@@ -1,602 +1,293 @@
-Return-Path: <linux-kselftest+bounces-25277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33773A2071E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:19:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 744CAA2074E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:27:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BD867A1D11
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:19:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A60773A30F1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4B91F78E2;
-	Tue, 28 Jan 2025 09:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58A2B1DF998;
+	Tue, 28 Jan 2025 09:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b08JNMw+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F851F63F5;
-	Tue, 28 Jan 2025 09:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260F0161310;
+	Tue, 28 Jan 2025 09:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738055820; cv=none; b=aDDVaNUZwjWD+jqKFkuWqOuQQfXAjy0KS5Ru8BrHurvLQ/VZYYPUI+Cg/R7aB44J28AaI6vA49OSEzGO3Hye8UpvW/7IOnH/gCqTFYwMiLO+4ZXYznN9t1yP9CkU06r5xrdLRIZ/E3FBoUDuFIO04OcgWEpU6J4oR5kMhMYqLb8=
+	t=1738056437; cv=none; b=mT+/D5c/e9G6A+hKsXqCsnP3DdTnlbvJlsWlEa+4LsRT9ttTEJufFVHgRPGXSFsQzi+23xna3C7xYs3/GL9+nOqmZ6IYc6hwZyVFIC7PlAQMQP98hRK2I9PZJRl3L7oAT5rQGtydRiXpYbJVFBomf4qXtLOsRs8AYOV8Y8qfZII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738055820; c=relaxed/simple;
-	bh=LSblS1PVMvMz8FdDDmGZ5JyEVh7HQg5v8+rgm1SwSX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=ZbfcTshSl27qfcs0Qno/dry6rrMzO4qLQawXuX1EoY/zdzt7lkxE3Va+QPLGgjB4jOFJOgjWibwP2tHpLdaxp1BbvTqA2FchHppQyK+zjSo4QRRfiDgQYn8P6bJk+KNxGNTkJaWwT9on9pE+7/V7I00vvtq2l8TZbOFemEvzaqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id AA2AE72C8CC;
-	Tue, 28 Jan 2025 12:16:56 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id 973CC7CCB3A; Tue, 28 Jan 2025 11:16:56 +0200 (IST)
-Date: Tue, 28 Jan 2025 11:16:56 +0200
-From: "Dmitry V. Levin" <ldv@strace.io>
-To: Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Mike Frysinger <vapier@gentoo.org>,
-	Renzo Davoli <renzo@cs.unibo.it>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	strace-devel@lists.strace.io, linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1738056437; c=relaxed/simple;
+	bh=iCbYshpRg08hQdbDkopUn5Vj56lVut9iyZDGmvAZw7I=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nAW60gVBVPinj0KRlgbq/cZeE4owNtFiabIwEk7AZDOHzRPkCNLpDM8RpDeI6I3VzZUO+pw0JHbTij6w/lp10YcX7teolFGl7xrru7HWY9fPmEy68Lhhxg2oNM6qiw77/0xAC+LJQVW3Y8BxmgQAosPw+yD7Kluwdpc14MAXPGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b08JNMw+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31B6C4CED3;
+	Tue, 28 Jan 2025 09:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738056437;
+	bh=iCbYshpRg08hQdbDkopUn5Vj56lVut9iyZDGmvAZw7I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=b08JNMw+vaEv82euLbu4+0DU88tcR/JEBIgAf6VlfLo1QQMtGt38AHlFHC42H20XL
+	 cmrht6F3EPXIl4c4mXS4qDAVNPuWz5kasQ6Rxl16FHOGM4JUU6i1s2XNVw3U0F19uM
+	 jfdgLNh5QuRML5bZ/l4f/GNmzaoKBjk4E34m7vUjOcN5b1JgGE7f3RjRlpsWzEOXnq
+	 th6KsNYgcrKfEOwnrJ2rve6znz5UV0rvHA3Cd7e1v6HiPtyYhcZHbZFpfjkbB3xEjM
+	 C8oaGFGlTKf+dYASmXZBsw8l/cUOuNHa0cx6JOEhxs7A3IMORv3zY7YqQU8lr0+xOp
+	 DlCsXitVTBSBw==
+Received: from 82-132-220-9.dab.02.net ([82.132.220.9] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1tchsI-00G0MS-DY;
+	Tue, 28 Jan 2025 09:27:14 +0000
+Date: Tue, 28 Jan 2025 09:27:11 +0000
+Message-ID: <87ikpzthjk.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 6/6] selftests/ptrace: add a test case for
- PTRACE_SET_SYSCALL_INFO
-Message-ID: <20250128091656.GF8601@strace.io>
+Subject: Re: [RFC PATCH 1/4] perf: arm_pmuv3: Introduce module param to partition the PMU
+In-Reply-To: <20250127222031.3078945-2-coltonlewis@google.com>
+References: <20250127222031.3078945-1-coltonlewis@google.com>
+	<20250127222031.3078945-2-coltonlewis@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250128091445.GA8257@strace.io>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.220.9
+X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Check whether PTRACE_SET_SYSCALL_INFO semantics implemented in the
-kernel matches userspace expectations.
+On Mon, 27 Jan 2025 22:20:27 +0000,
+Colton Lewis <coltonlewis@google.com> wrote:
+> 
+> For PMUv3, the register MDCR_EL2.HPMN partitiones the PMU counters
+> into two ranges where counters 0..HPMN-1 are accessible by EL1 and, if
+> allowed, EL0 while counters HPMN..N are only accessible by EL2.
+> 
+> Introduce a module parameter in the PMUv3 driver to set this
+> register. The name reserved_guest_counters reflects the intent to
+> reserve some counters for the guest so they may eventually be allowed
+> direct access to a subset of PMU functionality for increased
+> performance.
+> 
+> Track HPMN and whether the pmu is partitioned in struct arm_pmu.
+> 
+> While FEAT_HPMN0 does allow HPMN to be set to 0, this patch
+> specifically disallows that case because it's not useful given the
+> intention to allow guests access to their own counters.
+> 
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> ---
+>  arch/arm/include/asm/arm_pmuv3.h   | 10 +++++++
+>  arch/arm64/include/asm/arm_pmuv3.h | 10 +++++++
+>  drivers/perf/arm_pmuv3.c           | 43 ++++++++++++++++++++++++++++--
+>  include/linux/perf/arm_pmu.h       |  2 ++
+>  include/linux/perf/arm_pmuv3.h     |  7 +++++
+>  5 files changed, 70 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
+> index 2ec0e5e83fc9..49ad90486aa5 100644
+> --- a/arch/arm/include/asm/arm_pmuv3.h
+> +++ b/arch/arm/include/asm/arm_pmuv3.h
+> @@ -277,4 +277,14 @@ static inline u64 read_pmceid1(void)
+>  	return val;
+>  }
+>  
+> +static inline u32 read_mdcr(void)
+> +{
+> +	return read_sysreg(mdcr_el2);
+> +}
+> +
+> +static inline void write_mdcr(u32 val)
+> +{
+> +	write_sysreg(val, mdcr_el2);
+> +}
+> +
 
-Signed-off-by: Dmitry V. Levin <ldv@strace.io>
----
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/set_syscall_info.c       | 514 ++++++++++++++++++
- 2 files changed, 515 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
+This will obviously break the 32bit build.
 
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 1c631740a730..c5e0b76ba6ac 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS += -std=c99 -pthread -Wall $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess get_set_sud
-+TEST_GEN_PROGS := get_syscall_info set_syscall_info peeksiginfo vmaccess get_set_sud
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/set_syscall_info.c b/tools/testing/selftests/ptrace/set_syscall_info.c
-new file mode 100644
-index 000000000000..0ec69401c008
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/set_syscall_info.c
-@@ -0,0 +1,514 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (c) 2018-2025 Dmitry V. Levin <ldv@strace.io>
-+ * All rights reserved.
-+ *
-+ * Check whether PTRACE_SET_SYSCALL_INFO semantics implemented in the kernel
-+ * matches userspace expectations.
-+ */
-+
-+#include "../kselftest_harness.h"
-+#include <err.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <asm/unistd.h>
-+#include <linux/types.h>
-+#include <linux/ptrace.h>
-+
-+#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
-+/*
-+ * MIPS N32 is the only architecture where __kernel_ulong_t
-+ * does not match the bitness of syscall arguments.
-+ */
-+typedef unsigned long long kernel_ulong_t;
-+#else
-+typedef __kernel_ulong_t kernel_ulong_t;
-+#endif
-+
-+struct si_entry {
-+	int nr;
-+	kernel_ulong_t args[6];
-+};
-+struct si_exit {
-+	unsigned int is_error;
-+	int rval;
-+};
-+
-+static unsigned int ptrace_stop;
-+static pid_t tracee_pid;
-+
-+static int
-+kill_tracee(pid_t pid)
-+{
-+	if (!pid)
-+		return 0;
-+
-+	int saved_errno = errno;
-+
-+	int rc = kill(pid, SIGKILL);
-+
-+	errno = saved_errno;
-+	return rc;
-+}
-+
-+static long
-+sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
-+{
-+	return syscall(__NR_ptrace, request, pid, addr, data);
-+}
-+
-+#define LOG_KILL_TRACEE(fmt, ...)				\
-+	do {							\
-+		kill_tracee(tracee_pid);			\
-+		TH_LOG("wait #%d: " fmt,			\
-+		       ptrace_stop, ##__VA_ARGS__);		\
-+	} while (0)
-+
-+static void
-+check_psi_entry(struct __test_metadata *_metadata,
-+		const struct ptrace_syscall_info *info,
-+		const struct si_entry *exp_entry,
-+		const char *text)
-+{
-+	unsigned int i;
-+
-+	ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info->op) {
-+		LOG_KILL_TRACEE("%s: entry stop mismatch", text);
-+	}
-+	ASSERT_TRUE(info->arch) {
-+		LOG_KILL_TRACEE("%s: entry stop mismatch", text);
-+	}
-+	ASSERT_TRUE(info->instruction_pointer) {
-+		LOG_KILL_TRACEE("%s: entry stop mismatch", text);
-+	}
-+	ASSERT_TRUE(info->stack_pointer) {
-+		LOG_KILL_TRACEE("%s: entry stop mismatch", text);
-+	}
-+	ASSERT_EQ(exp_entry->nr, info->entry.nr) {
-+		LOG_KILL_TRACEE("%s: syscall nr mismatch", text);
-+	}
-+	for (i = 0; i < ARRAY_SIZE(exp_entry->args); ++i) {
-+		ASSERT_EQ(exp_entry->args[i], info->entry.args[i]) {
-+			LOG_KILL_TRACEE("%s: syscall arg #%u mismatch",
-+					text, i);
-+		}
-+	}
-+}
-+
-+static void
-+check_psi_exit(struct __test_metadata *_metadata,
-+	       const struct ptrace_syscall_info *info,
-+	       const struct si_exit *exp_exit,
-+	       const char *text)
-+{
-+	ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info->op) {
-+		LOG_KILL_TRACEE("%s: exit stop mismatch", text);
-+	}
-+	ASSERT_TRUE(info->arch) {
-+		LOG_KILL_TRACEE("%s: exit stop mismatch", text);
-+	}
-+	ASSERT_TRUE(info->instruction_pointer) {
-+		LOG_KILL_TRACEE("%s: exit stop mismatch", text);
-+	}
-+	ASSERT_TRUE(info->stack_pointer) {
-+		LOG_KILL_TRACEE("%s: exit stop mismatch", text);
-+	}
-+	ASSERT_EQ(exp_exit->is_error, info->exit.is_error) {
-+		LOG_KILL_TRACEE("%s: exit stop mismatch", text);
-+	}
-+	ASSERT_EQ(exp_exit->rval, info->exit.rval) {
-+		LOG_KILL_TRACEE("%s: exit stop mismatch", text);
-+	}
-+}
-+
-+TEST(set_syscall_info)
-+{
-+	const pid_t tracer_pid = getpid();
-+	const kernel_ulong_t dummy[] = {
-+		(kernel_ulong_t) 0xdad0bef0bad0fed0ULL,
-+		(kernel_ulong_t) 0xdad1bef1bad1fed1ULL,
-+		(kernel_ulong_t) 0xdad2bef2bad2fed2ULL,
-+		(kernel_ulong_t) 0xdad3bef3bad3fed3ULL,
-+		(kernel_ulong_t) 0xdad4bef4bad4fed4ULL,
-+		(kernel_ulong_t) 0xdad5bef5bad5fed5ULL,
-+	};
-+	int splice_in[2], splice_out[2];
-+
-+	ASSERT_EQ(0, pipe(splice_in));
-+	ASSERT_EQ(0, pipe(splice_out));
-+	ASSERT_EQ(sizeof(dummy), write(splice_in[1], dummy, sizeof(dummy)));
-+
-+	const struct {
-+		struct si_entry entry[2];
-+		struct si_exit exit[2];
-+	} si[] = {
-+		/* change scno, keep non-error rval */
-+		{
-+			{
-+				{
-+					__NR_gettid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, tracer_pid }, { 0, tracer_pid }
-+			}
-+		},
-+
-+		/* set scno to -1, keep error rval */
-+		{
-+			{
-+				{
-+					__NR_chdir,
-+					{
-+						(uintptr_t) ".",
-+						dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					-1,
-+					{
-+						(uintptr_t) ".",
-+						dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 1, -ENOSYS }, { 1, -ENOSYS }
-+			}
-+		},
-+
-+		/* keep scno, change non-error rval */
-+		{
-+			{
-+				{
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, tracer_pid }, { 0, tracer_pid + 1 }
-+			}
-+		},
-+
-+		/* change arg1, keep non-error rval */
-+		{
-+			{
-+				{
-+					__NR_chdir,
-+					{
-+						(uintptr_t) "",
-+						dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_chdir,
-+					{
-+						(uintptr_t) ".",
-+						dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, 0 }, { 0, 0 }
-+			}
-+		},
-+
-+		/* set scno to -1, change error rval to non-error */
-+		{
-+			{
-+				{
-+					__NR_gettid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					-1,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 1, -ENOSYS }, { 0, tracer_pid }
-+			}
-+		},
-+
-+		/* change scno, change non-error rval to error */
-+		{
-+			{
-+				{
-+					__NR_chdir,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, tracer_pid }, { 1, -EISDIR }
-+			}
-+		},
-+
-+		/* change scno and all args, change non-error rval */
-+		{
-+			{
-+				{
-+					__NR_gettid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_splice,
-+					{
-+						splice_in[0], 0, splice_out[1], 0,
-+						sizeof(dummy), SPLICE_F_NONBLOCK
-+					}
-+				}
-+			}, {
-+				{ 0, sizeof(dummy) }, { 0, sizeof(dummy) + 1 }
-+			}
-+		},
-+
-+		/* change arg1, no exit stop */
-+		{
-+			{
-+				{
-+					__NR_exit_group,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_exit_group,
-+					{
-+						0, dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, 0 }, { 0, 0 }
-+			}
-+		},
-+	};
-+
-+	long rc;
-+	unsigned int i;
-+
-+	tracee_pid = fork();
-+
-+	ASSERT_LE(0, tracee_pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	if (tracee_pid == 0) {
-+		/* get the pid before PTRACE_TRACEME */
-+		tracee_pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(tracee_pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+		for (i = 0; i < ARRAY_SIZE(si); ++i) {
-+			rc = syscall(si[i].entry[0].nr,
-+				     si[i].entry[0].args[0],
-+				     si[i].entry[0].args[1],
-+				     si[i].entry[0].args[2],
-+				     si[i].entry[0].args[3],
-+				     si[i].entry[0].args[4],
-+				     si[i].entry[0].args[5]);
-+			if (si[i].exit[1].is_error) {
-+				if (rc != -1 || errno != -si[i].exit[1].rval)
-+					break;
-+			} else {
-+				if (rc != si[i].exit[1].rval)
-+					break;
-+			}
-+		}
-+		/*
-+		 * Something went wrong, but in this state tracee
-+		 * cannot reliably issue syscalls, so just crash.
-+		 */
-+		*(volatile unsigned char *) (uintptr_t) i = 42;
-+		/* unreachable */
-+		_exit(i + 1);
-+	}
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		const size_t size = sizeof(info);
-+		const int expected_entry_size =
-+			(void *) &info.entry.args[6] - (void *) &info;
-+		const int expected_exit_size =
-+			(void *) (&info.exit.is_error + 1) -
-+			(void *) &info;
-+		int status;
-+
-+		ASSERT_EQ(tracee_pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+		if (WIFEXITED(status)) {
-+			tracee_pid = 0;	/* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status)) {
-+				LOG_KILL_TRACEE("unexpected exit status %u",
-+						WEXITSTATUS(status));
-+			}
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			tracee_pid = 0;	/* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		ASSERT_LT(ptrace_stop, ARRAY_SIZE(si) * 2) {
-+			LOG_KILL_TRACEE("ptrace stop overflow");
-+		}
-+
-+		switch (WSTOPSIG(status)) {
-+		case SIGSTOP:
-+			ASSERT_EQ(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected signal stop");
-+			}
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, tracee_pid,
-+						0, PTRACE_O_TRACESYSGOOD)) {
-+				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+			}
-+			break;
-+
-+		case SIGTRAP | 0x80:
-+			ASSERT_LT(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected syscall stop");
-+			}
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      tracee_pid, size,
-+						      (uintptr_t) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO #1: %m");
-+			}
-+			if (ptrace_stop & 1) {
-+				/* entering syscall */
-+				const struct si_entry *exp_entry =
-+					&si[ptrace_stop / 2].entry[0];
-+				const struct si_entry *set_entry =
-+					&si[ptrace_stop / 2].entry[1];
-+
-+				/* check ptrace_syscall_info before the changes */
-+				ASSERT_EQ(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO #1"
-+							": entry stop mismatch");
-+				}
-+				check_psi_entry(_metadata, &info, exp_entry,
-+						"PTRACE_GET_SYSCALL_INFO #1");
-+
-+				/* apply the changes */
-+				info.entry.nr = set_entry->nr;
-+				for (i = 0; i < ARRAY_SIZE(set_entry->args); ++i)
-+					info.entry.args[i] = set_entry->args[i];
-+				ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+							tracee_pid, size,
-+							(uintptr_t) &info)) {
-+					LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
-+				}
-+
-+				/* check ptrace_syscall_info after the changes */
-+				memset(&info, 0, sizeof(info));
-+				info.op = 0xff;
-+				ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+							      tracee_pid, size,
-+							      (uintptr_t) &info))) {
-+					LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+				}
-+				ASSERT_EQ(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO #2"
-+							": entry stop mismatch");
-+				}
-+				check_psi_entry(_metadata, &info, set_entry,
-+						"PTRACE_GET_SYSCALL_INFO #2");
-+			} else {
-+				/* exiting syscall */
-+				const struct si_exit *exp_exit =
-+					&si[ptrace_stop / 2 - 1].exit[0];
-+				const struct si_exit *set_exit =
-+					&si[ptrace_stop / 2 - 1].exit[1];
-+
-+				/* check ptrace_syscall_info before the changes */
-+				ASSERT_EQ(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO #1"
-+							": exit stop mismatch");
-+				}
-+				check_psi_exit(_metadata, &info, exp_exit,
-+						"PTRACE_GET_SYSCALL_INFO #1");
-+
-+				/* apply the changes */
-+				info.exit.is_error = set_exit->is_error;
-+				info.exit.rval = set_exit->rval;
-+				ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+							tracee_pid, size,
-+							(uintptr_t) &info)) {
-+					LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
-+				}
-+
-+				/* check ptrace_syscall_info after the changes */
-+				memset(&info, 0, sizeof(info));
-+				info.op = 0xff;
-+				ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+							      tracee_pid, size,
-+							      (uintptr_t) &info))) {
-+					LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO #2: %m");
-+				}
-+				ASSERT_EQ(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO #2"
-+							": exit stop mismatch");
-+				}
-+				check_psi_exit(_metadata, &info, set_exit,
-+						"PTRACE_GET_SYSCALL_INFO #2");
-+			}
-+			break;
-+
-+		default:
-+			LOG_KILL_TRACEE("unexpected stop signal %u",
-+					WSTOPSIG(status));
-+			abort();
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, tracee_pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
-+		}
-+	}
-+
-+	ASSERT_EQ(ptrace_stop, ARRAY_SIZE(si) * 2);
-+}
-+
-+TEST_HARNESS_MAIN
+>  #endif
+> diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
+> index 8a777dec8d88..fc37e7e81e07 100644
+> --- a/arch/arm64/include/asm/arm_pmuv3.h
+> +++ b/arch/arm64/include/asm/arm_pmuv3.h
+> @@ -188,4 +188,14 @@ static inline bool is_pmuv3p9(int pmuver)
+>  	return pmuver >= ID_AA64DFR0_EL1_PMUVer_V3P9;
+>  }
+>  
+> +static inline u64 read_mdcr(void)
+> +{
+> +	return read_sysreg(mdcr_el2);
+> +}
+> +
+> +static inline void write_mdcr(u64 val)
+> +{
+> +	write_sysreg(val, mdcr_el2);
+> +}
+> +
+>  #endif
+> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+> index b5cc11abc962..55f9ae560715 100644
+> --- a/drivers/perf/arm_pmuv3.c
+> +++ b/drivers/perf/arm_pmuv3.c
+> @@ -325,6 +325,7 @@ GEN_PMU_FORMAT_ATTR(threshold_compare);
+>  GEN_PMU_FORMAT_ATTR(threshold);
+>  
+>  static int sysctl_perf_user_access __read_mostly;
+> +static u8 reserved_guest_counters __read_mostly;
+>  
+>  static bool armv8pmu_event_is_64bit(struct perf_event *event)
+>  {
+> @@ -500,6 +501,29 @@ static void armv8pmu_pmcr_write(u64 val)
+>  	write_pmcr(val);
+>  }
+>  
+> +static u64 armv8pmu_mdcr_read(void)
+> +{
+> +	return read_mdcr();
+> +}
+> +
+> +static void armv8pmu_mdcr_write(u64 val)
+> +{
+> +	write_mdcr(val);
+> +	isb();
+> +}
+> +
+> +static void armv8pmu_partition(u8 hpmn)
+> +{
+> +	u64 mdcr = armv8pmu_mdcr_read();
+> +
+> +	mdcr &= ~MDCR_EL2_HPMN_MASK;
+> +	mdcr |= FIELD_PREP(ARMV8_PMU_MDCR_HPMN, hpmn);
+> +	/* Prevent guest counters counting at EL2 */
+> +	mdcr |= ARMV8_PMU_MDCR_HPMD;
+> +
+> +	armv8pmu_mdcr_write(mdcr);
+> +}
+> +
+>  static int armv8pmu_has_overflowed(u64 pmovsr)
+>  {
+>  	return !!(pmovsr & ARMV8_PMU_OVERFLOWED_MASK);
+> @@ -1069,6 +1093,9 @@ static void armv8pmu_reset(void *info)
+>  
+>  	bitmap_to_arr64(&mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
+>  
+> +	if (cpu_pmu->partitioned)
+> +		armv8pmu_partition(cpu_pmu->hpmn);
+> +
+
+Kaboom, see below.
+
+>  	/* The counter and interrupt enable registers are unknown at reset. */
+>  	armv8pmu_disable_counter(mask);
+>  	armv8pmu_disable_intens(mask);
+> @@ -1205,6 +1232,7 @@ static void __armv8pmu_probe_pmu(void *info)
+>  {
+>  	struct armv8pmu_probe_info *probe = info;
+>  	struct arm_pmu *cpu_pmu = probe->pmu;
+> +	u8 pmcr_n;
+>  	u64 pmceid_raw[2];
+>  	u32 pmceid[2];
+>  	int pmuver;
+> @@ -1215,10 +1243,19 @@ static void __armv8pmu_probe_pmu(void *info)
+>  
+>  	cpu_pmu->pmuver = pmuver;
+>  	probe->present = true;
+> +	pmcr_n = FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read());
+>  
+>  	/* Read the nb of CNTx counters supported from PMNC */
+> -	bitmap_set(cpu_pmu->cntr_mask,
+> -		   0, FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read()));
+> +	bitmap_set(cpu_pmu->cntr_mask, 0, pmcr_n);
+> +
+> +	if (reserved_guest_counters > 0 && reserved_guest_counters < pmcr_n) {
+> +		cpu_pmu->hpmn = reserved_guest_counters;
+> +		cpu_pmu->partitioned = true;
+
+Isn't this going to completely explode on a kernel running at EL1?
+
+Also, how does it work in an asymmetric configuration where some CPUs
+can satisfy the reservation, and some can't?
+
+> +	} else {
+> +		reserved_guest_counters = 0;
+> +		cpu_pmu->hpmn = pmcr_n;
+> +		cpu_pmu->partitioned = false;
+> +	}
+>  
+>  	/* Add the CPU cycles counter */
+>  	set_bit(ARMV8_PMU_CYCLE_IDX, cpu_pmu->cntr_mask);
+> @@ -1516,3 +1553,5 @@ void arch_perf_update_userpage(struct perf_event *event,
+>  	userpg->cap_user_time_zero = 1;
+>  	userpg->cap_user_time_short = 1;
+>  }
+> +
+> +module_param(reserved_guest_counters, byte, 0);
+> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+> index 4b5b83677e3f..ad97aabed25a 100644
+> --- a/include/linux/perf/arm_pmu.h
+> +++ b/include/linux/perf/arm_pmu.h
+> @@ -101,6 +101,8 @@ struct arm_pmu {
+>  	void		(*reset)(void *);
+>  	int		(*map_event)(struct perf_event *event);
+>  	DECLARE_BITMAP(cntr_mask, ARMPMU_MAX_HWEVENTS);
+> +	u8		hpmn; /* MDCR_EL2.HPMN: counter partition pivot */
+> +	bool	        partitioned;
+>  	bool		secure_access; /* 32-bit ARM only */
+>  #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
+>  	DECLARE_BITMAP(pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
+> diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
+> index d698efba28a2..d399e8c6f98e 100644
+> --- a/include/linux/perf/arm_pmuv3.h
+> +++ b/include/linux/perf/arm_pmuv3.h
+> @@ -223,6 +223,13 @@
+>  				 ARMV8_PMU_PMCR_X | ARMV8_PMU_PMCR_DP | \
+>  				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
+>  
+> +/*
+> + * Per-CPU MDCR: config reg
+> + */
+> +#define ARMV8_PMU_MDCR_HPMN		GENMASK(4, 0)
+> +#define ARMV8_PMU_MDCR_HPME		BIT(7)
+> +#define ARMV8_PMU_MDCR_HPMD		BIT(17)
+> +
+
+I'd rather we find a way to use the existing definitions form the
+sysreg file rather than add more duplication.
+
+I also don't see how the kernel knows not to access the low-numbered
+counters at this point. Maybe in a later patch, I'll keep reading.
+
+	M.
+
 -- 
-ldv
+Without deviation from the norm, progress is not possible.
 
