@@ -1,293 +1,100 @@
-Return-Path: <linux-kselftest+bounces-25278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 744CAA2074E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:27:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C527A20794
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:43:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A60773A30F1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:27:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D10CF3A4049
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:43:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58A2B1DF998;
-	Tue, 28 Jan 2025 09:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F59199FA4;
+	Tue, 28 Jan 2025 09:43:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b08JNMw+"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gSmlINAv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 260F0161310;
-	Tue, 28 Jan 2025 09:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136BC199385;
+	Tue, 28 Jan 2025 09:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738056437; cv=none; b=mT+/D5c/e9G6A+hKsXqCsnP3DdTnlbvJlsWlEa+4LsRT9ttTEJufFVHgRPGXSFsQzi+23xna3C7xYs3/GL9+nOqmZ6IYc6hwZyVFIC7PlAQMQP98hRK2I9PZJRl3L7oAT5rQGtydRiXpYbJVFBomf4qXtLOsRs8AYOV8Y8qfZII=
+	t=1738057396; cv=none; b=EvAo5ytMCQiwAKz4CIJeDHqnsl4/RO0pkuTDN1lY4oLCn2QOxtDHNPe6HvvfLBk6NWzyDqxJvzppOjnZD1utbsx67PNVwkogUlB+/dy/k1OdUIizefeINDcxUCA3xzkEWA444eSI8ZN+kfq97SlOQT/PJwsagHZbnnI/fwVZv40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738056437; c=relaxed/simple;
-	bh=iCbYshpRg08hQdbDkopUn5Vj56lVut9iyZDGmvAZw7I=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nAW60gVBVPinj0KRlgbq/cZeE4owNtFiabIwEk7AZDOHzRPkCNLpDM8RpDeI6I3VzZUO+pw0JHbTij6w/lp10YcX7teolFGl7xrru7HWY9fPmEy68Lhhxg2oNM6qiw77/0xAC+LJQVW3Y8BxmgQAosPw+yD7Kluwdpc14MAXPGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b08JNMw+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31B6C4CED3;
-	Tue, 28 Jan 2025 09:27:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738056437;
-	bh=iCbYshpRg08hQdbDkopUn5Vj56lVut9iyZDGmvAZw7I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=b08JNMw+vaEv82euLbu4+0DU88tcR/JEBIgAf6VlfLo1QQMtGt38AHlFHC42H20XL
-	 cmrht6F3EPXIl4c4mXS4qDAVNPuWz5kasQ6Rxl16FHOGM4JUU6i1s2XNVw3U0F19uM
-	 jfdgLNh5QuRML5bZ/l4f/GNmzaoKBjk4E34m7vUjOcN5b1JgGE7f3RjRlpsWzEOXnq
-	 th6KsNYgcrKfEOwnrJ2rve6znz5UV0rvHA3Cd7e1v6HiPtyYhcZHbZFpfjkbB3xEjM
-	 C8oaGFGlTKf+dYASmXZBsw8l/cUOuNHa0cx6JOEhxs7A3IMORv3zY7YqQU8lr0+xOp
-	 DlCsXitVTBSBw==
-Received: from 82-132-220-9.dab.02.net ([82.132.220.9] helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tchsI-00G0MS-DY;
-	Tue, 28 Jan 2025 09:27:14 +0000
-Date: Tue, 28 Jan 2025 09:27:11 +0000
-Message-ID: <87ikpzthjk.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] perf: arm_pmuv3: Introduce module param to partition the PMU
-In-Reply-To: <20250127222031.3078945-2-coltonlewis@google.com>
-References: <20250127222031.3078945-1-coltonlewis@google.com>
-	<20250127222031.3078945-2-coltonlewis@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1738057396; c=relaxed/simple;
+	bh=nhxX+KKjyAmhuZqSaSiq//fR1W9bmmcoErKE363JeZg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Z/KHclpGReAFcYKBZGCZiHiG0xaaEguTW7LXoHUV0/D34KzSxgT2A/ybXW7SVDRjkXAgwYoFTgLrn+J+IwBdRwbTEbDAUFJr4WHe/5aWoob4m1SRRCZKYixVLvA0yFJT0loZ56jkKVQ/Kecz7P1X5ObihhfAydw+Vtl7BoRhvl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gSmlINAv; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=qiUVswsB3yTR4MT5Ln5A5p1vDg9ssqYWDaSK0rRPwXk=; b=gSmlINAvpXUPukFxeLE2Smgyak
+	cvlBY3CRasQpvgwPWahNX2d8MPFy0mh7kQMPXvjGb8fADnPVzvID69/8xGJwpCx1mmQ+JnwnBT6vX
+	qf5auJplfdAqa/IwrSw7c1o8W2Sm8qRR/XQc1/GLZgKAXa8ULXOXXPeItnv60Sj19Dm2Aa1i7NKGc
+	RDDHQ2qeDWYWZKSGDuSVc88Q5QgQpt6LX9jvuVFioRYO8g86DjyKEjYwode7ri43JCKCV5PW8IkqO
+	X/Arn50qNq+SSfLasPQR650XLG1/+fMeK5IEt10BasynsWapN5MWgfjAaZULelpjTp0YvbhIVCC/B
+	10vqmnLA==;
+Received: from [138.199.18.130] (helo=[172.31.28.190])
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tci7X-0000000ARyH-2y9k;
+	Tue, 28 Jan 2025 09:42:59 +0000
+Message-ID: <83d44307f30ad8ce19de3edcdc00c179750e0e23.camel@infradead.org>
+Subject: Re: [RFC PATCH 00/39] 1G page support for guest_memfd
+From: Amit Shah <amit@infradead.org>
+To: Ackerley Tng <ackerleytng@google.com>, tabba@google.com, 
+	quic_eberman@quicinc.com, roypat@amazon.co.uk, jgg@nvidia.com,
+ peterx@redhat.com, 	david@redhat.com, rientjes@google.com, fvdl@google.com,
+ jthoughton@google.com, 	seanjc@google.com, pbonzini@redhat.com,
+ zhiquan1.li@intel.com, fan.du@intel.com, 	jun.miao@intel.com,
+ isaku.yamahata@intel.com, muchun.song@linux.dev, 	mike.kravetz@oracle.com
+Cc: erdemaktas@google.com, vannapurve@google.com, qperret@google.com, 
+	jhubbard@nvidia.com, willy@infradead.org, shuah@kernel.org,
+ brauner@kernel.org, 	bfoster@redhat.com, kent.overstreet@linux.dev,
+ pvorel@suse.cz, rppt@kernel.org, 	richard.weiyang@gmail.com,
+ anup@brainfault.org, haibo1.xu@intel.com, 	ajones@ventanamicro.com,
+ vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 	pgonda@google.com,
+ oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 	linux-mm@kvack.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-fsdevel@kvack.org
+Date: Tue, 28 Jan 2025 10:42:57 +0100
+In-Reply-To: <cover.1726009989.git.ackerleytng@google.com>
+References: <cover.1726009989.git.ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 82.132.220.9
-X-SA-Exim-Rcpt-To: coltonlewis@google.com, kvm@vger.kernel.org, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
 
-On Mon, 27 Jan 2025 22:20:27 +0000,
-Colton Lewis <coltonlewis@google.com> wrote:
-> 
-> For PMUv3, the register MDCR_EL2.HPMN partitiones the PMU counters
-> into two ranges where counters 0..HPMN-1 are accessible by EL1 and, if
-> allowed, EL0 while counters HPMN..N are only accessible by EL2.
-> 
-> Introduce a module parameter in the PMUv3 driver to set this
-> register. The name reserved_guest_counters reflects the intent to
-> reserve some counters for the guest so they may eventually be allowed
-> direct access to a subset of PMU functionality for increased
-> performance.
-> 
-> Track HPMN and whether the pmu is partitioned in struct arm_pmu.
-> 
-> While FEAT_HPMN0 does allow HPMN to be set to 0, this patch
-> specifically disallows that case because it's not useful given the
-> intention to allow guests access to their own counters.
-> 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
-> ---
->  arch/arm/include/asm/arm_pmuv3.h   | 10 +++++++
->  arch/arm64/include/asm/arm_pmuv3.h | 10 +++++++
->  drivers/perf/arm_pmuv3.c           | 43 ++++++++++++++++++++++++++++--
->  include/linux/perf/arm_pmu.h       |  2 ++
->  include/linux/perf/arm_pmuv3.h     |  7 +++++
->  5 files changed, 70 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-> index 2ec0e5e83fc9..49ad90486aa5 100644
-> --- a/arch/arm/include/asm/arm_pmuv3.h
-> +++ b/arch/arm/include/asm/arm_pmuv3.h
-> @@ -277,4 +277,14 @@ static inline u64 read_pmceid1(void)
->  	return val;
->  }
->  
-> +static inline u32 read_mdcr(void)
-> +{
-> +	return read_sysreg(mdcr_el2);
-> +}
-> +
-> +static inline void write_mdcr(u32 val)
-> +{
-> +	write_sysreg(val, mdcr_el2);
-> +}
-> +
+Hey Ackerley,
 
-This will obviously break the 32bit build.
+On Tue, 2024-09-10 at 23:43 +0000, Ackerley Tng wrote:
+> Hello,
+>=20
+> This patchset is our exploration of how to support 1G pages in
+> guest_memfd, and
+> how the pages will be used in Confidential VMs.
 
->  #endif
-> diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
-> index 8a777dec8d88..fc37e7e81e07 100644
-> --- a/arch/arm64/include/asm/arm_pmuv3.h
-> +++ b/arch/arm64/include/asm/arm_pmuv3.h
-> @@ -188,4 +188,14 @@ static inline bool is_pmuv3p9(int pmuver)
->  	return pmuver >= ID_AA64DFR0_EL1_PMUVer_V3P9;
->  }
->  
-> +static inline u64 read_mdcr(void)
-> +{
-> +	return read_sysreg(mdcr_el2);
-> +}
-> +
-> +static inline void write_mdcr(u64 val)
-> +{
-> +	write_sysreg(val, mdcr_el2);
-> +}
-> +
->  #endif
-> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-> index b5cc11abc962..55f9ae560715 100644
-> --- a/drivers/perf/arm_pmuv3.c
-> +++ b/drivers/perf/arm_pmuv3.c
-> @@ -325,6 +325,7 @@ GEN_PMU_FORMAT_ATTR(threshold_compare);
->  GEN_PMU_FORMAT_ATTR(threshold);
->  
->  static int sysctl_perf_user_access __read_mostly;
-> +static u8 reserved_guest_counters __read_mostly;
->  
->  static bool armv8pmu_event_is_64bit(struct perf_event *event)
->  {
-> @@ -500,6 +501,29 @@ static void armv8pmu_pmcr_write(u64 val)
->  	write_pmcr(val);
->  }
->  
-> +static u64 armv8pmu_mdcr_read(void)
-> +{
-> +	return read_mdcr();
-> +}
-> +
-> +static void armv8pmu_mdcr_write(u64 val)
-> +{
-> +	write_mdcr(val);
-> +	isb();
-> +}
-> +
-> +static void armv8pmu_partition(u8 hpmn)
-> +{
-> +	u64 mdcr = armv8pmu_mdcr_read();
-> +
-> +	mdcr &= ~MDCR_EL2_HPMN_MASK;
-> +	mdcr |= FIELD_PREP(ARMV8_PMU_MDCR_HPMN, hpmn);
-> +	/* Prevent guest counters counting at EL2 */
-> +	mdcr |= ARMV8_PMU_MDCR_HPMD;
-> +
-> +	armv8pmu_mdcr_write(mdcr);
-> +}
-> +
->  static int armv8pmu_has_overflowed(u64 pmovsr)
->  {
->  	return !!(pmovsr & ARMV8_PMU_OVERFLOWED_MASK);
-> @@ -1069,6 +1093,9 @@ static void armv8pmu_reset(void *info)
->  
->  	bitmap_to_arr64(&mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
->  
-> +	if (cpu_pmu->partitioned)
-> +		armv8pmu_partition(cpu_pmu->hpmn);
-> +
+We've discussed this patchset at LPC and in the guest-memfd calls.  Can
+you please summarise the discussions here as a follow-up, so we can
+also continue discussing on-list, and not repeat things that are
+already discussed?
 
-Kaboom, see below.
+Also - as mentioned in those meetings, we at AMD are interested in this
+series along with SEV-SNP support - and I'm also interested in figuring
+out how we collaborate on the evolution of this series.
 
->  	/* The counter and interrupt enable registers are unknown at reset. */
->  	armv8pmu_disable_counter(mask);
->  	armv8pmu_disable_intens(mask);
-> @@ -1205,6 +1232,7 @@ static void __armv8pmu_probe_pmu(void *info)
->  {
->  	struct armv8pmu_probe_info *probe = info;
->  	struct arm_pmu *cpu_pmu = probe->pmu;
-> +	u8 pmcr_n;
->  	u64 pmceid_raw[2];
->  	u32 pmceid[2];
->  	int pmuver;
-> @@ -1215,10 +1243,19 @@ static void __armv8pmu_probe_pmu(void *info)
->  
->  	cpu_pmu->pmuver = pmuver;
->  	probe->present = true;
-> +	pmcr_n = FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read());
->  
->  	/* Read the nb of CNTx counters supported from PMNC */
-> -	bitmap_set(cpu_pmu->cntr_mask,
-> -		   0, FIELD_GET(ARMV8_PMU_PMCR_N, armv8pmu_pmcr_read()));
-> +	bitmap_set(cpu_pmu->cntr_mask, 0, pmcr_n);
-> +
-> +	if (reserved_guest_counters > 0 && reserved_guest_counters < pmcr_n) {
-> +		cpu_pmu->hpmn = reserved_guest_counters;
-> +		cpu_pmu->partitioned = true;
+Thanks,
 
-Isn't this going to completely explode on a kernel running at EL1?
-
-Also, how does it work in an asymmetric configuration where some CPUs
-can satisfy the reservation, and some can't?
-
-> +	} else {
-> +		reserved_guest_counters = 0;
-> +		cpu_pmu->hpmn = pmcr_n;
-> +		cpu_pmu->partitioned = false;
-> +	}
->  
->  	/* Add the CPU cycles counter */
->  	set_bit(ARMV8_PMU_CYCLE_IDX, cpu_pmu->cntr_mask);
-> @@ -1516,3 +1553,5 @@ void arch_perf_update_userpage(struct perf_event *event,
->  	userpg->cap_user_time_zero = 1;
->  	userpg->cap_user_time_short = 1;
->  }
-> +
-> +module_param(reserved_guest_counters, byte, 0);
-> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-> index 4b5b83677e3f..ad97aabed25a 100644
-> --- a/include/linux/perf/arm_pmu.h
-> +++ b/include/linux/perf/arm_pmu.h
-> @@ -101,6 +101,8 @@ struct arm_pmu {
->  	void		(*reset)(void *);
->  	int		(*map_event)(struct perf_event *event);
->  	DECLARE_BITMAP(cntr_mask, ARMPMU_MAX_HWEVENTS);
-> +	u8		hpmn; /* MDCR_EL2.HPMN: counter partition pivot */
-> +	bool	        partitioned;
->  	bool		secure_access; /* 32-bit ARM only */
->  #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
->  	DECLARE_BITMAP(pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
-> diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-> index d698efba28a2..d399e8c6f98e 100644
-> --- a/include/linux/perf/arm_pmuv3.h
-> +++ b/include/linux/perf/arm_pmuv3.h
-> @@ -223,6 +223,13 @@
->  				 ARMV8_PMU_PMCR_X | ARMV8_PMU_PMCR_DP | \
->  				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
->  
-> +/*
-> + * Per-CPU MDCR: config reg
-> + */
-> +#define ARMV8_PMU_MDCR_HPMN		GENMASK(4, 0)
-> +#define ARMV8_PMU_MDCR_HPME		BIT(7)
-> +#define ARMV8_PMU_MDCR_HPMD		BIT(17)
-> +
-
-I'd rather we find a way to use the existing definitions form the
-sysreg file rather than add more duplication.
-
-I also don't see how the kernel knows not to access the low-numbered
-counters at this point. Maybe in a later patch, I'll keep reading.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+		Amit
 
