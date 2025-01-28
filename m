@@ -1,301 +1,101 @@
-Return-Path: <linux-kselftest+bounces-25313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 174BAA20DBF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 16:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A213A20E1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 17:11:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49FB0188338D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 15:55:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57B771882BA0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 16:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DB5B1D7E54;
-	Tue, 28 Jan 2025 15:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B5D1CDA2D;
+	Tue, 28 Jan 2025 16:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ngcSBs6K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C2771D9346;
-	Tue, 28 Jan 2025 15:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E831991D2;
+	Tue, 28 Jan 2025 16:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738079708; cv=none; b=FRVi0XMCEnZiVkh5WaZ1iqyJ/GM2flM295zHlaMfuESDN7iACkYTldL1WZemO5i8e635yjg5fHf0tjDZx7oFICTT6Y79O/q67JDvAfeISKl/4TuhP2XaDS46krtr1VGsQxMZdqX3LlXbw5benA5mFgYuowNsfLzGH9mo5JUZRlw=
+	t=1738080694; cv=none; b=ewigHtlgQZ3Nj2WmbATaipt2HHb3vi95c7pKV3KAIZOWdH/4NkPrHeB12rqMtOb7/B9W7fjA1uvD8VLsWxItpvy7a7e/H0jhFNxSut56CDzbO/U0ENCSy5qyvckff9reZ6DtNiij++tRB532WIAopv197rIAId7d+/z+iMvrHQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738079708; c=relaxed/simple;
-	bh=so9RNA6ObIf2W+UYW4qNUZcIrSOzvcMSJEizI4dEGzw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sa+Bich8Kt6023VzHHGCR3JSUcRMsXwV7rVUka3oSQqeR1dXTHXmgXajp9ti+24wTqk3lhBb7eXapSu0oirVh0ehx/YeSmggyn79R0K8Ux8pE/H6pEP+ASQ3rJu9nTCgCVfz66sYWGK0a/Uh4RTl8RLz2W5vQVgfT40T8EN/08A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2146497;
-	Tue, 28 Jan 2025 07:55:30 -0800 (PST)
-Received: from [10.57.34.26] (unknown [10.57.34.26])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 015DB3F694;
-	Tue, 28 Jan 2025 07:55:01 -0800 (PST)
-Message-ID: <a6152acf-67e1-4800-857f-cffb35a5d738@arm.com>
-Date: Tue, 28 Jan 2025 15:55:00 +0000
+	s=arc-20240116; t=1738080694; c=relaxed/simple;
+	bh=bqzQVhTrpMA2uAx0Oer/MhQcFh1TGCsOexF5xB6IkPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h4NXoKcdcJwWV6AbKDa5pXXrHOGvkH7r5ZadHudbSud1Nn4o9ZUfBAPkWnOCwYIsbBYiJloLRsfFdw5BAySJPMLM1BWJMR/PLlbvQJeuLRgDjeL4pLN3fIiy4jSjXECPNyiMNtiSPYKtpAU36iwRUkvUsCdbYK7PPmCUi20x/F8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ngcSBs6K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9C4C4CED3;
+	Tue, 28 Jan 2025 16:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738080693;
+	bh=bqzQVhTrpMA2uAx0Oer/MhQcFh1TGCsOexF5xB6IkPs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ngcSBs6KG5f362pVgzlakhoeZ2UU3Q1uMAdeexJz6NKVQSu1zKw+qKTsvKvW1qtCe
+	 bJiyCl4COtdi4CikOnRFEfynrUmT0YipptgOTRd6xvGHloQCmoAbYqR27UNJdJTDz2
+	 VuCJPlYBujprVVen6IR55zPZZG61q4kaER+QbOIK/Ri29/u5iC/MRwycJS+rjyrk3u
+	 ynRIV9nJc4XWF4euNyHmlrB24KCy7LrRxT8xJp8nCAGwmqDissY9AyGw5SJkFy3ko+
+	 gcOWLZJWYw/iM77zrfcdS6p+Nsqh/O40VdkbMXdGDRw2avgyfHx6POczWtgefgr8O4
+	 qxecbiewfTScw==
+Date: Tue, 28 Jan 2025 16:11:28 +0000
+From: Simon Horman <horms@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	rdunlap@infradead.org, kernel-team@meta.com
+Subject: Re: [PATCH RFC net-next v3 1/8] netconsole: consolidate send buffers
+ into netconsole_target struct
+Message-ID: <20250128161128.GB277827@kernel.org>
+References: <20250124-netcon_cpu-v3-0-12a0d286ba1d@debian.org>
+ <20250124-netcon_cpu-v3-1-12a0d286ba1d@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 4/4] perf: arm_pmuv3: Keep out of guest counter
- partition
-Content-Language: en-GB
-To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc: Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- Joey Gouly <joey.gouly@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- Mark Rutland <mark.rutland@arm.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20250127222031.3078945-1-coltonlewis@google.com>
- <20250127222031.3078945-5-coltonlewis@google.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20250127222031.3078945-5-coltonlewis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250124-netcon_cpu-v3-1-12a0d286ba1d@debian.org>
 
-On 27/01/2025 22:20, Colton Lewis wrote:
-> If the PMU is partitioned, keep the driver out of the guest counter
-> partition and only use the host counter partition. Partitioning is
-> defined by the MDCR_EL2.HPMN register field and saved in
-> cpu_pmu->hpmn. The range 0..HPMN-1 is accessible by EL1 and EL0 while
-> HPMN..PMCR.N is reserved for EL2.
+On Fri, Jan 24, 2025 at 07:16:40AM -0800, Breno Leitao wrote:
+> Move the static buffers from send_msg_no_fragmentation() and
+> send_msg_fragmented() into the netconsole_target structure. This
+> simplifies the code by:
+> - Eliminating redundant static buffers
+> - Centralizing buffer management in the target structure
+> - Reducing memory usage by 1KB (one buffer instead of two)
 > 
-> Define some macros that take HPMN as an argument and construct
-> mutually exclusive bitmaps for testing which partition a particular
-> counter is in. Note that despite their different position in the
-> bitmap, the cycle and instruction counters are always in the guest
-> partition.
+> The buffer in netconsole_target is protected by target_list_lock,
+> maintaining the same synchronization semantics as the original code.
 > 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
->   drivers/perf/arm_pmuv3.c       | 72 +++++++++++++++++++++++++++++-----
->   include/linux/perf/arm_pmuv3.h |  8 ++++
->   2 files changed, 70 insertions(+), 10 deletions(-)
+>  drivers/net/netconsole.c | 29 +++++++++++++++--------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-> index 55f9ae560715..c61845fad9d9 100644
-> --- a/drivers/perf/arm_pmuv3.c
-> +++ b/drivers/perf/arm_pmuv3.c
-> @@ -754,15 +754,19 @@ static void armv8pmu_disable_event_irq(struct perf_event *event)
->   	armv8pmu_disable_intens(BIT(event->hw.idx));
->   }
->   
-> -static u64 armv8pmu_getreset_flags(void)
-> +static u64 armv8pmu_getreset_flags(struct arm_pmu *cpu_pmu)
->   {
->   	u64 value;
->   
->   	/* Read */
->   	value = read_pmovsclr();
->   
-> +	if (cpu_pmu->partitioned)
-> +		value &= ARMV8_PMU_HOST_CNT_PART(cpu_pmu->hpmn);
-> +	else
-> +		value &= ARMV8_PMU_OVERFLOWED_MASK;
-> +
->   	/* Write to clear flags */
-> -	value &= ARMV8_PMU_OVERFLOWED_MASK;
->   	write_pmovsclr(value);
->   
->   	return value;
-> @@ -789,6 +793,18 @@ static void armv8pmu_disable_user_access(void)
->   	update_pmuserenr(0);
->   }
->   
-> +static bool armv8pmu_is_guest_part(struct arm_pmu *cpu_pmu, u8 idx)
-> +{
-> +	return cpu_pmu->partitioned &&
-> +		(BIT(idx) & ARMV8_PMU_GUEST_CNT_PART(cpu_pmu->hpmn));
-> +}
-> +
-> +static bool armv8pmu_is_host_part(struct arm_pmu *cpu_pmu, u8 idx)
-> +{
-> +	return !cpu_pmu->partitioned ||
-> +		(BIT(idx) & ARMV8_PMU_HOST_CNT_PART(cpu_pmu->hpmn));
-> +}
-> +
->   static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
->   {
->   	int i;
-> @@ -797,6 +813,8 @@ static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
->   	if (is_pmuv3p9(cpu_pmu->pmuver)) {
->   		u64 mask = 0;
->   		for_each_set_bit(i, cpuc->used_mask, ARMPMU_MAX_HWEVENTS) {
-> +			if (armv8pmu_is_guest_part(cpu_pmu, i))
-> +				continue;
->   			if (armv8pmu_event_has_user_read(cpuc->events[i]))
->   				mask |= BIT(i);
->   		}
-> @@ -805,6 +823,8 @@ static void armv8pmu_enable_user_access(struct arm_pmu *cpu_pmu)
->   		/* Clear any unused counters to avoid leaking their contents */
->   		for_each_andnot_bit(i, cpu_pmu->cntr_mask, cpuc->used_mask,
->   				    ARMPMU_MAX_HWEVENTS) {
-> +			if (armv8pmu_is_guest_part(cpu_pmu, i))
-> +				continue;
->   			if (i == ARMV8_PMU_CYCLE_IDX)
->   				write_pmccntr(0);
->   			else if (i == ARMV8_PMU_INSTR_IDX)
-> @@ -850,7 +870,10 @@ static void armv8pmu_start(struct arm_pmu *cpu_pmu)
->   		armv8pmu_disable_user_access();
->   
->   	/* Enable all counters */
-> -	armv8pmu_pmcr_write(armv8pmu_pmcr_read() | ARMV8_PMU_PMCR_E);
-> +	if (cpu_pmu->partitioned)
-> +		armv8pmu_mdcr_write(armv8pmu_mdcr_read() | ARMV8_PMU_MDCR_HPME);
-> +	else
-> +		armv8pmu_pmcr_write(armv8pmu_pmcr_read() | ARMV8_PMU_PMCR_E);
->   
->   	kvm_vcpu_pmu_resync_el0();
->   }
-> @@ -858,7 +881,10 @@ static void armv8pmu_start(struct arm_pmu *cpu_pmu)
->   static void armv8pmu_stop(struct arm_pmu *cpu_pmu)
->   {
->   	/* Disable all counters */
-> -	armv8pmu_pmcr_write(armv8pmu_pmcr_read() & ~ARMV8_PMU_PMCR_E);
-> +	if (cpu_pmu->partitioned)
-> +		armv8pmu_mdcr_write(armv8pmu_pmcr_read() & ~ARMV8_PMU_MDCR_HPME);
+> diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> index 86ab4a42769a49eebe5dd6f01dafafc6c86ec54f..1a78704681184673f5c1ba8ae665e46751384293 100644
+> --- a/drivers/net/netconsole.c
+> +++ b/drivers/net/netconsole.c
+> @@ -137,6 +137,8 @@ struct netconsole_target {
+>  	bool			extended;
+>  	bool			release;
+>  	struct netpoll		np;
+> +	/* protected by target_list_lock */
+> +	char			buf[MAX_PRINT_CHUNK];
 
-typo: s/armv8pmu_pmcr_read/armv8pmu_mdcr_read
+nit: buf should also be added to the Kernel doc for this structure.
 
-
-Suzuki
-
-
-> +	else
-> +		armv8pmu_pmcr_write(armv8pmu_pmcr_read() & ~ARMV8_PMU_PMCR_E);
->   }
->   
->   static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
-> @@ -872,7 +898,7 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
->   	/*
->   	 * Get and reset the IRQ flags
->   	 */
-> -	pmovsr = armv8pmu_getreset_flags();
-> +	pmovsr = armv8pmu_getreset_flags(cpu_pmu);
->   
->   	/*
->   	 * Did an overflow occur?
-> @@ -930,6 +956,8 @@ static int armv8pmu_get_single_idx(struct pmu_hw_events *cpuc,
->   	int idx;
->   
->   	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
-> +		if (armv8pmu_is_guest_part(cpu_pmu, idx))
-> +			continue;
->   		if (!test_and_set_bit(idx, cpuc->used_mask))
->   			return idx;
->   	}
-> @@ -946,6 +974,8 @@ static int armv8pmu_get_chain_idx(struct pmu_hw_events *cpuc,
->   	 * the lower idx must be even.
->   	 */
->   	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS) {
-> +		if (armv8pmu_is_guest_part(cpu_pmu, idx))
-> +			continue;
->   		if (!(idx & 0x1))
->   			continue;
->   		if (!test_and_set_bit(idx, cpuc->used_mask)) {
-> @@ -968,6 +998,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
->   
->   	/* Always prefer to place a cycle counter into the cycle counter. */
->   	if ((evtype == ARMV8_PMUV3_PERFCTR_CPU_CYCLES) &&
-> +	    !cpu_pmu->partitioned &&
->   	    !armv8pmu_event_get_threshold(&event->attr)) {
->   		if (!test_and_set_bit(ARMV8_PMU_CYCLE_IDX, cpuc->used_mask))
->   			return ARMV8_PMU_CYCLE_IDX;
-> @@ -983,6 +1014,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
->   	 * may not know how to handle it.
->   	 */
->   	if ((evtype == ARMV8_PMUV3_PERFCTR_INST_RETIRED) &&
-> +	    !cpu_pmu->partitioned &&
->   	    !armv8pmu_event_get_threshold(&event->attr) &&
->   	    test_bit(ARMV8_PMU_INSTR_IDX, cpu_pmu->cntr_mask) &&
->   	    !armv8pmu_event_want_user_access(event)) {
-> @@ -994,7 +1026,7 @@ static int armv8pmu_get_event_idx(struct pmu_hw_events *cpuc,
->   	 * Otherwise use events counters
->   	 */
->   	if (armv8pmu_event_is_chained(event))
-> -		return	armv8pmu_get_chain_idx(cpuc, cpu_pmu);
-> +		return armv8pmu_get_chain_idx(cpuc, cpu_pmu);
->   	else
->   		return armv8pmu_get_single_idx(cpuc, cpu_pmu);
->   }
-> @@ -1086,6 +1118,15 @@ static int armv8pmu_set_event_filter(struct hw_perf_event *event,
->   	return 0;
->   }
->   
-> +static void armv8pmu_reset_host_counters(struct arm_pmu *cpu_pmu)
-> +{
-> +	int idx;
-> +
-> +	for_each_set_bit(idx, cpu_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS)
-> +		if (armv8pmu_is_host_part(cpu_pmu, idx))
-> +			armv8pmu_write_evcntr(idx, 0);
-> +}
-> +
->   static void armv8pmu_reset(void *info)
->   {
->   	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
-> @@ -1093,8 +1134,10 @@ static void armv8pmu_reset(void *info)
->   
->   	bitmap_to_arr64(&mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
->   
-> -	if (cpu_pmu->partitioned)
-> +	if (cpu_pmu->partitioned) {
->   		armv8pmu_partition(cpu_pmu->hpmn);
-> +		mask &= ARMV8_PMU_HOST_CNT_PART(cpu_pmu->hpmn);
-> +	}
->   
->   	/* The counter and interrupt enable registers are unknown at reset. */
->   	armv8pmu_disable_counter(mask);
-> @@ -1103,11 +1146,20 @@ static void armv8pmu_reset(void *info)
->   	/* Clear the counters we flip at guest entry/exit */
->   	kvm_clr_pmu_events(mask);
->   
-> +
-> +	pmcr = ARMV8_PMU_PMCR_LC;
-> +
->   	/*
-> -	 * Initialize & Reset PMNC. Request overflow interrupt for
-> -	 * 64 bit cycle counter but cheat in armv8pmu_write_counter().
-> +	 * Initialize & Reset PMNC. Request overflow interrupt for 64
-> +	 * bit cycle counter but cheat in armv8pmu_write_counter().
-> +	 *
-> +	 * When partitioned, there is no single bit to reset only the
-> +	 * host counters. so reset them individually.
->   	 */
-> -	pmcr = ARMV8_PMU_PMCR_P | ARMV8_PMU_PMCR_C | ARMV8_PMU_PMCR_LC;
-> +	if (cpu_pmu->partitioned)
-> +		armv8pmu_reset_host_counters(cpu_pmu);
-> +	else
-> +		pmcr = ARMV8_PMU_PMCR_P | ARMV8_PMU_PMCR_C;
->   
->   	/* Enable long event counter support where available */
->   	if (armv8pmu_has_long_event(cpu_pmu))
-> diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-> index 115ee39f693a..5f8b143794ce 100644
-> --- a/include/linux/perf/arm_pmuv3.h
-> +++ b/include/linux/perf/arm_pmuv3.h
-> @@ -247,6 +247,14 @@
->   #define ARMV8_PMU_OVSR_F		ARMV8_PMU_CNT_MASK_F
->   /* Mask for writable bits is both P and C fields */
->   #define ARMV8_PMU_OVERFLOWED_MASK	ARMV8_PMU_CNT_MASK_ALL
-> +
-> +/* Masks for guest and host counter partitions */
-> +#define ARMV8_PMU_HPMN_CNT_MASK(N)	GENMASK((N) - 1, 0)
-> +#define ARMV8_PMU_GUEST_CNT_PART(N)	(ARMV8_PMU_HPMN_CNT_MASK(N) | \
-> +					 ARMV8_PMU_CNT_MASK_C | \
-> +					 ARMV8_PMU_CNT_MASK_F)
-> +#define ARMV8_PMU_HOST_CNT_PART(N)	(ARMV8_PMU_CNT_MASK_ALL & \
-> +					 ~ARMV8_PMU_GUEST_CNT_PART(N))
->   /*
->    * PMXEVTYPER: Event selection reg
->    */
-
+...
 
