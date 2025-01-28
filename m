@@ -1,135 +1,217 @@
-Return-Path: <linux-kselftest+bounces-25297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F4045A208B4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 11:39:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 741F2A20952
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 12:13:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E28DB3A4BB1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:39:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C20E5169311
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 11:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C13719DF4B;
-	Tue, 28 Jan 2025 10:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C3E19F103;
+	Tue, 28 Jan 2025 11:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWhDSFhk"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="eapRqYQO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SY5PR01CU010.outbound.protection.outlook.com (mail-australiaeastazolkn19012062.outbound.protection.outlook.com [52.103.72.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2719199EB2;
-	Tue, 28 Jan 2025 10:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738060763; cv=none; b=G265IS/FCfz2t3mZh4xRjRi2gy5dYbOLe2U/yY5vUuM0zztlkeY5Yzovzrzf/gN6ynWveDeiNrc8uwdojW6BpdhDTvhgjMl4YkICGdya755s2HNGgRKOfUreHxgL2coZfgzu8uLaZiWj/xHn34QlYGcSRwI0/UhR1ooeY9qQ/OY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738060763; c=relaxed/simple;
-	bh=VLy9LLdyqKC61hljttIwuJnD92HQYO3mRBVi1icex5A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kk6WaJV/zG+z0wO811bQ518W1s0EfSr98ZPBkbYty1aGWktFdnG32NJAqkPjbaHjyU5s6C9KTZ0vjO0wiXConPxdbwK52s5SMe5DTiRKl/l5U/uQEOZh8zNpAwAczh8QIt0aiKm46fME6ip4USBWfCm8Z7CEj0y9tEaawej3osI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWhDSFhk; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-21619108a6bso93091545ad.3;
-        Tue, 28 Jan 2025 02:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738060761; x=1738665561; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=APq1HFpsZy4S0RGnEFmQ684aZOqR+qlyiCYe7Preps8=;
-        b=JWhDSFhkL+ofSBtEhG/23De2cUDuKL4/YVaptNinDyv03RxHgRr++3W1WRlBe1lErx
-         WX+3Hr+DvihhWGPMFIzvvSYoprcUQL+JBKNLPukY0mZvz5NCTepNqgm0MNDYIUpM9XV2
-         FA+qpyK72eKVfOgSWe0l5vxCZbiSvxzhvDt0WuNuo/l91cKpa1O5cqE99U1AH1KJr/wg
-         7a0W2Fg93E+EyBP1IqGckL5z1Ilndin9HwSu9BvcMxYAaWfEIc4YQLSQe3gHBUoxst4I
-         YN1O4/g0sw41alFg2avuLwFpUDXNDEddjyzRl+X2ZtNZd/O9T1OSEXRRzFUAQrXiOkOk
-         cylw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738060761; x=1738665561;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=APq1HFpsZy4S0RGnEFmQ684aZOqR+qlyiCYe7Preps8=;
-        b=Oo8Pa5mE5tcbfvyvoWCTK7fbxBtAQfYaD0Q2cDahr9RuwzKOM4NZSoGgiZ+qxsLARm
-         kkfBUudNymRGKmmK+2uE0L+bVeZylBi9Jk/pJfNOuJ8G9LT0+7G4uBRPSBN7kOIe8fdk
-         Skmbj24JPP9e0w0QG7HfsQAjTXwqjiM+4E5y1BpxobicpP4PSDX2RFLhFNnixg2iG+qA
-         BSEkw7GtAQ477t6xZb+G7F5Qrr6uZ1K/rykyr+2gVkQM6iJC1G6c7P+/iktjtoQNkuQF
-         H1R1bBvwhmZ/jdLp00EKrzk9SffQSaASua6AnEYQl8AbKvw0s08/nVVAnIJuerDPXZT0
-         1Hqw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2xCG8Gj8UbmRUpWa5sB5q7VNKb3mxdV3zdTT6bWlE3fJ222muTH548j6CezNU4HV/51HYc1H5RZ5Sv/JzvIu/@vger.kernel.org, AJvYcCVR/6KE64tfri/CuaUVGqktcxtTRAY+oRMUmHAaJwQFT5+rGB8Q7pnHM0+kMnYe8pZTyQ+l9B9T8EO7MeGv@vger.kernel.org, AJvYcCWTaMnFHz15csIJuMPWppTLdJAJryxGMbe5tWQ/rDD2J+k2CvcOAC0yDsju2kYc1eVzt3w1rVhVLsv3OPkG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4eilq2k0hLPTryaJUWOtKpTHzZI2MbKnaAGlTOi5qCUAY8b6h
-	5nBw4/uI6jp07UrLfoSJ2jx44oP80dbiClYndzSSe3gwr4yR8jZIYmlsgA==
-X-Gm-Gg: ASbGncu7YNP8qzCoDa7bP9JmFXWeMZSGIaMOLAT+wB1iefGz4RV2Kdl4eNgRt98vgP/
-	5dLdL/H61vPUH6n6AqykR0aroKrKDBXBHi3/ovCU5A/yYVQ/qfUjGxq6okyeZnUoNtG45WzbzGj
-	Q8H22eVOHvmHUfIazuW2+XKm9swwpIqEtt6uRi+UTKeh/XrDbFJ/vauq1NGlXOJotG/J1dRRak9
-	h08VbERkfbF67Y+eUt9zSEZ5mFiGqydxqpjxjKjSxGZLWJE5EN/A1Ikcl0qOzcflfuAVFGWVryU
-	1Q7dOIPBrG+vzXOBBj7SSz6wnc2p/V9Tiw==
-X-Google-Smtp-Source: AGHT+IGAlZQLpix8DubipXT7VaqWxugPpes6Dq+mAangYVIPw0azjF51IArYwe78SeCwoZAu5gQmsQ==
-X-Received: by 2002:a17:902:f393:b0:215:a2e2:53ff with SMTP id d9443c01a7336-21c352d6cbbmr499938975ad.11.1738060760870;
-        Tue, 28 Jan 2025 02:39:20 -0800 (PST)
-Received: from Ubuntu.. ([27.59.87.238])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-21da3d9cacfsm78702015ad.31.2025.01.28.02.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jan 2025 02:39:20 -0800 (PST)
-From: Chandra Pratap <chandrapratap3519@gmail.com>
-To: kees@kernel.org,
-	joel.granados@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Chandra Pratap <chandrapratap3519@gmail.com>
-Subject: [PATCH] selftests: fix spelling/grammar errors in sysctl/sysctl.sh
-Date: Tue, 28 Jan 2025 16:06:55 +0530
-Message-ID: <20250128103853.7806-1-chandrapratap3519@gmail.com>
-X-Mailer: git-send-email 2.48.0-rc1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B61192B96;
+	Tue, 28 Jan 2025 11:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.72.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738062811; cv=fail; b=nL0wQS1gFDaYtEY5lirJQmiyyCFou2a7jy7URbIghYzWU9Jd4eQcCJ0DUyG45aismaoWPgWOpIFnuZzvHvdkSeHxagY4TKFUs1e+xV5X3ROkk14LRhIpkgtkelCdmwD/RtNFxgXQjpztMbxaIMrnpVd5xPZkkENPcP8bhJgr9jk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738062811; c=relaxed/simple;
+	bh=nQqMDZAOte4VecLaz5NhUdq3DrbihcQPpDBk9icM6ZY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=P2bPyHB7dF1pT97n4U4k5jnfYPjeQKnwWLc7GjDergzg/EThOvW+a/TqpktTIv9k/2ZCDENN534Yk67WQFZSdweoosqgUWQhb1XX80w3he/dNaaRuworNgyfhQwdgy/9FPAgafG4qyqgJTXYAIK+MOLxkVvNJm7Wxet7EGg1DTg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=eapRqYQO; arc=fail smtp.client-ip=52.103.72.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ATe1y3M5p72GJ3d4PeJVIbtDUaiKNmmgLziFfUkNltAND3oILSo6DppAeNZV5hJLsIkoBTnPB2xCWh0M8C24OWOzGHMLFu/dfutefreVu2NhWEZ+35l7G5HvaC1LhAt5Oy8LrV6fHyoZ+oUjFXvBJ95Kxb8s9Up2JeDpyJWwu130r4FXCZHobQMxEyrUWebvNmBly19eA9WuLIYi6ZDsPAApT7TsfNkiUTd8Jm5/s8W3ljid/xXbdlAaqi0eY0tJe6ZZ/m45JwMlMkoDRmycwcGscM8R7kwwWMT0S+D8P5oTkjUiX0/Nhp+TEHnG7lvy8zpoDiRu87NqE9aLxhm4YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V1zwJsGya26W24ire9ScaXOt34Ycl/p1Rl5OcTgeppQ=;
+ b=XWKAoLvbLCPdHweR8tQ82yy9blVfwVBs58cO4t2rB+FW9gw3oec08UyAJVjxtqFoD/CBnPjs6Nx1C+4HoQY51X0M/6nLf18hLNb/m5oZwBXAcovE8F/QGBVUB+bUUWPFjLn/Ed1Tu/UbHtefRt2VXLXry3pYILrJoGAycAXhK1oCV7mCPq0QRTdLQN2C+f5SY+MFdpugdnfV49VG2JicZ5c5trEz3vCrY3sr6oXb6PfpI9hdf68907jdey1VkS0i60/imJWa4jlV65ie3i00jHYOzkMCyTHKuWdiaRB3O2zjLJ7SEelC44O08esph6rMDF21pUC3Qc9O9JJDJexrgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V1zwJsGya26W24ire9ScaXOt34Ycl/p1Rl5OcTgeppQ=;
+ b=eapRqYQOx+7BH9YK5T8gxSij5nnogEDphPi8KxprisPUaBi7v05oeWQChdg4Ff77BObP/uboNaEz2MtkMPqbLCRfS1ry9uSP8Cs0o8zJeAN1k0lQv491Eq8k+fxjB24lQ7WHaiFMjM4290VL75wjGVBi5wmunPLYG8zokj8P8dMo8AwLa22+71tvEr4Ouv+DLHeO3rdJE0qggmEqHA0bSq9GzKzZ8gQErOCH5nSXRo93Cmfxmc+kuzlXGYn4b2WrDT87Nuusqz3FyUBZv7rzyP/PPLOHXk3lbYZCN7nTPQXbSbf7eEP5dzxAwdWgL0gNoW7XDTMm3wG/zwMmGTE+UQ==
+Received: from MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:ff::9) by
+ MEYP282MB1608.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:bb::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8398.18; Tue, 28 Jan 2025 11:13:22 +0000
+Received: from MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::6174:52de:9210:9165]) by MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::6174:52de:9210:9165%6]) with mapi id 15.20.8398.014; Tue, 28 Jan 2025
+ 11:13:22 +0000
+Message-ID:
+ <MEYP282MB23123214D4F50F0F622C4697C6EF2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM>
+Date: Tue, 28 Jan 2025 19:13:12 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/7] bpf: Implement
+ bpf_probe_read_kernel_dynptr helper
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
+ <20250125-bpf_dynptr_probe-v2-1-c42c87f97afe@outlook.com>
+ <CAADnVQ+bRvL-4n4ZB5QS2oUxvo3vhJHf=8=2No3WWqYHqSyBEg@mail.gmail.com>
+ <MEYP282MB2312A90273FF290ED5FC6F6AC6ED2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM>
+ <CAADnVQJ7bw0Qa4UM_E0zb5bqt5P09f7rryFSe6faY8ibX0zWuA@mail.gmail.com>
+Content-Language: en-US
+From: Levi Zim <rsworktech@outlook.com>
+In-Reply-To: <CAADnVQJ7bw0Qa4UM_E0zb5bqt5P09f7rryFSe6faY8ibX0zWuA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TYWPR01CA0016.jpnprd01.prod.outlook.com
+ (2603:1096:400:a9::21) To MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:220:ff::9)
+X-Microsoft-Original-Message-ID:
+ <aa602797-b908-427a-9944-a0fd90c50fb8@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MEYP282MB2312:EE_|MEYP282MB1608:EE_
+X-MS-Office365-Filtering-Correlation-Id: 458fd8c9-b6f6-415e-36d5-08dd3f8cc680
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|8060799006|5072599009|19110799003|6090799003|461199028|7092599003|15080799006|440099028|3412199025;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RVVQM2pRT1NOTXJIOGt4ZU5lQk9uZURQTVA4Sm53Q2ErRTNiV2ppY2RPYTAw?=
+ =?utf-8?B?L014eC8wTGl4N1JxSTlwSmtxejAxWFUvNFMyUUNXWTB0aE8zRG00S1dpSmpn?=
+ =?utf-8?B?TERGZmhIS2NqTVJweTVKQVlGa2kyRTNwUFVpQWdqK1l1dlo0eFIyVDU4M01O?=
+ =?utf-8?B?ZmJDeUM4N08yVERvbmhxMFpwblJndnc2THBENS9DWmNsaHNwdEJtdnE4WXZ0?=
+ =?utf-8?B?K3E5TnBjR2VYZFNrWGxRWGUxVlpaSlptRENUN2szUm9LMTdubDZ6VnpVMnFH?=
+ =?utf-8?B?SllMdmxkaFRqaHBuWW9OTTJiVnJTcGhxNFFDd3JvNjZlMXFnQkdieEthNXBo?=
+ =?utf-8?B?Q1hoUlZhaTdzSTVvczJmakQvTm9ob3Bva2RwTEdKSWxRdTI5MUtvZUhlU3o1?=
+ =?utf-8?B?dVRKeVlHaWk1R0V4MWN0RFFJSXVvdG1WR2ZxRkNXQ1N4QWYzVU4wT0lQQ0RW?=
+ =?utf-8?B?cFF4c01PbnVtZzBZc1FyQVE3MEFYejkwNlpReWRDMzdLdUZRQzU2eW1KemZj?=
+ =?utf-8?B?K0wxdGRjMVU2Qm9oRTZCcTJGaHBYc2t4NVZ1VlFJZ2J5cEZWM1EyMHZnV1lQ?=
+ =?utf-8?B?UENqU1NiZ0hJUXlYZG1vZHQ4b0dFS0FtMnZhV2pwS1FJank3QThlWXlyUkJV?=
+ =?utf-8?B?QkxnZ1pUeEl3YXRsYnk4ckVteUNkUXZQcEVOVlQ0dHlRUTB1RTZsQzI3cENH?=
+ =?utf-8?B?eWQ5UldUTnJBTGZtandQY3FrcmFRRmxrRFFVMnF3eTZWU1FNMG5uWGJJblk2?=
+ =?utf-8?B?b09tNjQxVnNEVHlmNE5wSHM4ZkdUcTdDVVBLRzhrblh5Y0ZXeWlURCt0QWNk?=
+ =?utf-8?B?ZnZvRTd2THJzY0tsUURJejNBTEFBV1F1MmltbnhQWDY5RURrZ1ZCUW8wY09J?=
+ =?utf-8?B?d3FDdWpudVZpQS9MWStYejBReTNwdjd2NHBLdTN2UDlCWFNKMEViTmNxcnBr?=
+ =?utf-8?B?cmFYMlJvcmdaZ29sK0NTTnNnWURWN04wUS9pMWMxaWEyRHZrMFZueUJxWER2?=
+ =?utf-8?B?SHg4R2lOZVoxMlhRalJUYTEvOGtuRWdPY3owTjMyQkxldERyVDdCclhhdFV2?=
+ =?utf-8?B?eEJRRER3SXdtSmdHcTlUZDVuWlNrM2w2RWFHckhQazhaWDBEUkVnUnlYQm4z?=
+ =?utf-8?B?aVEyb1hLbFdwTVRrUWNEYXBjNzhkSHJEZnRtcWx1ckJ2QXZUMmVlZUVIZjdw?=
+ =?utf-8?B?NE1aWlRLcWNmRnFQcDc2R0RQNDZ2cEtmSmZFdFlTTzlpRFVNS1pDUHpYdWdx?=
+ =?utf-8?B?RlVBaTFhSGZGdEpJRGNyak5NbnNKbDFrUFdSd2dQd2FZME1GbHdrSkxGSklV?=
+ =?utf-8?B?eVlRUllzYW1ZeG53U3FwTzFLVllOTURDTldMQk1PMVdFWFhwbng0OTVUZFFG?=
+ =?utf-8?B?cHY2ODdFU1NBRnBRWXA0V0FIbUtGV01VbEQ3NnJJaHprbHo4cGg4dDJRek1t?=
+ =?utf-8?B?ZlBrcEE5YU84Mjg0RUxLbkNWL2ZtTFdNVzd1OVhmOUNaQVR2aTRBMmdUUm5n?=
+ =?utf-8?Q?bWvFsU=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cTBuRVBuSFlINXpQSGNnOGRxUkFLMS9FMHdVaEZaemFKN0xlK3cvYlNaMUZw?=
+ =?utf-8?B?Y2pveGc2UHNScWdLYkhiMzlrY00zNi9FQ2FtcVl4ck1qdGVoN0ErRS9XNjVH?=
+ =?utf-8?B?VGdmTllqaGlvWjNhTXRJUFVPM1dwTkRXS1c3UVZ5WTZLTW1Ha2puRk8xanBs?=
+ =?utf-8?B?YWthMGJsdHVpS09EbmpScGJCUlJiYnBLa1A0Unh2TXd6MklNQkVvSjBseGRB?=
+ =?utf-8?B?Mkt3emRvY2ZMMnBRVUsxUnhZRTR4SXJzeW9HeWhNS3daOFMrQStic3RuV1ha?=
+ =?utf-8?B?TW1lREFGT0lJNFRWOUZRdllFV2MrbmJ0TFp1QXlLK1p2YW54NTNIb3NBOUtn?=
+ =?utf-8?B?RmRsQkszaXFPMGZHZ2ZUK3B2ZEt5WWIvalZ0c0pTdFlCZjFRNnlzOUo5RzBy?=
+ =?utf-8?B?VVVXdmNESnpaS21KbzRzbS9KVWw5NkRuWlpzNTNwcWtBMUxwMzVtQStFV1hT?=
+ =?utf-8?B?SmhETHJ2Z0E5UUdtUDMyenFYQm9jR0JScWlITnN3cks4U0xzdm9HcG4vc0FP?=
+ =?utf-8?B?ZmMwYkIxbVN1STlPV3QvVjIvZ2hNL3YxamNYclF6YW1hRi9EalpCc29tS3hH?=
+ =?utf-8?B?cmxYYzJoek56K0kzUVMyWkk3R0RVcTBaVnRpZDNtWUdCcm5ncUhJNFhvQ0lq?=
+ =?utf-8?B?V2YwNHErOTNDQXhDMXJUendZU3lHRzR6TkhjZFpsZU9FdVVLRUx5VlRkK1FL?=
+ =?utf-8?B?WUlmZWZQL216bndKSTAvQVR2NGl3cEJUQ1NySE1aWEdZdWNudzNCdkRVSFVs?=
+ =?utf-8?B?N0QzdFZIdmVKdk9DQ1o1ckQ4V1gwbTZFWEg0KzZPMHhHd0FOWTZlb3Z4a3U4?=
+ =?utf-8?B?bHVBYUM2Y2ZUUStCZ3FEVkZ4R1FUOWNQRHRpZW9PM2lza1JoNFdnVWxnUTlt?=
+ =?utf-8?B?VnhyanJubWwycW5NTGdKVUJmUkl6R0JSeElGbUtRWGV3RE1waXJTcEtFdWhj?=
+ =?utf-8?B?SjJNRTZkRUpRN1pTY0syVWtVdHVBcFoydEJTcmhDOER2RlNHaXJSOTh5Z2Nk?=
+ =?utf-8?B?aVFBUkRJNytUTEFHUm1aUzkyWWNPZDlNeDF6TytWMTdCT3lTb1FaU3hIU3M4?=
+ =?utf-8?B?elFCNjlrY2dMeWxBOE9SWnFMeGdVd2JMbzlBVE9wWG1MVHE3RGlOb281YTlt?=
+ =?utf-8?B?bUVzSVFpbGYrNkR4c0RROXJUSmpqSmFqK29yYzJUbExrdXBPQ2d0bDZSS1Ux?=
+ =?utf-8?B?V1pMK3FMR1hKR0RIWEhydnJZLzE5WDZ5cXR6ODF3LzBSSS82bldndjVOREZJ?=
+ =?utf-8?B?WkI5OWZvNldwTXc3c2NKSXdJUmVDa2xIbFY1NnFhOUkwMk54alU5cUR0SnpV?=
+ =?utf-8?B?SkdjVzN3U2t6dFBzSTd6dkJiMlhmcTU1UFdwc1gzTHFPaGhOTngzeFdtWGwx?=
+ =?utf-8?B?UGl1VnVPZUR4bkVETjF6ekNoUW9yTUNZakVSSjZ6UEJzOUgxYStlNVlaWXRU?=
+ =?utf-8?B?dERGbU12cWx4UUZEUXN5RUFLMldBRDNndWtGUHFNWEdNWG5jT0J2aHkwKzlI?=
+ =?utf-8?B?ZmI1QVlsckt5aDVNNnRpYm5KZm9PZi9PTWNZUnh3LzdsN0IrdmNFVGRKRHhD?=
+ =?utf-8?B?VlZUNVYvaGZVM3ExUjhsQUlXSGtDS210bFBQdUNDVW4xT25IRGtPQnlFazUw?=
+ =?utf-8?Q?kUX166YoRjsun8AkkDnSlo3sy7hsRdMdQ2LZmG7qH8fo=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 458fd8c9-b6f6-415e-36d5-08dd3f8cc680
+X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2025 11:13:21.9089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEYP282MB1608
 
-Fix the grammatical/spelling errors in sysctl/sysctl.sh.
-This fixes all errors pointed out by codespell in the file.
-
-Signed-off-by: Chandra Pratap <chandrapratap3519@gmail.com>
----
- tools/testing/selftests/sysctl/sysctl.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index 84472b436c07..f6e129a82ffd 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -21,7 +21,7 @@ TEST_FILE=$(mktemp)
- # ENABLED: 1 if enabled, 0 otherwise
- # TARGET: test target file required on the test_sysctl module
- # SKIP_NO_TARGET: 1 skip if TARGET not there
--#                 0 run eventhough TARGET not there
-+#                 0 run even though TARGET not there
- #
- # Once these are enabled please leave them as-is. Write your own test,
- # we have tons of space.
-@@ -764,7 +764,7 @@ sysctl_test_0007()
- 	fi
- 
- 	if [ ! -f /proc/cmdline ]; then
--		echo -e "SKIPPING\nThere is no /proc/cmdline to check for paramter"
-+		echo -e "SKIPPING\nThere is no /proc/cmdline to check for parameter"
- 		return $ksft_skip
- 	fi
- 
-@@ -898,7 +898,7 @@ usage()
- 	echo Example uses:
- 	echo
- 	echo "$TEST_NAME.sh            -- executes all tests"
--	echo "$TEST_NAME.sh -t 0002    -- Executes test ID 0002 number of times is recomended"
-+	echo "$TEST_NAME.sh -t 0002    -- Executes test ID 0002 number of times is recommended"
- 	echo "$TEST_NAME.sh -w 0002    -- Watch test ID 0002 run until an error occurs"
- 	echo "$TEST_NAME.sh -s 0002    -- Run test ID 0002 once"
- 	echo "$TEST_NAME.sh -c 0002 3  -- Run test ID 0002 three times"
--- 
-2.48.0-rc1
+On 2025/1/28 06:04, Alexei Starovoitov wrote:
+> On Sat, Jan 25, 2025 at 5:05 PM Levi Zim <rsworktech@outlook.com> wrote:
+>> On 2025/1/26 00:58, Alexei Starovoitov wrote:
+>>   > On Sat, Jan 25, 2025 at 12:30 AM Levi Zim via B4 Relay
+>>   > <devnull+rsworktech.outlook.com@kernel.org> wrote:
+>>   >> From: Levi Zim <rsworktech@outlook.com>
+>>   >>
+>>   >> This patch add a helper function bpf_probe_read_kernel_dynptr:
+>>   >>
+>>   >> long bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dst,
+>>   >>          u32 offset, u32 size, const void *unsafe_ptr, u64 flags);
+>>   > We stopped adding helpers years ago.
+>>   > Only new kfuncs are allowed.
+>>
+>> Sorry, I didn't know that. Just asking, is there any
+>> documentation/discussion
+>> about stopping adding helpers?
+>>
+>> I will switch the implementation to kfuncs in v3.
+>>
+>>   > This particular one doesn't look useful as-is.
+>>   > The same logic can be expressed with
+>>   > - create dynptr
+>>   > - dynptr_slice
+>>   > - copy_from_kernel
+>>
+>> By copy_from_kernel I assume you mean bpf_probe_read_kernel. The problem
+>> with dynptr_slice_rdwr and probe_read_kernel is that they only support a
+>> compile-time constant size [1].
+>>
+>> But in order to best utilize the space on a BPF ringbuf, it is possible
+>> to reserve a
+>> variable length of space as dynptr on a ringbuf with
+>> bpf_ringbuf_reserve_dynptr.
+> That makes sense. The commit log didn't call it out.
+> Please spell out the motivation clearly.
+Thanks for the advice! I will include it in v3.
+> Also why bpf_probe_read_kernel_common ?
+> Do we need to memset() it on failure?
+Since the current patch is basically a thin wrapper around 
+bpf_probe_read_kernel,
+I think we'd better not deviate from the wrapped function.
 
 
