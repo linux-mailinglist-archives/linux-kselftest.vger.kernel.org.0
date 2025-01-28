@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-25284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25285-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA77A207EF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:59:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40C57A207F3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 11:00:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9495C18896A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:59:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B313D3A8C08
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2A319CCF5;
-	Tue, 28 Jan 2025 09:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DBF1A9B27;
+	Tue, 28 Jan 2025 09:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YiXs8IbK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jPI0HlvI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3BC19E7D0;
-	Tue, 28 Jan 2025 09:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620C61A23AC;
+	Tue, 28 Jan 2025 09:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738058267; cv=none; b=J9Oj++fCKvLFfVQBUakLKBlWDRPYroAXCsHXGbo43vueBvGjlDvSVWF+U0ZgeQ/7mkeIbKRvaBNbp/deAispOP8A0+poFpe4AMcVUFmzq9R9uXrlGlsPk7jPG/G0tYbY87d+qbj+moKEju8dUG5fgQoMtkmIPtfMSdEgi2JdHpE=
+	t=1738058269; cv=none; b=a6CA4LpbcsT2pxVNL9zETvkZW7sDJzGETqv9GxDvMsZSZ0WJCUJeOHdAnihzXhvwU/B7OAScbeprddTF+zAL99KYkCbqYbzZhbo2KXgf7Xs6o3PNZNivtbbLn16g2vAVWo1y3plHrihgd04JJNYdnt2Vv6Dti0goBIQIhWsV7to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738058267; c=relaxed/simple;
-	bh=m04FlneCj/z8D2trL1H3pbdcqpm/qA9j3a89d1NfL/Q=;
+	s=arc-20240116; t=1738058269; c=relaxed/simple;
+	bh=gFLKuL6G55TUy+IWxGtTNF0lqi9FMxeV1c/9dvvMhsA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uQAXc5WXLyRneUCIfFDfj1/p6vLJ0OCmNbHBnbHxevukeN4zTSj7yByWc1CgcLuZSMkDrdWq/Coqle+svLeBfjBG0IDOs6cJ9aYh6iqj8k1DIipqJYeiwHZn9MUU0zJgwqkzMcX5+/MLS2Iw5MTwqE0Im5iRwM6C2YPhgsUrt1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YiXs8IbK; arc=none smtp.client-ip=217.70.183.197
+	 In-Reply-To:To:Cc; b=W2JTyKVtIJRUHZEf8iXVCktaxWW4VCGQUoBbB00P1q0F8r0zCjJH1KTS1US2uWRTqsVH1/Wuwr8CCnjTgeDsOV0uts4OY0dj77J4y5KkMk9FvZd8HeyDi222DXPphaqK2sY7rNu/BvxDSUqg7Ulm2tFlxGrg3LXvaGiaeXdGDD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jPI0HlvI; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 20F3E1C0014;
-	Tue, 28 Jan 2025 09:57:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E0ED1C0003;
+	Tue, 28 Jan 2025 09:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738058263;
+	t=1738058264;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=asvZ/snCTxuDRhkTJGvywmxe0sC5Rfiti0fKWCDm+Bg=;
-	b=YiXs8IbKFPKcFzAlTfKoy1zk8SDu7WNAABsLqbI+CZziO6tOjYp8VtYCQUDoAf5a3pOQ4E
-	RAsR9JR4M6WpH2riFckH9BNtR/u2YAzsYFaPTIKZQZOtVmpOI0oBnhphr0BWv10audX9tM
-	ma7Pp6bLfRmP7eEskTJBYRz8I2KLOA5oYUggBCNmclLdx1IkrLZuYYSTHrVeva3RfWZAGb
-	JGBT9qZwtN+HXamOHCOO8oldeCp+oyVGx3tizIfKQFuY9XUWhKY6mIBG58V5gbcvrkgyRi
-	Fso1XF9QvX7kxA4Jc/YSNUgiRKFa7m1yo54cpRKDjtz30eXcbOolpY0BMtpMvg==
+	bh=7P+x0n8lJBtCDpe4AAhhE/ki5FufYoGxSglBVU6SPOs=;
+	b=jPI0HlvIL/Bfkg52uvM24Tl2y+mv44NmrZl4pyQOMDNv3I96cl7zmMoeVmp7cGNrcjIEu0
+	2ousqxQq0s7LIWrMO7Bw9+ujGV4g2ig8ud+Qj5htyuV2idyebgrwJJE9R9SsPtZ+3pbQju
+	7KkWYakTWkpkxSbvppUOhIrPqTsTAtnwpAI9JCNJxPhSeZHAD783qgSNl4Wp2cAZph+ekg
+	iomPE3agP5dE5crUYH0q55Tks0oIoXTA4WxQZ47WI/ZNwE1kNWs90omLo8o6dLYOYgKIYA
+	CaqX2CJo7RDfGMQpj7KYYZuhvbx0AWrXvG+jnMNODFhsJ03cGUIEO0FcZtuDEg==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Tue, 28 Jan 2025 10:57:28 +0100
-Subject: [PATCH bpf-next v3 04/14] selftests/bpf: test_xdp_veth: Use int to
- describe next veth
+Date: Tue, 28 Jan 2025 10:57:29 +0100
+Subject: [PATCH bpf-next v3 05/14] selftests/bpf: test_xdp_veth: Split
+ network configuration
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250128-redirect-multi-v3-4-c1ce69997c01@bootlin.com>
+Message-Id: <20250128-redirect-multi-v3-5-c1ce69997c01@bootlin.com>
 References: <20250128-redirect-multi-v3-0-c1ce69997c01@bootlin.com>
 In-Reply-To: <20250128-redirect-multi-v3-0-c1ce69997c01@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -80,67 +80,150 @@ Cc: Alexis Lothore <alexis.lothore@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-In the struct veth_configuration, the next_veth string is used to tell
-the next virtual interface to which packets must be redirected to. So it
-has to match the local_veth string of an other veth_configuration.
+configure_network() does two things : it first creates the network
+topology and then configures the BPF maps to fit the test needs. This
+isn't convenient if we want to re-use the same network topology for
+different test cases.
 
-Change next_veth type to int to avoid handling two identical strings.
-This integer is used as an offset in the network configuration table.
+Rename configure_network() create_network().
+Move the BPF configuration to the test itself.
+Split the test description in two parts, first the description of the
+network topology, then the description of the test case.
+Remove the veth indexes from the ASCII art as dynamic ones are used
 
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/test_xdp_veth.c       | 81 +++++++++++++---------
+ 1 file changed, 47 insertions(+), 34 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index d41884fdc430f1ceed53f16b0dddbdbb34f83301..942c6e99e15ef69003c033e7bc1bfc9bc9777557 100644
+index 942c6e99e15ef69003c033e7bc1bfc9bc9777557..710136861bda7607dcaca6186b5acfe0082a870c 100644
 --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
 +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -39,7 +39,7 @@ struct veth_configuration {
- 	char local_veth[VETH_NAME_MAX_LEN]; /* Interface in main namespace */
- 	char remote_veth[VETH_NAME_MAX_LEN]; /* Peer interface in dedicated namespace*/
- 	const char *namespace; /* Namespace for the remote veth */
--	char next_veth[VETH_NAME_MAX_LEN]; /* Local interface to redirect traffic to */
-+	int next_veth; /* Local interface to redirect traffic to */
- 	char *remote_addr; /* IP address of the remote veth */
- };
+@@ -3,17 +3,27 @@
+ /* Create 3 namespaces with 3 veth peers, and forward packets in-between using
+  * native XDP
+  *
+- *                      XDP_TX
+- * NS1(veth11)        NS2(veth22)        NS3(veth33)
+- *      |                  |                  |
+- *      |                  |                  |
+- *   (veth1,            (veth2,            (veth3,
+- *   id:111)            id:122)            id:133)
+- *     ^ |                ^ |                ^ |
+- *     | |  XDP_REDIRECT  | |  XDP_REDIRECT  | |
+- *     | ------------------ ------------------ |
+- *     -----------------------------------------
+- *                    XDP_REDIRECT
++ * Network topology:
++ *  ----------        ----------       ----------
++ *  |  NS1   |        |  NS2   |       |  NS3   |
++ *  | veth11 |        | veth22 |       | veth33 |
++ *  ----|-----        -----|----       -----|----
++ *      |                  |                |
++ *    veth1              veth2            veth3
++ *
++ * Test cases:
++ *  - [test_xdp_veth_redirect] : ping veth33 from veth11
++ *
++ *    veth11             veth22              veth33
++ *  (XDP_PASS)          (XDP_TX)           (XDP_PASS)
++ *       |                  |                  |
++ *       |                  |                  |
++ *     veth1             veth2              veth3
++ * (XDP_REDIRECT)     (XDP_REDIRECT)     (XDP_REDIRECT)
++ *      ^ |                ^ |                ^ |
++ *      | |                | |                | |
++ *      | ------------------ ------------------ |
++ *      -----------------------------------------
+  */
  
-@@ -47,21 +47,21 @@ static struct veth_configuration config[VETH_PAIRS_COUNT] = {
- 	{
- 		.local_veth = "veth1",
- 		.remote_veth = "veth11",
--		.next_veth = "veth2",
-+		.next_veth = 1,
- 		.remote_addr = IP_SRC,
- 		.namespace = "ns-veth11"
- 	},
- 	{
- 		.local_veth = "veth2",
- 		.remote_veth = "veth22",
--		.next_veth = "veth3",
-+		.next_veth = 2,
- 		.remote_addr = NULL,
- 		.namespace = "ns-veth22"
- 	},
- 	{
- 		.local_veth = "veth3",
- 		.remote_veth = "veth33",
--		.next_veth = "veth1",
-+		.next_veth = 0,
- 		.remote_addr = IP_DST,
- 		.namespace = "ns-veth33"
- 	}
-@@ -144,7 +144,9 @@ static int configure_network(struct skeletons *skeletons)
- 	if (!ASSERT_GE(map_fd, 0, "open redirect map"))
- 		goto fail;
+ #define _GNU_SOURCE
+@@ -119,12 +129,9 @@ static int attach_programs_to_veth_pair(struct skeletons *skeletons, int index)
+ 	return 0;
+ }
+ 
+-static int configure_network(struct skeletons *skeletons)
++static int create_network(void)
+ {
+-	int interface_id;
+-	int map_fd;
+-	int err;
+-	int i = 0;
++	int i;
+ 
+ 	/* First create and configure all interfaces */
  	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
--		interface_id = if_nametoindex(config[i].next_veth);
+@@ -139,27 +146,11 @@ static int configure_network(struct skeletons *skeletons)
+ 		    config[i].remote_veth);
+ 	}
+ 
+-	/* Then configure the redirect map and attach programs to interfaces */
+-	map_fd = bpf_map__fd(skeletons->xdp_redirect_maps->maps.tx_port);
+-	if (!ASSERT_GE(map_fd, 0, "open redirect map"))
+-		goto fail;
+-	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
+-		int next_veth = config[i].next_veth;
+-
+-		interface_id = if_nametoindex(config[next_veth].local_veth);
+-		if (!ASSERT_NEQ(interface_id, 0, "non zero interface index"))
+-			goto fail;
+-		err = bpf_map_update_elem(map_fd, &i, &interface_id, BPF_ANY);
+-		if (!ASSERT_OK(err, "configure interface redirection through map"))
+-			goto fail;
+-		if (attach_programs_to_veth_pair(skeletons, i))
+-			goto fail;
+-	}
+-
+ 	return 0;
+ 
+ fail:
+ 	return -1;
++
+ }
+ 
+ static void cleanup_network(void)
+@@ -175,6 +166,8 @@ static void cleanup_network(void)
+ void test_xdp_veth_redirect(void)
+ {
+ 	struct skeletons skeletons = {};
++	int map_fd;
++	int i;
+ 
+ 	skeletons.xdp_dummy = xdp_dummy__open_and_load();
+ 	if (!ASSERT_OK_PTR(skeletons.xdp_dummy, "xdp_dummy__open_and_load"))
+@@ -188,9 +181,29 @@ void test_xdp_veth_redirect(void)
+ 	if (!ASSERT_OK_PTR(skeletons.xdp_redirect_maps, "xdp_redirect_map__open_and_load"))
+ 		goto destroy_xdp_tx;
+ 
+-	if (configure_network(&skeletons))
++	if (!ASSERT_OK(create_network(), "create_network"))
+ 		goto destroy_xdp_redirect_map;
+ 
++	/* Then configure the redirect map and attach programs to interfaces */
++	map_fd = bpf_map__fd(skeletons.xdp_redirect_maps->maps.tx_port);
++	if (!ASSERT_OK_FD(map_fd, "open redirect map"))
++		goto destroy_xdp_redirect_map;
++
++	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
 +		int next_veth = config[i].next_veth;
++		int interface_id;
++		int err;
 +
 +		interface_id = if_nametoindex(config[next_veth].local_veth);
- 		if (!ASSERT_NEQ(interface_id, 0, "non zero interface index"))
- 			goto fail;
- 		err = bpf_map_update_elem(map_fd, &i, &interface_id, BPF_ANY);
++		if (!ASSERT_NEQ(interface_id, 0, "non zero interface index"))
++			goto destroy_xdp_redirect_map;
++		err = bpf_map_update_elem(map_fd, &i, &interface_id, BPF_ANY);
++		if (!ASSERT_OK(err, "configure interface redirection through map"))
++			goto destroy_xdp_redirect_map;
++		if (attach_programs_to_veth_pair(&skeletons, i))
++			goto destroy_xdp_redirect_map;
++	}
++
+ 	/* Test: if all interfaces are properly configured, we must be able to ping
+ 	 * veth33 from veth11
+ 	 */
 
 -- 
 2.47.1
