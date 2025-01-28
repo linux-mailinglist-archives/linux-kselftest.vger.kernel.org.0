@@ -1,175 +1,192 @@
-Return-Path: <linux-kselftest+bounces-25308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00DEDA20B34
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 14:18:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F5BA20C37
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 15:45:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2548F18863CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 13:18:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E3733A5D5A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 14:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD0919CCEC;
-	Tue, 28 Jan 2025 13:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7514B1A83E5;
+	Tue, 28 Jan 2025 14:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZCpRcnZB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mlRZLirg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A734D26ACD;
-	Tue, 28 Jan 2025 13:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5F019EED7;
+	Tue, 28 Jan 2025 14:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738070306; cv=none; b=KK6sbWRAm/otTf3yYhRwuYBtlNVP9LRRSV7fI4sNeXWL2fIJ1ZjY6JG6Ew3me5bTzpyDiAnFp8VBCOnJ13Czgnx8jwhuvn0n/AV+r9VYBlhIrpPkkAKXp4F7WceqK8P5OT0bnCq47p0QBlix4GDCZp37FwYfsvXmUWh9KvLQGrQ=
+	t=1738075542; cv=none; b=UKNRXI8jMVGFOjTr1xQW/zzgK0UAIQ7ECPGa4qfqhya8n5WJxwPCHOGcJ/Rrl75YnKK1xySdCXxTD0jhNBVXVKb2nYWbwJ8mzied1qfAKtW43J4uO8ihyGJIEqF0lZkt0lpNSMv9ABz9++/6+5qIccLBl6gbj3x4PeFXz6reRAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738070306; c=relaxed/simple;
-	bh=R1CkjN6rnlBEidy6zaoQEIIz7xKKK7Xxsrb1UAcj6ak=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=On2iFkJxhMJ7NkQLviTgOfymwu4/3y4utC1m8T4NKIT/sgLGLCS6Sl7NzxrssNIjcL4UVJzxYnpHGaisKgbL6EMdKzknJdZNKrS/YoASIDEm3nu3Dbc/RpkKvE5+zzzlx5XSOxxH1abBh9GSdO4bOgD2qnx4LbYt3atirW6G0OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZCpRcnZB; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50SAF9lc019191;
-	Tue, 28 Jan 2025 13:18:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=6Eu73WL2s2EjQr7dSMUh8LPNNPnizN+fc1HdpKeCv
-	OM=; b=ZCpRcnZBoL/utG9bmelX2vglJeyyRC1pgF/3dKwG+CvgLdiV2ANdnwuP+
-	39QiOXRE8/c2sCXhWpjOzXeUv5Sy8YYBw86UQ68839ikkOyyHDC9nQQ7njrW18yO
-	duogt9pnSIPAn+m4nWbW34DhKN0UAcHEEOOqtwkgKx88yedDVcKIyjjiY3hc6J3m
-	F8Aula+988dywdH2fB1iUA+AHKLwN6K2WlCo6e2mPdaHbyLs/iUIU/LFca2eAzLT
-	ll0cvFNE4vGvlcppuXfapKSwGoE+hq73cZ5g+PVDuUUUoXA2HBg4jGVU4w4QtF+S
-	6zQbPzekm0tN/rvGkWW+ccunM3/Ng==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44ecytcuqj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Jan 2025 13:18:13 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50S98ZGG019368;
-	Tue, 28 Jan 2025 13:18:13 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44db9mucdj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Jan 2025 13:18:12 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50SDI9sJ16056690
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Jan 2025 13:18:09 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 06F0A20043;
-	Tue, 28 Jan 2025 13:18:09 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C3C7A20040;
-	Tue, 28 Jan 2025 13:18:08 +0000 (GMT)
-Received: from darkmoore.boeblingen.de.ibm.com (unknown [9.155.210.150])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 28 Jan 2025 13:18:08 +0000 (GMT)
-From: Christoph Schlameuss <schlameuss@linux.ibm.com>
-To: kvm@vger.kernel.org
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] KVM: s390: selftests: Streamline uc_skey test to issue iske after sske
-Date: Tue, 28 Jan 2025 14:18:03 +0100
-Message-ID: <20250128131803.1047388-1-schlameuss@linux.ibm.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1738075542; c=relaxed/simple;
+	bh=/csEvLRUMucPRyRdSUwZOs8F0rkU5vIyJTNl6uyBlR8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=cANS/6VhZ5adXYIkkI8cXMp3bfiN0wmZkkfEXt8NSJr1bzABT84ANyQ/sqOxI9gLJgJEa+4dgh6W5mUMH0V0mqO7I4GEw/mn9CXVFgNnBC/9ezlOEWWdaNUHzD791p8uaRaArgfLlSdU19Y5/xdPjUcA8kjr2WLojgU7w44vjko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mlRZLirg; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-51640f7bbd3so1821312e0c.2;
+        Tue, 28 Jan 2025 06:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738075539; x=1738680339; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fakcm+rH6Ht22JqZeovxMYLDOTFTQ4rDAH4rXh1qvOE=;
+        b=mlRZLirgudvDOE9ztoVVFpVNUIyEP1s9M0yN+PR6IUlr2APgSiCgrhTOepExplldS1
+         UbYzmcyX1mBv2cyikPNgyyHSGJxwc6DKAIe89UYTz4wcDc80ROI+kySx4Bp5eRetPWqp
+         scD3RnOqjoymVgMaY6liCaCtqK6u6iR5k5YmGLUVT9k7aTfg1EHPLwEcbba8+lPWzX9K
+         YbmnJqVEVQFJpbeTsn4GAToaTJaiinHGeGozRjEppG8gT+VSDLP4r9tKgNMfop8UbVqo
+         RgC5znHf+yq9rj1ofCpqIA7xIWSjfTwMXNWXiIQKPji/PtcTU9vuNKlLvmEveglJaNLg
+         FUeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738075539; x=1738680339;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fakcm+rH6Ht22JqZeovxMYLDOTFTQ4rDAH4rXh1qvOE=;
+        b=vCug+FnIM/PFP7lL8hExBSXWlc5eLTJQPEGYYqG5GKA9aRFR1BYpIK7QYRTllsLeFu
+         T24dKaBm8R7gFIcNg9+sYN/bd4SKHWY40sPBpHErMYrFJl8qT2MHhCbWmZjMPGk6LfBp
+         I9p23QT6ugWiOStpWpPj2mELyW7dDbfALbkaD9MlYDw8FUXhwvDCZXZh2dpH7WgvYVyY
+         /sWJBQuTIGisIc+ySawnXqbomtcHtSZHcaR9Wu5UgHpdv+JL2U0Fq9rYKMfoi+bmEOpF
+         EEd7H2EvG/smwICG7psUnuYjUSvCLgy13u9K/JDLSlPL+bcrKDUJEdyzWUfPC5YY3NJP
+         SCHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUN3WVwZeTVwiacZtMNJXV91XYrFWMVChh5+5g14eEDl09AVQXHCkMRBFBH8fVZ2LiigeoCQXaCpKxkFDQ=@vger.kernel.org, AJvYcCWXDsauzQr/F/WPqiUBKewgm7KZaeGD63/QBgMp+z3Dk3BF+obsJz3/WVWQRI/S0LckkQ5gsqVJzr4O98SBdKNt@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXDbPp4kpsmP4FVEfugzFS94Zj56uId3L9apitLGwG/kxnq89V
+	mcO49WqqxmjxK0rQH9cKiLzmRezkMtagorlsS6vlt54xbvfwErMn
+X-Gm-Gg: ASbGnctWAPHNLob2jYg9tctAs5tbHufDr51mHR5IXmzaOdIApRNUArKMT0ujAACFoPD
+	z+sQapljqBnjod2dhxEsIY/4JpScWliMWpdTaWRfsDgGaZQNgBp1udk/j2A3co6L03LlH1vkQb9
+	H8psj2keB3enpQPJATAOnJKRfW5E9gDx9em6OsVAudrOHWPhnkOAaB10PUgM44szX8MH6TnwrQT
+	8gkGflLfidFgRsqLmcU/hRbFj2nY2rCuC3mUk9KjVF1HS6oP4zRIkgE5paOW2f+JuaN7qYvt8YE
+	2+EJtGeHtr7+HMigMJy5Qba/xG+LRdD3Nm932LN2k9omrDY3yKhIKgMUw70omjY=
+X-Google-Smtp-Source: AGHT+IH15H9JPwbH1F+JmB7HXP9OTFcSXFQ71rdpzS8md7yeH76V23u8pEHPsJ4aRsKMybm2dXZw0w==
+X-Received: by 2002:a05:6122:29c2:b0:518:865e:d177 with SMTP id 71dfb90a1353d-51d5b33f5c9mr37756715e0c.9.1738075539555;
+        Tue, 28 Jan 2025 06:45:39 -0800 (PST)
+Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-864a9ada068sm2406919241.5.2025.01.28.06.45.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jan 2025 06:45:38 -0800 (PST)
+Date: Tue, 28 Jan 2025 09:45:37 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Yan Zhai <yan@cloudflare.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, 
+ David Ahern <dsahern@kernel.org>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Josh Hunt <johunt@akamai.com>, 
+ Alexander Duyck <alexander.h.duyck@linux.intel.com>, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <6798ed91e94a9_987d9294c2@willemb.c.googlers.com.notmuch>
+In-Reply-To: <CAO3-Pbqx_sLxdLsTg+NX3z1rrenK=0qpvfL5h_K-RX-Yk9A4YA@mail.gmail.com>
+References: <Z5cgWh/6bRQm9vVU@debian.debian>
+ <6797992c28a23_3f1a294d6@willemb.c.googlers.com.notmuch>
+ <CAO3-Pbqx_sLxdLsTg+NX3z1rrenK=0qpvfL5h_K-RX-Yk9A4YA@mail.gmail.com>
+Subject: Re: [PATCH] udp: gso: fix MTU check for small packets
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: j9wogvxXEIjg4NMZ98cxzp41Q6fNKwgg
-X-Proofpoint-ORIG-GUID: j9wogvxXEIjg4NMZ98cxzp41Q6fNKwgg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-28_04,2025-01-27_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 adultscore=0 spamscore=0
- impostorscore=0 mlxscore=0 phishscore=0 mlxlogscore=963 suspectscore=0
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501280099
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-In some rare situations a non default storage key is already set on the
-memory used by the test. Within normal VMs the key is reset / zapped
-when the memory is added to the VM. This is not the case for ucontrol
-VMs. With the initial iske check removed this test case can work in all
-situations. The function of the iske instruction is still validated by
-the remaining code.
+Yan Zhai wrote:
+> Hi Willem,
+> =
 
-Fixes: 0185fbc6a2d3 ("KVM: s390: selftests: Add uc_skey VM test case")
-Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
----
- .../selftests/kvm/s390/ucontrol_test.c        | 24 +++++--------------
- 1 file changed, 6 insertions(+), 18 deletions(-)
+> Thanks for getting back to me.
+> =
 
-diff --git a/tools/testing/selftests/kvm/s390/ucontrol_test.c b/tools/testing/selftests/kvm/s390/ucontrol_test.c
-index 135ee22856cf..d1080020a243 100644
---- a/tools/testing/selftests/kvm/s390/ucontrol_test.c
-+++ b/tools/testing/selftests/kvm/s390/ucontrol_test.c
-@@ -88,10 +88,6 @@ asm("test_skey_asm:\n"
- 	"	ahi	%r0,1\n"
- 	"	st	%r1,0(%r5,%r6)\n"
- 
--	"	iske	%r1,%r6\n"
--	"	ahi	%r0,1\n"
--	"	diag	0,0,0x44\n"
--
- 	"	sske	%r1,%r6\n"
- 	"	xgr	%r1,%r1\n"
- 	"	iske	%r1,%r6\n"
-@@ -596,7 +592,9 @@ TEST_F(uc_kvm, uc_skey)
- 	ASSERT_EQ(true, uc_handle_exit(self));
- 	ASSERT_EQ(1, sync_regs->gprs[0]);
- 
--	/* ISKE */
-+	/* SSKE + ISKE */
-+	sync_regs->gprs[1] = skeyvalue;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
- 	ASSERT_EQ(0, uc_run_once(self));
- 
- 	/*
-@@ -608,21 +606,11 @@ TEST_F(uc_kvm, uc_skey)
- 	TEST_ASSERT_EQ(0, sie_block->ictl & (ICTL_ISKE | ICTL_SSKE | ICTL_RRBE));
- 	TEST_ASSERT_EQ(KVM_EXIT_S390_SIEIC, self->run->exit_reason);
- 	TEST_ASSERT_EQ(ICPT_INST, sie_block->icptcode);
--	TEST_REQUIRE(sie_block->ipa != 0xb229);
-+	TEST_REQUIRE(sie_block->ipa != 0xb22b);
- 
--	/* ISKE contd. */
-+	/* SSKE + ISKE contd. */
- 	ASSERT_EQ(false, uc_handle_exit(self));
- 	ASSERT_EQ(2, sync_regs->gprs[0]);
--	/* assert initial skey (ACC = 0, R & C = 1) */
--	ASSERT_EQ(0x06, sync_regs->gprs[1]);
--	uc_assert_diag44(self);
--
--	/* SSKE + ISKE */
--	sync_regs->gprs[1] = skeyvalue;
--	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
--	ASSERT_EQ(0, uc_run_once(self));
--	ASSERT_EQ(false, uc_handle_exit(self));
--	ASSERT_EQ(3, sync_regs->gprs[0]);
- 	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
- 	uc_assert_diag44(self);
- 
-@@ -631,7 +619,7 @@ TEST_F(uc_kvm, uc_skey)
- 	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
- 	ASSERT_EQ(0, uc_run_once(self));
- 	ASSERT_EQ(false, uc_handle_exit(self));
--	ASSERT_EQ(4, sync_regs->gprs[0]);
-+	ASSERT_EQ(3, sync_regs->gprs[0]);
- 	/* assert R reset but rest of skey unchanged */
- 	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
- 	ASSERT_EQ(0, sync_regs->gprs[1] & 0x04);
--- 
-2.48.1
+> On Mon, Jan 27, 2025 at 8:33=E2=80=AFAM Willem de Bruijn
+> <willemdebruijn.kernel@gmail.com> wrote:
+> >
+> > Yan Zhai wrote:
+> > > Commit 4094871db1d6 ("udp: only do GSO if # of segs > 1") avoided G=
+SO
+> > > for small packets. But the kernel currently dismisses GSO requests =
+only
+> > > after checking MTU on gso_size. This means any packets, regardless =
+of
+> > > their payload sizes, would be dropped when MTU is smaller than requ=
+ested
+> > > gso_size.
+> >
+> > Is this a realistic concern? How did you encounter this in practice.
+> >
+> > It *is* a misconfiguration to configure a gso_size larger than MTU.
+> >
+> > > Meanwhile, EINVAL would be returned in this case, making it
+> > > very misleading to debug.
+> >
+> > Misleading is subjective. I'm not sure what is misleading here. From
+> > my above comment, I believe this is correctly EINVAL.
+> >
+> > That said, if this impacts a real workload we could reconsider
+> > relaxing the check. I.e., allowing through packets even when an
+> > application has clearly misconfigured UDP_SEGMENT.
+> >
+> We did encounter a painful reliability issue in production last month.
+> =
 
+> To simplify the scenario, we had these symptoms when the issue occurred=
+:
+> 1. QUIC connections to host A started to fail, and cannot establish new=
+ ones
+> 2. User space Wireguard to the exact same host worked 100% fine
+> =
+
+> This happened rarely, like one or twice a day, lasting for a few
+> minutes usually, but it was quite visible since it is an office
+> network.
+> =
+
+> Initially this prompted something wrong at the protocol layer. But
+> after multiple rounds of digging, we finally figured the root cause
+> was:
+> 3. Something sometimes pings host B, which shares the same IP with
+> host A but different ports (thanks to limited IPv4 space), and its
+> PMTU was reduced to 1280 occasionally. This unexpectedly affected all
+> traffic to that IP including traffic toward host A. Our QUIC client
+> set gso_size to 1350, and that's why it got hit.
+> =
+
+> I agree that configurations do matter a lot here. Given how broken the
+> PMTU was for the Internet, we might just turn off pmtudisc option on
+> our end to avoid this failure path. But for those who hasn't yet, this
+> could still be confusing if it ever happens, because nothing seems to
+> point to PMTU in the first place:
+> * small packets also get dropped
+> * error code was EINVAL from sendmsg
+> =
+
+> That said, I probably should have used PMTU in my commit message to be
+> more clear for our problem. But meanwhile I am also concerned about
+> newly added tunnels to trigger the same issue, even if it has a static
+> device MTU. My proposal should make the error reason more clear:
+> EMSGSIZE itself is a direct signal pointing to MTU/PMTU. Larger
+> packets getting dropped would have a similar effect.
+
+Thanks for that context. Makes sense that this is a real issue.
+
+One issue is that with segmentation, the initial mtu checks are
+skipped, so they have to be enforced later. In __ip_append_data:
+
+    mtu =3D cork->gso_size ? IP_MAX_MTU : cork->fragsize;
+
+Also, might this make the debugging actually harder, as the
+error condition is now triggered intermittently.
 
