@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-25281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1280A207E1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0088A207E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 10:59:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 648BC16990B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:58:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C28F216454A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 09:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 303741A08A4;
-	Tue, 28 Jan 2025 09:57:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A961A2567;
+	Tue, 28 Jan 2025 09:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nr7r1reF"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aaW9OuD1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B26617A586;
-	Tue, 28 Jan 2025 09:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D105C19D8AC;
+	Tue, 28 Jan 2025 09:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738058265; cv=none; b=DBi/zc9I5zqUKT+L24fc1pBskXPCwHPBdn8XtaSUhELhyUy2xnVNCq+sR78pFiN3Yt5IyNlxxqY4meGPKINN1YHqXUI11ZZlwYH/8eLUsX9F14BtXKAaZYdyjh/UOqnNfs+brdBpqLOol9R8nH9qDKrXt9RI8DahaA3lJPNcZrI=
+	t=1738058266; cv=none; b=gzEWtCEwcWOU/qra8W+kev6aGkD89Ml3msLxSvDDUQC6OH2nWtL09VdeccZrGJoM2Kzu8qS1R/+yEY3v3r3eJiPZ61Ik4SzJjILB44erLw0yl59F1rPilYb6EiLik4fbp8IZ3/bXliQfWkv763LYDwv54Xk6ihVUnH/pHxX61KY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738058265; c=relaxed/simple;
-	bh=pvcBYlilfh6EjDdkBXswet3ARC1sdM5NTxxZ6PVjyNw=;
+	s=arc-20240116; t=1738058266; c=relaxed/simple;
+	bh=wq3u5u1r+qGA2NcGRruKTo+blKU149iNm0Xcpd8tCBc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cwZ4YbM5HPNGhclYyajA/18/aB7WoF/aNmUloh0S2Fv2h+IIDbfKrk729sXFWy+X8TIMAREnM4+3sYwdgHx/JVglUsKb8uSvFl/Ca+laSvsLMIxLkRWf4SK/I09MI1dZKw7xXHMDDFmpULK1c77Cv1NOp7WIDHlbw/lWWys454M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nr7r1reF; arc=none smtp.client-ip=217.70.183.197
+	 In-Reply-To:To:Cc; b=u45xogf9Zq7y7C156PRHSzMEH5L4dxiKDKzIukd7/XTlfy1xXl7HIsuounVV2aokMBAXPrxCrjpA2G5PogDKSmjy1zkJZJhz8motlbxsDeqyd7o5owop0KzVsteaXj8PtDJA2gXCIXanXz60SnbTEXCBVP2pSJKwaFBRFXWhf6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aaW9OuD1; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8EAD21C0010;
-	Tue, 28 Jan 2025 09:57:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C47CA1C0011;
+	Tue, 28 Jan 2025 09:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738058260;
+	t=1738058262;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GOes+KfBv8/upgtkhPOaazc7B2nfbC7ly3LGHebWJ5k=;
-	b=nr7r1reFYXnKdz6+SnJmoFHlx95rN4GriFJHGKTMxzPWhcYf++4wwc6FdeIdZ7XHCwqjBf
-	Xz/JIPT+DicVU3RTD7Hi3j2cdgVTUjfO4Fk3bDdNEtcFRD9hF7R0DBKzO0W4aLbhGmD4aW
-	BZPLpliDWzRruKO/VZeIDeCiACtpUeoO98bQDbMVVum6kEcLS36JTZ1APooeE9oAgW08s4
-	DwMU5mqLqdr1EzJ9s1+NkvOWDvJZD4KRv/Uq6RTP7jPgLkgnT3iRkOcjv6r140posEl7Vf
-	BUnN/gLpiDPWyN/fw2I2vx5ViNMc02B+W1J5sjLV3AcYSrRFbmNh4P+JxBPK3A==
+	bh=uou6lwSbSVHbeo2jIsQLbizMIB/EoU9fj/33YUz621w=;
+	b=aaW9OuD1o/esj36Ds/Od4Rf6Gcc6+Lwyv8PsjNYxBnIqkj2sh2Cg3uFXQEJLbF9GYcOSyA
+	F7T7WbqqBARRl2ohsiM5MGadaq7TI2qyiqAxri1WmJamKlP8GIZeCm6xBHEHbGDKiGB9RD
+	9jqODROCErc1AoUY+96AXaL0xTO+EVX7OP9Tg5qKQplhNrbMDgGMxBfVPKnV2393LNSax5
+	oXTwsGSIaVYQltyEo7vZpzYR+xKlDSq0ncOOVdafCqk/l4ktsQGzJPwTM2A5+zu2dvVNt5
+	VP8KCvVlnTCLslCRdMpJ5qr5+T07Apr0GXVu/7oDLqzC3+taDWCfEQvzoU60Cg==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Tue, 28 Jan 2025 10:57:26 +0100
-Subject: [PATCH bpf-next v3 02/14] selftests/bpf: test_xdp_veth: Remove
- unused defines
+Date: Tue, 28 Jan 2025 10:57:27 +0100
+Subject: [PATCH bpf-next v3 03/14] selftests/bpf: test_xdp_veth: Remove
+ unecessarry check_ping()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250128-redirect-multi-v3-2-c1ce69997c01@bootlin.com>
+Message-Id: <20250128-redirect-multi-v3-3-c1ce69997c01@bootlin.com>
 References: <20250128-redirect-multi-v3-0-c1ce69997c01@bootlin.com>
 In-Reply-To: <20250128-redirect-multi-v3-0-c1ce69997c01@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -80,31 +80,50 @@ Cc: Alexis Lothore <alexis.lothore@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-IP_CMD_MAX_LEN and NS_SUFFIX_LEN aren't used anywhere.
+check_ping() directly returns a SYS_NOFAIL without any previous
+treatment. It's called only once in the file and hardcodes the used
+namespace and ip address.
 
-Remove these unused defines
+Replace check_ping() with a direct call of SYS_NOFAIL in the test.
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c | 2 --
- 1 file changed, 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index 8d75424fe6bc8b2d4eeabe3ec49b883284c834e9..95e1791ea7e0f950609607b30d35f78da82e058b 100644
+index 95e1791ea7e0f950609607b30d35f78da82e058b..d41884fdc430f1ceed53f16b0dddbdbb34f83301 100644
 --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
 +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -25,11 +25,9 @@
- #include "xdp_tx.skel.h"
+@@ -170,15 +170,6 @@ static void cleanup_network(void)
+ 		SYS_NOFAIL("ip netns del %s", config[i].namespace);
+ }
  
- #define VETH_PAIRS_COUNT	3
--#define NS_SUFFIX_LEN		6
- #define VETH_NAME_MAX_LEN	16
- #define IP_SRC				"10.1.1.11"
- #define IP_DST				"10.1.1.33"
--#define IP_CMD_MAX_LEN		128
+-static int check_ping(struct skeletons *skeletons)
+-{
+-	/* Test: if all interfaces are properly configured, we must be able to ping
+-	 * veth33 from veth11
+-	 */
+-	return SYS_NOFAIL("ip netns exec %s ping -c 1 -W 1 %s > /dev/null",
+-					  config[0].namespace, IP_DST);
+-}
+-
+ void test_xdp_veth_redirect(void)
+ {
+ 	struct skeletons skeletons = {};
+@@ -198,7 +189,11 @@ void test_xdp_veth_redirect(void)
+ 	if (configure_network(&skeletons))
+ 		goto destroy_xdp_redirect_map;
  
- struct skeletons {
- 	struct xdp_dummy *xdp_dummy;
+-	ASSERT_OK(check_ping(&skeletons), "ping");
++	/* Test: if all interfaces are properly configured, we must be able to ping
++	 * veth33 from veth11
++	 */
++	ASSERT_OK(SYS_NOFAIL("ip netns exec %s ping -c 1 -W 1 %s > /dev/null",
++			     config[0].namespace, IP_DST), "ping");
+ 
+ destroy_xdp_redirect_map:
+ 	xdp_redirect_map__destroy(skeletons.xdp_redirect_maps);
 
 -- 
 2.47.1
