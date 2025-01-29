@@ -1,258 +1,187 @@
-Return-Path: <linux-kselftest+bounces-25386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1B10A22346
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 18:45:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACE36A2234E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 18:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 075401886052
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 17:45:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1150C167A23
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 17:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024061DDC3B;
-	Wed, 29 Jan 2025 17:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC9F1DFE16;
+	Wed, 29 Jan 2025 17:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="neLkziuV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dfIvhfSv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cnDv9gis"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BDC1922D3;
-	Wed, 29 Jan 2025 17:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D761922D3
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 17:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738172723; cv=none; b=LPZ2bNPf58rPi8QAAcgWMfg8EKIPrCE+YEi361xcnpb0IdmDZhehhgfC9haI81XY52sqofQ62QvGbfzxOcQ4ieI85+nrxIs+AeHfEm2/0izlANFxLoZas821y3ylWlXP1TR4hObmnzqieMmFTuP6zbjr2JBz7pmUyKn5xIu2snQ=
+	t=1738172791; cv=none; b=g/w+zUHFTrrXKJxPqRRsEBYpjULB4bhUFYQidIv0zATC17xj/57H8yd4UP6SEUFZxf35TR9/5AZ14fW7SUmTkPSJFobXR5WIoYVCuLEnBpdp/hXJZuMvr6flHHmloUZh/bXQj4T11/4gHhzapxZKl9pNDCff+2jqwnRwhQTiB6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738172723; c=relaxed/simple;
-	bh=s98cIhbXBXESd/Dodta9xIfcGjQ5stfBTvta0Rdmsig=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pN5RGqa8ui9jLQrE6Y0aU6Gyq6HdxKexAzEyJzoZaCwXw9dprosH/UfaBvXvhti5+HVFLRdbIk/dWoahMjRzIH4UIoBTrvFN7d/8bQfRGn8qX+ERND0f8K5YAnVpM9Waz4eNKWTXxGsew9p7OV5QNIWxNPMVvSLqUINqJtDE6Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=neLkziuV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dfIvhfSv; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id C72B11380061;
-	Wed, 29 Jan 2025 12:45:20 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Wed, 29 Jan 2025 12:45:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1738172720;
-	 x=1738259120; bh=IqyjXNoWUVJhoEmd9c0TNjMsCqEKY7goUP5H7EhX1CI=; b=
-	neLkziuVMTO3ZlsKsJe/IEnosPGzMZieRIstHLecoK8xeaNeaEZx4Y3fd62+Y0PE
-	Dfk+XES7nXJoDykw2FbTRqerb5NGQYDgozBuYR05l7756N3KDocOCIzQUae1LPM0
-	Kj1F5A4Cwm/39KoPTz5KFERsp4eF3NtuxY1XOjyL0xb0l1GBmJr2B2ohaUgrnUu0
-	v22+AmcNu5LBtgrbX1iyScPRz6D26SvXd9EXf5Lmj4dKNEgB4purEle1UvZFDZPH
-	oY1ePVEaVoKR8K7YTLG2TfUIzKAAZ0bbOGk2hLGrUsFSEyn+XznidVHpLAIUovMA
-	y3ZsQz23omXOc9og0dqlHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738172720; x=
-	1738259120; bh=IqyjXNoWUVJhoEmd9c0TNjMsCqEKY7goUP5H7EhX1CI=; b=d
-	fIvhfSvvjUT3A9fflbhhWZiedpyiuHeJ27Zmk95P5zeSc9gx9XX+WvJDXfoF/3oA
-	98KRz6ARfTpSFGz5g2zqp2WiXz5j+gird6blFj0iddarTI9prD2pmOzP7usUJDsz
-	8uDQMACTIkVDtCr+5IpacMLAueHMbL8GRlBuohdXkl1EnfUKIREy+RBCClr76Imj
-	45gk/bi7MZKjb6BoFvt6aj3sshfsnO2JN+/8iJ0u4Dqji1cpBtRRZc2TL0yw7Ltd
-	QWJOSdYcQIuoP+5sSFovVTkGiIkVHk0gbhYQ0SGPNZ3hOeKPZp4pxV0zBka1CDx9
-	TREVjOl9dnDbqrqBA9hCA==
-X-ME-Sender: <xms:L2maZ1NJ2zPOgnF4iI0qdS8Wb7eO2ux7oN11UIKVR7ZHT78XkkIykQ>
-    <xme:L2maZ3_muPJ59ct5sylOLbr_DHP6vwwGDyDX6Kpq5EmVE2KEcBmi39e4Lzm6a2gDo
-    -R1-9s9oYf-vY1AbQ>
-X-ME-Received: <xmr:L2maZ0SWRA7HRUpZuOzSyKGoAzH5oTUpf_rA3_GyG5ft5UWcqBGBi0IA5jr540U6kzwUJRjzyIlSYmpxeR0gn05nBUYSvGOJMbmr8I-l2vCh7w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhf
-    gggtugfgjgestheksfdttddtudenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
-    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeuhedtkedttddvieeffedtvdej
-    udeuleefuedukeekteetffevleeglefhhfekueenucffohhmrghinhepghhithhhuhgsrd
-    gtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    ugiguhesugiguhhuuhdrgiihiidpnhgspghrtghpthhtohepudelpdhmohguvgepshhmth
-    hpohhuthdprhgtphhtthhopehiihhisehlihhnuhigrdhisghmrdgtohhmpdhrtghpthht
-    ohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguugihiiekjeesgh
-    hmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrnhgurh
-    hiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgu
-    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrd
-    guvghvpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:L2maZxt_yHWdgnu_O1BcmM1XBxfnZabd5UUJHb_p2s2TTtRvISawXg>
-    <xmx:L2maZ9ckuBuYUOYkQ7nFfJRyrWxdqZfyJ-44fnS2NxFB_wRGSqWqxQ>
-    <xmx:L2maZ911myeRLyVVlkbtC2D_gkAb_W6m-V-UfuysY7lMYWCD-8wo7A>
-    <xmx:L2maZ59Ob0nrqE459VdTNsZFcQ1u1ZKI5SJGAp9n3lh9bSvdVmx6nw>
-    <xmx:MGmaZ-AJsJT0WNGq73v5bIvAa3xFHn8w6OcVx4b-XDb5C8mu_ZH6QgUp>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Jan 2025 12:45:17 -0500 (EST)
-Date: Wed, 29 Jan 2025 10:45:16 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: shuah@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Marc Hartmayer <mhartmay@linux.ibm.com>
-Subject: Re: [PATCH bpf-next v7 4/5] bpf: verifier: Support eliding map
- lookup nullness
-Message-ID: <f7rhmwrp3fgx3qd7gn3pzczxeztvsg45u4vrl6ls3ylcvflapx@3yi3shfnrmb3>
-References: <cover.1736886479.git.dxu@dxuuu.xyz>
- <68f3ea96ff3809a87e502a11a4bd30177fc5823e.1736886479.git.dxu@dxuuu.xyz>
- <78b2e750b4568e294b5fc5a33cf4bc8f62fae7f6.camel@linux.ibm.com>
- <hsgmutuoi4kvjkr7erm5ty2fdrhdrjpz4fpp5doe65l3pzguxv@lcbmvmjpyykq>
+	s=arc-20240116; t=1738172791; c=relaxed/simple;
+	bh=GVBVPQXK+YOVlYYHwZtT5FW5o6eoUI4q99NTvpI44+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M+CeY4QiRZgfCNuH4iqd8NlipoDcNlBg+GV76QLCdVVrB+e52i3XzElPjLz96bGKxqEa6DxpPARfIjrSGnwyCEv4PFrqX2e8RzaVigdObHNkZ9zIWD7KjOri4K5NIUt7F92/+cO3V3UbhlI7fzq1/QfMxxYkqdcoAz85rKlxa5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cnDv9gis; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738172788;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7C39AcP479z7PaOLmWGBMx2cDdXkmF+MZl53H1pFh10=;
+	b=cnDv9gis7KChwlEq7tACnjBMcuShun73QtuYhz2ZIBdgSkhPx5nbnM/kdPIG3Xlvoatn4n
+	kDbKk2Zd0HtdcwC/CMPdIIAcqVTN832OiaL2S00pN9b+4rxyL+VB/+QmFpaFpbxvxQMShg
+	2W9/6wNYCt3bHKNptCh8vfeKdfsM3t4=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-645-h2ubUBlAM4CExP4_pR1mSQ-1; Wed, 29 Jan 2025 12:46:27 -0500
+X-MC-Unique: h2ubUBlAM4CExP4_pR1mSQ-1
+X-Mimecast-MFC-AGG-ID: h2ubUBlAM4CExP4_pR1mSQ
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-436225d4389so4812505e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 09:46:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738172785; x=1738777585;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7C39AcP479z7PaOLmWGBMx2cDdXkmF+MZl53H1pFh10=;
+        b=aFhB2fhnUSz/UAEn3r84SioacscZIs5zvljhtc0O2MHokPD2jk1e21U1qiAcz5OI/d
+         Ta5C/BWsDTGAJpnenKjYVneP2dxN9oels/bjoI/a8H5BUR8bCgVew1yL8P36BreQXDdC
+         IqpPxZozr0rxKu2mFasNBmiLalhSDY/zErjELZm6CsIWNLRovnh8Jcho4W5LDR8Q87Ev
+         ZpgXG9pYa5/l8qPsU8x3wosAxaQXqO/e7MczgnX8NTDpGKDglgLmeUY73YiQeZpJI5N3
+         kmFDTlcncI4xxNxRC2gFh69YDkHDLO88d8Qvk/58uj2tgWPMMSFlMNvQ1upQJUsSm5YU
+         VpQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVEPf0FnBGTNSPHU6bUxBAhiU58fTlwWjCHgfTvU71AmkckfWczONJay7VfQUEOpQc97hR49UFJ4ZhUkPdBCaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1aUFVj+Hh/Q1FafBeiDmZB5La4ZS4rxWuYouLCaRlmf+UoVWU
+	CaO0uPGMPaqoIuGFPfMWLCb7AL2rUNRmoV1frhO+TrmO3dSlrOJw2jDWbCwjcO9+PyINPTdlH0t
+	Y/x3d/Ib9IwNOT5RTqSVSCvCqhGGtaMsUdfnW3SfQdY+C1miQkNwnQjtcdPRVzcrgfkn96snXxw
+	==
+X-Gm-Gg: ASbGncv+kgUVC7e5ziuq/stv+0h3BCB5ahSJII7cy5MjWuCBwX7xqx+Wo8dHnE99v2r
+	dEwWQYSGHaUw2xWTKPqI5l4S1NHBX9Ty+JrOzPBDgSpBwQnO8qKZP+6bCkzTlihn0V6v4uMuxTx
+	p2Pez+C+Hac6OA57OnFzj7OruQD1ML2TIoyjbVpLQv7WKUrCiUHc9/T/27bxrQyoE0bsrKIDVTi
+	ZFGavfFcqbuHkCu8IqlCygFUuPKLTvwI6BoOa4FP6EE+iMUdAIUYQdV3+pe1mjW/J++3iEmYe3s
+	OaEr96PbSOoTJvo2pE/+rcrzo9CHKt6CT4dI2I3SWXpb1eZl9WoJ
+X-Received: by 2002:a05:600c:6555:b0:436:fdac:26eb with SMTP id 5b1f17b1804b1-438e15e7fdamr1934935e9.7.1738172785122;
+        Wed, 29 Jan 2025 09:46:25 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFQmQmuNWdwXKR1WA8YUMR0neWSl2UDPcJoTIpWOkS9ogRoZv55tiuXIIRNpwuKJUpW+TAzXQ==
+X-Received: by 2002:a05:600c:6555:b0:436:fdac:26eb with SMTP id 5b1f17b1804b1-438e15e7fdamr1934415e9.7.1738172784724;
+        Wed, 29 Jan 2025 09:46:24 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438dcc13151sm30025435e9.1.2025.01.29.09.46.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jan 2025 09:46:22 -0800 (PST)
+Message-ID: <8e4c21b5-3b79-4f0b-b920-59b825c2fb81@redhat.com>
+Date: Wed, 29 Jan 2025 18:46:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <hsgmutuoi4kvjkr7erm5ty2fdrhdrjpz4fpp5doe65l3pzguxv@lcbmvmjpyykq>
-
-On Wed, Jan 29, 2025 at 09:49:12AM -0700, Daniel Xu wrote:
-> Hi Ilya,
-> 
-> On Wed, Jan 29, 2025 at 03:58:54PM +0100, Ilya Leoshkevich wrote:
-> > On Tue, 2025-01-14 at 13:28 -0700, Daniel Xu wrote:
-> > > This commit allows progs to elide a null check on statically known
-> > > map
-> > > lookup keys. In other words, if the verifier can statically prove
-> > > that
-> > > the lookup will be in-bounds, allow the prog to drop the null check.
-> > > 
-> > > This is useful for two reasons:
-> > > 
-> > > 1. Large numbers of nullness checks (especially when they cannot
-> > > fail)
-> > >    unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
-> > > 2. It forms a tighter contract between programmer and verifier.
-> > > 
-> > > For (1), bpftrace is starting to make heavier use of percpu scratch
-> > > maps. As a result, for user scripts with large number of unrolled
-> > > loops,
-> > > we are starting to hit jump complexity verification errors.  These
-> > > percpu lookups cannot fail anyways, as we only use static key values.
-> > > Eliding nullness probably results in less work for verifier as well.
-> > > 
-> > > For (2), percpu scratch maps are often used as a larger stack, as the
-> > > currrent stack is limited to 512 bytes. In these situations, it is
-> > > desirable for the programmer to express: "this lookup should never
-> > > fail,
-> > > and if it does, it means I messed up the code". By omitting the null
-> > > check, the programmer can "ask" the verifier to double check the
-> > > logic.
-> > > 
-> > > Tests also have to be updated in sync with these changes, as the
-> > > verifier is more efficient with this change. Notable, iters.c tests
-> > > had
-> > > to be changed to use a map type that still requires null checks, as
-> > > it's
-> > > exercising verifier tracking logic w.r.t iterators.
-> > > 
-> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > ---
-> > >  kernel/bpf/verifier.c                         | 92
-> > > ++++++++++++++++++-
-> > >  tools/testing/selftests/bpf/progs/iters.c     | 14 +--
-> > >  .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
-> > >  .../selftests/bpf/progs/verifier_map_in_map.c |  2 +-
-> > >  .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
-> > >  5 files changed, 99 insertions(+), 13 deletions(-)
-> > 
-> > [...]
-> > 
-> > > @@ -9158,6 +9216,7 @@ static int check_func_arg(struct
-> > > bpf_verifier_env *env, u32 arg,
-> > >  	enum bpf_arg_type arg_type = fn->arg_type[arg];
-> > >  	enum bpf_reg_type type = reg->type;
-> > >  	u32 *arg_btf_id = NULL;
-> > > +	u32 key_size;
-> > >  	int err = 0;
-> > >  
-> > >  	if (arg_type == ARG_DONTCARE)
-> > > @@ -9291,8 +9350,13 @@ static int check_func_arg(struct
-> > > bpf_verifier_env *env, u32 arg,
-> > >  			verbose(env, "invalid map_ptr to access map-
-> > > >key\n");
-> > >  			return -EACCES;
-> > >  		}
-> > > -		err = check_helper_mem_access(env, regno, meta-
-> > > >map_ptr->key_size,
-> > > -					      BPF_READ, false,
-> > > NULL);
-> > > +		key_size = meta->map_ptr->key_size;
-> > > +		err = check_helper_mem_access(env, regno, key_size,
-> > > BPF_READ, false, NULL);
-> > > +		if (err)
-> > > +			return err;
-> > > +		meta->const_map_key = get_constant_map_key(env, reg,
-> > > key_size);
-> > > +		if (meta->const_map_key < 0 && meta->const_map_key
-> > > != -EOPNOTSUPP)
-> > > +			return meta->const_map_key;
-> > 
-> > Mark Hartmayer reported a problem that after this commit the verifier
-> > started refusing to load libvirt's virCgroupV2DevicesLoadProg(), which
-> > contains the following snippet:
-> > 
-> > 53: (b7) r1 = -1                      ; R1_w=-1
-> > 54: (7b) *(u64 *)(r10 -8) = r1        ; R1_w=-1 R10=fp0 fp-8_w=-1
-> > 55: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
-> > 56: (07) r2 += -8                     ; R2_w=fp-8
-> > 57: (18) r1 = 0x9553c800              ; R1_w=map_ptr(ks=8,vs=4)
-> > 59: (85) call bpf_map_lookup_elem#1
-> > 
-> > IIUC here the actual constant value is -1, which this code confuses
-> > with an error.
-> 
-> Thanks for reporting. I think I know what the issue is - will send a
-> patch shortly.
-> 
-> Daniel
-> 
-
-I cribbed the source from [0] and tested before and after. I think this
-should work. Mind giving it a try?
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9971c03adfd5..e9176a5ce215 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9206,6 +9206,8 @@ static s64 get_constant_map_key(struct bpf_verifier_env *env,
-        return reg->var_off.value;
- }
-
-+static bool can_elide_value_nullness(enum bpf_map_type type);
-+
- static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
-                          struct bpf_call_arg_meta *meta,
-                          const struct bpf_func_proto *fn,
-@@ -9354,9 +9356,11 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
-                err = check_helper_mem_access(env, regno, key_size, BPF_READ, false, NULL);
-                if (err)
-                        return err;
--               meta->const_map_key = get_constant_map_key(env, reg, key_size);
--               if (meta->const_map_key < 0 && meta->const_map_key != -EOPNOTSUPP)
--                       return meta->const_map_key;
-+               if (can_elide_value_nullness(meta->map_ptr->map_type)) {
-+                       meta->const_map_key = get_constant_map_key(env, reg, key_size);
-+                       if (meta->const_map_key < 0 && meta->const_map_key != -EOPNOTSUPP)
-+                               return meta->const_map_key;
-+               }
-                break;
-        case ARG_PTR_TO_MAP_VALUE:
-                if (type_may_be_null(arg_type) && register_is_null(reg))
-
-Thanks,
-Daniel
+User-Agent: Mozilla Thunderbird
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH RFCv2 00/13] iommu: Add MSI mapping support with nested
+ SMMU
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+ Nicolin Chen <nicolinc@nvidia.com>, "will@kernel.org" <will@kernel.org>,
+ "robin.murphy@arm.com" <robin.murphy@arm.com>,
+ "kevin.tian@intel.com" <kevin.tian@intel.com>,
+ "tglx@linutronix.de" <tglx@linutronix.de>, "maz@kernel.org"
+ <maz@kernel.org>, "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+ "joro@8bytes.org" <joro@8bytes.org>, "shuah@kernel.org" <shuah@kernel.org>,
+ "reinette.chatre@intel.com" <reinette.chatre@intel.com>,
+ "yebin (H)" <yebin10@huawei.com>,
+ "apatel@ventanamicro.com" <apatel@ventanamicro.com>,
+ "shivamurthy.shastri@linutronix.de" <shivamurthy.shastri@linutronix.de>,
+ "bhelgaas@google.com" <bhelgaas@google.com>,
+ "anna-maria@linutronix.de" <anna-maria@linutronix.de>,
+ "yury.norov@gmail.com" <yury.norov@gmail.com>,
+ "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "patches@lists.linux.dev" <patches@lists.linux.dev>,
+ "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+ "mdf@kernel.org" <mdf@kernel.org>, "mshavit@google.com"
+ <mshavit@google.com>, "smostafa@google.com" <smostafa@google.com>,
+ "ddutile@redhat.com" <ddutile@redhat.com>
+References: <cover.1736550979.git.nicolinc@nvidia.com>
+ <4946ea266bdc4b1e8796dee1b228bd8f@huawei.com>
+ <20250123132432.GJ5556@nvidia.com>
+ <de6b9dc1-dedd-4a3d-9db7-cb4b8e281697@redhat.com>
+ <20250129150454.GH5556@nvidia.com>
+From: Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <20250129150454.GH5556@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-[0]: https://github.com/libvirt/libvirt/blob/c1166be3475a0269f5164d87fec6227d6cb34b47/src/util/vircgroupv2devices.c#L66-L135
+
+
+On 1/29/25 4:04 PM, Jason Gunthorpe wrote:
+> On Wed, Jan 29, 2025 at 03:54:48PM +0100, Eric Auger wrote:
+>>>> or you are just mentioning it here because
+>>>> it is still possible to make use of that. I think from previous discussions the
+>>>> argument was to adopt a more dedicated MSI pass-through model which I
+>>>> think is  approach-2 here.  
+>>> The basic flow of the pass through model is shown in the last two
+>>> patches, it is not fully complete but is testable. It assumes a single
+>>> ITS page. The VM would use IOMMU_OPTION_SW_MSI_START/SIZE to put the
+>>> ITS page at the correct S2 location and then describe it in the ACPI
+>>> as an ITS page not a RMR.
+>> This is a nice to have feature but not mandated in the first place,
+>> is it?
+> Not mandated. It just sort of happens because of the design. IMHO
+> nothing should use it because there is no way for userspace to
+> discover how many ITS pages there may be.
+>
+>>> This missing peice is cleaning up the ITS mapping to allow for
+>>> multiple ITS pages. I've imagined that kvm would someone give iommufd
+>>> a FD that holds the specific ITS pages instead of the
+>>> IOMMU_OPTION_SW_MSI_START/SIZE flow.
+>> That's what I don't get: at the moment you only pass the gIOVA. With
+>> technique 2, how can you build the nested mapping, ie.
+>>
+>>          S1           S2
+>> gIOVA    ->    gDB    ->    hDB
+>>
+>> without passing the full gIOVA/gDB S1 mapping to the host?
+> The nested S2 mapping is already setup before the VM boots:
+>
+>  - The VMM puts the ITS page (hDB) into the S2 at a fixed address (gDB)
+Ah OK. Your gDB has nothing to do with the actual S1 guest gDB, right?
+It is computed in iommufd_sw_msi_get_map() from the sw_msi_start pool.
+Is that correct? In
+https://lore.kernel.org/all/20210411111228.14386-9-eric.auger@redhat.com/
+I was passing both the gIOVA and the "true" gDB Eric
+>  - The ACPI tells the VM that the GIC has an ITS page at the S2's
+>    address (hDB)
+>  - The VM sets up its S1 with a gIOVA that points to the S2's ITS 
+>    page (gDB). The S2 already has gDB -> hDB.
+>  - The VMM traps the gIOVA write to the MSI-X table. Both the S1 and
+>    S2 are populated at this moment.
+>
+> If you have multiple ITS pages then the ACPI has to tell the guest GIC
+> about them, what their gDB address is, and what devices use which ITS.
+>
+> Jason
+>
+
 
