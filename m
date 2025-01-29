@@ -1,222 +1,212 @@
-Return-Path: <linux-kselftest+bounces-25371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC3CA21FD1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:58:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10004A21FD9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:59:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D0AB3A561D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:58:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48EFC188560F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23941B4257;
-	Wed, 29 Jan 2025 14:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063391BD9E6;
+	Wed, 29 Jan 2025 14:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dHyutCl7"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fWCIhPe8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2099E7E9;
-	Wed, 29 Jan 2025 14:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738162690; cv=fail; b=lA6K07W1T0/hhTajF1lAnpJCMtYLStiy5MP1/TzpUBiXvCSqL4pTqXxxI3lmQNDzSd5UvOemq+P0uejFwtqzNfJlRycZWxxOl7ZQa+c6teDSJnKHoZg5dIP8ryxoO0TwtRzP5xsr8D6PFk12LUvJlIqPKYJR30y0S5CjOROyj50=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738162690; c=relaxed/simple;
-	bh=cXDK4OpvtytR0NSKUbv7VbXxMkdl8ZIpAhRyKDoHvJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=MaLMlwz9QGg7/U+9vGYpob9QMfAwi5Rj2VSHWR0VGuoxJhysgEqkx/0DLcGy1ktsP4A/o9sZ+bVK0Z/jeWUfeLr58MUMQZCXGUE4nUadtVyA8ikeC0bvFWqP4hq2r9WIZnkrL7MASErdGpDV1nEhzuELTrzxzqIa1KcI/qCCGmw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dHyutCl7; arc=fail smtp.client-ip=40.107.243.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lJVGJg02uB+iA45SHbNTJhfSmdK3gOpv79GrWNT65M5Lb5N1zqtlapGXoXx6V8BAKc7TpsRAw509XMu8MOYBXx5H6Y3Vfa/5S0BwfQaeuD45SoYcOhSJxnBpbdenZO5f/TMNnN4vbkBwUgS1n0JHbNMeR1jT94VMl799bb5ProFdz+/YAbk7wl1kgbNL929pD+iATWL72XjppLZ4Pj2qxeeXjSwC6ZLl1hDZe2w+YlXQwzg3llULJWf6CVj3ZA15UlnV5Z0yA9jB4sekVqSJ3TDNdJpQ5Zqy1I3Jfb8qslV42/LL7JCR4PYPusS+uRz/89b2EGU8wfoQXo4wSyHI9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jFQ89FOWChVF28LHSvaVAzztV0S8z2Xh7koKtCjF0Ug=;
- b=hrTCAraD7n+qn82AWy3gqo+tyULGYKk6/VggqlhjlEecW9a2vTmobAFvOKkFt/npXGsUoPhrZOevCZ5jLsboCnqZVp5EivWQoeTogzsjUe20G/YZmnt3Q5N7b7bZp4itmZkZcYIMwvGzpZPdbQbRdR0zSJdRq93T2Ovijlw0+WcG4TxkSM9wfHDxD+8gZ5nbN8/o7rKxRCVQbPteGErtmiBsQaBlKSTegrjpDY+cO484DfoZUYY0YxeimnfjRJIy4Bj7slMC+d++51glMUOtAw0qewIKY0SvZ2Q91qgr3q65FBB1Pf3DeGvH2fzABUyQeYFsGKohjlE0wqkOxyrwGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jFQ89FOWChVF28LHSvaVAzztV0S8z2Xh7koKtCjF0Ug=;
- b=dHyutCl7Qt40P2hliL+Wn6ShiHj/MEhODcsKjsy59NNwVB4lpKa6lB86O3+A32touacIv0a3++sL5/JUEjYrPWQUdH/1gTmYPRWRPQ6yG+HMI9AaEnS3Auh3WfvBjMeKOY/8TlxbV1Xc4I/uK2bmZjVFi45DsBznM2yPQPyUGet8H2VRjZBDaoLrkx/N8gPVlJgPp5cOODN1kQ54uLs0D0S/iY83ZxS/lgutBYgNgN8iFtgr7yAOUALb8pytf5L05XrICpgxhMt3CCevImFEDOdvay6IW3kEFg5sqrxzY/af8bGyCs1GH8m4gs/6WbxFwi+eJZ9OTn558Z7EeVZzBw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by MW4PR12MB5601.namprd12.prod.outlook.com (2603:10b6:303:168::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.18; Wed, 29 Jan
- 2025 14:58:01 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%5]) with mapi id 15.20.8377.021; Wed, 29 Jan 2025
- 14:58:01 +0000
-Date: Wed, 29 Jan 2025 10:58:00 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Eric Auger <eric.auger@redhat.com>
-Cc: Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
-	robin.murphy@arm.com, kevin.tian@intel.com, tglx@linutronix.de,
-	maz@kernel.org, alex.williamson@redhat.com, joro@8bytes.org,
-	shuah@kernel.org, reinette.chatre@intel.com, yebin10@huawei.com,
-	apatel@ventanamicro.com, shivamurthy.shastri@linutronix.de,
-	bhelgaas@google.com, anna-maria@linutronix.de, yury.norov@gmail.com,
-	nipun.gupta@amd.com, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	patches@lists.linux.dev, jean-philippe@linaro.org, mdf@kernel.org,
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
-	smostafa@google.com, ddutile@redhat.com
-Subject: Re: [PATCH RFCv2 09/13] iommufd: Add IOMMU_OPTION_SW_MSI_START/SIZE
- ioctls
-Message-ID: <20250129145800.GG5556@nvidia.com>
-References: <cover.1736550979.git.nicolinc@nvidia.com>
- <d3cb1694e07be0e214dc44dcb2cb74f014606560.1736550979.git.nicolinc@nvidia.com>
- <0521187e-c511-4ab1-9ffa-be2be8eacd04@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0521187e-c511-4ab1-9ffa-be2be8eacd04@redhat.com>
-X-ClientProxiedBy: BN9PR03CA0806.namprd03.prod.outlook.com
- (2603:10b6:408:13f::31) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDC67E9;
+	Wed, 29 Jan 2025 14:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738162777; cv=none; b=TnSDSNAoc7WWjnDDNi3FlLxgPxfjPJuFtCxZUXRfYcfyUX0N2O79MMp/ta6y44sAwvxs5Xg5ZZ6Ji9iTmE2NQpo0oSU7cScu8ORFknosOFh9YsrxHTjW4OnpuViS6g8T5ybuzpOonVojAFo+FiRyeTaK4sb30tUmGUPCl2t8VhU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738162777; c=relaxed/simple;
+	bh=j0xf8Wugf7d4B5mcDrAnRANssmaL+WMd5mK+89Bqg30=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aAChZ7mHgvs76XD8eXJG44u4SvjgFcwVSIRe8PVdmseBzBj0n6qtDairKbQwslKWya7O38jzrwRrNmvawCmWFU2j/+qgzw+wtvV9lRWnX5jf30cmmgHWyLhUaWH/nRb9A510Q/7VoQO/Sc+0u8BN7AcxQgCJ9uLkjheR1b8XTAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fWCIhPe8; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50TEEEjt028543;
+	Wed, 29 Jan 2025 14:59:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=NX52ag
+	ti0v8wlGfwn10zvny4iYL1EqJm7zUROtBGTxM=; b=fWCIhPe8C3BNhUUr7A3NYh
+	MUFnniVye7i8cWgUIXvSwzfByqQAi7BdFOMl6VAnCkRMh1eZwAj464zwMNTbnCJR
+	4f+a8dbAoaVO3IYfgkqU00J9D6A1xaVglzZ+KfMzh0aerScoQGbentQxGQfjrYJF
+	auZaL2LuqhhCYeZJv/XnLyqD2hlgZZ46JV64X+nfwdIigE7wcbI/mR2+lUDLOuyr
+	yDrP2QA0S648Io8h9xJo+jLH/1Pvar4wubm7EIbCio8ctlUl9cMW3H97+2erC1nu
+	6f62BIFXyiGK8XkdqxxJvREsUY+r3fHpVxiIHE50ehh3A/fMSI73Gc1z+ceF74JQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44fb60ax6k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jan 2025 14:59:12 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50TExBhZ003237;
+	Wed, 29 Jan 2025 14:59:11 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44fb60ax58-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jan 2025 14:59:11 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50TCqVOQ012336;
+	Wed, 29 Jan 2025 14:59:01 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44dany99u5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jan 2025 14:59:01 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50TEwxUb40108324
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Jan 2025 14:58:59 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 007152009C;
+	Wed, 29 Jan 2025 14:58:59 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EDEE7200A0;
+	Wed, 29 Jan 2025 14:58:57 +0000 (GMT)
+Received: from [127.0.0.1] (unknown [9.152.108.100])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 29 Jan 2025 14:58:57 +0000 (GMT)
+Message-ID: <78b2e750b4568e294b5fc5a33cf4bc8f62fae7f6.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v7 4/5] bpf: verifier: Support eliding map
+ lookup nullness
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, eddyz87@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marc
+ Hartmayer <mhartmay@linux.ibm.com>
+Date: Wed, 29 Jan 2025 15:58:54 +0100
+In-Reply-To: <68f3ea96ff3809a87e502a11a4bd30177fc5823e.1736886479.git.dxu@dxuuu.xyz>
+References: <cover.1736886479.git.dxu@dxuuu.xyz>
+	 <68f3ea96ff3809a87e502a11a4bd30177fc5823e.1736886479.git.dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|MW4PR12MB5601:EE_
-X-MS-Office365-Filtering-Correlation-Id: fcf25d85-daa1-4a0d-c845-08dd40755373
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jWOzK87M1b8cwsfukvz8O1tG1WcANaKIXhn+tACyQMeBL3PdHGDm5nP9kUWJ?=
- =?us-ascii?Q?ajpMCNe4mxSHuJKeSkn8LCTDKQ4hS3ADDvYQxOUOwFzVxoBqkwyGU5KHTR9I?=
- =?us-ascii?Q?3b5VwdGaok5YQXhLxLzOd64Dj3CiEz6/sdFBbTbjOXN7yDYz2N5AjdgfBqvG?=
- =?us-ascii?Q?fTjpuZZYpSyWFTh1Zg6qzzrv8evpAbyLHrOkUrMGbjUUu3cO+zQcxddbNSjL?=
- =?us-ascii?Q?YTZ6RhJ13b2EOdL5dpaY9xhwOiKUQJDxo7k1WdyigHPK409aXrY6AXI0L2wx?=
- =?us-ascii?Q?jzCxh2jgRu/E3Bn2JCZqWWh+xD5gcQGcFyf6yyzMiE29Fn/6urW+yLgjE8mu?=
- =?us-ascii?Q?z5TipyLS97EOmRo82cX0/HvW0ugNaqU4tjD83u+rTDJN8C966evZbsoDJRBF?=
- =?us-ascii?Q?WX4+a3E5G6dpJN8xdT6KkuA2apRhVxlN7uGyr1UpfmHAEO2QXApnpsmWmAAq?=
- =?us-ascii?Q?K8OM1Ku0Ac5kekMSrNP7f/M1vSVB6/INU0ADRBLo87Uh2i0D6uZ5pH4mFH3Y?=
- =?us-ascii?Q?vU4cJse5wU1oQ/dDlltfwXOK5lRnUIYkI8wDgXlPiwDT1kSK/TPT/HZxZdv9?=
- =?us-ascii?Q?pfK7IjmunC7kzWiIvEgAuTjKis6kmtn9TCZvsP4b28A+s75TLoOOTvPbqZoq?=
- =?us-ascii?Q?Q93vC/RHDpYoDTbounlt0Ghm2zTtaL6OtF0q/XCO5dti2SiILB9fPwvdaiO7?=
- =?us-ascii?Q?cuE+XBjHN4MTIsQcc48tjBwXqPgfQdUg9HDh/3/er0aVPtZqSegw4txM8uNv?=
- =?us-ascii?Q?eRnz/pWRhCX/LolKkcGaU2KkPiYwvmqsTwZmHAeKaTSpQzTH+bkD8/L+ma0Q?=
- =?us-ascii?Q?0sdJf3eER3+PF/DZt0QrRk9UFMpHrptAJRYnFfya42b3yfOFCV+3Csg1YzgE?=
- =?us-ascii?Q?WKPb9boNbt8L6e7bspcU36XbWnAEJH/SkgHTJdh3FH3daYWo+ko7K0erMWe6?=
- =?us-ascii?Q?kLQvMeY28VpwO9XUR/XXREZ7aoC8xqf8VjF6AYf3G1ijtfp0JmdsNMpnEo3v?=
- =?us-ascii?Q?8zaC5mjqFUwpDedgFo0tIHopdcG/m8onLfYWo83LU8Nd+0fzrlRBsqdl4os4?=
- =?us-ascii?Q?8UIUFWrxaEe6j50q3uggDE3+DfUVFPPApB6/ICTxleU6bk3SEjEUt+1v9I2Y?=
- =?us-ascii?Q?QbsXPZnGMCchagwqk16iaLjKWaf1jFC9aIeOZAkqPx/hnU9XO9YN9tZD+iIj?=
- =?us-ascii?Q?DA58fLO5Iva0kizYPB/dGLDQRxbZjrv5qw5gJ7rgOBbkBz+i5PCBfYrAlk3q?=
- =?us-ascii?Q?sszK7AvsswWGA9HKsIjaP0+pM3kXeCA6Fbyv8Ixp6ch06S+0YugPewrldquH?=
- =?us-ascii?Q?bEtI5+LnSLWwVQzJ0Lm/DESUwn9xQZ6fVnGKh3NpZM05atFjaOFtEFum81vX?=
- =?us-ascii?Q?T+lzJwlutOFtCAq0Sz2BE9+RoPfQ?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?CCra0dnOUWz8CQxc81GkR2kfQ1Q2PZTUd1O6+0p4+IZRtXBbvUxz8Oy0RObf?=
- =?us-ascii?Q?Gr8i8RXOBuOw7dzEV5RIy+4RIn480EaFceU41r9p453/hhnNLdlHn4nuXnY1?=
- =?us-ascii?Q?uy5q/Mny/nc8vWRqJf1VAXmZ3/6zAD+GdF86KuLOVdKQ1TKmKKmq2E6Pi9vD?=
- =?us-ascii?Q?qOeWWEob3BxrOJ3oM7m0z4ox4oDAVS8BibjIBPL9/RAYUvBP466II7N57ajO?=
- =?us-ascii?Q?T4/5tdwgwVGk0ueGQd9gv1JfGnzOF4BjelWELCRjqIREsGER8l5zTPZPEaON?=
- =?us-ascii?Q?G5SC6O0urnfT3o3oTD2pR7Ac+IIOTCOE9wQMguKBVtuJ5cZ0SXr3nv95RuuI?=
- =?us-ascii?Q?uRc/sQRcHozJxrDsKt2mnHm7jFcsUDXoDIUn+406GOo7NKH8ZDeIhzSQS/fe?=
- =?us-ascii?Q?zr69t16CpD2IkT+5UL3nCYigvVE1sgYiHOX1ZarQqAVW72MxeZ1lRR3m90H2?=
- =?us-ascii?Q?wHKheeO38ymRxbsbUMHUQEP1lYYikZFV1QknKZhHSlWVe6ci5yo4Hh16gTm8?=
- =?us-ascii?Q?8df5xFD4JtMwjUPldtiNbvngRPr/MwvHQxg5BU+zDt351CTBBq3Ym76mIukK?=
- =?us-ascii?Q?SbnZODE68oGbeMC31hvKq9g2yId6VcBpm5tTVmNiw64O9RmP6csx4Mx1dr7z?=
- =?us-ascii?Q?84WMJ7fOM2oytD1YFhZ5jcAA3v4O17d4UMCfOzJ7jz/AANjD9F3jUBhJ71bq?=
- =?us-ascii?Q?UaCnF8/x4BrdsJsWYdXd2yrptytv0KI89+CF4qx3KnyIPkI2gB9l8B3W/8jB?=
- =?us-ascii?Q?c11dN12whaNOaQsdOjZZ35irJsSaNWqYFEujXna950JmxVxVJu5l55D0SpA3?=
- =?us-ascii?Q?Zfz4QbCfIWCzkL7d2dtuF9h+tj+8TeIB5ZwNvWiHlHzGLA3Hk8DjvxgbxdCB?=
- =?us-ascii?Q?SIfqLJ+KjkxlfQ5wC2gXvkkJxMrNtdsEfO/6AYIjhPb18ya5lKzrV2D84GV3?=
- =?us-ascii?Q?2/kugnGPr9I5FB+jHX8GwOBmy2yeloXej+L9GSVRz1WPszGs7atPEvzOR6Ek?=
- =?us-ascii?Q?VorGPy5lze3KI0jBqAkWddmENIIEa4UtHdbnyKF8j2UIqJf4vRoqkH5WX1kH?=
- =?us-ascii?Q?T2846m934TKDJe+/z8G+qpwKsTo4GFyC7JQdPkAA6v+eQeNEd7jNRiTRsed7?=
- =?us-ascii?Q?cATvH/8kZqLYOArK2bCKkLjD7kZQ3WkJkJMEK7kijZJVbPc7PfCqAY/O+F4f?=
- =?us-ascii?Q?B2QebJOdLI+6BX6kPixnLm8m3iYvcy5bdFmIuexvXMXMiQRNqIz3t/i3ceW/?=
- =?us-ascii?Q?CYBsjR6L97NrMfLd0keSHI6tkVz29Xx6wLBa+Lo9W72ceMcqj9IPg4weWqHw?=
- =?us-ascii?Q?ZawN9A/ynNpND3XHNCVyGctXIN3nqJWMWL/aZaKkg9WmLXV8R/tbVIK1W56j?=
- =?us-ascii?Q?ZxkbQDlLVyAyGPY8Wqpy1uQY4CutoBoVyXuue8hMJUgFJPuGIo3uvZY0hK+S?=
- =?us-ascii?Q?dqpLbXaZR3Jn8mpsXmLcbfYwWw2Kn8bkN1/c4bA/HTwyq6k/xtxDKdadMloV?=
- =?us-ascii?Q?1aF9R3FkhGBU6qRujkFr+CvTsQ62e77IWggTRtWEiDBbsj0xngoDoExWgdwo?=
- =?us-ascii?Q?wHyKtpMDjFHazjSxXtrpfi/hZktyXLIKGANfmgYD?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcf25d85-daa1-4a0d-c845-08dd40755373
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2025 14:58:01.3546
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5CrPs+kQttUJM2LUcjZlchk/u1rVuHCATR6lJQEWUqpIvPAsrt8uWIaV7mi7DHV8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5601
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FKh6k25TDJ9aQ2qF7PzgdFcKDbgROBqX
+X-Proofpoint-ORIG-GUID: wXT9RqwprV3FqDqUF9kRqUy79Xb-QAI5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-29_02,2025-01-29_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 clxscore=1011 lowpriorityscore=0 mlxlogscore=872
+ bulkscore=0 spamscore=0 suspectscore=0 phishscore=0 priorityscore=1501
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501290121
 
-On Wed, Jan 29, 2025 at 02:44:12PM +0100, Eric Auger wrote:
-> Hi,
-> 
-> 
-> On 1/11/25 4:32 AM, Nicolin Chen wrote:
-> > For systems that require MSI pages to be mapped into the IOMMU translation
-> > the IOMMU driver provides an IOMMU_RESV_SW_MSI range, which is the default
-> > recommended IOVA window to place these mappings. However, there is nothing
-> > special about this address. And to support the RMR trick in VMM for nested
-> well at least it shall not overlap VMM's RAM. So it was not random either.
-> > translation, the VMM needs to know what sw_msi window the kernel is using.
-> > As there is no particular reason to force VMM to adopt the kernel default,
-> > provide a simple IOMMU_OPTION_SW_MSI_START/SIZE ioctl that the VMM can use
-> > to directly specify the sw_msi window that it wants to use, which replaces
-> > and disables the default IOMMU_RESV_SW_MSI from the driver to avoid having
-> > to build an API to discover the default IOMMU_RESV_SW_MSI.
-> IIUC the MSI window will then be different when using legacy VFIO
-> assignment and iommufd backend.
+On Tue, 2025-01-14 at 13:28 -0700, Daniel Xu wrote:
+> This commit allows progs to elide a null check on statically known
+> map
+> lookup keys. In other words, if the verifier can statically prove
+> that
+> the lookup will be in-bounds, allow the prog to drop the null check.
+>=20
+> This is useful for two reasons:
+>=20
+> 1. Large numbers of nullness checks (especially when they cannot
+> fail)
+> =C2=A0=C2=A0 unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_S=
+EQ.
+> 2. It forms a tighter contract between programmer and verifier.
+>=20
+> For (1), bpftrace is starting to make heavier use of percpu scratch
+> maps. As a result, for user scripts with large number of unrolled
+> loops,
+> we are starting to hit jump complexity verification errors.=C2=A0 These
+> percpu lookups cannot fail anyways, as we only use static key values.
+> Eliding nullness probably results in less work for verifier as well.
+>=20
+> For (2), percpu scratch maps are often used as a larger stack, as the
+> currrent stack is limited to 512 bytes. In these situations, it is
+> desirable for the programmer to express: "this lookup should never
+> fail,
+> and if it does, it means I messed up the code". By omitting the null
+> check, the programmer can "ask" the verifier to double check the
+> logic.
+>=20
+> Tests also have to be updated in sync with these changes, as the
+> verifier is more efficient with this change. Notable, iters.c tests
+> had
+> to be changed to use a map type that still requires null checks, as
+> it's
+> exercising verifier tracking logic w.r.t iterators.
+>=20
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+> =C2=A0kernel/bpf/verifier.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 | 92
+> ++++++++++++++++++-
+> =C2=A0tools/testing/selftests/bpf/progs/iters.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
+ 14 +--
+> =C2=A0.../selftests/bpf/progs/map_kptr_fail.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 |=C2=A0 2 +-
+> =C2=A0.../selftests/bpf/progs/verifier_map_in_map.c |=C2=A0 2 +-
+> =C2=A0.../testing/selftests/bpf/verifier/map_kptr.c |=C2=A0 2 +-
+> =C2=A05 files changed, 99 insertions(+), 13 deletions(-)
 
-? They use the same, iommufd can have userspace override it. Then it
-will ignore the reserved region.
+[...]
 
-> MSI reserved regions are exposed in
-> /sys/kernel/iommu_groups/<n>/reserved_regions
-> 0x0000000008000000 0x00000000080fffff msi
- 
-> Is that configurability reflected accordingly?
+> @@ -9158,6 +9216,7 @@ static int check_func_arg(struct
+> bpf_verifier_env *env, u32 arg,
+> =C2=A0	enum bpf_arg_type arg_type =3D fn->arg_type[arg];
+> =C2=A0	enum bpf_reg_type type =3D reg->type;
+> =C2=A0	u32 *arg_btf_id =3D NULL;
+> +	u32 key_size;
+> =C2=A0	int err =3D 0;
+> =C2=A0
+> =C2=A0	if (arg_type =3D=3D ARG_DONTCARE)
+> @@ -9291,8 +9350,13 @@ static int check_func_arg(struct
+> bpf_verifier_env *env, u32 arg,
+> =C2=A0			verbose(env, "invalid map_ptr to access map-
+> >key\n");
+> =C2=A0			return -EACCES;
+> =C2=A0		}
+> -		err =3D check_helper_mem_access(env, regno, meta-
+> >map_ptr->key_size,
+> -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_READ, false,
+> NULL);
+> +		key_size =3D meta->map_ptr->key_size;
+> +		err =3D check_helper_mem_access(env, regno, key_size,
+> BPF_READ, false, NULL);
+> +		if (err)
+> +			return err;
+> +		meta->const_map_key =3D get_constant_map_key(env, reg,
+> key_size);
+> +		if (meta->const_map_key < 0 && meta->const_map_key
+> !=3D -EOPNOTSUPP)
+> +			return meta->const_map_key;
 
-?
+Mark Hartmayer reported a problem that after this commit the verifier
+started refusing to load libvirt's virCgroupV2DevicesLoadProg(), which
+contains the following snippet:
 
-Nothing using iommufd should parse that sysfs file.
- 
-> How do you make sure it does not collide with other resv regions? I
-> don't see any check here.
+53: (b7) r1 =3D -1                      ; R1_w=3D-1
+54: (7b) *(u64 *)(r10 -8) =3D r1        ; R1_w=3D-1 R10=3Dfp0 fp-8_w=3D-1
+55: (bf) r2 =3D r10                     ; R2_w=3Dfp0 R10=3Dfp0
+56: (07) r2 +=3D -8                     ; R2_w=3Dfp-8
+57: (18) r1 =3D 0x9553c800              ; R1_w=3Dmap_ptr(ks=3D8,vs=3D4)
+59: (85) call bpf_map_lookup_elem#1
 
-Yes this does need to be checked, it does look missing. It still needs
-to create a reserved region in the ioas when attaching to keep the
-areas safe and it has to intersect with the incoming reserved
-regions from the driver.
-
-> > + * @IOMMU_OPTION_SW_MSI_START:
-> > + *    Change the base address of the IOMMU mapping region for MSI doorbell(s).
-> > + *    It must be set this before attaching a device to an IOAS/HWPT, otherwise
-> > + *    this option will be not effective on that IOAS/HWPT. User can choose to
-> > + *    let kernel pick a base address, by simply ignoring this option or setting
-> > + *    a value 0 to IOMMU_OPTION_SW_MSI_SIZE. Global option, object_id must be 0
-
-> I think we should document it cannot be put at a random place either.
-
-It can be put at any place a map can be placed.
-
-That also needs to be checked when creating a domain, it can't be
-outside the geometry.
-
-Jason
+IIUC here the actual constant value is -1, which this code confuses
+with an error.
 
