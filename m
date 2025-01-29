@@ -1,163 +1,145 @@
-Return-Path: <linux-kselftest+bounces-25400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72321A22593
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 22:21:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6FCA225A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 22:27:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7B081885C78
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 21:21:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3ED261886C29
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 21:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CAF1E2838;
-	Wed, 29 Jan 2025 21:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327DF1E2843;
+	Wed, 29 Jan 2025 21:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K2qQv0wX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j2TLc2M6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f202.google.com (mail-il1-f202.google.com [209.85.166.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F591946A1
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 21:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BC11E285A
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 21:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738185709; cv=none; b=F8UZyzRTobQaXSY5mRK/JAEe5QHLkj9w4Lu0pY6Re1rkRhRHj4HFKcJ13GcdBFrDQg0SineMWfEBqW8p6qkVxmYhBc8bU4fGLEcJX92pb2FWPoHJJTDlgIjNf4aci7luZevuiSd8CwYC1xDIVKXylTO0d8J8XoR6q+x5lI1Gbc0=
+	t=1738186026; cv=none; b=gfdNjZ2SBmNojxrpRdSpg9et11Nx0PBPy18UvtkiGxVDGURaJzwVr7NQXpXgoVtYdv1pZeThE4rtQUlA4igDTlhhbyvw/aunnF1QLnrbdIH3tTPcl5Tx0MzAuF+O65sHquP+wvx8crDV9oRVNsnghq9YZ7hIBdEV8r2ugtYDYyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738185709; c=relaxed/simple;
-	bh=RobWR3W+k8C+CJCrQ4Q+6jdj9PcWOKqhIs8hko5VTi8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FT/yIG+WYlaxsZk9xIb/bXKo202rao10UiKoeLZgqhKGgacYpud2l8iR7cRFlGA52WeKp0I2ZYmZGf1U5s/8kiZ96auQKmaulVuGomRQoZt5r3tSLjJoamR30S6Tk/D3U4Nn6Cc6L54ZjDO/EMWEPyoY1VMP/LXVfH3CzfO+fgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K2qQv0wX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738185707;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E5B5s1soOSVtHPF0j3YsjMfi+df/kHS6e1AwQLgHvws=;
-	b=K2qQv0wXGRQ6O8XO1IthyJKzU/8aQjq4/Xir047tJ1iicpT0ZD1OGi40PVW7NKRARvlI2F
-	oRi+siB99wzwatoWIZIi++ORw73Bl0Kv9GP3vDs/56Yu17hNhIYxTxPlgomTvdAR31PCzL
-	OspeYK2fIsuE6k4UPfXmxwxnlBKP4Us=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-310-5WfpaLMXNASPgZKtnk1S0Q-1; Wed, 29 Jan 2025 16:21:44 -0500
-X-MC-Unique: 5WfpaLMXNASPgZKtnk1S0Q-1
-X-Mimecast-MFC-AGG-ID: 5WfpaLMXNASPgZKtnk1S0Q
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-216750b679eso1381995ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 13:21:44 -0800 (PST)
+	s=arc-20240116; t=1738186026; c=relaxed/simple;
+	bh=nN9FJWNplkIKmzFXRfsaSEmbobI8sxtet+92PBTyajw=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=KXM1N+9aQ9v5r7YsTX/euOJXHCI2A0x+drub7+0NytI8AfysoFl9xLjH4jFwbpuAZjhqOIoPgWORwCd8QuPxYZRvt2t3lw+t3E4HBaCKRSZKpE4ZdKzh0RY1TK6Ul1fNl7WwM1ogJwHq/X459iRgc6Z9XbzsZoDZ+PGjZyOM+4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j2TLc2M6; arc=none smtp.client-ip=209.85.166.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Received: by mail-il1-f202.google.com with SMTP id e9e14a558f8ab-3ce843b51c3so3516605ab.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 13:27:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738186023; x=1738790823; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f5TFKrdlu748ABqlHsuP9NDv0QkMzFjiUtwaLrqTFf0=;
+        b=j2TLc2M6wiZkJPGU8C8uY4tI4Z9NJS3opsqH5b73tdH9/aaID2ov46WOKFTWGnSDS9
+         7pW82iJdU2kGqOBmvitgQ2H1h4w51wmEEL7xzk9D05lxaXP84sgqzUGXku0rlfHy5v69
+         q0Np7iakn8a9BM+eH4m7w47B3mhc5vcTDblsfBGcEhi7Dmh/lSjTEEuwDXK6PegJThUQ
+         VvWkZZsIPLM2QuRnZG8JNq1WMZLa4poU4NU8ANNwLs/YK6LK4P5CUwjzUJ337VvOUxsA
+         X0GK1TdhYP/8B2BmiAY1Im5f/NDG75K0UTdNCQI+kRdce27XooYIixa48SZzLIzkV+Cm
+         cT+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738185703; x=1738790503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E5B5s1soOSVtHPF0j3YsjMfi+df/kHS6e1AwQLgHvws=;
-        b=LZ8u+LV2aL+jdZbwmk1anBrpCNHMV01q4SpaCTPKwCtLJ06TCB4UnaxEaAT9GPKZ0V
-         1JTFhzKIEiQZoe4QM1pUzdYABd4S+JgALGdr14HkYA1SDb1EsXfYQiUtGdJlASbNIfm2
-         O+jC9fLOYahuHmHq3qGxz1TvAhyBkkRQhVARycIFN2SyDazjLFcB62jSvSxC05fmMGKr
-         9U8Iyys1aCVBGqjeu0rBgANV+UZgB6koZSoBaSO3LaVx1qfOWGNMRcW6VA1nkv3PvkMY
-         sJOX+/AKRb4J9N7Gd8VrhzI4iJen+5a6/rzl1kTYPD3Aqjs8By5heoJfXGPhrHDAyXgj
-         FUMw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+kfLJ0MmxruI2PKM8dc1uoZ3bd656hT36jcsP+U6HaHTaEPYt8qSj9V6YTihbYKRK0BVi/zMT56/mIT6xyck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeA8402+dovOjLUTu7zXTDm4bddw06WzRfWqhfyovs78HE8nez
-	mv8h3n4ZH4/tl5UsvP14OJ6/3G29z5cmU9qgblUUtK9oolO2/FUt2qVqmwg4z68CG1COUJY6t6b
-	t1eRwhDURp/NF77qBuI9veQGRJKl1Pn77KJkxJgJnGw+nRTZLUdVJ+ZV6U7s1amX57V/t46TQTW
-	rTq29k4PxQt4dNscvTNKDhmu7U9MJbUoltJTlLZH+I
-X-Gm-Gg: ASbGncv/mt302eJNS4kgJv4SlfLCE99O9S48qtUG9hLM3vSDof+600nzMwa05L10K1j
-	gGR1bpSO0ppVGds5cK7v79Srseyrm7kxdy9ynR//+7hy2GyPccEqzcaY+awRq
-X-Received: by 2002:a17:902:e751:b0:21d:dae6:d956 with SMTP id d9443c01a7336-21ddae6df49mr57143825ad.24.1738185702999;
-        Wed, 29 Jan 2025 13:21:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGiQ3DFwtHCzWWCjvRJXFfmr9YJZG0hu8Kfc0/zDrtvtrpQixJI5+VyKmiJNCy1/A45b9C5zMyPhFhX6sJ7WPM=
-X-Received: by 2002:a17:902:e751:b0:21d:dae6:d956 with SMTP id
- d9443c01a7336-21ddae6df49mr57143535ad.24.1738185702630; Wed, 29 Jan 2025
- 13:21:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738186023; x=1738790823;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f5TFKrdlu748ABqlHsuP9NDv0QkMzFjiUtwaLrqTFf0=;
+        b=okIBFkmh+QgPLhdmXFbbVI4VS0gAC7XXUCVzEL/egCND8mKCxX/A7WjOHIFZcz+qxb
+         tA6f/hZdLwzhVfzwTR45RApcrepMw2Jdi70hb5af5O4L+cBMaLafHgU3ACcLpPPD55zE
+         XXBpcSV4854x7eji/ibObkpy5ANuNujKBpUSsyY5DIQsgMV3a/BymwNgdTMWbhKMURX4
+         M8vNKx5qmxMH+6gjsWR4ygz8ybR8lqia7ex3EP3fbby+tcs9f3+D8faYGYi2aan0IoBV
+         FB5mRzb9zXS4Rww7KgOc1gxXL+5P4A0ZSwBEDppkSaDp+FamV8GMRqN+bJpBre9PwYmC
+         7hJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWVxhJsvh53+RWU+1moCIeJECb+oOLUn6fs3Ad/7IPKyi648/P4DlzQHSUcAHkmT5kzT3pDnQGsrDB3PpNdz3s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO8WTH8ssxsCCC3ZicgpkYBWkRkfjUEfrrB0zgEphdV35HuWEL
+	+PuS7SMR035uTDucj2MCYj39WZcJPsynZ0IuvyUJpP5K2T6DIsK/u5Om0F+aUwqbKbcks0VVbj+
+	ukk0dZynN7nP3fldtuyzwCw==
+X-Google-Smtp-Source: AGHT+IEe9UoVLvNSaHlSkXBd6Ho5IN4ChMz7y7gjFQYGYFiTLbvYP7nErowhtJVcYSVDfJu2qMuLzToHlUCNsQ59Ig==
+X-Received: from ilbbb15.prod.google.com ([2002:a05:6e02:f:b0:3ce:69d1:ce53])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6e02:20cd:b0:3a7:66e0:a98a with SMTP id e9e14a558f8ab-3cffe3d1e48mr43753655ab.9.1738186023704;
+ Wed, 29 Jan 2025 13:27:03 -0800 (PST)
+Date: Wed, 29 Jan 2025 21:27:03 +0000
+In-Reply-To: <86bjvpvdn5.wl-maz@kernel.org> (message from Marc Zyngier on Wed,
+ 29 Jan 2025 15:33:02 +0000)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250128163859.1883260-1-agruenba@redhat.com> <20250128163859.1883260-12-agruenba@redhat.com>
- <ajfehauvtid4d7pqy7o3uhe6p7buohwe542wqddkwpdq62lr4g@6cgcfpzcyag3>
- <CAHc6FU6Yzk1Si37nRji-5uDZF9uaYo=G5tbtuS_5FiW6BDVTAg@mail.gmail.com> <rddasfmbw3ul2iezec7rgit2vxnv4p53uvoydck4b5jxuo44kq@7qlk5cru6w7r>
-In-Reply-To: <rddasfmbw3ul2iezec7rgit2vxnv4p53uvoydck4b5jxuo44kq@7qlk5cru6w7r>
-From: Andreas Gruenbacher <agruenba@redhat.com>
-Date: Wed, 29 Jan 2025 22:21:31 +0100
-X-Gm-Features: AWEUYZnLMn0BfwMoxgEY5raT0-dNixUOgtPWdpFrR_-TsOntnYQ54oO31qd_ZLs
-Message-ID: <CAHc6FU7oZxP1cy6uihH=m9i=0z8PmCtozwQs2HgnqvbTDhAd_g@mail.gmail.com>
-Subject: Re: [PATCH 11/21] bcachefs: improve the eytzinger0_find_le tests
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Shuah Khan <shuah@kernel.org>, linux-bcachefs@vger.kernel.org, 
+Mime-Version: 1.0
+Message-ID: <gsntzfj91fbs.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [RFC PATCH 1/4] perf: arm_pmuv3: Introduce module param to
+ partition the PMU
+From: Colton Lewis <coltonlewis@google.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: kvm@vger.kernel.org, linux@armlinux.org.uk, catalin.marinas@arm.com, 
+	will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, 
+	suzuki.poulose@arm.com, yuzenghui@huawei.com, mark.rutland@arm.com, 
+	pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
 	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Wed, Jan 29, 2025 at 9:28=E2=80=AFPM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
-> On Wed, Jan 29, 2025 at 07:21:49PM +0100, Andreas Gruenbacher wrote:
-> > On Wed, Jan 29, 2025 at 7:04=E2=80=AFPM Kent Overstreet
-> > <kent.overstreet@linux.dev> wrote:
-> > > On Tue, Jan 28, 2025 at 05:38:48PM +0100, Andreas Gruenbacher wrote:
-> > > > Rename eytzinger0_find_test_val() to eytzinger0_find_test_le() and =
-add a
-> > > > new eytzinger0_find_test_val() wrapper that calls it.
-> > > >
-> > > > We have already established that the array is sorted in eytzinger o=
-rder,
-> > > > so we can use the eytzinger iterator functions and check the bounda=
-ry
-> > > > conditions to verify the result of eytzinger0_find_le().
-> > > >
-> > > > Only scan the entire array if we get an incorrect result.  When we =
-need
-> > > > to scan, use eytzinger0_for_each_prev() so that we'll stop at the
-> > > > highest matching element in the array in case there are duplicates;
-> > > > going through the array linearly wouldn't give us that.
-> > >
-> > > For test code, wouldn't it be simpler to iterate over the test array,
-> > > testing with every element as a search value? There's enough corner
-> > > cases in lookup that I think it'd be worthwhile (and probably add som=
-e
-> > > extra test values, e.g. first/last elements +1/-1).
-> >
-> > If you expect to get the same index back, that won't work when there
-> > are duplicates.
->
-> No, but we wouldn't expect to get the same index back if we're testing
-> every combination of elements (+0, -1, +1) x (le, ge, gt) - and it
-> sounds like perhaps we should, if you've been finding bugs. Thoughts?
+Marc Zyngier <maz@kernel.org> writes:
 
-I don't really know what you're after here. Function
-eytzinger0_find_test() already tests every combination of elements
-(+0, -1, +1) x (le, ge, gt).
+> On Tue, 28 Jan 2025 22:08:27 +0000,
+> Colton Lewis <coltonlewis@google.com> wrote:
 
-The full scans of the array in eytzinger0_find_test_{le,gt,ge}() are
-not there to verify correctness; they're only there to produce
-slightly nicer debug output. I'm perfectly happy with removing that if
-you prefer.
+>> >> +	bitmap_set(cpu_pmu->cntr_mask, 0, pmcr_n);
+>> >> +
+>> >> +	if (reserved_guest_counters > 0 && reserved_guest_counters <  
+>> pmcr_n) {
+>> >> +		cpu_pmu->hpmn = reserved_guest_counters;
+>> >> +		cpu_pmu->partitioned = true;
 
-> I think the test code would have to do short linear searches from the
-> test element, and then verify the search functions against that.
+>> > Isn't this going to completely explode on a kernel running at EL1?
 
-What for? We already know from the eytzinger0_for_each loop in
-eytzinger0_find_test() that the array is in eytzinger sort order, and
-we also know from eytzinger{0,1}_test() that the _prev() and _next()
-functions are doing "the right thing". So the one thing left to verify
-in eytzinger0_find_test_{le,gt,ge}() is that all the search functions
-always return the boundary element. That's done by going to the next
-element in search order and by verifying that it no longer fulfils the
-search criterion.
+>> Trying to access an EL2 register at EL1 can do that. I'll add the
+>> appropriate hypercalls.
 
-> Have you spotted any issues with searching over arrays with duplicate
-> elements?
+> But what about a guest that would get passed the magic parameter? I
+> think you want to prevent that too.
 
-Only that eytzinger0_find_ge() didn't always find the first matching
-element in the array; see patches 17 and 18.
+That doesn't matter because the ARM manual states that when HPMN is set,
+reads of PMCR.N from EL1 have that value and I've made sure in the
+second patch KVM does that, so a guest believes it has a system where
+reserved_guest_counters/HPMN == PMCR.N so there is no partition.
 
-Thanks,
-Andreas
 
+>> > Also, how does it work in an asymmetric configuration where some CPUs
+>> > can satisfy the reservation, and some can't?
+
+>> The CPUs that can't read their own value of PMCR.N below what the
+>> attempted reservation is and so do not get partitioned. Nothing changes
+>> for that CPU if it can't meet the reservation.
+
+> That's not what I meant. The question really is:
+
+> - do we want the reservation to be the number of counters reserved for
+>    the host
+
+> - or do we want it to be for the guest?
+
+> On symmetric systems, it doesn't matter. On broken big-little systems,
+> this changes everything (it has a direct impact on userspace's ability
+> to use the counters).
+
+> I think the design should reflect a decision on the above.
+
+As currently written and reflected in the name reserved_guest_counters
+this series is making a reservation for the guest.
+
+After talking with Oliver it probably makes more sense to make a
+reservation for the host. This is closer to the semantics of the
+underlying CPU feature.
+
+In the limit case it's impossible to leave the host without
+counters. All valid values for HPMN leave the host at least 1, but
+should we make any guarantees beyond that?
 
