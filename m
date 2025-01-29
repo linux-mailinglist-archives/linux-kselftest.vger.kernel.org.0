@@ -1,151 +1,99 @@
-Return-Path: <linux-kselftest+bounces-25394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8D8A2244F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 19:53:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1C86A224F4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 21:05:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03A961886136
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 18:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A33716721E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 20:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E79B1E2843;
-	Wed, 29 Jan 2025 18:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D2D9199921;
+	Wed, 29 Jan 2025 20:05:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ezOo7BBz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBYGpX/2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035491E1C36
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 18:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5385B29A2;
+	Wed, 29 Jan 2025 20:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738176780; cv=none; b=g0jV84TB4OW3HTT1lXsBrWjGbNuGyWgH0Mf/4qvXsfV8VvJuux3w/5Ny2rKnGs9W/VZ5d6tIG0J6hWALpHfOsa8A3linNrcuxkTD3YgckgGASWVXp/BHlNlavMIgfmoDlkp945C48hqQOpjNEu8OjkVV2IT6glmAL/wEYttcpDU=
+	t=1738181128; cv=none; b=UBJZAlNfmz8JOGLxnlSa2U96rTXkFmB0HSmH3XskKt8xXyax41R+oo0oylnyIm/bzAXX4aJ1Mp4lw3mFN2zEVcifoe0hp9aJCdodZS3s+VPSMBSSZFYc+OV2GGKbHsp4Fyp3qKs5iaHpnqdUG3llxsL0ztwKV9mICAh0RQgHMMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738176780; c=relaxed/simple;
-	bh=kXUWf4bzCULNMipXU787lKMp83ROSa9zL6s2oSKQfIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b1Vf29wn1kX68kpXfhBugQ/tsWY4iAt4Q6KvemdRH8Oi0e6dCJv5YL1hc1stQlmn0U2W5XIrgLkk8CoLaTlCjDbu0UaX5stQSnmW71pNLJUk+AQwKTYCFLSMRkTt/N6PKTnyb9LPaWBrNv3JY0Xo2/9A1m5bObxqxs+PC35JDJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ezOo7BBz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738176777;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vlOChQEKTp5JX+pbfAOT77vMe8ez+6+Y0ab8kJl+7mw=;
-	b=ezOo7BBzVUpNniUKhqfl1yseIkwXviv8+M7zYjpbs4EjtGszYUGpaKj7DbZAU+ErT469hA
-	KjkXaHrsecBzE/BkUbVftsZAWtkX/wTbm9R/JEGBRi8f6aTkbngSnBKg82SO7VSEb6j1N0
-	T+gakBzDohSM33rwsXrfGJ6OwHfMGeU=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-47--D-VqdZWMCuKFM53jcF7wQ-1; Wed,
- 29 Jan 2025 13:52:52 -0500
-X-MC-Unique: -D-VqdZWMCuKFM53jcF7wQ-1
-X-Mimecast-MFC-AGG-ID: -D-VqdZWMCuKFM53jcF7wQ
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 396CC19560BA;
-	Wed, 29 Jan 2025 18:52:48 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.29])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 3326919560AA;
-	Wed, 29 Jan 2025 18:52:16 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 29 Jan 2025 19:52:21 +0100 (CET)
-Date: Wed, 29 Jan 2025 19:51:49 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: "Dmitry V. Levin" <ldv@strace.io>
-Cc: Alexey Gladkov <legion@kernel.org>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Mike Frysinger <vapier@gentoo.org>,
-	Renzo Davoli <renzo@cs.unibo.it>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	strace-devel@lists.strace.io, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>, linux-snps-arc@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
-Message-ID: <20250129185149.GA25901@redhat.com>
-References: <20250128091445.GA8257@strace.io>
+	s=arc-20240116; t=1738181128; c=relaxed/simple;
+	bh=ctiHtXdHi1w62PgzZwSkmiiiPPdzp0pSp2L7RWvYviE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i0C6M/Wc6ptE7JTS/tOv/23/kCHGrgt8tPCrJKJ560R9gYXUo+GxNL4eRr91GIU61wWnjbGxApIUh3lm8sSRj30kFtc8IwUQlqZpL4hJdRHvi9WzrM20vkKZ3R+4FxywllDmULErus5TUc9ZukSkpglD/jwF0VEYACrfY+62pd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBYGpX/2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFE9C4CED1;
+	Wed, 29 Jan 2025 20:05:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738181128;
+	bh=ctiHtXdHi1w62PgzZwSkmiiiPPdzp0pSp2L7RWvYviE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TBYGpX/23LzeD9iFp5304St7Oq8+pAv7QL64Im1mzecTvpZK2XGJwPa/W4wiz1nYb
+	 T7bYxuIH+cyNJKmPBohy7mQl2U/VT1TwgSeQOOeNqVUjI3ka/bPpO6nT9n2+b3em8G
+	 K7m4ko0DmMLTbHaTubNgluq6wVhLgikDeQd00Uf+Y4YoHrwYywzcy9DwBZrl1oCgrk
+	 Pk78ydKcrN9EUDaWEjjCTkRcY3jCLVjmGxd8f2DQT56KgFFElBgI2V79NkBXNkREC6
+	 R0amNmk61eKcOX695Np9rLBQsGDobQ7okAsUBuuuV2y0vEK5iAruGaNgEopBueTpXq
+	 Yn6nN79tk4ufw==
+Date: Wed, 29 Jan 2025 12:05:26 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Anna Emese Nyiri <annaemesenyiri@gmail.com>
+Cc: netdev@vger.kernel.org, fejes@inf.elte.hu, edumazet@google.com,
+ pabeni@redhat.com, willemb@google.com, idosch@idosch.org,
+ davem@davemloft.net, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/1] selftests: net: Add support for testing
+ SO_RCVMARK and SO_RCVPRIORITY
+Message-ID: <20250129120526.7ba0958b@kernel.org>
+In-Reply-To: <20250129143601.16035-2-annaemesenyiri@gmail.com>
+References: <20250129143601.16035-1-annaemesenyiri@gmail.com>
+	<20250129143601.16035-2-annaemesenyiri@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250128091445.GA8257@strace.io>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 01/28, Dmitry V. Levin wrote:
->
->     * ptrace: Add explicit padding to the end of struct ptrace_syscall_info,
->       simplify obtaining of user ptrace_syscall_info,
->       do not introduce PTRACE_SYSCALL_INFO_SIZE_VER0
->     * ptrace: Change the return type of ptrace_set_syscall_info_* functions
->       from "unsigned long" to "int"
->     * ptrace: Add -ERANGE check to ptrace_set_syscall_info_exit,
->       add comments to -ERANGE checks
->     * ptrace: Update comments about supported syscall stops
->     * selftests: Extend set_syscall_info test, fix for mips n32
+On Wed, 29 Jan 2025 15:36:01 +0100 Anna Emese Nyiri wrote:
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 73ee88d6b043..98f05473e672 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -33,6 +33,7 @@ TEST_PROGS += gro.sh
+>  TEST_PROGS += gre_gso.sh
+>  TEST_PROGS += cmsg_so_mark.sh
+>  TEST_PROGS += cmsg_so_priority.sh
+> +TEST_PROGS += test_so_rcv.sh
 
-Again, I can't review 1-3, I know nothing about the non-x86 architectures.
+You need to add the C part to the TEST_GEN_PROGS, otherwise it won't
+get built. We're seeing:
 
-As for 4-6, feel free to add
+./test_so_rcv.sh: line 25: ./so_rcv_listener: No such file or directory
 
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+in the CI.
 
+> +	memset(&recv_addr, 0, sizeof(recv_addr));
+> +	recv_addr.sin_family = AF_INET;
+> +	recv_addr.sin_port = htons(atoi(opt.service));
+> +
+> +	if (inet_pton(AF_INET, opt.host, &recv_addr.sin_addr) <= 0) {
+> +		perror("Invalid address");
+> +		ret_value = -errno;
+> +		goto cleanup;
+> +	}
+
+Any reason not to use getaddrinfo() ?
+
+Otherwise LGTM, thanks for following up!
+-- 
+pw-bot: cr
 
