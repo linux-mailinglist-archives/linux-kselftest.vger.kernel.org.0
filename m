@@ -1,354 +1,254 @@
-Return-Path: <linux-kselftest+bounces-25368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C998A21F4F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:36:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4F5A21FBA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BE37188481E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:36:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6DFF18858DE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD1B195980;
-	Wed, 29 Jan 2025 14:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2971C5F25;
+	Wed, 29 Jan 2025 14:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gVEoiwXE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFphCWbx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97F81474A7;
-	Wed, 29 Jan 2025 14:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AA5199B8
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 14:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738161397; cv=none; b=MYv9X/GRTlfeNDx1MPUQQplREv9JZqmvA06f5TbOK6IFWwiMheMWYF6gxWWHMLoJsR1va4U/s6NNUtMg02QxOb5WsZHLFsfzLQL4AMJkR5QuORtpVwjoB+27yOqg98eES8d/v8IePsE1qDZA7MJg0xpVLIrq5qNwuWvjX02wDRs=
+	t=1738162340; cv=none; b=nKdim968vINK0oHSmxLGwXBwLp3ByxbY6wXv41ohA+WzZrG89QKzQiXz5n8j+hJDIwsnP22UWhoUeJfwXBffEijfhGTbIHv3IjAlf1oVMiRmvlSVHWB2q7HgZNHLm20zdYTurMauVqiNxY7Xp/lPnBIop3+xlxDLXWtrOj2IS2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738161397; c=relaxed/simple;
-	bh=GdEI/Xk2j5FiMtc++O5jVQhNKnf5OWc1lfUXq0M/18Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KDbZpo+lxsrWXi5Wl7I6Y5MDfxF/1w/1Q2bApVJ6ayVMYGG+yr7m75vzECBPF590Pu75OCzMF5KzbALQfFTwd2tbn/kp2llsAJ4SUcgyP6zvcaw8clKsHMsRF/0rAXJUo3DUsvk8gzIzZw+3tmybIH1KyhjSxxyV49os/xyV6pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gVEoiwXE; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1738162340; c=relaxed/simple;
+	bh=et+F4lIsP0xLBEbka+5mTy5sc5OWcPICDnaj+Dnfut8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=SjH+9vYH16GZ0KAK9ZiTwkfleWZcmpt89pZBoxMyrrCQTpOLMQptEnyMoRGjjNd22r0Ha9g83K64WBCW7ergNMOQGfrclwea95M3MgDNQLzQUWbzI4T8KOsANjULuERSH4CxQ9C3cj7p71sEBB0BEvA/SkbHR+TOZ8ZfDCmiEO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFphCWbx; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-436326dcb1cso47785775e9.0;
-        Wed, 29 Jan 2025 06:36:35 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3862c78536bso422422f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 06:52:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738161394; x=1738766194; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2sIfHEvcxCY3pnpcdFB+oh5QhdHA0BfWgcYNXklwgHQ=;
-        b=gVEoiwXEhbU7gcgOlXvyBV/94kE87QEpe2/EAJjQDGG8TDFHwpqszN2RnO7a2VJJ3r
-         BVT9um0fuUzwsT/akDGHGZqf6hF3p/1vYxECEQm+b7jldCW5xLcCT7dvk+gC2mF9RcJn
-         CzVfgdWWWTkRWRE82escxV14YLFklHOfxtmS1AwGpQr5QKavDYRsgAVyRV2zxtdJLfXc
-         sHhKxkKpGt3FvIiUpKmjY9QPeeE2H1plvUZje6a4xr6ozK4IMIdYFtlrhLhUTOM5drrL
-         qy+MZPh94vZMSdT2JljT4Aa+Uatrp4TvVr7HEcPzLSK5E9zBDixUoSCJXwEt5XPMBr5A
-         ZI9g==
+        d=gmail.com; s=20230601; t=1738162336; x=1738767136; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yS/ki7blkPY5sgOhGGtxpI4uVopNxUZR7+zpKj9shxw=;
+        b=KFphCWbxtQanHTbnXPzSBYVt61Jbi9/3mwC+EbPKpM1eKuyYifa7uIc54ZZm7X2FpJ
+         bFKXtpu0Laoq0aGWXmr/FiMNvdsJpSE9UjbXBRXW1ll+MKZLIcvztTF8Cmyq7TJFyfqa
+         W67+aih8iMUi7m3RRAIHhdqUgFmtfGCadgZTb5yw5H0ha5O6VPAWvLH+ggIgTmNCrO0v
+         V+cAKfwIQ/A1UQZY7fWifHsvE9EGON6kdXnjMI/rAeCyVjEOn+f6o2d2N+STerOwcwpo
+         +hNO1QpvnaY/WqEocKLCgyj5vHlVKofy83x2bE0tvtSELx3y7WpevvpDnpxwdpzy+ZM5
+         q2Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738161394; x=1738766194;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2sIfHEvcxCY3pnpcdFB+oh5QhdHA0BfWgcYNXklwgHQ=;
-        b=msPYg1/NEkngLUwdm70XMq7HFeeKqrDyLd9ZPwxr5z2YvInk5h6NAaU/rz0nxn510W
-         0Hb/xavHFUtw8TDIMCTESv/wtgqfXrNJzgfF7otaKk/5q+/6CQUpIzIZFAIlFPpdAVO+
-         Vh6ZY6ogvuKKnM1n2fzMK5tQ2VLF97jUStOFeUEKcqUsAyqd3iMsmuydoKLIIRmeoX47
-         2CQ3lmofjmz+hgR3uO7zpQ3OJpSp7it/NE41vpoEiphdLk13BYXDwGHfxfiibtGySXxm
-         grhjeDsDnlj1gviH+uexI5kYVHQP9J9k9ct/Byep7eLmpWOqukaspP7Ribq5cIeboDjm
-         Pcfg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5DuS3nWj0z9tdxWVBePjvBWLJnxsXwOVNQOL3mt+kWc36NsCVsvT8y6IiynfUPmiG35kOOqdrIBghFgJr49A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzm++kkmT598d7GVi8SQZfsBBOzCs6x3zKQLpHb4Lpx9XbMndIw
-	GInGIHxBEo5uhF6T1x4gXG1cTQg95Cv2iNsOvI3g0p7osqYH9pCBZfplCqrm
-X-Gm-Gg: ASbGncsM/Oh1iyY09IsZ/fsqtGRkp9OAGZKGqx0mSdI/2d2buffv4uh5G7GHxsfcRNs
-	/y4JwrDl0zTZJ/wmkrdG7V1BhIcCMQ3GYMtI/sFypq5NdlB0TYm2aWaPo7X1onsdwUY09xQF40U
-	OCruDEEdL8bC3tUUm8oKrbzryVexxMkbX6N1zWnB+JL+X7iE+ZyxCuc1rrSc9muLUX9KOBBv/02
-	iT+XumUd5oTvhOLDTtPyNpT2OkzQvIMPpu6f7M2j2iouJ8TMFhq/viOl8My72JbbXywCCIXFizj
-	TY1OHzvMuVmbkJTvxse4MOANpbYiM15UqDYPfw==
-X-Google-Smtp-Source: AGHT+IFIFR8iv/eVaU11QgIa3cyc7+1szefMZosV1a+eSFkjJCYbCxA9WYj1pFXZGMSpdhB9/X2Z0w==
-X-Received: by 2002:a05:600c:1f15:b0:434:f335:83b with SMTP id 5b1f17b1804b1-438dc3a84aamr31947285e9.5.1738161393326;
-        Wed, 29 Jan 2025 06:36:33 -0800 (PST)
-Received: from localhost.localdomain ([2001:4c4e:1eb5:de00:1ff8:8b09:84cb:1239])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438dcc6df36sm26472465e9.25.2025.01.29.06.36.32
+        d=1e100.net; s=20230601; t=1738162336; x=1738767136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yS/ki7blkPY5sgOhGGtxpI4uVopNxUZR7+zpKj9shxw=;
+        b=Q+DjGax6BkjeyKxHZAjgWNWc8iUBva+FGZQtBScPeAQNTf+NWaz8tl9QlfFQnXTqUU
+         BKiOk0KYJVZN2zYKRZIH1PLR8TtBXb8DZDz+f8oYBirF0WpnK6CCmapZmPzxMEgDZw/y
+         AAiwOzIehXQMYsbKdmV3a7pJxiHdfecwBdqssEpid4UrNkpHZSNX7WPc88hBppElDyBl
+         v0zDBOQMQ2hRgfmhLDQE+nkxe/Fs/aR//63u36Qqab+BKvPNdF7lDlsfrhsUBmD+Vbe7
+         42wwG8BK/dRURVok5vaO47aPYS1EvbOzsWidcDHe/hJdeSjy7SfwDmMGjdAv2MKdMWNS
+         nuyA==
+X-Gm-Message-State: AOJu0Yw7D6RpFo4nUQGqDB5KqvqwkeNdqqmjNWwrogwNsEpCNm62RfcV
+	RkqkRnD1/tLyIVXBJVVOA6kU57mikr2Z6iGLMiXFkkKDXk3r0dBG
+X-Gm-Gg: ASbGncuND3Uzx7F2/XyJZiP1BWy2egRyV8nDDN4E2KZ4zWJy8TYmQp2ZpU998JfIdNs
+	j4thahEA7awuJNO1LCLv8+NpsvqAJeha7Kz0BKRXU3Nxc6nCwQYEpmiAYOC0nAo2HT6nVpRU2EI
+	H+Uy3DumuXnf/LZ7UTOgLSulU2d5ZlFFd1D1CIK7sS1BQ8O2Fzip86MQBlPotTLaIvIe3ml+Qv1
+	KtdgZFP0UZ2KkX73YiGdZPGyuWh9zRBQLILE6UKOjfF7G111sl5RJnslZsEw2AwZrD+ZLHJO13U
+	NUpHKM8TlQWzxOqirLBft6TUYJT4AA3ymE6a4/8dMAYzqqKYOxJqF/giAvhho4IX
+X-Google-Smtp-Source: AGHT+IFGFRfEtWeeOuFqwHIT5fNME/cxSZ1qM51MyiCWR114rDnQdm4RIXqhGiywmZb5pbHxlKLTXg==
+X-Received: by 2002:a05:6000:1566:b0:38a:9ed4:9ffc with SMTP id ffacd0b85a97d-38c520940c7mr1275934f8f.10.1738162335965;
+        Wed, 29 Jan 2025 06:52:15 -0800 (PST)
+Received: from pop-os.localdomain (14.78.11.37.dynamic.jazztel.es. [37.11.78.14])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1c4212sm16753724f8f.87.2025.01.29.06.52.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2025 06:36:32 -0800 (PST)
-From: Anna Emese Nyiri <annaemesenyiri@gmail.com>
-To: netdev@vger.kernel.org
-Cc: fejes@inf.elte.hu,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	willemb@google.com,
-	idosch@idosch.org,
-	davem@davemloft.net,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Anna Emese Nyiri <annaemesenyiri@gmail.com>
-Subject: [PATCH net-next 1/1] selftests: net: Add support for testing SO_RCVMARK and SO_RCVPRIORITY
-Date: Wed, 29 Jan 2025 15:36:01 +0100
-Message-ID: <20250129143601.16035-2-annaemesenyiri@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250129143601.16035-1-annaemesenyiri@gmail.com>
-References: <20250129143601.16035-1-annaemesenyiri@gmail.com>
+        Wed, 29 Jan 2025 06:52:15 -0800 (PST)
+From: =?UTF-8?q?Miguel=20Garc=C3=ADa?= <miguelgarciaroman8@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?Miguel=20Garc=C3=ADa?= <miguelgarciaroman8@gmail.com>
+Subject: [PATCH] selftests: Fix typos and grammar in multiple test files
+Date: Wed, 29 Jan 2025 15:52:12 +0100
+Message-Id: <20250129145212.37486-1-miguelgarciaroman8@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Introduce tests to verify the correct functionality of the SO_RCVMARK and 
-SO_RCVPRIORITY socket options.
-
-Key changes include:
-
-- so_rcv_listener.c: Implements a receiver application to test the correct 
-behavior of the SO_RCVMARK and SO_RCVPRIORITY options.
-- test_so_rcv.sh: Provides a shell script to automate testing for these options.
-- Makefile: Integrates test_so_rcv.sh into the kernel selftests.
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Suggested-by: Ferenc Fejes <fejes@inf.elte.hu>
-Signed-off-by: Anna Emese Nyiri <annaemesenyiri@gmail.com>
-
+Signed-off-by: Miguel García <miguelgarciaroman8@gmail.com>
 ---
- tools/testing/selftests/net/Makefile          |   1 +
- tools/testing/selftests/net/so_rcv_listener.c | 147 ++++++++++++++++++
- tools/testing/selftests/net/test_so_rcv.sh    |  56 +++++++
- 3 files changed, 204 insertions(+)
- create mode 100644 tools/testing/selftests/net/so_rcv_listener.c
- create mode 100755 tools/testing/selftests/net/test_so_rcv.sh
+ tools/testing/selftests/alsa/mixer-test.c                     | 2 +-
+ tools/testing/selftests/arm64/gcs/libc-gcs.c                  | 2 +-
+ tools/testing/selftests/cgroup/test_cpuset.c                  | 2 +-
+ tools/testing/selftests/mm/gup_longterm.c                     | 2 +-
+ tools/testing/selftests/mm/mseal_test.c                       | 2 +-
+ tools/testing/selftests/mm/protection_keys.c                  | 4 ++--
+ tools/testing/selftests/mm/test_vmalloc.sh                    | 2 +-
+ tools/testing/selftests/mount_setattr/mount_setattr_test.c    | 2 +-
+ .../pmu/event_code_tests/group_constraint_thresh_sel_test.c   | 4 ++--
+ tools/testing/selftests/safesetid/safesetid-test.c            | 2 +-
+ 10 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 73ee88d6b043..98f05473e672 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -33,6 +33,7 @@ TEST_PROGS += gro.sh
- TEST_PROGS += gre_gso.sh
- TEST_PROGS += cmsg_so_mark.sh
- TEST_PROGS += cmsg_so_priority.sh
-+TEST_PROGS += test_so_rcv.sh
- TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
- TEST_PROGS += netns-name.sh
- TEST_PROGS += nl_netdev.py
-diff --git a/tools/testing/selftests/net/so_rcv_listener.c b/tools/testing/selftests/net/so_rcv_listener.c
-new file mode 100644
-index 000000000000..53b09582a7e3
---- /dev/null
-+++ b/tools/testing/selftests/net/so_rcv_listener.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <netdb.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/types.h>
-+#include <sys/socket.h>
-+#include <netinet/in.h>
-+#include <arpa/inet.h>
-+
-+#ifndef SO_RCVPRIORITY
-+#define SO_RCVPRIORITY 82
-+#endif
-+
-+struct options {
-+	__u32 val;
-+	int name;
-+	int rcvname;
-+	const char *host;
-+	const char *service;
-+} opt;
-+
-+static void __attribute__((noreturn)) usage(const char *bin)
-+{
-+	printf("Usage: %s [opts] <dst host> <dst port / service>\n", bin);
-+	printf("Options:\n"
-+		"\t\t-M val  Test SO_RCVMARK\n"
-+		"\t\t-P val  Test SO_RCVPRIORITY\n"
-+		"");
-+	exit(EXIT_FAILURE);
-+}
-+
-+static void parse_args(int argc, char *argv[])
-+{
-+	int o;
-+
-+	while ((o = getopt(argc, argv, "M:P:")) != -1) {
-+		switch (o) {
-+		case 'M':
-+			opt.val = atoi(optarg);
-+			opt.name = SO_MARK;
-+			opt.rcvname = SO_RCVMARK;
-+			break;
-+		case 'P':
-+			opt.val = atoi(optarg);
-+			opt.name = SO_PRIORITY;
-+			opt.rcvname = SO_RCVPRIORITY;
-+			break;
-+		default:
-+			usage(argv[0]);
-+			break;
-+		}
-+	}
-+
-+	if (optind != argc - 2)
-+		usage(argv[0]);
-+
-+	opt.host = argv[optind];
-+	opt.service = argv[optind + 1];
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int err = 0;
-+	int recv_fd = -1;
-+	int ret_value = 0;
-+	__u32 recv_val;
-+	struct cmsghdr *cmsg;
-+	char cbuf[1024];
-+	char recv_buf[1024];
-+	struct iovec iov[1];
-+	struct msghdr msg;
-+	struct sockaddr_in recv_addr;
-+
-+	parse_args(argc, argv);
-+
-+	recv_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-+	if (recv_fd < 0) {
-+		perror("Can't open recv socket");
-+		ret_value = -errno;
-+		goto cleanup;
-+	}
-+
-+	err = setsockopt(recv_fd, SOL_SOCKET, opt.rcvname, &opt.val, sizeof(opt.val));
-+	if (err < 0) {
-+		perror("Recv setsockopt error");
-+		ret_value = -errno;
-+		goto cleanup;
-+	}
-+
-+	memset(&recv_addr, 0, sizeof(recv_addr));
-+	recv_addr.sin_family = AF_INET;
-+	recv_addr.sin_port = htons(atoi(opt.service));
-+
-+	if (inet_pton(AF_INET, opt.host, &recv_addr.sin_addr) <= 0) {
-+		perror("Invalid address");
-+		ret_value = -errno;
-+		goto cleanup;
-+	}
-+
-+	err = bind(recv_fd, (struct sockaddr *)&recv_addr, sizeof(recv_addr));
-+	if (err < 0) {
-+		perror("Recv bind error");
-+		ret_value = -errno;
-+		goto cleanup;
-+	}
-+
-+	iov[0].iov_base = recv_buf;
-+	iov[0].iov_len = sizeof(recv_buf);
-+
-+	memset(&msg, 0, sizeof(msg));
-+	msg.msg_iov = iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cbuf;
-+	msg.msg_controllen = sizeof(cbuf);
-+
-+	err = recvmsg(recv_fd, &msg, 0);
-+	if (err < 0) {
-+		perror("Message receive error");
-+		ret_value = -errno;
-+		goto cleanup;
-+	}
-+
-+	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-+		if (cmsg->cmsg_level == SOL_SOCKET && cmsg->cmsg_type == opt.name) {
-+			recv_val = *(__u32 *)CMSG_DATA(cmsg);
-+			printf("Received value: %u\n", recv_val);
-+
-+			if (recv_val != opt.val) {
-+				fprintf(stderr, "Error: expected value: %u, got: %u\n",
-+					opt.val, recv_val);
-+				ret_value = -EINVAL;
-+				goto cleanup;
-+			}
-+		}
-+	}
-+
-+cleanup:
-+	if (recv_fd >= 0)
-+		close(recv_fd);
-+
-+	return ret_value;
-+}
-diff --git a/tools/testing/selftests/net/test_so_rcv.sh b/tools/testing/selftests/net/test_so_rcv.sh
-new file mode 100755
-index 000000000000..12d37f9ab905
---- /dev/null
-+++ b/tools/testing/selftests/net/test_so_rcv.sh
-@@ -0,0 +1,56 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+HOST=127.0.0.1
-+PORT=1234
-+TOTAL_TESTS=0
-+FAILED_TESTS=0
-+
-+declare -A TESTS=(
-+	["SO_RCVPRIORITY"]="-P 2"
-+	["SO_RCVMARK"]="-M 3"
-+)
-+
-+check_result() {
-+	((TOTAL_TESTS++))
-+	if [ "$1" -ne 0 ]; then
-+		((FAILED_TESTS++))
-+	fi
-+}
-+
-+for test_name in "${!TESTS[@]}"; do
-+	echo "Running $test_name test"
-+	arg=${TESTS[$test_name]}
-+
-+	./so_rcv_listener $arg $HOST $PORT &
-+	LISTENER_PID=$!
-+
-+	if ./cmsg_sender $arg $HOST $PORT; then
-+		echo "Sender succeeded for $test_name"
-+	else
-+		echo "Sender failed for $test_name"
-+		kill "$LISTENER_PID" 2>/dev/null
-+		wait "$LISTENER_PID"
-+		check_result 1
-+		continue
-+	fi
-+
-+	wait "$LISTENER_PID"
-+	LISTENER_EXIT_CODE=$?
-+
-+	if [ "$LISTENER_EXIT_CODE" -eq 0 ]; then
-+		echo "Rcv test OK for $test_name"
-+		check_result 0
-+	else
-+		echo "Rcv test FAILED for $test_name"
-+		check_result 1
-+	fi
-+done
-+
-+if [ "$FAILED_TESTS" -ne 0 ]; then
-+	echo "FAIL - $FAILED_TESTS/$TOTAL_TESTS tests failed"
-+	exit 1
-+else
-+	echo "OK - All $TOTAL_TESTS tests passed"
-+	exit 0
-+fi
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index 2a4b2662035e..dc7b290fc4ad 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -685,7 +685,7 @@ static int write_and_verify(struct ctl_data *ctl,
+ 	}
+ 
+ 	/*
+-	 * Use the libray to compare values, if there's a mismatch
++	 * Use the library to compare values, if there's a mismatch
+ 	 * carry on and try to provide a more useful diagnostic than
+ 	 * just "mismatch".
+ 	 */
+diff --git a/tools/testing/selftests/arm64/gcs/libc-gcs.c b/tools/testing/selftests/arm64/gcs/libc-gcs.c
+index 17b2fabfec38..482e1c634a65 100644
+--- a/tools/testing/selftests/arm64/gcs/libc-gcs.c
++++ b/tools/testing/selftests/arm64/gcs/libc-gcs.c
+@@ -129,7 +129,7 @@ TEST(gcs_find_terminator)
+  * We can access a GCS via ptrace
+  *
+  * This could usefully have a fixture but note that each test is
+- * fork()ed into a new child whcih causes issues.  Might be better to
++ * fork()ed into a new child which causes issues.  Might be better to
+  * lift at least some of this out into a separate, non-harness, test
+  * program.
+  */
+diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
+index 4034d14ba69a..3f802e3e8480 100644
+--- a/tools/testing/selftests/cgroup/test_cpuset.c
++++ b/tools/testing/selftests/cgroup/test_cpuset.c
+@@ -160,7 +160,7 @@ static int test_cpuset_perms_object_deny(const char *root)
+ }
+ 
+ /*
+- * Migrate a process between parent and child implicitely
++ * Migrate a process between parent and child implicitly
+  * Implicit migration happens when a controller is enabled/disabled.
+  *
+  */
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 9423ad439a61..d2dc3b59a084 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -154,7 +154,7 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 		/*
+ 		 * R/O pinning or pinning in a private mapping is always
+ 		 * expected to work. Otherwise, we expect long-term R/W pinning
+-		 * to only succeed for special fielesystems.
++		 * to only succeed for special filesystems.
+ 		 */
+ 		should_work = !shared || !rw ||
+ 			      fs_supports_writable_longterm_pinning(fs_type);
+diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+index 01675c412b2a..2ec2c5aea44a 100644
+--- a/tools/testing/selftests/mm/mseal_test.c
++++ b/tools/testing/selftests/mm/mseal_test.c
+@@ -732,7 +732,7 @@ static void test_seal_mprotect_two_vma_with_split(bool seal)
+ 	else
+ 		FAIL_TEST_IF_FALSE(!ret);
+ 
+-	/* the fouth page is not sealed. */
++	/* the fourth page is not sealed. */
+ 	ret = sys_mprotect(ptr + 3 * page_size, page_size,
+ 			PROT_READ | PROT_WRITE);
+ 	FAIL_TEST_IF_FALSE(!ret);
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 4990f7ab4cb7..fcac7bb26b7a 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -900,7 +900,7 @@ void expected_pkey_fault(int pkey)
+ 
+ #if defined(__i386__) || defined(__x86_64__) /* arch */
+ 	/*
+-	 * The signal handler shold have cleared out PKEY register to let the
++	 * The signal handler should have cleared out PKEY register to let the
+ 	 * test program continue.  We now have to restore it.
+ 	 */
+ 	if (__read_pkey_reg() != 0)
+@@ -1372,7 +1372,7 @@ void test_ptrace_of_child(int *ptr, u16 pkey)
+ 	long ret;
+ 	int status;
+ 	/*
+-	 * This is the "control" for our little expermient.  Make sure
++	 * This is the "control" for our little experiment.  Make sure
+ 	 * we can always access it when ptracing.
+ 	 */
+ 	int *plain_ptr_unaligned = malloc(HPAGE_SIZE);
+diff --git a/tools/testing/selftests/mm/test_vmalloc.sh b/tools/testing/selftests/mm/test_vmalloc.sh
+index d73b846736f1..2d4b3e0a6a17 100755
+--- a/tools/testing/selftests/mm/test_vmalloc.sh
++++ b/tools/testing/selftests/mm/test_vmalloc.sh
+@@ -21,7 +21,7 @@ ksft_skip=4
+ 
+ #
+ # Static templates for performance, stressing and smoke tests.
+-# Also it is possible to pass any supported parameters manualy.
++# Also it is possible to pass any supported parameters manually.
+ #
+ PERF_PARAM="sequential_test_order=1 test_repeat_count=3"
+ SMOKE_PARAM="test_loop_count=10000 test_repeat_count=10"
+diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+index 70f65eb320a7..a6d9f7bd1443 100644
+--- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
++++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+@@ -682,7 +682,7 @@ TEST_F(mount_setattr, mount_has_writers)
+ 	ASSERT_GE(fd, 0);
+ 
+ 	/*
+-	 * We're holding a fd open to a mount somwhere in the middle so this
++	 * We're holding a fd open to a mount somewhere in the middle so this
+ 	 * needs to fail somewhere in the middle. After this the mount options
+ 	 * need to be unchanged.
+ 	 */
+diff --git a/tools/testing/selftests/powerpc/pmu/event_code_tests/group_constraint_thresh_sel_test.c b/tools/testing/selftests/powerpc/pmu/event_code_tests/group_constraint_thresh_sel_test.c
+index 50a8cd843ce7..1b1336c1ddb1 100644
+--- a/tools/testing/selftests/powerpc/pmu/event_code_tests/group_constraint_thresh_sel_test.c
++++ b/tools/testing/selftests/powerpc/pmu/event_code_tests/group_constraint_thresh_sel_test.c
+@@ -34,7 +34,7 @@ static int group_constraint_thresh_sel(void)
+ 	/* Check for platform support for the test */
+ 	SKIP_IF(platform_check_for_tests());
+ 
+-	/* Init the events for the group contraint thresh select test */
++	/* Init the events for the group constraint thresh select test */
+ 	event_init(&leader, EventCode_1);
+ 	FAIL_IF(event_open(&leader));
+ 
+@@ -45,7 +45,7 @@ static int group_constraint_thresh_sel(void)
+ 
+ 	event_close(&event);
+ 
+-	/* Init the event for the group contraint thresh select test */
++	/* Init the event for the group constraint thresh select test */
+ 	event_init(&event, EventCode_3);
+ 
+ 	 /* Expected to succeed as sibling and leader event request same thresh_sel bits */
+diff --git a/tools/testing/selftests/safesetid/safesetid-test.c b/tools/testing/selftests/safesetid/safesetid-test.c
+index eb9bf0aee951..80f736d545a9 100644
+--- a/tools/testing/selftests/safesetid/safesetid-test.c
++++ b/tools/testing/selftests/safesetid/safesetid-test.c
+@@ -19,7 +19,7 @@
+ 
+ /*
+  * NOTES about this test:
+- * - requries libcap-dev to be installed on test system
++ * - requires libcap-dev to be installed on test system
+  * - requires securityfs to me mounted at /sys/kernel/security, e.g.:
+  * mount -n -t securityfs -o nodev,noexec,nosuid securityfs /sys/kernel/security
+  * - needs CONFIG_SECURITYFS and CONFIG_SAFESETID to be enabled
 -- 
-2.43.0
+2.34.1
 
 
