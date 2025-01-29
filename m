@@ -1,203 +1,167 @@
-Return-Path: <linux-kselftest+bounces-25392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7998CA223CE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 19:23:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D330A223D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 19:24:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0E667A32F5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 18:22:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA2EC1887C93
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 18:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139B51E25F1;
-	Wed, 29 Jan 2025 18:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE691DF268;
+	Wed, 29 Jan 2025 18:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="etSLQXVd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CfrPszNq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A2E1E1C36
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 18:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3691552F5;
+	Wed, 29 Jan 2025 18:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738174929; cv=none; b=RjQ6bjL4VJXAP82mAfiEKDY3HmuGOoiJ3lS3CZUt8MxAzkqk467WNZTjW8Tzp+50shbcsaKu2l8QixTsfIn5ADGesaIlJ48BoYtZQ2MTTPuQXufmcyE8Rkl85g3F60MhSWIoEOmYM1/MpURvN8Tn+98iqap5Yx/Ew1ZkLhlS5Sw=
+	t=1738175069; cv=none; b=fnkaa8PQ/NVc7QY/LTIIih0NtCoy+jpPlsr0jQQp3Q1ROgYtJpU2nJIrQXpvgFTcJL/qwzDbE58LOqocPeJwVqs3xEoTk+HUMit6/4yIkDqv8149X2+HxeclHeqmCePGxhIdG+Z0Wk376JnBu2Tgq4pcnJADYvZFJNi1YaiY9Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738174929; c=relaxed/simple;
-	bh=lsaUG6o3qihqxjqzbj4fHVtLhJfu4dvDi15dE28PoFI=;
+	s=arc-20240116; t=1738175069; c=relaxed/simple;
+	bh=fsXVvAzAtZZgYo+UcFjIrPlDSF/lJxnvBIN3XkxfnFc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YNZvzP7LTM+tbHALg2F0Glt9r1B1wNXmW1Mlaqnw3zPbN4cbvkCLrDFYHVc1w1yF0X3zj+FIuSQBrwd/f+1o47vG1T1RKrNLSHosyEWlL0lw8V6vGq1l2Rgw6SzFDZ/UWS5upPg68oXVdSHB9RyDZKM1DaGfu4X2Zpkpw416Ew8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=etSLQXVd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738174926;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vwvdh5o59AfjX+xyiOuePStNuB1CoftM4eJYE4dSFr0=;
-	b=etSLQXVdtEiDaOsZsunez475TOE4JR6DnQE+0m5jbgr124cfu2Co4z5b8Rv+itSciw4whi
-	4TehHl9szJjo1iWy1xWwEBjhr27rNMFa6m/GC3jsXZfeFFCUxfMCocBD/RupBMmKnKZhEX
-	LxGfF6Xu+hZCrY199daYKjdkkmDQIxg=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-494-uEkfur81Nai3a1z9I4VnPw-1; Wed, 29 Jan 2025 13:22:03 -0500
-X-MC-Unique: uEkfur81Nai3a1z9I4VnPw-1
-X-Mimecast-MFC-AGG-ID: uEkfur81Nai3a1z9I4VnPw
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-21661949f23so214163675ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 10:22:03 -0800 (PST)
+	 To:Cc:Content-Type; b=AFnfNXFh6BXSAy/Eey5Wwj6dtOXEaQn/lausW72NVd2vuX+rt2vHdnKX3yZlQNLGw9nA6JQg1fDMutqG6r39kyL0gRhi7e79MrEjX8M7cEBWHQ4RkI664CfqhWpWHBxKL1Lmh7gYeDj2Z42FLh9uk1p17UlnWwA6zUruqarNpjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CfrPszNq; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-306007227d3so72386611fa.0;
+        Wed, 29 Jan 2025 10:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738175065; x=1738779865; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mIGGzfQ0/TAeUf8PgDonO1t6XZ+XQpG44YzXL+6av8Q=;
+        b=CfrPszNq9OnEGcbNXwbw+m8LGiatvVj5B5i7qSh2giHDtrtHxKj41q9rJljnkziY7S
+         NaS1wleui1KjdBeBcj8VF/xYtOG5JwObxnDKsO55P62C9+fsBhGyNE8akxTiuM6ymlpj
+         m6G9IPM6ZEx+LNeFB4rNuzEU8mvfVr1VymyawTBE+t9fC6UrTk5+sWvl7MIeDuj1/FOQ
+         R3xVGTZH7GVwW2UWxkh4cUGBMG6NkmHREcn3Y2aIDn97M4+9AU22mLL+PIBZf0JMfUs6
+         yAUTenvjenQ1dgKb48lL+xKGW2xB6BeKVCrE8bfkoef4YWl+5kTjpwNjwyYR7t4sZn8+
+         XK6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738174921; x=1738779721;
+        d=1e100.net; s=20230601; t=1738175065; x=1738779865;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Vwvdh5o59AfjX+xyiOuePStNuB1CoftM4eJYE4dSFr0=;
-        b=VuD8JrzI2PR3oOu+Wc0Nv9OUmoXSHPaEl6ZcqMtjZyJuYLUf5QSUaSbB9lwhjd723D
-         WqbcbPf06imzOPAjwnEl8m6KZH7hnrdFUHDOC94Bc/VHFYl4UmuGszXNfaGcpIkWN57R
-         Oz43E2vIrE5ecpiKtILGZ8wQg7BQEJXw2E3BMvGq8ryfgeWZ0fOIjelW9Ofi4otIe+BT
-         x/9DU8xEopsYhbgKmez4Kx1ezWqyG5RqMvqMXaMXJXBQzqCU5vV5ytVHvtsdkQNfiLMS
-         2CGmUCkx60i8YSsOEpxJAuxlo3SJOV4HsmeNR6NbhcE4UygHl018Y78j5Hc6498wirn8
-         eIgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVnHTRiwK/3pKj4qyPFT+DE78t6we3AZAzwnwstVyaUv/oPHYLTav33T8g+Ek16GzqdZ53TW3CeRk+01tmgbFI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpS1LqT3rbTZ/1eXvxnvHRSo1suhtYPPk7iv/2GtJdpU2CDi8a
-	AJv8cXOL13+ZqyGwFeGrX7AUdNrNPFG0s8055BcgHhVYfTX4661tPKnBqYVnXeLGhSwLM2k8IQS
-	K4IictGuGsjPZTfBvOZmc/JxnkXNuaf1WzvGlP3XKWPZvSzTzEq32KjcthrBOVi9gkADrjtLA/x
-	s1yonV6Ji2Rlxu/NIkyrPupG/+j0u8n77gGiy7nTw8nnQ4Vc89k5M=
-X-Gm-Gg: ASbGncu+FFr4yvX1mgX+fIJC6B3qM5UxBHWqsdbcO26d4al2as8dE58+kdK+B2+g1lt
-	GQCG0iNWzBd+xzNADbFW6vVg1p9cdjmEPbK8lzTPnU9vew3eIgH5HGRWyXswH
-X-Received: by 2002:a17:903:191:b0:215:a3fb:b4d6 with SMTP id d9443c01a7336-21dd7c46c2bmr52962935ad.8.1738174921341;
-        Wed, 29 Jan 2025 10:22:01 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFptm1UwGo2W05+wxJUDKK2S8w38oe09PVLSommj0ey+wlSbU7v2JPCWDRl68vDt0awHZUBWs4SYgdxF0NnzuM=
-X-Received: by 2002:a17:903:191:b0:215:a3fb:b4d6 with SMTP id
- d9443c01a7336-21dd7c46c2bmr52962655ad.8.1738174921020; Wed, 29 Jan 2025
- 10:22:01 -0800 (PST)
+        bh=mIGGzfQ0/TAeUf8PgDonO1t6XZ+XQpG44YzXL+6av8Q=;
+        b=lEVz3KDvvKOR7VtUcBT1fQxOuTe5qxg9RpoBI1Izyu6sQJRsGmWbyCcXfwd9nsLJjB
+         EaXqzNoyHMDstuQsBKc4mas2uhQW2P/ISys2iMeVTzaED3vpa71KKfI5Om9pM3ApVfFI
+         potwTo/p+DKCdgLFJp4L/hExKDaxdfCckN5u4rXRDdw37YZ+Z9OXMoWet5ghvYwl2Fq4
+         4isgn9bInl83MFaznvWgNcgUKSS+KtKJ9K8DbQSg2uynmz+XESgvYPp6TPEqBxABy2QL
+         dXLeSKWep2qaBgXYqeAoJ1albTN6WOh6isBpJyHtBQpRYkz7EWo2lsHpmATtbFUKWci7
+         hQZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUg1RVn9l/vB3t6oQ9Od5tasjgHM5U8+Dmnz+ngGdkH70W0qsksRdKbeKthcKvbYe/jCMNmZVjasr1dJAk=@vger.kernel.org, AJvYcCWN9RF8YyElyl+wG5FTBmq15EHcz7IDPteGhm/tCW0hgIAOeqQRgB8EfRaKy0IVNEdOqqPYd4nfB95vFWDtgNHa@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw26CJzfXE81EkysSHVkJX9i5BK198CBXj9YJP0GKjWYZU4Wu+V
+	ryWx6725nPoWxIJugPrDikuJBg7pwVctL893EcxQnGmF/4pueyJjQAy/u7BgopNMg+Ti3z1HB63
+	tjAPBH7GuMuU9QtU1jD26a0JJvkw=
+X-Gm-Gg: ASbGncufRTuCJwIFP5ZG33dvGvh+zDkJD1Dbb01nBPZXIH58tNDGOPx0ZH1Ubpx2wgW
+	jALTHIj1xcoco3T8iytYam+i8UHoVA1weiAGBh8MEm1rJ14iZPNjoVvtsWLlXHiobGFJhk2zzUi
+	vKrNYU/+rXSvFHEiviSHZwJRzQneSlkrD8qO54kA==
+X-Google-Smtp-Source: AGHT+IGewwuB/uZuQl1n4dnYvZPmU/kT6Qq7oAdpHhYpO0NnorzwTkOCni+qGS8/PKYbVfZKxEhZV2HAq/DFNZZRmqg=
+X-Received: by 2002:a05:651c:2224:b0:300:42ad:f284 with SMTP id
+ 38308e7fff4ca-3079681efe3mr16809661fa.7.1738175065201; Wed, 29 Jan 2025
+ 10:24:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250128163859.1883260-1-agruenba@redhat.com> <20250128163859.1883260-12-agruenba@redhat.com>
- <ajfehauvtid4d7pqy7o3uhe6p7buohwe542wqddkwpdq62lr4g@6cgcfpzcyag3>
-In-Reply-To: <ajfehauvtid4d7pqy7o3uhe6p7buohwe542wqddkwpdq62lr4g@6cgcfpzcyag3>
-From: Andreas Gruenbacher <agruenba@redhat.com>
-Date: Wed, 29 Jan 2025 19:21:49 +0100
-X-Gm-Features: AWEUYZkSBdaXjPPHE2wqhh6qQSkUStuBuJVEdnsHM8It449daZy7EWOkh9lv5f0
-Message-ID: <CAHc6FU6Yzk1Si37nRji-5uDZF9uaYo=G5tbtuS_5FiW6BDVTAg@mail.gmail.com>
-Subject: Re: [PATCH 11/21] bcachefs: improve the eytzinger0_find_le tests
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Shuah Khan <shuah@kernel.org>, linux-bcachefs@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20250126105932.63762-1-purvayeshi550@gmail.com> <d85f9c94-249a-4847-a323-2f547fe60732@csgroup.eu>
+In-Reply-To: <d85f9c94-249a-4847-a323-2f547fe60732@csgroup.eu>
+From: Purva Yeshi <purvayeshi550@gmail.com>
+Date: Wed, 29 Jan 2025 23:54:11 +0530
+X-Gm-Features: AWEUYZluEDh-khvtJAhzensN70-xXtAeQ_-2QMqNdmI4IFQkwKHyBbZryvYcdh0
+Message-ID: <CAMp3bLW_NwMZ7DTErUHMmzEfz4M6r0PkU=w2WzptGzhmW2FmaQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/vDSO: Fix undefined CLONE_NEWTIME by including
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, skhan@linuxfoundation.org
+Cc: shuah@kernel.org, Jason@zx2c4.com, liaoyu15@huawei.com, broonie@kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 29, 2025 at 7:04=E2=80=AFPM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
-> On Tue, Jan 28, 2025 at 05:38:48PM +0100, Andreas Gruenbacher wrote:
-> > Rename eytzinger0_find_test_val() to eytzinger0_find_test_le() and add =
-a
-> > new eytzinger0_find_test_val() wrapper that calls it.
-> >
-> > We have already established that the array is sorted in eytzinger order=
-,
-> > so we can use the eytzinger iterator functions and check the boundary
-> > conditions to verify the result of eytzinger0_find_le().
-> >
-> > Only scan the entire array if we get an incorrect result.  When we need
-> > to scan, use eytzinger0_for_each_prev() so that we'll stop at the
-> > highest matching element in the array in case there are duplicates;
-> > going through the array linearly wouldn't give us that.
+On 27/01/25 13:32, Christophe Leroy wrote:
 >
-> For test code, wouldn't it be simpler to iterate over the test array,
-> testing with every element as a search value? There's enough corner
-> cases in lookup that I think it'd be worthwhile (and probably add some
-> extra test values, e.g. first/last elements +1/-1).
-
-If you expect to get the same index back, that won't work when there
-are duplicates.
-
-Andreas
-
-> >
-> > Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-> > ---
-> >  fs/bcachefs/util.c | 41 ++++++++++++++++++++++++++++++-----------
-> >  1 file changed, 30 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/fs/bcachefs/util.c b/fs/bcachefs/util.c
-> > index 3fe9a3b8c696..c772629783f3 100644
-> > --- a/fs/bcachefs/util.c
-> > +++ b/fs/bcachefs/util.c
-> > @@ -782,29 +782,48 @@ static inline int cmp_u16(const void *_l, const v=
-oid *_r)
-> >       return (*l > *r) - (*r > *l);
-> >  }
-> >
-> > -static void eytzinger0_find_test_val(u16 *test_array, unsigned nr, u16=
- search)
-> > +static void eytzinger0_find_test_le(u16 *test_array, unsigned nr, u16 =
-search)
-> >  {
-> > -     int i, c1 =3D -1, c2 =3D -1;
-> > -     ssize_t r;
-> > +     int r, s;
-> > +     bool bad;
-> >
-> >       r =3D eytzinger0_find_le(test_array, nr,
-> >                              sizeof(test_array[0]),
-> >                              cmp_u16, &search);
-> > -     if (r >=3D 0)
-> > -             c1 =3D test_array[r];
-> > +     if (r >=3D 0) {
-> > +             if (test_array[r] > search) {
-> > +                     bad =3D true;
-> > +             } else {
-> > +                     s =3D eytzinger0_next(r, nr);
-> > +                     bad =3D s >=3D 0 && test_array[s] <=3D search;
-> > +             }
-> > +     } else {
-> > +             s =3D eytzinger0_last(nr);
-> > +             bad =3D s >=3D 0 && test_array[s] <=3D search;
-> > +     }
-> >
-> > -     for (i =3D 0; i < nr; i++)
-> > -             if (test_array[i] <=3D search && test_array[i] > c2)
-> > -                     c2 =3D test_array[i];
-> > +     if (bad) {
-> > +             s =3D -1;
-> > +             eytzinger0_for_each_prev(j, nr) {
-> > +                     if (test_array[j] <=3D search) {
-> > +                             s =3D j;
-> > +                             break;
-> > +                     }
-> > +             }
-> >
-> > -     if (c1 !=3D c2) {
-> >               eytzinger0_for_each(j, nr)
-> >                       pr_info("[%3u] =3D %12u\n", j, test_array[j]);
-> > -             pr_info("find_le(%2u) -> [%2zi] =3D %2i should be %2i\n",
-> > -                     i, r, c1, c2);
-> > +             pr_info("find_le(%12u) =3D %3i should be %3i\n",
-> > +                     search, r, s);
-> > +             BUG();
-> >       }
-> >  }
-> >
-> > +static void eytzinger0_find_test_val(u16 *test_array, unsigned nr, u16=
- search)
-> > +{
-> > +     eytzinger0_find_test_le(test_array, nr, search);
-> > +}
-> > +
-> >  void eytzinger0_find_test(void)
-> >  {
-> >       unsigned i, nr, allocated =3D 1 << 12;
-> > --
-> > 2.48.1
-> >
 >
+> Le 26/01/2025 =C3=A0 11:59, Purva Yeshi a =C3=A9crit :
+>> [Vous ne recevez pas souvent de courriers de purvayeshi550@gmail.com.
+>> D=C3=A9couvrez pourquoi ceci est important =C3=A0
+>> https://aka.ms/LearnAboutSenderIdentification ]
+>>
+>> Fix the build failure caused by the undefined `CLONE_NEWTIME`.
+>> Include the `linux/sched.h` header file where the function is defined to
+>> ensure successful compilation of the selftests.
+>
+> This is supposed to be already fixed by commit 34d5b600172b ("selftests:
+> vDSO: Explicitly include sched.h")
+>
+> Can you explain what is the exact problem still ? And why linux/sched.h ?
 
+Yes, I noticed that sched.h is already included, but I still encountered
+an "undeclared CLONE_NEWTIME" error during compilation.
+
+Error I got:
+CC       vdso_test_getrandom
+vdso_test_getrandom.c: In function =E2=80=98kselftest=E2=80=99:
+vdso_test_getrandom.c:257:29: error: =E2=80=98CLONE_NEWTIME=E2=80=99 undecl=
+ared (first
+use in this function); did you mean =E2=80=98CLONE_NEWPID=E2=80=99?
+   257 |         ksft_assert(unshare(CLONE_NEWTIME) =3D=3D 0);
+       |                             ^~~~~
+vdso_test_getrandom.c:47:20: note: in definition of macro =E2=80=98ksft_ass=
+ert=E2=80=99
+    47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
+failed: %s\n", #condition); } while (0)
+       |                    ^~~~~
+vdso_test_getrandom.c:257:29: note: each undeclared identifier is
+reported only once for each function it appears in
+   257 |         ksft_assert(unshare(CLONE_NEWTIME) =3D=3D 0);
+       |                             ^~~~~
+vdso_test_getrandom.c:47:20: note: in definition of macro =E2=80=98ksft_ass=
+ert=E2=80=99
+    47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
+failed: %s\n", #condition); } while (0)
+       |                    ^~~~~
+make[1]: * [../lib.mk:222:
+/home/purva/linux/tools/testing/selftests/vDSO/vdso_test_getrandom] Error 1
+make[1]: Leaving directory '/home/purva/linux/tools/testing/selftests/vDSO'
+
+
+>
+> Did you properly build kernel headers before building selftests ?
+>
+>
+>>
+>> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+>> ---
+>>   tools/testing/selftests/vDSO/vdso_test_getrandom.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+>> b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+>> index 95057f7567db..b2c9cf15878b 100644
+>> --- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+>> +++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+>> @@ -29,6 +29,8 @@
+>>   #include "vdso_config.h"
+>>   #include "vdso_call.h"
+>>
+>> +#include <linux/sched.h>
+>> +
+>>   #ifndef timespecsub
+>>   #define        timespecsub(tsp, usp,
+>> vsp)                                      \
+>>          do
+>> {                                                            \
+>> --
+>> 2.34.1
+>>
+>
 
