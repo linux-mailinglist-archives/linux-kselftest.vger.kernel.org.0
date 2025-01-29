@@ -1,328 +1,243 @@
-Return-Path: <linux-kselftest+bounces-25363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B77FA21E12
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:44:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EAE5A21ECE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:14:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C3C91884658
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 13:44:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12EAB188BD3D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:11:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 101B513D503;
-	Wed, 29 Jan 2025 13:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A51B1DE3DD;
+	Wed, 29 Jan 2025 14:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F5hhpXna"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fPtWWEHs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE58EAFA
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 13:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F831BD9E6;
+	Wed, 29 Jan 2025 14:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738158264; cv=none; b=JTQzRwOQfz9Qv0Ue3jtke/AaeW8u5ohrHRlBX5UEJVf2uhs+a7tSAiLFxeGLR0xKVbwGQq+VSJ31VVPdsekSGR0N/h9YHf6J/wNkwTfFBTjiiNy77y7+7RgnsHiBharMTfJ2IwllTb7qb3apP6wNdSrjIcL7hREaRv/BSoiOJkY=
+	t=1738159735; cv=none; b=W6ktTXtcdgQ/BGxcyZnht5ZSWiiScjF6Vxyjj33aT3f3HdqaMnLigUI4nhDJd6ZU4jB+0KdUQNrlQzn75qCwN97cqBydPweoeuMKpTBgNF4/Bs69f7amFusazl+Qh1TnB8yhp6Fwktpjre7Yr2xiDYxvKmcNp0xiHfj7TmL03Eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738158264; c=relaxed/simple;
-	bh=b9UgbSGBeNmmJCIGLoCXB4vAkJ110kVpSuKj6rgRcYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VyXo2xD6cNddEXbBaQSP9l+RX4cynO/PA9ZGUbDZMf0Riun7zuoml4NovuR04zUYh7y0qB46rP0X5PONdL6dbL4UnZxZLNGWsttncay0lFcyft1RDdOO59tTglFqBkhNRJkS82nLLaK+jl5R8YB4nsjJNKa6q2dTyxf22GULOtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F5hhpXna; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738158261;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sf+DtGmrqdTwE2hubtPrHYXjgFDMJbqgNNnIu1aYodU=;
-	b=F5hhpXnawqB7JDJTKlAkraF4zN1rBoiucBAajLOYYZ6e2eBw8+veMPz8Xq0WHLAz7CidT6
-	AboQJ/MwGLuGELSCiBYlBKzwqqjKxZhyvLa4YVd40ye0dhlsVoK0E2LSnFLFwJWZeWBuVV
-	9thfV9+iW7aTCr+4qsjybbgfLoKM5Zg=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-67-ElMTzAatPoa8rL55F7rIIQ-1; Wed, 29 Jan 2025 08:44:20 -0500
-X-MC-Unique: ElMTzAatPoa8rL55F7rIIQ-1
-X-Mimecast-MFC-AGG-ID: ElMTzAatPoa8rL55F7rIIQ
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7b6e1b036e9so667602085a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 05:44:19 -0800 (PST)
+	s=arc-20240116; t=1738159735; c=relaxed/simple;
+	bh=rqhhwXKGByeE8r89cbnCBNvF1PnM7jIfUTqAYfzJo1Y=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=EusBjjS236Ehqg6KMiJo151DQpPvTOj54G1h7oxp47BPrySTdacwaYNG/3aSbvHcKwRwT3P+dSnnFkeen7NIc/6c2gNXK3PSkNncIQNfrOaG1V5cI4se8uhvT6b/hZad44uOvuITLgQHHdMGvgFupWY8YCrc33q+wPqmYdtwNVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fPtWWEHs; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6dd01781b56so77998046d6.0;
+        Wed, 29 Jan 2025 06:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738159732; x=1738764532; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6MjXPcEMKbR6gUdgk/5lZvgG3KEYIRNOpZTNc0pegh8=;
+        b=fPtWWEHsNNLDrMwy9BzZ72euZRTTzJhiBov4GonICml0wWAcFOtMORn7cdrJVYfpcO
+         9d2oQ6n7wW4ZnjoWEvTjeNoKN2tt1FUKB2a4XPBy1LgtgP/fibBDH5Eu6gMKIjtWLG0L
+         2bhbCbcdNAjJMyEOE7TzDf7op/JZ6zcFp4ZgdrJAXXDLqnlQ931ZnNydDc7RMWP6Y8xt
+         XR5pS+/978FzWHjsJJ4pB9rJlpcpaa2HL7cA+YGTrlyqIWkKws65Klu+4jAnQ0UiHGd+
+         +TGFa/v14RAhpFXB+5EZ/zQ2jsnwgzZgjal3JMoeNZl28/bML/c0tKYeazfhXFLDHIvf
+         4yGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738158259; x=1738763059;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sf+DtGmrqdTwE2hubtPrHYXjgFDMJbqgNNnIu1aYodU=;
-        b=GXtk10YzS+dBsEcfja5XlSwGIhsQ0p8IVDE/kQStJxwzKs/Wu8w77VhLwLL2NqsOeF
-         73udi3Xv53UxpR+sylC0vZgwBGQyz+ks7csPgZLuSELLFMdvlo2cOZk3orzPRMQe00YP
-         Wn+fiRbB0XWXHqKq1aE1sNo4VJmYfZVMOQjnEvd3G4yIrxueByG2a8LV0N4IebsJYtM9
-         Z8GbjG9juke8UyogZH/orx+fuw1vjZ7VadtlAqrwzNpMvk5AI5mBL9QYewNcJa3D3WGj
-         vojK9pwAdpIdu1wgK5SRmzS7sntwpoB9uo4Q+TuhheGK/4IoCeFGMJo2rZd2Lz6q8qwl
-         GuiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVWX4K3T6X5yU56WGeK0/27XLOLlk9zmOloKmCJxxD3ig4EXvNSs2ffiYXNn8zdwuby0SMJPLuLmWd2AECUMPA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8FoOryl7HN2Abcl6b+eqyNhe4w+sJUuE09iqzjOSwn80QiYPx
-	LcYIiuk5ICcuufCS5eKLHkcYQ4vOKItjn1/Wa+28ub/a9KsB00Y++41OGAhuJ940M3jZ6oK7eg4
-	wJUC9BH+95KH+2W3JBOGUAEh1LPrPxzvPAj0fFE51447JC6L5yYt95AA+3mjO45jzbA==
-X-Gm-Gg: ASbGncvxygy4Ums5uxmWGH8S2uW7pB4NNikkTamfb91h8ixXBvO5CPINoR9dKF8oyhA
-	cb2uAtRalSwd8EcgBwkVweLHgSz1VgA36mjFfB1YuEoOvFoMDyjSqg1jGL4C/5HFrWqEjJ4qC21
-	tJLEnWMDS4yODeI0fxCodLkUA1oQnI9kwXdgTWvUOfI3BWXYr3EFuMbmWwm+4D976wxm46UqUGy
-	O7+PC8+URtEyDzBIitjkubuX5EOkT2qCYvGxgP8RpVoMHpltS7BWuXWSNiqBojGzmaA20iB/hCu
-	yUrXPH1A60hffA9EfIafCZOrJOixblNvIaEhrqPUHdIbOnIEmmeW
-X-Received: by 2002:a05:620a:4387:b0:7b6:d910:5b31 with SMTP id af79cd13be357-7bffcd902b1mr487015385a.39.1738158259374;
-        Wed, 29 Jan 2025 05:44:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHfdRRfWiU/OFcr3Tb9Wnx23c3Oss13g014CVs37t9ZgKQ1ODWd2wjx8kgWWU1PdQbKyQMMZA==
-X-Received: by 2002:a05:620a:4387:b0:7b6:d910:5b31 with SMTP id af79cd13be357-7bffcd902b1mr487009785a.39.1738158258956;
-        Wed, 29 Jan 2025 05:44:18 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7be9af03b3dsm619851385a.90.2025.01.29.05.44.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jan 2025 05:44:18 -0800 (PST)
-Message-ID: <0521187e-c511-4ab1-9ffa-be2be8eacd04@redhat.com>
-Date: Wed, 29 Jan 2025 14:44:12 +0100
+        d=1e100.net; s=20230601; t=1738159732; x=1738764532;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6MjXPcEMKbR6gUdgk/5lZvgG3KEYIRNOpZTNc0pegh8=;
+        b=p2B+mXcCN75toAT0vCM69wMGr7kMreLILFhYUnLi8sHxMZuN/8+TmFWX72iLB5ONP9
+         FMlm1PW+vNYA3KdOc7H1GcELlHR/JFhKH2YWbCJDF/nyqUIAaHYEW6xJ2pcQ3LTjl3D3
+         cUOPg65B5DAx4ZLQ6ksw2pnmi8dmT3ToWrkxywRALankWaKW/Xa7MQWTE7IL6hOaRs3p
+         2dooJc97iWMJ7GIa1rHB/kXh9jrsBQmxENNWBYk3ylyPzc2cNZyB8Eo/iuJPoztg0TC0
+         8KvseFetdoJ8U2auSJcxjHrM+fN6pMqfEhSPAG/8Vo2QWlJLRdIJuXjJmvWpJ+HJcF7k
+         hLdA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIIFr75+GA2YZGhvgdA8zhxEGHm+dpBbewhUL1vAi3+oRay9EEzVJ2evd2JoPTePY29fj1k/C7MEjzumGhtgHc@vger.kernel.org, AJvYcCVghSDIy1z9+cM3qABx0jKlhhOt5YQ/XvzQHi4OIAX6ump0Kc8lqZdW6azb4rDQCfsHGymegIfPqm3fWlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza83ohCoB/1WG5a7hlOzUxhnNgTIG36NxW5a3o7su35LJ56W8g
+	mkpAwueCnkP8yyMNth+Ib8hI8Kp+tn4d/sDdum9/s7us8k5nWtkN
+X-Gm-Gg: ASbGnct4YhOav1z70f1296r9p2CZYpUV+ZOKT/ZtPXMBDoMpknoNVFBQbS0V4FYDIDP
+	7tLnkqjd6NvD6XSEPxZ9c22w8ROZjDmZCvtZpaCHjUYt6gJ4mAuyiR9LzUXQXU17TRImthUAWl8
+	TMP6v+bScD4VId/DPxSyTBSHE+eKKUoBBiiAlrubobOYa50044jGC20kGxYY/tcxoeyLvDbvcIS
+	DpP/dBJPTCuYY1OSHFBV26FNkwESR+UiI0hAJ0C2bwq3vydzduV2yX8dndJnXUfCLBvQWsz9pn8
+	yfX0d7Cri2F8FHSTpTYUV5eU+LKaf8ptMujzYto3fy5febRaE8H6TY3XdJ1yDQg=
+X-Google-Smtp-Source: AGHT+IGin2FqQStz1/iddWMQu+LTtXlc7FkeAXWkw9fwUCSfzEmhcK7kaFTSmr4rIauWIX5YWXi4vA==
+X-Received: by 2002:a05:6214:408:b0:6d8:aba8:837b with SMTP id 6a1803df08f44-6e243c78da1mr41902336d6.41.1738159732065;
+        Wed, 29 Jan 2025 06:08:52 -0800 (PST)
+Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e2057a88e1sm55475816d6.89.2025.01.29.06.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2025 06:08:51 -0800 (PST)
+Date: Wed, 29 Jan 2025 09:08:49 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Yan Zhai <yan@cloudflare.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, 
+ David Ahern <dsahern@kernel.org>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Josh Hunt <johunt@akamai.com>, 
+ Alexander Duyck <alexander.h.duyck@linux.intel.com>, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ kernel-team <kernel-team@cloudflare.com>
+Message-ID: <679a367198f13_132e0829467@willemb.c.googlers.com.notmuch>
+In-Reply-To: <CAO3-PboS3JB1GhhbmoJc2-h5zvHe-iNsk9Hkg-_-eNATq99D1Q@mail.gmail.com>
+References: <Z5cgWh/6bRQm9vVU@debian.debian>
+ <6797992c28a23_3f1a294d6@willemb.c.googlers.com.notmuch>
+ <CAO3-Pbqx_sLxdLsTg+NX3z1rrenK=0qpvfL5h_K-RX-Yk9A4YA@mail.gmail.com>
+ <6798ed91e94a9_987d9294c2@willemb.c.googlers.com.notmuch>
+ <CAO3-PboS3JB1GhhbmoJc2-h5zvHe-iNsk9Hkg-_-eNATq99D1Q@mail.gmail.com>
+Subject: Re: [PATCH] udp: gso: fix MTU check for small packets
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH RFCv2 09/13] iommufd: Add IOMMU_OPTION_SW_MSI_START/SIZE
- ioctls
-Content-Language: en-US
-To: Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org,
- robin.murphy@arm.com, jgg@nvidia.com, kevin.tian@intel.com,
- tglx@linutronix.de, maz@kernel.org, alex.williamson@redhat.com
-Cc: joro@8bytes.org, shuah@kernel.org, reinette.chatre@intel.com,
- yebin10@huawei.com, apatel@ventanamicro.com,
- shivamurthy.shastri@linutronix.de, bhelgaas@google.com,
- anna-maria@linutronix.de, yury.norov@gmail.com, nipun.gupta@amd.com,
- iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
- jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
- shameerali.kolothum.thodi@huawei.com, smostafa@google.com, ddutile@redhat.com
-References: <cover.1736550979.git.nicolinc@nvidia.com>
- <d3cb1694e07be0e214dc44dcb2cb74f014606560.1736550979.git.nicolinc@nvidia.com>
-From: Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <d3cb1694e07be0e214dc44dcb2cb74f014606560.1736550979.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Yan Zhai wrote:
+> On Tue, Jan 28, 2025 at 8:45=E2=80=AFAM Willem de Bruijn
+> <willemdebruijn.kernel@gmail.com> wrote:
+> >
+> > Yan Zhai wrote:
+> > > Hi Willem,
+> > >
+> > > Thanks for getting back to me.
+> > >
+> > > On Mon, Jan 27, 2025 at 8:33=E2=80=AFAM Willem de Bruijn
+> > > <willemdebruijn.kernel@gmail.com> wrote:
+> > > >
+> > > > Yan Zhai wrote:
+> > > > > Commit 4094871db1d6 ("udp: only do GSO if # of segs > 1") avoid=
+ed GSO
+> > > > > for small packets. But the kernel currently dismisses GSO reque=
+sts only
+> > > > > after checking MTU on gso_size. This means any packets, regardl=
+ess of
+> > > > > their payload sizes, would be dropped when MTU is smaller than =
+requested
+> > > > > gso_size.
+> > > >
+> > > > Is this a realistic concern? How did you encounter this in practi=
+ce.
+> > > >
+> > > > It *is* a misconfiguration to configure a gso_size larger than MT=
+U.
+> > > >
+> > > > > Meanwhile, EINVAL would be returned in this case, making it
+> > > > > very misleading to debug.
+> > > >
+> > > > Misleading is subjective. I'm not sure what is misleading here. F=
+rom
+> > > > my above comment, I believe this is correctly EINVAL.
+> > > >
+> > > > That said, if this impacts a real workload we could reconsider
+> > > > relaxing the check. I.e., allowing through packets even when an
+> > > > application has clearly misconfigured UDP_SEGMENT.
+> > > >
+> > > We did encounter a painful reliability issue in production last mon=
+th.
+> > >
+> > > To simplify the scenario, we had these symptoms when the issue occu=
+rred:
+> > > 1. QUIC connections to host A started to fail, and cannot establish=
+ new ones
+> > > 2. User space Wireguard to the exact same host worked 100% fine
+> > >
+> > > This happened rarely, like one or twice a day, lasting for a few
+> > > minutes usually, but it was quite visible since it is an office
+> > > network.
+> > >
+> > > Initially this prompted something wrong at the protocol layer. But
+> > > after multiple rounds of digging, we finally figured the root cause=
 
+> > > was:
+> > > 3. Something sometimes pings host B, which shares the same IP with
+> > > host A but different ports (thanks to limited IPv4 space), and its
+> > > PMTU was reduced to 1280 occasionally. This unexpectedly affected a=
+ll
+> > > traffic to that IP including traffic toward host A. Our QUIC client=
 
-On 1/11/25 4:32 AM, Nicolin Chen wrote:
-> For systems that require MSI pages to be mapped into the IOMMU translation
-> the IOMMU driver provides an IOMMU_RESV_SW_MSI range, which is the default
-> recommended IOVA window to place these mappings. However, there is nothing
-> special about this address. And to support the RMR trick in VMM for nested
-well at least it shall not overlap VMM's RAM. So it was not random either.
-> translation, the VMM needs to know what sw_msi window the kernel is using.
-> As there is no particular reason to force VMM to adopt the kernel default,
-> provide a simple IOMMU_OPTION_SW_MSI_START/SIZE ioctl that the VMM can use
-> to directly specify the sw_msi window that it wants to use, which replaces
-> and disables the default IOMMU_RESV_SW_MSI from the driver to avoid having
-> to build an API to discover the default IOMMU_RESV_SW_MSI.
-IIUC the MSI window will then be different when using legacy VFIO
-assignment and iommufd backend.
-MSI reserved regions are exposed in
-/sys/kernel/iommu_groups/<n>/reserved_regions
-0x0000000008000000 0x00000000080fffff msi
+> > > set gso_size to 1350, and that's why it got hit.
+> > >
+> > > I agree that configurations do matter a lot here. Given how broken =
+the
+> > > PMTU was for the Internet, we might just turn off pmtudisc option o=
+n
+> > > our end to avoid this failure path. But for those who hasn't yet, t=
+his
+> > > could still be confusing if it ever happens, because nothing seems =
+to
+> > > point to PMTU in the first place:
+> > > * small packets also get dropped
+> > > * error code was EINVAL from sendmsg
+> > >
+> > > That said, I probably should have used PMTU in my commit message to=
+ be
+> > > more clear for our problem. But meanwhile I am also concerned about=
 
-Is that configurability reflected accordingly?
+> > > newly added tunnels to trigger the same issue, even if it has a sta=
+tic
+> > > device MTU. My proposal should make the error reason more clear:
+> > > EMSGSIZE itself is a direct signal pointing to MTU/PMTU. Larger
+> > > packets getting dropped would have a similar effect.
+> >
+> > Thanks for that context. Makes sense that this is a real issue.
+> >
+> > One issue is that with segmentation, the initial mtu checks are
+> > skipped, so they have to be enforced later. In __ip_append_data:
+> >
+> >     mtu =3D cork->gso_size ? IP_MAX_MTU : cork->fragsize;
+> >
+> You are right, if packet sizes are between (PMTU, gso_size), then they
+> should still be dropped. But instead of checking explicitly in
+> udp_send_skb, maybe we can leave them to be dropped in
+> ip_finish_output?
 
-How do you make sure it does not collide with other resv regions? I
-don't see any check here.
+Not sure how to do this, or whether it will be simpler than having all
+the UDP GSO checks in udp_send_skb.
 
->
-> Since iommufd now has its own sw_msi function, this is easy to implement.
->
-> To keep things simple, the parameters are global to the entire iommufd FD,
-> and will directly replace the IOMMU_RESV_SW_MSI values. The VMM must set
-> the values before creating any hwpt's to have any effect.
->
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/iommufd/iommufd_private.h |  4 +++
->  include/uapi/linux/iommufd.h            | 18 ++++++++++++-
->  drivers/iommu/iommufd/device.c          |  4 +++
->  drivers/iommu/iommufd/io_pagetable.c    |  4 ++-
->  drivers/iommu/iommufd/ioas.c            | 34 +++++++++++++++++++++++++
->  drivers/iommu/iommufd/main.c            |  6 +++++
->  6 files changed, 68 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-> index 3e83bbb5912c..9f071609f00b 100644
-> --- a/drivers/iommu/iommufd/iommufd_private.h
-> +++ b/drivers/iommu/iommufd/iommufd_private.h
-> @@ -45,6 +45,9 @@ struct iommufd_ctx {
->  	struct mutex sw_msi_lock;
->  	struct list_head sw_msi_list;
->  	unsigned int sw_msi_id;
-> +	/* User-programmed SW_MSI region, to override igroup->sw_msi_start */
-> +	phys_addr_t sw_msi_start;
-> +	size_t sw_msi_size;
->  
->  	u8 account_mode;
->  	/* Compatibility with VFIO no iommu */
-> @@ -281,6 +284,7 @@ int iommufd_ioas_unmap(struct iommufd_ucmd *ucmd);
->  int iommufd_ioas_option(struct iommufd_ucmd *ucmd);
->  int iommufd_option_rlimit_mode(struct iommu_option *cmd,
->  			       struct iommufd_ctx *ictx);
-> +int iommufd_option_sw_msi(struct iommu_option *cmd, struct iommufd_ctx *ictx);
->  
->  int iommufd_vfio_ioas(struct iommufd_ucmd *ucmd);
->  int iommufd_check_iova_range(struct io_pagetable *iopt,
-> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-> index 34810f6ae2b5..c864a201e502 100644
-> --- a/include/uapi/linux/iommufd.h
-> +++ b/include/uapi/linux/iommufd.h
-> @@ -294,7 +294,9 @@ struct iommu_ioas_unmap {
->  
->  /**
->   * enum iommufd_option - ioctl(IOMMU_OPTION_RLIMIT_MODE) and
-> - *                       ioctl(IOMMU_OPTION_HUGE_PAGES)
-> + *                       ioctl(IOMMU_OPTION_HUGE_PAGES) and
-> + *                       ioctl(IOMMU_OPTION_SW_MSI_START) and
-> + *                       ioctl(IOMMU_OPTION_SW_MSI_SIZE)
->   * @IOMMU_OPTION_RLIMIT_MODE:
->   *    Change how RLIMIT_MEMLOCK accounting works. The caller must have privilege
->   *    to invoke this. Value 0 (default) is user based accounting, 1 uses process
-> @@ -304,10 +306,24 @@ struct iommu_ioas_unmap {
->   *    iommu mappings. Value 0 disables combining, everything is mapped to
->   *    PAGE_SIZE. This can be useful for benchmarking.  This is a per-IOAS
->   *    option, the object_id must be the IOAS ID.
-> + * @IOMMU_OPTION_SW_MSI_START:
-> + *    Change the base address of the IOMMU mapping region for MSI doorbell(s).
-> + *    It must be set this before attaching a device to an IOAS/HWPT, otherwise
-> + *    this option will be not effective on that IOAS/HWPT. User can choose to
-> + *    let kernel pick a base address, by simply ignoring this option or setting
-> + *    a value 0 to IOMMU_OPTION_SW_MSI_SIZE. Global option, object_id must be 0
-I think we should document it cannot be put at a random place either.
-> + * @IOMMU_OPTION_SW_MSI_SIZE:
-> + *    Change the size of the IOMMU mapping region for MSI doorbell(s). It must
-> + *    be set this before attaching a device to an IOAS/HWPT, otherwise it won't
-> + *    be effective on that IOAS/HWPT. The value is in MB, and the minimum value
-> + *    is 1 MB. A value 0 (default) will invalidate the MSI doorbell base address
-> + *    value set to IOMMU_OPTION_SW_MSI_START. Global option, object_id must be 0
->   */
->  enum iommufd_option {
->  	IOMMU_OPTION_RLIMIT_MODE = 0,
->  	IOMMU_OPTION_HUGE_PAGES = 1,
-> +	IOMMU_OPTION_SW_MSI_START = 2,
-> +	IOMMU_OPTION_SW_MSI_SIZE = 3,
->  };
->  
->  /**
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index f75b3c23cd41..093a3bd798db 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -445,10 +445,14 @@ static int
->  iommufd_device_attach_reserved_iova(struct iommufd_device *idev,
->  				    struct iommufd_hwpt_paging *hwpt_paging)
->  {
-> +	struct iommufd_ctx *ictx = idev->ictx;
->  	int rc;
->  
->  	lockdep_assert_held(&idev->igroup->lock);
->  
-> +	/* Override it with a user-programmed SW_MSI region */
-> +	if (ictx->sw_msi_size && ictx->sw_msi_start != PHYS_ADDR_MAX)
-> +		idev->igroup->sw_msi_start = ictx->sw_msi_start;
->  	rc = iopt_table_enforce_dev_resv_regions(&hwpt_paging->ioas->iopt,
->  						 idev->dev,
->  						 &idev->igroup->sw_msi_start);
-> diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
-> index 8a790e597e12..5d7f5ca1eecf 100644
-> --- a/drivers/iommu/iommufd/io_pagetable.c
-> +++ b/drivers/iommu/iommufd/io_pagetable.c
-> @@ -1446,7 +1446,9 @@ int iopt_table_enforce_dev_resv_regions(struct io_pagetable *iopt,
->  		if (sw_msi_start && resv->type == IOMMU_RESV_MSI)
->  			num_hw_msi++;
->  		if (sw_msi_start && resv->type == IOMMU_RESV_SW_MSI) {
-> -			*sw_msi_start = resv->start;
-> +			/* Bypass the driver-defined SW_MSI region, if preset */
-> +			if (*sw_msi_start == PHYS_ADDR_MAX)
-> +				*sw_msi_start = resv->start;
->  			num_sw_msi++;
->  		}
->  
-> diff --git a/drivers/iommu/iommufd/ioas.c b/drivers/iommu/iommufd/ioas.c
-> index 1542c5fd10a8..3f4e25b660f9 100644
-> --- a/drivers/iommu/iommufd/ioas.c
-> +++ b/drivers/iommu/iommufd/ioas.c
-> @@ -620,6 +620,40 @@ int iommufd_option_rlimit_mode(struct iommu_option *cmd,
->  	return -EOPNOTSUPP;
->  }
->  
-> +int iommufd_option_sw_msi(struct iommu_option *cmd, struct iommufd_ctx *ictx)
-> +{
-> +	if (cmd->object_id)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (cmd->op == IOMMU_OPTION_OP_GET) {
-> +		switch (cmd->option_id) {
-> +		case IOMMU_OPTION_SW_MSI_START:
-> +			cmd->val64 = (u64)ictx->sw_msi_start;
-> +			break;
-> +		case IOMMU_OPTION_SW_MSI_SIZE:
-> +			cmd->val64 = (u64)ictx->sw_msi_size;
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		return 0;
-> +	}
-> +	if (cmd->op == IOMMU_OPTION_OP_SET) {
-> +		switch (cmd->option_id) {
-> +		case IOMMU_OPTION_SW_MSI_START:
-> +			ictx->sw_msi_start = (phys_addr_t)cmd->val64;
-> +			break;
-> +		case IOMMU_OPTION_SW_MSI_SIZE:
-> +			ictx->sw_msi_size = (size_t)cmd->val64;
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +		return 0;
-> +	}
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  static int iommufd_ioas_option_huge_pages(struct iommu_option *cmd,
->  					  struct iommufd_ioas *ioas)
->  {
-> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-> index 7cc9497b7193..026297265c71 100644
-> --- a/drivers/iommu/iommufd/main.c
-> +++ b/drivers/iommu/iommufd/main.c
-> @@ -229,6 +229,8 @@ static int iommufd_fops_open(struct inode *inode, struct file *filp)
->  	init_waitqueue_head(&ictx->destroy_wait);
->  	mutex_init(&ictx->sw_msi_lock);
->  	INIT_LIST_HEAD(&ictx->sw_msi_list);
-> +	ictx->sw_msi_start = PHYS_ADDR_MAX;
-> +	ictx->sw_msi_size = 0;
->  	filp->private_data = ictx;
->  	return 0;
->  }
-> @@ -287,6 +289,10 @@ static int iommufd_option(struct iommufd_ucmd *ucmd)
->  	case IOMMU_OPTION_RLIMIT_MODE:
->  		rc = iommufd_option_rlimit_mode(cmd, ucmd->ictx);
->  		break;
-> +	case IOMMU_OPTION_SW_MSI_START:
-> +	case IOMMU_OPTION_SW_MSI_SIZE:
-> +		rc = iommufd_option_sw_msi(cmd, ucmd->ictx);
-> +		break;
->  	case IOMMU_OPTION_HUGE_PAGES:
->  		rc = iommufd_ioas_option(ucmd);
->  		break;
-Eric
+For a "don't add cost to the hot path" point of view, it's actually
+best to keep all these checks in one place only when UDP_SEGMENT is
+negotiated (where the hot path is the common case without GSO).
+
+> This way there is no need to add an extra branch for
+> non GSO code paths. PMTU shrinking should be rare, so the overhead
+> should be minimal.
+> =
+
+> > Also, might this make the debugging actually harder, as the
+> > error condition is now triggered intermittently.
+> Yes sendmsg may only return errors for a portion of packets now under
+> the same situation. But IMHO it's not trading debugging for
+> reliability. Consistent error is good news for engineers to reproduce
+> locally, but in production I find people (SREs, solution and
+> escalation engineers) rely on pcaps and errno a lot. The pattern in
+> pcaps (lack of large packets of certain sizes, since they are dropped
+> before dev_queue_xmit), and exact error reasons like EMSGSIZE are both
+> good indicators for root causes. EINVAL is more generic on the other
+> hand. For example, I remembered we had another issue on UDP sendmsg,
+> which also returned a bunch of EINVAL. But that was due to some
+> attacker tricking us to reply with source port 0.
+
+Relying on error code is fraught anyway. For online analysis (which
+I think can be assumed when pcap is mentioned), function tracing and
+bpf trace are much more powerful.
+
+That said, no objections to returning EMSGSIZE instead of EINVAL. That
+is the same UDP returns when sending a single datagram that exceeds
+MTU, after all.
 
 
