@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-25364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76E8BA21E75
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:06:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25913A21E9B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 15:09:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE1B33A8DA6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:05:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B044F188B409
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 14:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5D81DE3DF;
-	Wed, 29 Jan 2025 14:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8741E492D;
+	Wed, 29 Jan 2025 14:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kj5aLJhm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EoYhiwKW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5320D1DE2B9;
-	Wed, 29 Jan 2025 14:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83EF1DEFD6;
+	Wed, 29 Jan 2025 14:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738159375; cv=none; b=mTw1LzosaA8pa+h2e++RIViEQBTOS9KNHe2oOgxwjuH4aO65nKasgPjYZrfBeRpaB/sUvz3rT4Wb8X1yWPn3wJO0gqrWhhlLY0MS0Q4QHGX3ahRIYLDk5lNqDevDYZUnxxpvLmZMAerGMe71HYVStlMkdVGhCFLMFoXaGvOEAqc=
+	t=1738159403; cv=none; b=NWC6kJD7rj4md8yxbUPZXnmsdkDT3StK4k9rIPM8RKGE8ymg87yTs96vQhhXJwXhhJbroaqA0lusTnjXIMDh1BPKamQSogXDDWPnaQEg0v7a/uRdk4KB7wbMYQ0Hgx0J+HMyftV0EP47EDjtJEMKrxrjTQVrDUgZYKl7Te4kmTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738159375; c=relaxed/simple;
+	s=arc-20240116; t=1738159403; c=relaxed/simple;
 	bh=c/TiNvwooN3OUjz6R9/GdMWx4hNJHCwDmJuf1a2GToM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BBlZtiG9pvgVHR08MMnk61fgsK2sWqkoDm9d2awX6eIZ+h9zcJ4C5b4j7/KdpBFgBh2i/fNxxSDstYcFLUcwfgvLBl64R47aaF6tRsA3p2X1YLTXfJnYbh5UNAIDtPuSt7WcYtR/T//G89bdmBdCDbaMEgm4npMjEkgkQSF/EsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kj5aLJhm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D09C4CED3;
-	Wed, 29 Jan 2025 14:02:53 +0000 (UTC)
+	 MIME-Version:Content-Type; b=jzX4HgFhbhYEadaqNczNfdKvGcx5vBoNdyvcYa+IhPPkuqv69Y1b/b0mLBKITOUR/bgjY2vFFNvrd97xIdBTL5JBTpawG1xU+/Kx/jFIftF+eSLx1qpSVGWu9CpUnTw+f9DBKratajCj+JNvfN0OQmxkbDi6324+08t8js9qDIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EoYhiwKW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142C2C4CED1;
+	Wed, 29 Jan 2025 14:03:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738159375;
+	s=k20201202; t=1738159402;
 	bh=c/TiNvwooN3OUjz6R9/GdMWx4hNJHCwDmJuf1a2GToM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kj5aLJhmrUTBSzpIeM4rmGCMxG8YN5XCGVoXJHVgWSpvoUaNXU7DjJMNE6oR7lozZ
-	 eM3GRXVr+WG3PPWwnX5n1kfWx0gO9Lj0BZqAYphl2Y+6Gdw31gZEJXcANfVYWkledD
-	 TlwKQRz/4Y81c9mHRfxaUh7elgSHdekySap/ll8HLIO11fdv9887d0gBNQ4PE+AsEW
-	 5tTlGYySHRgNsjx0hdRWVVbtzKHHaFj2KtBBUIbewAMtb6x7UVo/91AFhGaOaA9Qb8
-	 Zlvx+M5hlRFBBlhw8q8kwPy2efEYk1nrrGa3Yz9FiBSyVOK3nW5MeFUxpCHLbS5tG/
-	 T5H3wve6LdgGA==
+	b=EoYhiwKWX05kHDzH+cOgp5L7GvD0vAmU139RUDYsYE6+Pq54MuwAyMSITV3iuNoiG
+	 McQlrD5DHEiXdITcIAUMboVMprOEWmJmIh5v7JChcg+V73xbFL0VbqbOG9HcmB+YqW
+	 WtJ2Csbvd2lc/S/w+nCj/HNFk8Pkb79+877bewYRi9uH5iZSJKshqQ9UHPsuCxG1Zb
+	 67MaC7J4jqY4Xg1furrPTtDMEUJBciEOcPSqSLkJX8jud7gT89YDjM6c90bMKJwVlv
+	 g2qF8POyuhinOLHFdEa82IcqcRcq+/z2JtmxKUr+hDqHyekPOzwQjReG/FmGFSiXYB
+	 sirhCENHyef1w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Brian Norris <briannorris@chromium.org>,
 	brendan.higgins@linux.dev,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 6.13 4/8] kunit: platform: Resolve 'struct completion' warning
-Date: Wed, 29 Jan 2025 07:58:57 -0500
-Message-Id: <20250129125904.1272926-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 4/8] kunit: platform: Resolve 'struct completion' warning
+Date: Wed, 29 Jan 2025 07:59:24 -0500
+Message-Id: <20250129125930.1273051-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250129125904.1272926-1-sashal@kernel.org>
-References: <20250129125904.1272926-1-sashal@kernel.org>
+In-Reply-To: <20250129125930.1273051-1-sashal@kernel.org>
+References: <20250129125930.1273051-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,7 +67,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.13
+X-stable-base: Linux 6.12.11
 Content-Transfer-Encoding: 8bit
 
 From: Brian Norris <briannorris@chromium.org>
