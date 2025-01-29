@@ -1,138 +1,108 @@
-Return-Path: <linux-kselftest+bounces-25402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47216A225D8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 22:31:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E299A22600
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 23:00:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF2DB1672F5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 21:31:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E345F7A19D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 21:59:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931861E9B1F;
-	Wed, 29 Jan 2025 21:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A74C1E3DED;
+	Wed, 29 Jan 2025 22:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PrL7se9q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IY61jMRw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9591E47B0
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 21:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D29A1D9320;
+	Wed, 29 Jan 2025 22:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738186213; cv=none; b=nZ58KwlgcHLf6KN+GnWyQ9SqKnA48kBOH/afiunqAF8rlIFC50OkNq5LptaeStlctNG3crgEySnD8QraaRARyXp1c6vVTxa16yUrcHjtzmTGZtEajeWWf24abJwnZghy3dYI/jkhtJDYuSwC8i4rRsPPIJvYbm+mMlPjCoFM+Zw=
+	t=1738188007; cv=none; b=I8KxRgsVrQqCg0HRxaiNswqoR3ChBwj0ngWziCFask5/MHidk8ftyf5gpYSPZuinPhpLGOAFbQbnaRWXfcDK/3hIZYQXiTxVg+kxSwu3XK2r2Qo/inYJj6U9Q+7pxASv3wx5e5Gid0W37UsALTKldzqq3o1/hUmyVNKeP9S6Rr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738186213; c=relaxed/simple;
-	bh=c3zdLUjyfoxA5IXunh28EbOIUhI4Z6JgdKurXMndpS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L6lEJ05deLnfSSa7KiQF2BdRx1yaTZBRG3WmbkdYdh7m4e4Uf+ioCXS9zEJdeeVrn7oMr+nuXfN5ys2H/UdJ6u/b/N8h9P2kmeCjPDamg7AbiRTjM4/SPvPV5qIs5TOkHNU1DIwzTJBbYB/Pz3MIouxz8NgaHHEgFaOG7rNolEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PrL7se9q; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 29 Jan 2025 16:30:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738186209;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uDKVH8SqEMjnHY+WIVjJ+T1RpSbVZqtPnx8I5fD1WQ0=;
-	b=PrL7se9qqjPBXp1XFV2EmWC/YQYIKX/z1pi1eAnJkmwFeOSxV+xJyIx/sTwY/m6tC8c9Gh
-	Z7bqrCrzS47tLKzLgizwLAA7SV46krfgyqPQZMbuFVLQf3pxEmxL/lhs5s67fQhSJSovWH
-	GA1FbVGtkNkip4zmr0R720dnPO6UanU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Andreas Gruenbacher <agruenba@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-bcachefs@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 11/21] bcachefs: improve the eytzinger0_find_le tests
-Message-ID: <nxabgljkslxwr27wrzgjxao2nr3jh5leytj7f3pjir3t27uf5w@zcdmd4phur2m>
-References: <20250128163859.1883260-1-agruenba@redhat.com>
- <20250128163859.1883260-12-agruenba@redhat.com>
- <ajfehauvtid4d7pqy7o3uhe6p7buohwe542wqddkwpdq62lr4g@6cgcfpzcyag3>
- <CAHc6FU6Yzk1Si37nRji-5uDZF9uaYo=G5tbtuS_5FiW6BDVTAg@mail.gmail.com>
- <rddasfmbw3ul2iezec7rgit2vxnv4p53uvoydck4b5jxuo44kq@7qlk5cru6w7r>
- <CAHc6FU7oZxP1cy6uihH=m9i=0z8PmCtozwQs2HgnqvbTDhAd_g@mail.gmail.com>
+	s=arc-20240116; t=1738188007; c=relaxed/simple;
+	bh=HJFCp6CCneTiAH22wqHM4Owd5WMOFA50lFeANMb2dzM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Qa5TuPBpx6XdB+bBU7+ao1dOhC5Dm6BIws9UEbd2Gmk5TOgJ83EGGjFPZPEWv7H3I1PnO9/uCCyfGTshYjPFZZHos0cMDyflb2ODo6xxSv6uFvYHz1PQsT1/A284JzR4wh/oIshkyXhswVUFdq/wFWJTivRnoUYV5Dj2+bwIIfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IY61jMRw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAA1C4CED1;
+	Wed, 29 Jan 2025 22:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738188006;
+	bh=HJFCp6CCneTiAH22wqHM4Owd5WMOFA50lFeANMb2dzM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IY61jMRwFcspsttzsd+sjd+E1y7o1uCTxGToBezBWg3Cr2ruHhMtufLL/igyi7tCb
+	 tasXQ9SLVD95YFfY9RqKUkjx6+/JtI9cTLOM0npn+tDIbo+hhvN80yjJ5zVbAvjXGa
+	 n5eJCDcSaNXk0yjqXzlosXxni9650c2mcQkugr2LTDxPFnxtd/B8LwkRm9XPPCvI7u
+	 RHz+mGNAD2sebfVs8p3peji33wUPF8+C4D5nfSbm7bHqKM516a1Gl4FruJ5Btu/yHl
+	 g7Ggv3+U0LK9PolqP6nDJVBlny5PkPIHSS05MpqpFk1ZJfV1uZE9PtgzD9yDwLFKro
+	 i9fkMxVjVSFpg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EBB01380AA66;
+	Wed, 29 Jan 2025 22:00:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHc6FU7oZxP1cy6uihH=m9i=0z8PmCtozwQs2HgnqvbTDhAd_g@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH bpf v9 0/5] bpf: fix wrong copied_seq calculation and add
+ tests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173818803275.439997.10383700619344985358.git-patchwork-notify@kernel.org>
+Date: Wed, 29 Jan 2025 22:00:32 +0000
+References: <20250122100917.49845-1-mrpre@163.com>
+In-Reply-To: <20250122100917.49845-1-mrpre@163.com>
+To: Jiayuan Chen <mrpre@163.com>
+Cc: bpf@vger.kernel.org, jakub@cloudflare.com, john.fastabend@gmail.com,
+ netdev@vger.kernel.org, martin.lau@linux.dev, ast@kernel.org,
+ edumazet@google.com, davem@davemloft.net, dsahern@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+ song@kernel.org, andrii@kernel.org, mhal@rbox.co, yonghong.song@linux.dev,
+ daniel@iogearbox.net, xiyou.wangcong@gmail.com, horms@kernel.org,
+ corbet@lwn.net, eddyz87@gmail.com, cong.wang@bytedance.com, shuah@kernel.org,
+ mykolal@fb.com, jolsa@kernel.org, haoluo@google.com, sdf@fomichev.me,
+ kpsingh@kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Wed, Jan 29, 2025 at 10:21:31PM +0100, Andreas Gruenbacher wrote:
-> On Wed, Jan 29, 2025 at 9:28 PM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> > On Wed, Jan 29, 2025 at 07:21:49PM +0100, Andreas Gruenbacher wrote:
-> > > On Wed, Jan 29, 2025 at 7:04 PM Kent Overstreet
-> > > <kent.overstreet@linux.dev> wrote:
-> > > > On Tue, Jan 28, 2025 at 05:38:48PM +0100, Andreas Gruenbacher wrote:
-> > > > > Rename eytzinger0_find_test_val() to eytzinger0_find_test_le() and add a
-> > > > > new eytzinger0_find_test_val() wrapper that calls it.
-> > > > >
-> > > > > We have already established that the array is sorted in eytzinger order,
-> > > > > so we can use the eytzinger iterator functions and check the boundary
-> > > > > conditions to verify the result of eytzinger0_find_le().
-> > > > >
-> > > > > Only scan the entire array if we get an incorrect result.  When we need
-> > > > > to scan, use eytzinger0_for_each_prev() so that we'll stop at the
-> > > > > highest matching element in the array in case there are duplicates;
-> > > > > going through the array linearly wouldn't give us that.
-> > > >
-> > > > For test code, wouldn't it be simpler to iterate over the test array,
-> > > > testing with every element as a search value? There's enough corner
-> > > > cases in lookup that I think it'd be worthwhile (and probably add some
-> > > > extra test values, e.g. first/last elements +1/-1).
-> > >
-> > > If you expect to get the same index back, that won't work when there
-> > > are duplicates.
-> >
-> > No, but we wouldn't expect to get the same index back if we're testing
-> > every combination of elements (+0, -1, +1) x (le, ge, gt) - and it
-> > sounds like perhaps we should, if you've been finding bugs. Thoughts?
+Hello:
+
+This series was applied to bpf/bpf.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
+
+On Wed, 22 Jan 2025 18:09:12 +0800 you wrote:
+> A previous commit described in this topic
+> http://lore.kernel.org/bpf/20230523025618.113937-9-john.fastabend@gmail.com
+> directly updated 'sk->copied_seq' in the tcp_eat_skb() function when the
+> action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
+> the update logic for 'sk->copied_seq' was moved to
+> tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
 > 
-> I don't really know what you're after here. Function
-> eytzinger0_find_test() already tests every combination of elements
-> (+0, -1, +1) x (le, ge, gt).
+> [...]
 
-Ok - it can be hard to tell looking at isolated patches vs. being able
-to fetch a git repo. Do you have it in a branch I can fetch from?
+Here is the summary with links:
+  - [bpf,v9,1/5] strparser: add read_sock callback
+    https://git.kernel.org/bpf/bpf/c/0532a79efd68
+  - [bpf,v9,2/5] bpf: fix wrong copied_seq calculation
+    https://git.kernel.org/bpf/bpf/c/36b62df5683c
+  - [bpf,v9,3/5] bpf: disable non stream socket for strparser
+    https://git.kernel.org/bpf/bpf/c/5459cce6bf49
+  - [bpf,v9,4/5] selftests/bpf: fix invalid flag of recv()
+    https://git.kernel.org/bpf/bpf/c/a0c11149509a
+  - [bpf,v9,5/5] selftests/bpf: add strparser test for bpf
+    https://git.kernel.org/bpf/bpf/c/6fcfe96e0f6e
 
-> The full scans of the array in eytzinger0_find_test_{le,gt,ge}() are
-> not there to verify correctness; they're only there to produce
-> slightly nicer debug output. I'm perfectly happy with removing that if
-> you prefer.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-No, not at all
 
-> > I think the test code would have to do short linear searches from the
-> > test element, and then verify the search functions against that.
-> 
-> What for? We already know from the eytzinger0_for_each loop in
-> eytzinger0_find_test() that the array is in eytzinger sort order, and
-> we also know from eytzinger{0,1}_test() that the _prev() and _next()
-> functions are doing "the right thing". So the one thing left to verify
-> in eytzinger0_find_test_{le,gt,ge}() is that all the search functions
-> always return the boundary element. That's done by going to the next
-> element in search order and by verifying that it no longer fulfils the
-> search criterion.
-> 
-> > Have you spotted any issues with searching over arrays with duplicate
-> > elements?
-> 
-> Only that eytzinger0_find_ge() didn't always find the first matching
-> element in the array; see patches 17 and 18.
-
-Gotcha
-
-Ok, it sounds like everything I'm after is there - give me a git branch
-so I can read through it that way and I'll be happy to merge when you
-say it's ready
 
