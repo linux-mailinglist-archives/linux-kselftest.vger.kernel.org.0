@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-25353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 826A4A217D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 07:58:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 210A9A217E0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 08:09:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E7D87A238C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 06:57:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FF2A163981
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 07:09:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D7B1917C2;
-	Wed, 29 Jan 2025 06:58:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B02F192D76;
+	Wed, 29 Jan 2025 07:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gnnaGGJ2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gxyCXZdp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E20C6A33F;
-	Wed, 29 Jan 2025 06:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29157189916;
+	Wed, 29 Jan 2025 07:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738133879; cv=none; b=Jj8zcAnsMTj/TGMiqc2ApJ82aLF1fgabDPxBrlW2N9YhpUbWc8qVph+CddwZj8iGaHMedBlxp0R0MmAGi+L2FHAo7UP68axJEaxRZo0flp1yPgcQKDgEgnrzLkn907EHmbRq5T8+A4rhxHFrlQAi6j+JSMtqMCTDDjDVEyt1wgI=
+	t=1738134553; cv=none; b=bDb73kcVdAP19yETQm9qkbviqRkk3ikwNamxfZqPchgCI8dMLcNVu7yEQ2JKR1UDmNQVWnCFWLRWTJDOodSkyzE+D7uYBlo7MqTwW5LFRkjzZ1VTYRQea/dpvoIryWipqLCyFNExaoYOojKU1ETKM2ufx2n6v2RfHXbihUlvNC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738133879; c=relaxed/simple;
-	bh=YC1FDHPvIyhVgaotn9HTQ2tIBSTNErg1xrN15O9AmV4=;
+	s=arc-20240116; t=1738134553; c=relaxed/simple;
+	bh=7lBXA8t5dwNr4+zwOWOzpvCYQjYnrBwJAFA/fBlItnM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S9X7u9xL4+a5Mf+/UlbI2mgF71btzYsng2uwEQpH/KWmK9sCGL3FyQW6E2HnVbbk4uGs8GFPQ7Wd78Eg7UYdR760OIm8F3b22JvkPOek0GJRicnyKVOQMZV35FvC4j9/IL4dLSGmQnp/W4LtHLHiLZrumZXuY/pHNdu5sTKVg0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gnnaGGJ2; arc=none smtp.client-ip=217.70.183.197
+	 In-Reply-To:Content-Type; b=ZcMSQnE1JpUFqScxyX6Y26PzG9F2nwyoekUeu5ZgKOwa3WBwbIxwv/7+F1pnXnRnmIu/mgFY/n48+9CuOWCUOakjllsBXcL4Op60U+C9C20bd570A5pDo4pKu/OjrodDNtwuYVQowyZFIkQrnMziAik0mEZ9r4QeqrjUHPZw4AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gxyCXZdp; arc=none smtp.client-ip=217.70.183.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 46C8944324;
-	Wed, 29 Jan 2025 06:57:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EB0DE4327F;
+	Wed, 29 Jan 2025 07:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738133868;
+	t=1738134543;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Oy9s+DlMVJVYzLw4V6sxoakophmWkFXPFuF+80B+ahA=;
-	b=gnnaGGJ2OwbmTatOLwgXPXdAjiXdi+o0teojrbh12A25F91jHiV+gQ+3LrMMon1oeCIEAL
-	14FwWonMpD3WqJhBT98WoYfO11Sd7wrAkMyxsCjhGL+K1bFbDsFv9x4l1N5PA7q9aCcbmv
-	PQ5Dmu2Oeze5soLgKQSEFWX/b0MjxTnHe2XXQEYOkm5rhL7lQXfEKzB61UXXNvSrwtxReO
-	Z8rFvQXHey28tx0E+HT1ODQq0UWahKgspa9cQyRdETbxzZmU8OKyIczLAEbNXIfY4ruKGY
-	pCIZQKJO/nMujdQSRApQzSy55ShlLzhbrYijVBxlku2XqWXSKk9SGFnQ+JINEQ==
-Message-ID: <718da5cc-1ab1-45ec-b61a-8a11162b2f15@bootlin.com>
-Date: Wed, 29 Jan 2025 07:57:44 +0100
+	bh=X7e0+ZackKd23zhnfHS3GkxLoieKfwiTjezy8zO/3VQ=;
+	b=gxyCXZdpJRKTpZWwuRy/yIS5xsJ+NdOU/yo7td2e5wotg/aUfTn/8hsLskA7ky1Au31Lgb
+	7kGp9Pnj0T8nfSOZ44B6/VqYDP1R9U4kktKbcVg6X0P+Cp7E6RyVKDge53pts+Ui281EpB
+	IBIXqmipeIiXh/7uLLOpCDNJZuOEO2LTrLX1tP9RnhTQjvAsPHzxI6WjzvZMfSPudA7YNh
+	EEd1tYL8Q0NMQ0a0koe0g3F4RKUpW6j9tOy01kichT1h0rNEsMhE4g9Bgxf/9A7ZZ89fa5
+	Kh8vDO/XUsTNQzVWf6obeev9241fpYr1zLn91eb5jm5S9NXjvqQRpJks2PG9+Q==
+Message-ID: <6641f585-38bc-4536-a788-560fd700d646@bootlin.com>
+Date: Wed, 29 Jan 2025 08:08:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,8 +54,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 01/14] selftests/bpf: helpers: Add
- append_tid()
+Subject: Re: [PATCH bpf-next v3 12/14] selftests/bpf: test_xdp_veth: Add XDP
+ broadcast redirection tests
 To: Martin KaFai Lau <martin.lau@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
@@ -72,56 +72,36 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250128-redirect-multi-v3-0-c1ce69997c01@bootlin.com>
- <20250128-redirect-multi-v3-1-c1ce69997c01@bootlin.com>
- <e03f6c1d-37c3-4d0b-8e42-1f8980ed379a@linux.dev>
+ <20250128-redirect-multi-v3-12-c1ce69997c01@bootlin.com>
+ <f0eb6d62-695b-461c-9a45-3926f590e413@linux.dev>
 Content-Language: en-US
 From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-In-Reply-To: <e03f6c1d-37c3-4d0b-8e42-1f8980ed379a@linux.dev>
+In-Reply-To: <f0eb6d62-695b-461c-9a45-3926f590e413@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomhepuegrshhtihgvnhcuvehurhhuthgthhgvthcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvieeujedvveevvddtkeetjeeiuedvgfejgfdvtddvveejgeelueefkeetveekvdenucfkphepvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekvdehfeemugdutddtmehflegvudemfegtjedumeejiedttgemudgtsggrpdhhvghloheplgfkrfggieemvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrggnpdhmrghilhhfrhhomhepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdefpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgp
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomhepuegrshhtihgvnhcuvehurhhuthgthhgvthcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhheeggfetffekheevuedvkedvvdeufeegjeevgfelveevveetffevfefgheeijeenucfkphepvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekvdehfeemugdutddtmehflegvudemfegtjedumeejiedttgemudgtsggrpdhhvghloheplgfkrfggieemvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrggnpdhmrghilhhfrhhomhepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdefpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgp
  dhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgrfihksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhg
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
 Hi Martin,
 
-On 1/28/25 11:49 PM, Martin KaFai Lau wrote:
+On 1/29/25 12:03 AM, Martin KaFai Lau wrote:
 > On 1/28/25 1:57 AM, Bastien Curutchet (eBPF Foundation) wrote:
->> Some tests can't be run in parallel because they use same namespace
->> names or veth names.
->>
->> Create an helper that appends the thread ID to a given string. 8
->> characters are used for it (7 digits + '\0')
->>
->> Signed-off-by: Bastien Curutchet (eBPF Foundation) 
->> <bastien.curutchet@bootlin.com>
->> ---
->>   tools/testing/selftests/bpf/network_helpers.c | 11 +++++++++++
->>   tools/testing/selftests/bpf/network_helpers.h | 10 ++++++++++
->>   2 files changed, 21 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/ 
->> testing/selftests/bpf/network_helpers.c
->> index 
->> 80844a5fb1feef2ff73c2f0293e52495803ab769..d2ff7521aaa696ed04d8f1308394b4c01c1c038b 100644
->> --- a/tools/testing/selftests/bpf/network_helpers.c
->> +++ b/tools/testing/selftests/bpf/network_helpers.c
->> @@ -446,6 +446,17 @@ char *ping_command(int family)
->>       return "ping";
->>   }
->> +int append_tid(char *str, size_t offset)
-> nit. offset should always be strlen(str) now. The append_tid will be 
-> easier to use if the append_tid always does the strlen() itself to 
-> figure out the end of the str.
+>> Set the tests to run serially to avoid conflicts with
+>> test_xdp_veth_redirect
 > 
-> It will be useful to replace the "size_t offset" arg with "size_t sz" 
-> which tells the max size of the "char *str" and the append_tid does a 
-> check to ensure there is enough space to append the "%07d" tid.
+> I think this has been fixed in v3?
+>
+
+Indeed, I forgot to update the commit log ...
+
+> Others lgtm also. Thanks for working on this.
 > 
 
-Ok, I'll do that.
+Great, I'll send a V4 soon then, thank you.
+
 
 Best regards,
 Bastien
