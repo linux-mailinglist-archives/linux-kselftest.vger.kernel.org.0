@@ -1,197 +1,195 @@
-Return-Path: <linux-kselftest+bounces-25351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E72EA2170A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 05:31:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F148A2175B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 06:26:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 330FD18864D2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 04:31:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 798E71888C02
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 05:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E54E618C907;
-	Wed, 29 Jan 2025 04:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFDF518C011;
+	Wed, 29 Jan 2025 05:26:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="A15/Dq5I"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TxQRDfhd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C3F36124
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 04:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738125096; cv=none; b=AP8jWRuVEurQsoxzj2XLyAOyCh51zustW6zCPWklpI5uhD7CnIz05SGjaqsoNC1O+zEpjt+acbXIenMz+nAX5cadc64jFgxYLLGbx2S9LsmgihY+UxsK27Urn32brFE35F9QCr2h0HtMvIXgaoQM8pNdtvoBR5l4wvzky8iegKI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738125096; c=relaxed/simple;
-	bh=808ZSvqrp6Jw2j2yHfLGfGLkh4ZMtd/+Cno4IekELSE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D/jqcDwVU0xPuTKFUWe1JdK2WXmBPk7NZZEardPC4740XR7asjz3dcjkACKcRyAPqMjgfm6WtIf64QDKZCz5td0LV1jxK/pXhKmSH2IyycIUIHbnzdidFdv/3nyE4BXKoxd4YBaYAcc3JrY71MsRINmaTzGIDrAjEKvVo3uxzsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=A15/Dq5I; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aaedd529ba1so913335066b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jan 2025 20:31:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1738125093; x=1738729893; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rBO9dXCuMkurFX9lxY8xUIlOlPnO5yILDAytp6+TmDI=;
-        b=A15/Dq5ISv6qNcMNtQo6IdH5ymgQsJtm2inFFTGC2chkyaDwOx2OVchjd5E1+cBIHz
-         d1Kv4+5V6Ff165p22hMMgRcspdL8lflK1uwpP3zkiqMkLKR0D5l/42PvkhsWq2MLIp1Z
-         4W5A1FO4+z7hZTYqbKu76oKDo24XKPraZxF5hnOHSjWWGx6SAr+8qbc4ui1J7flIVz6e
-         Idvi1XVVjKtmDhuEweyVLuVSrYlVOQFXik2G/VhstFdOUcS7Pa6Vw3w6qNQb2BnlEDQn
-         M2yPvvmFRslGzrKkvlCj9TEEl6S3k0BWakfW3f/NgPsSd+h0tKR1ZaadBGLpHZIiSL7I
-         KuXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738125093; x=1738729893;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rBO9dXCuMkurFX9lxY8xUIlOlPnO5yILDAytp6+TmDI=;
-        b=MuC01dPGdGruD0q2WuaYXFgFqxTMGGOrRu/16ZfbDv5/pzuP/C7YkbKl+2mo9wYo9I
-         ZgZqP1mRCy47a8SxYph8PQf9jW4IS1EXwhTAusuD/ref6UerZTGLu+LNPTRtbePMjDHR
-         ynt+PWgaJ9R6tqUOjLNM4mYYes87+GBVOAdZhm09j+4J4fvNkevHnmh9KEMfEV7ITKg3
-         6nqn5isd1kcHsCi05NDLkjSZHuoxJb0DpTLD7mNNU+9mYay9KowC0/7BO9rUF+aHU1xl
-         fr7t91PcUGAV8rSC3VddxsaWCU8h9v09mgCyodtFgMhisF5dgABQYDD/Bz/kVw+W1DSg
-         PE9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWeybJxL+F6wr7knDms0MQ8b7FrtKqHIZXb5WDk2KL9bvCyZ6YiVz0ah9py4f9bfrA5We7NcVfAwFPEEHcAa00=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybGnPOkrtgqgoneOMOExyf4cNPyvGaKAtlcMVm+gIyJC//9qGY
-	B3Fx6EmieWwckWte6QOyFQ1cI4zQbWyZGAO1PcpupY8dyMyubdcFHdsufYrgeO53dl3urMoE4QQ
-	s4P/h75/QcJ3yyHjGc2lWaO4TOHENcWId+fOtMg==
-X-Gm-Gg: ASbGncuIWK2AKAih0jVpAa3eUZ9uHcHK3H/efXofROIOPhZ9nkSETiArT+f4B/i2nKo
-	ixoD+mE4ZOuitrbbU/Jc7HlMEfD3Z0rVS7krdYBIAJOeEP19qxS022azJwHNoMT/BwKPnKHZsAT
-	7TscPPYe4odrw=
-X-Google-Smtp-Source: AGHT+IH1M08WO5Qx9Ys5wiCpk2W2FW/E9jpAyqZ8NwwuVAWi7zCv6NhLJzzXsfmmPElRMVxILXxlKaLqHmCQuLcAg3o=
-X-Received: by 2002:a05:6402:13ca:b0:5db:e7eb:1b4c with SMTP id
- 4fb4d7f45d1cf-5dc5efbf41amr3735244a12.10.1738125093185; Tue, 28 Jan 2025
- 20:31:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D254618E75A;
+	Wed, 29 Jan 2025 05:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738128398; cv=fail; b=BPPqY1A18AyTFiJV3pldjNCxVkScS20p6nasRdk6oLa8bn7RUZT7lLFv1ULb7hkQ6Tu0msEOIp1yfXLXCbR58R3kVW/x2NLL6hN0H3iQK1m2kwGPyzSOlsMJMH0vWHvB4S7iNyI5DLaqOc3nbmGrDAukOJiBgXUwWm3E9ATHO2A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738128398; c=relaxed/simple;
+	bh=IBdGnXyhBGRQJzXkoOimlejCwVriEJ1B1BnJ/PcZbBg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=l7RfrRWAuIFvmvWSelCCn/5kXW6EboN66qIdo59xe3swje2vGDYsnMXvKjSEDlINeC9zw0oFOEDon2Cx5RUoBMzv5UoQV67MDw/ruF/zd3OZNFYj8FRFkgkjrqYOpd6oqbYIDyRSJBgarLeD0CJF/w16oMzzoBSrToHIr/amzYA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TxQRDfhd; arc=fail smtp.client-ip=40.107.243.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I4Wse7H19TCkTlXkJ2raFf4pr9lpIIaOj3Fkf5yaXDM11Hq9nTwXOnx/+TOEeuWCeTiHMgKKoYzHNkGoQy+JHL0rwqv360SXNTENbaI9lhSka3CHQmDkFdVFr96C9qMPgF3UpAfb3djvNCdfGmAXmC/GLuhg72rCvl3vrXPTKz3dpm27TrQN4RhReFzVGBjuVqAcAsMQep4pd94yESMTUtRTByZf/Rh62vfP1pYypAZP42bSD/bAPXh0oA+AIkscxp8RJNxYWEX4QJB9q/5eAHjmJlXKqgGr9+93AW8DHjLX4IypqWO5jhBjMdTdBmy5idv3xtkUTJwSrCU3i4VvHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iYoPw85qQZkfwh78HjTAK0Q6To3S94cggBIb15bIo7k=;
+ b=UJ4VT1ziVoj6PVDQLIxoO4wJSIF7Xr/MYbqzWfGnpQUlQNbn3BLzJnEBVHarAjUJm3Q14oK4YKWKYJmuAk15AvmRrCNEumhNfSgbicrfSApr/PCXq2q8TSx69qlOR3gPwflEPsJcKfQl5Pi2Jejm/VbDtU4a2ddehEqhVwNL8gyrx3rELzl74d5Hp5cVzcwIQtPj0IdfRQmqyC11nEg7lSoPQvsKGKN5cHjChxVFFG8XD58w54kh+/BZDoK/hdxjbR6ywWUFIr1q3fqudtRhmDhm0FHVdMNm7usp9a7I5NmCOXqnkBbTQrj+dbC446QoSl7icqWf50Dgi9H2o4Z8yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iYoPw85qQZkfwh78HjTAK0Q6To3S94cggBIb15bIo7k=;
+ b=TxQRDfhdK6etEa0YJ5dlRs1I0zOV6gXtPyBeyS9JG5Jgc0UDoqHO1Gtor5DlrCJ5Sr6wi3jHW+LqN+wAcYLv5ebtzcrKbCBiLjZCo5rK/BXrPGajCTo7aDQW+0W76zeujxaTuqJQC46QlnNDfw+Ta3+MbBech7sQXUsGFU7sY9M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB6608.namprd12.prod.outlook.com (2603:10b6:8:d0::10) by
+ DS0PR12MB8454.namprd12.prod.outlook.com (2603:10b6:8:15e::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8398.18; Wed, 29 Jan 2025 05:26:15 +0000
+Received: from DS0PR12MB6608.namprd12.prod.outlook.com
+ ([fe80::b71d:8902:9ab3:f627]) by DS0PR12MB6608.namprd12.prod.outlook.com
+ ([fe80::b71d:8902:9ab3:f627%2]) with mapi id 15.20.8377.021; Wed, 29 Jan 2025
+ 05:26:14 +0000
+Message-ID: <634c27ab-8ec5-431b-b024-fb8f86f05886@amd.com>
+Date: Wed, 29 Jan 2025 10:56:00 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/3] KVM: selftests: Add self IPI HLT test
+To: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, nikunj@amd.com,
+ thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de,
+ babu.moger@amd.com
+References: <20250128124812.7324-1-manali.shukla@amd.com>
+ <20250128124812.7324-4-manali.shukla@amd.com>
+Content-Language: en-US
+From: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+In-Reply-To: <20250128124812.7324-4-manali.shukla@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0168.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:de::8) To DS0PR12MB6608.namprd12.prod.outlook.com
+ (2603:10b6:8:d0::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <Z5cgWh/6bRQm9vVU@debian.debian> <6797992c28a23_3f1a294d6@willemb.c.googlers.com.notmuch>
- <CAO3-Pbqx_sLxdLsTg+NX3z1rrenK=0qpvfL5h_K-RX-Yk9A4YA@mail.gmail.com> <6798ed91e94a9_987d9294c2@willemb.c.googlers.com.notmuch>
-In-Reply-To: <6798ed91e94a9_987d9294c2@willemb.c.googlers.com.notmuch>
-From: Yan Zhai <yan@cloudflare.com>
-Date: Tue, 28 Jan 2025 22:31:22 -0600
-X-Gm-Features: AWEUYZkFF04hIq6CQys-BAU9SzPyBvvzYRnsiHHxwADQ-M2LEFAF1toT_s31iWM
-Message-ID: <CAO3-PboS3JB1GhhbmoJc2-h5zvHe-iNsk9Hkg-_-eNATq99D1Q@mail.gmail.com>
-Subject: Re: [PATCH] udp: gso: fix MTU check for small packets
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Josh Hunt <johunt@akamai.com>, 
-	Alexander Duyck <alexander.h.duyck@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6608:EE_|DS0PR12MB8454:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4ab8b2b-d888-473b-977d-08dd402572eb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZUN0am42U3RDbnQrcVFnelVYbFVEYUQvL0pDTjk1N0orUEtUL2lNUzAxYlVr?=
+ =?utf-8?B?YktrdXpCTlJldU5tT0xKdjNtVDMyRHdlQ3hhRExCbUdGQlJKU2xrenFFMWdo?=
+ =?utf-8?B?Y21FRHRYdy85M014UDkvZEY0STFmYSs4QWZBazNGR0I0dUxaampaYzUrV2pa?=
+ =?utf-8?B?OWdCNklVZVRUdzdPOUphSFozTElGZTY1dm9CWmxrTXo0TzhoRVhsOWE4dkk2?=
+ =?utf-8?B?WjBYTVBxL1B3WW9hQjU0UE1kbXhXOVBkT25oMi9OWjJHVzlmRlBNMERJYTFT?=
+ =?utf-8?B?cVI2UU1oVkhVMk0xUmcyRUU0bEJOU0hadE94NU8wbmJLZnJ6THMyVGd2cTUz?=
+ =?utf-8?B?ajdCUEZwSGRWMXNlYmYxWW9maTFqcFZrMGloYVZuTnNxTVNER0pSZFB2WXZ5?=
+ =?utf-8?B?Z05lNWl1Sy92cStHTGVHOGJOenlETWZBaEI3M2dLYWFFdWgvZG94amRPWm45?=
+ =?utf-8?B?cmU1Z0NKbmxGQThOL2VwZHVQS1NvZVpqZ2hlclYvL2lMQlE5ckF5Rzk3Smhm?=
+ =?utf-8?B?cVVLWENLNHlnN0VWVGptTEhiOVg5RVJieVc1ZWFVak52eCtmcFBWYVdsaXhu?=
+ =?utf-8?B?RFRscU1RVEFIOFFKbEVseTdkOFBGeFE0K1QvNHE5N2VlWk9mWThqZEpOL1RL?=
+ =?utf-8?B?TUV3b0tCMlhnby9RQkRCcTFDT0dqUzNwN3FQQThTVnN1Qi95WDZ5UWZrM3RU?=
+ =?utf-8?B?OENHN0VjejNGKzJiZDZOYkl1WFlEempoMHRxMnpVcnJuM0pQekF1QjcrM0Ew?=
+ =?utf-8?B?ZlNtK21XT2xlREFtRW9MQUIxdVlWbEpwYkFsUzJBcnpVaGhpNmJBMk5FWXQ1?=
+ =?utf-8?B?L1E3UTVKNExCeHZDOVdEQ01KQUdqZXFOd2ZoT2dvNXgyM1JKZElqdkVwRWZD?=
+ =?utf-8?B?YXpwdUlmdzBuUkE0bnNOcjh6b0x4RkpXeU9OSlR6Z0FJN2MySGY4M3FWSUhn?=
+ =?utf-8?B?QWl5NjEyZzI4bEl4dkZTeHl2akRObnJnekhRNFlMV0xHWFRHSnN0WnM0RjV3?=
+ =?utf-8?B?akFxNm5RYXpUcGNEWS9ERTd5Tm1HQ0pHcWpqSUdVaWJQRlJ2U1Fpd3lUdmxr?=
+ =?utf-8?B?b21ya3NBaVBFaWwyRGxpenVhaU9JdUNtZWt0RTZIZEYzRkRZZHNvRkVmcFJ6?=
+ =?utf-8?B?N0pUNElyV1k3MXBnbFc2eUlLdjZQLyswMXYxSndBclZ0NFAxR0p4RDlnUUx6?=
+ =?utf-8?B?VC9tNTdmU2NBMElIYTZpc1oxZWVlNjFxdjhucDJnRHRkY3hKZlJpQW1sOWp1?=
+ =?utf-8?B?ZSsvaEtsS3RjS3U2VXhrT1NWK1hIdTJwL3BGSmgzUVFqSGp2LzNuNXN5Qk9D?=
+ =?utf-8?B?czVNOUZpa2lKSFptNXFYQzZFUklLSnphblF3djRXUkg3bHVlYTMzNzdubWhU?=
+ =?utf-8?B?OU9aaDZQV1dKd0tKTkpwL0ZPZW53SnFRcWJtU1dzV3EwRm0rbHBXVjJWTW1V?=
+ =?utf-8?B?K1IycjNwaVFtZThWZktsaHNhbmRQd1VXYUJzc0wwcWxQVUtkUzh6aU0rRmpn?=
+ =?utf-8?B?RmNJTnYxNG9NZTZjdDhkR2tOZ093cDBSTFBsNk5UZ0FndUZyOTIyWE9laTlh?=
+ =?utf-8?B?VG9BanFxd3FYU2lxRGxrNDN2RVB2RGNVY2NXWXo3UW1zc1lOY0liV0doQzBl?=
+ =?utf-8?B?M3d5QlNvZEVGSFNuYzMvcWlBOXdYN1h2SnRRbU1zd0ZEaHlxeG5pMnJtRHVT?=
+ =?utf-8?B?ckVUMG4rY3BkZitwRWhyVkkySUpBaTdOdlJlQkJncVJyeHlFZzRTL1NaOXBQ?=
+ =?utf-8?B?aldHY1ZWV3I0MzB4ek1JcU4zU0FBUmJZN2p0REZXb1VmZGc5Z0FqTFoyZ2tl?=
+ =?utf-8?B?Zjc4U05EQUtxc0hLcllvY21Rck9xNGVCbENvRmswazFLcmtaSXExS1VCcGNK?=
+ =?utf-8?Q?teXbWzodD4nc9?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6608.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZGRxVjVXN09mckNkek15aXNTd0UrOEJLRGxnUmt0bkt6TmJvVmE3NzBaOHI1?=
+ =?utf-8?B?VmlkWG04NjQ3NVM4SUNGMVl3WThMUkJ1YnR3cTRkOGNtM1F6ZU5hcEppMHhI?=
+ =?utf-8?B?VnJwckx4YU9zTW5tSFp2bTVHdU5PR1Z6TWErZnFMa2J4MnlMWTlDWGgzVzhG?=
+ =?utf-8?B?SmYzcUpEeHdwcEFQT1hPRG5NdlRhYXBveUVzTk1EQk1EWHdBL1hMbU5IZ3RJ?=
+ =?utf-8?B?VHZsZ245Q094UzIyQTViL0p0RGNqZ2toaVczVlp3TUtxRkpndm9qTnZsRW5N?=
+ =?utf-8?B?WWlmdWU1RGNtenBKY0NDbHdHNGFNRC93ajZ1Y2tsNkUvSE9QUXMvVFA1Szli?=
+ =?utf-8?B?Q04yTVdCaU9KRnM1ZHFpZFl0dWJkS01UOE41K1kvZ1hNblFNZVMwaW5FcHFl?=
+ =?utf-8?B?a3djRDVGV3dJTCs3V2F6MTNzRWZ1d0RGWWZobXg3MXZsdFJkaVRnOVVjdFda?=
+ =?utf-8?B?b21zS0xIZ3Jvc0UralVkNjhxWUV6S0M2Yy9ydEVTRytzU2xmZCtsZFlOYWh0?=
+ =?utf-8?B?bGN1bEFNTllSNURlY2pVZUVoVEduS29uNmhWam43NlVjR3J4NEY1bXd5SU9D?=
+ =?utf-8?B?elVNRy9hd2M4L0ovdm83azFST0Q3ejFBM25GNDRUOXNscEtLWFZTa2NVVWJE?=
+ =?utf-8?B?Zi95cjRkTWRjYlBnaHFVWGtHR0tyUHU4ZWZ6VndMeUdybE5FOTQyRTdVa0RG?=
+ =?utf-8?B?UXZySmU4VDBIUFNiZzF4MmZDb0MwdTljdW8vSDNHL1pDaEJCc3pHaTdJcTBy?=
+ =?utf-8?B?MzdyWGhyeEhlSGRiZUVoQllqeTlzc0xSOEcwV0tnWjlPMXAvb2NLb05paitU?=
+ =?utf-8?B?ZEpPUmk2aVFoYlNnS0I5WnAxRDZOa2JGYzdoZUVVcU5oRVhaUkFtNUY1RjVv?=
+ =?utf-8?B?dTZ3N1kzQkFNUmFSZ2hRTjk4WDA3dkxBbjBJK2twb2pLSVUyWm9Fa05EaHZs?=
+ =?utf-8?B?dFJtcS95WU5BQ1o1cXZiNXJUOTVwdVVKSWk4d1FFdkdPSGVaOVVaRE4xRXRo?=
+ =?utf-8?B?cUhDOGNQaHpYTGxIT0dBS1RuUFkyeno4Z3NBWTlSU0U1R1g2cWZIcmVBZVhN?=
+ =?utf-8?B?bEV6WWNBRWttc2R2ZUtRVUtqdTR0RWUrWVR4YjhDNkhjTXh2eTRqa2dEeUNy?=
+ =?utf-8?B?UE12dks0K0xQeUd0a3owVVd6WTdpWi8wZVUrWCs0bDk3b2JyREdrUi9rM1Nt?=
+ =?utf-8?B?VWxIeVBOa2ZZblYxbWU0ZWJkUnJPcSs4Z2pGbzdkbWp2aTZjTkgvRmFaVENF?=
+ =?utf-8?B?MWR0WTM4dFJPZFhwaXk2bkdpNUd0a0pGaVV6UWhhNXIyamVjK1hrKzlzUFRI?=
+ =?utf-8?B?ZHdGR3ZndXdMUUVkNWlIa0pBYVllUGJSNG8zT0txSVErN3dTQmRWaHNGc0RH?=
+ =?utf-8?B?NFEveVgwQlhHMFY0eEROY0R5R2J6eHYrVitZYzR0ai85d3hYVDNLZjRBSW1j?=
+ =?utf-8?B?SHpmS1Zadlg1ekZmbWNQV3IyMWlZUDYweTkyZ0tUQmRHb01ZQjRtMGdiN0ln?=
+ =?utf-8?B?YkQvc3BNNVJKSmt4Q1o5WDhZaGhyOVFqaFlrNzkvb2ZEZ2JLQ1B1MUM0WkM2?=
+ =?utf-8?B?YVQ3NjBLbi9OSWFHM28wWWUvZmVET3FBSUthZEpEZS9nRFBtQ1VHTlhTZ3lM?=
+ =?utf-8?B?TEIyR0s2SWdTSXlnaXRQWG9vOGNlT0ljUm1IcXg0OFlKSFFmREVtS2xaYTUy?=
+ =?utf-8?B?ZG8zSlgwTVR6ZXZJNUQ2bngwcjBGYXhMUVYrYkZxYk9GVHdkSXZQTE5mUkg2?=
+ =?utf-8?B?Y2o0ZTRSM25VTlQzRjN1N2JDWEo4ZGpGbTNSZmcyRCtab2pnTm1KaGRHcHBV?=
+ =?utf-8?B?RjFEZGIrK0xKTWhIdG5YWjZoZTd3N3ZacWR0WmNOc3h0OU1DKzFpdzNsclVW?=
+ =?utf-8?B?alVhQW1zQ0tidUpaTk05aUVoZldIVm5WVmhsT2tkc28zcENubStCbGZhaXJq?=
+ =?utf-8?B?R1NkeVk3K1VDVmNzVXIwNlQ3c29Rd1AvOTFaL2N0cjNyTDZCTzh6V0JicXpu?=
+ =?utf-8?B?bUlZY1Jnby9OZC9qRXhZSWlCTUhMd015UXZxajZNdWFrbE0wcWU0K2VhWm5E?=
+ =?utf-8?B?TGJ6emVvVzhCT2NFSHljUHVSY3dPT0lkNGJSRVRTd3YyMWJBT29Kd2MybEdn?=
+ =?utf-8?Q?QMN3v9qxEValKxLXpMVRNbXsu?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4ab8b2b-d888-473b-977d-08dd402572eb
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6608.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2025 05:26:14.7053
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MRYGeJTATz8OOFLRKgOoLnTqg5/h+j5sKfd+Je7ML5lvehfUZvzcBjUQ3C3iVvoChulzfhNoEW6cPOSKEeylCQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8454
 
-On Tue, Jan 28, 2025 at 8:45=E2=80=AFAM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> Yan Zhai wrote:
-> > Hi Willem,
-> >
-> > Thanks for getting back to me.
-> >
-> > On Mon, Jan 27, 2025 at 8:33=E2=80=AFAM Willem de Bruijn
-> > <willemdebruijn.kernel@gmail.com> wrote:
-> > >
-> > > Yan Zhai wrote:
-> > > > Commit 4094871db1d6 ("udp: only do GSO if # of segs > 1") avoided G=
-SO
-> > > > for small packets. But the kernel currently dismisses GSO requests =
-only
-> > > > after checking MTU on gso_size. This means any packets, regardless =
-of
-> > > > their payload sizes, would be dropped when MTU is smaller than requ=
-ested
-> > > > gso_size.
-> > >
-> > > Is this a realistic concern? How did you encounter this in practice.
-> > >
-> > > It *is* a misconfiguration to configure a gso_size larger than MTU.
-> > >
-> > > > Meanwhile, EINVAL would be returned in this case, making it
-> > > > very misleading to debug.
-> > >
-> > > Misleading is subjective. I'm not sure what is misleading here. From
-> > > my above comment, I believe this is correctly EINVAL.
-> > >
-> > > That said, if this impacts a real workload we could reconsider
-> > > relaxing the check. I.e., allowing through packets even when an
-> > > application has clearly misconfigured UDP_SEGMENT.
-> > >
-> > We did encounter a painful reliability issue in production last month.
-> >
-> > To simplify the scenario, we had these symptoms when the issue occurred=
-:
-> > 1. QUIC connections to host A started to fail, and cannot establish new=
- ones
-> > 2. User space Wireguard to the exact same host worked 100% fine
-> >
-> > This happened rarely, like one or twice a day, lasting for a few
-> > minutes usually, but it was quite visible since it is an office
-> > network.
-> >
-> > Initially this prompted something wrong at the protocol layer. But
-> > after multiple rounds of digging, we finally figured the root cause
-> > was:
-> > 3. Something sometimes pings host B, which shares the same IP with
-> > host A but different ports (thanks to limited IPv4 space), and its
-> > PMTU was reduced to 1280 occasionally. This unexpectedly affected all
-> > traffic to that IP including traffic toward host A. Our QUIC client
-> > set gso_size to 1350, and that's why it got hit.
-> >
-> > I agree that configurations do matter a lot here. Given how broken the
-> > PMTU was for the Internet, we might just turn off pmtudisc option on
-> > our end to avoid this failure path. But for those who hasn't yet, this
-> > could still be confusing if it ever happens, because nothing seems to
-> > point to PMTU in the first place:
-> > * small packets also get dropped
-> > * error code was EINVAL from sendmsg
-> >
-> > That said, I probably should have used PMTU in my commit message to be
-> > more clear for our problem. But meanwhile I am also concerned about
-> > newly added tunnels to trigger the same issue, even if it has a static
-> > device MTU. My proposal should make the error reason more clear:
-> > EMSGSIZE itself is a direct signal pointing to MTU/PMTU. Larger
-> > packets getting dropped would have a similar effect.
->
-> Thanks for that context. Makes sense that this is a real issue.
->
-> One issue is that with segmentation, the initial mtu checks are
-> skipped, so they have to be enforced later. In __ip_append_data:
->
->     mtu =3D cork->gso_size ? IP_MAX_MTU : cork->fragsize;
->
-You are right, if packet sizes are between (PMTU, gso_size), then they
-should still be dropped. But instead of checking explicitly in
-udp_send_skb, maybe we can leave them to be dropped in
-ip_finish_output? This way there is no need to add an extra branch for
-non GSO code paths. PMTU shrinking should be rare, so the overhead
-should be minimal.
 
-> Also, might this make the debugging actually harder, as the
-> error condition is now triggered intermittently.
-Yes sendmsg may only return errors for a portion of packets now under
-the same situation. But IMHO it's not trading debugging for
-reliability. Consistent error is good news for engineers to reproduce
-locally, but in production I find people (SREs, solution and
-escalation engineers) rely on pcaps and errno a lot. The pattern in
-pcaps (lack of large packets of certain sizes, since they are dropped
-before dev_queue_xmit), and exact error reasons like EMSGSIZE are both
-good indicators for root causes. EINVAL is more generic on the other
-hand. For example, I remembered we had another issue on UDP sendmsg,
-which also returned a bunch of EINVAL. But that was due to some
-attacker tricking us to reply with source port 0.
 
-thanks
-Yan
+On 1/28/2025 6:18 PM, Manali Shukla wrote:
+> From: Manali Shukla <Manali.Shukla@amd.com>
+> 
+> The IPI HLT test simulates a scenario where a pending event is present
+> while the HLT instruction is executed.
+> 
+> This test evaluates the idle HLT intercept feature of the AMD
+> architecture, if available. If the feature is not present, the test
+> exercises halt-exits/guest-entry for pending interrupts.  It can be
+> extended in the future to include cross-vCPU IPI testing.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Manali Shukla <Manali.Shukla@amd.com>
+> ---
+
+Reviewed-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+
+
+- Neeraj
 
