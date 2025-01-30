@@ -1,196 +1,153 @@
-Return-Path: <linux-kselftest+bounces-25408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A9CA2280A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 05:11:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D426AA22916
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 08:20:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07D173A4020
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 04:11:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44840163299
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 07:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1525D7404E;
-	Thu, 30 Jan 2025 04:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FvFPOePl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52DC19DF60;
+	Thu, 30 Jan 2025 07:20:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4632770C;
-	Thu, 30 Jan 2025 04:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057754A07;
+	Thu, 30 Jan 2025 07:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738210303; cv=none; b=Sw4w9zaKRZjlmNGAIcvEJVCjDjxJMi9yGT+6rUGRY5OLG/QcBenJ89dJ0EjIw5DUC35uRSNduUnKBLH4RQFf1hmsAx352patq53+EvvcVU+gwAY4Bbx/98n0ZKBAHwGBm8szTvxcrG/XXY9vLHHAuoaI7SQqBc6PR1E6gv6LXEk=
+	t=1738221605; cv=none; b=BaEhwvnTQ9e1/jz1FelMmOuhiYG8hwyJsOY0/iGGG4iSzJ3zZZSRy4XxFX6HgTUxLYDfh/9wQxXetSXIn7zU9pCUKwXnMPPtv5K+y5dI8fbFukQ9kuYk2mxBQAzrbQ4sC4KeHwe/n7rsZYR9vX23klEth7UXbcmqz0QbzQI29Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738210303; c=relaxed/simple;
-	bh=UC8IeBBKFfPBafCFr4kyUFlVe382D2VnfBipiZRaeRk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qWC1bJy9QN8MO4h2j6so3CiBFfaabUjSYxEYK3Pvk4Y/L/stGCnw2Z8dPsN7dZ6z+Rqa5VY/W9wqwNXxZpEBgEjsX840VGq5xKwX3md9Zca6rByW28oQmev6Sxfdta4dCR2fbeaCJ2rE2+s3GNkDp4MYJnkWR8pABXaJZGWptXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FvFPOePl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142C8C4CED2;
-	Thu, 30 Jan 2025 04:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738210301;
-	bh=UC8IeBBKFfPBafCFr4kyUFlVe382D2VnfBipiZRaeRk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FvFPOePlZwb+q7p6VAdWvFNtAW3tP1nHg6WW2zcJaU4NBd7tkRrFawMA/8C7BVKNG
-	 avNXIc291RJYKtb21lcaVNzFUTmGc5vV1aU3QRNrNmu8Q1jLa4VXBHSzRiYuAPZv1l
-	 gzi3AAm1a55/2ZTre2qX6zQBFJKDzfm5yJc9JKoT6RZNMwmr4U2C1a4zYCTEJ6R7b4
-	 ZR3IOq9yYN4nJGJGt4UWdBiWuXACHW9fk0T1xLslstiVWWKaN3EMcatUlLBePbEL74
-	 udgZylVrsFyKyefsc0ConnfYje20wF64jkfAOJtPMg6sLxytwIat3xeR8ynGMZJpGt
-	 lnapa7ShDYaDw==
-From: SeongJae Park <sj@kernel.org>
-To: Yuanchu Xie <yuanchu@google.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-	Khalid Aziz <khalid.aziz@oracle.com>,
-	Henry Huang <henry.hj@antgroup.com>,
-	Yu Zhao <yuzhao@google.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Gregory Price <gregory.price@memverge.com>,
-	Huang Ying <ying.huang@intel.com>,
-	Lance Yang <ioworker0@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	=?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Mike Rapoport <rppt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Daniel Watson <ozzloy@each.do>,
-	cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 0/9] mm: workingset reporting
-Date: Wed, 29 Jan 2025 20:11:39 -0800
-Message-Id: <20250130041139.49594-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <CAJj2-QEaLTasfQgb=VFfnbOmkcXU3kw2VbsNummNEq0V3b9jdw@mail.gmail.com>
-References: 
+	s=arc-20240116; t=1738221605; c=relaxed/simple;
+	bh=/dz+TL6hOUizao4JeKuqffB+abbHnPib5T4ImH55e4Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VoZl78If3spA8de4r1IklC1JGTW9de2NBAvgAYQ7jWxY2XrwwnzzgRxmQV5hI0futKkzVQFWfDPwVvI1yuSq0BUIf4Bl8YoMsUmBOP96OsJAZVmAelKQJGzNm/py08d9n3eFPl4iLEsYVT7BTgUw3ba1uFtHzH2eOgtq5Y9RtEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Yk92K2Vgqz9sRr;
+	Thu, 30 Jan 2025 08:02:33 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mLkRQEvxfhng; Thu, 30 Jan 2025 08:02:33 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Yk92K1byjz9sRk;
+	Thu, 30 Jan 2025 08:02:33 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 24D5E8B774;
+	Thu, 30 Jan 2025 08:02:33 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 9ANhva5jAowX; Thu, 30 Jan 2025 08:02:33 +0100 (CET)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id A10E68B763;
+	Thu, 30 Jan 2025 08:02:32 +0100 (CET)
+Message-ID: <3150e796-9249-4ac1-a91a-7efb7ec4de16@csgroup.eu>
+Date: Thu, 30 Jan 2025 08:02:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/vDSO: Fix undefined CLONE_NEWTIME by including
+To: Purva Yeshi <purvayeshi550@gmail.com>, skhan@linuxfoundation.org
+Cc: shuah@kernel.org, Jason@zx2c4.com, liaoyu15@huawei.com,
+ broonie@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250126105932.63762-1-purvayeshi550@gmail.com>
+ <d85f9c94-249a-4847-a323-2f547fe60732@csgroup.eu>
+ <171e15dc-b48f-4592-8466-b220185bae78@gmail.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <171e15dc-b48f-4592-8466-b220185bae78@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Yuanchu,
 
-On Wed, 29 Jan 2025 18:02:26 -0800 Yuanchu Xie <yuanchu@google.com> wrote:
 
-> On Wed, Dec 11, 2024 at 11:53 AM SeongJae Park <sj@kernel.org> wrote:
-> >
-> > On Fri, 6 Dec 2024 11:57:55 -0800 Yuanchu Xie <yuanchu@google.com> wrote:
-> >
-> > > Thanks for the response Johannes. Some replies inline.
-> > >
-> > > On Tue, Nov 26, 2024 at 11:26\u202fPM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > > >
-> > > > On Tue, Nov 26, 2024 at 06:57:19PM -0800, Yuanchu Xie wrote:
-> > > > > This patch series provides workingset reporting of user pages in
-> > > > > lruvecs, of which coldness can be tracked by accessed bits and fd
-> > > > > references. However, the concept of workingset applies generically to
-> > > > > all types of memory, which could be kernel slab caches, discardable
-> > > > > userspace caches (databases), or CXL.mem. Therefore, data sources might
-> > > > > come from slab shrinkers, device drivers, or the userspace.
-> > > > > Another interesting idea might be hugepage workingset, so that we can
-> > > > > measure the proportion of hugepages backing cold memory. However, with
-> > > > > architectures like arm, there may be too many hugepage sizes leading to
-> > > > > a combinatorial explosion when exporting stats to the userspace.
-> > > > > Nonetheless, the kernel should provide a set of workingset interfaces
-> > > > > that is generic enough to accommodate the various use cases, and extensible
-> > > > > to potential future use cases.
-> > > >
-> > > > Doesn't DAMON already provide this information?
-> > > >
-> > > > CCing SJ.
-> > > Thanks for the CC. DAMON was really good at visualizing the memory
-> > > access frequencies last time I tried it out!
-> >
-> > Thank you for this kind acknowledgement, Yuanchu!
-> >
-> > > For server use cases,
-> > > DAMON would benefit from integrations with cgroups.  The key then would be a
-> > > standard interface for exporting a cgroup's working set to the user.
-> >
-> > I show two ways to make DAMON supports cgroups for now.  First way is making
-> > another DAMON operations set implementation for cgroups.  I shared a rough idea
-> > for this before, probably on kernel summit.  But I haven't had a chance to
-> > prioritize this so far.  Please let me know if you need more details.  The
-> > second way is extending DAMOS filter to provide more detailed statistics per
-> > DAMON-region, and adding another DAMOS action that does nothing but only
-> > accounting the detailed statistics.  Using the new DAMOS action, users will be
-> > able to know how much of specific DAMON-found regions are filtered out by the
-> > given filter.  Because we have DAMOS filter type for cgroups, we can know how
-> > much of workingset (or, warm memory) belongs to specific groups.  This can be
-> > applied to not only cgroups, but for any DAMOS filter types that exist (e.g.,
-> > anonymous page, young page).
-> >
-> > I believe the second way is simpler to implement while providing information
-> > that sufficient for most possible use cases.  I was anyway planning to do this.
+Le 29/01/2025 à 19:17, Purva Yeshi a écrit :
+> 
+> On 27/01/25 13:32, Christophe Leroy wrote:
+>>
+>>
+>> Le 26/01/2025 à 11:59, Purva Yeshi a écrit :
+>>> [Vous ne recevez pas souvent de courriers de purvayeshi550@gmail.com.
+>>> Découvrez pourquoi ceci est important à
+>>> https://aka.ms/LearnAboutSenderIdentification ]
+>>>
+>>> Fix the build failure caused by the undefined `CLONE_NEWTIME`.
+>>> Include the `linux/sched.h` header file where the function is defined to
+>>> ensure successful compilation of the selftests.
+>>
+>> This is supposed to be already fixed by commit 34d5b600172b ("selftests:
+>> vDSO: Explicitly include sched.h")
+>>
+>> Can you explain what is the exact problem still ? And why linux/sched.h ?
+> 
+> Yes, I noticed that sched.h is already included, but I still encountered
+> an "undeclared CLONE_NEWTIME" error during compilation.
 
-I implemented the feature for the second approach I mentioned above.  The
-initial version of the feature has recently merged[1] into the mainline as a
-part of 6.14-rc1 MM pull request.  DAMON user-space tool (damo) is also updated
-for baisc support of it.  I forgot updating that on this thread, sorry.
+Must be that your sched.h is not up-to-date I guess. On my side I have:
 
-> For a container orchestrator like kubernetes, the node agents need to
-> be able to gather the working set stats at a per-job level. Some jobs
-> can create sub-hierarchies as well, so it's important that we have
-> hierarchical stats.
+/usr/include/linux/sched.h:#define CLONE_NEWTIME	0x00000080	/* New time 
+namespace */
+/usr/include/bits/sched.h:#define CLONE_NEWTIME	0x00000080      /* New 
+time namespace */
 
-This makes sense to me.  And yes, I believe DAMOS filters for memcg could also
-be used for this use case, since we can install and use multiple DAMOS filters
-in combinations.
+And
 
-The documentation of the feature is not that good and there are many rooms to
-improve.  You might not be able to get what you want in a perfect way with the
-current implementation.  But we will continue improving it, and I believe we
-can make it faster if efforts are gathered.  Of course, I could be wrong, and
-whether to use it or not is up to each person :)
+/usr/include/sched.h:#include <bits/sched.h>
 
-Anyway, please feel free to ask me questions or any help about the feature if
-you want.
 
 > 
-> Do you think it's a good idea to integrate DAMON to provide some
-> aggregate stats in a memory controller file? With the DAMOS cgroup
-> filter, there can be some kind of interface that a DAMOS action or the
-> damo tool could call into. I feel that would be a straightforward and
-> integrated way to support cgroups.
+> Error I got:
+> CC       vdso_test_getrandom
+> vdso_test_getrandom.c: In function ‘kselftest’:
+> vdso_test_getrandom.c:257:29: error: ‘CLONE_NEWTIME’ undeclared (first
+> use in this function); did you mean ‘CLONE_NEWPID’?
+>    257 |         ksft_assert(unshare(CLONE_NEWTIME) == 0);
+>        |                             ^~~~~
+> vdso_test_getrandom.c:47:20: note: in definition of macro ‘ksft_assert’
+>     47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
+> failed: %s\n", #condition); } while (0)
+>        |                    ^~~~~
+> vdso_test_getrandom.c:257:29: note: each undeclared identifier is
+> reported only once for each function it appears in
+>    257 |         ksft_assert(unshare(CLONE_NEWTIME) == 0);
+>        |                             ^~~~~
+> vdso_test_getrandom.c:47:20: note: in definition of macro ‘ksft_assert’
+>     47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
+> failed: %s\n", #condition); } while (0)
+>        |                    ^~~~~
+> make[1]: * [../lib.mk:222:
+> /home/purva/linux/tools/testing/selftests/vDSO/vdso_test_getrandom] Error 1
+> make[1]: Leaving directory '/home/purva/linux/tools/testing/selftests/vDSO'
+> 
+> I found that CLONE_NEWTIME is declared in both sched.h and
+> linux/sched.h. Since sched.h was already included, it was surprising
+> that the error persisted. Adding linux/sched.h as a header resolved the
+> issue, and the selftests compiled successfully after that.
 
-DAMON basically exposes its internal information via DAMON sysfs, and DAMON
-user-space tool (damo) uses it.  In this case, per-memcg working set could also
-be retrieved in the way (directly from DAMON sysfs or indirectly from damo).
+Can you recheck that the sched.h that contains CLONE_NEWTIME is really 
+the one used by your compiler ?
 
-But, yes, I think we could make new and optimized ABIs for exposing the
-information to user-space in more efficient way depending on the use case, if
-needed.  DAMON modules such as DAMON_RECLAIM and DAMON_LRU_SORT provides their
-own ABIs that simplified and optimized for their usages.
+> 
+>>
+>> Did you properly build kernel headers before building selftests ?
+> 
+> Yes, I ensured that I properly built the kernel headers before building
+> the selftests by following the documentation provided here
 
-[1] https://git.kernel.org/torvalds/c/626ffabe67c2
 
-
-Thanks,
-SJ
-
-[...]
+At the end we should probably wonder if we want selftests to build with 
+old libc's that do not include latest defines. If we want to, then you 
+should probably replace sched.h by linux/sched.h . I'm not sure about 
+what to do really.
 
