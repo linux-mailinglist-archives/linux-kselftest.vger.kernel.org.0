@@ -1,168 +1,190 @@
-Return-Path: <linux-kselftest+bounces-25405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06545A226F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 00:36:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2520DA22799
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 03:02:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54C08164974
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2025 23:36:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D21287A2A6C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 02:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B351B424D;
-	Wed, 29 Jan 2025 23:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2362A70814;
+	Thu, 30 Jan 2025 02:02:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vS2tBcBb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eNm7qmWW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB891DDCD
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 23:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A442556E
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2025 02:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738193807; cv=none; b=IPglOk6jwDvEcSIGOfDwq6llYe1lY7AIGX8K19EqLOSNBu/rJwhNhc8QHv1oaIvJQ5UR4SfwnM8yYPwJLwQskH8qJGPPblsGAn3oFYBGJT4RwQWj6mxOkpIuu+GWIj4q259wLqOp/DOd1rmnz+EkK3RqJ6Kb+vsiQRfU0qUiFpY=
+	t=1738202566; cv=none; b=ID6dsyupBxoyS7WecUfwWZDAcFZcJXTiIzPDrC84CafANvx4PTDG2E4qUXiRr1qpnOHndOd9YAF68QqSwcQ1n/mAwuLsHUnhQzXlstQggg+HXhHfVheDZA75L0Zx37fxfibt8ScrISlRA+ZQJhN2JM/66rB9Aoh43J+PKgbwPKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738193807; c=relaxed/simple;
-	bh=UaeAALwAtuafje6+N38h7Tic7wOnzgVgeMqqjTyj6kM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dAErzbmwCG/Y0BeRQzw3bz34gK3mgZXpxoCDUoYvxe0xrCZAaGAKs5ekGr1+IM860YZr8fbCIvAbSapgT5BoBxHzQyBULpgtZ9Rhi8aSbIHF0dhWgY2BCVtyGDmodRPEdGOgrCrTe640fLcv1PwlxRS6UcxmOp/uFVRPnqSH4F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vS2tBcBb; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 29 Jan 2025 18:36:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738193796;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n5zomXTa+ERKjUowhQf21+AaHnjtqsE4cQH6Ryktt6g=;
-	b=vS2tBcBbVcTb74wxWwlQhUYz4URK43M4wJ53qy9gLo3UE0zEWolxtOWXwP4gssSbARdGE2
-	AVFpmRK0cY0ndgfDcb6JqqKiT5kSagkVHWvhX8fZHNLbKd7kizCy1SorQ5Beuy4ab4NYAW
-	1kNF4qgUqFkZCYYXzNDH5So4B3NaRcg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Andreas Gruenbacher <agruenba@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-bcachefs@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 11/21] bcachefs: improve the eytzinger0_find_le tests
-Message-ID: <dxumxyg5no5dc7ndslicm6v7dmkjkbrfr2wocsytin7jx6jdic@4utbjfwdcnqi>
-References: <20250128163859.1883260-1-agruenba@redhat.com>
- <20250128163859.1883260-12-agruenba@redhat.com>
- <ajfehauvtid4d7pqy7o3uhe6p7buohwe542wqddkwpdq62lr4g@6cgcfpzcyag3>
- <CAHc6FU6Yzk1Si37nRji-5uDZF9uaYo=G5tbtuS_5FiW6BDVTAg@mail.gmail.com>
- <rddasfmbw3ul2iezec7rgit2vxnv4p53uvoydck4b5jxuo44kq@7qlk5cru6w7r>
- <CAHc6FU7oZxP1cy6uihH=m9i=0z8PmCtozwQs2HgnqvbTDhAd_g@mail.gmail.com>
- <nxabgljkslxwr27wrzgjxao2nr3jh5leytj7f3pjir3t27uf5w@zcdmd4phur2m>
- <CAHc6FU7x8MbRLA9ELYiDM+Srz2FNzOzr28yztBA=CrPsj8X43A@mail.gmail.com>
+	s=arc-20240116; t=1738202566; c=relaxed/simple;
+	bh=n/OeGdeZMVIJFEVcwDCl7iqV15bGqS8grI/CpofheSg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EbfFuyPLWezG3KD0b7pjSGX+pC4oiOAl+/2xKRauQ4AL3E0sLsdqFm5kuV5IG54iZclhHP+jGsp2G/gqzE3XH3PpgCsTXiQfWTWTB8sJd1HEvj3cXSgqeq0qEOhSqzlFekAs7IQdlDcplRwvgvl76jghq/J1zCz6nCDX1CsGsc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eNm7qmWW; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2163affd184so41935ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 18:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738202563; x=1738807363; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zjUEKGcrUN8SEEUn3045QyzgbV2Muq4d8woD1luLXEo=;
+        b=eNm7qmWWTXmn2+VkKG3q0+oPZyixQ21wqQYBZqY8GDrGDlleD7XFm/8TN+Oqqx80M3
+         S/f2X5hbWwderjxXwXbgLU2FxNjEGOCKK6R5+ZYAKf6QSofDYVKgbnJx9uxNMUkR3K73
+         cYmqc0caKkQz7IEsQjspeOAoiGvc9yyjCu3qfNFpk5VxjpOSeLqacwEQfTT0IJI4Yo+x
+         mIcAQHk34O4iPu1XMdrTtUxSao2j4SrRcSUQUUHmoHQlaCRb+huHW8Y4rjzqWEvttiT1
+         rCU8YUuoC77sA+RF8BeNqZb7LBxC6eWuVrgJX3g9XVtVOFwZDJfZpbJ4HEH3x6g1MMkX
+         LXmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738202563; x=1738807363;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zjUEKGcrUN8SEEUn3045QyzgbV2Muq4d8woD1luLXEo=;
+        b=VZzdt1kj01lI0y2xVyRDpE3S7eW2RvywLvqZ9WJRcg7gtIVW7DAN6CtSUs0od33iAP
+         JyEsBo41hCUt83sd7yJsWTqV+jYW/Zul+TcWeW/QLEVglOFKtecUORU3Ku69W/DcQFjI
+         bGLcs00cfZZoHBrPNBXEoOkoIBrsFLmXxXAUTdvh2kSI/ca+LFSU7jEmSW1vmdA5+7z1
+         YS3fOE9dZd0gfYYnf0mYH4o77lYzNqd3AQl81MqPOuV4mJBlJpMk0KNeTRmau5+qeeqO
+         i0q1k0oO0hIKCbT5UeAFW/PDnywh7zUE8dXkwFrKy8BZ7mxJ3n+VxxmZchbTSzCjj38K
+         aVBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsAJeOcR8ArpdNr+A096SfRWJjCcChisZcW23PXpsJmAWT07UqUHScY33gr6G0rfwzCyZg+WbdMv7k43sLI74=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+GdmDR3Jkc8QQc1fmfQsoJzKKFBDGJ2VEK6V0Iwa2a0dnjxXc
+	rRF/UAkCHNZVrDK5kjcxwR/WaNNyGDKSsR9xS8APiG9HfoyvZHMbMFD/VYHR0A75AENkRkfXKoX
+	aVfxqSiruaIfGzicacqgFMKWAy6QS8bQV/H3i
+X-Gm-Gg: ASbGncvPeVRQACkDVgDwjEaZC/i5j00i0oa0iW3Te3yUIBoXbohqeACoDVXN8BYXnZQ
+	Pmkn7QXtuNoely0i3rcesi4TSbj0svh5+FdsCoCupEmomCGQ7YclvkUTsWQ8JqU56EjddZrhtPP
+	td02oQHtvyrkDCg5rxi/Yezuvbow==
+X-Google-Smtp-Source: AGHT+IFE4A3aWM8yz21uOrZOg4SChpOzryWR+ItPTzgeX3qzwaFRLrgsLB6RJr5+4uESj8JF/qvVZaYyrmavlvqmppA=
+X-Received: by 2002:a17:902:fc4b:b0:215:9ab0:402 with SMTP id
+ d9443c01a7336-21de24504dfmr1287495ad.18.1738202562597; Wed, 29 Jan 2025
+ 18:02:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHc6FU7x8MbRLA9ELYiDM+Srz2FNzOzr28yztBA=CrPsj8X43A@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <CAJj2-QFdP6DKVQJ4Tw6rdV+XtgDihe=UOnvm4cm-q61K0hq6CQ@mail.gmail.com>
+ <20241211195329.60224-1-sj@kernel.org>
+In-Reply-To: <20241211195329.60224-1-sj@kernel.org>
+From: Yuanchu Xie <yuanchu@google.com>
+Date: Wed, 29 Jan 2025 18:02:26 -0800
+X-Gm-Features: AWEUYZmCJuhnrHdMr4LNNVLS2bbqy0msDks-3N4T6wXtjurzCtTNwSUNxZIoRCo
+Message-ID: <CAJj2-QEaLTasfQgb=VFfnbOmkcXU3kw2VbsNummNEq0V3b9jdw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] mm: workingset reporting
+To: SeongJae Park <sj@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>, "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, 
+	Khalid Aziz <khalid.aziz@oracle.com>, Henry Huang <henry.hj@antgroup.com>, 
+	Yu Zhao <yuzhao@google.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Gregory Price <gregory.price@memverge.com>, Huang Ying <ying.huang@intel.com>, 
+	Lance Yang <ioworker0@gmail.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, Tejun Heo <tj@kernel.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, Daniel Watson <ozzloy@each.do>, cgroups@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 30, 2025 at 12:17:51AM +0100, Andreas Gruenbacher wrote:
-> On Wed, Jan 29, 2025 at 10:30 PM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> > On Wed, Jan 29, 2025 at 10:21:31PM +0100, Andreas Gruenbacher wrote:
-> > > On Wed, Jan 29, 2025 at 9:28 PM Kent Overstreet
-> > > <kent.overstreet@linux.dev> wrote:
-> > > > On Wed, Jan 29, 2025 at 07:21:49PM +0100, Andreas Gruenbacher wrote:
-> > > > > On Wed, Jan 29, 2025 at 7:04 PM Kent Overstreet
-> > > > > <kent.overstreet@linux.dev> wrote:
-> > > > > > On Tue, Jan 28, 2025 at 05:38:48PM +0100, Andreas Gruenbacher wrote:
-> > > > > > > Rename eytzinger0_find_test_val() to eytzinger0_find_test_le() and add a
-> > > > > > > new eytzinger0_find_test_val() wrapper that calls it.
-> > > > > > >
-> > > > > > > We have already established that the array is sorted in eytzinger order,
-> > > > > > > so we can use the eytzinger iterator functions and check the boundary
-> > > > > > > conditions to verify the result of eytzinger0_find_le().
-> > > > > > >
-> > > > > > > Only scan the entire array if we get an incorrect result.  When we need
-> > > > > > > to scan, use eytzinger0_for_each_prev() so that we'll stop at the
-> > > > > > > highest matching element in the array in case there are duplicates;
-> > > > > > > going through the array linearly wouldn't give us that.
-> > > > > >
-> > > > > > For test code, wouldn't it be simpler to iterate over the test array,
-> > > > > > testing with every element as a search value? There's enough corner
-> > > > > > cases in lookup that I think it'd be worthwhile (and probably add some
-> > > > > > extra test values, e.g. first/last elements +1/-1).
-> > > > >
-> > > > > If you expect to get the same index back, that won't work when there
-> > > > > are duplicates.
-> > > >
-> > > > No, but we wouldn't expect to get the same index back if we're testing
-> > > > every combination of elements (+0, -1, +1) x (le, ge, gt) - and it
-> > > > sounds like perhaps we should, if you've been finding bugs. Thoughts?
+On Wed, Dec 11, 2024 at 11:53=E2=80=AFAM SeongJae Park <sj@kernel.org> wrot=
+e:
+>
+> On Fri, 6 Dec 2024 11:57:55 -0800 Yuanchu Xie <yuanchu@google.com> wrote:
+>
+> > Thanks for the response Johannes. Some replies inline.
+> >
+> > On Tue, Nov 26, 2024 at 11:26\u202fPM Johannes Weiner <hannes@cmpxchg.o=
+rg> wrote:
 > > >
-> > > I don't really know what you're after here. Function
-> > > eytzinger0_find_test() already tests every combination of elements
-> > > (+0, -1, +1) x (le, ge, gt).
-> >
-> > Ok - it can be hard to tell looking at isolated patches vs. being able
-> > to fetch a git repo. Do you have it in a branch I can fetch from?
-> >
-> > > The full scans of the array in eytzinger0_find_test_{le,gt,ge}() are
-> > > not there to verify correctness; they're only there to produce
-> > > slightly nicer debug output. I'm perfectly happy with removing that if
-> > > you prefer.
-> >
-> > No, not at all
-> >
-> > > > I think the test code would have to do short linear searches from the
-> > > > test element, and then verify the search functions against that.
+> > > On Tue, Nov 26, 2024 at 06:57:19PM -0800, Yuanchu Xie wrote:
+> > > > This patch series provides workingset reporting of user pages in
+> > > > lruvecs, of which coldness can be tracked by accessed bits and fd
+> > > > references. However, the concept of workingset applies generically =
+to
+> > > > all types of memory, which could be kernel slab caches, discardable
+> > > > userspace caches (databases), or CXL.mem. Therefore, data sources m=
+ight
+> > > > come from slab shrinkers, device drivers, or the userspace.
+> > > > Another interesting idea might be hugepage workingset, so that we c=
+an
+> > > > measure the proportion of hugepages backing cold memory. However, w=
+ith
+> > > > architectures like arm, there may be too many hugepage sizes leadin=
+g to
+> > > > a combinatorial explosion when exporting stats to the userspace.
+> > > > Nonetheless, the kernel should provide a set of workingset interfac=
+es
+> > > > that is generic enough to accommodate the various use cases, and ex=
+tensible
+> > > > to potential future use cases.
 > > >
-> > > What for? We already know from the eytzinger0_for_each loop in
-> > > eytzinger0_find_test() that the array is in eytzinger sort order, and
-> > > we also know from eytzinger{0,1}_test() that the _prev() and _next()
-> > > functions are doing "the right thing". So the one thing left to verify
-> > > in eytzinger0_find_test_{le,gt,ge}() is that all the search functions
-> > > always return the boundary element. That's done by going to the next
-> > > element in search order and by verifying that it no longer fulfils the
-> > > search criterion.
+> > > Doesn't DAMON already provide this information?
 > > >
-> > > > Have you spotted any issues with searching over arrays with duplicate
-> > > > elements?
-> > >
-> > > Only that eytzinger0_find_ge() didn't always find the first matching
-> > > element in the array; see patches 17 and 18.
-> >
-> > Gotcha
-> >
-> > Ok, it sounds like everything I'm after is there - give me a git branch
-> > so I can read through it that way and I'll be happy to merge when you
-> > say it's ready
-> 
-> Sure, I've pushed the patches here:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/agruen/linux.git/log/?h=bcachefs
-> 
-> Note that you don't want to merge the following patch:
-> 
->   bcachefs: Run the eytzinger tests on modprobe
-> 
-> And this minor one should probably be changed to use __maybe_unused or
-> dropped; not sure which of the two options you prefer:
-> 
->   bcachefs: remove dead code in is_aligned
+> > > CCing SJ.
+> > Thanks for the CC. DAMON was really good at visualizing the memory
+> > access frequencies last time I tried it out!
+>
+> Thank you for this kind acknowledgement, Yuanchu!
+>
+> > For server use cases,
+> > DAMON would benefit from integrations with cgroups.  The key then would=
+ be a
+> > standard interface for exporting a cgroup's working set to the user.
+>
+> I show two ways to make DAMON supports cgroups for now.  First way is mak=
+ing
+> another DAMON operations set implementation for cgroups.  I shared a roug=
+h idea
+> for this before, probably on kernel summit.  But I haven't had a chance t=
+o
+> prioritize this so far.  Please let me know if you need more details.  Th=
+e
+> second way is extending DAMOS filter to provide more detailed statistics =
+per
+> DAMON-region, and adding another DAMOS action that does nothing but only
+> accounting the detailed statistics.  Using the new DAMOS action, users wi=
+ll be
+> able to know how much of specific DAMON-found regions are filtered out by=
+ the
+> given filter.  Because we have DAMOS filter type for cgroups, we can know=
+ how
+> much of workingset (or, warm memory) belongs to specific groups.  This ca=
+n be
+> applied to not only cgroups, but for any DAMOS filter types that exist (e=
+.g.,
+> anonymous page, young page).
+>
+> I believe the second way is simpler to implement while providing informat=
+ion
+> that sufficient for most possible use cases.  I was anyway planning to do=
+ this.
+For a container orchestrator like kubernetes, the node agents need to
+be able to gather the working set stats at a per-job level. Some jobs
+can create sub-hierarchies as well, so it's important that we have
+hierarchical stats.
 
-That code is a cut and paste of sort.c, so we should just drop it - no
-reason for those to diverge (and perhaps add a giant comment on where
-it's from).
+Do you think it's a good idea to integrate DAMON to provide some
+aggregate stats in a memory controller file? With the DAMOS cgroup
+filter, there can be some kind of interface that a DAMOS action or the
+damo tool could call into. I feel that would be a straightforward and
+integrated way to support cgroups.
 
-> I've only run the self tests. They seem to provide good coverage and I
-> don't expect any trouble, but some real filesystem testing would be
-> great.
-
-I've fetched it to my repo and added it to the CI:
-
-https://evilpiepirate.org/~testdashboard/ci?user=kmo&branch=eytzinger
+Yuanchu
 
