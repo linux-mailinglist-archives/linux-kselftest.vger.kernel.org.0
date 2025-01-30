@@ -1,98 +1,100 @@
-Return-Path: <linux-kselftest+bounces-25427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE183A230E5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 16:15:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 542F4A2310F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 16:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C94D188905B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 15:16:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D81DA7A28A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 15:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 045401E9B1C;
-	Thu, 30 Jan 2025 15:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A051E9B22;
+	Thu, 30 Jan 2025 15:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGme9gIv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rn7IU0Xl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2301F1AA78E;
-	Thu, 30 Jan 2025 15:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BD21E7668;
+	Thu, 30 Jan 2025 15:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738250151; cv=none; b=Z7EM16sFRsu9BjHN9yRQymSRM8P7haz1bBu9I3MdLiA0X+TD9Y/dAcPeiPSJ+zTXejcFjLLO54bPE7/uGYIDr3gw0FkChsOLKlfkkUxTB75SPZsuV6sdUqVZedHihEWke0ldDQ+d/mkizDF87mJxW9YQBZ51TZ7h0UxOoitEqIc=
+	t=1738251309; cv=none; b=oc6grvYLDf1ZDZhas3XQQa5SWNrvw9AXO4mXBM5cOnEVYPVBrH0kp8cUUYTwnLR548gpgxhNT2cROXyVxCXph/GuBGY4hwhoNuMviENrbLSJePk2oL8/1pZEtp5QS3f5GgMpkzzPb5scZj+3ij3Z3dMfqaJ2zDPwHJzGH6PsN08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738250151; c=relaxed/simple;
-	bh=+9mnqBrvd5SjuJajBafVNf2yQkwHvsne7SRWTmMI+hw=;
+	s=arc-20240116; t=1738251309; c=relaxed/simple;
+	bh=F0L0UFJMFu1dNFDx+bZr4INjxQJbiHCHvJicfSQSXmI=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=UK3zfBGsN/YKReGr0yrWHv69sPEAJMnzYGRlP95sgs+e6X8oHFYP7wWVRJzoLfDJ8q+BtvHlRADlle/6P/yQmPYJYlT+54ekRtG0VZbrlRp2QzvgQO1dgK9TUdVlLXEsJ99mwMHcP5cX3jpAP4SkXYTMKBjgj7NNoVGPY8r7dAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UGme9gIv; arc=none smtp.client-ip=209.85.222.177
+	 Mime-Version:Content-Type; b=h0HfsvNGCzVTr0xMRQcpcuI3qLN4FdBXBCxgiczGIqL9fXFlxM8Gloj5oqNRfdloBRG9g9WbkJTeN4vij5FnNmSZxEFu6I9N5r5Z8jIZFDP1uAlHCvhriMA55drGHdNf1nYI2euF761BJH/tHzQApy+0L9+WUvChWwVl/31wTRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rn7IU0Xl; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7b9bc648736so98868985a.1;
-        Thu, 30 Jan 2025 07:15:49 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7be8f28172dso44928785a.3;
+        Thu, 30 Jan 2025 07:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738250149; x=1738854949; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738251306; x=1738856106; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5m7wJzESF4WTMqUDkNEvtQp5Udo1Cl2C5LfjBRC6rV8=;
-        b=UGme9gIvYDy49IU5HzoOkFZbMoZgyb2OWXSIQqRsSgowA9XeIgEwIyYwv9lQZmvC22
-         evpRpV7pn0oypAXIDfcb4xARAEBjMyxe+ZOtyEasY8Xd6rScHr7NPAjunOXcjVenkgFM
-         vDPfMu+Q4zm7a0SMU2MIH4REoINEFaojcwBAA+4n21iOG9cIef7uJVLfSMcLiDxysbDy
-         R0OTm+VszY6toiC6Io/S07dExigNyrsY2FNjWjWAUb2ckEYF2qaUXIsmm+nMH3l2aEEC
-         OkdgwCLJWKrwNc5gkof7dTZataRlDF5KsWIk39p6w0UUynwVmBmsciIo4LVz2DUCzhiS
-         IR3Q==
+        bh=2Y7vjNKJSsbv0kKdvCQ/SyM2oijPldetOL5qOy4DLoo=;
+        b=Rn7IU0XlldET1plmoz/H23owQqbVjvkTtMkN6LWhQopnHgJBiTDlx7PZ0ras3J/8kj
+         G/KbDqd09MlnNo3wK+1MhMp/uAruKMVzTLonV+bINI1oydfoUwL6qlH50HCDpnOGyCIa
+         tYq9yzkjQa23xk+MaAorN2z1ZhP+5eVSlLNdfwCFCayTgoac1vsPVtc9laegOkQGZApw
+         MenxVewtjAGb0QWkht6Od245uzDCuww2gU7vZoMyKiZ5jaDJaHesFc3S0AK9JK3gg7aT
+         R480C50P95/uqwUKluU+nCgrp6ajojyiKWeUryK5oFO9d8ICf0bGuBsr5eHjq2iskkvl
+         tufg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738250149; x=1738854949;
+        d=1e100.net; s=20230601; t=1738251306; x=1738856106;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=5m7wJzESF4WTMqUDkNEvtQp5Udo1Cl2C5LfjBRC6rV8=;
-        b=NI2obTF9It7evv5vLBjoB9/P55ixR+A8aWGkDqx2DfkRz6xJ1ZNbSthti73Dmdzmdm
-         1PKroFMKOFKITZ7M9vzIOmi4zcG4xXDIfmK5aMsizSkUFCYSDZGDuRFtmzaGrEGRbNcg
-         yO1APDp6ZEJSH4E9tUyRTz668gZ+EV3DXdtxOd7e3dD3brC/RheuuEqzOK2Alg++TYvA
-         wnDYevWJnkqBw4lCNRUyITWWnCrweNWOwHDra2ce4EgkcuWss6CyESDvhc6big6lK8N7
-         dHdIIyXB4EBXsiOwqs34jTAgQ8rYNiDwutS/25MkYayrbl7hRjC5fWg1BJ6bit4+IWf4
-         7dqA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5xFNb9ICtWMXD87IihjEIvyVNWlj6TNJwPtITNSPcMDR6GkYWXTUiQN/Lf3RWAfbwk0Cq+P9k2ctiFu3h90I=@vger.kernel.org, AJvYcCVlvSEfmTzUm17IK4muv/fZyF9Jysyjy1GU1cdSb1Rh2Stai7KGTmPcKyalbxjdBoXBgirOHzFg@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeJMxSocbaDuYfbAgwfIW8JGJvx5iE8DmJDlBdnu9qe43FEMEz
-	udwr7chq3n2A6xz9v5k4pUlIw8IyKSaxGhemk+8Hwn0+gbi3+sIh
-X-Gm-Gg: ASbGncsCb4JzY1QWvXjz3KsX9Dg/XQhBRnfRFjv+10SX/m1bcFEKL9a9S02nKny3TiF
-	hPXTg3s0ClaBTnOzwze9PYfa2C1RBBfw6qzotiWPdNbkLOmAxqWIsFKeJBY3zdMG8jYA8EoS6Tn
-	wxoJKrxrIdn43R21eIixb77SMjTpRRixzFSNhzZzRPyTcBTNQze6Q5X9Enga1KVJdNwcPdshBcr
-	LDe8Pg1cYUFqYurYzlTgXimltUXAlBakZ5Wixrf+oSqfGJ1Wg4JCBUyZIrJeZk8OwtTCDIXMSt5
-	LPWYdtn1vPDFRJHWJhohl9PAtdqMs4F30V/E0+dpMJo0QUrwAND65iJrdFnE9NA=
-X-Google-Smtp-Source: AGHT+IFlaGqc/5Wc1nD3alBZCIgo92aRGcOJ4Y7WWAc1xi9ter4yrYqpffOUNfOdhZn5nnHJCbtkNg==
-X-Received: by 2002:a05:620a:439c:b0:7b6:c93a:7f2f with SMTP id af79cd13be357-7bffcce4a1amr1055568785a.14.1738250148864;
-        Thu, 30 Jan 2025 07:15:48 -0800 (PST)
+        bh=2Y7vjNKJSsbv0kKdvCQ/SyM2oijPldetOL5qOy4DLoo=;
+        b=G+M0gQhdBid9srGwvTVBupep5AqHp/X8feMSJ8fKXRfSaw7JuFina2Yb94iqGPbHb0
+         Q0g+Cpctnuhqn5ONlLEyCoYQcssClXFoNvH0CJYPll/5xeG3zjas6tSxGnhBJi8Zn69N
+         JQjElSUCp3OuufGivdJHLsrB2SW2oHe0xHF+x5BPdK1dYGPcIk6mJjLXsFjdcDZqCFsR
+         2jTkni1rdckoB8Ran5vBak2gK11saJsDXcAYpfcpZd+OhQ6temFBzSfiapfTK2oXDTz7
+         q4G7W078L6qAwrTk+7Mei0hYXuKDQRFjZug1GcCvfQUsVwUBhFN3NkuYB8dwrS6Yix/N
+         9Iug==
+X-Forwarded-Encrypted: i=1; AJvYcCVFzyVyOUWfVTJobDB9e4jaEttgY5ny0hB05AUipB3eOqYhDw2XTWq1VOPf0ytFbyh2fZ4nm0ye@vger.kernel.org, AJvYcCX1oDju0H9/nSG1eXI6Yqg0vXgUsFkOUjwCNnzlsrijVlvOVelXApQNScW/8L8tDFCBBZFhR14SIImaM8UIuqH9@vger.kernel.org, AJvYcCXF613tS+96AAg7caOh20aZSnoudS/cKTjn9xK0aHfTIdr/Y8yOvgAKxmW82+LnwfJT7NLtzA9/Dw9GW9w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxedXDl6/ck4UeDpuwMo4JJWelC2HwT9wVYyZgf6duuhqfd3g54
+	B4QMRcEGPF1w4Y/NP0ICrQyjKahsk7prcINuVftidxqbSPpWhIcC
+X-Gm-Gg: ASbGnctEbMZdWALfvwCANRYZm5KPs9r5pfzPQLw94ehzWgpmcOXCqb5S9RN9kZ7oCCD
+	DUmrvvbwPJQL52jlbh5U56bBI1u6VwPosdxH5ieIAbV9d9TEa/KrAFh9125EeEXsJlmeBPvbJ1v
+	VLs7SExno6Vzttk0742eMXYeXuATMZWpbKshHigxX55KXT7W4Lva7GTj20OFpT8n0dvIwFfaeoG
+	ImSMP/jLtOny4xXVgb0CdZFGzgsv2W+SvA+9ffYQbEdpo0sDaXk+ugUmSth3LL6rXwVCQ59QVns
+	F0uB9YizqE1sQcVM9snh5eSK4h1ZLnzNJrzXw+d11veAKkeloJZh1eK47HURSXk=
+X-Google-Smtp-Source: AGHT+IHSjgwd2Y2TrZu6CGi6QE0CtItO07MK1UrUGiqrJJpEqUAJ+4VQla2VPs79AMFsMXLQTlNKdQ==
+X-Received: by 2002:a05:620a:2a10:b0:7b6:deab:d485 with SMTP id af79cd13be357-7bffcce52c5mr911716685a.16.1738251306156;
+        Thu, 30 Jan 2025 07:35:06 -0800 (PST)
 Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-866941da05dsm271165241.21.2025.01.30.07.15.48
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e25495e831sm7274446d6.123.2025.01.30.07.35.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2025 07:15:48 -0800 (PST)
-Date: Thu, 30 Jan 2025 10:15:47 -0500
+        Thu, 30 Jan 2025 07:35:05 -0800 (PST)
+Date: Thu, 30 Jan 2025 10:35:05 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Anna Emese Nyiri <annaemesenyiri@gmail.com>, 
+To: Yan Zhai <yan@cloudflare.com>, 
  netdev@vger.kernel.org
-Cc: fejes@inf.elte.hu, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- willemb@google.com, 
- idosch@idosch.org, 
- davem@davemloft.net, 
- horms@kernel.org, 
- shuah@kernel.org, 
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ David Ahern <dsahern@kernel.org>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Josh Hunt <johunt@akamai.com>, 
+ Alexander Duyck <alexander.h.duyck@linux.intel.com>, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- Anna Emese Nyiri <annaemesenyiri@gmail.com>
-Message-ID: <679b97a391c2c_1c776329467@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250129143601.16035-2-annaemesenyiri@gmail.com>
-References: <20250129143601.16035-1-annaemesenyiri@gmail.com>
- <20250129143601.16035-2-annaemesenyiri@gmail.com>
-Subject: Re: [PATCH net-next 1/1] selftests: net: Add support for testing
- SO_RCVMARK and SO_RCVPRIORITY
+ kernel-team@cloudflare.com
+Message-ID: <679b9c293471b_1ca8082949b@willemb.c.googlers.com.notmuch>
+In-Reply-To: <Z5swit7ykNRbJFMS@debian.debian>
+References: <Z5swit7ykNRbJFMS@debian.debian>
+Subject: Re: [PATCH v2 net] udp: gso: do not drop small packets when PMTU
+ reduces
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -103,280 +105,184 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-Anna Emese Nyiri wrote:
-> Introduce tests to verify the correct functionality of the SO_RCVMARK and 
-> SO_RCVPRIORITY socket options.
+Yan Zhai wrote:
+> Commit 4094871db1d6 ("udp: only do GSO if # of segs > 1") avoided GSO
+> for small packets. But the kernel currently dismisses GSO requests only
+> after checking MTU/PMTU on gso_size. This means any packets, regardless
+> of their payload sizes, could be dropped when PMTU becomes smaller than
+> requested gso_size. We encountered this issue in production and it
+> caused a reliability problem that new QUIC connection cannot be
+> established before PMTU cache expired, while non GSO sockets still
+> worked fine at the same time.
 > 
-> Key changes include:
+> Ideally, do not check any GSO related constraints when payload size is
+> smaller than requested gso_size, and return EMSGSIZE instead of EINVAL
+> on MTU/PMTU check failure to be more specific on the error cause.
 > 
-> - so_rcv_listener.c: Implements a receiver application to test the correct 
-> behavior of the SO_RCVMARK and SO_RCVPRIORITY options.
-> - test_so_rcv.sh: Provides a shell script to automate testing for these options.
-> - Makefile: Integrates test_so_rcv.sh into the kernel selftests.
+> Fixes: 4094871db1d6 ("udp: only do GSO if # of segs > 1")
+> Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> --
+> v1->v2: add a missing MTU check when fall back to no GSO mode suggested
+> by Willem de Bruijn <willemdebruijn.kernel@gmail.com>; Fixed up commit
+> message to be more precise.
 > 
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Suggested-by: Ferenc Fejes <fejes@inf.elte.hu>
-> Signed-off-by: Anna Emese Nyiri <annaemesenyiri@gmail.com>
-
-No need for a cover letter to a single patch.
-
-net-next is closed.
-
-> 
+> v1: https://lore.kernel.org/all/Z5cgWh%2F6bRQm9vVU@debian.debian/
 > ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  tools/testing/selftests/net/so_rcv_listener.c | 147 ++++++++++++++++++
->  tools/testing/selftests/net/test_so_rcv.sh    |  56 +++++++
->  3 files changed, 204 insertions(+)
->  create mode 100644 tools/testing/selftests/net/so_rcv_listener.c
->  create mode 100755 tools/testing/selftests/net/test_so_rcv.sh
+>  net/ipv4/udp.c                       | 28 +++++++++++++++++++---------
+>  net/ipv6/udp.c                       | 28 +++++++++++++++++++---------
+>  tools/testing/selftests/net/udpgso.c | 14 ++++++++++++++
+>  3 files changed, 52 insertions(+), 18 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 73ee88d6b043..98f05473e672 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -33,6 +33,7 @@ TEST_PROGS += gro.sh
->  TEST_PROGS += gre_gso.sh
->  TEST_PROGS += cmsg_so_mark.sh
->  TEST_PROGS += cmsg_so_priority.sh
-> +TEST_PROGS += test_so_rcv.sh
->  TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
->  TEST_PROGS += netns-name.sh
->  TEST_PROGS += nl_netdev.py
-> diff --git a/tools/testing/selftests/net/so_rcv_listener.c b/tools/testing/selftests/net/so_rcv_listener.c
-> new file mode 100644
-> index 000000000000..53b09582a7e3
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/so_rcv_listener.c
-> @@ -0,0 +1,147 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <errno.h>
-> +#include <netdb.h>
-> +#include <stdbool.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <linux/types.h>
-> +#include <sys/socket.h>
-> +#include <netinet/in.h>
-> +#include <arpa/inet.h>
-> +
-> +#ifndef SO_RCVPRIORITY
-> +#define SO_RCVPRIORITY 82
-> +#endif
-> +
-> +struct options {
-> +	__u32 val;
-> +	int name;
-> +	int rcvname;
-> +	const char *host;
-> +	const char *service;
-> +} opt;
-> +
-> +static void __attribute__((noreturn)) usage(const char *bin)
-> +{
-> +	printf("Usage: %s [opts] <dst host> <dst port / service>\n", bin);
-> +	printf("Options:\n"
-> +		"\t\t-M val  Test SO_RCVMARK\n"
-> +		"\t\t-P val  Test SO_RCVPRIORITY\n"
-> +		"");
-> +	exit(EXIT_FAILURE);
-> +}
-> +
-> +static void parse_args(int argc, char *argv[])
-> +{
-> +	int o;
-> +
-> +	while ((o = getopt(argc, argv, "M:P:")) != -1) {
-> +		switch (o) {
-> +		case 'M':
-> +			opt.val = atoi(optarg);
-> +			opt.name = SO_MARK;
-> +			opt.rcvname = SO_RCVMARK;
-> +			break;
-> +		case 'P':
-> +			opt.val = atoi(optarg);
-> +			opt.name = SO_PRIORITY;
-> +			opt.rcvname = SO_RCVPRIORITY;
-> +			break;
-> +		default:
-> +			usage(argv[0]);
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (optind != argc - 2)
-> +		usage(argv[0]);
-> +
-> +	opt.host = argv[optind];
-> +	opt.service = argv[optind + 1];
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	int err = 0;
-> +	int recv_fd = -1;
-> +	int ret_value = 0;
-> +	__u32 recv_val;
-> +	struct cmsghdr *cmsg;
-> +	char cbuf[1024];
-
-Please use CMSG_SPACE and anticipate the minimum required space needed.
-
-> +	char recv_buf[1024];
-> +	struct iovec iov[1];
-> +	struct msghdr msg;
-> +	struct sockaddr_in recv_addr;
-
-In general code should not be IPv4 only. In this case the logic in the
-kernel is the same for IPv4 and IPv6, so I guess it's okay. If
-explicitly testing only one of the two, I would suggest IPv6.
-
-> +
-> +	parse_args(argc, argv);
-> +
-> +	recv_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-> +	if (recv_fd < 0) {
-> +		perror("Can't open recv socket");
-> +		ret_value = -errno;
-> +		goto cleanup;
-> +	}
-> +
-> +	err = setsockopt(recv_fd, SOL_SOCKET, opt.rcvname, &opt.val, sizeof(opt.val));
-> +	if (err < 0) {
-> +		perror("Recv setsockopt error");
-> +		ret_value = -errno;
-> +		goto cleanup;
-> +	}
-> +
-> +	memset(&recv_addr, 0, sizeof(recv_addr));
-> +	recv_addr.sin_family = AF_INET;
-> +	recv_addr.sin_port = htons(atoi(opt.service));
-> +
-> +	if (inet_pton(AF_INET, opt.host, &recv_addr.sin_addr) <= 0) {
-> +		perror("Invalid address");
-> +		ret_value = -errno;
-> +		goto cleanup;
-> +	}
-> +
-> +	err = bind(recv_fd, (struct sockaddr *)&recv_addr, sizeof(recv_addr));
-> +	if (err < 0) {
-> +		perror("Recv bind error");
-> +		ret_value = -errno;
-> +		goto cleanup;
-> +	}
-> +
-> +	iov[0].iov_base = recv_buf;
-> +	iov[0].iov_len = sizeof(recv_buf);
-> +
-> +	memset(&msg, 0, sizeof(msg));
-> +	msg.msg_iov = iov;
-> +	msg.msg_iovlen = 1;
-> +	msg.msg_control = cbuf;
-> +	msg.msg_controllen = sizeof(cbuf);
-> +
-> +	err = recvmsg(recv_fd, &msg, 0);
-> +	if (err < 0) {
-> +		perror("Message receive error");
-> +		ret_value = -errno;
-> +		goto cleanup;
-> +	}
-> +
-> +	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-> +		if (cmsg->cmsg_level == SOL_SOCKET && cmsg->cmsg_type == opt.name) {
-> +			recv_val = *(__u32 *)CMSG_DATA(cmsg);
-> +			printf("Received value: %u\n", recv_val);
-> +
-> +			if (recv_val != opt.val) {
-> +				fprintf(stderr, "Error: expected value: %u, got: %u\n",
-> +					opt.val, recv_val);
-> +				ret_value = -EINVAL;
-> +				goto cleanup;
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index c472c9a57cf6..0b5010238d05 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -1141,9 +1141,20 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4,
+>  		const int hlen = skb_network_header_len(skb) +
+>  				 sizeof(struct udphdr);
+>  
+> +		if (datalen <= cork->gso_size) {
+> +			/*
+> +			 * check MTU again: it's skipped previously when
+> +			 * gso_size != 0
+> +			 */
+> +			if (hlen + datalen > cork->fragsize) {
+> +				kfree_skb(skb);
+> +				return -EMSGSIZE;
 > +			}
+> +			goto no_gso;
+
+This is almost the same as the test below.
+
+How about just
+
+    if (hlen + min(cork->gso_size, datalen) > cork->fragsize)
+
+And don't bypass the subsequent checks with a goto, or modify the
+rest of the code.
+
 > +		}
-> +	}
-> +
-> +cleanup:
-> +	if (recv_fd >= 0)
-> +		close(recv_fd);
-> +
-> +	return ret_value;
-> +}
-> diff --git a/tools/testing/selftests/net/test_so_rcv.sh b/tools/testing/selftests/net/test_so_rcv.sh
-> new file mode 100755
-> index 000000000000..12d37f9ab905
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/test_so_rcv.sh
-> @@ -0,0 +1,56 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +HOST=127.0.0.1
-> +PORT=1234
-> +TOTAL_TESTS=0
-> +FAILED_TESTS=0
-> +
-> +declare -A TESTS=(
-> +	["SO_RCVPRIORITY"]="-P 2"
-> +	["SO_RCVMARK"]="-M 3"
-> +)
-> +
-> +check_result() {
-> +	((TOTAL_TESTS++))
-> +	if [ "$1" -ne 0 ]; then
-> +		((FAILED_TESTS++))
-> +	fi
-> +}
-> +
-> +for test_name in "${!TESTS[@]}"; do
-> +	echo "Running $test_name test"
-> +	arg=${TESTS[$test_name]}
-> +
-> +	./so_rcv_listener $arg $HOST $PORT &
-> +	LISTENER_PID=$!
-> +
-> +	if ./cmsg_sender $arg $HOST $PORT; then
-> +		echo "Sender succeeded for $test_name"
+>  		if (hlen + cork->gso_size > cork->fragsize) {
+>  			kfree_skb(skb);
+> -			return -EINVAL;
+> +			return -EMSGSIZE;
+>  		}
+>  		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
+>  			kfree_skb(skb);
+> @@ -1158,17 +1169,16 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4,
+>  			return -EIO;
+>  		}
+>  
+> -		if (datalen > cork->gso_size) {
+> -			skb_shinfo(skb)->gso_size = cork->gso_size;
+> -			skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+> -			skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
+> -								 cork->gso_size);
+> +		skb_shinfo(skb)->gso_size = cork->gso_size;
+> +		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+> +		skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
+> +							 cork->gso_size);
+>  
+> -			/* Don't checksum the payload, skb will get segmented */
+> -			goto csum_partial;
+> -		}
+> +		/* Don't checksum the payload, skb will get segmented */
+> +		goto csum_partial;
+>  	}
+>  
+> +no_gso:
+>  	if (is_udplite)  				 /*     UDP-Lite      */
+>  		csum = udplite_csum(skb);
+>  
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index 6671daa67f4f..d97befa7f80d 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -1389,9 +1389,20 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
+>  		const int hlen = skb_network_header_len(skb) +
+>  				 sizeof(struct udphdr);
+>  
+> +		if (datalen <= cork->gso_size) {
+> +			/*
+> +			 * check MTU again: it's skipped previously when
+> +			 * gso_size != 0
+> +			 */
+> +			if (hlen + datalen > cork->fragsize) {
+> +				kfree_skb(skb);
+> +				return -EMSGSIZE;
+> +			}
+> +			goto no_gso;
+> +		}
+>  		if (hlen + cork->gso_size > cork->fragsize) {
+>  			kfree_skb(skb);
+> -			return -EINVAL;
+> +			return -EMSGSIZE;
+>  		}
+>  		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
+>  			kfree_skb(skb);
+> @@ -1406,17 +1417,16 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
+>  			return -EIO;
+>  		}
+>  
+> -		if (datalen > cork->gso_size) {
+> -			skb_shinfo(skb)->gso_size = cork->gso_size;
+> -			skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+> -			skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
+> -								 cork->gso_size);
+> +		skb_shinfo(skb)->gso_size = cork->gso_size;
+> +		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+> +		skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
+> +							 cork->gso_size);
+>  
+> -			/* Don't checksum the payload, skb will get segmented */
+> -			goto csum_partial;
+> -		}
+> +		/* Don't checksum the payload, skb will get segmented */
+> +		goto csum_partial;
+>  	}
+>  
+> +no_gso:
+>  	if (is_udplite)
+>  		csum = udplite_csum(skb);
+>  	else if (udp_get_no_check6_tx(sk)) {   /* UDP csum disabled */
+> diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
+> index 3f2fca02fec5..fb73f1c331fb 100644
+> --- a/tools/testing/selftests/net/udpgso.c
+> +++ b/tools/testing/selftests/net/udpgso.c
+> @@ -102,6 +102,13 @@ struct testcase testcases_v4[] = {
+>  		.gso_len = CONST_MSS_V4,
+>  		.r_num_mss = 1,
+>  	},
+> +	{
+> +		/* datalen <= MSS < gso_len: will fall back to no GSO */
+> +		.tlen = CONST_MSS_V4,
+> +		.gso_len = CONST_MSS_V4 + 1,
+> +		.r_num_mss = 0,
+> +		.r_len_last = CONST_MSS_V4,
+> +	},
 
-nit: such verbose comments are not very informative.
+Please also add a test where datalen > MSS < gso_len (with .tfail = true).
 
-> +	else
-> +		echo "Sender failed for $test_name"
-> +		kill "$LISTENER_PID" 2>/dev/null
-> +		wait "$LISTENER_PID"
-> +		check_result 1
-> +		continue
-> +	fi
-> +
-> +	wait "$LISTENER_PID"
-> +	LISTENER_EXIT_CODE=$?
-> +
-> +	if [ "$LISTENER_EXIT_CODE" -eq 0 ]; then
-> +		echo "Rcv test OK for $test_name"
-> +		check_result 0
-> +	else
-> +		echo "Rcv test FAILED for $test_name"
-> +		check_result 1
-> +	fi
-> +done
-> +
-> +if [ "$FAILED_TESTS" -ne 0 ]; then
-> +	echo "FAIL - $FAILED_TESTS/$TOTAL_TESTS tests failed"
-> +	exit 1
-
-please use kselftest exit codes: KSFT_FAIL
-
-> +else
-> +	echo "OK - All $TOTAL_TESTS tests passed"
-> +	exit 0
-
-KSFT_PASS
-
-> +fi
+>  	{
+>  		/* send a single MSS + 1B */
+>  		.tlen = CONST_MSS_V4 + 1,
+> @@ -205,6 +212,13 @@ struct testcase testcases_v6[] = {
+>  		.gso_len = CONST_MSS_V6,
+>  		.r_num_mss = 1,
+>  	},
+> +	{
+> +		/* datalen <= MSS < gso_len: will fall back to no GSO */
+> +		.tlen = CONST_MSS_V6,
+> +		.gso_len = CONST_MSS_V6 + 1,
+> +		.r_num_mss = 0,
+> +		.r_len_last = CONST_MSS_V6,
+> +	},
+>  	{
+>  		/* send a single MSS + 1B */
+>  		.tlen = CONST_MSS_V6 + 1,
 > -- 
-> 2.43.0
+> 2.30.2
+> 
 > 
 
 
