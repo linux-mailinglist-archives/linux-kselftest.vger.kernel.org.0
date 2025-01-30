@@ -1,214 +1,135 @@
-Return-Path: <linux-kselftest+bounces-25423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4528A22CCB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 13:06:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DEDFA22DBC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 14:27:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 287561889446
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 12:06:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2E377A18AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 13:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4231C07E2;
-	Thu, 30 Jan 2025 12:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 945351E3DFA;
+	Thu, 30 Jan 2025 13:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAR3DGWc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ByHuLa8H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A411AF0DC;
-	Thu, 30 Jan 2025 12:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA80819;
+	Thu, 30 Jan 2025 13:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738238771; cv=none; b=HE7kcZlnobmQ24xPN1pyNbCgXU4peoLW8kduo8c/Sys2H4vlMyo3m+qak93hxphLtQzsaxxl3HquADp1/Z1MSJwTxrpqNRyLQnJjJ1VAWidNkzh7diR/HNf98EjUukyVXujPWGfzzZjp41qbf8GXmpT0qc9l9FxRHH8hQR8hqpI=
+	t=1738243660; cv=none; b=PoSaI4+ctVpCSL80UkwA5fOL6i/+ze0D0TcvhIlv5GkZgkJNzqCsqNmxtlLP7l6hXKh1XXCGGXLbER6d49icVsYrZZtHikLwbLzZHb0iTsazmX4x/TMsmCtXDCgQgr76gKWnsC00jp2/HV1rSeXufcsQt29GMyMptrZIZKbBP40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738238771; c=relaxed/simple;
-	bh=xopmZEADxLu17v8s1oec48v9swghvqcukEWRE5i/ArQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rg89ZkYP4ZL6PDEwKg+5i1XdCvDfpA7fRzP22ETPFI93fGKu/ebaaCHbwu8WqIs59oSj9N9n3StZqmifvtg1OdMT1PPu1b3XYK2JDWssBWUdyoi0vULxoqI4Gyeuo23Cjs8Sdxxs5MIITL1sj7cABUvtPe4brdxw68d1CTvWy6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAR3DGWc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33C4C4CED2;
-	Thu, 30 Jan 2025 12:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738238770;
-	bh=xopmZEADxLu17v8s1oec48v9swghvqcukEWRE5i/ArQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mAR3DGWcYda1w4z0OEHonKPUaUDc0dWMf/3YYEXtK61VMN/NDdh1hVPVJF54ImIb1
-	 fBhqehjqpuNIDlQOBHjtXaWdqlW0quBcdIUcAEdRGZCN+wqL/b+bJOJQWbIyRJhirr
-	 GyWrVb0JimepHfBcJTgTUuKieX/YqXI/8fP8hY8jsthxtlOqQZr8hp/xDISGE0owm0
-	 gYGE+ahAYxDoTtKItvF6X3BQEmd4knWu/UJl/DUXleKBH/xvYVzkkLdZlTIYkyik6Z
-	 aMwzkD6yE42iXUkpvOEHiEA2T8cB/kSyu05k5dHLcL/Mwp2WUiez14Oo3o2OIxLFtT
-	 b3mdKDD/0Nz0Q==
-Message-ID: <3b5af48e-4155-4b98-b67b-b75d9fb6285e@kernel.org>
-Date: Thu, 30 Jan 2025 13:05:54 +0100
+	s=arc-20240116; t=1738243660; c=relaxed/simple;
+	bh=nCvbnjCsBbJ5FsxX4YRrfQaHw0Tx+zG6GrSTdxNaiQs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cEQIL58eWx3Tprb+49EqnSRxnEVPSh/MK0JTJQV3gKAE0AlMuynnf/AJauWyO3IIMSomJOw5/O4OhqeT4zhAwTKYyl7asG/iXIBvyCWgXFusDAj0vRGEFHZ55SpBzxeabxXhkyUc18eeLr0Pn3VPEJ3rJI4HXX0pvGwHU3yEVmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ByHuLa8H; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-854a68f5afcso6423039f.0;
+        Thu, 30 Jan 2025 05:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738243658; x=1738848458; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xq1XFa9etbTxIeq8MzY5AubOpQwzI5sUCBw+tZsW4jk=;
+        b=ByHuLa8HyUqYCsB2Qmn4qx7OL+eC/42NIfkUySGfnL+yJRWPKMizGozoGuJlCAb6w4
+         11HEFYr7VFQzdKwGsoafzlKidKsQkfan86ImO2Do9IZwlVzMwcyW4OJs5aCIoXP39KNc
+         d9fTf++9YJFzHpvfIc1V8jbJVr/dkVpW57k5OwiIvklAxmpWsH3RTVipLJkfgDvnyC3l
+         ayL5h37vhaA90QoEJUoFC8F4rw7oCY278E91CkJ61/vxX+vLikkF5eyss9A7eYr+bJyr
+         rHs9lZccxSarN8Hic0pKgNrAXWjxPn4YjEc3PUTzvouMQjX2uYKlk18XpuSMf9GGkIvb
+         PfRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738243658; x=1738848458;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xq1XFa9etbTxIeq8MzY5AubOpQwzI5sUCBw+tZsW4jk=;
+        b=gVzcabKguyHPcLVvuIaz2yQ5chuubLRoCGkuqYNoRAzFwJSMWP+kIPDKeNl5KNJJAt
+         HwUcHUg+bKi+rpJHJtp5YDmxBx8DUJNlL6q1Jb9WFxNmrnyBFYeGWLRNkN85vjj60rUP
+         C3LZ/1v5nq6BpGlNBfIssjRX7hj4+udPIYkjJ5nM26lAmrdywHsobjg+BtbVTbBaKctR
+         PlaTY2PN3zSwBscThMN/Wtyz25dnBVw9abNcukkqND+G3buceFFQZ9LCckwk7PQulQ1I
+         b2/S6FRJS+g+YSD9SAJ3lMc1m745gCtitAWafqD5XdF6hxDGb1tnyzll0Eq+CMPDduYM
+         yADg==
+X-Forwarded-Encrypted: i=1; AJvYcCVPwgj2WgsgqttWe1I1bGCdDFh4tpy1IHTmt3KmKo4DNASFhpsp7NeUq6J9TSne/Dp4qQcVS6oSubq6wfQ8+fE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwESL40nXrVV9cNJw39fmtOjUqz5IzgE7zv7vrNS0MafKgWkx6I
+	6L9lV4I0kG6hWEJsSrgg+h3e2TOdv/pS6BF5L6rAJ4hUy/M+OtYkkjZv6I/ynEg7lNAV6RbjPB9
+	JppMgihGi7f3gwLiiX2wuu5TDBwr1S25pcRU=
+X-Gm-Gg: ASbGncuVZUg/tUgk9JXEkw9D7ElLcM33ZliDpsd3QwqaDgO58a6UkmsHdk1Y4I1HTwN
+	57GIgxecCyw6jDKZM63mFZp2fc/pjxqXutBgWVIKBT2FvXit1CQI8YJYVgrXyatCI3jhsq+pWVv
+	fjID7E21iqnQ3yM/AJTIyZDR20lCc9Aqo=
+X-Google-Smtp-Source: AGHT+IFtKCmoV6sMWqKrVvA4GF5oxUKXvP72zYNd2p82qdKpGXowwtCWgdSJvQNxoJt2/FhjEZqlzRUgPC5kKws6Ueg=
+X-Received: by 2002:a05:6602:7505:b0:83d:ff89:218c with SMTP id
+ ca18e2360f4ac-85427e24f96mr716842039f.7.1738243658005; Thu, 30 Jan 2025
+ 05:27:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next/net v2 4/7] bpf: Add mptcp_subflow bpf_iter
-Content-Language: en-GB
-To: Martin KaFai Lau <martin.lau@linux.dev>, Geliang Tang <geliang@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
- <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-4-ae244d3cdbbc@kernel.org>
- <fdf0ddbe-e007-4a5f-bbdf-9a144e8fbe35@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <fdf0ddbe-e007-4a5f-bbdf-9a144e8fbe35@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250129143601.16035-1-annaemesenyiri@gmail.com>
+ <20250129143601.16035-2-annaemesenyiri@gmail.com> <20250129120526.7ba0958b@kernel.org>
+In-Reply-To: <20250129120526.7ba0958b@kernel.org>
+From: Anna Nyiri <annaemesenyiri@gmail.com>
+Date: Thu, 30 Jan 2025 14:27:27 +0100
+X-Gm-Features: AWEUYZmgRNw3ve5dDOJt5tNThmBvK8l20BuTSdvPp9iayb-Gv6grYrkeZ3f5EnQ
+Message-ID: <CAKm6_Rvp+KotAyYrr6w0GCQT1ji5J+R5qX6X8B8ZZQoOBwveDQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/1] selftests: net: Add support for testing
+ SO_RCVMARK and SO_RCVPRIORITY
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, fejes@inf.elte.hu, edumazet@google.com, 
+	pabeni@redhat.com, willemb@google.com, idosch@idosch.org, davem@davemloft.net, 
+	horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Martin,
+Jakub Kicinski <kuba@kernel.org> ezt =C3=ADrta (id=C5=91pont: 2025. jan. 29=
+., Sze, 21:05):
+>
+> On Wed, 29 Jan 2025 15:36:01 +0100 Anna Emese Nyiri wrote:
+> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selft=
+ests/net/Makefile
+> > index 73ee88d6b043..98f05473e672 100644
+> > --- a/tools/testing/selftests/net/Makefile
+> > +++ b/tools/testing/selftests/net/Makefile
+> > @@ -33,6 +33,7 @@ TEST_PROGS +=3D gro.sh
+> >  TEST_PROGS +=3D gre_gso.sh
+> >  TEST_PROGS +=3D cmsg_so_mark.sh
+> >  TEST_PROGS +=3D cmsg_so_priority.sh
+> > +TEST_PROGS +=3D test_so_rcv.sh
+>
+> You need to add the C part to the TEST_GEN_PROGS, otherwise it won't
+> get built. We're seeing:
+>
+> ./test_so_rcv.sh: line 25: ./so_rcv_listener: No such file or directory
+>
+> in the CI.
+>
+> > +     memset(&recv_addr, 0, sizeof(recv_addr));
+> > +     recv_addr.sin_family =3D AF_INET;
+> > +     recv_addr.sin_port =3D htons(atoi(opt.service));
+> > +
+> > +     if (inet_pton(AF_INET, opt.host, &recv_addr.sin_addr) <=3D 0) {
+> > +             perror("Invalid address");
+> > +             ret_value =3D -errno;
+> > +             goto cleanup;
+> > +     }
+>
+> Any reason not to use getaddrinfo() ?
 
-Thank you for your review!
+I chose inet_pton() over getaddrinfo() because getaddrinfo() depends
+on libnss, which can cause warnings and linking issues in static
+builds. In contrast, inet_pton() is fully part of libc, so it seemed
+like a safer choice.
 
-Sorry for the delay here, Geliang started to work on a new version, but
-it might take a bit of time as he is currently off for a few days.
-
-On 24/01/2025 01:47, Martin KaFai Lau wrote:
-> On 12/19/24 7:46 AM, Matthieu Baerts (NGI0) wrote:
->> From: Geliang Tang <tanggeliang@kylinos.cn>
->>
->> It's necessary to traverse all subflows on the conn_list of an MPTCP
->> socket and then call kfunc to modify the fields of each subflow. In
->> kernel space, mptcp_for_each_subflow() helper is used for this:
->>
->>     mptcp_for_each_subflow(msk, subflow)
->>         kfunc(subflow);
->>
->> But in the MPTCP BPF program, this has not yet been implemented. As
->> Martin suggested recently, this conn_list walking + modify-by-kfunc
->> usage fits the bpf_iter use case.
->>
->> So this patch adds a new bpf_iter type named "mptcp_subflow" to do
->> this and implements its helpers bpf_iter_mptcp_subflow_new()/_next()/
->> _destroy(). And register these bpf_iter mptcp_subflow into mptcp
->> common kfunc set. Then bpf_for_each() for mptcp_subflow can be used
->> in BPF program like this:
->>
->>     bpf_for_each(mptcp_subflow, subflow, msk)
->>         kfunc(subflow);
-
-(...)
-
->> diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
->> index
->> c5bfd84c16c43230d9d8e1fd8ff781a767e647b5..e39f0e4fb683c1aa31ee075281daee218dac5878 100644
->> --- a/net/mptcp/bpf.c
->> +++ b/net/mptcp/bpf.c
-
-(...)
-
->> @@ -47,10 +56,54 @@ bpf_mptcp_subflow_ctx(const struct sock *sk)
->>       return NULL;
->>   }
->>   +__bpf_kfunc static int
->> +bpf_iter_mptcp_subflow_new(struct bpf_iter_mptcp_subflow *it,
->> +               struct mptcp_sock *msk)
->> +{
->> +    struct bpf_iter_mptcp_subflow_kern *kit = (void *)it;
->> +    struct sock *sk = (struct sock *)msk;
->> +
->> +    BUILD_BUG_ON(sizeof(struct bpf_iter_mptcp_subflow_kern) >
->> +             sizeof(struct bpf_iter_mptcp_subflow));
->> +    BUILD_BUG_ON(__alignof__(struct bpf_iter_mptcp_subflow_kern) !=
->> +             __alignof__(struct bpf_iter_mptcp_subflow));
->> +
->> +    kit->msk = msk;
->> +    if (!msk)
-> 
-> NULL check is not needed. verifier should have rejected it for
-> KF_TRUSTED_ARGS.
-> 
->> +        return -EINVAL;
->> +
->> +    if (!sock_owned_by_user_nocheck(sk) &&
->> +        !spin_is_locked(&sk->sk_lock.slock))
-> 
-> I could have missed something. If it is to catch bug, should it be
-> sock_owned_by_me() that has the lockdep splat? For the cg get/setsockopt
-> hook here, the lock should have already been held earlier in the kernel.
-
-Good point. Because in this series, the kfunc is currently restricted to
-CG [gs]etsockopt hooks, we should use msk_owned_by_me(msk) here.
-
-> This set is only showing the cg sockopt bpf prog but missing the major
-> struct_ops piece. It is hard to comment. I assumed the lock situation is
-> the same for the struct_ops where the lock will be held before calling
-> the struct_ops prog?
-
-I understand it is hard to comment on that point. In the 'struct_ops' we
-are designing, the lock will indeed be held before calling the stuct_ops
-program. So we will just need to make sure this assumption is correct
-for all callbacks of our struct_ops.
-Also, if I understood correctly, it is possible to restrict a kfunc to
-some specific struct_ops, e.g. not to call this kfunc for the TCP CA
-struct_ops. So these checks should indeed not be needed, but I will
-double-check that with Geliang.
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+> Otherwise LGTM, thanks for following up!
+> --
+> pw-bot: cr
 
