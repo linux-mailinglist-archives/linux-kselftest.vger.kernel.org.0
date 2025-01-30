@@ -1,121 +1,110 @@
-Return-Path: <linux-kselftest+bounces-25414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CDCA22BA7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 11:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56D64A22BAC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 11:35:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9612B3A8629
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 10:34:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65FD83A859F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 10:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C24D1B4257;
-	Thu, 30 Jan 2025 10:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B28C1BBBDD;
+	Thu, 30 Jan 2025 10:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IdAvCTb0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RNGCKl4S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4F7185955
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2025 10:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49759185955;
+	Thu, 30 Jan 2025 10:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738233253; cv=none; b=kYNK1cgvHtbmLnR/wjOvpjOxXVBkDBpemA2C1pUtlVfbXv7gRgUWeNUgG04XqaflQT3ig8gG0o9kbh/XnO6jUeSu+nScgpHOiaklZgPwuJMtA+1Thsgt11SWbUh75JJLeuwvSJyTySnmxLAzFS3GOcEDzLRhX49JbSM/z/NTjlQ=
+	t=1738233351; cv=none; b=AGuNKJx9hNEQvxR/4VRw94NQoPBzlMZ7MfL2+EPWLbL7nYFne7Yc0rIsg7t/WUwKYp216yusR1ib7UTZEs2uFGyiQVlXyFuPJU2Ri9PlRZHjCSLa1HSc6auG95Oz8RR/F95uKnD989rrc92eHt9xJorQrFs5pTYVK54ZJx0kWtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738233253; c=relaxed/simple;
-	bh=lS1bEFcOQl3Z3qsCefy2wu140cxq5T+XxiPuugJCoCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NagjGmH+KQBUGPFkpmVNZEFzSycfU4oFCQ/IbLcx8kEomT2fbumN4OA1h2iGa1LdvZh3X05UCYuhCZMdkHXsdCRXorWhKb/or/fB5e669uv2oFwbiUYT69D1vh5TBkbugFWfLL3Vb131yUaYkBWbkJqSnr24wHDiND7og38dL4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IdAvCTb0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738233249;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IKqQ05QYoJSNu9wELFiytzHLcerxmQ7zrdUjCASu/9o=;
-	b=IdAvCTb05TgfHQf9mKPEh8jIAb/Qz+zsbeA8qjAbJcK+VXKHmWhmz7EUe4FMdz6NpoH5F+
-	FoNf2AGEFhzGr8rqzM0vsN2wUEy1BFTcCWo0tOidpDGMUlTyvlt1yJCXny6Ayg5YaxnDGJ
-	ifMVzYCh4I+CMtFKzKVOnLpGVPL56tE=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-627-hIc23d79NsOFirCQdD4RJA-1; Thu,
- 30 Jan 2025 05:34:05 -0500
-X-MC-Unique: hIc23d79NsOFirCQdD4RJA-1
-X-Mimecast-MFC-AGG-ID: hIc23d79NsOFirCQdD4RJA
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6438B19560BA;
-	Thu, 30 Jan 2025 10:34:04 +0000 (UTC)
-Received: from pasta.fast.eng.rdu2.dc.redhat.com (unknown [10.45.224.234])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7F23D1956060;
-	Thu, 30 Jan 2025 10:34:02 +0000 (UTC)
-From: Andreas Gruenbacher <agruenba@redhat.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Andreas Gruenbacher <agruenba@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-bcachefs@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 11/21] bcachefs: improve the eytzinger0_find_le tests
-Date: Thu, 30 Jan 2025 11:33:58 +0100
-Message-ID: <20250130103400.1899121-1-agruenba@redhat.com>
-In-Reply-To: <dxumxyg5no5dc7ndslicm6v7dmkjkbrfr2wocsytin7jx6jdic@4utbjfwdcnqi>
-References: <dxumxyg5no5dc7ndslicm6v7dmkjkbrfr2wocsytin7jx6jdic@4utbjfwdcnqi>
- <20250128163859.1883260-1-agruenba@redhat.com>
- <20250128163859.1883260-12-agruenba@redhat.com>
- <ajfehauvtid4d7pqy7o3uhe6p7buohwe542wqddkwpdq62lr4g@6cgcfpzcyag3>
- <CAHc6FU6Yzk1Si37nRji-5uDZF9uaYo=G5tbtuS_5FiW6BDVTAg@mail.gmail.com>
- <rddasfmbw3ul2iezec7rgit2vxnv4p53uvoydck4b5jxuo44kq@7qlk5cru6w7r>
- <CAHc6FU7oZxP1cy6uihH=m9i=0z8PmCtozwQs2HgnqvbTDhAd_g@mail.gmail.com>
- <nxabgljkslxwr27wrzgjxao2nr3jh5leytj7f3pjir3t27uf5w@zcdmd4phur2m>
- <CAHc6FU7x8MbRLA9ELYiDM+Srz2FNzOzr28yztBA=CrPsj8X43A@mail.gmail.com>
+	s=arc-20240116; t=1738233351; c=relaxed/simple;
+	bh=8JZcVpcGWcqfEFuX82FHVX+6WV6k8ISLrVwBtu4Esoo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d3ILwKm0eNaJbMUgLxE5iZDi12ekqbIM78+WEEcRr0umgka8EH9N6GZfy9JATlcJDNbcVTaaM9SBFHfgKXiFayKHT6mX8Xni+eSYUwMjcNODuqHTZMPk2HhNPfVEV2eIllODFaNzg4y4ByINBMeHrd0O0mQBwhuPuyhwX7HmLLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RNGCKl4S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F456C4CED2;
+	Thu, 30 Jan 2025 10:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738233350;
+	bh=8JZcVpcGWcqfEFuX82FHVX+6WV6k8ISLrVwBtu4Esoo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RNGCKl4Sjf3cTNpyQiwFUw2Q3xlNGEDvKTlicGmu2Ukyk/MM4owz71fGRPSFLcAPj
+	 PsfbxL+RHQpcU6tkfw6qJdOMuRO2XjjmP9ysl/vjbIedHUxox9K94sWLnFuvDYebPp
+	 UJYA8EafEC6WqJwfUhqfkONziANCiVG23iQB+oFS8PsR+ZK0B4dfPovqfhkf06fsOK
+	 gU2FIQypX8wdGbVUa8Sh3NFN7ICgLrQ8CWUWcjAYq+zn1qvywja5oTZBE0yzIZtJC4
+	 PmhXCtsiyBRI9ZINKXMLR9DCdXeNs1i2Is9cU0/Gjkn0gX/IbSkNI/WVqOE+Fsy3ZL
+	 89+xFPl/bprrQ==
+Date: Thu, 30 Jan 2025 10:35:44 +0000
+From: Simon Horman <horms@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	rdunlap@infradead.org, kernel-team@meta.com
+Subject: Re: [PATCH RFC net-next v3 1/8] netconsole: consolidate send buffers
+ into netconsole_target struct
+Message-ID: <20250130103544.GE113107@kernel.org>
+References: <20250124-netcon_cpu-v3-0-12a0d286ba1d@debian.org>
+ <20250124-netcon_cpu-v3-1-12a0d286ba1d@debian.org>
+ <20250128161128.GB277827@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250128161128.GB277827@kernel.org>
 
-On Thu, Jan 30, 2025 at 12:36=E2=80=AFAM Kent Overstreet <kent.overstreet@l=
-inux.dev> wrote:=0D
-> I've fetched it to my repo and added it to the CI:=0D
->=0D
-> https://evilpiepirate.org/~testdashboard/ci?user=3Dkmo&branch=3Deytzinger=
-=0D
-=0D
-Ah, the following went wrong in "bcachefs: convert eytzinger0_find to be 1-=
-based":=0D
-=0D
-diff --git a/fs/bcachefs/eytzinger.h b/fs/bcachefs/eytzinger.h=0D
-index d3e8b9edf335..3afb346b0738 100644=0D
---- a/fs/bcachefs/eytzinger.h=0D
-+++ b/fs/bcachefs/eytzinger.h=0D
-@@ -308,7 +308,7 @@ static inline int eytzinger0_find_ge(void *base, size_t=
- nr, size_t size,=0D
- #define eytzinger0_find(base, nr, size, _cmp, search)			\=0D
- ({									\=0D
- 	size_t _size		=3D (size);				\=0D
--	void *_base1		=3D (base) - _size;			\=0D
-+	void *_base1		=3D (void *)(base) - _size;		\=0D
- 	const void *_search	=3D (search);				\=0D
- 	size_t _nr		=3D (nr);					\=0D
- 	size_t _i		=3D 1;					\=0D
-=0D
-The eytzinger0_find() macro is still a bit of a mess.=0D
-=0D
-I've updated https://git.kernel.org/pub/scm/linux/kernel/git/agruen/linux.g=
-it/log/?h=3Dbcachefs.=0D
-=0D
-Thanks,=0D
-Andreas=0D
+On Tue, Jan 28, 2025 at 04:11:28PM +0000, Simon Horman wrote:
+> On Fri, Jan 24, 2025 at 07:16:40AM -0800, Breno Leitao wrote:
+> > Move the static buffers from send_msg_no_fragmentation() and
+> > send_msg_fragmented() into the netconsole_target structure. This
+> > simplifies the code by:
+> > - Eliminating redundant static buffers
+> > - Centralizing buffer management in the target structure
+> > - Reducing memory usage by 1KB (one buffer instead of two)
+> > 
+> > The buffer in netconsole_target is protected by target_list_lock,
+> > maintaining the same synchronization semantics as the original code.
+> > 
+> > Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> >  drivers/net/netconsole.c | 29 +++++++++++++++--------------
+> >  1 file changed, 15 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> > index 86ab4a42769a49eebe5dd6f01dafafc6c86ec54f..1a78704681184673f5c1ba8ae665e46751384293 100644
+> > --- a/drivers/net/netconsole.c
+> > +++ b/drivers/net/netconsole.c
+> > @@ -137,6 +137,8 @@ struct netconsole_target {
+> >  	bool			extended;
+> >  	bool			release;
+> >  	struct netpoll		np;
+> > +	/* protected by target_list_lock */
+> > +	char			buf[MAX_PRINT_CHUNK];
+> 
+> nit: buf should also be added to the Kernel doc for this structure.
+> 
+> ...
+
+Hi Breno,
+
+With that fixed feel free to add:
+
+Reviewed-by: Simon Horman <horms@kernel.org>
 
 
