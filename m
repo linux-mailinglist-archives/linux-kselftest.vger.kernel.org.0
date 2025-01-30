@@ -1,153 +1,262 @@
-Return-Path: <linux-kselftest+bounces-25409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D426AA22916
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 08:20:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E737EA22952
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 08:56:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44840163299
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 07:20:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F48A1886E38
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 07:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52DC19DF60;
-	Thu, 30 Jan 2025 07:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DBF1A4F2F;
+	Thu, 30 Jan 2025 07:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="QxjwJ781"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057754A07;
-	Thu, 30 Jan 2025 07:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4FA198E84
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2025 07:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738221605; cv=none; b=BaEhwvnTQ9e1/jz1FelMmOuhiYG8hwyJsOY0/iGGG4iSzJ3zZZSRy4XxFX6HgTUxLYDfh/9wQxXetSXIn7zU9pCUKwXnMPPtv5K+y5dI8fbFukQ9kuYk2mxBQAzrbQ4sC4KeHwe/n7rsZYR9vX23klEth7UXbcmqz0QbzQI29Wo=
+	t=1738223762; cv=none; b=lVDAheBCLSPuEtzmpxJ+RcWOusoHZKUvUczwxetQ2npTN5kg3k8Vi4KmhfS330thrTesc6lXOlVb+weotebCI10Mw7yZBjmKtsixC+RCYh2hQqAsipebgMjx1sPpKz/Uw7/Ohais0lz6wjh9QpsJH4dzvXsroUhbI+/z4zV6lb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738221605; c=relaxed/simple;
-	bh=/dz+TL6hOUizao4JeKuqffB+abbHnPib5T4ImH55e4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VoZl78If3spA8de4r1IklC1JGTW9de2NBAvgAYQ7jWxY2XrwwnzzgRxmQV5hI0futKkzVQFWfDPwVvI1yuSq0BUIf4Bl8YoMsUmBOP96OsJAZVmAelKQJGzNm/py08d9n3eFPl4iLEsYVT7BTgUw3ba1uFtHzH2eOgtq5Y9RtEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Yk92K2Vgqz9sRr;
-	Thu, 30 Jan 2025 08:02:33 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mLkRQEvxfhng; Thu, 30 Jan 2025 08:02:33 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Yk92K1byjz9sRk;
-	Thu, 30 Jan 2025 08:02:33 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 24D5E8B774;
-	Thu, 30 Jan 2025 08:02:33 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 9ANhva5jAowX; Thu, 30 Jan 2025 08:02:33 +0100 (CET)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id A10E68B763;
-	Thu, 30 Jan 2025 08:02:32 +0100 (CET)
-Message-ID: <3150e796-9249-4ac1-a91a-7efb7ec4de16@csgroup.eu>
-Date: Thu, 30 Jan 2025 08:02:32 +0100
+	s=arc-20240116; t=1738223762; c=relaxed/simple;
+	bh=SahFX2KFPBl9owsYWpi3lFqwrzYFVVWPeBWDKwYl7dY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=joUfjcPOyv22cxjz6LuuH5K1D6L535v1b8F+JiULDZSN3tyXeDndmh2/jI3HORuwQzivVdR/UI83eV7NBBH9h084sRzFv+aDRcfitjYrJ7brJOzSnxbj6S1HX6UQ9srLF4vLmAXqJt8s1NM0k9WNxNkc3xaXsFRLsrdm6OtAqTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=QxjwJ781; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6d8fd060e27so3626296d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2025 23:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1738223759; x=1738828559; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1G1O7K0l1YuMoDNXIHAxVpiayqI4GueBHWvDpZUuxvg=;
+        b=QxjwJ781O7A3L4H5brsS5E19B6LR+OGFPU1AjkleyJxCxO0nTRr3ztnssO5/76IHfU
+         RFy9Sn6BiCU2AP6zSELLLtL7WSCqmqX9T72PxUu89kv7AoipTPkBBs99kLfD36AsvVPV
+         LiFboZlrooUhS/hrCcO9ocK88ZSHCMkwm1w+eXGQ8gveHRaHgsZ/Z3OuecFLurcWLGeC
+         lOGfRV4AfEmjGhr4wB08HxsWzN0LTtdl5xgB9oj/NJpeEc02xYgeKp/9eevazld5PjKd
+         26C+eFfpMbZX44e6vwBl6w0rccqdsPvVaDrFT3gKy63+xjLc02lxbtQJ+h/aCQZLBJkc
+         Vc3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738223759; x=1738828559;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1G1O7K0l1YuMoDNXIHAxVpiayqI4GueBHWvDpZUuxvg=;
+        b=Qj+aJEVyiQW5PISjH3zkHNGgDfL3NWGoECi74+GapBBPE1KJfa1kyLp0qtOvCkZuLx
+         L4Rfxo4DC8cVJFr9t9vhFUZ7Xo61lrEjX7zrT/Lr5jO8vWw97EawTOMlBp5u+SaQizUj
+         CO+GR7zPLDCNiinTWFqfScQT1mQcVGsmvN0FueFL5svHITTaNcf57vO+KiwTUOSyQ1r/
+         uBeSs0g5Xoxz9CmekRF1oW8AZhdDTFkZD6RPfZhtJ6GkXkJ+2rkK5K4QIK5kFH4tZbGI
+         g9UPkvN9Q1tJDgXnFysnaCUImcELfdQz9oxsmZ0RWSrouDxWHOvtrV9SZ0cD8+zw/oSd
+         jQag==
+X-Forwarded-Encrypted: i=1; AJvYcCWC98zZQ3wegRE3/vl6I78bRbaqQE2x8TmwUQbxlmxoR2EcnJzI+LbXEV2aWd++bBlgHgLtAHKvK6lD4GvMEdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAiydlz83kHui/pTZLKiBeuz2hfUFMYT7qTwo9/eOxrG5xOI3q
+	cWiCmdQzpzw5152W+VE4KA+jqimhU3NV4SigvttrdAh0FMg0nxXgqntuaS0Rk6o=
+X-Gm-Gg: ASbGnctauE3reUmQN9uBPPkV3RAI8DFz9eNdv+mfCVV0ZFtACtV3Fhn1jLQjgOK9Fxe
+	dDhhAJq7dYYLctjuvybyIOXrVhFkoHRq6kdfA8V5depf+/YA27tzlZcx5+NRpVp/Vps+8x1guS4
+	MLFe7s1pY7aSXSlN9C/Iz6lmlH59a695l3giJdlE2XAUtCUTHG/1cQNfMlETnvPxWF3GIqeG86v
+	8jgK35aMWpHCebyPtlGaLxV7JiBfgnX7Ul2EmvWDafxRty6rtwmjyM0NvCATCnHbFJOWIfGS3i5
+	2kI=
+X-Google-Smtp-Source: AGHT+IH3PTHfqvB2vqnMrZMRHGh6PBHBVrM91TtJJ09yAJbOCgQlAe8MytjqcZnxZHDIm0iRGYObCg==
+X-Received: by 2002:a05:6214:19eb:b0:6d4:1e43:f3a5 with SMTP id 6a1803df08f44-6e243c15524mr94797886d6.13.1738223758452;
+        Wed, 29 Jan 2025 23:55:58 -0800 (PST)
+Received: from debian.debian ([2a09:bac5:79dd:25a5::3c0:2])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e254819f92sm3656896d6.48.2025.01.29.23.55.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2025 23:55:57 -0800 (PST)
+Date: Wed, 29 Jan 2025 23:55:54 -0800
+From: Yan Zhai <yan@cloudflare.com>
+To: netdev@vger.kernel.org
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Josh Hunt <johunt@akamai.com>,
+	Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
+Subject: [PATCH v2 net] udp: gso: do not drop small packets when PMTU reduces
+Message-ID: <Z5swit7ykNRbJFMS@debian.debian>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/vDSO: Fix undefined CLONE_NEWTIME by including
-To: Purva Yeshi <purvayeshi550@gmail.com>, skhan@linuxfoundation.org
-Cc: shuah@kernel.org, Jason@zx2c4.com, liaoyu15@huawei.com,
- broonie@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250126105932.63762-1-purvayeshi550@gmail.com>
- <d85f9c94-249a-4847-a323-2f547fe60732@csgroup.eu>
- <171e15dc-b48f-4592-8466-b220185bae78@gmail.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <171e15dc-b48f-4592-8466-b220185bae78@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Commit 4094871db1d6 ("udp: only do GSO if # of segs > 1") avoided GSO
+for small packets. But the kernel currently dismisses GSO requests only
+after checking MTU/PMTU on gso_size. This means any packets, regardless
+of their payload sizes, could be dropped when PMTU becomes smaller than
+requested gso_size. We encountered this issue in production and it
+caused a reliability problem that new QUIC connection cannot be
+established before PMTU cache expired, while non GSO sockets still
+worked fine at the same time.
+
+Ideally, do not check any GSO related constraints when payload size is
+smaller than requested gso_size, and return EMSGSIZE instead of EINVAL
+on MTU/PMTU check failure to be more specific on the error cause.
+
+Fixes: 4094871db1d6 ("udp: only do GSO if # of segs > 1")
+Signed-off-by: Yan Zhai <yan@cloudflare.com>
+--
+v1->v2: add a missing MTU check when fall back to no GSO mode suggested
+by Willem de Bruijn <willemdebruijn.kernel@gmail.com>; Fixed up commit
+message to be more precise.
+
+v1: https://lore.kernel.org/all/Z5cgWh%2F6bRQm9vVU@debian.debian/
+---
+ net/ipv4/udp.c                       | 28 +++++++++++++++++++---------
+ net/ipv6/udp.c                       | 28 +++++++++++++++++++---------
+ tools/testing/selftests/net/udpgso.c | 14 ++++++++++++++
+ 3 files changed, 52 insertions(+), 18 deletions(-)
+
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index c472c9a57cf6..0b5010238d05 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1141,9 +1141,20 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4,
+ 		const int hlen = skb_network_header_len(skb) +
+ 				 sizeof(struct udphdr);
+ 
++		if (datalen <= cork->gso_size) {
++			/*
++			 * check MTU again: it's skipped previously when
++			 * gso_size != 0
++			 */
++			if (hlen + datalen > cork->fragsize) {
++				kfree_skb(skb);
++				return -EMSGSIZE;
++			}
++			goto no_gso;
++		}
+ 		if (hlen + cork->gso_size > cork->fragsize) {
+ 			kfree_skb(skb);
+-			return -EINVAL;
++			return -EMSGSIZE;
+ 		}
+ 		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
+ 			kfree_skb(skb);
+@@ -1158,17 +1169,16 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4,
+ 			return -EIO;
+ 		}
+ 
+-		if (datalen > cork->gso_size) {
+-			skb_shinfo(skb)->gso_size = cork->gso_size;
+-			skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+-			skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
+-								 cork->gso_size);
++		skb_shinfo(skb)->gso_size = cork->gso_size;
++		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
++		skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
++							 cork->gso_size);
+ 
+-			/* Don't checksum the payload, skb will get segmented */
+-			goto csum_partial;
+-		}
++		/* Don't checksum the payload, skb will get segmented */
++		goto csum_partial;
+ 	}
+ 
++no_gso:
+ 	if (is_udplite)  				 /*     UDP-Lite      */
+ 		csum = udplite_csum(skb);
+ 
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 6671daa67f4f..d97befa7f80d 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1389,9 +1389,20 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
+ 		const int hlen = skb_network_header_len(skb) +
+ 				 sizeof(struct udphdr);
+ 
++		if (datalen <= cork->gso_size) {
++			/*
++			 * check MTU again: it's skipped previously when
++			 * gso_size != 0
++			 */
++			if (hlen + datalen > cork->fragsize) {
++				kfree_skb(skb);
++				return -EMSGSIZE;
++			}
++			goto no_gso;
++		}
+ 		if (hlen + cork->gso_size > cork->fragsize) {
+ 			kfree_skb(skb);
+-			return -EINVAL;
++			return -EMSGSIZE;
+ 		}
+ 		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
+ 			kfree_skb(skb);
+@@ -1406,17 +1417,16 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
+ 			return -EIO;
+ 		}
+ 
+-		if (datalen > cork->gso_size) {
+-			skb_shinfo(skb)->gso_size = cork->gso_size;
+-			skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+-			skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
+-								 cork->gso_size);
++		skb_shinfo(skb)->gso_size = cork->gso_size;
++		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
++		skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
++							 cork->gso_size);
+ 
+-			/* Don't checksum the payload, skb will get segmented */
+-			goto csum_partial;
+-		}
++		/* Don't checksum the payload, skb will get segmented */
++		goto csum_partial;
+ 	}
+ 
++no_gso:
+ 	if (is_udplite)
+ 		csum = udplite_csum(skb);
+ 	else if (udp_get_no_check6_tx(sk)) {   /* UDP csum disabled */
+diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
+index 3f2fca02fec5..fb73f1c331fb 100644
+--- a/tools/testing/selftests/net/udpgso.c
++++ b/tools/testing/selftests/net/udpgso.c
+@@ -102,6 +102,13 @@ struct testcase testcases_v4[] = {
+ 		.gso_len = CONST_MSS_V4,
+ 		.r_num_mss = 1,
+ 	},
++	{
++		/* datalen <= MSS < gso_len: will fall back to no GSO */
++		.tlen = CONST_MSS_V4,
++		.gso_len = CONST_MSS_V4 + 1,
++		.r_num_mss = 0,
++		.r_len_last = CONST_MSS_V4,
++	},
+ 	{
+ 		/* send a single MSS + 1B */
+ 		.tlen = CONST_MSS_V4 + 1,
+@@ -205,6 +212,13 @@ struct testcase testcases_v6[] = {
+ 		.gso_len = CONST_MSS_V6,
+ 		.r_num_mss = 1,
+ 	},
++	{
++		/* datalen <= MSS < gso_len: will fall back to no GSO */
++		.tlen = CONST_MSS_V6,
++		.gso_len = CONST_MSS_V6 + 1,
++		.r_num_mss = 0,
++		.r_len_last = CONST_MSS_V6,
++	},
+ 	{
+ 		/* send a single MSS + 1B */
+ 		.tlen = CONST_MSS_V6 + 1,
+-- 
+2.30.2
 
 
-
-Le 29/01/2025 à 19:17, Purva Yeshi a écrit :
-> 
-> On 27/01/25 13:32, Christophe Leroy wrote:
->>
->>
->> Le 26/01/2025 à 11:59, Purva Yeshi a écrit :
->>> [Vous ne recevez pas souvent de courriers de purvayeshi550@gmail.com.
->>> Découvrez pourquoi ceci est important à
->>> https://aka.ms/LearnAboutSenderIdentification ]
->>>
->>> Fix the build failure caused by the undefined `CLONE_NEWTIME`.
->>> Include the `linux/sched.h` header file where the function is defined to
->>> ensure successful compilation of the selftests.
->>
->> This is supposed to be already fixed by commit 34d5b600172b ("selftests:
->> vDSO: Explicitly include sched.h")
->>
->> Can you explain what is the exact problem still ? And why linux/sched.h ?
-> 
-> Yes, I noticed that sched.h is already included, but I still encountered
-> an "undeclared CLONE_NEWTIME" error during compilation.
-
-Must be that your sched.h is not up-to-date I guess. On my side I have:
-
-/usr/include/linux/sched.h:#define CLONE_NEWTIME	0x00000080	/* New time 
-namespace */
-/usr/include/bits/sched.h:#define CLONE_NEWTIME	0x00000080      /* New 
-time namespace */
-
-And
-
-/usr/include/sched.h:#include <bits/sched.h>
-
-
-> 
-> Error I got:
-> CC       vdso_test_getrandom
-> vdso_test_getrandom.c: In function ‘kselftest’:
-> vdso_test_getrandom.c:257:29: error: ‘CLONE_NEWTIME’ undeclared (first
-> use in this function); did you mean ‘CLONE_NEWPID’?
->    257 |         ksft_assert(unshare(CLONE_NEWTIME) == 0);
->        |                             ^~~~~
-> vdso_test_getrandom.c:47:20: note: in definition of macro ‘ksft_assert’
->     47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
-> failed: %s\n", #condition); } while (0)
->        |                    ^~~~~
-> vdso_test_getrandom.c:257:29: note: each undeclared identifier is
-> reported only once for each function it appears in
->    257 |         ksft_assert(unshare(CLONE_NEWTIME) == 0);
->        |                             ^~~~~
-> vdso_test_getrandom.c:47:20: note: in definition of macro ‘ksft_assert’
->     47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
-> failed: %s\n", #condition); } while (0)
->        |                    ^~~~~
-> make[1]: * [../lib.mk:222:
-> /home/purva/linux/tools/testing/selftests/vDSO/vdso_test_getrandom] Error 1
-> make[1]: Leaving directory '/home/purva/linux/tools/testing/selftests/vDSO'
-> 
-> I found that CLONE_NEWTIME is declared in both sched.h and
-> linux/sched.h. Since sched.h was already included, it was surprising
-> that the error persisted. Adding linux/sched.h as a header resolved the
-> issue, and the selftests compiled successfully after that.
-
-Can you recheck that the sched.h that contains CLONE_NEWTIME is really 
-the one used by your compiler ?
-
-> 
->>
->> Did you properly build kernel headers before building selftests ?
-> 
-> Yes, I ensured that I properly built the kernel headers before building
-> the selftests by following the documentation provided here
-
-
-At the end we should probably wonder if we want selftests to build with 
-old libc's that do not include latest defines. If we want to, then you 
-should probably replace sched.h by linux/sched.h . I'm not sure about 
-what to do really.
 
