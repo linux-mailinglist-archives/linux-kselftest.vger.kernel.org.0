@@ -1,125 +1,144 @@
-Return-Path: <linux-kselftest+bounces-25425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15674A22EBB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 15:10:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61611A230D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 16:06:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 997E4163ACF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 14:10:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D25211888C9F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 15:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBA1D1E7C2B;
-	Thu, 30 Jan 2025 14:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F22A1E9B19;
+	Thu, 30 Jan 2025 15:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FC/e0Ajn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hsu1fFn8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9279C1E573F;
-	Thu, 30 Jan 2025 14:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D611E2853;
+	Thu, 30 Jan 2025 15:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738246212; cv=none; b=R0fYEl2fUQ7QM6jtoNZiy6klnI5FvE28TDl0kHxzqJz3lP6KUbEdVF2yxGsNFVUisPcX0SOeCD0SiS5yS6BvAKiQq/wP4zsgLdB+lkBeAWYQSXw7lCG5eKyxNXfc0RHOzWtm/w4xPthMoCV8DTvf6PvsXBNQ5XOOJ1rlNs2tgng=
+	t=1738249607; cv=none; b=nOg/nJ+v2fH2RpiM2ZWkJqjdT9oblScuUCAlcX+It3HAKfssdxaUf8czVqv0rqX+gf9dOsrZEpETtSYlgYmlydFYp7F7LVzD+lNj0sCzywaR4vC84si9cBql8ys8W1lurYP7/Oa6D1ClzH5MCKqeooNzpYVPBx40PIv7lLamPsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738246212; c=relaxed/simple;
-	bh=kXMtPvKQuZHL9xcm4hq3kkVSDGMX5Os3i3OJFM8PSIo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=uGfJyE28+Az1QJTRVbgpmt53kKGeCbPNZpS5m/oB7OtNb112ul0oiSzADb3eCC8Hkvd9vjKKHkXhCoBAUBK49B5SXhswHwiZ8f7FD2g7AokR44FNxgqglmdkBgr/4UyJlfIDGI82SEcNdbh0h8STIoUZNS/u5MtoAijLglB80MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FC/e0Ajn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C027C4CED2;
-	Thu, 30 Jan 2025 14:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738246212;
-	bh=kXMtPvKQuZHL9xcm4hq3kkVSDGMX5Os3i3OJFM8PSIo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FC/e0Ajnb6yigUYE+68RWjMmE2hdLowFH7ZjlxuOc49+h3pHnNVQIv92HciGk/veu
-	 l1jqLQaZr2jUbt8dQGfDtinIahleHwrW28sIiDWSodyN11u5+4iFEsHoLTP3r4pbWk
-	 Db3LcSsWuclPXhWwqvS+dlaEHsD8NPXMYUYitlRZJtnFFFh7Er53eerdaLXx9jRc3R
-	 HNgtRa+x/qFi+HCxmQHcJn/jH1KwsWku+nTy3G41+eSbMYj5ydbcK51rCieBsL7Uzs
-	 EphNuo4965I9C7qr/gTH7RETVZsRASw04DpP6gu2lNstqCuy5XmXqCkncugX4n91pY
-	 j0A3fEdKN4KZA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7136E380AA66;
-	Thu, 30 Jan 2025 14:10:39 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1738249607; c=relaxed/simple;
+	bh=lPHx7WaZsUhvB70yZzHrPTeASZHFEDazFq/DwQM9k+c=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=jSq7IG/CK4IOPTTnVVdAplj/XvltAaDR7UzBIbxeKhmr66irR/EHXpnhEPCz6sZJChq9+4OOiuM0yRUL0kKZZ06AjP9G9thUHucvS0buqvAgowsE+WID1ez7wYyqa7j5yYHUyFSx9pAjaKhHOGQG8F2qKj9z1f/V2fRc5agCYkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hsu1fFn8; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7be44a90468so108970685a.3;
+        Thu, 30 Jan 2025 07:06:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738249604; x=1738854404; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JI5cvnHUtQaistWIrGNna3l1hMRw3Olm90CfuK7nl+8=;
+        b=hsu1fFn8DWVYPCnfe5qorKaaPUsG9mbCqv0nVkUKd/QDYH0cumfWj6JxwJca6h3+0n
+         XoOaaKWM76h7GjCuClOId43ka3zerqZHon99OKKpwp0DBxTsywPh+XPlzHTMe6Ao7eaG
+         bHuoFZ0M7fxqmHrF7dbXYkL+F/ABYSAxtdOHLL/Q7srGZe49+DjNQLpqKvQcLX88O4n0
+         xRlmUPfktHbpVQ4dlTCxaOHDFoTBIcvQgurx3sBadvB3taF9SZmKcsEkNruiv3oYV78E
+         iNewFwwgOndNxiRNNcoOPN1fxT5ADGuU4NwEZK+Lerg8LLxRStvOFqHmjXofKjJKGjze
+         KyMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738249604; x=1738854404;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JI5cvnHUtQaistWIrGNna3l1hMRw3Olm90CfuK7nl+8=;
+        b=Yp/WYeyOozKKryVUP8BB4MUJPY/ba3RU21eZTFnZqxoWw/mbpuEJcuYmCqjgKumOKS
+         ZioZeirCfy/yolUZur2DgRuhwbYoliXkEyQVFRslU5z+3vmNjp6kcs9LbMgtzpgLcTno
+         1N/aGkl/vjmg4FZQWxnlISghFiB0EcLi4+xnWIKEiL8h4jeDujcytppUl3PN7s1lgmY0
+         wJJfkrjm5qQRXmsX+tD65315cNJHaTSAgSP/NRQ430VmzyU4NEOd9HoUZQje0EJ3Pugy
+         uP4IClnD1H/TSekK2XLWtw8bY/bzwYhfRVb/aZvpi2K6I2+dRAAU8/CCX83jvs+l+7uL
+         xfaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU66OUMf/HYFEBDIORqzsl8fp/+rwvLeEoMP3MPg4bfzdwFkmgbbQpG8to48cYtqj5ChCQSo9Gsp0cONpUZGbM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlVJfmKHVSP4R1Gp65d7vQv7P281C66s82trriWtRcvTSFdyZa
+	lvvjiz0fcc/ksXpPTydMCWg7Offw4bBSsduB+yRwYthsLCdRcnju
+X-Gm-Gg: ASbGncv/wCHfQ78UXsO/9lMzGTgD73dCGBReqHtnDoC8vfP/ds1QFMGSd2DaMkKbgGb
+	dQSabPRs8t0ye4vxewn8ETLBCp8Pwgeb9aRn3v6WdKreBBRB2EyiJQ1YBY4ADlD5cjc+JTcTzZf
+	PNKqxmF6u/BL/H3oR0l9zi69gIYRLGLDWC+b2yOrX8rcvgyUBomyId3UMoFZBrI/qzIVtDbeBCp
+	W8s44xbn2TJ6LSLTW3tvG7PDEnunmfYsa7O5LmSWJsY2+DUkjUxkl46l5F73RF3MV7yMagN9DlC
+	ew2dWI20ca8rET2XruJr6kxKKfx1IJIcQmC+MWIK3gylFiwHZ66q0/LODj3q/gs=
+X-Google-Smtp-Source: AGHT+IEhcvqek8X/10GXPUdrkYOae79A4soxEePRG/3Mi9gTYA5EN3/mO+so46rHgN3Bc8y1Vyihyw==
+X-Received: by 2002:a05:620a:390e:b0:7b6:bbe8:7d6e with SMTP id af79cd13be357-7bffcd9b6c7mr1236325485a.40.1738249604189;
+        Thu, 30 Jan 2025 07:06:44 -0800 (PST)
+Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c00a905afdsm81570285a.81.2025.01.30.07.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jan 2025 07:06:43 -0800 (PST)
+Date: Thu, 30 Jan 2025 10:06:43 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Anna Emese Nyiri <annaemesenyiri@gmail.com>
+Cc: netdev@vger.kernel.org, 
+ fejes@inf.elte.hu, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ willemb@google.com, 
+ idosch@idosch.org, 
+ davem@davemloft.net, 
+ horms@kernel.org, 
+ shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <679b95838f17_1c77632944f@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250129120526.7ba0958b@kernel.org>
+References: <20250129143601.16035-1-annaemesenyiri@gmail.com>
+ <20250129143601.16035-2-annaemesenyiri@gmail.com>
+ <20250129120526.7ba0958b@kernel.org>
+Subject: Re: [PATCH net-next 1/1] selftests: net: Add support for testing
+ SO_RCVMARK and SO_RCVPRIORITY
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v11 00/14] riscv: Add support for xtheadvector
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <173824623824.971083.4395426797923401446.git-patchwork-notify@kernel.org>
-Date: Thu, 30 Jan 2025 14:10:38 +0000
-References: <20241113-xtheadvector-v11-0-236c22791ef9@rivosinc.com>
-In-Reply-To: <20241113-xtheadvector-v11-0-236c22791ef9@rivosinc.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, conor@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, jszhang@kernel.org, wens@csie.org,
- jernej.skrabec@gmail.com, samuel@sholland.org, samuel.holland@sifive.com,
- corbet@lwn.net, shuah@kernel.org, guoren@kernel.org, evan@rivosinc.com,
- jrtc27@jrtc27.com, ajones@ventanamicro.com, cyy@cyyself.name,
- andybnac@gmail.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-sunxi@lists.linux.dev, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, conor.dooley@microchip.com, heiko@sntech.de
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
-
-On Wed, 13 Nov 2024 18:21:06 -0800 you wrote:
-> xtheadvector is a custom extension that is based upon riscv vector
-> version 0.7.1 [1]. All of the vector routines have been modified to
-> support this alternative vector version based upon whether xtheadvector
-> was determined to be supported at boot.
+Jakub Kicinski wrote:
+> On Wed, 29 Jan 2025 15:36:01 +0100 Anna Emese Nyiri wrote:
+> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> > index 73ee88d6b043..98f05473e672 100644
+> > --- a/tools/testing/selftests/net/Makefile
+> > +++ b/tools/testing/selftests/net/Makefile
+> > @@ -33,6 +33,7 @@ TEST_PROGS += gro.sh
+> >  TEST_PROGS += gre_gso.sh
+> >  TEST_PROGS += cmsg_so_mark.sh
+> >  TEST_PROGS += cmsg_so_priority.sh
+> > +TEST_PROGS += test_so_rcv.sh
 > 
-> vlenb is not supported on the existing xtheadvector hardware, so a
-> devicetree property thead,vlenb is added to provide the vlenb to Linux.
+> You need to add the C part to the TEST_GEN_PROGS, otherwise it won't
+> get built. We're seeing:
+
+and to .gitignore
+ 
+> ./test_so_rcv.sh: line 25: ./so_rcv_listener: No such file or directory
 > 
-> [...]
-
-Here is the summary with links:
-  - [v11,01/14] dt-bindings: riscv: Add xtheadvector ISA extension description
-    https://git.kernel.org/riscv/c/e576b7cb8183
-  - [v11,02/14] dt-bindings: cpus: add a thead vlen register length property
-    https://git.kernel.org/riscv/c/bf6279b38a4b
-  - [v11,03/14] riscv: dts: allwinner: Add xtheadvector to the D1/D1s devicetree
-    https://git.kernel.org/riscv/c/ce1daeeba600
-  - [v11,04/14] riscv: Add thead and xtheadvector as a vendor extension
-    https://git.kernel.org/riscv/c/cddd63869f92
-  - [v11,05/14] riscv: vector: Use vlenb from DT for thead
-    https://git.kernel.org/riscv/c/377be47f90e4
-  - [v11,06/14] RISC-V: define the elements of the VCSR vector CSR
-    https://git.kernel.org/riscv/c/66f197785d51
-  - [v11,07/14] riscv: csr: Add CSR encodings for CSR_VXRM/CSR_VXSAT
-    https://git.kernel.org/riscv/c/b9a931442451
-  - [v11,08/14] riscv: Add xtheadvector instruction definitions
-    https://git.kernel.org/riscv/c/01e3313e34d0
-  - [v11,09/14] riscv: vector: Support xtheadvector save/restore
-    https://git.kernel.org/riscv/c/d863910eabaf
-  - [v11,10/14] riscv: hwprobe: Add thead vendor extension probing
-    https://git.kernel.org/riscv/c/a5ea53da65c5
-  - [v11,11/14] riscv: hwprobe: Document thead vendor extensions and xtheadvector extension
-    https://git.kernel.org/riscv/c/7fa00fd6ff53
-  - [v11,12/14] selftests: riscv: Fix vector tests
-    https://git.kernel.org/riscv/c/57d7713af93e
-  - [v11,13/14] selftests: riscv: Support xtheadvector in vector tests
-    https://git.kernel.org/riscv/c/c384c5d4a2ae
-  - [v11,14/14] riscv: Add ghostwrite vulnerability
-    https://git.kernel.org/riscv/c/4bf97069239b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> in the CI.
+> 
+> > +	memset(&recv_addr, 0, sizeof(recv_addr));
+> > +	recv_addr.sin_family = AF_INET;
+> > +	recv_addr.sin_port = htons(atoi(opt.service));
+> > +
+> > +	if (inet_pton(AF_INET, opt.host, &recv_addr.sin_addr) <= 0) {
+> > +		perror("Invalid address");
+> > +		ret_value = -errno;
+> > +		goto cleanup;
+> > +	}
+> 
+> Any reason not to use getaddrinfo() ?
+> 
+> Otherwise LGTM, thanks for following up!
+> -- 
+> pw-bot: cr
 
 
 
