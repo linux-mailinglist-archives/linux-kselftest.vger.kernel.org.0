@@ -1,124 +1,122 @@
-Return-Path: <linux-kselftest+bounces-25458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25459-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82001A237DD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 00:32:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39808A23856
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 01:48:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 831FA3A6C73
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2025 23:32:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 854E67A23BB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 00:47:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98EA1D63CC;
-	Thu, 30 Jan 2025 23:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329283FD4;
+	Fri, 31 Jan 2025 00:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="kDjQDA34"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vv3OgX2O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954A61BCA19;
-	Thu, 30 Jan 2025 23:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B609B219FC;
+	Fri, 31 Jan 2025 00:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738279958; cv=none; b=bQ67QqVXdn2kmzbf0PP2v4pWy8W31him14uPlH8ZYC1r7mQ9wlpMtxDXlN8RloTarGRvU47zNiNMN4Zhw6Te31+1EOpzcmDTLjsQYV908+rmgZbN3yc05VgWSd/5z88juNeeOuwkKac+apcJXY2S0IOdMUyIAQnumYHZkHj4pEY=
+	t=1738284510; cv=none; b=STgWX51uq3RTRcc85ngagNodexcXmlbGSiFpDfpziBXvtE+0ZHbenO8BXzKaDc9nVgUugBdErGrd73P8KGCJwscccOr6oYDqqm1z60FCAn9ocClM2LmyLZ27f/3TyvnK9kx+dQt7XNqels2a6S5rR84issAsTr4OmCKj+YS9KG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738279958; c=relaxed/simple;
-	bh=YAzBNh858f16eQEi0uSmSjC9dMjnfA4uRjmAO5bbijw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=eR7Q8qJIs60eHyQRYJndUpvXt3vqivb7yPucrlJzfsYwVaVGudAZqKy2LGUqZLY1qpl5sc3871nyLKQrCnfvv2IXme/Sqxvq+9WafJmPeaX2kez5ulV5HZFwGZU1wfPUJFg+mT0j/M+hqSEgOHDiRiqwZIJnic6beRSiKtCAYd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=kDjQDA34; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2DFC4CED2;
-	Thu, 30 Jan 2025 23:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1738279958;
-	bh=YAzBNh858f16eQEi0uSmSjC9dMjnfA4uRjmAO5bbijw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=kDjQDA34++J2dlg4xnSfBBzDGSZ9KV1AVth9tRi7nQM1MzdQy8IAw8MQv3TJ4dwN3
-	 ajEPilD9kq7WlfiYeJZAQSc+8rX9QtpewvToUCXtKMTFy4xxZgf5H4x5RNDUmJArHO
-	 1cEMsa3iGgdEttezd9z+qK8xLdpIGN2kAvjy2tiM=
-Date: Thu, 30 Jan 2025 15:32:36 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Pedro Falcato <pedro.falcato@gmail.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Christian Brauner
- <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, "Liam R . Howlett"
- <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>,
- Vlastimil Babka <vbabka@suse.cz>, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, Oliver Sang
- <oliver.sang@intel.com>, John Hubbard <jhubbard@nvidia.com>, Tejun Heo
- <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny
- <mkoutny@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>
-Subject: Re: [PATCH v7 0/6] introduce PIDFD_SELF* sentinels
-Message-Id: <20250130153236.198664b9a19ccfcdb24f888b@linux-foundation.org>
-In-Reply-To: <CAKbZUD3w4_4MjrME-0mgRL01eFggb7et2BLa6012tzQX78KK9w@mail.gmail.com>
-References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
-	<20250130143754.1b8bb87bfb15175dd434529b@linux-foundation.org>
-	<b396487f-b906-410d-9ff4-6956d99e2771@lucifer.local>
-	<CAKbZUD3w4_4MjrME-0mgRL01eFggb7et2BLa6012tzQX78KK9w@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1738284510; c=relaxed/simple;
+	bh=+xMaN9yAbIcURitIBFnND01fmgks3Cq4Ks6qF6WqJ7o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=F6hwy26WbUQRJLvShla1x/7lVxF6e6TpZwSlnLlb32oF8NcRXwPv0EdoYoZTffdAO41hAgL22uvM5mvy6UoTZxkZjMTO0gCs7lT1sxI/Ix0kKvFy12ICcYId88XCl1R7HIkv0x59FD/CPMRxHj4cGWKO6Ni+16s6RuXy/0PFy0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vv3OgX2O; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21628b3fe7dso26676625ad.3;
+        Thu, 30 Jan 2025 16:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738284508; x=1738889308; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YtPvCO6S0II/KJMCKKK9WhQP/vAJCYUBd1iffzSjO/w=;
+        b=Vv3OgX2O/w1Bf1lKEAbhZ9o0oNJ1N+rn/LlMTdKq5EnzlNTW8TGwPAMRSEBn2LwYeM
+         VgacG6gvP1coBsdX7aZBZrJ2GT883nhAYHKsiYV48IjKD8dkBQNYYiP3oRSEhgtvztVg
+         9mBW8X6X4Mmokndml5BhBGX+3CIq+YYUs5ekwv3BTV/pKnUb4w6gtxOSAvIkoIZHWDRD
+         K0cwdEVP0I+6JfXQn7z+uUZJ78mG6ZC7RYtSbwNH2VEGVCSkPWe0NGvFXOA8vameG3aI
+         b/OW/biwzy4o9Tj4Qoq4jMi6cvckMQfUnkuJ91Lw20PNmMZA8RLEJzRM2a01OPVH4KlD
+         OImA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738284508; x=1738889308;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YtPvCO6S0II/KJMCKKK9WhQP/vAJCYUBd1iffzSjO/w=;
+        b=MTPSzDx7eMT2qK9crEf13K1pQzbDA2VE4qlywcryqThaiISKeOJIwplMpZ2+HlBb1S
+         JemlkL9qyGRXPqdVCtQ5OYCv11NBVVJKIX5KuyuWgYmlqU95yJK2AjzwEz6UaY4PYYzg
+         c8NztRVKC6gIWIaXIeYqmLlOcdjOo1frxeVmvDhuqn5pUqeApLJYyRGwmvMZ1BH94HoH
+         DhuMR/77A0Jef2QEqzjoylNbMPTetnFSngyHA0ockz3zexQnFQeizdGcRPyEjflMH6CQ
+         r3bYG65bY5k5T7b8anHDq8OoFzlj8jBmI+5bMBuj4JfUAxpJyPqWU9vjO6plrqCWQN0B
+         zl6w==
+X-Forwarded-Encrypted: i=1; AJvYcCUbSfOouG9BSadtSKqU8koFJd7jm5+As2LLUZIQayvIV6ZM7/pz28Txr9s6rLqrBDhu5bc7kelBGPEWyLTq@vger.kernel.org, AJvYcCV6+364UpWvcxJ9x7zpoYNNkxi6var499sr+IOd1V19BW+a4aT6JdRFKyNkmdMbYjnv0q8rAMaVeG7kBV2/uSXO@vger.kernel.org, AJvYcCXnIhX5JrdGide4H7x/7Dgk+j4PMRLRV//A1n+sPnq8SvQhEYQKggJyIO9Zqj5Q960b/ZA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUdzi1goAJ936DQZITVD1vrbt+0lGmLrSeur2avf5KBr2hAukd
+	HNXuyUaHAMbJh0uCamE/KPy3VXT/lbbNMVYM1gvQDahoUuKRSyMJ
+X-Gm-Gg: ASbGncsP1gQqptUNtH0ThRf2fGRNGtqBd5bnnt6OmsQfNjHFvcDZemB7Gva7i8G48bZ
+	5T9KAWvSjVLj+l1JSi7PEUKhm0supwblDQ7ocY6OuzmFcycgxzttkz+5IzLSwS7bgfd5IP9JzLv
+	sjoppXJowghq5zCeRTro12XMsicvIbJunjQHpSlP6NUL1FcLx8rBnu591MYkK3B56rmjORdYoB7
+	nzjQAPs9soRiyCtEjmp7t9az5Hjr8eaHSiF3xvGk2dYZf8NppVcEeqPH3p/Xa+F10lfdskJx8z9
+	mfVXx6PUFjLX
+X-Google-Smtp-Source: AGHT+IFF6eAT5w1vWPhpPcgEgSxowVdJfEet3pFu4xTXuLB5i+viKrOreK5sdyh578g1EBtx5geEAg==
+X-Received: by 2002:a05:6a20:8415:b0:1e1:e2d9:3f31 with SMTP id adf61e73a8af0-1ed7a5fafe9mr12744457637.16.1738284507892;
+        Thu, 30 Jan 2025 16:48:27 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ba2d6sm2128078b3a.109.2025.01.30.16.48.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jan 2025 16:48:27 -0800 (PST)
+Message-ID: <f70c352b558742a328449e941dc33237900fc74d.camel@gmail.com>
+Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
+ not available
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, andrii@kernel.org, 
+	ast@kernel.org, nathan@kernel.org, daniel@iogearbox.net
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, 	jolsa@kernel.org, mykolal@fb.com,
+ ndesaulniers@google.com, morbo@google.com, 	justinstitt@google.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 30 Jan 2025 16:48:22 -0800
+In-Reply-To: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+References: 
+	<872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
 
-On Thu, 30 Jan 2025 23:10:53 +0000 Pedro Falcato <pedro.falcato@gmail.com> wrote:
+On Thu, 2025-01-30 at 15:33 -0700, Daniel Xu wrote:
+> Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
+> libraries"), only statically linking test_progs is supported. However,
+> some distros only provide a dynamically linkable LLVM.
+>=20
+> This commit adds a fallback for dynamically linking LLVM if static
+> linking is not available. If both options are available, static linking
+> is chosen.
+>=20
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-> On Thu, Jan 30, 2025 at 10:53 PM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > > The above code sequence doesn't seem at all onerous.  I'm not
-> > > understanding why it's worth altering the kernel to permit this little
-> > > shortcut?
-> >
-> > In practice it adds quite a bit of overhead for something that whatever
-> > mechanism is using the pidfd can avoid.
-> >
-> > It was specifically intended for a real case of utilising
-> > process_madvise(), using the newly extended ability to batch _any_
-> > madvise() operations for the current process, like:
-> >
-> >         if (process_madvise(PIDFD_SELF, iovec, 10, MADV_GUARD_INSTALL, 0)) {
-> >             ... error handling ...
-> >         }
-> >
-> > vs.
-> >
-> >         pid_t pid = getpid();
-> >         int pidfd = pidfd_open(pid, PIDFD_THREAD);
-> >
-> >         if (pidfd < 0) {
-> >            ... error handling ...
-> >         }
-> >
-> >         if (process_madvise(PIDFD_SELF, iovec, 10, MADV_GUARD_INSTALL, 0)) {
-> >            ... cleanup pidfd ...
-> >            ... error handling ...
-> >         }
-> >
-> >         ...
-> >
-> >         ... cleanup pidfd ...
-> >
-> > So in practice, it's actually a lot more ceremony and noise. Suren has been
-> > working with this code in practice and found this to be useful.
-> 
-> It's also nice to add that people on the libc/allocator side should
-> also appreciate skipping pidfd_open's reliability concerns (mostly,
-> that RLIMIT_NOFILE Should Not(tm) ever affect thread spawning or a
-> malloc[1]). Besides the big syscall reduction and nice speedup, that
-> is.
-> 
-> [1] whether this is the already case is an exercise left to the
-> reader, but at the very least we should not add onto existing problems
+Tested in two configuration:
+- when both static and dynamic libraries are available
+  (linked against static);
+- when only static libraries are available.
 
-Thanks.
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Could we please get all the above spelled out much more thoroughly in
-the [0/n] description (aka Patch Series Sales Brochure)?
+[...]
+
 
