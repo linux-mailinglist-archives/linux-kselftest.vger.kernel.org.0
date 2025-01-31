@@ -1,129 +1,138 @@
-Return-Path: <linux-kselftest+bounces-25462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66CB8A23985
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 07:28:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8231AA239B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 08:06:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B0803A9A36
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 06:28:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA88B167DE9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2025 07:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A9A1494AD;
-	Fri, 31 Jan 2025 06:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC845143888;
+	Fri, 31 Jan 2025 07:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EX5+aK/6"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CFu4PSAZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C4D136353
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2025 06:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346B824B28;
+	Fri, 31 Jan 2025 07:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738304903; cv=none; b=iq3J9mSKxlZ33Ls9wRnuwjUnn0BIm1p7TABvatU2AqK/fjdvgv19fWfodT7ZM/EYdf+NCt6ObwkRZ5DqNgdjHEUpxXAu8Vj2mDbeFtLfBb2fWBGt5wWU8RMpB5HEyEOS4LWYNKblxN4KuRyx9kp9oS4MD63EQ8ch7s75FEYLjGk=
+	t=1738307170; cv=none; b=M4ViVT591VI2eEOW5oT8zUXts3at61llnY2KizRYwtTZ7QQaJQlauftXZ87SymaFZ7bOkJFR7Pj0B9R/oFIdv4x5rPChGPWkSMXYZeMNnGjymkx4i6sbkByww23B5QJGjvxbxirLeWqA729ufRO+GbzmKfiVKzWkhvC3tP/5jdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738304903; c=relaxed/simple;
-	bh=BNwj/cu2eiUOIuXNgpw6rKDwrnR4+fv5e/EebXhTC3A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kk6tqK0DHuNEd+fs7LSB9MrkvoPOaEm0uvi8/g4TnIrHsVNX467HoSluJenxgnGLCh6kuDKOgWLRKWqXHBhn72HMDM4cLvPx/NGLElQq9mEZV2aNtdFslENgngIWirCRDZ3Yd0KPXo9/ZnUJEI6t2KwF0y+gg8tnrxkX6IywOOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EX5+aK/6; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738304898;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z6nr90zQBuI/mRmsANmm014cd25JJit1RNWXmjt1m1g=;
-	b=EX5+aK/6Og8svexi1PHU/CPZfYtsrcZHXTgeg9bnG1usrUIJepcjKdWtJ/vJ+z5PSfA0Ea
-	MYY6LzwY6152AJXDF6jRg00V/i185IwtKOBncbtJB79yqcLIICAmKfsHmLz20dhOxXom8c
-	BjwZCJDZHUWd8kVY2hIrVZW9D6iceTA=
-Date: Thu, 30 Jan 2025 22:28:11 -0800
+	s=arc-20240116; t=1738307170; c=relaxed/simple;
+	bh=6DumR7Mge3kd2XSzM7I4GxupibJ2zmTPozvXKs7+JPs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fUtFeagLGNYva0woNaUX/4SkpPvW5R49t1JFaPlPVfXtLp3FmhUCWbL1qIIfznZ81XcL7LABQXMI9G4KYCo57oEHiHeijnMqxhFHCncPSlkMkcan5ueezGqOGNjRyxoh08kuIZ4zERpas9w9PkpUA/EOyGh43QGdsjUxlO03chE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CFu4PSAZ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50V2Odtn016645;
+	Fri, 31 Jan 2025 07:05:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=53P03y6wzOUcXrafDARHZxxZFZINIDTYpG0LthlED
+	8c=; b=CFu4PSAZFsPKaGH7dLfpVIEG4dYGFjj29hxYeZqW10R+xfbFvmHZu4V9g
+	5Ue2DQtsGG1CP0wVNif7fEUgWscBF86VR8QLSbjBtYjqEnKtv/38d+sZ7kslUoRX
+	HznZqv4Y9jSFz1ZrX48RklhCa1YTaHBdzLYCsZch03mY77JVYpiDEOhK3VNkGmIU
+	pFPcweb1UmOj2mYX+caoFPS+jEY/d1ybldiWM/s0fCangDZqd5bUGEn60KbRQTIZ
+	5FcWW7X3FstXe6RbGwKxSUyzb4GvXurKzEyeRv5UI6aJsFZubXEgYqS+7sWYitz9
+	kH4eymVS6bEVqGXd/g79DFPjtSZkQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44gmk913e7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 07:05:43 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50V74xJV012444;
+	Fri, 31 Jan 2025 07:05:42 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44gmk913e4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 07:05:42 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50V3bCrC013864;
+	Fri, 31 Jan 2025 07:05:40 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44gf93acv9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 07:05:40 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50V75dKA40239450
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 31 Jan 2025 07:05:39 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 12518200C5;
+	Fri, 31 Jan 2025 07:05:39 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DB7E6200C4;
+	Fri, 31 Jan 2025 07:05:29 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.60.42])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 31 Jan 2025 07:05:29 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
+Subject: [PATCH v2 1/2] selftests/bpf: Define SYS_PREFIX for powerpc
+Date: Fri, 31 Jan 2025 12:35:21 +0530
+Message-ID: <7192d6aa9501115dc242435970df82b3d190f257.1738302337.git.skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
- not available
-Content-Language: en-GB
-To: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, nathan@kernel.org, daniel@iogearbox.net
-Cc: martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: I0D88icMCqPAshbr_m6zzehm50ajZmCf
+X-Proofpoint-ORIG-GUID: zVYdDYEerUlTTlmtIiJQ4mwKynbTRaT5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-31_02,2025-01-30_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1015
+ adultscore=0 spamscore=0 phishscore=0 priorityscore=1501 mlxlogscore=825
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2501310051
 
+Since commit 7e92e01b7245 ("powerpc: Provide syscall wrapper")
+landed in v6.1, syscall wrapper is enabled on powerpc. Commit
+94746890202c ("powerpc: Don't add __powerpc_ prefix to syscall 
+entry points") , that drops the prefix to syscall entry points,
+also landed in the same release. So, add the missing empty
+SYS_PREFIX prefix definition for powerpc, to fix some fentry
+and kprobe selftests.
 
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-On 1/30/25 2:33 PM, Daniel Xu wrote:
-> Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
-> libraries"), only statically linking test_progs is supported. However,
-> some distros only provide a dynamically linkable LLVM.
->
-> This commit adds a fallback for dynamically linking LLVM if static
-> linking is not available. If both options are available, static linking
-> is chosen.
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->   tools/testing/selftests/bpf/Makefile | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6722080b2107..da514030a153 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
->     LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
->     # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
->     LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> -  LLVM_LDLIBS  += -lstdc++
-> +  # Prefer linking statically if it's available, otherwise fallback to shared
-> +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
-> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_LDLIBS  += -lstdc++
-> +  else
-> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +  endif
->     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
->   endif
-
-Although your change looks good, but maybe you can look at bpftool Makefile?
-
-   # If LLVM is available, use it for JIT disassembly
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
-   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
-   # (e.g. when bpftool build is called from selftests build as selftests
-   # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
-   # compilation error due to redefinition. Let's filter it out here.
-   CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
-     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-     LIBS += -lstdc++
-   endif
-   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
-
-It would be great if the selftests shared library handling to be the same as bpftool's.
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index f45f4352f..02c9f7964 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -172,6 +172,9 @@
+ #elif defined(__TARGET_ARCH_riscv)
+ #define SYSCALL_WRAPPER 1
+ #define SYS_PREFIX "__riscv_"
++#elif defined(__TARGET_ARCH_powerpc)
++#define SYSCALL_WRAPPER 1
++#define SYS_PREFIX ""
+ #else
+ #define SYSCALL_WRAPPER 0
+ #define SYS_PREFIX "__se_"
+-- 
+2.43.5
 
 
