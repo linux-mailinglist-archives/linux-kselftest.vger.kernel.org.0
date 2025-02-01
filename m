@@ -1,366 +1,282 @@
-Return-Path: <linux-kselftest+bounces-25519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03BEFA248D4
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 13:04:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9ADBA24A7A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 17:39:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 779BE1887724
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 12:04:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4315F160ECD
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 16:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A5A1494BF;
-	Sat,  1 Feb 2025 12:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9E81C5D68;
+	Sat,  1 Feb 2025 16:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="CrdinWTj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jFO81lW9"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RTldoeTp";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="hloM3lGA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A750184A30;
-	Sat,  1 Feb 2025 12:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738411479; cv=none; b=Rl4zl6RzV3MEFhAsXMX0BXfF2ocQvqXqZakgBhYYcA+dK3jjuhCPNPdOkRxD2t6Sut5/UBtSiYLcdSpz+HUofdBLzmSqSC5dP1e0b6qx4lH1j/WB5KB0jhQnVSe+9S6aalPpUef9UiTbSpigo+fYbJvxaBNEPvur4SLV+wO7QMU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738411479; c=relaxed/simple;
-	bh=8iKncPFvFN/KqWv1IJCRHmAS1yVFc6ETLBHRNLvI8Kw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=qKr8rZipwzO5Q2oU343Bc5LOI6iBd5t3FWqACiPGyH8z1WD4xGvXRK7q73+fq9nTxCuy1WYYOluh+7P6N/VlPBqRO/86z3UOyE5yISNYDQzByeRa4Rj71LBET1FK9lVYLZAKtxM9i0MgzJEy8ghtuACPDIoZ4g1+qHwoM50vVOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=CrdinWTj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jFO81lW9; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 96E0511400EE;
-	Sat,  1 Feb 2025 07:04:35 -0500 (EST)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Sat, 01 Feb 2025 07:04:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1738411475;
-	 x=1738497875; bh=q94BrnE8GmmvJEToiUwE2COPlRZW+gxKKN9ufHNcoBU=; b=
-	CrdinWTj4j5pemeHmxTFUcHhyq1eVgwwCnGEBCWsKTnDsud/lCeo6RLNw5PM2HU9
-	T4GBS/ADFZkDlXkzFSiQjD2gn6M5WfeRoLuIHCzyqHiVipLlUDaqshyuQImMrUm3
-	1ATdB/7Z0QUOdjgi3Pe+xDJsPOev7O7k2cHkDPiQf4q7k/ruH7yraOdN7stKO3bR
-	Wfky5D16/eFUJUUNVXhGPgjkgBlTr2q7gjmwMIhBwZB8ZT4o++2vF+H+1+sU2SI+
-	qekES0KJaqqDXpf3UA/EmcdStGW9reSVGAFosk+X1OWL6SK/2F5ttSj3VK38pS2M
-	Gvt0L3EydwA1XzY+9TkUfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738411475; x=
-	1738497875; bh=q94BrnE8GmmvJEToiUwE2COPlRZW+gxKKN9ufHNcoBU=; b=j
-	FO81lW99zu6h7WGYlOzMkDHp2OHlTYjdjlM/rtXJg/fm/yYlw33QG9X673KPNj/y
-	lh1Lq7Zf5mWkV5KWq+DMRFE26UwhTbaFvkaNTjqLin5JLVQZ2OvFOfikDDLbO5PI
-	Edx66nP07RDLV+zUhm8px7s7dgtfR6rhrlX9UuYTMoFXZmQm+8pdyzXLV/rw+0La
-	r961ZEjNR29+kTNR6flxxVNlgBvY+tl9d4R1cXti1oRXYwJJTwk7xYSQ6fTyU0jD
-	t35mrYX14KLGfs2cKqfFmBreZ+9FPSPYQe1QUYkYT4FSWhQhYwPMqos0XUVVsEDj
-	Xht27mdyIBoxfE4ACNL4w==
-X-ME-Sender: <xms:0Q2eZ7pp_qtJ515r8XXjlmwfTQa8qUS6_ug6Th2SX2Y0lDk6DGu5Jw>
-    <xme:0Q2eZ1o8vtkjRpaEeTY-jVZd2CYhAGZ_lga7gnch168toDUUIWQV0_zSUsMjQ-iUF
-    117wlTMKjRGNu5utA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudeijecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdefhedmnecujfgurhepofggfffhvfev
-    kfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceoug
-    iguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepieekudevieffkeevffei
-    hefhtdfftdevteejfeeiveevffevveduteekffffleelnecuffhomhgrihhnpehgihhthh
-    husgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpegugihusegugihuuhhurdighiiipdhnsggprhgtphhtthhopeduledpmhhouggvpe
-    hsmhhtphhouhhtpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthht
-    ohepshgufhesfhhomhhitghhvghvrdhmvgdprhgtphhtthhopegvugguhiiikeejsehgmh
-    grihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhl
-    rdgtohhmpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrnhgurhhi
-    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:0Q2eZ4PmkEZZCfRQH0QUSOYomY2tZj4k-rrRa2CBkJlYFnw_ZIMZPQ>
-    <xmx:0Q2eZ-5Dc5rPjxxcYmDOQfSAk7CPhHXqN5-p8aj97aCkayQ6if33uA>
-    <xmx:0Q2eZ66Ex5HoXENhVU1dhe8FmFOGJ5KecN45xKfIZSPefvgs50hV8A>
-    <xmx:0Q2eZ2hudgihac6f5xZl4T4NpGy4gL3Z49Sjw60FnY8c5pqs5Ok4Nw>
-    <xmx:0w2eZ3xjJH_drhm_Z-Bf3-IlczEH0nLjgB02iSCH4DCDC_Qi1SqJ9IpX>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id BFC0718A006B; Sat,  1 Feb 2025 07:04:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6671BBBD4;
+	Sat,  1 Feb 2025 16:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738427960; cv=fail; b=i7DK1mzFyDJymEHbyh7APra3Awmqd5eDp9pAlzFHbEUPaCJtkFkHKYpPTcisNLFriLAItdlLg233fevdaNq7/aBo+hrv8V4edGuZFUBGjAekGzaBq+esE3Rh2yO+idugyauLsCnRbBgg98tZ6VbozPq6jYssskiJ9pDiHHa+/mc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738427960; c=relaxed/simple;
+	bh=/0y2OJtggpEXoIvU6BA+JDs/8rRjht5rf3y2t6NwyP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=GzzPzT6J51jKcbshFSQLS9opUPYvhj5QtZsQiTuEABZMDIwm4vwTaSUSmhNK7xIpVJglFNjRK2ubLqRKJ9+cHKImh51lSVps4ExMzbcmMR5T21Q7488nDCDddxHO4lcEZXugkPZ5LV1V0K5/F/ZSZM6uibrqMKN9VnWGFBfP3cw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RTldoeTp; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=hloM3lGA; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 511EB8dA032167;
+	Sat, 1 Feb 2025 16:38:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=KanpYMEvajl5ceR0EV
+	CHO57xNvfMeLSaGkBP/HpKi4s=; b=RTldoeTpf6A0YFBSY59RSLKhaOHmuCxrB/
+	JU9DPl8kJ+5Z/NGLmiAEwDgT4vLdWrHWGiCl3BdzV+J+7VS8+rfNd0pd+oR2TWLL
+	F9ZFqgmS8UJt6xe7bpOZrIh4SBcL4jbD2Hm3nCtpnG3tQKic0BGq9CMzgs4sIGz2
+	0AnRPczu1bNmfsMsCudcsT8PTbxrjfRUBzR1lVSqDLIwW6K3JmSktLV3ZinAX1As
+	w0HwaFS99JII+J+rQ3XDhLp+8dLOVz/w7+VdWD+B7cTmnWRrD6IDnL9IYCA0bhnn
+	e71qm9w1402K+OUr6J+HYNHW/1m+ko9I1+1L/1mAY6mAj5rxr30w==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hhsv05m0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 01 Feb 2025 16:38:40 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 511F1kbk021202;
+	Sat, 1 Feb 2025 16:38:39 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44ha2d4x10-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 01 Feb 2025 16:38:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JncfF6ocO3Ew1APoZt82FMYam9zcauKuMIjloeGJ7hCzjYyILJXf/m6c+Jtt87Z6hfRSGlbroSHFoSYHN5iOJcfMKepwoUEJOxdpiRTi2aML26XR0Ch/HCWK3WVpxctZZE34uFI2u884vB6gh5gqG75J7ydQkzzvWObe7EJ3HJ0b6tcHw1gl++2UigMcH+28OimWd16vLlcTC6MbnRxCaYWZ/5FC7sHzn2JGuPi0IBWBQjZuu4f+SShigNt7GxaNV3c5sbsC91TR4Oxzai5IYmnu7fUeIYd10B5Db1siHuMMrISX+BcqqzH6E7eUOy5gPFkC25fGliqtK/wcSTsCrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KanpYMEvajl5ceR0EVCHO57xNvfMeLSaGkBP/HpKi4s=;
+ b=YN1jMHbl/y4MRiVsYbt+mYSZeG/RhEmhxeMN4wJW/XOc5g8166edGWthrbeHxMfpWTOrUwQCNzp8KFnD0hBF8CvlA5fSpAvKvGS1MlE7ksQ74+QogRFXY+ppcAVWD5el0UIVCF5tM1Xc1eyzj1VwGh08YwolQxZtlGhEJcIGIKIn+3bqJevFu6mFeYw4IPO52lP69qPP8qmqEPhGSN2Hz2WrR22nYGCHjp97HlBX4DYCwjFJjLuC7cmD5LEAayWDXefRlJHXWHa0lR5qf6XAKRv4FiPu2ak4CHwkYJ3hRigNfpBSmW/zj0X3l1c/vBAoUBmQ3N7xfdgj/nJVGE0ZVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KanpYMEvajl5ceR0EVCHO57xNvfMeLSaGkBP/HpKi4s=;
+ b=hloM3lGABdHKJyhEdTqsLGNM+fPvHkEebaLZdEv4LyiRTzI9e6NQyHGHUO6bJAUn8vkW0UxJisekm2yKCURowwJK4qbpttdH4AkX2NagvWli7FLUtco8mCa9cnq9cON4QF27aF9nO19dQxGR4MOTR8Sx/2wQvo9AqzkJnUwOPKc=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by DS7PR10MB5120.namprd10.prod.outlook.com (2603:10b6:5:3a5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.23; Sat, 1 Feb
+ 2025 16:38:36 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8398.020; Sat, 1 Feb 2025
+ 16:38:36 +0000
+Date: Sat, 1 Feb 2025 16:38:30 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Sang <oliver.sang@intel.com>,
+        John Hubbard <jhubbard@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>,
+        Shakeel Butt <shakeel.butt@linux.dev>
+Subject: Re: [PATCH v7 0/6] introduce PIDFD_SELF* sentinels
+Message-ID: <abf5cbca-ec64-4eb6-acb6-f4b274f837a9@lucifer.local>
+References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
+ <20250130143754.1b8bb87bfb15175dd434529b@linux-foundation.org>
+ <b396487f-b906-410d-9ff4-6956d99e2771@lucifer.local>
+ <CAKbZUD3w4_4MjrME-0mgRL01eFggb7et2BLa6012tzQX78KK9w@mail.gmail.com>
+ <20250130153236.198664b9a19ccfcdb24f888b@linux-foundation.org>
+ <7519b85a-cd04-4ae9-a8c8-3d16fb20582e@lucifer.local>
+ <20250201-cremig-desorientiert-aac3b09da8e2@brauner>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250201-cremig-desorientiert-aac3b09da8e2@brauner>
+X-ClientProxiedBy: LO4P123CA0345.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18d::8) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 01 Feb 2025 13:04:13 +0100
-From: "Daniel Xu" <dxu@dxuuu.xyz>
-To: "Ilya Leoshkevich" <iii@linux.ibm.com>
-Cc: "Shuah Khan" <shuah@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Marc Hartmayer" <mhartmay@linux.ibm.com>
-Message-Id: <92a6f664-01b8-46bc-8712-6e5a5ac3d851@app.fastmail.com>
-In-Reply-To: <20f56c02-688d-4f22-97dc-cc5b3800de3f@app.fastmail.com>
-References: <cover.1736886479.git.dxu@dxuuu.xyz>
- <68f3ea96ff3809a87e502a11a4bd30177fc5823e.1736886479.git.dxu@dxuuu.xyz>
- <78b2e750b4568e294b5fc5a33cf4bc8f62fae7f6.camel@linux.ibm.com>
- <hsgmutuoi4kvjkr7erm5ty2fdrhdrjpz4fpp5doe65l3pzguxv@lcbmvmjpyykq>
- <f7rhmwrp3fgx3qd7gn3pzczxeztvsg45u4vrl6ls3ylcvflapx@3yi3shfnrmb3>
- <ae5e32ff2269eb4c190aeb882b17cb1bb8e6c70d.camel@linux.ibm.com>
- <20f56c02-688d-4f22-97dc-cc5b3800de3f@app.fastmail.com>
-Subject: Re: [PATCH bpf-next v7 4/5] bpf: verifier: Support eliding map lookup nullness
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|DS7PR10MB5120:EE_
+X-MS-Office365-Filtering-Correlation-Id: f97a2f23-daf2-464a-372e-08dd42dedfe5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?v9y1OXOQY1kN8DE0Sm2TrbQJ4WENM3cnKh8u3roInN5NO0mwB3uf+Cj7hBgq?=
+ =?us-ascii?Q?LrbepK9Te3eBUA6ri6C+qEsPUmTVDj3qS6z0B0+pFpOV3TsvWQbfNlIy1+/5?=
+ =?us-ascii?Q?DmGhExiEahunJ2Q/quanCf6Xu7A5EYyrtebZa8pLOSfkqufb7QpSFUTOmQYn?=
+ =?us-ascii?Q?vhl37gBvY50v3x77a8HKT1IJBcNV0CUIV2viF1z/mc4uaTTnE0ZZkbSujAIw?=
+ =?us-ascii?Q?JAiwLw5Ot6UNfWMrMDHiicpEfINmglNMi6ImaHdUxPM4B1eN44t0txdLLgvV?=
+ =?us-ascii?Q?wkCtzH2GVFBJl6hDVJyWodBrfUDvpFe/JQMgoUpdXuwQzMrWIFrTtKgmigbk?=
+ =?us-ascii?Q?iVr5LmFHOOnLWGVif1W2/bVHgY3GkUqRFwP4OAByV3LWmiuUgCQ1bc3sErMa?=
+ =?us-ascii?Q?gmZqdq20CguveNMvZzTqaisKpWMGJTfrSDKI/8JwgmU04QQvPUZBNdbDSH2f?=
+ =?us-ascii?Q?VeqpNPMTxJ69Fa4SWmRKNCr6OPbybCcjQYdEp1OO9JPltzk7SWikEaMAeve0?=
+ =?us-ascii?Q?vY1MBhkjHQil0QbVmqxSNy7eRNnia53FrH3I4am4qNWwyw6QV1QENqQRT7vD?=
+ =?us-ascii?Q?v8k+0+Sw/oklmtWVhsDNdJBmQ3lpR1JPO//vOnBLveOqE1JLk+CstX1j0whR?=
+ =?us-ascii?Q?1A8+vw0V+LoHqrPo82DrCghJWvCFzX3mAl/4RtVHJmJQN1Lz0Pl6maKCl9ER?=
+ =?us-ascii?Q?y7qQPv8JUAzqdgL4grhVV5Z0fzrmmBCctsz8RSHO/NnBnCuD02UxqzFaPJ0G?=
+ =?us-ascii?Q?bcs18wv+s6ZTDyzKx2HjlmtZfvtZr9aw53Js67++9tHT7pNEPkavrisXMIcK?=
+ =?us-ascii?Q?Amz2SVICHrSwY0TLm3qCxK3h/lfG3p937o5KPiOjJ2DmN/TBtvhGlOFodEzH?=
+ =?us-ascii?Q?fpkvDxCZ7nPV8p9wkmV6wPua7uD1RWSO8UqEYSEj7wpTD8QCp4UJ4AVANSiQ?=
+ =?us-ascii?Q?dd2pxF9uOR4Cg6kmjiEF7hjmxh0lYSARPeQx6yjLk+dchw5+S2r/qVyLEaYk?=
+ =?us-ascii?Q?nqt9iDpLM+lPn0oSNVneQz2T2jazT9SWINr2yl81KuGy0EjPkDpn0kdGXOZo?=
+ =?us-ascii?Q?ywzkmVVPqaKebeStHJbGdI7xv5SqmftnGgYYedYyNxCaE3JgkL6STNZXMyOe?=
+ =?us-ascii?Q?UFUx+QXD+EyP5xDM5MiFrX+R/UON01cwcMkWKSP7PmykUQ5/nB8P12eNPOrP?=
+ =?us-ascii?Q?JwF/uDnQ5+7kJfGiFJVKKWc8z1LYl+9+Pbv9NIML0EVUYkm4oK/zYtLy6e9v?=
+ =?us-ascii?Q?tt3QEXYkF9mLt8uIngW7CsLrN/PL5tUW2E5xIfzNuqNhbIp7X25dufv3+m33?=
+ =?us-ascii?Q?vK84CIva9cVd3Pl92ZiVeH0/ZYQe5QceNHfx/16YUU8o6Y6G+jIvE/fB/ILF?=
+ =?us-ascii?Q?IOSA08y84D9hpVtRR5MxpEomb2Gv?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ygugvSThsWNqodtTEdWnR6HaDjHKksj9GSrNklOc1VZ8X2zJzk5B9P0/Ij/b?=
+ =?us-ascii?Q?j0uiBEfYKIuVjXVeL1bjH+Dj6zs6I0KXC6WsYvbLYItA4iW7a7hYaD1efAQL?=
+ =?us-ascii?Q?yXlCC78fGL1MXE2zzvui+xtdvVcadDXN7rQfjky8Jucyjp/g87TrakdA2KSI?=
+ =?us-ascii?Q?FdHR67tTgbL0dT5Gt0Ae2IvYSOWNmEbq2zB+ywkVoE6nZ7CFWHjOG39IJA1v?=
+ =?us-ascii?Q?FsEGtbqzEzK+DpSFBj5Hm/8cjaSu9GkI10/hu1p4s58LwSzUEDJv5y+NygHY?=
+ =?us-ascii?Q?bNstgAnk1mWTFHyB0OBOhVuCJfFqtZrYcgR2fAB3wJhchKFKDzI6Jb1tNWVy?=
+ =?us-ascii?Q?H0ygxj23XFuXjgOl/oXyG5I5Rd8crxhDwlg8FTY7i5J/b0lTbCgK8Dq8Tcb7?=
+ =?us-ascii?Q?9dYMK3C7RpqowWy6615L7G9CWc/rb9TT3pGAxnGNOPJsGw8+cNftdyyhHUIT?=
+ =?us-ascii?Q?OZHhOyD92mEFnHMwhAt1BDsbgb5V+MSdb4kXX//Kwu0sxO7M2Hq+Lc+epJQN?=
+ =?us-ascii?Q?Zqa/2dy1Ml+okd1TVWscqT66APthJ0k/CS69iZngeMLcN7NxJTjo6WN4/oSo?=
+ =?us-ascii?Q?WZ5Bg7jFvtUiK2f1sgWLqJqrL9RLUleukX0rXfqkQe5zy0evni+142wHCikB?=
+ =?us-ascii?Q?AipMZZBHQpLgtu2DUMxD8xvDnEuCx1eCGA+hdysJ3i80vnrsfANZ28XLBGCi?=
+ =?us-ascii?Q?XhVz/Sh6NxqBF5TPYBhU9Vl6hp4rBf71KQtUSvkmBiZCxqDUvmz5HkZ92Hw8?=
+ =?us-ascii?Q?6zvgtrhMyjGdbb7QmZ8qoJq8FL6/Szv9Krw41HUJgD08eYKLmwcPe9PhbCs0?=
+ =?us-ascii?Q?W6s3l0TNXXNimFmShvlcN8niMlDoLI2KpljJEQ8O93sSNhikb7BHaJb2ZuzW?=
+ =?us-ascii?Q?/lPLXYIFIHjUV3+3bYT7pz6Q8PAXDKoiVRNAPAAUGCHAmxShfBbMro7QJBSS?=
+ =?us-ascii?Q?DThxXW4RqePY0j7N1UyJT1oez+fHBHHWKvUyawkV094iQNqF/RTC+WuWoyPY?=
+ =?us-ascii?Q?YLXHvcIcjTSIzP0nAUNjD6HuvDxgHQCTe6hwULnUNzDu022fgYRo5Ae/y429?=
+ =?us-ascii?Q?E/Zwy4j2kxuLOP8ZQJei/KIgyKR4jDPeIRZ4JcsfxjufcZXvtgiVroG8OraS?=
+ =?us-ascii?Q?UseEUlk6wWb5xyjMqVeFXMJj7kNs5DJXhTxtVofxsj3hoL/lWuLJ0D3yHpAW?=
+ =?us-ascii?Q?53NL0Oqc2t7SfxVb0j/DLcHheK7bbsxoeM++Hxfb7wuAUr+JQxAJXwK+oRfv?=
+ =?us-ascii?Q?37NMi59CWkbygGoaYaDzrHC6uUNGO8Vk51Pb3V0V5eC0GMuziZKcksPdDVY1?=
+ =?us-ascii?Q?zfLSh0A9tMw+KqmbbMeJj9Crdhy6a0QUkrUxZsxllAJdQag6++4IUdNpshqX?=
+ =?us-ascii?Q?DRYKeO7KklXsP4RvHoG41Ft3arvqFC0x81C66gjnj0jvuApscm/XXOk9A+EM?=
+ =?us-ascii?Q?MqTIVH6eE4rwOMM+sHQKuYLJeTH74uum8eLdW0xoxLvzdvyKG0x8yhe/RTKV?=
+ =?us-ascii?Q?IxsmWL/HxQuTimGkcmRrE+Bil9H7o4CepvZjv0xWJk12rVmL0eBxNc108gzg?=
+ =?us-ascii?Q?hWn9gbSj62i+ISOBJhKa8YD+xpyMQotQYzpAy4XF+xZCsExvwQKInma3kosm?=
+ =?us-ascii?Q?YA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	yFhm9CRVwbPP6QCbdHIDhCKDq0i/yZjojV/vqVcFyxpbK5Sz6jwUJZHHGfuFuSWbr6O5EVCERVQgGBdErOymNREhDdB1oNGf2LT7ObsF3qhpQo7ke0E/RLaWXWdxtaARTDuoUOARLWCD6Z4RdGMMrIuTJKZPPFl3sydX4kgoAbpt6ynnLJkpkDbmPhVT0Ov2AZ+e07+JcUH9AhB2R95a7V9phbgZi/0OZuOaXLbXJow4zSq8iVvSe0/wYh6E6jMe9csidZaUcHqwo8kxqjbcmHwJjTzm/PDcxI+TK+v59TgWHiPSTR6vmwsmzEzFsWx9pGWBC5v6wIxu4f6ydYOJVcG7dYwblyCHFKhzPp3HZCSo6SQuHpU9KWW7sb0qkLL7K0SE/k6vOlSrZ/t9OqHBD/f6VSX8lVK8SzdajiI+zUoW6iFjVvIUnKqsZItdBassQCisAbDl0jwh58HgUDJI8yVmOqunWxs/qmaB4e5Bxj2OBt+cB/zJ/ih6o4T5qytOR7nW78KuUcpTpWUGKVYZAKpEgI6ByiWWzLUPEy9T4Bgg7qDD3gHztMTovo9/1DpMUfWFtcTvRZ1nQsTzjZA8//OWfkHyYzo/p24E7KehFYc=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f97a2f23-daf2-464a-372e-08dd42dedfe5
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2025 16:38:36.6903
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uvzs16Bt0mfa+UaHImNLEx1cedbwx0T9gQGq923A0G0yHdjY2E/5MhZ+2w93op6ByGlSWsCV65yztqNmDgaNAw6YdCIN6SUFx7/Q4PJ2v8c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5120
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-01_07,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ mlxscore=0 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2501170000 definitions=main-2502010144
+X-Proofpoint-GUID: Gl-zUh89W1NIr3_e9BGfAHdo69VuFkUD
+X-Proofpoint-ORIG-GUID: Gl-zUh89W1NIr3_e9BGfAHdo69VuFkUD
 
-
-
-On Thu, Jan 30, 2025, at 7:41 PM, Daniel Xu wrote:
-> Hi Ilya,
+On Sat, Feb 01, 2025 at 12:12:46PM +0100, Christian Brauner wrote:
+> > Intent is for Christian to take this in his tree (if he so wishes) to be
+> > clear!
 >
-> On Thu, Jan 30, 2025, at 2:06 AM, Ilya Leoshkevich wrote:
->> On Wed, 2025-01-29 at 10:45 -0700, Daniel Xu wrote:
->>> On Wed, Jan 29, 2025 at 09:49:12AM -0700, Daniel Xu wrote:
->>> > Hi Ilya,
->>> >=20
->>> > On Wed, Jan 29, 2025 at 03:58:54PM +0100, Ilya Leoshkevich wrote:
->>> > > On Tue, 2025-01-14 at 13:28 -0700, Daniel Xu wrote:
->>> > > > This commit allows progs to elide a null check on statically
->>> > > > known
->>> > > > map
->>> > > > lookup keys. In other words, if the verifier can statically
->>> > > > prove
->>> > > > that
->>> > > > the lookup will be in-bounds, allow the prog to drop the null
->>> > > > check.
->>> > > >=20
->>> > > > This is useful for two reasons:
->>> > > >=20
->>> > > > 1. Large numbers of nullness checks (especially when they
->>> > > > cannot
->>> > > > fail)
->>> > > > =C2=A0=C2=A0 unnecessarily pushes prog towards
->>> > > > BPF_COMPLEXITY_LIMIT_JMP_SEQ.
->>> > > > 2. It forms a tighter contract between programmer and verifier.
->>> > > >=20
->>> > > > For (1), bpftrace is starting to make heavier use of percpu
->>> > > > scratch
->>> > > > maps. As a result, for user scripts with large number of
->>> > > > unrolled
->>> > > > loops,
->>> > > > we are starting to hit jump complexity verification errors.=C2=A0
->>> > > > These
->>> > > > percpu lookups cannot fail anyways, as we only use static key
->>> > > > values.
->>> > > > Eliding nullness probably results in less work for verifier as
->>> > > > well.
->>> > > >=20
->>> > > > For (2), percpu scratch maps are often used as a larger stack,
->>> > > > as the
->>> > > > currrent stack is limited to 512 bytes. In these situations, it
->>> > > > is
->>> > > > desirable for the programmer to express: "this lookup should
->>> > > > never
->>> > > > fail,
->>> > > > and if it does, it means I messed up the code". By omitting the
->>> > > > null
->>> > > > check, the programmer can "ask" the verifier to double check
->>> > > > the
->>> > > > logic.
->>> > > >=20
->>> > > > Tests also have to be updated in sync with these changes, as
->>> > > > the
->>> > > > verifier is more efficient with this change. Notable, iters.c
->>> > > > tests
->>> > > > had
->>> > > > to be changed to use a map type that still requires null
->>> > > > checks, as
->>> > > > it's
->>> > > > exercising verifier tracking logic w.r.t iterators.
->>> > > >=20
->>> > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->>> > > > ---
->>> > > > =C2=A0kernel/bpf/verifier.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 92
->>> > > > ++++++++++++++++++-
->>> > > > =C2=A0tools/testing/selftests/bpf/progs/iters.c=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 14 +--
->>> > > > =C2=A0.../selftests/bpf/progs/map_kptr_fail.c=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
->>> > > > =C2=A0.../selftests/bpf/progs/verifier_map_in_map.c |=C2=A0 2 =
-+-
->>> > > > =C2=A0.../testing/selftests/bpf/verifier/map_kptr.c |=C2=A0 2 =
-+-
->>> > > > =C2=A05 files changed, 99 insertions(+), 13 deletions(-)
->>> > >=20
->>> > > [...]
->>> > >=20
->>> > > > @@ -9158,6 +9216,7 @@ static int check_func_arg(struct
->>> > > > bpf_verifier_env *env, u32 arg,
->>> > > > =C2=A0	enum bpf_arg_type arg_type =3D fn->arg_type[arg];
->>> > > > =C2=A0	enum bpf_reg_type type =3D reg->type;
->>> > > > =C2=A0	u32 *arg_btf_id =3D NULL;
->>> > > > +	u32 key_size;
->>> > > > =C2=A0	int err =3D 0;
->>> > > > =C2=A0
->>> > > > =C2=A0	if (arg_type =3D=3D ARG_DONTCARE)
->>> > > > @@ -9291,8 +9350,13 @@ static int check_func_arg(struct
->>> > > > bpf_verifier_env *env, u32 arg,
->>> > > > =C2=A0			verbose(env, "invalid map_ptr to
->>> > > > access map-
->>> > > > > key\n");
->>> > > > =C2=A0			return -EACCES;
->>> > > > =C2=A0		}
->>> > > > -		err =3D check_helper_mem_access(env, regno,
->>> > > > meta-
->>> > > > > map_ptr->key_size,
->>> > > > -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_READ, false,
->>> > > > NULL);
->>> > > > +		key_size =3D meta->map_ptr->key_size;
->>> > > > +		err =3D check_helper_mem_access(env, regno,
->>> > > > key_size,
->>> > > > BPF_READ, false, NULL);
->>> > > > +		if (err)
->>> > > > +			return err;
->>> > > > +		meta->const_map_key =3D
->>> > > > get_constant_map_key(env, reg,
->>> > > > key_size);
->>> > > > +		if (meta->const_map_key < 0 && meta-
->>> > > > >const_map_key
->>> > > > !=3D -EOPNOTSUPP)
->>> > > > +			return meta->const_map_key;
->>> > >=20
->>> > > Mark Hartmayer reported a problem that after this commit the
->>> > > verifier
->>> > > started refusing to load libvirt's virCgroupV2DevicesLoadProg(),
->>> > > which
->>> > > contains the following snippet:
->>> > >=20
->>> > > 53: (b7) r1 =3D -1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 ; R1_w=3D-1
->>> > > 54: (7b) *(u64 *)(r10 -8) =3D r1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 ; R1_w=3D-1 R10=3Dfp0 fp-8_w=3D-1
->>> > > 55: (bf) r2 =3D r10=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 ; R2_w=3Dfp0 R10=3Dfp0
->>> > > 56: (07) r2 +=3D -8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 ; R2_w=3Dfp-8
->>> > > 57: (18) r1 =3D 0x9553c800=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R1_w=3Dmap_ptr(ks=3D8,vs=3D4)
->>> > > 59: (85) call bpf_map_lookup_elem#1
->>> > >=20
->>> > > IIUC here the actual constant value is -1, which this code
->>> > > confuses
->>> > > with an error.
->>> >=20
->>> > Thanks for reporting. I think I know what the issue is - will send
->>> > a
->>> > patch shortly.
->>> >=20
->>> > Daniel
->>> >=20
->>>=20
->>> I cribbed the source from [0] and tested before and after. I think
->>> this
->>> should work. Mind giving it a try?
->>>=20
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index 9971c03adfd5..e9176a5ce215 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -9206,6 +9206,8 @@ static s64 get_constant_map_key(struct
->>> bpf_verifier_env *env,
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return reg->var_off.value;
->>> =C2=A0}
->>>=20
->>> +static bool can_elide_value_nullness(enum bpf_map_type type);
->>> +
->>> =C2=A0static int check_func_arg(struct bpf_verifier_env *env, u32 ar=
-g,
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 struct bpf_call_arg_meta *meta,
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 const struct bpf_func_proto *fn,
->>> @@ -9354,9 +9356,11 @@ static int check_func_arg(struct
->>> bpf_verifier_env *env, u32 arg,
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 err =3D check_helper_mem_access(env, regno, key_si=
-ze,
->>> BPF_READ, false, NULL);
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 if (err)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
-turn err;
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 meta->const_map_key =3D get_constant_map_key(env, reg,
->>> key_size);
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 if (meta->const_map_key < 0 && meta->const_map_key !=3D
->>> -EOPNOTSUPP)
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return m=
-eta->const_map_key;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 if (can_elide_value_nullness(meta->map_ptr-
->>> >map_type)) {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meta->co=
-nst_map_key =3D
->>> get_constant_map_key(env, reg, key_size);
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (meta=
-->const_map_key < 0 && meta-
->>> >const_map_key !=3D -EOPNOTSUPP)
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return meta->const_map_key;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 }
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 break;
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case ARG_PTR_TO_MAP_VALUE:
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 if (type_may_be_null(arg_type) &&
->>> register_is_null(reg))
->>>=20
->>> Thanks,
->>> Daniel
->>>=20
->>>=20
->>> [0]:
->>> https://github.com/libvirt/libvirt/blob/c1166be3475a0269f5164d87fec6=
-227d6cb34b47/src/util/vircgroupv2devices.c#L66-L135
->>
->> Thanks, I tried this in isolation and it fixed the issue for me.
->> I talked to Mark and he will try it with his libvirt scenario.
->
-> Thanks for testing!=20
->
->>
->> The code looks reasonable to me, but I have a small concern regarding
->> what will happen if the BPF code uses a -EOPNOTSUPP immediate with an
->> array. Unlike other immediates, IIUC this will cause check_func_arg()
->> to return 0. Is there a reason to have this special?
->
-> That's a good point. Lemme check on that.
+> If you send me an updated blurb I can fold it.
 
-Seems like the verifier tracks the s32 spill as a u32.=20
+Thanks, I therefore propose replacing the cover letter blurb with the below:
 
-So I couldn=E2=80=99t craft a repro for this. But it=E2=80=99ll be a
-good refactor to make anyways.=20
+----8<----
+If you wish to utilise a pidfd interface to refer to the current process or
+thread then there is a lot of ceremony involved, looking something like:
+
+	pid_t pid = getpid();
+	int pidfd = pidfd_open(pid, PIDFD_THREAD);
+
+	if (pidfd < 0) {
+		... error handling ...
+	}
+
+	if (process_madvise(pidfd, iovec, 8, MADV_GUARD_INSTALL, 0)) {
+		... cleanup pidfd ...
+		... error handling ...
+        }
+
+        ...
+
+        ... cleanup pidfd ...
+
+This adds unnecessary overhead + system calls, complicated error handling
+and in addition pidfd_open() is subject to RLIMIT_NOFILE (i.e. the limit of
+per-process number of open file descriptors), so the call may fail
+spuriously on this basis.
+
+Rather than doing this we can make use of sentinels for this purpose which can
+be passed as the pidfd instead. This looks like:
+
+	if (process_madvise(PIDFD_SELF, iovec, 8, MADV_GUARD_INSTALL, 0)) {
+		... error handling ...
+	}
+
+And avoids all of the aforementioned issues. This series introduces such
+sentinels.
+
+It is useful to refer to both the current thread from the userland's
+perspective for which we use PIDFD_SELF, and the current process from the
+userland's perspective, for which we use PIDFD_SELF_PROCESS.
+
+There is unfortunately some confusion between the kernel and userland as to
+what constitutes a process - a thread from the userland perspective is a
+process in userland, and a userland process is a thread group (more
+specifically the thread group leader from the kernel perspective). We
+therefore alias things thusly:
+
+* PIDFD_SELF_THREAD aliased by PIDFD_SELF - use PIDTYPE_PID.
+* PIDFD_SELF_THREAD_GROUP alised by PIDFD_SELF_PROCESS - use PIDTYPE_TGID.
+
+In all of the kernel code we refer to PIDFD_SELF_THREAD and
+PIDFD_SELF_THREAD_GROUP. However we expect users to use PIDFD_SELF and
+PIDFD_SELF_PROCESS.
+
+This matters for cases where, for instance, a user unshare()'s FDs or does
+thread-specific signal handling and where the user would be hugely confused
+if the FDs referenced or signal processed referred to the thread group
+leader rather than the individual thread.
+
+For now we only adjust pidfd_get_task() and the pidfd_send_signal() system
+call with specific handling for this, implementing this functionality for
+process_madvise(), process_mrelease() (albeit, using it here wouldn't
+really make sense) and pidfd_send_signal().
+
+We defer making further changes, as this would require a significant rework
+of the pidfd mechanism.
+
+The motivating case here is to support PIDFD_SELF in process_madvise(), so
+this suffices for immediate uses. Moving forward, this can be further
+expanded to other uses.
 
