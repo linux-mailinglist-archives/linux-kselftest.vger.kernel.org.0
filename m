@@ -1,69 +1,121 @@
-Return-Path: <linux-kselftest+bounces-25510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74A6A2482E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:13:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E86CA24839
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:17:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 897533A53CC
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 10:13:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAC881888C42
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 10:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51331149E1A;
-	Sat,  1 Feb 2025 10:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E5113D619;
+	Sat,  1 Feb 2025 10:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fPWvnw/O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BF92AD20;
-	Sat,  1 Feb 2025 10:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FEB6A935;
+	Sat,  1 Feb 2025 10:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738404819; cv=none; b=XXRydnp9xvM4+yZPChyWqiGGzQQkIaUaqDqdeOforzPrkVKHJDLYq/wAHJ0k7B14RG27zP5bba7FffgoQ7umjxlb+qfEb022DH7JTBsN7Qd7g5iFk6XiecAaRJMldhucKczVy6pde+eRxggTcO19EOpL5aics6Kw7pPVV/68dx4=
+	t=1738405061; cv=none; b=R5D2jhdfqmG58kJRh1pPmHjgb4k/efFLkHNr7nEf26pevv1YJJHiopcjbO4TiaxzB/M3C1kAUMY7f3oQZ0gchPQzXmHpbyplM0K9hJQYO5Z+tpCYpgEMzzpTfpoFtqKSLTixSIFwNTOxYVQ+vl78Rsfwy1fHVnkkmQbPaEC9Bpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738404819; c=relaxed/simple;
-	bh=eqy5n9zvc98rjwVXMWtKBTL0bMx8UfW5nruzLLsbyM8=;
+	s=arc-20240116; t=1738405061; c=relaxed/simple;
+	bh=NHljcI2F57mmoG1PxvZFvu26mCW48Mnq1S82OK+pn9k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DXRAyd1zD947n55BHvhakdEx6ptcK5YeAD2U7JS4YFp5pEI38Z0Sm7INP/M9EZUUigW6GoagfipPmCrajcH+FAYCOxHMEbwkMYgEtkVcUJO9sY7Bvr3bo/XYJUJvB/XMfIVczp6a5RXxufXrezgpcZkAa8B1QEoKzc9hCPysBwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 511ADYrT006385;
-	Sat, 1 Feb 2025 11:13:34 +0100
-Date: Sat, 1 Feb 2025 11:13:34 +0100
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] selftests/nolibc: always keep test kernel
- configuration up to date
-Message-ID: <20250201101334.GE5849@1wt.eu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=bYn0a+Sv8/UTActLQQfX8bhfVAwxWarl7J6pf1rUV5KFMqSj2rec8jLNBHMrHzh78BupcXAMbeEKSDjmOJGLFW49Kg+jPzYDlB1WtDEW25z/Wm5w/KbpGrNM26Mee5M4iNJObDpFFZapj0UhZXFYL5/mjeg8ckQrGAN8tjKSOTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fPWvnw/O; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1738405048;
+	bh=NHljcI2F57mmoG1PxvZFvu26mCW48Mnq1S82OK+pn9k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fPWvnw/OsVZqRzT82MXmQXpFNExVIL/0r5TPOAt5Z2L+MDSq7uj0YcsFXsACby5wd
+	 osU08Vk0KmW6+PKjz6MU1xt//mDKMbbZq+NLV65Giuw0axBTLujhehCKbq/pd7bdD9
+	 STtkz/as3sYINQXiZkk4F1CvM4o77fKjCCqTWp3o=
+Date: Sat, 1 Feb 2025 11:17:28 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] selftests/nolibc: drop custom EXTRACONFIG
+ functionality
+Message-ID: <3f06ca01-68a3-41ca-9bfb-3f37f2173951@t-8ch.de>
 References: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
- <20250123-nolibc-config-v2-5-5701c35995d6@weissschuh.net>
+ <20250123-nolibc-config-v2-1-5701c35995d6@weissschuh.net>
+ <20250201101305.GD5849@1wt.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250123-nolibc-config-v2-5-5701c35995d6@weissschuh.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20250201101305.GD5849@1wt.eu>
 
-On Thu, Jan 23, 2025 at 08:37:41AM +0100, Thomas Weiﬂschuh wrote:
-> Avoid using a stale test kernel configuration by always synchronizing
-> it to the current source tree.
-> kbuild is smart enough to avoid spurious rebuilds.
+On 2025-02-01 11:13:05+0100, Willy Tarreau wrote:
+> On Thu, Jan 23, 2025 at 08:37:37AM +0100, Thomas Wei√üschuh wrote:
+> > kbuild already contains logic to merge predefines snippets into a
+> > defconfig file. This already works nicely with the current "defconfig"
+> > target. Make use of the snippet and drop the custom logic.
+> > 
+> > Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
+> > ---
+> >  tools/testing/selftests/nolibc/Makefile | 9 +--------
+> >  1 file changed, 1 insertion(+), 8 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > index 7d14a7c0cb62608f328b251495264517d333db2e..ba044c8a042ce345ff90bdd35569de4b5acd117d 100644
+> > --- a/tools/testing/selftests/nolibc/Makefile
+> > +++ b/tools/testing/selftests/nolibc/Makefile
+> > @@ -82,7 +82,7 @@ DEFCONFIG_x86        = defconfig
+> >  DEFCONFIG_arm64      = defconfig
+> >  DEFCONFIG_arm        = multi_v7_defconfig
+> >  DEFCONFIG_mips32le   = malta_defconfig
+> > -DEFCONFIG_mips32be   = malta_defconfig
+> > +DEFCONFIG_mips32be   = malta_defconfig generic/eb.config
+> >  DEFCONFIG_ppc        = pmac32_defconfig
+> >  DEFCONFIG_ppc64      = powernv_be_defconfig
+> >  DEFCONFIG_ppc64le    = powernv_defconfig
+> > @@ -93,9 +93,6 @@ DEFCONFIG_s390       = defconfig
+> >  DEFCONFIG_loongarch  = defconfig
+> >  DEFCONFIG            = $(DEFCONFIG_$(XARCH))
+> >  
+> > -EXTRACONFIG_mips32be = -d CONFIG_CPU_LITTLE_ENDIAN -e CONFIG_CPU_BIG_ENDIAN
+> > -EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
+> > -
+> >  # optional tests to run (default = all)
+> >  TEST =
+> >  
+> > @@ -265,10 +262,6 @@ initramfs: nolibc-test
+> >  
+> >  defconfig:
+> >  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+> > -	$(Q)if [ -n "$(EXTRACONFIG)" ]; then \
+> > -		$(srctree)/scripts/config --file $(objtree)/.config $(EXTRACONFIG); \
+> > -		$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) olddefconfig < /dev/null; \
+> > -	fi
 > 
-> Shuffle the code around a bit to keep all the commands with side-effects
-> together.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> OK it's no longer needed thanks to your change above, but to we really
+> want to get rid of that feature allowing anyone to add their own extra
+> config ? I'm not sure. For example maybe the current build script helps
+> on bare metal, when trying to add support for new archs or other features
+> not yet in defconfig ? We could leave EXTRACONFIG_* empty by default and
+> user-defined, as I don't feel like it blocks anything to keep it.
+
+Makes sense, let's keep it.
+It's currently not possible for kbuild to pick up config snippets
+outside of a few special locations.
+
+I'll fix this up locally and apply the series directly.
 
 
-Acked-by: Willy Tarreau <w@1wt.eu>
-
-Willy
+Thomas
 
