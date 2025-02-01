@@ -1,47 +1,45 @@
-Return-Path: <linux-kselftest+bounces-25513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26B4EA2483F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:20:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B257AA24846
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:34:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4F2E1887762
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 10:20:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32576165B23
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 10:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA0514A4DD;
-	Sat,  1 Feb 2025 10:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02A731494D4;
+	Sat,  1 Feb 2025 10:34:54 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655701459FD;
-	Sat,  1 Feb 2025 10:20:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21DE17BA5;
+	Sat,  1 Feb 2025 10:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738405231; cv=none; b=ZTPu2ck8n/xyDhBymoZSK9e9ISPgISb1vkxYvg6CT1Mm6t5E0D+Mz/3LYoAQ0awlXge3BVl3v9zC03s/tPsyhaTaeuFJ44LdDp80gxFL65TP2fNDx3G0chxL8QJ/fPI4cY95mWP0CtchfPA48bhmxnZ0Y1LiDfuKf5o81TYYSAA=
+	t=1738406093; cv=none; b=bb83xEEAKW1QJs3bkoOyTS3/b4eJbNN8PgdVxPlyvZV+5xc+6OU7wdY9j5BOoTuhuqCS+OhwAsXkOrNNXL4tFeMczb086UuNex8sze5FurQmvyKzQ1PeJRFI2FYruStAkKUiyFJ2YbaJMqbH/5AdKQgYW+8WGTca1gRC23bFf1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738405231; c=relaxed/simple;
-	bh=tUEaZBK1Fv6jgwdMcbeELrgHTRfiKEeZV2xaBHrfsi0=;
+	s=arc-20240116; t=1738406093; c=relaxed/simple;
+	bh=nckk6IREeGgepW/yKnetVDAc4LT+8v8kYncfJQzyg5w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K+5OJFchADyOWxau3VzMjqRLoSsnaUiGWwGmF7CbW4GS4ooBKhw9oWY43E0FaNXPkTZ/9LqkecNNtqTYh6k26eScmBqpo2+gWTKuE2Fp1y3GYYVYtqsrkkxx0vjufakK45QPLhel2oeo2S0Pxy/lpuUTJpPhM5EsN/ZfgJ/DT6s=
+	 Content-Type:Content-Disposition:In-Reply-To; b=rinDV3sU229ShDZKOPRDnuarX8HI1J0JnVHQkHJSr8Pey0kUFQBw95LIjh6v5+TBaJkS6TuRuWw1X8QFvCgZYNapNrwske+1PWYFTGDXZ1fbVIMjNn1vJCixMgEl2nd9QZRLsq7a99qoI5Y0s32oYWAsNbIKGdiwRkDuEj6QBVc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
 Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 511AKPfC006655;
-	Sat, 1 Feb 2025 11:20:25 +0100
-Date: Sat, 1 Feb 2025 11:20:25 +0100
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 511AYcgk007838;
+	Sat, 1 Feb 2025 11:34:38 +0100
+Date: Sat, 1 Feb 2025 11:34:38 +0100
 From: Willy Tarreau <w@1wt.eu>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] selftests/nolibc: drop custom EXTRACONFIG
- functionality
-Message-ID: <20250201102025.GG5849@1wt.eu>
-References: <20250123-nolibc-config-v2-0-5701c35995d6@weissschuh.net>
- <20250123-nolibc-config-v2-1-5701c35995d6@weissschuh.net>
- <20250201101305.GD5849@1wt.eu>
- <3f06ca01-68a3-41ca-9bfb-3f37f2173951@t-8ch.de>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH 2/2] tools/nolibc: add support for directory access
+Message-ID: <20250201103438.GH5849@1wt.eu>
+References: <20250130-nolibc-dir-v1-0-ea9950b52e29@weissschuh.net>
+ <20250130-nolibc-dir-v1-2-ea9950b52e29@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,69 +49,88 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f06ca01-68a3-41ca-9bfb-3f37f2173951@t-8ch.de>
+In-Reply-To: <20250130-nolibc-dir-v1-2-ea9950b52e29@weissschuh.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat, Feb 01, 2025 at 11:17:28AM +0100, Thomas Weiﬂschuh wrote:
-> On 2025-02-01 11:13:05+0100, Willy Tarreau wrote:
-> > On Thu, Jan 23, 2025 at 08:37:37AM +0100, Thomas Weiﬂschuh wrote:
-> > > kbuild already contains logic to merge predefines snippets into a
-> > > defconfig file. This already works nicely with the current "defconfig"
-> > > target. Make use of the snippet and drop the custom logic.
-> > > 
-> > > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > > ---
-> > >  tools/testing/selftests/nolibc/Makefile | 9 +--------
-> > >  1 file changed, 1 insertion(+), 8 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > > index 7d14a7c0cb62608f328b251495264517d333db2e..ba044c8a042ce345ff90bdd35569de4b5acd117d 100644
-> > > --- a/tools/testing/selftests/nolibc/Makefile
-> > > +++ b/tools/testing/selftests/nolibc/Makefile
-> > > @@ -82,7 +82,7 @@ DEFCONFIG_x86        = defconfig
-> > >  DEFCONFIG_arm64      = defconfig
-> > >  DEFCONFIG_arm        = multi_v7_defconfig
-> > >  DEFCONFIG_mips32le   = malta_defconfig
-> > > -DEFCONFIG_mips32be   = malta_defconfig
-> > > +DEFCONFIG_mips32be   = malta_defconfig generic/eb.config
-> > >  DEFCONFIG_ppc        = pmac32_defconfig
-> > >  DEFCONFIG_ppc64      = powernv_be_defconfig
-> > >  DEFCONFIG_ppc64le    = powernv_defconfig
-> > > @@ -93,9 +93,6 @@ DEFCONFIG_s390       = defconfig
-> > >  DEFCONFIG_loongarch  = defconfig
-> > >  DEFCONFIG            = $(DEFCONFIG_$(XARCH))
-> > >  
-> > > -EXTRACONFIG_mips32be = -d CONFIG_CPU_LITTLE_ENDIAN -e CONFIG_CPU_BIG_ENDIAN
-> > > -EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
-> > > -
-> > >  # optional tests to run (default = all)
-> > >  TEST =
-> > >  
-> > > @@ -265,10 +262,6 @@ initramfs: nolibc-test
-> > >  
-> > >  defconfig:
-> > >  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-> > > -	$(Q)if [ -n "$(EXTRACONFIG)" ]; then \
-> > > -		$(srctree)/scripts/config --file $(objtree)/.config $(EXTRACONFIG); \
-> > > -		$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) olddefconfig < /dev/null; \
-> > > -	fi
-> > 
-> > OK it's no longer needed thanks to your change above, but to we really
-> > want to get rid of that feature allowing anyone to add their own extra
-> > config ? I'm not sure. For example maybe the current build script helps
-> > on bare metal, when trying to add support for new archs or other features
-> > not yet in defconfig ? We could leave EXTRACONFIG_* empty by default and
-> > user-defined, as I don't feel like it blocks anything to keep it.
+On Thu, Jan 30, 2025 at 08:54:03PM +0100, Thomas Weiﬂschuh wrote:
+> From: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 > 
-> Makes sense, let's keep it.
-> It's currently not possible for kbuild to pick up config snippets
-> outside of a few special locations.
+> Add an allocation-free implementation of readdir() and related
+> functions. The implementation is modelled after the one for FILE.
 
-Yes but when facing difficulties, users can be creative (e.g. inject
-semi-colon and commands in EXTRACONFIG ;-)).
+I think you'd need to mention/remind the two important points that
+come out of that choice, one being that DIR is a fake pointer that
+instead stores ~fd so that it can be turned back to a valid FD, and
+that subsequent readdir() calls will only work from the same file
+unit since it relies on a local static storage.
 
-> I'll fix this up locally and apply the series directly.
+Better have this visible in the commit message so that in the event
+someone faces a difficulty due to this, they can easily find that it's
+an on-purpose design choice.
 
-Thank you!
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> 
+> ---
+> I'm not entirely sure where to put it. It doesn't really belong into
+> stdio.h, but that's where the FILE stuff is.
+> sys.h wants alphabetical ordering, but IMO these functions should stick
+> together.
+
+My man pages suggest that userland code will include <dirent.h>, thus
+I think it could be the moment to create it with that new code.
+
+> diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+> index 3892034198dd566d21a5cc0a9f67cf097d428393..1f275a0a7b6b2c6f1c15405d027c282bb77aa618 100644
+> --- a/tools/include/nolibc/stdio.h
+> +++ b/tools/include/nolibc/stdio.h
+(...)
+> +static __attribute__((unused))
+> +struct dirent *readdir(DIR *dirp)
+> +{
+> +	static struct dirent dirent;
+> +
+> +	char buf[sizeof(struct linux_dirent64) + NAME_MAX];
+
+I'm uncertain where NAME_MAX is defined, I haven't found it in the
+nolibc sources, just double-checking that it's not just in your build
+environment by accident.
+
+> +	struct linux_dirent64 *ldir = (void *)buf;
+> +	intptr_t i = (intptr_t)dirp;
+> +	int fd, ret;
+> +
+> +	if (i >= 0) {
+> +		SET_ERRNO(EBADF);
+> +		return NULL;
+> +	}
+> +
+> +	fd = ~i;
+> +
+> +	ret = getdents64(fd, ldir, sizeof(buf));
+> +	if (ret == -1 || ret == 0)
+> +		return NULL;
+> +
+> +	/*
+> +	 * getdents64() returns as many entries as fit the buffer.
+> +	 * readdir() can only return one entry at a time.
+> +	 * Make sure the non-returned ones are not skipped.
+> +	 */
+> +	ret = lseek(fd, ldir->d_off, SEEK_SET);
+> +	if (ret == -1)
+> +		return NULL;
+> +
+> +	dirent = (struct dirent) {
+> +		.d_ino = ldir->d_ino,
+> +	};
+> +	strlcpy(dirent.d_name, ldir->d_name, sizeof(dirent.d_name));
+
+Just out of curiosity, could this copy fail, and if so, should we handle
+it (e.g. NAME_MAX != 255) ? My guess here is that if it could almost never
+fail and checking it would needlessly complicate the function, let's just
+handle it with a comment for now. And if it cannot at all, let's mention
+why on top of it as well.
+
+Thanks,
 Willy
 
