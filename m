@@ -1,107 +1,184 @@
-Return-Path: <linux-kselftest+bounces-25504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B341A24791
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 08:42:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5667A247BD
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 09:23:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18BB73A43B6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 07:42:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0145D7A2F78
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 08:22:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C37D1369AE;
-	Sat,  1 Feb 2025 07:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA9D13AA41;
+	Sat,  1 Feb 2025 08:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="PjMpia/v"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="hrnIrD3Z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IlrQ3gOZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F9E2B9A9;
-	Sat,  1 Feb 2025 07:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738395775; cv=pass; b=BsZstDZt+i7IjXMZuYNETplk88Cx0tkm/J9tYr19tH7EGekCtAET3BKrInSElFi/YN7X8/7EBUkMaZjpRgWExHT1aH8wMZBtAZpCxDMenW6lIwSC+tcBDgRpz+BaJXZLl3BBBvkY27iqAU31ty1NMvxi55yPMWP0ZNPZ8ehP6P8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738395775; c=relaxed/simple;
-	bh=PHOPVwnqYW4RAVoAd1OAGy78FLHlJaiUTin9zJkj5kI=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=PTuSx5dhW/QStgTDDCIXD89kFT+ZPB3ikL4aoxa9DvaxHtJe558TFOLS1xtDNUuZY2FD1w3uE2hjvrkpaU8QiLZKlCVDy0Y+2YoIhFa8SUa6ZBfzdJOV2PNmDpi5pXjUZmxOmBzOkAQNFXc/xh6XAnomtd74idI8WDygYT5fdyU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=PjMpia/v; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1738395755; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=fnhtczJxfrullL1L0M2O5tVnX5aYmJoqPIqGaOEc2+ngT7LN3515fbaDT/OWFdIWk8drkrjQHjimE5i8LkTEURWZlrhyWCVe4mHob7c7lonao0HpS/V40HzE6xX8b94iHW0ePXFeH6P2io0TZ4wFixJPAUksA+CFE8hYi+ReaLc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1738395755; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=CLZpf6rLwx+y6XYMMSXn85igrf6sEjyPZMUtVYwyThE=; 
-	b=TkW8wXB4zHB8iObuuCAUp5TgO44xn1rpkQNPMN0AJHt2H4Xk3JoUsetatO2QXPti1KcUZpZxw2mFFqxtUXsq7oINheiR4TIrfklrfcCho1M+bPZtiXUnuVrn2zZ0VX0ffG4juXQ5q+hG5qgEddxt/VpwtcMvqfYjF7lNthhgRIw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1738395755;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=CLZpf6rLwx+y6XYMMSXn85igrf6sEjyPZMUtVYwyThE=;
-	b=PjMpia/vELd4fiEUbx1qLHup05g6ekUMhmoUqu+HnTnZBvxnhpQzYfb8XM6U0+8D
-	nWFLTDk5JWkjmufhgWBprHBR33ME6y9kjE60GksFLTHR3+o/rVu6zCyGen4IivWncl0
-	kWtUxNZWR3ID7JIwZiFRJDqGeb8m3MvpMfDI+cWs=
-Received: by mx.zohomail.com with SMTPS id 1738395751055390.58881136718696;
-	Fri, 31 Jan 2025 23:42:31 -0800 (PST)
-Message-ID: <0a769233-8cdf-4bee-ba6a-3b69767b7d43@collabora.com>
-Date: Sat, 1 Feb 2025 12:43:03 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7B11B960;
+	Sat,  1 Feb 2025 08:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738398203; cv=none; b=Um0boPOMrXDGEr10UObAZLWTcE1c+Xbfbf6QpQeOVrqfrFfrT1xBIq0CaqRLcAxOUTHgZMtpl1P9uZQXPDdp4VFL3PSENPYT87csCVFQo7As8sTP54SAouQSE0bRp6UuogljgfbnRH0S8+SWyQRmvwYHh2NEBsBmsOW5qJBNsWA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738398203; c=relaxed/simple;
+	bh=I2x1xNDIv6a2xJQAVWZ6ZI7SUQRt30VNLur5TLaNNGs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JR4uFY6C8SCz9Aw/CVQYs257eComTlwGWgdvhhqwlxKjmlFGg20TVUoA+7yKIGjYAth7hMP9iFZFUW7sOouojk8Cpvq/Pm5AljbGNZRn8MK1JFJQznLQ8TIUIgPIx5aKAjDFUNusOX088mxr4cVSeYEqNMup1ZoVl9HWkIVDc0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=hrnIrD3Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IlrQ3gOZ; arc=none smtp.client-ip=103.168.172.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id BB3482005FD;
+	Sat,  1 Feb 2025 03:23:18 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sat, 01 Feb 2025 03:23:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1738398198; x=1738405398; bh=O1mPFwwAy2
+	XgJUG0+NNUDpAoMHPfDv8dSUIkUoZJEPg=; b=hrnIrD3ZWt+Au+iZtZx5K8KtGH
+	ug2UfjmYXUW7TzTy/LjWNqUjg1uzMTa8L5DArbC6nSg4kZA+dHt1tQCjDnxHK4iZ
+	hpMhUXR8yV5X0NmNdf+Rvcsj6OI5ckcFcp25hmwSBn4hjiPyzrF1eYEoG9zjW3xD
+	BHua/o8FUICD1DAA3jUDIjLgUgzO37ig4Z4qeAyQukZc+FLDw9lHi7IvoDDUD72p
+	kcNrXxZnIVK6vJSWIdTFyk3M3Ivv283RCpk5QlMcjq7W13cyUmRjVletdc0MNJWW
+	vnMhTYp0FVmVSpWtv8bsMqsikdhAMy83cbvaA0+fODED5RezClBby3RHmgJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1738398198; x=1738405398; bh=O1mPFwwAy2XgJUG0+NNUDpAoMHPfDv8dSUI
+	kUoZJEPg=; b=IlrQ3gOZmjZRBVeQQIrKHtIoo0LSCWjeaI03u1ryMizInRhFbui
+	962y5IVxELD37rcClNURqUcXjJgcdbmMTbPlr+JGcEFuqa9pxLD+NlTnAAKHbimX
+	jb5O2opl4yU9d0DooSzgCKgGB3PnxnglVXQ/XjomkAdPoTm+cFIClJMO45UuUkJN
+	BSg1nWjDPs3svs5zM1g+FmFL7Ki9ppjrsjcLnDcXZtU6ODocLFTYEPJGizJ0OV22
+	H5i0msVFVA6Gg5oWQzszvCSnszJB0HV4+k4CaL4dpShmcVR/M6vynKn+5iZeIjGG
+	1Z/+RZsdke4sThrZ7dSZ5bEJ83vXB4xTxEw==
+X-ME-Sender: <xms:9dmdZ79-YJjqcUktUBCa4D-70msWLiYK2-BysjvNCFleoKoWGk1y_A>
+    <xme:9dmdZ3ut_1Qcozfw8kv951LqbFVFF8uSpKPbnWuU3n3pz-n2aBG9f_QOrPtBUT3e7
+    7GmK6TRRd9vzr3o-w>
+X-ME-Received: <xmr:9dmdZ5C3fXWrsJnnCh0-wIc-5vaCaMYnK_c_pJdODxbo6CdTXb-lLZue2ki4h8qmFLRmjqXAvV9VQG2TADsVjmVyDSnHtOhl0LIOXNhSAyNG9w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffk
+    fhggtggujgesthdtsfdttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
+    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvfeekteduudefieegtdehfeff
+    keeuudekheduffduffffgfegiedttefgvdfhvdenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgt
+    phhtthhopedvvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohephihonhhghhhonh
+    hgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopehshhhurghhsehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtohepmhgr
+    rhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepshhonhhgsehkvghrnh
+    gvlhdrohhrgh
+X-ME-Proxy: <xmx:9dmdZ3f0FVdGvftOqExcfQPNGXK_2Rpu1O-Ec6PhNbUVcxHNjYRKaA>
+    <xmx:9dmdZwPF85muZS5C5i7wn5AMOKmpgQCcJ20wskxIkAtPzVB-K9Hv4Q>
+    <xmx:9dmdZ5kwdkk2JAXWf_zcsLPZ6l0UK6hvbBRf8CJ-6XwKaW88Pc2WYQ>
+    <xmx:9dmdZ6u4pWRQs0PVeKEEjAFViA1pohBwgDKwbB84wGYirx-_95NNfQ>
+    <xmx:9tmdZxznGuhvfHFB51Ew1BhEjPiKn_KCo0QQqY5ai3aY2GfD9WZzCo-K>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 1 Feb 2025 03:23:15 -0500 (EST)
+Date: Sat, 1 Feb 2025 01:23:14 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: shuah@kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
+	nathan@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
+	jolsa@kernel.org, mykolal@fb.com, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
+ not available
+Message-ID: <rgcdc7zokwfoars7c2pzredogea3rvolbnzkvko7q6lbgjnvfx@oeyzed5zalpb>
+References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+ <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
- =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, kernel@collabora.com
-Subject: Re: [PATCH 01/16] selftests/mm: remove argc and argv unused
- parameters
-To: Andrew Morton <akpm@linux-foundation.org>, Kees Cook <kees@kernel.org>
-References: <20250109173842.1142376-1-usama.anjum@collabora.com>
- <20250109173842.1142376-2-usama.anjum@collabora.com>
- <202501090941.5289E7444B@keescook>
- <843bf743-4005-47bc-9e39-8ea49255b152@collabora.com>
- <202501090949.793D9A0@keescook>
- <20250109161246.f43a69773b5459e5200d3f45@linux-foundation.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <20250109161246.f43a69773b5459e5200d3f45@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
 
-On 1/10/25 5:12 AM, Andrew Morton wrote:
-> On Thu, 9 Jan 2025 09:50:45 -0800 Kees Cook <kees@kernel.org> wrote:
-> 
->> On Thu, Jan 09, 2025 at 10:48:52PM +0500, Muhammad Usama Anjum wrote:
->>> For the all other case, why should we keep argv/argc and mark them unused
->>> as well when they aren't being used?
->>
->> I'm fine either way, but my personal code style instinct is to keep the
->> "standard" main declaration with argc/argv present. But it's mostly
->> aesthetic.
->>
->> And if you think use of kselftest.h isn't universal, then perhaps we can
->> avoid the macro, but it does seem nicer and more "normal" feeling for
->> the rest of kernel development.
->>
-> 
-> Agreed.  __attribute__((unused)) is a bit of a mouthful and isn't what
-> the kernel developer's eye expects to see.  
-In the next version, I'll add a macro and use that.
+Hi Yonghong,
 
--- 
-BR,
-Muhammad Usama Anjum
+On Thu, Jan 30, 2025 at 10:28:11PM -0800, Yonghong Song wrote:
+> 
+> 
+> 
+> On 1/30/25 2:33 PM, Daniel Xu wrote:
+> > Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
+> > libraries"), only statically linking test_progs is supported. However,
+> > some distros only provide a dynamically linkable LLVM.
+> > 
+> > This commit adds a fallback for dynamically linking LLVM if static
+> > linking is not available. If both options are available, static linking
+> > is chosen.
+> > 
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > ---
+> >   tools/testing/selftests/bpf/Makefile | 11 ++++++++---
+> >   1 file changed, 8 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index 6722080b2107..da514030a153 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
+> >     LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+> >     # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
+> >     LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+> > -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> > -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> > -  LLVM_LDLIBS  += -lstdc++
+> > +  # Prefer linking statically if it's available, otherwise fallback to shared
+> > +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
+> > +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> > +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> > +    LLVM_LDLIBS  += -lstdc++
+> > +  else
+> > +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> > +  endif
+> >     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+> >   endif
+> 
+> Although your change looks good, but maybe you can look at bpftool Makefile?
+> 
+>   # If LLVM is available, use it for JIT disassembly
+>   CFLAGS  += -DHAVE_LLVM_SUPPORT
+>   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+>   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
+>   # (e.g. when bpftool build is called from selftests build as selftests
+>   # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+>   # compilation error due to redefinition. Let's filter it out here.
+>   CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+>   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+>     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>     LIBS += -lstdc++
+>   endif
+>   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+> 
+> It would be great if the selftests shared library handling to be the same as bpftool's.
+
+So bpftool is both an internally consumed (from selftests) dependency as
+well as a tool packaged up by distros. For the latter case, distros
+prefer dynamic linking.
+
+So unfortunately, I think these probably need to be defined separately.
+The code looks similar but the use cases are different.
+
+Thanks,
+Daniel
 
