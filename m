@@ -1,122 +1,78 @@
-Return-Path: <linux-kselftest+bounces-25516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 885DCA24853
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F27A2487A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 12:13:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 603723A7FF9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 10:47:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF9AE3A38F2
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE0A14AD19;
-	Sat,  1 Feb 2025 10:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A431D15535B;
+	Sat,  1 Feb 2025 11:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMDG/lVE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2333119A;
-	Sat,  1 Feb 2025 10:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D2F19A;
+	Sat,  1 Feb 2025 11:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738406826; cv=none; b=rzoTzb14zC64RxuBXB1mbO32yedh4Uoin9H3JOXZWheW4RZHqlLauR/OFPbb/onsmo6mc0hgzxHi76aEZw9YjYrAZLyBybOYudpus2zmR8zfwFF/2kVgM8l3u/Whj3x3fhltmLglIFoX7zeYW0INb9oUH0q65nNrfXMmALkUHCc=
+	t=1738408373; cv=none; b=QSkq6vPREoSLI+/xvcZGxFOUX0FgOLy9Qm8pKALZqJB+SMS+scI312nkBUxOxD1KzY9VHSvReABjT4szg65vcLi45VldW2fAkCSYKvXLte+J8wHLwvOk5hakFk2/P3O4NB5LHA2DYcNOBJ0I5K4JW+I4yPWMkJfAYjcx0KYIo8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738406826; c=relaxed/simple;
-	bh=yIzuzElCgQQb6/6GBQQZSKuZExTmtFdbaE9T6tcEsb8=;
+	s=arc-20240116; t=1738408373; c=relaxed/simple;
+	bh=/A+9ioR6oxXv0tTTLfZfZoer4mvDdiifgkLG/Ak9mUE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JA3Idjy4olt2/F+8ehtelIlKFkeePsYD1aAgeb0RnH4mN5/09owxOjWgkRrQJHk+c2+rWCuU4zKixqG8G+vJXYjl2TEFVQsglz8mkUej7JKqKULScMkOF2kix4ctGS4A61eqUQorXxvIPwonUKhp9F4Xi99aS9OutDJ/r7GEPH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 511Akx0L008336;
-	Sat, 1 Feb 2025 11:46:59 +0100
-Date: Sat, 1 Feb 2025 11:46:59 +0100
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Subject: Re: [PATCH 2/2] tools/nolibc: add support for directory access
-Message-ID: <20250201104659.GA8168@1wt.eu>
-References: <20250130-nolibc-dir-v1-0-ea9950b52e29@weissschuh.net>
- <20250130-nolibc-dir-v1-2-ea9950b52e29@weissschuh.net>
- <20250201103438.GH5849@1wt.eu>
- <58dbcb3c-5d5a-4f81-ac42-494b1fcaf932@t-8ch.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fk27BouPH7dsjpcNvNYTu0HBumDhTdgNoX8EM9Pt+61G4JVIXC1NjIA9ouYima7yLqMDMzFenAygFiryLEdTWHfIJ/QkC3bG7/9WQ7fKoef/U6LLnwc6V5cokvJZeOCKtm54PUt2mluTvwCneMXwsyWZoVkYn9uIQWsVY9e/1bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMDG/lVE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB8DC4CED3;
+	Sat,  1 Feb 2025 11:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738408371;
+	bh=/A+9ioR6oxXv0tTTLfZfZoer4mvDdiifgkLG/Ak9mUE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AMDG/lVEmnwNryWo4aqYuWEZYwTxgC6T+PE+WFAW+RjhqDSjvpRPLfiSpmKXtxkTY
+	 qUnq1Pb6LjSecV6MAuvrOWPqau7c4g9jFCsosl0F4Y6lr63pYKfjnZjKUKhALJkHFQ
+	 87fKODpk9a+4hhv61K5yKc8kXISMQXlVt7E4RLGR284RVdHoWCgxsP5nD5/CviKima
+	 ezyfFS7V4F9Mci9YS+hNKx1b20cx+MnXJXkMxxnGWWCvdsJAsUmdEKX7axn5C82+IZ
+	 RbFTxepM7VGJiRLnRvOqUTxZM7njEsxtzOWijhnfw9rP4gt4h3kwhIekf9khDzSrV+
+	 EUyjZVOVfdYaQ==
+Date: Sat, 1 Feb 2025 12:12:46 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Pedro Falcato <pedro.falcato@gmail.com>, Christian Brauner <christian@brauner.io>, 
+	Shuah Khan <shuah@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Oliver Sang <oliver.sang@intel.com>, John Hubbard <jhubbard@nvidia.com>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>
+Subject: Re: [PATCH v7 0/6] introduce PIDFD_SELF* sentinels
+Message-ID: <20250201-cremig-desorientiert-aac3b09da8e2@brauner>
+References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
+ <20250130143754.1b8bb87bfb15175dd434529b@linux-foundation.org>
+ <b396487f-b906-410d-9ff4-6956d99e2771@lucifer.local>
+ <CAKbZUD3w4_4MjrME-0mgRL01eFggb7et2BLa6012tzQX78KK9w@mail.gmail.com>
+ <20250130153236.198664b9a19ccfcdb24f888b@linux-foundation.org>
+ <7519b85a-cd04-4ae9-a8c8-3d16fb20582e@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <58dbcb3c-5d5a-4f81-ac42-494b1fcaf932@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <7519b85a-cd04-4ae9-a8c8-3d16fb20582e@lucifer.local>
 
-On Sat, Feb 01, 2025 at 11:41:58AM +0100, Thomas Weiﬂschuh wrote:
-> On 2025-02-01 11:34:38+0100, Willy Tarreau wrote:
-> > On Thu, Jan 30, 2025 at 08:54:03PM +0100, Thomas Weiﬂschuh wrote:
-> > > From: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > > 
-> > > Add an allocation-free implementation of readdir() and related
-> > > functions. The implementation is modelled after the one for FILE.
-> > 
-> > I think you'd need to mention/remind the two important points that
-> > come out of that choice, one being that DIR is a fake pointer that
-> > instead stores ~fd so that it can be turned back to a valid FD, and
-> > that subsequent readdir() calls will only work from the same file
-> > unit since it relies on a local static storage.
-> 
-> Point one is true.
-> Point two not so much. It is fine to have multiple directories open at
-> the same time. All state is kept inside the kernel.
-> Only the *current* return value is in the static buffer.
+> Intent is for Christian to take this in his tree (if he so wishes) to be
+> clear!
 
-Excellent point! It also needs to be mentioned.
-
-> So multithreading wouldn't work, but nolibc doesn't support that
-> anyways.
-
-Not only that, but it also means recursive directory scanning is not
-possible either, this definitely deserve being mentioned!
-
-That's something we could improve in the future if there is some demand,
-by also keeping a static "level" and use a hand-built stack. But let's
-not overengineer something that nobody asked for yet ;-)
-
-> > > I'm not entirely sure where to put it. It doesn't really belong into
-> > > stdio.h, but that's where the FILE stuff is.
-> > > sys.h wants alphabetical ordering, but IMO these functions should stick
-> > > together.
-> > 
-> > My man pages suggest that userland code will include <dirent.h>, thus
-> > I think it could be the moment to create it with that new code.
-> 
-> Ack. Now that you suggest it, it seems obvious.
-
-Obvious is always the hardest thing to find as it's assumed to be known
-and is rarely documented ;-)
-
-> > I'm uncertain where NAME_MAX is defined, I haven't found it in the
-> > nolibc sources, just double-checking that it's not just in your build
-> > environment by accident.
-> 
-> It comes from linux/limits.h. I don't think it can ever go away.
-
-Ah fine then!
-
-> > Just out of curiosity, could this copy fail, and if so, should we handle
-> > it (e.g. NAME_MAX != 255) ? My guess here is that if it could almost never
-> > fail and checking it would needlessly complicate the function, let's just
-> > handle it with a comment for now. And if it cannot at all, let's mention
-> > why on top of it as well.
-> 
-> If NAME_MAX changes it would be a userspace regression IMO.
-> I'll add a comment.
-
-Perfect! Consider an acked-by from me on the next one as I'm generally
-fine with the principles.
-
-Willy
+If you send me an updated blurb I can fold it.
 
