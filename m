@@ -1,205 +1,366 @@
-Return-Path: <linux-kselftest+bounces-25518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66295A24883
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 12:21:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03BEFA248D4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 13:04:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40EB83A4A56
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 11:21:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 779BE1887724
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 12:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74617145A09;
-	Sat,  1 Feb 2025 11:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A5A1494BF;
+	Sat,  1 Feb 2025 12:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Di1263yk"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="CrdinWTj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jFO81lW9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5974A3E;
-	Sat,  1 Feb 2025 11:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A750184A30;
+	Sat,  1 Feb 2025 12:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738408864; cv=none; b=EPnIzB+hqVuAaEhOycLy/1g/L6wCky6IZVARF7Q/NkP5cqtx5RmmoRPgctd4E6UvIilEs9fYKUqlb7p71oo5QRXJfTTpno1qgB1jQymDkVH/D8RY0VTR1f50b0B8/cyEsq6tSGUTVo1MJm5q2+ARFH+wbor25mxmDZUWTn+TeyI=
+	t=1738411479; cv=none; b=Rl4zl6RzV3MEFhAsXMX0BXfF2ocQvqXqZakgBhYYcA+dK3jjuhCPNPdOkRxD2t6Sut5/UBtSiYLcdSpz+HUofdBLzmSqSC5dP1e0b6qx4lH1j/WB5KB0jhQnVSe+9S6aalPpUef9UiTbSpigo+fYbJvxaBNEPvur4SLV+wO7QMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738408864; c=relaxed/simple;
-	bh=Pkz6KNTBDbYPEp20NDDuYafiscU7CmXy27olzQlgkCY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OdDf4J650ZwfIlLKjyBGF9cmVuT7Mt6C98zFUQw1VaY+RkpOlSGomeOkgV/gMdB01AeLx6Mrg3Uzz8LGi+Ky8pkDxNVt6+cJJgHa6tU+KgxnpsbGKFwcAB8ROdEAZCchGYX6GFEFO9O303FRjiB1x09tOjaHbFBHi2Q52hDXoGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Di1263yk; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2162c0f6a39so70820525ad.0;
-        Sat, 01 Feb 2025 03:21:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738408862; x=1739013662; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HpXB01KAhrqJhHJwN7yldMlPl2KTotioErkNMfqnalU=;
-        b=Di1263ykdIiL0BMkRN9trkwISGhwvBvMa4nTJlD1+ApLQHlM/pn2VwQP5AalsbU13I
-         hDkufmxqh4wDWKQdI324ROMF2IYyzLy+vOtnzvDntw38pX2EjRWHiYsL84iid7tTSCkA
-         rqCLH+O1SKbs/UBbW+++SzUlK26NthNF7Qdxc2PmGNqcpvPhQ/ELY9h5iiwJJ/kaOF+9
-         suKcHHbCVFdqumyO2vP4ZJGTeRi56pJBSkkcTnp1T5lLGhETY30F0XAXJQbbA6/9I8Au
-         Sm4Ic85pIKcWA/ZaBbtjL1QDWEoJNEHDv4Try1F2x0mj2uRTaLvEffinR18DVbiiO387
-         Cqbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738408862; x=1739013662;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpXB01KAhrqJhHJwN7yldMlPl2KTotioErkNMfqnalU=;
-        b=Anyz70OO2n1TS1flxqYkYLsSoFLd+v6M7AtExTiZuieqF0AWjJ5U/dJT1bstWSbxSK
-         AXy6LngXPiddLkHdZeWHzvakdbuZJcjf4LTlUBNjXRJYuQIMavXSsO5Okru65+JgqoD7
-         6X7aHP0F9V2R32q2Z+QWNW4kAIYYIWJIXdR0MqnHitO3vygClIEp18Zn6QlVq3l2PUfv
-         rtw5bip1MuZVQt/vwm1yo6YhQgIps9Uu2SdeApljp7Nq/InbTiJZWWmLXGRfH6j1oVHt
-         rQnhaDgDgknY473caNTptEwom7yzI0/kJ6ElvSDhV6ZM9rPiQ7xXHNXSywVl0uidYTMp
-         zHGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUPrkBBN9zvDv9Fc9dpfJKPobhIc/SfT6dd66mG/jbeZZn2CawCOT9R70py0GTYFaCAUYyU8zdoEsn22Pw=@vger.kernel.org, AJvYcCWxbMoftEzhfQTkATCF6mK9xumWhjofl22paqUI2o/nab+upkQXZ/nVfDAjrr8fS8ek+Mzvod00ANB/3UshcKor@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoGCO7K2j6T5MUyT9Qh+XVckRJAlskDntTQET5UkSeveuTD3/y
-	UKnKqbWsz6+l2MHcIFmotGhvRGW5xHXGrg2SHCZN3R5NHp9BULQkEq7/1EU1/hg=
-X-Gm-Gg: ASbGncshovH+jQpUNwKtLgI2pit9rI4SoZ2HHSVwq3Hqh9zOC+t6piiR6ClXdAIR5RW
-	ZQrqXE8mMM3apBqzQnVlIQHY6gJUmwwNo5kOk62W9q43VDoMeYpXEIkUuG5dLAIB45t5X9rDrJ3
-	Lqra27SfCl7HjZXkVEflJMY1r7cdVArcryvv8p9VNWsunE5ocDt0p7/ItJMiIqxhxKzIcM3jaaF
-	nvBaJMRCygLvQa18sJJGs0RJ0Vl+O7qlFWn7g5AjRSzvGfb9tgsXvxAixm/eD+rFJjTqP1gJ1bS
-	Nl1wXHIB0s9w/h+rdwWqrD89kYm1NVagh8IYEMlKjha91dZhlMNbdGUQXG5atmOt0ffNsw==
-X-Google-Smtp-Source: AGHT+IHN+mBNBPkLxrKNYilnN9ZM4/vcCO/uUgYYvC+5rHQngX7sQc4gsrp8y9ARjCpsSZJMYDrQZw==
-X-Received: by 2002:a05:6a00:35cd:b0:725:d64c:f122 with SMTP id d2e1a72fcca58-72ff2b48d88mr11362863b3a.2.1738408861922;
-        Sat, 01 Feb 2025 03:21:01 -0800 (PST)
-Received: from ?IPV6:2409:40c0:1035:9c47:d3e9:3f8e:7f5d:858a? ([2409:40c0:1035:9c47:d3e9:3f8e:7f5d:858a])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe6a1cb70sm4737608b3a.180.2025.02.01.03.20.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Feb 2025 03:21:01 -0800 (PST)
-Message-ID: <0f8eed3c-d485-4fbd-98d5-d6c4066789a6@gmail.com>
-Date: Sat, 1 Feb 2025 16:50:55 +0530
+	s=arc-20240116; t=1738411479; c=relaxed/simple;
+	bh=8iKncPFvFN/KqWv1IJCRHmAS1yVFc6ETLBHRNLvI8Kw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=qKr8rZipwzO5Q2oU343Bc5LOI6iBd5t3FWqACiPGyH8z1WD4xGvXRK7q73+fq9nTxCuy1WYYOluh+7P6N/VlPBqRO/86z3UOyE5yISNYDQzByeRa4Rj71LBET1FK9lVYLZAKtxM9i0MgzJEy8ghtuACPDIoZ4g1+qHwoM50vVOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=CrdinWTj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jFO81lW9; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 96E0511400EE;
+	Sat,  1 Feb 2025 07:04:35 -0500 (EST)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-03.internal (MEProxy); Sat, 01 Feb 2025 07:04:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1738411475;
+	 x=1738497875; bh=q94BrnE8GmmvJEToiUwE2COPlRZW+gxKKN9ufHNcoBU=; b=
+	CrdinWTj4j5pemeHmxTFUcHhyq1eVgwwCnGEBCWsKTnDsud/lCeo6RLNw5PM2HU9
+	T4GBS/ADFZkDlXkzFSiQjD2gn6M5WfeRoLuIHCzyqHiVipLlUDaqshyuQImMrUm3
+	1ATdB/7Z0QUOdjgi3Pe+xDJsPOev7O7k2cHkDPiQf4q7k/ruH7yraOdN7stKO3bR
+	Wfky5D16/eFUJUUNVXhGPgjkgBlTr2q7gjmwMIhBwZB8ZT4o++2vF+H+1+sU2SI+
+	qekES0KJaqqDXpf3UA/EmcdStGW9reSVGAFosk+X1OWL6SK/2F5ttSj3VK38pS2M
+	Gvt0L3EydwA1XzY+9TkUfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738411475; x=
+	1738497875; bh=q94BrnE8GmmvJEToiUwE2COPlRZW+gxKKN9ufHNcoBU=; b=j
+	FO81lW99zu6h7WGYlOzMkDHp2OHlTYjdjlM/rtXJg/fm/yYlw33QG9X673KPNj/y
+	lh1Lq7Zf5mWkV5KWq+DMRFE26UwhTbaFvkaNTjqLin5JLVQZ2OvFOfikDDLbO5PI
+	Edx66nP07RDLV+zUhm8px7s7dgtfR6rhrlX9UuYTMoFXZmQm+8pdyzXLV/rw+0La
+	r961ZEjNR29+kTNR6flxxVNlgBvY+tl9d4R1cXti1oRXYwJJTwk7xYSQ6fTyU0jD
+	t35mrYX14KLGfs2cKqfFmBreZ+9FPSPYQe1QUYkYT4FSWhQhYwPMqos0XUVVsEDj
+	Xht27mdyIBoxfE4ACNL4w==
+X-ME-Sender: <xms:0Q2eZ7pp_qtJ515r8XXjlmwfTQa8qUS6_ug6Th2SX2Y0lDk6DGu5Jw>
+    <xme:0Q2eZ1o8vtkjRpaEeTY-jVZd2CYhAGZ_lga7gnch168toDUUIWQV0_zSUsMjQ-iUF
+    117wlTMKjRGNu5utA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudeijecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdefhedmnecujfgurhepofggfffhvfev
+    kfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceoug
+    iguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepieekudevieffkeevffei
+    hefhtdfftdevteejfeeiveevffevveduteekffffleelnecuffhomhgrihhnpehgihhthh
+    husgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpegugihusegugihuuhhurdighiiipdhnsggprhgtphhtthhopeduledpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthht
+    ohepshgufhesfhhomhhitghhvghvrdhmvgdprhgtphhtthhopegvugguhiiikeejsehgmh
+    grihhlrdgtohhmpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhl
+    rdgtohhmpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtth
+    hopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrnhgurhhi
+    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:0Q2eZ4PmkEZZCfRQH0QUSOYomY2tZj4k-rrRa2CBkJlYFnw_ZIMZPQ>
+    <xmx:0Q2eZ-5Dc5rPjxxcYmDOQfSAk7CPhHXqN5-p8aj97aCkayQ6if33uA>
+    <xmx:0Q2eZ66Ex5HoXENhVU1dhe8FmFOGJ5KecN45xKfIZSPefvgs50hV8A>
+    <xmx:0Q2eZ2hudgihac6f5xZl4T4NpGy4gL3Z49Sjw60FnY8c5pqs5Ok4Nw>
+    <xmx:0w2eZ3xjJH_drhm_Z-Bf3-IlczEH0nLjgB02iSCH4DCDC_Qi1SqJ9IpX>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id BFC0718A006B; Sat,  1 Feb 2025 07:04:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/vDSO: Fix undefined CLONE_NEWTIME by including
-To: Christophe Leroy <christophe.leroy@csgroup.eu>, skhan@linuxfoundation.org
-Cc: shuah@kernel.org, Jason@zx2c4.com, liaoyu15@huawei.com,
- broonie@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250126105932.63762-1-purvayeshi550@gmail.com>
- <d85f9c94-249a-4847-a323-2f547fe60732@csgroup.eu>
- <171e15dc-b48f-4592-8466-b220185bae78@gmail.com>
- <3150e796-9249-4ac1-a91a-7efb7ec4de16@csgroup.eu>
-Content-Language: en-US
-From: Purva Yeshi <purvayeshi550@gmail.com>
-In-Reply-To: <3150e796-9249-4ac1-a91a-7efb7ec4de16@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Date: Sat, 01 Feb 2025 13:04:13 +0100
+From: "Daniel Xu" <dxu@dxuuu.xyz>
+To: "Ilya Leoshkevich" <iii@linux.ibm.com>
+Cc: "Shuah Khan" <shuah@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "Marc Hartmayer" <mhartmay@linux.ibm.com>
+Message-Id: <92a6f664-01b8-46bc-8712-6e5a5ac3d851@app.fastmail.com>
+In-Reply-To: <20f56c02-688d-4f22-97dc-cc5b3800de3f@app.fastmail.com>
+References: <cover.1736886479.git.dxu@dxuuu.xyz>
+ <68f3ea96ff3809a87e502a11a4bd30177fc5823e.1736886479.git.dxu@dxuuu.xyz>
+ <78b2e750b4568e294b5fc5a33cf4bc8f62fae7f6.camel@linux.ibm.com>
+ <hsgmutuoi4kvjkr7erm5ty2fdrhdrjpz4fpp5doe65l3pzguxv@lcbmvmjpyykq>
+ <f7rhmwrp3fgx3qd7gn3pzczxeztvsg45u4vrl6ls3ylcvflapx@3yi3shfnrmb3>
+ <ae5e32ff2269eb4c190aeb882b17cb1bb8e6c70d.camel@linux.ibm.com>
+ <20f56c02-688d-4f22-97dc-cc5b3800de3f@app.fastmail.com>
+Subject: Re: [PATCH bpf-next v7 4/5] bpf: verifier: Support eliding map lookup nullness
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 30/01/25 12:32, Christophe Leroy wrote:
-> 
-> 
-> Le 29/01/2025 à 19:17, Purva Yeshi a écrit :
+
+
+On Thu, Jan 30, 2025, at 7:41 PM, Daniel Xu wrote:
+> Hi Ilya,
+>
+> On Thu, Jan 30, 2025, at 2:06 AM, Ilya Leoshkevich wrote:
+>> On Wed, 2025-01-29 at 10:45 -0700, Daniel Xu wrote:
+>>> On Wed, Jan 29, 2025 at 09:49:12AM -0700, Daniel Xu wrote:
+>>> > Hi Ilya,
+>>> >=20
+>>> > On Wed, Jan 29, 2025 at 03:58:54PM +0100, Ilya Leoshkevich wrote:
+>>> > > On Tue, 2025-01-14 at 13:28 -0700, Daniel Xu wrote:
+>>> > > > This commit allows progs to elide a null check on statically
+>>> > > > known
+>>> > > > map
+>>> > > > lookup keys. In other words, if the verifier can statically
+>>> > > > prove
+>>> > > > that
+>>> > > > the lookup will be in-bounds, allow the prog to drop the null
+>>> > > > check.
+>>> > > >=20
+>>> > > > This is useful for two reasons:
+>>> > > >=20
+>>> > > > 1. Large numbers of nullness checks (especially when they
+>>> > > > cannot
+>>> > > > fail)
+>>> > > > =C2=A0=C2=A0 unnecessarily pushes prog towards
+>>> > > > BPF_COMPLEXITY_LIMIT_JMP_SEQ.
+>>> > > > 2. It forms a tighter contract between programmer and verifier.
+>>> > > >=20
+>>> > > > For (1), bpftrace is starting to make heavier use of percpu
+>>> > > > scratch
+>>> > > > maps. As a result, for user scripts with large number of
+>>> > > > unrolled
+>>> > > > loops,
+>>> > > > we are starting to hit jump complexity verification errors.=C2=A0
+>>> > > > These
+>>> > > > percpu lookups cannot fail anyways, as we only use static key
+>>> > > > values.
+>>> > > > Eliding nullness probably results in less work for verifier as
+>>> > > > well.
+>>> > > >=20
+>>> > > > For (2), percpu scratch maps are often used as a larger stack,
+>>> > > > as the
+>>> > > > currrent stack is limited to 512 bytes. In these situations, it
+>>> > > > is
+>>> > > > desirable for the programmer to express: "this lookup should
+>>> > > > never
+>>> > > > fail,
+>>> > > > and if it does, it means I messed up the code". By omitting the
+>>> > > > null
+>>> > > > check, the programmer can "ask" the verifier to double check
+>>> > > > the
+>>> > > > logic.
+>>> > > >=20
+>>> > > > Tests also have to be updated in sync with these changes, as
+>>> > > > the
+>>> > > > verifier is more efficient with this change. Notable, iters.c
+>>> > > > tests
+>>> > > > had
+>>> > > > to be changed to use a map type that still requires null
+>>> > > > checks, as
+>>> > > > it's
+>>> > > > exercising verifier tracking logic w.r.t iterators.
+>>> > > >=20
+>>> > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>>> > > > ---
+>>> > > > =C2=A0kernel/bpf/verifier.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 92
+>>> > > > ++++++++++++++++++-
+>>> > > > =C2=A0tools/testing/selftests/bpf/progs/iters.c=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 14 +--
+>>> > > > =C2=A0.../selftests/bpf/progs/map_kptr_fail.c=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
+>>> > > > =C2=A0.../selftests/bpf/progs/verifier_map_in_map.c |=C2=A0 2 =
++-
+>>> > > > =C2=A0.../testing/selftests/bpf/verifier/map_kptr.c |=C2=A0 2 =
++-
+>>> > > > =C2=A05 files changed, 99 insertions(+), 13 deletions(-)
+>>> > >=20
+>>> > > [...]
+>>> > >=20
+>>> > > > @@ -9158,6 +9216,7 @@ static int check_func_arg(struct
+>>> > > > bpf_verifier_env *env, u32 arg,
+>>> > > > =C2=A0	enum bpf_arg_type arg_type =3D fn->arg_type[arg];
+>>> > > > =C2=A0	enum bpf_reg_type type =3D reg->type;
+>>> > > > =C2=A0	u32 *arg_btf_id =3D NULL;
+>>> > > > +	u32 key_size;
+>>> > > > =C2=A0	int err =3D 0;
+>>> > > > =C2=A0
+>>> > > > =C2=A0	if (arg_type =3D=3D ARG_DONTCARE)
+>>> > > > @@ -9291,8 +9350,13 @@ static int check_func_arg(struct
+>>> > > > bpf_verifier_env *env, u32 arg,
+>>> > > > =C2=A0			verbose(env, "invalid map_ptr to
+>>> > > > access map-
+>>> > > > > key\n");
+>>> > > > =C2=A0			return -EACCES;
+>>> > > > =C2=A0		}
+>>> > > > -		err =3D check_helper_mem_access(env, regno,
+>>> > > > meta-
+>>> > > > > map_ptr->key_size,
+>>> > > > -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_READ, false,
+>>> > > > NULL);
+>>> > > > +		key_size =3D meta->map_ptr->key_size;
+>>> > > > +		err =3D check_helper_mem_access(env, regno,
+>>> > > > key_size,
+>>> > > > BPF_READ, false, NULL);
+>>> > > > +		if (err)
+>>> > > > +			return err;
+>>> > > > +		meta->const_map_key =3D
+>>> > > > get_constant_map_key(env, reg,
+>>> > > > key_size);
+>>> > > > +		if (meta->const_map_key < 0 && meta-
+>>> > > > >const_map_key
+>>> > > > !=3D -EOPNOTSUPP)
+>>> > > > +			return meta->const_map_key;
+>>> > >=20
+>>> > > Mark Hartmayer reported a problem that after this commit the
+>>> > > verifier
+>>> > > started refusing to load libvirt's virCgroupV2DevicesLoadProg(),
+>>> > > which
+>>> > > contains the following snippet:
+>>> > >=20
+>>> > > 53: (b7) r1 =3D -1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 ; R1_w=3D-1
+>>> > > 54: (7b) *(u64 *)(r10 -8) =3D r1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 ; R1_w=3D-1 R10=3Dfp0 fp-8_w=3D-1
+>>> > > 55: (bf) r2 =3D r10=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 ; R2_w=3Dfp0 R10=3Dfp0
+>>> > > 56: (07) r2 +=3D -8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 ; R2_w=3Dfp-8
+>>> > > 57: (18) r1 =3D 0x9553c800=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R1_w=3Dmap_ptr(ks=3D8,vs=3D4)
+>>> > > 59: (85) call bpf_map_lookup_elem#1
+>>> > >=20
+>>> > > IIUC here the actual constant value is -1, which this code
+>>> > > confuses
+>>> > > with an error.
+>>> >=20
+>>> > Thanks for reporting. I think I know what the issue is - will send
+>>> > a
+>>> > patch shortly.
+>>> >=20
+>>> > Daniel
+>>> >=20
+>>>=20
+>>> I cribbed the source from [0] and tested before and after. I think
+>>> this
+>>> should work. Mind giving it a try?
+>>>=20
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index 9971c03adfd5..e9176a5ce215 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -9206,6 +9206,8 @@ static s64 get_constant_map_key(struct
+>>> bpf_verifier_env *env,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return reg->var_off.value;
+>>> =C2=A0}
+>>>=20
+>>> +static bool can_elide_value_nullness(enum bpf_map_type type);
+>>> +
+>>> =C2=A0static int check_func_arg(struct bpf_verifier_env *env, u32 ar=
+g,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 struct bpf_call_arg_meta *meta,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 const struct bpf_func_proto *fn,
+>>> @@ -9354,9 +9356,11 @@ static int check_func_arg(struct
+>>> bpf_verifier_env *env, u32 arg,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 err =3D check_helper_mem_access(env, regno, key_si=
+ze,
+>>> BPF_READ, false, NULL);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 if (err)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
+turn err;
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 meta->const_map_key =3D get_constant_map_key(env, reg,
+>>> key_size);
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 if (meta->const_map_key < 0 && meta->const_map_key !=3D
+>>> -EOPNOTSUPP)
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return m=
+eta->const_map_key;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 if (can_elide_value_nullness(meta->map_ptr-
+>>> >map_type)) {
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meta->co=
+nst_map_key =3D
+>>> get_constant_map_key(env, reg, key_size);
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (meta=
+->const_map_key < 0 && meta-
+>>> >const_map_key !=3D -EOPNOTSUPP)
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return meta->const_map_key;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 }
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 break;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case ARG_PTR_TO_MAP_VALUE:
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 if (type_may_be_null(arg_type) &&
+>>> register_is_null(reg))
+>>>=20
+>>> Thanks,
+>>> Daniel
+>>>=20
+>>>=20
+>>> [0]:
+>>> https://github.com/libvirt/libvirt/blob/c1166be3475a0269f5164d87fec6=
+227d6cb34b47/src/util/vircgroupv2devices.c#L66-L135
 >>
->> On 27/01/25 13:32, Christophe Leroy wrote:
->>>
->>>
->>> Le 26/01/2025 à 11:59, Purva Yeshi a écrit :
->>>> [Vous ne recevez pas souvent de courriers de purvayeshi550@gmail.com.
->>>> Découvrez pourquoi ceci est important à
->>>> https://aka.ms/LearnAboutSenderIdentification ]
->>>>
->>>> Fix the build failure caused by the undefined `CLONE_NEWTIME`.
->>>> Include the `linux/sched.h` header file where the function is 
->>>> defined to
->>>> ensure successful compilation of the selftests.
->>>
->>> This is supposed to be already fixed by commit 34d5b600172b ("selftests:
->>> vDSO: Explicitly include sched.h")
->>>
->>> Can you explain what is the exact problem still ? And why 
->>> linux/sched.h ?
+>> Thanks, I tried this in isolation and it fixed the issue for me.
+>> I talked to Mark and he will try it with his libvirt scenario.
+>
+> Thanks for testing!=20
+>
 >>
->> Yes, I noticed that sched.h is already included, but I still encountered
->> an "undeclared CLONE_NEWTIME" error during compilation.
-> 
-> Must be that your sched.h is not up-to-date I guess. On my side I have:
-> 
-> /usr/include/linux/sched.h:#define CLONE_NEWTIME    0x00000080    /* New 
-> time namespace */
-> /usr/include/bits/sched.h:#define CLONE_NEWTIME    0x00000080      /* 
-> New time namespace */
-> 
-> And
-> 
-> /usr/include/sched.h:#include <bits/sched.h>
-> 
-> 
->>
->> Error I got:
->> CC       vdso_test_getrandom
->> vdso_test_getrandom.c: In function ‘kselftest’:
->> vdso_test_getrandom.c:257:29: error: ‘CLONE_NEWTIME’ undeclared (first
->> use in this function); did you mean ‘CLONE_NEWPID’?
->>    257 |         ksft_assert(unshare(CLONE_NEWTIME) == 0);
->>        |                             ^~~~~
->> vdso_test_getrandom.c:47:20: note: in definition of macro ‘ksft_assert’
->>     47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
->> failed: %s\n", #condition); } while (0)
->>        |                    ^~~~~
->> vdso_test_getrandom.c:257:29: note: each undeclared identifier is
->> reported only once for each function it appears in
->>    257 |         ksft_assert(unshare(CLONE_NEWTIME) == 0);
->>        |                             ^~~~~
->> vdso_test_getrandom.c:47:20: note: in definition of macro ‘ksft_assert’
->>     47 |         do { if (!(condition)) ksft_exit_fail_msg("Assertion
->> failed: %s\n", #condition); } while (0)
->>        |                    ^~~~~
->> make[1]: * [../lib.mk:222:
->> /home/purva/linux/tools/testing/selftests/vDSO/vdso_test_getrandom] 
->> Error 1
->> make[1]: Leaving directory 
->> '/home/purva/linux/tools/testing/selftests/vDSO'
->>
->> I found that CLONE_NEWTIME is declared in both sched.h and
->> linux/sched.h. Since sched.h was already included, it was surprising
->> that the error persisted. Adding linux/sched.h as a header resolved the
->> issue, and the selftests compiled successfully after that.
-> 
-> Can you recheck that the sched.h that contains CLONE_NEWTIME is really 
-> the one used by your compiler ?
+>> The code looks reasonable to me, but I have a small concern regarding
+>> what will happen if the BPF code uses a -EOPNOTSUPP immediate with an
+>> array. Unlike other immediates, IIUC this will cause check_func_arg()
+>> to return 0. Is there a reason to have this special?
+>
+> That's a good point. Lemme check on that.
 
-I rechecked the header files on my system and got the following output:
+Seems like the verifier tracks the s32 spill as a u32.=20
 
-purva@purva-IdeaPad-Gaming-3-15IHU6:~/linux$ grep -r "CLONE_NEWTIME" 
-/usr/include/linux/sched.h /usr/include/bits/sched.h /usr/include/sched.h
-/usr/include/linux/sched.h:#define CLONE_NEWTIME	0x00000080	/* New time 
-namespace */
-
-This shows that the definition of CLONE_NEWTIME exists only in 
-/usr/include/linux/sched.h
-
-> 
->>
->>>
->>> Did you properly build kernel headers before building selftests ?
->>
->> Yes, I ensured that I properly built the kernel headers before building
->> the selftests by following the documentation provided here
-> 
-> 
-> At the end we should probably wonder if we want selftests to build with 
-> old libc's that do not include latest defines. If we want to, then you 
-> should probably replace sched.h by linux/sched.h . I'm not sure about 
-> what to do really.
-
-Since sched.h from libc may not define CLONE_NEWTIME on older systems, 
-should we explicitly include linux/sched.h to ensure compatibility with 
-older libc versions?
-
-Thank you for your time and feedback!
-
-Best regards,
-Purva Yeshi
-
+So I couldn=E2=80=99t craft a repro for this. But it=E2=80=99ll be a
+good refactor to make anyways.=20
 
