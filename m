@@ -1,160 +1,151 @@
-Return-Path: <linux-kselftest+bounces-25522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7705A24BB1
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 20:58:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E33CA24CB5
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Feb 2025 07:22:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E866E3A628D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Feb 2025 19:58:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E945618841D5
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Feb 2025 06:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FF61D434F;
-	Sat,  1 Feb 2025 19:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6A441C6E;
+	Sun,  2 Feb 2025 06:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="d6bJAWqy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EsvQOi5I"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HYpdriww"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410341D151F;
-	Sat,  1 Feb 2025 19:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF7D35958
+	for <linux-kselftest@vger.kernel.org>; Sun,  2 Feb 2025 06:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738439906; cv=none; b=qfJJ/ptKASSVLvSfyo6/S6OfF/Jw6snei9KfVHyll1+RC83995re3Z0SjocFlBxB/w/TWfCJSp7b2L7KUEf11lP81aGttLDrcCaoJtgCmsiPXM4jIeDu1FH0FYE6+h7LkDUzpOzQg1S1pSftwNnd0jb6bwaf44TW/+NMw32+tLg=
+	t=1738477354; cv=none; b=K0nR3Zf0TaCVtmqhhqOVmssCNWFJNYXtuCZnAhFKG4Wr/k34V9eUbFxZQirA5hAZxy0w7M4QVuvhq0HnSp9ZXxc7InsJVu6u4dCIBainmrFUhDhofwJHRNlsyvzNP6wnAsKlYO9slMxZ71GcrePshywdRVfzGI8QxrOC5GyUFRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738439906; c=relaxed/simple;
-	bh=M8s7IqSxHfrB7fFre1WVBbdOEA58s6gNXQoH8hf3SDk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=obJq4ztBRFhv5ox/oMHfJXKOs8pq60Ac3P6wcD7TA6KIQGKuX/S3JXg7V0AiURbs8pI0mEfdtEH+XTtONOY3GnQvwCNOcWKHhoG1CZwtM7M6mhCv/OVKl/LdpjlHzhakV3ktADKblOZqewloIRNEORjZIGvjfBSPKtN+0po3Pkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=d6bJAWqy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EsvQOi5I; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfout.stl.internal (Postfix) with ESMTP id 1D7A11140090;
-	Sat,  1 Feb 2025 14:58:24 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Sat, 01 Feb 2025 14:58:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1738439903; x=
-	1738526303; bh=ws5aTwt92i+jLTIShvXJrsRXjDQOQ6p0zriyk6l9RX8=; b=d
-	6bJAWqyu/4/5Nf/rUIqUCBL4QT/XCnETshQyIpZ3BPBGfPaEmn9/R/RGnM2f7n/R
-	3FFB3ppUUD/0acQloiR7V8uZSLHqYQHrMBOj4IG047y9ZNSCcLIEyV6Zq88LARU4
-	XeGH/2Aeao/bvQuaM63WUJHe64xPet6rXRDTs6q2LiHLEpRjQN6VYDn2fCCnHnsT
-	90ueCw0LRsZJrYsTf3zYY6Z7Mixn09w29BU68/G5niricowbFQeokv7uwwv/06/p
-	4jwaVjj9YhjcCsfnfeLkqC3G4xrlaa87ak6vK5ZAW/EEMMFQXo1tUq6ndWLWuAQE
-	Ch80rZbjwRIDYVfgvf76g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1738439903; x=1738526303; bh=w
-	s5aTwt92i+jLTIShvXJrsRXjDQOQ6p0zriyk6l9RX8=; b=EsvQOi5IuhzddvvX2
-	WaFadPRnfG6bhGLinIZFLuPW6s1VmfGn3HegaE68lMSTXnERxszSXySNR0A86noH
-	YiWCQ264f9wOKZ3Is5SSybVZD2YLSvphnbDhq4dcFwEcTFbBedmmPkta4tUjKiYA
-	18DmnwZO+QknpehvqmX+R4mmi+3/4TNksdcty781ZkeFipRQitiscuPQuHbDTNHp
-	7ufiAQsnBc3kN/O401RuksWBmJ/fdO2YbCtrAn8aOoo6VUfYqG1d3inWzKL+xygq
-	xI5mm7bebvw3x+rXb5UcYIKQtjMQ6ip672AbbAhdo5TxD9TBkoLDBUHPQsWjNChG
-	VckaQ==
-X-ME-Sender: <xms:33yeZzLwdghTQ1uKw1DclcMg6jw8Lq-CwSzL2YCUt9L5ld_tENadhg>
-    <xme:33yeZ3JNf4hFQQq3de-BTeKIV6Xrn8tSHYupBDC-K4dSRRb9Ecvg6_VNUK5pqk5EV
-    5eVNlTOCGKty2uGzg>
-X-ME-Received: <xmr:33yeZ7u9QLY8WKQGlp8CduRahUOi-gP0b2BfCY2fkSbW1c8s9rdNpsHwXzazailX1H_KYlEObFNp37sSD57Cifu0fzgl8yZnGsE9Nal_Jp0-WDnGNYBN>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdeigecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculd
-    ejtddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhep
-    ffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrh
-    hnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihuse
-    gugihuuhhurdighiiipdhnsggprhgtphhtthhopeduledpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtoh
-    epvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhihkhholhgrlhes
-    fhgsrdgtohhmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpd
-    hrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeihohhnghhh
-    ohhnghdrshhonhhgsehlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:33yeZ8Y2ThsG9qnrb7PNkNM7TQ6nhPVVTgJMnstdjDQC0w_D1WnkOA>
-    <xmx:33yeZ6b6TlTFnlybjBYqfXXMxOgKZqgjez-NodUrK9AEvUF560L4tg>
-    <xmx:33yeZwB5wGDjmkNmHe_xUK7MK3DRJEqLXbkrDrBaQSHsCsSOl-DANA>
-    <xmx:33yeZ4YWRx2z08BcnhL_ssDnMNjHOGIEXzFfmvxtl4oaO--h5xo54g>
-    <xmx:33yeZyNV5UuruVHsVCdZgoNgmcGrp6eP2yUs7b5JNCQwdBGh2w5v9eF6>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 1 Feb 2025 14:58:21 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	andrii@kernel.org,
-	ast@kernel.org
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mhartmay@linux.ibm.com,
-	iii@linux.ibm.com
-Subject: [PATCH bpf-next 2/3] bpf: selftests: Test constant key extraction on irrelevant maps
-Date: Sat,  1 Feb 2025 12:58:02 -0700
-Message-ID: <d6f48c9cb8b7981fd037a19a8cfbba5def40f2ea.1738439839.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1738439839.git.dxu@dxuuu.xyz>
-References: <cover.1738439839.git.dxu@dxuuu.xyz>
+	s=arc-20240116; t=1738477354; c=relaxed/simple;
+	bh=T9jjr5yNJujIiKaW63A2Y58cBrapCoUrLyJT07flpW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cUOyj8IFuyNq5SeU+B9R1lcIrs9Ytv6IT9sT2mbGCX9G1UA4EigfxLU1IcuZ+zQUPWrivzKeHPfxPcmxpMrzlSHOHp5B2yv7Tc42FDKn2xJ2t2dlyrm2Fr57gMvRbueXOPgjCd7Nj/39JWQkE9VyjLM7lnFjWpVnL8ZJHimbbJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HYpdriww; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <1b7ae999-c081-45c8-a914-f215c829d57e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738477335;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VX6SmOLzx1meiUouVUG4j5d233T4zSo6WdF6Bre80cU=;
+	b=HYpdriwwjDJVozqO86kstPzP/UohWn8OJaVLab46/fI1sZkPvasOyAvX5XB6vp04m2j3h+
+	knbMs7p6IPCxJVv6QOcCwXo+4HIRzGoOpF4y9vUlLP6oHvgDayh39EFRq759Vau5mTNm1c
+	9Xbw61w4kJzmKpdV0D6Ek37gw9SuVMc=
+Date: Sat, 1 Feb 2025 22:22:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
+ not available
+Content-Language: en-GB
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: shuah@kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ nathan@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+ <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
+ <rgcdc7zokwfoars7c2pzredogea3rvolbnzkvko7q6lbgjnvfx@oeyzed5zalpb>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <rgcdc7zokwfoars7c2pzredogea3rvolbnzkvko7q6lbgjnvfx@oeyzed5zalpb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Test that very high constant map keys are not interpreted as an error
-value by the verifier. This would previously fail.
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../selftests/bpf/progs/verifier_array_access.c   | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-index 29eb9568633f..0a187ff725cc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-@@ -713,4 +713,19 @@ unsigned int non_stack_key_lookup(void)
- 	return val->index;
- }
- 
-+SEC("socket")
-+__description("doesn't reject UINT64_MAX as s64 for irrelevant maps")
-+__success __retval(42)
-+unsigned int doesnt_reject_irrelevant_maps(void)
-+{
-+	__u64 key = 0xFFFFFFFFFFFFFFFF;
-+	struct test_val *val;
-+
-+	val = bpf_map_lookup_elem(&map_hash_48b, &key);
-+	if (val)
-+		return val->index;
-+
-+	return 42;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.47.1
+
+On 2/1/25 12:23 AM, Daniel Xu wrote:
+> Hi Yonghong,
+>
+> On Thu, Jan 30, 2025 at 10:28:11PM -0800, Yonghong Song wrote:
+>>
+>>
+>> On 1/30/25 2:33 PM, Daniel Xu wrote:
+>>> Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
+>>> libraries"), only statically linking test_progs is supported. However,
+>>> some distros only provide a dynamically linkable LLVM.
+>>>
+>>> This commit adds a fallback for dynamically linking LLVM if static
+>>> linking is not available. If both options are available, static linking
+>>> is chosen.
+>>>
+>>> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>>> ---
+>>>    tools/testing/selftests/bpf/Makefile | 11 ++++++++---
+>>>    1 file changed, 8 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>>> index 6722080b2107..da514030a153 100644
+>>> --- a/tools/testing/selftests/bpf/Makefile
+>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>> @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
+>>>      LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+>>>      # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
+>>>      LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+>>> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> -  LLVM_LDLIBS  += -lstdc++
+>>> +  # Prefer linking statically if it's available, otherwise fallback to shared
+>>> +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
+>>> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> +    LLVM_LDLIBS  += -lstdc++
+>>> +  else
+>>> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> +  endif
+>>>      LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+>>>    endif
+>> Although your change looks good, but maybe you can look at bpftool Makefile?
+>>
+>>    # If LLVM is available, use it for JIT disassembly
+>>    CFLAGS  += -DHAVE_LLVM_SUPPORT
+>>    LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+>>    # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
+>>    # (e.g. when bpftool build is called from selftests build as selftests
+>>    # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+>>    # compilation error due to redefinition. Let's filter it out here.
+>>    CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+>>    LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>    ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+>>      LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>      LIBS += -lstdc++
+>>    endif
+>>    LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+>>
+>> It would be great if the selftests shared library handling to be the same as bpftool's.
+> So bpftool is both an internally consumed (from selftests) dependency as
+> well as a tool packaged up by distros. For the latter case, distros
+> prefer dynamic linking.
+
+I hacked llvm to have both static and shared libraries installed and indeed
+`llvm-config --shared-mode` prefers shared mode.
+
+So yes, your existing change looks good. Thanks.
+
+>
+> So unfortunately, I think these probably need to be defined separately.
+> The code looks similar but the use cases are different.
+>
+> Thanks,
+> Daniel
 
 
