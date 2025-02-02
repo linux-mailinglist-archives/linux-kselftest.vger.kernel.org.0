@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-25528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1A98A25092
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 00:00:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D103A25096
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 00:07:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53C861636E2
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Feb 2025 23:00:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97CC018849EB
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Feb 2025 23:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F014B1FBE83;
-	Sun,  2 Feb 2025 23:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7611FECC0;
+	Sun,  2 Feb 2025 23:07:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="DAkgHmIE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kpGrPDD/"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="OdMFmDt1";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="siC0HCfQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF30E1E511;
-	Sun,  2 Feb 2025 23:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562641FDA90;
+	Sun,  2 Feb 2025 23:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738537237; cv=none; b=kk2Er5Q3RhQ29mCsJZnQ0AxbwJedhhCywI2Y0wii3yM28qtOG3KF45WUxYiL8uvy+YTXgDT2o32JbfcJmVbad9RpmmSsofH/wAVhuFyCMGt3dsd5PxtWPydsLxjuKU1s/vi9PQhZ1182eFbLBNqitAsl7QbLOykjDDkR+Cv3QuY=
+	t=1738537643; cv=none; b=B0LHbCzIasRDeAbzpPJg9qAp21pJUWHZ2gzywmWMxrykuZbgkGQF+T2aMW66Uigj7iwZEJgJCiyuoYoUbPswtlez59q68p6HSIZDdvhy1ePIafs7p1eu8Ee4OZuIoF+WoFf3tJGRyydZblBJkKiJ2uFsX1w7Y1cgiKuacR1tjhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738537237; c=relaxed/simple;
-	bh=clS/an5mppDT0qEpiVyEo479PWmPKGrMrsqrOG7E5JA=;
+	s=arc-20240116; t=1738537643; c=relaxed/simple;
+	bh=9gVeuqoUPF160LlPKssl/ECX3xfu3p7wCdpPGVaQhoo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S0jyfhe4VbAXJGZ1A6o7YuC5ysU5SuvmcK8nF35AWItdMLBnTdxos8EGXequWMTet33HLOzUpDJkk7hmefEX2NNSf6rB59nEOCYpQ6YnoGETppwjjRaWFZZzziAxSoRhJomVvAT0yVkRCJUlsnZTN9ac3NjP7pLRt9hIUZLYK1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=DAkgHmIE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kpGrPDD/; arc=none smtp.client-ip=202.12.124.158
+	 Content-Type:Content-Disposition:In-Reply-To; b=YkogRqgjjQZPebWx/REr/oT62ri91dEPEMAgRHdo20PX9SKg9qH4Cu7jEWdW2Ftja6YxXO1yhcuvE5cEF8tsFeSsJng+lvSfbvlGfZuCXuRc+ObllyzSGBfhg17oEM098SVLafBNVL9wsRNvh7DNJO+mrlY2x1ASx1Bu9NjD1S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=OdMFmDt1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=siC0HCfQ; arc=none smtp.client-ip=202.12.124.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 921B925400A1;
-	Sun,  2 Feb 2025 18:00:33 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Sun, 02 Feb 2025 18:00:33 -0500
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfout.stl.internal (Postfix) with ESMTP id 08B8211400D8;
+	Sun,  2 Feb 2025 18:07:19 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Sun, 02 Feb 2025 18:07:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1738537233; x=
-	1738623633; bh=8u0EbBKwXnZo9li66mikzFl6a8SzQaOranWA3KV26lM=; b=D
-	AkgHmIE7JwpV2XBoEijeuq85FJSclLOGMkxgyYg3lw4BQmOTSOWXpQcBddD/mlkt
-	3fHFPCbXvNrNIX6+RWeNnWJQIWc0ISUQtMVItJuikOYzNBrMzRJuOnZzvS/UFrfz
-	ZFwL8/Wouiqw0eTECKa98oIWxvdVaEVK3StcvKab2+j6YHJKesNqFSTpl5TTCocM
-	J76ADCggn9kMHCetZTlYk+pnUtr2uxJQidxHrdFT5iCfQtUtyyNgc2Miy9YFIkxl
-	w4/y655xoV4cHK7jDd0nn0QTPBOoKrQdT1qJWnxixT51XQSfNPTfVctdRX1mag+Z
-	CZ4DiflCFTTnTUadgDUvQ==
+	:reply-to:subject:subject:to:to; s=fm1; t=1738537638; x=
+	1738624038; bh=b8vxyUo2+X0+IZqkuu9170OSmww4EAw9XZWfoUl1MjU=; b=O
+	dMFmDt1EsiLVabvfBUvSem0oNoF60VU+sFI8csXSAkkSzNwd1EvUDuY/ybp6MKqB
+	9w6rYsn9Ehj1l2ak7i9JD+Te87tQ7F8PhW3Q/ilpMZh+ZMXpT+1D9n6U2JLZpB+Y
+	Pbg1Xf0JMrW+H6TcfbgXLGRNQxtm1iYlEtCRm+1bv3JR39ZsJOUpL0zND90BiTHj
+	RLDqmi1VtPUbs3z1YuLDehPmicwyh6Uj4MVunsuzAzM4A2yLRUElpEeOvQwWp7NB
+	q/be8bqelTVHenQXUEM0VCvWrxri72vA+UMxpiWahKlWVxPdVllkKoZwzHJBlrPz
+	jDQifd5aK9NxWlkNFDppg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1738537233; x=1738623633; bh=8u0EbBKwXnZo9li66mikzFl6a8SzQaOranW
-	A3KV26lM=; b=kpGrPDD/bpAth21WltoNdR0djWRO4z7vKpEz4FLeoYeBF0XBgXb
-	XTwQ4Ia/UPqkdnFMYj8zDmfW/q+k2deonGtUmtjVHyc8traFodmtLuGUR9sdKhcI
-	0TcAZOXrmZli9qUSa4CfwEVWLf4Mw9aL7FDWMBXvpj01SECrKOAyWJAinHq6YbsH
-	VJE/BGM3nIkULGh3njODKKiREqQB4dFDJuVhCeBtDdr0ID6KZnDmXi7ANgSBFqEY
-	r9VIbv9Ydq20VuSKRWhfK2gN1V0a1+tab102ZT7gqAgwOKta+gutArCxGGofOTJy
-	IX2+osaHZM9Mm5KGRVIDOUd8lNjRMwu0Jcw==
-X-ME-Sender: <xms:EfmfZ3GDem_EiU_oj7vI1lZ2yl2woXvp3SxS61aTsrQJWBhDgfEh9Q>
-    <xme:EfmfZ0WZY_tNLGLIlrPF5vy-kSww8myQM5az5drWBrXCatCwj4eXOTPhN4exs2_SG
-    bCg2-kLLsgpmPaCqBA>
-X-ME-Received: <xmr:EfmfZ5KYGJ66ACKC3kuvgM2FeVwNsyJAa452RXnglh9Mio8ZYgho_dC2tQpB>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheeliecutefuodetggdotefrod
+	1738537638; x=1738624038; bh=b8vxyUo2+X0+IZqkuu9170OSmww4EAw9XZW
+	foUl1MjU=; b=siC0HCfQkklPmSdK8cQG4T27dbd2P99wHAEkuP9MQ92s3afdFZ6
+	C5k1jE15LdMHrZLq0TnYL8ejsFLtMMYxWFyuN6lKYGWE/xNCLy8QYO+XHh6KQEbZ
+	kl0qtTls8+8NoY0ztozJYOLPcYYm5p+SyE1QcHxv8CXfyYoXw7zE7IQd+yOoVPgU
+	0k3GuZ2M8eJ2qcyenLu0Y9wFyqrQEUuRTpk0As2JjnxuyOFpf43raxoUCCoziA4t
+	ph6JmoowkFrCOWbJjNfjFZ3BOeHjls3oqNX9b7HT6A9NfL+kvCwnXO/ELNojveM9
+	hubH3z3U5an9t8pk3FkabT1zDD5k9K6WlTA==
+X-ME-Sender: <xms:pvqfZ0r7VEYE265W1BIhGT7TftXP_v4u2xjQDRrWi9cMkUwHY1AR0g>
+    <xme:pvqfZ6qWIWi3NJXIsqLRcVnpneVWKYxoxN8_5HWuDrvwm_3ZkrMa3urJyMFbupn6J
+    8U31eYCqhlkZdxe8Js>
+X-ME-Received: <xmr:pvqfZ5M6wssxgqmNNisuvLsB-9qZ_b2HUrKV0ccAUI2aW4bz6AfRLYmDV9Kc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheeljecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
     hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
@@ -80,15 +80,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheeliecutefuodetgg
     hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
     pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
     htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
-X-ME-Proxy: <xmx:EfmfZ1GOB_GKTqhN5wlSCG4TZub2bhOvbhuHtBnvs4vPBUJGY1EujA>
-    <xmx:EfmfZ9UiBBfVfSbGlE0MO_253NRSn7PFzWWaX7pRp1e-q_49lHzdzA>
-    <xmx:EfmfZwPPUNfU6_IEgCzco2p7oL20kPcqeGqLl4DIHdE2y_jvHPU4fA>
-    <xmx:EfmfZ81nxiq3c1IvASkKGG24T9Y-bVnwRdExW2VBrqDBSvP1pFLLBQ>
-    <xmx:EfmfZyUcP9MkZiiwwp86hoz-ikj52l0fE6wM7mI08BV1dWoljAqb2RVX>
+X-ME-Proxy: <xmx:pvqfZ75uugAveFN6dlaxF2MgcLMVtKza16yvGafINQIYbwSYRd3hoA>
+    <xmx:pvqfZz6fS-YnknOTvgkvLpCTIRFsHGPKObd1TAeT_W4DVZk7BZacrA>
+    <xmx:pvqfZ7gdUxGXKGw8dZUzRRnRCs5bLdrrAsIMc5Du5qnNOd8s_n_soA>
+    <xmx:pvqfZ96IVHVUr-sM1SJpir-EzZ44Fj7kxF7d7hQx4JeK8nAgvvkQWQ>
+    <xmx:pvqfZ6J_04S0EBLV4dJMXRe7OGksLyB7z9rOWJydTj0xyTPZbvtO4RJG>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 2 Feb 2025 18:00:32 -0500 (EST)
-Date: Mon, 3 Feb 2025 00:00:31 +0100
+ 2 Feb 2025 18:07:17 -0500 (EST)
+Date: Mon, 3 Feb 2025 00:07:16 +0100
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
@@ -98,10 +98,11 @@ Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v18 15/25] ovpn: implement multi-peer support
-Message-ID: <Z5_5D4boBEaVdf4W@hog>
+Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
+ add/get/dump/delete via netlink
+Message-ID: <Z5_6pC-zsVzukJs3@hog>
 References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
- <20250113-b4-ovpn-v18-15-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,73 +111,176 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250113-b4-ovpn-v18-15-1f00db9c2bd6@openvpn.net>
+In-Reply-To: <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
 
-2025-01-13, 10:31:34 +0100, Antonio Quartulli wrote:
->  static int ovpn_newlink(struct net *src_net, struct net_device *dev,
->  			struct nlattr *tb[], struct nlattr *data[],
->  			struct netlink_ext_ack *extack)
->  {
->  	struct ovpn_priv *ovpn = netdev_priv(dev);
->  	enum ovpn_mode mode = OVPN_MODE_P2P;
-> +	int err;
->  
->  	if (data && data[IFLA_OVPN_MODE]) {
->  		mode = nla_get_u8(data[IFLA_OVPN_MODE]);
-> @@ -136,6 +183,10 @@ static int ovpn_newlink(struct net *src_net, struct net_device *dev,
->  	ovpn->mode = mode;
->  	spin_lock_init(&ovpn->lock);
->  
-> +	err = ovpn_mp_alloc(ovpn);
-
-If register_netdevice fails, ovpn->peers won't get freed in some cases
-(only if we got past ndo_init). So this should go into ndo_init.
-
-> +	if (err < 0)
-> +		return err;
+2025-01-13, 10:31:39 +0100, Antonio Quartulli wrote:
+> +static int ovpn_nl_attr_sockaddr_remote(struct nlattr **attrs,
+> +					struct sockaddr_storage *ss)
+> +{
+> +	struct sockaddr_in6 *sin6;
+> +	struct sockaddr_in *sin;
+> +	struct in6_addr *in6;
+> +	__be16 port = 0;
+> +	__be32 *in;
+> +	int af;
 > +
->  	/* turn carrier explicitly off after registration, this way state is
->  	 * clearly defined
->  	 */
+> +	ss->ss_family = AF_UNSPEC;
+> +
+> +	if (attrs[OVPN_A_PEER_REMOTE_PORT])
+> +		port = nla_get_be16(attrs[OVPN_A_PEER_REMOTE_PORT]);
+> +
+> +	if (attrs[OVPN_A_PEER_REMOTE_IPV4]) {
+> +		af = AF_INET;
+> +		ss->ss_family = AF_INET;
+> +		in = nla_data(attrs[OVPN_A_PEER_REMOTE_IPV4]);
+> +	} else if (attrs[OVPN_A_PEER_REMOTE_IPV6]) {
+> +		af = AF_INET6;
+> +		ss->ss_family = AF_INET6;
+> +		in6 = nla_data(attrs[OVPN_A_PEER_REMOTE_IPV6]);
+> +	} else {
+> +		return AF_UNSPEC;
+> +	}
+> +
+> +	switch (ss->ss_family) {
+> +	case AF_INET6:
+> +		/* If this is a regular IPv6 just break and move on,
+> +		 * otherwise switch to AF_INET and extract the IPv4 accordingly
+> +		 */
+> +		if (!ipv6_addr_v4mapped(in6)) {
+> +			sin6 = (struct sockaddr_in6 *)ss;
+> +			sin6->sin6_port = port;
+> +			memcpy(&sin6->sin6_addr, in6, sizeof(*in6));
+> +			break;
+> +		}
+> +
+> +		/* v4-mapped-v6 address */
+> +		ss->ss_family = AF_INET;
+> +		in = &in6->s6_addr32[3];
+> +		fallthrough;
+> +	case AF_INET:
+> +		sin = (struct sockaddr_in *)ss;
+> +		sin->sin_port = port;
+> +		sin->sin_addr.s_addr = *in;
+> +		break;
+> +	}
+> +
+> +	/* don't return ss->ss_family as it may have changed in case of
+> +	 * v4-mapped-v6 address
+> +	 */
 
+nit: I'm not sure that matters since the only thing the caller checks
+is ret != AF_UNSPEC, and at this point, while ss_family could have
+been changed, it would have changed from AF_INET6 to AF_INET, so it's
+!= AF_UNSPEC.
+
+> +	return af;
+> +}
 
 [...]
-> +static int ovpn_peer_add_mp(struct ovpn_priv *ovpn, struct ovpn_peer *peer)
+> +static int ovpn_nl_peer_precheck(struct ovpn_priv *ovpn,
+> +				 struct genl_info *info,
+> +				 struct nlattr **attrs)
 > +{
 [...]
-> +	hlist_add_head_rcu(&peer->hash_entry_id,
-> +			   ovpn_get_hash_head(ovpn->peers->by_id, &peer->id,
-> +					      sizeof(peer->id)));
 > +
-> +	if (peer->vpn_addrs.ipv4.s_addr != htonl(INADDR_ANY)) {
-> +		nhead = ovpn_get_hash_head(ovpn->peers->by_vpn_addr,
-> +					   &peer->vpn_addrs.ipv4,
-> +					   sizeof(peer->vpn_addrs.ipv4));
-> +		hlist_nulls_add_head_rcu(&peer->hash_entry_addr4, nhead);
+> +	/* VPN IPs are needed only in MP mode for selecting the right peer */
+> +	if (ovpn->mode == OVPN_MODE_P2P && (attrs[OVPN_A_PEER_VPN_IPV4] ||
+> +					    attrs[OVPN_A_PEER_VPN_IPV6])) {
+
+And in MP mode, at least one VPN_IP* is required?
+
+
+[...]
+>  int ovpn_nl_peer_new_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+[...]
+> +	/* Only when using UDP as transport protocol the remote endpoint
+> +	 * can be configured so that ovpn knows where to send packets to.
+> +	 *
+> +	 * In case of TCP, the socket is connected to the peer and ovpn
+> +	 * will just send bytes over it, without the need to specify a
+> +	 * destination.
+> +	 */
+> +	if (sock->sk->sk_protocol != IPPROTO_UDP &&
+> +	    (attrs[OVPN_A_PEER_REMOTE_IPV4] ||
+> +	     attrs[OVPN_A_PEER_REMOTE_IPV6])) {
+
+Is a peer on a UDP socket without any remote (neither
+OVPN_A_PEER_REMOTE_IPV4 nor OVPN_A_PEER_REMOTE_IPV6) valid? We just
+wait until we get data from it to update the endpoint?
+
+Or should there be a check to make sure that one was provided?
+
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "unexpected remote IP address for non UDP socket");
+> +		sockfd_put(sock);
+> +		return -EINVAL;
 > +	}
 > +
-> +	if (!ipv6_addr_any(&peer->vpn_addrs.ipv6)) {
-> +		nhead = ovpn_get_hash_head(ovpn->peers->by_vpn_addr,
-> +					   &peer->vpn_addrs.ipv6,
-> +					   sizeof(peer->vpn_addrs.ipv6));
-> +		hlist_nulls_add_head_rcu(&peer->hash_entry_addr6, nhead);
+> +	ovpn_sock = ovpn_socket_new(sock, peer);
+> +	if (IS_ERR(ovpn_sock)) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot encapsulate socket: %ld",
+> +				       PTR_ERR(ovpn_sock));
+> +		sockfd_put(sock);
+> +		return -ENOTSOCK;
+
+Maybe s/-ENOTSOCK/PTR_ERR(ovpn_sock)/ ?
+Overwriting ovpn_socket_new's -EBUSY etc with -ENOTSOCK is a bit
+misleading to the caller.
+
+> +	}
+> +
+> +	peer->sock = ovpn_sock;
+> +
+> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
+> +	if (ret < 0)
+> +		goto peer_release;
+> +
+> +	ret = ovpn_peer_add(ovpn, peer);
+> +	if (ret < 0) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot add new peer (id=%u) to hashtable: %d\n",
+> +				       peer->id, ret);
+> +		goto peer_release;
+> +	}
+> +
+> +	return 0;
+> +
+> +peer_release:
+
+I think you need to add:
+
+	ovpn_socket_release(peer);
+
+If ovpn_socket_new succeeded, ovpn_peer_release only takes care of the
+peer but not its socket.
+
+> +	/* release right away because peer is not used in any context */
+> +	ovpn_peer_release(peer);
+> +
+> +	return ret;
+>  }
+>  
+>  int ovpn_nl_peer_set_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+[...]
+> +	if (attrs[OVPN_A_PEER_SOCKET]) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "socket cannot be modified");
+> +		return -EINVAL;
+> +	}
+> +
+> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
+> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
+> +	if (!peer) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot find peer with id %u", peer_id);
+> +		return -ENOENT;
 > +	}
 
-You can't add hash_entry_addr4 and hash_entry_addr6 to the same
-hashtable.  ovpn_peer_get_by_vpn_addr{4,6} use those fields as
-"member" for hlist_nulls_for_each_entry_rcu, so container_of (in
-hlist_nulls_entry) will return a "peer" that's not really a peer
-object in memory when we walk past an entry for the wrong address
-family:
-  container_of(peer_v4->hash_entry_addr4, struct ovpn_peer, hash_entry_addr6)
-or
-  container_of(peer_v6->hash_entry_addr6, struct ovpn_peer, hash_entry_addr4)
-
-(probably not visible in testing since we'll never really get 2 peers
-(and of different families) into the same bucket, and then also get
-them to pass the addr_equal test in ovpn_peer_get_by_vpn_addr{4,6}.
-easiest way to try to trigger problems would be making the hashtable
-single bucket, and even then...)
+The check for non-UDP socket with a remote address configured should
+be replicated here, no?
 
 -- 
 Sabrina
