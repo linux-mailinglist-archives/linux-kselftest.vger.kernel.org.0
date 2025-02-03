@@ -1,119 +1,96 @@
-Return-Path: <linux-kselftest+bounces-25603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B38CBA265CC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 22:38:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1628A26607
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 22:48:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 710B6188674F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 21:38:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DE4C3A3578
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 21:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038F2211495;
-	Mon,  3 Feb 2025 21:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23DD200121;
+	Mon,  3 Feb 2025 21:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qmDEtDXn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEYCDKLe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f202.google.com (mail-il1-f202.google.com [209.85.166.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39755211292
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 21:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C950378F54;
+	Mon,  3 Feb 2025 21:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738618647; cv=none; b=SguMHKlHqKkhEtdRtb0VW+CLrPrFHIXCW/fHosb9gp/uyjhWDU3e2MQjeIhwg3FWomjxF2QxwSiMJww8Ki8zp9eB6/cSvNfB7J3F/56MOwNNUvbauPTXZ7nUvntDcI18h5mgpNJu6bmmKthbRjJd+Te7KeC/coe57vgYdqwC0SU=
+	t=1738619332; cv=none; b=ETL3hOspflzi3hv4uGtDqcVG6Gpb3RoFjWmvKyJnxgNNVpg7KDZgJMe92v3AGEcUMs3cJmoFe+DVWdi71jzasT9iWZ5k1oJ/B3qinWnp0PfOE8bOscP2oLvAbeOcwA+gwHj4unZCJ4ePLwsMRTjknWYYIHKTbNdYnoX+TQztjUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738618647; c=relaxed/simple;
-	bh=QLnx4/Rgy7zQOoI/TasPwiI6+hjEJs/e68fuOcK9rGs=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=GfU9c5uTcbxuR7SfyLMFK0PY0JuBj8EfcjHzI2FsZLI0wTx3GyeQMvhg2qhGZDi+n5NsO0dO6vbeYspNRpz0cQ6yghhKpZwtdpQ5yq31rGnc4QjC09+doO5PL2a/QgbypG2YDnZHUXoaXUxDvT0DfnfLEv1Bw0LIZBkNd9bvHCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qmDEtDXn; arc=none smtp.client-ip=209.85.166.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-il1-f202.google.com with SMTP id e9e14a558f8ab-3cfe0ce0dbbso70985505ab.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 13:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738618645; x=1739223445; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XEqP/YEsjQP6HXPcAZ+OLL0SnqZRyU2wi8fLU4Seg48=;
-        b=qmDEtDXnc+drZ2rBsx5VwzDTo8GAidumBDsj/exrwP3oPPPzqsVXCuGF68aWe3gD+9
-         fzEtf1YGvJojJQm6s9piBShclKbrI+4Jgs6yCx65MwpwhX5+dVpgfCWWVppr6fdpRsCo
-         RvX2A9Q2z5mplQVC1RKXwMyBzd2Hya9FENjOS/qMpJqcodTv41OfSqA6J0RrzH1dsgAH
-         IC572ulqisdDqw6RsKjq9T03zRi8lA37nIQLIcF85+S5qpQfUzeR1MlNsuCW910R3iEY
-         BNZhhqwPV09n/lrMSAkB/BgVgOwAELzePUlvyo5s/UoXcjwQht8jFSgy2GItQ8b1fBG3
-         qwHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738618645; x=1739223445;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XEqP/YEsjQP6HXPcAZ+OLL0SnqZRyU2wi8fLU4Seg48=;
-        b=AjeB9polLFDoPN87LTfAuLKOPONAofAPqCDMdIxB+5i0D/YL+PKNmMjUv0arKpUeUe
-         bFFjvcVlrE4xU6bE2gO4/NXqeHVCsm2+rZJHwoK2KTMNRI8WMe5uezkqVbBG9jVFgle5
-         iDH2O6Yeq8XcJJrmZxxrl3wXPa7OSJGzsVb8Tvwt4Xsm4iXQmDa/5O73nFhAhr7Q3nij
-         u/Xc0e2OxRHGrJ/yJbYtAQAoy8NkHes4akhx2kjY8UELLrgPrxlGsxxK4DMqwfiB616u
-         Alh4gZ7jtfHbthWM+7SurC0cRLY8VU44olGhL7ZVT8Zo6Y6UxO3IykG6BK768GSXOkQG
-         ARZg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2Q6lHrsR0UtaRMlf9rRsW1uySZm1EZHUg0Uxpwg/t+8ZkUm6oTapqMnVZ5oHn9dsqAQf610VHbHLZHGDNAAo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/mcYceM4afxDjX/l6xqVUfpwwy00izqcTVgZ1ib7dq4dCUrRg
-	y0Tjh/W3KJi7tyBFJokkOsCGGjQYEmizTj5M0KqJzvUES+qHoBJh76Do7t91jrlNRv849ASXTd2
-	HFz3xPreEKpk6rU/y9xal3w==
-X-Google-Smtp-Source: AGHT+IFzEQXFVr/GsJOoiYsXrEqAdOToUP7ubJ3+EUez4554ouloGovsV2x1HVo9oXN98kh3qBpaq5S0IrbbEWoKkA==
-X-Received: from ilbby19.prod.google.com ([2002:a05:6e02:2613:b0:3cf:c127:d037])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a92:cd83:0:b0:3cf:b571:c08c with SMTP id e9e14a558f8ab-3cffe3d1bc2mr218960215ab.3.1738618645230;
- Mon, 03 Feb 2025 13:37:25 -0800 (PST)
-Date: Mon, 03 Feb 2025 21:37:24 +0000
-In-Reply-To: <gsntzfj91fbs.fsf@coltonlewis-kvm.c.googlers.com> (message from
- Colton Lewis on Wed, 29 Jan 2025 21:27:03 +0000)
+	s=arc-20240116; t=1738619332; c=relaxed/simple;
+	bh=AgNip4Ad0+xKhyaCmGtkbrPXcE+2OIzYanrzNlcDRfw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=czsqOrhTDHSKuH3K++8FxG8JC1gP87wALsjsA+3JeOc3Pn0vc5R2THXN79Kthivfg9ko1zxzzdCTRXy/RBIDkpiVtWp65AvhchiyI6/iCbJWR5zLuaWeXli9WUXeIpY2AvD26szZlsoepXysgHlDpEECkI8Ktl4LVHL8WS6zuP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEYCDKLe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D55FFC4CED2;
+	Mon,  3 Feb 2025 21:48:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738619332;
+	bh=AgNip4Ad0+xKhyaCmGtkbrPXcE+2OIzYanrzNlcDRfw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BEYCDKLeNx9YAXG/HZU/1SOvy2hDp/Owq9MKgX5svdZoqjls9jI1wHl4mH1jo3hst
+	 hcendJUGzmi+CRvUi3xutbE8Y8v2qQtUPe0NVxb9yQBfyy4Lyf6AukEVRddXTqG/FR
+	 6hzwSCKiAV8GONVcCiAz//NZfP4jtuq9xGx0d/psW8LKzbUqrCWywvy2shUo1/IsrH
+	 CYwAyIE4c9X26u3THacVG9dEBJ3aBtSpaxms71aVyzM8n+F17mfHMrgYslhQGdqR82
+	 5zDEyWTGzh7MiWFfWi1OSnpTGYqUZnCf6534kXvoWM98jbHpS/K5zHltmElUkHnrPG
+	 GYIDKI6MN2K6g==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	donald.hunter@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: net: suppress ReST file generation when building selftests
+Date: Mon,  3 Feb 2025 13:48:50 -0800
+Message-ID: <20250203214850.1282291-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsntwme61zhn.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [RFC PATCH 1/4] perf: arm_pmuv3: Introduce module param to
- partition the PMU
-From: Colton Lewis <coltonlewis@google.com>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: maz@kernel.org, kvm@vger.kernel.org, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, pbonzini@redhat.com, shuah@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Colton Lewis <coltonlewis@google.com> writes:
+Some selftests need libynl.a. When building it try to skip
+generating the ReST documentation, libynl.a does not depend
+on them.
 
-> Marc Zyngier <maz@kernel.org> writes:
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: donald.hunter@gmail.com
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/ynl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->> On Tue, 28 Jan 2025 22:08:27 +0000,
->> Colton Lewis <coltonlewis@google.com> wrote:
+diff --git a/tools/testing/selftests/net/ynl.mk b/tools/testing/selftests/net/ynl.mk
+index 12e7cae251be..e907c2751956 100644
+--- a/tools/testing/selftests/net/ynl.mk
++++ b/tools/testing/selftests/net/ynl.mk
+@@ -27,7 +27,8 @@ YNL_GENS_HASH := $(shell echo $(YNL_GENS) | sha1sum | cut -c1-8)
+ 
+ $(OUTPUT)/libynl.a: $(YNL_SPECS) $(OUTPUT)/.libynl-$(YNL_GENS_HASH).sig
+ 	$(Q)rm -f $(top_srcdir)/tools/net/ynl/libynl.a
+-	$(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl GENS="$(YNL_GENS)" libynl.a
++	$(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl \
++		GENS="$(YNL_GENS)" RSTS="" libynl.a
+ 	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a $(OUTPUT)/libynl.a
+ 
+ EXTRA_CLEAN += \
+-- 
+2.48.1
 
->>> >> +	bitmap_set(cpu_pmu->cntr_mask, 0, pmcr_n);
->>> >> +
->>> >> +	if (reserved_guest_counters > 0 && reserved_guest_counters <
->>> pmcr_n) {
->>> >> +		cpu_pmu->hpmn = reserved_guest_counters;
->>> >> +		cpu_pmu->partitioned = true;
-
->>> > Isn't this going to completely explode on a kernel running at EL1?
-
->>> Trying to access an EL2 register at EL1 can do that. I'll add the
->>> appropriate hypercalls.
-
-Ooohh. Making this work at EL1 is much more complicated than adding the
-hypercall to write MDCR because once HPMN takes effect, the upper range
-of counters that the host will use is only writable at EL2. That means
-using any register related to any counter in the upper range would also
-require a hypercall. The only way around that would be to avoid using
-this feature in the host entirely and only enable it when we load a
-guest.
-
-I know we don't like feature discrepencies between VHE and nVHE mode,
-but Oliver thinks it might be justified here to have PMU partitioning be
-VHE-only.
 
