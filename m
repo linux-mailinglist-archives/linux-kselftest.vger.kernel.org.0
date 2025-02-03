@@ -1,102 +1,126 @@
-Return-Path: <linux-kselftest+bounces-25531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCBD0A25436
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:19:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46ED0A2543F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:20:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34263A64C6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:17:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4189F18857D6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49099214807;
-	Mon,  3 Feb 2025 08:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745271FBEA5;
+	Mon,  3 Feb 2025 08:17:44 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8F81FAC5A;
-	Mon,  3 Feb 2025 08:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D7F1FBC9F;
+	Mon,  3 Feb 2025 08:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738570455; cv=none; b=dBW/6MINV7pQ5yVwLT08/k9WOj+1fNJJ5TSlY0HNrshtiEHYAldFhpeBWnIH8UYfQVHLUMA17uVIqygFjCASXec5iX4ZsbZ0kVgFpOT8x/yS44YAfNSr6JYOAZ6KF4qlmxLEwxKeLAnScLgeKCiAEoO6I2p3TpYMHNS1c5Shn2c=
+	t=1738570664; cv=none; b=btRSRmmekQOLK/l/g7YN0wYwAry6mzKf4rsFsNcM9T9No5ajUwsyhZT1liNBwbZrT5WIaPAo3q9ZQWdGWbKDA8c7hPH8SP6NBk2EflvEGhF7hcguI8LNHhueJf5VJZnV4EHatmAB54txqLExd6+vc+jQMAREgnfr4R21RRbKnLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738570455; c=relaxed/simple;
-	bh=6tT40f0J/jFQXQpwdYEDnXhYU/ij7hgUAKjX7EorJXs=;
+	s=arc-20240116; t=1738570664; c=relaxed/simple;
+	bh=8PXoE15wQ70wbPo2ZLqLkRjwLKtsDbG0KitAXePP6Us=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I0/z4xNJ9VEn4J4HDJiiYOx8LmX6FVbFZQsy99OYIBT8sDxCBqTgDu9tdkDt2F/WjqvnlWCpPd2IShX99UuM6+uz5yxYy/G7obCnsOPkdEgpkviw/c4iEOAYGF1Hz+6LI3/1+1570WeGrZUh4kavbzmgJK4lvtUpIjd1NJevP+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.53
+	 To:Cc:Content-Type; b=o34m2NhOHPLqQQXgHqITVOKxmPD2RjZG6sSqB3aKxnA+LIfqSNvaBGk2y36kpZ3Ck33H8B51r4JshoDOJFAI68DaPvuB5NeNMmnMySvBjmU8MCzs0sCCZOKoKMujW5zIpnEJv3u5KFRPX2maxsv1gywSX1gZFIsbtPuhxoHHk/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4aff1c57377so2367698137.0;
-        Mon, 03 Feb 2025 00:14:12 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-85c5d4f3d58so732209241.3;
+        Mon, 03 Feb 2025 00:17:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738570450; x=1739175250;
+        d=1e100.net; s=20230601; t=1738570659; x=1739175459;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fqueGweUcpZtMLKrjIzy2Y44GrPak9U05e86xS0LIRA=;
-        b=HFoOBb59NR9CW9kXQ14+xxh81RqR9nNEfFRlBoNSZkc/Knvqo9yAzvqb0ra+dJ8YEQ
-         4ByRi4FEYDQW1fuQcOOP99NrhvK5pkIpLkb+edt5tdTgc16GMWl06huldsbPjbaf/0ci
-         BLzSGPg5IDnzgZoiOZ0U2YK5zjzNaSJSAj1KxwZLYSVQFzk9Jn0nkPX1xIrWyqf2LXaN
-         fFjshAUwba9iMXEx9vQKLXs3O3VBZ4hSwB/OHva0W4QMFINWVz3tIUvrKXwWVKnokX7W
-         zMFlpVjTXznP6aZ85CPxEYfyxafp7tFakwSkuVzx904gf1YXK5AiyMFSJS0GjPuf0UMU
-         U0kQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIuaFRiYem71g20SBhOEuX6qCnSV6OE5ix0pN+KBRnPwVSIhT+F0vRuQNyd38hYE+iNLBEvlz04L1dxHQ=@vger.kernel.org, AJvYcCWgnkRkTp/BMN+HinZLNm0FRhnKtuTVmI0/SK9qC4v7YGTSjqVlgsvi6I/wyLUTM5H1wALEAWmbNLTDDUICxx+F@vger.kernel.org
-X-Gm-Message-State: AOJu0YwICQna20GUn1oIgkV04kMRUXa4fGMlJD/4U8/XahWAqAAygx4V
-	pmzbGbU/xKClyS+oleb7HEATdERKUk+MAq6JhmG2xHuqkMladSLbFAzPhFds
-X-Gm-Gg: ASbGncs5W8kcHe5JpGA254cMIEg0VoWowjeltQCY7UWGGKcm5tLHtqAVME+pXjQz28w
-	P+WEXCsimQOOCTIGP6OQB1ARURiNeHjvIDQsh4ct7tu53ZXY0wc+Ku9STVcoJdZ62jnwXM7w749
-	Pnc9k7UP/AfZ7HMh5T7g32N5vT7LoFDtuaGWoE1EPawcokMMxwzdLiJ48NsTrYWiR4Ig4ASUSHo
-	BpCkr/GL9h0Jen3sWHv+gAkNq07varGvrvF7CFxv8xRIB1APg3lipl9KCwasGUWvoViCMFLUneA
-	YJ6SolXD6C7Y4celgaENXrX0WmQv1nKKsXDRHHjoUpUDf3kpFhCrxA==
-X-Google-Smtp-Source: AGHT+IEAA2Z/EEKTPKRpZa1pAsenYWodUmHSNZs16EppXKN36LwmCXfYPIG+u232lBEQ5MbymaRHSw==
-X-Received: by 2002:a05:6102:468d:b0:4b9:bdb5:cc45 with SMTP id ada2fe7eead31-4b9bdb5d1admr6050394137.12.1738570450426;
-        Mon, 03 Feb 2025 00:14:10 -0800 (PST)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b9baa18af4sm1514496137.1.2025.02.03.00.14.09
+        bh=MIvXo9RAM14dSFKA9Ie0SEL3egKUYJe1PQ0JpRzi4HI=;
+        b=QN7qvr61xJ0jZ52abrbIZsLkGab1NwtJQazlCpHZdWCAyF7h8aq8S3SoCNRJ7fHH8y
+         8v3d3p1uYc7tfbWRcfHlZOcKUF9WfACdLvyaG8dmWu4J206BYvWlnbb3QVsP8zNudbi1
+         IBd6okdOrz3l4R5B5mSVQgemE4jsfdtLkn1Ni04XcQPvuyOqWOZPPuECluZ/XU5iq4+P
+         hTne+0CYih2E5qmcPFqld5rxQLiia6NcJ4h8+CjqSpGlABUWQbnfa8+WIlMp2eL3DjFu
+         Gvu9oOOWYOiOdWTO6wHRTDVOPUyu8q5z6ED0xEJwRj19NX0XpbLcQmUX+eio3dfJ8Opu
+         RTuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUORxxg1WUppRETYpoxM38TDI3S3aPdzQ2kIvmgmHsgf24sJ1fdrjmARNME5slbCAEiIHbyqbnVXybL1Pip8Q0+@vger.kernel.org, AJvYcCWkv9GH0/YVviOysIFzLaCzeeoA8rq4cNXyUX53RdSlLLaQRbPmhtqflhQflndAOitEjU4qvaGsrvMPqGs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywax3GaMZOgixS/QPGAXLMStY/Yjxq5k7As8uMBbAHAP9NELPOt
+	wJenurtzIfBWLSasm2TcvWozzAmr59zynZ8lYmPF+6z8SOpHWnSgYMkCAgjK
+X-Gm-Gg: ASbGncufKFuMfueM5w5nrAE+vYtduBwRAqSraJL+LkGF8Uw0jZsZrJ6p8gmnhgfP94F
+	m7fl4YcBTGdc3ZKB3tiL9N6VX7c++aEu5k6QSIlwiELBNdKzGsftbqwPHUIveX452wMQQZuOaQl
+	i0JGcBb+/O5PkCFwCqZRXm64oH/Xt2CIJ6r6fK9bM3tJmOBwZi+9q3QZOV4hpPphfVsswd2qjdd
+	L2yaEaOxEi8nAqA5kOY+TfZiPy3NB8yjm0t7Xmfst2zVasZCBP3UhXhjk0ZJ8VswNwrxWh5iDHW
+	bvFImYskyCShUbcHmh4FoToZn0yAm/nmvI5xmN42a6AxjOjTgLK3XQ==
+X-Google-Smtp-Source: AGHT+IFy5L4tV+Q6aiRXIqFdPlBFZ7bV6UTPixBuxGs2sjVx3yj2sI06roNavA9g6ceYzgldQhBjfw==
+X-Received: by 2002:a05:6102:510f:b0:4af:d487:45f3 with SMTP id ada2fe7eead31-4b9a526cac2mr15277033137.23.1738570659122;
+        Mon, 03 Feb 2025 00:17:39 -0800 (PST)
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-866941f309dsm1592235241.32.2025.02.03.00.17.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2025 00:14:10 -0800 (PST)
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4b9486a15a0so2670926137.0;
-        Mon, 03 Feb 2025 00:14:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCURjdBZnxPPgZDYX2YP6jucRrI3M8kj62vbuM81o1yaRxBn6w+g2TSwzPQHwiJEakipUuxNRvRSbnzJD7JldY1N@vger.kernel.org, AJvYcCWwMrFT+Gna6XX5NcYL2Byg6huraB4eXoTmwU3nXr2DtvaoqeOPx3D8LyWVFVEuFih3pTxfKRVdIwQg7wA=@vger.kernel.org
-X-Received: by 2002:a05:6102:7c2:b0:4b6:8bd1:6b5d with SMTP id
- ada2fe7eead31-4b9c88ec6bamr6144554137.1.1738570449779; Mon, 03 Feb 2025
- 00:14:09 -0800 (PST)
+        Mon, 03 Feb 2025 00:17:38 -0800 (PST)
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4aff31b77e8so1612170137.1;
+        Mon, 03 Feb 2025 00:17:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUZ4mvLumRViwqWqTcI91mMaz9Pk7K02/qtcYjADeziEsyFjZKG7Cy2Bjcq/BL7ZRmGL4SeP/vT2LL+mRBpxGjm@vger.kernel.org, AJvYcCXrpM5ANJMcdyZLO+6tO2/dRFMj8KokTmLUC3+aOoG/t8jz+qqKa1YV9cKNso39n33qUfem1Bl2ZVzhcEk=@vger.kernel.org
+X-Received: by 2002:a05:6102:b0a:b0:4af:4902:153e with SMTP id
+ ada2fe7eead31-4b9a4f50f7dmr14529837137.9.1738570658420; Mon, 03 Feb 2025
+ 00:17:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com> <Z50EM7gxqyV0Eois@smile.fi.intel.com>
-In-Reply-To: <Z50EM7gxqyV0Eois@smile.fi.intel.com>
+References: <20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com>
+In-Reply-To: <20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 3 Feb 2025 09:13:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUb83wjGE0Qb06RSpQ+t6MXN7afAq7bFpwb4U534asxXQ@mail.gmail.com>
-X-Gm-Features: AWEUYZl02qjfXtsEe6cfoqgoYiZYrKK1VYJ5Jvos86TQ8K46UxGcrfEG2eYJ8HQ
-Message-ID: <CAMuHMdUb83wjGE0Qb06RSpQ+t6MXN7afAq7bFpwb4U534asxXQ@mail.gmail.com>
+Date: Mon, 3 Feb 2025 09:17:26 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVvU6t2n_Cg4jsvRCLRpc10baeS4d-r83RGhYY5H-dypg@mail.gmail.com>
+X-Gm-Features: AWEUYZlyniTPHJYCinC1O_uOLuUwbBOovxdNN8IVz7nd1y817ol7_8Kk0p_HMkY
+Message-ID: <CAMuHMdVvU6t2n_Cg4jsvRCLRpc10baeS4d-r83RGhYY5H-dypg@mail.gmail.com>
 Subject: Re: [PATCH] scanf: convert self-test to KUnit
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>, 
-	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
 	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Andy,
+On Fri, 31 Jan 2025 at 16:48, Tamir Duberstein <tamird@gmail.com> wrote:
+> Convert the scanf() self-test to a KUnit test.
+>
+> In the interest of keeping the patch reasonably-sized this doesn't
+> rename the file in accordance with usual kunit conventions nor does it
+> refactor the tests into proper parameterized tests - it's all one big
+> test case.
+>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+> This is one of just 3 remaining "Test Module" kselftests (the others
+> being bitmap and printf), the rest having been converted to KUnit. In
+> addition to the enclosed patch, please consider this an RFC on the
+> removal of the "Test Module" kselftest machinery.
+>
+> I tested this using:
+>
+> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 scanf
 
-On Fri, 31 Jan 2025 at 19:06, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> P.S. The test modules in defconfig is something which puzzling me. I would
-> remove all of them at once, if somebody wants debug configuration, they would
-> specify it and use with help of merge_config or alike.
+Sounds way too complicated: "modprobe test_scanf" ;-)
 
-I really like having all tests available as modules.
-Fortunately all of these will be gone, once all tests have been converted
-to kunit, and have a "default KUNIT_ALL_TESTS" line...
+>  arch/m68k/configs/amiga_defconfig    |   1 -
+>  arch/m68k/configs/apollo_defconfig   |   1 -
+>  arch/m68k/configs/atari_defconfig    |   1 -
+>  arch/m68k/configs/bvme6000_defconfig |   1 -
+>  arch/m68k/configs/hp300_defconfig    |   1 -
+>  arch/m68k/configs/mac_defconfig      |   1 -
+>  arch/m68k/configs/multi_defconfig    |   1 -
+>  arch/m68k/configs/mvme147_defconfig  |   1 -
+>  arch/m68k/configs/mvme16x_defconfig  |   1 -
+>  arch/m68k/configs/q40_defconfig      |   1 -
+>  arch/m68k/configs/sun3_defconfig     |   1 -
+>  arch/m68k/configs/sun3x_defconfig    |   1 -
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
 
 Gr{oetje,eeting}s,
 
