@@ -1,77 +1,76 @@
-Return-Path: <linux-kselftest+bounces-25601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 804F9A26418
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 20:53:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 796BAA264A4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 21:36:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 041D81885557
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 19:54:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AACCB7A3FB5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 20:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F3120CCDB;
-	Mon,  3 Feb 2025 19:53:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3952020E32F;
+	Mon,  3 Feb 2025 20:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hll4qKW0"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="f4RxBxKj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BF620AF7B
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 19:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CC720CCEB
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 20:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738612429; cv=none; b=PnSUPwpNuz8ie7yBl9zqOd5mDP5bdVtHCq8jsVeIbzXLUQr06VJqdkxTusbqAns+8JCLRZS2MwSm5tde8vcAnO1scFjlowzze6z7OO/j9jCHnNzMp45FQgtIk4S4hWn+bNkELd9DTeWZGSfm+DkZUJZnDKH69OtEB0GZHoxYJvU=
+	t=1738614954; cv=none; b=YuR1VWHsea2MF440adRH/jWZEfyQILS+yENYJa/L9EMuA+ckHHJHN+hww/r5vgIrh0RV6NxI3yY0kxFXAPiJhigAE8zKC0YSK69pc2s4RPKUTWAY6uSuyER9O+zKrf2IoS0m8uySBx02dxZXHKxiGNY7ah6K9llT2jkRv1TNUIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738612429; c=relaxed/simple;
-	bh=hxr7jNuqUlPfc59GPh0os0w2bEp50OFtzoYI/kT4GTs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RzieL2dIV0GnnFy/pRc0+vU/albAyHK0qebWtH0xD5IFAOUOteqJcOHmPjIf7FWXLIoTjBul6y8++lzi4OhXVwHwBVV2sD0GV97iZCcme9T0qn38iqNF990VDVtf6BddTihqCfQ2u6U/OXiHbalPvnG98I6mujk3kWcs4W53P5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hll4qKW0; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2166f9f52fbso157241265ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 11:53:47 -0800 (PST)
+	s=arc-20240116; t=1738614954; c=relaxed/simple;
+	bh=iHOgsgbTLasT+mAbTKI3kNcpK3vJNjZYaHQEoQJJPkk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H24K0Oa4GaDgO6WzDkZ5naUx2tvSCN3w90MHGBjmJn7lkjqE8VejICUa7iFnuh9MKRmuOGp8evA5sOrwmVJLYiXxkbr+FknehrRdXuUrYDUMSvMqzJzriLm1acD60iy3CTL9S9g+2Oic4b4Mu9V22XhHh5JTmktSjs9wN5cxsZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=f4RxBxKj; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aaec111762bso450655366b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 12:35:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738612427; x=1739217227; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nCEyOu/LOSfPdvr+BVNdN/g0WxtTpzskRucY3ZD/ki0=;
-        b=hll4qKW0/MDYaWgct95bovpDKbmfc/9xZPLQHSUmaBUKPEQQsfx8egcgJ8EGg/l/R6
-         A4kVGGLIml9y6/FSe476CAuGq/HZTjK7xsFH9t9tgjMpx9Sd7IjvXbpGK4KbzpSnhiLp
-         eqU56cKKtrqyBAh4ZhnUhWTmRhghH4Lj4U6+t6xVDa93U6UVNsY9V5FOm2P64+BUCxNk
-         gt6/dZS56lOelBMGEz0s1oDrtFnV+sSudxAZSfMuKoXVx4v9+080i4/XVxiteYqkDdI2
-         2pJGmIdWen0OGS4Jzt6dYuckNg1qkd1pwvGt+lwyjh69SfIfSRs3yQlQnXFHM/xvanVx
-         CY+A==
+        d=broadcom.com; s=google; t=1738614950; x=1739219750; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q7Ns3FLfIAZYGDFkK3fA+Vs5Q3I4AHQ7nr4KJPOKX0U=;
+        b=f4RxBxKjDTdDjBsIYLtm5ozeuzWueyoa/Rj8pjPgVkKjSJoTXu68kEtwUnPwHifA/h
+         NXZeBuQZcby81GQC0VeHQe9Ed0n0qTX2A6qxudxe4rqveZc/05092q+Bv2SxJW22K4gI
+         uiSzwjlxjoKNwl4paBJTen2GJiOpL1O+479Mw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738612427; x=1739217227;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nCEyOu/LOSfPdvr+BVNdN/g0WxtTpzskRucY3ZD/ki0=;
-        b=mROjiZlJct+nVievy4LgGSada330OFQyNmfWYHX6zTJSebkNYHRhvc3vQN95vQnFX0
-         7zSl+MrO+GDKzFGf1UOfHrxO5GrAw5mnw+1CS6+Tg9MbGR5gcP0I9bux4No27fdJzdhr
-         QNLVgknFbqlXzGgUOKw/9FnXN1lkEY6RS88ExwsSMFU9mZ1IjoHrQ/eCw5enAP80kBF4
-         /s/ok3XIukZDACw0QNn+A74lzJogQ5KkccPFeuGPTgc8laYQYjBOZQiN2OCbumkVZJmo
-         PR4zbll4jVK9NYWQStTTn8GrNHSTQEiU92scHm7h3TD9lhGmzNGiRilfmj3oroRPYQ2m
-         e1pA==
-X-Forwarded-Encrypted: i=1; AJvYcCWlf7hpYlCBLlP1QF8SjFhS7x9bRDRveF8fOcZM4TH3g8yI6r+7DBd84gF/yPexuMJGSd0BnP83aSEbIHNN9B4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdhAjleZG2RE84J62GDL7yEEUex6uasZEJJ/xaWaAxMluthS1a
-	0AbxXWXk8eKs8p9dpPqnYygt9gAwN9Lc6ONAV1Td5n+HfCvnWPskttDgQjwGp+lmWtItY1iBzi+
-	6PQ==
-X-Google-Smtp-Source: AGHT+IFc9rZmF1JjMiP844qma6jdZcJ9zwzx2lsRF7TrY+30VoDsiU9sWPM5lazcp0sTUpmilFfzJxD366U=
-X-Received: from pfblo6.prod.google.com ([2002:a05:6a00:3d06:b0:72d:26ac:7d0])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:140e:b0:725:eb85:f7f7
- with SMTP id d2e1a72fcca58-72fd0bda642mr32932803b3a.5.1738612427344; Mon, 03
- Feb 2025 11:53:47 -0800 (PST)
-Date: Mon, 3 Feb 2025 11:53:45 -0800
-In-Reply-To: <93df442c-8ec3-43ee-aba1-e770a5b7588f@redhat.com>
+        d=1e100.net; s=20230601; t=1738614950; x=1739219750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q7Ns3FLfIAZYGDFkK3fA+Vs5Q3I4AHQ7nr4KJPOKX0U=;
+        b=p/PwUjNw4hA3TUnCwZLPjIWbwmVLaPoUuq68c41u1lB+BH31gs6xfVspAWdiy9Dp+q
+         ZI6d4L68zAkx9kiQ8gkxD8zWLjoA7dxK4YLiLAsCTxgZk5OHzbWX9V9z4whJOdt0drS0
+         TYadD/GrGjU9O6NoFKiQcU8nN4SMXdmuY9wFJJPiEknQFD3qhniYY1ekii+JVbpiCjdz
+         y1HEiVczmz754lg92TdAOPSNiK3AbBENjTiqWF+/i9Quz9OfHkgchOAtDESCJ96C3tid
+         DATB6QuelR2JqYTfq3NvUJf5PE7jJR3feKTvqFnyOBQFM38ipr3GMX8yN69tn5BuCMRn
+         Tivg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+NBK3GIQwSvTYinott5skCi8q4L1ddrUhhtlBu7dqwwVi32V8PywRczz311LUvaACG4wfmKDXu/QWmjxVU6Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcZ5PIqZ561relT91GdybtbSTmjiP49B0uQNo1J//dW+7i0u3W
+	2I65L+9Qe/JzC7yj7JDvb+V3vB37D5w4w8Ba6RkvmmT22XwSvHDl0VwsO4adk3lOyob8lUhydbd
+	RsvbHOnOUDIVR4ry//fpqDmlafKTCDGcV0b9yLQF7OPbDjLIEQxUJcCtAXKIoD4ftk6OpTx8/7d
+	lVNMwaiA8SDilEU0AaYk+gD1MKoPfMxg==
+X-Gm-Gg: ASbGncvZUZjyCyiP0g7IdzgWdvxSCPjfwwrMA2L6HT/GX/wzUf+YYFXkBJCqyasgr4u
+	AzxgWkk4it7VKhBrsSZuKBN92GzdDhhLqXyWaGPmtsiGc6shm1/b5jdJS3nMTBn3eRsTmCjfD
+X-Google-Smtp-Source: AGHT+IF5AWWdY4qYzAwQdbOtXfgV9YAbUE+7qvDb3Uh4Avo5Mcb4wzOObn3yCi/awJ7s1audhmtBacpaZff4AJ/3R0o=
+X-Received: by 2002:a17:907:9691:b0:ab6:dbd2:df78 with SMTP id
+ a640c23a62f3a-ab6dbd2e39dmr2560575466b.35.1738614950459; Mon, 03 Feb 2025
+ 12:35:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com>
  <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
  <CADH9ctB0YSYqC_Vj2nP20vMO_gN--KsqOBOu8sfHDrkZJV6pmw@mail.gmail.com>
@@ -80,11 +79,15 @@ References: <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com>
  <CABgObfb3Ttfg6H+_RpNQGSYKw9BLEwx3+EysXdL-wbpd1pkGHQ@mail.gmail.com>
  <CADH9ctAzffvDByS1s2PJoD63On-b+pCnCmER4Nf4Zc=62vkbMA@mail.gmail.com>
  <Z6Eb4PfmmHWFTR9A@google.com> <93df442c-8ec3-43ee-aba1-e770a5b7588f@redhat.com>
-Message-ID: <Z6EeyaOZUevXDBiH@google.com>
+ <Z6EeyaOZUevXDBiH@google.com>
+In-Reply-To: <Z6EeyaOZUevXDBiH@google.com>
+From: Doug Covelli <doug.covelli@broadcom.com>
+Date: Mon, 3 Feb 2025 15:35:20 -0500
+X-Gm-Features: AWEUYZnthUXQ_pnDcokMXb4-W_1h4l_OREU8d1T2--Q60_3QnZjpsz7kj6ouJEQ
+Message-ID: <CADH9ctC0=YWJ1S-WVWhasjS+DHSWpzqQ0bbgz6N2vGHAcBrgRg@mail.gmail.com>
 Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
-From: Sean Christopherson <seanjc@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Doug Covelli <doug.covelli@broadcom.com>, Zack Rusin <zack.rusin@broadcom.com>, 
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Zack Rusin <zack.rusin@broadcom.com>, 
 	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
 	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
@@ -92,28 +95,64 @@ Cc: Doug Covelli <doug.covelli@broadcom.com>, Zack Rusin <zack.rusin@broadcom.co
 	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
 	Joel Stanley <joel@jms.id.au>, Linux Doc Mailing List <linux-doc@vger.kernel.org>, linux-kernel@vger.kernel.org, 
 	linux-kselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 03, 2025, Paolo Bonzini wrote:
-> On 2/3/25 20:41, Sean Christopherson wrote:
-> > -EFAULT isn't the problem, KVM not being able to return useful information in
-> > all situations is the issue.
-> 
-> Yes, that's why I don't want it to be an automatically opted-in API.  If
-> incremental improvements are possible, it may be useful to allow interested
-> userspace to enable it early.  For example...
-> 
-> > Specifically, "guest" accesses that are emulated
-> > by KVM are problematic, because the -EFAULT from e.g. __kvm_write_guest_page()
-> > is disconnected from the code that actually kicks out to userspace.  In that
-> > case, userspace will get KVM_EXIT_MMIO, not -EFAULT.  There are more problems
-> > beyond KVM_EXIT_MMIO vs. -EFAULT, e.g. instructions that perform multiple memory
-> > accesses,
-> 
-> those are obviously synchronous and I expect VMware to handle them already.
-> 
-> That said my preferred solution to just use userfaultfd, which is
-> synchronous by definition.
+On Mon, Feb 3, 2025 at 2:53=E2=80=AFPM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Mon, Feb 03, 2025, Paolo Bonzini wrote:
+> > On 2/3/25 20:41, Sean Christopherson wrote:
+> > > -EFAULT isn't the problem, KVM not being able to return useful inform=
+ation in
+> > > all situations is the issue.
+> >
+> > Yes, that's why I don't want it to be an automatically opted-in API.  I=
+f
+> > incremental improvements are possible, it may be useful to allow intere=
+sted
+> > userspace to enable it early.  For example...
+> >
+> > > Specifically, "guest" accesses that are emulated
+> > > by KVM are problematic, because the -EFAULT from e.g. __kvm_write_gue=
+st_page()
+> > > is disconnected from the code that actually kicks out to userspace.  =
+In that
+> > > case, userspace will get KVM_EXIT_MMIO, not -EFAULT.  There are more =
+problems
+> > > beyond KVM_EXIT_MMIO vs. -EFAULT, e.g. instructions that perform mult=
+iple memory
+> > > accesses,
+> >
+> > those are obviously synchronous and I expect VMware to handle them alre=
+ady.
+> >
+> > That said my preferred solution to just use userfaultfd, which is
+> > synchronous by definition.
+>
+> Oh, right, userfaultfd would be far better than piggybacking write-tracki=
+ng.
 
-Oh, right, userfaultfd would be far better than piggybacking write-tracking.
+Thanks.  We will look into using userfaultfd.
+
+Doug
+
+--=20
+This electronic communication and the information and any files transmitted=
+=20
+with it, or attached to it, are confidential and are intended solely for=20
+the use of the individual or entity to whom it is addressed and may contain=
+=20
+information that is confidential, legally privileged, protected by privacy=
+=20
+laws, or otherwise restricted from disclosure to anyone else. If you are=20
+not the intended recipient or the person responsible for delivering the=20
+e-mail to the intended recipient, you are hereby notified that any use,=20
+copying, distributing, dissemination, forwarding, printing, or copying of=
+=20
+this e-mail is strictly prohibited. If you received this e-mail in error,=
+=20
+please return the e-mail to the sender, delete it from your computer, and=
+=20
+destroy any printed copy of it.
 
