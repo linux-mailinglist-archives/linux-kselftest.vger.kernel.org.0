@@ -1,135 +1,204 @@
-Return-Path: <linux-kselftest+bounces-25532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46ED0A2543F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F6C7A25473
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:35:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4189F18857D6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:20:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAD2D1882213
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745271FBEA5;
-	Mon,  3 Feb 2025 08:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56FCA1FAC23;
+	Mon,  3 Feb 2025 08:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZQWJ8PfT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D7F1FBC9F;
-	Mon,  3 Feb 2025 08:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D691E9905
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 08:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738570664; cv=none; b=btRSRmmekQOLK/l/g7YN0wYwAry6mzKf4rsFsNcM9T9No5ajUwsyhZT1liNBwbZrT5WIaPAo3q9ZQWdGWbKDA8c7hPH8SP6NBk2EflvEGhF7hcguI8LNHhueJf5VJZnV4EHatmAB54txqLExd6+vc+jQMAREgnfr4R21RRbKnLk=
+	t=1738571717; cv=none; b=D87TNlVli3gj5KWmkDqOJH2cpa52BgaQzoGIJcVJCI6AHFcntaWV39KqcNaE62UrPQdLyL0dKplFrZ0IMfo35nX0cdJbLYEzKs3oc6owy/+wsNhPHXWVXtlYPE64+sPN/M7x6sMbPSqS9BZ2NZFdAUqp8ZN7NVwYFiTdQ+0/Bis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738570664; c=relaxed/simple;
-	bh=8PXoE15wQ70wbPo2ZLqLkRjwLKtsDbG0KitAXePP6Us=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o34m2NhOHPLqQQXgHqITVOKxmPD2RjZG6sSqB3aKxnA+LIfqSNvaBGk2y36kpZ3Ck33H8B51r4JshoDOJFAI68DaPvuB5NeNMmnMySvBjmU8MCzs0sCCZOKoKMujW5zIpnEJv3u5KFRPX2maxsv1gywSX1gZFIsbtPuhxoHHk/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-85c5d4f3d58so732209241.3;
-        Mon, 03 Feb 2025 00:17:42 -0800 (PST)
+	s=arc-20240116; t=1738571717; c=relaxed/simple;
+	bh=AjeBmdJxOhB8EePWx9LMdeDziY3O7eZmfuZLVM3LnCA=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=PsqGkonAheQwENAeoX3umYyMO5wKfq8iAvHuYfxofscmWBXP7ELOGdx0CRE4gki7zxnkn2/M4JU6QkxIexj1WtURGDkgHxTxoQAuRw70xbF8s+UvBlcC5R4lcX1jk8PhuTaOnpx8NVimkuCvHBBOiSEmnC17RSvhDwiJESN8t7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZQWJ8PfT; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ef9e38b0cfso7658120a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 00:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738571715; x=1739176515; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bCVGsPkdqv8VOcstVdRRWjGTGpKBIG2jSUrhWhisdPo=;
+        b=ZQWJ8PfTXWf9rjNMsrbTjBAJbETXlU/CjR5KASUzY0l/Ub2eookgHzsLD363AJRHx/
+         mrVTbegfVsjcApqwzcEBOSAtvHE50uT/nuV2S2k6sxkgf4hkW6YuBjk6jWffs2UPh354
+         ihB5+AMeb70RmDTt9egjCIo8tRjleB3Ym3AsBI7VjUNPVI16F6CbvoC5pYs7cpL5sTUt
+         7XQtWAC3Ky+siA/93SsIZaGLAJIdWEIP2gu86eQqppgOFLsLN2whPa6w3Yap5IB+pcDk
+         IYQmpY+9GJs8oEh6St7eW/fxTlyNVqOTysF2OfUwtxAmDNQZKFx5crqzxsY0zieWl2gz
+         P9TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738570659; x=1739175459;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MIvXo9RAM14dSFKA9Ie0SEL3egKUYJe1PQ0JpRzi4HI=;
-        b=QN7qvr61xJ0jZ52abrbIZsLkGab1NwtJQazlCpHZdWCAyF7h8aq8S3SoCNRJ7fHH8y
-         8v3d3p1uYc7tfbWRcfHlZOcKUF9WfACdLvyaG8dmWu4J206BYvWlnbb3QVsP8zNudbi1
-         IBd6okdOrz3l4R5B5mSVQgemE4jsfdtLkn1Ni04XcQPvuyOqWOZPPuECluZ/XU5iq4+P
-         hTne+0CYih2E5qmcPFqld5rxQLiia6NcJ4h8+CjqSpGlABUWQbnfa8+WIlMp2eL3DjFu
-         Gvu9oOOWYOiOdWTO6wHRTDVOPUyu8q5z6ED0xEJwRj19NX0XpbLcQmUX+eio3dfJ8Opu
-         RTuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUORxxg1WUppRETYpoxM38TDI3S3aPdzQ2kIvmgmHsgf24sJ1fdrjmARNME5slbCAEiIHbyqbnVXybL1Pip8Q0+@vger.kernel.org, AJvYcCWkv9GH0/YVviOysIFzLaCzeeoA8rq4cNXyUX53RdSlLLaQRbPmhtqflhQflndAOitEjU4qvaGsrvMPqGs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywax3GaMZOgixS/QPGAXLMStY/Yjxq5k7As8uMBbAHAP9NELPOt
-	wJenurtzIfBWLSasm2TcvWozzAmr59zynZ8lYmPF+6z8SOpHWnSgYMkCAgjK
-X-Gm-Gg: ASbGncufKFuMfueM5w5nrAE+vYtduBwRAqSraJL+LkGF8Uw0jZsZrJ6p8gmnhgfP94F
-	m7fl4YcBTGdc3ZKB3tiL9N6VX7c++aEu5k6QSIlwiELBNdKzGsftbqwPHUIveX452wMQQZuOaQl
-	i0JGcBb+/O5PkCFwCqZRXm64oH/Xt2CIJ6r6fK9bM3tJmOBwZi+9q3QZOV4hpPphfVsswd2qjdd
-	L2yaEaOxEi8nAqA5kOY+TfZiPy3NB8yjm0t7Xmfst2zVasZCBP3UhXhjk0ZJ8VswNwrxWh5iDHW
-	bvFImYskyCShUbcHmh4FoToZn0yAm/nmvI5xmN42a6AxjOjTgLK3XQ==
-X-Google-Smtp-Source: AGHT+IFy5L4tV+Q6aiRXIqFdPlBFZ7bV6UTPixBuxGs2sjVx3yj2sI06roNavA9g6ceYzgldQhBjfw==
-X-Received: by 2002:a05:6102:510f:b0:4af:d487:45f3 with SMTP id ada2fe7eead31-4b9a526cac2mr15277033137.23.1738570659122;
-        Mon, 03 Feb 2025 00:17:39 -0800 (PST)
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-866941f309dsm1592235241.32.2025.02.03.00.17.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2025 00:17:38 -0800 (PST)
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4aff31b77e8so1612170137.1;
-        Mon, 03 Feb 2025 00:17:38 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUZ4mvLumRViwqWqTcI91mMaz9Pk7K02/qtcYjADeziEsyFjZKG7Cy2Bjcq/BL7ZRmGL4SeP/vT2LL+mRBpxGjm@vger.kernel.org, AJvYcCXrpM5ANJMcdyZLO+6tO2/dRFMj8KokTmLUC3+aOoG/t8jz+qqKa1YV9cKNso39n33qUfem1Bl2ZVzhcEk=@vger.kernel.org
-X-Received: by 2002:a05:6102:b0a:b0:4af:4902:153e with SMTP id
- ada2fe7eead31-4b9a4f50f7dmr14529837137.9.1738570658420; Mon, 03 Feb 2025
- 00:17:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738571715; x=1739176515;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bCVGsPkdqv8VOcstVdRRWjGTGpKBIG2jSUrhWhisdPo=;
+        b=Dm2iLgexOESfyWwUyiuCJimp8Zp7KpXn+SjTEzndxV2Nb7rc1ww3+AhBGBsSIOuf6l
+         pws/igF6ieT7BgdtfzjbLe8k5enCWVnBHy/YBYk62m803o6zb+h+ANj8hvHuNQN6VeIn
+         4LvIq3oyeN+Gqb1yXe1IO7UT4yrn/tIK9oM3KXY4cYvj8rHWbbcnHrgRKcR8UrSgNcel
+         J3bMQ+JOWI/nJQahhqJ62eKnM8/pSTYUly3R8CcanLFmajZGveTqXCEJl9Qy0c+oM9gu
+         hW9IiW9MuJFdQulDyqAOZ2CP2jZXTWE6vUM+b2+mTIXFlWoR3Qu5HH7amuyC3Wimb1nu
+         TIuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVBysWd5FTdN7JYEd4OsCTWvU5ZEr+/2Mj+yxTHI2BDWKYCJRZuSwAMgtKBhe+S7uL2cftduQ7rNU4uF8dMUV0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi+HhgUsJ8X1ZCtR9ItTzOl+ynNU+Eg3bVKNQuDpkTE1ETVhAD
+	/Bb2ngBI7dVa1/s7RcJshkTI2k0RS5OkazsodeXPtJ+mT0hKm/hth+O8ggQ4mg1G5kY05+ciPJY
+	4dO1CnKo+IAz1c/f0miCPzQ==
+X-Google-Smtp-Source: AGHT+IHj+Cug/2vDcc3qbw44IShUmb2Dal+tFzb8jNSGxbKWVsDIeVzNOQ+erfgJBUWM/FABAfOHIsgQxSoSDHqCzA==
+X-Received: from pjbnc13.prod.google.com ([2002:a17:90b:37cd:b0:2ea:46ed:5d3b])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:2748:b0:2f4:465d:5c94 with SMTP id 98e67ed59e1d1-2f83abd9978mr32152246a91.11.1738571714919;
+ Mon, 03 Feb 2025 00:35:14 -0800 (PST)
+Date: Mon, 03 Feb 2025 08:35:12 +0000
+In-Reply-To: <83d44307f30ad8ce19de3edcdc00c179750e0e23.camel@infradead.org>
+ (message from Amit Shah on Tue, 28 Jan 2025 10:42:57 +0100)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com>
-In-Reply-To: <20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 3 Feb 2025 09:17:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVvU6t2n_Cg4jsvRCLRpc10baeS4d-r83RGhYY5H-dypg@mail.gmail.com>
-X-Gm-Features: AWEUYZlyniTPHJYCinC1O_uOLuUwbBOovxdNN8IVz7nd1y817ol7_8Kk0p_HMkY
-Message-ID: <CAMuHMdVvU6t2n_Cg4jsvRCLRpc10baeS4d-r83RGhYY5H-dypg@mail.gmail.com>
-Subject: Re: [PATCH] scanf: convert self-test to KUnit
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Message-ID: <diqzr04fpgsf.fsf@ackerleytng-ctop-specialist.c.googlers.com>
+Subject: Re: [RFC PATCH 00/39] 1G page support for guest_memfd
+From: Ackerley Tng <ackerleytng@google.com>
+To: Amit Shah <amit@infradead.org>
+Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
+	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
+	fvdl@google.com, jthoughton@google.com, seanjc@google.com, 
+	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com, 
+	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev, 
+	mike.kravetz@oracle.com, erdemaktas@google.com, vannapurve@google.com, 
+	qperret@google.com, jhubbard@nvidia.com, willy@infradead.org, 
+	shuah@kernel.org, brauner@kernel.org, bfoster@redhat.com, 
+	kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
+	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
+	ajones@ventanamicro.com, vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 
+	pgonda@google.com, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-fsdevel@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 31 Jan 2025 at 16:48, Tamir Duberstein <tamird@gmail.com> wrote:
-> Convert the scanf() self-test to a KUnit test.
+Amit Shah <amit@infradead.org> writes:
+
+> Hey Ackerley,
+
+Hi Amit,
+
+> On Tue, 2024-09-10 at 23:43 +0000, Ackerley Tng wrote:
+>> Hello,
+>> 
+>> This patchset is our exploration of how to support 1G pages in
+>> guest_memfd, and
+>> how the pages will be used in Confidential VMs.
 >
-> In the interest of keeping the patch reasonably-sized this doesn't
-> rename the file in accordance with usual kunit conventions nor does it
-> refactor the tests into proper parameterized tests - it's all one big
-> test case.
+> We've discussed this patchset at LPC and in the guest-memfd calls.  Can
+> you please summarise the discussions here as a follow-up, so we can
+> also continue discussing on-list, and not repeat things that are
+> already discussed?
+
+Thanks for this question! Since LPC, Vishal and I have been tied up with
+some Google internal work, which slowed down progress on 1G page support
+for guest_memfd. We will have progress this quarter and the next few
+quarters on 1G page support for guest_memfd.
+
+The related updates are
+
+1. No objections on using hugetlb as the source of 1G pages.
+
+2. Prerequisite hugetlb changes.
+
++ I've separated some of the prerequisite hugetlb changes into another
+  patch series hoping to have them merged ahead of and separately from
+  this patchset [1].
++ Peter Xu contributed a better patchset, including a bugfix [2].
++ I have an alternative [3].
++ The next revision of this series (1G page support for guest_memfd)
+  will be based on alternative [3]. I think there should be no issues
+  there.
++ I believe Peter is also waiting on the next revision before we make
+  further progress/decide on [2] or [3].
+
+3. No objections for allowing mmap()-ing of guest_memfd physical memory
+   when memory is marked shared to avoid double-allocation.
+
+4. No objections for splitting pages when marked shared.
+
+5. folio_put() callback for guest_memfd folio cleanup/merging.
+
++ In Fuad's series [4], Fuad used the callback to reset the folio's
+  mappability status.
++ The catch is that the callback is only invoked when folio->page_type
+  == PGTY_guest_memfd, and folio->page_type is a union with folio's
+  mapcount, so any folio with a non-zero mapcount cannot have a valid
+  page_type.
++ I was concerned that we might not get a callback, and hence
+  unintentionally skip merging pages and not correctly restore hugetlb
+  pages
++ This was discussed at the last guest_memfd upstream call (2025-01-23
+  07:58 PST), and the conclusion is that using folio->page_type works,
+  because
+    + We only merge folios in two cases: (1) when converting to private
+      (2) when truncating folios (removing from filemap).
+    + When converting to private, in (1), we can forcibly unmap all the
+      converted pages or check if the mapcount is 0, and once mapcount
+      is 0 we can install the callback by setting folio->page_type =
+      PGTY_guest_memfd
+    + When truncating, we will be unmapping the folios anyway, so
+      mapcount is also 0 and we can install the callback.
+
+Hope that covers the points that you're referring to. If there are other
+parts that you'd like to know the status on, please let me know which
+aspects those are!
+
+> Also - as mentioned in those meetings, we at AMD are interested in this
+> series along with SEV-SNP support - and I'm also interested in figuring
+> out how we collaborate on the evolution of this series.
+
+Thanks all your help and comments during the guest_memfd upstream calls,
+and thanks for the help from AMD.
+
+Extending mmap() support from Fuad with 1G page support introduces more
+states that made it more complicated (at least for me).
+
+I'm modeling the states in python so I can iterate more quickly. I also
+have usage flows (e.g. allocate, guest_use, host_use,
+transient_folio_get, close, transient_folio_put) as test cases.
+
+I'm almost done with the model and my next steps are to write up a state
+machine (like Fuad's [5]) and share that.
+
+I'd be happy to share the python model too but I have to work through
+some internal open-sourcing processes first, so if you think this will
+be useful, let me know!
+
+Then, I'll code it all up in a new revision of this series (target:
+March 2025), which will be accompanied by source code on GitHub.
+
+I'm happy to collaborate more closely, let me know if you have ideas for
+collaboration!
+
+> Thanks,
 >
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
-> This is one of just 3 remaining "Test Module" kselftests (the others
-> being bitmap and printf), the rest having been converted to KUnit. In
-> addition to the enclosed patch, please consider this an RFC on the
-> removal of the "Test Module" kselftest machinery.
->
-> I tested this using:
->
-> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 scanf
+> 		Amit
 
-Sounds way too complicated: "modprobe test_scanf" ;-)
-
->  arch/m68k/configs/amiga_defconfig    |   1 -
->  arch/m68k/configs/apollo_defconfig   |   1 -
->  arch/m68k/configs/atari_defconfig    |   1 -
->  arch/m68k/configs/bvme6000_defconfig |   1 -
->  arch/m68k/configs/hp300_defconfig    |   1 -
->  arch/m68k/configs/mac_defconfig      |   1 -
->  arch/m68k/configs/multi_defconfig    |   1 -
->  arch/m68k/configs/mvme147_defconfig  |   1 -
->  arch/m68k/configs/mvme16x_defconfig  |   1 -
->  arch/m68k/configs/q40_defconfig      |   1 -
->  arch/m68k/configs/sun3_defconfig     |   1 -
->  arch/m68k/configs/sun3x_defconfig    |   1 -
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[1] https://lore.kernel.org/all/cover.1728684491.git.ackerleytng@google.com/T/
+[2] https://lore.kernel.org/all/20250107204002.2683356-1-peterx@redhat.com/T/
+[3] https://lore.kernel.org/all/diqzjzayz5ho.fsf@ackerleytng-ctop.c.googlers.com/
+[4] https://lore.kernel.org/all/20250117163001.2326672-1-tabba@google.com/T/
+[5] https://lpc.events/event/18/contributions/1758/attachments/1457/3699/Guestmemfd%20folio%20state%20page_type.pdf
 
