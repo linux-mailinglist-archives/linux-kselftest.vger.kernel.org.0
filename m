@@ -1,309 +1,168 @@
-Return-Path: <linux-kselftest+bounces-25552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB564A2556D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 10:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DABFCA255AD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 10:20:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7F223A93B5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:07:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AC4E3A14FF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D30202C3B;
-	Mon,  3 Feb 2025 09:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03741FE46B;
+	Mon,  3 Feb 2025 09:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tu8Hh9hb";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="M1mKAq5B"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Vd9frdIm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PwVTjJiB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FEA1FFC60;
-	Mon,  3 Feb 2025 09:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BC635966;
+	Mon,  3 Feb 2025 09:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738573530; cv=none; b=C2BXmQt8cZ41KOYWOZ9KAZTiLzJskh7wRmAorWzSXpexWIFywlWY6g2cdoY821E4zgq8+Hk00y92NSSOPfZ+plPQKDQGK3Q78kIERYpBfr8At0hvxaPvbnwWDk13j+EQkS5LDipkNw1gh4CmbTvI+ELaZu31m3vbLdQtMaD4huE=
+	t=1738574440; cv=none; b=sMRsBSfdw24NmRNm1uXF31zkoe1p9JdCknpxoN9Y9AGoLAQgGKHrOCZs1ZRRscrjGsESms7Sk/tH0rFJuvfNUPNj7npSFDUWNyBWNv0kPIU7TmD1DLjQHXl1fdC4EQ6IdnPJ3YoS+mKjvcauFspnINNWmeiPrDaEjADEMnBYBcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738573530; c=relaxed/simple;
-	bh=io6sXt7iIEpqclAN5udDVtDQPsKQqT7YCXVo80AmeIk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AFUgl10Vr+uf2PG685b5w5pVFshppzguRoYhgcmZrE3vh2fKnBR62c5AI1Ku9YQ51Bw4aLGmynM+WXY+dkCzg6RPqi7/u/WsXWcUFl5ZErZAcrIyHyMHXiKZ+yxJGHuKFFjdkWfTxBb6IogFCKu+rG6yICyEY0Lx4MSATe9p8qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tu8Hh9hb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=M1mKAq5B; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738573526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wWWpuwHkmHsBX34pcGl1jvCG52qLLh0La3Bmm84Eboo=;
-	b=tu8Hh9hbsWetkIDgzcpH2nG14ZI8nV2lcq3oKrs+KHbFh8KtE4qTpI38Igq94jhAvFsFQj
-	3yY9SX6JdKiD8tVe2lUU9LRtsvnnjdn1JhlJXI2mhmuz8+sLGmg738B9CYWqJu3GcKAmBR
-	eAZBHmf/DNUJNQ4HU3P4/HKvBWjUi8TdvgzhWp8BgOqw/UWfqmIFX4Ii8DQWyiZRkNMGxo
-	XnDY1pvwSsJZetB95mma2AdKtOTPOicddBbhqUJKIL7EuaTezJuUX5Ac44BaK7XUGYnMqr
-	qMdTdJVpXfOXIriZL4wt6wd6AqBXU45ogl118Na0xqoUU0pDPq51ih4XZk2scA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738573526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wWWpuwHkmHsBX34pcGl1jvCG52qLLh0La3Bmm84Eboo=;
-	b=M1mKAq5BEsyd2vw89rzEqIJlchsRF4h8bG5ZOfxZUaEDBVmgPocf4eab2VMqxI3symVNg2
-	4ntxneSBMmqJbIAA==
-Date: Mon, 03 Feb 2025 10:05:17 +0100
-Subject: [PATCH 16/16] selftests: vDSO: vdso_standalone_test_x86: Switch to
- nolibc
+	s=arc-20240116; t=1738574440; c=relaxed/simple;
+	bh=eH8RTlzzHp4UeP8KiQIoY8gIaSQQAs8szmF27FWar1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=im5urJQGPGBkkh2GicJuWFjFq2aCuxPhakddrf7rA+nATCWLZHlb1z/6ds02w76uRXX+LWSuT2kiwsBgzUOQtog8K8/is2nD4FWB1Z7Se1KQznGZpIak+XrzqApRq4H2RyW3mQmacfep/bwufX7UYRuBXVtadejmexaBtZv3MIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Vd9frdIm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PwVTjJiB; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id B06D91140172;
+	Mon,  3 Feb 2025 04:20:35 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Mon, 03 Feb 2025 04:20:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1738574435; x=
+	1738660835; bh=YlFWSO22bl8+fawPp6D8ReMiTZsYoX3fNRXYOkRD+pw=; b=V
+	d9frdImBGEGNN6HH2PlR+iCuevMDIBikfhw4bmf75WnKy+9Z7tbZ04hBVaY84Riu
+	Uph5qGx28t6hoVT2oryTI6NtMqQFvOA5bj/JLb1rAcQc5zQOAyrEVvokxYQDr/Dw
+	a/nYrtj4RdP+MaBKefxEADAAC9qLBIs9u9z5dBzOssEZVm/4wx78C5ZyyDySmVCf
+	A54zf6kamdGTQUDGTdzcwon1px8SPICo7zl5N88vDdyoliIxObIsTx+E4s9p8Y1M
+	BAy/4Y8FzMug6ogRBbATemrBr6F6RtzxRGFIDt+ahEbLLhzB7vl1OrdDWiqB8lJ0
+	rzCPNVlU30vqYC+MuUNIQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1738574435; x=1738660835; bh=YlFWSO22bl8+fawPp6D8ReMiTZsYoX3fNRX
+	YOkRD+pw=; b=PwVTjJiBiXi7CTfXdINoIOd4rhsNSaUgd+VjZnANQkP6MtjXRyr
+	MWWOcx2YT9Fky0JpKDlM860arvHGo0ayBJjIAz9Zc3NWPFSjl6ufOfk1LBI7YSmr
+	5967oyQBaT5sp/ajyfZHt9LtTx/4QJz07YUrnJyPICKBbqsmmAruGqkoIXhSeVqe
+	qAr1FN0GH7Fmb+Wahw4JXkz2cKNWuHvjHYR/xdLrLaVmc1jat4vzFLwSTkppUrDA
+	SzsVF3kb3Eo4cfcKfeJZiqcy6QXNLoecHHeLyAjO9VhtwkxrGJpeQxuXAAov0Q4w
+	KLxsSOUEs430dKjjqWUkXXIngioMAARNmiw==
+X-ME-Sender: <xms:Y4qgZ0xiJL2pHo30aU6RUjj96V8IbO1-CPZliu8s8dvhxsZC-h01YA>
+    <xme:Y4qgZ4Q-1AYIZ9q984zLi_ufHU2-Lgro1CHVvu8nVEZmCcozYj-6OdJCUhH-UlNvU
+    wxIusuFsIqOg3gVm00>
+X-ME-Received: <xmr:Y4qgZ2WOmal_QazD6njrFgBxcz4JVy5tGdq87D4aek7nC0ZcGIdmy5kC0CyD>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
+    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
+    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
+    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
+    pghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
+    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
+    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
+    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
+    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:Y4qgZyjLT0xB8dfB7DdEccyatt-wj7AG_zD9tkqFXRWPtF0vQeJhEw>
+    <xmx:Y4qgZ2A0o2M6tB16kz4-wmyPDnvjYK6heajikhBXcCrCKanJv9nFsA>
+    <xmx:Y4qgZzIp8hawpGgAcneq0QdkIRG64HRxGPX5sqISHEnFa5O-C5De6w>
+    <xmx:Y4qgZ9AH1B5tJ8pteapfOqSz4_CyrR1_kG92cTppsJnmeFl4xC0PXQ>
+    <xmx:Y4qgZyxPWjB6oEh6m5Rxs1fM623tW9bSHiMHva57f12qoQFffNCkjBK0>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Feb 2025 04:20:34 -0500 (EST)
+Date: Mon, 3 Feb 2025 10:20:32 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+Subject: Re: [PATCH net-next v18 17/25] ovpn: implement keepalive mechanism
+Message-ID: <Z6CKYA8ueI-ZGybN@hog>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-17-1f00db9c2bd6@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250203-parse_vdso-nolibc-v1-16-9cb6268d77be@linutronix.de>
-References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
-In-Reply-To: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
-To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1738573516; l=6263;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=io6sXt7iIEpqclAN5udDVtDQPsKQqT7YCXVo80AmeIk=;
- b=GwjI5bSquW7zdPwOw/ObHOwJd3uaE2TURfhr6wXyXJSxHF8582pBDftmeCnGijOcc4+cOJsgI
- vZbb5XCvvLxC6Hni87Pvz2ilsFxfk0A2G8pgIDBOlJWWLW/J36zx9Uk
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250113-b4-ovpn-v18-17-1f00db9c2bd6@openvpn.net>
 
-vdso_standalone_test_x86 provides its own ASM syscall wrappers and
-_start() implementation. The in-tree nolibc library already provides
-this functionality for multiple architectures. By making use of nolibc,
-the standalone testcase can be built from the exact same codebase as the
-non-standalone version.
+2025-01-13, 10:31:36 +0100, Antonio Quartulli wrote:
+> +void ovpn_xmit_special(struct ovpn_peer *peer, const void *data,
+> +		       const unsigned int len)
+> +{
+> +	struct ovpn_priv *ovpn;
+> +	struct sk_buff *skb;
+> +
+> +	ovpn = peer->ovpn;
+> +	if (unlikely(!ovpn))
+> +		return;
+> +
+> +	skb = alloc_skb(256 + len, GFP_ATOMIC);
+> +	if (unlikely(!skb))
+> +		return;
+> +
+> +	skb_reserve(skb, 128);
+> +	skb->priority = TC_PRIO_BESTEFFORT;
+> +	__skb_put_data(skb, data, len);
+> +
+> +	/* increase reference counter when passing peer to sending queue */
+> +	if (!ovpn_peer_hold(peer)) {
+> +		netdev_dbg(ovpn->dev,
+> +			   "cannot hold peer reference for sending special packet\n");
+> +		kfree_skb(skb);
+> +		return;
+> +	}
+> +
+> +	ovpn_send(ovpn, skb, peer);
+> +}
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/testing/selftests/vDSO/Makefile              |   8 +-
- .../selftests/vDSO/vdso_standalone_test_x86.c      | 168 +--------------------
- 2 files changed, 7 insertions(+), 169 deletions(-)
+[...]
+> +static void ovpn_peer_keepalive_send(struct work_struct *work)
+> +{
+> +	struct ovpn_peer *peer = container_of(work, struct ovpn_peer,
+> +					      keepalive_work);
+> +
+> +	local_bh_disable();
+> +	ovpn_xmit_special(peer, ovpn_keepalive_message,
+> +			  sizeof(ovpn_keepalive_message));
+> +	local_bh_enable();
+> +	ovpn_peer_put(peer);
 
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index bc8ca186fb877dc11740c37f1e07e45e84c2ae92..12a0614b9fd4983deffe5d6a7cfa06ba8d92a516 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -22,13 +22,17 @@ include ../lib.mk
- 
- CFLAGS += $(TOOLS_INCLUDES)
- 
-+CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tables \
-+		 -fno-stack-protector -include $(top_srcdir)/tools/include/nolibc/nolibc.h \
-+		 -I$(top_srcdir)/tools/include/nolibc/ $(KHDR_INCLUDES)
-+
- $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
- $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
- $(OUTPUT)/vdso_test_clock_getres: vdso_test_clock_getres.c
- 
--$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
--$(OUTPUT)/vdso_standalone_test_x86: CFLAGS +=-nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-+$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c | headers
-+$(OUTPUT)/vdso_standalone_test_x86: CFLAGS:=$(CFLAGS_NOLIBC) $(CFLAGS)
- 
- $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
- $(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-deleted file mode 100644
-index 500608f89c66b5747e3d845ebc54e4c3a35b6ccd..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ /dev/null
-@@ -1,167 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * vdso_test.c: Sample code to test parse_vdso.c on x86
-- * Copyright (c) 2011-2014 Andy Lutomirski
-- *
-- * You can amuse yourself by compiling with:
-- * gcc -std=gnu99 -nostdlib
-- *     -Os -fno-asynchronous-unwind-tables -flto -lgcc_s
-- *      vdso_standalone_test_x86.c parse_vdso.c
-- * to generate a small binary.  On x86_64, you can omit -lgcc_s
-- * if you want the binary to be completely standalone.
-- */
--
--#include <sys/syscall.h>
--#include <sys/time.h>
--#include <unistd.h>
--#include <stdint.h>
--#include <linux/auxvec.h>
--
--#include "parse_vdso.h"
--
--/* We need some libc functions... */
--int strcmp(const char *a, const char *b)
--{
--	/* This implementation is buggy: it never returns -1. */
--	while (*a || *b) {
--		if (*a != *b)
--			return 1;
--		if (*a == 0 || *b == 0)
--			return 1;
--		a++;
--		b++;
--	}
--
--	return 0;
--}
--
--/*
-- * The clang build needs this, although gcc does not.
-- * Stolen from lib/string.c.
-- */
--void *memcpy(void *dest, const void *src, size_t count)
--{
--	char *tmp = dest;
--	const char *s = src;
--
--	while (count--)
--		*tmp++ = *s++;
--	return dest;
--}
--
--/* ...and two syscalls.  This is x86-specific. */
--static inline long x86_syscall3(long nr, long a0, long a1, long a2)
--{
--	long ret;
--#ifdef __x86_64__
--	asm volatile ("syscall" : "=a" (ret) : "a" (nr),
--		      "D" (a0), "S" (a1), "d" (a2) :
--		      "cc", "memory", "rcx",
--		      "r8", "r9", "r10", "r11" );
--#else
--	asm volatile ("int $0x80" : "=a" (ret) : "a" (nr),
--		      "b" (a0), "c" (a1), "d" (a2) :
--		      "cc", "memory" );
--#endif
--	return ret;
--}
--
--static inline long linux_write(int fd, const void *data, size_t len)
--{
--	return x86_syscall3(__NR_write, fd, (long)data, (long)len);
--}
--
--static inline void linux_exit(int code)
--{
--	x86_syscall3(__NR_exit, code, 0, 0);
--}
--
--void to_base10(char *lastdig, time_t n)
--{
--	while (n) {
--		*lastdig = (n % 10) + '0';
--		n /= 10;
--		lastdig--;
--	}
--}
--
--unsigned long getauxval(const unsigned long *auxv, unsigned long type)
--{
--	unsigned long ret;
--
--	if (!auxv)
--		return 0;
--
--	while (1) {
--		if (!auxv[0] && !auxv[1]) {
--			ret = 0;
--			break;
--		}
--
--		if (auxv[0] == type) {
--			ret = auxv[1];
--			break;
--		}
--
--		auxv += 2;
--	}
--
--	return ret;
--}
--
--void c_main(void **stack)
--{
--	/* Parse the stack */
--	long argc = (long)*stack;
--	stack += argc + 2;
--
--	/* Now we're pointing at the environment.  Skip it. */
--	while(*stack)
--		stack++;
--	stack++;
--
--	/* Now we're pointing at auxv.  Initialize the vDSO parser. */
--	vdso_init_from_sysinfo_ehdr(getauxval((unsigned long *)stack, AT_SYSINFO_EHDR));
--
--	/* Find gettimeofday. */
--	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym("LINUX_2.6", "__vdso_gettimeofday");
--
--	if (!gtod)
--		linux_exit(1);
--
--	struct timeval tv;
--	long ret = gtod(&tv, 0);
--
--	if (ret == 0) {
--		char buf[] = "The time is                     .000000\n";
--		to_base10(buf + 31, tv.tv_sec);
--		to_base10(buf + 38, tv.tv_usec);
--		linux_write(1, buf, sizeof(buf) - 1);
--	} else {
--		linux_exit(ret);
--	}
--
--	linux_exit(0);
--}
--
--/*
-- * This is the real entry point.  It passes the initial stack into
-- * the C entry point.
-- */
--asm (
--	".text\n"
--	".global _start\n"
--	".type _start,@function\n"
--	"_start:\n\t"
--#ifdef __x86_64__
--	"mov %rsp,%rdi\n\t"
--	"and $-16,%rsp\n\t"
--	"sub $8,%rsp\n\t"
--	"jmp c_main"
--#else
--	"push %esp\n\t"
--	"call c_main\n\t"
--	"int $3"
--#endif
--	);
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-new file mode 120000
-index 0000000000000000000000000000000000000000..4d3d96f1e440c965474681a6f35375a60b3921be
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -0,0 +1 @@
-+vdso_test_gettimeofday.c
-\ No newline at end of file
+nit: could we simply drop this put and the hold in ovpn_xmit_special?
+ovpn_peer_keepalive_send has a reference on the peer from the WQ, just
+transfer it to ovpn_xmit_special and then ovpn_send. No need to
+pretend to acquire one for ovpn_send's sake and drop the one we got
+from the WQ? (ovpn_xmit_special would need to _put(peer) in case of
+early return)
+
+> +}
 
 -- 
-2.48.1
-
+Sabrina
 
