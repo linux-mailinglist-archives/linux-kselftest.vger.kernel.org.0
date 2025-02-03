@@ -1,230 +1,141 @@
-Return-Path: <linux-kselftest+bounces-25621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E55B4A266F3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 23:41:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 111DCA267EE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 00:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 923B41882B2C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 22:41:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98862164D9F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 23:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7A521323A;
-	Mon,  3 Feb 2025 22:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4261FFC73;
+	Mon,  3 Feb 2025 23:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="05SV4dk/"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FEVVgcM4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B740F212D6E
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 22:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13221E7C19;
+	Mon,  3 Feb 2025 23:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738622370; cv=none; b=ehuuWzuSiGVsfdRgiTNqELhMUYx+eW09OvWhWVlfusmqpOmM5kaBbx1TeZDqMVPowQlFzBeiXWTGRoRsfqhsgbWA6Bf0ZxuYcSpXQiDtHXIrvGJtvIdKb8RYgdnp4xEXhUkLdDpb9YP/UEM/XKHZ6kJAJK9d/IanWLtF36bdJr0=
+	t=1738625699; cv=none; b=t+P3wKEsEm031zO9s4LUFNIBAQ8J5hiwFFmCwji0CMdBK+dqgBx2CnqovUBmckG3MxTDIaZ0szR7RcLu1Bo/2L3i8fDLk1OZm2O9KTrKgDub8BZEwBqFitVpivf1x/bWrADtvD0HGaByBxWO1vQju5qF9ICdfg/GynjNKjHEdxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738622370; c=relaxed/simple;
-	bh=97oOx4z9pCZ0Iq/ojWzrHOGygbt98r31tFw6EuDjFTc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Op8evCFLT3ojDQksS8IIzqrQO4080I4Uy6hZednpbRw/6jRLPFd6xxUCRfSs555GaeWXf7/LXS6lkBAG9eYIKQvG3GFf5ai5oNIIHeO5NI0mmIKbmVCR2gArxHN2QFDigx3BEKHkOJXkmrxCjqAKwtvl3K3bIjhn9Fsq6tSRLSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=05SV4dk/; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ef9da03117so13930816a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 14:39:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738622367; x=1739227167; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rc7c9JPXikCd8Iu9pgV4LRP9xA48AK8hD/MXmnBG3Aw=;
-        b=05SV4dk/x3eiSCMAWP53WrkfCM4kvDiUKWnfVIejbpBTPu3MKBzJyLKcfzO4poy/kX
-         Ke//cny2dUUax0s1K4eQ//i2ujZJqxVhxPPM4vaymmUYDxTv2yHJTfL8f/bLzyHDUq/L
-         eK6mBODC96qEPMTbBeQuIoGazj8vTj3Gw0hgv19EKGKT8VsuxRJuXxqieAetsRFDylf8
-         aM/+B0B/pz2BJBvSNC3ElMSL03uc2HI6LvkYg2XOG1ECF8y93gjQWN4ANXp4ZUT25g84
-         CqlCRx8Z+rKOnbILEyBTXkvmEJh9DLDEcpxnyzxeomAbW5qxb9WVUGeRssQ6Bpu5kD5W
-         0TOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738622367; x=1739227167;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rc7c9JPXikCd8Iu9pgV4LRP9xA48AK8hD/MXmnBG3Aw=;
-        b=H+d3qQFGJIabUm/pGc2oCOywfj1V0qxz2E0CPWzcedeuJJjhigtMwufGYhb50M209w
-         gIg4DDZDhI4pcJfjNqGB4KE0pgtPXnDTq/q53n3KpTQFz3PdDR6i+AwMEXR4eKcKlFrI
-         AjpjOAoAz1QOTzi5XI3Qfr6XZmN9M8iEIPLUqkUusySTChc8xBt3/4Yr6xr1Sq10cMzt
-         cTa7kZQTU90ANkq4f2l9FNqbkOcZBFHUyiqkyt/kl/HH1DHZM/vmoxCCIQKvbpzam2Nu
-         17ppYwyUnotm4kuesgwxtuueHZv+xe5YxehwqPiJ+5ZLwcI8skGinWUzVCpOIQ+6JXgC
-         XZRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwv7VDKoPIfHhewWpl7vBYdsa+uXq+0eDgjI0q4QURAp3JoKPuvLOHxY3b4Mksz4ApqywbG8o//Dx6Vn5HMwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+YKVUDB6GdcBvjTk5CprjW8Rqg3ghm7jDowSIGL1Wyx3GnGX7
-	iRS+VClSBrR/9J2R2zyTKctv5NJSAOc2mOF6wK0jvwI/2HguFXpOtXtkWyGlBwQYOMEsBHvacLw
-	k43zbg8fMhyzGrVyUAvsTyQ==
-X-Google-Smtp-Source: AGHT+IEVoq/odtPJGxLrrYEYPRP3ZsRO1cKfDMWv4+6BAejNJPoBnN+rujdSVvcz7HzR2bynurMrReZ/ogt/1YT+mg==
-X-Received: from pjbsx4.prod.google.com ([2002:a17:90b:2cc4:b0:2ea:aa56:49c])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:53c7:b0:2ee:7870:8835 with SMTP id 98e67ed59e1d1-2f83ac83791mr40443324a91.33.1738622367078;
- Mon, 03 Feb 2025 14:39:27 -0800 (PST)
-Date: Mon,  3 Feb 2025 22:39:16 +0000
-In-Reply-To: <20250203223916.1064540-1-almasrymina@google.com>
+	s=arc-20240116; t=1738625699; c=relaxed/simple;
+	bh=Vg73nH8RurlRZHXDRzWEAZt1britzIMXAQ9pdHhGnvw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o/xJfVGngSgtZT4tCqA5MBMyQnnd0rGX+UArXT6v26/NECcyPfqDFp632Y4AbeDjguzviSdUXeHATEWg81RFXcQWojvbin4Ve2luUliMelVcKzdKjY4wVSOYNBlJ1a/ACbqeF8ND6l9/HyrhodpOc9np2XRferVBZ6AHN5hIRoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FEVVgcM4; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513JMsMO001589;
+	Mon, 3 Feb 2025 23:34:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=2QBCebSBE+pFbANYL47TiwglN3Emj
+	NdNI3873/la3KQ=; b=FEVVgcM4SJIDNKZhvrG4IDZ4+p7KPosG+3wEqJG55epAx
+	mmuGVyyH0MUywwlF18g0rPjpXLD8EkSCTqySqpBpag1goAjGtZg9qFWXl+ynHUxT
+	iirAsC3TB7U6kD4HAd9JYBeEOK+XYzxO24T9N1W5HzSE1AY8BVbrumaXNWPDVK+e
+	OwfhzzADFssS3mHJvMkm4pr3E9b7gi1hB2kD07AzAuKLH9CHdWMkQX1NqOHr721y
+	ZQtBlOspkGPO/5igfEfyzIlVIhWeoXiYkfdv5ALRxBXk4EayGa0Gcdhq8OcJ8PHk
+	i4uIrAzztEkyQESYuThZ6iutqLSmFyMc+AID191HQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hfcguwwt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Feb 2025 23:34:52 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 513NWEeW036229;
+	Mon, 3 Feb 2025 23:34:51 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44j8fkhay7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Feb 2025 23:34:51 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 513NYo8O016962;
+	Mon, 3 Feb 2025 23:34:50 GMT
+Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44j8fkhay1-1;
+	Mon, 03 Feb 2025 23:34:50 +0000
+From: Yifei Liu <yifei.l.liu@oracle.com>
+To: kpm@linux-foundation.org, shuah@kernel.org, kevin.brodsky@arm.com
+Cc: yifei.l.liu@oracle.com, stable@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH Linux-6.12.y 1/1] selftests/mm: build with -O2
+Date: Mon,  3 Feb 2025 15:33:42 -0800
+Message-ID: <20250203233342.51041-1-yifei.l.liu@oracle.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250203223916.1064540-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.48.1.362.g079036d154-goog
-Message-ID: <20250203223916.1064540-7-almasrymina@google.com>
-Subject: [PATCH net-next v3 6/6] net: devmem: make dmabuf unbinding scheduled work
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	"=?UTF-8?q?Eugenio=20P=C3=A9rez?=" <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
-	Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, 
-	asml.silence@gmail.com, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>, 
-	Victor Nogueira <victor@mojatatu.com>, Pedro Tammela <pctammela@mojatatu.com>, 
-	Samiullah Khawaja <skhawaja@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-03_10,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
+ suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2501170000
+ definitions=main-2502030172
+X-Proofpoint-GUID: 3eg4j6BaGbnZJQxRao_hCbNYEfxUuHpj
+X-Proofpoint-ORIG-GUID: 3eg4j6BaGbnZJQxRao_hCbNYEfxUuHpj
 
-The TX path may release the dmabuf in a context where we cannot wait.
-This happens when the user unbinds a TX dmabuf while there are still
-references to its netmems in the TX path. In that case, the netmems will
-be put_netmem'd from a context where we can't unmap the dmabuf,
-resulting in a BUG like seen by Stan:
+From: Kevin Brodsky <kevin.brodsky@arm.com>
 
-[    1.548495] BUG: sleeping function called from invalid context at drivers/dma-buf/dma-buf.c:1255
-[    1.548741] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 149, name: ncdevmem
-[    1.548926] preempt_count: 201, expected: 0
-[    1.549026] RCU nest depth: 0, expected: 0
-[    1.549197]
-[    1.549237] =============================
-[    1.549331] [ BUG: Invalid wait context ]
-[    1.549425] 6.13.0-rc3-00770-gbc9ef9606dc9-dirty #15 Tainted: G        W
-[    1.549609] -----------------------------
-[    1.549704] ncdevmem/149 is trying to lock:
-[    1.549801] ffff8880066701c0 (reservation_ww_class_mutex){+.+.}-{4:4}, at: dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.550051] other info that might help us debug this:
-[    1.550167] context-{5:5}
-[    1.550229] 3 locks held by ncdevmem/149:
-[    1.550322]  #0: ffff888005730208 (&sb->s_type->i_mutex_key#11){+.+.}-{4:4}, at: sock_close+0x40/0xf0
-[    1.550530]  #1: ffff88800b148f98 (sk_lock-AF_INET6){+.+.}-{0:0}, at: tcp_close+0x19/0x80
-[    1.550731]  #2: ffff88800b148f18 (slock-AF_INET6){+.-.}-{3:3}, at: __tcp_close+0x185/0x4b0
-[    1.550921] stack backtrace:
-[    1.550990] CPU: 0 UID: 0 PID: 149 Comm: ncdevmem Tainted: G        W          6.13.0-rc3-00770-gbc9ef9606dc9-dirty #15
-[    1.551233] Tainted: [W]=WARN
-[    1.551304] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
-[    1.551518] Call Trace:
-[    1.551584]  <TASK>
-[    1.551636]  dump_stack_lvl+0x86/0xc0
-[    1.551723]  __lock_acquire+0xb0f/0xc30
-[    1.551814]  ? dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.551941]  lock_acquire+0xf1/0x2a0
-[    1.552026]  ? dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.552152]  ? dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.552281]  ? dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.552408]  __ww_mutex_lock+0x121/0x1060
-[    1.552503]  ? dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.552648]  ww_mutex_lock+0x3d/0xa0
-[    1.552733]  dma_buf_unmap_attachment_unlocked+0x4b/0x90
-[    1.552857]  __net_devmem_dmabuf_binding_free+0x56/0xb0
-[    1.552979]  skb_release_data+0x120/0x1f0
-[    1.553074]  __kfree_skb+0x29/0xa0
-[    1.553156]  tcp_write_queue_purge+0x41/0x310
-[    1.553259]  tcp_v4_destroy_sock+0x127/0x320
-[    1.553363]  ? __tcp_close+0x169/0x4b0
-[    1.553452]  inet_csk_destroy_sock+0x53/0x130
-[    1.553560]  __tcp_close+0x421/0x4b0
-[    1.553646]  tcp_close+0x24/0x80
-[    1.553724]  inet_release+0x5d/0x90
-[    1.553806]  sock_close+0x4a/0xf0
-[    1.553886]  __fput+0x9c/0x2b0
-[    1.553960]  task_work_run+0x89/0xc0
-[    1.554046]  do_exit+0x27f/0x980
-[    1.554125]  do_group_exit+0xa4/0xb0
-[    1.554211]  __x64_sys_exit_group+0x17/0x20
-[    1.554309]  x64_sys_call+0x21a0/0x21a0
-[    1.554400]  do_syscall_64+0xec/0x1d0
-[    1.554487]  ? exc_page_fault+0x8a/0xf0
-[    1.554585]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-[    1.554703] RIP: 0033:0x7f2f8a27abcd
+[ Upstream commit 46036188ea1f5266df23a6149dea0df1c77cd1c7 ]
 
-Resolve this by making __net_devmem_dmabuf_binding_free schedule_work'd.
+The mm kselftests are currently built with no optimisation (-O0).  It's
+unclear why, and besides being obviously suboptimal, this also prevents
+the pkeys tests from working as intended.  Let's build all the tests with
+-O2.
 
-Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-
+[kevin.brodsky@arm.com: silence unused-result warnings]
+  Link: https://lkml.kernel.org/r/20250107170110.2819685-1-kevin.brodsky@arm.com
+Link: https://lkml.kernel.org/r/20241209095019.1732120-6-kevin.brodsky@arm.com
+Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Joey Gouly <joey.gouly@arm.com>
+Cc: Keith Lucas <keith.lucas@oracle.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+(cherry picked from commit 46036188ea1f5266df23a6149dea0df1c77cd1c7)
+[Yifei: This commit also fix the failure of pkey_sighandler_tests_64,
+which is also in linux-6.12.y, thus backport this commit]
+Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
 ---
- net/core/devmem.c |  4 +++-
- net/core/devmem.h | 10 ++++++----
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ tools/testing/selftests/mm/Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 5de887545f5e..23463de19f50 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -46,8 +46,10 @@ static dma_addr_t net_devmem_get_dma_addr(const struct net_iov *niov)
- 	       ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
- }
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 02e1204971b0..c0138cb19705 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -33,9 +33,16 @@ endif
+ # LDLIBS.
+ MAKEFLAGS += --no-builtin-rules
  
--void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
-+void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
- {
-+	struct net_devmem_dmabuf_binding *binding = container_of(wq, typeof(*binding), unbind_w);
+-CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
++CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
+ 
++# Some distributions (such as Ubuntu) configure GCC so that _FORTIFY_SOURCE is
++# automatically enabled at -O1 or above. This triggers various unused-result
++# warnings where functions such as read() or write() are called and their
++# return value is not checked. Disable _FORTIFY_SOURCE to silence those
++# warnings.
++CFLAGS += -U_FORTIFY_SOURCE
 +
- 	size_t size, avail;
- 
- 	gen_pool_for_each_chunk(binding->chunk_pool,
-diff --git a/net/core/devmem.h b/net/core/devmem.h
-index 874e891e70e0..63d16dbaca2d 100644
---- a/net/core/devmem.h
-+++ b/net/core/devmem.h
-@@ -52,6 +52,8 @@ struct net_devmem_dmabuf_binding {
- 	 * net_iovs in the TX path.
- 	 */
- 	struct net_iov **tx_vec;
-+
-+	struct work_struct unbind_w;
- };
- 
- #if defined(CONFIG_NET_DEVMEM)
-@@ -74,7 +76,7 @@ struct dmabuf_genpool_chunk_owner {
- 	struct net_devmem_dmabuf_binding *binding;
- };
- 
--void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding);
-+void __net_devmem_dmabuf_binding_free(struct work_struct *wq);
- struct net_devmem_dmabuf_binding *
- net_devmem_bind_dmabuf(struct net_device *dev,
- 		       enum dma_data_direction direction,
-@@ -129,7 +131,8 @@ net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
- 	if (!refcount_dec_and_test(&binding->ref))
- 		return;
- 
--	__net_devmem_dmabuf_binding_free(binding);
-+	INIT_WORK(&binding->unbind_w, __net_devmem_dmabuf_binding_free);
-+	schedule_work(&binding->unbind_w);
- }
- 
- void net_devmem_get_net_iov(struct net_iov *niov);
-@@ -161,8 +164,7 @@ static inline void net_devmem_put_net_iov(struct net_iov *niov)
- {
- }
- 
--static inline void
--__net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
-+static inline void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
- {
- }
- 
+ TEST_GEN_FILES = cow
+ TEST_GEN_FILES += compaction_test
+ TEST_GEN_FILES += gup_longterm
 -- 
-2.48.1.362.g079036d154-goog
+2.46.0
 
 
