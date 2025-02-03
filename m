@@ -1,237 +1,269 @@
-Return-Path: <linux-kselftest+bounces-25568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1765A25A6C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 14:11:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A73FFA25B50
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 14:50:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EE07164580
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 13:11:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1923D3A4198
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 13:50:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588E0204F84;
-	Mon,  3 Feb 2025 13:11:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B76F7205AB3;
+	Mon,  3 Feb 2025 13:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="N90y90gQ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YPpXSpjZ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zpOBiFzq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7D3204C06
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 13:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C69205AB8;
+	Mon,  3 Feb 2025 13:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738588309; cv=none; b=Vnz/YsgSRfEG68CcKkVFmJuFSs5vrSde+DuoC69sA8mn7PPzwUZls/Vi500e9flT1Xi4Ninrh7sPUc2AUnvkgwzcxhG5opNID93gpJ04DmaDL8PHbhTXybKALZlR1ifQIXnDLPMU3534FPNVMFayej6v12kaxb/yKlKSyb5iE0c=
+	t=1738590622; cv=none; b=XGR4B6LLzYjGKYABLIdlr8P2WPSY0g2rHG1/tT56xFJTXXIIa9LIrFl0X3CeJ1Qto8ES5J+32JQa7YRi/hj38t7TAPZe6rpFNANNTaxm9mEcxZGSyUz24usBh4pv38JhxadkokjwVhzyn19ds+UeB8s2maccvf3LCNd9mTfricE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738588309; c=relaxed/simple;
-	bh=PDfO2TqiHOQOswp1r7MD60aF2gzSJU3JaaoTdmxlwEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kf6cWRR3Nj692Kku1Dy6C+2M/pWef+eh5h74QquVMDE8Qajq+hCCb5zhzSTitwzwpxy8ywYvYI6k4sTB0AkOSlBVdB97nDrA7gQo3Z2VZVDixujNXRguYsGhh/Y2FxK4JMeraPXTuRLpQexjnNfxWEV5UHdjhtqIjHnrSflIT40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=N90y90gQ; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-436a39e4891so29753085e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 05:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1738588305; x=1739193105; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0RwX06YNoQDRCRmvfoCjGCfN9QTBGFckStparosZZg=;
-        b=N90y90gQnyZDbawzAUUwKAxucHfrEu5a9AXbCBVfIu7mSKWpVkOZDj1Ejd2JjCLpmK
-         LcAVowU/5XFa7TBVdHr4fNi/Pk3Fn/I3+zrtfeEPR2xb0660TU/UDpqqGyAjVS3CxVsg
-         yDww6964tbJa/JGjZ7q+9rkDtcpEJHXiwScwKHAm7ED0E1pQmIJUufV+YVelzGNDSF/y
-         bkp2Ji0wMec/YwJOAVTMaFzB96CCCwC/Ok8ttsTLVhM0WaQbZjMY/EByC13KsyykqsNq
-         0fv92vpmoJcfs1Jep0zZ2wu6vTL6IXMd1LWitpelrSyz/PClzyH6rt4tVygdg4WFODEF
-         OCQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738588305; x=1739193105;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W0RwX06YNoQDRCRmvfoCjGCfN9QTBGFckStparosZZg=;
-        b=ltriL1tBt1D/T3ZhLE7+cMnEc+IUprDlmgo2I2yuED4LPjvo2qOZBj7Hvc3AvglCYN
-         +2OfkslpyDukZgpIlJJMiYSXG4iWqwMvpzESn6sQIuskfWDW/SfOrc/uO/v42QhIpW49
-         GFfixloJtXMmck01qkSLXeADHL+noaJ5zXJY3HSxP30SBDGEWmlMKv3MrhBlbzr0BQja
-         ePtuKPQYLdlyHUnuXMkumBc4Lkj003oKCwFiHopr7J2RqT4fqksLl+LaMPNBmjXGZtpv
-         Nua7S9f/p5Tcx27mHSNyNp+jngUMgnmKjhSTRsE5IM43tuh8CkeySh71JgBR1l/6+ACb
-         ZfXw==
-X-Forwarded-Encrypted: i=1; AJvYcCWvGJTmprBNdqUPrrUAk/4yJRDuM5ftM4Lp2V9k/4K/qsV+YwcE/+VxigUNOncXvMJ1Cb9/Mxqg7h0UHfkJ2OA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7Awym6btOnWS2SCHF0ElsEU2IxEMAgkRsLUSqUshBSz3PHN7O
-	5QwdmNSjY6nHuzI88+xViBDYwboR22v7fdZSUY7N6QGLjXh4L6g9ob46RlZsITw=
-X-Gm-Gg: ASbGncvH36gBupA5jf5B1wCxV1W91bbkdYX3ISRClmtAHLUeW6vZX0XcluM1nGdALi/
-	DnQ4sfSbR7GdYUq0UaI0d43teYEDVpTtoKnrtLGy+2SNM9ajmumV2so41cVeEcr/iKyjCCM1g86
-	m3gpBtk0sHLguIiO6BB/ujFwzG4F4V4V2Eua0EqN704ftvBbWeq9hfXMSdcCS98idpjW0TKRRP3
-	MNtybU5XUObsrtBcbAWtB0Tn/JdgfkPTlRo6fXIpSjmNzt4Mi0ucrn4lGwxKo0+cla/30COy7K7
-	gV72M2SO2yOROwHvmo2qbSagEi0+w+UkA7821f98jmUrzo8Z1uYlOQ==
-X-Google-Smtp-Source: AGHT+IGix2KKhAS1u/WXZkqDrxDELKSomSjX0SZ+43f7IZjAxUu2W/Ytm+kXaqZ0WXxeZUkc/HDk8w==
-X-Received: by 2002:a05:600c:3b94:b0:434:a923:9310 with SMTP id 5b1f17b1804b1-438dc3cc3b1mr197184575e9.15.1738588305116;
-        Mon, 03 Feb 2025 05:11:45 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:b4fe:e6fa:32a0:6a72? ([2001:67c:2fbc:1:b4fe:e6fa:32a0:6a72])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438dcc2e384sm194539245e9.19.2025.02.03.05.11.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2025 05:11:44 -0800 (PST)
-Message-ID: <78e59cd0-332e-4a97-8060-ccdf023e8a91@openvpn.net>
-Date: Mon, 3 Feb 2025 14:12:52 +0100
+	s=arc-20240116; t=1738590622; c=relaxed/simple;
+	bh=Nsul2RHko3wUFZHRd+DzcKbvxURzXAXeCgS95BA2UqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pm5VMupXEbP9rkFUg5e/Flj41wEQ18nLvVMYKWPV2ZfLtKarjCcSzJT0c3ORGt0UWNtBjKQwOvS/tlQfgJkIahv74O5IL2zToI2vlrBxB6STkmVz8snMhz7qybVK1mKawIooGTEzkTKzWKKh/dx9yhv/8oeUvc28PKyMAwbvi4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YPpXSpjZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zpOBiFzq; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 3 Feb 2025 14:50:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1738590618;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZQrfcOY2FHWEyibchfnDOta6mFsV+KBdbtmBdSk0oiU=;
+	b=YPpXSpjZ0wzBy4i8ZEGZe/u1qrkNxIslNFF/UDtZTHdW0VLlZT5yRwiaAXsn/twnpPhfSp
+	ZGnL5wODQkps5Jjcja0NMEDmdPrr8M2E6S1bkQ/i/YbxQ0AkIdTIUK2jnucFNUUg1eArsU
+	Bk8j13Vusd2XQHjUG6DaahEBrQ/RdklJuQlVfb1Jz8jlSg6N8kzk7ovAHBfrZSm871ejTs
+	z7+PnSuYLQNsKdEcyJXSinH2tZ/lylpVUkI0M8kZVPZZe57W9UlPml9zY4pW5l5N/1l199
+	iWeimxH0IFa0nl6Ds3kBhPShEcYqFdpHUmqpzEuCrJ+pwUjuNFTX4FiJ3hiX2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1738590618;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZQrfcOY2FHWEyibchfnDOta6mFsV+KBdbtmBdSk0oiU=;
+	b=zpOBiFzqOW/f8piH0OJQXhdrOuRqtzwchGmFzVAfGVF4jCmrbXF//XpS3g+xALDkpSvFsV
+	HS3pxrQy5AuuvFBA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
+	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 00/16] selftests: vDSO: parse_vdso: Make compatible with
+ nolibc
+Message-ID: <20250203143640-70c59c53-af45-40cb-9a52-6395b3fdd263@linutronix.de>
+References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
+ <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v18 12/25] ovpn: implement TCP transport
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
- <20250113-b4-ovpn-v18-12-1f00db9c2bd6@openvpn.net> <Z6CU2emFGy1L3MDT@hog>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <Z6CU2emFGy1L3MDT@hog>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
 
-On 03/02/2025 11:05, Sabrina Dubroca wrote:
-> 2025-01-13, 10:31:31 +0100, Antonio Quartulli wrote:
->> +static void ovpn_tcp_rcv(struct strparser *strp, struct sk_buff *skb)
->> +{
-> [...]
->> +	/* we need the first byte of data to be accessible
->> +	 * to extract the opcode and the key ID later on
->> +	 */
->> +	if (!pskb_may_pull(skb, 1)) {
+On Mon, Feb 03, 2025 at 12:23:29PM +0100, Christophe Leroy wrote:
+> Le 03/02/2025 ‡ 10:05, Thomas Weiﬂschuh a Ècrit†:
+> > For testing the functionality of the vDSO, it is necessary to build
+> > userspace programs for multiple different architectures.
+> > It is additional work to acquire matching userspace cross-compilers with
+> > full C libraries and then building root images out of those.
+> > The kernel tree already contains nolibc, a small, header-only C library.
+> > By using it, it is possible to build userspace programs without any
+> > additional dependencies.
+> > For example the kernel.org crosstools or multi-target clang can be used
+> > to build test programs for a multitude of architectures.
+> > While nolibc is very limited, it is enough for many selftests.
+> > With some minor adjustments it is possible to make parse_vdso.c
+> > compatible with nolibc.
+> > As an example, vdso_standalone_test_x86 is now built from the same C
+> > code as the regular vdso_test_gettimeofday, while still being completely
+> > standalone.
+> > 
+> > This should probably go through the kselftest tree.
 > 
-> make sure we have 1B...
-> 
->> +		net_warn_ratelimited("%s: packet too small to fetch opcode for peer %u\n",
->> +				     netdev_name(peer->ovpn->dev), peer->id);
->> +		goto err;
->> +	}
->> +
->> +	/* DATA_V2 packets are handled in kernel, the rest goes to user space */
->> +	opcode = ovpn_opcode_from_skb(skb, 0);
-> 
-> but this reads a u32 (4B) from skb->data
+> Not sure what are the expectations with this series.
 
-ACK, hand-in-hand with the comment not updated.
-Will fix this.
+In general it should also work for PPC,
+thanks for testing it.
 
+> I gave it a try with vdso_test_gettimeofday and get the following:
 > 
-> [...]
->> +void ovpn_tcp_socket_detach(struct ovpn_socket *ovpn_sock)
->> +{
->> +	struct ovpn_peer *peer = ovpn_sock->peer;
->> +	struct socket *sock = ovpn_sock->sock;
->> +
->> +	strp_stop(&peer->tcp.strp);
->> +
->> +	skb_queue_purge(&peer->tcp.user_queue);
->>
->> +	/* restore CBs that were saved in ovpn_sock_set_tcp_cb() */
->> +	sock->sk->sk_data_ready = peer->tcp.sk_cb.sk_data_ready;
->> +	sock->sk->sk_write_space = peer->tcp.sk_cb.sk_write_space;
->> +	sock->sk->sk_prot = peer->tcp.sk_cb.prot;
->> +	sock->sk->sk_socket->ops = peer->tcp.sk_cb.ops;
->> +
->> +	/* drop reference to peer */
+> $ powerpc64-linux-gcc -nostdlib -nostdinc -ffreestanding
+> -fno-asynchronous-unwind-tables -fno-stack-protector -include /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/nolibc.h -I/home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/
+> -isystem
+> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../usr/include
+> -std=gnu99 -O2 -D_GNU_SOURCE= -isystem /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/uapi
+> vdso_test_gettimeofday.c parse_vdso.c  -o /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_gettimeofday
 > 
-> nit: not really :)
+> make: Entering directory
+> '/home/chleroy/linux-powerpc/tools/testing/selftests/vDSO'
+> powerpc64-linux-gcc -nostdlib -nostdinc -ffreestanding
+> -fno-asynchronous-unwind-tables -fno-stack-protector -include /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/nolibc.h -I/home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/
+> -isystem
+> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../usr/include
+> -std=gnu99 -O2 -D_GNU_SOURCE= -isystem /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/uapi
+> vdso_test_gettimeofday.c parse_vdso.c  -o /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_gettimeofday
 
-drop comment :)
+This log is confusing. It contains traces of "make" output but no "make"
+invocation. I'm also not sure if there were two different compilations
+or only one. Can you give the full commandline?
+For your testing it should be enough to enable
+"vdso_test_standalone_x86" in the Makefile for PPC.
 
+> parse_vdso.c:38:34: error: unknown type name 'Elf64_Versym'
+>    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
+>       |                                  ^~~
+> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
+>    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
+>       |                                 ^~~~~~~~~~~~~~~
+> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
+>    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
+>       |                ^~~~~~~~~~~~~~
+> parse_vdso.c:63:9: note: in expansion of macro 'ELF'
+>    63 |         ELF(Versym) *versym;
+>       |         ^~~
+> parse_vdso.c:38:34: error: unknown type name 'Elf64_Verdef'
+>    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
+>       |                                  ^~~
+> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
+>    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
+>       |                                 ^~~~~~~~~~~~~~~
+> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
+>    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
+>       |                ^~~~~~~~~~~~~~
+> parse_vdso.c:64:9: note: in expansion of macro 'ELF'
+>    64 |         ELF(Verdef) *verdef;
+>       |         ^~~
+> parse_vdso.c: In function 'vdso_init_from_sysinfo_ehdr':
+> parse_vdso.c:38:34: error: 'Elf64_Versym' undeclared (first use in this
+> function); did you mean 'Elf64_Sym'?
+>    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
+>       |                                  ^~~
+> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
+>    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
+>       |                                 ^~~~~~~~~~~~~~~
+> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
+>    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
+>       |                ^~~~~~~~~~~~~~
+> parse_vdso.c:150:45: note: in expansion of macro 'ELF'
+>   150 |                         vdso_info.versym = (ELF(Versym) *)
+>       |                                             ^~~
+> parse_vdso.c:38:34: note: each undeclared identifier is reported only once
+> for each function it appears in
+>    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
+>       |                                  ^~~
+> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
+>    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
+>       |                                 ^~~~~~~~~~~~~~~
+> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
+>    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
+>       |                ^~~~~~~~~~~~~~
+> parse_vdso.c:150:45: note: in expansion of macro 'ELF'
+>   150 |                         vdso_info.versym = (ELF(Versym) *)
+>       |                                             ^~~
+> parse_vdso.c:150:58: error: expected expression before ')' token
+>   150 |                         vdso_info.versym = (ELF(Versym) *)
+>       |                                                          ^
+> parse_vdso.c:38:34: error: 'Elf64_Verdef' undeclared (first use in this
+> function); did you mean 'Elf64_Word'?
+>    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
+>       |                                  ^~~
+> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
+>    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
+>       |                                 ^~~~~~~~~~~~~~~
+> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
+>    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
+>       |                ^~~~~~~~~~~~~~
+> parse_vdso.c:155:45: note: in expansion of macro 'ELF'
+>   155 |                         vdso_info.verdef = (ELF(Verdef) *)
+>       |                                             ^~~
+> parse_vdso.c:155:58: error: expected expression before ')' token
+>   155 |                         vdso_info.verdef = (ELF(Verdef) *)
+>       |                                                          ^
+> parse_vdso.c: At top level:
+> parse_vdso.c:38:34: error: unknown type name 'Elf64_Versym'; did you mean
+> 'Elf64_Sym'?
+>    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
+>       |                                  ^~~
+> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
+>    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
+>       |                                 ^~~~~~~~~~~~~~~
+> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
+>    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
+>       |                ^~~~~~~~~~~~~~
+> parse_vdso.c:177:32: note: in expansion of macro 'ELF'
+>   177 | static bool vdso_match_version(ELF(Versym) ver,
+>       |                                ^~~
+> parse_vdso.c: In function 'vdso_sym':
+> parse_vdso.c:224:25: error: 'STN_UNDEF' undeclared (first use in this
+> function); did you mean 'SHN_UNDEF'?
+>   224 |         for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
+>       |                         ^~~~~~~~~
+>       |                         SHN_UNDEF
+> parse_vdso.c:240:25: warning: implicit declaration of function
+> 'vdso_match_version' [-Wimplicit-function-declaration]
+>   240 |                     && !vdso_match_version(vdso_info.versym[chain],
+>       |                         ^~~~~~~~~~~~~~~~~~
+> make: *** [../lib.mk:222: /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_gettimeofday]
+> Error 1
+> make: Leaving directory
+> '/home/chleroy/linux-powerpc/tools/testing/selftests/vDSO'
 > 
->> +	rcu_assign_sk_user_data(sock->sk, NULL);
->> +
->> +	/* before canceling any ongoing work we must ensure that CBs
->> +	 * have been reset to prevent workers from being re-armed
->> +	 */
->> +	barrier();
->> +
->> +	cancel_work_sync(&peer->tcp.tx_work);
->> +	strp_done(&peer->tcp.strp);
->> +	skb_queue_purge(&peer->tcp.out_queue);
+> Christophe
 > 
-> Also kfree_skb(peer->tcp.out_msg.skb)?
-
-hm yeah, it could be we allocated one but did not finish filling it.
-
+> > 
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > ---
+> > Thomas Weiﬂschuh (16):
+> >        MAINTAINERS: Add vDSO selftests
+> >        elf, uapi: Add definition for STN_UNDEF
+> >        elf, uapi: Add definition for DT_GNU_HASH
+> >        elf, uapi: Add definitions for VER_FLG_BASE and VER_FLG_WEAK
+> >        elf, uapi: Add type ElfXX_Versym
+> >        elf, uapi: Add types ElfXX_Verdef and ElfXX_Veraux
+> >        tools/include: Add uapi/linux/elf.h
+> >        selftests: Add headers target
+> >        selftests: vDSO: vdso_standalone_test_x86: Use vdso_init_form_sysinfo_ehdr
+> >        selftests: vDSO: parse_vdso: Drop vdso_init_from_auxv()
+> >        selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers
+> >        selftests: vDSO: parse_vdso: Test __SIZEOF_LONG__ instead of ULONG_MAX
+> >        selftests: vDSO: parse_vdso: Make compatible with nolibc
+> >        selftests: vDSO: vdso_test_gettimeofday: Clean up includes
+> >        selftests: vDSO: vdso_test_gettimeofday: Make compatible with nolibc
+> >        selftests: vDSO: vdso_standalone_test_x86: Switch to nolibc
+> > 
+> >   MAINTAINERS                                        |   1 +
+> >   include/uapi/linux/elf.h                           |  38 ++
+> >   tools/include/uapi/linux/elf.h                     | 524 +++++++++++++++++++++
+> >   tools/testing/selftests/lib.mk                     |   5 +-
+> >   tools/testing/selftests/vDSO/Makefile              |  11 +-
+> >   tools/testing/selftests/vDSO/parse_vdso.c          |  21 +-
+> >   tools/testing/selftests/vDSO/parse_vdso.h          |   1 -
+> >   .../selftests/vDSO/vdso_standalone_test_x86.c      | 143 +-----
+> >   .../selftests/vDSO/vdso_test_gettimeofday.c        |   4 +-
+> >   9 files changed, 584 insertions(+), 164 deletions(-)
+> > ---
+> > base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+> > change-id: 20241017-parse_vdso-nolibc-e069baa7ff48
+> > 
+> > Best regards,
 > 
->> +	ovpn_peer_put(peer);
->> +}
-> 
-> 
-> [...]
->> +static int ovpn_tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
->> +{
-> [...]
->> +	ret = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
->> +	if (ret) {
->> +		kfree_skb(skb);
->> +		net_err_ratelimited("%s: skb copy from iter failed: %d\n",
->> +				    netdev_name(sock->peer->ovpn->dev), ret);
->> +		goto peer_free;
->> +	}
->> +
->> +	ovpn_tcp_send_sock_skb(sock->peer, skb);
-> 
-> This isn't propagating MSG_DONTWAIT down to ovpn_tcp_send_sock?
-> 
-
-patch 14/25 will add a new member to ovpn_cb which will be filled right 
-before calling ovpn_tcp_send_sock_skb() and that gets picked later.
-
-Cheers,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
-
 
