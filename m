@@ -1,287 +1,229 @@
-Return-Path: <linux-kselftest+bounces-25529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D103A25096
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 00:07:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93A19A252CC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:05:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97CC018849EB
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Feb 2025 23:07:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0427A28F7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 07:04:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7611FECC0;
-	Sun,  2 Feb 2025 23:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="OdMFmDt1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="siC0HCfQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726CF1DB12D;
+	Mon,  3 Feb 2025 07:04:57 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562641FDA90;
-	Sun,  2 Feb 2025 23:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8388F18EAB;
+	Mon,  3 Feb 2025 07:04:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738537643; cv=none; b=B0LHbCzIasRDeAbzpPJg9qAp21pJUWHZ2gzywmWMxrykuZbgkGQF+T2aMW66Uigj7iwZEJgJCiyuoYoUbPswtlez59q68p6HSIZDdvhy1ePIafs7p1eu8Ee4OZuIoF+WoFf3tJGRyydZblBJkKiJ2uFsX1w7Y1cgiKuacR1tjhk=
+	t=1738566297; cv=none; b=ZL1PEtv+Ic1BBGlIe1KYnP+hZXNUmkoCsLjx3LXhrymI7FIj1NBFt9HnThO2IHQ67eUrZSBJvorMtI3xiIvTYq1M7G59wlDmgYv1sjjf/cHL3QE01Mhkc66ErGLMxt9QXeiDD0gFSjbB9f4mz3gnzj6KZyKb4g2AmbH+LlHNMes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738537643; c=relaxed/simple;
-	bh=9gVeuqoUPF160LlPKssl/ECX3xfu3p7wCdpPGVaQhoo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YkogRqgjjQZPebWx/REr/oT62ri91dEPEMAgRHdo20PX9SKg9qH4Cu7jEWdW2Ftja6YxXO1yhcuvE5cEF8tsFeSsJng+lvSfbvlGfZuCXuRc+ObllyzSGBfhg17oEM098SVLafBNVL9wsRNvh7DNJO+mrlY2x1ASx1Bu9NjD1S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=OdMFmDt1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=siC0HCfQ; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfout.stl.internal (Postfix) with ESMTP id 08B8211400D8;
-	Sun,  2 Feb 2025 18:07:19 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Sun, 02 Feb 2025 18:07:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1738537638; x=
-	1738624038; bh=b8vxyUo2+X0+IZqkuu9170OSmww4EAw9XZWfoUl1MjU=; b=O
-	dMFmDt1EsiLVabvfBUvSem0oNoF60VU+sFI8csXSAkkSzNwd1EvUDuY/ybp6MKqB
-	9w6rYsn9Ehj1l2ak7i9JD+Te87tQ7F8PhW3Q/ilpMZh+ZMXpT+1D9n6U2JLZpB+Y
-	Pbg1Xf0JMrW+H6TcfbgXLGRNQxtm1iYlEtCRm+1bv3JR39ZsJOUpL0zND90BiTHj
-	RLDqmi1VtPUbs3z1YuLDehPmicwyh6Uj4MVunsuzAzM4A2yLRUElpEeOvQwWp7NB
-	q/be8bqelTVHenQXUEM0VCvWrxri72vA+UMxpiWahKlWVxPdVllkKoZwzHJBlrPz
-	jDQifd5aK9NxWlkNFDppg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1738537638; x=1738624038; bh=b8vxyUo2+X0+IZqkuu9170OSmww4EAw9XZW
-	foUl1MjU=; b=siC0HCfQkklPmSdK8cQG4T27dbd2P99wHAEkuP9MQ92s3afdFZ6
-	C5k1jE15LdMHrZLq0TnYL8ejsFLtMMYxWFyuN6lKYGWE/xNCLy8QYO+XHh6KQEbZ
-	kl0qtTls8+8NoY0ztozJYOLPcYYm5p+SyE1QcHxv8CXfyYoXw7zE7IQd+yOoVPgU
-	0k3GuZ2M8eJ2qcyenLu0Y9wFyqrQEUuRTpk0As2JjnxuyOFpf43raxoUCCoziA4t
-	ph6JmoowkFrCOWbJjNfjFZ3BOeHjls3oqNX9b7HT6A9NfL+kvCwnXO/ELNojveM9
-	hubH3z3U5an9t8pk3FkabT1zDD5k9K6WlTA==
-X-ME-Sender: <xms:pvqfZ0r7VEYE265W1BIhGT7TftXP_v4u2xjQDRrWi9cMkUwHY1AR0g>
-    <xme:pvqfZ6qWIWi3NJXIsqLRcVnpneVWKYxoxN8_5HWuDrvwm_3ZkrMa3urJyMFbupn6J
-    8U31eYCqhlkZdxe8Js>
-X-ME-Received: <xmr:pvqfZ5M6wssxgqmNNisuvLsB-9qZ_b2HUrKV0ccAUI2aW4bz6AfRLYmDV9Kc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheeljecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
-    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
-    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
-    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
-    pghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
-    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
-    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
-    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
-    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
-X-ME-Proxy: <xmx:pvqfZ75uugAveFN6dlaxF2MgcLMVtKza16yvGafINQIYbwSYRd3hoA>
-    <xmx:pvqfZz6fS-YnknOTvgkvLpCTIRFsHGPKObd1TAeT_W4DVZk7BZacrA>
-    <xmx:pvqfZ7gdUxGXKGw8dZUzRRnRCs5bLdrrAsIMc5Du5qnNOd8s_n_soA>
-    <xmx:pvqfZ96IVHVUr-sM1SJpir-EzZ44Fj7kxF7d7hQx4JeK8nAgvvkQWQ>
-    <xmx:pvqfZ6J_04S0EBLV4dJMXRe7OGksLyB7z9rOWJydTj0xyTPZbvtO4RJG>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 2 Feb 2025 18:07:17 -0500 (EST)
-Date: Mon, 3 Feb 2025 00:07:16 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
- add/get/dump/delete via netlink
-Message-ID: <Z5_6pC-zsVzukJs3@hog>
-References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
- <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
+	s=arc-20240116; t=1738566297; c=relaxed/simple;
+	bh=cdlxG3DUWpb2N9e84QeaBxU8D/erEiti6DSYyuQkVZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dFVD/ivASsAMpXqWjLlggDgq8eQKNqB5eqnFenonFuakNxmNWDj7C6RSCvgGq6Ihi/dpigxvjVggAQw8J+cwcMHhNhgAMXmkuiAlUXRo87CwDChqKy9+BTOVt/Z1JukF4n3RyESfABExcLsjK2fh36/S9hAxPRZVOttL7kXofIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 86CA172C8F5;
+	Mon,  3 Feb 2025 09:58:49 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 590A67CCB3B; Mon,  3 Feb 2025 08:58:49 +0200 (IST)
+Date: Mon, 3 Feb 2025 08:58:49 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Renzo Davoli <renzo@cs.unibo.it>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, strace-devel@lists.strace.io,
+	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-api@vger.kernel.org
+Subject: [PATCH v4 0/7] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
+Message-ID: <20250203065849.GA14120@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
 
-2025-01-13, 10:31:39 +0100, Antonio Quartulli wrote:
-> +static int ovpn_nl_attr_sockaddr_remote(struct nlattr **attrs,
-> +					struct sockaddr_storage *ss)
-> +{
-> +	struct sockaddr_in6 *sin6;
-> +	struct sockaddr_in *sin;
-> +	struct in6_addr *in6;
-> +	__be16 port = 0;
-> +	__be32 *in;
-> +	int af;
-> +
-> +	ss->ss_family = AF_UNSPEC;
-> +
-> +	if (attrs[OVPN_A_PEER_REMOTE_PORT])
-> +		port = nla_get_be16(attrs[OVPN_A_PEER_REMOTE_PORT]);
-> +
-> +	if (attrs[OVPN_A_PEER_REMOTE_IPV4]) {
-> +		af = AF_INET;
-> +		ss->ss_family = AF_INET;
-> +		in = nla_data(attrs[OVPN_A_PEER_REMOTE_IPV4]);
-> +	} else if (attrs[OVPN_A_PEER_REMOTE_IPV6]) {
-> +		af = AF_INET6;
-> +		ss->ss_family = AF_INET6;
-> +		in6 = nla_data(attrs[OVPN_A_PEER_REMOTE_IPV6]);
-> +	} else {
-> +		return AF_UNSPEC;
-> +	}
-> +
-> +	switch (ss->ss_family) {
-> +	case AF_INET6:
-> +		/* If this is a regular IPv6 just break and move on,
-> +		 * otherwise switch to AF_INET and extract the IPv4 accordingly
-> +		 */
-> +		if (!ipv6_addr_v4mapped(in6)) {
-> +			sin6 = (struct sockaddr_in6 *)ss;
-> +			sin6->sin6_port = port;
-> +			memcpy(&sin6->sin6_addr, in6, sizeof(*in6));
-> +			break;
-> +		}
-> +
-> +		/* v4-mapped-v6 address */
-> +		ss->ss_family = AF_INET;
-> +		in = &in6->s6_addr32[3];
-> +		fallthrough;
-> +	case AF_INET:
-> +		sin = (struct sockaddr_in *)ss;
-> +		sin->sin_port = port;
-> +		sin->sin_addr.s_addr = *in;
-> +		break;
-> +	}
-> +
-> +	/* don't return ss->ss_family as it may have changed in case of
-> +	 * v4-mapped-v6 address
-> +	 */
+PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
+PTRACE_GET_SYSCALL_INFO by letting the ptracer modify details of
+system calls the tracee is blocked in.
 
-nit: I'm not sure that matters since the only thing the caller checks
-is ret != AF_UNSPEC, and at this point, while ss_family could have
-been changed, it would have changed from AF_INET6 to AF_INET, so it's
-!= AF_UNSPEC.
+This API allows ptracers to obtain and modify system call details
+in a straightforward and architecture-agnostic way.
 
-> +	return af;
-> +}
+Current implementation supports changing only those bits of system call
+information that are used by strace, namely, syscall number, syscall
+arguments, and syscall return value.
 
-[...]
-> +static int ovpn_nl_peer_precheck(struct ovpn_priv *ovpn,
-> +				 struct genl_info *info,
-> +				 struct nlattr **attrs)
-> +{
-[...]
-> +
-> +	/* VPN IPs are needed only in MP mode for selecting the right peer */
-> +	if (ovpn->mode == OVPN_MODE_P2P && (attrs[OVPN_A_PEER_VPN_IPV4] ||
-> +					    attrs[OVPN_A_PEER_VPN_IPV6])) {
+Support of changing additional details returned by PTRACE_GET_SYSCALL_INFO,
+such as instruction pointer and stack pointer, could be added later if
+needed, by using struct ptrace_syscall_info.flags to specify the additional
+details that should be set.  Currently, "flags" and "reserved" fields of
+struct ptrace_syscall_info must be initialized with zeroes; "arch",
+"instruction_pointer", and "stack_pointer" fields are ignored.
 
-And in MP mode, at least one VPN_IP* is required?
+PTRACE_SET_SYSCALL_INFO currently supports only PTRACE_SYSCALL_INFO_ENTRY,
+PTRACE_SYSCALL_INFO_EXIT, and PTRACE_SYSCALL_INFO_SECCOMP operations.
+Other operations could be added later if needed.
 
+Ideally, PTRACE_SET_SYSCALL_INFO should have been introduced along with
+PTRACE_GET_SYSCALL_INFO, but it didn't happen.  The last straw that
+convinced me to implement PTRACE_SET_SYSCALL_INFO was apparent failure
+to provide an API of changing the first system call argument on riscv
+architecture [1].
 
-[...]
->  int ovpn_nl_peer_new_doit(struct sk_buff *skb, struct genl_info *info)
->  {
-[...]
-> +	/* Only when using UDP as transport protocol the remote endpoint
-> +	 * can be configured so that ovpn knows where to send packets to.
-> +	 *
-> +	 * In case of TCP, the socket is connected to the peer and ovpn
-> +	 * will just send bytes over it, without the need to specify a
-> +	 * destination.
-> +	 */
-> +	if (sock->sk->sk_protocol != IPPROTO_UDP &&
-> +	    (attrs[OVPN_A_PEER_REMOTE_IPV4] ||
-> +	     attrs[OVPN_A_PEER_REMOTE_IPV6])) {
+ptrace(2) man page:
 
-Is a peer on a UDP socket without any remote (neither
-OVPN_A_PEER_REMOTE_IPV4 nor OVPN_A_PEER_REMOTE_IPV6) valid? We just
-wait until we get data from it to update the endpoint?
+long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data);
+...
+PTRACE_SET_SYSCALL_INFO
+       Modify information about the system call that caused the stop.
+       The "data" argument is a pointer to struct ptrace_syscall_info
+       that specifies the system call information to be set.
+       The "addr" argument should be set to sizeof(struct ptrace_syscall_info)).
 
-Or should there be a check to make sure that one was provided?
+[1] https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
 
-> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +				       "unexpected remote IP address for non UDP socket");
-> +		sockfd_put(sock);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ovpn_sock = ovpn_socket_new(sock, peer);
-> +	if (IS_ERR(ovpn_sock)) {
-> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +				       "cannot encapsulate socket: %ld",
-> +				       PTR_ERR(ovpn_sock));
-> +		sockfd_put(sock);
-> +		return -ENOTSOCK;
+Notes:
+    v4:
+    * Split out syscall_set_return_value() for hexagon into a separate patch
+    * s390: Change the style of syscall_set_arguments() implementation as
+      requested
+    * Add more Reviewed-by
+    * v3: https://lore.kernel.org/all/20250128091445.GA8257@strace.io/
 
-Maybe s/-ENOTSOCK/PTR_ERR(ovpn_sock)/ ?
-Overwriting ovpn_socket_new's -EBUSY etc with -ENOTSOCK is a bit
-misleading to the caller.
+    v3:
+    * powerpc: Submit syscall_set_return_value() fix for "sc" case separately
+    * mips: Do not introduce erroneous argument truncation on mips n32,
+      add a detailed description to the commit message of the
+      mips_get_syscall_arg() change
+    * ptrace: Add explicit padding to the end of struct ptrace_syscall_info,
+      simplify obtaining of user ptrace_syscall_info,
+      do not introduce PTRACE_SYSCALL_INFO_SIZE_VER0
+    * ptrace: Change the return type of ptrace_set_syscall_info_* functions
+      from "unsigned long" to "int"
+    * ptrace: Add -ERANGE check to ptrace_set_syscall_info_exit(),
+      add comments to -ERANGE checks
+    * ptrace: Update comments about supported syscall stops
+    * selftests: Extend set_syscall_info test, fix for mips n32
+    * Add Tested-by and Reviewed-by
 
-> +	}
-> +
-> +	peer->sock = ovpn_sock;
-> +
-> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
-> +	if (ret < 0)
-> +		goto peer_release;
-> +
-> +	ret = ovpn_peer_add(ovpn, peer);
-> +	if (ret < 0) {
-> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +				       "cannot add new peer (id=%u) to hashtable: %d\n",
-> +				       peer->id, ret);
-> +		goto peer_release;
-> +	}
-> +
-> +	return 0;
-> +
-> +peer_release:
+    v2:
+    * Add patch to fix syscall_set_return_value() on powerpc
+    * Add patch to fix mips_get_syscall_arg() on mips
+    * Add syscall_set_return_value() implementation on hexagon
+    * Add syscall_set_return_value() invocation to syscall_set_nr()
+      on arm and arm64.
+    * Fix syscall_set_nr() and mips_set_syscall_arg() on mips
+    * Add a comment to syscall_set_nr() on arc, powerpc, s390, sh,
+      and sparc
+    * Remove redundant ptrace_syscall_info.op assignments in
+      ptrace_get_syscall_info_*
+    * Minor style tweaks in ptrace_get_syscall_info_op()
+    * Remove syscall_set_return_value() invocation from
+      ptrace_set_syscall_info_entry()
+    * Skip syscall_set_arguments() invocation in case of syscall number -1
+      in ptrace_set_syscall_info_entry() 
+    * Split ptrace_syscall_info.reserved into ptrace_syscall_info.reserved
+      and ptrace_syscall_info.flags
+    * Use __kernel_ulong_t instead of unsigned long in set_syscall_info test
 
-I think you need to add:
+    v1:
 
-	ovpn_socket_release(peer);
+Dmitry V. Levin (7):
+  mips: fix mips_get_syscall_arg() for o32
+  hexagon: add syscall_set_return_value()
+  syscall.h: add syscall_set_arguments()
+  syscall.h: introduce syscall_set_nr()
+  ptrace_get_syscall_info: factor out ptrace_get_syscall_info_op
+  ptrace: introduce PTRACE_SET_SYSCALL_INFO request
+  selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO
 
-If ovpn_socket_new succeeded, ovpn_peer_release only takes care of the
-peer but not its socket.
-
-> +	/* release right away because peer is not used in any context */
-> +	ovpn_peer_release(peer);
-> +
-> +	return ret;
->  }
->  
->  int ovpn_nl_peer_set_doit(struct sk_buff *skb, struct genl_info *info)
->  {
-[...]
-> +	if (attrs[OVPN_A_PEER_SOCKET]) {
-> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +				       "socket cannot be modified");
-> +		return -EINVAL;
-> +	}
-> +
-> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
-> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
-> +	if (!peer) {
-> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +				       "cannot find peer with id %u", peer_id);
-> +		return -ENOENT;
-> +	}
-
-The check for non-UDP socket with a remote address configured should
-be replicated here, no?
+ arch/arc/include/asm/syscall.h                |  25 +
+ arch/arm/include/asm/syscall.h                |  37 ++
+ arch/arm64/include/asm/syscall.h              |  29 +
+ arch/csky/include/asm/syscall.h               |  13 +
+ arch/hexagon/include/asm/syscall.h            |  21 +
+ arch/loongarch/include/asm/syscall.h          |  15 +
+ arch/m68k/include/asm/syscall.h               |   7 +
+ arch/microblaze/include/asm/syscall.h         |   7 +
+ arch/mips/include/asm/syscall.h               |  70 ++-
+ arch/nios2/include/asm/syscall.h              |  16 +
+ arch/openrisc/include/asm/syscall.h           |  13 +
+ arch/parisc/include/asm/syscall.h             |  19 +
+ arch/powerpc/include/asm/syscall.h            |  20 +
+ arch/riscv/include/asm/syscall.h              |  16 +
+ arch/s390/include/asm/syscall.h               |  21 +
+ arch/sh/include/asm/syscall_32.h              |  24 +
+ arch/sparc/include/asm/syscall.h              |  22 +
+ arch/um/include/asm/syscall-generic.h         |  19 +
+ arch/x86/include/asm/syscall.h                |  43 ++
+ arch/xtensa/include/asm/syscall.h             |  18 +
+ include/asm-generic/syscall.h                 |  30 +
+ include/uapi/linux/ptrace.h                   |   7 +-
+ kernel/ptrace.c                               | 179 +++++-
+ tools/testing/selftests/ptrace/Makefile       |   2 +-
+ .../selftests/ptrace/set_syscall_info.c       | 514 ++++++++++++++++++
+ 25 files changed, 1140 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
 
 -- 
-Sabrina
+ldv
 
