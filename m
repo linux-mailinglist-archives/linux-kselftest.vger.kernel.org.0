@@ -1,210 +1,184 @@
-Return-Path: <linux-kselftest+bounces-25599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF72AA263E6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 20:41:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5465CA263F6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 20:46:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82F2818864D5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 19:41:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E47A33A2DFF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 19:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC31E20AF7B;
-	Mon,  3 Feb 2025 19:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0AE1DACB1;
+	Mon,  3 Feb 2025 19:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cu5lf5Lt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tq3jmft+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266E51DB958
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 19:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63BE83597F
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Feb 2025 19:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738611684; cv=none; b=PIsh56smowce/789AiLebhqHdieghAzoIy2JOJe4C0EhFiWHrZ0UrVvBtJrbMOyHslmnz4U1Fg4V3z1MDyXaRz/GbBYF5sDx1GD2jnAo7Z+zFJrpAvYO8R3x1/DYk2yUpzAJ7+dBivdetnO2Nu8Sbw124qp0DhOkxuNBkaGA9/g=
+	t=1738612000; cv=none; b=c42egxgk2RvQtnzI8D849emEhN7iscgMmeVM3mw+iRIU+5oDnVDGN7qb37BmVfXtuPz4HYsIAgb224jaIYbk3jw0OOk75uzACGKg3VoHffmlVoqLlqz7W+Ne5OZe607riXtwxhGWES4hkNAaAhnLrRNEaFCVlXej6dnBoHsYymk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738611684; c=relaxed/simple;
-	bh=bmzPo8fjt8JOhc/1bHrIPMZFP8Y2muFcWZy4Ysux2lU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tFtVe+7ShiZ0PvoLg1XT3nFyIX0evbcExxkiUru19aOAeCZWUlPlgt04zJvq8Ihb17lH9W6wcYPmR8bAS/oyFDXg9qXxkLkyCe3NbEgGkvHsk2vjqai1ekfj6JUWpwW3I6E/qSyJ0S9mQ9ctMRXhKAxCjxYJA70/F+rq1+Kovig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Cu5lf5Lt; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2efc3292021so13272034a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 11:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738611682; x=1739216482; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VJXV2LQY26MqizxcjQXhtNRXXOMRYW+qm0imDYwsMvw=;
-        b=Cu5lf5LtLxTxa/GXdUK7k6HYS89RYuoTJsSXOUkd1YWJ1CRns2Dv24VD+GQC1WCdx9
-         SU/Dmie28f+2sAhXWZhXxNfhQTba8j3FGJbf96LsPhRKbGH1iDICxGvhcBBartou1FN8
-         n2+8NNevuM+X2ijWyYLMKT+VJhaZnATrPzkphxXMZ2w0uALjmDj2qwuW6z/y3RlUyh98
-         4JYUuARYARwHpGq6q7gwg5k9ZGHdkII6Le8jJGPxvB3gE6tNxzeFt16qTZ2vqQV76zP5
-         37HyhsOyz4Tz+uanh+iSJRpX4vlqOAo/atRHozWIyUBynEKAWn880gOZt0ovSlavlBWW
-         llIg==
+	s=arc-20240116; t=1738612000; c=relaxed/simple;
+	bh=09whj4uZGPY+MU0n+/5yUTtg1hWaTb1nkD/DeIxUkCI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BNlnJ4hYJrdOc5zv2U1IRbU8sX380MgJPNWdVhEa2O6dZ5E82BYvvZ8ERt3N7Ig8m/69lJB/JBM03rM8LJNvcWri70wF0PpoCa3QjMVKPp0wz90RRLFeiKU1+VPf27ZJvcSDmwPO1K9lpT+V98Bg7Q8a9ncygWzRetG/z3/FiGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tq3jmft+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738611997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=OXEsTHoAIxPyeu+L6p4C4IoY0yLlvxYneWJOKrJchu0=;
+	b=Tq3jmft+uMzYDuJmj6FvetgMoiczMuc643bxBJgEdH3W9pN4r1QdTtQTLkMI8CbvmfzK3e
+	2WltnDHD1k6v1xj7ClzFMCDo2uby5FcG8MgbcSQKTdNONnb0uPJHRDyYbv5Qa/63NPan2J
+	W61IbEJ9osrSOU6wyp22td/kdCApV0c=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-F_7o_BeCMtOr8ONP9cv5zQ-1; Mon, 03 Feb 2025 14:46:36 -0500
+X-MC-Unique: F_7o_BeCMtOr8ONP9cv5zQ-1
+X-Mimecast-MFC-AGG-ID: F_7o_BeCMtOr8ONP9cv5zQ
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43626224274so25041645e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2025 11:46:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738611682; x=1739216482;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VJXV2LQY26MqizxcjQXhtNRXXOMRYW+qm0imDYwsMvw=;
-        b=IxQpcAZLf06qJWB8hxhkR1mabGfrLkE9GI0QuPJKRH5vrKilG6oVFV4ke8UDVOecXH
-         SRWSeHKw9osky6jRPxiRxxSMDH5ZWAA0nXJqgTZjFiFulm5Q6YNprBYqoYxi0M10Kx2K
-         zr66RtSYi0xwlt4f+YIdy2uWr/cmqTKB1yzZBNbowdFyyphGul1dW6vFHxVQUVgKJvas
-         vI2XYPDKP0VbfxVJJdWVBGBk4/c6f8VRkSxQ1Vr7d0WvwQ0MYKxQElN97CaoSoqXxG7C
-         26SS6NccBQcbX3OszfdBliqVSJCIO3lXFiky4/qWw2g4r+QskRL2Lj0q5wWAy3/aUjqh
-         j3bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4a7kbsGOLGIZNXFxr+zE9IUimHuiPEJiVtmxiuMBlyyKYX1SmGZjsQdhIuzEFlLdrnHmsoG55JytsHzo9EZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLkpnCegSB1pttdpCxZJkj8mSzvhh0UBQaJmcbJYi4eN8s034G
-	hCMUliFr+p3Lco7ojBqul3KntOO/PUhHn+cDcRQANDNcRShjLVdzmiYXH01N3VkBDNy3UsQqFQ3
-	Sfw==
-X-Google-Smtp-Source: AGHT+IGcEY16oN3aex7QCo8rxntT+v0xmLo7K0x8S2drWCxpjUutztQRaAT/c6jmhnfhVhYFkmYgpyMZlK8=
-X-Received: from pjtu5.prod.google.com ([2002:a17:90a:c885:b0:2ee:3128:390f])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b88:b0:2f8:34df:564e
- with SMTP id 98e67ed59e1d1-2f83abf3506mr38263640a91.14.1738611682399; Mon, 03
- Feb 2025 11:41:22 -0800 (PST)
-Date: Mon, 3 Feb 2025 11:41:20 -0800
-In-Reply-To: <CADH9ctAzffvDByS1s2PJoD63On-b+pCnCmER4Nf4Zc=62vkbMA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1738611995; x=1739216795;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OXEsTHoAIxPyeu+L6p4C4IoY0yLlvxYneWJOKrJchu0=;
+        b=SfJqcwM7C9cSTfwvtq7ebaDp6+uNm95NG17pfQ65xro3hsRiinp/oJwi7NJD6OAR5w
+         8zaUsE6t38LBYPkM2L15Cflbj+yZOyLQtn3cSAzt3HPRo8j2AoViMZVbf7KNyPCSDiH3
+         UKG8Ir2RnpYBo4W+2w8dqQYx2HFzTzEJ4iDmb+zYcam/MoiSWQXZcAs4xVpqee/omD/A
+         lecVmJEod40mmi6A6vhQoH7CYR8bfbDPuTk0d1uhzKm6IsSI+bzxRDQEJtA9GJSnuY/d
+         BAhcRPTvhGpa6jYg8z1myPBg05CcigIwFr1EnddfhAsogXtBdROT5k5CbDPLL8OVqWNc
+         AlrA==
+X-Forwarded-Encrypted: i=1; AJvYcCXiLjSVXGBZzetWtxp5VXQmGHjlm/jLxIlX4dsTS6UDZXH+w+cM74fQeoDkSO7ah9Uc6BCVVz3JHr8FERuE0Mg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyEMPoh17HzXRkb3SfIM/795nNwDp8oZRQz6+NsDetHPfilyJF
+	/6WTJT3UiNBGQvqX6i23GnMdXtPZv4fP5spVMBRALnmSQKpb3DOpjL0fWnRdPbJrTrq5hR0GEYL
+	5wsyWLc+qtzvBk/pBAWwUxYaDMVjgXmL0kH8lhJLlsmXcLXWOwgeI+9YEhuAOIATLsQ==
+X-Gm-Gg: ASbGncsqxQPrpM07Vj1d48Zzy91ZqadxPr9fNfLTub72vTd1DHpIwln+PN0YLtpKlD9
+	IRuwaNcUqy+WwHGV4ox+uNK9XE5ymIC3ZaMnJnHSc3U2Ae7jBvY227ht5jBu8BGsQ+I3A2IAMAB
+	5wA00CyR9SqwXvZ7apUhgkb2jt3OKf1g36zYI81nDvdqFndNYkSjvb2aJnkUYCjkj5bHe9DEyeL
+	Ljne8XNoznLrlFHC7Ech/X/cl7XpySvbrtBN8ZQAll/gv6oWOC0XLxxE4PdJ06k3arREtUcG5G9
+	Zgo7mg==
+X-Received: by 2002:a05:600c:470e:b0:431:52f5:f48d with SMTP id 5b1f17b1804b1-438dc436f30mr209582275e9.31.1738611994933;
+        Mon, 03 Feb 2025 11:46:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IExzO583g33zUPWRI/zcaL35RgYJp4iCWf0jOXygzTMxI95IkQaUBxik56T44eVLnel04j5hw==
+X-Received: by 2002:a05:600c:470e:b0:431:52f5:f48d with SMTP id 5b1f17b1804b1-438dc436f30mr209582095e9.31.1738611994560;
+        Mon, 03 Feb 2025 11:46:34 -0800 (PST)
+Received: from [192.168.10.3] ([151.62.97.55])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-438e236f9bfsm170727385e9.0.2025.02.03.11.46.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Feb 2025 11:46:33 -0800 (PST)
+Message-ID: <93df442c-8ec3-43ee-aba1-e770a5b7588f@redhat.com>
+Date: Mon, 3 Feb 2025 20:46:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific
+ hypercalls
+To: Sean Christopherson <seanjc@google.com>,
+ Doug Covelli <doug.covelli@broadcom.com>
+Cc: Zack Rusin <zack.rusin@broadcom.com>, kvm <kvm@vger.kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ the arch/x86 maintainers <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ Arnaldo Carvalho de Melo <acme@redhat.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Joel Stanley <joel@jms.id.au>,
+ Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+ linux-kernel@vger.kernel.org,
+ linux-kselftest <linux-kselftest@vger.kernel.org>
 References: <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
  <CADH9ctBYp-LMbW4hm3+QwNoXvAc5ryVeB0L1jLY0uDWSe3vbag@mail.gmail.com>
- <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com> <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
+ <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com>
+ <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
  <CADH9ctB0YSYqC_Vj2nP20vMO_gN--KsqOBOu8sfHDrkZJV6pmw@mail.gmail.com>
- <Z2IXvsM0olS5GvbR@google.com> <CABgObfadZZ5sXYB0xR5OcLDw_eVUmXTOTFSWkVpkgiCJmNnFRQ@mail.gmail.com>
+ <Z2IXvsM0olS5GvbR@google.com>
+ <CABgObfadZZ5sXYB0xR5OcLDw_eVUmXTOTFSWkVpkgiCJmNnFRQ@mail.gmail.com>
  <CADH9ctAGt_VriKA7Ch1L9U+xud-6M54GzaPOM_2sSA780TpAYw@mail.gmail.com>
- <CABgObfb3Ttfg6H+_RpNQGSYKw9BLEwx3+EysXdL-wbpd1pkGHQ@mail.gmail.com> <CADH9ctAzffvDByS1s2PJoD63On-b+pCnCmER4Nf4Zc=62vkbMA@mail.gmail.com>
-Message-ID: <Z6Eb4PfmmHWFTR9A@google.com>
-Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
-From: Sean Christopherson <seanjc@google.com>
-To: Doug Covelli <doug.covelli@broadcom.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Zack Rusin <zack.rusin@broadcom.com>, 
-	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Joel Stanley <joel@jms.id.au>, Linux Doc Mailing List <linux-doc@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+ <CABgObfb3Ttfg6H+_RpNQGSYKw9BLEwx3+EysXdL-wbpd1pkGHQ@mail.gmail.com>
+ <CADH9ctAzffvDByS1s2PJoD63On-b+pCnCmER4Nf4Zc=62vkbMA@mail.gmail.com>
+ <Z6Eb4PfmmHWFTR9A@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ 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
+In-Reply-To: <Z6Eb4PfmmHWFTR9A@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 03, 2025, Doug Covelli wrote:
-> On Mon, Feb 3, 2025 at 1:22=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com=
-> wrote:
-> >
-> > On Mon, Feb 3, 2025 at 5:35=E2=80=AFPM Doug Covelli <doug.covelli@broad=
-com.com> wrote:
-> > > OK.  It seems like fully embracing the in-kernel APIC is the way to g=
-o
-> > > especially considering it really simplifies using KVM's support for n=
-ested
-> > > virtualization.  Speaking of nested virtualization we have been worki=
-ng on
-> > > adding support for that and would like to propose a couple of changes=
-:
-> > >
-> > > - Add an option for L0 to handle backdoor accesses from CPL3 code run=
-ning in L2.
-> > > On a #GP nested_vmx_l0_wants_exit can check if this option is enabled=
- and KVM
-> > > can handle the #GP like it would if it had been from L1 (exit to user=
-level iff
-> > > it is a backdoor access otherwwise deliver the fault to L2).  When co=
-mbined with
-> > > enable_vmware_backdoor this will allow L0 to optionally handle backdo=
-or accesses
-> > > from CPL3 code running in L2.  This is needed for cases such as runni=
-ng VMware
-> > > tools in a Windows VM with VBS enabled.  For other cases such as runn=
-ing tools
-> > > in a Windows VM in an ESX VM we still want L1 to handle the backdoor =
-accesses
-> > > from L2.
-> >
-> > I think this makes sense and could be an argument to KVM_ENABLE_CAP.
-> >
-> > > - Extend KVM_EXIT_MEMORY_FAULT for permission faults (e.g the guest a=
-ttempting
-> > > to write to a page that has been protected by userlevel calling mprot=
-ect).  This
-> > > is useful for cases where we want synchronous detection of guest writ=
-es such as
-> > > lazy snapshots (dirty page tracking is no good for this case).  Curre=
-ntly
-> > > permission faults result in KVM_RUN returning EFAULT which we handle =
-by
-> > > interpreting the instruction as we do not know the guest physical add=
-ress
-> > > associated with the fault.
-> >
-> > Yes, this makes sense too, though you might want to look into
-> > userfaultfd as well.
-> >
-> > We had something planned using attributes, but I don't see any issue
-> > extending it to EFAULT. Maybe it would have to be yet another
-> > KVM_ENABLE_CAP; considering that it would break your existing code,
-> > there might be someone else in the wild doing it.
->=20
-> It looks like KVM_EXIT_MEMORY_FAULT was implemented in such a way that it
-> won't break existing code:
->=20
-> Note! KVM_EXIT_MEMORY_FAULT is unique among all KVM exit reasons in
-> that it accompanies a return code of =E2=80=98-1=E2=80=99, not =E2=80=980=
-=E2=80=99! errno will always
-> be set to EFAULT or EHWPOISON when KVM exits with
-> KVM_EXIT_MEMORY_FAULT, userspace should assume kvm_run.exit_reason is
-> stale/undefined for all other error numbers.
->=20
-> That being said we could certainly make this opt-in if that is preferable=
-.
+On 2/3/25 20:41, Sean Christopherson wrote:
+> -EFAULT isn't the problem, KVM not being able to return useful information in
+> all situations is the issue. 
 
--EFAULT isn't the problem, KVM not being able to return useful information =
-in
-all situations is the issue.  Specifically, "guest" accesses that are emula=
-ted
-by KVM are problematic, because the -EFAULT from e.g. __kvm_write_guest_pag=
-e()
-is disconnected from the code that actually kicks out to userspace.  In tha=
-t
-case, userspace will get KVM_EXIT_MMIO, not -EFAULT.  There are more proble=
-ms
-beyond KVM_EXIT_MMIO vs. -EFAULT, e.g. instructions that perform multiple m=
-emory
-accesses, "failures" that are squashed and never propagated to userspace (P=
-V
-features tend to do this), page splits, etc.
+Yes, that's why I don't want it to be an automatically opted-in API.  If 
+incremental improvements are possible, it may be useful to allow 
+interested userspace to enable it early.  For example...
 
-In general, I don't expect most KVM access to guest memory to Just Work, as=
- I
-doubt KVM will behave as you want.
+> Specifically, "guest" accesses that are emulated
+> by KVM are problematic, because the -EFAULT from e.g. __kvm_write_guest_page()
+> is disconnected from the code that actually kicks out to userspace.  In that
+> case, userspace will get KVM_EXIT_MMIO, not -EFAULT.  There are more problems
+> beyond KVM_EXIT_MMIO vs. -EFAULT, e.g. instructions that perform multiple memory
+> accesses,
 
-We spent a lot of time trying to sort out a viable approach in the context =
-of the
-USERFAULT_ON_MISSING series[1], and ultimately gave up (ignoring that we po=
-stponed
-the entire series)[2], because we decided that fully solving KVM accesses w=
-ould
-require an absurd amount of effort and churn, and wasn't at all necessary f=
-or the
-userfault use case.
+those are obviously synchronous and I expect VMware to handle them already.
 
-What exactly needs to happen on "synchronous detection of guest writes"?  O=
-ne
-idea (which may be horribly flawed as I have put *very* little thought into=
- it)
-would be to implement a module (or KVM extension) that utilizes KVM's "exte=
-rnal"
-write-tracking APIs to get the synchronous notifications (see
-arch/x86/include/asm/kvm_page_track.h).
+That said my preferred solution to just use userfaultfd, which is 
+synchronous by definition.
 
-[1] https://lore.kernel.org/all/ZIn6VQSebTRN1jtX@google.com
-[2] https://lore.kernel.org/all/ZR88w9W62qsZDro-@google.com
+Paolo
+
+> "failures" that are squashed and never propagated to userspace (PV
+> features tend to do this), page splits, etc.
+
 
