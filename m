@@ -1,229 +1,111 @@
-Return-Path: <linux-kselftest+bounces-25530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93A19A252CC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:05:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCBD0A25436
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 09:19:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0427A28F7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 07:04:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34263A64C6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 08:17:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726CF1DB12D;
-	Mon,  3 Feb 2025 07:04:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49099214807;
+	Mon,  3 Feb 2025 08:14:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8388F18EAB;
-	Mon,  3 Feb 2025 07:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8F81FAC5A;
+	Mon,  3 Feb 2025 08:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738566297; cv=none; b=ZL1PEtv+Ic1BBGlIe1KYnP+hZXNUmkoCsLjx3LXhrymI7FIj1NBFt9HnThO2IHQ67eUrZSBJvorMtI3xiIvTYq1M7G59wlDmgYv1sjjf/cHL3QE01Mhkc66ErGLMxt9QXeiDD0gFSjbB9f4mz3gnzj6KZyKb4g2AmbH+LlHNMes=
+	t=1738570455; cv=none; b=dBW/6MINV7pQ5yVwLT08/k9WOj+1fNJJ5TSlY0HNrshtiEHYAldFhpeBWnIH8UYfQVHLUMA17uVIqygFjCASXec5iX4ZsbZ0kVgFpOT8x/yS44YAfNSr6JYOAZ6KF4qlmxLEwxKeLAnScLgeKCiAEoO6I2p3TpYMHNS1c5Shn2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738566297; c=relaxed/simple;
-	bh=cdlxG3DUWpb2N9e84QeaBxU8D/erEiti6DSYyuQkVZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dFVD/ivASsAMpXqWjLlggDgq8eQKNqB5eqnFenonFuakNxmNWDj7C6RSCvgGq6Ihi/dpigxvjVggAQw8J+cwcMHhNhgAMXmkuiAlUXRo87CwDChqKy9+BTOVt/Z1JukF4n3RyESfABExcLsjK2fh36/S9hAxPRZVOttL7kXofIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 86CA172C8F5;
-	Mon,  3 Feb 2025 09:58:49 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id 590A67CCB3B; Mon,  3 Feb 2025 08:58:49 +0200 (IST)
-Date: Mon, 3 Feb 2025 08:58:49 +0200
-From: "Dmitry V. Levin" <ldv@strace.io>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Mike Frysinger <vapier@gentoo.org>,
-	Renzo Davoli <renzo@cs.unibo.it>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>, strace-devel@lists.strace.io,
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-api@vger.kernel.org
-Subject: [PATCH v4 0/7] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
-Message-ID: <20250203065849.GA14120@strace.io>
+	s=arc-20240116; t=1738570455; c=relaxed/simple;
+	bh=6tT40f0J/jFQXQpwdYEDnXhYU/ij7hgUAKjX7EorJXs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I0/z4xNJ9VEn4J4HDJiiYOx8LmX6FVbFZQsy99OYIBT8sDxCBqTgDu9tdkDt2F/WjqvnlWCpPd2IShX99UuM6+uz5yxYy/G7obCnsOPkdEgpkviw/c4iEOAYGF1Hz+6LI3/1+1570WeGrZUh4kavbzmgJK4lvtUpIjd1NJevP+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4aff1c57377so2367698137.0;
+        Mon, 03 Feb 2025 00:14:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738570450; x=1739175250;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fqueGweUcpZtMLKrjIzy2Y44GrPak9U05e86xS0LIRA=;
+        b=HFoOBb59NR9CW9kXQ14+xxh81RqR9nNEfFRlBoNSZkc/Knvqo9yAzvqb0ra+dJ8YEQ
+         4ByRi4FEYDQW1fuQcOOP99NrhvK5pkIpLkb+edt5tdTgc16GMWl06huldsbPjbaf/0ci
+         BLzSGPg5IDnzgZoiOZ0U2YK5zjzNaSJSAj1KxwZLYSVQFzk9Jn0nkPX1xIrWyqf2LXaN
+         fFjshAUwba9iMXEx9vQKLXs3O3VBZ4hSwB/OHva0W4QMFINWVz3tIUvrKXwWVKnokX7W
+         zMFlpVjTXznP6aZ85CPxEYfyxafp7tFakwSkuVzx904gf1YXK5AiyMFSJS0GjPuf0UMU
+         U0kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIuaFRiYem71g20SBhOEuX6qCnSV6OE5ix0pN+KBRnPwVSIhT+F0vRuQNyd38hYE+iNLBEvlz04L1dxHQ=@vger.kernel.org, AJvYcCWgnkRkTp/BMN+HinZLNm0FRhnKtuTVmI0/SK9qC4v7YGTSjqVlgsvi6I/wyLUTM5H1wALEAWmbNLTDDUICxx+F@vger.kernel.org
+X-Gm-Message-State: AOJu0YwICQna20GUn1oIgkV04kMRUXa4fGMlJD/4U8/XahWAqAAygx4V
+	pmzbGbU/xKClyS+oleb7HEATdERKUk+MAq6JhmG2xHuqkMladSLbFAzPhFds
+X-Gm-Gg: ASbGncs5W8kcHe5JpGA254cMIEg0VoWowjeltQCY7UWGGKcm5tLHtqAVME+pXjQz28w
+	P+WEXCsimQOOCTIGP6OQB1ARURiNeHjvIDQsh4ct7tu53ZXY0wc+Ku9STVcoJdZ62jnwXM7w749
+	Pnc9k7UP/AfZ7HMh5T7g32N5vT7LoFDtuaGWoE1EPawcokMMxwzdLiJ48NsTrYWiR4Ig4ASUSHo
+	BpCkr/GL9h0Jen3sWHv+gAkNq07varGvrvF7CFxv8xRIB1APg3lipl9KCwasGUWvoViCMFLUneA
+	YJ6SolXD6C7Y4celgaENXrX0WmQv1nKKsXDRHHjoUpUDf3kpFhCrxA==
+X-Google-Smtp-Source: AGHT+IEAA2Z/EEKTPKRpZa1pAsenYWodUmHSNZs16EppXKN36LwmCXfYPIG+u232lBEQ5MbymaRHSw==
+X-Received: by 2002:a05:6102:468d:b0:4b9:bdb5:cc45 with SMTP id ada2fe7eead31-4b9bdb5d1admr6050394137.12.1738570450426;
+        Mon, 03 Feb 2025 00:14:10 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b9baa18af4sm1514496137.1.2025.02.03.00.14.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Feb 2025 00:14:10 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4b9486a15a0so2670926137.0;
+        Mon, 03 Feb 2025 00:14:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCURjdBZnxPPgZDYX2YP6jucRrI3M8kj62vbuM81o1yaRxBn6w+g2TSwzPQHwiJEakipUuxNRvRSbnzJD7JldY1N@vger.kernel.org, AJvYcCWwMrFT+Gna6XX5NcYL2Byg6huraB4eXoTmwU3nXr2DtvaoqeOPx3D8LyWVFVEuFih3pTxfKRVdIwQg7wA=@vger.kernel.org
+X-Received: by 2002:a05:6102:7c2:b0:4b6:8bd1:6b5d with SMTP id
+ ada2fe7eead31-4b9c88ec6bamr6144554137.1.1738570449779; Mon, 03 Feb 2025
+ 00:14:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com> <Z50EM7gxqyV0Eois@smile.fi.intel.com>
+In-Reply-To: <Z50EM7gxqyV0Eois@smile.fi.intel.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 3 Feb 2025 09:13:58 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUb83wjGE0Qb06RSpQ+t6MXN7afAq7bFpwb4U534asxXQ@mail.gmail.com>
+X-Gm-Features: AWEUYZl02qjfXtsEe6cfoqgoYiZYrKK1VYJ5Jvos86TQ8K46UxGcrfEG2eYJ8HQ
+Message-ID: <CAMuHMdUb83wjGE0Qb06RSpQ+t6MXN7afAq7bFpwb4U534asxXQ@mail.gmail.com>
+Subject: Re: [PATCH] scanf: convert self-test to KUnit
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>, 
+	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
-PTRACE_GET_SYSCALL_INFO by letting the ptracer modify details of
-system calls the tracee is blocked in.
+Hi Andy,
 
-This API allows ptracers to obtain and modify system call details
-in a straightforward and architecture-agnostic way.
+On Fri, 31 Jan 2025 at 19:06, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> P.S. The test modules in defconfig is something which puzzling me. I would
+> remove all of them at once, if somebody wants debug configuration, they would
+> specify it and use with help of merge_config or alike.
 
-Current implementation supports changing only those bits of system call
-information that are used by strace, namely, syscall number, syscall
-arguments, and syscall return value.
+I really like having all tests available as modules.
+Fortunately all of these will be gone, once all tests have been converted
+to kunit, and have a "default KUNIT_ALL_TESTS" line...
 
-Support of changing additional details returned by PTRACE_GET_SYSCALL_INFO,
-such as instruction pointer and stack pointer, could be added later if
-needed, by using struct ptrace_syscall_info.flags to specify the additional
-details that should be set.  Currently, "flags" and "reserved" fields of
-struct ptrace_syscall_info must be initialized with zeroes; "arch",
-"instruction_pointer", and "stack_pointer" fields are ignored.
+Gr{oetje,eeting}s,
 
-PTRACE_SET_SYSCALL_INFO currently supports only PTRACE_SYSCALL_INFO_ENTRY,
-PTRACE_SYSCALL_INFO_EXIT, and PTRACE_SYSCALL_INFO_SECCOMP operations.
-Other operations could be added later if needed.
-
-Ideally, PTRACE_SET_SYSCALL_INFO should have been introduced along with
-PTRACE_GET_SYSCALL_INFO, but it didn't happen.  The last straw that
-convinced me to implement PTRACE_SET_SYSCALL_INFO was apparent failure
-to provide an API of changing the first system call argument on riscv
-architecture [1].
-
-ptrace(2) man page:
-
-long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data);
-...
-PTRACE_SET_SYSCALL_INFO
-       Modify information about the system call that caused the stop.
-       The "data" argument is a pointer to struct ptrace_syscall_info
-       that specifies the system call information to be set.
-       The "addr" argument should be set to sizeof(struct ptrace_syscall_info)).
-
-[1] https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
-
-Notes:
-    v4:
-    * Split out syscall_set_return_value() for hexagon into a separate patch
-    * s390: Change the style of syscall_set_arguments() implementation as
-      requested
-    * Add more Reviewed-by
-    * v3: https://lore.kernel.org/all/20250128091445.GA8257@strace.io/
-
-    v3:
-    * powerpc: Submit syscall_set_return_value() fix for "sc" case separately
-    * mips: Do not introduce erroneous argument truncation on mips n32,
-      add a detailed description to the commit message of the
-      mips_get_syscall_arg() change
-    * ptrace: Add explicit padding to the end of struct ptrace_syscall_info,
-      simplify obtaining of user ptrace_syscall_info,
-      do not introduce PTRACE_SYSCALL_INFO_SIZE_VER0
-    * ptrace: Change the return type of ptrace_set_syscall_info_* functions
-      from "unsigned long" to "int"
-    * ptrace: Add -ERANGE check to ptrace_set_syscall_info_exit(),
-      add comments to -ERANGE checks
-    * ptrace: Update comments about supported syscall stops
-    * selftests: Extend set_syscall_info test, fix for mips n32
-    * Add Tested-by and Reviewed-by
-
-    v2:
-    * Add patch to fix syscall_set_return_value() on powerpc
-    * Add patch to fix mips_get_syscall_arg() on mips
-    * Add syscall_set_return_value() implementation on hexagon
-    * Add syscall_set_return_value() invocation to syscall_set_nr()
-      on arm and arm64.
-    * Fix syscall_set_nr() and mips_set_syscall_arg() on mips
-    * Add a comment to syscall_set_nr() on arc, powerpc, s390, sh,
-      and sparc
-    * Remove redundant ptrace_syscall_info.op assignments in
-      ptrace_get_syscall_info_*
-    * Minor style tweaks in ptrace_get_syscall_info_op()
-    * Remove syscall_set_return_value() invocation from
-      ptrace_set_syscall_info_entry()
-    * Skip syscall_set_arguments() invocation in case of syscall number -1
-      in ptrace_set_syscall_info_entry() 
-    * Split ptrace_syscall_info.reserved into ptrace_syscall_info.reserved
-      and ptrace_syscall_info.flags
-    * Use __kernel_ulong_t instead of unsigned long in set_syscall_info test
-
-    v1:
-
-Dmitry V. Levin (7):
-  mips: fix mips_get_syscall_arg() for o32
-  hexagon: add syscall_set_return_value()
-  syscall.h: add syscall_set_arguments()
-  syscall.h: introduce syscall_set_nr()
-  ptrace_get_syscall_info: factor out ptrace_get_syscall_info_op
-  ptrace: introduce PTRACE_SET_SYSCALL_INFO request
-  selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO
-
- arch/arc/include/asm/syscall.h                |  25 +
- arch/arm/include/asm/syscall.h                |  37 ++
- arch/arm64/include/asm/syscall.h              |  29 +
- arch/csky/include/asm/syscall.h               |  13 +
- arch/hexagon/include/asm/syscall.h            |  21 +
- arch/loongarch/include/asm/syscall.h          |  15 +
- arch/m68k/include/asm/syscall.h               |   7 +
- arch/microblaze/include/asm/syscall.h         |   7 +
- arch/mips/include/asm/syscall.h               |  70 ++-
- arch/nios2/include/asm/syscall.h              |  16 +
- arch/openrisc/include/asm/syscall.h           |  13 +
- arch/parisc/include/asm/syscall.h             |  19 +
- arch/powerpc/include/asm/syscall.h            |  20 +
- arch/riscv/include/asm/syscall.h              |  16 +
- arch/s390/include/asm/syscall.h               |  21 +
- arch/sh/include/asm/syscall_32.h              |  24 +
- arch/sparc/include/asm/syscall.h              |  22 +
- arch/um/include/asm/syscall-generic.h         |  19 +
- arch/x86/include/asm/syscall.h                |  43 ++
- arch/xtensa/include/asm/syscall.h             |  18 +
- include/asm-generic/syscall.h                 |  30 +
- include/uapi/linux/ptrace.h                   |   7 +-
- kernel/ptrace.c                               | 179 +++++-
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/set_syscall_info.c       | 514 ++++++++++++++++++
- 25 files changed, 1140 insertions(+), 47 deletions(-)
- create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
+                        Geert
 
 -- 
-ldv
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
