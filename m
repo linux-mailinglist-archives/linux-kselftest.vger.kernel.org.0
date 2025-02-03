@@ -1,269 +1,125 @@
-Return-Path: <linux-kselftest+bounces-25570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25571-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A73FFA25B50
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 14:50:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69F8EA25C2A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 15:21:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1923D3A4198
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 13:50:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E28F1882828
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2025 14:21:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B76F7205AB3;
-	Mon,  3 Feb 2025 13:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D0B205E0A;
+	Mon,  3 Feb 2025 14:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YPpXSpjZ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zpOBiFzq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHSoTQGC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C69205AB8;
-	Mon,  3 Feb 2025 13:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343D91FF1CE;
+	Mon,  3 Feb 2025 14:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738590622; cv=none; b=XGR4B6LLzYjGKYABLIdlr8P2WPSY0g2rHG1/tT56xFJTXXIIa9LIrFl0X3CeJ1Qto8ES5J+32JQa7YRi/hj38t7TAPZe6rpFNANNTaxm9mEcxZGSyUz24usBh4pv38JhxadkokjwVhzyn19ds+UeB8s2maccvf3LCNd9mTfricE=
+	t=1738592468; cv=none; b=jME8IB5XSqaOUDN4aZFvFkyt7U32aVy+GJj0sm+LyQ/4OZt0RHaFsQD/1I0W5VonlANKq9caD/hCsYXJQjuZgn9KQqJow/3I4RN4Aph1mJ5LDOBs1CmJfQoik4ni1FTB8srC+wxAdOcVWCjFCNLBYS+bgBLPSFml8KPBFBCVPrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738590622; c=relaxed/simple;
-	bh=Nsul2RHko3wUFZHRd+DzcKbvxURzXAXeCgS95BA2UqQ=;
+	s=arc-20240116; t=1738592468; c=relaxed/simple;
+	bh=EifYljNwSOGaeKqu0rrtfpQsay3gDaNn6WUfJyNIX9I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pm5VMupXEbP9rkFUg5e/Flj41wEQ18nLvVMYKWPV2ZfLtKarjCcSzJT0c3ORGt0UWNtBjKQwOvS/tlQfgJkIahv74O5IL2zToI2vlrBxB6STkmVz8snMhz7qybVK1mKawIooGTEzkTKzWKKh/dx9yhv/8oeUvc28PKyMAwbvi4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YPpXSpjZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zpOBiFzq; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 3 Feb 2025 14:50:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738590618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZQrfcOY2FHWEyibchfnDOta6mFsV+KBdbtmBdSk0oiU=;
-	b=YPpXSpjZ0wzBy4i8ZEGZe/u1qrkNxIslNFF/UDtZTHdW0VLlZT5yRwiaAXsn/twnpPhfSp
-	ZGnL5wODQkps5Jjcja0NMEDmdPrr8M2E6S1bkQ/i/YbxQ0AkIdTIUK2jnucFNUUg1eArsU
-	Bk8j13Vusd2XQHjUG6DaahEBrQ/RdklJuQlVfb1Jz8jlSg6N8kzk7ovAHBfrZSm871ejTs
-	z7+PnSuYLQNsKdEcyJXSinH2tZ/lylpVUkI0M8kZVPZZe57W9UlPml9zY4pW5l5N/1l199
-	iWeimxH0IFa0nl6Ds3kBhPShEcYqFdpHUmqpzEuCrJ+pwUjuNFTX4FiJ3hiX2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738590618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZQrfcOY2FHWEyibchfnDOta6mFsV+KBdbtmBdSk0oiU=;
-	b=zpOBiFzqOW/f8piH0OJQXhdrOuRqtzwchGmFzVAfGVF4jCmrbXF//XpS3g+xALDkpSvFsV
-	HS3pxrQy5AuuvFBA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 00/16] selftests: vDSO: parse_vdso: Make compatible with
- nolibc
-Message-ID: <20250203143640-70c59c53-af45-40cb-9a52-6395b3fdd263@linutronix.de>
-References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
- <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oSFeffWL0W6gSFwuUADe8aTYhOfQZF025g6wUyaGOqHSjdMvcUxufgYlJI4b5vLes1e5bxDBJKkOG6HqPbPhRbRzpNf8NP1T2UeYbP7+V8twwfSDmLbDdrISg6yrSrVtT/oze9UcuiqcEa5a62bWQmlqs+2bjuoBcRWCteeN1vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHSoTQGC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB79EC4CED2;
+	Mon,  3 Feb 2025 14:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738592467;
+	bh=EifYljNwSOGaeKqu0rrtfpQsay3gDaNn6WUfJyNIX9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qHSoTQGChGiznZeUsDLp94YgYSOpzrjzUheUcZR7aqW7HIbxrspi/H29Qr3M1wyTZ
+	 4e2+Yb4g1NM4kzJMcRBHJOwzWAOcSzP3qY5h/H3mcDY07436Ma9jRIkz4SB7b2pQQj
+	 dmyRa6yHR7OwA/UIWUWIoZOBnJd80rh9m2FvJeYw4Dg9ZN82GW5vKZvuk1l829Wi7c
+	 cSWpUuWLoimKy01Q/2dh+kjaq/xuW3B89I1q/XhWij9+Sd5cdV38BjeEnqvBfQeU4x
+	 yKvNhWFQwoG34BdkZrOvrgN8bJJr+sFYOFRI/bRXHasJJmUcppbmhgJ7mXTD/4qZtE
+	 4HMNb3JLZVjiQ==
+Date: Mon, 3 Feb 2025 14:21:02 +0000
+From: Simon Horman <horms@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	matttbe@kernel.org
+Subject: Re: [PATCH RFC net-next] netconsole: selftest: Add test for
+ fragmented messages
+Message-ID: <20250203142102.GH234677@kernel.org>
+References: <20250131-netcons_frag_msgs-v1-1-0de83bf2a7e6@debian.org>
+ <20250203104855.GC234677@kernel.org>
+ <20250203-subtle-taipan-of-realization-1c3a3f@leitao>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250203-subtle-taipan-of-realization-1c3a3f@leitao>
 
-On Mon, Feb 03, 2025 at 12:23:29PM +0100, Christophe Leroy wrote:
-> Le 03/02/2025 ‡ 10:05, Thomas Weiﬂschuh a Ècrit†:
-> > For testing the functionality of the vDSO, it is necessary to build
-> > userspace programs for multiple different architectures.
-> > It is additional work to acquire matching userspace cross-compilers with
-> > full C libraries and then building root images out of those.
-> > The kernel tree already contains nolibc, a small, header-only C library.
-> > By using it, it is possible to build userspace programs without any
-> > additional dependencies.
-> > For example the kernel.org crosstools or multi-target clang can be used
-> > to build test programs for a multitude of architectures.
-> > While nolibc is very limited, it is enough for many selftests.
-> > With some minor adjustments it is possible to make parse_vdso.c
-> > compatible with nolibc.
-> > As an example, vdso_standalone_test_x86 is now built from the same C
-> > code as the regular vdso_test_gettimeofday, while still being completely
-> > standalone.
-> > 
-> > This should probably go through the kselftest tree.
-> 
-> Not sure what are the expectations with this series.
+On Mon, Feb 03, 2025 at 03:00:37AM -0800, Breno Leitao wrote:
+> Hello Simon,
+>=20
+> On Mon, Feb 03, 2025 at 10:48:55AM +0000, Simon Horman wrote:
+> > On Fri, Jan 31, 2025 at 04:39:38AM -0800, Breno Leitao wrote:
+>=20
+> > > +# Validate the message, which has two messages glued together.
+> > > +# unwrap them to make sure all the characters were transmitted.
+> > > +# File will look like the following:
+> > > +#   13,468,514729715,-,ncfrag=3D0/1135;MSG1=3DMSG2=3DMSG3=3DMSG4=3DM=
+SG5=3DMSG6=3DMSG7=3DMSG8=3DMSG9=3DMSG10=3DMSG11=3DMSG12=3DMSG13=3DMSG14=3DM=
+SG15=3DMSG16=3DMSG17=3DMSG18=3DMSG19=3DMSG20=3DMSG21=3DMSG22=3DMSG23=3DMSG2=
+4=3DMSG25=3DMSG26=3DMSG27=3DMSG28=3DMSG29=3DMSG30=3DMSG31=3DMSG32=3DMSG33=
+=3DMSG34=3DMSG35=3DMSG36=3DMSG37=3DMSG38=3DMSG39=3DMSG40=3DMSG41=3DMSG42=3D=
+MSG43=3DMSG44=3DMSG45=3DMSG46=3DMSG47=3DMSG48=3DMSG49=3DMSG50=3DMSG51=3DMSG=
+52=3DMSG53=3DMSG54=3DMSG55=3DMSG56=3DMSG57=3DMSG58=3DMSG59=3DMSG60=3DMSG61=
+=3DMSG62=3DMSG63=3DMSG64=3DMSG65=3DMSG66=3DMSG67=3DMSG68=3DMSG69=3DMSG70=3D=
+MSG71=3DMSG72=3DMSG73=3DMSG74=3DMSG75=3DMSG76=3DMSG77=3DMSG78=3DMSG79=3DMSG=
+80=3DMSG81=3DMSG82=3DMSG83=3DMSG84=3DMSG85=3DMSG86=3DMSG87=3DMSG88=3DMSG89=
+=3DMSG90=3DMSG91=3DMSG92=3DMSG93=3DMSG94=3DMSG95=3DMSG96=3DMSG97=3DMSG98=3D=
+MSG99=3DMSG100=3DMSG101=3DMSG102=3DMSG103=3DMSG104=3DMSG105=3DMSG106=3DMSG1=
+07=3DMSG108=3DMSG109=3DMSG110=3DMSG111=3DMSG112=3DMSG113=3DMSG114=3DMSG115=
+=3DMSG116=3DMSG117=3DMSG118=3DMSG119=3DMSG120=3DMSG121=3DMSG122=3DMSG123=3D=
+MSG124=3DMSG125=3DMSG126=3DMSG127=3DMSG128=3DMSG129=3DMSG130=3DMSG131=3DMSG=
+132=3DMSG133=3DMSG134=3DMSG135=3DMSG136=3DMSG137=3DMSG138=3DMSG139=3DMSG140=
+=3DMSG141=3DMSG142=3DMSG143=3DMSG144=3DMSG145=3DMSG146=3DMSG147=3DMSG148=3D=
+MSG149=3DMSG150=3D: netcons_nzmJQ
+> > > +#    key=3D1-2-13,468,514729715,-,ncfrag=3D967/1135;3-4-5-6-7-8-9-10=
+-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35=
+-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-
+>=20
+> > I appreciate there is a value in providing the literal data.
+> > But as the data is based mostly of arithmetic sequences
+> > perhaps it would be nicer to express this in a more succinct way.
+>=20
+> First of all, thanks for the review.
+>=20
+> Do you mean I should simplify this comment above, to avoid the literal
+> data, right?
 
-In general it should also work for PPC,
-thanks for testing it.
+Thanks Breno,
 
-> I gave it a try with vdso_test_gettimeofday and get the following:
-> 
-> $ powerpc64-linux-gcc -nostdlib -nostdinc -ffreestanding
-> -fno-asynchronous-unwind-tables -fno-stack-protector -include /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/nolibc.h -I/home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/
-> -isystem
-> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../usr/include
-> -std=gnu99 -O2 -D_GNU_SOURCE= -isystem /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/uapi
-> vdso_test_gettimeofday.c parse_vdso.c  -o /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_gettimeofday
-> 
-> make: Entering directory
-> '/home/chleroy/linux-powerpc/tools/testing/selftests/vDSO'
-> powerpc64-linux-gcc -nostdlib -nostdinc -ffreestanding
-> -fno-asynchronous-unwind-tables -fno-stack-protector -include /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/nolibc.h -I/home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/nolibc/
-> -isystem
-> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../usr/include
-> -std=gnu99 -O2 -D_GNU_SOURCE= -isystem /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include/uapi
-> vdso_test_gettimeofday.c parse_vdso.c  -o /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_gettimeofday
+Yes, that is what I meant.
 
-This log is confusing. It contains traces of "make" output but no "make"
-invocation. I'm also not sure if there were two different compilations
-or only one. Can you give the full commandline?
-For your testing it should be enough to enable
-"vdso_test_standalone_x86" in the Makefile for PPC.
-
-> parse_vdso.c:38:34: error: unknown type name 'Elf64_Versym'
->    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
->       |                                  ^~~
-> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
->    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
->       |                                 ^~~~~~~~~~~~~~~
-> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
->    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
->       |                ^~~~~~~~~~~~~~
-> parse_vdso.c:63:9: note: in expansion of macro 'ELF'
->    63 |         ELF(Versym) *versym;
->       |         ^~~
-> parse_vdso.c:38:34: error: unknown type name 'Elf64_Verdef'
->    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
->       |                                  ^~~
-> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
->    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
->       |                                 ^~~~~~~~~~~~~~~
-> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
->    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
->       |                ^~~~~~~~~~~~~~
-> parse_vdso.c:64:9: note: in expansion of macro 'ELF'
->    64 |         ELF(Verdef) *verdef;
->       |         ^~~
-> parse_vdso.c: In function 'vdso_init_from_sysinfo_ehdr':
-> parse_vdso.c:38:34: error: 'Elf64_Versym' undeclared (first use in this
-> function); did you mean 'Elf64_Sym'?
->    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
->       |                                  ^~~
-> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
->    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
->       |                                 ^~~~~~~~~~~~~~~
-> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
->    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
->       |                ^~~~~~~~~~~~~~
-> parse_vdso.c:150:45: note: in expansion of macro 'ELF'
->   150 |                         vdso_info.versym = (ELF(Versym) *)
->       |                                             ^~~
-> parse_vdso.c:38:34: note: each undeclared identifier is reported only once
-> for each function it appears in
->    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
->       |                                  ^~~
-> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
->    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
->       |                                 ^~~~~~~~~~~~~~~
-> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
->    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
->       |                ^~~~~~~~~~~~~~
-> parse_vdso.c:150:45: note: in expansion of macro 'ELF'
->   150 |                         vdso_info.versym = (ELF(Versym) *)
->       |                                             ^~~
-> parse_vdso.c:150:58: error: expected expression before ')' token
->   150 |                         vdso_info.versym = (ELF(Versym) *)
->       |                                                          ^
-> parse_vdso.c:38:34: error: 'Elf64_Verdef' undeclared (first use in this
-> function); did you mean 'Elf64_Word'?
->    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
->       |                                  ^~~
-> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
->    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
->       |                                 ^~~~~~~~~~~~~~~
-> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
->    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
->       |                ^~~~~~~~~~~~~~
-> parse_vdso.c:155:45: note: in expansion of macro 'ELF'
->   155 |                         vdso_info.verdef = (ELF(Verdef) *)
->       |                                             ^~~
-> parse_vdso.c:155:58: error: expected expression before ')' token
->   155 |                         vdso_info.verdef = (ELF(Verdef) *)
->       |                                                          ^
-> parse_vdso.c: At top level:
-> parse_vdso.c:38:34: error: unknown type name 'Elf64_Versym'; did you mean
-> 'Elf64_Sym'?
->    38 | #define ELF_BITS_XFORM2(bits, x) Elf##bits##_##x
->       |                                  ^~~
-> parse_vdso.c:39:33: note: in expansion of macro 'ELF_BITS_XFORM2'
->    39 | #define ELF_BITS_XFORM(bits, x) ELF_BITS_XFORM2(bits, x)
->       |                                 ^~~~~~~~~~~~~~~
-> parse_vdso.c:40:16: note: in expansion of macro 'ELF_BITS_XFORM'
->    40 | #define ELF(x) ELF_BITS_XFORM(ELF_BITS, x)
->       |                ^~~~~~~~~~~~~~
-> parse_vdso.c:177:32: note: in expansion of macro 'ELF'
->   177 | static bool vdso_match_version(ELF(Versym) ver,
->       |                                ^~~
-> parse_vdso.c: In function 'vdso_sym':
-> parse_vdso.c:224:25: error: 'STN_UNDEF' undeclared (first use in this
-> function); did you mean 'SHN_UNDEF'?
->   224 |         for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
->       |                         ^~~~~~~~~
->       |                         SHN_UNDEF
-> parse_vdso.c:240:25: warning: implicit declaration of function
-> 'vdso_match_version' [-Wimplicit-function-declaration]
->   240 |                     && !vdso_match_version(vdso_info.versym[chain],
->       |                         ^~~~~~~~~~~~~~~~~~
-> make: *** [../lib.mk:222: /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_gettimeofday]
-> Error 1
-> make: Leaving directory
-> '/home/chleroy/linux-powerpc/tools/testing/selftests/vDSO'
-> 
-> Christophe
-> 
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > ---
-> > Thomas Weiﬂschuh (16):
-> >        MAINTAINERS: Add vDSO selftests
-> >        elf, uapi: Add definition for STN_UNDEF
-> >        elf, uapi: Add definition for DT_GNU_HASH
-> >        elf, uapi: Add definitions for VER_FLG_BASE and VER_FLG_WEAK
-> >        elf, uapi: Add type ElfXX_Versym
-> >        elf, uapi: Add types ElfXX_Verdef and ElfXX_Veraux
-> >        tools/include: Add uapi/linux/elf.h
-> >        selftests: Add headers target
-> >        selftests: vDSO: vdso_standalone_test_x86: Use vdso_init_form_sysinfo_ehdr
-> >        selftests: vDSO: parse_vdso: Drop vdso_init_from_auxv()
-> >        selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers
-> >        selftests: vDSO: parse_vdso: Test __SIZEOF_LONG__ instead of ULONG_MAX
-> >        selftests: vDSO: parse_vdso: Make compatible with nolibc
-> >        selftests: vDSO: vdso_test_gettimeofday: Clean up includes
-> >        selftests: vDSO: vdso_test_gettimeofday: Make compatible with nolibc
-> >        selftests: vDSO: vdso_standalone_test_x86: Switch to nolibc
-> > 
-> >   MAINTAINERS                                        |   1 +
-> >   include/uapi/linux/elf.h                           |  38 ++
-> >   tools/include/uapi/linux/elf.h                     | 524 +++++++++++++++++++++
-> >   tools/testing/selftests/lib.mk                     |   5 +-
-> >   tools/testing/selftests/vDSO/Makefile              |  11 +-
-> >   tools/testing/selftests/vDSO/parse_vdso.c          |  21 +-
-> >   tools/testing/selftests/vDSO/parse_vdso.h          |   1 -
-> >   .../selftests/vDSO/vdso_standalone_test_x86.c      | 143 +-----
-> >   .../selftests/vDSO/vdso_test_gettimeofday.c        |   4 +-
-> >   9 files changed, 584 insertions(+), 164 deletions(-)
-> > ---
-> > base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> > change-id: 20241017-parse_vdso-nolibc-e069baa7ff48
-> > 
-> > Best regards,
-> 
+> > Regardless, this patch looks good to me.
+>=20
+> Thanks, I was a bit surprised with the tests failing on our CI, but,
+> after some investigation, it doesn't seem to be caused by this change.
+>=20
+> https://patchwork.kernel.org/project/netdevbpf/patch/20250131-netcons_fra=
+g_msgs-v1-1-0de83bf2a7e6@debian.org/
+>=20
+> --breno
+>=20
 
