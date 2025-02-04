@@ -1,153 +1,139 @@
-Return-Path: <linux-kselftest+bounces-25673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 871F3A271BE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 13:24:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC307A271D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 13:32:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CB8C18818E0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:24:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466E03A3772
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:32:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4811B20D51F;
-	Tue,  4 Feb 2025 12:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1881621148B;
+	Tue,  4 Feb 2025 12:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dzKwy/C9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gpf4dkAg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A9620A5D0;
-	Tue,  4 Feb 2025 12:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159AA20A5D0
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 12:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738671811; cv=none; b=nBsUFidueI8Wk61+XqrAcbWLlmpNnof5aNYDVbW2uWpUPFAztcUw87auAyINaQhQVCg/DkLda1JOcmtQam+GbOPswlvKWKbNzX99KVymQR0fVmWTweZ5IlGGnjZGFVEzyKxmpluXcKYf2SM+Cr9s8WPrtIwf92kAbyig0M0g5hE=
+	t=1738672168; cv=none; b=APrC96JyYrN07nS9TnFC5hya0jZxwBjVGUVqaipfu5aTX7VNZWHFdONgfQvK27RWtv/AU4oihDn28USz8ocbU7TH3R4X4WPWjjiBBmrQH8ukFnw5z/LVq6TnGevxCUSs2+D/nVZfe8yjfSvFXPBc8V6MCenyNfWry1plNM+0fDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738671811; c=relaxed/simple;
-	bh=dG5tGVtQZTw25dqMdtJ1/zyy7NY53LArQnmaSzSHXlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EtLNAwN0xG48sfNxt9QeGXVIpaKX+4gjcJPPnAS+rsiMosCLHGG4J5mEqD8T+UoWRWTMmfiXMqm6F115tYl0Rn5ZUWWzv93gA+GkHg5w5xzlPxmaKyS3Oxcwn0fVhDHlqIPs5nwo7x8LFwd4YsAuI+juJYDhvUHWELqOhSU47gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dzKwy/C9; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5145NlQ3008384;
-	Tue, 4 Feb 2025 12:23:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=UJ/Pfi
-	/BfkwkEFANDeCNiXq+lhOSzYk/7Ikhm8IpmLU=; b=dzKwy/C9ik+0HIjNHd8nTE
-	2zQpVD00//xmxf2wXK9XbKi6izU2Mq5Vv8s730Ducof6Ip34iQN6vogG+E6LGQJ0
-	OpNSPWPyCWlk6fesqHMxr54iMLIiQmJh9qALHv7VWDklJCJPEU3X57MFrJo45eE9
-	YbzwpYBbNuAEkq/iN5MHV7V4/iOTvt5okOcJLcQPZ5imXRKyy3klIyl3bhzgfSR/
-	gmlM708D+g/Be8EQcSzM1xrxCrj/tLAGSLQwNm9tRyqLJyqygbbHLZZZkZhCXqKQ
-	9AXUW+kcRynr80GU3vqnT6xmUGphKfEF+WUqBaxwfTPut/upvv9zvt2m3MX7ltUw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kcq7sw41-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 12:23:24 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 514CNOG2024827;
-	Tue, 4 Feb 2025 12:23:24 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kcq7sw3y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 12:23:24 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 514Bda3b016416;
-	Tue, 4 Feb 2025 12:23:23 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 44hwxsbmcv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 12:23:23 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 514CNJVT17891722
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 4 Feb 2025 12:23:19 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B085D20542;
-	Tue,  4 Feb 2025 12:23:19 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2E25520544;
-	Tue,  4 Feb 2025 12:23:19 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.171.94.245])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with SMTP;
-	Tue,  4 Feb 2025 12:23:19 +0000 (GMT)
-Date: Tue, 4 Feb 2025 13:23:17 +0100
-From: Claudio Imbrenda <imbrenda@linux.ibm.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank
- <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Paolo
- Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Fix spelling mistake "initally" ->
- "initially"
-Message-ID: <20250204132317.67d85b69@p-imbrenda>
-In-Reply-To: <20250204105647.367743-1-colin.i.king@gmail.com>
-References: <20250204105647.367743-1-colin.i.king@gmail.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1738672168; c=relaxed/simple;
+	bh=u6K1gc6fqbQ9CyQmR1XZtEDc+/599QHfU81+5JM+XJg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hlKzGVq2TGZSxocziGQMIVls24S/yBKKR4zs+TJKMvrvwSDfOnaLuRURKAxBWj/bow9HCf0gsJiBzNeVeirDD2kvSO1KA/7vzgij5JxW2Q+paD4t8M6zQkTHC51stJUbLhTXlplu2HXPWt99kyvlqpclkqyXLGlqz6NU7Ap43xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gpf4dkAg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738672164;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SVt11t4VdzXmaGrVYonLKU4tNbyq45g4LumiKNuZLV8=;
+	b=gpf4dkAgfZJjGroqrLhLo3yFumiFQAk31z5ESXLMhDdRsT+lQuGavqltxlpN/7zOUmC8nh
+	aTwS84LAU+1deAaNSOI9AuQ2yVC1ACrk8zt+e2NXiwMKgha1x6qno/cGPZp+dWxl/+QdRm
+	nlNcTk6Bf1bHEzcw+QtC4YaaxFYDY2o=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-170-qi1DhfM4MdSVY3VwEG3Tjw-1; Tue, 04 Feb 2025 07:29:22 -0500
+X-MC-Unique: qi1DhfM4MdSVY3VwEG3Tjw-1
+X-Mimecast-MFC-AGG-ID: qi1DhfM4MdSVY3VwEG3Tjw
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4361d4e8359so38993145e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 04:29:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738672161; x=1739276961;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SVt11t4VdzXmaGrVYonLKU4tNbyq45g4LumiKNuZLV8=;
+        b=t1NA0BtbnpI8Sg3PN1qNTaw8Nm66I0zw5vL2SUbJsbOb2kw33que1fI1AN53F7/jau
+         lY6HKbETwb1v8RtVQkdfeHrZwIv7D71j/mVdaf8JetWmsMm0IJoLUSKeDQiAIHAnXkYJ
+         yX1vd+ICydwK91FjDaxUs+HvfR4CB4hYhrZGGcELv9XdoijRDsb7aGqksKntFLppjwcU
+         vBM54tKU9sCCKFXY7lm4yIq231KIVwARmKghhrhMSwG9giqfa0X6Bvq8rZ9xiJdMBt0l
+         ENbwOwV6KCnHmj4C9/3GQH21Vm/xs50OZ3Xopp8IS0l3OFrA5fV3i0plCgGdxlj6rx4c
+         rPTg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrP1Tbbe67sKUrURQwCKLo6vrxd6OySRcZBqp/sXXQswteBK4ZfXYOscRI7bJAiBMQS0VaebbK0yLo835PVZY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyip9Xirt7RgZ/rJjbEmMxjz++VL4Xu/HrUpWf8M7AoPFi6MKk/
+	VJVshVmEqoZwAOz801Puio1GPb7A2JXfLDsyJSf3gzpOvnyNUQt32hrFf0yzZ3m8DmBzAm7Etyr
+	2kwFeo7oCRGHjfoD2cmWkx+jkUe1C/dOKIImgaW9EhvPsccWUfaI915xTGSdDZlFIHA==
+X-Gm-Gg: ASbGncvbVDrm6ubX05U4XQ9GVUzqw1WXJ3d/7qPxCkFWDgBcpEbPsFBEwMqNBWg+qcv
+	6QnDKVbW+21zwUf+ZgYhX5uS3d7fFl7D5Z8CzhzBnF1ZJv2SXQVTzaszw52b4AIHPqVGKgYqgCM
+	6f29z9yIvzS8YcrIbZeBg88eA7/CADka/al2yrWqsolgyf20GDOP2I1vK8P+jSBlQ6kCjv1/GeY
+	aTBSf709N5yuNvZtJDT68AW5/+4IzjVLzvW9n8jmkz0yXLRexnSHKq45MHrhxotpwRXctCmhdRL
+	k8eJ3Orq/RGHgZtniqRLbnLa50Z4/zv8fOM=
+X-Received: by 2002:a05:600c:5248:b0:435:32e:8270 with SMTP id 5b1f17b1804b1-438dc3cac3cmr242156365e9.14.1738672161580;
+        Tue, 04 Feb 2025 04:29:21 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF6sf3mUWx9f6oCktAawZ1NkGZse1Cb+QiEWr0dnqS8PjvhkiCOef50Jj0CTOWCanLTCjNSYQ==
+X-Received: by 2002:a05:600c:5248:b0:435:32e:8270 with SMTP id 5b1f17b1804b1-438dc3cac3cmr242156005e9.14.1738672161191;
+        Tue, 04 Feb 2025 04:29:21 -0800 (PST)
+Received: from [192.168.88.253] (146-241-41-201.dyn.eolo.it. [146.241.41.201])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438dcc8a59dsm228847985e9.40.2025.02.04.04.29.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2025 04:29:20 -0800 (PST)
+Message-ID: <c8dd0458-b0a9-4342-a022-487e73542381@redhat.com>
+Date: Tue, 4 Feb 2025 13:29:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 2/6] selftests: ncdevmem: Implement devmem TCP
+ TX
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>,
+ Pedro Tammela <pctammela@mojatatu.com>,
+ Samiullah Khawaja <skhawaja@google.com>
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <20250203223916.1064540-3-almasrymina@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250203223916.1064540-3-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -yyIbkPcCIgxgjB2b6kv5fNBMi9Us86a
-X-Proofpoint-ORIG-GUID: X91T-z-FZSsJTojqkAtvXmRXxkwbzcY3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-04_05,2025-01-31_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502040096
 
-On Tue,  4 Feb 2025 10:56:47 +0000
-Colin Ian King <colin.i.king@gmail.com> wrote:
-
-> There is a spelling mistake in a literal string and in the function
-> test_get_inital_dirty. Fix them.
+On 2/3/25 11:39 PM, Mina Almasry wrote:
+> Add support for devmem TX in ncdevmem.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-
-> ---
->  tools/testing/selftests/kvm/s390/cmma_test.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> This is a combination of the ncdevmem from the devmem TCP series RFCv1
+> which included the TX path, and work by Stan to include the netlink API
+> and refactored on top of his generic memory_provider support.
 > 
-> diff --git a/tools/testing/selftests/kvm/s390/cmma_test.c b/tools/testing/selftests/kvm/s390/cmma_test.c
-> index e32dd59703a0..85cc8c18d6e7 100644
-> --- a/tools/testing/selftests/kvm/s390/cmma_test.c
-> +++ b/tools/testing/selftests/kvm/s390/cmma_test.c
-> @@ -444,7 +444,7 @@ static void assert_no_pages_cmma_dirty(struct kvm_vm *vm)
->  			 );
->  }
->  
-> -static void test_get_inital_dirty(void)
-> +static void test_get_initial_dirty(void)
->  {
->  	struct kvm_vm *vm = create_vm_two_memslots();
->  	struct kvm_vcpu *vcpu;
-> @@ -651,7 +651,7 @@ struct testdef {
->  } testlist[] = {
->  	{ "migration mode and dirty tracking", test_migration_mode },
->  	{ "GET_CMMA_BITS: basic calls", test_get_cmma_basic },
-> -	{ "GET_CMMA_BITS: all pages are dirty initally", test_get_inital_dirty },
-> +	{ "GET_CMMA_BITS: all pages are dirty initially", test_get_initial_dirty },
->  	{ "GET_CMMA_BITS: holes are skipped", test_get_skip_holes },
->  };
->  
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+
+Usually the self-tests are included towards the end of the series, to
+help reviewers building-up on previous patches knowledge.
+
+>  .../selftests/drivers/net/hw/ncdevmem.c       | 300 +++++++++++++++++-
+>  1 file changed, 289 insertions(+), 11 deletions(-)
+
+Why devmem.py is not touched? AFAICS the test currently run ncdevmem
+only in server (rx) mode, so the tx path is not actually exercised ?!?
+
+/P
 
 
