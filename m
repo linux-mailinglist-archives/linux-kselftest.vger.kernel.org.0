@@ -1,162 +1,146 @@
-Return-Path: <linux-kselftest+bounces-25712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2832A278DC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 18:44:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56948A27924
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 18:57:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 826CF18868FA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 17:44:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 771543A552E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 17:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00AD621660C;
-	Tue,  4 Feb 2025 17:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6B3217647;
+	Tue,  4 Feb 2025 17:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JgSiuWpb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ey8mhd/p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136A52163AD
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 17:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201B7216602
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 17:56:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738691026; cv=none; b=WADOdCkiY0X6HHPq8BOwaZjDa1GDVDLyHU5Zh30XQIXwvCBLiSVI7lxDnsp1mRyX4GHVfQHVdPIN3sLtHw1SlPoQXfSGpIVOPTAuAMXOk1RlNwCGEn+XTMuJ9IH6l+tMMNIucFZOZPE9uvXKXkUrPbdAyWOEs/udazl8tmXKiRY=
+	t=1738691790; cv=none; b=Dl9Gmk6s78iI6rfvepbny33l+6EqrP8mYZj0ztkoNPYpWkX55S4GYn94HO+SBvvQml9wlHh2xJUL/zNw2kPQCRZ7fgyUSYppfgVZmNy6OjMt6YxTmo3HQIfLe2oB5RJjW2sidgyPqHPIFJPFhB5v0QmqInEuGAYq+mTiKF9f2yU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738691026; c=relaxed/simple;
-	bh=RI516KF8KlF5wuxKhvy14BxpgtxjsqHgb9vmRE+RH8o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tKN9q8wsbanhBs8UY2IKPEEYR6bKgg6taI2ks3ic43Ukp5NJOP64MhKUBR282Jfa/gjxRVUBPe8L0K2FespAjOMLbzEpBYWxNqK+gy5pWkM/SlEdQOxlh3DbdvLOGJDwYhnMfD+aJPGeQzR4A0kJtFW1pjlJjV6DbRYg5QCl52Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JgSiuWpb; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4679b5c66d0so256591cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 09:43:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738691024; x=1739295824; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EmE2lFz8a65MIXFo9x5Yc1zrZ1Lc4zxxKH4CPUa2jU4=;
-        b=JgSiuWpb+YML86EJyQ2/R0EZyW8W5JETWLI3LrOJ51FIvCEAwwIly+HFiTpAgCePJA
-         vm6MXrMO2k0MWYXUSlPiUeULVXSXaWBKabT6P6wjtDNJyWj3UF1F/e8Svc4k47mA2Iea
-         72dGJmmXDbhk+9kBDG3FbVX68ayh5oCoUnIvdznsGVdcb0bHcZfgFjqMNwuTVWiraD+Y
-         E+L0xHWR8k/VC5+Ntv8XEWw1KkasaMOEKGWYWThxtAqzcQS8cofSTFW3bmb+UdE4aTmw
-         /Xtd2TRLIvikBUVr0qyfgqii6Wegi88qm8OrswFl+5LJWokLzp827YroXGaSlM6YaV3b
-         EhEg==
+	s=arc-20240116; t=1738691790; c=relaxed/simple;
+	bh=m670b6vZ0EmsoJkmownLJxz8JU2YptA7G45HSbgfDp4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ljb62DsdY7Mh1/Qny3ui83PwUFh0JxzsNQxWo641kpq/HKIjsnuLlRTpeL4wUr8tsOZ/J2AXaPi/Zlbma3HMxxlHKHO8fA3atxoG1oHLQJ0qno+95wdHeho3n4OGERHAQqzX1LMr1W0GGZOYvmCgnFU/wn7v86ug1ChoIIqcQ3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ey8mhd/p; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738691788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y7rTv22+08/qF0nM+ECThVkoy0LVlXk9luYfrRe54qs=;
+	b=ey8mhd/pYZA6DoNO4vZ54Y9nUxbUHyxdeNonzRQUgrCq5R6+bVyCR8VEQgzIOTgs3E4RRM
+	A75/QZoG0qfU0kH8rWMVUopIP3ZRa8HeSF8jz5dq3ylkGNceyLJo7XmC/fVeG/InbD63jZ
+	GsWuG8VEu4R6ryBXMNccsiNs5C90DRg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-dopMYptqP3SnK9e5wt_w4g-1; Tue, 04 Feb 2025 12:56:26 -0500
+X-MC-Unique: dopMYptqP3SnK9e5wt_w4g-1
+X-Mimecast-MFC-AGG-ID: dopMYptqP3SnK9e5wt_w4g
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43651b1ba8aso42248485e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 09:56:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738691024; x=1739295824;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EmE2lFz8a65MIXFo9x5Yc1zrZ1Lc4zxxKH4CPUa2jU4=;
-        b=t4viH80lVTXAvDJVBAcmqhDUyWTXbrKK6iE17DKA1Y5mFspQTAxtAXZ1mtkEyu+AwS
-         11WF7DsJaIt08HcTWcoiHkriQBLM0WfrHJwLD4LjofZd8j9U3joC+Yw6eYw28uLirSDI
-         ZaUoIZnycq9mzzI82GwB/a6U3C9soXHKgLuWiMlBo02ri+h/jkyYu4M9wU00S0wgTksw
-         JFX1XjNctYXbiHtXgPBNAuHWNq1MAPraYkbI3vOslvIL93XgYGvxmr0E95wa5R5bTN8D
-         K0lrQFu9873SNxC87qFNJ6brYJG2q0YnhCfsUw3wsavHM6OpT5JNtyq8ReLMXAtzMs1r
-         tiFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtxWqjcMNrP1EPRV58i9BvkoE+kE9AdTdyVepPUQ9edLfZSVz+t43/k/SaxzYpW7d8ESu67En3X2QC8gm/mHo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhTqX3APKCkb5oE/RLS8qWjJB7Ns8r1xrCFvLM+EuFInmr/iA3
-	RbZGGu4+qQBxtKCRXoQjxYHaz2rL733JXCqUpLvQlsfbRkCLI1xMoU3S80Rrf7tlpRsQY9mAM+c
-	aCxJZ2XCgXIhXxmuTYRVBJOPdm2mYuq2J9kz3
-X-Gm-Gg: ASbGncuQIwJMTv1mB0BdNVFQ93qr39rLZst0vrSz+au6+4/6XnZ1VH55E3HASbF5NcE
-	troHdAcFwQdS8MvtWj0U3wyfIvirVZ6JC//oVb5Kt8Q+5xqQ5TD9uG8TDD/zf4RpboyTbH0bdoe
-	GrlwVcTquSdhU2h1kpRHM+C9tSOkk=
-X-Google-Smtp-Source: AGHT+IEakkqdUEODQS4oUhl0P6nM6vpIAMS/AXypUyD79wEUNQXqWMLpkJCIqWEzIzpizWIXImCaCf1Qfn+0Gv6ysdI=
-X-Received: by 2002:a05:622a:4296:b0:466:9af1:5a35 with SMTP id
- d75a77b69052e-4701901f667mr4483511cf.10.1738691023583; Tue, 04 Feb 2025
- 09:43:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738691785; x=1739296585;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y7rTv22+08/qF0nM+ECThVkoy0LVlXk9luYfrRe54qs=;
+        b=wzs5rDlijCzQO0Zq9fmqTZyep+pc+H+y8wMmdiHKUVtFZ3PQ/HvlgtwYOiXgC9KigD
+         m/2nZOzOoqX8a6a+RYeihfICeGRZNy4BX+cbmesBVDdULhh0OcpBROF2JuseobSsNR/R
+         zaystn/1FJHeKP3LrP2xmmeavUI2sgFqPP4/F0haxaNhvfPSNzqQHgY8zLm2BzShqcAX
+         jzjlJqGvHEXNKKea+jQ0LKmeYHFft0tpizTUdCclWySB6mSH1bS2Ly+x7Wysby7qU19r
+         KgSQVGWefundgNoJN0TSpYtDt+aVmBV1g4CXcMslrYWfos97DdUHQCS8b+US9xv6IbL4
+         t0Qg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhcTrocgci1oN/gSbYTEXnRL1A8FZZMg7n/rhND0SozKthDmH7/dckwNLTds4AfsAt0QRgceC7r0JOvMFKqTE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRNzDmS5QZMWBKQxe98DFY4zmojEnRiipK1oBcBt3umTwaqReG
+	k2R4eQMzTAor/ruzfLZ70Lc7G0ejVKvJTjHV9hx/6E9UnL3DuBMHnCYqrlBQ0PDh+oS+W7HPK32
+	SM/ukxtJyLI2JZqvFSaee7MaLVXtcVgL7tJaSJg1J6j7THllSnZjBV3e+6d0U5LOtxQ==
+X-Gm-Gg: ASbGnct47dQdeRNz0wpMBAEZLqVebTftyQPmbbJyuA0fkGgzT/UsVq7IDVLNe4lptqS
+	/yNJ0n3n5/XgysxOL+8mFg4Ad/uTTf+axTIUlX9zqZTbfysav6JJ2fCcHNuOQWicQTB3J9R6tvg
+	+b+ep0XQtRqwMLv95REQzX4u8Qc9uiAE0OvVuiI20fQx+qNvplur16iXtiqIGlF3taLppp+KlMk
+	nP2MwZFHP7pC1T/In7Wm8GA3q0LdwyUt0yGGG42uSJweoh4q1Moe2TO+uh531wPisGCTQK2LP8P
+	YKz5a/oRFo+GQYFzd8RDqUrt0eRqqLE/2u0=
+X-Received: by 2002:a7b:c347:0:b0:436:6460:e680 with SMTP id 5b1f17b1804b1-438dc3cc9e6mr253181045e9.16.1738691785276;
+        Tue, 04 Feb 2025 09:56:25 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFCE1OD75AvFxX4Ocn0Vn8riU+bmAUBASRVK771tFjkbz9SV1IT6+srLah/Dv8CbvHWMOv8og==
+X-Received: by 2002:a7b:c347:0:b0:436:6460:e680 with SMTP id 5b1f17b1804b1-438dc3cc9e6mr253180785e9.16.1738691784822;
+        Tue, 04 Feb 2025 09:56:24 -0800 (PST)
+Received: from [192.168.88.253] (146-241-41-201.dyn.eolo.it. [146.241.41.201])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e245efbcsm193857215e9.33.2025.02.04.09.56.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2025 09:56:24 -0800 (PST)
+Message-ID: <71336d4e-6a75-4166-9834-7de310df357e@redhat.com>
+Date: Tue, 4 Feb 2025 18:56:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
- <20250204-joggen-buddeln-29e5ca75abb7@brauner> <7a8a1719-466f-4e10-b1eb-9e9e1ef8ad52@lucifer.local>
-In-Reply-To: <7a8a1719-466f-4e10-b1eb-9e9e1ef8ad52@lucifer.local>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 4 Feb 2025 09:43:31 -0800
-X-Gm-Features: AWEUYZl7RlmyhEU99QQ-tyghSf0sZ-KKDjjpT9EgshNSpko_7zG64QXhfE_k9kk
-Message-ID: <CAJuCfpEUusRt_ss7RtxRPP9q_LRwi+Lw+SOq32EUA58s3JOx1A@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] introduce PIDFD_SELF* sentinels
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, 
-	John Hubbard <jhubbard@nvidia.com>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Elliott Hughes <enh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 2/6] selftests: ncdevmem: Implement devmem TCP
+ TX
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Neal Cardwell <ncardwell@google.com>,
+ David Ahern <dsahern@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>,
+ Pedro Tammela <pctammela@mojatatu.com>,
+ Samiullah Khawaja <skhawaja@google.com>
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <20250203223916.1064540-3-almasrymina@google.com>
+ <c8dd0458-b0a9-4342-a022-487e73542381@redhat.com>
+ <CAHS8izOnrWdPPhVaCFT4f3Vz=YkHyJ5KgnAbuxfR5u-ffkbUxA@mail.gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <CAHS8izOnrWdPPhVaCFT4f3Vz=YkHyJ5KgnAbuxfR5u-ffkbUxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 4, 2025 at 2:01=E2=80=AFAM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
->
-> On Tue, Feb 04, 2025 at 10:46:35AM +0100, Christian Brauner wrote:
-> > On Thu, 30 Jan 2025 20:40:25 +0000, Lorenzo Stoakes wrote:
-> > > If you wish to utilise a pidfd interface to refer to the current proc=
-ess or
-> > > thread it is rather cumbersome, requiring something like:
-> > >
-> > >     int pidfd =3D pidfd_open(getpid(), 0 or PIDFD_THREAD);
-> > >
-> > >     ...
-> > >
-> > > [...]
-> >
-> > Updated merge message. I've slightly rearranged pidfd_send_signal() so
-> > we don't have to call CLASS(fd, f)(pidfd) unconditionally anymore.
->
-> Sounds good and thank you! Glad to get this in :)
+On 2/4/25 6:35 PM, Mina Almasry wrote:
+> On Tue, Feb 4, 2025 at 4:29 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>>>  .../selftests/drivers/net/hw/ncdevmem.c       | 300 +++++++++++++++++-
+>>>  1 file changed, 289 insertions(+), 11 deletions(-)
+>>
+>> Why devmem.py is not touched? AFAICS the test currently run ncdevmem
+>> only in server (rx) mode, so the tx path is not actually exercised ?!?
+>>
+> 
+> Yeah, to be honest I have a collection of local bash scripts that
+> invoke ncdevmem in different ways for my testing, and I have docs on
+> top of ncdevmem.c of how to test; I don't use devmem.py. I was going
+> to look at adding test cases to devmem.py as a follow up, if it's OK
+> with you, and Stan offered as well on an earlier revision. If not no
+> problem, I can address in this series. The only issue is that I have
+> some legwork to enable devmem.py on my test setup/distro, but the meat
+> of the tests is already included and passing in this series (when
+> invoked manually).
 
-Sorry, a bit late to the party...
+I think it would be better if you could include at least a very basic
+test-case for the TX path. More accurate coverage could be a follow-up.
 
-We were discussing MADV_GUARD_INSTALL use with Android Bionic team and
-the possibility of caching pidfd_open() result for reuse when
-installing multiple guards, however doing that in libraries would pose
-issues as we can't predict the user behavior, which can fork() in
-between such calls. That would be an additional reason why having
-these sentinels is beneficial.
+Thanks,
 
+Paolo
 
->
-> >
-> > ---
-> >
-> > Applied to the vfs-6.15.pidfs branch of the vfs/vfs.git tree.
-> > Patches in the vfs-6.15.pidfs branch should appear in linux-next soon.
-> >
-> > Please report any outstanding bugs that were missed during review in a
-> > new review to the original patch series allowing us to drop it.
-> >
-> > It's encouraged to provide Acked-bys and Reviewed-bys even though the
-> > patch has now been applied. If possible patch trailers will be updated.
-> >
-> > Note that commit hashes shown below are subject to change due to rebase=
-,
-> > trailer updates or similar. If in doubt, please check the listed branch=
-.
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-> > branch: vfs-6.15.pidfs
-> >
-> > [1/6] pidfd: add PIDFD_SELF* sentinels to refer to own thread/process
-> >       https://git.kernel.org/vfs/vfs/c/e6e4ed42f8d8
-> > [2/6] selftests/pidfd: add missing system header imcludes to pidfd test=
-s
-> >       https://git.kernel.org/vfs/vfs/c/c9f04f4a251d
-> > [3/6] tools: testing: separate out wait_for_pid() into helper header
-> >       https://git.kernel.org/vfs/vfs/c/fb67fe44116e
-> > [4/6] selftests: pidfd: add pidfd.h UAPI wrapper
-> >       https://git.kernel.org/vfs/vfs/c/ac331e56724d
-> > [5/6] selftests: pidfd: add tests for PIDFD_SELF_*
-> >       https://git.kernel.org/vfs/vfs/c/881a3515c191
-> > [6/6] selftests/mm: use PIDFD_SELF in guard pages test
-> >       https://git.kernel.org/vfs/vfs/c/b4703f056f42
 
