@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-25633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 371A3A26962
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:18:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32D59A2697B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDCC01885B42
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 01:18:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0B653A58E9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 01:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0536219ADA4;
-	Tue,  4 Feb 2025 01:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5242B212B39;
+	Tue,  4 Feb 2025 01:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCWAVLwl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pEK5D170"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA7218C900;
-	Tue,  4 Feb 2025 01:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20994212B2E;
+	Tue,  4 Feb 2025 01:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738631811; cv=none; b=lu56V33nYrSN5tXaUIHhzDYZoPUfj/wn4I1CnetC8acFD5vrbWxORZ9c9juhjcaTvUcGcJbWzshwcQaRlKh6/Kbhl6IReZsxQwKT3SY2J342qHJcrmGyTPsuhTIeOFOGpoHtZq7JDLSHMs3syp1+82qAFAEiOWi0uj40EapzwDw=
+	t=1738631823; cv=none; b=Pt/MqYyiJnIRNxdEqAnmreYkfg9Ja9US07bvYPoNfsmmqPsgHlrj1leZGemxp2wgtgVaPnUJu8X85WZozwsmVZZyB889LAqvNUPIKLcdfG0GUqSR/iYR/iM/yKN8tucUCvVTbj3/a/2luvW3onIDMCof25aQuQdizzzaFXekmIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738631811; c=relaxed/simple;
+	s=arc-20240116; t=1738631823; c=relaxed/simple;
 	bh=AZYnpZH02SrGHDneIoHNp5RsnbeIUYf5hZihOJgorME=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hCD1eC0ybyV+juGiXxIuuJ0dfced0fInn5KSRh5iRflxvno5OOwOqPM3W1xcRAYHYxnuevRZ/DJ8mVgElbcidTkbIgPCHYdjfTCazphBll7TlB0Wd3ZZvc3X04q8wTMuiNI47STq8Z/36IeDdOiatL7YOs+Tr3BtHIiz/SwNE0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCWAVLwl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E9FC4CEE7;
-	Tue,  4 Feb 2025 01:16:50 +0000 (UTC)
+	 MIME-Version; b=gtjkrUhGRc1O0mpfKAy8JOWdjP9d8EOb2dpFcqBXfOjH+LAOOvxc1TzuN6c2Sx4sCnmowWMFK1vaf8HxvT9as1cgN075ROfK6wF4NydVjyBngh50/l7Q5vto5R/YCjV59t+UFvH6B2ok1Bwh75+q1UuT1YIN+iLaozQyh/3k0AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pEK5D170; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72121C4CEE4;
+	Tue,  4 Feb 2025 01:17:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738631811;
+	s=k20201202; t=1738631822;
 	bh=AZYnpZH02SrGHDneIoHNp5RsnbeIUYf5hZihOJgorME=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jCWAVLwlMZXqUsVJiAfv5ymVEZ9BakmoUGJehKsWJlXSDS4pHJTdl6WdXdSajsJfE
-	 +0wLL/OJtLCZYe6yMWRvgBXPuHXMKkj/RrLHND9SyO49u9/R/zkY65Y0+ZHMltqT/4
-	 yRXQD97mS7dXCLrXfhrYaf2AouNz+z24B4Me2ddohCIpxGUMy6o4flz383Z01ioeCb
-	 T+6q8wXsHCwt90AtKvUL6GBoUAkuBfp7P+xyshrirdOo9WHRtI150gejObYcBYpMC2
-	 0H89venAXAWmCe3a2ZyzWFOXBTt6jLB+AZvNjeNATGYS379a2VRH7+eaODe0Adklfw
-	 U/qUI39QCjSRQ==
+	b=pEK5D170Cke78d+bFOM1IpZl5MlklwfJWrs5cVayQWFTODk6iGZz2rQJFOJucsD/w
+	 1vGUTmB7I8rgETXdS1SCgqt1gJ9s+TpZg/JWeAt/jNB8zt2a0w2S8hyroynr+zAf4y
+	 OVCnqRCMPjj8ZqkYCvhOlfZa/xcH5jDxsGT3JWOmUxm8fNYmW5POzN7HIlW5wGVSI/
+	 IgdfmoeD+arTLDdO+WQmTAXi5krkAVu1EK/NM1XZLqIy0wANiauG1+YXQdSNGenw+a
+	 YIf2vQMangytJSaBvE5W2cO5i/7znApxPJEQy/lNhApN+xxsKmdyEegdZ1nAIm4Oh6
+	 c9mUibL3j45Yw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Koichiro Den <koichiro.den@canonical.com>,
 	shuah@kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 3/4] selftests: gpio: gpio-sim: Fix missing chip disablements
-Date: Mon,  3 Feb 2025 20:16:41 -0500
-Message-Id: <20250204011643.2206417-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 2/3] selftests: gpio: gpio-sim: Fix missing chip disablements
+Date: Mon,  3 Feb 2025 20:16:53 -0500
+Message-Id: <20250204011654.2206481-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250204011643.2206417-1-sashal@kernel.org>
-References: <20250204011643.2206417-1-sashal@kernel.org>
+In-Reply-To: <20250204011654.2206481-1-sashal@kernel.org>
+References: <20250204011654.2206481-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.12
+X-stable-base: Linux 6.6.75
 Content-Transfer-Encoding: 8bit
 
 From: Koichiro Den <koichiro.den@canonical.com>
