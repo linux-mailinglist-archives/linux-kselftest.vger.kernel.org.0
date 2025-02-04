@@ -1,176 +1,341 @@
-Return-Path: <linux-kselftest+bounces-25670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9A4A27097
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE271A26FE6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:08:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A08411884FB8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:46:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7256188750A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:08:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F006320C47E;
-	Tue,  4 Feb 2025 11:46:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF7320C032;
+	Tue,  4 Feb 2025 11:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SNCbNeYb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gl7vfr09"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAC25CDF1;
-	Tue,  4 Feb 2025 11:46:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738669596; cv=none; b=C2n/wkZOpibi4tCyqh6GeFrjzXntBV6OZR4Um6YPh0UotxDxowtdfGZzxnxC4TPzOxWiWKXOeWE6AsnX1DjjgbWBIj6cnbwJZtqKsCl7ML9STEUFMW+n6EGMSrXxKFucI+AZF9K8oTz9OwJGtPRM6zqwBrN3X3T0sZWlBaOL8/s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738669596; c=relaxed/simple;
-	bh=xLOU8a08rHJUOj0tVOcrZH3clFkmrBhh7AUb9i9ZhA8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tWmLc8DXxeZnCL0ScQi87x+eQKqUIKEUi8sNzcNUpzKFfJaTHf1gtKGrgz+tALvAMdr51qsACEntiprpcJ4ZVRxhyP1FSeAVuLBX79ZE9LZj7Ws8UlXsjtAyq6dNira5x3pcO4oXYZE1salrT1OGoYKUs2bxYo0TdfRCtYE5JZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SNCbNeYb; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5143SEWH018231;
-	Tue, 4 Feb 2025 10:14:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Idrynv
-	jVwlKjx48J0Gstw5ntaCO7hXDwAHh6RgERaGw=; b=SNCbNeYb+aMI9mDHT5NSka
-	IQKNNz+ygSk11chKsfonnLQlMJzhwdZ0kFPZWoPIgwmyd6FpHTg4NvHeJzRnODUl
-	LwSftsrZ+hTMiCs9nfeWNqO2/ZzP9qDqct3LRy+JgaTR6boxlz6Qmp3gNVGBiHQw
-	W07jbrjBIps3q0zpR7ZLPrPoG07Po5xHCL67x9DWh7Jb9FEXqObEjTIfKHL5Ov8D
-	ejUymbxWv/1MBwojSxZ5GeXS3l5Q/tAh0zkXc53pL/Lanlk8yFMKCPB0PDCEK7xZ
-	bl/jWteTASwYrzzkdtq3MPJpRYKsFcIu1TUWHZbA5V5w9aSqifvSNE8gbT5eEWYg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44k0mtc95c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 10:14:09 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 514A3bse021956;
-	Tue, 4 Feb 2025 10:14:08 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44k0mtc95b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 10:14:08 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5148j8Gq024492;
-	Tue, 4 Feb 2025 10:14:08 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44hxxn2yb3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 10:14:08 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 514AE4NY41091450
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 4 Feb 2025 10:14:04 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 51F9C200B2;
-	Tue,  4 Feb 2025 10:14:04 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B0786200BE;
-	Tue,  4 Feb 2025 10:14:02 +0000 (GMT)
-Received: from [9.171.76.170] (unknown [9.171.76.170])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  4 Feb 2025 10:14:02 +0000 (GMT)
-Message-ID: <0d4bbaba-d05e-48d5-b248-6d915f8d4e18@linux.ibm.com>
-Date: Tue, 4 Feb 2025 11:14:02 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F0220B813;
+	Tue,  4 Feb 2025 11:07:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738667249; cv=fail; b=iqKeFCZ6feE3PnHzb//lkCT5c7hsWbuJ3rxRmRVb05Ygj05NqG5WmEAW8gnuD2jKo1JjQKy+tNO/BqfgV5udV4loVfFKPoFMrvGHUzjHyOYnFSaALBEP/tRAOox8S7xwHegLmWO4p5a4+5LSFGH8Ah9ndXhrKIXCnGo+jfYvzJc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738667249; c=relaxed/simple;
+	bh=2z16Z2d59biZpaltvYyfg9wC8hJcGX0R6r0qRZ0U1u0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=k63v5XIBsiN54tR18947B9swLmPDBT+nLPVR5Wi/Np1pzU1vQ8RiAk73U1k0XV2WLxmzQ3fs/f44SCZGgQvImUD9wo1DpB8SEKm382sm41YdwatnbF1fPoWoWyQ7jLmSTmxzeADaCNLXu5ktOiRpfOVfu10AypmK7wTJLDe4P4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gl7vfr09; arc=fail smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738667247; x=1770203247;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=2z16Z2d59biZpaltvYyfg9wC8hJcGX0R6r0qRZ0U1u0=;
+  b=Gl7vfr09BYhh7M+umL43E4Ona6MOI6lmzIHULdCmSNOVALY+At84omf7
+   QL49AorhXK/n5uMVwyo039GzhCEPKnvFvoAIQ7sTc1rovSZen28mKiqmE
+   1/w9Ww4gFSr67E1h9LkBiZfLi3XFDElj6rrkrySl1UTHF299K47rPmGBU
+   2nKssVWnL7YN0NVgB0pbltV8h1DadWnoADNIc4ezgfde8u01oP7hYABax
+   yrNMaoH+u+4zmK8Yz8N0xlt0b3uXLZRKOkHtnViiN5OOuFcd8dsruZL8I
+   nuRFIxyEDpb+BlA3GCzjvv2tZSoqBKZ+/8AipjXuRz7pD5Ji3yDBBKaE9
+   Q==;
+X-CSE-ConnectionGUID: 9Q8VgWZHRFOsdHfDRf65uA==
+X-CSE-MsgGUID: p5dYYVIiQCWIN4lQqgbKPg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="49803023"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="49803023"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 03:07:25 -0800
+X-CSE-ConnectionGUID: e9y+dsz9RrqLFW76VGjLPA==
+X-CSE-MsgGUID: UFvyAGKsQXiSP0opw56J7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="110554179"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Feb 2025 03:07:26 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Tue, 4 Feb 2025 03:07:25 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Tue, 4 Feb 2025 03:07:25 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Tue, 4 Feb 2025 03:07:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mNx7K5DBMIUS+6LakwBUmElNekTbypM7qHXeTOO2H1tUFNjqmgOiOqqdIUu0pzwh6hV5DrKoSdw9RhwhymEW1H1C55BAm+q3tUGFSvIVWvk4Sp8R+5RxIfJIiGNXUskTFZHgleQLgaXkfr8pITJdbzvOocHZvw4oxJiGU42KBD9ay0T37sVqUzOJRpY5hh8d5PXDUnO97skXUX6x1mo1lboZ9Ij7ZvOrsPfYvgYOPvvK8PBM2yhqb3PRtj85cQoqBuIfBlOMhqvGpMuA9m0jDSXvGhs1oUAZ6TNifAJtskwxNA1bV9uHUVNRYy7ZvJOe5594CSM2jk+tlI7o8DW4qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D8irRDE/oYvy4Oc523V2s8qHrD8ItvIa9Mlv1biUXbA=;
+ b=RtOK0TarWbmwodUmc/2goEIhmtdfvCJ/Xdt3ug9ZwD32pNmxikLgh6tnGcZ0n2YBr3PPd8WGuANW90u93bcNJ6zV9OH0ROxdqsgqho+2SrNiAvjrlNFSVF+v907zC2es4VfaYLzG2TcVqOsdLtOanySLFb2ZkSEGF08ZQkZ7g2M4tUFuv5r2XZ1O4XPE4C1GCvT/3I/tCzCP3Y1FOgoo0A+Qw9vqfh/zF2n0Hg89CJn82C5qt7Y69F68nqBO632WFAxsqfTFonvQq/+t874/iMyJAintqYbZnbZ/tui9tCwbs6UqOIbqoroRsyZUCOnfgBJscBZ6FOPO2nqvy7HOZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5830.namprd11.prod.outlook.com (2603:10b6:510:129::20)
+ by PH0PR11MB4806.namprd11.prod.outlook.com (2603:10b6:510:31::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.22; Tue, 4 Feb
+ 2025 11:07:22 +0000
+Received: from PH0PR11MB5830.namprd11.prod.outlook.com
+ ([fe80::c80d:3b17:3f40:10d6]) by PH0PR11MB5830.namprd11.prod.outlook.com
+ ([fe80::c80d:3b17:3f40:10d6%4]) with mapi id 15.20.8398.025; Tue, 4 Feb 2025
+ 11:07:22 +0000
+From: "Song, Yoong Siang" <yoong.siang.song@intel.com>
+To: "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
+CC: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Willem de Bruijn
+	<willemb@google.com>, "Bezdeka, Florian" <florian.bezdeka@siemens.com>,
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+	Bjorn Topel <bjorn@kernel.org>, "Karlsson, Magnus"
+	<magnus.karlsson@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, "Damato, Joe"
+	<jdamato@fastly.com>, Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo
+	<xuanzhuo@linux.alibaba.com>, Mina Almasry <almasrymina@google.com>, "Daniel
+ Jurgens" <danielj@nvidia.com>, Andrii Nakryiko <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Alexandre Torgue <alexandre.torgue@foss.st.com>, "Jose
+ Abreu" <joabreu@synopsys.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
+	<przemyslaw.kitszel@intel.com>, Faizal Rahim
+	<faizal.abdul.rahim@linux.intel.com>, Choong Yong Liang
+	<yong.liang.choong@linux.intel.com>, "Bouska, Zdenek"
+	<zdenek.bouska@siemens.com>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "intel-wired-lan@lists.osuosl.org"
+	<intel-wired-lan@lists.osuosl.org>, "xdp-hints@xdp-project.net"
+	<xdp-hints@xdp-project.net>
+Subject: RE: [PATCH bpf-next v7 4/5] igc: Refactor empty packet insertion into
+ a reusable function
+Thread-Topic: [PATCH bpf-next v7 4/5] igc: Refactor empty packet insertion
+ into a reusable function
+Thread-Index: AQHbdp7rCY5AnKYQ8ka8t2MtMQljeLM25zMAgAAN7NA=
+Date: Tue, 4 Feb 2025 11:07:21 +0000
+Message-ID: <PH0PR11MB58306CEAFF46FD493030943BD8F42@PH0PR11MB5830.namprd11.prod.outlook.com>
+References: <20250204004907.789330-1-yoong.siang.song@intel.com>
+ <20250204004907.789330-5-yoong.siang.song@intel.com> <Z6Hi5G0ngTnb7lb/@boxer>
+In-Reply-To: <Z6Hi5G0ngTnb7lb/@boxer>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5830:EE_|PH0PR11MB4806:EE_
+x-ms-office365-filtering-correlation-id: 7a306d01-63ce-4ddd-8da0-08dd450c1919
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?LD8QeIXdK8T2s2ZzsJVxk2eflFEjThClhtLfZ61hLU1ARadhCqgyW+0uVNT5?=
+ =?us-ascii?Q?t2iawRjaS+W+fELUknsNDLOy/V0jcpd8QlKW9n9qvbsZRf1GxkfBzOmcMO5Y?=
+ =?us-ascii?Q?Cd5Y8bMyrU5i7zVVtVXxfDqjUi648aeQt4J79a/INz+eb5S9Ya7rkAuSyeym?=
+ =?us-ascii?Q?LS/Wauc5nS14lrKk/1dOtIpeaMztH2i3r3BjPg49r6n3v+kmztNy/1Je7Zbi?=
+ =?us-ascii?Q?pKTBPRxIPJ6mi6UQD32MWfQH0jE28ISGCWSd4y7Jn3rw2gDSNJJGbVVjrQS9?=
+ =?us-ascii?Q?EHMFPBnlwgJFjDuHUjLXKJwAHT/RlI1AI8xrTOSwbTGVikQE6M9Vxax+U7ao?=
+ =?us-ascii?Q?FRK0rzwsa8oKyv8A8EXH21x1PBfJfFeJQmdw+xui1EaGVbTATTzB62Cy1JQ4?=
+ =?us-ascii?Q?SRmf749PQqsZdlH6K3lnSLjedQ+MPRauV7vM920cAleRr7Kps4C/vWTOWUy9?=
+ =?us-ascii?Q?nuz0EhvJA6g5M/AFrb5nYB6FugRwCMylE8CrqBamxbdh3WLP5tleaeHH9IC/?=
+ =?us-ascii?Q?vEd0w4TpgnziV2UDshFK79YC4t8yp3F1++Nd3CUTZIm32YTC0R0uH3drNLFZ?=
+ =?us-ascii?Q?82VNrDOusHoJx4kWAivnzqWno0/aPFUzkIWwYjxSH7NFbNcYr0MdKYuoE1V7?=
+ =?us-ascii?Q?jrRY6ShY7RuXPFFPh98oHiDh+kf9AZ0oFSjNG4NApXA/GeaVFYGlJlIEE68/?=
+ =?us-ascii?Q?mBMEwGeQ+KjMBiSJ+66TBx0LSMFLkl1qU331bcqrCLHF0MyK/rgpCO8CyTjU?=
+ =?us-ascii?Q?3t6iCWv30TkIBabRlIsr2gnz2rdNQQ7LwZE+cqh0mI3Ea5qtSBs8FASFsBVO?=
+ =?us-ascii?Q?5SSJheAZvOQGfLIuR6mfkog4wekUQr6qCyP4je7pDGXSOF3WcyVclDOPKAJ1?=
+ =?us-ascii?Q?gel0iUMlrCVZnDGBNfVt33bMjINFDe2ceYCeCFWXlu3cBdyBw0sHEy9HeR18?=
+ =?us-ascii?Q?3Yz3eHfBm3SyWoHZGuYhbc4Rsiv1ByWlQ2TUFN/lm7MBjwD2i87tL41ggJg3?=
+ =?us-ascii?Q?JIrVUVhKlqZa7qtKltV6Vn3lSo6vDM2fYnI/ufYz9KzEv5J/SnszKeDvxWkV?=
+ =?us-ascii?Q?cCoKpkdUDoAW1B+vJ+Uaf30tItabZPZoPuqS0NeTR90JvAPjihG8HKsehxeO?=
+ =?us-ascii?Q?1AMOeW1ddccvgGiMlLjw2qT6GAPEhZrgrwTJuD1yCKjBUg03s1t1NeIW2A7j?=
+ =?us-ascii?Q?6+neQ8SVq3V9NMkKB24DaocHOInckFerSjCxNqbdKfJBHF3yOenMjJgaPaWX?=
+ =?us-ascii?Q?ZlXjcMaQ9dCfzyOaBFHUC2RhgdtgbhbTfOFVJyeNnEd+G62iu5ShN0oZgQeb?=
+ =?us-ascii?Q?CZCwnodMqCvkXDayv0V6wj5wnbdiw5r24FnjM4vIDeGQ85JmQj7XUFPhw4Dk?=
+ =?us-ascii?Q?ZBTW8GxOxXn76cL2TqBpo1yFh1wNiw+zUVWJ3X8KaZS/Kyx6B+XPsYpigJFy?=
+ =?us-ascii?Q?HXEUNwbx7+di6aTermSsPDHGYUAGHeAb?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5830.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?na88wrrTB26jEis2HCoY7PsL1Z7hKnbZBerWFsYq6mm7idBL19uCEvVd6igP?=
+ =?us-ascii?Q?+bAoyw6BJGazAC9KETO78oHqz7/LsF35crNeS+YuAgFoMMOAmtTlh+VekTew?=
+ =?us-ascii?Q?4JGsCvtXIj/DupeU7cdRh3vPE/LFjgLPMrecq28UVqmta61b0BjjVWv2HQQ5?=
+ =?us-ascii?Q?G49HEQwU47WFx7w13cWqrvfOoKH6rQb3iS1WmOwqCXIpTP40Rc+ynic2wpqY?=
+ =?us-ascii?Q?4xGdBHSRxOrVyLYIJ0ROxMUi1HAUvkhVes0PnPmQ5krS2cf7mvG2c0+koM0I?=
+ =?us-ascii?Q?8/Y/wFHuJe2EimYmZEt7l5/ma3t9qNS6tCG+U2EY4Rs8WytWPCNGL0Y4J1bs?=
+ =?us-ascii?Q?GiPWmVmnpaBkp23Kx4BAOn08w+hurZhFeDFrN/+CaD1D9hMqyz+vt2K2O2oH?=
+ =?us-ascii?Q?eucc8hthXIKxhX15teRqFdymps8FDGIKkSRAzjJHrqEuwEr+WW6N3/PzPEhk?=
+ =?us-ascii?Q?Tjl8v2ppvfv33vpwSUWcgSt4HKnsjfjdevAAj/Zms52YykQMufkyW8HvjbYd?=
+ =?us-ascii?Q?BWGdLkNRBwUE8e/gqD5xtd9ZD4f7z93u0c+8Sl7aYfULZYg9R6PKLLe4nxcI?=
+ =?us-ascii?Q?C+OHNEqUuRvQ4PYqFES+p/uqQMAiz/oOsJIqJ/aHE0iWmT9pMCO/5YzZHB7M?=
+ =?us-ascii?Q?MSaIhHD1R1p4Fli1KOPbsfzyGIHsrYu/U5xgBkxe5VWqQkYjsV9z90QYU7v4?=
+ =?us-ascii?Q?ztVSbZfSw1Ran0WLAhNkTOXHEani9179EELxncMztiCGH4555ukz4pD7/Ofq?=
+ =?us-ascii?Q?yQwnpynNYSpR/cbQHdxPoakbOrf+M53loKGy75THpUo4Bmtf4bTLWrSRIP6e?=
+ =?us-ascii?Q?j+HFxjtkDAygRWGMcXN+vtgojD22c4cJRTopLMTzwJ6Zk9QEapmzS8PFJheC?=
+ =?us-ascii?Q?5A1P4ELcmhozHbCh687wr4tLYBihvPhTw1QKVNYRZm6NX4/wT/GezTbeqP9R?=
+ =?us-ascii?Q?FqkndC59d9WoWJpDlYY6jsrhaHx+dk/zOt1m4gTuo8MD2OW/+AT9N+Z0Lc2B?=
+ =?us-ascii?Q?Wd4uU6phvKQ1aH0HtznB/6NmBSVn/iHpZ5rfLUMCCZ1pJZkIfMcFvSj4+uWO?=
+ =?us-ascii?Q?X00EBmrXr3xVreDkgNe20mYBj3shI1kjZ/Qa0paCz8BlG6N3aO7117dga0jV?=
+ =?us-ascii?Q?1leqCZX/WnpRgH+u105krQXPT2qGlhzCmGxmcjiSPKz0qpN96DfLjf0kOW/P?=
+ =?us-ascii?Q?lF7+6lngc5/6AlQJSLBNxuWWgBcIaEWbXJX/3W2r34/1dtJ3+ONs5N4bPyml?=
+ =?us-ascii?Q?zkWs4juAgM4Q2P85Ydd7LUAXksusYMi9QUxgAqVr/nWabwmugXmSsBCE08jt?=
+ =?us-ascii?Q?i+MPQuOY4D1XUfh48QRqpgfTsnR0ep/W9cuTOY9t5qcrg9SzxgWOJkPTrr8z?=
+ =?us-ascii?Q?n7ZekIwd3sMLv6KWSWojkduhcsxTZVC2imQaYljV9t+MKR+ShXQUTk5b0lDy?=
+ =?us-ascii?Q?oDTVWbGBI2RBubvV438XanjT5shMtVTMi85XxBFV4U2RKZXdaAzCjJjMWZCd?=
+ =?us-ascii?Q?2px9VPaLTK34hKGew/TtTx+qxQDH5rui1MZXLVYv8IWnOxYZG4bnEtEh3Rrd?=
+ =?us-ascii?Q?eNgLC8dA1Mk2U3fUg+y8uFBNO+t2yEZcrCfi3S8eW8urMH5XS6f2z8a2GsQh?=
+ =?us-ascii?Q?Ow=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] KVM: selftests: Fix spelling mistake "initally" ->
- "initially"
-To: Colin Ian King <colin.i.king@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250204084855.289493-1-colin.i.king@gmail.com>
-Content-Language: en-US
-From: Janosch Frank <frankja@linux.ibm.com>
-Autocrypt: addr=frankja@linux.ibm.com; keydata=
- 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
-In-Reply-To: <20250204084855.289493-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: em9XsPtbBNG-41cqUInX7h-bp2XNK59M
-X-Proofpoint-GUID: jBPwFMkCVtRvGZ9dwh-DSfg7odbrUG2j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-04_04,2025-01-31_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxlogscore=764 malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- clxscore=1011 priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
- definitions=main-2502040080
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5830.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a306d01-63ce-4ddd-8da0-08dd450c1919
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Feb 2025 11:07:21.9185
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oThDIl3ovUkymA+SbBR87n1KPCrtqG36XvKEzCUIHdRpLxI9ylJ/oQchAPSonKxTfMWRDa0uVxCgYAZLqp1cG421yIYHEAx0iPdglogXhhQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4806
+X-OriginatorOrg: intel.com
 
-On 2/4/25 9:48 AM, Colin Ian King wrote:
-> There is a spelling mistake in a literal string. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   tools/testing/selftests/kvm/s390/cmma_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390/cmma_test.c b/tools/testing/selftests/kvm/s390/cmma_test.c
-> index e32dd59703a0..7fbbe8b912b6 100644
-> --- a/tools/testing/selftests/kvm/s390/cmma_test.c
-> +++ b/tools/testing/selftests/kvm/s390/cmma_test.c
-> @@ -651,7 +651,7 @@ struct testdef {
->   } testlist[] = {
->   	{ "migration mode and dirty tracking", test_migration_mode },
->   	{ "GET_CMMA_BITS: basic calls", test_get_cmma_basic },
-> -	{ "GET_CMMA_BITS: all pages are dirty initally", test_get_inital_dirty },
-> +	{ "GET_CMMA_BITS: all pages are dirty initially", test_get_inital_dirty },
+On Tuesday, February 4, 2025 5:50 PM, Fijalkowski, Maciej <maciej.fijalkows=
+ki@intel.com> wrote:
+>On Tue, Feb 04, 2025 at 08:49:06AM +0800, Song Yoong Siang wrote:
+>> Refactor the code for inserting an empty packet into a new function
+>> igc_insert_empty_packet(). This change extracts the logic for inserting
+>> an empty packet from igc_xmit_frame_ring() into a separate function,
+>> allowing it to be reused in future implementations, such as the XDP
+>> zero copy transmit function.
+>>
+>> This patch introduces no functional changes.
+>>
+>> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+>> ---
+>>  drivers/net/ethernet/intel/igc/igc_main.c | 42 ++++++++++++-----------
+>>  1 file changed, 22 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c
+>b/drivers/net/ethernet/intel/igc/igc_main.c
+>> index 56a35d58e7a6..c3edd8bcf633 100644
+>> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+>> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+>> @@ -1566,6 +1566,26 @@ static bool igc_request_tx_tstamp(struct igc_adap=
+ter
+>*adapter, struct sk_buff *s
+>>  	return false;
+>>  }
+>>
+>> +static void igc_insert_empty_packet(struct igc_ring *tx_ring)
+>> +{
+>> +	struct igc_tx_buffer *empty_info;
+>> +	struct sk_buff *empty;
+>> +	void *data;
+>> +
+>> +	empty_info =3D &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+>> +	empty =3D alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+>> +	if (!empty)
+>> +		return;
+>> +
+>> +	data =3D skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+>> +	memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+>> +
+>> +	igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+>> +
+>> +	if (igc_init_tx_empty_descriptor(tx_ring, empty, empty_info) < 0)
+>> +		dev_kfree_skb_any(empty);
+>> +}
+>> +
+>>  static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>>  				       struct igc_ring *tx_ring)
+>>  {
+>> @@ -1603,26 +1623,8 @@ static netdev_tx_t igc_xmit_frame_ring(struct
+>sk_buff *skb,
+>>  	skb->tstamp =3D ktime_set(0, 0);
+>>  	launch_time =3D igc_tx_launchtime(tx_ring, txtime, &first_flag,
+>&insert_empty);
+>>
+>> -	if (insert_empty) {
+>> -		struct igc_tx_buffer *empty_info;
+>> -		struct sk_buff *empty;
+>> -		void *data;
+>> -
+>> -		empty_info =3D &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+>> -		empty =3D alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+>> -		if (!empty)
+>> -			goto done;
+>
+>shouldn't this be 'goto drop' from day 1? pretty weird to silently ignore
+>allocation error.
+>
 
-Do me a favor and send a v2 that also fixes the function name.
+Hi Fijalkowski Maciej,
+
+Thanks for your comments.
+
+"insert an empty packet" is a launch time trick to send a packet in
+next Qbv cycle. The design is, the driver will still sending the
+packet, even the empty packet insertion trick is fail (unable to
+allocate). The intention of this patch set is to enable launch time
+on XDP zero-copy data path, so I try not to change the original
+behavior of launch time.
+
+btw, do you think driver should drop the packet if something went
+wrong with the launch time, like launch time offload not enabled,
+launch time over horizon, empty packet insertion fail, etc?
+If yes, then maybe i can submit another patch to change the behavior
+of launch time and we can continue to discuss there.
+
+>> -
+>> -		data =3D skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+>> -		memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+>> -
+>> -		igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+>> -
+>> -		if (igc_init_tx_empty_descriptor(tx_ring,
+>> -						 empty,
+>> -						 empty_info) < 0)
+>> -			dev_kfree_skb_any(empty);
+>
+>ditto
+>
+
+ditto
+
+>> -	}
+>> +	if (insert_empty)
+>> +		igc_insert_empty_packet(tx_ring);
+>>
+>>  done:
+>>  	/* record the location of the first descriptor for this packet */
+>> --
+>> 2.34.1
+>>
+
+Thanks & Regards
+Siang
 
