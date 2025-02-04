@@ -1,222 +1,176 @@
-Return-Path: <linux-kselftest+bounces-25659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3A5BA26FB3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EE9A4A27097
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:46:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 759071885316
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:00:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A08411884FB8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:46:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C2020B1EF;
-	Tue,  4 Feb 2025 10:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F006320C47E;
+	Tue,  4 Feb 2025 11:46:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KGDs7jNm"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SNCbNeYb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDE720AF9A;
-	Tue,  4 Feb 2025 10:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAC25CDF1;
+	Tue,  4 Feb 2025 11:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738666792; cv=none; b=atsd6lt97jAVfwZPKquX460AzH/E6uGiKgvz2xROSvN4JNYkQV+JQWC9rGjhxDlyqo9PPs9c1MJphNfNtoeKihSnMvrc3V8KK4bCuO0devsoW1XHdG4HoDKxBKLDIQdxsboLxuYVXZ1l3X338YuBJwVWzO0SD8xwGXbhjxQn+1Y=
+	t=1738669596; cv=none; b=C2n/wkZOpibi4tCyqh6GeFrjzXntBV6OZR4Um6YPh0UotxDxowtdfGZzxnxC4TPzOxWiWKXOeWE6AsnX1DjjgbWBIj6cnbwJZtqKsCl7ML9STEUFMW+n6EGMSrXxKFucI+AZF9K8oTz9OwJGtPRM6zqwBrN3X3T0sZWlBaOL8/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738666792; c=relaxed/simple;
-	bh=JNsr/7RBe3vPFw81J3RBQjyvUzlCjE+Og1IZuVfbHNY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OPxV15NqL9SuCcXyKBRbIlW/Vc0jjQlMmXZweFVKj4G8Q446Gr3jUMu8cZeJdUKFvoKrncRqS6FdTvRWYSpEFWhX0D57ubTWSjUYqt5zaEEAAKHJgOSKq4vvIGBfdOi4iwDerJAEaeNdfKbGVyD/HK0wbuGVTaNyO6tS/nuWrM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KGDs7jNm; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 51FC642CCD;
-	Tue,  4 Feb 2025 10:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738666787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1nrOiBu4WBrNhYnKgXb0/WmtNOK7mKrU0gfnoU2BLCs=;
-	b=KGDs7jNm5J9Ub3xYrY/kRAwo/dwfU5g5ueO4H2pMwubzqckuvPJf+gaH3EUliY7QVIMd8r
-	t5WdPsTFipFz+lOTbK1jRWA2mCM+BzZ70PwvFhO24HlURQJ8b2GAWGq0eYLuEvDzKBGffE
-	CjHb/8Ts5x9CJD/ggTsM+xYGZPQxgppUEsaJ9dBMEoMCqbvbGcvEEy5UoPr68MTuRB56Lz
-	A2UOnZyZzocAjD34Zn28FKdWcb3rAvOu0p5NwK5ikEmSwLb8XBQB9qN/U1nekpfVx4s2ip
-	7hHNHQv/n8i4RmLdXhIKd12KiaV7Mru3Y1pwrhwluO+bltN2eAeY7+6axPhmpQ==
-From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Tue, 04 Feb 2025 11:59:43 +0100
-Subject: [PATCH bpf-next] selftests/bpf: Remove with_addr.sh and
- with_tunnels.sh
+	s=arc-20240116; t=1738669596; c=relaxed/simple;
+	bh=xLOU8a08rHJUOj0tVOcrZH3clFkmrBhh7AUb9i9ZhA8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tWmLc8DXxeZnCL0ScQi87x+eQKqUIKEUi8sNzcNUpzKFfJaTHf1gtKGrgz+tALvAMdr51qsACEntiprpcJ4ZVRxhyP1FSeAVuLBX79ZE9LZj7Ws8UlXsjtAyq6dNira5x3pcO4oXYZE1salrT1OGoYKUs2bxYo0TdfRCtYE5JZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SNCbNeYb; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5143SEWH018231;
+	Tue, 4 Feb 2025 10:14:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Idrynv
+	jVwlKjx48J0Gstw5ntaCO7hXDwAHh6RgERaGw=; b=SNCbNeYb+aMI9mDHT5NSka
+	IQKNNz+ygSk11chKsfonnLQlMJzhwdZ0kFPZWoPIgwmyd6FpHTg4NvHeJzRnODUl
+	LwSftsrZ+hTMiCs9nfeWNqO2/ZzP9qDqct3LRy+JgaTR6boxlz6Qmp3gNVGBiHQw
+	W07jbrjBIps3q0zpR7ZLPrPoG07Po5xHCL67x9DWh7Jb9FEXqObEjTIfKHL5Ov8D
+	ejUymbxWv/1MBwojSxZ5GeXS3l5Q/tAh0zkXc53pL/Lanlk8yFMKCPB0PDCEK7xZ
+	bl/jWteTASwYrzzkdtq3MPJpRYKsFcIu1TUWHZbA5V5w9aSqifvSNE8gbT5eEWYg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44k0mtc95c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 10:14:09 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 514A3bse021956;
+	Tue, 4 Feb 2025 10:14:08 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44k0mtc95b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 10:14:08 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5148j8Gq024492;
+	Tue, 4 Feb 2025 10:14:08 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44hxxn2yb3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 10:14:08 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 514AE4NY41091450
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 4 Feb 2025 10:14:04 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 51F9C200B2;
+	Tue,  4 Feb 2025 10:14:04 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B0786200BE;
+	Tue,  4 Feb 2025 10:14:02 +0000 (GMT)
+Received: from [9.171.76.170] (unknown [9.171.76.170])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  4 Feb 2025 10:14:02 +0000 (GMT)
+Message-ID: <0d4bbaba-d05e-48d5-b248-6d915f8d4e18@linux.ibm.com>
+Date: Tue, 4 Feb 2025 11:14:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH][next] KVM: selftests: Fix spelling mistake "initally" ->
+ "initially"
+To: Colin Ian King <colin.i.king@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250204084855.289493-1-colin.i.king@gmail.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20250204084855.289493-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-with-v1-1-387a42118cd4@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAB/zoWcC/x3MQQqAIBBA0avErBNGJYquEi3UxpqNiUoF0t2Tl
- g8+v0KmxJRh7iokujjzGRpk34E7TNhJ8NYMCtWAUqO4uRxCT5MdlfHOOoSWxkSen3+zgI1eBHo
- KrO/7AUe4wwtgAAAA
-X-Change-ID: 20250130-with-388b72afcbc0
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Alexis Lothore <alexis.lothore@bootlin.com>, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpedfuegrshhtihgvnhcuvehurhhuthgthhgvthculdgvuefrhfcuhfhouhhnuggrthhiohhnmddfuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjeegffejjeegtdeggeehheejvdejiefhjeetgffggeeitdelueduieehfefgffelnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegsphhfsehvghgvr
- hdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehmhihkohhlrghlsehfsgdrtghomhdprhgtphhtthhopeihohhnghhhohhnghdrshhonhhgsehlihhnuhigrdguvghv
-X-GND-Sasl: bastien.curutchet@bootlin.com
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: em9XsPtbBNG-41cqUInX7h-bp2XNK59M
+X-Proofpoint-GUID: jBPwFMkCVtRvGZ9dwh-DSfg7odbrUG2j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-04_04,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ mlxlogscore=764 malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ clxscore=1011 priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
+ definitions=main-2502040080
 
-Those two scripts were used by test_flow_dissector.sh to setup/cleanup
-the network topology before/after the tests. test_flow_dissector.sh
-have been deleted by commit 63b37657c5fd ("selftests/bpf: remove
-test_flow_dissector.sh") so they aren't used anywhere now.
+On 2/4/25 9:48 AM, Colin Ian King wrote:
+> There is a spelling mistake in a literal string. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   tools/testing/selftests/kvm/s390/cmma_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390/cmma_test.c b/tools/testing/selftests/kvm/s390/cmma_test.c
+> index e32dd59703a0..7fbbe8b912b6 100644
+> --- a/tools/testing/selftests/kvm/s390/cmma_test.c
+> +++ b/tools/testing/selftests/kvm/s390/cmma_test.c
+> @@ -651,7 +651,7 @@ struct testdef {
+>   } testlist[] = {
+>   	{ "migration mode and dirty tracking", test_migration_mode },
+>   	{ "GET_CMMA_BITS: basic calls", test_get_cmma_basic },
+> -	{ "GET_CMMA_BITS: all pages are dirty initally", test_get_inital_dirty },
+> +	{ "GET_CMMA_BITS: all pages are dirty initially", test_get_inital_dirty },
 
-Remove the two unused scripts and their Makefile entries.
-
-Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
----
- tools/testing/selftests/bpf/Makefile        |  4 +--
- tools/testing/selftests/bpf/with_addr.sh    | 54 -----------------------------
- tools/testing/selftests/bpf/with_tunnels.sh | 36 -------------------
- 3 files changed, 2 insertions(+), 92 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6722080b2107a56c1500bab4d7b638f5bcde2a82..e9dfd96fa48c98a736c7b39356757b1b3680220a 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -117,8 +117,8 @@ TEST_PROGS := test_kmod.sh \
- 	test_xsk.sh \
- 	test_xdp_features.sh
- 
--TEST_PROGS_EXTENDED := with_addr.sh \
--	with_tunnels.sh ima_setup.sh verify_sig_setup.sh \
-+TEST_PROGS_EXTENDED := \
-+	ima_setup.sh verify_sig_setup.sh \
- 	test_xdp_vlan.sh test_bpftool.py
- 
- TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
-diff --git a/tools/testing/selftests/bpf/with_addr.sh b/tools/testing/selftests/bpf/with_addr.sh
-deleted file mode 100755
-index ffcd3953f94cf2301f0e5158d141ccb48b2fb1c0..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/with_addr.sh
-+++ /dev/null
-@@ -1,54 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--#
--# add private ipv4 and ipv6 addresses to loopback
--
--readonly V6_INNER='100::a/128'
--readonly V4_INNER='192.168.0.1/32'
--
--if getopts ":s" opt; then
--  readonly SIT_DEV_NAME='sixtofourtest0'
--  readonly V6_SIT='2::/64'
--  readonly V4_SIT='172.17.0.1/32'
--  shift
--fi
--
--fail() {
--  echo "error: $*" 1>&2
--  exit 1
--}
--
--setup() {
--  ip -6 addr add "${V6_INNER}" dev lo || fail 'failed to setup v6 address'
--  ip -4 addr add "${V4_INNER}" dev lo || fail 'failed to setup v4 address'
--
--  if [[ -n "${V6_SIT}" ]]; then
--    ip link add "${SIT_DEV_NAME}" type sit remote any local any \
--	    || fail 'failed to add sit'
--    ip link set dev "${SIT_DEV_NAME}" up \
--	    || fail 'failed to bring sit device up'
--    ip -6 addr add "${V6_SIT}" dev "${SIT_DEV_NAME}" \
--	    || fail 'failed to setup v6 SIT address'
--    ip -4 addr add "${V4_SIT}" dev "${SIT_DEV_NAME}" \
--	    || fail 'failed to setup v4 SIT address'
--  fi
--
--  sleep 2	# avoid race causing bind to fail
--}
--
--cleanup() {
--  if [[ -n "${V6_SIT}" ]]; then
--    ip -4 addr del "${V4_SIT}" dev "${SIT_DEV_NAME}"
--    ip -6 addr del "${V6_SIT}" dev "${SIT_DEV_NAME}"
--    ip link del "${SIT_DEV_NAME}"
--  fi
--
--  ip -4 addr del "${V4_INNER}" dev lo
--  ip -6 addr del "${V6_INNER}" dev lo
--}
--
--trap cleanup EXIT
--
--setup
--"$@"
--exit "$?"
-diff --git a/tools/testing/selftests/bpf/with_tunnels.sh b/tools/testing/selftests/bpf/with_tunnels.sh
-deleted file mode 100755
-index e24949ed3a20813e34bd69bdd634b0f32b7a26e9..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/with_tunnels.sh
-+++ /dev/null
-@@ -1,36 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--#
--# setup tunnels for flow dissection test
--
--readonly SUFFIX="test_$(mktemp -u XXXX)"
--CONFIG="remote 127.0.0.2 local 127.0.0.1 dev lo"
--
--setup() {
--  ip link add "ipip_${SUFFIX}" type ipip ${CONFIG}
--  ip link add "gre_${SUFFIX}" type gre ${CONFIG}
--  ip link add "sit_${SUFFIX}" type sit ${CONFIG}
--
--  echo "tunnels before test:"
--  ip tunnel show
--
--  ip link set "ipip_${SUFFIX}" up
--  ip link set "gre_${SUFFIX}" up
--  ip link set "sit_${SUFFIX}" up
--}
--
--
--cleanup() {
--  ip tunnel del "ipip_${SUFFIX}"
--  ip tunnel del "gre_${SUFFIX}"
--  ip tunnel del "sit_${SUFFIX}"
--
--  echo "tunnels after test:"
--  ip tunnel show
--}
--
--trap cleanup EXIT
--
--setup
--"$@"
--exit "$?"
-
----
-base-commit: ab4839cd3b4d65bffd574035a02568809c54a5b6
-change-id: 20250130-with-388b72afcbc0
-
-Best regards,
--- 
-Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
-
+Do me a favor and send a v2 that also fixes the function name.
 
