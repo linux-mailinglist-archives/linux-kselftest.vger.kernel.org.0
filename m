@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-25698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AEFA275E9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 16:33:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D53DA275EB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 16:33:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29A94162125
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 15:32:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 478C41887203
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 15:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE19F2135C3;
-	Tue,  4 Feb 2025 15:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496ED214200;
+	Tue,  4 Feb 2025 15:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7szBf3V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSxR2huE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B9D2C181;
-	Tue,  4 Feb 2025 15:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C78F2C181;
+	Tue,  4 Feb 2025 15:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738683172; cv=none; b=llOTJhqkQcV/ZxtJsbOXvxqfOEXWYE2ALvICofB0pCwAbgoHjCkjAlzlE5uL1qzL+vkrt7XNCAJoG+fA16/Z5BcQEj6OpdxMljP4sUdEqPnlND1YbiiVmiV8fQXRvOHSyS1WPmPCY6BuhKFIljBDuP7m9vjDeGiEwqPCQ/oZWmQ=
+	t=1738683183; cv=none; b=UgezgVxaHqrRjaVmdu5g0YmzX0Wp1UGKMWV4jPrXUaxF8fpY8RM4qaRw9nezOQ+633cbIn948M+6QT13PNfVERqNHDdU0XILSVw6YOLuMUo0ZPwbiddzG+IjCKs91KxQS7M23uX66FWq5+xJpMRjHiVAHQtMGTnYvM3/VaJSKyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738683172; c=relaxed/simple;
-	bh=t5Icv/egWFWC1O7kdkqXcuCy+zTPnRHYnBNIpbWlwKU=;
+	s=arc-20240116; t=1738683183; c=relaxed/simple;
+	bh=i/s0OB7Mhq9Pvk3J95cQX/PKqJmn/MkdkvjD21GLInA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VmT4CdEeJcDIQiDcnIeVFrsIosoRspLRh6qQ/37qjGVDjc/qHqlhnS2QgJOlNJYBLZ/35PSyw5jkm5zoETAYy5ktGIBUS3WzURMDKMmbUFsOmb7cPOfp7jKJisrtv62R/2HJbdu09tGQn+cTGsEcrC5ax8DNpQmM0AvcJ8aE2u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7szBf3V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F22C4CEDF;
-	Tue,  4 Feb 2025 15:32:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IvHFH0USPTnNaB/kz6r/kIa4470Un2OGlCATNVCMNt0xA+qEnfymNKW7cqmPHxOCteQhoYx6oLSC0UyUYpN1CCDmZ0436U4sOQFoBtnqC6j0VlgTh3uDwFLMdJnJK0aKNPBqdQ939u1h7Fx0u1trO6Jwcp4WHQXAdWxW9PENn2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSxR2huE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0B3C4CEDF;
+	Tue,  4 Feb 2025 15:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738683172;
-	bh=t5Icv/egWFWC1O7kdkqXcuCy+zTPnRHYnBNIpbWlwKU=;
+	s=k20201202; t=1738683182;
+	bh=i/s0OB7Mhq9Pvk3J95cQX/PKqJmn/MkdkvjD21GLInA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k7szBf3VutI8Zn4KWc/GABlxX69lW22g6d8O0pa33kon7yAq+iVf584YyNVKBl1fD
-	 aKvKukH3pOThyOn0pWjWKBGmhAv+F7oxGc/D4zBliZ6KKRTCZ8FA0KCZnGRuUNrum7
-	 x4X89ohiyoDzrS+9f9lzZqTy278LnbgW3GsRzCWI+cZXobOXg1bqyAYcv6yrk3FJbu
-	 RIm6V65RSqx8HRyz/yMVn9Zsws8eAXrbY/l5qE8NuQNXrcgwdKDTKJnXqBl1mSvy9Z
-	 /w5y8hPbtRp5M8C5EPbuRyAa6j1AWjni3f6DoSLI6JTJbxdjPOIjPwRB3T4l7mXDVY
-	 IMpWFMB2lS8ZQ==
-Date: Tue, 4 Feb 2025 07:32:49 -0800
+	b=LSxR2huED9E2ctHMruH8oWTPP7EKUkgFeaokj084LHJ1UQE/hpU35RTuKcsr+RDDH
+	 pmkOLCt7rm6ZBMURXZF2exeLH2hfoy1Gn9fvydDvh5o97H4iDlKqiHR351c8pnin4X
+	 MHgC+oukxPqs9ppuOdt0CSZhx5BLpFV+RqdB1Gp+QHZiZ+GmQq27M3oG633toRwthg
+	 H+PL2IXlLRSDkGo+PCC6rS6us3ExSC06tq8Cbdp8JpKdAMM0uqImZCt9FSy/SNM+Wy
+	 NlSDPtqZJ3BzVeR1Y/Q1p0ieZQ6WuUNeO+Fn95ayguKo7m/ZCahIFLX1OBRgQepsI2
+	 9eruOwcFMwBJQ==
+Date: Tue, 4 Feb 2025 07:32:59 -0800
 From: Kees Cook <kees@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
@@ -54,10 +54,10 @@ Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
 	Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH 03/16] elf, uapi: Add definition for DT_GNU_HASH
-Message-ID: <202502040732.5C39B05@keescook>
+Subject: Re: [PATCH 05/16] elf, uapi: Add type ElfXX_Versym
+Message-ID: <202502040732.E32F6C2@keescook>
 References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
- <20250203-parse_vdso-nolibc-v1-3-9cb6268d77be@linutronix.de>
+ <20250203-parse_vdso-nolibc-v1-5-9cb6268d77be@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,14 +67,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250203-parse_vdso-nolibc-v1-3-9cb6268d77be@linutronix.de>
+In-Reply-To: <20250203-parse_vdso-nolibc-v1-5-9cb6268d77be@linutronix.de>
 
-On Mon, Feb 03, 2025 at 10:05:04AM +0100, Thomas Weiﬂschuh wrote:
-> The definition is used by tools/testing/selftests/vDSO/parse_vdso.c.
+On Mon, Feb 03, 2025 at 10:05:06AM +0100, Thomas Weiﬂschuh wrote:
+> The types are used by tools/testing/selftests/vDSO/parse_vdso.c.
 > To be able to build the vDSO selftests without a libc dependency,
-> add the define to the kernels own UAPI headers.
+> add the types to the kernels own UAPI headers.
 > 
-> Link: https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/libc-ddefs.html
+> As documented by elf(5).
+> 
 > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 
 Reviewed-by: Kees Cook <kees@kernel.org>
