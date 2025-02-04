@@ -1,186 +1,149 @@
-Return-Path: <linux-kselftest+bounces-25720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF6B4A27A7E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 19:47:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 283B7A27ACD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 20:04:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A5023A1D26
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 18:47:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05A6B1884EB0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 19:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCA62185BC;
-	Tue,  4 Feb 2025 18:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC7A219A8E;
+	Tue,  4 Feb 2025 19:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rDWYIKMo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qm55WJ7V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925B61FBCB5
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 18:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD78216E19;
+	Tue,  4 Feb 2025 19:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738694854; cv=none; b=r+0WK+aAnC0htPUoS6dEjRE5ZgjQ0K8Xza71mc7sfe74mD/2Es764LbaTI1vLgWWaUyqF1nWIM5J9XY7c9ESP+SDqzxYpstejlp5tPWoOi3ExmqO1++8WoQktH4Us7Wb5hoR4gx/U5s36DJi1GzIzB+fPW7dt+8ZmZ2C56aTPrM=
+	t=1738695861; cv=none; b=auX9Xr00e/O6lHt6kQ7UhoNFsu6OybPxgpBbBb6Fr71DpPo2qxAm4ZznOjQMoLXru2d5/wgzvj8eGopcMsPRQZt1fUYjQHPCGGFifT6jMD5/31Sfj7Skc9ZG+BKaPcrct+HyfAuUMQiuXeIZWjKOyVlgYH+umKPfcCBkeqsaUoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738694854; c=relaxed/simple;
-	bh=v4IGltEbXVCP4a94OCouiBWhgi6qNWTf6k50EQqiHBU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HwPM5C5vtF+X0/2nuJpXDFpRQeiNAcRk2/Fq9qEJagRWhBu/e9ZPUkYc4/p9KpaW5/oTzpNkXL+6jA3695OkX3SX0my3ZqriMChbSTQTFVe1mQhsPIj268rZ8yoGm7OGylFDwT0gm4gsVAO02Nv3bRFsiwFWEflpLqg7xKz8IG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rDWYIKMo; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-219f6ca9a81so139825ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 10:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738694852; x=1739299652; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v4IGltEbXVCP4a94OCouiBWhgi6qNWTf6k50EQqiHBU=;
-        b=rDWYIKMoZCzlJCwCdBIMg3sLU7PfZEOkLIabj6tvxuxyoOxIRjVsGojF6ICqpim5Pq
-         gAMzEBrgeQ8RfwCtC5xqruDtllhCdZJP9rwTrk+izmTufLQ9ZHTDhU0PkljoXoLxlYrE
-         3zDm4SgkOi+gqeSxP+SLQV6hypjUxStvMWtc1v9CQeshj8Z4dk9v3AqJxwRl3q1ZdH/6
-         oO0wFSxwB0fSgp9ragfDcowwIu64Zc1uMM/a7/9t1DYVg+H1KheXwnX0N6vOJcX0LxXP
-         dDac/cHmuJap+PchRZhyC5TqsMFWvn6rV3PF+UHu4E5h30ObqDEzhmDNNVrJnhblFnfD
-         +RQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738694852; x=1739299652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v4IGltEbXVCP4a94OCouiBWhgi6qNWTf6k50EQqiHBU=;
-        b=Ttd3tGM6MvSED7bYFVlZ0diymFJQWjN2BbRzX8B6fMh3cPaVJQ43MSh728xz35XHSX
-         Bj+TqtL4sYDv+d+r0nGG9umO6d1oaxuph36VjE01UQ6dArfv7TaWwv9VoIITDBrFljoi
-         rle+vEfk8IIhf/0IBbv4mBR0o/oFwMguht3p+cJaQ0381QXx6++MrlukxKcvDVuQ5TaS
-         vkCFpR+PADbGqmBpYCRbkvT1ER2bQ59D2YIlqxGBZMoZglDC5Yyk+aqGnV3X3a6hFmcj
-         7o8ieT4aBu+sQhwOKFWD4ayOH4n1s6JRzpnTJmvLACNQti/Hcf6ZpAoqirxpdZzZnRor
-         /o6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUUVzKLEUU7POzRF5w//0bTnLLBR1Vui+6Am4fdDjC1tq3vv/vUxDamZCAIbhQOof3WkbelUAu/WiFehZrB3GU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8PXP3Yu4LMBpuCH3bsj4NtL3J4MZqVsmgSrOOpJOdRBIEbZZ9
-	KKPha1lzDxHqz9aN/MbptCNQmFI3/0M0Gy44BgYbedU0Kqv03yZA3IyPH/7xZilAHnQ3qr7Vqme
-	7VKikD7Ob+kU6V8bK7D38zJJfYH7AlCxOAZlM
-X-Gm-Gg: ASbGncuf0O2EKS5rz1r9015MFXH4EgEhV/lufHk6sPYXg9xUkie34LzQvPdjta+j0SR
-	HBaWjZ1D/ZJQuH5oyHyO/LIX2AdOZUWP9Y09vpp2IBvfnl/tBpIu+t++axnhS4CzC0iGAboaM
-X-Google-Smtp-Source: AGHT+IFJdXh8ck83n4rc4Do2Ogq6GGTLEe+osME5dG/SgCsLyieOBoQ0D2ALRntzLsFX8hi9y9QT4/yUf821Olkgy8I=
-X-Received: by 2002:a17:903:2a88:b0:20c:f40e:6ec3 with SMTP id
- d9443c01a7336-21f005bbe24mr3646635ad.22.1738694851632; Tue, 04 Feb 2025
- 10:47:31 -0800 (PST)
+	s=arc-20240116; t=1738695861; c=relaxed/simple;
+	bh=v8r4gg3IpnzC66jwjrXxr6aYUfmgZLy5LJ4cFgHuXWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufimIT3VUUQIrjmwRAP5ttDJCcKCey/XnGxlKmNKF9an6qSh2i+GDR3A8GlKrkyU7I4ubBCJ4NIe8zUeaa0uTVHWK5Dc7p/DFJ/uAeoe4ezE+xMBxhgMhGi1cLHKIW90OWOrTIIFk4lZomre968Nts1G1GITAWhQrb0wMMz5bUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qm55WJ7V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A038BC4CEE6;
+	Tue,  4 Feb 2025 19:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738695860;
+	bh=v8r4gg3IpnzC66jwjrXxr6aYUfmgZLy5LJ4cFgHuXWk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qm55WJ7V++ofH+9NdJIp2TUVPrgUBOq3LYr0DXa0rfxPMshEJdxIA1e6+0WNngOo6
+	 g0wvmw5eeQJyGSGZxqCw76SPDx2aEaYvrlfDdhRqVaIQrs37h09DmmdUHHfoUky1NE
+	 eyA+BL6k7iwn8iXkhIWfL8nQCgrqUR4a34o90tjkKmqHJbyYZLf9R/lNjTMl0K7jVR
+	 OoZtK/QrD7Pb3ftUogY/lomBj+fMekVJ/wvBTMc2xiuQe69zrLYHMFhV09OIlxNvmf
+	 NFVy+myPKj4Hh8ktc1Fk/Cup/FIQ4BSfTdzd17nViB1zBZ2b6r3EtZ84FQOj/xmJKg
+	 TNKfxMx0CGclg==
+Date: Tue, 4 Feb 2025 11:04:17 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
+	Linux Power Management <linux-pm@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
+Message-ID: <Z6JksXDRh8OSAh-u@google.com>
+References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
+ <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
+ <Z6JdwSsAk1xCiSrn@ghost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250203223916.1064540-1-almasrymina@google.com>
- <a97c4278-ea08-4693-a394-8654f1168fea@redhat.com> <CAHS8izNZrKVXSXxL3JG3BuZdho2OQZp=nhLuVCrLZjJD1R0EPg@mail.gmail.com>
- <Z6JXFRUobi-w73D0@mini-arch> <60550f27-ea6a-4165-8eaa-a730d02a5ddc@redhat.com>
-In-Reply-To: <60550f27-ea6a-4165-8eaa-a730d02a5ddc@redhat.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 4 Feb 2025 10:47:18 -0800
-X-Gm-Features: AWEUYZl2dMuyJ4mkkA_bd8Ob9-LshOFjdqNfCtl85nK7UgZnTkQrQ8j9xNndrX8
-Message-ID: <CAHS8izMkfQpUQQLAkyfn8=YkGS1MhPN4DXbxFM6jzCKLAVhM2A@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/6] Device memory TCP TX
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Stanislav Fomichev <stfomichev@gmail.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
-	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z6JdwSsAk1xCiSrn@ghost>
 
-On Tue, Feb 4, 2025 at 10:32=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On 2/4/25 7:06 PM, Stanislav Fomichev wrote:
-> > On 02/04, Mina Almasry wrote:
-> >> On Tue, Feb 4, 2025 at 4:32=E2=80=AFAM Paolo Abeni <pabeni@redhat.com>=
- wrote:
-> >>>
-> >>> On 2/3/25 11:39 PM, Mina Almasry wrote:
-> >>>> The TX path had been dropped from the Device Memory TCP patch series
-> >>>> post RFCv1 [1], to make that series slightly easier to review. This
-> >>>> series rebases the implementation of the TX path on top of the
-> >>>> net_iov/netmem framework agreed upon and merged. The motivation for
-> >>>> the feature is thoroughly described in the docs & cover letter of th=
-e
-> >>>> original proposal, so I don't repeat the lengthy descriptions here, =
-but
-> >>>> they are available in [1].
-> >>>>
-> >>>> Sending this series as RFC as the winder closure is immenient. I pla=
-n on
-> >>>> reposting as non-RFC once the tree re-opens, addressing any feedback
-> >>>> I receive in the meantime.
-> >>>
-> >>> I guess you should drop this paragraph.
-> >>>
-> >>>> Full outline on usage of the TX path is detailed in the documentatio=
-n
-> >>>> added in the first patch.
-> >>>>
-> >>>> Test example is available via the kselftest included in the series a=
-s well.
-> >>>>
-> >>>> The series is relatively small, as the TX path for this feature larg=
-ely
-> >>>> piggybacks on the existing MSG_ZEROCOPY implementation.
-> >>>
-> >>> It looks like no additional device level support is required. That is
-> >>> IMHO so good up to suspicious level :)
-> >>>
-> >>
-> >> It is correct no additional device level support is required. I don't
-> >> have any local changes to my driver to make this work. I think Stan
-> >> on-list was able to run the TX path (he commented on fixes to the test
-> >> but didn't say it doesn't work :D) and one other person was able to
-> >> run it offlist.
-> >
-> > For BRCM I had shared this: https://lore.kernel.org/netdev/ZxAfWHk3aRWl=
--F31@mini-arch/
-> > I have similar internal patch for mlx5 (will share after RX part gets
-> > in). I agree that it seems like gve_unmap_packet needs some work to be =
-more
-> > careful to not unmap NIOVs (if you were testing against gve).
->
-> What happen if an user try to use devmem TX on a device not really
-> supporting it? Silent data corruption?
->
+Hello,
 
-So the tx dma-buf binding netlink API will bind the dma-buf to the
-netdevice. If that fails, the uapi will return failure and devmem tx
-will not be enabled.
+On Tue, Feb 04, 2025 at 10:34:41AM -0800, Charlie Jenkins wrote:
+> On Tue, Feb 04, 2025 at 05:18:42PM +0000, Alexei Starovoitov wrote:
+> > On Tue, Feb 4, 2025 at 12:10 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
+> > >
+> > > The quiet infrastructure was moved out of Makefile.build to accomidate
+> > > the new syscall table generation scripts in perf. Syscall table
+> > > generation wanted to also be able to be quiet, so instead of again
+> > > copying the code to set the quiet variables, the code was moved into
+> > > Makefile.perf to be used globally. This was not the right solution. It
+> > > should have been moved even further upwards in the call chain.
+> > > Makefile.include is imported in many files so this seems like a proper
+> > > place to put it.
+> > >
+> > > To:
+> > >
+> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > > ---
+> > > Charlie Jenkins (2):
+> > >       tools: Unify top-level quiet infrastructure
+> > >       tools: Remove redundant quiet setup
+> > >
+> > >  tools/arch/arm64/tools/Makefile           |  6 -----
+> > >  tools/bpf/Makefile                        |  6 -----
+> > >  tools/bpf/bpftool/Documentation/Makefile  |  6 -----
+> > >  tools/bpf/bpftool/Makefile                |  6 -----
+> > >  tools/bpf/resolve_btfids/Makefile         |  2 --
+> > >  tools/bpf/runqslower/Makefile             |  5 +---
+> > >  tools/build/Makefile                      |  8 +-----
+> > >  tools/lib/bpf/Makefile                    | 13 ----------
+> > 
+> > Nack.
+> > libbpf and bpftool are synced independently to github
+> > and released from there.
+> > This change breaks it.
 
-If the dma-binding succeeds, then the device can indeed DMA into the
-dma-addrs in the device. The TX path will dma from the dma-addrs in
-the device just fine and it need not be aware that the dma-addrs are
-coming from a device and not from host memory.
+Sorry, I overlooked this part and merged a change that touched the
+common files into the perf tree.
 
-The only issue that Stan's patches is pointing to, is that the driver
-will likely be passing these dma-buf addresses into dma-mapping APIs
-like dma_unmap_*() and dma_sync_*() functions. Those, AFAIU, will be
-no-ops with dma-buf addresses in most setups, but it's not 100% safe
-to pass those dma-buf addresses to these dma-mapping APIs, so we
-should avoid these calls entirely.
+f2868b1a66d4f40f ("perf tools: Expose quiet/verbose variables in Makefile.perf")
 
-> Don't we need some way for the device to opt-in (or opt-out) and avoid
-> such issues?
->
+Unfortunately, it's already in v6.14-rc1.
 
-Yeah, I think likely the driver needs to declare support (i.e. it's
-not using dma-mapping API with dma-buf addresses).
+> 
+> Can you explain how it breaks it? Currently bpftool and resolve_btfids
+> don't build quietly so this was an attempt to fix that.
 
---
+So I think you will need something like this for v6.14.  Again, sorry
+about the trouble.
+
 Thanks,
-Mina
+Namhyung
+
 
