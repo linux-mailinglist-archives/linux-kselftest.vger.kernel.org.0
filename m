@@ -1,149 +1,165 @@
-Return-Path: <linux-kselftest+bounces-25721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 283B7A27ACD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 20:04:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6EB7A27AE9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 20:11:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05A6B1884EB0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 19:04:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F94716703A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 19:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CC7A219A8E;
-	Tue,  4 Feb 2025 19:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23066218ADB;
+	Tue,  4 Feb 2025 19:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qm55WJ7V"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="p2iNy5Wu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD78216E19;
-	Tue,  4 Feb 2025 19:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033221767A
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 19:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738695861; cv=none; b=auX9Xr00e/O6lHt6kQ7UhoNFsu6OybPxgpBbBb6Fr71DpPo2qxAm4ZznOjQMoLXru2d5/wgzvj8eGopcMsPRQZt1fUYjQHPCGGFifT6jMD5/31Sfj7Skc9ZG+BKaPcrct+HyfAuUMQiuXeIZWjKOyVlgYH+umKPfcCBkeqsaUoU=
+	t=1738696275; cv=none; b=Z/8azvfuU37Fq0onjlB/pjuK3kzfH0sBft1SFvZVy6PVLa+C1m6gz+MxhTd8COFSoBX2sPNSad+0clKnqeW5icikMqIRtKlwH6+IW6msrAtJyoSi8JY0/w2SzCt/nJ1Q3LucLJ7dbEwO09tfLMoVN6rQJrlgMh6WgiUix7VJ9dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738695861; c=relaxed/simple;
-	bh=v8r4gg3IpnzC66jwjrXxr6aYUfmgZLy5LJ4cFgHuXWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufimIT3VUUQIrjmwRAP5ttDJCcKCey/XnGxlKmNKF9an6qSh2i+GDR3A8GlKrkyU7I4ubBCJ4NIe8zUeaa0uTVHWK5Dc7p/DFJ/uAeoe4ezE+xMBxhgMhGi1cLHKIW90OWOrTIIFk4lZomre968Nts1G1GITAWhQrb0wMMz5bUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qm55WJ7V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A038BC4CEE6;
-	Tue,  4 Feb 2025 19:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738695860;
-	bh=v8r4gg3IpnzC66jwjrXxr6aYUfmgZLy5LJ4cFgHuXWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qm55WJ7V++ofH+9NdJIp2TUVPrgUBOq3LYr0DXa0rfxPMshEJdxIA1e6+0WNngOo6
-	 g0wvmw5eeQJyGSGZxqCw76SPDx2aEaYvrlfDdhRqVaIQrs37h09DmmdUHHfoUky1NE
-	 eyA+BL6k7iwn8iXkhIWfL8nQCgrqUR4a34o90tjkKmqHJbyYZLf9R/lNjTMl0K7jVR
-	 OoZtK/QrD7Pb3ftUogY/lomBj+fMekVJ/wvBTMc2xiuQe69zrLYHMFhV09OIlxNvmf
-	 NFVy+myPKj4Hh8ktc1Fk/Cup/FIQ4BSfTdzd17nViB1zBZ2b6r3EtZ84FQOj/xmJKg
-	 TNKfxMx0CGclg==
-Date: Tue, 4 Feb 2025 11:04:17 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	s=arc-20240116; t=1738696275; c=relaxed/simple;
+	bh=0fuYrIsqllSYzLcHkJwRY4bJmN7f0RR3V+7BnwkqZU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NryboiJz0Bw5TXPEvc1K0qekeh2+3+BQ3bhfse2BgNwwJSrpcRFwOu2UrHGdGdZE6+K0R3GYxkmQJln1jXDGNl2KLQmCeGSf+0FCb04axBswttvlvom0N4mxDDcWszw0ezWURVX3MDL2Xr1rzs/X6Oig8FALdVFU95L5krktSpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=p2iNy5Wu; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2166651f752so21100425ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 11:11:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1738696273; x=1739301073; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f6v2PFnPWGVlwpnR5q4crYxZDb82PXI2M6sV6qpxfa4=;
+        b=p2iNy5WuLXL7dHihh847affEbdk5jw/XsmMqHzVKEeg58Taq2ilrheA+kep6UOex1C
+         3fzqB7rMwZs820NvP1WwDqN9HeD5/3ExVn3TUh9mHjae6bMXvoE8CorbfPt+FYD2RHB+
+         cFnL4nkHXDUb/ThnD9Uh/NUBUQB+sKeWPLwKw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738696273; x=1739301073;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f6v2PFnPWGVlwpnR5q4crYxZDb82PXI2M6sV6qpxfa4=;
+        b=YWN8nU7CkH7/2vbXbIv3J5jchcFPduEkrjkIcVkkPGj/fGVtn8KxH97+Fg+I2rGDuA
+         VDdoqUGfJRfCD6fNLIUDx+WY6zGKKJm6fOGBLtLWr5jvzKaD6mAsn9/ANNQPJ1CVxNSi
+         TqTJFiPd+CTk5cZq244Saf0W884P42+iS4D6NDnR3bkfVX0Fr62tX7kveE66Z5FntRjP
+         EjIzupfXohhh+Wo+hoyXphWSStV/GAtmdM/K/GjY3A6XLPUAOYtB7CEB9HBt4mFK+GqH
+         SHSL0G4gwasnpkjr+6Ao37613A8iISJ+BrfO9sjjZMujwadeM/x3pXaMmSDwqBaFFaM1
+         agKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqC0nfASDb1dXUTj03cWohFoxWrrr0yEB7NCYDn25i/SOX3jO1Air/5IV12qdak5pMOoS79lGC1SdBcAlltgo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB3ta7ELE2sUBTlYB4obygN+pn2mjY23gAJ29yi33kfNJfPBJO
+	H/MExpoQHBmbblnhkgLDXLORwLFqAPLWBZGaCVpmRY4W0orZIJvFertlKH9VvkU=
+X-Gm-Gg: ASbGnctDi0K+eOCsKj1R+1BkDwspVEhF1jq6wSSdUHlE9HYp1PpBBHndkPMUnXC5ZGb
+	x6PesxSMrKAt8EdKJ2ly2bDckaBVjQZJO/NQAXysgpxUzFRVRrHoQWRcj+0CTf+4m8fGEanuAPH
+	Wt5QYJTll1F/ReK2ddPdXQW33i6mUSSWnQh2URATdrU5lv1lxAgPw7JWwDWWYvuRtLuJ1C97Unr
+	vlgb52k2zFcA3rRkRk6RcbevhcyiYEIKmmbHFBvGKUmYfF2K8ZfnGLqMAOJMWZCSzuL/GCVgv40
+	SvuLR2tcL3NdFhNkH8o2ILY=
+X-Google-Smtp-Source: AGHT+IHanqXpzFtreEkBCacmTKic/+ySduWwGEttNxARnmGyeReqSJRYRr1Lcw0ZgAN2NJKjdJwsaA==
+X-Received: by 2002:a17:902:e747:b0:219:cdf1:a0b8 with SMTP id d9443c01a7336-21dd7d7ccaamr366849085ad.30.1738696272708;
+        Tue, 04 Feb 2025 11:11:12 -0800 (PST)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de32ea5f1sm100749785ad.130.2025.02.04.11.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2025 11:11:12 -0800 (PST)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: kuba@kernel.org,
+	Joe Damato <jdamato@fastly.com>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_)),
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Jurgens <danielj@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
-Message-ID: <Z6JksXDRh8OSAh-u@google.com>
-References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
- <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
- <Z6JdwSsAk1xCiSrn@ghost>
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Mina Almasry <almasrymina@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 0/2] netdevgenl: Add an xsk attribute to queues
+Date: Tue,  4 Feb 2025 19:10:46 +0000
+Message-ID: <20250204191108.161046-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z6JdwSsAk1xCiSrn@ghost>
 
-Hello,
+Greetings:
 
-On Tue, Feb 04, 2025 at 10:34:41AM -0800, Charlie Jenkins wrote:
-> On Tue, Feb 04, 2025 at 05:18:42PM +0000, Alexei Starovoitov wrote:
-> > On Tue, Feb 4, 2025 at 12:10 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> > >
-> > > The quiet infrastructure was moved out of Makefile.build to accomidate
-> > > the new syscall table generation scripts in perf. Syscall table
-> > > generation wanted to also be able to be quiet, so instead of again
-> > > copying the code to set the quiet variables, the code was moved into
-> > > Makefile.perf to be used globally. This was not the right solution. It
-> > > should have been moved even further upwards in the call chain.
-> > > Makefile.include is imported in many files so this seems like a proper
-> > > place to put it.
-> > >
-> > > To:
-> > >
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > ---
-> > > Charlie Jenkins (2):
-> > >       tools: Unify top-level quiet infrastructure
-> > >       tools: Remove redundant quiet setup
-> > >
-> > >  tools/arch/arm64/tools/Makefile           |  6 -----
-> > >  tools/bpf/Makefile                        |  6 -----
-> > >  tools/bpf/bpftool/Documentation/Makefile  |  6 -----
-> > >  tools/bpf/bpftool/Makefile                |  6 -----
-> > >  tools/bpf/resolve_btfids/Makefile         |  2 --
-> > >  tools/bpf/runqslower/Makefile             |  5 +---
-> > >  tools/build/Makefile                      |  8 +-----
-> > >  tools/lib/bpf/Makefile                    | 13 ----------
-> > 
-> > Nack.
-> > libbpf and bpftool are synced independently to github
-> > and released from there.
-> > This change breaks it.
+Welcome to v3. No functional changes, see changelog below.
 
-Sorry, I overlooked this part and merged a change that touched the
-common files into the perf tree.
+This is an attempt to followup on something Jakub asked me about [1],
+adding an xsk attribute to queues and more clearly documenting which
+queues are linked to NAPIs...
 
-f2868b1a66d4f40f ("perf tools: Expose quiet/verbose variables in Makefile.perf")
+After the RFC [2], Jakub suggested creating an empty nest for queues
+which have a pool, so I've adjusted this version to work that way.
 
-Unfortunately, it's already in v6.14-rc1.
+The nest can be extended in the future to express attributes about XSK
+as needed. Queues which are not used for AF_XDP do not have the xsk
+attribute present.
 
-> 
-> Can you explain how it breaks it? Currently bpftool and resolve_btfids
-> don't build quietly so this was an attempt to fix that.
+I've run the included test on:
+  - my mlx5 machine (via NETIF=)
+  - without setting NETIF
 
-So I think you will need something like this for v6.14.  Again, sorry
-about the trouble.
+And the test seems to pass in both cases.
 
 Thanks,
-Namhyung
+Joe
+
+[1]: https://lore.kernel.org/netdev/20250113143109.60afa59a@kernel.org/
+[2]: https://lore.kernel.org/netdev/20250129172431.65773-1-jdamato@fastly.com/
+
+v3:
+  - Change comment format in patch 2 to avoid kdoc warnings. No other
+    changes.
+
+v2: https://lore.kernel.org/all/20250203185828.19334-1-jdamato@fastly.com/
+  - Switched from RFC to actual submission now that net-next is open
+  - Adjusted patch 1 to include an empty nest as suggested by Jakub
+  - Adjusted patch 2 to update the test based on changes to patch 1, and
+    to incorporate some Python feedback from Jakub :)
+
+rfc: https://lore.kernel.org/netdev/20250129172431.65773-1-jdamato@fastly.com/
+
+Joe Damato (2):
+  netdev-genl: Add an XSK attribute to queues
+  selftests: drv-net: Test queue xsk attribute
+
+ Documentation/netlink/specs/netdev.yaml       | 13 ++-
+ include/uapi/linux/netdev.h                   |  6 ++
+ net/core/netdev-genl.c                        | 11 +++
+ tools/include/uapi/linux/netdev.h             |  6 ++
+ .../testing/selftests/drivers/net/.gitignore  |  2 +
+ tools/testing/selftests/drivers/net/Makefile  |  3 +
+ tools/testing/selftests/drivers/net/queues.py | 35 +++++++-
+ .../selftests/drivers/net/xdp_helper.c        | 89 +++++++++++++++++++
+ 8 files changed, 162 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/.gitignore
+ create mode 100644 tools/testing/selftests/drivers/net/xdp_helper.c
+
+
+base-commit: c2933b2befe25309f4c5cfbea0ca80909735fd76
+-- 
+2.43.0
 
 
