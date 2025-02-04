@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-25640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29624A26A1B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 03:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2492FA26A21
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 03:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDD291885EEF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:42:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B86F91883AAE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:43:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E193613E02D;
-	Tue,  4 Feb 2025 02:42:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8021422DD;
+	Tue,  4 Feb 2025 02:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CUz7AUxy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R8SdpOd9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB84179BD;
-	Tue,  4 Feb 2025 02:42:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C1486321;
+	Tue,  4 Feb 2025 02:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738636960; cv=none; b=SaJ6rH5Spy7WCNKkkFrFok6D2DLESMqPLcwKQZZXCBoQ4v/MRvhlYARpWUVM4MQ3Okj43ckmftqezgBU0fOYNP/VLVKu1WvdfaS8twhKp731I3U/+opD08936KVAeL8WSj37YdXoFg3ogtWeVe/Dn68fxGVUPDPTylC/6GAr3/M=
+	t=1738637027; cv=none; b=lqzC1LYqEFAanDD4CAX5UwtuwovaEOjIjKvQ714RzF2UEPzIfzK9OWn5YBX+TAEHxrQVreOwo6Vd6xwVY/796DxmSrUvVIPwm4o6K5KsSXfEBUJhe+GEhZNDASUQ76QoNcZajocj80YG13/SZqquJnWCNTz8H8USuqnHMT6uXTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738636960; c=relaxed/simple;
-	bh=192aj1QJsPyGtAMkRPhiiiupVd6SXNH3StPpurpmAIo=;
+	s=arc-20240116; t=1738637027; c=relaxed/simple;
+	bh=D/yelYXMu8Tmrswd3iQdp89T2paRJBLUtNsp9zw6A+I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NJi73Rzdvu66y50e9NpMrLzAd8rUrT4wolPNTDZttygXpG+o2HgsD5gv38hhw2WkcjRS6usipVZMhLoO8lKiz9uASCRF3KNs84oQLKwSoB4QDf+1b5kCvPIpjQ3TQlUHnHa0p7yJb7aJpnTUNKbgRYv6Y0nDCV/rQysS2MhpAmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CUz7AUxy; arc=none smtp.client-ip=192.198.163.10
+	 In-Reply-To:Content-Type; b=GW0o3wIWymKerdhvgQnOgFcrWy9/da4Rtq07gBoM2zq/x1ax0z85AGDEqV0NlP3X5YX12szJlb4/1gdJ2DcFnlCZaLOYjuxwVK2HcMgw0lm/J0A3gT4ZG+a0Ky33W9KC70xta7SCsbJcFplaR5aoQe4MlxTWxZDwPQbA3jdYlME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R8SdpOd9; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738636959; x=1770172959;
+  t=1738637026; x=1770173026;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=192aj1QJsPyGtAMkRPhiiiupVd6SXNH3StPpurpmAIo=;
-  b=CUz7AUxyvo+hz+6dXm+UfXIJDV4141D5LUFGcCPvrV2JtdSwHzCfoqg2
-   3aipezKWVU8xhO2K9Q4Qcm5jHtMQ/BsGOrntygGt5GW9B1H8QKYDP0tQZ
-   kGEGG4rdmVrQK+H9tFBLMYoDJhVijjmSCpUPeWI1SxoORSNPOvp94/kD1
-   PxF9ZWc1npKJ84LIiSxI+J9Ft2i9DJ2DyhfjLN2UM+HGwoRwWzc11JhOq
-   B1tHr7OtCREEKTgoKwzAhvozXS9zltSxgt3o5FXBYFGZt5KL53tXXl8EY
-   v4Eu5CAnybWuIJgTkst4+V2CKO8TX/VC/uFjNuA8E/+Orb50FnI4y1hXc
-   Q==;
-X-CSE-ConnectionGUID: pmTCF2+cTOyHvAepcbTjhw==
-X-CSE-MsgGUID: x/zZL4pORVyPg4atGXm7Jw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50564140"
+  bh=D/yelYXMu8Tmrswd3iQdp89T2paRJBLUtNsp9zw6A+I=;
+  b=R8SdpOd9vQLsx6fgxG2iC2C32/aAaoV5CEYsGSE0i4EKCKBBkCuFY/Yk
+   mZBy27deHPtqzUImgORpgM3pJsd53/9VmVNlWSpBQAPTYvY23NTanbOUP
+   DXQbYSrrmRDuc/nI6GqErPBflE2ORAeqrQ48kJF2Cd8WUjsJP97xHrDq/
+   cQ/ySQ9wWHm49XueBYZ+HB6Yl2S6gF6YBDuYrtu6y84C/RqqtMMAnpcF/
+   VT2sG/1Q0hFwg6VPS4aqlpFYWgtx05tCUvrw9cpkOtFvOAYSyyo43Nojl
+   2AVwP+karK16iIEYupdSny3gKFJzwWK+TQyHBnVgaYGcUX2HG+BD6mNs5
+   A==;
+X-CSE-ConnectionGUID: wC2o1vPDSQm4zhcvM/xCbg==
+X-CSE-MsgGUID: k13NXhh/S+OAWmE9r4EAVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="39248897"
 X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="50564140"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 18:42:37 -0800
-X-CSE-ConnectionGUID: k5pMJs/eS1KFJUS51BcEEw==
-X-CSE-MsgGUID: LsDoyXyXTwW06yE4uEzP3A==
+   d="scan'208";a="39248897"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 18:43:45 -0800
+X-CSE-ConnectionGUID: eirV3W6ATT2+I2tIcic76g==
+X-CSE-MsgGUID: MlLHdLEVQYS5RAbSPTokFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,257,1732608000"; 
-   d="scan'208";a="111051867"
+   d="scan'208";a="115488420"
 Received: from mohdfai2-mobl.gar.corp.intel.com (HELO [10.247.89.75]) ([10.247.89.75])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 18:42:26 -0800
-Message-ID: <a374fa88-433e-4fc9-a63c-fa56f619abd0@linux.intel.com>
-Date: Tue, 4 Feb 2025 10:42:13 +0800
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 18:43:33 -0800
+Message-ID: <42fc5e78-ce8a-45fa-95dc-adf25d0d76d7@linux.intel.com>
+Date: Tue, 4 Feb 2025 10:43:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 4/5] igc: Refactor empty packet insertion into
- a reusable function
+Subject: Re: [PATCH bpf-next v7 5/5] igc: Add launch time support to XDP ZC
 To: Song Yoong Siang <yoong.siang.song@intel.com>,
  "David S . Miller" <davem@davemloft.net>, Eric Dumazet
  <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -104,89 +103,165 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
  xdp-hints@xdp-project.net
 References: <20250204004907.789330-1-yoong.siang.song@intel.com>
- <20250204004907.789330-5-yoong.siang.song@intel.com>
+ <20250204004907.789330-6-yoong.siang.song@intel.com>
 Content-Language: en-US
 From: "Abdul Rahim, Faizal" <faizal.abdul.rahim@linux.intel.com>
-In-Reply-To: <20250204004907.789330-5-yoong.siang.song@intel.com>
+In-Reply-To: <20250204004907.789330-6-yoong.siang.song@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 4/2/2025 8:49 am, Song Yoong Siang wrote:
-> Refactor the code for inserting an empty packet into a new function
-> igc_insert_empty_packet(). This change extracts the logic for inserting
-> an empty packet from igc_xmit_frame_ring() into a separate function,
-> allowing it to be reused in future implementations, such as the XDP
-> zero copy transmit function.
+> Enable Launch Time Control (LTC) support for XDP zero copy via XDP Tx
+> metadata framework.
 > 
-> This patch introduces no functional changes.
+> This patch has been tested with tools/testing/selftests/bpf/xdp_hw_metadata
+> on Intel I225-LM Ethernet controller. Below are the test steps and result.
+> 
+> Test 1: Send a single packet with the launch time set to 1 s in the future.
+> 
+> Test steps:
+> 1. On the DUT, start the xdp_hw_metadata selftest application:
+>     $ sudo ./xdp_hw_metadata enp2s0 -l 1000000000 -L 1
+> 
+> 2. On the Link Partner, send a UDP packet with VLAN priority 1 to port 9091
+>     of the DUT.
+> 
+> Result:
+> When the launch time is set to 1 s in the future, the delta between the
+> launch time and the transmit hardware timestamp is 0.016 us, as shown in
+> printout of the xdp_hw_metadata application below.
+>    0x562ff5dc8880: rx_desc[4]->addr=84110 addr=84110 comp_addr=84110 EoP
+>    rx_hash: 0xE343384 with RSS type:0x1
+>    HW RX-time:   1734578015467548904 (sec:1734578015.4675)
+>                  delta to User RX-time sec:0.0002 (183.103 usec)
+>    XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
+>                   delta to User RX-time sec:0.0001 (80.309 usec)
+>    No rx_vlan_tci or rx_vlan_proto, err=-95
+>    0x562ff5dc8880: ping-pong with csum=561c (want c7dd)
+>                    csum_start=34 csum_offset=6
+>    HW RX-time:   1734578015467548904 (sec:1734578015.4675)
+>                  delta to HW Launch-time sec:1.0000 (1000000.000 usec)
+>    0x562ff5dc8880: complete tx idx=4 addr=4018
+>    HW Launch-time:   1734578016467548904 (sec:1734578016.4675)
+>                      delta to HW TX-complete-time sec:0.0000 (0.016 usec)
+>    HW TX-complete-time:   1734578016467548920 (sec:1734578016.4675)
+>                           delta to User TX-complete-time sec:0.0000
+>                           (32.546 usec)
+>    XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
+>                   delta to User TX-complete-time sec:0.9999
+>                   (999929.768 usec)
+>    HW RX-time:   1734578015467548904 (sec:1734578015.4675)
+>                  delta to HW TX-complete-time sec:1.0000 (1000000.016 usec)
+>    0x562ff5dc8880: complete rx idx=132 addr=84110
+> 
+> Test 2: Send 1000 packets with a 10 ms interval and the launch time set to
+>          500 us in the future.
+> 
+> Test steps:
+> 1. On the DUT, start the xdp_hw_metadata selftest application:
+>     $ sudo chrt -f 99 ./xdp_hw_metadata enp2s0 -l 500000 -L 1 > \
+>       /dev/shm/result.log
+> 
+> 2. On the Link Partner, send 1000 UDP packets with a 10 ms interval and
+>     VLAN priority 1 to port 9091 of the DUT.
+> 
+> Result:
+> When the launch time is set to 500 us in the future, the average delta
+> between the launch time and the transmit hardware timestamp is 0.016 us,
+> as shown in the analysis of /dev/shm/result.log below. The XDP launch time
+> works correctly in sending 1000 packets continuously.
+>    Min delta: 0.005 us
+>    Avr delta: 0.016 us
+>    Max delta: 0.031 us
+>    Total packets forwarded: 1000
 > 
 > Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 > ---
->   drivers/net/ethernet/intel/igc/igc_main.c | 42 ++++++++++++-----------
->   1 file changed, 22 insertions(+), 20 deletions(-)
+>   drivers/net/ethernet/intel/igc/igc_main.c | 42 +++++++++++++++++++++--
+>   1 file changed, 40 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index 56a35d58e7a6..c3edd8bcf633 100644
+> index c3edd8bcf633..535d340c71c9 100644
 > --- a/drivers/net/ethernet/intel/igc/igc_main.c
 > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -1566,6 +1566,26 @@ static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *s
->   	return false;
+> @@ -2951,9 +2951,33 @@ static u64 igc_xsk_fill_timestamp(void *_priv)
+>   	return *(u64 *)_priv;
 >   }
 >   
-> +static void igc_insert_empty_packet(struct igc_ring *tx_ring)
+> +static void igc_xsk_request_launch_time(u64 launch_time, void *_priv)
 > +{
-> +	struct igc_tx_buffer *empty_info;
-> +	struct sk_buff *empty;
-> +	void *data;
+> +	struct igc_metadata_request *meta_req = _priv;
+> +	struct igc_ring *tx_ring = meta_req->tx_ring;
+> +	__le32 launch_time_offset;
+> +	bool insert_empty = false;
+> +	bool first_flag = false;
 > +
-> +	empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
-> +	empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
-> +	if (!empty)
+> +	if (!tx_ring->launchtime_enable)
 > +		return;
 > +
-> +	data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
-> +	memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> +	launch_time_offset = igc_tx_launchtime(tx_ring,
+> +					       ns_to_ktime(launch_time),
+> +					       &first_flag, &insert_empty);
+> +	if (insert_empty) {
+> +		igc_insert_empty_packet(tx_ring);
+> +		meta_req->tx_buffer =
+> +			&tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> +	}
 > +
-> +	igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
-> +
-> +	if (igc_init_tx_empty_descriptor(tx_ring, empty, empty_info) < 0)
-> +		dev_kfree_skb_any(empty);
+> +	igc_tx_ctxtdesc(tx_ring, launch_time_offset, first_flag, 0, 0, 0);
 > +}
 > +
->   static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
->   				       struct igc_ring *tx_ring)
->   {
-> @@ -1603,26 +1623,8 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
->   	skb->tstamp = ktime_set(0, 0);
->   	launch_time = igc_tx_launchtime(tx_ring, txtime, &first_flag, &insert_empty);
+>   const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
+>   	.tmo_request_timestamp		= igc_xsk_request_timestamp,
+>   	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
+> +	.tmo_request_launch_time	= igc_xsk_request_launch_time,
+>   };
 >   
-> -	if (insert_empty) {
-> -		struct igc_tx_buffer *empty_info;
-> -		struct sk_buff *empty;
-> -		void *data;
-> -
-> -		empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
-> -		empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
-> -		if (!empty)
-> -			goto done;
-> -
-> -		data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
-> -		memset(data, 0, IGC_EMPTY_FRAME_SIZE);
-> -
-> -		igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
-> -
-> -		if (igc_init_tx_empty_descriptor(tx_ring,
-> -						 empty,
-> -						 empty_info) < 0)
-> -			dev_kfree_skb_any(empty);
-> -	}
-> +	if (insert_empty)
-> +		igc_insert_empty_packet(tx_ring);
+>   static void igc_xdp_xmit_zc(struct igc_ring *ring)
+> @@ -2976,7 +3000,13 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>   	ntu = ring->next_to_use;
+>   	budget = igc_desc_unused(ring);
 >   
->   done:
->   	/* record the location of the first descriptor for this packet */
+> -	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
+> +	/* Packets with launch time require one data descriptor and one context
+> +	 * descriptor. When the launch time falls into the next Qbv cycle, we
+> +	 * may need to insert an empty packet, which requires two more
+> +	 * descriptors. Therefore, to be safe, we always ensure we have at least
+> +	 * 4 descriptors available.
+> +	 */
+> +	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget >= 4) {
+>   		struct igc_metadata_request meta_req;
+>   		struct xsk_tx_metadata *meta = NULL;
+>   		struct igc_tx_buffer *bi;
+> @@ -3000,6 +3030,12 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>   		xsk_tx_metadata_request(meta, &igc_xsk_tx_metadata_ops,
+>   					&meta_req);
+>   
+> +		/* xsk_tx_metadata_request() may have updated next_to_use */
+> +		ntu = ring->next_to_use;
+> +
+> +		/* xsk_tx_metadata_request() may have updated Tx buffer info */
+> +		bi = meta_req.tx_buffer;
+> +
+>   		tx_desc = IGC_TX_DESC(ring, ntu);
+>   		tx_desc->read.cmd_type_len = cpu_to_le32(meta_req.cmd_type);
+>   		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
+> @@ -3017,9 +3053,11 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>   		ntu++;
+>   		if (ntu == ring->count)
+>   			ntu = 0;
+> +
+> +		ring->next_to_use = ntu;
+> +		budget = igc_desc_unused(ring);
+>   	}
+>   
+> -	ring->next_to_use = ntu;
+>   	if (tx_desc) {
+>   		igc_flush_tx_descriptors(ring);
+>   		xsk_tx_release(pool);
 
 Reviewed-by: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>
+
 
