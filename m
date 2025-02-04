@@ -1,66 +1,67 @@
-Return-Path: <linux-kselftest+bounces-25668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 361B1A2706B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:37:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D7CA27072
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B319C16806E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:37:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A11A18893F0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 231F7211A20;
-	Tue,  4 Feb 2025 11:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10246212B17;
+	Tue,  4 Feb 2025 11:35:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA512116E6;
-	Tue,  4 Feb 2025 11:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FBD211A31;
+	Tue,  4 Feb 2025 11:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738668944; cv=none; b=OggXWqpB3sRJX4tZtvhCUNealpe6JwEg1LRtKXABJuEHgMBE+bBsJYNNI3+rhIZGzzLV3gQKpGgP33EBobu3+ZdmpFY8dgQynePg7UGB6dynpLAmwQOSjZGvYtkoN/QOhap/Oa4ghcNeZBcO83qUaR1bIqdb6ftP0Fw/qPr0Ei8=
+	t=1738668948; cv=none; b=R2QxxnreBGVTKjXQPJjx0WGwvgastTbG1Hs2jVVEtkrrg+Q01B7WWTXvD8KAzf7v+2XZRatH86PlXrf9V4uGcpHzPehR6j+7yBLfqNAPdp5PN5EGz4bZ4JmR7dSqq33oFCppCjOFkr8+YYDn1P/b2kbcCS1dHyhJoRboJ0qQAcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738668944; c=relaxed/simple;
-	bh=EWk2ay0albPWO0VUzwfvd3FuxFeaTYfwca4yspDY4GM=;
+	s=arc-20240116; t=1738668948; c=relaxed/simple;
+	bh=2pUaLVwLHOwxMYDPKEmqQLY0Bgk29Kn0tTJ8gIKafis=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=chaB9axV5lKc+kQVQXY8RayviNYdWZRCyIyqfM4Gb5UzGNPSJMyc3D8fuBIEMYz3ofTI5TV+x0CLXHcdOq/LOk+pA2uIrIfYDgDSdbrrIT6Hy4GLLTmK7Bna/fM9JL8WncRnO7/Y/H7yZyj+4WTY/K+HNfdgbxCCb+kXig/q12c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
+	 In-Reply-To:To:Cc; b=RrCeVChsvKzOBjWv6Kp3ZlRwyNIJilv8Q3WEhq79CxEiSSBCYyFXz4ydhic3Ldgfia6YJ9OuVEXVQFe1LdWn1Lx0CxqXS90H0GFJNrQD0s630HKqf8szpH/dx6XJX6+iD4ebRsI9pVqhJZnWaSEo9Z8N1biq+nT+66IyXfTVP8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ab68a4ab074so674149466b.0;
-        Tue, 04 Feb 2025 03:35:41 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab70043cd05so847517166b.0;
+        Tue, 04 Feb 2025 03:35:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738668940; x=1739273740;
+        d=1e100.net; s=20230601; t=1738668941; x=1739273741;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+4lbmitZAUWzZsnieUUQwDFzsIag16/ARHCo65YqC7k=;
-        b=rPbOHSfTAHpzCG/QCDgBl7AJTnT2FBMlQ0jVBz+DjsLGy+RGbeYtv/JWpHFaTtVMPf
-         dVEeqjaCRFrqznC98o6ehdS0pBMmzCXBDMKSZLe9bG3MO4b60qG3QbXKDQh/+I9jm1t8
-         LpFBspUCtRCxWACqUvaHH5VCaUaaGi2BD3scVBhMxgZD0T1TwHD6xkmzgO2oaaUFcv9b
-         Fj8XK6covQLUYjyBsbcyQph2GZc1/3HhiqYaKWBMsZMxgnlmFgsTAcOVZAe8TE3b0UNV
-         RGSGBuPzfp3WA7892Q/gOHX/u1DmH1en7RiynU8Z5znkT5ao/J4eB9FRyJ1BmQOKqiSw
-         FSTg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRqELExogmYSNk2RKWIZ3q+ryATjCMnfyYFrWX2FB8GNPempVzOf1vtdYP5WWqqwEdXtbLEb0fRoWS2U/rbFil@vger.kernel.org, AJvYcCVtHgK1ZNCbC7/VnqO8qkIYQy8MKlClNLXrqo6nYvyrgGF+J/uP/K7RKE9f76wty+4omFfNTaYGzlM=@vger.kernel.org, AJvYcCW33LCbsnjqMbpcepOuHB3Lj2xRtMWkSDxa7svlsrwQO0WTIrv/eCcMsNfs5t/rb7aSgk5UzC1tfoX6pbE5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKvln51nv6WEJkHCh460GyD8bglzcnZG3yu+Y0R73SdO+LJUmh
-	swVp9e624rHZoENOxpQycsyD6goqQjM3BnWalnmQ7TZn5NPvuzoWpEPIgg==
-X-Gm-Gg: ASbGncvsBCR/FI16yCl/PdfSUk1o6Ku8IpLlxmA16epxMT1qzs2c2Z915WxIP0lQu0j
-	5oeQa/3wKQugkct2lz+X5jAjgZm9Q3YGUW23MbkyoCNoe4Ao8B/aRzZm3wdd+4wczG4vQ8jo4Pd
-	nPrfKfUsZZYFeIPRsrfRiamo9O8ME5Bd73fSAox1uRseX0w/bnoOMiSN6pj2jsL3AHDbIcbjbOE
-	RSI1XFKuUchatAd9Jn0T2n9eE+CfJ9yeUfjzSbwNxD3mkgVTAwX+B0EzE9YDQqeKUBax5J9BmUe
-	o6odI20=
-X-Google-Smtp-Source: AGHT+IHDbQ1+cLNBPQxoOFBV+3VXprx5YVL2fhuMmRdRdGknXrBharEkYL7xW71lznoSIMEG3h/FIg==
-X-Received: by 2002:a05:6402:5285:b0:5dc:a463:ab96 with SMTP id 4fb4d7f45d1cf-5dca463abf6mr23965091a12.19.1738668939633;
-        Tue, 04 Feb 2025 03:35:39 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:72::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc724a9c76sm9357917a12.53.2025.02.04.03.35.38
+        bh=8PPqcIXQzYEFsqNlbLKuHZEq4XrZtJwQTMEp1c3me10=;
+        b=NrNTyVXTMMz/Z4on3YxpLZdDHnlvK5egX9Fix244TFZ44itUygaXJmR9KgpmmEXSd6
+         uZ1fy8Dl4GFSzALhP6Ji550SqNP2ZgzouiFqhXwyiRShY4j6/k7wSDE//CTe3y2E+V6p
+         J/RLgrdkWWrVT1gPkw0kb9dlwo02NAybjcHlbb4WGr4NEg7lrPTAGMHzt+LEdGLrVJ66
+         ubFm/yR2H0yhdZi0R5oKtgdTZU7qvJVoYYTSMQYz2i84tsned5NJyUz6VcrnJ2aRWi6F
+         K7IBXhbIyf7jgVec0912flzxaVHgpOJj4UA5KMAV9NbmP5Z515bxzcUHtb0nygVRqluL
+         E1tw==
+X-Forwarded-Encrypted: i=1; AJvYcCUaBmveCwcrTzh2dDGw6IvKUItUQsbjyh8OT3eIVfRwkMyFN8p8XWvFoyn4lFpV+zobqbfq9FvcxLluPOuN@vger.kernel.org, AJvYcCX371YXP+y5XqKoCyrIu7b4cf3nqown3Pxut580OH77jraCIpLbNbZuNgGN/sd4Hv4K4YI5alz6Zrs+IyyzCvFg@vger.kernel.org, AJvYcCXuAjz/nz9nBaDUlhDFyzd4u5ZY4Q91/ehhZ67IJrEIO8jiQLBMEefVnFYp2wK2kFizd7MbS6empDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCBYXeCbRMPcZfMZx/pNE3EghEJJsJzbh8YZyIdhA0/rMOnPXc
+	vkdaQV+hm27MvInZQ5n5ed02UX6+gJM6JSmBhTMuLfiGJLqLvwJY7i3prA==
+X-Gm-Gg: ASbGncs649lptlPxVtPU9mncbEEtpukOMnqSQrEXiFIqQYoRhIrNvtlAh7GZsrq+pvu
+	vCNFJDR5UPp7NYKpbqVLRy0s/NFaXH8uaP4MprEPDcGB2/IfmxdCd7Bu1/t+LVFuOgsYXN8/zqH
+	/r5zWDutNtwJlfoKIqLStS716ZQ4YUEamTEGpPlrtXhdGqj745abzmvUM5Q4apF88k7AjlxvY77
+	JtDL8IVITgoisy/hNcoq3cFZa3vaLBqDfC0hQOmlp2ujqvSsx+r/5BGQPlOJAZQkxbj5L623+J3
+	USKXhcs=
+X-Google-Smtp-Source: AGHT+IHCyfaueKIUNYUPir9gO/xg7NSDPC0F+tsupVOVvkWrV6oAN6co9B3Ale6w9VUTWBCuMyZH6w==
+X-Received: by 2002:a17:907:7255:b0:ab7:e71:adb5 with SMTP id a640c23a62f3a-ab70e71b1bcmr1353777066b.35.1738668941218;
+        Tue, 04 Feb 2025 03:35:41 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:70::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab71166a8e0sm545657466b.158.2025.02.04.03.35.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 03:35:39 -0800 (PST)
+        Tue, 04 Feb 2025 03:35:40 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Date: Tue, 04 Feb 2025 03:35:15 -0800
-Subject: [PATCH net-next v4 7/8] netconsole: selftest: test for sysdata CPU
+Date: Tue, 04 Feb 2025 03:35:16 -0800
+Subject: [PATCH net-next v4 8/8] netconsole: docs: Add documentation for
+ CPU number auto-population
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-netcon_cpu-v4-7-9480266ef556@debian.org>
+Message-Id: <20250204-netcon_cpu-v4-8-9480266ef556@debian.org>
 References: <20250204-netcon_cpu-v4-0-9480266ef556@debian.org>
 In-Reply-To: <20250204-netcon_cpu-v4-0-9480266ef556@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -82,253 +83,103 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  rdunlap@infradead.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7712; i=leitao@debian.org;
- h=from:subject:message-id; bh=EWk2ay0albPWO0VUzwfvd3FuxFeaTYfwca4yspDY4GM=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnoft+jBqVcviLLuFniqVgH0ydldvphC8ymZkQf
- kEj8f4wAPaJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ6H7fgAKCRA1o5Of/Hh3
- bbU/D/9kiqFvmq3sVhypIhxv22X21ABBavGODyL5+5dgDYzrbbvt10XDPxjxayWScPsFzgayh0e
- kW5JSgVfoyAJ0gBFClzHRZR/yUSs+IoZHDpQpF6IEhSepI55YCpJzIgkZsKTQXW3AA98gcYJxPg
- G+NOk6eNNmSo5oGh1uY7TWMhoHdDO4rDO11ymjVU84+eB8IEPboTNYMqganY5o94tZDH+of5wwQ
- EX9aPtVLAZcB1BaxzOVIm+Q9J+E4IWPUmmKAwsLTEyHiXOcffdQm6oaz/jdhDOUFLAcxC4Fx4jI
- ICAUm4JW0ozRK25g3lNgFDfYmnxammbVqJj/8B0YGVkdrxHCirIdlksgD8ocCmQb+RdQS4UJciQ
- MwfiPwe7Cxn8DrokW5sfS56bL+IFVcDb76VNwPTikKEtHEpAfDjT4uWm95yDfat2KDNmfhf1FXb
- 4ATsBGGyCDhEl5m5JBH7/uvL4AsDd0PiKGDzLvp764j8WWcRmD/prTCs/6wrVJPM2XRuAB+3XxX
- LKrvm81YLZHGbUN+Ra/9PYqh3j/4fHSjGtcukqnuSav3UQVtyoMmXHwQLHsU+ADQphAOMHFqCzQ
- VVZ63PPsmnmJZ9K+z6/hhYbl3m2rqXMljb1WrG+t6TS9ey2Ts18qZ+p0Hy6de6TaZM9ZsaCeqbR
- 7lMhTTfNm3PMYvw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3164; i=leitao@debian.org;
+ h=from:subject:message-id; bh=2pUaLVwLHOwxMYDPKEmqQLY0Bgk29Kn0tTJ8gIKafis=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnoft+8Sx5tY+XOi3a1CcmSvKXupO1Hflji0JvP
+ kGtZ1lphD+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ6H7fgAKCRA1o5Of/Hh3
+ bQ4nEACZUwIqUq8eeC7HBNxcADsyp9IxDLdVgHJp1/faFHA5nEda5PJE2Rgxf2enEQTh7yr49x3
+ Y8CW7ZSk4uK8NFjVVmnWAvBOFe9FVLvP7SWswe5cU5yvBMuMAZZEsBZ6ZbwPDHv1PZylN/QQvMZ
+ /nEyieCeWDFOBV0YVmX7gXPxkdjh1BWrxkIcevek/fb7K4WdWMI3bSMhVsnbaiPFKdgw9OUuxr8
+ MbC0ooUwRUGUmorSCNbCF7EMbSvmqSb9RJQh+pdmEatxP0kY2NKfjZ54+Y7Gnqlu8VBALieepKq
+ 1OSFUAKrJQpRlv4BcSzEXghk7Eh1hxaoBw0RlvBeguyiK8GUev+cnsokATcwdr7QBCkUhibYpM/
+ gSd1+mU/55+P8r2HiZ3JWyVIsp7F1Z7xAji2keN+uqySeMFi3WfpZkwzQlQ4cZ7EgS7X+E+uTil
+ UcE26rjnDjIuMivbikAcIXNKAC9N3nZuUWONSLtrkhniHYDCf1rtDdpCRXQouqvIWD/ZaDJN5Xe
+ mbHBDf7p4kHLg1lmpiNxDhsQzExojGkuBJU+0sdVa7Zn0sEWb6dtJTI7U5s3lSnrl+ONmqJ4jUf
+ 4HzSSbmvwhRIxk5RuQNnXgd74sT5ms6rc0voDB3eZnMdr3eJs/hgVgOMH+1k2vd27ETGGUTJkb/
+ ItbN1bm9VVncpVw==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Add a new selftest to verify that the netconsole module correctly
-handles CPU runtime data in sysdata. The test validates three scenarios:
+Update the netconsole documentation to explain the new feature that
+allows automatic population of the CPU number.
 
-1. Basic CPU sysdata functionality - verifies that cpu=X is appended to
-   messages
-2. CPU sysdata with userdata - ensures CPU data works alongside userdata
-3. Disabled CPU sysdata - confirms no CPU data is included when disabled
+The key changes include introducing a new section titled "CPU number
+auto population in userdata", explaining how to enable the CPU number
+auto-population feature by writing to the "populate_cpu_nr" file in the
+netconsole configfs hierarchy.
 
-The test uses taskset to control which CPU sends messages and verifies
-the reported CPU matches the one used. This helps ensure that netconsole
-accurately tracks and reports the originating CPU of messages.
+This documentation update ensures users are aware of the new CPU number
+auto-population functionality and how to leverage it for better
+demultiplexing and visibility of parallel netconsole output.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Simon Horman <horms@kernel.org>
 ---
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  17 +++
- .../selftests/drivers/net/netcons_sysdata.sh       | 167 +++++++++++++++++++++
- 3 files changed, 185 insertions(+)
+ Documentation/networking/netconsole.rst | 45 +++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index c7f1c443f2af091aa13f67dd1df9ae05d7a43f40..28b6d47f812dd23dfed89599b6edb020671f8242 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -9,6 +9,7 @@ TEST_PROGS := \
- 	netcons_basic.sh \
- 	netcons_fragmented_msg.sh \
- 	netcons_overflow.sh \
-+	netcons_sysdata.sh \
- 	ping.py \
- 	queues.py \
- 	stats.py \
-diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-index 0c262b123fdd3082c40b2bd899ec626d223226ed..3c96b022954db9e21216950b1c13431c313ed4b5 100644
---- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-+++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-@@ -230,3 +230,20 @@ function check_for_dependencies() {
- 		exit "${ksft_skip}"
- 	fi
- }
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index 94c4680fdf3e7e1a0020d11b44547acfd68072a5..84803c59968a3237012fab821f432eb531aba45c 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -17,6 +17,8 @@ Release prepend support by Breno Leitao <leitao@debian.org>, Jul 7 2023
+ 
+ Userdata append support by Matthew Wood <thepacketgeek@gmail.com>, Jan 22 2024
+ 
++Sysdata append support by Breno Leitao <leitao@debian.org>, Jan 15 2025
 +
-+function check_for_taskset() {
-+	if ! which taskset > /dev/null ; then
-+		echo "SKIP: taskset(1) is not available" >&2
-+		exit "${ksft_skip}"
-+	fi
-+}
+ Please send bug reports to Matt Mackall <mpm@selenic.com>
+ Satyam Sharma <satyam.sharma@gmail.com>, and Cong Wang <xiyou.wangcong@gmail.com>
+ 
+@@ -238,6 +240,49 @@ Delete `userdata` entries with `rmdir`::
+ 
+    It is recommended to not write user data values with newlines.
+ 
++CPU number auto population in userdata
++--------------------------------------
 +
-+# This is necessary if running multiple tests in a row
-+function pkill_socat() {
-+	PROCESS_NAME="socat UDP-LISTEN:6666,fork ${OUTPUT_FILE}"
-+	# socat runs under timeout(1), kill it if it is still alive
-+	# do not fail if socat doesn't exist anymore
-+	set +e
-+	pkill -f "${PROCESS_NAME}"
-+	set -e
-+}
-diff --git a/tools/testing/selftests/drivers/net/netcons_sysdata.sh b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..2b78fd1f5982fee81b379bf9ac6f64a38d915974
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-@@ -0,0 +1,167 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
++Inside the netconsole configfs hierarchy, there is a file called
++`cpu_nr` under the `userdata` directory. This file is used to enable or disable
++the automatic CPU number population feature. This feature automatically
++populates the CPU number that is sending the message.
 +
-+# A test that makes sure that sysdata runtime CPU data is properly set
-+# when a message is sent.
-+#
-+# There are 3 different tests, every time sent using a random CPU.
-+#  - Test #1
-+#    * Only enable cpu_nr sysdata feature.
-+#  - Test #2
-+#    * Keep cpu_nr sysdata feature enable and enable userdata.
-+#  - Test #3
-+#    * keep userdata enabled, and disable sysdata cpu_nr feature.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
++To enable the CPU number auto-population::
 +
-+set -euo pipefail
++  echo 1 > /sys/kernel/config/netconsole/target1/userdata/cpu_nr
 +
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++When this option is enabled, the netconsole messages will include an additional
++line in the userdata field with the format `cpu=<cpu_number>`. This allows the
++receiver of the netconsole messages to easily differentiate and demultiplex
++messages originating from different CPUs, which is particularly useful when
++dealing with parallel log output.
 +
-+source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
++Example::
 +
-+# Enable the sysdata cpu_nr feature
-+function set_cpu_nr() {
-+	if [[ ! -f "${NETCONS_PATH}/userdata/cpu_nr_enabled" ]]
-+	then
-+		echo "Populate CPU configfs path not available in ${NETCONS_PATH}/userdata/cpu_nr_enabled" >&2
-+		exit "${ksft_skip}"
-+	fi
++  echo "This is a message" > /dev/kmsg
++  12,607,22085407756,-;This is a message
++   cpu=42
 +
-+	echo 1 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
-+}
++In this example, the message was sent by CPU 42.
 +
-+# Disable the sysdata cpu_nr feature
-+function unset_cpu_nr() {
-+	echo 0 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
-+}
++.. note::
 +
-+# Test if MSG content and `cpu=${CPU}` exists in OUTPUT_FILE
-+function validate_sysdata_cpu_exists() {
-+	# OUTPUT_FILE will contain something like:
-+	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
-+	#  userdatakey=userdatavalue
-+	#  cpu=X
++   If the user has set a conflicting `cpu` key in the userdata dictionary,
++   both keys will be reported, with the kernel-populated entry appearing after
++   the user one. For example::
 +
-+	if [ ! -f "$OUTPUT_FILE" ]; then
-+		echo "FAIL: File was not generated." >&2
-+		exit "${ksft_fail}"
-+	fi
++     # User-defined CPU entry
++     mkdir -p /sys/kernel/config/netconsole/target1/userdata/cpu
++     echo "1" > /sys/kernel/config/netconsole/target1/userdata/cpu/value
 +
-+	if ! grep -q "${MSG}" "${OUTPUT_FILE}"; then
-+		echo "FAIL: ${MSG} not found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
++   Output might look like::
 +
-+	# Check if cpu=XX exists in the file and matches the one used
-+	# in taskset(1)
-+	if ! grep -q "cpu=${CPU}\+" "${OUTPUT_FILE}"; then
-+		echo "FAIL: 'cpu=${CPU}' not found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
++     12,607,22085407756,-;This is a message
++      cpu=1
++      cpu=42    # kernel-populated value
 +
-+	rm "${OUTPUT_FILE}"
-+	pkill_socat
-+}
 +
-+# Test if MSG content exists in OUTPUT_FILE but no `cpu=` string
-+function validate_sysdata_no_cpu() {
-+	if [ ! -f "$OUTPUT_FILE" ]; then
-+		echo "FAIL: File was not generated." >&2
-+		exit "${ksft_fail}"
-+	fi
-+
-+	if ! grep -q "${MSG}" "${OUTPUT_FILE}"; then
-+		echo "FAIL: ${MSG} not found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+
-+	if grep -q "cpu=" "${OUTPUT_FILE}"; then
-+		echo "FAIL: 'cpu=  found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+
-+	rm "${OUTPUT_FILE}"
-+}
-+
-+# Start socat, send the message and wait for the file to show up in the file
-+# system
-+function runtest {
-+	# Listen for netconsole port inside the namespace and destination
-+	# interface
-+	listen_port_and_save_to "${OUTPUT_FILE}" &
-+	# Wait for socat to start and listen to the port.
-+	wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
-+	# Send the message
-+	taskset -c "${CPU}" echo "${MSG}: ${TARGET}" > /dev/kmsg
-+	# Wait until socat saves the file to disk
-+	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+}
-+
-+# ========== #
-+# Start here #
-+# ========== #
-+
-+modprobe netdevsim 2> /dev/null || true
-+modprobe netconsole 2> /dev/null || true
-+
-+# Check for basic system dependency and exit if not found
-+check_for_dependencies
-+# This test also depends on taskset(1). Check for it before starting the test
-+check_for_taskset
-+
-+# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
-+echo "6 5" > /proc/sys/kernel/printk
-+# Remove the namespace, interfaces and netconsole target on exit
-+trap cleanup EXIT
-+# Create one namespace and two interfaces
-+set_network
-+# Create a dynamic target for netconsole
-+create_dynamic_target
-+
-+#====================================================
-+# TEST #1
-+# Send message from a random CPU
-+#====================================================
-+# Random CPU in the system
-+CPU=$((RANDOM % $(nproc)))
-+OUTPUT_FILE="/tmp/${TARGET}_1"
-+MSG="Test #1 from CPU${CPU}"
-+# Enable the auto population of cpu_nr
-+set_cpu_nr
-+runtest
-+# Make sure the message was received in the dst part
-+# and exit
-+validate_sysdata_cpu_exists
-+
-+#====================================================
-+# TEST #2
-+# This test now adds userdata together with sysdata
-+# ===================================================
-+# Get a new random CPU
-+CPU=$((RANDOM % $(nproc)))
-+OUTPUT_FILE="/tmp/${TARGET}_2"
-+MSG="Test #2 from CPU${CPU}"
-+set_user_data
-+runtest
-+validate_sysdata_cpu_exists
-+
-+# ===================================================
-+# TEST #3
-+# Unset cpu_nr, so, no CPU should be appended.
-+# userdata is still set
-+# ===================================================
-+CPU=$((RANDOM % $(nproc)))
-+OUTPUT_FILE="/tmp/${TARGET}_3"
-+MSG="Test #3 from CPU${CPU}"
-+# Enable the auto population of cpu_nr
-+unset_cpu_nr
-+runtest
-+# At this time, cpu= shouldn't be present in the msg
-+validate_sysdata_no_cpu
-+
-+exit "${ksft_pass}"
+ Extended console:
+ =================
+ 
 
 -- 
 2.43.5
