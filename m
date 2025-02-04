@@ -1,85 +1,85 @@
-Return-Path: <linux-kselftest+bounces-25730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3D67A27B2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 20:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0327BA27B31
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 20:27:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0D641885C73
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 19:26:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF4041886250
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 19:27:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65E2D219E93;
-	Tue,  4 Feb 2025 19:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5D9219A74;
+	Tue,  4 Feb 2025 19:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiDZNAxv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGWF5ej1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C56F218E81;
-	Tue,  4 Feb 2025 19:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB2521A428;
+	Tue,  4 Feb 2025 19:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738697180; cv=none; b=aktbnGzqO5tdQoLS+u0LrSUxF3tmP6IWxzPKn44BBzYnpzUyNkjsONwvJwAVOVzgDXByiMWC1WDUre9G6B2ES+ad9lrnK/m02jsWWMujSnBGt0P1NBhOKAIY8m1AWAceOmFFBtARBMvBtFgTbYGnM8Mh72zPkZBVH9IIO4GcUYo=
+	t=1738697188; cv=none; b=q/cFUw8R/HA/Y98SORxJ0+55X/Tv+E+LxByRrov6TdW6KHIMHPFXvoLq5NePVQ41ThnydDQktShkl7aaGyjDWwg6DxQ7cIYaeT2cL4Vg8hwWtn2dip+/BTY9yfDFnJ/KtrtgDwFko24UQxSKqoTG2eURwE0+jJWoCiyl/NPJ34M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738697180; c=relaxed/simple;
-	bh=saAIpbAsu/Wc8lx8hl0YEdg90qsTRfW9gpRyYmr3XS0=;
+	s=arc-20240116; t=1738697188; c=relaxed/simple;
+	bh=Mx3hbDuVU/Oq/hXock6V5okR5J2QW8+fGP5nWq506Jg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gTfOHU8VtyAmf4txBOx0N0MKEmBQ/yBovAFfGLfBYRKuBtMTg+73urbSgJpPXZdgjKcaZcCFsDLqjyBDB7xp6KVV3K6v3A9N9dMXeGlNCYEkCSItwP/7dd02qZO9LL9ksAmN2eZEBiWMW+CpFom2pA1n8U6ZBkX5u0oTyFADcjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RiDZNAxv; arc=none smtp.client-ip=209.85.167.54
+	 To:Cc:Content-Type; b=M3pTj+Cc6ZAUjhy/u1nHI82VpGGoBpDC7Qn0xjHgwSC/ScOhc/DPr3Tphik6Hn6SFvFT+QbuuuTITA7Ck6/iznzVXbYMmTo/2jiT2Xy1EjyrfYMQC74ySGlWpqZPGePiwd++sUUWIs4eppnTi9jF/JO6V7JjfoDHxC4uYVOJ8q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGWF5ej1; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53ff1f7caaeso5913060e87.0;
-        Tue, 04 Feb 2025 11:26:18 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-53f757134cdso6217931e87.2;
+        Tue, 04 Feb 2025 11:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738697176; x=1739301976; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738697185; x=1739301985; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=saAIpbAsu/Wc8lx8hl0YEdg90qsTRfW9gpRyYmr3XS0=;
-        b=RiDZNAxv/M+YPYmJXsKEIMtu0NkXQwxydi8eLxY+FVwOMESDLWqzZVppHYPqk9P77K
-         r9mzlCCByk4ja0arPkMxubbZQAUg7L6inTtTnhbslnMG9aJoC4uIhfP/t4Js1s9/SP1s
-         5P0qu25LbEbH9dBjrOqKxRaJJUxHRozeStvLrq4+wPArvbvpv8/NHdyZRG/kBuIXTAmu
-         DzoWU9Xw2Zhw+ZG5i3HRDoETTjw3M+liq5sEbMRpnpMhwepk0CZYMV2EvjyBt++5BcT8
-         p4OEyHID0rI0W7OjKiMu2pWZiBXC0oAqyce/GYMw9lDIbthGADhs5E9fdagromfXfkEE
-         RkBg==
+        bh=Mx3hbDuVU/Oq/hXock6V5okR5J2QW8+fGP5nWq506Jg=;
+        b=MGWF5ej1JhNGg7hHDmXprwecOwXDCcWjwqdRKNbtQOElYpF7rwYH0PCkpgaWAXa/xS
+         Ns6asFHrtCFMfcR5FbaDCw184XY5ZBccJAIpqVqltCYwHD87eUV8u1n1wJG1PL5zta8e
+         zeEvQPqyOP0OREGKSv1QMLPFtk5h4BOb10/ChsVkKF6v+TpITQVHDxfTbyuRCJrXIOU7
+         B2np0DQX+KJRck0R+C1jUKnzgvKmFu3ZmBBP8G8PQ7EqKjaHOF/sBh2M3MwOPqNbhAFy
+         9+Ks05FIQ8iZZErI2aoAqJ3Ub5aGwosgoYQz2rtcgo+ZuX6K3McxRomyJ9jshBUdNcxv
+         4P5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738697176; x=1739301976;
+        d=1e100.net; s=20230601; t=1738697185; x=1739301985;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=saAIpbAsu/Wc8lx8hl0YEdg90qsTRfW9gpRyYmr3XS0=;
-        b=QSCwRY5HX3ZS01JnwohIJfJeotEkdQhjGn/+/0/RawWLOlCEwnH9f5BQMfF0I/XZXK
-         t66LKYVfGHak6rcrLCcAHEsxWbZNQ0KZDq84PWra/LdJsYvw+OviZuZpliQs3pDASsk5
-         /fqZW5/euTE30LNlFcmYrJZP6DBnwBCfux6Pu+GmNeKxOgKL27bOgeO7P96/5402Mx75
-         onVs6BLWyeFowiYDcGZ/l/iPRuEaDhI6YN5t91fD1XlkWChbezK6NQJRnKNGVAnLgBGT
-         1kZ47Z63t89UVrAybmlZ6dXlfxZ/380bE7XR1pxufm5DDW3czO0/oqxH4ofirMyNKt8w
-         H0Wg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBNV9youQfKZLIU4jSw2vf6sayvvMpo1AVbmagNZxTnkBcAhn3uUHEN8zTV5OZ13FWMt8QmW9/uV3hQVFta6E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyylHK2EbqdC0ruDhLPcMq/V0krrKKZaadctcPy2cKqsKoWJsrf
-	BSJXo/axBMzy/2JPDXU4j9w5UkccjYEZ2xU2kuT+K8GxNiPTf9kP0rDBIvGnk2xrQsdO1/syyne
-	Qk8JzhMMinmCJwk4s1BI+XU3c9zg=
-X-Gm-Gg: ASbGncuUQrAMt57d+kBRJdiFAFkT3RpQDUsCEBrxQdEea6vCC7LSI9rCmp2f2nRlnho
-	R3WvRSFfQJ4daPkFDMi8mezS1ynwVksnX8+3wKBWGTjC/p9KqWdbHBNxyH7jtrGv6yZbxBVSuxE
-	XyggP3TqVkldA+
-X-Google-Smtp-Source: AGHT+IH/jyBO650WyRiRa5yc/6CFRzsLFBSLHzgUK9YTGVKcm6KX6vbvefNxtgcyPzi2jaewwS2zuUrvWnwse2+RQ5U=
-X-Received: by 2002:a05:6512:2389:b0:543:baa3:87a9 with SMTP id
- 2adb3069b0e04-543e4c3ffb9mr10318265e87.49.1738697176472; Tue, 04 Feb 2025
- 11:26:16 -0800 (PST)
+        bh=Mx3hbDuVU/Oq/hXock6V5okR5J2QW8+fGP5nWq506Jg=;
+        b=f6+ReesQB0xifiEvMmqGKbB+6x2JP4fSajbJOl5VmFWK5DaKUC5fZqoMicVw6h6hXG
+         edoQ1olC9n3pnLVZXsEHSYR6bNNeXlIjgpCVZjdNnOe6z11cBe4EMTa+gDcpJjmo1Re8
+         QbvXs2pk4RPU2I/IJHwljElus53VNZzF/mtGoYqOocJv1EfsOgNTfHQpIHOUcSF27p/H
+         13hWiG9y000gaY7kVKajtLondP83PlGSnzJpLG0Ke0ECajIkm4ji7KjNfOkDiuM7ZLo5
+         hXb5gQz5u4aLWXeI9z8W/f0QF2Wv77WBGzHSm48roSoKSuXTD0xT5GBK2Ss4/IesL7Ma
+         xTmA==
+X-Forwarded-Encrypted: i=1; AJvYcCWQBGzzJGg9tKdI6ffh6pf5xjLQoGIH9HTomB4rOR+jKzY1h8kBhHfb5DH6pukkUJxXCH+BPzlt1TW7mJ+SZJc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFCkDcU4bRVVT/ARxRLwbPKWfs7NqC/00P6vhY1Ns5ku/M4Gnl
+	MRn3a8nUAcQgnQifeS51kXbXxvRl1eZiGyFXFaKpV65xEfDjqc64oOvgrduQhshY/GCr2evznG/
+	haZFd/8e7U7NWZEGA3GtWC2ozR8E=
+X-Gm-Gg: ASbGncsQVo/qCDkTSkXF1vACCKeh3kSRKto4BZ1ZXd8ihCGKMf1yotl6eJBAh64hFw2
+	Y31HT7/6G+WEtR0n4BDI+4PvayyV7pZZc+4wd9iVL4KBbRQVNEWjLx+cE/aFyxGWBZ6JgfFDlbT
+	8LdZGWHZc7+7N+
+X-Google-Smtp-Source: AGHT+IHy/Aav1ZcSGXFYUnjSQPf6N0iBo35VUrLXaA45h5UWqhhGIVeWQ0F9N4WItXT1yoiu7oknFPS05J4fkl45lro=
+X-Received: by 2002:a2e:a99a:0:b0:300:3a15:8f0d with SMTP id
+ 38308e7fff4ca-307cf388ce9mr786581fa.34.1738697184705; Tue, 04 Feb 2025
+ 11:26:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204-scanf-kunit-convert-v3-0-f1d662822804@gmail.com>
-In-Reply-To: <20250204-scanf-kunit-convert-v3-0-f1d662822804@gmail.com>
+References: <20250204-scanf-kunit-convert-v3-0-f1d662822804@gmail.com> <20250204-scanf-kunit-convert-v3-1-f1d662822804@gmail.com>
+In-Reply-To: <20250204-scanf-kunit-convert-v3-1-f1d662822804@gmail.com>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 4 Feb 2025 14:25:40 -0500
-X-Gm-Features: AWEUYZljj-fvHjO1QRn6_h3DD-JCLrNofWaRqL3ebGF071kyIE3NiSxAR34esvE
-Message-ID: <CAJ-ks9=X-EqwOGBPqK-qEz4SoevOkW-EProBjGByy+Vhzjq+KQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] EDITME: cover title for scanf-kunit-convert
+Date: Tue, 4 Feb 2025 14:25:48 -0500
+X-Gm-Features: AWEUYZmVhCfzkctUV44nmQmaIlmRncNBeixnMWVk5E8t0mW9cZVkV9SDn44swQQ
+Message-ID: <CAJ-ks9mXfg0L7EK0hF_Q1_sY3ccbEVcx-S1VsimgHHaKyaeAWw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] scanf: convert self-test to KUnit
 To: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
 	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
@@ -88,5 +88,5 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	Geert Uytterhoeven <geert@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Oops, broken cover letter. Resending.
+Please disregard.
 
