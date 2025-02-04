@@ -1,85 +1,86 @@
-Return-Path: <linux-kselftest+bounces-25710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A72A9A27858
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 18:28:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 074CEA2788C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 18:35:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 215853A035B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 17:27:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B29851886B25
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 17:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2232E216388;
-	Tue,  4 Feb 2025 17:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD80216612;
+	Tue,  4 Feb 2025 17:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OftOmaUJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d4+rhr9N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F10E215170
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 17:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83941215F66
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 17:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738690076; cv=none; b=pkyQPDY2PjD/31kjjiAxOsj2A3k9iWJN4PyPjEDc5gf4N8q536y8vVpMg5zjjZdLb0/jeC5+MKhnZ6+l0FZ1sa7Vx6XmNB44tB1ZzR0rKk+ckDgaEwkItJNKD1PBEQaBbPH/8B47ZyuKoxk/jvyOAc8Q1UBNxs7zA/lBio6CNzE=
+	t=1738690527; cv=none; b=F+tMJ09V6d9WM+Za3jrO0eDMvAbJQH+/2hNqN2wVzWkqGGey+BLG7mHZs03//Xm6AS4bWROetFkEiI1W3LoebkCTy9+zeWT6RVIrTUXj/Xd09SR5BTGLtFhOPQMRkCw3JltRC1JhaohyVFCn5npTmFOyvBw8DGvbYR952qdPyzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738690076; c=relaxed/simple;
-	bh=V4uv66MK680ClXu6f6Ker2AP5D+vs5LU4+W5Eqq9fDQ=;
+	s=arc-20240116; t=1738690527; c=relaxed/simple;
+	bh=zCHNKGA6MIC6IBXzZGco0x6H0vkuSlEA7G+5gjB5WwU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CehyNp+pqDF4ZoPlV9hezi3fXqbXU3pXVZeTv+2Lken4VsnJUtt2gKlyBpjxIYiBUzwpstkK/zEDYwHbCVwJE131rxKUll++AF4C2/lBK4cgNKpARq4TmpPqUzT3W1tDgpIq97Y79wYnVUmE2UL0TZyix8axOdnRCfB+ccQKAJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OftOmaUJ; arc=none smtp.client-ip=209.85.214.173
+	 To:Cc:Content-Type; b=QkggQFklhHxue/v02sI0xj0Bhm3F7qkZlpCS+xpUlSZklRZbLgrwFCo2LUPyssfTXZ79otZgbdwtky9672wTLAKxhUC1Epai4VbHBVxfnS9Zp4ZAOtRDz5XNgIe4Giw8n94l6I16zyzxst3QRKc5808U5KAulPwFeszvkM9HPlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d4+rhr9N; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2163affd184so138585ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 09:27:54 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21f032484d4so156195ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 09:35:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738690074; x=1739294874; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1738690525; x=1739295325; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rfuayBjlRpeNZsUXyFm5cOwCbpbAk9szfdT3xIhInHw=;
-        b=OftOmaUJrSf6tTIWxvgCdnZPkkJuuhxPCe5Lf/UTIRn9nq3TTaVAmc4uVZTNqLTW4n
-         VcwpswN4g8JyfIyqWObrF4TpF4tLPo0hC3Bz89YaDcdwa/LcUrAigg016lMxWrB0t8nR
-         AXYpDuLlXq2QCnKuj4X8wICSmZPbIwnlf9aKllME7CWIMCXvi4/P28iMEbDsGGAQ1nSN
-         L5qnKeUCWe2i4WHHfXWqiw/AA+bQwv2Iud4UEiuMVo6Ab2Efo+JTHmHTaL27XogA/BmW
-         X1xXst6mDWUXaCAYHNXCVUNjfW/girinU2noXsXSMNAUf4/xjn5i+gZ2JCMc2EqVYEcn
-         8I0w==
+        bh=84XRGI+7lwmGL6GUPwbtH7AhjEYYUVi2GeiyJJ7VXBw=;
+        b=d4+rhr9N7zikIW+KEMZg+mcQTPWn3C3oVbh7IFjp/+E3N9ZO0Vz+GYDjAEb5GoVIDe
+         MzagfKV8ddXD5kBdfbj6vBRUbchPhacBWeKxTQL5c9FamSDkBny5X9kPdpOwBzVsvpNS
+         wvOzTCnf3rKtYIMtnZbmEbKcZMM7/x6kcTtBWXUbFPSV0zS1pjqmaDthXOzCpqfwp0kT
+         3fSZzjsGH1j+XMtop7Q9oBvGHDEv3xBzkZJSLiYAXylwl+UCktgVt/UcHaPDP6AmId3d
+         RaXsirVOZLD96J21TOH5q6jPlGIhOPCwhr04nxwfou3hBJKUgJ+PkZjv3MPSv45GRiT9
+         6WSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738690074; x=1739294874;
+        d=1e100.net; s=20230601; t=1738690525; x=1739295325;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rfuayBjlRpeNZsUXyFm5cOwCbpbAk9szfdT3xIhInHw=;
-        b=ZQUwEf17w14yFSyi1ZUexh4bPE0dVhC3SneYw+2o7enxXH9KU31QfJVPXqIg6AmJUb
-         IZODinrHoW7NaSodQQncxiwSDDLhGYNmuc+hRZ6em/pV068gvctXY9XDL+CaxVYgDyDg
-         GshRI+hmctpjHIrACxgEpIxgZSLa/kyc1Msis7tPqkihrEDcJZoDwuLrkJAPg+kSdtN3
-         2+l8h56TOP1vOtNzc8pdiNZJjCEuGol8VaBdr1m9yws6WutuN1pmmPzYtBfSm03YxUD4
-         6qF3CObf8twbk7/mfc0uP/GQJly0DKA0kL4EcmJ0NLkZhy3V94w2y6VDlXggHQmgSmdO
-         OjWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ0Xgbc2dSuok1Gk4DzcI98McEDZEdnnFA8LGMJsARRTpxGB2BPrbJLJzXJbxAhC+tmfHdqB5AxVRk8kPbfOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxr6AHWjQR/jjDTehD6Pm+H8M1kB2eYplPhRQxE0O5X9SCfgzvr
-	PYA9o6/M42Ldsk1vAEF0KPyaKswMDCBWzHVsSqz/lxyP1ZirFB6XSOQMboK/SPh8cm5mV2yVay0
-	poBDSlBWvRAx1SHUkwmxMCHurv3EJb9ejILLZ
-X-Gm-Gg: ASbGncvgD10RFTyc+9W76NAvH5c5TfAS2+amf5Su3iS7ywYgUJfnCWq+SHcNnkAWefP
-	BfetxF5NpJq4wEHadMxbq3pgp0a9tkC4HikMzZJ8xRphgyCmGBhCxZLi9Ayl87J6XQk4v2/5g
-X-Google-Smtp-Source: AGHT+IE6dDHOUbSqrO0D169k4b7qsYEqIapGMMKqj/OrRCHutVQk4Tk9SbBciNiSXSLiP161vvVY/cJhza5i3Kply9Y=
-X-Received: by 2002:a17:903:1a2f:b0:216:2839:145 with SMTP id
- d9443c01a7336-21f03afd716mr2749705ad.1.1738690073656; Tue, 04 Feb 2025
- 09:27:53 -0800 (PST)
+        bh=84XRGI+7lwmGL6GUPwbtH7AhjEYYUVi2GeiyJJ7VXBw=;
+        b=gR3+mJcbeNEVqS4OAHbM9XCTt7uGEUKYr+Da3qfesLnlnGtX0qTEvAhseHbrMCAdmc
+         tjXGhO1EitiWZ+RnXlhwlgQBajD9QvY2sbbuUukvbdkTgX+Oj02kay8RXtGZucnnHD37
+         PY43O/FnU+8PZNvENvLYFKTSXKA8pP4LqsLZsRzEcaQ05J1ByOhPymQ3ldOD/PHHZvrZ
+         QD4Mk2W16laWWrELL8Kt+UwXorvtOYpkxrAIFpfjPxxb4Ymu1YdQurb+wyYsfmv31wTf
+         H6ivOehI+nmDEPVrkCYzyAsP1nxLzggrXgEeLvE1OaJgADI0+nxASfW8e8vGa0Dt5lzW
+         blKA==
+X-Forwarded-Encrypted: i=1; AJvYcCXZVrdr9p2aOIBlCipsqGqjthldB+isYuONu+vpj+bUdq5kFuP+ShT+stOUX4hSkq0wazt8SqDtUgnMtmBrZDw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo7uwD1I6eSLVdR3AdNFmxnbg9NB81WO65cPDOGbb3jFci8ZRh
+	Aa7zKSF+v9NbGc8bZktHqvJOYbLwneetuNoXh+fitZ6Wn9uf61n/sOFaL3I47lGXoGGkq/bm1+a
+	oTgeMznbSM2UvSNGJbllPZa2hS1YVh6VxR2LG
+X-Gm-Gg: ASbGncsEIWD7NUfGt2KiFvulyM4+O9Jzh1rWv1n5j5Gv+0XbpvO+3tGXFhsj9IjCSF+
+	Hz8fGQTf3NQ8cSA3sgwbR2Uljcp21+P8GCmSou21pUnxlxUUa7rfZhGLhvhxjV8HPMnoVGrrC
+X-Google-Smtp-Source: AGHT+IHg8SF867Yy+z2GXbKry2r0iDmWlZunHewA79883dWtyyKDj6PGknuUr+EeJwHqGa1SQwzcF0gj8w2TziRSjaE=
+X-Received: by 2002:a17:902:d9ce:b0:215:7ced:9d67 with SMTP id
+ d9443c01a7336-21f005bbe36mr3250755ad.24.1738690524517; Tue, 04 Feb 2025
+ 09:35:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250203223916.1064540-1-almasrymina@google.com> <a97c4278-ea08-4693-a394-8654f1168fea@redhat.com>
-In-Reply-To: <a97c4278-ea08-4693-a394-8654f1168fea@redhat.com>
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <20250203223916.1064540-3-almasrymina@google.com> <c8dd0458-b0a9-4342-a022-487e73542381@redhat.com>
+In-Reply-To: <c8dd0458-b0a9-4342-a022-487e73542381@redhat.com>
 From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 4 Feb 2025 09:27:40 -0800
-X-Gm-Features: AWEUYZmyHp3Gf6q5ty9WsLiNHfSw5QJWVWhu7wvqA18o91D3NGgPmvSyJ9NXuus
-Message-ID: <CAHS8izNZrKVXSXxL3JG3BuZdho2OQZp=nhLuVCrLZjJD1R0EPg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/6] Device memory TCP TX
+Date: Tue, 4 Feb 2025 09:35:11 -0800
+X-Gm-Features: AWEUYZn1moYHmrXoVYPPn5psMSRlqxODAnsNkR2q6mSq4IS5EB-8iProLqujYec
+Message-ID: <CAHS8izOnrWdPPhVaCFT4f3Vz=YkHyJ5KgnAbuxfR5u-ffkbUxA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 2/6] selftests: ncdevmem: Implement devmem TCP TX
 To: Paolo Abeni <pabeni@redhat.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
@@ -97,65 +98,46 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 4, 2025 at 4:32=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wrot=
+On Tue, Feb 4, 2025 at 4:29=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wrot=
 e:
 >
 > On 2/3/25 11:39 PM, Mina Almasry wrote:
-> > The TX path had been dropped from the Device Memory TCP patch series
-> > post RFCv1 [1], to make that series slightly easier to review. This
-> > series rebases the implementation of the TX path on top of the
-> > net_iov/netmem framework agreed upon and merged. The motivation for
-> > the feature is thoroughly described in the docs & cover letter of the
-> > original proposal, so I don't repeat the lengthy descriptions here, but
-> > they are available in [1].
+> > Add support for devmem TX in ncdevmem.
 > >
-> > Sending this series as RFC as the winder closure is immenient. I plan o=
-n
-> > reposting as non-RFC once the tree re-opens, addressing any feedback
-> > I receive in the meantime.
->
-> I guess you should drop this paragraph.
->
-> > Full outline on usage of the TX path is detailed in the documentation
-> > added in the first patch.
+> > This is a combination of the ncdevmem from the devmem TCP series RFCv1
+> > which included the TX path, and work by Stan to include the netlink API
+> > and refactored on top of his generic memory_provider support.
 > >
-> > Test example is available via the kselftest included in the series as w=
-ell.
-> >
-> > The series is relatively small, as the TX path for this feature largely
-> > piggybacks on the existing MSG_ZEROCOPY implementation.
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 >
-> It looks like no additional device level support is required. That is
-> IMHO so good up to suspicious level :)
+> Usually the self-tests are included towards the end of the series, to
+> help reviewers building-up on previous patches knowledge.
 >
 
-It is correct no additional device level support is required. I don't
-have any local changes to my driver to make this work. I think Stan
-on-list was able to run the TX path (he commented on fixes to the test
-but didn't say it doesn't work :D) and one other person was able to
-run it offlist.
+I noticed reviewers like to go over docs + selftests in my previous
+series so I thought I'd put them in the beginning. Looks like the
+gambit was not welcome. I'll move the selftests to the end. May also
+move the docs to the end as is customary as well.
 
-> > Patch Overview:
-> > ---------------
-> >
-> > 1. Documentation & tests to give high level overview of the feature
-> >    being added.
-> >
-> > 2. Add netmem refcounting needed for the TX path.
-> >
-> > 3. Devmem TX netlink API.
-> >
-> > 4. Devmem TX net stack implementation.
+> >  .../selftests/drivers/net/hw/ncdevmem.c       | 300 +++++++++++++++++-
+> >  1 file changed, 289 insertions(+), 11 deletions(-)
 >
-> It looks like even the above section needs some update.
+> Why devmem.py is not touched? AFAICS the test currently run ncdevmem
+> only in server (rx) mode, so the tx path is not actually exercised ?!?
 >
 
-Ah, I usually keep the original cover letter untouched and put the
-updates under the version labels. Looks like you expect the full cover
-letter to be updated. Will do. Thanks for looking.
+Yeah, to be honest I have a collection of local bash scripts that
+invoke ncdevmem in different ways for my testing, and I have docs on
+top of ncdevmem.c of how to test; I don't use devmem.py. I was going
+to look at adding test cases to devmem.py as a follow up, if it's OK
+with you, and Stan offered as well on an earlier revision. If not no
+problem, I can address in this series. The only issue is that I have
+some legwork to enable devmem.py on my test setup/distro, but the meat
+of the tests is already included and passing in this series (when
+invoked manually).
 
-
---=20
+--
 Thanks,
 Mina
 
