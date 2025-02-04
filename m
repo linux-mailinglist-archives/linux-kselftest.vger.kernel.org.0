@@ -1,187 +1,176 @@
-Return-Path: <linux-kselftest+bounces-25669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8D7CA27072
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:38:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26770A271B0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 13:18:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A11A18893F0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 11:38:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BFE83A2FA5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10246212B17;
-	Tue,  4 Feb 2025 11:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2D320D510;
+	Tue,  4 Feb 2025 12:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QE75jh3Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FBD211A31;
-	Tue,  4 Feb 2025 11:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA75D207669
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 12:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738668948; cv=none; b=R2QxxnreBGVTKjXQPJjx0WGwvgastTbG1Hs2jVVEtkrrg+Q01B7WWTXvD8KAzf7v+2XZRatH86PlXrf9V4uGcpHzPehR6j+7yBLfqNAPdp5PN5EGz4bZ4JmR7dSqq33oFCppCjOFkr8+YYDn1P/b2kbcCS1dHyhJoRboJ0qQAcY=
+	t=1738671347; cv=none; b=aTSAXKhluWF7pen2KJ9yvtcaHxTZe16+qENHuOdEF6M8zfkdXT9kCU8Z3eLHI9IgPFkyKbjiBkGRq3aWnA8ED5N1YOmENBicj8NL2apeYAG1GSuLJnLNB7WKtbPRs8SnBL78fqKmi4MLUGxuKbs1xlcRMkLpPrSUozRct6dC+l0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738668948; c=relaxed/simple;
-	bh=2pUaLVwLHOwxMYDPKEmqQLY0Bgk29Kn0tTJ8gIKafis=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RrCeVChsvKzOBjWv6Kp3ZlRwyNIJilv8Q3WEhq79CxEiSSBCYyFXz4ydhic3Ldgfia6YJ9OuVEXVQFe1LdWn1Lx0CxqXS90H0GFJNrQD0s630HKqf8szpH/dx6XJX6+iD4ebRsI9pVqhJZnWaSEo9Z8N1biq+nT+66IyXfTVP8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab70043cd05so847517166b.0;
-        Tue, 04 Feb 2025 03:35:43 -0800 (PST)
+	s=arc-20240116; t=1738671347; c=relaxed/simple;
+	bh=XhIT+5be0aQXVhwv9QulCCNPuCzXKuKQuv2PR3ezl7U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xdi/yfLoiKYWJS3wAZTxk3aS0VHpaE9j4CuEzazjvqq+Sc9X7lkzaCrOvN8NjCbaflFCdIo4x+q8RMQEfwO5ZtVXvVo3io8AOjS3yHTeAX4jikfcN4QwXSWszbFqbob4NPjKCbf5jXhzB+CpbYuOhKwwSqAWMuqqNGUvspwA0fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QE75jh3Q; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738671344;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VUvkUC7Qb2mF5GiMgDLACey09zZYlr7i7/mTZlGsGks=;
+	b=QE75jh3Q5eWgElEPWQ6oTG9lZOCOdbZg0Yv1JpVTYegsfL/ZxLlEAuXlJUYIYgZE4ezBdb
+	RwBLFfb/ATLvoKRiziHDjgT/Qo6cKQTvn0KgZsyBxg9Gfb0Psm8f38IUj/Iw0eaAr//i6k
+	JesCX4haJGJl5KNpqh7P9H2HhVi5oYs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-jvXAhAItPIKazn1-e_V7WA-1; Tue, 04 Feb 2025 07:15:43 -0500
+X-MC-Unique: jvXAhAItPIKazn1-e_V7WA-1
+X-Mimecast-MFC-AGG-ID: jvXAhAItPIKazn1-e_V7WA
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-436379713baso27526965e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 04:15:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738668941; x=1739273741;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8PPqcIXQzYEFsqNlbLKuHZEq4XrZtJwQTMEp1c3me10=;
-        b=NrNTyVXTMMz/Z4on3YxpLZdDHnlvK5egX9Fix244TFZ44itUygaXJmR9KgpmmEXSd6
-         uZ1fy8Dl4GFSzALhP6Ji550SqNP2ZgzouiFqhXwyiRShY4j6/k7wSDE//CTe3y2E+V6p
-         J/RLgrdkWWrVT1gPkw0kb9dlwo02NAybjcHlbb4WGr4NEg7lrPTAGMHzt+LEdGLrVJ66
-         ubFm/yR2H0yhdZi0R5oKtgdTZU7qvJVoYYTSMQYz2i84tsned5NJyUz6VcrnJ2aRWi6F
-         K7IBXhbIyf7jgVec0912flzxaVHgpOJj4UA5KMAV9NbmP5Z515bxzcUHtb0nygVRqluL
-         E1tw==
-X-Forwarded-Encrypted: i=1; AJvYcCUaBmveCwcrTzh2dDGw6IvKUItUQsbjyh8OT3eIVfRwkMyFN8p8XWvFoyn4lFpV+zobqbfq9FvcxLluPOuN@vger.kernel.org, AJvYcCX371YXP+y5XqKoCyrIu7b4cf3nqown3Pxut580OH77jraCIpLbNbZuNgGN/sd4Hv4K4YI5alz6Zrs+IyyzCvFg@vger.kernel.org, AJvYcCXuAjz/nz9nBaDUlhDFyzd4u5ZY4Q91/ehhZ67IJrEIO8jiQLBMEefVnFYp2wK2kFizd7MbS6empDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCBYXeCbRMPcZfMZx/pNE3EghEJJsJzbh8YZyIdhA0/rMOnPXc
-	vkdaQV+hm27MvInZQ5n5ed02UX6+gJM6JSmBhTMuLfiGJLqLvwJY7i3prA==
-X-Gm-Gg: ASbGncs649lptlPxVtPU9mncbEEtpukOMnqSQrEXiFIqQYoRhIrNvtlAh7GZsrq+pvu
-	vCNFJDR5UPp7NYKpbqVLRy0s/NFaXH8uaP4MprEPDcGB2/IfmxdCd7Bu1/t+LVFuOgsYXN8/zqH
-	/r5zWDutNtwJlfoKIqLStS716ZQ4YUEamTEGpPlrtXhdGqj745abzmvUM5Q4apF88k7AjlxvY77
-	JtDL8IVITgoisy/hNcoq3cFZa3vaLBqDfC0hQOmlp2ujqvSsx+r/5BGQPlOJAZQkxbj5L623+J3
-	USKXhcs=
-X-Google-Smtp-Source: AGHT+IHCyfaueKIUNYUPir9gO/xg7NSDPC0F+tsupVOVvkWrV6oAN6co9B3Ale6w9VUTWBCuMyZH6w==
-X-Received: by 2002:a17:907:7255:b0:ab7:e71:adb5 with SMTP id a640c23a62f3a-ab70e71b1bcmr1353777066b.35.1738668941218;
-        Tue, 04 Feb 2025 03:35:41 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:70::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab71166a8e0sm545657466b.158.2025.02.04.03.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 03:35:40 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Tue, 04 Feb 2025 03:35:16 -0800
-Subject: [PATCH net-next v4 8/8] netconsole: docs: Add documentation for
- CPU number auto-population
+        d=1e100.net; s=20230601; t=1738671342; x=1739276142;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VUvkUC7Qb2mF5GiMgDLACey09zZYlr7i7/mTZlGsGks=;
+        b=Gii3I7Fxkh9GD3+6t5DzYyr6esqZL2oNbpceRRc5oKJe1NtnIX5N4aRa1SmL1xckW4
+         2y/29o2OPo2UjtioHfkLEcDnrXNtIixrtUkqfkVe5owko6+tXM+Soc4PFe/VhJEAoLSV
+         vCMwXz2+WlBex68hfjtklGH+ud8rnZpaUu/fk8SIGikGubl0TWfVZt231cC9HNTibI3h
+         pau0Fu8m6+lSreOHOt33kVMEhOUtcsMKrkTQyLg91tDIpIp1SAYna5/BTah0kBbivnfY
+         2iefIDRbs7iw9GnrKnh8PUrr4NNlZtI3RXUZRnQ48gLrjOOaFzWTMHymBcKX1EpU1O1Q
+         PW7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU4gstGl3d0XK+g6I5+pp+nmOSH9VhPdK9COTHLoyVDZE/+38ceEzmLyauwagzMVD+Cx9azXAuFcDjnEreyMZ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHQfyweUMRAwdWTX2JJ6j75Qb5dGK9Xhv9kvGUIrgLn1AULTTB
+	gz15XEc6nLawaALFxu7PiU6JaPciFVV6MwJxR9WhT4BxJQuxd4769RNwST3LvyVFLe3bhbhwqkF
+	v1mA7+ErV18M26aO3duC1B8AITFPpT4CnM5Joqvz/ZTHQCW21bFSkoUL+sUeqbQmQPw==
+X-Gm-Gg: ASbGnctXY9fV5mN2sLMKwiYbD66PGAFAhpji8zN8llpnhr2B5Cx3JsX1IWkiLh+Og0W
+	hSFEqRlODIr8xq1csMix6kSymGCBWdykBnioJn4FFP0txwqp3yY2SdClMIlpcWWJ7UZny5EYO6+
+	xxBVjZXjVRyDGDFP2CdRJ+HTL5pOdRBU9R2UQxTW1FeWujqVrJoUMB9T+TK8qEgvDIDPj03pCKs
+	+E2CjnD9wyALC491I96NKRvnyqYUZqWdaElYm6tJoY23t2plnwcC2wA+nEgQ7iHZIx/F1f5xTij
+	nY/eV7yb9vfs+qivnkSa4gCnAE47eKvBJKE=
+X-Received: by 2002:a05:600c:4f55:b0:436:51bb:7a43 with SMTP id 5b1f17b1804b1-438dc3ab675mr242755265e9.5.1738671342068;
+        Tue, 04 Feb 2025 04:15:42 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH4tQ5q9E6Yxu+JN4mWimlvj7yjOo3f8Z7rh6yaBUL8ZjGCY5yo/S+gH10TnPYvFIU94EeRnw==
+X-Received: by 2002:a05:600c:4f55:b0:436:51bb:7a43 with SMTP id 5b1f17b1804b1-438dc3ab675mr242754885e9.5.1738671341707;
+        Tue, 04 Feb 2025 04:15:41 -0800 (PST)
+Received: from [192.168.88.253] (146-241-41-201.dyn.eolo.it. [146.241.41.201])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e23d48b3sm197508285e9.5.2025.02.04.04.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2025 04:15:41 -0800 (PST)
+Message-ID: <09a0caba-db29-4100-a46d-b104b282ea0a@redhat.com>
+Date: Tue, 4 Feb 2025 13:15:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>,
+ Pedro Tammela <pctammela@mojatatu.com>,
+ Samiullah Khawaja <skhawaja@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <20250203223916.1064540-6-almasrymina@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250203223916.1064540-6-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-netcon_cpu-v4-8-9480266ef556@debian.org>
-References: <20250204-netcon_cpu-v4-0-9480266ef556@debian.org>
-In-Reply-To: <20250204-netcon_cpu-v4-0-9480266ef556@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- rdunlap@infradead.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3164; i=leitao@debian.org;
- h=from:subject:message-id; bh=2pUaLVwLHOwxMYDPKEmqQLY0Bgk29Kn0tTJ8gIKafis=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnoft+8Sx5tY+XOi3a1CcmSvKXupO1Hflji0JvP
- kGtZ1lphD+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ6H7fgAKCRA1o5Of/Hh3
- bQ4nEACZUwIqUq8eeC7HBNxcADsyp9IxDLdVgHJp1/faFHA5nEda5PJE2Rgxf2enEQTh7yr49x3
- Y8CW7ZSk4uK8NFjVVmnWAvBOFe9FVLvP7SWswe5cU5yvBMuMAZZEsBZ6ZbwPDHv1PZylN/QQvMZ
- /nEyieCeWDFOBV0YVmX7gXPxkdjh1BWrxkIcevek/fb7K4WdWMI3bSMhVsnbaiPFKdgw9OUuxr8
- MbC0ooUwRUGUmorSCNbCF7EMbSvmqSb9RJQh+pdmEatxP0kY2NKfjZ54+Y7Gnqlu8VBALieepKq
- 1OSFUAKrJQpRlv4BcSzEXghk7Eh1hxaoBw0RlvBeguyiK8GUev+cnsokATcwdr7QBCkUhibYpM/
- gSd1+mU/55+P8r2HiZ3JWyVIsp7F1Z7xAji2keN+uqySeMFi3WfpZkwzQlQ4cZ7EgS7X+E+uTil
- UcE26rjnDjIuMivbikAcIXNKAC9N3nZuUWONSLtrkhniHYDCf1rtDdpCRXQouqvIWD/ZaDJN5Xe
- mbHBDf7p4kHLg1lmpiNxDhsQzExojGkuBJU+0sdVa7Zn0sEWb6dtJTI7U5s3lSnrl+ONmqJ4jUf
- 4HzSSbmvwhRIxk5RuQNnXgd74sT5ms6rc0voDB3eZnMdr3eJs/hgVgOMH+1k2vd27ETGGUTJkb/
- ItbN1bm9VVncpVw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Update the netconsole documentation to explain the new feature that
-allows automatic population of the CPU number.
+On 2/3/25 11:39 PM, Mina Almasry wrote:
+> Augment dmabuf binding to be able to handle TX. Additional to all the RX
+> binding, we also create tx_vec needed for the TX path.
+> 
+> Provide API for sendmsg to be able to send dmabufs bound to this device:
+> 
+> - Provide a new dmabuf_tx_cmsg which includes the dmabuf to send from.
+> - MSG_ZEROCOPY with SCM_DEVMEM_DMABUF cmsg indicates send from dma-buf.
+> 
+> Devmem is uncopyable, so piggyback off the existing MSG_ZEROCOPY
+> implementation, while disabling instances where MSG_ZEROCOPY falls back
+> to copying.
+> 
+> We additionally pipe the binding down to the new
+> zerocopy_fill_skb_from_devmem which fills a TX skb with net_iov netmems
+> instead of the traditional page netmems.
+> 
+> We also special case skb_frag_dma_map to return the dma-address of these
+> dmabuf net_iovs instead of attempting to map pages.
+> 
+> Based on work by Stanislav Fomichev <sdf@fomichev.me>. A lot of the meat
+> of the implementation came from devmem TCP RFC v1[1], which included the
+> TX path, but Stan did all the rebasing on top of netmem/net_iov.
+> 
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-The key changes include introducing a new section titled "CPU number
-auto population in userdata", explaining how to enable the CPU number
-auto-population feature by writing to the "populate_cpu_nr" file in the
-netconsole configfs hierarchy.
+Very minor nit: you unexpectedly leaved a lot of empty lines after the SoB.
 
-This documentation update ensures users are aware of the new CPU number
-auto-population functionality and how to leverage it for better
-demultiplexing and visibility of parallel netconsole output.
+[...]
+@@ -240,13 +249,23 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+unsigned int dmabuf_fd,
+>  	 * binding can be much more flexible than that. We may be able to
+>  	 * allocate MTU sized chunks here. Leave that for future work...
+>  	 */
+> -	binding->chunk_pool =
+> -		gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
+> +	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+>  	if (!binding->chunk_pool) {
+>  		err = -ENOMEM;
+>  		goto err_unmap;
+>  	}
+>  
+> +	if (direction == DMA_TO_DEVICE) {
+> +		binding->tx_vec = kvmalloc_array(dmabuf->size / PAGE_SIZE,
+> +						 sizeof(struct net_iov *),
+> +						 GFP_KERNEL);
+> +		if (!binding->tx_vec) {
+> +			err = -ENOMEM;
+> +			goto err_free_chunks;
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- Documentation/networking/netconsole.rst | 45 +++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+It looks like the later error paths (in the for_each_sgtable_dma_sg()
+loop) could happen even for 'direction == DMA_TO_DEVICE', so I guess an
+additional error label is needed to clean tx_vec on such paths.
 
-diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
-index 94c4680fdf3e7e1a0020d11b44547acfd68072a5..84803c59968a3237012fab821f432eb531aba45c 100644
---- a/Documentation/networking/netconsole.rst
-+++ b/Documentation/networking/netconsole.rst
-@@ -17,6 +17,8 @@ Release prepend support by Breno Leitao <leitao@debian.org>, Jul 7 2023
- 
- Userdata append support by Matthew Wood <thepacketgeek@gmail.com>, Jan 22 2024
- 
-+Sysdata append support by Breno Leitao <leitao@debian.org>, Jan 15 2025
-+
- Please send bug reports to Matt Mackall <mpm@selenic.com>
- Satyam Sharma <satyam.sharma@gmail.com>, and Cong Wang <xiyou.wangcong@gmail.com>
- 
-@@ -238,6 +240,49 @@ Delete `userdata` entries with `rmdir`::
- 
-    It is recommended to not write user data values with newlines.
- 
-+CPU number auto population in userdata
-+--------------------------------------
-+
-+Inside the netconsole configfs hierarchy, there is a file called
-+`cpu_nr` under the `userdata` directory. This file is used to enable or disable
-+the automatic CPU number population feature. This feature automatically
-+populates the CPU number that is sending the message.
-+
-+To enable the CPU number auto-population::
-+
-+  echo 1 > /sys/kernel/config/netconsole/target1/userdata/cpu_nr
-+
-+When this option is enabled, the netconsole messages will include an additional
-+line in the userdata field with the format `cpu=<cpu_number>`. This allows the
-+receiver of the netconsole messages to easily differentiate and demultiplex
-+messages originating from different CPUs, which is particularly useful when
-+dealing with parallel log output.
-+
-+Example::
-+
-+  echo "This is a message" > /dev/kmsg
-+  12,607,22085407756,-;This is a message
-+   cpu=42
-+
-+In this example, the message was sent by CPU 42.
-+
-+.. note::
-+
-+   If the user has set a conflicting `cpu` key in the userdata dictionary,
-+   both keys will be reported, with the kernel-populated entry appearing after
-+   the user one. For example::
-+
-+     # User-defined CPU entry
-+     mkdir -p /sys/kernel/config/netconsole/target1/userdata/cpu
-+     echo "1" > /sys/kernel/config/netconsole/target1/userdata/cpu/value
-+
-+   Output might look like::
-+
-+     12,607,22085407756,-;This is a message
-+      cpu=1
-+      cpu=42    # kernel-populated value
-+
-+
- Extended console:
- =================
- 
-
--- 
-2.43.5
+/P
 
 
