@@ -1,140 +1,192 @@
-Return-Path: <linux-kselftest+bounces-25639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFD4DA26A15
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 03:40:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29624A26A1B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 03:42:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5982A3A4883
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:39:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDD291885EEF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFCC13C82E;
-	Tue,  4 Feb 2025 02:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E193613E02D;
+	Tue,  4 Feb 2025 02:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bMESZ9oc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CUz7AUxy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80852200CB;
-	Tue,  4 Feb 2025 02:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB84179BD;
+	Tue,  4 Feb 2025 02:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738636804; cv=none; b=YSkV53nPuwQycVheK6yXkvBKWbLsM+l3XevLiYHlx1iMx+/Bhf4r6iJuAJseDy4cNsAjMZ/Q9m91avh0lukQEW8OJ7d4A6+04FNTB7rdKZ75L93c2oaSMAOf5/GUh5jbbact3JPm+eu6ktKyaYM1TZlC3AUGkEPJxcZzBygMW+Y=
+	t=1738636960; cv=none; b=SaJ6rH5Spy7WCNKkkFrFok6D2DLESMqPLcwKQZZXCBoQ4v/MRvhlYARpWUVM4MQ3Okj43ckmftqezgBU0fOYNP/VLVKu1WvdfaS8twhKp731I3U/+opD08936KVAeL8WSj37YdXoFg3ogtWeVe/Dn68fxGVUPDPTylC/6GAr3/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738636804; c=relaxed/simple;
-	bh=0RMKK50ZfAFQ/WWQaMSZcxrDWoAOCnDm86PI3OyC3oQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QoMnZQV9qPqwpkhE7WCb1y08Xrz/mQqZTYygHi2jkG5xNc3lPTM1b99ksKKv+OQVa3bDscyTsB3xloBi3ptJjyyVwiukSAuHRB4ti/ART5LHsuAlMLvIh0CjXvr8eUgptpkzuDsLciUotwZ8PUCKg4OCWxxCfAdg7d7h7d4RakE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bMESZ9oc; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ee51f8c47dso6704766a91.1;
-        Mon, 03 Feb 2025 18:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738636803; x=1739241603; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qp8KVioUFfBus+6v/iXWPU8Vu5yTjPj9uqEhgYHMSGw=;
-        b=bMESZ9oc+A3BLURbOc7ElFwLcgJvTvEBm6JoD1kwZ/GqLZwghjBW43I/aVS8F0C54R
-         +HS0XQStvl/JZ/DAIGbrgsUXlBSqNIqGxRNOSagCu2GIf6CA8MnBzIEG+vD4KweVS92a
-         rTUNVwkWsvWG5LitBLZeeBSGVQ63Ps56hVylgecHPGFypdFg2AYeCY8vF4/kD+oXWOed
-         YMJUDzRrLILeJjaUrDSYcbuGPWEmo4bNCIqO28Vnf4bvwraCSs5xV8LvQ8iCc739CJin
-         I76AE7MaLBTBQVkolfxWaPz80AA98a0Gew+W5fB32YrEvuoUARAVTtxtRVhLJDN+WaqX
-         wDXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738636803; x=1739241603;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qp8KVioUFfBus+6v/iXWPU8Vu5yTjPj9uqEhgYHMSGw=;
-        b=ul6gJYrWv/ZGwrVhaXcaiA9nv8QxcFCLmBjZypFkrWC29vneGTU/rUyku+kcrmsxyv
-         l1qfoTpoVZK7J9G5IvCUuwfclfXr27FdVhV9/V+CgXreB97SvsebvPSpA64jZJhpsWvP
-         K/yG4V1SEPZWW+oQMZpR1rTZFvGLZ+fRp46lbOvfSkVzpGnJN0n1wDI+H1nbbHJgXFLr
-         oUVmxstbPn4v/62nlM1Clffnf6v7WcSjRDKKRH7pbC/LNNK9gx8Y82co73pvVtXatwtl
-         TmM1qIKwRItWu+x3hNg1QtzdcDtka8Yv322IWsEOqNAUvQFuuKY/n4oq2gCj0AeBxGt7
-         41Tg==
-X-Forwarded-Encrypted: i=1; AJvYcCXEjPPk+yDKNlyhSfYtQAhcXc5CAPUJKsmT8IOMir4EXUnpXLyETxvBDOAQuvnM4WvPT1BKBvjddMczlr3zjms=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeI/8KF/RR/qi0cs8LKHim8ov+eQY5skYFQ2CyXtLU58Jn0SOe
-	qNxUzwytTMmvLspNbn2nNfg5+yXTdzMWCXN5yZ3DcpVYmU4NgTaV
-X-Gm-Gg: ASbGnctcemWiixRoVkxrFo24q98QytezGbZisTLjpdVbhRjpVopepBKW6taYfI9ZgmU
-	hR/ZPkHQvSEUZO3lF8hmuFurmIPqWQWSdrRmfqODSLbdAsIIUNsa0b+5mE7LJFYLndCEuYxiyPs
-	zVoiHGcTEbtp98s8t14rBATe3vCAw0o99FM8o7gYhhghkM+2AkFX5gGmqAfRAsImA+ivb4GH3W9
-	f3xrygS5yTbx0zK8MIWDvKsPfNgESlBRr+iPXHvVZ44CwIU3W49ySO4e4/3WE4l+SuZX/fex8wg
-	bQSOT4t5ZbjBAIm2Z7s492hAxFtfa3Y4y3ljS5piq4qogWBcIoiRDQ==
-X-Google-Smtp-Source: AGHT+IFL3FpLvn4dIqVj7c7A8JrOFnw3sDyfgAzebPHiuA27JiS5ecKUMmpwZcR0etyCTsCiSe9NXA==
-X-Received: by 2002:a05:6a00:4f8c:b0:728:927b:7de2 with SMTP id d2e1a72fcca58-72fd0be829amr39890183b3a.8.1738636802815;
-        Mon, 03 Feb 2025 18:40:02 -0800 (PST)
-Received: from KERNELXING-MC1.tencent.com ([111.201.25.167])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ba44fsm9660492b3a.100.2025.02.03.18.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 18:40:02 -0800 (PST)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jason Xing <kerneljasonxing@gmail.com>
-Subject: [PATCH bpf-next v1 2/2] bpf: sockopt_sk: fix 'undeclared' definition error
-Date: Tue,  4 Feb 2025 10:39:46 +0800
-Message-Id: <20250204023946.16031-3-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250204023946.16031-1-kerneljasonxing@gmail.com>
-References: <20250204023946.16031-1-kerneljasonxing@gmail.com>
+	s=arc-20240116; t=1738636960; c=relaxed/simple;
+	bh=192aj1QJsPyGtAMkRPhiiiupVd6SXNH3StPpurpmAIo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NJi73Rzdvu66y50e9NpMrLzAd8rUrT4wolPNTDZttygXpG+o2HgsD5gv38hhw2WkcjRS6usipVZMhLoO8lKiz9uASCRF3KNs84oQLKwSoB4QDf+1b5kCvPIpjQ3TQlUHnHa0p7yJb7aJpnTUNKbgRYv6Y0nDCV/rQysS2MhpAmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CUz7AUxy; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738636959; x=1770172959;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=192aj1QJsPyGtAMkRPhiiiupVd6SXNH3StPpurpmAIo=;
+  b=CUz7AUxyvo+hz+6dXm+UfXIJDV4141D5LUFGcCPvrV2JtdSwHzCfoqg2
+   3aipezKWVU8xhO2K9Q4Qcm5jHtMQ/BsGOrntygGt5GW9B1H8QKYDP0tQZ
+   kGEGG4rdmVrQK+H9tFBLMYoDJhVijjmSCpUPeWI1SxoORSNPOvp94/kD1
+   PxF9ZWc1npKJ84LIiSxI+J9Ft2i9DJ2DyhfjLN2UM+HGwoRwWzc11JhOq
+   B1tHr7OtCREEKTgoKwzAhvozXS9zltSxgt3o5FXBYFGZt5KL53tXXl8EY
+   v4Eu5CAnybWuIJgTkst4+V2CKO8TX/VC/uFjNuA8E/+Orb50FnI4y1hXc
+   Q==;
+X-CSE-ConnectionGUID: pmTCF2+cTOyHvAepcbTjhw==
+X-CSE-MsgGUID: x/zZL4pORVyPg4atGXm7Jw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50564140"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="50564140"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 18:42:37 -0800
+X-CSE-ConnectionGUID: k5pMJs/eS1KFJUS51BcEEw==
+X-CSE-MsgGUID: LsDoyXyXTwW06yE4uEzP3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,257,1732608000"; 
+   d="scan'208";a="111051867"
+Received: from mohdfai2-mobl.gar.corp.intel.com (HELO [10.247.89.75]) ([10.247.89.75])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 18:42:26 -0800
+Message-ID: <a374fa88-433e-4fc9-a63c-fa56f619abd0@linux.intel.com>
+Date: Tue, 4 Feb 2025 10:42:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 4/5] igc: Refactor empty packet insertion into
+ a reusable function
+To: Song Yoong Siang <yoong.siang.song@intel.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Willem de Bruijn <willemb@google.com>,
+ Florian Bezdeka <florian.bezdeka@siemens.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Joe Damato <jdamato@fastly.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mina Almasry <almasrymina@google.com>,
+ Daniel Jurgens <danielj@nvidia.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <joabreu@synopsys.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Choong Yong Liang <yong.liang.choong@linux.intel.com>,
+ Bouska Zdenek <zdenek.bouska@siemens.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+ xdp-hints@xdp-project.net
+References: <20250204004907.789330-1-yoong.siang.song@intel.com>
+ <20250204004907.789330-5-yoong.siang.song@intel.com>
+Content-Language: en-US
+From: "Abdul Rahim, Faizal" <faizal.abdul.rahim@linux.intel.com>
+In-Reply-To: <20250204004907.789330-5-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Error messages:
-selftests/bpf/prog_tests/sockopt_sk.c: In function ‘getsetsockopt’:
-selftests/bpf/prog_tests/sockopt_sk.c:22:31: error: field ‘zc’ has incomplete type
-   struct tcp_zerocopy_receive zc;
-                               ^~
-selftests/bpf/prog_tests/sockopt_sk.c:169:32: error: ‘TCP_ZEROCOPY_RECEIVE’ undeclared (first use in this function)
-  err = getsockopt(fd, SOL_TCP, TCP_ZEROCOPY_RECEIVE, &buf, &optlen);
-                                ^~~~~~~~~~~~~~~~~~~~
 
-Fix it by introducing the right header.
 
-Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/sockopt_sk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 4/2/2025 8:49 am, Song Yoong Siang wrote:
+> Refactor the code for inserting an empty packet into a new function
+> igc_insert_empty_packet(). This change extracts the logic for inserting
+> an empty packet from igc_xmit_frame_ring() into a separate function,
+> allowing it to be reused in future implementations, such as the XDP
+> zero copy transmit function.
+> 
+> This patch introduces no functional changes.
+> 
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> ---
+>   drivers/net/ethernet/intel/igc/igc_main.c | 42 ++++++++++++-----------
+>   1 file changed, 22 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 56a35d58e7a6..c3edd8bcf633 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -1566,6 +1566,26 @@ static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *s
+>   	return false;
+>   }
+>   
+> +static void igc_insert_empty_packet(struct igc_ring *tx_ring)
+> +{
+> +	struct igc_tx_buffer *empty_info;
+> +	struct sk_buff *empty;
+> +	void *data;
+> +
+> +	empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> +	empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+> +	if (!empty)
+> +		return;
+> +
+> +	data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+> +	memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> +
+> +	igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+> +
+> +	if (igc_init_tx_empty_descriptor(tx_ring, empty, empty_info) < 0)
+> +		dev_kfree_skb_any(empty);
+> +}
+> +
+>   static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>   				       struct igc_ring *tx_ring)
+>   {
+> @@ -1603,26 +1623,8 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>   	skb->tstamp = ktime_set(0, 0);
+>   	launch_time = igc_tx_launchtime(tx_ring, txtime, &first_flag, &insert_empty);
+>   
+> -	if (insert_empty) {
+> -		struct igc_tx_buffer *empty_info;
+> -		struct sk_buff *empty;
+> -		void *data;
+> -
+> -		empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> -		empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+> -		if (!empty)
+> -			goto done;
+> -
+> -		data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+> -		memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> -
+> -		igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+> -
+> -		if (igc_init_tx_empty_descriptor(tx_ring,
+> -						 empty,
+> -						 empty_info) < 0)
+> -			dev_kfree_skb_any(empty);
+> -	}
+> +	if (insert_empty)
+> +		igc_insert_empty_packet(tx_ring);
+>   
+>   done:
+>   	/* record the location of the first descriptor for this packet */
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-index ba6b3ec1156a..e0a9785ffcdc 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-@@ -2,7 +2,7 @@
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- 
--#include <netinet/tcp.h>
-+#include <uapi/linux/tcp.h>
- #include <linux/netlink.h>
- #include "sockopt_sk.skel.h"
- 
--- 
-2.43.5
-
+Reviewed-by: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>
 
