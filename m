@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-25634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32D59A2697B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:21:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A15FA26982
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0B653A58E9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 01:20:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 574BE16082A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 01:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5242B212B39;
-	Tue,  4 Feb 2025 01:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B61212FB1;
+	Tue,  4 Feb 2025 01:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pEK5D170"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q93ahCPC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20994212B2E;
-	Tue,  4 Feb 2025 01:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B330A8632C;
+	Tue,  4 Feb 2025 01:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738631823; cv=none; b=Pt/MqYyiJnIRNxdEqAnmreYkfg9Ja9US07bvYPoNfsmmqPsgHlrj1leZGemxp2wgtgVaPnUJu8X85WZozwsmVZZyB889LAqvNUPIKLcdfG0GUqSR/iYR/iM/yKN8tucUCvVTbj3/a/2luvW3onIDMCof25aQuQdizzzaFXekmIo=
+	t=1738631833; cv=none; b=uuSAgtyWSrRl0Dix/bFqPUytPEPDCiBYjTcG7GuhEmZTnDKto/cf9LcaCesHzriBwq9mpA9xq/Agb1njwUgcpwZ9bN0DXWFJY8QHK0JGog8u7IPRLMPICCRDcY/zOHZSNp4oe4OeaGT+0inBIEYIDBCMxeNJ5nkcOHSzoF6sUcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738631823; c=relaxed/simple;
-	bh=AZYnpZH02SrGHDneIoHNp5RsnbeIUYf5hZihOJgorME=;
+	s=arc-20240116; t=1738631833; c=relaxed/simple;
+	bh=RXhsuFDVq5YZtUta9GY/LD9gnQHOJhDgJBXPIZx9ZNo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gtjkrUhGRc1O0mpfKAy8JOWdjP9d8EOb2dpFcqBXfOjH+LAOOvxc1TzuN6c2Sx4sCnmowWMFK1vaf8HxvT9as1cgN075ROfK6wF4NydVjyBngh50/l7Q5vto5R/YCjV59t+UFvH6B2ok1Bwh75+q1UuT1YIN+iLaozQyh/3k0AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pEK5D170; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72121C4CEE4;
-	Tue,  4 Feb 2025 01:17:01 +0000 (UTC)
+	 MIME-Version; b=vGErVlhsTvEPYDconxeGdWBIff+w5jSFmOT21oJqACz2PJlGSkwRDWW3oCg9bDMFF8fTuY5uu7OzlAkrN+9RWwDxdSF4cGN2q6ATo4SwBUT+PCnKYdu2WdXS9vN1xl5eyHaSW0wdhygrUdAuHFArIR/GtZPkeoqVIUYQFGT0DsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q93ahCPC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D229C4CEE4;
+	Tue,  4 Feb 2025 01:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738631822;
-	bh=AZYnpZH02SrGHDneIoHNp5RsnbeIUYf5hZihOJgorME=;
+	s=k20201202; t=1738631832;
+	bh=RXhsuFDVq5YZtUta9GY/LD9gnQHOJhDgJBXPIZx9ZNo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pEK5D170Cke78d+bFOM1IpZl5MlklwfJWrs5cVayQWFTODk6iGZz2rQJFOJucsD/w
-	 1vGUTmB7I8rgETXdS1SCgqt1gJ9s+TpZg/JWeAt/jNB8zt2a0w2S8hyroynr+zAf4y
-	 OVCnqRCMPjj8ZqkYCvhOlfZa/xcH5jDxsGT3JWOmUxm8fNYmW5POzN7HIlW5wGVSI/
-	 IgdfmoeD+arTLDdO+WQmTAXi5krkAVu1EK/NM1XZLqIy0wANiauG1+YXQdSNGenw+a
-	 YIf2vQMangytJSaBvE5W2cO5i/7znApxPJEQy/lNhApN+xxsKmdyEegdZ1nAIm4Oh6
-	 c9mUibL3j45Yw==
+	b=Q93ahCPCVOSUp94rs7JUcgKcqOHYFTbLNxPvIsMEELSjpFIsH2EQrTvNy/z55OOFM
+	 jomCyO5MsN4ZYXAC5kNTjR7GOVmExCFZ/zfy5sBEa7DFnmXt1mjNJ1QAxecLn8aDJ0
+	 GDtXSc9w7+Lnlyp7bWUmPHCOn4XGPdziQsT/fPJLg0tf0HB4LP2sR+NUjqOctGPyM4
+	 PTYUByyIVSuATYn+bYajfbwqQtsTt7jZUlWGGwSrMwMxS4KVdgN/4qhgiav953RcDd
+	 wcSe629la0G+R/I1zBd+s+qXQdHCtQe0UL57L1bYKNyZgSnUIS/QqRSXePptUdabv0
+	 4UbKCM+OYAfnw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Koichiro Den <koichiro.den@canonical.com>,
 	shuah@kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 2/3] selftests: gpio: gpio-sim: Fix missing chip disablements
-Date: Mon,  3 Feb 2025 20:16:53 -0500
-Message-Id: <20250204011654.2206481-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 2/2] selftests: gpio: gpio-sim: Fix missing chip disablements
+Date: Mon,  3 Feb 2025 20:17:05 -0500
+Message-Id: <20250204011705.2206557-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250204011654.2206481-1-sashal@kernel.org>
-References: <20250204011654.2206481-1-sashal@kernel.org>
+In-Reply-To: <20250204011705.2206557-1-sashal@kernel.org>
+References: <20250204011705.2206557-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.75
+X-stable-base: Linux 6.1.128
 Content-Transfer-Encoding: 8bit
 
 From: Koichiro Den <koichiro.den@canonical.com>
@@ -90,7 +90,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 25 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-index 6fb66a687f173..bbc29ed9c60a9 100755
+index bf67b23ed29ac..46101a800bebf 100755
 --- a/tools/testing/selftests/gpio/gpio-sim.sh
 +++ b/tools/testing/selftests/gpio/gpio-sim.sh
 @@ -46,12 +46,6 @@ remove_chip() {
