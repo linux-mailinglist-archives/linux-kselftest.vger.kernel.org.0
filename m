@@ -1,270 +1,184 @@
-Return-Path: <linux-kselftest+bounces-25635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A15FA26982
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:21:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B6A7A269DD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 02:34:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 574BE16082A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 01:21:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A74B23A4EF4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 01:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B61212FB1;
-	Tue,  4 Feb 2025 01:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 933E7537E5;
+	Tue,  4 Feb 2025 01:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q93ahCPC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ke09ZpVk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B330A8632C;
-	Tue,  4 Feb 2025 01:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B00AEC4;
+	Tue,  4 Feb 2025 01:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738631833; cv=none; b=uuSAgtyWSrRl0Dix/bFqPUytPEPDCiBYjTcG7GuhEmZTnDKto/cf9LcaCesHzriBwq9mpA9xq/Agb1njwUgcpwZ9bN0DXWFJY8QHK0JGog8u7IPRLMPICCRDcY/zOHZSNp4oe4OeaGT+0inBIEYIDBCMxeNJ5nkcOHSzoF6sUcM=
+	t=1738632877; cv=none; b=nCCJe7+NHlsME22FRBwZVWw2tmbh5nkjU5aPoQrKHBEuNpg6FcE6CamlOzE0JFUUzNDAW1f6tg298/8C9OR4VS1Kgc+ogd+6TuCGHT5ztSqv/UoI0EcbKcSkY88EuRDCURgz2JlbmNpT14YbTUXk9hBiAYPD7Tc58YbdlSIw4Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738631833; c=relaxed/simple;
-	bh=RXhsuFDVq5YZtUta9GY/LD9gnQHOJhDgJBXPIZx9ZNo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=vGErVlhsTvEPYDconxeGdWBIff+w5jSFmOT21oJqACz2PJlGSkwRDWW3oCg9bDMFF8fTuY5uu7OzlAkrN+9RWwDxdSF4cGN2q6ATo4SwBUT+PCnKYdu2WdXS9vN1xl5eyHaSW0wdhygrUdAuHFArIR/GtZPkeoqVIUYQFGT0DsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q93ahCPC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D229C4CEE4;
-	Tue,  4 Feb 2025 01:17:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738631832;
-	bh=RXhsuFDVq5YZtUta9GY/LD9gnQHOJhDgJBXPIZx9ZNo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q93ahCPCVOSUp94rs7JUcgKcqOHYFTbLNxPvIsMEELSjpFIsH2EQrTvNy/z55OOFM
-	 jomCyO5MsN4ZYXAC5kNTjR7GOVmExCFZ/zfy5sBEa7DFnmXt1mjNJ1QAxecLn8aDJ0
-	 GDtXSc9w7+Lnlyp7bWUmPHCOn4XGPdziQsT/fPJLg0tf0HB4LP2sR+NUjqOctGPyM4
-	 PTYUByyIVSuATYn+bYajfbwqQtsTt7jZUlWGGwSrMwMxS4KVdgN/4qhgiav953RcDd
-	 wcSe629la0G+R/I1zBd+s+qXQdHCtQe0UL57L1bYKNyZgSnUIS/QqRSXePptUdabv0
-	 4UbKCM+OYAfnw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Koichiro Den <koichiro.den@canonical.com>,
-	kernel test robot <oliver.sang@intel.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Sasha Levin <sashal@kernel.org>,
-	bamv2005@gmail.com,
-	shuah@kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 2/2] selftests: gpio: gpio-sim: Fix missing chip disablements
-Date: Mon,  3 Feb 2025 20:17:05 -0500
-Message-Id: <20250204011705.2206557-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250204011705.2206557-1-sashal@kernel.org>
-References: <20250204011705.2206557-1-sashal@kernel.org>
+	s=arc-20240116; t=1738632877; c=relaxed/simple;
+	bh=cTqZc7KMQfir834dyF7dto20NWb+pLw52qL9bC6G4tA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i2YTTv1W+h2YCof0qVPoQ/fmEUKHGR0C/Uudw4xL8o+rq5GiSr+1f8UV3BQGKUCYhALaC57/kkTUJSHlHbB8W3lEkRkfEdq8bdEvbH8P+Rn2yKXENx1eG6apIG0UftTnx3pv+zeobTq7K5cA+0niFSmsbKoPUq/3772V/eg30aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ke09ZpVk; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738632876; x=1770168876;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cTqZc7KMQfir834dyF7dto20NWb+pLw52qL9bC6G4tA=;
+  b=ke09ZpVkdy1U6DPZo1SL0b5+e/FMq/Am8+KXiU3vo5WDMx42rYdf4RZG
+   SUcsllelXGG1HCHKD3j1YD6LcHtPdmBb7LACDvNgtNyQikfK51GYh4+PB
+   3TLIaFOTc6m3g3mcyfkQmMscwggqYwugRGyxkdxACJSpPWZKxOiPmuW68
+   NOa9azDdaXNfw6nARYfUTj5fBx+H0HOEBOuroAyXFQBKUNqw6bmaaSZ/y
+   rpBxqOZj/Ys+LXaKRA/4PDKaWVlDbFklQbv8thbJvVojUe7ry+RiJ1/Kg
+   reZ17PUPr+1yHYP6gdklhu6NiDskD6c/rxYw66ZdRQadQchc1imYIVioM
+   A==;
+X-CSE-ConnectionGUID: Tag1N2hORI2+DE2n+rR1yg==
+X-CSE-MsgGUID: P87jdiaMTjKPjnq1PtVJGg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="49795734"
+X-IronPort-AV: E=Sophos;i="6.13,257,1732608000"; 
+   d="scan'208";a="49795734"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 17:34:18 -0800
+X-CSE-ConnectionGUID: 4tSta66CTFq8So3/FmHf2g==
+X-CSE-MsgGUID: 907kdKGuTAyI/dVJbUURBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="115441422"
+Received: from choongyo-mobl.gar.corp.intel.com (HELO [10.247.124.71]) ([10.247.124.71])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 17:34:06 -0800
+Message-ID: <e0d34c88-dd8d-402d-bc67-6b9c4f8effaf@linux.intel.com>
+Date: Tue, 4 Feb 2025 09:34:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.128
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 3/5] net: stmmac: Add launch time support to
+ XDP ZC
+To: Song Yoong Siang <yoong.siang.song@intel.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Willem de Bruijn <willemb@google.com>,
+ Florian Bezdeka <florian.bezdeka@siemens.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Joe Damato <jdamato@fastly.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mina Almasry <almasrymina@google.com>,
+ Daniel Jurgens <danielj@nvidia.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <joabreu@synopsys.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
+ Bouska Zdenek <zdenek.bouska@siemens.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+ xdp-hints@xdp-project.net
+References: <20250204004907.789330-1-yoong.siang.song@intel.com>
+ <20250204004907.789330-4-yoong.siang.song@intel.com>
+Content-Language: en-US
+From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
+In-Reply-To: <20250204004907.789330-4-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Koichiro Den <koichiro.den@canonical.com>
 
-[ Upstream commit f8524ac33cd452aef5384504b3264db6039a455e ]
 
-Since upstream commit 8bd76b3d3f3a ("gpio: sim: lock up configfs that an
-instantiated device depends on"), rmdir for an active virtual devices
-been prohibited.
+On 4/2/2025 8:49 am, Song Yoong Siang wrote:
+> Enable launch time (Time-Based Scheduling) support for XDP zero copy via
+> the XDP Tx metadata framework.
+> 
+> This patch has been tested with tools/testing/selftests/bpf/xdp_hw_metadata
+> on Intel Tiger Lake platform. Below are the test steps and result.
+> 
+> Test 1: Send a single packet with the launch time set to 1 s in the future.
+> 
+> Test steps:
+> 1. On the DUT, start the xdp_hw_metadata selftest application:
+>     $ sudo ./xdp_hw_metadata enp0s30f4 -l 1000000000 -L 1
+> 
+> 2. On the Link Partner, send a UDP packet with VLAN priority 1 to port 9091
+>     of the DUT.
+> 
+> Result:
+> When the launch time is set to 1 s in the future, the delta between the
+> launch time and the transmit hardware timestamp is 16.963 us, as shown in
+> printout of the xdp_hw_metadata application below.
+>    0x55b5864717a8: rx_desc[4]->addr=88100 addr=88100 comp_addr=88100 EoP
+>    No rx_hash, err=-95
+>    HW RX-time:   1734579065767717328 (sec:1734579065.7677)
+>                  delta to User RX-time sec:0.0004 (375.624 usec)
+>    XDP RX-time:   1734579065768004454 (sec:1734579065.7680)
+>                   delta to User RX-time sec:0.0001 (88.498 usec)
+>    No rx_vlan_tci or rx_vlan_proto, err=-95
+>    0x55b5864717a8: ping-pong with csum=5619 (want 0000)
+>                    csum_start=34 csum_offset=6
+>    HW RX-time:   1734579065767717328 (sec:1734579065.7677)
+>                  delta to HW Launch-time sec:1.0000 (1000000.000 usec)
+>    0x55b5864717a8: complete tx idx=4 addr=4018
+>    HW Launch-time:   1734579066767717328 (sec:1734579066.7677)
+>                      delta to HW TX-complete-time sec:0.0000 (16.963 usec)
+>    HW TX-complete-time:   1734579066767734291 (sec:1734579066.7677)
+>                           delta to User TX-complete-time sec:0.0001
+>                           (130.408 usec)
+>    XDP RX-time:   1734579065768004454 (sec:1734579065.7680)
+>                   delta to User TX-complete-time sec:0.9999
+>                  (999860.245 usec)
+>    HW RX-time:   1734579065767717328 (sec:1734579065.7677)
+>                  delta to HW TX-complete-time sec:1.0000 (1000016.963 usec)
+>    0x55b5864717a8: complete rx idx=132 addr=88100
+> 
+> Test 2: Send 1000 packets with a 10 ms interval and the launch time set to
+>          500 us in the future.
+> 
+> Test steps:
+> 1. On the DUT, start the xdp_hw_metadata selftest application:
+>     $ sudo chrt -f 99 ./xdp_hw_metadata enp0s30f4 -l 500000 -L 1 > \
+>       /dev/shm/result.log
+> 
+> 2. On the Link Partner, send 1000 UDP packets with a 10 ms interval and
+>     VLAN priority 1 to port 9091 of the DUT.
+> 
+> Result:
+> When the launch time is set to 500 us in the future, the average delta
+> between the launch time and the transmit hardware timestamp is 13.854 us,
+> as shown in the analysis of /dev/shm/result.log below. The XDP launch time
+> works correctly in sending 1000 packets continuously.
+>    Min delta: 08.410 us
+>    Avr delta: 13.854 us
+>    Max delta: 17.076 us
+>    Total packets forwarded: 1000
+> 
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 
-Update gpio-sim selftest to align with the change.
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202501221006.a1ca5dfa-lkp@intel.com
-Signed-off-by: Koichiro Den <koichiro.den@canonical.com>
-Link: https://lore.kernel.org/r/20250122043309.304621-1-koichiro.den@canonical.com
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/gpio/gpio-sim.sh | 31 +++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-index bf67b23ed29ac..46101a800bebf 100755
---- a/tools/testing/selftests/gpio/gpio-sim.sh
-+++ b/tools/testing/selftests/gpio/gpio-sim.sh
-@@ -46,12 +46,6 @@ remove_chip() {
- 	rmdir $CONFIGFS_DIR/$CHIP || fail "Unable to remove the chip"
- }
- 
--configfs_cleanup() {
--	for CHIP in `ls $CONFIGFS_DIR/`; do
--		remove_chip $CHIP
--	done
--}
--
- create_chip() {
- 	local CHIP=$1
- 
-@@ -105,6 +99,13 @@ disable_chip() {
- 	echo 0 > $CONFIGFS_DIR/$CHIP/live || fail "Unable to disable the chip"
- }
- 
-+configfs_cleanup() {
-+	for CHIP in `ls $CONFIGFS_DIR/`; do
-+		disable_chip $CHIP
-+		remove_chip $CHIP
-+	done
-+}
-+
- configfs_chip_name() {
- 	local CHIP=$1
- 	local BANK=$2
-@@ -181,6 +182,7 @@ create_chip chip
- create_bank chip bank
- enable_chip chip
- test -n `cat $CONFIGFS_DIR/chip/bank/chip_name` || fail "chip_name doesn't work"
-+disable_chip chip
- remove_chip chip
- 
- echo "1.2. chip_name returns 'none' if the chip is still pending"
-@@ -195,6 +197,7 @@ create_chip chip
- create_bank chip bank
- enable_chip chip
- test -n `cat $CONFIGFS_DIR/chip/dev_name` || fail "dev_name doesn't work"
-+disable_chip chip
- remove_chip chip
- 
- echo "2. Creating and configuring simulated chips"
-@@ -204,6 +207,7 @@ create_chip chip
- create_bank chip bank
- enable_chip chip
- test "`get_chip_num_lines chip bank`" = "1" || fail "default number of lines is not 1"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.2. Number of lines can be specified"
-@@ -212,6 +216,7 @@ create_bank chip bank
- set_num_lines chip bank 16
- enable_chip chip
- test "`get_chip_num_lines chip bank`" = "16" || fail "number of lines is not 16"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.3. Label can be set"
-@@ -220,6 +225,7 @@ create_bank chip bank
- set_label chip bank foobar
- enable_chip chip
- test "`get_chip_label chip bank`" = "foobar" || fail "label is incorrect"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.4. Label can be left empty"
-@@ -227,6 +233,7 @@ create_chip chip
- create_bank chip bank
- enable_chip chip
- test -z "`cat $CONFIGFS_DIR/chip/bank/label`" || fail "label is not empty"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.5. Line names can be configured"
-@@ -238,6 +245,7 @@ set_line_name chip bank 2 bar
- enable_chip chip
- test "`get_line_name chip bank 0`" = "foo" || fail "line name is incorrect"
- test "`get_line_name chip bank 2`" = "bar" || fail "line name is incorrect"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.6. Line config can remain unused if offset is greater than number of lines"
-@@ -248,6 +256,7 @@ set_line_name chip bank 5 foobar
- enable_chip chip
- test "`get_line_name chip bank 0`" = "" || fail "line name is incorrect"
- test "`get_line_name chip bank 1`" = "" || fail "line name is incorrect"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.7. Line configfs directory names are sanitized"
-@@ -267,6 +276,7 @@ for CHIP in $CHIPS; do
- 	enable_chip $CHIP
- done
- for CHIP in $CHIPS; do
-+  disable_chip $CHIP
- 	remove_chip $CHIP
- done
- 
-@@ -278,6 +288,7 @@ echo foobar > $CONFIGFS_DIR/chip/bank/label 2> /dev/null && \
- 	fail "Setting label of a live chip should fail"
- echo 8 > $CONFIGFS_DIR/chip/bank/num_lines 2> /dev/null && \
- 	fail "Setting number of lines of a live chip should fail"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.10. Can't create line items when chip is live"
-@@ -285,6 +296,7 @@ create_chip chip
- create_bank chip bank
- enable_chip chip
- mkdir $CONFIGFS_DIR/chip/bank/line0 2> /dev/null && fail "Creating line item should fail"
-+disable_chip chip
- remove_chip chip
- 
- echo "2.11. Probe errors are propagated to user-space"
-@@ -316,6 +328,7 @@ mkdir -p $CONFIGFS_DIR/chip/bank/line4/hog
- enable_chip chip
- $BASE_DIR/gpio-mockup-cdev -s 1 /dev/`configfs_chip_name chip bank` 4 2> /dev/null && \
- 	fail "Setting the value of a hogged line shouldn't succeed"
-+disable_chip chip
- remove_chip chip
- 
- echo "3. Controlling simulated chips"
-@@ -331,6 +344,7 @@ test "$?" = "1" || fail "pull set incorrectly"
- sysfs_set_pull chip bank 0 pull-down
- $BASE_DIR/gpio-mockup-cdev /dev/`configfs_chip_name chip bank` 1
- test "$?" = "0" || fail "pull set incorrectly"
-+disable_chip chip
- remove_chip chip
- 
- echo "3.2. Pull can be read from sysfs"
-@@ -344,6 +358,7 @@ SYSFS_PATH=/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/pull
- test `cat $SYSFS_PATH` = "pull-down" || fail "reading the pull failed"
- sysfs_set_pull chip bank 0 pull-up
- test `cat $SYSFS_PATH` = "pull-up" || fail "reading the pull failed"
-+disable_chip chip
- remove_chip chip
- 
- echo "3.3. Incorrect input in sysfs is rejected"
-@@ -355,6 +370,7 @@ DEVNAME=`configfs_dev_name chip`
- CHIPNAME=`configfs_chip_name chip bank`
- SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/pull"
- echo foobar > $SYSFS_PATH 2> /dev/null && fail "invalid input not detected"
-+disable_chip chip
- remove_chip chip
- 
- echo "3.4. Can't write to value"
-@@ -365,6 +381,7 @@ DEVNAME=`configfs_dev_name chip`
- CHIPNAME=`configfs_chip_name chip bank`
- SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
- echo 1 > $SYSFS_PATH 2> /dev/null && fail "writing to 'value' succeeded unexpectedly"
-+disable_chip chip
- remove_chip chip
- 
- echo "4. Simulated GPIO chips are functional"
-@@ -382,6 +399,7 @@ $BASE_DIR/gpio-mockup-cdev -s 1 /dev/`configfs_chip_name chip bank` 0 &
- sleep 0.1 # FIXME Any better way?
- test `cat $SYSFS_PATH` = "1" || fail "incorrect value read from sysfs"
- kill $!
-+disable_chip chip
- remove_chip chip
- 
- echo "4.2. Bias settings work correctly"
-@@ -394,6 +412,7 @@ CHIPNAME=`configfs_chip_name chip bank`
- SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
- $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
- test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
-+disable_chip chip
- remove_chip chip
- 
- echo "GPIO $MODULE test PASS"
--- 
-2.39.5
-
+Reviewed-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 
