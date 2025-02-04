@@ -1,118 +1,153 @@
-Return-Path: <linux-kselftest+bounces-25672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A1BAA271AD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 13:17:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871F3A271BE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 13:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A30DD1608F5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:17:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CB8C18818E0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 12:24:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7AB207669;
-	Tue,  4 Feb 2025 12:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4811B20D51F;
+	Tue,  4 Feb 2025 12:23:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Xe3Qk0Kr"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dzKwy/C9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4251020B80D
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 12:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A9620A5D0;
+	Tue,  4 Feb 2025 12:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738671426; cv=none; b=DgrmhhWXwvU5r69ZO61V9Gx3Vwhvg4ukr6eP8Te/AWJu/1dVO53iMK/y8ZWSJbsDR1gLFN/5aKx8iF865jAJkvcbioCzwkFBOYcMlNTe0ekekhHeF9LyxX+v1SWEoZJxxtpWHfx3RLybDfl4M7zoQs+F05pQlZyVRkf2n7Ofy+o=
+	t=1738671811; cv=none; b=nBsUFidueI8Wk61+XqrAcbWLlmpNnof5aNYDVbW2uWpUPFAztcUw87auAyINaQhQVCg/DkLda1JOcmtQam+GbOPswlvKWKbNzX99KVymQR0fVmWTweZ5IlGGnjZGFVEzyKxmpluXcKYf2SM+Cr9s8WPrtIwf92kAbyig0M0g5hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738671426; c=relaxed/simple;
-	bh=1DsnRCD9MC1WNlpE3vjA8aL51Bl2gKT8bWu2APVPL18=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ba04AdcJxbzAIURCGtBDhTCtzbNG2mxzRJ2hnddY41QZZ7OWW0CUB+UWCmaqRLNfJAjUXxr98o7Epdl2pkik8OTtWdPq43B5n6dWT78lMu1HcB6WjnEFNKiMOyP69TDemB6H2ZJ11epmw5aASjAC3kQE4vdKjDEx5LZkGm97q9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Xe3Qk0Kr; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aa68b513abcso980524066b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 04:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1738671422; x=1739276222; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZvhNBQWKlCvAqcbBDr5tv0EzdkUSClpqTtdtVXuZUac=;
-        b=Xe3Qk0Kr0HP36Qm1W5eKVq8IHDeCaSQYliBW8DvNQZSzRiXW3g28mxcIwdtCUmEQfb
-         h/F9hYQQjqOLVHR0HaM4Z7Zx5O6xnWBDOikKmkkMImXfWzq83whRS6+YFb7DcCcK2vAa
-         oZgwIDCDY+GEkObFWXwlVt5C+GqcNwsvuTMnnd0rWGNFBEa0/PbODsY8PbYcHrS1ah1o
-         CVaUHOkL0f7h/Nb6me4IDHjbNIyZkW6LWam+hVGD35XhCqM+2GJxNILNl+whltEzUW+N
-         IyyndLxh8A0LdEjCJLwOFmUq0ct1Onbkjy1s1HQb3fKCYSucNWG5dXLGfjYMWZRYWv4S
-         kwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738671422; x=1739276222;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZvhNBQWKlCvAqcbBDr5tv0EzdkUSClpqTtdtVXuZUac=;
-        b=jqTaJtnTF5BRKU+S5GYsGS8BJjW2TTLsm1FIzpA/m4GC77a3SpiUn1p7XzY5jHiIFR
-         zz4RT/e0M0x7bLStJsT1HcsJVmbx9FDykCCVOAvKjc6KMbURrh6b/+pHpXFRA9COFIS1
-         hYl0oU2t82qYBIRx2X1fY+E1APrfIlX7Rt2voUPDaScVvUDGd43N9k+FlaLYzXD8d0vi
-         CnGN+a6E+8DHgnaAHDtUy5FcHnf15QPnAGjimc3RkxCUP11nK9+e1EtbT4VsJqoXIPlE
-         V2v3ZjuY8oDX42Rji7kxgMWIfRro9OZrnGyDArXnQkUlDx4akfW1Dd2LwcEHGenrtyaM
-         0UBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVX5aeHL9/JF/XGduU4ALwzDPyg3+OCsrU8LxSu57zRAPPBiLv7YWDrfDg5bvTjpmWyGd7p0YLsUC1Eki0oKCU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk0Tydo9gnSdHGj9awdFE9YBRAI/3pEqEL8R6Ohm5zdCwqK9+L
-	1Dea2nPaIRcmTot4Jou4IHRgGINcqhFr6lMZ8ULtNJ4K1SkkaRd/siUqSsBRftc=
-X-Gm-Gg: ASbGncv4JzuaFl4P+6HELQtEYvM1pHCNZNa03KbulNIe8KG3kA6VcIx+LRrNBXAdEyH
-	lL5oofhvmw4lym7uobTmLBfYFodpcpSgYuf5C6kwnfvId6UimgvIfOl0K6TsPeY4JI7pcH5PM+z
-	HXYhM7Z54OnLC6Tzh1vPsW9rJ86iYlmBg8v5T56HHnOmt9nLyDdBtVxiGLp3pSzMxuAadgWAJ8m
-	/IbAX2yjGIHAa7ckJxZ4LHcZ4/Yhqjl/9MXi96rBMZZ/YeUhq6ymayWSaPhB4ri6zbTSD64QfV+
-	8iO6TZj/NRb52gUOaw==
-X-Google-Smtp-Source: AGHT+IH2G8hYYAkJwoDrdGcDA8/rdA98WX6XXA5JkrXP0w9WRYZajDa9VQmXcTXz1ys2KVFC33ecFA==
-X-Received: by 2002:a17:906:d54c:b0:ab6:edd6:a812 with SMTP id a640c23a62f3a-ab6edd6a8camr2102928166b.24.1738671422169;
-        Tue, 04 Feb 2025 04:17:02 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e47f1e23sm906290566b.82.2025.02.04.04.17.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 04:17:01 -0800 (PST)
-Date: Tue, 4 Feb 2025 13:17:00 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v2] scanf: convert self-test to KUnit
-Message-ID: <Z6IFPAuCz0_vDdB4@pathway.suse.cz>
-References: <20250203-scanf-kunit-convert-v2-1-277a618d804e@gmail.com>
- <Z6HSFvvgxFVGDQeI@pathway.suse.cz>
- <CAJ-ks9mfmM-SzkEiJsKL56jSuyXzLrKd4XHgRnp63C9AYcDoAA@mail.gmail.com>
+	s=arc-20240116; t=1738671811; c=relaxed/simple;
+	bh=dG5tGVtQZTw25dqMdtJ1/zyy7NY53LArQnmaSzSHXlM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EtLNAwN0xG48sfNxt9QeGXVIpaKX+4gjcJPPnAS+rsiMosCLHGG4J5mEqD8T+UoWRWTMmfiXMqm6F115tYl0Rn5ZUWWzv93gA+GkHg5w5xzlPxmaKyS3Oxcwn0fVhDHlqIPs5nwo7x8LFwd4YsAuI+juJYDhvUHWELqOhSU47gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dzKwy/C9; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5145NlQ3008384;
+	Tue, 4 Feb 2025 12:23:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=UJ/Pfi
+	/BfkwkEFANDeCNiXq+lhOSzYk/7Ikhm8IpmLU=; b=dzKwy/C9ik+0HIjNHd8nTE
+	2zQpVD00//xmxf2wXK9XbKi6izU2Mq5Vv8s730Ducof6Ip34iQN6vogG+E6LGQJ0
+	OpNSPWPyCWlk6fesqHMxr54iMLIiQmJh9qALHv7VWDklJCJPEU3X57MFrJo45eE9
+	YbzwpYBbNuAEkq/iN5MHV7V4/iOTvt5okOcJLcQPZ5imXRKyy3klIyl3bhzgfSR/
+	gmlM708D+g/Be8EQcSzM1xrxCrj/tLAGSLQwNm9tRyqLJyqygbbHLZZZkZhCXqKQ
+	9AXUW+kcRynr80GU3vqnT6xmUGphKfEF+WUqBaxwfTPut/upvv9zvt2m3MX7ltUw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kcq7sw41-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 12:23:24 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 514CNOG2024827;
+	Tue, 4 Feb 2025 12:23:24 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kcq7sw3y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 12:23:24 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 514Bda3b016416;
+	Tue, 4 Feb 2025 12:23:23 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 44hwxsbmcv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Feb 2025 12:23:23 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 514CNJVT17891722
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 4 Feb 2025 12:23:19 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B085D20542;
+	Tue,  4 Feb 2025 12:23:19 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2E25520544;
+	Tue,  4 Feb 2025 12:23:19 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.171.94.245])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Tue,  4 Feb 2025 12:23:19 +0000 (GMT)
+Date: Tue, 4 Feb 2025 13:23:17 +0100
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank
+ <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo
+ Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Fix spelling mistake "initally" ->
+ "initially"
+Message-ID: <20250204132317.67d85b69@p-imbrenda>
+In-Reply-To: <20250204105647.367743-1-colin.i.king@gmail.com>
+References: <20250204105647.367743-1-colin.i.king@gmail.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ-ks9mfmM-SzkEiJsKL56jSuyXzLrKd4XHgRnp63C9AYcDoAA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -yyIbkPcCIgxgjB2b6kv5fNBMi9Us86a
+X-Proofpoint-ORIG-GUID: X91T-z-FZSsJTojqkAtvXmRXxkwbzcY3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-04_05,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502040096
 
-On Tue 2025-02-04 05:27:23, Tamir Duberstein wrote:
-> Oops, meant to address this in the last reply.
+On Tue,  4 Feb 2025 10:56:47 +0000
+Colin Ian King <colin.i.king@gmail.com> wrote:
+
+> There is a spelling mistake in a literal string and in the function
+> test_get_inital_dirty. Fix them.
 > 
-> On Tue, Feb 4, 2025 at 3:39 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > Should this go via the printk tree, please?
-> > Or is David going to take it via the kunit tree?
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+
+> ---
+>  tools/testing/selftests/kvm/s390/cmma_test.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Going via printk would be my preference.
+> diff --git a/tools/testing/selftests/kvm/s390/cmma_test.c b/tools/testing/selftests/kvm/s390/cmma_test.c
+> index e32dd59703a0..85cc8c18d6e7 100644
+> --- a/tools/testing/selftests/kvm/s390/cmma_test.c
+> +++ b/tools/testing/selftests/kvm/s390/cmma_test.c
+> @@ -444,7 +444,7 @@ static void assert_no_pages_cmma_dirty(struct kvm_vm *vm)
+>  			 );
+>  }
+>  
+> -static void test_get_inital_dirty(void)
+> +static void test_get_initial_dirty(void)
+>  {
+>  	struct kvm_vm *vm = create_vm_two_memslots();
+>  	struct kvm_vcpu *vcpu;
+> @@ -651,7 +651,7 @@ struct testdef {
+>  } testlist[] = {
+>  	{ "migration mode and dirty tracking", test_migration_mode },
+>  	{ "GET_CMMA_BITS: basic calls", test_get_cmma_basic },
+> -	{ "GET_CMMA_BITS: all pages are dirty initally", test_get_inital_dirty },
+> +	{ "GET_CMMA_BITS: all pages are dirty initially", test_get_initial_dirty },
+>  	{ "GET_CMMA_BITS: holes are skipped", test_get_skip_holes },
+>  };
+>  
 
-I am fine with it. I assume that you are going to send v3 with
-the updated Makefile. Well, let's wait a bit for more potential
-feedback.
-
-Best Regards,
-Petr
 
