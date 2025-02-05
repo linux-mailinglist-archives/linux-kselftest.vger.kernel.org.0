@@ -1,103 +1,86 @@
-Return-Path: <linux-kselftest+bounces-25796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45013A2839E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 06:24:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F226A283A5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 06:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B5D218868EE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 05:24:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E6D5161587
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 05:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35A721D583;
-	Wed,  5 Feb 2025 05:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057D121D5A4;
+	Wed,  5 Feb 2025 05:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vMDDXSD4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099A420F09D;
-	Wed,  5 Feb 2025 05:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E7D21D59C
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Feb 2025 05:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738733055; cv=none; b=JoDDAPhbAeIYkv0DSmDJfxodO9FNsON01S6z02wjTM0BZmRfpnKt/SM4L0aVLTeCL2eMkK+4ZPYQJH4W5dESQOjriigwdVejVryH09sxVI7v14gw2orGX9yQHtIUHhRcSIN/hBhN/5RKjK9lbrvyqRzCUFhzVdLYqoFbQ8BWlUc=
+	t=1738733281; cv=none; b=f8cnSPrb/ZofiMltjTWamlfRcIwHesyaalpUwEODHAkZhCN6JAqzaYFjVMe+XSAyWNKpxlJHujBV7UrbQ/OOXvbryy44aO4XIa5vIZhp89TYmqmx3HR4fgk7Pr5Bx+MVUsjHJs1a1X4UKdXnEOoNo1oCZ6usg2JFEy/ULkpMKqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738733055; c=relaxed/simple;
-	bh=+Lk5B53trfdD2kQOnydrTPR6mmkbLrC29ruqyJk4Buc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WYknH0stIK1ShiRLcRS18ZFnGlR1+3Ojh15m25WN05Il8OvKlxch5ZfUWBKrSxGdT2Kmh/u9eZCCQvt1m0wjqhy9erau+tzqzolbrm/iRO3dzTT1pFkMriPrikqYNC+OMOZSE7hA0ghObdyeJ1NnSp85O0Z6JpnyTkC/wbzSIfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E680311FB;
-	Tue,  4 Feb 2025 21:24:36 -0800 (PST)
-Received: from [10.162.41.15] (K4MQJ0H1H2.blr.arm.com [10.162.41.15])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8E853F63F;
-	Tue,  4 Feb 2025 21:24:10 -0800 (PST)
-Message-ID: <ee3ca3d6-ed8e-4138-a0ec-5a19a23f937e@arm.com>
-Date: Wed, 5 Feb 2025 10:54:07 +0530
+	s=arc-20240116; t=1738733281; c=relaxed/simple;
+	bh=pK4jSL3Gygw3R6JbuHJk0Jewq96zcYqsIuw0skDpqq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OOPokCwypCuSqJ6Z7T9lgwV03b1jOwz+StqEN7UQul3ygM+zJLCacFx8E5H2DndL0t+q7xV4SenfQ1GUtpEDILRMTW0zh3Q3Fgnf/qRHAVr/MRQ+vtwOkYXyr5ejeOHFFlKNhEpBnwwWG8aiIXQ0wj0/eaHntChsZyRynVZaerc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vMDDXSD4; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 4 Feb 2025 21:27:47 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738733273;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Yr/kEl344VtN8JcOTmPwoh4ga2bP215c4hyTIT5ZTRI=;
+	b=vMDDXSD4ut45yPfX2txcNftk5l9C5ldX6TFwkLReCHrtumv/Vl0odEIad0ry6rQQDz7zR8
+	1tv7yqycrgyqXYmAs8NwRAV8uVboWNIz5jqEKyjVenwHoTVSXn2hk3WEcCkjvADxUoWIP3
+	C2qoDmjcAXsDAiE8vR1Ywt6nHR1XL3A=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Christian Brauner <christian@brauner.io>, 
+	Shuah Khan <shuah@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Oliver Sang <oliver.sang@intel.com>, John Hubbard <jhubbard@nvidia.com>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>, 
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v7 5/6] selftests: pidfd: add tests for PIDFD_SELF_*
+Message-ID: <23rf6rxqzezqa5zmuiwwairxatbmahboccwzp6p5tbvkjirvqc@h4qzhh3pvsun>
+References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
+ <7ab0e48b26ba53abf7b703df2dd11a2e99b8efb2.1738268370.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Fix thuge-gen test name uniqueness
-To: Mark Brown <broonie@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250204-kselftest-mm-fix-dups-v1-1-6afe417ef4bb@kernel.org>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20250204-kselftest-mm-fix-dups-v1-1-6afe417ef4bb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ab0e48b26ba53abf7b703df2dd11a2e99b8efb2.1738268370.git.lorenzo.stoakes@oracle.com>
+X-Migadu-Flow: FLOW_OUT
 
-
-
-On 05/02/25 4:23 am, Mark Brown wrote:
-> The thuge-gen test_mmap() and test_shmget() tests are repeatedly run for a
-> variety of sizes but always report the result of their test with the same
-> name, meaning that automated sysetms running the tests are unable to
-> distinguish between the various tests. Add the supplied sizes to the logged
-> test names to distinguish between runs.
+On Thu, Jan 30, 2025 at 08:40:30PM +0000, Lorenzo Stoakes wrote:
+> Add tests to assert that PIDFD_SELF* correctly refers to the current
+> thread and process.
 > 
-> Fixes: b38bd9b2c448 ("selftests/mm: thuge-gen: conform to TAP format output")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   tools/testing/selftests/mm/thuge-gen.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> We explicitly test pidfd_send_signal(), however We defer testing of
+> mm-specific functionality which uses pidfd, namely process_madvise() and
+> process_mrelease() to mm testing (though note the latter can not be
+> sensibly tested as it would require the testing process to be dying).
 > 
-> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
-> index e4370b79b62ffb133056eb843cdd1eaeba6503df..cd5174d735be405220d99ae796a3768f53df6ea4 100644
-> --- a/tools/testing/selftests/mm/thuge-gen.c
-> +++ b/tools/testing/selftests/mm/thuge-gen.c
-> @@ -127,7 +127,7 @@ void test_mmap(unsigned long size, unsigned flags)
->   
->   	show(size);
->   	ksft_test_result(size == getpagesize() || (before - after) == NUM_PAGES,
-> -			 "%s mmap\n", __func__);
-> +			 "%s mmap %lu\n", __func__, size);
->   
->   	if (munmap(map, size * NUM_PAGES))
->   		ksft_exit_fail_msg("%s: unmap %s\n", __func__, strerror(errno));
-> @@ -165,7 +165,7 @@ void test_shmget(unsigned long size, unsigned flags)
->   
->   	show(size);
->   	ksft_test_result(size == getpagesize() || (before - after) == NUM_PAGES,
-> -			 "%s: mmap\n", __func__);
-> +			 "%s: mmap %lu\n", __func__, size);
->   	if (shmdt(map))
->   		ksft_exit_fail_msg("%s: shmdt: %s\n", __func__, strerror(errno));
->   }
+> We also correct the pidfd_open_test.c fields which refer to .request_mask
+> whereas the UAPI header refers to .mask, which otherwise break the import
+> of the UAPI header.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-
-Suggest converting size to MB before printing. This will print the size 
-in bytes which is confusing. Otherwise:
-
-Reviewed-by: Dev Jain <dev.jain@arm.com>
-
-
+Reviewed-by: Shakeel Butt <shakeel.butt@linux.dev>
 
