@@ -1,154 +1,133 @@
-Return-Path: <linux-kselftest+bounces-25826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03531A28A74
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 13:41:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28000A28B34
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 14:07:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FA611679BE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 12:41:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 873B53A720F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 13:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7157322A4EF;
-	Wed,  5 Feb 2025 12:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC2B282FA;
+	Wed,  5 Feb 2025 13:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VpXQJGqi"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="mtl58fj6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11911EA91;
-	Wed,  5 Feb 2025 12:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8500F151987;
+	Wed,  5 Feb 2025 13:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738759269; cv=none; b=B6/WCrj66Mx2Ip2DYDNWnIqi2NcTDmsyaSl9AjJvNzIZT6VjnRtRzsHJuauQA7+ZqYcalmndTKMptr/H7zlx9wPQWppExttIe3XOOJsghGZINUQ9C3PuKim6lbrqnFWH9EFO1AvlZGRxyKKXECGvurzRPIfw4ojLh1koMlRnKVk=
+	t=1738760829; cv=none; b=athmfWlcj7zSAMH4sfeyS9xkiJWQJjWJILGte0PYgugHglY1o4hYomX2Lwe3EI9X4oJcyUylbmGxJxmPmBB8HHoXtyVvHl4o8ArC6ERipRzZKDqUACoayE+BcA/R0Kdgmgx73K97t0Le3dv2wUyje03mv/39ZNke0Yx45ka/pZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738759269; c=relaxed/simple;
-	bh=pYhD+SHOxcSft14VFZBo/hBAX8Nxq+oO+kbTLpeDLGE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GwlR4My36BryloBfLZLM43gfp0Qb/NqywaLWrsIRh0W4rPPVtUm99fzN0MnF9rP2H9l8sk2Sn+CQbalS1OC9iyg7JHsMa46N9bHk4nWERWbu5vy4ii0QTXRL6yxR08q5axq5Brk5agrMjCSZcFWq+0nQbfp2+SJIcInO2a3+rMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VpXQJGqi; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso46683815e9.3;
-        Wed, 05 Feb 2025 04:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738759266; x=1739364066; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B2nY810+IaZK5n9EujS3czHJOBsB42FBjuOFqVzxuj0=;
-        b=VpXQJGqi+2bFlgONaqA0ICu/b+3eA3Thd6vDkjsfU5pop1q3MrgaKK3fQP8gbDQKFS
-         Sm75cFoAoVF0NXUXH2yyNd5kuCqFqQ5XjwDeXxZgVgkpC0SVunFQX5GmjLMejKZ6sUVO
-         OuCqD1iPt+holKjsZDnhxsWgH/ezbb92KsLIcd/3bAkA/bsmaTm95nXOzeXjgmsC3+uH
-         f5NlO/Uu2RLWAPkOp/iXYvBwlZPTx03TkVfsqLI4PqBqemu50QVv6NvVdQBc/r3oasjA
-         nb0WcA/m5xVWUF1mzJMdtF9ghK+UcxZ6G0Xk25eWGrHNjZ9FnlsV8INFql+l+BSf4sHv
-         wEcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738759266; x=1739364066;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B2nY810+IaZK5n9EujS3czHJOBsB42FBjuOFqVzxuj0=;
-        b=fDBvaiASZb3lC3UG+9svZyARYfs3SvMqeH6PLJD/1/a7DgEU2vMJjN4iLsNC2gPGFh
-         kacQdSEwNKi6HZmXP3d0OQB99WjUKrvlmrxYX8CFoBOP5ie821zQCpWFryTki4V7RBgJ
-         N56TQIJo5Md92UH/lYHHgKfp68eKrsh0B1HVVuFQJy4Um9k25l/hDciqgaPoHqkIbM3r
-         AeMqcTM6/dkTAarLv2TcrY8mSH8ogQAgqrKNWc7DeufhEAA0KobFARc/R0j+IBZeaM+t
-         zKv0uVTcbW0PKasF9cpyZOWbeHgphvVAnyf9daeTTe0awLzoOlXMCksiGQ/grGc1NPAP
-         DYqg==
-X-Forwarded-Encrypted: i=1; AJvYcCViSZhNqHZzsRDIvQ1AYGivk2x6n2ZZh8fg5zW6r7LRqk/q1IB3sMQmb0lxXh3lxMp29yIIHg5Y5uZ4/igt5HNk@vger.kernel.org, AJvYcCW/VXUSHvLFRgqxshZN3JSMgLmQd0O8PCeH4Ft/6RNMCaxB628KlA5Lg6AhDeHlb3V6/HU=@vger.kernel.org, AJvYcCWZRHW7VfwN7CwyeXoE+IIrBWXZxyoODcsBMCfcVCnK0SuCD+BvTVz4rNPCin/1AY9vwIBfX0TBX7ji@vger.kernel.org, AJvYcCWaWRU9gcosuIP6T28n9MYyQlEOlaHlfz2eVJbGhVOQW1Sy9LKcOZGZLv/Wf7ZdwtZLdmwj3+wYYBzC/9/x@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkbBNgkUi4faoF43F/yKxwh5H6CmEDjhTkJFB2KxDZ0xGOsibp
-	aFwqJmRNhaulfwdpP8OPD3olPaL4Kz3Qhlfb0wKQMJqV79kmVIyiQa4g7Qp9
-X-Gm-Gg: ASbGnctD4/FfDfFOipRFhnA/4QyJDKhXUIxdCb32vbmyp/xsGdCuQqCM8MQP+XugQVh
-	7bdfaGgphGQqYZPCDHcFQt8Ga88m1ICInM4lWRO+sj9FeIyQOCgPzY/N1jej4eLGS60OcZEjzQi
-	C+5X6+2RcVXheKbbfDnvAA00KYzBfXzY6/jv5M9IoXgBqAzdWT1/T8mUybo4ny8LbYXJQKyx/Dq
-	fvCWy1pFKsbPfTxWYK0XYoKjGSz1AFG4JZ8sHldZI3o0jpKW5Dou7wMVblCmEVxtDKL9yzTNLCc
-	SWUiVEyx5ojNQqgW7guTIp4=
-X-Google-Smtp-Source: AGHT+IGPDh0UCfW8C0UUaobE12fAfZcaYcWV+qO1/+Q7RfKKWpw6BN/Izj4F094IN//LhwjnBjSyNw==
-X-Received: by 2002:a5d:64af:0:b0:38b:ed6f:f012 with SMTP id ffacd0b85a97d-38db48868a1mr1958421f8f.9.1738759265611;
-        Wed, 05 Feb 2025 04:41:05 -0800 (PST)
-Received: from [192.168.8.100] ([148.252.128.4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4390d93383asm20448845e9.7.2025.02.05.04.41.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2025 04:41:04 -0800 (PST)
-Message-ID: <53192c45-df3c-4a65-9047-bbd59d4aee47@gmail.com>
-Date: Wed, 5 Feb 2025 12:41:11 +0000
+	s=arc-20240116; t=1738760829; c=relaxed/simple;
+	bh=7Dpyg+fjBS5ylwa6lXbkK1V1o4n3i/ba3X3ylj5JybQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RohiN1MA4wNwh6ll4DKTAoGckUXfWnHOFFJONek2w19DDSNnW8qblNrvl+YZXeAp8pScTXuGx26rKa3hbe7bCy/rjNRnMA+MIeVK+RCfLWx8ri0cPf0FJn95EKmCznB8w1/wAwOw24Y8x6qUZjWkNLNbZpHrrJf6CWKEe1qgOoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=mtl58fj6; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1738760808; x=1739365608; i=ps.report@gmx.net;
+	bh=7Dpyg+fjBS5ylwa6lXbkK1V1o4n3i/ba3X3ylj5JybQ=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=mtl58fj6P7YN1Icrwu83PO6rNmnIZ9ah16gFHY345nHAwKpWvC8JN3iF71W4DdCX
+	 8RbCunBQDEiVhfBJEFB3xLhEAKRrivS1kTOnaTGBxRJ3wsBShDBUDiw0b+Qx8YETd
+	 cjad/a3GaqwXdq3drQPNZ8d89YwQ3RVFwfqM1UWjBencjo1YixWtp2YXvPD7Bf+6D
+	 W5lQADepBPi+BJ9ZSwY+tjPDf8CG6ep8dtTp5psmuZ3mk8SkRY8AqLb7Tvol6WPr1
+	 hLZM6S8Qin+clQP8F6oWnBroP0xvEECg7+QvgOR82x9g0Wft0atqbrJygH3+Is8Jl
+	 XLmvpHquPMi7by9w8Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.162]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAfUo-1tZ2Ke0k5w-00H1EU; Wed, 05
+ Feb 2025 14:06:48 +0100
+Date: Wed, 5 Feb 2025 14:06:46 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Nam Cao
+ <namcao@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, Frederic
+ Weisbecker <frederic@kernel.org>, Artem Chernyshev
+ <artem.chernyshev@red-soft.ru>
+Subject: Re: [PATCH net-next v3 02/10] net: pktgen: enable 'param=value'
+ parsing
+Message-ID: <20250205140646.0fe82c6a@gmx.net>
+In-Reply-To: <835481c6-0ac1-47a7-84b2-fa5a135186c2@redhat.com>
+References: <20250203170201.1661703-1-ps.report@gmx.net>
+	<20250203170201.1661703-3-ps.report@gmx.net>
+	<835481c6-0ac1-47a7-84b2-fa5a135186c2@redhat.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC net-next v1 5/5] net: devmem: Implement TX path
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, virtualization@lists.linux.dev,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- David Ahern <dsahern@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Stefan Hajnoczi <stefanha@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Willem de Bruijn <willemb@google.com>,
- Samiullah Khawaja <skhawaja@google.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Joe Damato <jdamato@fastly.com>, dw@davidwei.uk
-References: <20241221004236.2629280-1-almasrymina@google.com>
- <20241221004236.2629280-6-almasrymina@google.com>
- <676dd022d1388_1d346b2947@willemb.c.googlers.com.notmuch>
- <CAHS8izNzbEi_Dn+hDohF9Go=et7kts-BnmEpq=Znpot7o7B5wA@mail.gmail.com>
- <6798ee97c73e1_987d9294d6@willemb.c.googlers.com.notmuch>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <6798ee97c73e1_987d9294d6@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tbV9nPQbiRGlbA+fs4RVJ9B39twSFqLEwBfkpWipL7nVRT5Mg6w
+ Eezqo/GvVrbSZqjm+PE1y9ZqS95uGItndQ882qk5/SH1BCUls9qJijlPLiPQbAnbqhC9mZK
+ nz6i5Bte33olIXuJr4N6Lky/scyB7M3e1Li/6ep6sWmCRdCwufi0dXLQk4LcjU3/sOxAWeL
+ t5spVy9qsOtZLNDC0m1sA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:aOEf9ahPHk0=;+k8BKBhOIzHUqia2z0wZq+VIiB8
+ IpUbLlhMzf8/o0XR4FAGFM64N7kdkBevocoJdQIFTsje7zEBFxfBLYE/bzABI1hD5SvZyYHO1
+ rxdCh6tFMQZxq6Xl8JxK8PTe3JHPlWcV2CgEFtOK4GVj+jMnrtR+r571oS+s2Dnnycwas6Qtz
+ umkWZJLANMq5s/X48kG8is/rgnh6D8VmK0UI5L8YCdQPhUoT0uMZpQLbDUpkva3l1IrVPUjMj
+ qWYZc42IDeCCy37tELJywVQfHJSHWROWZ3fkWHwm0R1PeBD59WEb5OcdTzuCn2Lr/HHZ81Wjg
+ ++OoCnhbF7TZGeMkDrUmQXqoOjAMIHPcaz5kjoKpdz5BjTvNK0CDZjAiKG2Wt/Eg6SUMgGk8u
+ iaCIifr05mvQ7DMll1ZmBmK9wlxyprXwIE6WEjCORId74zcOzEk2LwyLO202FnW93lN187FOw
+ OcxL8AN92+3975hG5SrVov9d223IpAJR2MVipCZ1PpQv/+Ow0on+PGrxUopo6wrP96QLSqfbj
+ QViQaq4gtBF53+mK1pGCJnPo1N70Q5iaYh5oRx+m/FfcdYB/yfG7EMGnDgObTxGOxy8Pm1jey
+ hfI0NKjnCg0RdXxDB7Wp3sTyVz9JkGF0Y398UO67rGRRuAWkt3ecdN636BUXyr8ecZVWNWCV3
+ A7RbvlIi6tehIw7Ikw8KonVOekvWfDS+quJNjU9wrUVw9HHNPuqu+/FTAXILWJLTQJmEJIbY/
+ XzjesGtpbBexGRTKf566n6SC0Jumj6Qapf5q0SDGp4Mqisy5h6UC97EI0Pakqmjabw5EBG/kv
+ gG03f4sTXOg5jaDyn0p55OUnORYPCOCGXYvJrdTnsvvldJW/qDMCs4tHaerYWC1QCwBa/Denx
+ i1uvxZXSbHmwxLEeNHC3aujsqXnROWETnVxkoNsA85DbllQBTCNPHxCZE82gyJ4n4/CaL6/de
+ X6gzqNbeiw85VWW6JJxPTSGL227Ubf3/lnLiXgZ3MHV9FTJG0fgYxPSg3md2CcVcV5p6SBA7I
+ tiC3yeT4Vg8vnqcIMm0NMaw13DQPYmYSF1Ll50EFFSvdjFvr6gaStMLaVLP4oX7x+1fkrCgG6
+ fBDhsxbZnrwAFL+x88qQzGz+Gr921NDZAXtedAxrwLVxkz3SYJByk2c9y06HG48120L+casNh
+ EYA9R9n02YBXsHhO8EVPNEhSFGiFSNOADVVNUopUJLzw9PvFSykTYlNJjSCcW1OrsIY9bm5UF
+ 4fEU+1h7VmWOMyP6cF4IoSfg2u/0P3tES63k2BMl9dvob3ZLVd1hvEE9jcglSZsRddlm/ZMDJ
+ 5b2so2fiGmaTWV+uOI01dERTQRBJ9oDyPAUtjblXaVwkEURJE0Fs4X3SAcy6xnZjClV26GR+M
+ 076GIA7Z123WjQw5EZzsJBgqqGFN12Zn9oiOn6TN49Fn1wl90Gg9c0c+G9
 
-On 1/28/25 14:49, Willem de Bruijn wrote:
->>>> +struct net_devmem_dmabuf_binding *
->>>> +net_devmem_get_sockc_binding(struct sock *sk, struct sockcm_cookie *sockc)
->>>> +{
->>>> +     struct net_devmem_dmabuf_binding *binding;
->>>> +     int err = 0;
->>>> +
->>>> +     binding = net_devmem_lookup_dmabuf(sockc->dmabuf_id);
->>>
->>> This lookup is from global xarray net_devmem_dmabuf_bindings.
->>>
->>> Is there a check that the socket is sending out through the device
->>> to which this dmabuf was bound with netlink? Should there be?
->>> (e.g., SO_BINDTODEVICE).
->>>
->>
->> Yes, I think it may be an issue if the user triggers a send from a
->> different netdevice, because indeed when we bind a dmabuf we bind it
->> to a specific netdevice.
->>
->> One option is as you say to require TX sockets to be bound and to
->> check that we're bound to the correct netdev. I also wonder if I can
->> make this work without SO_BINDTODEVICE, by querying the netdev the
->> sock is currently trying to send out on and doing a check in the
->> tcp_sendmsg. I'm not sure if this is possible but I'll give it a look.
-> 
-> I was a bit quick on mentioning SO_BINDTODEVICE. Agreed that it is
-> vastly preferable to not require that, but infer the device from
-> the connected TCP sock.
+Hello Paolo,
 
-I wonder why so? I'd imagine something like SO_BINDTODEVICE is a
-better way to go. The user has to do it anyway, otherwise packets
-might go to a different device and the user would suddenly start
-getting errors with no good way to alleviate them (apart from
-likes of SO_BINDTODEVICE). It's even worse if it works for a while
-but starts to unpredictably fail as time passes. With binding at
-least it'd fail fast if the setup is not done correctly.
+On Tue, 4 Feb 2025 11:55:57 +0100, Paolo Abeni <pabeni@redhat.com> wrote:
 
--- 
-Pavel Begunkov
+> On 2/3/25 6:01 PM, Peter Seiderer wrote:
+> > Enable additional to 'parm value' the 'param=3Dvalue' parsing
+>
+> It could be language bias on my side, by I find the above statement hard
+> to parse. Could you please rephrase it?
+>
+> IMHO something alike:
+>
+> """
+> Enable more flexible parameters syntax, allowing "param=3Dvalue" in
+> addition to the already supported "param value" pattern.
+> """
+
+You are right, thanks for review and improved commit description,
+will fix it in the next patch iteration...
+
+Regards,
+Peter
+
+>
+> Thanks,
+>
+> Paolo
+>
 
 
