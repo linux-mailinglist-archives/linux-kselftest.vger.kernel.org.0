@@ -1,96 +1,106 @@
-Return-Path: <linux-kselftest+bounces-25782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D314CA2821F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 03:44:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA459A2822E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 03:52:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D510A7A2E62
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 02:43:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5195C1633F6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 02:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E71521323C;
-	Wed,  5 Feb 2025 02:42:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7FA2116EB;
+	Wed,  5 Feb 2025 02:52:13 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C20F200A3;
-	Wed,  5 Feb 2025 02:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A6C25A65E;
+	Wed,  5 Feb 2025 02:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738723370; cv=none; b=fe6RFtY1z2PBU95ToUQ0WKxn8Lkvp8VAOnIpBLyOpijqIuvvS1/JXajvtN9u3rpHB3LcWNyK15VDHSjwlaEh7gmGzJvE7+TVOLKDYE/WsAcHjfB1LLHtcBG49PU2ir0xcE+92LnT0u0+vOUi1WLrJZtm+oeDuUW1nyIUwMRcsIU=
+	t=1738723933; cv=none; b=bvDB3JErcwnv1Ze8FgW8tzj8YteQyZvXbP/SIZ2wV8BdXfqPVeDfti66sCUzxgdkvDXnrJH/2dbShvsomcjqEB3MDKvFt+uOt7XBMRfvsombOUpMcQYBR8SyJvslG/OYNX7yr966OGmPv6hjtHAn2jkYeVSI134slSol7dTOL2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738723370; c=relaxed/simple;
-	bh=HCm+P1j6fb2x+58L1VY6iZ16Bgr0r6sjqAeUyrkl6NQ=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=mYzmCKOTefinEXuE3VjfIsN6ZRfhqpqcjrh96zonbUJzeCNuI6SlWTLKeg5TTjHx/Rwh8wOByqBbasTnJZtCxdER2dBjAnZygNSJCyRQ7Pz1SIp9bRkQ4teFg6NgF6FSehsncM+cwXTKbDIELJ/hi15Hcbpnv+kbLZRFj19huwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YnkzJ24Dyz4f3jY3;
-	Wed,  5 Feb 2025 10:42:20 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 61F811A0FED;
-	Wed,  5 Feb 2025 10:42:41 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP3 (Coremail) with SMTP id _Ch0CgDHGMMa0KJn3+GbCw--.28738S2;
-	Wed, 05 Feb 2025 10:42:38 +0800 (CST)
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: correct the check of join
- cgroup
-To: Jason Xing <kerneljasonxing@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20250204051154.57655-1-kerneljasonxing@gmail.com>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <96d70d0b-048a-e715-0348-c1ba4b3e0e59@huaweicloud.com>
-Date: Wed, 5 Feb 2025 10:42:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1738723933; c=relaxed/simple;
+	bh=UqBRS20e47Py0ck1XVhetdet5Oi0enyRvKQOePUH7gw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rr2c+E/H+BO2s2i+KNpxUQe7NdkbW+n9phqYlg4E0a0Pk/KiRa00m4r6tXGHn1QoebG+guhae52phfcHzlNx7Gt0OFmMDTapjr+PpQ0C51pCA7kFp+3+quF3CiYsDx4RulqYh4ziel08XHcsqGA//kXHWvqqK/NyvukzMd4MHBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B963011FB;
+	Tue,  4 Feb 2025 18:52:33 -0800 (PST)
+Received: from [10.162.16.89] (unknown [10.162.16.89])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F6A73F5A1;
+	Tue,  4 Feb 2025 18:52:07 -0800 (PST)
+Message-ID: <2e160343-8420-4f55-86b1-128676cf75d3@arm.com>
+Date: Wed, 5 Feb 2025 08:22:04 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20250204051154.57655-1-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Fix thuge-gen test name uniqueness
+To: Mark Brown <broonie@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250204-kselftest-mm-fix-dups-v1-1-6afe417ef4bb@kernel.org>
 Content-Language: en-US
-X-CM-TRANSID:_Ch0CgDHGMMa0KJn3+GbCw--.28738S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYQ7kC6x804xWl14x267AKxVW5JVWrJwAF
-	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
-	wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
-	xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
-	04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4c8EcI0Ec7CjxVAaw2
-	AFwI0_GFv_Wryl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-	0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
-	IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-	Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20250204-kselftest-mm-fix-dups-v1-1-6afe417ef4bb@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 2/5/25 04:23, Mark Brown wrote:
+> The thuge-gen test_mmap() and test_shmget() tests are repeatedly run for a
+> variety of sizes but always report the result of their test with the same
+> name, meaning that automated sysetms running the tests are unable to
 
+s/sysetms/system		^^^^^^
 
-On 2/4/2025 1:11 PM, Jason Xing wrote:
-> Use ASSERT_OK_FD to check the return value of join cgroup,
-> or else this test will pass even if the fd < 0. ASSERT_OK_FD
-> can print the error message to the console.
->
-> Link: https://lore.kernel.org/all/6d62bd77-6733-40c7-b240-a1aeff55566c@linux.dev/
-> Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+> distinguish between the various tests. Add the supplied sizes to the logged
+> test names to distinguish between runs.
 
-Acked-by: Hou Tao <houtao1@huawei.com>
+This makes sense given that the size parameter is available right away.
 
+> 
+> Fixes: b38bd9b2c448 ("selftests/mm: thuge-gen: conform to TAP format output")
+
+Just wondering how this fixes anything ? This seems like an improvement to
+the current behaviour.
+
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/mm/thuge-gen.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+> index e4370b79b62ffb133056eb843cdd1eaeba6503df..cd5174d735be405220d99ae796a3768f53df6ea4 100644
+> --- a/tools/testing/selftests/mm/thuge-gen.c
+> +++ b/tools/testing/selftests/mm/thuge-gen.c
+> @@ -127,7 +127,7 @@ void test_mmap(unsigned long size, unsigned flags)
+>  
+>  	show(size);
+>  	ksft_test_result(size == getpagesize() || (before - after) == NUM_PAGES,
+> -			 "%s mmap\n", __func__);
+> +			 "%s mmap %lu\n", __func__, size);
+>  
+>  	if (munmap(map, size * NUM_PAGES))
+>  		ksft_exit_fail_msg("%s: unmap %s\n", __func__, strerror(errno));
+> @@ -165,7 +165,7 @@ void test_shmget(unsigned long size, unsigned flags)
+>  
+>  	show(size);
+>  	ksft_test_result(size == getpagesize() || (before - after) == NUM_PAGES,
+> -			 "%s: mmap\n", __func__);
+> +			 "%s: mmap %lu\n", __func__, size);
+>  	if (shmdt(map))
+>  		ksft_exit_fail_msg("%s: shmdt: %s\n", __func__, strerror(errno));
+>  }
+> 
+
+Otherwise LGTM.
 
