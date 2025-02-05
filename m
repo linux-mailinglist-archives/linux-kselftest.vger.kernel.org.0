@@ -1,183 +1,230 @@
-Return-Path: <linux-kselftest+bounces-25813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9C09A28635
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 10:11:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40FBBA28687
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 10:30:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E3693A70C8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 09:11:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CEA13A7635
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 09:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED21022A4D8;
-	Wed,  5 Feb 2025 09:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B21422A80A;
+	Wed,  5 Feb 2025 09:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="ROXlN+eo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eg6yHtoI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9B822A4E1
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Feb 2025 09:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F37022A800;
+	Wed,  5 Feb 2025 09:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738746700; cv=none; b=q00/4LZl2cLkLWbmmc4/PO2ykIIhf3v+YmYpDgBaYo1EQEP5oGsKoPl7WA1L870bPGem3K0RQKHgAJ7sbTUHD2OYocLV1H6MiwZHcAjnlRieN8IbxiACXcbDAijzUKUHidzrNF5ZGamSjjZCJumUTv8r9NLT6ZTXRJdAsW6xHB8=
+	t=1738747752; cv=none; b=CK/ivgleUJJM3z4ZChYRStZ27VghI4oqmOmh4UpNoxQEMFJdsvZEBFfIeVeQUySLJVxkKyWIp2jer/wxnLg9ObRNhBTY3NcNMlqNmeFztcX1CRD9zNH0v07VaRm+YZiRSaYvnWsS6fl3Y/czABDdOelIZDBaqD8jI4qDLQNhID4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738746700; c=relaxed/simple;
-	bh=FrfX+Va6jShG2kQ7vxJe5JbRNE5XziiWylZStKahXbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R4rZB5uX681O4G9ogtaffTcNxXIy9eFgDy/80g1tlLorCXTlymZMPzcPZNyE3Lx0oaTY7HN6krtCxWD9KkfstnK1PJKAEg4LuAAp/gF/uKZMgeJ4sk2+kM9pitthkFsLfjn500+xqyoF+KhAIDx3Bfaoe7NJPuF4OF13u3mbFIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=ROXlN+eo; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aaedd529ba1so876755166b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2025 01:11:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1738746697; x=1739351497; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=hN00tjsFn+X2j7iH9Mfyzq5iQc++plfpKz8SCs0r79A=;
-        b=ROXlN+eo+V0u7RDQCIjMLzPFMpkdHKcwnRcuGapESZCagpUAvTkmoCO1Nr6AStIwJH
-         aVpAq6tiep5D48HxImSHQy+4JGIctmqMdnGz4ynZqdLoLuxOhysVYyMYgi5xDayzP4Zh
-         Vq7mSBBxlfdgor1zyk/69XbvNMgVhrBr0x7NI92mTSHaRIvrAqnA00l9gI8AXzGNerRO
-         DQvg2uiSHyVIqXCpMkSDWSYVu5YA6SES0/8Eg0Qba+lGUuEco8u0smBTMSgFBIPC4DAd
-         K+/ZJZQn8UXgoJZnDmTMX+bpJrV044vgeijbyj1V8Tviz2tkxaBZcGowXNgvgJ6w0AVt
-         k9fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738746697; x=1739351497;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hN00tjsFn+X2j7iH9Mfyzq5iQc++plfpKz8SCs0r79A=;
-        b=bpZCzujsY2MKdWzRLBatM9xjU9LCYivNSz/MhP1pDEDjsxO8HLCCZ8+sBjEi5EMpwS
-         qfg/YOm1h12VPheo58827dkl9UjNaotEU9coUUG0C/Pe4OH6x6JPjJQRvK8E+SDhcIuW
-         CO20Cc8hp9CjfRLBgMmarz8MD12tR+FUHV1+NDVcaacEYLZpOJT24BJ3rHw2w8ikVNOC
-         9C1m5xRZX7McEu5fFeqdHVEBOrN0PUVkL/rIMUmWUlw9BRSiB7m6qoOHyUdpHnE2Kdny
-         9RcnoMCAdK0hIMUtm8felIitGxiqspOgKZUbrmx+VFUI73tYFN6OD2phi1OK1ODeXdoO
-         CYQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwNoyfb7oi/aaBraoqApSVNzCIdeezstSEQcZQCUOe2CtRV5l7+OHlQQWHcZleKAttB2az0RbiOjyOWjesrpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz835ht+g8XdSPRYhyGQVCnfrU8zrM7/Q16Xd9TzLklfuz8Jbod
-	pVRwvERoFZAv1PFrUkY3lSruaxT1P69pGtKXA0RorO59/DdR7uXAmacAdUf4pTc=
-X-Gm-Gg: ASbGncvEwYzL5RjSmCAMa9CzWvPq2WKH4L3nKQybevAAqFvnMyjHVf+nY0/Pv+tDIE5
-	aoFVg5+kq8GUGRcvr4tI5ayViw+oWXr/TeHpp1oIvg/jnahwDLdFQWsS1b9oD6EbOKVnBpGQuzh
-	U31kYnV2e4Jz4MZ5uKaJWwksaGUjVVArKBpghCerxAASKkMOBEh/kN2aQm6Y0ooMZ6aHjiLZrwn
-	+rOjEJZ7dEHJW/5drcsYG2hK13hbJDdTiFaStwFlfYaRDllzfkh+G7jP1yYG+qmxJq0t+cIauLX
-	VB4VReI6ly3JB9ejudHt2kshAVbZYMUYxoaCbAbN63bJz3hi7O6wAA==
-X-Google-Smtp-Source: AGHT+IEoQAuCOq42UVqvlrSsUfc0NnaMiOTk8hK4xlAbqdB6mJYOEgWtx7QtTS2IN0r2sXN8sU1+Gg==
-X-Received: by 2002:a05:6402:13c8:b0:5dc:80ba:dda1 with SMTP id 4fb4d7f45d1cf-5dcdb711b67mr4827035a12.9.1738746696686;
-        Wed, 05 Feb 2025 01:11:36 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:e45d:9f15:4f3d:f5b0? ([2001:67c:2fbc:1:e45d:9f15:4f3d:f5b0])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e47d1014sm1069717466b.66.2025.02.05.01.11.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2025 01:11:35 -0800 (PST)
-Message-ID: <4c97399a-8975-40ca-aa6a-0c18a366d596@openvpn.net>
-Date: Wed, 5 Feb 2025 10:12:45 +0100
+	s=arc-20240116; t=1738747752; c=relaxed/simple;
+	bh=Ms21WWQxt0hgCHNGn7VoI88OcIK4i02A5VsFEvG24mk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B2qd4Jq2g1ITHYa3B5Ozu6lbiOl/WV3Md34Z9T+47oJnvRcGjvFKMOy5+fTjoeJA1HBzwyUZfPWMsffkeD9IiG3T4BM8nPzEUcC78jo4mBgAbu6NrSO7eWzdIWBJ/+uCE2ysJfu2ThisPeUoCvVONREI/1pPG+88Iu+f0Nbx+ZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eg6yHtoI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8972C4CEE3;
+	Wed,  5 Feb 2025 09:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738747751;
+	bh=Ms21WWQxt0hgCHNGn7VoI88OcIK4i02A5VsFEvG24mk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eg6yHtoIaP23lOBbUoIZktLdaXSm0/rQFB+Gu8dr+q6+oDohpMbSz2yg63hKd5qcR
+	 JIEQigQOx6zSCL8PfwFDkT74//d+oqTy+g/WnEeE9UP5rDeXqV9BLxGh+S9eSB5FCQ
+	 0EH4OaodiU249ytvGjb03wGCsyxxcB6ysVIfWcaagRWsD3RQE40qXgte1c/SSodkak
+	 STW8sPJ3yqHfZTCbEMSHiStohjiCgW6+p701EXd/PQ3EyNGW8ToP6boCW+4mBJYH6M
+	 9GZOR6yUYN177p9P2oqWDE9hTWfwmjDylNbdW650fOmV8bB+tmA0ieFWuJ9AWuGJmk
+	 SqgS9GzJbdTnQ==
+Date: Wed, 5 Feb 2025 10:29:03 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Shuah Khan <shuah@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, 
+	John Hubbard <jhubbard@nvidia.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Koutny <mkoutny@suse.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Elliott Hughes <enh@google.com>
+Subject: Re: [PATCH v7 0/6] introduce PIDFD_SELF* sentinels
+Message-ID: <20250205-gewahrsam-einnahmen-9b580054f501@brauner>
+References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
+ <20250204-joggen-buddeln-29e5ca75abb7@brauner>
+ <7a8a1719-466f-4e10-b1eb-9e9e1ef8ad52@lucifer.local>
+ <CAJuCfpEUusRt_ss7RtxRPP9q_LRwi+Lw+SOq32EUA58s3JOx1A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v18 07/25] ovpn: implement basic TX path (UDP)
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
- <20250113-b4-ovpn-v18-7-1f00db9c2bd6@openvpn.net> <Z6CR6QGVrMqauP2H@hog>
- <Z6I9yn3Nh-9Ebvv9@hog>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <Z6I9yn3Nh-9Ebvv9@hog>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpEUusRt_ss7RtxRPP9q_LRwi+Lw+SOq32EUA58s3JOx1A@mail.gmail.com>
 
-On 04/02/2025 17:18, Sabrina Dubroca wrote:
-> 2025-02-03, 10:52:41 +0100, Sabrina Dubroca wrote:
->> 2025-01-13, 10:31:26 +0100, Antonio Quartulli wrote:
->>> +static void ovpn_encrypt_post(struct sk_buff *skb, int ret)
->>> +{
->>> +	struct ovpn_peer *peer = ovpn_skb_cb(skb)->peer;
->>> +
->>> +	if (unlikely(ret < 0))
->>> +		goto err;
->>> +
->>> +	skb_mark_not_on_list(skb);
->>> +
->>> +	switch (peer->sock->sock->sk->sk_protocol) {
->>
->> We have a ref on the peer, but not on the ovpn_sock. DEL_PEER could
->> have detached the sock by the time the crypto completes.
->>
->> (unfortunately I don't have any idea to fix this yet)
+On Tue, Feb 04, 2025 at 09:43:31AM -0800, Suren Baghdasaryan wrote:
+> On Tue, Feb 4, 2025 at 2:01 AM Lorenzo Stoakes
+> <lorenzo.stoakes@oracle.com> wrote:
+> >
+> > On Tue, Feb 04, 2025 at 10:46:35AM +0100, Christian Brauner wrote:
+> > > On Thu, 30 Jan 2025 20:40:25 +0000, Lorenzo Stoakes wrote:
+> > > > If you wish to utilise a pidfd interface to refer to the current process or
+> > > > thread it is rather cumbersome, requiring something like:
+> > > >
+> > > >     int pidfd = pidfd_open(getpid(), 0 or PIDFD_THREAD);
+> > > >
+> > > >     ...
+> > > >
+> > > > [...]
+> > >
+> > > Updated merge message. I've slightly rearranged pidfd_send_signal() so
+> > > we don't have to call CLASS(fd, f)(pidfd) unconditionally anymore.
+> >
+> > Sounds good and thank you! Glad to get this in :)
 > 
-> Maybe an idea:
+> Sorry, a bit late to the party...
 > 
-> Since ovpn_sock itself lives under RCU (because of sk_user_data),
-> peer->sock should be an RCU pointer and also follow RCU rules. For
-> most parts (io.c, netlink.c) the conversion is not too
-> problematic. TCP is more difficult.
+> We were discussing MADV_GUARD_INSTALL use with Android Bionic team and
+> the possibility of caching pidfd_open() result for reuse when
+> installing multiple guards, however doing that in libraries would pose
+> issues as we can't predict the user behavior, which can fork() in
+> between such calls. That would be an additional reason why having
+> these sentinels is beneficial.
+
+Ok, added this to the cover letter as well.
+
+Note that starting with v6.14 pidfs supports file handles.
+This works because pidfs provides each pidfd with a unique 64bit inode
+number that is exposed in statx(). On 64-bit the ->st_ino simply is the
+inode number. On 32-bit the unique identifier can be reconstructed using
+->st_ino and the inode generation number which can be retrieved via the
+FS_IOC_GETVERSION ioctl. So the 64-bit identifier on 32-bit is
+reconstructed by using ->st_ino as the lower 32-bits and the 32-bit
+generation number as the upper 32-bits.
+
+Also note that since the introduction of pidfs each struct pid will
+refer to a different inode but the same struct pid will refer to the
+same inode if it's opened multiple times. In contrast to pre-pidfs
+pidfds where each struct pid refered to the same inode.
+
+IOW, with pidfs statx() is sufficient to compare to pidfds whether they
+refer to the same process. On 64-bit it's sufficient to do the usual
+st1->st_dev == st2->st_dev && st1->st_ino == st2->st_ino and on 32-bit
+you will want to also compare the generation number:
+
+TEST_F(pidfd_bind_mount, reopen)
+{
+        int pidfd;
+        char proc_path[PATH_MAX];
+
+        sprintf(proc_path, "/proc/self/fd/%d", self->pidfd);
+        pidfd = open(proc_path, O_RDONLY | O_NOCTTY | O_CLOEXEC);
+        ASSERT_GE(pidfd, 0);
+
+        ASSERT_GE(fstat(self->pidfd, &self->st2), 0);
+        ASSERT_EQ(ioctl(self->pidfd, FS_IOC_GETVERSION, &self->gen2), 0);
+
+        ASSERT_TRUE(self->st1.st_dev == self->st2.st_dev && self->st1.st_ino == self->st2.st_ino);
+        ASSERT_TRUE(self->gen1 == self->gen2);
+
+        ASSERT_EQ(close(pidfd), 0);
+}
+
+Plus, you can bind-mount them now.
+
+In any case, this allows us to create file handles that are unique for
+the lifetime of the system. Please see
+
+tools/testing/selftests/pidfd/pidfd_file_handle_test.c
+
+for how that works. The gist is that decoding and encoding for pidfs is
+unprivileged and the only requirement we have is that the process the
+file handle resolves to must be valid in the caller's pid namespace
+hierarchy:
+
+TEST_F(file_handle, file_handle_child_pidns)
+{
+        int mnt_id;
+        struct file_handle *fh;
+        int pidfd = -EBADF;
+        struct stat st1, st2;
+
+        fh = malloc(sizeof(struct file_handle) + MAX_HANDLE_SZ);
+        ASSERT_NE(fh, NULL);
+        memset(fh, 0, sizeof(struct file_handle) + MAX_HANDLE_SZ);
+        fh->handle_bytes = MAX_HANDLE_SZ;
+
+        ASSERT_EQ(name_to_handle_at(self->child_pidfd2, "", fh, &mnt_id, AT_EMPTY_PATH), 0);
+
+        ASSERT_EQ(fstat(self->child_pidfd2, &st1), 0);
+
+        pidfd = open_by_handle_at(self->pidfd, fh, 0);
+        ASSERT_GE(pidfd, 0);
+
+        ASSERT_EQ(fstat(pidfd, &st2), 0);
+        ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
+
+        ASSERT_EQ(close(pidfd), 0);
+
+        pidfd = open_by_handle_at(self->pidfd, fh, O_CLOEXEC);
+        ASSERT_GE(pidfd, 0);
+
+        ASSERT_EQ(fstat(pidfd, &st2), 0);
+        ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
+
+        ASSERT_EQ(close(pidfd), 0);
+
+        pidfd = open_by_handle_at(self->pidfd, fh, O_NONBLOCK);
+        ASSERT_GE(pidfd, 0);
+
+        ASSERT_EQ(fstat(pidfd, &st2), 0);
+        ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
+
+        ASSERT_EQ(close(pidfd), 0);
+
+        free(fh);
+}
+
+So you don't need to keep the fd open.
+
 > 
-> I still need to think about whether this works, and whether this is
-> worth the complexity, or if we could solve this in another way.
-
-It may actually be a reasonable solution.
-And maybe it is not that complex to get done.
-
-I'll see what I come up with.
-
-Regards,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
-
+> 
+> >
+> > >
+> > > ---
+> > >
+> > > Applied to the vfs-6.15.pidfs branch of the vfs/vfs.git tree.
+> > > Patches in the vfs-6.15.pidfs branch should appear in linux-next soon.
+> > >
+> > > Please report any outstanding bugs that were missed during review in a
+> > > new review to the original patch series allowing us to drop it.
+> > >
+> > > It's encouraged to provide Acked-bys and Reviewed-bys even though the
+> > > patch has now been applied. If possible patch trailers will be updated.
+> > >
+> > > Note that commit hashes shown below are subject to change due to rebase,
+> > > trailer updates or similar. If in doubt, please check the listed branch.
+> > >
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+> > > branch: vfs-6.15.pidfs
+> > >
+> > > [1/6] pidfd: add PIDFD_SELF* sentinels to refer to own thread/process
+> > >       https://git.kernel.org/vfs/vfs/c/e6e4ed42f8d8
+> > > [2/6] selftests/pidfd: add missing system header imcludes to pidfd tests
+> > >       https://git.kernel.org/vfs/vfs/c/c9f04f4a251d
+> > > [3/6] tools: testing: separate out wait_for_pid() into helper header
+> > >       https://git.kernel.org/vfs/vfs/c/fb67fe44116e
+> > > [4/6] selftests: pidfd: add pidfd.h UAPI wrapper
+> > >       https://git.kernel.org/vfs/vfs/c/ac331e56724d
+> > > [5/6] selftests: pidfd: add tests for PIDFD_SELF_*
+> > >       https://git.kernel.org/vfs/vfs/c/881a3515c191
+> > > [6/6] selftests/mm: use PIDFD_SELF in guard pages test
+> > >       https://git.kernel.org/vfs/vfs/c/b4703f056f42
 
