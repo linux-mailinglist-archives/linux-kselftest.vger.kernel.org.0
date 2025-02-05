@@ -1,159 +1,173 @@
-Return-Path: <linux-kselftest+bounces-25865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5B59A29BCB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 22:22:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 089E8A29C1E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 22:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA311188828D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 21:22:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 591B63A7791
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 21:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A49F6214A8E;
-	Wed,  5 Feb 2025 21:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7AE0215067;
+	Wed,  5 Feb 2025 21:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjZhBnVE"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="T1Us9Yk7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="D/j+JXMQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6B82144BE;
-	Wed,  5 Feb 2025 21:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACCDF510;
+	Wed,  5 Feb 2025 21:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738790516; cv=none; b=FlPIHL7qlkx3RU2hciqKg9nkLbdGYQz6Clo5YosXEHSBfRp6mIn0uEEEZOmAPM3befosDH11ZzWSFqSuDcpIuxPYtrrdWzSIqo2bBRSi5YcuPSWMNJSfHqB6t1FVyNAZBCrqWlMx2lnH0Hie2t0NQtJRcN3Sw+pGv1HOa5qn028=
+	t=1738792218; cv=none; b=R3CqMAclvm2TJw3BlitlPCE47w3+t56vjfOVR4eeiF05gUp7cziYY6lcsrnoaVojI6lPBpvxHLK/W/crwSlF8y7mA/hGeaQL2CAJptH6X0nsjZ2Rc5SRt/7nOWOscApkN8WZxpuQ4m7XEgLPsSNIwDje2U8T9+CBI7Tiow4MUfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738790516; c=relaxed/simple;
-	bh=nEesjhAuTJziUxYVq7v1gWdsPVAbJrLdrW6QwCP71vM=;
-	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=DW/rTywRnkDIh7JvQP0seAY0EWIGZ89X9EbnXfKoG9GVpQTcEKno0eUDupKSV0prSYj/ldd67q58NT4Z0ZTSgo2NejHPJfqxCEYvxO768asmJxbMH9BGaiKisCcl/qmSxPp3jyfhPaKSbV7DWa6os61ol9Aoy6Z9qD150lzJVHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VjZhBnVE; arc=none smtp.client-ip=209.85.222.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-85c4557fce0so47801241.3;
-        Wed, 05 Feb 2025 13:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738790514; x=1739395314; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oA59/b0HqiTbM3mdKAGWxKNjJnBpzxH7nv45X6IYWmY=;
-        b=VjZhBnVEL3E5tVFSPq0rvsF50L4DlbE1QAotoBrWaLz4H47k0Z7F7QTlCiEQZufVJX
-         hovbdqQbA0JICssqW91Ks9jD9d8m6J0S+il/5w7H0vbpnwyHsqRxz9JaVlTYic7btS7a
-         d0DTQKBVd1EL7o8LVRUVweEdeGtc13ntvBA8yRkGVl+K+0aDUjlYWPlgXo91ZVidvifC
-         K5qBOIPz3/m2yTfvoEKF756ykco1JLmtqmFQiatLJfsHOc6/6K2yxItxstxfWOBBkIZD
-         2X6qv9TsL1QyUeAfup8+iLav25CmH3CkT6BplkEBUjTQqCgL/FdXhIlHvGj4ipRAh5v0
-         MIgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738790514; x=1739395314;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oA59/b0HqiTbM3mdKAGWxKNjJnBpzxH7nv45X6IYWmY=;
-        b=DrS+ZR5+q/R3SVocOksICHvld+q65PJjufpn9a4Ndx1UisiAlqBpxmsXWBU1K8/xXY
-         gFazpZoLZbNTRHd9+Jnoq5Yw4AV25JfLci6orv4rIS+XfzF+lL6Ijxhlzd+F7HwTOPGe
-         OhdVyLrS4G/Oke6wGAI0TrzDklL6QEMJTWG14B2UhKvNVkPSf6l7Un1/ysY6BJCfG6EK
-         5D4hSpJd+/Zio5Pyuf093X01V+UBfP2YG2pxNUSOfv6RApX+7IANJkjKlOMp27zGkePR
-         ar8pFiqOG+PJYQM0sapr0HzsINmrEGkgss/67Z5yw7GhYQEAcTpkaGt4SLUAjVgmVrAM
-         sqeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFgb1n+kWhnawWvmdDHTJbTOv1XJP3vp/0TG/Sv270zyIqVqvgYhPUtBnDTZXhuBiNK4562ennoEmiEGhWyZKy@vger.kernel.org, AJvYcCUbgkBPom4+8J5QTZFtfgrIynAAD10yUm9e9BtavFoXO+Eifi09KijHkX+La4nKkhUCqJY=@vger.kernel.org, AJvYcCUsMYzQIRT3HIeY8C1guvA1OpQ6gXY1tvnlOHqLxDbeZGKx01h5f9Vj+KprMbbZNUKlwQwBjP5o@vger.kernel.org, AJvYcCWcag9Y/lpwDEWXECXxdN1p0xzgm4ye8nkOBki5hIE/3B83ZZVMqv4bMUIsIUWnsEjNTPQJc2PxVM8DifgT@vger.kernel.org, AJvYcCXJzEap0qFbbkkdTvEDMiGaq4eo7t7/s86ATIgMnuR+jP9RohzWYJMwsRcatdG+7n0q27tgQyvtFmAh@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdXQuWGL4a6pEk31QAWgrEvfd1qxLPlDB6U6RAlEjuqfnc3qZ7
-	DEeOjmLXLA112PeN9uKS8/DH/OxJ6byxfrTEThhmm/70dE4lbSZw
-X-Gm-Gg: ASbGnctUXZ2mq3N9vOiUx6GcSKxXle/JjbWYpsuOWqbZJC+ny/BmCRliPQHgZCSNTtS
-	rHfROrHTlcdNd/+l9prRVVW2oF0wVecg1eDxOYu0CXbBOZcT8SVxn0bU47kxemHuDKDCSqIIvsG
-	MtDYUXL9+t3dcVj6OQJ7osNOqb2Y86lcL1LMfc0pHFGQ+4xrqQ8lsyFUiDtkMdom4mMkw5pTmQm
-	TiAjREJ/Khx1V4glHsHn7g6h8q1cQI6aJd13AHvqC0VGZP8OUGVrtHHPbjJ2eV2+u266Nx5DrA1
-	BGsd/aLpwK2q2JT9PlMC9t+VMSWJ0DYnVT8RH+Ow7pYCe8cGiObhNHsvzUUABFk=
-X-Google-Smtp-Source: AGHT+IGMnECoIZSQWPaeSS6dNPkAqETjHSQP+dcqfl8m4ZhiKsez3m+3zBDXaugCYi/i3Eptq/eBDQ==
-X-Received: by 2002:a05:6102:3f4c:b0:4b0:ccec:c9de with SMTP id ada2fe7eead31-4ba47ae88c3mr3894330137.24.1738790513631;
-        Wed, 05 Feb 2025 13:21:53 -0800 (PST)
-Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b9baadae67sm2516649137.15.2025.02.05.13.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 13:21:52 -0800 (PST)
-Date: Wed, 05 Feb 2025 16:21:52 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- Shuah Khan <shuah@kernel.org>, 
- linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- kvm@vger.kernel.org, 
- virtualization@lists.linux-foundation.org, 
- linux-kselftest@vger.kernel.org, 
- Yuri Benditovich <yuri.benditovich@daynix.com>, 
- Andrew Melnychenko <andrew@daynix.com>, 
- Stephen Hemminger <stephen@networkplumber.org>, 
- gur.stavi@huawei.com, 
- devel@daynix.com, 
- Akihiko Odaki <akihiko.odaki@daynix.com>
-Message-ID: <67a3d6706c01a_170d3929436@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250205-tun-v5-6-15d0b32e87fa@daynix.com>
-References: <20250205-tun-v5-0-15d0b32e87fa@daynix.com>
- <20250205-tun-v5-6-15d0b32e87fa@daynix.com>
-Subject: Re: [PATCH net-next v5 6/7] tap: Keep hdr_len in tap_get_user()
+	s=arc-20240116; t=1738792218; c=relaxed/simple;
+	bh=VZeDDWElS97HftJUqI0ZV7tLfTYxf1l0eS3m7HaFToY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y0RhmKEMdJ5epfXB1iQm6iBTavVOJweFeXnU4ZHiAnFCHdC30qZda/bp8chY7iHOh0kfPkFb5Jgm9lLM2qtuJ1UygkjFjY6A2y5e/YPYE8TMqanGEJI3s+Nq7IrNgiUzLeFdHv9KHr277lpHktVT7Iz7XNA5QP+ei1rT6fEyp1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=T1Us9Yk7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=D/j+JXMQ; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 32B1213801B0;
+	Wed,  5 Feb 2025 16:50:13 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Wed, 05 Feb 2025 16:50:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1738792213; x=
+	1738878613; bh=dPn7JSPXiqgSq7Z0EgBkucMtw2n7J3jmDFtkNsgBHQY=; b=T
+	1Us9Yk7qBaMNBNqtEWnDx1fAoiVbkQg0Sr3/VAifh5QW4ruSq2o2NFM6y+NJ9p/h
+	WVXWALuhd4z72hfCQT0OEEKUidWPsLyRDRILL//EFvmraF9l4V3KJKiRM2drHESs
+	mGKeAfMGNr11F35lNkpFYVnTY3mT5sj3uP/ucN/lNMzD4ksT8Rwp98haePqHzrDm
+	BQoLOZpGucLzzDWWRMCmEDlXMnECrubDSL3P+ahmYp7+Vx1BYJ4uz74qx7TTkPDT
+	/S3hHFiL0LISAR1+iDB/PW4/hMmah8rT5LgPisRyOIZbXTu/fQzEXqFDCACs1D+t
+	9aS8ZOx9liM95ZVKzp3+w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1738792213; x=1738878613; bh=dPn7JSPXiqgSq7Z0EgBkucMtw2n7J3jmDFt
+	kNsgBHQY=; b=D/j+JXMQftftoZ647xleulPgDaCzNOStyuEUxGUk36Klyb/vqd0
+	Ut6Jxr0L20+DYS5h4Z+KQIAvMKcNrdxDoaz2IYF6ebjVTqx/BoQyctGxmTp5p23j
+	7uibMqbvblQ8ZYPALwHbMex4VP11xm8vpUKKMnw6cx8WtFsBDcDSzRP5j0TusHEO
+	EjYS/e1W/k7/mlk22VFBWjg/vM0l3/wFOIGc6xGu3B8OrK0/fIAxvZHpYNt9G22t
+	+KFoMZtuCdcYmkBpSGwRhgzolVTHMqPINazhT+K1YJIt17iHCrf61ffNdudbLXBY
+	Yij779PND+Z7cYzkCu+yAK78JKot1eg2jxg==
+X-ME-Sender: <xms:FN2jZ88iTlPQWcddEpMZn1rgmJXRCHWbFBO6Gvm0AP513rKEQY8qtQ>
+    <xme:FN2jZ0voVIy4HCglPJ5QUGy2hm9y7dCnmZ3F3ywcjbGhPiCJ6hLB3I5luFLxzfpdu
+    BMxDGYY8N36rtcOL6w>
+X-ME-Received: <xmr:FN2jZyCiXi-4MC2o4zcmomeJRMFOCQxVKwkZcagomOPiNHtEo6NyFsveQ1tn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeehlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
+    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
+    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
+    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
+    pghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
+    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
+    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
+    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
+    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:FN2jZ8czV6t1zJaziXPuoZHv03Xl_YSAZXlv78R5sy8lRO_JqEz9BA>
+    <xmx:FN2jZxOaXdbi32br8lRCivxfq0s5A2S6sRh-_98BWwQAShDc6Gd0eQ>
+    <xmx:FN2jZ2lIsmKSDGCfRoHOSiWebZ3Cm9-z70evuF9pnOshIpaf_h-iNQ>
+    <xmx:FN2jZzu8YHRg-PWvkQtPEXPRoljEC4mcZHMO5vUAWpOuCKfAPJw6Pw>
+    <xmx:Fd2jZ3tE71NpQiJheY5hLBK3BHWbpQ1jt_eqbmO6h39bxrDEfA0cFHuF>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Feb 2025 16:50:12 -0500 (EST)
+Date: Wed, 5 Feb 2025 22:50:10 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+Subject: Re: [PATCH net-next v18 09/25] ovpn: implement packet processing
+Message-ID: <Z6PdEurGNirlnkoM@hog>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-9-1f00db9c2bd6@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250113-b4-ovpn-v18-9-1f00db9c2bd6@openvpn.net>
 
-Akihiko Odaki wrote:
-> hdr_len is repeatedly used so keep it in a local variable.
-> 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+Hi Antonio,
 
-> @@ -682,11 +683,8 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->  	if (msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY)) {
->  		struct iov_iter i;
->  
-> -		copylen = vnet_hdr.hdr_len ?
-> -			tap16_to_cpu(q, vnet_hdr.hdr_len) : GOODCOPY_LEN;
-> -		if (copylen > good_linear)
-> -			copylen = good_linear;
-> -		else if (copylen < ETH_HLEN)
-> +		copylen = min(hdr_len ? hdr_len : GOODCOPY_LEN, good_linear);
-> +		if (copylen < ETH_HLEN)
->  			copylen = ETH_HLEN;
+Another one I should have spotted a long time ago :(
 
-I forgot earlier: this can also use single line statement
+2025-01-13, 10:31:28 +0100, Antonio Quartulli wrote:
+> +int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+> +		      struct sk_buff *skb)
+> +{
+> +	const unsigned int tag_size = crypto_aead_authsize(ks->encrypt);
+> +	struct aead_request *req;
+> +	struct sk_buff *trailer;
+> +	struct scatterlist *sg;
+> +	u8 iv[OVPN_NONCE_SIZE];
 
-    copylen = max(copylen, ETH_HLEN);
+You'll have to kmalloc this as well, it gets passed to the crypto API
+and with async crypto, it'll be used after ovpn_aead_encrypt has
+returned.
 
-And perhaps easiest to follow is
+[...]
+> +	/* setup async crypto operation */
+> +	aead_request_set_tfm(req, ks->encrypt);
+> +	aead_request_set_callback(req, 0, ovpn_encrypt_post, skb);
+> +	aead_request_set_crypt(req, sg, sg,
+> +			       skb->len - ovpn_aead_encap_overhead(ks), iv);
+                                                                        ^^
+passed here
 
-    copylen = hdr_len ?: GOODCOPY_LEN;
-    copylen = min(copylen, good_linear);
-    copylen = max(copylen, ETH_HLEN);
 
->  		linear = copylen;
->  		i = *from;
-> @@ -697,11 +695,9 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->  
->  	if (!zerocopy) {
->  		copylen = len;
-> -		linear = tap16_to_cpu(q, vnet_hdr.hdr_len);
-> -		if (linear > good_linear)
-> -			linear = good_linear;
-> -		else if (linear < ETH_HLEN)
-> -			linear = ETH_HLEN;
-> +		linear = min(hdr_len, good_linear);
-> +		if (copylen < ETH_HLEN)
-> +			copylen = ETH_HLEN;
+> +	aead_request_set_ad(req, OVPN_AAD_SIZE);
+> +
+> +	/* encrypt it */
+> +	return crypto_aead_encrypt(req);
+> +free_sg:
+> +	kfree(ovpn_skb_cb(skb)->sg);
+> +	ovpn_skb_cb(skb)->sg = NULL;
+> +	return ret;
+> +}
+> +
+> +int ovpn_aead_decrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+> +		      struct sk_buff *skb)
+> +{
+> +	const unsigned int tag_size = crypto_aead_authsize(ks->decrypt);
+> +	int ret, payload_len, nfrags;
+> +	unsigned int payload_offset;
+> +	struct aead_request *req;
+> +	struct sk_buff *trailer;
+> +	struct scatterlist *sg;
+> +	u8 iv[OVPN_NONCE_SIZE];
 
-Same
+And same here.
+
+(maybe something for the todolist: ovpn could copy the alloc trick
+from esp_alloc_tmp, like I did for macsec_alloc_req -- not required,
+but could be nice to avoid many small allocs and all their failure
+checks)
+
+-- 
+Sabrina
 
