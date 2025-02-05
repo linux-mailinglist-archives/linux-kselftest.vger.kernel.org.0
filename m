@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-25799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E17A283C2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 06:39:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21750A283E4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 06:50:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33B361665E9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 05:39:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1BC77A3179
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 05:49:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D550521516C;
-	Wed,  5 Feb 2025 05:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555C321E0A6;
+	Wed,  5 Feb 2025 05:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MclkfxxS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cp3x+ax6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A48F21D591;
-	Wed,  5 Feb 2025 05:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DB621D5A8;
+	Wed,  5 Feb 2025 05:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738733974; cv=none; b=hfxAg8aF2bbQvkRkwcXZAiTghpFYo6nY19DQhKz5+6eL378YgMYdcX3q0bK1pFYJc3keWgK/YdxMlNPIaVgc1vlofb/iLyrR+iyFUvZsjwjc8sF5Egm7D2vyoJLSFb5cmAQTeft5jFx2mWqLduJOLfLo+o4b35QhV2mZBqxJHhc=
+	t=1738734639; cv=none; b=mXaMYHKfHjU3aDe0U3EZuwG8OHKpmhG+/zEnKKfJUyQGKJfhVaFa81O/l4PjCHmewaJn3y/f91Cw3l5kndoltIzm9imPsfC8uENbfJa+ucl5He2H7GqmoZxRRrms9y/9WxSMI/U9+5FqaNG1fhvtCG2Kds6/LvO6cAQ9V4p1a0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738733974; c=relaxed/simple;
-	bh=wRMSTlIHoaEU/DmkPcVfRBAGfm3mkOsFJgbtEQ6blDo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lObdFkYkwATmLAAw5wUonXwdQpR0LLabZ5Pn8ifTx3TX30qh56ctN1VUVXFNNYs48JOWKd8WzYaIUTNYr9F3rOFhnv4hrEL+tA0kzX5QutBzAql6361IliCRaqHETxOK7pF2hyomcPaOFtoiTmcQNG1qBh1P0Ls5uVyKw2oOJ6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MclkfxxS; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1738734639; c=relaxed/simple;
+	bh=hoKTiFNJga4k6kDkzlWvbfX/wG4hbP8zEshGLRIq03I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hT/SHylDaRSeyTi/1xzNBk5/H3AqOVwQ4Lk8gyxZekoE1jM1uAHxyRG4OqQJpQzTo3Xi6TsshV4Wz0Av34hNQAhayh78lVptpJkpOgwJEHIOCo41hfZDXV0CHoiDUzJgwQvFqG6W5gNEvSgSci/r3o8tCDukvrfjEWpqQ7OefBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cp3x+ax6; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2f9d17ac130so1641597a91.3;
-        Tue, 04 Feb 2025 21:39:32 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21f200014f1so543535ad.2;
+        Tue, 04 Feb 2025 21:50:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738733972; x=1739338772; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738734637; x=1739339437; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dsul7VtDFl3am4+HHPYwB3KbX5Pdkh87uLvEk51HcKE=;
-        b=MclkfxxS7y4SRoSJ35kiLq6ScjRWVd0T/LHPVeor73BW6DvrH6Vtdb5yJ5bb720GKq
-         Ox4MDhMiyjsaYNTm7oHTDsPwq77e7Ngj8BwOE4zj2fEJudj8mVuBRxHmv1lA8nhWg7JA
-         /Q1r3BGxxpa4Wg3EbjGYVzJ53YMH/Hgy+n27ch1BMLTDH36JSwjbENBmzafB7nAJxZk2
-         FxtouCBF5mIckjREoXHZwvFcscrwKleitZfwh28ukdHeMwBad738V3BSgElemD7q2XeH
-         GhatCjs5jISKdBSce1uxcCtIFFQfHr/WnXdp5M7cVsQcTEj3EfpD5uy4h3/WH3/ESo7r
-         ifqQ==
+        bh=5/8WaG5xcausJczSDu1PtwlsotHm7UZnGjCaIMeLMRQ=;
+        b=cp3x+ax6nGeO1LopJTK1YUvvPCb/29UTWj/3oKKyUZt/PIOD3QwMb34QIgpTBBvaSX
+         iVdEhD4zL8UaZ+gTL2CDtea/9v4RKzDaHmTNshkmSou7CQUP5NUfYXsR7zXNizw7c77A
+         3KL0ks/dFe0FV8BcazDERBZibQBzmii4xEsRlQMTKyhNZY1rmesQc77McANhrLCF4gkv
+         ersb7IB8NmMY+bhqvsgaGo2Mkk1PXHPa4IN/0/VGyHP6KWtjPMSrP43esZ4lW8fIB6j0
+         cwv9vO7na+cnP3mfs15kY2pr2LUfkAqYehT/YLwPKOc3lmJqIy7SNmuWJMcwnKyA2XEv
+         3JBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738733972; x=1739338772;
+        d=1e100.net; s=20230601; t=1738734637; x=1739339437;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dsul7VtDFl3am4+HHPYwB3KbX5Pdkh87uLvEk51HcKE=;
-        b=Ss6vg21bpjyzV//zHElxpRhWuRMsFlMtzeiB+L6iJCqGsvSTdLBRPyXno+TiOMKwaz
-         LwlJTpn2PF6mPAU5IxAi4tLap6PihXaYNy64t3qfE6irzk9ZGzXT7VABgbOwZKvB9kfn
-         K3q9dLQm9jW3GQqZISos6wrIJi+ODoqZWLRQuQVOfb4G8tOpr8LlxTzXlEqE+jEHSrOZ
-         aBGR98rzYh2NhR5WMLupYpJax+0Tzr+uj+YYCQ5iDbuloj+TMZq8gUGpxR4xGfsrQA/J
-         7SbLtt4vQ+PIwDgdSm7RyyZGYCEXIys9PcVWdAyVgj4xAqbfIay0XAVMQIZ3mDnuK0NJ
-         hnFA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGnBFYRymDXWej5rhK7P43Ua50k56psBuxsGbebRzD7B14hKQDI2X3QGHB+v732U5F2TggAgH0gKS86pM=@vger.kernel.org, AJvYcCX/PAUVc3JdY00AwdvftygpcorkPFh5/m2x0KGyZUbMrGS74qJ+U8gNzX899cTXFaHslvhfSMs28BoWHa+OQQtk@vger.kernel.org
-X-Gm-Message-State: AOJu0YynGPljDFYIptnR6x41jnipAhQu+BH/zIs5YsQnyo/VWRErJ4Ua
-	aHp6qi23eWD6FJo/fHqzb5neK7JZRYo1vy3JIxKqpPxBteMMT6Ai6/Mcyljr
-X-Gm-Gg: ASbGncvqKN2gwtjr38rX6Lua2PnI9qkQhQh+/95WE6P6UCtlbogLre+ux9HdILDLeA+
-	jnlfe2bXA6rthnHW9sRreCNvIlJGtWCZMdfTCa8mZNfRWeRLS/F2bm0+B0eGSPnGdy4VybCeno8
-	Mp0qYIEK8UkVXg6qWX9Tv9U8tIo06cDgBa0apIIt8zoviA8gvNbjQSfjMmxJtcLUrG38h8jYyE9
-	foE4Qgtd7NujBhyqc10HFRh6XSSBbRaFS4e8i2t98bnadf9LQiCEKUJrNHeMzIcp7UjztWCIJ5W
-	xHb2emHRG/OHiPOrYpOML+J0xcZTbdf6Sg0=
-X-Google-Smtp-Source: AGHT+IGxX/h10NXM0LIDTbYPxDYqVH+ZwKPX8fNuchz7fcwwLZmtRcoNtGkMiYJe6nYLWjdbFSvaxg==
-X-Received: by 2002:a17:90b:4c4b:b0:2ef:33a4:ae6e with SMTP id 98e67ed59e1d1-2f9e076772cmr2939422a91.12.1738733972290;
-        Tue, 04 Feb 2025 21:39:32 -0800 (PST)
+        bh=5/8WaG5xcausJczSDu1PtwlsotHm7UZnGjCaIMeLMRQ=;
+        b=HkgGdLE4Dyw/SZQhYslFfgdxb3IIZSFGmM11mmGuZg14zbpuVldQMdcwEAESjypNkS
+         Pc2lDT0KKj1Blg6Pl9mJ4pVr6bbm0au5zoCnZFSfeWt+NSP2BOcHQ/B0QY6d3j1SX91y
+         IXAE0N/5FLTZia3Zj5cKZrG6fGSniLYfRf4FSruzjIqoTXaDNmYtT8qdMeSJd5IOGVDl
+         /AHNVSaFBM/6+749mSnWqNzf6Xt8diqrhp3cg+N69RBskYbVD4QG9h3L1Jnuek8bLXF8
+         BYBHuoX3Aajd7t7y+y1yTt5xMA+ufzYlxq4V0XNPZ8OX5Aem7zhuv6suwjGxSE1gmiEY
+         05Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+pOcfF7XRRA2m/V14chW6CMdXORPKS12TO3trjH44PhXFSnxPxQ7CE/zByeR9Wf62YvRKIDRw1pQkb2A=@vger.kernel.org, AJvYcCWjSij2PPT0m2lY0/aFSbmR+CPZZ5Jgy9vDRedYrUgZqXy14/KVruECwRzjRDpXzfxERGNqpUziy3p2u3gc8VRq@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVflKH680ELZUfcVktWFwda+YCnUfZUdf5MHElb4sj7YjtyG30
+	b1aw/uUUsobc+Zi7GqFke2gWftxLCtYk+OrZhWg8sfI2rkq+Goje
+X-Gm-Gg: ASbGncvIyCB1fEDlTNsvWe2jvmkK39ai+N/XQli161IYAqIjsCZBDDrebgupx94QhKz
+	ntbxJJ7PNtwwwzEKAve5Ue+AhWvtQbjRaPSS16MduHZ5UC0w2M3Gmf2TcNze7A8Z62qaM9R4EY1
+	UqJdH/PNbacTl9KFZBLRVlJl9+iIofiudakR0JrtzwsaiAnX+eSqsPxeHCMCA6+IzIjsTo/ma6k
+	tO4Qq6WEKlscgyvc6XyOrbPR8T+VbIR1wLmEHDI7Yika3nImu2MphJ6hKHmtI5OlVimzLlLjhPh
+	oK3oDRxSocak1jp8sMh8Dyt9uLomGoZm/h8=
+X-Google-Smtp-Source: AGHT+IHUdRKgQ964UqJ7mPGegV4qUHNbriO8kSyM/D21jqtW+YJdW+LM/Z0c8Ulzu+ph57ZFYLEkHw==
+X-Received: by 2002:a17:902:f64f:b0:215:4a4e:9262 with SMTP id d9443c01a7336-21f17dd6b37mr24252835ad.8.1738734636869;
+        Tue, 04 Feb 2025 21:50:36 -0800 (PST)
 Received: from vaxr-BM6660-BM6360.. ([2001:288:7001:2703:dc5d:87af:eca4:905a])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f9e1c06393sm581025a91.0.2025.02.04.21.39.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f06e7d4f6sm23298345ad.112.2025.02.04.21.50.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 21:39:31 -0800 (PST)
+        Tue, 04 Feb 2025 21:50:36 -0800 (PST)
 From: I Hsin Cheng <richard120310@gmail.com>
 To: shuah@kernel.org
 Cc: brauner@kernel.org,
@@ -77,9 +77,9 @@ Cc: brauner@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel-mentees@lists.linux.dev,
 	I Hsin Cheng <richard120310@gmail.com>
-Subject: [PATCH] selftests: pidfd: Fix compiling errors and warning
-Date: Wed,  5 Feb 2025 13:39:26 +0800
-Message-ID: <20250205053926.257732-1-richard120310@gmail.com>
+Subject: [PATCH] selftests: pidfd: Fix compiling warning of pidfs_setns
+Date: Wed,  5 Feb 2025 13:50:31 +0800
+Message-ID: <20250205055031.259710-1-richard120310@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -90,58 +90,36 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When compiling selftests files under tools/testing/selftests/pidfd/ ,
-some compiling errors and warnings will pop out as the following.
+In the compilation of pidfs_setns_test.c , a warning as the following
+will pop out.
 
-  CC       pidfd_fdinfo_test
-pidfd_fdinfo_test.c: In function ‘child_fdinfo_nspid_test’:
-pidfd_fdinfo_test.c:231:13: warning: implicit declaration of function \
-‘mount’ [-Wimplicit-function-declaration]
-  231 |         r = mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
-      |             ^~~~~
-pidfd_fdinfo_test.c:231:36: error: ‘MS_REC’ undeclared \
-(first use in this function)
-  231 |         r = mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
-      |                                    ^~~~~~
-pidfd_fdinfo_test.c:231:36: note: each undeclared identifier is \
-reported only once for each function it appears in
-pidfd_fdinfo_test.c:231:45: error: ‘MS_PRIVATE’ undeclared \
-(first use in this function); did you mean ‘MAP_PRIVATE’?
-  231 |         r = mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
-      |                                             ^~~~~~~~~~
-      |                                             MAP_PRIVATE
-pidfd_fdinfo_test.c:237:15: warning: implicit declaration of function \
-‘umount2’; did you mean ‘SYS_umount2’? \
-[-Wimplicit-function-declaration]
-  237 |         (void)umount2("/proc", MNT_DETACH);
-      |               ^~~~~~~
-      |               SYS_umount2
-pidfd_fdinfo_test.c:237:32: error: ‘MNT_DETACH’ undeclared \
-(first use in this function)
-  237 |         (void)umount2("/proc", MNT_DETACH);
-      |                                ^~~~~~~~~~
-make: *** [../lib.mk:222: \
-~/linux/tools/testing/selftests/pidfd/pidfd_fdinfo_test] Error 1
+pidfd_setns_test.c: In function ‘current_nsset_setup’:
+pidfd_setns_test.c:173:54: warning: implicit declaration of function \
+‘ioctl’ [-Wimplicit-function-declaration]
+  173 |                 self->child_pidfd_derived_nsfds[i] = \
+ioctl(self->pidfd, info->pidfd_ioctl, 0);
 
-Solve these errors and warnings by including header file <sys/mount.h>.
+It's caused by wrong import of header file <linux/ioctl.h>, fix it to
+<sys/ioctl.h>.
 
 Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
 ---
- tools/testing/selftests/pidfd/pidfd_fdinfo_test.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/pidfd/pidfd_setns_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-index f062a986e..f718aac75 100644
---- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-@@ -13,6 +13,7 @@
- #include <syscall.h>
- #include <sys/wait.h>
- #include <sys/mman.h>
-+#include <sys/mount.h>
+diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+index 7c2a43491..3ed42f1eb 100644
+--- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+@@ -16,7 +16,7 @@
+ #include <unistd.h>
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+-#include <linux/ioctl.h>
++#include <sys/ioctl.h>
  
  #include "pidfd.h"
- #include "../kselftest.h"
+ #include "../clone3/clone3_selftests.h"
 -- 
 2.43.0
 
