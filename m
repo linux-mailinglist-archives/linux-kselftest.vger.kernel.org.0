@@ -1,161 +1,256 @@
-Return-Path: <linux-kselftest+bounces-25822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6D38A289FC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 13:15:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4981A28A26
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 13:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 323023A788F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 12:14:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C48D16937D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 12:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91BE22B8CD;
-	Wed,  5 Feb 2025 12:15:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A7722C358;
+	Wed,  5 Feb 2025 12:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="oFO2A2pg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="X6zSbh0E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKUH+syv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F17218AC4;
-	Wed,  5 Feb 2025 12:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4B822B8B7;
+	Wed,  5 Feb 2025 12:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738757702; cv=none; b=iDHu6fucmVFFbxPBBinyfH4whd6ih38LpT+Sum63AxK+x1F572BofWqoXIpT1D62J0ThVtcCJyyMv9SbSpEsMDr+/e1GSdb/zyX4bcckXqRbXglqFstSNur31F1Wt19yj+AQlnP13ZyMqE4cXDb7jD1+2GbSZVDiUrbqX4Yd0Jc=
+	t=1738758031; cv=none; b=ToxYXqeExQp2Xa02gPkI03TCR6lM41Y1/PG7cYRCFAARtQHnAlQ9dqquBWzbAairpoC3YRvfaPdWg4UCVNv8hL9tjPXwSU1J65uf1zB5Dcc2WRttJOLNXOm+RsR2Lbh4ZoP/G0GjOnJmcHYMV5Es8tajyQxcOGUTWuOjbddvfuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738757702; c=relaxed/simple;
-	bh=FMLGSLj6R8JVgLvkdOdwv134eD/wDE/J7GN3jj3lJvY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vc+kNcOXsx3aHQatb3oc+LbpVT3nvS9TOKxC4J4iDLrWAUyRmx7Dc9lp99uwfcbrId07fnlbTZdx/Njz4HhQa/+67mU58o7t/hdrZ/YcJ9IpdeeL77WGUv2GQsfRoz/3vyeHfp3j8CFLhZGmqx5G2tQjArNugPtuJefnSISrDes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=oFO2A2pg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=X6zSbh0E; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E63C011400E4;
-	Wed,  5 Feb 2025 07:14:58 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Wed, 05 Feb 2025 07:14:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1738757698; x=1738844098; bh=ZEkXZWhhni
-	DQ23BUYVMWyvX3Ay9kHR31GJKwgx6W/G8=; b=oFO2A2pgXLHzJzdFKyBKCelNn5
-	L5pkEvoqHVoU2FRozr2mtPtFF7qEbGJEEc7HrLe5N5T/BouIYV8devfJIbu+QHJe
-	oEHYrpDj8sqRSzs9dqNCb30stXZtE1X3QKX8tgFIqgT04VR+tTD8PcPFTSt8KaCU
-	If8zwdVUMQnpdmtisOTjta3++Lf6G4vi7181DdbRRYGBcf7qcbJJx6TnDhO/z+Fh
-	0yKpahVs2IlL/+09MEP7MAPVx12gnX1IfSh0vJVfYxaL0A5nTb6cqu8ek+LfC1f2
-	NgJO+NISaXabitkL7p5VUxPkdzWomjHLhsuotzPkjarZsN3U9s/GjLTg/o/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1738757698; x=1738844098; bh=ZEkXZWhhniDQ23BUYVMWyvX3Ay9kHR31GJK
-	wgx6W/G8=; b=X6zSbh0EOWqv3fmrfPU9iYtbWOrlpjsYkgVisARFsOgFpuhe1BY
-	SdT55t7iprSYfJEdXa6CfmfKMri2WyyvismKosLtd64QnFNmUPaMF/KF8dE6eGhd
-	lKVNTSz/G+JCt+lIB21XC0M6KuKD7Zgfp7ly5Vsk57H0SvOhmzg7qDvL+gXe32Zx
-	8+j0mesBL2WR/G6vrmbRowBKo8rkjoc/8BinWiRv6xqUaW2FCfUnxQVi/9mDYo3r
-	Wzz/8T/deDQQCbdrP3vcn7hmVjPri1vP/+slZc6eFkSHzEtqZTi8jYjfD7XhfplV
-	sQUmrJnaO4fXFxvGHUBELWiy8If7MPHDCBw==
-X-ME-Sender: <xms:QlajZ2ifL2uHrFupypxXD2WljhW3MR0ZTn3sPfgPhv5qSsIu1NkZcQ>
-    <xme:QlajZ3BrVNhpkeL3PoikA2dXUz39FlWPmwYa_yrlDTHjbomfpRFNiBG3k0FgD9JfK
-    UOi9Z0jXcrQOg>
-X-ME-Received: <xmr:QlajZ-G2GBfSswox4yPg5PGsrqAlbgcI93B-BmNEcg-uu3UcBG-mB3ZD54z7eKQSY4BpCcSOTq2WqYZujtkua40sKjBCqHOke5nEYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvf
-    evuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgv
-    gheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehueehgfdtledutdelke
-    efgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgrihhnpehkvghrnhgv
-    lhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepuddtpdhmohguvgep
-    shhmthhpohhuthdprhgtphhtthhopeihihhfvghirdhlrdhlihhusehorhgrtghlvgdrtg
-    homhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehk
-    vghvihhnrdgsrhhoughskhihsegrrhhmrdgtohhmpdhrtghpthhtohepshhtrggslhgvse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhht
-    vghsthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:QlajZ_RvIwQmHFqY4KS1TgqdnfX3lRou0dECf9jvXglNvdoAzMqbFA>
-    <xmx:QlajZzyn36K1jq1Ir8PakjSYdsz5zDyi2ncmCbDJ-tMXz4FpgZyTxQ>
-    <xmx:QlajZ964sP0EL_PDAPiy-T99tGfoqdLT9wpbR7WYWumS4IzLl13uBg>
-    <xmx:QlajZwy8my3lVtz6W7peoFLcZi9n94527mfHqyJQPEZ3Uq-VopFpaQ>
-    <xmx:QlajZ4qArvGqtd-EuOnOcZ8WzQi3DJy8azP8fCnj7hNCnuEWd5_MpfVm>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Feb 2025 07:14:57 -0500 (EST)
-Date: Wed, 5 Feb 2025 13:14:55 +0100
-From: Greg KH <greg@kroah.com>
-To: Yifei Liu <yifei.l.liu@oracle.com>
-Cc: shuah@kernel.org, kevin.brodsky@arm.com, stable@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 Linux-6.12.y Linux-6.13.y 1/1] selftests/mm: build
- with -O2
-Message-ID: <2025020544-preview-worshiper-8539@gregkh>
-References: <20250204214723.1991309-1-yifei.l.liu@oracle.com>
+	s=arc-20240116; t=1738758031; c=relaxed/simple;
+	bh=mliisTJtC4/x2He8n/YtxnJipD2aoHXMhReWhBlgrO8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ob8meXJ60l2i5EGERqoajiPWFoS1huaMzAF3SNi532zbgOVN376gwyR0lKPHHEnPIN317itr/D/WKxiXLkqnF20jMuBVnOTJ3cnDQ7uGEJLVj/0aWfTkLGitaj//vm1tnaKjE97XMdpLqflgXEc6vWyfHd1IsT3gyc9zbd4oa4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKUH+syv; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4361c705434so49676545e9.3;
+        Wed, 05 Feb 2025 04:20:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738758028; x=1739362828; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e6UxSbzx0mqyS4ecv7b06nR9TIVmkjaPNaX7UQ2Szu4=;
+        b=NKUH+syvZhUlzi4N5/ERuDGB32FsyHNPare1iNi8spbuzSreFVwl7ekvj9S+9WYOMk
+         2Z2eXdWF/FsHgn9I4/N0OQoylu8JAORQZMnfmuTIxXJ1MLmgQ4v5ly+XRbFgyziD+HhA
+         ELRrLUHGqWGxF4vv/JIiECVhcgho/p+nyABKp+zIcY8VhgPP+f98Q9OEzV0ufkD63pr9
+         rrIhuSCe/7tq3Ks7R/shKBPOejqWokNjjlb4F+hCeto/7kjiHPDhLzYITbifl21X3+75
+         UXq/OBQzFMP8/qEcq2huL82b/FIPKUdpnvyxIaRpY4NJr0VmX+tl4/PY6s/M328XclbP
+         8OqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738758028; x=1739362828;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e6UxSbzx0mqyS4ecv7b06nR9TIVmkjaPNaX7UQ2Szu4=;
+        b=Z3Wvf5rPvEGKB8wFzCGCty3kyFHFr1ugpt+r6mxE7Go3QH5WYmDlCVNSauz0bRp6xE
+         FrQfeWGLChSY3gQKQ0L+Ajiy7OoW2e2YR1hWY8nNVHyaicsihLHRh736Y6lPkoL+SYVc
+         1iKK5ozeq8zcQwEJUsnntmixRy2CFlYNXG3dMRl6xqL2d98pnAGVJC0Xg8QCzgbtMmYp
+         rT5EDfFsmsnj1kiH7Z055XQJIQSnm4d8eX+2VtXLiRnxWMUJueg8RbUdEJkyOAyJQfKi
+         A0RXBkOyR6l5UphkbZP4XtwV4tBUp1FmprQlNNtzL/AE7Yb+wNmTd8kE/ZxueUQBjIJ8
+         ucJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnN+J1AHYTgUqs3LoRlpsK9wHQ9haqn7Ip1CbN7slnbwV1rV/UmEWs3u3IJd7E6MU9jZg=@vger.kernel.org, AJvYcCVYGVHMZoTRxzl7wm/TpduhejuyEPaXA07A0o0gGqSyCMmEXPfjRal9uvG+RxpGx+vHLP8+BAjuV/aighVibncL@vger.kernel.org, AJvYcCW+mTAjbjJJTPuV24gBdT2dOj98p2H9vrBQvleW5xDT3aIGSKN0NDeqsEi+DRY38+8/dlJoe0I8mG4k@vger.kernel.org, AJvYcCWj7PvU52Iywjc7Vj/niFskzZE0m/iWE5Nb+rvDOOLCm49U/izV9tHn2MiaLacWh9I78wofCDslAvzDJxiI@vger.kernel.org, AJvYcCXb7yqn4yj5TxyAcbVUwKVLj9rc3rH6ZXTlPjUAVjxM3h2lSsKEfR6SmLx83/VUux6zHosScDoe@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqPkXP3S9qyeW3T2vW/K4iM2oxiE9k83wxENOGnFepVKsy/Rqa
+	RNKUOe9GZgzu05d/sTFPFaomEw/P4zaTr+Ge/R2JygaFoocpkcxh
+X-Gm-Gg: ASbGncs//8KbsHyuE0+rcNQ9OeJYph5YZQWcsYtRrDe6ixe88r2zSvhwXbRwpz4BBqf
+	3wz5dkQjciFUPfo9jhAFRgrCrp96pObdEixhguqphL56CnkJOTmnT1ft6oUzQQPRhIcCFHIIfCs
+	JM+ognUNf6sSh5Hg2dbvatve1g1cbM2YeadBJp5gVGkx/C0Cyk6OZ6PbErPxuQOBHP2cjq/j2JT
+	br6eKl/tcRLU71QZDvTL8V/jDj2cNxDrZ7ZCwf5m4pE1X9QSc5DhUh9E8Cnc/rk8zjSUq4YztWu
+	jVBAT1/Cm3nTGRi7QfLlVhw=
+X-Google-Smtp-Source: AGHT+IGJDXvIG/7Qnnn/pmmyUc/PCQsFzD0zmP7oGwtUvw9dR3YQPaYZ7+KNbPMVMRYa9yN06wEAdQ==
+X-Received: by 2002:a5d:6c6a:0:b0:38c:5bfa:a93b with SMTP id ffacd0b85a97d-38db48a987emr1829547f8f.2.1738758028045;
+        Wed, 05 Feb 2025 04:20:28 -0800 (PST)
+Received: from [192.168.8.100] ([148.252.128.4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1016easm18630336f8f.24.2025.02.05.04.20.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Feb 2025 04:20:27 -0800 (PST)
+Message-ID: <abc22620-d509-4b12-80ac-0c36b08b36d9@gmail.com>
+Date: Wed, 5 Feb 2025 12:20:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250204214723.1991309-1-yifei.l.liu@oracle.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Neal Cardwell <ncardwell@google.com>,
+ David Ahern <dsahern@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
+ Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <20250203223916.1064540-6-almasrymina@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20250203223916.1064540-6-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 04, 2025 at 01:47:23PM -0800, Yifei Liu wrote:
-> From: Kevin Brodsky <kevin.brodsky@arm.com>
-> 
-> [ Upstream commit 46036188ea1f5266df23a6149dea0df1c77cd1c7 ]
-> 
-> The mm kselftests are currently built with no optimisation (-O0).  It's
-> unclear why, and besides being obviously suboptimal, this also prevents
-> the pkeys tests from working as intended.  Let's build all the tests with
-> -O2.
-> 
-> [kevin.brodsky@arm.com: silence unused-result warnings]
->   Link: https://lkml.kernel.org/r/20250107170110.2819685-1-kevin.brodsky@arm.com
-> Link: https://lkml.kernel.org/r/20241209095019.1732120-6-kevin.brodsky@arm.com
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> Cc: Aruna Ramakrishna <aruna.ramakrishna@oracle.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Joey Gouly <joey.gouly@arm.com>
-> Cc: Keith Lucas <keith.lucas@oracle.com>
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> (cherry picked from commit 46036188ea1f5266df23a6149dea0df1c77cd1c7)
-> [Yifei: This commit also fix the failure of pkey_sighandler_tests_64,
-> which is also in linux-6.12.y and linux-6.13.y, thus backport this commit]
-> Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
-> ---
->  tools/testing/selftests/mm/Makefile | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index 02e1204971b0..c0138cb19705 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -33,9 +33,16 @@ endif
->  # LDLIBS.
->  MAKEFLAGS += --no-builtin-rules
->  
-> -CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-> +CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
->  LDLIBS = -lrt -lpthread -lm
->  
-> +# Some distributions (such as Ubuntu) configure GCC so that _FORTIFY_SOURCE is
-> +# automatically enabled at -O1 or above. This triggers various unused-result
-> +# warnings where functions such as read() or write() are called and their
-> +# return value is not checked. Disable _FORTIFY_SOURCE to silence those
-> +# warnings.
-> +CFLAGS += -U_FORTIFY_SOURCE
+On 2/3/25 22:39, Mina Almasry wrote:
+...
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index bb2b751d274a..3ff8f568c382 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1711,9 +1711,12 @@ struct ubuf_info *msg_zerocopy_realloc(struct sock *sk, size_t size,
+...
+>   int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>   				struct iov_iter *from, size_t length);
+> @@ -1721,12 +1724,14 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>   static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
+>   					  struct msghdr *msg, int len)
+>   {
+> -	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len);
+> +	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len,
+> +				       NULL);
+
+Instead of propagating it all the way down and carving a new path, why
+not reuse the existing infra? You already hook into where ubuf is
+allocated, you can stash the binding in there. And
+zerocopy_fill_skb_from_devmem can implement ->sg_from_iter,
+see __zerocopy_sg_from_iter().
+
+...
+> diff --git a/net/core/datagram.c b/net/core/datagram.c
+> index f0693707aece..c989606ff58d 100644
+> --- a/net/core/datagram.c
+> +++ b/net/core/datagram.c
+> @@ -63,6 +63,8 @@
+> +static int
+> +zerocopy_fill_skb_from_devmem(struct sk_buff *skb, struct iov_iter *from,
+> +			      int length,
+> +			      struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	int i = skb_shinfo(skb)->nr_frags;
+> +	size_t virt_addr, size, off;
+> +	struct net_iov *niov;
 > +
->  TEST_GEN_FILES = cow
->  TEST_GEN_FILES += compaction_test
->  TEST_GEN_FILES += gup_longterm
+> +	while (length && iov_iter_count(from)) {
+> +		if (i == MAX_SKB_FRAGS)
+> +			return -EMSGSIZE;
+> +
+> +		virt_addr = (size_t)iter_iov_addr(from);
 
-This does not apply to 6.13 :(
+Unless I missed it somewhere it needs to check that the iter
+is iovec based.
+
+> +		niov = net_devmem_get_niov_at(binding, virt_addr, &off, &size);
+> +		if (!niov)
+> +			return -EFAULT;
+> +
+> +		size = min_t(size_t, size, length);
+> +		size = min_t(size_t, size, iter_iov_len(from));
+> +
+> +		get_netmem(net_iov_to_netmem(niov));
+> +		skb_add_rx_frag_netmem(skb, i, net_iov_to_netmem(niov), off,
+> +				       size, PAGE_SIZE);
+> +		iov_iter_advance(from, size);
+> +		length -= size;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>   			    struct sk_buff *skb, struct iov_iter *from,
+> -			    size_t length)
+> +			    size_t length,
+> +			    struct net_devmem_dmabuf_binding *binding)
+>   {
+>   	unsigned long orig_size = skb->truesize;
+>   	unsigned long truesize;
+> @@ -702,6 +737,8 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>   
+>   	if (msg && msg->msg_ubuf && msg->sg_from_iter)
+>   		ret = msg->sg_from_iter(skb, from, length);
+
+As mentioned above, you can implement this callback. The callback can
+also be moved into ubuf_info ops if that's more convenient, I had
+patches stashed for that.
+
+> +	else if (unlikely(binding))
+> +		ret = zerocopy_fill_skb_from_devmem(skb, from, length, binding);
+>   	else
+>   		ret = zerocopy_fill_skb_from_iter(skb, from, length);
+>   
+> @@ -735,7 +772,7 @@ int zerocopy_sg_from_iter(struct sk_buff *skb, struct iov_iter *from)
+>   	if (skb_copy_datagram_from_iter(skb, 0, from, copy))
+>   		return -EFAULT;
+
+...
+
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 0d704bda6c41..44198ae7e44c 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1051,6 +1051,7 @@ int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *copied,
+>   
+>   int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+>   {
+> +	struct net_devmem_dmabuf_binding *binding = NULL;
+>   	struct tcp_sock *tp = tcp_sk(sk);
+>   	struct ubuf_info *uarg = NULL;
+>   	struct sk_buff *skb;
+> @@ -1063,6 +1064,15 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+>   
+>   	flags = msg->msg_flags;
+>   
+> +	sockcm_init(&sockc, sk);
+> +	if (msg->msg_controllen) {
+> +		err = sock_cmsg_send(sk, msg, &sockc);
+> +		if (unlikely(err)) {
+> +			err = -EINVAL;
+> +			goto out_err;
+> +		}
+> +	}
+> +
+>   	if ((flags & MSG_ZEROCOPY) && size) {
+>   		if (msg->msg_ubuf) {
+>   			uarg = msg->msg_ubuf;
+> @@ -1080,6 +1090,15 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+>   			else
+>   				uarg_to_msgzc(uarg)->zerocopy = 0;
+>   		}
+> +
+> +		if (sockc.dmabuf_id != 0) {
+
+It's better to be mutually exclusive with msg->msg_ubuf, the callers
+have expectations about the buffers used. And you likely don't want
+to mix it with normal MSG_ZEROCOPY in a single skb and/or ubuf_info,
+you can force reallocation of ubuf_info here.
+
+> +			binding = net_devmem_get_binding(sk, sockc.dmabuf_id);
+> +			if (IS_ERR(binding)) {
+> +				err = PTR_ERR(binding);
+> +				binding = NULL;
+> +				goto out_err;
+> +			}
+> +		}
+
+-- 
+Pavel Begunkov
 
 
