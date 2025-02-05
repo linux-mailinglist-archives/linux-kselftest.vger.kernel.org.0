@@ -1,230 +1,177 @@
-Return-Path: <linux-kselftest+bounces-25814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40FBBA28687
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 10:30:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E0DEA2868E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 10:30:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CEA13A7635
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 09:30:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63DB17A4109
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 09:29:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B21422A80A;
-	Wed,  5 Feb 2025 09:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eg6yHtoI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89ECB22A4FE;
+	Wed,  5 Feb 2025 09:30:27 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F37022A800;
-	Wed,  5 Feb 2025 09:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E27121A427;
+	Wed,  5 Feb 2025 09:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738747752; cv=none; b=CK/ivgleUJJM3z4ZChYRStZ27VghI4oqmOmh4UpNoxQEMFJdsvZEBFfIeVeQUySLJVxkKyWIp2jer/wxnLg9ObRNhBTY3NcNMlqNmeFztcX1CRD9zNH0v07VaRm+YZiRSaYvnWsS6fl3Y/czABDdOelIZDBaqD8jI4qDLQNhID4=
+	t=1738747827; cv=none; b=efoSLQ5djPRhM5PjfZTlCP1tCczyl82M8r/cHwIm5NNaOGq2e7oRH4eSgvvViUq8DfAMWmrgfYK3XS1KLFjoK/2J73xPEFavC3sNtRP4EfFYqjp6N0digamT5Fnd3GFmg/Hth0TOV83iro7g6nRst0Svq3BhQbf9/1VIfgHjNx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738747752; c=relaxed/simple;
-	bh=Ms21WWQxt0hgCHNGn7VoI88OcIK4i02A5VsFEvG24mk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B2qd4Jq2g1ITHYa3B5Ozu6lbiOl/WV3Md34Z9T+47oJnvRcGjvFKMOy5+fTjoeJA1HBzwyUZfPWMsffkeD9IiG3T4BM8nPzEUcC78jo4mBgAbu6NrSO7eWzdIWBJ/+uCE2ysJfu2ThisPeUoCvVONREI/1pPG+88Iu+f0Nbx+ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eg6yHtoI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8972C4CEE3;
-	Wed,  5 Feb 2025 09:29:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738747751;
-	bh=Ms21WWQxt0hgCHNGn7VoI88OcIK4i02A5VsFEvG24mk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eg6yHtoIaP23lOBbUoIZktLdaXSm0/rQFB+Gu8dr+q6+oDohpMbSz2yg63hKd5qcR
-	 JIEQigQOx6zSCL8PfwFDkT74//d+oqTy+g/WnEeE9UP5rDeXqV9BLxGh+S9eSB5FCQ
-	 0EH4OaodiU249ytvGjb03wGCsyxxcB6ysVIfWcaagRWsD3RQE40qXgte1c/SSodkak
-	 STW8sPJ3yqHfZTCbEMSHiStohjiCgW6+p701EXd/PQ3EyNGW8ToP6boCW+4mBJYH6M
-	 9GZOR6yUYN177p9P2oqWDE9hTWfwmjDylNbdW650fOmV8bB+tmA0ieFWuJ9AWuGJmk
-	 SqgS9GzJbdTnQ==
-Date: Wed, 5 Feb 2025 10:29:03 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Shuah Khan <shuah@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>, 
-	John Hubbard <jhubbard@nvidia.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Koutny <mkoutny@suse.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Elliott Hughes <enh@google.com>
-Subject: Re: [PATCH v7 0/6] introduce PIDFD_SELF* sentinels
-Message-ID: <20250205-gewahrsam-einnahmen-9b580054f501@brauner>
-References: <cover.1738268370.git.lorenzo.stoakes@oracle.com>
- <20250204-joggen-buddeln-29e5ca75abb7@brauner>
- <7a8a1719-466f-4e10-b1eb-9e9e1ef8ad52@lucifer.local>
- <CAJuCfpEUusRt_ss7RtxRPP9q_LRwi+Lw+SOq32EUA58s3JOx1A@mail.gmail.com>
+	s=arc-20240116; t=1738747827; c=relaxed/simple;
+	bh=KSvuNW4NaX9Wu27x971kTxNlQDfGsgCINQIRim9EfBw=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=R98zf476FdNIHMXibHNU6ghcYrMD+4pL/pGiSFXx0gM+pTA1JGhifkbfgIeuDynkt9CJsATDB0Zl2iaULubiCPSY2JN9KqsPYnMb3Ds5KVb8UThMy688U5w+jMJ6RsRqJo1C1THD7UlmaP4YwjJ23+JJq8jjNzI83fJPYKuTsqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ynw1f4WPKz4f3jYL;
+	Wed,  5 Feb 2025 17:29:58 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id B82CE1A11AF;
+	Wed,  5 Feb 2025 17:30:19 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP2 (Coremail) with SMTP id Syh0CgC3c2anL6NnaHbUCw--.14822S2;
+	Wed, 05 Feb 2025 17:30:19 +0800 (CST)
+Subject: Re: [PATCH bpf-next v1 2/2] bpf: sockopt_sk: fix 'undeclared'
+ definition error
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
+References: <20250204023946.16031-1-kerneljasonxing@gmail.com>
+ <20250204023946.16031-3-kerneljasonxing@gmail.com>
+ <99ccf971-cae5-9c45-5dff-2c8563a7879f@huaweicloud.com>
+ <CAL+tcoAkyjDQd48wKuA8V_RE6j1OYTL2iGxT8HdVKpryD3SaUA@mail.gmail.com>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <b13c3602-69b8-7452-f342-8204287cea4d@huaweicloud.com>
+Date: Wed, 5 Feb 2025 17:30:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAL+tcoAkyjDQd48wKuA8V_RE6j1OYTL2iGxT8HdVKpryD3SaUA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpEUusRt_ss7RtxRPP9q_LRwi+Lw+SOq32EUA58s3JOx1A@mail.gmail.com>
+Content-Language: en-US
+X-CM-TRANSID:Syh0CgC3c2anL6NnaHbUCw--.14822S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kXr4xAw1xtrW7tr4rAFb_yoW5tF1kpa
+	48A3WUKay8CFW5Zwn7Jr42vF1xKr48Jryj9rWvqry3ZF17WFyxGFW7KrWY9FnagrZIvr4F
+	v347KF93ua1kZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI
+	1cAE67vIY487MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
+	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+	x4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07jIksgUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Tue, Feb 04, 2025 at 09:43:31AM -0800, Suren Baghdasaryan wrote:
-> On Tue, Feb 4, 2025 at 2:01 AM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > On Tue, Feb 04, 2025 at 10:46:35AM +0100, Christian Brauner wrote:
-> > > On Thu, 30 Jan 2025 20:40:25 +0000, Lorenzo Stoakes wrote:
-> > > > If you wish to utilise a pidfd interface to refer to the current process or
-> > > > thread it is rather cumbersome, requiring something like:
-> > > >
-> > > >     int pidfd = pidfd_open(getpid(), 0 or PIDFD_THREAD);
-> > > >
-> > > >     ...
-> > > >
-> > > > [...]
-> > >
-> > > Updated merge message. I've slightly rearranged pidfd_send_signal() so
-> > > we don't have to call CLASS(fd, f)(pidfd) unconditionally anymore.
-> >
-> > Sounds good and thank you! Glad to get this in :)
-> 
-> Sorry, a bit late to the party...
-> 
-> We were discussing MADV_GUARD_INSTALL use with Android Bionic team and
-> the possibility of caching pidfd_open() result for reuse when
-> installing multiple guards, however doing that in libraries would pose
-> issues as we can't predict the user behavior, which can fork() in
-> between such calls. That would be an additional reason why having
-> these sentinels is beneficial.
+Hi,
 
-Ok, added this to the cover letter as well.
+On 2/5/2025 11:27 AM, Jason Xing wrote:
+> On Wed, Feb 5, 2025 at 10:57 AM Hou Tao <houtao@huaweicloud.com> wrote:
+>> Hi,
+>>
+>> On 2/4/2025 10:39 AM, Jason Xing wrote:
+>>> Error messages:
+>>> selftests/bpf/prog_tests/sockopt_sk.c: In function ‘getsetsockopt’:
+>>> selftests/bpf/prog_tests/sockopt_sk.c:22:31: error: field ‘zc’ has incomplete type
+>>>    struct tcp_zerocopy_receive zc;
+>>>                                ^~
+>>> selftests/bpf/prog_tests/sockopt_sk.c:169:32: error: ‘TCP_ZEROCOPY_RECEIVE’ undeclared (first use in this function)
+>>>   err = getsockopt(fd, SOL_TCP, TCP_ZEROCOPY_RECEIVE, &buf, &optlen);
+>>>                                 ^~~~~~~~~~~~~~~~~~~~
+>>>
+>>> Fix it by introducing the right header.
+>>>
+>>> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+>>> ---
+>>>  tools/testing/selftests/bpf/prog_tests/sockopt_sk.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+>>> index ba6b3ec1156a..e0a9785ffcdc 100644
+>>> --- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+>>> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+>>> @@ -2,7 +2,7 @@
+>>>  #include <test_progs.h>
+>>>  #include "cgroup_helpers.h"
+>>>
+>>> -#include <netinet/tcp.h>
+>>> +#include <uapi/linux/tcp.h>
+>> Should it be <linux/tcp.h> instead ?
+> I thought that too, but I altered my thoughts after reading this
+> commit[1], totally without knowing why the tcp part should be changed.
+> Should I change it back?
 
-Note that starting with v6.14 pidfs supports file handles.
-This works because pidfs provides each pidfd with a unique 64bit inode
-number that is exposed in statx(). On 64-bit the ->st_ino simply is the
-inode number. On 32-bit the unique identifier can be reconstructed using
-->st_ino and the inode generation number which can be retrieved via the
-FS_IOC_GETVERSION ioctl. So the 64-bit identifier on 32-bit is
-reconstructed by using ->st_ino as the lower 32-bits and the 32-bit
-generation number as the upper 32-bits.
+Thanks for pointing the commit to me. Under my local environment, it
+seems both netinet/tcp.h and linux/tcp define tcp_zerocopy_receive and
+tcphdr, and I think that is the reason why the commit changes tcp as
+well. For the following build error:
 
-Also note that since the introduction of pidfs each struct pid will
-refer to a different inode but the same struct pid will refer to the
-same inode if it's opened multiple times. In contrast to pre-pidfs
-pidfds where each struct pid refered to the same inode.
+selftests/bpf/prog_tests/sockopt_sk.c:22:31: error: field ‘zc’ has
+incomplete type
+   struct tcp_zerocopy_receive zc;
 
-IOW, with pidfs statx() is sufficient to compare to pidfds whether they
-refer to the same process. On 64-bit it's sufficient to do the usual
-st1->st_dev == st2->st_dev && st1->st_ino == st2->st_ino and on 32-bit
-you will want to also compare the generation number:
+I think maybe your local environment is a bit out-of-date. I prefer to
+keep it as-is.
+>
+>> Directly including uapi header file
+>> in application seems weird.
+> After greping the tools/testing/selftests/bpf, we see some similar
+> usage like including a uapi header file.
+>
+> [1]
+> commit a2f482c34a52176ae89d143979bbc9e7a72857c8
+> Author: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> Date:   Wed Nov 20 08:43:21 2024 +0100
+>
+>     selftests/bpf: use the same udp and tcp headers in tests under test_progs
+>
+>     Trying to add udp-dedicated helpers in network_helpers involves
+>     including some udp header, which makes multiple test_progs tests build
+>     fail:
+>
+>     In file included from ./progs/test_cls_redirect.h:13,
+>                      from [...]/prog_tests/cls_redirect.c:15:
+>     [...]/usr/include/linux/udp.h:23:8: error: redefinition of ‘struct udphdr’
+>        23 | struct udphdr {
+>           |        ^~~~~~
+>     In file included from ./network_helpers.h:17,
+>                      from [...]/prog_tests/cls_redirect.c:13:
+>     [...]/usr/include/netinet/udp.h:55:8: note: originally defined here
+>        55 | struct udphdr
+>           |        ^~~~~~
+>
+>     This error is due to struct udphdr being defined in both <linux/udp.h>
+>     and <netinet/udp.h>.
+>
+>     Use only <netinet/udp.h> in every test. While at it, perform the same
+>     for tcp.h. For some tests, the change needs to be done in the eBPF
+>     program part as well, because of some headers sharing between both
+>     sides.
+>
+> Thanks,
+> Jason
+>
+> .
 
-TEST_F(pidfd_bind_mount, reopen)
-{
-        int pidfd;
-        char proc_path[PATH_MAX];
-
-        sprintf(proc_path, "/proc/self/fd/%d", self->pidfd);
-        pidfd = open(proc_path, O_RDONLY | O_NOCTTY | O_CLOEXEC);
-        ASSERT_GE(pidfd, 0);
-
-        ASSERT_GE(fstat(self->pidfd, &self->st2), 0);
-        ASSERT_EQ(ioctl(self->pidfd, FS_IOC_GETVERSION, &self->gen2), 0);
-
-        ASSERT_TRUE(self->st1.st_dev == self->st2.st_dev && self->st1.st_ino == self->st2.st_ino);
-        ASSERT_TRUE(self->gen1 == self->gen2);
-
-        ASSERT_EQ(close(pidfd), 0);
-}
-
-Plus, you can bind-mount them now.
-
-In any case, this allows us to create file handles that are unique for
-the lifetime of the system. Please see
-
-tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-
-for how that works. The gist is that decoding and encoding for pidfs is
-unprivileged and the only requirement we have is that the process the
-file handle resolves to must be valid in the caller's pid namespace
-hierarchy:
-
-TEST_F(file_handle, file_handle_child_pidns)
-{
-        int mnt_id;
-        struct file_handle *fh;
-        int pidfd = -EBADF;
-        struct stat st1, st2;
-
-        fh = malloc(sizeof(struct file_handle) + MAX_HANDLE_SZ);
-        ASSERT_NE(fh, NULL);
-        memset(fh, 0, sizeof(struct file_handle) + MAX_HANDLE_SZ);
-        fh->handle_bytes = MAX_HANDLE_SZ;
-
-        ASSERT_EQ(name_to_handle_at(self->child_pidfd2, "", fh, &mnt_id, AT_EMPTY_PATH), 0);
-
-        ASSERT_EQ(fstat(self->child_pidfd2, &st1), 0);
-
-        pidfd = open_by_handle_at(self->pidfd, fh, 0);
-        ASSERT_GE(pidfd, 0);
-
-        ASSERT_EQ(fstat(pidfd, &st2), 0);
-        ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
-
-        ASSERT_EQ(close(pidfd), 0);
-
-        pidfd = open_by_handle_at(self->pidfd, fh, O_CLOEXEC);
-        ASSERT_GE(pidfd, 0);
-
-        ASSERT_EQ(fstat(pidfd, &st2), 0);
-        ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
-
-        ASSERT_EQ(close(pidfd), 0);
-
-        pidfd = open_by_handle_at(self->pidfd, fh, O_NONBLOCK);
-        ASSERT_GE(pidfd, 0);
-
-        ASSERT_EQ(fstat(pidfd, &st2), 0);
-        ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
-
-        ASSERT_EQ(close(pidfd), 0);
-
-        free(fh);
-}
-
-So you don't need to keep the fd open.
-
-> 
-> 
-> >
-> > >
-> > > ---
-> > >
-> > > Applied to the vfs-6.15.pidfs branch of the vfs/vfs.git tree.
-> > > Patches in the vfs-6.15.pidfs branch should appear in linux-next soon.
-> > >
-> > > Please report any outstanding bugs that were missed during review in a
-> > > new review to the original patch series allowing us to drop it.
-> > >
-> > > It's encouraged to provide Acked-bys and Reviewed-bys even though the
-> > > patch has now been applied. If possible patch trailers will be updated.
-> > >
-> > > Note that commit hashes shown below are subject to change due to rebase,
-> > > trailer updates or similar. If in doubt, please check the listed branch.
-> > >
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-> > > branch: vfs-6.15.pidfs
-> > >
-> > > [1/6] pidfd: add PIDFD_SELF* sentinels to refer to own thread/process
-> > >       https://git.kernel.org/vfs/vfs/c/e6e4ed42f8d8
-> > > [2/6] selftests/pidfd: add missing system header imcludes to pidfd tests
-> > >       https://git.kernel.org/vfs/vfs/c/c9f04f4a251d
-> > > [3/6] tools: testing: separate out wait_for_pid() into helper header
-> > >       https://git.kernel.org/vfs/vfs/c/fb67fe44116e
-> > > [4/6] selftests: pidfd: add pidfd.h UAPI wrapper
-> > >       https://git.kernel.org/vfs/vfs/c/ac331e56724d
-> > > [5/6] selftests: pidfd: add tests for PIDFD_SELF_*
-> > >       https://git.kernel.org/vfs/vfs/c/881a3515c191
-> > > [6/6] selftests/mm: use PIDFD_SELF in guard pages test
-> > >       https://git.kernel.org/vfs/vfs/c/b4703f056f42
 
