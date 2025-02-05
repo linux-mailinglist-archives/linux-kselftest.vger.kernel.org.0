@@ -1,256 +1,318 @@
-Return-Path: <linux-kselftest+bounces-25823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25824-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4981A28A26
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 13:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 223BEA28A53
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 13:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C48D16937D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 12:20:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83C93166074
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 12:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A7722C358;
-	Wed,  5 Feb 2025 12:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E8220ADFB;
+	Wed,  5 Feb 2025 12:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKUH+syv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BTcEEkAL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4B822B8B7;
-	Wed,  5 Feb 2025 12:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738758031; cv=none; b=ToxYXqeExQp2Xa02gPkI03TCR6lM41Y1/PG7cYRCFAARtQHnAlQ9dqquBWzbAairpoC3YRvfaPdWg4UCVNv8hL9tjPXwSU1J65uf1zB5Dcc2WRttJOLNXOm+RsR2Lbh4ZoP/G0GjOnJmcHYMV5Es8tajyQxcOGUTWuOjbddvfuw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738758031; c=relaxed/simple;
-	bh=mliisTJtC4/x2He8n/YtxnJipD2aoHXMhReWhBlgrO8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ob8meXJ60l2i5EGERqoajiPWFoS1huaMzAF3SNi532zbgOVN376gwyR0lKPHHEnPIN317itr/D/WKxiXLkqnF20jMuBVnOTJ3cnDQ7uGEJLVj/0aWfTkLGitaj//vm1tnaKjE97XMdpLqflgXEc6vWyfHd1IsT3gyc9zbd4oa4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKUH+syv; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4361c705434so49676545e9.3;
-        Wed, 05 Feb 2025 04:20:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738758028; x=1739362828; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e6UxSbzx0mqyS4ecv7b06nR9TIVmkjaPNaX7UQ2Szu4=;
-        b=NKUH+syvZhUlzi4N5/ERuDGB32FsyHNPare1iNi8spbuzSreFVwl7ekvj9S+9WYOMk
-         2Z2eXdWF/FsHgn9I4/N0OQoylu8JAORQZMnfmuTIxXJ1MLmgQ4v5ly+XRbFgyziD+HhA
-         ELRrLUHGqWGxF4vv/JIiECVhcgho/p+nyABKp+zIcY8VhgPP+f98Q9OEzV0ufkD63pr9
-         rrIhuSCe/7tq3Ks7R/shKBPOejqWokNjjlb4F+hCeto/7kjiHPDhLzYITbifl21X3+75
-         UXq/OBQzFMP8/qEcq2huL82b/FIPKUdpnvyxIaRpY4NJr0VmX+tl4/PY6s/M328XclbP
-         8OqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738758028; x=1739362828;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e6UxSbzx0mqyS4ecv7b06nR9TIVmkjaPNaX7UQ2Szu4=;
-        b=Z3Wvf5rPvEGKB8wFzCGCty3kyFHFr1ugpt+r6mxE7Go3QH5WYmDlCVNSauz0bRp6xE
-         FrQfeWGLChSY3gQKQ0L+Ajiy7OoW2e2YR1hWY8nNVHyaicsihLHRh736Y6lPkoL+SYVc
-         1iKK5ozeq8zcQwEJUsnntmixRy2CFlYNXG3dMRl6xqL2d98pnAGVJC0Xg8QCzgbtMmYp
-         rT5EDfFsmsnj1kiH7Z055XQJIQSnm4d8eX+2VtXLiRnxWMUJueg8RbUdEJkyOAyJQfKi
-         A0RXBkOyR6l5UphkbZP4XtwV4tBUp1FmprQlNNtzL/AE7Yb+wNmTd8kE/ZxueUQBjIJ8
-         ucJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnN+J1AHYTgUqs3LoRlpsK9wHQ9haqn7Ip1CbN7slnbwV1rV/UmEWs3u3IJd7E6MU9jZg=@vger.kernel.org, AJvYcCVYGVHMZoTRxzl7wm/TpduhejuyEPaXA07A0o0gGqSyCMmEXPfjRal9uvG+RxpGx+vHLP8+BAjuV/aighVibncL@vger.kernel.org, AJvYcCW+mTAjbjJJTPuV24gBdT2dOj98p2H9vrBQvleW5xDT3aIGSKN0NDeqsEi+DRY38+8/dlJoe0I8mG4k@vger.kernel.org, AJvYcCWj7PvU52Iywjc7Vj/niFskzZE0m/iWE5Nb+rvDOOLCm49U/izV9tHn2MiaLacWh9I78wofCDslAvzDJxiI@vger.kernel.org, AJvYcCXb7yqn4yj5TxyAcbVUwKVLj9rc3rH6ZXTlPjUAVjxM3h2lSsKEfR6SmLx83/VUux6zHosScDoe@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqPkXP3S9qyeW3T2vW/K4iM2oxiE9k83wxENOGnFepVKsy/Rqa
-	RNKUOe9GZgzu05d/sTFPFaomEw/P4zaTr+Ge/R2JygaFoocpkcxh
-X-Gm-Gg: ASbGncs//8KbsHyuE0+rcNQ9OeJYph5YZQWcsYtRrDe6ixe88r2zSvhwXbRwpz4BBqf
-	3wz5dkQjciFUPfo9jhAFRgrCrp96pObdEixhguqphL56CnkJOTmnT1ft6oUzQQPRhIcCFHIIfCs
-	JM+ognUNf6sSh5Hg2dbvatve1g1cbM2YeadBJp5gVGkx/C0Cyk6OZ6PbErPxuQOBHP2cjq/j2JT
-	br6eKl/tcRLU71QZDvTL8V/jDj2cNxDrZ7ZCwf5m4pE1X9QSc5DhUh9E8Cnc/rk8zjSUq4YztWu
-	jVBAT1/Cm3nTGRi7QfLlVhw=
-X-Google-Smtp-Source: AGHT+IGJDXvIG/7Qnnn/pmmyUc/PCQsFzD0zmP7oGwtUvw9dR3YQPaYZ7+KNbPMVMRYa9yN06wEAdQ==
-X-Received: by 2002:a5d:6c6a:0:b0:38c:5bfa:a93b with SMTP id ffacd0b85a97d-38db48a987emr1829547f8f.2.1738758028045;
-        Wed, 05 Feb 2025 04:20:28 -0800 (PST)
-Received: from [192.168.8.100] ([148.252.128.4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1016easm18630336f8f.24.2025.02.05.04.20.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2025 04:20:27 -0800 (PST)
-Message-ID: <abc22620-d509-4b12-80ac-0c36b08b36d9@gmail.com>
-Date: Wed, 5 Feb 2025 12:20:34 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78592151987;
+	Wed,  5 Feb 2025 12:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738758733; cv=fail; b=GYdHJIgmauLvg5eGQX+oEeZavMjiq57an5jlPc2gV2YcygXAObmLKdLkB/p3EDg07nbO9JHLqUdbZ6QYJ/re4NzBZr1yXltjbxibCj3SYUOeoNnbpFZoifw8tqmBvoCMWgrluFsEfSnvHOPwP7u4k28kr0z3CzqNOahJG6vW87o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738758733; c=relaxed/simple;
+	bh=Vk4c+jfZyEv/DcCZ2d/gKR4uYwh5VQZa96Douy3xYg8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=EpZuSHKd0pKTRo8oGVSlR99d6lw+WiXFi96s14FwOSJu2A20WE64rMOBkMvFv9uu3u1Ts1jlAw33GuRMjz+iX6NWR8o6ZRuPhkcA6VLa/stibNG+8towkcnf5ZNJI3kLariP0n2BQYxes5IqMBC9Zh5HIcADrp1OcrebSRjrQR4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BTcEEkAL; arc=fail smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738758732; x=1770294732;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Vk4c+jfZyEv/DcCZ2d/gKR4uYwh5VQZa96Douy3xYg8=;
+  b=BTcEEkALTPO8lhOiCFY5WWCvo5lQ4lqGs8/r8R/0i4Z6AvKg8l6+NEpI
+   OLTw8ua3sDjsdnZvm1tSzwkX6yzESDBnQnBhJ9uQlLTaGuMFX6AXg1a1g
+   JY4IEHr7Q0afLLIDxbguDZBBj46BORyphw1iUwSjYJTXdeg8Wj+QZGjuA
+   uQvU8SCVVEyD4dcyPLQIKeZh4eCOQ1Ew6QF8YSVSLkDlo6VmRzlBLI2ge
+   Xi8piER5ZzIfF5S3gu0TktTlIPf1WPhmHF2hfnp3kwrCGz1BqLNafLUCX
+   FMqdZF8+jMJAtISA8H749aPwIffzapHD52zmNzo/p/yyhZPcwoy2cQyyw
+   Q==;
+X-CSE-ConnectionGUID: VnWimGskQhmF6v9qT+/0TA==
+X-CSE-MsgGUID: OWdr8+xcSSCaT5d65qQ1ow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="56746290"
+X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
+   d="scan'208";a="56746290"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 04:32:11 -0800
+X-CSE-ConnectionGUID: ID/qly5lTrixN8ni2J7t/Q==
+X-CSE-MsgGUID: Ddar4mosRu+qCCbhEa/acQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
+   d="scan'208";a="115942241"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Feb 2025 04:32:09 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Wed, 5 Feb 2025 04:32:08 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Wed, 5 Feb 2025 04:32:08 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.42) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Wed, 5 Feb 2025 04:32:08 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EWlfjWiQZYg7bMIiAU8hF82jcqzN/xiyGa9rX9RHXrZ1hz3d45FuaaaxEp15P/jk+351sqKdXCV4P9P+xFURN8g4VRrXOadBFL7sMKmgbxM+LwnxC7aBRCfOVMziLIn8B8CVCu2qtznos3XQkePTMqsMQZNnvXybWQ90YV0oQMryNNKE8v1j5NbvtTcneB4uru6LI/h4meuvTg5cVBRpKoxxi1knl2r5yIWDQ/gRUkUsd8i8ZQrzU2wncJWMHmvd6HZeha8tjtfk7jb05n9T1oghztHZO8jtq1fmYdAo+GKFZIO3eFqVGNEnPGKrg5EbFEblyxfRR5rC2EpFWW33Cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n4APmcxV0QJiOFJlppxhvx4O0TxJy8Gb6DK9/+JahdQ=;
+ b=B6blNE1Byf4hiipkTEOI88/Wl2Z0pEg43uDaDrp0C7WvW6qXYPdFPuYh2SMB8QYaZoWGt5r9RDdz53AP3UZ2zFf0nll+DXgeJSKcONG3fiP4Dy3vs7XoLK5N7Wieo5pvBf0rvpdFZeJtCC7JVB+UXUymHxQPwtorTnD3qZgKs6ssKbUcAEV+ic6kfXSbXYa0q8ccXGUoJTLDH8lky5m3Z9JYfrqvBinaKF4tDFtl5zoy3tJDy3cz6IBV5556KN9c4ga1yUqE5xYFhaTe/lnw/7YqVHuv+G+bzn02i0ES+fwVUjFAa503wJv4aGr76ddTd4x/X4Wr5xlRBVaA32EDkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ MW4PR11MB5933.namprd11.prod.outlook.com (2603:10b6:303:16a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.11; Wed, 5 Feb
+ 2025 12:31:36 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d19:56fe:5841:77ca]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d19:56fe:5841:77ca%5]) with mapi id 15.20.8398.021; Wed, 5 Feb 2025
+ 12:31:36 +0000
+Date: Wed, 5 Feb 2025 13:31:18 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Song Yoong Siang <yoong.siang.song@intel.com>
+CC: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Willem de Bruijn
+	<willemb@google.com>, Florian Bezdeka <florian.bezdeka@siemens.com>, "Donald
+ Hunter" <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, "Bjorn
+ Topel" <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Joe Damato <jdamato@fastly.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Mina Almasry <almasrymina@google.com>, Daniel Jurgens <danielj@nvidia.com>,
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+	<kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+	<jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexandre Torgue
+	<alexandre.torgue@foss.st.com>, Jose Abreu <joabreu@synopsys.com>, "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Faizal Rahim <faizal.abdul.rahim@linux.intel.com>, Choong Yong Liang
+	<yong.liang.choong@linux.intel.com>, Bouska Zdenek
+	<zdenek.bouska@siemens.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-stm32@st-md-mailman.stormreply.com>,
+	<linux-arm-kernel@lists.infradead.org>, <intel-wired-lan@lists.osuosl.org>,
+	<xdp-hints@xdp-project.net>
+Subject: Re: [PATCH bpf-next v8 4/5] igc: Refactor empty packet insertion
+ into a reusable function
+Message-ID: <Z6NaFkPBZA18oILE@boxer>
+References: <20250205024116.798862-1-yoong.siang.song@intel.com>
+ <20250205024116.798862-5-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250205024116.798862-5-yoong.siang.song@intel.com>
+X-ClientProxiedBy: VI1PR02CA0060.eurprd02.prod.outlook.com
+ (2603:10a6:802:14::31) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, virtualization@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Neal Cardwell <ncardwell@google.com>,
- David Ahern <dsahern@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Stefan Hajnoczi <stefanha@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
- Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
- <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20250203223916.1064540-1-almasrymina@google.com>
- <20250203223916.1064540-6-almasrymina@google.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20250203223916.1064540-6-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|MW4PR11MB5933:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e152857-999c-47bd-eff5-08dd45e107eb
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?kJblYdAtmkLLyWkeI02SDIUZiw/hE1ZML+B97sJLCnTOHmwZEn8FDssGOGBA?=
+ =?us-ascii?Q?FNCuNi3xu+HIE2HWJOI0Z37JyzxObJcUyg2xLF4LFVqd4OJPyb2T9E2PWfb4?=
+ =?us-ascii?Q?Lq9Qf5FNHOkgv1GXrGvgkALfz6BSXZj2OHQezcuRsIzrkOlhfXwv4cY9Ku8O?=
+ =?us-ascii?Q?SYAtO6Fhkh664ScFwrCXF6XSDpEc90nR3cDWe1l5dcDvfc/zAJ+/L5fV5rcR?=
+ =?us-ascii?Q?SqAsVb9YYVPhE0P/eOzuwoRtkLNBiv8MEGFLbgRq9lz71X7Agkl8BiW9cYMS?=
+ =?us-ascii?Q?TmEBLmTf4JBUVdYMJGOZt7DVAIZFHz7rwFlZCFjideQQIZoITC8DxHohsReh?=
+ =?us-ascii?Q?zjeKYd0tAYEJEVjCz8+FAWwTKoF8+2fdwlRCyPxuwhXHLqnDVW7RXcNfpnKq?=
+ =?us-ascii?Q?DM8prsFEUUNhyb0R1NUbEOsUD45dED63QIlHqqYgiLLm4WEN7HTfc26sg3Da?=
+ =?us-ascii?Q?YhXmLDm0GP2Qil9rJfnxr+2CDpFNF9mBxKKEX1pdNKvwy5zTvL6pS/I/mUhv?=
+ =?us-ascii?Q?2P+RI//26UaYG/GgZGp3OKoMl8/kOy9E3kuZs6fu/cUWCSGMEcbj8IudKiHA?=
+ =?us-ascii?Q?UmM3RIhOIinGY6xzI4RQhfR5JzEeGmcXK1NSXp0YHHgORM8PRNyEvuT6GGA3?=
+ =?us-ascii?Q?NRiDMxLZSFMkIg/IrUCDTDpLtt22IjBsGg+SO+mQOfDtHMptUFKrMhp+MvWz?=
+ =?us-ascii?Q?6RtfgAqMIAy/3iFklVE+P0Ay3iw90i15xCNhV+l9cerSa6g8js7yeMpNiejW?=
+ =?us-ascii?Q?sBvAtfHMh38RFWF78bRli5SFTltSRbShsM20qnbJsCuYaBCeePMRbfAzeVEE?=
+ =?us-ascii?Q?bKW8udBPw71EEkx6xHzL+42B9LTWL0taFwESFAnsm40GPSkMHLXa/Vj1NIkz?=
+ =?us-ascii?Q?0wNbTPtpX9Id4dJdvBne1A0DZxw9X358ZZJbvKUS3W1hyQ9oXCldTk5pw9H9?=
+ =?us-ascii?Q?3Rg5iQta1chRaJtjzTGJ8r6C49gK8nnSWKDcgaQA8fRUN74aPV5pSpg3Zr2B?=
+ =?us-ascii?Q?/speustFasycRoPmzP7dYUfrI/WIEEhov6cB+Go8mt7zz0G6ATdg82dAPhBM?=
+ =?us-ascii?Q?uQx9hMuFDu2KTUof6t9l38PX20J/g0vuwGV5OETCqEmS4eynpZ0GzV4cRUTH?=
+ =?us-ascii?Q?c1GuTiR+5EO/1jTeWC5ijxQC+zQ4dKojMPZzypE7N/vsyuJOfPSXvrh4b9Xx?=
+ =?us-ascii?Q?3IwLX/MEvo9ZRqyS+xJeXuYaZjLLt6KT/ri98nfnfYM/gvzsTH7VSul+hFnP?=
+ =?us-ascii?Q?Svyvb2bOXzHBt6qN82R32Dg+NiqiCvsu8y7cGa+GtO11qEZOvunzeeXUcg7T?=
+ =?us-ascii?Q?wutDatferW/TQvlHRKWcU1JveUHCm0kYMM5xVouPlQ7gFjQzACp04CMq80Y2?=
+ =?us-ascii?Q?Kzz+vVqijqdiQ+t3FmCxPlOK19Tt?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O7pD8gu8CX4GvPcR5CPZFz7BDtYTqspk5llIv+mJ9tCwCgTbTki0K7LFrmxN?=
+ =?us-ascii?Q?x6XSmzD2qaj9rXISRIUCEtxuUjl6/YMLqLG2v7PCl/8W4qX4KGjeVHB7B0nK?=
+ =?us-ascii?Q?Spqx3mEC5n/AhRExaSc5ilZ0FxhenuSpMywD8nu4I63hFVWj2ypT6nQF/1qZ?=
+ =?us-ascii?Q?YY+32kliuE88yyIeXGIL7pq21mKRaffI7XReTO7T6ldrUwVXMXBVBSwLE4Qk?=
+ =?us-ascii?Q?qKTw/8o6vVjgFffdJr+a3s7/5KhOToKwuisKZtKyCQauR3Qm+Hxn5suCha3R?=
+ =?us-ascii?Q?1CLF1NByz62Aye9XGFXNIsdIPdQU3n/36rKuwzomnyLljoqsMjMvfSQ8tasa?=
+ =?us-ascii?Q?Hh61bhA7Xvi2jHQVNF/dT7fT24BzqceHP/Hp4vWh7zpetrBOmG6ofPlE4Djg?=
+ =?us-ascii?Q?cg9IVIRiyGnVAdcmcLPuD6AS0gnte27YjFEuS/wF16ctrnB0nSkP9C8zRETB?=
+ =?us-ascii?Q?WQ/ioUKMavYVCm151MCikHD6X2OV92ihz9L53cPbd9H3EH5p88FNLAAYm0Kl?=
+ =?us-ascii?Q?/ygwn8u1wcV0DyuAo18NEdMRrjpo0loyKhZ8VfaMfG79lXAl1GsAXrtBgiLe?=
+ =?us-ascii?Q?tsuSNl2VjEBkVDveP92/53rTQ/kREXYELcnto81KMuQAIgeeaH9aS7lSK12H?=
+ =?us-ascii?Q?Y0NO+J6i+fYw+/9DEdH1iKnSK4gLMiMLsGoAlw9wsg9I/rkFF6BVP8I5wCcS?=
+ =?us-ascii?Q?nevVG6s9L/OBu2QIW/+UhI41jSUcSHQgNfWGTtKl2cPw0u9Sm8h36pdDbWHv?=
+ =?us-ascii?Q?FCN43K3PT7q5a97Cvrj+Yl9W1kBjzJdtDQvEMUSfWUxVpbzovaCjEDDJ+mBi?=
+ =?us-ascii?Q?bIsiTnbHuiIIA2uhtx8YhYm8ou3PJBrBFLuG1AhOqKvVEzDSgthqmG2lHUV9?=
+ =?us-ascii?Q?DEtuvg0GkUgjlKuoNxBqVP9T7e3001Ew67esZYbtXWkQL6UfTOh1m0adb3l2?=
+ =?us-ascii?Q?OKa+ojOUjdE2ilzyRTZ2NN5t3EYytyNhBwX02ja4gXUuvL3X7GMWy9yoOJ7A?=
+ =?us-ascii?Q?/qDM90jiYIGKHFlRX4yc+WhPn+xasEHcGclDoLeM7mljYYyV99mzLiRL+txP?=
+ =?us-ascii?Q?IMxGRdQYCdjFfpHI8zDupW4r8z03FEYHffJ0JGdGSj9BLPr5YZJPA5MKmVN3?=
+ =?us-ascii?Q?Ia/gjRY7g5W6yg+UhQDYOsckeGih5EvNmAEgyYsv9jw5TujWj1Q/v2YmPDSJ?=
+ =?us-ascii?Q?EyuIF/JtcSWlNlvw1pyuFdIe9nOpsJqUw9ZE/uItc4s9WLPwrbC/s0shBtiF?=
+ =?us-ascii?Q?x6TpJvF6CjlbcrGU3SzAJ73jZksTI4mdsnalI9Gmncmpt+Y431ADwMEy9JhN?=
+ =?us-ascii?Q?JpEP+2jOR/QeZ2PAqwISXHfsrU+MslCStUdPog2OkUqVxqypPOogGgw/3ope?=
+ =?us-ascii?Q?njDQd9NoJSWjjHofHlEPI1jP4/ch2Kn/v0RWUs04NvyD1+7jwuZ5ZT5lRRlP?=
+ =?us-ascii?Q?QyyCyTcalkH7hUM0sf4qAoVQL5ag2487osFRJ8eU/1b7pQXjJamW3orSMdYQ?=
+ =?us-ascii?Q?6LwWKllMxuj5zoDZ2VV/xjn4hP34CXX87KIXMUt4yWvIPac3DCvHENYWmcLt?=
+ =?us-ascii?Q?e9KxRWG7MYEjTnpD0VmI/yLEHvIXQvTzv8E+I+dGfpaNNKUGEKKdV+y8PBZA?=
+ =?us-ascii?Q?qw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e152857-999c-47bd-eff5-08dd45e107eb
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2025 12:31:36.0861
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 90rQgulDikvfFxq9It3klUvZoSdERMUzAiPzhr54wxI8nblBqzx+BZiIlvGYhOfd3umvzFMGl8ILgd2qlZik/W14afY/a9NCZcrD75RbOdg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5933
+X-OriginatorOrg: intel.com
 
-On 2/3/25 22:39, Mina Almasry wrote:
-...
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index bb2b751d274a..3ff8f568c382 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -1711,9 +1711,12 @@ struct ubuf_info *msg_zerocopy_realloc(struct sock *sk, size_t size,
-...
->   int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
->   				struct iov_iter *from, size_t length);
-> @@ -1721,12 +1724,14 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
->   static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
->   					  struct msghdr *msg, int len)
->   {
-> -	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len);
-> +	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len,
-> +				       NULL);
+On Wed, Feb 05, 2025 at 10:41:15AM +0800, Song Yoong Siang wrote:
+> Refactor the code for inserting an empty packet into a new function
+> igc_insert_empty_packet(). This change extracts the logic for inserting
+> an empty packet from igc_xmit_frame_ring() into a separate function,
+> allowing it to be reused in future implementations, such as the XDP
+> zero copy transmit function.
+> 
+> This patch introduces no functional changes.
+> 
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 
-Instead of propagating it all the way down and carving a new path, why
-not reuse the existing infra? You already hook into where ubuf is
-allocated, you can stash the binding in there. And
-zerocopy_fill_skb_from_devmem can implement ->sg_from_iter,
-see __zerocopy_sg_from_iter().
+Your SoB should be last in the set of tags.
 
-...
-> diff --git a/net/core/datagram.c b/net/core/datagram.c
-> index f0693707aece..c989606ff58d 100644
-> --- a/net/core/datagram.c
-> +++ b/net/core/datagram.c
-> @@ -63,6 +63,8 @@
-> +static int
-> +zerocopy_fill_skb_from_devmem(struct sk_buff *skb, struct iov_iter *from,
-> +			      int length,
-> +			      struct net_devmem_dmabuf_binding *binding)
+> Reviewed-by: Faizal Rahim <faizal.abdul.rahim@linux.intel.com>
+> ---
+>  drivers/net/ethernet/intel/igc/igc_main.c | 42 ++++++++++++-----------
+>  1 file changed, 22 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 21f318f12a8d..553d6d82af0d 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -1566,6 +1566,26 @@ static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *s
+>  	return false;
+>  }
+>  
+> +static void igc_insert_empty_packet(struct igc_ring *tx_ring)
 > +{
-> +	int i = skb_shinfo(skb)->nr_frags;
-> +	size_t virt_addr, size, off;
-> +	struct net_iov *niov;
+> +	struct igc_tx_buffer *empty_info;
+> +	struct sk_buff *empty;
+> +	void *data;
 > +
-> +	while (length && iov_iter_count(from)) {
-> +		if (i == MAX_SKB_FRAGS)
-> +			return -EMSGSIZE;
+> +	empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> +	empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+> +	if (!empty)
+> +		return;
 > +
-> +		virt_addr = (size_t)iter_iov_addr(from);
+> +	data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+> +	memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> +
+> +	igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+> +
+> +	if (igc_init_tx_empty_descriptor(tx_ring, empty, empty_info) < 0)
+> +		dev_kfree_skb_any(empty);
 
-Unless I missed it somewhere it needs to check that the iter
-is iovec based.
+I still don't like the fact igc_insert_empty_packet() doesn't communicate
+to caller whether it successfully produced descriptors or not.
 
-> +		niov = net_devmem_get_niov_at(binding, virt_addr, &off, &size);
-> +		if (!niov)
-> +			return -EFAULT;
-> +
-> +		size = min_t(size_t, size, length);
-> +		size = min_t(size_t, size, iter_iov_len(from));
-> +
-> +		get_netmem(net_iov_to_netmem(niov));
-> +		skb_add_rx_frag_netmem(skb, i, net_iov_to_netmem(niov), off,
-> +				       size, PAGE_SIZE);
-> +		iov_iter_advance(from, size);
-> +		length -= size;
-> +		i++;
-> +	}
-> +
-> +	return 0;
+Look at this from igc_xmit_frame_ring() POV:
+- at the beginning you peek at Tx ring whether there is required amount of
+  descriptors free to be used
+- but then here's your additional routine which might consume two more
+  descs and you are not aware of the status
+- then you continue to further produce descriptors assuming there is
+  enough space in Tx ring
+
+Right now igc_init_tx_empty_descriptor() returns -EBUSY when ring is full.
+How can that happen in the first place + what if it would *really* happen
+though? You just continue with your Tx flow.
+
+What I'm trying to say here is, at least from correctness POV, you should
+take into the account two potential descriptors for launchtime feature
+when calling igc_maybe_stop_tx(). And igc_init_tx_empty_descriptor()
+should not really care about space in ring, it should be a caller's job to
+call it only when it will be sure it's safe to do so.
+
 > +}
 > +
->   int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
->   			    struct sk_buff *skb, struct iov_iter *from,
-> -			    size_t length)
-> +			    size_t length,
-> +			    struct net_devmem_dmabuf_binding *binding)
->   {
->   	unsigned long orig_size = skb->truesize;
->   	unsigned long truesize;
-> @@ -702,6 +737,8 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
->   
->   	if (msg && msg->msg_ubuf && msg->sg_from_iter)
->   		ret = msg->sg_from_iter(skb, from, length);
-
-As mentioned above, you can implement this callback. The callback can
-also be moved into ubuf_info ops if that's more convenient, I had
-patches stashed for that.
-
-> +	else if (unlikely(binding))
-> +		ret = zerocopy_fill_skb_from_devmem(skb, from, length, binding);
->   	else
->   		ret = zerocopy_fill_skb_from_iter(skb, from, length);
->   
-> @@ -735,7 +772,7 @@ int zerocopy_sg_from_iter(struct sk_buff *skb, struct iov_iter *from)
->   	if (skb_copy_datagram_from_iter(skb, 0, from, copy))
->   		return -EFAULT;
-
-...
-
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 0d704bda6c41..44198ae7e44c 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1051,6 +1051,7 @@ int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *copied,
->   
->   int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
->   {
-> +	struct net_devmem_dmabuf_binding *binding = NULL;
->   	struct tcp_sock *tp = tcp_sk(sk);
->   	struct ubuf_info *uarg = NULL;
->   	struct sk_buff *skb;
-> @@ -1063,6 +1064,15 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
->   
->   	flags = msg->msg_flags;
->   
-> +	sockcm_init(&sockc, sk);
-> +	if (msg->msg_controllen) {
-> +		err = sock_cmsg_send(sk, msg, &sockc);
-> +		if (unlikely(err)) {
-> +			err = -EINVAL;
-> +			goto out_err;
-> +		}
-> +	}
-> +
->   	if ((flags & MSG_ZEROCOPY) && size) {
->   		if (msg->msg_ubuf) {
->   			uarg = msg->msg_ubuf;
-> @@ -1080,6 +1090,15 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
->   			else
->   				uarg_to_msgzc(uarg)->zerocopy = 0;
->   		}
-> +
-> +		if (sockc.dmabuf_id != 0) {
-
-It's better to be mutually exclusive with msg->msg_ubuf, the callers
-have expectations about the buffers used. And you likely don't want
-to mix it with normal MSG_ZEROCOPY in a single skb and/or ubuf_info,
-you can force reallocation of ubuf_info here.
-
-> +			binding = net_devmem_get_binding(sk, sockc.dmabuf_id);
-> +			if (IS_ERR(binding)) {
-> +				err = PTR_ERR(binding);
-> +				binding = NULL;
-> +				goto out_err;
-> +			}
-> +		}
-
--- 
-Pavel Begunkov
-
+>  static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>  				       struct igc_ring *tx_ring)
+>  {
+> @@ -1603,26 +1623,8 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>  	skb->tstamp = ktime_set(0, 0);
+>  	launch_time = igc_tx_launchtime(tx_ring, txtime, &first_flag, &insert_empty);
+>  
+> -	if (insert_empty) {
+> -		struct igc_tx_buffer *empty_info;
+> -		struct sk_buff *empty;
+> -		void *data;
+> -
+> -		empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> -		empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+> -		if (!empty)
+> -			goto done;
+> -
+> -		data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+> -		memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> -
+> -		igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+> -
+> -		if (igc_init_tx_empty_descriptor(tx_ring,
+> -						 empty,
+> -						 empty_info) < 0)
+> -			dev_kfree_skb_any(empty);
+> -	}
+> +	if (insert_empty)
+> +		igc_insert_empty_packet(tx_ring);
+>  
+>  done:
+>  	/* record the location of the first descriptor for this packet */
+> -- 
+> 2.34.1
+> 
 
