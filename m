@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-25851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 781CDA29199
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 15:53:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F22A293E2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 16:17:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97B5B3AAD24
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 14:51:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E25D1189263E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 15:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E078224889;
-	Wed,  5 Feb 2025 14:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF70155A30;
+	Wed,  5 Feb 2025 15:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qyZCfe30"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wL8YHWfN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C60224882;
-	Wed,  5 Feb 2025 14:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BD11519BF;
+	Wed,  5 Feb 2025 15:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738766543; cv=none; b=AMQ6kuORAKOBZJ1SGAmTagwc5QHjjvztY6jFdsh0C2bE+6gb5vKnsvZ67N1BwW4P5wJAQsmcpHbpawbJ35o/Br2F+Us/8iT/jyFGY8b5DMZe81IxxEublJe5vdhZGXOV819rk29ecL/ackWPdHBHXO2Lt80sdBwFu0e3rhO79AM=
+	t=1738768050; cv=none; b=JKb8LApsd2f9LGHQiVHJtu1WN2uneGh+dVuIxDPPW70bzKJIE/d7fP2JbYY5Vr27B1Js15sCngvA2M6xwQN5mEQGZpde/TPNvPH2JnO72b16HBGyx/v6F0BSsT+VjGGWG/C5+hSzy1N7h5n5ijb4eGGDJ/fKqE1Ns8LbxluJfnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738766543; c=relaxed/simple;
-	bh=nW5aGGhY5eyg/ikdUZYh2n5OxpsbZE7GFEt+ZPOe+ok=;
+	s=arc-20240116; t=1738768050; c=relaxed/simple;
+	bh=SKYl9ovbwvQOQg7dSysQRrAU4fkMD45oHcfHrlnMGQ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YJ3KU+6SsRFpA4ZeZF8HQZ2FPNRxkBw0jnJP5ffUZb5Ysq41qW84kWZ3CveSeopWIu+Cnpt7fSAkrNmDMYBfue/69mBGumZbYYsTnKJXC7sj6zejIQJE+stfa90h8jRUxO6zFYk75UZBVsHP0oF73KaIXIbrZZ5Syd5vqX07OCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qyZCfe30; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C290C4CED1;
-	Wed,  5 Feb 2025 14:42:22 +0000 (UTC)
+	 MIME-Version; b=csgBQRkj/rhwq0YJrSjpeGxDdf4k0Gmls6zkBfE+8x3WLk4oFmHwPovxuB2i/KATCykXw8F4rZjQcCrIhtlA5UoZ6G2fCB4c2YpBoOSgx8DVLdjMQsDUvniTK5KbZL0Bn9K4UZEpXUu9EyqaIa+4UDdNPyCTnu5pynecCr+sCUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wL8YHWfN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95369C4CED1;
+	Wed,  5 Feb 2025 15:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738766543;
-	bh=nW5aGGhY5eyg/ikdUZYh2n5OxpsbZE7GFEt+ZPOe+ok=;
+	s=korg; t=1738768050;
+	bh=SKYl9ovbwvQOQg7dSysQRrAU4fkMD45oHcfHrlnMGQ0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qyZCfe300srs6C5Vt91rEVucXzScFZNutex6kFMH5qCF/eHA6oF8fZEvFXBxF7oID
-	 64H5Vn9larTlcPcYLqQvr57Ek+v3ZqxqhdUkYh8w3XTrv1wxPGPLxssaZ+Imoi4z4f
-	 1kZzJ3a+orjW//8YGZec8dydahsmKKQWZ5CLr9bk=
+	b=wL8YHWfNJ2pfqHfBZkk7SKd0uysVK+zbY1UGCUqgLD5nJzsr7yn3NHC+nS7OrSGnk
+	 GJlmg9u6w4LcDm8bmBHzo+3KXX2Lmu4EXYtCjsLjewBgI9Pd12OC7pdzDptU1mRzDl
+	 x0eSsEYUOUsZ/5zIpEwBSO2BWRG2J85JWU68LgxY=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -52,12 +52,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Florian Weimer <fweimer@redhat.com>,
 	Michael Jeanson <mjeanson@efficios.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 6.6 372/393] selftests/rseq: Fix handling of glibc without rseq support
-Date: Wed,  5 Feb 2025 14:44:51 +0100
-Message-ID: <20250205134434.530330349@linuxfoundation.org>
+Subject: [PATCH 6.12 546/590] selftests/rseq: Fix handling of glibc without rseq support
+Date: Wed,  5 Feb 2025 14:45:01 +0100
+Message-ID: <20250205134516.160256480@linuxfoundation.org>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250205134420.279368572@linuxfoundation.org>
-References: <20250205134420.279368572@linuxfoundation.org>
+In-Reply-To: <20250205134455.220373560@linuxfoundation.org>
+References: <20250205134455.220373560@linuxfoundation.org>
 User-Agent: quilt/0.68
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.12-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -121,12 +121,10 @@ Cc: stable@vger.kernel.org
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/rseq.c | 32 ++++++++++++++++++++++-------
- tools/testing/selftests/rseq/rseq.h |  9 +++++++-
+ tools/testing/selftests/rseq/rseq.c |   32 +++++++++++++++++++++++++-------
+ tools/testing/selftests/rseq/rseq.h |    9 ++++++++-
  2 files changed, 33 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index 5b9772cdf265..f6156790c3b4 100644
 --- a/tools/testing/selftests/rseq/rseq.c
 +++ b/tools/testing/selftests/rseq/rseq.c
 @@ -61,7 +61,6 @@ unsigned int rseq_size = -1U;
@@ -190,8 +188,6 @@ index 5b9772cdf265..f6156790c3b4 100644
  }
  
  static __attribute__((destructor))
-diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
-index 4e217b620e0c..062d10925a10 100644
 --- a/tools/testing/selftests/rseq/rseq.h
 +++ b/tools/testing/selftests/rseq/rseq.h
 @@ -60,7 +60,14 @@
@@ -210,9 +206,6 @@ index 4e217b620e0c..062d10925a10 100644
   * unsuccessful.
   */
  extern unsigned int rseq_size;
--- 
-2.48.1
-
 
 
 
