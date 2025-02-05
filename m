@@ -1,126 +1,173 @@
-Return-Path: <linux-kselftest+bounces-25800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25801-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21750A283E4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 06:50:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EECDAA28446
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 07:22:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1BC77A3179
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 05:49:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABC251884DD7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 06:22:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555C321E0A6;
-	Wed,  5 Feb 2025 05:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E309228393;
+	Wed,  5 Feb 2025 06:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cp3x+ax6"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="oqSg86sI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DB621D5A8;
-	Wed,  5 Feb 2025 05:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1D3228372
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Feb 2025 06:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738734639; cv=none; b=mXaMYHKfHjU3aDe0U3EZuwG8OHKpmhG+/zEnKKfJUyQGKJfhVaFa81O/l4PjCHmewaJn3y/f91Cw3l5kndoltIzm9imPsfC8uENbfJa+ucl5He2H7GqmoZxRRrms9y/9WxSMI/U9+5FqaNG1fhvtCG2Kds6/LvO6cAQ9V4p1a0A=
+	t=1738736556; cv=none; b=CKvka0OyeWYFt3tzILkwrADGDQEMXkO7p6IChor49r1Ak8F4bQecB4S61SDFb1l8epH9K5KI4zNBb9gELWBfCRJo9eMoQr0Nd4aVro3Hgr+t1fcuStmp1pOozWqnT/CiQutySdMXinAIrQm9Ajg4UGrIh794ZaDuI2+5MrWAFpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738734639; c=relaxed/simple;
-	bh=hoKTiFNJga4k6kDkzlWvbfX/wG4hbP8zEshGLRIq03I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hT/SHylDaRSeyTi/1xzNBk5/H3AqOVwQ4Lk8gyxZekoE1jM1uAHxyRG4OqQJpQzTo3Xi6TsshV4Wz0Av34hNQAhayh78lVptpJkpOgwJEHIOCo41hfZDXV0CHoiDUzJgwQvFqG6W5gNEvSgSci/r3o8tCDukvrfjEWpqQ7OefBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cp3x+ax6; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21f200014f1so543535ad.2;
-        Tue, 04 Feb 2025 21:50:37 -0800 (PST)
+	s=arc-20240116; t=1738736556; c=relaxed/simple;
+	bh=8WDHU2a8o+TvYU7S89Oev00JE4W0USl7Pr/i42Ilkw8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=t3CUUBi4WZkiOXM6VpaVz0C2ucH5d9cU9FbUSPnPQ2tc26WhkW83bQa0+VDAl/A4+qClxZhJY0fPkzuxDUJmODME1tIhRtoQfMu3PZaxq6UNwJm/APXX3x1HSae6hIqAjr94kAGrNW+FZl6xvvOHP0G3z0lR2ZDdHBzngRm1acM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=oqSg86sI; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2167141dfa1so9514565ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 22:22:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738734637; x=1739339437; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/8WaG5xcausJczSDu1PtwlsotHm7UZnGjCaIMeLMRQ=;
-        b=cp3x+ax6nGeO1LopJTK1YUvvPCb/29UTWj/3oKKyUZt/PIOD3QwMb34QIgpTBBvaSX
-         iVdEhD4zL8UaZ+gTL2CDtea/9v4RKzDaHmTNshkmSou7CQUP5NUfYXsR7zXNizw7c77A
-         3KL0ks/dFe0FV8BcazDERBZibQBzmii4xEsRlQMTKyhNZY1rmesQc77McANhrLCF4gkv
-         ersb7IB8NmMY+bhqvsgaGo2Mkk1PXHPa4IN/0/VGyHP6KWtjPMSrP43esZ4lW8fIB6j0
-         cwv9vO7na+cnP3mfs15kY2pr2LUfkAqYehT/YLwPKOc3lmJqIy7SNmuWJMcwnKyA2XEv
-         3JBQ==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1738736553; x=1739341353; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wOXEQBExe63vCNTctnNxequJPweHzEdNjWgMgaz30k=;
+        b=oqSg86sI56IwwQf8fB3KoHj91QD7itz8Ylo8pI6a/1LWeRg6lrIQPWfOZOpde1Nmza
+         iFdGUI+jF96Nn/vCIlhJJ9Irzndw24Omv9yZ29ASz0b6aN7EYoiitmlyrmN4KXn38zUm
+         U4RCgc5Neg/taS49IEed7KoD3XWf+q5ETtGaHHtcluPOGyB9uq7prw44pR6NySC+hj46
+         q7xrWHlQbAW6yU4HgAtxaAx3GjQRSKsSfiJSIDqzDjstA6NtomvLoIh4yxWhW617aTrd
+         BQe9LuXL+ytgrFdF2u7lBowBecziE9BKNcL8eRcYl4deY12Hvyl22WZvINlEPAPVJ+Nf
+         jLFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738734637; x=1739339437;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1738736553; x=1739341353;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5/8WaG5xcausJczSDu1PtwlsotHm7UZnGjCaIMeLMRQ=;
-        b=HkgGdLE4Dyw/SZQhYslFfgdxb3IIZSFGmM11mmGuZg14zbpuVldQMdcwEAESjypNkS
-         Pc2lDT0KKj1Blg6Pl9mJ4pVr6bbm0au5zoCnZFSfeWt+NSP2BOcHQ/B0QY6d3j1SX91y
-         IXAE0N/5FLTZia3Zj5cKZrG6fGSniLYfRf4FSruzjIqoTXaDNmYtT8qdMeSJd5IOGVDl
-         /AHNVSaFBM/6+749mSnWqNzf6Xt8diqrhp3cg+N69RBskYbVD4QG9h3L1Jnuek8bLXF8
-         BYBHuoX3Aajd7t7y+y1yTt5xMA+ufzYlxq4V0XNPZ8OX5Aem7zhuv6suwjGxSE1gmiEY
-         05Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCV+pOcfF7XRRA2m/V14chW6CMdXORPKS12TO3trjH44PhXFSnxPxQ7CE/zByeR9Wf62YvRKIDRw1pQkb2A=@vger.kernel.org, AJvYcCWjSij2PPT0m2lY0/aFSbmR+CPZZ5Jgy9vDRedYrUgZqXy14/KVruECwRzjRDpXzfxERGNqpUziy3p2u3gc8VRq@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVflKH680ELZUfcVktWFwda+YCnUfZUdf5MHElb4sj7YjtyG30
-	b1aw/uUUsobc+Zi7GqFke2gWftxLCtYk+OrZhWg8sfI2rkq+Goje
-X-Gm-Gg: ASbGncvIyCB1fEDlTNsvWe2jvmkK39ai+N/XQli161IYAqIjsCZBDDrebgupx94QhKz
-	ntbxJJ7PNtwwwzEKAve5Ue+AhWvtQbjRaPSS16MduHZ5UC0w2M3Gmf2TcNze7A8Z62qaM9R4EY1
-	UqJdH/PNbacTl9KFZBLRVlJl9+iIofiudakR0JrtzwsaiAnX+eSqsPxeHCMCA6+IzIjsTo/ma6k
-	tO4Qq6WEKlscgyvc6XyOrbPR8T+VbIR1wLmEHDI7Yika3nImu2MphJ6hKHmtI5OlVimzLlLjhPh
-	oK3oDRxSocak1jp8sMh8Dyt9uLomGoZm/h8=
-X-Google-Smtp-Source: AGHT+IHUdRKgQ964UqJ7mPGegV4qUHNbriO8kSyM/D21jqtW+YJdW+LM/Z0c8Ulzu+ph57ZFYLEkHw==
-X-Received: by 2002:a17:902:f64f:b0:215:4a4e:9262 with SMTP id d9443c01a7336-21f17dd6b37mr24252835ad.8.1738734636869;
-        Tue, 04 Feb 2025 21:50:36 -0800 (PST)
-Received: from vaxr-BM6660-BM6360.. ([2001:288:7001:2703:dc5d:87af:eca4:905a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f06e7d4f6sm23298345ad.112.2025.02.04.21.50.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 21:50:36 -0800 (PST)
-From: I Hsin Cheng <richard120310@gmail.com>
-To: shuah@kernel.org
-Cc: brauner@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	I Hsin Cheng <richard120310@gmail.com>
-Subject: [PATCH] selftests: pidfd: Fix compiling warning of pidfs_setns
-Date: Wed,  5 Feb 2025 13:50:31 +0800
-Message-ID: <20250205055031.259710-1-richard120310@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=+wOXEQBExe63vCNTctnNxequJPweHzEdNjWgMgaz30k=;
+        b=UXGk1rl1/6zkSq5s18iSXTIgSF2cyW0AS5AK42p4OfCDeI8U6puwEAuj6+vU+Qf8oA
+         PcghmPMBlSgsQ5X8aokJWTWZPFZr27CmRMJ9A0Cvwvgh0gTmvT42Nt6u7eQZJvlNAJeL
+         hCo6XGXKgAp/hgvRput93RWkFWyyJw/M2A+WDdunwSk+Xcu85POVTt4RoSgNoS1/clZ1
+         eoxiSCX3d/pBDxLp6VYnwpIyIlmB5wBK74gbcQngI1i2ZFONfldjHKBoKPtiqwzl4UHw
+         Fn/7Uq8ynTR1N91rerUvtM1AcHq4aKg1dQyGy0IsTy2COkV+DuJ6uoUVLhCBmXG9n+lp
+         i2UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW09vMPLiuIpWlM4nwZWmmlFGElLu0sutZ2eM/oYiQ+QMw4zdg70dJXN8ex9JxE89uSWUnGMwSCR92B5fwsY6s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRftNvLuqQ4o1hkrauuqC58cEtTjmrGd+HgnnoydPDrD2LNOSp
+	2pX85OIyt44oF5AMHqYbXNvi4rqJ0DeTQo3FrqVcUMl7oj0DbRKQGSTIFG4/50s=
+X-Gm-Gg: ASbGncvw7DCxa7sYjfHpVjgFAIP2vqTYZ7oYhT81HtOkBRtLQ1RvYMIQeyETLfFHTfO
+	sl18FxDvMIU7MYu2LNCPLT5E8yh3FmaPIpoAzs++ITIT492SwwO7Br125bQtOEtQWiIj8uhc7aL
+	juYIEhxvbiru5eDQSQmQ/bqk2QpBlP/IhM79KJgfqoutme4ZP34nRZpGsnN3CUtrh2FAi4zhDHS
+	LH/pYuP+MuHyTf7VYnOaUzBMmVuxy3dbErDtGFOUWY+h7D/gNKfVFzWuLib3T2uaSu1p6wxzehB
+	AXd3QIpk2/mx2pfmAXM=
+X-Google-Smtp-Source: AGHT+IG21WhSzoCJIvm+AnHNi/NgJ8H7PS8WPvT9Thipit8jAsTx6btg48nfdeJxttEXxjhIUHpDhw==
+X-Received: by 2002:a17:902:da8a:b0:21d:90d0:6c10 with SMTP id d9443c01a7336-21f17adb5c1mr29744745ad.23.1738736551500;
+        Tue, 04 Feb 2025 22:22:31 -0800 (PST)
+Received: from localhost ([157.82.207.107])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-21efe2eb4dfsm28940985ad.124.2025.02.04.22.22.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2025 22:22:31 -0800 (PST)
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH net-next v5 0/7] tun: Unify vnet implementation
+Date: Wed, 05 Feb 2025 15:22:22 +0900
+Message-Id: <20250205-tun-v5-0-15d0b32e87fa@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ4Do2cC/2XQza7CIBAF4FcxrMXwV6Cu7nvcuKBlemUhVYqkx
+ vTdncCmNy4nM99JzrzJAinAQs6HN0lQwhLmiEN3PJDx6uIf0OBxJoIJxYVkND8j1Ro4c6of2Gg
+ IXt4TTGGtKb8kQqYR1kwuuLmGJc/pVeMLr3tM6hhntiYVThnVxhurBqmkUT/evWJYT+N8qwFF7
+ FHfkEAkrfXGd05Y476Q3CGuG5KIRj3gPYfeTOYLqR0SrWhRiAAs994x6c30D22teoLHE/+WW//
+ Ltn0AgPpSa1UBAAA=
+X-Change-ID: 20241230-tun-66e10a49b0c7
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, kvm@vger.kernel.org, 
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+ Yuri Benditovich <yuri.benditovich@daynix.com>, 
+ Andrew Melnychenko <andrew@daynix.com>, 
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
+ devel@daynix.com, Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Willem de Bruijn <willemb@google.com>
+X-Mailer: b4 0.14.2
 
-In the compilation of pidfs_setns_test.c , a warning as the following
-will pop out.
+When I implemented virtio's hash-related features to tun/tap [1],
+I found tun/tap does not fill the entire region reserved for the virtio
+header, leaving some uninitialized hole in the middle of the buffer
+after read()/recvmesg().
 
-pidfd_setns_test.c: In function ‘current_nsset_setup’:
-pidfd_setns_test.c:173:54: warning: implicit declaration of function \
-‘ioctl’ [-Wimplicit-function-declaration]
-  173 |                 self->child_pidfd_derived_nsfds[i] = \
-ioctl(self->pidfd, info->pidfd_ioctl, 0);
+This series fills the uninitialized hole. More concretely, the
+num_buffers field will be initialized with 1, and the other fields will
+be inialized with 0. Setting the num_buffers field to 1 is mandated by
+virtio 1.0 [2].
 
-It's caused by wrong import of header file <linux/ioctl.h>, fix it to
-<sys/ioctl.h>.
+The change to virtio header is preceded by another change that refactors
+tun and tap to unify their virtio-related code.
 
-Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
+[1]: https://lore.kernel.org/r/20241008-rss-v5-0-f3cf68df005d@daynix.com
+[2]: https://lore.kernel.org/r/20241227084256-mutt-send-email-mst@kernel.org/
+
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 ---
- tools/testing/selftests/pidfd/pidfd_setns_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v5:
+- s/vnet_hdr_len_sz/vnet_hdr_sz/ for patch "tun: Decouple vnet handling"
+  (Willem de Bruijn)
+- Changed to inline vnet implementations to TUN and TAP.
+- Dropped patch "tun: Avoid double-tracking iov_iter length changes" and
+  "tap: Avoid double-tracking iov_iter length changes".
+- Link to v4: https://lore.kernel.org/r/20250120-tun-v4-0-ee81dda03d7f@daynix.com
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-index 7c2a43491..3ed42f1eb 100644
---- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-@@ -16,7 +16,7 @@
- #include <unistd.h>
- #include <sys/socket.h>
- #include <sys/stat.h>
--#include <linux/ioctl.h>
-+#include <sys/ioctl.h>
- 
- #include "pidfd.h"
- #include "../clone3/clone3_selftests.h"
+Changes in v4:
+- s/sz/vnet_hdr_len_sz/ for patch "tun: Decouple vnet handling"
+  (Willem de Bruijn)
+- Reverted to add CONFIG_TUN_VNET.
+- Link to v3: https://lore.kernel.org/r/20250116-tun-v3-0-c6b2871e97f7@daynix.com
+
+Changes in v3:
+- Dropped changes to fill the vnet header.
+- Splitted patch "tun: Unify vnet implementation".
+- Reverted spurious changes in patch "tun: Unify vnet implementation".
+- Merged tun_vnet.c into TAP.
+- Link to v2: https://lore.kernel.org/r/20250109-tun-v2-0-388d7d5a287a@daynix.com
+
+Changes in v2:
+- Fixed num_buffers endian.
+- Link to v1: https://lore.kernel.org/r/20250108-tun-v1-0-67d784b34374@daynix.com
+
+---
+Akihiko Odaki (7):
+      tun: Refactor CONFIG_TUN_VNET_CROSS_LE
+      tun: Keep hdr_len in tun_get_user()
+      tun: Decouple vnet from tun_struct
+      tun: Decouple vnet handling
+      tun: Extract the vnet handling code
+      tap: Keep hdr_len in tap_get_user()
+      tap: Use tun's vnet-related code
+
+ MAINTAINERS            |   2 +-
+ drivers/net/tap.c      | 168 ++++++------------------------------------
+ drivers/net/tun.c      | 193 ++++++-------------------------------------------
+ drivers/net/tun_vnet.h | 184 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 231 insertions(+), 316 deletions(-)
+---
+base-commit: a32e14f8aef69b42826cf0998b068a43d486a9e9
+change-id: 20241230-tun-66e10a49b0c7
+
+Best regards,
 -- 
-2.43.0
+Akihiko Odaki <akihiko.odaki@daynix.com>
 
 
