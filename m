@@ -1,123 +1,164 @@
-Return-Path: <linux-kselftest+bounces-25816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36613A2869D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 10:33:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29A89A286C3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 10:39:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CC533A80EF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 09:32:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABA2D162B17
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 09:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A267522A4FD;
-	Wed,  5 Feb 2025 09:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63CA422A7F3;
+	Wed,  5 Feb 2025 09:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V0ouUcBU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAFB229B36;
-	Wed,  5 Feb 2025 09:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77FD22A7E4;
+	Wed,  5 Feb 2025 09:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738747977; cv=none; b=SNv8RMQH1P890wy4FtxYskYgLEyDNUZnGHlBXi1OCdYeR/wLkH7l/DwHQx+jRH3261pZFJRfYFJoy5af9T3+pv4H3qrISJMEf64dxeUaKyZEv02UuJK5D1vJIChSqEpd6+hKjz+Be7bLcpIxM+oYOlPUuOLiWqunRvfXj9q8Nvw=
+	t=1738748352; cv=none; b=WdALuk7SNfeIr1BISfIOEuHZADOH11s7MdyQt34Sj2npzRJ0OQ1M9ModD5/sBDs7a3jrZEAltP4zr34bgxmf0Mw5SPqJkwGzFRuCPLOECqAaur0lfpKEB3odg0eEgLkyNF8yb8LWofN5D4MIrs4Y7bctc/Y9bSepBPHeFzGBmG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738747977; c=relaxed/simple;
-	bh=Agdro3bOdf17QBDFrbIxaxuU8tpqb48A39LtZ8J0lz8=;
+	s=arc-20240116; t=1738748352; c=relaxed/simple;
+	bh=Rxon6PTD7daRJg0+aVySuS+0sANyOmpEYks80AvCv/M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b++lsuo2n2vflGxTzAjTaROX5ODLKQA5F7lfbHGMuoQvFwxdRGuAAHOojwKW6q3YrW/lB7FQQZdWRragvG/H417er4kXpdq6ZmkyVRNkmn8ejiey1prw7MN7MwxmJbB9Xb9oWl+MNajaVB3VQkbz29M/STBMBGvY5asVkJdRiWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=gu7OZ8/t4UARtQyycKijBQwwoPZfOOTjB1WJMO/3NHVnFfkR5xHJni8zNMkM4J3myfTxANF3HBB7VCgXj01CcBTlzmvjlQp3D+8BcdHz9WobaQhWptffhKaMK+Vqwhnlh75r/dFm98iXJVi0CNU0fxLQB0tOI+tzuikRbFLtnHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V0ouUcBU; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-8622c3be2f4so1841219241.1;
-        Wed, 05 Feb 2025 01:32:55 -0800 (PST)
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3cfce97a3d9so20992335ab.2;
+        Wed, 05 Feb 2025 01:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738748350; x=1739353150; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kJCR/SfTU0C0sRJZd2HUPVpgMo5fZYOkbmZsnQM0lUA=;
+        b=V0ouUcBU1aIelrb7ruT2TvTk4Ai07ufN+bvUMhjt8sA//himWgPv2csUSK3BFAR8mM
+         UGUhUZeqRDKyrIbKKOvFlNRiTwaNSXLA4UDJt3VtoQixVsM56ZCv7vEJmd76hvs88dom
+         4GuTo4XwAPL3DcW20vZe3H5YOBl6Ijt0Ty0CCnjzQw25zqgSeu0E5JoL8GHRjKUjQI04
+         j7CcsDAm9ZQJIwMdceeFuNxYIP/PygTn5tbDL8l3lpTRr3RR/mE+vhCBJvzhjGUq/fpW
+         HiQYiMUH6e561z/sit2PjVXAUIFMSRULblPKEc/MLRB7/KJGDBwx3SZnVntvt6QBeRbJ
+         6q0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738747972; x=1739352772;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ul7RXmOlLWXbmp66NuHARFMZryclEeLS4nT2u1OB7IY=;
-        b=WH6A2bLIfKrd1934W1wbpDSG+G/Dx2cDacwm7/a54mkc0YsYWOE3cLK/5zq4/rurGk
-         hWbUXN7SDomAvcIX0Exkd2HB8GvT0npAgp7gQd0WqgtW05GnEnG0Us1DgeQI3DBPpinH
-         jZpUDJj+IB4i8VSFwdiQ4k4O2hYgkPnk0y5oBxKUqIX5KOvAyXFC5xceiwSloY92VIUQ
-         cztaG6ygY+9NuNM8wkN3zfL8dgQPPCNd+Si9tnhuYK1MVGiPZdZwjzLVzmaxSK5ZY0AW
-         w31ED8QGI4sHU6a+MX9YUz4JMy/wsLhIg8JRkB2Vwx8A8NZ7Glq28LIw4dxmK1w57b5x
-         uF4g==
-X-Forwarded-Encrypted: i=1; AJvYcCVHiE11p0EUBDfsaU/AG1Uih3iBkyiKg14bdLX+aJhierdumSwuxxpzYp8wYQYQ7XpRcJ7N8Y+UIN+Uf5Q6DUX2@vger.kernel.org, AJvYcCXfOdpCv1+B7mqldPvZYxUwAdkxbyyRdMWBdavT7jsCg+TyCCgDyA/kJa0VHYRvqwWe1van14wfeic+s9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA6Lq+whmjlqwOby0FovrsAgOS4gSWhkMMYXPgopEroyx2XGEd
-	F67JnCQ/WdmbVDYN7L7lVNGJX0NiQEoX4rEkHMwYnZq8PZyKsISqmKquGuHX
-X-Gm-Gg: ASbGncvfeJ/L5t/lcqCqpzbUdhWF2s2YvWQJ9k1dtpn/sDf1VBKZhohqPuTq+4fTUNg
-	WhS7f2HVNTmTQg+6kOfn0g7u98eLQgXvVDe1wfXcWku00SM8S5t71sLSTFi+S7sliE1PpPlNJLP
-	9Mwor5OFpmZ/ajO48wOPMmrCpPG1NztoTO3tt82Vdv2oU5U2V7yzGxxOW1BVnw1MEs+zyM4iQp2
-	TDYU2xx/g7IdqEdNNY/hbGF/oTsgsUc+oN1RVVAaIKkOIokWjWtSdOn5jQ7RCJ6f/ThJP1AE4te
-	F7oM93qVp0NhPCZWKi+Yx6LvchG/iAKF+RbrnkLsn+49GmNG8NxfRA==
-X-Google-Smtp-Source: AGHT+IGTJwqmBadrTSYVc//qFq05/hI4SqXYs6NsgpZqKlk4YMypfU3Waw6UDiKtHsUDFDYeIql50w==
-X-Received: by 2002:a05:6122:4f90:b0:518:8bfe:d5f0 with SMTP id 71dfb90a1353d-51f0c0bd78bmr1339989e0c.0.1738747972378;
-        Wed, 05 Feb 2025 01:32:52 -0800 (PST)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51eb1c1495bsm1768738e0c.20.2025.02.05.01.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2025 01:32:51 -0800 (PST)
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4afe4f1ce18so1847523137.3;
-        Wed, 05 Feb 2025 01:32:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUItAjZZGPEHV4gQo342JmST2/456Ie2qrxcFIdAs3ez0w5Lt8/imXAMNY/WZDZxMxsio98n+64E2KqCtY=@vger.kernel.org, AJvYcCXFr9PQspbqR1EV5e+90WQ8qvUQqDQTkD7rCH+riyV6LdrR9XfnPFOHlLB4MYlmtyYY2Ucb55BJAuHWOmS7dd9t@vger.kernel.org
-X-Received: by 2002:a05:6102:1610:b0:4b9:bb3a:f5fc with SMTP id
- ada2fe7eead31-4ba478bb5b3mr1358546137.8.1738747971234; Wed, 05 Feb 2025
- 01:32:51 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738748350; x=1739353150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kJCR/SfTU0C0sRJZd2HUPVpgMo5fZYOkbmZsnQM0lUA=;
+        b=F5hyFMgbBBdfmrI16MqdeLF1u7oAJCEMU4vLdW0uNEZZ0D2AVXg1HApg9tlCQUqqjd
+         9LMcSQ45MXKkqHhG3g1AxKRr7NtCBJFrHzwR0F8+NPjFHSVM8JaClmthXRMGleXiFt9X
+         s7SaVr5RUd8Vmz7huVsnfckhsNh6JpmDmFI76MYjDzJpR8ejEpoEQaEiAgY8kCu6A5do
+         IjzFNMFgFmO43FfV/sDg7HlQEuX2fF2DLkRAkaKr6VMURIgNUoA5cptQjvjTr0vYcx5M
+         ZnF5N1aTFW+IFoqOPWCX2ZOA3IOTWGLiZ3kw5dJqQSUYuRo4IjpC+Yq47HlMVkpBNPp2
+         i0UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXieftqypiJe0em1um5vNd7tUHC+lzv0KWtrzxR9wE/0EdydmwNrJaSKzVy2z09xUpibfcopJmDvAPOIihepho=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywqol2Jp/FOtY/9f5Wh1GI0opIRlPZCTG2APwBv3/2Lg8gp/z1V
+	JK2ajp/LOxkLKQisGO790IS/Mbhr9uBncxZ49Zk2734zOykuO8YO+8XJow0Sq5Jt2aXkZGtTYrJ
+	z99VOTqTDL7kKVu5p1LPmAeg5DR0=
+X-Gm-Gg: ASbGnctdj7NJPO4wtFfv7Nys2zDmiYy+fdIokfgRrzrSMsDJ/vtEfT/FuG6MHqiuA+H
+	VjSopJXqmS17wkLXVWR5G6U9F2yBir0iyiQ5adoaa6s/+YP+Prc2Z/GEU7pzKV3Nnb5Tq1TRq
+X-Google-Smtp-Source: AGHT+IEjYWCRfmKIJ3npYCWHVcL0hG2R2j79Cy2iuxGpfdAhG+/yDIjpTXPZJXWiyh1Q8y4VsdFPMVD5a03ggM/VZ2I=
+X-Received: by 2002:a92:c565:0:b0:3d0:47cf:869c with SMTP id
+ e9e14a558f8ab-3d04f93131amr19140435ab.19.1738748349747; Wed, 05 Feb 2025
+ 01:39:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com> <20250204-printf-kunit-convert-v1-1-ecf1b846a4de@gmail.com>
-In-Reply-To: <20250204-printf-kunit-convert-v1-1-ecf1b846a4de@gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 5 Feb 2025 10:32:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVjv6TeaFmJMzPNG=dScTbR=i7CktkftR=ovgn2YWUN9Q@mail.gmail.com>
-X-Gm-Features: AWEUYZmlNybqMOBIyOk1oXnDuzzkfZ-3MWvNFlAbQZAgj-9ELYuznLp7GCiQaxQ
-Message-ID: <CAMuHMdVjv6TeaFmJMzPNG=dScTbR=i7CktkftR=ovgn2YWUN9Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] printf: convert self-test to KUnit
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250204023946.16031-1-kerneljasonxing@gmail.com>
+ <20250204023946.16031-3-kerneljasonxing@gmail.com> <99ccf971-cae5-9c45-5dff-2c8563a7879f@huaweicloud.com>
+ <CAL+tcoAkyjDQd48wKuA8V_RE6j1OYTL2iGxT8HdVKpryD3SaUA@mail.gmail.com> <b13c3602-69b8-7452-f342-8204287cea4d@huaweicloud.com>
+In-Reply-To: <b13c3602-69b8-7452-f342-8204287cea4d@huaweicloud.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Wed, 5 Feb 2025 17:38:33 +0800
+X-Gm-Features: AWEUYZltfuwHeJsbk39oiKI_AKRp6YWEhV_JaOvLDAIa7t1PFt-2HYxOZvdcX9M
+Message-ID: <CAL+tcoC3eQew6R2Q=nZSus6p5d2pvF3kFbe_=ibPrPvzmjiD3Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/2] bpf: sockopt_sk: fix 'undeclared'
+ definition error
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 4 Feb 2025 at 20:38, Tamir Duberstein <tamird@gmail.com> wrote:
-> Convert the printf() self-test to a KUnit test.
+On Wed, Feb 5, 2025 at 5:30=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wro=
+te:
 >
-> In the interest of keeping the patch reasonably-sized this doesn't
-> refactor the tests into proper parameterized tests - it's all one big
-> test case.
+> Hi,
 >
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> On 2/5/2025 11:27 AM, Jason Xing wrote:
+> > On Wed, Feb 5, 2025 at 10:57=E2=80=AFAM Hou Tao <houtao@huaweicloud.com=
+> wrote:
+> >> Hi,
+> >>
+> >> On 2/4/2025 10:39 AM, Jason Xing wrote:
+> >>> Error messages:
+> >>> selftests/bpf/prog_tests/sockopt_sk.c: In function =E2=80=98getsetsoc=
+kopt=E2=80=99:
+> >>> selftests/bpf/prog_tests/sockopt_sk.c:22:31: error: field =E2=80=98zc=
+=E2=80=99 has incomplete type
+> >>>    struct tcp_zerocopy_receive zc;
+> >>>                                ^~
+> >>> selftests/bpf/prog_tests/sockopt_sk.c:169:32: error: =E2=80=98TCP_ZER=
+OCOPY_RECEIVE=E2=80=99 undeclared (first use in this function)
+> >>>   err =3D getsockopt(fd, SOL_TCP, TCP_ZEROCOPY_RECEIVE, &buf, &optlen=
+);
+> >>>                                 ^~~~~~~~~~~~~~~~~~~~
+> >>>
+> >>> Fix it by introducing the right header.
+> >>>
+> >>> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+> >>> ---
+> >>>  tools/testing/selftests/bpf/prog_tests/sockopt_sk.c | 2 +-
+> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/to=
+ols/testing/selftests/bpf/prog_tests/sockopt_sk.c
+> >>> index ba6b3ec1156a..e0a9785ffcdc 100644
+> >>> --- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+> >>> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+> >>> @@ -2,7 +2,7 @@
+> >>>  #include <test_progs.h>
+> >>>  #include "cgroup_helpers.h"
+> >>>
+> >>> -#include <netinet/tcp.h>
+> >>> +#include <uapi/linux/tcp.h>
+> >> Should it be <linux/tcp.h> instead ?
+> > I thought that too, but I altered my thoughts after reading this
+> > commit[1], totally without knowing why the tcp part should be changed.
+> > Should I change it back?
+>
+> Thanks for pointing the commit to me. Under my local environment, it
+> seems both netinet/tcp.h and linux/tcp define tcp_zerocopy_receive and
+> tcphdr, and I think that is the reason why the commit changes tcp as
+> well. For the following build error:
+>
+> selftests/bpf/prog_tests/sockopt_sk.c:22:31: error: field =E2=80=98zc=E2=
+=80=99 has
+> incomplete type
+>    struct tcp_zerocopy_receive zc;
+>
+> I think maybe your local environment is a bit out-of-date. I prefer to
+> keep it as-is.
 
->  arch/m68k/configs/amiga_defconfig         |   1 -
->  arch/m68k/configs/apollo_defconfig        |   1 -
->  arch/m68k/configs/atari_defconfig         |   1 -
->  arch/m68k/configs/bvme6000_defconfig      |   1 -
->  arch/m68k/configs/hp300_defconfig         |   1 -
->  arch/m68k/configs/mac_defconfig           |   1 -
->  arch/m68k/configs/multi_defconfig         |   1 -
->  arch/m68k/configs/mvme147_defconfig       |   1 -
->  arch/m68k/configs/mvme16x_defconfig       |   1 -
->  arch/m68k/configs/q40_defconfig           |   1 -
->  arch/m68k/configs/sun3_defconfig          |   1 -
->  arch/m68k/configs/sun3x_defconfig         |   1 -
+Thanks for your review.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+Right, but I believe many users can't manage to upgrade to the latest
+version for the whole system. The selftests are supposed to be
+compatible, I reckon. It's surely not bad to consider the
+compatibility after adjusting the header file.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Jason
 
