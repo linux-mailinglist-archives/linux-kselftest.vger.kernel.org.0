@@ -1,191 +1,194 @@
-Return-Path: <linux-kselftest+bounces-25743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25744-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47F25A27F87
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 00:24:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 418E9A2804E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 01:47:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B08053A1EFC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2025 23:24:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3C5D1888F1E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2025 00:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1D121CA1E;
-	Tue,  4 Feb 2025 23:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61724227BA5;
+	Wed,  5 Feb 2025 00:47:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NIwPyW0u"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HoGpHEWI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8E72163BA
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Feb 2025 23:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3A95FDA7
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Feb 2025 00:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738711456; cv=none; b=oK5aGnDJZvNUjOVCunpD0TTTYiF6mWp9L5osg1RFmp2btwonlPuag4E5VYCpCqABTe7rNVLSnFlrs82Sq9I3eUjDzipwJ6CjY5X2lRGw3DzyDq+hdsM9QUHL2BXZg2eFvvQi30MDgQySGqsLNf5+cE1++f+0pTt81YzonwUYX/Y=
+	t=1738716444; cv=none; b=ZEpLqoFBWNI/Bf6jBT9QKQJU7MEBdREQi31ACAP2ZElpHs8UI74qpzJR1ovs2T+UkWeq8s/u+K796JWTRwDemKAKUoAAtU5F3s2a3b5Kl7M/rHjAAofJaH3uLdzjdhbxGMXfFyJyNGOEwKJALHyc6exu8x07xTZOowKnyDxapMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738711456; c=relaxed/simple;
-	bh=FEX3Vdh+NEZiYfGk1vrrsJOKApKBG+9+aixlZ2R/lW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gds4jeRbzstXpux33hY9LzL8YnlVS0864c2UR+mpl4T2lfoSMPjpTQquasabot3aWVhmkKJcLEkUhOs6PIqeD077008oBPQZ/99D+A4DEywMvcU/40cwP9xUhDm82ixFnMly0wusAFIbudZh7T6511n05wS3fc+6yy2TWMUyz9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NIwPyW0u; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-844d7f81dd1so177546239f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 15:24:12 -0800 (PST)
+	s=arc-20240116; t=1738716444; c=relaxed/simple;
+	bh=f9sPyJPHfx+mJ3CCUlm+4FqDQVDGiXmeXxAHWBCRcc4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UMSkgzA80jXqmrOyGV8a7sUaDXzvt1aW+ZbW9hJumxGVK5iMX6DPiP1IsKjfTsIEhnYmgTYvqoCxAj2uvdpd07oaiuX8A8bKrzWkrkm+d/dM6Wp5dhWanTWD5NqXju1rr8zizcgypgPpVYbr22EgSUYKf6z9e2GpHqg/vO+/Mlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HoGpHEWI; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-438d9c391fcso88225e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2025 16:47:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738711452; x=1739316252; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7C+mmXcghpctUltjMuPzZT5k+4ILd9aRvVJeIVZ5h7E=;
-        b=NIwPyW0uky7MWvSUA4RrnNlmxM/EWqPpshZxttoVAADQYvbO1fKez3zdMlkX9PhkYD
-         CTJ8uVIWJxJ7+3H6gmYO3lswgiCiktGMZ31AZ0dCBy8zyObMc+zb3FXBBwQbIohuwmiL
-         sg9ATWw4dbquEfcQAv0dx5LlPTt4m8GYEs4fG5mSnf+ynjo02KyG7nTZ+AXtGiivWaBd
-         oQBK7ibjWxaj2ZzmUHVPErbOsg6sf6bG6779s7hUnqak1ifazJqK1x/UL2OI+JmeTKVB
-         J5uopAn9P4bGV+hWWrhFwJb6Lgrt/41Id2uoxvy85xEUG/21O0yfSwA6MENKOLf1iLRy
-         BMdQ==
+        d=google.com; s=20230601; t=1738716440; x=1739321240; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f9sPyJPHfx+mJ3CCUlm+4FqDQVDGiXmeXxAHWBCRcc4=;
+        b=HoGpHEWIK5wpMQKxAlwbLFFsRnG4SS+Z6WgGo+XCxHzSxIGJFqjQlW3ajLcVJUvdFi
+         vLGzeQVPf8m2fN7gUZPeyChz8W1yfaBsAswklIxYU9G+989tZPu/xcvMCufKqujmxF7G
+         qaV+tWJzuXcloGLGMKI1srL1Q+FQUDXmehJ2t8N9SnUwp5Tpgm/c7v2GtCzePrDrYOER
+         RjGCq8ZD41UAHJFOou/T4SHjmLHMFWQQwNA6bWjli7kkqaUDxmxE+qC97P3qGaLVhvE0
+         pRiOqUlcgJD5D6zpQY/BRunQ3ZEisi0kf3RBT4s036ullxJZVJwiHcxFsyNyGTXzfMI0
+         ZmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738711452; x=1739316252;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C+mmXcghpctUltjMuPzZT5k+4ILd9aRvVJeIVZ5h7E=;
-        b=e0xaizr5upOCU+aVVMun7K9dav28sEKB+cSJXZ+6XD75ZFAlD+JPAeI0yYKWRJeFeM
-         UrSl9MH8//Id8mESbtFvKxPKzbTbZg9CPxaZdDseAkLmrLTp3O77bafYNFRCn9BywI8Z
-         yjuaXJFWifdKBIovTvQfqX7ExUw7bMsczjoB6EnQ646XfBiuV7GTWWIjLAtbcamp5DFO
-         C3qo1WKEgreqES4ssRW/eCZdrWKUCbZlETXdtoVlODVjjczjXyyRAN34de6xA2MBa0l9
-         u9BTL92o9D3rFTdhOlxrsxGh4TpMhkcniHMFtVyywIbBs0+UkUKV7njn1/635z0VYM3f
-         U/ew==
-X-Forwarded-Encrypted: i=1; AJvYcCUtEYIl+7C9jbzktRKUbKUKYIfkB6eGmu8DFlDHFAHTAhIB6lNw3ehbWUaz3JWL03O/PYtlV+QDQEqVdNuHAHg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIU+pzRny5vIJdhmDxv8K/tV9W8a7ClhVNUDay4Q45jbYTeYB9
-	Acl2sBJBMJVMNJM/ppdOGGDdsX6Ul264ewVY3nU9Sv9uefNfqyenvckc7rSZSFA=
-X-Gm-Gg: ASbGncvLDSfEAC2dJngvxW5fNn/5OHaJ9UKUWEKMY8bXINNRwbsKBBNrMJtg29ROPuq
-	daC+X/JAujgNhjl+qe/vUKEyI610xnTexWSFz+qy6Y8ItO5rAmotlteeJQ/NAyZbGIgzEsnzq+8
-	Nx//Feow/2j+RSnCWkTz940YzNdbzjEOt/RgoiDwN3vJdITBZO8RCTzeyVPWmNl+oyE/YsBmfx9
-	07UIJglWhLb+jxjNaS4BTItUJozjk5Uk/tgbWXFttr32l/IHn1/GMHmOutVHofWtRGk62xlPddF
-	yXUWdg==
-X-Google-Smtp-Source: AGHT+IFk01l67w5flnt7AW1w/8rmtq99wc4nbdFvSpX2xfx/D9I29fUoitlQP4S1XPO0eaV5SdxmsA==
-X-Received: by 2002:a05:6602:3711:b0:83a:a305:d9ee with SMTP id ca18e2360f4ac-854ea515978mr94544239f.12.1738711451927;
-        Tue, 04 Feb 2025 15:24:11 -0800 (PST)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ec7458ed1bsm2990762173.4.2025.02.04.15.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 15:24:10 -0800 (PST)
-Date: Tue, 4 Feb 2025 15:24:07 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
-Message-ID: <Z6Khl1rHIAb7wOXw@ghost>
-References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
- <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
- <Z6JdwSsAk1xCiSrn@ghost>
- <Z6JksXDRh8OSAh-u@google.com>
- <CAADnVQKmKf6wY3dg+PfAxtrrFWGO7D-m83dEndjWksPfWDt5wQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1738716440; x=1739321240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f9sPyJPHfx+mJ3CCUlm+4FqDQVDGiXmeXxAHWBCRcc4=;
+        b=wFElhglRcuLsWgloALtkZl1jG638b5VuW3cvFp4UEax5tqRv4L+paFKykW+c2rBqs3
+         Wey4mDCw7UGqNwB11qlqHbs8K+qF+PDxe8glWFjDDrEcVD+bFkxjhZgdn7ztSRMb/lWY
+         IZmbB1cH82SSND8QK8vfOTdZ0u4MoIOmsjjpHktuhYtvhQoH5J/bY0ZfudbL+KrP0xeL
+         r9kUmzfqS1cqB4U+y++KmLnOz/5hxvB9JyWA96rokBlNeVMLGGgMVQ/NPpY5NCCyKgeI
+         o8tDf5tUMKwbIk33YHwVLTC5u7ulad0r9SNEjMP27yfIcGAnavhmI0NwXq5uhuWKALWO
+         X72g==
+X-Forwarded-Encrypted: i=1; AJvYcCWrvkaI0qoqAKH3vwWxMR9XAVhIpYwY5ubpALfmNRBNgn8JK6ZRlfik0N0jCwwx9gweHelqGlBNRVzeCXkIPgM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAjhndPtmAl+aXrCr86BMi9Z+kzvH9w7E/xG/s78JXU32Poegw
+	b0KwwKhbsVQe/igiDP3w/30+9VE1NHElYoeukrkoyKSJU5lGZ+D97AMtosoSkfCtzaO+5KCW0u0
+	xFJXDvWJeL7sBoRIexwf1L2zr6bdPPIse93QI
+X-Gm-Gg: ASbGncsAF3T4TR/Au++tCdAR/GB0CkRAesmHdYo9BQ76zoCZsyts5Of7WufwzDoZuws
+	Ml4NHF5ezRzKXjpQ6Wf9//nPvaDs6BjkM3vJc80oLx3MrOcAPKbDraNTySh7lCET02bLzbgQ8OA
+	4FCQuDROj1N0fxe9OjX8kh0cu7qzs=
+X-Google-Smtp-Source: AGHT+IGUW31PJlD3bYGpDg+C9be07H94SMBHgAtFyLNBcYtrn/UCuPjfBnxH4b74FqIdyPfbzJGcpSZUbPkSK4KZGl0=
+X-Received: by 2002:a05:600c:5112:b0:436:1811:a79c with SMTP id
+ 5b1f17b1804b1-439075839damr1798985e9.5.1738716440349; Tue, 04 Feb 2025
+ 16:47:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKmKf6wY3dg+PfAxtrrFWGO7D-m83dEndjWksPfWDt5wQ@mail.gmail.com>
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <a97c4278-ea08-4693-a394-8654f1168fea@redhat.com> <CAHS8izNZrKVXSXxL3JG3BuZdho2OQZp=nhLuVCrLZjJD1R0EPg@mail.gmail.com>
+ <Z6JXFRUobi-w73D0@mini-arch> <CAHS8izNXo1cQmA5GijE-UW2X1OU6irMV9FRevL5tZW3B5NQ8rA@mail.gmail.com>
+ <Z6Jt62bZEeHnN1JP@mini-arch>
+In-Reply-To: <Z6Jt62bZEeHnN1JP@mini-arch>
+From: Samiullah Khawaja <skhawaja@google.com>
+Date: Tue, 4 Feb 2025 16:47:09 -0800
+X-Gm-Features: AWEUYZkIUQ2TlE5w2LjqCY40ZGBNlBpSfqK85PLzfyPMNWV7Cff5-KExyysuV40
+Message-ID: <CAAywjhTZnyLkCSQTMO1SpJrL-epJMDrWRDAb_UEnR5WuAEvtpg@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 0/6] Device memory TCP TX
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, 
+	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
+	Pedro Tammela <pctammela@mojatatu.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 04, 2025 at 11:02:42PM +0000, Alexei Starovoitov wrote:
-> On Tue, Feb 4, 2025 at 7:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hello,
-> >
-> > On Tue, Feb 04, 2025 at 10:34:41AM -0800, Charlie Jenkins wrote:
-> > > On Tue, Feb 04, 2025 at 05:18:42PM +0000, Alexei Starovoitov wrote:
-> > > > On Tue, Feb 4, 2025 at 12:10 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> > > > >
-> > > > > The quiet infrastructure was moved out of Makefile.build to accomidate
-> > > > > the new syscall table generation scripts in perf. Syscall table
-> > > > > generation wanted to also be able to be quiet, so instead of again
-> > > > > copying the code to set the quiet variables, the code was moved into
-> > > > > Makefile.perf to be used globally. This was not the right solution. It
-> > > > > should have been moved even further upwards in the call chain.
-> > > > > Makefile.include is imported in many files so this seems like a proper
-> > > > > place to put it.
-> > > > >
-> > > > > To:
-> > > > >
-> > > > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > > > ---
-> > > > > Charlie Jenkins (2):
-> > > > >       tools: Unify top-level quiet infrastructure
-> > > > >       tools: Remove redundant quiet setup
-> > > > >
-> > > > >  tools/arch/arm64/tools/Makefile           |  6 -----
-> > > > >  tools/bpf/Makefile                        |  6 -----
-> > > > >  tools/bpf/bpftool/Documentation/Makefile  |  6 -----
-> > > > >  tools/bpf/bpftool/Makefile                |  6 -----
-> > > > >  tools/bpf/resolve_btfids/Makefile         |  2 --
-> > > > >  tools/bpf/runqslower/Makefile             |  5 +---
-> > > > >  tools/build/Makefile                      |  8 +-----
-> > > > >  tools/lib/bpf/Makefile                    | 13 ----------
-> > > >
-> > > > Nack.
-> > > > libbpf and bpftool are synced independently to github
-> > > > and released from there.
-> > > > This change breaks it.
-> >
-> > Sorry, I overlooked this part and merged a change that touched the
-> > common files into the perf tree.
-> >
-> > f2868b1a66d4f40f ("perf tools: Expose quiet/verbose variables in Makefile.perf")
-> >
-> > Unfortunately, it's already in v6.14-rc1.
-> >
+On Tue, Feb 4, 2025 at 11:43=E2=80=AFAM Stanislav Fomichev <stfomichev@gmai=
+l.com> wrote:
+>
+> On 02/04, Mina Almasry wrote:
+> > On Tue, Feb 4, 2025 at 10:06=E2=80=AFAM Stanislav Fomichev <stfomichev@=
+gmail.com> wrote:
 > > >
-> > > Can you explain how it breaks it? Currently bpftool and resolve_btfids
-> > > don't build quietly so this was an attempt to fix that.
+> > > On 02/04, Mina Almasry wrote:
+> > > > On Tue, Feb 4, 2025 at 4:32=E2=80=AFAM Paolo Abeni <pabeni@redhat.c=
+om> wrote:
+> > > > >
+> > > > > On 2/3/25 11:39 PM, Mina Almasry wrote:
+> > > > > > The TX path had been dropped from the Device Memory TCP patch s=
+eries
+> > > > > > post RFCv1 [1], to make that series slightly easier to review. =
+This
+> > > > > > series rebases the implementation of the TX path on top of the
+> > > > > > net_iov/netmem framework agreed upon and merged. The motivation=
+ for
+> > > > > > the feature is thoroughly described in the docs & cover letter =
+of the
+> > > > > > original proposal, so I don't repeat the lengthy descriptions h=
+ere, but
+> > > > > > they are available in [1].
+> > > > > >
+> > > > > > Sending this series as RFC as the winder closure is immenient. =
+I plan on
+> > > > > > reposting as non-RFC once the tree re-opens, addressing any fee=
+dback
+> > > > > > I receive in the meantime.
+> > > > >
+> > > > > I guess you should drop this paragraph.
+> > > > >
+> > > > > > Full outline on usage of the TX path is detailed in the documen=
+tation
+> > > > > > added in the first patch.
+> > > > > >
+> > > > > > Test example is available via the kselftest included in the ser=
+ies as well.
+> > > > > >
+> > > > > > The series is relatively small, as the TX path for this feature=
+ largely
+> > > > > > piggybacks on the existing MSG_ZEROCOPY implementation.
+> > > > >
+> > > > > It looks like no additional device level support is required. Tha=
+t is
+> > > > > IMHO so good up to suspicious level :)
+> > > > >
+> > > >
+> > > > It is correct no additional device level support is required. I don=
+'t
+> > > > have any local changes to my driver to make this work. I think Stan
+> > > > on-list was able to run the TX path (he commented on fixes to the t=
+est
+> > > > but didn't say it doesn't work :D) and one other person was able to
+> > > > run it offlist.
+> > >
+> > > For BRCM I had shared this: https://lore.kernel.org/netdev/ZxAfWHk3aR=
+Wl-F31@mini-arch/
+> > > I have similar internal patch for mlx5 (will share after RX part gets
+> > > in). I agree that it seems like gve_unmap_packet needs some work to b=
+e more
+> > > careful to not unmap NIOVs (if you were testing against gve).
 > >
-> > So I think you will need something like this for v6.14.  Again, sorry
-> > about the trouble.
-> 
-> Just revert f2868b1a66d4f40f that created this mess.
-
-Why are you opposed to unifying this helpers among the various projects
-in tools? Can you explain what about this breaks the Github syncing flow
-and why it cannot be resolved? It doesn't make sense to duplicate "Q="
-in every Makefile anybody ever wants to add to tools just because bpf
-syncing isn't robust.
-
-- Charlie
-
+> > Hmm. I think you're right. We ran into a similar issue with the RX
+> > path. The RX path worked 'fine' on initial merge, but it was passing
+> > dmabuf dma-addrs to the dma-mapping API which Jason later called out
+> > to be unsafe. The dma-mapping API calls with dmabuf dma-addrs will
+> > boil down into no-ops for a lot of setups I think which is why I'm not
+> > running into any issues in testing, but upon closer look, I think yes,
+> > we need to make sure the driver doesn't end up passing these niov
+> > dma-addrs to functions like dma_unmap_*() and dma_sync_*().
+> >
+> > Stan, do you run into issues (crashes/warnings/bugs) in your setup
+> > when the driver tries to unmap niovs? Or did you implement these
+> > changes purely for safety?
+>
+> I don't run into any issues with those unmaps in place, but I'm running x=
+86
+> with iommu bypass (and as you mention in the other thread, those
+> calls are no-ops in this case).
+The dma_addr from dma-buf should never enter dma_* APIs. dma-bufs
+exporters have their own implementation of these ops and they could be
+no-op for identity mappings or when iommu is disabled (in a VM? with
+no IOMMU enabled GPA=3DIOVA). so if we really want to map/unmap/sync
+these addresses the dma-buf APIs should be used to do that. Maybe some
+glue with a memory provider is required for these net_iovs? I think
+the safest option with these is that mappings are never unmapped
+manually by driver until the dma_buf_unmap_attachment is called during
+unbinding? But maybe that complicates things for io_uring?
 
