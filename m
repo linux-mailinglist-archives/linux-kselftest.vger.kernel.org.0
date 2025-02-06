@@ -1,311 +1,135 @@
-Return-Path: <linux-kselftest+bounces-25945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEE3DA2B3F8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 22:14:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3679AA2B493
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 23:00:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F2291687ED
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 21:14:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C6A016667F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 22:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F78D1DE2BC;
-	Thu,  6 Feb 2025 21:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A098522FF32;
+	Thu,  6 Feb 2025 21:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gd1alUST"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="lgMqS8Fw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE269194094;
-	Thu,  6 Feb 2025 21:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306FB22FF22
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Feb 2025 21:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738876485; cv=none; b=rKTQR+Qg6dR7YpIHDmhDl0siYRyWwnzSTtqQtuE5XNS6mdR4fyUadCQNfVcP1InXi78wkKJAWdQN80+HJPO+xZSgLallneOeibzvHvCHbs4+YwdguNJPnpUu465roKXdR2KDdwjtBeWQse0NqIr2utyU5vUzayUc736iv3SLFMQ=
+	t=1738879129; cv=none; b=VAG8VYHL6Y3Mm16ZaaUgvIZ1qaMgJO0FTvwbXc5zvvX3z/ArJ8K99vQvMZZRoRayDqqvKYR1amDoaBZB5JENgP83gEoz1a0QMPg1k4blObiuDSX8GYycybODyvsJrB41g15J9lKHgF9Zhkkqi1Aj9TCooc4NPx2BiLJg5fUWGU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738876485; c=relaxed/simple;
-	bh=e2SOY182HjtRf1jcrCmT/yGU2J8GDiU314PnbVwrp7g=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ll4VZp4s2EFzWiDD57dzqERl5nkIvB7aGQtLbshfhIzpOJrlcvh9G7EZJufdu/T8DuLXBE+zvdsa//j5Ki4ptUHPyBZqX4hnQJmH/zrOT0VljgeBFlsPROGvEXUAb5x27UBEAHTHOPM/vnHcuUP1BJl6uPj3kTH8KPJK6uzvdAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gd1alUST; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD4FC4CEDD;
-	Thu,  6 Feb 2025 21:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738876483;
-	bh=e2SOY182HjtRf1jcrCmT/yGU2J8GDiU314PnbVwrp7g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gd1alUST0IO6Lv5wd3A05bXQe2+4UMAsApIHndqvLWYKsFxSJzLnSIV1pH9/FJEqq
-	 Oi/vtKp55eWJktVqKpkXp4yTqD78gZ2JEtTIG56M//S0kfut3Q3jDQb5ptyEq5BacG
-	 +wKIIYrqqsV3d4LGFrh7nZXDTaDYVpD6MxHmJYSvB41BRRfYFWNdwmkSspuGzhqrPP
-	 eEUwS7WCmQfGgwo58hQ1FGiPp0H/tp/WuNVSAJ6mvbyo9ELleMKAqT3Vsoj/DDL52s
-	 q71wajBFFmlPiKz/UXxG1M4pIua9Wx016A9MJYiMBWeMuD8VSVqvPOhkbjHAu/dzBN
-	 gwiHw8Tl3Pjgw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tg9Cq-001J8q-PU;
-	Thu, 06 Feb 2025 21:14:40 +0000
-Date: Thu, 06 Feb 2025 21:14:39 +0000
-Message-ID: <86o6zeu668.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc: kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	oliver.upton@linux.dev,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	darren@os.amperecomputing.com,
-	scott@os.amperecomputing.com
-Subject: Re: [RFC PATCH 1/2] KVM: arm64: nv: selftests: Add guest hypervisor test
-In-Reply-To: <20250206164120.4045569-2-gankulkarni@os.amperecomputing.com>
-References: <20250206164120.4045569-1-gankulkarni@os.amperecomputing.com>
-	<20250206164120.4045569-2-gankulkarni@os.amperecomputing.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1738879129; c=relaxed/simple;
+	bh=PVuzEWiWGdU7/bhxXLzVugnQB2A6Ks+SP/VbQvRNZKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HmfAgrqjGvKtvjThf+t2xAmeC7rFbcMmuUflcUgOLHXNddqMTvNlpk14vN2vZ25mtuoBjgh6RKQfuxwH7gZQjmZXAkdDoLB5NJWcdVKtNR0CB1yx/EZL2FCeQIyMoVPhES4wRpFncq22MvtEi6EYeWtsCYikXqEQp0qbiSQUIiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=lgMqS8Fw; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21f48ebaadfso13784905ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 13:58:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738879125; x=1739483925; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9pEwEvQtMTht7p8WbC44bsRYNPMffSNDG4Pb5DVy/U=;
+        b=lgMqS8FwYX9xWhM9kSZPql3Crx1UAQfys1VbpOJ3051C/p7QGVizCiPRKApgoLkAuR
+         G1uHSk8GqayOBHbRg6VSPC5T/Ohvh5WHd+eQCimgke4rn5AytLk1I6IMf1UPVOyxRmBs
+         nlz+hqo2I+H0DyWTcV6D4L5cwDE8aoWwp75bgiYDkHwWjbOpDS7Dbl+SnXeedEDRwUjZ
+         9z3hq1QkloPVTh0K7qF8ICV8IrpZb8W+bvUCLsmNYUhKjhfGcSqaOIM06t5ZTQOoPRls
+         d0ZD7i9Cpyu5kQRbVYyU246pK4CGvPklWVtDh/zqYT48ER/fGaisttKZ9futu9Tkqm8+
+         Zq2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738879125; x=1739483925;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T9pEwEvQtMTht7p8WbC44bsRYNPMffSNDG4Pb5DVy/U=;
+        b=RbpDc9IB88NDB1vPwM+LGPBNoXnqy+DYE5WS8tfhOtC1iBH1J7BRGFflR3iylAzGSp
+         0q+FUMrGkDwmcJm66p5QdUWXUWIh8rRVwvCyFcZvo1EiS05EbXg/9WtZLgRYpcv8wuhF
+         geJ5c7L/sqI2mSPn2ms1EHwFqSpWP1N6kRmspj1sCri6qRt+C4gOedCkZvtKR9FT9IF3
+         sormtopIoghJaIxHHcZBu6L85fqETA0ydVaVIqeDH2YWMbscg56fnADsvpKc3p18kBzN
+         1BljpsJTPbrTQ3IuWInHF4yaJyI8Wl8etIzqPRXELmkQZZIdXW+FfKIRPkPAmyplA/vZ
+         7Hag==
+X-Forwarded-Encrypted: i=1; AJvYcCX5x6MxJJGkqVNTx1Hypru6VH3PMAO7OPVJaMjw6HpLrJjOBsz6hfmQ07/c9rbozZjRQH4AUS7COMqQ7wfaPL0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww8jXQ8kfcVBaavmyQbgUpZ+KE1RmMJteJX3Jf2O45qJ93alo5
+	XM/sk2BgM7T0wQ++yZ2yCvxtFIRH1wLc3TyRqzhpKO9ShpRfno5xHwZPzD7qfaw=
+X-Gm-Gg: ASbGncsE41mGnaBhf418IQpqFAJij8KERX1CqD34nLm+fWMLon9xhIsMG2zPOC7LPj/
+	K7PAdbY1eAQvU+zDi3Meon8gMWOF40rTaBRrpsA4628x+8ClC+N+iycGMR2s1icGevvFPunU5+m
+	iA4Mc2kG6uJOqGZlocfPVrWe42iVZSqJC5PKf5BHg4FQNbKoCNm+Rk/U5k13JqzrlL6IjD5/rgN
+	s0MCMGkQlOkBKSUVVW8Ctqe6m9SsdUXEpuY+hWM4jhyyBKmLL2itKWBI4gibQKK7kxkzGumhkCU
+	bJhLAdcYWdS3SsZzRwky/jVXAw==
+X-Google-Smtp-Source: AGHT+IEAeZdlOSa7aDkaxgunF100sJqK9vORD3h4QNYuoNX4V7Q49nJIgyQHGUMHbgK5Pow0L8i/Ig==
+X-Received: by 2002:a05:6a00:228d:b0:726:41e:b310 with SMTP id d2e1a72fcca58-7305d48010bmr1263832b3a.12.1738879125283;
+        Thu, 06 Feb 2025 13:58:45 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73048ae7c24sm1765047b3a.78.2025.02.06.13.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 13:58:44 -0800 (PST)
+Date: Thu, 6 Feb 2025 13:58:42 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+	Kees Cook <kees@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH RFT v14 2/8] Documentation: userspace-api: Add shadow
+ stack API documentation
+Message-ID: <Z6UwksPkdwb5DDcK@debug.ba.rivosinc.com>
+References: <20250206-clone3-shadow-stack-v14-0-805b53af73b9@kernel.org>
+ <20250206-clone3-shadow-stack-v14-2-805b53af73b9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: gankulkarni@os.amperecomputing.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, darren@os.amperecomputing.com, scott@os.amperecomputing.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20250206-clone3-shadow-stack-v14-2-805b53af73b9@kernel.org>
 
-On Thu, 06 Feb 2025 16:41:19 +0000,
-Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
-> 
-> This patch adds the required changes to init vcpu in vEL2 context.
-> Also adds a KVM selftest to execute guest code as a guest hypervisor(L1).
-> 
-> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-> ---
->  tools/testing/selftests/kvm/Makefile.kvm      |  1 +
->  .../selftests/kvm/arm64/nv_guest_hypervisor.c | 83 +++++++++++++++++++
->  .../kvm/include/arm64/kvm_util_arch.h         |  3 +
->  .../selftests/kvm/include/arm64/nv_util.h     | 28 +++++++
->  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
->  .../selftests/kvm/lib/arm64/processor.c       | 59 +++++++++----
->  6 files changed, 161 insertions(+), 14 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/arm64/nv_guest_hypervisor.c
->  create mode 100644 tools/testing/selftests/kvm/include/arm64/nv_util.h
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 4277b983cace..a85d3bec9fb1 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -154,6 +154,7 @@ TEST_GEN_PROGS_arm64 += arm64/vgic_irq
->  TEST_GEN_PROGS_arm64 += arm64/vgic_lpi_stress
->  TEST_GEN_PROGS_arm64 += arm64/vpmu_counter_access
->  TEST_GEN_PROGS_arm64 += arm64/no-vgic-v3
-> +TEST_GEN_PROGS_arm64 += arm64/nv_guest_hypervisor
->  TEST_GEN_PROGS_arm64 += access_tracking_perf_test
->  TEST_GEN_PROGS_arm64 += arch_timer
->  TEST_GEN_PROGS_arm64 += coalesced_io_test
-> diff --git a/tools/testing/selftests/kvm/arm64/nv_guest_hypervisor.c b/tools/testing/selftests/kvm/arm64/nv_guest_hypervisor.c
-> new file mode 100644
-> index 000000000000..5aeefe43aff7
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/arm64/nv_guest_hypervisor.c
-> @@ -0,0 +1,83 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2025 Ampere Computing LLC
-> + */
-> +#include <kvm_util.h>
-> +#include <nv_util.h>
-> +#include <processor.h>
-> +#include <vgic.h>
-> +
-> +static void guest_code(void)
-> +{
-> +	if (read_sysreg(CurrentEL) == CurrentEL_EL2)
-> +		GUEST_PRINTF("Executing guest code in vEL2\n");
-> +	else
-> +		GUEST_FAIL("Fail to run in vEL2\n");
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void guest_undef_handler(struct ex_regs *regs)
-> +{
-> +	GUEST_FAIL("Unexpected exception far_el1 = 0x%lx", read_sysreg(far_el1));
-> +}
-> +
-> +static void test_run_vcpu(struct kvm_vcpu *vcpu)
-> +{
-> +	struct ucall uc;
-> +
-> +	do {
-> +		vcpu_run(vcpu);
-> +
-> +		switch (get_ucall(vcpu, &uc)) {
-> +		case UCALL_ABORT:
-> +			REPORT_GUEST_ASSERT(uc);
-> +			break;
-> +		case UCALL_PRINTF:
-> +			printf("%s", uc.buffer);
-> +			break;
-> +		case UCALL_DONE:
-> +			printf("Test PASS\n");
-> +			break;
-> +		default:
-> +			TEST_FAIL("Unknown ucall %lu", uc.cmd);
-> +		}
-> +	} while (uc.cmd != UCALL_DONE);
-> +}
-> +
-> +static void test_nv_guest_hypervisor(void)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu_init init;
-> +	int gic_fd;
-> +
-> +	vm = vm_create(1);
-> +	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +
-> +	init.features[0] = 0;
-> +	init_vcpu_nested(&init);
-> +	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-> +
-> +	__TEST_REQUIRE(is_vcpu_nested(vcpu), "Failed to Enable NV");
-> +
-> +	vm_init_descriptor_tables(vm);
-> +	vcpu_init_descriptor_tables(vcpu);
-> +	gic_fd = vgic_v3_setup(vm, 1, 64);
-> +	__TEST_REQUIRE(gic_fd >= 0, "Failed to create vgic-v3");
-> +
-> +	vm_install_sync_handler(vm, VECTOR_SYNC_CURRENT,
-> +				ESR_ELx_EC_UNKNOWN, guest_undef_handler);
-> +
-> +	test_run_vcpu(vcpu);
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_EL2));
-> +
-> +	test_nv_guest_hypervisor();
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
-> index e43a57d99b56..ab5279c24413 100644
-> --- a/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
-> +++ b/tools/testing/selftests/kvm/include/arm64/kvm_util_arch.h
-> @@ -2,6 +2,9 @@
->  #ifndef SELFTEST_KVM_UTIL_ARCH_H
->  #define SELFTEST_KVM_UTIL_ARCH_H
->  
-> +#define CurrentEL_EL1		(1 << 2)
-> +#define CurrentEL_EL2		(2 << 2)
-> +
->  struct kvm_vm_arch {};
->  
->  #endif  // SELFTEST_KVM_UTIL_ARCH_H
-> diff --git a/tools/testing/selftests/kvm/include/arm64/nv_util.h b/tools/testing/selftests/kvm/include/arm64/nv_util.h
-> new file mode 100644
-> index 000000000000..4fecf1f18554
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/arm64/nv_util.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 Ampere Computing
-> + */
-> +#ifndef SELFTEST_NV_UTIL_H
-> +#define SELFTEST_NV_UTIL_H
-> +
-> +#include <linux/bitmap.h>
-> +
-> +/* NV helpers */
-> +static inline void init_vcpu_nested(struct kvm_vcpu_init *init)
-> +{
-> +	init->features[0] |= (1 << KVM_ARM_VCPU_HAS_EL2);
-> +}
-> +
-> +static inline bool kvm_arm_vcpu_has_el2(struct kvm_vcpu_init *init)
-> +{
-> +	unsigned long features = init->features[0];
-> +
-> +	return test_bit(KVM_ARM_VCPU_HAS_EL2, &features);
-> +}
-> +
-> +static inline bool is_vcpu_nested(struct kvm_vcpu *vcpu)
-> +{
-> +	return vcpu->nested;
-> +}
-> +
-> +#endif /* SELFTEST_NV_UTIL_H */
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 4c4e5a847f67..8c53dbc17f8f 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -58,6 +58,7 @@ struct kvm_vcpu {
->  	struct kvm_dirty_gfn *dirty_gfns;
->  	uint32_t fetch_index;
->  	uint32_t dirty_gfns_count;
-> +	bool nested;
->  };
->  
->  struct userspace_mem_regions {
-> diff --git a/tools/testing/selftests/kvm/lib/arm64/processor.c b/tools/testing/selftests/kvm/lib/arm64/processor.c
-> index 7ba3aa3755f3..35ba2ace61a2 100644
-> --- a/tools/testing/selftests/kvm/lib/arm64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/arm64/processor.c
-> @@ -10,6 +10,7 @@
->  
->  #include "guest_modes.h"
->  #include "kvm_util.h"
-> +#include "nv_util.h"
->  #include "processor.h"
->  #include "ucall_common.h"
->  
-> @@ -258,14 +259,47 @@ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
->  	}
->  }
->  
-> +static void aarch64_vcpu_set_reg(struct kvm_vcpu *vcpu, uint64_t sctlr_el1,
-> +			uint64_t tcr_el1, uint64_t ttbr0_el1)
-> +{
-> +	uint64_t fpen;
-> +
-> +	/*
-> +	 * Enable FP/ASIMD to avoid trapping when accessing Q0-Q15
-> +	 * registers, which the variable argument list macros do.
-> +	 */
-> +	fpen = 3 << 20;
-> +
-> +	if (is_vcpu_nested(vcpu)) {
-> +		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPTR_EL2), fpen);
-> +		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL2), sctlr_el1);
-> +		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2), tcr_el1);
-> +		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL2), DEFAULT_MAIR_EL1);
-> +		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL2), ttbr0_el1);
-> +		vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), vcpu->id);
+On Thu, Feb 06, 2025 at 11:38:04AM +0000, Mark Brown wrote:
+>There are a number of architectures with shadow stack features which we are
+>presenting to userspace with as consistent an API as we can (though there
+>are some architecture specifics). Especially given that there are some
+>important considerations for userspace code interacting directly with the
+>feature let's provide some documentation covering the common aspects.
+>
+>Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+>Reviewed-by: Kees Cook <kees@kernel.org>
+>Tested-by: Kees Cook <kees@kernel.org>
+>Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>Acked-by: Yury Khrustalev <yury.khrustalev@arm.com>
+>Signed-off-by: Mark Brown <broonie@kernel.org>
+>---
 
-How about some of the basics such as HCR_EL2, MDCR_EL2? A bunch of
-things there do have an impact on how the guest behaves, and relying
-on defaults feels like a bad idea.
+Reviewed-by: Deepak Gupta <debug@rivosinc.com>
 
-This also assumes VHE, without trying to enforce it.
-
-Finally, how to you plan to make all the existing tests run as EL2
-guests if TPIDR_EL1 isn't populated with the expected value? Surely
-you need to change the read side...
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+> Documentation/userspace-api/index.rst        |  1 +
+> Documentation/userspace-api/shadow_stack.rst | 44 ++++++++++++++++++++++++++++
+> 2 files changed, 45 insertions(+)
 
