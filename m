@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-25890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25891-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A0D9A2A1A7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 07:58:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E97A2A1BE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 08:04:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56EC718874C0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 06:58:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01B0116856D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 07:04:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685F7224AE5;
-	Thu,  6 Feb 2025 06:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F5B224B1B;
+	Thu,  6 Feb 2025 07:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="vmnDxC7G"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="Z94t4Vw+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48F620B208
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Feb 2025 06:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0981FE461
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Feb 2025 07:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738825123; cv=none; b=NBUQlizE8E4pr0Gewx7d7HBjgiqAERmCO//UJYk7fdPmHdAWjOOMKTL681wmlsXuBvvHCNqC6ZKDZXWy11+wTFVSRlfb7yi4SaS1neLOBw6C4AU8b5KEwy87V8v7QD1Q97vlEZnpHMQSRjT9bdfy6xGwxvchwVBJ8cee296xTfw=
+	t=1738825461; cv=none; b=l32dAwgv9PshAtkbJmggi1LKKrlyFce/kPE5wuuzfOKBJttulMKaJzrEociX7xeuQb3zqyp2PWW7+XgrkF/RnZXfOu1ppm5PG4AS5/w+bwFC8KE+iLHHIgj6QWrmz0N8Zb8iZP64UXIwLBEKycm8taFOiBkrx0VRlHL+KiFc8p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738825123; c=relaxed/simple;
-	bh=og3Aq1IjApPzY4pBlRJEpp2monYtKZMRFoZcCbo2WO8=;
+	s=arc-20240116; t=1738825461; c=relaxed/simple;
+	bh=6Z7n8UWnuTd40YxRqOUHsnsjz1hSaR5JYJ7mFXzEuEU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=g+TUOccyIKHocrh4bYdNWaj6DUiTyJCrTy1WFEe6GOlHqFDk+Jc4BNCIXdsD6h46k3TNsCrv5MPQKmYCHYrKpwV13+ojGq+66P25g6fmTpSI4T3TgfSTxscFp9vsjPadyfDkzrcYMTrtOq7wmsLM1o7rKv6i89HthCwXVGME2W0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=vmnDxC7G; arc=none smtp.client-ip=209.85.214.180
+	 In-Reply-To:Content-Type; b=nyC/MlvgAVrc5quGLTi2dAqV4jY9hUwPpHqqc1FL88DXgXH7TC0RFfwESS9oR9Q9Q3k9x8n06w0V+FhCSfLmq0Jx411i4UObOasZ977Er2IL01n52Gn91VrS3kMZD3UF81HyZzdXbWjcHp4Vy5w3h7BwcjR0e51INuWw3e4rosU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=Z94t4Vw+; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-21f200014f1so8361165ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2025 22:58:41 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21f3e2b4eceso1986105ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2025 23:04:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1738825121; x=1739429921; darn=vger.kernel.org;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1738825458; x=1739430258; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MfkFHRY4BuNO95W0YyldJMDcWeJ1g/mRAGw+u9+CPB0=;
-        b=vmnDxC7Gxchxw1LtQ3i7bSdlDrG0ebeWraoMP4rauxsI9uiJ5x+WxrDyHSIEWhrb0p
-         wjraVaFlMkv16b6IYjG27lol78/n506Ws//dWuJ4sPiUyma+6x3CiRJVc7ZjhHFeEneU
-         yA5j0VaFe53ATkXIMJJ8zr1nAuQT1R2TpUOwnainI2C6d7kh4p4AmArZOLGoJ197SCFs
-         ngwx3rOENpKJlGX2wy8DLXNzl8vDSmoNgSBWiI3zfDp7FyKrxW9qDdhRXo4i61+y8DFm
-         kkfGhfHGGr3rrXObj5zbMB/3FQTxXVU397KqaGCwtPQKG0Qcs+9FdemWZTsf+yuamk0/
-         Hpgg==
+        bh=xSMzQMG1ZHF7w5vbC9dgevornaZeizWpfwbsJmx7bQk=;
+        b=Z94t4Vw+PQhHm/5AADHOjjd8ZhDcd+V5D6AQ7o7Jp1LWmWsHVcxJlyOvqcNqHIjGl6
+         XiWk+CRqG67jELyb0owDOcKj7ld3q3qh3iSiHe7SK2vDLjqXrbSoiW+bXM5ehTPL1JaY
+         9AVEKGIlfvuEAYlhz+WYcGKZ17KEAiLVjKav4mPAILViMwGvEJYx+fg0pSbSNrM292sn
+         SiXt8MHxPvVYgCGKljfqrjhrFd5FVJ/f5dlWXUCu+aB1wOhvMOn3lCdkZr3lur42Upvy
+         3WvUzsWgHU3ts0u5ySa25e6zDILJHcwrk7jsdWWT3jGijvNNSkwM0YHShK4PrGu8SixI
+         3jrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738825121; x=1739429921;
+        d=1e100.net; s=20230601; t=1738825458; x=1739430258;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MfkFHRY4BuNO95W0YyldJMDcWeJ1g/mRAGw+u9+CPB0=;
-        b=f8T01OyUXlJfZfn3eQu61QqeB+nzFRHOal1vtsMhe8HQfGbfVRrS8kFwAbFncCPb/f
-         WNHeHYn1PXWaoNgsqRle9Ri8gC7qGiZYdvtPYF3qiUrRbn026E60V/uPOq4wn4ctub1g
-         bby+K4QiSbosiiiwaKduSzpEiBwNhDdikFyowNbR8AoQT6cwOr+TAagI200kUJ8t4t5s
-         ivJAHHXjtMt2uNLqEM/WgB3e5rqpgB9V0QPBEwK+UeiaQwHND9TFb+XEIkPC3ml8bS5j
-         jmIdqorJzbD2fvkEGghyLsMX5MeU3Ka5fssV54nEH4EswKg8dve9JnRjtgu1nmGGUr93
-         ZNKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWaTkxwhllX2hB0HbS3L3LRhmMjomLeQEJ4f7gHViiXtM2gn7wvSsFBu8pl51ND5MhJUvOD1ukHcCBstcEPRN8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUNET0BX3QSvmHDQ5s79pL6KkFMguXmsGvhWKmyYMMVFWSCMkG
-	pGLKyG/3X4qxxCxD3yjfuUGvWuFAaC2T7PqwQssFmyBC+bsMvFpNQNrAFgUmRdY=
-X-Gm-Gg: ASbGncujrknpUaVLayCZret5joV+Pgn6gX/Qu57NILwhgIoOKdzRd5F8p0dzhvyL0cl
-	Jg9Bqgbf3wwYu3QJ4FrA9S39Gyh11ZGhUrfTWqqvic5WE6o/LyeV8j0LOyuf8wLa9nGh6y2+EEQ
-	xYkiDIwLUccQFA4k6GXulbK1TJQoteS+bwvfM3UQCQ5KDRp3xDWys/75T8hBd/qMUFpWR8JDjkG
-	+8V1QzvVc7DWmFWQNfxi24p7SdBoC8ZngS7Z9Vx/MOMPr8rZ2sOENAHwokSl8MwDHB4MlqeJ3/I
-	UGsmV9k0GIylJOmSJ8wS7+R8HItz
-X-Google-Smtp-Source: AGHT+IHSHvbDEBE36nUTLqiZtQMOf3j/rI2OoIwM0kMRTh5vyxMjVD4DwGY5i/68BnM7I5tCX5GUew==
-X-Received: by 2002:a05:6a21:1805:b0:1ed:a6d7:3c07 with SMTP id adf61e73a8af0-1ede881f0b3mr9719443637.4.1738825121065;
-        Wed, 05 Feb 2025 22:58:41 -0800 (PST)
+        bh=xSMzQMG1ZHF7w5vbC9dgevornaZeizWpfwbsJmx7bQk=;
+        b=bf4O90SDCpzgQLcVzj7o38nX4TvNvpNw1yqhHg0aDXiqaPRVC0+H8bfda30Hhgb3tF
+         V5Q1hN1lRSq96o/blzqDNDtiCMApvZsisj2NjqlispuNBfhaRZSiQ98YfJyugyu0GdOj
+         VwmE/wR3W8QLllZ4PFypWIkQq2zDxGz1EddaqvU29qP6sL1aGyDHrvcbexKHX3OtuUAo
+         lanVLkK4J1+7pqSvWrN+RgZ5dTb2OyDhbi6j9a66a/t9uZ7E8wf8LPw4nRKHKVnQN4Mo
+         p+DTV+Huc5qCV40fVvso7Y94X2rWSCu/od9v+qRgEIJVEIw9CriP7WL+YjBKza3e9C5U
+         ZGTg==
+X-Forwarded-Encrypted: i=1; AJvYcCUylN4hG7TG2ZPzYyl7WoziS8Pxu2YJfNVfDJga4nTI5DabEINmNYpbcShi+7OleTWxN5518IK9Wpa/CukNdqI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybRgzLSLNK7c0cbYii4g3Latw/4myc72mfAkFMNWC0YPZLkL2K
+	uvgpv+gLeE0+ZU2BG7u3Q7FmYeyKz0K26JdS4w5jXeAlzQLlK1pWHkWIaGXS9yw=
+X-Gm-Gg: ASbGncuTucD8304UyJcUcv4lD1yPnuVd9A62mtWDSmlAJJDXFxqqfj+oa0H4ux872IN
+	M55QSlPzgBogUxfZJ899VSZjZCzkICoklzvfhuLx/Xz5w9WK6FFP6yCoBhrzguHUTP/N0FNBkBH
+	awdyMQ1tze+rW3C8blrTNll2ZzBZZ9rgV1xwQwS37W6VGotfUivNeCFeWhLlBib0kSBjWhgaxuJ
+	Ol2p4kJUwOSlyRW4DA4rxc/mojqhYzm7jnRaxrvSCoQPZmacL/9GxDsLyTcRlmljjuZaQbSG+cA
+	uQyJ6TavCj6qzIAWYo7EvaE71JG3
+X-Google-Smtp-Source: AGHT+IEGoYiB8pxUq02irm/CU5MvTVOQlUDfWzGd8n7ZsLH5KxtqKlPFWXhqlXZi0kPwplHWCVM1fg==
+X-Received: by 2002:a17:902:f64f:b0:216:3e87:c9fc with SMTP id d9443c01a7336-21f17ddf80bmr102170675ad.5.1738825457907;
+        Wed, 05 Feb 2025 23:04:17 -0800 (PST)
 Received: from [157.82.207.107] ([157.82.207.107])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73048ad292dsm590546b3a.61.2025.02.05.22.58.35
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ad51aecce52sm481627a12.18.2025.02.05.23.04.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2025 22:58:40 -0800 (PST)
-Message-ID: <1c2a1bd6-9ce9-47d8-b89d-1a647575ce07@daynix.com>
-Date: Thu, 6 Feb 2025 15:58:34 +0900
+        Wed, 05 Feb 2025 23:04:17 -0800 (PST)
+Message-ID: <8b389981-c04a-4d4f-8a5a-043b4cd6e8db@daynix.com>
+Date: Thu, 6 Feb 2025 16:04:11 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,7 +81,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 5/7] tun: Extract the vnet handling code
+Subject: Re: [PATCH net-next v5 6/7] tap: Keep hdr_len in tap_get_user()
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
  Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
@@ -96,46 +96,68 @@ To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
  Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
  devel@daynix.com
 References: <20250205-tun-v5-0-15d0b32e87fa@daynix.com>
- <20250205-tun-v5-5-15d0b32e87fa@daynix.com>
- <67a3d44d44f12_170d392947c@willemb.c.googlers.com.notmuch>
+ <20250205-tun-v5-6-15d0b32e87fa@daynix.com>
+ <67a3d6706c01a_170d3929436@willemb.c.googlers.com.notmuch>
 Content-Language: en-US
 From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <67a3d44d44f12_170d392947c@willemb.c.googlers.com.notmuch>
+In-Reply-To: <67a3d6706c01a_170d3929436@willemb.c.googlers.com.notmuch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2025/02/06 6:12, Willem de Bruijn wrote:
+On 2025/02/06 6:21, Willem de Bruijn wrote:
 > Akihiko Odaki wrote:
->> The vnet handling code will be reused by tap.
+>> hdr_len is repeatedly used so keep it in a local variable.
 >>
 >> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->>   MAINTAINERS            |   2 +-
->>   drivers/net/tun.c      | 179 +----------------------------------------------
->>   drivers/net/tun_vnet.h | 184 +++++++++++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 187 insertions(+), 178 deletions(-)
 > 
->> -static inline bool tun_legacy_is_little_endian(unsigned int flags)
->> -{
->> -	return !(IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE) &&
->> -		 (flags & TUN_VNET_BE)) &&
->> -		virtio_legacy_is_little_endian();
->> -}
+>> @@ -682,11 +683,8 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
+>>   	if (msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY)) {
+>>   		struct iov_iter i;
+>>   
+>> -		copylen = vnet_hdr.hdr_len ?
+>> -			tap16_to_cpu(q, vnet_hdr.hdr_len) : GOODCOPY_LEN;
+>> -		if (copylen > good_linear)
+>> -			copylen = good_linear;
+>> -		else if (copylen < ETH_HLEN)
+>> +		copylen = min(hdr_len ? hdr_len : GOODCOPY_LEN, good_linear);
+>> +		if (copylen < ETH_HLEN)
+>>   			copylen = ETH_HLEN;
 > 
->> +static inline bool tun_vnet_legacy_is_little_endian(unsigned int flags)
->> +{
->> +	return !(IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE) &&
->> +		 (flags & TUN_VNET_BE)) &&
->> +		virtio_legacy_is_little_endian();
->> +}
+> I forgot earlier: this can also use single line statement
 > 
-> In general LGTM. But why did you rename functions while moving them?
-> Please add an explanation in the commit message for any non obvious
-> changes like that.
+>      copylen = max(copylen, ETH_HLEN);
+> 
+> And perhaps easiest to follow is
+> 
+>      copylen = hdr_len ?: GOODCOPY_LEN;
+>      copylen = min(copylen, good_linear);
+>      copylen = max(copylen, ETH_HLEN);
 
-I renamed them to clarify they are in a distinct, decoupled part of 
-code. It was obvious in the previous version as they are static 
-functions contained in a translation unit, but now they are part of a 
-header file so I'm clarifying that with this rename. I will add this 
-explanation to the commit message.
+I introduced the min() usage as it now neatly fits in a line, but I 
+found even clamp() fits so I'll use it in the next version:
+copylen = clamp(hdr_len ?: GOODCOPY_LEN, ETH_HLEN, good_linear);
+
+Please tell me if you prefer hdr_len ?: GOODCOPY_LEN in a separate line:
+copylen = hdr_len ?: GOODCOPY_LEN;
+copylen = clamp(copylen, ETH_HLEN, good_linear);
+
+> 
+>>   		linear = copylen;
+>>   		i = *from;
+>> @@ -697,11 +695,9 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
+>>   
+>>   	if (!zerocopy) {
+>>   		copylen = len;
+>> -		linear = tap16_to_cpu(q, vnet_hdr.hdr_len);
+>> -		if (linear > good_linear)
+>> -			linear = good_linear;
+>> -		else if (linear < ETH_HLEN)
+>> -			linear = ETH_HLEN;
+>> +		linear = min(hdr_len, good_linear);
+>> +		if (copylen < ETH_HLEN)
+>> +			copylen = ETH_HLEN;> > Same
+
+
+I realized I mistakenly replaced linear with copylen here. Using clamp() 
+will remove redundant variable references and fix the bug.
 
