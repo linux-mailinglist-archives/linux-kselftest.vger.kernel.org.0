@@ -1,233 +1,256 @@
-Return-Path: <linux-kselftest+bounces-25911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D09A5A2A6FA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 12:10:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5FEA2A7A4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 12:40:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3285188A81C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 11:10:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB95A1886EDE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 11:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449B0228C97;
-	Thu,  6 Feb 2025 11:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB67A228C84;
+	Thu,  6 Feb 2025 11:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="We8EEd3m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b6zFIx74"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBC1226865;
-	Thu,  6 Feb 2025 11:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB7A151991;
+	Thu,  6 Feb 2025 11:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738840100; cv=none; b=bl5WSlxaCq1TDuKHFBI1Jb47SZ95YVyga2AIoHAAggZbtWqdEZd2r6josXepSjgVkRTdlSiui3kFaJgh3mJlsU4dCqogcDHHQ9CJ7VWFkciEL7zUJ+DgCP2TJFAjcUPlIJzClxX9M1gvP5ISetHnW8trG3ZhADr8ivawVE07h5w=
+	t=1738842011; cv=none; b=VOvjwQxVR+IcT2RN/gmwcWcbruG2fCdhjPMdPp22d0R2hoyo/NXqT/SyJmRegMe3pECBCsphoOAZR0jXDGR7SGZTNYKRYxRfiEX6A2kXQ8y4ScKXzLHfmJP8T4WBKogAim5K9aa6+bxoQeiuTyQynRePRmT2G5vDIt4smpoF3no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738840100; c=relaxed/simple;
-	bh=r08+YFVePrjR2DESEPzIzQ9ZPHAcHiFWCiN8lH5nWRU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nnoruQBTbgKkmnMyCGIDCQSazAmRefyxwp7RzOVDMEcF5EFMpDtTCdl07gcefvIfK8yqPyOfoICB34pGoh0htKKvr6eE29XhOoTNI8vXeA9O3uNSNet0aqyTJA2DyZv4go23/jyeLM7SvnjojAWBfhjn04bAooqjdqkVkGiCerI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=We8EEd3m; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=UKqqouyRpRkZFe46RA14bQtyVvZtArDhuQtbwJN68Ik=; b=We8EEd3m3YMHf1ronTLetEm7Lw
-	CiS1MXCW6POfbDqJ6nk5MJf+70nGt4J0OCvCx0gnQKCn31nslvmPJJNELhhuXBu0dqMBm4zEtt18u
-	TFiL1RnrEhCN64CZAYCRFH7HmP69IPZ48OXGbO8R3PNesYgNIYIZZe8L/l9gp2azb0JV4GVSp/jEF
-	K0RYRUzou1Tn0kq1Jz9O7cPQHklZhp5XT62jQlrLL8kHlITnKsqzX4Wdz5btKwpQFOjSCbvYGvjLY
-	XnEjf+qlFB/iJLwrhX/LrwacjxTr9CQXjDArrW+AwGP0/hKZ0yH2dlkVYuGDYLjdYGul4F5iRuTKy
-	gvd7fhnw==;
-Received: from [216.24.213.56] (helo=[172.31.28.190])
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tfzjk-00000005tep-24g4;
-	Thu, 06 Feb 2025 11:08:00 +0000
-Message-ID: <f8030dfc5086e4e4e3709d6fcdab1e38f01fc38d.camel@infradead.org>
-Subject: Re: [RFC PATCH 00/39] 1G page support for guest_memfd
-From: Amit Shah <amit@infradead.org>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
-	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
-	fvdl@google.com, jthoughton@google.com, seanjc@google.com,
- pbonzini@redhat.com, 	zhiquan1.li@intel.com, fan.du@intel.com,
- jun.miao@intel.com, 	isaku.yamahata@intel.com, muchun.song@linux.dev,
- mike.kravetz@oracle.com, 	erdemaktas@google.com, vannapurve@google.com,
- qperret@google.com, 	jhubbard@nvidia.com, willy@infradead.org,
- shuah@kernel.org, brauner@kernel.org, 	bfoster@redhat.com,
- kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
-	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
-	ajones@ventanamicro.com, vkuznets@redhat.com,
- maciej.wieczor-retman@intel.com, 	pgonda@google.com,
- oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 	linux-mm@kvack.org,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-fsdevel@kvack.org
-Date: Thu, 06 Feb 2025 12:07:58 +0100
-In-Reply-To: <diqzr04fpgsf.fsf@ackerleytng-ctop-specialist.c.googlers.com>
-References: <diqzr04fpgsf.fsf@ackerleytng-ctop-specialist.c.googlers.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1738842011; c=relaxed/simple;
+	bh=2QtYXCovY3Xqu1ycBuli7PkRZNFYf86VEZxo6OiEFHA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pG2xlyeZ585FrChM9Rb0+a8HwWhIle3wLN5+YZJgWFAxTNXJ7vpCBfZeRMPWXfS8QaNlmXHIiU9WZ9uAy06XCNtgd6+W4nkjELNdEH8rLIZ50yjoYXJ0Lqnz06lhfDJNuPlsEpJvTdOQG1zNpY26Bg9BQA/ZATYj2eloOAL5rFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b6zFIx74; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8FFC4CEDD;
+	Thu,  6 Feb 2025 11:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738842011;
+	bh=2QtYXCovY3Xqu1ycBuli7PkRZNFYf86VEZxo6OiEFHA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=b6zFIx74h1wAx13IHr643JdoSmXHtmmg0WA9KS9mDgTDrgfBjWq5tX+A7qhRAJKfO
+	 gNF21DjdGQ6YfBpR7z9Nkw85eQcwWAWH4X6ENe8HJTgn6Ctv4WJViBaM5kJilsFlpG
+	 8CifvE0YBSOB0w563dHycuMIwjkdD1nLvErYNZuspEo7KMJvz+X/Dm2SoTNv3yQtO3
+	 qltkHKhsWY9+vwd/92GBJccHYTdxvqmACh3/YHSepaGPyH8ZlZvveAM4TV4bH8xaKS
+	 4Xfy5bpKvy3Pz+s1mjN4X4vd1YyxidEl0yvuWUdAIRnC23ewtIrnHR2V4xsdHTRqMU
+	 1gcZkWXp1sEJw==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH RFT v14 0/8] fork: Support shadow stacks in clone3()
+Date: Thu, 06 Feb 2025 11:38:02 +0000
+Message-Id: <20250206-clone3-shadow-stack-v14-0-805b53af73b9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABufpGcC/3XSzU7EIBQF4FcxXVvDvfxdXLnyAYw74wLKxWlm0
+ prWVI2Zd5eO0dbQLoHwAYfzVY08tDxWt1df1cBTO7Z9lwegrq+q5uC7F67bmCcqFChBgKubU9+
+ xrMeDj/17Pb755liDjkpEDElLU+WdrwOn9uPCPlUP94/Vc548tONbP3xejprgsvSDotxEJ6hFH
+ cnYKEL2o7g78tDx6aYfXi7ghAsCoLYRzEgwIBMZAtC6QOQKQbGNyIx4G4ijZPRNUyBqjdA2ojJ
+ CASklVslYUyD6F1ECxU4mOiMSsTFOO2IVCsQsiNkL1mTEMVtLMkAKrkDsglgJ24idM3FaInNIA
+ WKB0IKQ2MmEMiJ8k6RtfAJVButWyE75Jjc/x2C0KjmnjCoQECsFd94DYr6LYbLOBqdU2RT4K60
+ CIfQOM7cWvfEYoolGQ8ngitlLF+beWiDJgQIz2JKRC7NbF5ib62Qg5wm85v+/dD6fvwEIO3f9A
+ QQAAA==
+X-Change-ID: 20231019-clone3-shadow-stack-15d40d2bf536
+To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
+ "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, jannh@google.com, bsegall@google.com, 
+ Yury Khrustalev <yury.khrustalev@arm.com>, 
+ Wilco Dijkstra <wilco.dijkstra@arm.com>, linux-kselftest@vger.kernel.org, 
+ linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+X-Mailer: b4 0.15-dev-1b0d6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7645; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=2QtYXCovY3Xqu1ycBuli7PkRZNFYf86VEZxo6OiEFHA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnpJ+OIxjlve2oOnGv9lMGM3TxzUW+jIx0aEMX6fbO
+ Kl5JPQmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ6SfjgAKCRAk1otyXVSH0BpgB/
+ 9VI/etiH15Ke692TsQL+FtW2YtgxYFuiMSYBHVP9ns7tzv/PR8NWcg8Oa7Jvk1oup7Tj/ekk3WzzPb
+ fY1yjECprEdVuFCK9/OfQMi0gPzhYn5/lUyPOzZccrwjarvmST/I7QLGGfD4K+xK0UCyStx6Ys5CDF
+ PD7CNsod9CWxC/MTg2Hf6Dgt2JsrdV2nvcMetAb4wSjXSnarJf91eqZkXBe3Xco2cFAg7mALZZkmYW
+ rHsX2tTXmScyGVPzpCzmM6/mS6IDRI+IGSjmOtmppsuH7pwrU9LC9yIFDU1Jph79eKc368cdkrl/vw
+ 5BzpbkSzLXzsA8a5lSej0H147bmr1s
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon, 2025-02-03 at 08:35 +0000, Ackerley Tng wrote:
-> Amit Shah <amit@infradead.org> writes:
->=20
-> > Hey Ackerley,
->=20
-> Hi Amit,
->=20
-> > On Tue, 2024-09-10 at 23:43 +0000, Ackerley Tng wrote:
-> > > Hello,
-> > >=20
-> > > This patchset is our exploration of how to support 1G pages in
-> > > guest_memfd, and
-> > > how the pages will be used in Confidential VMs.
-> >=20
-> > We've discussed this patchset at LPC and in the guest-memfd calls.=C2=
-=A0
-> > Can
-> > you please summarise the discussions here as a follow-up, so we can
-> > also continue discussing on-list, and not repeat things that are
-> > already discussed?
->=20
-> Thanks for this question! Since LPC, Vishal and I have been tied up
-> with
-> some Google internal work, which slowed down progress on 1G page
-> support
-> for guest_memfd. We will have progress this quarter and the next few
-> quarters on 1G page support for guest_memfd.
->=20
-> The related updates are
->=20
-> 1. No objections on using hugetlb as the source of 1G pages.
->=20
-> 2. Prerequisite hugetlb changes.
->=20
-> + I've separated some of the prerequisite hugetlb changes into
-> another
-> =C2=A0 patch series hoping to have them merged ahead of and separately
-> from
-> =C2=A0 this patchset [1].
-> + Peter Xu contributed a better patchset, including a bugfix [2].
-> + I have an alternative [3].
-> + The next revision of this series (1G page support for guest_memfd)
-> =C2=A0 will be based on alternative [3]. I think there should be no issue=
-s
-> =C2=A0 there.
-> + I believe Peter is also waiting on the next revision before we make
-> =C2=A0 further progress/decide on [2] or [3].
->=20
-> 3. No objections for allowing mmap()-ing of guest_memfd physical
-> memory
-> =C2=A0=C2=A0 when memory is marked shared to avoid double-allocation.
->=20
-> 4. No objections for splitting pages when marked shared.
->=20
-> 5. folio_put() callback for guest_memfd folio cleanup/merging.
->=20
-> + In Fuad's series [4], Fuad used the callback to reset the folio's
-> =C2=A0 mappability status.
-> + The catch is that the callback is only invoked when folio-
-> >page_type
-> =C2=A0 =3D=3D PGTY_guest_memfd, and folio->page_type is a union with foli=
-o's
-> =C2=A0 mapcount, so any folio with a non-zero mapcount cannot have a vali=
-d
-> =C2=A0 page_type.
-> + I was concerned that we might not get a callback, and hence
-> =C2=A0 unintentionally skip merging pages and not correctly restore
-> hugetlb
-> =C2=A0 pages
-> + This was discussed at the last guest_memfd upstream call (2025-01-
-> 23
-> =C2=A0 07:58 PST), and the conclusion is that using folio->page_type
-> works,
-> =C2=A0 because
-> =C2=A0=C2=A0=C2=A0 + We only merge folios in two cases: (1) when converti=
-ng to
-> private
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (2) when truncating folios (removing from =
-filemap).
-> =C2=A0=C2=A0=C2=A0 + When converting to private, in (1), we can forcibly =
-unmap all
-> the
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 converted pages or check if the mapcount i=
-s 0, and once
-> mapcount
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 is 0 we can install the callback by settin=
-g folio->page_type =3D
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 PGTY_guest_memfd
-> =C2=A0=C2=A0=C2=A0 + When truncating, we will be unmapping the folios any=
-way, so
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mapcount is also 0 and we can install the =
-callback.
->=20
-> Hope that covers the points that you're referring to. If there are
-> other
-> parts that you'd like to know the status on, please let me know which
-> aspects those are!
+The kernel has recently added support for shadow stacks, currently
+x86 only using their CET feature but both arm64 and RISC-V have
+equivalent features (GCS and Zicfiss respectively), I am actively
+working on GCS[1].  With shadow stacks the hardware maintains an
+additional stack containing only the return addresses for branch
+instructions which is not generally writeable by userspace and ensures
+that any returns are to the recorded addresses.  This provides some
+protection against ROP attacks and making it easier to collect call
+stacks.  These shadow stacks are allocated in the address space of the
+userspace process.
 
-Thank you for the nice summary!
+Our API for shadow stacks does not currently offer userspace any
+flexiblity for managing the allocation of shadow stacks for newly
+created threads, instead the kernel allocates a new shadow stack with
+the same size as the normal stack whenever a thread is created with the
+feature enabled.  The stacks allocated in this way are freed by the
+kernel when the thread exits or shadow stacks are disabled for the
+thread.  This lack of flexibility and control isn't ideal, in the vast
+majority of cases the shadow stack will be over allocated and the
+implicit allocation and deallocation is not consistent with other
+interfaces.  As far as I can tell the interface is done in this manner
+mainly because the shadow stack patches were in development since before
+clone3() was implemented.
 
-> > Also - as mentioned in those meetings, we at AMD are interested in
-> > this
-> > series along with SEV-SNP support - and I'm also interested in
-> > figuring
-> > out how we collaborate on the evolution of this series.
->=20
-> Thanks all your help and comments during the guest_memfd upstream
-> calls,
-> and thanks for the help from AMD.
->=20
-> Extending mmap() support from Fuad with 1G page support introduces
-> more
-> states that made it more complicated (at least for me).
->=20
-> I'm modeling the states in python so I can iterate more quickly. I
-> also
-> have usage flows (e.g. allocate, guest_use, host_use,
-> transient_folio_get, close, transient_folio_put) as test cases.
->=20
-> I'm almost done with the model and my next steps are to write up a
-> state
-> machine (like Fuad's [5]) and share that.
->=20
-> I'd be happy to share the python model too but I have to work through
-> some internal open-sourcing processes first, so if you think this
-> will
-> be useful, let me know!
+Since clone3() is readily extensible let's add support for specifying a
+shadow stack when creating a new thread or process, keeping the current
+implicit allocation behaviour if one is not specified either with
+clone3() or through the use of clone().  The user must provide a shadow
+stack pointer, this must point to memory mapped for use as a shadow
+stackby map_shadow_stack() with an architecture specified shadow stack
+token at the top of the stack.
 
-No problem.  Yes, I'm interested in this - it'll be helpful!
+Please note that the x86 portions of this code are build tested only, I
+don't appear to have a system that can run CET available to me.
 
-The other thing of note is that while we have the kernel patches, a
-userspace to drive them and exercise them is currently missing.
+[1] https://lore.kernel.org/linux-arm-kernel/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org/T/#mc58f97f27461749ccf400ebabf6f9f937116a86b
 
-> Then, I'll code it all up in a new revision of this series (target:
-> March 2025), which will be accompanied by source code on GitHub.
->=20
-> I'm happy to collaborate more closely, let me know if you have ideas
-> for
-> collaboration!
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v14:
+- Rebase onto v6.14-rc1.
+- Link to v13: https://lore.kernel.org/r/20241203-clone3-shadow-stack-v13-0-93b89a81a5ed@kernel.org
 
-Thank you.  I think currently the bigger problem we have is allocation
-of hugepages -- which is also blocking a lot of the follow-on work.=20
-Vishal briefly mentioned isolating pages from Linux entirely last time
-- that's also what I'm interested in to figure out if we can completely
-bypass the allocation problem by not allocating struct pages for non-
-host use pages entirely.  The guest_memfs/KHO/kexec/live-update patches
-also take this approach on AWS (for how their VMs are launched).  If we
-work with those patches together, allocation of 1G hugepages is
-simplified.  I'd like to discuss more on these themes to see if this is
-an approach that helps as well.
+Changes in v13:
+- Rebase onto v6.13-rc1.
+- Link to v12: https://lore.kernel.org/r/20241031-clone3-shadow-stack-v12-0-7183eb8bee17@kernel.org
 
+Changes in v12:
+- Add the regular prctl() to the userspace API document since arm64
+  support is queued in -next.
+- Link to v11: https://lore.kernel.org/r/20241005-clone3-shadow-stack-v11-0-2a6a2bd6d651@kernel.org
 
-		Amit
+Changes in v11:
+- Rebase onto arm64 for-next/gcs, which is based on v6.12-rc1, and
+  integrate arm64 support.
+- Rework the interface to specify a shadow stack pointer rather than a
+  base and size like we do for the regular stack.
+- Link to v10: https://lore.kernel.org/r/20240821-clone3-shadow-stack-v10-0-06e8797b9445@kernel.org
+
+Changes in v10:
+- Integrate fixes & improvements for the x86 implementation from Rick
+  Edgecombe.
+- Require that the shadow stack be VM_WRITE.
+- Require that the shadow stack base and size be sizeof(void *) aligned.
+- Clean up trailing newline.
+- Link to v9: https://lore.kernel.org/r/20240819-clone3-shadow-stack-v9-0-962d74f99464@kernel.org
+
+Changes in v9:
+- Pull token validation earlier and report problems with an error return
+  to parent rather than signal delivery to the child.
+- Verify that the top of the supplied shadow stack is VM_SHADOW_STACK.
+- Rework token validation to only do the page mapping once.
+- Drop no longer needed support for testing for signals in selftest.
+- Fix typo in comments.
+- Link to v8: https://lore.kernel.org/r/20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org
+
+Changes in v8:
+- Fix token verification with user specified shadow stack.
+- Don't track user managed shadow stacks for child processes.
+- Link to v7: https://lore.kernel.org/r/20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org
+
+Changes in v7:
+- Rebase onto v6.11-rc1.
+- Typo fixes.
+- Link to v6: https://lore.kernel.org/r/20240623-clone3-shadow-stack-v6-0-9ee7783b1fb9@kernel.org
+
+Changes in v6:
+- Rebase onto v6.10-rc3.
+- Ensure we don't try to free the parent shadow stack in error paths of
+  x86 arch code.
+- Spelling fixes in userspace API document.
+- Additional cleanups and improvements to the clone3() tests to support
+  the shadow stack tests.
+- Link to v5: https://lore.kernel.org/r/20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org
+
+Changes in v5:
+- Rebase onto v6.8-rc2.
+- Rework ABI to have the user allocate the shadow stack memory with
+  map_shadow_stack() and a token.
+- Force inlining of the x86 shadow stack enablement.
+- Move shadow stack enablement out into a shared header for reuse by
+  other tests.
+- Link to v4: https://lore.kernel.org/r/20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org
+
+Changes in v4:
+- Formatting changes.
+- Use a define for minimum shadow stack size and move some basic
+  validation to fork.c.
+- Link to v3: https://lore.kernel.org/r/20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org
+
+Changes in v3:
+- Rebase onto v6.7-rc2.
+- Remove stale shadow_stack in internal kargs.
+- If a shadow stack is specified unconditionally use it regardless of
+  CLONE_ parameters.
+- Force enable shadow stacks in the selftest.
+- Update changelogs for RISC-V feature rename.
+- Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
+
+Changes in v2:
+- Rebase onto v6.7-rc1.
+- Remove ability to provide preallocated shadow stack, just specify the
+  desired size.
+- Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
+
+---
+Mark Brown (8):
+      arm64/gcs: Return a success value from gcs_alloc_thread_stack()
+      Documentation: userspace-api: Add shadow stack API documentation
+      selftests: Provide helper header for shadow stack testing
+      fork: Add shadow stack support to clone3()
+      selftests/clone3: Remove redundant flushes of output streams
+      selftests/clone3: Factor more of main loop into test_clone3()
+      selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
+      selftests/clone3: Test shadow stack support
+
+ Documentation/userspace-api/index.rst             |   1 +
+ Documentation/userspace-api/shadow_stack.rst      |  44 +++++
+ arch/arm64/include/asm/gcs.h                      |   8 +-
+ arch/arm64/kernel/process.c                       |   8 +-
+ arch/arm64/mm/gcs.c                               |  62 +++++-
+ arch/x86/include/asm/shstk.h                      |  11 +-
+ arch/x86/kernel/process.c                         |   2 +-
+ arch/x86/kernel/shstk.c                           |  57 +++++-
+ include/asm-generic/cacheflush.h                  |  11 ++
+ include/linux/sched/task.h                        |  17 ++
+ include/uapi/linux/sched.h                        |  10 +-
+ kernel/fork.c                                     |  96 +++++++--
+ tools/testing/selftests/clone3/clone3.c           | 226 ++++++++++++++++++----
+ tools/testing/selftests/clone3/clone3_selftests.h |  65 ++++++-
+ tools/testing/selftests/ksft_shstk.h              |  98 ++++++++++
+ 15 files changed, 635 insertions(+), 81 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20231019-clone3-shadow-stack-15d40d2bf536
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
