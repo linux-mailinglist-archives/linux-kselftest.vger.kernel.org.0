@@ -1,309 +1,338 @@
-Return-Path: <linux-kselftest+bounces-25887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A687CA2A0A9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 07:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83609A2A108
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 07:40:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 784851888D0E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 06:06:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BE65188633E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 06:40:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D273224AE2;
-	Thu,  6 Feb 2025 06:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mRU9rlOB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4F722489A;
+	Thu,  6 Feb 2025 06:40:06 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F702248B5;
-	Thu,  6 Feb 2025 06:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6F92144A8;
+	Thu,  6 Feb 2025 06:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738821920; cv=none; b=dpfwtLGJO5xQsiPSpqNPQv3RpyRyjJ9+8ayAMVJrMjkEgOc4W/0xVOhr5kwuQcObxhOkKQrDENXDMnn8AIlU6ZGodt/vp+QF95X2MWPQDrlhYCph5d9Ge7aQXCOthIIb8ERJCz+/Az3L9oH1hY0BkF881Va1N14RlyvCtR03DIo=
+	t=1738824006; cv=none; b=ghgHh8I0O99bXXPpISgAdgzmoMVpphkneOUIgxyeXRdXHnAnAchml2g3iW/Z5Y2ljjkv90MvZzGSVmmwS7BrT6curNEGPXNgzeRkQ62FWtwNYWgeviN+3b0TC/X69b+MaDDbkL1kfjdaE1rJlW9VKQLFWPo8G4Qyf8H2v6DPnKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738821920; c=relaxed/simple;
-	bh=h5F9ULWX/IazPkL53mq2S83VDIY5FdzebPtuIVDlMQ0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sQpQf5m6B0+RgjMFAbMXHcNCAI45S57V2I3YGizk3rAYtXlR8psYZS0bwa+hBxXBdpBbQRiT9aIG5KEvbmt/+4e5JV58tBB9Sav/nE5DhPPi+lWoW9oKJuHYbXMR5OTFBJdAJl4m64nKrL43iMTx/pMKBH1RhyKjKoX5HVRfRKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mRU9rlOB; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738821918; x=1770357918;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=h5F9ULWX/IazPkL53mq2S83VDIY5FdzebPtuIVDlMQ0=;
-  b=mRU9rlOB/W7zYMaaRGcjn7Ok/ARLC5awt3WjQCIzEBJwfdhuf8ENas0g
-   6qQNJEbZfg5pP+Ze2Hj6EKFX2MiD59xSpluTBzfMERkMLbnvdyXFXDQ9N
-   5azKkqGX65b2QVrtGZZ59YE1H3C5qjccijy0BQyw4SHBoYKHasE+LoKCT
-   havTQv3wMJ8qV5VFUGZj5IuFkJJjHPT6D2v0/yMPyaUUbPo3a4tmt1yku
-   5tSrjpISuUx3J2Kf5J4kwSugIked9Oxbtfli1NJozno/i15ydeFjR6WWW
-   09A4MRNxlC1Cavyokvg/Wubgmpb57JHxjSWmUMEM2vcxRCl087JAKDNnI
-   w==;
-X-CSE-ConnectionGUID: CjcbOV9DTO6Lh4Wg7/VRqA==
-X-CSE-MsgGUID: e8C4nPi7S1GVgl1Fv1QPtQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50051192"
-X-IronPort-AV: E=Sophos;i="6.13,263,1732608000"; 
-   d="scan'208";a="50051192"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 22:05:16 -0800
-X-CSE-ConnectionGUID: PVvGlUBRQKWV9apBj3Iv9Q==
-X-CSE-MsgGUID: 7AIUXagISJW44G3R9VFWTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,263,1732608000"; 
-   d="scan'208";a="110944383"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.38])
-  by fmviesa006.fm.intel.com with ESMTP; 05 Feb 2025 22:05:05 -0800
-From: Song Yoong Siang <yoong.siang.song@intel.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Bezdeka <florian.bezdeka@siemens.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Bjorn Topel <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Joe Damato <jdamato@fastly.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Daniel Jurgens <danielj@nvidia.com>,
-	Song Yoong Siang <yoong.siang.song@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
-	Choong Yong Liang <yong.liang.choong@linux.intel.com>,
-	Bouska Zdenek <zdenek.bouska@siemens.com>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	intel-wired-lan@lists.osuosl.org,
-	xdp-hints@xdp-project.net
-Subject: [PATCH bpf-next v9 5/5] igc: Add launch time support to XDP ZC
-Date: Thu,  6 Feb 2025 14:04:08 +0800
-Message-Id: <20250206060408.808325-6-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250206060408.808325-1-yoong.siang.song@intel.com>
-References: <20250206060408.808325-1-yoong.siang.song@intel.com>
+	s=arc-20240116; t=1738824006; c=relaxed/simple;
+	bh=7xpXBJ9Lct3Eb6YdnfEBSq/oPX/CLPtDoIf+rWTizSs=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=QiqDaKQ8vBxSAChvgM6K2Xshoq6OvVuBBX/N41/YsoMmDavTqc4GCPzybP8TAg4yaoJ+oJ575bAxr2ITqrQ0nBwdK1fORutE8xTT88iypwK1U15zzFE/jhbCm6oN4CCmqOwkgJlg6YWmxERxQldGlxGTilABDwfSpQ98tlFarhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YpSBd5jZyz4f3jQv;
+	Thu,  6 Feb 2025 14:39:37 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id E46B51A148C;
+	Thu,  6 Feb 2025 14:39:58 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP4 (Coremail) with SMTP id gCh0CgB32Fw4WaRnSh82DA--.50974S2;
+	Thu, 06 Feb 2025 14:39:56 +0800 (CST)
+Subject: Re: [PATCH bpf] bpf: skip non existing key in
+ generic_map_lookup_batch
+To: Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
+References: <Z6OYbS4WqQnmzi2z@debian.debian>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <5f6610a1-3cd0-764e-0f49-91af1004ea50@huaweicloud.com>
+Date: Thu, 6 Feb 2025 14:39:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z6OYbS4WqQnmzi2z@debian.debian>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:gCh0CgB32Fw4WaRnSh82DA--.50974S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF4xAFy7Kr15tw43tr1DKFg_yoWfZF1kpF
+	WrCFnrGr4kWrW8t3y2ya47XFWv9r18Kw1jyas5J3s0krn7Wr17Cr10ka9rtry3uF1kZr1a
+	va12qryrXayYyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07jIksgUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-Enable Launch Time Control (LTC) support for XDP zero copy via XDP Tx
-metadata framework.
+Hi,
 
-This patch has been tested with tools/testing/selftests/bpf/xdp_hw_metadata
-on Intel I225-LM Ethernet controller. Below are the test steps and result.
+On 2/6/2025 12:57 AM, Yan Zhai wrote:
+> The generic_map_lookup_batch currently returns EINTR if it fails with
+> ENOENT and retries several times on bpf_map_copy_value. The next batch
+> would start from the same location, presuming it's a transient issue.
+> This is incorrect if a map can actually have "holes", i.e.
+> "get_next_key" can return a key that does not point to a valid value. At
+> least the array of maps type may contain such holes legitly. Right now
+> these holes show up, generic batch lookup cannot proceed any more. It
+> will always fail with EINTR errors.
+>
+> Rather, do not retry in generic_map_lookup_batch. If it finds a non
+> existing element, skip to the next key.
+>
+> Fixes: cb4d03ab499d ("bpf: Add generic support for lookup batch op")
+> Closes: https://lore.kernel.org/bpf/Z6JXtA1M5jAZx8xD@debian.debian/
+> Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> ---
+>  kernel/bpf/syscall.c                          | 16 ++----
+>  .../bpf/map_tests/map_in_map_batch_ops.c      | 54 ++++++++++++++-----
+>  2 files changed, 45 insertions(+), 25 deletions(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c420edbfb7c8..5691fc0d370d 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1979,7 +1979,7 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  	void __user *values = u64_to_user_ptr(attr->batch.values);
+>  	void __user *keys = u64_to_user_ptr(attr->batch.keys);
+>  	void *buf, *buf_prevkey, *prev_key, *key, *value;
+> -	int err, retry = MAP_LOOKUP_RETRIES;
+> +	int err;
+>  	u32 value_size, cp, max_count;
+>  
+>  	if (attr->batch.elem_flags & ~BPF_F_LOCK)
+> @@ -2026,14 +2026,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  		err = bpf_map_copy_value(map, key, value,
+>  					 attr->batch.elem_flags);
+>  
+> -		if (err == -ENOENT) {
+> -			if (retry) {
+> -				retry--;
+> -				continue;
+> -			}
+> -			err = -EINTR;
+> -			break;
+> -		}
+> +		if (err == -ENOENT)
+> +			goto next_key;
+>  
+>  		if (err)
+>  			goto free_buf;
+> @@ -2048,12 +2042,12 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  			goto free_buf;
+>  		}
+>  
+> +		cp++;
+> +next_key:
+>  		if (!prev_key)
+>  			prev_key = buf_prevkey;
+>  
+>  		swap(prev_key, key);
+> -		retry = MAP_LOOKUP_RETRIES;
+> -		cp++;
+>  		cond_resched();
+>  	}
+>  
 
-Test 1: Send a single packet with the launch time set to 1 s in the future.
+Let's move the new thread for further discussion.
 
-Test steps:
-1. On the DUT, start the xdp_hw_metadata selftest application:
-   $ sudo ./xdp_hw_metadata enp2s0 -l 1000000000 -L 1
+>We are probably not on the same page. Let me clarify:
 
-2. On the Link Partner, send a UDP packet with VLAN priority 1 to port 9091
-   of the DUT.
+>By "retry logic" I mean this code snippet:
+>               if (err == -ENOENT) {
+>                       if (retry) {
+>                               retry--;
+>                               continue;
+>                       }
+>                       err = -EINTR;
+>                       break;
+>               }
 
-Result:
-When the launch time is set to 1 s in the future, the delta between the
-launch time and the transmit hardware timestamp is 0.016 us, as shown in
-printout of the xdp_hw_metadata application below.
-  0x562ff5dc8880: rx_desc[4]->addr=84110 addr=84110 comp_addr=84110 EoP
-  rx_hash: 0xE343384 with RSS type:0x1
-  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
-                delta to User RX-time sec:0.0002 (183.103 usec)
-  XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
-                 delta to User RX-time sec:0.0001 (80.309 usec)
-  No rx_vlan_tci or rx_vlan_proto, err=-95
-  0x562ff5dc8880: ping-pong with csum=561c (want c7dd)
-                  csum_start=34 csum_offset=6
-  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
-                delta to HW Launch-time sec:1.0000 (1000000.000 usec)
-  0x562ff5dc8880: complete tx idx=4 addr=4018
-  HW Launch-time:   1734578016467548904 (sec:1734578016.4675)
-                    delta to HW TX-complete-time sec:0.0000 (0.016 usec)
-  HW TX-complete-time:   1734578016467548920 (sec:1734578016.4675)
-                         delta to User TX-complete-time sec:0.0000
-                         (32.546 usec)
-  XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
-                 delta to User TX-complete-time sec:0.9999
-                 (999929.768 usec)
-  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
-                delta to HW TX-complete-time sec:1.0000 (1000000.016 usec)
-  0x562ff5dc8880: complete rx idx=132 addr=84110
 
-Test 2: Send 1000 packets with a 10 ms interval and the launch time set to
-        500 us in the future.
+Yes, the retry logic doesn't change the previous key. Thanks for the
+clarifying.
+> And by "skipping to the next key", it's simply
+>
+>   if (err == -ENOENT)
+>        goto next_key;
+>
+> Note the "next_key" label was not in the current codebase. It is only
+> in my posted patch. I don't think this would break lpm_trie unless I
+> missed something.
 
-Test steps:
-1. On the DUT, start the xdp_hw_metadata selftest application:
-   $ sudo chrt -f 99 ./xdp_hw_metadata enp2s0 -l 500000 -L 1 > \
-     /dev/shm/result.log
+I was trying to say that the proposed patch may break the lookup_batch
+operation for lpm_trie, and let me explain step by step:
 
-2. On the Link Partner, send 1000 UDP packets with a 10 ms interval and
-   VLAN priority 1 to port 9091 of the DUT.
+For LPM trie map:
+(1) ->map_get_next_key(map, prev_key, key) returns a valid key
 
-Result:
-When the launch time is set to 500 us in the future, the average delta
-between the launch time and the transmit hardware timestamp is 0.016 us,
-as shown in the analysis of /dev/shm/result.log below. The XDP launch time
-works correctly in sending 1000 packets continuously.
-  Min delta: 0.005 us
-  Avr delta: 0.016 us
-  Max delta: 0.031 us
-  Total packets forwarded: 1000
+(2) bpf_map_copy_value() return -ENOMENT
+It means the key must be deleted concurrently.
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- drivers/net/ethernet/intel/igc/igc.h      |  1 +
- drivers/net/ethernet/intel/igc/igc_main.c | 57 ++++++++++++++++++++++-
- 2 files changed, 56 insertions(+), 2 deletions(-)
+(3) goto next_key
+It swaps the prev_key and key
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index b8111ad9a9a8..cd1d7b6c1782 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -579,6 +579,7 @@ struct igc_metadata_request {
- 	struct xsk_tx_metadata *meta;
- 	struct igc_ring *tx_ring;
- 	u32 cmd_type;
-+	u16 used_desc;
- };
- 
- struct igc_q_vector {
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 3df608601a4b..f239f744247d 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -2973,9 +2973,44 @@ static u64 igc_xsk_fill_timestamp(void *_priv)
- 	return *(u64 *)_priv;
- }
- 
-+static void igc_xsk_request_launch_time(u64 launch_time, void *_priv)
-+{
-+	struct igc_metadata_request *meta_req = _priv;
-+	struct igc_ring *tx_ring = meta_req->tx_ring;
-+	__le32 launch_time_offset;
-+	bool insert_empty = false;
-+	bool first_flag = false;
-+
-+	if (!tx_ring->launchtime_enable)
-+		return;
-+
-+	launch_time_offset = igc_tx_launchtime(tx_ring,
-+					       ns_to_ktime(launch_time),
-+					       &first_flag, &insert_empty);
-+	if (insert_empty) {
-+		/* Disregard the launch time request if the required empty frame
-+		 * fails to be inserted.
-+		 */
-+		if (igc_insert_empty_frame(tx_ring))
-+			return;
-+
-+		meta_req->tx_buffer =
-+			&tx_ring->tx_buffer_info[tx_ring->next_to_use];
-+		/* Inserting an empty packet requires two descriptors:
-+		 * one data descriptor and one context descriptor.
-+		 */
-+		meta_req->used_desc += 2;
-+	}
-+
-+	/* Use one context descriptor to specify launch time and first flag. */
-+	igc_tx_ctxtdesc(tx_ring, launch_time_offset, first_flag, 0, 0, 0);
-+	meta_req->used_desc += 1;
-+}
-+
- const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
- 	.tmo_request_timestamp		= igc_xsk_request_timestamp,
- 	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
-+	.tmo_request_launch_time	= igc_xsk_request_launch_time,
- };
- 
- static void igc_xdp_xmit_zc(struct igc_ring *ring)
-@@ -2998,7 +3033,13 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 	ntu = ring->next_to_use;
- 	budget = igc_desc_unused(ring);
- 
--	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
-+	/* Packets with launch time require one data descriptor and one context
-+	 * descriptor. When the launch time falls into the next Qbv cycle, we
-+	 * may need to insert an empty packet, which requires two more
-+	 * descriptors. Therefore, to be safe, we always ensure we have at least
-+	 * 4 descriptors available.
-+	 */
-+	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget >= 4) {
- 		struct igc_metadata_request meta_req;
- 		struct xsk_tx_metadata *meta = NULL;
- 		struct igc_tx_buffer *bi;
-@@ -3019,9 +3060,19 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		meta_req.tx_ring = ring;
- 		meta_req.tx_buffer = bi;
- 		meta_req.meta = meta;
-+		meta_req.used_desc = 0;
- 		xsk_tx_metadata_request(meta, &igc_xsk_tx_metadata_ops,
- 					&meta_req);
- 
-+		/* xsk_tx_metadata_request() may have updated next_to_use */
-+		ntu = ring->next_to_use;
-+
-+		/* xsk_tx_metadata_request() may have updated Tx buffer info */
-+		bi = meta_req.tx_buffer;
-+
-+		/* xsk_tx_metadata_request() may use a few descriptors */
-+		budget -= meta_req.used_desc;
-+
- 		tx_desc = IGC_TX_DESC(ring, ntu);
- 		tx_desc->read.cmd_type_len = cpu_to_le32(meta_req.cmd_type);
- 		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
-@@ -3039,9 +3090,11 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		ntu++;
- 		if (ntu == ring->count)
- 			ntu = 0;
-+
-+		ring->next_to_use = ntu;
-+		budget--;
- 	}
- 
--	ring->next_to_use = ntu;
- 	if (tx_desc) {
- 		igc_flush_tx_descriptors(ring);
- 		xsk_tx_release(pool);
--- 
-2.34.1
+(4) ->map_get_next_key(map, prev_key, key) again
+prev_key points to a non-existing key, for LPM trie it will treat just
+like prev_key=NULL case, the returned key will be duplicated.
+
+
+> diff --git a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+> index 66191ae9863c..b38be71f06be 100644
+
+It is better to split the update of map_tests into a separated patch and
+it will be more friendly for stable backport.
+> --- a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+> +++ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+> @@ -120,11 +120,12 @@ static void validate_fetch_results(int outer_map_fd,
+>  
+>  static void fetch_and_validate(int outer_map_fd,
+>  			       struct bpf_map_batch_opts *opts,
+> -			       __u32 batch_size, bool delete_entries)
+> +			       __u32 batch_size, bool delete_entries,
+> +			       bool has_holes)
+>  {
+> +	int err, max_entries = OUTER_MAP_ENTRIES - !!has_holes;
+>  	__u32 *fetched_keys, *fetched_values, total_fetched = 0;
+>  	__u32 batch_key = 0, fetch_count, step_size;
+> -	int err, max_entries = OUTER_MAP_ENTRIES;
+>  	__u32 value_size = sizeof(__u32);
+>  
+>  	/* Total entries needs to be fetched */
+> @@ -135,9 +136,9 @@ static void fetch_and_validate(int outer_map_fd,
+>  	      "error=%s\n", strerror(errno));
+>  
+>  	for (step_size = batch_size;
+> -	     step_size <= max_entries;
+> +	     step_size < max_entries + batch_size; /* allow read partial */
+>  	     step_size += batch_size) {
+> -		fetch_count = step_size;
+> +		fetch_count = batch_size;
+
+The change "fetch_count = batch_size" may fail the lookup batch
+operation of hash table, because the element in one bucket may be
+greater than batch_size and it will return -ENOSPC constantly. And it
+seems the original implementation of fetch_and_validate() is buggy,
+because for hash map, the returned fetched_count may be less than the
+passed count when there are too many elements in the same bucket. I
+don't know the reason why the bug doesn't show up.
+>  		err = delete_entries
+>  		      ? bpf_map_lookup_and_delete_batch(outer_map_fd,
+>  				      total_fetched ? &batch_key : NULL,
+> @@ -184,18 +185,19 @@ static void fetch_and_validate(int outer_map_fd,
+>  }
+>  
+>  static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+> -				  enum bpf_map_type inner_map_type)
+> +				  enum bpf_map_type inner_map_type,
+> +				  bool has_holes)
+>  {
+> +	__u32 max_entries = OUTER_MAP_ENTRIES - !!has_holes;
+>  	__u32 *outer_map_keys, *inner_map_fds;
+> -	__u32 max_entries = OUTER_MAP_ENTRIES;
+>  	LIBBPF_OPTS(bpf_map_batch_opts, opts);
+>  	__u32 value_size = sizeof(__u32);
+>  	int batch_size[2] = {5, 10};
+>  	__u32 map_index, op_index;
+>  	int outer_map_fd, ret;
+>  
+> -	outer_map_keys = calloc(max_entries, value_size);
+> -	inner_map_fds = calloc(max_entries, value_size);
+> +	outer_map_keys = calloc(OUTER_MAP_ENTRIES, value_size);
+> +	inner_map_fds = calloc(OUTER_MAP_ENTRIES, value_size);
+>  	CHECK((!outer_map_keys || !inner_map_fds),
+>  	      "Memory allocation failed for outer_map_keys or inner_map_fds",
+>  	      "error=%s\n", strerror(errno));
+> @@ -209,6 +211,24 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+>  			((outer_map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
+>  			 ? 9 : 1000) - map_index;
+>  
+> +	/* This condition is only meaningful for array of maps.
+> +	 *
+> +	 * max_entries == OUTER_MAP_ENTRIES - 1 if it is true. Say
+> +	 * max_entries is short for n, then outer_map_keys looks like:
+> +	 *
+> +	 *   [n, n-1, ... 2, 1]
+> +	 *
+> +	 * We change it to
+> +	 *
+> +	 *   [n, n-1, ... 2, 0]
+> +	 *
+> +	 * So it will leave key 1 as a hole. It will serve to test the
+> +	 * correctness when batch on an array: a "non-exist" key might be
+> +	 * actually allocated and returned from key iteration.
+> +	 */
+> +	if (has_holes)
+> +		outer_map_keys[max_entries - 1]--;
+> +
+>  	/* batch operation - map_update */
+>  	ret = bpf_map_update_batch(outer_map_fd, outer_map_keys,
+>  				   inner_map_fds, &max_entries, &opts);
+> @@ -219,12 +239,14 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+>  	/* batch operation - map_lookup */
+>  	for (op_index = 0; op_index < 2; ++op_index)
+>  		fetch_and_validate(outer_map_fd, &opts,
+> -				   batch_size[op_index], false);
+> +				   batch_size[op_index], false,
+> +				   has_holes);
+>  
+>  	/* batch operation - map_lookup_delete */
+>  	if (outer_map_type == BPF_MAP_TYPE_HASH_OF_MAPS)
+>  		fetch_and_validate(outer_map_fd, &opts,
+> -				   max_entries, true /*delete*/);
+> +				   max_entries, true /*delete*/,
+> +				   has_holes);
+>  
+>  	/* close all map fds */
+>  	for (map_index = 0; map_index < max_entries; map_index++)
+
+OUTER_MAP_ENTRIES instead of max_entries ?
+> @@ -237,16 +259,20 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+>  
+>  void test_map_in_map_batch_ops_array(void)
+>  {
+> -	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY);
+> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY, false);
+>  	printf("%s:PASS with inner ARRAY map\n", __func__);
+> -	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH);
+> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH, false);
+>  	printf("%s:PASS with inner HASH map\n", __func__);
+> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY, true);
+> +	printf("%s:PASS with inner ARRAY map with holes\n", __func__);
+> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH, true);
+> +	printf("%s:PASS with inner HASH map with holes\n", __func__);
+>  }
+>  
+>  void test_map_in_map_batch_ops_hash(void)
+>  {
+> -	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY);
+> +	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY, false);
+>  	printf("%s:PASS with inner ARRAY map\n", __func__);
+> -	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH);
+> +	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH, false);
+>  	printf("%s:PASS with inner HASH map\n", __func__);
+>  }
 
 
