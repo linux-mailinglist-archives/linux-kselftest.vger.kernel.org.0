@@ -1,338 +1,154 @@
-Return-Path: <linux-kselftest+bounces-25888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83609A2A108
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 07:40:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7F4BA2A19F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 07:53:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BE65188633E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 06:40:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4E921681AA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2025 06:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4F722489A;
-	Thu,  6 Feb 2025 06:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00821224B11;
+	Thu,  6 Feb 2025 06:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="F0mlw8j/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6F92144A8;
-	Thu,  6 Feb 2025 06:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED64A22257A
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Feb 2025 06:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738824006; cv=none; b=ghgHh8I0O99bXXPpISgAdgzmoMVpphkneOUIgxyeXRdXHnAnAchml2g3iW/Z5Y2ljjkv90MvZzGSVmmwS7BrT6curNEGPXNgzeRkQ62FWtwNYWgeviN+3b0TC/X69b+MaDDbkL1kfjdaE1rJlW9VKQLFWPo8G4Qyf8H2v6DPnKk=
+	t=1738824816; cv=none; b=XP9JOAwMr6x1Cqs7lC6zQhCdOqVUP4MFxghpKn5UeUNI4giR9M+Coy4OMFalriKwdYUbmM6HUKwuwVqK1ylGW7P5HEgoL46l+EYNCQYC6ghLPAQtMP47NcSdADN9o+XUEq6679+Ouvp11oW7lPWhXfmRuGR6ZQk271Z4vmU89Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738824006; c=relaxed/simple;
-	bh=7xpXBJ9Lct3Eb6YdnfEBSq/oPX/CLPtDoIf+rWTizSs=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=QiqDaKQ8vBxSAChvgM6K2Xshoq6OvVuBBX/N41/YsoMmDavTqc4GCPzybP8TAg4yaoJ+oJ575bAxr2ITqrQ0nBwdK1fORutE8xTT88iypwK1U15zzFE/jhbCm6oN4CCmqOwkgJlg6YWmxERxQldGlxGTilABDwfSpQ98tlFarhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YpSBd5jZyz4f3jQv;
-	Thu,  6 Feb 2025 14:39:37 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id E46B51A148C;
-	Thu,  6 Feb 2025 14:39:58 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP4 (Coremail) with SMTP id gCh0CgB32Fw4WaRnSh82DA--.50974S2;
-	Thu, 06 Feb 2025 14:39:56 +0800 (CST)
-Subject: Re: [PATCH bpf] bpf: skip non existing key in
- generic_map_lookup_batch
-To: Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
-References: <Z6OYbS4WqQnmzi2z@debian.debian>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <5f6610a1-3cd0-764e-0f49-91af1004ea50@huaweicloud.com>
-Date: Thu, 6 Feb 2025 14:39:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1738824816; c=relaxed/simple;
+	bh=QFOprhmkYAckDmLpj8OaQpl0QIRArOwxk2YuENHmzqo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rGXWu05JoytkegCVectR9xDp/efO6qh0siHXOXm5T9sqmh537lfaz9SKgmjlfH7PDkTIA/YkvQhv9sdGHEzADjUz73r+bc5A8ILvLiDmm8Cc1jXdzNVQ6W4T4AC/O3vElbvsO6fSMJtj4jsUAqvoq2s4dv0XsTZpbdEqf28j4YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=F0mlw8j/; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2f9bd7c480eso1012717a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2025 22:53:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1738824813; x=1739429613; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yfPzJgqGwInu62D/JbABqcLSTAUY1ivE7x32/lUlB+s=;
+        b=F0mlw8j/AG0MKEBcdJHMFfXXcLJ0ZHP9/2K6J65yteNpK+qdNKxi18sDLlaF6onQnk
+         7c70gicAMlBwDxssr+lPqXbLewbQ61RYZzGZA9AY1cZ3ojHEeFqPVvWp2W6wq6PdJ2bE
+         dhHzIGyD5t5vvHpYQ2LULeZ9rPFAIDAly6LNqJ5wLvylIZqJcjCrNgEQhbCKjwhNjzji
+         MMKSGqxhTzGYnejgMhOTdphd7HLFgxNBm+LPWbpTPy2vL60I1iVcWsL+XvNdoH43xudi
+         lGe7fCgaaruH+etviHr/ZmC0t4qH7k5F/h9dOxCCLMbehoxwPncy/r7dWoQ1vnfqnb7E
+         DR6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738824813; x=1739429613;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yfPzJgqGwInu62D/JbABqcLSTAUY1ivE7x32/lUlB+s=;
+        b=iw3BdBcwvYW2FPLZG6TPXPXyt/i/acRaGOTh0yPHyqTsGUuEZsZQ7ByxqR+32uJ9jI
+         vaxrsUYB6xQaY/mo0dZ4vTUGvVNOa0jWv/ZkYogDbnyvFt8Qb7GmyEOg1jKkTeaNLgAB
+         T5YHHHhp0c4aO9KESarOtkAXMDKdnhipL9YHa8ankpuMMrjSu/Ud9lNmpWjJfHxudVUy
+         n0NhYku7JTgxfMi8bKgX9qaUH42cmjQEZJJKBTkwxj1k8+QK5HNcZOwrAYLUA9qg7sxg
+         +0qVZ0Y6rFPezvGILYMngevNojmHdeAEFVRhbPpwUTRnHyJei+q6lTe7h9MpV7N/oK4M
+         FFOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXvE8gafYsqjYiYeenXigR8IPD9AGoyTgQYOmnF44hvo4qIfcAoWXX60p8G8FJAPyxXY1YHFNQzohhoACFPoN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbUnnRqxjvVEvPapjGqi1bAR54Vt7CEeMCyIkV59Yrs9AriOZs
+	tdVuEAUj4YotMhr38YaNUiUkkMNaGfAH2I8oCGzjOX6+8RKPw+oHnoFOvkvb2YE=
+X-Gm-Gg: ASbGncvkv0wcV4KbdTIJUvvsae4MaJhdlKJ+B2JQVG7c5E2ddnVaawreFYQ4jxIUZcT
+	ND15zsnqFejGcJTfgzXoVXGRUuvw7yu1HNvrAkVyLWP6QTdCIwT/QcIKaDjegm06DcFJDxMhN/0
+	gPOfCJuN46tc5y80E+gcMoH5OYW1y8pr+KCmReBrsy0EFatVFL7kLlOyyGvhXu9rvTtlX3kgtIC
+	42aQNDepb5ZRmUemK47AT2ATsOoUSsDiOdblvWuuQCBEApNA/O6iPO5rWCBA/sBEu52s1DLnOsp
+	3nN1wU25DIUZQKHc32cz2XawJE5l
+X-Google-Smtp-Source: AGHT+IER8psjFE80ifTWvoXn5WHFoV2OjIRpn8B020yOLPR0qnk21Bx82Mdy+x+4gwZSwLApBeX7OA==
+X-Received: by 2002:a17:90b:2d8e:b0:2ea:bf1c:1e3a with SMTP id 98e67ed59e1d1-2f9e0767573mr10783588a91.12.1738824813210;
+        Wed, 05 Feb 2025 22:53:33 -0800 (PST)
+Received: from [157.82.207.107] ([157.82.207.107])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f9e1e24559sm2800958a91.31.2025.02.05.22.53.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Feb 2025 22:53:32 -0800 (PST)
+Message-ID: <12dbfa5e-32cc-4355-89e4-6c1cd4e12d1a@daynix.com>
+Date: Thu, 6 Feb 2025 15:53:26 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Z6OYbS4WqQnmzi2z@debian.debian>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 1/7] tun: Refactor CONFIG_TUN_VNET_CROSS_LE
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>,
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
+ devel@daynix.com
+Cc: Willem de Bruijn <willemb@google.com>
+References: <20250205-tun-v5-0-15d0b32e87fa@daynix.com>
+ <20250205-tun-v5-1-15d0b32e87fa@daynix.com>
+ <67a3d2efbba32_170d392944d@willemb.c.googlers.com.notmuch>
 Content-Language: en-US
-X-CM-TRANSID:gCh0CgB32Fw4WaRnSh82DA--.50974S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF4xAFy7Kr15tw43tr1DKFg_yoWfZF1kpF
-	WrCFnrGr4kWrW8t3y2ya47XFWv9r18Kw1jyas5J3s0krn7Wr17Cr10ka9rtry3uF1kZr1a
-	va12qryrXayYyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
-	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
-	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-	BIdaVFxhVjvjDU0xZFpf9x07jIksgUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <67a3d2efbba32_170d392944d@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 2025/02/06 6:06, Willem de Bruijn wrote:
+> Akihiko Odaki wrote:
+>> Check IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE) to save some lines and make
+>> future changes easier.
+>>
+>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>> Reviewed-by: Willem de Bruijn <willemb@google.com>
+>> ---
+>>   drivers/net/tun.c | 26 ++++++++------------------
+>>   1 file changed, 8 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+>> index e816aaba8e5f2ed06f8832f79553b6c976e75bb8..452fc5104260fe7ff5fdd5cedc5d2647cbe35c79 100644
+>> --- a/drivers/net/tun.c
+>> +++ b/drivers/net/tun.c
+>> @@ -298,10 +298,10 @@ static bool tun_napi_frags_enabled(const struct tun_file *tfile)
+>>   	return tfile->napi_frags_enabled;
+>>   }
+>>   
+>> -#ifdef CONFIG_TUN_VNET_CROSS_LE
+>>   static inline bool tun_legacy_is_little_endian(struct tun_struct *tun)
+>>   {
+>> -	return tun->flags & TUN_VNET_BE ? false :
+>> +	return !(IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE) &&
+>> +		 (tun->flags & TUN_VNET_BE)) &&
+>>   		virtio_legacy_is_little_endian();
+> 
+> Since I have other comments to the series:
+> 
+> Can we make this a bit simpler to the reader, by splitting the test:
+> 
+>      if (IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE) && tun->flags & TUN_VNET_BE)
+>              return false;
+> 
+>      return virtio_legacy_is_little_endian();
+> 
 
-On 2/6/2025 12:57 AM, Yan Zhai wrote:
-> The generic_map_lookup_batch currently returns EINTR if it fails with
-> ENOENT and retries several times on bpf_map_copy_value. The next batch
-> would start from the same location, presuming it's a transient issue.
-> This is incorrect if a map can actually have "holes", i.e.
-> "get_next_key" can return a key that does not point to a valid value. At
-> least the array of maps type may contain such holes legitly. Right now
-> these holes show up, generic batch lookup cannot proceed any more. It
-> will always fail with EINTR errors.
->
-> Rather, do not retry in generic_map_lookup_batch. If it finds a non
-> existing element, skip to the next key.
->
-> Fixes: cb4d03ab499d ("bpf: Add generic support for lookup batch op")
-> Closes: https://lore.kernel.org/bpf/Z6JXtA1M5jAZx8xD@debian.debian/
-> Signed-off-by: Yan Zhai <yan@cloudflare.com>
-> ---
->  kernel/bpf/syscall.c                          | 16 ++----
->  .../bpf/map_tests/map_in_map_batch_ops.c      | 54 ++++++++++++++-----
->  2 files changed, 45 insertions(+), 25 deletions(-)
->
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index c420edbfb7c8..5691fc0d370d 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -1979,7 +1979,7 @@ int generic_map_lookup_batch(struct bpf_map *map,
->  	void __user *values = u64_to_user_ptr(attr->batch.values);
->  	void __user *keys = u64_to_user_ptr(attr->batch.keys);
->  	void *buf, *buf_prevkey, *prev_key, *key, *value;
-> -	int err, retry = MAP_LOOKUP_RETRIES;
-> +	int err;
->  	u32 value_size, cp, max_count;
->  
->  	if (attr->batch.elem_flags & ~BPF_F_LOCK)
-> @@ -2026,14 +2026,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
->  		err = bpf_map_copy_value(map, key, value,
->  					 attr->batch.elem_flags);
->  
-> -		if (err == -ENOENT) {
-> -			if (retry) {
-> -				retry--;
-> -				continue;
-> -			}
-> -			err = -EINTR;
-> -			break;
-> -		}
-> +		if (err == -ENOENT)
-> +			goto next_key;
->  
->  		if (err)
->  			goto free_buf;
-> @@ -2048,12 +2042,12 @@ int generic_map_lookup_batch(struct bpf_map *map,
->  			goto free_buf;
->  		}
->  
-> +		cp++;
-> +next_key:
->  		if (!prev_key)
->  			prev_key = buf_prevkey;
->  
->  		swap(prev_key, key);
-> -		retry = MAP_LOOKUP_RETRIES;
-> -		cp++;
->  		cond_resched();
->  	}
->  
+I kept all in one expression to show how different variables are reduced 
+into one bool value, but I agree it is too complicated.
 
-Let's move the new thread for further discussion.
+I'm adding a new variable to simplify this. The return statement will 
+look like: return !be && virtio_legacy_is_little_endian();
 
->We are probably not on the same page. Let me clarify:
-
->By "retry logic" I mean this code snippet:
->               if (err == -ENOENT) {
->                       if (retry) {
->                               retry--;
->                               continue;
->                       }
->                       err = -EINTR;
->                       break;
->               }
-
-
-Yes, the retry logic doesn't change the previous key. Thanks for the
-clarifying.
-> And by "skipping to the next key", it's simply
->
->   if (err == -ENOENT)
->        goto next_key;
->
-> Note the "next_key" label was not in the current codebase. It is only
-> in my posted patch. I don't think this would break lpm_trie unless I
-> missed something.
-
-I was trying to say that the proposed patch may break the lookup_batch
-operation for lpm_trie, and let me explain step by step:
-
-For LPM trie map:
-(1) ->map_get_next_key(map, prev_key, key) returns a valid key
-
-(2) bpf_map_copy_value() return -ENOMENT
-It means the key must be deleted concurrently.
-
-(3) goto next_key
-It swaps the prev_key and key
-
-(4) ->map_get_next_key(map, prev_key, key) again
-prev_key points to a non-existing key, for LPM trie it will treat just
-like prev_key=NULL case, the returned key will be duplicated.
-
-
-> diff --git a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
-> index 66191ae9863c..b38be71f06be 100644
-
-It is better to split the update of map_tests into a separated patch and
-it will be more friendly for stable backport.
-> --- a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
-> +++ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
-> @@ -120,11 +120,12 @@ static void validate_fetch_results(int outer_map_fd,
->  
->  static void fetch_and_validate(int outer_map_fd,
->  			       struct bpf_map_batch_opts *opts,
-> -			       __u32 batch_size, bool delete_entries)
-> +			       __u32 batch_size, bool delete_entries,
-> +			       bool has_holes)
->  {
-> +	int err, max_entries = OUTER_MAP_ENTRIES - !!has_holes;
->  	__u32 *fetched_keys, *fetched_values, total_fetched = 0;
->  	__u32 batch_key = 0, fetch_count, step_size;
-> -	int err, max_entries = OUTER_MAP_ENTRIES;
->  	__u32 value_size = sizeof(__u32);
->  
->  	/* Total entries needs to be fetched */
-> @@ -135,9 +136,9 @@ static void fetch_and_validate(int outer_map_fd,
->  	      "error=%s\n", strerror(errno));
->  
->  	for (step_size = batch_size;
-> -	     step_size <= max_entries;
-> +	     step_size < max_entries + batch_size; /* allow read partial */
->  	     step_size += batch_size) {
-> -		fetch_count = step_size;
-> +		fetch_count = batch_size;
-
-The change "fetch_count = batch_size" may fail the lookup batch
-operation of hash table, because the element in one bucket may be
-greater than batch_size and it will return -ENOSPC constantly. And it
-seems the original implementation of fetch_and_validate() is buggy,
-because for hash map, the returned fetched_count may be less than the
-passed count when there are too many elements in the same bucket. I
-don't know the reason why the bug doesn't show up.
->  		err = delete_entries
->  		      ? bpf_map_lookup_and_delete_batch(outer_map_fd,
->  				      total_fetched ? &batch_key : NULL,
-> @@ -184,18 +185,19 @@ static void fetch_and_validate(int outer_map_fd,
->  }
->  
->  static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
-> -				  enum bpf_map_type inner_map_type)
-> +				  enum bpf_map_type inner_map_type,
-> +				  bool has_holes)
->  {
-> +	__u32 max_entries = OUTER_MAP_ENTRIES - !!has_holes;
->  	__u32 *outer_map_keys, *inner_map_fds;
-> -	__u32 max_entries = OUTER_MAP_ENTRIES;
->  	LIBBPF_OPTS(bpf_map_batch_opts, opts);
->  	__u32 value_size = sizeof(__u32);
->  	int batch_size[2] = {5, 10};
->  	__u32 map_index, op_index;
->  	int outer_map_fd, ret;
->  
-> -	outer_map_keys = calloc(max_entries, value_size);
-> -	inner_map_fds = calloc(max_entries, value_size);
-> +	outer_map_keys = calloc(OUTER_MAP_ENTRIES, value_size);
-> +	inner_map_fds = calloc(OUTER_MAP_ENTRIES, value_size);
->  	CHECK((!outer_map_keys || !inner_map_fds),
->  	      "Memory allocation failed for outer_map_keys or inner_map_fds",
->  	      "error=%s\n", strerror(errno));
-> @@ -209,6 +211,24 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
->  			((outer_map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
->  			 ? 9 : 1000) - map_index;
->  
-> +	/* This condition is only meaningful for array of maps.
-> +	 *
-> +	 * max_entries == OUTER_MAP_ENTRIES - 1 if it is true. Say
-> +	 * max_entries is short for n, then outer_map_keys looks like:
-> +	 *
-> +	 *   [n, n-1, ... 2, 1]
-> +	 *
-> +	 * We change it to
-> +	 *
-> +	 *   [n, n-1, ... 2, 0]
-> +	 *
-> +	 * So it will leave key 1 as a hole. It will serve to test the
-> +	 * correctness when batch on an array: a "non-exist" key might be
-> +	 * actually allocated and returned from key iteration.
-> +	 */
-> +	if (has_holes)
-> +		outer_map_keys[max_entries - 1]--;
-> +
->  	/* batch operation - map_update */
->  	ret = bpf_map_update_batch(outer_map_fd, outer_map_keys,
->  				   inner_map_fds, &max_entries, &opts);
-> @@ -219,12 +239,14 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
->  	/* batch operation - map_lookup */
->  	for (op_index = 0; op_index < 2; ++op_index)
->  		fetch_and_validate(outer_map_fd, &opts,
-> -				   batch_size[op_index], false);
-> +				   batch_size[op_index], false,
-> +				   has_holes);
->  
->  	/* batch operation - map_lookup_delete */
->  	if (outer_map_type == BPF_MAP_TYPE_HASH_OF_MAPS)
->  		fetch_and_validate(outer_map_fd, &opts,
-> -				   max_entries, true /*delete*/);
-> +				   max_entries, true /*delete*/,
-> +				   has_holes);
->  
->  	/* close all map fds */
->  	for (map_index = 0; map_index < max_entries; map_index++)
-
-OUTER_MAP_ENTRIES instead of max_entries ?
-> @@ -237,16 +259,20 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
->  
->  void test_map_in_map_batch_ops_array(void)
->  {
-> -	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY);
-> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY, false);
->  	printf("%s:PASS with inner ARRAY map\n", __func__);
-> -	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH);
-> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH, false);
->  	printf("%s:PASS with inner HASH map\n", __func__);
-> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY, true);
-> +	printf("%s:PASS with inner ARRAY map with holes\n", __func__);
-> +	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH, true);
-> +	printf("%s:PASS with inner HASH map with holes\n", __func__);
->  }
->  
->  void test_map_in_map_batch_ops_hash(void)
->  {
-> -	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY);
-> +	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY, false);
->  	printf("%s:PASS with inner ARRAY map\n", __func__);
-> -	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH);
-> +	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH, false);
->  	printf("%s:PASS with inner HASH map\n", __func__);
->  }
-
+It means: for tun, whether the legacy format is in little endian will be 
+determined from the tun-specific big-endian flag and the virtio's common 
+logic.
 
