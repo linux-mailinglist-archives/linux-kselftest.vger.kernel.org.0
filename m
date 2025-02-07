@@ -1,121 +1,101 @@
-Return-Path: <linux-kselftest+bounces-25955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E2ADA2B8FC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 03:22:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D342BA2B971
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 04:09:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1372167910
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 02:22:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D8963A3F85
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 03:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7E01922C6;
-	Fri,  7 Feb 2025 02:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B85315539D;
+	Fri,  7 Feb 2025 03:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L1kpJZpm"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="CL0Nds8c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4207F18BC06;
-	Fri,  7 Feb 2025 02:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719FF10E9
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 03:09:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738894862; cv=none; b=sAFuGilc1CwYy3XZgTvI168YeHClNx/h06PzyBYh6hVDy16YMLvM1rsAogLikuUwP654aMljCxH4aWNaokrAWSnOP6caQaB8F+7uCMmxm+O9loa3k5XZlaq7vJpG8nTeqQZD/f7WLI8ZNnS1GhX6SHADtMq+bM3DgSfjZlU9gjw=
+	t=1738897780; cv=none; b=BZoxvPK3gFpjyHVWTHd0Aff7QXJilLNCnKXCBPBA2tZr6x53YZUKIEhg6uz6P/2F6Xr8yNMFmQKqtsqTc4El7swSSsesKa5Zjs0oshauOWCVTwTEHVS9KjvqzWv9WRLc3YomWRkw3ItOYlC9ampNc7hSrI3HhrQsThFmKPE8lEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738894862; c=relaxed/simple;
-	bh=p2wQyxyXyuiNqbBS17Es146CFtqu/d73uiA8Sh84ems=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=t9axbWJk5O7WaFT8xaBSswVk4B7j+UuZbzwtFuZSpgHJv7fRIbgvch7Re6Rh8nzb4LGXL7eTiw0j1ilEwf+27s66c+0NUxSaxPb0cJRNbdRHCgWaNnUK/zqghPdAvlnsgQSp5AShKX+iaV0IB1E1PY2AzEIvswUVpBVAHoyDU54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L1kpJZpm; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738894860; x=1770430860;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=p2wQyxyXyuiNqbBS17Es146CFtqu/d73uiA8Sh84ems=;
-  b=L1kpJZpmnSqacbgzsGRQXG+tuUkGw/fc7tPWRitJmN8zSuLqhSmjNng7
-   YI71TtHJCF7bhWEAeJa23CWkyBlsEZa6e9uSugjBUbVS2tK5plrojE+Ab
-   Y8cU+XSkORhHrpAWFYkyOv7Y/Nh7vZGXihmkZ8HK5LSfvs1KAEiBzOVMx
-   OUn1F9UAf6+iYcWswkd1n4N/WkNq184pF01Up12yT+Q1etXC2Y23+IFwk
-   QTYaF2tjyZ1sE3xCellvsENhmE9pFmzM5ECFitddsJoGUBroXXkAVEBei
-   0zqkssV9gzHjfmeBKEywNNdXtH6QaIaXAVdUZsKNHL+sxTVKT+uiXAWeh
-   A==;
-X-CSE-ConnectionGUID: 4XIeGv9VRxO64ARouM6cxg==
-X-CSE-MsgGUID: YGXHdnPfTXW2qfiznaNbMQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50917756"
-X-IronPort-AV: E=Sophos;i="6.13,266,1732608000"; 
-   d="scan'208";a="50917756"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 18:20:59 -0800
-X-CSE-ConnectionGUID: eQTw0hmUQiqbDQy6vOYrXw==
-X-CSE-MsgGUID: teK3NF9XR/qEuai3RyXRNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148615629"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.38])
-  by orviesa001.jf.intel.com with ESMTP; 06 Feb 2025 18:20:47 -0800
-From: Song Yoong Siang <yoong.siang.song@intel.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Bezdeka <florian.bezdeka@siemens.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Bjorn Topel <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+	s=arc-20240116; t=1738897780; c=relaxed/simple;
+	bh=KiRmZ8DqIcR+OnxxKrGOWfmmDrYw/NqG0k5zMUReZ/Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fTYQ/QipsRxFxi38FwgUEEwhx7/KBbFooelLvKcGFbR3Lh2HRYL1tNdNI8zRaBSoS/SReUdwGQ9zMIx61DuN/eCGxHXlCxmOxPdskMHW30+r8OHycMt4eGp5P/xQiJzVfqqJ+Chw9c4JaZ8tAQhmul2apIa+OGENj/ogaQFTk1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=CL0Nds8c; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2fa1fb3c445so1068799a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 19:09:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1738897778; x=1739502578; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SsfXGpXzuZR+ErsjE42epoWXJKBH7x41dbTr/ZlyETw=;
+        b=CL0Nds8cxZLB3AGY38Nt+6TyEPHhZhThMLLo/ew9tN8dHqOH9rWEpv2gJpA5IK2NwE
+         2zFDOCqMAXwhKCmvX20GFwer02ZllS0Cn9pAptPSdhZ9w4P8vVS+v+MY2OTB2mYjmbwv
+         H04PylbBwbuCSyJnLSlmEuaRDbB1fxoBNSGQM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738897778; x=1739502578;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SsfXGpXzuZR+ErsjE42epoWXJKBH7x41dbTr/ZlyETw=;
+        b=WaCnLjTw7vnjLL4pTxKfynA+8t8zTN0+Bo3z8nTFbir1DfbQD2YMXjmK5Lt5u0isiS
+         vQQqZEyntrjLeg7FtViJY+5JzDPTiku1HUxBk2OPcp4Y6cZ851GVBZqDUZVmX5KDQzVX
+         LDVU/C8Nzm0dmb5CWZvyJ16QvjMEY9jcntQDSQlM3++NOSnelWpr8cVz5qWSplhd8IqE
+         r41inn6pvQNq9X6nPR4cDEQ3Zs+ItPGnhdKxGvflX7SSCUAy/q2heipJBqwvSzSbgPgW
+         rZ0vtnMzIZ1DweoQxWZv1GB8+JrN9ovSBbRLuxnV4KrZwgbZhgTjctDd4yrVNsWFDqRK
+         t/fg==
+X-Forwarded-Encrypted: i=1; AJvYcCWG6tqnV/uJtiyaeGXntuz0frch5cJMl+H25RShDPLo0JQlh0+xdgXe+ADVNe9Ma9Bb4KblBgA+vZWroaO0aQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBZPLF5RP4n+vv79J1L1WIrSsZPcG5bHxECiVZgMOtyrqpLesn
+	RgrBjcKNh7/kp6V96mkBec6EW9UbfQGsfz57+0h5G4Kj2pmOWTRJ3vcv+tLdRzI=
+X-Gm-Gg: ASbGncsc1DmsjS5hqCRBYJLCNyrstU50WP92MNiGEXVwzhLrHeq31IJ+9A1a9oxG6jo
+	qoF/RrLTG4Rj0IXWfzERHFz7zvZE3IpnIQ808cNoDcOElXbZszMgyZT63GfjlM5+2ikHF2HuiBr
+	Wjw4erLBSWDlZ3C9DGkfTekP/V+AEpd/sItiCumz8fVG3R5px+W1LG14Vh2mmIgGoj7x9ZB8V5c
+	Ggl5GqdNk5P5avOlHhk/zsep6t3O9Mfg8aaIm3Ct58A67LQ/GjARYM3AVB1S3MZ2cvnLIkFb0N4
+	i2a/xKRGtKS9FYw7KmfnDEM=
+X-Google-Smtp-Source: AGHT+IE4lvGn74SnqtWPP7mNowI1TaEf4zYmlVSufnzq0vzK1BA2GeuK39LAyo8UDxpds6tdfwMaiA==
+X-Received: by 2002:a17:90b:38c3:b0:2ee:f687:6ad5 with SMTP id 98e67ed59e1d1-2fa23f5eb89mr2550060a91.2.1738897777676;
+        Thu, 06 Feb 2025 19:09:37 -0800 (PST)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f368ab196sm20348955ad.222.2025.02.06.19.09.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 19:09:37 -0800 (PST)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: pabeni@redhat.com,
+	edumazet@google.com,
+	sridhar.samudrala@intel.com,
+	Joe Damato <jdamato@fastly.com>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_)),
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Daniel Jurgens <danielj@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Wei <dw@davidwei.uk>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Joe Damato <jdamato@fastly.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	Martin Karsten <mkarsten@uwaterloo.ca>,
 	Mina Almasry <almasrymina@google.com>,
-	Daniel Jurgens <danielj@nvidia.com>,
-	Song Yoong Siang <yoong.siang.song@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Faizal Rahim <faizal.abdul.rahim@linux.intel.com>,
-	Choong Yong Liang <yong.liang.choong@linux.intel.com>,
-	Bouska Zdenek <zdenek.bouska@siemens.com>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	intel-wired-lan@lists.osuosl.org,
-	xdp-hints@xdp-project.net
-Subject: [PATCH bpf-next v10 5/5] igc: Add launch time support to XDP ZC
-Date: Fri,  7 Feb 2025 10:19:43 +0800
-Message-Id: <20250207021943.814768-6-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250207021943.814768-1-yoong.siang.song@intel.com>
-References: <20250207021943.814768-1-yoong.siang.song@intel.com>
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v4 0/3] netdev-genl: Add an xsk attribute to queues
+Date: Fri,  7 Feb 2025 03:08:52 +0000
+Message-ID: <20250207030916.32751-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -124,191 +104,73 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable Launch Time Control (LTC) support for XDP zero copy via XDP Tx
-metadata framework.
+Greetings:
 
-This patch has been tested with tools/testing/selftests/bpf/xdp_hw_metadata
-on Intel I225-LM Ethernet controller. Below are the test steps and result.
+Welcome to v4. Small functional change, which makes the code cleaner
+(see changelog) and tests pass on my machine with mlx5 and netdevsim.
 
-Test 1: Send a single packet with the launch time set to 1 s in the future.
+This is an attempt to followup on something Jakub asked me about [1],
+adding an xsk attribute to queues and more clearly documenting which
+queues are linked to NAPIs...
 
-Test steps:
-1. On the DUT, start the xdp_hw_metadata selftest application:
-   $ sudo ./xdp_hw_metadata enp2s0 -l 1000000000 -L 1
+After the RFC [2], Jakub suggested creating an empty nest for queues
+which have a pool, so I've adjusted this version to work that way.
 
-2. On the Link Partner, send a UDP packet with VLAN priority 1 to port 9091
-   of the DUT.
+The nest can be extended in the future to express attributes about XSK
+as needed. Queues which are not used for AF_XDP do not have the xsk
+attribute present.
 
-Result:
-When the launch time is set to 1 s in the future, the delta between the
-launch time and the transmit hardware timestamp is 0.016 us, as shown in
-printout of the xdp_hw_metadata application below.
-  0x562ff5dc8880: rx_desc[4]->addr=84110 addr=84110 comp_addr=84110 EoP
-  rx_hash: 0xE343384 with RSS type:0x1
-  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
-                delta to User RX-time sec:0.0002 (183.103 usec)
-  XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
-                 delta to User RX-time sec:0.0001 (80.309 usec)
-  No rx_vlan_tci or rx_vlan_proto, err=-95
-  0x562ff5dc8880: ping-pong with csum=561c (want c7dd)
-                  csum_start=34 csum_offset=6
-  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
-                delta to HW Launch-time sec:1.0000 (1000000.000 usec)
-  0x562ff5dc8880: complete tx idx=4 addr=4018
-  HW Launch-time:   1734578016467548904 (sec:1734578016.4675)
-                    delta to HW TX-complete-time sec:0.0000 (0.016 usec)
-  HW TX-complete-time:   1734578016467548920 (sec:1734578016.4675)
-                         delta to User TX-complete-time sec:0.0000
-                         (32.546 usec)
-  XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
-                 delta to User TX-complete-time sec:0.9999
-                 (999929.768 usec)
-  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
-                delta to HW TX-complete-time sec:1.0000 (1000000.016 usec)
-  0x562ff5dc8880: complete rx idx=132 addr=84110
+I've run the included test on:
+  - my mlx5 machine (via NETIF=)
+  - without setting NETIF
 
-Test 2: Send 1000 packets with a 10 ms interval and the launch time set to
-        500 us in the future.
+And the test seems to pass in both cases.
 
-Test steps:
-1. On the DUT, start the xdp_hw_metadata selftest application:
-   $ sudo chrt -f 99 ./xdp_hw_metadata enp2s0 -l 500000 -L 1 > \
-     /dev/shm/result.log
+Thanks,
+Joe
 
-2. On the Link Partner, send 1000 UDP packets with a 10 ms interval and
-   VLAN priority 1 to port 9091 of the DUT.
+[1]: https://lore.kernel.org/netdev/20250113143109.60afa59a@kernel.org/
+[2]: https://lore.kernel.org/netdev/20250129172431.65773-1-jdamato@fastly.com/
 
-Result:
-When the launch time is set to 500 us in the future, the average delta
-between the launch time and the transmit hardware timestamp is 0.016 us,
-as shown in the analysis of /dev/shm/result.log below. The XDP launch time
-works correctly in sending 1000 packets continuously.
-  Min delta: 0.005 us
-  Avr delta: 0.016 us
-  Max delta: 0.031 us
-  Total packets forwarded: 1000
+v4:
+  - Add patch 1, as suggested by Jakub, which adds an empty nest helper.
+  - Use the helper in patch 2, which makes the code cleaner and prevents
+    a possible bug.
 
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- drivers/net/ethernet/intel/igc/igc.h      |  1 +
- drivers/net/ethernet/intel/igc/igc_main.c | 61 ++++++++++++++++++++++-
- 2 files changed, 60 insertions(+), 2 deletions(-)
+v3: https://lore.kernel.org/netdev/20250204191108.161046-1-jdamato@fastly.com/
+  - Change comment format in patch 2 to avoid kdoc warnings. No other
+    changes.
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index b8111ad9a9a8..cd1d7b6c1782 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -579,6 +579,7 @@ struct igc_metadata_request {
- 	struct xsk_tx_metadata *meta;
- 	struct igc_ring *tx_ring;
- 	u32 cmd_type;
-+	u16 used_desc;
- };
- 
- struct igc_q_vector {
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 1bfa71545e37..3044392e8ded 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -2971,9 +2971,48 @@ static u64 igc_xsk_fill_timestamp(void *_priv)
- 	return *(u64 *)_priv;
- }
- 
-+static void igc_xsk_request_launch_time(u64 launch_time, void *_priv)
-+{
-+	struct igc_metadata_request *meta_req = _priv;
-+	struct igc_ring *tx_ring = meta_req->tx_ring;
-+	__le32 launch_time_offset;
-+	bool insert_empty = false;
-+	bool first_flag = false;
-+	u16 used_desc = 0;
-+
-+	if (!tx_ring->launchtime_enable)
-+		return;
-+
-+	launch_time_offset = igc_tx_launchtime(tx_ring,
-+					       ns_to_ktime(launch_time),
-+					       &first_flag, &insert_empty);
-+	if (insert_empty) {
-+		/* Disregard the launch time request if the required empty frame
-+		 * fails to be inserted.
-+		 */
-+		if (igc_insert_empty_frame(tx_ring))
-+			return;
-+
-+		meta_req->tx_buffer =
-+			&tx_ring->tx_buffer_info[tx_ring->next_to_use];
-+		/* Inserting an empty packet requires two descriptors:
-+		 * one data descriptor and one context descriptor.
-+		 */
-+		used_desc += 2;
-+	}
-+
-+	/* Use one context descriptor to specify launch time and first flag. */
-+	igc_tx_ctxtdesc(tx_ring, launch_time_offset, first_flag, 0, 0, 0);
-+	used_desc += 1;
-+
-+	/* Update the number of used descriptors in this request */
-+	meta_req->used_desc += used_desc;
-+}
-+
- const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
- 	.tmo_request_timestamp		= igc_xsk_request_timestamp,
- 	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
-+	.tmo_request_launch_time	= igc_xsk_request_launch_time,
- };
- 
- static void igc_xdp_xmit_zc(struct igc_ring *ring)
-@@ -2996,7 +3035,13 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 	ntu = ring->next_to_use;
- 	budget = igc_desc_unused(ring);
- 
--	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
-+	/* Packets with launch time require one data descriptor and one context
-+	 * descriptor. When the launch time falls into the next Qbv cycle, we
-+	 * may need to insert an empty packet, which requires two more
-+	 * descriptors. Therefore, to be safe, we always ensure we have at least
-+	 * 4 descriptors available.
-+	 */
-+	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget >= 4) {
- 		struct igc_metadata_request meta_req;
- 		struct xsk_tx_metadata *meta = NULL;
- 		struct igc_tx_buffer *bi;
-@@ -3017,9 +3062,19 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		meta_req.tx_ring = ring;
- 		meta_req.tx_buffer = bi;
- 		meta_req.meta = meta;
-+		meta_req.used_desc = 0;
- 		xsk_tx_metadata_request(meta, &igc_xsk_tx_metadata_ops,
- 					&meta_req);
- 
-+		/* xsk_tx_metadata_request() may have updated next_to_use */
-+		ntu = ring->next_to_use;
-+
-+		/* xsk_tx_metadata_request() may have updated Tx buffer info */
-+		bi = meta_req.tx_buffer;
-+
-+		/* xsk_tx_metadata_request() may use a few descriptors */
-+		budget -= meta_req.used_desc;
-+
- 		tx_desc = IGC_TX_DESC(ring, ntu);
- 		tx_desc->read.cmd_type_len = cpu_to_le32(meta_req.cmd_type);
- 		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
-@@ -3037,9 +3092,11 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		ntu++;
- 		if (ntu == ring->count)
- 			ntu = 0;
-+
-+		ring->next_to_use = ntu;
-+		budget--;
- 	}
- 
--	ring->next_to_use = ntu;
- 	if (tx_desc) {
- 		igc_flush_tx_descriptors(ring);
- 		xsk_tx_release(pool);
+v2: https://lore.kernel.org/all/20250203185828.19334-1-jdamato@fastly.com/
+  - Switched from RFC to actual submission now that net-next is open
+  - Adjusted patch 1 to include an empty nest as suggested by Jakub
+  - Adjusted patch 2 to update the test based on changes to patch 1, and
+    to incorporate some Python feedback from Jakub :)
+
+rfc: https://lore.kernel.org/netdev/20250129172431.65773-1-jdamato@fastly.com/
+
+
+Joe Damato (3):
+  netlink: Add nla_put_empty_nest helper
+  netdev-genl: Add an XSK attribute to queues
+  selftests: drv-net: Test queue xsk attribute
+
+ Documentation/netlink/specs/netdev.yaml       | 13 ++-
+ include/net/netlink.h                         | 15 ++++
+ include/uapi/linux/netdev.h                   |  6 ++
+ net/core/netdev-genl.c                        | 12 +++
+ tools/include/uapi/linux/netdev.h             |  6 ++
+ .../testing/selftests/drivers/net/.gitignore  |  2 +
+ tools/testing/selftests/drivers/net/Makefile  |  3 +
+ tools/testing/selftests/drivers/net/queues.py | 35 +++++++-
+ .../selftests/drivers/net/xdp_helper.c        | 89 +++++++++++++++++++
+ 9 files changed, 178 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/.gitignore
+ create mode 100644 tools/testing/selftests/drivers/net/xdp_helper.c
+
+
+base-commit: f3eba8edd885db439f4bfaa2cf9d766bad1ae6c5
 -- 
-2.34.1
+2.43.0
 
 
