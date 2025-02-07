@@ -1,247 +1,230 @@
-Return-Path: <linux-kselftest+bounces-25986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6CDDA2C159
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 12:08:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45C26A2C176
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 12:28:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 965FC3A2EE3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 11:08:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8241885599
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 11:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A4F1DED57;
-	Fri,  7 Feb 2025 11:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 407B71DD0D5;
+	Fri,  7 Feb 2025 11:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZuTsSJQp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTwTNHuf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E639154C05
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 11:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE9E63D;
+	Fri,  7 Feb 2025 11:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738926528; cv=none; b=deJUgstPdpkHouZJkDfgt9STWX6puDeYe/mMNkc0kbFmeZDUZae3f+tE6CQp86gDi4SRzWpAnRLEairuZe44yfFJ3AkozixtTBHGVdLDcoVZZfGCxYrSiAacS/0Sg3SBzKTWsYGvmGWFEb/ECdmcsOcbNqCEzYsNTuCoLeqPobE=
+	t=1738927718; cv=none; b=WcqYTFRIuoUwZmwKgsQ3/hL9+PRw/V84tfHuNW7GO6gbgrrlhSQgpb0JFBdLkZZRjzfHg7IC1seR6/CEfp743x5ZTYEYqhq16AKN9UGUZoNNscsIql1/9LJEMopvd88aAGf51aTpREFnNeiKO0vWOYpf8AHA13Z0X6F8kVa4UVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738926528; c=relaxed/simple;
-	bh=f/yNJNGOKRY35QAo1PWoMdiBK82+/Rfv1trboTm/QHY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MSYuFdv+ms+jUmiBpW6ZnNS8XvfRRl4DV2nPoMpJrnsjjx7olYnY+QiN3coKG6qHEUXm21nAw/n6GY22S3c6pVPHgSPfuplF/tJv7wNjy3778Cv1qRC49K+0+Ws/lbr43dg2R5VoKc5WFus6/uTXo1qvTkWVbLwcficOp4Nex3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZuTsSJQp; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-21f02a2410aso46020965ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 03:08:46 -0800 (PST)
+	s=arc-20240116; t=1738927718; c=relaxed/simple;
+	bh=CCZWa//gwdWtWgJNyXo15ebnvf4IYQUw2JPsdrxDlcM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uuolMMo7wt5j24LY3OMekaV1LgwlONhBxqASdIYC0jkKw/p/kRQHafhEVIawJvQgofEfiBOqUq5uoV4Ud5Z11WIeO2WhwMx8BucUMBn0tjB1xdC/7ui0mophmAYR58Go/v1UaRuvmuzEzYlhRbhTAIcmoGfl5+zq+t7RPYt4QAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTwTNHuf; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-308a559bdf7so4177311fa.1;
+        Fri, 07 Feb 2025 03:28:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738926526; x=1739531326; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0utfYowDQ93T6RyTX0nJtci3hBHyGiedBymm0LKsjGI=;
-        b=ZuTsSJQp+y2rbbEyJKsKcO35YPhdiTHtUo2TBJ/KNeLJz1DnQ0GvHETdkStdBVakJX
-         yZAr91B3TmIdwiE5m92P7xXN++l8xRfi6R0QMTJCtcYyevcAbZn8NUBOTIvRChLiVN8P
-         92Xi/3mvHjYYRWu4zez4gnB4NrgtTpncu3opChGeMW0ZSmrVGGdnKVX+ddY/GiHnJnI5
-         XNU4nLCwG839nygqL+stub0SrbaOZ/084/hSg7/zHrtNw95X77NK1u89dDDDLnHQNRne
-         wOBwYY+QNd6s6KRjCLS5MZGAFYQodFDozsV1j4coJGoo1prt9dmJUyO7Nv8WZgHR9c5U
-         E43g==
+        d=gmail.com; s=20230601; t=1738927714; x=1739532514; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K3I8jfNTSvLswouinc+w/1LyqpX8XBDD13CLbIziqAE=;
+        b=GTwTNHufqPOakhasMiewz/MlVNeofLu74V58gY98PZ/VQwaZFzmpjZ+52yTdlF2Olr
+         iITTz4I1WTeXjOGfcvXpqMVjXx81gTn0DAagrz1i45cyWYpYm4tc6vl3wHc9efscqg+a
+         QA4TEXIKecOEbPBLzwLPURWn7v9vK4IZF2kSDTj3NijO9Oo6ucmsyyfzyF0oR0BH2pAb
+         Q6keYEuQzWmLrVkx9NRsElgnoeiMk+yFoSYhKIJh+jE9Seefrh2vSiemdPPhREDsf7FW
+         ZVhJBNRViGTsuGHTnaEMmD340FSikLGYU5SOvug+wmsIT3G+4PMrbbQ/sb2AtU2eSzkr
+         Oe+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738926526; x=1739531326;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0utfYowDQ93T6RyTX0nJtci3hBHyGiedBymm0LKsjGI=;
-        b=PGTIvzGBed+AeK9sbc2SJGWe9P2O9aWYJJfVr4+epa2ihOqOHrafeP8u8vN2BKy+eX
-         uIrrC8Es9cEJUASbU0pN5X3eDxf7b+tMaZo0OEOwnUTFEw5m7TmE7SeuzSrqkWCiliHB
-         FmbH6d0pzhVX0rwDox7Vjs38jlgYAsZ0EcRA25LLXYEeFDt+f5irzOb9dFhEa/127QUk
-         AObGQ14+n6GENLC7vle4mmSlP3UVZSHE5j3sWO4qXtifwOEvhuduNEgQyb9ZWrGk6l9G
-         t4PThRCZLFhJnJAECrcomECcLDoZoSkZTmUq2DfgiQSdzg0LvwNO5LNLtW42MDtlmCwa
-         YG3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWs70iPh1ZzgShjiuSgvzxrYXoWOkG9A9AaP17RrAK7IjGzeM4ELHWB4xZJcFe8JUOT3jvFYV16vxX1DGGKYmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykjzkMKu3nQZ17EUnU0O7D02uraMzsXN2H1dMygbS4h58qO32M
-	o+d2UUHQz5oF5CBvYecSEXEjI05C9nNJ9s3+qtuYDkbPqmJHtxDy6rYHs1b7WcNdbu7eHcaJyoQ
-	U1djjUyU2QY8a97LY2kN9sA==
-X-Google-Smtp-Source: AGHT+IEUbTeaAIDnwWmnGfXjl+PT41bz7Igc1+QChc81LslqObzZ54A7CFnDypHOrSf1FV1jbu6+NXmrd53KUdhbLQ==
-X-Received: from pgmm34.prod.google.com ([2002:a05:6a02:5522:b0:ace:e770:ea95])
- (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:c909:b0:1e1:9ba5:80d8 with SMTP id adf61e73a8af0-1ee03b20a10mr5265795637.33.1738926525685;
- Fri, 07 Feb 2025 03:08:45 -0800 (PST)
-Date: Fri,  7 Feb 2025 20:08:36 +0900
-In-Reply-To: <20250207110836.2407224-1-yuyanghuang@google.com>
+        d=1e100.net; s=20230601; t=1738927714; x=1739532514;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K3I8jfNTSvLswouinc+w/1LyqpX8XBDD13CLbIziqAE=;
+        b=aOHCoAQkAObBGAYLwi2qMGJ9VpCNuK28103XCcKFIGwGjtsyNKNlfrdGDd7UGIBgEP
+         eJqFjgm9RYBU18Vdg2jfwlQxC37gmPGglBorZehPr/nbgGRrWXDvtQnJXFCtOL/Td7Or
+         elL1VKRFdEDKB7mIsQLd5ADRsvPzZMBmDFkyCvGz3ZfZl+TywiGVK8wtOhvwlN0G5x5q
+         7FqitsnkmVdyUITBEkYLbnR28R5F4TTD/8e6QxoMmMShyxo9EmexuANCYChoQ5KD8dvG
+         wwNUsS2tbMo83xo2FbjBCEEYjAUFDKUVHlWEtT8xCIqnT4FtJkZ5y9jITWzHiQWMk2Je
+         rLvw==
+X-Forwarded-Encrypted: i=1; AJvYcCUl5VLUARtD3suda51frIFLGusYqiJwcu3YoL3TXOZVZD6QkWU3xTTVV/LPawzeCo7D+a7yrYy57WwEByuOAf4D@vger.kernel.org, AJvYcCVbb/zc7XE4hc83S5S3szjrZ1i0y+4zpKw50vQaN916JKDT4Q1NWUT/lFCXCMcsD66uvj7bFDNGYjFT+Ls=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfu82OsobjdZ3vz0hQvUTwcEd8wHEjrdnWtf4mCb+h4YuJI3+K
+	j6zNnCuwH2XaRBM4hNa5HYtaI+C/A7sqKH04SggJJOt8ZxXggwiqTKLrRKPVPM1SeMTqJAQC+1P
+	Uhb31/kgds0N3cgI9WhLizQD6vhM=
+X-Gm-Gg: ASbGnctSUUgTsPVAHYbI9e4taoHJ+mcdmhXXyvan56QLoFSRfOC2b2By1CnUgy4lIzg
+	8ERfJyo5yILymC0qBx6wyqBe6eWJ5SN0y+Gqq4WwUyQXK+dxNb/7ClN4KinO5TH9l5SgVf/9RF/
+	U09ZS4AUl1ww19cCFBpw9vUTmT0g/N
+X-Google-Smtp-Source: AGHT+IEbJ1TXApipqmFCnNeTyCbZo+ClIG1v6IURN2hPR/XEhzJkpZlE93XuDEPNmz0NSjQARLGmRWj1Sr1MbsVJu4M=
+X-Received: by 2002:a2e:bd81:0:b0:307:e498:1269 with SMTP id
+ 38308e7fff4ca-307e5a8dee7mr8816221fa.37.1738927713988; Fri, 07 Feb 2025
+ 03:28:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250207110836.2407224-1-yuyanghuang@google.com>
-X-Mailer: git-send-email 2.48.1.502.g6dc24dfdaf-goog
-Message-ID: <20250207110836.2407224-2-yuyanghuang@google.com>
-Subject: [PATCH net-next, v8 2/2] selftests/net: Add selftest for IPv4
- RTM_GETMULTICAST support
-From: Yuyang Huang <yuyanghuang@google.com>
-To: Yuyang Huang <yuyanghuang@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org, 
-	Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Hangbin Liu <liuhangbin@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, petrm@nvidia.com, linux-kselftest@vger.kernel.org, 
-	"=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
+MIME-Version: 1.0
+References: <20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com>
+ <CAKwiHFi6SUCT7UjUTdKmLJ8kiAEqVg=d6ND60R05MJB85Eoj9w@mail.gmail.com>
+ <CAJ-ks9kLmArqqPati8n0dwzhjccLmTuTHtkaSyf_F_1QXzCoRw@mail.gmail.com> <87bjvers3u.fsf@prevas.dk>
+In-Reply-To: <87bjvers3u.fsf@prevas.dk>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 7 Feb 2025 06:27:57 -0500
+X-Gm-Features: AWEUYZm9MWuOjwS9lX6soP6HvGCb-hsrwH8EL3ZvEi3BRJZNc9R9maj_Z4tQnjM
+Message-ID: <CAJ-ks9=0+fk22Dx-65a+CSYhy0dnjTJuot9PtgOCi5Th1_wARA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] printf: convert self-test to KUnit
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-This change introduces a new selftest case to verify the functionality
-of dumping IPv4 multicast addresses using the RTM_GETMULTICAST netlink
-message. The test utilizes the ynl library to interact with the
-netlink interface and validate that the kernel correctly reports the
-joined IPv4 multicast addresses.
+On Fri, Feb 7, 2025 at 5:01=E2=80=AFAM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+>
+> On Thu, Feb 06 2025, Tamir Duberstein <tamird@gmail.com> wrote:
+>
+> > On Thu, Feb 6, 2025 at 4:27=E2=80=AFAM Rasmus Villemoes
+> > <linux@rasmusvillemoes.dk> wrote:
+> >>
+> >> On Tue, 4 Feb 2025 at 20:36, Tamir Duberstein <tamird@gmail.com> wrote=
+:
+> >> >
+> >> > This is one of just 3 remaining "Test Module" kselftests (the others
+> >> > being bitmap and scanf), the rest having been converted to KUnit.
+> >> >
+> >> > I tested this using:
+> >> >
+> >> > $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=
+=3D1 printf
+> >> >
+> >> > I have also sent out a series converting scanf[0].
+> >> >
+> >> > Link: https://lore.kernel.org/all/20250204-scanf-kunit-convert-v3-0-=
+386d7c3ee714@gmail.com/T/#u [0]
+> >> >
+> >>
+> >> Sorry, but NAK, not in this form.
+> >>
+> >> Please read the previous threads to understand what is wrong with this
+> >> mechanical approach. Not only is it wrong, it also actively makes the
+> >> test suite much less useful.
+> >>
+> >> https://lore.kernel.org/lkml/f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasm=
+usvillemoes.dk/
+> >> https://lore.kernel.org/lkml/876cc862-56f1-7330-f988-0248bec2fbad@rasm=
+usvillemoes.dk/
+> >> https://lore.kernel.org/lkml/0ab618c7-8c5c-00ae-8e08-0c1b99f3bf5c@rasm=
+usvillemoes.dk/
+> >>
+> >> I think the previous attempt was close to something acceptable (around
+> >> https://lore.kernel.org/lkml/57976ff4-7845-d721-ced1-1fe439000a9b@rasm=
+usvillemoes.dk/),
+> >> but I don't know what happened to it.
+> >>
+> >> Rasmus
+> >
+> > Thanks Rasmus, I wasn't aware of that prior effort. I've gone through
+> > and adopted your comments - the result is a first patch that is much
+> > smaller (104 insertions(+), 104 deletions(-)) and failure messages
+> > that are quite close to what is emitted now. I've taken care to keep
+> > all the control flow the same, as you requested. The previous
+> > discussion concluded with a promise to send another patch which didn't
+> > happen. May I send a v2 with these changes, or are there more
+> > fundamental objections? I'll also cc Arpitha and Brendan. The new
+> > failure output:
+> >
+> >     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:95
+> > vsnprintf(buf, 256, "%piS|%pIS", ...) wrote
+> > '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
+> >     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:95
+> > vsnprintf(buf, 19, "%piS|%pIS", ...) wrote '127.000.000.001|12',
+> > expected '127-000.000.001|12'
+> >     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:131
+> > kvasprintf(..., "%piS|%pIS", ...) returned
+> > '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
+>
+> That certainly addresses one of my main objections; I really don't want t=
+o see
+> "memcmp(..., ...) =3D=3D 1, expected memcmp(..., ...) =3D=3D 0". And you =
+said
+> you've kept the control flow/early returns the same, so that should also
+> be ok.
+>
+> I'll have to see the actual code, of course. In general, I find reading
+> code using those KUNIT macros quite hard, because I'm not familiar with
+> those macros and when I try to look up what they do they turn out to be
+> defined in terms of other KUNIT macros 10 levels deep.
+>
+> But that still leaves a few points. First, I really like that "388 test
+> cases passed" tally or some other free-form summary (so that I can see
+> that I properly hooked up, compiled, and ran a new testcase inside
+> test_number(), so any kind of aggregation on those top-level test_* is
+> too coarse).
 
-To run the test, execute the following command:
+This one I'm not sure how to address. What you're calling test cases
+here would typically be referred to as assertions, and I'm not aware
+of a way to report a count of assertions.
 
-$ vng -v --user root --cpus 16 -- \
-    make -C tools/testing/selftests TARGETS=3Dnet \
-    TEST_PROGS=3Drtnetlink.py TEST_GEN_PROGS=3D"" run_tests
+> The other thing I want to know is if this would make it harder for me to
+> finish up that "deterministic random testing" thing I wrote [*], but
+> never got around to actually get it upstream. It seems like something
+> that a framework like kunit could usefully provide out-of-the-box (which
+> is why I attempted to get it into kselftest), but as long as I'd still
+> be able to add in something like that, and get a "xxx failed, random
+> seed used was 0xabcdef" line printed, and run the test again setting the
+> seed explicitly to that 0xabcdef value, I'm good.
+>
+> [*] https://lore.kernel.org/lkml/20201025214842.5924-4-linux@rasmusvillem=
+oes.dk/
 
-Cc: Maciej =C5=BBenczykowski <maze@google.com>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
----
+I can't speak for the framework, but it wouldn't be any harder to do
+in printf itself. I did it this way:
 
-Changelog since v7:
-- Create a new RtnlAddrFamily to load rt_addr.yaml.
++static struct rnd_state rnd_state;
++static u64 seed;
++
+ static int printf_suite_init(struct kunit_suite *suite)
+ {
+  alloced_buffer =3D kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
+  if (!alloced_buffer)
+  return -1;
+  test_buffer =3D alloced_buffer + PAD_SIZE;
++
++ seed =3D get_random_u64();
++ prandom_seed_state(&rnd_state, seed);
+  return 0;
+ }
 
-Changelog since v6:
-- Move `getmaddrs` definition to rt_addr.yaml.
+ static void printf_suite_exit(struct kunit_suite *suite)
+ {
+  kfree(alloced_buffer);
++ if (kunit_suite_has_succeeded(suite) =3D=3D KUNIT_FAILURE) {
++ pr_info("Seed: %llu\n", seed);
++ }
+ }
 
- Documentation/netlink/specs/rt_addr.yaml      | 23 ++++++++++++++
- tools/testing/selftests/net/Makefile          |  1 +
- .../testing/selftests/net/lib/py/__init__.py  |  2 +-
- tools/testing/selftests/net/lib/py/ynl.py     |  4 +++
- tools/testing/selftests/net/rtnetlink.py      | 30 +++++++++++++++++++
- 5 files changed, 59 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/rtnetlink.py
+and the result (once I made one of the cases fail):
 
-diff --git a/Documentation/netlink/specs/rt_addr.yaml b/Documentation/netli=
-nk/specs/rt_addr.yaml
-index cbee1cedb177..5dd5469044c7 100644
---- a/Documentation/netlink/specs/rt_addr.yaml
-+++ b/Documentation/netlink/specs/rt_addr.yaml
-@@ -168,6 +168,29 @@ operations:
-         reply:
-           value: 20
-           attributes: *ifaddr-all
-+    -
-+      name: getmaddrs
-+      doc: Get / dump IPv4/IPv6 multicast addresses.
-+      attribute-set: addr-attrs
-+      fixed-header: ifaddrmsg
-+      do:
-+        request:
-+          value: 58
-+          attributes:
-+            - ifa-family
-+            - ifa-index
-+        reply:
-+          value: 58
-+          attributes: &mcaddr-attrs
-+            - ifa-multicast
-+            - ifa-cacheinfo
-+      dump:
-+        request:
-+          value: 58
-+            - ifa-family
-+        reply:
-+          value: 58
-+          attributes: *mcaddr-attrs
-=20
- mcast-groups:
-   list:
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests=
-/net/Makefile
-index 73ee88d6b043..e2f03211f9b3 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -36,6 +36,7 @@ TEST_PROGS +=3D cmsg_so_priority.sh
- TEST_PROGS +=3D cmsg_time.sh cmsg_ipv6.sh
- TEST_PROGS +=3D netns-name.sh
- TEST_PROGS +=3D nl_netdev.py
-+TEST_PROGS +=3D rtnetlink.py
- TEST_PROGS +=3D srv6_end_dt46_l3vpn_test.sh
- TEST_PROGS +=3D srv6_end_dt4_l3vpn_test.sh
- TEST_PROGS +=3D srv6_end_dt6_l3vpn_test.sh
-diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing=
-/selftests/net/lib/py/__init__.py
-index 54d8f5eba810..729457859316 100644
---- a/tools/testing/selftests/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/net/lib/py/__init__.py
-@@ -5,5 +5,5 @@ from .ksft import *
- from .netns import NetNS
- from .nsim import *
- from .utils import *
--from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFami=
-ly
-+from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFami=
-ly, RtnlAddrFamily
- from .ynl import NetshaperFamily
-diff --git a/tools/testing/selftests/net/lib/py/ynl.py b/tools/testing/self=
-tests/net/lib/py/ynl.py
-index ad1e36baee2a..8986c584cb37 100644
---- a/tools/testing/selftests/net/lib/py/ynl.py
-+++ b/tools/testing/selftests/net/lib/py/ynl.py
-@@ -42,6 +42,10 @@ class RtnlFamily(YnlFamily):
-         super().__init__((SPEC_PATH / Path('rt_link.yaml')).as_posix(),
-                          schema=3D'', recv_size=3Drecv_size)
-=20
-+class RtnlAddrFamily(YnlFamily):
-+    def __init__(self, recv_size=3D0):
-+        super().__init__((SPEC_PATH / Path('rt_addr.yaml')).as_posix(),
-+                         schema=3D'', recv_size=3Drecv_size)
-=20
- class NetdevFamily(YnlFamily):
-     def __init__(self, recv_size=3D0):
-diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selft=
-ests/net/rtnetlink.py
-new file mode 100755
-index 000000000000..80950888800b
---- /dev/null
-+++ b/tools/testing/selftests/net/rtnetlink.py
-@@ -0,0 +1,30 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from lib.py import ksft_exit, ksft_run, ksft_ge, RtnlAddrFamily
-+import socket
-+
-+IPV4_ALL_HOSTS_MULTICAST =3D b'\xe0\x00\x00\x01'
-+
-+def dump_mcaddr_check(rtnl: RtnlAddrFamily) -> None:
-+    """
-+    Verify that at least one interface has the IPv4 all-hosts multicast ad=
-dress.
-+    At least the loopback interface should have this address.
-+    """
-+
-+    addresses =3D rtnl.getmaddrs({"ifa-family": socket.AF_INET}, dump=3DTr=
-ue)
-+
-+    all_host_multicasts =3D [
-+        addr for addr in addresses if addr['ifa-multicast'] =3D=3D IPV4_AL=
-L_HOSTS_MULTICAST
-+    ]
-+
-+    ksft_ge(len(all_host_multicasts), 1,
-+            "No interface found with the IPv4 all-hosts multicast address"=
-)
-+
-+def main() -> None:
-+    rtnl =3D RtnlAddrFamily()
-+    ksft_run([dump_mcaddr_check], args=3D(rtnl, ))
-+    ksft_exit()
-+
-+if __name__ =3D=3D "__main__":
-+    main()
---=20
-2.48.1.502.g6dc24dfdaf-goog
+printf_kunit: Seed: 11480747578984087668
+# printf: pass:27 fail:1 skip:0 total:28
+# Totals: pass:27 fail:1 skip:0 total:28
+not ok 1 printf
 
+Thank you both for engaging with me here. I'll send v2 in a few
+minutes and we can continue the discussion there.
+Tamir
 
