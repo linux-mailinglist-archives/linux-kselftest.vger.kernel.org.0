@@ -1,109 +1,117 @@
-Return-Path: <linux-kselftest+bounces-26004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBA25A2C5AA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 15:38:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68F63A2C5C0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 15:43:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19E0D3AA63C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 14:37:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 528833A4C9C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 14:43:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 658B023ED62;
-	Fri,  7 Feb 2025 14:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A4623ED7A;
+	Fri,  7 Feb 2025 14:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzh4tRAN"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uwqW32XE";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jtOnsBd2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD25D22069A;
-	Fri,  7 Feb 2025 14:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6E813BAE4;
+	Fri,  7 Feb 2025 14:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738939078; cv=none; b=aAUQX4r0FHWQyjV4jgzyrssFGynKIiQofLViOKZvl2a90ssMKvjZV3UggiUIRpfI6Au5kHuXTyi+P0Y3zCLqH/niGFleKxY+MwBo0L+U/uAZqQiFrVAZheOj6PYroY7jPst/m4uvkVprKjxabKMbm/2kp7jnqjHlN6+MY9wtNsk=
+	t=1738939382; cv=none; b=SxJpRox7+OpxnVXscU6H+OFjePQj+uMP+XixD8GOIZ19NT3FpB8S+1Nkk3fH3vQsM2Wh+LfpcH3yFn5Ujuayb10jY5ENw1o42t2JlJlLgzAH4NMPoz9yvHZT9+GVZvWS0Ulqiw0bJsK0yGKPfU+JjmFQpqc/lkl2YeRiqQxx670=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738939078; c=relaxed/simple;
-	bh=jqowGkYZ4pmesdH31UEgUiregsf3ZvUnQhKbvZq1sgE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VCNzE1qxfnDKBEwBK13p7/egEtexWvhU1ZTofwzNolpnaS91O6l5TudLkoVInzqdvmfXYhpLYHMfPVmOEhI41lnPmqoLdORzwpF3VrBNIoCPqTZ4rPTkPQHwcw+//8AuUSzkMFAX/xzuc/pfIJtShryPeFexmEepfHFJtF5ohhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzh4tRAN; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-3061f1e534bso20624771fa.1;
-        Fri, 07 Feb 2025 06:37:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738939075; x=1739543875; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jqowGkYZ4pmesdH31UEgUiregsf3ZvUnQhKbvZq1sgE=;
-        b=kzh4tRANjnXcT+EcLbxA1kR9/zdPBCMLuynIzxuOh6i/DH2P9ISJwp4gpKb4E7v/x1
-         PhybTFhPkY1mUMDPzxmrosRI1wYrU/O5xFaXOGmYMQpPWw28Av1uFA3qO7S8CIh+VWTZ
-         d3AWnmcSPTTlai95ep/ysHaNkLD9HHXq8DgpbA9pChFwkE3JFr3CihFkOCZWjaw/isn+
-         ApIYpCdVOfd1tjSMPlK61GFzgCU+XQmcozpTdZuVIN/oUAa0PjV6TkWTCkrz5BUb2bd6
-         ztvc+NI9IJR1TwKjk3JAVCLVMl1qE4XOUfCxADsLha6nqrn5m8U4SBpmymwX4R5JJ9Ws
-         BPMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738939075; x=1739543875;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jqowGkYZ4pmesdH31UEgUiregsf3ZvUnQhKbvZq1sgE=;
-        b=L7QhI8kcZSDDQ2l5TNHjtwn+zaJ+Ps62IQVipJ30ZZSXHrZryKBOqqRyrMdT99D9cO
-         j+pBsBhiua0P15kreeHXWavysS35z4nixfwjWGZ1BpmAK9Pd+7jI2cliSlaJKQTAGMGa
-         WWhHnxS2FmM6DrKle83wq/Ms1JnMsHdJXvVGrBt/eL5yFtomS7jDT9Pk/nUZhFqbKO4O
-         C4c4cQ3TZ2uzXCiS/62+gNK5YN3Mol7IKWztrMdsdqrbnx8Dd4OtLchGbDIs4qk4woWx
-         RwMOQgasU+X3gTGhaEj+K7I3OXnx8CklqjmhY9033sSRslicWzbuE6eLrQQ10pRdGfB7
-         Nnzg==
-X-Forwarded-Encrypted: i=1; AJvYcCW1mmwVgTR0nVCFsBDRc+SHF1z+vxILfe71tGfQUbFyTDysCdPZSb6oLhShDFy1uM/HJmFsIMXPfHVLKWCBMuw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc5k2M4Rtq63DWj9rR3xa+wQWPQxYDz9E8Kp3JOczJbf6sV8+e
-	k3iotCsR10OkVvSXEsqQe1+F1lWWJb4XpkCa6eKy34NunNxx1vQO95NEge3hQJuOQ4cVMg4KFp4
-	eVjSXt792c60qDNGgwJGbsc2tX7A=
-X-Gm-Gg: ASbGnctl2g78c4qHfSGxCx6YNtaOyyseM96PJe8mfUtHTbIbP9mlI2sZ463ybtptcja
-	DxN6Ov3r5NlOSuocA2C8QakiVKHJcsJNouHsYA3kgoYYWct4AjJw8pHSk4dWKidcfBB0ULnqkIH
-	e1EQE1slbhT3iSD/7aLmsJpaG0Cchk
-X-Google-Smtp-Source: AGHT+IE/7s3ZRdv2RJ8mB73L0hZdZLCobg6+u7fVU3XDEg1fbPGQuUj9F3JzqSSxhsjeZb1AeDeBWwUNzMVlDjizq7c=
-X-Received: by 2002:a2e:bd14:0:b0:307:dc28:750b with SMTP id
- 38308e7fff4ca-307e5801f81mr11890231fa.13.1738939074559; Fri, 07 Feb 2025
- 06:37:54 -0800 (PST)
+	s=arc-20240116; t=1738939382; c=relaxed/simple;
+	bh=GaRceLLlogc4o9OjwuUlKdf9YKZMOrqTjM3515LS+Rw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mAxw5YXUSR3vrSBdVTLe5jfhaQfOjX4yMeGWowgNlbzX4lLAaemjGwBpNfdami6/f7Z1uhTtH9xMtsdPJnJzsRmqFQGPG/pfwepfSbgH78LjMOpqFwlStFJ1GIgghyjqJorXXzyiYuSqlfkSAxl16s9ifuhN2htaxVXUKLAP5xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uwqW32XE; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jtOnsBd2; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1738939374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CkeDqYa1HLfts95iCxAWRO24Np4zPeA8eWDtJpHaVXY=;
+	b=uwqW32XETTfe2u7CGshYrBNeAd+It/c+WnC1sALbfdPFvSaCtEi7ErbTUgR20g6mvbu/M/
+	uyvL6Ru9wTI1Y0k9fNu8yDrlaUV2ObuZoPfcTi3xIleR68BXK9QKXuoRiyttaV7PTP0ToX
+	CpdmTtj8Gh+78L3eD8joO+se52SZdPVUImCVceOqlT5aSIJjg7ajcZi5g8reOqVnNJNWNN
+	y7uOinjdrR/DeMZQnvZ9J7QX7HY7bNnhgHbtN0EbdUw7g+C+tHDuSX7687DWMztvSYlAP6
+	l5zNYX6/GNhCbR0TZkryf+LybkBfHCcigSqJQzRD/JXEeIOJP7CRm15wLJa+FQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1738939374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CkeDqYa1HLfts95iCxAWRO24Np4zPeA8eWDtJpHaVXY=;
+	b=jtOnsBd24wYOO8DUY4nJeuOxusWoOJiTGUPwTktLczqPvXUzX1fViIYAMoXBFt08EuQf8G
+	aOJ7fsBoWZzxXVBg==
+To: Jason Gunthorpe <jgg@nvidia.com>, Nicolin Chen <nicolinc@nvidia.com>,
+ robin.murphy@arm.com, maz@kernel.org
+Cc: will@kernel.org, kevin.tian@intel.com, alex.williamson@redhat.com,
+ joro@8bytes.org, shuah@kernel.org, reinette.chatre@intel.com,
+ eric.auger@redhat.com, yebin10@huawei.com, apatel@ventanamicro.com,
+ shivamurthy.shastri@linutronix.de, bhelgaas@google.com,
+ anna-maria@linutronix.de, yury.norov@gmail.com, nipun.gupta@amd.com,
+ iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, patches@lists.linux.dev,
+ jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
+ shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
+ ddutile@redhat.com
+Subject: Re: [PATCH RFCv2 00/13] iommu: Add MSI mapping support with nested
+ SMMU
+In-Reply-To: <20250207143402.GA3651395@nvidia.com>
+References: <cover.1736550979.git.nicolinc@nvidia.com>
+ <20250207143402.GA3651395@nvidia.com>
+Date: Fri, 07 Feb 2025 15:42:54 +0100
+Message-ID: <87lduhlssx.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207-printf-kunit-convert-v2-0-057b23860823@gmail.com> <20250207-printf-kunit-convert-v2-1-057b23860823@gmail.com>
-In-Reply-To: <20250207-printf-kunit-convert-v2-1-057b23860823@gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 7 Feb 2025 09:37:18 -0500
-X-Gm-Features: AWEUYZkqfV5zxM9Td4ZiPEVb-zfO0045lbfUGjZpcPCuzZw5gd9-N83XvwJrkDM
-Message-ID: <CAJ-ks9n+EyV8USyxqbKbTVv8RkNEe+F2DHHk0d1-Rv-osmgUng@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] printf: convert self-test to KUnit
-To: Arpitha Raghunandan <98.arpi@gmail.com>, David Gow <davidgow@google.com>, 
-	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Feb 7, 2025 at 6:30=E2=80=AFAM Tamir Duberstein <tamird@gmail.com> =
-wrote:
+On Fri, Feb 07 2025 at 10:34, Jason Gunthorpe wrote:
+> On Fri, Jan 10, 2025 at 07:32:16PM -0800, Nicolin Chen wrote:
+>> Though these two approaches feel very different on the surface, they can
+>> share some underlying common infrastructure. Currently, only one pair of
+>> sw_msi functions (prepare/compose) are provided by dma-iommu for irqchip
+>> drivers to directly use. There could be different versions of functions
+>> from different domain owners: for existing VFIO passthrough cases and in-
+>> kernel DMA domain cases, reuse the existing dma-iommu's version of sw_msi
+>> functions; for nested translation use cases, there can be another version
+>> of sw_msi functions to handle mapping and msi_msg(s) differently.
+>> 
+>> To support both approaches, in this series
+>>  - Get rid of the duplication in the "compose" function
+>>  - Introduce a function pointer for the previously "prepare" function
+>>  - Allow different domain owners to set their own "sw_msi" implementations
+>>  - Implement an iommufd_sw_msi function to additionally support a nested
+>>    translation use case using the approach (2), i.e. the RMR solution
+>>  - Add a pair of IOMMUFD options for a SW_MSI window for kernel and VMM to
+>>    agree on (for approach 1)
+>>  - Add a new VFIO ioctl to set the MSI(x) vector(s) for iommufd_sw_msi()
+>>    to update the msi_desc structure accordingly (for approach 2)
 >
-> Convert the printf() self-test to a KUnit test.
+> Thomas/Marc/Robin, are we comfortable with this general approach?
+> Nicolin can send something non-RFC for a proper review.
 >
-> In the interest of keeping the patch reasonably-sized this doesn't
-> refactor the tests into proper parameterized tests - it's all one big
-> test case.
+> I like it, it solves many of the problems iommufd had here and it
+> seems logical from the irq side.
 
-Apologies for the version churn, I'll have to send one more which
-removes spurious trailing newlines (not necessary in kunit) and
-converts logging macros like pr_info to kunit_info.
+I haven't seen anything horrible. My main concern of having a proper
+cached and writeable message is addressed.
 
-I'll wait a few days in case folks have other comments.
+Thanks,
+
+        tglx
 
