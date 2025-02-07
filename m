@@ -1,111 +1,148 @@
-Return-Path: <linux-kselftest+bounces-26025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78020A2CBDD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:49:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E4BAA2CBF2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:52:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 984B23A43BD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:48:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDEE7162562
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:52:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFB791A8F6D;
-	Fri,  7 Feb 2025 18:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C7E188596;
+	Fri,  7 Feb 2025 18:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AVJQKsBC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF3F19CD19;
-	Fri,  7 Feb 2025 18:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E8C10E5;
+	Fri,  7 Feb 2025 18:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953946; cv=none; b=csf6pGhDv3RzvjbV3UvDqH6T9AhGMszw+c4WTgXMLDHckVLQDbKOZrZIhUT4YxmEuwGSbzEkdjJvEyJHuHwWe/BB2N8snX/LSugJ700G/dU0mYUQVCSyU3yqxi/I2y3YIWx9TbuAUcvSs8ULFgXKChKHaNEL+mXbsuY3GQOQO1w=
+	t=1738954319; cv=none; b=ZR3Tx+fI40W+Z5l8eJeGDob1dR2WpEki4B+4asoztEvZYsOCg/d73GSBOnaF8Gaht60VamUG7x6ATgbvWCDwU74Euch9Yz6WTN+FVa++MDVpwDkmMzHyb47nEJy9PJ2MKRUMzV68I1KhPV/2O6PCQalWqoCjdKATku2ZHyzBi+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953946; c=relaxed/simple;
-	bh=G08VBEyiJJ6tR5NpSaqtSnJ8b/jJyircUmEMF27A+NA=;
+	s=arc-20240116; t=1738954319; c=relaxed/simple;
+	bh=7onJfjbDtWHDRExNm8cu9hpXQKqGW01LciP/zaYYx9M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YIoHov2ohflqahHw72UWyyergCGtTlERGmp3lh/9kjBIV/UVnk3YFMQ1xxWLwFxCkyUBnR8VRLoVfSS72LtZ5VsMrarQT1kOfEh7XyCHJ2Sa2T/Qpxa1JVAjGWAH0mPj7s5iOwg7eW3jtoHwFK3zysMb8k90k55TeVciHR8HXGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5dcef27deecso3538990a12.1;
-        Fri, 07 Feb 2025 10:45:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738953943; x=1739558743;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VhtexnXVY7QzQMUAllx3j3vLs0pu8Zqa/G9m/NY7Is=;
-        b=m7+Kq4m+rEjPUvojINjofKZqdxl5Z0+F6Y5ADmtfJNtJtgVsEqDJFvzc4pZKzsPOi6
-         h0kHf+mXWtralaU/Zl0D6onLfBRSmw6Im1pGi95827OS6G+pZkO50T5zzJLprXJ0/WUs
-         wH7Bz2/++Qs4R0l2kp8R6zuvasfV3Ec5BKgMPfi6c4VmNeA3Z+iElXRinSW/O0ef3eRE
-         tCXxSYHLLyLEfVNLEtembU4pzno2IMGg7AoZsf4m2XTLEF4etw7oK+jFFfSrjx3e+mRu
-         WwSjkhfR08Jn6qDXTHMjNxunCzeZ2YFwWPpEK/28B34SU0S9569gYZ4wVaDcLegl6PCG
-         gj2g==
-X-Forwarded-Encrypted: i=1; AJvYcCXa80UfyHBkq30PSfUd4a5W4KpHl9UOJ+Rh6NB1qRwqm1mThkqZzwB3Icf3nZITS8UbyAMPNQu1+npSIbmOJrVH@vger.kernel.org, AJvYcCXhHjdcw3kWoGKN3ayZMt0RQvZky/ABmrYCcY39Mv2xeULunyNjoy75WhqpZt4uc60QvN7+auAm33q1f1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNPbw6PToN5DrkkfiTpBhy9GjwZITy7bpOWKwWVmrm+ZDMzlMt
-	mOytrDZ/JIT2VqH59dhgwmAaWjDpX44VWryv8WzqRmZvkeO5c/ej
-X-Gm-Gg: ASbGncvMuLzrUONLBmXqfmGS7VadgPN8syEyqt01RHbBLyD5V6X7K01XVu4ymPzczc3
-	+zGHCqPIajMFgZNNSaE9vZwEfCj81NpINoHc9Sqk0Vj38lGFZfVXlH6Vwsan2QyZ8yoX47FOqT1
-	ZURMsKDr6kUxbZESY6wBH81qoJzL48LuQBYmjAwI1eLMKpq+6FNdzN7nVyXJK7IiTW8SL6NdHTN
-	fvGFsvF1Lvxiu8qKc7qEY5dfn/eWbIx372LyzIPxBk0sUQI0AkxAa7aePzQ/ce5f0n/AjqD++Qc
-	qpxNAA==
-X-Google-Smtp-Source: AGHT+IHAR6axEQ9+MHkvZntvG8d4OS0CceWilbre6crnARE2tUy/m826mkvKKvBjhjA1TdvTgvMfIg==
-X-Received: by 2002:a05:6402:3483:b0:5dc:c9ce:b01b with SMTP id 4fb4d7f45d1cf-5de450048camr4278947a12.8.1738953942726;
-        Fri, 07 Feb 2025 10:45:42 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:9::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dcf1b81608sm2898142a12.35.2025.02.07.10.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 10:45:41 -0800 (PST)
-Date: Fri, 7 Feb 2025 10:45:39 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Mark Brown <broonie@debian.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=maPoKl7+de24IJKJHJEosO+3uNPua+s2AtF6jew9RuNBigIK/TXP0uf5F0OrW/HeHW3rKobYEZ5qIhDQsgs7GbzAE4X6mqCZyCYrKh8gLqh12iCOR8hZM5FHMO/HXDsqAAvGbklCKslLJFDLQwJr+N8Kjjdz+UFBR58WRgfi688=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AVJQKsBC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5328C4CED1;
+	Fri,  7 Feb 2025 18:51:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738954318;
+	bh=7onJfjbDtWHDRExNm8cu9hpXQKqGW01LciP/zaYYx9M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AVJQKsBC7RMwQFymvjSHHCR2p0vwZLBFjHQLvvTRv/5cCZgPnMIV/DqIrN7B8ytIU
+	 M69yzNOlrbcpvlh/p+1eU1orKpp3MwCp3WiyvdqkTnteIRb76e1l/mmTkJmaFDU8yY
+	 LRBCZ6HNLoE9swbRVntg/VN2Kz4kkmunpQcnOLVTBeF37OfstugVNAl6GF2QBlzAJy
+	 xKb7IfTVpN4YeJ6MEHz97vd5bjTvAOXP3C8wgNBiUmKk59Q0HNeD+6c2rGsq83nQNf
+	 VnA1ep+dazqnA+VZYyLdJoCGKVNM5Dcbe4iUjkOtKttmaAR7Gs/yKW/MX1smWB6gEz
+	 2F+t1Mqsjvirg==
+Date: Fri, 7 Feb 2025 18:51:52 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Fix uninitialized variable warning in
- FPMR test
-Message-ID: <20250207-small-marmot-of-opposition-e7afd3@leitao>
-References: <20250207-arm_fix_selftest-v1-1-0d6eeb04299e@debian.org>
- <89da135a-8c14-478f-9830-0b03ecd0b14d@sirena.org.uk>
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 3/5] arm64/hwcap: Describe 2024 dpISA extensions to
+ userspace
+Message-ID: <0b3777cc-b73b-4843-97cb-5fe3cb1b9774@sirena.org.uk>
+References: <20250107-arm64-2024-dpisa-v5-0-7578da51fc3d@kernel.org>
+ <20250107-arm64-2024-dpisa-v5-3-7578da51fc3d@kernel.org>
+ <Z6ZS51BLkfFLl-5Y@J2N7QTR9R3>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DJF/VSDq3N4d5oeh"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <89da135a-8c14-478f-9830-0b03ecd0b14d@sirena.org.uk>
+In-Reply-To: <Z6ZS51BLkfFLl-5Y@J2N7QTR9R3>
+X-Cookie: MMM-MM!!  So THIS is BIO-NEBULATION!
 
-Hello Mark,
 
-On Fri, Feb 07, 2025 at 05:26:06PM +0000, Mark Brown wrote:
-> On Fri, Feb 07, 2025 at 03:06:42AM -0800, Breno Leitao wrote:
-> > Fix compiler warning about potentially uninitialized orig_fpmr variable:
-> > 
-> > 	testcases/fpmr_siginfo.c: In function ‘fpmr_present’:
-> > 	testcases/fpmr_siginfo.c:68:25: warning: ‘orig_fpmr’ may be used uninitialized in this function [-Wmaybe-uninitialized]
-> > 	                         fprintf(stderr, "FPMR in frame is %llx, was %llx\n",
-> > 	                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 	                                 fpmr_ctx->fpmr, orig_fpmr);
-> > 	                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This seems like something that should be reported to the compiler
-> people, we only print the FPMR value if have_fpmr and there's an
-> assignment to orig_fpmr in that case.  Which compiler is this?
+--DJF/VSDq3N4d5oeh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Good point. I am using:
-	# gcc --version
-	gcc (GCC) 11.5.0 20240719 (Red Hat 11.5.0-2)
+On Fri, Feb 07, 2025 at 06:37:27PM +0000, Mark Rutland wrote:
+> On Tue, Jan 07, 2025 at 10:59:43PM +0000, Mark Brown wrote:
+> > The 2024 dpISA introduces a number of architecture features all of which
+> > only add new instructions so only require the addition of hwcaps and ID
+> > register visibility.
 
-Clang, on the other hand, isn't upset about it.
+> While working on SME fixes atop v6.14-rc1, I found this patch breaks the
+> build spectacularly with CONFIG_ARM64_SME is enabled (splat at the end
+> of this mail), due to some missing definitions.
 
-	# clang --target=aarch64-redhat-linux-gnu -fintegrated-as -Wall -O2 -g -I/home/leit/Devel/upstream/tools/testing/selftests/ -isystem /home/leit/Devel/upstream/usr/include -I/home/leit/Devel/upstream/tools/include -std=gnu99 -I. -Wno-address-of-packed-member -Wno-gnu-variable-sized-type-not-at-end -D_GNU_SOURCE=  testcases/fpmr_siginfo.c test_signals.c test_signals_utils.c testcases/testcases.c signals.S sve_helpers.c -o testcases/fpmr_siginfo
-	# clang --version
-	clang version 19.1.3 (CentOS 19.1.3-1.el9)
+Yes, I already sent a fix for that which Will has merged:
 
+   https://lore.kernel.org/r/20250203-arm64-remove-sf8mmx-v1-1-6f1da3dbff82=
+@kernel.org
+=20
+> From a quick scan, there are some other missing bits too. For example
+> these two caps are defined in terms of ID_AA64FPFR0_EL1 fields:
+
+> > +HWCAP_F8MM8
+> > +    Functionality implied by ID_AA64FPFR0_EL1.F8MM8 =3D=3D 0b0001.
+> > +
+> > +HWCAP_F8MM4
+> > +    Functionality implied by ID_AA64FPFR0_EL1.F8MM4 =3D=3D 0b0001.
+
+> > +#define KERNEL_HWCAP_F8MM8		__khwcap_feature(F8MM8)
+> > +#define KERNEL_HWCAP_F8MM4		__khwcap_feature(F8MM4)
+
+> > +#define HWCAP_F8MM8		(1UL << 35)
+> > +#define HWCAP_F8MM4		(1UL << 36)
+
+> ... and we expose the ID register bits to userspace:
+
+> ... but there's no corresponding arm64_elf_hwcaps additions to actually
+> expose the hwcaps.
+
+Right, indeed.  I'll send a fix for that.
+
+> There are *SME* variants in arm64_elf_hwcaps:
+
+=2E..
+
+> ... but those KERNEL_HWCAP_SME_* values are never defined, and neither
+> are the UAPI equivalents.
+
+> We need to fix that quick, in case we need to shuffle values.
+
+These were removed in the patch above, the relevant features were
+removed from the architecture between the 2024-09 and 2024-12 XML
+releases so were removed from the patch series by the time it got
+applied but with CONFIG_SME being disabled the stray reference wasn't
+caught by testing.
+
+--DJF/VSDq3N4d5oeh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmemVkcACgkQJNaLcl1U
+h9ClRwf/WB2OvIr7lgQx020+QFzQCtNHusxsthqvrkbyHfN9xFDo0WGBzEhXht2t
+SxrHeNhPqeSa1twGITVG+lAlOresDhJwX8aCNVw43dWkKCvOF8wh5eiDc7PZOLXj
+Yj9HfFBUXWDVkQQ7gUSXRYBnRgvN2PoZlXgo2B2rEmsP7KU4UjkIPEN7kLKNBYK9
+ZznUGbYZBHOF6MbJeS5IbogE25jjEfterOxJq+J71TfLys/uQO4tDPYZ444A0K00
+ZnA8s2L/xJw0G6G1nH6ExTpbO6YcTy0j5E/OlTIjvQCZRNMWWDQF6P6kXyR9buh4
+Jz2fUFFsDgRIozNSVv2icyfgc+3isQ==
+=1zDI
+-----END PGP SIGNATURE-----
+
+--DJF/VSDq3N4d5oeh--
 
