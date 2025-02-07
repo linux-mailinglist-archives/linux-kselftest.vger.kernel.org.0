@@ -1,272 +1,306 @@
-Return-Path: <linux-kselftest+bounces-25978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D9EEA2BCF5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 08:55:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51C98A2BF3C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 10:27:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C4F0188B54A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 07:55:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66DE13AA1DA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 09:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32A151A2C25;
-	Fri,  7 Feb 2025 07:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BE01DC197;
+	Fri,  7 Feb 2025 09:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GIBUX6d/"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XQ7pGDBZ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+Z9gfUNp";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XQ7pGDBZ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+Z9gfUNp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766FE233D7C
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 07:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8AE74059;
+	Fri,  7 Feb 2025 09:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738914919; cv=none; b=i1e9by2AhoOejklUHR0K2VZtvQVMFhvGe5dXDEefQ89mtM4y5gJPPF6o/16oBLL/q383oXh0QMeD2rASNqGsVWRvm8uh7oqna90Wh7xjs/cGt14UsX4qttUQ8JoDQfBh/eVOOfH/MWpLI0JFrz4PvRfZGUKxyATT1O+dOZsfmLw=
+	t=1738920457; cv=none; b=CBDqfu8JbrEWZMXAr4KQFgM9ixdKZIG837lXOUQtBG8iyspGk7SBQXHgOq1VF1v/fRaohqMRsk/jhmAUkb33IOjGnmACqe8OrdzfcaLkwE13mgRgshCUAsFTEkvAevZw5+TksgwLN/KkZixIMIDnKqgcLcYXtzWG5tUEWfgC888=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738914919; c=relaxed/simple;
-	bh=GUFhr7Zca29CcyhP/s/01gEz8dHT7N67YrKE0c3Uzp8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ct/D5heCt8jg6Paayk9d2bqeAzXjipKDfaSkv5Smy3HlOM3kb1uL2hQIlXmcnAKp6fz1kBdHpz1FjQ3VDRbOA6Pwm6Od5hqzd/4I3ZfOSM5AerAnyvipFk/Jg45uqj0VAoKdO+bLRqI+fZpixXMnr2I8vdRuwnP1bQRFNDWA/xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GIBUX6d/; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6dcdd9a3e54so17770566d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 23:55:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738914916; x=1739519716; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lhiPVH7lOyt+j2ytlGslh9LPz3HKfEJcyfq1oZEx4YI=;
-        b=GIBUX6d/+yNc1UBbpQJC+bDsXIkWiYZejQheQP3rK10owbDUqwGFitCeY9TP1Yzdbm
-         IXz6q74O4WExu7Fv9gAOY19aVMyCW/ROkgerJ5y4iXOPcJ/jMJEFg9NuUcSRH7WVGR7e
-         YMqwX7saJFwMv26Czcy5L+/tsPP1uyOFOncYDEe2jqgXGZTLokVzUt5bSY5mMEV1kYhR
-         PgO9YXcTuAmtObNPjYWjCMS4scA0HEK3b4V83a0wwC/uQlV5jh0bowcf/GwP7Z4/TFKV
-         Xdh2BrN6xsXKlnDdnPEYoeoqGd3GT0dFXf1V4X4o9k1O9TPcWKd7GjoSh6r1djCoe2wj
-         qH/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738914916; x=1739519716;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lhiPVH7lOyt+j2ytlGslh9LPz3HKfEJcyfq1oZEx4YI=;
-        b=bH1ccbnkIy6Z5lTfa/n+lC+2JeytJcgT1/V5hiJ9Ag5sljWwJw4+FxQMzZWda/7dqP
-         yJdzT2j7FcI2ujTbr/D9LARXoWQ9pRhJVG2sxxpjr8IChDsVt77P2a87FwATX9lWZmz2
-         njeEa8P1KBaGhhUHo2A0iH9lHY9ftjnD56E+RKBSfF84HpMEupDOeWBS4ajj0b2etPfO
-         5r5/akv0M6uRwOH+Y0Q8A6rN2MdOXn9jVKpPk5ph8fFQBl1dgL6or/PvsBPztnDlxDZk
-         bRKjAiM7pUu4paqmVteThB7+U6aVHyLpCFRdliZS3gjjwV8DBBG/g7WHDMTCPAutpuB8
-         R37Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXdvg5vjTxFBIgq17oXfoZ5rLSZBwcivt7QRLVm0jRkWDLM3rCxJSIN8Cp5+GhS7uHFbvzMflWLSnL12oacJxg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGZDR9mrQE4N9gd1+nldmETGShr3w/nD+LLUpzEsxDmu2Pqduf
-	pdadFzKsZRrS22bL/Oe1TpC9wlm4t0al1BYh/9IurliI/PedyFQqbIm9hWn1CPi3TwclS90Ta/e
-	6O0Ks1qYo/u+bKFQ+bGC1fa5qik6wCKGgYS3W6FnzEswxDoEo0rCF/bM=
-X-Gm-Gg: ASbGncvqQwFTg9NzzwNFCbmQ/JAS2sKhpsoe7+3T1FmYs/GveTUt8kucu723arHvfUC
-	nG8zkk8zADx+wn1fwdWACDoZLzx1wHmBbXx9YMog0gOfBF9BbU5Gwvi/nupPUz3pRDJZZKzN/OQ
-	==
-X-Google-Smtp-Source: AGHT+IFCNsumyeOHiqkcOoacGlEik2Lj2uDIMKD80TUQNKeDUM5p7/U2J/eKmUsdladoNscWe3soAuF7sCf9WOmCiE4=
-X-Received: by 2002:a05:6214:5098:b0:6d8:aba8:837b with SMTP id
- 6a1803df08f44-6e445717b8fmr20625736d6.41.1738914916027; Thu, 06 Feb 2025
- 23:55:16 -0800 (PST)
+	s=arc-20240116; t=1738920457; c=relaxed/simple;
+	bh=Cjg41zt3tu6A6sampuq3xFWQGGE2PJODjl/kVEM+1xU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oCJ6gjK/vd2VgwABS5a+FVj/Dk6u8PFLNxn7uYQF44RzFDyu2qksEgZWFsBeXyD+yXcKpkm4E3jiR4uwrKdsIS38hYfaGJev3KS//raro8rSJ8Un8I3/b2EQJOOA+m+297cMaXX6F8ZywSKl3NGfT9iWh1JOerToCusm4G9Wolk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XQ7pGDBZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+Z9gfUNp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XQ7pGDBZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+Z9gfUNp; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 775AB1F38D;
+	Fri,  7 Feb 2025 09:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1738920431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/vhtL15V8lzJWJ74SEaJOEukiJU5OxDONdQQRQdk17w=;
+	b=XQ7pGDBZptTA4/T7Wm2s45W21O6H15JOt+nMgp5cYjyoHfcXgONFsGj6C2snk2bpEUfvzd
+	T0His087wisIom2qwMp/oOS1DcYmS3iAQD/govYJCHdE/WnHWwVjtYJqvGUzBeh5tmXeuW
+	s6MDvJmwkNZavqUBjGHNZQVVMWOVNdE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1738920431;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/vhtL15V8lzJWJ74SEaJOEukiJU5OxDONdQQRQdk17w=;
+	b=+Z9gfUNpXGMvjzI1r4rplxWv//CjB6KF5Y4+mE85bC/bRF91WRf/CLRxZXUOQ4idrfZsLM
+	BieK7g1ti1cCJBAw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=XQ7pGDBZ;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=+Z9gfUNp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1738920431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/vhtL15V8lzJWJ74SEaJOEukiJU5OxDONdQQRQdk17w=;
+	b=XQ7pGDBZptTA4/T7Wm2s45W21O6H15JOt+nMgp5cYjyoHfcXgONFsGj6C2snk2bpEUfvzd
+	T0His087wisIom2qwMp/oOS1DcYmS3iAQD/govYJCHdE/WnHWwVjtYJqvGUzBeh5tmXeuW
+	s6MDvJmwkNZavqUBjGHNZQVVMWOVNdE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1738920431;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=/vhtL15V8lzJWJ74SEaJOEukiJU5OxDONdQQRQdk17w=;
+	b=+Z9gfUNpXGMvjzI1r4rplxWv//CjB6KF5Y4+mE85bC/bRF91WRf/CLRxZXUOQ4idrfZsLM
+	BieK7g1ti1cCJBAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1992513694;
+	Fri,  7 Feb 2025 09:27:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id TGjfA+/RpWeQXQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Fri, 07 Feb 2025 09:27:11 +0000
+Message-ID: <6543c6b6-da86-4c10-9b8c-e5fe6f6f7da9@suse.cz>
+Date: Fri, 7 Feb 2025 10:27:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com>
- <CAKwiHFi6SUCT7UjUTdKmLJ8kiAEqVg=d6ND60R05MJB85Eoj9w@mail.gmail.com> <CAJ-ks9kLmArqqPati8n0dwzhjccLmTuTHtkaSyf_F_1QXzCoRw@mail.gmail.com>
-In-Reply-To: <CAJ-ks9kLmArqqPati8n0dwzhjccLmTuTHtkaSyf_F_1QXzCoRw@mail.gmail.com>
-From: David Gow <davidgow@google.com>
-Date: Fri, 7 Feb 2025 15:55:04 +0800
-X-Gm-Features: AWEUYZkkoEwLRUZgbNWNsQJ3KGH60_380LImotgycakidO9ZW74rmCI4GAG9KPo
-Message-ID: <CABVgOSnyh__y7W8+txaFQwDKPxA75aCHW1O0TvTxpFojc9pQaw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] printf: convert self-test to KUnit
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, Petr Mladek <pmladek@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e615fb062d88ada1"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 01/26] mm: helper `is_shadow_stack_vma` to check shadow
+ stack vma
+Content-Language: en-US
+To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Christian Brauner <brauner@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
+ rick.p.edgecombe@intel.com
+References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
+ <20250204-v5_user_cfi_series-v9-1-b37a49c5205c@rivosinc.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <20250204-v5_user_cfi_series-v9-1-b37a49c5205c@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 775AB1F38D
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[47];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kvack.org,lists.infradead.org,wdc.com,linaro.org,sifive.com,gmail.com,rivosinc.com,google.com,kernel.org,intel.com];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLisu716frudqkg98kczdd9eac)];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
+X-Spam-Flag: NO
 
---000000000000e615fb062d88ada1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 2/5/25 02:21, Deepak Gupta wrote:
+> VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) is used to encode shadow stack
 
-On Thu, 6 Feb 2025 at 23:42, Tamir Duberstein <tamird@gmail.com> wrote:
->
-> On Thu, Feb 6, 2025 at 4:27=E2=80=AFAM Rasmus Villemoes
-> <linux@rasmusvillemoes.dk> wrote:
-> >
-> > On Tue, 4 Feb 2025 at 20:36, Tamir Duberstein <tamird@gmail.com> wrote:
-> > >
-> > > This is one of just 3 remaining "Test Module" kselftests (the others
-> > > being bitmap and scanf), the rest having been converted to KUnit.
-> > >
-> > > I tested this using:
-> > >
-> > > $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=
-=3D1 printf
-> > >
-> > > I have also sent out a series converting scanf[0].
-> > >
-> > > Link: https://lore.kernel.org/all/20250204-scanf-kunit-convert-v3-0-3=
-86d7c3ee714@gmail.com/T/#u [0]
-> > >
-> >
-> > Sorry, but NAK, not in this form.
-> >
-> > Please read the previous threads to understand what is wrong with this
-> > mechanical approach. Not only is it wrong, it also actively makes the
-> > test suite much less useful.
-> >
-> > https://lore.kernel.org/lkml/f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmu=
-svillemoes.dk/
-> > https://lore.kernel.org/lkml/876cc862-56f1-7330-f988-0248bec2fbad@rasmu=
-svillemoes.dk/
-> > https://lore.kernel.org/lkml/0ab618c7-8c5c-00ae-8e08-0c1b99f3bf5c@rasmu=
-svillemoes.dk/
-> >
-> > I think the previous attempt was close to something acceptable (around
-> > https://lore.kernel.org/lkml/57976ff4-7845-d721-ced1-1fe439000a9b@rasmu=
-svillemoes.dk/),
-> > but I don't know what happened to it.
-> >
-> > Rasmus
->
-> Thanks Rasmus, I wasn't aware of that prior effort. I've gone through
-> and adopted your comments - the result is a first patch that is much
-> smaller (104 insertions(+), 104 deletions(-)) and failure messages
-> that are quite close to what is emitted now. I've taken care to keep
-> all the control flow the same, as you requested. The previous
-> discussion concluded with a promise to send another patch which didn't
-> happen. May I send a v2 with these changes, or are there more
-> fundamental objections? I'll also cc Arpitha and Brendan. The new
-> failure output:
->
->     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:95
-> vsnprintf(buf, 256, "%piS|%pIS", ...) wrote
-> '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:95
-> vsnprintf(buf, 19, "%piS|%pIS", ...) wrote '127.000.000.001|12',
-> expected '127-000.000.001|12'
->     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:131
-> kvasprintf(..., "%piS|%pIS", ...) returned
-> '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->
+I see that arm GCS uses VM_HIGH_ARCH_6.
 
-This failure message looks good to me. The ones in the current patch
-are very verbose, and while the memory comparisons could be useful for
-the overflow/buffer size tests, for simple string comparisons, having
-the string in a readable format is best.
+> VMA on three architectures (x86 shadow stack, arm GCS and RISC-V shadow
 
-Rasmus: the KUnit framework has since added a summary line to the
-output by default, which should also make this less of a regression
-from the existing format:
-# printf: pass:28 fail:0 skip:0 total:28
+And RISC-V doesn't define it at all, not even in this patchset, or did I
+miss it somewhere?
 
-Cheers,
--- David
+> stack). In case architecture doesn't implement shadow stack, it's VM_NONE
+> Introducing a helper `is_shadow_stack_vma` to determine shadow stack vma
+> or not.
 
---000000000000e615fb062d88ada1
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+This looks like an unfinished sentence. As if it was to continue with "...
+will allow us to ..." what?
 
-MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-NjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMKR2xvYmFsU2lnbjAeFw0xNDEyMTAwMDAw
-MDBaFw0zNDEyMTAwMDAwMDBaMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFI2MRMw
-EQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMIICIjANBgkqhkiG9w0BAQEF
-AAOCAg8AMIICCgKCAgEAlQfoc8pm+ewUyns89w0I8bRFCyyCtEjG61s8roO4QZIzFKRvf+kqzMaw
-iGvFtonRxrL/FM5RFCHsSt0bWsbWh+5NOhUG7WRmC5KAykTec5RO86eJf094YwjIElBtQmYvTbl5
-KE1SGooagLcZgQ5+xIq8ZEwhHENo1z08isWyZtWQmrcxBsW+4m0yBqYe+bnrqqO4v76CY1DQ8BiJ
-3+QPefXqoh8q0nAue+e8k7ttU+JIfIwQBzj/ZrJ3YX7g6ow8qrSk9vOVShIHbf2MsonP0KBhd8hY
-dLDUIzr3XTrKotudCd5dRC2Q8YHNV5L6frxQBGM032uTGL5rNrI55KwkNrfw77YcE1eTtt6y+OKF
-t3OiuDWqRfLgnTahb1SK8XJWbi6IxVFCRBWU7qPFOJabTk5aC0fzBjZJdzC8cTflpuwhCHX85mEW
-P3fV2ZGXhAps1AJNdMAU7f05+4PyXhShBLAL6f7uj+FuC7IIs2FmCWqxBjplllnA8DX9ydoojRoR
-h3CBCqiadR2eOoYFAJ7bgNYl+dwFnidZTHY5W+r5paHYgw/R/98wEfmFzzNI9cptZBQselhP00sI
-ScWVZBpjDnk99bOMylitnEJFeW4OhxlcVLFltr+Mm9wT6Q1vuC7cZ27JixG1hBSKABlwg3mRl5HU
-Gie/Nx4yB9gUYzwoTK8CAwEAAaNjMGEwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8w
-HQYDVR0OBBYEFK5sBaOTE+Ki5+LXHNbH8H/IZ1OgMB8GA1UdIwQYMBaAFK5sBaOTE+Ki5+LXHNbH
-8H/IZ1OgMA0GCSqGSIb3DQEBDAUAA4ICAQCDJe3o0f2VUs2ewASgkWnmXNCE3tytok/oR3jWZZip
-W6g8h3wCitFutxZz5l/AVJjVdL7BzeIRka0jGD3d4XJElrSVXsB7jpl4FkMTVlezorM7tXfcQHKs
-o+ubNT6xCCGh58RDN3kyvrXnnCxMvEMpmY4w06wh4OMd+tgHM3ZUACIquU0gLnBo2uVT/INc053y
-/0QMRGby0uO9RgAabQK6JV2NoTFR3VRGHE3bmZbvGhwEXKYV73jgef5d2z6qTFX9mhWpb+Gm+99w
-MOnD7kJG7cKTBYn6fWN7P9BxgXwA6JiuDng0wyX7rwqfIGvdOxOPEoziQRpIenOgd2nHtlx/gsge
-/lgbKCuobK1ebcAF0nu364D+JTf+AptorEJdw+71zNzwUHXSNmmc5nsE324GabbeCglIWYfrexRg
-emSqaUPvkcdM7BjdbO9TLYyZ4V7ycj7PVMi9Z+ykD0xF/9O5MCMHTI8Qv4aW2ZlatJlXHKTMuxWJ
-U7osBQ/kxJ4ZsRg01Uyduu33H68klQR4qAO77oHl2l98i0qhkHQlp7M+S8gsVr3HyO844lyS8Hn3
-nIS6dC1hASB+ftHyTwdZX4stQ1LrRgyU4fVmR3l31VRbH60kN8tFWk6gREjI2LCZxRWECfbWSUnA
-ZbjmGnFuoKjxguhFPmzWAtcKZ4MFWsmkEDCCBeQwggPMoAMCAQICEAHAzCnLVtRkCgyqhFEoeKYw
-DQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2Ex
-KjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMzAeFw0yNTAxMTAxODI1
-MTFaFw0yNTA3MDkxODI1MTFaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5jb20w
-ggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCoH0MspP58MiGTPha+mn1WzCI23OgX5wLB
-sXU0Br/FkQPM9EXOhArvxMOyFi0Sfz0HX20qlaIHxviaVNYpVMgmQO8x3Ww9zBVF9wpTnF6HSZ8s
-ZK7KHZhg43rwOEmRoA+3JXcgbmZqmZvLQwkGMld+HnQzJrvuFwXPlQt38yzNtRjWR2JmNn19OnEH
-uBaFE7b0Pl93kJE60o561TAoFS8AoP4rZFUSqtCL7LD2JseW1+SaJcUhJzLxStodIIc6hQbzOQ/f
-EvWDWbXF7nZWcQ5RDe7KgHIqwT8/8zsdCNiB2WW7SyjRRVL1CuoqCbhtervvgZmB3EXbLpXyNsoW
-YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
-N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
-exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
-+ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
-XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
-QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
-TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
-oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
-cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
-uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
-PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
-AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgvCt6fweGnir8UW8Bv8uA5cofjZIZ
-gzA6RaiYqcrLXFAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MjA3MDc1NTE2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAAilMUjkk0UdgcQsfBKE57z2ochZOsHbmMXa1z8+eAavrTUm
-LxrAQ7QX7jpC1F+jJGtBq0VGvBOyf7duQTJt3TDIBuh4fwmDny34MatVeP/5WGIQ8MaTsQzTqRoz
-sN+wEcM+KpMEWuhI9zP0fyfbiAGJtBtLaibtXWRZfXWvVeY8UABA7wPLc0qp+LhkTKiywqYzP/8y
-CXwoqnBWWCtslxGCIMsG2ShWa+ysNDAz6hBRxCZLgN7HCi4r6NtqKkHXjxw86OwM1AMAZnvukXxB
-Oq0gG2JUWrwDQdvyeglLXx3npVLcqd/8eN1FFRO+ml3fEPzCJ8DPNR1bd0UjPpVx0lM=
---000000000000e615fb062d88ada1--
+I'm not against a helper but this changelog is rather confusing and also
+code in arch/x86 and arch/arm64 isn't converted to the helper but testing
+VM_SHADOW_STACK still.
+
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> ---
+>  mm/gup.c  |  2 +-
+>  mm/mmap.c |  2 +-
+>  mm/vma.h  | 10 +++++++---
+>  3 files changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 3883b307780e..8c64f3ff34ab 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1291,7 +1291,7 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>  		    !writable_file_mapping_allowed(vma, gup_flags))
+>  			return -EFAULT;
+>  
+> -		if (!(vm_flags & VM_WRITE) || (vm_flags & VM_SHADOW_STACK)) {
+> +		if (!(vm_flags & VM_WRITE) || is_shadow_stack_vma(vm_flags)) {
+>  			if (!(gup_flags & FOLL_FORCE))
+>  				return -EFAULT;
+>  			/*
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index cda01071c7b1..7b6be4eec35d 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -648,7 +648,7 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+>   */
+>  static inline unsigned long stack_guard_placement(vm_flags_t vm_flags)
+>  {
+> -	if (vm_flags & VM_SHADOW_STACK)
+> +	if (is_shadow_stack_vma(vm_flags))
+>  		return PAGE_SIZE;
+>  
+>  	return 0;
+> diff --git a/mm/vma.h b/mm/vma.h
+> index a2e8710b8c47..47482a25f5c3 100644
+> --- a/mm/vma.h
+> +++ b/mm/vma.h
+> @@ -278,7 +278,7 @@ static inline struct vm_area_struct *vma_prev_limit(struct vma_iterator *vmi,
+>  }
+>  
+>  /*
+> - * These three helpers classifies VMAs for virtual memory accounting.
+> + * These four helpers classifies VMAs for virtual memory accounting.
+>   */
+>  
+>  /*
+> @@ -289,6 +289,11 @@ static inline bool is_exec_mapping(vm_flags_t flags)
+>  	return (flags & (VM_EXEC | VM_WRITE | VM_STACK)) == VM_EXEC;
+>  }
+>  
+> +static inline bool is_shadow_stack_vma(vm_flags_t vm_flags)
+> +{
+> +	return !!(vm_flags & VM_SHADOW_STACK);
+> +}
+> +
+>  /*
+>   * Stack area (including shadow stacks)
+>   *
+> @@ -297,7 +302,7 @@ static inline bool is_exec_mapping(vm_flags_t flags)
+>   */
+>  static inline bool is_stack_mapping(vm_flags_t flags)
+>  {
+> -	return ((flags & VM_STACK) == VM_STACK) || (flags & VM_SHADOW_STACK);
+> +	return ((flags & VM_STACK) == VM_STACK) || is_shadow_stack_vma(flags);
+>  }
+>  
+>  /*
+> @@ -308,7 +313,6 @@ static inline bool is_data_mapping(vm_flags_t flags)
+>  	return (flags & (VM_WRITE | VM_SHARED | VM_STACK)) == VM_WRITE;
+>  }
+>  
+> -
+>  static inline void vma_iter_config(struct vma_iterator *vmi,
+>  		unsigned long index, unsigned long last)
+>  {
+> 
+
 
