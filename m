@@ -1,124 +1,111 @@
-Return-Path: <linux-kselftest+bounces-26024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5671FA2CBA3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:43:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78020A2CBDD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:49:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DBE8188600C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:43:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 984B23A43BD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:48:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8B51B4153;
-	Fri,  7 Feb 2025 18:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ozhpCKSM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFB791A8F6D;
+	Fri,  7 Feb 2025 18:45:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FA31ABEC5;
-	Fri,  7 Feb 2025 18:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF3F19CD19;
+	Fri,  7 Feb 2025 18:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953703; cv=none; b=bdGnRp+FW/tVq18ZN1kHCSfPTfuUh1G5tZNq67SYAfci8d/Sshp7Y2L8RTsp3/7rC1Ok1Dkto9kloz5oZREdh9DGRlcT4CV35YRqyZ5rlukpzYPP3nbl7QeLRR1lY3AcCU2KNYXVNhiBS20TJNAvY1VVQZEuQizAJVTKumlt90w=
+	t=1738953946; cv=none; b=csf6pGhDv3RzvjbV3UvDqH6T9AhGMszw+c4WTgXMLDHckVLQDbKOZrZIhUT4YxmEuwGSbzEkdjJvEyJHuHwWe/BB2N8snX/LSugJ700G/dU0mYUQVCSyU3yqxi/I2y3YIWx9TbuAUcvSs8ULFgXKChKHaNEL+mXbsuY3GQOQO1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953703; c=relaxed/simple;
-	bh=uVEl4T3KcMSW5xOCdxbkUhNrrPWbNFo+ziho0Yt4p0g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EEzcM1Drc4mF1q9UAl/eLtFglfRXu1WhYC2NOBizFabX2x7wVp6VHG2uZjmhmTAnwkRr3QCfuWbueHtGiyoeDgH++H+PNrxiHAdpKzQLSPApMU0zdFRh0JFKtrUeUcTwT7SIEHKQfM7AePPwdr9iQ2Gox8SZ5HoP7ATiciG3cLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ozhpCKSM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD42C4CEDF;
-	Fri,  7 Feb 2025 18:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738953702;
-	bh=uVEl4T3KcMSW5xOCdxbkUhNrrPWbNFo+ziho0Yt4p0g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ozhpCKSMH+lhp5bndlaWMElSJeYdKpHcO1iksgxaCadiRV9Y8sUkeQCW3thLwCYfo
-	 SWrmNrL2SIuSd1OsEobkGF18invXt4MO2rnxS304TJDyV8gW9A/PbUqjyPJL6gutmF
-	 Mhd47/Qb8u5g/cTuf8MTvos3RlXT59wiBjyxoxyI7PMhCL6E58lwxvGHQrZjk3zTgI
-	 sRrQdu/N+D3IkWe8M3yHuCL8S/Yij5ewNBaZg+/P+LN9BbfwIseEPKJvLFHm8wuRFU
-	 YPOays9w+Fgum0k7ofyzgBNx6OJNglWl37m6G3GIl16KTeDcGohZt111AiRB3QUOgI
-	 NyRNTLLJUBJGg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	willemb@google.com,
-	petrm@nvidia.com,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 2/2] selftests: drv-net: add helper for path resolution
-Date: Fri,  7 Feb 2025 10:41:40 -0800
-Message-ID: <20250207184140.1730466-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250207184140.1730466-1-kuba@kernel.org>
-References: <20250207184140.1730466-1-kuba@kernel.org>
+	s=arc-20240116; t=1738953946; c=relaxed/simple;
+	bh=G08VBEyiJJ6tR5NpSaqtSnJ8b/jJyircUmEMF27A+NA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YIoHov2ohflqahHw72UWyyergCGtTlERGmp3lh/9kjBIV/UVnk3YFMQ1xxWLwFxCkyUBnR8VRLoVfSS72LtZ5VsMrarQT1kOfEh7XyCHJ2Sa2T/Qpxa1JVAjGWAH0mPj7s5iOwg7eW3jtoHwFK3zysMb8k90k55TeVciHR8HXGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5dcef27deecso3538990a12.1;
+        Fri, 07 Feb 2025 10:45:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738953943; x=1739558743;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VhtexnXVY7QzQMUAllx3j3vLs0pu8Zqa/G9m/NY7Is=;
+        b=m7+Kq4m+rEjPUvojINjofKZqdxl5Z0+F6Y5ADmtfJNtJtgVsEqDJFvzc4pZKzsPOi6
+         h0kHf+mXWtralaU/Zl0D6onLfBRSmw6Im1pGi95827OS6G+pZkO50T5zzJLprXJ0/WUs
+         wH7Bz2/++Qs4R0l2kp8R6zuvasfV3Ec5BKgMPfi6c4VmNeA3Z+iElXRinSW/O0ef3eRE
+         tCXxSYHLLyLEfVNLEtembU4pzno2IMGg7AoZsf4m2XTLEF4etw7oK+jFFfSrjx3e+mRu
+         WwSjkhfR08Jn6qDXTHMjNxunCzeZ2YFwWPpEK/28B34SU0S9569gYZ4wVaDcLegl6PCG
+         gj2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXa80UfyHBkq30PSfUd4a5W4KpHl9UOJ+Rh6NB1qRwqm1mThkqZzwB3Icf3nZITS8UbyAMPNQu1+npSIbmOJrVH@vger.kernel.org, AJvYcCXhHjdcw3kWoGKN3ayZMt0RQvZky/ABmrYCcY39Mv2xeULunyNjoy75WhqpZt4uc60QvN7+auAm33q1f1Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNPbw6PToN5DrkkfiTpBhy9GjwZITy7bpOWKwWVmrm+ZDMzlMt
+	mOytrDZ/JIT2VqH59dhgwmAaWjDpX44VWryv8WzqRmZvkeO5c/ej
+X-Gm-Gg: ASbGncvMuLzrUONLBmXqfmGS7VadgPN8syEyqt01RHbBLyD5V6X7K01XVu4ymPzczc3
+	+zGHCqPIajMFgZNNSaE9vZwEfCj81NpINoHc9Sqk0Vj38lGFZfVXlH6Vwsan2QyZ8yoX47FOqT1
+	ZURMsKDr6kUxbZESY6wBH81qoJzL48LuQBYmjAwI1eLMKpq+6FNdzN7nVyXJK7IiTW8SL6NdHTN
+	fvGFsvF1Lvxiu8qKc7qEY5dfn/eWbIx372LyzIPxBk0sUQI0AkxAa7aePzQ/ce5f0n/AjqD++Qc
+	qpxNAA==
+X-Google-Smtp-Source: AGHT+IHAR6axEQ9+MHkvZntvG8d4OS0CceWilbre6crnARE2tUy/m826mkvKKvBjhjA1TdvTgvMfIg==
+X-Received: by 2002:a05:6402:3483:b0:5dc:c9ce:b01b with SMTP id 4fb4d7f45d1cf-5de450048camr4278947a12.8.1738953942726;
+        Fri, 07 Feb 2025 10:45:42 -0800 (PST)
+Received: from gmail.com ([2a03:2880:30ff:9::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dcf1b81608sm2898142a12.35.2025.02.07.10.45.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2025 10:45:41 -0800 (PST)
+Date: Fri, 7 Feb 2025 10:45:39 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Mark Brown <broonie@debian.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: Fix uninitialized variable warning in
+ FPMR test
+Message-ID: <20250207-small-marmot-of-opposition-e7afd3@leitao>
+References: <20250207-arm_fix_selftest-v1-1-0d6eeb04299e@debian.org>
+ <89da135a-8c14-478f-9830-0b03ecd0b14d@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <89da135a-8c14-478f-9830-0b03ecd0b14d@sirena.org.uk>
 
-Refering to C binaries from Python code is going to be a common
-need. Add a helper to convert from path in relation to the test.
-Meaning, if the test is in the same directory as the binary, the
-call would be simply: cfg.rpath("binary").
+Hello Mark,
 
-The helper name "rpath" is not great. I can't think of a better
-name that would be accurate yet concise.
+On Fri, Feb 07, 2025 at 05:26:06PM +0000, Mark Brown wrote:
+> On Fri, Feb 07, 2025 at 03:06:42AM -0800, Breno Leitao wrote:
+> > Fix compiler warning about potentially uninitialized orig_fpmr variable:
+> > 
+> > 	testcases/fpmr_siginfo.c: In function ‘fpmr_present’:
+> > 	testcases/fpmr_siginfo.c:68:25: warning: ‘orig_fpmr’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+> > 	                         fprintf(stderr, "FPMR in frame is %llx, was %llx\n",
+> > 	                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 	                                 fpmr_ctx->fpmr, orig_fpmr);
+> > 	                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> This seems like something that should be reported to the compiler
+> people, we only print the FPMR value if have_fpmr and there's an
+> assignment to orig_fpmr in that case.  Which compiler is this?
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/drivers/net/hw/csum.py    |  2 +-
- tools/testing/selftests/drivers/net/lib/py/env.py | 12 ++++++++++++
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Good point. I am using:
+	# gcc --version
+	gcc (GCC) 11.5.0 20240719 (Red Hat 11.5.0-2)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/csum.py b/tools/testing/selftests/drivers/net/hw/csum.py
-index cb40497faee4..cd477f3440ca 100755
---- a/tools/testing/selftests/drivers/net/hw/csum.py
-+++ b/tools/testing/selftests/drivers/net/hw/csum.py
-@@ -100,7 +100,7 @@ from lib.py import bkg, cmd, wait_port_listen
-     with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
-         check_nic_features(cfg)
- 
--        cfg.bin_local = path.abspath(path.dirname(__file__) + "/../../../net/lib/csum")
-+        cfg.bin_local = cfg.rpath("../../../net/lib/csum")
-         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
- 
-         cases = []
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index 2f17880e411d..886b4904613c 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -18,6 +18,18 @@ from .remote import Remote
-         self.src_path = src_path
-         self.env = self._load_env_file()
- 
-+    def rpath(self, path):
-+        """
-+        Get an absolute path to a file based on a path relative to the directory
-+        containing the test which constructed env.
-+
-+        For example, if the test.py is in the same directory as
-+        a binary (built from helper.c), the test can use env.rpath("helper")
-+        to get the absolute path to the binary
-+        """
-+        src_dir = Path(self.src_path).parent.resolve()
-+        return (src_dir / path).as_posix()
-+
-     def _load_env_file(self):
-         env = os.environ.copy()
- 
--- 
-2.48.1
+Clang, on the other hand, isn't upset about it.
+
+	# clang --target=aarch64-redhat-linux-gnu -fintegrated-as -Wall -O2 -g -I/home/leit/Devel/upstream/tools/testing/selftests/ -isystem /home/leit/Devel/upstream/usr/include -I/home/leit/Devel/upstream/tools/include -std=gnu99 -I. -Wno-address-of-packed-member -Wno-gnu-variable-sized-type-not-at-end -D_GNU_SOURCE=  testcases/fpmr_siginfo.c test_signals.c test_signals_utils.c testcases/testcases.c signals.S sve_helpers.c -o testcases/fpmr_siginfo
+	# clang --version
+	clang version 19.1.3 (CentOS 19.1.3-1.el9)
 
 
