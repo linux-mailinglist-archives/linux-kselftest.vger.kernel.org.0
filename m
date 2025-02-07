@@ -1,261 +1,213 @@
-Return-Path: <linux-kselftest+bounces-25994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18E59A2C1E6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 12:49:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C074A2C34E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 14:12:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 068C57A1DCF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 11:48:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B752188C234
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 13:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD2A1DF74B;
-	Fri,  7 Feb 2025 11:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425061EC018;
+	Fri,  7 Feb 2025 13:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQESw395"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="XK/cYaOa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F511DF726;
-	Fri,  7 Feb 2025 11:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EA71DED70
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 13:12:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738928967; cv=none; b=szXwaLljJVfjZgxNZul79UlQMdoeKUcRyOp3KxW97etkqJDtxD0xseMKTSEmGkqRwr3ldnwvdN3Mp6lxv0HDgLHey5VQb/vaiOzHwdryzXHlB35qcSLzfEb7cErwaH9jUbD1nYOJ43c6m+Bg4Xio4/4uUHNmwi2zX/eZvcYJD7s=
+	t=1738933955; cv=none; b=taoqAafahUAou17RyZ82t1MSc4tBDxE7q51yh4TlSitwwqrzqzZ+Fsvt76q5Nwb/YQjzHzH4yvqXTj2HRXm3i90dJiWASudKiB+em2CD6SP1Qj0RhcB9UKC9fl1r7aOrk63GewtM+3A6Urjo/X2JXKE0bBgNonKfo6Q7eJ8zJPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738928967; c=relaxed/simple;
-	bh=6LI98nWpmfIwKLFD4MOsZyS7JGUGVQ9Mj8HjC795U5s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KIVnJLOXbh4usHvWl2L06oEqIDsbo5YH/UyXwPwgZ14toKw/8b+Zm5NRhumQ9kkIWj/mL1swX7dlpA1YruV8fGyknto02TjL/tp3Qu4bjQ9amTUtRCMDsjaUeedYh6H4TeBJMhm7cggqBKBg1XHvuHQnv42Jyc4+cPlmjXmOXFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OQESw395; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-467a63f5d1cso16174081cf.0;
-        Fri, 07 Feb 2025 03:49:25 -0800 (PST)
+	s=arc-20240116; t=1738933955; c=relaxed/simple;
+	bh=V8LDVkl2nRQ6eAdBK40xG1bKfK4P9CzdnIHedeqf3Ic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W59XVn4GiJns8k+aFpW5ZhQh+/bfligcGWCm8GfF34bJHwzHdEFaB452wngsRj2zQOZR0V7SAitVO8h6LLlcJtZkJanJOyL1vTOE24IXq90q6KuXgkE6O1JNgp1Mdp4gq610601WDPTjRjcaMTjllDxPD6O1ncAeHEivbIw3qRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=XK/cYaOa; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso13674225e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 05:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738928965; x=1739533765; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hK+YCFAeUnwDbxFTqeARy5CxKfn0P294F8L6cIYwfKI=;
-        b=OQESw395PusovQppro4mGytZkA0pR2rIE5DFbGfO5m6F/Dfp2zGJej2+OdYGQJzXPd
-         70RoZkmNvabjLJucTBSqmylXrW60LDpAspFH7wyQZHvnr8F/NbyJq8CXq2lHWeFO0FMR
-         FT4A9W2OVaqXEzkUQ5W1GUKCbNQTMnRcKeQhDFpgvQ+YIMHglIPSlO/0jKHOlGz81qCl
-         06SDJrUcECjhw7r8tsX0KQQEgzSL8HEHQ4Fs/DWbnpL+M2th1EAZKIrsvkpb2upWiJOs
-         VKrNVOoPQCWvqJWymLwEk+82lv5J2tQjWE216adhX65QTrPuUa//Uv2v7FJ0h8R2egS7
-         d9Tw==
+        d=openvpn.net; s=google; t=1738933951; x=1739538751; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULYqwQI7CRaAqRL8oB/X08x15C2FHRC/9lLiC6I/SiA=;
+        b=XK/cYaOaEdxWlPmatP+1cDEoWY86h/rHp6XPTISPoA19PK9HjNN4IPbVCTUMCklbsL
+         NZsl9+vVOXScvoSBGykt7UkM25yN2Fe0kSvVKmGp5lWiutfY9Qm4XFyklSyZ33ZOaf0y
+         yMrEH6mqigDxcBUqtPhIPJgkmc8SnfWPIOvPJVUdmrheFfWx1C4w7tm1tPdcIMVRTMUZ
+         lFQRpn8ntvuD9SjNiJppZeXjMDpI9OtyXXTf9WPml9rS0r/aN+l2tZ/DbSvG9EaTlZ1J
+         np4fNTrVnvpNbjYmanOfDXIt5WOw/vGDILpjox8sMa9JQpDQSIFhkdgWyGcKJT0aXWLX
+         CW0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738928965; x=1739533765;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hK+YCFAeUnwDbxFTqeARy5CxKfn0P294F8L6cIYwfKI=;
-        b=JUszsDCaFK7SWSRb2XU/GeW1YSsNqOQCycmd00mAJqMivGx1dnUctCowX09M/GESze
-         Z8RkwV6tcikBNz9IFWrK/frWIsS1YSd50KEm0PRNXKiPOnMOAj6tXU/DCPocK+w117zz
-         0JEjykIUUTW1qpJhlp6PhYaSOpfrNIQYWr8+hQ77S+9LBTrdMKSvJ5DZGRSo0FjzSaE0
-         PzYEP2jtnIN2pOAx/FzQir8cjDnUlwXipvACW0L5iJ5gtBVIIpgQNSYVWwDwLKMHLK9H
-         bOU2tsHx93PBB6BH32GaJa2upGGa470PtxYAi5vq7Y2+Anl1lMli5NqgWq8nTz2wEkqj
-         neNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxMa3p67GFUDHAr4N5Cv0AG5jBBVNAhfbPCUQYdQ9ZePelJNS1CUZUOJFgPyzJTLGbbySmTDwl7zQzJlZEWvk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAIqTGAc6McdxhNhlbq3PXxTcQbIBhzNlCg6pQoa/rBO5zCaOj
-	Sx/a40YYmHJlKJCgUHdt0/K3AYzQo0SHIp0UaKGA8JqZppx/QCdE
-X-Gm-Gg: ASbGncuK6jFYCSn+bmL73ofnoOeG0gqBSxlxV7XpBHO0fxQbCa+3r6nlpSLBAV3sdDd
-	qbGOth1UJm6t5fJ36by/hpCt1ZMRiCryx0H72XpraAZT+TqrfKTncykxOsalN1bgVzcCIZThB2E
-	3bxBPYLwC4ki6ArbYjYtySH06KKg9EBPDjvjpwHiPoM/KZUa3G8Z7XJwAltm9DFOJb9g3icjqAT
-	80POJ+IVvaP7irHenN5j7aH1mZE+EkKdvEQjaFsCWLPHhnbPUgAWDTKuJ4Z23JsCay3bgLSIQi3
-	qli9CpWFYSeoXkP6q9KyWhraxLj/pSa/U4Z/
-X-Google-Smtp-Source: AGHT+IGxR5KcsF0QxbLNpPy+JQtMWenZBATsqt2Lkl51oLAVcnzHiSaaIoK94C4AErF4bUXchTkRRA==
-X-Received: by 2002:a05:622a:64c:b0:466:ac03:a714 with SMTP id d75a77b69052e-47167ad097dmr41893781cf.36.1738928964719;
-        Fri, 07 Feb 2025 03:49:24 -0800 (PST)
-Received: from tamird-mac.local ([2600:4041:5be7:7c00:fb:aded:686f:8a03])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-471492763ebsm15533731cf.1.2025.02.07.03.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 03:49:23 -0800 (PST)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 07 Feb 2025 06:49:12 -0500
-Subject: [PATCH v4 2/2] scanf: break kunit into test cases
+        d=1e100.net; s=20230601; t=1738933951; x=1739538751;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ULYqwQI7CRaAqRL8oB/X08x15C2FHRC/9lLiC6I/SiA=;
+        b=qx3nvdMUPkBagbzkWbKvCsFRi7tUibpwA0LPU4xwUHeSUIId2OzpwLByR71TqxTA67
+         Z5bQ8R0bC0Yws5JBs41cmct1hGNMrD83nZAPG6qXMuC8ofpMetcd/wrkTxaj+wfNwycj
+         DtFdTBspVfu/NAXw1ybOCVrsUt0wfesFBRKTIuj/ErKTVRBTTsgbl9qdabKps+251/jI
+         6jhSj1rZvQSHKGygKQCCknuh8XUl+2FKQwsgPlR96qisIYF0nQJz3UFk5T1YZ0OwAcy/
+         rpL6usRfuuedxH0M/jiNVojf5vhZypWIHR810B31ZQOwB/EUuwtVBnYPgIWNrwn156mA
+         smbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUUJKVAs+7ibWiViT9qY2SLpp9/NrxL2lb4bvFAU0NzNeh/wkfKncl/GWDh0s6zq3ExbTG9GtTV618epR8TYc8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySurs3Kh6Pczh4EPwlQEVXGkn8Uvw8296C3KPnWZKcJ8G9aH1/
+	xykXSPOpb/tF9fRCP4zykfBkZsoyW/eYDmW+I3ZRH4ZiuM9RBPA4MElvJbLp3uI=
+X-Gm-Gg: ASbGncvhFVy4jkfKHTU1qNxdmvHxWJleSlMI8h8cE0Juhxtcy4CPrZzPBFRy1B0RxsD
+	g3I62zbhlfYAYHWS5gVx1bXGND1XvNUpRRuqZJP4rBNaTwO5B6C8Siki9kIPMdoXwPHxlcp/A0f
+	Wztj1vOhj/Z0n1rzv2hspeyRVbOs2gQUuSruMIFZq33rSgHB+cLT/ZglyzPSZTldMqqopWO8IAn
+	XY5+noz3cFAKbY2mcXN/gJkX0r8tmKS7gpZnAbOw+Of07S5upjkOMrJUQXjZvJHbZK86+16vKR/
+	3w/bGn6emycvUz8e5eIMUiY+ICGYvjnNx26wYJYCsVHfuubybc+OgQ==
+X-Google-Smtp-Source: AGHT+IF9wBsCSNNxAMG2g04BTTFcZiuGmMSSq1jpBjzRykjiBDMEmwtMfluBKIAcP83yb2c/VLnsOg==
+X-Received: by 2002:a05:600c:4f52:b0:434:b9c6:68f7 with SMTP id 5b1f17b1804b1-439249b2ba4mr23665845e9.26.1738933951145;
+        Fri, 07 Feb 2025 05:12:31 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:5aa9:f4c3:dbe3:332c? ([2001:67c:2fbc:1:5aa9:f4c3:dbe3:332c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4390d94d7c7sm88973265e9.14.2025.02.07.05.12.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Feb 2025 05:12:30 -0800 (PST)
+Message-ID: <3dca88d7-7037-4721-aae7-35970e97be21@openvpn.net>
+Date: Fri, 7 Feb 2025 14:13:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v18 09/25] ovpn: implement packet processing
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-9-1f00db9c2bd6@openvpn.net> <Z6PdEurGNirlnkoM@hog>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <Z6PdEurGNirlnkoM@hog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250207-scanf-kunit-convert-v4-2-a23e2afaede8@gmail.com>
-References: <20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com>
-In-Reply-To: <20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com>
-To: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
 
-Use `suite_{init,exit}` and move some tests into `scanf_test_cases`.
-This gives us nicer output in the event of a failure.
+On 05/02/2025 22:50, Sabrina Dubroca wrote:
+> Hi Antonio,
+> 
+> Another one I should have spotted a long time ago :(
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- lib/scanf_kunit.c | 82 +++++++++++++++++++++++++++++++------------------------
- 1 file changed, 47 insertions(+), 35 deletions(-)
+better late than never (I think..)
 
-diff --git a/lib/scanf_kunit.c b/lib/scanf_kunit.c
-index ad27b45c605e..05c8f7e724d8 100644
---- a/lib/scanf_kunit.c
-+++ b/lib/scanf_kunit.c
-@@ -430,8 +430,11 @@ static void numbers_list_hh(struct kunit *test, const char *delim)
- 	numbers_list_8(signed char,	   "0x%hhx", delim, "hhi", check_char);
- }
- 
--static void numbers_list(struct kunit *test, const char *delim)
-+static void numbers_list(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_ll(test, delim);
- 	numbers_list_l(test, delim);
- 	numbers_list_d(test, delim);
-@@ -502,8 +505,11 @@ static void numbers_list_field_width_hh(struct kunit *test, const char *delim)
-  * List of numbers separated by delim. Each field width specifier is the
-  * maximum possible digits for the given type and base.
-  */
--static void numbers_list_field_width_typemax(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_typemax(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_field_width_ll(test, delim);
- 	numbers_list_field_width_l(test, delim);
- 	numbers_list_field_width_d(test, delim);
-@@ -565,8 +571,11 @@ static void numbers_list_field_width_val_hh(struct kunit *test, const char *deli
-  * List of numbers separated by delim. Each field width specifier is the
-  * exact length of the corresponding value digits in the string being scanned.
-  */
--static void numbers_list_field_width_val_width(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_val_width(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_field_width_val_ll(test, delim);
- 	numbers_list_field_width_val_l(test, delim);
- 	numbers_list_field_width_val_d(test, delim);
-@@ -582,7 +591,12 @@ static void numbers_list_field_width_val_width(struct kunit *test, const char *d
-  */
- static void numbers_slice(struct kunit *test)
- {
--	numbers_list_field_width_val_width(test, "");
-+	const char *delim = "";
-+
-+	KUNIT_ASSERT_PTR_EQ(test, test->param_value, NULL);
-+	test->param_value = &delim;
-+
-+	numbers_list_field_width_val_width(test);
- }
- 
- #define test_number_prefix(T, str, scan_fmt, expect0, expect1, n_args, fn)	\
-@@ -734,62 +748,60 @@ static const char * const number_delimiters[] = {
- 	" ", ":", ",", "-", "/",
- };
- 
--static void test_numbers(struct kunit *test)
-+static void number_delimiter_param_desc(const char * const *param,
-+					   char *desc)
- {
--	int i;
-+	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "delim=\"%s\"", *param);
-+}
- 
--	/* String containing only one number. */
--	numbers_simple(test);
-+KUNIT_ARRAY_PARAM(number_delimiters, number_delimiters, number_delimiter_param_desc);
- 
-+static struct kunit_case scanf_test_cases[] = {
-+	KUNIT_CASE(numbers_simple),
- 	/* String with multiple numbers separated by delimiter. */
--	for (i = 0; i < ARRAY_SIZE(number_delimiters); i++) {
--		numbers_list(test, number_delimiters[i]);
--
--		/* Field width may be longer than actual field digits. */
--		numbers_list_field_width_typemax(test, number_delimiters[i]);
--
--		/* Each field width exactly length of actual field digits. */
--		numbers_list_field_width_val_width(test, number_delimiters[i]);
--	}
--
-+	KUNIT_CASE_PARAM(numbers_list, number_delimiters_gen_params),
-+	/* Field width may be longer than actual field digits. */
-+	KUNIT_CASE_PARAM(numbers_list_field_width_typemax, number_delimiters_gen_params),
-+	/* Each field width exactly length of actual field digits. */
-+	KUNIT_CASE_PARAM(numbers_list_field_width_val_width, number_delimiters_gen_params),
- 	/* Slice continuous sequence of digits using field widths. */
--	numbers_slice(test);
-+	KUNIT_CASE(numbers_slice),
-+	KUNIT_CASE(numbers_prefix_overflow),
- 
--	numbers_prefix_overflow(test);
--}
-+	KUNIT_CASE(test_simple_strtoull),
-+	KUNIT_CASE(test_simple_strtoll),
-+	KUNIT_CASE(test_simple_strtoul),
-+	KUNIT_CASE(test_simple_strtol),
-+	{}
-+};
- 
--static void scanf_test(struct kunit *test)
-+static int scanf_suite_init(struct kunit_suite *suite)
- {
- 	test_buffer = kmalloc(BUF_SIZE, GFP_KERNEL);
- 	if (!test_buffer)
--		return;
-+		return -1;
- 
- 	fmt_buffer = kmalloc(BUF_SIZE, GFP_KERNEL);
- 	if (!fmt_buffer) {
- 		kfree(test_buffer);
--		return;
-+		return -1;
- 	}
- 
- 	prandom_seed_state(&rnd_state, 3141592653589793238ULL);
- 
--	test_numbers(test);
--
--	test_simple_strtoull(test);
--	test_simple_strtoll(test);
--	test_simple_strtoul(test);
--	test_simple_strtol(test);
-+	return 0;
-+}
- 
-+static void scanf_suite_exit(struct kunit_suite *suite)
-+{
- 	kfree(fmt_buffer);
- 	kfree(test_buffer);
- }
- 
--static struct kunit_case scanf_test_cases[] = {
--	KUNIT_CASE(scanf_test),
--	{}
--};
--
- static struct kunit_suite scanf_test_suite = {
- 	.name = "scanf",
-+	.suite_init = scanf_suite_init,
-+	.suite_exit = scanf_suite_exit,
- 	.test_cases = scanf_test_cases,
- };
- 
+> 
+> 2025-01-13, 10:31:28 +0100, Antonio Quartulli wrote:
+>> +int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+>> +		      struct sk_buff *skb)
+>> +{
+>> +	const unsigned int tag_size = crypto_aead_authsize(ks->encrypt);
+>> +	struct aead_request *req;
+>> +	struct sk_buff *trailer;
+>> +	struct scatterlist *sg;
+>> +	u8 iv[OVPN_NONCE_SIZE];
+> 
+> You'll have to kmalloc this as well, it gets passed to the crypto API
+> and with async crypto, it'll be used after ovpn_aead_encrypt has
+> returned.
+> 
+> [...]
+>> +	/* setup async crypto operation */
+>> +	aead_request_set_tfm(req, ks->encrypt);
+>> +	aead_request_set_callback(req, 0, ovpn_encrypt_post, skb);
+>> +	aead_request_set_crypt(req, sg, sg,
+>> +			       skb->len - ovpn_aead_encap_overhead(ks), iv);
+>                                                                          ^^
+> passed here
+> 
+> 
+>> +	aead_request_set_ad(req, OVPN_AAD_SIZE);
+>> +
+>> +	/* encrypt it */
+>> +	return crypto_aead_encrypt(req);
+>> +free_sg:
+>> +	kfree(ovpn_skb_cb(skb)->sg);
+>> +	ovpn_skb_cb(skb)->sg = NULL;
+>> +	return ret;
+>> +}
+>> +
+>> +int ovpn_aead_decrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+>> +		      struct sk_buff *skb)
+>> +{
+>> +	const unsigned int tag_size = crypto_aead_authsize(ks->decrypt);
+>> +	int ret, payload_len, nfrags;
+>> +	unsigned int payload_offset;
+>> +	struct aead_request *req;
+>> +	struct sk_buff *trailer;
+>> +	struct scatterlist *sg;
+>> +	u8 iv[OVPN_NONCE_SIZE];
+> 
+> And same here.
+> 
+> (maybe something for the todolist: ovpn could copy the alloc trick
+> from esp_alloc_tmp, like I did for macsec_alloc_req -- not required,
+> but could be nice to avoid many small allocs and all their failure
+> checks)
+> 
+
+Ouch, you're right. I will pre-allocate iv as well, like I do for sg.
+
+And thanks for the hints, I'll add that to my todo.
+
+Cheers,
+
 
 -- 
-2.48.1
+Antonio Quartulli
+OpenVPN Inc.
 
 
