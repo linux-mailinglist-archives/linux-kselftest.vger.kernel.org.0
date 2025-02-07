@@ -1,117 +1,173 @@
-Return-Path: <linux-kselftest+bounces-26022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26023-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 394AFA2CBA1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:43:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFAD6A2CBA8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:43:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A41B87A6508
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:42:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19D973ADD07
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE12F1B0F19;
-	Fri,  7 Feb 2025 18:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B811B21BA;
+	Fri,  7 Feb 2025 18:41:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="IXSXmcek"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8p2kAeL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE121B0438
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 18:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F007C200CD;
+	Fri,  7 Feb 2025 18:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953676; cv=none; b=kPi0JD/7PfBl2TyNaj4eaDON9TS+9guvNbPaCjDennsNNHWwZYb4Aki44VsT0RiLoBGVlOcM8ThR8FsCl5fSqgua2X2z0Gm3MHta3CX8/D/8NPazGqtIXNGn0usJ+YWunLaay0rd0Iy+YmqR0w++4Dx7I3r6GctHjv6XD+iW9tM=
+	t=1738953703; cv=none; b=mFx25rcPnkO2I6f0a0WWlkmuC8yYdRiG9cKiZcaKlWJAXh++nsI9xcs6Zo4EyUz/KM4isMSkQpkRuVYllZ732NMxjej1z/+Y+CaEKJzYpbOaVvvgfeSgUZZ5JQs5Qcjz9qtwqgE4fV03t6fylEM9GsUHrB2oHWl8IKGMqbV+BCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953676; c=relaxed/simple;
-	bh=oco0Lqf/fb+pkzZei0VqH/EhA1GrCF6qBt/94yWHles=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g+rMbYbnihTa/5DDpqokAFlsHWpXSQX6IdSeKUMRYNBaEv2/fnyTLDSOThdMRmj1LZqEqig9lj0BplZhSgdbOj8XHkWVpqXdbWKQI345ipQUcDoUsZ2WgjpZZSZbccVBCRy+k/oE/5cXL8qtZifagwMVnmHOr4v6j8DyYKq1LoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=IXSXmcek; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fa3fe04dd2so348650a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 10:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1738953674; x=1739558474; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pX6bgDb7LMFYhcZSyq50FIVZrkoehDFKY62VUhrMl80=;
-        b=IXSXmcekg4S4dCIjTAIHWjK5tmEsQi998IJ9+5Mzl0510nZO8PZ/IrWcxOx7uJkcZh
-         g9mAyrxnzAyynH/vpp+9wXq1FM6AQdZMKm04IYahf4x/5NGc9POTuGK+uDijGbZOWZix
-         CfS0felIAcy03J5PJEpxgs89WCWuEkT+0lV/I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738953674; x=1739558474;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pX6bgDb7LMFYhcZSyq50FIVZrkoehDFKY62VUhrMl80=;
-        b=hvXfQyoz3vAYmP7VX7DdW+BzhWeP2vtWDWOufidcm6qxRnVGAFpt4xsRnDKSmDNvEm
-         p8xjkALWVgWHBFJP/hJSwX2ZoGztPHJoGn1Q0BlS1c/MIQw9+1tzoxRtHaz9tgYOdBFw
-         tHGh89ovJRp3aGqo0Q3EBOE+NQ4uk7dMEWvvP9tJAt2Q+EcsG3u4piE1BwN/jfIS3TVy
-         lfxs5fTRnPIXWVl+pBbrU31s86k9cWKSJtkjt/C/+CCMuA5OqBp9y36pAL6TR+UoZSTH
-         ezUVaq+7E81tuRumvonDSOKNeIXj/hboTuqYp0cbjILOWZ4ITI6aczzdzolkGoH8OU49
-         hfLw==
-X-Forwarded-Encrypted: i=1; AJvYcCWrhp5ewowlIAqMNSr+HFIuBuEX9jjv1oZgMLHUsWJ+jlCKGB1vFH6ZCJKAtjSdfD9Vc6NgdZT2XBmfbu3QEFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM85ZM37kUf0vTb4TF55867m6XpIxbD5fkRqbzHh0IMO3Rttqi
-	zXJrb91Lx3bVNhjsp/RDdTV83Qg1kQ4/i5aOJ21oB6Gk1IFKkFbBti+yyt6Rx8Y=
-X-Gm-Gg: ASbGncul/wEs9n0Mh92NaGr5crjV0DKB3y794udTiTNSq/KCdUC33fLwcQMC5Em7och
-	okOuwHjj5VjEl0DeKLJCUG9QblehwQcRKQXTPN8/3UMDsL+wCHeMlHnyZpi2sjH/WMEvnHE3yun
-	gU/XxNYJX+gGu2RGytvmcSJMuKQcTCY/q3ANuBCDK3F5wU4F52sIa31EU02x+oV+6tFIJPg0vqq
-	3O1mkNuAf9wswruc6Eg43gwjj82EKETtbX9a56Gy55Ivx3XRSWhYjYGPwORifxxhpY8Fn1t2eih
-	CuWK/yMtOGrgvE0GO0UB3SFR+BaREA0G3kMHrviiNoHcY6CM9EY50bPC6w==
-X-Google-Smtp-Source: AGHT+IGxLV+iaxkN+MqLINKOhTitdwb1FvV0w5srDzBYBBMluFope5BhU1ALTENRSG9snyb4tqVknA==
-X-Received: by 2002:a05:6a00:1d25:b0:727:64c8:2c44 with SMTP id d2e1a72fcca58-7305d4ec73emr6979465b3a.19.1738953674036;
-        Fri, 07 Feb 2025 10:41:14 -0800 (PST)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ad51aecd813sm2948474a12.26.2025.02.07.10.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 10:41:13 -0800 (PST)
-Date: Fri, 7 Feb 2025 10:41:11 -0800
-From: Joe Damato <jdamato@fastly.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, almasrymina@google.com, sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: remove an unnecessary
- libmnl include
-Message-ID: <Z6ZTxyDzzK4OQmyZ@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
-	almasrymina@google.com, sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org
-References: <20250207183119.1721424-1-kuba@kernel.org>
+	s=arc-20240116; t=1738953703; c=relaxed/simple;
+	bh=3zJXaj3IBjRkrJI5MDEeFM49y/kAOcZD3PfmpDJ29d8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kx0Gbqk+USzaTaL652yMVNFHwiHk7JfOYXfLwoaPno2zoi6IjwVbfHN9mEv79AtSHmi4m7d7AmFAWLA6XjiVvgUZvYPrylGpgShkmr2YvmfHNNGZhz1wuWlJEj+LcY8fWB1tF807t/RD6Uz7rpuQdOK118m3G0hxufcAAvhs5ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8p2kAeL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F97C4CED1;
+	Fri,  7 Feb 2025 18:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738953702;
+	bh=3zJXaj3IBjRkrJI5MDEeFM49y/kAOcZD3PfmpDJ29d8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=I8p2kAeLyHxaVFljDQoXkStUvMD4dZlbiJ1H6xOTqBXDGeq678bygcLW/MmNrw/yO
+	 DpB2VjHWnIgcRii1VP/7PUMcloT+58Ys738czSdKIQq3A7R26sOcEL8qACKN/3xqAh
+	 /vHc+epOlFHkWcYHxL+xq5P2TX6/HDXRsSOw29EJG2ZGksC16CWzbcsJnopNU+Rdcl
+	 RZWx8tbkTVmCL0Wm3cmB2z/jXmFnR/oHVhN0Vzxgc0KK3YbRpnfu74OV8ohwqmNhMB
+	 rNKUe8b3wnpPBSSEtsjsl2mcMCl/0ocmVnwOwtFnJoCkalbA9SsVIpl3Ck8jUNEKfI
+	 DEGCM9bBCR7aw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	shuah@kernel.org,
+	willemb@google.com,
+	petrm@nvidia.com,
+	sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 1/2] selftests: drv-net: factor out a DrvEnv base class
+Date: Fri,  7 Feb 2025 10:41:39 -0800
+Message-ID: <20250207184140.1730466-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207183119.1721424-1-kuba@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 07, 2025 at 10:31:19AM -0800, Jakub Kicinski wrote:
-> ncdevmem doesn't need libmnl, remove the unnecessary include.
-> 
-> Since YNL doesn't depend on libmnl either, any more, it's actually
-> possible to build selftests without having libmnl installed.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: almasrymina@google.com
-> CC: sdf@fomichev.me
-> CC: jdamato@fastly.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 1 -
->  1 file changed, 1 deletion(-)
+We have separate Env classes for local tests and tests with a remote
+endpoint. Make it easier to share the code by creating a base class.
+Make env loading a method of this class.
 
-Reviewed-by: Joe Damato <jdamato@fastly.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ .../selftests/drivers/net/lib/py/env.py       | 59 +++++++++++--------
+ 1 file changed, 33 insertions(+), 26 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 987e452d3a45..2f17880e411d 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -10,38 +10,46 @@ from lib.py import NetNS, NetdevSimDev
+ from .remote import Remote
+ 
+ 
+-def _load_env_file(src_path):
+-    env = os.environ.copy()
++class NetDrvEnvBase:
++    """
++    Base class for a NIC / host envirnoments
++    """
++    def __init__(self, src_path):
++        self.src_path = src_path
++        self.env = self._load_env_file()
+ 
+-    src_dir = Path(src_path).parent.resolve()
+-    if not (src_dir / "net.config").exists():
++    def _load_env_file(self):
++        env = os.environ.copy()
++
++        src_dir = Path(self.src_path).parent.resolve()
++        if not (src_dir / "net.config").exists():
++            return ksft_setup(env)
++
++        with open((src_dir / "net.config").as_posix(), 'r') as fp:
++            for line in fp.readlines():
++                full_file = line
++                # Strip comments
++                pos = line.find("#")
++                if pos >= 0:
++                    line = line[:pos]
++                line = line.strip()
++                if not line:
++                    continue
++                pair = line.split('=', maxsplit=1)
++                if len(pair) != 2:
++                    raise Exception("Can't parse configuration line:", full_file)
++                env[pair[0]] = pair[1]
+         return ksft_setup(env)
+ 
+-    with open((src_dir / "net.config").as_posix(), 'r') as fp:
+-        for line in fp.readlines():
+-            full_file = line
+-            # Strip comments
+-            pos = line.find("#")
+-            if pos >= 0:
+-                line = line[:pos]
+-            line = line.strip()
+-            if not line:
+-                continue
+-            pair = line.split('=', maxsplit=1)
+-            if len(pair) != 2:
+-                raise Exception("Can't parse configuration line:", full_file)
+-            env[pair[0]] = pair[1]
+-    return ksft_setup(env)
+ 
+-
+-class NetDrvEnv:
++class NetDrvEnv(NetDrvEnvBase):
+     """
+     Class for a single NIC / host env, with no remote end
+     """
+     def __init__(self, src_path, **kwargs):
+-        self._ns = None
++        super().__init__(src_path)
+ 
+-        self.env = _load_env_file(src_path)
++        self._ns = None
+ 
+         if 'NETIF' in self.env:
+             self.dev = ip("link show dev " + self.env['NETIF'], json=True)[0]
+@@ -68,7 +76,7 @@ from .remote import Remote
+             self._ns = None
+ 
+ 
+-class NetDrvEpEnv:
++class NetDrvEpEnv(NetDrvEnvBase):
+     """
+     Class for an environment with a local device and "remote endpoint"
+     which can be used to send traffic in.
+@@ -82,8 +90,7 @@ from .remote import Remote
+     nsim_v6_pfx = "2001:db8::"
+ 
+     def __init__(self, src_path, nsim_test=None):
+-
+-        self.env = _load_env_file(src_path)
++        super().__init__(src_path)
+ 
+         self._stats_settle_time = None
+ 
+-- 
+2.48.1
+
 
