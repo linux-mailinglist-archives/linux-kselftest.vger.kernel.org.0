@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-26023-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFAD6A2CBA8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:43:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5671FA2CBA3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:43:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19D973ADD07
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:43:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DBE8188600C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22B811B21BA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8B51B4153;
 	Fri,  7 Feb 2025 18:41:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8p2kAeL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ozhpCKSM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F007C200CD;
-	Fri,  7 Feb 2025 18:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FA31ABEC5;
+	Fri,  7 Feb 2025 18:41:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953703; cv=none; b=mFx25rcPnkO2I6f0a0WWlkmuC8yYdRiG9cKiZcaKlWJAXh++nsI9xcs6Zo4EyUz/KM4isMSkQpkRuVYllZ732NMxjej1z/+Y+CaEKJzYpbOaVvvgfeSgUZZ5JQs5Qcjz9qtwqgE4fV03t6fylEM9GsUHrB2oHWl8IKGMqbV+BCU=
+	t=1738953703; cv=none; b=bdGnRp+FW/tVq18ZN1kHCSfPTfuUh1G5tZNq67SYAfci8d/Sshp7Y2L8RTsp3/7rC1Ok1Dkto9kloz5oZREdh9DGRlcT4CV35YRqyZ5rlukpzYPP3nbl7QeLRR1lY3AcCU2KNYXVNhiBS20TJNAvY1VVQZEuQizAJVTKumlt90w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738953703; c=relaxed/simple;
-	bh=3zJXaj3IBjRkrJI5MDEeFM49y/kAOcZD3PfmpDJ29d8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kx0Gbqk+USzaTaL652yMVNFHwiHk7JfOYXfLwoaPno2zoi6IjwVbfHN9mEv79AtSHmi4m7d7AmFAWLA6XjiVvgUZvYPrylGpgShkmr2YvmfHNNGZhz1wuWlJEj+LcY8fWB1tF807t/RD6Uz7rpuQdOK118m3G0hxufcAAvhs5ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8p2kAeL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F97C4CED1;
+	bh=uVEl4T3KcMSW5xOCdxbkUhNrrPWbNFo+ziho0Yt4p0g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EEzcM1Drc4mF1q9UAl/eLtFglfRXu1WhYC2NOBizFabX2x7wVp6VHG2uZjmhmTAnwkRr3QCfuWbueHtGiyoeDgH++H+PNrxiHAdpKzQLSPApMU0zdFRh0JFKtrUeUcTwT7SIEHKQfM7AePPwdr9iQ2Gox8SZ5HoP7ATiciG3cLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ozhpCKSM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD42C4CEDF;
 	Fri,  7 Feb 2025 18:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1738953702;
-	bh=3zJXaj3IBjRkrJI5MDEeFM49y/kAOcZD3PfmpDJ29d8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=I8p2kAeLyHxaVFljDQoXkStUvMD4dZlbiJ1H6xOTqBXDGeq678bygcLW/MmNrw/yO
-	 DpB2VjHWnIgcRii1VP/7PUMcloT+58Ys738czSdKIQq3A7R26sOcEL8qACKN/3xqAh
-	 /vHc+epOlFHkWcYHxL+xq5P2TX6/HDXRsSOw29EJG2ZGksC16CWzbcsJnopNU+Rdcl
-	 RZWx8tbkTVmCL0Wm3cmB2z/jXmFnR/oHVhN0Vzxgc0KK3YbRpnfu74OV8ohwqmNhMB
-	 rNKUe8b3wnpPBSSEtsjsl2mcMCl/0ocmVnwOwtFnJoCkalbA9SsVIpl3Ck8jUNEKfI
-	 DEGCM9bBCR7aw==
+	bh=uVEl4T3KcMSW5xOCdxbkUhNrrPWbNFo+ziho0Yt4p0g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ozhpCKSMH+lhp5bndlaWMElSJeYdKpHcO1iksgxaCadiRV9Y8sUkeQCW3thLwCYfo
+	 SWrmNrL2SIuSd1OsEobkGF18invXt4MO2rnxS304TJDyV8gW9A/PbUqjyPJL6gutmF
+	 Mhd47/Qb8u5g/cTuf8MTvos3RlXT59wiBjyxoxyI7PMhCL6E58lwxvGHQrZjk3zTgI
+	 sRrQdu/N+D3IkWe8M3yHuCL8S/Yij5ewNBaZg+/P+LN9BbfwIseEPKJvLFHm8wuRFU
+	 YPOays9w+Fgum0k7ofyzgBNx6OJNglWl37m6G3GIl16KTeDcGohZt111AiRB3QUOgI
+	 NyRNTLLJUBJGg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -53,10 +54,12 @@ Cc: netdev@vger.kernel.org,
 	sdf@fomichev.me,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 1/2] selftests: drv-net: factor out a DrvEnv base class
-Date: Fri,  7 Feb 2025 10:41:39 -0800
-Message-ID: <20250207184140.1730466-1-kuba@kernel.org>
+Subject: [PATCH net-next 2/2] selftests: drv-net: add helper for path resolution
+Date: Fri,  7 Feb 2025 10:41:40 -0800
+Message-ID: <20250207184140.1730466-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250207184140.1730466-1-kuba@kernel.org>
+References: <20250207184140.1730466-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,107 +68,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We have separate Env classes for local tests and tests with a remote
-endpoint. Make it easier to share the code by creating a base class.
-Make env loading a method of this class.
+Refering to C binaries from Python code is going to be a common
+need. Add a helper to convert from path in relation to the test.
+Meaning, if the test is in the same directory as the binary, the
+call would be simply: cfg.rpath("binary").
+
+The helper name "rpath" is not great. I can't think of a better
+name that would be accurate yet concise.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../selftests/drivers/net/lib/py/env.py       | 59 +++++++++++--------
- 1 file changed, 33 insertions(+), 26 deletions(-)
+ tools/testing/selftests/drivers/net/hw/csum.py    |  2 +-
+ tools/testing/selftests/drivers/net/lib/py/env.py | 12 ++++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/drivers/net/hw/csum.py b/tools/testing/selftests/drivers/net/hw/csum.py
+index cb40497faee4..cd477f3440ca 100755
+--- a/tools/testing/selftests/drivers/net/hw/csum.py
++++ b/tools/testing/selftests/drivers/net/hw/csum.py
+@@ -100,7 +100,7 @@ from lib.py import bkg, cmd, wait_port_listen
+     with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
+         check_nic_features(cfg)
+ 
+-        cfg.bin_local = path.abspath(path.dirname(__file__) + "/../../../net/lib/csum")
++        cfg.bin_local = cfg.rpath("../../../net/lib/csum")
+         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
+ 
+         cases = []
 diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index 987e452d3a45..2f17880e411d 100644
+index 2f17880e411d..886b4904613c 100644
 --- a/tools/testing/selftests/drivers/net/lib/py/env.py
 +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -10,38 +10,46 @@ from lib.py import NetNS, NetdevSimDev
- from .remote import Remote
+@@ -18,6 +18,18 @@ from .remote import Remote
+         self.src_path = src_path
+         self.env = self._load_env_file()
  
- 
--def _load_env_file(src_path):
--    env = os.environ.copy()
-+class NetDrvEnvBase:
-+    """
-+    Base class for a NIC / host envirnoments
-+    """
-+    def __init__(self, src_path):
-+        self.src_path = src_path
-+        self.env = self._load_env_file()
- 
--    src_dir = Path(src_path).parent.resolve()
--    if not (src_dir / "net.config").exists():
-+    def _load_env_file(self):
-+        env = os.environ.copy()
++    def rpath(self, path):
++        """
++        Get an absolute path to a file based on a path relative to the directory
++        containing the test which constructed env.
 +
++        For example, if the test.py is in the same directory as
++        a binary (built from helper.c), the test can use env.rpath("helper")
++        to get the absolute path to the binary
++        """
 +        src_dir = Path(self.src_path).parent.resolve()
-+        if not (src_dir / "net.config").exists():
-+            return ksft_setup(env)
++        return (src_dir / path).as_posix()
 +
-+        with open((src_dir / "net.config").as_posix(), 'r') as fp:
-+            for line in fp.readlines():
-+                full_file = line
-+                # Strip comments
-+                pos = line.find("#")
-+                if pos >= 0:
-+                    line = line[:pos]
-+                line = line.strip()
-+                if not line:
-+                    continue
-+                pair = line.split('=', maxsplit=1)
-+                if len(pair) != 2:
-+                    raise Exception("Can't parse configuration line:", full_file)
-+                env[pair[0]] = pair[1]
-         return ksft_setup(env)
- 
--    with open((src_dir / "net.config").as_posix(), 'r') as fp:
--        for line in fp.readlines():
--            full_file = line
--            # Strip comments
--            pos = line.find("#")
--            if pos >= 0:
--                line = line[:pos]
--            line = line.strip()
--            if not line:
--                continue
--            pair = line.split('=', maxsplit=1)
--            if len(pair) != 2:
--                raise Exception("Can't parse configuration line:", full_file)
--            env[pair[0]] = pair[1]
--    return ksft_setup(env)
- 
--
--class NetDrvEnv:
-+class NetDrvEnv(NetDrvEnvBase):
-     """
-     Class for a single NIC / host env, with no remote end
-     """
-     def __init__(self, src_path, **kwargs):
--        self._ns = None
-+        super().__init__(src_path)
- 
--        self.env = _load_env_file(src_path)
-+        self._ns = None
- 
-         if 'NETIF' in self.env:
-             self.dev = ip("link show dev " + self.env['NETIF'], json=True)[0]
-@@ -68,7 +76,7 @@ from .remote import Remote
-             self._ns = None
- 
- 
--class NetDrvEpEnv:
-+class NetDrvEpEnv(NetDrvEnvBase):
-     """
-     Class for an environment with a local device and "remote endpoint"
-     which can be used to send traffic in.
-@@ -82,8 +90,7 @@ from .remote import Remote
-     nsim_v6_pfx = "2001:db8::"
- 
-     def __init__(self, src_path, nsim_test=None):
--
--        self.env = _load_env_file(src_path)
-+        super().__init__(src_path)
- 
-         self._stats_settle_time = None
+     def _load_env_file(self):
+         env = os.environ.copy()
  
 -- 
 2.48.1
