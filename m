@@ -1,330 +1,177 @@
-Return-Path: <linux-kselftest+bounces-25973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C7FA2BB35
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 07:14:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9EBFA2BB50
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 07:26:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B53B1887249
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 06:14:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D45DA3A68A8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 06:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55FDB239077;
-	Fri,  7 Feb 2025 06:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970A4176AB5;
+	Fri,  7 Feb 2025 06:26:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="AYoCJndz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cCXP40jK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB58823496F
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 06:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087791552F5
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 06:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738908717; cv=none; b=Q3Dhfwl+qtPgfkyhkIwwr95lMSt80UxXnCk2PtFLU2wXjckTiWZ3Vl9Q+PjhvzXOx3AsPE8amIO9WwWlT9/t+OCkxfDrpkbqMm9SGPx5KboJLlvdvhlmNg9fQDGwuWqgZGCdlAVFTgT4egB0U1++WIvW8tnWHnUdVNcFKKkJRsw=
+	t=1738909564; cv=none; b=CI3toMKwM9Ye/FKQ47ziE2rVB94Bm6ydjAfl0uxDp1fiuW7IVVObf76dt65wtfbhbSubcX5u5i1a4wuthGcHM308khDnQT/pg+XtGdarmDzTX2ohoRBjdGnR7YVcAgcIw0y5QK23jfNxnXJV2HmtK+eYvFVYGhd3uCX5k9HIHXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738908717; c=relaxed/simple;
-	bh=HTscNvyC9HJMHKWPJX1Sejy7f+gI0K4OIXa4+ZNvbAw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k5LgLoDO+OF/YALWfy/cOulYH76Z6q7XxAZfpMG2DQVY3SzhoXL/sGJrBSFCF9CUC070+cTjDjMpAtc5B7aesd4KwrUoW7aUfvI0hzRnXTZJc/wkoaD9pUDBD8sXaCEtHuozI+icVUobXYPwI8U5PDj/K2WKcuMO8b8jRKDd2ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=AYoCJndz; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21f3e2b4eceso25358935ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 22:11:54 -0800 (PST)
+	s=arc-20240116; t=1738909564; c=relaxed/simple;
+	bh=4OA6Vgbf5mmHaHK2XX87TxyNvNbPNA/LoqBpZuhF07s=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=EI3GiKrn9tSU8OjCAkSLoHa0b6OlzEI9rG1SfHwhpLbZrQt9wmh/DaqtS2nxO9Kmz65va2aeFwi+TZo/E3zkohajZ7wZdlqMv+h7XKMGxVvm9bLFJe1oKaKGE/waPJBr8gY33Iyshh893RYhwU2ElYLOgfbOQwNzmB9SKEfi1YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cCXP40jK; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-21f40f40788so30766705ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 22:26:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1738908714; x=1739513514; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S+R57A+roDGJE2oJSDUQxgir3uIkoZEEbg7sX8hwWCo=;
-        b=AYoCJndzxK0AsVqnRxIT8ZCSF0ko1nWeMW2iL8QdIDS3H5F26eZIk18IuZ2RLuArmm
-         kdOtqUKzdVqNl1/V2cyNB3UDo8vBL8dWk1EtEYhdDQTUS06YlId1KSMQYweXxoKqcM2E
-         GX26Znx17apatzBLvLhAdnSrp1PG3ovkf2IjmW96UtoiDbWDhKAPeONF00O4nj34EzOu
-         K/lZATUrdaWDmMor4+oKnOJdFs+oc9i15JNMy6W+XJdQKev6tsVhg7bfSCkT0CNl800l
-         7UskWins2NHc83WIMykZwE2fiwDlqFfrxWIaQWu79V3FCrQLh7IrA7ftjkSAMMhJPbDG
-         RcPw==
+        d=google.com; s=20230601; t=1738909562; x=1739514362; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pVBLx5GIpN7LjdmT+CcHUgO81qGH5daXphk7+y3Ogdw=;
+        b=cCXP40jKzfy5XvZx1xuB4aJJZqm5MN1MLU/bKvDhe8uGywAqayB+r/zyW41T4rIQfe
+         yz1dHyOjg15/v2KVtr8RgQKu96K37s2ioZ5Pg9+XdQxnzoAZMLp/TLNj4h9E8HDBVKli
+         LSf80eEqkiM0DqQLG+/hiqNK1FyNl7l1iznvNLg3CIEYxJ4X8yEbc+BpxVmSmd8N2PjI
+         r27mNgU9pEt/IjTiKi3xrnPoz4Ooy/LtvrYIIQyRnoPK5UUBo1JsMJwGKjWYfF5dbs3+
+         uHyVDj1mjgfAJKu+zDQ3pXOIof7jJsjijPQeqBMUHdLytenAvOQsH9PHoE4Gdg90gg6J
+         hIFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738908714; x=1739513514;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S+R57A+roDGJE2oJSDUQxgir3uIkoZEEbg7sX8hwWCo=;
-        b=D/lD350FJY7v/GlMWQscmQMHj1J1264PefrmO2dVQua1+KCCy84ifC+yaqYZVq1CtF
-         qkq4gJORzQo58J26JhnZKXu0rCLm94uvs704RxtEStNdleSrzlBnXFysZYnKYYBAgxdq
-         yN2fvGnPsy910T3Wg+E8fRkplqe8KA3rpV22tMGfKgOxIY9EZxA4rwAyNy8ygVpkJT/a
-         XWofbpKSuuzea0PMtGk+qC+0Day+7C5FbAytV6zPU2MgMC3SVZ//cQFzQndlM4+8M5Gh
-         t/ga4OmZFgwMYTa1dkB7DFIxCrQNli4i/Ft+pUvfMLOBZb8C3QJdcfB4uMSmF3Vvyr0n
-         L9VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpUjDnnIfp72SyJNhwUBOsp713gHAcoPcjZ6iNCUsLrqBHsfFk0G5GPbxTI7KtOC5TmGbjDEnw431LQJiRM9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFilY/WzL768xo7+GN0LIJGUELINDGxBVAFeT77hsRe88X3SAk
-	Mv+DUwM96cxt13D90bgrcS3nG9lGj/fPQ07GtAvUPRxC5aKfNniem2fw+4wQIRk=
-X-Gm-Gg: ASbGncuRYOKk6cL7oFUHQBLjzbj23iO49Gedbz54wETX/Qc0lPPpY1cm/qRszuJbqns
-	wKCNkQwixfSdAWN6qIfaSOzsLo88Yr5c2xEYau3D+YwoJvlLAW99UvuP5kedi1g/E8WHCiGHGhK
-	BBJ999tb9dhdy/6BvivsHr/N2bjbj7lwcAfshxpLRihI/Dn4UlWiGuWw3KfnHYnwThALxWK7lB/
-	tMajfx95h9fpproiDAs1wMYqrmVNNL4CqQyBqbc+JzpHjRUmQATSXjGV6lQseu37CFa6TqMvU28
-	udeOaEGIBNJQDqDmAKM=
-X-Google-Smtp-Source: AGHT+IHlCc/QLtRw9JwUBPb1D2TfS/bysYZ2EBR/Oh5kx6V1EMQBjR3blXWCBV04Zttp3n8xrEcfHg==
-X-Received: by 2002:a17:902:c40e:b0:21f:1549:a55f with SMTP id d9443c01a7336-21f4e6c0f49mr42137015ad.19.1738908714189;
-        Thu, 06 Feb 2025 22:11:54 -0800 (PST)
-Received: from localhost ([157.82.205.237])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-21f368d79a7sm22677855ad.253.2025.02.06.22.11.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Feb 2025 22:11:53 -0800 (PST)
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-Date: Fri, 07 Feb 2025 15:10:57 +0900
-Subject: [PATCH net-next v6 7/7] tap: Use tun's vnet-related code
+        d=1e100.net; s=20230601; t=1738909562; x=1739514362;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pVBLx5GIpN7LjdmT+CcHUgO81qGH5daXphk7+y3Ogdw=;
+        b=FC8Y6whxVTXN1ChTYjUpqDq6IaELVN2JGeTkTPJwynlwxcamUTvMxlGBZZ5nXMJPTP
+         ic1Avp2t4GlNu0bd42G+3tQ/4tz8gVeOFpeioD+ONWQObltG4j+AgR1z4oL+FU/h0sKa
+         oTbGhti4mPn03XfhHVn/ktCTrX3/f6hNRZOSNn3IVJKlagncqaBbPSjK7YWXex1s17+H
+         9mLnA/NapnvxLQyJXMV+s2eo5uSaxPfUlWrAAkxTVGPfcDEnvV1ExtMkg2g2Gwff7lCv
+         IhhqeDLD6OKIfILGS8sXMr5ZCliNNaKYSCx8PUnVKJkallmFliwR24AxdmENxKYWIHyE
+         /Stg==
+X-Forwarded-Encrypted: i=1; AJvYcCWHki69uYO7tbsXfvBv1vmY7VDMdsVdnJzmBBgAWiiIg8JNmYSp3UnZpBBQAzNCrVrxJENgQWtQJft85n5FIgQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweiTwUQ+g9/dfNU3DVG1IZhFsQj5Xw2By4foH3CoUQq1gdEas/
+	t4gtrAodkwWB9UYlpOOQ0gWt3qy2/0GNX5QVfk8Nns1/7mqx6HVn8MdZx5bm1wWpY1GvmQndciK
+	DSlZx2tGlks733+IsmjCRIQ==
+X-Google-Smtp-Source: AGHT+IHXNTs3kgTobb4JCthlwm4Jfzsw4vmzDv2oF+RkKfjY2IbUGXQW6QU/6emUQ2gWCi0WeScassVHI7XwDeeNyw==
+X-Received: from pjtd16.prod.google.com ([2002:a17:90b:50:b0:2ef:d136:17fc])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:ce84:b0:21f:c13:89a9 with SMTP id d9443c01a7336-21f4e75d8a7mr38698485ad.35.1738909562300;
+ Thu, 06 Feb 2025 22:26:02 -0800 (PST)
+Date: Fri, 07 Feb 2025 06:25:59 +0000
+In-Reply-To: <f8030dfc5086e4e4e3709d6fcdab1e38f01fc38d.camel@infradead.org>
+ (message from Amit Shah on Thu, 06 Feb 2025 12:07:58 +0100)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250207-tun-v6-7-fb49cf8b103e@daynix.com>
-References: <20250207-tun-v6-0-fb49cf8b103e@daynix.com>
-In-Reply-To: <20250207-tun-v6-0-fb49cf8b103e@daynix.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, kvm@vger.kernel.org, 
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
- Yuri Benditovich <yuri.benditovich@daynix.com>, 
- Andrew Melnychenko <andrew@daynix.com>, 
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
- devel@daynix.com, Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Willem de Bruijn <willemb@google.com>
-X-Mailer: b4 0.14.2
+Mime-Version: 1.0
+Message-ID: <diqzh656p8y0.fsf@ackerleytng-ctop-specialist.c.googlers.com>
+Subject: Re: [RFC PATCH 00/39] 1G page support for guest_memfd
+From: Ackerley Tng <ackerleytng@google.com>
+To: Amit Shah <amit@infradead.org>
+Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
+	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
+	fvdl@google.com, jthoughton@google.com, seanjc@google.com, 
+	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com, 
+	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev, 
+	mike.kravetz@oracle.com, erdemaktas@google.com, vannapurve@google.com, 
+	qperret@google.com, jhubbard@nvidia.com, willy@infradead.org, 
+	shuah@kernel.org, brauner@kernel.org, bfoster@redhat.com, 
+	kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
+	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
+	ajones@ventanamicro.com, vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 
+	pgonda@google.com, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-fsdevel@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-tun and tap implements the same vnet-related features so reuse the code.
+Amit Shah <amit@infradead.org> writes:
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
----
- drivers/net/tap.c | 152 ++++++------------------------------------------------
- 1 file changed, 16 insertions(+), 136 deletions(-)
+>> <snip>
+>> 
+>> Thanks all your help and comments during the guest_memfd upstream
+>> calls,
+>> and thanks for the help from AMD.
+>> 
+>> Extending mmap() support from Fuad with 1G page support introduces
+>> more
+>> states that made it more complicated (at least for me).
+>> 
+>> I'm modeling the states in python so I can iterate more quickly. I
+>> also
+>> have usage flows (e.g. allocate, guest_use, host_use,
+>> transient_folio_get, close, transient_folio_put) as test cases.
+>> 
+>> I'm almost done with the model and my next steps are to write up a
+>> state
+>> machine (like Fuad's [5]) and share that.
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index 8cb002616a6143b54258b65b483fed0c3af2c7a0..1287e241f4454fb8ec4975bbaded5fbaa88e3cc8 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -26,74 +26,9 @@
- #include <linux/virtio_net.h>
- #include <linux/skb_array.h>
- 
--#define TAP_IFFEATURES (IFF_VNET_HDR | IFF_MULTI_QUEUE)
--
--#define TAP_VNET_LE 0x80000000
--#define TAP_VNET_BE 0x40000000
--
--#ifdef CONFIG_TUN_VNET_CROSS_LE
--static inline bool tap_legacy_is_little_endian(struct tap_queue *q)
--{
--	return q->flags & TAP_VNET_BE ? false :
--		virtio_legacy_is_little_endian();
--}
--
--static long tap_get_vnet_be(struct tap_queue *q, int __user *sp)
--{
--	int s = !!(q->flags & TAP_VNET_BE);
--
--	if (put_user(s, sp))
--		return -EFAULT;
--
--	return 0;
--}
--
--static long tap_set_vnet_be(struct tap_queue *q, int __user *sp)
--{
--	int s;
--
--	if (get_user(s, sp))
--		return -EFAULT;
--
--	if (s)
--		q->flags |= TAP_VNET_BE;
--	else
--		q->flags &= ~TAP_VNET_BE;
--
--	return 0;
--}
--#else
--static inline bool tap_legacy_is_little_endian(struct tap_queue *q)
--{
--	return virtio_legacy_is_little_endian();
--}
--
--static long tap_get_vnet_be(struct tap_queue *q, int __user *argp)
--{
--	return -EINVAL;
--}
--
--static long tap_set_vnet_be(struct tap_queue *q, int __user *argp)
--{
--	return -EINVAL;
--}
--#endif /* CONFIG_TUN_VNET_CROSS_LE */
--
--static inline bool tap_is_little_endian(struct tap_queue *q)
--{
--	return q->flags & TAP_VNET_LE ||
--		tap_legacy_is_little_endian(q);
--}
--
--static inline u16 tap16_to_cpu(struct tap_queue *q, __virtio16 val)
--{
--	return __virtio16_to_cpu(tap_is_little_endian(q), val);
--}
-+#include "tun_vnet.h"
- 
--static inline __virtio16 cpu_to_tap16(struct tap_queue *q, u16 val)
--{
--	return __cpu_to_virtio16(tap_is_little_endian(q), val);
--}
-+#define TAP_IFFEATURES (IFF_VNET_HDR | IFF_MULTI_QUEUE)
- 
- static struct proto tap_proto = {
- 	.name = "tap",
-@@ -655,25 +590,13 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 	if (q->flags & IFF_VNET_HDR) {
- 		vnet_hdr_len = READ_ONCE(q->vnet_hdr_sz);
- 
--		err = -EINVAL;
--		if (len < vnet_hdr_len)
-+		hdr_len = tun_vnet_hdr_get(vnet_hdr_len, q->flags, from, &vnet_hdr);
-+		if (hdr_len < 0) {
-+			err = hdr_len;
- 			goto err;
--		len -= vnet_hdr_len;
--
--		err = -EFAULT;
--		if (!copy_from_iter_full(&vnet_hdr, sizeof(vnet_hdr), from))
--			goto err;
--		iov_iter_advance(from, vnet_hdr_len - sizeof(vnet_hdr));
--		hdr_len = tap16_to_cpu(q, vnet_hdr.hdr_len);
--		if (vnet_hdr.flags & VIRTIO_NET_HDR_F_NEEDS_CSUM) {
--			hdr_len = max(tap16_to_cpu(q, vnet_hdr.csum_start) +
--				      tap16_to_cpu(q, vnet_hdr.csum_offset) + 2,
--				      hdr_len);
--			vnet_hdr.hdr_len = cpu_to_tap16(q, hdr_len);
- 		}
--		err = -EINVAL;
--		if (tap16_to_cpu(q, vnet_hdr.hdr_len) > len)
--			goto err;
-+
-+		len -= vnet_hdr_len;
- 	}
- 
- 	err = -EINVAL;
-@@ -725,8 +648,7 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 	skb->dev = tap->dev;
- 
- 	if (vnet_hdr_len) {
--		err = virtio_net_hdr_to_skb(skb, &vnet_hdr,
--					    tap_is_little_endian(q));
-+		err = tun_vnet_hdr_to_skb(q->flags, skb, &vnet_hdr);
- 		if (err) {
- 			rcu_read_unlock();
- 			drop_reason = SKB_DROP_REASON_DEV_HDR;
-@@ -789,23 +711,17 @@ static ssize_t tap_put_user(struct tap_queue *q,
- 	int total;
- 
- 	if (q->flags & IFF_VNET_HDR) {
--		int vlan_hlen = skb_vlan_tag_present(skb) ? VLAN_HLEN : 0;
- 		struct virtio_net_hdr vnet_hdr;
- 
- 		vnet_hdr_len = READ_ONCE(q->vnet_hdr_sz);
--		if (iov_iter_count(iter) < vnet_hdr_len)
--			return -EINVAL;
--
--		if (virtio_net_hdr_from_skb(skb, &vnet_hdr,
--					    tap_is_little_endian(q), true,
--					    vlan_hlen))
--			BUG();
- 
--		if (copy_to_iter(&vnet_hdr, sizeof(vnet_hdr), iter) !=
--		    sizeof(vnet_hdr))
--			return -EFAULT;
-+		ret = tun_vnet_hdr_from_skb(q->flags, NULL, skb, &vnet_hdr);
-+		if (ret)
-+			return ret;
- 
--		iov_iter_advance(iter, vnet_hdr_len - sizeof(vnet_hdr));
-+		ret = tun_vnet_hdr_put(vnet_hdr_len, iter, &vnet_hdr);
-+		if (ret)
-+			return ret;
- 	}
- 	total = vnet_hdr_len;
- 	total += skb->len;
-@@ -1064,42 +980,6 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
- 		q->sk.sk_sndbuf = s;
- 		return 0;
- 
--	case TUNGETVNETHDRSZ:
--		s = q->vnet_hdr_sz;
--		if (put_user(s, sp))
--			return -EFAULT;
--		return 0;
--
--	case TUNSETVNETHDRSZ:
--		if (get_user(s, sp))
--			return -EFAULT;
--		if (s < (int)sizeof(struct virtio_net_hdr))
--			return -EINVAL;
--
--		q->vnet_hdr_sz = s;
--		return 0;
--
--	case TUNGETVNETLE:
--		s = !!(q->flags & TAP_VNET_LE);
--		if (put_user(s, sp))
--			return -EFAULT;
--		return 0;
--
--	case TUNSETVNETLE:
--		if (get_user(s, sp))
--			return -EFAULT;
--		if (s)
--			q->flags |= TAP_VNET_LE;
--		else
--			q->flags &= ~TAP_VNET_LE;
--		return 0;
--
--	case TUNGETVNETBE:
--		return tap_get_vnet_be(q, sp);
--
--	case TUNSETVNETBE:
--		return tap_set_vnet_be(q, sp);
--
- 	case TUNSETOFFLOAD:
- 		/* let the user check for future flags */
- 		if (arg & ~(TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TSO6 |
-@@ -1143,7 +1023,7 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
- 		return ret;
- 
- 	default:
--		return -EINVAL;
-+		return tun_vnet_ioctl(&q->vnet_hdr_sz, &q->flags, cmd, sp);
- 	}
- }
- 
-@@ -1190,7 +1070,7 @@ static int tap_get_user_xdp(struct tap_queue *q, struct xdp_buff *xdp)
- 	skb->protocol = eth_hdr(skb)->h_proto;
- 
- 	if (vnet_hdr_len) {
--		err = virtio_net_hdr_to_skb(skb, gso, tap_is_little_endian(q));
-+		err = tun_vnet_hdr_to_skb(q->flags, skb, gso);
- 		if (err)
- 			goto err_kfree;
- 	}
+Thanks everyone for all the comments at the 2025-02-06 guest_memfd
+upstream call! Here are the 
 
--- 
-2.48.1
++ Slides: https://lpc.events/event/18/contributions/1764/attachments/1409/3704/guest-memfd-1g-page-support-2025-02-06.pdf
++ State diagram: https://lpc.events/event/18/contributions/1764/attachments/1409/3702/guest-memfd-state-diagram-split-merge-2025-02-06.drawio.svg
++ For those interested in editing the state diagram using draw.io:
+  https://lpc.events/event/18/contributions/1764/attachments/1409/3703/guest-memfd-state-diagram-split-merge-2025-02-06.drawio.xml
 
+>> 
+>> I'd be happy to share the python model too but I have to work through
+>> some internal open-sourcing processes first, so if you think this
+>> will
+>> be useful, let me know!
+>
+> No problem.  Yes, I'm interested in this - it'll be helpful!
+
+I've started working through the internal processes and will update here
+when I'm done!
+
+>
+> The other thing of note is that while we have the kernel patches, a
+> userspace to drive them and exercise them is currently missing.
+
+In this and future patch series, I'll have selftests that will exercise
+any new functionality.
+
+>
+>> Then, I'll code it all up in a new revision of this series (target:
+>> March 2025), which will be accompanied by source code on GitHub.
+>> 
+>> I'm happy to collaborate more closely, let me know if you have ideas
+>> for
+>> collaboration!
+>
+> Thank you.  I think currently the bigger problem we have is allocation
+> of hugepages -- which is also blocking a lot of the follow-on work. 
+> Vishal briefly mentioned isolating pages from Linux entirely last time
+> - that's also what I'm interested in to figure out if we can completely
+> bypass the allocation problem by not allocating struct pages for non-
+> host use pages entirely.  The guest_memfs/KHO/kexec/live-update patches
+> also take this approach on AWS (for how their VMs are launched).  If we
+> work with those patches together, allocation of 1G hugepages is
+> simplified.  I'd like to discuss more on these themes to see if this is
+> an approach that helps as well.
+>
+>
+> 		Amit
+
+Vishal is still very interested in this and will probably be looking
+into this while I push ahead assuming that KVM continues to use struct
+pages. This was also brought up at the guest_memfd upstream call on
+2025-02-06, people were interested in this and think that it will
+simplify refcounting for merging and splitting.
+
+I'll push ahead assuming that we use hugetlb as the source of 1G pages,
+and assuming that KVM continues to use struct pages to describe guest
+private memory.
+
+The series will still be useful as an interim solution/prototype even if
+other allocators are preferred and get merged. :)
 
