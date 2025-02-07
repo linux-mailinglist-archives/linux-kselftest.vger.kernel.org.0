@@ -1,230 +1,156 @@
-Return-Path: <linux-kselftest+bounces-25987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45C26A2C176
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 12:28:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A44E1A2C18E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 12:31:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8241885599
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 11:28:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A81D7A19E1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 11:30:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 407B71DD0D5;
-	Fri,  7 Feb 2025 11:28:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359E11DEFF7;
+	Fri,  7 Feb 2025 11:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTwTNHuf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nDyo2lpG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE9E63D;
-	Fri,  7 Feb 2025 11:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C89B1DED64;
+	Fri,  7 Feb 2025 11:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738927718; cv=none; b=WcqYTFRIuoUwZmwKgsQ3/hL9+PRw/V84tfHuNW7GO6gbgrrlhSQgpb0JFBdLkZZRjzfHg7IC1seR6/CEfp743x5ZTYEYqhq16AKN9UGUZoNNscsIql1/9LJEMopvd88aAGf51aTpREFnNeiKO0vWOYpf8AHA13Z0X6F8kVa4UVw=
+	t=1738927853; cv=none; b=GI34tZ03n3mVgpeucYr4VcLssWfARZ4iYE/8ikZugBc15y6cinIeO4PhnVIRwE1j7e2aH0wazSCUv/AOdRM0o21QfkonjdvMa1tlmNKqfXvDAscGjDarRAhZOIXy4TLlcxh9JuYHVDVB2+v3zzC/QjsizPSn5KyQqldHWQqYKvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738927718; c=relaxed/simple;
-	bh=CCZWa//gwdWtWgJNyXo15ebnvf4IYQUw2JPsdrxDlcM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uuolMMo7wt5j24LY3OMekaV1LgwlONhBxqASdIYC0jkKw/p/kRQHafhEVIawJvQgofEfiBOqUq5uoV4Ud5Z11WIeO2WhwMx8BucUMBn0tjB1xdC/7ui0mophmAYR58Go/v1UaRuvmuzEzYlhRbhTAIcmoGfl5+zq+t7RPYt4QAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTwTNHuf; arc=none smtp.client-ip=209.85.208.181
+	s=arc-20240116; t=1738927853; c=relaxed/simple;
+	bh=ZDqjxjD1vbZXisHQ6PT8aGp7m4PMXTOTY09yBdtOHNE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PbUi3+2AXt2duLMUwetQugXX5FScLQpceI6IlfHYTr3FdgYfxX8tB7EG9dN4l6tmqQQ+HlAxJqqvDlk39pnibFGRLMqDu3ntGAEsotpCD3+XMVsoz52jRUOZWpLHjTmznNr29PeSIo0c7kCQj8E3GZ1d25/t37sIwPFVUK0+Ig4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nDyo2lpG; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-308a559bdf7so4177311fa.1;
-        Fri, 07 Feb 2025 03:28:35 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7b6f7d7e128so299699685a.1;
+        Fri, 07 Feb 2025 03:30:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738927714; x=1739532514; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K3I8jfNTSvLswouinc+w/1LyqpX8XBDD13CLbIziqAE=;
-        b=GTwTNHufqPOakhasMiewz/MlVNeofLu74V58gY98PZ/VQwaZFzmpjZ+52yTdlF2Olr
-         iITTz4I1WTeXjOGfcvXpqMVjXx81gTn0DAagrz1i45cyWYpYm4tc6vl3wHc9efscqg+a
-         QA4TEXIKecOEbPBLzwLPURWn7v9vK4IZF2kSDTj3NijO9Oo6ucmsyyfzyF0oR0BH2pAb
-         Q6keYEuQzWmLrVkx9NRsElgnoeiMk+yFoSYhKIJh+jE9Seefrh2vSiemdPPhREDsf7FW
-         ZVhJBNRViGTsuGHTnaEMmD340FSikLGYU5SOvug+wmsIT3G+4PMrbbQ/sb2AtU2eSzkr
-         Oe+w==
+        d=gmail.com; s=20230601; t=1738927850; x=1739532650; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gPvD7/A4BN9N53O6dBf8b1um0XD4Tez1MGd+tallm/A=;
+        b=nDyo2lpGaMhgEdrz/KoJqAzXaQs50TWA0HZZpE3M6iestm9ctzjgT9Hlzo6aqf/a5a
+         dBFxMCLc05i3tVGExIvIR+nxVopKCjzFUxOQT8liuUEujRRMRxn5T0g8cauqX3aT2bDX
+         7r2VUeXJkX+g5XbqvgSxKKaSiYOOK/CnsS7JY7nPPuGMVyUx5i3vslK82GOALVWiCmIQ
+         PxY4YOUhJr3MFtou0Kc6suB7nw2U76nHwqjlE5bvYBNZ5/OWX3aSng+706iZL9d3TMfH
+         AoM/jwg1Ryv3W37cwhHdqCjvcPhAkYN0Hf0g9jK0rvmzCBkP1ebJTyXFXT/Zhp/m5O2F
+         BC8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738927714; x=1739532514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K3I8jfNTSvLswouinc+w/1LyqpX8XBDD13CLbIziqAE=;
-        b=aOHCoAQkAObBGAYLwi2qMGJ9VpCNuK28103XCcKFIGwGjtsyNKNlfrdGDd7UGIBgEP
-         eJqFjgm9RYBU18Vdg2jfwlQxC37gmPGglBorZehPr/nbgGRrWXDvtQnJXFCtOL/Td7Or
-         elL1VKRFdEDKB7mIsQLd5ADRsvPzZMBmDFkyCvGz3ZfZl+TywiGVK8wtOhvwlN0G5x5q
-         7FqitsnkmVdyUITBEkYLbnR28R5F4TTD/8e6QxoMmMShyxo9EmexuANCYChoQ5KD8dvG
-         wwNUsS2tbMo83xo2FbjBCEEYjAUFDKUVHlWEtT8xCIqnT4FtJkZ5y9jITWzHiQWMk2Je
-         rLvw==
-X-Forwarded-Encrypted: i=1; AJvYcCUl5VLUARtD3suda51frIFLGusYqiJwcu3YoL3TXOZVZD6QkWU3xTTVV/LPawzeCo7D+a7yrYy57WwEByuOAf4D@vger.kernel.org, AJvYcCVbb/zc7XE4hc83S5S3szjrZ1i0y+4zpKw50vQaN916JKDT4Q1NWUT/lFCXCMcsD66uvj7bFDNGYjFT+Ls=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzfu82OsobjdZ3vz0hQvUTwcEd8wHEjrdnWtf4mCb+h4YuJI3+K
-	j6zNnCuwH2XaRBM4hNa5HYtaI+C/A7sqKH04SggJJOt8ZxXggwiqTKLrRKPVPM1SeMTqJAQC+1P
-	Uhb31/kgds0N3cgI9WhLizQD6vhM=
-X-Gm-Gg: ASbGnctSUUgTsPVAHYbI9e4taoHJ+mcdmhXXyvan56QLoFSRfOC2b2By1CnUgy4lIzg
-	8ERfJyo5yILymC0qBx6wyqBe6eWJ5SN0y+Gqq4WwUyQXK+dxNb/7ClN4KinO5TH9l5SgVf/9RF/
-	U09ZS4AUl1ww19cCFBpw9vUTmT0g/N
-X-Google-Smtp-Source: AGHT+IEbJ1TXApipqmFCnNeTyCbZo+ClIG1v6IURN2hPR/XEhzJkpZlE93XuDEPNmz0NSjQARLGmRWj1Sr1MbsVJu4M=
-X-Received: by 2002:a2e:bd81:0:b0:307:e498:1269 with SMTP id
- 38308e7fff4ca-307e5a8dee7mr8816221fa.37.1738927713988; Fri, 07 Feb 2025
- 03:28:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738927850; x=1739532650;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gPvD7/A4BN9N53O6dBf8b1um0XD4Tez1MGd+tallm/A=;
+        b=hQBWdOahiLRKhwqT9hFPSdItKosARVyXOqKewybHZukMHwY67cWEPJ65G5l+MARpbt
+         tzpZNTVhCFj2kKnh63xlhTSOejZnrajLVlV8SwjDEH6ZVeeeA60GbMceZLqDaOkvXWte
+         YP8+pWxWDeb1sOh5SFHflEMhJxHE51DlZ2sJWIKEwx3gDuqgpSLYHamFm13BWhrKyI1N
+         UwZDmS6R9Hf5o/RVUFYRlVHHsSETSa5bAPnzydscebDAgP5k3pxh+b91d2/xraqnagza
+         7r9WJ/vuKTAmbGteamm1ZkhKTLHYYO/pYG8uGCBs1RodQ/8oikMaCOU+6mkpSHIJ9mwF
+         jpHw==
+X-Forwarded-Encrypted: i=1; AJvYcCURdGQBRKtvfhPSSxiXejeBkzMMNdvX6YWnZs/rCFkzJaNpGM+bK/ZU6Q48B6YZtzoKfJ1DAG6zdAT1rV8aBuY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO8L9YC8DO2ap/RqbfEQ09zHCIQvnxYAvvJ1erJHeMOeUX8h6P
+	BWQwcddQUoHKhobJ9sVY5AR4AcP9LHDQXt9IcQc+dWkC8n/BL3yKYvV+ozo5
+X-Gm-Gg: ASbGncvMqb/x6LL0xqknPEcTXLyL53RgnbVVQQ0RbNBuowi4k3FK1adSZw/cKLEJZV4
+	vSkiF45L5eClSlrEG9tPgpkpPxTHfSsNDphF1puChrthA01pDS/dAzu1nrsaFBLl7IILv+oEtNh
+	+xw46wXJ/TzO2E6v83/mLIdFvaee/yF0NPkbcJehYPGVqpn0eBBB/aIP667ndVrx2ZGwE/OeXtc
+	y2M5FTBHd5SFA6U9Z0VVLAH330ez/SieCvr8vFbBO2JEvMSHwAZHzRJl51vuGr+Y9w8eb37bYa1
+	8IM+Qefowt6WCixgVJudPz9MzF1nkryEutOU
+X-Google-Smtp-Source: AGHT+IHf6a+mVgabTFzkr/tjv9wtYxeBGu4pNA2fRbLrHFgFpSC6gahs9OuNgfjsb/1EnX5IAw9TtQ==
+X-Received: by 2002:a05:620a:424b:b0:7b6:d7be:2e4 with SMTP id af79cd13be357-7c0402a1bd2mr867499285a.26.1738927850135;
+        Fri, 07 Feb 2025 03:30:50 -0800 (PST)
+Received: from tamird-mac.local ([2600:4041:5be7:7c00:fb:aded:686f:8a03])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c041ded0e7sm178507685a.8.2025.02.07.03.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2025 03:30:48 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v2 0/2] printf: convert self-test to KUnit
+Date: Fri, 07 Feb 2025 06:30:43 -0500
+Message-Id: <20250207-printf-kunit-convert-v2-0-057b23860823@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com>
- <CAKwiHFi6SUCT7UjUTdKmLJ8kiAEqVg=d6ND60R05MJB85Eoj9w@mail.gmail.com>
- <CAJ-ks9kLmArqqPati8n0dwzhjccLmTuTHtkaSyf_F_1QXzCoRw@mail.gmail.com> <87bjvers3u.fsf@prevas.dk>
-In-Reply-To: <87bjvers3u.fsf@prevas.dk>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 7 Feb 2025 06:27:57 -0500
-X-Gm-Features: AWEUYZm9MWuOjwS9lX6soP6HvGCb-hsrwH8EL3ZvEi3BRJZNc9R9maj_Z4tQnjM
-Message-ID: <CAJ-ks9=0+fk22Dx-65a+CSYhy0dnjTJuot9PtgOCi5Th1_wARA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] printf: convert self-test to KUnit
-To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOPupWcC/22NQQ7CIBBFr9LM2jGA2BhX3sN0gXRoJ1poAImm6
+ d3FunX5XvLfXyBRZEpwbhaIVDhx8BXUrgE7Gj8Qcl8ZlFBHIQ8S58g+O7w/PWe0wReKGV2vhVT
+ GKLIt1OkcyfFry167yiOnHOJ7eynya39BJfT/YJEokKyTt5Nuje7pMkyGH3sbJujWdf0AoS1UP
+ 7gAAAA=
+X-Change-ID: 20250131-printf-kunit-convert-fd4012aa2ec6
+To: Arpitha Raghunandan <98.arpi@gmail.com>, 
+ David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>
+X-Mailer: b4 0.15-dev
 
-On Fri, Feb 7, 2025 at 5:01=E2=80=AFAM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
->
-> On Thu, Feb 06 2025, Tamir Duberstein <tamird@gmail.com> wrote:
->
-> > On Thu, Feb 6, 2025 at 4:27=E2=80=AFAM Rasmus Villemoes
-> > <linux@rasmusvillemoes.dk> wrote:
-> >>
-> >> On Tue, 4 Feb 2025 at 20:36, Tamir Duberstein <tamird@gmail.com> wrote=
-:
-> >> >
-> >> > This is one of just 3 remaining "Test Module" kselftests (the others
-> >> > being bitmap and scanf), the rest having been converted to KUnit.
-> >> >
-> >> > I tested this using:
-> >> >
-> >> > $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=
-=3D1 printf
-> >> >
-> >> > I have also sent out a series converting scanf[0].
-> >> >
-> >> > Link: https://lore.kernel.org/all/20250204-scanf-kunit-convert-v3-0-=
-386d7c3ee714@gmail.com/T/#u [0]
-> >> >
-> >>
-> >> Sorry, but NAK, not in this form.
-> >>
-> >> Please read the previous threads to understand what is wrong with this
-> >> mechanical approach. Not only is it wrong, it also actively makes the
-> >> test suite much less useful.
-> >>
-> >> https://lore.kernel.org/lkml/f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasm=
-usvillemoes.dk/
-> >> https://lore.kernel.org/lkml/876cc862-56f1-7330-f988-0248bec2fbad@rasm=
-usvillemoes.dk/
-> >> https://lore.kernel.org/lkml/0ab618c7-8c5c-00ae-8e08-0c1b99f3bf5c@rasm=
-usvillemoes.dk/
-> >>
-> >> I think the previous attempt was close to something acceptable (around
-> >> https://lore.kernel.org/lkml/57976ff4-7845-d721-ced1-1fe439000a9b@rasm=
-usvillemoes.dk/),
-> >> but I don't know what happened to it.
-> >>
-> >> Rasmus
-> >
-> > Thanks Rasmus, I wasn't aware of that prior effort. I've gone through
-> > and adopted your comments - the result is a first patch that is much
-> > smaller (104 insertions(+), 104 deletions(-)) and failure messages
-> > that are quite close to what is emitted now. I've taken care to keep
-> > all the control flow the same, as you requested. The previous
-> > discussion concluded with a promise to send another patch which didn't
-> > happen. May I send a v2 with these changes, or are there more
-> > fundamental objections? I'll also cc Arpitha and Brendan. The new
-> > failure output:
-> >
-> >     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:95
-> > vsnprintf(buf, 256, "%piS|%pIS", ...) wrote
-> > '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> >     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:95
-> > vsnprintf(buf, 19, "%piS|%pIS", ...) wrote '127.000.000.001|12',
-> > expected '127-000.000.001|12'
-> >     # ip4: EXPECTATION FAILED at lib/printf_kunit.c:131
-> > kvasprintf(..., "%piS|%pIS", ...) returned
-> > '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->
-> That certainly addresses one of my main objections; I really don't want t=
-o see
-> "memcmp(..., ...) =3D=3D 1, expected memcmp(..., ...) =3D=3D 0". And you =
-said
-> you've kept the control flow/early returns the same, so that should also
-> be ok.
->
-> I'll have to see the actual code, of course. In general, I find reading
-> code using those KUNIT macros quite hard, because I'm not familiar with
-> those macros and when I try to look up what they do they turn out to be
-> defined in terms of other KUNIT macros 10 levels deep.
->
-> But that still leaves a few points. First, I really like that "388 test
-> cases passed" tally or some other free-form summary (so that I can see
-> that I properly hooked up, compiled, and ran a new testcase inside
-> test_number(), so any kind of aggregation on those top-level test_* is
-> too coarse).
+This is one of just 3 remaining "Test Module" kselftests (the others
+being bitmap and scanf), the rest having been converted to KUnit.
 
-This one I'm not sure how to address. What you're calling test cases
-here would typically be referred to as assertions, and I'm not aware
-of a way to report a count of assertions.
+I tested this using:
 
-> The other thing I want to know is if this would make it harder for me to
-> finish up that "deterministic random testing" thing I wrote [*], but
-> never got around to actually get it upstream. It seems like something
-> that a framework like kunit could usefully provide out-of-the-box (which
-> is why I attempted to get it into kselftest), but as long as I'd still
-> be able to add in something like that, and get a "xxx failed, random
-> seed used was 0xabcdef" line printed, and run the test again setting the
-> seed explicitly to that 0xabcdef value, I'm good.
->
-> [*] https://lore.kernel.org/lkml/20201025214842.5924-4-linux@rasmusvillem=
-oes.dk/
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 printf
 
-I can't speak for the framework, but it wouldn't be any harder to do
-in printf itself. I did it this way:
+I have also sent out a series converting scanf[0].
 
-+static struct rnd_state rnd_state;
-+static u64 seed;
-+
- static int printf_suite_init(struct kunit_suite *suite)
- {
-  alloced_buffer =3D kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
-  if (!alloced_buffer)
-  return -1;
-  test_buffer =3D alloced_buffer + PAD_SIZE;
-+
-+ seed =3D get_random_u64();
-+ prandom_seed_state(&rnd_state, seed);
-  return 0;
- }
+Link: https://lore.kernel.org/all/20250204-scanf-kunit-convert-v3-0-386d7c3ee714@gmail.com/T/#u [0]
 
- static void printf_suite_exit(struct kunit_suite *suite)
- {
-  kfree(alloced_buffer);
-+ if (kunit_suite_has_succeeded(suite) =3D=3D KUNIT_FAILURE) {
-+ pr_info("Seed: %llu\n", seed);
-+ }
- }
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v2:
+- Incorporate code review from prior work[0] by Arpitha Raghunandan.
+- Link to v1: https://lore.kernel.org/r/20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com
 
-and the result (once I made one of the cases fail):
+Link: https://lore.kernel.org/lkml/20200817043028.76502-1-98.arpi@gmail.com/t/#u [0]
 
-printf_kunit: Seed: 11480747578984087668
-# printf: pass:27 fail:1 skip:0 total:28
-# Totals: pass:27 fail:1 skip:0 total:28
-not ok 1 printf
+---
+Tamir Duberstein (2):
+      printf: convert self-test to KUnit
+      printf: break kunit into test cases
 
-Thank you both for engaging with me here. I'll send v2 in a few
-minutes and we can continue the discussion there.
-Tamir
+ Documentation/core-api/printk-formats.rst |   2 +-
+ MAINTAINERS                               |   2 +-
+ arch/m68k/configs/amiga_defconfig         |   1 -
+ arch/m68k/configs/apollo_defconfig        |   1 -
+ arch/m68k/configs/atari_defconfig         |   1 -
+ arch/m68k/configs/bvme6000_defconfig      |   1 -
+ arch/m68k/configs/hp300_defconfig         |   1 -
+ arch/m68k/configs/mac_defconfig           |   1 -
+ arch/m68k/configs/multi_defconfig         |   1 -
+ arch/m68k/configs/mvme147_defconfig       |   1 -
+ arch/m68k/configs/mvme16x_defconfig       |   1 -
+ arch/m68k/configs/q40_defconfig           |   1 -
+ arch/m68k/configs/sun3_defconfig          |   1 -
+ arch/m68k/configs/sun3x_defconfig         |   1 -
+ arch/powerpc/configs/ppc64_defconfig      |   1 -
+ lib/Kconfig.debug                         |  20 +-
+ lib/Makefile                              |   2 +-
+ lib/{test_printf.c => printf_kunit.c}     | 400 ++++++++++++------------------
+ tools/testing/selftests/lib/config        |   1 -
+ tools/testing/selftests/lib/printf.sh     |   4 -
+ 20 files changed, 182 insertions(+), 262 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250131-printf-kunit-convert-fd4012aa2ec6
+
+Best regards,
+-- 
+Tamir Duberstein <tamird@gmail.com>
+
 
