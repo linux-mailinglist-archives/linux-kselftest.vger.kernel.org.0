@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-25963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5874A2BACC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 06:45:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD48EA2BAD2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 06:45:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D3521888846
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 05:45:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A9A1167006
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 05:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDEFD1AB6C8;
-	Fri,  7 Feb 2025 05:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4CC2343C5;
+	Fri,  7 Feb 2025 05:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Rski2O3F"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UHEPg4YV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDE6187332
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 05:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DA9233D8F
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 05:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738907122; cv=none; b=KBJ+B3du+VYfJWedCDqLOsk7odSi8MnGyGZd7qSvAPjRdYZoZGKMVi5R8HTt1MVKyRHvxEUt8pkkeUe0PxTuwzaSV04x47IRQoGgOwfJbTYAnDcGK4wA2o0oBM5pgg/CKB2FOatqyF1V7tj+XXLbJOfLqwTHnMnnv/aqiNyx8NA=
+	t=1738907126; cv=none; b=Ewf2hxNT6dNgq5wPCejL7+UkQS4rKT9t32xAqDCPCe6Rfqp9gA37pUDKp58ZYjEB/s3g6BoGoYtdMp3/ypTcxhl4d/K3v4i2t8/kFxrUVB80ZP8E8Uf0lQL345BeR/YZP6NKuPfKaWYICnlL6aJDK/tOpQ0cM1qN0cWgTNIsVgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738907122; c=relaxed/simple;
-	bh=x61C/F4J/oG3FG1KFD20Za19v9HG288Z19JPSbWmAMI=;
+	s=arc-20240116; t=1738907126; c=relaxed/simple;
+	bh=TSqw6WTzkGxJ2g7v2P63DZ+KseEhuRtpFe8QcAD65c0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r3xikzj7hxX2ZOdYVI+yt/xwEzR5mwpdoxep/ECtrWBKe4K7qPoHzYGlLvr0i/gtvuCYsf/3SlfECJx6xtiH6XcUEgVTGhkN6BIIXvcyAgzDoFsEBtqq5pc4TNIhZvuXDrs37mzVxTNnH2trTfrN5AdwlbEGeuMCPpHg19C383g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Rski2O3F; arc=none smtp.client-ip=209.85.219.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=OkrULn+zYDYyVF0HtXzzy1R5UqZdlM4FxxBB2O9T7qm2PtOin6YWFYooBBR8eKmsHEg6aQJZlz8Py+IisjdG2e5kgJ6uBy5K4gfSX26EYw/InkceVNcM4czbCXqi11EWHbROvbG8+b1X6gxV8WiVS9gBszVDRV2KPRfg9Wb0uPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=UHEPg4YV; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6e1a41935c3so23042106d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 21:45:20 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7b6e8814842so190158985a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2025 21:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1738907120; x=1739511920; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1738907123; x=1739511923; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MPMcU7relN033a1ztg4Vj2Rf/KyzQJjjuQ/8o89cp7k=;
-        b=Rski2O3Fs1cxOgik6Hjyhi9grCRj5cgcx+diKvtCP7QxwDeVEYStfoWukXqQN9swbB
-         LeWoMCdlzsLB4UBcbeUTg685aLuKFf+zejzdpVbhhDh1fxeJxkZcEuYgvHT3b0czkQGZ
-         glTr9E0N07yK1aP3qHM4gIZeFk8RCa3PzQSfR2nbloaA4feXPCJEUaG8i6qJxFxGevvD
-         IB16NXb1rwvEve2Eo73tOchMfVmroJlC5oJ2A/PsuVFIQrIjqAroYtvR0cCwedZg2H78
-         7pas46gbQWLLlZTpUUBHNF24mvAqAB7172CtCyDC5PKi6w8Ba5plcSQBLkmDRSQDB0hZ
-         X1EA==
+        bh=BiL88Vl7FssHFuR4sgsTuWpUW3EZbuNKD07jWPDb1JA=;
+        b=UHEPg4YVibcpTJ1mxaJRGLdhZvlvZ2EM/Z4sqsMsVLTNFTaB2r8peb7JBdIex/qYnw
+         lK5vLlkMdjY+tqFSXvVOw2WSelcQ+KUb51Ho0dWExP4NnKMCFRdOAP7F+qX1hyyW4wD5
+         RIVDkAPbgqdMWSgeaDWSWU+IbwuFVEDj38tiSDNlZ5WuD1dC43q3doQNvVCaophJgEDN
+         M7a9eyQma7FA72ofTx5y/50H6w0wtKVKm7p1pqzCXLnoMeddfD/uFzKnyPjSeklPNtgs
+         eySYagC2xNcvtlDc6Vyk6pIUVuFpXtVHmsnM1iGYa5a2GZLgVGAhMRMThPKIqVqAJmvy
+         jfZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738907120; x=1739511920;
+        d=1e100.net; s=20230601; t=1738907123; x=1739511923;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MPMcU7relN033a1ztg4Vj2Rf/KyzQJjjuQ/8o89cp7k=;
-        b=rnYn9sz6hODBlsdBEhIRq0ecLVHiQNAWoJ5yWh/31Gi2LsqIcXraLJxRFf0Nlmik+c
-         ddxg9Ykq9DDnMHsifVBAX/WFSEmne6CYtJbnIKLvFz/s6eyNcGKAH5Jm2+fZ0sZe84Fh
-         5/QEHfXV4NAtZOh5KgFCdpdGavdqbhIdTkMje0+OpXM17mqmQa7zo7hWkpZX+qwXqc6d
-         ibvvhP3xMQK8+WSdnPNGIMsUhXZxU/8m3JD4NcWV9KhYebRKEWTvezOlYczsQw4y1i61
-         +mw/dWCZ0CC/x2bUvZI/Oj1vFu+brTHQuMEkXiicU95eNea5L2L45BE5MjGT5h15iV+3
-         qmCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVq5+si7bcD7nmmfKEJsB5Qngb6So3pOsU7aTOgfgo7AcwIIEYBLcMQo+2Uc4RC0SfDzTjmDY4RcUzojT2OBso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVYnb0oGLp89uvqOeAm0vVKueMgiMJTL9duz8EoOJc18rJ1jm6
-	6TTOrxvxiShZHiOmpEIw2zaXpp295dzbIIxuHcdt4hxMkTpLy9OdneEIpcWsIK8=
-X-Gm-Gg: ASbGncufS7e60hcnbu4XUeRp4HTtmyeyIhzeABBv1tuTefbMPQHWooeeehvhfz9XMVN
-	fkM4NgHhf0GUa+1t6K1ZzzRo49aXUJRiTE7ZY9dq3iLzOpHRS4cDz5yV1VoObVQG4UStWDLQKZv
-	LCstBUFJDFrwb23WOq8K6M7Rmm0euQA1zIaWqoK6xImVoVPUwOG8GvvU4P/E/KcIp4mxMhPWxO6
-	p4LZXj4BloPVUhbkrh8h7TfmjubUSffjJ2h5tSZmumRAeuWJ1nJb0/ckMrNvzrawU+u5II3X7m/
-	jdA=
-X-Google-Smtp-Source: AGHT+IEMtX5bNJe8+qFygANCqnKDtR8huQvrBTgdMpqJiJ33srctAZXEpbmfeT9ktGaXGKTQzI09GQ==
-X-Received: by 2002:ad4:5fca:0:b0:6d8:932a:eaa3 with SMTP id 6a1803df08f44-6e4455d4541mr26654036d6.3.1738907119910;
-        Thu, 06 Feb 2025 21:45:19 -0800 (PST)
+        bh=BiL88Vl7FssHFuR4sgsTuWpUW3EZbuNKD07jWPDb1JA=;
+        b=IWudib2A/nrZEmCCuLs330t18Nh1QrKYbQvGfuK9Wv/fvwbLphcMmzK66azmiOzg1Z
+         2HbQGXNdgu9EaZbGNk5sZvXCUbZfQZa+s0htl2mbwXj3QAtTHubzVlNMUQrdjRMfKu2v
+         Ydyh5hUH6qOYnEDn1IkmrHpn1uxpObrUbKArvf9EukQlLNsrrodqgoUZMNbdsyc2VmAN
+         xdp8qIO/REq0ps9Iexjz43XCstdILgBfITvu8Ibk8aUXt51UE5ip7VVzb7JsdRMMETcv
+         t69ZjMqEBmKnGVKLFodX4yyzRzGf8cvsmIHDQaBL8r73Sl34E2ADw1bbrbDbY9o+gB+I
+         L7Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWPktZOzvASPDhhSbQcdXkojFa/kyVwTYYagyXzHOm6MCZXu44BP408L1sjFSmT56hqsK43hMqidWTA4AgdVf4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu8ZpBNHO0wfD57B514Aqp6zaXPUSrn/y13AYlBYxbhJwmD/Sj
+	8JqhYr4StskGP+4U73uyeClDfZzvoQQFK2VKbPGjKVcbdy8iRiNUlh/MD2znRpU=
+X-Gm-Gg: ASbGnctqKpo/hiGRxhW+oEyZkgVrhMbL8eAy8Vha0+lcSh24pNXHxgett2Q12vDmtfi
+	O4trX4GlTynjOK/OeuPp2M3VVsCPIgq+NESDmGVwOaFOLqNih94rkrQxsrdQgEW3DIoQZG7EhpI
+	dctYtOZL7lM/KhbKS94/CEFy8pCZDWG6KJjzy0QeNJ3IScr1YUl/5ssTxFVdweguCKCXRoTIchb
+	A7Hy7FuV1A9rZ0oFI27n+05uYZDoGq2jtAllV/qeX3APFDzYCuEdGTZpo7HAQC3ExfxCvQIVH3L
+	C7I=
+X-Google-Smtp-Source: AGHT+IGZ3e/LBC9oFo92G9gFvFYL6g4CWsC0kkEIeD2dmJfNrUDCabnMPaFC52kKEkSHxzG2IanhUQ==
+X-Received: by 2002:a05:620a:258b:b0:7b6:e9be:97dc with SMTP id af79cd13be357-7c047ba498bmr301516785a.8.1738907123361;
+        Thu, 06 Feb 2025 21:45:23 -0800 (PST)
 Received: from debian.debian ([2a09:bac5:79dd:25a5::3c0:2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e43baacb5dsm13228256d6.88.2025.02.06.21.45.17
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c041eb7f94sm147517385a.96.2025.02.06.21.45.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2025 21:45:18 -0800 (PST)
-Date: Thu, 6 Feb 2025 21:45:16 -0800
+        Thu, 06 Feb 2025 21:45:22 -0800 (PST)
+Date: Thu, 6 Feb 2025 21:45:20 -0800
 From: Yan Zhai <yan@cloudflare.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -87,9 +87,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Yan Zhai <yan@cloudflare.com>, Brian Vazquez <brianvv@google.com>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	kernel-team@cloudflare.com, Hou Tao <houtao@huaweicloud.com>
-Subject: [PATCH v2 bpf 1/2] bpf: skip non exist keys in
- generic_map_lookup_batch
-Message-ID: <177c4a3417d848aa9d72158e235be7d6b6f43915.1738905497.git.yan@cloudflare.com>
+Subject: [PATCH v2 bpf 2/2] selftests: bpf: test batch lookup on array of
+ maps with holes
+Message-ID: <6e710c8034800cb14e7db2d77b2081222bcb247e.1738905497.git.yan@cloudflare.com>
 References: <cover.1738905497.git.yan@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -101,103 +101,150 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1738905497.git.yan@cloudflare.com>
 
-The generic_map_lookup_batch currently returns EINTR if it fails with
-ENOENT and retries several times on bpf_map_copy_value. The next batch
-would start from the same location, presuming it's a transient issue.
-This is incorrect if a map can actually have "holes", i.e.
-"get_next_key" can return a key that does not point to a valid value. At
-least the array of maps type may contain such holes legitly. Right now
-these holes show up, generic batch lookup cannot proceed any more. It
-will always fail with EINTR errors.
+Iterating through array of maps may encounter non existing keys. The
+batch operation should not fail on when this happens.
 
-Rather, do not retry in generic_map_lookup_batch. If it finds a non
-existing element, skip to the next key. This simple solution comes with
-a price that transient errors may not be recovered, and the iteration
-might cycle back to the first key under parallel deletion. For example,
-Hou Tao <houtao@huaweicloud.com> pointed out a following scenario:
-
-For LPM trie map:
-(1) ->map_get_next_key(map, prev_key, key) returns a valid key
-
-(2) bpf_map_copy_value() return -ENOMENT
-It means the key must be deleted concurrently.
-
-(3) goto next_key
-It swaps the prev_key and key
-
-(4) ->map_get_next_key(map, prev_key, key) again
-prev_key points to a non-existing key, for LPM trie it will treat just
-like prev_key=NULL case, the returned key will be duplicated.
-
-With the retry logic, the iteration can continue to the key next to the
-deleted one. But if we directly skip to the next key, the iteration loop
-would restart from the first key for the lpm_trie type.
-
-However, not all races may be recovered. For example, if current key is
-deleted after instead of before bpf_map_copy_value, or if the prev_key
-also gets deleted, then the loop will still restart from the first key
-for lpm_tire anyway. For generic lookup it might be better to stay
-simple, i.e. just skip to the next key. To guarantee that the output
-keys are not duplicated, it is better to implement map type specific
-batch operations, which can properly lock the trie and synchronize with
-concurrent mutators.
-
-Fixes: cb4d03ab499d ("bpf: Add generic support for lookup batch op")
-Closes: https://lore.kernel.org/bpf/Z6JXtA1M5jAZx8xD@debian.debian/
 Signed-off-by: Yan Zhai <yan@cloudflare.com>
 ---
-v1->v2: incorporate more useful information inside commit message.
-v1: https://lore.kernel.org/bpf/Z6OYbS4WqQnmzi2z@debian.debian/
----
- kernel/bpf/syscall.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ .../bpf/map_tests/map_in_map_batch_ops.c      | 62 +++++++++++++------
+ 1 file changed, 44 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c420edbfb7c8..5d0a4db6fb85 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1979,8 +1979,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
- 	void __user *values = u64_to_user_ptr(attr->batch.values);
- 	void __user *keys = u64_to_user_ptr(attr->batch.keys);
- 	void *buf, *buf_prevkey, *prev_key, *key, *value;
--	int err, retry = MAP_LOOKUP_RETRIES;
- 	u32 value_size, cp, max_count;
-+	int err;
+diff --git a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+index 66191ae9863c..79c3ccadb962 100644
+--- a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
++++ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+@@ -120,11 +120,12 @@ static void validate_fetch_results(int outer_map_fd,
  
- 	if (attr->batch.elem_flags & ~BPF_F_LOCK)
- 		return -EINVAL;
-@@ -2026,14 +2026,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
- 		err = bpf_map_copy_value(map, key, value,
- 					 attr->batch.elem_flags);
+ static void fetch_and_validate(int outer_map_fd,
+ 			       struct bpf_map_batch_opts *opts,
+-			       __u32 batch_size, bool delete_entries)
++			       __u32 batch_size, bool delete_entries,
++			       bool has_holes)
+ {
+-	__u32 *fetched_keys, *fetched_values, total_fetched = 0;
+-	__u32 batch_key = 0, fetch_count, step_size;
+-	int err, max_entries = OUTER_MAP_ENTRIES;
++	int err, max_entries = OUTER_MAP_ENTRIES - !!has_holes;
++	__u32 *fetched_keys, *fetched_values, total_fetched = 0, i;
++	__u32 batch_key = 0, fetch_count, step_size = batch_size;
+ 	__u32 value_size = sizeof(__u32);
  
--		if (err == -ENOENT) {
--			if (retry) {
--				retry--;
--				continue;
--			}
--			err = -EINTR;
--			break;
--		}
-+		if (err == -ENOENT)
-+			goto next_key;
+ 	/* Total entries needs to be fetched */
+@@ -134,9 +135,8 @@ static void fetch_and_validate(int outer_map_fd,
+ 	      "Memory allocation failed for fetched_keys or fetched_values",
+ 	      "error=%s\n", strerror(errno));
  
- 		if (err)
- 			goto free_buf;
-@@ -2048,12 +2042,12 @@ int generic_map_lookup_batch(struct bpf_map *map,
- 			goto free_buf;
+-	for (step_size = batch_size;
+-	     step_size <= max_entries;
+-	     step_size += batch_size) {
++	/* hash map may not always return full batch */
++	for (i = 0; i < OUTER_MAP_ENTRIES; i++) {
+ 		fetch_count = step_size;
+ 		err = delete_entries
+ 		      ? bpf_map_lookup_and_delete_batch(outer_map_fd,
+@@ -155,6 +155,7 @@ static void fetch_and_validate(int outer_map_fd,
+ 		if (err && errno == ENOSPC) {
+ 			/* Fetch again with higher batch size */
+ 			total_fetched = 0;
++			step_size += batch_size;
+ 			continue;
  		}
  
-+		cp++;
-+next_key:
- 		if (!prev_key)
- 			prev_key = buf_prevkey;
+@@ -184,18 +185,19 @@ static void fetch_and_validate(int outer_map_fd,
+ }
  
- 		swap(prev_key, key);
--		retry = MAP_LOOKUP_RETRIES;
--		cp++;
- 		cond_resched();
- 	}
+ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+-				  enum bpf_map_type inner_map_type)
++				  enum bpf_map_type inner_map_type,
++				  bool has_holes)
+ {
++	__u32 max_entries = OUTER_MAP_ENTRIES - !!has_holes;
+ 	__u32 *outer_map_keys, *inner_map_fds;
+-	__u32 max_entries = OUTER_MAP_ENTRIES;
+ 	LIBBPF_OPTS(bpf_map_batch_opts, opts);
+ 	__u32 value_size = sizeof(__u32);
+ 	int batch_size[2] = {5, 10};
+ 	__u32 map_index, op_index;
+ 	int outer_map_fd, ret;
  
+-	outer_map_keys = calloc(max_entries, value_size);
+-	inner_map_fds = calloc(max_entries, value_size);
++	outer_map_keys = calloc(OUTER_MAP_ENTRIES, value_size);
++	inner_map_fds = calloc(OUTER_MAP_ENTRIES, value_size);
+ 	CHECK((!outer_map_keys || !inner_map_fds),
+ 	      "Memory allocation failed for outer_map_keys or inner_map_fds",
+ 	      "error=%s\n", strerror(errno));
+@@ -209,6 +211,24 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+ 			((outer_map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS)
+ 			 ? 9 : 1000) - map_index;
+ 
++	/* This condition is only meaningful for array of maps.
++	 *
++	 * max_entries == OUTER_MAP_ENTRIES - 1 if it is true. Say
++	 * max_entries is short for n, then outer_map_keys looks like:
++	 *
++	 *   [n, n-1, ... 2, 1]
++	 *
++	 * We change it to
++	 *
++	 *   [n, n-1, ... 2, 0]
++	 *
++	 * So it will leave key 1 as a hole. It will serve to test the
++	 * correctness when batch on an array: a "non-exist" key might be
++	 * actually allocated and returned from key iteration.
++	 */
++	if (has_holes)
++		outer_map_keys[max_entries - 1]--;
++
+ 	/* batch operation - map_update */
+ 	ret = bpf_map_update_batch(outer_map_fd, outer_map_keys,
+ 				   inner_map_fds, &max_entries, &opts);
+@@ -219,15 +239,17 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+ 	/* batch operation - map_lookup */
+ 	for (op_index = 0; op_index < 2; ++op_index)
+ 		fetch_and_validate(outer_map_fd, &opts,
+-				   batch_size[op_index], false);
++				   batch_size[op_index], false,
++				   has_holes);
+ 
+ 	/* batch operation - map_lookup_delete */
+ 	if (outer_map_type == BPF_MAP_TYPE_HASH_OF_MAPS)
+ 		fetch_and_validate(outer_map_fd, &opts,
+-				   max_entries, true /*delete*/);
++				   max_entries, true /*delete*/,
++				   has_holes);
+ 
+ 	/* close all map fds */
+-	for (map_index = 0; map_index < max_entries; map_index++)
++	for (map_index = 0; map_index < OUTER_MAP_ENTRIES; map_index++)
+ 		close(inner_map_fds[map_index]);
+ 	close(outer_map_fd);
+ 
+@@ -237,16 +259,20 @@ static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
+ 
+ void test_map_in_map_batch_ops_array(void)
+ {
+-	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY, false);
+ 	printf("%s:PASS with inner ARRAY map\n", __func__);
+-	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH, false);
+ 	printf("%s:PASS with inner HASH map\n", __func__);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY, true);
++	printf("%s:PASS with inner ARRAY map with holes\n", __func__);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH, true);
++	printf("%s:PASS with inner HASH map with holes\n", __func__);
+ }
+ 
+ void test_map_in_map_batch_ops_hash(void)
+ {
+-	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY, false);
+ 	printf("%s:PASS with inner ARRAY map\n", __func__);
+-	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH, false);
+ 	printf("%s:PASS with inner HASH map\n", __func__);
+ }
 -- 
 2.39.5
 
