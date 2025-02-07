@@ -1,298 +1,211 @@
-Return-Path: <linux-kselftest+bounces-26020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10FFDA2CB8D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:41:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AB8AA2CB90
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 19:41:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E358C188A081
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:40:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE2A1164B4D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 18:41:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 410D71DC05F;
-	Fri,  7 Feb 2025 18:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2845F1DE89D;
+	Fri,  7 Feb 2025 18:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlQrJCsw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D431DC185;
-	Fri,  7 Feb 2025 18:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3661A3151;
+	Fri,  7 Feb 2025 18:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953458; cv=none; b=sFCZ3yF+of8vrs1rZAFIcKaiV1TxEsJG5OdVz5YXv6Y2DZnZEsiTdzz4xFHJ+ywCendcf2oxVXl+hy761EigmJQ4BfuZ9PJN0ghqb5BZcGVAg2V7fNFrWwgzBPYjvITNYLvU9uf4rMWjS8Qb0q/7h8cerZ3Q7Cq5Ut95DEnrGJc=
+	t=1738953481; cv=none; b=XZFp9K9j5bKoPMwtI4M2Wo+/+Ygtr5r76v4wXiemjgCbBeF+0Q7363lH35iRSzyjv/xhSDnYzP6JCNRAhgtInJ91iKh2zYpgF5KUTXHyzu+WRzYZwoXMsizddVb53ODckKn6n1JkOcWm1SECxQO539oO+P4Mb3X1Ur7CPy5BN6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953458; c=relaxed/simple;
-	bh=JwTcOEBYfr1rCDshZukmpO+Xyd0QO7FH1iQT2eblRcU=;
+	s=arc-20240116; t=1738953481; c=relaxed/simple;
+	bh=nKtIeXe1WybNWDzZwu5Tk8fpz5emsmZs04c0W6ceGA0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ESqmDzSGgti7T7WNRccX/ZB4DiZLHdTegT1MJL8KXnwzfglM7WPYGWWG9pT+R1tWJ7pIGtUT4XfmHr8r3yaGDP1QeotKe91Jbj8eAQQV/VJHF9fpAMcbh95rY+mj/SS8MnNJF6OjyleAazU7QtJAghiRXFwYn4c1BnFXWL9g0kI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D278113E;
-	Fri,  7 Feb 2025 10:37:58 -0800 (PST)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 27E173F63F;
-	Fri,  7 Feb 2025 10:37:33 -0800 (PST)
-Date: Fri, 7 Feb 2025 18:37:27 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 3/5] arm64/hwcap: Describe 2024 dpISA extensions to
- userspace
-Message-ID: <Z6ZS51BLkfFLl-5Y@J2N7QTR9R3>
-References: <20250107-arm64-2024-dpisa-v5-0-7578da51fc3d@kernel.org>
- <20250107-arm64-2024-dpisa-v5-3-7578da51fc3d@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cNKK9BE6dJJ9kfoMlkKCYQ8z+S9zw5e1ZQcdq31v7aRWhz7Nlks5z2yoaVTAUeWZlqFzVzL3uCZIUzP69fhhtie0FMi+X1z/Y1Rx2qz3Qx+B214kspC7nP4U71oZ3qRFEBtttt5aj/CfLo8cqtmnUzBeAhQBHeR/fJi5ngS1m4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlQrJCsw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4FB8C4CED1;
+	Fri,  7 Feb 2025 18:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738953480;
+	bh=nKtIeXe1WybNWDzZwu5Tk8fpz5emsmZs04c0W6ceGA0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NlQrJCswb2tfBHdOL//Nqi1duhWdmo0hhnvyFyfXR+kDIctwxBbNZGMh0uVXpdrpn
+	 VtrsS32dlVeABXURIIGFmPTMZ88JEy/aky3D6z70pfkEKIebKtTmA3OIqxmZ3iDcEH
+	 trWQP7mjMuGosKO+a09FIi/HB1+rytKm2YepWGLYPhGRvhc49fQbsTVEVzSz1vy8KY
+	 6YWoxRaVR88tPNIw47TXvof69pWZuIN0NCuUntVn/ixzcMSAUzD+pD+us46BW7ocRi
+	 X6a7pzBJZI/SEPEJ2Eua3jvdWjb6R21icBFzIt4mEif2XISSYrHb7WAcNTWLbqa0Er
+	 f0yIWw7KhrZxA==
+Date: Fri, 7 Feb 2025 19:37:57 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+	virtualization@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+	xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+	linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Rong Xu <xur@google.com>,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Jinghao Jia <jinghao7@illinois.edu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 22/30] context_tracking: Exit CT_STATE_IDLE upon
+ irq/nmi entry
+Message-ID: <Z6ZTBXUiEOLVcSKp@pavilion.home>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-23-vschneid@redhat.com>
+ <Z5A6NPqVGoZ32YsN@pavilion.home>
+ <xhsmh5xm0pkuo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <xhsmhbjvdk7kq.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250107-arm64-2024-dpisa-v5-3-7578da51fc3d@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <xhsmhbjvdk7kq.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 
-On Tue, Jan 07, 2025 at 10:59:43PM +0000, Mark Brown wrote:
-> The 2024 dpISA introduces a number of architecture features all of which
-> only add new instructions so only require the addition of hwcaps and ID
-> register visibility.
+Le Fri, Feb 07, 2025 at 06:06:45PM +0100, Valentin Schneider a écrit :
+> On 27/01/25 12:17, Valentin Schneider wrote:
+> > On 22/01/25 01:22, Frederic Weisbecker wrote:
+> >> And NMIs interrupting userspace don't call
+> >> enter_from_user_mode(). In fact they don't call irqentry_enter_from_user_mode()
+> >> like regular IRQs but irqentry_nmi_enter() instead. Well that's for archs
+> >> implementing common entry code, I can't speak for the others.
+> >>
+> >
+> > That I didn't realize, so thank you for pointing it out. Having another
+> > look now, I mistook DEFINE_IDTENTRY_RAW(exc_int3) for the general case
+> > when it really isn't :(
+> >
+> >> Unifying the behaviour between user and idle such that the IRQs/NMIs exit the
+> >> CT_STATE can be interesting but I fear this may not come for free. You would
+> >> need to save the old state on IRQ/NMI entry and restore it on exit.
+> >>
+> >
+> > That's what I tried to avoid, but it sounds like there's no nice way around it.
+> >
+> >> Do we really need it?
+> >>
+> >
+> > Well, my problem with not doing IDLE->KERNEL transitions on IRQ/NMI is that
+> > this leads the IPI deferral logic to observe a technically-out-of-sync sate
+> > for remote CPUs. Consider:
+> >
+> >   CPUx            CPUy
+> >                     state := CT_STATE_IDLE
+> >                     ...
+> >                     ~>IRQ
+> >                     ...
+> >                     ct_nmi_enter()
+> >                     [in the kernel proper by now]
+> >
+> >   text_poke_bp_batch()
+> >     ct_set_cpu_work(CPUy, CT_WORK_SYNC)
+> >       READ CPUy ct->state
+> >       `-> CT_IDLE_STATE
+> >       `-> defer IPI
+> >
+> >
+> > I thought this meant I would need to throw out the "defer IPIs if CPU is
+> > idle" part, but AIUI this also affects CT_STATE_USER and CT_STATE_GUEST,
+> > which is a bummer :(
+> 
+> Soooo I've been thinking...
+> 
+> Isn't
+> 
+>   (context_tracking.state & CT_RCU_WATCHING)
+> 
+> pretty much a proxy for knowing whether a CPU is executing in kernelspace,
+> including NMIs?
 
-While working on SME fixes atop v6.14-rc1, I found this patch breaks the
-build spectacularly with CONFIG_ARM64_SME is enabled (splat at the end
-of this mail), due to some missing definitions.
+You got it!
 
-From a quick scan, there are some other missing bits too. For example
-these two caps are defined in terms of ID_AA64FPFR0_EL1 fields:
+> 
+> NMI interrupts userspace/VM/idle -> ct_nmi_enter()   -> it becomes true
+> IRQ interrupts idle              -> ct_irq_enter()   -> it becomes true
+> IRQ interrupts userspace         -> __ct_user_exit() -> it becomes true
+> IRQ interrupts VM                -> __ct_user_exit() -> it becomes true
+> 
+> IOW, if I gate setting deferred work by checking for this instead of
+> explicitely CT_STATE_KERNEL, "it should work" and prevent the
+> aforementioned issue? Or should I be out drinking instead? :-)
 
-> +HWCAP_F8MM8
-> +    Functionality implied by ID_AA64FPFR0_EL1.F8MM8 == 0b0001.
-> +
-> +HWCAP_F8MM4
-> +    Functionality implied by ID_AA64FPFR0_EL1.F8MM4 == 0b0001.
+Exactly it should work! Now that doesn't mean you can't go out
+for a drink :-)
 
-> +#define KERNEL_HWCAP_F8MM8		__khwcap_feature(F8MM8)
-> +#define KERNEL_HWCAP_F8MM4		__khwcap_feature(F8MM4)
-
-> +#define HWCAP_F8MM8		(1UL << 35)
-> +#define HWCAP_F8MM4		(1UL << 36)
-
-... and we expose the ID register bits to userspace:
-
-> @@ -381,6 +396,8 @@ static const struct arm64_ftr_bits ftr_id_aa64fpfr0[] = {
->  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8FMA_SHIFT, 1, 0),
->  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8DP4_SHIFT, 1, 0),
->  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8DP2_SHIFT, 1, 0),
-> +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8MM8_SHIFT, 1, 0),
-> +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8MM4_SHIFT, 1, 0),
->  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8E4M3_SHIFT, 1, 0),
->  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8E5M2_SHIFT, 1, 0),
-
-... but there's no corresponding arm64_elf_hwcaps additions to actually
-expose the hwcaps.
-
-There are *SME* variants in arm64_elf_hwcaps:
-
-> @@ -3163,6 +3187,13 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
->  	HWCAP_CAP(ID_AA64SMFR0_EL1, SF8FMA, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8FMA),
->  	HWCAP_CAP(ID_AA64SMFR0_EL1, SF8DP4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8DP4),
->  	HWCAP_CAP(ID_AA64SMFR0_EL1, SF8DP2, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8DP2),
-> +	HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-> +	HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-
-... but those KERNEL_HWCAP_SME_* values are never defined, and neither
-are the UAPI equivalents.
-
-We need to fix that quick, in case we need to shuffle values.
-
-> diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-> index d79e88fccdfce427507e7a34c5959ce6309cbd12..b08ea3dd5e210626102b83edc3be4efcc9225fc6 100644
-> --- a/arch/arm64/kernel/cpuinfo.c
-> +++ b/arch/arm64/kernel/cpuinfo.c
-> @@ -145,6 +145,21 @@ static const char *const hwcap_str[] = {
->  	[KERNEL_HWCAP_SME_SF8DP4]	= "smesf8dp4",
->  	[KERNEL_HWCAP_SME_SF8DP2]	= "smesf8dp2",
->  	[KERNEL_HWCAP_POE]		= "poe",
-> +	[KERNEL_HWCAP_CMPBR]		= "cmpbr",
-> +	[KERNEL_HWCAP_FPRCVT]		= "fprcvt",
-> +	[KERNEL_HWCAP_F8MM8]		= "f8mm8",
-> +	[KERNEL_HWCAP_F8MM4]		= "f8mm4",
-> +	[KERNEL_HWCAP_SVE_F16MM]	= "svef16mm",
-> +	[KERNEL_HWCAP_SVE_ELTPERM]	= "sveeltperm",
-> +	[KERNEL_HWCAP_SVE_AES2]		= "sveaes2",
-> +	[KERNEL_HWCAP_SVE_BFSCALE]	= "svebfscale",
-> +	[KERNEL_HWCAP_SVE2P2]		= "sve2p2",
-> +	[KERNEL_HWCAP_SME2P2]		= "sme2p2",
-> +	[KERNEL_HWCAP_SME_SBITPERM]	= "smesbitperm",
-> +	[KERNEL_HWCAP_SME_AES]		= "smeaes",
-> +	[KERNEL_HWCAP_SME_SFEXPA]	= "smesfexpa",
-> +	[KERNEL_HWCAP_SME_STMOP]	= "smestmop",
-> +	[KERNEL_HWCAP_SME_SMOP4]	= "smesmop4",
->  };
-
-Likewise they're missing from the strings table here.
-
-The full splat I got was:
-
-| [mark@lakrids:~/src/linux]% usekorg 14.2.0 make ARCH=arm64 CROSS_COMPILE=aarch64-linux- arch/arm64/
-|   CALL    scripts/checksyscalls.sh
-|   CC      arch/arm64/kernel/cpufeature.o
-| arch/arm64/kernel/cpufeature.c:3183:61: error: 'KERNEL_HWCAP_SME_SF8MM8' undeclared here (not in a function); did you mean 'KERNEL_HWCAP_SME_SF8FMA'?
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |                                                             ^~~~~~~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3013:26: note: in definition of macro '__HWCAP_CAP'
-|  3013 |                 .hwcap = cap,                                                   \
-|       |                          ^~~
-| arch/arm64/kernel/cpufeature.c:3183:9: note: in expansion of macro 'HWCAP_CAP'
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:19: error: 'ID_AA64SMFR0_EL1_SF8MM8_SHIFT' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8FMA_SHIFT'?
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:154:30: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   154 |                 .field_pos = reg##_##field##_SHIFT,                     \
-|       |                              ^~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:9: note: in expansion of macro 'HWCAP_CAP'
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:19: error: 'ID_AA64SMFR0_EL1_SF8MM8_WIDTH' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8FMA_WIDTH'?
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:155:32: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   155 |                 .field_width = reg##_##field##_WIDTH,                   \
-|       |                                ^~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:9: note: in expansion of macro 'HWCAP_CAP'
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:19: error: 'ID_AA64SMFR0_EL1_SF8MM8_SIGNED' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8FMA_SIGNED'?
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:156:25: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   156 |                 .sign = reg##_##field##_SIGNED,                         \
-|       |                         ^~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:9: note: in expansion of macro 'HWCAP_CAP'
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:19: error: 'ID_AA64SMFR0_EL1_SF8MM8_IMP' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8FMA_IMP'?
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:157:36: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   157 |                 .min_field_value = min_value,                           \
-|       |                                    ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:169:30: note: in expansion of macro 'SYS_FIELD_VALUE'
-|   169 |                              SYS_FIELD_VALUE(reg, field, min_value),    \
-|       |                              ^~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3183:9: note: in expansion of macro 'HWCAP_CAP'
-|  3183 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM8),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:61: error: 'KERNEL_HWCAP_SME_SF8MM4' undeclared here (not in a function); did you mean 'KERNEL_HWCAP_SME_SF8DP4'?
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |                                                             ^~~~~~~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3013:26: note: in definition of macro '__HWCAP_CAP'
-|  3013 |                 .hwcap = cap,                                                   \
-|       |                          ^~~
-| arch/arm64/kernel/cpufeature.c:3184:9: note: in expansion of macro 'HWCAP_CAP'
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:19: error: 'ID_AA64SMFR0_EL1_SF8MM4_SHIFT' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8FMA_SHIFT'?
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:154:30: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   154 |                 .field_pos = reg##_##field##_SHIFT,                     \
-|       |                              ^~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:9: note: in expansion of macro 'HWCAP_CAP'
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:19: error: 'ID_AA64SMFR0_EL1_SF8MM4_WIDTH' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8FMA_WIDTH'?
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:155:32: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   155 |                 .field_width = reg##_##field##_WIDTH,                   \
-|       |                                ^~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:9: note: in expansion of macro 'HWCAP_CAP'
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:19: error: 'ID_AA64SMFR0_EL1_SF8MM4_SIGNED' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8DP4_SIGNED'?
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:156:25: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   156 |                 .sign = reg##_##field##_SIGNED,                         \
-|       |                         ^~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:9: note: in expansion of macro 'HWCAP_CAP'
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |         ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:19: error: 'ID_AA64SMFR0_EL1_SF8MM4_IMP' undeclared here (not in a function); did you mean 'ID_AA64SMFR0_EL1_SF8DP4_IMP'?
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |                   ^~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:157:36: note: in definition of macro '__ARM64_CPUID_FIELDS'
-|   157 |                 .min_field_value = min_value,                           \
-|       |                                    ^~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:169:30: note: in expansion of macro 'SYS_FIELD_VALUE'
-|   169 |                              SYS_FIELD_VALUE(reg, field, min_value),    \
-|       |                              ^~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3007:17: note: in expansion of macro 'ARM64_CPUID_FIELDS'
-|  3007 |                 ARM64_CPUID_FIELDS(reg, field, min_value)
-|       |                 ^~~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3018:17: note: in expansion of macro 'HWCAP_CPUID_MATCH'
-|  3018 |                 HWCAP_CPUID_MATCH(reg, field, min_value)                \
-|       |                 ^~~~~~~~~~~~~~~~~
-| arch/arm64/kernel/cpufeature.c:3184:9: note: in expansion of macro 'HWCAP_CAP'
-|  3184 |         HWCAP_CAP(ID_AA64SMFR0_EL1, SF8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_SF8MM4),
-|       |         ^~~~~~~~~
-| make[4]: *** [scripts/Makefile.build:207: arch/arm64/kernel/cpufeature.o] Error 1
-| make[3]: *** [scripts/Makefile.build:465: arch/arm64/kernel] Error 2
-| make[2]: *** [scripts/Makefile.build:465: arch/arm64] Error 2
-| make[1]: *** [/home/mark/src/linux/Makefile:1994: .] Error 2
-| make: *** [Makefile:251: __sub-make] Error 2
-
-Mark.
+Thanks.
 
