@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-25954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97F89A2B8F4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 03:22:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E2ADA2B8FC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 03:22:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 860617A3540
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 02:21:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1372167910
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 02:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA46518FDB2;
-	Fri,  7 Feb 2025 02:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7E01922C6;
+	Fri,  7 Feb 2025 02:21:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sv9ebUp0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L1kpJZpm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0A31547C0;
-	Fri,  7 Feb 2025 02:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4207F18BC06;
+	Fri,  7 Feb 2025 02:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738894849; cv=none; b=sYzNDQAxSMT83fcQUv6JzLMvNCdRSHIABVxXMQWpLoH7h1GOUdGhu0DXMWQu6dPWJm6x++MAWIxz5wVKm3HuCprd9B8ERdkXeX2jR02NfKXyVo438hlGl7XWw1NY/6J93UzuAbnwxfm6ufFrCGLF96PqUPYDHP7BvNQJvM2HmzU=
+	t=1738894862; cv=none; b=sAFuGilc1CwYy3XZgTvI168YeHClNx/h06PzyBYh6hVDy16YMLvM1rsAogLikuUwP654aMljCxH4aWNaokrAWSnOP6caQaB8F+7uCMmxm+O9loa3k5XZlaq7vJpG8nTeqQZD/f7WLI8ZNnS1GhX6SHADtMq+bM3DgSfjZlU9gjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738894849; c=relaxed/simple;
-	bh=L4HJEoutdmUjS53YLJEkzQz+QSrOjvma7vf3pkrWYmQ=;
+	s=arc-20240116; t=1738894862; c=relaxed/simple;
+	bh=p2wQyxyXyuiNqbBS17Es146CFtqu/d73uiA8Sh84ems=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Rx663K1XqFHyZSTNnnTrm33kW2nAIMAEMMkxuish/cufWSqrppzKrW0JV+1nXG4Xgjvgu/R869ihpnfDvsisD0RoC1qHI6ugSU3nDPASb2eEI1jwr/IrbJtV52TKIRDej8uFfbLSoJPbDXDdxWM9pVVncnfvHJgPT57/Gm0GwT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sv9ebUp0; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=t9axbWJk5O7WaFT8xaBSswVk4B7j+UuZbzwtFuZSpgHJv7fRIbgvch7Re6Rh8nzb4LGXL7eTiw0j1ilEwf+27s66c+0NUxSaxPb0cJRNbdRHCgWaNnUK/zqghPdAvlnsgQSp5AShKX+iaV0IB1E1PY2AzEIvswUVpBVAHoyDU54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L1kpJZpm; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738894848; x=1770430848;
+  t=1738894860; x=1770430860;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=L4HJEoutdmUjS53YLJEkzQz+QSrOjvma7vf3pkrWYmQ=;
-  b=Sv9ebUp0AokxdRHy2HHo5ePmAXCd4y0vf2ns0Nh/1E6foutxwlH6Fy9J
-   y7p1HFrjmY6ODnBC8l4OchlgpajUdmNV8UVuurf7NCpABlfZgXjbhWFya
-   +HaTW+j6Nseof+G7yI7rSO9VsFbX11tRs5Du9018OnYNVAbB50D/Fu2WM
-   uMLiRcyEDihNEVaCn/9ddvg0PPzBolBGm6wEUEx2VFvo6DPlpx18pqXSI
-   8aWmLfR2phaqxkipB6f44i5P5OAAmDEiq5yTVrmCL0u0+9YhvS8Y3DtZH
-   qWRfqjdJa4cY4rXLsQ9mMO+rGpDq99b05yET4Y1qm7aA74KUL/hvZ50Q4
-   g==;
-X-CSE-ConnectionGUID: TJ4Jl1xHTzaQHDWK5DY66Q==
-X-CSE-MsgGUID: P5/fv1p9QQaoYaH10sNA+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50917702"
+  bh=p2wQyxyXyuiNqbBS17Es146CFtqu/d73uiA8Sh84ems=;
+  b=L1kpJZpmnSqacbgzsGRQXG+tuUkGw/fc7tPWRitJmN8zSuLqhSmjNng7
+   YI71TtHJCF7bhWEAeJa23CWkyBlsEZa6e9uSugjBUbVS2tK5plrojE+Ab
+   Y8cU+XSkORhHrpAWFYkyOv7Y/Nh7vZGXihmkZ8HK5LSfvs1KAEiBzOVMx
+   OUn1F9UAf6+iYcWswkd1n4N/WkNq184pF01Up12yT+Q1etXC2Y23+IFwk
+   QTYaF2tjyZ1sE3xCellvsENhmE9pFmzM5ECFitddsJoGUBroXXkAVEBei
+   0zqkssV9gzHjfmeBKEywNNdXtH6QaIaXAVdUZsKNHL+sxTVKT+uiXAWeh
+   A==;
+X-CSE-ConnectionGUID: 4XIeGv9VRxO64ARouM6cxg==
+X-CSE-MsgGUID: YGXHdnPfTXW2qfiznaNbMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50917756"
 X-IronPort-AV: E=Sophos;i="6.13,266,1732608000"; 
-   d="scan'208";a="50917702"
+   d="scan'208";a="50917756"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 18:20:47 -0800
-X-CSE-ConnectionGUID: PvkB4DrdT6maNUc6jMGR6A==
-X-CSE-MsgGUID: diqdu9D8Sxyg8i9j8nJdPA==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 18:20:59 -0800
+X-CSE-ConnectionGUID: eQTw0hmUQiqbDQy6vOYrXw==
+X-CSE-MsgGUID: teK3NF9XR/qEuai3RyXRNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148615611"
+   d="scan'208";a="148615629"
 Received: from p12ill20yoongsia.png.intel.com ([10.88.227.38])
-  by orviesa001.jf.intel.com with ESMTP; 06 Feb 2025 18:20:34 -0800
+  by orviesa001.jf.intel.com with ESMTP; 06 Feb 2025 18:20:47 -0800
 From: Song Yoong Siang <yoong.siang.song@intel.com>
 To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -110,9 +110,9 @@ Cc: netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	intel-wired-lan@lists.osuosl.org,
 	xdp-hints@xdp-project.net
-Subject: [PATCH bpf-next v10 4/5] igc: Refactor empty frame insertion for launch time support
-Date: Fri,  7 Feb 2025 10:19:42 +0800
-Message-Id: <20250207021943.814768-5-yoong.siang.song@intel.com>
+Subject: [PATCH bpf-next v10 5/5] igc: Add launch time support to XDP ZC
+Date: Fri,  7 Feb 2025 10:19:43 +0800
+Message-Id: <20250207021943.814768-6-yoong.siang.song@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250207021943.814768-1-yoong.siang.song@intel.com>
 References: <20250207021943.814768-1-yoong.siang.song@intel.com>
@@ -124,164 +124,190 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refactor the code for inserting an empty frame into a new function
-igc_insert_empty_frame(). This change extracts the logic for inserting
-an empty packet from igc_xmit_frame_ring() into a separate function,
-allowing it to be reused in future implementations, such as the XDP
-zero copy transmit function.
+Enable Launch Time Control (LTC) support for XDP zero copy via XDP Tx
+metadata framework.
 
-Remove the igc_desc_unused() checking in igc_init_tx_empty_descriptor()
-because the number of descriptors needed is guaranteed.
+This patch has been tested with tools/testing/selftests/bpf/xdp_hw_metadata
+on Intel I225-LM Ethernet controller. Below are the test steps and result.
 
-Ensure that skb allocation and DMA mapping work for the empty frame,
-before proceeding to fill in igc_tx_buffer info, context descriptor,
-and data descriptor.
+Test 1: Send a single packet with the launch time set to 1 s in the future.
 
-Rate limit the error messages for skb allocation and DMA mapping failures.
+Test steps:
+1. On the DUT, start the xdp_hw_metadata selftest application:
+   $ sudo ./xdp_hw_metadata enp2s0 -l 1000000000 -L 1
 
-Update the comment to indicate that the 2 descriptors needed by the empty
-frame are already taken into consideration in igc_xmit_frame_ring().
+2. On the Link Partner, send a UDP packet with VLAN priority 1 to port 9091
+   of the DUT.
 
-Handle the case where the insertion of an empty frame fails and explain
-the reason behind this handling.
+Result:
+When the launch time is set to 1 s in the future, the delta between the
+launch time and the transmit hardware timestamp is 0.016 us, as shown in
+printout of the xdp_hw_metadata application below.
+  0x562ff5dc8880: rx_desc[4]->addr=84110 addr=84110 comp_addr=84110 EoP
+  rx_hash: 0xE343384 with RSS type:0x1
+  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
+                delta to User RX-time sec:0.0002 (183.103 usec)
+  XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
+                 delta to User RX-time sec:0.0001 (80.309 usec)
+  No rx_vlan_tci or rx_vlan_proto, err=-95
+  0x562ff5dc8880: ping-pong with csum=561c (want c7dd)
+                  csum_start=34 csum_offset=6
+  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
+                delta to HW Launch-time sec:1.0000 (1000000.000 usec)
+  0x562ff5dc8880: complete tx idx=4 addr=4018
+  HW Launch-time:   1734578016467548904 (sec:1734578016.4675)
+                    delta to HW TX-complete-time sec:0.0000 (0.016 usec)
+  HW TX-complete-time:   1734578016467548920 (sec:1734578016.4675)
+                         delta to User TX-complete-time sec:0.0000
+                         (32.546 usec)
+  XDP RX-time:   1734578015467651698 (sec:1734578015.4677)
+                 delta to User TX-complete-time sec:0.9999
+                 (999929.768 usec)
+  HW RX-time:   1734578015467548904 (sec:1734578015.4675)
+                delta to HW TX-complete-time sec:1.0000 (1000000.016 usec)
+  0x562ff5dc8880: complete rx idx=132 addr=84110
+
+Test 2: Send 1000 packets with a 10 ms interval and the launch time set to
+        500 us in the future.
+
+Test steps:
+1. On the DUT, start the xdp_hw_metadata selftest application:
+   $ sudo chrt -f 99 ./xdp_hw_metadata enp2s0 -l 500000 -L 1 > \
+     /dev/shm/result.log
+
+2. On the Link Partner, send 1000 UDP packets with a 10 ms interval and
+   VLAN priority 1 to port 9091 of the DUT.
+
+Result:
+When the launch time is set to 500 us in the future, the average delta
+between the launch time and the transmit hardware timestamp is 0.016 us,
+as shown in the analysis of /dev/shm/result.log below. The XDP launch time
+works correctly in sending 1000 packets continuously.
+  Min delta: 0.005 us
+  Avr delta: 0.016 us
+  Max delta: 0.031 us
+  Total packets forwarded: 1000
 
 Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 ---
- drivers/net/ethernet/intel/igc/igc_main.c | 82 ++++++++++++++---------
- 1 file changed, 50 insertions(+), 32 deletions(-)
+ drivers/net/ethernet/intel/igc/igc.h      |  1 +
+ drivers/net/ethernet/intel/igc/igc_main.c | 61 ++++++++++++++++++++++-
+ 2 files changed, 60 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+index b8111ad9a9a8..cd1d7b6c1782 100644
+--- a/drivers/net/ethernet/intel/igc/igc.h
++++ b/drivers/net/ethernet/intel/igc/igc.h
+@@ -579,6 +579,7 @@ struct igc_metadata_request {
+ 	struct xsk_tx_metadata *meta;
+ 	struct igc_ring *tx_ring;
+ 	u32 cmd_type;
++	u16 used_desc;
+ };
+ 
+ struct igc_q_vector {
 diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 84307bb7313e..1bfa71545e37 100644
+index 1bfa71545e37..3044392e8ded 100644
 --- a/drivers/net/ethernet/intel/igc/igc_main.c
 +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -1092,7 +1092,8 @@ static int igc_init_empty_frame(struct igc_ring *ring,
- 
- 	dma = dma_map_single(ring->dev, skb->data, size, DMA_TO_DEVICE);
- 	if (dma_mapping_error(ring->dev, dma)) {
--		netdev_err_once(ring->netdev, "Failed to map DMA for TX\n");
-+		net_err_ratelimited("%s: DMA mapping error for empty frame\n",
-+				    netdev_name(ring->netdev));
- 		return -ENOMEM;
- 	}
- 
-@@ -1108,20 +1109,12 @@ static int igc_init_empty_frame(struct igc_ring *ring,
- 	return 0;
+@@ -2971,9 +2971,48 @@ static u64 igc_xsk_fill_timestamp(void *_priv)
+ 	return *(u64 *)_priv;
  }
  
--static int igc_init_tx_empty_descriptor(struct igc_ring *ring,
--					struct sk_buff *skb,
--					struct igc_tx_buffer *first)
-+static void igc_init_tx_empty_descriptor(struct igc_ring *ring,
-+					 struct sk_buff *skb,
-+					 struct igc_tx_buffer *first)
- {
- 	union igc_adv_tx_desc *desc;
- 	u32 cmd_type, olinfo_status;
--	int err;
--
--	if (!igc_desc_unused(ring))
--		return -EBUSY;
--
--	err = igc_init_empty_frame(ring, first, skb);
--	if (err)
--		return err;
- 
- 	cmd_type = IGC_ADVTXD_DTYP_DATA | IGC_ADVTXD_DCMD_DEXT |
- 		   IGC_ADVTXD_DCMD_IFCS | IGC_TXD_DCMD |
-@@ -1140,8 +1133,6 @@ static int igc_init_tx_empty_descriptor(struct igc_ring *ring,
- 	ring->next_to_use++;
- 	if (ring->next_to_use == ring->count)
- 		ring->next_to_use = 0;
--
--	return 0;
- }
- 
- #define IGC_EMPTY_FRAME_SIZE 60
-@@ -1567,6 +1558,40 @@ static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *s
- 	return false;
- }
- 
-+static int igc_insert_empty_frame(struct igc_ring *tx_ring)
++static void igc_xsk_request_launch_time(u64 launch_time, void *_priv)
 +{
-+	struct igc_tx_buffer *empty_info;
-+	struct sk_buff *empty_skb;
-+	void *data;
-+	int ret;
++	struct igc_metadata_request *meta_req = _priv;
++	struct igc_ring *tx_ring = meta_req->tx_ring;
++	__le32 launch_time_offset;
++	bool insert_empty = false;
++	bool first_flag = false;
++	u16 used_desc = 0;
 +
-+	empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
-+	empty_skb = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
-+	if (unlikely(!empty_skb)) {
-+		net_err_ratelimited("%s: skb alloc error for empty frame\n",
-+				    netdev_name(tx_ring->netdev));
-+		return -ENOMEM;
-+	}
++	if (!tx_ring->launchtime_enable)
++		return;
 +
-+	data = skb_put(empty_skb, IGC_EMPTY_FRAME_SIZE);
-+	memset(data, 0, IGC_EMPTY_FRAME_SIZE);
-+
-+	/* Prepare DMA mapping and Tx buffer information */
-+	ret = igc_init_empty_frame(tx_ring, empty_info, empty_skb);
-+	if (unlikely(ret)) {
-+		dev_kfree_skb_any(empty_skb);
-+		return ret;
-+	}
-+
-+	/* Prepare advanced context descriptor for empty packet */
-+	igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
-+
-+	/* Prepare advanced data descriptor for empty packet */
-+	igc_init_tx_empty_descriptor(tx_ring, empty_skb, empty_info);
-+
-+	return 0;
-+}
-+
- static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
- 				       struct igc_ring *tx_ring)
- {
-@@ -1586,6 +1611,7 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
- 	 *	+ 1 desc for skb_headlen/IGC_MAX_DATA_PER_TXD,
- 	 *	+ 2 desc gap to keep tail from touching head,
- 	 *	+ 1 desc for context descriptor,
-+	 *	+ 2 desc for inserting an empty packet for launch time,
- 	 * otherwise try next time
- 	 */
- 	for (f = 0; f < skb_shinfo(skb)->nr_frags; f++)
-@@ -1605,24 +1631,16 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
- 	launch_time = igc_tx_launchtime(tx_ring, txtime, &first_flag, &insert_empty);
- 
- 	if (insert_empty) {
--		struct igc_tx_buffer *empty_info;
--		struct sk_buff *empty;
--		void *data;
--
--		empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
--		empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
--		if (!empty)
--			goto done;
--
--		data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
--		memset(data, 0, IGC_EMPTY_FRAME_SIZE);
--
--		igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
--
--		if (igc_init_tx_empty_descriptor(tx_ring,
--						 empty,
--						 empty_info) < 0)
--			dev_kfree_skb_any(empty);
-+		/* Reset the launch time if the required empty frame fails to
-+		 * be inserted. However, this packet is not dropped, so it
-+		 * "dirties" the current Qbv cycle. This ensures that the
-+		 * upcoming packet, which is scheduled in the next Qbv cycle,
-+		 * does not require an empty frame. This way, the launch time
-+		 * continues to function correctly despite the current failure
-+		 * to insert the empty frame.
++	launch_time_offset = igc_tx_launchtime(tx_ring,
++					       ns_to_ktime(launch_time),
++					       &first_flag, &insert_empty);
++	if (insert_empty) {
++		/* Disregard the launch time request if the required empty frame
++		 * fails to be inserted.
 +		 */
 +		if (igc_insert_empty_frame(tx_ring))
-+			launch_time = 0;
++			return;
++
++		meta_req->tx_buffer =
++			&tx_ring->tx_buffer_info[tx_ring->next_to_use];
++		/* Inserting an empty packet requires two descriptors:
++		 * one data descriptor and one context descriptor.
++		 */
++		used_desc += 2;
++	}
++
++	/* Use one context descriptor to specify launch time and first flag. */
++	igc_tx_ctxtdesc(tx_ring, launch_time_offset, first_flag, 0, 0, 0);
++	used_desc += 1;
++
++	/* Update the number of used descriptors in this request */
++	meta_req->used_desc += used_desc;
++}
++
+ const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
+ 	.tmo_request_timestamp		= igc_xsk_request_timestamp,
+ 	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
++	.tmo_request_launch_time	= igc_xsk_request_launch_time,
+ };
+ 
+ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+@@ -2996,7 +3035,13 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ 	ntu = ring->next_to_use;
+ 	budget = igc_desc_unused(ring);
+ 
+-	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
++	/* Packets with launch time require one data descriptor and one context
++	 * descriptor. When the launch time falls into the next Qbv cycle, we
++	 * may need to insert an empty packet, which requires two more
++	 * descriptors. Therefore, to be safe, we always ensure we have at least
++	 * 4 descriptors available.
++	 */
++	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget >= 4) {
+ 		struct igc_metadata_request meta_req;
+ 		struct xsk_tx_metadata *meta = NULL;
+ 		struct igc_tx_buffer *bi;
+@@ -3017,9 +3062,19 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ 		meta_req.tx_ring = ring;
+ 		meta_req.tx_buffer = bi;
+ 		meta_req.meta = meta;
++		meta_req.used_desc = 0;
+ 		xsk_tx_metadata_request(meta, &igc_xsk_tx_metadata_ops,
+ 					&meta_req);
+ 
++		/* xsk_tx_metadata_request() may have updated next_to_use */
++		ntu = ring->next_to_use;
++
++		/* xsk_tx_metadata_request() may have updated Tx buffer info */
++		bi = meta_req.tx_buffer;
++
++		/* xsk_tx_metadata_request() may use a few descriptors */
++		budget -= meta_req.used_desc;
++
+ 		tx_desc = IGC_TX_DESC(ring, ntu);
+ 		tx_desc->read.cmd_type_len = cpu_to_le32(meta_req.cmd_type);
+ 		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
+@@ -3037,9 +3092,11 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+ 		ntu++;
+ 		if (ntu == ring->count)
+ 			ntu = 0;
++
++		ring->next_to_use = ntu;
++		budget--;
  	}
  
- done:
+-	ring->next_to_use = ntu;
+ 	if (tx_desc) {
+ 		igc_flush_tx_descriptors(ring);
+ 		xsk_tx_release(pool);
 -- 
 2.34.1
 
