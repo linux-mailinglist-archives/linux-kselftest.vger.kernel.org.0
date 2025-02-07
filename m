@@ -1,125 +1,235 @@
-Return-Path: <linux-kselftest+bounces-26047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C531A2CD8C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 21:07:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3A76A2CDEF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 21:14:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D49301615FA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 20:07:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C45E1881F0F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 20:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7617619E826;
-	Fri,  7 Feb 2025 20:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABAB919F420;
+	Fri,  7 Feb 2025 20:14:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LYE9jc1E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J1UvAVJc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E5114D43D;
-	Fri,  7 Feb 2025 20:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABE419EED2;
+	Fri,  7 Feb 2025 20:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738958831; cv=none; b=PfM0SWUnPsXhb1okdQ2GjhmWmNhnCh2WAt7t900t8YkhUd98N3dmNaEKnadN9MRwREObFSC8BKrGB+ua2dN/2QXO/WNab6GX5hyuTyIQsPP16WZVOfvWORfAUPFifAPNh2H5Yr6SVMFfCuVP+P85ipHasaErHCq+8eyzJWVCNPM=
+	t=1738959251; cv=none; b=mWtR5hm2EpxfrJ5jeJWfuyZpwdJyaZaDkCbiWaozFCfN+YrkQgf3Pn4gg0RVavL23aTDHnqAOE+dgL9dord8ZGgpwT1/m3OPksOL7sZXXRBviQORON4LzzCM5aBBlCkVvjuR7WAQiIr02sJh1JeFuKa6gllR4XTdzkvbErmij6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738958831; c=relaxed/simple;
-	bh=hilhNBJhm7gyU2xWT0l3rVwkEdmqyKYqu1PEl6FCbO4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yjn/qHOFMX35E5G6VPxum9bmODJuVdmCGndBDCNA4Uldm/zaEId+6JF0w2sJ+IYc4xHpJljVwvbzgpqfvZNHkq5C6xuhOtKKufUj7WpohTq6nNln/7jNTWdrtPSYx9jpvZMsBN0ak2Loh+wTMphUi+HDLlGMFYOtpYHT7goNzPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LYE9jc1E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035DDC4CED1;
-	Fri,  7 Feb 2025 20:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738958830;
-	bh=hilhNBJhm7gyU2xWT0l3rVwkEdmqyKYqu1PEl6FCbO4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LYE9jc1EsEHG8d3Is5YHp0nx/UhYWYRFgkfUk39bIcEpCx5ZBQ9+xWQ4BirLtIuAv
-	 8yZudPKcjgjJqOY0q3DgF68NLWd2vr84/vtOziN+Rr6/qcE9RFRqft8e3K/Kt5ETDv
-	 ZQs3gVpLsq4xZICVk7Pa6tFH79Mk/f/eLo6B8Du2YyxXN2hkbOD2womNlBKm5fqyz+
-	 DecDnRHIa4bOkiWCZxXnLzD24hXO3BUXY40Ev04J0n6Pg38N3kGnRa0Z369RIW/uux
-	 L7v83uJabvw4b4S5BG2sxMdQLeT7UdvoXlEGml0u0lseOPAYLna4mKfHcsTp4tdN/T
-	 muTG0T0MffppQ==
-Date: Fri, 7 Feb 2025 20:06:59 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v9 01/26] mm: helper `is_shadow_stack_vma` to check
- shadow stack vma
-Message-ID: <5708c19d-240a-466a-b17a-d51b26ab95e6@sirena.org.uk>
-References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
- <20250204-v5_user_cfi_series-v9-1-b37a49c5205c@rivosinc.com>
- <6543c6b6-da86-4c10-9b8c-e5fe6f6f7da9@suse.cz>
+	s=arc-20240116; t=1738959251; c=relaxed/simple;
+	bh=OIee8Zv7FJW8dLrmsyqrHqhnUwTu0qSp/jU2rKhNy7E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LKNS7hjcp7UfWL8vY5Gtr45zGRq1wQz1OJY6vTLHsv83ajmW/74OnIzQ1u9KVJX/gb1oj7JioKHETGm9/Q4mFGs3lnJAJLGM/AJbLV1u+DhoOyGGdeyniqv+pjMIE39qQ+XphIFR00G5OvQ6i4WQvcxAykKIX9HOCfiPiE0tnIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J1UvAVJc; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7b6fc3e9e4aso223741885a.2;
+        Fri, 07 Feb 2025 12:14:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738959248; x=1739564048; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=InMP3iob4ePV8GF0GnOu+F67bMQE3/48J3tUdjgvoYQ=;
+        b=J1UvAVJc/6MHO9kpDIv/Cx710TusZkBxDrRAzXkjpLierZAv2hapfQZtnrELB2EtSG
+         6vegumqG24+CT4kouY0VgilxnO9OiOS5P2v1zkDHFuPcBXdnZLUcZ6hWcrb0BODSm5MS
+         y/X4Ht6BH0qi6gmpB8Jx5rlKPPhvdyGBR58YILZosL6FhjxQhbBmG98ogCkSTTzC1lxu
+         iKcPt2jGNrUQbHdbvJexJ/CBcmepFk4IDMNLtKSUbnfFd9g06edl1Ak9dgTKoHzZCcrg
+         W4LxVJZZGV8hDfwLctkuM7G+9vBqYts0AyJuObfb/fgoHXjJZtdUpe4RfO/OEnzz/GAr
+         jptg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738959248; x=1739564048;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=InMP3iob4ePV8GF0GnOu+F67bMQE3/48J3tUdjgvoYQ=;
+        b=csYdzkGoMfnz/wT/Hpgove/ishb438ZdTVHAvrYDFxmdEct9ULXIsbte+YAfLNu0sy
+         3qnYr/2l5S1l8SD/ITIvGbdLxfbu878qrckS6/qaPTDG7fbQM/X0Wge7AwtTXUWI5JNb
+         DodO4uBlLcuNt6+QZUgaum3HHx4rhE2tQpu7qlKU1kQBlVFO2duXviXwYc1J0d6NcjDB
+         jtsqlcBOz9uTRzuDnT/qaJTw3EcL211jmJv3T5G7jq8gvIuYKo9jnvf0178dZIIUq8c0
+         en6KdNPLGcpORW2ekEry/BcqGHqnanRwL2QcduF5f0YD2wLS+XIJBdyayzJ3D/r+cwPW
+         5l2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVd8naiKGq/TRhNxwJ7ngWM8ONmd253wXP7aoyX4OXadtZycs8TJABHxD8ViZ1koMqiH2Oq/eQWAHAPZAu3WgJ+@vger.kernel.org, AJvYcCWD8iWVG88zzAXl2Ctq9L8BHQb9MKTsMraqCaNivJ7GDar6R/J4edjsPPRNETGthjHuBdy59Hgmc0Oth8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqGGeou2GaOIQ5/LpIvVagmIagLK0XjtxAKo6hmW1TP6wqu/mz
+	H/MGZN6+673xqGfLeF0RJhg+r0HSya3WcKKFp7TWcBfgXl9Yvri6
+X-Gm-Gg: ASbGnctO4pIc+xSTvVZvOEJ2POyq32f4+p0YtBO0phc4V4GtGzZPhlp/5rL+Z5K/e7I
+	HIYBqS9LkSXL+LTdjib8tZCvabP0wgb6vpfxF/wy3HhSAJPiF7SddwpxnLLa4wL15h2fX3h8aRd
+	140ONjyeG79pcMlsPmc5Ls/O1GnFVG81l4hZpH3lHEaq0bx31KqkKOLjkLC4YOpij0BjMTSlLiM
+	V+GVXy+r4YU8B+sqSeiiw6IYsB6IxIfFAcYQeLZU44SeC/EwelSBoRz9Wz+cg7phW3uGKHmP8fR
+	dFEYt8buZ9p77aGlhD76ynOdUkykBdKJqfshDT6AGtcxTRTqymD/nlhy4JItEWFYxMYmFXIcB7r
+	/OP/LQ+x2WKNBZXSUPocTMjYFFHeewRPp2a+CvQ==
+X-Google-Smtp-Source: AGHT+IF9/EZlG7CYstG/RAX4Cebsc2v6V7/CwkGisOAz02Bj/HKRkvBl3RnAIQYOfaIOw465jlPEvA==
+X-Received: by 2002:a05:620a:40cc:b0:7b6:e9db:3b21 with SMTP id af79cd13be357-7c047bba9afmr576565385a.14.1738959248476;
+        Fri, 07 Feb 2025 12:14:08 -0800 (PST)
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2600:4041:5be7:7c00:c58e:ed03:1b60:c56d])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c041e13895sm228851285a.58.2025.02.07.12.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2025 12:14:08 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH 0/3] bitmap: convert self-test to KUnit
+Date: Fri, 07 Feb 2025 15:14:01 -0500
+Message-Id: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dNozXZgwSNh15IF2"
-Content-Disposition: inline
-In-Reply-To: <6543c6b6-da86-4c10-9b8c-e5fe6f6f7da9@suse.cz>
-X-Cookie: MMM-MM!!  So THIS is BIO-NEBULATION!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIlppmcC/x3MQQqEMBAF0atIr6chtoo4VxlmEfWrjRgliSKId
+ ze4fIuqiwK8ItA3u8jj0KCrS8g/GXWTdSNY+2QSI5URU3OrcbEbz7vTyN3qDvjIjfRFXtatAKC
+ Ubh6Dnu/297/vByCSwpNmAAAA
+X-Change-ID: 20250207-bitmap-kunit-convert-92d3147b2eee
+To: David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Shuah Khan <shuah@kernel.org>, 
+ Kees Cook <kees@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, 
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
+This is one of just 3 remaining "Test Module" kselftests (the others
+being printf and scanf), the rest having been converted to KUnit.
 
---dNozXZgwSNh15IF2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I tested this using:
 
-On Fri, Feb 07, 2025 at 10:27:10AM +0100, Vlastimil Babka wrote:
-> On 2/5/25 02:21, Deepak Gupta wrote:
-> > VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) is used to encode shadow stack
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 bitmap.
 
-> I see that arm GCS uses VM_HIGH_ARCH_6.
+I've already sent out a conversion series for each of printf[0] and scanf[1].
 
-That'll be bitrot in the changelog, it was originally VM_HIGH_ARCH_5 on
-arm64 as well but we had to renumber due to the addition of
-VM_MTE_ALLOWED while the GCS series was on the list.  The changelog just
-shouldn't mention VM_HIGH_ARCH_x, it's not particularly relevant here.
+There was a previous attempt[2] to do this in July 2024. Please bear
+with me as I try to understand and address the objections from that
+time. I've spoken with Muhammad Usama Anjum, the author of that series,
+and received their approval to "take over" this work. Here we go...
 
---dNozXZgwSNh15IF2
-Content-Type: application/pgp-signature; name="signature.asc"
+On 7/26/24 11:45 PM, John Hubbard wrote:
+> 
+> This changes the situation from "works for Linus' tab completion
+> case", to "causes a tab completion problem"! :)
+> 
+> I think a tests/ subdir is how we eventually decided to do this [1],
+> right?
+> 
+> So:
+> 
+>     lib/tests/bitmap_kunit.c
+> 
+> [1] https://lore.kernel.org/20240724201354.make.730-kees@kernel.org
 
------BEGIN PGP SIGNATURE-----
+This is true and unfortunate, but not trivial to fix because new
+kallsyms tests were placed in lib/tests in commit 84b4a51fce4c
+("selftests: add new kallsyms selftests")  *after* the KUnit filename
+best practices were adopted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmemZ+IACgkQJNaLcl1U
-h9DVuAf/dyasNesjmRVNnX4CSTWgbPesYoxwpqTQgKso+9joOZPYPyLvIggnLsC1
-o+R1+QnbfVTDXvm+EDZnKplHkrzc7OMlSyqoO0Jhcvho9xR9wHpNaqRTQEMg4vCm
-Zg5azVK9vR2hn74CXPkTi/0R39CY3f02oIwZqD8xp7OZ4hjW7cis7E1aXqnos5Xf
-ojdS0hRnNNwrxRfdgK6u2APvcBJajWPE2C2I1ogm4eZO6n3ZI2RTSez88i8bShDg
-9WGWK5ghGkwKB5tkeXRra2Vvbfs3Wu8RyAY8/X1LKU/8wE2Mrbbk5Cu8E9jbuqD6
-Wx+CXrnjrV+x09CkTFzkFq+DBsO2Gg==
-=DOc/
------END PGP SIGNATURE-----
+I propose that the KUnit maintainers blaze this trail using
+`string_kunit.c` which currently still lives in lib/ despite the KUnit
+docs giving it as an example at lib/tests/.
 
---dNozXZgwSNh15IF2--
+On 7/27/24 12:24 AM, Shuah Khan wrote:
+> 
+> This change will take away the ability to run bitmap tests during
+> boot on a non-kunit kernel.
+> 
+> Nack on this change. I wan to see all tests that are being removed
+> from lib because they have been converted - also it doesn't make
+> sense to convert some tests like this one that add the ability test
+> during boot.
+
+This point was also discussed in another thread[3] in which:
+
+On 7/27/24 12:35 AM, Shuah Khan wrote:
+> 
+> Please make sure you aren't taking away the ability to run these tests during
+> boot. 
+>
+> It doesn't make sense to convert every single test especially when it
+> is intended to be run during boot without dependencies - not as a kunit test
+> but a regression test during boot.
+> 
+> bitmap is one example - pay attention to the config help test - bitmap
+> one clearly states it runs regression testing during boot. Any test that
+> says that isn't a candidate for conversion.
+> 
+> I am going to nack any such conversions.
+
+The crux of the argument seems to be that the config help text is taken
+to describe the author's intent with the fragment "at boot". I think
+this may be a case of confirmation bias: I see at least the following
+KUnit tests with "at boot" in their help text:
+- CPUMASK_KUNIT_TEST
+- BITFIELD_KUNIT
+- CHECKSUM_KUNIT
+- UTIL_MACROS_KUNIT
+
+It seems to me that the inference being made is that any test that runs
+"at boot" is intended to be run by both developers and users, but I find
+no evidence that bitmap in particular would ever provide additional
+value when run by users.
+
+There's further discussion about KUnit not being "ideal for cases where
+people would want to check a subsystem on a running kernel", but I find
+no evidence that bitmap in particular is actually testing the running
+kernel; it is a unit test of the bitmap functions, which is also stated
+in the config help text.
+
+David Gow made many of the same points in his final reply[4], which was
+never replied to.
+
+Link: https://lore.kernel.org/all/20250207-printf-kunit-convert-v2-0-057b23860823@gmail.com/T/#u [0]
+Link: https://lore.kernel.org/all/20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com/T/#u [1]
+Link: https://lore.kernel.org/all/20240726110658.2281070-1-usama.anjum@collabora.com/T/#u [2]
+Link: https://lore.kernel.org/all/327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com/T/#u [3]
+Link: https://lore.kernel.org/all/CABVgOSmMoPD3JfzVd4VTkzGL2fZCo8LfwzaVSzeFimPrhgLa5w@mail.gmail.com/ [4]
+
+Thanks for your attention.
+
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Tamir Duberstein (3):
+      bitmap: remove _check_eq_u32_array
+      bitmap: convert self-test to KUnit
+      bitmap: break kunit into test cases
+
+ MAINTAINERS                           |   2 +-
+ arch/m68k/configs/amiga_defconfig     |   1 -
+ arch/m68k/configs/apollo_defconfig    |   1 -
+ arch/m68k/configs/atari_defconfig     |   1 -
+ arch/m68k/configs/bvme6000_defconfig  |   1 -
+ arch/m68k/configs/hp300_defconfig     |   1 -
+ arch/m68k/configs/mac_defconfig       |   1 -
+ arch/m68k/configs/multi_defconfig     |   1 -
+ arch/m68k/configs/mvme147_defconfig   |   1 -
+ arch/m68k/configs/mvme16x_defconfig   |   1 -
+ arch/m68k/configs/q40_defconfig       |   1 -
+ arch/m68k/configs/sun3_defconfig      |   1 -
+ arch/m68k/configs/sun3x_defconfig     |   1 -
+ arch/powerpc/configs/ppc64_defconfig  |   1 -
+ lib/Kconfig.debug                     |  24 +-
+ lib/Makefile                          |   2 +-
+ lib/{test_bitmap.c => bitmap_kunit.c} | 454 +++++++++++++---------------------
+ tools/testing/selftests/lib/bitmap.sh |   3 -
+ tools/testing/selftests/lib/config    |   1 -
+ 19 files changed, 195 insertions(+), 304 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250207-bitmap-kunit-convert-92d3147b2eee
+
+Best regards,
+-- 
+Tamir Duberstein <tamird@gmail.com>
+
 
