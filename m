@@ -1,152 +1,154 @@
-Return-Path: <linux-kselftest+bounces-26052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A386A2CEFF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 22:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4C1A2D005
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 22:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DB0D16D31F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 21:27:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CA5016830A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 21:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7EEB1B424E;
-	Fri,  7 Feb 2025 21:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9586D1B040B;
+	Fri,  7 Feb 2025 21:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="2Zi69OuW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KDuP03m6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5190B1ACECD
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 21:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B5B198E81
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 21:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738963616; cv=none; b=LnoS9RzLGUS1AUt6sXkZ4TGJbjH7OnW1VROmkvxvGvZPwg4jhftd6ZT2AGmFq2ErdXHm7L8c1mCZIz2pdsfqahRxPeHjbXTUUHm/My4thLJFXZH/zDV+H/nxo+PTO/Cw7Yey5YxEIjx5/5YA41GyzL3I+y+qjWl09fUFQP7GAOE=
+	t=1738965027; cv=none; b=odnx4OTK/Trr5isx48EKfA7t/myf/PCw+8ADI73k0KBDKLyylZ4T6q5Sr7h40x05jmTC6N2FGc0tZsSBu53Ic7Ni/1NBeWuZrRxYN2ASxoPID5A/11X7a/W37euUJbaycv+z8m5dFwQtfd5UsJZbjt38+1w6iDQ7WxR/7rRDs/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738963616; c=relaxed/simple;
-	bh=HVmE+Tt35mu4vWqHOKjrmfxx5g5d6DsZZLA0kmOgFzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l5rvMYerzYYPl5DB3wV4eFEliZz/IAHVpQx08UYfiHRoJcxcOYMu7+UbF9dT0TCjB5SuYt15lSyW3GYSN/YAq+h9f/J0Ppoc4W7mSyiEY382S4ibWov9RWdlgr2T0ONO9UH9z6fjjHz2TQRBezKW94OS8xsuBUt+pMfLYswQlm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=2Zi69OuW; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21661be2c2dso46901195ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 13:26:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738963614; x=1739568414; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HVmE+Tt35mu4vWqHOKjrmfxx5g5d6DsZZLA0kmOgFzY=;
-        b=2Zi69OuWZX0UEjdLx5h7V2aS2lqQrckk3FDmNx05GHs46itAomz4crC74qdpyA1/aO
-         EDpv/V+hCufPH6md+AJjX8dBvJpvI2nXq5QRAdC0FEAplwx4oA/mAL53314IdTNMLaiz
-         Z3oEJ0QfQfYoKs4jRCcSc5rMyUaI6eIiATejMY+99z83i77qvglKsPeZwRBla726fYop
-         PSTgQ5SiRqNy7P0s2LbWOPPnWkA7jU0SOOkIBgWbTQv/vWC8OPJTplulgmJsq2zsIs0u
-         AQ+Zavzfd70CDCuvreBZ9eZ/w0CgBpcS/rskGViakv1aBnSUYnfnrZjwsuraqKhv0PFf
-         3wTQ==
+	s=arc-20240116; t=1738965027; c=relaxed/simple;
+	bh=DaiuwdXV+e5Udz/gDTYrC6Cm/Dr7M9iTNsCd5vdoSwQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nfN7mSnp+jjXNAtat6qCDpJUG7yq3EfkL4v+i1OrgeqvxqLb2Sf3x/xy9L0JH58+AsNic/tMoSf4XLGlkPH/fyeQyiF7JL/Z8ykXBqe/aRyI+lLKyYt2cviS3dYS4zeNpXLVeEUs6YU6M9tlnpIFBYzLyvhpCXqchoJ+vlGjKLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KDuP03m6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738965024;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Wt/rhXICuGKPz6p+qSVDOoOIpUebsnzqpQhWZ7aI0s4=;
+	b=KDuP03m6/dd+qwR2l8sMfk+y18vsRxnkxOxdpN4EUCzqGJuwDFjFKfFcJZp9MgVyRERR4g
+	NVk8ZXe/WVmCNs1muXpkp5te56Jl+ekSKF97lhNrlD1n2c8ltdAlo1HPqa9Zxe1i3dJB0w
+	7Q8qYFQARkxHgFbWPDGmN4afeQFE6QE=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-107-Eq5FZEPvPdKs14mEjFfiYg-1; Fri, 07 Feb 2025 16:50:23 -0500
+X-MC-Unique: Eq5FZEPvPdKs14mEjFfiYg-1
+X-Mimecast-MFC-AGG-ID: Eq5FZEPvPdKs14mEjFfiYg
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-21f1919a7beso52550295ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 13:50:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738963614; x=1739568414;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HVmE+Tt35mu4vWqHOKjrmfxx5g5d6DsZZLA0kmOgFzY=;
-        b=BN0ff0oOLs11AOiJT5OrW+7LmIwT7bXnkh9se1qyhVLVCrMyd0QEEyJhHvZgseeBVd
-         XlFnPIXkpxXZO1JOs/B50dG+3f4GPFRRWeGsZrtxL4Hdp0KW5MxI/igwbCX6XFrZdgoS
-         IWiatvbiO6FFD82t9skug2W58sIapL667RfJXLcXX0XSiYGX5HcOLZCf6QyxoFwSOAcV
-         RNWaIIOH1uTyUrJUbzqw0hqzlJ03085hpOhr93z+IBg5Px+Kn006Gvb/tKSCxO5Tb6nv
-         hneiJ2kG0zXKUNEkRJXHIGM8vXRlpNcJenua5Z3YQ3PtnV4HRWNxCxnGtSebx1pl/iRm
-         vAsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWF30vsZesOZ4dxAih4Xj2MI7TZPdv/Q3nYVqlPWrB64OqcrCeVPu50uxdYyr8PxSzX7WEsUiQ/5IsDlVvImEw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzontR133xtAxGBTpWv0lwL0IK828kvJsJMo+b8SW+x7n+B1VMT
-	PGrszcvXVTe95y/4hj4i4gjoBl34/cRtwSU7Xk8s3aZkPxR6G1xcyO54L6Iwtts=
-X-Gm-Gg: ASbGncsagjs4pDXe7SzF0EbpN4AS6QKZVG2MPoDTFXp1VAxQuHkAL52KdDKctWNGfaZ
-	hGjsSKXVeDmFshvsp/9KLUz25N1MIhypeVNYhtt0nSS6JR3jhcHpGXANaaUTXjXvwfHdE+vHvaW
-	IsYaYiKM8eGVGiHT+kJW8vAVLvLuQ0qDdzDMT8fDUxnMAsaENSQpzMGZBKz5mrMVKwpjH5CLCWq
-	YK389/bE6zLDjkjTKeNBFZ0Xik4YGg2MMie2jrOkjXVmJPpx/hg3l7D7bGG+SuMO+QkAuG/Q1q/
-	+V3q76oobLauerFyzSfQZaE0yQ==
-X-Google-Smtp-Source: AGHT+IE9Oev0Y7C5Xmqtwl/B+JiwmKuI48iGekPbKSdtVdA99oMBiZeUkT8jvrSGxyy3gXBYBBsXzA==
-X-Received: by 2002:a17:902:d4cc:b0:21f:6a36:7bf3 with SMTP id d9443c01a7336-21f6a369009mr6855425ad.12.1738963614537;
-        Fri, 07 Feb 2025 13:26:54 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3683d551sm35131205ad.110.2025.02.07.13.26.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 13:26:54 -0800 (PST)
-Date: Fri, 7 Feb 2025 13:26:50 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v9 14/26] riscv/traps: Introduce software check exception
-Message-ID: <Z6Z6mhiQ3DmsNZe9@debug.ba.rivosinc.com>
-References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
- <20250204-v5_user_cfi_series-v9-14-b37a49c5205c@rivosinc.com>
- <fec3b7be-4259-4eef-87f9-b2cee5718cae@rivosinc.com>
+        d=1e100.net; s=20230601; t=1738965017; x=1739569817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wt/rhXICuGKPz6p+qSVDOoOIpUebsnzqpQhWZ7aI0s4=;
+        b=gfIvjBz2E+eILREmpG06wuOFDJ6C8a60vatO/91EwV+dqbork6zAsg9yrZaxvHTHcd
+         tpAwjb1UE/i9g/z9iF3wmKl64RSI+F8lwg4xrMi9jTTAHEAe1zO5EkmE0Nj2czYOxb2+
+         EC6vafU7FmQ0aDVBlhylgybHZB77b3OV3etN3ugv5cuvSy4U+PCOJWt9aU4g5UZ/lKWS
+         GkR7JVSoHw0MBCnUt5uEmGG5psHSDB9Jp7fXNO4D/H2WBd5tpcQgBxrTxbCdWBOeehGx
+         LdOhCLJ7q4oMGuovNDzqCUzeYfrYeu25JcjGV5hb2Of8Uv2xFv0crfTTC3KVo8X0YPtX
+         lKOA==
+X-Forwarded-Encrypted: i=1; AJvYcCW4gZM3E+2istmUNMceuF+ZpguMUrCCE8FM8meW2MEhJVdPojPFfmxSh4aFKyaRCy4Jcen7hTATfGrDiFyYFI4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdUc3Lm6JEfV7CKgQL3rPNP06F6F1qR70pOFuaV8pbL4gQhUlH
+	M2Ka01Q2QF2E0DmN/FUnpVqnK8Uo3b+EwEPLlCqwXrRwJssv1HAr0on3JEEYYg4Rrh0tnDHQ39h
+	4CQdzcGzd6cH5LKcXWs6g5Yckc6GgnXirYvQ2HSQZlNm8sbczjZvUVt8HgL9Yi6HFIbb4S1dF0M
+	ZEe4o8MZWRWyC4M7/KTO0FD/XPVI4hJ7pss1YTlzhz
+X-Gm-Gg: ASbGncsK7QjnvxyZ546pf6tuvdAlb73s6rkq1i2u4NKp8D/nVQPR45hz6tq0L3T3AJ8
+	jZz+PDYIUp9MT9q1OjnGt5V5FlxQhGWHUIicIF5PCrWiRwxtv9b0ylXtdF4yO
+X-Received: by 2002:a17:903:1108:b0:21f:4c8b:c4de with SMTP id d9443c01a7336-21f4e7428e7mr75240155ad.42.1738965016967;
+        Fri, 07 Feb 2025 13:50:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGMvuVYzR38ErU+ifgu+mCfqp/ihxTEzre+fWzUScLMCCUFSChUFoi8+zuc1opaccCYbwst09rlbD+RHdPBbw4=
+X-Received: by 2002:a17:903:1108:b0:21f:4c8b:c4de with SMTP id
+ d9443c01a7336-21f4e7428e7mr75239895ad.42.1738965016621; Fri, 07 Feb 2025
+ 13:50:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fec3b7be-4259-4eef-87f9-b2cee5718cae@rivosinc.com>
+References: <20250128163859.1883260-1-agruenba@redhat.com> <yoxmbxirfwr6tpl4lp3jnnb26ef3omhjna5b7p4d6522xvmnco@3eajr5hkfmhp>
+In-Reply-To: <yoxmbxirfwr6tpl4lp3jnnb26ef3omhjna5b7p4d6522xvmnco@3eajr5hkfmhp>
+From: Andreas Gruenbacher <agruenba@redhat.com>
+Date: Fri, 7 Feb 2025 22:50:05 +0100
+X-Gm-Features: AWEUYZmF6nIf5aRYDSSXBkpBUfXVGKwt-1ffEK-4nKvj6uOlvVkZ8k7qSvT4pQk
+Message-ID: <CAHc6FU5DDKga1ma72Dnvsj23DLJ3GyMd-CM0qx83EKhvo5p2ow@mail.gmail.com>
+Subject: Re: [PATCH 00/21] bcachefs: eytzinger code
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Shuah Khan <shuah@kernel.org>, linux-bcachefs@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Clement,
+On Fri, Feb 7, 2025 at 7:56=E2=80=AFPM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+> On Tue, Jan 28, 2025 at 05:38:37PM +0100, Andreas Gruenbacher wrote:
+> > Kent, to continue our discussion from last November, I've gone through
+> > more parts of the eytzinger code and as a result, here are some patches
+> > for you to consider.
+> >
+> > What I've not looked at are the eytzinger_to_inorder and
+> > inorder_to_eytzinger functions, as well as the implementation of sort.
+> > Those functions could use a bit more documentation, but the code iself
+> > looks reasonable.
+> >
+> >
+> > Shuah, I've also had a quick look at converting the tests into kernel
+> > selftests, but that hasn't gone very far because of the lack of support
+> > for basic functions like __fls(), __ffs(), ffz(), and
+> > rounddown_pow_of_two() in selftests.  Are there any plans for making
+> > those kinds of primitives generally available to selftests?
+>
+> Ping on this patchset - can you throw up a git repo that's ready to be
+> applied directly, and have you run the test that failed yourself to
+> confirm the fix?
 
-Thanks for looking at it. Inline
-On Thu, Feb 06, 2025 at 02:49:09PM +0100, Clément Léger wrote:
->
->
->On 05/02/2025 02:22, Deepak Gupta wrote:
->> zicfiss / zicfilp introduces a new exception to priv isa `software check
->> exception` with cause code = 18. This patch implements software check
->> exception.
->
->Hey Deepak,
->
->While not directly related to this patch, is the exception 18 delegation
->documented in the SBI doc ? I mean, should we specify that it is always
->delegated when implementing FWFT LANDING_PAD/SHADOW_STACK ?
+Did you miss this message?
 
-I don't think it's document in SBI spec anywhere. Should it be ?
+  https://lore.kernel.org/linux-bcachefs/20250130103400.1899121-1-agruenba@=
+redhat.com/
+
+The test results at:
+
+  https://evilpiepirate.org/~testdashboard/ci?user=3Dkmo&branch=3Deytzinger
+
+are still for the initial version, but I've applied the fix right away:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/agruen/linux.git/log/?h=
+=3Dbcachefs
+
+On top of that, I've got a small patch that adds eytzinger0_find self
+tests. That patch still needs testing before I can post it, though.
+
+Oh, and let me warn you about "bcachefs: Run the eytzinger tests on
+modprobe" again: this really is FOR DEBUGGING ONLY, so please do not
+merge.
+
+Thanks,
+Andreas
 
 
-In code, opensbi delegates the exception (SW_CHECK)
-https://github.com/riscv-software-src/opensbi/commit/110524441a827e026db3547ed03c5723b9c9e211
 
+> Also, I'll make an exception for this patchset if need be, but fyi:
+> in the future I'm getting out of the game of running tests for people.
 >
->Thanks,
+> Either run ktest locally, or get redhat to chip in on the cluster and
+> I'll give you CI access (and I highly reccomend that option, it'll get
+> you quick feedback with a nice dashboard and you can use it for non
+> bcachefs work as well).
 >
->Clément
->
->>
+
 
