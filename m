@@ -1,311 +1,131 @@
-Return-Path: <linux-kselftest+bounces-26077-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 574ABA2D3B0
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 05:15:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90309A2D445
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 07:34:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56366188E12E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 04:15:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2544F16C68C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 06:34:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F161A707A;
-	Sat,  8 Feb 2025 04:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFC71990DB;
+	Sat,  8 Feb 2025 06:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="vXTumveD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eS/1GPw7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAF81A2632
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Feb 2025 04:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB734155316;
+	Sat,  8 Feb 2025 06:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738988084; cv=none; b=aY1V8nrOwRaxmGE/dsdtfQ/y/mBZ8KNoF9XVVIjviypcshBI/1765WZ/tDqadJJ0bTtjVtnKol4ymDyvxQWZHvaHfeGPED8790w8+HasbPVJBS4TOFYs6/s7hCgBeAE8qoRFog2oAWyHqs+hKNlJEd39HSx3eTaBy6cW1/Zr2C4=
+	t=1738996472; cv=none; b=SumH4vUtRz6ELIYTZcDM8y54vz8CZylOimuAbTLDlRMDjmi6L63zc5PGOkqI3ifluh1qWsV7daIOPBFIdSeKK7u5dh+mNfxZ83s2LzIggTJTMXIX0HKz5ayJrnk9gAw1Ll+Vb2pykHtA/t1+xfVOQITuXLGRRdQKfEV4CamTA3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738988084; c=relaxed/simple;
-	bh=TmFrieKafs0y9qgWW4DLzVPuAlNlJxW158B1qIqoulU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bIPRdTfybDZp8JoCDyESqLl4btnsp3Z9VmilzPc7WT1VaHWwCNxdnhtETBdadbUnCbhEbAhSgrRybwzZeNYYTEcAhJT7h9bVKBC0QXYI7lmyq2VvT5trEEl62H0g1QQe0qRupICXMvke5WRsT+SoTRSw9RyXy4B+XLUW481qGas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=vXTumveD; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21f44e7eae4so38963775ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 20:14:42 -0800 (PST)
+	s=arc-20240116; t=1738996472; c=relaxed/simple;
+	bh=tW0+Lr2QBZHrrpEVFfIMsDHMzu3gMifdnEelPOfNlFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DL6kiIIu9DUMtG6zmOcVkBhUZUbA7h5DyH5XVPaX4s7YUF0MtPKj66WhY1+iPtstuogWTtMQ7NDOUGIM0HhbTwD/18YvTyojQKKECUapa+OUc6rSQ/rpdriojM978cUknPmzCCnTi7/w/bUuIdxy2mE7JJURIj+x8dhF6GWyHiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eS/1GPw7; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21f55fbb72bso23847415ad.2;
+        Fri, 07 Feb 2025 22:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1738988082; x=1739592882; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r7RUZIqHwLPt1JPkc0hYqOZYvl0G8thAspfJu2yEGWI=;
-        b=vXTumveDPV5D/h+W7pYAN4DirQaTAJqKXexuJu0+2+bNKw52aeL5aPrZSHgHnVaBBa
-         n1XPnJNl1/jDz7gkji+zYZA08NA6k8vBVs+fJY/+0Us2fjF5b1NDRE49lhI/saHxzl/0
-         6cix2VhcDW6fY2mfFaTQEMxDt/ATstN3EJIYo=
+        d=gmail.com; s=20230601; t=1738996470; x=1739601270; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2W+B51lt0Lph92TfGDjy3Nv60PpTC1Kx1fbVhEsxz6A=;
+        b=eS/1GPw7ZCiJi0d6qIej30qLQH/rD6KQH2dhyMqbSPDoMdZsCOnJhb10+1ooKjir37
+         MHoqmScMuoZ2x3zCNIF5/avSKKei6ggoGAt7CiP2AY0qf+NueYFFir+9GVwICN3qeHbF
+         4pAZaQ9jhhNAJHu6/Eqkkh5582k5HYD5d66NcOMwUl24pav8j+952BTHd/6QQjgIiJtt
+         +dKZgKpdEz5Z6+o0EjLfYm+Cbh96j58QDu6bnszH4TKQk5DzLcyzFXnvw2HAgxodCO7i
+         a0VjXyKsXNYSY1j3tPyKixvPYo5Pzyj2/3oO6hsgiLZA8nrW6lWlQZBaSwRZ9agPtMd5
+         JJnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738988082; x=1739592882;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r7RUZIqHwLPt1JPkc0hYqOZYvl0G8thAspfJu2yEGWI=;
-        b=nhUB18cg60stdQtkCnY2zE3SY+18ZJD0nARxbndapK0T9z8rrsiyf4fJCALkkml3Bb
-         t8JgwgIXwZKhPAhvJAQFDIfEfjj/Xu5h8QQSo1vMPXNntG2JxiMe3j8ReORK09xIRrsh
-         AIYMtPhFQoPf95wutIRs4IOcKCSwX56/4epXPL8LYYi/P4ihY6tAmuiM6XTibrE5DWxX
-         TztmOv85bpFXR9ddYiSGfirC1Ly6ew57GzQaGeICOXquPTyVUBawdi/TnT3b361pqjcw
-         E7JpZGC0kaf22/WOzvqrfI11BRxkribdu5hCtu7STpLbq+5oAb4C7qgp+QmtfrzuO7Od
-         tZLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJPSLYgPmEstr2tnFg/J79So8RpGoeKy9ZmD63uSuMzgxXy9nFqlQas9AwePQnmoFE+kQ5Mjgd6LZjZ4UPtF4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCkf/Ib9A3IXF/KVL8Ypxa0pOaQ8FoAwBQC45Hohw8+U88eN3w
-	PsgoLYmJgTIn4/Nz3mv+rTBAlJHmMUHhULfBda7HhlsXclEcMgoP5Y08L2acmz4=
-X-Gm-Gg: ASbGncskFIL/l5b4kVu2w20/EDYRVtMAs/VW9bttN7SzMDhVoDMv2LGUIJ9ZvgfdV8p
-	0U1ajx1hkQBeo3s6nfDKwbokfqq8436faMx9RXGWa5l+v5Eiaq0hffdDfdRfwryPsoBXepWowMs
-	9CFs+JTj2OCZgPWM31QnLRKmO1/GWOMX+70BMB2frWFy300x8wEpt2Oyi4s6FDAwODN+qod5eKS
-	XBRZ2Lvc+upUQRrbI6yajcr6VG5l5h//GTPehnjffsud9FeOuzKN59oD2yBNIfu1+eBhU8czPqv
-	klhUClvbSp2zUKNspbGyMXo=
-X-Google-Smtp-Source: AGHT+IEv7CcUWtUY/vHth+Pzo08OssxlhLb3z6WAsk4ULdVgEgbzIik2NIG6kbk+BkSy6XxFiRHClA==
-X-Received: by 2002:a17:903:186:b0:21f:75f:295 with SMTP id d9443c01a7336-21f4e716a17mr85874165ad.31.1738988081807;
-        Fri, 07 Feb 2025 20:14:41 -0800 (PST)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3650ce0bsm38567715ad.21.2025.02.07.20.14.40
+        d=1e100.net; s=20230601; t=1738996470; x=1739601270;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2W+B51lt0Lph92TfGDjy3Nv60PpTC1Kx1fbVhEsxz6A=;
+        b=mBLxIL2voPB/xLL6wSBBJssLM7YlI7/qV5v+/y/Sb4UajpwAAs2YINgyTp97fQLYet
+         uzBLaZz60OfNq96iAoDNhklKJoGjvahtenUcgRfPvMd5p9nznZDdPu95uhhowN9zD+1S
+         DX/06wijgNa/7Jn3IxK9tnWfofDHtJPu6jBGBb7MJrCdbBTwQ+XfQA1tq/pW9s07+ndm
+         qeB/DVtbV6Qs7IRDQGUzRubUdWuRjvzRxs4i/4O+cXajlKpQjR0PjgGyyaTQ1CxxYOmo
+         Il1kHmQNHC7rYzFXqhgwyCB78aiGDiZRzmKUdZNk4J9HJ9JS00wZFl/FZ/Ua0hQaJipx
+         ReDg==
+X-Forwarded-Encrypted: i=1; AJvYcCU54rWGizMI0L6XvxRUSPgjOZn3uaZFg1ndS2M6VOAsDlSByLa6cI6X8ICaswe0WKuLb+0gjzfq2EPGxfHsglSB@vger.kernel.org, AJvYcCVlWWcwIpFZCCfydfwaAD/Cq1gg7a8n+XV/JGGvJS+FOpsrFE3pI9aDxSCHsm3oKHkHXclKiu4hcHImksA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpmwOUsezTwiDxnskOdIKJ/POuHormkU5Du120VJ675GGUAdko
+	HY6HSu1gVpTJyXkiwzCTEkyhvmLS/xcpRi+IDnSlHhuL/7SDDkUjtReXhZ/4eU0=
+X-Gm-Gg: ASbGncuEjfNCDW9DitUTjZAN0pXcyKHYh/sIkGEjzRxZR6lH/dLBP7Rj4H/j/SI5Pvi
+	XKYbv7ghwAxwvpw518VoxiP3qobgsvIHNNWvE5w4WDvRgAiY1VK/73jRVS3krzKbptX9C6morSH
+	TuXUtE6R1Yrg/Q86G7QqeZWoqIni6KPM9EHSlVzAs6L2AOx5TSUWIQgtHiMQ6pFvmC5mAJToiOZ
+	n1Jii0n5X07Rhbg44Z8ry1/DTdpA38uIWf20Gtg6AlRN3UQvWmANC7KB4rNuZgfHAyDp64qAoAC
+	fLQo+9We+JZrcy2oJtnT
+X-Google-Smtp-Source: AGHT+IGxDEdmYorBuzvy1xm/OAuvwxfLLCr+4DZX0PWuc9hzXBVQeJvcQ4in8LfTo0YLP/yKJiQXig==
+X-Received: by 2002:a17:902:c948:b0:21f:5e9c:c349 with SMTP id d9443c01a7336-21f5e9cc5bfmr58687075ad.43.1738996469608;
+        Fri, 07 Feb 2025 22:34:29 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f64a67488sm11037835ad.244.2025.02.07.22.34.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 20:14:41 -0800 (PST)
-From: Joe Damato <jdamato@fastly.com>
+        Fri, 07 Feb 2025 22:34:28 -0800 (PST)
+Date: Sat, 8 Feb 2025 06:34:21 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
-Cc: horms@kernel.org,
-	kuba@kernel.org,
-	Joe Damato <jdamato@fastly.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
-Subject: [PATCH net-next v5 3/3] selftests: drv-net: Test queue xsk attribute
-Date: Sat,  8 Feb 2025 04:12:25 +0000
-Message-ID: <20250208041248.111118-4-jdamato@fastly.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250208041248.111118-1-jdamato@fastly.com>
-References: <20250208041248.111118-1-jdamato@fastly.com>
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 net 0/2] bonding: fix incorrect mac address setting
+Message-ID: <Z6b67YBbERi5v9gt@fedora>
+References: <20250207092920.543458-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250207092920.543458-1-liuhangbin@gmail.com>
 
-Test that queues which are used for AF_XDP have the xsk nest attribute.
-The attribute is currently empty, but its existence means the AF_XDP is
-being used for the queue.
+Please hold on this patch. Our QE reported that with bare NIC, the
+backup NIC can't receive the NS messages even after joining the multicast
+MAC group. But after remove the backup NIC from bond, the NIC interface
+could receive the NS message.
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
----
- v3:
-   - Change comment style of helper C program to avoid kdoc warnings as
-     suggested by Jakub. No other changes.
+This is weird, it looks the backup NIC dropped the NS message somewhere,
+even using tcpdump (the NIC will be in promisc mode) I can't capture the
+NS message on backup slave.
 
- v2:
-   - Updated the Python test after changes to patch 1 which expose an
-     empty nest
-   - Updated Python test with general Python coding feedback
+I need to debug more.
 
- .../testing/selftests/drivers/net/.gitignore  |  2 +
- tools/testing/selftests/drivers/net/Makefile  |  3 +
- tools/testing/selftests/drivers/net/queues.py | 35 +++++++-
- .../selftests/drivers/net/xdp_helper.c        | 89 +++++++++++++++++++
- 4 files changed, 127 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/drivers/net/.gitignore
- create mode 100644 tools/testing/selftests/drivers/net/xdp_helper.c
-
-diff --git a/tools/testing/selftests/drivers/net/.gitignore b/tools/testing/selftests/drivers/net/.gitignore
-new file mode 100644
-index 000000000000..ec746f374e85
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+xdp_helper
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index c7f1c443f2af..81961c6e059d 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -1,10 +1,13 @@
- # SPDX-License-Identifier: GPL-2.0
-+CFLAGS += $(KHDR_INCLUDES)
- 
- TEST_INCLUDES := $(wildcard lib/py/*.py) \
- 		 $(wildcard lib/sh/*.sh) \
- 		 ../../net/net_helper.sh \
- 		 ../../net/lib.sh \
- 
-+TEST_GEN_PROGS := xdp_helper
-+
- TEST_PROGS := \
- 	netcons_basic.sh \
- 	netcons_fragmented_msg.sh \
-diff --git a/tools/testing/selftests/drivers/net/queues.py b/tools/testing/selftests/drivers/net/queues.py
-index 38303da957ee..55c2b296ad3c 100755
---- a/tools/testing/selftests/drivers/net/queues.py
-+++ b/tools/testing/selftests/drivers/net/queues.py
-@@ -8,7 +8,10 @@ from lib.py import NetDrvEnv
- from lib.py import cmd, defer, ip
- import errno
- import glob
--
-+import os
-+import socket
-+import struct
-+import subprocess
- 
- def sys_get_queues(ifname, qtype='rx') -> int:
-     folders = glob.glob(f'/sys/class/net/{ifname}/queues/{qtype}-*')
-@@ -21,6 +24,34 @@ def nl_get_queues(cfg, nl, qtype='rx'):
-         return len([q for q in queues if q['type'] == qtype])
-     return None
- 
-+def check_xdp(cfg, nl, xdp_queue_id=0) -> None:
-+    test_dir = os.path.dirname(os.path.realpath(__file__))
-+    xdp = subprocess.Popen([f"{test_dir}/xdp_helper", f"{cfg.ifindex}", f"{xdp_queue_id}"],
-+                           stdin=subprocess.PIPE, stdout=subprocess.PIPE, bufsize=1,
-+                           text=True)
-+    defer(xdp.kill)
-+
-+    stdout, stderr = xdp.communicate(timeout=10)
-+    rx = tx = False
-+
-+    queues = nl.queue_get({'ifindex': cfg.ifindex}, dump=True)
-+    if not queues:
-+        raise KsftSkipEx("Netlink reports no queues")
-+
-+    for q in queues:
-+        if q['id'] == 0:
-+            if q['type'] == 'rx':
-+                rx = True
-+            if q['type'] == 'tx':
-+                tx = True
-+
-+            ksft_eq(q['xsk'], {})
-+        else:
-+            if 'xsk' in q:
-+                _fail("Check failed: xsk attribute set.")
-+
-+    ksft_eq(rx, True)
-+    ksft_eq(tx, True)
- 
- def get_queues(cfg, nl) -> None:
-     snl = NetdevFamily(recv_size=4096)
-@@ -81,7 +112,7 @@ def check_down(cfg, nl) -> None:
- 
- def main() -> None:
-     with NetDrvEnv(__file__, queue_count=100) as cfg:
--        ksft_run([get_queues, addremove_queues, check_down], args=(cfg, NetdevFamily()))
-+        ksft_run([get_queues, addremove_queues, check_down, check_xdp], args=(cfg, NetdevFamily()))
-     ksft_exit()
- 
- 
-diff --git a/tools/testing/selftests/drivers/net/xdp_helper.c b/tools/testing/selftests/drivers/net/xdp_helper.c
-new file mode 100644
-index 000000000000..b04d4e0ea30a
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/xdp_helper.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/socket.h>
-+#include <linux/if_xdp.h>
-+#include <linux/if_link.h>
-+#include <net/if.h>
-+#include <inttypes.h>
-+
-+#define UMEM_SZ (1U << 16)
-+#define NUM_DESC (UMEM_SZ / 2048)
-+
-+/* this is a simple helper program that creates an XDP socket and does the
-+ * minimum necessary to get bind() to succeed.
-+ *
-+ * this test program is not intended to actually process packets, but could be
-+ * extended in the future if that is actually needed.
-+ *
-+ * it is used by queues.py to ensure the xsk netlinux attribute is set
-+ * correctly.
-+ */
-+int main(int argc, char **argv)
-+{
-+	struct xdp_umem_reg umem_reg = { 0 };
-+	struct sockaddr_xdp sxdp = { 0 };
-+	int num_desc = NUM_DESC;
-+	void *umem_area;
-+	int ifindex;
-+	int sock_fd;
-+	int queue;
-+	char byte;
-+
-+	if (argc != 3) {
-+		fprintf(stderr, "Usage: %s ifindex queue_id", argv[0]);
-+		return 1;
-+	}
-+
-+	sock_fd = socket(AF_XDP, SOCK_RAW, 0);
-+	if (sock_fd < 0) {
-+		perror("socket creation failed");
-+		return 1;
-+	}
-+
-+	ifindex = atoi(argv[1]);
-+	queue = atoi(argv[2]);
-+
-+	umem_area = mmap(NULL, UMEM_SZ, PROT_READ | PROT_WRITE, MAP_PRIVATE |
-+			MAP_ANONYMOUS, -1, 0);
-+	if (umem_area == MAP_FAILED)
-+		return -1;
-+
-+	umem_reg.addr = (uintptr_t)umem_area;
-+	umem_reg.len = UMEM_SZ;
-+	umem_reg.chunk_size = 2048;
-+	umem_reg.headroom = 0;
-+
-+	setsockopt(sock_fd, SOL_XDP, XDP_UMEM_REG, &umem_reg,
-+		   sizeof(umem_reg));
-+	setsockopt(sock_fd, SOL_XDP, XDP_UMEM_FILL_RING, &num_desc,
-+		   sizeof(num_desc));
-+	setsockopt(sock_fd, SOL_XDP, XDP_UMEM_COMPLETION_RING, &num_desc,
-+		   sizeof(num_desc));
-+	setsockopt(sock_fd, SOL_XDP, XDP_RX_RING, &num_desc, sizeof(num_desc));
-+
-+	sxdp.sxdp_family = AF_XDP;
-+	sxdp.sxdp_ifindex = ifindex;
-+	sxdp.sxdp_queue_id = queue;
-+	sxdp.sxdp_flags = 0;
-+
-+	if (bind(sock_fd, (struct sockaddr *)&sxdp, sizeof(sxdp)) != 0) {
-+		perror("bind failed");
-+		close(sock_fd);
-+		return 1;
-+	}
-+
-+	/* give the parent program some data when the socket is ready*/
-+	fprintf(stdout, "%d\n", sock_fd);
-+
-+	/* parent program will write a byte to stdin when its ready for this
-+	 * helper to exit
-+	 */
-+	read(STDIN_FILENO, &byte, 1);
-+
-+	close(sock_fd);
-+	return 0;
-+}
--- 
-2.43.0
-
+Thanks
+Hangbin
+On Fri, Feb 07, 2025 at 09:29:18AM +0000, Hangbin Liu wrote:
+> The mac address on backup slave should be convert from Solicited-Node
+> Multicast address, not from bonding unicast target address.
+> 
+> v3: also fix the mac setting for slave_set_ns_maddr. (Jay)
+>     Add function description for slave_set_ns_maddr/slave_set_ns_maddrs (Jay)
+> v2: fix patch 01's subject
+> 
+> Hangbin Liu (2):
+>   bonding: fix incorrect MAC address setting to receive NS messages
+>   selftests: bonding: fix incorrect mac address
+> 
+>  drivers/net/bonding/bond_options.c            | 55 ++++++++++++++++---
+>  .../drivers/net/bonding/bond_options.sh       |  4 +-
+>  2 files changed, 49 insertions(+), 10 deletions(-)
+> 
+> -- 
+> 2.46.0
+> 
 
