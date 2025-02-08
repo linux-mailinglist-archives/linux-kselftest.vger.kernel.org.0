@@ -1,182 +1,159 @@
-Return-Path: <linux-kselftest+bounces-26117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 248E1A2D95E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 23:51:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 021B5A2D96C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 23:53:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30C7D188892F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 22:51:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 036C11887E4C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 22:53:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86786241117;
-	Sat,  8 Feb 2025 22:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D91244194;
+	Sat,  8 Feb 2025 22:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEkpStsP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8jAUkS2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFF71F2BAE;
-	Sat,  8 Feb 2025 22:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB0A24418E;
+	Sat,  8 Feb 2025 22:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739055079; cv=none; b=AvnobsRBy38wZcXV0c3LWdvqsEpJXA8TTvW6/iuNvNwQ4fCET4DRoHwITcSkW5QmkHE8tVNFQ6c82oDy8qJpsiWBoLetvAGHeis7z1sB2Qn1HDEMvSAdcNXBWJJf2cCMDuTrCXDUsYefeF+16oXtpyIa7rxbJQ/O333IhKV9Oss=
+	t=1739055165; cv=none; b=APCOMx9AcBoMuori0Hls48P+IB7Sv8l/zYNATUvPRhhL4ENBx2/ty9kHNW485SpaRa1iABRH3MPmzXvy6cz/PGkSeYyMp5LiEuRnP6ZEfuxqsUpgHg7AU7zB4pidT9K5YTrjz8GfEAZtvdEpVH+xMEyizO4spIHgRj9eSTHxDXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739055079; c=relaxed/simple;
-	bh=bG8iciPdsDovxlkJVQTSUjiduwBS3xd47SB2piZOgFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2HqGl4WtqakyMa8Sh0x6S98da3bjsIJPzp1U2qQqvL20zoNG4ixZC/tICHz8lPqE5LXfPeIzflHA0UAMD3L9Q44fjYf7WlCxSxKsvFDt8cEBiRpTXgT6ZHkwxC+K+dEfZX8RYn3H6j8St+K/VUcKKgiVFRtMuuG71Pz8IYQEwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEkpStsP; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739055078; x=1770591078;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bG8iciPdsDovxlkJVQTSUjiduwBS3xd47SB2piZOgFA=;
-  b=JEkpStsP8J+gTXjUxBborukUmAd4epNgChLnULFjkmutiefBbuc7p+6s
-   T2zW8wzQvQansRcPXJBJZ8j10+wtcIddLhg2f9YO9T9TQzifhTg54vQmZ
-   ecyc3v2Tzxnbdj9w8maJwNovkmJmr9HGkVNW3T+t3RI8ptT1VAcJP+Pnh
-   gbX5oI7bCsDamlrhQaNo3Cb4FogfPjmJnToGsBbI9XvelR6SqJd6WiJMb
-   B869/58aZaZbfUwOYqEEYGfvt+qZyEc6Aq3edz6fp5qMt3XplnFSIMapn
-   01Qb5WFQVNnD1fUAS5H25QTb5VxZ6mt5UNJy2UHuabc1nd+TXua0j/DEA
-   g==;
-X-CSE-ConnectionGUID: sLfWKNmfRpWiL51z/qLy0w==
-X-CSE-MsgGUID: o4Ur7n//SW6UsYBrOb8vFw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="50298221"
-X-IronPort-AV: E=Sophos;i="6.13,271,1732608000"; 
-   d="scan'208";a="50298221"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 14:51:16 -0800
-X-CSE-ConnectionGUID: WjcthE2OSzuVz4DiindQcg==
-X-CSE-MsgGUID: tDNgQgIBSFGTpNVOpZw4Lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,271,1732608000"; 
-   d="scan'208";a="112054509"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 08 Feb 2025 14:51:14 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgtfL-0010k7-1c;
-	Sat, 08 Feb 2025 22:51:11 +0000
-Date: Sun, 9 Feb 2025 06:50:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH v2 2/2] lib/prime_numbers: convert self-test to KUnit
-Message-ID: <202502090640.RJYhwFQe-lkp@intel.com>
-References: <20250208-prime_numbers-kunit-convert-v2-2-863119447e04@gmail.com>
+	s=arc-20240116; t=1739055165; c=relaxed/simple;
+	bh=+V2DO/v/Rg0iRMpNhmXPlkc6DKQjfJ/2+v6OBma+Sdc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fbWIUDyjx6WTT2ySTcjFz2v9SvvfLPXf7t4AJaUYBW5vgKWGzBu37a31WujXTi5ykyLOYTHxyfF+zYtm+RZi7i2lMBWl8pAM5VqpgWz5wD+z61IWhLAxiwC/zVP3rPphFLdLNCspXdaBD31Xcrbs0e5ppTC3ZD44mi3/cPlUIOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8jAUkS2; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-46fee2b9c7aso27972441cf.2;
+        Sat, 08 Feb 2025 14:52:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739055162; x=1739659962; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jiwq+pdt/QT32WgaSaqVbKDmKdsYjXMio3uaPJqsb8I=;
+        b=V8jAUkS2U38F3Lqo3S9yLUwvaSk2VtLxOgt1r4uEj9gRLiUosKxAFWRG/60mI1B/6X
+         Uli0rNUzfjGgoPjLf3sdiXA44lueMi69ktG7OG51jE5FizU4fBJKXsf/LPXLQA8zbc7k
+         q57qySrLemJLmofLVIT3R90VyFs3LxKHyMLCOpOBBAA0CkjVJAXQ7DDpRdyLDfJ9FW70
+         goaZBwyXNlSN7DO0685vOUmfch2D6b9kDDtO6rsVX4e1V3pt/3s9PFrxT52z6GCh32g+
+         ArvGgndSHCSwrSaxkimyoFTexZxx7VA5EUfqFHz+IKImyXzZawvyQZFW8bxOdgpZzqpB
+         hj/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739055162; x=1739659962;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jiwq+pdt/QT32WgaSaqVbKDmKdsYjXMio3uaPJqsb8I=;
+        b=cj2ovkmIg82EXSDy8IgTAOGt4NNxbI/H0MVn9IFpFLbJ8GxBujxr8zBWRGy9Fhw6IP
+         Y72jiJao/F/mgm+XqISFo3S5J5vo1/N1Fx5PFFvaVwHeqozFOdLNUveUO7/n/xD9WDP5
+         wc7l/vy/hNQchVYz8OR0AO9+dxw85usfBh+cZJIVlHLjrl6loGH1hpls0QLfs5Xrcn7I
+         R/NyptPMFDM18cIbMYD0mrluMStz2VMLKQwtxN9mjXyViJgKlyb08O03aAJb2WQnb/tL
+         iPk4+Ka7YCQsJxJA3ailWZ64sNIeycr1DopWL+jIgbtD9nQc+zY1Wl7NcGFnupxnzRTe
+         hmfg==
+X-Forwarded-Encrypted: i=1; AJvYcCWurWVB5W/yoXWixgwnfYapfyT+5Ek8P8r2/JzjeoB0Z56w4ugP0U4546AF9S2hKvapRtxBy+TMsoutTcJuZfA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyX+xIe76yIfOG6uXXPx8myCVmY4O1P50na7Fxc+ihBaZnnE8C
+	rCx0IsfBNHnA96s1NIcy4v3FX9u/IQ7O2ms/J7auhCjzZL9KptZ+T6ligW7W
+X-Gm-Gg: ASbGncuSaKPdYFWt0REKLfugH0Ui+A8bvmvaSsY5QKCkqm//Hzact02nK356fDT+doR
+	Ml3WbLcAE/nz3vxIA4WSAB3PATXmMwh/XOBy4A0mb680Ol3fLjlzQyt47Rg4c3ys10OIu4N5ahZ
+	Q9yH/NEORCKsYqN2p4/mZdK0+yktg+nt6p0/+9YaKdqy6BIhhOG4s1sM/jJFzVyl2xR4uwaP5Md
+	RYH0gHFs5rIEe2jKkqrixc4j3gHInPc6x7U086Lf2tbO3D3djukGsf0s4MjMSP0Cwj4t3LkSQJ9
+	hQ5HCW8cUUhSMPM5EcSJLNsJlIlnJG4TbBjsDKgcmaM=
+X-Google-Smtp-Source: AGHT+IF9x/UVPlnlzagsmolAT1pyOw7ZFMx5hVbLojcHERHZQClpLOUgQQK/GQc5uaChpmF3X4YKWA==
+X-Received: by 2002:a05:622a:4c0e:b0:467:681c:425f with SMTP id d75a77b69052e-471679945a9mr145138131cf.4.1739055162322;
+        Sat, 08 Feb 2025 14:52:42 -0800 (PST)
+Received: from [192.168.1.159] ([2600:4041:5be7:7c00:15f6:96e9:3308:934a])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4718c20a23esm310731cf.4.2025.02.08.14.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Feb 2025 14:52:41 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v3 0/2] lib/prime_numbers: convert self-test to KUnit
+Date: Sat, 08 Feb 2025 17:52:28 -0500
+Message-Id: <20250208-prime_numbers-kunit-convert-v3-0-8ffd5816d8dc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250208-prime_numbers-kunit-convert-v2-2-863119447e04@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACzgp2cC/43NSw6CMBSF4a2Yjq3pAyk4ch/GGCgXuNG2pIVGQ
+ 9i7hREj4/A/g+/MJIBHCORymImHiAGdTSGPB6L7ynZAsUlNBBNnJpiig0cDDzuZGnygz8niSLW
+ zEfxIFddlLTVveJORJAweWnxv+u2euscwOv/ZziJf1//cyCmjOctVK2qlFZfXzlT4OmlnyOpGs
+ beK35ZIVpFLzsssU8CyvbUsyxd7SQaZEgEAAA==
+X-Change-ID: 20250207-prime_numbers-kunit-convert-71c9b3c1d1d4
+To: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Luis Felipe Hernandez <luis.hernandez093@gmail.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-Hi Tamir,
+This is a clear example of a unit test.
 
-kernel test robot noticed the following build errors:
+I tested this using:
 
-[auto build test ERROR on 2014c95afecee3e76ca4a56956a936e23283f05b]
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 math-prime_numbers
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/lib-math-Hook-up-tests-Makefile/20250208-220040
-base:   2014c95afecee3e76ca4a56956a936e23283f05b
-patch link:    https://lore.kernel.org/r/20250208-prime_numbers-kunit-convert-v2-2-863119447e04%40gmail.com
-patch subject: [PATCH v2 2/2] lib/prime_numbers: convert self-test to KUnit
-config: i386-buildonly-randconfig-001-20250209 (https://download.01.org/0day-ci/archive/20250209/202502090640.RJYhwFQe-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090640.RJYhwFQe-lkp@intel.com/reproduce)
+On success:
+; [08:51:41] ============== math-prime_numbers (1 subtest) ==============
+; [08:51:41] [PASSED] prime_numbers_test
+; [08:51:41] =============== [PASSED] math-prime_numbers ================
+; [08:51:41] ============================================================
+; [08:51:41] Testing complete. Ran 1 tests: passed: 1
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502090640.RJYhwFQe-lkp@intel.com/
+On failure:
+; [08:50:19] ============== math-prime_numbers (1 subtest) ==============
+; [08:50:19]     # prime_numbers_test: ASSERTION FAILED at lib/math/tests/prime_numbers_kunit.c:28
+; [08:50:19]     Expected slow == fast, but
+; [08:50:19]         slow == 0 (0x0)
+; [08:50:19]         fast == 1 (0x1)
+; [08:50:19] is-prime(2)
+; [08:50:19] [FAILED] prime_numbers_test
+; [08:50:19] # module: prime_numbers_kunit
+; [08:50:19] # math-prime_numbers: primes.{last=61, .sz=64, .primes[]=...x28208a20a08a28ac} = 2-3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61
+; [08:50:19] =============== [FAILED] math-prime_numbers ================
+; [08:50:19] ============================================================
+; [08:50:19] Testing complete. Ran 1 tests: failed: 1
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v3:
+- Remove `selftest_max` again; snuck into v2.
+- Restore `#include <linux/slab.h>`.
+- Sending v3 early because kernel test robot is sad.
+- Link to v2: https://lore.kernel.org/r/20250208-prime_numbers-kunit-convert-v2-0-863119447e04@gmail.com
 
-   lib/math/prime_numbers.c: In function 'expand_to_next_prime':
->> lib/math/prime_numbers.c:126:15: error: implicit declaration of function 'kmalloc'; did you mean 'mm_alloc'? [-Werror=implicit-function-declaration]
-     126 |         new = kmalloc(sizeof(*new) + bitmap_size(sz),
-         |               ^~~~~~~
-         |               mm_alloc
-   lib/math/prime_numbers.c:126:13: warning: assignment to 'struct primes *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     126 |         new = kmalloc(sizeof(*new) + bitmap_size(sz),
-         |             ^
->> lib/math/prime_numbers.c:134:17: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
-     134 |                 kfree(new);
-         |                 ^~~~~
-   cc1: some warnings being treated as errors
+Changes in v2:
+- Keep all the details hidden in prime_numbers.c; expose `with_primes`
+  for debug logging in the test. (David Gow)
+- Link to v1: https://lore.kernel.org/r/20250207-prime_numbers-kunit-convert-v1-0-6067f2b7c713@gmail.com
 
+---
+Tamir Duberstein (2):
+      lib/math: Hook up tests/Makefile
+      lib/prime_numbers: convert self-test to KUnit
 
-vim +126 lib/math/prime_numbers.c
+ lib/Kconfig.debug                            | 14 +++++
+ lib/math/Makefile                            |  4 +-
+ lib/math/prime_numbers.c                     | 76 ++++------------------------
+ lib/math/prime_numbers_private.h             | 17 +++++++
+ lib/math/tests/Makefile                      |  1 +
+ lib/math/tests/prime_numbers_kunit.c         | 59 +++++++++++++++++++++
+ tools/testing/selftests/lib/config           |  1 -
+ tools/testing/selftests/lib/prime_numbers.sh |  4 --
+ 8 files changed, 102 insertions(+), 74 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250207-prime_numbers-kunit-convert-71c9b3c1d1d4
 
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  106  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  107  static bool expand_to_next_prime(unsigned long x)
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  108  {
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  109  	const struct primes *p;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  110  	struct primes *new;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  111  	unsigned long sz, y;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  112  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  113  	/* Betrand's Postulate (or Chebyshev's theorem) states that if n > 3,
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  114  	 * there is always at least one prime p between n and 2n - 2.
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  115  	 * Equivalently, if n > 1, then there is always at least one prime p
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  116  	 * such that n < p < 2n.
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  117  	 *
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  118  	 * http://mathworld.wolfram.com/BertrandsPostulate.html
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  119  	 * https://en.wikipedia.org/wiki/Bertrand's_postulate
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  120  	 */
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  121  	sz = 2 * x;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  122  	if (sz < x)
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  123  		return false;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  124  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  125  	sz = round_up(sz, BITS_PER_LONG);
-717c8ae7aae4f2 lib/prime_numbers.c Chris Wilson 2017-01-13 @126  	new = kmalloc(sizeof(*new) + bitmap_size(sz),
-717c8ae7aae4f2 lib/prime_numbers.c Chris Wilson 2017-01-13  127  		      GFP_KERNEL | __GFP_NOWARN);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  128  	if (!new)
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  129  		return false;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  130  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  131  	mutex_lock(&lock);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  132  	p = rcu_dereference_protected(primes, lockdep_is_held(&lock));
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  133  	if (x < p->last) {
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22 @134  		kfree(new);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  135  		goto unlock;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  136  	}
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  137  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  138  	/* Where memory permits, track the primes using the
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  139  	 * Sieve of Eratosthenes. The sieve is to remove all multiples of known
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  140  	 * primes from the set, what remains in the set is therefore prime.
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  141  	 */
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  142  	bitmap_fill(new->primes, sz);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  143  	bitmap_copy(new->primes, p->primes, p->sz);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  144  	for (y = 2UL; y < sz; y = find_next_bit(new->primes, sz, y + 1))
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  145  		new->last = clear_multiples(y, new->primes, p->sz, sz);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  146  	new->sz = sz;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  147  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  148  	BUG_ON(new->last <= x);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  149  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  150  	rcu_assign_pointer(primes, new);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  151  	if (p != &small_primes)
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  152  		kfree_rcu((struct primes *)p, rcu);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  153  
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  154  unlock:
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  155  	mutex_unlock(&lock);
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  156  	return true;
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  157  }
-cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  158  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tamir Duberstein <tamird@gmail.com>
+
 
