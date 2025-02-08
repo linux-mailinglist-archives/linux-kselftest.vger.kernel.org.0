@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-26107-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26108-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A526A2D7D8
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 18:53:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27EF2A2D7ED
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 19:01:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28B161889032
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 17:53:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D6A1163D42
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 18:00:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8470241131;
-	Sat,  8 Feb 2025 17:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E60524112B;
+	Sat,  8 Feb 2025 18:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KPeaTVp9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G9A1z+0G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DB7241103;
-	Sat,  8 Feb 2025 17:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056B3241107;
+	Sat,  8 Feb 2025 18:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739037211; cv=none; b=e8NDHKn8Msv+Wy4N+z4vNhKxyoGybQdoROWmbvD7NbmPx4YxAOC9ftDN7OV3flwBtANX/nN7lnvDqDRvdp827oI3nXiXru5My+7eMYaEX2o4cP5z/667rOYFPzERwJex7bQRSMynjjmQmtSg5Xt58SETrkIBjCVCqPyZ7RFcnAk=
+	t=1739037656; cv=none; b=QoWS+S5SlW9i4tBYCh8wxkW82lUqlZJXxvkRzcUg+cEzlEE2mK0+bn5S1Pq2fLQAcgGwkGFXbpgKc+FuVcKcVu+15v7pXEXr25+s+BixSaqOc/IKkwNPUMXZrX6L7GKulrWOrSzi1VF42iodhxlXrmThlu9lu6yYRqNiNb0igaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739037211; c=relaxed/simple;
-	bh=u5KQrgj4hl5hhrtdAGh+wetosNfiX2i3D4EhPgaEPow=;
+	s=arc-20240116; t=1739037656; c=relaxed/simple;
+	bh=yPi01lgbmAIevC6u+JmsTgYoSkU/wFCQ44YinEUjDL0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PTfRVuQISrlX5nGdO7DZDqiVSsKwIz+vPjBI4TAYuIfJJUV4xbhYwo4X0Yq7uFGfCX799jI3SBQKwPZeJrKBLYWM7lrvh+nJ/g4cvG/iWH8pgYQwRJyLpIfyHIPhWrJKvEOVJlKFJcxOj74fy24UaMwzaGTWduXRgmDKmcgHhzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KPeaTVp9; arc=none smtp.client-ip=209.85.128.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=QaqFBPyYd5h69dIaNJEbOPUMBBEynFwtOFKCzNsHVVy9ItDw7iIX1tlvymnydS1Y2dvQuvC1S74yfGcIP99651hHMkg4jE4vIPOLM9EIYg36Hxxpm1VpvnQbzPQ6tCp2h+rfrwFUbiSq0xDlZVHKbYejhs8a4C+qidE2tL66DuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G9A1z+0G; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6f77b9e0a34so23124817b3.2;
-        Sat, 08 Feb 2025 09:53:29 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6f277a1ecfdso21981487b3.2;
+        Sat, 08 Feb 2025 10:00:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739037209; x=1739642009; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739037654; x=1739642454; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWCLWUGpRzNN38qDSRAHapFkwtjzVMbT+fgTsmO02GE=;
-        b=KPeaTVp9sm8v7DGs39uvOBwy4BX+EzJD+yxE3Hkjqit5qBVfnCJKAidSE4ke3IRkXb
-         Kw8tngQR+Hq+pKzLRY71quNQzgy8jspsnKqLHpBwtANyANDlxBQnneCWAFH2zIeLxw/n
-         xQgAhmg0CCRh7kqDJjmJQ7D3/Z2y1JW1k24o4S3L8rLCImlgraA+94BOiuf8Eyc9BPbA
-         SsTQaV1qsYX8zSNbyHU+XYybHDNys2i3xsKa4CIZqeNGvoadJCHudiqZQb1OjiTdf/pj
-         ocAxuuZKStIfnfUMF5XCTibrrtD0qy69+PoXp+MTTEmTgtjrMhRaT+F4ECrDtFNJboih
-         U9CA==
+        bh=GJ50So012NUKYlUWEsNDmQqC2zUcRpvTKx1dhgNUOYI=;
+        b=G9A1z+0GBpPdqEPAPdLJKDdDrc3yX2akYe44iFvL8eC57GYiwalogLvK3dxlHAW2HY
+         eW82+MQjLDV5JyO/NrgbXSaR8EplXufRGFwtqy/qbZ9KUKCE7CAPQkde44ZB74CtfiUX
+         zopfZU50U7XCyav4v19WryvpUCtKs4r1ai3wSmnhjxvZ4o73T8+T8tfgiJTKmq3793qH
+         dPowK9RoC6DDo9p1s+JsUhCvJZVCIiEh3rTiTZGQdpraQEbk42mQcUOAfGh5wYzHRx04
+         L1BRlGED64j5GXz4hIQCAN4MKU3PQEy92lP9tIElNunf/U3rLht7FowiwQRnefh7ntZO
+         zfnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739037209; x=1739642009;
+        d=1e100.net; s=20230601; t=1739037654; x=1739642454;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GWCLWUGpRzNN38qDSRAHapFkwtjzVMbT+fgTsmO02GE=;
-        b=s/XKzo6Ou1Gmem0NDEd357+nCqTnxSd41O70Mb9RG3W8I6hos+KQuIkKKHFKYd7zCk
-         WTJET8DH++kIyApTkSrYqsP/H4+nSaBaKOwCdy2kHONqwLRzQaoocVVdsfM4fMdG6LpM
-         TFaKdRJKsMiSlHpC1l8sKyWNxP6K4LYtf54FXTu2dKK0EcZTzi3NmIrrHO3KnS6IgS+s
-         Stl3m6FuWyBVrn9ll5DjMkuak/a5dXGHyrqUDYE2mHjFFaVKOLznHcwV133vg1dci6Jk
-         60OojKoiE3zF8cxaG58hgCm38/F5cDaaHdj19zbOZCExtdTEA6cQH+5LHE/JPrsbIA6M
-         j4jA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeim5oZ7LuSuu6an3U+nEgRG8LB7P2UrFiK7UNYoePgbvAdFX0o0k8LJOnEUYRudmnsrx39h/VgyRc3oU=@vger.kernel.org, AJvYcCV5gLhbvLBhujTniF9fgvbgRUVGi3PWeZ9utPmaLwG2jGqyg9JXHcEbe3FUfxLntCuoViU3sXVWFy/F4fWoftmd@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGI9fSDibo9ypFsmgT+XIXUB/7sEXtHLPKT7VioZ2Dc5rH13Pp
-	2PSAvuF26WXAa0TYGv4HGYWSHMDZoZaHZCrVcbWpd363Wb6yRw0z
-X-Gm-Gg: ASbGncvel0dOArrKBk+2epvwtgMqrxA6QlfYHPjFNK7K35g14dOWmHHLkmh8lI5Tt8b
-	zmunrIldcev68ab0W0VUT3WBIyO/AdRnQNjrDdB72LgwxT/7hhdO9JpouTKC0LefDoWElEfj6NL
-	N3QyF7phkexieWrlZwyR6xZhpZNZaehGQr1TGsU6d35Pu+e2ADtoB+i1wrZZIuBCf9uh/tN7eZb
-	nFAVseXHY21NdQpNWITamTrkSfJxZMozm691X/aaiUlFwJBm7H7uwwSFlPxMjox+JxRqLSThh2d
-	zXkfxc6s+haiN/Tu8OsPHx+OQVrQgqakuV/xKKdGOWMsZ6xOEQs=
-X-Google-Smtp-Source: AGHT+IGharplEze0gu0SCa8jNPf4PFwFx7r6QQdncnkwjNrUp7r48urY21da4KyUfmTiooRho9XVbw==
-X-Received: by 2002:a05:690c:74c3:b0:6f6:cd43:5468 with SMTP id 00721157ae682-6f9b2a2165amr71225727b3.33.1739037208799;
-        Sat, 08 Feb 2025 09:53:28 -0800 (PST)
+        bh=GJ50So012NUKYlUWEsNDmQqC2zUcRpvTKx1dhgNUOYI=;
+        b=fWAgyUR9ilQs16VNA+9AjqtbGlCMHtIT3vS6VTIta+SF673AGm1jM+tKaSAjJw9+LE
+         U5XGiknX8Q7qLAf6/aevSPDumkFNlxJNGobdbaUwcDKUYI0F6lOUT3T+AoSDknwYTP4g
+         HDsWc4Do9GmrA3E5M8ZvTavgeonZwgpRGYDJe8ZJeOVHbLXS6GgQcdakbJQe8oHO2Ydp
+         aa0PHNERQSmZyEwXvrnOgB+OLgH/f+uzjT+N9GYYnBOXt0cinx8C5B1SB/xAw6WZq/f0
+         e5pMTIMmpsFh4TuZlKkjX49bPqZALas7fRDahsSF50nfDKakrrbccydnsUjQALoySDJN
+         sQBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUtkHufcvPlFw7c1103mmOD3mTVERc1KwWhBFTCFYBZSoE57l3gwnuTbw8nHrdepxqQigTnAj1BrJZgGJc=@vger.kernel.org, AJvYcCWNwyMcLHTEUmgJ4GYA1kv2di8BYZgCeA0zlvUDZnQPpmoG16qYS2VvJNXgaMGI7Mz9CgeDDLaNXmbLYGIstn5G@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfPIErp3GdNR6cyuZwY1vZhWIcGzD5RkLY++VaeXrBPVO5E6FX
+	8VihdoyZnikPYYMUuGbazCujT+iGHylaMk7t2a5TKXgZWoXRKQLZpL9DHyJd
+X-Gm-Gg: ASbGncuSEv38vWrHQiO/GJgtJCl0p86y1usWK0H3oPPKguvC0uFjw9rv9+ToQCiOX1m
+	t+CUWLd0tXGn/dUECRwa3iFrCS4UEOolw3FMaRRQ44KLexgtmu/kwtGT6KoVd+AfPwvrSENlbQp
+	iaUFR/fVZ4Yte/rK1+w79w7gytXb7wAFVNzOsDTkDQH7OEuCpIj+5l9CMjQJi/SNOQwcybaKUTe
+	FRJk6WkxIJxl1IEhw9ammf+h3/caC7V2SrFejo6OkwF5/8rjrvfEgmMb7k/Z0YoTnmkj+qJugsL
+	XNocvp0PwTniZ1+NQEtC5FItH92D5zGfC3tjygzSX32mBTMOB/M=
+X-Google-Smtp-Source: AGHT+IFRlIpmB/OwyomFOIGum1C1obghY8tVh4HH+993/Q5NYcDDdMOhv5rQxRMHdGz7A/w4A5DwlQ==
+X-Received: by 2002:a05:690c:7301:b0:6f9:a3c6:b2e4 with SMTP id 00721157ae682-6f9b2a216a1mr71260247b3.37.1739037653938;
+        Sat, 08 Feb 2025 10:00:53 -0800 (PST)
 Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6f99fceff39sm9570747b3.19.2025.02.08.09.53.27
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6f99ffc0b73sm9596537b3.104.2025.02.08.10.00.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Feb 2025 09:53:28 -0800 (PST)
-Date: Sat, 8 Feb 2025 12:53:27 -0500
+        Sat, 08 Feb 2025 10:00:52 -0800 (PST)
+Date: Sat, 8 Feb 2025 13:00:50 -0500
 From: Yury Norov <yury.norov@gmail.com>
 To: Tamir Duberstein <tamird@gmail.com>
 Cc: David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>,
@@ -87,9 +87,10 @@ Cc: David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>,
 	Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
 	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] bitmap: convert self-test to KUnit
-Message-ID: <Z6eaDuXnT_rjVSNS@thinkpad>
+Subject: Re: [PATCH 1/3] bitmap: remove _check_eq_u32_array
+Message-ID: <Z6eb0mO_U76CS83_@thinkpad>
 References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
+ <20250207-bitmap-kunit-convert-v1-1-c520675343b6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,188 +99,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
+In-Reply-To: <20250207-bitmap-kunit-convert-v1-1-c520675343b6@gmail.com>
 
-On Fri, Feb 07, 2025 at 03:14:01PM -0500, Tamir Duberstein wrote:
-> This is one of just 3 remaining "Test Module" kselftests (the others
-> being printf and scanf), the rest having been converted to KUnit.
+On Fri, Feb 07, 2025 at 03:14:02PM -0500, Tamir Duberstein wrote:
+> This has been unused since commit 3aa56885e516 ("bitmap: replace
+> bitmap_{from,to}_u32array") in 2018. Remove it to avoid the need to port
+> it to KUnit in this series.
 > 
-> I tested this using:
-> 
-> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 bitmap.
-> 
-> I've already sent out a conversion series for each of printf[0] and scanf[1].
-> 
-> There was a previous attempt[2] to do this in July 2024. Please bear
-> with me as I try to understand and address the objections from that
-> time. I've spoken with Muhammad Usama Anjum, the author of that series,
-> and received their approval to "take over" this work. Here we go...
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Take over means that you'd at least add the Co-developed-by tag.
-
-> 
-> On 7/26/24 11:45 PM, John Hubbard wrote:
-> > 
-> > This changes the situation from "works for Linus' tab completion
-> > case", to "causes a tab completion problem"! :)
-> > 
-> > I think a tests/ subdir is how we eventually decided to do this [1],
-> > right?
-> > 
-> > So:
-> > 
-> >     lib/tests/bitmap_kunit.c
-> > 
-> > [1] https://lore.kernel.org/20240724201354.make.730-kees@kernel.org
-> 
-> This is true and unfortunate, but not trivial to fix because new
-> kallsyms tests were placed in lib/tests in commit 84b4a51fce4c
-> ("selftests: add new kallsyms selftests")  *after* the KUnit filename
-> best practices were adopted.
-> 
-> I propose that the KUnit maintainers blaze this trail using
-> `string_kunit.c` which currently still lives in lib/ despite the KUnit
-> docs giving it as an example at lib/tests/.
-> 
-> On 7/27/24 12:24 AM, Shuah Khan wrote:
-> > 
-> > This change will take away the ability to run bitmap tests during
-> > boot on a non-kunit kernel.
-> > 
-> > Nack on this change. I wan to see all tests that are being removed
-> > from lib because they have been converted - also it doesn't make
-> > sense to convert some tests like this one that add the ability test
-> > during boot.
-> 
-> This point was also discussed in another thread[3] in which:
-> 
-> On 7/27/24 12:35 AM, Shuah Khan wrote:
-> > 
-> > Please make sure you aren't taking away the ability to run these tests during
-> > boot. 
-> >
-> > It doesn't make sense to convert every single test especially when it
-> > is intended to be run during boot without dependencies - not as a kunit test
-> > but a regression test during boot.
-> > 
-> > bitmap is one example - pay attention to the config help test - bitmap
-> > one clearly states it runs regression testing during boot. Any test that
-> > says that isn't a candidate for conversion.
-> > 
-> > I am going to nack any such conversions.
-> 
-> The crux of the argument seems to be that the config help text is taken
-> to describe the author's intent with the fragment "at boot". I think
- 
-KUNIT is disabled in defconfig, at least on x86_64. It is also disabled
-on my Ubuntu 24.04 machine. If I take your patches, I'll be unable to
-boot-test bitmaps. Even worse, I'll be unable to build the standalone
-test from sources as a module and load it later.
-
-Or I misunderstand it, and there's a way to build some particular KUNIT
-test without enabling KUNIT in config and/or re-compiling the whole kernel?
-Please teach me, if so
-
-Unless you give me a way to build and run the test in true
-production environment, I'm not going with KUNITs. Sorry.
-
-> this may be a case of confirmation bias: I see at least the following
-> KUnit tests with "at boot" in their help text:
-> - CPUMASK_KUNIT_TEST
-
-This one doesn't count because the test was not converted, it's
-originally written as a KUNIT test. I am happy when people bring new
-tests in the most comfortable way for them, and I don't want to push
-them to use this framework or another. So I didn't object, and I'm
-thankful for this contribution to Sander.
-
-> - BITFIELD_KUNIT
-
-Same here. Plus, it was written long before I took over bitfields.
-
-> - CHECKSUM_KUNIT
-> - UTIL_MACROS_KUNIT
-
-> It seems to me that the inference being made is that any test that runs
-> "at boot" is intended to be run by both developers and users, but I find
-> no evidence that bitmap in particular would ever provide additional
-> value when run by users.
-
-This is my evidence: sometimes people report performance or whatever
-issues on their systems, suspecting bitmaps guilty. I ask them to run
-the bitmap or find_bit test to narrow the problem. Sometimes I need to
-test a hardware I have no access to, and I have to (kindly!) ask people
-to build a small test and run it. I don't want to ask them to rebuild
-the whole kernel, or even to build something else.
-
-https://lore.kernel.org/all/YuWk3titnOiQACzC@yury-laptop/
-
-> There's further discussion about KUnit not being "ideal for cases where
-> people would want to check a subsystem on a running kernel", but I find
-> no evidence that bitmap in particular is actually testing the running
-> kernel; it is a unit test of the bitmap functions, which is also stated
-> in the config help text.
-> 
-> David Gow made many of the same points in his final reply[4], which was
-> never replied to.
-
-Nice summary for the discussion. Unfortunately you missed my concerns.
-Which are:
-
-Pros:
- - Now we switch to KUNITs because KUNITs are so good
-
-Cons:
- - Wipes git history;
- - Bloats the test's source code;
- - Adds dependencies;
- - Doesn't run on most popular distros and defconfig;
-
-So, no.
+OK, 7 years is enough to drop it. Adding in bitmap-for-next for
+testing.
 
 Thanks,
 Yury
 
-> Link: https://lore.kernel.org/all/20250207-printf-kunit-convert-v2-0-057b23860823@gmail.com/T/#u [0]
-> Link: https://lore.kernel.org/all/20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com/T/#u [1]
-> Link: https://lore.kernel.org/all/20240726110658.2281070-1-usama.anjum@collabora.com/T/#u [2]
-> Link: https://lore.kernel.org/all/327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com/T/#u [3]
-> Link: https://lore.kernel.org/all/CABVgOSmMoPD3JfzVd4VTkzGL2fZCo8LfwzaVSzeFimPrhgLa5w@mail.gmail.com/ [4]
-> 
-> Thanks for your attention.
-> 
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > ---
-> Tamir Duberstein (3):
->       bitmap: remove _check_eq_u32_array
->       bitmap: convert self-test to KUnit
->       bitmap: break kunit into test cases
+>  lib/test_bitmap.c | 28 ----------------------------
+>  1 file changed, 28 deletions(-)
 > 
->  MAINTAINERS                           |   2 +-
->  arch/m68k/configs/amiga_defconfig     |   1 -
->  arch/m68k/configs/apollo_defconfig    |   1 -
->  arch/m68k/configs/atari_defconfig     |   1 -
->  arch/m68k/configs/bvme6000_defconfig  |   1 -
->  arch/m68k/configs/hp300_defconfig     |   1 -
->  arch/m68k/configs/mac_defconfig       |   1 -
->  arch/m68k/configs/multi_defconfig     |   1 -
->  arch/m68k/configs/mvme147_defconfig   |   1 -
->  arch/m68k/configs/mvme16x_defconfig   |   1 -
->  arch/m68k/configs/q40_defconfig       |   1 -
->  arch/m68k/configs/sun3_defconfig      |   1 -
->  arch/m68k/configs/sun3x_defconfig     |   1 -
->  arch/powerpc/configs/ppc64_defconfig  |   1 -
->  lib/Kconfig.debug                     |  24 +-
->  lib/Makefile                          |   2 +-
->  lib/{test_bitmap.c => bitmap_kunit.c} | 454 +++++++++++++---------------------
->  tools/testing/selftests/lib/bitmap.sh |   3 -
->  tools/testing/selftests/lib/config    |   1 -
->  19 files changed, 195 insertions(+), 304 deletions(-)
-> ---
-> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> change-id: 20250207-bitmap-kunit-convert-92d3147b2eee
+> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+> index 65a75d58ed9e..c83829ef557f 100644
+> --- a/lib/test_bitmap.c
+> +++ b/lib/test_bitmap.c
+> @@ -100,34 +100,6 @@ __check_eq_pbl(const char *srcfile, unsigned int line,
+>  	return true;
+>  }
+>  
+> -static bool __init
+> -__check_eq_u32_array(const char *srcfile, unsigned int line,
+> -		     const u32 *exp_arr, unsigned int exp_len,
+> -		     const u32 *arr, unsigned int len) __used;
+> -static bool __init
+> -__check_eq_u32_array(const char *srcfile, unsigned int line,
+> -		     const u32 *exp_arr, unsigned int exp_len,
+> -		     const u32 *arr, unsigned int len)
+> -{
+> -	if (exp_len != len) {
+> -		pr_warn("[%s:%u] array length differ: expected %u, got %u\n",
+> -			srcfile, line,
+> -			exp_len, len);
+> -		return false;
+> -	}
+> -
+> -	if (memcmp(exp_arr, arr, len*sizeof(*arr))) {
+> -		pr_warn("[%s:%u] array contents differ\n", srcfile, line);
+> -		print_hex_dump(KERN_WARNING, "  exp:  ", DUMP_PREFIX_OFFSET,
+> -			       32, 4, exp_arr, exp_len*sizeof(*exp_arr), false);
+> -		print_hex_dump(KERN_WARNING, "  got:  ", DUMP_PREFIX_OFFSET,
+> -			       32, 4, arr, len*sizeof(*arr), false);
+> -		return false;
+> -	}
+> -
+> -	return true;
+> -}
+> -
+>  static bool __init __check_eq_clump8(const char *srcfile, unsigned int line,
+>  				    const unsigned int offset,
+>  				    const unsigned int size,
 > 
-> Best regards,
 > -- 
-> Tamir Duberstein <tamird@gmail.com>
+> 2.48.1
 
