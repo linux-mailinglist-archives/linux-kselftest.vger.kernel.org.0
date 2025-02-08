@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-26116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1991CA2D948
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 23:30:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 248E1A2D95E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 23:51:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0ACFC3A6BC5
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 22:30:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30C7D188892F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 22:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3576D1F2BA9;
-	Sat,  8 Feb 2025 22:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86786241117;
+	Sat,  8 Feb 2025 22:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bTwWt4TE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEkpStsP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA221F2B89;
-	Sat,  8 Feb 2025 22:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFF71F2BAE;
+	Sat,  8 Feb 2025 22:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739053817; cv=none; b=W/QxVT0bnccx8AnbFOucsEkRIS6D11OUo3c0U3QGww2PflQ/QT5Z1I8U13qEkxlB+DSYWLcUFyKhnxc1XmfLEgolnFPFgCJ2D0j+hMPCxzEruXDEI4eFjbM56PwX9dw6HoSH7RnOGU32M73dKiDQwOspRFMusTt4KPQu/aMD2wI=
+	t=1739055079; cv=none; b=AvnobsRBy38wZcXV0c3LWdvqsEpJXA8TTvW6/iuNvNwQ4fCET4DRoHwITcSkW5QmkHE8tVNFQ6c82oDy8qJpsiWBoLetvAGHeis7z1sB2Qn1HDEMvSAdcNXBWJJf2cCMDuTrCXDUsYefeF+16oXtpyIa7rxbJQ/O333IhKV9Oss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739053817; c=relaxed/simple;
-	bh=QUj11CsSy8WVXJW4TTp1f2R/odv4DJQy02Qwct09Bxg=;
+	s=arc-20240116; t=1739055079; c=relaxed/simple;
+	bh=bG8iciPdsDovxlkJVQTSUjiduwBS3xd47SB2piZOgFA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gCnXBNJyaZUMIczApdzH9KccwGJWUz9uAO0NSElWkWOPBhc20mMW1wAnxr2zqXpY432OQRw+nqxp9kFvdNOGBJWn/i+evaMpHsxWW+CM1P0pW5AeyyAsKDwveFZyAoSa6yZa+rDLZJe5zZE00Hx9LrbkVoQ8IvKGzBtXUaJbw7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bTwWt4TE; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=r2HqGl4WtqakyMa8Sh0x6S98da3bjsIJPzp1U2qQqvL20zoNG4ixZC/tICHz8lPqE5LXfPeIzflHA0UAMD3L9Q44fjYf7WlCxSxKsvFDt8cEBiRpTXgT6ZHkwxC+K+dEfZX8RYn3H6j8St+K/VUcKKgiVFRtMuuG71Pz8IYQEwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEkpStsP; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739053815; x=1770589815;
+  t=1739055078; x=1770591078;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QUj11CsSy8WVXJW4TTp1f2R/odv4DJQy02Qwct09Bxg=;
-  b=bTwWt4TEfcEJz14lV5ltCgZlJYwTXIMgV8K1jYlMzqkwktyPBOxXBu3K
-   wS/93YFR0GJHxNu6m7dCRQFEnZ2d2uZcmSp3IGsdjKbUirchbJqLJdb7c
-   Vkt/aEmOLph4MxnudaWWwHsxfQx/CCodYe3Jb89+YbJsg/WyX1QdRuXmJ
-   8YaWt/1mBuUOWoKYR1zaCPk6BULsJgrGbQt+SW/DGfZniYmOpf8YBQIxE
-   zTgnzPgT8EVfwQvnapMgRrQnwSqR/+uZxBCjAlBjJCbnbhOKs/hC/Dstq
-   bOpUAIXVS7OuKnp0+F2mFVBBbpTsh9Sih5omoZMICa9L7AWKKfTiWNMnH
-   A==;
-X-CSE-ConnectionGUID: wj/JbaOpR8mn92BkKValLw==
-X-CSE-MsgGUID: idnFzOj6TrGvgsLsjs23wQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="57204048"
+  bh=bG8iciPdsDovxlkJVQTSUjiduwBS3xd47SB2piZOgFA=;
+  b=JEkpStsP8J+gTXjUxBborukUmAd4epNgChLnULFjkmutiefBbuc7p+6s
+   T2zW8wzQvQansRcPXJBJZ8j10+wtcIddLhg2f9YO9T9TQzifhTg54vQmZ
+   ecyc3v2Tzxnbdj9w8maJwNovkmJmr9HGkVNW3T+t3RI8ptT1VAcJP+Pnh
+   gbX5oI7bCsDamlrhQaNo3Cb4FogfPjmJnToGsBbI9XvelR6SqJd6WiJMb
+   B869/58aZaZbfUwOYqEEYGfvt+qZyEc6Aq3edz6fp5qMt3XplnFSIMapn
+   01Qb5WFQVNnD1fUAS5H25QTb5VxZ6mt5UNJy2UHuabc1nd+TXua0j/DEA
+   g==;
+X-CSE-ConnectionGUID: sLfWKNmfRpWiL51z/qLy0w==
+X-CSE-MsgGUID: o4Ur7n//SW6UsYBrOb8vFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="50298221"
 X-IronPort-AV: E=Sophos;i="6.13,271,1732608000"; 
-   d="scan'208";a="57204048"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 14:30:14 -0800
-X-CSE-ConnectionGUID: nv0rcM/hQ7iMDYu8+mLPZg==
-X-CSE-MsgGUID: neJqry3XT9WkTA0bI4fY0Q==
+   d="scan'208";a="50298221"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 14:51:16 -0800
+X-CSE-ConnectionGUID: WjcthE2OSzuVz4DiindQcg==
+X-CSE-MsgGUID: tDNgQgIBSFGTpNVOpZw4Lg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,271,1732608000"; 
-   d="scan'208";a="111790884"
+   d="scan'208";a="112054509"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 08 Feb 2025 14:30:12 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 08 Feb 2025 14:51:14 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgtKz-0010iJ-0T;
-	Sat, 08 Feb 2025 22:30:09 +0000
-Date: Sun, 9 Feb 2025 06:29:45 +0800
+	id 1tgtfL-0010k7-1c;
+	Sat, 08 Feb 2025 22:51:11 +0000
+Date: Sun, 9 Feb 2025 06:50:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
 	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+Cc: oe-kbuild-all@lists.linux.dev,
 	Linux Memory Management List <linux-mm@kvack.org>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	Tamir Duberstein <tamird@gmail.com>
 Subject: Re: [PATCH v2 2/2] lib/prime_numbers: convert self-test to KUnit
-Message-ID: <202502090614.UJPLikn4-lkp@intel.com>
+Message-ID: <202502090640.RJYhwFQe-lkp@intel.com>
 References: <20250208-prime_numbers-kunit-convert-v2-2-863119447e04@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -95,36 +95,32 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/lib-math
 base:   2014c95afecee3e76ca4a56956a936e23283f05b
 patch link:    https://lore.kernel.org/r/20250208-prime_numbers-kunit-convert-v2-2-863119447e04%40gmail.com
 patch subject: [PATCH v2 2/2] lib/prime_numbers: convert self-test to KUnit
-config: i386-buildonly-randconfig-002-20250209 (https://download.01.org/0day-ci/archive/20250209/202502090614.UJPLikn4-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090614.UJPLikn4-lkp@intel.com/reproduce)
+config: i386-buildonly-randconfig-001-20250209 (https://download.01.org/0day-ci/archive/20250209/202502090640.RJYhwFQe-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090640.RJYhwFQe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502090614.UJPLikn4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502090640.RJYhwFQe-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> lib/math/prime_numbers.c:126:8: error: call to undeclared function 'kmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   lib/math/prime_numbers.c: In function 'expand_to_next_prime':
+>> lib/math/prime_numbers.c:126:15: error: implicit declaration of function 'kmalloc'; did you mean 'mm_alloc'? [-Werror=implicit-function-declaration]
      126 |         new = kmalloc(sizeof(*new) + bitmap_size(sz),
-         |               ^
-   lib/math/prime_numbers.c:126:8: note: did you mean 'mm_alloc'?
-   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
-      16 | extern struct mm_struct *mm_alloc(void);
-         |                          ^
->> lib/math/prime_numbers.c:126:6: error: incompatible integer to pointer conversion assigning to 'struct primes *' from 'int' [-Wint-conversion]
+         |               ^~~~~~~
+         |               mm_alloc
+   lib/math/prime_numbers.c:126:13: warning: assignment to 'struct primes *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
      126 |         new = kmalloc(sizeof(*new) + bitmap_size(sz),
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     127 |                       GFP_KERNEL | __GFP_NOWARN);
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
->> lib/math/prime_numbers.c:134:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+         |             ^
+>> lib/math/prime_numbers.c:134:17: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
      134 |                 kfree(new);
-         |                 ^
-   3 errors generated.
+         |                 ^~~~~
+   cc1: some warnings being treated as errors
 
 
-vim +/kmalloc +126 lib/math/prime_numbers.c
+vim +126 lib/math/prime_numbers.c
 
 cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  106  
 cf4a7207b1cb4a lib/prime_numbers.c Chris Wilson 2016-12-22  107  static bool expand_to_next_prime(unsigned long x)
