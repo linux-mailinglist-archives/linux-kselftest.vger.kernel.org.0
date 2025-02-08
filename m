@@ -1,656 +1,320 @@
-Return-Path: <linux-kselftest+bounces-26080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26081-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 103F2A2D4C6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 09:10:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4B26A2D4F9
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 10:03:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10E30188DA33
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 08:10:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AA6A16A553
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 09:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4C01A8F82;
-	Sat,  8 Feb 2025 08:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603BF19F10A;
+	Sat,  8 Feb 2025 09:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yw4cVV3X"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kAzKuQCw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0811A8403
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Feb 2025 08:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739002228; cv=none; b=fO8WbkXzRjg510vbA2+IQMeiF63UUaqnfccrF/6iCgwTl1kT7kbnQYKDinVpFg6eSQEzJ910tDaUFhkXlCkvHDbVQs17w37oe35zYywUHRW6somwn/HY4pkVAYuyZgj7SQF0cGZhXkoA0/EPptaL8o1W+dL2ctxwvJUQQDY8wLA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739002228; c=relaxed/simple;
-	bh=nAlGizJJ7MstBNg1kfQvHRuKX9fdd9zB0FTkdSwCwAk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=svs2M1unc1+Y29ZuD5kqAxPNDgyOM1GZXRHSYbASBJm+7UWDPQxINSLG9gDHAeDP/yEDDu0A4hRWnhdDA5VPoyETp9jOqZARCzhLi2p8OTp/WPRq9czJRal9pYnvoPvJmkOSMVBLwloGLEt30laO9dVbU7b74hW8iyLXdFLMgmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yw4cVV3X; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6ddcff5a823so19690596d6.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Feb 2025 00:10:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739002226; x=1739607026; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jmz0bOYNFxz1BmaVL4SOyNY7RyZdBcE04kichV9wo0=;
-        b=Yw4cVV3XLsvd8S8bbhIcCsYl4E/u/muUaKvRq/BaMtBaAgc9rmyX9NxywDS7Et5dVb
-         U0TGJ7wK6dTLO/nLRh1D1RDOg5xfnlxceG25i6ySYZzVH7idU3XTiJ06wg9jDcV+lhdh
-         ohscCC7hS1hPRJtciL7/t4SBKCasks3miCedei1Rnm2iwTQmhLbNO1abPl3hE9T4IJ9w
-         59wR9dh+ZQ5vz8fg2W3j2eu+zJEH9Q+Hqsz/L0IlDJn6UoRHSWB7AOTTKGkgu4QrIy7P
-         lrzsP0qDlb/uzh5pjEy3SDM/UXGsaIgJrZWRloE6YFDU3u7fKxxgRY6aX67bgCy31gvD
-         vRhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739002226; x=1739607026;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7jmz0bOYNFxz1BmaVL4SOyNY7RyZdBcE04kichV9wo0=;
-        b=EpcQgaZuwVLaDjkbOeVool98lPQIvQ1APK8UWnChRQzlNnlpabUYJZELglmZSc50br
-         Yug5wRiGIRJgApVcjLg1rqqOj12FfJAmQYtwNmbA0WMN4VjAzpMLP5NJKaaklb3PJyfe
-         KzBMjMpQfWCGIvtzIETJpDw1xD8p7tyQDSB7n0UW7PuR1POXTOwrlgmY2C/xLmKJ6pV9
-         eveuV0+8adw/oKS8ax3g7T/4V7ILXecsrNMjea01lu9HVnwTE5VIn+glyjBRI3QAlC7j
-         SGPX1GjxD6Z2nC8om4fEgfYkL0ActcWtToXlG9lNI2IoaRgIkwM5kbpJb15mUvD+H1Qq
-         pJKA==
-X-Forwarded-Encrypted: i=1; AJvYcCVLsXxjcN8aC+PdMPXwBihiL4md5pRWWRF1xZBRq68MJJ+k9QRyLHdOY1OkXkEcAXZttBfD/CHmXEiGXAylrQs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWd6Hfb/0vgLKmGsdaa+5q6I0oIyZW90XFlA1RUppy2WGUCoTn
-	zWkSTlmNpxtPFf5k8pCY834CUQV+fHYVkqFWs+4sX17bIfmnxkju2rpMpeMFNE4BdKaGs8WsV94
-	dwwRL+ZfK410HRQKFsqwzVHiQTLPpPc/KUSVw
-X-Gm-Gg: ASbGncueAodPL88EjOlGKPatVY0NqNHQ3ufGvgsz9YfRj8W4EmM6MHcII2No18FqwRz
-	pWxCOH+jFfsi8qZX9lq2/LBGiME4/t8/RSCc2v+7hUxf2PkFJRM0bDm/lUHnZJ6iexmc1aqoT7g
-	==
-X-Google-Smtp-Source: AGHT+IHAQDzb2qM5Kj3KssV96GIRJYD8e3V4UaxHAypkefp3ALA/T4Ox56MjteQPIdPH37dTny1cOpvwyvZXbvOOsHg=
-X-Received: by 2002:a05:6214:2621:b0:6e1:6bdf:ed1c with SMTP id
- 6a1803df08f44-6e4455fdb46mr95306656d6.14.1739002225603; Sat, 08 Feb 2025
- 00:10:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8E3155A52;
+	Sat,  8 Feb 2025 09:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739005402; cv=fail; b=Jluvtk9dFUvXjS9f0KnFYhO0oPbcBDZfRFunQzH0kRpjt4FBhRH6plU8DNAIfyLTW3zUNDRJ5AGOIif/fv+h4bBKxsrQqUiqW6N1CUKxhemK6dkNmAXTdaqkbS8GUuxb31GwHjBDuwwmMuAAR+rOcGjh3JnRwXqutBi6gtoszjE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739005402; c=relaxed/simple;
+	bh=xnRRisDOUi/9E+7KwxOR0fAbYygX8sgbIZ7sbkE4kmk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MFu6XL5XmdZ3ZPHpkke2JUfYKfothw4lpoJirnsDBeOFfjI5AydpvkPf571sHu2j9YWuWjETRhmnnVJ37rdjtAh70N/KJ9gX4Ysp8syFCCtUtX18XxYNo3V8UFs9G8bY5/6HjsfCrPrpYrBQA/RHIkNjh4hUzdz/aSz5jpAShZc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kAzKuQCw; arc=fail smtp.client-ip=40.107.243.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NMaK6UPI/SnzN7hZEyp3WG4moltG0MIjL+Nin0vcgsKgl+nTfHXHDfKkNPhE2mDMBr/YdhSbb6YlK9z54xh0uAGLmHkeLNFqiCFy90pnJLLoJFtx/6lwewFh1xdO1Wu90Xs1s8vhoDm8W7wzE4Qs/jtqIjkPcRE3FFsGGmWBKsx9iOfC6uN5DlsPs5ya363gBmkfzSKByfaK/h+q/7dqecxBXP7CgRAwDB1awLMpY9xY/YScy4Zg2dJgr46Z7r8eK66hv2vuRNRnA9ysvJjKUW8p91Zq+a7YEf80YULFIugyq4bV8IIS6Xp+/OnJRV5fJGRUHwsqUL6ODEohK1vLiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1swU+DWD4iLb9nDrOqt1FAkZP8c6uZvZhajtiD3NSro=;
+ b=gsDjmD5bXA9vDoAW84Yc8mLQIqLn1vAQvS8V8ddK9Qxqhhdw2PK90a4QQLovZ0+LYdfEQ1qHdCe5WV09J9dW5NTlANmPOJqyk8w9JKvtGUKeoN9BSGjIFvJfrAntbg9R1WUTg5PhgaMi+eiuCf/eF/zpPkKD/eT30kLVr/S/ezd4AvR0TnlOkg7wqj88fdRj3QpP86iHPNk7/Rc8kDPwFzysEH+SJFY4sZIUuqNC7e3jDqemdlkrp2RFUG35V4JtnNRAlIFzutI/H8luDy+CA+JkxvZSe30JffKsiZA2PiEl9EvQcsmGUUQytNzavpjoEwWQj8tXKlFZghWrvbSx0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1swU+DWD4iLb9nDrOqt1FAkZP8c6uZvZhajtiD3NSro=;
+ b=kAzKuQCwaAlGLax/Am0vXHKBHaMV3POP9oYQVM0YrkYq8L6e7ILWPJjYzWDxADazI6f2KFAfEgHqQDcZXcQKPmHhYAYB1rzA75+zeqGQiCtzuida+yZ4KiW4Icohh6YvjasJTlIaa3d4Kk8GLLJpVrTIxQVNdvxOCAnthp+ZgypDSsUNkPksoHhza4S84xOVRN9qapUOp6FyCpOYIE+Sxm7xx25VHwx7q+fkBN6m35jw97bzdImN0VQegSNOZMxyrDH1A1JbJU/GtlOt4+lfE9ah+X7UwFBmQIYo4A8+kYk/D2WlcD5p50OcTpQxJiRGnFdNBa71fcA41NgxBLwnvQ==
+Received: from DS7PR05CA0006.namprd05.prod.outlook.com (2603:10b6:5:3b9::11)
+ by BL3PR12MB6618.namprd12.prod.outlook.com (2603:10b6:208:38d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.25; Sat, 8 Feb
+ 2025 09:03:15 +0000
+Received: from DS3PEPF000099D5.namprd04.prod.outlook.com
+ (2603:10b6:5:3b9:cafe::b5) by DS7PR05CA0006.outlook.office365.com
+ (2603:10b6:5:3b9::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.8 via Frontend Transport; Sat, 8
+ Feb 2025 09:03:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS3PEPF000099D5.mail.protection.outlook.com (10.167.17.6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8398.14 via Frontend Transport; Sat, 8 Feb 2025 09:03:15 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sat, 8 Feb 2025
+ 01:03:07 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Sat, 8 Feb
+ 2025 01:03:07 -0800
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Sat, 8 Feb 2025 01:03:06 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <tglx@linutronix.de>,
+	<maz@kernel.org>
+CC: <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>,
+	<shuah@kernel.org>, <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<eric.auger@redhat.com>, <baolu.lu@linux.intel.com>, <yi.l.liu@intel.com>,
+	<yury.norov@gmail.com>, <jacob.pan@linux.microsoft.com>,
+	<patches@lists.linux.dev>
+Subject: [PATCH v1 00/13] iommu: Add MSI mapping support with nested SMMU
+Date: Sat, 8 Feb 2025 01:02:33 -0800
+Message-ID: <cover.1739005085.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207-prime_numbers-kunit-convert-v1-0-6067f2b7c713@gmail.com> <20250207-prime_numbers-kunit-convert-v1-2-6067f2b7c713@gmail.com>
-In-Reply-To: <20250207-prime_numbers-kunit-convert-v1-2-6067f2b7c713@gmail.com>
-From: David Gow <davidgow@google.com>
-Date: Sat, 8 Feb 2025 16:10:13 +0800
-X-Gm-Features: AWEUYZnyNJLvcaqnwN9Gp9vVAEZYliQTUDDpozbeg3xKsStdH1sI-hPU6s4BsPA
-Message-ID: <CABVgOSni012tKugoP7NN1UnwS-aqtw0mi7cOp2RLzLr7yanq1Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] lib/prime_numbers: convert self-test to KUnit
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, 
-	Luis Felipe Hernandez <luis.hernandez093@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000f45a8a062d9d0142"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099D5:EE_|BL3PR12MB6618:EE_
+X-MS-Office365-Filtering-Correlation-Id: a35cb5dd-a2b1-4a7c-eab6-08dd481f6c55
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|82310400026|36860700013|376014|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?LOvW1DLwVunXaSs/AvVIL49a/HAPxWhsMlhIK6At6GJn3Ae9MqvXq2ctJVVZ?=
+ =?us-ascii?Q?R29p9e737EG2s0ylKmjJr0nGPkWtU+3u0+gf1bQ8uC7hvn356ULSIs7unCtD?=
+ =?us-ascii?Q?0dF58MNWFvX2EPtBjRAxIp6tdrHduV4WhrvSKnYGtsoQCOFwyQepLVBIE+Q6?=
+ =?us-ascii?Q?OH0HjlPXn3e1JW7UzOTc6U6X+TBWuJZa5RNdt21EV1E7sPojSyzofme/V+v0?=
+ =?us-ascii?Q?gkZge4/2pHRDrWAL3LfQENlJL9hsEC7rmOmRTSTyfMmjD77pWzETUg90239L?=
+ =?us-ascii?Q?DuZsViAkx/msBEcwqq8oEfgNwXv8etAuP20p1Dr8aQVjRGPnlq6HsNkQ+bir?=
+ =?us-ascii?Q?mnqMoRBsYwRTRmVx+nhW63gWL2ZG4INhXo45hAi/wow5VawLFrGiJonVdxBP?=
+ =?us-ascii?Q?8ys8Qt6KAAlMa0VxRQCh2u7dExt3MrrCBlrXi8YpMjc35og2H4/POyPVHh6G?=
+ =?us-ascii?Q?AgCHjUiPGjDB4hQSXV3TCArYsQgNFsqTNyOsuf4X5KGP+Ay+01iFsnbTPBid?=
+ =?us-ascii?Q?bPHpkFvZT9ifWsmAs86CQWLQIi2txrBvntezKgyEs3VTxFGjN5+Gx6mHMqmG?=
+ =?us-ascii?Q?PHHp9y1E4AWmuoD+HRkJW5irywNhAjyqEJ4HJ5GueVIM1FLGpKor4hG46gYC?=
+ =?us-ascii?Q?uFZTEbkY6aZ6KurFO0LaH0pBgtaTE/ECv/ipDi3qBFDYC7oLU6gzxIJe1+gf?=
+ =?us-ascii?Q?rJuz5uA7m6ryajYH9sMnpKUexDxFD/Mx1b8f90IoTIzCWhV/HpDAp6+1SsLS?=
+ =?us-ascii?Q?faqmWnXzd2xdwpWb5W/7aM4ioml0V6jHjdVA/9c4UCU5cLFICXiXg+3t5lb5?=
+ =?us-ascii?Q?FKf1mshqL85WDXqzPJf2HQji5/oGBN2nb8JRtGQmiHEejxX4T2iP6IG88WaF?=
+ =?us-ascii?Q?6pge37DwlYDi+QFKOEbgBhkW6xvcBOQ7XRn0HMSb/69GszJlp9lg6hLJ+Jn5?=
+ =?us-ascii?Q?BS3/DG8SrOQpAUWSxwPzQkQWaNJ6ytH+nJlHgds5kIYStn0TFCAkjR8sa5z6?=
+ =?us-ascii?Q?uMgABmpIiGBvsTp5TsevODeOHbKrD1zkmhqQvLUUivNnspP2K496FCeVYMnE?=
+ =?us-ascii?Q?1MUEOysV0ntRc7JFGP8ZnzuK4Ii30CbOn/YIbsYAc+ZzxRIbxo4qPCi8N3Te?=
+ =?us-ascii?Q?lx/S5umgdxsAfH4IMa/fMDkoC4MaK/eRpjJAj9jZBqh5l+JneqmCNqsmVey5?=
+ =?us-ascii?Q?eQ01cTkQXg8Y6yA3znE+J7SajELZ8Qfq+sbrkqzl7AzzFngsuSm5FElteGPk?=
+ =?us-ascii?Q?YyWpn3h9F2Mrqj6F3xGntmbUk3fjtYmyRN514UVFlfzIAvj5OB/R9uQj1gxA?=
+ =?us-ascii?Q?oPDIO8CIOwPCH5xL2GE42HPIPBE4h0+nDWJpFUTK0UJAI7tYx4nYrWIQvsy4?=
+ =?us-ascii?Q?/qGrErpi96htoa0GePurgzin8E4RjSEm9/jSwVe4sUQ4yYQgxrUEiUNFolM1?=
+ =?us-ascii?Q?nnbnJROmxF9MRqM4BF6p+TBvaJPRgRHq6wy7wa2KL7VoVsUtXPzylwgkVlku?=
+ =?us-ascii?Q?ecnXlHsiaZohdlR5pfrnAxqRJFv7wUDPH5Nk?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(82310400026)(36860700013)(376014)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2025 09:03:15.4296
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a35cb5dd-a2b1-4a7c-eab6-08dd481f6c55
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF000099D5.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6618
 
---000000000000f45a8a062d9d0142
-Content-Type: text/plain; charset="UTF-8"
+[ Background ]
+On ARM GIC systems and others, the target address of the MSI is translated
+by the IOMMU. For GIC, the MSI address page is called "ITS" page. When the
+IOMMU is disabled, the MSI address is programmed to the physical location
+of the GIC ITS page (e.g. 0x20200000). When the IOMMU is enabled, the ITS
+page is behind the IOMMU, so the MSI address is programmed to an allocated
+IO virtual address (a.k.a IOVA), e.g. 0xFFFF0000, which must be mapped to
+the physical ITS page: IOVA (0xFFFF0000) ===> PA (0x20200000).
+When a 2-stage translation is enabled, IOVA will be still used to program
+the MSI address, though the mappings will be in two stages:
+  IOVA (0xFFFF0000) ===> IPA (e.g. 0x80900000) ===> PA (0x20200000)
+(IPA stands for Intermediate Physical Address).
 
-On Sat, 8 Feb 2025 at 06:33, Tamir Duberstein <tamird@gmail.com> wrote:
->
-> Extract a private header and convert the prime_numbers self-test to a
-> KUnit test. I considered parameterizing the test using
-> `KUNIT_CASE_PARAM` but didn't see how it was possible since the test
-> logic is entangled with the test parameter generation logic.
->
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
+If the device that generates MSI is attached to an IOMMU_DOMAIN_DMA, the
+IOVA is dynamically allocated from the top of the IOVA space. If attached
+to an IOMMU_DOMAIN_UNMANAGED (e.g. a VFIO passthrough device), the IOVA is
+fixed to an MSI window reported by the IOMMU driver via IOMMU_RESV_SW_MSI,
+which is hardwired to MSI_IOVA_BASE (IOVA==0x8000000) for ARM IOMMUs.
 
-I'm not totally sold on moving everything into the
-prime_numbers_private.h file, as we could end up with duplicate copies
-of the small primes list and associated variables.
+So far, this IOMMU_RESV_SW_MSI works well as kernel is entirely in charge
+of the IOMMU translation (1-stage translation), since the IOVA for the ITS
+page is fixed and known by kernel. However, with virtual machine enabling
+a nested IOMMU translation (2-stage), a guest kernel directly controls the
+stage-1 translation with an IOMMU_DOMAIN_DMA, mapping a vITS page (at an
+IPA 0x80900000) onto its own IOVA space (e.g. 0xEEEE0000). Then, the host
+kernel can't know that guest-level IOVA to program the MSI address.
 
-Would it not make more sense to keep as many of these private as
-possible, and only export slow_is_prime_number() -- perhaps
-conditionally if the test is enabled --, and use that from the test.
-The lists of primes (both the small primes list and the rcu-controlled
-larger cache) seem to me to still be implementation details, and the
-test itself should share the existing ones.
+There have been two approaches to solve this problem:
+1. Create an identity mapping in the stage-1. VMM could insert a few RMRs
+   (Reserved Memory Regions) in guest's IORT. Then the guest kernel would
+   fetch these RMR entries from the IORT and create an IOMMU_RESV_DIRECT
+   region per iommu group for a direct mapping. Eventually, the mappings
+   would look like: IOVA (0x8000000) === IPA (0x8000000) ===> 0x20200000
+   This requires an IOMMUFD ioctl for kernel and VMM to agree on the IPA.
+2. Forward the guest-level MSI IOVA captured by VMM to the host-level GIC
+   driver, to program the correct MSI IOVA. Forward the VMM-defined vITS
+   page location (IPA) to the kernel for the stage-2 mapping. Eventually:
+   IOVA (0xFFFF0000) ===> IPA (0x80900000) ===> PA (0x20200000)
+   This requires a VFIO ioctl (for IOVA) and an IOMMUFD ioctl (for IPA).
 
-(And, if we wanted the test to keep its own independent versions of
-these, we'd still be in trouble, as the prime number library and the
-test might access separate versions of the lists, if they're static to
-separate files/modules.)
+Worth mentioning that when Eric Auger was working on the same topic with
+the VFIO iommu uAPI, he had the approach (2) first, and then switched to
+the approach (1), suggested by Jean-Philippe for reduction of complexity.
 
-The only tricky bit would be handling dump_primes(): that could be
-done either by exporting (perhaps conditionally / in a namespace) the
-prime lists, and having dump_primes() be a part of the test, or
-exporting dump_primes() -- which would be simpler, but make it harder
-to use the kunit log functions.
+The approach (1) basically feels like the existing VFIO passthrough that
+has a 1-stage mapping for the unmanaged domain, yet only by shifting the
+MSI mapping from stage 1 (guest-has-no-iommu case) to stage 2 (guest-has-
+iommu case). So, it could reuse the existing IOMMU_RESV_SW_MSI piece, by
+sharing the same idea of "VMM leaving everything to the kernel".
 
-Thoughts?
+The approach (2) is an ideal solution, yet it requires additional effort
+for kernel to be aware of the 1-stage gIOVA(s) and 2-stage IPAs for vITS
+page(s), which demands VMM to closely cooperate.
+ * It also brings some complicated use cases to the table where the host
+   or/and guest system(s) has/have multiple ITS pages.
 
-Cheers,
--- David
+[ Execution ]
+Though these two approaches feel very different on the surface, they can
+share some underlying common infrastructure. Currently, only one pair of
+sw_msi functions (prepare/compose) are provided by dma-iommu for irqchip
+drivers to directly use. There could be different versions of functions
+from different domain owners: for existing VFIO passthrough cases and in-
+kernel DMA domain cases, reuse the existing dma-iommu's version of sw_msi
+functions; for nested translation use cases, there can be another version
+of sw_msi functions to handle mapping and msi_msg(s) differently.
 
->  lib/Kconfig.debug                            |  14 +++
->  lib/math/prime_numbers.c                     | 151 +--------------------------
->  lib/math/prime_numbers_private.h             |  64 ++++++++++++
->  lib/math/tests/Makefile                      |   1 +
->  lib/math/tests/prime_numbers_kunit.c         |  92 ++++++++++++++++
->  tools/testing/selftests/lib/config           |   1 -
->  tools/testing/selftests/lib/prime_numbers.sh |   4 -
->  7 files changed, 173 insertions(+), 154 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 1af972a92d06..616beaca4a2b 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -3197,6 +3197,20 @@ config INT_SQRT_KUNIT_TEST
->
->           If unsure, say N
->
-> +config PRIME_NUMBERS_KUNIT_TEST
-> +       tristate "Prime number generator test" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       select PRIME_NUMBERS
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This option enables the KUnit test suite for the {is,next}_prime_number
-> +         functions.
-> +
-> +         Enabling this option will include tests that compare the prime number
-> +         generator functions against a brute force implementation.
-> +
-> +         If unsure, say N
-> +
->  endif # RUNTIME_TESTING_MENU
->
->  config ARCH_USE_MEMTEST
-> diff --git a/lib/math/prime_numbers.c b/lib/math/prime_numbers.c
-> index 9a17ee9af93a..0842b0826672 100644
-> --- a/lib/math/prime_numbers.c
-> +++ b/lib/math/prime_numbers.c
-> @@ -1,70 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> -#define pr_fmt(fmt) "prime numbers: " fmt
->
-> -#include <linux/module.h>
-> -#include <linux/mutex.h>
->  #include <linux/prime_numbers.h>
->  #include <linux/slab.h>
->
-> -struct primes {
-> -       struct rcu_head rcu;
-> -       unsigned long last, sz;
-> -       unsigned long primes[];
-> -};
-> +#include "prime_numbers_private.h"
->
-> -#if BITS_PER_LONG == 64
-> -static const struct primes small_primes = {
-> -       .last = 61,
-> -       .sz = 64,
-> -       .primes = {
-> -               BIT(2) |
-> -               BIT(3) |
-> -               BIT(5) |
-> -               BIT(7) |
-> -               BIT(11) |
-> -               BIT(13) |
-> -               BIT(17) |
-> -               BIT(19) |
-> -               BIT(23) |
-> -               BIT(29) |
-> -               BIT(31) |
-> -               BIT(37) |
-> -               BIT(41) |
-> -               BIT(43) |
-> -               BIT(47) |
-> -               BIT(53) |
-> -               BIT(59) |
-> -               BIT(61)
-> -       }
-> -};
-> -#elif BITS_PER_LONG == 32
-> -static const struct primes small_primes = {
-> -       .last = 31,
-> -       .sz = 32,
-> -       .primes = {
-> -               BIT(2) |
-> -               BIT(3) |
-> -               BIT(5) |
-> -               BIT(7) |
-> -               BIT(11) |
-> -               BIT(13) |
-> -               BIT(17) |
-> -               BIT(19) |
-> -               BIT(23) |
-> -               BIT(29) |
-> -               BIT(31)
-> -       }
-> -};
-> -#else
-> -#error "unhandled BITS_PER_LONG"
-> -#endif
-> -
-> -static DEFINE_MUTEX(lock);
-> -static const struct primes __rcu *primes = RCU_INITIALIZER(&small_primes);
-> -
-> -static unsigned long selftest_max;
-> -
-> -static bool slow_is_prime_number(unsigned long x)
-> +bool slow_is_prime_number(unsigned long x)
->  {
->         unsigned long y = int_sqrt(x);
->
-> @@ -156,19 +97,6 @@ static bool expand_to_next_prime(unsigned long x)
->         return true;
->  }
->
-> -static void free_primes(void)
-> -{
-> -       const struct primes *p;
-> -
-> -       mutex_lock(&lock);
-> -       p = rcu_dereference_protected(primes, lockdep_is_held(&lock));
-> -       if (p != &small_primes) {
-> -               rcu_assign_pointer(primes, &small_primes);
-> -               kfree_rcu((struct primes *)p, rcu);
-> -       }
-> -       mutex_unlock(&lock);
-> -}
-> -
->  /**
->   * next_prime_number - return the next prime number
->   * @x: the starting point for searching to test
-> @@ -238,78 +166,3 @@ bool is_prime_number(unsigned long x)
->         return result;
->  }
->  EXPORT_SYMBOL(is_prime_number);
-> -
-> -static void dump_primes(void)
-> -{
-> -       const struct primes *p;
-> -       char *buf;
-> -
-> -       buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> -
-> -       rcu_read_lock();
-> -       p = rcu_dereference(primes);
-> -
-> -       if (buf)
-> -               bitmap_print_to_pagebuf(true, buf, p->primes, p->sz);
-> -       pr_info("primes.{last=%lu, .sz=%lu, .primes[]=...x%lx} = %s\n",
-> -               p->last, p->sz, p->primes[BITS_TO_LONGS(p->sz) - 1], buf);
-> -
-> -       rcu_read_unlock();
-> -
-> -       kfree(buf);
-> -}
-> -
-> -static int selftest(unsigned long max)
-> -{
-> -       unsigned long x, last;
-> -
-> -       if (!max)
-> -               return 0;
-> -
-> -       for (last = 0, x = 2; x < max; x++) {
-> -               bool slow = slow_is_prime_number(x);
-> -               bool fast = is_prime_number(x);
-> -
-> -               if (slow != fast) {
-> -                       pr_err("inconsistent result for is-prime(%lu): slow=%s, fast=%s!\n",
-> -                              x, slow ? "yes" : "no", fast ? "yes" : "no");
-> -                       goto err;
-> -               }
-> -
-> -               if (!slow)
-> -                       continue;
-> -
-> -               if (next_prime_number(last) != x) {
-> -                       pr_err("incorrect result for next-prime(%lu): expected %lu, got %lu\n",
-> -                              last, x, next_prime_number(last));
-> -                       goto err;
-> -               }
-> -               last = x;
-> -       }
-> -
-> -       pr_info("%s(%lu) passed, last prime was %lu\n", __func__, x, last);
-> -       return 0;
-> -
-> -err:
-> -       dump_primes();
-> -       return -EINVAL;
-> -}
-> -
-> -static int __init primes_init(void)
-> -{
-> -       return selftest(selftest_max);
-> -}
-> -
-> -static void __exit primes_exit(void)
-> -{
-> -       free_primes();
+As a part-1 supporting the approach (1), i.e. the RMR solution:
+ - Get rid of the duplication in the "compose" function
+ - Introduce a function pointer for the previously "prepare" function
+ - Allow different domain owners to set their own "sw_msi" implementations
+ - Implement an iommufd_sw_msi function to additionally support a nested
+   translation use case using the approach (1)
+ - Add a pair of IOMMUFD options for a SW_MSI window for kernel and VMM to
+   agree on (for approach 1)
 
-I'd argue that we should keep this here: the primes should be freed
-when the prime number library exits, not the test.
+[ Future Plan ]
+Part-2 and beyond will continue the effort of supporting the approach (2)
+for a complete vITS-to-pITS mapping:
+ 1) Map the phsical ITS page (potentially via IOMMUFD_CMD_IOAS_MAP_MSI)
+ 2) Convey the IOVAs per-irq (potentially via VFIO_IRQ_SET_ACTION_PREPARE)
+    Note that the set_option uAPI in this series might not fit since this
+    requires it is an array of MSI IOVAs.)
 
-> -}
-> -
-> -module_init(primes_init);
-> -module_exit(primes_exit);
-> -
-> -module_param_named(selftest, selftest_max, ulong, 0400);
-> -
-> -MODULE_AUTHOR("Intel Corporation");
-> -MODULE_DESCRIPTION("Prime number library");
-> -MODULE_LICENSE("GPL");
-> diff --git a/lib/math/prime_numbers_private.h b/lib/math/prime_numbers_private.h
-> new file mode 100644
-> index 000000000000..d0da5584aee8
-> --- /dev/null
-> +++ b/lib/math/prime_numbers_private.h
-> @@ -0,0 +1,64 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/mutex.h>
-> +#include <linux/rcupdate.h>
-> +#include <linux/types.h>
-> +
-> +struct primes {
-> +       struct rcu_head rcu;
-> +       unsigned long last, sz;
-> +       unsigned long primes[];
-> +};
-> +
-> +#if BITS_PER_LONG == 64
-> +static const struct primes small_primes = {
-> +       .last = 61,
-> +       .sz = 64,
-> +       .primes = {
-> +               BIT(2) |
-> +               BIT(3) |
-> +               BIT(5) |
-> +               BIT(7) |
-> +               BIT(11) |
-> +               BIT(13) |
-> +               BIT(17) |
-> +               BIT(19) |
-> +               BIT(23) |
-> +               BIT(29) |
-> +               BIT(31) |
-> +               BIT(37) |
-> +               BIT(41) |
-> +               BIT(43) |
-> +               BIT(47) |
-> +               BIT(53) |
-> +               BIT(59) |
-> +               BIT(61)
-> +       }
-> +};
-> +#elif BITS_PER_LONG == 32
-> +static const struct primes small_primes = {
-> +       .last = 31,
-> +       .sz = 32,
-> +       .primes = {
-> +               BIT(2) |
-> +               BIT(3) |
-> +               BIT(5) |
-> +               BIT(7) |
-> +               BIT(11) |
-> +               BIT(13) |
-> +               BIT(17) |
-> +               BIT(19) |
-> +               BIT(23) |
-> +               BIT(29) |
-> +               BIT(31)
-> +       }
-> +};
-> +#else
-> +#error "unhandled BITS_PER_LONG"
-> +#endif
-> +
-> +static const struct primes __rcu *primes = RCU_INITIALIZER(&small_primes);
-> +static DEFINE_MUTEX(lock);
-> +
-> +bool slow_is_prime_number(unsigned long x);
-> diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
-> index e1a79f093b2d..da21a592c75a 100644
-> --- a/lib/math/tests/Makefile
-> +++ b/lib/math/tests/Makefile
-> @@ -2,3 +2,4 @@
->
->  obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
->  obj-$(CONFIG_INT_SQRT_KUNIT_TEST) += int_sqrt_kunit.o
-> +obj-$(CONFIG_PRIME_NUMBERS_KUNIT_TEST) += prime_numbers_kunit.o
-> diff --git a/lib/math/tests/prime_numbers_kunit.c b/lib/math/tests/prime_numbers_kunit.c
-> new file mode 100644
-> index 000000000000..8b0884887f20
-> --- /dev/null
-> +++ b/lib/math/tests/prime_numbers_kunit.c
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <kunit/test.h>
-> +#include <linux/module.h>
-> +#include <linux/prime_numbers.h>
-> +#include <linux/slab.h>
-> +
-> +#include "../prime_numbers_private.h"
-> +
-> +static void free_primes(struct kunit_suite *suite)
-> +{
-> +       const struct primes *p;
-> +
-> +       mutex_lock(&lock);
-> +       p = rcu_dereference_protected(primes, lockdep_is_held(&lock));
-> +       if (p != &small_primes) {
-> +               rcu_assign_pointer(primes, &small_primes);
-> +               kfree_rcu((struct primes *)p, rcu);
-> +       }
-> +       mutex_unlock(&lock);
-> +}
-> +
-> +static void dump_primes(struct kunit *test)
-> +{
-> +       const struct primes *p;
-> +       char *buf;
-> +
-> +       buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-> +
-> +       rcu_read_lock();
-> +       p = rcu_dereference(primes);
-> +
-> +       if (buf)
-> +               bitmap_print_to_pagebuf(true, buf, p->primes, p->sz);
-> +       kunit_info(test, "primes.{last=%lu, .sz=%lu, .primes[]=...x%lx} = %s\n",
-> +                  p->last, p->sz, p->primes[BITS_TO_LONGS(p->sz) - 1], buf);
-> +
-> +       rcu_read_unlock();
-> +
-> +       kfree(buf);
-> +}
-> +
-> +static void prime_numbers_test(struct kunit *test)
-> +{
-> +       const unsigned long max = 65536;
-> +       unsigned long x, last;
-> +
-> +       for (last = 0, x = 2; x < max; x++) {
-> +               bool slow = slow_is_prime_number(x);
-> +               bool fast = is_prime_number(x);
-> +
-> +               if (slow != fast) {
-> +                       KUNIT_FAIL(test,
-> +                                  "inconsistent result for is-prime(%lu): slow=%s, fast=%s!\n",
-> +                                  x, slow ? "yes" : "no", fast ? "yes" : "no");
-> +                       goto err;
-> +               }
-> +
-> +               if (!slow)
-> +                       continue;
-> +
-> +               if (next_prime_number(last) != x) {
-> +                       KUNIT_FAIL(test,
-> +                                  "incorrect result for next-prime(%lu): expected %lu, got %lu\n",
-> +                                  last, x, next_prime_number(last));
-> +                       goto err;
-> +               }
-> +               last = x;
-> +       }
-> +
-> +       kunit_info(test, "%s(%lu) passed, last prime was %lu\n", __func__, x, last);
-> +
-> +err:
-> +       dump_primes(test);
-> +}
-> +
-> +static struct kunit_case prime_numbers_cases[] = {
-> +       KUNIT_CASE(prime_numbers_test),
-> +       {},
-> +};
-> +
-> +static struct kunit_suite prime_numbers_suite = {
-> +       .name = "math-prime_numbers",
-> +       .suite_exit = free_primes,
+---
 
-Should we be freeing the primes when the test exits? I suspect we
-should leave them in case any other part of the kernel needs them.
+This is a joint effort that includes Jason's rework in irq/iommu/iommufd
+base level and my additional patches on top of that for new uAPIs.
 
-(This, of course, potentially makes the test more brittle if run
-multiple times (or on a system with already initialised primes), but
-seems right to me.
+This series is on github:
+https://github.com/nicolinc/iommufd/commits/iommufd_msi_p1-v1
+Pairing QEMU branch for testing (approach 1):
+https://github.com/nicolinc/qemu/commits/wip/for_iommufd_msi_p1-v1-rmr
+(Note: QEMU virt command no longer requires iommmufd object v.s. RFCv2)
+
+Changelog
+v1
+ * Rebase on v6.14-rc1 and iommufd_attach_handle-v1 series
+   https://lore.kernel.org/all/cover.1738645017.git.nicolinc@nvidia.com/
+ * Correct typos
+ * Replace set_bit with __set_bit
+ * Use a common helper to get iommufd_handle
+ * Add kdoc for iommu_msi_iova/iommu_msi_page_shift
+ * Rename msi_msg_set_msi_addr() to msi_msg_set_addr()
+ * Update selftest for a better coverage for the new options
+ * Change IOMMU_OPTION_SW_MSI_START/SIZE to be per-idev and properly
+   check against device's reserved region list
+RFCv2
+ https://lore.kernel.org/kvm/cover.1736550979.git.nicolinc@nvidia.com/
+ * Rebase on v6.13-rc6
+ * Drop all the irq/pci patches and rework the compose function instead
+ * Add a new sw_msi op to iommu_domain for a per type implementation and
+   let iommufd core has its own implementation to support both approaches
+ * Add RMR-solution (approach 1) support since it is straightforward and
+   have been used in some out-of-tree projects widely
+RFCv1
+ https://lore.kernel.org/kvm/cover.1731130093.git.nicolinc@nvidia.com/
+
+Thanks!
+Nicolin
+
+Jason Gunthorpe (5):
+  genirq/msi: Store the IOMMU IOVA directly in msi_desc instead of
+    iommu_cookie
+  genirq/msi: Rename iommu_dma_compose_msi_msg() to msi_msg_set_addr()
+  iommu: Make iommu_dma_prepare_msi() into a generic operation
+  irqchip: Have CONFIG_IRQ_MSI_IOMMU be selected by the irqchips that
+    need it
+  iommufd: Implement sw_msi support natively
+
+Nicolin Chen (8):
+  iommu: Turn fault_data to iommufd private pointer
+  iommu: Turn iova_cookie to dma-iommu private pointer
+  iommufd/device: Move sw_msi_start from igroup to idev
+  iommufd: Pass in idev to iopt_table_enforce_dev_resv_regions
+  iommufd: Add IOMMU_OPTION_SW_MSI_START/SIZE ioctls
+  iommufd/selftest: Add MOCK_FLAGS_DEVICE_NO_ATTACH
+  iommufd/selftest: Add a testing reserved region
+  iommufd/selftest: Add coverage for IOMMU_OPTION_SW_MSI_START/SIZE
+
+ drivers/iommu/Kconfig                         |   1 -
+ drivers/irqchip/Kconfig                       |   4 +
+ kernel/irq/Kconfig                            |   1 +
+ drivers/iommu/iommufd/iommufd_private.h       |  29 ++-
+ drivers/iommu/iommufd/iommufd_test.h          |   4 +
+ include/linux/iommu.h                         |  58 ++++--
+ include/linux/msi.h                           |  47 +++--
+ include/uapi/linux/iommufd.h                  |  20 +-
+ drivers/iommu/dma-iommu.c                     |  63 ++----
+ drivers/iommu/iommu.c                         |  29 +++
+ drivers/iommu/iommufd/device.c                | 196 ++++++++++++++----
+ drivers/iommu/iommufd/fault.c                 |   2 +-
+ drivers/iommu/iommufd/hw_pagetable.c          |   5 +-
+ drivers/iommu/iommufd/io_pagetable.c          |  18 +-
+ drivers/iommu/iommufd/ioas.c                  |  97 +++++++++
+ drivers/iommu/iommufd/main.c                  |  13 ++
+ drivers/iommu/iommufd/selftest.c              |  41 +++-
+ drivers/irqchip/irq-gic-v2m.c                 |   5 +-
+ drivers/irqchip/irq-gic-v3-its.c              |  13 +-
+ drivers/irqchip/irq-gic-v3-mbi.c              |  12 +-
+ drivers/irqchip/irq-ls-scfg-msi.c             |   5 +-
+ tools/testing/selftests/iommu/iommufd.c       |  97 +++++++++
+ .../selftests/iommu/iommufd_fail_nth.c        |  21 ++
+ 23 files changed, 608 insertions(+), 173 deletions(-)
 
 
-> +       .test_cases = prime_numbers_cases,
-> +};
-> +
-> +kunit_test_suite(prime_numbers_suite);
-> +
-> +MODULE_AUTHOR("Intel Corporation");
-> +MODULE_DESCRIPTION("Prime number library");
-> +MODULE_LICENSE("GPL");
-> diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-> index dc15aba8d0a3..306a3d4dca98 100644
-> --- a/tools/testing/selftests/lib/config
-> +++ b/tools/testing/selftests/lib/config
-> @@ -1,5 +1,4 @@
->  CONFIG_TEST_PRINTF=m
->  CONFIG_TEST_SCANF=m
->  CONFIG_TEST_BITMAP=m
-> -CONFIG_PRIME_NUMBERS=m
->  CONFIG_TEST_BITOPS=m
-> diff --git a/tools/testing/selftests/lib/prime_numbers.sh b/tools/testing/selftests/lib/prime_numbers.sh
-> deleted file mode 100755
-> index 370b79a9cb2e..000000000000
-> --- a/tools/testing/selftests/lib/prime_numbers.sh
-> +++ /dev/null
-> @@ -1,4 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -# Checks fast/slow prime_number generation for inconsistencies
-> -$(dirname $0)/../kselftest/module.sh "prime numbers" prime_numbers selftest=65536
->
-> --
-> 2.48.1
->
+base-commit: 2b5bc8c9425fd87e094a08f72498536133da80e1
+-- 
+2.43.0
 
---000000000000f45a8a062d9d0142
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
-N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
-exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
-+ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
-XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
-QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
-TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
-oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
-cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
-uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
-PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
-AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgA2aMinb2Ld6JFYs5dv6jF7ivAuaS
-GBnsE/JbqZsuEyAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MjA4MDgxMDI2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAEpdzlybZ5Ho1/ylc7i8ET1NzcqtSEuuvxDBXKlpCUuj0lKP
-1Z3faSOth0RzStbymAPvzkQN+HBU3Rll1TU3DC7b+/dSodYdI7CProCvNAhij36nZpe1Szn7r9Xg
-QPES2m3g5oHirjRrSu0zpxgnLRYf2uvDbSeGMWld6MzbOdVaq/ugzHpU9GqPoXTmCvW6UzIphYdc
-5SinjCu3O7aYBPsvQZc2hAnaW+wCPkPVLj8eWy3W9HKGND8T/V32rQ/h4rIMJg4OJtuo+iBczqX1
-S0SWiwxx1iZR95qWrng6Ersmj9kxBUcSlBMcQKe+yYl7dhJiCBpd4XVut18Oo8Cx++Y=
---000000000000f45a8a062d9d0142--
 
