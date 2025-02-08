@@ -1,158 +1,197 @@
-Return-Path: <linux-kselftest+bounces-26065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26066-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76685A2D1CD
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 00:52:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48AA6A2D262
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 01:52:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72CEA188E994
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2025 23:52:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46880188E24B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2025 00:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C841DB546;
-	Fri,  7 Feb 2025 23:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="RoNmWspQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 295BF8479;
+	Sat,  8 Feb 2025 00:51:58 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B812418FDAE
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Feb 2025 23:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D897483;
+	Sat,  8 Feb 2025 00:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738972355; cv=none; b=GZqlFkzryeKsFoj2pjANZTyon92Kox4rDTHExoj2IxSr6UhdYcnRfRDe08RMyZLE/aZWTGUUAohRylX6huNPNPgwJjfAg8mbRkCOPw3GorWbxmcwAbHVwkE4hw7Vc2UM6gGcmiUJpXznKXSCmdVioY3w2LHjQWAaR3SIWSwd2zo=
+	t=1738975918; cv=none; b=E3u773UKx19D40kQnvVo8S5nLqgCoUkquJLulXkNlD1Pwx8R8gwrPHqg9ooR0RoeAkK3BD8KHFIsM37WVw5gHRS3uxHdxxiBm74wujjvMKi6svq8vMAlXZ+O6a6u12sMmVB1uL7cZpmWZAfb+tBoV8VGl+4NC3gIfrA0BOixZ6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738972355; c=relaxed/simple;
-	bh=feHZLMYdw1GKKdpzxXYJZHObDJpwzN8+Y0Xx2Qps0Fw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Di8xks8LiL8xu5U4jaewHz1MfhE/nMufGOKNVEd8INHIS7onR4tf8bbXO8jljnXRSu9NTeMPUm5bOJEyA4qsJtc++vtjNOlKqO/K/EY1VZMcBm3D7kkBfJZ1D+/54bgs5k6IGGcCVlcoWLrksAH7xG3txBynDMCuIQ4cILC4Vm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=RoNmWspQ; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21f4af4f9ddso26207305ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Feb 2025 15:52:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738972353; x=1739577153; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQcVjQRwopmrHuG7wgsXbQFTOWJLCaxzXjS7jJ9aNqc=;
-        b=RoNmWspQB8vNq6Ey74DOIuMh74vAkRoq85X9+moyA0z/rBNoXhmo9jFa3Sf/M5W6DI
-         GBp2Q7gEJFvIf9el8ifnUWlfB8oLJ8CRmTJD+j7JDRz0LfGgy9n1o/FeDvJvBSO9VUTO
-         7bcGlgSTc5315bdmrf8r2FqBlk/dbZHihABSupdMjwEN71guGwrWYAL0+vpfkbDE1pga
-         WdVc0NNW5J5IP96coq3aNR/1NxrgX73rzjA2gha5b3t8rWb4VnqwfB+LR370OaHaLQb3
-         +Qx2e66rRETtAe8WMynzj9fG38J46oKSTFFlukmQb3eB9hfr3tqDgKQPlSqr1gwyMXai
-         Y1SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738972353; x=1739577153;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oQcVjQRwopmrHuG7wgsXbQFTOWJLCaxzXjS7jJ9aNqc=;
-        b=wn0eQsEeIWV6bD/VmUMkYZ8ZNGuBkn+nsscpIPlm7bSjBZmCRUvXjP5OvcE+N7H6Q1
-         qybg8az+j4znCuTHGSIHXhN899+yA8U7Ngezdn2nzPTGksdNtp6MqEoWN7Aca9+CLIch
-         wfXaXAEhR9ESGN1zilfvLlLxYzprC0DqpJme9BTyVg8bmMBX5tW7d3J810uDYXpauG7u
-         MdtK+oB+zRkOrgmB1PPo5gqlioGYKp09QddkorM4Ol3kgmHY8R3YXO/Fs31Jlb5TjPJW
-         GMa0JQiMEb+kvjG5wBQzgFGQo2x7MzOO4lNERk0a6WV4MvfhGWz/abgVhIssgBhdpcVX
-         dM4g==
-X-Forwarded-Encrypted: i=1; AJvYcCXxcOrXGedwJn9LIMBMc1mRWKiViMOhr9eyIov6/01oAY9Q58XIcb0u1rzDAgui3FkH8/zwVHXmapqA2Z/BH9Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxecckO5sT0qdySECDGkPM9mC1dmUMNHRK9vMUtEsURRHNNRbVG
-	B2Jg443OGX2+YMNGxCxKPZixJgR01s9gwnPpds2gZAoo1+wP8xx53uksn00qRBw=
-X-Gm-Gg: ASbGnctrDNBvnUzDW+IdYplGdvM5wChi9edshDTm+ikrO4SwWnA14ZOsw7T3XALA1lZ
-	EgotoKJqydx4t+1AXyZkSUyyJe8D5srAjYOnVL/vUeUsRaT2X5M7vYpjK828Yr7gJUy8x59qs7z
-	Lp6awHquaZNg16c1LndV4Sm1ne/t/TvOGwzV0SmUGxZYYpVNr1ACKIrLmFh3kMbN5oYdfa9z1id
-	nvUA8hXfh/y9y8qoFp2zUZ3Dcg37ND6ht0vkuh9Ww9vMNcjy3jdIDTSRT5dyopl8nMY2InfCKpx
-	UFQRkeGAHxIvz6sZbBqkaETwkQ==
-X-Google-Smtp-Source: AGHT+IH5jRZW/ovSUPH8eJRvmKh5nXw8ULDIWD5h4+evTSN5U5cvmcLVFvRfp+GmY1NLadqVCxbddQ==
-X-Received: by 2002:a17:903:94e:b0:215:9470:7e82 with SMTP id d9443c01a7336-21f4e6a035bmr94058495ad.4.1738972353039;
-        Fri, 07 Feb 2025 15:52:33 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f368da60bsm36436795ad.258.2025.02.07.15.52.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 15:52:32 -0800 (PST)
-Date: Fri, 7 Feb 2025 15:52:28 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v9 01/26] mm: helper `is_shadow_stack_vma` to check
- shadow stack vma
-Message-ID: <Z6acvL9W4G9Y90WV@debug.ba.rivosinc.com>
-References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
- <20250204-v5_user_cfi_series-v9-1-b37a49c5205c@rivosinc.com>
- <6543c6b6-da86-4c10-9b8c-e5fe6f6f7da9@suse.cz>
- <Z6aa24/5M5Xdhe/A@debug.ba.rivosinc.com>
+	s=arc-20240116; t=1738975918; c=relaxed/simple;
+	bh=KSJlU7RWSwAN128E+ekyLcOzzpRnsUlM1weHPm1sTnI=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=UrQt70pmTcNkAFuOQGhiR8cgicQaWRIxbKq+6XL53MA0pEAXl0p1wmhXvt6Duql2carwXroZlZqlg4XqcSKAEgyRSo0h9cS4N1RPV+qPDupgBT8QPX5yxeVAsu5WaI9pTHgc71eEjOCrInnyafCkHNIJVEwIOxMUm/rXyvh0QMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YqXN20mvZz4f3jcs;
+	Sat,  8 Feb 2025 08:51:30 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 4F3F41A0C33;
+	Sat,  8 Feb 2025 08:51:51 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP3 (Coremail) with SMTP id _Ch0CgCXN8KhqqZnzrKwDA--.58958S2;
+	Sat, 08 Feb 2025 08:51:49 +0800 (CST)
+Subject: Re: [PATCH v2 bpf 1/2] bpf: skip non exist keys in
+ generic_map_lookup_batch
+To: Yan Zhai <yan@cloudflare.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
+References: <cover.1738905497.git.yan@cloudflare.com>
+ <177c4a3417d848aa9d72158e235be7d6b6f43915.1738905497.git.yan@cloudflare.com>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <a74970e1-9545-a975-3501-cfb17277f303@huaweicloud.com>
+Date: Sat, 8 Feb 2025 08:51:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Z6aa24/5M5Xdhe/A@debug.ba.rivosinc.com>
+In-Reply-To: <177c4a3417d848aa9d72158e235be7d6b6f43915.1738905497.git.yan@cloudflare.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:_Ch0CgCXN8KhqqZnzrKwDA--.58958S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr13Xry8ArW8ZFWDXFy7Wrg_yoWrGr4kpF
+	WrGF13Jw18ur4Iqw4Fqa1kWFy8Aw48Gr15Ga95t3sYkrn3Wry2kr10gaya9rW5Cr10vw4S
+	vr4jvF9Ygw12yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07jIksgUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Fri, Feb 07, 2025 at 03:44:27PM -0800, Deepak Gupta wrote:
->On Fri, Feb 07, 2025 at 10:27:10AM +0100, Vlastimil Babka wrote:
->>On 2/5/25 02:21, Deepak Gupta wrote:
->>>VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) is used to encode shadow stack
->>
->>I see that arm GCS uses VM_HIGH_ARCH_6.
->>
->>>VMA on three architectures (x86 shadow stack, arm GCS and RISC-V shadow
->>
->>And RISC-V doesn't define it at all, not even in this patchset, or did I
->>miss it somewhere?
->>
+
+
+On 2/7/2025 1:45 PM, Yan Zhai wrote:
+> The generic_map_lookup_batch currently returns EINTR if it fails with
+> ENOENT and retries several times on bpf_map_copy_value. The next batch
+> would start from the same location, presuming it's a transient issue.
+> This is incorrect if a map can actually have "holes", i.e.
+> "get_next_key" can return a key that does not point to a valid value. At
+> least the array of maps type may contain such holes legitly. Right now
+> these holes show up, generic batch lookup cannot proceed any more. It
+> will always fail with EINTR errors.
 >
->hmm...
->Something wrong in my workflow and rebasing.
->Thanks for catching this.
+> Rather, do not retry in generic_map_lookup_batch. If it finds a non
+> existing element, skip to the next key. This simple solution comes with
+> a price that transient errors may not be recovered, and the iteration
+> might cycle back to the first key under parallel deletion. For example,
+> Hou Tao <houtao@huaweicloud.com> pointed out a following scenario:
+>
+> For LPM trie map:
+> (1) ->map_get_next_key(map, prev_key, key) returns a valid key
+>
+> (2) bpf_map_copy_value() return -ENOMENT
+> It means the key must be deleted concurrently.
+>
+> (3) goto next_key
+> It swaps the prev_key and key
+>
+> (4) ->map_get_next_key(map, prev_key, key) again
+> prev_key points to a non-existing key, for LPM trie it will treat just
+> like prev_key=NULL case, the returned key will be duplicated.
+>
+> With the retry logic, the iteration can continue to the key next to the
+> deleted one. But if we directly skip to the next key, the iteration loop
+> would restart from the first key for the lpm_trie type.
+>
+> However, not all races may be recovered. For example, if current key is
+> deleted after instead of before bpf_map_copy_value, or if the prev_key
+> also gets deleted, then the loop will still restart from the first key
+> for lpm_tire anyway. For generic lookup it might be better to stay
+> simple, i.e. just skip to the next key. To guarantee that the output
+> keys are not duplicated, it is better to implement map type specific
+> batch operations, which can properly lock the trie and synchronize with
+> concurrent mutators.
 
-I think this is the miss on my part.
-
-I had this patch in last series which introduces `ARCH_HAS_USER_SHADOW_STACK`
-https://lore.kernel.org/all/20241111-v5_user_cfi_series-v8-1-dce14aa30207@rivosinc.com/
-
-As part of above patch, `CONFIG_X86_USER_SHADOW_STACK` was replaced with
-`CONFIG_ARCH_HAS_USER_SHADOW_STACK` in `mm.h` to define VM_SHADOW_STACK
-as VM_HIGH_ARCH_5. It was all fine because all 3 arches were using VM_HIGH_ARCH_5. 
-
-However as things progressed on, arm64 ended up using VM_HIGH_ARCH_6. But
-arm64 gcs patches also landed the introduction of `ARCH_HAS_USER_SHADOW_STACK`.
-So I dropped this patch from my v9 and didn't pay attention and actually missed
-the definition.
+Make sense.
 
 >
->>>stack). In case architecture doesn't implement shadow stack, it's VM_NONE
->>>Introducing a helper `is_shadow_stack_vma` to determine shadow stack vma
->>>or not.
+> Fixes: cb4d03ab499d ("bpf: Add generic support for lookup batch op")
+> Closes: https://lore.kernel.org/bpf/Z6JXtA1M5jAZx8xD@debian.debian/
+> Signed-off-by: Yan Zhai <yan@cloudflare.com>
+
+Acked-by: Hou Tao <houtao1@huawei.com>
+> ---
+> v1->v2: incorporate more useful information inside commit message.
+> v1: https://lore.kernel.org/bpf/Z6OYbS4WqQnmzi2z@debian.debian/
+> ---
+>  kernel/bpf/syscall.c | 16 +++++-----------
+>  1 file changed, 5 insertions(+), 11 deletions(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c420edbfb7c8..5d0a4db6fb85 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1979,8 +1979,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  	void __user *values = u64_to_user_ptr(attr->batch.values);
+>  	void __user *keys = u64_to_user_ptr(attr->batch.keys);
+>  	void *buf, *buf_prevkey, *prev_key, *key, *value;
+> -	int err, retry = MAP_LOOKUP_RETRIES;
+>  	u32 value_size, cp, max_count;
+> +	int err;
+>  
+>  	if (attr->batch.elem_flags & ~BPF_F_LOCK)
+>  		return -EINVAL;
+> @@ -2026,14 +2026,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  		err = bpf_map_copy_value(map, key, value,
+>  					 attr->batch.elem_flags);
+>  
+> -		if (err == -ENOENT) {
+> -			if (retry) {
+> -				retry--;
+> -				continue;
+> -			}
+> -			err = -EINTR;
+> -			break;
+> -		}
+> +		if (err == -ENOENT)
+> +			goto next_key;
+>  
+>  		if (err)
+>  			goto free_buf;
+> @@ -2048,12 +2042,12 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  			goto free_buf;
+>  		}
+>  
+> +		cp++;
+> +next_key:
+>  		if (!prev_key)
+>  			prev_key = buf_prevkey;
+>  
+>  		swap(prev_key, key);
+> -		retry = MAP_LOOKUP_RETRIES;
+> -		cp++;
+>  		cond_resched();
+>  	}
+>  
+
 
