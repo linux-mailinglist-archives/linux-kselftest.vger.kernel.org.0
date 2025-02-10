@@ -1,171 +1,160 @@
-Return-Path: <linux-kselftest+bounces-26150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74B58A2E583
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 08:38:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF33A2E5AA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 08:43:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C32021888577
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 07:38:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D61A67A420C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 07:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDD11B0F21;
-	Mon, 10 Feb 2025 07:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451601B85F8;
+	Mon, 10 Feb 2025 07:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vE+uFLIC"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hEHhEnub"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA9419DF99
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 07:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1181B425A
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 07:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739173090; cv=none; b=cZ8z1Y2/0HZSIeC0quJuDuqCLTrunBcj2zKdOV/GGkzet4yGr4KlYIVPmWIYLNucV0SdBeQQnoPtbIP/MK0SlhowWUZmqEdXvzXcaem1SVNQd/G+/kSJ81ctHRujXnq1vmaQcv57NScVDSgUA+JV1dH1urSymSSIXzN4iRcCVl8=
+	t=1739173364; cv=none; b=IgdXO6izdUg4sonE+u86zPMMwQ5JofC69WqvHPIlKUi6sRuouW7KqL9Dzn+9/XzBMu3nbNH6QvPbs3zn6ymRUeOeIgDaSeSsu0FYiMJTXjTX+HBxJ489bKN25mtju2v9IES0Du0rkdRr+YcyaynFu3d8OOoFUisfgGmEaOg2iwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739173090; c=relaxed/simple;
-	bh=TaXGkoKUS8R+zFSCLF80h16FwvqPvX+aex6ojMA0n/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AjuaMtj59MRcuW2QYVF8rcx850WuJYVXpjUAfSBoTa6HHZEmBzYVnFJtYcF4MncDeb2nspn4MkIYU1cc/pWxyU9MruKD00peZNaCheasX5R/1UHPjyjzS7FovQFfx8Ca+04Il6tWCU+DdVYQNvUGaSXhd9ur/kY2jXbdWPQEnjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vE+uFLIC; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Sun, 9 Feb 2025 23:37:45 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1739173074;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZOcYg4xLzinXROvIPIR5xsQLZpAtozt5q5hAITBaMhs=;
-	b=vE+uFLICHjimFS+ICMuI/HAxyfSAu4mZ77bZ828qh8f1L3qfRfmo59IMZeBXvGqrssiFNy
-	fCDND8KVpd50CISMkA7uHWCg7qYodaAjGO7IKKFCD9XIxPUn6IH9CRdkFsXbLsLOLX8lhP
-	OfDwEiCmz/G8voMwdIN56pm3FuFnd8I=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/4] KVM: arm64: Make guests see only counters
- they can access
-Message-ID: <Z6msyUG0HWM2EImQ@linux.dev>
-References: <20250208020111.2068239-1-coltonlewis@google.com>
- <20250208020111.2068239-5-coltonlewis@google.com>
+	s=arc-20240116; t=1739173364; c=relaxed/simple;
+	bh=uELykYu2UfnPFrcbXaL5ytU50E2XF8fxhOESv8wBqLc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qV76+Wz+tot/0uV8ME6haAO9KpzAHOvdmczCKqX45+JNQWZMteF3yt6Pvjnh7+DObk0rcJmEPAzMp0VlQub2bKd/eb0OZSWq4e5EXX0Oo2ICqgaPlrm1UW0pIkGhpNE+trxzNABLAH8q6oBoI/Rt7PUlba+IsVWbBAKbrAuz6fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hEHhEnub; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so5024515e9.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 09 Feb 2025 23:42:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739173360; x=1739778160; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jki0b2am8yzlz3QyhCDEFnMh6r+K6Xff5FC3zmcGxIQ=;
+        b=hEHhEnub9vJ60lxT2vbKKBzRLmTMTfzEohjaxyIuLzLiow2SvvpkSatF4AZQxAJjnt
+         GldSg7omHp61iZ44O1NoCTj6O106Fa44wXsTEgwrO3V6PzE0XKFkh6b/1ZhCnDiUMPLD
+         iwdjtrUpH14ypIzDoUIvMM99VMZk3yMbhrAuLsSxv/dZnbni6dapXkUUVW/cIaTFVxpU
+         G5YOpqgvdH6tvuTG1XbLoQT9/+QjN8WaQ3SBagZb0OxHRyre8cxLMu7PshbV34ULqsvb
+         gv/zLIyYV/g09f6i49Cxt3Z9AKBh7vYEdtAS2ASA6AqW2u06PJmqX7yjLhHIybimdYpn
+         yLVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739173360; x=1739778160;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jki0b2am8yzlz3QyhCDEFnMh6r+K6Xff5FC3zmcGxIQ=;
+        b=floLpYrV5dVYStSxrZd4r+22YfJBCs5qqrmuE6oBs7KXuXcqj0iHOfGNB03vvNkzfp
+         8vKiHGeORcMnhOowdihxtyvnP6ug5WydVQZVIw/7gmT82EEddJapKuB11fwLcu2iZhqr
+         5Oxf72PULZWkoCgKW8oKcQw8fsI8l/7RZQgmeXnk9jzeCXDPTQWVuxLF+0AVVos0GjEC
+         /jyn9TpbSfhOshc1s8SmxXvFa8UhHTWeEDy70AuTRoQcbINZTkE1U73LQBd9xhdlfCbD
+         /wxdbv6lQbyzo0l63EVpMnqjbGsY83UhnDRPUnhDr5JrCLHoSSRjIZuvvh6c44Gx4sO0
+         b9zg==
+X-Forwarded-Encrypted: i=1; AJvYcCVaifnxE1KbhQSH5YIkO4CNk4bofGRVxCb4Bd2W6sHoNJ/rKI6DewfPgnb5IMQIcysycPbX7rh9AK6Q0g+ijsA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8HkYLY7aPnrNUsGm+eifKmkDRt8VVu4NXhok26MOSzMZh6SFC
+	fB+1Ok/TUhFtDrm2ZVMcVhyZf+aaj5ZVez5hl3byQKOq1OCqg2MiZF+cK36PUqQ=
+X-Gm-Gg: ASbGncssQLVYDIxTxgtBDumCAzTfeeNFX1Q+ayM6S3xNtZ21sXdMXdyBCYPZDf4GqIA
+	xiU8o/GBaSGNvURuvorzQuOKh2enbT7UWCOLMvChHlBlKtDxQHnntHF4sTm8uzFSlKvFgYx8INQ
+	eVvYlZq+aAFmqchV3xrv8+JYv0yKKKvoY0EYhR4k2gwFH+9gbXOH1YE9Fmas4vkTIxUXAP23AGS
+	JLMjkLBtX1qsINjrpwrwH1RD09aFSwid8W8y82Hij4XfhtAa2bNCBNe3Fg8hFyzTsxuhhTyy6iI
+	rQjLpNPkyKnHx6DlJiBk/qEavV48JRmsRK6QxtZarmxgAQzEUE0BZ8K2xfTS
+X-Google-Smtp-Source: AGHT+IF39BdEkA9ZgcBIHbLRArZRwyqYfhbYwkkcPtQvR89C0KQhk8Xnq25iZkfcHIflDsp+ppJQFw==
+X-Received: by 2002:a5d:47ad:0:b0:38b:d7c3:3768 with SMTP id ffacd0b85a97d-38dc90fdb89mr7501603f8f.12.1739173359748;
+        Sun, 09 Feb 2025 23:42:39 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4390d896d70sm171375435e9.0.2025.02.09.23.42.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Feb 2025 23:42:38 -0800 (PST)
+Message-ID: <4320b0be-acce-43b2-b148-1577c6a56dff@rivosinc.com>
+Date: Mon, 10 Feb 2025 08:42:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250208020111.2068239-5-coltonlewis@google.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 14/26] riscv/traps: Introduce software check exception
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Christian Brauner <brauner@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+ atishp@rivosinc.com, evan@rivosinc.com, alexghiti@rivosinc.com,
+ samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com
+References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
+ <20250204-v5_user_cfi_series-v9-14-b37a49c5205c@rivosinc.com>
+ <fec3b7be-4259-4eef-87f9-b2cee5718cae@rivosinc.com>
+ <Z6Z6mhiQ3DmsNZe9@debug.ba.rivosinc.com>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <Z6Z6mhiQ3DmsNZe9@debug.ba.rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 08, 2025 at 02:01:11AM +0000, Colton Lewis wrote:
-> The ARM architecture specifies that when MDCR_EL2.HPMN is set, EL1 and
-> EL0, which includes KVM guests, should read that value for PMCR.N.
+
+
+On 07/02/2025 22:26, Deepak Gupta wrote:
+> Hi Clement,
 > 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
-> ---
->  arch/arm64/kvm/debug.c                                  | 3 +--
->  arch/arm64/kvm/pmu-emul.c                               | 8 +++++++-
->  tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 2 +-
->  3 files changed, 9 insertions(+), 4 deletions(-)
+> Thanks for looking at it. Inline
+> On Thu, Feb 06, 2025 at 02:49:09PM +0100, Clément Léger wrote:
+>>
+>>
+>> On 05/02/2025 02:22, Deepak Gupta wrote:
+>>> zicfiss / zicfilp introduces a new exception to priv isa `software check
+>>> exception` with cause code = 18. This patch implements software check
+>>> exception.
+>>
+>> Hey Deepak,
+>>
+>> While not directly related to this patch, is the exception 18 delegation
+>> documented in the SBI doc ? I mean, should we specify that it is always
+>> delegated when implementing FWFT LANDING_PAD/SHADOW_STACK ?
 > 
-> diff --git a/arch/arm64/kvm/debug.c b/arch/arm64/kvm/debug.c
-> index 0e4c805e7e89..7c04db00bf6c 100644
-> --- a/arch/arm64/kvm/debug.c
-> +++ b/arch/arm64/kvm/debug.c
-> @@ -36,8 +36,7 @@ static void kvm_arm_setup_mdcr_el2(struct kvm_vcpu *vcpu)
->  	 * This also clears MDCR_EL2_E2PB_MASK and MDCR_EL2_E2TB_MASK
->  	 * to disable guest access to the profiling and trace buffers
->  	 */
-> -	vcpu->arch.mdcr_el2 = FIELD_PREP(MDCR_EL2_HPMN,
-> -					 *host_data_ptr(nr_event_counters));
-> +	vcpu->arch.mdcr_el2 = FIELD_PREP(MDCR_EL2_HPMN, read_mdcr());
+> I don't think it's document in SBI spec anywhere. Should it be ?
 
-Please avoid unnecessary accesses to MDCR_EL2 at all costs. This is a
-guaranteed trap to EL2 with nested virt.
+That's a good question ! I don't know the process to document that part
+of the SBI but that would probably be nice to document it anyway I
+guess. Atish may know what to do with that.
 
->  	vcpu->arch.mdcr_el2 |= (MDCR_EL2_TPM |
->  				MDCR_EL2_TPMS |
->  				MDCR_EL2_TTRF |
-> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-> index 6c5950b9ceac..052ce8c721fe 100644
-> --- a/arch/arm64/kvm/pmu-emul.c
-> +++ b/arch/arm64/kvm/pmu-emul.c
-> @@ -993,12 +993,18 @@ static bool pmu_irq_is_valid(struct kvm *kvm, int irq)
->  u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
->  {
->  	struct arm_pmu *arm_pmu = kvm->arch.arm_pmu;
-> +	u8 limit;
-> +
-> +	if (arm_pmu->partitioned)
-> +		limit = arm_pmu->hpmn - 1;
-> +	else
-> +		limit = ARMV8_PMU_MAX_GENERAL_COUNTERS;
->  
->  	/*
->  	 * The arm_pmu->cntr_mask considers the fixed counter(s) as well.
->  	 * Ignore those and return only the general-purpose counters.
->  	 */
-> -	return bitmap_weight(arm_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS);
-> +	return bitmap_weight(arm_pmu->cntr_mask, limit);
->  }
+Clément
 
-This isn't necessary and is likely to regress the existing behavior.
+> 
+> 
+> In code, opensbi delegates the exception (SW_CHECK)
+> https://github.com/riscv-software-src/opensbi/
+> commit/110524441a827e026db3547ed03c5723b9c9e211
+> 
+>>
+>> Thanks,
+>>
+>> Clément
+>>
+>>>
 
-When the architecture says the lower ELs should see PMCR_EL0.N have the
-same value as MDCR_EL2.HPMN, what it really means is direct reads from
-hardware will return the value.
-
-So my expectation would be that a VM using the partitioned PMU
-implementation would never reach any of the *emulated* PMU handlers, as
-we would've disabled the associated traps.
-
-The partitioned PMU will not replace the emulated vPMU implementation in
-KVM, so it'd be good to refactor what we have today to make room for
-your work. I think that'd be along the lines of:
-
- - Shared code for event filter enforcement and handling of the vPMU
-   overflow IRQ.
-
- - Emulated PMU implementation that provides trap handlers for all PMUv3
-   registers and backs into host perf
-
- - Partitioned PMU implementation that doesn't rely on traps and instead
-   saves / restores a portion of the PMU that contains the guest
-   context.
-
-These should be done in separate files, i.e. I do not want to see a
-bunch of inline handling to cope with emulated v. partitioned PMUs.
-
->  static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
-> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> index f16b3b27e32e..b5bc18b7528d 100644
-> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> @@ -609,7 +609,7 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
->   */
->  static void run_error_test(uint64_t pmcr_n)
->  {
-> -	pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
-> +	pr_debug("Error test with pmcr_n %lu (larger than the host allows)\n", pmcr_n);
-
-NBD for an RFC, but in the future please do selftests changes in a
-separate patch.
-
--- 
-Thanks,
-Oliver
 
