@@ -1,343 +1,329 @@
-Return-Path: <linux-kselftest+bounces-26185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0629A2F1D1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:34:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85533A2F255
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:59:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 613953A2621
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 15:33:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21152160987
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 15:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD0723DE95;
-	Mon, 10 Feb 2025 15:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8F9243969;
+	Mon, 10 Feb 2025 15:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A2Zvv8O+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IXWPIGhA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BE123E236
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 15:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579C4241CA6;
+	Mon, 10 Feb 2025 15:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739201612; cv=none; b=ZE0u7AOomt1NhYNveSoJSqVp0DrMPbYzm+ltn0OCcwtpIZ7rc/864Ra4bHFw6YP4DUwUXaVXMr6mYcGmpMncbD6OT66EG1BSsL4X9WFMwHXZYAPZQfQASZDhsa4dGTPVwJEjpuGUF2I/pKSt13fbSB55i3NFr/ITM6I96FHBEuA=
+	t=1739203140; cv=none; b=jih8xV6BWGSPviGTLJNMAtW0fuXuewiACfU4ke2XGNaZn+yhHQny8Shjn+vg4XVNBQq+CUpKJCT5h1pNGexAnYuJJbGWNwQ1BWvNnZQAnC29TF3jjQyauvxMX05AgySOUXthxf6bl8Tc4rvnt6+2ITbVGv41UxT5wWH5t+Bj2Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739201612; c=relaxed/simple;
-	bh=0K3d8F/xVoOQDemlJCe7zkTMGCdS+at9S4Wn6xK5jsM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gTVuKRgM9hpoA3QXlDeUiS682ARjOkq2NO3/bu43iTXj1MfV6aBnR8riIm7EgCVi3uKTB75DS1SYALiuOOiTdczjuqsASVgf8M8Ruam7Q/ZasRgyCk7fW1HSKDUULO0+Go81CvzdLD6W9nZDTfEAqzIU/XlhQ79zKxyip3HGM54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A2Zvv8O+; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739201608;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BbjEMY8/mdvBBPR5YIiGfY/QlRvz6+lINWP41WIENPI=;
-	b=A2Zvv8O+iRwvmBkBzIYyAHpjh8BFQCZ8kzRkZvWFtI8HLR70gEndt1KKcGtstd2pSguWmj
-	++ideQzwWZVlbECpheBXn3z2Lyzxgste63LFzui1Kc/p4l/RUy+C2gOzl7J7T4WuGugL+x
-	HAXgvLgFlrMUxX8ctO7ppsmgbxuccXw=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-96-kGn09XMQOEurUM2gVyKo4w-1; Mon,
- 10 Feb 2025 10:33:26 -0500
-X-MC-Unique: kGn09XMQOEurUM2gVyKo4w-1
-X-Mimecast-MFC-AGG-ID: kGn09XMQOEurUM2gVyKo4w
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88C1119560B1;
-	Mon, 10 Feb 2025 15:33:23 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.44.34.65])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6F4C61800876;
-	Mon, 10 Feb 2025 15:33:20 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Cc: Gabriele Monaco <gmonaco@redhat.com>,
-	Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH v6 3/3] rseq/selftests: Add test for mm_cid compaction
-Date: Mon, 10 Feb 2025 16:32:52 +0100
-Message-ID: <20250210153253.460471-4-gmonaco@redhat.com>
-In-Reply-To: <20250210153253.460471-1-gmonaco@redhat.com>
-References: <20250210153253.460471-1-gmonaco@redhat.com>
+	s=arc-20240116; t=1739203140; c=relaxed/simple;
+	bh=7EBG2tbET6wKJo1NNIhON2+Zer6a0bhl92q4Vm0qXA4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D51iVQAGBFvgwRbScVtGgL1pBHO43Y2zMRShwfv+GmqHc/x8coZzdwI/dL0XuPxsmfyAOfjH7qWnJSWs53CpFvoN/RVvzZDwAwsRRCZ0/GNcR0qDUDGV7w7M9s0hZ3NORUcg6GX4B85VK/JxjBF4bmyFaY4L+RO8kwcek1npCis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IXWPIGhA; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-308e3bd8286so18908671fa.1;
+        Mon, 10 Feb 2025 07:58:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739203136; x=1739807936; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zrWLyzw/v9toMpV/2WaUI0bKtb0fFU80Ird81ZrYzdM=;
+        b=IXWPIGhAJ82Ozp6AAlz6rPnWLR32UWEpqQwsF5nlYoQnSBdVLH/rkZZzREyqftTzz1
+         9659ptAEkg6vdRzo3nS9loRUYh6uK206frrUB9KYTHSDA2Im4+JIy40iwIt2IRPmPWCk
+         /kNiJFGirK6czrCfqZUtsmdzlf8WUBqSMvKPK9aiUE5u3IYmCzY6aGv/iI1ebX20AOkj
+         kZb0i+ZURZBo2ul0TV4MThGbbMkYcIfTvmnpD+17E/y3BDoljMqKggLVX2fX/aDDH8aQ
+         wDckAQarsyWpRORHWOkfDuTZh/MuuCu/Y0dHft8vHZRI4M5cLYD0qxC/nZveDOxjL2R2
+         t8Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739203136; x=1739807936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zrWLyzw/v9toMpV/2WaUI0bKtb0fFU80Ird81ZrYzdM=;
+        b=jmIM7eqHEdEyUlSCVZb/A/W+H4STXaE3tKQAKIOT2TS14coIe2p3g2Ww71//VNqJPk
+         stG9LdYHMG66erExGlKLDoDfLk4V2lE6/N7ZthkyJ+S5/hqUMBgRhX80pqQwOI7lVY5Y
+         QXNnVh6Dc+I+REXn4VKr102f5ZipT3rdYDWQwaG1vy0LTLe1H2lecNUD+ja+Zxu5074E
+         PD+JgztblI4uk/DGWIm+Uyp0E5spaGcjpZGEw9QHhAicM84EWnzdwCk30sEH8rH2vcRB
+         FfpPGvp0is1Aii5686+QiMRXDWDwPyf0gTyL06Ru14A/aSpi24wYgKBo4rvcDi4Uoag7
+         5MAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOk5X6F1pzYXSFgA+Fh3CbEDuIA38WUWB/xuc4VQ8uDhGQh7FXkwAFSmm9XzCbjbR7MJp5zO2J@vger.kernel.org, AJvYcCUmT5/4BL+kWxbea581QLY9wNkaMefkzC9X38kurUr04q3vWdQxao2N4g4q6+iohqH7zKGvvDW8YLG3ElmXkBE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzSUEwhsjKTtW8CaXL2c+ZtGHv5SirQAVHcwqAB7wEcqWO0KHp
+	CAVZXZQXTp4TL+0XEuiK6xdaUsyFiIxba3d9fvlY/0cfKCHioc5lVFqP4JUXt5egxM9yTbR97Mb
+	vpusM4Al6REjYmOpXlHviby5NvVXTaGe1
+X-Gm-Gg: ASbGncvEAbWsGV9MNjjUHwnNY/iJsUmY+mDDKzq7eLBtGaCNNOAhZ3gPrGT4QwOkJG/
+	F8CQkLXABFw3U/R+WV/0RdjGjXiRjpgNwNNzuyUu8eOxbN2zUjyjJRelQN+YVP++H36nMcEGiqG
+	jGWV/06bAfuEVa
+X-Google-Smtp-Source: AGHT+IGkqQH/E+Pgi9Ncy1DZY26oSYyDtgavDMNfwuH1XfljRJcaQYH2iTSlbf1cM2cPI7piPE6eDaDQ/T6kMAyVk/Y=
+X-Received: by 2002:a2e:be1e:0:b0:300:42ad:f284 with SMTP id
+ 38308e7fff4ca-307e57bed2dmr45655851fa.7.1739203136163; Mon, 10 Feb 2025
+ 07:58:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+References: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+In-Reply-To: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 10 Feb 2025 10:58:19 -0500
+X-Gm-Features: AWEUYZlql4JL5QMxP8vmE8jTowIauEkfV0cUWeYdpuMMeJ7DErdRhKXRycQGMg4
+Message-ID: <CAJ-ks9nRmR-w6xAyWkVt-NH9pO+Ec_ehE9rJU+6LQBCYsgWd0w@mail.gmail.com>
+Subject: Re: [PATCH v2] blackhole_dev: convert self-test to KUnit
+To: Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	David Gow <davidgow@google.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A task in the kernel (task_mm_cid_work) runs somewhat periodically to
-compact the mm_cid for each process. Add a test to validate that it runs
-correctly and timely.
+On Sat, Feb 8, 2025 at 2:26=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
+wrote:
+>
+> Convert this very simple smoke test to a KUnit test.
+>
+> Add a missing `htons` call that was spotted[0] by kernel test robot
+> <lkp@intel.com> after initial conversion to KUnit.
+>
+> Link: https://lore.kernel.org/oe-kbuild-all/202502090223.qCYMBjWT-lkp@int=
+el.com/ [0]
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+> I tested this using:
+>
+> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=3D1 -=
+-kconfig_add CONFIG_NET=3Dy blackholedev
+> ---
+> Changes in v2:
+> - Add missing `htons` call. (kernel test robot <lkp@intel.com>)
+> - Link to v1: https://lore.kernel.org/r/20250207-blackholedev-kunit-conve=
+rt-v1-1-8ef0dc1ff881@gmail.com
+> ---
+>  lib/Kconfig.debug                                  | 20 ++++-----
+>  lib/Makefile                                       |  2 +-
+>  ...{test_blackhole_dev.c =3D> blackhole_dev_kunit.c} | 47 ++++++++------=
+--------
+>  tools/testing/selftests/net/Makefile               |  2 +-
+>  tools/testing/selftests/net/test_blackhole_dev.sh  | 11 -----
+>  5 files changed, 29 insertions(+), 53 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 1af972a92d06..238321830993 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2557,15 +2557,6 @@ config TEST_BPF
+>
+>           If unsure, say N.
+>
+> -config TEST_BLACKHOLE_DEV
+> -       tristate "Test blackhole netdev functionality"
+> -       depends on m && NET
+> -       help
+> -         This builds the "test_blackhole_dev" module that validates the
+> -         data path through this blackhole netdev.
+> -
+> -         If unsure, say N.
+> -
+>  config FIND_BIT_BENCHMARK
+>         tristate "Test find_bit functions"
+>         help
+> @@ -2888,6 +2879,17 @@ config USERCOPY_KUNIT_TEST
+>           on the copy_to/from_user infrastructure, making sure basic
+>           user/kernel boundary testing is working.
+>
+> +config BLACKHOLE_DEV_KUNIT_TEST
+> +       tristate "Test blackhole netdev functionality" if !KUNIT_ALL_TEST=
+S
+> +       depends on NET
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This builds the "blackhole_dev_kunit" module that validates the
+> +         data path through this blackhole netdev.
+> +
+> +         If unsure, say N.
+> +
+>  config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index d5cfc7afbbb8..19ff6993c2bc 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -102,7 +102,6 @@ obj-$(CONFIG_TEST_RUNTIME) +=3D tests/
+>  obj-$(CONFIG_TEST_DEBUG_VIRTUAL) +=3D test_debug_virtual.o
+>  obj-$(CONFIG_TEST_MEMCAT_P) +=3D test_memcat_p.o
+>  obj-$(CONFIG_TEST_OBJAGG) +=3D test_objagg.o
+> -obj-$(CONFIG_TEST_BLACKHOLE_DEV) +=3D test_blackhole_dev.o
+>  obj-$(CONFIG_TEST_MEMINIT) +=3D test_meminit.o
+>  obj-$(CONFIG_TEST_LOCKUP) +=3D test_lockup.o
+>  obj-$(CONFIG_TEST_HMM) +=3D test_hmm.o
+> @@ -393,6 +392,7 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) +=3D fortify_kunit.o
+>  obj-$(CONFIG_CRC_KUNIT_TEST) +=3D crc_kunit.o
+>  obj-$(CONFIG_SIPHASH_KUNIT_TEST) +=3D siphash_kunit.o
+>  obj-$(CONFIG_USERCOPY_KUNIT_TEST) +=3D usercopy_kunit.o
+> +obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) +=3D blackhole_dev_kunit.o
+>
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
+>
+> diff --git a/lib/test_blackhole_dev.c b/lib/blackhole_dev_kunit.c
+> similarity index 68%
+> rename from lib/test_blackhole_dev.c
+> rename to lib/blackhole_dev_kunit.c
+> index ec290ac2a0d9..06834ab35f43 100644
+> --- a/lib/test_blackhole_dev.c
+> +++ b/lib/blackhole_dev_kunit.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * This module tests the blackhole_dev that is created during the
+> + * This tests the blackhole_dev that is created during the
+>   * net subsystem initialization. The test this module performs is
+>   * by injecting an skb into the stack with skb->dev as the
+>   * blackhole_dev and expects kernel to behave in a sane manner
+> @@ -9,9 +9,8 @@
+>   * Copyright (c) 2018, Mahesh Bandewar <maheshb@google.com>
+>   */
+>
+> -#include <linux/init.h>
+> +#include <kunit/test.h>
+>  #include <linux/module.h>
+> -#include <linux/printk.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/netdevice.h>
+>  #include <linux/udp.h>
+> @@ -25,17 +24,15 @@
+>
+>  #define UDP_PORT 1234
+>
+> -static int __init test_blackholedev_init(void)
+> +static void test_blackholedev(struct kunit *test)
+>  {
+>         struct ipv6hdr *ip6h;
+>         struct sk_buff *skb;
+>         struct udphdr *uh;
+>         int data_len;
+> -       int ret;
+>
+>         skb =3D alloc_skb(SKB_SIZE, GFP_KERNEL);
+> -       if (!skb)
+> -               return -ENOMEM;
+> +       KUNIT_ASSERT_NOT_NULL(test, skb);
+>
+>         /* Reserve head-room for the headers */
+>         skb_reserve(skb, HEAD_SIZE);
+> @@ -55,7 +52,7 @@ static int __init test_blackholedev_init(void)
+>         ip6h =3D (struct ipv6hdr *)skb_push(skb, sizeof(struct ipv6hdr));
+>         skb_set_network_header(skb, 0);
+>         ip6h->hop_limit =3D 32;
+> -       ip6h->payload_len =3D data_len + sizeof(struct udphdr);
+> +       ip6h->payload_len =3D htons(data_len + sizeof(struct udphdr));
+>         ip6h->nexthdr =3D IPPROTO_UDP;
+>         ip6h->saddr =3D in6addr_loopback;
+>         ip6h->daddr =3D in6addr_loopback;
+> @@ -68,32 +65,20 @@ static int __init test_blackholedev_init(void)
+>         skb->dev =3D blackhole_netdev;
+>
+>         /* Now attempt to send the packet */
+> -       ret =3D dev_queue_xmit(skb);
+> -
+> -       switch (ret) {
+> -       case NET_XMIT_SUCCESS:
+> -               pr_warn("dev_queue_xmit() returned NET_XMIT_SUCCESS\n");
+> -               break;
+> -       case NET_XMIT_DROP:
+> -               pr_warn("dev_queue_xmit() returned NET_XMIT_DROP\n");
+> -               break;
+> -       case NET_XMIT_CN:
+> -               pr_warn("dev_queue_xmit() returned NET_XMIT_CN\n");
+> -               break;
+> -       default:
+> -               pr_err("dev_queue_xmit() returned UNKNOWN(%d)\n", ret);
+> -       }
+> -
+> -       return 0;
+> +       KUNIT_EXPECT_EQ(test, dev_queue_xmit(skb), NET_XMIT_SUCCESS);
+>  }
+>
+> -static void __exit test_blackholedev_exit(void)
+> -{
+> -       pr_warn("test_blackholedev module terminating.\n");
+> -}
+> +static struct kunit_case blackholedev_cases[] =3D {
+> +       KUNIT_CASE(test_blackholedev),
+> +       {},
+> +};
+> +
+> +static struct kunit_suite blackholedev_suite =3D {
+> +       .name =3D "blackholedev",
+> +       .test_cases =3D blackholedev_cases,
+> +};
+>
+> -module_init(test_blackholedev_init);
+> -module_exit(test_blackholedev_exit);
+> +kunit_test_suite(blackholedev_suite);
+>
+>  MODULE_AUTHOR("Mahesh Bandewar <maheshb@google.com>");
+>  MODULE_DESCRIPTION("module test of the blackhole_dev");
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
+ts/net/Makefile
+> index 73ee88d6b043..afa4bcdc5833 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -7,7 +7,7 @@ CFLAGS +=3D -I../../../../usr/include/ $(KHDR_INCLUDES)
+>  CFLAGS +=3D -I../
+>
+>  TEST_PROGS :=3D run_netsocktests run_afpackettests test_bpf.sh netdevice=
+.sh \
+> -             rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
+> +             rtnetlink.sh xfrm_policy.sh
+>  TEST_PROGS +=3D fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_de=
+frag.sh
+>  TEST_PROGS +=3D udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_=
+snd.sh
+>  TEST_PROGS +=3D udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reusep=
+ort_addr_any.sh
+> diff --git a/tools/testing/selftests/net/test_blackhole_dev.sh b/tools/te=
+sting/selftests/net/test_blackhole_dev.sh
+> deleted file mode 100755
+> index 3119b80e711f..000000000000
+> --- a/tools/testing/selftests/net/test_blackhole_dev.sh
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -# Runs blackhole-dev test using blackhole-dev kernel module
+> -
+> -if /sbin/modprobe -q test_blackhole_dev ; then
+> -       /sbin/modprobe -q -r test_blackhole_dev;
+> -       echo "test_blackhole_dev: ok";
+> -else
+> -       echo "test_blackhole_dev: [FAIL]";
+> -       exit 1;
+> -fi
+>
+> ---
+> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+> change-id: 20250207-blackholedev-kunit-convert-9a52a1a1a032
+>
+> Best regards,
+> --
+> Tamir Duberstein <tamird@gmail.com>
 
-The test spawns 1 thread pinned to each CPU, then each thread, including
-the main one, runs in short bursts for some time. During this period, the
-mm_cids should be spanning all numbers between 0 and nproc.
-
-At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
-is selected to be the new leader, all other threads terminate.
-
-After some time, the only running thread should see 0 as mm_cid, if that
-doesn't happen, the compaction mechanism didn't work and the test fails.
-
-The test never fails if only 1 core is available, in which case, we
-cannot test anything as the only available mm_cid is 0.
-
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
----
- tools/testing/selftests/rseq/.gitignore       |   1 +
- tools/testing/selftests/rseq/Makefile         |   2 +-
- .../selftests/rseq/mm_cid_compaction_test.c   | 200 ++++++++++++++++++
- 3 files changed, 202 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
-
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index 16496de5f6ce4..2c89f97e4f737 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -3,6 +3,7 @@ basic_percpu_ops_test
- basic_percpu_ops_mm_cid_test
- basic_test
- basic_rseq_op_test
-+mm_cid_compaction_test
- param_test
- param_test_benchmark
- param_test_compare_twice
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 5a3432fceb586..ce1b38f46a355 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
- 
- TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
--		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
-+		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
- 
- TEST_GEN_PROGS_EXTENDED = librseq.so
- 
-diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-new file mode 100644
-index 0000000000000..7ddde3b657dd6
---- /dev/null
-+++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <stddef.h>
-+
-+#include "../kselftest.h"
-+#include "rseq.h"
-+
-+#define VERBOSE 0
-+#define printf_verbose(fmt, ...)                    \
-+	do {                                        \
-+		if (VERBOSE)                        \
-+			printf(fmt, ##__VA_ARGS__); \
-+	} while (0)
-+
-+/* 0.5 s */
-+#define RUNNER_PERIOD 500000
-+/* Number of runs before we terminate or get the token */
-+#define THREAD_RUNS 5
-+
-+/*
-+ * Number of times we check that the mm_cid were compacted.
-+ * Checks are repeated every RUNNER_PERIOD.
-+ */
-+#define MM_CID_COMPACT_TIMEOUT 10
-+
-+struct thread_args {
-+	int cpu;
-+	int num_cpus;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	pthread_t *tinfo;
-+	struct thread_args *args_head;
-+};
-+
-+static void __noreturn *thread_runner(void *arg)
-+{
-+	struct thread_args *args = arg;
-+	int i, ret, curr_mm_cid;
-+	cpu_set_t cpumask;
-+
-+	CPU_ZERO(&cpumask);
-+	CPU_SET(args->cpu, &cpumask);
-+	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to set affinity");
-+		abort();
-+	}
-+	pthread_barrier_wait(args->barrier);
-+
-+	for (i = 0; i < THREAD_RUNS; i++)
-+		usleep(RUNNER_PERIOD);
-+	curr_mm_cid = rseq_current_mm_cid();
-+	/*
-+	 * We select one thread with high enough mm_cid to be the new leader.
-+	 * All other threads (including the main thread) will terminate.
-+	 * After some time, the mm_cid of the only remaining thread should
-+	 * converge to 0, if not, the test fails.
-+	 */
-+	if (curr_mm_cid >= args->num_cpus / 2 &&
-+	    !pthread_mutex_trylock(args->token)) {
-+		printf_verbose(
-+			"cpu%d has mm_cid=%d and will be the new leader.\n",
-+			sched_getcpu(), curr_mm_cid);
-+		for (i = 0; i < args->num_cpus; i++) {
-+			if (args->tinfo[i] == pthread_self())
-+				continue;
-+			ret = pthread_join(args->tinfo[i], NULL);
-+			if (ret) {
-+				errno = ret;
-+				perror("Error: failed to join thread");
-+				abort();
-+			}
-+		}
-+		pthread_barrier_destroy(args->barrier);
-+		free(args->tinfo);
-+		free(args->token);
-+		free(args->barrier);
-+		free(args->args_head);
-+
-+		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
-+			curr_mm_cid = rseq_current_mm_cid();
-+			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
-+				       curr_mm_cid, sched_getcpu());
-+			if (curr_mm_cid == 0)
-+				exit(EXIT_SUCCESS);
-+			usleep(RUNNER_PERIOD);
-+		}
-+		exit(EXIT_FAILURE);
-+	}
-+	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
-+		       sched_getcpu(), curr_mm_cid);
-+	pthread_exit(NULL);
-+}
-+
-+int test_mm_cid_compaction(void)
-+{
-+	cpu_set_t affinity;
-+	int i, j, ret = 0, num_threads;
-+	pthread_t *tinfo;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	struct thread_args *args;
-+
-+	sched_getaffinity(0, sizeof(affinity), &affinity);
-+	num_threads = CPU_COUNT(&affinity);
-+	tinfo = calloc(num_threads, sizeof(*tinfo));
-+	if (!tinfo) {
-+		perror("Error: failed to allocate tinfo");
-+		return -1;
-+	}
-+	args = calloc(num_threads, sizeof(*args));
-+	if (!args) {
-+		perror("Error: failed to allocate args");
-+		ret = -1;
-+		goto out_free_tinfo;
-+	}
-+	token = malloc(sizeof(*token));
-+	if (!token) {
-+		perror("Error: failed to allocate token");
-+		ret = -1;
-+		goto out_free_args;
-+	}
-+	barrier = malloc(sizeof(*barrier));
-+	if (!barrier) {
-+		perror("Error: failed to allocate barrier");
-+		ret = -1;
-+		goto out_free_token;
-+	}
-+	if (num_threads == 1) {
-+		fprintf(stderr, "Cannot test on a single cpu. "
-+				"Skipping mm_cid_compaction test.\n");
-+		/* only skipping the test, this is not a failure */
-+		goto out_free_barrier;
-+	}
-+	pthread_mutex_init(token, NULL);
-+	ret = pthread_barrier_init(barrier, NULL, num_threads);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to initialise barrier");
-+		goto out_free_barrier;
-+	}
-+	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
-+		if (!CPU_ISSET(i, &affinity))
-+			continue;
-+		args[j].num_cpus = num_threads;
-+		args[j].tinfo = tinfo;
-+		args[j].token = token;
-+		args[j].barrier = barrier;
-+		args[j].cpu = i;
-+		args[j].args_head = args;
-+		if (!j) {
-+			/* The first thread is the main one */
-+			tinfo[0] = pthread_self();
-+			++j;
-+			continue;
-+		}
-+		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
-+		if (ret) {
-+			errno = ret;
-+			perror("Error: failed to create thread");
-+			abort();
-+		}
-+		++j;
-+	}
-+	printf_verbose("Started %d threads.\n", num_threads);
-+
-+	/* Also main thread will terminate if it is not selected as leader */
-+	thread_runner(&args[0]);
-+
-+	/* only reached in case of errors */
-+out_free_barrier:
-+	free(barrier);
-+out_free_token:
-+	free(token);
-+out_free_args:
-+	free(args);
-+out_free_tinfo:
-+	free(tinfo);
-+
-+	return ret;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (!rseq_mm_cid_available()) {
-+		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
-+		return -1;
-+	}
-+	if (test_mm_cid_compaction())
-+		return -1;
-+	return 0;
-+}
--- 
-2.48.1
-
+Adding David.
 
