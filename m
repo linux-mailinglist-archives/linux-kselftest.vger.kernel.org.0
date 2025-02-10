@@ -1,118 +1,140 @@
-Return-Path: <linux-kselftest+bounces-26152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD482A2E5AE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 08:43:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87CF8A2E5D1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 08:54:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E61718840AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 07:43:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27505162723
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 07:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2D01AF0AF;
-	Mon, 10 Feb 2025 07:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71B11ADC93;
+	Mon, 10 Feb 2025 07:54:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9A01B81C1;
-	Mon, 10 Feb 2025 07:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4797E2F2A;
+	Mon, 10 Feb 2025 07:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739173395; cv=none; b=B546dhucj3Cut6jOhjhBPvhaXa9kENHo4rWFLWe4iXkwwPvpZGx5d9/15K8md2eK9p0lYfAhalo8B2umioWwjmFb9SlOgiFEuojfssQMhNVsBrlpSEY4wxHBkScNYTeiuqlNQIEjLXfkcKSeEVySmgHNBjJbE3ITePBcrcsGSnQ=
+	t=1739174073; cv=none; b=MK07+ISUru3TssuEaAOKciRm6ljd6lKaBBADq43pB3RjYrhREsJAw+pEJ6LrjvAk9Ski8IVJjfU1ktmNBQF0CSIrqS17qidXelnrb2gkycS8Xrm5psT5smJpqTlUfApdnaJ3JcSv1vYqJvzM6zVQOIu3GgegiX9N6+PazkTnG3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739173395; c=relaxed/simple;
-	bh=CwIlx4OEEN9ZRtZ1QafElHuN1i+vBGr8+n1N88C+kBQ=;
+	s=arc-20240116; t=1739174073; c=relaxed/simple;
+	bh=zGzqUTrmQ524+OgAqr4VcU42+3jZ2qDqqvvZ3J3P0v8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SD39baQMwUz3cA3reneij1TsHEOUAi/7VESVbdB8x+E36hFkeHUX7eogK/IfQWlN/q9O2r5UCxYWZhG6HXNwai++5COx/ANrtZI9131OjMSFn95eNq3NJ8WDWpzdCP1QE9hHm92zBQFJB7j59P3IX2P8eLgoBBHqXSYi2Vx1Lx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
+	 To:Cc:Content-Type; b=dbJPeRNF9QQxby+tTFjsEm6jj/2yvLzUNLoclBSJNj8iPL/QvxCE/M3sq8q/Ng4IdlDwhWhbXkS2ilP3QuhWMSEiczMn+k5JyuMBgIb1AX9gTDoN/uYvAOlL2mRmEF+UQeT8+JOlMc5j1Z1Lw6wiO5rhFvPw35DrkLFgZAknhr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4ba7ab22192so1147639137.3;
-        Sun, 09 Feb 2025 23:43:12 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-867082baa8eso714284241.1;
+        Sun, 09 Feb 2025 23:54:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739173390; x=1739778190;
+        d=1e100.net; s=20230601; t=1739174070; x=1739778870;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l1HAXrO7siUncPkj5ofDqgDnxHSc+KQ8zsK7WabjOVA=;
-        b=YHv39RZC16u+THXZIQfxOXZ+RSLWhlhhq6vggKqrZ9XlCZlEFTW5KMq6eQBZn+4U0o
-         wpoRVldWP572kwgEiQ7mG1VgicjLh78WjVwyhkE65w7SMmfFgvOJA1Qxdu/cRiYdnNuf
-         uAKRoRMU34myyUJ1q62iPFZWMhXi1loEzoM7fJjrsfriFS9BMQwp8x22ezL0cekhZYJD
-         6/JhBzBpBCzTZ2Chf9gdzOjrnMMf5aZ7xdh3e4P6HnU/OUvQzkEZ1PW0GYfExSv9HDNh
-         5GJ/dicXXSpZMQehKIdvhA5rj3n/xMvhipUmiRzMMRtTvruy+1sWuHe/YOQvT4rxVcvg
-         ZWOg==
-X-Forwarded-Encrypted: i=1; AJvYcCVX7FCG8MRw4r3kRMc4M6S7dxJ8PTu3m41aIAzCduKWjFwHnTANY1+7mDmVS5QdjU1sw2DduU/kqQP8J1BjDfEY@vger.kernel.org, AJvYcCWyJo8sOGgNoNAYRn4Z57rNuBVrk/lf3H+XYTxyeOEPglaOwOmcJV7KtbkuyYekm1ihHnAD4m+JxBquRcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/cGozk3/wSgj9BpRNbbJOVuaBmwZLniIR6sSfEuVJFjCrSOq3
-	jY0r0kXgcthd/oIhnrL7cWSCk7RB4B0QcSTHwxpRLUsuJnp3CYlHXl9Pw3v1
-X-Gm-Gg: ASbGncvumH1rn5Mfmx5S60meMNgDI9NDViE2ZOrag1h28YgeIrWpJQoVZkHZixSkss/
-	qjKF2PoYVH0acVlWanpNXHN4yvyBaQDJCtSXLUxjyYFxSUML0BComkLkswlEY1zw6gY6N4Eb30N
-	ZZwaBS5HqWeDuCdczAoEoEaXJ0WgTvO51Ea6/1LiaE5D4Mbvnwi3aaGx31VyhDJZR6N6bxITSMv
-	VfoXb5/3Qc6zy+Cuus8csRFCeYsENtnTQt7Y7C11x7PwldrYhHWXBu5/7f+FoPiVzITXGsLDJ7M
-	kiXQu/4RZwijMx6ECprz4ec8A68hqiaHL0nNqkmT0Up/+cxipd/HDQ==
-X-Google-Smtp-Source: AGHT+IGBa9RI5GShp+kMzyR/WJfamOAjBJGz5C4qSuytDyCEJhfu8DcJafeaiv9S3G/Z1VA/5dktwA==
-X-Received: by 2002:a05:6102:f0f:b0:4b6:5e0f:6ddc with SMTP id ada2fe7eead31-4ba85e8a3c6mr7306942137.14.1739173389922;
-        Sun, 09 Feb 2025 23:43:09 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bb0642e670sm848025137.10.2025.02.09.23.43.09
+        bh=6QVuU+Pj4WW7p8VfYDhUhfStFdnghuMaJHmBwZ02Z5o=;
+        b=O/gQnRTAKW6PuDNzFg95Yn9r+fWIcCS6FhKxK6XiRUkyFYO1PwPbMAlhwoys0Oyws5
+         9RZy71D5oV0Nbvcdm7d/xbSLV2EkpgN4V/5aVDhpu5+Gq/myaeljWVsBVBJLBeECfXXw
+         B1GdQi7+jwcm5ijihav39kmCCOHs7r/pkoGh8GtRWnbKeFR1ej3j78qxck9dxwrAFFa7
+         IMHki5HDOK5OgmoWX5yFq6Aezag6Wr6EnZS73r73w5C5V2/xzOCKFo6fqI5NkrxSbLfM
+         8BuLqXR0CWkE1CBZYU4YVTDNkAFr3zsZkimuNxJKepILpce1924cAZlolOCbB0YTTBHt
+         qmLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWTsdv/QwWW48ujdbmZa8Jh0APNE9fZ4al3/snxYZQ1AGjFNAwL8M84GTLDQP2FGnfDJJE3Y2s0GFWHm4E=@vger.kernel.org, AJvYcCWh5iFOKTv8kJo9NCQGjhkYXJIB5+EgsweH8UUX6z1XgqshEg8hQ7pmtwPSLeHyfgj0IzkwZg8QO0zxAivAFfWS@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzYaoatYau7smf0BGe+FSuMtM+3UMv3QMSIzeu4DOUoAItAzAl
+	YtoF9OVs/+FeudwUMtDlT+zIj4m790EPk7xkByIHptjV+2ut7NAl+Cju+yM8
+X-Gm-Gg: ASbGncujUIe8jHkXkxVWt5P/Bh/lL9ZnKV+VHM/RJwFswhVptJPgwKNqtqNKq5gjasL
+	Ti/14d+vqAVd753SQ9YnMoEcSwYr1n3W0PSfXq04Rc3sbyn1Lh2VhB7MghvVZbVotPLikZ+npYu
+	CsLGa9mfZtuXwgAQD5ZQlbIXkziZY0QwBf44VNyI19RqC37s9EfvIoUNAct10YzCxFlEMQUkOXa
+	6F7NutxrXbc8R9JFL1iVsnmnWp1Lrd+Tz7ycNGkkcYKsysyvmx+Vvt3WLZv56zKTjgiHbkMn0v1
+	DTYBSxjUrmMuqOPsoppe/WyYaAvBaGEkBRQNj2Pd9Lw9lLrRfagj+Q==
+X-Google-Smtp-Source: AGHT+IGjuVcvT014ehZgGSfSHcd+XVV36feIbwzJLyY58DY6zuXf2LZT8MgiKhibr7rtKkhYugZxRA==
+X-Received: by 2002:a05:6102:372:b0:4ba:971a:41fd with SMTP id ada2fe7eead31-4ba971a441amr5252028137.19.1739174070075;
+        Sun, 09 Feb 2025 23:54:30 -0800 (PST)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbc78d2675sm358103137.29.2025.02.09.23.54.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Feb 2025 23:43:09 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4bbc406499fso217211137.1;
-        Sun, 09 Feb 2025 23:43:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXdFbFTkPudO5WBcZaPJLgjjQCiYFFkTRbnwIuOt7i6pywTWEjXaIyU0pSSrN+9Yf2RBPAz01qQ7/Rf9CS0jTLJ@vger.kernel.org, AJvYcCXwR8KfY3rxpEqQIIq2gFc4wX/CDaPsMW6FGRuEDTfDnXzMFfaZQDc7P5F5WCCqZL6zHrV66uk1A93EXZg=@vger.kernel.org
-X-Received: by 2002:a05:6102:c54:b0:4bb:c24b:b623 with SMTP id
- ada2fe7eead31-4bbc24bc2e1mr2033659137.19.1739173388892; Sun, 09 Feb 2025
- 23:43:08 -0800 (PST)
+        Sun, 09 Feb 2025 23:54:29 -0800 (PST)
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86715793b1fso510141241.0;
+        Sun, 09 Feb 2025 23:54:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUeajdMWKldA8YkZgO3VhNmbGs3P3w9KwnVDfXOWy7yGFboSMcZLcRcWLCO42i54IFZpPb63S1D4ZvYURU=@vger.kernel.org, AJvYcCVv2fyK4L9gocrZ2F9wiZJIEvI6BwdAilUO48jNSi9z2S/nINHpwq0+4MYUT4muXEXwI7gcrkthyKiF6Rmr7/uP@vger.kernel.org
+X-Received: by 2002:a05:6102:41a0:b0:4ba:7b06:7e68 with SMTP id
+ ada2fe7eead31-4ba85f54226mr8216593137.23.1739174069469; Sun, 09 Feb 2025
+ 23:54:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com> <20250207-bitmap-kunit-convert-v1-2-c520675343b6@gmail.com>
-In-Reply-To: <20250207-bitmap-kunit-convert-v1-2-c520675343b6@gmail.com>
+References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com> <Z6eaDuXnT_rjVSNS@thinkpad>
+In-Reply-To: <Z6eaDuXnT_rjVSNS@thinkpad>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 10 Feb 2025 08:42:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXQ5vbhWsJgsGUny=9b4p0cvML+GkLJ=BmWnG9Q6FE78A@mail.gmail.com>
-X-Gm-Features: AWEUYZkkTrEuq6WMVMpODBTYSjpUaxRBgiMamGpu9Ed_-WnWv5jDfkFeFpfmlCY
-Message-ID: <CAMuHMdXQ5vbhWsJgsGUny=9b4p0cvML+GkLJ=BmWnG9Q6FE78A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bitmap: convert self-test to KUnit
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+Date: Mon, 10 Feb 2025 08:54:16 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
+X-Gm-Features: AWEUYZm5Xr2vD3ubUCPEj8UL7Ai7XR-3LWBLYpLEYOvMDEsJZO3nw3gZxZYFUGk
+Message-ID: <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] bitmap: convert self-test to KUnit
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>, 
+	John Hubbard <jhubbard@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
 	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
 	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 7 Feb 2025 at 21:14, Tamir Duberstein <tamird@gmail.com> wrote:
-> Convert the bitmap() self-test to a KUnit test.
->
-> In the interest of keeping the patch reasonably-sized this doesn't
-> refactor the tests into proper parameterized tests - it's all one big
-> test case.
->
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+Hi Yuri,
 
->  arch/m68k/configs/amiga_defconfig     |   1 -
->  arch/m68k/configs/apollo_defconfig    |   1 -
->  arch/m68k/configs/atari_defconfig     |   1 -
->  arch/m68k/configs/bvme6000_defconfig  |   1 -
->  arch/m68k/configs/hp300_defconfig     |   1 -
->  arch/m68k/configs/mac_defconfig       |   1 -
->  arch/m68k/configs/multi_defconfig     |   1 -
->  arch/m68k/configs/mvme147_defconfig   |   1 -
->  arch/m68k/configs/mvme16x_defconfig   |   1 -
->  arch/m68k/configs/q40_defconfig       |   1 -
->  arch/m68k/configs/sun3_defconfig      |   1 -
->  arch/m68k/configs/sun3x_defconfig     |   1 -
+On Sat, 8 Feb 2025 at 18:53, Yury Norov <yury.norov@gmail.com> wrote:
+> On Fri, Feb 07, 2025 at 03:14:01PM -0500, Tamir Duberstein wrote:
+> > On 7/27/24 12:35 AM, Shuah Khan wrote:
+> > > Please make sure you aren't taking away the ability to run these tests during
+> > > boot.
+> > >
+> > > It doesn't make sense to convert every single test especially when it
+> > > is intended to be run during boot without dependencies - not as a kunit test
+> > > but a regression test during boot.
+> > >
+> > > bitmap is one example - pay attention to the config help test - bitmap
+> > > one clearly states it runs regression testing during boot. Any test that
+> > > says that isn't a candidate for conversion.
+> > >
+> > > I am going to nack any such conversions.
+> >
+> > The crux of the argument seems to be that the config help text is taken
+> > to describe the author's intent with the fragment "at boot". I think
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+IMO, "at boot" is a misnomer, as most tests can be either builtin
+or modular.
+
+> KUNIT is disabled in defconfig, at least on x86_64. It is also disabled
+> on my Ubuntu 24.04 machine. If I take your patches, I'll be unable to
+
+I think distros should start setting CONFIG_KUNIT=m.
+
+> boot-test bitmaps. Even worse, I'll be unable to build the standalone
+> test from sources as a module and load it later.
+
+If you could build the standalone test from sources as a module,
+surely you can build the converted standalone test and KUNIT itself as
+modules, and load both of them later?
+
+> Or I misunderstand it, and there's a way to build some particular KUNIT
+> test without enabling KUNIT in config and/or re-compiling the whole kernel?
+> Please teach me, if so
+>
+> Unless you give me a way to build and run the test in true
+> production environment, I'm not going with KUNITs. Sorry.
+
+FTR, this is why I've been advocating for making all tests modular, and
+for not letting any test select (possibly unwanted) extra functionality.
 
 Gr{oetje,eeting}s,
 
