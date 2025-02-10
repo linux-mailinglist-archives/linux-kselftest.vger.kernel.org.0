@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-26163-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 171ACA2EDEA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 14:32:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2903A2EDF3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 14:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C1507A188A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 13:31:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6961518867E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 13:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E0C23027B;
-	Mon, 10 Feb 2025 13:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA4F230D0B;
+	Mon, 10 Feb 2025 13:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dgMUKhhb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SlcJ+47w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1393622F39D;
-	Mon, 10 Feb 2025 13:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DB1222579;
+	Mon, 10 Feb 2025 13:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739194248; cv=none; b=XN4mgBOPe78jUP6e9tCSP/VOTV5B5qe0KXYH56nRUeqb6oylBj3F0d1ybWIApTQ8PpV55emmtbRuxO2nHMKK32+1vel1bwzu/KF6uyvVuGxWbfh8cXFjpGlA9m58UoHu8O01deGCVvxLaMNmUZ1mPsAxAo3EaalTZloUCHQL52Y=
+	t=1739194257; cv=none; b=dTeQ2q2a5s0rZ05FyALj01DspcT7+gckbfaO+RJ0a4iuo7dBk+J8+4UUoAWzfHttDBmP0yydYI41vnWsmqANQD1s1fl8B3HSNfNua1qQ30Qg6I/APWdYPapaQylv3XY1x4ev7dFGzhG6I9op86Hmza8UtH3YhiAsGaHh4noDH3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739194248; c=relaxed/simple;
-	bh=H9aqFbCIkSAsSC/hjNbBRr8DDSLoMWyn0iRqmlBX9UQ=;
+	s=arc-20240116; t=1739194257; c=relaxed/simple;
+	bh=2u3aiZwG7nXyk2L47N18SQQLK/lDv6g+qT0nQKd4pSs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hdPFcT2mfvTZgcXUUQXgOQhuIGXHdq20K05EO4Fwq1v3uH/uHaFioKy2LcmHrw8ENui9LCO15j8pb4Y18/kCD/99615y+lxo/6gizqwrpsPUhwGMtIh9KvMnlEaIsRwnGTTr1v92UBUINCiDx8BFkCuU7lo4vgo6RFFO5qPrukY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dgMUKhhb; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=RVjvNTgscK9y5myhrlgw6WGu5fAu8a6lATRGFTIKH3pz5x/hpeT5XEf13KP2Ez22+2v6cyBP1j4qEcUzqExOGxV+l+ci1mmyYEYQKL5q05uaDdtBkjXfVX8oQagl61L5Ah6B1gtAprUNk6xGj3AilP9URoccBiZD7cpTzsyJ5qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SlcJ+47w; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2f9d3d0f55dso6682650a91.1;
-        Mon, 10 Feb 2025 05:30:45 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f2339dcfdso68365765ad.1;
+        Mon, 10 Feb 2025 05:30:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739194245; x=1739799045; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739194254; x=1739799054; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VTQz3HLN7vA7nTVNOajknIYqczbUXIKdhUj1noP9mOY=;
-        b=dgMUKhhbXmhHV2hhdwUoYb7ueopLiBa/KuW/6tO87/41OfiCD0i3xKoWHGdXe56mKy
-         G6I2x1x2sF6mmry3Yz0YySHAJUEY2Xlcc5Ga6h7phKyg/M+keeSS677MaRbOB+JVG7Yr
-         eWmi75uZ4/4SWGk13g/h3OsMcb6B+XN5RGr8C3x15x2NDp10trjXC2SX4pV9VSinsNLi
-         W7iQKWBAvbVj7b5I3vkoCTpOk/oDr1VCXB3m2/7KhNBOOWY5tWiEsZ+E02VtolAgF4IF
-         nvRzA3Gp98CS5R+2in5fMRErnf1noXTE/HhV5m1lIr9Bkut+HI1DBNCRZUsGn+pAWmEI
-         ow3g==
+        bh=0tN6LBIpl7aUsxZAQ1nC9Mvrd+HBX5wlThy/HCxYMvw=;
+        b=SlcJ+47wGGDUbl8sV5PwIW7AoAxfUG7nCeJM5ww7b+nw0BiGPXIl8QA6yS5m3t/QJ8
+         x7QFuIGD2iVmE1pY7/2y9PT0sO03WioE+Rn1tgNCwBzbcvp3OVBaWTPvPwEJ0p5gvdPq
+         q2CCrtUoARx/4aYWuiCPkFgIXtgGXDqPz9fiKFxrQ4UFEoQS0e2g/v0RoCmCDfPAnvXu
+         1+7laLyJ5HbpSZxKZTRijbfnAYCzQ2Kdo4eco51Rv7zQDUcLeYxsid2ED4X4nzcMmC+/
+         EyqNK3sFOOT4oS9VwDZlKmll5J6ZlzdAulvS/vAr8804aWjkFd2YbdndBmyKeGRAvEsY
+         5XHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739194245; x=1739799045;
+        d=1e100.net; s=20230601; t=1739194254; x=1739799054;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VTQz3HLN7vA7nTVNOajknIYqczbUXIKdhUj1noP9mOY=;
-        b=dxDBYqK3vYS1w55WVMVHkIHFIMC5S1Yl1CTlwlkP0EIQWVx5hrKvF/B53zyeRwv1od
-         QvRo/Z80PHK486FBBa7hvUfWeXCn52tTF5agloPCNMidMmilB+6Tmxw5Tktz8ZjdDp4J
-         bHvt8UNdbIAsJeBy/cx2eNey8SnArILXbnmDDpqYCHbY8WfB+kqnR0MAhflZTbbh3VKx
-         SDs4mVAIN4sKUPmAGFs5CvA0GRYbmTs9FCQIUHqD3DGolZOP8XCaAiO6l/14LVGzJVbx
-         16DArZLTC8t+svrDQgI/pwUriOJ5Ulp5Qz4fJsDUQt883W6CanFw16TU1Kptw6nBdNT6
-         1jVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUEQVNHfPjbh8cIp0wBJn3fZwV0EdCeg2Pu9857TLRcmpeON6Z8K2IzXblbMnbQGQhLWEXMxz4bk+bKPw==@vger.kernel.org, AJvYcCVS3VUboNlQ/OH4whF5sXIPZp4UoL8MJmEu1ccsjY1+u7eCHqJIzAhoggtE2ArFt14F22Mo7AyADcS4sEpHVmIZ@vger.kernel.org, AJvYcCVlXhzDZwuLXvZ01enqwNVi6a5YBN+vUrCEj6PPgFPbcqMxfM20nWjD72Fp7c69PJDgvAq8Afppwz6x@vger.kernel.org, AJvYcCWD7vdza0/2pB0qV2uFjbxark9lHqiJc4fXjlvNr221+Krj+H05NHhHUgpzulOu0DwSTqxkMZdrvmny@vger.kernel.org, AJvYcCWEJ3yvSBdcX68EQFffL5Hu/CDrM6zBCHb7xDe/wm1GYxUSadnt9jaicIwq9SeeqJaxWhwwcsXV8mqWNbnQYl0=@vger.kernel.org, AJvYcCWLNTqHfzfvFSQg+Hq7c4rTyMOyBJlI3mKIi/yVny9CjGwp+/woM8Zka7C2aIgrJPfs2kjaDzG4w7UaKiW7@vger.kernel.org, AJvYcCWXvIGZoPQ/LbchrSVndipSdFuirB/KHBwDY7MR+6g0NJ9r62F1FD4RfUmilQArev/aRpp8IR/4Nxstzw==@vger.kernel.org, AJvYcCXpATZEAdIr2KrX3YGJWQbUaeZI/4WODsjvI77516kwVyijyV3N+5Nh9FLcW4XFspuHDOo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlL6h99e0qBmdoGBkH1iVLCBmDelStd07cHXc5hMMUycDT/WKD
-	YSWa+U705RJekwPhY3gx7wrc0PHAv5liEuJgSpdxjONPOhlb37fpsNjTM1Cmw88=
-X-Gm-Gg: ASbGncurkBDXpoC1uz+EwO1SUXqcVO1zHbaRHpzlWzsK0DFA3NSunfphWjTrNP5N9p9
-	1xI7zFV7Qb4lKgEvm5dZlIW1WadOCsMV47FjMww0xG+TtjmgbXOBe5BLV/SaiiyXiN5MAkro6vX
-	skbl1yIUkIltGLYNdxcd0C9mdroYD01vB05LoDDl+G7p9rjzymB0YDtcGeeYQ3aB8q/CV40PYZ0
-	agv5gZJg205epExji1L+CjtOTJBebQUb+4DxBjf+ZGU0HeJ1Df4KlZ8kIeQISkGF7qIENBPGLIn
-	g6hwiQ==
-X-Google-Smtp-Source: AGHT+IGvCUUm6VDtDRTClYXUhfHGyNJIQBJcq6w6qi0QkqB1boS1T32XwvDbYId0u3A6njxoCxSXWg==
-X-Received: by 2002:a17:90b:1b44:b0:2ee:cdea:ad91 with SMTP id 98e67ed59e1d1-2fa24175d63mr21554271a91.15.1739194244648;
-        Mon, 10 Feb 2025 05:30:44 -0800 (PST)
+        bh=0tN6LBIpl7aUsxZAQ1nC9Mvrd+HBX5wlThy/HCxYMvw=;
+        b=tSKD1z1QhoLZlnEm1256y8ZQSsBE4IxrtyFYd7YB195lKRYkpmtnQlO4qjWJSYErhl
+         HGZkeROP6jYSIIkZXcONUFfQV18OtsSHze42KJDk2/nh7UxFJBKQO6pYX63w/OhIlcle
+         Y+5LINgTbyBk+SO+L8ta3rk60pAS2p+PfuETwr97jBE5gR9foeBlo3aVgH7I4GN/8q3c
+         YfiunFME73w+RQrgxpk9PhtOJyegDTQVODbGHAW3VnJbePzt4OQFqJEwdgnCHwJcOG2g
+         AfoupIva9e3xY86iSlyc+6eHsDxFv8H7XQjzUIN5qo3uAckTuTXOxHMj44qnFMTeba/+
+         C+Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ0l8At6FJ/SYLME2PzXx4uRE6mFl8dBanUGBiqqq8Th0huJqssV7lTN2hZg5bQBCFuurWkwBUo6kN4/GOHp98@vger.kernel.org, AJvYcCUU4Tq9SrFX+qOF1eRqOt00onrXZu7fPDDIEZCgzQEu5JwC+BZiXf1sNqXpTOuCLh0SjQGbFUD5Kdd8Tg==@vger.kernel.org, AJvYcCUw9B/WT94e/UE+JT45D5MSfLjZ99ZNmphmlSClc+QX+fLqLxb8IZEvxYMqbCKn0aKYE2Fs4mhEf0Kr@vger.kernel.org, AJvYcCV16on7V3lLlXPY3K/c+ui6kODu984DDNS4gJ71eNzIe6DGFv54o/nP1srnuC5MQkDb3qjU5wTyIWA+xQ==@vger.kernel.org, AJvYcCWhTQybiO587wGgTUhWun4rJFb78pXupN/PGofz7uesaeEGuYTAMB82jx3OUmX06KkgrAOkQt7ZaKHt@vger.kernel.org, AJvYcCWxVXImtm2cTF8o49+hZG3dmZaoyEI07XHaAtwB67E8X+zgA1PJEdO8WOOPJ9FobS/1Wpo=@vger.kernel.org, AJvYcCX2/Q/wRJi1qtNjs0TVJJtRrEY2xbU538zws2rvOoDo9AsieKOAFxLlRLmtdYpn5qJ3d5CvEYkqtHKN+ohc@vger.kernel.org, AJvYcCXSS1VY8u/saK2+CYLbadSMVWG96/xSZS1OXLqiTUxP6WytnNDaeh94Kq/LZ5aD28sAgGJFBCvagibN3FamzRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3UoaZX78phZhN/gNgzJ/lTcYubxrZ4Ga6F3pU0HBvD7ezlWmB
+	JB4lyAuCRRD3sjIBEOpJYtyGYZ7KlysFjzQ9ThvU6PNT7elw2ymGiA6v3GrdhCg=
+X-Gm-Gg: ASbGnct26Cxl6MhRehdV9Cixw4wUpwYfB5zm0PfHyGQm7gb6/hRuaNiOEi+2dpXd+jm
+	lyWYRYR9VpySJ1eXDy0svlbWp79S5XbvCkWQoIakUFltBnjb9K9sd8ySZrp4A+VrHHSL1x2UTCO
+	P3lxO7b01c+wVMCKgoQgAEdYMmbdEuaPerrtogVSyYkdzcwUitB8Mpo+sARtUEDz+TJy+v+m8da
+	5Y4uOzVeOdwoYV+R2c5IFTNGw9tAx7NvL9JlR5HJOSo2pq243Q7lmwmQk9e0tRjuhLuzmqKkhDz
+	GLjrPQ==
+X-Google-Smtp-Source: AGHT+IF8gihjdkRbSU1HRP8R4mEppMkEAKGDChElxIvCxKcXV79FUInFhj/RnX7alUKIg2RAq5xNnw==
+X-Received: by 2002:a17:903:46cc:b0:21f:6d63:6f4f with SMTP id d9443c01a7336-21f6d636ff1mr134607475ad.2.1739194253851;
+        Mon, 10 Feb 2025 05:30:53 -0800 (PST)
 Received: from ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653af3bsm78799445ad.57.2025.02.10.05.30.36
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653af3bsm78799445ad.57.2025.02.10.05.30.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 05:30:44 -0800 (PST)
+        Mon, 10 Feb 2025 05:30:53 -0800 (PST)
 From: Xiao Liang <shaw.leon@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -101,9 +101,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	bridge@lists.linux.dev,
 	linux-wpan@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v9 03/11] net: Use link netns in newlink() of rtnl_link_ops
-Date: Mon, 10 Feb 2025 21:29:54 +0800
-Message-ID: <20250210133002.883422-4-shaw.leon@gmail.com>
+Subject: [PATCH net-next v9 04/11] ieee802154: 6lowpan: Validate link netns in newlink() of rtnl_link_ops
+Date: Mon, 10 Feb 2025 21:29:55 +0800
+Message-ID: <20250210133002.883422-5-shaw.leon@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250210133002.883422-1-shaw.leon@gmail.com>
 References: <20250210133002.883422-1-shaw.leon@gmail.com>
@@ -115,501 +115,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These netdevice drivers already uses netns parameter in newlink()
-callback. Convert them to use rtnl_newlink_link_net() or
-rtnl_newlink_peer_net() for clarity and deprecate params->net.
+Device denoted by IFLA_LINK is in link_net (IFLA_LINK_NETNSID) or
+source netns by design, but 6lowpan uses dev_net.
+
+Note dev->netns_local is set to true and currently link_net is
+implemented via a netns change. These together effectively reject
+IFLA_LINK_NETNSID.
+
+This patch adds a validation to ensure link_net is either NULL or
+identical to dev_net. Thus it would be fine to continue using dev_net
+when rtnetlink core begins to create devices directly in target netns.
 
 Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 ---
- drivers/infiniband/ulp/ipoib/ipoib_netlink.c       | 4 ++--
- drivers/net/amt.c                                  | 6 +++---
- drivers/net/bareudp.c                              | 4 ++--
- drivers/net/can/vxcan.c                            | 2 +-
- drivers/net/ethernet/qualcomm/rmnet/rmnet_config.c | 4 ++--
- drivers/net/geneve.c                               | 4 ++--
- drivers/net/gtp.c                                  | 6 +++---
- drivers/net/ipvlan/ipvlan_main.c                   | 4 ++--
- drivers/net/macsec.c                               | 4 ++--
- drivers/net/macvlan.c                              | 4 ++--
- drivers/net/netkit.c                               | 2 +-
- drivers/net/pfcp.c                                 | 6 +++---
- drivers/net/ppp/ppp_generic.c                      | 4 ++--
- drivers/net/veth.c                                 | 2 +-
- drivers/net/vxlan/vxlan_core.c                     | 4 ++--
- drivers/net/wireguard/device.c                     | 4 ++--
- drivers/net/wireless/virtual/virt_wifi.c           | 4 ++--
- drivers/net/wwan/wwan_core.c                       | 2 +-
- net/8021q/vlan_netlink.c                           | 4 ++--
- net/hsr/hsr_netlink.c                              | 8 ++++----
- 20 files changed, 41 insertions(+), 41 deletions(-)
+ net/ieee802154/6lowpan/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/infiniband/ulp/ipoib/ipoib_netlink.c b/drivers/infiniband/ulp/ipoib/ipoib_netlink.c
-index 16cb8ced9f35..53db7c8191e3 100644
---- a/drivers/infiniband/ulp/ipoib/ipoib_netlink.c
-+++ b/drivers/infiniband/ulp/ipoib/ipoib_netlink.c
-@@ -101,8 +101,8 @@ static int ipoib_new_child_link(struct net_device *dev,
- 				struct rtnl_newlink_params *params,
- 				struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct net_device *pdev;
- 	struct ipoib_dev_priv *ppriv;
-@@ -112,7 +112,7 @@ static int ipoib_new_child_link(struct net_device *dev,
- 	if (!tb[IFLA_LINK])
- 		return -EINVAL;
- 
--	pdev = __dev_get_by_index(src_net, nla_get_u32(tb[IFLA_LINK]));
-+	pdev = __dev_get_by_index(link_net, nla_get_u32(tb[IFLA_LINK]));
- 	if (!pdev || pdev->type != ARPHRD_INFINIBAND)
- 		return -ENODEV;
- 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index 96b7ec9a2c13..53899b70fae1 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -3165,13 +3165,13 @@ static int amt_newlink(struct net_device *dev,
- 		       struct rtnl_newlink_params *params,
- 		       struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct amt_dev *amt = netdev_priv(dev);
- 	struct nlattr **data = params->data;
- 	struct nlattr **tb = params->tb;
--	struct net *net = params->net;
- 	int err = -EINVAL;
- 
--	amt->net = net;
-+	amt->net = link_net;
- 	amt->mode = nla_get_u32(data[IFLA_AMT_MODE]);
- 
- 	if (data[IFLA_AMT_MAX_TUNNELS] &&
-@@ -3186,7 +3186,7 @@ static int amt_newlink(struct net_device *dev,
- 	amt->hash_buckets = AMT_HSIZE;
- 	amt->nr_tunnels = 0;
- 	get_random_bytes(&amt->hash_seed, sizeof(amt->hash_seed));
--	amt->stream_dev = dev_get_by_index(net,
-+	amt->stream_dev = dev_get_by_index(link_net,
- 					   nla_get_u32(data[IFLA_AMT_LINK]));
- 	if (!amt->stream_dev) {
- 		NL_SET_ERR_MSG_ATTR(extack, tb[IFLA_AMT_LINK],
-diff --git a/drivers/net/bareudp.c b/drivers/net/bareudp.c
-index fc21dcfb4848..d1473c5f8eef 100644
---- a/drivers/net/bareudp.c
-+++ b/drivers/net/bareudp.c
-@@ -702,9 +702,9 @@ static int bareudp_newlink(struct net_device *dev,
- 			   struct rtnl_newlink_params *params,
- 			   struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
- 	struct nlattr **tb = params->tb;
--	struct net *net = params->net;
- 	struct bareudp_conf conf;
- 	int err;
- 
-@@ -712,7 +712,7 @@ static int bareudp_newlink(struct net_device *dev,
- 	if (err)
- 		return err;
- 
--	err = bareudp_configure(net, dev, &conf, extack);
-+	err = bareudp_configure(link_net, dev, &conf, extack);
- 	if (err)
- 		return err;
- 
-diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-index 6f8ebb1cfd7b..99a78a757167 100644
---- a/drivers/net/can/vxcan.c
-+++ b/drivers/net/can/vxcan.c
-@@ -176,8 +176,8 @@ static int vxcan_newlink(struct net_device *dev,
- 			 struct rtnl_newlink_params *params,
- 			 struct netlink_ext_ack *extack)
- {
-+	struct net *peer_net = rtnl_newlink_peer_net(params);
- 	struct nlattr **data = params->data;
--	struct net *peer_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct vxcan_priv *priv;
- 	struct net_device *peer;
-diff --git a/drivers/net/ethernet/qualcomm/rmnet/rmnet_config.c b/drivers/net/ethernet/qualcomm/rmnet/rmnet_config.c
-index 8151e91395e2..ab7e5b6649b2 100644
---- a/drivers/net/ethernet/qualcomm/rmnet/rmnet_config.c
-+++ b/drivers/net/ethernet/qualcomm/rmnet/rmnet_config.c
-@@ -122,8 +122,8 @@ static int rmnet_newlink(struct net_device *dev,
- 			 struct netlink_ext_ack *extack)
- {
- 	u32 data_format = RMNET_FLAGS_INGRESS_DEAGGREGATION;
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct net_device *real_dev;
- 	int mode = RMNET_EPMODE_VND;
-@@ -137,7 +137,7 @@ static int rmnet_newlink(struct net_device *dev,
- 		return -EINVAL;
- 	}
- 
--	real_dev = __dev_get_by_index(src_net, nla_get_u32(tb[IFLA_LINK]));
-+	real_dev = __dev_get_by_index(link_net, nla_get_u32(tb[IFLA_LINK]));
- 	if (!real_dev) {
- 		NL_SET_ERR_MSG_MOD(extack, "link does not exist");
- 		return -ENODEV;
-diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
-index d373a851930c..c7700deefb00 100644
---- a/drivers/net/geneve.c
-+++ b/drivers/net/geneve.c
-@@ -1618,9 +1618,9 @@ static int geneve_newlink(struct net_device *dev,
- 			  struct rtnl_newlink_params *params,
- 			  struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
- 	struct nlattr **tb = params->tb;
--	struct net *net = params->net;
- 	struct geneve_config cfg = {
- 		.df = GENEVE_DF_UNSET,
- 		.use_udp6_rx_checksums = false,
-@@ -1634,7 +1634,7 @@ static int geneve_newlink(struct net_device *dev,
- 	if (err)
- 		return err;
- 
--	err = geneve_configure(net, dev, extack, &cfg);
-+	err = geneve_configure(link_net, dev, extack, &cfg);
- 	if (err)
- 		return err;
- 
-diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
-index d6d4326cb908..2cf43e7d0edc 100644
---- a/drivers/net/gtp.c
-+++ b/drivers/net/gtp.c
-@@ -1466,8 +1466,8 @@ static int gtp_newlink(struct net_device *dev,
- 		       struct rtnl_newlink_params *params,
- 		       struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	unsigned int role = GTP_ROLE_GGSN;
- 	struct gtp_dev *gtp;
- 	struct gtp_net *gn;
-@@ -1498,7 +1498,7 @@ static int gtp_newlink(struct net_device *dev,
- 	gtp->restart_count = nla_get_u8_default(data[IFLA_GTP_RESTART_COUNT],
- 						0);
- 
--	gtp->net = src_net;
-+	gtp->net = link_net;
- 
- 	err = gtp_hashtable_new(gtp, hashsize);
- 	if (err < 0)
-@@ -1528,7 +1528,7 @@ static int gtp_newlink(struct net_device *dev,
- 		goto out_encap;
- 	}
- 
--	gn = net_generic(src_net, gtp_net_id);
-+	gn = net_generic(link_net, gtp_net_id);
- 	list_add(&gtp->list, &gn->gtp_dev_list);
- 	dev->priv_destructor = gtp_destructor;
- 
-diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
-index 19ce19ca7e32..b56144ca2fde 100644
---- a/drivers/net/ipvlan/ipvlan_main.c
-+++ b/drivers/net/ipvlan/ipvlan_main.c
-@@ -535,9 +535,9 @@ static int ipvlan_nl_fillinfo(struct sk_buff *skb,
- int ipvlan_link_new(struct net_device *dev, struct rtnl_newlink_params *params,
- 		    struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct ipvl_dev *ipvlan = netdev_priv(dev);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct ipvl_port *port;
- 	struct net_device *phy_dev;
-@@ -547,7 +547,7 @@ int ipvlan_link_new(struct net_device *dev, struct rtnl_newlink_params *params,
- 	if (!tb[IFLA_LINK])
- 		return -EINVAL;
- 
--	phy_dev = __dev_get_by_index(src_net, nla_get_u32(tb[IFLA_LINK]));
-+	phy_dev = __dev_get_by_index(link_net, nla_get_u32(tb[IFLA_LINK]));
- 	if (!phy_dev)
- 		return -ENODEV;
- 
-diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index 1869b0513f57..4de5d63fd577 100644
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@ -4145,10 +4145,10 @@ static int macsec_newlink(struct net_device *dev,
- 			  struct rtnl_newlink_params *params,
- 			  struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct macsec_dev *macsec = macsec_priv(dev);
- 	struct nlattr **data = params->data;
- 	struct nlattr **tb = params->tb;
--	struct net *net = params->net;
- 	rx_handler_func_t *rx_handler;
- 	u8 icv_len = MACSEC_DEFAULT_ICV_LEN;
- 	struct net_device *real_dev;
-@@ -4157,7 +4157,7 @@ static int macsec_newlink(struct net_device *dev,
+diff --git a/net/ieee802154/6lowpan/core.c b/net/ieee802154/6lowpan/core.c
+index 704bf9e3f097..ee318d46817d 100644
+--- a/net/ieee802154/6lowpan/core.c
++++ b/net/ieee802154/6lowpan/core.c
+@@ -143,6 +143,8 @@ static int lowpan_newlink(struct net_device *ldev,
  
  	if (!tb[IFLA_LINK])
  		return -EINVAL;
--	real_dev = __dev_get_by_index(net, nla_get_u32(tb[IFLA_LINK]));
-+	real_dev = __dev_get_by_index(link_net, nla_get_u32(tb[IFLA_LINK]));
- 	if (!real_dev)
- 		return -ENODEV;
- 	if (real_dev->type != ARPHRD_ETHER)
-diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
-index f903b414eaeb..4e9d54be887c 100644
---- a/drivers/net/macvlan.c
-+++ b/drivers/net/macvlan.c
-@@ -1444,9 +1444,9 @@ int macvlan_common_newlink(struct net_device *dev,
- 			   struct rtnl_newlink_params *params,
- 			   struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct macvlan_dev *vlan = netdev_priv(dev);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct net_device *lowerdev;
- 	struct macvlan_port *port;
-@@ -1457,7 +1457,7 @@ int macvlan_common_newlink(struct net_device *dev,
- 	if (!tb[IFLA_LINK])
- 		return -EINVAL;
- 
--	lowerdev = __dev_get_by_index(src_net, nla_get_u32(tb[IFLA_LINK]));
-+	lowerdev = __dev_get_by_index(link_net, nla_get_u32(tb[IFLA_LINK]));
- 	if (lowerdev == NULL)
- 		return -ENODEV;
- 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 640a2dbbbd28..751347392570 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -331,13 +331,13 @@ static int netkit_new_link(struct net_device *dev,
- 			   struct rtnl_newlink_params *params,
- 			   struct netlink_ext_ack *extack)
- {
-+	struct net *peer_net = rtnl_newlink_peer_net(params);
- 	enum netkit_scrub scrub_prim = NETKIT_SCRUB_DEFAULT;
- 	enum netkit_scrub scrub_peer = NETKIT_SCRUB_DEFAULT;
- 	struct nlattr *peer_tb[IFLA_MAX + 1], **tbp, *attr;
- 	enum netkit_action policy_prim = NETKIT_PASS;
- 	enum netkit_action policy_peer = NETKIT_PASS;
- 	struct nlattr **data = params->data;
--	struct net *peer_net = params->net;
- 	enum netkit_mode mode = NETKIT_L3;
- 	unsigned char ifname_assign_type;
- 	struct nlattr **tb = params->tb;
-diff --git a/drivers/net/pfcp.c b/drivers/net/pfcp.c
-index 7b0575940e1d..f873a92d2445 100644
---- a/drivers/net/pfcp.c
-+++ b/drivers/net/pfcp.c
-@@ -188,12 +188,12 @@ static int pfcp_newlink(struct net_device *dev,
- 			struct rtnl_newlink_params *params,
- 			struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct pfcp_dev *pfcp = netdev_priv(dev);
--	struct net *net = params->net;
- 	struct pfcp_net *pn;
- 	int err;
- 
--	pfcp->net = net;
-+	pfcp->net = link_net;
- 
- 	err = pfcp_add_sock(pfcp);
- 	if (err) {
-@@ -207,7 +207,7 @@ static int pfcp_newlink(struct net_device *dev,
- 		goto exit_del_pfcp_sock;
- 	}
- 
--	pn = net_generic(net, pfcp_net_id);
-+	pn = net_generic(link_net, pfcp_net_id);
- 	list_add(&pfcp->list, &pn->pfcp_dev_list);
- 
- 	netdev_dbg(dev, "registered new PFCP interface\n");
-diff --git a/drivers/net/ppp/ppp_generic.c b/drivers/net/ppp/ppp_generic.c
-index b3340f8a6149..6220866258fc 100644
---- a/drivers/net/ppp/ppp_generic.c
-+++ b/drivers/net/ppp/ppp_generic.c
-@@ -1307,8 +1307,8 @@ static int ppp_nl_newlink(struct net_device *dev,
- 			  struct rtnl_newlink_params *params,
- 			  struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct ppp_config conf = {
- 		.unit = -1,
-@@ -1346,7 +1346,7 @@ static int ppp_nl_newlink(struct net_device *dev,
- 	if (!tb[IFLA_IFNAME] || !nla_len(tb[IFLA_IFNAME]) || !*(char *)nla_data(tb[IFLA_IFNAME]))
- 		conf.ifname_is_set = false;
- 
--	err = ppp_dev_configure(src_net, dev, &conf);
-+	err = ppp_dev_configure(link_net, dev, &conf);
- 
- out_unlock:
- 	mutex_unlock(&ppp_mutex);
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 7dfda89f072f..ba3ae2d8092f 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1769,8 +1769,8 @@ static int veth_newlink(struct net_device *dev,
- 			struct rtnl_newlink_params *params,
- 			struct netlink_ext_ack *extack)
- {
-+	struct net *peer_net = rtnl_newlink_peer_net(params);
- 	struct nlattr **data = params->data;
--	struct net *peer_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	int err;
- 	struct net_device *peer;
-diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-index 69ee76172cd2..d342ba899a69 100644
---- a/drivers/net/vxlan/vxlan_core.c
-+++ b/drivers/net/vxlan/vxlan_core.c
-@@ -4401,8 +4401,8 @@ static int vxlan_newlink(struct net_device *dev,
- 			 struct rtnl_newlink_params *params,
- 			 struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct vxlan_config conf;
- 	int err;
-@@ -4411,7 +4411,7 @@ static int vxlan_newlink(struct net_device *dev,
- 	if (err)
- 		return err;
- 
--	return __vxlan_dev_create(src_net, dev, &conf, extack);
-+	return __vxlan_dev_create(link_net, dev, &conf, extack);
- }
- 
- static int vxlan_changelink(struct net_device *dev, struct nlattr *tb[],
-diff --git a/drivers/net/wireguard/device.c b/drivers/net/wireguard/device.c
-index 404cf05bd72b..c496d35b266d 100644
---- a/drivers/net/wireguard/device.c
-+++ b/drivers/net/wireguard/device.c
-@@ -311,11 +311,11 @@ static int wg_newlink(struct net_device *dev,
- 		      struct rtnl_newlink_params *params,
- 		      struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct wg_device *wg = netdev_priv(dev);
--	struct net *src_net = params->net;
- 	int ret = -ENOMEM;
- 
--	rcu_assign_pointer(wg->creating_net, src_net);
-+	rcu_assign_pointer(wg->creating_net, link_net);
- 	init_rwsem(&wg->static_identity.lock);
- 	mutex_init(&wg->socket_update_lock);
- 	mutex_init(&wg->device_update_lock);
-diff --git a/drivers/net/wireless/virtual/virt_wifi.c b/drivers/net/wireless/virtual/virt_wifi.c
-index 26905b2b3ba3..f9d11a023313 100644
---- a/drivers/net/wireless/virtual/virt_wifi.c
-+++ b/drivers/net/wireless/virtual/virt_wifi.c
-@@ -524,7 +524,7 @@ static int virt_wifi_newlink(struct net_device *dev,
- 			     struct netlink_ext_ack *extack)
- {
- 	struct virt_wifi_netdev_priv *priv = netdev_priv(dev);
--	struct net *src_net = params->net;
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **tb = params->tb;
- 	int err;
- 
-@@ -534,7 +534,7 @@ static int virt_wifi_newlink(struct net_device *dev,
- 	netif_carrier_off(dev);
- 
- 	priv->upperdev = dev;
--	priv->lowerdev = __dev_get_by_index(src_net,
-+	priv->lowerdev = __dev_get_by_index(link_net,
- 					    nla_get_u32(tb[IFLA_LINK]));
- 
- 	if (!priv->lowerdev)
-diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
-index a05c49b4e7f8..63a47d420bc5 100644
---- a/drivers/net/wwan/wwan_core.c
-+++ b/drivers/net/wwan/wwan_core.c
-@@ -1065,7 +1065,7 @@ static void wwan_create_default_link(struct wwan_device *wwandev,
- 	struct nlattr *tb[IFLA_MAX + 1], *linkinfo[IFLA_INFO_MAX + 1];
- 	struct nlattr *data[IFLA_WWAN_MAX + 1];
- 	struct rtnl_newlink_params params = {
--		.net = &init_net,
-+		.src_net = &init_net,
- 		.tb = tb,
- 		.data = data,
- 	};
-diff --git a/net/8021q/vlan_netlink.c b/net/8021q/vlan_netlink.c
-index 91df0f96e32a..a000b1ef0520 100644
---- a/net/8021q/vlan_netlink.c
-+++ b/net/8021q/vlan_netlink.c
-@@ -139,9 +139,9 @@ static int vlan_newlink(struct net_device *dev,
- 			struct rtnl_newlink_params *params,
- 			struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct vlan_dev_priv *vlan = vlan_dev_priv(dev);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	struct nlattr **tb = params->tb;
- 	struct net_device *real_dev;
- 	unsigned int max_mtu;
-@@ -158,7 +158,7 @@ static int vlan_newlink(struct net_device *dev,
- 		return -EINVAL;
- 	}
- 
--	real_dev = __dev_get_by_index(src_net, nla_get_u32(tb[IFLA_LINK]));
-+	real_dev = __dev_get_by_index(link_net, nla_get_u32(tb[IFLA_LINK]));
- 	if (!real_dev) {
- 		NL_SET_ERR_MSG_MOD(extack, "link does not exist");
- 		return -ENODEV;
-diff --git a/net/hsr/hsr_netlink.c b/net/hsr/hsr_netlink.c
-index 39add538ba99..b120470246cc 100644
---- a/net/hsr/hsr_netlink.c
-+++ b/net/hsr/hsr_netlink.c
-@@ -33,8 +33,8 @@ static int hsr_newlink(struct net_device *dev,
- 		       struct rtnl_newlink_params *params,
- 		       struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = rtnl_newlink_link_net(params);
- 	struct nlattr **data = params->data;
--	struct net *src_net = params->net;
- 	enum hsr_version proto_version;
- 	unsigned char multicast_spec;
- 	u8 proto = HSR_PROTOCOL_HSR;
-@@ -48,7 +48,7 @@ static int hsr_newlink(struct net_device *dev,
- 		NL_SET_ERR_MSG_MOD(extack, "Slave1 device not specified");
- 		return -EINVAL;
- 	}
--	link[0] = __dev_get_by_index(src_net,
-+	link[0] = __dev_get_by_index(link_net,
- 				     nla_get_u32(data[IFLA_HSR_SLAVE1]));
- 	if (!link[0]) {
- 		NL_SET_ERR_MSG_MOD(extack, "Slave1 does not exist");
-@@ -58,7 +58,7 @@ static int hsr_newlink(struct net_device *dev,
- 		NL_SET_ERR_MSG_MOD(extack, "Slave2 device not specified");
- 		return -EINVAL;
- 	}
--	link[1] = __dev_get_by_index(src_net,
-+	link[1] = __dev_get_by_index(link_net,
- 				     nla_get_u32(data[IFLA_HSR_SLAVE2]));
- 	if (!link[1]) {
- 		NL_SET_ERR_MSG_MOD(extack, "Slave2 does not exist");
-@@ -71,7 +71,7 @@ static int hsr_newlink(struct net_device *dev,
- 	}
- 
- 	if (data[IFLA_HSR_INTERLINK])
--		interlink = __dev_get_by_index(src_net,
-+		interlink = __dev_get_by_index(link_net,
- 					       nla_get_u32(data[IFLA_HSR_INTERLINK]));
- 
- 	if (interlink && interlink == link[0]) {
++	if (params->link_net && !net_eq(params->link_net, dev_net(ldev)))
++		return -EINVAL;
+ 	/* find and hold wpan device */
+ 	wdev = dev_get_by_index(dev_net(ldev), nla_get_u32(tb[IFLA_LINK]));
+ 	if (!wdev)
 -- 
 2.48.1
 
