@@ -1,795 +1,277 @@
-Return-Path: <linux-kselftest+bounces-26202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2792A2F6DF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 19:23:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3628AA2F71B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 19:31:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F8B83A6468
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 18:23:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68C351889FE4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 18:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF13B25742A;
-	Mon, 10 Feb 2025 18:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E76325743B;
+	Mon, 10 Feb 2025 18:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="byV8rWJe"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="uPPNNnS0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905382566F5;
-	Mon, 10 Feb 2025 18:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174B420487F
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 18:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739211811; cv=none; b=RZ+dUNpJXz4BItGqACm+pzDWL6VvQJCvC/uVRkRCJBMtjzMmPs1DzRm9ASOKsNhF3IJm7nfB7JIYTYE5iKUt6GNPsvhhUl3N1c0IJiKdkECxqk+9rYiyLIxbV1J4tNifttxaDuhmCSmQe4R80iUQAp4Utg7YE7g5F5kTXw2gW5E=
+	t=1739212269; cv=none; b=PtdS40FpB4QaR9rjFDGA65Pu4zPWTrSkp5CdIS0AOSpxBwJxHWnyQ3Gd6mmjnQRYRKYqM/gAJTmpkWZQHYMUird/7BorNUhwC+7LNcm3bnhF7tP7Ae6lNTenfHxyQESndon5Hr5X0I8kDQyoop64vQfl0vVU8s3Sp9wY6C3ZXbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739211811; c=relaxed/simple;
-	bh=+8LeJ0BFrjpAfAi6uw54u7DTnLNITgIBm+ndoUB5j84=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P9hIYLUCBCewMwAeTrJCII61iZ6I5erGvqClerjcNYONgoEhZLNY1twXNB2ha7iCoPf6VTyUcS/QycFvmvoEZOrTou2AXN8SSTkkSpOsArSoOsfgcdzx0RcTMpKkza+Cq0OnORAyrHxO8QBm7YZ458X7yCdL8DaXDO+TTKQd+ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=byV8rWJe; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4719141e711so11022601cf.0;
-        Mon, 10 Feb 2025 10:23:29 -0800 (PST)
+	s=arc-20240116; t=1739212269; c=relaxed/simple;
+	bh=NGOFeQX/94iKLC7KRyXn9K4Nt0CwgBBrM/PM50W0oY0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gXQWpZ66eBLodj/CXn6xC9P8IAHM+Yxa7uxTYlxcT/4sKw1rdw/0iJhDgk9R5RCE7eUKiwTHGBZcFRRVGwB775lURS+9M3gMcRtZ04ot4Tk+n9zSjCTnyJXsFlgmljXzGYZg6asWQnPzWtcBfnXmGTw67ytZbrZg7x7xKPMmwNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=uPPNNnS0; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e5b3391b033so3648579276.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 10:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739211808; x=1739816608; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8j2bJmhADEYZ8mCa5Jc3rXkBB0QVEtv6kx6cNdcOdls=;
-        b=byV8rWJed39cD2ZCfqa7Ru3HeIEwDaRgxnFXSgvppTDJBYRWd0Xtyru5N/M5AhqbN+
-         a9WoRCvCJZFyENMSG8QaWnu3JgFI8OiAO0wSu+chszE5xdAWAqkyObGdpYIR8VFLeg3/
-         GbfNFMXfqUXom7Hxodp3GbBGFUIF9Uc6Zmr73zaNVDgTEDi3+YztQL030PrTR2HiB7PY
-         c1/iJ7VdEyJ0aAKSk4o0eq0qyXmjQW4l+ba0tA5Q/RL6Lf7GlF52AW0SoR7zafrk6bF0
-         O9Toe88v0jeuw56qKMzWBaqRr3D9tMsiPxuzcbNzxyfpfOgxxueHKA7PBlUqb2tVY50k
-         Yw0Q==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739212265; x=1739817065; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KPwb4aI7pixw1RFAv20MaBbqn02tdpDM4Y6srTWRmRk=;
+        b=uPPNNnS04+JKCnArBtaVzbXinW+Z6sw8obI2LEZkIcEuXfK4sD6xH2vRUV7pbUuNlG
+         Y5k5sN9uXUvWVBhFL0VE3mesvv+WGMgHMAx/FjICw2cpmWW4KQ2u4FKPwG+rQ+lgzK8S
+         ZT6oikXG8OZ+vDptV+whm4dY2IU1UZCXfpKophp8tFe3E6KqtqNDqbgqaAon61IPwLBj
+         zUWF6Wson0GFjgnijp7GdoeTCDRIKDPzQnp3HHq6TZ7aH/iwoP7HjiTVzwBFOoePAPoZ
+         cpH77Motu1kIJmk+GTJZ9yym2DtuNZgfNEnSB8iJ0b1HB/a3C+GT4MAMOUEQKvJosiov
+         7XPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739211808; x=1739816608;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8j2bJmhADEYZ8mCa5Jc3rXkBB0QVEtv6kx6cNdcOdls=;
-        b=f6Aa1W7dsRgVIBFQgziBg3a+wBTVDqVCbKaKIj3P2o/vikKC9/zCHAyz9bi+oxPJmW
-         KC1MCG32NpvpD+j1NolGAaknR8V0ynfn8VYATia/jEeEe7BWAiEpiyJ+n2n0UcLaYlYe
-         2LHTXsmVVENwwDljmCYGuXISAdpoyjiyDvQgQ5HNfJs+lwWU76fdRnpzTNZDUfngNKuQ
-         Jmc5q6D7v5oM85p5BcHVrfD9V7m3cqpxcz/5p8M8G+7OYCnRYYIEB02+u2KOtJ2kaiOx
-         V3ee3Nne1fi5Dr3rml5xX1v76fUXUb5+l6brIQEQ9sBv1ZTowdJcDwxKF93/Nr556sEh
-         yG1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVccM+s6h6mYMvgILtnWAsyem910pJam2dS6lslKQ7MDsMKyQXolvhMyeTgUAqeC8/CLz/Vv9+9ZfA=@vger.kernel.org, AJvYcCVoIY7PYiUCF610C3DbzPebZzmnqdX21UVJHLRqPVK1R55EAVM9b6A6wmDafIfeYSqQ0/TwMB+T0DVTQO7wUva1@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbP5JPW/jI0YV+2wxiKt8W8YeRjod7QA2Sa4Ea4B3iP2U28ssb
-	ixf1tWWlfN5ZgD3EAL9EwmgGuR3OCnkyWNKimY/DiUyENqefZR/k
-X-Gm-Gg: ASbGnctujYZC81LLl5AEcL5IYsom64BoNgCZwTqke3CYJJjXadubpIaA6hIkWuFbeTm
-	5YFa0MXXtVSPOV/GOlZMSC1/FAd6rX+mxznUtH6SIffBwd+wFHVDNZ1wcHbqjpidIp5EXDOzjwD
-	ZEoNdYfCh1O7Kxh2i9Ur1dHN2lU5cS2pam7VLauCAVaEqh/KvahkCjQPTL1+rU0vLa3ADywhrp/
-	XOj6niNODe4t7vS6uRoJgYPr72jxKo2H2vfm5DsBwoERP0jvqEXU7LL1OLUCp1J+XkbsSYE4/Dw
-	M9cy1uabRHNO3p6KlA99nRwvDJlozMSknaixWnWxYOOmObVphwxyZb33Aaq+OXykns0j76Q7wYq
-	FmrQ7cmVga59UE1G+hXW75Swe
-X-Google-Smtp-Source: AGHT+IEnEkGCtTLPZBnfF+XiEiFW+kZgSjvA0T/NM+uWP3Y+L9VX1NzG9vcRZq5nZh1+OQOIra7TMg==
-X-Received: by 2002:a05:6214:20cf:b0:6d9:3016:d101 with SMTP id 6a1803df08f44-6e445707956mr156072856d6.41.1739211806776;
-        Mon, 10 Feb 2025 10:23:26 -0800 (PST)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:cc94])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e440d902d3sm45436456d6.7.2025.02.10.10.23.25
+        d=1e100.net; s=20230601; t=1739212265; x=1739817065;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KPwb4aI7pixw1RFAv20MaBbqn02tdpDM4Y6srTWRmRk=;
+        b=b0qSHQEUMQRj3s3dhuV1hd+ii5nqLoyWOHmrD8b6zExk0DTYksxQ8IK6ZTSkl5Pulv
+         BuX/W/10huh7YYQGv+XBPIUZfSW+mbt7Fyim1RhZjYz7aCDa0+EFZiBo36XvYT0z0zdt
+         mkoGAmzR7fMCoV/QgJpLaGPbup+xGS9cssFj8fg8nM5B6M2z+GE1rkONJvsEoyDt7/64
+         xvKjnmmwwbamiQCshebK3m7qb2hOwn7rHSQGH0iME2kWavsFMDplTpkU0GIEMqmNAOD8
+         CaD8sbrnhYxj8O0fDaL8JwnVm7lnXh7EoNZuYsC/TVJVIxDvR/xxIIbqTpvDYhi3+iV+
+         JtIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVd7IOLHDlCyyepZvx6Nq6dpBPSYHN4LI475DglfoY+80fGQn+jQVEvIU5LnOE5VwOcc4ifDUn1WSAdfWZ30sI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynbIVDZX+SoZhuQlIYG80HOIAeOAHT5d0YnygLhurMssINwgK6
+	ElPlD9J67q4mD7/qsOxVWlV3XzUgNLeivp4XRc2rG+SJ5bWyKvFcs2AL4Dr7rpo=
+X-Gm-Gg: ASbGnct7/B05WMFKbp/Ny6mqysAaYcu20kSmiquBcJdayGBHpzmJ8VaX2b8+rvGqFEi
+	oN+9fPsg45dDaWDep7ZJANwiAgldJChuiPDDR5MS425KTRuwNpaO4ygDqVKFSOqT3ODim7V9sxD
+	+10YmJzrpWIlu73s6xinJVv8raoHtnxm6rYaRf+r+3uY6sL5Qe3kP5qdKZs/AcURyJOiwZ8KBz9
+	EUYBywEcDuPlWu4YAiFxIrZvQdIYJRqeCQZltx5sLtgMWntleS1zo63nDBVIfFnVk4shVSO1HNY
+	ckE=
+X-Google-Smtp-Source: AGHT+IHP4/PfYe0pzIQUijWibiRiqcclWIqX6MxksiY/orFAxERUC+/zAt6c1cAXqUao8PQOqCSyhA==
+X-Received: by 2002:a05:6902:1793:b0:e5b:3394:ea0c with SMTP id 3f1490d57ef6-e5b461672f5mr12395154276.10.1739212264835;
+        Mon, 10 Feb 2025 10:31:04 -0800 (PST)
+Received: from ghost ([50.146.0.9])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e5b3a45d7f1sm2703301276.40.2025.02.10.10.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 10:23:26 -0800 (PST)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 10 Feb 2025 13:23:23 -0500
-Subject: [PATCH v3 2/2] printf: break kunit into test cases
+        Mon, 10 Feb 2025 10:31:04 -0800 (PST)
+Date: Mon, 10 Feb 2025 10:31:02 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
+	Linux Power Management <linux-pm@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
+Message-ID: <Z6pF5pkH_bqvDwMK@ghost>
+References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
+ <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
+ <Z6JdwSsAk1xCiSrn@ghost>
+ <Z6JksXDRh8OSAh-u@google.com>
+ <CAADnVQKmKf6wY3dg+PfAxtrrFWGO7D-m83dEndjWksPfWDt5wQ@mail.gmail.com>
+ <Z6Khl1rHIAb7wOXw@ghost>
+ <CAEf4Bza5nKk6_fVY2vmJjZgPb40zB+R3REy8==ZLc98eg1iHTA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250210-printf-kunit-convert-v3-2-ee6ac5500f5e@gmail.com>
-References: <20250210-printf-kunit-convert-v3-0-ee6ac5500f5e@gmail.com>
-In-Reply-To: <20250210-printf-kunit-convert-v3-0-ee6ac5500f5e@gmail.com>
-To: Arpitha Raghunandan <98.arpi@gmail.com>, 
- David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Geert Uytterhoeven <geert@linux-m68k.org>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linuxppc-dev@lists.ozlabs.org, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bza5nKk6_fVY2vmJjZgPb40zB+R3REy8==ZLc98eg1iHTA@mail.gmail.com>
 
-Move all tests into `printf_test_cases`. This gives us nicer output in
-the event of a failure.
+On Wed, Feb 05, 2025 at 05:28:19PM -0800, Andrii Nakryiko wrote:
+> On Tue, Feb 4, 2025 at 3:24 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
+> >
+> > On Tue, Feb 04, 2025 at 11:02:42PM +0000, Alexei Starovoitov wrote:
+> > > On Tue, Feb 4, 2025 at 7:04 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > On Tue, Feb 04, 2025 at 10:34:41AM -0800, Charlie Jenkins wrote:
+> > > > > On Tue, Feb 04, 2025 at 05:18:42PM +0000, Alexei Starovoitov wrote:
+> > > > > > On Tue, Feb 4, 2025 at 12:10 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
+> > > > > > >
+> > > > > > > The quiet infrastructure was moved out of Makefile.build to accomidate
+> > > > > > > the new syscall table generation scripts in perf. Syscall table
+> > > > > > > generation wanted to also be able to be quiet, so instead of again
+> > > > > > > copying the code to set the quiet variables, the code was moved into
+> > > > > > > Makefile.perf to be used globally. This was not the right solution. It
+> > > > > > > should have been moved even further upwards in the call chain.
+> > > > > > > Makefile.include is imported in many files so this seems like a proper
+> > > > > > > place to put it.
+> > > > > > >
+> > > > > > > To:
+> > > > > > >
+> > > > > > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > > > > > > ---
+> > > > > > > Charlie Jenkins (2):
+> > > > > > >       tools: Unify top-level quiet infrastructure
+> > > > > > >       tools: Remove redundant quiet setup
+> > > > > > >
+> > > > > > >  tools/arch/arm64/tools/Makefile           |  6 -----
+> > > > > > >  tools/bpf/Makefile                        |  6 -----
+> > > > > > >  tools/bpf/bpftool/Documentation/Makefile  |  6 -----
+> > > > > > >  tools/bpf/bpftool/Makefile                |  6 -----
+> > > > > > >  tools/bpf/resolve_btfids/Makefile         |  2 --
+> > > > > > >  tools/bpf/runqslower/Makefile             |  5 +---
+> > > > > > >  tools/build/Makefile                      |  8 +-----
+> > > > > > >  tools/lib/bpf/Makefile                    | 13 ----------
+> > > > > >
+> > > > > > Nack.
+> > > > > > libbpf and bpftool are synced independently to github
+> > > > > > and released from there.
+> > > > > > This change breaks it.
+> > > >
+> > > > Sorry, I overlooked this part and merged a change that touched the
+> > > > common files into the perf tree.
+> > > >
+> > > > f2868b1a66d4f40f ("perf tools: Expose quiet/verbose variables in Makefile.perf")
+> > > >
+> > > > Unfortunately, it's already in v6.14-rc1.
+> > > >
+> > > > >
+> > > > > Can you explain how it breaks it? Currently bpftool and resolve_btfids
+> > > > > don't build quietly so this was an attempt to fix that.
+> > > >
+> > > > So I think you will need something like this for v6.14.  Again, sorry
+> > > > about the trouble.
+> > >
+> > > Just revert f2868b1a66d4f40f that created this mess.
+> >
+> > Why are you opposed to unifying this helpers among the various projects
+> > in tools? Can you explain what about this breaks the Github syncing flow
+> > and why it cannot be resolved? It doesn't make sense to duplicate "Q="
+> > in every Makefile anybody ever wants to add to tools just because bpf
+> > syncing isn't robust.
+> 
+> Alexei's concern about Github mirrors of bpftool and libbpf isn't
+> valid. Github versions of those projects use their own independent
+> Makefiles anyways, so your change doesn't break that aspect.
+> 
+> But your change *does* break both libbpf's and bpftool's make output
+> *in the kernel repo*. With this patch we basically don't have "quiet"
+> mode anymore:
+> 
+> $ git co f2868b1a66d4f40f07e985b0beead606b2753602
+> HEAD is now at f2868b1a66d4 perf tools: Expose quiet/verbose variables
+> in Makefile.perf
+> $ git log --oneline -n1
+> f2868b1a66d4 (HEAD) perf tools: Expose quiet/verbose variables in Makefile.perf
+> $ pwd
+> /home/andriin/linux/tools/lib/bpf
+> $ make
+>   gcc -Wp,-MD,/data/users/andriin/linux/tools/lib/bpf/staticobjs/.libbpf.o.d
+> -Wp,-MT,/data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o -g
+> -O2 -std=gnu89 -Wbad-function-cast -Wdeclaration-after-statement
+> -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations
+> -Wmissing-prototypes -Wnested-externs -Wno-system-headers
+> -Wold-style-definition -Wpacked -Wredundant-decls -Wstrict-prototypes
+> -Wswitch-default -Wswitch-enum -Wundef -Wwrite-strings -Wformat
+> -Wno-type-limits -Wstrict-aliasing=3 -Wshadow -Wno-switch-enum -Werror
+> -Wall -I/data/users/andriin/linux/tools/lib/bpf/
+> -I/data/users/andriin/linux/tools/include
+> -I/data/users/andriin/linux/tools/include/uapi
+> -I/data/users/andriin/linux/tools/arch/x86/include -fvisibility=hidden
+> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D"BUILD_STR(s)=#s" -c -o
+> /data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o libbpf.c
+> ^Cmake[2]: *** [/data/users/andriin/linux/tools/build/Makefile.build:86:
+> /data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o] Interrupt
+> make[1]: *** [Makefile:165:
+> /data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf-in.o]
+> Interrupt
+> make: *** [Makefile:143: all] Interrupt
+> 
+> $ git co HEAD~
+> Previous HEAD position was f2868b1a66d4 perf tools: Expose
+> quiet/verbose variables in Makefile.perf
+> HEAD is now at e9cbc854d8b1 perf config: Add a function to set one
+> variable in .perfconfig
+> $ make
+>   CC      /data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o
+> ^C
+> 
+> So, can you please check and fix?
 
-Combine `plain_format` and `plain_hash` into `hash_pointer` since
-they're testing the same scenario.
+I think I am misunderstanding what you are saying. The patch that we are
+discussing on is the patch to fix this? You are showing the output from
+the patch that is being fixed in this series.
 
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- lib/printf_kunit.c | 331 ++++++++++++++++++++---------------------------------
- 1 file changed, 121 insertions(+), 210 deletions(-)
+> 
+> Also, looking at your patch:
+> 
+> a) you removed the `"$(origin V)", "command line"` check from both
+> perf and libbpf, so that's not really an equivalent change/behavior
+> now
 
-diff --git a/lib/printf_kunit.c b/lib/printf_kunit.c
-index 287bbfb61148..00c35eb0abdc 100644
---- a/lib/printf_kunit.c
-+++ b/lib/printf_kunit.c
-@@ -38,13 +38,8 @@ static unsigned int total_tests;
- static char *test_buffer;
- static char *alloced_buffer;
- 
--static struct kunit *kunittest;
--
--#define tc_fail(fmt, ...) \
--	KUNIT_FAIL(kunittest, fmt, ##__VA_ARGS__)
--
--static void __printf(4, 0)
--do_test(int bufsize, const char *expect, int elen,
-+static void __printf(5, 0)
-+do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
- 	const char *fmt, va_list ap)
- {
- 	va_list aq;
-@@ -58,59 +53,64 @@ do_test(int bufsize, const char *expect, int elen,
- 	va_end(aq);
- 
- 	if (ret != elen) {
--		tc_fail("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d",
--			bufsize, fmt, ret, elen);
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d",
-+			   bufsize, fmt, ret, elen);
- 		return;
- 	}
- 
- 	if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
--		tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote before buffer",
--			bufsize, fmt);
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote before buffer",
-+			   bufsize, fmt);
- 		return;
- 	}
- 
- 	if (!bufsize) {
- 		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE)) {
--			tc_fail("vsnprintf(buf, 0, \"%s\", ...) wrote to buffer", fmt);
-+			KUNIT_FAIL(kunittest, "vsnprintf(buf, 0, \"%s\", ...) wrote to buffer",
-+				   fmt);
- 		}
- 		return;
- 	}
- 
- 	written = min(bufsize-1, elen);
- 	if (test_buffer[written]) {
--		tc_fail("vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer",
--			bufsize, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer",
-+			   bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, bufsize - (written + 1))) {
--		tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator",
--			bufsize, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator",
-+			   bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + bufsize, FILL_CHAR, BUF_SIZE + PAD_SIZE - bufsize)) {
--		tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer", bufsize, fmt);
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer",
-+			   bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memcmp(test_buffer, expect, written)) {
--		tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'",
--			bufsize, fmt, test_buffer, written, expect);
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'",
-+			   bufsize, fmt, test_buffer, written, expect);
- 		return;
- 	}
- }
- 
--static void __printf(3, 4)
--__test(const char *expect, int elen, const char *fmt, ...)
-+static void __printf(4, 5)
-+__test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, ...)
- {
- 	va_list ap;
- 	int rand;
- 	char *p;
- 
- 	if (elen >= BUF_SIZE) {
--		tc_fail("error in test suite: expected output length %d too long. Format was '%s'.",
--			elen, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "error in test suite: expected length (%d) >= BUF_SIZE (%d). fmt=\"%s\"",
-+			   elen, BUF_SIZE, fmt);
- 		return;
- 	}
- 
-@@ -122,18 +122,19 @@ __test(const char *expect, int elen, const char *fmt, ...)
- 	 * enough and 0), and then we also test that kvasprintf would
- 	 * be able to print it as expected.
- 	 */
--	do_test(BUF_SIZE, expect, elen, fmt, ap);
-+	do_test(kunittest, BUF_SIZE, expect, elen, fmt, ap);
- 	rand = get_random_u32_inclusive(1, elen + 1);
- 	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
--	do_test(rand, expect, elen, fmt, ap);
--	do_test(0, expect, elen, fmt, ap);
-+	do_test(kunittest, rand, expect, elen, fmt, ap);
-+	do_test(kunittest, 0, expect, elen, fmt, ap);
- 
- 	p = kvasprintf(GFP_KERNEL, fmt, ap);
- 	if (p) {
- 		total_tests++;
- 		if (memcmp(p, expect, elen+1)) {
--			tc_fail("kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'",
--				fmt, p, expect);
-+			KUNIT_FAIL(kunittest,
-+				   "kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'",
-+				   fmt, p, expect);
- 		}
- 		kfree(p);
- 	}
-@@ -141,10 +142,10 @@ __test(const char *expect, int elen, const char *fmt, ...)
- }
- 
- #define test(expect, fmt, ...)					\
--	__test(expect, strlen(expect), fmt, ##__VA_ARGS__)
-+	__test(kunittest, expect, strlen(expect), fmt, ##__VA_ARGS__)
- 
- static void
--test_basic(void)
-+test_basic(struct kunit *kunittest)
- {
- 	/* Work around annoying "warning: zero-length gnu_printf format string". */
- 	char nul = '\0';
-@@ -152,11 +153,11 @@ test_basic(void)
- 	test("", &nul);
- 	test("100%", "100%%");
- 	test("xxx%yyy", "xxx%cyyy", '%');
--	__test("xxx\0yyy", 7, "xxx%cyyy", '\0');
-+	__test(kunittest, "xxx\0yyy", 7, "xxx%cyyy", '\0');
- }
- 
- static void
--test_number(void)
-+test_number(struct kunit *kunittest)
- {
- 	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
- 	test("  0x1234abcd", "%#12x", 0x1234abcd);
-@@ -178,7 +179,7 @@ test_number(void)
- }
- 
- static void
--test_string(void)
-+test_string(struct kunit *kunittest)
- {
- 	test("", "%s%.0s", "", "123");
- 	test("ABCD|abc|123", "%s|%.3s|%.*s", "ABCD", "abcdef", 3, "123456");
-@@ -215,29 +216,6 @@ test_string(void)
- #define ZEROS "00000000"	/* hex 32 zero bits */
- #define ONES "ffffffff"		/* hex 32 one bits */
- 
--static int
--plain_format(void)
--{
--	char buf[PLAIN_BUF_SIZE];
--	int nchars;
--
--	nchars = snprintf(buf, PLAIN_BUF_SIZE, "%p", PTR);
--
--	if (nchars != PTR_WIDTH)
--		return -1;
--
--	if (strncmp(buf, PTR_VAL_NO_CRNG, PTR_WIDTH) == 0) {
--		kunit_warn(kunittest, "crng possibly not yet initialized. plain 'p' buffer contains \"%s\"",
--			PTR_VAL_NO_CRNG);
--		return 0;
--	}
--
--	if (strncmp(buf, ZEROS, strlen(ZEROS)) != 0)
--		return -1;
--
--	return 0;
--}
--
- #else
- 
- #define PTR_WIDTH 8
-@@ -247,89 +225,44 @@ plain_format(void)
- #define ZEROS ""
- #define ONES ""
- 
--static int
--plain_format(void)
--{
--	/* Format is implicitly tested for 32 bit machines by plain_hash() */
--	return 0;
--}
--
- #endif	/* BITS_PER_LONG == 64 */
- 
--static int
--plain_hash_to_buffer(const void *p, char *buf, size_t len)
-+static void
-+plain_hash_to_buffer(struct kunit *kunittest, const void *p, char *buf, size_t len)
- {
--	int nchars;
--
--	nchars = snprintf(buf, len, "%p", p);
--
--	if (nchars != PTR_WIDTH)
--		return -1;
-+	KUNIT_ASSERT_EQ(kunittest, snprintf(buf, len, "%p", p), PTR_WIDTH);
- 
- 	if (strncmp(buf, PTR_VAL_NO_CRNG, PTR_WIDTH) == 0) {
- 		kunit_warn(kunittest, "crng possibly not yet initialized. plain 'p' buffer contains \"%s\"",
- 			PTR_VAL_NO_CRNG);
--		return 0;
- 	}
--
--	return 0;
- }
- 
--static int
--plain_hash(void)
--{
--	char buf[PLAIN_BUF_SIZE];
--	int ret;
--
--	ret = plain_hash_to_buffer(PTR, buf, PLAIN_BUF_SIZE);
--	if (ret)
--		return ret;
--
--	if (strncmp(buf, PTR_STR, PTR_WIDTH) == 0)
--		return -1;
--
--	return 0;
--}
--
--/*
-- * We can't use test() to test %p because we don't know what output to expect
-- * after an address is hashed.
-- */
- static void
--plain(void)
-+hash_pointer(struct kunit *kunittest)
- {
--	int err;
-+	if (no_hash_pointers)
-+		kunit_skip(kunittest, "hash pointers disabled");
- 
--	if (no_hash_pointers) {
--		kunit_warn(kunittest, "skipping plain 'p' tests");
--		return;
--	}
-+	char buf[PLAIN_BUF_SIZE];
- 
--	err = plain_hash();
--	if (err) {
--		tc_fail("plain 'p' does not appear to be hashed");
--		return;
--	}
-+	plain_hash_to_buffer(kunittest, PTR, buf, PLAIN_BUF_SIZE);
- 
--	err = plain_format();
--	if (err) {
--		tc_fail("hashing plain 'p' has unexpected format");
--	}
-+	/*
-+	 * We can't use test() to test %p because we don't know what output to expect
-+	 * after an address is hashed.
-+	 */
-+
-+	KUNIT_EXPECT_MEMEQ(kunittest, buf, ZEROS, strlen(ZEROS));
-+	KUNIT_EXPECT_MEMNEQ(kunittest, buf+strlen(ZEROS), PTR_STR, PTR_WIDTH);
- }
- 
- static void
--test_hashed(const char *fmt, const void *p)
-+test_hashed(struct kunit *kunittest, const char *fmt, const void *p)
- {
- 	char buf[PLAIN_BUF_SIZE];
--	int ret;
- 
--	/*
--	 * No need to increase failed test counter since this is assumed
--	 * to be called after plain().
--	 */
--	ret = plain_hash_to_buffer(p, buf, PLAIN_BUF_SIZE);
--	if (ret)
--		return;
-+	plain_hash_to_buffer(kunittest, p, buf, PLAIN_BUF_SIZE);
- 
- 	test(buf, fmt, p);
- }
-@@ -338,7 +271,7 @@ test_hashed(const char *fmt, const void *p)
-  * NULL pointers aren't hashed.
-  */
- static void
--null_pointer(void)
-+null_pointer(struct kunit *kunittest)
- {
- 	test(ZEROS "00000000", "%p", NULL);
- 	test(ZEROS "00000000", "%px", NULL);
-@@ -349,7 +282,7 @@ null_pointer(void)
-  * Error pointers aren't hashed.
-  */
- static void
--error_pointer(void)
-+error_pointer(struct kunit *kunittest)
- {
- 	test(ONES "fffffff5", "%p", ERR_PTR(-11));
- 	test(ONES "fffffff5", "%px", ERR_PTR(-11));
-@@ -359,26 +292,26 @@ error_pointer(void)
- #define PTR_INVALID ((void *)0x000000ab)
- 
- static void
--invalid_pointer(void)
-+invalid_pointer(struct kunit *kunittest)
- {
--	test_hashed("%p", PTR_INVALID);
-+	test_hashed(kunittest, "%p", PTR_INVALID);
- 	test(ZEROS "000000ab", "%px", PTR_INVALID);
- 	test("(efault)", "%pE", PTR_INVALID);
- }
- 
- static void
--symbol_ptr(void)
-+symbol_ptr(struct kunit *kunittest)
- {
- }
- 
- static void
--kernel_ptr(void)
-+kernel_ptr(struct kunit *kunittest)
- {
- 	/* We can't test this without access to kptr_restrict. */
- }
- 
- static void
--struct_resource(void)
-+struct_resource(struct kunit *kunittest)
- {
- 	struct resource test_resource = {
- 		.start = 0xc0ffee00,
-@@ -427,7 +360,7 @@ struct_resource(void)
- }
- 
- static void
--struct_range(void)
-+struct_range(struct kunit *kunittest)
- {
- 	struct range test_range = DEFINE_RANGE(0xc0ffee00ba5eba11,
- 					       0xc0ffee00ba5eba11);
-@@ -443,17 +376,17 @@ struct_range(void)
- }
- 
- static void
--addr(void)
-+addr(struct kunit *kunittest)
- {
- }
- 
- static void
--escaped_str(void)
-+escaped_str(struct kunit *kunittest)
- {
- }
- 
- static void
--hex_string(void)
-+hex_string(struct kunit *kunittest)
- {
- 	const char buf[3] = {0xc0, 0xff, 0xee};
- 
-@@ -464,7 +397,7 @@ hex_string(void)
- }
- 
- static void
--mac(void)
-+mac(struct kunit *kunittest)
- {
- 	const u8 addr[6] = {0x2d, 0x48, 0xd6, 0xfc, 0x7a, 0x05};
- 
-@@ -476,7 +409,7 @@ mac(void)
- }
- 
- static void
--ip4(void)
-+ip4(struct kunit *kunittest)
- {
- 	struct sockaddr_in sa;
- 
-@@ -491,19 +424,12 @@ ip4(void)
- }
- 
- static void
--ip6(void)
--{
--}
--
--static void
--ip(void)
-+ip6(struct kunit *kunittest)
- {
--	ip4();
--	ip6();
- }
- 
- static void
--uuid(void)
-+uuid(struct kunit *kunittest)
- {
- 	const char uuid[16] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
- 			       0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
-@@ -530,7 +456,7 @@ static struct dentry test_dentry[4] = {
- };
- 
- static void
--dentry(void)
-+dentry(struct kunit *kunittest)
- {
- 	test("foo", "%pd", &test_dentry[0]);
- 	test("foo", "%pd2", &test_dentry[0]);
-@@ -551,12 +477,12 @@ dentry(void)
- }
- 
- static void
--struct_va_format(void)
-+struct_va_format(struct kunit *kunittest)
- {
- }
- 
- static void
--time_and_date(void)
-+time_and_date(struct kunit *kunittest)
- {
- 	/* 1543210543 */
- 	const struct rtc_time tm = {
-@@ -590,12 +516,12 @@ time_and_date(void)
- }
- 
- static void
--struct_clk(void)
-+struct_clk(struct kunit *kunittest)
- {
- }
- 
- static void
--large_bitmap(void)
-+large_bitmap(struct kunit *kunittest)
- {
- 	const int nbits = 1 << 16;
- 	unsigned long *bits = bitmap_zalloc(nbits, GFP_KERNEL);
-@@ -609,7 +535,7 @@ large_bitmap(void)
- }
- 
- static void
--bitmap(void)
-+bitmap(struct kunit *kunittest)
- {
- 	DECLARE_BITMAP(bits, 20);
- 	const int primes[] = {2,3,5,7,11,13,17,19};
-@@ -628,11 +554,11 @@ bitmap(void)
- 	test("fffff|fffff", "%20pb|%*pb", bits, 20, bits);
- 	test("0-19|0-19", "%20pbl|%*pbl", bits, 20, bits);
- 
--	large_bitmap();
-+	large_bitmap(kunittest);
- }
- 
- static void
--netdev_features(void)
-+netdev_features(struct kunit *kunittest)
- {
- }
- 
-@@ -658,8 +584,8 @@ static const struct page_flags_test pft[] = {
- };
- 
- static void
--page_flags_test(int section, int node, int zone, int last_cpupid,
--		int kasan_tag, unsigned long flags, const char *name,
-+page_flags_test(struct kunit *kunittest, int section, int node, int zone,
-+		int last_cpupid, int kasan_tag, unsigned long flags, const char *name,
- 		char *cmp_buf)
- {
- 	unsigned long values[] = {section, node, zone, last_cpupid, kasan_tag};
-@@ -696,25 +622,24 @@ page_flags_test(int section, int node, int zone, int last_cpupid,
- }
- 
- static void
--flags(void)
-+flags(struct kunit *kunittest)
- {
- 	unsigned long flags;
- 	char *cmp_buffer;
- 	gfp_t gfp;
- 
--	cmp_buffer = kmalloc(BUF_SIZE, GFP_KERNEL);
--	if (!cmp_buffer)
--		return;
-+	cmp_buffer = kunit_kmalloc(kunittest, BUF_SIZE, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(kunittest, cmp_buffer);
- 
- 	flags = 0;
--	page_flags_test(0, 0, 0, 0, 0, flags, "", cmp_buffer);
-+	page_flags_test(kunittest, 0, 0, 0, 0, 0, flags, "", cmp_buffer);
- 
- 	flags = 1UL << NR_PAGEFLAGS;
--	page_flags_test(0, 0, 0, 0, 0, flags, "", cmp_buffer);
-+	page_flags_test(kunittest, 0, 0, 0, 0, 0, flags, "", cmp_buffer);
- 
- 	flags |= 1UL << PG_uptodate | 1UL << PG_dirty | 1UL << PG_lru
- 		| 1UL << PG_active | 1UL << PG_swapbacked;
--	page_flags_test(1, 1, 1, 0x1fffff, 1, flags,
-+	page_flags_test(kunittest, 1, 1, 1, 0x1fffff, 1, flags,
- 			"uptodate|dirty|lru|active|swapbacked",
- 			cmp_buffer);
- 
-@@ -739,11 +664,9 @@ flags(void)
- 							(unsigned long) gfp);
- 	gfp |= __GFP_HIGH;
- 	test(cmp_buffer, "%pGg", &gfp);
--
--	kfree(cmp_buffer);
- }
- 
--static void fwnode_pointer(void)
-+static void fwnode_pointer(struct kunit *kunittest)
- {
- 	const struct software_node first = { .name = "first" };
- 	const struct software_node second = { .name = "second", .parent = &first };
-@@ -757,8 +680,7 @@ static void fwnode_pointer(void)
- 
- 	rval = software_node_register_node_group(group);
- 	if (rval) {
--		kunit_warn(kunittest, "cannot register softnodes; rval %d", rval);
--		return;
-+		kunit_skip(kunittest, "cannot register softnodes; rval %d", rval);
- 	}
- 
- 	test(full_name_second, "%pfw", software_node_fwnode(&second));
-@@ -770,7 +692,7 @@ static void fwnode_pointer(void)
- 	software_node_unregister_node_group(group);
- }
- 
--static void fourcc_pointer(void)
-+static void fourcc_pointer(struct kunit *kunittest)
- {
- 	struct {
- 		u32 code;
-@@ -788,13 +710,13 @@ static void fourcc_pointer(void)
- }
- 
- static void
--errptr(void)
-+errptr(struct kunit *kunittest)
- {
- 	test("-1234", "%pe", ERR_PTR(-1234));
- 
- 	/* Check that %pe with a non-ERR_PTR gets treated as ordinary %p. */
- 	BUILD_BUG_ON(IS_ERR(PTR));
--	test_hashed("%pe", PTR);
-+	test_hashed(kunittest, "%pe", PTR);
- 
- #ifdef CONFIG_SYMBOLIC_ERRNAME
- 	test("(-ENOTSOCK)", "(%pe)", ERR_PTR(-ENOTSOCK));
-@@ -807,65 +729,54 @@ errptr(void)
- #endif
- }
- 
--static void
--test_pointer(void)
--{
--	plain();
--	null_pointer();
--	error_pointer();
--	invalid_pointer();
--	symbol_ptr();
--	kernel_ptr();
--	struct_resource();
--	struct_range();
--	addr();
--	escaped_str();
--	hex_string();
--	mac();
--	ip();
--	uuid();
--	dentry();
--	struct_va_format();
--	time_and_date();
--	struct_clk();
--	bitmap();
--	netdev_features();
--	flags();
--	errptr();
--	fwnode_pointer();
--	fourcc_pointer();
--}
--
--static void printf_test(struct kunit *test)
-+static int printf_suite_init(struct kunit_suite *suite)
- {
-+	total_tests = 0;
-+
- 	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
- 	if (!alloced_buffer)
--		return;
-+		return -ENOMEM;
- 	test_buffer = alloced_buffer + PAD_SIZE;
- 
--	kunittest = test;
--
--	test_basic();
--	test_number();
--	test_string();
--	test_pointer();
--
--	kfree(alloced_buffer);
--}
--
--static int printf_suite_init(struct kunit_suite *suite)
--{
--	total_tests = 0;
- 	return 0;
- }
- 
- static void printf_suite_exit(struct kunit_suite *suite)
- {
-+	kfree(alloced_buffer);
-+
- 	kunit_info(suite, "ran %u tests", total_tests);
- }
- 
- static struct kunit_case printf_test_cases[] = {
--	KUNIT_CASE(printf_test),
-+	KUNIT_CASE(test_basic),
-+	KUNIT_CASE(test_number),
-+	KUNIT_CASE(test_string),
-+	KUNIT_CASE(hash_pointer),
-+	KUNIT_CASE(null_pointer),
-+	KUNIT_CASE(error_pointer),
-+	KUNIT_CASE(invalid_pointer),
-+	KUNIT_CASE(symbol_ptr),
-+	KUNIT_CASE(kernel_ptr),
-+	KUNIT_CASE(struct_resource),
-+	KUNIT_CASE(struct_range),
-+	KUNIT_CASE(addr),
-+	KUNIT_CASE(escaped_str),
-+	KUNIT_CASE(hex_string),
-+	KUNIT_CASE(mac),
-+	KUNIT_CASE(ip4),
-+	KUNIT_CASE(ip6),
-+	KUNIT_CASE(uuid),
-+	KUNIT_CASE(dentry),
-+	KUNIT_CASE(struct_va_format),
-+	KUNIT_CASE(time_and_date),
-+	KUNIT_CASE(struct_clk),
-+	KUNIT_CASE(bitmap),
-+	KUNIT_CASE(netdev_features),
-+	KUNIT_CASE(flags),
-+	KUNIT_CASE(errptr),
-+	KUNIT_CASE(fwnode_pointer),
-+	KUNIT_CASE(fourcc_pointer),
- 	{}
- };
- 
+I don't believe it is required to keep that check.
 
--- 
-2.48.1
+> 
+> b) a bit sloppy on assignment:
+> 
+> +ifeq ($(V),1)
+> +  quiet =
+> +  Q =
+> +else
+> +  quiet=quiet_
+> +  Q=@
+> +endif
+> 
+> note the spaces around '=', try to keep stuff like this consistent
+> (and if this was shell, it would bite you as well)
 
+Yes, I can make that consistent.
+
+> 
+> >
+> > - Charlie
+> >
 
