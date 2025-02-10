@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-26164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2903A2EDF3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 14:32:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11E13A2EDFE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 14:33:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6961518867E1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 13:32:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A68D160951
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 13:32:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA4F230D0B;
-	Mon, 10 Feb 2025 13:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15908231A29;
+	Mon, 10 Feb 2025 13:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SlcJ+47w"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WfO92onU"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DB1222579;
-	Mon, 10 Feb 2025 13:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D3722FDE7;
+	Mon, 10 Feb 2025 13:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739194257; cv=none; b=dTeQ2q2a5s0rZ05FyALj01DspcT7+gckbfaO+RJ0a4iuo7dBk+J8+4UUoAWzfHttDBmP0yydYI41vnWsmqANQD1s1fl8B3HSNfNua1qQ30Qg6I/APWdYPapaQylv3XY1x4ev7dFGzhG6I9op86Hmza8UtH3YhiAsGaHh4noDH3o=
+	t=1739194266; cv=none; b=pZuozHLjUrr+sR+5aDdCZNINeY0m+1fttpGBLKUYsGwquRmeh7cWzBv5i852y631nZov3bWg3hXl1CGYauwrHzEwwEYV6NoWa7jIxh508HNKyrFAGQdUg4q58lRGNjr45kN41kOJ/SVW4eXyxHF94qMNkuSVNG0rDTQu2dyEcXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739194257; c=relaxed/simple;
-	bh=2u3aiZwG7nXyk2L47N18SQQLK/lDv6g+qT0nQKd4pSs=;
+	s=arc-20240116; t=1739194266; c=relaxed/simple;
+	bh=afU0eP8leIGpj7KOdqVDO3ES9Mr3NHsvuQ09X1iwlHY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RVjvNTgscK9y5myhrlgw6WGu5fAu8a6lATRGFTIKH3pz5x/hpeT5XEf13KP2Ez22+2v6cyBP1j4qEcUzqExOGxV+l+ci1mmyYEYQKL5q05uaDdtBkjXfVX8oQagl61L5Ah6B1gtAprUNk6xGj3AilP9URoccBiZD7cpTzsyJ5qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SlcJ+47w; arc=none smtp.client-ip=209.85.214.174
+	 MIME-Version; b=Q0qPOGTArTz4hlbXpPjivmM4pOhu258OYef4JXbHA6/v6WDqv23yzgrnlO/kKb1DjYaxa1ybiISOlsYipubvIN6LXVIf6rCltDlQLbLFy2X1tTcuNmDEcli1+/rb+5WrqNzlH/7K6vI8Cmum8YjDcaDf/AVdf5hJSbyoYTtKZZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WfO92onU; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f2339dcfdso68365765ad.1;
-        Mon, 10 Feb 2025 05:30:55 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f40deb941so88631955ad.2;
+        Mon, 10 Feb 2025 05:31:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739194254; x=1739799054; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739194263; x=1739799063; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0tN6LBIpl7aUsxZAQ1nC9Mvrd+HBX5wlThy/HCxYMvw=;
-        b=SlcJ+47wGGDUbl8sV5PwIW7AoAxfUG7nCeJM5ww7b+nw0BiGPXIl8QA6yS5m3t/QJ8
-         x7QFuIGD2iVmE1pY7/2y9PT0sO03WioE+Rn1tgNCwBzbcvp3OVBaWTPvPwEJ0p5gvdPq
-         q2CCrtUoARx/4aYWuiCPkFgIXtgGXDqPz9fiKFxrQ4UFEoQS0e2g/v0RoCmCDfPAnvXu
-         1+7laLyJ5HbpSZxKZTRijbfnAYCzQ2Kdo4eco51Rv7zQDUcLeYxsid2ED4X4nzcMmC+/
-         EyqNK3sFOOT4oS9VwDZlKmll5J6ZlzdAulvS/vAr8804aWjkFd2YbdndBmyKeGRAvEsY
-         5XHw==
+        bh=pJKz1g6voDImT0UUTo/s+cF5fKbKW++euQC6BW/L/6A=;
+        b=WfO92onUBROkws89XF0xJoYiXN4FY+kMJoYd37TDE6bRufKKr0r89DwlD1uSkinzmf
+         fRNv9H5peOkZZOMZiWRihuQvO+0HCljpVxL64nuYALi9PbcWytZNjtRvLSzXuI0cYwbu
+         kJprT0/Skum3pElV7RWeBnrhzMTKMUffM9m//R5bBbcQeqC0REmrSWfyRhPhXiJbDsA8
+         iVfkvYG+UduGy3J6thkFLLfmrLuU9b9ZH2Vpgh3AwI2ofM+F0lRjS6YZ05g/MEO4Ow2/
+         7PD5blYaWR1yTePxrVNjAceq2n0YhCBJ2iwtnPha8/0H3aT3pj++hUxOY/nNoFRpsYEg
+         6bfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739194254; x=1739799054;
+        d=1e100.net; s=20230601; t=1739194263; x=1739799063;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0tN6LBIpl7aUsxZAQ1nC9Mvrd+HBX5wlThy/HCxYMvw=;
-        b=tSKD1z1QhoLZlnEm1256y8ZQSsBE4IxrtyFYd7YB195lKRYkpmtnQlO4qjWJSYErhl
-         HGZkeROP6jYSIIkZXcONUFfQV18OtsSHze42KJDk2/nh7UxFJBKQO6pYX63w/OhIlcle
-         Y+5LINgTbyBk+SO+L8ta3rk60pAS2p+PfuETwr97jBE5gR9foeBlo3aVgH7I4GN/8q3c
-         YfiunFME73w+RQrgxpk9PhtOJyegDTQVODbGHAW3VnJbePzt4OQFqJEwdgnCHwJcOG2g
-         AfoupIva9e3xY86iSlyc+6eHsDxFv8H7XQjzUIN5qo3uAckTuTXOxHMj44qnFMTeba/+
-         C+Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ0l8At6FJ/SYLME2PzXx4uRE6mFl8dBanUGBiqqq8Th0huJqssV7lTN2hZg5bQBCFuurWkwBUo6kN4/GOHp98@vger.kernel.org, AJvYcCUU4Tq9SrFX+qOF1eRqOt00onrXZu7fPDDIEZCgzQEu5JwC+BZiXf1sNqXpTOuCLh0SjQGbFUD5Kdd8Tg==@vger.kernel.org, AJvYcCUw9B/WT94e/UE+JT45D5MSfLjZ99ZNmphmlSClc+QX+fLqLxb8IZEvxYMqbCKn0aKYE2Fs4mhEf0Kr@vger.kernel.org, AJvYcCV16on7V3lLlXPY3K/c+ui6kODu984DDNS4gJ71eNzIe6DGFv54o/nP1srnuC5MQkDb3qjU5wTyIWA+xQ==@vger.kernel.org, AJvYcCWhTQybiO587wGgTUhWun4rJFb78pXupN/PGofz7uesaeEGuYTAMB82jx3OUmX06KkgrAOkQt7ZaKHt@vger.kernel.org, AJvYcCWxVXImtm2cTF8o49+hZG3dmZaoyEI07XHaAtwB67E8X+zgA1PJEdO8WOOPJ9FobS/1Wpo=@vger.kernel.org, AJvYcCX2/Q/wRJi1qtNjs0TVJJtRrEY2xbU538zws2rvOoDo9AsieKOAFxLlRLmtdYpn5qJ3d5CvEYkqtHKN+ohc@vger.kernel.org, AJvYcCXSS1VY8u/saK2+CYLbadSMVWG96/xSZS1OXLqiTUxP6WytnNDaeh94Kq/LZ5aD28sAgGJFBCvagibN3FamzRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3UoaZX78phZhN/gNgzJ/lTcYubxrZ4Ga6F3pU0HBvD7ezlWmB
-	JB4lyAuCRRD3sjIBEOpJYtyGYZ7KlysFjzQ9ThvU6PNT7elw2ymGiA6v3GrdhCg=
-X-Gm-Gg: ASbGnct26Cxl6MhRehdV9Cixw4wUpwYfB5zm0PfHyGQm7gb6/hRuaNiOEi+2dpXd+jm
-	lyWYRYR9VpySJ1eXDy0svlbWp79S5XbvCkWQoIakUFltBnjb9K9sd8ySZrp4A+VrHHSL1x2UTCO
-	P3lxO7b01c+wVMCKgoQgAEdYMmbdEuaPerrtogVSyYkdzcwUitB8Mpo+sARtUEDz+TJy+v+m8da
-	5Y4uOzVeOdwoYV+R2c5IFTNGw9tAx7NvL9JlR5HJOSo2pq243Q7lmwmQk9e0tRjuhLuzmqKkhDz
-	GLjrPQ==
-X-Google-Smtp-Source: AGHT+IF8gihjdkRbSU1HRP8R4mEppMkEAKGDChElxIvCxKcXV79FUInFhj/RnX7alUKIg2RAq5xNnw==
-X-Received: by 2002:a17:903:46cc:b0:21f:6d63:6f4f with SMTP id d9443c01a7336-21f6d636ff1mr134607475ad.2.1739194253851;
-        Mon, 10 Feb 2025 05:30:53 -0800 (PST)
+        bh=pJKz1g6voDImT0UUTo/s+cF5fKbKW++euQC6BW/L/6A=;
+        b=gdiDZuCCTuQaYxmgaLJ9H2GbzKakMsoJLfO4tu0lYBuT+u6Tj2jmyNTD0djubbcxH4
+         uZIvajYFSxi8vKmlZXRCZ+A7Y35CE3K4NMZoJIAsCFEcQ6kSHiTkr6pH4+ulF6Dkr1TZ
+         SfYW87Iw1rpT97+KQPyQEzLomtW6Fhi0W/lotucqJnQl00H0snydbWwYRYWmDbCEKPDx
+         aMDQMuaTdbyNF0z6xGbJds5QAl3AONHkTkaZqyAxUUQpIgefCeesjCNCknabnTaUGVHO
+         TbVQdr4I+T5IUjNW4oZ4zjpMQljLnX7g3cjGeUbrF/W8zqq6kB2iwV0OwM3tXq8I+82v
+         Vicw==
+X-Forwarded-Encrypted: i=1; AJvYcCURR6ih8oatBAFoQlcDgFDYA0DYh1UNCrFwTpdo9b8st5PeRN6sXf8aGB9mO6it1k39AxvKhv0qF9Ryhe8Shp0=@vger.kernel.org, AJvYcCUbUBjtYVSjhl1OsVSrFVrtUo2PhYp7SZMyzVQ9NDoogVA1JszcJGmOo41sqz7/+t9KyFo=@vger.kernel.org, AJvYcCUdzs6uijMVHxCArqeZ4xhE+6e7qxoeS1k2xBPk1DHclqsl+kINweY3ocgocyq4ssuZV1dyY8lvNGieectI8a/s@vger.kernel.org, AJvYcCUy6EXV5QzD09tUzqNqrN4+R9PWvQ4qQ/uzJ+1/SWN+CDQLWFUq9OR4hBzGRu5G5u6kXwykjgiSzgyE@vger.kernel.org, AJvYcCVDruWV6E1CCpu9753+0DBWzU2gfPEdqYStAtG/nk9odDxgsoWRZNOIynbZQYtU8J6RCVbeBRPZ/SbF@vger.kernel.org, AJvYcCVkyLRvgU2mnxHKqhZ5lLAYi/5XIW08/i6y4VCuB2Lmb+8W9sFcX0Lt6L9G4X2qEdBpvjOK6Mm7DBH96w==@vger.kernel.org, AJvYcCWn22K3A+RE2CCSQMN5Eugba+cbQ3mISU1sL7jH5enCPmkQh55coa9NS3AfM7n6HFzTi4lTGrtRzQmUch0T@vger.kernel.org, AJvYcCWoNRQ77jt7YJ0bu4v7zvcLWJzVTuUBk43JDCgHnjPBIPHMnPRL/V7EypMlDNZpbhHI9bZbYTLyafjGjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsEJFvbjDO0ULxAl0cStJ8qDP5giJ9CJ3Z8Q6Jwd94ovhoBdbq
+	TG3NDXCmayBYMZc3Uv+GgccLAK2HvVr+NpjvrTLjdoWC8QOT9aR+FSCuZEcMqFg=
+X-Gm-Gg: ASbGncvRGyzY3HR51LQ+JcHLRwsKdHK9vyvb74MB6EI1MDeH3mwxyL4Z7WOFNVMMiml
+	h5qM+rXuRHBscDiko5SiY4gMd0tonTh4xOhKzQE1H4hFxThtkK731/g3Pn1KJFXUe4rfEBeSNs0
+	IIWC3tW6pDRUjiJ6R4fdO9+IZUA19zJbOSljI9Enf6dWpBCoTEFh3qxt1qGSZlUefaI7sxDwBgJ
+	l6ngEbA4HCSN/h93WGFnBJtepPTGXPJPyOSiS4CIHrk9Z6rXU57EjaOXJXriRMjd5rCwDtnRbrl
+	HiZaNg==
+X-Google-Smtp-Source: AGHT+IGNFjsW8yGSZG6C2tbCv5/JZ09OmB3LKkjVhY7agbUhlCe28tcl+Qcya8rlcfYhnDrE2/S9OQ==
+X-Received: by 2002:a17:902:e946:b0:216:7cde:51a with SMTP id d9443c01a7336-21f4e72631dmr249984615ad.28.1739194263028;
+        Mon, 10 Feb 2025 05:31:03 -0800 (PST)
 Received: from ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653af3bsm78799445ad.57.2025.02.10.05.30.45
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653af3bsm78799445ad.57.2025.02.10.05.30.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 05:30:53 -0800 (PST)
+        Mon, 10 Feb 2025 05:31:02 -0800 (PST)
 From: Xiao Liang <shaw.leon@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -101,9 +101,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	bridge@lists.linux.dev,
 	linux-wpan@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v9 04/11] ieee802154: 6lowpan: Validate link netns in newlink() of rtnl_link_ops
-Date: Mon, 10 Feb 2025 21:29:55 +0800
-Message-ID: <20250210133002.883422-5-shaw.leon@gmail.com>
+Subject: [PATCH net-next v9 05/11] net: ip_tunnel: Use link netns in newlink() of rtnl_link_ops
+Date: Mon, 10 Feb 2025 21:29:56 +0800
+Message-ID: <20250210133002.883422-6-shaw.leon@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250210133002.883422-1-shaw.leon@gmail.com>
 References: <20250210133002.883422-1-shaw.leon@gmail.com>
@@ -115,35 +115,129 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Device denoted by IFLA_LINK is in link_net (IFLA_LINK_NETNSID) or
-source netns by design, but 6lowpan uses dev_net.
+When link_net is set, use it as link netns instead of dev_net(). This
+prepares for rtnetlink core to create device in target netns directly,
+in which case the two namespaces may be different.
 
-Note dev->netns_local is set to true and currently link_net is
-implemented via a netns change. These together effectively reject
-IFLA_LINK_NETNSID.
-
-This patch adds a validation to ensure link_net is either NULL or
-identical to dev_net. Thus it would be fine to continue using dev_net
-when rtnetlink core begins to create devices directly in target netns.
+Convert common ip_tunnel_newlink() to accept an extra link netns
+argument. Don't overwrite ip_tunnel.net in ip_tunnel_init().
 
 Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 ---
- net/ieee802154/6lowpan/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/net/ip_tunnels.h |  5 +++--
+ net/ipv4/ip_gre.c        |  8 +++++---
+ net/ipv4/ip_tunnel.c     | 10 ++++++----
+ net/ipv4/ip_vti.c        |  3 ++-
+ net/ipv4/ipip.c          |  3 ++-
+ 5 files changed, 18 insertions(+), 11 deletions(-)
 
-diff --git a/net/ieee802154/6lowpan/core.c b/net/ieee802154/6lowpan/core.c
-index 704bf9e3f097..ee318d46817d 100644
---- a/net/ieee802154/6lowpan/core.c
-+++ b/net/ieee802154/6lowpan/core.c
-@@ -143,6 +143,8 @@ static int lowpan_newlink(struct net_device *ldev,
+diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
+index 1aa31bdb2b31..ae1f2dda4533 100644
+--- a/include/net/ip_tunnels.h
++++ b/include/net/ip_tunnels.h
+@@ -406,8 +406,9 @@ int ip_tunnel_rcv(struct ip_tunnel *tunnel, struct sk_buff *skb,
+ 		  bool log_ecn_error);
+ int ip_tunnel_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			 struct ip_tunnel_parm_kern *p, __u32 fwmark);
+-int ip_tunnel_newlink(struct net_device *dev, struct nlattr *tb[],
+-		      struct ip_tunnel_parm_kern *p, __u32 fwmark);
++int ip_tunnel_newlink(struct net *net, struct net_device *dev,
++		      struct nlattr *tb[], struct ip_tunnel_parm_kern *p,
++		      __u32 fwmark);
+ void ip_tunnel_setup(struct net_device *dev, unsigned int net_id);
  
- 	if (!tb[IFLA_LINK])
- 		return -EINVAL;
-+	if (params->link_net && !net_eq(params->link_net, dev_net(ldev)))
-+		return -EINVAL;
- 	/* find and hold wpan device */
- 	wdev = dev_get_by_index(dev_net(ldev), nla_get_u32(tb[IFLA_LINK]));
- 	if (!wdev)
+ bool ip_tunnel_netlink_encap_parms(struct nlattr *data[],
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index 1fe9b13d351c..26d15f907551 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -1413,7 +1413,8 @@ static int ipgre_newlink(struct net_device *dev,
+ 	err = ipgre_netlink_parms(dev, data, tb, &p, &fwmark);
+ 	if (err < 0)
+ 		return err;
+-	return ip_tunnel_newlink(dev, tb, &p, fwmark);
++	return ip_tunnel_newlink(params->link_net ? : dev_net(dev), dev, tb, &p,
++				 fwmark);
+ }
+ 
+ static int erspan_newlink(struct net_device *dev,
+@@ -1433,7 +1434,8 @@ static int erspan_newlink(struct net_device *dev,
+ 	err = erspan_netlink_parms(dev, data, tb, &p, &fwmark);
+ 	if (err)
+ 		return err;
+-	return ip_tunnel_newlink(dev, tb, &p, fwmark);
++	return ip_tunnel_newlink(params->link_net ? : dev_net(dev), dev, tb, &p,
++				 fwmark);
+ }
+ 
+ static int ipgre_changelink(struct net_device *dev, struct nlattr *tb[],
+@@ -1701,7 +1703,7 @@ static struct rtnl_link_ops erspan_link_ops __read_mostly = {
+ struct net_device *gretap_fb_dev_create(struct net *net, const char *name,
+ 					u8 name_assign_type)
+ {
+-	struct rtnl_newlink_params params = { .net = net };
++	struct rtnl_newlink_params params = { .src_net = net };
+ 	struct nlattr *tb[IFLA_MAX + 1];
+ 	struct net_device *dev;
+ 	LIST_HEAD(list_kill);
+diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
+index 09b73acf037a..618a50d5c0c2 100644
+--- a/net/ipv4/ip_tunnel.c
++++ b/net/ipv4/ip_tunnel.c
+@@ -1213,11 +1213,11 @@ void ip_tunnel_delete_nets(struct list_head *net_list, unsigned int id,
+ }
+ EXPORT_SYMBOL_GPL(ip_tunnel_delete_nets);
+ 
+-int ip_tunnel_newlink(struct net_device *dev, struct nlattr *tb[],
+-		      struct ip_tunnel_parm_kern *p, __u32 fwmark)
++int ip_tunnel_newlink(struct net *net, struct net_device *dev,
++		      struct nlattr *tb[], struct ip_tunnel_parm_kern *p,
++		      __u32 fwmark)
+ {
+ 	struct ip_tunnel *nt;
+-	struct net *net = dev_net(dev);
+ 	struct ip_tunnel_net *itn;
+ 	int mtu;
+ 	int err;
+@@ -1326,7 +1326,9 @@ int ip_tunnel_init(struct net_device *dev)
+ 	}
+ 
+ 	tunnel->dev = dev;
+-	tunnel->net = dev_net(dev);
++	if (!tunnel->net)
++		tunnel->net = dev_net(dev);
++
+ 	strscpy(tunnel->parms.name, dev->name);
+ 	iph->version		= 4;
+ 	iph->ihl		= 5;
+diff --git a/net/ipv4/ip_vti.c b/net/ipv4/ip_vti.c
+index b901bee03e6d..159b4473290e 100644
+--- a/net/ipv4/ip_vti.c
++++ b/net/ipv4/ip_vti.c
+@@ -585,7 +585,8 @@ static int vti_newlink(struct net_device *dev,
+ 	__u32 fwmark = 0;
+ 
+ 	vti_netlink_parms(data, &parms, &fwmark);
+-	return ip_tunnel_newlink(dev, tb, &parms, fwmark);
++	return ip_tunnel_newlink(params->link_net ? : dev_net(dev), dev, tb,
++				 &parms, fwmark);
+ }
+ 
+ static int vti_changelink(struct net_device *dev, struct nlattr *tb[],
+diff --git a/net/ipv4/ipip.c b/net/ipv4/ipip.c
+index a8b844bcfc64..bab0bf90c908 100644
+--- a/net/ipv4/ipip.c
++++ b/net/ipv4/ipip.c
+@@ -455,7 +455,8 @@ static int ipip_newlink(struct net_device *dev,
+ 	}
+ 
+ 	ipip_netlink_parms(data, &p, &t->collect_md, &fwmark);
+-	return ip_tunnel_newlink(dev, tb, &p, fwmark);
++	return ip_tunnel_newlink(params->link_net ? : dev_net(dev), dev, tb, &p,
++				 fwmark);
+ }
+ 
+ static int ipip_changelink(struct net_device *dev, struct nlattr *tb[],
 -- 
 2.48.1
 
