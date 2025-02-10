@@ -1,115 +1,114 @@
-Return-Path: <linux-kselftest+bounces-26189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26190-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDAF9A2F29E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 17:11:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 636CFA2F2DD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 17:15:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53BF51883AD0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:11:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CEC527A15DB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2D224F588;
-	Mon, 10 Feb 2025 16:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F022C2580F2;
+	Mon, 10 Feb 2025 16:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrXTm6rU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UdCLOvbU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E1B24F58E;
-	Mon, 10 Feb 2025 16:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C887C2580ED;
+	Mon, 10 Feb 2025 16:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739203889; cv=none; b=pEstUkwQ8TVRX702GKMbbnk/GuuGugbsihw39V8tNzExrD/XwuA0pR7LVp4exniRLCgxvA62czYKCKbmyQnThSWjFfX+bJHYdes/rDIvXw6h6BOKgdiKIaohtRky6bmawa0MvGcO5hxl2yEUXrL6lXRO9FZbLKOxcsMK49z4Up0=
+	t=1739203992; cv=none; b=eBFLh7QFGqFeTS1YDdyl0NTypHLduBpqRp7xBDJyW6kUL3geonhTlYlinESP7GA1+f0pJxwoH+QZz7/Tw2yrQZ97T9ES60u3ETxTluqGdPbswaOj/W3BjTARNidIBx8kywF7LGnyYjUKIKeJTwLOCZw1LVXTsDX05rlbUJ6FQdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739203889; c=relaxed/simple;
-	bh=Ju+jLIC+hdALWDNfTRKoeZW9qn5r+NTUgbFhV/yjG5k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ujZJacQEyiaEsccjCEu2dyB95fYTIIyrxRDAraGPopI5fSPuQaqwqO1GpiYaLPTL0wOdoAoDpgj0MT9gVRZaj4/AzyfDQAziPykUl3GPdjpQHrW4LucDBFLEfju049WmhiLUV52QT5TPMJ4ByXSZlfnysBOn4ZxHARYTr9q13vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrXTm6rU; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21f62cc4088so45226985ad.3;
-        Mon, 10 Feb 2025 08:11:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739203887; x=1739808687; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lt/TBqL493WxqFjgvfkZ2tS4krtyuV+0wcigwiXRZIM=;
-        b=nrXTm6rU0YgVlCbv4nn8RE9ZJXHcHGM0Ax2lnDYWix7c5tQynmMtMUqq7/oEI5qqdY
-         pK6clt2aO9nu0NBBsKCgbk1wDpANIAdaNCssmJ8aZSpAsetdCb5QzwcvXazGWx2L/dPP
-         UY9ExkGkVdjsCHS3kzVa7yLuaYIVHCrsxHXfTA1Dn2gf8AoP3PJU/zUHwq6Ri50y6eoT
-         q++GvJk/q53xt6lR7vk4TH+an96wX61w2o+2TlYfia3bt5TP7cGKp9y/qc5ZC6+36dlx
-         XVpsusIW4kGCmp7RKxKEFsD9nZMTWSmKzje+BMUzds/2o1Rlo4/zuEVYRJE5pbw4+vF9
-         DSLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739203887; x=1739808687;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lt/TBqL493WxqFjgvfkZ2tS4krtyuV+0wcigwiXRZIM=;
-        b=Zq20xygWUjjmLwo3IUasS70jqgpvg5HTw+//kcJX5YNvlg0S6YmlX0G/cNxOdc6HHz
-         58aNq1WDDXCh0maJld+DEMUBm6e+TN6fGxi24QdEPGUZpUlfl4YBM17tt1SANpgOxW92
-         HqwL4BOX9ki3UNbyvkQ7ONVIDZ07+W4XSSHZVLxfl3F4qYwUV+rMNKYJC4YrR16T67jX
-         Avh9eUJqwD5+OhjbEg5GK4m6FSKdKskL1PbZXHDBWEwXdsRtDWT4acSixeN1cZP1kySA
-         8uBlGjXPamGg+FSKtnJ6mPWtgQY66XxWfVvmuuYAn82aPXYWoDyhweZfiYa2iuUzBMat
-         VbrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU//gfLljOI165jkY1MtgYeeLIZEXaK4rq/o62i+IIb+kPCQy2IS4D+jwInIQ1DhjVEt4/f5QFg7X5qI9ze74Klsp8VpIaR@vger.kernel.org, AJvYcCUiCv5CZWhWsW04IngWemx/7tf32yGbzsQ+5/UkM9opnqY7GcA2jJmxHHTCldJy6uqnv5a0PXAZTX48DJF/tdEn@vger.kernel.org, AJvYcCXNMxVyvHxtwwIpf3gc2CJ6V/7obEtH4OQ0/bCZMS0q/KEdHfG0ZzvFn0bKWsb0CvEEIsAp5FObEnADTME=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCVNhCF2k/bDnwllHUHpsa9Ryc38KzpI+V6DclR7ToRSQsVoWU
-	GzaxYiAMrJs8rdzvY9gctvPrJD+P23AS4epGMF5j00Rs8gGfAGBs
-X-Gm-Gg: ASbGnctsx2QD/QA0iKAXbYFH4cBOkBZpju+UR5LaFCQBKMx8di4OM+aRBQJQfn3Bgo3
-	17/40TdXNejGj1VMS47QB4czi+uQKpbtigLzcYKDrxvmCUqOb3v5uu2aBu2VzHnyMo2G7k+lywP
-	zS2dY4OZXSybrhRoXSmZ8NN+lXlIwFyfN+0YuYrHahn20TuHjcZF03hvDjwOBnyADs09S8DriG4
-	wbt1wYbcaG6nBIpGF/V6E/bz4CjN8V78ySMUvi2R0K4EFVh4DXhH/eUxef9LHlILu+FUBuC6jOd
-	82dH+IJ1e7kyyiph3ls3J9I=
-X-Google-Smtp-Source: AGHT+IGBP1tsRARuyphuA4dc3+m2aWSwlcSZROST1syG8GihtPtpjMQ+VBiiwMW4vsoTibNHhabUyg==
-X-Received: by 2002:a05:6a00:148d:b0:730:97a6:f06 with SMTP id d2e1a72fcca58-73097a61364mr3937341b3a.8.1739203885416;
-        Mon, 10 Feb 2025 08:11:25 -0800 (PST)
-Received: from linuxmint.. ([14.139.69.34])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73083c1f029sm3022516b3a.125.2025.02.10.08.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 08:11:24 -0800 (PST)
-From: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
-To: mic@digikod.net
-Cc: Bharadwaj Raju <bharadwaj.raju777@gmail.com>,
-	gnoack@google.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	linux-security-module@vger.kernel.org,
+	s=arc-20240116; t=1739203992; c=relaxed/simple;
+	bh=njbEBtO+APS2dMkxHHNmNtrDbBbgDkmpalI/rHwsvcs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tKX+ZKr+AN+NVE8JHpYfuvpt42z5nd41YH6zmrZi5pOhffownPbqZMejyIWeyvs/L7L83Wxlg0lQUO45ViKoVIzXu/5WBp/6cH2TXn/VuU0Xvtib326+6A5tygVSjQAOYS3ps+Tx6jtWIj2pOpvS1ruEx4VD3ccn6iO3WTKSwwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UdCLOvbU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C409C4CED1;
+	Mon, 10 Feb 2025 16:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739203992;
+	bh=njbEBtO+APS2dMkxHHNmNtrDbBbgDkmpalI/rHwsvcs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UdCLOvbUtNEwcw1d37t8oNlBJYGK1xDgqHQa1h5j3RuxZjdMV55Rv1r2qLOSQ8dOZ
+	 gFbBZx0jP2d8VOWqGGS0/8OG12JHJB/t2lJBJ2nBmmou0J4hmXS9Xbbv2OHkf87ShT
+	 ssWQZWzqWbyCQqeo1T3X4gHP2QUYunEY/ANkuQkg7um/W8c4S+yyun9OOl2wjh/Va4
+	 g/v5b8Qj6XNbY/oyIQY44BsI71JQDoSavD8jtCIgZZBklQTykOxmJLc84lqjDj7nd9
+	 gwnzh6jtG2oIEcRiTZK6bbZaZKOGNLZErnQy29ImbyWdXCoo6+4DIp46+fyJgxnFc9
+	 sbhbUDijofj8A==
+Date: Mon, 10 Feb 2025 16:13:06 +0000
+From: Simon Horman <horms@kernel.org>
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>, petrm@nvidia.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: [PATCH] selftests/landlock: add binaries to gitignore
-Date: Mon, 10 Feb 2025 21:40:57 +0530
-Message-ID: <20250210161101.6024-1-bharadwaj.raju777@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+	Lorenzo Colitti <lorenzo@google.com>
+Subject: Re: [PATCH net-next, v8 2/2] selftests/net: Add selftest for IPv4
+ RTM_GETMULTICAST support
+Message-ID: <20250210161306.GE554665@kernel.org>
+References: <20250207110836.2407224-1-yuyanghuang@google.com>
+ <20250207110836.2407224-2-yuyanghuang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250207110836.2407224-2-yuyanghuang@google.com>
 
-Building the test creates binaries 'wait-pipe' and
-'sandbox-and-launch' which need to be gitignore'd.
+On Fri, Feb 07, 2025 at 08:08:36PM +0900, Yuyang Huang wrote:
+> This change introduces a new selftest case to verify the functionality
+> of dumping IPv4 multicast addresses using the RTM_GETMULTICAST netlink
+> message. The test utilizes the ynl library to interact with the
+> netlink interface and validate that the kernel correctly reports the
+> joined IPv4 multicast addresses.
+> 
+> To run the test, execute the following command:
+> 
+> $ vng -v --user root --cpus 16 -- \
+>     make -C tools/testing/selftests TARGETS=net \
+>     TEST_PROGS=rtnetlink.py TEST_GEN_PROGS="" run_tests
+> 
+> Cc: Maciej Żenczykowski <maze@google.com>
+> Cc: Lorenzo Colitti <lorenzo@google.com>
+> Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
+> ---
+> 
+> Changelog since v7:
+> - Create a new RtnlAddrFamily to load rt_addr.yaml.
+> 
+> Changelog since v6:
+> - Move `getmaddrs` definition to rt_addr.yaml.
+> 
+>  Documentation/netlink/specs/rt_addr.yaml      | 23 ++++++++++++++
 
-Signed-off-by: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
----
- tools/testing/selftests/landlock/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+Hi Yuyang Huang,
 
-diff --git a/tools/testing/selftests/landlock/.gitignore b/tools/testing/selftests/landlock/.gitignore
-index 470203a7cd73..0566c50dfcad 100644
---- a/tools/testing/selftests/landlock/.gitignore
-+++ b/tools/testing/selftests/landlock/.gitignore
-@@ -1,2 +1,4 @@
- /*_test
- /true
-+/wait-pipe
-+/sandbox-and-launch
--- 
-2.43.0
+FWIIW I think that the YAML spec entry is distinct from, although a
+dependency of, adding the test. I would put it in a separate patch.
 
+>  tools/testing/selftests/net/Makefile          |  1 +
+>  .../testing/selftests/net/lib/py/__init__.py  |  2 +-
+>  tools/testing/selftests/net/lib/py/ynl.py     |  4 +++
+>  tools/testing/selftests/net/rtnetlink.py      | 30 +++++++++++++++++++
+>  5 files changed, 59 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/net/rtnetlink.py
+
+...
 
