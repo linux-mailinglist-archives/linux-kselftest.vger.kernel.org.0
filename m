@@ -1,208 +1,202 @@
-Return-Path: <linux-kselftest+bounces-26265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 030A7A2FE32
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:08:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26108A2FE36
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:11:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98E5D3A5DBA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 23:08:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAF1B3A5070
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 23:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9A125EFB3;
-	Mon, 10 Feb 2025 23:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9985D25EF9F;
+	Mon, 10 Feb 2025 23:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ao33QvaD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvCvLL87"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f202.google.com (mail-il1-f202.google.com [209.85.166.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F9925EF9B
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 23:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43ED125334D
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 23:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739228894; cv=none; b=rDr+AD+9YBx1OiAvez12l7IcjRNG4uZPFVvNFyy53w6aKbCLebmlBhXQpTC18g/BmdfvimOVndjK9hBjGrj1ovK7zp+kI5YK6F2rDU9+aqUj6UfhiT5y/AbFJaHXZGQYjkMi1Q2VlT8iL1+3eCSEDVm/nzE4zH8I/qpmxy5x3c4=
+	t=1739229064; cv=none; b=b3KG3GEk4DqMBBbBwsN9QayRZIBK+1HvmwcuoXORLk7C+90k9ZndRWGcyeuqE0BkopJuUgL4VwFXw6dYUlGAhFXPvwPdXLrY2ZKMWumi8+gdDmlmU8MCvRGgn11AcxaIiHBfLovCAX8tQAXXhjnefW8G4xrLgGWpxqxYskrLtFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739228894; c=relaxed/simple;
-	bh=s/ssfNn4b7bCXjP2GKwiQQgiKWJx78QfbpNKZtSS6Q4=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=nYcKPMmut0EZm8A3n3jMwpXWj3LaUd89g/kkXHq0TYcJHpA7Y37KcnTVqDXkHvS/YGij2WQorFFvyGynIyiEhFDhfp2u5+IK5Rse2yLKy/fviJHAoy6Nnp20BhVJRlkbNb1oTmtAB5PRPr3nq5pLa1hEdRgTBLqFz2NkkKfmfME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ao33QvaD; arc=none smtp.client-ip=209.85.166.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-il1-f202.google.com with SMTP id e9e14a558f8ab-3d058142573so37326475ab.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 15:08:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739228892; x=1739833692; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CXinvutFgPziM7RxPNDr3Edga1bpxeAp0Ov8Puttle0=;
-        b=Ao33QvaDqLBfzcYuOSvLYfq+o96q/+BbX+Pbb21EuoerhsSxeODMPQTRIsKNEH34EG
-         wHMMd1dZcEuclV++vpCezIT1xj8Hp1lTYfI62i1WTxMlTcfx3Q8o2lSpLyBtvdG26cL2
-         2LY6+K4dJxlp67e7/iAlurx7F7pvyvWGfFGe0pR6Ut3CymKI2V6p0KEy1uBMllKnmsbR
-         wp90AScnRgqcaFTW9htr2U9hNC7NRfD1Eio6WVOa7iCl4ZeSl9cAuWcJCi0Dr+IxoaaY
-         BZ34DCyvu+Hz2HtzoB9okY7a9q5AHbixBW4ffRCuY9P8OkwKd70hCtxZr+ef8qLJ80W3
-         uVqg==
+	s=arc-20240116; t=1739229064; c=relaxed/simple;
+	bh=I85yiPeGxjB3pHp4BZM6Tvv0YClNTRfIZsY3+9214ek=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d74+mbhc2m8q30UEEoD5MDDvV3K34au3HwA7AZDh9jBC0ay9sYodCgzJyknrHgEvKCY0TFvXE2Wvn676qHezxPXhqkmnDlkG7+DnqrgAD8xvaTvQNN9MAst05tBN19dXETBYyk9WTgWK/r/NEVzAPR7IttVO0B918U2n7HUpBkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TvCvLL87; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739229061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x6ZHTPoBjg/uWcJFr6X1NHVKDtKY1RU4PIMNX3aAG8g=;
+	b=TvCvLL87AhqONjn473XnS1csk9PXdgCUwXqIy/1h2hnAVJAOR/Lm+eGRP4n1WB+B+SIhaF
+	QngDr0c753OlKp2V30fqRB8WTbpJPwxGGUpVPhqldlkSUJ76UKxqOnvVYC9OlHFDCOxp9H
+	iTU4q7BKUGB+vaoU1T/kLMQKps7Mct4=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-694-s9R9yfhrNNWIwyQ9RyzNNw-1; Mon, 10 Feb 2025 18:11:00 -0500
+X-MC-Unique: s9R9yfhrNNWIwyQ9RyzNNw-1
+X-Mimecast-MFC-AGG-ID: s9R9yfhrNNWIwyQ9RyzNNw
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-6f2b386136aso73383517b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 15:10:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739228892; x=1739833692;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CXinvutFgPziM7RxPNDr3Edga1bpxeAp0Ov8Puttle0=;
-        b=QIaukPGprlYMDWXivOAHfY/jgKyg/eSFrgoeWeQ7yWVU7WBdZNepRE/4jPDArC0xW1
-         IxYGVIzfB/E9dySLZdfznwdUYF+GB1hJGoG2nM9J/zLD+AzQgO1wGd67w2OHPwaXGGd3
-         Iz3vHnVE697xs1v/RWtqcgopApvaGvrVH+FdMxDtL97eKHOAeYANyWs2X5MaPRZkTA2d
-         dlw5zK5gQ6lnJ0wyJC5FhZk1qwv484WRR+pZxHSCJeIPT459LurdbMOgGvt27giwNEFp
-         O5E2fKsXemcDbUn3/DD+P1ZTPfErUYcyW8grO5TC52Tu59AI0kzt98NtCffEV7SKRlDs
-         xfvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBbqQ5SoHjnT3Mp8cyaRT+TNnbeweR0cmQVvU2wpfb7rbE2WFFFPkSzxFBi/9TYqn94fk2/t6elxv8Ojt0Evg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxHi32ZDr6jZP39WPp2+KjEB/ezaQqHfreSTkdJKBHIBEhk0bb
-	5nRZO6JwbQGHdN1B23wSjbgf6qcOsAPEI3ffgSGkscSywbKWk11tMAa41X1JTkNATGMIxeTFIJR
-	DqCuMGbz7iLbNSZ6bZThr2A==
-X-Google-Smtp-Source: AGHT+IFUZhu2OwBm9Xl4P9gAhtgSkcN1rVy5kcIM68xBXK4rcWyV4/0jaNvjvAieMThFeK6tg2McyqvG5JOCTsu70Q==
-X-Received: from ilbec1.prod.google.com ([2002:a05:6e02:4701:b0:3d1:3d59:434b])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6e02:1c01:b0:3d0:f2ca:65aa with SMTP id e9e14a558f8ab-3d16f40b648mr9951285ab.4.1739228891849;
- Mon, 10 Feb 2025 15:08:11 -0800 (PST)
-Date: Mon, 10 Feb 2025 23:08:11 +0000
-In-Reply-To: <Z6msyUG0HWM2EImQ@linux.dev> (message from Oliver Upton on Sun, 9
- Feb 2025 23:37:45 -0800)
+        d=1e100.net; s=20230601; t=1739229059; x=1739833859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x6ZHTPoBjg/uWcJFr6X1NHVKDtKY1RU4PIMNX3aAG8g=;
+        b=jrkSVjDkk5vgkJwFQl6UfYgGNLmiXFMQO+4RLiffG0WrCIEFwsFHPxPukhcT5eswP3
+         nOaZzZb8+sjqCsVqVjzdY+RvVMREtEi6gxmE7rkan5xN7BjsDmMeHNU2+uGsKGbvwYxz
+         6vleqfRayB2ZAGV2K1NDcH88+AKWRdUva/lyemFRl6BSb4Rs8Sgj/LLzbHqDe5kNUZJO
+         OIa2I5OU7qHL3RO+9jHfRttgXIeVBTBcmaUEaTZNZQ/VrfKewzV5CD0VQ9pkwhceQH9z
+         oPuD5OxRjURd9M7HftBOhzNvhQjLwu5C5Mn1PF9xXi1ANFNqxeXXL+MwkAWWKdo2S0ve
+         tZmw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwzERhlvtPdyGU7FfSI0fJKpDUHliIX5W9g8ezRcUu0XciC4jtxMM9YWSlc9MTV0VO2eX+5M3boEyx0Q8R8so=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfSccdbI3KPS1Ou24rulkZqwE+YqqKsl8S/+932v1ztdpMKTMn
+	6UpDJ+Ewlv/DgSmWxXKmgV31uQo/O+H5hwLF4obiZyNzgZLo2GDbKXi6nFiZNb9JXxj8ftX0WdO
+	t6eUzWwgF+4UNbF9RXMKHvWTYij5WDNA68Ly42LoSQ/JgKTHk39rK2/ShK4jEXM4HQQdkXuELNL
+	6PVTjNjZvFUxw7x035C4YxzzDZ4jiGno28/qnjhsGH
+X-Gm-Gg: ASbGncswRrv3GDMb/v2DshqHMBHC49wF8jlgcRAOiRU2FFAOfDB8uOb24tUaFly6On8
+	fyqwjniHrYEYc8vpggYDX/sVKI1KiGU8uWesZwJAxApRuRHCdKNoWZY0kVDB4p/Z5gFi0i8Sp3g
+	8=
+X-Received: by 2002:a05:6902:1707:b0:e5b:21e4:d887 with SMTP id 3f1490d57ef6-e5b4619f375mr13712174276.19.1739229059275;
+        Mon, 10 Feb 2025 15:10:59 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG+uFDoQgt7ClLP9YRwsvG8gLINyPnKkvfjeiO8adNvnnks4vYT/H56Z3CUg+P5cCKTbi1EKyjELPBxs6+aa0U=
+X-Received: by 2002:a05:6902:1707:b0:e5b:21e4:d887 with SMTP id
+ 3f1490d57ef6-e5b4619f375mr13712146276.19.1739229058920; Mon, 10 Feb 2025
+ 15:10:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsnted051jqc.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [RFC PATCH v2 4/4] KVM: arm64: Make guests see only counters they
- can access
-From: Colton Lewis <coltonlewis@google.com>
-To: Oliver Upton <oliver.upton@linux.dev>
-Cc: kvm@vger.kernel.org, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, maz@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, 
-	yuzenghui@huawei.com, mark.rutland@arm.com, pbonzini@redhat.com, 
-	shuah@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
+ <Z6eaDuXnT_rjVSNS@thinkpad> <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
+ <bd71c705-5f57-4067-b200-fd80b98ddbc9@nvidia.com> <8b4bb4f0-37fc-4215-a3a9-3771394f065f@redhat.com>
+In-Reply-To: <8b4bb4f0-37fc-4215-a3a9-3771394f065f@redhat.com>
+From: Nico Pache <npache@redhat.com>
+Date: Mon, 10 Feb 2025 16:10:33 -0700
+X-Gm-Features: AWEUYZnj374O6r-fMAMQWzYmUj3jVBsErlGEBDI0ezwDzb8h1N0CVNAmtj-2QQw
+Message-ID: <CAA1CXcDXs7VRp=sfyDNTr6fR7MQ+pvb+w-o+gp-N6yTgdpMBRw@mail.gmail.com>
+Subject: Re: distro support for CONFIG_KUNIT: [PATCH 0/3] bitmap: convert
+ self-test to KUnit
+To: David Hildenbrand <david@redhat.com>, John Hubbard <jhubbard@nvidia.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Yury Norov <yury.norov@gmail.com>
+Cc: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-kselftest@vger.kernel.org, Brad Figg <bfigg@nvidia.com>, 
+	Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Oliver, thanks for the review.
+On Mon, Feb 10, 2025 at 12:46=E2=80=AFPM David Hildenbrand <david@redhat.co=
+m> wrote:
+>
+> On 10.02.25 20:35, John Hubbard wrote:
+> > On 2/9/25 11:54 PM, Geert Uytterhoeven wrote:
+> >> On Sat, 8 Feb 2025 at 18:53, Yury Norov <yury.norov@gmail.com> wrote:
+> >>> On Fri, Feb 07, 2025 at 03:14:01PM -0500, Tamir Duberstein wrote:
+> >>>> On 7/27/24 12:35 AM, Shuah Khan wrote:
+> > ...
+> >>>> The crux of the argument seems to be that the config help text is ta=
+ken
+> >>>> to describe the author's intent with the fragment "at boot". I think
+> >>
+> >> IMO, "at boot" is a misnomer, as most tests can be either builtin
+> >> or modular.
+> >
+> > Right.
+> >
+> >>
+> >>> KUNIT is disabled in defconfig, at least on x86_64. It is also disabl=
+ed
+> >>> on my Ubuntu 24.04 machine. If I take your patches, I'll be unable to
+> >
+> > OK so I just bought a shiny new test machine, and installed one of the
+> > big name distros on it, hoping they've moved ahead and bought into the =
+kunit
+> > story...
+> >
+> > $ grep KUNIT /boot/config-6.8.0-52-generic
+> > # CONFIG_KUNIT is not set
+> >
+> > ...gagghh! No such luck. One more data point, in support of Yuri's comp=
+laint. :)
+> >
+> >>
+> >> I think distros should start setting CONFIG_KUNIT=3Dm.
+> >
+> > Yes they should! kunit really does have important advantages for many u=
+se
+> > cases, including bitmaps here, and "CONFIG_KUNIT is not set" is the mai=
+n
+> > obstacle.
+>  > > Let me add a few people to Cc who might be able to influence some
+> distros.
+> >
+> > thanks,
+>
+>
+> Fedora has it.
+>
+> CS-10 has it (-> RHEL-10):
+> redhat/configs/common/generic/CONFIG_KUNIT:CONFIG_KUNIT=3Dm
+>
+> https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-10/-/blo=
+b/main/redhat/configs/common/generic/CONFIG_KUNIT?ref_type=3Dheads
+>
+> CS-9 has it (-> RHEL-9):
+> redhat/configs/common/generic/CONFIG_KUNIT:CONFIG_KUNIT=3Dm
+>
+> https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob=
+/main/redhat/configs/common/generic/CONFIG_KUNIT?ref_type=3Dheads
+>
+> So I think from the RH side everything is properly set?
+>
+> Let me CC Nico, he did some KUNIT work in the past.
 
-Oliver Upton <oliver.upton@linux.dev> writes:
+Yeah that is correct! I enabled KUNIT in our environments a few years
+ago. We enable it as a module and use our own wrapper to exercise the
+code. For RHEL and Centos these kunit modules are only shipped
+internally for testing; However fedora-rawhide makes these modules
+available in the kernel-modules-internal package.
 
-> On Sat, Feb 08, 2025 at 02:01:11AM +0000, Colton Lewis wrote:
->> The ARM architecture specifies that when MDCR_EL2.HPMN is set, EL1 and
->> EL0, which includes KVM guests, should read that value for PMCR.N.
+To test this you can follow this to install rawhide-vm:
+https://developer.fedoraproject.org/tools/virt-builder/about.html
+then inside the vm:
+    yum install kernel-modules-internal
+    add the kunit.enable=3D1 to the cmdline
+    reboot vm
+    modprobe kunit
+    modprobe <test_name>
 
->> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> ---
->>   arch/arm64/kvm/debug.c                                  | 3 +--
->>   arch/arm64/kvm/pmu-emul.c                               | 8 +++++++-
->>   tools/testing/selftests/kvm/arm64/vpmu_counter_access.c | 2 +-
->>   3 files changed, 9 insertions(+), 4 deletions(-)
+Hopefully that helps!
+-- Nico
 
->> diff --git a/arch/arm64/kvm/debug.c b/arch/arm64/kvm/debug.c
->> index 0e4c805e7e89..7c04db00bf6c 100644
->> --- a/arch/arm64/kvm/debug.c
->> +++ b/arch/arm64/kvm/debug.c
->> @@ -36,8 +36,7 @@ static void kvm_arm_setup_mdcr_el2(struct kvm_vcpu  
->> *vcpu)
->>   	 * This also clears MDCR_EL2_E2PB_MASK and MDCR_EL2_E2TB_MASK
->>   	 * to disable guest access to the profiling and trace buffers
->>   	 */
->> -	vcpu->arch.mdcr_el2 = FIELD_PREP(MDCR_EL2_HPMN,
->> -					 *host_data_ptr(nr_event_counters));
->> +	vcpu->arch.mdcr_el2 = FIELD_PREP(MDCR_EL2_HPMN, read_mdcr());
 
-> Please avoid unnecessary accesses to MDCR_EL2 at all costs. This is a
-> guaranteed trap to EL2 with nested virt.
 
-I thought it was necessary when I wrote this, but I see it's not after
-thinking about it for a while.
+>
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
 
-The intended value is accessible from vcpu->kvm->arch.arm_pmu.hpmn as
-written, but could be somewhere else after addressing your suggestion to
-lift all MDCR handling into KVM.
-
->>   	vcpu->arch.mdcr_el2 |= (MDCR_EL2_TPM |
->>   				MDCR_EL2_TPMS |
->>   				MDCR_EL2_TTRF |
->> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
->> index 6c5950b9ceac..052ce8c721fe 100644
->> --- a/arch/arm64/kvm/pmu-emul.c
->> +++ b/arch/arm64/kvm/pmu-emul.c
->> @@ -993,12 +993,18 @@ static bool pmu_irq_is_valid(struct kvm *kvm, int  
->> irq)
->>   u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
->>   {
->>   	struct arm_pmu *arm_pmu = kvm->arch.arm_pmu;
->> +	u8 limit;
->> +
->> +	if (arm_pmu->partitioned)
->> +		limit = arm_pmu->hpmn - 1;
->> +	else
->> +		limit = ARMV8_PMU_MAX_GENERAL_COUNTERS;
-
->>   	/*
->>   	 * The arm_pmu->cntr_mask considers the fixed counter(s) as well.
->>   	 * Ignore those and return only the general-purpose counters.
->>   	 */
->> -	return bitmap_weight(arm_pmu->cntr_mask,  
->> ARMV8_PMU_MAX_GENERAL_COUNTERS);
->> +	return bitmap_weight(arm_pmu->cntr_mask, limit);
->>   }
-
-> This isn't necessary and is likely to regress the existing behavior.
-
-> When the architecture says the lower ELs should see PMCR_EL0.N have the
-> same value as MDCR_EL2.HPMN, what it really means is direct reads from
-> hardware will return the value.
-
-> So my expectation would be that a VM using the partitioned PMU
-> implementation would never reach any of the *emulated* PMU handlers, as
-> we would've disabled the associated traps.
-
-Understood. The change was here to see be able to read PMCR_EL0.N from
-inside a VM since I haven't disabled the associated traps yet.
-
-It shouldn't be in this patch.
-
-> The partitioned PMU will not replace the emulated vPMU implementation in
-> KVM, so it'd be good to refactor what we have today to make room for
-> your work. I think that'd be along the lines of:
-
->   - Shared code for event filter enforcement and handling of the vPMU
->     overflow IRQ.
-
->   - Emulated PMU implementation that provides trap handlers for all PMUv3
->     registers and backs into host perf
-
->   - Partitioned PMU implementation that doesn't rely on traps and instead
->     saves / restores a portion of the PMU that contains the guest
->     context.
-
-> These should be done in separate files, i.e. I do not want to see a
-> bunch of inline handling to cope with emulated v. partitioned PMUs.
-
-Agreed.
-
->>   static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
->> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c  
->> b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
->> index f16b3b27e32e..b5bc18b7528d 100644
->> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
->> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
->> @@ -609,7 +609,7 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
->>    */
->>   static void run_error_test(uint64_t pmcr_n)
->>   {
->> -	pr_debug("Error test with pmcr_n %lu (larger than the host)\n",  
->> pmcr_n);
->> +	pr_debug("Error test with pmcr_n %lu (larger than the host allows)\n",  
->> pmcr_n);
-
-> NBD for an RFC, but in the future please do selftests changes in a
-> separate patch.
-
-Ok, I'll do that in the future.
 
