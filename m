@@ -1,150 +1,139 @@
-Return-Path: <linux-kselftest+bounces-26191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4D39A2F329
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 17:21:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB68A2F36F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 17:27:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2552E18850BD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:22:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B0BC1881439
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EB42580EA;
-	Mon, 10 Feb 2025 16:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Spyl11ur"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052782580F3;
+	Mon, 10 Feb 2025 16:27:23 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5672580C8
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 16:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85552580D6;
+	Mon, 10 Feb 2025 16:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739204512; cv=none; b=qWDlg4NBz7J62ZxS5f1iVJQTM/wX+oTdysr0F8V7KQo2fN86zcf+n+XYB240JfVUbJHdLqtpE1nv13yEm3QSXJ+yrnxZUtujab1HPbhUcjZZPqFxdR+7iTJeUlghV9uv1IBqpp8zePAUbcQqe2KZLy0SIWAlpgnwRCnfP+R8a40=
+	t=1739204842; cv=none; b=gA5fV+fOmpADKz/INsbYv9jw477c++rbeMSYbCkye4lidaarJJlxS89nZONO6PCVISsw5cnCErAA5xhV+akafTYQpBqaQly8Zu9I3hpdfmNmJ1T3afCQPVBPngwCgJB74IdaK1Ovr2E3iIqFwD52iizF/QdqJriJZMYg1iOixd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739204512; c=relaxed/simple;
-	bh=KIqBkUSyhCVeVPELNP6ISV0HCnomhljLgtcM2pOAoUg=;
+	s=arc-20240116; t=1739204842; c=relaxed/simple;
+	bh=KuMe3+MDTwc+Rnc7r/9bMIaCdM012Bs1ibmPwlai+F4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O1/bBYrLwqgWdG7cNSQNb78YXcSkHkr5IEL+kJXI7o+23ApQjZ+gbP/qJTKuOsUvtgOmVrnMUUqevUwt9el+BLxJ85dgXfGO6wTdj7h9J3dpb4KUF7UEHXl+B7ewb2D/muxPN6c45ULrPK92qVTMuzcSr1Inxo5SxDAiSHcwCE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Spyl11ur; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5de51a735acso5840653a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 08:21:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1739204509; x=1739809309; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KIqBkUSyhCVeVPELNP6ISV0HCnomhljLgtcM2pOAoUg=;
-        b=Spyl11urk48vjBb63Eiqe68b5dQQq6kwPba4Aww0qcYBhgagSi0EPHuHxnciOeTC5L
-         dzooTKDnsUyYYh04/vSp/9RjLK5ptplUHlvc+v5uctevsHfuinmlIkmnkD/uak4Elcjr
-         3oKPGFa2R4bt6cs033p786DCzVIJnM+JZfvSOG+GBBh+m1nG3bmNzGTSkw4H8fNDPg4n
-         61D42Wcxw4QV+x6/KEnodlLdXVtU3uv+8usJlMntfuUhdHBaXlKTL9d3YmYaHN/LTkJB
-         qUwuWRi6kEg5mJcxYBfvaVKsiUs5QYm+ckWfotS+yGiiQzUG1pF0c7EiqraFGyL/KPU5
-         0aAQ==
+	 To:Cc:Content-Type; b=ehXtWJ+qWbeTrI7tKV7+Zu53r6bDhJ7gg0EfAVRTsA3563C3zm164q2tiFkch0NWw/NSscm+nrIIjKOTS7c1Edk7BBccZ+4fkudNwHP/ExgMNuJqv9AxvS5Bu1OnU+RFkKnuh1bnNEl13O4gG3hBVeSIXYzSxgHKpOIAPV4IeDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4affbb7ef2dso3457804137.0;
+        Mon, 10 Feb 2025 08:27:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739204509; x=1739809309;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KIqBkUSyhCVeVPELNP6ISV0HCnomhljLgtcM2pOAoUg=;
-        b=NO+gXh1bO9K7I01hJQOACEMkKUtOZC1omJ2rRKl2uJELAX4z8Cfjy9vCImI5F2rnYp
-         9z0ztzAeYh78ZrWT90bS+qfMRPri/WBjZHdcvYpiF3g4J/Ybk0Jx5/W3Ly/I3nxe+Cn2
-         1QGJ+kTQ+aiECDkUmxfWTfxZ5zkV0S+mnUjgUU1+oczJnEhKZuQ8wQbV1Ffe2opypvLX
-         Goj/PNGOREZYwRgABkXmjBys1W/v9lHnIjJRua7Es6QeOGmNXVt6+8NU3VRhzyRZAUeH
-         1qUNftgDVNuem5pmfkGE/HDTA+dJmQbyhB8LiF/hzFsBrulRuWr8XlqytJskwoXrorty
-         qVTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVU+ACddxDlDoi3Ap2IthT2aD5ahw03LmGt1c1OE7qOt8dGIvPpXXG4ukQGMu05/xtB257ecbesKVQBD2eG4m4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzAkVtraxlWtk+MqZHjR+EJ9u8U8mwrsNpVRioMK50QgRs4Ely
-	9qPc8rY78A2a9xhgTFNW4JSPpkDhHFpgrWJZ5dDMtxPM0ntfUv0iro6jX/Tt5rZ0+vDwU1ZyQzD
-	8T0F/wfz24Qd3FrRtMYN+Rk7hH5geHxKYBsF0ig==
-X-Gm-Gg: ASbGncvnR3A+85HDEpw08odPLyr98Ke2REhugk8VP3SovYZTliMyv9bVWAMfrkMgl/P
-	bvAVRx7L/zsy6FmOjrSIFjU+enbjFzFg5k7ILk+a3JCzaeJkpWnyHEiKFImohTDEo62ruLmx+8L
-	RiyiLLxW6sF1a7GGg=
-X-Google-Smtp-Source: AGHT+IHy71NYgSP/cCvRFmJ3G6I8GQkkK8vW2MV7RYTmiEkeOtYPIG8dZEldxTbMHipBtrY+5n8UQFrBgYq2RkcMjZw=
-X-Received: by 2002:a05:6402:13c5:b0:5db:e7eb:1b4a with SMTP id
- 4fb4d7f45d1cf-5de45005a3bmr15164299a12.10.1739204509076; Mon, 10 Feb 2025
- 08:21:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739204839; x=1739809639;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zqbX4psAGJ/PrujVLmSoQSl1kgnOHwvpt/Be/t6GDZw=;
+        b=h7CLDpsXt9pf4Qghv7YTCxRO194MSIQoChurMwRKEGveNuFVxCIJm49Uzais8rZYbs
+         FewJBC4TwAUy70rsHhPKAEZ5hh2JsB8DlZm+Ix6e8eLJ5IUhAcKBhfqzk9IJ2oAV/bIu
+         +tk/Q5aCUhZ3d5xRatMpAHHXr0K3RyhnsU51FCamU3iu6Wy2PXHIif/cKEF70rLtSAJ9
+         LidpyT5zv3kLlagDCEIybj+MU66gLmXFVbV1u6DoTYAj+vr7oT+GLZYTu9t+CKSh0dIo
+         ZhEoKQRUG8zW2etjHG0sHxpgrsZeM7S7roboGbW76xEH47FNQH4PogAkdEtSsWZJvpP9
+         4CQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWtClXNNiJufwfuHwoS299grJUjPvMiSVwHpE3Le7rghspkcroNeT0jth4ouB5iUJA02R2kpViVUqaqGtr1Jtus@vger.kernel.org, AJvYcCXuNj9kgdNvX9v5NPBgp0XOFVBxhbfSOMH0FRLwpCP9t06y3ZOl8GXTQywQhrx9RQ2ZwErgoEaiscNTt8A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpCyVg9H2WGLPU/i86pp2+8sL9apJq9cdnjKVk01rrOVQUQ8r2
+	co0gOYkUJpVct47tVUl4YhClVOZFawOTVtt27byZoo3CEGO0ZHdxFqHbI8jm
+X-Gm-Gg: ASbGncufayU6qfO3Ys7lqsC6FJBOotlkAYF2Z7PSwG+sgg7G8Iot4atjV+Qzn2LFbof
+	TLiZZWFeTmc5w610mO132f1ckLN4Lg+14lODuj3zRuCNgN+fjudhutDYXKk7zQ8GjFKiotMdBfR
+	q9ZVUmcKlE+SFqymYP+GvVMkNSQ6Td8HojhT33p8tbhxrrwuYfFqPXkZNucb9kC2ztsM3JspPTV
+	9G66TkNHyMudSVWeYCY6WTl+fTFxJwelTfgKscR0edplutUy1t14W7vaVjrvXSZ+tTCW+BYAdtQ
+	dD0L3jMbRB9Rpix7UkWDZA+UaA70cL/QCZFYn78RjIkslIDOwOZXIw==
+X-Google-Smtp-Source: AGHT+IGuxsDi8qW8F7BWVNEO/Pbjh0THpoKjO09AnXLhgrUUbLqtfnM0/M/Do5G/oTI8lLpt5ahBmw==
+X-Received: by 2002:a05:6102:3046:b0:4b6:fdc6:dd04 with SMTP id ada2fe7eead31-4ba85ec477dmr10168353137.18.1739204839107;
+        Mon, 10 Feb 2025 08:27:19 -0800 (PST)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbbebc1fa0sm676139137.15.2025.02.10.08.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Feb 2025 08:27:17 -0800 (PST)
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4affbb7ef2dso3457755137.0;
+        Mon, 10 Feb 2025 08:27:17 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTxFqqk5qIhAiytInVz0JBy8P6fbWie48hOEd/q2/aGhmwOri/XaY9t9IN9bcXNsbBxhrGVKKhsGA/EZo=@vger.kernel.org, AJvYcCV2kMun0fPB6vS6d76FzQqjFYQ5+9sSOvuCjIca5U68ay9gEmfuAT8co3+lDTUnphW+pBqEb3/WNa9h1GtvH71m@vger.kernel.org
+X-Received: by 2002:a05:6102:f0f:b0:4b2:ad82:133a with SMTP id
+ ada2fe7eead31-4ba85f407a9mr9701403137.25.1739204837046; Mon, 10 Feb 2025
+ 08:27:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1739171594.git.yan@cloudflare.com> <85618439eea75930630685c467ccefeac0942e2b.1739171594.git.yan@cloudflare.com>
- <Z6nEsGSbWqCSaVp3@krava> <CAMzD94QZQjpwOA8Os3khG32d2zgH8i=Sy1VoudRCGqZudyHkag@mail.gmail.com>
-In-Reply-To: <CAMzD94QZQjpwOA8Os3khG32d2zgH8i=Sy1VoudRCGqZudyHkag@mail.gmail.com>
-From: Yan Zhai <yan@cloudflare.com>
-Date: Mon, 10 Feb 2025 10:21:38 -0600
-X-Gm-Features: AWEUYZlnLuiCJjRJtIJZwpaZNOpATxR3bl3tZuwbBXDssS0d0dx6XXBf-mXpTzk
-Message-ID: <CAO3-Pbqa_oOm-u318mTwqPfuRJ2_kdk+ou99BOu53A3O_wEyZg@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf 1/2] bpf: skip non exist keys in generic_map_lookup_batch
-To: Brian Vazquez <brianvv@google.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com, 
-	Hou Tao <houtao@huaweicloud.com>
+References: <20250210-scanf-kunit-convert-v5-0-8e64f3a7de99@gmail.com> <20250210-scanf-kunit-convert-v5-2-8e64f3a7de99@gmail.com>
+In-Reply-To: <20250210-scanf-kunit-convert-v5-2-8e64f3a7de99@gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 10 Feb 2025 17:27:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVnqqffKUQ7+usXruWce8B0KdRxxO41zNY8bTfh-r5oHQ@mail.gmail.com>
+X-Gm-Features: AWEUYZm2EYJA8ZA_5wFNdPwcX5XuV0_TVa-Ox5vT8RiMF4s-d-aO03s5oFok9fE
+Message-ID: <CAMuHMdVnqqffKUQ7+usXruWce8B0KdRxxO41zNY8bTfh-r5oHQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] scanf: break kunit into test cases
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Brian, Jiri
+Hi Tamir,
 
-thanks for the comments.
-
-On Mon, Feb 10, 2025 at 8:47=E2=80=AFAM Brian Vazquez <brianvv@google.com> =
-wrote:
+On Mon, 10 Feb 2025 at 16:00, Tamir Duberstein <tamird@gmail.com> wrote:
+> Use `suite_init` and move some tests into `scanf_test_cases`. This
+> gives us nicer output in the event of a failure.
 >
-> On Mon, Feb 10, 2025 at 4:19=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wr=
-ote:
-> >
-> > On Sun, Feb 09, 2025 at 11:22:35PM -0800, Yan Zhai wrote:
-> > > The generic_map_lookup_batch currently returns EINTR if it fails with
-> > > ENOENT and retries several times on bpf_map_copy_value. The next batc=
-h
-> > > would start from the same location, presuming it's a transient issue.
-> > > This is incorrect if a map can actually have "holes", i.e.
-> > > "get_next_key" can return a key that does not point to a valid value.=
- At
-> > > least the array of maps type may contain such holes legitly. Right no=
-w
-> > > these holes show up, generic batch lookup cannot proceed any more. It
-> > > will always fail with EINTR errors.
-> > >
-> > > Rather, do not retry in generic_map_lookup_batch. If it finds a non
-> > > existing element, skip to the next key. This simple solution comes wi=
-th
-> > > a price that transient errors may not be recovered, and the iteration
-> > > might cycle back to the first key under parallel deletion. For exampl=
-e,
-> >
-> > probably stupid question, but why not keep the retry logic and when
-> > it fails then instead of returning EINTR just jump to the next key
-> >
-> > jirka
->
-> +1, keeping the retry logic but moving to the next key on error sounds
-> like a sensible approach.
->
-I made the trade off since retry would consistently fail for the array
-of maps, so it is merely wasting cycles to ever do so. It is already
-pretty slow to read these maps today from userspace (for us we read
-them for accounting/monitoring purposes), so it is nice to save a few
-cycles especially for sparse maps. E.g. We use inner maps to store
-protocol specific actions in an array of maps with 256 slots, but
-usually only a few common protocols like TCP/UDP/ICMP are populated,
-leaving most "holes". On the other hand, I personally feel it is
-really "fragile" if users rely heavily on this logic to survive
-concurrent lookup and deletion. Would it make more sense to provide
-concurrency guarantee with map specific ops like hash map?
+> Reviewed-by: David Gow <davidgow@google.com>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-best
-Yan
+Thanks for your patch!
+
+> --- a/lib/scanf_kunit.c
+> +++ b/lib/scanf_kunit.c
+> @@ -4,19 +4,14 @@
+>   */
+>
+>  #include <kunit/test.h>
+> -#include <linux/bitops.h>
+> -#include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/overflow.h>
+> -#include <linux/printk.h>
+>  #include <linux/prandom.h>
+> -#include <linux/slab.h>
+> -#include <linux/string.h>
+> +#include <linux/sprintf.h>
+>
+>  #define BUF_SIZE 1024
+>
+> -static char *test_buffer;
+> -static char *fmt_buffer;
+> +static char test_buffer[BUF_SIZE];
+> +static char fmt_buffer[BUF_SIZE];
+
+Why? This wastes 2 KiB of memory when the test is not running.
+
+>  static struct rnd_state rnd_state;
+>
+>  typedef void (*check_fn)(struct kunit *test, const void *check_data, const char *string,
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
