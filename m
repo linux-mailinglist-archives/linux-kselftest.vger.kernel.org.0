@@ -1,163 +1,343 @@
-Return-Path: <linux-kselftest+bounces-26184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54A18A2F1B6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0629A2F1D1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 16:34:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C86A3A35D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 15:27:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 613953A2621
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 15:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B1C24BD12;
-	Mon, 10 Feb 2025 15:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD0723DE95;
+	Mon, 10 Feb 2025 15:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="htvRimFu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A2Zvv8O+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C229524BD03
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 15:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BE123E236
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 15:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739201185; cv=none; b=CGrJ9ZRleg6JvlS5IktgPu406eYe7FGB33eCoobADDmYW+GSBcjCjvnUcEjJnXaAhBb/4u+FeXpsKuZgcOTQptHacsKvbMjI/W2IswK2wO5AnG5chz6ASwq0BZvrvv3Bc2/5VYIvNK89uZLHTiGaSkS2ZYn67N5eSqQq96hR8VM=
+	t=1739201612; cv=none; b=ZE0u7AOomt1NhYNveSoJSqVp0DrMPbYzm+ltn0OCcwtpIZ7rc/864Ra4bHFw6YP4DUwUXaVXMr6mYcGmpMncbD6OT66EG1BSsL4X9WFMwHXZYAPZQfQASZDhsa4dGTPVwJEjpuGUF2I/pKSt13fbSB55i3NFr/ITM6I96FHBEuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739201185; c=relaxed/simple;
-	bh=cqCf4NDqz6PP8XjbskK0JUt0MZIFFfNj+ukOYMRG8+4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SPK6Y+3V+OPomoGczqqBq5dDP4KKwDlPrIiwQDZxo9K0NUzVMjNwaEyHpBG0bwS4cdb8c9T5WhM/huhKs+CY22Up6lr821Qsyoek6K8FEOzJX9/iXV+yLFSbI2xh3Ks8LL8JWL+HhtCVFdo1ts2uL3GhC96fQRLYopY2soJ9anc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=htvRimFu; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1739201612; c=relaxed/simple;
+	bh=0K3d8F/xVoOQDemlJCe7zkTMGCdS+at9S4Wn6xK5jsM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gTVuKRgM9hpoA3QXlDeUiS682ARjOkq2NO3/bu43iTXj1MfV6aBnR8riIm7EgCVi3uKTB75DS1SYALiuOOiTdczjuqsASVgf8M8Ruam7Q/ZasRgyCk7fW1HSKDUULO0+Go81CvzdLD6W9nZDTfEAqzIU/XlhQ79zKxyip3HGM54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A2Zvv8O+; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739201182;
+	s=mimecast20190719; t=1739201608;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=DyU0PD8obl5r6J7r3/RI/9K2JsBJV1aeauj24rGL0J4=;
-	b=htvRimFu3Uvnp+H1kSHAof8GBIEHsienONFMGoTErNKdTlQtJ7OpPJcAapV+QjTXmY/Qvq
-	xhZzEu0qb/eQerd1SuOJ9Vb2fv4qHnEaz+AFz5DRXHD7uOFINO/TSrKGR2eMwM6MvK2skq
-	lneDmrjZsKKkp/OgzCWwaZig00tI1eU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-33-2L10QBDYOdq0bUJLfu1LSQ-1; Mon, 10 Feb 2025 10:26:19 -0500
-X-MC-Unique: 2L10QBDYOdq0bUJLfu1LSQ-1
-X-Mimecast-MFC-AGG-ID: 2L10QBDYOdq0bUJLfu1LSQ
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43626224274so26815205e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 07:26:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739201179; x=1739805979;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DyU0PD8obl5r6J7r3/RI/9K2JsBJV1aeauj24rGL0J4=;
-        b=edwh9etChMoWBrZkyL2bGOMqXWx/2myuw8nL+trqFf2BFPgwrbLwIfh/SKY8tfqkKj
-         ElJslrcaTLNQgK+ps3G0amQCPjEWN5GfcauGqTAun1/yRw9u9X0WYDcwLcPidqCVM1RF
-         2yLpKJRmlHFlz5CnxDB7sw3y17hI7gpu7KwjTZbdsKNbhasB+b80U497gUh9YsTQya+U
-         gyPnQoEgjbR507dosg5GF+6iLvLGh4///2rc2TEMEpOeQMgkJHKBnaqi3tq2k7RISjAO
-         hcndqWxgfrikniu0nFKX9ig5IWLG3GJhkT+H0iNGYW2Fc+wH87lZAa58uWn2gWtCvt7r
-         83Tw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlDTWlrH5ht7z0zMhASzyA3MJgOTvt9y7ZNr2KuRe+yETYpt3A6V1uNcmmWYogI2BQdQ6tP1b75Ip6fSq77Pk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzTqQY8O54oHwQ00X6RV7YzjLYEYuB6ZF0FcWOpEiz0JZMSROD
-	CdkeuVtm+ema8AbFU5camLC/qKjV2pt74yywraEcg2WbfcMCBkB9yFdmvo1GlfrCEPlizN1qxL+
-	U1TiN5tD234YbfdGspNbGEtNuxqRq7ZkvfVEV7/wBTW/qCc8sP6PHVgs0qGyu/oEzKA==
-X-Gm-Gg: ASbGnctSUFdhVWLUJ3v1bfhdPysa+DKKO5t0TRncZjTH22Hoi3Tlmvlafu35NbYrRK4
-	qG/Y33YW1PtPfz6FSyDkx4jCDvTAaVqIscb3FS3XowFEUbQlEPx/tVoTUlfwm3ArhX8nekiZfKl
-	+vtvXs1VfpN9y8joqjDznPvMit1GHv/CaWxpDlRdmaLUxIlqx99q9F9N+ZUpjcsP2K1rOGy2UEj
-	VYD//ej4wjhAi6hVTiQnyJLObpKEeuVjSyWg+VmkDWQy/PHHkNHQWEy5Pb89ZAVrBPpjy6XTJ3t
-	OTdPxgrPBRqzAAVHuSiHLLAdcxIqBMw=
-X-Received: by 2002:a05:600c:4e93:b0:439:4036:e925 with SMTP id 5b1f17b1804b1-4394036eb16mr63685425e9.11.1739201178643;
-        Mon, 10 Feb 2025 07:26:18 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IENw/oXxAGB+H0r+IgDEAwCWcxHZDYtwcMjowLVmO3YEF3rnAieF6nRyMgKVMNUn35trPu9UQ==
-X-Received: by 2002:a05:600c:4e93:b0:439:4036:e925 with SMTP id 5b1f17b1804b1-4394036eb16mr63685105e9.11.1739201178195;
-        Mon, 10 Feb 2025 07:26:18 -0800 (PST)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([185.107.56.35])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4391dfd8448sm150058285e9.38.2025.02.10.07.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 07:26:17 -0800 (PST)
-Message-ID: <2c2ee65283893a433ac4488f3d048b0f7454be24.camel@redhat.com>
-Subject: Re: [PATCH v5 3/3] rseq/selftests: Add test for mm_cid compaction
+	 in-reply-to:in-reply-to:references:references;
+	bh=BbjEMY8/mdvBBPR5YIiGfY/QlRvz6+lINWP41WIENPI=;
+	b=A2Zvv8O+iRwvmBkBzIYyAHpjh8BFQCZ8kzRkZvWFtI8HLR70gEndt1KKcGtstd2pSguWmj
+	++ideQzwWZVlbECpheBXn3z2Lyzxgste63LFzui1Kc/p4l/RUy+C2gOzl7J7T4WuGugL+x
+	HAXgvLgFlrMUxX8ctO7ppsmgbxuccXw=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-96-kGn09XMQOEurUM2gVyKo4w-1; Mon,
+ 10 Feb 2025 10:33:26 -0500
+X-MC-Unique: kGn09XMQOEurUM2gVyKo4w-1
+X-Mimecast-MFC-AGG-ID: kGn09XMQOEurUM2gVyKo4w
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88C1119560B1;
+	Mon, 10 Feb 2025 15:33:23 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.44.34.65])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6F4C61800876;
+	Mon, 10 Feb 2025 15:33:20 +0000 (UTC)
 From: Gabriele Monaco <gmonaco@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney"
-	 <paulmck@kernel.org>, Shuah Khan <shuah@kernel.org>, Ingo Molnar
-	 <mingo@kernel.org>, linux-kernel@vger.kernel.org, 
+To: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Date: Mon, 10 Feb 2025 16:25:59 +0100
-In-Reply-To: <da68dc94-9aa8-4ee1-b0f9-e28eb5c7da56@efficios.com>
-References: <20250210075703.79125-1-gmonaco@redhat.com>
-	 <20250210075703.79125-4-gmonaco@redhat.com>
-	 <da68dc94-9aa8-4ee1-b0f9-e28eb5c7da56@efficios.com>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0ByZWRoYXQuY29tPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmbiuWMCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfJzZgD/TXjnqCyqaZH/Y2w+YVbvm93WX2eqBqiVZ6VEjTuGNs8A/iPrKbzdWC7AicnK
- xyhmqeUWOzFx5P43S1E1dhsrLWgP
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Ingo Molnar <mingo@kernel.org>
+Subject: [PATCH v6 3/3] rseq/selftests: Add test for mm_cid compaction
+Date: Mon, 10 Feb 2025 16:32:52 +0100
+Message-ID: <20250210153253.460471-4-gmonaco@redhat.com>
+In-Reply-To: <20250210153253.460471-1-gmonaco@redhat.com>
+References: <20250210153253.460471-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
+A task in the kernel (task_mm_cid_work) runs somewhat periodically to
+compact the mm_cid for each process. Add a test to validate that it runs
+correctly and timely.
 
+The test spawns 1 thread pinned to each CPU, then each thread, including
+the main one, runs in short bursts for some time. During this period, the
+mm_cids should be spanning all numbers between 0 and nproc.
 
-On Mon, 2025-02-10 at 15:53 +0100, Mathieu Desnoyers wrote:
-> On 2025-02-10 08:57, Gabriele Monaco wrote:
-> > A task in the kernel (task_mm_cid_work) runs somewhat periodically
-> > to
-> > compact the mm_cid for each process. Add a test to validate that it
-> > runs
-> > correctly and timely.
-> >=20
-> > The test spawns 1 thread pinned to each CPU, then each thread,
-> > including
-> > the main one, runs in short bursts for some time. During this
-> > period, the
-> > mm_cids should be spanning all numbers between 0 and nproc.
-> >=20
-> > At the end of this phase, a thread with high enough mm_cid (>=3D
-> > nproc/2)
-> > is selected to be the new leader, all other threads terminate.
-> >=20
-> > After some time, the only running thread should see 0 as mm_cid, if
-> > that
-> > doesn't happen, the compaction mechanism didn't work and the test
-> > fails.
-> >=20
-> > The test never fails if only 1 core is available, in which case, we
-> > cannot test anything as the only available mm_cid is 0.
-> >=20
-> > To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->=20
-> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->=20
-> tiny nit below:
->=20
-> > +		usleep(RUNNER_PERIOD);
-> > +	curr_mm_cid =3D rseq_current_mm_cid();
-> > +	/*
-> > +	 * We select one thread with high enough mm_cid to be the
-> > new leader
->=20
-> Missing punctuation here (...new leader.=C2=A0 All other...)
+At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
+is selected to be the new leader, all other threads terminate.
 
-I guess I'm allergic to those ;) Thanks for finding it!
-I wonder if checkpatch should be able to catch this kind of problem,
-but that's for another day.
+After some time, the only running thread should see 0 as mm_cid, if that
+doesn't happen, the compaction mechanism didn't work and the test fails.
 
-Do I need to send a v6 for this or just reply here with the fixed
-patch?
+The test never fails if only 1 core is available, in which case, we
+cannot test anything as the only available mm_cid is 0.
 
-Thanks,
-Gabriele
+Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ tools/testing/selftests/rseq/.gitignore       |   1 +
+ tools/testing/selftests/rseq/Makefile         |   2 +-
+ .../selftests/rseq/mm_cid_compaction_test.c   | 200 ++++++++++++++++++
+ 3 files changed, 202 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
+
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+index 16496de5f6ce4..2c89f97e4f737 100644
+--- a/tools/testing/selftests/rseq/.gitignore
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -3,6 +3,7 @@ basic_percpu_ops_test
+ basic_percpu_ops_mm_cid_test
+ basic_test
+ basic_rseq_op_test
++mm_cid_compaction_test
+ param_test
+ param_test_benchmark
+ param_test_compare_twice
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index 5a3432fceb586..ce1b38f46a355 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
+ 
+ TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
+ 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
+-		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
++		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
+ 
+ TEST_GEN_PROGS_EXTENDED = librseq.so
+ 
+diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+new file mode 100644
+index 0000000000000..7ddde3b657dd6
+--- /dev/null
++++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: LGPL-2.1
++#define _GNU_SOURCE
++#include <assert.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stddef.h>
++
++#include "../kselftest.h"
++#include "rseq.h"
++
++#define VERBOSE 0
++#define printf_verbose(fmt, ...)                    \
++	do {                                        \
++		if (VERBOSE)                        \
++			printf(fmt, ##__VA_ARGS__); \
++	} while (0)
++
++/* 0.5 s */
++#define RUNNER_PERIOD 500000
++/* Number of runs before we terminate or get the token */
++#define THREAD_RUNS 5
++
++/*
++ * Number of times we check that the mm_cid were compacted.
++ * Checks are repeated every RUNNER_PERIOD.
++ */
++#define MM_CID_COMPACT_TIMEOUT 10
++
++struct thread_args {
++	int cpu;
++	int num_cpus;
++	pthread_mutex_t *token;
++	pthread_barrier_t *barrier;
++	pthread_t *tinfo;
++	struct thread_args *args_head;
++};
++
++static void __noreturn *thread_runner(void *arg)
++{
++	struct thread_args *args = arg;
++	int i, ret, curr_mm_cid;
++	cpu_set_t cpumask;
++
++	CPU_ZERO(&cpumask);
++	CPU_SET(args->cpu, &cpumask);
++	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
++	if (ret) {
++		errno = ret;
++		perror("Error: failed to set affinity");
++		abort();
++	}
++	pthread_barrier_wait(args->barrier);
++
++	for (i = 0; i < THREAD_RUNS; i++)
++		usleep(RUNNER_PERIOD);
++	curr_mm_cid = rseq_current_mm_cid();
++	/*
++	 * We select one thread with high enough mm_cid to be the new leader.
++	 * All other threads (including the main thread) will terminate.
++	 * After some time, the mm_cid of the only remaining thread should
++	 * converge to 0, if not, the test fails.
++	 */
++	if (curr_mm_cid >= args->num_cpus / 2 &&
++	    !pthread_mutex_trylock(args->token)) {
++		printf_verbose(
++			"cpu%d has mm_cid=%d and will be the new leader.\n",
++			sched_getcpu(), curr_mm_cid);
++		for (i = 0; i < args->num_cpus; i++) {
++			if (args->tinfo[i] == pthread_self())
++				continue;
++			ret = pthread_join(args->tinfo[i], NULL);
++			if (ret) {
++				errno = ret;
++				perror("Error: failed to join thread");
++				abort();
++			}
++		}
++		pthread_barrier_destroy(args->barrier);
++		free(args->tinfo);
++		free(args->token);
++		free(args->barrier);
++		free(args->args_head);
++
++		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
++			curr_mm_cid = rseq_current_mm_cid();
++			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
++				       curr_mm_cid, sched_getcpu());
++			if (curr_mm_cid == 0)
++				exit(EXIT_SUCCESS);
++			usleep(RUNNER_PERIOD);
++		}
++		exit(EXIT_FAILURE);
++	}
++	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
++		       sched_getcpu(), curr_mm_cid);
++	pthread_exit(NULL);
++}
++
++int test_mm_cid_compaction(void)
++{
++	cpu_set_t affinity;
++	int i, j, ret = 0, num_threads;
++	pthread_t *tinfo;
++	pthread_mutex_t *token;
++	pthread_barrier_t *barrier;
++	struct thread_args *args;
++
++	sched_getaffinity(0, sizeof(affinity), &affinity);
++	num_threads = CPU_COUNT(&affinity);
++	tinfo = calloc(num_threads, sizeof(*tinfo));
++	if (!tinfo) {
++		perror("Error: failed to allocate tinfo");
++		return -1;
++	}
++	args = calloc(num_threads, sizeof(*args));
++	if (!args) {
++		perror("Error: failed to allocate args");
++		ret = -1;
++		goto out_free_tinfo;
++	}
++	token = malloc(sizeof(*token));
++	if (!token) {
++		perror("Error: failed to allocate token");
++		ret = -1;
++		goto out_free_args;
++	}
++	barrier = malloc(sizeof(*barrier));
++	if (!barrier) {
++		perror("Error: failed to allocate barrier");
++		ret = -1;
++		goto out_free_token;
++	}
++	if (num_threads == 1) {
++		fprintf(stderr, "Cannot test on a single cpu. "
++				"Skipping mm_cid_compaction test.\n");
++		/* only skipping the test, this is not a failure */
++		goto out_free_barrier;
++	}
++	pthread_mutex_init(token, NULL);
++	ret = pthread_barrier_init(barrier, NULL, num_threads);
++	if (ret) {
++		errno = ret;
++		perror("Error: failed to initialise barrier");
++		goto out_free_barrier;
++	}
++	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
++		if (!CPU_ISSET(i, &affinity))
++			continue;
++		args[j].num_cpus = num_threads;
++		args[j].tinfo = tinfo;
++		args[j].token = token;
++		args[j].barrier = barrier;
++		args[j].cpu = i;
++		args[j].args_head = args;
++		if (!j) {
++			/* The first thread is the main one */
++			tinfo[0] = pthread_self();
++			++j;
++			continue;
++		}
++		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
++		if (ret) {
++			errno = ret;
++			perror("Error: failed to create thread");
++			abort();
++		}
++		++j;
++	}
++	printf_verbose("Started %d threads.\n", num_threads);
++
++	/* Also main thread will terminate if it is not selected as leader */
++	thread_runner(&args[0]);
++
++	/* only reached in case of errors */
++out_free_barrier:
++	free(barrier);
++out_free_token:
++	free(token);
++out_free_args:
++	free(args);
++out_free_tinfo:
++	free(tinfo);
++
++	return ret;
++}
++
++int main(int argc, char **argv)
++{
++	if (!rseq_mm_cid_available()) {
++		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
++		return -1;
++	}
++	if (test_mm_cid_compaction())
++		return -1;
++	return 0;
++}
+-- 
+2.48.1
 
 
