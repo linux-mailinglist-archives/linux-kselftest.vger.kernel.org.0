@@ -1,164 +1,398 @@
-Return-Path: <linux-kselftest+bounces-26173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 237E0A2EFAC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 15:25:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CC50A2F001
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 15:38:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4E9F3A3F60
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 14:25:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D8DB166940
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 14:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7EC25291F;
-	Mon, 10 Feb 2025 14:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04278237717;
+	Mon, 10 Feb 2025 14:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YUIiRLl0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cu4kvVRs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9D02528E3;
-	Mon, 10 Feb 2025 14:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739197512; cv=fail; b=AXIvQWIo7Cp0Iye1gUI6HC6M+7iw8rPEzoEWvaCTvkqY1v8MTnIB/hCpnyUXWb1hnzyEh9rP1xYjpvY7/IQNI+mYsS2xDLv4OTWi8HXcncsOe2c6zD2fGv5zUv6wkgB1j7GUI6TG73fhbcpQDgOw0xUNwDMR08Fiw8FX3nl5vu8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739197512; c=relaxed/simple;
-	bh=NoeFt/OVJWkkd919ymS3pqjosgCacEN3YSjxb2WEqjs=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=hqvD2CR33SoV5yVieA1z1TFn190P7gLKuY1iuW3i+KZc0hXbgybFPdG6h1JQCihRxTPvV45EZFr+q+BkZDE+o7AQmxDJOeZvoWBME3HIe3QJsXSBIUn3WRnJO6LrJlLqk/XFXpC66wcyVmJPRBgvjtwmyTWLMzxKioTQlRbUI70=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YUIiRLl0; arc=fail smtp.client-ip=40.107.94.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=W8GzcaaTCbYmuFcI9P6zqT7qEQtMlfi+0YrpXet53CAK5dMx+xgX5ldnxQPB2AOlb56ztaNxPjDNENGjOH/3aV3ERy+TLdHCmqbv2SloiMthf38vDLBwZsHScJ+E4adNycn77BynYMj42nCgKMl5zBefOoXC091XXEhC2w1jCzxvtNW+7SdCOmOVjQQ4cKNi8Oy93j6F+ETu5rsVVnlBJELblUzhe38slfR9ImU34MwvvU29nyNRNs05+MUU9KkI3PhauEnJb35PslJGGRwkzhK5yPp59YVmfj0Pui/A559dqCPtklRgc/KcmTd5UK4Jso29r7U32R3JAW0yEOQPuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NoeFt/OVJWkkd919ymS3pqjosgCacEN3YSjxb2WEqjs=;
- b=gzMm0Lxh23Y3bNkh5VK2w9tyLggkp4e0ojPTrRur9fWgt5icDxqRigRuu60ZEIEHBLnCi2yuwpcCf+VYsq32Bxhl25/YM4TPLcln9Q57VWLJBfZWPhNOYDsOg73z4MURzHt62/FQaiOxhdS33MsT9e9Hd0XryDV1nmzZMu4SypM+H75RV7OdODbFlsz6szxpCvv+VTO/2JJUeLKAGFlsPJmZIO4WwygDB4usL2UkUo/b85KO4IL45SYCZrtYQqlqPAlyusp4o6VvKcMzCAKQxPE9dSBthDlcqPMfT2UNdJ2b5ykGVNLcnRW5MFoezsfgkysS7xbSFAW8+6/eLR90lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NoeFt/OVJWkkd919ymS3pqjosgCacEN3YSjxb2WEqjs=;
- b=YUIiRLl0RyAGtpgm9oWWR6ggTnhkcR9fqnRVD2pzuPNdRnEHd3pSwtUM0R6NUXoyIXNhLIfSlH6a/IWzsKUr2WKoDqCjklgIEXtBdL6hm/E6NhzhDaUuz+03ZYQV7U2QeDVMdNNg9u7VTqgZvnmmF6J9jvYMN/EfDeR6PtpUd4FOWywXyc/wiol5JcbZ5G+mKiavMoTJtY2pVaGS/2Nxd3wqusoVcFcXezlA7VrbN5smCAKNDIEUNcptXSW+3ez1nf6Q/B/TAfU2YeAX3Fz0nbKKgfvlq95+CEXcmRchIW/sztJUYKCEJlF93nu7gW6xvXr++x78E3QCNNw/S1whag==
-Received: from CH0PR04CA0077.namprd04.prod.outlook.com (2603:10b6:610:74::22)
- by PH7PR12MB6786.namprd12.prod.outlook.com (2603:10b6:510:1ac::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.15; Mon, 10 Feb
- 2025 14:25:04 +0000
-Received: from CH2PEPF0000009F.namprd02.prod.outlook.com
- (2603:10b6:610:74:cafe::f6) by CH0PR04CA0077.outlook.office365.com
- (2603:10b6:610:74::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.31 via Frontend Transport; Mon,
- 10 Feb 2025 14:25:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH2PEPF0000009F.mail.protection.outlook.com (10.167.244.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8445.10 via Frontend Transport; Mon, 10 Feb 2025 14:25:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 10 Feb
- 2025 06:24:48 -0800
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Mon, 10 Feb
- 2025 06:24:43 -0800
-References: <20250207184140.1730466-1-kuba@kernel.org>
- <20250207184140.1730466-2-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
-	<shuah@kernel.org>, <willemb@google.com>, <petrm@nvidia.com>,
-	<sdf@fomichev.me>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 2/2] selftests: drv-net: add helper for path
- resolution
-Date: Mon, 10 Feb 2025 15:24:30 +0100
-In-Reply-To: <20250207184140.1730466-2-kuba@kernel.org>
-Message-ID: <87frklho7x.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D6D1F8BCD;
+	Mon, 10 Feb 2025 14:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739198242; cv=none; b=uL/YZMu72VMQXt91DYeYH1/9rzX3M2hmPfsFC9LM8yUOHElSvnUxUOILcry1KSudZ5kDS9VLgKYrUp25gCv9NWmKQyB72fFjUWRZZiYPMJizl2UQJtll2ZUtUAZHuwX9rv+tPSrCzRNoo0Kx2kEY074cjSssNrxyA7tb+qWEGa8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739198242; c=relaxed/simple;
+	bh=WABggrDl+6XcDPR7LJQJRVd34bIgd1ja9UBul5F7oO4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gdB/Xi1gYb5xhpTG1i0ZHx+Q1/Casnd4bmVFz597p/S2n+siLQGwFiTo0L2bTeMZW+io7C7E1JcPl5TPawskDwFd212CGGg/3ah89LaQZWzfXfdOjg6AQYePoNr60jb1oI/T/mR44qZD2BDl0gnF2qow9Jg1cIosU6LyC/et554=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cu4kvVRs; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30737db1ab1so40170041fa.1;
+        Mon, 10 Feb 2025 06:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739198238; x=1739803038; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s80mFWRzJg0+ihTVB33GqIgTKxFbiYbst0uhq40Ik08=;
+        b=Cu4kvVRs+VjA7Txjmr+wAv9lIAuVVxfx+lGTX6kcpaMpFyi5DC8IW8YzIrVRLzb1PP
+         pDA4jKchIv4uNydbzx6KHfrt/h+mPlabYAWCUJXqpKXBYNpIJWFHPGqUKMAWb4PK3q/5
+         +6dx2nXvnawSNl3+UkE+RemfxUO2hK4c/u3tOwAZHc3SlXiyA3e8NL/ziAyWsstx1CYp
+         g4V/T8cGptK4ygZFDW4SsYEGIpBwojMokgNzZt2Hj3tSvbCJzovSmNLl/pdUMZ57d/Ny
+         3+y13CXZcbzdkNj5c4b9uRU9l2dRAJWRQ2O9FkZs1ucpKlDj+xzcAxnUAIVgVyIsu91p
+         XYQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739198238; x=1739803038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s80mFWRzJg0+ihTVB33GqIgTKxFbiYbst0uhq40Ik08=;
+        b=e3a7anSa34mRrqsf9l/FjZr3SuEM17PbtrfjG+Yi4Bkulzlbxz4mvGOo4HT5Ps8bkW
+         r+PqAnFoZ87EsqfS9a0ezhwjQ+gQuVQ6OxOf5FE7k+j2sZcYjXzCoZYx1U31Vv/Y/4m1
+         FCuOnkdcqS7TDrbf5SJMzQEAk1yZg2foAHylFmOJy7wNbZbHSo92BbFPpYIdeCGb7azK
+         N6D4EqkR//iqGAqMNah0KKw3DsVaOIwvj0yaOv8d0J9HmLwWs9F5GSzN9lfCB5l1ob1F
+         fB4w3L1YzsW9DeeUhjF0KJEhlJ7QCbT88qbU/TtzNozzofr+DZceq8kzihGehOgzzSQx
+         Syow==
+X-Forwarded-Encrypted: i=1; AJvYcCVnY9imOJViKNQq6PajyZk8wGjGtzfTkX1IlAnug7WHjW58wfUJ+m2W76owmO5VBAXkG4eNhpxvufS+i68=@vger.kernel.org, AJvYcCVy6kyrD2jsuV5nG8o0sEIur658TWX96Pm0DUeZPNsQgeoSs+5rwS0hj+w7nvZ9Fv/Q9qTqad7WfFMWOwswCKxL@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZ4qLlB2ZZpH0o0Qw+IIT8ofVHnQ5GVSjUnvTVkulj9mPjXeqk
+	WPOFCy/EvqN10FdxLtbDEf2Dwe4ltG0CylMclj6893CXl8A8Q5xwmCN/ONS05SMPHqZMA3xwb9Q
+	CsZMibpP+x2XhQCRHCyN3633uD2M=
+X-Gm-Gg: ASbGnct17gkq+Jq8WsklVZycRAjsEjBk7g0P19qM1/odE5IvLqTdkO+D8+8z2Yx7gSz
+	mi8eaO1ay9TS4H0s0z01OGqIF0Yy5IY9d535LcWaYNJLmGUoZF3tp0ndnM9Qy7et61G0MrTVYYf
+	ntl6ktZHT3VDZZ
+X-Google-Smtp-Source: AGHT+IGH0XnJppescO6Iu/iZvdvCVrvlDbYFvv6BiC8GRaZZyrQgs4UKn0i1WrvjUfKk9WI/UkRgp2380s680qQ0ohU=
+X-Received: by 2002:a05:651c:514:b0:2fb:5035:a03 with SMTP id
+ 38308e7fff4ca-307e57ce236mr52075261fa.14.1739198237389; Mon, 10 Feb 2025
+ 06:37:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000009F:EE_|PH7PR12MB6786:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59863c74-31d1-41d5-b787-08dd49deb5e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KEjTFMU5xp5SaFDf9rB8bAUOc/lQl9e3JP3MiSQSuEAk/KWPZgN05ZaFGVwp?=
- =?us-ascii?Q?GyIS9Vamen5jwKyl5zY93v8J5vRbfZnovMgrnHC7H1afH2H6+IAl32Bze6Ik?=
- =?us-ascii?Q?LcUtz5cFRFf1qE19Njfp20sTQgE/Jq9nMEIlb/56yD3YdMz/L3Y7W8Z0r0k5?=
- =?us-ascii?Q?gSGZaodv/AM7ccqoBCohuQyB5E2aLkRd0c8mJMcjHKd+OzW2hw/Jc9jaD3tJ?=
- =?us-ascii?Q?fwOEjd2nGGSeZ2r015AetzL2Kg7XbPv4T+IF4Iz/M7FTPCRl5xiugJSPC8Br?=
- =?us-ascii?Q?St555/+APueqWRhzEokzqhG+9jVbynTEgNp1UHVf+6oF/8rGPOw4Guie8TEZ?=
- =?us-ascii?Q?+QfIfs0YW+x3G0GNblzoIi9FvB3YvDlqcdS5bZkEkcBRyMZynt0EzaQ9grdY?=
- =?us-ascii?Q?edfAQPR709SZHBB/wGYIlpMkhVmXrfbUobG7INhniVJc1eX4gFXVG146k57N?=
- =?us-ascii?Q?uUzIx8ye8BE/SPwnrsIlOeSUPPy331ihoqIvLdzqdzNtxLpQG3BkilitGzzS?=
- =?us-ascii?Q?7wGyjDpOHVrJiazJd12U1PLGZqVjes5P0fYh5U9D1yXdopWFMUGyU93sB9RN?=
- =?us-ascii?Q?L+mVNWyERNl36EnZG12gUk8fp2ZaYN3h+Z7L2GtSmg9sqO8co17U98OwulLu?=
- =?us-ascii?Q?CzSM0gIEGixpGXZJvLZOCRibqCl/T7WpyjRd4rD1nYa/lgTvl429hHVW8lyz?=
- =?us-ascii?Q?rIo8CR14cIaObNencP+C1xeA+r3LqpylpiBoSI53wiZjAUDTf3ziMj/Tge2L?=
- =?us-ascii?Q?F9JM4nUVFpvamGNUZ5GqSX+tzxpBgszjyoXrFkyN87MPjgDkUqkWX99ndK1q?=
- =?us-ascii?Q?9ChYKBCfT3H3K5iee/QSV0IK0Ofy5XBYP8cnLgXzI1HgIwNqXVJKCUm3R3On?=
- =?us-ascii?Q?kGg1diAGv4zy7WT3cpx2tzZtjacPyWV29Zwjqcb3S0140UNtzaEivz+A2y56?=
- =?us-ascii?Q?sDqu/zhU5Vse5IjwAfoIBQcr4Zql3ltqyMZ9BHQX8ZbDZFVPo2S6PJ8ky4mw?=
- =?us-ascii?Q?X7QfXLoaahAV3TBNH8ZCJYYNcb2WRD7zI4PB2LqLzOfesrUAzYNPgNXF0FSA?=
- =?us-ascii?Q?KpSUEgztjcaJ/vXFRY/kFA2KOOX1eJcUTWoryO0AB5gXTlPjM+ALWDUQbkH+?=
- =?us-ascii?Q?UxBJCYFDx3oTtfdh0dB7YE64NUUlsjEKByHOQf+NAUBV0PZ/PXQm0XTm9ouw?=
- =?us-ascii?Q?KKQPQOPPpqwJFSTBaL+JOGmZReW56Wm2hltCRFwJtJ38ElJ2Nfnd8XDa89QR?=
- =?us-ascii?Q?F+2SEFR1zi7ER1Ld8imhiztoB8VG8a7C0lPyhk7Lmf/aoebQE1twkx/p4FXx?=
- =?us-ascii?Q?Cgjqi4Gtnw1UqsJ3Woz05fAHxVp9esf3vIRTn08ao3RHNwFQT2h0/nrcr5wC?=
- =?us-ascii?Q?w1ITR+33zFIKt9mYCaf9eXESperIT5kPFl+uV1oVda6YCrzcLPggQDSMYEEi?=
- =?us-ascii?Q?fNcikI3XGNUJcOWDr6IBe5n50KuN8iFDiOv4365DI3Mg2T6CH6ADw9YwU6HI?=
- =?us-ascii?Q?wgD9KPZKne3svNk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 14:25:03.7951
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59863c74-31d1-41d5-b787-08dd49deb5e1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000009F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6786
+References: <20250207-printf-kunit-convert-v2-0-057b23860823@gmail.com>
+ <20250207-printf-kunit-convert-v2-1-057b23860823@gmail.com> <87tt92q7hw.fsf@prevas.dk>
+In-Reply-To: <87tt92q7hw.fsf@prevas.dk>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 10 Feb 2025 09:36:41 -0500
+X-Gm-Features: AWEUYZmADyNTxOepjox0OkGwD6ORA1jVrCOeXh_ZlJYyc2QDKyzof_riUKDIB8w
+Message-ID: <CAJ-ks9=SEBCZiuq2YE3Uj5wJ4Pv+78W-VBTeV7CSzLYJZqsR8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] printf: convert self-test to KUnit
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Arpitha Raghunandan <98.arpi@gmail.com>, David Gow <davidgow@google.com>, 
+	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Jakub Kicinski <kuba@kernel.org> writes:
-
-> Refering to C binaries from Python code is going to be a common
-> need. Add a helper to convert from path in relation to the test.
-> Meaning, if the test is in the same directory as the binary, the
-> call would be simply: cfg.rpath("binary").
+On Mon, Feb 10, 2025 at 8:01=E2=80=AFAM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
 >
-> The helper name "rpath" is not great. I can't think of a better
-> name that would be accurate yet concise.
+> On Fri, Feb 07 2025, Tamir Duberstein <tamird@gmail.com> wrote:
 >
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> [...]
+>
+> If/when you do re-roll a v3, can you split the defconfig changes off to
+> a separate patch? It's a little annoying to scroll through all those
+> mechanical one-liner diffs to get to the actual changes.
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+Yep. I'll split them into one for m68k and another for powerpc. Geert,
+I'll move your Acked-by to the m68k patch.
+
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 1af972a92d06..4834cac1eb8f 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -2427,6 +2427,23 @@ config ASYNC_RAID6_TEST
+> >  config TEST_HEXDUMP
+> >       tristate "Test functions located in the hexdump module at runtime=
+"
+> >
+> > +config PRINTF_KUNIT_TEST
+> > +     tristate "KUnit test printf() family of functions at runtime" if =
+!KUNIT_ALL_TESTS
+> > +     depends on KUNIT
+> > +     default KUNIT_ALL_TESTS
+> > +     help
+> > +       Enable this option to test the printf functions at boot.
+> > +
+>
+> Well, not necessarily at boot unless built-in?
+>
+> > +       KUnit tests run during boot and output the results to the debug=
+ log
+> > +       in TAP format (http://testanything.org/). Only useful for kerne=
+l devs
+> > +       running the KUnit test harness, and not intended for inclusion =
+into a
+> > +       production build.
+> > +
+> > +       For more information on KUnit and unit tests in general please =
+refer
+> > +       to the KUnit documentation in Documentation/dev-tools/kunit/.
+> > +
+> > +       If unsure, say N.
+> > +
+>
+> I see that this is copy-pasted from other kunit config items, but not
+> all of them have all this boilerplate, and I don't think it's useful
+> (and, the mentions of "at boot" and "during boot" are actively
+> misleading). Other kunit config items are shorter and more to the point,
+> e.g.
+>
+>           Enable this to turn on 'list_sort()' function test. This test i=
+s
+>           executed only once during system boot (so affects only boot tim=
+e),
+>           or at module load time.
+>
+>           If unsure, say N.
+>
+
+Very good point. Truthfully this boilerplate is a result of
+checkpatch.pl nagging about this paragraph being a certain length.
+I'll drop it and just write "Enable this option to test the printf
+functions at runtime.".
+
+> >
+> >  obj-$(CONFIG_TEST_BITMAP) +=3D test_bitmap.o
+> > diff --git a/lib/test_printf.c b/lib/printf_kunit.c
+> > similarity index 89%
+> > rename from lib/test_printf.c
+> > rename to lib/printf_kunit.c
+> > index 59dbe4f9a4cb..fe6f4df92dd5 100644
+> > --- a/lib/test_printf.c
+> > +++ b/lib/printf_kunit.c
+> > @@ -5,7 +5,7 @@
+> >
+> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >
+> > -#include <linux/init.h>
+> > +#include <kunit/test.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/printk.h>
+> > @@ -25,8 +25,6 @@
+> >
+> >  #include <linux/property.h>
+> >
+> > -#include "../tools/testing/selftests/kselftest_module.h"
+> > -
+> >  #define BUF_SIZE 256
+> >  #define PAD_SIZE 16
+> >  #define FILL_CHAR '$'
+> > @@ -37,72 +35,71 @@
+> >       block \
+> >       __diag_pop();
+> >
+> > -KSTM_MODULE_GLOBALS();
+> > +static char *test_buffer;
+> > +static char *alloced_buffer;
+> > +
+> > +static struct kunit *kunittest;
+> >
+> > -static char *test_buffer __initdata;
+> > -static char *alloced_buffer __initdata;
+> > +#define tc_fail(fmt, ...) \
+> > +     KUNIT_FAIL(kunittest, fmt, ##__VA_ARGS__)
+> >
+> > -static int __printf(4, 0) __init
+> > +static void __printf(4, 0)
+> >  do_test(int bufsize, const char *expect, int elen,
+> >       const char *fmt, va_list ap)
+> >  {
+> >       va_list aq;
+> >       int ret, written;
+> >
+> > -     total_tests++;
+> > -
+> >       memset(alloced_buffer, FILL_CHAR, BUF_SIZE + 2*PAD_SIZE);
+> >       va_copy(aq, ap);
+> >       ret =3D vsnprintf(test_buffer, bufsize, fmt, aq);
+> >       va_end(aq);
+> >
+> >       if (ret !=3D elen) {
+> > -             pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, exp=
+ected %d\n",
+> > +             tc_fail("vsnprintf(buf, %d, \"%s\", ...) returned %d, exp=
+ected %d\n",
+> >                       bufsize, fmt, ret, elen);
+> > -             return 1;
+> > +             return;
+> >       }
+> >
+> >       if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
+> > -             pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote before buf=
+fer\n", bufsize, fmt);
+> > -             return 1;
+> > +             tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote before buf=
+fer\n", bufsize, fmt);
+> > +             return;
+> >       }
+> >
+> >       if (!bufsize) {
+> >               if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZ=
+E)) {
+> > -                     pr_warn("vsnprintf(buf, 0, \"%s\", ...) wrote to =
+buffer\n",
+> > +                     tc_fail("vsnprintf(buf, 0, \"%s\", ...) wrote to =
+buffer\n",
+> >                               fmt);
+> > -                     return 1;
+> >               }
+> > -             return 0;
+> > +             return;
+> >       }
+> >
+> >       written =3D min(bufsize-1, elen);
+> >       if (test_buffer[written]) {
+> > -             pr_warn("vsnprintf(buf, %d, \"%s\", ...) did not nul-term=
+inate buffer\n",
+> > +             tc_fail("vsnprintf(buf, %d, \"%s\", ...) did not nul-term=
+inate buffer\n",
+> >                       bufsize, fmt);
+> > -             return 1;
+> > +             return;
+> >       }
+> >
+> >       if (memchr_inv(test_buffer + written + 1, FILL_CHAR, bufsize - (w=
+ritten + 1))) {
+> > -             pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote beyond the=
+ nul-terminator\n",
+> > +             tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote beyond the=
+ nul-terminator\n",
+> >                       bufsize, fmt);
+> > -             return 1;
+> > +             return;
+> >       }
+> >
+> >       if (memchr_inv(test_buffer + bufsize, FILL_CHAR, BUF_SIZE + PAD_S=
+IZE - bufsize)) {
+> > -             pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote beyond buf=
+fer\n", bufsize, fmt);
+> > -             return 1;
+> > +             tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote beyond buf=
+fer\n", bufsize, fmt);
+> > +             return;
+> >       }
+> >
+> >       if (memcmp(test_buffer, expect, written)) {
+> > -             pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expe=
+cted '%.*s'\n",
+> > +             tc_fail("vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expe=
+cted '%.*s'\n",
+> >                       bufsize, fmt, test_buffer, written, expect);
+> > -             return 1;
+> > +             return;
+> >       }
+> > -     return 0;
+> >  }
+> >
+> > -static void __printf(3, 4) __init
+> > +static void __printf(3, 4)
+> >  __test(const char *expect, int elen, const char *fmt, ...)
+> >  {
+> >       va_list ap;
+> > @@ -110,9 +107,8 @@ __test(const char *expect, int elen, const char *fm=
+t, ...)
+> >       char *p;
+> >
+> >       if (elen >=3D BUF_SIZE) {
+> > -             pr_err("error in test suite: expected output length %d to=
+o long. Format was '%s'.\n",
+> > -                    elen, fmt);
+> > -             failed_tests++;
+> > +             tc_fail("error in test suite: expected output length %d t=
+oo long. Format was '%s'.\n",
+> > +                     elen, fmt);
+> >               return;
+> >       }
+> >
+> > @@ -124,19 +120,17 @@ __test(const char *expect, int elen, const char *=
+fmt, ...)
+> >        * enough and 0), and then we also test that kvasprintf would
+> >        * be able to print it as expected.
+> >        */
+> > -     failed_tests +=3D do_test(BUF_SIZE, expect, elen, fmt, ap);
+> > +     do_test(BUF_SIZE, expect, elen, fmt, ap);
+> >       rand =3D get_random_u32_inclusive(1, elen + 1);
+> >       /* Since elen < BUF_SIZE, we have 1 <=3D rand <=3D BUF_SIZE. */
+> > -     failed_tests +=3D do_test(rand, expect, elen, fmt, ap);
+> > -     failed_tests +=3D do_test(0, expect, elen, fmt, ap);
+> > +     do_test(rand, expect, elen, fmt, ap);
+> > +     do_test(0, expect, elen, fmt, ap);
+> >
+> >       p =3D kvasprintf(GFP_KERNEL, fmt, ap);
+> >       if (p) {
+> > -             total_tests++;
+> >               if (memcmp(p, expect, elen+1)) {
+> > -                     pr_warn("kvasprintf(..., \"%s\", ...) returned '%=
+s', expected '%s'\n",
+> > +                     tc_fail("kvasprintf(..., \"%s\", ...) returned '%=
+s', expected '%s'\n",
+> >                               fmt, p, expect);
+> > -                     failed_tests++;
+> >               }
+> >               kfree(p);
+> >       }
+>
+> So reading through this, is there really any reason to drop those
+> existing total_tests and failed_tests tallies? Since you do need to keep
+> the control flow the same, leaving the return types and "return
+> 1"/"return 0" and their uses in updating failed_tests would also reduce
+> the patch size quite significantly.
+>
+> So they no longer come from some KSTM_MODULE_GLOBALS(), and thus need to
+> be explicitly declared in this module, but that's exactly how it was
+> originally until someone decided to lift that from the the printf suite
+> to kstm.
+>
+> Yes, they'd need to be explicitly initialized to 0 during kunit_init
+> since they are no longer use-once __initdata variable, and some
+> kunit_exit logic would need to "manually" report them.
+
+If I understand your concern correctly, you only really care about
+`total_tests`, right? I think it's slightly unidiomatic to count tests
+outside the framework this way but it's not a hill I'll die on.
+
+Just to elaborate on why I think this unidiomatic: the KUnit test
+runner script that produces human-readable output doesn't emit logs
+unless something fails. In the success case, you'd get (before the
+next patch that breaks this into many tests):
+
+[09:34:15] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D pri=
+ntf (1 subtest)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[09:34:15] [PASSED] printf_test
+[09:34:15] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+[PASSED] printf
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[09:34:15] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[09:34:15] Testing complete. Ran 1 tests: passed: 1
+
+but the raw output does contain the tally:
+
+KTAP version 1
+1..1
+    KTAP version 1
+    # Subtest: printf
+    # module: printf_kunit
+    1..1
+    ok 1 printf_test
+    # printf: ran 448 tests
+ok 1 printf
+
+So assuming you're OK with this compromise, I'll go ahead and spin v3.
+
+Thanks for the review!
 
