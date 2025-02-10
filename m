@@ -1,342 +1,224 @@
-Return-Path: <linux-kselftest+bounces-26154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8D17A2E5DC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 08:57:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A428CA2E77B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 10:20:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8C5B3A527F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 07:57:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 770C63A5A95
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 09:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0299E1B4243;
-	Mon, 10 Feb 2025 07:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4594F1BC077;
+	Mon, 10 Feb 2025 09:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HwDlOWiK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rr20On+J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110E91BCA1C
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 07:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444FA19D072;
+	Mon, 10 Feb 2025 09:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739174249; cv=none; b=fo+x8tVvW/xmC4aPjhYJOd/4DUKdt+dFXteaDmsTyUWwKgVlOBVvIneicRDGiFr2aEyrCwyMzQ5EulSSrQAOUhheDMlPI8ZM1UZB5GCN9efqs8bVYduWNga5p15L0h1aiWEpfMmQZvsBxcrtC2P4yCm0lzmPEekIYFeKf8KSHnA=
+	t=1739179191; cv=none; b=o+520OIQnI2htSyY3+pDkEdnCOe9YGBdTPxvQGae9GIts6E3t+dby/uSBuylxvPn4kUqn37W4Fu4ZJHpZgknEyFGT+trYF0zBGqRADUHASRQCIsIkyBp9+sqc9S2NTZ+9slIv8ObPiH2uxBRPM1eLTrslUCXFz4p1/7fq6KI9cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739174249; c=relaxed/simple;
-	bh=LslBjilOQWGk/1dv9Ss26Pci8tgoh8FFt/CGpG6YnUo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N8MPaIjmqIu5zXuifUrol/3JlrNcxh8Rz3NqicOE6oQAZG0pOzizXdpQhaC+lE+lFNbvk9kANXdI/yAUb61imGwfXqwloEAZ7MyUpb93IBcbMaoLbYb0m6W1q855hZZZ3wiePD1Ri/u1dZ27Xa3Jds++QJmYTvx2iOBHilNnfr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HwDlOWiK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739174246;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e/iey1qz6bn6O+gtmiYI/1qV8XvJoRLKZ4+LXzBzL8E=;
-	b=HwDlOWiKp53s5B5qj1cQlEwAfKAat5chNru5lQUNVQNXrGchk9BST3NiwN2FWzXP8A1hMS
-	4nCdT72kPGx5aZop/l0Ieg3CqBrjRUrdsOr+ECfyCzp1jnzoE+oz/w704kyeEQW8pc4Xwc
-	7DYQRW0FIcGqGlCqxaglda3N6afvzOs=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-593-a8fd4jEvNIaq4UvStufQ1A-1; Mon,
- 10 Feb 2025 02:57:23 -0500
-X-MC-Unique: a8fd4jEvNIaq4UvStufQ1A-1
-X-Mimecast-MFC-AGG-ID: a8fd4jEvNIaq4UvStufQ1A
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0C2E11956095;
-	Mon, 10 Feb 2025 07:57:22 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.44.32.69])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C60EC1800358;
-	Mon, 10 Feb 2025 07:57:18 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Gabriele Monaco <gmonaco@redhat.com>
-Subject: [PATCH v5 3/3] rseq/selftests: Add test for mm_cid compaction
-Date: Mon, 10 Feb 2025 08:57:02 +0100
-Message-ID: <20250210075703.79125-4-gmonaco@redhat.com>
-In-Reply-To: <20250210075703.79125-1-gmonaco@redhat.com>
-References: <20250210075703.79125-1-gmonaco@redhat.com>
+	s=arc-20240116; t=1739179191; c=relaxed/simple;
+	bh=HAv8mkXs22nJ9qO9Ygj1yVJPwqs0ZDo+F21aqZ7BJFE=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AMMahfBOMqhCUhNPAP9YAMpU4bGIvbhfLqjE6tuhZbCsDTyS4QVV2t3NcZEBkNC18CMgrHglKDSfniNIlpCrqj91m9CHCRxPskQGabVC1zTJYQd+asoyN0X/WkpRrIoBXh79cemHd8lcd9AKzWZ51E8LIql836rlX9KbOslzJa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rr20On+J; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43618283dedso40533565e9.3;
+        Mon, 10 Feb 2025 01:19:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739179187; x=1739783987; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SUqRsgayv98ELGejV6zmw9ZnEwHxjQ0BZzJqfeUUpT8=;
+        b=Rr20On+JdJMM/zcnOLkNBZA7ufl1OcUgi4gzbNxAd/jEftC6zukbBQKrVwzvWI+uag
+         VAOrpi4hqamfFatm61Aew8RdqLZBdUnCGGrbpH8hq/Nllk2T05R4PHKYBvdW8flokwlx
+         xifV6AcxY5BIH/ZFi91Glyy0QX0UKXKbzi+BFI0DvZoaumrCOcuV6Z+Qho72yLI2/TC5
+         j/2OSLCunHA8WMsthHrP84miLvCkG3K9DA85bWmdivVnJyrtGHsYVpsI1bBg1oxMsiwX
+         HM6P880Udw8Xhh9pPFN9s3KcAbnPB3nWhrWwvHwiqKPC9G0Mm0HfjginnWR6KZUKTt8i
+         FSEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739179187; x=1739783987;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SUqRsgayv98ELGejV6zmw9ZnEwHxjQ0BZzJqfeUUpT8=;
+        b=SI5HIO2s8osXGe0uJOFvkxXBcliZQr7wloaGLZJWleO3PFL3aS3jrFDIg6F+lHeqar
+         qX60rKvlYuL/6fNRt0IYcL5zppKmyZDwlraNNVG/UgYNufVhDSJ69WGlSCwwkzGht/2Y
+         AKPCqCXvgKRz7AkHRnc6uI6ju+k0xc942qmK69knCu8IZ30e/FIb6xhN79mq090AM7OM
+         Y8Or3lkL5uwSA6A0bK5jtR0MHF23BmDh+/+lgConHNvg9PNtkpfbzY/0CF+ErpdMUZ/N
+         Z1LfIhOlbl5gMJM9x/zgRRJdNMnN/e/2L7Wwgst18Pv+j6r4RJWRDrvwV1CM0DeLg0ot
+         aJhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWHs9q3ETMZUXGtEfNRjpWbf1gKMqXb6VhCHxEgsJP6pSWgCPcOCJtnXAXDh+/sLZ2pduN+hN31s246l50=@vger.kernel.org, AJvYcCXMVDb9iw3W7JUh6v5Ebuzcn0F7VbCV/MdKrp5zbiPXhsnNACJ9oUWbsUIQLhMf0u6eLy8mrURNkQV37k8EJaq3@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLvuVnblyAwFKmiK/8HJBN7sfyxfbMXipwTdEh86FqbSSdN22F
+	5tE/hKHN/PvkHT40Peyn5ZACWbdUBxBf11i+o7QKldMWgyHsX9L6
+X-Gm-Gg: ASbGncs+KGnfiXlH0pSNw439HMnjJSH7T6LXL6bUpNkTngoqrqby/3BxULH747hr6Ex
+	7hp5FGW/DcWkiRiUkLYWf1E/rSSvcn/eF5JRdCrvLZWnfnG0bbQio/NJ86EGzqWGkK5NHyz36v0
+	dEYvuJdml5B78P+v/gFmL4RM12j3ZYR/+EFjsfi1nuZfjL4F4vPeXmzwIs/R4sCR014CepsEbIX
+	dx69r0dNoO1ck4xblMjcIimvJry8r4FhOd8ESltCmgvCKmRUw5Xerqtwvkg818fOr7OCL21uxp1
+	Cg==
+X-Google-Smtp-Source: AGHT+IGNHvLL2+ZUcGcgn9qFHqbaFk1iBN1I2yhBLhXj6vo3pWLFrd2eocJ5X3XFyAArm5ulZ3axKA==
+X-Received: by 2002:a05:600c:3c87:b0:438:c18c:5ad8 with SMTP id 5b1f17b1804b1-439249d189cmr103632795e9.31.1739179187157;
+        Mon, 10 Feb 2025 01:19:47 -0800 (PST)
+Received: from krava ([173.38.220.45])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4390daf3c70sm174197545e9.26.2025.02.10.01.19.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 01:19:46 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 10 Feb 2025 10:19:44 +0100
+To: Yan Zhai <yan@cloudflare.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>, Brian Vazquez <brianvv@google.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kernel-team@cloudflare.com, Hou Tao <houtao@huaweicloud.com>
+Subject: Re: [PATCH v3 bpf 1/2] bpf: skip non exist keys in
+ generic_map_lookup_batch
+Message-ID: <Z6nEsGSbWqCSaVp3@krava>
+References: <cover.1739171594.git.yan@cloudflare.com>
+ <85618439eea75930630685c467ccefeac0942e2b.1739171594.git.yan@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <85618439eea75930630685c467ccefeac0942e2b.1739171594.git.yan@cloudflare.com>
 
-A task in the kernel (task_mm_cid_work) runs somewhat periodically to
-compact the mm_cid for each process. Add a test to validate that it runs
-correctly and timely.
+On Sun, Feb 09, 2025 at 11:22:35PM -0800, Yan Zhai wrote:
+> The generic_map_lookup_batch currently returns EINTR if it fails with
+> ENOENT and retries several times on bpf_map_copy_value. The next batch
+> would start from the same location, presuming it's a transient issue.
+> This is incorrect if a map can actually have "holes", i.e.
+> "get_next_key" can return a key that does not point to a valid value. At
+> least the array of maps type may contain such holes legitly. Right now
+> these holes show up, generic batch lookup cannot proceed any more. It
+> will always fail with EINTR errors.
+> 
+> Rather, do not retry in generic_map_lookup_batch. If it finds a non
+> existing element, skip to the next key. This simple solution comes with
+> a price that transient errors may not be recovered, and the iteration
+> might cycle back to the first key under parallel deletion. For example,
 
-The test spawns 1 thread pinned to each CPU, then each thread, including
-the main one, runs in short bursts for some time. During this period, the
-mm_cids should be spanning all numbers between 0 and nproc.
+probably stupid question, but why not keep the retry logic and when
+it fails then instead of returning EINTR just jump to the next key
 
-At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
-is selected to be the new leader, all other threads terminate.
+jirka
 
-After some time, the only running thread should see 0 as mm_cid, if that
-doesn't happen, the compaction mechanism didn't work and the test fails.
 
-The test never fails if only 1 core is available, in which case, we
-cannot test anything as the only available mm_cid is 0.
-
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
----
- tools/testing/selftests/rseq/.gitignore       |   1 +
- tools/testing/selftests/rseq/Makefile         |   2 +-
- .../selftests/rseq/mm_cid_compaction_test.c   | 200 ++++++++++++++++++
- 3 files changed, 202 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
-
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index 16496de5f6ce4..2c89f97e4f737 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -3,6 +3,7 @@ basic_percpu_ops_test
- basic_percpu_ops_mm_cid_test
- basic_test
- basic_rseq_op_test
-+mm_cid_compaction_test
- param_test
- param_test_benchmark
- param_test_compare_twice
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 5a3432fceb586..ce1b38f46a355 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
- 
- TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
--		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
-+		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
- 
- TEST_GEN_PROGS_EXTENDED = librseq.so
- 
-diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-new file mode 100644
-index 0000000000000..701719b320049
---- /dev/null
-+++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <stddef.h>
-+
-+#include "../kselftest.h"
-+#include "rseq.h"
-+
-+#define VERBOSE 0
-+#define printf_verbose(fmt, ...)                    \
-+	do {                                        \
-+		if (VERBOSE)                        \
-+			printf(fmt, ##__VA_ARGS__); \
-+	} while (0)
-+
-+/* 0.5 s */
-+#define RUNNER_PERIOD 500000
-+/* Number of runs before we terminate or get the token */
-+#define THREAD_RUNS 5
-+
-+/*
-+ * Number of times we check that the mm_cid were compacted.
-+ * Checks are repeated every RUNNER_PERIOD.
-+ */
-+#define MM_CID_COMPACT_TIMEOUT 10
-+
-+struct thread_args {
-+	int cpu;
-+	int num_cpus;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	pthread_t *tinfo;
-+	struct thread_args *args_head;
-+};
-+
-+static void __noreturn *thread_runner(void *arg)
-+{
-+	struct thread_args *args = arg;
-+	int i, ret, curr_mm_cid;
-+	cpu_set_t cpumask;
-+
-+	CPU_ZERO(&cpumask);
-+	CPU_SET(args->cpu, &cpumask);
-+	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to set affinity");
-+		abort();
-+	}
-+	pthread_barrier_wait(args->barrier);
-+
-+	for (i = 0; i < THREAD_RUNS; i++)
-+		usleep(RUNNER_PERIOD);
-+	curr_mm_cid = rseq_current_mm_cid();
-+	/*
-+	 * We select one thread with high enough mm_cid to be the new leader
-+	 * all other threads (including the main thread) will terminate.
-+	 * After some time, the mm_cid of the only remaining thread should
-+	 * converge to 0, if not, the test fails.
-+	 */
-+	if (curr_mm_cid >= args->num_cpus / 2 &&
-+	    !pthread_mutex_trylock(args->token)) {
-+		printf_verbose(
-+			"cpu%d has mm_cid=%d and will be the new leader.\n",
-+			sched_getcpu(), curr_mm_cid);
-+		for (i = 0; i < args->num_cpus; i++) {
-+			if (args->tinfo[i] == pthread_self())
-+				continue;
-+			ret = pthread_join(args->tinfo[i], NULL);
-+			if (ret) {
-+				errno = ret;
-+				perror("Error: failed to join thread");
-+				abort();
-+			}
-+		}
-+		pthread_barrier_destroy(args->barrier);
-+		free(args->tinfo);
-+		free(args->token);
-+		free(args->barrier);
-+		free(args->args_head);
-+
-+		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
-+			curr_mm_cid = rseq_current_mm_cid();
-+			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
-+				       curr_mm_cid, sched_getcpu());
-+			if (curr_mm_cid == 0)
-+				exit(EXIT_SUCCESS);
-+			usleep(RUNNER_PERIOD);
-+		}
-+		exit(EXIT_FAILURE);
-+	}
-+	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
-+		       sched_getcpu(), curr_mm_cid);
-+	pthread_exit(NULL);
-+}
-+
-+int test_mm_cid_compaction(void)
-+{
-+	cpu_set_t affinity;
-+	int i, j, ret = 0, num_threads;
-+	pthread_t *tinfo;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	struct thread_args *args;
-+
-+	sched_getaffinity(0, sizeof(affinity), &affinity);
-+	num_threads = CPU_COUNT(&affinity);
-+	tinfo = calloc(num_threads, sizeof(*tinfo));
-+	if (!tinfo) {
-+		perror("Error: failed to allocate tinfo");
-+		return -1;
-+	}
-+	args = calloc(num_threads, sizeof(*args));
-+	if (!args) {
-+		perror("Error: failed to allocate args");
-+		ret = -1;
-+		goto out_free_tinfo;
-+	}
-+	token = malloc(sizeof(*token));
-+	if (!token) {
-+		perror("Error: failed to allocate token");
-+		ret = -1;
-+		goto out_free_args;
-+	}
-+	barrier = malloc(sizeof(*barrier));
-+	if (!barrier) {
-+		perror("Error: failed to allocate barrier");
-+		ret = -1;
-+		goto out_free_token;
-+	}
-+	if (num_threads == 1) {
-+		fprintf(stderr, "Cannot test on a single cpu. "
-+				"Skipping mm_cid_compaction test.\n");
-+		/* only skipping the test, this is not a failure */
-+		goto out_free_barrier;
-+	}
-+	pthread_mutex_init(token, NULL);
-+	ret = pthread_barrier_init(barrier, NULL, num_threads);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to initialise barrier");
-+		goto out_free_barrier;
-+	}
-+	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
-+		if (!CPU_ISSET(i, &affinity))
-+			continue;
-+		args[j].num_cpus = num_threads;
-+		args[j].tinfo = tinfo;
-+		args[j].token = token;
-+		args[j].barrier = barrier;
-+		args[j].cpu = i;
-+		args[j].args_head = args;
-+		if (!j) {
-+			/* The first thread is the main one */
-+			tinfo[0] = pthread_self();
-+			++j;
-+			continue;
-+		}
-+		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
-+		if (ret) {
-+			errno = ret;
-+			perror("Error: failed to create thread");
-+			abort();
-+		}
-+		++j;
-+	}
-+	printf_verbose("Started %d threads.\n", num_threads);
-+
-+	/* Also main thread will terminate if it is not selected as leader */
-+	thread_runner(&args[0]);
-+
-+	/* only reached in case of errors */
-+out_free_barrier:
-+	free(barrier);
-+out_free_token:
-+	free(token);
-+out_free_args:
-+	free(args);
-+out_free_tinfo:
-+	free(tinfo);
-+
-+	return ret;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (!rseq_mm_cid_available()) {
-+		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
-+		return -1;
-+	}
-+	if (test_mm_cid_compaction())
-+		return -1;
-+	return 0;
-+}
--- 
-2.48.1
-
+> Hou Tao <houtao@huaweicloud.com> pointed out a following scenario:
+> 
+> For LPM trie map:
+> (1) ->map_get_next_key(map, prev_key, key) returns a valid key
+> 
+> (2) bpf_map_copy_value() return -ENOMENT
+> It means the key must be deleted concurrently.
+> 
+> (3) goto next_key
+> It swaps the prev_key and key
+> 
+> (4) ->map_get_next_key(map, prev_key, key) again
+> prev_key points to a non-existing key, for LPM trie it will treat just
+> like prev_key=NULL case, the returned key will be duplicated.
+> 
+> With the retry logic, the iteration can continue to the key next to the
+> deleted one. But if we directly skip to the next key, the iteration loop
+> would restart from the first key for the lpm_trie type.
+> 
+> However, not all races may be recovered. For example, if current key is
+> deleted after instead of before bpf_map_copy_value, or if the prev_key
+> also gets deleted, then the loop will still restart from the first key
+> for lpm_tire anyway. For generic lookup it might be better to stay
+> simple, i.e. just skip to the next key. To guarantee that the output
+> keys are not duplicated, it is better to implement map type specific
+> batch operations, which can properly lock the trie and synchronize with
+> concurrent mutators.
+> 
+> Fixes: cb4d03ab499d ("bpf: Add generic support for lookup batch op")
+> Closes: https://lore.kernel.org/bpf/Z6JXtA1M5jAZx8xD@debian.debian/
+> Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> Acked-by: Hou Tao <houtao1@huawei.com>
+> ---
+> v2->v3: deleted a used macro
+> v1->v2: incorporate more useful information inside commit message.
+> ---
+>  kernel/bpf/syscall.c | 18 +++++-------------
+>  1 file changed, 5 insertions(+), 13 deletions(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c420edbfb7c8..e5f1c7fd0ba7 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1968,8 +1968,6 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+>  	return err;
+>  }
+>  
+> -#define MAP_LOOKUP_RETRIES 3
+> -
+>  int generic_map_lookup_batch(struct bpf_map *map,
+>  				    const union bpf_attr *attr,
+>  				    union bpf_attr __user *uattr)
+> @@ -1979,8 +1977,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  	void __user *values = u64_to_user_ptr(attr->batch.values);
+>  	void __user *keys = u64_to_user_ptr(attr->batch.keys);
+>  	void *buf, *buf_prevkey, *prev_key, *key, *value;
+> -	int err, retry = MAP_LOOKUP_RETRIES;
+>  	u32 value_size, cp, max_count;
+> +	int err;
+>  
+>  	if (attr->batch.elem_flags & ~BPF_F_LOCK)
+>  		return -EINVAL;
+> @@ -2026,14 +2024,8 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  		err = bpf_map_copy_value(map, key, value,
+>  					 attr->batch.elem_flags);
+>  
+> -		if (err == -ENOENT) {
+> -			if (retry) {
+> -				retry--;
+> -				continue;
+> -			}
+> -			err = -EINTR;
+> -			break;
+> -		}
+> +		if (err == -ENOENT)
+> +			goto next_key;
+>  
+>  		if (err)
+>  			goto free_buf;
+> @@ -2048,12 +2040,12 @@ int generic_map_lookup_batch(struct bpf_map *map,
+>  			goto free_buf;
+>  		}
+>  
+> +		cp++;
+> +next_key:
+>  		if (!prev_key)
+>  			prev_key = buf_prevkey;
+>  
+>  		swap(prev_key, key);
+> -		retry = MAP_LOOKUP_RETRIES;
+> -		cp++;
+>  		cond_resched();
+>  	}
+>  
+> -- 
+> 2.39.5
+> 
+> 
 
