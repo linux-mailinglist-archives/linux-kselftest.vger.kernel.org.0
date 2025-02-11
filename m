@@ -1,220 +1,121 @@
-Return-Path: <linux-kselftest+bounces-26335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A799EA30444
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 08:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03680A30480
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 08:31:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A0AF18890FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 07:16:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 581B6188A259
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 07:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3951EB191;
-	Tue, 11 Feb 2025 07:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF071E5B8D;
+	Tue, 11 Feb 2025 07:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="phFwkk1k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eqomc+Ec"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593AD1C5D5E
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 07:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D48128819;
+	Tue, 11 Feb 2025 07:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739258165; cv=none; b=PVXlW0N+DpGlr4AwIH0+Bq52m9RSuCqaigARDm4lxyx+4MpjbaGrybUNy7M15LtbyP1NjGW3RIw8XdNiuqcdGr/QTQ5XykB313dKXDFZQzY9S4Zv2z+wd6W8th27OoJXwGbglTLl0admmXDHuV8+vpM/H2U9ffmkVG6cf0vDygo=
+	t=1739259094; cv=none; b=AKfhVBG+iEER95zwnTGy2oFPtYZ/JNDf0e3WkLJOm2AO7AN071kiDGOnM8JI1StvxkwpTCRdwu8vt4HsDHyuBWAVUnQCMsrVN/iNsBbOPo5JKlu5z2kqGBnnPBn84fLkNwBQp2RQQzFYxqs7YuFXmO4RFO4ung76kzz7UEvFeJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739258165; c=relaxed/simple;
-	bh=ygyLS/k5SRC/Sf1PUKCeZHT03EwSdItbMQEJssfmzgY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S/vgZBjIJw3vkcQNxzT2mdraQNjDZ1NG4+SKJyDKtnlCdYBm87NQfWNbUtZZm/b+4TGNwg6fx6NyzQ+NGCx/Qj7lvYD6pcSXgkEdd4ZmV6Ecp3mNQeQfIaXIsulIjNlndKIAONz17LKUN9sqZrulV0kIiUTq4d6Y8sBoik+8fW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=phFwkk1k; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6dd1962a75bso37655086d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 23:16:03 -0800 (PST)
+	s=arc-20240116; t=1739259094; c=relaxed/simple;
+	bh=fNXHZD0w81zVXb5WMwE53i1fejXnfLGbij1wF8RDOLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wttk61aKgwNvgpElNfy2n130mvgmkfmDeDx+ILKRvjf+jGPOgETdulLUGa3sWFe1Nl4E89cqA+01UmdDcdqQbKuCnv4OXK26kw2L97DY7L+ahyTcDnpRPB55M7daf1kL3nXkW7heSlMf6VYpfc1PLbXaUizI0f8E8EkhgrJ3JZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eqomc+Ec; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21f6a47d617so45973025ad.2;
+        Mon, 10 Feb 2025 23:31:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739258162; x=1739862962; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tB7lpnNqXHc5z/PkM3D4XtzXxfAlUQVDjMLNIcZD2fY=;
-        b=phFwkk1kJtxjFQ3okd9NFHhJapHnxgfw0RomgXQBYuEHilW5v7TZnWE+tcQ/3mrLvC
-         L1HI2K74VQBQpNjv7vG49w/PyyEKm7T0lUiUA97DNzYWM7WIr8liBbslONmT+kmf5Rdh
-         2CCXK76/V/FlSndq6tA1JlzKzPD5LFRVRTNK6gq/XSoIlvYgdDtv0EkB285+uFrGYE51
-         5SS+07yk/tLhsYtOs7+8W22xuBWTHW0M+z4LCNW6cI7U43jmBCuXmhzwxHmkYVrlqkyW
-         2MW6kMP8qQumn4lBRXJJkXtaqhVs0olKReqAln2f50OzHBWDfb7DVYThWz8NuByPPJgd
-         O7Ww==
+        d=gmail.com; s=20230601; t=1739259092; x=1739863892; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTH7Pm5uOLfD5YPyyOM3Aj+5Tf2V89zBjuGRtkm1M5Q=;
+        b=Eqomc+Ec4f8HzCKQSOY8u4l+px0Wwu4fov2gr5J5FyXOpZjdV1hcurW9gRxYcn6i+U
+         Y7gT/rX4RdIjEPbZUX+OZ++tGN6BotVN33ljT/mSXxL9VUFAKtSEFJUu33dATCdLSdzl
+         /fQuYVqAw6ro7tvbz/CtilCn5k8PA4czy4QiaE08UMKQluxaCVW6zZLV0QLjOm9zVcau
+         ECw44SZmFvdcLA+W6CG4lTlTeQKvsQP6zzIx43YjIiW79CSvvlyli+hSzAeqRN8Rkd83
+         t2ypM7HQT8WSyXww4ysdSefCOEtWO1uSp/3adXwl23wPZc++kv4fvveM/Gua+BsULS5s
+         EkRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739258162; x=1739862962;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tB7lpnNqXHc5z/PkM3D4XtzXxfAlUQVDjMLNIcZD2fY=;
-        b=gg8Pv3A5BBZTb4LVaFiF8J1tFq0eTvHurxE6uURcMANBNNDOZV8YrIPLwXzB965HgG
-         avn6z7WMB1im0MVNzWHzBu70bncS51ykPMTI2H4BtUABqU55EfrI2/4cFYqZWqb1VXfD
-         tmFE71FbgdRV+S84LT9ndnHW1Vs3viODFE49KPAkU2BIG5Ki3ODSWt1g8poXCCso8EmS
-         gVRt2IGqZbcZc1YurrYG2d7ocbFAiHC70JB1XcmAmIqPlyMJIkGlmJMkrML08n6Yc8w1
-         fe2HpEwybHwvD07MdXf0WdLOHdhIRxe79d57IRHnjby8VwDGE+8IrI0VdC7DgmemBi6s
-         p52w==
-X-Forwarded-Encrypted: i=1; AJvYcCWWhh/ox62aIXluM2En5/C7xdS2LChxvbCz2SA53noyXhVfl7V8F3C+KV9ceC7h3hYgng27/vzGP3f6fQ3SIaM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySUk0eSNwkULoLtyUrjhzRHl50X3veB8oTIj5yoF1S6xmzmPgw
-	EYdJYRvwdfLPwMb9j5Y5PvkaQUq+dVhLAbzS87P1WujupLWfP9m3T/+WqUcRfb4080jS9yilad0
-	UP8licZmaMuKNAKtGfhsr3lrj10a2niDavMtQ
-X-Gm-Gg: ASbGncugPXIEKZbxyyU3LpRXHGEpYlC9lPW2DNcIaMrwu6W+h/zWvdv834njHIBe4Kw
-	SJwk5C9n0++22w4DW7fZCbJjcAggTEXVeKQHiZ3DVE3vjCavLk60URhz7aALtATTETZJFRvtZyA
-	==
-X-Google-Smtp-Source: AGHT+IECyVTDsSJ8bHc2Z+yzaJsoURAySCHTT4AMFt03xJle6a6C4lRtf64jv+S5WgZan+z1km5lScqdXZh9cGoNzes=
-X-Received: by 2002:ad4:4eea:0:b0:6d8:8a60:ef24 with SMTP id
- 6a1803df08f44-6e4455c1d28mr264143866d6.9.1739258162042; Mon, 10 Feb 2025
- 23:16:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739259092; x=1739863892;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTH7Pm5uOLfD5YPyyOM3Aj+5Tf2V89zBjuGRtkm1M5Q=;
+        b=EJfMfM0eBYB98D53Ncx0/+sR1Bt66k53STmuvRl5hKaIB0LIw510TgYaHDz4Ae2wOd
+         0gUpVKvm7d2BdrPQca30Y2n6JwF+N6vjGsi6Di0FDRfgb2AY6AAMJfUmgdOfnybbcjPY
+         1lzYxZoo+2KjzH1rQzA0LdWzPeR1bb8YmVn5X6RW98xKIMdg6ts5i0R2MOj87v9bpkvV
+         m6TeQ0RLyYu+QXwtO65xNptlw9dTq0O0CcMpTEs6PTSprJRpV1CkTBEyAgG3Ud4QSryh
+         dhG9Jdtr5l8ImUGQJVjEs5EjcyXDkbr+doOF8C37q4NbWhDskMHgbMyLK5todE72RIiU
+         lTtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9xa/k+gaKGa6DNkFAfSfRM04lTlgCrKJopkl0Ped2GSgj/WtgQWSkpkACwNuNWPctwN2CwZoJBHaM2/WFfdBB@vger.kernel.org, AJvYcCX+l3XX/3/uJs3SO4xxIacAbJRp+VELcgv8n7rniPxNu1Y+dtTFQBVUrP/I9tv4NarPRWyXLq4U/GgJg6c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEsAXhBDooK6ywbeLqRVy6bV/K2NRHWMUa+CWXoiaj6N3Kh+l0
+	E05VM310/AJPsTFDREhxm50KsEP2QO4YWh3XwKPWkRlg8eDdNoEzzaZE/oWff14=
+X-Gm-Gg: ASbGncs1vDO56IGWigpPbEcHRMuCYDp7vG+QnuPE0VO/AHMP3geG9MhVckl+6oMuY+Y
+	l6PbFrzQk6dmKmriKFD/2otzPbZX2vkZYRr3Rx3zSDS0C9jUs6hvOTjUJyPjjyB8ch4Mf4TWM3h
+	D1gnPsh5tVMjkNMonv4YiA9GtrYEqlxwSdBdsFlXQjYTTYwdrWSncIbYCH71T0anvAPOcyXjzxW
+	wsb1EpP1XrOesU/1ZDblXuXSTy56K6uvrewedADmaL8s4yjo9zd4Q87FlcMCyFq0uHMOPZ8Lm/d
+	4QbgfIBytuvGcgG4odKI
+X-Google-Smtp-Source: AGHT+IGs30M56X5gAKQnZAxB9fHIUoYBdvgrpgSZIn7PFxqdfYyq2SNPZej4vAjy56zlwVX1mmBcEw==
+X-Received: by 2002:a17:902:c94c:b0:21f:4c65:6290 with SMTP id d9443c01a7336-21f4e6a0641mr305340305ad.1.1739259092134;
+        Mon, 10 Feb 2025 23:31:32 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3687e68bsm89975435ad.169.2025.02.10.23.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 23:31:30 -0800 (PST)
+Date: Tue, 11 Feb 2025 07:31:23 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jay Vosburgh <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 net 0/2] bonding: fix incorrect mac address setting
+Message-ID: <Z6r8y1U4C_s1-3jV@fedora>
+References: <20250207092920.543458-1-liuhangbin@gmail.com>
+ <Z6b67YBbERi5v9gt@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250211002600.it.339-kees@kernel.org>
-In-Reply-To: <20250211002600.it.339-kees@kernel.org>
-From: David Gow <davidgow@google.com>
-Date: Tue, 11 Feb 2025 15:15:50 +0800
-X-Gm-Features: AWEUYZnyW25b1De25GbpRIOnFO7-cY_xsFyRWZxtutK3uanHshmpY0hFcYCTR4E
-Message-ID: <CABVgOSnWq_0hjKes+Q8kLXyPSS2jGR_Oo01TREj1nTq+52R-0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] KUnit test moves / renames
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>, Nicolas Pitre <npitre@baylibre.com>, 
-	Rae Moar <rmoar@google.com>, Pedro Orlando <porlando@lkcamp.dev>, 
-	Danilo Pereira <dpereira@lkcamp.dev>, Gabriela Bittencourt <gbittencourt@lkcamp.dev>, 
-	Gabriel Krisman Bertazi <krisman@suse.de>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Diego Vieira <diego.daniel.professional@gmail.com>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Jakub Kicinski <kuba@kernel.org>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	=?UTF-8?Q?Bruno_Sobreira_Fran=C3=A7a?= <brunofrancadevsec@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Eric Biggers <ebiggers@google.com>, Tamir Duberstein <tamird@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z6b67YBbERi5v9gt@fedora>
 
-On Tue, 11 Feb 2025 at 08:31, Kees Cook <kees@kernel.org> wrote:
->
-> Hi,
->
-> This is rebased to v6.14-rc2. I'll carry it and folks can send me new
-> tests, etc, as needed to minimize future collisions.
->
->  v1: https://lore.kernel.org/lkml/20241011072509.3068328-2-davidgow@googl=
-e.com/
->
-> Thanks!
->
-> -Kees
+Hi Jay,
+On Sat, Feb 08, 2025 at 06:34:21AM +0000, Hangbin Liu wrote:
+> Please hold on this patch. Our QE reported that with bare NIC, the
+> backup NIC can't receive the NS messages even after joining the multicast
+> MAC group. But after remove the backup NIC from bond, the NIC interface
+> could receive the NS message.
+> 
+> This is weird, it looks the backup NIC dropped the NS message somewhere,
+> even using tcpdump (the NIC will be in promisc mode) I can't capture the
+> NS message on backup slave.
+> 
+> I need to debug more.
 
-Thanks a lot, Kees -- this has been languishing for too long!
+After debug, I find it's a driver issue. The issue exists with ice dirver NIC.
+I tried with a mlx5 NIC and the patch works good for me.
 
-I'm afraid that there might still end up being one or two conflicts,
-particularly around the maths tests and crc tests, both of which are
-seeing some development. I've CCed the folks writing patches for these
-as an FYI.
+So I think you can start review this patch when you have time. I will debug
+the ice driver later.
 
-Otherwise, I'll let you take lib/ tests which depend on / conflict
-with the renames.
-
-Cheers,
--- David
-
-
->
-> Bruno Sobreira Fran=C3=A7a (1):
->   lib/math: Add int_log test suite
->
-> Diego Vieira (1):
->   lib/tests/kfifo_kunit.c: add tests for the kfifo structure
->
-> Gabriela Bittencourt (2):
->   unicode: kunit: refactor selftest to kunit tests
->   unicode: kunit: change tests filename and path
->
-> Kees Cook (1):
->   lib: Move KUnit tests into tests/ subdirectory
->
-> Luis Felipe Hernandez (1):
->   lib: math: Move KUnit tests into tests/ subdir
->
->  MAINTAINERS                                   |  19 +-
->  fs/unicode/Kconfig                            |   5 +-
->  fs/unicode/Makefile                           |   2 +-
->  fs/unicode/tests/.kunitconfig                 |   3 +
->  .../{utf8-selftest.c =3D> tests/utf8_kunit.c}   | 149 ++++++------
->  fs/unicode/utf8-norm.c                        |   2 +-
->  lib/Kconfig.debug                             |  27 ++-
->  lib/Makefile                                  |  39 +--
->  lib/math/Makefile                             |   5 +-
->  lib/math/tests/Makefile                       |   4 +-
->  lib/math/tests/int_log_kunit.c                |  74 ++++++
->  .../rational_kunit.c}                         |   0
->  lib/tests/Makefile                            |  41 ++++
->  lib/{ =3D> tests}/bitfield_kunit.c              |   0
->  lib/{ =3D> tests}/checksum_kunit.c              |   0
->  lib/{ =3D> tests}/cmdline_kunit.c               |   0
->  lib/{ =3D> tests}/cpumask_kunit.c               |   0
->  lib/{ =3D> tests}/crc_kunit.c                   |   0
->  lib/{ =3D> tests}/fortify_kunit.c               |   0
->  lib/{ =3D> tests}/hashtable_test.c              |   0
->  lib/{ =3D> tests}/is_signed_type_kunit.c        |   0
->  lib/tests/kfifo_kunit.c                       | 224 ++++++++++++++++++
->  lib/{ =3D> tests}/kunit_iov_iter.c              |   0
->  lib/{ =3D> tests}/list-test.c                   |   0
->  lib/{ =3D> tests}/memcpy_kunit.c                |   0
->  lib/{ =3D> tests}/overflow_kunit.c              |   0
->  lib/{ =3D> tests}/siphash_kunit.c               |   0
->  lib/{ =3D> tests}/slub_kunit.c                  |   0
->  lib/{ =3D> tests}/stackinit_kunit.c             |   0
->  lib/{ =3D> tests}/string_helpers_kunit.c        |   0
->  lib/{ =3D> tests}/string_kunit.c                |   0
->  lib/{ =3D> tests}/test_bits.c                   |   0
->  lib/{ =3D> tests}/test_fprobe.c                 |   0
->  lib/{ =3D> tests}/test_hash.c                   |   0
->  lib/{ =3D> tests}/test_kprobes.c                |   0
->  lib/{ =3D> tests}/test_linear_ranges.c          |   0
->  lib/{ =3D> tests}/test_list_sort.c              |   0
->  lib/{ =3D> tests}/test_sort.c                   |   0
->  lib/{ =3D> tests}/usercopy_kunit.c              |   0
->  lib/{ =3D> tests}/util_macros_kunit.c           |   0
->  40 files changed, 458 insertions(+), 136 deletions(-)
->  create mode 100644 fs/unicode/tests/.kunitconfig
->  rename fs/unicode/{utf8-selftest.c =3D> tests/utf8_kunit.c} (64%)
->  create mode 100644 lib/math/tests/int_log_kunit.c
->  rename lib/math/{rational-test.c =3D> tests/rational_kunit.c} (100%)
->  rename lib/{ =3D> tests}/bitfield_kunit.c (100%)
->  rename lib/{ =3D> tests}/checksum_kunit.c (100%)
->  rename lib/{ =3D> tests}/cmdline_kunit.c (100%)
->  rename lib/{ =3D> tests}/cpumask_kunit.c (100%)
->  rename lib/{ =3D> tests}/crc_kunit.c (100%)
->  rename lib/{ =3D> tests}/fortify_kunit.c (100%)
->  rename lib/{ =3D> tests}/hashtable_test.c (100%)
->  rename lib/{ =3D> tests}/is_signed_type_kunit.c (100%)
->  create mode 100644 lib/tests/kfifo_kunit.c
->  rename lib/{ =3D> tests}/kunit_iov_iter.c (100%)
->  rename lib/{ =3D> tests}/list-test.c (100%)
->  rename lib/{ =3D> tests}/memcpy_kunit.c (100%)
->  rename lib/{ =3D> tests}/overflow_kunit.c (100%)
->  rename lib/{ =3D> tests}/siphash_kunit.c (100%)
->  rename lib/{ =3D> tests}/slub_kunit.c (100%)
->  rename lib/{ =3D> tests}/stackinit_kunit.c (100%)
->  rename lib/{ =3D> tests}/string_helpers_kunit.c (100%)
->  rename lib/{ =3D> tests}/string_kunit.c (100%)
->  rename lib/{ =3D> tests}/test_bits.c (100%)
->  rename lib/{ =3D> tests}/test_fprobe.c (100%)
->  rename lib/{ =3D> tests}/test_hash.c (100%)
->  rename lib/{ =3D> tests}/test_kprobes.c (100%)
->  rename lib/{ =3D> tests}/test_linear_ranges.c (100%)
->  rename lib/{ =3D> tests}/test_list_sort.c (100%)
->  rename lib/{ =3D> tests}/test_sort.c (100%)
->  rename lib/{ =3D> tests}/usercopy_kunit.c (100%)
->  rename lib/{ =3D> tests}/util_macros_kunit.c (100%)
->
-> --
-> 2.34.1
->
+Thanks
+Hangbin
 
