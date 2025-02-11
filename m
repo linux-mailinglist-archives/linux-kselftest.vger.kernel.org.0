@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-26321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEAD3A301A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 03:48:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB61A301B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 03:52:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A3E9167075
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 02:48:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 181BF1889525
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 02:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A381B87F3;
-	Tue, 11 Feb 2025 02:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0BC1CEEB2;
+	Tue, 11 Feb 2025 02:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E5ohvPSt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ch2/J/Vo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3AF26BD95;
-	Tue, 11 Feb 2025 02:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6125126BDB3;
+	Tue, 11 Feb 2025 02:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739242084; cv=none; b=CbdBa8fLYStPP6cd6Yo0BfKUCfXbgNBkgkoCtjSAaxntzhRwldKNpLqyjHxYcEcArUaX6YPjKRhmiiDHgcUzJ2+Qz03Qqk+EF/SejyYLNFIvy/Xg7PNKe64o1NENCYtyz/2LYzuluUtgDdj2yZfiIGE+IkGtJUtMfG4fzUUcXVc=
+	t=1739242374; cv=none; b=BAzk+yDj5Tj6dBvg4W401ulPoHjP6iujFvanz9dk/m5cFvWRvUiZJmE+hEeFLcRqaTsMuiQ6QQxibTyayhH2pPHIaJTywxhc83odT+y+kF1ke3Ex+zI+TFYBEpldcnPNGoxl4TtxuCpH8HXWUUZXzg5zzhga3Xc3ugxPSpEoj7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739242084; c=relaxed/simple;
-	bh=5OOL+q7crj6C+Y5aqDrG5n7Z52CJTo/s0a5E+RhLox8=;
+	s=arc-20240116; t=1739242374; c=relaxed/simple;
+	bh=zQw2a+CpxvAFUw4sXsEA97Fgbn2DgsUG3ckUtxNNYdw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IIBUeNqBNtBKAieHT4kmpe8b9sW+w7Vmr067Ql2DdaUBAIhhzMVZtiNJjZTtNgbXuPupxk9zO9iJx8qq9bbT7b2Ds6wcK5+c4kya5wSCrjrE6iZ3xVXOy9/vTV1kkzZtIatmllbl/q0d+CIsalnn00NDfprd8Lu7axOov5k4eoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E5ohvPSt; arc=none smtp.client-ip=209.85.208.179
+	 To:Cc:Content-Type; b=RBj8NNNyANlZoryc18XRv+thmJc7Qp89TJxJaEeNVPfrKRuS9Oh1S5vLtne8AWTQIyadqOvsUM22I0/mk/fq3oyi59ygNO8NnzfZaRoCT8xs1io5m8YN+9mqtKExa7im5Oky0m8GV04Whdgvl3X6ZZQBYl2hyHlUB+wPUqlTkr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ch2/J/Vo; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-308f71d5efcso9296031fa.3;
-        Mon, 10 Feb 2025 18:48:01 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-308f04beb24so12222711fa.2;
+        Mon, 10 Feb 2025 18:52:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739242080; x=1739846880; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739242370; x=1739847170; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zn3t1X0OMk9xhbwKXgSgdmPnjMJbdOEb2KTYQMy3qXc=;
-        b=E5ohvPSt7qrhkNJQ2dZRI1piOllhxqjcwXZy/8pJ5PvkKeOK0BgPetja98eUkgGW9w
-         gbESV+IHFbUO3y0B5fb5xoqzqSt2QnQKTISYmQ22552SvYu22/yfV4qApfBIS5NC5xv+
-         7Xe2esmQFrjMRyElaF1ojsT7h/el+LgZHr0CG5l1Gh9orQ01YFk7kNIDacIInVEwwFCB
-         G+y7EJwLR19upiEE6GKrTO20iTW8bfL+qkygrUASXid8B/g0AANPaE2IsvqL65lqpF6q
-         VJXaok5+pIQKHU87AE0VRCGaetabf37sslw8WYwgZZLoK7cxGzUIGu3bRy8a10Jm8Cny
-         S5NQ==
+        bh=C7zoGSKaCzaFrCZcucDgRUUxiAaI1ZXSr2r+w8mi1+Y=;
+        b=Ch2/J/VoXKAt9mbFAX8x2Oc9LcIQD4gIpm+tuDLHBTFeS7GZwOC0sjS9FyEU+sn1DE
+         ttetgm3Mkuc9GacjGiagcUQxlVm0wcm8BOLgz0xS2EaxZLvGHeVftv+kVX6QqJaPASPc
+         MKvjIpNZmwsf7X2dG0DPO8gRXYXnz/6PiFFIDOicAxl+4ikOxrIH6FH9DDliwxOo9cR8
+         NmnR2KJXwVOC6XV442twojq7XiABe+lj+D2Oh08Fqv0pTLiNpTxyiVsbIfW1kuviLJ3t
+         /S8V3jcv7MtgcJeI4bS61lljwUQ+1eTUKyeK8kMNJSj0SyC8vvcFdIVtfl4lBZPoH5DC
+         63uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739242080; x=1739846880;
+        d=1e100.net; s=20230601; t=1739242370; x=1739847170;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zn3t1X0OMk9xhbwKXgSgdmPnjMJbdOEb2KTYQMy3qXc=;
-        b=ZNTiQ+TWAbBdej3V/NzOiPTz4eTmGcels8ysj2sBPAPG3FBX0Ctj9/5bHfy+z4e6D9
-         GDbrnt2TOirz2VfwwlL9/YUCPlc9Okchjvhz/XpN3TP2H7/kcS2ZdTPOmdGTT32QEdc+
-         mCXjDEvysV5441uMg830freIEWYSlHKcafs1PpNh/RhGShd/8KHYTflqyfO+hNhtbz2g
-         aB3j8pN2SfWAlAMcOS82rgmssDEZWyz66zAgtDtNjxV8SI/y3eZBbf/LYmD3Ulruupy6
-         1kocvSG+xgxtwkxtkBL/+j7pej1SWl7S+b7nvuA2pQwW5I2Nru88Zkklj8e9nnmzeX0T
-         0bmA==
-X-Forwarded-Encrypted: i=1; AJvYcCVoHGNEQIPYSBLNuUmWjTgHQ7y3chYOYbWW/OpKxP8anWc8tbIfAJ11NPDfFQz9rOzdpwoNZfjgOzLicMk=@vger.kernel.org, AJvYcCVzKAAGr8nPNQ+RTntsiS4VGcDd1Mtv+xtid/WrdIV0gaI5AZa+DC8U/gTfzVHn2wSosDKku8RhRgljh5lwRwD5@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJyO50UEI9u/e4wL7AT5fbPQRYPfXUOOUb2Wh6VGpZzu9m9aG/
-	uzs8B3XEJBX2MphBYl2rNMFZFfytl6dvTiUkO8tSecmNEMcmY8lo7YX+q/vuFrnLa8uXSE9yVqB
-	xFGfq1qR8pGxyNOq1fJUyBsNXUck=
-X-Gm-Gg: ASbGncsHOllvNrx7/RLf2LcvhJw8CFXUwHCOuG+V/hGBfy4x5Z6hIEOEUtiQEoxP4Fm
-	gt9hdPa+AdzVfyZjHlN4liA0Y6WR4hPzcadb4wrMlCRCPQWD+yA+xp5HxnwSkphBjXkJcBz0Zvl
-	YXOaiCjtFzzvkLbWlSYeW+B1ppGCh3
-X-Google-Smtp-Source: AGHT+IFZIkGWLA2ZKDKUhI5865q128jmDXUjWOI34Qtb9k+aP8l3IrsXJBCyVRjwY34me4r64bJw1Q9gAQHDEga7bm4=
-X-Received: by 2002:a05:651c:1994:b0:308:f75f:446 with SMTP id
- 38308e7fff4ca-308f75f07a4mr11013791fa.31.1739242079858; Mon, 10 Feb 2025
- 18:47:59 -0800 (PST)
+        bh=C7zoGSKaCzaFrCZcucDgRUUxiAaI1ZXSr2r+w8mi1+Y=;
+        b=d6PMFMliIZt9dYq54Og3mSuIIsRetK6BHZZza6Wt6LBKVyBDcyO234gmWWb8NodhYG
+         I4UGSIdIkk4KLy3gr3h10a0rI3u0NVhPfqOXXxNiHC8J8A8hUFVP+MQ5//qDHkvphZXP
+         NV/vTNFmbqIVbHW1bvWUzokrWZlyjbJOSKhEu62qg1zdlY3LRf3mU21d2el+IOxpYbfa
+         Z++JcvDvUuXJI2nFfAb2mdV1ogyR/95yplZz89UZetEFS805osEamuEBVW9idkfE+iwM
+         /xejM4AntcIJKGjEGQpP0b4Tj1AHRvLE+PHm8I6CYOPUlghoZ2E/Gp6s3Sr0MEpMWGoS
+         E+Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUieuDIsk9By/+hGSkDBNeuCL3KybxoV6G05v3eTQqdS4le2BYfN3Zj2KbKS2dJbBDPD2gAw7ZPbJbzGiY=@vger.kernel.org, AJvYcCUkTg0Ouu0/SMDbekrnagn30KmjHwjFVQOQP3zSbDDv5FxCoVXslDDKRZ9TRf3ypm9GnXSYjwwAeroq5ZwYbBKI@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcfU4cslI/+mzudjbxhnKtnfMErxwy2ONtTEBmpGPQmjmXiKYm
+	NZJdkqnfJBwgWP4E9NFnLFyhwoBeIfMiX2As/j5SLaJLDBJ5mDojR7W5tQI80hixUxPDukovRQT
+	dNuuaVmEnkIIh4a4jJ/TZbh0Rywo=
+X-Gm-Gg: ASbGncswa6+j/LRB7SNRBZlub2BiBcEQIicl8NahYVTwm+Cf1mlcW+gRN+z3FqhVknZ
+	PQOMShxRHwrghgaAo1C7rUfs5FU8xE4d8DaaOtPG2nzTpSL4jJ4mf5vKK+MK+o4HnEZJmX8d4l+
+	iDEDa76hhWY3Gh3GLrZsfod1daTSRq
+X-Google-Smtp-Source: AGHT+IHZF8Pt1ouhTRhWC5nSvn5LiA7JiRKpNhRHquI/TMMTbGiFuAXQE9EO3401ZKj4Dc2d1xl9wZk8fB7hYd0o4rY=
+X-Received: by 2002:a05:651c:b29:b0:308:f479:5686 with SMTP id
+ 38308e7fff4ca-308f479594bmr12679821fa.0.1739242370155; Mon, 10 Feb 2025
+ 18:52:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,12 +75,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250208-prime_numbers-kunit-convert-v5-0-b0cb82ae7c7d@gmail.com>
- <20250208-prime_numbers-kunit-convert-v5-2-b0cb82ae7c7d@gmail.com> <202502101836.2B3E7BC4@keescook>
-In-Reply-To: <202502101836.2B3E7BC4@keescook>
+ <20250208-prime_numbers-kunit-convert-v5-2-b0cb82ae7c7d@gmail.com>
+ <202502101836.2B3E7BC4@keescook> <CAJ-ks9=pU6FsOfMk+fSwG2oLG95L2C-jwBDNad1FTGzQ5seiuw@mail.gmail.com>
+In-Reply-To: <CAJ-ks9=pU6FsOfMk+fSwG2oLG95L2C-jwBDNad1FTGzQ5seiuw@mail.gmail.com>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 10 Feb 2025 21:47:23 -0500
-X-Gm-Features: AWEUYZmiPJFFPicq2ZL6yV-FXokW2c26z9jhFLITBm6JYY_fKXQ2--JRmflbSOA
-Message-ID: <CAJ-ks9=pU6FsOfMk+fSwG2oLG95L2C-jwBDNad1FTGzQ5seiuw@mail.gmail.com>
+Date: Mon, 10 Feb 2025 21:52:14 -0500
+X-Gm-Features: AWEUYZnq2E-MPFeEevhTJkReUu_OvCFyN77M215DtLw-KJEuWzZCIAW1L8rsJaQ
+Message-ID: <CAJ-ks9nDH9Zk9vaiBP599LN-Jx3aN+JyxFXP16ikV0cayc01SQ@mail.gmail.com>
 Subject: Re: [PATCH v5 2/2] lib/prime_numbers: convert self-test to KUnit
 To: Kees Cook <kees@kernel.org>
 Cc: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -90,40 +91,50 @@ Cc: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 10, 2025 at 9:37=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+Ah, I see https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/co=
+mmit/?h=3Dfor-next/move-kunit-tests&id=3D3e50ba8fc834cadead733e4feeb969fce2=
+f3b6e1
+now.
+
+On Mon, Feb 10, 2025 at 9:47=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
 >
-> On Sat, Feb 08, 2025 at 09:44:39PM -0500, Tamir Duberstein wrote:
-> > Extract a private header and convert the prime_numbers self-test to a
-> > KUnit test. I considered parameterizing the test using
-> > `KUNIT_CASE_PARAM` but didn't see how it was possible since the test
-> > logic is entangled with the test parameter generation logic.
+> On Mon, Feb 10, 2025 at 9:37=E2=80=AFPM Kees Cook <kees@kernel.org> wrote=
+:
 > >
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> > ---
-> >  lib/Kconfig.debug                            | 14 +++++
-> >  lib/math/prime_numbers.c                     | 87 +++++---------------=
---------
-> >  lib/math/prime_numbers_private.h             | 17 ++++++
-> >  lib/math/tests/Makefile                      |  1 +
-> >  lib/math/tests/prime_numbers_kunit.c         | 59 +++++++++++++++++++
-> >  tools/testing/selftests/lib/config           |  1 -
-> >  tools/testing/selftests/lib/prime_numbers.sh |  4 --
-> >  7 files changed, 106 insertions(+), 77 deletions(-)
+> > On Sat, Feb 08, 2025 at 09:44:39PM -0500, Tamir Duberstein wrote:
+> > > Extract a private header and convert the prime_numbers self-test to a
+> > > KUnit test. I considered parameterizing the test using
+> > > `KUNIT_CASE_PARAM` but didn't see how it was possible since the test
+> > > logic is entangled with the test parameter generation logic.
+> > >
+> > > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> > > ---
+> > >  lib/Kconfig.debug                            | 14 +++++
+> > >  lib/math/prime_numbers.c                     | 87 +++++-------------=
+----------
+> > >  lib/math/prime_numbers_private.h             | 17 ++++++
+> > >  lib/math/tests/Makefile                      |  1 +
+> > >  lib/math/tests/prime_numbers_kunit.c         | 59 ++++++++++++++++++=
++
+> > >  tools/testing/selftests/lib/config           |  1 -
+> > >  tools/testing/selftests/lib/prime_numbers.sh |  4 --
+> > >  7 files changed, 106 insertions(+), 77 deletions(-)
+> >
+> > Thanks! I've applied this and rebased it onto:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=
+=3Dfor-next/move-kunit-tests
+> >
+> > --
+> > Kees Cook
 >
-> Thanks! I've applied this and rebased it onto:
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=3Df=
-or-next/move-kunit-tests
+> Thanks! Could you also take the first patch in the series[0]? The new
+> test won't build without it because lib/math/tests/Makefile is dead
+> code.
 >
-> --
-> Kees Cook
-
-Thanks! Could you also take the first patch in the series[0]? The new
-test won't build without it because lib/math/tests/Makefile is dead
-code.
-
-[0] https://lore.kernel.org/all/20250208-prime_numbers-kunit-convert-v5-1-b=
-0cb82ae7c7d@gmail.com/
-
-Cheers.
-Tamir
+> [0] https://lore.kernel.org/all/20250208-prime_numbers-kunit-convert-v5-1=
+-b0cb82ae7c7d@gmail.com/
+>
+> Cheers.
+> Tamir
 
