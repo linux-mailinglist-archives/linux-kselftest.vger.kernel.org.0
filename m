@@ -1,79 +1,80 @@
-Return-Path: <linux-kselftest+bounces-26367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A532A30F5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 16:13:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 048FFA30F5F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 16:14:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3FAF1637C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 15:13:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B60A3A3657
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 15:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219F325291B;
-	Tue, 11 Feb 2025 15:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 612AC25333E;
+	Tue, 11 Feb 2025 15:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DSbDAd1v"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5txZy7I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FB73D69;
-	Tue, 11 Feb 2025 15:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCAE26BD8C;
+	Tue, 11 Feb 2025 15:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739286822; cv=none; b=uCrQeY1aYWDNvTSrvIwMWKOAiPnSM6pTNk6aUhV9OflKszkNE9W3qvSVwz581+96yVjrWE1sBCYHuyx6ctrCf1YJpHcOO1dXCprW39H25Z+tQvLOKNhx9Dg6fejPvDPzed/VXlQhgKH9VjYeBfnyc5N13usgV0tiD9qTkt8+WTY=
+	t=1739286823; cv=none; b=nU6B+2mC1nUixYcGqLFUdZFgidfQwZ2vFKEys7zLfl7IKAbu/P+Q/JEgYiKxQsi93vlktC6OGCr6z1e7o7Dbn8s9U7yRGuxUic2zJ473UNMeyxLs96+65DiRlQwBOpoFZJ7uSg3M/9piVJH7txoLxW8bGcLQRV65aPG9aCK4F4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739286822; c=relaxed/simple;
-	bh=PQO1HNETqHO+CjYUl36CkrHEYK6wG0TaXkQPKysBzCQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nE0XvU57Vn7wROeokkQ8QftcMCAQC9NwwggiemkjC9HfoapzVEbjsY5EzxpnaWmco0Y79tbyCUjW98PUtv2PYYyp4t36uyWW30GAdCeImFR3tq5qkNxv2zq+8NHnXW5hG/ds+3OozvQvPvqva8vewwd/TyN9WGzm91odf8sZmBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DSbDAd1v; arc=none smtp.client-ip=209.85.222.175
+	s=arc-20240116; t=1739286823; c=relaxed/simple;
+	bh=IuVvvZtPoUGGcmxIWcY0gncFYLrFzRkM5f/+XVpUJ68=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=FOXlUjiLnp26muxgUwHiE5CGLYUU9FwZddiKvW4uPLe08Uj+1jYBsEBTrRM7gIL4qD4rr1KW19Bbm+kzeuD0N5N6K3QM77kdZ2N0OTvUuxNR0RU/RDn448klKuGfVfxnJ+jH90CNwQF4CZXwHfzhj+Spbwv53t9YGhhU6wpipuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5txZy7I; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7be8f281714so562340985a.1;
-        Tue, 11 Feb 2025 07:13:39 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7c053a2118fso293827985a.2;
+        Tue, 11 Feb 2025 07:13:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739286819; x=1739891619; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXFuMHmv9FkdofzVg960jul3uUUg0TNK3Z/UA6I4Qec=;
-        b=DSbDAd1vYuBNFuSE7fa0+0NbqfAZS6QKeqk1KMxHfF188c4vVEVcjtXETnwQtfoUk4
-         cLKCYV8voqBLNouKzqO7JMul3UrJs4FNASF9sK4/9kMFj265xX8bSjr0XmUBPNzFMDqi
-         OJc7g8rpcsEuZBi81CNOjJ3gZ/g7vR1+Q/0A2/xRTcwFXIKiPkeCHsNzsTUbbPFC4y9A
-         QNSETJskHlLxcxIzki+hiqYwRYM8IPspujf+htNqY5P1o/RnrDYk1pluomvO7VK71Z2T
-         /kytiG2n+xQK1xDxf+l4GXDY+vsL9kVhAsTjTaaA5FD642vZvZHZnsR6GiYSTMyi4l2j
-         m7yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739286819; x=1739891619;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1739286820; x=1739891620; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WXFuMHmv9FkdofzVg960jul3uUUg0TNK3Z/UA6I4Qec=;
-        b=YXCl0Gb81FTTsVht/Fvuyk1yozq8lFO5bbd7XDOL7KJs5xjCwSaTO2rLC/X79rSO3Q
-         Na8ijKucZKdkyUNJcmDz73+xFvIgSqN6CgAD8rkxAcyE25PUYHpku8IXEwYWAsEeB+NS
-         toj9RNm1zdr6h/+FoCOQwVwgcoQ5eG/4yI/9MNV5zwOxVddL0gDBbF1YiSFMStYIeklb
-         HourqWUYhvEjmV9uLF7JDvqRQK3xrNwApR2gzHjCs53162UCUWkGBsypX9qTv+EdNhVk
-         hwCye+9gNo46w/+/xOQKiq/pMm5VD0dEDnKcwxtYhFw0cXa+0KiTiYsLRunUi9yUNbyB
-         NkDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUE5HUKKxP0be1jCVuH0epKQsfqx54ZvqqFPCTrT6KJpvVzhYw1/K25JsBs6LxcDDmLWe4rwaSOhXA4WO4=@vger.kernel.org, AJvYcCUljHy8LFE6OjicW4OkUW/i6AnIbTlmFjB0Co8HnZ5qIsYM9d2GFYoQtiO7yxO27ATIX0hT2FEC7rMp4U1tQmnV@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKPEVFuhyM6Bg5l8deVKC4SR0gDmgOtysBc+d51htBaLUnWCqn
-	ovBOTbyw/YnD+mZ5gS+cvA4znjqHzP1scb24myf9Qrp+E4mbSLwR
-X-Gm-Gg: ASbGncug3Yqup4EH/WQgwoJyJ8LIBJK/gq2h+LlWejw7m6IuYpE80OOhTqUcjODirG+
-	/kn9qQqmDmfUirxVU6oAUOggIVRDEAmTqtK20W35Otw744RueozeKvjzM8ci/Bw7g0gTETjv0U4
-	zQDAHHwSpabuz4GG+xt0oHtoH29VOYcW5ylMDTqoLm3xQe4wOsStmObzuHtnBT1tRUwyr4i0k9U
-	CMUtpi+OpQO1I8+TV8eTXdGQ9VtnCxXS5wUCk4EHmroG0NX32orEfrSp2b15EcXju4RhKvYDaHb
-	gsk1IXN4gP1fijtQ0S9ZmlLbIDuGkr9ktWZu
-X-Google-Smtp-Source: AGHT+IEW4/iW2cGe7i6aWFxBmjfVsckg+jqj44b2ciTXZ1WH+/R9Db9PyC9AcOTrPtEDZtQtH3xREQ==
-X-Received: by 2002:a05:620a:4151:b0:7c0:6e5a:662f with SMTP id af79cd13be357-7c06e5a684amr110356685a.39.1739286818922;
-        Tue, 11 Feb 2025 07:13:38 -0800 (PST)
+        bh=22Bstn2976wUKe82wjuA5ZVlk+B7sh1UpKdDUKp4KuA=;
+        b=d5txZy7Iu/fR9A2TVJA7SsJl5x1xoRs2xy84aDpJcVWCnJ8z6Sx6HgmRDLl92BCbVC
+         5Q1w/RPkLBVu3gzZZHpopI4pCNKjz0sLw2Ko45RhM3ImqZRvMV72pzCMjo5AsbEilOPk
+         IY00owLyRhPscEmzSLr+f30Q09eEIcTDTjMB7ProLkMmJbVJVZCOjX7DKG4zW3errTJc
+         m7MlwYqGBTTp/tIcFN7beAIQaPPbRcvWTWJHkshlt0eW3QxTD5+pd7epsthG2Jh1Cr8i
+         d1rluyfHGHa//wpS/EkcEM1msmPof+RmF45xqw+6eZK7tNXSxZQge9RT93dVe27HRsCl
+         vJgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739286820; x=1739891620;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=22Bstn2976wUKe82wjuA5ZVlk+B7sh1UpKdDUKp4KuA=;
+        b=YKbWQDKZMWnIlgDsm6+NPKooscc380pHNCKLRxBTaJ5kPIN73dUyWWGLeIEjXeMdae
+         H7FdhcDtIf3w6Bejpl4PezS4rCiR94dDMYdX4/0Ldokot0UegIDVP9jMmNiwb1z4PK42
+         dR1mPS11+YD1TbjxoBAmm8C8kpZWDGz09rgMHlcY6Yuhs5xzdOD0Xvr4NqVb9L1Xe5jm
+         Z6oz/JaNfk+xgVcgjmMoobZ5rF/+Gm/nNzjdY/e6n6nKYNpQNyCrtp634QDGbj1T5d3T
+         ivkHV04h0sqUBnPoL40Xu9BdIoBAXWy765l0pAzAJ4s41HaGlOeHQX78kTt8dfOJohfj
+         7D0w==
+X-Forwarded-Encrypted: i=1; AJvYcCXFKMDsHDEzuloxfJbtOdV5kfHXmvk22b/ccjjwZHGy6mwDF6FoqZyAP4SZlGsKK4b1jHoH9/vB3zxJ9IvuENmq@vger.kernel.org, AJvYcCXl0QhIVfag+7uAcIMJDmrOEdtlUH1D37FADXVlnOCtcSO/lrNLCqzQW2H8HCCRENh2WC6l9z90z17aQ14=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgIzqahNTs5/bvvchdUKXb4KoTQPfXUlPRD6tJruGQ61oXZMtX
+	nhB4hFu99zeAr/yToKSyjlYEpU2/8LnPsIFXL4F96NKK+0A/Cmeg
+X-Gm-Gg: ASbGnctCzwGwgSDX3q+jIYNruVbx8e1QEn3Yecl8QljIaHlbzoV3Vzaf0fkVy7zSnqR
+	QKNcxu0XFh9DygywV1otNLmlRPQwEY19cBSQQY8b1Joh4cB+EnWfoSZLBtcYMK6d9boetyQjLhx
+	xm8rmoie2iTChmIZo00+AWQ2pPDC5yDLpr5zcR4lg2IfNGtBbZ07Md1tCLQF6Zh2gp5WCtMvSyz
+	BYACqpIMbJWHyP6hhNis7/rc+uYALYg30cB7WgoN3oL/SgtqeCdAO1WsmH03m1ZRB7hdsfTvNEt
+	jVKbtCuOvE7lgOvLFZTa/3FXh9VRpKcaUtiD
+X-Google-Smtp-Source: AGHT+IFeo+WjS/5Yd6JC8PWzDXkblp2JHuX7GuxZb5CP+Lk6VEHpDk4LizyTtdFx1q2Rpaq9GKWAXA==
+X-Received: by 2002:a05:620a:3725:b0:7c0:602c:e68a with SMTP id af79cd13be357-7c0686e14d7mr608046485a.18.1739286820564;
+        Tue, 11 Feb 2025 07:13:40 -0800 (PST)
 Received: from tamirs-macbook-pro.local ([2620:10d:c091:600::1:b3ba])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47193e581cesm26852561cf.40.2025.02.11.07.13.37
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47193e581cesm26852561cf.40.2025.02.11.07.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 07:13:38 -0800 (PST)
+        Tue, 11 Feb 2025 07:13:39 -0800 (PST)
 From: Tamir Duberstein <tamird@gmail.com>
-Subject: [PATCH v7 0/3] scanf: convert self-test to KUnit
-Date: Tue, 11 Feb 2025 10:13:36 -0500
-Message-Id: <20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com>
+Date: Tue, 11 Feb 2025 10:13:37 -0500
+Subject: [PATCH v7 1/3] scanf: remove redundant debug logs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,12 +83,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACBpq2cC/43NTW7DIBCG4atErEsFDH/uqveossAwJKgNrsBBr
- SLfvSSbWpZVdfl+0jxzIxVLwkpeDjdSsKWaptzDPB2IP7t8QppCbyKYUIwDp9W7HOn7NaeZ+ik
- 3LDONhgUPMI4gPemXnwVj+nqob8fe51TnqXw/njR+X//2GqecssFoJWRkOLrX08Wlj2c/Xcjda
- +LXEAz2DdENYYzT3AbLJG4NWBty3wDKKFgdjAdEw+XWkGvD7BuyG04AChcdBrRbQ60MzvYN1Q2
- LWkZwJuAwbA39D0N3QwZlITATBxHWxrIsP6tZaM4KAgAA
-X-Change-ID: 20250131-scanf-kunit-convert-f70dc33bb34c
+Message-Id: <20250211-scanf-kunit-convert-v7-1-c057f0a3d9d8@gmail.com>
+References: <20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com>
+In-Reply-To: <20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com>
 To: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
  Steven Rostedt <rostedt@goodmis.org>, 
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
@@ -98,124 +96,39 @@ Cc: Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-This is one of just 3 remaining "Test Module" kselftests (the others
-being bitmap and printf), the rest having been converted to KUnit. In
-addition to the enclosed patch, please consider this an RFC on the
-removal of the "Test Module" kselftest machinery.
-
-I tested this using:
-
-$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 scanf
+The test already prints the same information on failure; remove
+redundant pr_debug() logs.
 
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
-Changes in v7:
-- Remove redundant debug logs. (Petr Mladek)
-- Drop Petr's Acked-by.
-- Use original test assertions as KUNIT_*_EQ_MSG produces hard-to-parse
-  messages. The new failure output is:
+ lib/test_scanf.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-    vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx %4hx %4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
-            not ok 1 " "
-        # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:92
-    vsscanf("dc2:1c:0:3531:2621:5172:1:7", "%3hx:%2hx:%1hx:%4hx:%4hx:%4hx:%1hx:%1hx", ...) expected 892403712 got 28
-            not ok 2 ":"
-        # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:92
-    vsscanf("e083,8f6e,b,70ca,1,1,aab1,10e4", "%4hx,%4hx,%1hx,%4hx,%1hx,%1hx,%4hx,%4hx", ...) expected 1892286475 got 757614
-            not ok 3 ","
-        # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:92
-    vsscanf("2e72-8435-1-2fc-7cbd-c2f1-7158-2b41", "%4hx-%4hx-%1hx-%3hx-%4hx-%4hx-%4hx-%4hx", ...) expected 50069505 got 99381
-            not ok 4 "-"
-        # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:92
-    vsscanf("403/0/17/1/11e7/1/1fe8/34ba", "%3hx/%1hx/%2hx/%1hx/%4hx/%1hx/%4hx/%4hx", ...) expected 65559 got 1507328
-            not ok 5 "/"
-        # numbers_list_field_width_val_width: pass:0 fail:5 skip:0 total:5
-        not ok 4 numbers_list_field_width_val_width
-        # numbers_slice: ASSERTION FAILED at lib/scanf_kunit.c:92
-    vsscanf("3c87eac0f4afa1f9231da52", "%1hx%4hx%4hx%4hx%1hx%4hx%4hx%1hx", ...) expected 1257942031 got 2886715518
+diff --git a/lib/test_scanf.c b/lib/test_scanf.c
+index 44f8508c9d88..07444a852fd4 100644
+--- a/lib/test_scanf.c
++++ b/lib/test_scanf.c
+@@ -62,10 +62,8 @@ _test(check_fn fn, const void *check_data, const char *string, const char *fmt,
+ 
+ #define _check_numbers_template(arg_fmt, expect, str, fmt, n_args, ap)		\
+ do {										\
+-	pr_debug("\"%s\", \"%s\" ->\n", str, fmt);				\
+ 	for (; n_args > 0; n_args--, expect++) {				\
+ 		typeof(*expect) got = *va_arg(ap, typeof(expect));		\
+-		pr_debug("\t" arg_fmt "\n", got);				\
+ 		if (got != *expect) {						\
+ 			pr_warn("vsscanf(\"%s\", \"%s\", ...) expected " arg_fmt " got " arg_fmt "\n", \
+ 				str, fmt, *expect, got);			\
+@@ -689,7 +687,6 @@ do {										\
+ 	total_tests++;								\
+ 	len = snprintf(test_buffer, BUF_SIZE, gen_fmt, expect);			\
+ 	got = (fn)(test_buffer, &endp, base);					\
+-	pr_debug(#fn "(\"%s\", %d) -> " gen_fmt "\n", test_buffer, base, got);	\
+ 	if (got != (expect)) {							\
+ 		fail = true;							\
+ 		pr_warn(#fn "(\"%s\", %d): got " gen_fmt " expected " gen_fmt "\n", \
 
-- Link to v6: https://lore.kernel.org/r/20250210-scanf-kunit-convert-v6-0-4d583d07f92d@gmail.com
-
-Changes in v6:
-- s/at boot/at runtime/ for consistency with the printf series.
-- Go back to kmalloc. (Geert Uytterhoeven)
-- Link to v5: https://lore.kernel.org/r/20250210-scanf-kunit-convert-v5-0-8e64f3a7de99@gmail.com
-
-Changes in v5:
-- Remove extraneous trailing newlines from failure messages.
-- Replace `pr_debug` with `kunit_printk`.
-- Use static char arrays instead of kmalloc.
-- Drop KUnit boilerplate from CONFIG_SCANF_KUNIT_TEST help text.
-- Drop arch changes.
-- Link to v4: https://lore.kernel.org/r/20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com
-
-Changes in v4:
-- Bake `test` into various macros, greatly reducing diff noise.
-- Revert control flow changes.
-- Link to v3: https://lore.kernel.org/r/20250204-scanf-kunit-convert-v3-0-386d7c3ee714@gmail.com
-
-Changes in v3:
-- Reduce diff noise in lib/Makefile. (Petr Mladek)
-- Split `scanf_test` into a few test cases. New output:
-  : =================== scanf (10 subtests) ====================
-  : [PASSED] numbers_simple
-  : ====================== numbers_list  =======================
-  : [PASSED] delim=" "
-  : [PASSED] delim=":"
-  : [PASSED] delim=","
-  : [PASSED] delim="-"
-  : [PASSED] delim="/"
-  : ================== [PASSED] numbers_list ===================
-  : ============ numbers_list_field_width_typemax  =============
-  : [PASSED] delim=" "
-  : [PASSED] delim=":"
-  : [PASSED] delim=","
-  : [PASSED] delim="-"
-  : [PASSED] delim="/"
-  : ======== [PASSED] numbers_list_field_width_typemax =========
-  : =========== numbers_list_field_width_val_width  ============
-  : [PASSED] delim=" "
-  : [PASSED] delim=":"
-  : [PASSED] delim=","
-  : [PASSED] delim="-"
-  : [PASSED] delim="/"
-  : ======= [PASSED] numbers_list_field_width_val_width ========
-  : [PASSED] numbers_slice
-  : [PASSED] numbers_prefix_overflow
-  : [PASSED] test_simple_strtoull
-  : [PASSED] test_simple_strtoll
-  : [PASSED] test_simple_strtoul
-  : [PASSED] test_simple_strtol
-  : ====================== [PASSED] scanf ======================
-  : ============================================================
-  : Testing complete. Ran 22 tests: passed: 22
-  : Elapsed time: 5.517s total, 0.001s configuring, 5.440s building, 0.067s running
-- Link to v2: https://lore.kernel.org/r/20250203-scanf-kunit-convert-v2-1-277a618d804e@gmail.com
-
-Changes in v2:
-- Rename lib/{test_scanf.c => scanf_kunit.c}. (Andy Shevchenko)
-- Link to v1: https://lore.kernel.org/r/20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com
-
----
-Tamir Duberstein (3):
-      scanf: remove redundant debug logs
-      scanf: convert self-test to KUnit
-      scanf: break kunit into test cases
-
- MAINTAINERS                          |   2 +-
- lib/Kconfig.debug                    |  12 +-
- lib/Makefile                         |   2 +-
- lib/{test_scanf.c => scanf_kunit.c}  | 270 +++++++++++++++++------------------
- tools/testing/selftests/lib/Makefile |   2 +-
- tools/testing/selftests/lib/config   |   1 -
- tools/testing/selftests/lib/scanf.sh |   4 -
- 7 files changed, 143 insertions(+), 150 deletions(-)
----
-base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
-change-id: 20250131-scanf-kunit-convert-f70dc33bb34c
-
-Best regards,
 -- 
-Tamir Duberstein <tamird@gmail.com>
+2.48.1
 
 
