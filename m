@@ -1,112 +1,128 @@
-Return-Path: <linux-kselftest+bounces-26429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5F51A318AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 23:37:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58B88A318EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 23:41:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 535A83A66B0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 22:37:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32D357A4490
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 22:40:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9A4268FE4;
-	Tue, 11 Feb 2025 22:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0ED26A0CF;
+	Tue, 11 Feb 2025 22:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="faCHSE5A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EnLAzDRc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44D7268FC2
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 22:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FBD26A0CD;
+	Tue, 11 Feb 2025 22:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739313429; cv=none; b=uv0xWb0ZWyEiUQ6TdcFH8Zrhsc/lH7g0p45oaPfgCjgRKTX4ZMxT3SMMqTH4NvZx836g86h431TmumFKn4zHdhtnmh6bONWMzDZoTfb+Lp2HwL/2D50dGH/n6aqqhZJriv4YT/+JUdGyMxRo0r09sW7JvsAwBTtziVPh2jD4nGU=
+	t=1739313528; cv=none; b=a0F3J/lD1bnBUFX69opfMSr99PBDnHVAe07mTYh3o09HGRlWY/+TnNEYKuDXEwskBb2IwbE98hejfhMBv9hYUnVJuf8lnumKNiH5zGJOPfCfBeOjagEeKEJoTJrG6qalYfjBLGZIxZoSC+Vro9baQGpytbexSgDa9ijAaWSOChQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739313429; c=relaxed/simple;
-	bh=q1sN3kNwFoYv6srTktzz9x4Q+lTtCQc0zhJJvewJyGk=;
+	s=arc-20240116; t=1739313528; c=relaxed/simple;
+	bh=rB7BxSHW6EtSoabTXOHtfnbpaHJ0cVwUdAN/POuDev0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YS82t6sim75e6MN1vt6dsQjLOglItgd7Z7GTDPnU1pxLjgGFM7lVfY+jmg4Add94qMDYFdtuVRve5v7N0ITs9iibuAVPooPnt4NQn8yPs+Mpsjfj73WkwEeH+Jbz2Bj2BRi6ljP/7nFwC4xP0JHerG9ZlW6Og58vLTExpwsRbo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=faCHSE5A; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ee9a780de4so9382662a91.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 14:37:07 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XYRVZd8kp6XIYi++l56sC53zebUU5EkYcr1eV6o65THYGVrwlFp3ggEMJhytr8uSbu1lcpI50zQPtFC0LcNKXlKnj/i2DOAkGtiLLEyDl8YXKoqd98hfEU/RKQLMfioTPtEas9tL44SE22Mt5h1WMAvKnv/TNF+hv/fyMAf4pR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EnLAzDRc; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-46fa734a0b8so54883131cf.1;
+        Tue, 11 Feb 2025 14:38:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1739313427; x=1739918227; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zqgo0vzIUKhLbJdiVtuoHIz5/r7b8o5h5B5NAwoEKTY=;
-        b=faCHSE5A4Z3Dr+go34j0gmTWQHw/sNVarD1wLQstYyfPXs1B9Q1tsd3XOH7PNg/nVr
-         3uTo6XvuEeSc8QpA8ZsAunYcDTtsI+BS1v8hjNUTXzr5W3ntKy+n/A6nkwNJzRzPvHBF
-         0G+p2+12BYak4tp25+6QPjRVZ3eRDRVkKT6jE=
+        d=gmail.com; s=20230601; t=1739313526; x=1739918326; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YmBWEKaqUFBzqHGnnve5ouXXEJaAw0Livsmfx5tApoU=;
+        b=EnLAzDRcdIxrLVXkxOphkNCvJNc3RSIqgPL6ec5UFUHTECZE2h+ctWDjSNxlMTka5F
+         NwxhUImVY83+lm0VZgxyQ/rLty7OVUhpxBfvVL2bhGC3wenzRl6Nm0ts+3BZTNSSre2M
+         y9du3GFZNd3oniIfRxaBZcyLkZfeWPO7+yXbZqG8mebmJbbi/hK1vEXVhArBllsNZUUT
+         8Z0fhvMVKkul85L/2xFK4zZbIq7nRK8ZT9dtZCj47URAJNHQzTrw7mEHM53orvD5AG+l
+         v2zYytdihxPUj0XJ6bXW+WOx849MpNaSIM46eebAD7kyfg74881FjSKvrGPzKXa44GLU
+         PD8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739313427; x=1739918227;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zqgo0vzIUKhLbJdiVtuoHIz5/r7b8o5h5B5NAwoEKTY=;
-        b=Tge1mS/dFiW50WHYqLACkSXhhXE1ZzXDxfKZ6pTl6ClUtK0w3Cb67U5bWUKmAZaQhm
-         m2VSQdCyOGNR5PRyCZs4Uy110qbAQzrAmBcXH7l9zq+qgf+arvIOWWClVR1XBFe/hkpE
-         NxjuIheFjmmrybNppQ3T/NUAEzFfzJR6F3MbzGyAn6duMxELHB4GjjVZkj1NwXNkSvAq
-         veodbqQyNri2Y/RFTdTzSo9F2JNcb9tXb0QLg0wJNun/of1xycj/6IYOtVOsf9ipC2hE
-         7NEPb8B1mJifFBYwpYuJ9UthSKWphbczqgdILYCiHfhf1WCAWfs6uHmAcNjqheO5cKBi
-         7nFw==
-X-Forwarded-Encrypted: i=1; AJvYcCWNZE4tUySxl8JJHYN8m9BKf0+Q0ZyLUPNmSz6KnK7qNuRlhx4ffW3LDRVyIbNJ6/d6S3dFk9n8UmrUXnpYzJ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRfMGp/t8HIYhO0FWPl09drgGLBKS+3stOMsXMaphLkua6ADDq
-	3x5gjK+r+eYomxmMYk3ymrTxgupjS6w0a3tJdiSySEPP6wttaOg4azjTJ0n5g3M=
-X-Gm-Gg: ASbGncvDWtWwUewlmj2BO5uvh5+uk54Xt6u/FtwikFH8qCt5ioNCuZq5bwIghNhoBVo
-	fnHGhn1j2PVYypPhTQnpDwlp4irCFhjE8PF541wFE8f9jIHsYufVLFzOnyQCoQk6Wl+y9x1yFFe
-	4xXieOnE532M0N3LvLGqPoeWsjhTH84Z18ZiSgVTqkksl3O9y5T7+RZ0DZ21+HGkrVRAV9R2ktr
-	RUQLrxmAKSK7JoAbaYONiRDBdfcZGUE8zKv7eXCaBhHC5w8J2Dw4nSKJBj0gCimZVYhVzD4r+3v
-	qpWOCwL4q0qGr+6W4dwJtKA337dUeASP7Fo/FDLX6aj+a0gy1/fLJcV99A==
-X-Google-Smtp-Source: AGHT+IF2E+oD8rBAN01jy8O5/Q4OjPQUXJDe986T7YWkvAoRYx6xoB7ddaApRGSCt08+uRl+E8LH+Q==
-X-Received: by 2002:a17:90b:1f82:b0:2ee:3cc1:793a with SMTP id 98e67ed59e1d1-2fbf5c6d3eamr1174780a91.29.1739313427133;
-        Tue, 11 Feb 2025 14:37:07 -0800 (PST)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f36560c94sm99647275ad.91.2025.02.11.14.37.05
+        d=1e100.net; s=20230601; t=1739313526; x=1739918326;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YmBWEKaqUFBzqHGnnve5ouXXEJaAw0Livsmfx5tApoU=;
+        b=Wnh0TTQZ6sm+Pd0flz8gjQKH090IVPimIjp9H1Zxl4Hs2RwAsFEjXX1fGKFffpW6BN
+         YMjU15E+JH+cfrU2GG5AdBdBvfkbdEZ4n33BNWgYuVMGD/uYWPEFrZQJYNrKkMIWjt4D
+         g7k3Z8YN+KOXMK7wWQQvMXLXKhUPBrmwx8CT95GcmwQNchhZPwYGiEZltwGgL5dGi8cG
+         egKH+eq9qv9+j/f778835QCxE4856Lp9By8zU32bRagHTuUbGbapJjRqlLaeFu4GR7AV
+         cG1KgtRpnOldRYowm8mxRFpPfKIA3FvOfmdh71XkdFRtLQUeiZCYLjONCV6ZXua9Q1Tf
+         bD3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWP9JzD88YRVI1IrXDYfYnP/sGmByoWBk7UJRBrxuxWThqw79rjeS/0PAfyTOMXyQUlJB6OLw6ZCGtxQ2fkzJ6t@vger.kernel.org, AJvYcCXRFk9yCg3S6og4oeUD6CFMRrINctT/4wiKszkfPMluXZ5q96j8QL9DGvmEuBbJRxPMvocGfkBItvrc7Qo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAi/H8h9SWMiAev9T8dLu1J1wQ0NPqJCcmk3hC4TFToXHnNiMW
+	eKgiCCzSzwohMVHnT0FpYwTTKl0YtQ6TIEkyRAmw0/jt1wBR2ZLk
+X-Gm-Gg: ASbGncsjIZQZmDRAjKzZ/wEbOGq2cAm8BEMJWVKHs6EhGkl5gwvFCvrvK0d+bI1qHQ5
+	CKC6x/tyPulpeioYxk9e2HdHpGGUp8Up0GS5IU6HDe5bJNM6T/px/C5PDv9b/Gzk7NsTQRZICMZ
+	7gkQwQLuKVnt3bKgiAwgEBa4+4Y3qQuOzgVAvUMVBF32z3ldqO2sz/B37Jz4Cq3P8lfKzKLVFlD
+	TQ0gXTJyodFtGSlwaS57WyQ6yf24hl7OetONdmu6xem/e5XcpTa2tre98el/iB+MVrMEz91/W6T
+	Y69fl4eAgNrmYUrerADlXjFce62lLT9ue+d3hh82KJopibUwW/Z6+p+5eGTComO5rYXzfaOEq3y
+	lUmdCJw==
+X-Google-Smtp-Source: AGHT+IEO9AyXzekNhsd8EdtjWApnNbjJdg5zmAFdkNj4BVJjZli/lTN21xPpUXmaP+8WJPWp5aYc3Q==
+X-Received: by 2002:a05:622a:5c7:b0:467:8217:aae3 with SMTP id d75a77b69052e-471b070d34emr8123011cf.47.1739313526095;
+        Tue, 11 Feb 2025 14:38:46 -0800 (PST)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e44e550783sm51208976d6.86.2025.02.11.14.38.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 14:37:06 -0800 (PST)
-Date: Tue, 11 Feb 2025 14:37:03 -0800
-From: Joe Damato <jdamato@fastly.com>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-	horms@kernel.org, kuba@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v6 3/3] selftests: drv-net: Test queue xsk
- attribute
-Message-ID: <Z6vRD0agypHWDGkG@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Stanislav Fomichev <stfomichev@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-	horms@kernel.org, kuba@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-References: <20250210193903.16235-1-jdamato@fastly.com>
- <20250210193903.16235-4-jdamato@fastly.com>
- <13afab27-2066-4912-b8f6-15ee4846e802@redhat.com>
- <Z6uM1IDP9JgvGvev@LQ3V64L9R2>
- <Z6urp3d41nvBoSbG@LQ3V64L9R2>
- <Z6usZlrFJShn67su@mini-arch>
+        Tue, 11 Feb 2025 14:38:45 -0800 (PST)
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 24AC1120006A;
+	Tue, 11 Feb 2025 17:38:45 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Tue, 11 Feb 2025 17:38:45 -0500
+X-ME-Sender: <xms:ddGrZ-7nz1pK_q1szOpi7W3KVQfGB-XsCxtvYKKHSFCUYYnRHFOyAQ>
+    <xme:ddGrZ36wQ_AtIwyIEnrzPz9MTqCxGb1HYPIQBXW-9CQ0-HeLOyWL3Jr0oYh4_Wk8-
+    KKepFtQkcS5Nh2ELg>
+X-ME-Received: <xmr:ddGrZ9ex6wzy9h4GEuXb4Ji6kfd6in0yO8ApFAYVyRCsSp9VB3QMJ5oYwzg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
+    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
+    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
+    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
+    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
+    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeduiedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepthgrmhhirhgusehgmhgrihhlrdgtohhmpd
+    hrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtthhopehp
+    vghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehmihhnghhosehrvg
+    guhhgrthdrtghomhdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtoheplhhonhhgmhgrnhesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprghkphhmse
+    hlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehshhhurghhsehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:ddGrZ7JOOesaVFaui5eNoxq2f3auchwWtsWyE8m66QHx71LpWfYXuQ>
+    <xmx:ddGrZyIydsiH7cRzEnKiS0iDVYY7mNhrlOBMcYSFPj6QZ8Nb625riA>
+    <xmx:ddGrZ8yAnL9Y1Zxsi6NCcrSk0iHRiQjGbpNH7bQ-TWVsFvnmqdzh7w>
+    <xmx:ddGrZ2KwB0gJlijq0EF6JOpuOYid2afthp6lzK_V_SKL7O9MEprt6w>
+    <xmx:ddGrZ5byxjJ6W8bf1lypP9hPFBx7z2Cn6VnXABb2jNt_YIezVqI3F1g5>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Feb 2025 17:38:44 -0500 (EST)
+Date: Tue, 11 Feb 2025 14:37:21 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: David Gow <davidgow@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
+Message-ID: <Z6vRIZk7DsSNooFZ@boqun-archlinux>
+References: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -115,80 +131,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6usZlrFJShn67su@mini-arch>
+In-Reply-To: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
 
-On Tue, Feb 11, 2025 at 12:00:38PM -0800, Stanislav Fomichev wrote:
-> On 02/11, Joe Damato wrote:
-> > On Tue, Feb 11, 2025 at 09:45:56AM -0800, Joe Damato wrote:
-> > > On Tue, Feb 11, 2025 at 12:09:50PM +0100, Paolo Abeni wrote:
-> > > > On 2/10/25 8:38 PM, Joe Damato wrote:
+Hi Tamir,
 
-[...]
-
-> > > > 
-> > > > This causes self-test failures:
-> > > > 
-> > > > https://netdev-3.bots.linux.dev/vmksft-net-drv/results/987742/4-queues-py/stdout
-> > > > 
-> > > > but I really haven't done any real investigation here.
-> > > 
-> > > I think it's because the test kernel in this case has
-> > > CONFIG_XDP_SOCKETS undefined [1].
-> > > 
-> > > The error printed in the link you mentioned:
-> > > 
-> > >   socket creation failed: Address family not supported by protocol
-> > > 
-> > > is coming from the C program, which fails to create the AF_XDP
-> > > socket.
-> > > 
-> > > I think the immediate reaction is to add more error checking to the
-> > > python to make sure that the subprocess succeeded and if it failed,
-> > > skip.
-> > > 
-> > > But, we may want it to fail for other error states instead of
-> > > skipping? Not sure if there's general guidance on this, but my plan
-> > > was to have the AF_XDP socket creation failure return a different
-> > > error code (I dunno maybe -1?) and only skip the test in that case.
-> > > 
-> > > Will that work or is there a better way? I only want to skip if
-> > > AF_XDP doesn't exist in the test kernel.
-> > > 
-> > > [1]: https://netdev-3.bots.linux.dev/vmksft-net-drv/results/987742/config
-> > 
-> > I'll give it a few more hours incase anyone has comments before I
-> > resend, but I got something working (tested on kernels with and
-> > without XDP sockets).
-> > 
-> > xdp_helper returns -1 if (errno == EAFNOSUPPORT). All other error
-> > cases return 1.
-> > 
-> > Updated the python to do this:
-> > 
-> >   if xdp.returncode == 255:
-> >       raise KsftSkipEx('AF_XDP unsupported')
-> >   elif xdp.returncode > 0:
-> >       raise KsftFailEx('unable to create AF_XDP socket')
-> > 
-> > Which seems to work on both types of kernels?
-> > 
-> > Happy to take feedback; will hold off on respinning for a bit just
-> > incase there's a better way I don't know about.
+On Mon, Feb 10, 2025 at 10:59:12AM -0500, Tamir Duberstein wrote:
+> Convert this unit test to a KUnit test.
 > 
-> Any reason not to enable CONFIG_XDP_SOCKETS on NIPA kernels? Seems a bit
-> surprising that we run networking tests without XSKs enabled.
 
-I can't comment on NIPA because I have no idea how it works. Maybe
-there is a kernel with some options enabled and other kernels with
-various options disabled?
+I would like to know the pros and cons between kunit tests and
+kselftests, maybe someone Cced can answer that? It'll be good to put
+these in the commit log as well.
 
-I wonder if that's a separate issue though?
+Regards,
+Boqun
 
-In other words: maybe writing the test as I've mentioned above so it
-works regardless of whether CONFIG_XDP_SOCKETS is set or not is a
-good idea just on its own?
-
-I'm just not sure if there's some other pattern I should be
-following other than what I proposed above. I'm hesitant to re-spin
-until I get feedback on the proposed approach.
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+> I tested this using:
+> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 ww_mutex
+> 
+> On success:
+> ; [12:48:16] ================== ww_mutex (5 subtests) ===================
+> ; [12:48:16] ======================= test_mutex  ========================
+> ; [12:48:16] [PASSED] flags=0
+> ; [12:48:16] [PASSED] flags=1
+> ; [12:48:16] [PASSED] flags=2
+> ; [12:48:16] [PASSED] flags=3
+> ; [12:48:16] [PASSED] flags=4
+> ; [12:48:17] [PASSED] flags=5
+> ; [12:48:17] [PASSED] flags=6
+> ; [12:48:17] [PASSED] flags=7
+> ; [12:48:17] =================== [PASSED] test_mutex ====================
+> ; [12:48:17] ========================= test_aa  =========================
+> ; [12:48:17] [PASSED] lock
+> ; [12:48:17] [PASSED] trylock
+> ; [12:48:17] ===================== [PASSED] test_aa =====================
+> ; [12:48:17] ======================== test_abba  ========================
+> ; [12:48:17] [PASSED] trylock=0,resolve=0
+> ; [12:48:17] [PASSED] trylock=1,resolve=1
+> ; [12:48:17] [PASSED] trylock=0,resolve=0
+> ; [12:48:17] [PASSED] trylock=1,resolve=1
+> ; [12:48:17] ==================== [PASSED] test_abba ====================
+> ; [12:48:17] ======================= test_cycle  ========================
+> ; [12:48:17] [PASSED] nthreads=2
+> ; [12:48:17] =================== [PASSED] test_cycle ====================
+> ; [12:48:21] ========================= stress  ==========================
+> ; [12:48:21] [PASSED] nlocks=16,nthreads_per_cpu=2,flags=1
+> ; [12:48:23] [PASSED] nlocks=16,nthreads_per_cpu=2,flags=2
+> ; [12:48:23] [PASSED] nlocks=2046,nthreads_per_cpu=3,flags=7
+> ; [12:48:23] ===================== [PASSED] stress ======================
+> ; [12:48:23] ==================== [PASSED] ww_mutex =====================
+> ; [12:48:23] ============================================================
+> ; [12:48:23] Testing complete. Ran 18 tests: passed: 18
+> 
+> On failure:
+> ---
+[...]
 
