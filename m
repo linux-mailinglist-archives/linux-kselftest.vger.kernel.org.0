@@ -1,164 +1,156 @@
-Return-Path: <linux-kselftest+bounces-26269-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08406A2FE90
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:43:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C56A5A2FEAB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 01:01:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BECD83A5D5B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2025 23:42:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66F091666EB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45513260A2B;
-	Mon, 10 Feb 2025 23:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24CD2CA8;
+	Tue, 11 Feb 2025 00:01:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CnF5EYED"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bo6HhKy4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38311DE3B8;
-	Mon, 10 Feb 2025 23:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A7D380;
+	Tue, 11 Feb 2025 00:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739230982; cv=none; b=qH7al10kpRaIzh8OUhWWhVsEBHOjn5US3jO1Z/f/UXjDbXpNRxdgdMnt/uw1HBmX0oUyyqdbLJCrtEV6OQ16OxuFXcBPYMlUnv6j2G5OEdPhQ9oq/u/uW5SsgDcsES6Z98+DYjW+dkwG7zv5+PBscVH/t6pC9KJlmIKAv5CpS5A=
+	t=1739232064; cv=none; b=ia2sn+vLnJ1BGnIbMKPUkyz9SogH+1WNXwF0rCLt3FHk+Qn/oQCQ0KKxwaVAyAYvLtenOrcGxP7GIkWlchgA0f+9uzTLc2IzrUQinDXw5PS4O5OJKdpXSrU/FUhVror136OgMq52jnbnBe3s0mx3EDaYwBFfXWeLXRr8wAIXyYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739230982; c=relaxed/simple;
-	bh=MUIDd2fI73QZi6v0y5Fvhz8OUmwuDCtfk7eH7bHgesY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q5BEBNWaNMsy7hS9a4Mav/c1NyL6bOUJlCwRfbpjGhJNO2zO3Adcuysra7gry60yDD+TCXOA5h8PjRrbjb7PtnhC7UCATZYyPZ5L2PaCvAPcARknmhLMsQAP7hQ2pTu9wnfyeD7KJ4zu8ep2MjZDl1nr4TXYiHmryJ6w0v3h+18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CnF5EYED; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21f5660c2fdso64765965ad.2;
-        Mon, 10 Feb 2025 15:43:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739230980; x=1739835780; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hvhku1/z5ISGPVdL1BlHcUNOUe+L4Ex94wS+iRNs3Co=;
-        b=CnF5EYEDELE95V5U5WCgqmoBgp6Yiau9wanowXL4nAZc4pNFSNWU0fxbhXRaq1CTLk
-         4vc2GR373bBHxhWW+VcKXdzghHPXG/Nj8aCc4TQQurj/iMoAg2pdCyuxSjmRzKoiMHSA
-         xUuuDg1HtmPWJ+K8Cv2xNVq+rasYJAbcyEv2Cwbi6QY34d8aWNQAv5sffnLzCThikWmI
-         Zy6DIQpeUSlvJyjxeWTiQ2wEJAaMMO2cMc8/nFgRZwenNZ7troINypz13Ufqyd/7Vdw0
-         DM28zwzOvB+DEqMrWPIpG3kcZp1swL5bmG4A4W2zZR2rUKZ4J4rylcHLugbM3JgkctYQ
-         GhEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739230980; x=1739835780;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hvhku1/z5ISGPVdL1BlHcUNOUe+L4Ex94wS+iRNs3Co=;
-        b=fGQRC0yqz/O5pxEf28Px0OkH1/W/y/yhPOhDPoTtVNPd71kawLBWHZSMsgOkOB1GEh
-         7Z9ivt0Q+nE1Wz3JEPiZ7X0dBoOxlc2nKbWvnImDtOWW5r64tsERcNHe/UByVjc46XH4
-         zXVHfEwP2FAsR3yYIvVk4Xk7pueKPmcwMgV9O6adZTFpH6Jeh9Wgjk9+7PV+V4EJ6+/O
-         mZBNfmS9kdrUGDOWcCqWi6niOk9M2cig/Oml+e33mfJhfVV5fHgsTCP5pKFIaN6WbUKQ
-         ArLC57Po/Fg9htssy0OTBBKBmRZH2NziyjZQtBf0U9+iH587/sTsedw2t/gyX6/PH97h
-         92GQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUWwmjpUuxPE3x1VvdQDsMYcIN++tAm5MTGLjNLVuhG827W64moJ9s6uivy4qS528q740iBTmwie1w=@vger.kernel.org, AJvYcCUrDIDALdL3KOBG/UxzJOF5IrTaC/pz7wP3UQ7Wkgm7Fgy8w1Qa78ZpKS5xeuI6xNJby3yc3KYJf4nQqOut@vger.kernel.org, AJvYcCVL+eC8LUtDfGvO5btUZK632in6zdwjg+4rYXkvQmqXkeOUtQYg/1VC57OSuofj8Ds7bYQh+B4IVMW32aJtxc2c@vger.kernel.org, AJvYcCX9rRvUw2rCaE9b7JAHunouS/SXYsmAvn4axWhSoXRrQlvQkxX2Nt71vsyUVQwHWlqXtLBqhzwd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIksHFjN9unX5yAQqFkvDxbexR8ygoPkcih+ijSyb1N2sAE6+b
-	YlpHr4d+NQS5o/usOg7MA4Snv56fyIvd104PZetz6ruvGE/KSA9D
-X-Gm-Gg: ASbGncumo5F8DiZ2r7K3LeCSN74F3kPmigL4n6WzMjpWxBGD8MOwMHDXeCEE3tnu8P+
-	PyTuO/hNCEZmM21+EikMzx/wohFW9QcJAwTtjO3rhjE9YC7vfATKSAufTQfQMvIVpfGzVQOpOsH
-	8Nt/PixFx8QcTtSiAFfGbajv7dHcfcHW+PusBIUxNxABbdJ2hBghGCUCua1cScFL/uztcWxGg0y
-	GFqIpBKsQ8cryzxjiA0z2XnOgxuSPHka2csqr2zK3uOdElQp3wR1fhwJl7Ldf9y2SOlO9BPut5+
-	mBlAWK3Jb8bC5q4=
-X-Google-Smtp-Source: AGHT+IH/fffzdjw2z+TAvMPwE3HgU+tyPfoL2nybzuCe5nAEYQkGbNqUIgJ55joJVM1uAlrE35NZOg==
-X-Received: by 2002:a17:902:f790:b0:21f:614e:9e7c with SMTP id d9443c01a7336-21f614ea049mr227369245ad.25.1739230979741;
-        Mon, 10 Feb 2025 15:42:59 -0800 (PST)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3650e6aasm83909935ad.12.2025.02.10.15.42.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 15:42:57 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 98551423E4E4; Tue, 11 Feb 2025 06:42:51 +0700 (WIB)
-Date: Tue, 11 Feb 2025 06:42:51 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, rdunlap@infradead.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next v5 8/8] netconsole: docs: Add documentation for
- CPU number auto-population
-Message-ID: <Z6qO-_Ebnn5OTkgy@archie.me>
-References: <20250206-netcon_cpu-v5-0-859b23cc3826@debian.org>
- <20250206-netcon_cpu-v5-8-859b23cc3826@debian.org>
- <Z6Vm3ny5VN6mcKJN@archie.me>
- <20250210-crafty-snobbish-pogona-83e904@leitao>
+	s=arc-20240116; t=1739232064; c=relaxed/simple;
+	bh=KJAXYKFfcDTkKPOe7RLg/h85JfAGZ7OLrRd3HvGoHPo=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=rVp6f8oNEkdAOKEuOK/QYyVuSl2PWPl2Wq0jDzbAQojPiMmCxVGOUbKnmYrCpx8MMn1xMfjtWrYzlM3oM42IA1f1DV/lS12+GJ4p75d5shUW9wceqxJQth64dpTNGtxY4x4BcpMNQxhwiHWBILcFL/CgPTXvXPK2sFAbNvezRfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bo6HhKy4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACA0C4CED1;
+	Tue, 11 Feb 2025 00:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739232063;
+	bh=KJAXYKFfcDTkKPOe7RLg/h85JfAGZ7OLrRd3HvGoHPo=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=Bo6HhKy4FsJamOKzCtjqK8uo3ZdPNN7akmZSAOEg1QBxFGF+Ia49S7UgP5MLfHEw6
+	 VV13dCI0D8/e+E3yeKI7FJknC423IhA3c+FCZMiuXff703v5eLHiF+vI+WrSf6uV/Z
+	 E4GRMlzSd17XEfk39LXUf8ByV/zJydc+A7dQkD9nFG1g0yTm47zdcqcPbN+1LxXaAD
+	 xLEbWuk6mUpoG0mikMzcpi58EbTNuqx5ozW/aIUDnR2AL86oA4ZOx9MYiUj1S7PpHM
+	 Ywl98ZAAtikOMJ1qz9yTuXtvfoM0Vg+UhFXqGMJpzuAsVLPrKkAyYr8jYReK+/cMjD
+	 kT8e776dGaSjA==
+Message-ID: <21f98687-f715-449c-86f0-c095ea499450@kernel.org>
+Date: Tue, 11 Feb 2025 00:00:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jrZ3IkBhdvf9Qfh8"
-Content-Disposition: inline
-In-Reply-To: <20250210-crafty-snobbish-pogona-83e904@leitao>
+User-Agent: Mozilla Thunderbird
+From: Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH v2 2/2] tools: Remove redundant quiet setup
+To: Charlie Jenkins <charlie@rivosinc.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20250210-quiet_tools-v2-0-b2f18cbf72af@rivosinc.com>
+ <20250210-quiet_tools-v2-2-b2f18cbf72af@rivosinc.com>
+Content-Language: en-GB
+In-Reply-To: <20250210-quiet_tools-v2-2-b2f18cbf72af@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+2025-02-10 10:34 UTC-0800 ~ Charlie Jenkins <charlie@rivosinc.com>
+> Q is exported from Makefile.include so it is not necessary to manually
+> set it.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  tools/arch/arm64/tools/Makefile           |  6 ------
+>  tools/bpf/Makefile                        |  6 ------
+>  tools/bpf/bpftool/Documentation/Makefile  |  6 ------
+>  tools/bpf/bpftool/Makefile                |  6 ------
+>  tools/bpf/resolve_btfids/Makefile         |  2 --
+>  tools/bpf/runqslower/Makefile             |  5 +----
+>  tools/lib/bpf/Makefile                    | 13 -------------
+>  tools/lib/perf/Makefile                   | 13 -------------
+>  tools/lib/thermal/Makefile                | 13 -------------
+>  tools/objtool/Makefile                    |  6 ------
+>  tools/testing/selftests/bpf/Makefile.docs |  6 ------
+>  tools/testing/selftests/hid/Makefile      |  2 --
+>  tools/thermal/lib/Makefile                | 13 -------------
+>  tools/tracing/latency/Makefile            |  6 ------
+>  tools/tracing/rtla/Makefile               |  6 ------
+>  tools/verification/rv/Makefile            |  6 ------
+>  16 files changed, 1 insertion(+), 114 deletions(-)
+> 
 
 
---jrZ3IkBhdvf9Qfh8
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
 
-On Mon, Feb 10, 2025 at 03:07:24AM -0800, Breno Leitao wrote:
-> Hello Bagas,
->=20
-> On Fri, Feb 07, 2025 at 08:50:22AM +0700, Bagas Sanjaya wrote:
-> > On Thu, Feb 06, 2025 at 03:05:59AM -0800, Breno Leitao wrote:
-> > > +.. note::
-> > > +
-> > > +   If the user has set a conflicting `cpu` key in the userdata dicti=
-onary,
-> > > +   both keys will be reported, with the kernel-populated entry appea=
-ring after
-> > > +   the user one. For example::
-> >=20
-> > In that case, shouldn't the kernel autopopulates numbers of the rest of
-> > CPUs?
->=20
-> Do you mean listing all the CPUs that are *not* sending the current
-> message?
 
-Nope.
+> diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
+> index 4315652678b9f2e27e48b7815f3b9ddc70a57165..bf843f328812e10dd65a73f355f74e6825ad95b9 100644
+> --- a/tools/bpf/bpftool/Documentation/Makefile
+> +++ b/tools/bpf/bpftool/Documentation/Makefile
+> @@ -5,12 +5,6 @@ INSTALL ?= install
+>  RM ?= rm -f
+>  RMDIR ?= rmdir --ignore-fail-on-non-empty
+>  
+> -ifeq ($(V),1)
+> -  Q =
+> -else
+> -  Q = @
+> -endif
+> -
+>  prefix ?= /usr/local
+>  mandir ?= $(prefix)/man
+>  man8dir = $(mandir)/man8
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index dd9f3ec842017f1dd24054bf3a0986d546811dc4..6ea4823b770cbbe7fd9eb7da79956cc1dae1f204 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -7,12 +7,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>  
+> -ifeq ($(V),1)
+> -  Q =
+> -else
+> -  Q = @
+> -endif
+> -
+>  BPF_DIR = $(srctree)/tools/lib/bpf
+>  
+>  ifneq ($(OUTPUT),)
 
->=20
-> Let me come up with an example to try to understand this better. Let's
-> suppopse I have a machine with 64 cores, and cpu=3D42 is sending that
-> current message, then I would see the following on the dictionary:
->=20
->  cpu=3D42
->=20
-> You are suggesting we send all the other cpus, except 42 in a "key"?
 
-Sort of.
+This is OK from bpftool's side, the GitHub mirror has a Makefile.include
+included from both main and doc Makefiles, and where I can move this
+definition.
 
-I mean, on the dictionary, we would see user-defined cpu number on one cpu,
-and kernel-generated numbers on the rest.
+Acked-by: Quentin Monnet <qmo@kernel.org>
 
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---jrZ3IkBhdvf9Qfh8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZ6qO9AAKCRD2uYlJVVFO
-oyo6APsFj5scWxy8KkPllfChAVz5wqVh0oignotmAl3UJbIfqwD/RuuRG9shJ5JF
-mRYIV7kgg8Aec4+MY+9ni4010HWTrAc=
-=R/cL
------END PGP SIGNATURE-----
-
---jrZ3IkBhdvf9Qfh8--
+Thanks
 
