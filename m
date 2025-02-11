@@ -1,145 +1,207 @@
-Return-Path: <linux-kselftest+bounces-26352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53867A309D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 12:20:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F72AA30A60
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 12:39:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94D0E1626F9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 11:20:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F05B1616C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 11:39:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4811F9AB6;
-	Tue, 11 Feb 2025 11:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E79253B67;
+	Tue, 11 Feb 2025 11:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZTNGrui"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ws7G5vBd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA961F9A9C
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 11:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B76E253B45;
+	Tue, 11 Feb 2025 11:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739272772; cv=none; b=FaYSB9MRrqqv6lTiCJsXc94uqftsROS+39xTzui0BX2HhWMWBVLoApvE8NPuOGYd/GzoNMC4mYZdMBGH5Fpo6GVuJ70ZZfO3zoBXk3CesskiKo6JJdU5K6VGefJpeVIB4xsqjWdjTW9k//g/nR/ekLcwj9cEX4i+0F/x5hEJIXk=
+	t=1739273699; cv=none; b=FO4+4aDledEA7J2JqZQ/NSn8uM1HcNFUsFsl8vWBXBtrPeRU7rBTto2wLq5zNrcVL4wijwSgBwY5GvVmfoghR8ELK1KegmyA0EphOdWOaB2EXYy8R+JCdCoJ3+rIPt86zUV6ra7SNKzI03HlwmHt7p2axzDflf8hcIW1QKqGaeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739272772; c=relaxed/simple;
-	bh=A6kDijY1CxU3jwpKODbbC8vCmkKQJjjacTCdiLn75Lo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vDDPTWO4tp8LnZhpaTsiVSMXdLCpD1kNNopjrB30sd3VEi4BQg2XvKnudp6n5/wYEaBieBBovQY7Zq+D+Mno41WH0+UV78539jj0X+/B2Oo0Y/BlCyr5bSWdq66yR+2Iy0Tc5zQKKUru7Kmte8WrhvqSvzlJ4dztSk4/o2RHfYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZTNGrui; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739272769;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mKKlOAHFJNzqARLCniSKjEWDKr2MGQlvqNtXg2rOPEI=;
-	b=DZTNGruizautB6a7PHPwXoJQ8Jz5A0PLuL6uG05O9qaPQ71pTlaBw1yNWX8KBTeP3RZ0Ys
-	0gMFEo/NUgsqT4McL2+4RE9ftJWoviw8WNsRV+xmFzweQS/epn+Rp0XwQm4dVYj9bNTqO1
-	8SN3sgPPn8CXt5bS/iKV4Lm03xwPSAg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-453-X1nB6LZEN6yzjiHDLP2tmQ-1; Tue, 11 Feb 2025 06:19:27 -0500
-X-MC-Unique: X1nB6LZEN6yzjiHDLP2tmQ-1
-X-Mimecast-MFC-AGG-ID: X1nB6LZEN6yzjiHDLP2tmQ
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4393535043bso14950135e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 03:19:27 -0800 (PST)
+	s=arc-20240116; t=1739273699; c=relaxed/simple;
+	bh=wyXvLopBFLQlFPW/k8CEdG/b31WiZUfzxGhdq0vg/wU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S+c17gKidrmjungnwsRsZuxohQqWoCLRaEPv28oYJEhXpddgd/iQFqOHwfahwP4sOQ9h1t3k0O3MtII5PkOVGDXCkirp0A+xR/sT3ouSc6ln0/IcHrvsl8KC2PANpmEewMaUyv9fQ5hVQ56uQ/JBDsxCju9q1naD42XuzDxRq3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ws7G5vBd; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-308f04beb24so15084201fa.2;
+        Tue, 11 Feb 2025 03:34:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739273695; x=1739878495; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wyXvLopBFLQlFPW/k8CEdG/b31WiZUfzxGhdq0vg/wU=;
+        b=Ws7G5vBdXc532VwwgvWCO80RlkUrk7X0fVbu1HgpFuF9yDSUNuW6gPDWU5NgVjPUMJ
+         FfgEsxF/DDxeLn+svRjWUJOFYgt6na/Qb0EU7Hrzf9M1jkyCKoYHuyQrDI0le6fZd9y7
+         BY1yaDFjL+4/WkJMGwuSCEKvqcece95SbTGdluyvntQdgsTgkESz3gJRo08YmNZ1Y3PR
+         P9+/AKh/oxIXADb7QBaaFRPO+VHRuB5m7T41fsl7CQWIzXhfBuMjr0s3ZX1BuSxjX62k
+         BLzYND54jDjC6YwgqsFla1qF2FZXjDGRGhLGdzhtrjC2xjym4npb3ZX9QD9IAszKNaCl
+         pglA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739272767; x=1739877567;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mKKlOAHFJNzqARLCniSKjEWDKr2MGQlvqNtXg2rOPEI=;
-        b=UQ8UK1jtt00mwx+GfF3802ruu18Ud2ZWz7E88p7CHlTE3T0sTpwSuLiNpTUryRNF9S
-         fuTn5oevwLjYG+AY261ClUbk03Lj5ut6Fw4Co/ujECAN47qYK5a7nfrOR3BK/2DpSCc3
-         +q6UKMkn5FUQ7X+N86WXkYO8unslbG3Izyy0QfnqFtfBNKiNKNMKog5eNJhHKQlSDDaI
-         iWJBS7uTeElPgL8xgc4Och4IeRPsCnAP36zSHjtrIXjNLl7wU7WZyMz1QL5eXtG+RE87
-         xIFv0qSjS+m/gXjYxwf8eDkpM45PyN8jXYzNQB0ahn+Dl7huBG5ebs0Dry8OYfmjelhv
-         KFyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpOpQQgzhNGUNcaEhCPEXJieUni4rK/rJ3QrN35N98J1a7B9zmYCPtE/N+aALFXmwQp0awmVbM/IvIztfhOtc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqvJesO6Sc30Sv8R/RhxFW3SqjEHmapY2ptZdRjOGVfw3Hs5S+
-	eI9+1Rh0w8gMmX7BjKQmXfeHx5R/Q6nnMI6+DDTjWsMXjESiUKLyN7On7R8rAUTYDgRvW57pEaZ
-	0T5vVaymrv4W+t47kjkZdv9JNI8CxvAXEsEIUlF9WBVZlS4URrit3k6D/XMWvWxLzKA==
-X-Gm-Gg: ASbGncu1m++ugGQHCxcQ2Fb5HcsAPkR6w8ljNYpnOCDSvN5qCj1oEiUoP8ckCG1E4X1
-	hE64xrRmSIwMe3mNuHx+3OaVMO+F/obEDBzluaUbcBRthjvJj84RETsvJEpeufBjbM/ghmLnxEf
-	mzovoaunMilLO0celzMbjKqwsSud7mWkuPXNmGD/MVPdViSgmKbPoJ1wiQJwetWBMgVy7NxMWme
-	262szHTybOdqsQ3iH2Na4QRqwYTxTVAj2IbKMr9If6TWSR8YggNWwvSX79/YJF/jzbEr3rNabQe
-	Gs+KbNw5wsJeHlAIAUppnAP6OhymNCHlUr4=
-X-Received: by 2002:a7b:cd17:0:b0:439:33ac:ba49 with SMTP id 5b1f17b1804b1-4394ceaf87fmr25597385e9.1.1739272766794;
-        Tue, 11 Feb 2025 03:19:26 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFJz9n+AsvlWqCu6BA+8Vdyt20fjJ6R8Eet6qzeh2S/tTdd/2jLdGSZwJRO0O1iAJUykgpigQ==
-X-Received: by 2002:a7b:cd17:0:b0:439:33ac:ba49 with SMTP id 5b1f17b1804b1-4394ceaf87fmr25597135e9.1.1739272766384;
-        Tue, 11 Feb 2025 03:19:26 -0800 (PST)
-Received: from [192.168.88.253] (146-241-31-160.dyn.eolo.it. [146.241.31.160])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4394f3b8846sm9865315e9.1.2025.02.11.03.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Feb 2025 03:19:26 -0800 (PST)
-Message-ID: <72634e76-7bb2-48d5-ab21-9d5e86adee9c@redhat.com>
-Date: Tue, 11 Feb 2025 12:19:24 +0100
+        d=1e100.net; s=20230601; t=1739273695; x=1739878495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wyXvLopBFLQlFPW/k8CEdG/b31WiZUfzxGhdq0vg/wU=;
+        b=qspmgNnkVsgsENrT9rn7gIDnvBipyzdaf4viLsXOBzqMBLZb+7EE8dpmLNNzSbaUAJ
+         U6YPVCzHGR2Qgudaht9p8vrD2pLUgAKco0IkcxbK44Xl59SeQXAWUXLcwrECEcYSTyPO
+         lejE6Rssz1U861xzYHwSNMLVszW9qVMQ4J5MXTme3DDKmJix0sOtxIYg8mHvzUjNYjQp
+         sZfIsOccQXdaQt/KGi66F84MsrVA66W408F8QBX1KZjsRQofru9ZHG/7/SNu7PPuNTAY
+         k/lt7maGkAaMKKcMIWn+OIMqO3aPuPrZgSbILd3QIlgsFjisLQ5ubHRXoH/URnSG9xnS
+         xscQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUg2Shpp/deQxXGf8vr00kwvz3Y2r0AsP79JH9dMgYtnxGyaMuzJUWhyJv+9ohe+s8YgC0+5PVz/pAOvRn3Sf97@vger.kernel.org, AJvYcCWXAJ8Gy6N2keboY09/Hkve78YcHBy9a67hkL/nxDaw0eY67058i9k5UQZ7cUDtmdD7tBbdmcD+87Yj/d4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeUzAWMm5yMw9uT91VCb5w2OQv1hDGqpkBXHT+kSFwqzoqRMU5
+	v34HwQC5vFeOr797a0MunznhUwwR16YubgMw+7KknbX+zFQmm6dStTvgiFImhkF/YpOETtjq4Rc
+	+D9rRmmXUz2taUHf0/U0YNWIsztU=
+X-Gm-Gg: ASbGnctNogzY+QhbrNL17sNQRtrPwVnPrQnKfeQ7IjqnLChk7ecAHX0QHiYsopkSD1g
+	9p588D52sn7TtLjor8SMsTQQfsBROeqALp1zHgmmbcSMEcbhlyQoKTAb9drXDllHTGnFKlZNbnN
+	8g/o1H29pn27XbBzdrEMSx/UiBsw6+
+X-Google-Smtp-Source: AGHT+IGmEB14jF8lIa6nowbA8IXD6SluUmrQkSpS116NgUH3mpfZzJ0Ewrr7WpDNnU+D8BsYok6UUzkBmcfw4FO1/dg=
+X-Received: by 2002:a2e:9fc2:0:b0:308:f01f:182c with SMTP id
+ 38308e7fff4ca-308f01f1e9cmr25851901fa.12.1739273695238; Tue, 11 Feb 2025
+ 03:34:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2] selftests: net: Add support for testing
- SO_RCVMARK and SO_RCVPRIORITY
-To: Anna Emese Nyiri <annaemesenyiri@gmail.com>, netdev@vger.kernel.org
-Cc: fejes@inf.elte.hu, edumazet@google.com, kuba@kernel.org,
- willemb@google.com, idosch@idosch.org, horms@kernel.org,
- davem@davemloft.net, shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20250210192216.37756-1-annaemesenyiri@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250210192216.37756-1-annaemesenyiri@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com>
+ <CAKwiHFi6SUCT7UjUTdKmLJ8kiAEqVg=d6ND60R05MJB85Eoj9w@mail.gmail.com>
+ <CAJ-ks9kLmArqqPati8n0dwzhjccLmTuTHtkaSyf_F_1QXzCoRw@mail.gmail.com>
+ <87bjvers3u.fsf@prevas.dk> <CAJ-ks9=0+fk22Dx-65a+CSYhy0dnjTJuot9PtgOCi5Th1_wARA@mail.gmail.com>
+ <87y0yeqafu.fsf@prevas.dk> <CABVgOS=dfuX+X8=EVHcrCZnbOZj3T+wGD922eoeHb-dcOmmzXw@mail.gmail.com>
+ <87h650ri08.fsf@prevas.dk>
+In-Reply-To: <87h650ri08.fsf@prevas.dk>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Tue, 11 Feb 2025 06:34:19 -0500
+X-Gm-Features: AWEUYZmFwRkMBeNDX4ZekpNR0Cqv80Jbd9Y15e5FsQCQTm0FfAKPwbtociTRA6o
+Message-ID: <CAJ-ks9mKZVSZzgaPbJ3t3qcx0bMc1LUH+GueOtVX4UAWbntdvg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] printf: convert self-test to KUnit
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/10/25 8:22 PM, Anna Emese Nyiri wrote:
-> Introduce tests to verify the correct functionality of the SO_RCVMARK and 
-> SO_RCVPRIORITY socket options.
-> 
-> Key changes include:
-> 
-> - so_rcv_listener.c: Implements a receiver application to test the correct 
-> behavior of the SO_RCVMARK and SO_RCVPRIORITY options.
-> - test_so_rcv.sh: Provides a shell script to automate testing for these options.
-> - Makefile: Integrates test_so_rcv.sh into the kernel selftests.
-> 
-> v2:
-> 
-> - Add the C part to TEST_GEN_PROGS and .gitignore.
-> - Modify buffer space and add IPv6 testing option
-> in so_rcv_listener.c.
-> - Add IPv6 testing, remove unnecessary comment,
-> add kselftest exit codes, run both binaries in a namespace,
-> and add sleep in test_so_rcv.sh.
-> The sleep was added to ensure that the listener process has
-> enough time to start before the sender attempts to connect.
-> - Rebased on net-next.
-> 
-> v1:
-> 
-> https://lore.kernel.org/netdev/20250129143601.16035-2-annaemesenyiri@gmail.com/
+On Tue, Feb 11, 2025 at 3:40=E2=80=AFAM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+>
+> On Tue, Feb 11 2025, David Gow <davidgow@google.com> wrote:
+>
+> > On Mon, 10 Feb 2025 at 19:57, Rasmus Villemoes <linux@rasmusvillemoes.d=
+k> wrote:
+> >>
+> >> On Fri, Feb 07 2025, Tamir Duberstein <tamird@gmail.com> wrote:
+> >>
+> >> > On Fri, Feb 7, 2025 at 5:01=E2=80=AFAM Rasmus Villemoes
+> >> > <linux@rasmusvillemoes.dk> wrote:
+> >> >>
+> >> >> On Thu, Feb 06 2025, Tamir Duberstein <tamird@gmail.com> wrote:
+> >> >>
+> >> >>
+> >> >> I'll have to see the actual code, of course. In general, I find rea=
+ding
+> >> >> code using those KUNIT macros quite hard, because I'm not familiar =
+with
+> >> >> those macros and when I try to look up what they do they turn out t=
+o be
+> >> >> defined in terms of other KUNIT macros 10 levels deep.
+> >> >>
+> >> >> But that still leaves a few points. First, I really like that "388 =
+test
+> >> >> cases passed" tally or some other free-form summary (so that I can =
+see
+> >> >> that I properly hooked up, compiled, and ran a new testcase inside
+> >> >> test_number(), so any kind of aggregation on those top-level test_*=
+ is
+> >> >> too coarse).
+> >> >
+> >> > This one I'm not sure how to address. What you're calling test cases
+> >> > here would typically be referred to as assertions, and I'm not aware
+> >> > of a way to report a count of assertions.
+> >> >
+> >>
+> >> I'm not sure that's accurate.
+> >>
+> >> The thing is, each of the current test() instances results in four
+> >> different tests being done, which is roughly why we end up at the 4*97
+> >> =3D=3D 388, but each of those tests has several assertions being done =
+-
+> >> depending on which variant of the test we're doing (i.e. the buffer
+> >> length used or if we're passing it through kasprintf), we may do only
+> >> some of those assertions, and we do an early return in case one of tho=
+se
+> >> assertions fail (because it wouldn't be safe to do the following
+> >> assertions, and the test as such has failed already). So there are far
+> >> more assertions than those 388.
+> >>
+> >> OTOH, that the number reported is 388 is more a consequence of the
+> >> implementation than anything explicitly designed. I can certainly live
+> >> with 388 being replaced by 97, i.e. that each current test() invocatio=
+n
+> >> would count as one KUNIT case, as that would still allow me to detect =
+a
+> >> PEBKAC when I've added a new test() instance and failed to actually ru=
+n
+> >> that.
+> >
+> > It'd be possible to split things up further into tests, at the cost of
+> > it being a more extensive refactoring, if having the more granular
+> > count tracked by KUnit were desired.
+>
+> I think the problem is that kunit is simply not a good framework to do
+> these kinds of tests in, and certainly it's very hard to retrofit kunit
+> after the fact.
+>
+> It'd also be possible to make
+> > these more explicitly data driven via a parameterised test (so each
+> > input/output pair is listed in an array, and automatically gets
+> > converted to a KUnit subtest).
+>
+> So that "array of input/output" very much doesn't work for these
+> specific tests: We really want the format string/varargs to be checked
+> by the compiler, and besides, there's no way to store the necessary
+> varargs and generate a call from those in an array. Moreover, we verify a
+> lot more than just that the correct string is produced; it's also a
+> matter of the right return value regardless of the passed buffer size, et=
+c.
+>
+> That's also why is nigh impossible to simply change __test() into
+> (another) macro that expands to something that defines an individual
+> struct kunit_case, because the framework is really built around the
+> notion that each case can be represented by a void function call and the
+> name of the test is the stringification of the function name.
+>
+> So I don't mind the conversion to kunit if that really helps other
+> people, as long as the basic functionality is still present and doesn't
+> impede future extensions - and certainly I don't want to end up in a
+> situation where somebody adds a new %p extension but cannot really add a
+> test for it because kunit makes that hard.
+>
+> But I hope you all agree that it doesn't make much _sense_ to consider
+> test_number() and test_string() and so on individual "test cases"; the
+> atomic units of test being done in the printf suite is each invocation
+> of the __test() function, with one specific format string/varargs
+> combination.
+>
+> Rasmus
 
-Unfortunately the added self-test does not run successfully in the CI:
+Rasmus, does v3 meet your needs?
 
-https://netdev-3.bots.linux.dev/vmksft-net/results/987742/117-so-rcv-listener/stdout
+https://lore.kernel.org/all/20250210-printf-kunit-convert-v3-1-ee6ac5500f5e=
+@gmail.com/
 
-Please have a look at:
-
-https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style
-
-to test the change locally in a CI-like way.
-
-Cheers,
-
-Paolo
-
+Weirdly the cover letter seems to be missing on lore, should I resend?
 
