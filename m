@@ -1,194 +1,150 @@
-Return-Path: <linux-kselftest+bounces-26328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B1FA30289
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 05:31:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 611D0A302F9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 06:43:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD909168682
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 04:31:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82DCC7A2379
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 05:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23E11D63FB;
-	Tue, 11 Feb 2025 04:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A651E3DD8;
+	Tue, 11 Feb 2025 05:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="LT5hQ26v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="giKA0Z+c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5CF1A23BE
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 04:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABAD1E47C2
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 05:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739248300; cv=none; b=Sc3jhUNi5+RmrrfDmUzQ9OBbVcgBb+gcdk2jQN/GAj1fUmHvTfUr5qeLqTKlF7bdah8xxpQ6esNOrHUvMpt6ssB861IA2+Ms5bs0DAtN6RHmvb+Gnao7r3jO5WCnIN7d+Z2Yyg+KoVPbDeB58I/NRGMb/zBF0kA02dWXg/s5wto=
+	t=1739252622; cv=none; b=p/AkFw6nUDbultO3KGb3987Uk1HVwdoda89inFtAXxmOPXHuIpW95iw1YOU5kuvmqaF1IolbNoGYma34mcgQmaOEndeYKlU7CpNG8MJkOumYknqbQh3PVNP6UyvCQyWEZdQHBNeno/0RboNyoD+Xp9Z5fi/heeLd0DIQg3RmUjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739248300; c=relaxed/simple;
-	bh=KBi+G9UGgPx2k8umZQyZtGo0Tkv4fp4ucz0iGRT1/ZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J+ZazW5pYxExfWF/5ViSKMKYDvZUILvVLDhhE6pKCTqwZLP69wVksY9R8EH9253+kYb4bARrOFY8vxxPj1FzeGoiI8b9YM6ooUAdB8bHWrtTj4P51BbSDvd7Oc+k9uHg4imiG2DpDthSWiLoVf23pIYfGZ8kVTbg7i9eqKGdoqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=LT5hQ26v; arc=none smtp.client-ip=209.85.166.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-8553e7d9459so28766739f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 20:31:38 -0800 (PST)
+	s=arc-20240116; t=1739252622; c=relaxed/simple;
+	bh=yiutF29gJafdhIkoJFYAc9y4gay9BN34SrcFu5zNZuE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S3LyRIn67+CAFveDn20IpR8CAithsEq92CGFYhCJogo/SYjhxD6SFE9mYlfNA3CJiyR0XmcWrPu5cBeY+PBo3cBS+mmR+0WIM+dK6Xsc3HAKlvjdFrdEEDVsEmnWQnb+skRWluQeK8Ii8rE+idVyAHI6pBxgUoH0PQ8WZtthPwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=giKA0Z+c; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-471836d9c05so11cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 21:43:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1739248298; x=1739853098; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uk7QCT1ibthTmG31kgz2RQ3fd9RFf43i5AcvZcwTxN4=;
-        b=LT5hQ26vzNTfE/pnK0iQOZRlVJ9iOVJQ30cBQmxNxGOYs0Vtyj0Q9LZ/WXHnaWr8WU
-         8FodzwkLHV86p1IUbMUClZ9I4/aeZYYEGROWTkIEkLhO3n4w3dqfKFA7tM4PlmtHKxrM
-         NxDtHeltMZL1QL6dPtT64MMeL1LqLFoBAePnhx1+7+Qr/JLh3uCcFaYzggmbRAIWwpZB
-         C9c5pou1ojdbaiGDB1o+FBiigUli+g4i25OaoeEoloPr5csOaMngMzQ4h0MXF67Pz7XY
-         4FQWQchXuJhtDRzcL2EB+VDzyNVYrgA7enODAz6mFQfVVAoqeY3zftSgOYIkKPut6lW9
-         0KCg==
+        d=google.com; s=20230601; t=1739252620; x=1739857420; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PvPUz/tKMvoI4V8mQFLMl7NVNOQxnWrC6+o5gP+Aun4=;
+        b=giKA0Z+cSWBx/0zURPAyC5USWyiKNT4/tZZGr0Sq9KXKX5F1ZhQJjccoWb73tiQ0n/
+         fKkLcuUJPejL8SvB2aNBf5PwQM0dXgllqlyoSXX0/gwVsFA8SQU9NOCIUMSv88CUhAN0
+         8g0JUdyoLVonAanr9RTAGvGochFKDl9ZtSPnAaj4i7spJlB6S71JstBnsGQ7+TgnmXTv
+         k/Iz9tVWy7w4O2tBILIXeMsSb8zhX6PTgjTjC9A4Q/N9jC9xi4Mg/9uT/aijh18i4aSk
+         0kGvOH/iyBr33M2ylf9FNsE0uUW6WDBRN6seVei0GOIVCbOOz4n+0a1zFY7EHkmeweL5
+         nHZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739248298; x=1739853098;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uk7QCT1ibthTmG31kgz2RQ3fd9RFf43i5AcvZcwTxN4=;
-        b=qSPyK8x4UF0wrou62zOisArlDGRBSTZwvcJ0cAegB3AHwi4wgu0yFqqnWkm5wa0YuA
-         GErdKrfg00ipgom5lIQei6/m8PTCzzvWTrQp9rR63BGfGJ/eyoHRtu7rkHOHXm5kjxyk
-         xe6ZzMaCFigfZhlMFdib8miCvN2DJKsaXQe2LNnFBCTS3MgGW0LCnTA8jryASLfwGep6
-         03Hl4JdbOLSAAAREOmb3664o3S+9XnNkkKcfIem1kLBrQI4pNEcUNB/HJZcV+fiWIVDp
-         SpUEkQw0HFk4mh3vrhnvHnRhqtI31HMxeoSOkQKqIk3OM1TNqlXogi/0FOFZWz7jG7qO
-         9Mrw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCaZSLzuIkmmiLYH8xv65QezQ3WObXBMSo33Q3qKrRboScRa3YUd0KOzeWEVfrKw1AEoexMAhbcExCI0QqSrs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX7OuZkWlxnWjcwzID90V+IGVtsRqMrmQoFDCvkTOY/nBXuTCA
-	Ek4hCqYnSXuk05CTgLniH08lGvCZjI4IujkFMJSTscp5HVtnH78FXfDugP5+fMQ=
-X-Gm-Gg: ASbGncsRWC3zrdKgDqs4sO+MvIXYOxUkSeDA6yWzrEsMuiGqcl+s0G8y+9sMB56zD24
-	EUZ4WpdoVEO3rj10w8hIwSYY35w2ooA5nTOHigp2Dvm2Eskbfgbbt4A7QY4PZRQW26QhgYvnkXv
-	/1lDJgYmrITVPf3+TUM6ofq3kPBDNr+42Qu+6RvDWhU3tV786TNucYQ9WXxYiVqYuInmUfb+Thl
-	EpEaN9ozmCcXlpS+ZVCYjfdjVzxBL7w/UqQDwgs4ZXfE/xIuF2WRQZ3W5PpfxM+QCPRZbo45Wwm
-	5XH77YNWhCZO6Lz2bSDB7lQxefyBXsMw2+gdRHA=
-X-Google-Smtp-Source: AGHT+IHEmCDuHZ+8uB9f8GDunxYoBJjA1XFOTU/tpz/O0tguykq12oFATdzw1dCWB2rK39lLH2IaZg==
-X-Received: by 2002:a05:6602:3946:b0:84a:5201:41ff with SMTP id ca18e2360f4ac-854fd886d54mr1422323839f.3.1739248297943;
-        Mon, 10 Feb 2025 20:31:37 -0800 (PST)
-Received: from [100.64.0.1] ([165.188.116.9])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ecdb903a89sm2110916173.70.2025.02.10.20.31.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Feb 2025 20:31:37 -0800 (PST)
-Message-ID: <6223225b-a7cf-452d-ae69-d895b5f23d62@sifive.com>
-Date: Mon, 10 Feb 2025 22:31:35 -0600
+        d=1e100.net; s=20230601; t=1739252620; x=1739857420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PvPUz/tKMvoI4V8mQFLMl7NVNOQxnWrC6+o5gP+Aun4=;
+        b=W+e7aRJFZHWWHzZyFagA/rbgEjZ8qzi56p+GvMPnt02a6C8wY4mJQueFiu9v/toXIy
+         6yQcDX/95QbRMEu37kAKerW4qxGHK727wioxpfB4WSb9hevYNCAdcxkRkWspAQxfjl1d
+         XAVr31F8iRNI9i0z31aabkrn2IoHm9BzaA2zUt4B5W1tNSkLYlDCAhlskntOjwT6iHYN
+         fiAU6IgFdG+YYosyv53rVpAMSjMw6nq8BOagnXktgqAzxmvhBLmS0rTV91wv6qHHYTua
+         fB1zRdFamuGQR+2G56l06kQY/luqgZa/GUXd9jeZJA5gu8nE7nMBcBWsvyrqOURf51zK
+         n1Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCXz7aImlA3nOlLAttXjXMi1fXc8N3adI299wsHEvGqQyO+eA9IWENWTmGuRsqsYPITST3ge0LeYyCwuANmGyVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWoWv2nQjqTTPcJ3WckjRsiB1P/hd4+IAwvYouk/0jnh+sx0tF
+	isRvSHKSQm8wP9Jp0kZdEoGCVkLitCcT/HStTItBzlbSTjLiWaGiaXau1wx2hU8SpJuFR3n5jSk
+	WjSuBBzPTD2mOHcdzBLiIwdCibpepPeTRB2Fl
+X-Gm-Gg: ASbGnctviz0v3LJ4Ook25XRC2nZm06cEiGaiCOn7QzsRFYWNURrHtWpyy22mGr7iTmn
+	kvl+s4z/BERjvAMMHzL4QY63HvHZXXYpaO+NfoSG7N1Hl528g5nK3csgDMUO5D4hT02vVcelw4t
+	4=
+X-Google-Smtp-Source: AGHT+IFdPC2jxNjIQ60tB1qHYw35wQPcR+ebUuPbTINTbB3BgR5ZvL+qydjb39WrysC4U8S2UIzDA8MJwdVbCXOxWXU=
+X-Received: by 2002:ac8:66c6:0:b0:46e:3537:f21e with SMTP id
+ d75a77b69052e-471a910d664mr4321cf.2.1739252619289; Mon, 10 Feb 2025 21:43:39
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/15] riscv: add Firmware Feature (FWFT) SBI
- extensions definitions
-To: Deepak Gupta <debug@rivosinc.com>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?=
- <cleger@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org
-References: <20250210213549.1867704-1-cleger@rivosinc.com>
- <20250210213549.1867704-2-cleger@rivosinc.com>
- <Z6rMtBud/hsKYYIw@debug.ba.rivosinc.com>
-From: Samuel Holland <samuel.holland@sifive.com>
-Content-Language: en-US
-In-Reply-To: <Z6rMtBud/hsKYYIw@debug.ba.rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250207110836.2407224-1-yuyanghuang@google.com>
+ <20250207110836.2407224-2-yuyanghuang@google.com> <20250210161306.GE554665@kernel.org>
+In-Reply-To: <20250210161306.GE554665@kernel.org>
+From: Yuyang Huang <yuyanghuang@google.com>
+Date: Mon, 10 Feb 2025 21:43:03 -0800
+X-Gm-Features: AWEUYZkxPTkcoZEBe3_5sAnOnmrjICkKYhcLeSxWg-C3j3ZJ3rn8M2ow9fKXuiY
+Message-ID: <CADXeF1GP24uJNYBPjjegs=sycUa1d=cVacvchKdAk5+p=ZOj8w@mail.gmail.com>
+Subject: Re: [PATCH net-next, v8 2/2] selftests/net: Add selftest for IPv4
+ RTM_GETMULTICAST support
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Hangbin Liu <liuhangbin@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, petrm@nvidia.com, 
+	linux-kselftest@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
+	Lorenzo Colitti <lorenzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Deepak,
+>FWIIW I think that the YAML spec entry is distinct from, although a
+>dependency of, adding the test. I would put it in a separate patch.
 
-On 2025-02-10 10:06 PM, Deepak Gupta wrote:
-> On Mon, Feb 10, 2025 at 10:35:34PM +0100, Clément Léger wrote:
->> The Firmware Features extension (FWFT) was added as part of the SBI 3.0
->> specification. Add SBI definitions to use this extension.
->>
->> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->> Reviewed-by: Samuel Holland <samuel.holland@sifive.com>
->> Tested-by: Samuel Holland <samuel.holland@sifive.com>
->> ---
->> arch/riscv/include/asm/sbi.h | 33 +++++++++++++++++++++++++++++++++
->> 1 file changed, 33 insertions(+)
->>
->> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
->> index 3d250824178b..d373b5c08039 100644
->> --- a/arch/riscv/include/asm/sbi.h
->> +++ b/arch/riscv/include/asm/sbi.h
->> @@ -35,6 +35,7 @@ enum sbi_ext_id {
->>     SBI_EXT_DBCN = 0x4442434E,
->>     SBI_EXT_STA = 0x535441,
->>     SBI_EXT_NACL = 0x4E41434C,
->> +    SBI_EXT_FWFT = 0x46574654,
->>
->>     /* Experimentals extensions must lie within this range */
->>     SBI_EXT_EXPERIMENTAL_START = 0x08000000,
->> @@ -402,6 +403,33 @@ enum sbi_ext_nacl_feature {
->> #define SBI_NACL_SHMEM_SRET_X(__i)        ((__riscv_xlen / 8) * (__i))
->> #define SBI_NACL_SHMEM_SRET_X_LAST        31
->>
->> +/* SBI function IDs for FW feature extension */
->> +#define SBI_EXT_FWFT_SET        0x0
->> +#define SBI_EXT_FWFT_GET        0x1
->> +
->> +enum sbi_fwft_feature_t {
->> +    SBI_FWFT_MISALIGNED_EXC_DELEG        = 0x0,
->> +    SBI_FWFT_LANDING_PAD            = 0x1,
->> +    SBI_FWFT_SHADOW_STACK            = 0x2,
->> +    SBI_FWFT_DOUBLE_TRAP            = 0x3,
->> +    SBI_FWFT_PTE_AD_HW_UPDATING        = 0x4,
->> +    SBI_FWFT_POINTER_MASKING_PMLEN        = 0x5,
->> +    SBI_FWFT_LOCAL_RESERVED_START        = 0x6,
->> +    SBI_FWFT_LOCAL_RESERVED_END        = 0x3fffffff,
->> +    SBI_FWFT_LOCAL_PLATFORM_START        = 0x40000000,
->> +    SBI_FWFT_LOCAL_PLATFORM_END        = 0x7fffffff,
->> +
->> +    SBI_FWFT_GLOBAL_RESERVED_START        = 0x80000000,
->> +    SBI_FWFT_GLOBAL_RESERVED_END        = 0xbfffffff,
->> +    SBI_FWFT_GLOBAL_PLATFORM_START        = 0xc0000000,
->> +    SBI_FWFT_GLOBAL_PLATFORM_END        = 0xffffffff,
->> +};
->> +
->> +#define SBI_FWFT_PLATFORM_FEATURE_BIT        (1 << 30)
->> +#define SBI_FWFT_GLOBAL_FEATURE_BIT        (1 << 31)
->> +
->> +#define SBI_FWFT_SET_FLAG_LOCK            (1 << 0)
->> +
->> /* SBI spec version fields */
->> #define SBI_SPEC_VERSION_DEFAULT    0x1
->> #define SBI_SPEC_VERSION_MAJOR_SHIFT    24
->> @@ -419,6 +447,11 @@ enum sbi_ext_nacl_feature {
->> #define SBI_ERR_ALREADY_STARTED -7
->> #define SBI_ERR_ALREADY_STOPPED -8
->> #define SBI_ERR_NO_SHMEM    -9
->> +#define SBI_ERR_INVALID_STATE    -10
->> +#define SBI_ERR_BAD_RANGE    -11
->> +#define SBI_ERR_TIMEOUT        -12
-> 
-> nit: Space mis-aligned(^)    ^
+Thanks for the feedback! I will split the change into two patches in
+the next submission.
 
-The alignment is correct when the patch is applied. It only looks wrong in the
-patch because the "+" from the unified diff format causes an overflow to the
-next tab stop.
+Thanks,
 
-Regards,
-Samuel
+Yuyang
 
-> otherwise
-> Reviewed-by: Deepak Gupta <debug@rivosinc.com>
-> 
->> +#define SBI_ERR_IO        -13
->> +#define SBI_ERR_DENIED_LOCKED    -14
->>
->> extern unsigned long sbi_spec_version;
->> struct sbiret {
->> -- 
->> 2.47.2
->>
->>
 
+On Mon, Feb 10, 2025 at 8:13=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> On Fri, Feb 07, 2025 at 08:08:36PM +0900, Yuyang Huang wrote:
+> > This change introduces a new selftest case to verify the functionality
+> > of dumping IPv4 multicast addresses using the RTM_GETMULTICAST netlink
+> > message. The test utilizes the ynl library to interact with the
+> > netlink interface and validate that the kernel correctly reports the
+> > joined IPv4 multicast addresses.
+> >
+> > To run the test, execute the following command:
+> >
+> > $ vng -v --user root --cpus 16 -- \
+> >     make -C tools/testing/selftests TARGETS=3Dnet \
+> >     TEST_PROGS=3Drtnetlink.py TEST_GEN_PROGS=3D"" run_tests
+> >
+> > Cc: Maciej =C5=BBenczykowski <maze@google.com>
+> > Cc: Lorenzo Colitti <lorenzo@google.com>
+> > Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
+> > ---
+> >
+> > Changelog since v7:
+> > - Create a new RtnlAddrFamily to load rt_addr.yaml.
+> >
+> > Changelog since v6:
+> > - Move `getmaddrs` definition to rt_addr.yaml.
+> >
+> >  Documentation/netlink/specs/rt_addr.yaml      | 23 ++++++++++++++
+>
+> Hi Yuyang Huang,
+>
+> FWIIW I think that the YAML spec entry is distinct from, although a
+> dependency of, adding the test. I would put it in a separate patch.
+>
+> >  tools/testing/selftests/net/Makefile          |  1 +
+> >  .../testing/selftests/net/lib/py/__init__.py  |  2 +-
+> >  tools/testing/selftests/net/lib/py/ynl.py     |  4 +++
+> >  tools/testing/selftests/net/rtnetlink.py      | 30 +++++++++++++++++++
+> >  5 files changed, 59 insertions(+), 1 deletion(-)
+> >  create mode 100755 tools/testing/selftests/net/rtnetlink.py
+>
+> ...
 
