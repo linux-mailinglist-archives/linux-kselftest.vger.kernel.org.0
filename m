@@ -1,92 +1,89 @@
-Return-Path: <linux-kselftest+bounces-26394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3D9A310D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 17:12:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87C61A310DD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 17:13:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E452A167A58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 16:12:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3E453A5E99
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 16:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4B525A2D2;
-	Tue, 11 Feb 2025 16:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B11525A352;
+	Tue, 11 Feb 2025 16:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fA3qzVxh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i1HUBeyt"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01CB254B0F
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 16:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0222255E38
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 16:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739290199; cv=none; b=awg74DyFh/OUSuCSWuemdmzAHZKToQQBMqfWsP90BwdVmjEOoQyw72mOnwQfeGuwdVs/elGBaOrOLRTARKCRwESb3wd700lSDojbxVKsZM+/4IV5VryCXij+KlAhNiagO7HOJeMCLMDEuyztSvj67lZSc7ri2nX5dbjnb6wBPfo=
+	t=1739290247; cv=none; b=nqOBP2H2jSUMoi2nBrakkJ8NWXpyu2+aFnJke6K2dKwOpKKQ9TxcubEVhGLksydWEXF9uVR9ON7N8nB0EP2ZVD/4PFhGoEkYZZzCGQgnTGj2BeNTyP+Cek0za+y8pICs8bQlJxWbWBhgRqGedBRHPw6bNDH3KnwtDFielsAJY84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739290199; c=relaxed/simple;
-	bh=8XsCTn2SryIUrEwNpM26f2V1tVQ1i22m7UgmNeeQpq0=;
+	s=arc-20240116; t=1739290247; c=relaxed/simple;
+	bh=nE7GJqZw+gIEdhcV99Kpd2q5ds+/vCptECGTizt6klE=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Hlnz1htTvH+To6WeZCmM2SKiw8Xuy9t2T4/06rsLTR5lQHa2S/nFtyyWZBZlj4D/9O7VS8xuhgQxIMw5NnZWT3VuqZm1TUw6ZeFh3xM0JESbLZCkDpLXEUbW3GIFP7yYcUhnJIBSvsCvGGz+/H1bDN8UHl25innlgFG/zm5W/XU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fA3qzVxh; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=DKtTDhaOBh/xm0Mz2ZrF5Fj7aR6tNSXZqEPwA7tR/GhoVvtypYdnxZ+nVc5zZ3fUEucRjRZ+Xw9qglsnarU0HVzo3m8Ksyf6420SIFqkYGh0MXrENcUXBm6XS0kep5VyO/lMWdiDxBBi1VhPtcwNaTcBkNiGGhIG4tCLwyCPync=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i1HUBeyt; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739290196;
+	s=mimecast20190719; t=1739290243;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cqBw0fvuK6HvmV212DNXANVYi4ije8UDstIz77BqBKI=;
-	b=fA3qzVxhZJANrGgZg33N0GUr2U0438VEMc+KaHyn1wTzBUZYIf9Hw58WC+7BbMl1Cyna5z
-	EG0wYVPkN3YDHxdtRNqDSQ97jnaSzmYd/yLonNhfKzOb3rMhsgEM2IC2jMd4BaAiCFCuEE
-	c52l3/+/MuQohXiTSceKeQ2FR6y3XJ8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=DkXKKRZIZ3B6nMXAUQwqba2hAbiJWDhaRaBNOU6/fJw=;
+	b=i1HUBeytVZQfuTjrexbgjP7YEuXhfQTbb6pRe91MQPsrHrNvdDzSOfyC/EERd6n8ZWPDjF
+	+lZ5tsIl54r4itAaxVJ7JLggTgV7punI/95D8cHSFkAUzbdWyJUgYCJxsfKBbdpQAXbDp7
+	n1YwDMda2zzuC6MFCw8XkhNYDMwIpOc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-348-zbuHOpYQPOqF2sliARi9kw-1; Tue, 11 Feb 2025 11:09:55 -0500
-X-MC-Unique: zbuHOpYQPOqF2sliARi9kw-1
-X-Mimecast-MFC-AGG-ID: zbuHOpYQPOqF2sliARi9kw
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-38dd533dad0so2017808f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 08:09:54 -0800 (PST)
+ us-mta-280-Wn_ZrgK7PX6CjnEjNcQs3w-1; Tue, 11 Feb 2025 11:10:42 -0500
+X-MC-Unique: Wn_ZrgK7PX6CjnEjNcQs3w-1
+X-Mimecast-MFC-AGG-ID: Wn_ZrgK7PX6CjnEjNcQs3w
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-438da39bb69so43407595e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 08:10:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739290194; x=1739894994;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cqBw0fvuK6HvmV212DNXANVYi4ije8UDstIz77BqBKI=;
-        b=NZ/mB5LnMNsZDBuExk3fQEQe2A3y+ChhNUWpdEO7leOnrfXMYp4cw3EH/rZj6/nnlw
-         9w8dR7z77WcchWg1mtBbDfppTeOyfaRTcrc6/LL77xLHA1ET0MAVBL7u0fZUPA+baa65
-         OVNwG4L9VQw0G2vibyzHXQwzLpDhjlEYOiwQM0hLcUDPJaWB5BIVaE/gvNmp4ix9QyV+
-         /b2z4+/kP+SXqmKinSUk0PC7pbeajgXukLeufn2A3TmvqAPktZOsl4c5Kw3AMqUzbjNq
-         /6PRztQDuny/BV+41VaFxstMgDu0IKq/ENXZYAEszrVALr4dXJmYDdxnvB60Uc+qiubi
-         mIBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcvoQtOvRNmEbxKrYQ++GGdNrUbhwTQYFXd2nw6imRBpw/xLYtCGeLd0eKOUklxm3jG72I06wxDBEDQ8wfV64=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRnBV6v2gZEjNo3ui/7EKIWLu1LkIyHiT+J/Zb1zXu8o2TiTAN
-	PE/PNXQHIb3KB0hQ4xBisl6zPBN1heCKqNPifJIIomd89cjPkw81hfcDva9Gz+pSU3iyLJnpO/q
-	PnY8m4zWRGkAAEKdJ9knp2TFfWhiO7oxcFbzk+hd1R7wmYX3P+7okn1G4wUbtq6vniQ==
-X-Gm-Gg: ASbGncsLDCPIvNJQcUI68LrnC5dW65kUpQdVulWchqLuA7Qh+VRkkVIZBRbUPFcwkLs
-	A3Nimah2pEFvn7TVN5d7/Haw7WxYx6aSIWRGTLf3DrA967dp7jxAsqKNgGN4gnOdU6Bcq89uDYj
-	5i7iW+SMayLDhPrPs8IwBVB5CdQusXQuDZVY5zbL+1Vma/ObKTIZzAArIrZ49OPmVZxO/2uwUry
-	aSWrovMW8E2vNIEDqxQK/S/1OrP///LqiqvUmxO2lsKi6Q0QAKYIvSfsU8gPa7pfubJTDDmasGS
-	yj1P9Xm7gxwsAj80ssugPaAUpuc3wWW+EzHVDPjbKV5QKpId2DZIKO01sqfgofS75Q==
-X-Received: by 2002:adf:b60f:0:b0:38d:b113:eb8 with SMTP id ffacd0b85a97d-38de918b920mr304840f8f.20.1739290193758;
-        Tue, 11 Feb 2025 08:09:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHK1ASMUo9/0VqOa8FhznHehFcHh+h1fB2eK6UH8SCGRKzMX4fpRgybDSM9A1NmLLMyPAzxtg==
-X-Received: by 2002:adf:b60f:0:b0:38d:b113:eb8 with SMTP id ffacd0b85a97d-38de918b920mr304770f8f.20.1739290193306;
-        Tue, 11 Feb 2025 08:09:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739290241; x=1739895041;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkXKKRZIZ3B6nMXAUQwqba2hAbiJWDhaRaBNOU6/fJw=;
+        b=YtndCmWfGhl0jYa/dU+RUdLGuqCc99AXdoj5YN8/HtypEpwlT6iDj8ST7duoX9AhPs
+         ykZ3skl+VbXork8DwVsPEno3i13tk8GEYtVtv50oJXvmzBe2x45g6bIflrQv51/CkQge
+         8evLAmrCSxCLmQAU7xIawSQGsVlDGhECsxnrEZtcAQJPJO9ZSE5++U44Gu+xCEjYKj13
+         6jsEu2hQwfnJ2o+KFKy6cxNuczomiLA0eaETNwxBdKsuY59dU7bTWKxFKI310g6ErrNX
+         MsOCd39xH11wcqnfjfEatYK7sVyFh61tsfku7+ZYw8/pPj1/UlbC9/5o+M2csw93AGDi
+         uvdw==
+X-Forwarded-Encrypted: i=1; AJvYcCWcNtJ3WYIlv4jcgwrwZd7tiDAyOD3beyfTJ6vC9Cn84hrUhIBx3YZV12HdMjUMvslIUSgvU7+iKQWM8hz01dY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyiR07LBUpULW4DBQyA6iptiIJeJnIH88iomZrY8zN0LI5zHyJ
+	fKsy5C6PQWWaLUAdF4xIB9gL3rDYoFenMgxurBjudDQL415V0JXQz2HTWJDLxjyXiYWPnJDFx9Y
+	JvOx1CtEJ/6bYGxxn+1FHWKCh4zf7s0SUUmSvDeELw9Y/IB/xSqKuAzhvS8UwBkElYA==
+X-Gm-Gg: ASbGncs3vEqOTDH8FGgLkyUrisc6d7Ao4DCegtDqAKwzYyA4i9pa1XL804guPpEp61V
+	4Zi3jUNZer+Y5z1itZN8U+cCkZWP3fHklt9WJS9T/f3gkdlxFfYkPBT/6Po455MWLFT96H0at7R
+	GesAvTbaYAp0eMBY/4W+pMNfO5UiADcqgCWN14zdwXpqzxn6Q747XXsAO91gvXsh4JjQjLWmmDi
+	SvZIk378zrU6SLtvFSLMZUzRp/xX0hk9gRoxTMDjnlNnJFD+NENBwaJuNK5+S3pql8Q+zN/qjhc
+	aU8TPI7clAk2y4xlxRX0nw0c2bST9598qTX7vPPYxuxgWyzkhyExtDcB57EDhX4ong==
+X-Received: by 2002:a05:600c:500b:b0:439:48d9:d8b0 with SMTP id 5b1f17b1804b1-43948d9dd41mr73108345e9.16.1739290240839;
+        Tue, 11 Feb 2025 08:10:40 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGxNXfn5PLr2I3O9shVB9BLvMIo6l6XNn4GHuv5+NRtXPlNDWEKqGeQnOp/tv15slnT46loqA==
+X-Received: by 2002:a05:600c:500b:b0:439:48d9:d8b0 with SMTP id 5b1f17b1804b1-43948d9dd41mr73107295e9.16.1739290240325;
+        Tue, 11 Feb 2025 08:10:40 -0800 (PST)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde1dfaesm15387623f8f.90.2025.02.11.08.09.49
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dc9ef8ac6sm12561610f8f.27.2025.02.11.08.10.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 08:09:52 -0800 (PST)
+        Tue, 11 Feb 2025 08:10:39 -0800 (PST)
 From: Valentin Schneider <vschneid@redhat.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, virtualization@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
- xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
- linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
  linux-hardening@vger.kernel.org, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
  bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
@@ -99,7 +96,8 @@ Cc: Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
  Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
  Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Alexander Shishkin
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
  <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
  Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
  "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
@@ -132,7 +130,7 @@ Cc: Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
  Tiezhu Yang <yangtiezhu@loongson.cn>
 Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
  flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-In-Reply-To: <Z6tYnOEBkOlT_ehp@J2N7QTR9R3>
+In-Reply-To: <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
 References: <20250114175143.81438-1-vschneid@redhat.com>
  <20250114175143.81438-30-vschneid@redhat.com>
  <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
@@ -141,80 +139,58 @@ References: <20250114175143.81438-1-vschneid@redhat.com>
  <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
  <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
  <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <Z6tYnOEBkOlT_ehp@J2N7QTR9R3>
-Date: Tue, 11 Feb 2025 17:09:49 +0100
-Message-ID: <xhsmhwmdwihte.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
+Date: Tue, 11 Feb 2025 17:10:36 +0100
+Message-ID: <xhsmhv7tgihs3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On 11/02/25 14:03, Mark Rutland wrote:
-> On Tue, Feb 11, 2025 at 02:33:51PM +0100, Valentin Schneider wrote:
->> On 10/02/25 23:08, Jann Horn wrote:
->> > 2. It's wrong to assume that TLB entries are only populated for
->> > addresses you access - thanks to speculative execution, you have to
->> > assume that the CPU might be populating random TLB entries all over
->> > the place.
->>
+On 11/02/25 06:22, Dave Hansen wrote:
+> On 2/11/25 05:33, Valentin Schneider wrote:
+>>> 2. It's wrong to assume that TLB entries are only populated for
+>>> addresses you access - thanks to speculative execution, you have to
+>>> assume that the CPU might be populating random TLB entries all over
+>>> the place.
 >> Gotta love speculation. Now it is supposed to be limited to genuinely
 >> accessible data & code, right? Say theoretically we have a full TLBi as
->> literally the last thing before doing the return-to-userspace, speculati=
-on
+>> literally the last thing before doing the return-to-userspace, speculation
 >> should be limited to executing maybe bits of the return-from-userspace
 >> code?
 >
-> I think it's easier to ignore speculation entirely, and just assume that
-> the MMU can arbitrarily fill TLB entries from any page table entries
-> which are valid/accessible in the active page tables. Hardware
-> prefetchers can do that regardless of the specific path of speculative
-> execution.
+> In practice, it's mostly limited like that.
 >
-> Thus TLB fills are not limited to VAs which would be used on that
-> return-to-userspace path.
+> Architecturally, there are no promises from the CPU. It is within its
+> rights to cache anything from the page tables at any time. If it's in
+> the CR3 tree, it's fair game.
 >
 >> Furthermore, I would hope that once a CPU is executing in userspace, it's
 >> not going to populate the TLB with kernel address translations - AIUI the
 >> whole vulnerability mitigation debacle was about preventing this sort of
 >> thing.
 >
-> The CPU can definitely do that; the vulnerability mitigations are all
-> about what userspace can observe rather than what the CPU can do in the
-> background. Additionally, there are features like SPE and TRBE that use
-> kernel addresses while the CPU is executing userspace instructions.
+> Nope, unfortunately. There's two big exception to this. First, "implicit
+> supervisor-mode accesses". There are structures for which the CPU gets a
+> virtual address and accesses it even while userspace is running. The LDT
+> and GDT are the most obvious examples, but there are some less
+> ubiquitous ones like the buffers for PEBS events.
 >
-> The latest ARM Architecture Reference Manual (ARM DDI 0487 L.a) is fairly=
- clear
-> about that in section D8.16 "Translation Lookaside Buff", where it says
-> (among other things):
+> Second, remember that user versus supervisor is determined *BY* the page
+> tables. Before Linear Address Space Separation (LASS), all virtual
+> memory accesses walk the page tables, even userspace accesses to kernel
+> addresses.  The User/Supervisor bit is *in* the page tables, of course.
 >
->   When address translation is enabled, if a translation table entry
->   meets all of the following requirements, then that translation table
->   entry is permitted to be cached in a TLB or intermediate TLB caching
->   structure at any time:
->   =E2=80=A2 The translation table entry itself does not generate a Transl=
-ation
->     fault, an Address size fault, or an Access flag fault.
->   =E2=80=A2 The translation table entry is not from a translation regime
->     configured by an Exception level that is lower than the current
->     Exception level.
->
-> Here "permitted to be cached in a TLB" also implies that the HW is
-> allowed to fetch the translation tabl entry (which is what ARM call page
-> table entries).
->
+> A userspace access to a kernel address results in a page walk and the
+> CPU is completely free to cache all or part of that page walk. A
+> Meltdown-style _speculative_ userspace access to kernel memory won't
+> generate a fault either. It won't leak data like it used to, of course,
+> but it can still walk the page tables. That's one reason LASS is needed.
 
-That's actually fairly clear all things considered, thanks for the
-education and for fishing out the relevant DDI section!
-
-> The PDF can be found at:
->
->   https://developer.arm.com/documentation/ddi0487/la/?lang=3Den
->
-> Mark.
+Bummer, now I have at least two architectures proving me wrong :-) Thank
+you as well for the education, I really appreciate it.
 
 
