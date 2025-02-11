@@ -1,78 +1,79 @@
-Return-Path: <linux-kselftest+bounces-26330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1468A302FC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 06:43:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14865A30318
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 06:57:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 875FF188B599
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 05:44:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF3C93A8145
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 05:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD9A91E5B66;
-	Tue, 11 Feb 2025 05:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B801E5B78;
+	Tue, 11 Feb 2025 05:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="eUqqY8zC"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kvsngtux"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346851E571B
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 05:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12461E572F
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 05:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739252632; cv=none; b=uq91ZHmrzNGYWwW+cmm8PwUgghxIWUz78niNCMmUPNRCOI1rYFjgbWyjbR64W4Tk5IhPCT+AV36+IH4LsBD4rUiOGzmC+hzTGoQzbi0XE3B/qH4dIvp47bJGcUDw0dkKkzUOFizacwlLHKqq2fGnWTs2ZJJxSFkzh0Ri677EUFI=
+	t=1739253428; cv=none; b=RR0NB86LyMchAY4fXw7Kbsh1x9/Z4yv841Zw6HE+Ryp2J6DMv1OHKrCX68hbHhiDhOGMriZOnHECSmlZtUiG7qfQlS4t4N0jDYgPRBpAnWI5NPfy/cypkqIQPDunkzPvqmnRnNYUIx6ogoD0PT+OlmGpUlP3u37fCAOpzuR8s6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739252632; c=relaxed/simple;
-	bh=5PbCqh3umgNU/gZ+tDrHMMIbr/nnUqN53Rb2ul6bOEA=;
+	s=arc-20240116; t=1739253428; c=relaxed/simple;
+	bh=+nbqPmbMF4jgueQlkoNLtrphKKIkh/Fm5nsFDK7ILUo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MF6xHkGiJAVMHGuQRHsW1k45VCCVIJZbywfNrZ8FgzpXHrxt8e8HelzUd6TQKkYvmqSydX1O7yuAcdDAGRvjC2tUMqlGvTr0IcFo7wwDsgLMatNu2QbZ2X7yTXVE8hKGLBuJV3aYo8DNyvdnq727LZANHexg7pma1oKkvPoCgBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=eUqqY8zC; arc=none smtp.client-ip=209.85.214.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=IEBcq4NOnp9bdY+2tUyv5x0kUwaiVkXJrP2iVOgGBhm7HNpKiT2zQTLnAEPBU0DQaR69+CxZyOkgg/x5IjQ2NeKb0BcWM12N2ljTCne78hhIb16qUWYQ+MgNxcsJSXbKCzKePfmWKG02efOjz2u3NKuHbdSUl8NKqvkEvS3SFyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kvsngtux; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21f62cc4088so54963505ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 21:43:49 -0800 (PST)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2f441791e40so7098793a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 21:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739252629; x=1739857429; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739253425; x=1739858225; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=bQsQ+/o421QYPh8BJOWROcjn2xBlqUe9Xq6Aw4uiVNM=;
-        b=eUqqY8zCHDgKkQpCjdL4Xw1+uS1OpdpHq8SzUSvAlaUbFr2jSKbnGWYNxJIKVqZMI4
-         hCuvX1/Q7D6ZjejLPgQwWi5FCDlWFXH/DFV5CHHTe7D1WbNxYHmpvmfcM2Dskb4pUIzB
-         /nBnIAk9Z/ZztJrqkPT01w0BpMyl3hn0PaJvkW+aC/S8oD7CEjuEFlGhSlxr5UMq14K6
-         O/zKQliYyVTojn3er7+NQKc+JzCQVXB0BNFjQaZxXXeBPRE7G3WswTgkib2lQlxCyNeD
-         urjaZKplDHufxqzA8abubq+DzmgONMeyy/unZp9cLb3Xj2nFf9IUkhGenfgh3Nms36rq
-         CEgA==
+        bh=HJZy2jyvTOLzFCUYeWaduV9MqEWJwar6HvmOT6bl6Aw=;
+        b=kvsngtuxEusYb625FVRfs8WHAmg1bi7OBT1WVs+eHERiuMTYMo9JCqOBHZhXXJYkUl
+         XSRS+mJPQCVf2hlPYpQOJL8YgKOq96NDRrYDc3thBJERynCwBJlqALU/nlX5Iq5USSG0
+         NdKdNVYg9mBwZQp9Wfvl7wBLnfn3k+jZmKh/1refGqGvs0qlOZQE6VNVKMXhJjF6SvTD
+         9E4uDnPA1uPP9P4fCv1bfcTKpX5C9fgCYsdeMtwy03mAK076p2OH/qWbOg8mGgPMXPzW
+         kW26CYxpDqfxHYdz/K5QWuZ0mwRhuLl0y9+jRr4WO5nu85DLt5PIMSISyaTqNt6kKK2n
+         lNag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739252629; x=1739857429;
+        d=1e100.net; s=20230601; t=1739253425; x=1739858225;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQsQ+/o421QYPh8BJOWROcjn2xBlqUe9Xq6Aw4uiVNM=;
-        b=amYNxDpqGmaMo2bYpIHP5FHDFIzTF09zzchArPJzWb/asg32Fz8zqXYbUWo/7v4sr3
-         MyNS4e/0f7yikPYvEn7ZNu9XLHqBUZn+IfwfiYrpPj9fKy9cV2FunYWaMvzFHF5OQ/th
-         QCcP6pNZErf3TO/FLJx5SS/fucshXHO3PiRMlR5SvaUo4hmudH8BUMJEanNRz/8dWaLp
-         QX6ZRlshQVnCNyFtDdYdIgDr9cu5xUX/Rl492Mr7ZRUYf5eNMn9D3Nz3fROEr5ymAxpn
-         ichlkFKHKQb5n22SiSNNEuJWe8Ldc3a3+gPecG+axndIijAjxfz5Z+TZXnV8/JIIgTgN
-         HESQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUg7lAHZJY1iKWsFFFaWVs4pz270zNB4J4b+lWuueiRFpu8KOQQXTabPiFWlZOhe0egMhTqUKIMzTgnFqfp4Tg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+xxSaO7f2f6VpSXhvZQ2lXq5Qx6KogiL46DCO6cF2JfIe55Vh
-	YyW5ZYRZvh+u/aNo1KYAue/1RK7uHq89FTH8DZ1q9tcEf5+xV2GNozAPi06FJrA=
-X-Gm-Gg: ASbGnctfT27DX/Zt+vJgfyASTZOD/0uPupyNewZJZ07gdXMdYyCll8bz5My3CgygXHn
-	G0m7wrloDIfxakp6SkX8NbnPo6A+VCFClTGQQIrfNmVomLloJSLJ5GelKo5Izk4VwU1k9g9WMfX
-	8itSLfh4/QBYpnPudAeX6t2/ZJq5ctjq5IbmohZOQCVPbQ/o0Xlb1BLK350+9DdwsO+MLxgKI5M
-	6wcdE6Utdvkmf0KxegOydNBK4tqupWFLAHQmWx7IOBvWKZrglY3RLV6+g0QBf7nPRICMjcj1Aqs
-	oqkUhZ2FtqMT8mqvjnk2A4GtmQ==
-X-Google-Smtp-Source: AGHT+IEPKtHYtx0smpDpQgrDnTYBegghA1v5GIvgD0h4cr824ONo5mx4lRTjSLhr137zD0mY6UDmiw==
-X-Received: by 2002:a05:6a20:9f4a:b0:1e8:bd15:6819 with SMTP id adf61e73a8af0-1ee03a5f141mr31000422637.22.1739252629301;
-        Mon, 10 Feb 2025 21:43:49 -0800 (PST)
+        bh=HJZy2jyvTOLzFCUYeWaduV9MqEWJwar6HvmOT6bl6Aw=;
+        b=jU04+CdBZAWwIDJ61tN3TXAqbbNgHecfKDKhiHQst3ouvoR62iQ839Y3u8xAJbIhqw
+         eIQQH+k0bCm8GpgeF1ieqYsJP3ETBjmC6rzEpj/e9wv4vwWMyhQHpFbU8jhVkna120gW
+         Sfg3Rj9tPC+WsLzrz+QSf1h4t8RKK0e7n+3i9emLz9pA8OZe2Z+Avt5BRBPQCRScJBII
+         obxLI10Rz7Bb1Pb15X4wL8xX8ZEtyKIyWapLpJyApHCwkLMEGNYT57xXXbQPtYokgTtr
+         F1RVdVv13lXidKL+k7UlLdaX+r2icJC/NLj6VhSFa1TUoz5av639Ft5zTsAp47G41HT+
+         eo0w==
+X-Forwarded-Encrypted: i=1; AJvYcCVSVcR195CPjT/gg9ToXeE2uP20NCACkNAui9lulPJ9K4OCeGZAvH7QNA+42M65T3P2ob6JdWm5wXj3W8rrzdk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7r4khJ3DuHOTKjNbN+jsSVGnY1ROllfmLFyfqWIL+3zh4LI+b
+	psXKPyk7WvzJ+ezvzaRFDpt+CUBturh24FEHJl8Ma14J6ZrzC9mG4086dtPiKF/h1ksNOBPaBS+
+	x
+X-Gm-Gg: ASbGncttAw6EbH6CpeZVcybrp2sE831y37qzPJ4+VUgd+NLHhyBqVRNSE6PFyXvNGwy
+	x1QortJ8jaSoIYicVtCalbdCzuXpIll4y6Z9UJhw2TNoVCT6ftAKpFwYioev14ArQrKdYUCaX8P
+	Y3PnVvD7NKWburQzWxDPP5pry9Unj+48jTgijEoVQJndFlW+pTxwWP4FTUKVEunTcQySzNsdfYs
+	mmorX3p042OUM0P4SFMmpjaD9Z58tUASNRs2Ak4UsiMJLKZaFfBI76172LuzZOBqJOQcfPLB++6
+	yybaQ0bbxFMa6ZkG3Ku4BQg1+A==
+X-Google-Smtp-Source: AGHT+IGPV3VBh9FyPjCZf26VkPF75SNsz19I9tg0lKaJmNEHjjQrpfrlMc7NQxLWrWHUBES1C/WSbg==
+X-Received: by 2002:a05:6a00:3492:b0:730:87b2:e839 with SMTP id d2e1a72fcca58-73087b2f0a3mr15775608b3a.21.1739253425110;
+        Mon, 10 Feb 2025 21:57:05 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7308b102789sm3396914b3a.149.2025.02.10.21.43.48
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-730840e842bsm3878466b3a.88.2025.02.10.21.57.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 21:43:48 -0800 (PST)
-Date: Mon, 10 Feb 2025 21:43:46 -0800
+        Mon, 10 Feb 2025 21:57:04 -0800 (PST)
+Date: Mon, 10 Feb 2025 21:57:02 -0800
 From: Deepak Gupta <debug@rivosinc.com>
 To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
 Cc: Paul Walmsley <paul.walmsley@sifive.com>,
@@ -85,7 +86,7 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>,
 	linux-kselftest@vger.kernel.org,
 	Samuel Holland <samuel.holland@sifive.com>
 Subject: Re: [PATCH v2 14/15] RISC-V: KVM: add support for FWFT SBI extension
-Message-ID: <Z6rjkk5JlMlqbl2j@debug.ba.rivosinc.com>
+Message-ID: <Z6rmrqbNtHxmjI0X@debug.ba.rivosinc.com>
 References: <20250210213549.1867704-1-cleger@rivosinc.com>
  <20250210213549.1867704-15-cleger@rivosinc.com>
 Precedence: bulk
@@ -171,11 +172,24 @@ On Mon, Feb 10, 2025 at 10:35:47PM +0100, Clément Léger wrote:
 >+struct kvm_sbi_fwft_config;
 >+struct kvm_vcpu;
 >+
+
+
+Can we add some comments here for future fwft providers along below lines?
+
+Reason being, patch defaults to `conf->supported = true` if `supported` fn
+pointer in `kvm_sbi_fwft_feature` was NULL. Although `kvm_sbi_fwft_set/get`
+does get/set fn pointers (it would happen even if `supported` fn pointer
+was NULL).
+
 >+struct kvm_sbi_fwft_feature {
 >+	enum sbi_fwft_feature_t id;
+	/* If function not provided, KVM will default assume to be true */
 >+	bool (*supported)(struct kvm_vcpu *vcpu);
+	/* Must always provide function pointers for get/set */
 >+	int (*set)(struct kvm_vcpu *vcpu, struct kvm_sbi_fwft_config *conf, unsigned long value);
 >+	int (*get)(struct kvm_vcpu *vcpu, struct kvm_sbi_fwft_config *conf, unsigned long *value);
+
+
 >+};
 >+
 >+struct kvm_sbi_fwft_config {
@@ -383,18 +397,6 @@ On Mon, Feb 10, 2025 at 10:35:47PM +0100, Clément Léger wrote:
 >+
 >+	fwft->configs = kcalloc(ARRAY_SIZE(features), sizeof(struct kvm_sbi_fwft_config),
 >+				GFP_KERNEL);
-nit:
-
-I understand that in next patch you grow the static array`features`. But in this patch
-`ARRAY_SIZE(features)` evaluates to 0, thus kcalloc will be returning a pointer
-to some slab block (IIRC, kcalloc will not return NULL if size eventually evals to 0)
-
-This probably won't result in some bad stuff. But still there is a pointer in
-fwft->configs which is pointing to some random stuff if `features` turns out to be
-empty.
-
-Let me know if I got that right or missing something.
-
 >+	if (!fwft->configs)
 >+		return -ENOMEM;
 >+
