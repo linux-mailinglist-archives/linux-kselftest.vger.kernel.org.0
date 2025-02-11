@@ -1,138 +1,198 @@
-Return-Path: <linux-kselftest+bounces-26306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEC54A2FF9E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 01:50:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 787DFA2FF8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 01:48:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355BD3A7BCC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:47:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C2401884442
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:47:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526FF1F1530;
-	Tue, 11 Feb 2025 00:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF631F12F6;
+	Tue, 11 Feb 2025 00:41:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="EAKAP+gH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a+ObpMKM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757F81F12E3
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 00:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732671F0E23
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 00:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739234504; cv=none; b=SYvrCoT41qYnDz6o9U2d5h9bDPBsWICFTcaR0NrWpLmDeUJTKfmjCVvnfRVk1/5YN1rPlOBTR1RlJAqdDIB5n9EKKIb0Vk+KVXRK5u6OHWlWIBGT2FeOqMdFjtO2nm2KiDsxE+kw2fQVVJtF+8hzZFsx3OPDieOc4iJdmXMjFYw=
+	t=1739234501; cv=none; b=q5ShlkIY5qz6pSRg1iEf3kFqPCXt4ZKCc02QNgq3JFYHn5pI9JvyXRsV5emoZU2owXkpHxK0XUln0PQHkZ7Dt+oIQzfsZSCddlERDhLUpFZ0RgXWMjfIxdFtO5JsoUaVfe9tBYyU/ApLID/LUqmSM7ceyKuilqNsecuS82e+ADw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739234504; c=relaxed/simple;
-	bh=8xMoMq4/HmCsbbhmmUU+CjrB8VVYxxsj4UGn48mpUmA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KBJnzDTJej8Q5aRdnVJ7p2AiZU74gLfhAbLuLp8QUCgBj7dpBh3zUDJaTmsRhhI27jv06mzzgR+mRtw6ErMYRLvnpVe2aY4zoP9WGrrIv5ABz3wMUYeOajXHE27S4k+X+EoVnLcMQOQ+pQCRsFHDhIHa2Q4ouoehmw72F4kGb9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=EAKAP+gH; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4361e89b6daso34187405e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2025 16:41:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1739234500; x=1739839300; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0H4op0ePLiNdUHXM7R2dSoMw+sTN1l4LiLoSsD6CY0o=;
-        b=EAKAP+gHFnbMMSaAc4suj0odDs9wwUwRke7rSkY5idjAOB4lCgqDmWx4YEtmairfaS
-         boGJwprgoyeoygwhK/EUACs/hHMRPI284N4n5RPg3S5UUu4edNWkdogW2sZ1jxYRrUTX
-         18ufbME79A/vHkFokyaVEJYAucAlAj/04rEHc134zsAXRBfmCktLeyvI1bdLWDZ8Jy4u
-         WnRbRPBse0BhJuFeQJHWBqb2IBM09MHOLKuyzMZpyVtiDu6SvSQgfxnSOZBHbEardpbe
-         W56M7VdQlnnYwG5rfOzPp58/L3pMNPEvjOJbCgWniAowBy10I1YctVQpNA2gPEUQ/NH8
-         Lmdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739234500; x=1739839300;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0H4op0ePLiNdUHXM7R2dSoMw+sTN1l4LiLoSsD6CY0o=;
-        b=lUg8oIz1lltTq0FDxzJBvhjrt5GT/sp7igLCZSd7AsXHB42yNFMdC97MikL+LMgHrR
-         m2dWsBZyqnaSwhoYezecQTezUSL/Vs2efnH3neL9Hmww/W7F9k+0/1ckYw0QuiDLoceP
-         YF//rvR5+JFbHGCJIgf9YcsUZbAROc9QVAgf0EgLPbAZq7O8e0z/Y/ehV010scmnv+fc
-         eQLyGObbTE8qnRzljfSxtG+Ow0jdibvzHzS18ZeJOMeYXrHzOpjk3R0TZ8kv//PGULHO
-         XGb9oAC/gW47no5fWsdXNdKj/C+otb97yenwtkuM6sPEND767dbDg1WxCiC1VNa+zmTC
-         uGGw==
-X-Forwarded-Encrypted: i=1; AJvYcCWO1Z63mRf8c/Jk0CRLIxPTrd78UUhk/0bJukoFozQrN2XqAJcFyAKQyAOjsBG/NCVxzt4iaBZqdCZ4FXPTCyI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbX/RNHOIGZWGMAq88P3ftY8vf3CKWAXedZTSMHHr3ZoyjY/k2
-	d0O5mSt700pAqFBDwXCUUFs9uzMDFfd0DkxqLI0mwlAyBk4hUIP6MkN2+xhqijg=
-X-Gm-Gg: ASbGncvWSfQYLXlI388FcQjCrLfh/QK7JE+raZdDEdSjZAKFSDTzzGIVyjyjB9qyNhe
-	f2EgCDtyGWEC1sAwLSrZJEIPNOiNs/yI40h1akhhu0KcGuBBjtA+09bGNTgM3NunLmxDtwqGKcD
-	X7Mx5DY22HvfxnLBxeu0WEW3CRXJsnt99dJy0f4LIIloxybNYOEkTs4iJpKSawPukA0o2qo3lD6
-	qakpNlYOECkqtswBrJLyYeIslKCY9cHeOPXZ+7zR/AeeYP70hsq74U9Y0uqWtUIPPhBXLUUsdXT
-	i/ltFYURIj0X2W10/FXc6JjgD7I=
-X-Google-Smtp-Source: AGHT+IHjHENWeREsEhAJYoT3TQ2FFR8LSRFgAVO/2HRjTSK8uZkQIeJT/gCfk0HOYKp+KwyLvV3/jA==
-X-Received: by 2002:a05:600c:1549:b0:434:f0df:a14 with SMTP id 5b1f17b1804b1-4392496ec4amr124415175e9.2.1739234499835;
-        Mon, 10 Feb 2025 16:41:39 -0800 (PST)
-Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:1255:949f:f81c:4f95])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4394dc1bed2sm3388435e9.0.2025.02.10.16.41.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 16:41:38 -0800 (PST)
-From: Antonio Quartulli <antonio@openvpn.net>
-Date: Tue, 11 Feb 2025 01:40:19 +0100
-Subject: [PATCH net-next v19 26/26] mailmap: remove unwanted entry for
- Antonio Quartulli
+	s=arc-20240116; t=1739234501; c=relaxed/simple;
+	bh=bpieZKu7nF2fBcW+p5hY/rCkCIIcoFokdt3AqsVsiL8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VSEbTxXPOnt2FvFvk44ZSbMia5JPXsJ9zmVoj41hOF7r9OaTQMSWfbwPWgJFykF1ubxnRofcZuO1pjBe/SA5/53w4udMadCn/2QfMxieF1L4ICMV7EpHY+M54qgiOcMj9NjrGad2d1QGHo1Ge2kYxJn0ll2+fSrAKpmH1PgVit0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a+ObpMKM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739234498;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uW32snpxRzCVSt941LOqOUmwseLr9n4AUtM3i/agsHc=;
+	b=a+ObpMKM9m+n5kCHr9rMXlyHKGcYQ2w8uM33qGCHEIRv5AS5K+om9+5BJ5iEm/Vc7Uzf0s
+	bmY26NnOho4LJk0YdbqKWVcRIhv2A3zl5U9iK3pxD/RTtTUYolrpWNA5h68qIbesbxftXn
+	5uKKn/y2QXz7WzJStl4NEI+bFcy2Hxc=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-251-_e6O-04qOV2n_AD1k2LIuQ-1; Mon,
+ 10 Feb 2025 19:41:35 -0500
+X-MC-Unique: _e6O-04qOV2n_AD1k2LIuQ-1
+X-Mimecast-MFC-AGG-ID: _e6O-04qOV2n_AD1k2LIuQ
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B5BC2180087E;
+	Tue, 11 Feb 2025 00:41:29 +0000 (UTC)
+Received: from h1.redhat.com (unknown [10.22.88.129])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6BC8A18004A7;
+	Tue, 11 Feb 2025 00:41:18 +0000 (UTC)
+From: Nico Pache <npache@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: ryan.roberts@arm.com,
+	anshuman.khandual@arm.com,
+	catalin.marinas@arm.com,
+	cl@gentwo.org,
+	vbabka@suse.cz,
+	mhocko@suse.com,
+	apopple@nvidia.com,
+	dave.hansen@linux.intel.com,
+	will@kernel.org,
+	baohua@kernel.org,
+	jack@suse.cz,
+	srivatsa@csail.mit.edu,
+	haowenchao22@gmail.com,
+	hughd@google.com,
+	aneesh.kumar@kernel.org,
+	yang@os.amperecomputing.com,
+	peterx@redhat.com,
+	ioworker0@gmail.com,
+	wangkefeng.wang@huawei.com,
+	ziy@nvidia.com,
+	jglisse@google.com,
+	surenb@google.com,
+	vishal.moola@gmail.com,
+	zokeefe@google.com,
+	zhengqi.arch@bytedance.com,
+	jhubbard@nvidia.com,
+	21cnbao@gmail.com,
+	willy@infradead.org,
+	kirill.shutemov@linux.intel.com,
+	david@redhat.com,
+	aarcange@redhat.com,
+	raquini@redhat.com,
+	dev.jain@arm.com,
+	sunnanyong@huawei.com,
+	usamaarif642@gmail.com,
+	audra@redhat.com,
+	akpm@linux-foundation.org,
+	rostedt@goodmis.org,
+	mathieu.desnoyers@efficios.com,
+	tiwai@suse.de,
+	baolin.wang@linux.alibaba.com,
+	corbet@lwn.net,
+	shuah@kernel.org
+Subject: [RFC v2 0/5] mm: introduce THP deferred setting
+Date: Mon, 10 Feb 2025 17:40:49 -0700
+Message-ID: <20250211004054.222931-1-npache@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250211-b4-ovpn-v19-26-86d5daf2a47a@openvpn.net>
-References: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
-In-Reply-To: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
-To: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Donald Hunter <donald.hunter@gmail.com>, 
- Antonio Quartulli <antonio@openvpn.net>, Shuah Khan <shuah@kernel.org>, 
- sd@queasysnail.net, ryazanov.s.a@gmail.com, 
- Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=985; i=antonio@openvpn.net;
- h=from:subject:message-id; bh=8xMoMq4/HmCsbbhmmUU+CjrB8VVYxxsj4UGn48mpUmA=;
- b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnqpyPvVsBe5Cp3g3R9CiRk7YQ+2PHwNnzZlA1Q
- 0pnAm9TrPSJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZ6qcjwAKCRALcOU6oDjV
- h0aWCAC5uaeXlErFy1AmTjZtoAcj6luKEQPtxVbrLDJsiviSBdiwut1GgVdTkBDCil4TEcwZom9
- jOCIdcc9Ht7m3jWSRLxy5doFfUq71IVnVIRMOux/JzLd1chD3WBtZsX0ygKE03TMyM28kJjDrzX
- fx5V9/rHYb3aNjqZI1VEfNtBDxMWOrmd7Cot92HOOtzs6B3UZOlzU2zUfK1ESIeOASPlMAYR5Al
- h7ufHlD67uFoa1abb9kgLFHR9rdyIij8NFXiqmksKnYU+CRfUJMN73QaQg4PWJInRiFtb/tDqiK
- eS60/cTK1Fg7hSyJDYeHXQQkwrJaQAOIYfBJ9qHv17feug3Q
-X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
- fpr=CABDA1282017C267219885C748F0CCB68F59D14C
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-antonio@openvpn.net is still used for sending
-patches under the OpenVPN Inc. umbrella, therefore this
-address should not be re-mapped.
+This series is a follow-up to [1], which adds mTHP support to khugepaged.
+mTHP khugepaged support was necessary for the global="defer" and
+mTHP="inherit" case (and others) to make sense.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
----
- .mailmap | 1 -
- 1 file changed, 1 deletion(-)
+We've seen cases were customers switching from RHEL7 to RHEL8 see a
+significant increase in the memory footprint for the same workloads.
 
-diff --git a/.mailmap b/.mailmap
-index ae0adc499f4acba5b6220762c1beccceeb5e8ddf..9877cf1ebf5480b80bbb9df73e1096147fb256a4 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -88,7 +88,6 @@ Antonio Quartulli <antonio@mandelbit.com> <antonio@open-mesh.com>
- Antonio Quartulli <antonio@mandelbit.com> <antonio.quartulli@open-mesh.com>
- Antonio Quartulli <antonio@mandelbit.com> <ordex@autistici.org>
- Antonio Quartulli <antonio@mandelbit.com> <ordex@ritirata.org>
--Antonio Quartulli <antonio@mandelbit.com> <antonio@openvpn.net>
- Antonio Quartulli <antonio@mandelbit.com> <a@unstable.cc>
- Anup Patel <anup@brainfault.org> <anup.patel@wdc.com>
- Archit Taneja <archit@ti.com>
+Through our investigations we found that a large contributing factor to
+the increase in RSS was an increase in THP usage.
+
+For workloads like MySQL, or when using allocators like jemalloc, it is
+often recommended to set /transparent_hugepages/enabled=never. This is
+in part due to performance degradations and increased memory waste.
+
+This series introduces enabled=defer, this setting acts as a middle
+ground between always and madvise. If the mapping is MADV_HUGEPAGE, the
+page fault handler will act normally, making a hugepage if possible. If
+the allocation is not MADV_HUGEPAGE, then the page fault handler will
+default to the base size allocation. The caveat is that khugepaged can
+still operate on pages thats not MADV_HUGEPAGE.
+
+This allows for two things... one, applications specifically designed to
+use hugepages will get them, and two, applications that don't use
+hugepages can still benefit from them without aggressively inserting
+THPs at every possible chance. This curbs the memory waste, and defers
+the use of hugepages to khugepaged. Khugepaged can then scan the memory
+for eligible collapsing.
+
+Admins may want to lower max_ptes_none, if not, khugepaged may
+aggressively collapse single allocations into hugepages.
+
+TESTING:
+- Built for x86_64, aarch64, ppc64le, and s390x
+- selftests mm
+- In [1] I provided a script [2] that has multiple access patterns
+- lots of general use. These changes have been running in my VM for some time
+- redis testing. This test was my original case for the defer mode. What I was
+   able to prove was that THP=always leads to increased max_latency cases; hence
+   why it is recommended to disable THPs for redis servers. However with 'defer'
+   we dont have the max_latency spikes and can still get the system to utilize
+   THPs. I further tested this with the mTHP defer setting and found that redis
+   (and probably other jmalloc users) can utilize THPs via defer (+mTHP defer)
+   without a large latency penalty and some potential gains.
+   I uploaded some mmtest results here [3] which compares:
+       stock+thp=never
+       stock+(m)thp=always
+       khugepaged-mthp + defer (max_ptes_none=64)
+
+  The results show that (m)THPs can cause some throughput regression in some
+  cases, but also has gains in other cases. The mTHP+defer results have more
+  gains and less losses over the (m)THP=always case.
+
+V2 Changes:
+- base changes on mTHP khugepaged support
+- Fix selftests parsing issue
+- add mTHP defer option
+- add mTHP defer Documentation
+
+[1] - https://lkml.org/lkml/2025/2/10/1982
+[2] - https://gitlab.com/npache/khugepaged_mthp_test
+[3] - https://people.redhat.com/npache/mthp_khugepaged_defer/testoutput2/output.html
+
+Nico Pache (5):
+  mm: defer THP insertion to khugepaged
+  mm: document transparent_hugepage=defer usage
+  selftests: mm: add defer to thp setting parser
+  khugepaged: add defer option to mTHP options
+  mm: document mTHP defer setting
+
+ Documentation/admin-guide/mm/transhuge.rst | 40 ++++++++++---
+ include/linux/huge_mm.h                    | 18 +++++-
+ mm/huge_memory.c                           | 69 +++++++++++++++++++---
+ mm/khugepaged.c                            | 10 ++--
+ tools/testing/selftests/mm/thp_settings.c  |  1 +
+ tools/testing/selftests/mm/thp_settings.h  |  1 +
+ 6 files changed, 115 insertions(+), 24 deletions(-)
 
 -- 
-2.45.3
+2.48.1
 
 
