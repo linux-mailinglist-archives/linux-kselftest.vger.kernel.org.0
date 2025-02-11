@@ -1,123 +1,112 @@
-Return-Path: <linux-kselftest+bounces-26323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFA6BA301F6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 04:02:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CDD1A30229
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 04:30:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6743B3A36ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 03:01:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38B553A9870
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 03:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3141C5D5E;
-	Tue, 11 Feb 2025 03:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 181A51D61A5;
+	Tue, 11 Feb 2025 03:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MjItOrxd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbt18T0R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4389C374EA;
-	Tue, 11 Feb 2025 03:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D884A1D6194;
+	Tue, 11 Feb 2025 03:30:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739242865; cv=none; b=lPP0tWM+7+B6rrC1aBOjoyXmP+/c20LTodHRqIpXlCFoLvHw+Lfdi4XC0rUe5J/Yr6IMsH7UFgNkpnGKwXwGoie++AJPbGxY7uylu4nqt0fCyr/QTggG4JflRpwAimm9ppliM5YowLlGN8ewKbXntgdNh2uS74z3+dIky4cLGsk=
+	t=1739244614; cv=none; b=bYt7d2DFtTnFuDXDj/auNExGcnx948XsA/oloqEdlzipNInORCf18AqoHSFFusgd3h1uVXICETs+G++KGPJfVT2BoJeBXy53aTxaLaqzvp+WwMR+DriCJeVar07KAEdSMw639aBlvZ+JNA5l8JeqqBQsurJ9MbmLARYLAW24ehU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739242865; c=relaxed/simple;
-	bh=cZRSGsPr5NDIpPaoHCeAoLx/Cg6l0wSrIJIyEW42Puc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mOVaxeC0O5xXo6RbsHNi0CJbH5zJlZ41rEARLfR6VhDAwpNmdS4h3Jt5M7WX4YvK0DMwFbcmh2MtwbNevB+lfyPwv+cmZplzFs7n+OMd5741Ioto8QpBUHxGJnFO3Wufs/HcuLuNcMzj2Ncf6GxEmyHY5mOSEVkFE1FGPD/WUD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MjItOrxd; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so12964565e9.3;
-        Mon, 10 Feb 2025 19:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739242862; x=1739847662; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I0+Ftmctz1tHLKGjM2SvsvtPNyMgN+i6G6rr2ncjwYw=;
-        b=MjItOrxdIpK9Beqn0GLeYGdPvTYTn6rSyfdBEB++5bPg19oPBSXTPFext8gMkWpykE
-         5K++coT/zGq6cxCtcN51VNAX49sjcR5sL4dHqCFtX0UfEkqVdOc6awnAY+cE5VZzKmww
-         1M2NLpb/1u3V8flavez9oJetoBSJxbUdJIjKDYE1Ob99FOtmspUTVX+fM80ynafUwpIB
-         1Nk1WCNQ08h7kffR6lfPDuJDSf+o4hyYK+DjKQldnmFh6JYKKbB1wT+/XypG4vS86NJ/
-         lLsYLEhejK/javnUh8EuJMEg6mqW4Sc+ZMD88JlfRX5kmXGGapP+RSRD9qV95unuASIN
-         hACg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739242862; x=1739847662;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I0+Ftmctz1tHLKGjM2SvsvtPNyMgN+i6G6rr2ncjwYw=;
-        b=DIqzlAz76c5jzko1VVCwVzBiUuuNmugXbc8f16SDc821u8Bo6bHtscTjUzIQvl5Zpw
-         bMkDBNizm1+GvkMz0qM2edsnj016PudKf0RLpWyjEmPs3i4v+D/D/jk9Ix3Zo067Ghtz
-         Dpgp2fRq2kX+96ohWWuTxuAMAsDMZM2ScwsfiSJRgXTelxSWWRjj5e7QBRCjqOl6DTr2
-         TOMZR5ndoRZWdrN6VNd6uJOs4MYKbqLEkGLh12vTks1o3HLgjF0kn4sNq2zDYZ2a26OC
-         1gnwAvrdXl+JZxbFypijbzEu/jikBzqDSwzeIlyKQbZWKwWtfHhiKyPXpI7I3Cr8Wnc1
-         3EaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUgy8COySLBYU08ESORVbeJVbX2xu49AQIdAv//pK4soNe6ju0MiRo6PZivl1I8y77F7icu/CqlfuvD9/yaHS78@vger.kernel.org, AJvYcCVqbEsMk1Zg1oHSF2hxHQ65Jv78NZr69TFH8ycy6mCVJ68W3UgthpU6CXGcvrgzLFuVIjKBoRHR4o/GvYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz84ITrCEtPM1dsEfKM8LBgUDL8pXMTtEEDBfp8BOcDCMOjBezI
-	xg2GTjAlgO06MEjL9d6a5iCMEe70hnVTwuo/LMyz0ingY1l3u3pM
-X-Gm-Gg: ASbGncurzILuWgToRjcvQZoUl3rA+TRg3sWovt9bHxpUs+nY6a4wAagabFjhbqevHfK
-	x1P2T4fIikol0T6Z1ZwdCuU7hIRKCaFxapxieCUJucYJUGgvVfQpf3yuu9ZJKUoQIzoGTGAyDQ6
-	QEJZpsuBF1BqQxCKD/jsd63fZIHbKirVBECp0N3NtU5dCnUekQCCl4cRa4ERC6ukHnQt2RXQuaH
-	Oof62ASxv2kytzU4Wwmv0VVeMpa4Q8W8FXWE7+TlF0Xznb3zGk7yhIpY83Y36qQHjFPqMLEeLLS
-	TlKSGb/9MmRkZ6KbJjpcP0waShD0VYwCLRooNw4=
-X-Google-Smtp-Source: AGHT+IFQ5ct/eLOgfDv7Qw2gj1n3vazuwUHtEoARoYyP42j6t/7paFBG0Ke21LcKUs+x9M67T3tGLQ==
-X-Received: by 2002:a5d:6d0b:0:b0:38d:bd41:2f8b with SMTP id ffacd0b85a97d-38de41bdfe9mr1852527f8f.44.1739242862468;
-        Mon, 10 Feb 2025 19:01:02 -0800 (PST)
-Received: from localhost (tor-exit-9.zbau.f3netze.de. [185.220.100.248])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-38dd4342502sm8153548f8f.26.2025.02.10.19.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 19:01:01 -0800 (PST)
-Date: Tue, 11 Feb 2025 05:00:22 +0200
-From: Ahmed Salem <x0rw3ll@gmail.com>
-To: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, shuah@kernel.org, 
-	skhan@linuxfoundation.org
-Cc: linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
-Subject: [PATCH v3] selftests: tpm2: test_smoke: use POSIX-conformant
- expression operator
-Message-ID: <nyskb7mbqk2dvlwhez4sua7ryz5gyi73yker6y3qhd4chyyeaw@x6nhqgtxcyvl>
+	s=arc-20240116; t=1739244614; c=relaxed/simple;
+	bh=Td1U0MsX4jwP0X608ibiA1txDzrYo+jkLqYHfL6unXc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qwqGY5CvkV25yXYpzyk/UL9w4wBS4eTpyZRH6oqn0uELQew9ShxsLhKL3zIbj9c+7XneNCLgitMrQT8PqW5+C657+9O5VcJ6x9oz2gmfYZq2imb2jxk5ZYaeiSHfYE3NNHl9elIRqXiuI4vFJJWa740Yj+FHzXXwqfP4joJFzHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbt18T0R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A01C4CEEA;
+	Tue, 11 Feb 2025 03:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739244613;
+	bh=Td1U0MsX4jwP0X608ibiA1txDzrYo+jkLqYHfL6unXc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=gbt18T0RcqqWiwoOTneZSCFnbdT9Fh21yaei243no3AOA6QOtjPweKQuRpUQSF1oP
+	 z9Lztst6r2SkNca/uGAtFwlQ2IquVXqAUCAHbPY7tuhm5fMn8ebzZAk7fu4WeD3hnn
+	 QOIQSJsL7MRnGD0JSM+yz9/9KmDw4PEuCi9rO5V+2O3lNm4INPGEfZsZba8sYwJVSi
+	 vfyPUVCxJ4HjKfZlK4LiJPMIQJEg6dzI5wSYXdlXkcwxf2qqGjKW0lJYwl76oeWDY7
+	 M+/QswcMvpB5c4SKp1VT6ExvkdahmqBBGejG54v2Ynq1kJPlPnNaSEO8Gu5gT97iWJ
+	 QRNI6EVZuTfVg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33DDF380AA7A;
+	Tue, 11 Feb 2025 03:30:43 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v6 0/7] tun: Unify vnet implementation
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173924464176.3948401.17256177133677367804.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Feb 2025 03:30:41 +0000
+References: <20250207-tun-v6-0-fb49cf8b103e@daynix.com>
+In-Reply-To: <20250207-tun-v6-0-fb49cf8b103e@daynix.com>
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: corbet@lwn.net, willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ mst@redhat.com, xuanzhuo@linux.alibaba.com, shuah@kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ yuri.benditovich@daynix.com, andrew@daynix.com, stephen@networkplumber.org,
+ gur.stavi@huawei.com, devel@daynix.com, willemb@google.com
 
-Use POSIX-conformant operator symbol '='.
+Hello:
 
-Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
----
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Apologies for my previous mistakes.
+On Fri, 07 Feb 2025 15:10:50 +0900 you wrote:
+> When I implemented virtio's hash-related features to tun/tap [1],
+> I found tun/tap does not fill the entire region reserved for the virtio
+> header, leaving some uninitialized hole in the middle of the buffer
+> after read()/recvmesg().
+> 
+> This series fills the uninitialized hole. More concretely, the
+> num_buffers field will be initialized with 1, and the other fields will
+> be inialized with 0. Setting the num_buffers field to 1 is mandated by
+> virtio 1.0 [2].
+> 
+> [...]
 
-Changes in v3:
- - Reword mistaken commit message
+Here is the summary with links:
+  - [net-next,v6,1/7] tun: Refactor CONFIG_TUN_VNET_CROSS_LE
+    https://git.kernel.org/netdev/net-next/c/5a9c5e5d8a1b
+  - [net-next,v6,2/7] tun: Keep hdr_len in tun_get_user()
+    https://git.kernel.org/netdev/net-next/c/07e8b3bae2f8
+  - [net-next,v6,3/7] tun: Decouple vnet from tun_struct
+    https://git.kernel.org/netdev/net-next/c/60df67b94804
+  - [net-next,v6,4/7] tun: Decouple vnet handling
+    https://git.kernel.org/netdev/net-next/c/2506251e81d1
+  - [net-next,v6,5/7] tun: Extract the vnet handling code
+    https://git.kernel.org/netdev/net-next/c/1d41e2fa93f7
+  - [net-next,v6,6/7] tap: Keep hdr_len in tap_get_user()
+    https://git.kernel.org/netdev/net-next/c/74212f20f366
+  - [net-next,v6,7/7] tap: Use tun's vnet-related code
+    https://git.kernel.org/netdev/net-next/c/6a53fc5a8770
 
-Changes in v2:
- - Remove snippets pinpointing the issue 
-   from commit message
-
- tools/testing/selftests/tpm2/test_smoke.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 168f4b166234..3a60e6c6f5c9 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -6,6 +6,6 @@ ksft_skip=4
- 
- [ -e /dev/tpm0 ] || exit $ksft_skip
- read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
--[ "$tpm_version" == 2 ] || exit $ksft_skip
-+[ "$tpm_version" = 2 ] || exit $ksft_skip
- 
- python3 -m unittest -v tpm2_tests.SmokeTest 2>&1
+You are awesome, thank you!
 -- 
-2.47.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
