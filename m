@@ -1,81 +1,91 @@
-Return-Path: <linux-kselftest+bounces-26404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6EE4A313A5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 19:00:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC20BA313C7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 19:10:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BB7A167664
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 18:00:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B973D1888396
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 18:10:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E0611E5B62;
-	Tue, 11 Feb 2025 18:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3C941E3DEC;
+	Tue, 11 Feb 2025 18:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odGOWcaY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZFiYDnC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C4F261595;
-	Tue, 11 Feb 2025 18:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C7D1E3DDB;
+	Tue, 11 Feb 2025 18:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739296807; cv=none; b=hAizhPc2jDJJfbO+wJAFgPE3WBbso6eKC+wBZBibxv6FqbtdJr/3/R2k/KnL7xh1ErAY6OS7wSkVnyAO/WMq6WvMyrYlKtID5g8lnJrLyc1AwejLbAMLpvbKRy3NIuyBZNkLpbC+mUOg06Ez0hW1sY34FmVGBe67d0LBhI5oSss=
+	t=1739297409; cv=none; b=nkjPe2njpNICDRwe2AS8v8132UBHiCL2PY54TejOhb2qco3Rb/rh41WVi0jWpF3fgGhX3kscMw6zKT/EtviAo6bJe3jK6E3PI0GI0EEJ7tEr4xKVH1KaCpDoejc7cHFmDoWWexZssYoroSfoniSML8+iw6C/sMNtxCdpVYw2fcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739296807; c=relaxed/simple;
-	bh=UwvRs8pwFAJ6JeV5xxEyLtwclB0ZDjxvlAJA9mgKqhw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FUZ4497Ew1zksOtexrpYs5jRhI6OWJgMuIaZ8C14+9gXY1kagUnVRMSWsI5xpqOvwTcbjAyzb25SBGPTR3uqv0ewANsu849ixG3IVqCJWfb6C3Px24Ui+QQeZL5kUoeY0JnEbdKWqhTgYYyxBuodmfkH7KKZ++5Adw3yY+KfJYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odGOWcaY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBA1C4CEDD;
-	Tue, 11 Feb 2025 18:00:05 +0000 (UTC)
+	s=arc-20240116; t=1739297409; c=relaxed/simple;
+	bh=WNGJKuUDrkH4gbStW9QsiLGBbcSx5cWWguYdVr2sa2o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=RdaNxq9k+Ps0k8nevskgyaKA93GTc6TRw6gbZIo8pdij2Fo72HcRM3cPmbBUhZoSQUVt8jSvH7Hrmf5SzgCPu7wW9XMPj+cEWp3APMWm4ZnUwlFQW+NKX+3heBs54k/R8+sAI2U3TARFDXTpnEAxVz6MKIjRU6gsVaZN3xMwmzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZFiYDnC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86597C4CEDD;
+	Tue, 11 Feb 2025 18:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739296806;
-	bh=UwvRs8pwFAJ6JeV5xxEyLtwclB0ZDjxvlAJA9mgKqhw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=odGOWcaY02eC9ZmWOnctZ4yOtbBxji73PMEk1FDdZDuK+fi3ucHv/x6t9nQOaKAK7
-	 AGUoOl7pYQeSRlRI5mpn6bV2nO77R4uaqfvqRYkvbBz+zjyhd8Vj4oh1lV570HQ7DA
-	 KCKmMxCwkJH6xt/tNnYaUSfYqM4tHzVbLbXAMCKg3YTisFNB49q8pMSKSc3Owu2a9T
-	 Hq7rY+tQjgFE9oztTH8g3Fa2A7065Kq+zuNa6DKLxMVJS+0u0tMv6rIKlHKOddZSCI
-	 QujNwOE10Ml1r/6vWq6pBQTlN+76tmlxZLQ/WJrd2+xRtki6iZsydV/2WlQSOK1GU8
-	 285ZQxf9suUNA==
-Date: Tue, 11 Feb 2025 18:00:03 +0000
-From: Simon Horman <horms@kernel.org>
-To: Pranav Tyagi <pranav.tyagi03@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests: net: fix grammar in
- reuseaddr_ports_exhausted.c log message
-Message-ID: <20250211180003.GA1626852@kernel.org>
-References: <20250211170633.4458-1-pranav.tyagi03@gmail.com>
+	s=k20201202; t=1739297409;
+	bh=WNGJKuUDrkH4gbStW9QsiLGBbcSx5cWWguYdVr2sa2o=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=kZFiYDnCz+Q1YmWXWDf2ixDY/MaYnKDWWMAExvviHoztp5iZEyXPqufAH2AaemRSZ
+	 ypNqApnklqWOZelMKmbx5lOtBEX1G8w2OxMQEUflkQBJJMftNA0L369TXQgYwjaEmS
+	 gOISLMcSqenI2RvdPr+CSV9iTN53LgRM+hDLsSBFm+VXuhZ/PKH8EpHua/fZd5zVlM
+	 oTQQ5pR/2K12oakpZOA77ZtI6ZlTdjeaLJzszRL976P5vN0MaT0+K7H0zXwsyjltBJ
+	 PbdASNxnzMvoeebP6SJ340aUT++uZf7C37sN7SDfd4D1bDlQG6hr927regHIp4x/R+
+	 NBE+HSVutHKtg==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250211170633.4458-1-pranav.tyagi03@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 11 Feb 2025 20:10:04 +0200
+Message-Id: <D7PTH0ZUAH5L.VVEECLR4VEWH@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kernel-mentees@lists.linux.dev>
+Subject: Re: [PATCH v3] selftests: tpm2: test_smoke: use POSIX-conformant
+ expression operator
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Ahmed Salem" <x0rw3ll@gmail.com>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+ <shuah@kernel.org>, <skhan@linuxfoundation.org>
+X-Mailer: aerc 0.20.1
+References: <nyskb7mbqk2dvlwhez4sua7ryz5gyi73yker6y3qhd4chyyeaw@x6nhqgtxcyvl>
+In-Reply-To: <nyskb7mbqk2dvlwhez4sua7ryz5gyi73yker6y3qhd4chyyeaw@x6nhqgtxcyvl>
 
-On Tue, Feb 11, 2025 at 10:36:33PM +0530, Pranav Tyagi wrote:
-> This patch fixes a grammatical error in a test log message in
-> reuseaddr_ports_exhausted.c for better clarity as a part of lfx
-> application tasks
-> 
-> Signed-off-by: Pranav Tyagi <pranav.tyagi03@gmail.com>
+On Tue Feb 11, 2025 at 5:00 AM EET, Ahmed Salem wrote:
+> Use POSIX-conformant operator symbol '=3D'.
+>
+> Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
+> ---
+>
+> Apologies for my previous mistakes.
+>
+> Changes in v3:
+>  - Reword mistaken commit message
+>
+> Changes in v2:
+>  - Remove snippets pinpointing the issue=20
+>    from commit message
 
-Hi Pranav,
+OK I read what I wrote and I guess it could have been misinterpreted.
 
-As this is a patch for Networking it should probably be submitted to
-netdev@vger.kernel.org and targeted at the net-next tree, like this:
+What I meant was to take the relevant part of the transcript that shows
+the issue (and possibly also how it works when fixed).
 
-	Subject: [PATCH net-next] ...
+Sorry about that.
 
-Please take a look over the document at the link below
-and don't hesitate to reach out to me if you have any questions.
+[1] https://lore.kernel.org/linux-integrity/D7OY3ZVGJOV5.R3SL9SBFT2DF@kerne=
+l.org/
 
-https://docs.kernel.org/process/maintainer-netdev.html
+BR, Jarkko
 
