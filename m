@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-26351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00D75A30990
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 12:12:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53867A309D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 12:20:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B66213A8A38
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 11:12:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94D0E1626F9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 11:20:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F9B51FA14B;
-	Tue, 11 Feb 2025 11:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4811F9AB6;
+	Tue, 11 Feb 2025 11:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QZBlU3Ff"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZTNGrui"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B00E1FA243
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 11:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA961F9A9C
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 11:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739272198; cv=none; b=iQXDf5+hYDnn18RZcDYXhKuOF2i/PGm8pvm9wfAf4re6uExHUHc5maessvvlEYiTD+QcD3qeUZr5aPOnPofctvfuSvcg0p81p1xReGNZje7IJv00akw4LBjeBUROXDrr4Ni51b94Du4cIEtjhLhL93Ducffw3w8XhHK9zZqXAlA=
+	t=1739272772; cv=none; b=FaYSB9MRrqqv6lTiCJsXc94uqftsROS+39xTzui0BX2HhWMWBVLoApvE8NPuOGYd/GzoNMC4mYZdMBGH5Fpo6GVuJ70ZZfO3zoBXk3CesskiKo6JJdU5K6VGefJpeVIB4xsqjWdjTW9k//g/nR/ekLcwj9cEX4i+0F/x5hEJIXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739272198; c=relaxed/simple;
-	bh=rpSIJr2tTA1mlR4YLGpeZyR2NSRJg92WBS/isaUQecs=;
+	s=arc-20240116; t=1739272772; c=relaxed/simple;
+	bh=A6kDijY1CxU3jwpKODbbC8vCmkKQJjjacTCdiLn75Lo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X75KIT4LFPfgPtOMYwYxRtqH6iORm/4Vre2dh3iGpr7gSE9B8k0Q4BXfJDCu0S+V8wF12QP0TbsWCDLGM3bRUAlzU/6TrUSNzCQFAUw0FDH1yzeB6Dm5tP33Jbjtqq0IIulzRTtmeoAj3LyNEteYP3hqwTgPf4PlK/xYiGEXI3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QZBlU3Ff; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=vDDPTWO4tp8LnZhpaTsiVSMXdLCpD1kNNopjrB30sd3VEi4BQg2XvKnudp6n5/wYEaBieBBovQY7Zq+D+Mno41WH0+UV78539jj0X+/B2Oo0Y/BlCyr5bSWdq66yR+2Iy0Tc5zQKKUru7Kmte8WrhvqSvzlJ4dztSk4/o2RHfYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZTNGrui; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739272195;
+	s=mimecast20190719; t=1739272769;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Y7ZAQ07RxJ7O5uwhTtT4Uoh1NwPTNjnj401gSfYgfTY=;
-	b=QZBlU3FfPLoI3p8Yjz4Xs/nl9U417yAB6wu/giRTdj6Z/w9t5Axvl7RK+nu/biTSmOXUqb
-	hQTBvdJf8BfVEi9dkWGDrZ4OLNk1Ety37Qk1Z0YUY0qL+AEv7Bu8uR8lR7v/T0/6j7UUX2
-	kMp3xMB4VqlP345+MhPTUMO6B/LeWzA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=mKKlOAHFJNzqARLCniSKjEWDKr2MGQlvqNtXg2rOPEI=;
+	b=DZTNGruizautB6a7PHPwXoJQ8Jz5A0PLuL6uG05O9qaPQ71pTlaBw1yNWX8KBTeP3RZ0Ys
+	0gMFEo/NUgsqT4McL2+4RE9ftJWoviw8WNsRV+xmFzweQS/epn+Rp0XwQm4dVYj9bNTqO1
+	8SN3sgPPn8CXt5bS/iKV4Lm03xwPSAg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-540-kA5ilqWBMP-E8nb3oZ1H1w-1; Tue, 11 Feb 2025 06:09:54 -0500
-X-MC-Unique: kA5ilqWBMP-E8nb3oZ1H1w-1
-X-Mimecast-MFC-AGG-ID: kA5ilqWBMP-E8nb3oZ1H1w
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43935e09897so20277885e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 03:09:54 -0800 (PST)
+ us-mta-453-X1nB6LZEN6yzjiHDLP2tmQ-1; Tue, 11 Feb 2025 06:19:27 -0500
+X-MC-Unique: X1nB6LZEN6yzjiHDLP2tmQ-1
+X-Mimecast-MFC-AGG-ID: X1nB6LZEN6yzjiHDLP2tmQ
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4393535043bso14950135e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 03:19:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739272193; x=1739876993;
+        d=1e100.net; s=20230601; t=1739272767; x=1739877567;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7ZAQ07RxJ7O5uwhTtT4Uoh1NwPTNjnj401gSfYgfTY=;
-        b=U2K2mOyUHY7zFBXWYm1aOpJ3KJS8z5gi8FKcDN4rVCpu1/Fu31EAzXhyvXWXu0bmXg
-         M3LYq51rlOCTDWkt3OR9wbGtRRj2aZJ+XfI/quIZO6AGtIn4d3yhtsh+ZTbGz7MezvHG
-         HqwLR7T4dPSl7/mc799UQmhmtCZCFhSLM9PO17cBt9pfIN++CtSuuN5VWSvZNKEenwTl
-         nnbsvkOkAhUDa+v8IX+5f7t8f2d9sb1O0gf1opmdxo+HpQ2u+7Ho2booClE/4dv7IySc
-         vB/hRIga5d6UgeCik7kmXb1gWLoWDdySAVyz3lNjGPXgWi9ZU6BU4yHimgdWVrinZi8J
-         2xng==
-X-Forwarded-Encrypted: i=1; AJvYcCXy1rMiQia0DIGYa80GlHPd32rnVdb8uC+bXLB28SySKdgCP2RU0vsabU0pWBER8TN3m0+7WewfeufgbithRM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5mAtedOkvoz3IpVEvHwuOzHJ1BTNWGVWIsfsX+2/GsUlmWowo
-	l3UDhxfUXctfb6LHfDvQeQ0igafv3/DHPLZ3f+Ch5ghItdda5MEnVdXnDkfhl0OR0hlKktTCelA
-	/Nj1Q811ARP6wY48AMVOBKInLOk8RseXaxvUF6Fhrw0R8mJLosDyrZ9jEHcO72TTYFg==
-X-Gm-Gg: ASbGncuBUEKt9xz/omVog9HHHg3+DpuVPC1uxx9Qksbf49YRcM9TeYOmaXvk3Jv9e/X
-	py+E2frjTQMmuFxj/jFPA+oGY4D843YoqaFPJemAbQyA4gSrb0VPtn1/ELBsJwGd5YxBG/m3/aV
-	W8zB06AhNAvxUN82C3im7BGW9ABjt9hyxHmACw427dsrF7iLUCau732TEnuGdvWHzQS/IcuSX/Q
-	4mKiYyyXpavdy+UOOhjLihbawBld7xox/ChuVFeNN+I1wxM8jFYXr5atajynUsJ89UFiBRdwybf
-	WUGr9IiiFtPh6+0Ahdj9b0BSoUYxMO37rGM=
-X-Received: by 2002:a05:600c:1c92:b0:439:4589:1abc with SMTP id 5b1f17b1804b1-43945891eaemr64632685e9.14.1739272192990;
-        Tue, 11 Feb 2025 03:09:52 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGRBY/4tHNCW+QPAjUDCl4IZPK/+epAOWrGOIX9oOcIs3K9+fGAdS9SP2ebLTN01yGe5jkbBA==
-X-Received: by 2002:a05:600c:1c92:b0:439:4589:1abc with SMTP id 5b1f17b1804b1-43945891eaemr64632275e9.14.1739272192560;
-        Tue, 11 Feb 2025 03:09:52 -0800 (PST)
+        bh=mKKlOAHFJNzqARLCniSKjEWDKr2MGQlvqNtXg2rOPEI=;
+        b=UQ8UK1jtt00mwx+GfF3802ruu18Ud2ZWz7E88p7CHlTE3T0sTpwSuLiNpTUryRNF9S
+         fuTn5oevwLjYG+AY261ClUbk03Lj5ut6Fw4Co/ujECAN47qYK5a7nfrOR3BK/2DpSCc3
+         +q6UKMkn5FUQ7X+N86WXkYO8unslbG3Izyy0QfnqFtfBNKiNKNMKog5eNJhHKQlSDDaI
+         iWJBS7uTeElPgL8xgc4Och4IeRPsCnAP36zSHjtrIXjNLl7wU7WZyMz1QL5eXtG+RE87
+         xIFv0qSjS+m/gXjYxwf8eDkpM45PyN8jXYzNQB0ahn+Dl7huBG5ebs0Dry8OYfmjelhv
+         KFyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWpOpQQgzhNGUNcaEhCPEXJieUni4rK/rJ3QrN35N98J1a7B9zmYCPtE/N+aALFXmwQp0awmVbM/IvIztfhOtc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqvJesO6Sc30Sv8R/RhxFW3SqjEHmapY2ptZdRjOGVfw3Hs5S+
+	eI9+1Rh0w8gMmX7BjKQmXfeHx5R/Q6nnMI6+DDTjWsMXjESiUKLyN7On7R8rAUTYDgRvW57pEaZ
+	0T5vVaymrv4W+t47kjkZdv9JNI8CxvAXEsEIUlF9WBVZlS4URrit3k6D/XMWvWxLzKA==
+X-Gm-Gg: ASbGncu1m++ugGQHCxcQ2Fb5HcsAPkR6w8ljNYpnOCDSvN5qCj1oEiUoP8ckCG1E4X1
+	hE64xrRmSIwMe3mNuHx+3OaVMO+F/obEDBzluaUbcBRthjvJj84RETsvJEpeufBjbM/ghmLnxEf
+	mzovoaunMilLO0celzMbjKqwsSud7mWkuPXNmGD/MVPdViSgmKbPoJ1wiQJwetWBMgVy7NxMWme
+	262szHTybOdqsQ3iH2Na4QRqwYTxTVAj2IbKMr9If6TWSR8YggNWwvSX79/YJF/jzbEr3rNabQe
+	Gs+KbNw5wsJeHlAIAUppnAP6OhymNCHlUr4=
+X-Received: by 2002:a7b:cd17:0:b0:439:33ac:ba49 with SMTP id 5b1f17b1804b1-4394ceaf87fmr25597385e9.1.1739272766794;
+        Tue, 11 Feb 2025 03:19:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFJz9n+AsvlWqCu6BA+8Vdyt20fjJ6R8Eet6qzeh2S/tTdd/2jLdGSZwJRO0O1iAJUykgpigQ==
+X-Received: by 2002:a7b:cd17:0:b0:439:33ac:ba49 with SMTP id 5b1f17b1804b1-4394ceaf87fmr25597135e9.1.1739272766384;
+        Tue, 11 Feb 2025 03:19:26 -0800 (PST)
 Received: from [192.168.88.253] (146-241-31-160.dyn.eolo.it. [146.241.31.160])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dd6080926sm8461760f8f.83.2025.02.11.03.09.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4394f3b8846sm9865315e9.1.2025.02.11.03.19.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Feb 2025 03:09:52 -0800 (PST)
-Message-ID: <13afab27-2066-4912-b8f6-15ee4846e802@redhat.com>
-Date: Tue, 11 Feb 2025 12:09:50 +0100
+        Tue, 11 Feb 2025 03:19:26 -0800 (PST)
+Message-ID: <72634e76-7bb2-48d5-ab21-9d5e86adee9c@redhat.com>
+Date: Tue, 11 Feb 2025 12:19:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,172 +88,58 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 3/3] selftests: drv-net: Test queue xsk
- attribute
-To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org
-Cc: stfomichev@gmail.com, horms@kernel.org, kuba@kernel.org,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- "open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)"
- <bpf@vger.kernel.org>
-References: <20250210193903.16235-1-jdamato@fastly.com>
- <20250210193903.16235-4-jdamato@fastly.com>
+Subject: Re: [PATCH net-next v2] selftests: net: Add support for testing
+ SO_RCVMARK and SO_RCVPRIORITY
+To: Anna Emese Nyiri <annaemesenyiri@gmail.com>, netdev@vger.kernel.org
+Cc: fejes@inf.elte.hu, edumazet@google.com, kuba@kernel.org,
+ willemb@google.com, idosch@idosch.org, horms@kernel.org,
+ davem@davemloft.net, shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20250210192216.37756-1-annaemesenyiri@gmail.com>
 Content-Language: en-US
 From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250210193903.16235-4-jdamato@fastly.com>
+In-Reply-To: <20250210192216.37756-1-annaemesenyiri@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2/10/25 8:38 PM, Joe Damato wrote:
-> +def check_xdp(cfg, nl, xdp_queue_id=0) -> None:
-> +    test_dir = os.path.dirname(os.path.realpath(__file__))
-> +    xdp = subprocess.Popen([f"{test_dir}/xdp_helper", f"{cfg.ifindex}", f"{xdp_queue_id}"],
-> +                           stdin=subprocess.PIPE, stdout=subprocess.PIPE, bufsize=1,
-> +                           text=True)
-> +    defer(xdp.kill)
-> +
-> +    stdout, stderr = xdp.communicate(timeout=10)
-> +    rx = tx = False
-> +
-> +    queues = nl.queue_get({'ifindex': cfg.ifindex}, dump=True)
-> +    if not queues:
-> +        raise KsftSkipEx("Netlink reports no queues")
-> +
-> +    for q in queues:
-> +        if q['id'] == 0:
-> +            if q['type'] == 'rx':
-> +                rx = True
-> +            if q['type'] == 'tx':
-> +                tx = True
-> +
-> +            ksft_eq(q['xsk'], {})
-> +        else:
-> +            if 'xsk' in q:
-> +                _fail("Check failed: xsk attribute set.")
-> +
-> +    ksft_eq(rx, True)
-> +    ksft_eq(tx, True)
+On 2/10/25 8:22 PM, Anna Emese Nyiri wrote:
+> Introduce tests to verify the correct functionality of the SO_RCVMARK and 
+> SO_RCVPRIORITY socket options.
+> 
+> Key changes include:
+> 
+> - so_rcv_listener.c: Implements a receiver application to test the correct 
+> behavior of the SO_RCVMARK and SO_RCVPRIORITY options.
+> - test_so_rcv.sh: Provides a shell script to automate testing for these options.
+> - Makefile: Integrates test_so_rcv.sh into the kernel selftests.
+> 
+> v2:
+> 
+> - Add the C part to TEST_GEN_PROGS and .gitignore.
+> - Modify buffer space and add IPv6 testing option
+> in so_rcv_listener.c.
+> - Add IPv6 testing, remove unnecessary comment,
+> add kselftest exit codes, run both binaries in a namespace,
+> and add sleep in test_so_rcv.sh.
+> The sleep was added to ensure that the listener process has
+> enough time to start before the sender attempts to connect.
+> - Rebased on net-next.
+> 
+> v1:
+> 
+> https://lore.kernel.org/netdev/20250129143601.16035-2-annaemesenyiri@gmail.com/
 
-This causes self-test failures:
+Unfortunately the added self-test does not run successfully in the CI:
 
-https://netdev-3.bots.linux.dev/vmksft-net-drv/results/987742/4-queues-py/stdout
+https://netdev-3.bots.linux.dev/vmksft-net/results/987742/117-so-rcv-listener/stdout
 
-but I really haven't done any real investigation here.
+Please have a look at:
 
-/P
+https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style
 
->  
->  def get_queues(cfg, nl) -> None:
->      snl = NetdevFamily(recv_size=4096)
-> @@ -81,7 +112,7 @@ def check_down(cfg, nl) -> None:
->  
->  def main() -> None:
->      with NetDrvEnv(__file__, queue_count=100) as cfg:
-> -        ksft_run([get_queues, addremove_queues, check_down], args=(cfg, NetdevFamily()))
-> +        ksft_run([get_queues, addremove_queues, check_down, check_xdp], args=(cfg, NetdevFamily()))
->      ksft_exit()
->  
->  
-> diff --git a/tools/testing/selftests/drivers/net/xdp_helper.c b/tools/testing/selftests/drivers/net/xdp_helper.c
-> new file mode 100644
-> index 000000000000..b04d4e0ea30a
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/xdp_helper.c
-> @@ -0,0 +1,89 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <sys/mman.h>
-> +#include <sys/socket.h>
-> +#include <linux/if_xdp.h>
-> +#include <linux/if_link.h>
-> +#include <net/if.h>
-> +#include <inttypes.h>
-> +
-> +#define UMEM_SZ (1U << 16)
-> +#define NUM_DESC (UMEM_SZ / 2048)
-> +
-> +/* this is a simple helper program that creates an XDP socket and does the
-> + * minimum necessary to get bind() to succeed.
-> + *
-> + * this test program is not intended to actually process packets, but could be
-> + * extended in the future if that is actually needed.
-> + *
-> + * it is used by queues.py to ensure the xsk netlinux attribute is set
-> + * correctly.
-> + */
-> +int main(int argc, char **argv)
-> +{
-> +	struct xdp_umem_reg umem_reg = { 0 };
-> +	struct sockaddr_xdp sxdp = { 0 };
-> +	int num_desc = NUM_DESC;
-> +	void *umem_area;
-> +	int ifindex;
-> +	int sock_fd;
-> +	int queue;
-> +	char byte;
-> +
-> +	if (argc != 3) {
-> +		fprintf(stderr, "Usage: %s ifindex queue_id", argv[0]);
-> +		return 1;
-> +	}
-> +
-> +	sock_fd = socket(AF_XDP, SOCK_RAW, 0);
-> +	if (sock_fd < 0) {
-> +		perror("socket creation failed");
-> +		return 1;
-> +	}
-> +
-> +	ifindex = atoi(argv[1]);
-> +	queue = atoi(argv[2]);
-> +
-> +	umem_area = mmap(NULL, UMEM_SZ, PROT_READ | PROT_WRITE, MAP_PRIVATE |
-> +			MAP_ANONYMOUS, -1, 0);
-> +	if (umem_area == MAP_FAILED)
-> +		return -1;
-> +
-> +	umem_reg.addr = (uintptr_t)umem_area;
-> +	umem_reg.len = UMEM_SZ;
-> +	umem_reg.chunk_size = 2048;
-> +	umem_reg.headroom = 0;
-> +
-> +	setsockopt(sock_fd, SOL_XDP, XDP_UMEM_REG, &umem_reg,
-> +		   sizeof(umem_reg));
-> +	setsockopt(sock_fd, SOL_XDP, XDP_UMEM_FILL_RING, &num_desc,
-> +		   sizeof(num_desc));
-> +	setsockopt(sock_fd, SOL_XDP, XDP_UMEM_COMPLETION_RING, &num_desc,
-> +		   sizeof(num_desc));
-> +	setsockopt(sock_fd, SOL_XDP, XDP_RX_RING, &num_desc, sizeof(num_desc));
-> +
-> +	sxdp.sxdp_family = AF_XDP;
-> +	sxdp.sxdp_ifindex = ifindex;
-> +	sxdp.sxdp_queue_id = queue;
-> +	sxdp.sxdp_flags = 0;
-> +
-> +	if (bind(sock_fd, (struct sockaddr *)&sxdp, sizeof(sxdp)) != 0) {
-> +		perror("bind failed");
-> +		close(sock_fd);
-> +		return 1;
-> +	}
-> +
-> +	/* give the parent program some data when the socket is ready*/
-> +	fprintf(stdout, "%d\n", sock_fd);
-> +
-> +	/* parent program will write a byte to stdin when its ready for this
-> +	 * helper to exit
-> +	 */
-> +	read(STDIN_FILENO, &byte, 1);
-> +
-> +	close(sock_fd);
-> +	return 0;
-> +}
+to test the change locally in a CI-like way.
+
+Cheers,
+
+Paolo
 
 
