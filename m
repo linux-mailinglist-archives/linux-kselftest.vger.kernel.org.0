@@ -1,197 +1,121 @@
-Return-Path: <linux-kselftest+bounces-26312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BA74A2FFA2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 01:51:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E011EA2FFC1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 01:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28A771682A9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:49:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DABC188234C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 00:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679671D90B6;
-	Tue, 11 Feb 2025 00:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B4487B3E1;
+	Tue, 11 Feb 2025 00:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MUTdhX4Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LsUlUbvl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A0E1D89FD
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 00:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538C2224F6;
+	Tue, 11 Feb 2025 00:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739234552; cv=none; b=f/S9i63OwhIRrfeAsJUzleHdjhGZqNTHh/tLOyFoPTzrwc/441e8K2t9ayQcRK2pqdh8/4BkCWJr1bZc7c5BoI4XLLRJkswcBB6ZCK+wZOdEOZucjzRF9FS4RAHVgWa+i0zD+jncmvLokCqRl0CYe6/0TOzsSs7qLQoUi2VcWAM=
+	t=1739235374; cv=none; b=UvKFqY5OVwzucCicDLxTvJTwK3Y43ot/p8WKUbr+9DkLbYLiQlK9HTOEcldz87vI4545F9uxkEVRu/bmV9vV5UAvfVW9WrvfinntVnx8soseoTQZO1VLxu/8F3vGg1P6RYgQqB6YvUfsnRwUnO5WProU7MdMvrNqWxQ2ppriraY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739234552; c=relaxed/simple;
-	bh=oqwAWfvbdoScRtu8hPtWbARYhO1gtAfiQzHTgvD5/jY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XlXoUSVA+ZDHanXR2XeRJU7/amv6P0i92umKtmOx/l/IA9ZbriLyP4qFkbNXziITYJ36ADZOJvjYcGZF8JbbIJJ44Tr4QqLtjiMr6ogZm/HR5Lra1cIUVDKGK6LJGidj6hn9mTKP0JSXvlv9R7gN+O5cAcRZGzyM9zmyH1B6gBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MUTdhX4Q; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739234549;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9t+x6jSPF/Kaax2beF3oSfdLLrK+SQWfb/7DMQGVOLs=;
-	b=MUTdhX4Q5WTN53PTZD4nZPbmwlZHq7xvwBt///ccg3NVlTG3aP3LUDgYuP1z9CPywcrNVJ
-	wDjVXATpVTtwpq4giHxijwxqpDzW82wu4tSCEiK0g1LCvj1R13GdIlWURNNHsBEku/Ugfd
-	QdPS6pRfxPJTTxJbLr8IQu8N6zz6P0w=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-468-Ku2qpg2aMryfCR2GurdvVQ-1; Mon,
- 10 Feb 2025 19:42:23 -0500
-X-MC-Unique: Ku2qpg2aMryfCR2GurdvVQ-1
-X-Mimecast-MFC-AGG-ID: Ku2qpg2aMryfCR2GurdvVQ
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5936B180087A;
-	Tue, 11 Feb 2025 00:42:19 +0000 (UTC)
-Received: from h1.redhat.com (unknown [10.22.88.129])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 602901800873;
-	Tue, 11 Feb 2025 00:42:10 +0000 (UTC)
-From: Nico Pache <npache@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: ryan.roberts@arm.com,
-	anshuman.khandual@arm.com,
-	catalin.marinas@arm.com,
-	cl@gentwo.org,
-	vbabka@suse.cz,
-	mhocko@suse.com,
-	apopple@nvidia.com,
-	dave.hansen@linux.intel.com,
-	will@kernel.org,
-	baohua@kernel.org,
-	jack@suse.cz,
-	srivatsa@csail.mit.edu,
-	haowenchao22@gmail.com,
-	hughd@google.com,
-	aneesh.kumar@kernel.org,
-	yang@os.amperecomputing.com,
-	peterx@redhat.com,
-	ioworker0@gmail.com,
-	wangkefeng.wang@huawei.com,
-	ziy@nvidia.com,
-	jglisse@google.com,
-	surenb@google.com,
-	vishal.moola@gmail.com,
-	zokeefe@google.com,
-	zhengqi.arch@bytedance.com,
-	jhubbard@nvidia.com,
-	21cnbao@gmail.com,
-	willy@infradead.org,
-	kirill.shutemov@linux.intel.com,
-	david@redhat.com,
-	aarcange@redhat.com,
-	raquini@redhat.com,
-	dev.jain@arm.com,
-	sunnanyong@huawei.com,
-	usamaarif642@gmail.com,
-	audra@redhat.com,
-	akpm@linux-foundation.org,
-	rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com,
-	tiwai@suse.de,
-	baolin.wang@linux.alibaba.com,
-	corbet@lwn.net,
-	shuah@kernel.org
-Subject: [RFC v2 5/5] mm: document mTHP defer setting
-Date: Mon, 10 Feb 2025 17:40:54 -0700
-Message-ID: <20250211004054.222931-6-npache@redhat.com>
-In-Reply-To: <20250211004054.222931-1-npache@redhat.com>
-References: <20250211004054.222931-1-npache@redhat.com>
+	s=arc-20240116; t=1739235374; c=relaxed/simple;
+	bh=e47iR8fyburMallAFhuLe1RTPvkqX9NNf1uJok+lahI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JK0MBYFTuLrIx/Xw6zs6lC8faEXp7qIhyygXrI3GPgtHDZQ8Fk0+R6pkfNUtQxir7F9kaBnEBmh9gScwYUTMmcqiDJ0YLQ6PkgREwkaMkasW8c04wThp+RaOx/kVDmLmHgMllfOtLQUav0dtAgWQKco9an2/npFxYxk0AVzYc8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LsUlUbvl; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5de6c708315so3522629a12.0;
+        Mon, 10 Feb 2025 16:56:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739235370; x=1739840170; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6UL9cMSXRLrKUmcSWZ6ehr9HZGcrPjrQbiwbSxeTuc0=;
+        b=LsUlUbvl3hpoPc5qYWbSr54rDWpm7Vk5LUlHSePtW/jwjMB4z+Az6IiWAtuwzf+59i
+         2dVdEO/az7Ewd2xG0SO1ph+tl8PziUzra8q0JRZVu+mAprWGbhTLfsDYDaDsOkBUrvel
+         LZ9VI+J2A7a6+ogmv9651sv55ynnIxNkQUgEiPqqw7Sf92ChS43U75DDw92gu41MUp5d
+         Xm+GmPNogal/sk4HBD1wiw9sc88SHHz8Z5UDL15SSGxBIvCwx8tr6w1N9jceOmisLYxg
+         uFA4F4cofE7LwGSo9J2bfe/FOGlIabvYV7ydZe6lEYbQZYyORfPqFBlfBNGPXlWbEObj
+         qeRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739235370; x=1739840170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6UL9cMSXRLrKUmcSWZ6ehr9HZGcrPjrQbiwbSxeTuc0=;
+        b=fnRstHXUi8mS1TdGv7u1SlloLwJTem+5fVeqGkIY390EN/NbwnKx8+MC1VW3HuFIEF
+         nG5oPEJh8++QrzXO/wJgBeI7eERukM9nL7cgYF1iUc+pD+XCrpQY4sqHgFbqo1P/BRUd
+         ASf+jOtHAitaCkLHJVoivuwrTG4Sn80IDIolkJYPnsSVPzmD52Mcs/77YvT82GS5r35K
+         QlQH1KeMzIPUEkleKjF6Jbo7k3i++XmSIhYsWft07qrfKpj5QmnDGqBDdNwejTflqNqD
+         NJB8mRiToQZeD2Kz4SyPWfjP/mGd8JMwRd3Slb4+F7SLQ38ErT+z5aSJAdi9OmSFmgBJ
+         /fZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWLWR4ihjTSGaNEn/M+dmzWpgtxXVwHvUQF3k3pClTvFrQBHyaChkB6K7NICmRcPWJDLeZ/UvzDQLH8QY8=@vger.kernel.org, AJvYcCWeK6pgZ/1AuMU9PkB79dsd0PM2Ep30d/mPpmspTaR0luXa85By3CwZReFHny6512rwgf3HDidZS7N/3Wu8Nww0@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywfb9w7AtZ7SF3pGYiJfa6NVRm5nBiGWAm0r5jO5z9tOUh5TQWF
+	+dETAGU2506w4+FcTOIfaPtWmXMhat4DEmV2po1RerIha2pLCl4E
+X-Gm-Gg: ASbGncuqTQbvdssQ/TjEmut/0bKLNIjgHeqSmGka3TOAVT0Y+LJ4hqJ36eJtzJIkNSs
+	KpW0hGzkpiLa29mmHqgPTinJvHZxD6DE+obhdl2BjDRfNvBADGbw1OOZ9mzT8NzNVlyRbY9kA22
+	ildX/BdGiQ1kDAbmXIKJKLGSC1Aneyf0vVBjReT+vqfYe8+8uSKwnEbIYsWx1X/f6JzXb0aEBM+
+	HRv8VJQEEcNCEUw50Z9aosnEBpD9ZV+2mY2DMFhrIrbpiBgio11CJCswyRrKWGGmnCndsX6cl/d
+	1Jyg
+X-Google-Smtp-Source: AGHT+IFmOULmOXGP28PqCUALPKYMf0/xNA7A869rzJwx0VnrPUsVgBbo5gi6VDEbrDyHmyNFNjEpgQ==
+X-Received: by 2002:a05:6402:4305:b0:5de:39fd:b303 with SMTP id 4fb4d7f45d1cf-5de44feab07mr15546115a12.2.1739235370140;
+        Mon, 10 Feb 2025 16:56:10 -0800 (PST)
+Received: from localhost ([95.85.21.13])
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-5de379cedc6sm8183032a12.44.2025.02.10.16.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 16:56:08 -0800 (PST)
+Date: Tue, 11 Feb 2025 02:56:06 +0200
+From: Ahmed Salem <x0rw3ll@gmail.com>
+To: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, shuah@kernel.org, 
+	skhan@linuxfoundation.org
+Cc: linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
+Subject: [PATCH v2] selftests: tpm2: test_smoke: use POSIX-conformant
+ expression operator
+Message-ID: <gmqimicpacyyg6mkxrk4etmi74gp6zqivlrgbu263lfgpw7qvg@wwzrscxvidvm>
+References: <D7OY3ZVGJOV5.R3SL9SBFT2DF@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D7OY3ZVGJOV5.R3SL9SBFT2DF@kernel.org>
 
-Now that we have mTHP support in khugepaged, lets add it to the
-transhuge admin guide to provide proper guidance.
+Use POSIX-conformant operator symbol '=='.
 
-Signed-off-by: Nico Pache <npache@redhat.com>
+Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
 ---
- Documentation/admin-guide/mm/transhuge.rst | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/admin-guide/mm/transhuge.rst b/Documentation/admin-guide/mm/transhuge.rst
-index b3b18573bbb4..99ba3763c1c4 100644
---- a/Documentation/admin-guide/mm/transhuge.rst
-+++ b/Documentation/admin-guide/mm/transhuge.rst
-@@ -63,7 +63,7 @@ often.
- THP can be enabled system wide or restricted to certain tasks or even
- memory ranges inside task's address space. Unless THP is completely
- disabled, there is ``khugepaged`` daemon that scans memory and
--collapses sequences of basic pages into PMD-sized huge pages.
-+collapses sequences of basic pages into huge pages.
+Changes in v2:
+ - Remove snippets pinpointing the issue 
+   from commit message
+
+ tools/testing/selftests/tpm2/test_smoke.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index 168f4b166234..3a60e6c6f5c9 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -6,6 +6,6 @@ ksft_skip=4
  
- The THP behaviour is controlled via :ref:`sysfs <thp_sysfs>`
- interface and using madvise(2) and prctl(2) system calls.
-@@ -103,8 +103,8 @@ madvise(MADV_HUGEPAGE) on their critical mmapped regions.
- Applications that would like to benefit from THPs but would still like a
- more memory conservative approach can choose 'defer'. This avoids
- inserting THPs at the page fault handler unless they are MADV_HUGEPAGE.
--Khugepaged will then scan the mappings for potential collapses into PMD
--sized pages. Admins using this the 'defer' setting should consider
-+Khugepaged will then scan the mappings for potential collapses into (m)THP
-+pages. Admins using this the 'defer' setting should consider
- tweaking khugepaged/max_ptes_none. The current default of 511 may
- aggressively collapse your PTEs into PMDs. Lower this value to conserve
- more memory (ie. max_ptes_none=64).
-@@ -119,11 +119,14 @@ Global THP controls
+ [ -e /dev/tpm0 ] || exit $ksft_skip
+ read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
+-[ "$tpm_version" == 2 ] || exit $ksft_skip
++[ "$tpm_version" = 2 ] || exit $ksft_skip
  
- Transparent Hugepage Support for anonymous memory can be entirely disabled
- (mostly for debugging purposes) or only enabled inside MADV_HUGEPAGE
--regions (to avoid the risk of consuming more memory resources) or enabled
--system wide. This can be achieved per-supported-THP-size with one of::
-+regions (to avoid the risk of consuming more memory resources), defered to
-+khugepaged, or enabled system wide.
-+
-+This can be achieved per-supported-THP-size with one of::
- 
- 	echo always >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
- 	echo madvise >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
-+	echo defer >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
- 	echo never >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
- 
- where <size> is the hugepage size being addressed, the available sizes
-@@ -155,6 +158,13 @@ hugepage sizes have enabled="never". If enabling multiple hugepage
- sizes, the kernel will select the most appropriate enabled size for a
- given allocation.
- 
-+khugepaged use max_ptes_none scaled to the order of the enabled mTHP size to
-+determine collapses. When using mTHPs its recommended to set max_ptes_none low.
-+Ideally less than HPAGE_PMD_NR / 2 (255 on 4k page size). This will prevent
-+undesired "creep" behavior that leads to continously collapsing to a larger
-+mTHP size. max_ptes_shared and max_ptes_swap have no effect when collapsing to a
-+mTHP, and mTHP collapse will fail on shared or swapped out pages.
-+
- It's also possible to limit defrag efforts in the VM to generate
- anonymous hugepages in case they're not immediately free to madvise
- regions or to never try to defrag memory and simply fallback to regular
-@@ -318,7 +328,7 @@ Alternatively, each supported anonymous THP size can be controlled by
- passing ``thp_anon=<size>[KMG],<size>[KMG]:<state>;<size>[KMG]-<size>[KMG]:<state>``,
- where ``<size>`` is the THP size (must be a power of 2 of PAGE_SIZE and
- supported anonymous THP)  and ``<state>`` is one of ``always``, ``madvise``,
--``never`` or ``inherit``.
-+``defer``, ``never`` or ``inherit``.
- 
- For example, the following will set 16K, 32K, 64K THP to ``always``,
- set 128K, 512K to ``inherit``, set 256K to ``madvise`` and 1M, 2M
+ python3 -m unittest -v tpm2_tests.SmokeTest 2>&1
 -- 
-2.48.1
+2.47.2
 
 
