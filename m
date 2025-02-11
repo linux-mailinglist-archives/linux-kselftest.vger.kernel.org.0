@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-26326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97C2EA3022C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 04:30:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547BAA3022E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 04:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09F6D1883920
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 03:30:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CA173A99D9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 03:30:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA8A1D8A0B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A73F1D86ED;
 	Tue, 11 Feb 2025 03:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BX/5ROsq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qqwZxyuy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624451D5CDD;
-	Tue, 11 Feb 2025 03:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324551D54CF;
+	Tue, 11 Feb 2025 03:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739244616; cv=none; b=JnLKbPm1h5FyB4IyGbRPp3/bL9xid6K2vpIJRIT6ca9AHOgRi7qSsacPDxHp5UXnx8Ln6dZH4PjhAnSKCxt5C784sa06LYtILD4tMBu/X2BTwlYI3JNASjTsUjivGb1aRDA70BLEv52krOw6SBsbOswZdjRkurdIOltPMlToAmI=
+	t=1739244616; cv=none; b=XcXZsh/f9Pxp1fsiw9LS4dX3pkVObqVWnitQ3kUswYQIfH9dL+8TFG1p3rFFx5AvDnnm1ltPfv0zjTomvx/yTiOgE5NREQGZDj872eWKWstlSEV690DKB0zmyRYTt2lht7+9chSd0ruzUgr8YMXs8jCzla4aICNqRJq7svjtacI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1739244616; c=relaxed/simple;
-	bh=PW166DVT5NlNgcQqGNum97/ask5Ug1+sy2d8VvH1NnQ=;
+	bh=oJmFKDd4bcjFgOAT4TRWHq9US7yqqmSZWG+T5dzXL+k=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VL3gL8y+TKBFQLYRL7aeZzzHlDjsggmtHHtjE6vQBDzmPj8TKXd8pqgpvnKIgsQbADe1Nd/2AdTRVfn0ocQiHLwT+YETb8WSsPYhEkj85x0lcmAsOg7FPfa95ocitDJMab5g3netZk4ERo/TxzBYzVXlT8jVGi45nFlXTSsCF+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BX/5ROsq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1F6C4CED1;
-	Tue, 11 Feb 2025 03:30:14 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=QwSrC9XDV+biT+0+BSJ3Vk/qeZSZ11sf6SOX+e+igYaFZDjFGayVz4ZqpWf4VJQ/HTIe8CaQQE3qR+s3OsV4sxpC5zYSHgV1ifvaF8KUJxMpLVBAePPIjlAdTmiXeePM6Q8ELP2/Nc2IgOFu5KqtUPfZ3IG1ZMU62vom2O7MyJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qqwZxyuy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD9DC4CEDF;
+	Tue, 11 Feb 2025 03:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739244614;
-	bh=PW166DVT5NlNgcQqGNum97/ask5Ug1+sy2d8VvH1NnQ=;
+	s=k20201202; t=1739244616;
+	bh=oJmFKDd4bcjFgOAT4TRWHq9US7yqqmSZWG+T5dzXL+k=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BX/5ROsq6QAT86+4eE9EuboTtwK5Y27HlGSVBfMAGKXsmrkoMWRL/eHSmuGHz2FCi
-	 0imeQcQXcI1mTGMm8+wGgsV8LKLatn98rzmlmHQpulwjUaWDjVqpGLPkXlRihSgxTM
-	 Wsq0on52ETv8dMo66tImSJZ64kX4ACR1Tm1WLS+6wr0JIiVbFnVPsEmTPG5DdalWii
-	 9xSuyjOl+XBa2aP665PVsVc72LGsUQUwFHMFJjSn9Knq/epwfT8T2hzc0HlM+7SjbO
-	 yNm8a4+4hcfOvZijkevR2LTWucX0V0ishNBAcPPlKM1j9/9wVSBhJ8RHeahsK2CDDG
-	 hCKHQ/8nRsifQ==
+	b=qqwZxyuyAb7K/00T0UvHLnOPRfzJiWwjEji9DW2zbJ3YSSGl+4MXjupJorf78CWlZ
+	 8xNNokPG00SjkRlddbzK+n0vYL6YWX1xo0LwDlVSEtmtCn6jE5EYuvUq/CK6ti19+J
+	 bTxcWvN3du+C1qzc0dwRHyvfq6ap4MbO+Hx8FD05V1Q2dRT3TmH7n9v3Z2cpVPe8se
+	 Tt+C/VpLaVj3TPmQ/p0RTYpzGCo7lifquyvMnEwVYHgqyi2CfLJqsIJHruw/AWUoXk
+	 4yfAkIRTnVmLgEHYzcgDrLHmcXCXqraVUzapIlCnsEZAqXAnUcxRgVdi46fjCyP3L+
+	 qtPY3AalOzHNQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD97380AA7A;
-	Tue, 11 Feb 2025 03:30:44 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAF63380AA7A;
+	Tue, 11 Feb 2025 03:30:45 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,38 +52,40 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: drv-net: remove an unnecessary libmnl
- include
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: factor out a DrvEnv base
+ class
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <173924464326.3948401.12997926948925895162.git-patchwork-notify@kernel.org>
-Date: Tue, 11 Feb 2025 03:30:43 +0000
-References: <20250207183119.1721424-1-kuba@kernel.org>
-In-Reply-To: <20250207183119.1721424-1-kuba@kernel.org>
+ <173924464474.3948401.15014700951334326245.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Feb 2025 03:30:44 +0000
+References: <20250207184140.1730466-1-kuba@kernel.org>
+In-Reply-To: <20250207184140.1730466-1-kuba@kernel.org>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- almasrymina@google.com, sdf@fomichev.me, jdamato@fastly.com,
+ willemb@google.com, petrm@nvidia.com, sdf@fomichev.me,
  linux-kselftest@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net-next.git (main)
+This series was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri,  7 Feb 2025 10:31:19 -0800 you wrote:
-> ncdevmem doesn't need libmnl, remove the unnecessary include.
-> 
-> Since YNL doesn't depend on libmnl either, any more, it's actually
-> possible to build selftests without having libmnl installed.
+On Fri,  7 Feb 2025 10:41:39 -0800 you wrote:
+> We have separate Env classes for local tests and tests with a remote
+> endpoint. Make it easier to share the code by creating a base class.
+> Make env loading a method of this class.
 > 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> [...]
+> ---
+>  .../selftests/drivers/net/lib/py/env.py       | 59 +++++++++++--------
+>  1 file changed, 33 insertions(+), 26 deletions(-)
 
 Here is the summary with links:
-  - [net-next] selftests: drv-net: remove an unnecessary libmnl include
-    https://git.kernel.org/netdev/net-next/c/a980da54b6a4
+  - [net-next,1/2] selftests: drv-net: factor out a DrvEnv base class
+    https://git.kernel.org/netdev/net-next/c/29604bc2aaed
+  - [net-next,2/2] selftests: drv-net: add helper for path resolution
+    https://git.kernel.org/netdev/net-next/c/3337064f4204
 
 You are awesome, thank you!
 -- 
