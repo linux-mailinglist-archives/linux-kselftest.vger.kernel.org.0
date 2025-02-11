@@ -1,120 +1,129 @@
-Return-Path: <linux-kselftest+bounces-26431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33B7DA318F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 23:43:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 830ADA31948
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 00:05:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD1791660AC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 22:43:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 079BB1886740
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 23:05:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D881B272909;
-	Tue, 11 Feb 2025 22:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC23268C5A;
+	Tue, 11 Feb 2025 23:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XSsPSOiV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XI0FrjFE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A68272906;
-	Tue, 11 Feb 2025 22:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811E41FDA94;
+	Tue, 11 Feb 2025 23:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739313818; cv=none; b=uJLYPN4fa+2U0rEmXK3IErXybXfs2BsayDHy1bD0w1O43LjdTJnIdD20Zu+zomFtm0/p9T9y2gRni+y4dXt19gp8B5WQIJyWsO5kHcnhcVUQ1UGiYcdGv+TEXmZ9CzFP51zxXrKq8qxFXJZeGGIvGeh4SsduE62zAZ1R8BvjZwg=
+	t=1739315115; cv=none; b=ulkfZSb40vJrDDRXMPK4TzzZqll/bbtgS46amO2tcCw99mH25Vk6uXTuFSxsOOOv4voXmT2BQhKJc2qOZ4BgwcF1iRV4MKHYHNmdPOx+0db4DWTm5dDgstr4NQ1U1xYEt43JC7ZxO3ooVSWawK6OMwjP1+PwdKR6i43isCOcWUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739313818; c=relaxed/simple;
-	bh=+P0q4a0fkVM7lU5+Wd/g02zcF7Ptx6plpBHI4r4wCY4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PioVW811w3mvadfUlSAHA0HkbxDmWvBJgWkoxz/WGZLeFRY0vkTW3eqOo/lZhu2kuGayKr06N3oOiYQ8AePgRGc4kvmsqub+BVlRVvc/mgKKB2skS3+zn64K09QLZ/THh5tzxWae7k7Ywuwf2RB2Z/mO0HF0UzFV1+LgJq23vBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XSsPSOiV; arc=none smtp.client-ip=209.85.208.176
+	s=arc-20240116; t=1739315115; c=relaxed/simple;
+	bh=k+T1Cs27K17K8DiALVzIePS2OhqhZ0GNl7kWqwBuYbY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l5ILfQcPhdxJDczNeDvzFn1wqWU8CApcT5zwx/sBI0HCNjs7zrCDKt9CSppQLBiuLbGtBvB4lWKJZcQh27oQdnokNc1yhCvP6FBuaw4T978vxMthmR/vIqkaGZTYVOPANJLqpa3oJG3v+oPYzcxiHZPNb18kP5vB2lm8l/NGj0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XI0FrjFE; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30762598511so59759151fa.0;
-        Tue, 11 Feb 2025 14:43:36 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ab7c6fc35b3so436067866b.2;
+        Tue, 11 Feb 2025 15:05:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739313815; x=1739918615; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+P0q4a0fkVM7lU5+Wd/g02zcF7Ptx6plpBHI4r4wCY4=;
-        b=XSsPSOiV03qBOMIcpWZHrILgSkrQKy/x8RQdlTr5qjED/IrHCquVMMVdIYTXjbLECd
-         XtgeEFjNgtEA5Y5Kadn8axlxg7CZ80MMj/4PpFyFoE/PRb5p5sdAyCjM8F7JlQ94Fp87
-         iKab8wyu4AJyVR2MSeoyZZlgDETYUq6oKcy1PuQ1TqkoNVTLVvrGVDnJ4UfNQmSUnfQZ
-         OgRGh/svChaFPqPe/sACcLFk6UKkGaArar9NvE8Xy8aYbiuXBTOkcbqMoHl2zTC+NAkA
-         cLSKPwP6IsXzrqvgel8VX3KYjhNpJYWUsqRQvtLZMBD1iRpfybwxX5CXCDGJZySnZTt5
-         zRxA==
+        d=gmail.com; s=20230601; t=1739315112; x=1739919912; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=au4tYyjUaE3dthpQOAcr25Z/Ua2/0kq4cGxPjFpOCoo=;
+        b=XI0FrjFEJ3LK2bUpfFqr9cmC4NRppGyFmy4EuhLhTmxOPw1FccuUivz7DWVzfGURB4
+         xan9dyDsVvpeaHTSY6xDO9cgwzx/H3cb5bVRRMWHBKs9wmGDppQ/0l5baUerq97Tr9lJ
+         JlfDK6blozhazvq4zVjwtFPg1Wj+LB+4qsQQaBOAd8IS0GtjlITBXHm8f+Fodl3zGBWS
+         LuVzY83aLoORhBjjpFAjSC2drFODotlNy/j8dkDhibZBDHrZnkmTVCafDA8QszW0BVMb
+         yip8zRug1Hsi21TVdh45SIasZB0MvHJWv5RTuRIfasYMaSQGPfjVxU//euEM4tuFnD1y
+         gjeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739313815; x=1739918615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+P0q4a0fkVM7lU5+Wd/g02zcF7Ptx6plpBHI4r4wCY4=;
-        b=sUcPrjvrF92F2fgBv8/UhbIoTHKFVh3xz/WG9EXOj/dE41uPXOaoSl+DzXyXXUZE8F
-         tf4uLSew3F0fruzwkjABF8zyysyFcLp4hZ8swsjp84p+jzfdbKhL+L1cdzqIZzZHMc3R
-         AnBoAS8iZXQ9FSs/qvXP6wC0X2GiJFnhIOV6Dbeix7IqLdWFKxBECQ98VWDN2JkDJbCc
-         lRDkFuTdEA/IgG4895ZB65010dD6OAdH5YUpLbK0YfBcVrL6ppttLNktFRB/Zj7HGXK6
-         E4sQilMtKQprqkkp/yCiLkekH8YTDHOrzgOSJPVLmtirTwXWZ3seEf5Qjd7SdLQ+EpJF
-         Nu1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUa2haqIKQjBH7/IUH2XXHNy2TYeOjSBQqgQdBVttdGFQVaSSE+fVS8Ubo9F7Ubnmz+lsTNHr/NPTO6v9vpeocq@vger.kernel.org, AJvYcCXF+QkGpPO9nLjobAkoFX1edtVKROi7PvGBx7OQeQbUM+w2BXeQ6Agw3nehm2oQrTYfr79krkzJnHeL5iY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2No+oUL3iwruv+///1sBJxQpvWdl5MsTnCPgjQLfcLSs6FY8C
-	D/GlPWhuBNiSkxbVFkdgkbVt58ffBwbDggxY1omrd78a/FRWfx5iBq4zeoBTHw3sEk/PSc5kXS9
-	MHk9ggI1UvD+WO/qhXPvNcgeXB3M=
-X-Gm-Gg: ASbGncuTzMJ4dceb7nFXyY8nckgmuwVLDdzRKoK1YQ5ub8nWef3V5IXCPj9wcjlsx6q
-	8uSvn9Arp/Hft9et5Ey3rl7o9bkxuGDTLnz6nNaOeb/XjSeuxvbldmgEMYH+dFFTQSWxVz6lvSw
-	UH4IlMHMk2T42h
-X-Google-Smtp-Source: AGHT+IELdGNHUDK0UfZymCdzCGQppus55YE/nCQaFiA7ChFaTnW2wACEvhwP4JP61G9fF7ZueB1/JebEtHfPflOAhrg=
-X-Received: by 2002:a05:651c:2205:b0:308:e8d3:7571 with SMTP id
- 38308e7fff4ca-3090377bb96mr4324741fa.31.1739313815030; Tue, 11 Feb 2025
- 14:43:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739315112; x=1739919912;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=au4tYyjUaE3dthpQOAcr25Z/Ua2/0kq4cGxPjFpOCoo=;
+        b=Ff0yfOEPTA4XYQCMWWciM0wlBj2eW3tWj/B3cWLUlWNFX3xF7fTMSgI777+9k6kJ0t
+         uPhJThlTHVr5st710W/XVliH9taqNvA67uDTVCUjCdBIgbFzX9Ld+98MRGtNOAuYCeDO
+         dUXyjRpsTFyFeu/RzTHYWXxG6pEazuFpl6Jmcv5PWBfTbQE5hLVoPsjyhM+ZrElKvxLB
+         ffOPGeWSqkGCWOvu+lE+RMW+Nfrh6pXZa2ipvi7ogJLRvdV7W1hGqqJiksx4hj2W1FAU
+         W2krhK1mE6ZZHJoQhADX0NoBzIQNYFmNl07xd0WEur9TYdDeatkaHwMMHwyG4erhw1MC
+         Yz3g==
+X-Forwarded-Encrypted: i=1; AJvYcCWDa4ki6Y2dh+4F6Pq1o7g9lUe4us8zniICw+dDCTop+3AsWviNH6XceYzyeRMXKoCOb1rrfUafh72N1Fge@vger.kernel.org, AJvYcCWRkeU7eMXciu1xXRuKls4p/FPxGnu9MliLLRycqEofgPGcGQcVcrO5dNhP35QuOhoBJd4huldeCjIBSGHI3d0=@vger.kernel.org, AJvYcCXQL3+HZNVjTI9fKVArx1o8Ia4pKb4T9P5wss6vJGOeGCD7h3hOkF8mJYOEt/VXBO9JOufFJOTnnO1f8K3prH5V@vger.kernel.org
+X-Gm-Message-State: AOJu0YwczumM1JtgFeDuSF3eA/kmnwRMEMP5Hlq7r3HTMGrh4HS55YOL
+	2KTnrnicLTts4PeyZyx6uEvvxNPJwLsRlN9753HX15E+jVq01wtRZWfASP4WbkRITg==
+X-Gm-Gg: ASbGnctEUIMtzdmqYxAG+vbRbl93AAxPNg/RgMV6YAfSkj/gyEDGa/ufZ7jf27NxGSE
+	L0a5Yg14RWCsQBX4G4Ciop5EgRm1MxqcrVWgMpfEuegxDx1I0smQQrsPtaEi2UEyVO7UFJ6ok90
+	gFOWF3H/gT1sglfCayH+LLp4B3ef2hEGp2gtv9cXIki/FmizjLFgxcf05SuAyS4HjS/1NEzgwMl
+	nscsrG5o8W+Tz/NjIA6d8BHQxAdBFwbZC4D9MS5qe4Ib8pfGxCxwl4yiN1AQCRoUPVonD6+0zVj
+	c/IG0RUIAelh1wPlkoQMhF7+uSP75OAbBDEUe82HCJGSSmrPycJhVxwQmGNawHv9L7A=
+X-Google-Smtp-Source: AGHT+IGI+JyaHzqreyWTgHAya6OyyTJbR8tyC+vcwIictYrMaQF1JoXigt4HXYn+Qxu+GTO5WrJXxw==
+X-Received: by 2002:a17:907:971e:b0:ab6:ed8a:8a90 with SMTP id a640c23a62f3a-ab7f377cf46mr53391966b.24.1739315111434;
+        Tue, 11 Feb 2025 15:05:11 -0800 (PST)
+Received: from localhost (tor-exit-60.for-privacy.net. [185.220.101.60])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ab7a58abd76sm766729466b.26.2025.02.11.15.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2025 15:05:10 -0800 (PST)
+Date: Wed, 12 Feb 2025 01:05:02 +0200
+From: Ahmed Salem <x0rw3ll@gmail.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, shuah@kernel.org, 
+	skhan@linuxfoundation.org, linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
+Subject: Re: [PATCH v3] selftests: tpm2: test_smoke: use POSIX-conformant
+ expression operator
+Message-ID: <x4dtkjgxwy7vyjg7rryvqqu3lwhiqm6jmhr4ph2fexa7m2m2mv@dbefieqhx6x6>
+References: <nyskb7mbqk2dvlwhez4sua7ryz5gyi73yker6y3qhd4chyyeaw@x6nhqgtxcyvl>
+ <D7PTH0ZUAH5L.VVEECLR4VEWH@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com> <Z6vRIZk7DsSNooFZ@boqun-archlinux>
-In-Reply-To: <Z6vRIZk7DsSNooFZ@boqun-archlinux>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 11 Feb 2025 17:42:59 -0500
-X-Gm-Features: AWEUYZmdVD87KgQWGbxD7rE2mUUzNYneLqMuLXWmOxVvy_-_F7I4uqgkp4eVj00
-Message-ID: <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
-Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: David Gow <davidgow@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D7PTH0ZUAH5L.VVEECLR4VEWH@kernel.org>
 
-On Tue, Feb 11, 2025 at 5:38=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
-rote:
->
-> Hi Tamir,
-
-Hi Boqun, thanks for taking a look.
-
-> On Mon, Feb 10, 2025 at 10:59:12AM -0500, Tamir Duberstein wrote:
-> > Convert this unit test to a KUnit test.
+On 25/02/11 08:10PM, Jarkko Sakkinen wrote:
+> On Tue Feb 11, 2025 at 5:00 AM EET, Ahmed Salem wrote:
+> > Use POSIX-conformant operator symbol '='.
 > >
->
-> I would like to know the pros and cons between kunit tests and
-> kselftests, maybe someone Cced can answer that? It'll be good to put
-> these in the commit log as well.
+> > Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
+> > ---
+> >
+> > Apologies for my previous mistakes.
+> >
+> > Changes in v3:
+> >  - Reword mistaken commit message
+> >
+> > Changes in v2:
+> >  - Remove snippets pinpointing the issue 
+> >    from commit message
+> 
+> OK I read what I wrote and I guess it could have been misinterpreted.
+> 
+> What I meant was to take the relevant part of the transcript that shows
+> the issue (and possibly also how it works when fixed).
+> 
+> Sorry about that.
+> 
+> [1] https://lore.kernel.org/linux-integrity/D7OY3ZVGJOV5.R3SL9SBFT2DF@kernel.org/
+> 
+> BR, Jarkko
 
-David Gow gave a pretty detailed answer in
-https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQAD=
-rW+sJg@mail.gmail.com/
-for a similar patch.
+Understood. Thank you so much for your review and continued guidance!
 
-David, what do you think about enumerating these reasons in the KUnit
-documentation? This is the 3rd of these patches that has received this
-question. It'd be a shame to have every commit enumerate KUnit's
-reasons for being.
+I will be sending the revised patch shortly with the proposed changes.
 
-Tamir
+-- 
+Best regards,
+Ahmed Salem <x0rw3ll@gmail.com>
 
