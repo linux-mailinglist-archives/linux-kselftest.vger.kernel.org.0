@@ -1,102 +1,149 @@
-Return-Path: <linux-kselftest+bounces-26347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 383F9A308CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 11:40:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30F0DA30938
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 11:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69912188214E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 10:40:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2C633A47B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 10:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC32A1F755B;
-	Tue, 11 Feb 2025 10:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MxiXpffB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216951F3D31;
+	Tue, 11 Feb 2025 10:56:38 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.119])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C2B1F63C1;
-	Tue, 11 Feb 2025 10:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457251F193C;
+	Tue, 11 Feb 2025 10:56:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739270403; cv=none; b=AxHGnHj8hiSS0h+A4tqghESCjZ4uXOvVxEnQC897pRgSWueYoBW5G2czyqa0C50dvXtYoerSe8mu79l8L8fEa9+kwoW9wANE7KNFGEAHHvCB88sc3MpqwloQ5Kd809Z6rPXp1qLQmdZwUlfEgUaJas0UBtrLou4MYwKqNJzC/4M=
+	t=1739271398; cv=none; b=eXF1tYMTXFzFBwchsqRJtQKjG4QpoJ8tNYtIN1b/ciz2EiKpVlME3eb+yh+gfS0DeMwya0Ej4MtI0EVu0T49I1fY9PpBgcA4+6Dxrp+ZH3LjBtsEcmR51BEMn68OG4wHSByZIfYcebl22MK7fZ/arc2V+MCuFx1IjuRgYIeUmGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739270403; c=relaxed/simple;
-	bh=Ff1zBfZ0pU7L0UpOaVD2ThNBD30ptoW2WgDq0VC1KV8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WtKy0GBsBlZgYSvhXmz+sB5UMD2Kn+vid74zqks8JVuh4qDE2GPuitrMTsl8uqwLiMDmlD2WgzqFKS1OaGsAuAEBFxZB9HH2Dn3o64SFUWQRoOlZ2J1ybjmx3UoAWiMe+WsX8tZ6b1tuocbytppEmKPNOadoL+8+y2Va4Hy7s3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MxiXpffB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFE0C4CEDD;
-	Tue, 11 Feb 2025 10:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739270403;
-	bh=Ff1zBfZ0pU7L0UpOaVD2ThNBD30ptoW2WgDq0VC1KV8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=MxiXpffBe36XUIgsy+tYMNzVGUE706vGJfxU0b9kGqHIiS9o7W2UADTN6zmhsOz+o
-	 hQ7TtGOIlq6g35sCs/1HrCYI4S5hhsqfv56+8PrtQpmY0LmNjisn61JIQngdCRzURx
-	 NsWKoqwGx6t8jXc4vVvVR0Y48OuPZBqIZJ4rbPXGieIr2CCnBJNI6vDbueiWHcoZu5
-	 qkyITk1c2T8nOjEGac/CNj3806tUVPY83i1GdlwH1tEnBWFi0J4k1MLXkfi5Wl4l01
-	 JrtXejrpy8qW0BLLRraL6sXfy26hZlFPWh3n6yLlx4TxDhWaWvJY0f8SuEhPIwSKZb
-	 oB53dKhrYff+w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB439380AA7A;
-	Tue, 11 Feb 2025 10:40:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1739271398; c=relaxed/simple;
+	bh=3rEaIwGr0IJXL2qhfiPf6ofu0wVASditL9M/DYf/cr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=fzGslzcuY+4+yzzs1K1ha2bra41SI7KnIvP9CiAhRL05bIa5rTaVbuvsxvcf1yz1ReJ6ZQkyH8Nnj/V2E278RvE3x3UmBEKXBiF5bUcb0GHOPxTnwMZEoB8pHuKNxrmFb+HCer8IRTWvq6Jd7wpi+m4gAoWGoonVg+pp0Rw5SZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=fjasle.eu; spf=pass smtp.mailfrom=avm.de; arc=none smtp.client-ip=212.42.244.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=fjasle.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
+Received: from [212.42.244.71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.52.1)
+	(envelope-from <n.schier@avm.de>)
+	id 67ab2b6b-72a9-7f0000032729-7f00000191e0-1
+	for <multiple-recipients>; Tue, 11 Feb 2025 11:50:19 +0100
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Tue, 11 Feb 2025 11:50:19 +0100 (CET)
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+	by mail-auth.avm.de (Postfix) with ESMTPA id 22A86807B2;
+	Tue, 11 Feb 2025 11:50:19 +0100 (CET)
+Received: from l-nschier-z2.ads.avm.de (unknown [IPv6:fde4:4c1b:acd5:7792::1])
+	by buildd.core.avm.de (Postfix) with ESMTP id 130D418B43E;
+	Tue, 11 Feb 2025 11:50:19 +0100 (CET)
+Received: from nicolas by l-nschier-z2.ads.avm.de with local (Exim 4.98)
+	(envelope-from <n.schier@avm.de>)
+	id 1thnqM-000000058pF-29Ha;
+	Tue, 11 Feb 2025 11:50:18 +0100
+Date: Tue, 11 Feb 2025 11:50:18 +0100
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Richard Weinberger <richard@nod.at>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Subject: Re: [PATCH v1] kbuild: Allow building of samples with UML
+Message-ID: <20250211-efficient-pink-dolphin-dcfd4d@l-nschier-z2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,
- v8 1/2] netlink: support dumping IPv4 multicast addresses
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173927043179.4019065.9891478772940585487.git-patchwork-notify@kernel.org>
-Date: Tue, 11 Feb 2025 10:40:31 +0000
-References: <20250207110836.2407224-1-yuyanghuang@google.com>
-In-Reply-To: <20250207110836.2407224-1-yuyanghuang@google.com>
-To: Yuyang Huang <yuyanghuang@google.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, dsahern@kernel.org,
- netdev@vger.kernel.org, donald.hunter@gmail.com, shuah@kernel.org,
- razor@blackwall.org, liuhangbin@gmail.com, daniel@iogearbox.net,
- petrm@nvidia.com, linux-kselftest@vger.kernel.org, maze@google.com,
- lorenzo@google.com
+In-Reply-To: <CAK7LNATuekKKAtp7W+vzwEmaPW52YzPzqTfrJNKpXPV1kGhR8g@mail.gmail.com>
+X-purgate-ID: 149429::1739271019-CC7B9F3E-2FB39A69/0/0
+X-purgate-type: clean
+X-purgate-size: 2663
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Fri,  7 Feb 2025 20:08:35 +0900 you wrote:
-> Extended RTM_GETMULTICAST to support dumping joined IPv4 multicast
-> addresses, in addition to the existing IPv6 functionality. This allows
-> userspace applications to retrieve both IPv4 and IPv6 multicast
-> addresses through similar netlink command and then monitor future
-> changes by registering to RTNLGRP_IPV4_MCADDR and RTNLGRP_IPV6_MCADDR.
+On Tue, Feb 11, 2025 at 06:44:30PM +0900, Masahiro Yamada wrote:
+> On Wed, Dec 18, 2024 at 8:51 PM Mickaël Salaün <mic@digikod.net> wrote:
+> >
+> > It's useful to build samples/* with UML and the only blocker is the
+> > artificial incompatibility with CONFIG_HEADERS_INSTALL.
+> >
+> > Allow the headers_install target with ARCH=um, which then allow building
+> > samples (and tests using them) with UML too:
+> >
+> >   printf 'CONFIG_SAMPLES=y\nCONFIG_HEADERS_INSTALL=y\nCONFIG_SAMPLE_LANDLOCK=y\n' >.config
+> >   make ARCH=um olddefconfig headers_install
+> >   make ARCH=um samples/landlock/
+> >
+> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > Cc: Johannes Berg <johannes@sipsolutions.net>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Nicolas Schier <nicolas@fjasle.eu>
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Fixes: 1b620d539ccc ("kbuild: disable header exports for UML in a straightforward way")
+> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > ---
+> >  Makefile          | 1 -
+> >  lib/Kconfig.debug | 1 -
+> >  2 files changed, 2 deletions(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index e5b8a8832c0c..6e2cce16a2a3 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1355,7 +1355,6 @@ hdr-inst := -f $(srctree)/scripts/Makefile.headersinst obj
+> >
+> >  PHONY += headers
+> >  headers: $(version_h) scripts_unifdef uapi-asm-generic archheaders archscripts
+> > -       $(if $(filter um, $(SRCARCH)), $(error Headers not exportable for UML))
+> >         $(Q)$(MAKE) $(hdr-inst)=include/uapi
+> >         $(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi
+> >
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index f3d723705879..fac1208f48e4 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -473,7 +473,6 @@ config READABLE_ASM
+> >
+> >  config HEADERS_INSTALL
+> >         bool "Install uapi headers to usr/include"
+> > -       depends on !UML
+> >         help
+> >           This option will install uapi headers (headers exported to user-space)
+> >           into the usr/include directory for use during the kernel build.
+> > --
+> > 2.47.1
+> >
 > 
-> Cc: Maciej Żenczykowski <maze@google.com>
-> Cc: Lorenzo Colitti <lorenzo@google.com>
-> Reviewed-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
+> This patch was not even compile-tested.
 > 
-> [...]
+> Apply this patch.
+> Enable CONFIG_HEADERS_INSTALL and CONFIG_UAPI_HEADERS_TEST.
+> "make ARCH=um" and see the errors.
+> 
+> The reason is obvious, UML is a kernel. No such userspace.
 
-Here is the summary with links:
-  - [net-next,v8,1/2] netlink: support dumping IPv4 multicast addresses
-    https://git.kernel.org/netdev/net-next/c/eb4e17a1d915
-  - [net-next,v8,2/2] selftests/net: Add selftest for IPv4 RTM_GETMULTICAST support
-    https://git.kernel.org/netdev/net-next/c/4f280376e531
+oh, I sorry.  I should have seen that when reviewing, but confused
+myself as I missed the UAPI_HEADERS_TEST and just looked at a
+"successful" run of 'make headers_install'.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kind regards,
+Nicolas
 
