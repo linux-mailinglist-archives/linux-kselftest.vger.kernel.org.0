@@ -1,190 +1,149 @@
-Return-Path: <linux-kselftest+bounces-26433-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E3ADA3194E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 00:11:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4549FA31955
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 00:16:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 428D6167240
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 23:11:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECDC31671EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2025 23:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0C4268FD2;
-	Tue, 11 Feb 2025 23:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89271F7092;
+	Tue, 11 Feb 2025 23:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UJmMMZnQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ij6SwSed"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D46272908;
-	Tue, 11 Feb 2025 23:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241ED272910;
+	Tue, 11 Feb 2025 23:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739315456; cv=none; b=rSJQQwwy94a2TuArqNYJdLFfAqv854O5MhUZjG0vQMFWIy3qLxf8C0GBMQbICF3AuQqplk4rR296CJK1GJyKQyj/4ZsYZJrEK6Gvep1ua4t9IweEsaiuTvn0s/mkFSttbOdj6m11r2zM+GX3PP0xx1fRJjOPPveShb7gjcz1QzI=
+	t=1739315789; cv=none; b=I2We7fowcO6T8gDErFg3wLL6p+BvPQ128wgEoZZdA8g28d9kCJlk8/mpet72ScWUInhG/qOXSmWfANcLoECWx0hyYDICN4bLlI3za0XjDh146OxQnHZr5PQzAoZU2zYHIYD13Yo9thvzXTKlO2blJADyxHTo5rztGTpcIQvm3b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739315456; c=relaxed/simple;
-	bh=0dcK66hTVokbqMQxve1BwnKvFh7KdTxSGhckilILrKY=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VYzUdbr09jvSmouq5LH+acTa6QFoApd9JNJfBI5kpoVhsSGOVRLXQXP8bH7+vvHoSbqPI1UJdV2qMqrZ5ii5eh3wEJD8f7RnH0LjJyrl+uf8o50S+dF2Q8YKpneKxB5Y3tXGWpLQezVl7V+8okFo2A9+yUNpWh/4eM+BVYfje5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UJmMMZnQ; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1739315789; c=relaxed/simple;
+	bh=Ys1rhJgXEnjNdv2VFm8kkhafAaLZPOuF2zw82IRSTpI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ioDwKK8s3W5jAkAj/SQYq43e1TTwMlQp+sVvZHgwj32xS8p+al1T1kz+2d3vnDRlZGa0/0tYHW6UpZc7/1zTdI6l2P5vm1E3LZEETMw0ZbwZp24ZlD93lziRuQewqj4rtGXmYjSj/i7Ct4Z/JVglIaCUaakSfSsLGukWhg11JVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ij6SwSed; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2f833af7a09so8478084a91.2;
-        Tue, 11 Feb 2025 15:10:54 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ab7d58aa674so288222066b.0;
+        Tue, 11 Feb 2025 15:16:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739315454; x=1739920254; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uf52XgtaIcQPJFViGKUdg83OmEWQbqg8rDzjq+MorWA=;
-        b=UJmMMZnQsMDNPHT6bkhpZfYkGWVcVkwrud3nvh+3QUPIWHS0wehP4tCaYdM+Zc53Bi
-         OBQ3ieOZ2VTjvSEhMvO8P30cW7lZUexN0GQHDQHCk0rD9K71idKwH5rY7H2nTbN+vfZ+
-         2k8QNCzJ4MZNkZ4GvarIbNz27APKjpQlJgOoEbtXo3cDy8kDFlOjIqwCnwblnVRQtRUd
-         b+plJtsPT1NKCkl0YAQwNTgLBX6KMz/nTEfXMGmMCryZDCiOMf66RSxDV2FHY34OYJz2
-         4QfdgCf4FmCJhZrbZmH60v7oct0S0LdRth5trgMmGNNjLgx5LGcnBZjrw+mWNbn3ZZiE
-         WeWw==
+        d=gmail.com; s=20230601; t=1739315786; x=1739920586; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aO6abGurUc0b4USPskQVxLQPxPraxFKYOUzF3VnWLZI=;
+        b=Ij6SwSedB3PXgTurtvGYx0Qpf1uOyHBO/SUgQSLXkHNL0tqsj6vjw/9Ol4+lf+XsTd
+         RaVFbtpQg1s0g5AuxbHDwSEMbQy1OQ2+lAoLocoZdEYhVIiB19znU4lPkwugPwD3Ud+e
+         Q7XcmxTXthO+SqEuWvNtueO9kaN6UWEdWfBfu5i+eedrzmtFtuexoxnUDdigGU2C8Ynu
+         R+14qtyJOJD6GIKM6lDY8W2CVRz7QWvaZ6Er46RZfsloriFMwFFTc3PN5+vnU56+QUfM
+         +hjdQ3728hZJVIlHcQxl2K+PKmrZT9NaAT4Tq1+i21xYOnK5tCv23EfGh3mqMymSOyRo
+         sYtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739315454; x=1739920254;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uf52XgtaIcQPJFViGKUdg83OmEWQbqg8rDzjq+MorWA=;
-        b=WHog6JhRVJubBoG+6UlxMrxTD3i20EzZG7PCtj5fE+xZl5OGmRMxbr4cPd98GpJkfv
-         JiTGwbl8noO0OQ6gRkJuIB8qpHjMkJcCgXYG4RaCXfn+wFd4mijErL2oiMdwvjw1hdHb
-         GkSwO7Tl6J0RiFjwm4lasKz/42eoWJAbWS4PyEUfPQ2o+/xw2ESUoo/4EUtzKQecSZYo
-         6SUkEeGMxbNX2QJFxEREETwXDx9q0QqXE+CmULcmkCGnRbM2+zos+CQRhBeU9OPd2fGU
-         7DMeIrOzKuVBNE/5J/aiM2zF3EJvvUB8kqxixnmcSoiQAGzPYilT/7mktfi4FuOSODWN
-         dTvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWsN4uWSCJmcbj9IMY/hXjiCnqe65EC2lWnHv8TR3ejmmxToJAfR7dBixxo7QB8zwjOkcRLfKos@vger.kernel.org, AJvYcCXL/lN54DZ1YiiS+Wou0Z3OON1r8DrSlB9kWdeX9qEOsXONMnKeA+m6P28s3wmyAWYyk4aPQb4VuoKXEOhn@vger.kernel.org, AJvYcCXLTO42TyEWvZtrkfWkhlQb5+Aw8bRlodq1Ca915vpl0X3w4v93/amZf7JjhUZ9RD0sLLeisLB6KYOW6o/gUxeW@vger.kernel.org, AJvYcCXT1cQuEV+JbsGJGfBwjBiMGJWYYQWRI6+jMMrJVNDXqxLtFg8D2g7dE5OVxjKD9tZwcQQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx00DyQlmG3pSIOi3bHYt75bs+YrPx6AnNHGLUpYQrMxPlGIpOh
-	SX7MryLR9JaM0xZlxgUmBI8D8UXBL6AZ2/hcUEWCusblQ5vy0Xk=
-X-Gm-Gg: ASbGncu8hdi2XHFSO0QOvgzF+h/PrjDEZkwAuA23KhtHvoDFWl12PcNaoP3rhJz/9/6
-	nHWaKTQ0iFXUcZVlDCVxH+QdDzDGRH4WkV7947hE7fK0JFLMSMSciDUAgF20B9efJQ9P2eCso/Z
-	aXQxsN1doa5hiK9QDtGUklw+cw8LHKnuefhGEd9GBUYOYLQ6IhUkyKMuHZaQLFpx+5VUJCvuId7
-	f1j4Yi0dLpyy4oUGB9CFt7GOMHZ0YkKTPIz9BmstkS7lpBb4TtDW65Vzp2lp68jvJj4ren9Nagp
-	Hgv7mOpZqw7zVT0=
-X-Google-Smtp-Source: AGHT+IFnD65bCd+k11rd/D5ehPCwMtJROZBHWejN4ICUo1HalU2wCbTukHdFiyKco+ppnLlqyRQykg==
-X-Received: by 2002:a17:90a:c88e:b0:2fa:20f4:d277 with SMTP id 98e67ed59e1d1-2fbf5c59edamr1478220a91.24.1739315453855;
-        Tue, 11 Feb 2025 15:10:53 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2faa5cf22fesm1292240a91.1.2025.02.11.15.10.52
+        d=1e100.net; s=20230601; t=1739315786; x=1739920586;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aO6abGurUc0b4USPskQVxLQPxPraxFKYOUzF3VnWLZI=;
+        b=NC1Hv708P3YTRPbLkITZ5nkJrJZsMja1F7nwiERU3L8y99j9yiwcjG9nVWAZdXREIy
+         zT6UHu3YHnYB1awNcvq5iJ+7wZa1zuWpn3d6NdzCdaQg4kvgq6T+3vOzaKoFkhIf+foZ
+         0rBCP0JW1R287rPlKgAapkTfWngY7a7t7YvIgng7UmvZg3+r5lHvxcv4QVE8vbS9v3+g
+         qNZTc9j0bJfgrL1+6gMNyPC+6uYDBg1imQSjFmV/3o8LPHMXz49dYBVWzQH5VIO7Hlrh
+         l37MCeQi39UfQaMjBaf6Vmp79OaD61o5U4QRHZCzITauaMGhHneTMvQCzbRGv/WoXn2H
+         g5+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUOhOyvN2tGCEc2wPOYPkXYTFViAx6LG4XGDG5VXzhdPFw4UwFsIAdryvQN9ZhHHfJ9kRoybhdvYZ46/Df4YJqX@vger.kernel.org, AJvYcCVbyRlQEDARU81xUuF6Y8VXInc6oqCOxdyO5sHB+E3NMFlrtuuh32W3FIuKgjRDbEm+NbF2m/78AgIBbSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrmhdNuNIb2bvsdvVj93ZB8c8odNbouEAbwyjia1bRfVP9pstg
+	kiFZuBut4jg1b9zYh6EW5POD0mE0UTHVuORaot5UmW3HQFKdM8Ow
+X-Gm-Gg: ASbGnctzDMV7F/jto1iZ/GqaY3mXbHw9rxkIJ0RA5PXQPN/RY25NIijvX8XRbSdoYkL
+	SDx9+Xr8aJPUZBR3uZXrnqz3br2YOtCqLDQxOV4lOTRHPntD7Nx0L7kQAQ6Df1rkl7DXV8eR5F2
+	VxMTcypvTNsHhlFn0sEqFbb/Bxc8Z8ApSOlOxgspmLWCDQOnFHBEBqdag0GDa+tyrVQ0v5MsOMQ
+	X2A7sIBofEp4kuVGA77AaLeDCgDr70MkzuiFJqDDP1o8C2xt2DeOAOjABpAosUwhAnuDwK9X1x8
+	q1hw8LgmVSzKKrxamj/ZCC0l9LckfHtfKHTNgraDHdESboCNzgDTq1NA6Ji3gFEAppI=
+X-Google-Smtp-Source: AGHT+IFRMxaQWc4CweYkS5E/aJgKc3I6MfhoY2jkKP65WChnoZkLoI9IzknT+GJzEi9P0e+GxdYDMw==
+X-Received: by 2002:a17:907:97cd:b0:ab7:b0e4:aa93 with SMTP id a640c23a62f3a-ab7f33bec22mr52917966b.13.1739315785997;
+        Tue, 11 Feb 2025 15:16:25 -0800 (PST)
+Received: from localhost (tor-exit-44.for-privacy.net. [185.220.101.44])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ab7b35b0d2csm620651166b.122.2025.02.11.15.16.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 15:10:53 -0800 (PST)
-Date: Tue, 11 Feb 2025 15:10:52 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Joe Damato <jdamato@fastly.com>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, horms@kernel.org, kuba@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v6 3/3] selftests: drv-net: Test queue xsk
- attribute
-Message-ID: <Z6vY_LXp3LTp7qWV@mini-arch>
-References: <20250210193903.16235-1-jdamato@fastly.com>
- <20250210193903.16235-4-jdamato@fastly.com>
- <13afab27-2066-4912-b8f6-15ee4846e802@redhat.com>
- <Z6uM1IDP9JgvGvev@LQ3V64L9R2>
- <Z6urp3d41nvBoSbG@LQ3V64L9R2>
- <Z6usZlrFJShn67su@mini-arch>
- <Z6vRD0agypHWDGkG@LQ3V64L9R2>
+        Tue, 11 Feb 2025 15:16:25 -0800 (PST)
+Date: Wed, 12 Feb 2025 01:16:17 +0200
+From: Ahmed Salem <x0rw3ll@gmail.com>
+To: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, shuah@kernel.org, 
+	skhan@linuxfoundation.org
+Cc: linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v4] selftests: tpm2: test_smoke: use POSIX-conformant
+ expression operator
+Message-ID: <37ztyakgrrtgvec344mg7mspchwjpxxtsprtjidso3pwkmm4f4@awsa5mzgqmtb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6vRD0agypHWDGkG@LQ3V64L9R2>
 
-On 02/11, Joe Damato wrote:
-> On Tue, Feb 11, 2025 at 12:00:38PM -0800, Stanislav Fomichev wrote:
-> > On 02/11, Joe Damato wrote:
-> > > On Tue, Feb 11, 2025 at 09:45:56AM -0800, Joe Damato wrote:
-> > > > On Tue, Feb 11, 2025 at 12:09:50PM +0100, Paolo Abeni wrote:
-> > > > > On 2/10/25 8:38 PM, Joe Damato wrote:
-> 
-> [...]
-> 
-> > > > > 
-> > > > > This causes self-test failures:
-> > > > > 
-> > > > > https://netdev-3.bots.linux.dev/vmksft-net-drv/results/987742/4-queues-py/stdout
-> > > > > 
-> > > > > but I really haven't done any real investigation here.
-> > > > 
-> > > > I think it's because the test kernel in this case has
-> > > > CONFIG_XDP_SOCKETS undefined [1].
-> > > > 
-> > > > The error printed in the link you mentioned:
-> > > > 
-> > > >   socket creation failed: Address family not supported by protocol
-> > > > 
-> > > > is coming from the C program, which fails to create the AF_XDP
-> > > > socket.
-> > > > 
-> > > > I think the immediate reaction is to add more error checking to the
-> > > > python to make sure that the subprocess succeeded and if it failed,
-> > > > skip.
-> > > > 
-> > > > But, we may want it to fail for other error states instead of
-> > > > skipping? Not sure if there's general guidance on this, but my plan
-> > > > was to have the AF_XDP socket creation failure return a different
-> > > > error code (I dunno maybe -1?) and only skip the test in that case.
-> > > > 
-> > > > Will that work or is there a better way? I only want to skip if
-> > > > AF_XDP doesn't exist in the test kernel.
-> > > > 
-> > > > [1]: https://netdev-3.bots.linux.dev/vmksft-net-drv/results/987742/config
-> > > 
-> > > I'll give it a few more hours incase anyone has comments before I
-> > > resend, but I got something working (tested on kernels with and
-> > > without XDP sockets).
-> > > 
-> > > xdp_helper returns -1 if (errno == EAFNOSUPPORT). All other error
-> > > cases return 1.
-> > > 
-> > > Updated the python to do this:
-> > > 
-> > >   if xdp.returncode == 255:
-> > >       raise KsftSkipEx('AF_XDP unsupported')
-> > >   elif xdp.returncode > 0:
-> > >       raise KsftFailEx('unable to create AF_XDP socket')
-> > > 
-> > > Which seems to work on both types of kernels?
-> > > 
-> > > Happy to take feedback; will hold off on respinning for a bit just
-> > > incase there's a better way I don't know about.
-> > 
-> > Any reason not to enable CONFIG_XDP_SOCKETS on NIPA kernels? Seems a bit
-> > surprising that we run networking tests without XSKs enabled.
-> 
-> I can't comment on NIPA because I have no idea how it works. Maybe
-> there is a kernel with some options enabled and other kernels with
-> various options disabled?
+Use POSIX-conformant expression operator symbol '='.
 
-Sorry, should've been more clear. My suggestion is to add 
-CONFIG_XDP_SOCKETS to tools/testing/selftests/drivers/net/config
-to make your new testcase run in a proper environment with XSKs enabled.
+The use of the non POSIX-conformant symbol '==' would work 
+in bash, but not in sh where the unexpected operator error 
+would result in test_smoke.sh being skipped.
 
-> I wonder if that's a separate issue though?
->
-> In other words: maybe writing the test as I've mentioned above so it
-> works regardless of whether CONFIG_XDP_SOCKETS is set or not is a
-> good idea just on its own?
-> 
-> I'm just not sure if there's some other pattern I should be
-> following other than what I proposed above. I'm hesitant to re-spin
-> until I get feedback on the proposed approach.
+Instead of changing the shebang to use bash, which may not be 
+available on all systems, use the POSIX-conformant expression 
+symbol '=' to test for equality.
 
-I'd keep your test as is (fail hard if XSK is not there), but 
-let's see if Paolo/Jakub have any other suggestions.
+Without this patch:
+===================
+ # make -j8 TARGETS=tpm2 kselftest
+ # selftests: tpm2: test_smoke.sh
+ # ./test_smoke.sh: 9: [: 2: unexpected operator
+ ok 1 selftests: tpm2: test_smoke.sh # SKIP
+
+With this patch:
+================
+ # make -j8 TARGETS=tpm2 kselftest
+ # selftests: tpm2: test_smoke.sh
+ # Ran 9 tests in 9.236s
+ ok 1 selftests: tpm2: test_smoke.sh
+
+Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
+---
+
+Changes in v4:
+ - Include relevant parts of the script showing 
+   the issue before and after the patch
+
+Changes in v3:
+ - Reword mistaken commit message
+
+Changes in v2:
+ - Remove snippets pinpointing the issue
+   from commit message
+
+ tools/testing/selftests/tpm2/test_smoke.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index 168f4b166234..3a60e6c6f5c9 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -6,6 +6,6 @@ ksft_skip=4
+ 
+ [ -e /dev/tpm0 ] || exit $ksft_skip
+ read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
+-[ "$tpm_version" == 2 ] || exit $ksft_skip
++[ "$tpm_version" = 2 ] || exit $ksft_skip
+ 
+ python3 -m unittest -v tpm2_tests.SmokeTest 2>&1
+
+base-commit: 34c26c5e1cb0cc7f54c1b89c6e9168cad8ffb580
+-- 
+2.47.2
+
 
