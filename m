@@ -1,89 +1,103 @@
-Return-Path: <linux-kselftest+bounces-26479-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26480-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DE14A32D6C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 18:26:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0EC6A32DC3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 18:45:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6638161CB3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 17:25:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3973F3A1587
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 17:45:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDA825A35C;
-	Wed, 12 Feb 2025 17:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22683213236;
+	Wed, 12 Feb 2025 17:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="igqy8sHc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3889425A33D;
-	Wed, 12 Feb 2025 17:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2CE271837;
+	Wed, 12 Feb 2025 17:45:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739381104; cv=none; b=k40lGH0f6eR4IoTEmdP6XltkDCprXgapj4doslnv0b//7HfL5HnqIQOFZ6etoo9YZsbS7nngnrEPJNH1lgoQNgQRZpS5IB0UdnDWdEzjbajgzXsu8CSQfReTDscCErp7jsnsz/dFM43WDzk05dWEyJFGXHGm5U5KvOcT004hrz4=
+	t=1739382348; cv=none; b=QFy/Sp+h3sn3c7ixTmVv6j0N53h5cb93gz+aG6Ym9LYv98Upld94hdh1EbK4xgn8Rgd0Fg5pBZgEen9MN/iZIZ3TcxGO0uNc15ggtmkBRPGJQ2Fxe/jJybxOX1u6R1fciNr+owoRRzWZdFLWeZ1TWK4uD6sigkRERH2BBVjAWnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739381104; c=relaxed/simple;
-	bh=+nB1cPYHD/fxEy2WIZDTmBBHnFzDdf3ZrYDQGQawJII=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=de2rbvDqBW2Gb3kgeibMpH8WQqdQOwc0HnwIZk9s8LY/m8kn3S9MemWfvh1CwPPdMGZsUjo5HcmaXWN05ovUaG/ZCA1q8Wo0J/M5W2RaECEiPd/K+3ttUsfC2/4DwGYGOJwnp+1SnpPLFIF9vMn/88AEuPLIbsuyYNVYmlAcSPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36236C4CEE2;
-	Wed, 12 Feb 2025 17:25:01 +0000 (UTC)
-Date: Wed, 12 Feb 2025 17:24:58 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Yury Khrustalev <yury.khrustalev@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sandipan Das <sandipan@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	nd@arm.com
-Subject: Re: [RESEND v4 0/3] mm/pkey: Add PKEY_UNRESTRICTED macro
-Message-ID: <Z6zZanGRGd15770_@arm.com>
-References: <20250113170619.484698-1-yury.khrustalev@arm.com>
+	s=arc-20240116; t=1739382348; c=relaxed/simple;
+	bh=evN8cM6Q1oIqWCcOtZLAvt/cgxYzIaia5q6Sy4GrOjY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PxeVaT/MdSRcwU0avchJa8SMsoy5Aldx9tDjAcroixPbQCCbcdmdJ5Nhhur3omUBU3tpXHBEMC6ifBYOirWZdV5FvjDikrJZaftxBUSRGMstBtj29pBXhMXanaeI+DxPzkCueB93RQbHx7dtws6/PhQPAzked9PJ8vGEG/poZzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=igqy8sHc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E196EC4CEDF;
+	Wed, 12 Feb 2025 17:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739382347;
+	bh=evN8cM6Q1oIqWCcOtZLAvt/cgxYzIaia5q6Sy4GrOjY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=igqy8sHc00n/VrUZ9n5v84Vzgh655W8Q4dc21nECDQH5kYlEaNLuu1MxPqG/BI0ow
+	 pHhZkyf84m6shuA44l8Y2SVerw2V1tUj/rEugVFGHekThpFa7H+XVTDgbSdoWj6t/O
+	 5ji//yfkx5RfSbUHK7Gjp8Q58XzkyYsdvee3T5a6+3d967y/9rqmfR6HNIeJ8pgdec
+	 0ufBPq/pPIQXtJuEsMvz18JWlQqXT2oRH04BhwT1bq3j9WkTxlNAgSNjMB4RH9xfa4
+	 2de4ZFebUb6zfE6PdjIx9k4H2eIylN1akxnfYfvhcY5NX/gNCX3DoypOzhbPWEMQZC
+	 Q+ajPJNTrB9LA==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/2] selftests/mm: Allow execution on systems without huge
+ pages
+Date: Wed, 12 Feb 2025 17:44:24 +0000
+Message-Id: <20250212-kselftest-mm-no-hugepages-v1-0-44702f538522@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250113170619.484698-1-yury.khrustalev@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPjdrGcC/x3MQQqDMBBG4avIrB3IBETaq5Quov7GoTVKRkUQ7
+ 97Q5bd47yJDVhg9q4syDjVdUoHUFfVTSBGsQzF55xvnRfhj+I4bbON55rTwtEesIcIYaB7SBmk
+ dOir9mjHq+X+/3vf9A5y+GjxrAAAA
+X-Change-ID: 20250211-kselftest-mm-no-hugepages-ee5917a170eb
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Nico Pache <npache@redhat.com>, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-1b0d6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=896; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=evN8cM6Q1oIqWCcOtZLAvt/cgxYzIaia5q6Sy4GrOjY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnrN5HZYgqURwxvsO0ack8R7NPvqOyDk7rjYlaEgF+
+ +Wg7YriJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ6zeRwAKCRAk1otyXVSH0LuRB/
+ 0TSGpX+FRHmXb0V8EBbcdsyCVNOLxzXT/tibbhYFP5GeC3NKRt0/pjk8gPKsBA6QtDc6S/lxB6/Rh2
+ GxfaN1xEzAdskrXonB75YzrADUP6gF5ZslFRQa3jiczHIqHyzSs8SXDRV+njuwuPPHbyz6i3gKztGT
+ EcEDa3EtP6EIQbTynEeD1fmrGKnnxffqhIhWAXQGx7BMMF1k12pOeQUDvg7cT7dezZg5nMlS+FMirB
+ 5dtxodGZkWlNDqDg1NmCNBYVTRxA/UNglgjv73j/pck5JacofP4kZcu4+9u7z9wTlD5AP7tkijHeRD
+ vIapCj/llk7Wo1ukY9ySRMP4MZtvVK
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon, Jan 13, 2025 at 05:06:16PM +0000, Yury Khrustalev wrote:
-> Add PKEY_UNRESTRICTED macro to mman.h and use it in selftests.
-> 
-> For context, this change will also allow for more consistent update of the
-> Glibc manual which in turn will help with introducing memory protection
-> keys on AArch64 targets.
-[...]
-> Yury Khrustalev (3):
->   mm/pkey: Add PKEY_UNRESTRICTED macro
->   selftests/mm: Use PKEY_UNRESTRICTED macro
->   selftests/powerpc: Use PKEY_UNRESTRICTED macro
-> 
->  include/uapi/asm-generic/mman-common.h               | 1 +
->  tools/testing/selftests/mm/mseal_test.c              | 6 +++---
->  tools/testing/selftests/mm/pkey-helpers.h            | 3 ++-
->  tools/testing/selftests/mm/pkey_sighandler_tests.c   | 4 ++--
->  tools/testing/selftests/mm/protection_keys.c         | 2 +-
->  tools/testing/selftests/powerpc/include/pkeys.h      | 2 +-
->  tools/testing/selftests/powerpc/mm/pkey_exec_prot.c  | 2 +-
->  tools/testing/selftests/powerpc/mm/pkey_siginfo.c    | 2 +-
->  tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 6 +++---
->  tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 6 +++---
->  10 files changed, 18 insertions(+), 16 deletions(-)
+Currently the mm selftests refuse to run if we don't have huge page
+support but there are plenty of tests that don't depend on this feature,
+relax this requirement to allow coverage on relevant systems (eg, most
+32 bit arm ones).
 
-Andrew, Arnd - are you ok if I take these patches through the arm64
-tree?
+While doing this I noticed a bug with an existing check if we're running
+THP tests, the fix overlaps with the above change so is sent as part of
+a series.
 
-Thanks.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (2):
+      selftests/mm: Fix check for running THP tests
+      selftests/mm: Allow tests to run with no huge pages support
 
+ tools/testing/selftests/mm/run_vmtests.sh | 68 +++++++++++++++++++------------
+ 1 file changed, 43 insertions(+), 25 deletions(-)
+---
+base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+change-id: 20250211-kselftest-mm-no-hugepages-ee5917a170eb
+
+Best regards,
 -- 
-Catalin
+Mark Brown <broonie@kernel.org>
+
 
