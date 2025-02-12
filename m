@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-26455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5468CA3245F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 12:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1057FA32464
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 12:11:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11AB6188BE5F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 11:11:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C522E188C0A5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 11:11:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9116E20ADE0;
-	Wed, 12 Feb 2025 11:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E1D720B1ED;
+	Wed, 12 Feb 2025 11:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cel54dTP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EPlw+Tvh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE122209F49;
-	Wed, 12 Feb 2025 11:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6496A209F46;
+	Wed, 12 Feb 2025 11:11:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739358680; cv=none; b=cQRF1K+fDAN7vqyr+TJ6QPWlsrksI6qYeLPO5Hk7DvFlnOVHG2SQF/Ij2CvFIKwaEqse9VpglyyWraDpcE56YL/C2ngREDyLRwnvC7motHKQJiqu2reg32T3CoWhMOxkwHd3+84XpZQDkjj6Nk0oslhXXVgZgxZy1N8QONPICqg=
+	t=1739358682; cv=none; b=t0cCdWuLaAEbJuiSfzlt+z7igcZJHiCk/RRS1IMsv520cOULT90XmLjcdWOBD3hzaLOrDQM+V987UbDwdIp7gXk5j57QsHbrl7/mcnAkxZdND+c0s0ZVRZ1gatWDyvtQ0lRwf7RXkINanV4weNVlHjKdg4sO7qhjdTMmjiImboM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739358680; c=relaxed/simple;
-	bh=mML3QKQYZej6FAetszH7V3AdRE3n++aer73FZa9YkTI=;
+	s=arc-20240116; t=1739358682; c=relaxed/simple;
+	bh=MzSWdPosDdxdBkf1z+KXK6OUeFXB9MBq/QdiKYjFrXk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iDduOft8OrzeX/K7qShueFgmcJ+CoyDUoEVl7WOCOSxs5J520OiAbZg3+sMWH0LQ4CJXdlJ8IvxqHbS+yWP99D0YiWAA9eiW5MpvvtcDXvI6mGuHIlfX3ZX25m/tEIko0tNehF9UUbCU/GhZT2xTXEeH5i8Nv69ediqS07VmpWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cel54dTP; arc=none smtp.client-ip=217.70.183.197
+	 In-Reply-To:To:Cc; b=GSkQindN5khgk96fnP+1sEJk//tnMJe+VfGzCYwYgTC6peYhcIgLlJL7J3T+jSbgWa7O3HoWDGpT1iYRX8I/mjy13K9j3ZbDZH4zBskuV6AhthJ0TlJ2C7NFfBfUvKnydLl1KejC3FvrpkuRO8yEnSDGo3VxotQgg1cb3e+BBwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EPlw+Tvh; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 20DE743315;
-	Wed, 12 Feb 2025 11:11:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69E71432FA;
+	Wed, 12 Feb 2025 11:11:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1739358676;
+	t=1739358677;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=r+mHmOr7kEFjb8pVExkvKZ/vFKSfAcAT8K4w57mYRhg=;
-	b=cel54dTPOsh/BqH+CHXScE6Ife8/XYgJSz3P3LbFCcsytgIR60YtrwdHqw27x5thh+e/FT
-	uVHzNKPDRb+G0B0XtKvY2AQr0zebhg1lj2cOPat/qshm3r803Q1kIBmvst7njgOutJshwl
-	qJ0u3XPZwEXaUmfeObk2GkWBqK82/MSQBPXmxwLjjYGgZ5qcPMWsxGIptShYtlLiF/qPdv
-	/srfpLMNwL3BOoQcBrXOq89OWlcCZxi5fld0BSklEZfYcDWi3UrBhw297NX5cdcXSGf3Rz
-	A0xEecrfiyHWSX5lBTSaskun8yS+a71OdnvN16LX0JDcZswW9vWdFthcPN67Rg==
+	bh=rj5o7NoQNqJlyyY9DzCVHS3ItyDIwLAnEb3Fe3jd0qQ=;
+	b=EPlw+Tvhs+blWX027JMGx+njY4Kf6nLTeqCtleQrXNzMybW+OcOyveSGTfthndxl1jIorT
+	v6J/hwbrmumaIPXKv7EGpNE1K/GfRYrjT76QoFlgYOMzXVWT0yfb+VXC/waNwoYK+UseJE
+	so7vh8AevinS+YYpM4XPFgBbsbQVH5Y7pkpvqMU+uwL8jPYut+NVp7SYvA28b34fK7tia9
+	EpOgrnuyoSVNjVZgOMoN7kaAllcaq3Iwf7H690wXSW/eUyIr3htBT6axPdWO1NVNdpNTrr
+	lkhm780mxOqaE5Yvg+Q9p1Uy54MPVqgBXou9y0mq8XqvgNC92Vs9ll2I2vK0uA==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Wed, 12 Feb 2025 12:11:09 +0100
-Subject: [PATCH bpf-next v5 1/6] selftests/bpf: test_xdp_veth: Create
- struct net_configuration
+Date: Wed, 12 Feb 2025 12:11:10 +0100
+Subject: [PATCH bpf-next v5 2/6] selftests/bpf: test_xdp_veth: Use a
+ dedicated namespace
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250212-redirect-multi-v5-1-fd0d39fca6e6@bootlin.com>
+Message-Id: <20250212-redirect-multi-v5-2-fd0d39fca6e6@bootlin.com>
 References: <20250212-redirect-multi-v5-0-fd0d39fca6e6@bootlin.com>
 In-Reply-To: <20250212-redirect-multi-v5-0-fd0d39fca6e6@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -84,244 +84,151 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegfeejvdcutefuodetggdotef
  gdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepkhhpshhinhhghheskhgvrhhnvghlrdhorhhg
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-The network configuration is defined by a table of struct
-veth_configuration. This isn't convenient if we want to add a network
-configuration that isn't linked to a veth pair.
+Tests use the root network namespace, so they aren't fully independent
+of each other. For instance, the index of the created veth interfaces
+is incremented every time a new test is launched.
 
-Create a struct net_configuration that holds the veth_configuration
-table to ease adding new configuration attributes in upcoming patch.
+Wrap the network topology in a network namespace to ensure full
+isolation. Use the append_tid() helper to ensure the uniqueness of this
+namespace's name during parallel runs.
+Remove the use of the append_tid() on the veth names as they now belong
+to an already unique namespace.
+Simplify cleanup_network() by directly deleting the namespaces
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- .../selftests/bpf/prog_tests/test_xdp_veth.c       | 108 +++++++++++----------
- 1 file changed, 59 insertions(+), 49 deletions(-)
+ .../selftests/bpf/prog_tests/test_xdp_veth.c       | 52 ++++++++++++++--------
+ 1 file changed, 33 insertions(+), 19 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index 73a440e44d5287ae6246e074737483f31aa484fb..4fa2b452de7c8361ec575d63a3ce6fbedc220773 100644
+index 4fa2b452de7c8361ec575d63a3ce6fbedc220773..a1c79af23bec25529af5b549d16b2cbfaf1cebd4 100644
 --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
 +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -51,27 +51,33 @@ struct veth_configuration {
- 	char remote_addr[IP_MAX_LEN]; /* IP address of the remote veth */
+@@ -9,7 +9,11 @@
+  *  | veth11 |        | veth22 |       | veth33 |
+  *  ----|-----        -----|----       -----|----
+  *      |                  |                |
+- *    veth1              veth2            veth3
++ *  ----|------------------|----------------|----
++ *  | veth1              veth2            veth3 |
++ *  |                                           |
++ *  |                     NSO                   |
++ *  ---------------------------------------------
+  *
+  * Test cases:
+  *  - [test_xdp_veth_redirect] : ping veth33 from veth11
+@@ -52,10 +56,12 @@ struct veth_configuration {
  };
  
--static const struct veth_configuration default_config[VETH_PAIRS_COUNT] = {
--	{
--		.local_veth = "veth1-",
--		.remote_veth = "veth11",
--		.next_veth = 1,
--		.remote_addr = IP_SRC,
--		.namespace = "ns-veth11-"
--	},
--	{
--		.local_veth = "veth2-",
--		.remote_veth = "veth22",
--		.next_veth = 2,
--		.remote_addr = "",
--		.namespace = "ns-veth22-"
--	},
-+struct net_configuration {
-+	struct veth_configuration veth_cfg[VETH_PAIRS_COUNT];
-+};
-+
-+static const struct net_configuration default_config = {
+ struct net_configuration {
++	char ns0_name[NS_NAME_MAX_LEN];
+ 	struct veth_configuration veth_cfg[VETH_PAIRS_COUNT];
+ };
+ 
+ static const struct net_configuration default_config = {
++	.ns0_name = "ns0-",
  	{
--		.local_veth = "veth3-",
--		.remote_veth = "veth33",
--		.next_veth = 0,
--		.remote_addr = IP_DST,
--		.namespace = "ns-veth33-"
-+		{
-+			.local_veth = "veth1-",
-+			.remote_veth = "veth11",
-+			.next_veth = 1,
-+			.remote_addr = IP_SRC,
-+			.namespace = "ns-veth11-"
-+		},
-+		{
-+			.local_veth = "veth2-",
-+			.remote_veth = "veth22",
-+			.next_veth = 2,
-+			.remote_addr = "",
-+			.namespace = "ns-veth22-"
-+		},
-+		{
-+			.local_veth = "veth3-",
-+			.remote_veth = "veth33",
-+			.next_veth = 0,
-+			.remote_addr = IP_DST,
-+			.namespace = "ns-veth33-"
-+		}
- 	}
- };
+ 		{
+ 			.local_veth = "veth1-",
+@@ -144,21 +150,30 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
  
-@@ -83,7 +89,7 @@ struct prog_configuration {
- };
- 
- static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
--					struct veth_configuration *net_config,
-+					struct net_configuration *net_config,
- 					struct prog_configuration *prog, int index)
+ static int create_network(struct net_configuration *net_config)
  {
- 	struct bpf_program *local_prog, *remote_prog;
-@@ -106,7 +112,7 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 	if (!ASSERT_OK_PTR(remote_prog, "find remote program"))
- 		return -1;
- 
--	interface = if_nametoindex(net_config[index].local_veth);
-+	interface = if_nametoindex(net_config->veth_cfg[index].local_veth);
- 	if (!ASSERT_NEQ(interface, 0, "non zero interface index"))
- 		return -1;
- 
-@@ -115,11 +121,11 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 	if (!ASSERT_OK(ret, "attach xdp program to local veth"))
- 		return -1;
- 
--	nstoken = open_netns(net_config[index].namespace);
-+	nstoken = open_netns(net_config->veth_cfg[index].namespace);
- 	if (!ASSERT_OK_PTR(nstoken, "switch to remote veth namespace"))
- 		return -1;
- 
--	interface = if_nametoindex(net_config[index].remote_veth);
-+	interface = if_nametoindex(net_config->veth_cfg[index].remote_veth);
- 	if (!ASSERT_NEQ(interface, 0, "non zero interface index")) {
- 		close_netns(nstoken);
- 		return -1;
-@@ -136,31 +142,34 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 	return 0;
- }
- 
--static int create_network(struct veth_configuration *net_config)
-+static int create_network(struct net_configuration *net_config)
- {
++	struct nstoken *nstoken = NULL;
  	int i, err;
  
--	memcpy(net_config, default_config, VETH_PAIRS_COUNT * sizeof(struct veth_configuration));
-+	memcpy(net_config, &default_config, sizeof(struct net_configuration));
+ 	memcpy(net_config, &default_config, sizeof(struct net_configuration));
  
- 	/* First create and configure all interfaces */
+-	/* First create and configure all interfaces */
++	/* Create unique namespaces */
++	err = append_tid(net_config->ns0_name, NS_NAME_MAX_LEN);
++	if (!ASSERT_OK(err, "append TID to ns0 name"))
++		goto fail;
++	SYS(fail, "ip netns add %s", net_config->ns0_name);
++
  	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
--		err = append_tid(net_config[i].namespace, NS_NAME_MAX_LEN);
-+		err = append_tid(net_config->veth_cfg[i].namespace, NS_NAME_MAX_LEN);
+ 		err = append_tid(net_config->veth_cfg[i].namespace, NS_NAME_MAX_LEN);
  		if (!ASSERT_OK(err, "append TID to ns name"))
- 			return -1;
- 
--		err = append_tid(net_config[i].local_veth, VETH_NAME_MAX_LEN);
-+		err = append_tid(net_config->veth_cfg[i].local_veth, VETH_NAME_MAX_LEN);
- 		if (!ASSERT_OK(err, "append TID to local veth name"))
- 			return -1;
- 
--		SYS(fail, "ip netns add %s", net_config[i].namespace);
+-			return -1;
++			goto fail;
 +		SYS(fail, "ip netns add %s", net_config->veth_cfg[i].namespace);
++	}
+ 
+-		err = append_tid(net_config->veth_cfg[i].local_veth, VETH_NAME_MAX_LEN);
+-		if (!ASSERT_OK(err, "append TID to local veth name"))
+-			return -1;
++	/* Create interfaces */
++	nstoken = open_netns(net_config->ns0_name);
++	if (!nstoken)
++		goto fail;
+ 
+-		SYS(fail, "ip netns add %s", net_config->veth_cfg[i].namespace);
++	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
  		SYS(fail, "ip link add %s type veth peer name %s netns %s",
--		    net_config[i].local_veth, net_config[i].remote_veth, net_config[i].namespace);
--		SYS(fail, "ip link set dev %s up", net_config[i].local_veth);
--		if (net_config[i].remote_addr[0])
--			SYS(fail, "ip -n %s addr add %s/24 dev %s",	net_config[i].namespace,
--			    net_config[i].remote_addr, net_config[i].remote_veth);
--		SYS(fail, "ip -n %s link set dev %s up", net_config[i].namespace,
--		    net_config[i].remote_veth);
-+		    net_config->veth_cfg[i].local_veth, net_config->veth_cfg[i].remote_veth,
-+		    net_config->veth_cfg[i].namespace);
-+		SYS(fail, "ip link set dev %s up", net_config->veth_cfg[i].local_veth);
-+		if (net_config->veth_cfg[i].remote_addr[0])
-+			SYS(fail, "ip -n %s addr add %s/24 dev %s",
-+			    net_config->veth_cfg[i].namespace,
-+			    net_config->veth_cfg[i].remote_addr,
-+			    net_config->veth_cfg[i].remote_veth);
-+		SYS(fail, "ip -n %s link set dev %s up", net_config->veth_cfg[i].namespace,
-+		    net_config->veth_cfg[i].remote_veth);
+ 		    net_config->veth_cfg[i].local_veth, net_config->veth_cfg[i].remote_veth,
+ 		    net_config->veth_cfg[i].namespace);
+@@ -172,29 +187,21 @@ static int create_network(struct net_configuration *net_config)
+ 		    net_config->veth_cfg[i].remote_veth);
  	}
  
++	close_netns(nstoken);
  	return 0;
-@@ -169,21 +178,22 @@ static int create_network(struct veth_configuration *net_config)
+ 
+ fail:
++	close_netns(nstoken);
  	return -1;
  }
  
--static void cleanup_network(struct veth_configuration *net_config)
-+static void cleanup_network(struct net_configuration *net_config)
+ static void cleanup_network(struct net_configuration *net_config)
  {
- 	struct nstoken *nstoken;
+-	struct nstoken *nstoken;
  	int i;
  
- 	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
--		bpf_xdp_detach(if_nametoindex(net_config[i].local_veth), 0, NULL);
--		nstoken = open_netns(net_config[i].namespace);
-+		bpf_xdp_detach(if_nametoindex(net_config->veth_cfg[i].local_veth), 0, NULL);
-+		nstoken = open_netns(net_config->veth_cfg[i].namespace);
- 		if (nstoken) {
--			bpf_xdp_detach(if_nametoindex(net_config[i].remote_veth), 0, NULL);
-+			bpf_xdp_detach(if_nametoindex(net_config->veth_cfg[i].remote_veth),
-+				       0, NULL);
- 			close_netns(nstoken);
- 		}
- 		/* in case the detach failed */
--		SYS_NOFAIL("ip link del %s", net_config[i].local_veth);
--		SYS_NOFAIL("ip netns del %s", net_config[i].namespace);
-+		SYS_NOFAIL("ip link del %s", net_config->veth_cfg[i].local_veth);
-+		SYS_NOFAIL("ip netns del %s", net_config->veth_cfg[i].namespace);
- 	}
+-	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
+-		bpf_xdp_detach(if_nametoindex(net_config->veth_cfg[i].local_veth), 0, NULL);
+-		nstoken = open_netns(net_config->veth_cfg[i].namespace);
+-		if (nstoken) {
+-			bpf_xdp_detach(if_nametoindex(net_config->veth_cfg[i].remote_veth),
+-				       0, NULL);
+-			close_netns(nstoken);
+-		}
+-		/* in case the detach failed */
+-		SYS_NOFAIL("ip link del %s", net_config->veth_cfg[i].local_veth);
++	SYS_NOFAIL("ip netns del %s", net_config->ns0_name);
++	for (i = 0; i < VETH_PAIRS_COUNT; i++)
+ 		SYS_NOFAIL("ip netns del %s", net_config->veth_cfg[i].namespace);
+-	}
  }
  
-@@ -210,9 +220,9 @@ static void xdp_veth_redirect(u32 flags)
- 			.remote_flags = flags,
- 		}
- 	};
--	struct veth_configuration net_config[VETH_PAIRS_COUNT];
+ #define VETH_REDIRECT_SKEL_NB	3
+@@ -223,6 +230,7 @@ static void xdp_veth_redirect(u32 flags)
  	struct bpf_object *bpf_objs[VETH_REDIRECT_SKEL_NB];
  	struct xdp_redirect_map *xdp_redirect_map;
-+	struct net_configuration net_config;
+ 	struct net_configuration net_config;
++	struct nstoken *nstoken = NULL;
  	struct xdp_dummy *xdp_dummy;
  	struct xdp_tx *xdp_tx;
  	int map_fd;
-@@ -230,7 +240,7 @@ static void xdp_veth_redirect(u32 flags)
- 	if (!ASSERT_OK_PTR(xdp_redirect_map, "xdp_redirect_map__open_and_load"))
- 		goto destroy_xdp_tx;
- 
--	if (!ASSERT_OK(create_network(net_config), "create network"))
-+	if (!ASSERT_OK(create_network(&net_config), "create network"))
- 		goto destroy_xdp_redirect_map;
- 
- 	/* Then configure the redirect map and attach programs to interfaces */
-@@ -242,18 +252,18 @@ static void xdp_veth_redirect(u32 flags)
+@@ -251,6 +259,11 @@ static void xdp_veth_redirect(u32 flags)
+ 	bpf_objs[0] = xdp_dummy->obj;
  	bpf_objs[1] = xdp_tx->obj;
  	bpf_objs[2] = xdp_redirect_map->obj;
++
++	nstoken = open_netns(net_config.ns0_name);
++	if (!ASSERT_OK_PTR(nstoken, "open NS0"))
++		goto destroy_xdp_redirect_map;
++
  	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
--		int next_veth = net_config[i].next_veth;
-+		int next_veth = net_config.veth_cfg[i].next_veth;
+ 		int next_veth = net_config.veth_cfg[i].next_veth;
  		int interface_id;
- 		int err;
- 
--		interface_id = if_nametoindex(net_config[next_veth].local_veth);
-+		interface_id = if_nametoindex(net_config.veth_cfg[next_veth].local_veth);
- 		if (!ASSERT_NEQ(interface_id, 0, "non zero interface index"))
- 			goto destroy_xdp_redirect_map;
- 		err = bpf_map_update_elem(map_fd, &i, &interface_id, BPF_ANY);
- 		if (!ASSERT_OK(err, "configure interface redirection through map"))
- 			goto destroy_xdp_redirect_map;
- 		if (attach_programs_to_veth_pair(bpf_objs, VETH_REDIRECT_SKEL_NB,
--						 net_config, ping_config, i))
-+						 &net_config, ping_config, i))
- 			goto destroy_xdp_redirect_map;
- 	}
- 
-@@ -261,7 +271,7 @@ static void xdp_veth_redirect(u32 flags)
- 	 * veth33 from veth11
- 	 */
- 	ASSERT_OK(SYS_NOFAIL("ip netns exec %s ping -c 1 -W 1 %s > /dev/null",
--			     net_config[0].namespace, IP_DST), "ping");
-+			     net_config.veth_cfg[0].namespace, IP_DST), "ping");
+@@ -274,6 +287,7 @@ static void xdp_veth_redirect(u32 flags)
+ 			     net_config.veth_cfg[0].namespace, IP_DST), "ping");
  
  destroy_xdp_redirect_map:
++	close_netns(nstoken);
  	xdp_redirect_map__destroy(xdp_redirect_map);
-@@ -270,7 +280,7 @@ static void xdp_veth_redirect(u32 flags)
- destroy_xdp_dummy:
- 	xdp_dummy__destroy(xdp_dummy);
- 
--	cleanup_network(net_config);
-+	cleanup_network(&net_config);
- }
- 
- void test_xdp_veth_redirect(void)
+ destroy_xdp_tx:
+ 	xdp_tx__destroy(xdp_tx);
 
 -- 
 2.48.1
