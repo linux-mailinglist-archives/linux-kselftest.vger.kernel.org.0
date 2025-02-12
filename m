@@ -1,166 +1,158 @@
-Return-Path: <linux-kselftest+bounces-26452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA72A3220E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 10:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61F27A32232
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 10:32:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A986D18868FA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 09:26:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C24A918886FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 09:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654872063E5;
-	Wed, 12 Feb 2025 09:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE511FC11A;
+	Wed, 12 Feb 2025 09:32:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S74DbRTh"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uBoY2TMc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A5C2063CD
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 09:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278431F12E8
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 09:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739352359; cv=none; b=qV/0SNBJvZj7SmmIFa/J/7sB7yOX5ASj876yObYmNINZeCnxIclrlQr5IYrOJpAJS1/aLDDDRFyTcphxPUKCDq+1eW4ARao/OAZl+FhuOoko+1b92qnUC6cxrvjOY1KT6Owe3xFhQJQyqoqixYQhPum4CdwbsIifBejes1u6CK8=
+	t=1739352733; cv=none; b=TTzo7FYsFiza+PubDUOiOzSkZBek16ajonm18zQDe1OUq4Yixv7n57XV98tFAskMzccrTbzaGARoiM7U5ctynEdNj8jFOPUa01n2Oz47OpKAK4F/BfWYsudbdzScSjCeuGQq4ZEjGwr/TJzJK5QhfBMqN7wQvh/oQskUAzOgAyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739352359; c=relaxed/simple;
-	bh=2DgsAE/rL/fnlPvwtgF6Aw3bBsrRtbNV6XqO9zykZgM=;
+	s=arc-20240116; t=1739352733; c=relaxed/simple;
+	bh=7d27jDDpcRZT/d9tBPCI5HCkHoWf6HH5PH6C+PoOdFQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Acs0s673xRuUAXeVDD9p7RxU61IjM0VKnvESS/HXvvYFy1ivE1SmhBVt76yufX8fHPpKwjN77wwGajpVByT3o1jqj02amK4plisl75B3fHJqiFeJwkPJyRL3T7n6hnz8j5K+aZLV9qNnbDkXbBkzh0MMSWL2ZVNB+g7idQaRqw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S74DbRTh; arc=none smtp.client-ip=209.85.219.51
+	 To:Cc:Content-Type; b=RO+5jjLJ40N1E5p4dZWNMUF8LADpJMrmK5NZu38i1BuRRLceHlMsr9f02OsM3Rj5/zkr/aHsUlZmHFemYILbxnLqk5RM3Wtf8WTuhdafNC4QVu+AhRwNdkqffKXsahgNOPtZQAP2E8HtrQHdCccvq6rE47lBP4zqHQbCavzA+A4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uBoY2TMc; arc=none smtp.client-ip=209.85.219.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e45258610bso5250746d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 01:25:57 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6e454a513a6so30200416d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 01:32:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739352356; x=1739957156; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1739352731; x=1739957531; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2DgsAE/rL/fnlPvwtgF6Aw3bBsrRtbNV6XqO9zykZgM=;
-        b=S74DbRThxNnwB5P++24fkd3S8mCHEij/+zsx5kGg7Mf8KyqxZ5MFQeYJ8A/W24aKAt
-         aZ7Ezib1wIqP9elrwATJse/HhgYoVXyjaCZgpvfMq4e5ZP47nte0WvWoWahK6bm7LuAF
-         ZqJVxHMY5BYXaXpwatDJRsnfU1qOq5KjSjFo6tSIXgIf7M2GflVOQ9LA5/lTWQpo8YVD
-         Du7RKqzGEjuR8pAG22GgCiTxOBS93YPaDRreZ8gMs1aWD2rM+uYxF5MqJv0hPRDgCGX7
-         uAAZK/WzszN+St7XzVWOW1wBE2ZJWZBmpsDZHTVvMfXLLY28r/p6EERBCOiCXyMDoUA6
-         7dRQ==
+        bh=yhRMxgk7x3dISf9GlbkgmMVrGfXy9hy+GxR6wJxVLNE=;
+        b=uBoY2TMcQvyZm45KcR2cURXXgaJt+K+2MUHKyUAFrch8rWPaJ2nRNc/weV549sXQrK
+         +ajb4TMRF14AOvyOkIJ+CNRBCKQpIazz52Rz1XT/QZXBPUTYkI9NAS+CzlFgOUvdplSU
+         tJMCH2Ym/tqr4Tcj6k/Sm7lNK9YdwnUAjQJE0fYP1r4HFUFxZTeIRXJSk9g9GG2ivUZo
+         eigu8OEWWF31fz1Vmu5Wrh6BqEChD5DvMFc4dLRWy2AwgpoKs4L0P18XvpFO7gB1/E6E
+         Vv9VtnkvEhVlcNPiTgaSuFIxQvwufmx/BsLaCjXDsTQn7don4Xwt5Wsf1elPkKk000VN
+         wWBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739352356; x=1739957156;
+        d=1e100.net; s=20230601; t=1739352731; x=1739957531;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2DgsAE/rL/fnlPvwtgF6Aw3bBsrRtbNV6XqO9zykZgM=;
-        b=etrTpJ0PNkL1n2M3fLaqa4YQjefv9CMEjn8dfbJKIuNPrxNFWFRTu5tRI1CDq6SEjZ
-         0biMe2skYZKxc6OKswoDQV9gjANMzQdfQySNisubtgfhZfTOiOs3AiMc1K5IYFRFJaKh
-         xLU3T/wE7uKewBVslfKuBI4fwer0WWw5Jti5PoL5lZLqjtUCHfg9DdWMeC/0T23hRc2v
-         qud7+Hxy4o0o436DKv1bflOpkUXuAguZ+B5vaABLFHjWe0HHDp75SCqb0tZSRxIlsKyN
-         TbA1JaCI9azXFlWVWcIO0P/ugSJdsSakHmvoRf8ejiS6ztgP4Sf+AnmbpZ0nLv8vkeJk
-         ovYw==
-X-Forwarded-Encrypted: i=1; AJvYcCVoZBAsIAf9oZjK/mtYoc95EMpOXV0T+WongkSzr+s+o9jysQCg4DmJoyS3Qbn43UqfYm6OHCLI+Caos4uSvhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxT0ZpKP6q/9PR3SL5GIBapKxuk9qa3/doaYYDJKFCXupl7qsQe
-	1cWhSdKHwE0AcUSAdO91mzweuLY/cuM85ofH9qYqGjX2FrpEOVEQxoxaLmMY2rFui3x2CJPz3Qj
-	kGhfc+gwQmXHaD3AxUD1fvlQMVq5L9eXDTBYt
-X-Gm-Gg: ASbGncvaabRUk1KIPrKj2oXkO85HxRhezy5T9FyNtlEJJ8x19ezVA1ty0Z7VXVxZyoK
-	DRkPZHdra69YMUCuR9GJ+waONxdIrz9i6z33JOctoW9AcBkx2uv/CgU5J8tDeppxP9C5ssPTsWw
+        bh=yhRMxgk7x3dISf9GlbkgmMVrGfXy9hy+GxR6wJxVLNE=;
+        b=gM2WVD5vdFAwmGLpfj5cq/cUFEUDjepik+cGFB07OZpne9kEk1lf6MvqZ2K+Tz7OUO
+         VsJmA0SyqMD9wYkbPufSSSXkLy+b8p5b3BVBbNDZQj25iwOZL/t85m0IhrWJPAltvlA0
+         u6mVvxLg9LC0VfgTfFwXI0RVs+dIfzM7++vLuNg+yRxyz6qlkkTjDif0DAqEGbu0VM5c
+         2MCeSXhPtjfpOVKQPAEtNrOp5IFv8PeNMYrI9mrkwZDafDPUHBoNL5AWR9sIPnZahCKC
+         ElIoj6C22JrTAo09e7SduAaWSejvZ2bdgSFsWMq46dp8oSEPnzRI7O4Aog74UpsVCN2F
+         M6yg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4rk/3toshwq747ijz9Jnmv+0xGgQ/LAvS/7nak5NXhZG9EF81VN3B//HR9jBLD1z2INM2gcaJ15CFq+iMngk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzisVFNg3ErG3n6hmShBZZTvXB5x9izT3+e2cIfDzm4Pxb7C8ZW
+	TNUgRQ7K5BpEuoMOshu7OScsZKkUNLqPHhSmND+gq1fGZWcAF293F87uaN/cPMUSR5w3iZrGoEi
+	43lIBcBBVAcbWXyXUiKlTeu7841OSVusOZQ4s
+X-Gm-Gg: ASbGnctEN+Ni4S0co231iIaQcnUYR+h5W0MnHSBTAA+sI1jr01ZkOSu7sJhhpARwnHT
+	T6yFrbstPDljd7c1sxDmi3rAhCPfEbr1spCu2qxFrxykLo+pE8fJRuuLN13UcKUB8K7a12NDNEw
 	==
-X-Google-Smtp-Source: AGHT+IELM8KwZg9bPa6ApIbCrsuxGiv4sqNaeocApE+U5glfWR9qu3Scox2u1ntzGs9gZiEQj1tJDoc7YBA8OJymPQI=
-X-Received: by 2002:a05:6214:20eb:b0:6e4:4582:4760 with SMTP id
- 6a1803df08f44-6e4680808f0mr96565326d6.21.1739352356421; Wed, 12 Feb 2025
- 01:25:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHqnH56bEzm8NV2ZQyhVWM4msgDhH/69BKhdVG/QGZdCL5Ii2NjLfCLJU+Dv/rnHTmajdo+OnMTWb57Qg2zJXk=
+X-Received: by 2002:ad4:5dec:0:b0:6d8:9a85:5b44 with SMTP id
+ 6a1803df08f44-6e46edacf68mr32690266d6.29.1739352730814; Wed, 12 Feb 2025
+ 01:32:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
- <Z6vRIZk7DsSNooFZ@boqun-archlinux> <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
-In-Reply-To: <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
+References: <20240928235825.96961-1-porlando@lkcamp.dev> <20240928235825.96961-3-porlando@lkcamp.dev>
+ <87iku7u211.fsf@mailhost.krisman.be> <2c26c5e4-9cf3-4020-b0be-637dc826b4e9@leemhuis.info>
+In-Reply-To: <2c26c5e4-9cf3-4020-b0be-637dc826b4e9@leemhuis.info>
 From: David Gow <davidgow@google.com>
-Date: Wed, 12 Feb 2025 17:25:44 +0800
-X-Gm-Features: AWEUYZkV2OS39zkWusmNz-gAmfnypsKurOAydIIqeSOxeLA_3B7gbiADav21Pbg
-Message-ID: <CABVgOS=jS6Sgbffrx18eHnO=0LnFsvgxO0_pnpD6HCgH646Ndw@mail.gmail.com>
-Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Date: Wed, 12 Feb 2025 17:31:59 +0800
+X-Gm-Features: AWEUYZn7RdReqmwmjJQTGuXVDd9NksDyWUUjhxWNmLfC3iYnfp3ctJ2NpBh2Xxo
+Message-ID: <CABVgOS=36iRrpb+ND4M2awbZzgCKwudYxx5XNvEBEkgss+C-bw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] unicode: kunit: change tests filename and path
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: Gabriel Krisman Bertazi <gabriel@krisman.be>, Pedro Orlando <porlando@lkcamp.dev>, 
+	Kees Cook <keescook@chromium.org>, Danilo Pereira <dpereira@lkcamp.dev>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	Gabriela Bittencourt <gbittencourt@lkcamp.dev>, 
+	Linux kernel regressions list <regressions@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000005f6df6062dee8739"
+	boundary="000000000000b0dc09062dee9d53"
 
---0000000000005f6df6062dee8739
+--000000000000b0dc09062dee9d53
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, 12 Feb 2025 at 06:43, Tamir Duberstein <tamird@gmail.com> wrote:
+On Wed, 12 Feb 2025 at 14:45, Thorsten Leemhuis <linux@leemhuis.info> wrote:
 >
-> On Tue, Feb 11, 2025 at 5:38=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com>=
- wrote:
+> On 04.10.24 21:00, Gabriel Krisman Bertazi wrote:
+> > Pedro Orlando <porlando@lkcamp.dev> writes:
+> >> From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+> >>
+> >> Change utf8 kunit test filename and path to follow the style
+> >> convention on Documentation/dev-tools/kunit/style.rst
+> >>
+> >> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
+> >> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
+> >> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
+> >> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
+> >> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+> >> ---
+> >>  fs/unicode/Makefile                                | 2 +-
+> >>  fs/unicode/{ => tests}/.kunitconfig                | 0
+> >>  fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} | 0
+> >>  3 files changed, 1 insertion(+), 1 deletion(-)
+> >>  rename fs/unicode/{ => tests}/.kunitconfig (100%)
+> >>  rename fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} (100%)
+> >>
+> >> diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
+> >> index 37bbcbc628a1..d95be7fb9f6b 100644
+> >> --- a/fs/unicode/Makefile
+> >> +++ b/fs/unicode/Makefile
+> >> @@ -4,7 +4,7 @@ ifneq ($(CONFIG_UNICODE),)
+> >>  obj-y                       += unicode.o
+> >>  endif
+> >>  obj-$(CONFIG_UNICODE)       += utf8data.o
+> >> -obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += utf8-selftest.o
+> >> +obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += tests/utf8_kunit.o
 > >
-> > Hi Tamir,
->
-> Hi Boqun, thanks for taking a look.
->
-> > On Mon, Feb 10, 2025 at 10:59:12AM -0500, Tamir Duberstein wrote:
-> > > Convert this unit test to a KUnit test.
-> > >
+> > This breaks compilation for me.
 > >
-> > I would like to know the pros and cons between kunit tests and
-> > kselftests, maybe someone Cced can answer that? It'll be good to put
-> > these in the commit log as well.
+> > fs/unicode/tests/utf8_kunit.c:11:10: fatal error: utf8n.h: No such file or directory
+> >    11 | #include "utf8n.h"
+> >       |          ^~~~~~~~~
 >
-> David Gow gave a pretty detailed answer in
-> https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQ=
-ADrW+sJg@mail.gmail.com/
-> for a similar patch.
+> I encountered the same error when building -next using the Fedora
+> rawhide config today. Given that this patch landed in -next today I
+> suspect it might be due to this change, but I'm on the road and unable
+> to verify that right now.
+>
+> Log:
+> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/08642966-next-next-all/builder-live.log.gz
+>
+> Cioa, Thorsten
+>
 
-That previous answer covers a lot, but while I think the advantages
-(better tooling, easy architecture emulation, etc) are covered, I'll
-add a few extra caveats specific to this test here.
-
-KUnit is really better suited to "unit tests" rather than "stress
-tests", and does have some limits when tests span multiple threads
-(assertions cannot kill other threads, the test context is not
-automatically applied, etc).
-
-I don't think these would preclude you from using KUnit for ww_mutex
-testing -- and people have done multithreaded stress tests in KUnit in
-the past if they really want to, it's definitely a trade-off rather
-than a strict win, so it may make sense if as maintainers you are
-already familiar with or want to use KUnit, but definitely is up to
-you.
-
-> David, what do you think about enumerating these reasons in the KUnit
-> documentation? This is the 3rd of these patches that has received this
-> question. It'd be a shame to have every commit enumerate KUnit's
-> reasons for being.
-
-We have some existing documentation as to when KUnit and kselftest are
-more appropriate as a part of the 'Kernel Testing Guide' in
-Documentation/testing-overview.rst (though it focuses on the
-underlying differences in goals, rather than 'look at all of these
-useful features'), as well as an overview of why KUnit is useful on
-the KUnit webpage at http://kunit.dev/ (though without the direct
-kselftest comparison).
-
-My hope was that porting tests from one framework to the other should
-be a rare, probably one-off occurrence, so the focus should be more on
-writing new tests, but clearly what we have is insufficient. And
-ideally some of the advantages of KUnit, particularly in the
-standardisation and tooling support, will continue to make their way
-to kselftest, so hopefully some of the advantages of KUnit will
-disappear.
-
-Nevertheless, I'll see if there's anything specific we want to add
-about test porting.
+Hmm... this definitely seems like a problem, but I haven't been able
+to reproduce it here (either under x86_64 or UML, both as a module and
+built-in). The suggested fix of changing the path to "../utf8n.h"
+doesn't seem to have broken it, though.
 
 Cheers,
 -- David
 
---0000000000005f6df6062dee8739
+--000000000000b0dc09062dee9d53
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -250,14 +242,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgLbzrIV77LyqdEK2YDK+XFSIuEB0U
-xeELQgoo7zrfnKUwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MjEyMDkyNTU2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgbcLcf0jX2zh/A+dk8t6kNSBOTOop
+awlid5ShBd/XnrMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MjEyMDkzMjExWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAF0EDNR2bNy1fAs6oS/buG2srS7mlAv85Y+TJOVtx6ITTdwl
-6Vv6os+Nedt0qwX3a0Z4qXnrNkAUqvGEDM0RKoseqfKyscNTI5LbPUniJwnHatEEFG1rW8vd+moJ
-4jNBkHGXBDyMT2g6WWIpWnS0meJbqHHgyuS9O29AWt0Ww6UFg0KpH5tOsC3ko9ZSPh4Et2P1q1Ad
-i6twvruu3o77XadRIzgM1QhPOUtFyjc5/th0iA6cHDcLbUntCkO7gfdnQ3MT4PC4tq1JppWTFnrM
-qFwD/VJxR+tJOf5/0Yc5eDvPDDNq8EHn4oFcQKyglbQs5JF2Rk6A3TC+nASuXKtH0Jk=
---0000000000005f6df6062dee8739--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAHvW6Nr0pOwZxY7o+wo6aOeMspi9sLX0nkAaUNS0ZY3jtpzd
+QKoNcLOmrOto9U3CT4/ILQhVQ4Lp5X9Sh9UVMRLiqYZ3HbA6/OsuydROZFhG8/Zu8+EetX3/aUAQ
+ibyzlcYz0claIpGFbha0bo8xbqvjQRM/cYYhwuIsyW1r2Y9dYKBWlnoX3aMvBYI15lfY3t25Y1aS
+g/8q6ebKWyVrh3xE1hK6Cc6k7iQBmJdGk5AEp6qeRn++w2iiSnh6vPM5nqv+KV2k4UNPXNLoJ0rE
+uDkpBQsvZoJgFoKwx+xbE8L8Deq0HUwvje+QBi8xSblaMpCquYYKz+OvV6de3UkSBXE=
+--000000000000b0dc09062dee9d53--
 
