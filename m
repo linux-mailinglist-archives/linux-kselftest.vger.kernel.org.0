@@ -1,174 +1,113 @@
-Return-Path: <linux-kselftest+bounces-26461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34B08A3256E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 12:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59257A32630
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 13:49:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C58703A6DB3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 11:53:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC7AD3A451A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 12:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D42720B1FD;
-	Wed, 12 Feb 2025 11:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3109A20B803;
+	Wed, 12 Feb 2025 12:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gtScDzWX"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Zt5JZ0sm";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SHoi6ODK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7711320AF94
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 11:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFAF27183F;
+	Wed, 12 Feb 2025 12:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739361217; cv=none; b=XbQGV0+kl7RZbpPYKAwv7ZaYZz1fGvrTnGx0VIu8ndFVhlstN9XJOPFV/6C6ZuR7G0DTkX4hCyD+yjMVt/jGWgpe71IJUjaqOaBw/x6tYnzNw29KvfXcw9PvuiIQ7NUmkj7AxcJwbDZkzpFMlJAHJNXMMIl3UVKd2lfgnoH1Dcg=
+	t=1739364561; cv=none; b=VqQx2f16Ge6WMvdCgFMqoRQKR93Mb6OZkXpUrtCfZ17WdAkQo8UhOfuTZ3XY0BqMa6NXHFoZK0gBAfu3SCd3/AgyFCB1TqQrAOnaRbvlh2rCc/pMqr/hZNtT3reOnKsNDeiCAMzUVG1BuQPWBIZU/CTKbIZwNB/s0LOUsMlJcfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739361217; c=relaxed/simple;
-	bh=F/Y6oZFsQtTxUrr9YYdhPnGY9CZOnlMoNkfED6ENZxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=GSlOtTasiGVBayPJXdtB12TXx1L3xLisIwkUp6RRJGPFL1q2RpQVsk5rDZu1jIinO8cwemvhK1fP9U38mzVQrWrbOSnntkUWLc2Y0lbafW/aG2j+X62nDVq/yYvli1TTXuP6KElfGwsslJm10DKaTN722gGcgojoaXHmvw11s1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gtScDzWX; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5de6e26db8eso7054729a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 03:53:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739361214; x=1739966014; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ve4GUfiMGd+JubWtGmw2gMxfkFox9RovPabXzAhTLMg=;
-        b=gtScDzWXT/xz8AMgZ2gUYup6p92FeeSmLTsHJswlGBRhztU1xS35hr2ggHNgDH60If
-         fCmSyoOqxnkh2GY9sqNK8IjUXtHK+pYHBxSY84v+nETr19VqB9Yc8cRrxrxQzyIysOSE
-         4Ivd60YwHsrcOxI+nGVfcXE1wJULUUInyQreL1diuAeAnHRlGQo2/OMlAIAt4VbONzay
-         FWpU/RMZId67TC8U/B8wNAUfNIHu55C7nOqsyzytkx77Sr1g1A6QLbPq+J+4ikUkMxwh
-         4bZNas/SuqBJn6Lju/0CDsIdRw2oK6saP55NYDMSKzX5FwkM1Gra9BC7e0C7ixVv+c2S
-         C3SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739361214; x=1739966014;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ve4GUfiMGd+JubWtGmw2gMxfkFox9RovPabXzAhTLMg=;
-        b=ZsdGxoKfGIi/NjM9Rttr7O+vNsOvyXPVMAg0dlo6V2P4LNbT8FyUo8xwClEXbBp1P3
-         IjrfOTFOZZjJIbS4UQlVhAPY+CqIb91vz3q+0l9niXSP/nUQVOvMmzU9gXT6iMX7ZKCt
-         HuNz4rFJng7A1xtncdeS8u/rlI5AxCsadpuk/Rm0aHiVLCiFueaYHJwlMDs7vDFD/F5S
-         Usm8OY/Q/gBy7HZWXCmXfZ8Z1Pc6vQHlbFrCUDwWl1EgSjOUfRklb1k980+mHpkw5Zin
-         EeHmA5ccMlkB7TD7/Q+GyWFaHbJfM5JM00tsYmd3yubi+s2AqQabk7dbt6gR+Qa/xU44
-         bYQA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2VsWHGAv5DucIi/qfXJfm6A13G0yoq3KpyBYJva8bh4SLxUlIMJpPVjQVLovdXIlob+7jZZUbkQ0dRZgl8sw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX26fs6oC8hE54PEYH21eCFibcdx28u73AkgP8HgUbJcdrRpqk
-	LOEnrDRllVIX7/bqGSIkb+MuN/up+Be299OAOJmu7YwYqUJQ3b4w/BEH/fxMXYU=
-X-Gm-Gg: ASbGncsmMOKzAy1U8H2j5odYZYO7A/NjjPeaKrW/ZIVx8+dVojkx3ALhkxXZfLI8d5e
-	ksjV4t0z6sZ60lBo11T6DYuUtEuCyiZP4kzFevVrO7MoE47wVH3P18u2p40/9XcW3R4JYKpO89k
-	JBQcPsH/HD4mE3BbU2I48aWKCE3zSvLZ1fjndW68I7VBIjxjs2xwwTx697+AEEQB+uRmMsQmf4F
-	e+Ri7Tb8aaRa1NCF2eACeCkIJkvfnWTZkEQOySTMN/8cQOpJmUtxh7vzH2WolZhfNuLG6y8AvHy
-	Ix7Cu/gXYY9kjRLti3b3
-X-Google-Smtp-Source: AGHT+IEW37Ln8Rw9wZCx5hEW7SwbEBmh4Q/tDMUHGy/4+ny+FLprR4PjEwKabrQy3taBn4EwI9h/ug==
-X-Received: by 2002:a05:6402:4605:b0:5dc:8f03:bb5c with SMTP id 4fb4d7f45d1cf-5deadd9217bmr2454917a12.11.1739361213657;
-        Wed, 12 Feb 2025 03:53:33 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-5de46b7b480sm10008537a12.36.2025.02.12.03.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 03:53:33 -0800 (PST)
-Date: Wed, 12 Feb 2025 14:53:30 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Tamir Duberstein <tamird@gmail.com>,
-	David Gow <davidgow@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
-Message-ID: <3dabe058-2308-4990-8e5d-0af1efd27431@stanley.mountain>
+	s=arc-20240116; t=1739364561; c=relaxed/simple;
+	bh=NL58RGQUo5cvDWALIIvtJzK3eZ89+YFSNsS/E+/xOYM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=je30RYmSAnJDoqiUeJrw+fgYTaMYnjZ3ycru2eZ1ojW84+ZKlo6qvkkQf1bkVoCPtTOmPwFYIfNNQtuMEO0GNzlAAjv5TmGTZuxoVr1bHKDR73PhvRV1jQTGp555cjF9qSXW/Uvh0LEQbvFn5oV8XOy+z+5YID/ZdeA4JalNviM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Zt5JZ0sm; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SHoi6ODK; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739364557;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qSE35Z9rhydIaSHAG0noyN8q9MSMVAvkn+jqzXgS5LM=;
+	b=Zt5JZ0smQy+kxK5j8Za0NvLqHkdAgq9fUF7i0kyqT4Rv2cRchDrMt4yf5qLSOCIZW8ieRq
+	CRebHDkgksGNt56pb54GfoHYKGXeZuZa6QrJAhVC6NMpXB/VSqBVJzBF7Vq58hFZawdmxN
+	RZwDMUQlU8ZgQOKV79oBy8/GP5A4DPPcYD/pfXjTBAFWq6WQNirySlBVTJi8hu0mR3k3r1
+	kung3dabubcvUP7KXWLPf4f4UH+mrNOggx/eo34NKc0C1gnNisT4nugRaLFGuvnDCV/6xc
+	wO80uot+XmN85WWr17n25TeT0S7vhsptaGpzpVc564AHciYPirqQggOi1UEkVw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739364557;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qSE35Z9rhydIaSHAG0noyN8q9MSMVAvkn+jqzXgS5LM=;
+	b=SHoi6ODK2ZAoWeX9WaCSBK4N/zB034ZJLd2+0fheADeJjwSaQlQf1ISynPa/EFkEX6MTp/
+	+d0hfQhAHUpYdSDw==
+Subject: [PATCH 0/2] kunit: qemu_configs: Add MIPS configurations
+Date: Wed, 12 Feb 2025 13:49:11 +0100
+Message-Id: <20250212-kunit-mips-v1-0-eb49c9d76615@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMeYrGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDA0MT3ezSvMwS3dzMgmLdVJO0VMNkIzPT1BRzJaCGgqLUtMwKsGHRsbW
+ 1AATm1e5cAAAA
+X-Change-ID: 20241014-kunit-mips-e4fe1c265ed7
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Paul Burton <paulburton@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+ linux-mm@kvack.org
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739364553; l=1084;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=NL58RGQUo5cvDWALIIvtJzK3eZ89+YFSNsS/E+/xOYM=;
+ b=4nBWBlSDRkDFl9aNAg9lYya2vuBvns3smhtBT5YJTUfvVRJn4kmC7gvUq6Avu/AhXSk7o61jh
+ gv4wkUyQtREA7MCgkkswzkEAq2o1IRaLMREW5MHLcxUIxksebhndKQr
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Hi Tamir,
+Add basic support to run various MIPS variants via kunit_tool using the
+virtualized malta platform.
+Various kunit tests from drivers/firmware/cirrus/ are failing on MIPS.
+They are fixed in [0].
 
-kernel test robot noticed the following build warnings:
+[0] https://lore.kernel.org/lkml/20250211-cs_dsp-kunit-strings-v1-1-d9bc2035d154@linutronix.de/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/ww_mutex-convert-self-test-to-KUnit/20250211-000245
-base:   a64dcfb451e254085a7daee5fe51bf22959d52d3
-patch link:    https://lore.kernel.org/r/20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e%40gmail.com
-patch subject: [PATCH] ww_mutex: convert self-test to KUnit
-config: i386-randconfig-141-20250212 (https://download.01.org/0day-ci/archive/20250212/202502121806.CS6r741y-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (2):
+      MIPS: mm: Avoid blocking DMA zone with memory map memblock allocation
+      kunit: qemu_configs: Add MIPS configurations
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202502121806.CS6r741y-lkp@intel.com/
+ arch/mips/mm/init.c                          |  2 ++
+ tools/testing/kunit/qemu_configs/mips.py     | 18 ++++++++++++++++++
+ tools/testing/kunit/qemu_configs/mips64.py   | 19 +++++++++++++++++++
+ tools/testing/kunit/qemu_configs/mips64el.py | 19 +++++++++++++++++++
+ tools/testing/kunit/qemu_configs/mipsel.py   | 18 ++++++++++++++++++
+ 5 files changed, 76 insertions(+)
+---
+base-commit: 6e24361511062dba8c5f7e59d51b29cdfa859523
+change-id: 20241014-kunit-mips-e4fe1c265ed7
 
-smatch warnings:
-kernel/locking/ww_mutex_kunit.c:238 test_abba_gen_params() warn: shift has higher precedence than mask
-kernel/locking/ww_mutex_kunit.c:249 test_abba() warn: shift has higher precedence than mask
-
-vim +238 kernel/locking/ww_mutex_kunit.c
-
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  231  
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  232  static const void *test_abba_gen_params(const void *prev, char *desc)
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  233  {
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  234  	static unsigned int storage;
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  235  	const unsigned int *next = gen_range(&storage, 0b00, 0b11, prev);
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  236  
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  237  	if (next != NULL) {
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10 @238  		const bool trylock = *next & 0b01 >> 0;
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  239  		const bool resolve = *next & 0b10 >> 1;
-
-The shifts here are weird...  A zero shift is strange but even the 1 shift
-is odd.  The current code is equivalent to:
-
-	const bool resolve = *next & (0b10 >> 1);
-
-But changing it to:
-
-	const bool resolve = (*next & 0b10) >> 1;
-
-Doesn't make sense either...  Probably that makes less sense actually.
-What are you trying to communicate with this code?
-
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  240  
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  241  		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "trylock=%d,resolve=%d", trylock, resolve);
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  242  	}
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  243  	return next;
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  244  }
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  245  
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  246  static void test_abba(struct kunit *test)
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  247  {
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  248  	const unsigned int *param = test->param_value;
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10 @249  	const bool trylock = *param & 0b01 >> 0;
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  250  	const bool resolve = *param & 0b10 >> 1;
-
-Same.
-
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  251  	struct test_abba abba;
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  252  	struct ww_acquire_ctx ctx;
-daf92a37bd1117 kernel/locking/ww_mutex_kunit.c Tamir Duberstein  2025-02-10  253  	int err;
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  254  
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  255  	ww_mutex_init(&abba.a_mutex, &ww_class);
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  256  	ww_mutex_init(&abba.b_mutex, &ww_class);
-70207686e492fb kernel/locking/test-ww_mutex.c  Chris Wilson      2016-12-01  257  	INIT_WORK_ONSTACK(&abba.work, test_abba_work);
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
