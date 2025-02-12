@@ -1,109 +1,187 @@
-Return-Path: <linux-kselftest+bounces-26449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED8EAA31E24
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 06:44:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1287A31F59
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 07:46:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92DEB1623C0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 05:44:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F31E3A6CC9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 06:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5DB1F8BCA;
-	Wed, 12 Feb 2025 05:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9260A1FBE89;
+	Wed, 12 Feb 2025 06:45:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J57u1PKq"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="WC0SlDMH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521CB1F8ADB
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 05:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BAA1E47CA;
+	Wed, 12 Feb 2025 06:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739339054; cv=none; b=l+XDESVr0fq2lfR1qZc6oYqxrfWaKiUXH74dhIM/4FRH2cLXfYwjVsEQvqYba22i6k7MC5KcQRm5onm3UbxTp+r7z8x88WaNInbXInbuEd2XsNysjAXrgORJHuFvnXn2jzaiYWi9fBbz0d2T1gvO8Pdkqhr+bbULfPsi+1nN8gE=
+	t=1739342759; cv=none; b=TdrhE5CuRuDq+H+6/thAUZd3rDZa3IgtAm1SqeEaf2+sLZJiDGgdw6eNtn4DXlOroxOeHPleTQ/3DYBMmzWUlsSzvzpJdzW87vDYQqn8L+Ui9hp1dq7dJ60KXfMaqD4ZC6WR7ODW3hfF/bRdjZRsMMh5XA0xqVrpujP0Yn7oV7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739339054; c=relaxed/simple;
-	bh=V31QGzTKdittKrZ3aMRv7ryJK1V5ss1ZHiuTJ3vecAU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qBRz5ldl5PBU5JxBFHD+aLmfae6ebpypK7VMpIr9iMAnDuaXxPBNy4nikcy1fJHmezyFR9qmUvO8oRAHYPulmfn0jtSeU6czwN+DFQgqTUwF4IRd2KOqKQksfkAFmDuQ6OC0fdnx5w+JvzaDiYlBdmF8vAbA2wI4AG2nde8+O/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J57u1PKq; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2fbfa8c73a6so527239a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2025 21:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739339052; x=1739943852; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QUyF6DpPsCEUmNdZi2XEJgFOvze8NsqDYdne0FtU7cU=;
-        b=J57u1PKqvZlcwZDs/dpfulFdUjqlAMh48jrQPhe06Bk2w/Xnsq7GSIg7myH8f82gtM
-         S53VhzdhtE/0lfEAQtd5u0rZZwJ05+R1OHUmyfNGHq/DUaVsib+YgZRPdb97a6Ji10Pb
-         lc3gJE0HWXqVu+J3jhGCc77uaEs7meyDL1LQre0lUxE1CP2m1bhioxJQ6wSau857x8rS
-         nAphKSqjs9rusa1FmDQkN4mi1Zj8njIom/rZJGWRWn4cELGzg5a4k6yXGetDAvgGOZkY
-         XlMbibGDr5pkXAg7qqs7C0GYivEweLWoTUxq4KXwpBt5JNzkhWHAEVFExvbOWu3KBNl9
-         GelA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739339052; x=1739943852;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QUyF6DpPsCEUmNdZi2XEJgFOvze8NsqDYdne0FtU7cU=;
-        b=K2TSpY06aUUPWylz456eYmlY55DI9wi6D0Rxb6C4hCu3eHpm4hp+P9DZ+EYuffxeaq
-         jGDN937/8rZJmpC6VV+6pJUcwPYFxi5batcrGAJIP5l4ZKDTcUZFTXceuDJFYdauF3hK
-         /WUrfGHCBAJTOq42LKCDHoyoblc30Em7+cZAWtedXiULCI1vjK4dWLgX+aNLOzL46UAx
-         ks/8d+WTKsgECb6b3ak5vWUemcfTUTm1bluu+oymxIvNRUJAXuipRAFyGtOG9XeaZOW6
-         X0bkxyIOpHlmIm+1PNyVgLd/07R/KLT3FNLJQJzHFFtiy0oh8kTkL1zY6ZzfROvvIWUa
-         R0PQ==
-X-Gm-Message-State: AOJu0YzcrUyFNVzEzyWcLWYBFuN5hng2NLcPnJdi39slyX62424ogYXS
-	/4/wTV1P+ld8MW8YzsSb7rkKthmUM/imcxs+Eec/5u4htW5BAsLL
-X-Gm-Gg: ASbGncvOD3fOI23Xcl7z44+lsV5mEKmW64kx1QW+mJvmQu+E4P+AmIvlsBuaLHm3vfT
-	RHYpC07X5qAgPdffG3NnPnqErWJFq/VK8hEtyqnJ6ScZVZxFcGIHlaT80F7N/oQhM/PRsscxNhZ
-	jlQRxUD3vUZAqlkfU5ebD8T3k+W6uBnRi6GSOudA7d36/7jAcAtuNe+BSYoVxyDtku5nYrDxZtM
-	IqjQGDeAIWh1a8BaBBw3xs8Bwcd5mM4FuAu6VtfLq4bv0StLHkfhaChSWmDl6a3LpeKQgO1wqOa
-	klQW/JZtTcrqvphYc4pdEP29jRJXInWv3mA=
-X-Google-Smtp-Source: AGHT+IGAf2W/iUvVdXurPH6g2n7X82uDf9DuEqqo5vOB2NvDdGhpv/kvQPgR19aih/3lDcGnS096MQ==
-X-Received: by 2002:a17:90a:f946:b0:2f9:9ddd:689c with SMTP id 98e67ed59e1d1-2fbf5c5e9fdmr3155438a91.25.1739339052385;
-        Tue, 11 Feb 2025 21:44:12 -0800 (PST)
-Received: from forest.jssaten.edu ([210.212.85.151])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3683d65esm105467355ad.127.2025.02.11.21.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 21:44:11 -0800 (PST)
-From: Rohit Yadav <rohityadavconnect@gmail.com>
-To: skhan@linuxfoundation.org
-Cc: linux-kselftest@vger.kernel.org,
-	Rohit Yadav <rohityadavconnect@gmail.com>
-Subject: [PATCH] selftests: timers: Improve clarity in time difference message
-Date: Wed, 12 Feb 2025 11:13:50 +0530
-Message-ID: <20250212054350.12387-1-rohityadavconnect@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1739342759; c=relaxed/simple;
+	bh=ZQsMnwzTf17KEzJgScmk62+uoLSEHEedJ3pMoj7PFFM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I7PzXEHKLA03dBzx8Qnbxn8UqT94ybh6228P7SozLzgK8QI9LXY/ABmOn1vI5pVxXfGtbP4B9y4EhvQZw5w8UbBMz7DescZ6owGErAFgdPpoa6+pA2waXJ04Pyjz1JnEsqvU4p8dJqWJ+ZP1oWOHS/lPBEHroL6oVcJVnrJAK/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=WC0SlDMH; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=U9ZsS++Scdzt6/PZ8I0ydrljHMoErWwMzMWIoSKzTg4=; t=1739342757;
+	x=1739774757; b=WC0SlDMH3C64LjODizP53N7prNMC1iq4Qe9VROs05tuNMK482GqYmtV/wrdiM
+	/zNMlYZAyeMCMFTeg/f/iQ4Bh+kuplyFNLQmbvyMZThzcYyEZlYlXCAYrJNMGGJisgkGzWvetvTnG
+	0F/MjtC6CIreHnLP8l3F1oniMrZ4XMMv1EUHs9qMnuc/MyrSypuMcCVdRmMwUqQPqUQIx4CAi4zz+
+	vG1I4FD9Cw+/P3bnNCpQbN2ZGNKwOMPMpaaKD6t7rhC8vZT+rmZusTwNPDvIioKQwurrz3j3QvXlG
+	/Ka9nvpTjisz42OngfnMVvbhBR2tgdHj4o/1Uq3HEsjW+AKU0Q==;
+Received: from [185.238.219.16] (helo=[192.168.44.12]); authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1ti6VN-00FNTJ-1A;
+	Wed, 12 Feb 2025 07:45:53 +0100
+Message-ID: <2c26c5e4-9cf3-4020-b0be-637dc826b4e9@leemhuis.info>
+Date: Wed, 12 Feb 2025 07:45:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] unicode: kunit: change tests filename and path
+To: Gabriel Krisman Bertazi <gabriel@krisman.be>,
+ Pedro Orlando <porlando@lkcamp.dev>, Kees Cook <keescook@chromium.org>,
+ Danilo Pereira <dpereira@lkcamp.dev>
+Cc: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, Gabriela Bittencourt <gbittencourt@lkcamp.dev>,
+ Linux kernel regressions list <regressions@lists.linux.dev>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20240928235825.96961-1-porlando@lkcamp.dev>
+ <20240928235825.96961-3-porlando@lkcamp.dev>
+ <87iku7u211.fsf@mailhost.krisman.be>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: de-DE, en-US
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <87iku7u211.fsf@mailhost.krisman.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1739342757;4d3b9490;
+X-HE-SMSGID: 1ti6VN-00FNTJ-1A
 
-Signed-off-by: Rohit Yadav <rohityadavconnect@gmail.com>
----
- tools/testing/selftests/timers/posix_timers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 04.10.24 21:00, Gabriel Krisman Bertazi wrote:
+> Pedro Orlando <porlando@lkcamp.dev> writes:
+>> From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+>>
+>> Change utf8 kunit test filename and path to follow the style
+>> convention on Documentation/dev-tools/kunit/style.rst
+>>
+>> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
+>> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
+>> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
+>> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
+>> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+>> ---
+>>  fs/unicode/Makefile                                | 2 +-
+>>  fs/unicode/{ => tests}/.kunitconfig                | 0
+>>  fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} | 0
+>>  3 files changed, 1 insertion(+), 1 deletion(-)
+>>  rename fs/unicode/{ => tests}/.kunitconfig (100%)
+>>  rename fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} (100%)
+>>
+>> diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
+>> index 37bbcbc628a1..d95be7fb9f6b 100644
+>> --- a/fs/unicode/Makefile
+>> +++ b/fs/unicode/Makefile
+>> @@ -4,7 +4,7 @@ ifneq ($(CONFIG_UNICODE),)
+>>  obj-y			+= unicode.o
+>>  endif
+>>  obj-$(CONFIG_UNICODE)	+= utf8data.o
+>> -obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += utf8-selftest.o
+>> +obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += tests/utf8_kunit.o
+> 
+> This breaks compilation for me.
+> 
+> fs/unicode/tests/utf8_kunit.c:11:10: fatal error: utf8n.h: No such file or directory
+>    11 | #include "utf8n.h"
+>       |          ^~~~~~~~~
 
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index 9814b3a1c77d..f6e3730c63b5 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -88,7 +88,7 @@ static int check_diff(struct timeval start, struct timeval end)
- 	diff += (end.tv_sec - start.tv_sec) * USEC_PER_SEC;
- 
- 	if (llabs(diff - DELAY * USEC_PER_SEC) > USEC_PER_SEC / 2) {
--		printf("Diff too high: %lld..", diff);
-+		printf("Time difference too high: %lld\n", diff);
- 		return -1;
- 	}
- 
--- 
-2.43.0
+I encountered the same error when building -next using the Fedora
+rawhide config today. Given that this patch landed in -next today I
+suspect it might be due to this change, but I'm on the road and unable
+to verify that right now.
+
+Log:
+https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/08642966-next-next-all/builder-live.log.gz
+
+Cioa, Thorsten
+
+> After this patch that local header is now in the parent directory.
+> 
+> I'm building with:
+> 
+> CONFIG_UNICODE=m
+> CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST=m
+> 
+>>  unicode-y := utf8-norm.o utf8-core.o
+>>  
+>> diff --git a/fs/unicode/.kunitconfig b/fs/unicode/tests/.kunitconfig
+>> similarity index 100%
+>> rename from fs/unicode/.kunitconfig
+>> rename to fs/unicode/tests/.kunitconfig
+>> diff --git a/fs/unicode/utf8-selftest.c b/fs/unicode/tests/utf8_kunit.c
+>> similarity index 100%
+>> rename from fs/unicode/utf8-selftest.c
+>> rename to fs/unicode/tests/utf8_kunit.c
+> 
 
 
