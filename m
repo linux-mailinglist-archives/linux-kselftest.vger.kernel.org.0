@@ -1,161 +1,163 @@
-Return-Path: <linux-kselftest+bounces-26477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26478-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D79A32C91
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 17:56:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5831FA32CEC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 18:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 054E53AC5B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 16:55:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85A33188CCFB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 17:07:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10B6256C62;
-	Wed, 12 Feb 2025 16:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883C22580EC;
+	Wed, 12 Feb 2025 17:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fIDxdnhL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hafMovTN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D72253F09;
-	Wed, 12 Feb 2025 16:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECAC2580D9;
+	Wed, 12 Feb 2025 17:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739379332; cv=none; b=jFPVwBvouJ2vWeOKBhwLjvIXgC2cWDuyC8ol2XxIMHTTvcI0RBimE1Tg3HRbjLfIFl3/DiBv6kvRb/XGXcEb/iZoSIrVw17/Becs9enwpamv2/DcU7nB3Z0d4wJRK9Bv/GMKiH5squsPQkwlXgqVGvB2eF2Q169BIbCteBSxlTw=
+	t=1739379885; cv=none; b=VBckoaSQZgGddGbRdzndS+K+4bwxWme2Seo5OPXxpqwRiI24DgiUeY1YPJdNPxXKsUwhmpaCfgLeJKs8VUIqk/r8hOLNLXtHhOuEoNMH30U9qYQ+FQP3ng8VTKlwWYrOSYOYBumZR2yTxIbM7pNyAiavs0hJcFELWu/LmL/nJNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739379332; c=relaxed/simple;
-	bh=60cHMAsDRvIOHo48UF7M2hduYfC6u+0l/5xeFUgi6wc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JnYoKYqR2yyA/iix3FOic6bHk7dfOhJoQr1+l8UtDtKuwAcs2nz4jd6mb7CYwzcrI23oIkyb5bZ1Eqfz9oH/K1/orAhabvhoQVhusbgExZI1C9PnNNLKzGlDOTtq/XSqS+cuFTAEuUmlBXqxcEx/UC1YEYni4JHWArE1IlYSr3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fIDxdnhL; arc=none smtp.client-ip=209.85.208.175
+	s=arc-20240116; t=1739379885; c=relaxed/simple;
+	bh=Bfidi7anesqYs999M9Ik6ywb85mPeR+VxYEwuDAAFOU=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q1lmKtz/lGq0lJMUulqXCYcvnIvtXnhWqgCwV7cgFnOkLDn0laal988Vv+QzoEuNebFHWWFG7PYPGYAGO3kZbyu8JHgOkGsM59BFfG/PueEA0mK9bQEZvKUNI5YIcc2WTIbsspGuPUST0mDOfxkVa8jOFd+1HrJl5bTbb3vq4z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hafMovTN; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-308f53aef4fso26946281fa.0;
-        Wed, 12 Feb 2025 08:55:30 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4362bae4d7dso47187005e9.1;
+        Wed, 12 Feb 2025 09:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739379329; x=1739984129; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NBvdLo8gkR8Wy8cwK/8Vm6VLKmV1zg6ayYB1+AAnbp0=;
-        b=fIDxdnhLQCKOzSGFTKVsGCLD3kndMohah1Gk0EIsHt3mBzNvve9EtdU4+WF9qw4+c1
-         JkowzElcUaoQJXfpUZoS9fidWdB4Sq5hLq9xGOT15k/BJWmruZZPAfPM3zMowqiJFoi3
-         4Xkpu+VoHhNSJloriIaUIZjGN86JoTRVtuJEucNJZVJs0oId2Xs46RvQtDUcVfENcpt3
-         xZo0BHhxXm4sVlFUzqS4bDMT4jgfRehnzW97bzpy86+QS3Yy/eqVd1f3/GpigSrSznR0
-         539tcaheXRy3FToUe9HJRa60gWCxk+AA6M1Y3pdwzSp0FNUxrTXgWnA9llp6+mLAJk8N
-         Qd4w==
+        d=gmail.com; s=20230601; t=1739379882; x=1739984682; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+7x9dWz5+kt+yK4VtjE7r4PpL/wI+I4YOt5i78vMh+Y=;
+        b=hafMovTNwM6qiexAvRxMY6gjD6fSWxxxnj+6c5Do/tj5+CGqV0WvEv+Nag5S1PG3cx
+         N3qESwMa/XSgQXEpG9+vvqbSjh4oqvCO6kbHdJMJCr6HU5yduPLmYkoS9TZJD2Ss4Sgz
+         dhZ82TstaGvhry+MS9J+A+v4CnMjKFQB0Q+x9/AJ5hTKGVVaN4d6xJbpUetVLM+aYs2a
+         Id2N2MmqT6ysdE64ucSMhZj2jTVLnFVwYd4wxhlUP1rRZPmDhN9Ia+VNG3RUQfBV4rdI
+         NHbnPajouiQRhm6xm5EdepNfaWaJvrXbgi1+hxqHgZ74rfi0I36XRsxcfHzjqbrHBtGl
+         O/tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739379329; x=1739984129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NBvdLo8gkR8Wy8cwK/8Vm6VLKmV1zg6ayYB1+AAnbp0=;
-        b=XCcEzqnCBa6+autOi24WO1guycqE1r5htjZHs3IZxnXd5BO8xlk5y3szZKHtSRYt4R
-         4kdwx3dWkllMVyV2lulV7kG5voz98/+PW/yPmI1CN9NKGit9K0T67owqK395VG4LMo5U
-         peLTsMwriqo/Zo+1P2XDJxlDhrjzzBi1a5zLZlsDuhNvHtVApzCnjET8uGcCbZtRM1P7
-         k9NIglcGHS0VC0qJBT3llZYTAzuu5afWhW9/BO6HqJOnaXjc1sQk1tUFIfOsAjYEFDqY
-         3tB9QIRK2/TI3OzdV5kXKCIVWHGeWTxMb+072Q1AKIytHR4e3TifWOK1ZOXomJuPsBf9
-         VsxA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1QplbU0HDfRgfWGlzOkp4xMIoDa6PP+MQDksVVvWpMDQjVHZLhmzgECg0DJvhHh/27FaHifhJE7hMwU4=@vger.kernel.org, AJvYcCVxVC8yjmQDyiJ9RG2y8rPPQu2ccOYUbUTMUx6/wCours5L1Z1pcz2vyvIcd1ChQNCQich4T8NHdikS9br8fGBg@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsH9DXf+1WUOr2+ThLebtnzXRpvyQzsKAwEMmXK8fHSBAyDnID
-	AzI1QuijGoG34VYwJrQ+Rv+yl1RfxjjS9MQIrX36eRcCABqoXuA+phxrDifotTmlNoK59rEKpXQ
-	OFvXGwPpy7AkPEDKl4w4p45duD8g=
-X-Gm-Gg: ASbGnct3TND1nFLRf+UVyBceNCvvIcpqDTRorTNqYucIXdrBK1h3FKQh3iYg5l0V68+
-	OO48HFoVSID5GjF+Cwc2y+YfgLDvVxEUbRosAY5k8ikZ8PojtSFN2Gc5f8mMavyMdr/KakqGv/P
-	ruxsTzPReolIC1
-X-Google-Smtp-Source: AGHT+IGlPgCSSnQs6QH/QeGmHrfb6k7riD6rc3wGRHOG75RycIS7kEPtaSqxnS6MDYNzFsUjm8bKnI+kG9vozNb7gGA=
-X-Received: by 2002:a05:651c:b2b:b0:307:db5f:c44f with SMTP id
- 38308e7fff4ca-309036697d7mr17588861fa.19.1739379328691; Wed, 12 Feb 2025
- 08:55:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739379882; x=1739984682;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+7x9dWz5+kt+yK4VtjE7r4PpL/wI+I4YOt5i78vMh+Y=;
+        b=Ssc6G543a1Hx0MZYKQ268Tje1uOlvnOihBn/rsNj6FO2Kd1Zcp/XBF2aF9pwUrmtU4
+         bCdVIdujJIAMcWVP7FNP1CNdIxufyn7JKHg59cUPTM1QzjlRZLiR5ocAU/2OvpQ9gCJq
+         TRZKd+/1NW2fGndBICQYIH0wkQFfK8Uw9Nl0p/qzeACj+YWaawLKRdAXu4s+RGq/y9pW
+         vzdQHUdLCoFJhKAPiPRbhvcLxEICT9htDOLkohlNJOmvtCnp05j2UjuCxmVCdgrQ4Bxj
+         t0q6gKseYwoWpPiI42fIIoC3HrZAmRg+cEJqVbFk24jBwyrhzfm6EbfGBmWic6VtKtSf
+         1KaA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6UVZVDWkTckMRofvjL5VoGjLlTDCFDSGu/7oPzL2y5gZZGvnNS+arQ5/k7uMvcK1v8zST4zyeg1cx602Q@vger.kernel.org, AJvYcCW+jsk9xUNtsoomrDbKVwau0d7z98uu23qcwozFp0aCt5RH2lJskAc3X/i3q+/5pjnQPc+B0Xq3noKrksryDjHO@vger.kernel.org, AJvYcCX+eoT57ikk2gKU5OkJxBKsdLCL2BffpjEjT4sYzGcrEKJmhXt9Sf94x5PvNZ/AUjzJBsY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEBqhPnrKgF6+qaRRpXjPDia3hqzw0xiYrEutSXZ3q7a9NwzgV
+	ZJB++O5/j3mQtjvhcru/DTpncDpRLE6ZByiUAy7rXLPkiTtH3l7n
+X-Gm-Gg: ASbGnct3wma8AD6jKDQUf6v48I27d2QGpXhesz9fNrchJugEHWPJ6ppG1R/1vXmBu8Y
+	ILxcMj58ePZbp/9iqBOPVjDaWATlbhdssDGqQr18S4323IiCBdnpdtzm42GUjO+WNlsF2VWlmki
+	xgAucshC1IZu86jbVjbz7oY7IJz3W/4nDU8i2/aejSKHabl0LCgAV4qD+3Ap7SupKVBtR6oIM7m
+	R1YdRjy52Qf0TqPldh8Wg1bFJJV8+bGIvXMbpm7y96Q0IcvGUH3THz0Vdur5RSP+SthtWP8jvpF
+	vsHXKHiESadzXxxMEJSRjfjcm9PAuEw=
+X-Google-Smtp-Source: AGHT+IFDrW6X+85TE5d3qfk8XGG1Z1AhG0IbM9mne5W129Zyv1eca0C1OKyE5SjomlKof7boeX4iEQ==
+X-Received: by 2002:a05:600c:6046:b0:439:5a7e:5c5e with SMTP id 5b1f17b1804b1-4395a7e5f79mr27622725e9.26.1739379881461;
+        Wed, 12 Feb 2025 09:04:41 -0800 (PST)
+Received: from krava (ip4-95-82-160-96.cust.nbox.cz. [95.82.160.96])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dd2750829sm12883804f8f.7.2025.02.12.09.04.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2025 09:04:40 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 12 Feb 2025 18:04:38 +0100
+To: Yan Zhai <yan@cloudflare.com>
+Cc: Brian Vazquez <brianvv@google.com>, Jiri Olsa <olsajiri@gmail.com>,
+	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
+	Hou Tao <houtao@huaweicloud.com>
+Subject: Re: [PATCH v3 bpf 1/2] bpf: skip non exist keys in
+ generic_map_lookup_batch
+Message-ID: <Z6zUpt5Y4I1p0A3n@krava>
+References: <cover.1739171594.git.yan@cloudflare.com>
+ <85618439eea75930630685c467ccefeac0942e2b.1739171594.git.yan@cloudflare.com>
+ <Z6nEsGSbWqCSaVp3@krava>
+ <CAMzD94QZQjpwOA8Os3khG32d2zgH8i=Sy1VoudRCGqZudyHkag@mail.gmail.com>
+ <CAO3-Pbqa_oOm-u318mTwqPfuRJ2_kdk+ou99BOu53A3O_wEyZg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com>
- <Z6tvciJpQgTwYpGx@smile.fi.intel.com> <CAJ-ks9mcxW7zY33FPB+mZ75dQ2Xqo-viM9CpbL=0i0WXUPJRhw@mail.gmail.com>
- <Z6tytjvT1A-5TOrq@smile.fi.intel.com> <CAJ-ks9kSBMh0=dgPC-NiOhibnK_LhBjBdZ_AQ91h-DBZfYR1sw@mail.gmail.com>
- <Z6uGPZZ7LioJmekz@smile.fi.intel.com> <CAJ-ks9mGwXmiJ3_Kk4j0MnEqn24A9UJJXVhqtUjcG8W5ifodsA@mail.gmail.com>
-In-Reply-To: <CAJ-ks9mGwXmiJ3_Kk4j0MnEqn24A9UJJXVhqtUjcG8W5ifodsA@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 12 Feb 2025 11:54:52 -0500
-X-Gm-Features: AWEUYZmF5UVTVNJrgqmcY6YHP16q-YpXs83zwjEBlC-szLP67C1U0B5hNhwVw28
-Message-ID: <CAJ-ks9k9d4aX+P9F10h3TqHPOCHEQ5m=QyMAv7bU+Xyb3LRsOQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/3] scanf: convert self-test to KUnit
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAO3-Pbqa_oOm-u318mTwqPfuRJ2_kdk+ou99BOu53A3O_wEyZg@mail.gmail.com>
 
-On Tue, Feb 11, 2025 at 12:26=E2=80=AFPM Tamir Duberstein <tamird@gmail.com=
-> wrote:
->
-> > Is it me who cut something or the above missing this information (total=
- tests)?
-> > If the latter, how are we supposed to answer to the question if the fai=
-led test
-> > is from new bunch of cases I hypothetically added or regression of the =
-existing
-> > ones? Without this it seems like I need to go through all failures. OTO=
-H it may
-> > be needed anyway as failing test case needs an investigation.
->
-> I assume you mean missing from the new output. Yeah, KUnit doesn't do
-> this counting. Instead you get the test name in the failure message:
->
-> > > > > > >     vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx %4hx %=
-4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
-> > > > > > >             not ok 1 " "
-> > > > > > >         # numbers_list_field_width_val_width: ASSERTION FAILE=
-D at lib/scanf_kunit.c:92
->
-> I think maybe you're saying: what if I add a new assertion (rather
-> than a new test case), and I start getting failure reports - how do I
-> know if the reporter is running old or new test code?
->
-> In an ideal world the message above would give you all the information
-> you need by including the line number from the test. This doesn't
-> quite work out in this case because of the various test helper
-> functions; you end up with a line number in the test helper rather
-> than in the test itself. We could fix that by passing around __FILE__
-> and __LINE__ (probably by wrapping the test helpers in a macro). What
-> do you think?
+On Mon, Feb 10, 2025 at 10:21:38AM -0600, Yan Zhai wrote:
+> Hi Brian, Jiri
+> 
+> thanks for the comments.
+> 
+> On Mon, Feb 10, 2025 at 8:47 AM Brian Vazquez <brianvv@google.com> wrote:
+> >
+> > On Mon, Feb 10, 2025 at 4:19 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Sun, Feb 09, 2025 at 11:22:35PM -0800, Yan Zhai wrote:
+> > > > The generic_map_lookup_batch currently returns EINTR if it fails with
+> > > > ENOENT and retries several times on bpf_map_copy_value. The next batch
+> > > > would start from the same location, presuming it's a transient issue.
+> > > > This is incorrect if a map can actually have "holes", i.e.
+> > > > "get_next_key" can return a key that does not point to a valid value. At
+> > > > least the array of maps type may contain such holes legitly. Right now
+> > > > these holes show up, generic batch lookup cannot proceed any more. It
+> > > > will always fail with EINTR errors.
+> > > >
+> > > > Rather, do not retry in generic_map_lookup_batch. If it finds a non
+> > > > existing element, skip to the next key. This simple solution comes with
+> > > > a price that transient errors may not be recovered, and the iteration
+> > > > might cycle back to the first key under parallel deletion. For example,
+> > >
+> > > probably stupid question, but why not keep the retry logic and when
+> > > it fails then instead of returning EINTR just jump to the next key
+> > >
+> > > jirka
+> >
+> > +1, keeping the retry logic but moving to the next key on error sounds
+> > like a sensible approach.
+> >
+> I made the trade off since retry would consistently fail for the array
+> of maps, so it is merely wasting cycles to ever do so. It is already
+> pretty slow to read these maps today from userspace (for us we read
+> them for accounting/monitoring purposes), so it is nice to save a few
+> cycles especially for sparse maps. E.g. We use inner maps to store
+> protocol specific actions in an array of maps with 256 slots, but
+> usually only a few common protocols like TCP/UDP/ICMP are populated,
+> leaving most "holes". On the other hand, I personally feel it is
+> really "fragile" if users rely heavily on this logic to survive
+> concurrent lookup and deletion. Would it make more sense to provide
+> concurrency guarantee with map specific ops like hash map?
 
-I gave this a try locally, and it produced this output:
+Brian, any details on the EINTR path? is that just to survive concurent
+batch-lookup and delete?
 
->     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_k=
-unit.c:94
-> lib/scanf_kunit.c:555: vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx=
- %4hx %4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
->         not ok 1 " "
->     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_k=
-unit.c:94
-> lib/scanf_kunit.c:555: vsscanf("dc2:1c:0:3531:2621:5172:1:7", "%3hx:%2hx:=
-%1hx:%4hx:%4hx:%4hx:%1hx:%1hx", ...) expected 892403712 got 28
->         not ok 2 ":"
->     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_k=
-unit.c:94
-> lib/scanf_kunit.c:555: vsscanf("e083,8f6e,b,70ca,1,1,aab1,10e4", "%4hx,%4=
-hx,%1hx,%4hx,%1hx,%1hx,%4hx,%4hx", ...) expected 1892286475 got 757614
->         not ok 3 ","
->     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_k=
-unit.c:94
-> lib/scanf_kunit.c:555: vsscanf("2e72-8435-1-2fc-7cbd-c2f1-7158-2b41", "%4=
-hx-%4hx-%1hx-%3hx-%4hx-%4hx-%4hx-%4hx", ...) expected 50069505 got 99381
->         not ok 4 "-"
->     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_k=
-unit.c:94
-> lib/scanf_kunit.c:555: vsscanf("403/0/17/1/11e7/1/1fe8/34ba", "%3hx/%1hx/=
-%2hx/%1hx/%4hx/%1hx/%4hx/%4hx", ...) expected 65559 got 1507328
->         not ok 5 "/"
+if that's important use case I guess the map specific function would be
+possible, because it's broken for maps with holes as you described
 
-Andy, Petr: what do you think? I've added this (and the original
-output, as you requested) to the cover letter for when I reroll v8
-(not before next week).
+thanks,
+jirka
 
