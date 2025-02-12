@@ -1,247 +1,166 @@
-Return-Path: <linux-kselftest+bounces-26451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BE0CA3220C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 10:25:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CA72A3220E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 10:26:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1826E3A5371
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 09:25:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A986D18868FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 09:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E0E205E13;
-	Wed, 12 Feb 2025 09:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654872063E5;
+	Wed, 12 Feb 2025 09:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h2anpmFO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S74DbRTh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934B6205ADD
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 09:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A5C2063CD
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 09:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739352353; cv=none; b=O5Jru7eokb7ch0Xg57vnDgWJN+HvgRkGmqsFVQnfxzrqEp5MnsTWTYJ/z/PEfo66QcEnvJjfig2YOns+0uVZWPSB6rtb0yEkjsJycI10OHIcN4RKcGD+2m/zU3DpJQsuo55vJ3DUGPZl3EcarrZPVK1SPATulZOdbRYW6sXxyAk=
+	t=1739352359; cv=none; b=qV/0SNBJvZj7SmmIFa/J/7sB7yOX5ASj876yObYmNINZeCnxIclrlQr5IYrOJpAJS1/aLDDDRFyTcphxPUKCDq+1eW4ARao/OAZl+FhuOoko+1b92qnUC6cxrvjOY1KT6Owe3xFhQJQyqoqixYQhPum4CdwbsIifBejes1u6CK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739352353; c=relaxed/simple;
-	bh=wrZeDnoTOUaX3MWt7VTrG+emQeIpNJxC9TTW/F1FH2k=;
+	s=arc-20240116; t=1739352359; c=relaxed/simple;
+	bh=2DgsAE/rL/fnlPvwtgF6Aw3bBsrRtbNV6XqO9zykZgM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BOgAXeZgP0FcB1Pl+RlZCEfMXezuqDmD9EKK0Wo2HXCsCIl5MZ4yOzUEzccRFCAqLrH5+Iy+1tnr5Xuor2GQ6rbrXe1od+UvY/tuWrxWX1R9efCWe2k6LT6OUFqoYKtzD9pUEwOBhJf/ys5iGvK/YIO6PUu20CGr3oxjueGqApo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h2anpmFO; arc=none smtp.client-ip=209.85.222.172
+	 To:Cc:Content-Type; b=Acs0s673xRuUAXeVDD9p7RxU61IjM0VKnvESS/HXvvYFy1ivE1SmhBVt76yufX8fHPpKwjN77wwGajpVByT3o1jqj02amK4plisl75B3fHJqiFeJwkPJyRL3T7n6hnz8j5K+aZLV9qNnbDkXbBkzh0MMSWL2ZVNB+g7idQaRqw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S74DbRTh; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7be8f28172dso391321885a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 01:25:51 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e45258610bso5250746d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 01:25:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739352350; x=1739957150; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1739352356; x=1739957156; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wrZeDnoTOUaX3MWt7VTrG+emQeIpNJxC9TTW/F1FH2k=;
-        b=h2anpmFOISzLDF4MjOjAdnrsGpwurAVteB2cvg/2pb1rop//prgrtFNjtAcdfW03on
-         uhjAdHO49MYdbJGhdQy3IJCz5p5Yb8FKtdkcnkrozRRhSV82CXLGCNqTDO2L7ATN+gi8
-         oWRukA0sBbwb2c1UE7b+woq6wsTeJ94Hyd2R1jsl5xFG6rpS49+5snyP9yep2ygiZKT2
-         pi6E4foewJLGz6sbOAo5CY0GYj1hcVuE0tMa8CFqjRpTwtsmjJssrXcQOgIwbDq6JHMv
-         6XwAnsSb3CUSpts2u/TXTZ67yy1FflRVdYrHDMLPfdRtr2rfTlf8V02FtGwC0K0qTvDj
-         V8Iw==
+        bh=2DgsAE/rL/fnlPvwtgF6Aw3bBsrRtbNV6XqO9zykZgM=;
+        b=S74DbRThxNnwB5P++24fkd3S8mCHEij/+zsx5kGg7Mf8KyqxZ5MFQeYJ8A/W24aKAt
+         aZ7Ezib1wIqP9elrwATJse/HhgYoVXyjaCZgpvfMq4e5ZP47nte0WvWoWahK6bm7LuAF
+         ZqJVxHMY5BYXaXpwatDJRsnfU1qOq5KjSjFo6tSIXgIf7M2GflVOQ9LA5/lTWQpo8YVD
+         Du7RKqzGEjuR8pAG22GgCiTxOBS93YPaDRreZ8gMs1aWD2rM+uYxF5MqJv0hPRDgCGX7
+         uAAZK/WzszN+St7XzVWOW1wBE2ZJWZBmpsDZHTVvMfXLLY28r/p6EERBCOiCXyMDoUA6
+         7dRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739352350; x=1739957150;
+        d=1e100.net; s=20230601; t=1739352356; x=1739957156;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wrZeDnoTOUaX3MWt7VTrG+emQeIpNJxC9TTW/F1FH2k=;
-        b=fH2UvxtKTF1K4KYhGCM4uuwlsgAsoQdO6KRnHYWFysMwCHYSenpjf5agWs0S7VUbjY
-         QltS7prXg6iwVzYF9B9pEBUEUTogeENUl59uge6arZQc4GLMNH0DSycilVy/4Kpv+H68
-         zaBeH2mUDtL7XnnCVD39kUl96RfLSg58eJ4fvQMYW19vcE8ZVV66BcOkdkj7f4U34+dv
-         o2+B/nNAroZsmM53BD/kQURzHLkTWANNsEn8gpqZkmDax5ZHrXPgoXu1w4aqvd8Ov1z7
-         uub0YA0JcIcmqWpTZwxbjmEUcUsH53ljzbiRQN9BJhL+eQg8TBfkkrlDQJjplojm0Mt0
-         JrTg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+tEo//EBP5Thjk2Re7P7DbPSuEPiNZB24B1stjb66hCwQyl1wDt9kehWzLwTB1QlL2jnu1UklLzNXGrlzYko=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqsYIAMz2+qqtThcbfivL29ThU2ncLcvCYWu+Qok3LiXW6gJ/G
-	YsU2/zXUZ2w4MeoCriR8mnQMbc3ExumfpvyK+62jWbE2n1C1DNgJfCcfXOpx9ILX5rxZLv3dn58
-	oxFD/C96nK134P+/MW2WSAVN/WlWgtO2uqrwN
-X-Gm-Gg: ASbGncu3XBCbQtbqVsBvXTVvKJNG6UxgJvA5Ji7u/5SRl3Mj8eKSyEyxGTTOZgwQPKE
-	Gd9DWMf8f+adkKAZMJuUeeyiFL3xt3bSWe53B+puhsa37zV1ehah0hUIxAmWIT0L23ce+heEkxQ
+        bh=2DgsAE/rL/fnlPvwtgF6Aw3bBsrRtbNV6XqO9zykZgM=;
+        b=etrTpJ0PNkL1n2M3fLaqa4YQjefv9CMEjn8dfbJKIuNPrxNFWFRTu5tRI1CDq6SEjZ
+         0biMe2skYZKxc6OKswoDQV9gjANMzQdfQySNisubtgfhZfTOiOs3AiMc1K5IYFRFJaKh
+         xLU3T/wE7uKewBVslfKuBI4fwer0WWw5Jti5PoL5lZLqjtUCHfg9DdWMeC/0T23hRc2v
+         qud7+Hxy4o0o436DKv1bflOpkUXuAguZ+B5vaABLFHjWe0HHDp75SCqb0tZSRxIlsKyN
+         TbA1JaCI9azXFlWVWcIO0P/ugSJdsSakHmvoRf8ejiS6ztgP4Sf+AnmbpZ0nLv8vkeJk
+         ovYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVoZBAsIAf9oZjK/mtYoc95EMpOXV0T+WongkSzr+s+o9jysQCg4DmJoyS3Qbn43UqfYm6OHCLI+Caos4uSvhk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxT0ZpKP6q/9PR3SL5GIBapKxuk9qa3/doaYYDJKFCXupl7qsQe
+	1cWhSdKHwE0AcUSAdO91mzweuLY/cuM85ofH9qYqGjX2FrpEOVEQxoxaLmMY2rFui3x2CJPz3Qj
+	kGhfc+gwQmXHaD3AxUD1fvlQMVq5L9eXDTBYt
+X-Gm-Gg: ASbGncvaabRUk1KIPrKj2oXkO85HxRhezy5T9FyNtlEJJ8x19ezVA1ty0Z7VXVxZyoK
+	DRkPZHdra69YMUCuR9GJ+waONxdIrz9i6z33JOctoW9AcBkx2uv/CgU5J8tDeppxP9C5ssPTsWw
 	==
-X-Google-Smtp-Source: AGHT+IHNw5Y6ZLhPcYI0G0gzS0F6tvxdjsua0+vnRUKJTjhBZmFE1ueNugZ0Ss95vVCX9IcOJe/oYyu1umapjfUpgxw=
-X-Received: by 2002:ad4:5ba7:0:b0:6e4:3e5e:56d5 with SMTP id
- 6a1803df08f44-6e46ed77e88mr37961816d6.5.1739352348834; Wed, 12 Feb 2025
- 01:25:48 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IELM8KwZg9bPa6ApIbCrsuxGiv4sqNaeocApE+U5glfWR9qu3Scox2u1ntzGs9gZiEQj1tJDoc7YBA8OJymPQI=
+X-Received: by 2002:a05:6214:20eb:b0:6e4:4582:4760 with SMTP id
+ 6a1803df08f44-6e4680808f0mr96565326d6.21.1739352356421; Wed, 12 Feb 2025
+ 01:25:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250204-printf-kunit-convert-v1-0-ecf1b846a4de@gmail.com>
- <CAKwiHFi6SUCT7UjUTdKmLJ8kiAEqVg=d6ND60R05MJB85Eoj9w@mail.gmail.com>
- <CAJ-ks9kLmArqqPati8n0dwzhjccLmTuTHtkaSyf_F_1QXzCoRw@mail.gmail.com>
- <87bjvers3u.fsf@prevas.dk> <CAJ-ks9=0+fk22Dx-65a+CSYhy0dnjTJuot9PtgOCi5Th1_wARA@mail.gmail.com>
- <87y0yeqafu.fsf@prevas.dk> <CABVgOS=dfuX+X8=EVHcrCZnbOZj3T+wGD922eoeHb-dcOmmzXw@mail.gmail.com>
- <87h650ri08.fsf@prevas.dk>
-In-Reply-To: <87h650ri08.fsf@prevas.dk>
+References: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
+ <Z6vRIZk7DsSNooFZ@boqun-archlinux> <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
+In-Reply-To: <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Wed, 12 Feb 2025 17:25:35 +0800
-X-Gm-Features: AWEUYZldKbrN14Agxv1vRTC_XGHvqdcjfs3enScjV9pDCmX3JjPjR-hnndI-xPY
-Message-ID: <CABVgOSmYWfBPod8Dq=vdYvmOUE31Nft1Ad-0nRHZ9J2W_f-q_Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] printf: convert self-test to KUnit
-To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Tamir Duberstein <tamird@gmail.com>, Petr Mladek <pmladek@suse.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Date: Wed, 12 Feb 2025 17:25:44 +0800
+X-Gm-Features: AWEUYZkV2OS39zkWusmNz-gAmfnypsKurOAydIIqeSOxeLA_3B7gbiADav21Pbg
+Message-ID: <CABVgOS=jS6Sgbffrx18eHnO=0LnFsvgxO0_pnpD6HCgH646Ndw@mail.gmail.com>
+Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000002641c062dee87d2"
+	boundary="0000000000005f6df6062dee8739"
 
---00000000000002641c062dee87d2
+--0000000000005f6df6062dee8739
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 11 Feb 2025 at 16:40, Rasmus Villemoes <linux@rasmusvillemoes.dk> w=
-rote:
+On Wed, 12 Feb 2025 at 06:43, Tamir Duberstein <tamird@gmail.com> wrote:
 >
-> On Tue, Feb 11 2025, David Gow <davidgow@google.com> wrote:
->
-> > On Mon, 10 Feb 2025 at 19:57, Rasmus Villemoes <linux@rasmusvillemoes.d=
-k> wrote:
-> >>
-> >> On Fri, Feb 07 2025, Tamir Duberstein <tamird@gmail.com> wrote:
-> >>
-> >> > On Fri, Feb 7, 2025 at 5:01=E2=80=AFAM Rasmus Villemoes
-> >> > <linux@rasmusvillemoes.dk> wrote:
-> >> >>
-> >> >> On Thu, Feb 06 2025, Tamir Duberstein <tamird@gmail.com> wrote:
-> >> >>
-> >> >>
-> >> >> I'll have to see the actual code, of course. In general, I find rea=
-ding
-> >> >> code using those KUNIT macros quite hard, because I'm not familiar =
-with
-> >> >> those macros and when I try to look up what they do they turn out t=
-o be
-> >> >> defined in terms of other KUNIT macros 10 levels deep.
-> >> >>
-> >> >> But that still leaves a few points. First, I really like that "388 =
-test
-> >> >> cases passed" tally or some other free-form summary (so that I can =
-see
-> >> >> that I properly hooked up, compiled, and ran a new testcase inside
-> >> >> test_number(), so any kind of aggregation on those top-level test_*=
- is
-> >> >> too coarse).
-> >> >
-> >> > This one I'm not sure how to address. What you're calling test cases
-> >> > here would typically be referred to as assertions, and I'm not aware
-> >> > of a way to report a count of assertions.
-> >> >
-> >>
-> >> I'm not sure that's accurate.
-> >>
-> >> The thing is, each of the current test() instances results in four
-> >> different tests being done, which is roughly why we end up at the 4*97
-> >> =3D=3D 388, but each of those tests has several assertions being done =
--
-> >> depending on which variant of the test we're doing (i.e. the buffer
-> >> length used or if we're passing it through kasprintf), we may do only
-> >> some of those assertions, and we do an early return in case one of tho=
-se
-> >> assertions fail (because it wouldn't be safe to do the following
-> >> assertions, and the test as such has failed already). So there are far
-> >> more assertions than those 388.
-> >>
-> >> OTOH, that the number reported is 388 is more a consequence of the
-> >> implementation than anything explicitly designed. I can certainly live
-> >> with 388 being replaced by 97, i.e. that each current test() invocatio=
-n
-> >> would count as one KUNIT case, as that would still allow me to detect =
-a
-> >> PEBKAC when I've added a new test() instance and failed to actually ru=
-n
-> >> that.
+> On Tue, Feb 11, 2025 at 5:38=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com>=
+ wrote:
 > >
-> > It'd be possible to split things up further into tests, at the cost of
-> > it being a more extensive refactoring, if having the more granular
-> > count tracked by KUnit were desired.
+> > Hi Tamir,
 >
-> I think the problem is that kunit is simply not a good framework to do
-> these kinds of tests in, and certainly it's very hard to retrofit kunit
-> after the fact.
+> Hi Boqun, thanks for taking a look.
 >
-
-I think I'd have to disagree on the whole (though I'm admittedly
-biased in KUnit's favour), but I can definitely see that the printf
-tests do provide some unique challenges, and that either way, a port
-would require either some code churn or bloat, a need to reinterpret
-things (such as what unit a 'test' is), or both.
-
-Ultimately, I don't want to force KUnit on anyone if it's going to
-make things more difficult, so it's ultimately up to you. My personal
-feeling is that this could work well as a KUnit test, but due to the
-churn involved, it may not be worth it if no-one wants to take
-advantage of the tooling.
-
-> It'd also be possible to make
-> > these more explicitly data driven via a parameterised test (so each
-> > input/output pair is listed in an array, and automatically gets
-> > converted to a KUnit subtest).
+> > On Mon, Feb 10, 2025 at 10:59:12AM -0500, Tamir Duberstein wrote:
+> > > Convert this unit test to a KUnit test.
+> > >
+> >
+> > I would like to know the pros and cons between kunit tests and
+> > kselftests, maybe someone Cced can answer that? It'll be good to put
+> > these in the commit log as well.
 >
-> So that "array of input/output" very much doesn't work for these
-> specific tests: We really want the format string/varargs to be checked
-> by the compiler, and besides, there's no way to store the necessary
-> varargs and generate a call from those in an array. Moreover, we verify a
-> lot more than just that the correct string is produced; it's also a
-> matter of the right return value regardless of the passed buffer size, et=
-c.
+> David Gow gave a pretty detailed answer in
+> https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQ=
+ADrW+sJg@mail.gmail.com/
+> for a similar patch.
 
-Ah, that makes sense. I suspect with enough work and some friendly
-compiler developers, this could be make to work, but it definitely
-doesn't seem worth the effort to me.
+That previous answer covers a lot, but while I think the advantages
+(better tooling, easy architecture emulation, etc) are covered, I'll
+add a few extra caveats specific to this test here.
 
-> That's also why is nigh impossible to simply change __test() into
-> (another) macro that expands to something that defines an individual
-> struct kunit_case, because the framework is really built around the
-> notion that each case can be represented by a void function call and the
-> name of the test is the stringification of the function name.
+KUnit is really better suited to "unit tests" rather than "stress
+tests", and does have some limits when tests span multiple threads
+(assertions cannot kill other threads, the test context is not
+automatically applied, etc).
 
-Yeah: it may be possible to do something with KUnit's parameter
-generating functions (you can have a function which generates a void*
-test context, as well as a string test name: this could be a struct
-with a format string and a va_list), but it's definitely getting
-complicated.
+I don't think these would preclude you from using KUnit for ww_mutex
+testing -- and people have done multithreaded stress tests in KUnit in
+the past if they really want to, it's definitely a trade-off rather
+than a strict win, so it may make sense if as maintainers you are
+already familiar with or want to use KUnit, but definitely is up to
+you.
 
-> So I don't mind the conversion to kunit if that really helps other
-> people, as long as the basic functionality is still present and doesn't
-> impede future extensions - and certainly I don't want to end up in a
-> situation where somebody adds a new %p extension but cannot really add a
-> test for it because kunit makes that hard.
->
-> But I hope you all agree that it doesn't make much _sense_ to consider
-> test_number() and test_string() and so on individual "test cases"; the
-> atomic units of test being done in the printf suite is each invocation
-> of the __test() function, with one specific format string/varargs
-> combination.
+> David, what do you think about enumerating these reasons in the KUnit
+> documentation? This is the 3rd of these patches that has received this
+> question. It'd be a shame to have every commit enumerate KUnit's
+> reasons for being.
 
-I think this is -- to some extent -- a matter of interpretation. I
-don't think it's wrong to use KUnit test cases to refer to a "thing
-being tested" (e.g., a specific format specifier) rather than an
-"individual invocation": lots of KUnit tests already group very
-related things together. But given the way there are several "checks"
-within each __test() invocation mirrors this already, I understand why
-it'd make sense to keep that as the "test case".
+We have some existing documentation as to when KUnit and kselftest are
+more appropriate as a part of the 'Kernel Testing Guide' in
+Documentation/testing-overview.rst (though it focuses on the
+underlying differences in goals, rather than 'look at all of these
+useful features'), as well as an overview of why KUnit is useful on
+the KUnit webpage at http://kunit.dev/ (though without the direct
+kselftest comparison).
 
-I don't have any immediate plans personally to work on the
-printf/scanf code, so your opinion here definitely matters more than
-mine. But if this does end up as a KUnit test, I'll definitely keep an
-eye on it as part of my regular KUnit test runs.
+My hope was that porting tests from one framework to the other should
+be a rare, probably one-off occurrence, so the focus should be more on
+writing new tests, but clearly what we have is insufficient. And
+ideally some of the advantages of KUnit, particularly in the
+standardisation and tooling support, will continue to make their way
+to kselftest, so hopefully some of the advantages of KUnit will
+disappear.
+
+Nevertheless, I'll see if there's anything specific we want to add
+about test porting.
 
 Cheers,
 -- David
 
->
-> Rasmus
-
---00000000000002641c062dee87d2
+--0000000000005f6df6062dee8739
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -331,14 +250,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgb1zoE/wizLmGoZEFHGUQJzGXwMBH
-h+l1jjmgf8uy9ycwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MjEyMDkyNTUwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgLbzrIV77LyqdEK2YDK+XFSIuEB0U
+xeELQgoo7zrfnKUwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MjEyMDkyNTU2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAC6lMU/ZmndCSHYX+A+wlv3xrji1Axo4q+aWIVRAOwT+/OEw
-FJtnsk85e8g3IsATNVHtlMRq7HRQZJ1LEpA0KVDIfrBlWpHEyungq7lFcCBINZD9Fko/zJ8bEaeM
-gYeIg4eciE+igmTFlI7e1YZPR0To0O07CaiCgJiXbV0fSa5qNZaFUV1hIbCnhMIxDa0f2JPLBGfR
-TT54EaC3tl9XIIn8jM4Ydy0jWFwo8DUOmMot/Ao7wpPiihmS8XKcJn3HMJpBI1MzzOwIKRUqkXh8
-AtgowBr+I5VbyRQwS9+Upwl1WI+5weHpHPs1MMiBkYObGfpPUccgWsmTUdILEtEoyX8=
---00000000000002641c062dee87d2--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAF0EDNR2bNy1fAs6oS/buG2srS7mlAv85Y+TJOVtx6ITTdwl
+6Vv6os+Nedt0qwX3a0Z4qXnrNkAUqvGEDM0RKoseqfKyscNTI5LbPUniJwnHatEEFG1rW8vd+moJ
+4jNBkHGXBDyMT2g6WWIpWnS0meJbqHHgyuS9O29AWt0Ww6UFg0KpH5tOsC3ko9ZSPh4Et2P1q1Ad
+i6twvruu3o77XadRIzgM1QhPOUtFyjc5/th0iA6cHDcLbUntCkO7gfdnQ3MT4PC4tq1JppWTFnrM
+qFwD/VJxR+tJOf5/0Yc5eDvPDDNq8EHn4oFcQKyglbQs5JF2Rk6A3TC+nASuXKtH0Jk=
+--0000000000005f6df6062dee8739--
 
