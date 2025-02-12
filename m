@@ -1,156 +1,180 @@
-Return-Path: <linux-kselftest+bounces-26467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CB2A3271C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 14:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7833DA32756
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 14:44:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6DB71625B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 13:30:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 027B4164DE2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 13:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F157420E6EC;
-	Wed, 12 Feb 2025 13:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18BD321324C;
+	Wed, 12 Feb 2025 13:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="bI9eezHu"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="ObAogfSp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5116A1F94D
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 13:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11EE120F079
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 13:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739367031; cv=none; b=Fr+Wq1ABNRqE57bleBObVAlG2SDh8t63sp+v5rod40AevTu4kLKv0A20MmBIJhhbHfWrKSaYPLy3cnGAMGUp5oxwYnfSMZqzcRh0NhQK6WKttqxxXCWwvAZ63SU41+O4i+0a6MhayRrV0ByUQfEhiaDjBzqXu61DLYGcFSIS2eU=
+	t=1739367725; cv=none; b=po3Y4c7Ed36xv6QZw+YafqEeca7xXTgj5BQ0r8cGpGxa+MN58CddHZf2vTEZoEOZQXOF6/k86scx0gZcrRwJm7jHBu7POxR34FRmkoPTnGdFME8do3/HMM1h63S1pA9i+Bdx9Dot5Zw98ITRrqtq0RjSOpbYv7HvkZ6Sov7jDCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739367031; c=relaxed/simple;
-	bh=cppRDKTH5X7+PhdoGd1D1mSrJYsVfO2+TtgwU+r5HiM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dtsgRoP8V0v9pLIb2uJMBN9gUgLjRwkoVSR6pzGBTieBY3HXtKfhx+vOaPRUQ6ovPR0t++ajr4gHK6srxS0lHxT5I51xgs3GxOkYSkcE8RHT02bKzbv/psFpggjm/x0O1IUbPHpxXhaet7KrqLc1FDPkTMfYJ09t5Cr0riw9r2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=bI9eezHu; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1739367725; c=relaxed/simple;
+	bh=HzA97DPnn+U2gZkXV8YQI5t4LN4Nd9v0u24mxG8tzFo=;
+	h=From:MIME-Version:Date:Message-ID:Subject:To:Cc:Content-Type; b=a/XbYyQtQqK7WGTdzxVXlYMFTZ4IL2W6sLCE8U4Y++hkGXPudOPstkePYQ9ZhOLQAPUsj/UlufQ4IdlJU3pEQ/A7Wip2Sl2V7a6O30fJ8cBn4fQR3thzjwaL5EgRWolIvzTdaohoJvvSuAvL2Nf+ikXFDFepI5SI3DlGlouvXDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=ObAogfSp; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-220c4159f87so6767835ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 05:30:30 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dc89df7eccso12872068a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 05:42:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1739367029; x=1739971829; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bq7SdSXo+JhFwWwHQa7/twUcE0+PVputBf+G7gcfT+Q=;
-        b=bI9eezHuZ1YRlXLL26JDblxdtNGRFf09dr3q1mu7Lynz47ayzTiLJjJhKXhTy/9k+B
-         0D4ITt6y8zAWEjZ/FVrGl4QY3nS95UcnG7ba0x7HqugSdeMpRZFhqv9YE4C5N+qjDbQe
-         LoFfdGwBDdNyt6mq/GpTEhAdKGpI+BpwLuogA=
+        d=fastly.com; s=google; t=1739367721; x=1739972521; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Vx4K/GwJmSxxuxEf9CYEVojUHCwqS7V2m4wDGfnHgXs=;
+        b=ObAogfSp60miJjwQ2qilScjFLmjvSMi58i905OlYlQxPJxDUpLIIIiPpeQPDsnr8Oo
+         fn2QLXm+eRI9aodVrw7FVGGz/I/KiARDksK0Q0jUNXZx6RtuHB7uhzv4T/d94hzOBaii
+         gF2xLtnYxowDS5lGEP4f4rjWtq8Qg+1oEskR0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739367029; x=1739971829;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bq7SdSXo+JhFwWwHQa7/twUcE0+PVputBf+G7gcfT+Q=;
-        b=e3eggrqWE9b0gKdtvQYtYgY37oShSNe4556153QU8kX4WmWpxXaXB0wjIJW2mvCvqu
-         Cubsv84Io2AJgEVm5DD9dDi8Bs5FXG47CY9x+DNQvsHLTK7v+cfUqtuMiLT1wPhAa84n
-         5SyzcF2FnN2uJDvBpT709o5BphjvCnGRYhqZEKVSzivteh/e9b2JRfn8j8Xzd/wCig9C
-         giMqE6DcrntscI5WV8moVslrT7GXWCN9b6W97hihBeYdemoZpS17AyaPa66+i3nICzgp
-         klSHlrLVROCKtte0/S3MjJnb+mGwQy+wAGkkdLTWzpck1Q58K5Wd5bT5gbNX8yfZlCpV
-         Qt9w==
-X-Forwarded-Encrypted: i=1; AJvYcCVMO9f6PvSg/ukVUZSZv3e3gdn/SDY8x1Kk8nCTJbGJSby8pT6mMkfdcKwIa8eITtSPjAP6XFk+HJZA5E5jlL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsaNneVRE5WLS3tLiNUx6A4LQXWGE6hnDcBNPKkAVIx4iHypOu
-	mCiTPsUkirMNvNvo+wqeBEBOgumCRdYuVJjx+jGrNfr9lB1TrKR8neExq48kLnY=
-X-Gm-Gg: ASbGncu+rEHtloU5Lr7iBmK1RqEcMqE3oTMv8UiBCHN5OTtcq3+0Wq8UUrDemBE7NLI
-	uN4xef2KNUuPbfw7zahjJFnW7gQDxJ54cvUTDcFwc9xYAzIMPOmT4dWjs1lNseilNjyttlAUJb4
-	R0A+xGGMJMlHLwNF8EKkdaoMuN3D6lLoMqKB7Bc+jF3OZ0ZroDAz98UMWL2EbXNEiUpoxc8eWlp
-	+DA7ix0zPtCJ5VIeZfLWNGqdD5NSh1FWaxmZcT+XgbLoFVXfZjcMKLeo30Diz4oyCPMbwyiMfEZ
-	XaE6HwYmM6Sintyjh2UZ+8TGg2zy9TSrlTrRmaIFnFf0pFOSYdTMc+aCvA==
-X-Google-Smtp-Source: AGHT+IE/UeUsPjMO1gpNMj4yctOpDIpP/4atL2aTr+WokGGBV4mZ/QiJjiwEjLs7hX6m+RhsVtK1Fg==
-X-Received: by 2002:a17:90a:fc46:b0:2fa:1a23:c01d with SMTP id 98e67ed59e1d1-2fbf5c10491mr4674200a91.21.1739367029580;
-        Wed, 12 Feb 2025 05:30:29 -0800 (PST)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fbf98b4c52sm1448513a91.4.2025.02.12.05.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 05:30:29 -0800 (PST)
-Date: Wed, 12 Feb 2025 05:30:26 -0800
+        d=1e100.net; s=20230601; t=1739367721; x=1739972521;
+        h=cc:to:subject:message-id:date:mime-version:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vx4K/GwJmSxxuxEf9CYEVojUHCwqS7V2m4wDGfnHgXs=;
+        b=UebVLre1qZ5LJIZPw71t6fJzXw+dvvZ1Jbdl5JcqOiWdkhDDt3tm3hBNPBpkfK3qBR
+         Hu+3dbQn4ILByDqSt1h+nywX/oDVh6k9A7P6PlJxCFUqh8mjaus6ydudzgv+AyVZDoAh
+         AELKhlEUdSHp+x1urRdMRO2TPKDbO6KRse42Z/wZgbdPo41MmhIAJSwtQYmuHKQimHWF
+         c2w961wpn6ktaarR4tMLVXdkzPTts0AtGWxL2JtaJaiC7IYQhZXEju18CWG8SN9qegcg
+         3AK5RB91NTeQ2grF9sn3DDPVier8aRKCUxiUOGRB3OtU7H67Y0cINCLXmZe/bxoksJ71
+         GhRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWDQ3CfAALlsF2zx8vjQDmFjbQmAR2RvylBz/UO7a3TkoWvWTMo5kaoTJovhfK8J55HN9a0vTod6OVvTdlIj38=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSZybJAeclyXdLawDqZtxZUUfFfQg7ppX3tAkLqrrbkA59+0X3
+	DD81keh7t2jwm0BKHh76Io6PgiXSfN93wnwl8m9JkBk+HYhcaWkvLc8f+J5TVXOqpwcAPbEyqIS
+	VbMJvUj86zCnHPESz+C0KNpay798uKNj9fEmKRA==
+X-Gm-Gg: ASbGncvknyGvaC7NRkiRTZTdXUYsXjcre1uTx4wri+mRgmkdkOkNOl/zlNpyPHRi7Ac
+	V02YUwdin6EhIS1R8gXo+yPaimAxIrQWi+iutnA11RlXXtT+rBalWN6F4obpJil2UKFu6VPzbMX
+	SY4PkzfZzvL0ywVQNZSieuBvSO
+X-Google-Smtp-Source: AGHT+IExY+577RFSkgohoQb2qPrtldLo7ZoR+uTGSWF+pFLzLK8mEvgKjNwZyU3Yafymz93SmD9UC67l3DwKniJi9kE=
+X-Received: by 2002:a05:6402:4606:b0:5dc:da2f:9cd1 with SMTP id
+ 4fb4d7f45d1cf-5deadd7ff22mr2750686a12.14.1739367721337; Wed, 12 Feb 2025
+ 05:42:01 -0800 (PST)
+Received: from 155257052529 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 12 Feb 2025 08:41:59 -0500
 From: Joe Damato <jdamato@fastly.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Stanislav Fomichev <stfomichev@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-	horms@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v6 3/3] selftests: drv-net: Test queue xsk
- attribute
-Message-ID: <Z6yiciovTsNpIAJA@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Stanislav Fomichev <stfomichev@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-	horms@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>
-References: <20250210193903.16235-1-jdamato@fastly.com>
- <20250210193903.16235-4-jdamato@fastly.com>
- <13afab27-2066-4912-b8f6-15ee4846e802@redhat.com>
- <Z6uM1IDP9JgvGvev@LQ3V64L9R2>
- <Z6urp3d41nvBoSbG@LQ3V64L9R2>
- <Z6usZlrFJShn67su@mini-arch>
- <Z6vRD0agypHWDGkG@LQ3V64L9R2>
- <Z6vY_LXp3LTp7qWV@mini-arch>
- <20250211183706.5b53ee5e@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250211183706.5b53ee5e@kernel.org>
+Date: Wed, 12 Feb 2025 08:41:59 -0500
+X-Gm-Features: AWEUYZlwmvHKRwI2fJFJaa53LoTAcn2hU8f5TdJuaF-vAvBD-4SwZmnDN9AK2pE
+Message-ID: <CALALjgw_h9ToEaiQdKebyp0KLgJvaHJuxyLh3ZXAYgz6v5SL-w@mail.gmail.com>
+Subject: [PATCH net-next v7 0/3] netdev-genl: Add an xsk attribute to queues
+To: netdev@vger.kernel.org
+Cc: pabeni@redhat.com, stfomichev@gmail.com, horms@kernel.org, kuba@kernel.org, 
+	Joe Damato <jdamato@fastly.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Amritha Nambiar <amritha.nambiar@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Daniel Jurgens <danielj@nvidia.com>, "David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>, 
+	Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Martin Karsten <mkarsten@uwaterloo.ca>, 
+	Mina Almasry <almasrymina@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Feb 11, 2025 at 06:37:06PM -0800, Jakub Kicinski wrote:
-> On Tue, 11 Feb 2025 15:10:52 -0800 Stanislav Fomichev wrote:
-> > > I can't comment on NIPA because I have no idea how it works. Maybe
-> > > there is a kernel with some options enabled and other kernels with
-> > > various options disabled?  
-> > 
-> > Sorry, should've been more clear. My suggestion is to add 
-> > CONFIG_XDP_SOCKETS to tools/testing/selftests/drivers/net/config
-> > to make your new testcase run in a proper environment with XSKs enabled.
-> 
-> +1 this we need for sure
+Greetings:
 
-OK will do.
- 
-> > > I wonder if that's a separate issue though?
-> > >
-> > > In other words: maybe writing the test as I've mentioned above so it
-> > > works regardless of whether CONFIG_XDP_SOCKETS is set or not is a
-> > > good idea just on its own?
-> > > 
-> > > I'm just not sure if there's some other pattern I should be
-> > > following other than what I proposed above. I'm hesitant to re-spin
-> > > until I get feedback on the proposed approach.  
-> > 
-> > I'd keep your test as is (fail hard if XSK is not there), but 
-> > let's see if Paolo/Jakub have any other suggestions.
-> 
-> No strong preference. Stan is right that validating the environment 
-> is definitely a non-goal for the upstream tests. But if you already
-> added and tested the checks Joe you can keep them, up to you.
+Welcome to v7. Added CONFIG_XDP_SOCKETS to the selftests/driver/net
+kernel config in patch 3. Updated the xdp_helper.c to return -1 on
+AF_XDP non-existence, and updated queues.py to skip the test if AF_XDP
+does not exist (but fail in other failure cases). Tested on kernels with
+and without CONFIG_XDP_SOCKETS enabled.
 
-OK. I guess I'll just leave them? They are as described earlier in
-the thread.
+This is an attempt to followup on something Jakub asked me about [1],
+adding an xsk attribute to queues and more clearly documenting which
+queues are linked to NAPIs...
+
+After the RFC [2], Jakub suggested creating an empty nest for queues
+which have a pool, so I've adjusted this version to work that way.
+
+The nest can be extended in the future to express attributes about XSK
+as needed. Queues which are not used for AF_XDP do not have the xsk
+attribute present.
+
+I've run the included test on:
+  - my mlx5 machine (via NETIF=)
+  - without setting NETIF
+
+And the test seems to pass in both cases.
+
+Thanks,
+Joe
+
+[1]: https://lore.kernel.org/netdev/20250113143109.60afa59a@kernel.org/
+[2]: https://lore.kernel.org/netdev/20250129172431.65773-1-jdamato@fastly.com/
+
+v7:
+  - Added CONFIG_XDP_SOCKETS to selftests/driver/net/config as suggested
+    by Stanislav.
+  - Updated xdp_helper.c to return -1 for AF_XDP non-existence, but 1
+    for other failures.
+  - Updated queues.py to mark test as skipped if AF_XDP does not exist.
+
+v6: https://lore.kernel.org/bpf/20250210193903.16235-1-jdamato@fastly.com/
+  - Added ifdefs for CONFIG_XDP_SOCKETS in patch 2 as Stanislav
+    suggested.
+
+v5: https://lore.kernel.org/bpf/20250208041248.111118-1-jdamato@fastly.com/
+  - Removed unused ret variable from patch 2 as Simon suggested.
+
+v4: https://lore.kernel.org/lkml/20250207030916.32751-1-jdamato@fastly.com/
+  - Add patch 1, as suggested by Jakub, which adds an empty nest helper.
+  - Use the helper in patch 2, which makes the code cleaner and prevents
+    a possible bug.
+
+v3: https://lore.kernel.org/netdev/20250204191108.161046-1-jdamato@fastly.com/
+  - Change comment format in patch 2 to avoid kdoc warnings. No other
+    changes.
+
+v2: https://lore.kernel.org/all/20250203185828.19334-1-jdamato@fastly.com/
+  - Switched from RFC to actual submission now that net-next is open
+  - Adjusted patch 1 to include an empty nest as suggested by Jakub
+  - Adjusted patch 2 to update the test based on changes to patch 1, and
+    to incorporate some Python feedback from Jakub :)
+
+rfc: https://lore.kernel.org/netdev/20250129172431.65773-1-jdamato@fastly.com/
+
+
+
+Joe Damato (3):
+  netlink: Add nla_put_empty_nest helper
+  netdev-genl: Add an XSK attribute to queues
+  selftests: drv-net: Test queue xsk attribute
+
+ Documentation/netlink/specs/netdev.yaml       | 13 ++-
+ include/net/netlink.h                         | 15 +++
+ include/uapi/linux/netdev.h                   |  6 ++
+ net/core/netdev-genl.c                        | 12 +++
+ tools/include/uapi/linux/netdev.h             |  6 ++
+ .../testing/selftests/drivers/net/.gitignore  |  2 +
+ tools/testing/selftests/drivers/net/Makefile  |  3 +
+ tools/testing/selftests/drivers/net/config    |  1 +
+ tools/testing/selftests/drivers/net/queues.py | 42 +++++++-
+ .../selftests/drivers/net/xdp_helper.c        | 98 +++++++++++++++++++
+ 10 files changed, 194 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/.gitignore
+ create mode 100644 tools/testing/selftests/drivers/net/xdp_helper.c
+
+
+base-commit: 4e41231249f4083a095085ff86e317e29313c2c3
+-- 
+2.43.0
 
