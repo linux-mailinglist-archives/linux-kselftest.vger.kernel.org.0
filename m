@@ -1,217 +1,153 @@
-Return-Path: <linux-kselftest+bounces-26475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A31BA32AE5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 16:57:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 766C8A32B83
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 17:23:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4E5A168400
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 15:56:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C413A1757
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 16:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D5025A35E;
-	Wed, 12 Feb 2025 15:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8C620B7F7;
+	Wed, 12 Feb 2025 16:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G6VymOBh"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Y6DCvZ2n";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GPCQA8P+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782D625A354;
-	Wed, 12 Feb 2025 15:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B81E211A02;
+	Wed, 12 Feb 2025 16:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739375547; cv=none; b=VMHzuF+UjhM5Y1WIEB0SJJ7ojoCKQpqVROnw4tM4yqPmrEXNQeAgypTViE72rOyeDR8N9O0KK82/j9cgF5/IKw0ErVrAX0oPHW/Z45dSj4B0AlpXzz/psjqM0UC8pMiwgiQtIHWfWHbjzxM2+GByPRjKCPH6PUjwAWSisOzGds4=
+	t=1739377429; cv=none; b=RLEY26eMmHzldNNWTgYLjMkKSeudrmVMugtVPxwLUV9RSpTTA6PEiPhcMqfNxFJzYFf1v5r/GPuXbz9mHY3qBAbvZDSNJ9eX7fxXYiRk5bNwFo8JnwQ1dlmrMCDPbM5cS7qxjUSJY5jpulbdtxJCn1AikRVn/FVQw+TJM+ODrBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739375547; c=relaxed/simple;
-	bh=jrXhWYnImskFko9wBtv2JPSJVKz9x+wgYx6uQ0eFWZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bN73G3vBx2WUxXzEXmPlJS22Qaa2I/4tpoXJzZTleFmsFAbGGJEd5nhOSS8/syCqWaqWZsVw/s7uI3huIGuDsLYSe8bu4ItZ8ysD+1/51qWdq22EFtHHNBT4zkOTF7J0/iJF2gappwQMTG30dmPt0u1ynDrTaw1RsG2L2U5w/No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G6VymOBh; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38dd011ff8bso4197151f8f.0;
-        Wed, 12 Feb 2025 07:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739375544; x=1739980344; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zy76W96ncGtjcIE/1RFX9zT9Pr7PxW1QtkdC0k/xF7g=;
-        b=G6VymOBhgDwpbDuyoMazrUbYpQA1hTntdHRYV8udjB+/YX39Jyow/mkBf9q8Ixhlsm
-         e5/WAJ++wRXMIc6wgVDzlwotBh7bit3Tz2009rjRm+0vkrTWZ9s+qM3NLVLICknLGJ9s
-         TDfILeiDXZ9Hqj8wtmxa6wkMXjgYhANBRsPNTg+TzKXreqHzXSglGhZ9rzsO0WHL7RSb
-         uSjTanDr8JBmEuxXT2894gJBEoVNC1IwTwHRpWwLiGpfe4vvFUsDl4uEroWw0ki9jt6O
-         G9Np5FZzCDVix5/Xd5r8l+rBrAGinJ5q276GReQ8xRZ4qY3+V3CqAoZIbNx17SWtiX1F
-         tuTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739375544; x=1739980344;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zy76W96ncGtjcIE/1RFX9zT9Pr7PxW1QtkdC0k/xF7g=;
-        b=K1t2mony+93uNOUBe2OeMaBnZK53aZX2e06bkVnMm6IsW7H9CrZTy2VK4yHg21eyP2
-         FsLZV+xSbAeWBONGkTA+UWKzO8JWGEHlCU75p7OBRs+o7HSG84lEhv+q1NIV7BGR1Dfw
-         8p0n4XUSx2h06Qsn8/8aqsliiB2tWjoMqoEgFbd48CE8nu1s35FzyDqb8PSAkxbWg0Gn
-         1PKwbJcFJ8MgNOHBvc1FQmbl/5SXQpVvLsbaXIVQpQwq7pDjvTrSbIJndMDw3uGgeykJ
-         arxd8Qgvm8fybksXjQpdz7IUX3hVIRb7Pn2L5CE/I7u9kmtpAJbQ1cYj5Twk+0zhcnU2
-         90KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUojgXkHg/X5fKScukYx0kqlGZ6sV7YrMSZ8irgdkuS6ylW20P6LCyBwIBG5mBJD71VhktI66hKsTdE@vger.kernel.org, AJvYcCVcXpwq22D9ieFDb/A/UFwCQploM88/0+SHC4q+CvaSZz1rUIv+cV0akL6EHauomrQQ5YSwCSyhx8/wlZa1@vger.kernel.org, AJvYcCXqPva3JfLbkPCGeThY+HbX4f3591hBig4Og5Ox24CkcKc33U9rnbLOUbH4+Gs9qp8K3Z1nejvUFpdX4RehaJb+@vger.kernel.org, AJvYcCXw3ewdCD5CpWMwFynXXYQGkGygYz/pE6Hl34mL1W6rS2YiPBlsDf/5TncXnjAdKL1j/Eo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUBxLzRXpkDL7j2KWsPZ7uAdvgzkIeHgvWeL5dc+7wddWmRsam
-	5s6jcASjd427GsK+wY85U5reHA7a9qzmbB4HZC0U2kBAgHPTfk1k
-X-Gm-Gg: ASbGnctLi4wEw195lN3JkPNtq01Vm7ICHrEWA/U4X2hmmK8ctCjnyJoHbUYQEY+vv/J
-	6QPG8A5bVuVkgJ6b3Cdm9VnZHIiQmb/5zHwIItMjTHzcou5xhuM4Qac+cnJzrQzozTEu+GaeN1L
-	dIfXEYrv0b/dA11S8oVkFb/DwywMat+5Q6swtcKQYmt163JCG+8aHGSgs0kQY+nE8t3cRUQ1xEk
-	+Aw9DLML/U6nEBfaYNG99H7yK5lbqLpNcS1jsrWvUMasPlAsITScAWVVtT9ny9tn/v44O/9XcbD
-	jCh6OWNPHVGKFmlZM0+c54/p
-X-Google-Smtp-Source: AGHT+IGpD+27wLo/4uLAUDA60FDap/eR74/Ue8vD3BXCKcQh+GD2m9lFZwxy9qa3lhW3DrbvJ0WWIw==
-X-Received: by 2002:a5d:6da5:0:b0:38d:eb33:79c2 with SMTP id ffacd0b85a97d-38deb337a6cmr2961051f8f.32.1739375543490;
-        Wed, 12 Feb 2025 07:52:23 -0800 (PST)
-Received: from [192.168.8.100] ([148.252.128.10])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a04ee2fsm23278465e9.4.2025.02.12.07.52.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2025 07:52:22 -0800 (PST)
-Message-ID: <28343e83-6d93-4002-a691-f8273d4d24a8@gmail.com>
-Date: Wed, 12 Feb 2025 15:53:23 +0000
+	s=arc-20240116; t=1739377429; c=relaxed/simple;
+	bh=XL39NdLk2V+axPm4CJnYFNcvDmWaUc/u1gUKMgoOE1g=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=JhkvARBJx8jh11sJZwNCXeFSFhrhFydXnDnMaLvcTKq9xH8hleDMDNOQ9A4PP0rydHPLKq7nUCcdpBOu9SkJ/VoeTD7N3cNtNH0grGbMC4HyMa3/vq/ejyU8onGTUiELj3bTFY9E/fT5uZKayZUSFgMvy2jM3e6muP2wU8+LsLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Y6DCvZ2n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GPCQA8P+; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 1E50A25401D5;
+	Wed, 12 Feb 2025 11:23:46 -0500 (EST)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-10.internal (MEProxy); Wed, 12 Feb 2025 11:23:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1739377425;
+	 x=1739463825; bh=PcRqnxiZ/Ii1llbahddi+kZG8Q9fpkjlbE4tyq6Q1Ys=; b=
+	Y6DCvZ2nhGu+5MZ5+s48phkDJ/ZP227k27zDlKQxbOcLnGYGmjhcKTp3Nxdf+f3f
+	alb4CUKGn20aNG4YJKsb+v+4LUBgRuQBIy9/djWsyRHos6MWTtipay4DJeaTtA+S
+	U8ypTbwLJOKtHj22cNh3axLu7pDaf0Wiq+Vyw6ixOXjLPH4S2U8U6sBhEbiUU76m
+	7Noi+bqNzbdwCDD7wsEOIM83fayQepizZXKDOw22cEw4kTCsGxcEkRCLpbjN5yR4
+	SW31rc9ezhP+ofvklTmHBC5qp/xi5P/zzW2eFxhgxDFBmjkwKir2d7c44iJd8Zbb
+	k4Lq4zcfKoGNTEboDTUv/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739377425; x=
+	1739463825; bh=PcRqnxiZ/Ii1llbahddi+kZG8Q9fpkjlbE4tyq6Q1Ys=; b=G
+	PCQA8P+HQ56eRkcnk1Cr6A/LB2E8JEiNhNNyUEOg+b2F+wh40yesrXLUu5H3o/kH
+	Q49peTijyu7I8QJwuerVFY3Qr1kQAvFXNMcHaW7pE3T0LmC9FYGlVZc+ffbjjW/0
+	vmDAdfw69szL2SZfcH5F8gOo/CeXgQeS4FtKJhWz0RYa0bFkcuhZhYi0JAkmXMiG
+	T2yxEUudw4RI600MdnxYAQy9vxZDklDsbZiDUYRkNUbI5JkkPWlXe/3TLTZv7aEY
+	u10kS2dKnOSevXI6IMzdO1IFu0Y5BSKewJhU5CBD28tpl7j5hLRZNQ0DJr4XqSdi
+	pz6PC5n+1JTEp/lbnMGKw==
+X-ME-Sender: <xms:EcusZ8MfIEx1bjp714sFIiGR3oLL2JQNio2NT2WvBHhHIkHJPFQSeg>
+    <xme:EcusZy_U8O_n8O6OoURh9itSPpXC-EmCE7NK0RElMj5pyY9FMiESAFnYEtsjr2ejz
+    kASz5_kQtLhjVFLXZA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeggeefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhguvghsrghulhhnihgvrhhsse
+    hgohhoghhlvgdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnug
+    gvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhgpdhrtghpthhtohepuggrnhdrtggr
+    rhhpvghnthgvrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepnhgrrhgvshhhrdhkrg
+    hmsghojhhusehlihhnrghrohdrohhrghdprhgtphhtthhopehlkhhfthdqthhrihgrghgv
+    sehlihhsthhsrdhlihhnrghrohdrohhrghdprhgtphhtthhopehllhhvmheslhhishhtsh
+    drlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:EcusZzTq4Ny0Qro4oel8QcTMbqAmnx1jwVwm4_x-_HNIwyMqTKj-kA>
+    <xmx:EcusZ0vcAWMqtYh2WD0JCY2JEXSl7M6XCQlwWBoAHB26dqBGt9XSXg>
+    <xmx:EcusZ0fyHS9Omlrd-9jYIcq9itqQuBFb3YUx6VNHVWSdAwauYskHxQ>
+    <xmx:EcusZ42OxmPtPcKy825z5oczyVoaB_f00tjTjkKMqHuMdKVdVssiBQ>
+    <xmx:EcusZ86lQjZm0OHjHG52CM870dGe8QQoJ1aHEzenOumraI7bhtmYwLS3>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7658F1C20066; Wed, 12 Feb 2025 11:23:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
- Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
- <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
- Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
- <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20250203223916.1064540-1-almasrymina@google.com>
- <20250203223916.1064540-6-almasrymina@google.com>
- <abc22620-d509-4b12-80ac-0c36b08b36d9@gmail.com>
- <CAHS8izNOqaFe_40gFh09vdBz6-deWdeGu9Aky-e7E+Wu2qtfdw@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izNOqaFe_40gFh09vdBz6-deWdeGu9Aky-e7E+Wu2qtfdw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Date: Wed, 12 Feb 2025 17:23:25 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ clang-built-linux <llvm@lists.linux.dev>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ "open list" <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc: "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Dan Carpenter" <dan.carpenter@linaro.org>,
+ "Anders Roxell" <anders.roxell@linaro.org>, shuah <shuah@kernel.org>
+Message-Id: <b7dc96e3-4d8a-4da8-adda-161f8ff815b1@app.fastmail.com>
+In-Reply-To: 
+ <CA+G9fYuw3XJ3NcYGHT=Jt9mQP_si49GQNEa6sSNLeqDm9A6+Cw@mail.gmail.com>
+References: 
+ <CA+G9fYuw3XJ3NcYGHT=Jt9mQP_si49GQNEa6sSNLeqDm9A6+Cw@mail.gmail.com>
+Subject: Re: selftest/vDSO: vdso_test_abi tests with gcc-13 and pass with clang-19
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 2/10/25 21:09, Mina Almasry wrote:
-> On Wed, Feb 5, 2025 at 4:20 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> On 2/3/25 22:39, Mina Almasry wrote:
->> ...
->>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
->>> index bb2b751d274a..3ff8f568c382 100644
->>> --- a/include/linux/skbuff.h
->>> +++ b/include/linux/skbuff.h
->>> @@ -1711,9 +1711,12 @@ struct ubuf_info *msg_zerocopy_realloc(struct sock *sk, size_t size,
->> ...
->>>    int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
->>>                                struct iov_iter *from, size_t length);
->>> @@ -1721,12 +1724,14 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
->>>    static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
->>>                                          struct msghdr *msg, int len)
->>>    {
->>> -     return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len);
->>> +     return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len,
->>> +                                    NULL);
->>
->> Instead of propagating it all the way down and carving a new path, why
->> not reuse the existing infra? You already hook into where ubuf is
->> allocated, you can stash the binding in there. And
-> 
-> It looks like it's not possible to increase the side of ubuf_info at
-> all, otherwise the BUILD_BUG_ON in msg_zerocopy_alloc() fires.
-> 
-> It's asserting that sizeof(ubuf_info_msgzc) <= sizeof(skb->cb), and
-> I'm guessing increasing skb->cb size is not really the way to go.
-> 
-> What I may be able to do here is stash the binding somewhere in
-> ubuf_info_msgzc via union with fields we don't need for devmem, and/or
+On Wed, Feb 12, 2025, at 15:29, Naresh Kamboju wrote:
+> The kselftest-vDSO/vdso_test_abi test encounters failures when built
+> and executed using GCC-13 on armv7 architecture.
+> The issue has been observed on both TI X15 devices and QEMU-armv7.
+>
+> Interestingly, the same test passes without any issues when built using
+> Clang-19.This failure is specific to GCC-13. but test case should have
+> been failed on clang toolchain but it did not.
 
-It doesn't need to account the memory against the user, and you
-actually don't want that because dmabuf should take care of that.
-So, it should be fine to reuse ->mmp.
+To clarify: the failure depends on how the toolchain is built:
+for compilers using the default 32-bit time_t in glibc, ltp does
+not notice a problem, but using gcc it will run into a testcase
+bug because the vdso_test_abi.c file incorrectly mixes libc types
+and kernel types.
 
-It's also not a real sk_buff, so maybe maintainers wouldn't mind
-reusing some more space out of it, if that would even be needed.
+> The Clang toolchain likely defaults to the traditional 32-bit time_t on
+> 32-bit Debian Trixie (except x86), leading to an ABI issue similar to
+> older compilers. This is affecting compatibility.
+>
+> This is not a new regression,
+> this report generated on Linux next but also seen on Linux stable tree.
+>
+> Test name: kselftest-vDSO/vdso_test_abi
+> Fails: gcc-13
+> pass: clang-19
+>
+> Arnd Bergmann investigated and proposed a patch which fixes the problem.
 
-> stashing the binding in ubuf_info_ops (very hacky). Neither approach
-> seems ideal, but the former may work and may be cleaner.
-> 
-> I'll take a deeper look here. I had looked before and concluded that
-> we're piggybacking devmem TX on MSG_ZEROCOPY path, because we need
-> almost all of the functionality there (no copying, send complete
-> notifications, etc), with one minor change in the skb filling. I had
-> concluded that if MSG_ZEROCOPY was never updated to use the existing
-> infra, then it's appropriate for devmem TX piggybacking on top of it
+The patch only makes changes ltp so it tests the old system calls
+correctly regardless of the toolchain settings.
 
-MSG_ZEROCOPY does use the common infra, i.e. passing ubuf_info,
-but doesn't need ->sg_from_iter as zerocopy_fill_skb_from_iter()
-and it's what was there first.
+Someone still needs to change LTP to include this change as well as
+add tests for the 64-bit time_t vdso functions.
 
-> to follow that. I would not want to get into a refactor of
-> MSG_ZEROCOPY for no real reason.
-> 
-> But I'll take a deeper look here and see if I can make something
-> slightly cleaner work.
-> 
->> zerocopy_fill_skb_from_devmem can implement ->sg_from_iter,
->> see __zerocopy_sg_from_iter().
->>
->> ...
->>> diff --git a/net/core/datagram.c b/net/core/datagram.c
->>> index f0693707aece..c989606ff58d 100644
->>> --- a/net/core/datagram.c
->>> +++ b/net/core/datagram.c
->>> @@ -63,6 +63,8 @@
->>> +static int
->>> +zerocopy_fill_skb_from_devmem(struct sk_buff *skb, struct iov_iter *from,
->>> +                           int length,
->>> +                           struct net_devmem_dmabuf_binding *binding)
->>> +{
->>> +     int i = skb_shinfo(skb)->nr_frags;
->>> +     size_t virt_addr, size, off;
->>> +     struct net_iov *niov;
->>> +
->>> +     while (length && iov_iter_count(from)) {
->>> +             if (i == MAX_SKB_FRAGS)
->>> +                     return -EMSGSIZE;
->>> +
->>> +             virt_addr = (size_t)iter_iov_addr(from);
->>
->> Unless I missed it somewhere it needs to check that the iter
->> is iovec based.
->>
-> 
-> How do we end up here with an iterator that is not iovec based? Is the
-> user able to trigger that somehow and I missed it?
-
-Hopefully not, but for example io_uring passes bvecs for a number of
-requests that can end up in tcp_sendmsg_locked(). Those probably
-would work with the current patch, but check the order of some of the
-checks it will break. And once io_uring starts passing bvecs for
-normal send[msg] requests, it'd definitely be possible. And there
-are other in kernel users apart from send(2) path, so who knows.
-
-The api allows it and therefore should be checked, it's better to
-avoid quite possible latent bugs.
-
--- 
-Pavel Begunkov
-
+     Arnd
 
