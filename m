@@ -1,168 +1,226 @@
-Return-Path: <linux-kselftest+bounces-26470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880F3A327C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 14:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2241DA3286E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 15:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D6C93A1CF2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 13:56:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3DC33A81C2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 14:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B5420E32D;
-	Wed, 12 Feb 2025 13:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEC0210186;
+	Wed, 12 Feb 2025 14:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="J935cCFY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CHli5STF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEC527181F;
-	Wed, 12 Feb 2025 13:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1958C20FAB6
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 14:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739368613; cv=none; b=Zs4sJ5/xDsgRVtsEyyiUHsq1yYM6BhLYHEGTb3f5IWPKDCFcOi4LX/zqd4aPB5gZSxA44JQjZ5m0YR+TiFqqJMtc/00sVLlOI3AZKzT4sTYBXyxMqlrdYffffbyWcDWiJskwx0qZTnMgOIR6d7EEm8inDvM7GB7dK9wOWwwlWB4=
+	t=1739370568; cv=none; b=iCnPgNEST5BTWTED6q1s9Ars1+BMSMSk38XaND/6spEyZlytGy8MCnPgEV21Fm3U5vZKsERHe79RW2OUck60jaCyPZoZQB4ZmNClnMZwIArwLRCC3aoAbxTAqsDPZpkf17BlhHXucd1VWBTkYf/r/BU0QdnUtI98gl0NktvNpV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739368613; c=relaxed/simple;
-	bh=Pr86lMV7Bh1PlfKhE4AqhsQxT1UDf0QAwoCgO0pz3iU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=K81JjsvmMAtDbt5j14uru0fAxluF95P6witdvguemep262nWyIvDubczajsj95P6PpRAvxxdqMSf7T5OTEh99aFxZtR7EoHrI6RkGgJLYmXKLD2irH6T6MD2A/2oUE8fxyh/Ia9pkNeHjPyKy3YVIYhDI56m04368EDx5QrV5vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=J935cCFY; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=GB7xjCPOK/pEAuKbKV8HDXw3kI8kkyuIaj/YAhiAvrA=; t=1739368611;
-	x=1739800611; b=J935cCFYATk6mzxJGXndeVwV27gYhsvIRFUF3GW22xc2htMFA+MEnE/0yU09N
-	wgHHjOyIdQJaTX5byxMELrR2pbKAeVhM1RyNL14fUgI5V/0ObsotROjv+AAleKEAIaBCoTxrZa4Hi
-	pPtQBhoRh+PsmJgY3rXDwBpV3LPmLVLHcWWUqQkYwRbK+7C481ZuWckTo1C29o6nCRfj5vdNgqyKW
-	ERhz9Pva9dY5NKmWuTTWUdQEA/NNEFs25PmVEb42XzfmkV7Q1Mb88O/OCPEgmImmVOHCIQwTZkJuy
-	dcq6gS2rzERE5i/b4FrwMOkIdcica1uZ6IdpOdq42ZkNGyi0dQ==;
-Received: from p200300eb2f41aefa7c229ae9bd244007.dip0.t-ipconnect.de ([2003:eb:2f41:aefa:7c22:9ae9:bd24:4007]); authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1tiDEH-00H5PA-1T;
-	Wed, 12 Feb 2025 14:56:41 +0100
-Message-ID: <204cca29-5c75-4601-b659-9733b3282451@leemhuis.info>
-Date: Wed, 12 Feb 2025 14:56:40 +0100
+	s=arc-20240116; t=1739370568; c=relaxed/simple;
+	bh=OPY/ttXempJru6Ga1RV4xoldFBk00fifGauRa8nVjwg=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=DMHbFnAT+q9y6kpeJzAAJm0evgYWAT7oEHpUzhLj3GYuZ92/g8FB/9Qa6TwPBO+6U3PwDCVWCgLv+G+AT6yF7yo7WoglNJWmB6bmmSZszQrFkbxmAIxiQE9rPRT9NYOTAuAx1RKj2ksr3Vt8rE5IokNlGTcyTiS/Xe1STgO87nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CHli5STF; arc=none smtp.client-ip=209.85.222.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-866eb01bde9so4165627241.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2025 06:29:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739370566; x=1739975366; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IQXDe8fhhmSLuPbo2aVFP4x2A1nmLJfbRBStCyLpsCw=;
+        b=CHli5STFJNzAG2/RW+n9/8Hl40lXOJjNfT5uv+uL/QGGOz4JZENKVifvFz0DVricqU
+         avexO/hXOnQI8WO/zyP6qPVByJPlyUlR51dh3L4BUcg2at14QuWwswMnQCC8gjOb6mY/
+         a198v1UxAcCHRQaRwusUcNDPOQyME8gHl+rPHTAsp6NvYDX8EaMkmkDLSdKYngyLcRXJ
+         tl2Ncs8viO4F44JZCJ14HcugNKPhJLOVdHUYe4tejq2hTVxhXBrzNEJZfJdBR6HqQ13Q
+         J0lhzrpJpX/tKWkwUsq+Cav8vnmQNEpQmk3KuR/cIiyk+GizodeUBRQjvO2FJvfAP2VF
+         RJzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739370566; x=1739975366;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IQXDe8fhhmSLuPbo2aVFP4x2A1nmLJfbRBStCyLpsCw=;
+        b=Jadb0HSDzq3WzDgld7cluXTznV3VGWR0vyXfcljtNRFnvfha3hnv/87tNdHzRSneOi
+         ypwt/2IH6Nxg3QqwYbozNK+ZEfBsVcCWIjAyOGf5UTSXkB+aG9/MRbw1XNsFmkyl8r3+
+         elVw56IHStHaNmAcjTlgTy73nbuYmoy3RnchmgZCeN3Qi2Vuu2HHPHKuuy08jGqoi3pp
+         6A/GRaPHpjherkBaI1TT6/P46FW28lB97ayRN5eVBbR6vtCnsgNdOaEWPeoUawFAXQBX
+         uf9YHT+phZVhSqw9NnZ3JsK8MPGyTlTon27DuvsK9Q11wItkq8Q2n4Olc5sj84qG4YVI
+         GnYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmTPNL97J7cRHF8vVOQyTJiCQq7fMIJ9cmQCOA7p6ZzzVBxHNh+9z6WbNiGzVo1I9NP3Nbnjf7qbL4g4tVGd0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCXArtDHmzCZ5qs1/M6V5m7P49oQhjxD51OwEzgaFknDyEdDv+
+	uKs3TAE31FMeVEQ2hlse7ZU9HjhuYUR6rW90YssWaNgl9ExH+qGasCk8zQ98+vSVjsMujx7Q7/w
+	ly6ZLt5XTrI/yu8W8co5L2GcWdIPGuIot2/xkhA==
+X-Gm-Gg: ASbGncvLUmBe58Jyn2L4JKKvFTldDfW0hv5/kQSCziECK4Kd5RMQLxYPhmQuhXRpIsM
+	jwOboYRfQQGeBbfZUZfq1UMr/08WWD4EZQ69nBiITyyCYXovKm9HhxAJ3L++NUPKT7sYS9R7TvC
+	A=
+X-Google-Smtp-Source: AGHT+IG4n0xqcfXhx3NvshSoCQo+PEUb+p7MDHm4sjc30wvs2Pt/IPzEMlAVsG0PTmhHo4D+KJWvgxKySnM4I46+mqM=
+X-Received: by 2002:a05:6122:16a2:b0:520:6773:e5ba with SMTP id
+ 71dfb90a1353d-52067b2abdemr3019034e0c.2.1739370565848; Wed, 12 Feb 2025
+ 06:29:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] unicode: kunit: change tests filename and path
-From: Thorsten Leemhuis <linux@leemhuis.info>
-To: Gabriel Krisman Bertazi <gabriel@krisman.be>,
- Pedro Orlando <porlando@lkcamp.dev>, Kees Cook <keescook@chromium.org>,
- Danilo Pereira <dpereira@lkcamp.dev>
-Cc: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, Gabriela Bittencourt <gbittencourt@lkcamp.dev>,
- Linux kernel regressions list <regressions@lists.linux.dev>,
- LKML <linux-kernel@vger.kernel.org>
-References: <20240928235825.96961-1-porlando@lkcamp.dev>
- <20240928235825.96961-3-porlando@lkcamp.dev>
- <87iku7u211.fsf@mailhost.krisman.be>
- <2c26c5e4-9cf3-4020-b0be-637dc826b4e9@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <2c26c5e4-9cf3-4020-b0be-637dc826b4e9@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1739368611;dfac2415;
-X-HE-SMSGID: 1tiDEH-00H5PA-1T
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 12 Feb 2025 19:59:14 +0530
+X-Gm-Features: AWEUYZkKLpdZkyHVsSB2BWfSoOZsdInFc-eqp2yhtj3-lDliB8rWq5u4wrqEWBc
+Message-ID: <CA+G9fYuw3XJ3NcYGHT=Jt9mQP_si49GQNEa6sSNLeqDm9A6+Cw@mail.gmail.com>
+Subject: selftest/vDSO: vdso_test_abi tests with gcc-13 and pass with clang-19
+To: clang-built-linux <llvm@lists.linux.dev>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000b60a9b062df2c4e6"
 
+--000000000000b60a9b062df2c4e6
+Content-Type: text/plain; charset="UTF-8"
 
+The kselftest-vDSO/vdso_test_abi test encounters failures when built
+and executed using GCC-13 on armv7 architecture.
+The issue has been observed on both TI X15 devices and QEMU-armv7.
 
-On 12.02.25 07:45, Thorsten Leemhuis wrote:
-> On 04.10.24 21:00, Gabriel Krisman Bertazi wrote:
->> Pedro Orlando <porlando@lkcamp.dev> writes:
-> [...]
->> This breaks compilation for me.
->>
->> fs/unicode/tests/utf8_kunit.c:11:10: fatal error: utf8n.h: No such file or directory
->>    11 | #include "utf8n.h"
->>       |          ^~~~~~~~~
-> 
-> I encountered the same error when building -next using the Fedora
-> rawhide config today. Given that this patch landed in -next today I
-> suspect it might be due to this change, but I'm on the road and unable
-> to verify that right now.
+Interestingly, the same test passes without any issues when built using
+Clang-19.This failure is specific to GCC-13. but test case should have
+been failed on clang toolchain but it did not.
 
-Did that now and this patch was indeed the culprit, as reverting
-be6f498e7391 ("unicode: kunit: change tests filename and path") from
--next fixed the build error for me.
+The Clang toolchain likely defaults to the traditional 32-bit time_t on
+32-bit Debian Trixie (except x86), leading to an ABI issue similar to
+older compilers. This is affecting compatibility.
 
-Ciao, Thorsten
+This is not a new regression,
+this report generated on Linux next but also seen on Linux stable tree.
 
-> Log:
-> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/08642966-next-next-all/builder-live.log.gz
->
->> After this patch that local header is now in the parent directory.
->>
->> I'm building with:
->>
->> CONFIG_UNICODE=m
->> CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST=m
->>
->>>  unicode-y := utf8-norm.o utf8-core.o
->>>  
->>> diff --git a/fs/unicode/.kunitconfig b/fs/unicode/tests/.kunitconfig
->>> similarity index 100%
->>> rename from fs/unicode/.kunitconfig
->>> rename to fs/unicode/tests/.kunitconfig
->>> diff --git a/fs/unicode/utf8-selftest.c b/fs/unicode/tests/utf8_kunit.c
->>> similarity index 100%
->>> rename from fs/unicode/utf8-selftest.c
->>> rename to fs/unicode/tests/utf8_kunit.c
->>
-> 
+Test name: kselftest-vDSO/vdso_test_abi
+Fails: gcc-13
+pass: clang-19
 
+Arnd Bergmann investigated and proposed a patch which fixes the problem.
+
+Test regression: selftest-vDSO/vdso_test_abi:
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+# selftests: vDSO: vdso_test_abi
+# TAP version 13
+# 1..16
+# # [vDSO kselftest] VDSO_VERSION: LINUX_2.6
+# # The time is 184285885525887.-5268386858514840748
+# ok 1 __vdso_gettimeofday
+# # clock_id: CLOCK_REALTIME
+# # The time is 184287230099877759.-1225334784
+# ok 2 __vdso_clock_gettime CLOCK_REALTIME
+# # The vdso resolution is 4294967296 -1225335584
+# # The syscall resolution is 4294967296 -1225334784
+# not ok 3 __vdso_clock_getres CLOCK_REALTIME
+# # clock_id: CLOCK_BOOTTIME
+# # The time is 3253049749439251215.-1225334784
+# ok 4 __vdso_clock_gettime CLOCK_BOOTTIME
+# # The vdso resolution is 4294967296 -1225335584
+# # The syscall resolution is 4294967296 -1225334784
+# not ok 5 __vdso_clock_getres CLOCK_BOOTTIME
+# # clock_id: CLOCK_TAI
+# # The time is 184549377723756415.-1225334784
+# ok 6 __vdso_clock_gettime CLOCK_TAI
+# # The vdso resolution is 4294967296 -1225335584
+# # The syscall resolution is 4294967296 -1225334784
+# not ok 7 __vdso_clock_getres CLOCK_TAI
+# # clock_id: CLOCK_REALTIME_COARSE
+# # The time is 128974845965660031.-1225334784
+# ok 8 __vdso_clock_gettime CLOCK_REALTIME_COARSE
+# # The vdso resolution is 42949672960000000 -1225335584
+# # The syscall resolution is 42949672960000000 -1225334784
+# not ok 9 __vdso_clock_getres CLOCK_REALTIME_COARSE
+# # clock_id: CLOCK_MONOTONIC
+# # The time is 3253311892768162575.-1225334784
+# ok 10 __vdso_clock_gettime CLOCK_MONOTONIC
+# # The vdso resolution is 4294967296 -1225335584
+# # The syscall resolution is 4294967296 -1225334784
+# not ok 11 __vdso_clock_getres CLOCK_MONOTONIC
+# # clock_id: CLOCK_MONOTONIC_RAW
+# # The time is 3253442966580101903.-1225334784
+# ok 12 __vdso_clock_gettime CLOCK_MONOTONIC_RAW
+# # The vdso resolution is 4294967296 -1225335584
+# # The syscall resolution is 4294967296 -1225334784
+# not ok 13 __vdso_clock_getres CLOCK_MONOTONIC_RAW
+# # clock_id: CLOCK_MONOTONIC_COARSE
+# # The time is 3197606291493094159.-1225334784
+# ok 14 __vdso_clock_gettime CLOCK_MONOTONIC_COARSE
+# # The vdso resolution is 42949672960000000 -1225335584
+# # The syscall resolution is 42949672960000000 -1225334784
+# not ok 15 __vdso_clock_getres CLOCK_MONOTONIC_COARSE
+# # Couldn't find __vdso_time
+# ok 16 # SKIP __vdso_time
+# # 1 skipped test(s) detected. Consider enabling relevant config
+options to improve coverage.
+# # Totals: pass:8 fail:7 xfail:0 xpass:0 skip:1 error:0
+not ok 3 selftests: vDSO: vdso_test_abi # exit=1
+
+## Build
+* test log: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241126/testrun/26062838/suite/kselftest-vDSO/test/vDSO_vdso_test_abi/log
+* TI x15 test log:
+https://lkft.validation.linaro.org/scheduler/job/8117196#L7091
+* build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2spp0E2mMNQq16RHsbzLSFAlxuM/
+
+## Source
+* git tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+* git sha: df5d6180169ae06a2eac57e33b077ad6f6252440 (this not new issue)
+* architectures: armv7
+* toolchain: gcc-13 (13.3.0) - failed
+* toolchain: clang ( version: 19.1.7) - pass
+* devices: Armv7 TI beaglebone, qemu-armv7
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+--000000000000b60a9b062df2c4e6
+Content-Type: application/x-patch; 
+	name="0001-selftests-vdso-debug-vdso_test_abi-__kernel_old_time.patch"
+Content-Disposition: attachment; 
+	filename="0001-selftests-vdso-debug-vdso_test_abi-__kernel_old_time.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m6z27dxf0>
+X-Attachment-Id: f_m6z27dxf0
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZEU08vdmRzb190ZXN0X2FiaS5j
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdkRTTy92ZHNvX3Rlc3RfYWJpLmMKaW5kZXggYTU0
+NDI0ZTIzMzZmNC4uMjU3NzhhN2Y4NDljZSAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvdkRTTy92ZHNvX3Rlc3RfYWJpLmMKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
+dkRTTy92ZHNvX3Rlc3RfYWJpLmMKQEAgLTE3LDYgKzE3LDcgQEAKICNkZWZpbmUgX0dOVV9TT1VS
+Q0UKICNpbmNsdWRlIDx1bmlzdGQuaD4KICNpbmNsdWRlIDxzeXMvc3lzY2FsbC5oPgorI2luY2x1
+ZGUgPGxpbnV4L3RpbWVfdHlwZXMuaD4KIAogI2luY2x1ZGUgIi4uL2tzZWxmdGVzdC5oIgogI2lu
+Y2x1ZGUgInZkc29fY29uZmlnLmgiCkBAIC0yNiw5ICsyNyw5IEBACiBzdGF0aWMgY29uc3QgY2hh
+ciAqdmVyc2lvbjsKIHN0YXRpYyBjb25zdCBjaGFyICoqbmFtZTsKIAotdHlwZWRlZiBsb25nICgq
+dmRzb19nZXR0aW1lb2ZkYXlfdCkoc3RydWN0IHRpbWV2YWwgKnR2LCBzdHJ1Y3QgdGltZXpvbmUg
+KnR6KTsKLXR5cGVkZWYgbG9uZyAoKnZkc29fY2xvY2tfZ2V0dGltZV90KShjbG9ja2lkX3QgY2xr
+X2lkLCBzdHJ1Y3QgdGltZXNwZWMgKnRzKTsKLXR5cGVkZWYgbG9uZyAoKnZkc29fY2xvY2tfZ2V0
+cmVzX3QpKGNsb2NraWRfdCBjbGtfaWQsIHN0cnVjdCB0aW1lc3BlYyAqdHMpOwordHlwZWRlZiBs
+b25nICgqdmRzb19nZXR0aW1lb2ZkYXlfdCkoc3RydWN0IF9fa2VybmVsX29sZF90aW1ldmFsICp0
+diwgc3RydWN0IHRpbWV6b25lICp0eik7Cit0eXBlZGVmIGxvbmcgKCp2ZHNvX2Nsb2NrX2dldHRp
+bWVfdCkoY2xvY2tpZF90IGNsa19pZCwgc3RydWN0IF9fa2VybmVsX29sZF90aW1lc3BlYyAqdHMp
+OwordHlwZWRlZiBsb25nICgqdmRzb19jbG9ja19nZXRyZXNfdCkoY2xvY2tpZF90IGNsa19pZCwg
+c3RydWN0IF9fa2VybmVsX29sZF90aW1lc3BlYyAqdHMpOwogdHlwZWRlZiB0aW1lX3QgKCp2ZHNv
+X3RpbWVfdCkodGltZV90ICp0KTsKIAogY29uc3QgY2hhciAqdmRzb19jbG9ja19uYW1lWzEyXSA9
+IHsKQEAgLTgzLDcgKzg0LDcgQEAgc3RhdGljIHZvaWQgdmRzb190ZXN0X2Nsb2NrX2dldHRpbWUo
+Y2xvY2tpZF90IGNsa19pZCkKIAkJcmV0dXJuOwogCX0KIAotCXN0cnVjdCB0aW1lc3BlYyB0czsK
+KwlzdHJ1Y3QgX19rZXJuZWxfb2xkX3RpbWVzcGVjIHRzOwogCWxvbmcgcmV0ID0gVkRTT19DQUxM
+KHZkc29fY2xvY2tfZ2V0dGltZSwgMiwgY2xrX2lkLCAmdHMpOwogCiAJaWYgKHJldCA9PSAwKSB7
+CkBAIC0xMzUsNyArMTM2LDcgQEAgc3RhdGljIHZvaWQgdmRzb190ZXN0X2Nsb2NrX2dldHJlcyhj
+bG9ja2lkX3QgY2xrX2lkKQogCQlyZXR1cm47CiAJfQogCi0Jc3RydWN0IHRpbWVzcGVjIHRzLCBz
+eXNfdHM7CisJc3RydWN0IF9fa2VybmVsX29sZF90aW1lc3BlYyB0cywgc3lzX3RzOwogCWxvbmcg
+cmV0ID0gVkRTT19DQUxMKHZkc29fY2xvY2tfZ2V0cmVzLCAyLCBjbGtfaWQsICZ0cyk7CiAKIAlp
+ZiAocmV0ID09IDApIHsKLS0gCjIuNDMuMAoK
+--000000000000b60a9b062df2c4e6--
 
