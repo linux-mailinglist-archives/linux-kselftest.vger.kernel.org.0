@@ -1,89 +1,88 @@
-Return-Path: <linux-kselftest+bounces-26512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14428A33BB2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 10:56:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1B4A33BE2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 11:01:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 700B13A6619
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 09:56:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 824C4188CA49
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 10:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB4120F09C;
-	Thu, 13 Feb 2025 09:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BCB1211474;
+	Thu, 13 Feb 2025 10:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hgv6vE5O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F27HBhco"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F001E2847;
-	Thu, 13 Feb 2025 09:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527FC2066D6;
+	Thu, 13 Feb 2025 10:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739440573; cv=none; b=J5NZZd28TaBQFYOpjc7IETliVp74icp8HXKsiOwyFE0OuvHJ98uaKZK+WiOtDHY8jmXUIrC2lgH3NZisehKb/LUReCo4Wg8JPaWzCN55vSSgL0sLr/5E94R4ZJ6W9Tzq03923tgjZ32dlx8lytAUdNuxVdqBnmWFhQhtf0vBE2Q=
+	t=1739440901; cv=none; b=RXeuubzBsdSRhAD7TPBIAlYBskSP4cN0ISFmpxQoS6v0oZ5ykwODqiWhIjzzc2Ia0uhqw/19LyWVkSeYqinfMbhrlGRfktr68BQEeoS4p+f59/n0J1IwaLVe+wVKUB8mkMbnv4vkDHDMKIl3y22sVYvGdNDhKpTey82g41QvfRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739440573; c=relaxed/simple;
-	bh=jA7SlTyYhz1+j8HlAbKGMC97RbplB7cAQ05gjyR9wTw=;
+	s=arc-20240116; t=1739440901; c=relaxed/simple;
+	bh=iBDt2glmR7cHZRLk9T83XH+ffn4f88bkjS2lrtyqh/4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ljFqXsZBz/cCTXvyiELCRwK8Yn0EReMcoyN7t180HYamxX/vT5gWOq4RjoU1fRkopJ1nz6dLl9iHFWpoRj24quZLzMxTDM/knz14elGADkUeH92zbQJAAufL0KXGYSm6sBAVHCAG0iixTQSIOgHzqQZjssAP6X2E8IIju0+bN6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hgv6vE5O; arc=none smtp.client-ip=209.85.128.43
+	 To:Cc:Content-Type; b=JR9UU+8MbQLKO4dtmkRZZrRmPzy5O3dzfAioqxon5feqjXNXsNda4uChAvOo0vSrrzFq86j08XYn94bQEQC3Is/scJoc05/gmETs8Bg2qLOayRABLVtJ7xmB5t+3f8U7hEIPfkuMLFZXrTzd/a46sR97M8oeDQ32ZpR2TQDA7ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F27HBhco; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43946b5920cso4042075e9.1;
-        Thu, 13 Feb 2025 01:56:11 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-38dc5764fc0so564731f8f.3;
+        Thu, 13 Feb 2025 02:01:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739440570; x=1740045370; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739440897; x=1740045697; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6VgtMhO6+jJX1RjKLdoncmTjEAD+6FhglRm1uezg6DA=;
-        b=Hgv6vE5OsWur1EsBJTLkf5Yw349pSAE6Lp05HWKlRPG9+m+5WbsPo1CKJXvt/IGa/i
-         xrpkiDUqstn2jgmm1AEfDcAf7auFjEvOOVHdf/N3ci2O4QZ7HtvIHt9DcxH39UkdqUHr
-         DPGuIFrFPLJiZyz1b+1j9t7AAUFpYw4+Pt9so5H+Mf86NJ+TaqJ8ErEH4w6yLRtzW4mS
-         FPABPpgYwymr/VpnDAXX8kN0uUdXvQ0sPHcd03M1dUoZ5M+aqGrB3wZptr/npYEAMUwA
-         Yj8WLB9zzESuYDWXBahaBchabIyKp215y8uYPaKE7rIOZguBG5p/PngrPctt+k/IweJl
-         VYbw==
+        bh=QzLT98ZLU5P2fWKiTUzwgsTrlPg66ER6fTAj9aLF8fM=;
+        b=F27HBhcoSLzT3sL8Ku2e7U5GQt/ymD89GKSeWZlf/5QENZWPh+kuLggyLZ/rxwb2kG
+         1lWmSEJFm1nanoZH8lzQYxqzFdv1aT8avZ8CiKMBVadaxBFS5Nhei7I1azcLd3UknIeU
+         7xCN6uF85Bg/byZNEoSGJa7IE92JToAeBbxDZ+N/OHtVkGxfjoQ8B+2ahS3I3he/BRfe
+         voVYcN8Xy+kIhbOxs4jl9NWMinbGuYNk3kSMc0LhPMyQ5lv9oc71ZPVl6d35rHyP34Gc
+         305R481UgfWnLplk1bjNDkEakdTcSswJF9ACcvjc4j6kB9pRpZiLwPIZmx6R7xRvW6gR
+         zhGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739440570; x=1740045370;
+        d=1e100.net; s=20230601; t=1739440897; x=1740045697;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6VgtMhO6+jJX1RjKLdoncmTjEAD+6FhglRm1uezg6DA=;
-        b=qyEc0vfGeC0PcSiu83lNKFijhQbIXr4mp09nmXwlq/AS6u7hZcaKpltCzBfdB0xh72
-         +xOVgjCBIxZRWkInHbvQ4J4kg7I/nzOQPGbtJB1T9HNYmwUJKO1pCI1qzvHqmSE2h1kB
-         HAdvWkB3iNQ0kSc41L/2ZRAX6Hh+9L0UUVCEU9PRr6SpIMbF4XcsITyF+3H2BpL5glGx
-         NrLN2LtS+RoB/J6mVO3y6dnB3TpAjOc88o+9064c4nQKqMfgw2oMO3NXU1Ql/foCALbC
-         RWgCXRa05662Gc1XlAnrfd6seM/ShpO7iN/mrCpua3ObXcyriqtWbfFq9MkJr+7Rd/+h
-         uivA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3tufqHBLGggpJeFu65M+QbZVD429u7flhjGSDj/85RnmuNFG1PQj0bCCQV8dIeXjsMIA1ZwlQ+HDBIA==@vger.kernel.org, AJvYcCUONQ7XX7uLvj48uVklyR+VJLpW4z2NQxK24HnrwFybQ3vvhS1e9zcghReuNKbF70OfdLEQW69W5yeK@vger.kernel.org, AJvYcCUf0wHUNrSkIC/xM0udslXpYo1J0xvgm7TV40ujYbdY4XqO9pBLvd11CAVReK3Hiu47+h4ZlvKdnffQ@vger.kernel.org, AJvYcCWL1nrIGCkCXkdQfkLa3BD/0SmQzsOGkzjyRWvIDsY1K1DSNoif/iA+lhsNSUYOVK8bMlO4kkplbS9jdQ==@vger.kernel.org, AJvYcCWd5CL/Ua/0CfWu9WdCQ+GDtCjaDkxOpMfSZl6OWziX5Tx+aLu//CQfsRZPyrg38SdajsrEwvxNL8+hPTvV8129@vger.kernel.org, AJvYcCWob7ogA+GYpPAPqUqbMYZUQly6RgXxaroCCdYzCdOzAvVC7Ney4aj+mOCbcfRpbunabcozjbsjxzeea7XSyHg=@vger.kernel.org, AJvYcCWp/m1hrbPiZpLaY9J8YODGgNBEa7rJ7badKg9j3GOGKug9YnFO6/kUyOqETE+9h2cNQn8sbBFg@vger.kernel.org, AJvYcCX6ica7pCcIoAR7FarPfjWHEm5Kz6oFBzcgU6ga3QWGYPKAXfFv11FSk1Kn7vqYF70bmdl+RLG+ft/FQ0Sc@vger.kernel.org, AJvYcCXMbL+LehLmsLp3NRaW043Xs6yfE5/fMWwln8WGm42ln44YrJwvqevLhVDjSjQzYM/O1kI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhfnzbWv4146UK9fZoCbq12Ri4Lx21+M2E7M87d4axe6x976y5
-	rhYXDi1WR04M9nGm5hEYx236T8+X1CAghHa7yTwaPpK+rRT7e6f0wiUsvNHKHrCnqrtV9tTChN0
-	V66bsK3SpHhy5zQDoyxnhMdRa6PY=
-X-Gm-Gg: ASbGncvhpXdXkmbRtpGTViKawpv8rCyIEZNt++CLA7mIvgMongPg4qNIIgyc/3SoNWs
-	JZX1CQnHTuLdJMNRAR8Vy45SiqsnMGtk+p8XELQJHfwpWcF3dPLDF39MsnrX2ObPy7K49EGM=
-X-Google-Smtp-Source: AGHT+IF4vz9ZMNWiLlURtMBrw7f64+VQaaApf4FQsQ85yq8rGSoIhlhaKmw+1l1LVh0uOeuQn3pwG9KU0hl60Rc/heo=
-X-Received: by 2002:a5d:5889:0:b0:38f:24f9:8bac with SMTP id
- ffacd0b85a97d-38f24f9912fmr1885857f8f.23.1739440569419; Thu, 13 Feb 2025
- 01:56:09 -0800 (PST)
+        bh=QzLT98ZLU5P2fWKiTUzwgsTrlPg66ER6fTAj9aLF8fM=;
+        b=w/4FJa5msYAQJpJhJXwSXY+yhFHB9fC70zQrODeZin4AGk/JLQxCbh1+BmRbNIBJ37
+         v/bW5ResExA5w6DFs/F2y9rek5ApVhSKXcS6lwHZvZxT47RpGqwvr4UIrcXXOZsbutgu
+         H7z7OSIO9FkEaPYVHVvYFrAL9F5wPOWqx4kvpArHvrie0kCL1n4SzR1AyIwNduQNkBHK
+         OqXP7Ylf5m5I+7ChyHVzDhkBtLzho3DAG7P22wVvV/fAtrNLWkRLa4B7x818+74v/+KH
+         AJMKULG9I3RuFvPVmyZ8IG3wolvotA7Mj3eHWYVW3xXmXmihN3URstIjCrdpBXjpgBdn
+         /URQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1+CJP2buiM8/DxyTwCPZzncnVfzcHgbuW3iKWvO1do77cctij23fXYVMF+zPMUBIlDAWneUmKjYWb@vger.kernel.org, AJvYcCU3xVynTwG8NrgXxLb7gBh4boQSM9N6pAptrklcVVHiMAauHD/DLvj/330EBetonOrcStljQebi@vger.kernel.org, AJvYcCU9RszRKzCoJBNMYdeoEmirhOP+/Z7UvxFkk4miHcL92h/mznww2um2vaB2l21V2mwhB0AMXY6bIkbQ@vger.kernel.org, AJvYcCUlHjPbPYBcFUBnLno3QU/H7ZKwfzUtXeWsLzqgnsUvjI5tp7d/4tLe+AenraLxD7kOF+vfY6QhEqlPQWR4NbKo@vger.kernel.org, AJvYcCV5m1qs3UWLXCzIj0GXli0fon4S2fR94mmwGaf27nnzuEb5bn9tlCloTROXEq9sW6AhAos7aeAa6d9NVg==@vger.kernel.org, AJvYcCVAobNqM+lKxqtaHDsZ3TiXORLTkhwZNVSN0pp2Iewv+c3y0k89ZUaL47DrixFT2Sv9e6Q=@vger.kernel.org, AJvYcCWJfA6NgWgPy/KwsXVIXwhdc0qKrz8imABc7dSy4xwWmneKxn91nCyZard0PfeuVG8G3p3rYz9AQP/wNg==@vger.kernel.org, AJvYcCWuKH9C0H7oOrCWBWyXGhLxS9XWDvAurO6q57+Iaqjuww+4z6zpdpHbc+oLf90dx5alhlvytjTdaTmhjhCt@vger.kernel.org, AJvYcCXKd+b2ZizvRrFEsf16e5WCsJX29pqkNYvM/CvV2eLp2bEFouszvQk3N1/ulCMBfWcWp/yfrTg3obqgTA+ACtI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsDHQ2ULy/b3H8iPETyqOKkf4JPLz9z4KSNCCA/04557xoG4CO
+	6lCnISj2AVQzeLgwoP7mZe823KPU3kwQ1qEjVA/Q5AdxgvbjZnt0+V91qa8ynycnCERKaZEjPgX
+	8/ePJ1IQFmihptsKGmu7JdZhS9q0=
+X-Gm-Gg: ASbGnct8IV7hqIfFWMa1uEEF3ywnGb75LQi5LuYw616qX3swxvG2KRqgIZ2w+8VpnXp
+	CXcBA54kofPJRtHwBVhF2eyAY4pNByTx0SHMt6d0bDAMn4qDWaiYtZrb3ma2a6/lJUb6DFz4=
+X-Google-Smtp-Source: AGHT+IGNZlywLnJxQSbfEuVU5lxBk1mvVT9ugQLIpGpywWHBNNSM0YY4phrOkk812RGul4zBJlRkLm/hRcXNfYkCEHg=
+X-Received: by 2002:a5d:64e2:0:b0:38f:21eb:5d02 with SMTP id
+ ffacd0b85a97d-38f21eb5f2dmr4477949f8f.22.1739440897336; Thu, 13 Feb 2025
+ 02:01:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210133002.883422-7-shaw.leon@gmail.com> <20250213070533.9926-1-kuniyu@amazon.com>
- <CABAhCOT8sCV4RgBWwfYjCw2xoZbdiYG8yuWReigx-u5DibTaiA@mail.gmail.com>
-In-Reply-To: <CABAhCOT8sCV4RgBWwfYjCw2xoZbdiYG8yuWReigx-u5DibTaiA@mail.gmail.com>
+References: <20250210133002.883422-3-shaw.leon@gmail.com> <20250213065348.8507-1-kuniyu@amazon.com>
+ <CABAhCOTw+CpiwwRGNtDS3gntTQe7XESNzzi6RXd9ju1xO_a5Hw@mail.gmail.com> <2c294c0a-26c4-4ec5-992d-a2fd98829b16@redhat.com>
+In-Reply-To: <2c294c0a-26c4-4ec5-992d-a2fd98829b16@redhat.com>
 From: Xiao Liang <shaw.leon@gmail.com>
-Date: Thu, 13 Feb 2025 17:55:32 +0800
-X-Gm-Features: AWEUYZkW9l6r7KSPGBGbQx_PCRCw6eQRHHUgG_KYRCauok2SpPFULcU0b728Vqw
-Message-ID: <CABAhCORgi7Jqu=Aigs6Fc8ewG5OshFvcunye03R43C+Z0ojZyw@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 06/11] net: ipv6: Use link netns in newlink()
- of rtnl_link_ops
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: alex.aring@gmail.com, andrew+netdev@lunn.ch, 
+Date: Thu, 13 Feb 2025 18:01:00 +0800
+X-Gm-Features: AWEUYZkc6f7IS5VLx0dDxpZ4gB9UzsINfw32PuUeMd1tOC9C9cBZAvSRCBGNkQM
+Message-ID: <CABAhCOQLHgiwkydm9vQAkVYZRyrCCu=E9Nh=wwkWFXox0x5uvQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 02/11] rtnetlink: Pack newlink() params into struct
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>, alex.aring@gmail.com, andrew+netdev@lunn.ch, 
 	b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org, bridge@lists.linux.dev, 
 	davem@davemloft.net, donald.hunter@gmail.com, dsahern@kernel.org, 
 	edumazet@google.com, herbert@gondor.apana.org.au, horms@kernel.org, 
@@ -91,53 +90,84 @@ Cc: alex.aring@gmail.com, andrew+netdev@lunn.ch,
 	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
 	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org, 
 	linux-wpan@vger.kernel.org, miquel.raynal@bootlin.com, netdev@vger.kernel.org, 
-	osmocom-net-gprs@lists.osmocom.org, pabeni@redhat.com, shuah@kernel.org, 
+	osmocom-net-gprs@lists.osmocom.org, shuah@kernel.org, 
 	stefan@datenfreihafen.org, steffen.klassert@secunet.com, 
 	wireguard@lists.zx2c4.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 13, 2025 at 4:37=E2=80=AFPM Xiao Liang <shaw.leon@gmail.com> wr=
-ote:
+On Thu, Feb 13, 2025 at 5:17=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
+te:
 >
-> On Thu, Feb 13, 2025 at 3:05=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.=
-com> wrote:
+> On 2/13/25 9:36 AM, Xiao Liang wrote:
+> > On Thu, Feb 13, 2025 at 2:54=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazo=
+n.com> wrote:
+> > [...]
+> >>> diff --git a/include/linux/if_macvlan.h b/include/linux/if_macvlan.h
+> >>> index 523025106a64..0f7281e3e448 100644
+> >>> --- a/include/linux/if_macvlan.h
+> >>> +++ b/include/linux/if_macvlan.h
+> >>> @@ -59,8 +59,10 @@ static inline void macvlan_count_rx(const struct m=
+acvlan_dev *vlan,
+> >>>
+> >>>  extern void macvlan_common_setup(struct net_device *dev);
+> >>>
+> >>> -extern int macvlan_common_newlink(struct net *src_net, struct net_de=
+vice *dev,
+> >>> -                               struct nlattr *tb[], struct nlattr *d=
+ata[],
+> >>> +struct rtnl_newlink_params;
+> >>
+> >> You can just include <net/rtnetlink.h> and remove it from .c
+> >> files, then this forward declaration will be unnecessary.
 > >
-> [...]
-> > > diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-> > > index 863852abe8ea..108600dc716f 100644
-> > > --- a/net/ipv6/ip6_gre.c
-> > > +++ b/net/ipv6/ip6_gre.c
-> > > @@ -1498,7 +1498,8 @@ static int ip6gre_tunnel_init_common(struct net=
-_device *dev)
-> > >       tunnel =3D netdev_priv(dev);
-> > >
-> > >       tunnel->dev =3D dev;
-> > > -     tunnel->net =3D dev_net(dev);
-> > > +     if (!tunnel->net)
-> > > +             tunnel->net =3D dev_net(dev);
-> >
-> > Same question as patch 5 for here and other parts.
-> > Do we need this check and assignment ?
-> >
-> > ip6gre_newlink_common
-> > -> nt->net =3D dev_net(dev)
-> > -> register_netdevice
-> >   -> ndo_init / ip6gre_tunnel_init()
-> >     -> ip6gre_tunnel_init_common
-> >       -> tunnel->net =3D dev_net(dev)
+> > OK. Was not sure if it's desirable to include include/net files from
+> > include/linux.
 >
-> Will remove this line.
+> I think we are better of with the forward declaration instead of adding
+> more intra header dependencies, which will slow down the build and will
+> produces artifacts in the CI runs (increases of reported warning in the
+> incremental build, as any warns from the included header will be
+> 'propagated' to more files).
+>
+> >>> +extern int macvlan_common_newlink(struct net_device *dev,
+> >>> +                               struct rtnl_newlink_params *params,
+> >>>                                 struct netlink_ext_ack *extack);
+> >>>
+> >>>  extern void macvlan_dellink(struct net_device *dev, struct list_head=
+ *head);
+> >>
+> >>
+> >> [...]
+> >>> diff --git a/include/net/rtnetlink.h b/include/net/rtnetlink.h
+> >>> index bc0069a8b6ea..00c086ca0c11 100644
+> >>> --- a/include/net/rtnetlink.h
+> >>> +++ b/include/net/rtnetlink.h
+> >>> @@ -69,6 +69,42 @@ static inline int rtnl_msg_family(const struct nlm=
+sghdr *nlh)
+> >>>               return AF_UNSPEC;
+> >>>  }
+> >>>
+> >>> +/**
+> >>> + *   struct rtnl_newlink_params - parameters of rtnl_link_ops::newli=
+nk()
+> >>
+> >> The '\t' after '*' should be single '\s'.
+> >>
+> >> Same for lines below.
+> >
+> > This is copied from other structs in the same file. Should I change it?
+>
+> https://elixir.bootlin.com/linux/v6.13.2/source/Documentation/process/mai=
+ntainer-netdev.rst#L376
+>
+> In this series, just use the good formatting for the new code.
 
-However, fb tunnel of ip6_tunnel, ip6_vti and sit can have
-tunnel->net =3D=3D NULL here. Take ip6_tunnel for example:
+Got it. Thanks.
 
-ip6_tnl_init_net()
-    -> ip6_fb_tnl_dev_init()
-    -> register_netdev()
-        -> register_netdevice()
-            -> ip6_tnl_dev_init()
-
-This code path (including ip6_fb_tnl_dev_init()) doesn't set
-tunnel->net. But for ip6_gre, ip6gre_fb_tunnel_init() does.
+>
+> Thanks,
+>
+> Paolo
+>
 
