@@ -1,88 +1,160 @@
-Return-Path: <linux-kselftest+bounces-26541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C72CA33EAC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:02:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3F7EA33EDF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC976188E97F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 12:01:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9B877A43C5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 12:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1FD7221554;
-	Thu, 13 Feb 2025 12:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8456B21D3F7;
+	Thu, 13 Feb 2025 12:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TyFt7NBM"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rmp5Exz8";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Y0Z7BaOI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD9823A9B1;
-	Thu, 13 Feb 2025 11:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B690A227EBE;
+	Thu, 13 Feb 2025 12:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739448000; cv=none; b=gOo2UJ+INiZ4JBFb/zJ4nCrO3NjXjrlGjKQ2UTLnPsBa5SCosaIEZCOg5IXlKktFIOAkhkrHM1tZN5Zn2vzPOZNgIbS/TjXgV7fNLQF6wjP5MVbM5PCk/lthCB9ppiFOTqCmfo/r0PXfwxAiOKmG+6Kxt61rYA8S3EMuxNgfgfU=
+	t=1739448715; cv=none; b=O9+vxm42oXoIrIHCYUxEFZx3Ql1M0Zg/emNsW0H8vDD4G5iMq11OeCBNtkPTc3VUYPC2BTcMOkN8xutBO6EYZKg9H1z2S9BHuqXLnc7KQ+fTWfcaVgVdvwFhCHgiDyCESw+WiECl3ARYoQZGjSlPEsg2z4IZHH8B/H9MlkqAVw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739448000; c=relaxed/simple;
-	bh=tHokHA+R/K+81u9HnafZobZMDVtLSE+pPxttTZO+tUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iQApSBdAyMFYq8M1amjDTc2g3j466yvqeqclmq7XAG+EZjzxFR8SCYk1+C1M2hBXmc0SHKM6T+RHPpZm64qGMULVXWNc9kwCb1Mr+GGr+tUjOXSM8Z31dTze4aytQZ/OlVY9SfOI3bBzB1vGftrx1BRs3fir8F56Y/oL7vXUFbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TyFt7NBM; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=tHokHA+R/K+81u9HnafZobZMDVtLSE+pPxttTZO+tUo=; b=TyFt7NBMvQ4lL0oU5PguO+cqjA
-	v/KgR1YXRka9r06Jv65NbCb/SQXasBBlES4xhlKa3aQ/l72+slSTgHll3AcuYYR9DYmXc4UkWrDC4
-	xYrFlWwQ23AbzocnITa7H/riJYhqD1z2JxdEpU1Q2ra8UKlMxbVkNuyGzU2TanjyQzVbXluy4TAaB
-	V9WWq4C843YW/2oCavurhGKvtj6G4+K/Dbqgme5lzoArZLMXN77uTnVBxPING0nbx1ZUjUudBki71
-	hk4HYC/EDDR92dYSKEmLQoio4HFzEdg6QfVm61kf7eVQIDGR2zQvmedSCHsAuMWf13IpFMF304UWB
-	LhLVIGOw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tiXsl-00000008Bpw-3J8d;
-	Thu, 13 Feb 2025 11:59:51 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5FDE13001AC; Thu, 13 Feb 2025 12:59:51 +0100 (CET)
-Date: Thu, 13 Feb 2025 12:59:51 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
-Message-ID: <20250213115951.GF28068@noisy.programming.kicks-ass.net>
-References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
+	s=arc-20240116; t=1739448715; c=relaxed/simple;
+	bh=/+89HoxCR4P4bed6CdrcvksQl9SDCWv/He6EHKr8h/Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=VzLURiUTmPskcv709kFInM47/Sok2LMoF9RYyhWKVRZduDOp89MrqYBLPgHP/SEH4HFjbd8WqsgqxYG9NIi6J5pI6gP73n1nNptRpo2XnJRxfufS5RlW2Box4ggh3v3JKHKBdhTFXmXMqgW9JsPqZudl2h9rUBdx59+lQ4XVkdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rmp5Exz8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Y0Z7BaOI; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739448697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/3WCJyWHDo+iDYPmzNhUzFQSCU4PUPzZ8RBmSh5HlJo=;
+	b=rmp5Exz8cDlyq2mtNnojNZqj7ZYko62PkYV3fFrSxq1Pna8q2IvK8E+v+gOW6NPZe3H/fm
+	v/gtkPMIycGTOD7g5TCR12qEEc2t80l1kfok3Rr5lARpVi1Qol6Y/Sd07nLa3zrHO6P1uD
+	O50ktZZ45CICbk5q7TDmQxGrtDowNsPOJGJn6yqOoBZIyKLUQ1hKtFRi6eLnOvEEHjww2q
+	SwW7fGiysuI7EIJ/+QezmN6TjL+mWqU/MiABFTbAn3252BVLG630/SZ+iFVnkC6NPoWd6Z
+	Q287nrW++IPa7QsqN/YAg8D4x2PbuybqPVxZJiezEtw2anHAwj18WosJkR1zeg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739448697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/3WCJyWHDo+iDYPmzNhUzFQSCU4PUPzZ8RBmSh5HlJo=;
+	b=Y0Z7BaOIti331G1gEPWryQVQcDyrmBsKbcJIPPOQl1tBPL9Xa9fzRGB6QnuJbUWt05xtY/
+	rPv67jYIe0eMiYCg==
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+ kevin.tian@intel.com, maz@kernel.org
+Cc: joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+ shuah@kernel.org, iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ eric.auger@redhat.com, baolu.lu@linux.intel.com, yi.l.liu@intel.com,
+ yury.norov@gmail.com, jacob.pan@linux.microsoft.com,
+ patches@lists.linux.dev
+Subject: Re: [PATCH v1 02/13] genirq/msi: Rename iommu_dma_compose_msi_msg()
+ to msi_msg_set_addr()
+In-Reply-To: <0cfaefcc104e29aeb031f316537249d8d53ef7fa.1739005085.git.nicolinc@nvidia.com>
+References: <cover.1739005085.git.nicolinc@nvidia.com>
+ <0cfaefcc104e29aeb031f316537249d8d53ef7fa.1739005085.git.nicolinc@nvidia.com>
+Date: Thu, 13 Feb 2025 13:11:37 +0100
+Message-ID: <87v7tejb7q.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
+Content-Type: text/plain
 
-On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
-> Convert this unit test to a KUnit test. This allows the test to benefit
-> from the KUnit tooling. Note that care is taken to avoid test-ending
-> assertions in worker threads, which is unsafe in KUnit (and wasn't done
-> before this change either).
+On Sat, Feb 08 2025 at 01:02, Nicolin Chen wrote:
 
-So this was something simple, and now I need to know how to operate this
-kunit nonsense :-(
+> From: Jason Gunthorpe <jgg@nvidia.com>
+>
+> The new function is used to take in a u64 MSI address and store it in the
 
-How is that an improvement?
+Which new function? The subject claims this is a rename. That's
+confusing at best.
+
+> msi_msg. If the iommu has provided an alternative address then that is
+> replaced instead.
+>
+> All callers have a tidy u64 already so this also consolidates the repeated
+> low/high code into a small helper.
+
+Now I'm really confused. Something like:
+
+    genirq/msi: Refactor iommu_dma_compose_msi_msg()
+
+    The call sites of iommu_dma_compose_msi_msg() have the following
+    pattern:
+
+      1) Set the MSI message address to the non-translated address
+
+      2) Invoke iommu_dma_compose_msi_msg() to apply IOVA translation if
+         available.
+
+    Rework and rename iommu_dma_compose_msi_msg() to handles both
+    address set up variants in one consolidated helper.
+
+Or something to that effect.
+
+> -/**
+> - * iommu_dma_compose_msi_msg() - Apply translation to an MSI message
+> - * @desc: MSI descriptor prepared by iommu_dma_prepare_msi()
+> - * @msg: MSI message containing target physical address
+> - */
+
+Please keep and rework the documentation comment.
+
+> -static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc,
+> -					     struct msi_msg *msg)
+> +static inline void msi_msg_set_addr(struct msi_desc *desc, struct msi_msg *msg,
+> +				    u64 msi_addr)
+
+No line break required. You have 100 characters available.
+
+>  {
+>  #ifdef CONFIG_IRQ_MSI_IOMMU
+>  	if (desc->iommu_msi_page_shift) {
+> @@ -314,11 +309,14 @@ static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc,
+>  			       << desc->iommu_msi_page_shift;
+>  
+>  		msg->address_hi = upper_32_bits(msi_iova);
+> -		msg->address_lo = lower_32_bits(msi_iova) |
+> -				  (msg->address_lo &
+> -				   ((1 << desc->iommu_msi_page_shift) - 1));
+> +		msg->address_lo =
+> +			lower_32_bits(msi_iova) |
+> +			(msi_addr & ((1 << desc->iommu_msi_page_shift) - 1));
+
+Please avoid unrelated random formatting changes. Especially in this
+case this is even more non-sensical as you introduced the original
+formatting in the previous patch. So fix it up there and make it:
+
+		msg->address_lo = lower_32_bits(msi_iova) |
+				  (msg->address_lo & ((1 << desc->iommu_msi_page_shift) - 1));
+
+which is way more readable than this displaced variant above.
+
+> +		return;
+>  
+> -	iommu_dma_compose_msi_msg(irq_data_get_msi_desc(d), msg);
+> +	msg->data = its_get_event_id(d);
+> +	msi_msg_set_addr(irq_data_get_msi_desc(d), msg,
+> +			 its_dev->its->get_msi_base(its_dev));
+
+No line break required here and at the other places.
+
+Thanks,
+
+        tglx
 
