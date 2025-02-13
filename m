@@ -1,42 +1,43 @@
-Return-Path: <linux-kselftest+bounces-26545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39116A33FFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 14:13:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FA6AA34001
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 14:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 899D93A1F28
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:13:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC0611696FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057C323F41F;
-	Thu, 13 Feb 2025 13:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26D823F420;
+	Thu, 13 Feb 2025 13:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Ya6MJo1+"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fdO3sUcK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6875923F404;
-	Thu, 13 Feb 2025 13:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8D723F41B;
+	Thu, 13 Feb 2025 13:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739452391; cv=none; b=jS/9L3kR4bT2Jem/kXRlrzRyj9uOnuoMQR383lCGsaWFGnOe855Iffy530ydy611dzLT+ajJEyQabL2YQZvU124y6XACf4FP7STZ7WNX9jelL0UGljRHpUykOMN2XMQFNDWydSPb6S0jvlxgTiO8WCjhNSyr6qV6tmMP4VtFVu4=
+	t=1739452398; cv=none; b=Ix6ECWOSMw2onKjJCRPnoZe/buW60HlWRFkoddCklEuUAEqmfAyt8ifHTVpi8vgBNSFh9Q0uSSrhmhsper3p+6uvN22SWzgPLMv3zX3bpCAuLvXXmaE+S0vVO8fWaAUj1gyA22m7+KKEeQ0ieQTkOUydBt2kDm4t6q7FalbcI9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739452391; c=relaxed/simple;
-	bh=PvUJQvv0TMN/p/W8luAL2yKuJITHxoGDlOUMOvpwRyc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CpSVx3aUV/X4faqUIR/5lhh+SkLI+8zC/vqo5A6QjustFzs5JUidFcCzQqGg61voA2fIvH9t5J+VM8rs+8ZCEnPLxPctqtEis4u6IRiN5R5ro5LK1mzJWku3SQv9qAmdqCEJtE9s/VGff3+6R7fYMbhj6qoVp96Db6HU1D6uQp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Ya6MJo1+; arc=none smtp.client-ip=220.197.31.4
+	s=arc-20240116; t=1739452398; c=relaxed/simple;
+	bh=r3XU+DGNm90//yQ3AsPpyzLkR4el0EYOuVM2HcyiGqA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=a/tmuvfjDdjrGLFF1+Ufj9pmSpIClXTH8akNZKevZNgfT5mnfPm7s605DyorkoDTbe8LDcNEAGVx7TRde8NX/Yyt9QkuPC9eBbGZmmoWyAnVmjJIhO/9qS4mubG1O+DJhjM2isphKFzjJFXtBYRDV+CAy83bSAXb/OAyiA8sIc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fdO3sUcK; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=66QIH
-	tabSwT83zWqMY4rhDRSp8xEydswNS2skmyxGQo=; b=Ya6MJo1+Hta8EhIiqARyu
-	VrCAEgkjLpJA/61r2t6+Q9yuJhWmehP1mLWVL8B8oKqBpQJq30/1L6B5N7VAyxTn
-	uVP1tHSKifWmX3/osXHNmOx9tAbafgZ9/2IXVBbc9QibZnMK0XorcTth3tZZtOi6
-	+6OQ75FYN351xcyUeDbgts=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Y8v0K
+	eZhBbmue/Fp6RVZC0XefbCMdD2hVwAYwi82vIs=; b=fdO3sUcK513OgSwKNnR2j
+	jsWMj61Xbz2HrHNbl9wrginTWGW1+sY/9mtrkQnWtOjTfPiClP/sAtBIther7Hyd
+	jnOachWQEbodwy+XLIpBsPyx8a+0lFvVzdksOuAIRham6z2iFwhMpsbAMsYNWsYR
+	rlrvlmfeRILrpuNi+aUPzo=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3N8qv761nJPMJMA--.27324S2;
-	Thu, 13 Feb 2025 21:12:17 +0800 (CST)
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3N8qv761nJPMJMA--.27324S3;
+	Thu, 13 Feb 2025 21:12:19 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -54,11 +55,14 @@ Cc: linux-kselftest@vger.kernel.org,
 	jolsa@kernel.org,
 	mykolal@fb.com,
 	shuah@kernel.org,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf-next v2 0/3] bpf: Fix array bounds error with may_goto and add selftest
-Date: Thu, 13 Feb 2025 21:12:11 +0800
-Message-ID: <20250213131214.164982-1-mrpre@163.com>
+	Jiayuan Chen <mrpre@163.com>,
+	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+Subject: [PATCH bpf-next v2 1/3] bpf: Fix array bounds error with may_goto
+Date: Thu, 13 Feb 2025 21:12:12 +0800
+Message-ID: <20250213131214.164982-2-mrpre@163.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250213131214.164982-1-mrpre@163.com>
+References: <20250213131214.164982-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,76 +70,106 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3N8qv761nJPMJMA--.27324S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZFy7WF47Gr18WFW7XF47Jwb_yoW5Xw18pF
-	WxJr15GF4kXr17Ar17AF4UGF15tws7AayUJr4xXr15Z3W5WFyUXr18G3yUXFn8GrWUZF1S
-	ya4DW34kKw18ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziYFAPUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwHyp2et7vcY+gAAsq
+X-CM-TRANSID:_____wD3N8qv761nJPMJMA--.27324S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJw1xZFyxKr4DAFy5GFy8Krg_yoW5tFyxpF
+	4DKFy7Cr48ta1Ik3sxCF4xurW5Jrs5tw17GanrJ348Ja1jqr4kCr15KFyrXryaqrn7Kw4r
+	ZF1j9rnxtay7u3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEcTmxUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxzyp2et6WvVuwAAs0
 
-Syzbot caught an array out-of-bounds bug [1]. It turns out that when the
-BPF program runs through do_misc_fixups(), it allocates an extra 8 bytes
-on the call stack, which eventually causes stack_depth to exceed 512.
+may_goto uses an additional 8 bytes on the stack, which causes the
+interpreters[] array to go out of bounds when calculating index by
+stack_size.
 
-I was able to reproduce this issue probabilistically by enabling
-CONFIG_UBSAN=y and disabling CONFIG_BPF_JIT_ALWAYS_ON with the selfttest
-I provide in second patch(although it doesn't happen every time - I didn't
-dig deeper into why UBSAN behaves this way).
+1. If a BPF program is rewritten, re-evaluate the stack size. For non-JIT
+cases, reject loading directly.
 
-Furthermore, if I set /proc/sys/net/core/bpf_jit_enable to 0 to disable
-the jit, a panic occurs, and the reason is the same, that bpf_func is
-assigned an incorrect address.
+2. For non-JIT cases, calculating interpreters[idx] may still cause
+out-of-bounds array access, and just warn about it.
 
-[---[ end trace ]---
-[Oops: general protection fault, probably for non-canonical address
-0x100f0e0e0d090808: 0000 [#1] PREEMPT SMP NOPTI
-[Tainted: [W]=WARN, [O]=OOT_MODULE
-[RIP: 0010:bpf_test_run+0x1d2/0x360
-[RSP: 0018:ffffafc7955178a0 EFLAGS: 00010246
-[RAX: 100f0e0e0d090808 RBX: ffff8e9fdb2c4100 RCX: 0000000000000018
-[RDX: 00000000002b5b18 RSI: ffffafc780497048 RDI: ffff8ea04d601700
-[RBP: ffffafc780497000 R08: ffffafc795517a0c R09: 0000000000000000
-[R10: 0000000000000000 R11: fefefefefefefeff R12: ffff8ea04d601700
-[R13: ffffafc795517928 R14: ffffafc795517928 R15: 0000000000000000
-[CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[CR2: 00007f181c064648 CR3: 00000001aa2be003 CR4: 0000000000770ef0
-[DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
-[PKRU: 55555554
-[Call Trace:
-[ <TASK>
-[ ? die_addr+0x36/0x90
-[ ? exc_general_protection+0x237/0x430
-[ ? asm_exc_general_protection+0x26/0x30
-[ ? bpf_test_run+0x1d2/0x360
-[ ? bpf_test_run+0x10d/0x360
-[ ? __link_object+0x12a/0x1e0
-[ ? slab_build_skb+0x23/0x130
-[ ? kmem_cache_alloc_noprof+0x2ea/0x3f0
-[ ? sk_prot_alloc+0xc2/0x120
-[ bpf_prog_test_run_skb+0x21b/0x590
-[ __sys_bpf+0x340/0xa80
-[ __x64_sys_bpf+0x1e/0x30
+3. For jit_requested cases, the execution of bpf_func also needs to be
+warned. So Move the definition of function __bpf_prog_ret0_warn out of
+the macro definition CONFIG_BPF_JIT_ALWAYS_ON
 
+Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/bpf/0000000000000f823606139faa5d@google.com/
+Fixes: 011832b97b311 ("bpf: Introduce may_goto instruction")
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
-v1 -> v2:
-Directly reject loading programs with a stack size greater than 512 when
-jit disabled.(Suggested by Alexei Starovoitov)
-https://lore.kernel.org/bpf/20250212135251.85487-1-mrpre@163.com/T/#u
+ kernel/bpf/core.c     | 18 ++++++++++++++----
+ kernel/bpf/verifier.c |  7 +++++++
+ 2 files changed, 21 insertions(+), 4 deletions(-)
 
----
-Jiayuan Chen (3):
-  bpf: Fix array bounds error with may_goto
-  selftests/bpf: Allow the program to select specific modes for testing
-  selftests/bpf: Add selftest for may_goto
-
- kernel/bpf/core.c                             | 18 +++++--
- kernel/bpf/verifier.c                         |  7 +++
- tools/testing/selftests/bpf/progs/bpf_misc.h  |  2 +
- .../selftests/bpf/progs/verifier_stack_ptr.c  | 50 +++++++++++++++++++
- tools/testing/selftests/bpf/test_loader.c     | 27 ++++++++++
- 5 files changed, 100 insertions(+), 4 deletions(-)
-
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index da729cbbaeb9..59291261f825 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2269,6 +2269,9 @@ EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
+ EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
+ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+ };
++
++#define MAX_INTERPRETERS_CALLBACK (sizeof(interpreters) / sizeof(*interpreters))
++
+ #undef PROG_NAME_LIST
+ #define PROG_NAME_LIST(stack_size) PROG_NAME_ARGS(stack_size),
+ static __maybe_unused
+@@ -2290,17 +2293,18 @@ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+ 	insn->code = BPF_JMP | BPF_CALL_ARGS;
+ }
+ #endif
+-#else
++#endif
++
+ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
+ 					 const struct bpf_insn *insn)
+ {
+ 	/* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
+-	 * is not working properly, so warn about it!
++	 * is not working properly, or interpreter is being used when
++	 * prog->jit_requested is not 0, so warn about it!
+ 	 */
+ 	WARN_ON_ONCE(1);
+ 	return 0;
+ }
+-#endif
+ 
+ bool bpf_prog_map_compatible(struct bpf_map *map,
+ 			     const struct bpf_prog *fp)
+@@ -2380,8 +2384,14 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
+ {
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+ 	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
++	u32 idx = (round_up(stack_depth, 32) / 32) - 1;
+ 
+-	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
++	if (!fp->jit_requested) {
++		WARN_ON_ONCE(idx >= MAX_INTERPRETERS_CALLBACK);
++		fp->bpf_func = interpreters[idx];
++	} else {
++		fp->bpf_func = __bpf_prog_ret0_warn;
++	}
+ #else
+ 	fp->bpf_func = __bpf_prog_ret0_warn;
+ #endif
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9971c03adfd5..fcd302904ba0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -21882,6 +21882,13 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
+ 			subprogs[cur_subprog].stack_depth += stack_depth_extra;
+ 			subprogs[cur_subprog].stack_extra = stack_depth_extra;
++
++			stack_depth = subprogs[cur_subprog].stack_depth;
++			if (stack_depth > MAX_BPF_STACK && !prog->jit_requested) {
++				verbose(env, "stack size %d(extra %d) is too large\n",
++					stack_depth, stack_depth_extra);
++				return -EINVAL;
++			}
+ 			cur_subprog++;
+ 			stack_depth = subprogs[cur_subprog].stack_depth;
+ 			stack_depth_extra = 0;
 -- 
 2.47.1
 
