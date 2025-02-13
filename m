@@ -1,201 +1,146 @@
-Return-Path: <linux-kselftest+bounces-26509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6429CA33B18
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 10:24:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BF03A33B75
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 10:43:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B6AA18852D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 09:24:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8109A3A8C2B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 09:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96A320C49C;
-	Thu, 13 Feb 2025 09:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0194220E000;
+	Thu, 13 Feb 2025 09:41:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="KDjKOm6/"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aUT7e9bU";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RLpsJLbQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9948494
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 09:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A12520E70A;
+	Thu, 13 Feb 2025 09:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739438644; cv=none; b=loewiBblIYXtpGW3XxqZD0NUNbgw1zu0OyWhOjjeu/TsRZXo2/nB4T9vaKmvEsPtYqTWGdYMVe+SObkYE40fVYCKhWj+Z+hmWbGjzfxzAy9Vee/LzuqGzn/YwJpSk18Ry7IRlluarNSSHqbuN9EvgTVlS1uUlz00P0DKO9AV4no=
+	t=1739439713; cv=none; b=aQhJRzJIvF9V/RLLOW3As2qTzhSb7yh7JzSHhiX64+MPPWdBZ0guZFK7inqPc3ZnRQUw0rqHsewZR2YbcsGRuY9uip3JdlR/bExc+tASPL4ff3BW37Y0ECZaIjMYbsauQ1L+wvzMCujbKLaqZLp0Rr9Zxgi0e4pK9+tNdwHp8Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739438644; c=relaxed/simple;
-	bh=mfXNeTj+Q8ZX0NBisxbi4QQyQ/0LK4y+WrTTR40VPyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZPvjlWcxIgfaqaed6hZbeZ3bxHaFlVGYBfcDZP7D1qnv4AiI5acYjmNlalqNNotAHDM9lT+GoLIzIJk5zZfXD8uM2XVBqhUFIAu2q1+pK6drp7sLgDRJb2s/4EMukSrNlIS8MErHHUh4Xncxhf6RtmMbJdBv/gvl7Xyna3KCbss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=KDjKOm6/; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21c2f1b610dso14483245ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 01:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1739438642; x=1740043442; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s+g1corMoWLkqgaHyL0dUry18PBH1WwZj6geDsmEd1Y=;
-        b=KDjKOm6/0FJ3659nApC3mh5Qz2KfuRT+TelHF+ecr+t08t0h66scPICfpH8q36dDdg
-         QNpyYENQ5hApsce4xKZYWc/6l7lwDw2r288/mzMSZmM2UxvpTjK75ljeTzV7dVByqdPx
-         /867R5Ei2/PaBSNEp/Zm6k3AXDyisesc3wjyzdVOAYEUdQpIIs7TjXWlfFeDZMbsFLCJ
-         CVv8SbBjU49ezKqdbXe8QNlTxp1p3no2ssUvpPSNsstvHvLmw7r9lIrAaqXlBpobaS/R
-         NwxC17uCq2KpdNFKZkZubeft8KN3u3yeKSIGiwp0FVQZSh49q1RyQYbPtIiJL11XeB5H
-         jegA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739438642; x=1740043442;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s+g1corMoWLkqgaHyL0dUry18PBH1WwZj6geDsmEd1Y=;
-        b=qEpsa+QFgG0eVwvhGrlSJVtuH1JhVsKJmpZlbT+yODhDWdjZFxsO1YCU2ZvfFZAuvj
-         ovO0eGnFCdykCDZO1L2qNhcFqTfeQIZ+qpaIDdb5+huyFOzSpC1qDY/rGOxGCgcqPS7n
-         0/Pf09MR8aQCRndlEjJOms/VXnSKBu37RvejkjfP7jp/SJu4JmNHWBXvUkBhzQHx2XW5
-         EX0kIsSXRXoH5R9ej8Y/lPwVnz7dSEtnqOfj2LluBMubB0Nf+oHd1atkGQZkGNC554bs
-         O+kLo0qElCKcDXZH4Y6GQkZS6v+9HWI9fr2qsq4yerNrg7d9JDrpYqQnRMNdNwXMn5dh
-         BgPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMo88TI9y9jKJCPbjg5Gbhs4/eLmXQbC7r+XkB/JyFXnjbtCWtDLcJJA5qXPor29fT4+M0y+dDMqPn0l9rM/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzryEIsQBITdc0NcXSz2M4hXI9ldNTU3nnF9zeSM3mTD+t3aZVW
-	twSm4dVBnzBQ2M7zISwe5LnK7UPedgA7jYbzyiHWFngIQrnXZgLffsaczyHrcFI=
-X-Gm-Gg: ASbGncumKxBV1/m9+OgNFyQLEjxxnrlhOkr5juhLJ0PTLrn6mRQcWo0ezclN59D36O0
-	5IYCwKDfexigdS+nvmPYzHYIfAeJt96zAXKyszS8agESmvZBqJ7AKeFOG1uR3OAkxblxPdsEw6p
-	l5jZJIk11/zPkdj9OoqXPJoCLW+pjoVt9ldmE6PMdLxH9ttEK4velBC6URVXhPwQasJoE82VEZ3
-	MwZIQue1zndWE7ygZcbhTpGCzOMmXyU6v5J4M/7r3EY6Q2/TxTzLGOUkbUW3wV/3gW48LH81FRx
-	sSNRRCcXG6Uf7P7ZEAAe/5XUbNKR
-X-Google-Smtp-Source: AGHT+IGF+4e3Af2SCI8Rg8n4coZI7ErejXVy5bxQnzx65sHDQNZjtZ7hhVxDzaYqpoDifzZ7gAKFSQ==
-X-Received: by 2002:a17:902:e950:b0:220:c813:dfb2 with SMTP id d9443c01a7336-220d2153077mr52167375ad.44.1739438642097;
-        Thu, 13 Feb 2025 01:24:02 -0800 (PST)
-Received: from [157.82.205.237] ([157.82.205.237])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fc13ad3fb8sm805579a91.26.2025.02.13.01.23.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Feb 2025 01:24:01 -0800 (PST)
-Message-ID: <0fa16c0e-8002-4320-b7d3-d3d36f80008c@daynix.com>
-Date: Thu, 13 Feb 2025 18:23:55 +0900
+	s=arc-20240116; t=1739439713; c=relaxed/simple;
+	bh=davAbf6rTCE+XvDGJl7h+YhckMtmJciY6jpQeFmgp/w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KGhLJKhvCuJp8iJt0Dhhmqs4p26U7EG7aIsgfLyAiCGM/WzW4KE9j8LoQz20Xjy+3YXxbqeEwchtJTJt76vVawclJEI1wXVMLIkovDNjlZKm/4XmqF7XHHqeb/Pie7WM8JW4DRdBEVVOC682blZL8/8ZikJuIiRUAiHAdnQTNwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aUT7e9bU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RLpsJLbQ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739439710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=X/Pc7Lm5hpZtdxpchXc7KzNgwnIIFT8+i6ED6OooeNk=;
+	b=aUT7e9bUEMmYg/ml94p7QTLAQRSrL0CxrlFk7YZW5H8AO4XtS+4s/mP7qtMH77wY5i7PNy
+	K69mDDapFoBoxYvHT+bJgkgknFrFoW0Q7aGiEauqGkzOPO2eGerGmqrP2/4+oanI+6l4ki
+	qSCY5gNxhUCJQKhx/KZ8vI/gEs4lbwP5j+PEQCV5PWNuV+EJcYOpU7qTjDsffbQlBcFbwo
+	9xH2tFFA81FIJBp24qS9ZtLAide1o8br85u7xu/1AbK9k1d44aU+hAh03fn/p/yZSXuoYO
+	ohnOlouLMmN+XEAi24dhDPWTzu7PFbwO0iWGqEb6wH0cH2so/V70BxjSphmLlw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739439710;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=X/Pc7Lm5hpZtdxpchXc7KzNgwnIIFT8+i6ED6OooeNk=;
+	b=RLpsJLbQmJ2fsbqjaJV73k6jxyuO016rJYlUM9hIAidr3wt74OgXmmMmyI8zXmqpKCZa5a
+	+zGD44/o0mEL7yBA==
+Date: Thu, 13 Feb 2025 10:41:21 +0100
+Subject: [PATCH] selftests/vDSO: fix GNU hash table entry size for s390x
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] tun: Pad virtio headers
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- devel@daynix.com
-References: <20250213-buffers-v1-1-ec4a0821957a@daynix.com>
- <20250213020702-mutt-send-email-mst@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <20250213020702-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250213-selftests-vdso-s390-gnu-hash-v1-1-ace3bcc940a3@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAEC+rWcC/x3MQQqDMBAF0KvIrB1IImrrVcRFqqMZKFHyVQTx7
+ g1dvs27CZJUQF1xU5JToWvMsGVBY/BxEdYpm5xxtXG2Ysh33gU7+JywMqq34SUeHDwCt840TWv
+ 9Z3zVlIstyazXv++H5/kB0m6RrG4AAAA=
+X-Change-ID: 20250213-selftests-vdso-s390-gnu-hash-7206671abc85
+To: Shuah Khan <shuah@kernel.org>, Fangrui Song <i@maskray.me>, 
+ Xi Ruoyao <xry111@xry111.site>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, 
+ Heiko Carstens <hca@linux.ibm.com>, Jens Remus <jremus@linux.ibm.com>, 
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739439706; l=2491;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=davAbf6rTCE+XvDGJl7h+YhckMtmJciY6jpQeFmgp/w=;
+ b=0HC1gx+m3o6x/zWek8/MPE1C5y2ntJcD4kv6toi+n3YF1xQ8vzTcVGmEbiM01e+LYw0Cm1lfW
+ /LkaltOmg01ABxQ2QnuOUSw32cpdSisu6CaWa5PdH55Jf+2Q6acHPSV
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 2025/02/13 16:18, Michael S. Tsirkin wrote:
-> 
-> Commit log needs some work.
-> 
-> So my understanding is, this patch does not do much functionally,
-> but makes adding the hash feature easier. OK.
-> 
-> On Thu, Feb 13, 2025 at 03:54:06PM +0900, Akihiko Odaki wrote:
->> tun used to simply advance iov_iter when it needs to pad virtio header,
->> which leaves the garbage in the buffer as is. This is especially
->> problematic
-> 
-> I think you mean "this will become especially problematic"
-> 
->> when tun starts to allow enabling the hash reporting
->> feature; even if the feature is enabled, the packet may lack a hash
->> value and may contain a hole in the virtio header because the packet
->> arrived before the feature gets enabled or does not contain the
->> header fields to be hashed. If the hole is not filled with zero, it is
->> impossible to tell if the packet lacks a hash value.
->>
->> In theory, a user of tun can fill the buffer with zero before calling
->> read() to avoid such a problem, but leaving the garbage in the buffer is
->> awkward anyway so fill the buffer in tun.
-> 
-> 
-> What is missing here is description of what the patch does.
-> I think it is
-> "Replace advancing the iterator with writing zeros".
-> 
-> There could be performance cost to the dirtying extra cache lines, though.
-> Could you try checking that please?
+Commit 14be4e6f3522 ("selftests: vDSO: fix ELF hash table entry size for s390x")
+changed the type of the ELF hash table entries to 64bit on s390x.
+However the *GNU* hash tables entries are always 32bit.
+The "bucket" pointer is shared between both hash algorithms.
+On s390x the GNU algorithm assigns and dereferences this 64bit pointer as a
+32bit pointer, leading to compiler warnings and runtime crashes.
 
-It will not dirty extra cache lines; an explanation follows later. 
-Because of that, any benchmark are likely to show only noises, but if 
-you have an idea of workloads that should be tested, please tell me.
+Introduce a new dedicated "gnu_bucket" pointer which is used by the GNU hash.
 
-> 
-> I think we should mention the risks of the patch, too.
-> Maybe:
-> 
-> 	Also in theory, a user might have initialized the buffer
-> 	to some non-zero value, expecting tun to skip writing it.
-> 	As this was never a documented feature, this seems unlikely.
- > >
->>
->> The specification also says the device MUST set num_buffers to 1 when
->> the field is present so set it when the specified header size is big
->> enough to contain the field.
-> 
-> This part I dislike. tun has no idea what the number of buffers is.
-> Why 1 specifically?
+Fixes: e0746bde6f82 ("selftests/vDSO: support DT_GNU_HASH")
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ tools/testing/selftests/vDSO/parse_vdso.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-That's a valid point. I rewrote the commit log to clarify, but perhaps 
-we can drop the code to set the num_buffers as "[PATCH] vhost/net: Set 
-num_buffers for virtio 1.0" already landed.
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 2fe5e983cb22f1ed066d0310a54f6aef2ed77ed8..f89d052c730eb43eea28d69ca27b56e897503e16 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -53,7 +53,7 @@ static struct vdso_info
+ 	/* Symbol table */
+ 	ELF(Sym) *symtab;
+ 	const char *symstrings;
+-	ELF(Word) *gnu_hash;
++	ELF(Word) *gnu_hash, *gnu_bucket;
+ 	ELF_HASH_ENTRY *bucket, *chain;
+ 	ELF_HASH_ENTRY nbucket, nchain;
+ 
+@@ -185,8 +185,8 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
+ 		/* The bucket array is located after the header (4 uint32) and the bloom
+ 		 * filter (size_t array of gnu_hash[2] elements).
+ 		 */
+-		vdso_info.bucket = vdso_info.gnu_hash + 4 +
+-				   sizeof(size_t) / 4 * vdso_info.gnu_hash[2];
++		vdso_info.gnu_bucket = vdso_info.gnu_hash + 4 +
++				       sizeof(size_t) / 4 * vdso_info.gnu_hash[2];
+ 	} else {
+ 		vdso_info.nbucket = hash[0];
+ 		vdso_info.nchain = hash[1];
+@@ -268,11 +268,11 @@ void *vdso_sym(const char *version, const char *name)
+ 	if (vdso_info.gnu_hash) {
+ 		uint32_t h1 = gnu_hash(name), h2, *hashval;
+ 
+-		i = vdso_info.bucket[h1 % vdso_info.nbucket];
++		i = vdso_info.gnu_bucket[h1 % vdso_info.nbucket];
+ 		if (i == 0)
+ 			return 0;
+ 		h1 |= 1;
+-		hashval = vdso_info.bucket + vdso_info.nbucket +
++		hashval = vdso_info.gnu_bucket + vdso_info.nbucket +
+ 			  (i - vdso_info.gnu_hash[1]);
+ 		for (;; i++) {
+ 			ELF(Sym) *sym = &vdso_info.symtab[i];
 
-Below is the rewritten commit log, which incorporates your suggestions 
-and is extended to cover the performance implication and reason the 
-num_buffers initialization:
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250213-selftests-vdso-s390-gnu-hash-7206671abc85
 
-tun simply advances iov_iter when it needs to pad virtio header,
-which leaves the garbage in the buffer as is. This will become
-especially problematic when tun starts to allow enabling the hash
-reporting feature; even if the feature is enabled, the packet may lack a
-hash value and may contain a hole in the virtio header because the
-packet arrived before the feature gets enabled or does not contain the
-header fields to be hashed. If the hole is not filled with zero, it is
-impossible to tell if the packet lacks a hash value.
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-In theory, a user of tun can fill the buffer with zero before calling
-read() to avoid such a problem, but leaving the garbage in the buffer is
-awkward anyway so replace advancing the iterator with writing zeros.
-
-A user might have initialized the buffer to some non-zero value,
-expecting tun to skip writing it. As this was never a documented
-feature, this seems unlikely. Neither is there a non-zero value that can
-be determined and set before receiving the packet; the only exception
-is the num_buffers field, which is expected to be 1 for version 1 when
-VIRTIO_NET_F_HASH_REPORT is not negotiated. This field is specifically
-set to 1 instead of 0.
-
-The overhead of filling the hole in the header is negligible as the
-entire header is already placed on the cache when a header size defined
-in the current specification is used even if the cache line is small
-(16 bytes for example).
-
-Below are the header sizes possible with the current specification:
-a) 10 bytes if the legacy interface is used
-b) 12 bytes if the modern interface is used
-c) 20 bytes if VIRTIO_NET_F_HASH_REPORT is negotiated
-
-a) and b) obviously fit in a cache line. c) uses one extra cache line,
-but the cache line also contains the first 12 bytes of the packet so
-it is always placed on the cache.
 
