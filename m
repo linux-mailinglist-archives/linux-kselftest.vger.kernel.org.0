@@ -1,60 +1,61 @@
-Return-Path: <linux-kselftest+bounces-26537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26538-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8835FA33E96
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:00:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57BFFA33E99
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 835B7168EFD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 11:59:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 689B53A5A9B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 11:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83D3221549;
-	Thu, 13 Feb 2025 11:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8F022156F;
+	Thu, 13 Feb 2025 11:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="GJLthJdz"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Z0oSvblp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACAE2153C1;
-	Thu, 13 Feb 2025 11:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144D221D3FC;
+	Thu, 13 Feb 2025 11:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739447985; cv=none; b=oWfqDh3kXKmJBK35wvW7+jjquclboKP8qO+8t2mkZYDe0QHttOVpHBIvfWtxwG+9eVhaK6Q4rUFs1P8UTHnjmY3bTnx5KB1gXG78XHCRzQESOKd2hIKIx+Z1DxZdWc2l50xvDlZLV8+YI4OPULM8fe8QCQl/p9e+HO2lIUM7AT8=
+	t=1739447987; cv=none; b=rupbgZDLQxH5g64M79UFAauVB5F49xG0/RQYd8wT265/jbcngHucxKsaT1mZAA/KF4fDQjGKyylHKmsNzOz9sU3s7p4Ia9yY0kvey122lYuRoU46A9mcINMWtzX4phMOat3UIiaAsQ02m1bBmmDBXTmVAzYZtyGv0G7+8v8w/QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739447985; c=relaxed/simple;
-	bh=k3ooq/tPLxGI5j0iWVBIg57+0TwNUN2jW4JEV+uka7Y=;
+	s=arc-20240116; t=1739447987; c=relaxed/simple;
+	bh=diI8kyiYTniTU0Xe8e7BeDAadyWzqAaR19wnpNARev8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bL3g9VHNu0Ym/66HGd5chrabfRjkfEfe2EQ8eG2WScm1bgXnq8OR8S3I8UuWSYQg/UlXkuXkZGDbW2X7rgTrUdyw96cCpww+/2LJiH84oLdXoUBtYuwILyQjYxq/00qGFXaUbHMRVTWHy+u47fa32QJwys24ji10GtXSocEMNV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=GJLthJdz; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:To:Cc; b=Q/+UDJAfzmrFhdjFEDUD4agvWRbnVb8UVzVoOts7Ts+5900EgoTxCX1YTkRUjESTjPCs7GOVRDSyNw/eyPeA//PwPsPkgE52SR2m2ejruXQxzVa/ma1tQEMXfYjdCuypV5/+DYRGCLC898CWSqrOMXMX/BiRrOSAqV/ZYtiHoR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Z0oSvblp; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1tiXsS-002RrQ-7P; Thu, 13 Feb 2025 12:59:32 +0100
+	id 1tiXsa-002RsB-3y; Thu, 13 Feb 2025 12:59:40 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=CXjrF5RXl5vKdD++OqwBGF6JpHNxnq4V5zQkMrNsoPc=; b=GJLthJdzSbUxCXWp19l1Bwos1V
-	ONGYv5AQznyCJI/sJAgolMq6hAYGvDDhfEeDYOE3qO+sxf+2hyHMUhayZHGUtmK4MzCvShM9lKk4/
-	5UZdTphDC9VuyYxM0jzfMfpiUUnvUPYpFcxndNkBlpbI2rVO0TNyd6an3G8Ee7Ulq11LlGUptYEF8
-	6XfIzwEO3FwXoeIptF3b+8kDtvZcsxLPWvakke/qMcqnT5w9kkXR2KrmwcJD4akM6OziVkgu8dotK
-	ADJE0uQ7NA3iBwLg0Qw5E+HncJhCIuqOH1VcFCqRCXTnX0E23sEAaijq4hwGloCzdBVKbVQyVoIJq
-	e7uhWWbw==;
+	bh=mjDeIQ/pGHjWGPnZsYZ5+UIGfRQ2k6pi8wwfapisHgc=; b=Z0oSvblpMI7OOYn7T+KThhrCye
+	Ps7+vAqGhdQ7BeH2KO1NNIfEVKf33Uu3tPoYvv9xVS61ZUeRqPNafljhxxIXOCNA3yyj4Af5tCg4+
+	qnSgZkFR1oOkDo7dmaDfH5XYLdllSpTEbDyyTcTeNCgwZNrJaqcIZY7lfFznBk2DCZ7GtnCto2C2X
+	T05i6ln1u/nkdClbDm/HafdBYSH4KaNKP0/UnkP9rFiIPe+Mbtvbxenno7x4bxLH2A5LRkLRbsMdN
+	kQhYcifMHtGz1UC0urZBdGNQY324e7z2qefl+tSdYrwNmOXb7ypFrpQ+U2AZZocxP+EpABfoP73au
+	fCj+xGhA==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1tiXsR-0004qj-Mt; Thu, 13 Feb 2025 12:59:31 +0100
+	id 1tiXsZ-0004rA-ML; Thu, 13 Feb 2025 12:59:39 +0100
 Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1tiXsB-008u87-HQ; Thu, 13 Feb 2025 12:59:15 +0100
+	id 1tiXsC-008u87-Pg; Thu, 13 Feb 2025 12:59:16 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 13 Feb 2025 12:58:50 +0100
-Subject: [PATCH net 2/4] vsock/bpf: Warn on socket without transport
+Date: Thu, 13 Feb 2025 12:58:51 +0100
+Subject: [PATCH net 3/4] selftest/bpf: Adapt vsock_delete_on_close to
+ sockmap rejecting unconnected
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250213-vsock-listen-sockmap-nullptr-v1-2-994b7cd2f16b@rbox.co>
+Message-Id: <20250213-vsock-listen-sockmap-nullptr-v1-3-994b7cd2f16b@rbox.co>
 References: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
 In-Reply-To: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -87,44 +88,79 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-In the spirit of commit 91751e248256 ("vsock: prevent null-ptr-deref in
-vsock_*[has_data|has_space]"), armorize the "impossible" cases with a
-warning.
+Commit 515745445e92 ("selftest/bpf: Add test for vsock removal from sockmap
+on close()") added test that checked if proto::close() callback was invoked
+on AF_VSOCK socket release. I.e. it verified that a close()d vsock does
+indeed get removed from the sockmap.
 
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
+It was done simply by creating a socket pair and attempting to replace a
+close()d one with its peer. Since, due to a recent change, sockmap does not
+allow updating index with a non-established connectible vsock, redo it with
+a freshly established one.
+
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/vmw_vsock/af_vsock.c  | 3 +++
- net/vmw_vsock/vsock_bpf.c | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/sockmap_basic.c       | 40 ++++++++++++----------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
 
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 53a081d49d28ac1c04e7f8057c8a55e7b73cc131..7e3db87ae4333cf63327ec105ca99253569bb9fe 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1189,6 +1189,9 @@ static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
- {
- 	struct vsock_sock *vsk = vsock_sk(sk);
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 884ad87783d59ef3d1ca84c3a542f3f8670cd463..21793d8c79e12b6e607f59ecebb26448c310044b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -111,31 +111,35 @@ static void test_sockmap_create_update_free(enum bpf_map_type map_type)
  
-+	if (WARN_ON_ONCE(!vsk->transport))
-+		return -ENODEV;
+ static void test_sockmap_vsock_delete_on_close(void)
+ {
+-	int err, c, p, map;
+-	const int zero = 0;
+-
+-	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
+-	if (!ASSERT_OK(err, "create_pair(AF_VSOCK)"))
+-		return;
++	int map, c, p, err, zero = 0;
+ 
+ 	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
+ 			     sizeof(int), 1, NULL);
+-	if (!ASSERT_GE(map, 0, "bpf_map_create")) {
+-		close(c);
+-		goto out;
+-	}
++	if (!ASSERT_OK_FD(map, "bpf_map_create"))
++		return;
+ 
+-	err = bpf_map_update_elem(map, &zero, &c, BPF_NOEXIST);
+-	close(c);
+-	if (!ASSERT_OK(err, "bpf_map_update"))
+-		goto out;
++	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto close_map;
+ 
+-	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
++	if (xbpf_map_update_elem(map, &zero, &c, BPF_NOEXIST))
++		goto close_socks;
 +
- 	return vsk->transport->read_skb(vsk, read_actor);
++	xclose(c);
++	xclose(p);
++
++	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto close_map;
++
++	err = bpf_map_update_elem(map, &zero, &c, BPF_NOEXIST);
+ 	ASSERT_OK(err, "after close(), bpf_map_update");
+ 
+-out:
+-	close(p);
+-	close(map);
++close_socks:
++	xclose(c);
++	xclose(p);
++close_map:
++	xclose(map);
  }
  
-diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-index f201d9eca1df2f8143638cf7a4d08671e8368c11..07b96d56f3a577af71021b1b8132743554996c4f 100644
---- a/net/vmw_vsock/vsock_bpf.c
-+++ b/net/vmw_vsock/vsock_bpf.c
-@@ -87,7 +87,7 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
- 	lock_sock(sk);
- 	vsk = vsock_sk(sk);
- 
--	if (!vsk->transport) {
-+	if (WARN_ON_ONCE(!vsk->transport)) {
- 		copied = -ENODEV;
- 		goto out;
- 	}
+ static void test_skmsg_helpers(enum bpf_map_type map_type)
 
 -- 
 2.48.1
