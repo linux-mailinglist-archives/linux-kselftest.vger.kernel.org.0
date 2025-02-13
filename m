@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-26561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3922EA348E5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 17:04:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FA6DA348EC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 17:05:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8CAC188F956
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 16:03:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 613B7169367
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 16:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970331FFC69;
-	Thu, 13 Feb 2025 16:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82741FFC69;
+	Thu, 13 Feb 2025 16:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="da2C4UKE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COjh19Gh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94AC1FF7AD;
-	Thu, 13 Feb 2025 16:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A5E1DE4C1;
+	Thu, 13 Feb 2025 16:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739462591; cv=none; b=lkFGznd71FYT6WrG0KJi65qPricZVbCL4bvLU+KvECgrGPGD72CYruZ8lKvog5z0FaAtFDZXPiB1MT6Dcb/LfR2DBQWEe1c+YRoVKsvRJo8tKJ03soNK7HakRXUExgWw/ccIw6ZdrG+m0MjChgcMo6dIG2d052gfsPlnyBl1a2s=
+	t=1739462660; cv=none; b=EC6RAuwDzA1jcD7LUKddr0gInn0LUreVcL0PoeHUYTeLX4LwCQV2o2A2bUo2ZF7tkCGfXBGJCn0XgFZc7GWc3/e6Pc2fWRK7YevySIIFcjdNM7dAjx3EOQcRndIozW/kBd7J4c/FfbdPCK4oJs148cHDh925QfOVJVXtqQgyV4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739462591; c=relaxed/simple;
-	bh=fWJUQ5afGme+TPZBWsI6xPVrEznKOdyt/aClUOkopWY=;
+	s=arc-20240116; t=1739462660; c=relaxed/simple;
+	bh=amEVy0abcdKf1C9yzz51yKTZyf5A1NpmPrG6bxM6Xm0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qr95FHeEcrHixc6E5IHRhTFtnsoMBWS8IIIxmTJ/4me+dUKMBWG0qZWZb9jU3FWadX7CroSCn5v/oPRCXlMp6gLTq+1rvzYfJ3NQ63nC/I1trkzU5BVvPWLBMV9+CalRbx89ZoYlYTiPUAjJzrhVSo8JokAtmESRPzdHxvLRm2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=da2C4UKE; arc=none smtp.client-ip=209.85.221.46
+	 To:Cc:Content-Type; b=nH26SPXfEOqDBNEnQUTnbaM8t1kkY7GL1j/dQKVB/WwhSoQavJzTnkcSXHoY0v85vbgY88urEhX2cEyY42an2jwaxc3OHHgWkG5ZKhlUSChRZ32q6Jqwv/eag7JJLluahhg5mwX0uuNea16GAnoEhsxBb12lyKM+dfM0B2v7T94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COjh19Gh; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38f265c6cb0so473793f8f.2;
-        Thu, 13 Feb 2025 08:03:09 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38dc33931d3so575545f8f.1;
+        Thu, 13 Feb 2025 08:04:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739462588; x=1740067388; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739462657; x=1740067457; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wS6PTAq/FILaPjbGb4r1nnjBpyEP5iLXfjy7SIzK7gI=;
-        b=da2C4UKEiKrP6ZcZJp/s5KMiqEpLKBgO2kBB4Rwpf3V8MpU9IlUtQBF0l5BfqML9z3
-         Y5g/Z4da1eKy0O0GUm26Z+6eEyxJnmGB2PGqIwtWf5J86jbZYIuNL5uBvGNqJSGEQFSD
-         TV4A78maBXfL5RHBZgGCSewIzteuCv6i9Xzqh4/b1t/Y12PjmSzRI3wxFb5gf+xz2eBd
-         QMm1W5OZC17V9BMKNIrbUzYrjbh5Ss6lxyOPeRbI3Pmek0nrSzACn4Gv4XIXiGm4YsQe
-         x9L+sQgQX2AhkMocYVmgJVdn5lCK83RnhpYhMr0ahMfasSb6JKHIRaa329efLDvWExpp
-         YNUA==
+        bh=XS48wvhNeDKYDAu31J6hTRnGxVDh0IVBgKjgbTKqfaE=;
+        b=COjh19GhhjENGo3rHLVk6kZPh87MD/5a6p9ewK4UnwFn+1AT9PcH6GjzXtRyf7FqdN
+         6uLtzmklHpSshtbbDTUdgB7VTzlWYDVRUoITimfCCnvtE5dREo5X4LdLRcZbsdto24aG
+         uh7ZqL4bIsSu8vQX+Hp/HnUHFV1HVtT06TpklgBBv9QmZg+kzeGZ3z7VvPKzyHkhpu8D
+         6qNuhZWOQdMT68sL/A+83JJMfbzySsuJXDT4zIsLcsOsKCSaahweO3hJ4FKE3SsMGfaq
+         efB5P+pAJYwBa2RJNba/19Eng4Hc5RgfaysOsndLj/Lbp6s6LyROH4j6KSSh8jCZmuKP
+         HBLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739462588; x=1740067388;
+        d=1e100.net; s=20230601; t=1739462657; x=1740067457;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wS6PTAq/FILaPjbGb4r1nnjBpyEP5iLXfjy7SIzK7gI=;
-        b=JWBvJBFn+etCddp25IIvoXXMgMVZjX+7B49mGGsf6AvmpZH6kuDRvPzzfkzkBKkhWt
-         kAet0YuU+5YrAnhJy08jcbSn/UBY97nzsfynSpRvmrLwzOnJCNQ1bxgaBUIJb+/NMAAW
-         O5Q5jJcYqdUQ5+RKDlua0ADlG5NVS9hjtcW3L4eH5E9Mo7yK2VpiXoZNG3ggiZarcsxn
-         Z9HjwV9NRERjlDlOxWGZJumVIzqhJY+nDG9x0YnV9Ryc+uCrqxYPrDG5Ljbm1YIkUG69
-         5gbzeTKVrYU7U2CtPSvwWqFc8MqbuGqDTfHRujr6UvGIo1cit672JXrOrSuXBPA/17fQ
-         S6lg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3FHIbiZSdtBRhfLmrW54FTg9l+p8riU55fQN6Eqxgm46Co9RW3sIay2M++l0QeCfGi2lN6Ksj0HLTpuXsUw0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeE5I6WwPRt4+MIe4b73QA5i58Oi3dGjdv3Z2MdZIki9CdR+9C
-	sIjkRWOl5tc+scV2Db5kghrLrpMYHMUqde9TLaSkBhs3jwBoiJaF95ctEt+97BA+5lQY+xSIbDy
-	gnWmVDG70V3LmXfaVR9zRh6eHkT4=
-X-Gm-Gg: ASbGncuvk/pfnP5NNStFI+9CEMpmXDbKm4GkVuE/LinpYcirfD2+2+qVMzoc+ZQSDMi
-	QX0vuso5AEjfkF0vBeqWClzuvwmB42/q9Tfq/7Zzdit3bBtXpBjQel2hERq+zwI/8lWLlQnkfDi
-	00b9GxTY9oxlW0oYMbL2KbAqqFFxVd
-X-Google-Smtp-Source: AGHT+IE64metSdWOVEHOcc0NJPo9nPR0omrGmYhpDOoTuMaZoAMoR9YIG9mUuma91uSv8ofk88eiX2inKTjB7kJVMLQ=
-X-Received: by 2002:a05:6000:18a5:b0:385:f249:c336 with SMTP id
- ffacd0b85a97d-38dea2f758emr7936739f8f.45.1739462587741; Thu, 13 Feb 2025
- 08:03:07 -0800 (PST)
+        bh=XS48wvhNeDKYDAu31J6hTRnGxVDh0IVBgKjgbTKqfaE=;
+        b=Bo5QyDFdlBBDynWzsOhIULex3Qez2iXpE0beAefP6iIA0svk1TRPrku5bX3JyaWVeB
+         ayslk7aO77y/rAvtdd9lddhJKbevgreIN8Io8k5tDmOw+5nWZq4qAi8TxQD0OB4tFiwQ
+         mwCB7Fptm26rUoyBiZIg6Q0zn/+Aro1jVHPEESjUudr8+ao09xTIv6OpANk/om/SHI6O
+         PwTu+pHj5H7caPPBxY6XX3ebk1V6EUNpovc8bKgcMJrC9++seeqBmFxT5rnsaWJwOMX6
+         5wSIyOHV3kV/VDHRps+beGd4FaJFWk86vsISGh36/rkSbKH899wt/xtg/rv4KNT4+Vji
+         lGng==
+X-Forwarded-Encrypted: i=1; AJvYcCUHFNYHYUWaUDP4NY6eDIowqZs6Q6ydynGZ5pAYnEapyRsAwrEb/u5T4M4YxwwOT7S2hqoA8Fii/03h217U/7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaU3DLlI76OrWkB2P6AyLrHyUhzEzaA9fzo/+BOa3Vm2ak6nns
+	ouzkZPuqUeIPGy9IuBrBxQQaTMO/CpQVsWGUjaVtkF01SnW8TO4Nhgg/B3q7QuBthu4mGe9lhvx
+	od61zEoVYucCYf31x7ji2Cs2pc4wkRg==
+X-Gm-Gg: ASbGncsGkkxZTiO3E1UpQdf6MvM+Pytf4jAB9APTLJsZkHNrCdQ3fVTocTjZcShKVKv
+	T6dXvEAgI7ub/Lfq44+w6rAWCLDsI0qOYEnj9noDqHJDJLA98wZrtYvo0l9CiEm5TuuNu6j/Nis
+	swXQfJAxpUu7Hd9UZLjbg5v7S4enCv
+X-Google-Smtp-Source: AGHT+IFGjykZ4SdDgEKZoUI/RUHHbbSXJpxq52m6VI8lsQsM6mIzwIDYjXTz0LAKRnOM0sqIV3S6VNm3MTEg3SMsOMI=
+X-Received: by 2002:a05:6000:188b:b0:38f:22ed:f9e9 with SMTP id
+ ffacd0b85a97d-38f244dfdf8mr4990973f8f.21.1739462656741; Thu, 13 Feb 2025
+ 08:04:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250213131214.164982-1-mrpre@163.com> <20250213131214.164982-2-mrpre@163.com>
-In-Reply-To: <20250213131214.164982-2-mrpre@163.com>
+References: <20250213131214.164982-1-mrpre@163.com> <20250213131214.164982-4-mrpre@163.com>
+In-Reply-To: <20250213131214.164982-4-mrpre@163.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 13 Feb 2025 08:02:55 -0800
-X-Gm-Features: AWEUYZkSQnOLywGagd6n9cqyhfyUU7fyqjY14k0x68r039IwDS7XGE86VX0pSr4
-Message-ID: <CAADnVQ++goV=Yi=dhXNa5F-h0o7uSNEGiPHh0ArODt3TaEeeQg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Fix array bounds error with may_goto
+Date: Thu, 13 Feb 2025 08:04:05 -0800
+X-Gm-Features: AWEUYZnuKWbfVmEvZKQ-j1Kj8x4U7PcvzbuRKZExmXNfrnez826JkBMEaX5JdPQ
+Message-ID: <CAADnVQKRKD1hxZ+rXQk5Af2my8vK_2OvQ7x6Xn58edYVkOpDxA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Add selftest for may_goto
 To: Jiayuan Chen <mrpre@163.com>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -88,129 +88,100 @@ Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
 	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Thu, Feb 13, 2025 at 5:13=E2=80=AFAM Jiayuan Chen <mrpre@163.com> wrote:
 >
-> may_goto uses an additional 8 bytes on the stack, which causes the
-> interpreters[] array to go out of bounds when calculating index by
-> stack_size.
+> Add test cases to ensure the maximum stack size can be properly limited t=
+o
+> 512.
 >
-> 1. If a BPF program is rewritten, re-evaluate the stack size. For non-JIT
-> cases, reject loading directly.
+> Test result:
+> echo "0" > /proc/sys/net/core/bpf_jit_enable
+> ./test_progs -t verifier_stack_ptr
+> verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto with jit:SKI=
+P
+> verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto without jit:=
+OK
 >
-> 2. For non-JIT cases, calculating interpreters[idx] may still cause
-> out-of-bounds array access, and just warn about it.
->
-> 3. For jit_requested cases, the execution of bpf_func also needs to be
-> warned. So Move the definition of function __bpf_prog_ret0_warn out of
-> the macro definition CONFIG_BPF_JIT_ALWAYS_ON
->
-> Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/bpf/0000000000000f823606139faa5d@google.c=
-om/
-> Fixes: 011832b97b311 ("bpf: Introduce may_goto instruction")
+> echo "1" > /proc/sys/net/core/bpf_jit_enable
+> verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto with jit:OK
+> verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto without jit:=
+SKIP
+
+echo '0|1' is not longer necessary ?
+The commit log seems obsolete?
+
+pw-bot: cr
+
 > Signed-off-by: Jiayuan Chen <mrpre@163.com>
 > ---
->  kernel/bpf/core.c     | 18 ++++++++++++++----
->  kernel/bpf/verifier.c |  7 +++++++
->  2 files changed, 21 insertions(+), 4 deletions(-)
+>  .../selftests/bpf/progs/verifier_stack_ptr.c  | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
 >
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index da729cbbaeb9..59291261f825 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2269,6 +2269,9 @@ EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
->  EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
->  EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
->  };
-> +
-> +#define MAX_INTERPRETERS_CALLBACK (sizeof(interpreters) / sizeof(*interp=
-reters))
-
-There is ARRAY_SIZE macro.
-
->  #undef PROG_NAME_LIST
->  #define PROG_NAME_LIST(stack_size) PROG_NAME_ARGS(stack_size),
->  static __maybe_unused
-> @@ -2290,17 +2293,18 @@ void bpf_patch_call_args(struct bpf_insn *insn, u=
-32 stack_depth)
->         insn->code =3D BPF_JMP | BPF_CALL_ARGS;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/too=
+ls/testing/selftests/bpf/progs/verifier_stack_ptr.c
+> index 417c61cd4b19..8ffe5a01d140 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
+> @@ -481,4 +481,54 @@ l1_%=3D:     r0 =3D 42;                             =
+           \
+>         : __clobber_all);
 >  }
->  #endif
-> -#else
+>
+> +SEC("socket")
+> +__description("PTR_TO_STACK stack size > 512")
+> +__failure __msg("invalid write to stack R1 off=3D-520 size=3D8")
+> +__naked void stack_check_size_gt_512(void)
+> +{
+> +       asm volatile (
+> +       "r1 =3D r10;"
+> +       "r1 +=3D -520;"
+> +       "r0 =3D 42;"
+> +       "*(u64*)(r1 + 0) =3D r0;"
+> +       "exit;"
+> +       ::: __clobber_all);
+> +}
+> +
+> +#ifdef __BPF_FEATURE_MAY_GOTO
+> +SEC("socket")
+> +__description("PTR_TO_STACK stack size 512 with may_goto with jit")
+> +__use_jit()
+> +__success __retval(42)
+> +__naked void stack_check_size_512_with_may_goto_jit(void)
+> +{
+> +       asm volatile (
+> +       "r1 =3D r10;"
+> +       "r1 +=3D -512;"
+> +       "r0 =3D 42;"
+> +       "*(u32*)(r1 + 0) =3D r0;"
+> +       "may_goto l0_%=3D;"
+> +       "r2 =3D 100;"
+> +"l0_%=3D:        exit;"
+> +       ::: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("PTR_TO_STACK stack size 512 with may_goto without jit")
+> +__use_interp()
+> +__failure __msg("stack size 520(extra 8) is too large")
+> +__naked void stack_check_size_512_with_may_goto(void)
+> +{
+> +       asm volatile (
+> +       "r1 =3D r10;"
+> +       "r1 +=3D -512;"
+> +       "r0 =3D 42;"
+> +       "*(u32*)(r1 + 0) =3D r0;"
+> +       "may_goto l0_%=3D;"
+> +       "r2 =3D 100;"
+> +"l0_%=3D:        exit;"
+> +       ::: __clobber_all);
+> +}
 > +#endif
 > +
->  static unsigned int __bpf_prog_ret0_warn(const void *ctx,
->                                          const struct bpf_insn *insn)
->  {
->         /* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
-> -        * is not working properly, so warn about it!
-> +        * is not working properly, or interpreter is being used when
-> +        * prog->jit_requested is not 0, so warn about it!
->          */
->         WARN_ON_ONCE(1);
->         return 0;
->  }
-> -#endif
->
->  bool bpf_prog_map_compatible(struct bpf_map *map,
->                              const struct bpf_prog *fp)
-> @@ -2380,8 +2384,14 @@ static void bpf_prog_select_func(struct bpf_prog *=
-fp)
->  {
->  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
->         u32 stack_depth =3D max_t(u32, fp->aux->stack_depth, 1);
-> +       u32 idx =3D (round_up(stack_depth, 32) / 32) - 1;
->
-> -       fp->bpf_func =3D interpreters[(round_up(stack_depth, 32) / 32) - =
-1];
-> +       if (!fp->jit_requested) {
-
-I don't think above check is necessary.
-Why not just
-if (WARN_ON_ONCE(idx >=3D ARRAY_SIZE(interpreters)))
-  fp->bpf_func =3D __bpf_prog_ret0_warn;
-else
-  fp->bpf_func =3D interpreters[idx];
-
-> +               WARN_ON_ONCE(idx >=3D MAX_INTERPRETERS_CALLBACK);
-> +               fp->bpf_func =3D interpreters[idx];
-> +       } else {
-> +               fp->bpf_func =3D __bpf_prog_ret0_warn;
-> +       }
->  #else
->         fp->bpf_func =3D __bpf_prog_ret0_warn;
->  #endif
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9971c03adfd5..fcd302904ba0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -21882,6 +21882,13 @@ static int do_misc_fixups(struct bpf_verifier_en=
-v *env)
->                 if (subprogs[cur_subprog + 1].start =3D=3D i + delta + 1)=
- {
->                         subprogs[cur_subprog].stack_depth +=3D stack_dept=
-h_extra;
->                         subprogs[cur_subprog].stack_extra =3D stack_depth=
-_extra;
-> +
-> +                       stack_depth =3D subprogs[cur_subprog].stack_depth=
-;
-> +                       if (stack_depth > MAX_BPF_STACK && !prog->jit_req=
-uested) {
-> +                               verbose(env, "stack size %d(extra %d) is =
-too large\n",
-> +                                       stack_depth, stack_depth_extra);
-> +                               return -EINVAL;
-> +                       }
->                         cur_subprog++;
->                         stack_depth =3D subprogs[cur_subprog].stack_depth=
-;
->                         stack_depth_extra =3D 0;
+>  char _license[] SEC("license") =3D "GPL";
 > --
 > 2.47.1
 >
