@@ -1,149 +1,151 @@
-Return-Path: <linux-kselftest+bounces-26493-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E67CA3336D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 00:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD029A333F3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 01:25:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CB6216381D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2025 23:35:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93AED167A41
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 00:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9186209F4F;
-	Wed, 12 Feb 2025 23:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D251179BD;
+	Thu, 13 Feb 2025 00:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="YkDwFj7z";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qT5MUOAP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kA5Outsz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589D82080F1;
-	Wed, 12 Feb 2025 23:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A75533F6;
+	Thu, 13 Feb 2025 00:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739403305; cv=none; b=FC3C+BXGVOai+DKawF1QzFTmKuL9ulB1BoBNsUTLI/BIgD7Ut9I5EuLM0Et/C8XK8CCQM7+hwMDdt6VQI7xHMbIUP5rEt1JmwceCFsSHj74VcfaWfotoTdLy8J0pH/QljzmS5ZtaZsk/8eN5opHstv3EpcgGY8CsfHvh0JHA/qk=
+	t=1739406310; cv=none; b=rcjc5oWTEzeasDLI5Cya5k5iAPzbPv8jzdsyiF83gY62kDvpzRceYqS+cF/5c2MNkYYX8T3goCvfOlDwoD+Iy7p5KhMx3fEjWslOYOIanxTGEQ72ozQkSemfXp0+eu3t89clgUjR09m4O+al6Bo6AqnPrrq7gn5E0Okq7QwKOLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739403305; c=relaxed/simple;
-	bh=K1wrqzeYi3Gta2Ad6p0k5kVGf+FW8XSmOwVIKl5mEw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lxd26eu7LPNGkHRRxCuMUrnwMlMKDQxwDJDp9D9TRXEPR2jZz1pAhwzeViSu4EeBeRuvE5rL0XlMZK4ZvkhX7h9E3hxaqVRbcAKoww09VWNj7wFLJZFrZx7pHX+7NTzbETmMhYEZ1MaFStz9psWqj7Te/dNZ2FH5bCN9P7z/gAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=YkDwFj7z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qT5MUOAP; arc=none smtp.client-ip=202.12.124.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B4019254022D;
-	Wed, 12 Feb 2025 18:35:00 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 12 Feb 2025 18:35:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1739403300; x=
-	1739489700; bh=PbkKzlIY/ac5i1RLKAU/cKM5GEAJQeB9Gs1wNfgY110=; b=Y
-	kDwFj7zDOgOhJTQFpugxdpcPQFHKHbzX6YwSyo8tGDHlg7aZ5TKFwnE5ZGR7b/em
-	CnUBnRa19erEZ9Gz7ZniXw9RbAIr0YlzzP+8uMVEkiYEhnI1U6lvkI6BO8y6lt6A
-	cJRv1XuJZwyO9+FbdK9zhOq5JmL3VjCmzO6QrDR07eNFpGSg1SRYA+jpoF9OeF01
-	xfStUlw+s6O/3oYD+keo/k56154K3AE6d5pCSpecfj1T7Cgu84vZyPSXnqlfGeVK
-	dgGpOOkcfAMEtUwbpszuEffgeJ2TVmsr2x+vacdQIUyyr6zKzBsN1Gz15BZrNvlV
-	OK/WZOo68d8+XtXHX6wKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1739403300; x=1739489700; bh=PbkKzlIY/ac5i1RLKAU/cKM5GEAJQeB9Gs1
-	wNfgY110=; b=qT5MUOAPcxTwVPQ2gsPzH9lGcMAVGzGVzhmrnhon1wWgfiW6I35
-	90uz9BBikjS1wlqIqRjbzVKxmMUv/Nl77nPS1B737Ob0cTaCc8bQNqCV3B/mcAQ8
-	dl8menE2+CvYJgSb1xFx3+mrZ/tW8afkSA9eNDHLTuKAFvHRlR5QBlUOX1sfq8xn
-	iZZsj7Y8ElbJDXxJyniowY0S5dQZHzlKJS/ubzjQX8LeM9XoHFq8Zu8UdWh9LSXt
-	/OrjCc//60aPJjEHcONj8EebbogEeg90HmLy8oBDpUl6qd5CZqN1plSJp4TEvxsD
-	b2g9V6WDRSBcfFp9jJanZzHh8y/5El0evoQ==
-X-ME-Sender: <xms:IzCtZw3rqAx5rxHLwLT_fNIyuLJY-DVAlwc2NkK_Qn3FDfwBavATUQ>
-    <xme:IzCtZ7HeC2XUhIzmdKUa3Hm05r8VuL_jy5ffthEXTI3f3egEb--QjLlvuZdn8ogvJ
-    _ldaiLtkGtg6OA-owU>
-X-ME-Received: <xmr:IzCtZ44vrXCedy-qe1NA6HW21k3xZXkZ4z2i7BxJvCB7JpXbU1gT13FzlG6K>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeghedvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
-    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
-    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
-    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
-    pghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
-    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
-    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
-    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
-    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
-X-ME-Proxy: <xmx:IzCtZ50_QtK3CAKotBK-DA6sOj-b2v79EAxn8aIJ8LR2LojkyqH4kA>
-    <xmx:IzCtZzHoWxLJ69zRYhF0maXuwsDOHqzACoyLF_iluDLFKHPBmwrkbg>
-    <xmx:IzCtZy9_0G9mC0KlOpuRSqC0ZieO-XHc0WCvUu78XjHWOMQdq1wGAg>
-    <xmx:IzCtZ4ny-2GZQZ46RSCsaa8mKlmatb5CgPjhWY33R1tID2B0snakbA>
-    <xmx:JDCtZ-lX_51eQsIxJ9_Hg7G61JuYSd0Ir82mhK42uWg0W_wg62IZXgtP>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Feb 2025 18:34:59 -0500 (EST)
-Date: Thu, 13 Feb 2025 00:34:57 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
-	steffen.klassert@secunet.com, antony.antony@secunet.com,
-	willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH net-next v19 00/26] Introducing OpenVPN Data Channel
- Offload
-Message-ID: <Z60wIRjw5Id1VTal@hog>
-References: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
+	s=arc-20240116; t=1739406310; c=relaxed/simple;
+	bh=fzyna7PLtoUbYbs8+fX5Za4SKqKoUCKcoou8JqjRvYI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V+nAl/qBIWK1tUaZqZK5fQDe9UEBMLRm7lCyohOwr1jKkaZ7Gc8RkuLerdPgHjtPdlmkomc7ARU671Cvfmj7WGYwbHgs9kjpXiELyK+UZvcesqqufk1fJjGXE1gubsNwUbO2CdsUVQxXnkrODaKe+TiAcyFi9wLg/FtZndlhljk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kA5Outsz; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d9837f201aso2946503a12.0;
+        Wed, 12 Feb 2025 16:25:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739406307; x=1740011107; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W8dBeeEoSDm4SD/YCzWVE+gxCVxcw7YRX7A4c8VioMo=;
+        b=kA5OutszU8dgyo/YxArxToAJa4O1j/qmGf8sX5yViyzzSWo0PH3/eTguC3hoLs/zgA
+         Q9XBH3m7Lk7fQSKyppe2lHIKnuaBuzr6BA8Si13QvxZ/2h20dh5PAqBnuYbhkNnaw1FK
+         W81DGJrYp4UafRjgeuIksUPLXfdBbDDt7uvUdlQKKFIp/hK9AOWzz7wvc8XZG6yLEIUl
+         iie63YD0Y5A9dVdyvX2sumgsOvZ48Abn//T55/IlyDJEHiBnNHzMRKWAoR8djTttSu60
+         RV61YwLS9HFTE+mkHX4INgI/F4k7Nsh832xjw/bW3IlToFnKqB4SdIwalDLm7qmTAHQ2
+         +nuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739406307; x=1740011107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W8dBeeEoSDm4SD/YCzWVE+gxCVxcw7YRX7A4c8VioMo=;
+        b=sCJ2jRUHjgdEkS37IBPRfMDjJTh0bW4Ws5QmiWaxn0jcgTGyWA7EOH6EM9DQKk3FOx
+         7VTywNzxgU3zTI0TAHMegn3/mxgPkyxn/i6ziohEaItrJeDe9zRjPmO6aR0DbnM1a6iP
+         8KIYt8oBYE8eEglGyDgHr1JLcIq998IPGzX+BuEll8pSMqB9dpC0LAhe9Ul92VNa3eU3
+         2oSZdzl3F5dvoKFJ3QWukP1+srkfxH9l0xLWn6M0063e3/1fu0UNa8qQtjIdved7+uDh
+         VMbiwFrUOgPjYUsgFY3DHVmGaUC+UaQD1sN1e+CkIZeTlkfwAgjpDH9uuJhDaKGV+ubV
+         pJAA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNFWBE+GQ8Cybehp43clBKYP6y4N31LFSpI1ia9MTaoRQEn6rEZLH1pGhPA1WMji4isqsc00QKeIxfLpzU/a4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw92guc59yA7ixOSHiCquArI1KmJGKwDHn+cMln7MZQqLE+NLPg
+	ETTfppNkXdx/vp6CgDeJx768jRvNwVwDID3Fy6NI8/P5Nbo65hm9vjxKTBSywAWxt9Qc7n1e3cT
+	x8QpFuN6yejIb609PwZZLQ1tTbT/ffih+ywk=
+X-Gm-Gg: ASbGnctbs41isiEyTBR8hTEFhWBf12zjSg4aQo/IyFkLSS2oXaUYgtkxyNJaI16L6LG
+	uRa3sVfjFDyBBbfXVtAZyvZ1SAW5cAM/YpEE8poZbL45GRpHYzoeAbQZm4YJWkeAmqPVq
+X-Google-Smtp-Source: AGHT+IFBywya4EAS7dAbROUy9T3txlKiirfcuRq/lCa9/agwJBGHdQZO3s7MfYbRi2pIqybSTqIUYoXFU4GzJwdxoXY=
+X-Received: by 2002:a05:6402:1d50:b0:5db:68bd:ab78 with SMTP id
+ 4fb4d7f45d1cf-5decba815dcmr736936a12.10.1739406306489; Wed, 12 Feb 2025
+ 16:25:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
+References: <20250128170447.12918-1-alessandro.zanni87@gmail.com>
+In-Reply-To: <20250128170447.12918-1-alessandro.zanni87@gmail.com>
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+Date: Thu, 13 Feb 2025 01:24:30 +0100
+X-Gm-Features: AWEUYZk-ObCPdB1sCqh0rfANabmxISt7chbnNtEsESdDCHQ8OJSszw4wtsrkSNM
+Message-ID: <CABq9Dx53aaX1t2Jidi_zDtR6VDB4UvWo1LkO5GYhCnwfs3ycsQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: pid_namespace and pidfd missing include
+To: brauner@kernel.org, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+> Running "make kselftest" results in several errors like these:
+>
+> pidfd_fdinfo_test.c:231:36: error: =E2=80=98MS_REC=E2=80=99 undeclared (f=
+irst use in
+> this function)
+>   231 |         r =3D mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
+>
+> pidfd_fdinfo_test.c:231:45: error: =E2=80=98MS_PRIVATE=E2=80=99 undeclare=
+d (first use
+> in this function); did you mean =E2=80=98MAP_PRIVATE=E2=80=99?
+>   231 |         r =3D mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0);
+>
+> pid_max.c:48:9: warning: implicit declaration of function =E2=80=98umount=
+2=E2=80=99;
+> did you mean =E2=80=98SYS_umount2=E2=80=99? [-Wimplicit-function-declarat=
+ion]
+>    48 |         umount2("/proc", MNT_DETACH);
+>
+> This patch adds the <sys/mount.h> include in pidfd_fdinfo_test.c and
+> pid_max.c files to find the variables MS_REC, MS_PRIVATE, MNT_DETACH.
+>
+> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+> ---
+>  tools/testing/selftests/pid_namespace/pid_max.c   | 1 +
+>  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/pid_namespace/pid_max.c b/tools/test=
+ing/selftests/pid_namespace/pid_max.c
+> index 51c414faabb0..972bedc475f1 100644
+> --- a/tools/testing/selftests/pid_namespace/pid_max.c
+> +++ b/tools/testing/selftests/pid_namespace/pid_max.c
+> @@ -11,6 +11,7 @@
+>  #include <string.h>
+>  #include <syscall.h>
+>  #include <sys/wait.h>
+> +#include <sys/mount.h>
+>
+>  #include "../kselftest_harness.h"
+>  #include "../pidfd/pidfd.h"
+> diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/te=
+sting/selftests/pidfd/pidfd_fdinfo_test.c
+> index f062a986e382..f718aac75068 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> @@ -13,6 +13,7 @@
+>  #include <syscall.h>
+>  #include <sys/wait.h>
+>  #include <sys/mman.h>
+> +#include <sys/mount.h>
+>
+>  #include "pidfd.h"
+>  #include "../kselftest.h"
+> --
+> 2.43.0
 
 Hello,
 
-2025-02-11, 01:39:53 +0100, Antonio Quartulli wrote:
-> All minor and major reported problems have been finally addressed.
-> Big thanks to Sabrina, who took the time to guide me through
-> converting the peer socket to an RCU pointer.
+I'm reaching out to know if you have any comments or
+feedbacks about this patch.
 
-Something is off (not sure if it's new to this version): if I use
-test-tcp.sh to setup a set of interfaces and peers (I stop the test
-just after setup to keep the environment alive), then remove all netns
-with "ip -all netns delete", I expect all devices to go away, but they
-don't. With debug messages enabled I'm seeing some activity from the
-module ("tun0: sending keepalive to peer 3" and so on), and
-ovpn_net_uninit/ovpn_priv_free never got called.
-
-[...]
-> So there is NO risk of deadlock (and indeed nothing hangs), but I
-> couldn't find a way to make the warning go away.
-
-I've spotted another splat on strparser cleanup that looked like an
-actual deadlock, but it's not very reproducible. Still looking into
-it, but I'm not convinced it's ok to call strp_done (as is done from
-ovpn_tcp_socket_detach) while under lock_sock, because AFAIU
-cancel_work_sync(&strp->work) may be waiting for a work that needs to
-lock the socket (cb.lock in do_strp_work). I guess tcp_tx_work would
-have the same problem.
-
--- 
-Sabrina
+Thanks,
+Alessandro
 
