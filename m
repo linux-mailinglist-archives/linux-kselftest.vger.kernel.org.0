@@ -1,215 +1,159 @@
-Return-Path: <linux-kselftest+bounces-26554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48BC9A342C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 15:42:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A711A34524
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 16:12:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A8601883048
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 14:39:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F078169403
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 15:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D9523A9B9;
-	Thu, 13 Feb 2025 14:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42CF526B08A;
+	Thu, 13 Feb 2025 15:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JVDbSw2Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M1ggNw2r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2089.outbound.protection.outlook.com [40.107.236.89])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F68D281375;
-	Thu, 13 Feb 2025 14:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739457444; cv=fail; b=lwNEnasrRgIJucc9hb9ecERnHGb6Nb2Qujqhg8FhNmSLu2EbhZc2bdM4IDtVTiAggopM8y6hlgmWBdANCZ7gcUC+lc8WZHiqkOC5vjYmfdSaFw6LfjrnNWFAs4cHfzppgaBnQhhULsrYXX2m5mPP4SzjDmJWj0FEGupQO3pIXGY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739457444; c=relaxed/simple;
-	bh=rQXs8AmhJtxeXT0/MIDKjqsdnwVqs7CEA2S/z6hQWOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kCXWV71WFimivdsFf0fozXxKjxWWRLbDXN2ichH1P+r/bO5S3WTOF4aoWBoWUOF9xjxtU3hUn69itd0MaOcHpIzOvz7ZnNipjIuTL50Nk7pUy/cva9Be3wuCvHPg10Vyey7s/68ghw+NCJCgGuN09jB8vSRZP7FDn9GXMJXaSdo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JVDbSw2Q; arc=fail smtp.client-ip=40.107.236.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=T/6Jw8rSGNkxZyV0KAkam1+ZazkdndOdrBieStI47OqlHPxRsJRjNoyMugLIYegKdHxvQ5try15X6eM1sHQO8nQixF4rNEZsBOlNTUJJPqGPTenzrkRKn65ZlEDb6G3EKS0qH4vJkv7440b/zNqLU3ShTiB0Y61UUeF8+IU7lIdTgaDPzuYLATJgM873fhB7VUvpwH07ZFPNjMJUFenIPyOYZnYIdJdvOcHWMfgRgfnwO4c3KQm0reuhEHNQUnpZDGLOHQTaskxpoQ3kZ6sRWVgT6T+ZduiRD2yvLDSxZFNIzAaCRmTERq0bi0Wkrg595HDavcdfoSbd4Az13L/ZIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gMGQ+l2v+keaPXcLQ731dvu5wVPTSTMLAoED48MTqxY=;
- b=EkOTURSGhiuga9C6q3H3BoT2yOW4EF71NOnwPHpnZRWfgySbiIA9R20nv7ZBG/v4GJumMd5xrZranU492bjdcDVV8ZiyG04MBhXmjOxMdu4IgLQSk2wFCKb9ohsouhknfMik6addHzmbnbPXSm3EHblq/rCWFAY0h4nwW2H+o/i006Km77O7q1xHriujW9YXVcLR8/7hajtUYUuFFn8yIaksdy6azs/WDRMzW1v+ZP67xrNJ0gQm8e+0SfgV/jjIlsFRviluXza/HFhYazIHHfUe3jryF991VmnmJebyQOM5Fhw2E4nNccTGlT+M9H43KjcZCDS5Zhv/F5kAdxR6PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gMGQ+l2v+keaPXcLQ731dvu5wVPTSTMLAoED48MTqxY=;
- b=JVDbSw2Qx2S5ZJQG7viQrWd2LZg4yZbdQNbSgeoNMWLUQROxajoPvlG+r6DRSnwDYRU+/S9uKOJjA7Zom7ecSW7mZtffgb+BcfHEjJEhWWp03kB6gyJbHQ0FnnLJDri0JLMeLpa9g8KWIO04nXfc9JiH0uL+zYirzRu7hfWDX7jmkKVFz2viq08H5vUSeGUZH1o7XWbujnPOccbB1iNigXIY3Q/xq+aep4anfX1GHdoQoQrkkHzidXWHZkfKQpYL/jPufsGC14OaXYp6cxOGTPrQJxXIkKXV66PZk5gbdN/UYE6U4BlNjHG3kWfjChCuwjPyJfIhBtZGmruPQEojaA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by CY8PR12MB7657.namprd12.prod.outlook.com (2603:10b6:930:9d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.13; Thu, 13 Feb
- 2025 14:37:19 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%6]) with mapi id 15.20.8445.013; Thu, 13 Feb 2025
- 14:37:19 +0000
-Date: Thu, 13 Feb 2025 10:37:17 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
-	maz@kernel.org, joro@8bytes.org, will@kernel.org,
-	robin.murphy@arm.com, shuah@kernel.org, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	baolu.lu@linux.intel.com, yi.l.liu@intel.com, yury.norov@gmail.com,
-	jacob.pan@linux.microsoft.com, patches@lists.linux.dev
-Subject: Re: [PATCH v1 02/13] genirq/msi: Rename iommu_dma_compose_msi_msg()
- to msi_msg_set_addr()
-Message-ID: <20250213143717.GA3754072@nvidia.com>
-References: <cover.1739005085.git.nicolinc@nvidia.com>
- <0cfaefcc104e29aeb031f316537249d8d53ef7fa.1739005085.git.nicolinc@nvidia.com>
- <87v7tejb7q.ffs@tglx>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v7tejb7q.ffs@tglx>
-X-ClientProxiedBy: BN0PR07CA0024.namprd07.prod.outlook.com
- (2603:10b6:408:141::33) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F07526B0A5;
+	Thu, 13 Feb 2025 15:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739458861; cv=none; b=cENrpjKRPN4t3M+q2U1rFcl422E2wP9GzbLU50WHRSr9WW4WUbsw3//mgDB6rrE9eOgVlYwHldddoPeYAABBuD5Qt2g0W3rOJuOpzmwdwPDRcUc9H38UDDF1HfRTdqznB9ANBv480YCvUSeuFOZLgu6ZT0cVgM5UiKmFh0ZhdZs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739458861; c=relaxed/simple;
+	bh=wzE2FlgcMySDp5HE1FWmSL6fucmXnUfQFEhkHSaYt0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mjpyOQB1Ggx6ULCybVG/usLx12EWcpGsJEcwRSUAP20Ocb+NjYiShWAO4O463G7Ur6T6qOncTvZ6m+hfOTQYgQRyfQ5jU0yJH8ZEcAHOAkjnEVyi84RxcpnnXTa2aYkxwS8qx+R6qUabL61MgGke+ylcs9znrvPR1VBLc9L2F/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M1ggNw2r; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739458860; x=1770994860;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wzE2FlgcMySDp5HE1FWmSL6fucmXnUfQFEhkHSaYt0c=;
+  b=M1ggNw2rD1yKeFZgXhPkty++ZxjzSY8IiTy3PaNdgo1QKJWBAI60BPwp
+   yb7KhMkaY+UjrzF1oVrBlfJaFo9As6XAo4qYcdS+OkfpGQP1wcJqXzXT5
+   jOsuDPNBlejMv3HlQvmVV6EDL1nDYMS0O19SOhaJen+BvbeXR8yeZz+0p
+   RlkQbDs1OjvaL1XX8huQPPpugEUIZMgByA2e1vVuLfF1g3fSeY5v7TPlO
+   0+jDMxxRJXVcOFM6RK69khhpXzjuyAKpnRQrMRIxh2POCi8i/FZ72l3nN
+   L6HHnbQtToPW6BQrOgo/bQVNKcPKDlQoPbjmjErgdFDFjRjheGqtXO5Tu
+   w==;
+X-CSE-ConnectionGUID: IYTSSdeuQH2tGx6rx5yZZA==
+X-CSE-MsgGUID: DxNSdI+sS/63DjY+gauSsQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="50378364"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="50378364"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 07:00:57 -0800
+X-CSE-ConnectionGUID: HiJGP3a2QjiEOaNVTIzrzA==
+X-CSE-MsgGUID: eDD4zJFqSyKNVzQN+xH/qQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118356150"
+Received: from iherna2-mobl4.amr.corp.intel.com (HELO [10.125.108.188]) ([10.125.108.188])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 07:00:56 -0800
+Message-ID: <4dc1c0b8-c38a-455c-8dd2-dab25f912498@intel.com>
+Date: Thu, 13 Feb 2025 07:00:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CY8PR12MB7657:EE_
-X-MS-Office365-Filtering-Correlation-Id: b90171e1-ec99-4910-f15e-08dd4c3beb43
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?OCsrLadiYS70MeC7QWziBI3BQuukZtSFb6xC1Lk6McJ0i31gMikaHCfNnMPJ?=
- =?us-ascii?Q?iNvXE318bZWdxhfilM4IbShQvUrhFeyrM2TBPW8pvbP5SQMWtJPKCYkU2q+Q?=
- =?us-ascii?Q?933cGqVsG8sHNiUjo1PnZrRiAfzD4msEkEIKNASHb20KmDTgC86X1ootpRQg?=
- =?us-ascii?Q?zFBpTi0MCTpsHSosJuqcYjidwGs7IeyxSFVU40ASSnhZ1qgbvYzn5KKkVbwi?=
- =?us-ascii?Q?VkmF2IT7m+oNvgScOsQPTPH/ZkbVi0qDpfH2GUMdFHAsnGAzPiEQUJ0KAkNE?=
- =?us-ascii?Q?1IEkxL9J2a6ICWNMTcWmJtCWq51AZa0/fZAk82r/y6I9lpWuzLfPIXqfpo9Y?=
- =?us-ascii?Q?NTJ9XULd8eRFJv1MzxRhL4uLoE+eNjEt+TcYkboDS3BkYJVZw1Pk3kBpb8/D?=
- =?us-ascii?Q?OW9/PGwANsRV6tr3NFUhXeVpvxF/2yH/d7xT/KGGv/Bepf2Bkao/ZxJxXg8G?=
- =?us-ascii?Q?MvRffX10Lq7RYSadnHFiJ0ttGDLGJ4fBCZdrrEorPE4DaYX7VeU1Pt+T+5nW?=
- =?us-ascii?Q?hKo/VZWO22oTT1rFbe1CSGBQXoCMr+7vPc4NbCv67fRx+IfXBiWlq+vmZ+Gi?=
- =?us-ascii?Q?U2mFsZBix71YT4JCQEHmrDPoVA6w4CylIXe5sgj2GULCkiFcVRsAVndEH8ry?=
- =?us-ascii?Q?O2iAGkp8/Iy/rcYoyXVe++sWLrmUi/OOu5dSLBidkrWTHR8fFDHD2w4W2JIm?=
- =?us-ascii?Q?JOHaSLjQOE/x3OLV3V3g/irMmWESFmGSpBfa0wMZV5SLOC4jAJkWCPfW8Vtx?=
- =?us-ascii?Q?CSOWtK2OudlRwCdML7tba6fCgibwmV7ecd10oeYR8v26WAKwU+tw3Q+7BB3G?=
- =?us-ascii?Q?ZN2eKH2vEj4olZQTiK9hSKo+w69IimEze8vpQ5Lwvn7+r8XMsZMfThSv+xSu?=
- =?us-ascii?Q?TApFeqOeX1LdFEhnRMTxTaz1AfQD3iadtCksNMm8gQXNnOPCx/pBlC1cc6GF?=
- =?us-ascii?Q?2HVL3BehfF24MQ3hTKghDYH0PkOuEpDxsPq2cvZrPd1d6K5vV2YWTCMIMKHw?=
- =?us-ascii?Q?jGafwYc6I8yKaVXeZ/+V3Gq+olmiKd7odrLu08fX20d/J1DSulC0IrYAFT/g?=
- =?us-ascii?Q?nY3lZcHkNCaQ0P+OjUteGDv8u2K68SUcYuoxuU7DGkkq27KdTmqrMjyO6B8L?=
- =?us-ascii?Q?1dZloJUDjTv3nl9l3ektYq2RZIRzYFwmOSXI8Pgu9XcqxhqQO3MtTfQIkmGl?=
- =?us-ascii?Q?y3Xm6H/c4Tyeb/kXNr6hrjvm4NoddahuesWpAYECu3FYI91NFcHCQq9/JAL1?=
- =?us-ascii?Q?UHlc5gaAS5rEUGywuzUmX53tGuPpVrU0zfrN/DGWRy6f6Mu79lUbd5/Ifktb?=
- =?us-ascii?Q?xCDVyiNBth4ZuNNAv74v8Z5Kn0aPqOUZKcFhzol0XBMORq2FLeMMiUG7VaoP?=
- =?us-ascii?Q?v1trOuxhCSjeWFeYDskntb47O9x7?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?CbTa4EM9D4LG1E1cY0aJ7JYrWOraDjZ0Ar0Rycz6QDfjNFE7cXlY8yNkARJD?=
- =?us-ascii?Q?E4d4dSNc55DoKBs7+lPd3XK6yQAxvyQ0wALBEGZKLI8SSZhjJsYSR9kQuLXQ?=
- =?us-ascii?Q?NAy7LZp06ctM5pHQFhX+Rw/6o1kyXsVGUsCGHxCD5lnmsSnXE235Uekl+z81?=
- =?us-ascii?Q?6zatGfuYQbWajOw13Qo76SLz40SzHguF+zE9QqisMYqaTHYgZ9JmtiDYhux+?=
- =?us-ascii?Q?VqYpZ8E4vAOa5HCIos31OJVhyQuycTb9LLh6Ig/ICINCkhW81OjMDlz3isbz?=
- =?us-ascii?Q?Yypg4sNveF+7iu/jl6mgK3B8r7Ivoa65JsELnbhupfozjZJS45tsBwJcqtEV?=
- =?us-ascii?Q?rbCkCUZJLYI3Usx/3ZB5orCE7IzkTP0ZIW7oD43nW2cQP+L5JaOhr1mFSzft?=
- =?us-ascii?Q?ub8hlPotcs5EvgqXEnki/rXsN7nBu43F7GX3sNNnsAusWDrddZw1/2FFYJr/?=
- =?us-ascii?Q?jJOm24OwpTU9bTF/KUphTiapBhhLilwrDkrvlgd05fwI+UZHMtgfhu8W1HHL?=
- =?us-ascii?Q?HH9pdmPz7MvpmdWERAkfBIPdMntUaNFu2TlJSihGQ4yTLVwVpiYHkJyEn/v8?=
- =?us-ascii?Q?Z4WfsS4NReVGR6MNTB2h2zBHw3GbLFA+IVmskaIQrbYjdtW5yIQcmw/4RMFH?=
- =?us-ascii?Q?Zj7oT5YgnLYF5lnMe6k1Ub6C6g14Lk1p9WTh8O7MaNkW98U/2Zb3e/kpm5GQ?=
- =?us-ascii?Q?k5t9X+nWGhxsEUHBX7HBKPCi+AOoeodS6wkl1HqQVmaXV/3w5cXDgxYQFw3o?=
- =?us-ascii?Q?L1kCy1VPTE4VCIx3Kd/WEgujnvY9DhWunlhwbEDyByD8LWVffEB9A/+cJrKK?=
- =?us-ascii?Q?K3opqXxL8z31BuuvEHtLQ6xj8t/Inv6DS8NGebqAYqm0grdATCBjJVXHXeHb?=
- =?us-ascii?Q?2Pbbn+Rc6mC7rVNpj0CBdZxPSimktoOq4I2Dbpv/VYs2lUcwCLu4JeegcEF9?=
- =?us-ascii?Q?LvlfCf70h1TSgu0c2qMXzuiHjZqm91S9wiujxe3ctw9t+pppGql63dbiWfFZ?=
- =?us-ascii?Q?JYRixz9z9nXeUEjtyBh1feCwZgCXIV5T21fY+RXGRVLVWUPVTXmM4uWxfohB?=
- =?us-ascii?Q?TBb4XmgfgWH7MLjE8GvOQRltB26JhptzcvdQNPbpo2oKp1ztd2ejuSbtnbRM?=
- =?us-ascii?Q?DLL1BOJF1jDQ/sgAGgXNAgb0iDQOEl9/kcSbvXtyQZ1PJCzp2/UPMJesmhn3?=
- =?us-ascii?Q?QISYcGIgBPzbeE8FqpM3H8LNhc1+Cc84GkE59BPm7rbfBQdlL8Qf/UKluReX?=
- =?us-ascii?Q?DIoxYVw/mp9pxbdVuXn3fbvbZJPw614mvsPCwnZB/qjlMcI7LhuGdJhplKTT?=
- =?us-ascii?Q?AY5QxJlLpuUtCoio+7yZQLuIJ7X6spxigGRPbczpEjcz4te7+Yu8reWtTCze?=
- =?us-ascii?Q?P2LORQs8Yfu4eFVSWe+I5OL1Voud+R2F7OOZ89SXTusQr7q96k3LBLQ654oy?=
- =?us-ascii?Q?6ln5hA5i8fY13gY0n8uzQwF+gnPbcbIvY69MtLoiBn8SRmAObjuyHKcVsyBQ?=
- =?us-ascii?Q?+R6QvfCxU4ciuXPcSOmivset/R4cUIDQYI6aWK7m1qLdfp5GOWb/iez688hO?=
- =?us-ascii?Q?xionF5ZfFK6Qx7HWRCjzXjgbO0CQvp6Cd7PYuDd1?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b90171e1-ec99-4910-f15e-08dd4c3beb43
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 14:37:19.1717
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3A0b7oC5JqSPwmgguOxClLLpuPvKPt+xdpR0TTjEVPhstk5TCFpOIRt0lFsiCqqb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7657
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/6] selftests/mm: remove local __NR_* definitions
+To: John Hubbard <jhubbard@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Jeff Xu <jeffxu@chromium.org>,
+ Shuah Khan <shuah@kernel.org>
+Cc: Andrei Vagin <avagin@google.com>,
+ Axel Rasmussen <axelrasmussen@google.com>,
+ Christian Brauner <brauner@kernel.org>, David Hildenbrand
+ <david@redhat.com>, Kees Cook <kees@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Peter Xu <peterx@redhat.com>, Rich Felker <dalias@libc.org>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20240614023009.221547-1-jhubbard@nvidia.com>
+ <20240614023009.221547-7-jhubbard@nvidia.com>
+ <dc585017-6740-4cab-a536-b12b37a7582d@intel.com>
+ <76770ce2-f6a6-4af0-b29c-0070933a1dfb@nvidia.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <76770ce2-f6a6-4af0-b29c-0070933a1dfb@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 13, 2025 at 01:11:37PM +0100, Thomas Gleixner wrote:
-> On Sat, Feb 08 2025 at 01:02, Nicolin Chen wrote:
+On 2/13/25 00:04, John Hubbard wrote:
 > 
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> >
-> > The new function is used to take in a u64 MSI address and store it in the
-
-Assuming Nicolin moves the hunk as I suggested for patch 1 lets say:
-
-genirq/msi: Refactor iommu_dma_compose_msi_msg()
-
-The two step process to translate the MSI address involves two
-functions, iommu_dma_prepare_msi() and iommu_dma_compose_msi_msg().
-
-Previously iommu_dma_compose_msi_msg() needed to be in the iommu layer
-as it had to dereference the opaque cookie pointer. The previous patch
-changed the cookie pointer into an integer so there is no longer any
-need for the iommu layer to be involved.
-
-Further, the call sites of iommu_dma_compose_msi_msg() all follow the
-same pattern of setting the MSI message address_hi/lo to
-non-translated and then immediately calling
-iommu_dma_compose_msi_msg().
-
-Refactor iommu_dma_compose_msi_msg() into msi_msg_set_addr() which
-directly accepts the u64 version of the address and simplifies all the
-callers.
-
-Move the implementation to linux/msi.h since it has nothing to do with
-iommu.
-
-Aside from refactoring, this logically prepares for the next patch
-which allows multiple implementation options for
-iommu_dma_prepare_msi(). It does not make sense to have the
-iommu_dma_compose_msi_msg() in dma-iommu.c when it no longer provides
-the only iommu_dma_prepare_msi() implementation.
-
-Ok?
-
-> > -static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc,
-> > -					     struct msi_msg *msg)
-> > +static inline void msi_msg_set_addr(struct msi_desc *desc, struct msi_msg *msg,
-> > +				    u64 msi_addr)
+> 2) I'm unable to reproduce what you saw, because in ALL cases (before
+> or after the commit, and with or without a revert), I get the same
+> results on my Intel test machine:
 > 
-> No line break required. You have 100 characters available.
+>     $ ./protection_keys_64
+>     has pkeys: 0
+>     running PKEY tests for unsupported CPU/OS
+> 
+> ...so that's why I'm attaching a patch, in case you can verify that a
+> revert fixes it.
 
-Sure, I make alot of patches for places that only accept 80 :\ It is
-hard to keep track of everyones preferences. Thank you for having
-patience, it will get fixed - I think following a 100 char limit will
-resolve all of these notes.
+The revert fixes it for me, thanks!
 
-Thanks,
-Jason
+You probably just have hardware without pkey support. This isn't 100%
+definitive, but you can check:
+
+	cat /proc/cpuinfo  | grep ospke
+
+If that doesn't match the "flags" line, then your hardware doesn't have
+support in the first place and the message is totally expected.
 
