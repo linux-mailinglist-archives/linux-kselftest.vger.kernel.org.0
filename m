@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-26547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FA6AA34001
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 14:13:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA21EA33FFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 14:13:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC0611696FF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:13:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 719281885AB6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 13:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26D823F420;
-	Thu, 13 Feb 2025 13:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E500723F42C;
+	Thu, 13 Feb 2025 13:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fdO3sUcK"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ngD5Y4hE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8D723F41B;
-	Thu, 13 Feb 2025 13:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D95F23F41B;
+	Thu, 13 Feb 2025 13:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739452398; cv=none; b=Ix6ECWOSMw2onKjJCRPnoZe/buW60HlWRFkoddCklEuUAEqmfAyt8ifHTVpi8vgBNSFh9Q0uSSrhmhsper3p+6uvN22SWzgPLMv3zX3bpCAuLvXXmaE+S0vVO8fWaAUj1gyA22m7+KKEeQ0ieQTkOUydBt2kDm4t6q7FalbcI9U=
+	t=1739452393; cv=none; b=LmHWiUXhSf9Dte2AL28ZBj+s5EutLXeWuyjIIZc8l3gpZrK82JVKR0TRqOa29ghBrpczWEvtHrQ623UDP6GsJV+O64qS1SouvvBkk4tfHJEgeA0BxLeOnuD6iXWx8PaM2zQLhdycXuU6PGQ5WszIk6hGhxmqRthFWwSuBrgi0aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739452398; c=relaxed/simple;
-	bh=r3XU+DGNm90//yQ3AsPpyzLkR4el0EYOuVM2HcyiGqA=;
+	s=arc-20240116; t=1739452393; c=relaxed/simple;
+	bh=nyEsKhTApCPZoLTMnv/lFkEGMWySgB+lFwwLSPV8Ou4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a/tmuvfjDdjrGLFF1+Ufj9pmSpIClXTH8akNZKevZNgfT5mnfPm7s605DyorkoDTbe8LDcNEAGVx7TRde8NX/Yyt9QkuPC9eBbGZmmoWyAnVmjJIhO/9qS4mubG1O+DJhjM2isphKFzjJFXtBYRDV+CAy83bSAXb/OAyiA8sIc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fdO3sUcK; arc=none smtp.client-ip=117.135.210.4
+	 MIME-Version; b=rjla7QdJPtAv6A0lZDcmzGSLdOJzAxiD8C4qlezMNNC1+QfWL06PkaMgaOm1BMbJYJAD8rbN6fNVs1RJAg32d8N2QZufseO49jTLaRjIp+wYkwReTxjV0OOlYIv0GoDi26c/ZaBTrK8ww14oZWFOpBepp/QOkntlSWDLzmqNL8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ngD5Y4hE; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Y8v0K
-	eZhBbmue/Fp6RVZC0XefbCMdD2hVwAYwi82vIs=; b=fdO3sUcK513OgSwKNnR2j
-	jsWMj61Xbz2HrHNbl9wrginTWGW1+sY/9mtrkQnWtOjTfPiClP/sAtBIther7Hyd
-	jnOachWQEbodwy+XLIpBsPyx8a+0lFvVzdksOuAIRham6z2iFwhMpsbAMsYNWsYR
-	rlrvlmfeRILrpuNi+aUPzo=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=cJ3UT
+	jsSJyPJ9WcOaBSeMblhCf9uN6xSOO70sEY2XLY=; b=ngD5Y4hEUtWrxs+qfEw2I
+	5bITXlRPMaovONtizEBhsikIO2IgA8YvgLn3sXKFnmPQEoEHgt+EIyPhY4fVeLPp
+	m1KX3Q13WvY4E7WIstWx5AYDE23nS2eK0a6yAKzQtpvY0Kxxlaew9NBKiP+PlcIt
+	FHMl7f5Xy44IcLxSwQuOeM=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3N8qv761nJPMJMA--.27324S3;
-	Thu, 13 Feb 2025 21:12:19 +0800 (CST)
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3N8qv761nJPMJMA--.27324S4;
+	Thu, 13 Feb 2025 21:12:21 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -55,11 +55,10 @@ Cc: linux-kselftest@vger.kernel.org,
 	jolsa@kernel.org,
 	mykolal@fb.com,
 	shuah@kernel.org,
-	Jiayuan Chen <mrpre@163.com>,
-	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Subject: [PATCH bpf-next v2 1/3] bpf: Fix array bounds error with may_goto
-Date: Thu, 13 Feb 2025 21:12:12 +0800
-Message-ID: <20250213131214.164982-2-mrpre@163.com>
+	Jiayuan Chen <mrpre@163.com>
+Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Allow the program to select specific modes for testing
+Date: Thu, 13 Feb 2025 21:12:13 +0800
+Message-ID: <20250213131214.164982-3-mrpre@163.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250213131214.164982-1-mrpre@163.com>
 References: <20250213131214.164982-1-mrpre@163.com>
@@ -70,106 +69,121 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3N8qv761nJPMJMA--.27324S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJw1xZFyxKr4DAFy5GFy8Krg_yoW5tFyxpF
-	4DKFy7Cr48ta1Ik3sxCF4xurW5Jrs5tw17GanrJ348Ja1jqr4kCr15KFyrXryaqrn7Kw4r
-	ZF1j9rnxtay7u3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEcTmxUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxzyp2et6WvVuwAAs0
+X-CM-TRANSID:_____wD3N8qv761nJPMJMA--.27324S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJFWrWF4rWF4fZF48AFy3XFb_yoW5KFyDpa
+	y8G34Ykr4xJFnaqa4xGa1jgFW3Kr4kWFW8JF12gFZYyw4UG34kXF1xKayagFn8Gr4fWrnx
+	Z3ZY9w4fur97AFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziyrWrUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxfyp2et6WvV-QAAs5
 
-may_goto uses an additional 8 bytes on the stack, which causes the
-interpreters[] array to go out of bounds when calculating index by
-stack_size.
+In some cases, the verification logic under the interpreter and JIT
+differs, such as may_goto, and the test program behaves differently under
+different runtime modes, requiring separate verification logic for each
+result.
 
-1. If a BPF program is rewritten, re-evaluate the stack size. For non-JIT
-cases, reject loading directly.
-
-2. For non-JIT cases, calculating interpreters[idx] may still cause
-out-of-bounds array access, and just warn about it.
-
-3. For jit_requested cases, the execution of bpf_func also needs to be
-warned. So Move the definition of function __bpf_prog_ret0_warn out of
-the macro definition CONFIG_BPF_JIT_ALWAYS_ON
-
-Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/0000000000000f823606139faa5d@google.com/
-Fixes: 011832b97b311 ("bpf: Introduce may_goto instruction")
 Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
- kernel/bpf/core.c     | 18 ++++++++++++++----
- kernel/bpf/verifier.c |  7 +++++++
- 2 files changed, 21 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h |  2 ++
+ tools/testing/selftests/bpf/test_loader.c    | 27 ++++++++++++++++++++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index da729cbbaeb9..59291261f825 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2269,6 +2269,9 @@ EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
- EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
- EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index f45f4352feeb..dd23822cfb5a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -135,6 +135,8 @@
+ #define __arch_arm64		__arch("ARM64")
+ #define __arch_riscv64		__arch("RISCV64")
+ #define __caps_unpriv(caps)	__attribute__((btf_decl_tag("comment:test_caps_unpriv=" EXPAND_QUOTE(caps))))
++#define __use_jit()		__attribute__((btf_decl_tag("comment:run_mode=jit")))
++#define __use_interp()		__attribute__((btf_decl_tag("comment:run_mode=interpreter")))
+ 
+ /* Define common capabilities tested using __caps_unpriv */
+ #define CAP_NET_ADMIN		12
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index 53b06647cf57..2c23178d9a7a 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -37,6 +37,7 @@
+ #define TEST_TAG_JITED_PFX "comment:test_jited="
+ #define TEST_TAG_JITED_PFX_UNPRIV "comment:test_jited_unpriv="
+ #define TEST_TAG_CAPS_UNPRIV "comment:test_caps_unpriv="
++#define TEST_TAG_RUN_MODE_PFX "comment:run_mode="
+ 
+ /* Warning: duplicated in bpf_misc.h */
+ #define POINTER_VALUE	0xcafe4all
+@@ -55,6 +56,11 @@ enum mode {
+ 	UNPRIV = 2
  };
-+
-+#define MAX_INTERPRETERS_CALLBACK (sizeof(interpreters) / sizeof(*interpreters))
-+
- #undef PROG_NAME_LIST
- #define PROG_NAME_LIST(stack_size) PROG_NAME_ARGS(stack_size),
- static __maybe_unused
-@@ -2290,17 +2293,18 @@ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
- 	insn->code = BPF_JMP | BPF_CALL_ARGS;
- }
- #endif
--#else
-+#endif
-+
- static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- 					 const struct bpf_insn *insn)
- {
- 	/* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
--	 * is not working properly, so warn about it!
-+	 * is not working properly, or interpreter is being used when
-+	 * prog->jit_requested is not 0, so warn about it!
- 	 */
- 	WARN_ON_ONCE(1);
- 	return 0;
- }
--#endif
  
- bool bpf_prog_map_compatible(struct bpf_map *map,
- 			     const struct bpf_prog *fp)
-@@ -2380,8 +2384,14 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
- {
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
-+	u32 idx = (round_up(stack_depth, 32) / 32) - 1;
- 
--	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
-+	if (!fp->jit_requested) {
-+		WARN_ON_ONCE(idx >= MAX_INTERPRETERS_CALLBACK);
-+		fp->bpf_func = interpreters[idx];
-+	} else {
-+		fp->bpf_func = __bpf_prog_ret0_warn;
-+	}
- #else
- 	fp->bpf_func = __bpf_prog_ret0_warn;
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9971c03adfd5..fcd302904ba0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21882,6 +21882,13 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
- 			subprogs[cur_subprog].stack_depth += stack_depth_extra;
- 			subprogs[cur_subprog].stack_extra = stack_depth_extra;
++enum run_mode {
++	JIT = 1 << 0,
++	INTERP = 1 << 1
++};
 +
-+			stack_depth = subprogs[cur_subprog].stack_depth;
-+			if (stack_depth > MAX_BPF_STACK && !prog->jit_requested) {
-+				verbose(env, "stack size %d(extra %d) is too large\n",
-+					stack_depth, stack_depth_extra);
-+				return -EINVAL;
+ struct expect_msg {
+ 	const char *substr; /* substring match */
+ 	regex_t regex;
+@@ -87,6 +93,7 @@ struct test_spec {
+ 	int prog_flags;
+ 	int mode_mask;
+ 	int arch_mask;
++	int run_mode;
+ 	bool auxiliary;
+ 	bool valid;
+ };
+@@ -406,6 +413,7 @@ static int parse_test_spec(struct test_loader *tester,
+ 	bool collect_jit = false;
+ 	int func_id, i, err = 0;
+ 	u32 arch_mask = 0;
++	u32 run_mode = 0;
+ 	struct btf *btf;
+ 	enum arch arch;
+ 
+@@ -580,10 +588,22 @@ static int parse_test_spec(struct test_loader *tester,
+ 			if (err)
+ 				goto cleanup;
+ 			spec->mode_mask |= UNPRIV;
++		} else if (str_has_pfx(s, TEST_TAG_RUN_MODE_PFX)) {
++			val = s + sizeof(TEST_TAG_RUN_MODE_PFX) - 1;
++			if (strcmp(val, "jit") == 0) {
++				run_mode = JIT;
++			} else if (strcmp(val, "interpreter") == 0) {
++				run_mode = INTERP;
++			} else {
++				PRINT_FAIL("bad run mode spec: '%s'", val);
++				err = -EINVAL;
++				goto cleanup;
 +			}
- 			cur_subprog++;
- 			stack_depth = subprogs[cur_subprog].stack_depth;
- 			stack_depth_extra = 0;
+ 		}
+ 	}
+ 
+ 	spec->arch_mask = arch_mask ?: -1;
++	spec->run_mode = run_mode ?: (JIT | INTERP);
+ 
+ 	if (spec->mode_mask == 0)
+ 		spec->mode_mask = PRIV;
+@@ -930,6 +950,7 @@ void run_subtest(struct test_loader *tester,
+ 	struct test_subspec *subspec = unpriv ? &spec->unpriv : &spec->priv;
+ 	struct bpf_program *tprog = NULL, *tprog_iter;
+ 	struct bpf_link *link, *links[32] = {};
++	bool jit_enabled = is_jit_enabled();
+ 	struct test_spec *spec_iter;
+ 	struct cap_state caps = {};
+ 	struct bpf_object *tobj;
+@@ -946,6 +967,12 @@ void run_subtest(struct test_loader *tester,
+ 		return;
+ 	}
+ 
++	if ((jit_enabled && spec->run_mode & INTERP) ||
++	    (!jit_enabled && spec->run_mode & JIT)) {
++		test__skip();
++		return;
++	}
++
+ 	if (unpriv) {
+ 		if (!can_execute_unpriv(tester, spec)) {
+ 			test__skip();
 -- 
 2.47.1
 
