@@ -1,236 +1,372 @@
-Return-Path: <linux-kselftest+bounces-26559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30BABA34880
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 16:51:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C64CA3484A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 16:46:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98D953ACB8F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 15:43:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D15597A1F52
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 15:45:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E74A194AD5;
-	Thu, 13 Feb 2025 15:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DEF18F2FC;
+	Thu, 13 Feb 2025 15:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g2Ly/3Ov"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Crcp0V80";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="erq+gZpb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB4126B085
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 15:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6D244C7C;
+	Thu, 13 Feb 2025 15:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739461399; cv=none; b=tUA/MUJ5eTAA7gJANkxz3QUYxfORpp+is7VftgLGslbn4S4HzMml9LrGZQa2CaY6SL9hvpermEIKivzv2fHR5isjwZ/1LTgdh4IfsgU0IllDUVu1qEahj6tahXVLw+xt4MeMsiyxnMUND9qglg4yFc2za4SWxqT1HvtKQSH4xPI=
+	t=1739461580; cv=none; b=qIaPN1o/0SfSBGx3yUHJi43uUYLXuA46NnxU2Y74eHy6YfLSjqNsSDXp6YwYXZ3OI9+U21n7A39Mr93MlntYUMtdLA3x347BP+/xiM7fhpIOiWhqFZ0mAVwxhSoTNwBtIi61X+LZeisGkxdQy/f60IcYLbsK9iSMvGUmL4iZ+Mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739461399; c=relaxed/simple;
-	bh=uLiZ1rCqYfK/j8eSgyeV2MyQP8gfHxF6rrcTwqcvaaA=;
+	s=arc-20240116; t=1739461580; c=relaxed/simple;
+	bh=gvUZcnnQ5S3I/6Ed9Im/T5u1wze2xU99aehyrFj4ZGg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tpaUgE1xtl083a2I/b0Njuu4h8Emme7+R0/U3MZzQW18HYH9DnoKvkRQG55KLT18TDyjwMN0S5vY1MiF8WT3ZCiP+PoCWLoYv3zwF4oRZRtm7p3rcyMm8rvmdcg77ASUeL9t2/IBm6CSS65qZv63YK8c4ZmRsBnGAS/zv6ph7xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g2Ly/3Ov; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739461396;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yzI2r5nmEeXgT2ts1VutUTn2sHSIfm7BIbhjPpBpcIA=;
-	b=g2Ly/3OvR6mtGYXlVfLToj0OYk3cMlr9GTC/GXMZUO9jtSJFoVp8uRZjpymLRfs8yPUZqj
-	bY4dfTlxXY0e5Yc/WmFyArx+0UG2ZNuMHOikJ7gbGtp7nV3/fV1r4rtTXlNoxef5hCKhIT
-	NSuNFf0QN2svZVLLqSZ7UBHgclMMDZw=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-350-lB_Oe8P5Mt61K3j0Ro2Q9A-1; Thu, 13 Feb 2025 10:43:15 -0500
-X-MC-Unique: lB_Oe8P5Mt61K3j0Ro2Q9A-1
-X-Mimecast-MFC-AGG-ID: lB_Oe8P5Mt61K3j0Ro2Q9A_1739461394
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ab7f0964bc3so110282566b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 07:43:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739461394; x=1740066194;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yzI2r5nmEeXgT2ts1VutUTn2sHSIfm7BIbhjPpBpcIA=;
-        b=e5wk44XsDMG+2iE8+Sp2FAf/swbybCAU6++edR03R/dw6Brt7Kl4k3LVd2d0Xrq6FG
-         klR5his4EG+farksOPV9U+xHZ1knWe0ac/JziBbxV8wv5b5Q5m9/+/SLN6U8X/63kUpM
-         2adHkS3NWUVNbTRwe556zIIwh182eAPFXy0hDHYqdxtegJvAzl5d5bFTbR/8o01eiZPD
-         14neDmme+GUd/eoaj5w7YIKxHZBKHq8TZe1KFl97b6DG2YLyL/51eKgREs8J3SJTEySv
-         EzbCzIby47mRZ39N1OzzB9/MucGa4l0JIVvta2wJD6LPYnMTuNXQw5xIANIoo/C9vP2l
-         UdIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjk6KMB8XOIZSCD9dUhPPkL3BEhahonJi2o4mvtcW3D9o9Zzf+/5hNd1hB21ewJX3J9IRSKXF3fmYYw/sxOXE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJRDGp/PYdLxg7zSO2uXYazxRAvRGMCzaillk8yq08j5yk5gCr
-	LHU6MROwS7/tBLbn29UPMoRD4yM9wk7awgzSxRc2bKE194X6kFGpfqTToMB5abEgGC87CzOjmYJ
-	NzWar4vgeYmY1kpWPc3SJHqS+R3ylZVP9IK6UohgeUmHKI3yFz3y8d9szdFN1P1WzSg==
-X-Gm-Gg: ASbGncs/d7kvMxMzNm13kPbKJukvr/9HLqzu3ry+tc5GHMQABMCAg4AEObg9EAQXZj+
-	OiK8N1mwocK+NffI7KFF+mLGoyv1Coe7eZfw+SQX7Rbpw2puYO1+e1/F9umpcQGz1ZoERk8ftjn
-	xeckE3IpTZkSJw49yFRSk7MwbNPvaFEugbIjRa1rlIVQ4yR+mtYCww99sbzizcSc9XlRh0VAyCS
-	bIb5iMsxoK0FX3l+3Axqf2BDXSSzsr0XngX7mbzYsMtmzeWJUbE1iYsoJL5RYvZTEyieoVwgg==
-X-Received: by 2002:a17:907:96ac:b0:ab7:cd83:98b6 with SMTP id a640c23a62f3a-ab7f336d4dcmr727680166b.6.1739461393901;
-        Thu, 13 Feb 2025 07:43:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGMjEK63T1Hvw2DRYuMNZ0QhIbCttTcpsK+feVhTHyAb3Qwlg1NW7Q7NJFwB80xOR6TDebhgw==
-X-Received: by 2002:a17:907:96ac:b0:ab7:cd83:98b6 with SMTP id a640c23a62f3a-ab7f336d4dcmr727676966b.6.1739461393478;
-        Thu, 13 Feb 2025 07:43:13 -0800 (PST)
-Received: from redhat.com ([2a02:14f:171:92b6:64de:62a8:325e:4f1d])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba53376abbsm153403066b.93.2025.02.13.07.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 07:43:12 -0800 (PST)
-Date: Thu, 13 Feb 2025 10:43:07 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=aj/F49WHKuf5Jgrg716MkQMoWn66MAa/Kp7cdGNZwvZeitzukNjeSvbk63ie3W0v/227+wLKxDfTjn+Og0ZRcUBQYIaTtDE730USzyVYG1co6b0BPq4NhJI8yDKDkvQTq+FyQjKk1W3e+th5snEnkX1uQ+GOJBGrgkXfcIPmBBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Crcp0V80; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=erq+gZpb; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id A812D1140105;
+	Thu, 13 Feb 2025 10:46:14 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Thu, 13 Feb 2025 10:46:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1739461574; x=
+	1739547974; bh=flUcINtEEcqp3xh3oLozl64817tCecBtw4bDJgRumQM=; b=C
+	rcp0V80x1cf0mq+BpDJSAYlErFSXbbhdvLiBBFJVaGKMfPih2bCOsnNSpeIAo2EM
+	tHCKM4fekrRzm62x4Z2Ljy/qOIqE5vrY0YgtJ296dChT/plfDsybjU6+nfcgg4tF
+	gK5kubDNE7ucFDKG4TcL4dRtERlYAuSjJTwppc/ytMJCPNLKCWKYdJS/AgXHgULG
+	qLMBTW+7N47er+KX4GegfiKXXnPgKDa8DI6EyNMGPFgVcD2S/NxeFaGRziX8a3j4
+	AvGg5+khktWWYSVIBg30O54OZVo/wOPydVTPhyINR/OVsnNhm7u+0KItz8xoUPwK
+	jg26Q+tsyO5m0D6K3DwbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1739461574; x=1739547974; bh=flUcINtEEcqp3xh3oLozl64817tCecBtw4b
+	DJgRumQM=; b=erq+gZpbkIbDaZZuEIzUD7wvbwy8vVeVxjAGNsjd375/0HfE+4H
+	hj/lwF/1RXPmws4Q3IskMOHPeXAkBGgZejqJSbzGIV8lc+bV1xRf3BdFUvzWCXj3
+	jyUtSfS62C02TfTqumlBfjFhDdrRb23KhBKuD/F7QQuJV3JBYklEQ01MzllTNaWi
+	oaz50IakiG7omIc+JrZ78SyreoW6MrBSqLzlnfioDE58ydwiQkFdvqwQLlnDO63S
+	XVIURPfG67vKl8NggdO2lcbG9HO0fBRW+h4pJ/t4Ql6GPFindTxeuI4WeuqKfFCb
+	uoCASrVthMaviR9jh+uJqjNJGUewdWGd3GA==
+X-ME-Sender: <xms:xROuZy2mIyZeJDbj8B1k5QYFQC6NKBl_QDNzDTTCkc59OUNMWrSInA>
+    <xme:xROuZ1FL7MMBa44A9pD_7PdXzHbldSZOGn38fYh5HkCY1mYeO-1sCH1WPpOSWyRvg
+    PH1M03dp0hGhVUhVjA>
+X-ME-Received: <xmr:xROuZ64vU1tDisaGoqwKxUqYia3WkAvhTbn3bQbgIXIccaC_IeI_CfFe4qu8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegjeduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
+    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
+    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
+    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
+    pghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
+    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
+    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
+    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
+    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:xROuZz0NjbwXMzJydHsm2742v2z4qALWwOm3wq8icwmkKBFdyHbd4Q>
+    <xmx:xROuZ1E1c1gPBXYJGWxXLd6fpkC2YnrEmMzPSZDPb7eTQ_ttos-2aw>
+    <xmx:xROuZ88VhxBCBghNvOXb0OPfZ6q0A9QnOqj4sJcDCFmGYvgLTXpzFQ>
+    <xmx:xROuZ6nUjXZtrJM4B05ZutU4fPAGBCY4kxK_cwy1S63_mT1oblHUzA>
+    <xmx:xhOuZwkmbS0PbxX_jvq7qHkyFKyWfYmY3Y1mXyxkUXeIYYaCdXdiT8Kv>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Feb 2025 10:46:13 -0500 (EST)
+Date: Thu, 13 Feb 2025 16:46:11 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-	linux-kselftest@vger.kernel.org,
-	Yuri Benditovich <yuri.benditovich@daynix.com>,
-	Andrew Melnychenko <andrew@daynix.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	gur.stavi@huawei.com, devel@daynix.com
-Subject: Re: [PATCH net-next] tun: Pad virtio headers
-Message-ID: <20250213103636-mutt-send-email-mst@kernel.org>
-References: <20250213-buffers-v1-1-ec4a0821957a@daynix.com>
- <20250213020702-mutt-send-email-mst@kernel.org>
- <0fa16c0e-8002-4320-b7d3-d3d36f80008c@daynix.com>
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+	steffen.klassert@secunet.com, antony.antony@secunet.com,
+	willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH net-next v19 00/26] Introducing OpenVPN Data Channel
+ Offload
+Message-ID: <Z64Tw02PO433bob8@hog>
+References: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
+ <Z60wIRjw5Id1VTal@hog>
+ <090524ac-724d-4915-8699-fe2ae736ab8c@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0fa16c0e-8002-4320-b7d3-d3d36f80008c@daynix.com>
+In-Reply-To: <090524ac-724d-4915-8699-fe2ae736ab8c@openvpn.net>
 
-On Thu, Feb 13, 2025 at 06:23:55PM +0900, Akihiko Odaki wrote:
-> On 2025/02/13 16:18, Michael S. Tsirkin wrote:
+2025-02-13, 12:46:34 +0100, Antonio Quartulli wrote:
+> On 13/02/2025 00:34, Sabrina Dubroca wrote:
+> > Hello,
 > > 
-> > Commit log needs some work.
+> > 2025-02-11, 01:39:53 +0100, Antonio Quartulli wrote:
+> > > All minor and major reported problems have been finally addressed.
+> > > Big thanks to Sabrina, who took the time to guide me through
+> > > converting the peer socket to an RCU pointer.
 > > 
-> > So my understanding is, this patch does not do much functionally,
-> > but makes adding the hash feature easier. OK.
-> > 
-> > On Thu, Feb 13, 2025 at 03:54:06PM +0900, Akihiko Odaki wrote:
-> > > tun used to simply advance iov_iter when it needs to pad virtio header,
-> > > which leaves the garbage in the buffer as is. This is especially
-> > > problematic
-> > 
-> > I think you mean "this will become especially problematic"
-> > 
-> > > when tun starts to allow enabling the hash reporting
-> > > feature; even if the feature is enabled, the packet may lack a hash
-> > > value and may contain a hole in the virtio header because the packet
-> > > arrived before the feature gets enabled or does not contain the
-> > > header fields to be hashed. If the hole is not filled with zero, it is
-> > > impossible to tell if the packet lacks a hash value.
-> > > 
-> > > In theory, a user of tun can fill the buffer with zero before calling
-> > > read() to avoid such a problem, but leaving the garbage in the buffer is
-> > > awkward anyway so fill the buffer in tun.
-> > 
-> > 
-> > What is missing here is description of what the patch does.
-> > I think it is
-> > "Replace advancing the iterator with writing zeros".
-> > 
-> > There could be performance cost to the dirtying extra cache lines, though.
-> > Could you try checking that please?
+> > Something is off (not sure if it's new to this version): if I use
+> > test-tcp.sh to setup a set of interfaces and peers (I stop the test
+> > just after setup to keep the environment alive), then remove all netns
+> > with "ip -all netns delete", I expect all devices to go away, but they
+> > don't. With debug messages enabled I'm seeing some activity from the
+> > module ("tun0: sending keepalive to peer 3" and so on), and
+> > ovpn_net_uninit/ovpn_priv_free never got called.
 > 
-> It will not dirty extra cache lines; an explanation follows later. Because
-> of that, any benchmark are likely to show only noises, but if you have an
-> idea of workloads that should be tested, please tell me.
+> I can reproduce it. If later I rmmod ovpn I then get all the "Deleting peer"
+> messages.
+> So instances are not being purged on netns exit.
+> 
+> Will dive into it.
 
-pktgen usually
+I think the socket holds a ref on the netns, so it's not getting
+destroyed, simply "removed" from iproute's point of view. And the
+socket isn't going away as long as it's used by a peer.
 
+If I delete the peer(s) for the ovpn device and then the netns it was
+in, the netns is fully removed, and the ovpn device is gone. Also no
+issue if I delete the ovpn device before its netns, then everything is
+destroyed as expected.
 
+I'm not sure that can be solved, as least under the current refcount
+scheme.
+
+But I don't think there's a way to re-attach to that netns afterwards
+if we wanted to clean up manually (something similar to "ip netns
+attach <name> <pid>", but that won't work if whatever created the
+socket is not running anymore -- as is the case with ovpn-cli).
 
 > > 
-> > I think we should mention the risks of the patch, too.
-> > Maybe:
+> > [...]
+> > > So there is NO risk of deadlock (and indeed nothing hangs), but I
+> > > couldn't find a way to make the warning go away.
 > > 
-> > 	Also in theory, a user might have initialized the buffer
-> > 	to some non-zero value, expecting tun to skip writing it.
-> > 	As this was never a documented feature, this seems unlikely.
-> > >
-> > > 
-> > > The specification also says the device MUST set num_buffers to 1 when
-> > > the field is present so set it when the specified header size is big
-> > > enough to contain the field.
-> > 
-> > This part I dislike. tun has no idea what the number of buffers is.
-> > Why 1 specifically?
+> > I've spotted another splat on strparser cleanup that looked like an
+> > actual deadlock, but it's not very reproducible. Still looking into
+> > it, but I'm not convinced it's ok to call strp_done (as is done from
+> > ovpn_tcp_socket_detach) while under lock_sock, because AFAIU
+> > cancel_work_sync(&strp->work) may be waiting for a work that needs to
+> > lock the socket (cb.lock in do_strp_work). I guess tcp_tx_work would
+> > have the same problem.
 > 
-> That's a valid point. I rewrote the commit log to clarify, but perhaps we
-> can drop the code to set the num_buffers as "[PATCH] vhost/net: Set
-> num_buffers for virtio 1.0" already landed.
+> Will have a look here too.
+
+The only ways I've managed to reproduce it is by using some ugly
+kernel-side hacks to try to force that path being hit. Either forcing
+the strp work to be queued just as we detach the socket (in
+strp_stop), or this:
+
+ - hack some code path to do a big sleep() under lock_sock(), to give
+   me the time to do the next steps
+ - ping over ovpn, or any other way to add packets on the receive
+   socket
+ - delete the peer for the sleeping socket (while it's still sleeping)
+
+When that big sleep is over, strp_data_ready will kick off and queue
+its worker (because at this point the socket lock is still owned),
+then I think del_peer proceeds toward tcp_detach and I got the splat
+below. So that's maybe a bit hard to trigger in real life (I don't
+remember what I was doing the first time I got it, I think something
+messing with the RCU stuff we discussed earlier).
 
 
-I think I'd prefer that second option. it allows userspace
-to reliably detect the new behaviour, by setting the value
-to != 0.
+[  922.681435][  T300] ======================================================
+[  922.686247][  T300] WARNING: possible circular locking dependency detected
+[  922.690971][  T300] 6.14.0-rc1-net-00276-g95f1f7ea224e-dirty #279 Tainted: G                 N
+[  922.696584][  T300] ------------------------------------------------------
+[  922.699697][  T300] kworker/1:2/300 is trying to acquire lock:
+[  922.702105][  T300] ffff88800a662160 ((work_completion)(&strp->work)){+.+.}-{0:0}, at: start_flush_work+0x407/0xa50
+[  922.705716][  T300] 
+[  922.705716][  T300] but task is already holding lock:
+[  922.707779][  T300] ffff8880113edd98 (sk_lock-AF_INET){+.+.}-{0:0}, at: ovpn_socket_release+0x8a/0x1a0
+[  922.710238][  T300] 
+[  922.710238][  T300] which lock already depends on the new lock.
+[  922.710238][  T300] 
+[  922.712628][  T300] 
+[  922.712628][  T300] the existing dependency chain (in reverse order) is:
+[  922.714443][  T300] 
+[  922.714443][  T300] -> #1 (sk_lock-AF_INET){+.+.}-{0:0}:
+[  922.716127][  T300]        __lock_acquire+0xc4d/0x1ee0
+[  922.717250][  T300]        lock_acquire+0x1a9/0x500
+[  922.718266][  T300]        lock_sock_nested+0x40/0xf0
+[  922.719325][  T300]        strp_work+0x95/0x1e0
+[  922.720240][  T300]        process_one_work+0xe28/0x1460
+[  922.721307][  T300]        worker_thread+0x674/0xee0
+[  922.722283][  T300]        kthread+0x3c3/0x760
+[  922.723101][  T300]        ret_from_fork+0x46/0x80
+[  922.723792][  T300]        ret_from_fork_asm+0x1a/0x30
+[  922.724532][  T300] 
+[  922.724532][  T300] -> #0 ((work_completion)(&strp->work)){+.+.}-{0:0}:
+[  922.726038][  T300]        check_prev_add+0x1af/0x2400
+[  922.726927][  T300]        validate_chain+0xdcf/0x1a10
+[  922.727847][  T300]        __lock_acquire+0xc4d/0x1ee0
+[  922.728721][  T300]        lock_acquire+0x1a9/0x500
+[  922.729590][  T300]        start_flush_work+0x41a/0xa50
+[  922.730434][  T300]        __flush_work+0xee/0x210
+[  922.731213][  T300]        cancel_work_sync+0xb8/0xd0
+[  922.732022][  T300]        strp_done.cold+0x51/0xcf
+[  922.732830][  T300]        ovpn_tcp_socket_detach+0x28e/0x2de
+[  922.733752][  T300]        ovpn_socket_release_kref+0x1ef/0x350
+[  922.734713][  T300]        ovpn_socket_release+0xe7/0x1a0
+[  922.735577][  T300]        ovpn_peer_remove_work+0x2b/0x90
+[  922.736468][  T300]        process_one_work+0xe28/0x1460
+[  922.737357][  T300]        worker_thread+0x674/0xee0
+[  922.737985][  T300]        kthread+0x3c3/0x760
+[  922.738545][  T300]        ret_from_fork+0x46/0x80
+[  922.739177][  T300]        ret_from_fork_asm+0x1a/0x30
+[  922.739846][  T300] 
+[  922.739846][  T300] other info that might help us debug this:
+[  922.739846][  T300] 
+[  922.741159][  T300]  Possible unsafe locking scenario:
+[  922.741159][  T300] 
+[  922.742165][  T300]        CPU0                    CPU1
+[  922.743055][  T300]        ----                    ----
+[  922.743943][  T300]   lock(sk_lock-AF_INET);
+[  922.744638][  T300]                                lock((work_completion)(&strp->work));
+[  922.745786][  T300]                                lock(sk_lock-AF_INET);
+[  922.746837][  T300]   lock((work_completion)(&strp->work));
+[  922.747788][  T300] 
+[  922.747788][  T300]  *** DEADLOCK ***
+[  922.747788][  T300] 
+[  922.748856][  T300] 4 locks held by kworker/1:2/300:
+[  922.749474][  T300]  #0: ffff888008499b48 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0xd80/0x1460
+[  922.750588][  T300]  #1: ffffc90002527d30 ((work_completion)(&peer->remove_work)){+.+.}-{0:0}, at: process_one_work+0xddf/0x1460
+[  922.751894][  T300]  #2: ffff8880113edd98 (sk_lock-AF_INET){+.+.}-{0:0}, at: ovpn_socket_release+0x8a/0x1a0
+[  922.752983][  T300]  #3: ffffffff854de980 (rcu_read_lock){....}-{1:3}, at: start_flush_work+0x39/0xa50
+[  922.754018][  T300] 
+[  922.754018][  T300] stack backtrace:
+[  922.754734][  T300] CPU: 1 UID: 0 PID: 300 Comm: kworker/1:2 Tainted: G                 N 6.14.0-rc1-net-00276-g95f1f7ea224e-dirty #279
+[  922.754748][  T300] Tainted: [N]=TEST
+[  922.754752][  T300] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
+[  922.754761][  T300] Workqueue: events ovpn_peer_remove_work
+[  922.754779][  T300] Call Trace:
+[  922.754785][  T300]  <TASK>
+[  922.754791][  T300]  dump_stack_lvl+0xa5/0x100
+[  922.754803][  T300]  print_circular_bug.cold+0x38/0x48
+[  922.754820][  T300]  check_noncircular+0x2f2/0x3d0
+[  922.754922][  T300]  check_prev_add+0x1af/0x2400
+[  922.754942][  T300]  validate_chain+0xdcf/0x1a10
+[  922.754991][  T300]  __lock_acquire+0xc4d/0x1ee0
+[  922.755023][  T300]  lock_acquire+0x1a9/0x500
+[  922.755104][  T300]  start_flush_work+0x41a/0xa50
+[  922.755128][  T300]  __flush_work+0xee/0x210
+[  922.755198][  T300]  cancel_work_sync+0xb8/0xd0
+[  922.755211][  T300]  strp_done.cold+0x51/0xcf
+[  922.755222][  T300]  ovpn_tcp_socket_detach+0x28e/0x2de
+[  922.755237][  T300]  ovpn_socket_release_kref+0x1ef/0x350
+[  922.755253][  T300]  ovpn_socket_release+0xe7/0x1a0
+[  922.755268][  T300]  ovpn_peer_remove_work+0x2b/0x90
+[  922.755282][  T300]  process_one_work+0xe28/0x1460
+[  922.755330][  T300]  worker_thread+0x674/0xee0
+[  922.755402][  T300]  kthread+0x3c3/0x760
+[  922.755472][  T300]  ret_from_fork+0x46/0x80
+[  922.755497][  T300]  ret_from_fork_asm+0x1a/0x30
+[  922.755521][  T300]  </TASK>
 
 
-> 
-> Below is the rewritten commit log, which incorporates your suggestions and
-> is extended to cover the performance implication and reason the num_buffers
-> initialization:
-> 
-> tun simply advances iov_iter when it needs to pad virtio header,
-> which leaves the garbage in the buffer as is. This will become
-> especially problematic when tun starts to allow enabling the hash
-> reporting feature; even if the feature is enabled, the packet may lack a
-> hash value and may contain a hole in the virtio header because the
-> packet arrived before the feature gets enabled or does not contain the
-> header fields to be hashed. If the hole is not filled with zero, it is
-> impossible to tell if the packet lacks a hash value.
-> 
-> In theory, a user of tun can fill the buffer with zero before calling
-> read() to avoid such a problem, but leaving the garbage in the buffer is
-> awkward anyway so replace advancing the iterator with writing zeros.
-> 
-> A user might have initialized the buffer to some non-zero value,
-> expecting tun to skip writing it. As this was never a documented
-> feature, this seems unlikely. Neither is there a non-zero value that can
-> be determined and set before receiving the packet; the only exception
-> is the num_buffers field, which is expected to be 1 for version 1 when
-> VIRTIO_NET_F_HASH_REPORT is not negotiated.
+And then come the hung task warnings:
+ - del_peer waiting on the completion
+ - strp waiting on lock_sock
+ - peer cleanup/socket detach waiting on cancel_work_sync/strp
 
-you need mergeable buffers instead i presume.
-
-> This field is specifically
-> set to 1 instead of 0.
-> 
-> The overhead of filling the hole in the header is negligible as the
-> entire header is already placed on the cache when a header size defined
-
-
-what does this mean?
-
-> in the current specification is used even if the cache line is small
-> (16 bytes for example).
-> 
-> Below are the header sizes possible with the current specification:
-> a) 10 bytes if the legacy interface is used
-> b) 12 bytes if the modern interface is used
-> c) 20 bytes if VIRTIO_NET_F_HASH_REPORT is negotiated
-> 
-> a) and b) obviously fit in a cache line. c) uses one extra cache line,
-> but the cache line also contains the first 12 bytes of the packet so
-> it is always placed on the cache.
-
-
-Hmm. But it could be clean so shared. write makes it dirty and so
-not shared.
+[ 1106.347400][   T39] INFO: task kworker/u16:0:11 blocked for more than 122 seconds.
+[ 1106.348547][   T39]       Tainted: G                 N 6.14.0-rc1-net-00276-g95f1f7ea224e-dirty #279
+[ 1106.349671][   T39] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[ 1106.350748][   T39] task:kworker/u16:0   state:D stack:0     pid:11    tgid:11    ppid:2      task_flags:0x4208160 flags:0x00004000
+[ 1106.352454][   T39] Workqueue: kstrp strp_work
+[ 1106.353133][   T39] Call Trace:
+[ 1106.353659][   T39]  <TASK>
+[ 1106.354143][   T39]  __schedule+0xace/0x2620
+[ 1106.360659][   T39]  schedule+0xd0/0x210
+[ 1106.361266][   T39]  __lock_sock+0x137/0x230
+[ 1106.365430][   T39]  lock_sock_nested+0xcb/0xf0
+[ 1106.366173][   T39]  strp_work+0x95/0x1e0
+[ 1106.366845][   T39]  process_one_work+0xe28/0x1460
+[ 1106.369231][   T39]  worker_thread+0x674/0xee0
+[ 1106.371594][   T39]  kthread+0x3c3/0x760
+[ 1106.375692][   T39]  ret_from_fork+0x46/0x80
+[ 1106.377040][   T39]  ret_from_fork_asm+0x1a/0x30
+[ 1106.377851][   T39]  </TASK>
+[ 1106.378355][   T39] INFO: task kworker/1:2:300 blocked for more than 122 seconds.
+[ 1106.379590][   T39]       Tainted: G                 N 6.14.0-rc1-net-00276-g95f1f7ea224e-dirty #279
+[ 1106.381079][   T39] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[ 1106.382372][   T39] task:kworker/1:2     state:D stack:0     pid:300   tgid:300   ppid:2      task_flags:0x4208060 flags:0x00004000
+[ 1106.384211][   T39] Workqueue: events ovpn_peer_remove_work
+[ 1106.385072][   T39] Call Trace:
+[ 1106.385648][   T39]  <TASK>
+[ 1106.386139][   T39]  __schedule+0xace/0x2620
+[ 1106.393518][   T39]  schedule+0xd0/0x210
+[ 1106.394195][   T39]  schedule_timeout+0x18c/0x240
+[ 1106.398840][   T39]  __wait_for_common+0x3e3/0x610
+[ 1106.403079][   T39]  __flush_work+0x14f/0x210
+[ 1106.406874][   T39]  cancel_work_sync+0xb8/0xd0
+[ 1106.407519][   T39]  strp_done.cold+0x51/0xcf
+[ 1106.408109][   T39]  ovpn_tcp_socket_detach+0x28e/0x2de
+[ 1106.408851][   T39]  ovpn_socket_release_kref+0x1ef/0x350
+[ 1106.409588][   T39]  ovpn_socket_release+0xe7/0x1a0
+[ 1106.410271][   T39]  ovpn_peer_remove_work+0x2b/0x90
+[ 1106.410973][   T39]  process_one_work+0xe28/0x1460
+[ 1106.413075][   T39]  worker_thread+0x674/0xee0
+[ 1106.416968][   T39]  kthread+0x3c3/0x760
+[ 1106.419983][   T39]  ret_from_fork+0x46/0x80
+[ 1106.421172][   T39]  ret_from_fork_asm+0x1a/0x30
+[ 1106.421829][   T39]  </TASK>
+[ 1106.422260][   T39] INFO: task ovpn-cli:1213 blocked for more than 122 seconds.
+[ 1106.423215][   T39]       Tainted: G                 N 6.14.0-rc1-net-00276-g95f1f7ea224e-dirty #279
+[ 1106.424451][   T39] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[ 1106.425643][   T39] task:ovpn-cli        state:D stack:0     pid:1213  tgid:1213  ppid:514    task_flags:0x400100 flags:0x00000002
+[ 1106.427145][   T39] Call Trace:
+[ 1106.427610][   T39]  <TASK>
+[ 1106.428005][   T39]  __schedule+0xace/0x2620
+[ 1106.431820][   T39]  schedule+0xd0/0x210
+[ 1106.432351][   T39]  schedule_timeout+0x18c/0x240
+[ 1106.435050][   T39]  __wait_for_common+0x3e3/0x610
+[ 1106.439809][   T39]  ovpn_nl_peer_del_doit+0x270/0x6e0
+[ 1106.442825][   T39]  genl_family_rcv_msg_doit+0x1ea/0x2e0
+[ 1106.445602][   T39]  genl_family_rcv_msg+0x3a7/0x5b0
+[ 1106.450559][   T39]  genl_rcv_msg+0xb1/0x160
+[ 1106.451154][   T39]  netlink_rcv_skb+0x13e/0x3d0
+[ 1106.455220][   T39]  genl_rcv+0x29/0x40
+[ 1106.455737][   T39]  netlink_unicast+0x491/0x730
+[ 1106.457107][   T39]  netlink_sendmsg+0x77d/0xc00
+[ 1106.458517][   T39]  ____sys_sendmsg+0x7c5/0xac0
+[ 1106.461329][   T39]  ___sys_sendmsg+0x163/0x1b0
+[ 1106.468146][   T39]  __sys_sendmsg+0x135/0x1d0
+[ 1106.471564][   T39]  do_syscall_64+0x64/0x140
+[ 1106.472173][   T39]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ 1106.472947][   T39] RIP: 0033:0x7faa76628e56
+[ 1106.473558][   T39] RSP: 002b:00007ffe757311e0 EFLAGS: 00000202 ORIG_RAX: 000000000000002e
+[ 1106.474674][   T39] RAX: ffffffffffffffda RBX: 00007faa7654f740 RCX: 00007faa76628e56
+[ 1106.475715][   T39] RDX: 0000000000000000 RSI: 00007ffe75731270 RDI: 0000000000000003
+[ 1106.476847][   T39] RBP: 00007ffe757311f0 R08: 0000000000000000 R09: 0000000000000000
+[ 1106.477959][   T39] R10: 0000000000000000 R11: 0000000000000202 R12: 00005617490cf490
+[ 1106.479064][   T39] R13: 00005617490d04f0 R14: 00007ffe75731270 R15: 0000561733d62d78
+[ 1106.480175][   T39]  </TASK>
+[ 1106.480646][   T39] INFO: lockdep is turned off.
 
 -- 
-MST
-
+Sabrina
 
