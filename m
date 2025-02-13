@@ -1,135 +1,143 @@
-Return-Path: <linux-kselftest+bounces-26511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEA7A33B88
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 10:47:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14428A33BB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 10:56:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB65E3A5EF7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 09:47:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 700B13A6619
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2025 09:56:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E91220E314;
-	Thu, 13 Feb 2025 09:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB4120F09C;
+	Thu, 13 Feb 2025 09:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NwnbyiS6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hgv6vE5O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEDE20D4E6
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 09:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F001E2847;
+	Thu, 13 Feb 2025 09:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739440057; cv=none; b=ha3tXKhPGm5vP65aNhCodXO/CTwD1x65d7IrvpwKAoWN9sUs7UXpqA0GW45oPOwMIl0Pr8qRByNznlEMz+/7mxgDPTUrNcA20GUhTD0EjZqmLXaCbEO4i8cWsxMXUNgMOBOr2EVyEXKwYRDTx5qpAgvNyRyJvH/iGiUmAUmMu4M=
+	t=1739440573; cv=none; b=J5NZZd28TaBQFYOpjc7IETliVp74icp8HXKsiOwyFE0OuvHJ98uaKZK+WiOtDHY8jmXUIrC2lgH3NZisehKb/LUReCo4Wg8JPaWzCN55vSSgL0sLr/5E94R4ZJ6W9Tzq03923tgjZ32dlx8lytAUdNuxVdqBnmWFhQhtf0vBE2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739440057; c=relaxed/simple;
-	bh=qzJGD2b+cbjGe2N6+DgDif/b8vffJoz0V+ySZt7b4BI=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=fEsbZxMrafidI8CxFnrCxabt+nMyguRhWNX85q2KjDbV+TAAlkaNOMZPGT7q6HEEWRluj09ZDdnpq2g7RO0pooh58zvbp2BI83srDgL2bJU1kJGvdoUjb6Il1QLk7fcEEpX+OMPhBDIVFZOA4azxIwEHL2Z1egnmoQenpx8UQdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NwnbyiS6; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2f81a0d0a18so1628731a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 01:47:35 -0800 (PST)
+	s=arc-20240116; t=1739440573; c=relaxed/simple;
+	bh=jA7SlTyYhz1+j8HlAbKGMC97RbplB7cAQ05gjyR9wTw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ljFqXsZBz/cCTXvyiELCRwK8Yn0EReMcoyN7t180HYamxX/vT5gWOq4RjoU1fRkopJ1nz6dLl9iHFWpoRj24quZLzMxTDM/knz14elGADkUeH92zbQJAAufL0KXGYSm6sBAVHCAG0iixTQSIOgHzqQZjssAP6X2E8IIju0+bN6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hgv6vE5O; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43946b5920cso4042075e9.1;
+        Thu, 13 Feb 2025 01:56:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739440055; x=1740044855; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PuoEoBk1WxA1QM7rSYL5IAeW1R6CE44HE0t4+Ea+Jjs=;
-        b=NwnbyiS6AzjDitoE3i/JvqabdY0H083Quox50BgWrq7l6EXhLMU94d9S3Tzv6t8Rvt
-         zY0gs76Bc5llVbdwoCiwDCzP+X+GP6SM/r1k70gDcdAp2IvO0Kivd158O4oL2Clz3L6B
-         HYCG0qG5e30MeJTm42S8I8NA1fRhS6uNX2OWZxvb+oJgGxoJdqLphl2UjpJcN0Sih3TY
-         McsNSXaWfn/oFkIP621sY3KD37wpCP+Sqg3lh8rP/b92s/oNicuHYAyMQmgiZVDXlFPP
-         kmiJaIwVA387jjH0XG/uDUAFk1ON2UoNe0m3jWUZkSbbYXJQdyiyrypcJWTpHAOtE+Eg
-         GCyQ==
+        d=gmail.com; s=20230601; t=1739440570; x=1740045370; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6VgtMhO6+jJX1RjKLdoncmTjEAD+6FhglRm1uezg6DA=;
+        b=Hgv6vE5OsWur1EsBJTLkf5Yw349pSAE6Lp05HWKlRPG9+m+5WbsPo1CKJXvt/IGa/i
+         xrpkiDUqstn2jgmm1AEfDcAf7auFjEvOOVHdf/N3ci2O4QZ7HtvIHt9DcxH39UkdqUHr
+         DPGuIFrFPLJiZyz1b+1j9t7AAUFpYw4+Pt9so5H+Mf86NJ+TaqJ8ErEH4w6yLRtzW4mS
+         FPABPpgYwymr/VpnDAXX8kN0uUdXvQ0sPHcd03M1dUoZ5M+aqGrB3wZptr/npYEAMUwA
+         Yj8WLB9zzESuYDWXBahaBchabIyKp215y8uYPaKE7rIOZguBG5p/PngrPctt+k/IweJl
+         VYbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739440055; x=1740044855;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PuoEoBk1WxA1QM7rSYL5IAeW1R6CE44HE0t4+Ea+Jjs=;
-        b=QgLowyKZNN//wT4TO2pAXuBPw/xcpX6ozYfZ+2XU7UXWWaDLyZQ/PhZEaAhSYx4Cbu
-         ayZG/F8C+yLO1qgw4pvayNhFFybt6JhrOHLJuUgVdttB3N/RGWZbtwaXQn6Qc8hHcwXm
-         rCG1PYfp7LiHQFShLnfpNj1EWsKn+sL8acGNiQ3EfjWrQFedxIzt+ePFJfU+zy+1IDMA
-         I9tcyhijYQePvhNGaYKYcjuJvoxazMD4dQdK5KHggZUFbS99JVpjVu/Vzt4Okm9r2zlb
-         WdbWUrHoUXeQtDca3F42li63R0M7TQeTsmWh34eng+gxUjIyREfdvHTCHl7OAT8XAqAW
-         j2sw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdmlMRkB2REb/ibY4o7+e0nh09b5rsY+F50ye011EYx++BtVNOrl/gp2gD4yU1qG0NSL3JVfMeogi+pf5dI58=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8w9gW35ZudRpWoWMt5nz4Qc3jMjzIGWwcCldHYOP98xSjfKHH
-	gRH3k3K/Ds6ZFlxHwoIFeFd8aXQp6xfFIy7Gm9toGmkRTjdEQ16V+KVN/oCckYba8WDWRx+yv1D
-	YrYsj5hphxE4Pro6XCmC6Hw==
-X-Google-Smtp-Source: AGHT+IFjo0o7W8BMmhgfzjT1fZjgSjJW+Epialp3pC2emFjR4ZguxthbuHETUF+drifrj4mBdX3+3nB91gHNlOu2NQ==
-X-Received: from pjbmp3.prod.google.com ([2002:a17:90b:1903:b0:2fa:a101:755])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3a89:b0:2f4:423a:8fb2 with SMTP id 98e67ed59e1d1-2fc0e98dd17mr3572208a91.20.1739440055202;
- Thu, 13 Feb 2025 01:47:35 -0800 (PST)
-Date: Thu, 13 Feb 2025 09:47:33 +0000
-In-Reply-To: <Z0ykBZAOZUdf8GbB@x1n> (message from Peter Xu on Sun, 1 Dec 2024
- 12:59:33 -0500)
+        d=1e100.net; s=20230601; t=1739440570; x=1740045370;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6VgtMhO6+jJX1RjKLdoncmTjEAD+6FhglRm1uezg6DA=;
+        b=qyEc0vfGeC0PcSiu83lNKFijhQbIXr4mp09nmXwlq/AS6u7hZcaKpltCzBfdB0xh72
+         +xOVgjCBIxZRWkInHbvQ4J4kg7I/nzOQPGbtJB1T9HNYmwUJKO1pCI1qzvHqmSE2h1kB
+         HAdvWkB3iNQ0kSc41L/2ZRAX6Hh+9L0UUVCEU9PRr6SpIMbF4XcsITyF+3H2BpL5glGx
+         NrLN2LtS+RoB/J6mVO3y6dnB3TpAjOc88o+9064c4nQKqMfgw2oMO3NXU1Ql/foCALbC
+         RWgCXRa05662Gc1XlAnrfd6seM/ShpO7iN/mrCpua3ObXcyriqtWbfFq9MkJr+7Rd/+h
+         uivA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3tufqHBLGggpJeFu65M+QbZVD429u7flhjGSDj/85RnmuNFG1PQj0bCCQV8dIeXjsMIA1ZwlQ+HDBIA==@vger.kernel.org, AJvYcCUONQ7XX7uLvj48uVklyR+VJLpW4z2NQxK24HnrwFybQ3vvhS1e9zcghReuNKbF70OfdLEQW69W5yeK@vger.kernel.org, AJvYcCUf0wHUNrSkIC/xM0udslXpYo1J0xvgm7TV40ujYbdY4XqO9pBLvd11CAVReK3Hiu47+h4ZlvKdnffQ@vger.kernel.org, AJvYcCWL1nrIGCkCXkdQfkLa3BD/0SmQzsOGkzjyRWvIDsY1K1DSNoif/iA+lhsNSUYOVK8bMlO4kkplbS9jdQ==@vger.kernel.org, AJvYcCWd5CL/Ua/0CfWu9WdCQ+GDtCjaDkxOpMfSZl6OWziX5Tx+aLu//CQfsRZPyrg38SdajsrEwvxNL8+hPTvV8129@vger.kernel.org, AJvYcCWob7ogA+GYpPAPqUqbMYZUQly6RgXxaroCCdYzCdOzAvVC7Ney4aj+mOCbcfRpbunabcozjbsjxzeea7XSyHg=@vger.kernel.org, AJvYcCWp/m1hrbPiZpLaY9J8YODGgNBEa7rJ7badKg9j3GOGKug9YnFO6/kUyOqETE+9h2cNQn8sbBFg@vger.kernel.org, AJvYcCX6ica7pCcIoAR7FarPfjWHEm5Kz6oFBzcgU6ga3QWGYPKAXfFv11FSk1Kn7vqYF70bmdl+RLG+ft/FQ0Sc@vger.kernel.org, AJvYcCXMbL+LehLmsLp3NRaW043Xs6yfE5/fMWwln8WGm42ln44YrJwvqevLhVDjSjQzYM/O1kI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhfnzbWv4146UK9fZoCbq12Ri4Lx21+M2E7M87d4axe6x976y5
+	rhYXDi1WR04M9nGm5hEYx236T8+X1CAghHa7yTwaPpK+rRT7e6f0wiUsvNHKHrCnqrtV9tTChN0
+	V66bsK3SpHhy5zQDoyxnhMdRa6PY=
+X-Gm-Gg: ASbGncvhpXdXkmbRtpGTViKawpv8rCyIEZNt++CLA7mIvgMongPg4qNIIgyc/3SoNWs
+	JZX1CQnHTuLdJMNRAR8Vy45SiqsnMGtk+p8XELQJHfwpWcF3dPLDF39MsnrX2ObPy7K49EGM=
+X-Google-Smtp-Source: AGHT+IF4vz9ZMNWiLlURtMBrw7f64+VQaaApf4FQsQ85yq8rGSoIhlhaKmw+1l1LVh0uOeuQn3pwG9KU0hl60Rc/heo=
+X-Received: by 2002:a5d:5889:0:b0:38f:24f9:8bac with SMTP id
+ ffacd0b85a97d-38f24f9912fmr1885857f8f.23.1739440569419; Thu, 13 Feb 2025
+ 01:56:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <diqz5xle9nwq.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [RFC PATCH 14/39] KVM: guest_memfd: hugetlb: initialization and cleanup
-From: Ackerley Tng <ackerleytng@google.com>
-To: Peter Xu <peterx@redhat.com>
-Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
-	jgg@nvidia.com, david@redhat.com, rientjes@google.com, fvdl@google.com, 
-	jthoughton@google.com, seanjc@google.com, pbonzini@redhat.com, 
-	zhiquan1.li@intel.com, fan.du@intel.com, jun.miao@intel.com, 
-	isaku.yamahata@intel.com, muchun.song@linux.dev, mike.kravetz@oracle.com, 
-	erdemaktas@google.com, vannapurve@google.com, qperret@google.com, 
-	jhubbard@nvidia.com, willy@infradead.org, shuah@kernel.org, 
-	brauner@kernel.org, bfoster@redhat.com, kent.overstreet@linux.dev, 
-	pvorel@suse.cz, rppt@kernel.org, richard.weiyang@gmail.com, 
-	anup@brainfault.org, haibo1.xu@intel.com, ajones@ventanamicro.com, 
-	vkuznets@redhat.com, maciej.wieczor-retman@intel.com, pgonda@google.com, 
-	oliver.upton@linux.dev, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-fsdevel@kvack.org
+MIME-Version: 1.0
+References: <20250210133002.883422-7-shaw.leon@gmail.com> <20250213070533.9926-1-kuniyu@amazon.com>
+ <CABAhCOT8sCV4RgBWwfYjCw2xoZbdiYG8yuWReigx-u5DibTaiA@mail.gmail.com>
+In-Reply-To: <CABAhCOT8sCV4RgBWwfYjCw2xoZbdiYG8yuWReigx-u5DibTaiA@mail.gmail.com>
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Thu, 13 Feb 2025 17:55:32 +0800
+X-Gm-Features: AWEUYZkW9l6r7KSPGBGbQx_PCRCw6eQRHHUgG_KYRCauok2SpPFULcU0b728Vqw
+Message-ID: <CABAhCORgi7Jqu=Aigs6Fc8ewG5OshFvcunye03R43C+Z0ojZyw@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 06/11] net: ipv6: Use link netns in newlink()
+ of rtnl_link_ops
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: alex.aring@gmail.com, andrew+netdev@lunn.ch, 
+	b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org, bridge@lists.linux.dev, 
+	davem@davemloft.net, donald.hunter@gmail.com, dsahern@kernel.org, 
+	edumazet@google.com, herbert@gondor.apana.org.au, horms@kernel.org, 
+	kuba@kernel.org, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, miquel.raynal@bootlin.com, netdev@vger.kernel.org, 
+	osmocom-net-gprs@lists.osmocom.org, pabeni@redhat.com, shuah@kernel.org, 
+	stefan@datenfreihafen.org, steffen.klassert@secunet.com, 
+	wireguard@lists.zx2c4.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Peter Xu <peterx@redhat.com> writes:
-
-> On Tue, Sep 10, 2024 at 11:43:45PM +0000, Ackerley Tng wrote:
->> +/**
->> + * Removes folios in range [@lstart, @lend) from page cache of inode, updates
->> + * inode metadata and hugetlb reservations.
->> + */
->> +static void kvm_gmem_hugetlb_truncate_folios_range(struct inode *inode,
->> +						   loff_t lstart, loff_t lend)
->> +{
->> +	struct kvm_gmem_hugetlb *hgmem;
->> +	struct hstate *h;
->> +	int gbl_reserve;
->> +	int num_freed;
->> +
->> +	hgmem = kvm_gmem_hgmem(inode);
->> +	h = hgmem->h;
->> +
->> +	num_freed = kvm_gmem_hugetlb_filemap_remove_folios(inode->i_mapping,
->> +							   h, lstart, lend);
->> +
->> +	gbl_reserve = hugepage_subpool_put_pages(hgmem->spool, num_freed);
->> +	hugetlb_acct_memory(h, -gbl_reserve);
+On Thu, Feb 13, 2025 at 4:37=E2=80=AFPM Xiao Liang <shaw.leon@gmail.com> wr=
+ote:
 >
-> I wonder whether this is needed, and whether hugetlb_acct_memory() needs to
-> be exported in the other patch.
+> On Thu, Feb 13, 2025 at 3:05=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.=
+com> wrote:
+> >
+> [...]
+> > > diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+> > > index 863852abe8ea..108600dc716f 100644
+> > > --- a/net/ipv6/ip6_gre.c
+> > > +++ b/net/ipv6/ip6_gre.c
+> > > @@ -1498,7 +1498,8 @@ static int ip6gre_tunnel_init_common(struct net=
+_device *dev)
+> > >       tunnel =3D netdev_priv(dev);
+> > >
+> > >       tunnel->dev =3D dev;
+> > > -     tunnel->net =3D dev_net(dev);
+> > > +     if (!tunnel->net)
+> > > +             tunnel->net =3D dev_net(dev);
+> >
+> > Same question as patch 5 for here and other parts.
+> > Do we need this check and assignment ?
+> >
+> > ip6gre_newlink_common
+> > -> nt->net =3D dev_net(dev)
+> > -> register_netdevice
+> >   -> ndo_init / ip6gre_tunnel_init()
+> >     -> ip6gre_tunnel_init_common
+> >       -> tunnel->net =3D dev_net(dev)
 >
-> IIUC subpools manages the global reservation on its own when min_pages is
-> set (which should be gmem's case, where both max/min set to gmem size).
-> That's in hugepage_put_subpool() -> unlock_or_release_subpool().
->
+> Will remove this line.
 
-Thank you for pointing this out! You are right and I will remove
-hugetlb_acct_memory() from here.
+However, fb tunnel of ip6_tunnel, ip6_vti and sit can have
+tunnel->net =3D=3D NULL here. Take ip6_tunnel for example:
 
->> +
->> +	spin_lock(&inode->i_lock);
->> +	inode->i_blocks -= blocks_per_huge_page(h) * num_freed;
->> +	spin_unlock(&inode->i_lock);
->> +}
+ip6_tnl_init_net()
+    -> ip6_fb_tnl_dev_init()
+    -> register_netdev()
+        -> register_netdevice()
+            -> ip6_tnl_dev_init()
+
+This code path (including ip6_fb_tnl_dev_init()) doesn't set
+tunnel->net. But for ip6_gre, ip6gre_fb_tunnel_init() does.
 
