@@ -1,249 +1,185 @@
-Return-Path: <linux-kselftest+bounces-26637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24B63A35812
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 08:42:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 928F4A35865
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 09:04:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1AB41891C6D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 07:42:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D1713AB683
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 08:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3988F2165EA;
-	Fri, 14 Feb 2025 07:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8F2221550;
+	Fri, 14 Feb 2025 08:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DNipiRVN"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Pe5bIth2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2074.outbound.protection.outlook.com [40.107.244.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604F42163B9
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 07:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739518881; cv=none; b=RGusANHIlRjESoGG8vWUoc1wQ/8U+1bXK9TjIQKskcUtjbzoS50N9+fiVVoCZUQuJOIKFC4c7Pz989UE1xj1SSBsNnrZx5gacjR/Ft33jdloqaMR/LucWOvsVqNrJkT0DCE/fRPjVES75fB4hfICB8dDvFliPh7FC96WkH3Fi2c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739518881; c=relaxed/simple;
-	bh=wu1wYChkKBa84U+/lJlhYvBmiPd0MNbKVAR64OfX5YY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RBfuCQj/NfBoo/M8nwZo4gv7rp0AuXQ/6G1NQ/KJoc5cY4XMcDapJKp1QwSvJUqB2EWIXbIa2KO0s55a2WvYfzD8QZRznHCQoA48kl3ovO4zjwUXYwmNYPsDn231NuxLO3qbYx86dxaOCEtL6EwfVPk3vBM5lIqpHB2txn84QsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DNipiRVN; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2f9da17946fso6172300a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 23:41:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739518878; x=1740123678; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qphj6TWjxMj/gif/4tS2O4Kyyc5IbUJk5s6oYOqOgqw=;
-        b=DNipiRVNYB5pwNKT4xxWREnjPu8+cRIck/NsOReDCVUB/dd9nFsF7CYobqTL09s/ox
-         ufdCPZ7f7liktb9ILmFVKMAYFHKBUYZi6RB8lJmLMfmRjMmYZ8Z6aVOhdjtMiNSX9hQ+
-         3+cTsv8kfkRXnskVEaflpOVHC7cKfhTMmFNZrBrult+S5ZMJ670L1wG0BjBEcGfie2O4
-         Rz2vnD6a9KQKKRyxQ+RdlGqQSRWjxyI5NPvzQorv8d8Z877Ga8WqxJN5PMaDJwrfhyMr
-         6rbRXVInHHZi7HmXO2qed4dx93bNvBcI0S+0LEmcoBa+Tm6PVc2ijJ2ww/zrImMjkabj
-         8A8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739518878; x=1740123678;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Qphj6TWjxMj/gif/4tS2O4Kyyc5IbUJk5s6oYOqOgqw=;
-        b=cTuzb534HNPM+3yqUf00Qtwrj4xWaxkBDz7FaDn4YlGYVD4a5C+EmL183L3WDoKXzn
-         cpb4OyQ7B406J+u73rtip6l1/nhaj8erydam9yL8/sRgQYwgmZlgIrTDdKducR5kJCtr
-         qp0mhVB5Z76BhZKFeUyvrlztPThGb5UEraIYergsdZaTEVQN2IwOvpjFmmalEHfpKfwQ
-         xahZIBL/VY7fc7dsNsaWRPDKl1RoDMbAXdlhwfDzMKCxYB4cNTaY0KVmYKStaVa+7TXW
-         GUVjqhocen11nh6qwsgoD41EZRTy/U3hBy6DVGe3RyZgy3DVxhDyRrCKtWOgQCjvlSKo
-         QTuw==
-X-Forwarded-Encrypted: i=1; AJvYcCXm9Ha6fsnpweVmjCsfUIlXYt2HkeTs7IsYGNx1FCkrJQf7hQAY7i9o9dx6sIcgT5i5gAHTT13yGQtJQkDrRr8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZlu/UHnk3pEzJ4HEwEaG5FnOA511k7/YH12GCqmUGZ8PzdLkq
-	j17g0PYTLsZkS1qHxvmXkg3RcB/8NW96YuoxTXwiOSYLWZZfSfXICkVeCztX4nV45YHe7rlYMkN
-	e+9lJ9WpVwA==
-X-Google-Smtp-Source: AGHT+IFgeVopjebWDLNzibTUdu5X7StXLo69muuWXN8z+HL8PoMGaE8j2OZtBwMk7ckUhoqyVUCJrBYQdPwGMw==
-X-Received: from pfne24.prod.google.com ([2002:aa7:8258:0:b0:730:8518:b97])
- (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:98b:b0:732:1bad:e245 with SMTP id d2e1a72fcca58-7322c37ea39mr14491448b3a.7.1739518878328;
- Thu, 13 Feb 2025 23:41:18 -0800 (PST)
-Date: Fri, 14 Feb 2025 15:40:48 +0800
-In-Reply-To: <20250214074051.1619256-1-davidgow@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C9D21CC4D;
+	Fri, 14 Feb 2025 08:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739520244; cv=fail; b=bA+pt59tTsl92G9ZlzWiKYUNt+BdC4S8dz+kPQa0F2lQfGAeO62AOD+CkqL6IIS1jk7Gc3y5E6ZJC8dU4e/G525Uxl7d9KoDxJXs9P9JgNargGH7b64r1zRZ1/ddUmyeITsnqLf3ll2JM438YjSSx/t4MA4gNyxbgin3LNwrrW4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739520244; c=relaxed/simple;
+	bh=mtCCeOxl8dM/Ot0JSSzCPxc023Et8iCjTXYj7bOKOIk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QsnuW0wBowOMHXO+F+QnWNOtxoE7jHhncH86CzZXk9fG5mDEr8XGzLdy7RKBKXYAQnoQMsYN62QwrITw2YOHKIgOnvPvGoKsSLEQyIyJGKrBhy8HaToEA8mb945NwcQISKpvUQJlk3HV692BvrboGsYn9ajbryQm2QO0NRBIctk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Pe5bIth2; arc=fail smtp.client-ip=40.107.244.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RSkkC5QpsUejEatoDgcWXsiXGGLQznip2ThZqyve/htG7ziLJ4qjtsi9TVOg3C00r+NsIV6W7udr1U9kxBS4tixlcx4NxmaCqes15iiYruardiXqW3rMLfKKP6Ug/wRMqPFh2RYeSRfaJBXKQYQ5bzDCDlOj1nUP67cPjtteTUtQvps0wtlb9ZpQ3ZgO/niedVroGAo4ByK5IU9MbqIPu/7CumUMSZPSJJwk2iXKGcvzA/WNw4NFJwBZ3jDXCte50rwGIW+nrLEuasaP+RBtBQ84bQqj8JBxX7B7/Jv5niahU4joEEltW2E1hfiGPqgToXjl/NrnfhszeNK9dEJG9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B7r0qxbYz5KikhYIhGjZnS71KRZ+6xXvLWz8igB4oKw=;
+ b=Amr+XQ8oKJ523yZLHYDpgBEDalsofZ6DtpQloXmHLr8z1LrAVDA0cRZNgC+Ok4s3zXjSA8HIN+8p5rSCXyVoQv5IoVIIXB1i2ASN0TyxIe9XgwDtKn01pClGXoT98wgu/7yZNeMGDWUE84JTgb0utaaz00lglV/DUU8p+Qotd5E2dzwtQXnbyobWbFKe1J0PcajfTTn53WyH6xfWKmV4ICwXrWYX2S0McLDpw6GPtRoJpWo7z1gQ+cjyZeI57kIw/MoP9KQ0IKkge0igHXpQdMzlAfIEULLS4DdqnfvIrbJQNTG7avYlGKhNUE/pmgVNoPkxVxwEJjFIbwXMEI5HnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B7r0qxbYz5KikhYIhGjZnS71KRZ+6xXvLWz8igB4oKw=;
+ b=Pe5bIth2tK5K6d3aprazcF54fszQUS7Q6QsSYmH2Z81Dx67uKLfKB0JVghI5U8isMjfz3nwT+zeCKuGpHLQqBywZV+ZYpsHoE4C/cvSc548jH0/ko0E/dmFdXPIw3zyC2sVDJ2uK9LCblwLNvHlnq/0ajYrF7Fnr5LAIIF82VGfR4k/mbwmJBB3IER+Qyamgkivit28+xUjyLYma7kLCPoIIrqzK89SeoQMMzLl9ZwQjaFDiGzabhso8UmCRz+2mTmchsDbt66vin6+oBmkeT16vTLBkqmEcuYRkEI1FTLvdHz/SDOESjKBzXRolwYAw+pyLtMLI2YmV++u6d5aGgw==
+Received: from BL6PEPF00013DFA.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1001:0:d) by CY8PR12MB7100.namprd12.prod.outlook.com
+ (2603:10b6:930:60::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.11; Fri, 14 Feb
+ 2025 08:03:59 +0000
+Received: from BN3PEPF0000B06D.namprd21.prod.outlook.com
+ (2a01:111:f403:c803::1) by BL6PEPF00013DFA.outlook.office365.com
+ (2603:1036:903:4::4) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.14 via Frontend Transport; Fri,
+ 14 Feb 2025 08:03:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN3PEPF0000B06D.mail.protection.outlook.com (10.167.243.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8466.0 via Frontend Transport; Fri, 14 Feb 2025 08:03:59 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Feb
+ 2025 00:03:49 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Fri, 14 Feb 2025 00:03:49 -0800
+Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
+ Transport; Fri, 14 Feb 2025 00:03:48 -0800
+Date: Fri, 14 Feb 2025 00:03:47 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<will@kernel.org>
+CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
+	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
+Subject: Re: [PATCH v6 00/14] iommufd: Add vIOMMU infrastructure (Part-3:
+ vEVENTQ)
+Message-ID: <Z67440qtXH35UN2t@Asurada-Nvidia>
+References: <cover.1737754129.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250214074051.1619256-1-davidgow@google.com>
-X-Mailer: git-send-email 2.48.1.601.g30ceb7b040-goog
-Message-ID: <20250214074051.1619256-4-davidgow@google.com>
-Subject: [PATCH v6 3/3] rust: kunit: allow to know if we are in a test
-From: David Gow <davidgow@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>, 
-	"=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?=" <jose.exposito89@gmail.com>, Rae Moar <rmoar@google.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, Benno Lossin <benno.lossin@proton.me>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Matt Gilbride <mattgilbride@google.com>, Brendan Higgins <brendan.higgins@linux.dev>
-Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1737754129.git.nicolinc@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06D:EE_|CY8PR12MB7100:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27a3b385-0cc1-42d2-577f-08dd4cce2362
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024|7416014|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?qYjRelFvtTr9vsBNYDEHeoABF7b8mAvewpj9GFboNdabSIVn5wHFdnUlTpYU?=
+ =?us-ascii?Q?5oQTydhGWnRHamMNmQ5lhIvimD0qs26zwASlVgyqWxtn8VR/pkZb8iXAkq9+?=
+ =?us-ascii?Q?uZm5b8efkSm6r3jx3ISI1vt/U3UoCW4yNTG2075oR5d8Yv9G+wN2t0ULXlGq?=
+ =?us-ascii?Q?x1siEaYTgmDZKHchEKeGB1ciO5DD4H1CGEDnXND6bkLQbTL40B+kXH0yWsk3?=
+ =?us-ascii?Q?aMVy53RCjNq45cPB1pLJRre2KQ45tICrYd4KvLzmToc2rmjtJi/Sm5SKUtBJ?=
+ =?us-ascii?Q?/z7f4Td5GAx4OuqiM45PerJ7Sx8lQauINDGnUNrkOfuVIw0EuiFB588D3B0Z?=
+ =?us-ascii?Q?5jNALI6GUcVKsuhGrx/Gq9rM7tUec74w1ccNGOulY6U0kdFawoTEpsZEGqWU?=
+ =?us-ascii?Q?RR/xhorMCEErCIQE8h0j2gv6n04E8yOW8QtbqxIo4X1YtQxqiWC18L2kKDh+?=
+ =?us-ascii?Q?BrLqsduijQ+SW7rvoOXNZyJalmrQfDfMjwHWUAFT38X4ks/7Mk9Lw44QJvW2?=
+ =?us-ascii?Q?+cSKGfAg1ea9+v9qH4L69gRcDkYuYfl0CK4dgrzgx5OvLh/z2ko7vjZKUyWg?=
+ =?us-ascii?Q?C63P+I7n86g72t7CQbaJ37NKX/ynBdho0eCpwSTHnVeNrB7PSnt0Af//POFX?=
+ =?us-ascii?Q?dq/sPZb7VVblvlei7oMWCmPjK2YXXXsg+FT/sHW+q4K0q/wVc/FgchGB/mBz?=
+ =?us-ascii?Q?e/SDwM/rwoNvRGUYE7VCw8/MD0I2vHEvT8Y3kbDbOfk1xYphUBWACeY3XMfG?=
+ =?us-ascii?Q?iN9vsZrcUPSnrhNCEQ+BGIlUF9VO6rKxzpNc2q08iA8M8pcXusL+LxZC1RTS?=
+ =?us-ascii?Q?FP+ehQPAVUtybt4FtIT98P06EhudlI+J7JLunk+uiqbcA7vAYoyfoebiMjJW?=
+ =?us-ascii?Q?yufv6NutX2G90ZEHvL8LKz3J4iPUYmgOGb1YgR3dNJiQlsleyE+9DYY2+WfU?=
+ =?us-ascii?Q?qGynWPXeFQuYgw28IowC+KmBUIoEt8btbaoHe8zOpEgY/S1TPrjcCEpmnFyV?=
+ =?us-ascii?Q?tBrR94+Q1eH3tVh0OH2IyhkrBH4MYbx/7D4z9VPOWaWFMRTtYVx0xq1dMdkK?=
+ =?us-ascii?Q?UDG+yHX/EeUHHdcBbNoNrgHyP0cZaXOtbjGpOuU9EsTYMrj8rr1Qtj0h+cHZ?=
+ =?us-ascii?Q?VoJxjP0+p5y3eTUvmf3KGvxMckTy0RIWwtMbSYRyeiugT8jDM1DfZ4RNE85e?=
+ =?us-ascii?Q?gN8XXgtGLAKEm8/VdsOpbrt/B2QRCzfR1tZUzW+04Q4ksbBJ540zeJXXmvxV?=
+ =?us-ascii?Q?WRmZpXwE1tbTNvoZACVCcVPmUvu3oUyqSr8tHN2wfxxq++z+CopME9CZEFCy?=
+ =?us-ascii?Q?VrF0y62ic97d9vqwQEbQiaArQt62BasWDnybF+qDwdevwXf20cXQswbmVONE?=
+ =?us-ascii?Q?xjBUjZzgDE0GeSMbtW4QFx00dphcF0tfGF3rMmZ9Rbn6hwF8wL4XPIFJlTyR?=
+ =?us-ascii?Q?xGa3kWGcOOaQjTs37L8Bmz5pMvTIZs1HLsJV1vOC4LSNjiMl6jr0ZeIHwe3F?=
+ =?us-ascii?Q?yOF0Co5z9DdcZtc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024)(7416014)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 08:03:59.5224
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27a3b385-0cc1-42d2-577f-08dd4cce2362
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B06D.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7100
 
-From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+On Fri, Jan 24, 2025 at 04:30:29PM -0800, Nicolin Chen wrote:
+> This is on Github:
+> https://github.com/nicolinc/iommufd/commits/iommufd_veventq-v6
+> 
+> Testing with RMR patches for MSI:
+> https://github.com/nicolinc/iommufd/commits/iommufd_veventq-v6-with-rmr
+> Paring QEMU branch for testing:
+> https://github.com/nicolinc/qemu/commits/wip/for_iommufd_veventq-v6
+> 
+> Changelog
+> v6
+>  * Drop supports_veventq viommu op
+>  * Split bug/cosmetics fixes out of the series
+>  * Drop the blocking mutex around copy_to_user()
+>  * Add veventq_depth in uAPI to limit vEVENTQ size
+>  * Revise the documentation for a clear description
+>  * Fix sparse warnings in arm_vmaster_report_event()
+>  * Rework iommufd_viommu_get_vdev_id() to return -ENOENT v.s. 0
+>  * Allow Abort/Bypass STEs to allocate vEVENTQ and set STE.MEV for DoS
+>    mitigations
 
-In some cases, we need to call test-only code from outside the test
-case, for example, to mock a function or a module.
+I rebased a v7 on rc2, but found no changelog at all from v6 to v7,
+except Bagas's "Reviewed-by".
 
-In order to check whether we are in a test or not, we need to test if
-`CONFIG_KUNIT` is set.
-Unfortunately, we cannot rely only on this condition because:
-- a test could be running in another thread,
-- some distros compile KUnit in production kernels, so checking at runtime
-  that `current->kunit_test !=3D NULL` is required.
+So, I think we can still review on this version?
 
-Forturately, KUnit provides an optimised check in
-`kunit_get_current_test()`, which checks CONFIG_KUNIT, a global static
-key, and then the current thread's running KUnit test.
-
-Add a safe wrapper function around this to know whether or not we are in
-a KUnit test and examples showing how to mock a function and a module.
-
-Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
-
-Changes since v5:
-https://lore.kernel.org/all/20241213081035.2069066-4-davidgow@google.com/
-- Greatly improved documentation, which is both clearer and better
-  matches the rustdoc norm. (Thanks, Miguel)
-- The examples and safety comments are also both more idiomatic an
-  cleaner. (Thanks, Miguel)
-- More things sit appropriately behind CONFIG_KUNIT (Thanks, Miguel)
-
-Changes since v4:
-https://lore.kernel.org/linux-kselftest/20241101064505.3820737-4-davidgow@g=
-oogle.com/
-- Rebased against 6.13-rc1
-- Fix some missing safety comments, and remove some unneeded 'unsafe'
-  blocks. (Thanks Boqun)
-
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20241030045719.3085147-8-davidgow@g=
-oogle.com/
-- The example test has been updated to no longer use assert_eq!() with
-  a constant bool argument (fixes a clippy warning).
-
-No changes since v2:
-https://lore.kernel.org/linux-kselftest/20241029092422.2884505-4-davidgow@g=
-oogle.com/
-
-Changes since v1:
-https://lore.kernel.org/lkml/20230720-rustbind-v1-3-c80db349e3b5@google.com=
-/
-- Rebased on top of rust-next.
-- Use the `kunit_get_current_test()` C function, which wasn't previously
-  available, instead of rolling our own.
-- (Thanks also to Boqun for suggesting a nicer way of implementing this,
-  which I tried, but the `kunit_get_current_test()` version obsoleted.)
----
- rust/kernel/kunit.rs | 66 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
-
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 9e27b74a605b..3aad7a281b6d 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -286,11 +286,77 @@ macro_rules! kunit_unsafe_test_suite {
-     };
- }
-=20
-+/// Returns whether we are currently running a KUnit test.
-+///
-+/// In some cases, you need to call test-only code from outside the test c=
-ase, for example, to
-+/// create a function mock. This function allows to change behavior depend=
-ing on whether we are
-+/// currently running a KUnit test or not.
-+///
-+/// # Examples
-+///
-+/// This example shows how a function can be mocked to return a well-known=
- value while testing:
-+///
-+/// ```
-+/// # use kernel::kunit::in_kunit_test;
-+/// fn fn_mock_example(n: i32) -> i32 {
-+///     if in_kunit_test() {
-+///         return 100;
-+///     }
-+///
-+///     n + 1
-+/// }
-+///
-+/// let mock_res =3D fn_mock_example(5);
-+/// assert_eq!(mock_res, 100);
-+/// ```
-+///
-+/// Sometimes, you don't control the code that needs to be mocked. This ex=
-ample shows how the
-+/// `bindings` module can be mocked:
-+///
-+/// ```
-+/// // Import our mock naming it as the real module.
-+/// #[cfg(CONFIG_KUNIT)]
-+/// use bindings_mock_example as bindings;
-+/// #[cfg(not(CONFIG_KUNIT))]
-+/// use kernel::bindings;
-+///
-+/// // This module mocks `bindings`.
-+/// #[cfg(CONFIG_KUNIT)]
-+/// mod bindings_mock_example {
-+///     /// Mock `ktime_get_boot_fast_ns` to return a well-known value whe=
-n running a KUnit test.
-+///     pub(crate) fn ktime_get_boot_fast_ns() -> u64 {
-+///         1234
-+///     }
-+/// }
-+///
-+/// // This is the function we want to test. Since `bindings` has been moc=
-ked, we can use its
-+/// // functions seamlessly.
-+/// fn get_boot_ns() -> u64 {
-+///     // SAFETY: `ktime_get_boot_fast_ns()` is always safe to call.
-+///     unsafe { bindings::ktime_get_boot_fast_ns() }
-+/// }
-+///
-+/// let time =3D get_boot_ns();
-+/// assert_eq!(time, 1234);
-+/// ```
-+pub fn in_kunit_test() -> bool {
-+    // SAFETY: `kunit_get_current_test()` is always safe to call (it has f=
-allbacks for
-+    // when KUnit is not enabled).
-+    unsafe { !bindings::kunit_get_current_test().is_null() }
-+}
-+
- #[kunit_tests(rust_kernel_kunit)]
- mod tests {
-+    use super::*;
-+
-     #[test]
-     fn rust_test_kunit_example_test() {
-         #![expect(clippy::eq_op)]
-         assert_eq!(1 + 1, 2);
-     }
-+
-+    #[test]
-+    fn rust_test_kunit_in_kunit_test() {
-+        assert!(in_kunit_test());
-+    }
- }
---=20
-2.48.1.601.g30ceb7b040-goog
-
+Thanks
+Nicolin
 
