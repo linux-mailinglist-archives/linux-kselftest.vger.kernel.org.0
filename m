@@ -1,171 +1,388 @@
-Return-Path: <linux-kselftest+bounces-26656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EF26A35FB5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 15:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A351A360AC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 15:41:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE09F3AB58C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 14:00:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4BA53A28C0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 14:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44763264A91;
-	Fri, 14 Feb 2025 14:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78D9266573;
+	Fri, 14 Feb 2025 14:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Pf8MBZ+Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWrttBuP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD507081C
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 14:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B206E2661B9;
+	Fri, 14 Feb 2025 14:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739541637; cv=none; b=FcvN/pohxlYIBH3O9G1ws/INx4AXJrdPxbkq4RnwBqmXrwaZwte9CMann+4lFkVlSmsluVABljAto4eEjhhxL33OlzMQ1TxGP24F1hVSVT9UWGNNuCfPZPnTLBunWNZG51iAktjPiu4goMElRoIAg/KWPLvGr2TlSeQM2wOf9ho=
+	t=1739544094; cv=none; b=AmmeQPwngaENtWQzSpL1MP/YyiJiPwbDSlOZbk21ygrvfPZzoH64KzTItkb1yPAUmm5Dgi/Rt7GZC6dnyVbvIN48RL9Tu+yUtp5I8Vm8flYdiEGfByv0B+DhYFaKlGUkXZQeWm/g6T2rgQf3dcR5RKw6E5ytvqyEEoYn5v5141U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739541637; c=relaxed/simple;
-	bh=aT52DCyCkE/FOAU5A4XxNdM0hSVkOX9rETPz1btkjJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mQ6xBGBlFUX0bdD30zcnYbURgkEdDWunS9xX9/Oz9nsg7SzEYN/MhpJOSpiuw1CkgjC6BJbKIqnFpG8e1RRws2LNRkFNpGD8eqQtwd4XbVFewCggfUjUm6wrSKicWtFJ2suSs7ZPhPduUtqUwSyEODscacjjUFBt+CQR/L5I5eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Pf8MBZ+Y; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-38f265c6cb0so945715f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 06:00:34 -0800 (PST)
+	s=arc-20240116; t=1739544094; c=relaxed/simple;
+	bh=pyw+BJyPn139JLUocYBhLcBKS55uFur4xdWb9MEQN8s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m1xh7pJOhcJ7tYXDTZ1X1KzYJVKRVlh6pIj6NkZeZ6eIoxws1zQBxhkVMExePkCqXj6ltaiU6jFGijfvAQGANklxtxWv1OAJbPkl03MxagvjsY0D1U5KrOGBVw+X1zkg/3WA7iahLPUu/bJX2WT4kV7rS5cxuPfbr5Y7IQMzhjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FWrttBuP; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-307c13298eeso20828961fa.0;
+        Fri, 14 Feb 2025 06:41:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1739541633; x=1740146433; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QIKJXROgZdnHdVfnlvw9H3L9hbWVM4xWzC/FdoHev/E=;
-        b=Pf8MBZ+YG5nO7DTT6JrytEgcQIOq+1Q6yPXgN/2LM2H/E/yBZSZuAiQLWlvYFmOTWT
-         YsNgGcus6q56K/LrzogRdBbuUR1/IHGVuH7NBAtNVXyoTs6k6nGsjLlA9+JLQJ/AkSEG
-         gVaTQqhcaxIeZGrr9ICJZnMVeSeDo0/JYTV90WUE9bpxo76QeznUovViDPreIUpmOmVW
-         NOD77Q2d7lGG5BmAJZSdL3QPO8u4SCPOAurpjcKo5EeLO2v2+ixdt2iuDWWNlePYN84C
-         6ghjGxINUH/4MLCRlGCP6FhfpvsI1cFtIXZ5407Qn6L/SXSP0fV0w5u+RkA5a0RjYhO9
-         RMvg==
+        d=gmail.com; s=20230601; t=1739544091; x=1740148891; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oe9/eEqMmqvNor8cwQSKhskL7gHhmbo4tvwhBhdYuso=;
+        b=FWrttBuPyP8msFQhheXvnBAwwI43oAWBaT5ssgPiAw+Ktwaxl+eu4o2weg8AGPg4Dt
+         T0Io64eChE8Ds4ZAwA58g5fKk1Ax+7CoFeG2ZUTFNpvsWCOdPfRbMSx8HOwb0UfYWo8G
+         kHP6XPvnftZlKpHOFrqrNovFlcZY22wfhNye4nv3l3WUYT9iV93rvhe83HzeHq06hB01
+         hCUlIqY5hHmELjgZGyXSqC27ziutv8hELUWfLHvGE+KsonngT9aOD5C5LuiftvgB4jtt
+         IkT7hmqntyt5vZyF1lBvu9pd4QvhM+SBlTTgPdsu4sfVge458+F4hHQ+cRyWULlF9q2O
+         WENg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739541633; x=1740146433;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=QIKJXROgZdnHdVfnlvw9H3L9hbWVM4xWzC/FdoHev/E=;
-        b=daX2UIJXnadc1SMKNlx17fMQ9JzSXrqWy1yxz4Zcd8ckDFf6fyWQOLNDvWVZpXpPzB
-         xkVu5iIDzAHXfegjumB9wZN4EPZ8jtmT6OokFKdb2HVXCXgJd2gOW8xxRBTOC3WsHsAP
-         myNRP5IXzLdu8l03CaVSW0dgWssYUWoI7SKhshN60N4vspamDvDGZo0JUXzVUjP6+DGx
-         CS/LysNgZ/8qBYJxcM5wDJQrHxClZ1yQcutRB+QFzl2wKH7LoyoVrFYyXt4Y1eNRjXVG
-         3Ks8NG3L+zZn1zG0y6TiRAZXvueaUd0Ul3S609GADCkdsT8xhIJTkwzfEMVbVDSf62xS
-         G81g==
-X-Forwarded-Encrypted: i=1; AJvYcCWxV1TistrRConWFOxAGtF8YZopUUZK0llqEhioI+29G2l0x4ckUuLU0cT3KW1TBd6puLMN+W1SJ8xz769+mvA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdA3lbiGD/Nc44HRiF3goPHMlQOjCkuKlB2K9/xgLPqZ7uUbiy
-	7uPb5fIpdTmMOqLPHdCTw25kt7m4klNeXbB75rUDJCi2HnRSozvZW1bTVpuCpe4=
-X-Gm-Gg: ASbGncuPqXTZbErOTxBAn67z4aeXAEbjNHaQv3aE40io0zq1ABgzo/WlOg+quST3DKk
-	EnkD/yH7rWVSOdiNLpb8+nj/AiVoo/idV7lKJbVCb83OdRbn/ZiUmlHkw8VVMtD+fA4ldkbhoZn
-	FcQ47KqccBiEbZngx0Gvj9ed7iXe+OnFDDI/JCs46OBkffQE/yQdZm7ZGHouFWtCPRHoC1W2/a0
-	bqIT1Yz8MZ60p8pjosVZhgyTAs6l5PBtWHuC5SeeSwGJKSEDuDAIOiOFeOkaHeYI6x+PlcBUQmT
-	yvLpUn89PQPy1hevaYTNlW8oE2znrkmABGk6L9qyTq0CZqRyrDnGBg==
-X-Google-Smtp-Source: AGHT+IEPmiJ1bSo/864Z7aQ6et3I2XrazbxrUsk5ja1G6ShAPdhRXrrX/2IxOM6UBpVAET50cPOD0g==
-X-Received: by 2002:adf:e74c:0:b0:38f:31fe:6d08 with SMTP id ffacd0b85a97d-38f31fe7410mr849213f8f.46.1739541632914;
-        Fri, 14 Feb 2025 06:00:32 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:cd14:b9de:fda8:dc6d? ([2001:67c:2fbc:1:cd14:b9de:fda8:dc6d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f258f5efdsm4635615f8f.43.2025.02.14.06.00.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Feb 2025 06:00:32 -0800 (PST)
-Message-ID: <ccd4c233-e065-456d-8275-ffcca402583d@openvpn.net>
-Date: Fri, 14 Feb 2025 15:00:31 +0100
+        d=1e100.net; s=20230601; t=1739544091; x=1740148891;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Oe9/eEqMmqvNor8cwQSKhskL7gHhmbo4tvwhBhdYuso=;
+        b=QnPRuDzuK43espfOswxL0lU40gwyUaKykSfCnQDYTmLcGZ2qGZaFrK/seAVMOdprTx
+         fHBs8UqgBPOK6kejphRjMDpdMgxN5J4vPBxTnMOGWpReLIf2KgSExqwdyzAz2jcIktQL
+         0QBflD3ugvNbUIbuqcIGkITOLVe4eOczHAIlof4T2xHZlT0a+dubuaKLchNxJwHz+i8J
+         3hs1/qyt3kqAJK2dKKulbtGPi1SHy6/nmEEAe32/Jwl60mg3/pr6Y9gWTMYhQ7WCoI6E
+         awrQnQEPFHpRs2DMOB1CgCUZhAZb4ow/+Y9+O4lGtK5GvpTkmSZTQhNd5D6vVrDmzYVa
+         3gpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOZC3KIkIxVq+QUxRYPYwxbG8oEvJIPpjIDO05VUiAoaAAIPtgZir9plKrp6aN3KL4sYoASqCOgtAsYJWS3u0Q@vger.kernel.org, AJvYcCVmLv6BC0PEXANJ0fc4LPqNXQRIvehwK41I2FVYkW4ajz+yRkJn0alC3NQuGIOqyD6uxyI31lkxq3QXzrQ=@vger.kernel.org, AJvYcCXiTij1ywVEeplfEOj83LipcrTVXCzGctEiC35f3WERk+gJjwHOp+vJOEjNfWZLLyFEDMcWYiwOA883yRvPPo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrTLjKL+IRCLgeKF9GgufEmGIBCA7Wzkb64ve4rqd2taCyFDdM
+	wgVr4HRiwRrb5wo82e3bLIWgsQDu0yd4x4CLBDelaSco3GKOkWquRMWor1kO3XRhsAbYIoid0T2
+	l7IyMoxNOCaEUY/8OpmJnTtEFwV8=
+X-Gm-Gg: ASbGnctbPKIS3wVaAAOjtSA9ulT8XeVljRKGou/sTPSIGFLQ88CUIKBbQS/AyyRsAf6
+	we6aygm7QtNtFmu0vQwH1cX8an79KcbubEGrnjCjni+NYVT9+Xa+MsihEmT2A1KWI07dLjoNJlE
+	hyZxDXztyiqTk2ZCri4vSdn4WluBgCzec=
+X-Google-Smtp-Source: AGHT+IEHP1/ou32oGaJo+ui+Aoc0iAWhMsZ+zjW+y2I1QHaXj2d7iOxXdc2cExE7NP4Px14pEOsLVfeB6zsuqBbtkuw=
+X-Received: by 2002:a2e:9648:0:b0:308:eb31:df9c with SMTP id
+ 38308e7fff4ca-3090f11c8e5mr21047021fa.1.1739544090444; Fri, 14 Feb 2025
+ 06:41:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v19 00/26] Introducing OpenVPN Data Channel
- Offload
-From: Antonio Quartulli <antonio@openvpn.net>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
- steffen.klassert@secunet.com, antony.antony@secunet.com,
- willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>
-References: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
- <Z60wIRjw5Id1VTal@hog> <090524ac-724d-4915-8699-fe2ae736ab8c@openvpn.net>
- <Z64Tw02PO433bob8@hog> <0c0de58a-4dac-4b3b-9fc5-2a58a145d5ab@openvpn.net>
- <507c0388-8ce4-47fa-90b3-b46ae170045a@openvpn.net>
-Content-Language: en-US
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <507c0388-8ce4-47fa-90b3-b46ae170045a@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250214074051.1619256-1-davidgow@google.com> <20250214074051.1619256-2-davidgow@google.com>
+In-Reply-To: <20250214074051.1619256-2-davidgow@google.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 14 Feb 2025 09:40:54 -0500
+X-Gm-Features: AWEUYZn94LVObzk-67NyV5Edu12iMHyaHU-UZd5O3IiVN77rUgILpWhQIsbqA9g
+Message-ID: <CAJ-ks9kw7FTJ7EcHy8B+-1XFK8J4a-DuHLJhP1f3hPy10nOJZA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] rust: kunit: add KUnit case and suite macros
+To: David Gow <davidgow@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
+	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Benno Lossin <benno.lossin@proton.me>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Matt Gilbride <mattgilbride@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 14/02/2025 14:54, Antonio Quartulli wrote:
-> For example in wireguard/device.c the socket is released in 
-> pernet_operations.pre_exit().
-> 
-> But pre_exit() is invoked in cleanup_net(), which is invoked ONLY if the 
-> net refcount has reached 0...but how can it be zero before the sockets 
-> have been released?
-> 
-> I must be missing something, because this seems to be a reference loop.
+Very excited to see this progress.
 
-FTR, the answer is that sockets created in-kernel (like for wireguard) 
-have sk->sk_ref_cnt set to 0, which implies that no reference to the 
-netns is taken.
+On Fri, Feb 14, 2025 at 2:41=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+>
+> Add a couple of Rust const functions and macros to allow to develop
+> KUnit tests without relying on generated C code:
+>
+>  - The `kunit_unsafe_test_suite!` Rust macro is similar to the
+>    `kunit_test_suite` C macro. It requires a NULL-terminated array of
+>    test cases (see below).
+>  - The `kunit_case` Rust function is similar to the `KUNIT_CASE` C macro.
+>    It generates as case from the name and function.
+>  - The `kunit_case_null` Rust function generates a NULL test case, which
+>    is to be used as delimiter in `kunit_test_suite!`.
+>
+> While these functions and macros can be used on their own, a future
+> patch will introduce another macro to create KUnit tests using a
+> user-space like syntax.
+>
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+> Co-developed-by: Matt Gilbride <mattgilbride@google.com>
+> Signed-off-by: Matt Gilbride <mattgilbride@google.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Co-developed-by: David Gow <davidgow@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> Changes since v5:
+> https://lore.kernel.org/all/20241213081035.2069066-2-davidgow@google.com/
+> - Rebased against 6.14-rc1
+> - Several documentation touch-ups, including noting that the example
+>   test function need not be unsafe. (Thanks, Miguel)
+> - Remove the need for static_mut_refs, by using core::addr_of_mut!()
+>   combined with a cast. (Thanks, Miguel)
+>   - While this should also avoid the need for const_mut_refs, it seems
+>     to have been enabled for other users anyway.
+> - Use ::kernel::ffi::c_char for C strings, rather than i8 directly.
+>   (Thanks, Miguel)
+>
+> Changes since v4:
+> https://lore.kernel.org/linux-kselftest/20241101064505.3820737-2-davidgow=
+@google.com/
+> - Rebased against 6.13-rc1
+> - Allowed an unused_unsafe warning after the behaviour of addr_of_mut!()
+>   changed in Rust 1.82. (Thanks Boqun, Miguel)
+> - Fix a couple of minor rustfmt issues which were triggering checkpatch
+>   warnings.
+>
+> Changes since v3:
+> https://lore.kernel.org/linux-kselftest/20241030045719.3085147-4-davidgow=
+@google.com/
+> - The kunit_unsafe_test_suite!() macro now panic!s if the suite name is
+>   too long, triggering a compile error. (Thanks, Alice!)
+>
+> Changes since v2:
+> https://lore.kernel.org/linux-kselftest/20241029092422.2884505-2-davidgow=
+@google.com/
+> - The kunit_unsafe_test_suite!() macro will truncate the name of the
+>   suite if it is too long. (Thanks Alice!)
+> - We no longer needlessly use UnsafeCell<> in
+>   kunit_unsafe_test_suite!(). (Thanks Alice!)
+>
+> Changes since v1:
+> https://lore.kernel.org/lkml/20230720-rustbind-v1-1-c80db349e3b5@google.c=
+om/
+> - Rebase on top of rust-next
+> - As a result, KUnit attributes are new set. These are hardcoded to the
+>   defaults of "normal" speed and no module name.
+> - Split the kunit_case!() macro into two const functions, kunit_case()
+>   and kunit_case_null() (for the NULL terminator).
+>
+> ---
+>  rust/kernel/kunit.rs | 121 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>
+> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+> index 824da0e9738a..d34a92075174 100644
+> --- a/rust/kernel/kunit.rs
+> +++ b/rust/kernel/kunit.rs
+> @@ -161,3 +161,124 @@ macro_rules! kunit_assert_eq {
+>          $crate::kunit_assert!($name, $file, $diff, $left =3D=3D $right);
+>      }};
+>  }
+> +
+> +/// Represents an individual test case.
+> +///
+> +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminated list =
+of valid test cases.
+> +/// Use `kunit_case_null` to generate such a delimiter.
 
-So ovpn has this issue because our sockets are coming from userspace.
+Can both of these be linkified? [`kunit_unsafe_test_suite!`] and
+[`kunit_case_null`]. There are more instances below.
 
-Regards,
+> +#[doc(hidden)]
+> +pub const fn kunit_case(
+> +    name: &'static kernel::str::CStr,
+> +    run_case: unsafe extern "C" fn(*mut kernel::bindings::kunit),
+> +) -> kernel::bindings::kunit_case {
+> +    kernel::bindings::kunit_case {
+> +        run_case: Some(run_case),
+> +        name: name.as_char_ptr(),
+> +        attr: kernel::bindings::kunit_attributes {
+> +            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NORMAL,
+> +        },
+> +        generate_params: None,
+> +        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
+> +        module_name: core::ptr::null_mut(),
+> +        log: core::ptr::null_mut(),
 
--- 
-Antonio Quartulli
-OpenVPN Inc.
+These members, after `name`, can be spelled `..kunit_case_null()` to
+avoid some repetition.
 
+> +    }
+> +}
+> +
+> +/// Represents the NULL test case delimiter.
+> +///
+> +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminated list =
+of test cases. This
+> +/// function returns such a delimiter.
+> +#[doc(hidden)]
+> +pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
+> +    kernel::bindings::kunit_case {
+> +        run_case: None,
+> +        name: core::ptr::null_mut(),
+> +        generate_params: None,
+> +        attr: kernel::bindings::kunit_attributes {
+> +            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NORMAL,
+> +        },
+> +        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
+> +        module_name: core::ptr::null_mut(),
+> +        log: core::ptr::null_mut(),
+> +    }
+> +}
+> +
+> +/// Registers a KUnit test suite.
+> +///
+> +/// # Safety
+> +///
+> +/// `test_cases` must be a NULL terminated array of valid test cases.
+> +///
+> +/// # Examples
+> +///
+> +/// ```ignore
+> +/// extern "C" fn test_fn(_test: *mut kernel::bindings::kunit) {
+> +///     let actual =3D 1 + 1;
+> +///     let expected =3D 2;
+> +///     assert_eq!(actual, expected);
+> +/// }
+> +///
+> +/// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] =3D [
+> +///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
+> +///     kernel::kunit::kunit_case_null(),
+> +/// ];
+> +/// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+> +/// ```
+> +#[doc(hidden)]
+> +#[macro_export]
+> +macro_rules! kunit_unsafe_test_suite {
+> +    ($name:ident, $test_cases:ident) =3D> {
+> +        const _: () =3D {
+> +            const KUNIT_TEST_SUITE_NAME: [::kernel::ffi::c_char; 256] =
+=3D {
+> +                let name_u8 =3D ::core::stringify!($name).as_bytes();
+
+This can be a little simpler:
+
+let name =3D $crate::c_str!(::core::stringify!($name)).as_bytes_with_nul();
+
+> +                let mut ret =3D [0; 256];
+> +
+> +                if name_u8.len() > 255 {
+> +                    panic!(concat!(
+> +                        "The test suite name `",
+> +                        ::core::stringify!($name),
+> +                        "` exceeds the maximum length of 255 bytes."
+> +                    ));
+> +                }
+> +
+> +                let mut i =3D 0;
+> +                while i < name_u8.len() {
+> +                    ret[i] =3D name_u8[i] as ::kernel::ffi::c_char;
+> +                    i +=3D 1;
+> +                }
+
+I'd suggest `ret[..name.len()].copy_from_slice(name)` but
+`copy_from_slice` isn't `const`. This can stay the same with the
+now-unnecessary cast removed, or it can be the body of
+`copy_from_slice`:
+
+                // SAFETY: `name` is valid for `name.len()` elements
+by definition, and `ret` was
+                // checked to be at least as large as `name`. The
+buffers are statically know to not
+                // overlap.
+                unsafe {
+                    ::core::ptr::copy_nonoverlapping(name.as_ptr(),
+ret.as_mut_ptr(), name.len());
+
+                }
+
+> +
+> +                ret
+> +            };
+> +
+> +            #[allow(unused_unsafe)]
+> +            static mut KUNIT_TEST_SUITE: ::kernel::bindings::kunit_suite=
+ =3D
+> +                ::kernel::bindings::kunit_suite {
+> +                    name: KUNIT_TEST_SUITE_NAME,
+> +                    // SAFETY: User is expected to pass a correct `test_=
+cases`, given the safety
+> +                    // precondition; hence this macro named `unsafe`.
+> +                    test_cases: unsafe {
+> +                        ::core::ptr::addr_of_mut!($test_cases)
+> +                            .cast::<::kernel::bindings::kunit_case>()
+> +                    },
+
+This safety comment seems to be referring to the safety of
+`addr_of_mut!` but this was just a compiler limitation until Rust
+1.82, right? Same thing below on `KUNIT_TEST_SUITE_ENTRY`.
+
+Can we also narrow the `#[allow]`? This seems to work:
+
+                    #[allow(unused_unsafe)]
+                    // SAFETY: ...
+                    test_cases: unsafe {
+                        ::core::ptr::addr_of_mut!($test_cases)
+                            .cast::<::kernel::bindings::kunit_case>()
+                    },
+
+> +                    suite_init: None,
+> +                    suite_exit: None,
+> +                    init: None,
+> +                    exit: None,
+> +                    attr: ::kernel::bindings::kunit_attributes {
+> +                        speed: ::kernel::bindings::kunit_speed_KUNIT_SPE=
+ED_NORMAL,
+> +                    },
+> +                    status_comment: [0; 256usize],
+
+I don't think you need the usize hint here, there's always a usize in
+the length position.
+
+> +                    debugfs: ::core::ptr::null_mut(),
+> +                    log: ::core::ptr::null_mut(),
+> +                    suite_init_err: 0,
+> +                    is_init: false,
+> +                };
+> +
+> +            #[used]
+> +            #[link_section =3D ".kunit_test_suites"]
+
+This attribute causes the same problem I describe in
+https://lore.kernel.org/all/20250210-macros-section-v2-1-3bb9ff44b969@gmail=
+.com/.
+That's because the KUnit tests are generated both on target and on
+host (even though they won't run on host). I don't think you need to
+deal with that here, just pointing it out. I think we'll need a cfg to
+indicate we're building for host to avoid emitting these attributes
+that only make sense in the kernel.
+
+> +            static mut KUNIT_TEST_SUITE_ENTRY: *const ::kernel::bindings=
+::kunit_suite =3D
+> +                // SAFETY: `KUNIT_TEST_SUITE` is static.
+> +                unsafe { ::core::ptr::addr_of_mut!(KUNIT_TEST_SUITE) };
+
+This is missing the `#[allow(unused_unsafe)]` (it appears in the next
+patch). This means this commit will not compile on bisection.
+
+> +        };
+> +    };
+> +}
+> --
+> 2.48.1.601.g30ceb7b040-goog
+>
+>
+
+Global note: it seems more customary to use crate:: and $crate::
+instead of kernel:: and ::kernel in functions and macros,
+respectively.
+
+Cheers.
+
+
+
+
+Tamir
 
