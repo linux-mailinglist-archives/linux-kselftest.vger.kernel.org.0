@@ -1,154 +1,246 @@
-Return-Path: <linux-kselftest+bounces-26633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E070A3560D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 06:11:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FB20A35808
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 08:41:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E449616CFD3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 05:11:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C21523AB8F2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 07:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 519F61714D0;
-	Fri, 14 Feb 2025 05:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7CA32153FB;
+	Fri, 14 Feb 2025 07:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="nII9W+eC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="baep5RrY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pCSPyBJD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E2E16CD33;
-	Fri, 14 Feb 2025 05:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B08E2153DF
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 07:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739509886; cv=none; b=K+LVUWAXJDx/kVS2SS+BTxuMtC/NAWsNGtaQPwlMvW3EAH84KBAqd1c05sEi3EO6t6Pz+Pw8RpGcj3FG69QKjpXxWd5xqxyAgScn9klWJRkh3Zv9XTgRYnkI/1TlVS4QkuQXzmCVNccTBzoLE0+AzVFFZBKp+5mQq81gG5vOk50=
+	t=1739518866; cv=none; b=M2ubdm9+El+oP3FaAo5PH668pzGAEjndxPrVFt/wsO27y5Zw8Dp+BoPp/nz7rQYnbb4D3Zvour4NQKQdDqGmOyvKe8fOGlkpcpC2rx+gpeScC1my8ypGDKrtr+PeuxjRbC/FRIWFM8H/lRkqu0jRwUYppZ1gyOhkKjgWwv+tjeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739509886; c=relaxed/simple;
-	bh=izTXpmjkLskuTaKgQ53chP8qGfsAs27u/crrMU1WP+0=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=RaYE+F6M05c3Tkcoy8KpvOZncEldJ0K6sLhV9cpn+uPiTzu+6LA65/qEdtp4mDOqayNkUkM12aSEDQjKg+H95iTB6U0k0PMAroD9PLTW2Z9I3L/WbNmYohR7nZzTtsKiKbQLYAvq+lpU+bAHYOcVFmQOpIaxCT4ztorDuJTwxfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=nII9W+eC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=baep5RrY; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id 6F91911400EC;
-	Fri, 14 Feb 2025 00:11:22 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Fri, 14 Feb 2025 00:11:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
-	 h=cc:cc:content-id:content-type:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1739509882; x=
-	1739596282; bh=heMlusK5FGA6JqL97UB/JZCAI0C9yt2iHuQEDmaniks=; b=n
-	II9W+eCiL7CV2whRTV1Xb/uBvTekDrriJJa5+7d+MVlHYHVK2urzM2PY78tKVLp/
-	4cSjy9jLAxuPb9DSx/jfYzRb5dR4Af6EY7NCe7HAWvNerCoarJP0LBH4DFeZtz1p
-	JlY/uXO2ahq+y+FfOKrYzvhz9ntGMkz9Fkr95tK+mI8uD3/j4aTTMannZuKQTuPW
-	yDRd/IIeizV0nMiuJZ1C32mCct0Fux4x7ewP01DnO7QKvSdtuxH7I8Yax4upRhzN
-	JNzUtZVm/RxJNNkkwL/64juXMEmRdpQh7EncNTMLi/puS+oREFevqfxpNaOa3SuF
-	5XUkbd+qttR3IdMwBYlGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-id:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1739509882; x=1739596282; bh=h
-	eMlusK5FGA6JqL97UB/JZCAI0C9yt2iHuQEDmaniks=; b=baep5RrYQPiyfvkCh
-	06Gdqq7dU36kSjLHnOUNXn39ilKCG8EgKVk7sgNEJ+FJgmjTcDV+eMpAyyw/yHGi
-	J2vjUDzoC74zd7FXQa55yCqZVI2JTVE3T98KHxZRXqNVWWjEjwEk51aDAwmYvo+D
-	Lysgff/P3j9xRQjCf+s5pp0me7PS1TAn8O+fovcz8H0vvpcJRqL1EQSZau5RpyGa
-	85TpIx7l7SwIk/KUQhl+F9bwuchQd/gVoKfSgH1TlZkVYOFVUzpW+oalPl8VANCt
-	E8dndfQfuR2qUnT3p4dgxSblVEglTimbbqHk0Q1i4m+pv1QXk5dFBBphFVvr0S2N
-	IEM5w==
-X-ME-Sender: <xms:edCuZzzKnRIDlAuq4um28_84z9ghYnx_yWxoolndABPFgBEzpiVaCA>
-    <xme:edCuZ7QfJ3D7MESVkjfPhmdgAbhSxUsmx_F_Sm-Dbv-ZvghVr_4s-PWsJNHLMMyDc
-    YVg9yDeBVttk0YI5m0>
-X-ME-Received: <xmr:edCuZ9WPdDAQjpP2S17k5M9SkBMf6cGOqKyaeebzM9D-j5cJ6-eyKagln_51p1L2i4YUOA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegkeejjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhfogggtfffksehttdertdertddv
-    necuhfhrohhmpeflrgihucggohhssghurhhghhcuoehjvhesjhhvohhssghurhhghhdrnh
-    gvtheqnecuggftrfgrthhtvghrnhepjedvgffhteevvddufedvjeegleetveekveegtdfh
-    udekveeijeeuheekgeffjedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepjhhvsehjvhhoshgsuhhrghhhrdhnvghtpdhnsggprhgtphhtthho
-    peduhedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhgriihorhessghlrggtkh
-    ifrghllhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvght
-    pdhrtghpthhtoheplhhiuhhhrghnghgsihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
-    epvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehhohhrmhhssehk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgif
-    odhnvghtuggvvheslhhunhhnrdgthhdprhgtphhtthhopegsohhrihhsphesnhhvihguih
-    grrdgtohhm
-X-ME-Proxy: <xmx:edCuZ9gHGu7_p1PU8Gg6KqhcN8jIPFFCGgPzcAG5dSRp7CrHLKGGcg>
-    <xmx:edCuZ1ArhYtB1PW9FRZYUvxT_ztQOcpg1chBf0FmixcN3BxiGLSyjQ>
-    <xmx:edCuZ2LtQ9vtQsKJ9lDR3h8DhUJkwicN-U_1eXqejy5jj0DFo4Zw3g>
-    <xmx:edCuZ0CwJ6gvLFXIG_aXn8tM1ybbJooWBGa4qYKzEkmTI1rpHr9qHg>
-    <xmx:etCuZ_T4DGXuhh6UQSGobHRkaXcDoQlvwNv6i1-wfcfYvw7dHoH0qz9h>
-Feedback-ID: i53714940:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Feb 2025 00:11:21 -0500 (EST)
-Received: by famine.localdomain (Postfix, from userid 1000)
-	id 6975F9FD37; Thu, 13 Feb 2025 21:11:19 -0800 (PST)
-Received: from famine (localhost [127.0.0.1])
-	by famine.localdomain (Postfix) with ESMTP id 689099FD36;
-	Thu, 13 Feb 2025 21:11:19 -0800 (PST)
-From: Jay Vosburgh <jv@jvosburgh.net>
-To: Hangbin Liu <liuhangbin@gmail.com>
-cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-    "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>,
-    Nikolay Aleksandrov <razor@blackwall.org>,
-    Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
-    Boris Pismenny <borisp@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
-    Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 net 0/2] bonding: fix incorrect mac address setting
-In-reply-to: <20250207092920.543458-1-liuhangbin@gmail.com>
-References: <20250207092920.543458-1-liuhangbin@gmail.com>
-Comments: In-reply-to Hangbin Liu <liuhangbin@gmail.com>
-   message dated "Fri, 07 Feb 2025 09:29:18 +0000."
-X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
+	s=arc-20240116; t=1739518866; c=relaxed/simple;
+	bh=12kOPRWel7xFCzSXfD1ckAW3cz4eQ6lXHcEjTTfHP5s=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ZybOAKHxCKmWpcLNFAFC3P4gUbWvb0Pz30YenZqyMOcbYuAlRNfTo55TUFf80RgE6f5K420qF257j1zT13kxiIz5hg8NBPKHrQcI2D6MDYckP+wnjI3TXmk0Mzaanxxyl7kqDv2F9EZO+szf/zJkRlGe1MHwyeFCpSLMj1rX+3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pCSPyBJD; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-220e7d654acso19021275ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Feb 2025 23:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739518864; x=1740123664; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ros5ecWILQk9ViSMi46tyrMnoasJTGynME1EO90va/I=;
+        b=pCSPyBJDNza5YN0gsduFf8YznwKZ+9fmLxYpU+YGZDyZS86XgPJzd/h78X5XK48QAf
+         h+YEQ4p2OWwZkMPp+Sfvpe94zh6fTYfvyViAx7uFPEg5nI0Kyx/s5qX7BZLE2qmtku9x
+         kmnAzs1d11NsIB/g/gGEqL5YmZ4kB81DOcGbZOly7i3CiOC2PMbIIUomnXcuKqwic0zB
+         Lti2hrOJFiDjmy+GuzXnSRMmTZ8AvRXNPptzByXMegOaT3Cwz5B8HdcTRFnfzfAAXUml
+         4XDXrgbKoeHQUfddC22h/J31a/grrzn8pNgk1VcFvWG3iBEiCJowoPANA8y0YHXsNZV2
+         n00Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739518864; x=1740123664;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ros5ecWILQk9ViSMi46tyrMnoasJTGynME1EO90va/I=;
+        b=OuWTeMbnPG1YNiKtrX4mFMzwZMSZ05d1pZeNlR0w2XR+srH0XrnZopuVcSrbe9nt27
+         J34lnstibGjQxJ8Yj48bJnjhQOVRpPZc81bjT/PgNcSg3rqGrnP/j6ZyiX/Pm0d3EKQC
+         +tP0cMp+gB2wRbdmeXJ9hPIoL+z3mgplRFAI74GLsKvufECeqOlzKYPFgjvBty5O5WnO
+         T5Ep+6k2I6lKEReXmBhLm+xm6gqIJHuvewlErqoHPNNqWgzN6vyxvLzQxhC6w/JWuVuQ
+         T9bwIeUObQindY38SiM8PAM84XVTA9ph3ztzWdUjrmDRVHyoXyJhXb2nO1pcgX6wSCNu
+         4fIg==
+X-Forwarded-Encrypted: i=1; AJvYcCWcfILcWaV2nUKyOR6QhXo7XTSE/mJiYZCMmmhPicV1I4gm/s8uc2gcB0Ke5UKBnI49JorLbTLecRXEoqryd2w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynZxuBNCOIaYVhx+kDxGV0qaVjLQE1iUB2aIdkjBlc//Jaz2aV
+	lbtrZmF3F6AZVyFld3wDtNQ3oT9O/yUDGnndbg6M7GKr0BcQmFuAM5ngqkEZDfqNkAeDbY6w6K1
+	WWiTyXpk6zw==
+X-Google-Smtp-Source: AGHT+IFc9mssigZBBdQeLa48hAtAvejO3PdAygZr+C8/qwDEPSonq7V87yX/QBsUdgxAuKB6Xx/+ib3gt23dEg==
+X-Received: from plbjk16.prod.google.com ([2002:a17:903:3310:b0:21f:4e6:1edd])
+ (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:dacc:b0:21f:6546:9adc with SMTP id d9443c01a7336-220d3517e17mr85460525ad.13.1739518864278;
+ Thu, 13 Feb 2025 23:41:04 -0800 (PST)
+Date: Fri, 14 Feb 2025 15:40:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <985474.1739509879.1@famine>
-Date: Thu, 13 Feb 2025 21:11:19 -0800
-Message-ID: <985475.1739509879@famine>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.601.g30ceb7b040-goog
+Message-ID: <20250214074051.1619256-1-davidgow@google.com>
+Subject: [PATCH v6 0/3] rust: kunit: Support KUnit tests with a user-space
+ like syntax
+From: David Gow <davidgow@google.com>
+To: Miguel Ojeda <ojeda@kernel.org>, 
+	"=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?=" <jose.exposito89@gmail.com>, Rae Moar <rmoar@google.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, Benno Lossin <benno.lossin@proton.me>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Matt Gilbride <mattgilbride@google.com>, Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hangbin Liu <liuhangbin@gmail.com> wrote:
+Hi all,
 
->The mac address on backup slave should be convert from Solicited-Node
->Multicast address, not from bonding unicast target address.
->
->v3: also fix the mac setting for slave_set_ns_maddr. (Jay)
->    Add function description for slave_set_ns_maddr/slave_set_ns_maddrs (Jay)
->v2: fix patch 01's subject
->
->Hangbin Liu (2):
->  bonding: fix incorrect MAC address setting to receive NS messages
->  selftests: bonding: fix incorrect mac address
+After much delay, v6 of the KUnit/Rust integration patchset is here.
+This change incorporates most of Miguels suggestions from v5 (save for
+some of the copyright headers I wasn't comfortable unilaterally
+changing). This means the documentation is much improved, and it should
+work more cleanly on Rust 1.83 and 1.84, no longer requiring
+static_mut_refs or const_mut_refs. (I'm not 100% sure I understand all
+of the details of this, but I'm comfortable enough with how it's ended
+up.)
 
-	For the series:
+This has been rebased against 6.14-rc1/rust-next, and should be able to
+comfortably go in via either the KUnit or Rust trees. My suspicion is
+that there's more likely to be conflicts with the Rust work (due to the
+changes in rust/macros/lib.rs) than with KUnit, where there are no
+current patches which would break the API, so maybe it makes the most
+sense for it to go in via Rust for 6.15.
 
-Acked-by: Jay Vosburgh <jv@jvosburgh.net>
+This series was originally written by Jos=C3=A9 Exp=C3=B3sito, and has been
+modified and updated by Matt Gilbride, Miguel Ojeda, and myself. The
+original version can be found here:
+https://github.com/Rust-for-Linux/linux/pull/950
 
-	-J
+Add support for writing KUnit tests in Rust. While Rust doctests are
+already converted to KUnit tests and run, they're really better suited
+for examples, rather than as first-class unit tests.
 
-> drivers/net/bonding/bond_options.c            | 55 ++++++++++++++++---
-> .../drivers/net/bonding/bond_options.sh       |  4 +-
-> 2 files changed, 49 insertions(+), 10 deletions(-)
->
->-- 
->2.46.0
->
+This series implements a series of direct Rust bindings for KUnit tests,
+as well as a new macro which allows KUnit tests to be written using a
+close variant of normal Rust unit test syntax. The only change required
+is replacing '#[cfg(test)]' with '#[kunit_tests(kunit_test_suite_name)]'
+
+An example test would look like:
+	#[kunit_tests(rust_kernel_hid_driver)]
+	mod tests {
+	    use super::*;
+	    use crate::{c_str, driver, hid, prelude::*};
+	    use core::ptr;
+
+	    struct SimpleTestDriver;
+	    impl Driver for SimpleTestDriver {
+	        type Data =3D ();
+	    }
+
+	    #[test]
+	    fn rust_test_hid_driver_adapter() {
+	        let mut hid =3D bindings::hid_driver::default();
+	        let name =3D c_str!("SimpleTestDriver");
+	        static MODULE: ThisModule =3D unsafe { ThisModule::from_ptr(ptr::n=
+ull_mut()) };
+
+        	let res =3D unsafe {
+	            <hid::Adapter<SimpleTestDriver> as driver::DriverOps>::registe=
+r(&mut hid, name, &MODULE)
+	        };
+	        assert_eq!(res, Err(ENODEV)); // The mock returns -19
+	    }
+	}
+
+
+Please give this a go, and make sure I haven't broken it! There's almost
+certainly a lot of improvements which can be made -- and there's a fair
+case to be made for replacing some of this with generated C code which
+can use the C macros -- but this is hopefully an adequate implementation
+for now, and the interface can (with luck) remain the same even if the
+implementation changes.
+
+A few small notable missing features:
+- Attributes (like the speed of a test) are hardcoded to the default
+  value.
+- Similarly, the module name attribute is hardcoded to NULL. In C, we
+  use the KBUILD_MODNAME macro, but I couldn't find a way to use this
+  from Rust which wasn't more ugly than just disabling it.
+- Assertions are not automatically rewritten to use KUnit assertions.
 
 ---
-	-Jay Vosburgh, jv@jvosburgh.net
+
+Changes since v5:
+https://lore.kernel.org/all/20241213081035.2069066-1-davidgow@google.com/
+- Rebased against 6.14-rc1
+- Fixed a bunch of warnings / clippy lints introduced in Rust 1.83 and
+  1.84.
+- No longer needs static_mut_refs / const_mut_refs, and is much cleaned
+  up as a result. (Thanks, Miguel)
+- Major documentation and example fixes. (Thanks, Miguel)
+
+Changes since v4:
+https://lore.kernel.org/linux-kselftest/20241101064505.3820737-1-davidgow@g=
+oogle.com/
+- Rebased against 6.13-rc1
+- Allowed an unused_unsafe warning after the behaviour of addr_of_mut!()
+  changed in Rust 1.82. (Thanks Boqun, Miguel)
+- "Expect" that the sample assert_eq!(1+1, 2) produces a clippy warning
+  due to a redundant assertion. (Thanks Boqun, Miguel)
+- Fix some missing safety comments, and remove some unneeded 'unsafe'
+  blocks. (Thanks Boqun)
+- Fix a couple of minor rustfmt issues which were triggering checkpatch
+  warnings.
+
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20241030045719.3085147-2-davidgow@g=
+oogle.com/T/
+- The kunit_unsafe_test_suite!() macro now panic!s if the suite name is
+  too long, triggering a compile error. (Thanks, Alice!)
+- The #[kunit_tests()] macro now preserves span information, so
+  errors can be better reported. (Thanks, Boqun!)
+- The example tests have been updated to no longer use assert_eq!() with
+  a constant bool argument (which triggered a clippy warning now we
+  have the span info).
+
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20241029092422.2884505-1-davidgow@g=
+oogle.com/T/
+- Include missing rust/macros/kunit.rs file from v2. (Thanks Boqun!)
+- The kunit_unsafe_test_suite!() macro will truncate the name of the
+  suite if it is too long. (Thanks Alice!)
+- The proc macro now emits an error if the suite name is too long.
+- We no longer needlessly use UnsafeCell<> in
+  kunit_unsafe_test_suite!(). (Thanks Alice!)
+
+Changes since v1:
+https://lore.kernel.org/lkml/20230720-rustbind-v1-0-c80db349e3b5@google.com=
+/T/
+- Rebase on top of the latest rust-next (commit 718c4069896c)
+- Make kunit_case a const fn, rather than a macro (Thanks Boqun)
+- As a result, the null terminator is now created with
+  kernel::kunit::kunit_case_null()
+- Use the C kunit_get_current_test() function to implement
+  in_kunit_test(), rather than re-implementing it (less efficiently)
+  ourselves.
+
+Changes since the GitHub PR:
+- Rebased on top of kselftest/kunit
+- Add const_mut_refs feature
+  This may conflict with https://lore.kernel.org/lkml/20230503090708.252431=
+0-6-nmi@metaspace.dk/
+- Add rust/macros/kunit.rs to the KUnit MAINTAINERS entry
+
+---
+
+Jos=C3=A9 Exp=C3=B3sito (3):
+  rust: kunit: add KUnit case and suite macros
+  rust: macros: add macro to easily run KUnit tests
+  rust: kunit: allow to know if we are in a test
+
+ MAINTAINERS          |   1 +
+ rust/kernel/kunit.rs | 199 +++++++++++++++++++++++++++++++++++++++++++
+ rust/macros/kunit.rs | 161 ++++++++++++++++++++++++++++++++++
+ rust/macros/lib.rs   |  29 +++++++
+ 4 files changed, 390 insertions(+)
+ create mode 100644 rust/macros/kunit.rs
+
+--=20
+2.48.1.601.g30ceb7b040-goog
+
 
