@@ -1,270 +1,445 @@
-Return-Path: <linux-kselftest+bounces-26694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B799A367E1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 22:54:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A30A367EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 23:00:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E7CF1729AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 21:53:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADD7F3AF242
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 22:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A6C1FC109;
-	Fri, 14 Feb 2025 21:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BE51FC10E;
+	Fri, 14 Feb 2025 22:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIH8ubkD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qy+tUyoP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B911FC0E3;
-	Fri, 14 Feb 2025 21:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19551FBEAF
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 22:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739569984; cv=none; b=rTGgamYb6yx2KfeOBPdsFgBkF8YUN9egv5Y/5AIgeKaCES4r61/IehwVRCBNh/UMHbvz0OoC0rwH/QiZDkjFKC9E1BVp/ZOSynA2O41giT3tx/zktzzDCAw4LpJCzUxtH5L0G7lAJShE4kUqsrEFemx3Bfj5SQNLuyewEu/IQhw=
+	t=1739570404; cv=none; b=o/orL6A5XKOdoTKhfTdElT/NGtqUNvrPI3iF7+F3A4ufqNpP3rvM/fjIIobdnpbxMeHcRk2JHqJYlSTRORqXMj6Jv90f+iEdCclcNwIASmeLe0QRWtWgNw1QiGledz/NsXoXWxHYBT4BHekPY8Lx/Uqv88J9Rq7tux7lvZMjlRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739569984; c=relaxed/simple;
-	bh=HavbWFUnciSTOttH8mfqU/8SObb8RPeSLGn2Jxv5I4Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XTkrImp1pg/Vf0oz+S9hyJatCOPEU/rSi8rLuJZHxRM+qHpz4cVj86siOGilEAcM9gx0nzF6Jz/HpodxurYWbT5z/w9wxae/BEnYWFXhKfqCmAIavpMMlgryeheQMadmv7OqApDLUc5lr2IHdNTisbq0fbcdvRbGe9zQ8i+nRoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIH8ubkD; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-471dc990e18so1502951cf.0;
-        Fri, 14 Feb 2025 13:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739569982; x=1740174782; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xFMliA0Dn/p4u+VrmfnKQQd+kfiJIGEDkR0ON34/fPY=;
-        b=JIH8ubkDuoLxWaqLN5X+0s5K0Dgwk7bqnfgzpjF7GQEPWOXS+otkN9l9YhlqcZR4lf
-         qfaYA+LlUCCIctdasfU3DHdUxBriXJ/b+LnIFsmKNAKxJcb0KSLEtTxi5NumuZw7/rE+
-         WO3P+CXPv8AC7exeJdBU08sR1q8rl5X/ancNI8MloRvy68rReOy7+0NUVvEJr2sHaYTW
-         eCqtbZwKl+DUWMtrfYUtd/k/uDi8UbFhanGesm116Gtghr+aa4U0W9JOyqmEdbrS3hlZ
-         0XA8L78ZQNVrUM4snh8nIT/T9HbHU+iHBvmdxKzPR/cxsztZezNoe6IRUn2gdhxjqDYN
-         ZW9A==
+	s=arc-20240116; t=1739570404; c=relaxed/simple;
+	bh=aK6nlOumBwwBE8fp0+hFXtCE3Vt5FrP5EL6BMMIp2bE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d9eQgd6H4QnXgtyWWlbQ6j7V17ccnch8cWd19CsxHZ36hfAnPyVMMqeXDiQGj9laFwpx8yTATXtEma3Ua9s3oiqbWXkmYkwaFRZ1q2VqEWNVQRAAfrTgMgnQpf37UhmdzVxaSuOKTXpY8kHxh0AwPmfc+MmCfHcrsjG+kbwQ88Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qy+tUyoP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739570399;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1UXxy6mQxDzeF30KOcZxZ8FOown0bDjggxUSAN6E34g=;
+	b=Qy+tUyoPndDQOJq4/SsN4ve/u+xMGU8mwj/80/se+wan+ZudgikKW072+MaUAkP2dUpZCb
+	NLyXPOb1YNK9pzy/yAYGF9PQNlJ6YiVGzVsBlqsqGg3Ut2DYW60s9Vs5q9cASDhyWdpXX4
+	+sHnvqKOH26sMWd4W3xixtr8VRjFE58=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-278-mPzaDPNqO4mOd8IZe3DqSg-1; Fri, 14 Feb 2025 16:59:55 -0500
+X-MC-Unique: mPzaDPNqO4mOd8IZe3DqSg-1
+X-Mimecast-MFC-AGG-ID: mPzaDPNqO4mOd8IZe3DqSg_1739570393
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-439640a1a8dso11718425e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 13:59:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739569982; x=1740174782;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xFMliA0Dn/p4u+VrmfnKQQd+kfiJIGEDkR0ON34/fPY=;
-        b=gKn/Da0RbcAj4tlJLFkwPXW/m2CXBurNbQI/mdY4o/cRPgK2DET/QZFVr0lP8lGKIv
-         EW2Am44kOvZRUjsxXw9EWkHjyyl+ZK9RqTwaiLUhOmLEq7H94JISmyc8i1QiDRMwGWA7
-         B/dC9j/uALBS/kiVjg3T5Dd+SDDwtgCwRbOQ7WTqjLVQOHRhq0aFrJ2SfobqHnsLkhHK
-         1x9EqqIOpVMlJFY7egh7qrlIk+Mv2Kke/nXwsOjeJcdVLIaTfTJhEOjyGJh50Vro6ReS
-         Wsc4ao6d3wbQ4MHe7Y33HlRGdL7l5y9Z5iBC+D3PI9Xxql4chDrZrPABbj91WOpqbpoh
-         7iyA==
-X-Forwarded-Encrypted: i=1; AJvYcCWTbtgTtCr5TORv0IbnVSbtTuyciCM+3OM3HZLrbR9CPkegmS9O+M7Nz+EOD/RrDL1Xj/FUFchdAwv1Qs40Sx1r@vger.kernel.org, AJvYcCXgPGeQkWJT6tfVIZswD4zI5wCIfBKpkllqsLA9tF4paXpMYnTg34NBl4PuSUP2VsyEBQ1Vm5Gc9ls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjFa2zEtbMhI7BTCe4IiIIBXQ+w6srmbIKNWVjJTzUli2pgCz9
-	cef8xvZ+Iyt6YxXo7axAyac4NHrpq2+RYKWJGakLBeYYVLQi6bq4
-X-Gm-Gg: ASbGncuPB2Oh6UepeD7VeUqjcoLuLqhuybhQYvQbpfv+unAwWYfTxxwZHnPnv4WUaSS
-	UFVnEYIKOKBc8T0WNPQcJzPXEjwOVTXbew982rc+NzMOAI3TTNyBBxgDn83XsjemAHQUnAlPLet
-	wCXo+FND+DN2KCdel86oQmNDqtSWetwwqeeZolno28896C1TWfkJjhhSM9krtJemE9cD7BVC8Xf
-	Rnw1V2u9oyf4E0C+GZvH0maEiQzMEBaaq5Z/PUl3tt73O6DcuryGDY90Z2Ngs/FVVkBp0qXoGKM
-	Pq90AoCtixAbR35WlHEGXzIGSqWYNATOI2ZmOg==
-X-Google-Smtp-Source: AGHT+IFHRDJwKLMxI67DD6WpGbO1HVraQMP3bdVweoIapsF2KWSn8IFdluxVK/yBTsz5cTIjR/UZbQ==
-X-Received: by 2002:a05:622a:241:b0:471:bce7:39e2 with SMTP id d75a77b69052e-471dbd234f4mr12562881cf.17.1739569981830;
-        Fri, 14 Feb 2025 13:53:01 -0800 (PST)
-Received: from [192.168.1.159] ([2600:4041:5be7:7c00:d4df:402c:65f0:87da])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-471c2af3367sm21844451cf.59.2025.02.14.13.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2025 13:53:00 -0800 (PST)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 14 Feb 2025 16:52:41 -0500
-Subject: [PATCH v4 3/3] printf: implicate test line in failure messages
+        d=1e100.net; s=20230601; t=1739570393; x=1740175193;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1UXxy6mQxDzeF30KOcZxZ8FOown0bDjggxUSAN6E34g=;
+        b=UoLQfoyKaqkWxd+6Iy2y/DvhsdhLdt5lmlnLI0vdkzBS8+/TZDNXtj1JIrVz9gxbqC
+         omA1S+sqtZXZTOZc4XEya5HORyFBZJ+quTBstmNFpeuf/YpxBcxNN848ItI7msiE1pcV
+         yFE/oQtwzdWM9YmsMAaf/InXbd2P2gstM/EhVICSk4dplJxVtrDx7rciNzHtwrUPleSb
+         r3+fwTKfV0EKb1R4oZblUjYPALHl9I8lXbtw4hVwVbSHnFqjU3Y0NP35Gb8XIGI6iKiT
+         8qtDC6p7uHpaZDOqGq9hCm7Y2h9s1efLaasgyNNV/MthUSSfU8clEOuakVRjVz/ndDuz
+         Kj1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUskT5R/CB5xp50JhnA1jINnbelcPQN9kSQIO4bhzUz3xiCuhqIvAIjFYBGv7qpJl4FPBMItjyLRNk1txG3jRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydL5O5vB/In+5g4xkwZUOsqZLOX9CKtzCfyTnsBBZ0u1yhToPb
+	uGNJkmXkTNVPmXT78lJONkw8UFdR60JaaaFpAGHwjhDdEUxwsz2iCDnRfsW5IqkRh58+WuKMzXJ
+	t4tVcyWGkh0TUddqdbM1ubsiXlBlO7acUbLnm0gwtphsBwaus0vMZiWY+fSGAER4MBA==
+X-Gm-Gg: ASbGncu+cAJQjl8i4Las31D+YO0257A/ZoKSb3SKvUy7YsfiouX4wllr3vjWsNhoMYf
+	1b40hKlp9rBCw4orFnbzKFmG4WN6X8pzfHqEKOvs01HB0I+oS+HxlEG6T/l/Q/YbFBabMuVZFAR
+	ZTaiMiFJFIEMhpAAeV/xe17Ds0on+QyYMdo4RZZj3AUjc/vDzVKXkxoHSIJz1GHoSwb8ZIrGb92
+	JqyP2GFDeTw9TLUmNJWPVsxToBkDS10D+pic6jj6mieXZyFEA/L0EQMmWgUkdTyPHs7r/okv74t
+	soAI6G4i1QpfaWMlpry2htTTxwj6PLwJHNWcZAXyuWmAlnaeNks4TY+YhdKQExmYrfHiBdhUIK5
+	3fFcCrnx+tt/j44lNFIcXozn6XIOn8c0y
+X-Received: by 2002:a05:600c:1c97:b0:439:403a:6b77 with SMTP id 5b1f17b1804b1-4396e6c944dmr11952325e9.10.1739570393131;
+        Fri, 14 Feb 2025 13:59:53 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF2oEBu1OS6oJJ34rUUqc1BPOBx9m8tNT2xQLLSgNg9HQNPbmC+/jnLVSFbyq6TTxeC5btulw==
+X-Received: by 2002:a05:600c:1c97:b0:439:403a:6b77 with SMTP id 5b1f17b1804b1-4396e6c944dmr11952055e9.10.1739570392683;
+        Fri, 14 Feb 2025 13:59:52 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f22:1000:d72d:fd5f:4118:c70b? (p200300d82f221000d72dfd5f4118c70b.dip0.t-ipconnect.de. [2003:d8:2f22:1000:d72d:fd5f:4118:c70b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a06da56sm85991305e9.23.2025.02.14.13.59.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Feb 2025 13:59:51 -0800 (PST)
+Message-ID: <db77d017-4a1e-4a47-9064-e335cb0313af@redhat.com>
+Date: Fri, 14 Feb 2025 22:59:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/8] mm/huge_memory: add two new (not yet used)
+ functions for folio_split()
+To: Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
+ Yang Shi <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>,
+ Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>,
+ John Hubbard <jhubbard@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250211155034.268962-1-ziy@nvidia.com>
+ <20250211155034.268962-3-ziy@nvidia.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250211155034.268962-3-ziy@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250214-printf-kunit-convert-v4-3-c254572f1565@gmail.com>
-References: <20250214-printf-kunit-convert-v4-0-c254572f1565@gmail.com>
-In-Reply-To: <20250214-printf-kunit-convert-v4-0-c254572f1565@gmail.com>
-To: Arpitha Raghunandan <98.arpi@gmail.com>, 
- David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Geert Uytterhoeven <geert@linux-m68k.org>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linuxppc-dev@lists.ozlabs.org, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
 
-This improves the failure output by pointing to the failing line at the
-top level of the test, e.g.:
-      # test_number: EXPECTATION FAILED at lib/printf_kunit.c:103
-  lib/printf_kunit.c:167: vsnprintf(buf, 256, "%#-12x", ...) wrote '0x1234abcd  ', expected '0x1234abce  '
-      # test_number: EXPECTATION FAILED at lib/printf_kunit.c:142
-  lib/printf_kunit.c:167: kvasprintf(..., "%#-12x", ...) returned '0x1234abcd  ', expected '0x1234abce  '
+On 11.02.25 16:50, Zi Yan wrote:
+> This is a preparation patch, both added functions are not used yet.
+> 
+> The added __split_unmapped_folio() is able to split a folio with
+> its mapping removed in two manners: 1) uniform split (the existing way),
+> and 2) buddy allocator like split.
+> 
+> The added __split_folio_to_order() can split a folio into any lower order.
+> For uniform split, __split_unmapped_folio() calls it once to split
+> the given folio to the new order. For buddy allocator split,
+> __split_unmapped_folio() calls it (folio_order - new_order) times
+> and each time splits the folio containing the given page to one lower
+> order.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>   mm/huge_memory.c | 349 ++++++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 348 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index a0277f4154c2..12d3f515c408 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -3262,7 +3262,6 @@ static void remap_page(struct folio *folio, unsigned long nr, int flags)
+>   static void lru_add_page_tail(struct folio *folio, struct page *tail,
+>   		struct lruvec *lruvec, struct list_head *list)
+>   {
+> -	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>   	VM_BUG_ON_FOLIO(PageLRU(tail), folio);
+>   	lockdep_assert_held(&lruvec->lru_lock);
+>   
+> @@ -3506,6 +3505,354 @@ bool can_split_folio(struct folio *folio, int caller_pins, int *pextra_pins)
+>   					caller_pins;
+>   }
+>   
+> +/*
+> + * It splits @folio into @new_order folios and copies the @folio metadata to
+> + * all the resulting folios.
+> + */
+> +static int __split_folio_to_order(struct folio *folio, int new_order)
+> +{
+> +	int curr_order = folio_order(folio);
+> +	long nr_pages = folio_nr_pages(folio);
+> +	long new_nr_pages = 1 << new_order;
+> +	long index;
+> +
+> +	if (curr_order <= new_order)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Skip the first new_nr_pages, since the new folio from them have all
+> +	 * the flags from the original folio.
+> +	 */
+> +	for (index = new_nr_pages; index < nr_pages; index += new_nr_pages) {
+> +		struct page *head = &folio->page;
+> +		struct page *new_head = head + index;
+> +
+> +		/*
+> +		 * Careful: new_folio is not a "real" folio before we cleared PageTail.
+> +		 * Don't pass it around before clear_compound_head().
+> +		 */
+> +		struct folio *new_folio = (struct folio *)new_head;
+> +
+> +		VM_BUG_ON_PAGE(atomic_read(&new_head->_mapcount) != -1, new_head);
+> +
+> +		/*
+> +		 * Clone page flags before unfreezing refcount.
+> +		 *
+> +		 * After successful get_page_unless_zero() might follow flags change,
+> +		 * for example lock_page() which set PG_waiters.
+> +		 *
+> +		 * Note that for mapped sub-pages of an anonymous THP,
+> +		 * PG_anon_exclusive has been cleared in unmap_folio() and is stored in
+> +		 * the migration entry instead from where remap_page() will restore it.
+> +		 * We can still have PG_anon_exclusive set on effectively unmapped and
+> +		 * unreferenced sub-pages of an anonymous THP: we can simply drop
+> +		 * PG_anon_exclusive (-> PG_mappedtodisk) for these here.
+> +		 */
+> +		new_head->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+> +		new_head->flags |= (head->flags &
+> +				((1L << PG_referenced) |
+> +				 (1L << PG_swapbacked) |
+> +				 (1L << PG_swapcache) |
+> +				 (1L << PG_mlocked) |
+> +				 (1L << PG_uptodate) |
+> +				 (1L << PG_active) |
+> +				 (1L << PG_workingset) |
+> +				 (1L << PG_locked) |
+> +				 (1L << PG_unevictable) |
+> +#ifdef CONFIG_ARCH_USES_PG_ARCH_2
+> +				 (1L << PG_arch_2) |
+> +#endif
+> +#ifdef CONFIG_ARCH_USES_PG_ARCH_3
+> +				 (1L << PG_arch_3) |
+> +#endif
+> +				 (1L << PG_dirty) |
+> +				 LRU_GEN_MASK | LRU_REFS_MASK));
+> +
+> +		/* ->mapping in first and second tail page is replaced by other uses */
+> +		VM_BUG_ON_PAGE(new_nr_pages > 2 && new_head->mapping != TAIL_MAPPING,
+> +			       new_head);
+> +		new_head->mapping = head->mapping;
+> +		new_head->index = head->index + index;
+> +
+> +		/*
+> +		 * page->private should not be set in tail pages. Fix up and warn once
+> +		 * if private is unexpectedly set.
+> +		 */
+> +		if (unlikely(new_head->private)) {
+> +			VM_WARN_ON_ONCE_PAGE(true, new_head);
+> +			new_head->private = 0;
+> +		}
+> +
+> +		if (folio_test_swapcache(folio))
+> +			new_folio->swap.val = folio->swap.val + index;
+> +
+> +		/* Page flags must be visible before we make the page non-compound. */
+> +		smp_wmb();
+> +
+> +		/*
+> +		 * Clear PageTail before unfreezing page refcount.
+> +		 *
+> +		 * After successful get_page_unless_zero() might follow put_page()
+> +		 * which needs correct compound_head().
+> +		 */
+> +		clear_compound_head(new_head);
+> +		if (new_order) {
+> +			prep_compound_page(new_head, new_order);
+> +			folio_set_large_rmappable(new_folio);
+> +
+> +			folio_set_order(folio, new_order);
+> +		}
+> +
+> +		if (folio_test_young(folio))
+> +			folio_set_young(new_folio);
+> +		if (folio_test_idle(folio))
+> +			folio_set_idle(new_folio);
+> +
+> +		folio_xchg_last_cpupid(new_folio, folio_last_cpupid(folio));
+> +	}
+> +
+> +	if (!new_order)
+> +		ClearPageCompound(&folio->page);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * It splits an unmapped @folio to lower order smaller folios in two ways.
+> + * @folio: the to-be-split folio
+> + * @new_order: the smallest order of the after split folios (since buddy
+> + *             allocator like split generates folios with orders from @folio's
+> + *             order - 1 to new_order).
+> + * @page: in buddy allocator like split, the folio containing @page will be
+> + *        split until its order becomes @new_order.
+> + * @list: the after split folios will be added to @list if it is not NULL,
+> + *        otherwise to LRU lists.
+> + * @end: the end of the file @folio maps to. -1 if @folio is anonymous memory.
+> + * @xas: xa_state pointing to folio->mapping->i_pages and locked by caller
+> + * @mapping: @folio->mapping
+> + * @uniform_split: if the split is uniform or not (buddy allocator like split)
+> + *
+> + *
+> + * 1. uniform split: the given @folio into multiple @new_order small folios,
+> + *    where all small folios have the same order. This is done when
+> + *    uniform_split is true.
+> + * 2. buddy allocator like (non-uniform) split: the given @folio is split into
+> + *    half and one of the half (containing the given page) is split into half
+> + *    until the given @page's order becomes @new_order. This is done when
+> + *    uniform_split is false.
+> + *
+> + * The high level flow for these two methods are:
+> + * 1. uniform split: a single __split_folio_to_order() is called to split the
+> + *    @folio into @new_order, then we traverse all the resulting folios one by
+> + *    one in PFN ascending order and perform stats, unfreeze, adding to list,
+> + *    and file mapping index operations.
+> + * 2. non-uniform split: in general, folio_order - @new_order calls to
+> + *    __split_folio_to_order() are made in a for loop to split the @folio
+> + *    to one lower order at a time. The resulting small folios are processed
+> + *    like what is done during the traversal in 1, except the one containing
+> + *    @page, which is split in next for loop.
+> + *
+> + * After splitting, the caller's folio reference will be transferred to the
+> + * folio containing @page. The other folios may be freed if they are not mapped.
+> + *
+> + * In terms of locking, after splitting,
+> + * 1. uniform split leaves @page (or the folio contains it) locked;
+> + * 2. buddy allocator like (non-uniform) split leaves @folio locked.
+> + *
+> + *
+> + * For !uniform_split, when -ENOMEM is returned, the original folio might be
+> + * split. The caller needs to check the input folio.
+> + */
+> +static int __split_unmapped_folio(struct folio *folio, int new_order,
+> +		struct page *page, struct list_head *list, pgoff_t end,
+> +		struct xa_state *xas, struct address_space *mapping,
+> +		bool uniform_split)
+> +{
+> +	struct lruvec *lruvec;
+> +	struct address_space *swap_cache = NULL;
+> +	struct folio *origin_folio = folio;
+> +	struct folio *next_folio = folio_next(folio);
+> +	struct folio *new_folio;
+> +	struct folio *next;
+> +	int order = folio_order(folio);
+> +	int split_order;
+> +	int start_order = uniform_split ? new_order : order - 1;
+> +	int nr_dropped = 0;
+> +	int ret = 0;
+> +	bool stop_split = false;
+> +
+> +	if (folio_test_anon(folio) && folio_test_swapcache(folio)) {
+> +		/* a swapcache folio can only be uniformly split to order-0 */
+> +		if (!uniform_split || new_order != 0)
+> +			return -EINVAL;
+> +
+> +		swap_cache = swap_address_space(folio->swap);
+> +		xa_lock(&swap_cache->i_pages);
+> +	}
+> +
+> +	if (folio_test_anon(folio))
+> +		mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
+> +
+> +	/* lock lru list/PageCompound, ref frozen by page_ref_freeze */
+> +	lruvec = folio_lruvec_lock(folio);
+> +
+> +	folio_clear_has_hwpoisoned(folio);
+> +
+> +	/*
+> +	 * split to new_order one order at a time. For uniform split,
+> +	 * folio is split to new_order directly.
+> +	 */
+> +	for (split_order = start_order;
+> +	     split_order >= new_order && !stop_split;
+> +	     split_order--) {
+> +		int old_order = folio_order(folio);
+> +		struct folio *release;
+> +		struct folio *end_folio = folio_next(folio);
+> +		int status;
+> +
+> +		/* order-1 anonymous folio is not supported */
+> +		if (folio_test_anon(folio) && split_order == 1)
+> +			continue;
+> +		if (uniform_split && split_order != new_order)
+> +			continue;
+> +
+> +		if (mapping) {
+> +			/*
+> +			 * uniform split has xas_split_alloc() called before
+> +			 * irq is disabled to allocate enough memory, whereas
+> +			 * non-uniform split can handle ENOMEM.
+> +			 */
+> +			if (uniform_split)
+> +				xas_split(xas, folio, old_order);
+> +			else {
+> +				xas_set_order(xas, folio->index, split_order);
+> +				xas_try_split(xas, folio, old_order,
+> +						GFP_NOWAIT);
+> +				if (xas_error(xas)) {
+> +					ret = xas_error(xas);
+> +					stop_split = true;
+> +					goto after_split;
+> +				}
+> +			}
+> +		}
+> +
+> +		/* complete memcg works before add pages to LRU */
+> +		split_page_memcg(&folio->page, old_order, split_order);
+> +		split_page_owner(&folio->page, old_order, split_order);
+> +		pgalloc_tag_split(folio, old_order, split_order);
+> +
+> +		status = __split_folio_to_order(folio, split_order);
+> +
 
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- lib/tests/printf_kunit.c | 60 ++++++++++++++++++++++++++----------------------
- 1 file changed, 33 insertions(+), 27 deletions(-)
+Stumbling over that code (sorry for the late reply ... ).
 
-diff --git a/lib/tests/printf_kunit.c b/lib/tests/printf_kunit.c
-index 013df6f6dd49..aa5011156788 100644
---- a/lib/tests/printf_kunit.c
-+++ b/lib/tests/printf_kunit.c
-@@ -39,8 +39,8 @@ static char *test_buffer;
- static char *alloced_buffer;
- 
- static void __printf(5, 0)
--do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
--	const char *fmt, va_list ap)
-+do_test(struct kunit *kunittest, const char *file, const int line, int bufsize, const char *expect,
-+	int elen, const char *fmt, va_list ap)
- {
- 	va_list aq;
- 	int ret, written;
-@@ -53,21 +53,24 @@ do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
- 	va_end(aq);
- 
- 	if (ret != elen) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d",
--			   bufsize, fmt, ret, elen);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d",
-+			   file, line, bufsize, fmt, ret, elen);
- 		return;
- 	}
- 
- 	if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote before buffer",
--			   bufsize, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote before buffer",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (!bufsize) {
- 		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE)) {
--			KUNIT_FAIL(kunittest, "vsnprintf(buf, 0, \"%s\", ...) wrote to buffer",
--				   fmt);
-+			KUNIT_FAIL(kunittest,
-+				   "%s:%d: vsnprintf(buf, 0, \"%s\", ...) wrote to buffer",
-+				   file, line, fmt);
- 		}
- 		return;
- 	}
-@@ -75,33 +78,36 @@ do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
- 	written = min(bufsize-1, elen);
- 	if (test_buffer[written]) {
- 		KUNIT_FAIL(kunittest,
--			   "vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer",
--			   bufsize, fmt);
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, bufsize - (written + 1))) {
- 		KUNIT_FAIL(kunittest,
--			   "vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator",
--			   bufsize, fmt);
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + bufsize, FILL_CHAR, BUF_SIZE + PAD_SIZE - bufsize)) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer",
--			   bufsize, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memcmp(test_buffer, expect, written)) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'",
--			   bufsize, fmt, test_buffer, written, expect);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'",
-+			   file, line, bufsize, fmt, test_buffer, written, expect);
- 		return;
- 	}
- }
- 
--static void __printf(4, 0)
--__test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, ...)
-+static void __printf(6, 0)
-+__test(struct kunit *kunittest, const char *file, const int line, const char *expect, int elen,
-+	const char *fmt, ...)
- {
- 	va_list ap;
- 	int rand;
-@@ -109,8 +115,8 @@ __test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, .
- 
- 	if (elen >= BUF_SIZE) {
- 		KUNIT_FAIL(kunittest,
--			   "error in test suite: expected length (%d) >= BUF_SIZE (%d). fmt=\"%s\"",
--			   elen, BUF_SIZE, fmt);
-+			   "%s:%d: error in test suite: expected length (%d) >= BUF_SIZE (%d). fmt=\"%s\"",
-+			   file, line, elen, BUF_SIZE, fmt);
- 		return;
- 	}
- 
-@@ -122,19 +128,19 @@ __test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, .
- 	 * enough and 0), and then we also test that kvasprintf would
- 	 * be able to print it as expected.
- 	 */
--	do_test(kunittest, BUF_SIZE, expect, elen, fmt, ap);
-+	do_test(kunittest, file, line, BUF_SIZE, expect, elen, fmt, ap);
- 	rand = get_random_u32_inclusive(1, elen + 1);
- 	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
--	do_test(kunittest, rand, expect, elen, fmt, ap);
--	do_test(kunittest, 0, expect, elen, fmt, ap);
-+	do_test(kunittest, file, line, rand, expect, elen, fmt, ap);
-+	do_test(kunittest, file, line, 0, expect, elen, fmt, ap);
- 
- 	p = kvasprintf(GFP_KERNEL, fmt, ap);
- 	if (p) {
- 		total_tests++;
- 		if (memcmp(p, expect, elen+1)) {
- 			KUNIT_FAIL(kunittest,
--				   "kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'",
--				   fmt, p, expect);
-+				   "%s:%d: kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'",
-+				   file, line, fmt, p, expect);
- 		}
- 		kfree(p);
- 	}
-@@ -142,7 +148,7 @@ __test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, .
- }
- 
- #define test(expect, fmt, ...)					\
--	__test(kunittest, expect, strlen(expect), fmt, ##__VA_ARGS__)
-+	__test(kunittest, __FILE__, __LINE__, expect, strlen(expect), fmt, ##__VA_ARGS__)
- 
- static void
- test_basic(struct kunit *kunittest)
-@@ -153,7 +159,7 @@ test_basic(struct kunit *kunittest)
- 	test("", &nul);
- 	test("100%", "100%%");
- 	test("xxx%yyy", "xxx%cyyy", '%');
--	__test(kunittest, "xxx\0yyy", 7, "xxx%cyyy", '\0');
-+	__test(kunittest, __FILE__, __LINE__, "xxx\0yyy", 7, "xxx%cyyy", '\0');
- }
- 
- static void
+That looks weird. We split memcg/owner/pgalloc ... and then figure out 
+in __split_folio_to_order() that we don't want to ... split?
+
+Should that all be moved into __split_folio_to_order() and performed 
+only when we really want to split?
 
 -- 
-2.48.1
+Cheers,
+
+David / dhildenb
 
 
