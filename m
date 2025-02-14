@@ -1,264 +1,237 @@
-Return-Path: <linux-kselftest+bounces-26667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919C5A362E0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 17:19:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4971CA362E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 17:20:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67B9E3A9CE3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 16:19:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2C393A8C49
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 16:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F0C2676FD;
-	Fri, 14 Feb 2025 16:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D0E2676EF;
+	Fri, 14 Feb 2025 16:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eVxhKRPO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JsuDqKTb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048CC2676CF;
-	Fri, 14 Feb 2025 16:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739549982; cv=fail; b=rCoxkC3kBe7bJOdzo89n9Y/RuFMncjMrykwffNTobnXVFwhS0FJ570dYmku+XVSOHhVlPggQmUOFcymLhL/SgGKQsQ03ITDDzisqt1sNt//YtUfigY4dyJqj2ZW6+1v8sQpO+VteFzPpR5/Xzwtdol9TWPfenBDDHHGemFHMm2E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739549982; c=relaxed/simple;
-	bh=+wbcbyXnXvn1PMP9ymid+vdhhzJIeOlZcycTthupwoU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ncvou/nj1GsnM1U2+rMW7xNXpopLhzABUVxwdY+nFGotDaFbiAhGThDq9Kp0WfRcA3eOvb18x97udSoAlnnU3nEiMdamEOGRowjqDnNePzop7wUDfOGhy6+ZwbGzXdNrzrRbsrzRYPI1jzM6Aw/lq9/ZvTKXkp4rYbbtavPp++s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eVxhKRPO; arc=fail smtp.client-ip=40.107.223.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JhG0gX1/3moI3gohl6Gm02ZvqcXrwO8XEPVDy2TSDrozb8IdiIESB+RZlG2FJeZtxM6xQ7MjzFYcfzfIi2c2L9wDt2Gw3YXjQ50qwjJ+V9zInaE6zAkn7Y61l+932yIVEBbRuz4LGRBvwT9Zj52tdGjCl5itMlHNTjz9wjWQJwoZ+6ow6FriSTUlQdOcaadeRuc5soC/jtDviD+Ep75pE39Kv76890ZfWjNLkuXAIXDVFQ50fiw3WeQxBVC56xah3cTl3H7FelmIc3PVsKqq9EJ2tEgq+H60ifx0f429I25O04r5T0W04HTJw3FG546MyNxqgeoZ1gAHSfj93rpihA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1mKSnH03/+WnGU1/2SdKtQRHTDHaRyS3u5W4LHT2oMU=;
- b=orNe4leUZlbqt7MNC6FlMfClrh7PnWS1mOTIBjcoT+55qU1vGqx30T3ghzRuHe6rYt4v/0FRWSA4w9E9YPt3DxMnpyEmnUIpGOi+sxsA7q8dEhMNGzMWacs4YGnjIfxBFCQGiSbRvb7sBY0cFkpupT+GwerpTM0PjuNQa03U6HaNCnAURqHq0kn1wNQGthu3yxIzLnvswXGBbEBBc0G0ndU29WpceBSfdKiZYkeXsT0PthHk4R/EP7/zbKdx1PbxCfF/1mcEssovjC6BtQw6aJAKyOJKMaqKvaCniK2eJ/+D9DeOcjVSEE2fCVD3t3UHfwc4dwxfUTkmVmwV2V1q0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1mKSnH03/+WnGU1/2SdKtQRHTDHaRyS3u5W4LHT2oMU=;
- b=eVxhKRPOLQOipJK9y1SVgupvcjGFk06UYiSlRr9Vd7P4LyzSLIclU5GfFSED0ZTYdXb2HiGH3DXbY+Ouf9ZFgncpEEx8oTK6cZcWb7y/V42VrFflCIDZvaG1ZB2/xV5wGOP5x6hlMAJZfAqoS122jh5lL/kQkkt7T01n+xXfCxGYv1dhuCUhmx5EINg7n6aa4gqvL+alk+4KZ2/+WD5NhF8LplQItjUc6wjqcPKTgtPIzN00zcO5x5KNMtnIIDJhfXc+pOzd6ih/yEM4mdSssKdzbqAK5P+KzWD7C2akGfZajKZ0VEmObDkCypgDV6QK9TCNpV7fUrfOWaOpN9nzsg==
-Received: from MN0PR04CA0021.namprd04.prod.outlook.com (2603:10b6:208:52d::32)
- by CH3PR12MB8581.namprd12.prod.outlook.com (2603:10b6:610:15d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.17; Fri, 14 Feb
- 2025 16:19:36 +0000
-Received: from MN1PEPF0000F0E5.namprd04.prod.outlook.com
- (2603:10b6:208:52d:cafe::49) by MN0PR04CA0021.outlook.office365.com
- (2603:10b6:208:52d::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.16 via Frontend Transport; Fri,
- 14 Feb 2025 16:19:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MN1PEPF0000F0E5.mail.protection.outlook.com (10.167.242.43) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8445.10 via Frontend Transport; Fri, 14 Feb 2025 16:19:35 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Feb
- 2025 08:19:20 -0800
-Received: from fedora.mtl.com (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Fri, 14 Feb
- 2025 08:19:15 -0800
-From: Petr Machata <petrm@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-	<netdev@vger.kernel.org>
-CC: Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-	<mlxsw@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 5/5] selftests: test_vxlan_fdb_changelink: Add a test for MC remote change
-Date: Fri, 14 Feb 2025 17:18:24 +0100
-Message-ID: <dcaf5e786362a5e39297f93bff480482b78ec393.1739548836.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <cover.1739548836.git.petrm@nvidia.com>
-References: <cover.1739548836.git.petrm@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A371E04AC;
+	Fri, 14 Feb 2025 16:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739550017; cv=none; b=sZXU1eCCPuRaJtW+v8Md3P+OaBJvNXiwNPA4CnnwGSEvpWJDuvf0OOetDk8C1U0lRT9Cnk5aQd9u+JnghUDuUn+iRSTcvbkZLz/C4E9d7CuLSAauNQYqauxS2HJdBvNjs5e3vUu48ljsdeKmNk+XRnw6dkj+v1LJAWIMAxC55SM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739550017; c=relaxed/simple;
+	bh=Co60+0XLQSGJuVYCgHFZFSYSARsz/MWSsGWThrUxsl0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dumlNKLoNszEvU6ei6l32Cm7eiawEDFhONjE0DmPNQM3651obO3bYGB4Xz8Mayp8J/6qS0EjaNt97pOIW/NwrAes5ZaVtdqLVu5a/I3KKaRMo3yaRuzNosy4xqUdhjctLGRoeDB6CjbSaCl/ocvKPLRVwfBna8kfjzG0PKWpa1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JsuDqKTb; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-471c8bdabcfso13872041cf.2;
+        Fri, 14 Feb 2025 08:20:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739550014; x=1740154814; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M1vLUvv5G8gI5Dm90TOMD0iNfnTNFxwwgB19DOSwu0U=;
+        b=JsuDqKTbTV+G04gmXCv84xo1LRSzKHliGImUHY2H+bLJfYaPaljoYbIcDINASuTvXx
+         TeDcWMitFPWKiSHfcScCqGGXqSafe89UMl7YvB498O3N5OgBIiYC7a0uNUPEzzjU6jpp
+         5HBLghKjzb4W1+lOBB3UJ6xNV65Grfv7JoASFiIofbdh6vTgCPos7VqQaXb+hAeuB8AZ
+         VrzpZKVz7XvaWvzcCNPFiF0aj1+7O2O4H5n6ZANZCEHX1m030rN5Zy5mKGSM1sww0UDE
+         Z1YyJtFfW1TWDaL/TTjIYFHkjCyeK79uDE2si4TVdhpnv9NGUcM/pPK571/UwtUfRo78
+         SOHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739550014; x=1740154814;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M1vLUvv5G8gI5Dm90TOMD0iNfnTNFxwwgB19DOSwu0U=;
+        b=XNYtuoTMD1kYA/feA48BaeUrwZV5H+OhSHC7gfOlMpcgqrQINByVEXOh8w+jsSa/Mw
+         JcTLWsI4ZhJDeD0N88egQpmsMJWtVLinC+5FT0PuA0/pmmBjGYgwGd2rWoc12ALEgs4A
+         g/uFAWqsGneo/zmUXEuIGTmS0RYtvTIXqzQ0h0tV/YXQgk7TQ1k4uYvLNj32yjanp+vj
+         notstKJlb1KYVEvbpQJFlzfvykQQiZM8/10sPeeoXRX324nmV9uu+A73sOxR/uq81fHD
+         30d/eip/t7w8HW4Ju2Ojmh1b2H0IEkcO+EP2x0BT0ojGsA0yewaU+38pCz3x6BiRoFG+
+         nkpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUcCVpo+cJESwI1YQBLNzKScN2Y/jtBmr1fwb9VXd3PL+btVPrasamaeAgRnmUlStP3vu9LlcjXSfmdl0iN0UIr@vger.kernel.org, AJvYcCWDOEt6bfU97hrCI4p4WOnNTFIszRRks8nYfA7iegY5Ru4N5SU7ZTLWTzjdP6IuGk8ewKnM3/KhhxYHDtM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiH4U2F/IY17IW+h6wt1G9cxLqb1/BvOegZM+iaOYaG9sVamWw
+	owjpUwLAQTzfcOoYpIN+3COTZ1VKsElSeMLfAg0k8lCGywCdKoW0
+X-Gm-Gg: ASbGncvncd5JnVMKVBK2iJCUGfDYj3kdenfgVVIvWMru6T0VJPsk9woibg5up7E5wwS
+	Qe5eHAs9+qSXe9bea+4jFuxZJudAaZS+xALvtQD4pZ1+xqoGGOSqfoVonnX+WtGz21PBT7aY6tw
+	XOUBQyg2S3C6636kUlY+e1PZa2EPGrmXBV8xrO064d+40KuW84APy/Gt42CLnDMUKcF0Z8UA42D
+	d0DVtZwguTuU2gKO/zeAqYQCWl63m/Tyu39wByys0vsuPCWyP5w4N79uFqRMGL9OuwtQgrzhhYR
+	+CpjGl7Q6G8tAGhUx0+qlsC9m3FTI2Z4+gwvyw==
+X-Google-Smtp-Source: AGHT+IHYWZn2GNkBkk7wTrIASNLt/U68QgJ6I7GpkioNs9UTVDHNec4Qp+4fwQZP1vTGkKNr3j20nw==
+X-Received: by 2002:ac8:5a93:0:b0:471:9721:7482 with SMTP id d75a77b69052e-471bed2f155mr99709181cf.27.1739550014341;
+        Fri, 14 Feb 2025 08:20:14 -0800 (PST)
+Received: from [192.168.1.159] ([2600:4041:5be7:7c00:d4df:402c:65f0:87da])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-471c2af37c7sm19196911cf.61.2025.02.14.08.20.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 08:20:13 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v8 0/4] scanf: convert self-test to KUnit
+Date: Fri, 14 Feb 2025 11:19:57 -0500
+Message-Id: <20250214-scanf-kunit-convert-v8-0-5ea50f95f83c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E5:EE_|CH3PR12MB8581:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53626a83-1c5f-4767-10e9-08dd4d135f56
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?QtuTrPUMcpzpEELvXlEUuGspf7A0SoG2WmVdny4qE+/sQ+NC5AAZLBLpg8EP?=
- =?us-ascii?Q?RWGwUwqpxBCQwI+5QyVmGZ1WdfNAMC5QGxP1szemzMBfalVYNQ2UNHEskiXw?=
- =?us-ascii?Q?Ol+20HkxX5u4LY3CD2lEHUl4RbaM6OPWiBlM/fNVXsTMMC4D9TsGVcgNg3u8?=
- =?us-ascii?Q?qLr5dpP5MgA3pV7/A5dN93KyNViqp8adSkaOkLYmC7P3g+yQXPro49o+GvAZ?=
- =?us-ascii?Q?kjB9XsmlzjVEOoQPHMueYMVBO+1wuDzQjOuANci58ylNYk78Loso14FuqMsp?=
- =?us-ascii?Q?y52B573RX8W9x3kd1cpPkKILwnekVAex+PcgYMX9oL5InHfuIn3Cvq5+vLCJ?=
- =?us-ascii?Q?HYgYQEfVqLCfl2DkK7dvFMsT/lqb05wCmCc3MDK05bl2qFnQrcw2nE5cURIN?=
- =?us-ascii?Q?dsxpFWaVVzKHBucoHvNtdBIa7o0xBJLxrTRUr26XwqJaVbNK9XjyZxwsiGcd?=
- =?us-ascii?Q?zhzo6fiT1v/kVejD86aVwsqHph1nVgBFynEy7jUCJs9QOPnvDH7YTfMfLL2h?=
- =?us-ascii?Q?rB4LTgvtBUvVIIVUBaJOqRZBPRd2rh4FT8SiA3bmnaoWURgpU5koigxt0Xo8?=
- =?us-ascii?Q?oZOKJj1sIxbyuqXlziNm/lwbHdTaHRZW5XL7z8z7sNn81JKkXT1TDO4LkOsT?=
- =?us-ascii?Q?C27FC4NOe158eZEYx9BcU4ePVxdwQ7ZTvEmkfAsox5vWcG9F8lgXqufaDW5c?=
- =?us-ascii?Q?7zNjFgUeSLXWQSPjPApcRonj5j4xAAFwF/LrkgxBwxIvmAgnSPewSpAYfhGQ?=
- =?us-ascii?Q?gjAFONlLqD8wgW2OXlQxye41vDkPVyJA9OJnzdy/TJV91YFy+yLF0Xtodatf?=
- =?us-ascii?Q?T+fM3KmZzUl5pPMNbFCYQiuV7tEkfg3fHs51c70yUstgPQFFQWW2zdVEwjDE?=
- =?us-ascii?Q?l7S7W57jbFoER9t4fnQnG1CDQb+j+9g+AbtSBAg7768LvDBttTVIElbpMvJu?=
- =?us-ascii?Q?n+SL9opZIn7L6juyqj89+KC97d0JbrqQUtaUgGf5NIl/PYydUXIOoKZ/L7BJ?=
- =?us-ascii?Q?tQg4CNhhhfloTJFvswx/TE2WxLloE0H/FwD9DI1LrzKosJjaCd2rxb8YlZMP?=
- =?us-ascii?Q?C529qCI3cjH7IoC/oOJqN5e2+hZ8sIr6kYIiIzMlZRwZxGhksHzjXjDdLN2q?=
- =?us-ascii?Q?hAYDlgLzcj2Q5ejpGXDEZYuBJeBPyExxUCJ1gjRzGlTgv3An8reXdt01QUCC?=
- =?us-ascii?Q?WzXSHSMg4dm6JrFsg2MujlHKndjApBJZT8UHFfvPHhuPONAfiHhPyEv5ak18?=
- =?us-ascii?Q?uIlYHJO/VSL4iRhDI7gKkQ1SkQKb5h8+yYYHozOdRJjoPDlP3bcdO981546V?=
- =?us-ascii?Q?ko+TNftis9NWKIEBrd4jnsu1nRTgt85pIxj0BLUeUP/OR6Sf9xV/ByeHShFJ?=
- =?us-ascii?Q?k9llCQZGBcs67jBUJc4oIXG8xeMhODyiM3LJ0jVbx0GyX4+E/2C3tyfflD5G?=
- =?us-ascii?Q?ro7vMlxcebMo6BxDUsjy5jaDF9tfOKzFxrVBosfKhOXuYegrVLClXWkrR8Ua?=
- =?us-ascii?Q?RQ/VwEIHoQ4ZkLk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 16:19:35.3640
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53626a83-1c5f-4767-10e9-08dd4d135f56
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000F0E5.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8581
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC1tr2cC/43RwU7DMAwG4FeZcibIiZM45cR7IA5p4mwRrEVtq
+ UBT351sF0pVEMffkr9fli9i5KHwKB4OFzHwXMbSdzX4u4OIp9AdWZZUs9CgLShUcoyhy/LlvSu
+ TjH038zDJTJAiYtuiiaJuvg2cy8dNfXqu+VTGqR8+byWzuk7/9mYllYSGnNUmA7fh8XgO5fU+9
+ mdx9Wb9bWjAfUNXQxMFp3zyYHhr4Now+wZKkOhdoojMpMzWMGuD9g1TjaCRdciBE/utYVeGgn3
+ DVsOzMxkDJW6areH+YbhqmGQ9JqDc6LQ1aG388heqRgRLGQKmJv24ZVmWL3UB3RdOAgAA
+X-Change-ID: 20250131-scanf-kunit-convert-f70dc33bb34c
+To: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-Changes to MC remote need to be reflected in actual group memberships.
-Add a test to verify that it is the case.
+This is one of just 3 remaining "Test Module" kselftests (the others
+being bitmap and printf), the rest having been converted to KUnit. In
+addition to the enclosed patch, please consider this an RFC on the
+removal of the "Test Module" kselftest machinery.
 
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+I tested this using:
+
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 scanf
+
+Failure output before this series:
+  [  383.100048] test_scanf: vsscanf("1574 9 64ca 935b 7 142d ff58 0", "%4hx %1hx %4hx %4hx %1hx %4hx %4hx %1hx", ...) expected 2472240330 got 1690959881
+  [  383.102843] test_scanf: vsscanf("f12:2:d:2:c166:1:36b:1906", "%3hx:%1hx:%1hx:%1hx:%4hx:%1hx:%3hx:%4hx", ...) expected 131085 got 851970
+  [  383.105376] test_scanf: vsscanf("4,b2fe,3,593,6,0,3bde,0", "%1hx,%4hx,%1hx,%3hx,%1hx,%1hx,%4hx,%1hx", ...) expected 93519875 got 242430
+  [  383.105659] test_scanf: vsscanf("6-1-2-1-d9e6-f-93e-e567", "%1hx-%1hx-%1hx-%1hx-%4hx-%1hx-%3hx-%4hx", ...) expected 65538 got 131073
+  [  383.106127] test_scanf: vsscanf("72d6/35/e88d/1/0/6c8c/7/1", "%4hx/%2hx/%4hx/%1hx/%1hx/%4hx/%1hx/%1hx", ...) expected 125069 got 3901554741
+  [  383.106235] test_scanf: vsscanf("c9bea1b8122113e9a168df573", "%4hx%4hx%1hx%4hx%4hx%1hx%4hx%3hx", ...) expected 571539457 got 106936
+  ...
+  [  383.106398] test_scanf: failed 6 out of 2545 tests
+
+Failure output after this series:
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx %4hx %4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
+          not ok 1 " "
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("dc2:1c:0:3531:2621:5172:1:7", "%3hx:%2hx:%1hx:%4hx:%4hx:%4hx:%1hx:%1hx", ...) expected 892403712 got 28
+          not ok 2 ":"
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("e083,8f6e,b,70ca,1,1,aab1,10e4", "%4hx,%4hx,%1hx,%4hx,%1hx,%1hx,%4hx,%4hx", ...) expected 1892286475 got 757614
+          not ok 3 ","
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("2e72-8435-1-2fc-7cbd-c2f1-7158-2b41", "%4hx-%4hx-%1hx-%3hx-%4hx-%4hx-%4hx-%4hx", ...) expected 50069505 got 99381
+          not ok 4 "-"
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("403/0/17/1/11e7/1/1fe8/34ba", "%3hx/%1hx/%2hx/%1hx/%4hx/%1hx/%4hx/%4hx", ...) expected 65559 got 1507328
+          not ok 5 "/"
+
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
+Changes in v8:
+- Expand "scanf: remove redundant debug logs" commit message. (Andy
+  Shevchenko)
+- Add patch "implicate test line in failure messages".
+- Rebase on linux-next, move scanf_kunit.c into lib/tests/.
+- Link to v7: https://lore.kernel.org/r/20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com
 
-Notes:
-CC: Simon Horman <horms@kernel.org>
-CC: Shuah Khan <shuah@kernel.org>
-CC: linux-kselftest@vger.kernel.org
+Changes in v7:
+- Remove redundant debug logs. (Petr Mladek)
+- Drop Petr's Acked-by.
+- Use original test assertions as KUNIT_*_EQ_MSG produces hard-to-parse
+  messages. The new failure output is:
+- Link to v6: https://lore.kernel.org/r/20250210-scanf-kunit-convert-v6-0-4d583d07f92d@gmail.com
 
- .../net/test_vxlan_fdb_changelink.sh          | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
+Changes in v6:
+- s/at boot/at runtime/ for consistency with the printf series.
+- Go back to kmalloc. (Geert Uytterhoeven)
+- Link to v5: https://lore.kernel.org/r/20250210-scanf-kunit-convert-v5-0-8e64f3a7de99@gmail.com
 
-diff --git a/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh b/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh
-index 6f2bca4b346c..062f957950af 100755
---- a/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh
-+++ b/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh
-@@ -3,6 +3,7 @@
- 
- ALL_TESTS="
- 	test_set_remote
-+	test_change_mc_remote
- "
- source lib.sh
- 
-@@ -31,6 +32,81 @@ test_set_remote()
- 	log_test 'FDB default-remote handling across "ip link set"'
- }
- 
-+fmt_remote()
-+{
-+	local addr=$1; shift
-+
-+	if [[ $addr == 224.* ]]; then
-+		echo "group $addr"
-+	else
-+		echo "remote $addr"
-+	fi
-+}
-+
-+change_remote()
-+{
-+	local remote=$1; shift
-+
-+	ip link set dev vx type vxlan $(fmt_remote $remote) dev v1
-+}
-+
-+check_membership()
-+{
-+	local check_vec=("$@")
-+
-+	local memberships
-+	memberships=$(
-+	    netstat -n --groups |
-+		sed -n '/^v1\b/p' |
-+		grep -o '[^ ]*$'
-+	)
-+	check_err $? "Couldn't obtain group memberships"
-+
-+	local item
-+	for item in "${check_vec[@]}"; do
-+		eval "local $item"
-+		echo "$memberships" | grep -q "\b$group\b"
-+		check_err_fail $fail $? "$group is_ex reported in IGMP query response"
-+	done
-+}
-+
-+test_change_mc_remote()
-+{
-+	check_command netstat || return
-+
-+	ip_link_add v1 up type veth peer name v2
-+	ip_link_set_up v2
-+
-+	RET=0
-+
-+	ip_link_add vx up type vxlan dstport 4789 \
-+		local 192.0.2.1 $(fmt_remote 224.1.1.1) dev v1 vni 1000
-+
-+	check_membership "group=224.1.1.1 fail=0" \
-+			 "group=224.1.1.2 fail=1" \
-+			 "group=224.1.1.3 fail=1"
-+
-+	log_test "MC group report after VXLAN creation"
-+
-+	RET=0
-+
-+	change_remote 224.1.1.2
-+	check_membership "group=224.1.1.1 fail=1" \
-+			 "group=224.1.1.2 fail=0" \
-+			 "group=224.1.1.3 fail=1"
-+
-+	log_test "MC group report after changing VXLAN remote MC->MC"
-+
-+	RET=0
-+
-+	change_remote 192.0.2.2
-+	check_membership "group=224.1.1.1 fail=1" \
-+			 "group=224.1.1.2 fail=1" \
-+			 "group=224.1.1.3 fail=1"
-+
-+	log_test "MC group report after changing VXLAN remote MC->UC"
-+}
-+
- trap defer_scopes_cleanup EXIT
- 
- tests_run
+Changes in v5:
+- Remove extraneous trailing newlines from failure messages.
+- Replace `pr_debug` with `kunit_printk`.
+- Use static char arrays instead of kmalloc.
+- Drop KUnit boilerplate from CONFIG_SCANF_KUNIT_TEST help text.
+- Drop arch changes.
+- Link to v4: https://lore.kernel.org/r/20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com
+
+Changes in v4:
+- Bake `test` into various macros, greatly reducing diff noise.
+- Revert control flow changes.
+- Link to v3: https://lore.kernel.org/r/20250204-scanf-kunit-convert-v3-0-386d7c3ee714@gmail.com
+
+Changes in v3:
+- Reduce diff noise in lib/Makefile. (Petr Mladek)
+- Split `scanf_test` into a few test cases. New output:
+  : =================== scanf (10 subtests) ====================
+  : [PASSED] numbers_simple
+  : ====================== numbers_list  =======================
+  : [PASSED] delim=" "
+  : [PASSED] delim=":"
+  : [PASSED] delim=","
+  : [PASSED] delim="-"
+  : [PASSED] delim="/"
+  : ================== [PASSED] numbers_list ===================
+  : ============ numbers_list_field_width_typemax  =============
+  : [PASSED] delim=" "
+  : [PASSED] delim=":"
+  : [PASSED] delim=","
+  : [PASSED] delim="-"
+  : [PASSED] delim="/"
+  : ======== [PASSED] numbers_list_field_width_typemax =========
+  : =========== numbers_list_field_width_val_width  ============
+  : [PASSED] delim=" "
+  : [PASSED] delim=":"
+  : [PASSED] delim=","
+  : [PASSED] delim="-"
+  : [PASSED] delim="/"
+  : ======= [PASSED] numbers_list_field_width_val_width ========
+  : [PASSED] numbers_slice
+  : [PASSED] numbers_prefix_overflow
+  : [PASSED] test_simple_strtoull
+  : [PASSED] test_simple_strtoll
+  : [PASSED] test_simple_strtoul
+  : [PASSED] test_simple_strtol
+  : ====================== [PASSED] scanf ======================
+  : ============================================================
+  : Testing complete. Ran 22 tests: passed: 22
+  : Elapsed time: 5.517s total, 0.001s configuring, 5.440s building, 0.067s running
+- Link to v2: https://lore.kernel.org/r/20250203-scanf-kunit-convert-v2-1-277a618d804e@gmail.com
+
+Changes in v2:
+- Rename lib/{test_scanf.c => scanf_kunit.c}. (Andy Shevchenko)
+- Link to v1: https://lore.kernel.org/r/20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com
+
+---
+Tamir Duberstein (4):
+      scanf: implicate test line in failure messages
+      scanf: remove redundant debug logs
+      scanf: convert self-test to KUnit
+      scanf: break kunit into test cases
+
+ MAINTAINERS                               |   2 +-
+ lib/Kconfig.debug                         |  12 +-
+ lib/Makefile                              |   1 -
+ lib/tests/Makefile                        |   1 +
+ lib/{test_scanf.c => tests/scanf_kunit.c} | 299 +++++++++++++++---------------
+ tools/testing/selftests/lib/Makefile      |   2 +-
+ tools/testing/selftests/lib/config        |   1 -
+ tools/testing/selftests/lib/scanf.sh      |   4 -
+ 8 files changed, 160 insertions(+), 162 deletions(-)
+---
+base-commit: 7b7a883c7f4de1ee5040bd1c32aabaafde54d209
+change-id: 20250131-scanf-kunit-convert-f70dc33bb34c
+
+Best regards,
 -- 
-2.47.0
+Tamir Duberstein <tamird@gmail.com>
 
 
