@@ -1,130 +1,158 @@
-Return-Path: <linux-kselftest+bounces-26673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 522D1A363AD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 17:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D3547A364E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 18:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92F593AB17C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 16:53:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B10A3A7BBC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 17:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91C1C26773F;
-	Fri, 14 Feb 2025 16:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE97267B15;
+	Fri, 14 Feb 2025 17:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+9T88QH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aknN/cZd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36B8267700;
-	Fri, 14 Feb 2025 16:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7E3264A80
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 17:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739552032; cv=none; b=tvokuNsoQwgGGg9y4TysPgVUsTqeg5t+eCVBxtfDcGK5UUlmndbPBxGWL7+RnH7lcWA/4GCxfHE17mazyxk5UDd1MAKPHItX7PPhsR+7D1MfS4hZ+CyK4VWwxnXRocTSkoFXZXU1JJNTx17A15qinNUxU4gmPukS+boqn6pldDo=
+	t=1739555074; cv=none; b=GIoGdk2aE6YixXQCkAoe2MpMV/llAPdw5TVu6g52ftWWLV/jqcDMMLg4552j0+30Mwpqr3AEQp0oEI+kYyQeF5axvMKo0gB5SP8g47umxuSfxbi1fk7Vde5hZ6B4ciyER1h/anzn4VeHNe6ucV7oO76cklM5TLKGJUj5CiHaXDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739552032; c=relaxed/simple;
-	bh=2c5NuBDyo2m0shbPuVy5ObaCNtX5qBwlWxjze7MTKVg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BDZ0Vl4XrKBcFQ+xISqtvJNR5P5PHUAGZqha6tWUephuaio6/JNLvm35UBFE9zBEJUVjbrg29P9CFxaMejJkH3qQKUIBXwX17BjlOuNJuDtZRlgtuBhaGgnFPjlzJ+moTXxfcjaG59afEjcMWVw4TOiV+QU1vpkUO6nccN7aNlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+9T88QH; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30613802a59so23406471fa.0;
-        Fri, 14 Feb 2025 08:53:50 -0800 (PST)
+	s=arc-20240116; t=1739555074; c=relaxed/simple;
+	bh=yB/N/dmodWxGpg2pNJzfl2ggwDQTXm2uu8GMzqjQxVQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MYiJTztF7d6pwNWjPM3vEt7Od2csLBUWJRgd1mL761MOaUU3lLEF8p1J4h580HGFeMwSMKj0q1QVGJTpS0QDjcEYli0s5ujNgJ2PffYxmYJA4BBe8LLtyRhYCBCxAveXPrP/snM8sw8gJA+0gInjYcnk5NCet1hIV1NAGj665gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aknN/cZd; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-220c8f38febso44117885ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 09:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739552029; x=1740156829; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2c5NuBDyo2m0shbPuVy5ObaCNtX5qBwlWxjze7MTKVg=;
-        b=f+9T88QHHF2clw9JQku/08ewFwYw3vAM0beJS3fTWf+s+f/Lbs3YHvgmQ7m756eBSL
-         Q+QNjRHWZPzJ/atrja7XLDpesNBaHogiwU+H7irju0b+oE8tlhOoZGvmfbbs1nB04Aiq
-         VqSwEjLPVY4Ku2mSaUvnwSiwew+SBdL3xGUACwOa0amr0vunHUi/IWXigDLnKd4cRplr
-         eqpIXzjXAwC73SFY/J2ERcaT7+z1fIaGu9kJ2T3QrI+HlCUjdaO+WpkWOqHFhOisqfUp
-         v6z1gwpxtn1UXufBeBiwBSrffzKouBwIYmdx+5HbefDk5MbHAgiQsJdJH97NWGZrxPfm
-         ylYg==
+        d=linaro.org; s=google; t=1739555072; x=1740159872; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rMF2FQJwD4AiHWSw8XkooqqJGsGsXZnRmnTTxBxizF4=;
+        b=aknN/cZdCOlaw0lwj+7BUUxITG4LWMxHfb7DOO5onPXlMpsIh6lGzFRxv6BdCRuzPI
+         6yCDgXxTKRvZ1Ol5hwZobvrlc1qetZpCZVSQwqcxKnEPPeqYFyEQDV9D6efpOtJoSBOw
+         k7yDw9z70qwKAaXfdh3UHg7k6egrJM50F3wbRYZnOhSv9lQtUy8656db3yWEBXeDzVby
+         CY/wScXpKOFOa03HDDimq/tTly5CVsrnjBQ4S+6OZIATQh/u0p7Y5U+2m+cp4nwsaBmo
+         4/h2bcLvYhMCojlaGCY1UD1M3MxNNGKYO24LLMkNwAQ2XNEI2jAgLuXwZ0hYlVFZ7Fd2
+         8gnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739552029; x=1740156829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2c5NuBDyo2m0shbPuVy5ObaCNtX5qBwlWxjze7MTKVg=;
-        b=LgCYqbYbUzl9e8aJBzUBCqa+FyelZKieDSGR7hjSj353K6ewzymbQX6bcusoRyp4Ue
-         E9p2CscL0zRkSg/1N1eP9tn7j745NMdLtKhcas01Jma4I4bV7zxmBoq7r/blv0GwljL6
-         5d+fP6pBKG2OPmTQ7Dpzl6jHiFWTsULAmGbMEaJB9QYUcMDNHEZHmveVlQvukNoKiJxB
-         +QqL6m48mSmei8WlaIQUxLwTG9SgwfeuLMF9VEEIr8jbche2nWr6OCRHfDOOlaH1dY86
-         ryNT3OH+Uv8zxRlPG0SL81Rcsl2rwdAmBxOKXkFOUFDDEjoIG2W4q9h3QHGEHGCncfry
-         esgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFBWucI3Ptg7S4XKPRd+D/QoRQtd1VQkzNdb7CZnk8GYUbhLMFvI5Sn1C3pVYAuW+Jd+8P0Idyuh4=@vger.kernel.org, AJvYcCVFy8WeK1BolTCskSp6aDN4Cb9vCsUbOFjSQCRY7BG4iPySGpKNV8cEYLwrKbRgTZ1itv9gHtZgF9vCqlqf@vger.kernel.org, AJvYcCVVSZDxU5lVXbg9wvUrTmWnoihAUemvEN1eVJxW4xjMANFRjMIV8M32uyaNX3USlDZ1YTytAhzEOkEKjf8ggAQG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEXkHkw5D3mk5JyEmYi7qMFGaEPl1jf+FNsKZUsH73gTNpNu+u
-	MGDDzhOCg4qnkkXxHgFIbK/PgcxYxIz3yNnFU63FtA3RriwdvfGfYvtf/m7PFvhpGaBrWpBfJeX
-	bga0gk8PyW5e45bp/YptPkYY01o4=
-X-Gm-Gg: ASbGncuAXKZiL1kH/n33Noqbx2epqmNNOLkq76oaNqtJhrMbjfC7pkXCqfsSEvZP1gz
-	q+EdX3qB9wI5Cz3aag57vDClhnhp5dlxyakz9pwtWKnqv7p6k2gOKL45Jt5YO866gUK5mPB3Nax
-	tRHd1/6DfN8IkZjHzfMYO63PpsnGemEhQ=
-X-Google-Smtp-Source: AGHT+IH+ZY2j63cWbogB9A3vuP8zUi7lLVt1mNv8t9yoNtwWn6FsGoTMpU+6/obf1W6ICZ9peOj7KrEV5ms8Ua3/CX8=
-X-Received: by 2002:a05:651c:548:b0:301:12:1ef3 with SMTP id
- 38308e7fff4ca-30927a2cde4mr1356071fa.4.1739552028486; Fri, 14 Feb 2025
- 08:53:48 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739555072; x=1740159872;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMF2FQJwD4AiHWSw8XkooqqJGsGsXZnRmnTTxBxizF4=;
+        b=bqnMq2H8Wgo6VWZ/2HDEQnyHJZJ87hgtu4d8o0yDdtKQbR3u7M7ISqvbyHLWATaQhs
+         KbFUGH/MMfPLgZXKdSvM6SqXiYz3ogT2d+afE6pwF6CWHmMShipgobmXSSq/smWMUYpB
+         0Vf0BK8U7Q0kZp+d0+5zpLwCcOlSYTnkL/l39xrDYgpAk8obDx77Vws5zE8nzZPQ7CVT
+         AFbC1oPn00tr09U71oAoP2osOZ/MJLsVUedePx1i+VsYQEQ/EdZfjax8akEscqFxBlyK
+         YrNt+8sr1x5XYu3BvBTC+IfdArgEMQoIhavFUi5kj8FpQ34SKXidsnrRIa77econkMI5
+         xvgA==
+X-Forwarded-Encrypted: i=1; AJvYcCX0BuTf0NpbysTUnxmpPa8RN9VxmkzO76mlU8YGzb2jPaASp+opeDJ29HN6lVLp5VYbIlhsI/TifEl6eKPCAk8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBbGfgkJg0L6VQe/T2yoAplqVljW4+xD0W7Wk54d63AtqIXemn
+	JMGGroDXio+zWU4AbbOaTC/AKSggjnf2hFbsY3arUOOYQBT7Wubwe+cKPGqDfw==
+X-Gm-Gg: ASbGncsWNz5tkbzNdxG6hBCRe/xp+ChHxFOClKcS6UzfV32F1tSS0xOxq4Or0V894Kb
+	A1U45goSTUeljyTwvDWz0Qa/vELEh5Bk0RFwAGE1hDs9j0arBHTe2tgCLXHE3X0UU7Ity4UIwL/
+	dHsEmqpAFP3tJnL+mYAmBGWvaZX5WxoodfGTAIwBJo3AnltOWaxO5FfE2cr+8ebTh7DK8xJUYwh
+	iPzir+SSSWgOCLGkIOHMIBQmA/8Zw0tkh1lQExBCg7Y2rSir+ovURZsehVkD/doN4cMcxefy189
+	6gvSF57YdNgCNv3Vhc7m4d92Ekg=
+X-Google-Smtp-Source: AGHT+IFPPV2L6UfIjBOJCgYVAwQL+H1yJLajnoN7rIqvq0UHGG8ilpnrBf/ind5JB91U3cBDb9FvKA==
+X-Received: by 2002:a17:902:e848:b0:216:31aa:12eb with SMTP id d9443c01a7336-22104064cd6mr1615855ad.31.1739555072461;
+        Fri, 14 Feb 2025 09:44:32 -0800 (PST)
+Received: from thinkpad ([120.60.134.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d559614dsm31649175ad.256.2025.02.14.09.44.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 09:44:32 -0800 (PST)
+Date: Fri, 14 Feb 2025 23:14:28 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: bhelgaas@google.com, kw@linux.com, linux-pci@vger.kernel.org,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] misc: pci_endpoint_test: Give disabled BARs a
+ distinct error code
+Message-ID: <20250214174428.bosbckzfvouh76o4@thinkpad>
+References: <20250123120147.3603409-3-cassel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210-printf-kunit-convert-v3-0-ee6ac5500f5e@gmail.com>
- <Z69isDf_6Vy8gGcS@pathway.suse.cz> <Z69oxhkUzTfJ6YKi@smile.fi.intel.com>
-In-Reply-To: <Z69oxhkUzTfJ6YKi@smile.fi.intel.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 14 Feb 2025 11:53:10 -0500
-X-Gm-Features: AWEUYZlnq5SWYMq0W8Wtx8_gV8oE6jI4f_XCC4fWZ0NXKTJTv_1uIYIyKaB7JkM
-Message-ID: <CAJ-ks9mck4DzX+WANxKSmcN=mP9ztgwWETXLmX_F-gy=EhmLNg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] printf: convert self-test to KUnit
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Petr Mladek <pmladek@suse.com>, Arpitha Raghunandan <98.arpi@gmail.com>, David Gow <davidgow@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250123120147.3603409-3-cassel@kernel.org>
 
-On Fri, Feb 14, 2025 at 11:02=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Feb 14, 2025 at 04:35:12PM +0100, Petr Mladek wrote:
-> > On Mon 2025-02-10 13:23:21, Tamir Duberstein wrote:
-> > > This is one of just 3 remaining "Test Module" kselftests (the others
-> > > being bitmap and scanf), the rest having been converted to KUnit.
-> > >
-> > > I tested this using:
-> > >
-> > > $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=
-=3D1 printf
-> > >
-> > > I have also sent out a series converting scanf[0].
-> > >
-> > > Link: https://lore.kernel.org/all/20250204-scanf-kunit-convert-v3-0-3=
-86d7c3ee714@gmail.com/T/#u [0]
-> > >
-> > > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> >
-> > I have just quickly tested this before leaving for a week.
-> > And I am fine with the result.
->
-> Seems reasonable to me. But I want a consensus with Rasmus.
+On Thu, Jan 23, 2025 at 01:01:48PM +0100, Niklas Cassel wrote:
+> The current code returns -ENOMEM if test->bar[barno] is NULL.
+> 
+> There can be two reasons why test->bar[barno] is NULL:
+> 1) The pci_ioremap_bar() call in pci_endpoint_test_probe() failed.
+> 2) The BAR was skipped, because it is disabled by the endpoint.
+> 
+> Many PCI endpoint controller drivers will disable all BARs in their
+> init function. A disabled BAR will have a size of 0.
+> 
+> A PCI endpoint function driver will be able to enable any BAR that
+> is not marked as BAR_RESERVED (which means that the BAR should not
+> be touched by the EPF driver).
+> 
+> Thus, perform check if the size is 0, before checking if
+> test->bar[barno] is NULL, such that we can return different errors.
+> 
+> This will allow the selftests to return SKIP instead of FAIL for
+> disabled BARs.
+> 
+> Signed-off-by: Niklas Cassel <cassel@kernel.org>
 
-I have a local v4 where I've added the same enhancement as the scanf
-patches so that assertions log the line in the top-level test.
+Applied to pci/endpoint!
 
-I'll wait for Rasmus' reply before sending.
-Tamir
+- Mani
+
+> ---
+> Hello PCI maintainers.
+> This patch might give a trivial conflict with:
+> https://lore.kernel.org/linux-pci/20250123095906.3578241-2-cassel@kernel.org/T/#u
+> because the context lines (lines that haven't been changed)
+> might be different. If there is a conflict, simply look at
+> this patch by itself, and resolution should be trivial.
+> 
+>  drivers/misc/pci_endpoint_test.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> index d5ac71a49386..b95980b29eb9 100644
+> --- a/drivers/misc/pci_endpoint_test.c
+> +++ b/drivers/misc/pci_endpoint_test.c
+> @@ -292,11 +292,13 @@ static int pci_endpoint_test_bar(struct pci_endpoint_test *test,
+>  	void *read_buf __free(kfree) = NULL;
+>  	struct pci_dev *pdev = test->pdev;
+>  
+> +	bar_size = pci_resource_len(pdev, barno);
+> +	if (!bar_size)
+> +		return -ENODATA;
+> +
+>  	if (!test->bar[barno])
+>  		return -ENOMEM;
+>  
+> -	bar_size = pci_resource_len(pdev, barno);
+> -
+>  	if (barno == test->test_reg_bar)
+>  		bar_size = 0x4;
+>  
+> -- 
+> 2.48.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
