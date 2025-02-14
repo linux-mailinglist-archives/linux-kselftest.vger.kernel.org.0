@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-26666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E3BA362E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 17:20:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 919C5A362E0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 17:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A838318900FE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 16:19:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67B9E3A9CE3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 16:19:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B542676EC;
-	Fri, 14 Feb 2025 16:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F0C2676FD;
+	Fri, 14 Feb 2025 16:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Vk8hCOQq"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eVxhKRPO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EF12676CD;
-	Fri, 14 Feb 2025 16:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048CC2676CF;
+	Fri, 14 Feb 2025 16:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.56
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739549979; cv=fail; b=Y+MH40D6RBnQJ5YZ4QQiWzJ0oBpdqUSrgxfZ5oLkTCqC/oUk2/4QYQeaXQJH0ZdFvMc0qm/+y5cKKT8jS6KtFsqpJqFgYwpnKV0JypzvxhiJk0rgxy+449SocL3qVPNFgMsxw+h2Hn0ptmwJfkLSicMjkE3hy/0ZeNCOgxQ4zDk=
+	t=1739549982; cv=fail; b=rCoxkC3kBe7bJOdzo89n9Y/RuFMncjMrykwffNTobnXVFwhS0FJ570dYmku+XVSOHhVlPggQmUOFcymLhL/SgGKQsQ03ITDDzisqt1sNt//YtUfigY4dyJqj2ZW6+1v8sQpO+VteFzPpR5/Xzwtdol9TWPfenBDDHHGemFHMm2E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739549979; c=relaxed/simple;
-	bh=FErlX1RMbmxusG3Jd5/UOdTKdnEFR0Vvy5cuZxkRsm0=;
+	s=arc-20240116; t=1739549982; c=relaxed/simple;
+	bh=+wbcbyXnXvn1PMP9ymid+vdhhzJIeOlZcycTthupwoU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MLd5tuKqYq7MPzrdExr5T7QawS4/8c7PJb89BCzynb5q7Mc7H+a0e2WUsK3B8Uj+6OhEcIx1Rai0s/R0oqLs0UJcTDtb8ggDo0Ou5j1vPNINwH0hlHmoQGZEWJFnxPxdOWEya3YWRl3SshGusRJtJgY0zXv+593Q+9FzMkdPm4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Vk8hCOQq; arc=fail smtp.client-ip=40.107.237.73
+	 MIME-Version:Content-Type; b=Ncvou/nj1GsnM1U2+rMW7xNXpopLhzABUVxwdY+nFGotDaFbiAhGThDq9Kp0WfRcA3eOvb18x97udSoAlnnU3nEiMdamEOGRowjqDnNePzop7wUDfOGhy6+ZwbGzXdNrzrRbsrzRYPI1jzM6Aw/lq9/ZvTKXkp4rYbbtavPp++s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eVxhKRPO; arc=fail smtp.client-ip=40.107.223.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Isy0I03GYosMs03NBXTAv8tuOix54WbF2eXjZCqyzxPpd1lcULG+QZk+6bTb67b4DNDARxGQl9Rp/f7mcMzeLNQls1SPLElVtYHFnDROoOfbuohlUkb15L4oxOPv2/Muiz6BszRzBoP7Ro8kuyLX+dWEaW7Fpb6hJV1KLEm7+YGwcnDVW3m1azRhJwUm+3X0/5QS5oDtijbDaD96aeTxbvVXippyBhHxCQk+jCrSOuiJVk/bLgJGaglMo3oJM/SbR6pmIJhEQIdtBGnrpBXgT+mQQcxsmhtHSExd9kFJZF7E/L/BhzL51ihZphkPhM5Pfsh+imRDed9UTqOVrzjkag==
+ b=JhG0gX1/3moI3gohl6Gm02ZvqcXrwO8XEPVDy2TSDrozb8IdiIESB+RZlG2FJeZtxM6xQ7MjzFYcfzfIi2c2L9wDt2Gw3YXjQ50qwjJ+V9zInaE6zAkn7Y61l+932yIVEBbRuz4LGRBvwT9Zj52tdGjCl5itMlHNTjz9wjWQJwoZ+6ow6FriSTUlQdOcaadeRuc5soC/jtDviD+Ep75pE39Kv76890ZfWjNLkuXAIXDVFQ50fiw3WeQxBVC56xah3cTl3H7FelmIc3PVsKqq9EJ2tEgq+H60ifx0f429I25O04r5T0W04HTJw3FG546MyNxqgeoZ1gAHSfj93rpihA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NCSKERS2mQwbMjcbxMx22ExK2cMFq15Hq9GUrnZl9JI=;
- b=egzOxLVaTIBhRwOL4yqeWIdfHdDgWF4EDkbBnIH4zLqTRKdSy69nnZlNCpjqXdO2VH1DSdq49kapykAiu9WJJgTzlEG0ihMB4n/YdhHUyeZ1aoEXHf3tE5kKNxqkAH0ypcAcZHgfV67LzQ9ErH14JUhHgf4alp3FZPwQG6XdAZuonchDr8f7yTj88qvOUAjD0haVLTEQOVgwl9NAAAcNHcTneTQE2MRF3AanpWB+aVff+FOqvjmNYmZY0CpdHwzSLO2mcBA/6OGMrT8nd6AoEqUsn4pD4S33oQIJQQ4UYwuWen/OiH1/AzlaCL2A1mCakXlzZmf8+S/FTYudZBNadg==
+ bh=1mKSnH03/+WnGU1/2SdKtQRHTDHaRyS3u5W4LHT2oMU=;
+ b=orNe4leUZlbqt7MNC6FlMfClrh7PnWS1mOTIBjcoT+55qU1vGqx30T3ghzRuHe6rYt4v/0FRWSA4w9E9YPt3DxMnpyEmnUIpGOi+sxsA7q8dEhMNGzMWacs4YGnjIfxBFCQGiSbRvb7sBY0cFkpupT+GwerpTM0PjuNQa03U6HaNCnAURqHq0kn1wNQGthu3yxIzLnvswXGBbEBBc0G0ndU29WpceBSfdKiZYkeXsT0PthHk4R/EP7/zbKdx1PbxCfF/1mcEssovjC6BtQw6aJAKyOJKMaqKvaCniK2eJ/+D9DeOcjVSEE2fCVD3t3UHfwc4dwxfUTkmVmwV2V1q0A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NCSKERS2mQwbMjcbxMx22ExK2cMFq15Hq9GUrnZl9JI=;
- b=Vk8hCOQqRn4Ir5Fq9emCLnlHInLT8TbziQCLCvkPgUdoG/N5uoxg0Q6pro+HF5ze62QExliY+SXeQFioTjuXfOAXb811Vn5Uy2mY1b9yTVWZugIicxF4z6TgbFYhIQKH3jmhU50xeRVew5/2L7iTtWq/27EFGAp8nyp8I1CR1ncdNMYyC4eAuRkFUuffC/FvDjHt7wPchh+S6g+xBqtHolg0Yq0m0KlWEf6zBH8UdiDperE1gbyaXLoHpxhy5LJAL8eJi9OBih8bOgzTfgHrLVKS7SvkVrTKRK0lMsZ0spIvaU9cgfhQfru8lNaDQQz2KGoXdWTKs4ia4UyyYeU7pQ==
-Received: from BN9PR03CA0300.namprd03.prod.outlook.com (2603:10b6:408:f5::35)
- by CY8PR12MB7217.namprd12.prod.outlook.com (2603:10b6:930:5b::20) with
+ bh=1mKSnH03/+WnGU1/2SdKtQRHTDHaRyS3u5W4LHT2oMU=;
+ b=eVxhKRPOLQOipJK9y1SVgupvcjGFk06UYiSlRr9Vd7P4LyzSLIclU5GfFSED0ZTYdXb2HiGH3DXbY+Ouf9ZFgncpEEx8oTK6cZcWb7y/V42VrFflCIDZvaG1ZB2/xV5wGOP5x6hlMAJZfAqoS122jh5lL/kQkkt7T01n+xXfCxGYv1dhuCUhmx5EINg7n6aa4gqvL+alk+4KZ2/+WD5NhF8LplQItjUc6wjqcPKTgtPIzN00zcO5x5KNMtnIIDJhfXc+pOzd6ih/yEM4mdSssKdzbqAK5P+KzWD7C2akGfZajKZ0VEmObDkCypgDV6QK9TCNpV7fUrfOWaOpN9nzsg==
+Received: from MN0PR04CA0021.namprd04.prod.outlook.com (2603:10b6:208:52d::32)
+ by CH3PR12MB8581.namprd12.prod.outlook.com (2603:10b6:610:15d::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.22; Fri, 14 Feb
- 2025 16:19:31 +0000
-Received: from MN1PEPF0000F0E3.namprd04.prod.outlook.com
- (2603:10b6:408:f5:cafe::4e) by BN9PR03CA0300.outlook.office365.com
- (2603:10b6:408:f5::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.14 via Frontend Transport; Fri,
- 14 Feb 2025 16:19:30 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.17; Fri, 14 Feb
+ 2025 16:19:36 +0000
+Received: from MN1PEPF0000F0E5.namprd04.prod.outlook.com
+ (2603:10b6:208:52d:cafe::49) by MN0PR04CA0021.outlook.office365.com
+ (2603:10b6:208:52d::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.16 via Frontend Transport; Fri,
+ 14 Feb 2025 16:19:36 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -64,17 +64,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- MN1PEPF0000F0E3.mail.protection.outlook.com (10.167.242.41) with Microsoft
+ MN1PEPF0000F0E5.mail.protection.outlook.com (10.167.242.43) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8445.10 via Frontend Transport; Fri, 14 Feb 2025 16:19:30 +0000
+ 15.20.8445.10 via Frontend Transport; Fri, 14 Feb 2025 16:19:35 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Feb
- 2025 08:19:15 -0800
+ 2025 08:19:20 -0800
 Received: from fedora.mtl.com (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Fri, 14 Feb
- 2025 08:19:10 -0800
+ 2025 08:19:15 -0800
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -83,9 +83,9 @@ To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 CC: Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
 	<mlxsw@nvidia.com>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan
 	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 4/5] selftests: test_vxlan_fdb_changelink: Convert to lib.sh
-Date: Fri, 14 Feb 2025 17:18:23 +0100
-Message-ID: <e1a49e3fc8663b08e5d5bdee5049d25484f2ce7f.1739548836.git.petrm@nvidia.com>
+Subject: [PATCH net-next v2 5/5] selftests: test_vxlan_fdb_changelink: Add a test for MC remote change
+Date: Fri, 14 Feb 2025 17:18:24 +0100
+Message-ID: <dcaf5e786362a5e39297f93bff480482b78ec393.1739548836.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <cover.1739548836.git.petrm@nvidia.com>
 References: <cover.1739548836.git.petrm@nvidia.com>
@@ -101,57 +101,55 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E3:EE_|CY8PR12MB7217:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e2574ab-561a-4b7e-047c-08dd4d135c98
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E5:EE_|CH3PR12MB8581:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53626a83-1c5f-4767-10e9-08dd4d135f56
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?93IrwUERwyjnLQqGyEl5JAR9I9ledCRdeSOWHhlE1EWSCraof/09kjHFNhUn?=
- =?us-ascii?Q?VPCrZ2dSHOET6nlyDR4V4cVnxS9RXv7OUoMzQNODG7mNZzdMIyZV19sKU6pa?=
- =?us-ascii?Q?rKlf6bItOBMkrOgG5gzrqsYG7noamyqN0AJCCbEJevAOQu0XJ2/lf4Du4gVv?=
- =?us-ascii?Q?zWDpNpnMeYJN5pr+U9LepIrs14tNk71LBbaPFuxTqzDN1macoR2QfjP4udIW?=
- =?us-ascii?Q?NG0XUCAyxCUXKd5VhR2B1edRX6gx6P0g7ha/nZfTq8UPPc6RLAQru6dWMa3U?=
- =?us-ascii?Q?rhxtg2Hu02ppBVfTPoDpOXJ9zcqyqhc2LsSecQ/+cUlKS10FHj1d6JDayTKw?=
- =?us-ascii?Q?G/p/4Y3FTSK36BbUbDutNi10W4+wg5xpdA++nt/p8Cqf+zPuAKKlMR9vPgLy?=
- =?us-ascii?Q?7Whf+38CiEiL3niCiD5D1RVRxgva8BRbS64/uw97ft74jUI0ihtddNjVEbjJ?=
- =?us-ascii?Q?NW/wJkntUZEXojXUbPXn6V0q2+tvJtGlkE72gNdBJLKGIPnN0MnrksKQMe/j?=
- =?us-ascii?Q?kYl6qTVGCNoIqCdmmpGiP7O9ggiGvUXhvulk0JWUUch0R5aSo0RYcEwoVuzm?=
- =?us-ascii?Q?vkgW7x4Zi3TUbwGesvn7fw3rlcDKxmbqySN+V8EsrCHK/vV86cH9adf0wHjL?=
- =?us-ascii?Q?3eqQ0EYlKCEgrXh+nQItEnjZXbZbkirBzG057brQBhhky1hAe0ZuEsPiJwNw?=
- =?us-ascii?Q?n7BntAUQX5bQTKwQzm6PIhI1B1DpZaZwMcBA2GVN043/D6FWWt8FarTI85tp?=
- =?us-ascii?Q?YQwuLYm1VC+rl7jyXypbxCbNhfAEa8Q+Rqp25bNUYm93T3UDHh5CAcq9S4EY?=
- =?us-ascii?Q?kektI3OBi5QyfuebIjWTNZt1QvTEW0ejHUnrvxmBPakdDXzdjkPp2YcCo+OF?=
- =?us-ascii?Q?9i9Pj69YkGHPhCjeVnUGKvgw1YB+JmcU4f4eMSxdSKlr1uzo7au0sLkfXnZ4?=
- =?us-ascii?Q?gZdgcd4A9dvh+qbmQTxRefMvRSshpYubxw5k9gBlbHOsikNuVQJyn84S9AGj?=
- =?us-ascii?Q?zlJyOQ+Vkn19jZPviGRd+CPAKMzRw6PvoFjjYD6mw5Vy+el3QgdNeuo6K3eh?=
- =?us-ascii?Q?VAKttRu7guSXKwgvHlOhiw+BQnqDEP8sY24yG5U6/auvsidEn4eyKmapMfpu?=
- =?us-ascii?Q?3G2smlKEbpE7FBiI/PxGtdM4nQq2vqkBZuPbxqV09Qg3JaLCExh4L8kbob+1?=
- =?us-ascii?Q?VqCFb7ya/8yj47o5gesc8fqk5X0B2+PO6KKUjPP9KWo3KKVbuYEn+DtTp7M4?=
- =?us-ascii?Q?ZLoRsVFUOgXR7IKqo7z2xtu3s5hruvk+umrmX5RR+TqAO3VUn4hPpNxTt3l1?=
- =?us-ascii?Q?DBf0d7R2zri8AuKOQFP5ooqN2SSGXyR/PGu8DT1pfmj6bg4TIcI7URh1V4rr?=
- =?us-ascii?Q?Vxvy7WV1NwlQ3gkqr9gLi+8A3OCIoBvN62HwwbZfDWsWQ0or1kxcFB1fLS0i?=
- =?us-ascii?Q?pr+/+WrnL5FmoHuhaqWC/jt0c/6lruenctAwrQvzo+uhO2nlrq0CjJJoWCVW?=
- =?us-ascii?Q?z9t1qqM10XgO4bg=3D?=
+	=?us-ascii?Q?QtuTrPUMcpzpEELvXlEUuGspf7A0SoG2WmVdny4qE+/sQ+NC5AAZLBLpg8EP?=
+ =?us-ascii?Q?RWGwUwqpxBCQwI+5QyVmGZ1WdfNAMC5QGxP1szemzMBfalVYNQ2UNHEskiXw?=
+ =?us-ascii?Q?Ol+20HkxX5u4LY3CD2lEHUl4RbaM6OPWiBlM/fNVXsTMMC4D9TsGVcgNg3u8?=
+ =?us-ascii?Q?qLr5dpP5MgA3pV7/A5dN93KyNViqp8adSkaOkLYmC7P3g+yQXPro49o+GvAZ?=
+ =?us-ascii?Q?kjB9XsmlzjVEOoQPHMueYMVBO+1wuDzQjOuANci58ylNYk78Loso14FuqMsp?=
+ =?us-ascii?Q?y52B573RX8W9x3kd1cpPkKILwnekVAex+PcgYMX9oL5InHfuIn3Cvq5+vLCJ?=
+ =?us-ascii?Q?HYgYQEfVqLCfl2DkK7dvFMsT/lqb05wCmCc3MDK05bl2qFnQrcw2nE5cURIN?=
+ =?us-ascii?Q?dsxpFWaVVzKHBucoHvNtdBIa7o0xBJLxrTRUr26XwqJaVbNK9XjyZxwsiGcd?=
+ =?us-ascii?Q?zhzo6fiT1v/kVejD86aVwsqHph1nVgBFynEy7jUCJs9QOPnvDH7YTfMfLL2h?=
+ =?us-ascii?Q?rB4LTgvtBUvVIIVUBaJOqRZBPRd2rh4FT8SiA3bmnaoWURgpU5koigxt0Xo8?=
+ =?us-ascii?Q?oZOKJj1sIxbyuqXlziNm/lwbHdTaHRZW5XL7z8z7sNn81JKkXT1TDO4LkOsT?=
+ =?us-ascii?Q?C27FC4NOe158eZEYx9BcU4ePVxdwQ7ZTvEmkfAsox5vWcG9F8lgXqufaDW5c?=
+ =?us-ascii?Q?7zNjFgUeSLXWQSPjPApcRonj5j4xAAFwF/LrkgxBwxIvmAgnSPewSpAYfhGQ?=
+ =?us-ascii?Q?gjAFONlLqD8wgW2OXlQxye41vDkPVyJA9OJnzdy/TJV91YFy+yLF0Xtodatf?=
+ =?us-ascii?Q?T+fM3KmZzUl5pPMNbFCYQiuV7tEkfg3fHs51c70yUstgPQFFQWW2zdVEwjDE?=
+ =?us-ascii?Q?l7S7W57jbFoER9t4fnQnG1CDQb+j+9g+AbtSBAg7768LvDBttTVIElbpMvJu?=
+ =?us-ascii?Q?n+SL9opZIn7L6juyqj89+KC97d0JbrqQUtaUgGf5NIl/PYydUXIOoKZ/L7BJ?=
+ =?us-ascii?Q?tQg4CNhhhfloTJFvswx/TE2WxLloE0H/FwD9DI1LrzKosJjaCd2rxb8YlZMP?=
+ =?us-ascii?Q?C529qCI3cjH7IoC/oOJqN5e2+hZ8sIr6kYIiIzMlZRwZxGhksHzjXjDdLN2q?=
+ =?us-ascii?Q?hAYDlgLzcj2Q5ejpGXDEZYuBJeBPyExxUCJ1gjRzGlTgv3An8reXdt01QUCC?=
+ =?us-ascii?Q?WzXSHSMg4dm6JrFsg2MujlHKndjApBJZT8UHFfvPHhuPONAfiHhPyEv5ak18?=
+ =?us-ascii?Q?uIlYHJO/VSL4iRhDI7gKkQ1SkQKb5h8+yYYHozOdRJjoPDlP3bcdO981546V?=
+ =?us-ascii?Q?ko+TNftis9NWKIEBrd4jnsu1nRTgt85pIxj0BLUeUP/OR6Sf9xV/ByeHShFJ?=
+ =?us-ascii?Q?k9llCQZGBcs67jBUJc4oIXG8xeMhODyiM3LJ0jVbx0GyX4+E/2C3tyfflD5G?=
+ =?us-ascii?Q?ro7vMlxcebMo6BxDUsjy5jaDF9tfOKzFxrVBosfKhOXuYegrVLClXWkrR8Ua?=
+ =?us-ascii?Q?RQ/VwEIHoQ4ZkLk=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 16:19:30.7787
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 16:19:35.3640
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e2574ab-561a-4b7e-047c-08dd4d135c98
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53626a83-1c5f-4767-10e9-08dd4d135f56
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000F0E3.namprd04.prod.outlook.com
+	MN1PEPF0000F0E5.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7217
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8581
 
-Instead of inlining equivalents, use lib.sh-provided primitives.
-Use defer to manage vx lifetime.
-
-This will make it easier to extend the test in the next patch.
+Changes to MC remote need to be reflected in actual group memberships.
+Add a test to verify that it is the case.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 Reviewed-by: Ido Schimmel <idosch@nvidia.com>
@@ -163,67 +161,103 @@ CC: Simon Horman <horms@kernel.org>
 CC: Shuah Khan <shuah@kernel.org>
 CC: linux-kselftest@vger.kernel.org
 
- .../net/test_vxlan_fdb_changelink.sh          | 39 ++++++++++++-------
- 1 file changed, 24 insertions(+), 15 deletions(-)
+ .../net/test_vxlan_fdb_changelink.sh          | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
 diff --git a/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh b/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh
-index 2d442cdab11e..6f2bca4b346c 100755
+index 6f2bca4b346c..062f957950af 100755
 --- a/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh
 +++ b/tools/testing/selftests/net/test_vxlan_fdb_changelink.sh
-@@ -1,29 +1,38 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
+@@ -3,6 +3,7 @@
  
--# Check FDB default-remote handling across "ip link set".
-+ALL_TESTS="
-+	test_set_remote
-+"
-+source lib.sh
+ ALL_TESTS="
+ 	test_set_remote
++	test_change_mc_remote
+ "
+ source lib.sh
  
- check_remotes()
- {
- 	local what=$1; shift
- 	local N=$(bridge fdb sh dev vx | grep 00:00:00:00:00:00 | wc -l)
- 
--	echo -ne "expected two remotes after $what\t"
--	if [[ $N != 2 ]]; then
--		echo "[FAIL]"
--		EXIT_STATUS=1
--	else
--		echo "[ OK ]"
--	fi
-+	((N == 2))
-+	check_err $? "expected 2 remotes after $what, got $N"
+@@ -31,6 +32,81 @@ test_set_remote()
+ 	log_test 'FDB default-remote handling across "ip link set"'
  }
  
--ip link add name vx up type vxlan id 2000 dstport 4789
--bridge fdb ap dev vx 00:00:00:00:00:00 dst 192.0.2.20 self permanent
--bridge fdb ap dev vx 00:00:00:00:00:00 dst 192.0.2.30 self permanent
--check_remotes "fdb append"
-+# Check FDB default-remote handling across "ip link set".
-+test_set_remote()
++fmt_remote()
 +{
-+	RET=0
- 
--ip link set dev vx type vxlan remote 192.0.2.30
--check_remotes "link set"
-+	ip_link_add vx up type vxlan id 2000 dstport 4789
-+	bridge fdb ap dev vx 00:00:00:00:00:00 dst 192.0.2.20 self permanent
-+	bridge fdb ap dev vx 00:00:00:00:00:00 dst 192.0.2.30 self permanent
-+	check_remotes "fdb append"
++	local addr=$1; shift
 +
-+	ip link set dev vx type vxlan remote 192.0.2.30
-+	check_remotes "link set"
-+
-+	log_test 'FDB default-remote handling across "ip link set"'
++	if [[ $addr == 224.* ]]; then
++		echo "group $addr"
++	else
++		echo "remote $addr"
++	fi
 +}
 +
-+trap defer_scopes_cleanup EXIT
++change_remote()
++{
++	local remote=$1; shift
 +
-+tests_run
++	ip link set dev vx type vxlan $(fmt_remote $remote) dev v1
++}
++
++check_membership()
++{
++	local check_vec=("$@")
++
++	local memberships
++	memberships=$(
++	    netstat -n --groups |
++		sed -n '/^v1\b/p' |
++		grep -o '[^ ]*$'
++	)
++	check_err $? "Couldn't obtain group memberships"
++
++	local item
++	for item in "${check_vec[@]}"; do
++		eval "local $item"
++		echo "$memberships" | grep -q "\b$group\b"
++		check_err_fail $fail $? "$group is_ex reported in IGMP query response"
++	done
++}
++
++test_change_mc_remote()
++{
++	check_command netstat || return
++
++	ip_link_add v1 up type veth peer name v2
++	ip_link_set_up v2
++
++	RET=0
++
++	ip_link_add vx up type vxlan dstport 4789 \
++		local 192.0.2.1 $(fmt_remote 224.1.1.1) dev v1 vni 1000
++
++	check_membership "group=224.1.1.1 fail=0" \
++			 "group=224.1.1.2 fail=1" \
++			 "group=224.1.1.3 fail=1"
++
++	log_test "MC group report after VXLAN creation"
++
++	RET=0
++
++	change_remote 224.1.1.2
++	check_membership "group=224.1.1.1 fail=1" \
++			 "group=224.1.1.2 fail=0" \
++			 "group=224.1.1.3 fail=1"
++
++	log_test "MC group report after changing VXLAN remote MC->MC"
++
++	RET=0
++
++	change_remote 192.0.2.2
++	check_membership "group=224.1.1.1 fail=1" \
++			 "group=224.1.1.2 fail=1" \
++			 "group=224.1.1.3 fail=1"
++
++	log_test "MC group report after changing VXLAN remote MC->UC"
++}
++
+ trap defer_scopes_cleanup EXIT
  
--ip link del dev vx
- exit $EXIT_STATUS
+ tests_run
 -- 
 2.47.0
 
