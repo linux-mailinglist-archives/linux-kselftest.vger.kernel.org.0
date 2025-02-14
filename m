@@ -1,127 +1,175 @@
-Return-Path: <linux-kselftest+bounces-26652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75291A35F36
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 14:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BAE81A35F5A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 14:38:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 447E83A6683
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 13:27:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BDCE3A3226
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 13:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845B32641F0;
-	Fri, 14 Feb 2025 13:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57661264A88;
+	Fri, 14 Feb 2025 13:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="st9u7nEo";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ta8snyTf"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GbiHc+Al"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1F6263F29;
-	Fri, 14 Feb 2025 13:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308DD275419
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 13:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739539633; cv=none; b=qhlCWiv8il26mVv04shed6GzJ/W/i5xYYG7GPL5AVpZyYGDeEcoBHSVGL85JD+B7a5WjvmHQbXolN6Dwugt4K0m4v+/VCKqeA2hNupI5UVqZcKfkfE/0fTvP7K38QuSv9ZHqDiUjBWTBo1CTe8tIgSXto7QPJeiHqz0vx2dcSy4=
+	t=1739540020; cv=none; b=p05km3AQmDSfDe2XquqsId4KRMW6H9EGCUIlStUklKEB3D/GrmkHFUcqWy27dm3aSr0erY+vq94L9JWp2a2hH3fA4YFbGuNeCVNjp9JRlhtPubpMRi5hG8F1iIJoId3qPHXEurdC5ja2IDD1HOBMpphR2itzeG3lipIpbfyfZ40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739539633; c=relaxed/simple;
-	bh=buO8lnZB5RS19yZ3QiNDAI3WoWc4MzzsGjX7y7m4+sA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AR2gRaz6Cr03IVzP7RjqL+Mv7fl/On46rm+B0t2Bd5ouAg0PZfI2Hc6Pfk1yifmlcIONHX62fekk7aoQqvH5JZxsd7nlmRywkHPzdXsO53GV3bYwOa8DpBTDVs1v9RflgeeXFw3OevhF1qi740vU/1IzknCAXADuinI5sqXmae8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=st9u7nEo; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ta8snyTf; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1739539628;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yv777d7cAi3pxmwo5xy/LqTWbb3/Dx76bz53TWLPkS4=;
-	b=st9u7nEojJzs+c8TtLH/WmuLSQzQ/FNo8A3hk2AXUBk1JfTEZw9+Uy4qg6WWUqCvLdWzF1
-	5qQWsTR/CjZgtOpJxy6RWV95K4lXvX2++jcqC7sd75Pamm3qY1Jhom0mVZOQDd8NHoF9zH
-	uSL6zbXILeWGCK6FEOnUwNqm7lPPSU6z5e4mv7TrVlqV6hsjGrvtFqehfyQCdRLTCuzbOr
-	hGJuPyyKjvl1T8AjhVyLxb2q1KPCGyTtlYuZGma+ALa5wfz7rB2Fqol8aftL8Eb+OzwpdS
-	jTiltO4CsWs+rzTrFsPm4vfmsnxqRn5Hd1bVdE1qegKZwaMkNxwe0b/U5eu98Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1739539628;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yv777d7cAi3pxmwo5xy/LqTWbb3/Dx76bz53TWLPkS4=;
-	b=ta8snyTf/hTfMo7mYLMF3tbyjajsmBpoBH9X35bQRcnaU8LbcC3ePmi5Ha1RQX4Apl5l72
-	jRGmzVsaobDq5mDg==
-Date: Fri, 14 Feb 2025 14:27:05 +0100
-Subject: [PATCH] kunit: qemu_configs: sparc: use Zilog console
+	s=arc-20240116; t=1739540020; c=relaxed/simple;
+	bh=ycR+1MwMEU5ObvPaf3WAvNpWw1BEie2SzKcxxyLnJUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjMw17UKuFEGoG/PL3bH+yAhp/P5gH2/7yT9szQTRrsdhzSdTpffEyA9th4nlmRORX5+gfpxBWhZOrSWHLBVYPA8WPGVzGFmX56ZPSfVb2FU1a5ZF2bzGCBoXvEJ5PkjTyG0pXCRcTW6fnut2g+Kj4KyZ2ZhfBZQ79hM05OVHzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GbiHc+Al; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5dee07e51aaso1398330a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 05:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1739540016; x=1740144816; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DMU56UYZAvRvQBmTkWTgLsgV69Nth4aeRE+elxO+TF0=;
+        b=GbiHc+AlPDqD3e04Vc1bpK7+mzD5qpHAFfRQsivopjbkb8lXYyA0ONhO4IpzAcumsT
+         imj7eNSqBekrrJ8BtND6IkhdGmR/LQ5cFspjb3jPxwO4Sx5RS014wSlW4N58ABoLz+cX
+         1CTcagUlAS7vsO6uZP8xmI0IgcEPJQ7B0FbWsJKAl+Vemdn+zUX7FabWsyJqsTW7GfgW
+         dKGgrDqwNKVmAt1V/SS5dLBJb4qXx15/dycUYcE9eJ2Tcv3WjzffiIeAZ8ogzgVMj2KO
+         z9iim8mcJDGDdllmuAiAkIviAz6yHOkq+ZmtPHHFbpiJ0cgp2owSZdWlz/Gnhdkb0dyk
+         c0YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739540016; x=1740144816;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DMU56UYZAvRvQBmTkWTgLsgV69Nth4aeRE+elxO+TF0=;
+        b=E5g3z5aYmgvW/5JZ55+F4FYl7EneFYU7e/5rMKds/WeltG4q3Ph7V8dc2Z3ptY1n5z
+         5MCh7hy6iS3vZfgJZoSm0qSUc9mL/lepZ86GYGI7q8j612i1CFGMhmme/0Kk3Q/hx4rT
+         EVj/5a2zBkn1sb0a87cncJXoSMUk1OlsvSz3uAi1qo38ykVhJBfOnyU5RQYQhi4AVgYE
+         WzC6yffTVE/ADI857/IF6TidkoKbbjIBrlLD06cGp/EQTaxusTyGRIeLj2bYmvLdPerB
+         MFquyQIZkqDLuvNORpOFN0xMRKBFQtZ7RLk5A1JYayWARWKdegwj7ab6SdFVGjQ1N35X
+         6F6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWfPe25R7R06vP/tdgVsgOVtVKiNPyFtj2pO2Q+wk+7a45VW9qkpPrSw4ZtFDtKUWQZyWS63zFFU0vmmfasFNI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypM92qu5/c7+ME6QBtHoSkAHhBI+cSQw0g6sOeSWWI9cm82v2v
+	Fn4gOSeW2HqFFkgHBvMCD3NzF0fH4DRIIXHCQenpJep8DxCMjLrHclNOi5CB2AaXpsJ2VFYAdTU
+	Q
+X-Gm-Gg: ASbGnctRfhssKnWUN7cXmpPO8Aei7N5ItR6McqrKg5jnQXseHkZVUqeBZTaObtNj9if
+	pfFY2nv5STjzY8cyTRW493zs9hbfaheSzj92JLFTmJy49rB+fSUVSwW0v//zO28U4q/AxFSyQT4
+	3+edFHuxep37CSm6GdSvBw9USMDfcEG74UJ1+JaLlxtGfk7BEGILvyQoXw8cjYd7Wtq2Yyb7kSw
+	e7aeRstTRj0Y69okJIZvrUaH+Alv75FVsdMisw7ip383XltLop7do1ZwGgy6OSx08DHFEJOm1Aw
+	vsOX9RHub0+hb3BYzg==
+X-Google-Smtp-Source: AGHT+IGPJJhE6wRDk9L9f4no7Cog7YbL9aFvuIy+X6Xo0n3M9vxodRrVaRG3tb7zWwYGNh5DO5nxsA==
+X-Received: by 2002:a17:907:94c5:b0:ab7:ea59:2120 with SMTP id a640c23a62f3a-ab7f37149d0mr1353996666b.10.1739540014663;
+        Fri, 14 Feb 2025 05:33:34 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba533981f2sm341066166b.125.2025.02.14.05.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 05:33:34 -0800 (PST)
+Date: Fri, 14 Feb 2025 14:33:32 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	David Gow <davidgow@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] scanf: convert self-test to KUnit
+Message-ID: <Z69GLMVPCuKKz1gk@pathway.suse.cz>
+References: <20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com>
+ <Z6tvciJpQgTwYpGx@smile.fi.intel.com>
+ <CAJ-ks9mcxW7zY33FPB+mZ75dQ2Xqo-viM9CpbL=0i0WXUPJRhw@mail.gmail.com>
+ <Z6tytjvT1A-5TOrq@smile.fi.intel.com>
+ <CAJ-ks9kSBMh0=dgPC-NiOhibnK_LhBjBdZ_AQ91h-DBZfYR1sw@mail.gmail.com>
+ <Z6uGPZZ7LioJmekz@smile.fi.intel.com>
+ <CAJ-ks9mGwXmiJ3_Kk4j0MnEqn24A9UJJXVhqtUjcG8W5ifodsA@mail.gmail.com>
+ <CAJ-ks9k9d4aX+P9F10h3TqHPOCHEQ5m=QyMAv7bU+Xyb3LRsOQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250214-kunit-qemu-sparc-console-v1-1-ba1dfdf8f0b1@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAKhEr2cC/x3MQQ6CMBBG4auQWTNJGVGIVyEuSPnVidpCRwxJw
- 91tWH6L9zIZksLoWmVK+KlpDAVNXZF/juEB1qmYxMnZSdPyaw365QWflW0ek2cfg8U3uDvBQ3q
- Z+ktHJZ8T7rod6+G273/Orfw7agAAAA==
-X-Change-ID: 20250214-kunit-qemu-sparc-console-73ece282d867
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
- Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739539626; l=1720;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=buO8lnZB5RS19yZ3QiNDAI3WoWc4MzzsGjX7y7m4+sA=;
- b=5ODErY8doHI/e8J6vud19fO6KexdNetfa/1SpPYrbfEC0Uzl7E739hZnvghY8rYKftpewi0bh
- 4fGI4uwu+tJBkMl2Y6Kqz7rlaX70zXv/l4vhdUxLoJMDkg0oZ7tscLr
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+In-Reply-To: <CAJ-ks9k9d4aX+P9F10h3TqHPOCHEQ5m=QyMAv7bU+Xyb3LRsOQ@mail.gmail.com>
 
-The driver for the 8250 console is not used, as no port is found.
-Instead the prom0 bootconsole is used the whole time.
-The prom driver translates '\n' to '\r\n' before handing of the message
-off to the firmware. The firmware performs the same translation again.
-In the final output produced by QEMU each line ends with '\r\r\n'.
-This breaks the kunit parser, which can only handle '\r\n' and '\n'.
+On Wed 2025-02-12 11:54:52, Tamir Duberstein wrote:
+> On Tue, Feb 11, 2025 at 12:26 PM Tamir Duberstein <tamird@gmail.com> wrote:
+> >
+> > > Is it me who cut something or the above missing this information (total tests)?
+> > > If the latter, how are we supposed to answer to the question if the failed test
+> > > is from new bunch of cases I hypothetically added or regression of the existing
+> > > ones? Without this it seems like I need to go through all failures. OTOH it may
+> > > be needed anyway as failing test case needs an investigation.
+> >
+> > I assume you mean missing from the new output. Yeah, KUnit doesn't do
+> > this counting. Instead you get the test name in the failure message:
+> >
+> > > > > > > >     vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx %4hx %4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
+> > > > > > > >             not ok 1 " "
+> > > > > > > >         # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:92
+> >
+> > I think maybe you're saying: what if I add a new assertion (rather
+> > than a new test case), and I start getting failure reports - how do I
+> > know if the reporter is running old or new test code?
+> >
+> > In an ideal world the message above would give you all the information
+> > you need by including the line number from the test. This doesn't
+> > quite work out in this case because of the various test helper
+> > functions; you end up with a line number in the test helper rather
+> > than in the test itself. We could fix that by passing around __FILE__
+> > and __LINE__ (probably by wrapping the test helpers in a macro). What
+> > do you think?
 
-Use the Zilog console instead. It works correctly, is the one documented
-by the QEMU manual and also saves a bit of codesize:
-Before=4051011, After=4023326, chg -0.68%
+I am not sure how many changes are needed to wrap the test helpers in
+a macro.
 
-Observed on QEMU 9.2.0.
+> I gave this a try locally, and it produced this output:
+> 
+> >     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+> > lib/scanf_kunit.c:555: vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx %4hx %4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
+> >         not ok 1 " "
+> >     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+> > lib/scanf_kunit.c:555: vsscanf("dc2:1c:0:3531:2621:5172:1:7", "%3hx:%2hx:%1hx:%4hx:%4hx:%4hx:%1hx:%1hx", ...) expected 892403712 got 28
+> >         not ok 2 ":"
+> >     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+> > lib/scanf_kunit.c:555: vsscanf("e083,8f6e,b,70ca,1,1,aab1,10e4", "%4hx,%4hx,%1hx,%4hx,%1hx,%1hx,%4hx,%4hx", ...) expected 1892286475 got 757614
+> >         not ok 3 ","
+> >     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+> > lib/scanf_kunit.c:555: vsscanf("2e72-8435-1-2fc-7cbd-c2f1-7158-2b41", "%4hx-%4hx-%1hx-%3hx-%4hx-%4hx-%4hx-%4hx", ...) expected 50069505 got 99381
+> >         not ok 4 "-"
+> >     # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+> > lib/scanf_kunit.c:555: vsscanf("403/0/17/1/11e7/1/1fe8/34ba", "%3hx/%1hx/%2hx/%1hx/%4hx/%1hx/%4hx/%4hx", ...) expected 65559 got 1507328
+> >         not ok 5 "/"
 
-Fixes: 87c9c1631788 ("kunit: tool: add support for QEMU")
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/testing/kunit/qemu_configs/sparc.py | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+But I really like that the error message shows the exact line of the
+caller. IMHO, it is very helpful in this module. I like it.
 
-diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
-index e975c4331a7c2a74f8ade61c3f31ff0d37314545..256d9573b44646533d1a6f768976628adc87921e 100644
---- a/tools/testing/kunit/qemu_configs/sparc.py
-+++ b/tools/testing/kunit/qemu_configs/sparc.py
-@@ -2,8 +2,9 @@ from ..qemu_config import QemuArchParams
- 
- QEMU_ARCH = QemuArchParams(linux_arch='sparc',
- 			   kconfig='''
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y''',
-+CONFIG_SERIAL_SUNZILOG=y
-+CONFIG_SERIAL_SUNZILOG_CONSOLE=y
-+''',
- 			   qemu_arch='sparc',
- 			   kernel_path='arch/sparc/boot/zImage',
- 			   kernel_command_line='console=ttyS0 mem=256M',
+IMHO, it also justifies removing the pr_debug() messages (currently 1st patch).
 
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250214-kunit-qemu-sparc-console-73ece282d867
+> Andy, Petr: what do you think? I've added this (and the original
+> output, as you requested) to the cover letter for when I reroll v8
+> (not before next week).
 
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+I suggest, to do the switch into macros in the 1st patch.
+Remove the obsolete pr_debug() lines in 2nd patch.
+Plus two more patches switching the module to kunit test.
 
+I am personally fine with this change.
+
+Best Regards,
+Petr
 
