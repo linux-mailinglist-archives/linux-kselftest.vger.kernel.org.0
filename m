@@ -1,164 +1,156 @@
-Return-Path: <linux-kselftest+bounces-26647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D441CA35BE8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 11:53:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD2FDA35DC1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 13:38:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00A3018939DD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 10:52:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9973188E476
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 12:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD89A25A64E;
-	Fri, 14 Feb 2025 10:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26F0263F26;
+	Fri, 14 Feb 2025 12:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="MNfAtpwx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YVrA8CdI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13998245B1F;
-	Fri, 14 Feb 2025 10:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.184.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8B7263F32;
+	Fri, 14 Feb 2025 12:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739530341; cv=none; b=H/4jaBehW6HTbglIcIg9lRVypUQkniqcqwJgIcKw+IYCPEAF4kMocIbyXeFF4ydeaLevJfuwE/xli4T9dV8sFp1mR525xL2gRLl1vRmSC+NBAoOIC6P4Vkv9Q+6vEHd3ZluPu8EOsucYU7NbvS0mGpMB0cMv7cKlfk+j9lLkLVg=
+	t=1739536707; cv=none; b=ct1AK68yutGrV1OLv0Z8KsfB+HIqT8ReASdLH7jXLQKtrUjKUQf2Iys3VU77OoWzwdZRWZHqzBxGsanv56YnuW2hL4prwr8cf41bVbLk8Lwp+TUUjscq4QYE3fOkFlX2v6KcEGqOa+ZNiiVcPAUnvjm5B729Y13xU+OTkwl0Iy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739530341; c=relaxed/simple;
-	bh=mDVjtyGUVb1KOH6XFAgZg0raVWfx3ObaCsvs+QX6YF0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ispBiUXHtJEb6yXGvv7f9uX3TZaP/kjEmbIo/wflkeIIMVVUgwZqw2cOIfFfFM0JFtDtdduLB8IgwhMcqRUbHqN+rW+9chDb6ohwk94oAzkmgShxgPUML6KlySzsOyfVPPRYnTPSu5u4ayp4tGoFxHNoQzS643rFQpxtZJNQdac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=MNfAtpwx; arc=none smtp.client-ip=207.171.184.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1739536707; c=relaxed/simple;
+	bh=gSPu3zaINtQ2hE5QQA984vUerqIGwHUTIQ2qvK166l4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XY+3sYE+r3EzjUuA2cYPF+jI20QNTvyy26+nJbWtAxThTPsMe33NgSKLj4tsumUwjkC1Ck7T1mIFt1910HNIxdzss9VvA4U8Xq0b+2UAD7i4qxSBs7uGnh6riHiIRnyeA4k/rmpPOSQ7UPak5TX9PCgIH2QlI6SGPGpZTmPIcx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YVrA8CdI; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3076262bfc6so21300431fa.3;
+        Fri, 14 Feb 2025 04:38:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1739530340; x=1771066340;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X45XUOzd/bOUyeGuamt7kL+bHzoQ+bKhEEl7QpzEQY8=;
-  b=MNfAtpwxQumG2P41iJonYF5wLi1RA8BwpfWObzF3yqoNvstn79cywCCB
-   jYnOGgzNl4OHygjKREetMT+AjGRXH1GGjc9XIgI1e598HF6INwm+TgF95
-   dpyCyeP3JtvkF13POp3Hou/eRO5WTV4Z7EXfdeuNxQ8GGJrFPQ6RWTcW+
-   g=;
-X-IronPort-AV: E=Sophos;i="6.13,285,1732579200"; 
-   d="scan'208";a="493875980"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 10:52:13 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:41133]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.61.181:2525] with esmtp (Farcaster)
- id 014291f4-deb9-4469-b9db-a2315c599e77; Fri, 14 Feb 2025 10:52:12 +0000 (UTC)
-X-Farcaster-Flow-ID: 014291f4-deb9-4469-b9db-a2315c599e77
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
- Fri, 14 Feb 2025 10:52:08 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.118.254.117) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Fri, 14 Feb 2025 10:51:59 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <shaw.leon@gmail.com>
-CC: <alex.aring@gmail.com>, <andrew+netdev@lunn.ch>,
-	<b.a.t.m.a.n@lists.open-mesh.org>, <bpf@vger.kernel.org>,
-	<bridge@lists.linux.dev>, <davem@davemloft.net>, <donald.hunter@gmail.com>,
-	<dsahern@kernel.org>, <edumazet@google.com>, <herbert@gondor.apana.org.au>,
-	<horms@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-	<linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-ppp@vger.kernel.org>,
-	<linux-rdma@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-	<linux-wpan@vger.kernel.org>, <miquel.raynal@bootlin.com>,
-	<netdev@vger.kernel.org>, <osmocom-net-gprs@lists.osmocom.org>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <stefan@datenfreihafen.org>,
-	<steffen.klassert@secunet.com>, <wireguard@lists.zx2c4.com>
-Subject: Re: [PATCH net-next v9 06/11] net: ipv6: Use link netns in newlink() of rtnl_link_ops
-Date: Fri, 14 Feb 2025 19:51:48 +0900
-Message-ID: <20250214105148.1920-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <CABAhCOSsZqzrsqct+c613TVhGJdubv+_wTDxmjH8z6-PL1Mu2A@mail.gmail.com>
-References: <CABAhCOSsZqzrsqct+c613TVhGJdubv+_wTDxmjH8z6-PL1Mu2A@mail.gmail.com>
+        d=gmail.com; s=20230601; t=1739536704; x=1740141504; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gSPu3zaINtQ2hE5QQA984vUerqIGwHUTIQ2qvK166l4=;
+        b=YVrA8CdI701eOG0ongXtvXEYyVRRWq/ncnCKyqXp7pKDmVFtWs75aWeEBdDT6FIaNM
+         srywv9fVelag5Z5EVHqf5kHZYTGawAtfwt42T49gy87zc/5ZZB7y71wUk3qIvo4cQrdE
+         c8VwVho915rYphI2ILxhB+Kjt6r/kZedvHdaAM3fIN6Mu6jVO5CbqTXj/qPYNSnUla0W
+         vJ4R1Jav6y9VnfNBkPGW9WLOPZmrqNnhlh//sRfazS+7EvKrq9bc8s6PMMrZsqTcK3wA
+         XMDMXNcqr93EFGWVOShoxLCu9gm29mOPexPfIl2Nt18DWqIB47YJ03pBkCj/6qsxRLEz
+         SsjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739536704; x=1740141504;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gSPu3zaINtQ2hE5QQA984vUerqIGwHUTIQ2qvK166l4=;
+        b=Lgh+ZtM0ONIOzAz3dptwAE2+u9A/1dU7gnx/laTnjT/aySJGCsGDbwgVwVTvxCorE+
+         ZKm9EDCNyrFIzlBJZTDXW5ciragkEzX9qng1JSSmTgxznt+7oEQrdfa53BYpGLUlHAFF
+         QPOJubnVs29u3W1XuFpeCeVFJAKI7fkE57/VqsoCKd7HIWFmW3dsk80TvCqxX09iMnOe
+         84L7sc+Q5KNL79er2+u2obYVD4OQFI0nAv2kF4ZW9VlANc5gmVjXif3lSSjjHCy2VoM2
+         NmZTs/LWvPX43qU8hWJbm/zjJKqoJkrzh8tKLrqbmnfc+86Qi5Xr20JOagiP1p0sGOHA
+         9gaA==
+X-Forwarded-Encrypted: i=1; AJvYcCV38cjz/02QKacomiAZQ3ITDwgqAYidn617k9wHSTQKR4eVYeDIcy2CO4xYq1dE+QE+DafrlmNLPioD6hQ=@vger.kernel.org, AJvYcCVD27vhpLomxlVPVX++ziZbQt7rV+56FR1m4iDoYQbGdm6knHtAUmixPxTKif/SurvTHRWBSM/jX/zGnLayo8O6@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2CZ/Omy6Z2GFrvvtKsvXujNN9BTcYB0S0yMRLnV/s5DzuQ9D+
+	yA+HphLP3f21axvllEYvX0548YIDsDQcXPVdA/+krL/rV30DAjZBPOsZwpuZgQYSm4+ZKcIYXTT
+	VMEEL/Ej8jksCkiiQc29OimqZ0Uw=
+X-Gm-Gg: ASbGncuYy9M65FjyriMk1aOKSqFT6pGsHiXc/V0rmeGP/Z0F581GFEj8TNJieoAP64/
+	pRq5/8TqobScg9Tw5mI6xooFlQzNMAX9TN+62xtigihUfAAcHlh1HPlfmS6qHruNpjmmgEuKYlz
+	qZTDB1rn+98lGAr7jpQPgzDQ2Bk1+sw7U=
+X-Google-Smtp-Source: AGHT+IHGTYfsLVh9BXq48a3Ayem0jia6+jW2kw2BEwO0RvsU7V2GFEsuZ34723RE7RdhTAMfDl91vlkNlX5oioY0wFA=
+X-Received: by 2002:a2e:be84:0:b0:300:25f6:9b3d with SMTP id
+ 38308e7fff4ca-3090dca0d0cmr28127421fa.10.1739536703681; Fri, 14 Feb 2025
+ 04:38:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
+ <20250213115951.GF28068@noisy.programming.kicks-ass.net> <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
+ <20250214094856.GD21726@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250214094856.GD21726@noisy.programming.kicks-ass.net>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 14 Feb 2025 07:37:47 -0500
+X-Gm-Features: AWEUYZk-wm4aTyenMdT75V7ZD2MsmSIdQL5n9jNliiKDXZ4mzVb7Lg0L8-G8dY0
+Message-ID: <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
+Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D041UWB004.ant.amazon.com (10.13.139.143) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Content-Transfer-Encoding: quoted-printable
 
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Fri, 14 Feb 2025 17:22:28 +0800
-> On Thu, Feb 13, 2025 at 7:00 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+On Fri, Feb 14, 2025 at 4:48=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Thu, Feb 13, 2025 at 10:42:24AM -0500, Tamir Duberstein wrote:
+> > On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infradea=
+d.org> wrote:
+> > >
+> > > On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
+> > > > Convert this unit test to a KUnit test. This allows the test to ben=
+efit
+> > > > from the KUnit tooling. Note that care is taken to avoid test-endin=
+g
+> > > > assertions in worker threads, which is unsafe in KUnit (and wasn't =
+done
+> > > > before this change either).
+> > >
+> > > So this was something simple, and now I need to know how to operate t=
+his
+> > > kunit nonsense :-(
+> > >
+> > > How is that an improvement?
 > >
-> > From: Xiao Liang <shaw.leon@gmail.com>
-> > Date: Thu, 13 Feb 2025 17:55:32 +0800
-> > > On Thu, Feb 13, 2025 at 4:37 PM Xiao Liang <shaw.leon@gmail.com> wrote:
-> > > >
-> > > > On Thu, Feb 13, 2025 at 3:05 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> > > > >
-> > > > [...]
-> > > > > > diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-> > > > > > index 863852abe8ea..108600dc716f 100644
-> > > > > > --- a/net/ipv6/ip6_gre.c
-> > > > > > +++ b/net/ipv6/ip6_gre.c
-> > > > > > @@ -1498,7 +1498,8 @@ static int ip6gre_tunnel_init_common(struct net_device *dev)
-> > > > > >       tunnel = netdev_priv(dev);
-> > > > > >
-> > > > > >       tunnel->dev = dev;
-> > > > > > -     tunnel->net = dev_net(dev);
-> > > > > > +     if (!tunnel->net)
-> > > > > > +             tunnel->net = dev_net(dev);
-> > > > >
-> > > > > Same question as patch 5 for here and other parts.
-> > > > > Do we need this check and assignment ?
-> > > > >
-> > > > > ip6gre_newlink_common
-> > > > > -> nt->net = dev_net(dev)
-> > > > > -> register_netdevice
-> > > > >   -> ndo_init / ip6gre_tunnel_init()
-> > > > >     -> ip6gre_tunnel_init_common
-> > > > >       -> tunnel->net = dev_net(dev)
-> > > >
-> > > > Will remove this line.
-> > >
-> > > However, fb tunnel of ip6_tunnel, ip6_vti and sit can have
-> > > tunnel->net == NULL here. Take ip6_tunnel for example:
-> > >
-> > > ip6_tnl_init_net()
-> > >     -> ip6_fb_tnl_dev_init()
-> > >     -> register_netdev()
-> > >         -> register_netdevice()
-> > >             -> ip6_tnl_dev_init()
-> > >
-> > > This code path (including ip6_fb_tnl_dev_init()) doesn't set
-> > > tunnel->net. But for ip6_gre, ip6gre_fb_tunnel_init() does.
+> > Hi Peter,
 > >
-> > Ah, okay.  Then, let's set net in a single place, which would
-> > be better than spreading net assignment and adding null check
-> > in ->ndo_init(), and maybe apply the same to IPv4 tunnels ?
-> 
-> Tunnels are created in three ways: a) rtnetlink newlink,
-> b) ioctl SIOCADDTUNNEL and c) during per netns init (fb).
-> The code paths don't have much in common, and refactoring
-> to set net in a single place is somewhat beyond the scope
-> of this series. But for now I think we could put a general rule:
-> net should be set prior to register_netdevice().
-> 
-> For IPv4 tunnels, tunnel->net of a) is set in ip_tunnel_newlink().
-> b) and c) are set in __ip_tunnel_create():
-> ip_tunnel_init_net() -> __ip_tunnel_create()
-> ip_tunnel_ctl() -> ip_tunnel_create() -> __ip_tunnel_create()
-> So net has already been initialized when register_netdevice()
-> is called.
-> 
-> But it varies for IPv6 tunnels. Some set net for a) or c) while
-> some don't. This patch has "fixed" for a). As for c) we can
-> adopt the way of ip6_gre - setting net in *_fb_tunnel_init(),
-> then remove the check in ndo_init().
-> 
-> Is it reasonable?
+> > David enumerated some of the benefits of KUnit in another
+> > thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmT=
+Y2T2Ti53DQADrW+sJg@mail.gmail.com/.
+> >
+> > My personal reason for preferring KUnit is that it's much easier to
+> > run from userspace; the tooling takes care of building, starting the
+> > VM, running the tests, and producing a human-friendly report.
+>
+> Wait what -- you have to run a VM just to use Kunit? That's a hard pass.
+>
+> If I can't simply run it natively on my test box, its a no go. And it
+> using python also don't help, you shouldn't be needing that to load a
+> module.
 
-Yes, fair enough.
+The tooling I mention is all optional. You can still use modprobe to
+run the test as a module or at boot. In this case you'd set:
+
+CONFIG_KUNIT=3Dy
+CONFIG_WW_MUTEX_KUNIT_TEST=3Dm
+
+and then run the test via:
+
+```
+modprobe ww_mutex_kunit
+```
+
+or to run at boot:
+
+CONFIG_KUNIT=3Dy
+CONFIG_WW_MUTEX_KUNIT_TEST=3Dy
+
+Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.h=
+tml#running-built-in-tests
+Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.h=
+tml#running-tests-as-modules
 
