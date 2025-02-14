@@ -1,81 +1,79 @@
-Return-Path: <linux-kselftest+bounces-26654-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1CAAA35F7D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 14:54:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBC11A35F86
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 14:56:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 076497A4FCC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 13:53:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40CAC188DAE6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 13:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74E5264A91;
-	Fri, 14 Feb 2025 13:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B37264F95;
+	Fri, 14 Feb 2025 13:56:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="dYMmzSj+"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="onuQFLdR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C474263F46
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 13:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40021263F3C
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 13:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739541265; cv=none; b=nSJJNBZviRk24hsgKl+zKxzfgdQBzDXVwR1ilqNcgfk1NPK2+u2cmAvxCn/3N6AtfzeMhXlVcvXOZClXhb/2tQVAilWVsf1iQAg6AITbVPpU+uYqdOvTuclrejBYXqpwPiWXppJXPp/quUnaijBcpOWpv/otB+JkzW9w1Y3fEAE=
+	t=1739541363; cv=none; b=enEQht5o7iDTo906AnXYg84z06InUWLCRMJypn3o//2ACDzX54j+koCNQLFqXga410fkJMOM/cQzNj32REVvc5REI0RuvqPnmhBu+a41t2XaS6MmGCijRmqk79UbieHJ6tu22frG+w8vzEhObNnM9D7j7IDrquUwxgw1LBO/R0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739541265; c=relaxed/simple;
-	bh=QskIIUY3abCHEQqr+ZBO02qBkdcjQaMWhVVTfD1ktoI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Jzr0EP4p+DhFiZsUy53GwvPIExzhDaUlbnzwA4nXOmrqCJOuvTgaKfTzGeaY5lO+26Y07hvy5aNYK17B+3yEHd6vA7skMxM90oA2lJPeqtIbEiQgG4A0PDqt/VOFs/WsXVWscCc4iIuSC1LQI7cQv1FG6xCztrtHlYZUBLqRFf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=dYMmzSj+; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38dcac27bcbso2023119f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 05:54:23 -0800 (PST)
+	s=arc-20240116; t=1739541363; c=relaxed/simple;
+	bh=WqHfc85CnIBg5vLEOhk4ICcpaUNYC+QTXUEJ0QrkipU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EiUI34CIrvnWlaQPrc8nG+NOOzN3dhOZWxPKPvR+eRhJ4w05nsM7Fbz81WozKuUVlB9KAALV/jsw2aqnmLAyjPeUbFROjYcDdNW+2MeYi0uMu4Tlk86UHVP09yz2afE8sol/nR9xFFd21joovuo5rhLgTgPRzld5y5gmIKMmxB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=onuQFLdR; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-220c665ef4cso30097975ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Feb 2025 05:56:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1739541262; x=1740146062; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=toWHVNWxJVyn5ES/h46Z050KFfTtE9z+8q/ixpftoXQ=;
-        b=dYMmzSj+uyk5TL/dl5EwvUHVdCQ3S1OYsC7xJWoGCKQH5fcB+PD8TSB7Y2dXgCHvhl
-         a4udnkfu5GdPw1RDpspVYz9z7JVhO+/H6IFijdlvpseBJrVguqLtOP2csCwevO9LrZ8i
-         4+cxKf2Xqx1LSl3BvPUiLPu5eErCfLfFYblzLXTKbxVXydvgkctp5/M/VxImW84lZ4g8
-         Ljc+Qjgx8D4MFynab5V6tRtalKvbNaT6Z1SOfs1mFTRFiiZFr9Cgrg7Q1OsGwCdSEwYv
-         0T3e21TWsKtHbhyk7xzKTxgBj7DU/uYhkPZ8YkMR1o4BfcynOSIu3OsJfJubAQFsqCfh
-         lRhA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739541360; x=1740146160; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oyv4ckbJAaXr2NOVehbMO+gl4gQRomY2gyYVfwC/7iQ=;
+        b=onuQFLdRVanS93hfn2FQa2not2TAsGU/41STQfgHSDZ9RrYcV5Cidb3/n5Yc9x112s
+         uKdmY5YDg309lV3diYN5yYDzXc3jSehrT2Vyczr/DpcrWVqOsv41vJ6QVWv2BWG5tYq/
+         MNF+t/yajpqMbVdATK9ArdrRIqioKrAvoq8QeYfSfOO/jyYoB6RXe2W4/yLtu8IGAQrM
+         LM4jn8msvGkypwCrp91Z6kIfe93XpU/t+HOOn1Q5EJnD9ftg83OjAYFoVFaAhyqxO74g
+         W2EcfMXBwCV4Qy/wc6cQWFQAuAtm5mcIt7wEREJnoyN4NlBGXd0FFO0edgMbF/cO8qFw
+         5xWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739541262; x=1740146062;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=toWHVNWxJVyn5ES/h46Z050KFfTtE9z+8q/ixpftoXQ=;
-        b=wzhQZpdWTMFwgJCnH3/EzUenW5MKqftmH2I57jyEKWCR5XnOx09b8lqgAgJpCU0mxm
-         U9KtGe7luGVPoCkMpRv4vhv8wpYPq3b0BzeDBRUWxvj/qKj8JHWB7J5t74Wd3skCI735
-         dT7I7KEG7V6Qeng1gxzAwrzXfI75O6LYiurG4wNEuLmWzLBMwLKVGsGiSQt6ajVGdkvZ
-         GgRRNpdTRMYZ+s2fXi56AePhH6Mowr/RLLmQ8aWmv9ibMdDzdChtVMBGB56fMaPXPkWU
-         lr88ygFkecm2slAE0oVjcIdPy7fV89bjvltmpXIcb1f0rFTnurvhMm4yj1ODQNq8m07p
-         76nw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyZX/ZUU/BlSNtFY78sJ+OHfEWn7B36I5Isg3Gg0o7Eb5sKydOtkbXUIJQLgcfssaLvJ+p5ZEG35ZlA8gWgjA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+jJBWo1taxFhLHdCjdvGHNoXQVpeX5hw+f2eESdV1f5Z5qorP
-	/aViBacNWBxJdk2GNfhw1Z36fvHrzrU3NQGlPzJJbrNo59TGoOHBWxpUi+TiJ1w=
-X-Gm-Gg: ASbGncsYYcWwFioio+4zTaWpeY4iN1t2StU1WpEhvXCZLrKuOwOKLxOJsLHA6ae7/gQ
-	HOE9jnWIu8jlZMXga8qiD1GqXooxdoMkQ8V/ZAzh0PZY/ITAkh0EJSKk/3DA4lq5aIL+9eR6qhh
-	NS+t3KvCDSaWrKLRIgXgbRjFxs0ZchCfvmQOXxKXdu32nj1MwHPJxA/ztLeqTYZbFdrGSQj+ubO
-	BcbbDY+Zf6+x5EIl6wXJNfmHikKquI6xevzIN7fAvwRz2kVZe6WaYPghtM/1lE0ZZtIJFnJRgYp
-	zJUpRBkvxpQIRfTP2ZD/90ZHV6dgO0Eb6WU4a3ADqBDqF0HXOwcQcw==
-X-Google-Smtp-Source: AGHT+IGkDAoesNnj7fFlL42H4EVhyCcHo9D7iDEiKI1TAQsgS558sccl4nN3f3aKaXXhWN9NPT7ZkA==
-X-Received: by 2002:a5d:6d0a:0:b0:38d:e363:494b with SMTP id ffacd0b85a97d-38f24cfa3f1mr9673966f8f.8.1739541261655;
-        Fri, 14 Feb 2025 05:54:21 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:cd14:b9de:fda8:dc6d? ([2001:67c:2fbc:1:cd14:b9de:fda8:dc6d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f2580fe7dsm4733240f8f.0.2025.02.14.05.54.20
+        d=1e100.net; s=20230601; t=1739541360; x=1740146160;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oyv4ckbJAaXr2NOVehbMO+gl4gQRomY2gyYVfwC/7iQ=;
+        b=meopsRW2weWHlXIVRXOhmBqhmERu6C9dVeKXrNSRXSD4xAUr6xtm+04Dr0rkEDbA8r
+         axNL4CJk8V5uCJ0KXR7hf7G18YeG2fzlYOI8Fuab8gpsSWr/XLuKbpf9KbptuXQRy07S
+         V8fkhUVOpKdsgUfH3DY/lGyKjVLS2+HQDGaRgM8vR6r1uX5qu8yuIQ1nOCvtBCMQPmZk
+         EKb0wYebcJcIiK6H2aR0Cse8SsmW1/s5HxQ64iyO6snqsfjU5gvgdmVah9xUD1xPjo2Y
+         ROqa5yyE/DoYADXwYZ9wY7fUp/fg5V5rwl8X6u7mn5DhArRYCLduwxATmOij2+jsf5As
+         YWSA==
+X-Forwarded-Encrypted: i=1; AJvYcCV90OxJVIt3gpgh7bnFFxxJkPimtai4cQxqCdV3mGkckP4/JcVrk+iugYu9GR5KuMvo5lBkB10hm+g/5SV2aYU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDb4/+XE/G7CMhfssj43f+613IAGUhkxbTVG0JkFT+hZjFJlTX
+	Dy1CuNPRxoCn6TsZfd3zWHVuEJtZJjVvH35KiZZzke3SrdFl3x5qtDYiyPuu+Co=
+X-Gm-Gg: ASbGncuHPXPMTq4MamiUOzKP3Otp1gHoy1YOD/FWIuuYsN8IUIHhO0OaUNdX1+ZWhYL
+	HhWW3P1RQUBaNh1vtzWBAEjj4p0jf3Pq1LIs8gX4/1FFyf2m0Yy43A3TGvwQdRGmT+bZ9zdVR+O
+	JMOFDtoZDPfjNhJbwp9i50yhQOAYwjWZ7i7MpCYdpeiz6Yr9OvglXoQoWnLVOjCmRFpFFXJXPS0
+	jVjq27DrzzI5txD3jiPUzebqBn8XToiB2GHFjn+G0ml48ZPSV3ABkrm8yihCXjmFET7K1TCe7mo
+	7x60T87KaMPZ2YDqVewhp8ucuieoBF/Sb6mtNc9yM0pTcN7YMX+oXolvSBAN
+X-Google-Smtp-Source: AGHT+IFJG8yJSXBwAOW5a3Rg7tds7wmeju3GEMDTQvcg2LBmbQ5NCSQTLylp178QmOw/Q0qstwEZFw==
+X-Received: by 2002:a05:6a00:2da7:b0:730:9446:4d75 with SMTP id d2e1a72fcca58-7322c5fd357mr16415480b3a.17.1739541360271;
+        Fri, 14 Feb 2025 05:56:00 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73242568b03sm3233341b3a.54.2025.02.14.05.55.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Feb 2025 05:54:21 -0800 (PST)
-Message-ID: <507c0388-8ce4-47fa-90b3-b46ae170045a@openvpn.net>
-Date: Fri, 14 Feb 2025 14:54:20 +0100
+        Fri, 14 Feb 2025 05:55:59 -0800 (PST)
+Message-ID: <57fbc08b-73fa-464f-b960-c4511d27598b@rivosinc.com>
+Date: Fri, 14 Feb 2025 14:55:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,151 +81,390 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v19 00/26] Introducing OpenVPN Data Channel
- Offload
-From: Antonio Quartulli <antonio@openvpn.net>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
- steffen.klassert@secunet.com, antony.antony@secunet.com,
- willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>
-References: <20250211-b4-ovpn-v19-0-86d5daf2a47a@openvpn.net>
- <Z60wIRjw5Id1VTal@hog> <090524ac-724d-4915-8699-fe2ae736ab8c@openvpn.net>
- <Z64Tw02PO433bob8@hog> <0c0de58a-4dac-4b3b-9fc5-2a58a145d5ab@openvpn.net>
+Subject: Re: [PATCH v2 14/15] RISC-V: KVM: add support for FWFT SBI extension
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>
+References: <20250210213549.1867704-1-cleger@rivosinc.com>
+ <20250210213549.1867704-15-cleger@rivosinc.com>
+ <Z6rmrqbNtHxmjI0X@debug.ba.rivosinc.com>
 Content-Language: en-US
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <0c0de58a-4dac-4b3b-9fc5-2a58a145d5ab@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <Z6rmrqbNtHxmjI0X@debug.ba.rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 13/02/2025 20:40, Antonio Quartulli wrote:
-> On 13/02/2025 16:46, Sabrina Dubroca wrote:
->> 2025-02-13, 12:46:34 +0100, Antonio Quartulli wrote:
->>> On 13/02/2025 00:34, Sabrina Dubroca wrote:
->>>> Hello,
->>>>
->>>> 2025-02-11, 01:39:53 +0100, Antonio Quartulli wrote:
->>>>> All minor and major reported problems have been finally addressed.
->>>>> Big thanks to Sabrina, who took the time to guide me through
->>>>> converting the peer socket to an RCU pointer.
->>>>
->>>> Something is off (not sure if it's new to this version): if I use
->>>> test-tcp.sh to setup a set of interfaces and peers (I stop the test
->>>> just after setup to keep the environment alive), then remove all netns
->>>> with "ip -all netns delete", I expect all devices to go away, but they
->>>> don't. With debug messages enabled I'm seeing some activity from the
->>>> module ("tun0: sending keepalive to peer 3" and so on), and
->>>> ovpn_net_uninit/ovpn_priv_free never got called.
->>>
->>> I can reproduce it. If later I rmmod ovpn I then get all the 
->>> "Deleting peer"
->>> messages.
->>> So instances are not being purged on netns exit.
->>>
->>> Will dive into it.
+
+
+On 11/02/2025 06:57, Deepak Gupta wrote:
+> On Mon, Feb 10, 2025 at 10:35:47PM +0100, Clément Léger wrote:
+>> Add basic infrastructure to support the FWFT extension in KVM.
 >>
->> I think the socket holds a ref on the netns, so it's not getting
->> destroyed, simply "removed" from iproute's point of view. And the
->> socket isn't going away as long as it's used by a peer.
-> 
-> After a deep dive I was getting to the same conclusion:
-> cleanup_net() is never invoked because we lack an invocation of put_net().
-> sk_alloc() invokes get_net(), so this is the ref that is not being 
-> released.
-> 
+>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+>> ---
+>> arch/riscv/include/asm/kvm_host.h          |   4 +
+>> arch/riscv/include/asm/kvm_vcpu_sbi.h      |   1 +
+>> arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h |  37 ++++
+>> arch/riscv/include/uapi/asm/kvm.h          |   1 +
+>> arch/riscv/kvm/Makefile                    |   1 +
+>> arch/riscv/kvm/vcpu_sbi.c                  |   4 +
+>> arch/riscv/kvm/vcpu_sbi_fwft.c             | 187 +++++++++++++++++++++
+>> 7 files changed, 235 insertions(+)
+>> create mode 100644 arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h
+>> create mode 100644 arch/riscv/kvm/vcpu_sbi_fwft.c
 >>
->> If I delete the peer(s) for the ovpn device and then the netns it was
->> in, the netns is fully removed, and the ovpn device is gone. Also no
->> issue if I delete the ovpn device before its netns, then everything is
->> destroyed as expected.
+>> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/
+>> asm/kvm_host.h
+>> index bb93d2995ea2..c0db61ba691a 100644
+>> --- a/arch/riscv/include/asm/kvm_host.h
+>> +++ b/arch/riscv/include/asm/kvm_host.h
+>> @@ -19,6 +19,7 @@
+>> #include <asm/kvm_vcpu_fp.h>
+>> #include <asm/kvm_vcpu_insn.h>
+>> #include <asm/kvm_vcpu_sbi.h>
+>> +#include <asm/kvm_vcpu_sbi_fwft.h>
+>> #include <asm/kvm_vcpu_timer.h>
+>> #include <asm/kvm_vcpu_pmu.h>
 >>
->> I'm not sure that can be solved, as least under the current refcount
->> scheme.
+>> @@ -281,6 +282,9 @@ struct kvm_vcpu_arch {
+>>     /* Performance monitoring context */
+>>     struct kvm_pmu pmu_context;
+>>
+>> +    /* Firmware feature SBI extension context */
+>> +    struct kvm_sbi_fwft fwft_context;
+>> +
+>>     /* 'static' configurations which are set only once */
+>>     struct kvm_vcpu_config cfg;
+>>
+>> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/
+>> include/asm/kvm_vcpu_sbi.h
+>> index cb68b3a57c8f..ffd03fed0c06 100644
+>> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+>> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+>> @@ -98,6 +98,7 @@ extern const struct kvm_vcpu_sbi_extension
+>> vcpu_sbi_ext_hsm;
+>> extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn;
+>> extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_susp;
+>> extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_sta;
+>> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_fwft;
+>> extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
+>> extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+>>
+>> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h b/arch/riscv/
+>> include/asm/kvm_vcpu_sbi_fwft.h
+>> new file mode 100644
+>> index 000000000000..5782517f6e08
+>> --- /dev/null
+>> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h
+>> @@ -0,0 +1,37 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2025 Rivos Inc.
+>> + *
+>> + * Authors:
+>> + *     Clément Léger <cleger@rivosinc.com>
+>> + */
+>> +
+>> +#ifndef __KVM_VCPU_RISCV_FWFT_H
+>> +#define __KVM_VCPU_RISCV_FWFT_H
+>> +
+>> +#include <asm/sbi.h>
+>> +
+>> +struct kvm_sbi_fwft_config;
+>> +struct kvm_vcpu;
+>> +
 > 
-> I went back to v12 of the patchset (which is pre-refcount-restructuring) 
-> and indeed the problem there doesn't exist.
 > 
-> However, it's unclear to me how in v12 the socket release was happening 
-> upon netns delete. Who was triggering that? ovpn still needed to call 
-> sockfd_put() in order to let it go.
+> Can we add some comments here for future fwft providers along below lines?
 > 
-> Will investigate some more and think about a solution.
+> Reason being, patch defaults to `conf->supported = true` if `supported` fn
+> pointer in `kvm_sbi_fwft_feature` was NULL. Although `kvm_sbi_fwft_set/get`
+> does get/set fn pointers (it would happen even if `supported` fn pointer
+> was NULL).
+
+Yes sure, I'll add some kernel doc comments.
+
+Thanks,
+
+Clément
+
 > 
-
-I may have done something wrong, but today I tried again and I am 
-reproducing this issue also on v8 + 6.11.
-
-I am indeed wondering how it could have ever worked: if we don't delete 
-the peer, we don't detach the socket, hence the following chain:
-
-sockfd_put() -> sk_destructor() -> put_net()
-
-does not happen.
-
-Shouldn't we be notified somehow that the netns is going away?
-
-For example in wireguard/device.c the socket is released in 
-pernet_operations.pre_exit().
-
-But pre_exit() is invoked in cleanup_net(), which is invoked ONLY if the 
-net refcount has reached 0...but how can it be zero before the sockets 
-have been released?
-
-I must be missing something, because this seems to be a reference loop.
-
-
-I'll keep digging..
-
-Regards,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
+>> +struct kvm_sbi_fwft_feature {
+>> +    enum sbi_fwft_feature_t id;
+>     /* If function not provided, KVM will default assume to be true */
+>> +    bool (*supported)(struct kvm_vcpu *vcpu);
+>     /* Must always provide function pointers for get/set */
+>> +    int (*set)(struct kvm_vcpu *vcpu, struct kvm_sbi_fwft_config
+>> *conf, unsigned long value);
+>> +    int (*get)(struct kvm_vcpu *vcpu, struct kvm_sbi_fwft_config
+>> *conf, unsigned long *value);
+> 
+> 
+>> +};
+>> +
+>> +struct kvm_sbi_fwft_config {
+>> +    const struct kvm_sbi_fwft_feature *feature;
+>> +    bool supported;
+>> +    unsigned long flags;
+>> +};
+>> +
+>> +/* FWFT data structure per vcpu */
+>> +struct kvm_sbi_fwft {
+>> +    struct kvm_sbi_fwft_config *configs;
+>> +};
+>> +
+>> +#define vcpu_to_fwft(vcpu) (&(vcpu)->arch.fwft_context)
+>> +
+>> +#endif /* !__KVM_VCPU_RISCV_FWFT_H */
+>> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/
+>> uapi/asm/kvm.h
+>> index f06bc5efcd79..fa6eee1caf41 100644
+>> --- a/arch/riscv/include/uapi/asm/kvm.h
+>> +++ b/arch/riscv/include/uapi/asm/kvm.h
+>> @@ -202,6 +202,7 @@ enum KVM_RISCV_SBI_EXT_ID {
+>>     KVM_RISCV_SBI_EXT_DBCN,
+>>     KVM_RISCV_SBI_EXT_STA,
+>>     KVM_RISCV_SBI_EXT_SUSP,
+>> +    KVM_RISCV_SBI_EXT_FWFT,
+>>     KVM_RISCV_SBI_EXT_MAX,
+>> };
+>>
+>> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+>> index 4e0bba91d284..06e2d52a9b88 100644
+>> --- a/arch/riscv/kvm/Makefile
+>> +++ b/arch/riscv/kvm/Makefile
+>> @@ -26,6 +26,7 @@ kvm-y += vcpu_onereg.o
+>> kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
+>> kvm-y += vcpu_sbi.o
+>> kvm-y += vcpu_sbi_base.o
+>> +kvm-y += vcpu_sbi_fwft.o
+>> kvm-y += vcpu_sbi_hsm.o
+>> kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_sbi_pmu.o
+>> kvm-y += vcpu_sbi_replace.o
+>> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+>> index f81f06f82650..3b37deaed4e7 100644
+>> --- a/arch/riscv/kvm/vcpu_sbi.c
+>> +++ b/arch/riscv/kvm/vcpu_sbi.c
+>> @@ -78,6 +78,10 @@ static const struct kvm_riscv_sbi_extension_entry
+>> sbi_ext[] = {
+>>         .ext_idx = KVM_RISCV_SBI_EXT_STA,
+>>         .ext_ptr = &vcpu_sbi_ext_sta,
+>>     },
+>> +    {
+>> +        .ext_idx = KVM_RISCV_SBI_EXT_FWFT,
+>> +        .ext_ptr = &vcpu_sbi_ext_fwft,
+>> +    },
+>>     {
+>>         .ext_idx = KVM_RISCV_SBI_EXT_EXPERIMENTAL,
+>>         .ext_ptr = &vcpu_sbi_ext_experimental,
+>> diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/
+>> vcpu_sbi_fwft.c
+>> new file mode 100644
+>> index 000000000000..fe608bf16558
+>> --- /dev/null
+>> +++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
+>> @@ -0,0 +1,187 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2025 Rivos Inc.
+>> + *
+>> + * Authors:
+>> + *     Clément Léger <cleger@rivosinc.com>
+>> + */
+>> +
+>> +#include <linux/errno.h>
+>> +#include <linux/err.h>
+>> +#include <linux/kvm_host.h>
+>> +#include <asm/cpufeature.h>
+>> +#include <asm/sbi.h>
+>> +#include <asm/kvm_vcpu_sbi.h>
+>> +#include <asm/kvm_vcpu_sbi_fwft.h>
+>> +
+>> +static const enum sbi_fwft_feature_t kvm_fwft_defined_features[] = {
+>> +    SBI_FWFT_MISALIGNED_EXC_DELEG,
+>> +    SBI_FWFT_LANDING_PAD,
+>> +    SBI_FWFT_SHADOW_STACK,
+>> +    SBI_FWFT_DOUBLE_TRAP,
+>> +    SBI_FWFT_PTE_AD_HW_UPDATING,
+>> +    SBI_FWFT_POINTER_MASKING_PMLEN,
+>> +};
+>> +
+>> +static bool kvm_fwft_is_defined_feature(enum sbi_fwft_feature_t feature)
+>> +{
+>> +    int i;
+>> +
+>> +    for (i = 0; i < ARRAY_SIZE(kvm_fwft_defined_features); i++) {
+>> +        if (kvm_fwft_defined_features[i] == feature)
+>> +            return true;
+>> +    }
+>> +
+>> +    return false;
+>> +}
+>> +
+>> +static const struct kvm_sbi_fwft_feature features[] = {
+>> +};
+>> +
+>> +static struct kvm_sbi_fwft_config *
+>> +kvm_sbi_fwft_get_config(struct kvm_vcpu *vcpu, enum
+>> sbi_fwft_feature_t feature)
+>> +{
+>> +    int i = 0;
+>> +    struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+>> +
+>> +    for (i = 0; i < ARRAY_SIZE(features); i++) {
+>> +        if (fwft->configs[i].feature->id == feature)
+>> +            return &fwft->configs[i];
+>> +    }
+>> +
+>> +    return NULL;
+>> +}
+>> +
+>> +static int kvm_fwft_get_feature(struct kvm_vcpu *vcpu, unsigned long
+>> feature,
+>> +                struct kvm_sbi_fwft_config **conf)
+>> +{
+>> +    struct kvm_sbi_fwft_config *tconf;
+>> +
+>> +    /* Feature are defined as 32 bits identifiers */
+>> +    if (feature & ~(BIT_ULL(32) - 1))
+>> +        return SBI_ERR_INVALID_PARAM;
+>> +
+>> +    tconf = kvm_sbi_fwft_get_config(vcpu, feature);
+>> +    if (!tconf) {
+>> +        if (kvm_fwft_is_defined_feature(feature))
+>> +            return SBI_ERR_NOT_SUPPORTED;
+>> +
+>> +        return SBI_ERR_DENIED;
+>> +    }
+>> +
+>> +    if (!tconf->supported)
+>> +        return SBI_ERR_NOT_SUPPORTED;
+>> +
+>> +    *conf = tconf;
+>> +
+>> +    return SBI_SUCCESS;
+>> +}
+>> +
+>> +static int kvm_sbi_fwft_set(struct kvm_vcpu *vcpu, unsigned long
+>> feature,
+>> +                unsigned long value, unsigned long flags)
+>> +{
+>> +    int ret;
+>> +    struct kvm_sbi_fwft_config *conf;
+>> +
+>> +    ret = kvm_fwft_get_feature(vcpu, feature, &conf);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    if ((flags & ~SBI_FWFT_SET_FLAG_LOCK) != 0)
+>> +        return SBI_ERR_INVALID_PARAM;
+>> +
+>> +    if (conf->flags & SBI_FWFT_SET_FLAG_LOCK)
+>> +        return SBI_ERR_DENIED_LOCKED;
+>> +
+>> +    conf->flags = flags;
+>> +
+>> +    return conf->feature->set(vcpu, conf, value);
+>> +}
+>> +
+>> +static int kvm_sbi_fwft_get(struct kvm_vcpu *vcpu, unsigned long
+>> feature,
+>> +                unsigned long *value)
+>> +{
+>> +    int ret;
+>> +    struct kvm_sbi_fwft_config *conf;
+>> +
+>> +    ret = kvm_fwft_get_feature(vcpu, feature, &conf);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return conf->feature->get(vcpu, conf, value);
+>> +}
+>> +
+>> +static int kvm_sbi_ext_fwft_handler(struct kvm_vcpu *vcpu, struct
+>> kvm_run *run,
+>> +                    struct kvm_vcpu_sbi_return *retdata)
+>> +{
+>> +    int ret = 0;
+>> +    struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>> +    unsigned long funcid = cp->a6;
+>> +
+>> +    switch (funcid) {
+>> +    case SBI_EXT_FWFT_SET:
+>> +        ret = kvm_sbi_fwft_set(vcpu, cp->a0, cp->a1, cp->a2);
+>> +        break;
+>> +    case SBI_EXT_FWFT_GET:
+>> +        ret = kvm_sbi_fwft_get(vcpu, cp->a0, &retdata->out_val);
+>> +        break;
+>> +    default:
+>> +        ret = SBI_ERR_NOT_SUPPORTED;
+>> +        break;
+>> +    }
+>> +
+>> +    retdata->err_val = ret;
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int kvm_sbi_ext_fwft_init(struct kvm_vcpu *vcpu)
+>> +{
+>> +    struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+>> +    const struct kvm_sbi_fwft_feature *feature;
+>> +    struct kvm_sbi_fwft_config *conf;
+>> +    int i;
+>> +
+>> +    fwft->configs = kcalloc(ARRAY_SIZE(features), sizeof(struct
+>> kvm_sbi_fwft_config),
+>> +                GFP_KERNEL);
+>> +    if (!fwft->configs)
+>> +        return -ENOMEM;
+>> +
+>> +    for (i = 0; i < ARRAY_SIZE(features); i++) {
+>> +        feature = &features[i];
+>> +        conf = &fwft->configs[i];
+>> +        if (feature->supported)
+>> +            conf->supported = feature->supported(vcpu);
+>> +        else
+>> +            conf->supported = true;
+>> +
+>> +        conf->feature = feature;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void kvm_sbi_ext_fwft_deinit(struct kvm_vcpu *vcpu)
+>> +{
+>> +    struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+>> +
+>> +    kfree(fwft->configs);
+>> +}
+>> +
+>> +static void kvm_sbi_ext_fwft_reset(struct kvm_vcpu *vcpu)
+>> +{
+>> +    int i = 0;
+>> +    struct kvm_sbi_fwft *fwft = vcpu_to_fwft(vcpu);
+>> +
+>> +    for (i = 0; i < ARRAY_SIZE(features); i++)
+>> +        fwft->configs[i].flags = 0;
+>> +}
+>> +
+>> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_fwft = {
+>> +    .extid_start = SBI_EXT_FWFT,
+>> +    .extid_end = SBI_EXT_FWFT,
+>> +    .handler = kvm_sbi_ext_fwft_handler,
+>> +    .init = kvm_sbi_ext_fwft_init,
+>> +    .deinit = kvm_sbi_ext_fwft_deinit,
+>> +    .reset = kvm_sbi_ext_fwft_reset,
+>> +};
+>> -- 
+>> 2.47.2
+>>
+>>
 
 
