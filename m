@@ -1,67 +1,66 @@
-Return-Path: <linux-kselftest+bounces-26679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE20FA36583
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 19:12:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B641A3658C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 19:15:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C3E97A1734
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 18:11:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37AB53AEFEA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 18:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF84D268C69;
-	Fri, 14 Feb 2025 18:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BC12690C3;
+	Fri, 14 Feb 2025 18:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="YMatHjwu"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="sdhGv/t7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2068.outbound.protection.outlook.com [40.107.244.68])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2063.outbound.protection.outlook.com [40.107.92.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BAF268FD7;
-	Fri, 14 Feb 2025 18:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F029F268C69;
+	Fri, 14 Feb 2025 18:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739556743; cv=fail; b=S6VFGSH8nv8TfDmnNEOxo7+x8IFokyDpiqhwd69x02EL1S/AU9SOn9lDvsS/RhzqONMLhTRxk8YAnL0E/ZMIlukCMm22Jr7vLN7U8HUT8PhFHCm4Zgifmq3Cf3GUkTO39XpIA+u9qWodnKQCWGSiSu5T9ORgjExsUJ6UbP3UuBs=
+	t=1739556865; cv=fail; b=QUdgwFyUZW9yESvP0gxRd4hXuEBWJjRvXHDmEaE353nMLQC1fC+B2vIs5nvKL3zNUmbfVPV9HZW3vfrx2stndBC9ig/pNVjpdk06TH9twj19YvjTI9FXusecj/DF4l+QBTDvBE5fqj2gb9l/dbySvl4127DmJbhm3TpDgPyNAPs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739556743; c=relaxed/simple;
-	bh=Jy6KzncL6w2NoKj0iijFoP9bDz/DX6totiVLuQKFUlc=;
+	s=arc-20240116; t=1739556865; c=relaxed/simple;
+	bh=Stm8KoDp9N4keSS96mrxoJEQptZHffMzeIMDIOhDBAc=;
 	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=q++bflZMrUoJg5mHdlxkIXUv/+GH3vYVYvA+TvrjStrSELrWYOIqr2pljeqzTzoHZN0qIKAUHvG+Ue1972Jx+9k37xEshim1IZIcxr0XncPpp6RVBV64Df+W2fhW63bMxgQuOoffKcXkuyvQ8gulc4BZy/h+qyPxKkNaG/FlJAk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=YMatHjwu; arc=fail smtp.client-ip=40.107.244.68
+	 Content-Type:MIME-Version; b=MI27tKMmex6c8EV5Qg4OeQvc4tv0BueQEQYyCraEDGP/SwikNZ0I04kXVhFHFb1ja9t2+58jV7xEMIqraFymFx0uQxhZonGp55ocnCXlF9ZT6yhca9LsxQBnNynFT9ts2tR3kyFT3/LEMzh3cMfaoCNAR9gtPn7dAdOux3LmU/w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sdhGv/t7; arc=fail smtp.client-ip=40.107.92.63
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mSo8nNBNQe0No3quJMln5aDfg1eqBDePkkhHfNt3dr964ye/Z7FhUcGaSoo0BNplYS9PkRNDIjSYEvIBsK8dfVeaIuESmMarYzjzQO4Lt/oGqc0ALGevP+ksiN8lIHSBgxXI6FcEmhGJbKzRQyH/UnYEd5htEvMd2/0LZVnF4sE98W5NehKBiLVbXy9WZAjLviqRugP0WChRNBN71wNUyKbGj9cb/EDisLnSCWK8sNLZCxKycs9Xq3HztfgPS/ejWj3koLP/AUprZ9YTkHT3Lai2EwAlpwbrNvHN9cc6EIyod6wqNgB4clAdMRSRxp11GC3f0la/tRq7hCcqtumIag==
+ b=SzhH/hrK7yDvWFN/cTpTbZBp5UV36Sa3n4ht6fOxGr4AMIl/FKlgvRMTM800HJTtzRhtVKtudf7wrTtd80iJr+4wWqnm8WdD0/FarMlEii2QJcJQCE9/bi72BHh6t0T1x6BtFtNGCr2ED/FOpFiP5SuARv9UjUBSyw9kr4++JSb3ZE8LIAGk5+Ei0ZZdlm34FU7hTAeZq59eN1y66aByP9R/sshkmgmWW2pFqreNBTsOYX6ETCmcRPNlKJZkq94stFndEjMocopdGBOV6sjFR5pS3jTdDlfrQC2HSHCPOxuiiKev938iIuzH+8MlDgr6AbR1Uj7nzD9sHcqDeTHeHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cjhq6kkUyImM7huZY2JmAPwlynmUjdC0B+hCOyU+eLc=;
- b=XDaHQbzGGlenUEQIqnAaME8pUrYTEcLPtUBU+w/EB5X6Ljb5hRO4Aun/p2qUb9GTxmz56+gaiFVpTC8HPCbPFo3787OFoIVKP+vNFZTjmyHpiiqJwPUxKOdTbT4rAuan0FlB3TlPraA4YblFNXMSWc5PF7D35TV2+xOOnLo1tU5aTudqAPxaWwdrtblKrlvMf+KW0KLhbNi/6105V1XEH3hTaHFaSV2fjttlrNrBiiUmol8s70S1+Zj9QkJraxT/xg8Mt54791XpJJkfpnVBP4D0b+9RwEeE/iCI3tmoVx+0XEy3z1oAINHEEqzmI334fXi00wusYpvuUY0sylCIWw==
+ bh=DBuXNLYS12lfAS6YZu8EPKIr13iWXkxNTk6eG58nJi8=;
+ b=VApoNBD/lYUh42VRtU79w4Hq9aNazJPLbVeOT86uSp0ULJAVTozsnHTfk3wq0vVVKj5VBrZrp7GSDBpFdOc1VTxZ7oR3ji0CgzjT+svOE1rtCEM+0hVy+TV0SxnfQbBeayGudPK+0JCV1yKctFpBAT5xSvKoQMBhSORZTmE+borCo0/8xxNiZT4wV1A7FSHZwun2CwWYc1v7PbKh4tDZrubFMBbfVXUmBOc0rU0htdLjRcp+HeRFW9eBCbC5l1hZ07Owt66oUcORtsIfEFLjolJe6YMXmCepPeJ67UHAi4i7z5HREKLCyJyzh3cPqoulQxKne0H752zfnbFveb9klQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cjhq6kkUyImM7huZY2JmAPwlynmUjdC0B+hCOyU+eLc=;
- b=YMatHjwu75+eIoF1DVzznejqa4WEkKmI6lxUXEMLZT6Wt4h+yFYAIODHcxMcZW4Y3jFWAn8eg3AO1E+0QqBRHnwEFbehZ4lHzB1oZBJk81uVjrvKfJjs7/8JtA8fn0l7X0gxTXNPB6GvrEE0BBgLRAn2+2PePXvgHm+C14Jspng=
+ bh=DBuXNLYS12lfAS6YZu8EPKIr13iWXkxNTk6eG58nJi8=;
+ b=sdhGv/t7BLq/aFR3uTC013P8IQG3mbWcV+8OCP22we6ovDMqUTcq2s/xn1iOHxUK9i7E/v6lyENzXuEvGiOHNeZZFoepIGzjahSvrzbmett8wW5+9PpOqu7XVTbDJCTsNRuDGPOrEkVeI7DEbmiSY/cdKVEF1T/HFtSQwkJK6EY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from PH0PR12MB7093.namprd12.prod.outlook.com (2603:10b6:510:21d::14)
- by CYYPR12MB9013.namprd12.prod.outlook.com (2603:10b6:930:c2::13) with
+ by MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.11; Fri, 14 Feb
- 2025 18:12:20 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.17; Fri, 14 Feb
+ 2025 18:14:21 +0000
 Received: from PH0PR12MB7093.namprd12.prod.outlook.com
  ([fe80::ebda:ae6f:3e32:2f7f]) by PH0PR12MB7093.namprd12.prod.outlook.com
  ([fe80::ebda:ae6f:3e32:2f7f%4]) with mapi id 15.20.8445.017; Fri, 14 Feb 2025
- 18:12:19 +0000
-Message-ID: <ecaee27e-c121-4831-9764-043d2e6230cf@amd.com>
-Date: Fri, 14 Feb 2025 12:12:18 -0600
+ 18:14:21 +0000
+Message-ID: <e3136d20-977a-4e2d-ad7b-c04be1dca1db@amd.com>
+Date: Fri, 14 Feb 2025 12:14:19 -0600
 User-Agent: Mozilla Thunderbird
 From: Pratik Rajesh Sampat <prsampat@amd.com>
-Subject: Re: [PATCH v6 6/9] KVM: selftests: Add library support for
- interacting with SNP
+Subject: Re: [PATCH v6 9/9] KVM: selftests: Add a basic SEV-SNP smoke test
 To: Sean Christopherson <seanjc@google.com>
 Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
  linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -70,13 +69,13 @@ Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
  shuah@kernel.org, pgonda@google.com, ashish.kalra@amd.com, nikunj@amd.com,
  pankaj.gupta@amd.com, michael.roth@amd.com, sraithal@amd.com
 References: <20250203223205.36121-1-prsampat@amd.com>
- <20250203223205.36121-7-prsampat@amd.com> <Z6wDiOGjSElatLBd@google.com>
+ <20250203223205.36121-10-prsampat@amd.com> <Z6wIDsbjt2ZaiX0I@google.com>
 Content-Language: en-US
-In-Reply-To: <Z6wDiOGjSElatLBd@google.com>
+In-Reply-To: <Z6wIDsbjt2ZaiX0I@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0019.namprd11.prod.outlook.com
- (2603:10b6:806:d3::24) To PH0PR12MB7093.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN7P220CA0016.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:806:123::21) To PH0PR12MB7093.namprd12.prod.outlook.com
  (2603:10b6:510:21d::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -85,284 +84,183 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR12MB7093:EE_|CYYPR12MB9013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4645b251-8f1a-4000-31b3-08dd4d231f0f
+X-MS-TrafficTypeDiagnostic: PH0PR12MB7093:EE_|MN2PR12MB4192:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ed21f52-e2dd-4df4-c5ef-08dd4d236775
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NTR6T3gzZzNNWjVtbWJVOElZUXNmOU55djc5eHNZalRPYWRETk00c3F2K0x2?=
- =?utf-8?B?M0FUR0wyeDkweWlMbENjTzBzaWx0M1I1UHhna3BZL3FGZTJHNkRvZ0drREls?=
- =?utf-8?B?TTcyYlFjNE5PbmdGRnF6d1B2c3hkM0lrdjhiZUJHc2JGblNiT0h2UytvUm5D?=
- =?utf-8?B?MXQ5VStvaWwwTElicFNkMDBlN3YxTE45bjFhRm84Y3ZxSXl0aGEvRncxc0dv?=
- =?utf-8?B?TEpzVFhQWUcva2oxRWR6NHE5RjJIY0V5bkgzUStuTkVVM29iVG5GV3paTFpw?=
- =?utf-8?B?dW9yaEUvWWxaVmtybUNDMCtwdysydDBuQjFaZDhJL1ZVN2dVUXhJbFhFeGlm?=
- =?utf-8?B?SFdHVWR5cnFJYkVSWEh2akdXaE1nYlFkcFVTQmZjNWZud1VDYzlIbXk1d0F0?=
- =?utf-8?B?WXoxbHhZRGVpYzBBWlljQTdDOHlMVWJ0ay92QUcwTEhCekpJRnk5V0MzcHlN?=
- =?utf-8?B?Q1AyRk5UaDVpakhVTHg5NG9zY2RLYzJldmcrTFdsOHZwMC9oNVZCWFR2a0JD?=
- =?utf-8?B?YmNVUnFwVlVIWWRlRi8yaDQxM1JhZ0taZElUWk5tTXJLNDl3OUlwbmVVV0Jp?=
- =?utf-8?B?TytwY1N0UGFYVWJTTHJPY05ma0VCeVcrN0VJaDdHUVlIalltNjlXRWNPNlRN?=
- =?utf-8?B?ZXcxaVZ6VTEwaTZhV2g0TWJBdmtkSEFCa3pMeXpMMW52SXo1dVFiTUtxRkhL?=
- =?utf-8?B?V3lIbjVIY255RExFa1FJSWhaeUhGblpub1lXNW5EQm0xQ3BUNG1OZkN1VHdh?=
- =?utf-8?B?dU1rM1Q5eFF6emlLUlA4N2VOeEVLcmw3MHJzRzFVeldhSXUzZ3ZweTM1eGVa?=
- =?utf-8?B?RnNrNVJxREo5SWYwMUExbURkVG41R1RrNXhwcTlQaU1RaGtCcHlyQWRhWHRi?=
- =?utf-8?B?Um1ReG1lcmxSRUl6Wkw3ekkxSFhIRmZRWllJbno2QjFvaUNZZUM1dCsvS1BD?=
- =?utf-8?B?ZWhGMnYxSVNNU1NWWnoyTDU3UGRxWlBHdTBhQmVXL1N1QjlRWmtKRnQyV1Rt?=
- =?utf-8?B?Sk92aVVkeFJxNGxtTVBscWt4RlBCSnQyNWhDaTlLekNldlIwM1RLREgzUmNm?=
- =?utf-8?B?WENBbSsvL1QrNCtSdjFlY1FBc1dUL04yblR5dFJkSUI0T09iOEptb0pzeWVm?=
- =?utf-8?B?cGtjM1NQQXlzdjJHVURRSSs1Z1VjLzlGSSt3cDRYNkN6cGJZL1V6eW91QklG?=
- =?utf-8?B?TVU5VDhVU3BWWXFSMjFYcFZ0Mzg5WDZ6a1B1RTRYQzRDMEZtR3prQmxvZzBp?=
- =?utf-8?B?V2JLNzBmV0Eya0piTnhWZ3NZczhkbGdOSVlxSm9ObEYxdEFLQ2dCZ1pDNVky?=
- =?utf-8?B?S3dwdldkMTRRaFhXSXpjRmFMemJEbkpTcFJENVpKekFVL1dVZTFrRExPdkVM?=
- =?utf-8?B?SkxqdU1hUVFSUGdJdHVaTGMzaTk4QThLYXVsUUpFUWt6OW1haDgyeWFpQS9U?=
- =?utf-8?B?KytZSHppZlpaU3QyWW4vR0pnTUhweUMxaEVCaG9oOGxoN2VQZzVncWJPbTFr?=
- =?utf-8?B?UU1uV0pvSFlzTlMzYXJzUWNBRWN3WjVlSTJwWUM0aUU0eFp5NkNQS2VPcngw?=
- =?utf-8?B?U0dKVmF1MU55dUZLMHllVWljN0xGdWpiWXBqKzBvUXpDVVhGbzVwOVgzek5U?=
- =?utf-8?B?eGIyYTJQa0JwUXBaR3RvRGwzWDJhUnMwL0ZSUXFwc2ovclEzSXMzYlpKNUVG?=
- =?utf-8?B?WWVPNHRqL1hCd01QQmNCb0JEc0d6YWwycG9iZlRKNnJGR1k0VmRwOWg1RlJ5?=
- =?utf-8?B?MndLM1E2c3ZoM0lNR3hpWmZReHVSWmdLcUlGZlZRUW5TUzRsWUFEemtqZUdm?=
- =?utf-8?B?Q25kSHBTdnh6M29hcHc1d3VYNG9uVXFESXRFZ09wTktEMWpYdjkzclU0WFhE?=
- =?utf-8?Q?Jn3Yaf7aknda3?=
+	=?utf-8?B?VzZIYUovSmZOUmkvTzQ0YmlDU1BGK2NHcXNZWm9wT2FVTkdRcUpwdzU1SVRS?=
+ =?utf-8?B?cjhBK25ybTdlLzJWaklBWnVwRjduVUFmZ1cyNG5QemNLVEtpNnMxUHB2SDFo?=
+ =?utf-8?B?S28wZmkxT1pWc2NQaHorQSticzJFb0NxMExuaXpMRWNpQkswbmloMy9OazJV?=
+ =?utf-8?B?SnZzQ0NORTN3SjZtMlc1RlRsdk5GbzdldDFPYXErK3dhNjlZUDgxc1luYlpj?=
+ =?utf-8?B?VFU0Tk8vc2tQTE90RTFuUTNjVlpUTnJZeEtwWnlMVSthZ2dkVll6NExBcXlL?=
+ =?utf-8?B?ZDhjN01QeW53MUdjVGRvVnh6T29rTWJwZE5DTXFwNXpHS0FiUWM5czgvVmtX?=
+ =?utf-8?B?V3k2Rkc4QzBWWkF6cHFzbzN1dDZKQ0FpTm0zNDhTZ29zY1lqdEphSHluRlYv?=
+ =?utf-8?B?L2NsM1hRY0FPMGJyNFdTRW12cDNLeS9STGhIL2tqYlE1T1NlcmN4bWVRdEo5?=
+ =?utf-8?B?UG55OHZTNU1FSWNvSlY0N2M3dGZkcjlReTIyMnRNanZVOFFpWFJleTd6cWtl?=
+ =?utf-8?B?SG9XWDMraVkwZFhJcDFPSHd3UStkZDZpaGhJdHE1R0VSejNYajlqcEFqS1VJ?=
+ =?utf-8?B?WVN1SmNnYUZsZ0Z1d0lKc2VGdy9NMitobENpSmZrQnBKdDc1ajRvd3AwT3Iy?=
+ =?utf-8?B?Qjk5RWtxYjh0dXBwY1pXUnBNV29pajlsT3Z3QjVMbjUzcHN5cmdCUi9Ob3JV?=
+ =?utf-8?B?czMySG1iUGhZY1NCdXFrY3VJdVFGdWloK0wwbkFCbEkwR2lBMTF3NWVxWEo5?=
+ =?utf-8?B?Z0Y3elRoOC9LaElObDYzVSt4UlNhd1B5aXA3MTRrS1Z1RCtmaWQ3UGJ4KzlB?=
+ =?utf-8?B?UThtL3E3RUdTdjlrUHdEVFV5WmVZYS8yZU56cXEzeUw4elVnQWcyTmoxbjFX?=
+ =?utf-8?B?eW9Hcy8rRkRUUTJqMkVSVHhVUUVOVU5ZV0EwVmZwMWx1VEpVK3U2TVY4RXhK?=
+ =?utf-8?B?ZmlUUnZkbjNVY2xWRzBwRjg5ZktWejNuUUFkSnpnUkVSZ1dabG5TcU1YMExF?=
+ =?utf-8?B?aGl6dUlVU3lXTnNJZUlZK0svc0QrWEhNeWl0b0dzVEIrSC9oWHhDMWdSMWUz?=
+ =?utf-8?B?UkJkQW5aRDd1T3RFaVltSExPYVNNM0hhK2o5N1l2c3R3b2FQN2NWZUYvSzRs?=
+ =?utf-8?B?NjFYNlVWak5FTFFodTR3UG54UlFLK0pzVGZqQVdzMzM3RFQwUU9LMWVRVXVL?=
+ =?utf-8?B?WEZod1FRRUpCWWQ3T2Rnb2d6SkVjOENhMThKUWpHc3Z3eUR5OWpFbG9tM2Zn?=
+ =?utf-8?B?cVFmSVBscGJZYzd3a09SVTFCQ1JFUU9wL2xFM0ZxVGs2K1M5MXpXZmdReWlU?=
+ =?utf-8?B?U3JSRk11MWJQWkgwQTRNZ1BDSVgrM0ZtT2M5azBXMllvQUtvZm9wLysxU1FZ?=
+ =?utf-8?B?OG5ia2M5OWF1R3ltTlc0QUVSS21zdEtaTC9RQ2tPOE1mL0s5Y0p6aUZYUHk4?=
+ =?utf-8?B?L0Ixakcxc1lFYzhzMnFKN1MwRVUzUFdZTjFBb0xiYVFPb2Y5dzBDb2prcmg3?=
+ =?utf-8?B?RVNyUTVlSW90T2RaVHp4bzBYK0VZcml0YnhSTThRVXkzdFNDR09VeGxhYloz?=
+ =?utf-8?B?UmZJeHFZUmlkSE5LVVV1UG5wM0xiREJ0aSs3dDFRL0JKWlo0UW1Ec0g4b2Jr?=
+ =?utf-8?B?djBNc2l1WnpCSFJZYkZmUE41WnVDcTZRcDB0VFMxTzJrN09Mc3A4L0RrSFZP?=
+ =?utf-8?B?YzlNcDVrc3RDbktjeGtKQzRNVjdqMzUrM25qa0l1akw4aEthV1J4TWNIL3dn?=
+ =?utf-8?B?Vy9tTG1kSEtpaDFEbzJhUHRLMGd0eEpBcnNNMHY3SVN6WkpxbEgxYnE4QUdB?=
+ =?utf-8?B?RkJTV3Z1QWFmM29XbGkzbjBPalJybkxSVURDV3g2dDBWNms4dFkvRU1UbnRK?=
+ =?utf-8?Q?D1JseH5E3hsqY?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7093.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7093.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z2xHUVZBRkhLMUtpVXlpdWJGTzZiSDJockVNMVlIQStSMW9SNHFiWGdiRyth?=
- =?utf-8?B?NSt0bVNOak9yeDRoOXNWNVFrQjBGM3lUQ2NIOCtsWWRZZk5zTFhnSi9EaFp3?=
- =?utf-8?B?Y2NXc1JTNTBYeXh0dVF6Yk9VeVlYcnBWeHBuWllrTWsyWUR6U2J1YTZOTlFL?=
- =?utf-8?B?TUlMMjZsYUJDeGRZQjhkVzZhWkFSYUJlbWlBQ1NWVWNiV01BSzJoTzJra1dk?=
- =?utf-8?B?a3Q5NS9NamxkU1E5SjRxSERVMkY0OTErNnBTR2dXT0cwRXFzMTMzWDh1ZnBa?=
- =?utf-8?B?V3hwQzdmL01wVVhCcEZMRTdTSlBua0FlRnQranNGS1k0a1JTRzN1UnVoWVB2?=
- =?utf-8?B?NmQvME9Pci9VdHRmazV0OVlYTm52YVNtL3h4MWVRVUs3dUNFblE4ZGNCQlp3?=
- =?utf-8?B?QU1iallDdlkvZ2creVkxVGgrbmtXaDI2dUl1dUxsbTV6bDlpLzdHOCtQWUR4?=
- =?utf-8?B?MmsvTCtnWUY5cGJRVDRNcVZNUzlNWThURGZJMkthSnNKWHU1RkJXS3p6YzF6?=
- =?utf-8?B?a2xhUXdzWEhIVVQ4WEhpL2pLRW9sWkJMeE9EUHd0cWdIQXcrU3IzWXhNWDlr?=
- =?utf-8?B?c3hkZWx3ZDZIUGg2MXpWM1JDOTZIVjlPMW1MVXR5eGJHbkFRK1Y5cHVUajBn?=
- =?utf-8?B?SHFKcDNINWIxN09ZaU40UmZCMTZYQzZJTW9xem9GUzRUcUJuQllGQ2Y5dTI5?=
- =?utf-8?B?bWs5UUdwNlJGUm9iZzJ5emlEM1pnL2I2U0VJMlRBSExYNDd1V1Mzc1dDbTdr?=
- =?utf-8?B?YnVWemgwZ1c5UjdYSHk2S2hDOXZzRWkxb3pPTEJ6Q2VvdUU4OTVYdjdrcWpa?=
- =?utf-8?B?MHMxbERBcElCYkNnNWRlOFpMU0pDL3VYdkd0UHRIaUY1aDE4YldkYWhocHMr?=
- =?utf-8?B?L2Y4cVRtQUVNTm92R2cyaGNkWjhYWHJlVGY1YXVmSWhOV2d4UFgxaGw0ZHBL?=
- =?utf-8?B?Zjl3U0NKRXY3RVZNbXoyTFpMQWpkL2x5SVpKUDJ3eTArMzhQUGdKdk1uMFFG?=
- =?utf-8?B?cVVFZFA3ZnE5ZUQ2QURYck1jRlBBMlZocmV6NEpYWGpvYmFaMjNPN1hMbS9j?=
- =?utf-8?B?RjFETmU0NWZjcGtyNWJjemU5MXAxMHJiT0gzTWN3VGZDQ1B2Ly82RHNxanRS?=
- =?utf-8?B?QWtVdlBKNjlGbjdJN281UlR1RTdCTG9ybnYzRktmQkhlUXhqdk8wdWxvZkRZ?=
- =?utf-8?B?Z09PMDFMVkMvbXFqSGs1blVFc2pwY0hVcDJodWRBanlia2FJQUZXbUhaSzdO?=
- =?utf-8?B?dEVvT1BjeWxlNE56V0lydE16SURiODhncEdxYkJYbWp4ZjNueDB0SWp1S0ll?=
- =?utf-8?B?cUFzM2RrRUNuOE9jb3RSN1VrNFVzMVJaVFZqaThrU1V3THIzREkzYVIzV0lq?=
- =?utf-8?B?VzRJcGFYOHNsVGFacHJnOE5ucFJPaThWU2dWWG8vOVF5cUtwVndVMlFlbldx?=
- =?utf-8?B?aXY0WXdLSnpOVEN2aTlHcjM2ekFRSEM1MnRRcE9wRk4zOWs4TTJWVE9nTGpu?=
- =?utf-8?B?bzN1S2FvT1VhM01FcXUyTGgxbkZPMkpYVWFFVkZHclVPc1BacnYzdnQzTDFU?=
- =?utf-8?B?bjhXWUlyc3BEYzB5dmcwQUFtdVlKTG1pNWEyODVBck1vS3orRUtENVZuYVNZ?=
- =?utf-8?B?dU13NUpaL1A0WlJNbVZnbzhVMUpVNWpjOXpiWG1MeUtXQjJaaEo3VUNlKzN1?=
- =?utf-8?B?WnJKZkJrMlNwc05ZZ25jWWNZZnhFeFNWM2NzakVkcnVFTWw0NzBPRjJWUGVs?=
- =?utf-8?B?bzhlYmR3aTJqZWZpeS9oNzdMNHlwZ01OMSs3K25TQzNKdktobkNKVDFTTDZj?=
- =?utf-8?B?ZVVQc3BUVHdEaERNakRQeVhmNU5FbmN5TndRMTJqd0VFbUNVQ0tsZ3RNUDlK?=
- =?utf-8?B?ZlJlWWQwUFhmVllkVjFvK3J6UWtPMTJTQmg5dHJWODNTbG1xWXNiNjV2dXl3?=
- =?utf-8?B?bE9JMlB0ekxnUjZtZXNjMUZ6MG15dTBWVVFwNFgxSW9xVHdCd08vQnc0Qmph?=
- =?utf-8?B?YnVjVUkyelJISS85V0F3eDlTc1hmMXlpVHh0RXFqSFk4WXFqOE4yNVZ6SUpi?=
- =?utf-8?B?dUpOVXJEUHBYaDVBOUVNWU9wOGI5dTVtMzJTYlE2amFTYnNZSGJLbVRLMVRh?=
- =?utf-8?Q?KfSaFB+OwnpnZKaaHBPSOxL8S?=
+	=?utf-8?B?WXhYV1FXSkZvWWlKQjhvcUhsSFBZMWhDYklPZHBhejgxQmNKbk4vTHd5TCtS?=
+ =?utf-8?B?YXFwQWh3cVJobEk1YVgrcHowVGluZy85eWc0OU84RXVtTXJYZG1yR2djdS9u?=
+ =?utf-8?B?UW93VUxtSFNBTm55ZmdTZ1d5ZWFKencza3lFOENYempPSEQyK1FaM1VXMDdW?=
+ =?utf-8?B?dVBqKzNCbTB5YVdpV0tINHo1SU14UlJQUHVZbWNNTXhDQVgyZEd5anFqcldO?=
+ =?utf-8?B?THJBR05NMlJPYzYzZnFzMXVwSlJPS0M5bmkySkdpdDhGRnEvaEFxOURZQmhY?=
+ =?utf-8?B?NUxHVjg3SmVMMDZXNjk1WS80eC9qa2swV2NuK2p0K0poZ09WclY0bWd5VGFV?=
+ =?utf-8?B?Q3IvcDMzUXZwb3NodDN2SGxoeldQNGEycmlEYmZNRmZHQ2JQek4xR0pzWXlo?=
+ =?utf-8?B?cDZOMGt4b1g2U2NWQ0szZmFxUjJxemdVNlBXSFRCTEtCMUZ3NDhNa2JyTjJv?=
+ =?utf-8?B?cTNMU3NtYXB2RlBqdXF0R0VOcVlIWnhYOEdiRWdLSHFqUTR4Y1paNEdqbGpI?=
+ =?utf-8?B?YlVOZWRJeDhaUFdqdjBpRGtZanRIVzFxNUhFa0tXMnRnZFpvRDF1dlI1U1A3?=
+ =?utf-8?B?SDVyVHM2cSs3bXJjdHBXTXBuMVZUeTAwTjlDcFkxbmJIcC96OWhXRittVEJD?=
+ =?utf-8?B?TWFSc29UOGFUSDJ5VTlMUnBXQnkvZjA2cDF1dHA5M1ptNVdsQ1VKTHE1QS90?=
+ =?utf-8?B?VzUyYnZCR2s4aHR1b2NSUEZESWttRjVRUjloT080ZlI1M1Z4VStxRWQ2TmlB?=
+ =?utf-8?B?amcxSmxNbWQ5MS81VmE0YTBSalhCQ1lEY213cTNvL2s3VEdLU3lkekF4bWl2?=
+ =?utf-8?B?TUJHaExvRjV3N0lBZmlLMlZYb252eU9XMFpENGNEdU5yYnRHcUs3UkdVQkZx?=
+ =?utf-8?B?eTJuUkZxRXZhUGdDa000Tkg5V2JJQkJYbFJPOTdhYkNyeWtnb1ptWnlKQTVF?=
+ =?utf-8?B?SXVrOWViM3plM0psUzh0SGs2VDRMQ3NmMzA2cjhpclBPT1l6aDhhdlBRaTlD?=
+ =?utf-8?B?TG5Ob0ttZFRWZ21kSWcwUWdJdHd3YXhNalViemxJUEJBbnpwNGh2VENhN3pD?=
+ =?utf-8?B?d3lkMSsxelptaU9FK1oxLzUxNVY2aEN0NzN4Y1cva2F2WXRoelRyb1pvOURB?=
+ =?utf-8?B?QWpiakFRM29GQlhTaXQzS1dDOURhZCt0VjRrNzlYV0w0Z2pkZnJTaGxZaG9N?=
+ =?utf-8?B?MGM4MzlKRFk4OGt4NEk2Z0x1c1M5VlBtUjJnUTJZQy81QXppQXhPVlVNczEw?=
+ =?utf-8?B?N2EzNVNHSWNmTkpnNXpKMk5NR3habUR6aXRXUDkzUHFHYXBHandkVlhSWkFV?=
+ =?utf-8?B?eGVORjRjdVFqTHR1NVBvbGNYUC9ublNKUTVKdEcvWjlBMzZtTzdwakNLUytr?=
+ =?utf-8?B?Y2M5QS9pbkk0Vm43Um9sWVhaUXZWZjhkTUY1cFZoMGdoSEFLdzVUK2lUL2JW?=
+ =?utf-8?B?Qi9mb0pSNTFKcFRYVVZDMFZzL3ZUczBkM3RnZ2hXRGpyUlp5d0tXUkpScTlx?=
+ =?utf-8?B?R1BSTUdiMHJmdmk5eW5QTmw3cTJxM0krZzNKWHFaZDhDc2xLR0wxQXVleSt1?=
+ =?utf-8?B?RmZrcUMyM1R4bXZIOS9MODZ2WHBpWFZNY2JQYVFIRE1rYkZ5WWRVMjhSSEk0?=
+ =?utf-8?B?ZVFJSXlDQkJaZHQ1Z3ZESEVNRk1wbC8yU3Vpb1hrWUl5NGdGTTNla0Ridk9C?=
+ =?utf-8?B?eVFEQ1o3dnVSMERYYUdCd3JCbmd2VG5UR0p4QjQrMkNOVUlUamc4S2YxWmhJ?=
+ =?utf-8?B?ekxOejh4NzduMEVUUS92SkU5TTBDL3RxaisvZ3l1UGNxM3J4UkpycVRQME81?=
+ =?utf-8?B?cTFzdS96TVFCeldiYUhENXpyUmRaMGFZTUpVUnBuMXRMdDV4OW9wcVVDU0R6?=
+ =?utf-8?B?b2RORGhoZ1FRcDJaTzZqcStzd1JiaytPUTFnTzc5Y3RBK3RzMjA2UDJRM0Ny?=
+ =?utf-8?B?Y0pUa1ptL0xCdExRcnNaRVZQdUNpRGJ1Z1hjMDRrLzRXQmRKaU9WWlNMVk8v?=
+ =?utf-8?B?c00yQkxXY0NaMVJVN3puNGUxekVjUHNNT0pHdUhEbTZ5bWlUak1qRFAxS0ov?=
+ =?utf-8?B?RSswNzBob05lMll1UkRQZW15bHN2TzZRWW1LYjJ4cTlOYytNSTJEOEcyamNs?=
+ =?utf-8?Q?ZTCkfU8z6S3sS6ADtpVgtjhY9?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4645b251-8f1a-4000-31b3-08dd4d231f0f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ed21f52-e2dd-4df4-c5ef-08dd4d236775
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB7093.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 18:12:19.8792
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 18:14:21.3444
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QJaZTbyOY7xYRsO6rBITSxEuvWRA/9et1CZHRfq8Ba4XvPJF8BaH4kNYsQDSLnw3u1nElICAp76MhRpu5WYE1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB9013
+X-MS-Exchange-CrossTenant-UserPrincipalName: GRG2aXjPBRFe/PYrIOho/FyGzMEENF6zkfjuDlMdPCddffHdcAo0p4kyAqjosByn1mjL/oy2GKMzNxh15ZzQ0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4192
 
-On 2/11/25 8:12 PM, Sean Christopherson wrote:
+
+
+On 2/11/25 8:31 PM, Sean Christopherson wrote:
 > On Mon, Feb 03, 2025, Pratik R. Sampat wrote:
->> Extend the SEV library to include support for SNP ioctl() wrappers,
->> which aid in launching and interacting with a SEV-SNP guest.
->>
->> Tested-by: Srikanth Aithal <sraithal@amd.com>
->> Signed-off-by: Pratik R. Sampat <prsampat@amd.com>
-
-[..snip..]
-
->> +/*
->> + * A SEV-SNP VM requires the policy reserved bit to always be set.
->> + * The SMT policy bit is also required to be set based on SMT being
->> + * available and active on the system.
->> + */
->> +static inline u64 snp_default_policy(void)
->> +{
->> +	bool smt_active = false;
->> +	FILE *f;
->> +
->> +	f = fopen("/sys/devices/system/cpu/smt/active", "r");
-> 
-> Please add a helper to query if SMT is enabled.  I doubt there will ever be many
-> users of this, but it doesn't seem like something that should buried in SNP code.
-> 
-> Ha!  smt_possible() in tools/testing/selftests/kvm/x86/hyperv_cpuid.c is already
-> guilty of burying a related helper, and it looks like it's a more robust version.
-> 
-
-You're right, a more general helper is in order here.
-
-Since the hyperv_cpuid selftest only seems to care about whether SMT is
-possible (i.e., it may or may not be enabled) and we care about it being
-enabled as well, for the flag to be set. I should make a more generic
-variant(s) that can be accessible to both. Maybe I can implement it
-within testing/selftests/kvm/include/x86_processor.h?
-
->> +	if (f) {
->> +		smt_active = fgetc(f) - '0';
->> +		fclose(f);
->> +	}
->> +
->> +	return SNP_POLICY_RSVD_MBO | (smt_active ? SNP_POLICY_SMT : 0);
->> +}
->> +
->>  /*
->>   * The KVM_MEMORY_ENCRYPT_OP uAPI is utter garbage and takes an "unsigned long"
->>   * instead of a proper struct.  The size of the parameter is embedded in the
->> @@ -76,6 +109,7 @@ kvm_static_assert(SEV_RET_SUCCESS == 0);
->>  
->>  void sev_vm_init(struct kvm_vm *vm);
->>  void sev_es_vm_init(struct kvm_vm *vm);
->> +void snp_vm_init(struct kvm_vm *vm);
->>  
->>  static inline void sev_register_encrypted_memory(struct kvm_vm *vm,
->>  						 struct userspace_mem_region *region)
->> @@ -99,4 +133,17 @@ static inline void sev_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
->>  	vm_sev_ioctl(vm, KVM_SEV_LAUNCH_UPDATE_DATA, &update_data);
->>  }
->>  
->> +static inline void snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
->> +					  uint64_t hva, uint64_t size, uint8_t type)
->> +{
->> +	struct kvm_sev_snp_launch_update update_data = {
->> +		.uaddr = hva,
->> +		.gfn_start = gpa >> PAGE_SHIFT,
->> +		.len = size,
->> +		.type = type,
->> +	};
->> +
->> +	vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update_data);
->> +}
->> +
->>  #endif /* SELFTEST_KVM_SEV_H */
->> diff --git a/tools/testing/selftests/kvm/lib/x86/sev.c b/tools/testing/selftests/kvm/lib/x86/sev.c
->> index 280ec42e281b..17d493e9907a 100644
->> --- a/tools/testing/selftests/kvm/lib/x86/sev.c
->> +++ b/tools/testing/selftests/kvm/lib/x86/sev.c
->> @@ -31,7 +31,8 @@ bool is_sev_vm(struct kvm_vm *vm)
->>   * and find the first range, but that's correct because the condition
->>   * expression would cause us to quit the loop.
->>   */
->> -static void encrypt_region(struct kvm_vm *vm, struct userspace_mem_region *region)
->> +static void encrypt_region(struct kvm_vm *vm, struct userspace_mem_region *region,
->> +			   uint8_t page_type)
->>  {
->>  	const struct sparsebit *protected_phy_pages = region->protected_phy_pages;
->>  	const vm_paddr_t gpa_base = region->region.guest_phys_addr;
->> @@ -41,13 +42,35 @@ static void encrypt_region(struct kvm_vm *vm, struct userspace_mem_region *regio
->>  	if (!sparsebit_any_set(protected_phy_pages))
->>  		return;
->>  
->> -	sev_register_encrypted_memory(vm, region);
->> +	if (!is_sev_snp_vm(vm))
->> +		sev_register_encrypted_memory(vm, region);
->>  
->>  	sparsebit_for_each_set_range(protected_phy_pages, i, j) {
->>  		const uint64_t size = (j - i + 1) * vm->page_size;
->>  		const uint64_t offset = (i - lowest_page_in_region) * vm->page_size;
->>  
->> -		sev_launch_update_data(vm, gpa_base + offset, size);
->> +		if (is_sev_snp_vm(vm)) {
-> 
-> Curly braces are unnecessary.
-
-Ack. Will be remove them.
-
-> 
->> +			snp_launch_update_data(vm, gpa_base + offset,
->> +					       (uint64_t)addr_gpa2hva(vm, gpa_base + offset),
->> +					       size, page_type);
->> +		} else {
->> +			sev_launch_update_data(vm, gpa_base + offset, size);
->> +		}
->> +	}
->> +}
->> +
->> +static void privatize_region(struct kvm_vm *vm, struct userspace_mem_region *region)
-> 
-> Can't this just be a param to encrypt_region() that also says "make it private"?
-> 
-
-Sure, I can parameterize encrypt_region() to have a private boolean.
-The idea was essentially to ensure that privatizing and encryption can
-be called separately if they wanted to. However, since this is
-currently only used in tandem (by SNP) I can remove this to reduce
-duplication.
-
->> +{
->> +	const struct sparsebit *protected_phy_pages = region->protected_phy_pages;
->> +	const vm_paddr_t gpa_base = region->region.guest_phys_addr;
->> +	const sparsebit_idx_t lowest_page_in_region = gpa_base >> vm->page_shift;
->> +	sparsebit_idx_t i, j;
->> +
->> +	sparsebit_for_each_set_range(protected_phy_pages, i, j) {
->> +		const uint64_t size = (j - i + 1) * vm->page_size;
->> +		const uint64_t offset = (i - lowest_page_in_region) * vm->page_size;
->> +
->> +		vm_mem_set_private(vm, gpa_base + offset, size);
+>> @@ -217,5 +244,20 @@ int main(int argc, char *argv[])
+>>  		}
 >>  	}
->>  }
 >>  
->> @@ -77,6 +100,14 @@ void sev_es_vm_init(struct kvm_vm *vm)
->>  	}
->>  }
->>  
->> +void snp_vm_init(struct kvm_vm *vm)
->> +{
->> +	struct kvm_sev_init init = { 0 };
+>> +	if (kvm_cpu_has(X86_FEATURE_SEV_SNP)) {
+>> +		uint64_t snp_policy = snp_default_policy();
 >> +
->> +	assert(vm->type == KVM_X86_SNP_VM);
+>> +		test_snp(snp_policy);
+>> +		/* Test minimum firmware level */
+>> +		test_snp(snp_policy | SNP_FW_VER_MAJOR(SNP_MIN_API_MAJOR) |
+>> +			SNP_FW_VER_MINOR(SNP_MIN_API_MINOR));
 > 
-> Use TEST_ASSERT(), or do nothing, don't use assert().
+> Ah, this is where the firmware policy stuff is used.  Refresh me, can userspace
+> request _any_ major/minor as the min, and expect failure if the version isn't
+> supported?  If so, the test should iterate over the major/minor combinations that
+> are guaranteed to fail.  And if userspace can query the supported minor/major,
+> the test should iterate over all the happy versions too. 
 > 
 
-Alright, I can do that.
-I will also send another cleanups patch to remove asserts() in the
-SEV, SEV-ES counterparts too in that case!
+Yes, any policy greater than the min policy (defined in sev-dev.c)
+should be supported. The sad path tests were intended to be added in the
+upcoming negative test patch series so that we could have the proper
+infrastructure to handle and report failures.
 
->> +	vm_sev_ioctl(vm, KVM_SEV_INIT2, &init);
->> +}
+> Unless there's nothing interesting to test, I would move the major/minor stuff to
+> a separate patch.
+
+Would you rather prefer I do the happy tests here (something like -
+min_policy and min_policy + 1?) and defer the failure tests for the
+next patchset? Or, I can remove policy testing from here entirely and
+introduce it only when the sad path testing infrastructure is ready, so
+that we can test this completely at once?
+
+> 
 >> +
->>  void sev_vm_launch(struct kvm_vm *vm, uint32_t policy)
->>  {
->>  	struct kvm_sev_launch_start launch_start = {
->> @@ -93,7 +124,7 @@ void sev_vm_launch(struct kvm_vm *vm, uint32_t policy)
->>  	TEST_ASSERT_EQ(status.state, SEV_GUEST_STATE_LAUNCH_UPDATE);
->>  
->>  	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node)
->> -		encrypt_region(vm, region);
->> +		encrypt_region(vm, region, 0);
+>> +		test_snp_shutdown(snp_policy);
+>> +
+>> +		if (kvm_has_cap(KVM_CAP_XCRS) &&
+>> +		    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask)
+>> +			test_sync_vmsa_snp(snp_policy);
 > 
-> Please add an enum/macro instead of open coding a literal '0'.  I gotta assume
-> there's an appropriate name for page type '0'.
+> This is all copy+paste from SEV-ES tests, minus SEV_POLICY_NO_DBG.  There's gotta
+> be a way to dedup this code.
 > 
+> Something like this?
+> 
+> static void needs_a_better_name(uint32_t type, uint64_t policy)
+> {
+> 	const u64 xf_mask = XFEATURE_MASK_X87_AVX;
+> 
+> 	test_sev(guest_sev_code, policy | SEV_POLICY_NO_DBG);
+> 	test_sev(guest_sev_code, policy);
+> 
+> 	if (type == KVM_X86_SEV_VM)
+> 		return;
+> 
+> 	test_sev_shutdown(policy);
+> 
+> 	if (kvm_has_cap(KVM_CAP_XCRS) &&
+> 	    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask) {
+> 		test_sync_vmsa(policy);
+> 		test_sync_vmsa(policy | SEV_POLICY_NO_DBG);
+> 	}
+> }
+> 
+> int main(int argc, char *argv[])
+> {
+> 	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
+> 
+> 	needs_a_better_name(KVM_X86_SEV_VM, 0);
+> 
+> 	if (kvm_cpu_has(X86_FEATURE_SEV_ES))
+> 		needs_a_better_name(KVM_X86_SEV_ES_VM, 0);
+> 
+> 	if (kvm_cpu_has(X86_FEATURE_SEV_SNP))
+> 		needs_a_better_name(KVM_X86_SEV_SNP_VM, 0);
+> 
+> 	return 0;
+> }
 
-For SNP, we supply this parameter to determine the page type for SNP
-launch update defined as KVM_SEV_SNP_PAGE_TYPE_*. For SEV/SEV-ES,
-however, the page type doesn't really get factored in and falls through
-unaccounted in that case, so I had passed a zero to it.
+Sure, I can definitely clean this up so that we have less duplication of
+code all around for this test.
 
-Having said that, having a literal here is quite unclean. Maybe I can
-pass one of the existing page types to it or, better yet, define a new
-KVM_SEV_PAGE_TYPE_[RESERVED|UNUSED] type instead for our selftest
-header?
-
->>  
->>  	if (policy & SEV_POLICY_ES)
->>  		vm_sev_ioctl(vm, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
-
+Thanks again!
+Pratik
 
