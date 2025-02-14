@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-26619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A65DCA35437
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 03:05:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75633A35438
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 03:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD47C16C2DA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 02:05:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D94257A494F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 02:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53821C860D;
-	Fri, 14 Feb 2025 02:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28BC1D89F0;
+	Fri, 14 Feb 2025 02:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e0pVF4r0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XnBQ65VS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0E01C8600;
-	Fri, 14 Feb 2025 02:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C285D1D86E4;
+	Fri, 14 Feb 2025 02:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739498517; cv=none; b=uKL1qgAkjML1NY64+va/KofbWrypXasEtOVh5+Pu65jbKHZyVIIJa3flYPj2A/XbuVVi/FqrfP52/5gL/fDzQfhbLANiltC66rIcNyRxLT7egvFHB+BOXKOqvsMbk7SVsg5vn5/L5DoHjs0XztQ2GSmngZEjdDk2L6ec059NIlc=
+	t=1739498520; cv=none; b=eXTeVidt+qPAMDLzGHP9XFhp9xbZxzvhVXyQTVeiHHTBRMQRF+ONLfDYQTZWKCDhxhprrUTG55doCCu3j/CIrqHF6xyQJPxOo/vTdB5zprvnxXMFhTNro4Ly3fcj7UFpBskeauI3REDiuIZGB4V1QyCgse/anq8nPGbXC0M8P7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739498517; c=relaxed/simple;
-	bh=KthAFJE+SIF0dLE8S413GLUMvpdlQLSkbZ+hUct3NSo=;
+	s=arc-20240116; t=1739498520; c=relaxed/simple;
+	bh=qo7H32r2wNGTMfrlNHz8kGfdEKw9RWzoZiLjbar4AvM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DQYTX2LNYMpeB8cqx3CJwSQ4tPtngPq/gV1+14G2ET19sIWW1A2CSc4ZNpzNi07MyJGuu+l0bpZhUdccb92YoUDQUQRrbeujk4UVhHc/E/qLsmE1HXhr1ZcCH93o4bp3eZPwToLmmykeX7hf6umechKfeEIs5MuRe1JiTp2oyr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e0pVF4r0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C7AC4CEE6;
-	Fri, 14 Feb 2025 02:01:53 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=RMKBJJOaEl/E35aW/aSq0aHO62nV3YU3UOx6+Av0fDO9Zvk5RmauDw4KLi/qtTx9N+n8vgKXGAMi7zxnM5r2fVXUCLLNa/lEdrSQJP/XLRQj5eTi6en+uQ+KKXOsIrK9jhhG7gtCt0558fsTasWggZDAd4pb0JVPhzACIUphOS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XnBQ65VS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDEFC4CEE2;
+	Fri, 14 Feb 2025 02:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739498516;
-	bh=KthAFJE+SIF0dLE8S413GLUMvpdlQLSkbZ+hUct3NSo=;
+	s=k20201202; t=1739498520;
+	bh=qo7H32r2wNGTMfrlNHz8kGfdEKw9RWzoZiLjbar4AvM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=e0pVF4r0fPdJWZkdIAgGuco0x/z7Shv/1wDuVq3xQo5zTEOtr/C9jV/WMYh3tJ3sA
-	 u0F/4LXoqIgGTp4xXLGnIVYcWIIFeCxP716BzyzXLJEiHiVUxlIYtA1qtn0UMgEWPI
-	 k7jeHjSbNtf9Rl6/UX9I5p0Q+Vg7I97wV71kufdQhPA0mV20DYVo81xY8fKAPp3sDm
-	 ZfOC+6KXLJtmvF21LH86Rc+7cgzj1Jg3Y0C8TU8k+S4aIBQJItqpbtOI0gYu9xO6us
-	 +8NxKSXwe9ZQZX3UKwRjcs5P0/Cf72w343Ep5sR9mLBvGdod03P9jd6aCtWkLU5W/0
-	 PCgn8Io/xhTiQ==
+	b=XnBQ65VS3I9bj1mX7Papiv+X1zToHxd9KnjRGEJ7IXKWZylSISiliUW4nLzRdHCDj
+	 nEd5+GPztDi2XRZL8B0/pi/8cbRQDdYUYX/vnZq5/4YzpwbKvzXZA6h6kd4YfMx6PR
+	 cABwfP1JO4HMYm+Mf15SWaIBK9Ntf35BP12kM6NSnzzmRr2Zkf8bWTpETQj0LSkfzj
+	 +5qX6mHzk+4GQQBgfrtsPYEeOxX1aAZeujtnzV79c+s36/wUrgZxGs4aahkwr4p1Co
+	 c9bqFxHy8jD9nY4pJhlIGPYBDtlzJEUdCGYjPdFL1WmhrJWmkFUQMJuOOp97ZUmS2O
+	 dV0IkHyWCfGdQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Fri, 14 Feb 2025 01:57:58 +0000
-Subject: [PATCH v4 15/27] KVM: arm64: Support SME control registers
+Date: Fri, 14 Feb 2025 01:57:59 +0000
+Subject: [PATCH v4 16/27] KVM: arm64: Support TPIDR2_EL0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250214-kvm-arm64-sme-v4-15-d64a681adcc2@kernel.org>
+Message-Id: <20250214-kvm-arm64-sme-v4-16-d64a681adcc2@kernel.org>
 References: <20250214-kvm-arm64-sme-v4-0-d64a681adcc2@kernel.org>
 In-Reply-To: <20250214-kvm-arm64-sme-v4-0-d64a681adcc2@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
@@ -66,133 +66,120 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-1b0d6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4930; i=broonie@kernel.org;
- h=from:subject:message-id; bh=KthAFJE+SIF0dLE8S413GLUMvpdlQLSkbZ+hUct3NSo=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnrqPMmUgNls9piz0lfXFaB9EN3Q69vysm8e9EJxGl
- ESzaXtiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ66jzAAKCRAk1otyXVSH0GfqB/
- 95txGd53UM9kLA6r0WdXratLvhDq7IoeWhql2U4CS8mxzIFKOks7tBOVNqZtuyH43abC/KusibJQQq
- 3PgG3PXkXCQL+hKZ3Fa54FoNosibLFeU3EQIsM533fwZ08GZa8+09BeuhQKXcF+KhTts2DdVusIGAZ
- UHj4SrD0z9+8GffzhpLND9I6CVkq9xCnEEYrXr3YS1YxsH07XUSOceX49E8xYwDJ5IzG7bpBxxE/h7
- EuUu3JIqDHFVX5cM7N9HfZabiYaH6BWLxkVMh8ZvtZghGdy6knR7XnhL2mT5Z6lexucQrlTa85yqV2
- ZoS+pAvSTgwExEEMfC2jjWtSkEwr5Y
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4417; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=qo7H32r2wNGTMfrlNHz8kGfdEKw9RWzoZiLjbar4AvM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnrqPMohFUruQXcfEwUEo2WbpxUFeA8eoszM/LB2R2
+ Wn3sry6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ66jzAAKCRAk1otyXVSH0AjRB/
+ 0TV9UwGhtStHLdnu+w9DOtSEGUUBG38XDsYXOrUG7Wajl8rAeuih8YH2ru0KxeIseo1caarpwjXKId
+ /wY1Ua6NBOggNlXFg4nTzkaMIyAO0pCOSQchazJAdt30QQzTwmJ6ZGwdO+snar4yH0Makm4JUv9nd3
+ SqQZStsNm+QSz01uAW3ZuoOdU2FlY29SM9UfRWtctXkS/ti1JqK1c7QoL5HowkXiffZrG05MCt9OoG
+ k2UB0Gv4zolvhAw/CTchv5O3rpxazHSqP2ZKzQOLwfim/Mc5djh3pVBk++lIcG+rcQCq3rLOrBjUSw
+ EXf4uj8VQEQFhgp377gS/TgJmLjUsh
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-SME is configured by the system registers SMCR_EL1 and SMCR_EL2, add
-definitions and userspace access for them.  These control the SME vector
-length in a manner similar to that for SVE and also have feature enable
-bits for SME2 and FA64.  A subsequent patch will add management of them
-for guests as part of the general floating point context switch, as is
-done for the equivalent SVE registers.
+SME adds a new thread ID register, TPIDR2_EL0. This is used in userspace
+for delayed saving of the ZA state but in terms of the architecture is
+not really connected to SME other than being part of FEAT_SME. It has an
+independent fine grained trap and the runtime connection with the rest
+of SME is purely software defined.
+
+Expose the register as a system register if the guest supports SME,
+context switching it along with the other EL0 TPIDRs.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_host.h     |  2 ++
- arch/arm64/include/asm/vncr_mapping.h |  1 +
- arch/arm64/kvm/sys_regs.c             | 37 ++++++++++++++++++++++++++++++++++-
- 3 files changed, 39 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/kvm_host.h          |  1 +
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 15 +++++++++++++++
+ arch/arm64/kvm/sys_regs.c                  |  9 ++++++---
+ 3 files changed, 22 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 5cc1014120ca6de249093b3e34437a99bc8bf935..f987698f88acf7b01e08e44b46a0982e36cced95 100644
+index f987698f88acf7b01e08e44b46a0982e36cced95..c770ed6138164fcd3e11b8517ef4120b4f4486b9 100644
 --- a/arch/arm64/include/asm/kvm_host.h
 +++ b/arch/arm64/include/asm/kvm_host.h
-@@ -485,6 +485,7 @@ enum vcpu_sysreg {
- 	CPTR_EL2,	/* Architectural Feature Trap Register (EL2) */
- 	HACR_EL2,	/* Hypervisor Auxiliary Control Register */
- 	ZCR_EL2,	/* SVE Control Register (EL2) */
-+	SMCR_EL2,	/* SME Control Register (EL2) */
- 	TTBR0_EL2,	/* Translation Table Base Register 0 (EL2) */
- 	TTBR1_EL2,	/* Translation Table Base Register 1 (EL2) */
- 	TCR_EL2,	/* Translation Control Register (EL2) */
-@@ -522,6 +523,7 @@ enum vcpu_sysreg {
- 	VNCR(ACTLR_EL1),/* Auxiliary Control Register */
- 	VNCR(CPACR_EL1),/* Coprocessor Access Control */
- 	VNCR(ZCR_EL1),	/* SVE Control */
-+	VNCR(SMCR_EL1),	/* SME Control */
- 	VNCR(TTBR0_EL1),/* Translation Table Base Register 0 */
- 	VNCR(TTBR1_EL1),/* Translation Table Base Register 1 */
- 	VNCR(TCR_EL1),	/* Translation Control Register */
-diff --git a/arch/arm64/include/asm/vncr_mapping.h b/arch/arm64/include/asm/vncr_mapping.h
-index 4f9bbd4d6c2671753124599475e5138bf6b9c749..74fc7400efbc7de6b8dd81a485f1e9d545baf7a9 100644
---- a/arch/arm64/include/asm/vncr_mapping.h
-+++ b/arch/arm64/include/asm/vncr_mapping.h
-@@ -42,6 +42,7 @@
- #define VNCR_HDFGWTR_EL2	0x1D8
- #define VNCR_ZCR_EL1            0x1E0
- #define VNCR_HAFGRTR_EL2	0x1E8
-+#define VNCR_SMCR_EL1		0x1F0
- #define VNCR_TTBR0_EL1          0x200
- #define VNCR_TTBR1_EL1          0x210
- #define VNCR_FAR_EL1            0x220
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index 49b7844af8a19467e7842347c4b05ceb44c4caaf..597d6a33826d001268d53174581ef8e61e7dd946 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -142,6 +142,7 @@ static bool get_el2_to_el1_mapping(unsigned int reg,
- 		MAPPED_EL2_SYSREG(ELR_EL2,     ELR_EL1,	    NULL	     );
- 		MAPPED_EL2_SYSREG(SPSR_EL2,    SPSR_EL1,    NULL	     );
- 		MAPPED_EL2_SYSREG(ZCR_EL2,     ZCR_EL1,     NULL	     );
-+		MAPPED_EL2_SYSREG(SMCR_EL2,    SMCR_EL1,    NULL	     );
- 		MAPPED_EL2_SYSREG(CONTEXTIDR_EL2, CONTEXTIDR_EL1, NULL	     );
- 	default:
- 		return false;
-@@ -2429,6 +2430,37 @@ static bool access_zcr_el2(struct kvm_vcpu *vcpu,
- 	return true;
+@@ -429,6 +429,7 @@ enum vcpu_sysreg {
+ 	CSSELR_EL1,	/* Cache Size Selection Register */
+ 	TPIDR_EL0,	/* Thread ID, User R/W */
+ 	TPIDRRO_EL0,	/* Thread ID, User R/O */
++	TPIDR2_EL0,	/* Thread ID, Register 2 */
+ 	TPIDR_EL1,	/* Thread ID, Privileged */
+ 	CNTKCTL_EL1,	/* Timer Control Register (EL1) */
+ 	PAR_EL1,	/* Physical Address Register */
+diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+index 7a4ad8a4c3727e4628b375cbefc5e0d3533687de..8141e4785161d0f610f1aa161d8448ca2f50312c 100644
+--- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
++++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+@@ -81,6 +81,17 @@ static inline u64 *ctxt_mdscr_el1(struct kvm_cpu_context *ctxt)
+ 	return &ctxt_sys_reg(ctxt, MDSCR_EL1);
  }
  
-+static unsigned int sme_el2_visibility(const struct kvm_vcpu *vcpu,
-+				       const struct sys_reg_desc *rd)
++static inline bool ctxt_has_sme(struct kvm_cpu_context *ctxt)
 +{
-+	return __el2_visibility(vcpu, rd, sme_visibility);
++	struct kvm_vcpu *vcpu;
++
++	if (!system_supports_sme())
++		return false;
++
++	vcpu = ctxt_to_vcpu(ctxt);
++	return kvm_has_sme(kern_hyp_va(vcpu->kvm));
 +}
 +
-+static bool access_smcr_el2(struct kvm_vcpu *vcpu,
-+			    struct sys_reg_params *p,
-+			    const struct sys_reg_desc *r)
-+{
-+	unsigned int vq;
-+	u64 smcr;
-+
-+	if (guest_hyp_sve_traps_enabled(vcpu)) {
-+		kvm_inject_nested_sve_trap(vcpu);
-+		return true;
-+	}
-+
-+	if (!p->is_write) {
-+		p->regval = vcpu_read_sys_reg(vcpu, SMCR_EL2);
-+		return true;
-+	}
-+
-+	smcr = p->regval;
-+	vq = SYS_FIELD_GET(SMCR_ELx, LEN, smcr) + 1;
-+	vq = min(vq, vcpu_sme_max_vq(vcpu));
-+	vcpu_write_sys_reg(vcpu, SYS_FIELD_PREP(SMCR_ELx, LEN, vq - 1),
-+			   SMCR_EL2);
-+	return true;
-+}
-+
- static unsigned int s1poe_visibility(const struct kvm_vcpu *vcpu,
- 				     const struct sys_reg_desc *rd)
+ static inline void __sysreg_save_common_state(struct kvm_cpu_context *ctxt)
  {
-@@ -2695,7 +2727,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
- 	{ SYS_DESC(SYS_ZCR_EL1), NULL, reset_val, ZCR_EL1, 0, .visibility = sve_visibility },
- 	{ SYS_DESC(SYS_TRFCR_EL1), undef_access },
- 	{ SYS_DESC(SYS_SMPRI_EL1), undef_access },
--	{ SYS_DESC(SYS_SMCR_EL1), undef_access },
-+	{ SYS_DESC(SYS_SMCR_EL1), NULL, reset_val, SMCR_EL1, 0, .visibility = sme_visibility },
- 	{ SYS_DESC(SYS_TTBR0_EL1), access_vm_reg, reset_unknown, TTBR0_EL1 },
- 	{ SYS_DESC(SYS_TTBR1_EL1), access_vm_reg, reset_unknown, TTBR1_EL1 },
- 	{ SYS_DESC(SYS_TCR_EL1), access_vm_reg, reset_val, TCR_EL1, 0 },
-@@ -3047,6 +3079,9 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 	*ctxt_mdscr_el1(ctxt)	= read_sysreg(mdscr_el1);
+@@ -94,6 +105,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+ {
+ 	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
+ 	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
++	if (ctxt_has_sme(ctxt))
++		ctxt_sys_reg(ctxt, TPIDR2_EL0)	= read_sysreg_s(SYS_TPIDR2_EL0);
+ }
  
- 	EL2_REG_VNCR(HCRX_EL2, reset_val, 0),
+ static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
+@@ -163,6 +176,8 @@ static inline void __sysreg_restore_user_state(struct kvm_cpu_context *ctxt)
+ {
+ 	write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL0),	tpidr_el0);
+ 	write_sysreg(ctxt_sys_reg(ctxt, TPIDRRO_EL0),	tpidrro_el0);
++	if (ctxt_has_sme(ctxt))
++		write_sysreg_s(ctxt_sys_reg(ctxt, TPIDR2_EL0), SYS_TPIDR2_EL0);
+ }
  
-+	EL2_REG_FILTERED(SMCR_EL2, access_smcr_el2, reset_val, 0,
-+			 sme_el2_visibility),
+ static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt,
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 597d6a33826d001268d53174581ef8e61e7dd946..eece67141480b8d4bbd2bac0f02f9208c7f86f8b 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -2901,7 +2901,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 	  .visibility = s1poe_visibility },
+ 	{ SYS_DESC(SYS_TPIDR_EL0), NULL, reset_unknown, TPIDR_EL0 },
+ 	{ SYS_DESC(SYS_TPIDRRO_EL0), NULL, reset_unknown, TPIDRRO_EL0 },
+-	{ SYS_DESC(SYS_TPIDR2_EL0), undef_access },
++	{ SYS_DESC(SYS_TPIDR2_EL0), NULL, reset_unknown, TPIDR2_EL0,
++	  .visibility = sme_visibility},
+ 
+ 	{ SYS_DESC(SYS_SCXTNUM_EL0), undef_access },
+ 
+@@ -5033,8 +5034,7 @@ void kvm_calculate_traps(struct kvm_vcpu *vcpu)
+ 				       HFGxTR_EL2_nMAIR2_EL1		|
+ 				       HFGxTR_EL2_nS2POR_EL1		|
+ 				       HFGxTR_EL2_nACCDATA_EL1		|
+-				       HFGxTR_EL2_nSMPRI_EL1_MASK	|
+-				       HFGxTR_EL2_nTPIDR2_EL0_MASK);
++				       HFGxTR_EL2_nSMPRI_EL1_MASK);
+ 
+ 	if (!kvm_has_feat(kvm, ID_AA64ISAR0_EL1, TLB, OS))
+ 		kvm->arch.fgu[HFGITR_GROUP] |= (HFGITR_EL2_TLBIRVAALE1OS|
+@@ -5089,6 +5089,9 @@ void kvm_calculate_traps(struct kvm_vcpu *vcpu)
+ 						HFGITR_EL2_nBRBIALL);
+ 	}
+ 
++	if (!kvm_has_feat(kvm, ID_AA64PFR1_EL1, SME, IMP))
++		kvm->arch.fgu[HFGxTR_GROUP] |= HFGxTR_EL2_nTPIDR2_EL0;
 +
- 	EL2_REG(TTBR0_EL2, access_rw, reset_val, 0),
- 	EL2_REG(TTBR1_EL2, access_rw, reset_val, 0),
- 	EL2_REG(TCR_EL2, access_rw, reset_val, TCR_EL2_RES1),
+ 	set_bit(KVM_ARCH_FLAG_FGU_INITIALIZED, &kvm->arch.flags);
+ out:
+ 	mutex_unlock(&kvm->arch.config_lock);
 
 -- 
 2.39.5
