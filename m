@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-26640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1AECA35A0E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 10:19:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1C04A35A0F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 10:19:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5B973A3B32
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 09:19:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57B831883468
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2025 09:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB3622D7AC;
-	Fri, 14 Feb 2025 09:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49B222F165;
+	Fri, 14 Feb 2025 09:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Zn0zKRQO"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PPEEy3b8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60440151983;
-	Fri, 14 Feb 2025 09:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC9222E405;
+	Fri, 14 Feb 2025 09:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739524756; cv=none; b=iB1YaG2HzIBF+imb3zgY0wEXU56tvLxYShbEsf4QwXQ8gwPV4haqVyoU2k1XXXwb53E41ZasSS4JGJMW/epUcAi5EV23u4wQiskUnB3nW+G9DvstHEnGahbvRoJdBLMVsumj24DzxwTdvK0Zo7Oz1SMuKlBif+dV/8sxRDBWIok=
+	t=1739524759; cv=none; b=RqHnQvKLhHefVjiwL5XBhkWbE1poNbZR2bM4g34aAu8e4XadhHC4XTIJ1fwAy3b4Ry/l5HZm5KrdQEw5gkWIfD+sY80AEqQLP5+M9gsOYNpSycfEtjzwqA5hPyREsNnSlUA3CLYYLKECkU9qfE81kw4pye4YsNRt7+AyCO7WWII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739524756; c=relaxed/simple;
-	bh=1glHOL5Pzw+8f9Vi4dPnvjKUnZdK+7Gma6tpPN5wtZ4=;
+	s=arc-20240116; t=1739524759; c=relaxed/simple;
+	bh=R4TKYRupVCB93Gl+1MTFKEaO6m65aWCRnFvBqyADbJU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rq5l8P4FiUBd9F6FRRL/O2tg7c8/eKMLeONVZfZfxPXZYCzRDd99GQwhYST4Hj+u5jXeKz7U6+O32cUX+AKCXS3iN0OCJjWxi1srZvdX23kBnmwQ+qCFqpmuPVj30zlw1fp8y+tAutPcx5fA3BDDhZ6+Y3EaXgHrdLB6pyvimfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Zn0zKRQO; arc=none smtp.client-ip=117.135.210.2
+	 MIME-Version; b=eUCL0kkER63MvDmpmZQuyZy/NYV1cpt9wrUQg/buNtQYwQXpf8xrSvk60/OrC3IdaGRxcMsC7htsfR0T6b/Mua4GEyGtgXqdaEk1SY78fwKJdbVriIlNTCqUKbBJOcTiRhzTfWWGj3IXr/cS7Npqb3PqdrjSydnpJQdzYBIixSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PPEEy3b8; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=r/Nie
-	Ukngw1Ng7zjztWXdhTdNUKCYe7Tq1fFu04keqs=; b=Zn0zKRQOcnRnto2Gzonso
-	q2kZzTc51LUcEUkD1KxJ383fLZa39Ux9lYhHyPZu44qbeIiFdf/xF4obOv+Q75Lx
-	angFuFCokf/ma/Slj7ZxA222Dm3EZ0cOaz6lB/ghzniLKMm+x3p5eB1qwX56rRfz
-	RzzRAm/UzSdLiC3CUPcqPA=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=tPPMm
+	Jd3CtmVukZjPNPlyzL9MmDEtdrVNqX16QbV6Rg=; b=PPEEy3b8m9J3ZMnqXBX5O
+	E2BE7OvPZHSflGzWfGdubpinBEH59yILnHpsiIBR0R6sX+y2kAx9mwpYn4nOtwm0
+	duhkR9h9OhaqfRbGu2XatEWL7zDIGglpblFm3TuCfIK6bGEyHHeyCtvqyvLyNQdG
+	Fc3Nhd50eYY+Iu6JWEd6mU=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wD3N0RjCq9nqR1PMA--.3071S4;
-	Fri, 14 Feb 2025 17:18:32 +0800 (CST)
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wD3N0RjCq9nqR1PMA--.3071S5;
+	Fri, 14 Feb 2025 17:18:34 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -56,9 +56,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	mykolal@fb.com,
 	shuah@kernel.org,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf-next v3 2/3] selftests/bpf: Introduce __load_if_JITed annotation for tests
-Date: Fri, 14 Feb 2025 17:18:22 +0800
-Message-ID: <20250214091823.46042-3-mrpre@163.com>
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add selftest for may_goto
+Date: Fri, 14 Feb 2025 17:18:23 +0800
+Message-ID: <20250214091823.46042-4-mrpre@163.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250214091823.46042-1-mrpre@163.com>
 References: <20250214091823.46042-1-mrpre@163.com>
@@ -69,122 +69,101 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3N0RjCq9nqR1PMA--.3071S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWF17ZF1xAFWDJr4kAr17trb_yoWrJr4rpF
-	y8Ga4YkrWxJF13XFyxJa1UWFWfKr1kWrWfAF1jgrsYyws8Xas7XF4xK3yagFn8Xr4rWrn8
-	AasY9w45urykAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziyrWrUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxnzp2evAb7UygAAs-
+X-CM-TRANSID:_____wD3N0RjCq9nqR1PMA--.3071S5
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KryUtFyDCF18Cw4fGr4fAFb_yoW5Jr18p3
+	s7Xasakr18Xw1xKw1xGFWkGFyrZF4kZr1YkFyfXr15JFnrJFn7WFn2kF9rXrsIyFs3Zw4Y
+	vFWqyFZxGw4UJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRMrWrUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxTzp2evAb7U8AAAsI
 
-In some cases, the verification logic under the interpreter and JIT
-differs, such as may_goto, and the test program behaves differently under
-different runtime modes, requiring separate verification logic for each
-result.
+Added test cases to ensure that programs with stack sizes exceeding 512
+bytes are restricted in non-JITed mode, and can be executed normally in
+JITed mode, even with stack sizes exceeding 512 bytes due to the presence
+of may_goto instructions.
 
-Introduce __load_if_JITed and __load_if_no_JITed annotation for tests.
+Test result:
+echo "0" > /proc/sys/net/core/bpf_jit_enable
+./test_progs -t verifier_stack_ptr
+...
+stack size 512 with may_goto with jit:SKIP
+stack size 512 with may_goto without jit:OK
+...
+Summary: 1/27 PASSED, 25 SKIPPED, 0 FAILED
+
+echo "1" > /proc/sys/net/core/bpf_jit_enable
+./test_progs -t verifier_stack_ptr
+...
+stack size 512 with may_goto with jit:OK
+stack size 512 with may_goto without jit:SKIP
+...
+Summary: 1/27 PASSED, 25 SKIPPED, 0 FAILED
 
 Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h |  2 ++
- tools/testing/selftests/bpf/test_loader.c    | 26 ++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ .../selftests/bpf/progs/verifier_stack_ptr.c  | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index f45f4352feeb..a40d5c0040ec 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -135,6 +135,8 @@
- #define __arch_arm64		__arch("ARM64")
- #define __arch_riscv64		__arch("RISCV64")
- #define __caps_unpriv(caps)	__attribute__((btf_decl_tag("comment:test_caps_unpriv=" EXPAND_QUOTE(caps))))
-+#define __load_if_JITed()	__attribute__((btf_decl_tag("comment:load_mode=jited")))
-+#define __load_if_no_JITed()	__attribute__((btf_decl_tag("comment:load_mode=no_jited")))
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
+index 417c61cd4b19..24aabc6083fd 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
+@@ -481,4 +481,56 @@ l1_%=:	r0 = 42;					\
+ 	: __clobber_all);
+ }
  
- /* Define common capabilities tested using __caps_unpriv */
- #define CAP_NET_ADMIN		12
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 53b06647cf57..4d23a9c463ee 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -37,6 +37,7 @@
- #define TEST_TAG_JITED_PFX "comment:test_jited="
- #define TEST_TAG_JITED_PFX_UNPRIV "comment:test_jited_unpriv="
- #define TEST_TAG_CAPS_UNPRIV "comment:test_caps_unpriv="
-+#define TEST_TAG_LOAD_MODE_PFX "comment:load_mode="
- 
- /* Warning: duplicated in bpf_misc.h */
- #define POINTER_VALUE	0xcafe4all
-@@ -55,6 +56,11 @@ enum mode {
- 	UNPRIV = 2
- };
- 
-+enum load_mode {
-+	JITED		= 1 << 0,
-+	NO_JITED	= 1 << 1,
-+};
++SEC("socket")
++__description("PTR_TO_STACK stack size > 512")
++__failure __msg("invalid write to stack R1 off=-520 size=8")
++__naked void stack_check_size_gt_512(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -520;					\
++	r0 = 42;					\
++	*(u64*)(r1 + 0) = r0;				\
++	exit;						\
++"	::: __clobber_all);
++}
 +
- struct expect_msg {
- 	const char *substr; /* substring match */
- 	regex_t regex;
-@@ -87,6 +93,7 @@ struct test_spec {
- 	int prog_flags;
- 	int mode_mask;
- 	int arch_mask;
-+	int load_mask;
- 	bool auxiliary;
- 	bool valid;
- };
-@@ -406,6 +413,7 @@ static int parse_test_spec(struct test_loader *tester,
- 	bool collect_jit = false;
- 	int func_id, i, err = 0;
- 	u32 arch_mask = 0;
-+	u32 load_mask = 0;
- 	struct btf *btf;
- 	enum arch arch;
- 
-@@ -580,10 +588,22 @@ static int parse_test_spec(struct test_loader *tester,
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
-+		} else if (str_has_pfx(s, TEST_TAG_LOAD_MODE_PFX)) {
-+			val = s + sizeof(TEST_TAG_LOAD_MODE_PFX) - 1;
-+			if (strcmp(val, "jited") == 0) {
-+				load_mask = JITED;
-+			} else if (strcmp(val, "no_jited") == 0) {
-+				load_mask = NO_JITED;
-+			} else {
-+				PRINT_FAIL("bad load spec: '%s'", val);
-+				err = -EINVAL;
-+				goto cleanup;
-+			}
- 		}
- 	}
- 
- 	spec->arch_mask = arch_mask ?: -1;
-+	spec->load_mask = load_mask ?: (JITED | NO_JITED);
- 
- 	if (spec->mode_mask == 0)
- 		spec->mode_mask = PRIV;
-@@ -928,6 +948,7 @@ void run_subtest(struct test_loader *tester,
- 		 bool unpriv)
- {
- 	struct test_subspec *subspec = unpriv ? &spec->unpriv : &spec->priv;
-+	int current_runtime = is_jit_enabled() ? JITED : NO_JITED;
- 	struct bpf_program *tprog = NULL, *tprog_iter;
- 	struct bpf_link *link, *links[32] = {};
- 	struct test_spec *spec_iter;
-@@ -946,6 +967,11 @@ void run_subtest(struct test_loader *tester,
- 		return;
- 	}
- 
-+	if ((current_runtime & spec->load_mask) == 0) {
-+		test__skip();
-+		return;
-+	}
++#ifdef __BPF_FEATURE_MAY_GOTO
++SEC("socket")
++__description("PTR_TO_STACK stack size 512 with may_goto with jit")
++__load_if_JITed()
++__success __retval(42)
++__naked void stack_check_size_512_with_may_goto_jit(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -512;					\
++	r0 = 42;					\
++	*(u32*)(r1 + 0) = r0;				\
++	may_goto l0_%=;					\
++	r2 = 100;					\
++	l0_%=:						\
++	exit;						\
++"	::: __clobber_all);
++}
 +
- 	if (unpriv) {
- 		if (!can_execute_unpriv(tester, spec)) {
- 			test__skip();
++SEC("socket")
++__description("PTR_TO_STACK stack size 512 with may_goto without jit")
++__load_if_no_JITed()
++__failure __msg("stack size 520(extra 8) is too large")
++__naked void stack_check_size_512_with_may_goto(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -512;					\
++	r0 = 42;					\
++	*(u32*)(r1 + 0) = r0;				\
++	may_goto l0_%=;					\
++	r2 = 100;					\
++	l0_%=:						\
++	exit;						\
++"	::: __clobber_all);
++}
++#endif
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.47.1
 
