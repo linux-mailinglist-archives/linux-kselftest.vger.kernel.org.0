@@ -1,145 +1,862 @@
-Return-Path: <linux-kselftest+bounces-26718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0DBA36F0E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 16:21:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9279CA37039
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 19:51:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E9D37A334F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 15:21:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 400D41703B4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 18:51:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356481DDC2C;
-	Sat, 15 Feb 2025 15:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502DF1EDA23;
+	Sat, 15 Feb 2025 18:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ECzYN6xI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCCkP0o2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803A11B532F;
-	Sat, 15 Feb 2025 15:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10F91F4180;
+	Sat, 15 Feb 2025 18:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739632913; cv=none; b=oeakw6D7rTNXz0/uadIYlxD3Tmm8PKRi3kWStoVtzjDCA7CSfJ/TiHIpEznxEX3HPvoCnh5aZpLxmGZXkO6fot7UvSEWfWo1Rxec0t8dBYm4pmIUSpfVYNqAlmSiN/fwwMUG7bsxsM6+VfeI8k6VnvRGabpuWaVbLfY74r0YfMQ=
+	t=1739645487; cv=none; b=tKqWsuHvtMWZ1jzfiLO+4lTcxdT5ElRrKmxKHO+Kcu/m6CHbvdocBqsxLzNLBwlIAKkw+Y5BXAHWq/0a1cg5Iilg9JnhiQn9fFs2HEDe49kDG1dtBaMNDk28qwrTk797gdFzuEm5A8eilNQOCJM42ScxffFg5C5+zdHy3HDASoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739632913; c=relaxed/simple;
-	bh=qhDazyfT4fXyQ55ZFc7/xhm33sFszSOfjFQXOuGirLY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=VSfSuIadiLkyBPNPi1T2DiiSAI5atf3IGP35y2PzErHgkAjnVIyu/xLEwP3CnS/jHY7A7lBGiMz8ZDKllueXU/w7vp5HIqJlRljzcAwsgaUoIi2RJQhLOGlaFhr8xR3yWc/5tKKGGaGojKoBMeqZmyROnpK+G6EIAHw4OsmjmZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ECzYN6xI; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c077c9cbb9so249482585a.1;
-        Sat, 15 Feb 2025 07:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739632910; x=1740237710; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lMmFW9JrhGDdKsX2kiJjysOLPKZHgx5YbIzP9n3YrVc=;
-        b=ECzYN6xIX7c09baMp1hCDYfACmNyT+riShIJBNgCTIrTdYdXgPIdppEt7YYKvSVkOl
-         qjcBUi4Yb9fFOzBk39R7QzUHxsZTGfZibcKN5KqpZytAuFS0t9grsdy2xS9lzWRG3TwW
-         Z0Njlxhs5U10WSJ2kQa1fNT+/Tmop8lyp5XpNAfg9FLmDHhehQdmF4N0GNRT//MwNbhZ
-         +CxC4AxksU3Idcror5ZsgSMAyc3O2m7fMJH4rRrDrdRmyrC/lKHShNlzTQsIXLTIJDJ3
-         wRpP5NvJRyMSBcN8PJKNXg9UGijAqNnzm8GIe43rBYYtrAsxKuHsopDgD0oUgueu3P4X
-         sCwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739632910; x=1740237710;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lMmFW9JrhGDdKsX2kiJjysOLPKZHgx5YbIzP9n3YrVc=;
-        b=EisqNisXeTQtJJ1jsp+EqyAEA7kcyfi44yoZlvKo4zzm45Lq6AIBDvRgtdLFjCbseF
-         32EaoAkqA3zPEfATUFGzuM3joBm2V5BbmHhLn6rkiOAa9wt7Pe4HkhzgVyTxvmvK0zpp
-         b/HxjudtKFcc8U1tSWLXXjw8q7TmyUI7oz5OdI8wTpM1+MH1mlDnMTkFJs1uQZuHz3ft
-         ACTXOQ9bEjDO5pFH4ed6tVDIr0zZqGjg9HBo7K4dHdLWAX+qzb2I9c5mBtPp7lEk/XDT
-         qEVKRNyd2uVOw5nY/d7dsa+jclQYjuSZ9GxxqHLxu6tDnf0vsB2aNfyx8ksIiGPTPECb
-         wxNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWiO5nbAKOATO9dvyOphuLQDoeG9KoAQDNBOvucPoQm02NcQqGjIMdqlJnlZhpf49yOmiK+bkm0e5MAiI7GETw=@vger.kernel.org, AJvYcCWpG0ObZuv3nC/N59yVziLOkST4Az7Jz9L/A0Vwh4KDj29IOBumRB5AouijAUy/LiLntLDnPkz0@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZo+dPqDkedda4qmbQrcYetcszM6vAmiGYz2nsPLRJUvoBi5Xl
-	g792VdyegFj77Krt0ZWpJ8JbI5rJYFAGDkXSeOoSuLkAjRg/zJ3/
-X-Gm-Gg: ASbGncs+VTKRen+EF6ve5jegxBL12ESGkliIPLTXTdHTQ3i+DgnnsNU+YXe6tn3z51Q
-	LhHQf9vXzJ0feHJExQhdYQDAWyAmKTQTyl8fWj8KqddrezNBD9PFHY/ukiAOvJXog4iezqlKLe9
-	DopcifoSbYVTRTDU3oy9bZZMW8ra7apN5bbpkqZgsl5FbNpbMK6tpCjVOs8YD9c6e6FmTrZ6TZw
-	XVBsiOi9zf7gvMjWVZHY0zQmM1i4MwFw5K73gbRhNiSxFJMgd2nhVQG2oTRsKsdheyS3hFn+BWE
-	JQJWuyMtObw1a4VQDjhBNOwG4UxKNI22XFPJgVJH4MjJV5/0X5hUbFNgfcSaZYQ=
-X-Google-Smtp-Source: AGHT+IG5scF0mmUQW2RyZ3GmEoLcesENu3i2UpsNOTAMjxcvKEICQAtJy5/BHE9hAqFDiYO78xC4dQ==
-X-Received: by 2002:a05:620a:2496:b0:7b6:d5b2:e58 with SMTP id af79cd13be357-7c08b1568d2mr455733885a.18.1739632909676;
-        Sat, 15 Feb 2025 07:21:49 -0800 (PST)
-Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c07c6173f7sm324813585a.57.2025.02.15.07.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Feb 2025 07:21:49 -0800 (PST)
-Date: Sat, 15 Feb 2025 10:21:48 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Anna Emese Nyiri <annaemesenyiri@gmail.com>, 
- netdev@vger.kernel.org
-Cc: fejes@inf.elte.hu, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- willemb@google.com, 
- idosch@idosch.org, 
- horms@kernel.org, 
- davem@davemloft.net, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Anna Emese Nyiri <annaemesenyiri@gmail.com>
-Message-ID: <67b0b10cd4381_36e34429435@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250214205828.48503-1-annaemesenyiri@gmail.com>
-References: <20250214205828.48503-1-annaemesenyiri@gmail.com>
-Subject: Re: [PATCH net-next v3] selftests: net: add support for testing
- SO_RCVMARK and SO_RCVPRIORITY
+	s=arc-20240116; t=1739645487; c=relaxed/simple;
+	bh=63NUTSPkfjclQa984MAUwZu52tLXBqvoqpXpqYwVOIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g3nMr6DrLh9uk2SZVcF59R86XFB3aPjsx4jmlgPJSoNfGo8RraIG2KSat7R3vNaiDZjuQfdbFCKCAEPLxomL8FfOwVjoq/IIqWdxOvQGhoserV4DgkViVLPw+YYFbmr4vaxWg9/yGBW9VmpiRQ9QFGZNI7OGmNsruouAXr7jwAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCCkP0o2; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739645484; x=1771181484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=63NUTSPkfjclQa984MAUwZu52tLXBqvoqpXpqYwVOIM=;
+  b=hCCkP0o2ZBBe7Xzylpms/0cWVZPcYcLDzBBUJO5YMSC55y9IftwsK8hx
+   F8EvX1Qkm6r2g4fi+YMYW8y1WQk1xOcw/jz3NisYkoqE3XlkmaKg8kgo+
+   /JdwJRAjDfqgAOAE0s3zFXWz5FlS385TLQarS8/ol4xvKs4VhzX240eAU
+   H8uKgFSFj4XiRbGMVAsqcK5p0NdAWeZeq1qJ+vio5JjqHgJwELJ/WRiXH
+   pqMkmhiZHMjcTyRuDkLWA1MsejZOCUtJS4M+X5FDlZhqk11OigQNJvDix
+   xGvISZ13SdxKPwMjWov4JPNX6z6ypArxXmQibxEbsHngyEjGintbgP+C1
+   w==;
+X-CSE-ConnectionGUID: ROtn+BPnSsyKGV0jSrSofw==
+X-CSE-MsgGUID: G7Dh+hcBRaexeNPyMHHctg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="40234733"
+X-IronPort-AV: E=Sophos;i="6.13,289,1732608000"; 
+   d="scan'208";a="40234733"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 10:51:23 -0800
+X-CSE-ConnectionGUID: F8buz/y/Slq76GWXplLgzQ==
+X-CSE-MsgGUID: nuYRKGGATeSc1dKW7gmfuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,289,1732608000"; 
+   d="scan'208";a="144596655"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 15 Feb 2025 10:51:19 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tjNG0-001B5b-2T;
+	Sat, 15 Feb 2025 18:51:16 +0000
+Date: Sun, 16 Feb 2025 02:50:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tamir Duberstein <tamird@gmail.com>, David Gow <davidgow@google.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Tamir Duberstein <tamird@gmail.com>
+Subject: Re: [PATCH v8 3/4] scanf: convert self-test to KUnit
+Message-ID: <202502160245.KUrryBJR-lkp@intel.com>
+References: <20250214-scanf-kunit-convert-v8-3-5ea50f95f83c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250214-scanf-kunit-convert-v8-3-5ea50f95f83c@gmail.com>
 
-Anna Emese Nyiri wrote:
-> Introduce tests to verify the correct functionality of the SO_RCVMARK and 
-> SO_RCVPRIORITY socket options.
-> 
-> Key changes include:
-> 
-> - so_rcv_listener.c: Implements a receiver application to test the correct 
-> behavior of the SO_RCVMARK and SO_RCVPRIORITY options.
-> - test_so_rcv.sh: Provides a shell script to automate testing for these options.
-> - Makefile: Integrates test_so_rcv.sh into the kernel selftests.
-> 
-> v3:
-> 
-> - Add the C part to TEST_GEN_FILES.
-> - Ensure the test fails if no cmsg of type opt.name is received
-> in so_rcv_listener.c
-> - Rebased on net-next.
-> 
-> v2:
-> 
-> https://lore.kernel.org/netdev/20250210192216.37756-1-annaemesenyiri@gmail.com/
-> - Add the C part to TEST_GEN_PROGS and .gitignore.
-> - Modify buffer space and add IPv6 testing option
-> in so_rcv_listener.c.
-> - Add IPv6 testing, remove unnecessary comment,
-> add kselftest exit codes, run both binaries in a namespace,
-> and add sleep in test_so_rcv.sh.
-> The sleep was added to ensure that the listener process has
-> enough time to start before the sender attempts to connect.
-> - Rebased on net-next.
-> 
-> v1:
-> 
-> https://lore.kernel.org/netdev/20250129143601.16035-2-annaemesenyiri@gmail.com/
-> 
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Suggested-by: Ferenc Fejes <fejes@inf.elte.hu>
-> Signed-off-by: Anna Emese Nyiri <annaemesenyiri@gmail.com>
+Hi Tamir,
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 7b7a883c7f4de1ee5040bd1c32aabaafde54d209]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/scanf-implicate-test-line-in-failure-messages/20250215-002302
+base:   7b7a883c7f4de1ee5040bd1c32aabaafde54d209
+patch link:    https://lore.kernel.org/r/20250214-scanf-kunit-convert-v8-3-5ea50f95f83c%40gmail.com
+patch subject: [PATCH v8 3/4] scanf: convert self-test to KUnit
+config: sh-randconfig-002-20250216 (https://download.01.org/0day-ci/archive/20250216/202502160245.KUrryBJR-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250216/202502160245.KUrryBJR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502160245.KUrryBJR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from <command-line>:
+   lib/tests/scanf_kunit.c: In function 'numbers_list_ll':
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:390:9: note: in expansion of macro 'numbers_list_8'
+     390 |         numbers_list_8(unsigned long long, "%llu",   delim, "llu", check_ull);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:391:9: note: in expansion of macro 'numbers_list_8'
+     391 |         numbers_list_8(long long,          "%lld",   delim, "lld", check_ll);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:392:9: note: in expansion of macro 'numbers_list_8'
+     392 |         numbers_list_8(long long,          "%lld",   delim, "lli", check_ll);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:393:9: note: in expansion of macro 'numbers_list_8'
+     393 |         numbers_list_8(unsigned long long, "%llx",   delim, "llx", check_ull);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:394:9: note: in expansion of macro 'numbers_list_8'
+     394 |         numbers_list_8(unsigned long long, "0x%llx", delim, "llx", check_ull);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:395:9: note: in expansion of macro 'numbers_list_8'
+     395 |         numbers_list_8(long long,          "0x%llx", delim, "lli", check_ll);
+         |         ^~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c: In function 'numbers_list_l':
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_l' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:400:9: note: in expansion of macro 'numbers_list_8'
+     400 |         numbers_list_8(unsigned long,      "%lu",    delim, "lu", check_ulong);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_l' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:401:9: note: in expansion of macro 'numbers_list_8'
+     401 |         numbers_list_8(long,               "%ld",    delim, "ld", check_long);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_l' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:402:9: note: in expansion of macro 'numbers_list_8'
+     402 |         numbers_list_8(long,               "%ld",    delim, "li", check_long);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_l' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:403:9: note: in expansion of macro 'numbers_list_8'
+     403 |         numbers_list_8(unsigned long,      "%lx",    delim, "lx", check_ulong);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_l' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:404:9: note: in expansion of macro 'numbers_list_8'
+     404 |         numbers_list_8(unsigned long,      "0x%lx",  delim, "lx", check_ulong);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_l' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:405:9: note: in expansion of macro 'numbers_list_8'
+     405 |         numbers_list_8(long,               "0x%lx",  delim, "li", check_long);
+         |         ^~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c: In function 'numbers_list_d':
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_d' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:410:9: note: in expansion of macro 'numbers_list_8'
+     410 |         numbers_list_8(unsigned int,       "%u",     delim, "u", check_uint);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_d' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:411:9: note: in expansion of macro 'numbers_list_8'
+     411 |         numbers_list_8(int,                "%d",     delim, "d", check_int);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_d' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:412:9: note: in expansion of macro 'numbers_list_8'
+     412 |         numbers_list_8(int,                "%d",     delim, "i", check_int);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_d' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:413:9: note: in expansion of macro 'numbers_list_8'
+     413 |         numbers_list_8(unsigned int,       "%x",     delim, "x", check_uint);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_d' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:414:9: note: in expansion of macro 'numbers_list_8'
+     414 |         numbers_list_8(unsigned int,       "0x%x",   delim, "x", check_uint);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_d' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:415:9: note: in expansion of macro 'numbers_list_8'
+     415 |         numbers_list_8(int,                "0x%x",   delim, "i", check_int);
+         |         ^~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c: In function 'numbers_list_h':
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_h' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:420:9: note: in expansion of macro 'numbers_list_8'
+     420 |         numbers_list_8(unsigned short,     "%hu",    delim, "hu", check_ushort);
+         |         ^~~~~~~~~~~~~~
+>> include/linux/compiler.h:197:61: warning: function 'numbers_list_h' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:421:9: note: in expansion of macro 'numbers_list_8'
+     421 |         numbers_list_8(short,              "%hd",    delim, "hd", check_short);
+         |         ^~~~~~~~~~~~~~
+   include/linux/compiler.h:197:61: warning: function 'numbers_list_h' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:422:9: note: in expansion of macro 'numbers_list_8'
+     422 |         numbers_list_8(short,              "%hd",    delim, "hi", check_short);
+         |         ^~~~~~~~~~~~~~
+   include/linux/compiler.h:197:61: warning: function 'numbers_list_h' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                             ^
+   include/linux/compiler_types.h:522:23: note: in definition of macro '__compiletime_assert'
+     522 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:542:9: note: in expansion of macro '_compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:9: note: in expansion of macro 'BUILD_BUG_ON'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |         ^~~~~~~~~~~~
+   include/linux/compiler.h:202:33: note: in expansion of macro '__BUILD_BUG_ON_ZERO_MSG'
+     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: in expansion of macro '__must_be_array'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:333:22: note: in expansion of macro 'ARRAY_SIZE'
+     333 |         BUILD_BUG_ON(ARRAY_SIZE(arr) != 8);                                     \
+         |                      ^~~~~~~~~~
+   lib/tests/scanf_kunit.c:356:9: note: in expansion of macro 'test_array_8'
+     356 |         test_array_8(fn, expect, test_buffer, fmt_buffer, result);              \
+         |         ^~~~~~~~~~~~
+   lib/tests/scanf_kunit.c:423:9: note: in expansion of macro 'numbers_list_8'
+     423 |         numbers_list_8(unsigned short,     "%hx",    delim, "hx", check_ushort);
+         |         ^~~~~~~~~~~~~~
+   include/linux/compiler.h:197:61: warning: function 'numbers_list_h' might be a candidate for 'gnu_scanf' format attribute [-Wsuggest-attribute=format]
+     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+
+
+vim +197 include/linux/compiler.h
+
+230fa253df6352a Christian Borntraeger 2014-11-25  193  
+cb7380de9e4cbc9 Kees Cook             2025-02-05  194  #ifdef __CHECKER__
+cb7380de9e4cbc9 Kees Cook             2025-02-05  195  #define __BUILD_BUG_ON_ZERO_MSG(e, msg) (0)
+cb7380de9e4cbc9 Kees Cook             2025-02-05  196  #else /* __CHECKER__ */
+cb7380de9e4cbc9 Kees Cook             2025-02-05 @197  #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+cb7380de9e4cbc9 Kees Cook             2025-02-05  198  #endif /* __CHECKER__ */
+cb7380de9e4cbc9 Kees Cook             2025-02-05  199  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
