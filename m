@@ -1,101 +1,88 @@
-Return-Path: <linux-kselftest+bounces-26703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB725A36BE1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 05:00:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D47D1A36BF4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 05:11:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23C353B2CA0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 03:59:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32EF53A82DD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 04:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BD41624C4;
-	Sat, 15 Feb 2025 04:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11E818950A;
+	Sat, 15 Feb 2025 04:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPn5rvJ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gvp2Ukzw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07511158851;
-	Sat, 15 Feb 2025 04:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC5821345;
+	Sat, 15 Feb 2025 04:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739592004; cv=none; b=TNieF6UM9yVghEa259he/uNfW9dCr86xAX+0qJn7BoaDMK+hlXbJ277j61NkNJaEdkx4PJ4HK6bxVZEcHyy98uf7x6SPsim/Quz1wuhe0dH8OxcFWphAxPu6B22vmKteC3R4MCglnFp2/kOoDvROod1XcO0wIzmLMojrt8NIEuw=
+	t=1739592707; cv=none; b=DnARY+RAMJNWUuSSEjgmbGC4esGuzq75pl24YIoe7j+YL4UrmC/wr/zZ1yM8FG0Rg8ym1a/OEvmWbJZCXf8IIY16c60UClivt3vjEHunhg242kO+tbAMg2pktOmrRiMDS73jCQMxjU2owg003oXhPAt2zbyHXNVuI7wjL/c042w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739592004; c=relaxed/simple;
-	bh=hCnQDWhtMnKn+5oJ5xMo1GoVUBOmPZ3ucfXjsqfaR+4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=m3TdSuO7AZsgfMsFU1IU7KXFCR5VJm/chFU8EDEcdZdqjMw7DM40uFbUZVJVUA1rS2Aihbs/rtlv6j96sxW/bfuyhFWfVYKbinOgvIva+DQ1q+0jwyYWHyjoCr+Y6uVD7Hx2Car8UEOMaq9hSxMIFfg+MmKMHxF0WDgZfq2bLsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPn5rvJ0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D92BC4CEE4;
-	Sat, 15 Feb 2025 04:00:03 +0000 (UTC)
+	s=arc-20240116; t=1739592707; c=relaxed/simple;
+	bh=J01rv0Vc3764uz0oZ4ZqAFwsv9wb2ZQedlgpcHJ03p8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VxskeHShngKrkGtZbCnoP5vlxpP8+hGFycweFfk1q32989dyVJpzNHdZwgB+XMqg5r0CmqpsJyIRgyanjLaJBI2qkw5PFSUlTce97XsTLHNd33ISCF/EitDWObOAdQmGnBgHufH16GSS1hKxcAmvcCmZOnI6J4aCa+OI1/TiO0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gvp2Ukzw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6632AC4CEE4;
+	Sat, 15 Feb 2025 04:11:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739592003;
-	bh=hCnQDWhtMnKn+5oJ5xMo1GoVUBOmPZ3ucfXjsqfaR+4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=TPn5rvJ0QB4Ij9Lw2+Xhf13M4XsqJ/asNxGXJWKQ82VF/E+BhFY5YAhO5ZIgDTih5
-	 DJFqorUV+KH3qx04JSA5Q1m1qtXwXPZjPO0uTynpjtRKrIXqHPEi5GMdLdrK0MXXRb
-	 kJ2pZ4DRIaucCT22lCC4oqFryNNG5c6kYMh2l5k0HhtFHq6vvm8q4ZiRl9r8uhcWib
-	 8AZvkJdysVWVf8g3+jhJykkK/+zjsbSjbhPxBHx+TwxOSNeJelH3p4gq677a/rSEyA
-	 Lg5BtnqBH3LDcnASvmzWdtb/Qij8s9v1iyZDrPps0whDbCMklbEHfCx3W7zJnqfMVh
-	 j45pVk2vn/JrQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34CA7380CEE9;
-	Sat, 15 Feb 2025 04:00:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1739592706;
+	bh=J01rv0Vc3764uz0oZ4ZqAFwsv9wb2ZQedlgpcHJ03p8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Gvp2UkzwzR5C8A9qxtm8/T6+rG0KOQRN4YDjIAG0tn25BG/s39lq6qAfdOsElPKlR
+	 oYJDEi7WEUVL98U/3Pn/ls6MYzG4RoecWvw+iJKc6U1wASWV4CcUVlskKQ3EeZgNcc
+	 /athIuB7fXF8LvgGTgNM/eV6KqKIRbJKNI6vN7j3yCOpkMDrc00WSddBtkEVEtU//Q
+	 IQoIeJKJBPwlPqamiP0uXO4oUdzPQ7m0dLuhsKOmZskhZkHQ7p/ZYjRRyVJ+ITUw/v
+	 +JX/vRqS0xDoWgmLkfCiWhRDnenR1sWKyXUZUPAzD6eRbR8/hW2x4xeT+cryS+2fFn
+	 V88Km1UDighhA==
+Date: Fri, 14 Feb 2025 20:11:45 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Peter Seiderer <ps.report@gmx.net>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Artem Chernyshev
+ <artem.chernyshev@red-soft.ru>, Nam Cao <namcao@linutronix.de>, Frederic
+ Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH net-next v5 8/8] net: pktgen: use defines for the
+ various dec/hex number parsing digits lengths
+Message-ID: <20250214201145.2f824428@kernel.org>
+In-Reply-To: <20250213110025.1436160-9-ps.report@gmx.net>
+References: <20250213110025.1436160-1-ps.report@gmx.net>
+	<20250213110025.1436160-9-ps.report@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/3] bpf: Fix array bounds error with may_goto and
- add selftest
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173959203283.2185212.17551794379760846853.git-patchwork-notify@kernel.org>
-Date: Sat, 15 Feb 2025 04:00:32 +0000
-References: <20250214091823.46042-1-mrpre@163.com>
-In-Reply-To: <20250214091823.46042-1-mrpre@163.com>
-To: Jiayuan Chen <mrpre@163.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, linux-kselftest@vger.kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, 13 Feb 2025 12:00:25 +0100 Peter Seiderer wrote:
+> Use defines for the various dec/hex number parsing digits lengths
+> (hex32_arg/num_arg calls).
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I don't understand the value of this patch, TBH.
 
-On Fri, 14 Feb 2025 17:18:20 +0800 you wrote:
-> Syzbot caught an array out-of-bounds bug [1]. It turns out that when the
-> BPF program runs through do_misc_fixups(), it allocates an extra 8 bytes
-> on the call stack, which eventually causes stack_depth to exceed 512.
-> 
-> I was able to reproduce this issue probabilistically by enabling
-> CONFIG_UBSAN=y and disabling CONFIG_BPF_JIT_ALWAYS_ON with the selfttest
-> I provide in second patch(although it doesn't happen every time - I didn't
-> dig deeper into why UBSAN behaves this way).
-> 
-> [...]
+Example:
 
-Here is the summary with links:
-  - [bpf-next,v3,1/3] bpf: Fix array bounds error with may_goto
-    https://git.kernel.org/bpf/bpf-next/c/6ebc5030e0c5
-  - [bpf-next,v3,2/3] selftests/bpf: Introduce __load_if_JITed annotation for tests
-    https://git.kernel.org/bpf/bpf-next/c/b38c72ab808c
-  - [bpf-next,v3,3/3] selftests/bpf: Add selftest for may_goto
-    https://git.kernel.org/bpf/bpf-next/c/72266ee83fed
++#define HEX_2_DIGITS 2
 
-You are awesome, thank you!
+-		len = hex32_arg(&user_buffer[i], 2, &tmp_value);
++		len = hex32_arg(&user_buffer[i], HEX_2_DIGITS, &tmp_value);
+
+The word hex is already there.
+There is still a two.
+I don't think the new define has any explanatory power?
+
+Previous 7 patches look ready indeed.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
 
