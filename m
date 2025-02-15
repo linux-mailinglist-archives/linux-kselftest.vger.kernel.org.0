@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-26716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C59EDA36E4C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 14:02:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14782A36E52
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 14:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 134743A8405
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 13:01:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D05C9170F87
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2025 13:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D231A2545;
-	Sat, 15 Feb 2025 13:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5DD1A2545;
+	Sat, 15 Feb 2025 13:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B72rRaci"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UcSJPF+V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A34623;
-	Sat, 15 Feb 2025 13:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3068623;
+	Sat, 15 Feb 2025 13:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739624517; cv=none; b=gRnjCKMtAS5dtsw3taFkwId++FsTqt6rEPKYVi32cKCSXTQg9JStJwfMgFGgKYRwSFXC4VdtYdCZPf7o+QrbTMokTP0Ot6TZPCj9XOSaYUmQzKjIxjah3yUPYVQ0NE/k3KmjPPjQx6jq1QUIS+FD1LsRICI31yZ7Tx3KxCnHYUk=
+	t=1739624686; cv=none; b=jbO9dtpY4ius61L+K8D4nPz4vah1Q7bJjMstqJ3bluQ9MvJtl9AYHGmBQ7uCYiHp6cRAhZf7E/XNy9NmmpX0rCEo+iGhmbvnHyf5lYpKCrru7qwCWVhYjgf3Sr4kqvBxigfI54Qd2E185mmAwGpraceT31M9jMFi5tEWCuMU/v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739624517; c=relaxed/simple;
-	bh=yLJ2xFGq8f/gfg6NkwwjwmCBmrRbjJ1xnr113KsNsVk=;
+	s=arc-20240116; t=1739624686; c=relaxed/simple;
+	bh=UWYnF2e2+P6Y/sAgEbI3iKHOLh7pG3OxwbBUXSU8RLA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ei4jOWvrcfpfafz2ftJGMoHQI14TlKWbvvuQPze820uN/2NqmIMNfNtB2Xa0vNMaH7vLdciKCmpmzUShWP407X2sCv99VGuk/0jttiLBU8TgFNxSjp6IGS1cYbIWaS3zz4MvMzCCbpiW5he3d1XzeLqU9TrSNTOet/6qG0FwtmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B72rRaci; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=ADR8B5gRNQz6xyoOYK9w803bCyh/CCH4bm1ys/n9q0sLGtUGVQ3ja3uvpfYZ+vp6ZW3tOfVWejelFkUHRp7fYD3yyJPVZkBsxuf8TJ6OZbHcAjjmqTz7UcDGE4iKpmChThKFOP6H9ET1ASQcIBC2f+HUTBX/4EC/i/blHuAeqEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UcSJPF+V; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5439a6179a7so3026754e87.1;
-        Sat, 15 Feb 2025 05:01:54 -0800 (PST)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-3092643f4aaso8988231fa.1;
+        Sat, 15 Feb 2025 05:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739624513; x=1740229313; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739624682; x=1740229482; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ozhKsWX3kweoYJQju1+qqAjGdDcPiipwU+Xczk1SZZE=;
-        b=B72rRaci3TSIXrEGsC/e2fPBWJZxurhUhE8V3P4F9f3aQQdbMR2yg/f8oA403SUSfN
-         pMSoM+Z51DzEsGvVZnm/u/ZiRySJBsDEi9Q2GFqnacTCJRxQMRiKHyqQobDiiI/q0OgE
-         o393fHTo0fh5tbIoX7O+WluCm62tcXPtmoz976lPu60D/Gge+sLxjghhoS4fF4gFr0Ky
-         wJU0oOZmzHhPRoNeBflWLMF/5icfMp8mF8t9VYl6LEatFhlHt8gGdV4WDAR+/GErt+SG
-         SI2nMeIOnu6702fpjHm+DuKhyFTFM8GLsazIoTTwqwIHGVA6KjWGMkxHO3XU7WwTflJ4
-         X8Lg==
+        bh=eQxqWePvHIT2picXONSU+2OFMt7hfUb4gyLS+js58fQ=;
+        b=UcSJPF+VDAFsUGV3rRFrwtljkzXJvXJU53F+rc2OSww6cKL7caCjE+p2RwQ498268N
+         NifbZ6jVWoJtqMuBMWBRaorKOEWEqw93mCcZCMwSxk/iT0wCmoCFmXlZhYH8D0GdMgVI
+         P3/5OmskogeacO7U9uwfeGL7PHcv7RILVbN1+ciJPBAHPQ3dXKD8pccIosW9rqC5d1sF
+         hX71Pdu1y1ptnHOQGtR/LlOJ8o67PS/zFzrdW2ZWwon+RwDfNCbc0xzaEXiQ2OP7vwpR
+         WkFD6HIZmUC9Ayw8uoPTEFBUayYQ8At+Lt+3cIO4yp8s1foxnU9B1ecIdNpWL1u9c7jb
+         47LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739624513; x=1740229313;
+        d=1e100.net; s=20230601; t=1739624682; x=1740229482;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ozhKsWX3kweoYJQju1+qqAjGdDcPiipwU+Xczk1SZZE=;
-        b=WKIHVHpTKRbCqmZN4tqAEHATQqsUhDJdbD8Pazb8AVPBQ3yWXpHJJG6jE8gPntspql
-         SfGB+MvA6CwKMVHu7unkVbisTmCCE4jSOST0UkZJ009iHscP0hrigMmfxWHDTtYVv291
-         s5c2f/OUJpJ/7W5xamQ4DkgtEaE5THUIpDt1MubfkxcH7E8cDBNpqzLFa9TykKz1vhMB
-         RmYevlREENlYCW51BZuc3YLq9gN8HddYZPv2DtM5SX9YvwCpqKqDWmi0M4qRBo9c9/Wf
-         Mfc00KOdljD+6p9PQQPmlOJiLeOEyI4NOJcokcw0t2O7MqXv3wlP2HACz6zh6QWvR9xN
-         oIVg==
-X-Forwarded-Encrypted: i=1; AJvYcCUcC7cejAOT2xuvNpRG6OcB1PTnXOUNrrDA3o9mYu29lY3RpRTS+vV8Cmu+opCkP0wP0dS97yl83TmtxuCteLU=@vger.kernel.org, AJvYcCV24xYcUELo/wP817L1dv5vBRT66m6TwLjPY7Yz4YM0UbZXdBiFQUmp3lTQoxCTexyPDzHrWc6Qny2TbjU=@vger.kernel.org, AJvYcCW4FPWaM20lqQNrJN7LAmAoF+pDdMOEAFLSfCgvT+PLJ+2cI/zYZ0N2lcDdEGmmxbvgQVW6ycA2tj6+HhVo1Zh6@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzGT8W3fKAOsUZhqO81KIuwIB8jiw038SI1mUMcn1+7bjgVtWi
-	c50fU10JXKoRNVQNOiD4lD5y0cA+i6K9LiaK5eO+RVQlYOrZX6Km1r3BbW/IE1edD31mg+ccDnr
-	J29GkR8KavThgqMIU/ZQTCYAhGms=
-X-Gm-Gg: ASbGncsD9BXB72D2vmvJA/++JtFUDPSCQhwm7GrRz0uELD4FmW5cttO4zU8qI08p1k8
-	nmDB6xwL2WqC2zkoL/2YducEMuXiji+yihpauzBOxWxS0Ynb7nlnFHC/aEEBYidSeVGf/I8UaTR
-	D2D2yyRQdfXQQ4Ysv1UxSiPfO2JeIdlw==
-X-Google-Smtp-Source: AGHT+IGKVOUfO1mi/BujIz8JVHzz8ieUmXy4eCf+jhg42xu7xOL4QbqHEO0He+TVLlt+CR/i1mw2UYZAGOMLV5lvF+0=
-X-Received: by 2002:a05:6512:3ca1:b0:545:f90:2771 with SMTP id
- 2adb3069b0e04-5451dfc13fcmr3731365e87.3.1739624512703; Sat, 15 Feb 2025
- 05:01:52 -0800 (PST)
+        bh=eQxqWePvHIT2picXONSU+2OFMt7hfUb4gyLS+js58fQ=;
+        b=WNuF5sGHRBGEb7sSGm2uPr4bcJRUZsmOD7LoiHUOiM9Nf88IzIAuT/IpbJua4n/dYP
+         iQBbNCxiCE+9jVn5C2jsK1YUIY/BKJOjpDaVfI1agvhssDXOXTLctYbvjWZKeIlJ9nNT
+         z/BJjZj0578LVWFTw6QsEKBZT7l8u27o9jhzSKNNYYgh7wB9ivfG+VXFgm3iUG7lWQJL
+         X06hoFlIGgo5V8LgYpOJsI3GcN9TeVIDjIBIVRubRVVuAI/QAaHJ9VvUjMF3UZLfgJgC
+         5U772vTmkIcs4vXGkboI4s4d6Yonfyk2QdD9qiyERaM2xzVTLsbE3X4/bhdMzs8a/qC3
+         qlAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6znYU7BGtP/VL6U8nQEA39TlCS6awcS6kMZJLfIgmdi9c+jV0bv8cBh2hk4aqk2kJoe2WmvA/BRPgLgL7+nY=@vger.kernel.org, AJvYcCW+DxO8YaI3QvbxX8TpIR6fk7nqhh6qNIdDoWa1T6N2CLP0lhHZlDB3QnLPtngLk+KxEICjo0tZSwKmLig=@vger.kernel.org, AJvYcCWYqp1YxnUNbOh/J5LY3PVHNahLrNnbweKvVTRi+iM0UHaI6SDFnHpef1BV05xYOKasH9G4+JuVSZLaY8C41PxL@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1rsDw0VyRTjirlyuxgfYh4KLRhUHp52gwUj9bXGxCKjv++63s
+	8oVyd1eIkVGntCrwWr5OyvMEanJNeuKYDmoVT7wEK+YeeMJ8GbyQscgxeHulEeUquX2m4xxXtsr
+	tcuOb4Cs9GfRvcB9ZQF36q//j8gtiz4zK
+X-Gm-Gg: ASbGncsfK2l8QVenejSEZPfcSxcFTDDuioGHKlnCkfNVTV4r4RvXIeGdszAPduvDQEK
+	AYiolC7xaGzsMpum9E6x1eXy/fCqFbsAmsgwYnqwm6yv1AEfyV2bYUB+/9fqcfKzd/Hho/N1cey
+	VbwTNaKMZ1hET+QhzbZzzEmcgRRYyMxQ==
+X-Google-Smtp-Source: AGHT+IGADOXK6A8/GEkATLBOdsyZof9/aX5TClGqjHqEuQqchxyCpH+3TIKuNfkvMgRdz1TQFw/1RcVFxaS9v1vh/NA=
+X-Received: by 2002:a2e:95cd:0:b0:302:3356:35d7 with SMTP id
+ 38308e7fff4ca-30928b7439bmr7123121fa.18.1739624681465; Sat, 15 Feb 2025
+ 05:04:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250214074051.1619256-1-davidgow@google.com> <20250214074051.1619256-2-davidgow@google.com>
- <CAJ-ks9kw7FTJ7EcHy8B+-1XFK8J4a-DuHLJhP1f3hPy10nOJZA@mail.gmail.com> <CABVgOSkcDPwWEz=Uo0q+HXSeQT4a5yPg8vb4BMkpZ0yyDu4wQA@mail.gmail.com>
-In-Reply-To: <CABVgOSkcDPwWEz=Uo0q+HXSeQT4a5yPg8vb4BMkpZ0yyDu4wQA@mail.gmail.com>
+References: <20250214074051.1619256-1-davidgow@google.com> <20250214074051.1619256-4-davidgow@google.com>
+ <CAJ-ks9kwVz4sPdmqfTLVK-Z2C7WmXHpBhbe5_ozWBZnwxJ8HpA@mail.gmail.com> <CABVgOS=2f3Yg8Wb7qxneRC_+s-W_TQey083niujpZD3fYcfL_w@mail.gmail.com>
+In-Reply-To: <CABVgOS=2f3Yg8Wb7qxneRC_+s-W_TQey083niujpZD3fYcfL_w@mail.gmail.com>
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 15 Feb 2025 08:01:16 -0500
-X-Gm-Features: AWEUYZkVH7Z7HtHO3XWyE9VdXkKoq077qDEkI6kD3AGCSxCPbfw3nUR0i29ULfQ
-Message-ID: <CAJ-ks9mEocaBAhovLvjFuEPrSipLpOEzKOtJ7uGK5X-TG44QBw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] rust: kunit: add KUnit case and suite macros
+Date: Sat, 15 Feb 2025 08:04:05 -0500
+X-Gm-Features: AWEUYZkO-deC3TTJ-Ho4qHpqUbaRWg5ash0Mk7jUJ1Y_Vd10hv4vuGqdu5AaPFo
+Message-ID: <CAJ-ks9n92LCVQRuNMqKwMwGyLzJTnQXpHth4L8h19D0qoGUphg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] rust: kunit: allow to know if we are in a test
 To: David Gow <davidgow@google.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
 	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -99,395 +99,220 @@ te:
 >
 > On Fri, 14 Feb 2025 at 22:41, Tamir Duberstein <tamird@gmail.com> wrote:
 > >
-> > Very excited to see this progress.
-> >
-> > On Fri, Feb 14, 2025 at 2:41=E2=80=AFAM David Gow <davidgow@google.com>=
+> > On Fri, Feb 14, 2025 at 2:42=E2=80=AFAM David Gow <davidgow@google.com>=
  wrote:
 > > >
 > > > From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
 > > >
-> > > Add a couple of Rust const functions and macros to allow to develop
-> > > KUnit tests without relying on generated C code:
+> > > In some cases, we need to call test-only code from outside the test
+> > > case, for example, to mock a function or a module.
 > > >
-> > >  - The `kunit_unsafe_test_suite!` Rust macro is similar to the
-> > >    `kunit_test_suite` C macro. It requires a NULL-terminated array of
-> > >    test cases (see below).
-> > >  - The `kunit_case` Rust function is similar to the `KUNIT_CASE` C ma=
-cro.
-> > >    It generates as case from the name and function.
-> > >  - The `kunit_case_null` Rust function generates a NULL test case, wh=
-ich
-> > >    is to be used as delimiter in `kunit_test_suite!`.
+> > > In order to check whether we are in a test or not, we need to test if
+> > > `CONFIG_KUNIT` is set.
+> > > Unfortunately, we cannot rely only on this condition because:
+> > > - a test could be running in another thread,
+> > > - some distros compile KUnit in production kernels, so checking at ru=
+ntime
+> > >   that `current->kunit_test !=3D NULL` is required.
 > > >
-> > > While these functions and macros can be used on their own, a future
-> > > patch will introduce another macro to create KUnit tests using a
-> > > user-space like syntax.
+> > > Forturately, KUnit provides an optimised check in
+> > > `kunit_get_current_test()`, which checks CONFIG_KUNIT, a global stati=
+c
+> > > key, and then the current thread's running KUnit test.
+> > >
+> > > Add a safe wrapper function around this to know whether or not we are=
+ in
+> > > a KUnit test and examples showing how to mock a function and a module=
+.
 > > >
 > > > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> > > Co-developed-by: Matt Gilbride <mattgilbride@google.com>
-> > > Signed-off-by: Matt Gilbride <mattgilbride@google.com>
-> > > Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > > > Co-developed-by: David Gow <davidgow@google.com>
 > > > Signed-off-by: David Gow <davidgow@google.com>
+> > > Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > > > ---
 > > >
 > > > Changes since v5:
-> > > https://lore.kernel.org/all/20241213081035.2069066-2-davidgow@google.=
+> > > https://lore.kernel.org/all/20241213081035.2069066-4-davidgow@google.=
 com/
-> > > - Rebased against 6.14-rc1
-> > > - Several documentation touch-ups, including noting that the example
-> > >   test function need not be unsafe. (Thanks, Miguel)
-> > > - Remove the need for static_mut_refs, by using core::addr_of_mut!()
-> > >   combined with a cast. (Thanks, Miguel)
-> > >   - While this should also avoid the need for const_mut_refs, it seem=
-s
-> > >     to have been enabled for other users anyway.
-> > > - Use ::kernel::ffi::c_char for C strings, rather than i8 directly.
-> > >   (Thanks, Miguel)
+> > > - Greatly improved documentation, which is both clearer and better
+> > >   matches the rustdoc norm. (Thanks, Miguel)
+> > > - The examples and safety comments are also both more idiomatic an
+> > >   cleaner. (Thanks, Miguel)
+> > > - More things sit appropriately behind CONFIG_KUNIT (Thanks, Miguel)
 > > >
 > > > Changes since v4:
-> > > https://lore.kernel.org/linux-kselftest/20241101064505.3820737-2-davi=
+> > > https://lore.kernel.org/linux-kselftest/20241101064505.3820737-4-davi=
 dgow@google.com/
 > > > - Rebased against 6.13-rc1
-> > > - Allowed an unused_unsafe warning after the behaviour of addr_of_mut=
-!()
-> > >   changed in Rust 1.82. (Thanks Boqun, Miguel)
-> > > - Fix a couple of minor rustfmt issues which were triggering checkpat=
-ch
-> > >   warnings.
+> > > - Fix some missing safety comments, and remove some unneeded 'unsafe'
+> > >   blocks. (Thanks Boqun)
 > > >
 > > > Changes since v3:
-> > > https://lore.kernel.org/linux-kselftest/20241030045719.3085147-4-davi=
+> > > https://lore.kernel.org/linux-kselftest/20241030045719.3085147-8-davi=
 dgow@google.com/
-> > > - The kunit_unsafe_test_suite!() macro now panic!s if the suite name =
-is
-> > >   too long, triggering a compile error. (Thanks, Alice!)
+> > > - The example test has been updated to no longer use assert_eq!() wit=
+h
+> > >   a constant bool argument (fixes a clippy warning).
 > > >
-> > > Changes since v2:
-> > > https://lore.kernel.org/linux-kselftest/20241029092422.2884505-2-davi=
+> > > No changes since v2:
+> > > https://lore.kernel.org/linux-kselftest/20241029092422.2884505-4-davi=
 dgow@google.com/
-> > > - The kunit_unsafe_test_suite!() macro will truncate the name of the
-> > >   suite if it is too long. (Thanks Alice!)
-> > > - We no longer needlessly use UnsafeCell<> in
-> > >   kunit_unsafe_test_suite!(). (Thanks Alice!)
 > > >
 > > > Changes since v1:
-> > > https://lore.kernel.org/lkml/20230720-rustbind-v1-1-c80db349e3b5@goog=
+> > > https://lore.kernel.org/lkml/20230720-rustbind-v1-3-c80db349e3b5@goog=
 le.com/
-> > > - Rebase on top of rust-next
-> > > - As a result, KUnit attributes are new set. These are hardcoded to t=
-he
-> > >   defaults of "normal" speed and no module name.
-> > > - Split the kunit_case!() macro into two const functions, kunit_case(=
-)
-> > >   and kunit_case_null() (for the NULL terminator).
-> > >
+> > > - Rebased on top of rust-next.
+> > > - Use the `kunit_get_current_test()` C function, which wasn't previou=
+sly
+> > >   available, instead of rolling our own.
+> > > - (Thanks also to Boqun for suggesting a nicer way of implementing th=
+is,
+> > >   which I tried, but the `kunit_get_current_test()` version obsoleted=
+.)
 > > > ---
-> > >  rust/kernel/kunit.rs | 121 +++++++++++++++++++++++++++++++++++++++++=
+> > >  rust/kernel/kunit.rs | 66 ++++++++++++++++++++++++++++++++++++++++++=
 ++
-> > >  1 file changed, 121 insertions(+)
+> > >  1 file changed, 66 insertions(+)
 > > >
 > > > diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> > > index 824da0e9738a..d34a92075174 100644
+> > > index 9e27b74a605b..3aad7a281b6d 100644
 > > > --- a/rust/kernel/kunit.rs
 > > > +++ b/rust/kernel/kunit.rs
-> > > @@ -161,3 +161,124 @@ macro_rules! kunit_assert_eq {
-> > >          $crate::kunit_assert!($name, $file, $diff, $left =3D=3D $rig=
-ht);
-> > >      }};
+> > > @@ -286,11 +286,77 @@ macro_rules! kunit_unsafe_test_suite {
+> > >      };
 > > >  }
-> > > +
-> > > +/// Represents an individual test case.
+> > >
+> > > +/// Returns whether we are currently running a KUnit test.
 > > > +///
-> > > +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminated l=
-ist of valid test cases.
-> > > +/// Use `kunit_case_null` to generate such a delimiter.
-> >
-> > Can both of these be linkified? [`kunit_unsafe_test_suite!`] and
-> > [`kunit_case_null`]. There are more instances below.
-> >
->
-> I've done this here. I've not linkified absolutely everything, but the
-> most obvious/prominent ones should be done.
->
-> > > +#[doc(hidden)]
-> > > +pub const fn kunit_case(
-> > > +    name: &'static kernel::str::CStr,
-> > > +    run_case: unsafe extern "C" fn(*mut kernel::bindings::kunit),
-> > > +) -> kernel::bindings::kunit_case {
-> > > +    kernel::bindings::kunit_case {
-> > > +        run_case: Some(run_case),
-> > > +        name: name.as_char_ptr(),
-> > > +        attr: kernel::bindings::kunit_attributes {
-> > > +            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NORMAL,
-> > > +        },
-> > > +        generate_params: None,
-> > > +        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
-> > > +        module_name: core::ptr::null_mut(),
-> > > +        log: core::ptr::null_mut(),
-> >
-> > These members, after `name`, can be spelled `..kunit_case_null()` to
-> > avoid some repetition.
->
-> I'm going to leave this as-is, as logically, the NULL terminator case
-> and the 'default' case are two different things (even if, in practice,
-> they have the same values). And personally, I find it clearer to have
-> them more explicitly set here for now.
->
-> It is a nice thought, though, so I reserve the right to change my mind
-> in the future. :-)
->
-> > > +    }
-> > > +}
-> > > +
-> > > +/// Represents the NULL test case delimiter.
-> > > +///
-> > > +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminated l=
-ist of test cases. This
-> > > +/// function returns such a delimiter.
-> > > +#[doc(hidden)]
-> > > +pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
-> > > +    kernel::bindings::kunit_case {
-> > > +        run_case: None,
-> > > +        name: core::ptr::null_mut(),
-> > > +        generate_params: None,
-> > > +        attr: kernel::bindings::kunit_attributes {
-> > > +            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NORMAL,
-> > > +        },
-> > > +        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
-> > > +        module_name: core::ptr::null_mut(),
-> > > +        log: core::ptr::null_mut(),
-> > > +    }
-> > > +}
-> > > +
-> > > +/// Registers a KUnit test suite.
-> > > +///
-> > > +/// # Safety
-> > > +///
-> > > +/// `test_cases` must be a NULL terminated array of valid test cases=
-.
+> > > +/// In some cases, you need to call test-only code from outside the =
+test case, for example, to
+> > > +/// create a function mock. This function allows to change behavior =
+depending on whether we are
+> > > +/// currently running a KUnit test or not.
 > > > +///
 > > > +/// # Examples
 > > > +///
-> > > +/// ```ignore
-> > > +/// extern "C" fn test_fn(_test: *mut kernel::bindings::kunit) {
-> > > +///     let actual =3D 1 + 1;
-> > > +///     let expected =3D 2;
-> > > +///     assert_eq!(actual, expected);
+> > > +/// This example shows how a function can be mocked to return a well=
+-known value while testing:
+> > > +///
+> > > +/// ```
+> > > +/// # use kernel::kunit::in_kunit_test;
+> > > +/// fn fn_mock_example(n: i32) -> i32 {
+> > > +///     if in_kunit_test() {
+> > > +///         return 100;
+> > > +///     }
+> > > +///
+> > > +///     n + 1
 > > > +/// }
 > > > +///
-> > > +/// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] =
-=3D [
-> > > +///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
-> > > +///     kernel::kunit::kunit_case_null(),
-> > > +/// ];
-> > > +/// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+> > > +/// let mock_res =3D fn_mock_example(5);
+> > > +/// assert_eq!(mock_res, 100);
 > > > +/// ```
-> > > +#[doc(hidden)]
-> > > +#[macro_export]
-> > > +macro_rules! kunit_unsafe_test_suite {
-> > > +    ($name:ident, $test_cases:ident) =3D> {
-> > > +        const _: () =3D {
-> > > +            const KUNIT_TEST_SUITE_NAME: [::kernel::ffi::c_char; 256=
-] =3D {
-> > > +                let name_u8 =3D ::core::stringify!($name).as_bytes()=
-;
+> > > +///
+> > > +/// Sometimes, you don't control the code that needs to be mocked. T=
+his example shows how the
+> > > +/// `bindings` module can be mocked:
 > >
-> > This can be a little simpler:
-> >
-> > let name =3D $crate::c_str!(::core::stringify!($name)).as_bytes_with_nu=
-l();
+> > [`bindings`] here, please. There are two more instances below but
+> > those aren't doc comments, so I don't think bracketing them will do
+> > anything.
 > >
 >
-> I'm not sure this ends up being much simpler: it makes it (possible?,
-> obvious?) to get rid of the cast below, but we don't actually need to
-> copy the null byte at the end, so it seems wasteful to bother.
+> Done in v7. Alas, I'll have to keep getting used to the differences
+> between kerneldoc and rustdoc...
 >
-> So after playing around both ways, I think this is probably best.
-
-If you don't want to copy the null byte, you can s/as_bytes_with_nul/as_byt=
-es.
-
-The main thing is that `as` casts in Rust are a rare instance of
-unchecked coercion in the language, so I encourage folks to avoid
-them. The rest I don't feel strongly about.
-
-> > > +                let mut ret =3D [0; 256];
-> > > +
-> > > +                if name_u8.len() > 255 {
-> > > +                    panic!(concat!(
-> > > +                        "The test suite name `",
-> > > +                        ::core::stringify!($name),
-> > > +                        "` exceeds the maximum length of 255 bytes."
-> > > +                    ));
-> > > +                }
-> > > +
-> > > +                let mut i =3D 0;
-> > > +                while i < name_u8.len() {
-> > > +                    ret[i] =3D name_u8[i] as ::kernel::ffi::c_char;
-> > > +                    i +=3D 1;
-> > > +                }
-> >
-> > I'd suggest `ret[..name.len()].copy_from_slice(name)` but
-> > `copy_from_slice` isn't `const`. This can stay the same with the
-> > now-unnecessary cast removed, or it can be the body of
-> > `copy_from_slice`:
-> >
-> >                 // SAFETY: `name` is valid for `name.len()` elements
-> > by definition, and `ret` was
-> >                 // checked to be at least as large as `name`. The
-> > buffers are statically know to not
-> >                 // overlap.
-> >                 unsafe {
-> >                     ::core::ptr::copy_nonoverlapping(name.as_ptr(),
-> > ret.as_mut_ptr(), name.len());
-> >
-> >                 }
-> >
->
-> I think I'll keep this as the loop for now, as that's more obvious to
-> me, and avoids the extra unsafe block.
->
-> If copy_from_slice ends up working in a const context, we can consider
-> that later (though, personally, I still find the loop easier to
-> understand).
->
-> > > +
-> > > +                ret
-> > > +            };
-> > > +
-> > > +            #[allow(unused_unsafe)]
-> > > +            static mut KUNIT_TEST_SUITE: ::kernel::bindings::kunit_s=
-uite =3D
-> > > +                ::kernel::bindings::kunit_suite {
-> > > +                    name: KUNIT_TEST_SUITE_NAME,
-> > > +                    // SAFETY: User is expected to pass a correct `t=
-est_cases`, given the safety
-> > > +                    // precondition; hence this macro named `unsafe`=
+> > > +///
+> > > +/// ```
+> > > +/// // Import our mock naming it as the real module.
+> > > +/// #[cfg(CONFIG_KUNIT)]
+> > > +/// use bindings_mock_example as bindings;
+> > > +/// #[cfg(not(CONFIG_KUNIT))]
+> > > +/// use kernel::bindings;
+> > > +///
+> > > +/// // This module mocks `bindings`.
+> > > +/// #[cfg(CONFIG_KUNIT)]
+> > > +/// mod bindings_mock_example {
+> > > +///     /// Mock `ktime_get_boot_fast_ns` to return a well-known val=
+ue when running a KUnit test.
+> > > +///     pub(crate) fn ktime_get_boot_fast_ns() -> u64 {
+> > > +///         1234
+> > > +///     }
+> > > +/// }
+> > > +///
+> > > +/// // This is the function we want to test. Since `bindings` has be=
+en mocked, we can use its
+> > > +/// // functions seamlessly.
+> > > +/// fn get_boot_ns() -> u64 {
+> > > +///     // SAFETY: `ktime_get_boot_fast_ns()` is always safe to call=
 .
-> > > +                    test_cases: unsafe {
-> > > +                        ::core::ptr::addr_of_mut!($test_cases)
-> > > +                            .cast::<::kernel::bindings::kunit_case>(=
-)
-> > > +                    },
+> > > +///     unsafe { bindings::ktime_get_boot_fast_ns() }
+> > > +/// }
+> > > +///
+> > > +/// let time =3D get_boot_ns();
+> > > +/// assert_eq!(time, 1234);
+> > > +/// ```
 > >
-> > This safety comment seems to be referring to the safety of
-> > `addr_of_mut!` but this was just a compiler limitation until Rust
-> > 1.82, right? Same thing below on `KUNIT_TEST_SUITE_ENTRY`.
+> > Isn't this swapping out the bindings module at compile time, and for
+> > the whole build? In other words cfg(CONFIG_KUNIT) will apply to all
+> > code, both test and non-test.
 > >
 >
-> Yeah, this comment was originally written prior to 1.82 existing.
->
-> But I think we probably should keep the safety comment here anyway, as
-> -- if I understand it -- 1.82 only makes this safe if $test_cases is
-> static, so it's still worth documenting the preconditions here.
+> I believe so, so this is probably something best done only in test files.
 
-I don't think the safety guarantees changed. In the Rust 1.82 release notes=
-:
+Why would you need conditional compilation of this kind in test files?
 
-> In an expression context, STATIC_MUT and EXTERN_STATIC are place expressi=
-ons. Previously, the compiler's safety checks were not aware that the raw r=
-ef operator did not actually affect the operand's place, treating it as a p=
-ossible read or write to a pointer. No unsafety is actually present, howeve=
-r, as it just creates a pointer.
+What I was getting at with this comment is that this example might
+mislead a user to think that this is how they should imbue their code
+with test-specific behavior, which is not what this will do. Instead
+this would break kernels built with CONFIG_KUNIT, which I think is not
+where we want to be going. Right?
 
-https://blog.rust-lang.org/2024/10/17/Rust-1.82.0.html#safely-addressing-un=
-safe-statics
-
-That's why I flagged this; the SAFETY comment is not actually correct.
-
-> If we eventually stop supporting rust < 1.82, though, I'd be happy to
-> remove the unsafe and thereby enforce the use of this macro only on
-> statics at compile time.
 >
-> > Can we also narrow the `#[allow]`? This seems to work:
+> Ideally, we'd have support for something like the KUnit function
+> mocking features here, but that's horribly C-specific at the moment.
+>
+> > > +pub fn in_kunit_test() -> bool {
+> > > +    // SAFETY: `kunit_get_current_test()` is always safe to call (it=
+ has fallbacks for
+> > > +    // when KUnit is not enabled).
+> > > +    unsafe { !bindings::kunit_get_current_test().is_null() }
 > >
-> >                     #[allow(unused_unsafe)]
-> >                     // SAFETY: ...
-> >                     test_cases: unsafe {
-> >                         ::core::ptr::addr_of_mut!($test_cases)
-> >                             .cast::<::kernel::bindings::kunit_case>()
-> >                     },
+> > Nit if you care about reducing unsafe blocks:
+> >
+> > !unsafe { bindings::kunit_get_current_test() }.is_null()
+> >
 > >
 >
-> We hit problems before with #[allow] not working on expressions, so
-> assumed we couldn't narrow it further. Seems to be working here,
-> though, so I've changed it.
+> Huh, I thought this wouldn't work, but it's working fine for me here,
+> so I've made the change.
 >
-> > > +                    suite_init: None,
-> > > +                    suite_exit: None,
-> > > +                    init: None,
-> > > +                    exit: None,
-> > > +                    attr: ::kernel::bindings::kunit_attributes {
-> > > +                        speed: ::kernel::bindings::kunit_speed_KUNIT=
-_SPEED_NORMAL,
-> > > +                    },
-> > > +                    status_comment: [0; 256usize],
-> >
-> > I don't think you need the usize hint here, there's always a usize in
-> > the length position.
-> >
-> > > +                    debugfs: ::core::ptr::null_mut(),
-> > > +                    log: ::core::ptr::null_mut(),
-> > > +                    suite_init_err: 0,
-> > > +                    is_init: false,
-> > > +                };
-> > > +
-> > > +            #[used]
-> > > +            #[link_section =3D ".kunit_test_suites"]
-> >
-> > This attribute causes the same problem I describe in
-> > https://lore.kernel.org/all/20250210-macros-section-v2-1-3bb9ff44b969@g=
-mail.com/.
-> > That's because the KUnit tests are generated both on target and on
-> > host (even though they won't run on host). I don't think you need to
-> > deal with that here, just pointing it out. I think we'll need a cfg to
-> > indicate we're building for host to avoid emitting these attributes
-> > that only make sense in the kernel.
-> >
+> Thanks!
 >
-> I've added the same exclusion for macos here, but don't have a macos
-> machine to test it on. If it's broken, we can fix it in a follow-up.
->
-> > > +            static mut KUNIT_TEST_SUITE_ENTRY: *const ::kernel::bind=
-ings::kunit_suite =3D
-> > > +                // SAFETY: `KUNIT_TEST_SUITE` is static.
-> > > +                unsafe { ::core::ptr::addr_of_mut!(KUNIT_TEST_SUITE)=
- };
-> >
-> > This is missing the `#[allow(unused_unsafe)]` (it appears in the next
-> > patch). This means this commit will not compile on bisection.
->
-> Whoops. This must have snuck in during one of the many squashes and
-> rebases. I'll fix that now.
->
-> Annoyingly, I'm no longer able to actually reproduce the warning,
-> which is strange.
-> >
-> > > +        };
-> > > +    };
 > > > +}
+> > > +
+> > >  #[kunit_tests(rust_kernel_kunit)]
+> > >  mod tests {
+> > > +    use super::*;
+> > > +
+> > >      #[test]
+> > >      fn rust_test_kunit_example_test() {
+> > >          #![expect(clippy::eq_op)]
+> > >          assert_eq!(1 + 1, 2);
+> > >      }
+> > > +
+> > > +    #[test]
+> > > +    fn rust_test_kunit_in_kunit_test() {
+> > > +        assert!(in_kunit_test());
+> > > +    }
+> > >  }
 > > > --
 > > > 2.48.1.601.g30ceb7b040-goog
 > > >
 > > >
-> >
-> > Global note: it seems more customary to use crate:: and $crate::
-> > instead of kernel:: and ::kernel in functions and macros,
-> > respectively.
 >
-> Hmm... I think I had that at one point and was told to change it to
-> kernel. Personally, I think kernel:: makes more sense. So if it's not
-> breaking anything, and I'll only get yelled at a little bit, let's
-> keep it as is.
+> Thanks a lot, these should be fixed in v7.
 >
-> In any case, I'm sending out v7 with the changes above. My hope is
-> that this is then probably "good enough" to let us get started, and
-> future changes can be done as independent patches, so we're both not
-> holding this up for too long, and can better parallelise any fixes,
-> rather than having to re-spin the whole series each time.
->
-> Thanks a lot,
+> Cheers,
 > -- David
 
