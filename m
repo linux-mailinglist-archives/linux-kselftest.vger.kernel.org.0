@@ -1,113 +1,88 @@
-Return-Path: <linux-kselftest+bounces-26747-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26748-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CB9CA3752D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 16:42:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5E74A3755C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 17:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BFD316E8CC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 15:42:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5A9316EE4F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 16:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FDD156236;
-	Sun, 16 Feb 2025 15:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D7878F4B;
+	Sun, 16 Feb 2025 16:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="bQIvUn1b"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E45E567;
-	Sun, 16 Feb 2025 15:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA48355887
+	for <linux-kselftest@vger.kernel.org>; Sun, 16 Feb 2025 16:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.77.79.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739720525; cv=none; b=TG3u3NDTCdAOpJiKEDGSyLhKiUd0RDfkhLypLsOjDGmJYsD3KhTMNVsgFjBoKeVAxi8dsVXlmvJzoXfj25LrwAm3iLPbnhPfJv9cGHtFYURQ4Ech1m1vFRAOM1BoO5J/2DHGB8npymumwPjp1q/YvOfuZobntjR0hKnrf7ClxzY=
+	t=1739721733; cv=none; b=hlGomLrwAU6tMv060cydjnU9l3bTrJZnRYXKG1cBZMMFb0h6o660W0wBfWHCaiG3KLxtxrDmXxE9z4lcV6Ni5i40z89UeqQisYE+aOMPRX3aTWURcylbacl6L9XwpijvlTCp8/WgsbkyUQFDaxCn6VGIIsfkU8rMqpuUyXA1bOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739720525; c=relaxed/simple;
-	bh=eSzKgV/qkiFhJkkCzIQX0Z+jgrhpsUclZiqEZFUe9z8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=EFQJUbTnxvYto+4BOb/tXtV9PUBj9VyNfNCQxGKIklex8K82YjSoI6uZZ+j9Zuzlg51sMkAEfBzLXug98xAEAoIQIZLBf2JVZ/e6Bree1JDMB8PKZp/709boCP1YxQb6dTLXYvQK0/RfwhuUJTpCOiNz95gxtOuGLnCHjagLc80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 5DB2792009C; Sun, 16 Feb 2025 16:41:55 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 574B892009B;
-	Sun, 16 Feb 2025 15:41:55 +0000 (GMT)
-Date: Sun, 16 Feb 2025 15:41:55 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-mips@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
-In-Reply-To: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
-Message-ID: <alpine.DEB.2.21.2502161523290.65342@angie.orcam.me.uk>
-References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1739721733; c=relaxed/simple;
+	bh=DrFpAuUgCojBbVhqy3e9tBdipAyeY0/uf6RSS7XXZXE=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=C11pogMcsaAqFb8D4Gx/z/g87n+IRA9Yimp8b2K58ta6NRlI4n4/GkQ3uyOxtZLd3mfJyCJ4M5lzV8GWxfYTZOKCBQDdxAyORi+fD8nFa1/otXEDfgzfwVprqdNhJt568bnHph9kfzBFShlwCmW9G0Igo6oxVNWxTAgZ35cj7nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=bQIvUn1b; arc=none smtp.client-ip=51.77.79.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1739721715; x=1739980915;
+	bh=DrFpAuUgCojBbVhqy3e9tBdipAyeY0/uf6RSS7XXZXE=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=bQIvUn1b2Bz+L/WRubshu912FBI8lqNHdwFsI5zLlKDa5V7Jcxxaun8Q11TTLWToD
+	 HewzcKXQMvDit9Bb/Vhqfm+xNh6D3GF/2B3bQ7RZlhrFG5Ip95f391Aj3FE8B2Wxgp
+	 NxrFUSinxW6dJ7NKxeEvhQnG9e1m+SlKn3BLjMp1omCRfRCJ9Tu9iI7b3D251nIbIR
+	 sXBB7/Rb+Gz7kHWpjE/fbnRQ6R7d80vyW1xnAid1P8nCRXIWfktiJP+/+ie0M6lR+2
+	 XUVLr27MxIIQToYcsJXEp5NCwEoYKQS2Mq0+bNs3VAIfvKcvxCETkGo3eoQ00+7gti
+	 mCBWbSb/3epLA==
+Date: Sun, 16 Feb 2025 16:01:49 +0000
+To: shuah@kernel.org
+From: Imanol <imvalient@protonmail.com>
+Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Imanol <imvalient@protonmail.com>
+Subject: [PATCH] selftests/core: fix repeated word in close_range_test.c comment
+Message-ID: <20250216160114.83221-1-imvalient@protonmail.com>
+Feedback-ID: 28866602:user:proton
+X-Pm-Message-ID: 1368527d4ae133340ed3f0d12103bec4f24af3d3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 12 Feb 2025, Thomas Weißschuh wrote:
+Fixes a minor grammatical issue in a comment in close_range_test.c
+where "and and" was mistakenly repeated.
 
-> diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-> index 753a8ed2cf695f0b5eac4b5e4d317fdb383ebf93..638520a3427a985fdbd5f5a49b55853bbadeee75 100644
-> --- a/tools/include/nolibc/arch-mips.h
-> +++ b/tools/include/nolibc/arch-mips.h
-> @@ -190,13 +257,33 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __
->  		"1:\n"
->  		".cpload $ra\n"
->  		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
-> +
-> +#if defined(_ABIO32)
->  		"addiu $sp, $sp, -4\n"   /* space for .cprestore to store $gp              */
->  		".cprestore 0\n"
->  		"li    $t0, -8\n"
->  		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
->  		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
-> -		"lui $t9, %hi(_start_c)\n" /* ABI requires current function address in $t9 */
-> +#else
-> +		"daddiu $sp, $sp, -8\n"  /* space for .cprestore to store $gp              */
-> +		".cpsetup $ra, 0, 1b\n"
-> +		"li    $t0, -16\n"
-> +		"and   $sp, $sp, $t0\n"  /* $sp must be 16-byte aligned                    */
-> +#endif
+Signed-off-by: Imanol <imvalient@protonmail.com>
+---
+ tools/testing/selftests/core/close_range_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Why is this code breaking stack alignment just to have to fix it up two 
-instructions down the line?  Or is it that the incoming $sp is not aligned 
-in the first place (in which case we're having a deeper problem).
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testin=
+g/selftests/core/close_range_test.c
+index e0d9851fe1c9..c19e8d037211 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -506,7 +506,7 @@ TEST(close_range_cloexec_unshare_syzbot)
+=20
+ =09/*
+ =09 * Create a huge gap in the fd table. When we now call
+-=09 * CLOSE_RANGE_UNSHARE with a shared fd table and and with ~0U as upper
++=09 * CLOSE_RANGE_UNSHARE with a shared fd table and with ~0U as upper
+ =09 * bound the kernel will only copy up to fd1 file descriptors into the
+ =09 * new fd table. If the kernel is buggy and doesn't handle
+ =09 * CLOSE_RANGE_CLOEXEC correctly it will not have copied all file
+--=20
+2.43.0
 
-> +
-> +		/* ABI requires current function address in $t9 */
-> +#if defined(_ABIO32) || defined(_ABIN32)
-> +		"lui $t9, %hi(_start_c)\n"
->  		"ori $t9, %lo(_start_c)\n"
-> +#else
-> +		"lui  $t9, %highest(_start_c)\n"
-> +		"ori  $t9, %higher(_start_c)\n"
-> +		"dsll $t9, 0x10\n"
-> +		"ori  $t9, %hi(_start_c)\n"
-> +		"dsll $t9, 0x10\n"
-> +		"ori  $t9, %lo(_start_c)\n"
 
- This could be optimised using a temporary (e.g. $at, but I guess any will 
-do as I gather we don't have any ABI abnormalities here).
-
-> +#endif
-> +
->  		"jalr $t9\n"             /* transfer to c runtime
-> */
->  		" nop\n"                 /* delayed slot
-
- On an unrelated matter JALR above ought to be JAL (or otherwise there's 
-no point in using the .cprestore pseudo-op).  And I fail to see why this 
-code has to be "noreorder" (except for the .cpload piece, of course), it's 
-just asking for troubles.
-
-  Maciej
 
