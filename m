@@ -1,120 +1,113 @@
-Return-Path: <linux-kselftest+bounces-26746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26747-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5579A374EC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 16:11:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB9CA3752D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 16:42:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C5CB3AF0E7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 15:11:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BFD316E8CC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Feb 2025 15:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3440199230;
-	Sun, 16 Feb 2025 15:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="ThQddU+R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FDD156236;
+	Sun, 16 Feb 2025 15:42:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135341991B2
-	for <linux-kselftest@vger.kernel.org>; Sun, 16 Feb 2025 15:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E45E567;
+	Sun, 16 Feb 2025 15:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739718680; cv=none; b=WtTbId/p9f/t9Tf8PLLoIpPtBCbz9DC5F8h058BdGpvtMXzQXRPBDOhWDCgIR5qEho678wLzWsyYaa5SAq6joTqZUPyKTC/YETXDEKu+3CUOjds1pzWTL3EXDygCfRNWY46nDqaBZ8qIKfIgqVbB/WHiVIMi0o/4WbpytjnCqE4=
+	t=1739720525; cv=none; b=TG3u3NDTCdAOpJiKEDGSyLhKiUd0RDfkhLypLsOjDGmJYsD3KhTMNVsgFjBoKeVAxi8dsVXlmvJzoXfj25LrwAm3iLPbnhPfJv9cGHtFYURQ4Ech1m1vFRAOM1BoO5J/2DHGB8npymumwPjp1q/YvOfuZobntjR0hKnrf7ClxzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739718680; c=relaxed/simple;
-	bh=4IQ0g5KvyuNbmI4QCx+VPX0qeUVxl+rCSR4p41A6Qs0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N7J+PIeYZTi7JmOcq/36/AIsm92Jynxon4jF78sQuYIetEpRZQ7XxBI7sGvqrY4Dr9IRRmazOGU0UxHbj+SzV19CVDhazrBrmq5EJ+t469ovgrim63RHwUd5h34ETCgMYQsPmBxHb3aTBBh6I2V0TJPzPdE6rI+1mzvOOLiHq60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=ThQddU+R; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dec996069aso6386167a12.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Feb 2025 07:11:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1739718677; x=1740323477; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XxEs174tgEejEhOGBs+mL3V6fq9DUU/u2mDzbjv/spw=;
-        b=ThQddU+RMy7z0OSUJzzrS1h5g8C+aFHJEUpCeFTZIJjxuUuZtdmKhMSIQC4n94wsMA
-         pDafPzHJ9SHhih0K2pNSaOECzLZF2sw4Sflu7Qp9Vp/gSgbYl4P5wPj+NSMhOmlVag/O
-         q5meUpCfPzJgianjuaexCNE60Mhx7lfj6eiEJssnoi6ar4ubQDGV7uOkoD2r/g+JPqtM
-         IEGNyUMPGTvd3GsvqA2z/npDltepLpNt/hTdYtVUtJ8bezynKDFcwYf7dPxWYQcun3N5
-         uyEk8WG+9L3ZE3iHT6G7jtFsOEKGOGhAwvBnTkk4SdNdvPB779Th13jhGSsyKHpPBeBN
-         xLLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739718677; x=1740323477;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XxEs174tgEejEhOGBs+mL3V6fq9DUU/u2mDzbjv/spw=;
-        b=uWEgFo+62fYEKQUFkaUCI78r1F2NMhvEpNoSikw2YcuhFiEvOozMgm0sE0E2Rd47ci
-         pWhcFqWDXLPIq63s/FX5+oazzm4X5YZ+5EEziGknveDCxvDo2sVkIaztpUJr6nNw3OmP
-         PYEQCJ38uu2ZdvEGnb9D15Ywq9ev72EDdQpkQg7R3+sEB6xgFKUOFEXEgK5lmkcgQor7
-         WQxqG+LhmizkwNkKcqit+DkbxCopvjmGFodUhGTaeXig11YbLwx4AOfGMz40IdwxZj/s
-         +Nw56ygDMfTuk+MrEC4Cgyi0oB4Nh+yOgHprO99TfFEkqDuPwf+ziPfHs+bFiWwlwOvA
-         DGJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU346NIw7RftY+6PxCFnlX9CuFQNC4WAHgyaJGFFxHHDgrsOtYYabavQgKMU4LpwCGsPCgNFq9j9A5sQJElsAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM1nvPKcS+MvA2iGIGbDNxRduEp2kGV0XjgvBce/kjGBR7XQrz
-	b3rS62DEIzOu9RmU9E6nBWb9DtG/AEkWL0ReW4VBdx+gS6CfvjzCHTJZBH/KOOU=
-X-Gm-Gg: ASbGncvpM7zvsXiEIvAoGnOvGp59AppnokjszbftIAXV7y08qidiCu6UNHzRJZq0L5l
-	0DcS3f8E8/o/A8Wota4BSpviWmO5+b0ArLoHR6IMzxbniYEZTP5Nf2QhuDy3+P1CUgD4NhY7JoF
-	O4+M/yxNRAMim6NHU1LP454NjwHaPoDrxgaE2urCoR3ZpTQiUCf9DW44fCpsy0PGWspS0vc5AUe
-	rmlX/c1FlqvBeY48UaTTegj4/5jN72k2Hu4anR0bxveeTdCOgo0IwWlWwXmpNYOSS0/ib98y4xx
-	y/cFQLCOu8kJeGiggx9GnuqMpHMiet5DeAX7sz2xBemyVVE=
-X-Google-Smtp-Source: AGHT+IFJErHfiwjq8OuATuDMBXLWRjnh3cAPDyG+uN8XMo+VzOnpfp01aY9p8urTKh5hiaXOlWw+3w==
-X-Received: by 2002:a17:907:7f27:b0:ab2:da92:d0bc with SMTP id a640c23a62f3a-abb70c01ecemr672451566b.3.1739718677216;
-        Sun, 16 Feb 2025 07:11:17 -0800 (PST)
-Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece270967sm5963200a12.55.2025.02.16.07.11.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Feb 2025 07:11:16 -0800 (PST)
-Message-ID: <684bc34c-ae15-4cff-9e44-945294ee233b@blackwall.org>
-Date: Sun, 16 Feb 2025 17:11:15 +0200
+	s=arc-20240116; t=1739720525; c=relaxed/simple;
+	bh=eSzKgV/qkiFhJkkCzIQX0Z+jgrhpsUclZiqEZFUe9z8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=EFQJUbTnxvYto+4BOb/tXtV9PUBj9VyNfNCQxGKIklex8K82YjSoI6uZZ+j9Zuzlg51sMkAEfBzLXug98xAEAoIQIZLBf2JVZ/e6Bree1JDMB8PKZp/709boCP1YxQb6dTLXYvQK0/RfwhuUJTpCOiNz95gxtOuGLnCHjagLc80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 5DB2792009C; Sun, 16 Feb 2025 16:41:55 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 574B892009B;
+	Sun, 16 Feb 2025 15:41:55 +0000 (GMT)
+Date: Sun, 16 Feb 2025 15:41:55 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-mips@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
+In-Reply-To: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
+Message-ID: <alpine.DEB.2.21.2502161523290.65342@angie.orcam.me.uk>
+References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv3 net 0/2] bonding: fix incorrect mac address setting
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
- Boris Pismenny <borisp@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250207092920.543458-1-liuhangbin@gmail.com>
-Content-Language: en-US
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20250207092920.543458-1-liuhangbin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 
-On 2/7/25 11:29, Hangbin Liu wrote:
-> The mac address on backup slave should be convert from Solicited-Node
-> Multicast address, not from bonding unicast target address.
-> 
-> v3: also fix the mac setting for slave_set_ns_maddr. (Jay)
->     Add function description for slave_set_ns_maddr/slave_set_ns_maddrs (Jay)
-> v2: fix patch 01's subject
-> 
-> Hangbin Liu (2):
->   bonding: fix incorrect MAC address setting to receive NS messages
->   selftests: bonding: fix incorrect mac address
-> 
->  drivers/net/bonding/bond_options.c            | 55 ++++++++++++++++---
->  .../drivers/net/bonding/bond_options.sh       |  4 +-
->  2 files changed, 49 insertions(+), 10 deletions(-)
-> 
+On Wed, 12 Feb 2025, Thomas Weißschuh wrote:
 
-For the set:
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+> diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+> index 753a8ed2cf695f0b5eac4b5e4d317fdb383ebf93..638520a3427a985fdbd5f5a49b55853bbadeee75 100644
+> --- a/tools/include/nolibc/arch-mips.h
+> +++ b/tools/include/nolibc/arch-mips.h
+> @@ -190,13 +257,33 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __
+>  		"1:\n"
+>  		".cpload $ra\n"
+>  		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
+> +
+> +#if defined(_ABIO32)
+>  		"addiu $sp, $sp, -4\n"   /* space for .cprestore to store $gp              */
+>  		".cprestore 0\n"
+>  		"li    $t0, -8\n"
+>  		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
+>  		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
+> -		"lui $t9, %hi(_start_c)\n" /* ABI requires current function address in $t9 */
+> +#else
+> +		"daddiu $sp, $sp, -8\n"  /* space for .cprestore to store $gp              */
+> +		".cpsetup $ra, 0, 1b\n"
+> +		"li    $t0, -16\n"
+> +		"and   $sp, $sp, $t0\n"  /* $sp must be 16-byte aligned                    */
+> +#endif
 
+ Why is this code breaking stack alignment just to have to fix it up two 
+instructions down the line?  Or is it that the incoming $sp is not aligned 
+in the first place (in which case we're having a deeper problem).
+
+> +
+> +		/* ABI requires current function address in $t9 */
+> +#if defined(_ABIO32) || defined(_ABIN32)
+> +		"lui $t9, %hi(_start_c)\n"
+>  		"ori $t9, %lo(_start_c)\n"
+> +#else
+> +		"lui  $t9, %highest(_start_c)\n"
+> +		"ori  $t9, %higher(_start_c)\n"
+> +		"dsll $t9, 0x10\n"
+> +		"ori  $t9, %hi(_start_c)\n"
+> +		"dsll $t9, 0x10\n"
+> +		"ori  $t9, %lo(_start_c)\n"
+
+ This could be optimised using a temporary (e.g. $at, but I guess any will 
+do as I gather we don't have any ABI abnormalities here).
+
+> +#endif
+> +
+>  		"jalr $t9\n"             /* transfer to c runtime
+> */
+>  		" nop\n"                 /* delayed slot
+
+ On an unrelated matter JALR above ought to be JAL (or otherwise there's 
+no point in using the .cprestore pseudo-op).  And I fail to see why this 
+code has to be "noreorder" (except for the .cpload piece, of course), it's 
+just asking for troubles.
+
+  Maciej
 
