@@ -1,305 +1,277 @@
-Return-Path: <linux-kselftest+bounces-26753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B57E4A379F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 03:57:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C105A37A9C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 05:44:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7413B166590
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 02:57:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46735188D6AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 04:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8634714A0B3;
-	Mon, 17 Feb 2025 02:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CB65156F54;
+	Mon, 17 Feb 2025 04:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BC++iy6h"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qZdBoGfA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2046.outbound.protection.outlook.com [40.107.100.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5795DDAD
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 02:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739761055; cv=none; b=dAwxJEi+MI5lp7E28M7VoYNxdo2uxAXX/FwIdMaorDEtpqw7ow4ON1UbHG5nDcR132oTIvnIZeLGqYbYWw+fX1H+ibLh6T3fVmHrS2qyUnwj2XhZKbMhvEG+SeUGXuYYKa0rBVO4hQFDkkKRV/Hgsk8vE7k8DqWLme2RzTrfKoc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739761055; c=relaxed/simple;
-	bh=tK9aQDDzfCQLNRUw+2WbCovmkYY2oxiY2yzy3q3Ip3M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NcsS+OaDqF3wDtnRn1CwsH3bJtd6lu3GQR8fAO+s1pSDzaLYapwXcZatNlUmdIzuZTSIpWBiKKdO4yXw/HLtAprZ7mScAp0+SX/8aPzuwuwqqDHy9rJd2CxhmncItxTXcG3QTTSdQTXc/BInTasmW+R+NFWD4reW2/TdxDO5s+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BC++iy6h; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739761052;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XL1MJI2qQRyDzxhhPjfCSyHWJpUSYQmJdBFY+jqfMOQ=;
-	b=BC++iy6h2w4UHZFnXXtik21zffi1bOHoXPF4lbwKKZK/2gS04L+kUEWVihpUQ5+JFM+W1i
-	izfpEEKduzwFsiYao++TKE5ZbNBwDpKIDqmFKlPBi08QySFa84cL+UuhVmL5q4wIipNaGU
-	mdcP3TP7k1TyoI95+wN/x/HxQWSoaQM=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-371-sX5E14EVNbGfTWgcKP1WeQ-1; Sun, 16 Feb 2025 21:57:30 -0500
-X-MC-Unique: sX5E14EVNbGfTWgcKP1WeQ-1
-X-Mimecast-MFC-AGG-ID: sX5E14EVNbGfTWgcKP1WeQ_1739761050
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2fc1a4c14d4so7145339a91.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Feb 2025 18:57:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739761050; x=1740365850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XL1MJI2qQRyDzxhhPjfCSyHWJpUSYQmJdBFY+jqfMOQ=;
-        b=uNRGh6s+a8mw+Ju4G4VvZn7aNfiNzDwdiyIW0g26FQ/K09rRZA2vNJuqwxtGNWxha5
-         yt0h3UWaK9lv0Y+rB6N5bYwKSQDNdaJY8nol1WqJLyWLJcFGDxHBcQM3MRqAzJ/8/5dx
-         ntjeTGNPrURDBF160Q+yX4XQz806WnXkhtedApTN4T0hImCpO7J6Pjyg4Mly8DEKwxSy
-         4AsaziyhKMljXWys7MCZWhKBYe/0JxgoOsxsj2c7lxB9x5DSAkx8OuoJzDWzsK2Eo/bW
-         Atwvw8pCBjtd1+Yo1GgilKr37A74730wo8i8i4qtgah3quOKOQVv3zRrpPRejnkaHb+R
-         HjVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWMBg0VCBOQUq0SpJuSe7wf1boekIS+CT1WdqPAhz9qT1Pm0gZ8Z/6U+QTU1RaEbHaYsCa7ZZWEzl6RDYKIQ2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKDi0vak6r8j+zEBOT+kLuKkVd7k2b5BV8doVO+buVY9cSd4NG
-	so9VACBu0tElnWBWPQATm93xBp2br+MrvHEh6Y8PZs336RQnW0RMxwUfeO5zMFBbHDLdFPaHYjQ
-	iMnia3KO3VaUbY+YIADlC1hJAKKzOe8hr/IKbrsUTyUIP3QVqGa2pueqDH8Xer5xAXLx7tdvou7
-	AL08hr75Y7ciC9UcFwhzebnuG+e0xTQzDr4DqohCVn
-X-Gm-Gg: ASbGncvDqmQCTy2imk2y6folN+UYguvZhKy2QmSbJ187KjZQA0scSeAwOhbRF1A8Ejj
-	PSQLyONfuBeO7az60Z5KMh+EZkkGZWSbd7nMRw4g0RYqbEDbjDwZCcUdSrrVNUJ4=
-X-Received: by 2002:a05:6a00:198c:b0:732:2484:e0ce with SMTP id d2e1a72fcca58-732618c1cf1mr11783599b3a.17.1739761049858;
-        Sun, 16 Feb 2025 18:57:29 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGVQWLmp+QSkutFPeteGs2zCw24E66CumblkrzQWDUWooZ2u41pKGG968ScoLFCi/Lnb1NyBTA6Z6e9dHmLbEA=
-X-Received: by 2002:a05:6a00:198c:b0:732:2484:e0ce with SMTP id
- d2e1a72fcca58-732618c1cf1mr11783572b3a.17.1739761049201; Sun, 16 Feb 2025
- 18:57:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259FD12DD95;
+	Mon, 17 Feb 2025 04:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739767467; cv=fail; b=nZxBjISLowzCPlfEbSwxzyxDrPl0/rgfXIDZY2WYp7E70VBXNyU1nYtYhE6c/nWUIeRRCKwsAcwKjQduPMqKOuLszaq4CtvPPjTl4IZr/LSpr1eiC2P+X6sLWD69Fyohd0KaB3FWdRjam1vKQnljVNVVTyVGFgWoR6BrizdHN2s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739767467; c=relaxed/simple;
+	bh=uQ4Ejg2OSEpBCHkbOaPJIUWIVhmZJZl/crH/x+oe/kA=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=F9EQde5z+3Chg5G6pofRsBWupLVMJFruRbMoFhrb+D5fxngb+JwQTqYVw8vzzy8geIMoSc1eQocsr7ZDOZBpaBgY5HeRYt3ghRKzWQezCLIiujG2s/nvn+ILuPTP8L0cPgFQtoG+k/oQE4crZINrbjYd7dbS/6ndL+2IqtiwBqU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qZdBoGfA; arc=fail smtp.client-ip=40.107.100.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iCflVki8TGuVeLn4ugX+7HJIhEjXLBrXFPv4xcv8w5jcFWCcABeTdqNLY4P1Ub3vq2ufDG2xnAg28YUA4Hwzk8T+lbnA256drUqL0s6ZobwSOJH8wERvMnV8SLx8b7DsV9UQ4kEgQAqm96dwKm7Cak9zgx14E17st7LrH9IkXXVRybE+YWSEyIlwhXWtWjsvLd8wnN8tp4D/9D7hRpOqsU8Kq/H+q2y7oPaKt5FinaZhQwwlF37ILS3l/t6yPe0FbJTN1lB+U1ZmxOY+1FFsYm94Rcs+gbv32e2S8X0KHLTnimkm3bsErhwsVvxIIMFMxEUjS7Fml0aQUUSiFtoQmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TDVvElRt+YuWJLI0RNxXtlcX86qRhFPIO9cfhazz4XE=;
+ b=gzj4VCIIt+E/nriEgK/Lyq4H9q7A0oJ7Htq0VC95LTq4gkezpuefu/4Q+TSzk5O+oKhvYqYCz/qfEuXH1NPgBFQ84Dqgttzd6d0XJ0GFvFetOgW1M7a/F2nQd9WR6VuEPFSXoxk1pdDhF5beHPiPlzAR3USu/hh0VVOyECIgUWlQP8+48JOK0P1isYRm5YRJftiW2GkDLlysj3jaNvY0Nc/AKnj4LBFRmXq4UkpLE3QLJ+KhD26epjXwB2dvLjhKi0IriEEh2lr+uE/HZxIhCu678K3KlUPcosTdZJEg8jAdcR4zAY/5iD9yDkVEC+Gr9nnxzubGeofOE/2QhwmZTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TDVvElRt+YuWJLI0RNxXtlcX86qRhFPIO9cfhazz4XE=;
+ b=qZdBoGfAgxgZQFqT0vGsB8TppxD6LAp1gRpPIhnQKUFv3rrmMNp9RmQN7me+JgAwJegYnj1Qc36zoKXgodbYK8nRvh1Y62QzahqeazE6takO6cJmQYLBdf6DoJj8DDod9HAt2Z8GcMKXeaQS7w0M8QllRIMHmP2sT+XMZaEyyX0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
+ SJ2PR12MB8980.namprd12.prod.outlook.com (2603:10b6:a03:542::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.16; Mon, 17 Feb
+ 2025 04:44:19 +0000
+Received: from DS7PR12MB6214.namprd12.prod.outlook.com
+ ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
+ ([fe80::17e6:16c7:6bc1:26fb%3]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
+ 04:44:19 +0000
+Message-ID: <cad45745-3e77-4f6a-8165-6f8051e03322@amd.com>
+Date: Mon, 17 Feb 2025 10:13:17 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/3] Add support for the Idle HLT intercept feature
+From: Manali Shukla <manali.shukla@amd.com>
+To: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: pbonzini@redhat.com, seanjc@google.com, shuah@kernel.org, nikunj@amd.com,
+ thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de,
+ babu.moger@amd.com, neeraj.upadhyay@amd.com
+References: <20250128124812.7324-1-manali.shukla@amd.com>
+ <9f1cc809-c2d8-4a02-ac01-093d3d3eac38@amd.com>
+Content-Language: en-US
+In-Reply-To: <9f1cc809-c2d8-4a02-ac01-093d3d3eac38@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BM1PR01CA0149.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:68::19) To DS7PR12MB6214.namprd12.prod.outlook.com
+ (2603:10b6:8:96::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250213-buffers-v1-1-ec4a0821957a@daynix.com>
- <20250213020702-mutt-send-email-mst@kernel.org> <0fa16c0e-8002-4320-b7d3-d3d36f80008c@daynix.com>
- <20250213103636-mutt-send-email-mst@kernel.org> <33369e7d-4c43-407a-92fd-373a8a7b2160@daynix.com>
-In-Reply-To: <33369e7d-4c43-407a-92fd-373a8a7b2160@daynix.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Mon, 17 Feb 2025 10:57:17 +0800
-X-Gm-Features: AWEUYZmrHEftswhiFfbnVsQcr0_qVHSX-ifAC11RiQWuyoYd9I2p8DCAZlwdITA
-Message-ID: <CACGkMEtFK-UO8vJbNTogvTpiP2XFDBrB6B2frFJrUfqgjzApyA@mail.gmail.com>
-Subject: Re: [PATCH net-next] tun: Pad virtio headers
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
-	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, devel@daynix.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|SJ2PR12MB8980:EE_
+X-MS-Office365-Filtering-Correlation-Id: 51e924c6-b3c4-4148-718e-08dd4f0dbd63
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T0k3R2l2WDQrZGtwMHJHWFFpRTZBeVpFay9kV2FqUEM4NW8veksrN01OT2lX?=
+ =?utf-8?B?blhTWEZHMXlsV3ZsSmpOWVh5TmFoK2hWUDhQUTJQblpkRituUGNWVXVLOURm?=
+ =?utf-8?B?R293amVLQVRtb2phQTN1ZE5hWHZlZVFjeXo0Vm1GUGRlZGkwR1haZTloUmhL?=
+ =?utf-8?B?VHE4OE96dUNkYTJFODkwUGRqVVUrL0VRL2x2ajVRekFZTWxUVURFUExEN0V6?=
+ =?utf-8?B?T2syYlVRYUJ1MFNWZ0hxWUc4TEcvakhkQ0RLZ1c0UG1OMjIzYnpFeTZ5N1Zs?=
+ =?utf-8?B?S3dCUFErcERUTDVpN2ZGUnJUcGg4dHU5MU40V2tQMWpTaFlpSWF3KzhFN2g3?=
+ =?utf-8?B?dmIxd1pCaGJMdTdhSUVSMEFjVU1VeHFiQTRJSEp3cHowbGtQWWdCTDBZQzlP?=
+ =?utf-8?B?ODFidDF3NmFWWmtpQUJrRkNtRTlrSkZXQTZDYlJtWUtDaERlNTRSQkt0Sk5y?=
+ =?utf-8?B?UkliZ2c3RmZaR2JpajRIM3c4aFYvOWIzRHp6dlR3THhSVkFCYjZLNHlHem8y?=
+ =?utf-8?B?Tkcxay92ekttRlExaXNEQWpwRGh2dkpkN3dmVlk5NHhRd2VNZ2VZNlNzVXlr?=
+ =?utf-8?B?cyt2TEF6cDVrQXByMnRWeForemgvakwyNE00My9XcVVnREh4aW9kZjhRVWlm?=
+ =?utf-8?B?RTNDUjJNcll2WUtPQndHTVBzd2hQem8rejhwVENldHJzbUNXTFdNZU1VNjM1?=
+ =?utf-8?B?bE42QnJCb0d0Uk5VVzlCdHdPQmd5MXlUZmxVVDl0dmxIL2hnWHUwbmdqNzZM?=
+ =?utf-8?B?OE1QRGxpbng0NGZ2QWNVd0JYdHB2ckVScFVPdHhpZnlTNW05dlh2RHU1L1pJ?=
+ =?utf-8?B?eDlXanllaVg0NzJLWjJkWHVFeUVvYnBPd2RFRGtuQXl1VnFZTi9kbHV2c0Iz?=
+ =?utf-8?B?Q2t5U3UvTmdYNE1tbVdmY3NKaDJRb29hQ0g3L0xWQ2c5QTN0cldWZStEdzRy?=
+ =?utf-8?B?ek4yOHVaeldxbG11aFkvY3JYU2xkZ0hyenNCUXIvblZDK2RlWWZLbU9yanFm?=
+ =?utf-8?B?YmYxU0hGdzQ4cFdRdTB4NVZ6Z2lpOWRoT2g3akJBU21xaDVJTFQ1aTlwb2dW?=
+ =?utf-8?B?ZTY4SUlYWjlWWkIvQnBZRXJ4WVM1QmRJaFBsZDBQbm82ZkpNN3ZiY2JZeE5E?=
+ =?utf-8?B?RUd0YkIzd3l1MldXZVRsdUlkSENrWEI3d3FtRkY4NTVJZ29MdlE2dUloMUpa?=
+ =?utf-8?B?d1BiUlhJYXZua1Y1aU1wdkVxZHZyYjNaenQ5NWdnTlBhYWU0TEk5UGdPRG5r?=
+ =?utf-8?B?N3d2d1l2S0t5RzlkNTdaN0g2b0xET0ZPOGRCbTQzbGk4ajk2cmdVSlR4NUdW?=
+ =?utf-8?B?MWk0VXBnM09GUk1TdU1HQ0RxdmdISGhQSU0wSHgvNWtWY1N0TUxoNVBBVVFa?=
+ =?utf-8?B?cG43L2dXWGw5YTZlTHJhcXFucytRbTE0ZE1vMlNHbnVEcFBRNTZ1TU4wV21O?=
+ =?utf-8?B?c0c4aTRNMUdTN3lMWEY4OXErenFyejhjRmhwL0RURG1YZ2dLRjJxL2Nodmll?=
+ =?utf-8?B?M2l0SGpRbnRkZmZxcThXenlDWUVpZlVPOWU5dk13VWU0eHRZSVZOOGZ6WEhX?=
+ =?utf-8?B?Q21KYTZLOGdDR0EwK1VIMjlrUVk5NXkzcnA4WW0rQ2RGNWpSNXFBTWxvZEwz?=
+ =?utf-8?B?YkczVXJ1bU44N05UOGxvWEJtYUZPbll5NXE1T29ONytHUUsxeU83OUZEUldZ?=
+ =?utf-8?B?YzBYM0RINW5FU0NCS1MwOFArcitDRjFENlErSWpWeW81dG9TTW9sOE9yUGZu?=
+ =?utf-8?B?blc5TFkvd1phZ1JXQ09lM3pMd25KWGRYcnJXdDZIcTlwTnNzYlYrU2l2Yloy?=
+ =?utf-8?B?N3hsUmdVcCtGK3U4a0k2dz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Z3NwMlRtVXJqTlVDUjdyVWhpRTZ3UUIxOTR4Z3pwa3pxa0lyRmVIaHhvTUll?=
+ =?utf-8?B?aERCbmRzV3FOTnh6NTlLaXhXMUIyWjZValQ0a2JaVEVaNXpGVExNeXpoMlJw?=
+ =?utf-8?B?ODBuMkxHaGFZSktwNmIzRjkrSDlMQXJmQm1zM2pNZ0xPYVUwVEduS3FnRGlR?=
+ =?utf-8?B?dzVqOUNPVjB2dlVGbXBXeFAxR1lVaUprY1JaamNISzd4dkJIMlk4M1RqWWRS?=
+ =?utf-8?B?STd2bkRCZFdYM0U0SWZoU01vNU9PSzhnd284UnZSVzdpOGFRRWUzd0N1NS9s?=
+ =?utf-8?B?VW0xbmZ1Z3J4NFFTZWgyb21EeGw4TnRkbkV2YXNIb2tPMnR2RnZTWkVZUlhl?=
+ =?utf-8?B?OVFpL0hveUlQc2ZJMW9UZlo5UW5ZY2JmdzR3aEVGYTZINWpkRDVibzYxYkdr?=
+ =?utf-8?B?L0JoWXE4RWMyZ3Q4WFVCWk02bllHRHVreU1OUktuWFQ5bVBhOGdDNWhHeHV6?=
+ =?utf-8?B?S3pJb3hhOHpJZXVIZkZuMjBzaFJjbGxCbkwrVStCaTFIYTAzOFE1T053N0E0?=
+ =?utf-8?B?VnM1NzNvcGttVjlXTVJPcnRxcFppT2FCRzhpbWxqREJPUjE4VG9scGsxYTEw?=
+ =?utf-8?B?ejVvMXNGeVpFS0wxb3N4akJYTjl5bEk2cHQrSklrWXBjSDMxb3FRSXhYd3dp?=
+ =?utf-8?B?eVNFaVRrQ0o3VWNDQ3FnS0VXWU9JbnY3bGdmNmhFd0g4MVVYSlpQNWUydXlF?=
+ =?utf-8?B?MEpXam9XZ3JtRllFNHhQUFA4b1VjOGV0M3UvWHJoM0lBcnB4VXhsaUZlMUoz?=
+ =?utf-8?B?SWw3NENnZE1NK2UwMitUQjYrZkFxWEFpcE1aQ1QrUUhVSnFBbGpXYW9tN2U0?=
+ =?utf-8?B?QUhHQS85QnhyU21wWVYxNGUvR01YMnI4WUZ3MUdYdy92TVl2b0hQSGVXM1p3?=
+ =?utf-8?B?SUdpNFY0TzhVbDBXVkJ0OXdTZmRPVUJaMDRXaHBSVlU2VXRXOWVac3NsV2VQ?=
+ =?utf-8?B?M1U4VU51bXE2UXpoVFh6b2pjYnVGeU1hbUJjS3Q0QUNaZDJNTjlkZDgvYWQx?=
+ =?utf-8?B?aDFueWlRSDZIYkxXRE9EN1BkVDlWcnNyQ2pzZ29kam12a3dFVXFoRE1wNEtn?=
+ =?utf-8?B?UXZNU3FnYVlPMWpjWDJ5UlR1YkQzc2tvcUI2NmRzUHhmVnQ1UHUzd3lzVzh2?=
+ =?utf-8?B?eUppLzFFYVIyZU95YytBR0p5bjlPblFxbG5QcVQ2cUJGODdyS1ozQThKTEdQ?=
+ =?utf-8?B?M2l0M2xQdVpmSUN3c0dEVVNBL3hyeG5DVlVPaGR0S2JqVHFQZ3hsNDdyTGJ5?=
+ =?utf-8?B?SE5YcnUzRWxFZ3FtRlltQkRnR1grY21KY0JvaVp1Z1o4cGtKSDdSRXBOUXRH?=
+ =?utf-8?B?c0pnYndnZldpc1hMcmw4WlJyZW5HaW9VcFlpUG5OK1ZBc0l0MUFrN1NBbEts?=
+ =?utf-8?B?dktWQmtzZlc1TFZxUkpGTW9rU3VtNUdYWUhqb29QZUxxLzN2QnNCUFNvZEwr?=
+ =?utf-8?B?NFNLdmxOcE51TW5XZ3FsNFRVVWFvMld0NlIzVmxYZlpwck9JakRMSU9FaWhq?=
+ =?utf-8?B?YnAzdTJISDlrcUtScVJQM2hHZVZ1S3h4RTlQemVkaDh3c1pQdWVJR0ljK21s?=
+ =?utf-8?B?ZWFlMzFKSVNlMmt3WVhpWVIybUp0SnRLeGwvYVFzRjN6SStpWXdZYkt2NW11?=
+ =?utf-8?B?QkI3NHFRVEpWU1pkTHkzVWRsOStFckNjUGREcmQwUXVIdDdreU5jUFIzWTZz?=
+ =?utf-8?B?Z0xoWEtnemtHKytIMHkzWHFRVWY0UUhTYmdZbHhxUk9tL2JFOEgyMDhNMWEy?=
+ =?utf-8?B?Uld2M09vM2JJem9RNUJ3OU91WDFBRlgxNlEvSFBONlUvVFlyRm5tbzVacXc2?=
+ =?utf-8?B?d25sUHIxQ1lOMm5XcHRaeGlHdm15TUVCbHZkWW5qWUM2dFA1Um9MblYwNmxn?=
+ =?utf-8?B?ZnFGZ2VIRGw4OTczUk9vM2xxaGFTb1gya3NxZi9ialpOQjJXTjlsaHJEU1J1?=
+ =?utf-8?B?ZkZFTTBiZzRwSjVBbnNQdU5ZSUs3ZXIzWlBTUGxEVnQrOVdzSmlSY3MvdHVC?=
+ =?utf-8?B?T3FUd3NLTGVUSDA2dFpWbkt3eDJpVW5Hc2p6Vk1BZ3V1RnZIWmFyc2NhMldh?=
+ =?utf-8?B?MEpiWUszYlBnY1NjWDh1aDFOd1BXV1ZtWEhTZFFQVUg5WUJUcG11RVlnWEFC?=
+ =?utf-8?Q?fmBHWs6RzEnTrW/vdvKatoFpv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51e924c6-b3c4-4148-718e-08dd4f0dbd63
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 04:44:19.0821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0E7UHYLDUSfmnmUJfHk58NrZykUARCEE+xfI2xCUqCgaGrZxWbyyYDs/qKQ9sHy+fb5fxGzBpxa351OKJWF7pQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8980
 
-On Sat, Feb 15, 2025 at 1:25=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
-.com> wrote:
->
-> On 2025/02/14 0:43, Michael S. Tsirkin wrote:
-> > On Thu, Feb 13, 2025 at 06:23:55PM +0900, Akihiko Odaki wrote:
-> >> On 2025/02/13 16:18, Michael S. Tsirkin wrote:
-> >>>
-> >>> Commit log needs some work.
-> >>>
-> >>> So my understanding is, this patch does not do much functionally,
-> >>> but makes adding the hash feature easier. OK.
-> >>>
-> >>> On Thu, Feb 13, 2025 at 03:54:06PM +0900, Akihiko Odaki wrote:
-> >>>> tun used to simply advance iov_iter when it needs to pad virtio head=
-er,
-> >>>> which leaves the garbage in the buffer as is. This is especially
-> >>>> problematic
-> >>>
-> >>> I think you mean "this will become especially problematic"
-> >>>
-> >>>> when tun starts to allow enabling the hash reporting
-> >>>> feature; even if the feature is enabled, the packet may lack a hash
-> >>>> value and may contain a hole in the virtio header because the packet
-> >>>> arrived before the feature gets enabled or does not contain the
-> >>>> header fields to be hashed. If the hole is not filled with zero, it =
-is
-> >>>> impossible to tell if the packet lacks a hash value.
-> >>>>
-> >>>> In theory, a user of tun can fill the buffer with zero before callin=
-g
-> >>>> read() to avoid such a problem, but leaving the garbage in the buffe=
-r is
-> >>>> awkward anyway so fill the buffer in tun.
-> >>>
-> >>>
-> >>> What is missing here is description of what the patch does.
-> >>> I think it is
-> >>> "Replace advancing the iterator with writing zeros".
-> >>>
-> >>> There could be performance cost to the dirtying extra cache lines, th=
-ough.
-> >>> Could you try checking that please?
-> >>
-> >> It will not dirty extra cache lines; an explanation follows later. Bec=
-ause
-> >> of that, any benchmark are likely to show only noises, but if you have=
- an
-> >> idea of workloads that should be tested, please tell me.
-> >
-> > pktgen usually
->
-> I tried it but it didn't give meaningful results so I may be doing
-> wrong. It didn't show an obvious performance regression at least. I ran
-> the following procedure:
->
-> 1. create a veth pair
-> 2. connect it to macvtap
-> 3. run Fedora 41 on QEMU with vhost=3Don
-> 4. run samples/pktgen/pktgen_sample01_simple.sh for the other end of veth
-> 5. observe the rx packet rate of macvtap with ifstat for 60 seconds
->
-> ifstat showed that it received:
-> 532K packets / 60 seconds without this patch
-> 578K packets / 60 seconds with this patch
+On 2/10/2025 10:36 AM, Manali Shukla wrote:
+> On 1/28/2025 6:18 PM, Manali Shukla wrote:
+>> The upcoming new Idle HLT Intercept feature allows for the HLT
+>> instruction execution by a vCPU to be intercepted by the hypervisor
+>> only if there are no pending V_INTR and V_NMI events for the vCPU.
+>> When the vCPU is expected to service the pending V_INTR and V_NMI
+>> events, the Idle HLT intercept won’t trigger. The feature allows the
+>> hypervisor to determine if the vCPU is actually idle and reduces
+>> wasteful VMEXITs.
+>>
+>> The Idle HLT intercept feature is used for enlightened guests who wish
+>> to securely handle the events. When an enlightened guest does a HLT
+>> while an interrupt is pending, hypervisor will not have a way to
+>> figure out whether the guest needs to be re-entered or not. The Idle
+>> HLT intercept feature allows the HLT execution only if there are no
+>> pending V_INTR and V_NMI events.
+>>
+>> Presence of the Idle HLT Intercept feature is indicated via CPUID
+>> function Fn8000_000A_EDX[30].
+>>
+>> Document for the Idle HLT intercept feature is available at [1].
+>>
+>> This series is based on kvm-x86/next (eb723766b103) + [2].
+>>
+>> Testing Done:
+>> - Tested the functionality for the Idle HLT intercept feature
+>>   using selftest ipi_hlt_test.
+>> - Tested on normal, SEV, SEV-ES, SEV-SNP guest for the Idle HLT intercept
+>>   functionality.
+>> - Tested the Idle HLT intercept functionality on nested guest.
+>>
+>> v5 -> v6
+>> - Incorporated Neeraj's review comments on selftest.
+>>
+>> v4 -> v5
+>> - Incorporated Sean's review comments on nested Idle HLT intercept support.
+>> - Make svm_idle_hlt_test independent of the Idle HLT to run on all hardware.
+>>
+>> v3 -> v4
+>> - Drop the patches to add vcpu_get_stat() into a new series [2].
+>> - Added nested Idle HLT intercept support.
+>>
+>> v2 -> v3
+>> - Incorporated Andrew's suggestion to structure vcpu_stat_types in
+>>   a way that each architecture can share the generic types and also
+>>   provide its own.
+>>
+>> v1 -> v2
+>> - Did changes in svm_idle_hlt_test based on the review comments from Sean.
+>> - Added an enum based approach to get binary stats in vcpu_get_stat() which
+>>   doesn't use string to get stat data based on the comments from Sean.
+>> - Added safe_halt() and cli() helpers based on the comments from Sean.
+>>
+>> [1]: AMD64 Architecture Programmer's Manual Pub. 24593, April 2024,
+>>      Vol 2, 15.9 Instruction Intercepts (Table 15-7: IDLE_HLT).
+>>      https://bugzilla.kernel.org/attachment.cgi?id=306251
+>>
+>> [2]: https://lore.kernel.org/kvm/ee027335-f1b9-4637-bc79-27a610c1ab08@amd.com/T/#u
+>>
+>> ---
+>> V5: https://lore.kernel.org/kvm/20250103081828.7060-1-manali.shukla@amd.com/
+>> V4: https://lore.kernel.org/kvm/20241022054810.23369-1-manali.shukla@amd.com/
+>> V3: https://lore.kernel.org/kvm/20240528041926.3989-4-manali.shukla@amd.com/T/
+>> V2: https://lore.kernel.org/kvm/20240501145433.4070-1-manali.shukla@amd.com/
+>> V1: https://lore.kernel.org/kvm/20240307054623.13632-1-manali.shukla@amd.com/
+>>
+>> Manali Shukla (3):
+>>   x86/cpufeatures: Add CPUID feature bit for Idle HLT intercept
+>>   KVM: SVM: Add Idle HLT intercept support
+>>   KVM: selftests: Add self IPI HLT test
+>>
+>>  arch/x86/include/asm/cpufeatures.h            |  1 +
+>>  arch/x86/include/asm/svm.h                    |  1 +
+>>  arch/x86/include/uapi/asm/svm.h               |  2 +
+>>  arch/x86/kvm/svm/svm.c                        | 13 ++-
+>>  tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+>>  .../selftests/kvm/include/x86/processor.h     |  1 +
+>>  tools/testing/selftests/kvm/ipi_hlt_test.c    | 81 +++++++++++++++++++
+>>  7 files changed, 97 insertions(+), 3 deletions(-)
+>>  create mode 100644 tools/testing/selftests/kvm/ipi_hlt_test.c
+>>
+>>
+>> base-commit: eb723766b1030a23c38adf2348b7c3d1409d11f0
+>> prerequisite-patch-id: cb345fc0d814a351df2b5788b76eee0eef9de549
+>> prerequisite-patch-id: 71806f400cffe09f47d6231cb072cbdbd540de1b
+>> prerequisite-patch-id: 9ea0412aab7ecd8555fcee3e9609dbfe8456d47b
+>> prerequisite-patch-id: 3504df50cdd33958456f2e56139d76867273525c
+>> prerequisite-patch-id: 674e56729a56cc487cb85be1a64ef561eb7bac8a
+>> prerequisite-patch-id: 48e87354f9d6e6bd121ca32ab73cd0d7f1dce74f
+>> prerequisite-patch-id: b32c21df6522a7396baa41d62bcad9479041d97a
+>> prerequisite-patch-id: 0ff4b504e982db7c1dfa8ec6ac485c92a89f4af8
+>> prerequisite-patch-id: 509018dc2fc1657debc641544e86f5a92d04bc1a
+> 
+> A gentle reminder for the review.
+> 
+> -Manali
+> 
+> 
 
-The pps seems to be too poor.
+A gentle reminder for the review.
 
-If you want to test, I would suggest to use:
+-Manali
 
-pktgen on the host with DPDK testpmd + virtio user:
-
-https://doc.dpdk.org/guides/howto/virtio_user_as_exception_path.html
-
-Thanks
-
->
-> This is 8.6 % uplift, not degradation. I guess it's just a noise.
->
-> Below are actual commands I ran:
->
-> The commands I set up the veth pair and macvtap is as follows:
->
-> ip link add veth_host type veth peer name veth_guest
-> ip link set veth_host up
-> ip link set veth_guest up
-> ip link add link macvtap0 link veth_guest type macvtap
-> ip link set macvtap0 address 02:00:00:01:00:00 mtu 1486 up
-> ip address add 10.0.2.0 dev veth_host
-> ip route add 10.0.2.1 dev veth_host
->
-> The command for the pktgen is:
-> samples/pktgen/pktgen_sample01_simple.sh -i veth_host -d 10.0.2.1 -m
-> 02:00:00:01:00:00 -n 0
->
-> After I started pktgen, I ran: ifstat -d 60 macvtap0
-> I waited 60 seconds, and observed the rx rate with: ifstat -as macvtap0
->
-> >
-> >
-> >
-> >>>
-> >>> I think we should mention the risks of the patch, too.
-> >>> Maybe:
-> >>>
-> >>>     Also in theory, a user might have initialized the buffer
-> >>>     to some non-zero value, expecting tun to skip writing it.
-> >>>     As this was never a documented feature, this seems unlikely.
-> >>>>
-> >>>>
-> >>>> The specification also says the device MUST set num_buffers to 1 whe=
-n
-> >>>> the field is present so set it when the specified header size is big
-> >>>> enough to contain the field.
-> >>>
-> >>> This part I dislike. tun has no idea what the number of buffers is.
-> >>> Why 1 specifically?
-> >>
-> >> That's a valid point. I rewrote the commit log to clarify, but perhaps=
- we
-> >> can drop the code to set the num_buffers as "[PATCH] vhost/net: Set
-> >> num_buffers for virtio 1.0" already landed.
-> >
-> >
-> > I think I'd prefer that second option. it allows userspace
-> > to reliably detect the new behaviour, by setting the value
-> > to !=3D 0.
->
-> I'll leave num_buffers zero in the next version.
->
-> >
-> >
-> >>
-> >> Below is the rewritten commit log, which incorporates your suggestions=
- and
-> >> is extended to cover the performance implication and reason the num_bu=
-ffers
-> >> initialization:
-> >>
-> >> tun simply advances iov_iter when it needs to pad virtio header,
-> >> which leaves the garbage in the buffer as is. This will become
-> >> especially problematic when tun starts to allow enabling the hash
-> >> reporting feature; even if the feature is enabled, the packet may lack=
- a
-> >> hash value and may contain a hole in the virtio header because the
-> >> packet arrived before the feature gets enabled or does not contain the
-> >> header fields to be hashed. If the hole is not filled with zero, it is
-> >> impossible to tell if the packet lacks a hash value.
-> >>
-> >> In theory, a user of tun can fill the buffer with zero before calling
-> >> read() to avoid such a problem, but leaving the garbage in the buffer =
-is
-> >> awkward anyway so replace advancing the iterator with writing zeros.
-> >>
-> >> A user might have initialized the buffer to some non-zero value,
-> >> expecting tun to skip writing it. As this was never a documented
-> >> feature, this seems unlikely. Neither is there a non-zero value that c=
-an
-> >> be determined and set before receiving the packet; the only exception
-> >> is the num_buffers field, which is expected to be 1 for version 1 when
-> >> VIRTIO_NET_F_HASH_REPORT is not negotiated.
-> >
-> > you need mergeable buffers instead i presume.
-> >
-> >> This field is specifically
-> >> set to 1 instead of 0.
-> >>
-> >> The overhead of filling the hole in the header is negligible as the
-> >> entire header is already placed on the cache when a header size define=
-d
-> >
-> >
-> > what does this mean?
->
-> The current specification says the header size is 20 bytes or less. tun
-> already makes all cache lines where the header will be written dirty for
-> such a header size so we are not making another cache line dirty.
->
-> >
-> >> in the current specification is used even if the cache line is small
-> >> (16 bytes for example).
-> >>
-> >> Below are the header sizes possible with the current specification:
-> >> a) 10 bytes if the legacy interface is used
-> >> b) 12 bytes if the modern interface is used
-> >> c) 20 bytes if VIRTIO_NET_F_HASH_REPORT is negotiated
-> >>
-> >> a) and b) obviously fit in a cache line. c) uses one extra cache line,
-> >> but the cache line also contains the first 12 bytes of the packet so
-> >> it is always placed on the cache.
-> >
-> >
-> > Hmm. But it could be clean so shared. write makes it dirty and so
-> > not shared.
->
-> The packet is not just located after the header in the buffer but tun
-> writes the packet there. It makes the cache line dirty even without this
-> change.
->
-> >
->
 
 
