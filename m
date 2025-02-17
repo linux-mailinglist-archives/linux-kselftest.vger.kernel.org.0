@@ -1,49 +1,85 @@
-Return-Path: <linux-kselftest+bounces-26782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F996A3853C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:00:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28819A385F6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:20:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A855D3AAB48
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 14:00:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 053511882558
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 14:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E58944E;
-	Mon, 17 Feb 2025 14:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CE12248AF;
+	Mon, 17 Feb 2025 14:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FzDTMiZo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238D533DF;
-	Mon, 17 Feb 2025 14:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEB42248AC;
+	Mon, 17 Feb 2025 14:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739800828; cv=none; b=mktNbTnvf3JZu8i54CDGyjO+l+PUfMldgrKcozd8ULiWDRfjbSUQiuwdcyE2Tc/Qy2AheHxxtClSppSm8qCjggbBRpOWI58BRcdfTO7B7ew7vjc0eoHVKXtEs6+z6nxTC/fYwvLy6dXVSAlBbks+eHZyE/qXimsCNfTS5O8YPEc=
+	t=1739801858; cv=none; b=tc+is4th8AmJHOiEzjTAALc2mWMr4fgzR6Sa77lMkyhg41PFU4xBw63Robve3cQizKgSkbftI3uCp92JD/gEgIsSFNX4KMuomUByzuduUE+Z0peuVctRLsXL3nCQ6s/GEJpn+EU9VeYadO+4ilc9eZ+oFGhyJQiETlgbst8GU+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739800828; c=relaxed/simple;
-	bh=AtEqx9QGTWktOsZgYPLB/2CcwL4t2IRHK+54r66qrMo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aYWUIMxbTTM4oHU4w7UMWIAWuo3T3Eo5LoPYS1nrd+NBkaZexsQ5ER/WOenXnhAvDaZtsmZqqTNDy5FQWx8meSdoYOWlHdE4/2GG/q5pm9kTo2N/UStCGXQClqY1wkbgxawFjQXlv7wc6n2qJQBmuU3kl1HPnRtQkfZtQStcov8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A029152B;
-	Mon, 17 Feb 2025 06:00:44 -0800 (PST)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B50D3F6A8;
-	Mon, 17 Feb 2025 06:00:23 -0800 (PST)
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-To: kunit-dev@googlegroups.com
-Cc: linux-kernel@vger.kernel.org,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] kunit: Clarify kunit_skip() argument name
-Date: Mon, 17 Feb 2025 14:00:08 +0000
-Message-ID: <20250217140008.1941287-1-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1739801858; c=relaxed/simple;
+	bh=o39YROBuVbA6O3ko9Qq4yI5dRM0+WT1BVbhUu9uV5uM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LNTx65Gn2qy6qoMWmsn9p9YG/QAxI/HuXSwO6kbuyGZk+VKMX9XcEJjh0Z9j4DUu+xo1AwEOYlQBLRCocvbD9mqncZniXaJBrVCiL2dDHLfbQtMvpyzU0VW5fPa3j5L74kodIdqZ+9d+ksOdmxdCfm1B362GthZpz80AzX9OhcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FzDTMiZo; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21c2f1b610dso110864635ad.0;
+        Mon, 17 Feb 2025 06:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739801856; x=1740406656; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=euGD3DtL6BCGM+b7jkbY7enHbQAEo+xzdmRvXrR2nc0=;
+        b=FzDTMiZo8/oAVe9Hd0uk1REysvhn++aw2bT7qFeoyp0MskM6JrJSeryanqpvODJ+0J
+         kIOR27hemeg53WmxgsHaukYzTjKkHL7lHVhkUguzNpuELph9NgemPTkZLMq1YC5dgEBK
+         wVr1FzxCHLuyxqWwLJU5KHbG9uyF0kftD+2nO8M/dhm5s/7d2+dB/UYarCmhsdMghS/u
+         4c5R3b3zV3iqV0A728ofUXsZAGQNOa6DO/vevondDQiVLGN/92WTrwfeDAVcmfK8HQrl
+         6AJpOTuVNfo/2jAHGKi3t9le08l9oaTdS2rOrzoeqJQ6W17JiTB+YrFm2ZrV3Dh9XHlQ
+         NRNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739801856; x=1740406656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=euGD3DtL6BCGM+b7jkbY7enHbQAEo+xzdmRvXrR2nc0=;
+        b=PLVz9SE9ilvDrGivRPmDfgUvdKPs3ImUSGp5BsUV4o1S/DB2091GZDDanUe6ZQWC51
+         wYwl8AQo3fdUR/EC6uPxuGkQ9l4KOkQT7QTo5CNhn9LltWWbuTSrC4Vjfo/dtL55B91i
+         TCgqCPL2DJm0NpqNjG78XYRM5SQFsxJcCcdksChiuMnKyrRdyJnB5nMhsa7ty8CArCUe
+         Ex1xH1RFOqzoVLEuFxICn9PKzTGEVPjHpOaNZhjvkBf6v1BoUjJ/+CYv5EJ84WtElB6w
+         fqvKVf2br3Pwp5zzX4S8BN3oR3D3Df2THrBoI6ZHMcd3guNUx82ddgNQAmM00BIovTH6
+         rO9A==
+X-Forwarded-Encrypted: i=1; AJvYcCVG9yLppmEmXwelKlu68whs8TAZDAx8X4WsCiObQpYx406U5Y0TFgcZg5Dg+9J+AiFiZHjn6/0xEhxMjuMcgMU=@vger.kernel.org, AJvYcCXAUaAVoh36wjUF0w48lu6PYy3SGytGyI2yruJYuL0FBIn9VQ+S1bkoqov7S31PLTVwfeX9xepd@vger.kernel.org
+X-Gm-Message-State: AOJu0YyftSJCf1OVFigyPasIg++x7EYXlChhNeqtZXMxhQ+T4ihg7ELu
+	lnS0iONpJhMIrhrQhJl7ZF7EAl1f/6Qk+o589IE4x147qZRifxeZ
+X-Gm-Gg: ASbGncubaqit+zjyMQrcbmNT3MR2z3IEtTK6lS6awgAMqQ1Oo2aV6oAuf9zD/xhHpzq
+	X/u500nNKZX6ysrdOAAePZITaSWFmCRL7uJD9ZElddgmb9YpVd2+TVSpBsIKocmQIuo7i3t2/UB
+	Ga24Pj9seluCsEh8T10kg+A5c5HwwCcTNyw4UqB8jz/w19T92gLdoUCIZz65kU/aUYkFAExhL35
+	yb/mEUecS/yccYPehkzEX+R17MU1DyAljQUrw7991PGybVHsMYxZDPNsyb1P2s3Lp1oLJBtipyB
+	YJL3Vd/8yd1ImZfyg4d3dCbpoXxIyEwspEHiyLcI
+X-Google-Smtp-Source: AGHT+IFpFeBSNuUJ9Jopviu3/MljT4Y04e+Tksr52wJhW7iAizRMSd95PeaL9LxYgEEhXppqNW6Htg==
+X-Received: by 2002:a17:903:1a0e:b0:220:f1a1:b6e1 with SMTP id d9443c01a7336-22104028854mr164379845ad.19.1739801856490;
+        Mon, 17 Feb 2025 06:17:36 -0800 (PST)
+Received: from localhost.localdomain ([122.171.19.71])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d545c8d1sm71648185ad.113.2025.02.17.06.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Feb 2025 06:17:36 -0800 (PST)
+From: Chandra Mohan Sundar <chandru.dav@gmail.com>
+To: skhan@linuxfoundation.org,
+	shuah@kernel.org
+Cc: Chandra Mohan Sundar <chandru.dav@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH] selftests: net : Fix few spelling mistakes
+Date: Mon, 17 Feb 2025 19:45:16 +0530
+Message-ID: <20250217141520.81033-1-chandru.dav@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,77 +88,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-kunit_skip() and kunit_mark_skipped() can only be passed a pointer
-to a struct kunit, not struct kunit_suite (only kunit_log() actually
-supports both). Rename their first argument accordingly.
+Fix few spelling mistakes in net selftests
 
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Signed-off-by: Chandra Mohan Sundar <chandru.dav@gmail.com>
 ---
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org
----
- include/kunit/test.h | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ tools/testing/selftests/net/fcnal-test.sh   | 4 ++--
+ tools/testing/selftests/net/fdb_flush.sh    | 2 +-
+ tools/testing/selftests/net/fib_nexthops.sh | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 58dbab60f853..0ffb97c78566 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -553,9 +553,9 @@ void kunit_cleanup(struct kunit *test);
- void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt, ...);
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 899dbad0104b..4fcc38907e48 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -3667,7 +3667,7 @@ ipv6_addr_bind_novrf()
+ 	# when it really should not
+ 	a=${NSA_LO_IP6}
+ 	log_start
+-	show_hint "Tecnically should fail since address is not on device but kernel allows"
++	show_hint "Technically should fail since address is not on device but kernel allows"
+ 	run_cmd nettest -6 -s -l ${a} -I ${NSA_DEV} -t1 -b
+ 	log_test_addr ${a} $? 0 "TCP socket bind to out of scope local address"
+ }
+@@ -3724,7 +3724,7 @@ ipv6_addr_bind_vrf()
+ 	# passes when it really should not
+ 	a=${VRF_IP6}
+ 	log_start
+-	show_hint "Tecnically should fail since address is not on device but kernel allows"
++	show_hint "Technically should fail since address is not on device but kernel allows"
+ 	run_cmd nettest -6 -s -l ${a} -I ${NSA_DEV} -t1 -b
+ 	log_test_addr ${a} $? 0 "TCP socket bind to VRF address with device bind"
  
- /**
-- * kunit_mark_skipped() - Marks @test_or_suite as skipped
-+ * kunit_mark_skipped() - Marks @test as skipped
-  *
-- * @test_or_suite: The test context object.
-+ * @test: The test context object.
-  * @fmt:  A printk() style format string.
-  *
-  * Marks the test as skipped. @fmt is given output as the test status
-@@ -563,18 +563,18 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
-  *
-  * Test execution continues after kunit_mark_skipped() is called.
-  */
--#define kunit_mark_skipped(test_or_suite, fmt, ...)			\
-+#define kunit_mark_skipped(test, fmt, ...)				\
- 	do {								\
--		WRITE_ONCE((test_or_suite)->status, KUNIT_SKIPPED);	\
--		scnprintf((test_or_suite)->status_comment,		\
-+		WRITE_ONCE((test)->status, KUNIT_SKIPPED);		\
-+		scnprintf((test)->status_comment,			\
- 			  KUNIT_STATUS_COMMENT_SIZE,			\
- 			  fmt, ##__VA_ARGS__);				\
- 	} while (0)
+diff --git a/tools/testing/selftests/net/fdb_flush.sh b/tools/testing/selftests/net/fdb_flush.sh
+index d5e3abb8658c..9931a1e36e3d 100755
+--- a/tools/testing/selftests/net/fdb_flush.sh
++++ b/tools/testing/selftests/net/fdb_flush.sh
+@@ -583,7 +583,7 @@ vxlan_test_flush_by_remote_attributes()
+ 	$IP link del dev vx10
+ 	$IP link add name vx10 type vxlan dstport "$VXPORT" external
  
- /**
-- * kunit_skip() - Marks @test_or_suite as skipped
-+ * kunit_skip() - Marks @test as skipped
-  *
-- * @test_or_suite: The test context object.
-+ * @test: The test context object.
-  * @fmt:  A printk() style format string.
-  *
-  * Skips the test. @fmt is given output as the test status
-@@ -582,10 +582,10 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
-  *
-  * Test execution is halted after kunit_skip() is called.
-  */
--#define kunit_skip(test_or_suite, fmt, ...)				\
-+#define kunit_skip(test, fmt, ...)					\
- 	do {								\
--		kunit_mark_skipped((test_or_suite), fmt, ##__VA_ARGS__);\
--		kunit_try_catch_throw(&((test_or_suite)->try_catch));	\
-+		kunit_mark_skipped((test), fmt, ##__VA_ARGS__);		\
-+		kunit_try_catch_throw(&((test)->try_catch));		\
- 	} while (0)
+-	# For multicat FDB entries, the VXLAN driver stores a linked list of
++	# For multicast FDB entries, the VXLAN driver stores a linked list of
+ 	# remotes for a given key. Verify that only the expected remotes are
+ 	# flushed.
+ 	multicast_fdb_entries_add
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index 77c83d9508d3..bea1282e0281 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -741,7 +741,7 @@ ipv6_fcnal()
+ 	run_cmd "$IP nexthop add id 52 via 2001:db8:92::3"
+ 	log_test $? 2 "Create nexthop - gw only"
  
- /*
-
-base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+-	# gw is not reachable throught given dev
++	# gw is not reachable through given dev
+ 	run_cmd "$IP nexthop add id 53 via 2001:db8:3::3 dev veth1"
+ 	log_test $? 2 "Create nexthop - invalid gw+dev combination"
+ 
 -- 
-2.47.0
+2.43.0
 
 
