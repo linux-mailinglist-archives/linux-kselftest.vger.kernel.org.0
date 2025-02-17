@@ -1,31 +1,31 @@
-Return-Path: <linux-kselftest+bounces-26790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16E5A38AAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 18:39:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA059A38AB3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 18:39:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5A56167139
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 17:39:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E736169132
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 17:39:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A03C3229B12;
-	Mon, 17 Feb 2025 17:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90F8229B26;
+	Mon, 17 Feb 2025 17:39:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB60A21A421;
-	Mon, 17 Feb 2025 17:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0AB21A421;
+	Mon, 17 Feb 2025 17:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739813945; cv=none; b=NNuwfM257Vb9YFMDf6LCbz96mrHsv50kScz1NXPO1JkxRqQfvqaFX6S5WGysOkKUS+O4rB0iA5IeKbY9WZC4Bne3ItzXwMDWKr/4RVWG5m23tjf60LAsJur2XhA84Xeh4dNnXzLKtsDLORgLWSZrAJmVRZ6bxMRXa7GJLiTB9Bw=
+	t=1739813961; cv=none; b=d7oCyS+mVYEwW0QbbRI/dXDKweI1ow2UE328GHuxu5pDOKEFRSs4dr7c44GaljJ7as6MWoN6W7xQdoJSPwROeFibR8K+/sIcWm/BYJUEZWmyHkY3IrTcRupIjP3gt+pjjNx3MVMge6s2rxc1zl6wwyot41p6uBw2v5wmuUXihFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739813945; c=relaxed/simple;
-	bh=TdvNS18Uw5tczHNccU2gUpBqFtAjzC9sqV61DwUlqXU=;
+	s=arc-20240116; t=1739813961; c=relaxed/simple;
+	bh=Hln9MLJLWvBratba7o3z+my4SMXxNPfe/RNLjHyo04k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NGgi28wyQtz/KWeBKKpRrpapX99gX3JXhdAdhAF1GjuWymUSlBW8NGMXEuri7gRmH0S3XY7LZf1CidVHG+1ptdT4n5DysPWx+yjaOlKS9jrLurcMBSGnMNgjGciFTuZGjjNjUtVt1sPUn3ZP9b7EofmWTXYx0ZBEcTkzSJpdXVM=
+	 MIME-Version; b=gCTRyxtI3w407e7KOMGh9n5CgXKepBcTwgh7pRl+S9+WaeERSnY3WQOW1/8lpzESKSHNY0qntMANU5oezd2LD6bfZSVescZKcZUPP3aifn8zBbiulOQeUkrYCRkgeDG5PNV4rAkYUDiqWyN9GusbF5RrkHY0VZkyqo4+Q2ePMf8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -33,12 +33,12 @@ Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tk4pu-0001wq-3w; Mon, 17 Feb 2025 18:23:14 +0100
+	id 1tk4pu-0001wu-7V; Mon, 17 Feb 2025 18:23:14 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tk4pt-000Opa-2l;
+	id 1tk4pt-000Opa-39;
 	Mon, 17 Feb 2025 18:23:13 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
@@ -68,9 +68,9 @@ Cc: willemdebruijn.kernel@gmail.com,
 	shuah@kernel.org,
 	hawk@kernel.org,
 	marcus.wichelmann@hetzner-cloud.de
-Subject: [PATCH bpf-next v2 5/6] selftests/bpf: add test for XDP metadata support in tun driver
-Date: Mon, 17 Feb 2025 17:23:07 +0000
-Message-ID: <20250217172308.3291739-6-marcus.wichelmann@hetzner-cloud.de>
+Subject: [PATCH bpf-next v2 6/6] selftests/bpf: fix file descriptor assertion in open_tuntap helper
+Date: Mon, 17 Feb 2025 17:23:08 +0000
+Message-ID: <20250217172308.3291739-7-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de>
 References: <20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de>
@@ -84,94 +84,42 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27552/Mon Feb 17 10:47:21 2025)
 
-Add a selftest that creates a tap device, attaches XDP and TC programs,
-writes a packet with a test payload into the tap device and checks the
-test result. This test ensures that the XDP metadata support in the tun
-driver is enabled and that the metadata size is correctly passed to the
-skb.
+The open_tuntap helper function uses open() to get a file descriptor for
+/dev/net/tun.
 
-See the previous commit ("selftests/bpf: refactor xdp_context_functional
-test and bpf program") for details about the test design.
+The open(2) manpage writes this about its return value:
+
+  On success, open(), openat(), and creat() return the new file
+  descriptor (a nonnegative integer).  On error, -1 is returned and
+  errno is set to indicate the error.
+
+This means that the fd > 0 assertion in the open_tuntap helper is
+incorrect and should rather check for fd >= 0.
+
+When running the BPF selftests locally, this incorrect assertion was not
+an issue, but the BPF kernel-patches CI failed because of this:
+
+  open_tuntap:FAIL:open(/dev/net/tun) unexpected open(/dev/net/tun):
+  actual 0 <= expected 0
 
 Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 ---
- .../bpf/prog_tests/xdp_context_test_run.c     | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ tools/testing/selftests/bpf/network_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 0cd2a0d8ae60..5eba4a823184 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -8,6 +8,7 @@
- #define TX_NAME "veth1"
- #define TX_NETNS "xdp_context_tx"
- #define RX_NETNS "xdp_context_rx"
-+#define TAP_NAME "tap0"
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index e1cfa1b37754..9b59bfd5d912 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -571,7 +571,7 @@ int open_tuntap(const char *dev_name, bool need_mac)
+ 	struct ifreq ifr;
+ 	int fd = open("/dev/net/tun", O_RDWR);
  
- #define TEST_PAYLOAD_LEN 32
- static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
-@@ -245,3 +246,61 @@ void test_xdp_context_veth(void)
- 	netns_free(tx_ns);
- }
+-	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
++	if (!ASSERT_GE(fd, 0, "open(/dev/net/tun)"))
+ 		return -1;
  
-+void test_xdp_context_tuntap(void)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct test_xdp_meta *skel = NULL;
-+	__u8 packet[sizeof(struct ethhdr) + TEST_PAYLOAD_LEN];
-+	int tap_fd = -1;
-+	int tap_ifindex;
-+	int ret;
-+
-+	tap_fd = open_tuntap(TAP_NAME, true);
-+	if (!ASSERT_GE(tap_fd, 0, "open_tuntap"))
-+		goto close;
-+
-+	SYS(close, "ip link set dev " TAP_NAME " up");
-+
-+	skel = test_xdp_meta__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		goto close;
-+
-+	tap_ifindex = if_nametoindex(TAP_NAME);
-+	if (!ASSERT_GE(tap_ifindex, 0, "if_nametoindex"))
-+		goto close;
-+
-+	tc_hook.ifindex = tap_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto close;
-+
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.ing_cls);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto close;
-+
-+	ret = bpf_xdp_attach(tap_ifindex, bpf_program__fd(skel->progs.ing_xdp),
-+			     0, NULL);
-+	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
-+		goto close;
-+
-+	/* The ethernet header is not relevant for this test and doesn't need to
-+	 * be meaningful.
-+	 */
-+	struct ethhdr eth = { 0 };
-+
-+	memcpy(packet, &eth, sizeof(eth));
-+	memcpy(packet + sizeof(eth), test_payload, TEST_PAYLOAD_LEN);
-+
-+	ret = write(tap_fd, packet, sizeof(packet));
-+	if (!ASSERT_EQ(ret, sizeof(packet), "write packet"))
-+		goto close;
-+
-+	assert_test_result(skel);
-+
-+close:
-+	if (tap_fd >= 0)
-+		close(tap_fd);
-+	test_xdp_meta__destroy(skel);
-+}
+ 	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
 -- 
 2.43.0
 
