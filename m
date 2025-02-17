@@ -1,216 +1,220 @@
-Return-Path: <linux-kselftest+bounces-26759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AB1AA37EC1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 10:37:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D088A3810F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 12:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01F03161E46
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 09:37:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B94A07A6582
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 11:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DBB2153EE;
-	Mon, 17 Feb 2025 09:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4C3D218AB2;
+	Mon, 17 Feb 2025 11:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RH6llmNi"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DYODbpZY";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8rOM/uJn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC61F155316;
-	Mon, 17 Feb 2025 09:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9133217646;
+	Mon, 17 Feb 2025 11:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739785050; cv=none; b=eOF57wjaWMud+R4I8GvA+yfMyNkrVfsCUOG6HniS3v7yzZ0Qy+ZK3y1wu60UFNrYVspc2OFWnc8uirjvDGt/slQKHr3Poo6kljfgS0VURWhOWVm4CCSScWbA5OTYHqU5n9JAqo99vkskuryHKP+rV4efEA5J5AxxCJKMIhACTAM=
+	t=1739790039; cv=none; b=WZLrzzIT2nyKZZZaWhdrTOfgVSfbfiDnc9KYZGMShPdggghR2aDH6SNTb9fjd0yuVpIJg7Grw+qpF7pxzbQbQ8vYACq/VFwPy1oD62lwHG8ZLGhwHoF4ieUAxbEuN6u2YcWDs6b2c3a+BXH9aHCO7QXTIZkMopXgoES3thrRznU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739785050; c=relaxed/simple;
-	bh=AZCs5g8Mralms5Xjea2hMqxAgz+/0HZ4sntHHhpsj9s=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=en1YhjzqeLj/lQXy1IEnSLUv/WjdvMeHQd/A3O0FCY90x+3vJndO6y9PuLORmxh+dp9vrFEo084no5JoJTr+mV7lWfGvps1yQjOL9C1+IKo3pWySoJMUycQCllC6KuUWt+41vbet5DsGFq3V1aNIBvTnx9L+9b3XeIXZdyqFuSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RH6llmNi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258C1C4CED1;
-	Mon, 17 Feb 2025 09:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739785049;
-	bh=AZCs5g8Mralms5Xjea2hMqxAgz+/0HZ4sntHHhpsj9s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RH6llmNifW/GIp1YLSH29+A+9o7u8I2E0W3EyKFXLU1MKdiVZlTSttctViCPDEaJo
-	 MSIIzZbfDvaacMB1GK9oIeii0mbPtrcxYzLiAZOaZRSZdWUnyLm4ByZd3t4CH+U7CU
-	 gsoVw7xBdahqHquX6A0YTxXvsgT5mSVnTGO5uyb0C+aqHQtt8njJ8vi+P6XBxPbAkR
-	 3dgdnwqQ2dQ3CXZDE9IHiEV50BsIu6jt2W/y2pWE6six45KfPb7KAShqDFWq6JNn2L
-	 zlKe+Av4bNn/RPTMlp6lUbfdyMM0xMJxjueXRziyc6atx+8Ki923PlfQ97JSRVrDI7
-	 gl3zTX1ukcHkA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tjxZ8-004zmI-N1;
-	Mon, 17 Feb 2025 09:37:26 +0000
-Date: Mon, 17 Feb 2025 09:37:26 +0000
-Message-ID: <86h64ssyi1.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 00/27] KVM: arm64: Implement support for SME in non-protected guests
-In-Reply-To: <Z69dsGn1JVWPCqAi@finisterre.sirena.org.uk>
-References: <20250214-kvm-arm64-sme-v4-0-d64a681adcc2@kernel.org>
-	<86pljkswuk.wl-maz@kernel.org>
-	<Z69dsGn1JVWPCqAi@finisterre.sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1739790039; c=relaxed/simple;
+	bh=TfZ1KJVQujR/HT3oPEKNiSlDL6xZc4H3LPnzgMSMjm0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ArLlCo4IbxveCRlKSgT/qXOWA/QciRJqu8wFNjxBIu3tRoYIKV1X7RJbtzsUUqFetKmVMJ2ccdIoy7bjIKIIGdAD4a+X8RCgmzDbzUsfw27ooS7WEcXudX+pr7aYgUcTr7PfvcWHcfTsJYIaPx1F7HDE1Fdx0H/WFOM78M60gsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DYODbpZY; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8rOM/uJn; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739790035;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GvuUwG+qIwvHRQItyyno7DxWnJaEqQNA725TKi+5rlw=;
+	b=DYODbpZYeTzdI8EJRFJtmEi9rvrde+4pFhE8mZWSkxL9FMJuj9lyXKpqVAkkqbnsK3UfnO
+	3hcxLC07lfeViBvXddUfi7UsaK2REhuhl1blC+NdzbVtFfJv4M+9ZiCKQ1fb/c9LTQvQEb
+	K89aYBy49bZnabYfU8ue1p5wCM23tjZJ8ZiHxYCtYJFSoSrwKH9iqlmhc1XowRkM8wyGAG
+	LQFCpOMiTEUqKPh+QMojDL8uDudK2a4mEqEUgcPj0+m5hjbK9ssG6q9Y95JT+DwN2af6Z8
+	E+7drRGpPg2Cyud4X398fIuvBvYLdhgRKLWathA3q09YlO26s/8wtjkjui4KlQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739790035;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GvuUwG+qIwvHRQItyyno7DxWnJaEqQNA725TKi+5rlw=;
+	b=8rOM/uJnix25mKPK2Db7m1FvxNrrNnpagv0Ue45mykqVbz+9VoGUlXPOHJZeJGcEHIJMLZ
+	rT6gw67A9tzPQyCg==
+Subject: [PATCH 00/12] kunit: Introduce UAPI testing framework
+Date: Mon, 17 Feb 2025 11:59:20 +0100
+Message-Id: <20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, catalin.marinas@arm.com, suzuki.poulose@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, Dave.Martin@arm.com, tabba@google.com, mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIgWs2cC/2WNyw6CMBBFf4XM2po+xbjyPwyLAoNMIMV0CsEQ/
+ t3C1uU5yT13A8ZIyPAoNoi4ENMUMqhLAU3vwxsFtZlBS22VVE4Mc6AkBsaxS8iJhbvp0tSNldZ
+ qyLNPxI7WM/mqMvfEaYrf82FRhz1iTmpl/mOLElL42pTm3jrvFD5HCnOKU6D12iJU+77/AIrUM
+ 9+0AAAA
+X-Change-ID: 20241015-kunit-kselftests-56273bc40442
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-doc@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739790034; l=6312;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=TfZ1KJVQujR/HT3oPEKNiSlDL6xZc4H3LPnzgMSMjm0=;
+ b=ZQpQ0jJup/+DiUt2j1A80eoAA/RKqdnloh7ln/bzlNAjcHcTzXhYPfOV9Um/nbEaIka9ti3VE
+ EbUkeD6fpAfDKtPAs3YPH4aLf+Hp686bgjnWsk0zfFLiB/G3GDXF/wA
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, 14 Feb 2025 15:13:52 +0000,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> On Fri, Feb 14, 2025 at 09:24:03AM +0000, Marc Zyngier wrote:
-> > Mark Brown <broonie@kernel.org> wrote:
-> 
-> > Just to be clear: I do not intend to review a series that doesn't
-> > cover the full gamut of KVM from day 1. Protected mode is an absolute
-> > requirement. It is the largest KVM deployment, and Android phones the
-> > only commonly available platform with SME. If CCA gets merged prior to
-> > SME support, supporting it will also be a requirement.
-> 
-> OK, no problem.  This is a new requirement and I'd been trying to
-> balance the concerns people have with the size of serieses like this
-> with the need to get everything in, my plan had been to follow up as
-> soon as possible with pKVM.
+Currently testing of userspace and in-kernel API use two different
+frameworks. kselftests for the userspace ones and Kunit for the
+in-kernel ones. Besides their different scopes, both have different
+strengths and limitations:
 
-If size is an issue, split the UAPI from the core code. But don't
-fragment the overall world switch and exception handling, because
-that's a sure way to end-up with the same sort of problems we ended up
-fixing in SVE. pKVM has a direct influence on what you track, where
-you track it, and implementing it as an afterthought is a very bad
-idea.
+Kunit:
+* Tests are normal kernel code.
+* They use the regular kernel toolchain.
+* They can be packaged and distributed as modules conveniently.
 
-> 
-> > > Access to the floating point registers follows the architecture:
-> 
-> > >  - When both SVE and SME are present:
-> > >    - If PSTATE.SM == 0 the vector length used for the Z and P registers
-> > >      is the SVE vector length.
-> > >    - If PSTATE.SM == 1 the vector length used for the Z and P registers
-> > >      is the SME vector length.
-> > >  - If only SME is present:
-> > >    - If PSTATE.SM == 0 the Z and P registers are inaccessible and the
-> > >      floating point state accessed via the encodings for the V registers. 
-> > >    - If PSTATE.SM == 1 the vector length used for the Z and P registers
-> > >  - The SME specific ZA and ZT0 registers are only accessible if SVCR.ZA is 1.
-> 
-> > > The VMM must understand this, in particular when loading state SVCR
-> > > should be configured before other state.
-> 
-> > Why SVCR? This isn't a register, just an architected accessor to
-> > PSTATE.{ZA,SM}. Userspace already has direct access to PSTATE, so I
-> > don't understand this requirement.
-> 
-> Could you be more explicit as to what you mean by direct access to
-> PSTATE here?  The direct access to these PSTATE fields is in the form of
-> SVCR register accesses, or writes via SMSTART or SMSTOP instructions
-> when executing code - is there another access mechanism I'm not aware of
-> here?  They don't appear in SPSR.  Or is this a terminology issue with
-> referring to SVCR as the mechanism for configuring PSTATE.{SM,ZA}
-> without explicitly calling out that that's what's happening?
+Kselftests:
+* Tests are normal userspace code
+* They need a userspace toolchain.
+  A kernel cross toolchain is likely not enough.
+* A fair amout of userland is required to run the tests,
+  which means a full distro or handcrafted rootfs.
+* There is no way to conveniently package and run kselftests with a
+  given kernel image.
+* The kselftests makefiles are not as powerful as regular kbuild.
+  For example they are missing proper header dependency tracking or more
+  complex compiler option modifications.
 
-I'm painfully aware of the architecture limitations.
+Therefore kunit is much easier to run against different kernel
+configurations and architectures.
+This series aims to combine kselftests and kunit, avoiding both their
+limitations. It works by compiling the userspace kselftests as part of
+the regular kernel build, embedding them into the kunit kernel or module
+and executing them from there. If the kernel toolchain is not fit to
+produce userspace because of a missing libc, the kernel's own nolibc can
+be used instead.
+The structured TAP output from the kselftest is integrated into the
+kunit KTAP output transparently, the kunit parser can parse the combined
+logs together.
 
-However, I don't get your mention of SPSR here. The architecture is
-quite clear that PSTATE is where these bits are held, that they are
-not propagated anywhere else, and that's where userspace should expect
-to find them.
+Further room for improvements:
+* Call each test in its completely dedicated namespace
+* Handle additional test files besides the test executable through
+  archives. CPIO, cramfs, etc.
+* Compatibility with kselftest_harness.h (in progress)
+* Expose the blobs in debugfs
+* Provide some convience wrappers around compat userprogs
+* Figure out a migration path/coexistence solution for
+  kunit UAPI and tools/testing/selftests/
 
-The fact that SW must use SVCR to alter PSTATE.{ZA,SM} doesn't matter.
-We save/restore registers, not accessors. If this means we need to
-play a dance when the VMM accesses PSTATE to reconciliate KVM's
-internal view with the userspace view, so be it.
+Output from the kunit example testcase, note the output of
+"example_uapi_tests".
 
-It probably means you need to obtain a clarification of the
-architecture to define *where* these bits are stored in PSTATE,
-because that's not currently defined.
+$ ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit example
+...
+Running tests with:
+$ .kunit/linux kunit.filter_glob=example kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
+[11:53:53] ================== example (10 subtests) ===================
+[11:53:53] [PASSED] example_simple_test
+[11:53:53] [SKIPPED] example_skip_test
+[11:53:53] [SKIPPED] example_mark_skipped_test
+[11:53:53] [PASSED] example_all_expect_macros_test
+[11:53:53] [PASSED] example_static_stub_test
+[11:53:53] [PASSED] example_static_stub_using_fn_ptr_test
+[11:53:53] [PASSED] example_priv_test
+[11:53:53] =================== example_params_test  ===================
+[11:53:53] [SKIPPED] example value 3
+[11:53:53] [PASSED] example value 2
+[11:53:53] [PASSED] example value 1
+[11:53:53] [SKIPPED] example value 0
+[11:53:53] =============== [PASSED] example_params_test ===============
+[11:53:53] [PASSED] example_slow_test
+[11:53:53] ======================= (4 subtests) =======================
+[11:53:53] [PASSED] procfs
+[11:53:53] [PASSED] userspace test 2
+[11:53:53] [SKIPPED] userspace test 3: some reason
+[11:53:53] [PASSED] userspace test 4
+[11:53:53] ================ [PASSED] example_uapi_test ================
+[11:53:53] ===================== [PASSED] example =====================
+[11:53:53] ============================================================
+[11:53:53] Testing complete. Ran 16 tests: passed: 11, skipped: 5
+[11:53:53] Elapsed time: 67.543s total, 1.823s configuring, 65.655s building, 0.058s running
 
->
-> > Isn't it that there is simply a dependency between restoring PSTATE
-> > and any of the vector stuff? Also, how do you preserve the current ABI
-> > that do not have this requirement?
-> 
-> Yes, that's the dependency - I'm spelling out explicitly what changes in
-> the register view when PSTATE.{SM,ZA} are restored.  This ABI is what
-> you appeared to be asking for the last time we discussed this.
-> Previously I had also proposed either:
-> 
->  - Exposing the streaming mode view of the register state as separate
->    registers, selecting between the standard and streaming views for
->    load/save based on the mode when the guest runs and clearing the
->    inactive registers on userspace access.
-> 
->  - Always presenting userspace with the largest available vector length,
->    zero padding when userspace reads and discarding unused high bits
->    when loading into the registers for the guest.  This ends up
->    requiring rewriting between VLs, or to/from FPSIMD format, around
->    periods of userspace access since when normally executing and context
->    switching the guest we want to store the data in the native format
->    for the current PSTATE.SM for performance.
-> 
-> both of which largely avoid the ordering requirements but add complexity
-> to the implementation, and memory overhead in the first case.  I'd
-> originally implemented the second case, that seems the best of the
-> available options to me.  You weren't happy with these options and said
-> that we should not translate register formats and always use the current
-> mode for the vCPU, but given that changing PSTATE.SM changes the
-> register sizes that ends up creating an ordering requirement.  You
-> seemed to agree that it was reasonable to have an ordering requirement
-> with PSTATE.SM so long as it only came when SME had been explicitly
-> enabled.
-> 
-> Would you prefer:
-> 
->  - Changing the register view based on the current value of PSTATE.SM.
->  - Exposing streaming mode Z and P as separate registers.
->  - Exposing the existing Z and P registers with the maximum S?E VL.
-> 
-> or some other option?
+Based on v6.14-rc1 and the series
+"tools/nolibc: compatibility with -Wmissing-prototypes" [0].
+For compatibility with LLVM/clang another series is needed [1].
 
-My take on this hasn't changed. I want to see something that behaves
-*exactly* like the architecture defines the expected behaviour of a
-CPU.
+[0] https://lore.kernel.org/lkml/20250123-nolibc-prototype-v1-0-e1afc5c1999a@weissschuh.net/
+[1] https://lore.kernel.org/lkml/20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de/
 
-But you still haven't answered my question: How is the *current* ABI
-preserved? Does it require *not* selecting SME? Does it require
-anything else? I'm expecting simple answers to simple questions, not a
-wall of text describing something that is not emulating the
-architecture.
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (12):
+      kconfig: implement CONFIG_HEADERS_INSTALL for Usermode Linux
+      kconfig: introduce CONFIG_ARCH_HAS_NOLIBC
+      kbuild: userprogs: respect CONFIG_WERROR
+      kbuild: userprogs: add nolibc support
+      kbuild: introduce blob framework
+      kunit: tool: Add test for nested test result reporting
+      kunit: tool: Don't overwrite test status based on subtest counts
+      kunit: tool: Parse skipped tests from kselftest.h
+      kunit: Introduce UAPI testing framework
+      kunit: uapi: Add example for UAPI tests
+      kunit: uapi: Introduce preinit executable
+      kunit: uapi: Validate usability of /proc
 
-	M.
+ Documentation/kbuild/makefiles.rst                 |  12 +
+ Makefile                                           |   5 +-
+ include/kunit/uapi.h                               |  17 ++
+ include/linux/blob.h                               |  21 ++
+ init/Kconfig                                       |   2 +
+ lib/Kconfig.debug                                  |   1 -
+ lib/kunit/Kconfig                                  |   9 +
+ lib/kunit/Makefile                                 |  17 +-
+ lib/kunit/kunit-example-test.c                     |  17 ++
+ lib/kunit/kunit-uapi-example.c                     |  58 +++++
+ lib/kunit/uapi-preinit.c                           |  61 +++++
+ lib/kunit/uapi.c                                   | 250 +++++++++++++++++++++
+ scripts/Makefile.blobs                             |  19 ++
+ scripts/Makefile.build                             |   6 +
+ scripts/Makefile.clean                             |   2 +-
+ scripts/Makefile.userprogs                         |  18 +-
+ scripts/blob-wrap.c                                |  27 +++
+ tools/include/nolibc/Kconfig.nolibc                |  18 ++
+ tools/testing/kunit/kunit_parser.py                |  13 +-
+ tools/testing/kunit/kunit_tool_test.py             |   9 +
+ .../test_is_test_passed-failure-nested.log         |  10 +
+ .../test_data/test_is_test_passed-kselftest.log    |   3 +-
+ 22 files changed, 584 insertions(+), 11 deletions(-)
+---
+base-commit: 20e952894066214a80793404c9578d72ef89c5e0
+change-id: 20241015-kunit-kselftests-56273bc40442
 
+Best regards,
 -- 
-Without deviation from the norm, progress is not possible.
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
