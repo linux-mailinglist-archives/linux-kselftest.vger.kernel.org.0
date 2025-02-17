@@ -1,205 +1,409 @@
-Return-Path: <linux-kselftest+bounces-26788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E75C6A3874F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 16:15:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969E9A3876E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 16:23:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99F6F170E01
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:14:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7948D3B0B29
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50CD224AF3;
-	Mon, 17 Feb 2025 15:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25072223300;
+	Mon, 17 Feb 2025 15:22:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SkwL6kx1"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YHx3Wv+8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CE2224AE3;
-	Mon, 17 Feb 2025 15:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739805239; cv=none; b=tZF8kC3eQQSo8PRtuw3uXgQlYLFuGxbBk8XN5Kw2t5UDdLXXLzFPD0Q/ikxqqzg962lsxC1OeOHKQJoEzDtyO5cAb/Jzxf5e8wScQ30acdPhkoE4EpMEbjipqudQZeQqcLceRnv8rDlHOM4zinFoBrNcp+imC3oFZ8XK4GG4XS0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739805239; c=relaxed/simple;
-	bh=ceOi81mc70klegZOTYzDPgZqMYutc+or6PEzYL8DKVk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qtz+tvVWj4o4gC4gOZWeOfmnueF/QKfx+jEmguEcF4yClawCYEFf9zIXhLpKLwr3K8Lvx0f3HB1CFZot/xjHdtHzlpJdhJB7PqfZwVLVyEAN1stzBA7GwX06xiV9Ly5Iqx46qr4CX1LCemgI/E8A65vy7Gz1ByfJ4blIieYpg5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SkwL6kx1; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5dc89df7eccso8218837a12.3;
-        Mon, 17 Feb 2025 07:13:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739805236; x=1740410036; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DoNbjmdbvjY/XVJJlaAAFeUh14svEzqtVgPXSMwNfBw=;
-        b=SkwL6kx1ND6hdMiPF94lLRfNHuR6WWLOEouISvV8vZEFB0L6YGUuRIh6aq5Wa+a48C
-         Aahb93S2xWePajLzxQ/9of42kaMRwHXAkobLi9wBB4ETinaY2xb+LgOgQVU+K6wyM2F9
-         p2gqBC5bT9JmNjvqx9o0L40D3RIGAlFwZsRaARfgzFdK78uyB/HqZvqqoZ/O0ymcErkY
-         yEkPLsRdpi2YNKVX8MVV2ehruoIHp9HVUSSaYueUQGnSzR7JKFfQEZZ7xta/54l7iupQ
-         bCaa3X2pu4xdjKBtX12xRJL5m9bDfDN+PkMizuxoWN27YlxPourauh2wYKdfm7uaeHDH
-         vr3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739805236; x=1740410036;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DoNbjmdbvjY/XVJJlaAAFeUh14svEzqtVgPXSMwNfBw=;
-        b=vVtJroN0HakNKnIMqwCPfRe1n3O2KIK6bK9fycYaTUOq9E5lhoolg5uTpZDiKuDyQD
-         P8+p7tMPmAu24QeHYgs3OtCYtAP/XCkTT69YOeyuEwwOCWKd65XGY5ZoAVbP5YPzRg7z
-         ofVKDGi4GVxR7aR5i2IHAvqgwTtNO/BcmxcObVwzsGZGA16Ag9VBYN8l7IWkPASGVBmh
-         v3LVHW/FUyAqsz1q4y4Y+GKbUa4I6YqJKNUwtzpE6q4YcrunG8eki87kYNdaClvuMBuq
-         4h9S/Lp5yQK+5xG0sZnsc9bWmLAYdHm9t8QF3oaSGMRj5IRiI7xdvitfZJcl61cKm7qV
-         l9JA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGbwqfYR/bobOyaLfMET8Yo3N8WEBdNJ6AUG848x7m4G9uCJVTddOwecE4q8D6X7kTOZ3L91Do3nSfaWee@vger.kernel.org, AJvYcCVJQuHqelXiJCPb1VTOqf373XosGbNvDPKuCn26EknsGX6iVKXH9G0e6G6KNmorYj00IeNUhkGO6yo=@vger.kernel.org, AJvYcCXexEMPKrS16yhH8KawygrKu0aXh1AgCU6ojeMf3/J9ehgjoGDbTXlOIW+Y1nMlZd/WWx65s2n9/udHV2MCbsM2@vger.kernel.org
-X-Gm-Message-State: AOJu0YyytWCQehPudjM+A6B/6UeykQpdCDbvvksf2xfPZzs4q6iiIYTB
-	oh/zSC3T4MSRFtbBOZeuEdWVGY2ULo53eoJ9xMGYyGPt4lGe9kLW
-X-Gm-Gg: ASbGncvvLqqfyZeXahVkG+hi26NbuBXbZJpnKeiI9stpihaiuWHb1LQ/SQYTA9RWQ7C
-	9AFTpfjY4GUnYbU0ljK/YIC0RAMXcCSymkFtKIQ/jLYLhBCvZxfYXZFdiuOxROr1e/8nV4EbSPS
-	brgAtrRoy9tA8WNfcJzEoDMjAIRaYlGAs38ohAfqcGPFWFkDbjZjs4K2JA59GdhhyokDiMcSRsQ
-	vFoRBqiKtiV0N2m2WW4sg/qEiLeBxRujKtH7UppBWZZ8FlfqAAuHnXvaDYU2kK4fgK3a9TTj+mg
-	Qsx0rxmcIZkkRjsphG76uqfWPZH45CrAatL3WC63szizOjScgzNu5OnpODsZmg==
-X-Google-Smtp-Source: AGHT+IEP10eXUY8i3oDDDg3lF4ilHQydvyQYUQww7NrtLLL+sTgv656S34fPOBxn2U+5a6BaYbbw3A==
-X-Received: by 2002:a17:907:72cf:b0:aa6:96ad:f903 with SMTP id a640c23a62f3a-abb70db0230mr684578266b.31.1739805235904;
-        Mon, 17 Feb 2025 07:13:55 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1126:4:fb:39c9:9a24:d181? ([2620:10d:c092:500::7:6466])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb904a4ae5sm303112766b.29.2025.02.17.07.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Feb 2025 07:13:55 -0800 (PST)
-Message-ID: <3ef9a5f3-2d63-46db-b0b5-d6f7e78c7888@gmail.com>
-Date: Mon, 17 Feb 2025 15:13:54 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484D01494DF;
+	Mon, 17 Feb 2025 15:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739805772; cv=fail; b=CxjOmBI1jEj61EYrFrAxfvQ2SG8Ui+1sutArcBedbw5obS7XKzo2aS+DK2mePVGGsRB/BSiqLQwo8u/BdCTeYZ8JY0WoxZHtlmb4m/WaNeSBrLtWNcWUMODJtQCHiEK5Bv54sBw6ZGgqDxXCzdoOV/PhsYO7PBU7EjNKv7VYn8M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739805772; c=relaxed/simple;
+	bh=ZOsHy1wHf6JRGfr2IAOQPRNCc8G/IH1qLB1B/UFwHiY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pGmPZXodFJ2xQv5W89G4D0Wox22/lu0HZ3Oek7lUkMVxL96lkWPWa+7Bq/E3f1G92Xm9j3ChDjuhVMIGG+WZTgdSTRNfs2V54BccT2PYWDa37FLdhIIeCQCWdoIQMsb9D7AvNBaDO8b4YLi4AOrlSzaqO7hng+//MDUdlb6kYJg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YHx3Wv+8; arc=fail smtp.client-ip=40.107.244.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xeMi+WKLmTRNNIPX+nqPQhizluHi60BDn+kohe0eNqlrzqjTaCCo8IAUUJ3VeVQ2/adiDb6NEtH+zwZw70R9yI6Rg7dJ+aBdsmPBgT7gjWpnO6iEJ2TMobNk1AaYbC0jHxfgFSp9gun5J2pSHzSX6cAN26nC6qAt/x7lS9cZKTnZf1c/cY4gky43v/4imxXd2EQrQ7aqUFnuloGiPRataG8IXnkqZ512tQxswF9/SC7QgSlmC1tj2gN5MlJFhKbceYbP3QYb15t9o6uV7A5m4BrPVqFjwQ6vlwQiDLzX1Ds5eUCbWE1OiQeyyWJcgSPq8XM+vA/DMLZXPWJJDoEnMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WIIUDEIO+npXFeN+j7NOCrdWtmEwAQ1OuL9LgF/Wz+M=;
+ b=FwVsy4fYIoAu2qBwnzaWhm93H7lYE7Onov4Z8qdHwSdq7wfd78URFTVxjKn8LIBF0Ogon2wla2kmjhIJgYFHnTkC0UTsvRcQ2xsOJxN1ovPF+VJvEkI6p3kDOcMZfjOfnTlqeTS2ljx/lA/RLOJXCN2o2I4vTasvIuaymF8HYwHgQuDE1Mq83xaHpFbw+h2rrenXmgDPBkEfDuA57OT/84HQ5+5OqSe+ZiQBJBLyHkkjCQztNPUqZzko3HvF8cI3fET27gxRDrZHJen4F2fLV1u0OOie4oQR4F4R6ariAyKkh0NXSooyXkiSk1evo0X1it0nZdaO6B1EOamI1VQHAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WIIUDEIO+npXFeN+j7NOCrdWtmEwAQ1OuL9LgF/Wz+M=;
+ b=YHx3Wv+8QozMXPlZ0JPhZIgwfxdoCX0lNwpDNdkFcepclcHh40YveIS7RrRG1DQAA13J4FJGZDt2QZyj6XCgJn+dVXp0xnmCfpwkFJbtfxmewuomV2DJO59JUUamFPCovOlY5tkSJyj88zIQtKbbuRA+/B/AxmSOUUHkI0PVIS1mWgG5Ti8wp5JUx8uaTElAmXmbsO8G5GVdwJ7t62gp2jt9n8UCYFma4YzAB1mD5Rpoj7MENJvxDuA43I1t02AYng3ZOpDYzYJOyb6Bg8DHenmUPvKposcSFS41OTBT3oAfCiofTFbb+RmpJg7CUTxrJbVN9gtiQufB9l3WayRc1Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ DM4PR12MB7719.namprd12.prod.outlook.com (2603:10b6:8:101::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8445.20; Mon, 17 Feb 2025 15:22:46 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%5]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
+ 15:22:46 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ David Hildenbrand <david@redhat.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
+ Yang Shi <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>,
+ Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>,
+ John Hubbard <jhubbard@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/8] mm/huge_memory: add buddy allocator like
+ (non-uniform) folio_split()
+Date: Mon, 17 Feb 2025 10:22:44 -0500
+X-Mailer: MailMate (2.0r6222)
+Message-ID: <A6E3A545-D2CD-46B6-A532-64BBBED42914@nvidia.com>
+In-Reply-To: <4483B46A-FEAF-46D9-AFF4-F0DF34864633@nvidia.com>
+References: <20250211155034.268962-1-ziy@nvidia.com>
+ <20250211155034.268962-5-ziy@nvidia.com>
+ <f1198e22-3358-4f82-8227-49b0e779302f@redhat.com>
+ <4483B46A-FEAF-46D9-AFF4-F0DF34864633@nvidia.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: IA1P220CA0003.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:208:461::9) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v2 5/5] mm: document mTHP defer setting
-To: Nico Pache <npache@redhat.com>, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-Cc: ryan.roberts@arm.com, anshuman.khandual@arm.com, catalin.marinas@arm.com,
- cl@gentwo.org, vbabka@suse.cz, mhocko@suse.com, apopple@nvidia.com,
- dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org,
- jack@suse.cz, srivatsa@csail.mit.edu, haowenchao22@gmail.com,
- hughd@google.com, aneesh.kumar@kernel.org, yang@os.amperecomputing.com,
- peterx@redhat.com, ioworker0@gmail.com, wangkefeng.wang@huawei.com,
- ziy@nvidia.com, jglisse@google.com, surenb@google.com,
- vishal.moola@gmail.com, zokeefe@google.com, zhengqi.arch@bytedance.com,
- jhubbard@nvidia.com, 21cnbao@gmail.com, willy@infradead.org,
- kirill.shutemov@linux.intel.com, david@redhat.com, aarcange@redhat.com,
- raquini@redhat.com, dev.jain@arm.com, sunnanyong@huawei.com,
- audra@redhat.com, akpm@linux-foundation.org, rostedt@goodmis.org,
- mathieu.desnoyers@efficios.com, tiwai@suse.de,
- baolin.wang@linux.alibaba.com, corbet@lwn.net, shuah@kernel.org
-References: <20250211004054.222931-1-npache@redhat.com>
- <20250211004054.222931-6-npache@redhat.com>
-Content-Language: en-US
-From: Usama Arif <usamaarif642@gmail.com>
-In-Reply-To: <20250211004054.222931-6-npache@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DM4PR12MB7719:EE_
+X-MS-Office365-Filtering-Correlation-Id: fea69d1b-0696-4797-c4ae-08dd4f66ee7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?vXkm4HYyvetj8avQyHU7WAXK/4mqpY5yOTlC+QrBgZOsZmKRDaegHlsBqA/5?=
+ =?us-ascii?Q?ACKv6GzgKzR3BIlPMB0Z/RAZ3gUTiKWftFYIi7sZB2nvlIc1+Fh9lJLQuTUX?=
+ =?us-ascii?Q?flblhlCuOyjU2IvACvihBuZ07+h1RzQTCiVBoIdU7IOMOiycB2gz5kY7seLP?=
+ =?us-ascii?Q?jN2Y/rwrZamznywexQvGQUlI0Z+WrjPdG/P8NX9tJOIKnqNVJo/h4mBmkCfj?=
+ =?us-ascii?Q?QQe1ec0RRoGpNj4uhB48PCKFb8qexK5B1ntJccj4X/TsBIQqiX4w9ldvdIjm?=
+ =?us-ascii?Q?YzYGEvOLNncZLW0uIo5gji/S/jCD9heJOVNlXVjblAmHZps8WPbWKe+0wTLZ?=
+ =?us-ascii?Q?tWM3Ku0HCgLYZdpJw225iR8j/gHlB0nHgsw7EEVGwgu+UEIiFGHY63vRSb94?=
+ =?us-ascii?Q?5PArfxg/r84jdtg5slwrrMbMS+NxrlLoW9VScgKsaIVnnNqjgEiO3kgxtb1C?=
+ =?us-ascii?Q?TbXNgl0Q6A2fbT4EtrZtkETv/uDO/YWrtrGbpdEHdnJrjZeKhMUACMyMhkkz?=
+ =?us-ascii?Q?BAguM3Q+wVbHFj9LMToLwcmFexkBd51R0dmHanAjEnE46Mn6dYfGhXOtpiao?=
+ =?us-ascii?Q?/gwS6YBvvM1+Fz3dGnjvAqw1Y6FsqylvwwMQ3ikJcyeEkfQqVQIX58nqyCIa?=
+ =?us-ascii?Q?+cXcXld8GmuDq6JWuCGP8iBf2WP5VfAzZflxvPIMiPJ5L69/DW64HFbZXk5/?=
+ =?us-ascii?Q?gYMVUUS+TJi+JQMsSEG/g2rqBOXOHp3aFn6v5Xea9s6i+9UNXMNxEFTyWk2l?=
+ =?us-ascii?Q?5yJPO9fyUnHSAPNzAHLAWDfbTBDRaLU5LoQw+cv5nHbp0eVg+dDuiErkG1OG?=
+ =?us-ascii?Q?SK9tlTJMmpquk+0VBexP7evVvOe9VqPrLZTY8Bqi8gZ85pnYBR6WGTHAVZ5B?=
+ =?us-ascii?Q?fSp2Fc2AQ+KbQZonahGn7CDsCLWdfwoGPsQy2rKEOARDPZqz9J2bvVLGjdv6?=
+ =?us-ascii?Q?ORdsDsU93BA09Ca5/GhbJxo0HprqnlKAS3qz/2Lj6JPxPD3O4eOI5Wyfb+vq?=
+ =?us-ascii?Q?ewBpX7IaG/KOLPA+CP070tdpOuiKxFgFDLSZ9f9mYotxowkQu3ZMErE0AGml?=
+ =?us-ascii?Q?UAV5xD4WXLnPdi/PSWjMInOikaj+PAtx+Hjn7E+o42SReOnKIoei9bxKLSu+?=
+ =?us-ascii?Q?yAUBdV7vGEjmAf7SjwEja/Ny1uRbme0fUdnRoDWrhZEEctEltco++TD+BtEc?=
+ =?us-ascii?Q?tdwo1zMW87OCeYHtaqveK+Jwqw4BT6dPihoHxJerdnqHIvPRMNAmbJi4dTQa?=
+ =?us-ascii?Q?lxPm21TqveIS0t0XANlqvnS8tb43PB+B0BkH92aqmGrjf0wR7dqG0imAiiCB?=
+ =?us-ascii?Q?7RvNrmEO4jaYTFlbQIPrpU5osk4JQMIVU/Pv75vFmc6GwCIWQDSlXURa2x2q?=
+ =?us-ascii?Q?BWUmBQr5eohkM5D3SxL6/lxchS0b?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?FJ7YneVH2m8PnYu6XYYSrBIzMGE9hTsADN3Ymdl5mUfUGHn4gLw84gqqf4uT?=
+ =?us-ascii?Q?kg42OeoXMOsRXT4M+oSamLj9gv/B9gQswA83aJHRvASLUOrJfzCOkD6JbU9r?=
+ =?us-ascii?Q?RwMYnAI9Iv1DTDAm1MHYgA+BV7LY3opWt4sHGvlAlmKC/6aWJfwwZuzk88SI?=
+ =?us-ascii?Q?5+I0tD/i3231G5FYl3rMG4qKulfPUV1dEoaeE4g3TKqZd1cygPsSELeHfDwe?=
+ =?us-ascii?Q?wzhTGQEoIlku406rxHnmNzaH9Dqd9B8i5LMUPBhZbw8buV+lGRhJfG7+nJ8P?=
+ =?us-ascii?Q?NfJyRdDnaQX87ZOud0zPkwp64j03NbSl7T1EC8okeKaSNgjWS0EXDC1+zh36?=
+ =?us-ascii?Q?6kZRFaP+QSNgBpdMBUmF0hKw8cNA5FP1nbD5cKZGqcU3pTUnb9YoBv15Q8E1?=
+ =?us-ascii?Q?TDuWF/G5U2ZKETgMQ3V1GP15vQlczm7IETY2ooV5oHQsLCOPCou+W9ikYXW6?=
+ =?us-ascii?Q?adlKbVl0mLXJLyR+au/IXNwPIO5TL1agu5QepmtNSAXQAjemBWC3ud05z2QX?=
+ =?us-ascii?Q?2kqk79WJeHvVUHGbBZWUXtBpvw8WAtzF69/2HrgtJeERGp/cw1qnxaj98o6i?=
+ =?us-ascii?Q?T7TuEHbcWwldO5hYwFp/mi+jutEB34Og85YRLjas5bufTuZE0P6mHifpk3p8?=
+ =?us-ascii?Q?ROXxI60K8HpasVSuI/rUkIHb9z5aSPW5j5oS2qrNNCnkcd4HFMk6YDto4kTu?=
+ =?us-ascii?Q?8dAx/hvK/QkWgCdSpRsvqoOxuAigI3+oet13PHgrZQL8i680UMwZs6SU7lO8?=
+ =?us-ascii?Q?DWcDbqAm7h6OPC4tcIbTwnmMhq72yp+9pcCBMtdX+2Vdz9FfQ6tRvbZmhd12?=
+ =?us-ascii?Q?vQ5kM+ALYh6WIpRSa72xyB/S972+TXKCetigd7Hm5L4T5nby36CXsTUPmbAT?=
+ =?us-ascii?Q?7EFbwXs6o0nS1MpqJazUDDoEQTT4RBuAykY+NyJzvHiwH9c9lh+ktOcBb606?=
+ =?us-ascii?Q?cQArSDAFp5oDRxaxkU2NNlLY6x5X/L1ziL3G7TUojWM66ero6BtH6sqPxudY?=
+ =?us-ascii?Q?kwFDluP64+PBHY8ODtOZcVmILxdQCDkbauZ1vyxlfHTNBLr2E4B6yr87MbQ6?=
+ =?us-ascii?Q?7qnENI8WlXuXH1xiT7xFo/LbIjzSwAoIACVlm0hfD5yA5VomQpwngDlmwZVi?=
+ =?us-ascii?Q?x6FbMukVmvRfgSX6gMTguEXqTMN5x/YnxHwe69qe84m0eIwslOTOHYhgKPrY?=
+ =?us-ascii?Q?B5QhFnmTz2jLKVM1Wi32sSwLNs8tl6inXcyN28WJ2iOV7kFjzCfJ3AtyU6tx?=
+ =?us-ascii?Q?QsAudS40LuBC5J9v+5nd7xuja5hxhevoulOdRTDVPjoPCQCNw0O5+RXbCCFM?=
+ =?us-ascii?Q?dUGzR+cUB9TVuVHNjq2XuYAf+WRAyMWkD7Tby4keSZXXMmj1BVhfkz1rv1Bo?=
+ =?us-ascii?Q?5Bvbu9eA5TBl9YIGUKpdC/i7IaQRR69Au/3bsV6VNzoOjbxrv8wFEtykjGn1?=
+ =?us-ascii?Q?/aSRKc/df6ekF4GjH68cqgyIdCrlIJBcIOOcQ+Ygsn7yq7GltvkNRsXFxQRS?=
+ =?us-ascii?Q?uBJyoRwNb4svku4AZ8Hw8jyhkYgq94X+tmvL9Xq66cl8PuLvIcy9QykSDfPn?=
+ =?us-ascii?Q?tpLkl5VXwBYxXQq2c142SHbETOgY/Hm+xZgV3mcb?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fea69d1b-0696-4797-c4ae-08dd4f66ee7e
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 15:22:46.4540
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aX8TBT/aSlSmVccxOooDNcGO5A+v2b6XLwecbcasO26n+VdOI1/15pf3uRiR71Sr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7719
+
+On 16 Feb 2025, at 9:17, Zi Yan wrote:
+
+> On 16 Feb 2025, at 5:32, David Hildenbrand wrote:
+>
+>> On 11.02.25 16:50, Zi Yan wrote:
+>>> folio_split() splits a large folio in the same way as buddy allocator=
+
+>>> splits a large free page for allocation. The purpose is to minimize t=
+he
+>>> number of folios after the split. For example, if user wants to free =
+the
+>>> 3rd subpage in a order-9 folio, folio_split() will split the order-9 =
+folio
+>>> as:
+>>> O-0, O-0, O-0, O-0, O-2, O-3, O-4, O-5, O-6, O-7, O-8 if it is anon,
+>>> since anon folio does not support order-1 yet.
+>>> -----------------------------------------------------------------
+>>> |   |   |   |   |     |   |       |                             |
+>>> |O-0|O-0|O-0|O-0| O-2 |...|  O-7  |             O-8             |
+>>> |   |   |   |   |     |   |       |                             |
+>>> -----------------------------------------------------------------
+>>>
+>>> O-1,      O-0, O-0, O-2, O-3, O-4, O-5, O-6, O-7, O-9 if it is pageca=
+che
+>>> ---------------------------------------------------------------
+>>> |     |   |   |     |   |       |                             |
+>>> | O-1 |O-0|O-0| O-2 |...|  O-7  |             O-8             |
+>>> |     |   |   |     |   |       |                             |
+>>> ---------------------------------------------------------------
+>>>
+>>> It generates fewer folios (i.e., 11 or 10) than existing page split
+>>> approach, which splits the order-9 to 512 order-0 folios. It also red=
+uces
+>>> the number of new xa_node needed during a pagecache folio split from
+>>> 8 to 1, potentially decreasing the folio split failure rate due to me=
+mory
+>>> constraints.
+>>>
+>>> folio_split() and existing split_huge_page_to_list_to_order() share
+>>> the folio unmapping and remapping code in __folio_split() and the com=
+mon
+>>> backend split code in __split_unmapped_folio() using
+>>> uniform_split variable to distinguish their operations.
+>>>
+>>> uniform_split_supported() and non_uniform_split_supported() are added=
+
+>>> to factor out check code and will be used outside __folio_split() in =
+the
+>>> following commit.
+>>>
+>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>> ---
+>>>   mm/huge_memory.c | 137 ++++++++++++++++++++++++++++++++++----------=
+---
+>>>   1 file changed, 100 insertions(+), 37 deletions(-)
+>>>
+>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>>> index 21ebe2dec5a4..400dfe8a6e60 100644
+>>> --- a/mm/huge_memory.c
+>>> +++ b/mm/huge_memory.c
+>>> @@ -3853,12 +3853,68 @@ static int __split_unmapped_folio(struct foli=
+o *folio, int new_order,
+>>>   	return ret;
+>>>   }
+>>>  +static bool non_uniform_split_supported(struct folio *folio, unsign=
+ed int new_order,
+>>> +		bool warns)
+>>> +{
+>>> +	/* order-1 is not supported for anonymous THP. */
+>>> +	if (folio_test_anon(folio) && new_order =3D=3D 1) {
+>>> +		VM_WARN_ONCE(warns, "Cannot split to order-1 folio");
+>>> +		return false;
+>>> +	}
+>>> +
+>>> +	/*
+>>> +	 * No split if the file system does not support large folio.
+>>> +	 * Note that we might still have THPs in such mappings due to
+>>> +	 * CONFIG_READ_ONLY_THP_FOR_FS. But in that case, the mapping
+>>> +	 * does not actually support large folios properly.
+>>> +	 */
+>>> +	if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+>>> +	    !mapping_large_folio_support(folio->mapping)) {
+>>
+>> In this (and a similar case below), you need
+>>
+>> if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+>>     !folio_test_anon(folio) &&
+>>     !mapping_large_folio_support(folio->mapping)) {
+>>
+>> Otherwise mapping_large_folio_support() is unhappy:
+>>
+>
+> Thanks. The patch below should fix it.
+>
+> I am going to send V8, since
+> 1. there have been 4 fixes so far for V7, a new series would help peopl=
+e
+> review;
+>
+> 2.  based on the discussion with you in THP cabal meeting, to
+> convert split_huge_page*() to use __folio_split(), the current
+> __folio_split() interface becomes awkward. Two changes are needed:
+>    a) use in folio offset instead of struct page, since even in
+>      truncate_inode_partial_folio() I needed to convert in folio offset=
+
+>      struct page to use my current interface;
+>    b) split_huge_page*()'s caller might hold the page lock at a non-hea=
+d
+>      page, so an additional keep_lock_at_in_folio_offset is needed
+>      to indicate which after-split folio should be kept locked after
+>      split is done.
+>
+
+Hi Andrew,
+
+I am planing to send V8 to collect all fixup patches I have so far plus
+the one below and change folio_split() interface and some of the code.
+What is your preferred method?
+
+1. you can pick up the fixup below and I send a new set of patches to
+change folio_split();
+
+2. I collect a new V8 with all fixup patches and folio_split() change.
+
+For 1, the commit history might be messy due to my new folio_split()
+change. For 2, Minimize xa_node allocation during xarry split [1]
+patchset depends on patch 1 of this series, which adds some extra work
+for you to collect V8 (alternatively, I can send V8 without patch 1).
+
+Let me know your thoughts. Thanks.
 
 
+[1] https://lore.kernel.org/linux-mm/20250213034355.516610-1-ziy@nvidia.c=
+om/
 
-On 11/02/2025 00:40, Nico Pache wrote:
-> Now that we have mTHP support in khugepaged, lets add it to the
-> transhuge admin guide to provide proper guidance.
-> 
 
-I think you should move this patch to the mTHP khugepaged series, and just send
-THP=defer separately from mTHP khguepaged.
-
-> Signed-off-by: Nico Pache <npache@redhat.com>
+>
+> From 8b2aa5432c8d726a1fb6ce74c971365650da9370 Mon Sep 17 00:00:00 2001
+> From: Zi Yan <ziy@nvidia.com>
+> Date: Sun, 16 Feb 2025 09:01:29 -0500
+> Subject: [PATCH] mm/huge_memory: check folio_test_anon() before
+>  mapping_large_folio_support()
+>
+> Otherwise mapping_large_folio_support() complains.
+>
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
 > ---
->  Documentation/admin-guide/mm/transhuge.rst | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/mm/transhuge.rst b/Documentation/admin-guide/mm/transhuge.rst
-> index b3b18573bbb4..99ba3763c1c4 100644
-> --- a/Documentation/admin-guide/mm/transhuge.rst
-> +++ b/Documentation/admin-guide/mm/transhuge.rst
-> @@ -63,7 +63,7 @@ often.
->  THP can be enabled system wide or restricted to certain tasks or even
->  memory ranges inside task's address space. Unless THP is completely
->  disabled, there is ``khugepaged`` daemon that scans memory and
-> -collapses sequences of basic pages into PMD-sized huge pages.
-> +collapses sequences of basic pages into huge pages.
->  
->  The THP behaviour is controlled via :ref:`sysfs <thp_sysfs>`
->  interface and using madvise(2) and prctl(2) system calls.
-> @@ -103,8 +103,8 @@ madvise(MADV_HUGEPAGE) on their critical mmapped regions.
->  Applications that would like to benefit from THPs but would still like a
->  more memory conservative approach can choose 'defer'. This avoids
->  inserting THPs at the page fault handler unless they are MADV_HUGEPAGE.
-> -Khugepaged will then scan the mappings for potential collapses into PMD
-> -sized pages. Admins using this the 'defer' setting should consider
-> +Khugepaged will then scan the mappings for potential collapses into (m)THP
-> +pages. Admins using this the 'defer' setting should consider
->  tweaking khugepaged/max_ptes_none. The current default of 511 may
->  aggressively collapse your PTEs into PMDs. Lower this value to conserve
->  more memory (ie. max_ptes_none=64).
-> @@ -119,11 +119,14 @@ Global THP controls
->  
->  Transparent Hugepage Support for anonymous memory can be entirely disabled
->  (mostly for debugging purposes) or only enabled inside MADV_HUGEPAGE
-> -regions (to avoid the risk of consuming more memory resources) or enabled
-> -system wide. This can be achieved per-supported-THP-size with one of::
-> +regions (to avoid the risk of consuming more memory resources), defered to
-> +khugepaged, or enabled system wide.
+>  mm/huge_memory.c | 48 ++++++++++++++++++++++++------------------------=
+
+>  1 file changed, 24 insertions(+), 24 deletions(-)
+>
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 87cb62c81bf3..deb16fe662c4 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -3629,20 +3629,19 @@ static int __split_unmapped_folio(struct folio =
+*folio, int new_order,
+>  bool non_uniform_split_supported(struct folio *folio, unsigned int new=
+_order,
+>  		bool warns)
+>  {
+> -	/* order-1 is not supported for anonymous THP. */
+> -	if (folio_test_anon(folio) && new_order =3D=3D 1) {
+> -		VM_WARN_ONCE(warns, "Cannot split to order-1 folio");
+> -		return false;
+> -	}
+> -
+> -	/*
+> -	 * No split if the file system does not support large folio.
+> -	 * Note that we might still have THPs in such mappings due to
+> -	 * CONFIG_READ_ONLY_THP_FOR_FS. But in that case, the mapping
+> -	 * does not actually support large folios properly.
+> -	 */
+> -	if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+> +	if (folio_test_anon(folio)) {
+> +		/* order-1 is not supported for anonymous THP. */
+> +		VM_WARN_ONCE(warns && new_order =3D=3D 1,
+> +				"Cannot split to order-1 folio");
+> +		return new_order !=3D 1;
+> +	} else if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+>  	    !mapping_large_folio_support(folio->mapping)) {
+> +		/*
+> +		 * No split if the file system does not support large folio.
+> +		 * Note that we might still have THPs in such mappings due to
+> +		 * CONFIG_READ_ONLY_THP_FOR_FS. But in that case, the mapping
+> +		 * does not actually support large folios properly.
+> +		 */
+>  		VM_WARN_ONCE(warns,
+>  			"Cannot split file folio to non-0 order");
+>  		return false;
+> @@ -3662,24 +3661,25 @@ bool non_uniform_split_supported(struct folio *=
+folio, unsigned int new_order,
+>  bool uniform_split_supported(struct folio *folio, unsigned int new_ord=
+er,
+>  		bool warns)
+>  {
+> -	if (folio_test_anon(folio) && new_order =3D=3D 1) {
+> -		VM_WARN_ONCE(warns, "Cannot split to order-1 folio");
+> -		return false;
+> -	}
+> -
+> -	if (new_order) {
+> +	if (folio_test_anon(folio)) {
+> +		VM_WARN_ONCE(warns && new_order =3D=3D 1,
+> +				"Cannot split to order-1 folio");
+> +		return new_order !=3D 1;
+> +	} else  if (new_order) {
+>  		if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+>  		    !mapping_large_folio_support(folio->mapping)) {
+>  			VM_WARN_ONCE(warns,
+>  				"Cannot split file folio to non-0 order");
+>  			return false;
+>  		}
+> -		if (folio_test_swapcache(folio)) {
+> -			VM_WARN_ONCE(warns,
+> -				"Cannot split swapcache folio to non-0 order");
+> -			return false;
+> -		}
+>  	}
 > +
-> +This can be achieved per-supported-THP-size with one of::
->  
->  	echo always >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
->  	echo madvise >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
-> +	echo defer >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
->  	echo never >/sys/kernel/mm/transparent_hugepage/hugepages-<size>kB/enabled
->  
->  where <size> is the hugepage size being addressed, the available sizes
-> @@ -155,6 +158,13 @@ hugepage sizes have enabled="never". If enabling multiple hugepage
->  sizes, the kernel will select the most appropriate enabled size for a
->  given allocation.
->  
-> +khugepaged use max_ptes_none scaled to the order of the enabled mTHP size to
-> +determine collapses. When using mTHPs its recommended to set max_ptes_none low.
-> +Ideally less than HPAGE_PMD_NR / 2 (255 on 4k page size). This will prevent
-> +undesired "creep" behavior that leads to continously collapsing to a larger
-> +mTHP size. max_ptes_shared and max_ptes_swap have no effect when collapsing to a
-> +mTHP, and mTHP collapse will fail on shared or swapped out pages.
+> +	if (new_order && folio_test_swapcache(folio)) {
+> +		VM_WARN_ONCE(warns,
+> +			"Cannot split swapcache folio to non-0 order");
+> +		return false;
+> +	}
 > +
+>  	return true;
+>  }
+>
+> -- =
 
-This paragraph definitely belongs in the khugepaged series, as it doesn't have anything
-to do with THP=defer.
-
-re "Ideally less than HPAGE_PMD_NR / 2",
-what if you are running on amd, and using 16K and 2M THP=always only as, thats where
-the most TLB benefit is. Than this recommendation doesnt make sense?
-
-Also even if you have all mTHP sizes as always, shouldnt you start by collapsing to
-the largest THP size first? (I haven't reviewed the khugepaged series yet, so might
-be have been discussed there, I will try and review it).
-
-Did you see the creep behavior you mentioned in your experiments?
+> 2.47.2
+>
+>
+>
+> --
+> Best Regards,
+> Yan, Zi
 
 
->  It's also possible to limit defrag efforts in the VM to generate
->  anonymous hugepages in case they're not immediately free to madvise
->  regions or to never try to defrag memory and simply fallback to regular
-> @@ -318,7 +328,7 @@ Alternatively, each supported anonymous THP size can be controlled by
->  passing ``thp_anon=<size>[KMG],<size>[KMG]:<state>;<size>[KMG]-<size>[KMG]:<state>``,
->  where ``<size>`` is the THP size (must be a power of 2 of PAGE_SIZE and
->  supported anonymous THP)  and ``<state>`` is one of ``always``, ``madvise``,
-> -``never`` or ``inherit``.
-> +``defer``, ``never`` or ``inherit``.
->  
->  For example, the following will set 16K, 32K, 64K THP to ``always``,
->  set 128K, 512K to ``inherit``, set 256K to ``madvise`` and 1M, 2M
-
+--
+Best Regards,
+Yan, Zi
 
