@@ -1,234 +1,139 @@
-Return-Path: <linux-kselftest+bounces-26817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6118A38F9C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 00:28:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14426A38FC6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 00:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 929583A47AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 23:26:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C095416D7ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 23:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B4E1B0406;
-	Mon, 17 Feb 2025 23:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C341AAA1F;
+	Mon, 17 Feb 2025 23:53:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LecC7O2I"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aNQRuiAr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A191ABEC1
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 23:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD76213AA5D;
+	Mon, 17 Feb 2025 23:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739834795; cv=none; b=OpJNER1bY3FsNEwxnLahRSmXUqat8JKaSWTN8Yab40Ja0lIgoK56r8iBqEfknNkCCiU9o0vxXNdNHRwlhzfwRkvpC7oZdVdf3D8l+h61bXaOspKZLCzoQBT+rQxfoEGukumzfCtsVMXfh3nmBnH6htUsopL/kFP37mACNMnvWeU=
+	t=1739836382; cv=none; b=Sd+FV5MLTrH3J52zXbzmD5HwwlI5FIuljKOERg+T4GBqGcwEf3xinpaReImFx8B1tWrSPSOmq7D+kHk1IcXYfTZCpbSZ2QYs7e3fMHMKwJkx8nvIueZFTD91go1Tip8es5ZWLrbH6b9182geCKeVpTHO24qyjWwIhU2BRVyHt8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739834795; c=relaxed/simple;
-	bh=e15tfvqLJ167hVdakQyut1lmoKwKCOmcthYLadFB7bA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aL7to+04jNjB5XjbCssVIh2RDoduiukDpNkcGbhKELvkvv9nPuTFDWRWasChRC69be3odLRyyfFqVZXps2aHRfBNv10A6QFPrHFzaU8/ci50YaFHlGw8gJ7DHKtGoMqJ6zEwpY2tnrYr1KpDT5na0DmnLO8uzaMzpr2wJlc5oYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LecC7O2I; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-219f6ca9a81so337365ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 15:26:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739834792; x=1740439592; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LU4/0cDqZHRnh9CiIVcjoIP2zXEWwJkeElU0iysFgw0=;
-        b=LecC7O2IieFQoAYBg7q/bbm5Dy8Tb67Zf5OXCXsND+sGb24jFjPKVJehv79GmtUBCk
-         L0awW9D6t0PYQ9ainmgI1/Gz34G+gCoORp4QpxlthVPeZcVd+eHU3ijayJZqu4jq3zho
-         sqaR9rfFIb1OZXguKLwG89M8uNipG5ZLKGCzLvLiy2By+ndjNu3dcZhu65MlUdQ8pM6s
-         3m/t3Czq82etZ/5OYPaGfcu+moububa7vRhBK5YIfVLscHj8GAUGZLhnW3n39mBCQJ5Y
-         6rMIejebtmVDC37PJPqJD3n0RzYopOytrsmp73hPIYBA64EEfcMqooM/WNu9GztLw2Pq
-         8d3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739834792; x=1740439592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LU4/0cDqZHRnh9CiIVcjoIP2zXEWwJkeElU0iysFgw0=;
-        b=NsSq/564tjJR/vNih8+veXqziP+R316Kn3hGvUAF2U9A/tBNmW2lMElxdcViwCyiXM
-         zr5U+l5h3jzInm5ieEIaWvkhvvxf/SAb/c1H+b1OvXDR8sbxnuBJJijwKEPk4Fpr9iDS
-         R+OejKIEXbyP+9m4oFLFbkdSpks5nIhSUa+Hy204NowYppgRP1/qUxKgxelN2K+qL85L
-         bgtcmNHc8i+jUb9sUMCQNEWMO2JMJOTTljgMqgAeukXPszUAaVEgC/0pGU2lN/4LYq4x
-         H/7lMebQ0U5ELhQWuC0BoN0+X9JTxDEUq+NgrM4FviTbXsm5Q8TASik91iDCg/wDQ6Gj
-         92eA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyPlaihP5LReYTsnDb1UIvDotvgXk4vzdQWHAt4EDaXZ4m6OowztpNXPCOY+0MPqyLpRFSWWoJVWAfRA5p2x8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvVgBXU5WMVtsaMegYYFBOfn7Nt7pgFOUcvoH//J7mGMnoOcG4
-	nCTBmoFDwIwPLA2VI1sRHb0rd9D2yjz3XtcDeYe3155k0a/wL09i4JSMh+15eMkbYkGtIs15T5f
-	fSP///rsRKyvIvWGlPWiYsZtdvczQgq76QfbT
-X-Gm-Gg: ASbGncu94Rsy1PdcF9X82aXC0P2J5I/BZqT/LmrUliLbTc45LgCrgiDCt7bDFROM/Id
-	VXmfbg58aFMQB70NN3N5H311qh2CYKh8BWxHUS3abFMMcgEm9u2FMrMEwYxWs+lU0AXy/FYl6
-X-Google-Smtp-Source: AGHT+IEz2Vjx4sspzRYyerWy/4H+lWv6VlJ3XI4nEpHd7psvEF5u3oZI0j4vbRhndLp+h57tbEMfk5dYT2aH2zu++aE=
-X-Received: by 2002:a17:903:1cc:b0:21f:40e8:6398 with SMTP id
- d9443c01a7336-22104cf7bf5mr4662555ad.26.1739834791554; Mon, 17 Feb 2025
- 15:26:31 -0800 (PST)
+	s=arc-20240116; t=1739836382; c=relaxed/simple;
+	bh=hFWQZbuaJCLbpJ75wJwLS1eWO/mwC/SJ9sPYNIG6Fjk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PB5Eqsd7NZh0SVK/hte9k7/x6CMm/DAE6SJ09j1Fh+7WGQqOvb5Ld0nDTr1nYRyFLDM7Q675acpGB+be4s1IUJRAjGkig3GJ7pu/u/EN/fdFt+QloF+SqZ6uUCWecPgposepBFXRgDrn/eNHgAttk3nXXhyX5rd3VDHTP8HcrRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aNQRuiAr; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51HEFdnr031269;
+	Mon, 17 Feb 2025 23:52:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=xcbpSi
+	rApYFVqD02XWoqbeg0ui4KB0iW63GiGNd5ibY=; b=aNQRuiArjnDq+vK+ET0P72
+	zaX/SsQS06tsW4Cjf82GwGHDLQYkjyMNYSmiMQGnZKi6qB0z4qNlt1GrA1GiSulS
+	eOe4Tdw4qj7yC15Myt61yaJFuT1Vo3RkgRY/PRahZWSg+E7mwo0mhnT5gzmH8N10
+	Wm+icAw4Pj2z0WBLQXrvGKvKx/cviGYQmdGprqT9w2Ngkf6ejBZzGXB7AfjkOMzU
+	dWKobXeyjUjP0V2a8+6FxfDOCuLjfpSFK98+Zby0Q+nLn3DPBFQkyZMbnP5TEoh9
+	zW8AvjbM14bQk9aM3QSzTUmxxWJb8UdZlJNVDocD+mmapXPz6yNJAMxBGFR2/tSg
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44uxx7vxbh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Feb 2025 23:52:36 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51HK8Eei008141;
+	Mon, 17 Feb 2025 23:52:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 44u58tgk48-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Feb 2025 23:52:35 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51HNqWTU20578732
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 17 Feb 2025 23:52:32 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 00A3820043;
+	Mon, 17 Feb 2025 23:52:32 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 733BD20040;
+	Mon, 17 Feb 2025 23:52:31 +0000 (GMT)
+Received: from localhost (unknown [9.171.66.22])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 17 Feb 2025 23:52:31 +0000 (GMT)
+Date: Tue, 18 Feb 2025 00:52:26 +0100
+From: Vasily Gorbik <gor@linux.ibm.com>
+To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Fangrui Song <i@maskray.me>, Xi Ruoyao <xry111@xry111.site>,
+        Heiko Carstens <hca@linux.ibm.com>, Jens Remus <jremus@linux.ibm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/vDSO: fix GNU hash table entry size for
+ s390x
+Message-ID: <your-ad-here.call-01739836346-ext-7522@work.hours>
+References: <20250217-selftests-vdso-s390-gnu-hash-v2-1-f6c2532ffe2a@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250203223916.1064540-1-almasrymina@google.com>
- <20250203223916.1064540-6-almasrymina@google.com> <abc22620-d509-4b12-80ac-0c36b08b36d9@gmail.com>
- <CAHS8izNOqaFe_40gFh09vdBz6-deWdeGu9Aky-e7E+Wu2qtfdw@mail.gmail.com>
- <28343e83-6d93-4002-a691-f8273d4d24a8@gmail.com> <CAHS8izOE-JzMszieHEXtYBs7_6D-ngVx2kJyMwp8eCWLK-c0cQ@mail.gmail.com>
- <9210a12c-9adb-46ba-b92c-90fd07e1980f@gmail.com>
-In-Reply-To: <9210a12c-9adb-46ba-b92c-90fd07e1980f@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 17 Feb 2025 15:26:17 -0800
-X-Gm-Features: AWEUYZkNcuzch3JnUQ41m7NwTl507Jdryfd99v6tS9trGnS4pxPErojvBtyR8mY
-Message-ID: <CAHS8izPHtk5x-W05_svxU53X-V4+++PiYErCgfr-3iDGgEaUig@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Neal Cardwell <ncardwell@google.com>, 
-	David Ahern <dsahern@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>, 
-	Victor Nogueira <victor@mojatatu.com>, Pedro Tammela <pctammela@mojatatu.com>, 
-	Samiullah Khawaja <skhawaja@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250217-selftests-vdso-s390-gnu-hash-v2-1-f6c2532ffe2a@linutronix.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mEt67ZX6_nKBR3UKS2y_zNxBz83sFpVi
+X-Proofpoint-ORIG-GUID: mEt67ZX6_nKBR3UKS2y_zNxBz83sFpVi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-17_08,2025-02-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ adultscore=0 bulkscore=0 clxscore=1011 suspectscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502170179
 
-On Thu, Feb 13, 2025 at 5:17=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
->
-> On 2/12/25 19:18, Mina Almasry wrote:
-> > On Wed, Feb 12, 2025 at 7:52=E2=80=AFAM Pavel Begunkov <asml.silence@gm=
-ail.com> wrote:
-> >>
-> >> On 2/10/25 21:09, Mina Almasry wrote:
-> >>> On Wed, Feb 5, 2025 at 4:20=E2=80=AFAM Pavel Begunkov <asml.silence@g=
-mail.com> wrote:
-> >>>>
-> >>>> On 2/3/25 22:39, Mina Almasry wrote:
-> >>>> ...
-> >>>>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> >>>>> index bb2b751d274a..3ff8f568c382 100644
-> >>>>> --- a/include/linux/skbuff.h
-> >>>>> +++ b/include/linux/skbuff.h
-> >>>>> @@ -1711,9 +1711,12 @@ struct ubuf_info *msg_zerocopy_realloc(struc=
-t sock *sk, size_t size,
-> >>>> ...
-> >>>>>     int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
-> >>>>>                                 struct iov_iter *from, size_t lengt=
-h);
-> >>>>> @@ -1721,12 +1724,14 @@ int zerocopy_fill_skb_from_iter(struct sk_b=
-uff *skb,
-> >>>>>     static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
-> >>>>>                                           struct msghdr *msg, int l=
-en)
-> >>>>>     {
-> >>>>> -     return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_i=
-ter, len);
-> >>>>> +     return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_i=
-ter, len,
-> >>>>> +                                    NULL);
-> >>>>
-> >>>> Instead of propagating it all the way down and carving a new path, w=
-hy
-> >>>> not reuse the existing infra? You already hook into where ubuf is
-> >>>> allocated, you can stash the binding in there. And
-> >>>
-> >>> It looks like it's not possible to increase the side of ubuf_info at
-> >>> all, otherwise the BUILD_BUG_ON in msg_zerocopy_alloc() fires.
-> >>>
-> >>> It's asserting that sizeof(ubuf_info_msgzc) <=3D sizeof(skb->cb), and
-> >>> I'm guessing increasing skb->cb size is not really the way to go.
-> >>>
-> >>> What I may be able to do here is stash the binding somewhere in
-> >>> ubuf_info_msgzc via union with fields we don't need for devmem, and/o=
-r
-> >>
-> >> It doesn't need to account the memory against the user, and you
-> >> actually don't want that because dmabuf should take care of that.
-> >> So, it should be fine to reuse ->mmp.
-> >>
-> >> It's also not a real sk_buff, so maybe maintainers wouldn't mind
-> >> reusing some more space out of it, if that would even be needed.
-> >>
-> >
-> > netmem skb are real sk_buff, with the modification that frags are not
->
-> We were discussing ubuf_info allocation, take a look at
-> msg_zerocopy_alloc(), it has nothing to do with netmems and all that.
->
-
-Yes. My response was regarding the suggestion that we can use space in
-devmem skbs however we want though.
-
-> > readable, only in the case that the netmem is unreadable. I would not
-> > approve of considering netmem/devmem skbs "not real skbs", and start
-> > messing with the semantics of skb fields for devmem skbs, and having
-> > to start adding skb_is_devmem() checks through all code in the skb
-> > handlers that touch the fields being overwritten in the devmem case.
-> > No, I don't think we can re-use random fields in the skb for devmem.
-> >
-> >>> stashing the binding in ubuf_info_ops (very hacky). Neither approach
-> >>> seems ideal, but the former may work and may be cleaner.
-> >>>
-> >>> I'll take a deeper look here. I had looked before and concluded that
-> >>> we're piggybacking devmem TX on MSG_ZEROCOPY path, because we need
-> >>> almost all of the functionality there (no copying, send complete
-> >>> notifications, etc), with one minor change in the skb filling. I had
-> >>> concluded that if MSG_ZEROCOPY was never updated to use the existing
-> >>> infra, then it's appropriate for devmem TX piggybacking on top of it
-> >>
-> >> MSG_ZEROCOPY does use the common infra, i.e. passing ubuf_info,
-> >> but doesn't need ->sg_from_iter as zerocopy_fill_skb_from_iter()
-> >> and it's what was there first.
-> >>
-> >
-> > But MSG_ZEROCOPY doesn't set msg->msg_ubuf. And not setting
-> > msg->msg_ubuf fails to trigger msg->sg_from_iter altogether.
-> >
-> > And also currently sg_from_iter isn't set up to take in a ubuf_info.
-> > We'd need that if we stash the binding in the ubuf_info.
->
-> https://github.com/isilence/linux.git sg-iter-ops
->
-> I have old patches for all of that, they even rebased cleanly. That
-> should do it for you, and I need to send then regardless of devmem.
->
->
-
-These patches help a bit, but do not make any meaningful dent in
-addressing the concern I have in the earlier emails.
-
-The concern is that we're piggybacking devmem TX on MSG_ZEROCOPY, and
-currently the MSG_ZEROCOPY code carefully avoids any code paths
-setting msg->[sg_from_iter|msg_ubuf].
-
-If we want devmem to reuse both the MSG_ZEROCOPY mechanisms and the
-msg->[sg_from_iter|ubuf_info] mechanism, I have to dissect the
-MSG_ZEROCOPY code carefully so that it works with and without
-setting msg->[ubuf_info|msg->sg_from_iter]. Having gone through this
-rabbit hole so far I see that it complicates the implementation and
-adds more checks to the fast MSG_ZEROCOPY paths.
-
-The complication could be worth it if there was some upside, but I
-don't see one tbh. Passing the binding down to
-zerocopy_fill_skb_from_devmem seems like a better approach to my eye
-so far
-
-I'm afraid I'm going to table this for now. If there is overwhelming
-consensus that msg->sg_from_iter is the right approach here I will
-revisit, but it seems to me to complicate code without a significant
-upside.
-
-
+On Mon, Feb 17, 2025 at 02:04:18PM +0100, Thomas Weißschuh wrote:
+> Commit 14be4e6f3522 ("selftests: vDSO: fix ELF hash table entry size for s390x")
+> changed the type of the ELF hash table entries to 64bit on s390x.
+> However the *GNU* hash tables entries are always 32bit.
+> The "bucket" pointer is shared between both hash algorithms.
 --
-Thanks,
-Mina
+> On s390x the GNU algorithm assigns and dereferences this pointer to a
+> 64bit value as a pointer to a 32bit value, leading to compiler warnings and
+> runtime crashes.
+
+I would rephrase it as follows:
+
+On s390, this caused the GNU hash algorithm to access its 32-bit entries as if they
+were 64-bit, triggering compiler warnings (assignment between "Elf64_Xword *" and
+"Elf64_Word *") and runtime crashes.
+
+And take it via s390 tree.
+
+Shuah, if you don't mind, may I get your Acked-by?
+
+Thank you!
+
+> Introduce a new dedicated "gnu_bucket" pointer which is used by the GNU hash.
+> 
+> Fixes: e0746bde6f82 ("selftests/vDSO: support DT_GNU_HASH")
+> Reviewed-by: Jens Remus <jremus@linux.ibm.com>
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Changes in v2:
+> - Fix wording around the width of pointers vs the pointed-to values
+> - Link to v1: https://lore.kernel.org/r/20250213-selftests-vdso-s390-gnu-hash-v1-1-ace3bcc940a3@linutronix.de
+> ---
+>  tools/testing/selftests/vDSO/parse_vdso.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
