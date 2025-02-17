@@ -1,144 +1,128 @@
-Return-Path: <linux-kselftest+bounces-26781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 266DFA384FA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 14:44:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F996A3853C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:00:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D27FB1888DF5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 13:43:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A855D3AAB48
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 14:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587EB21CC6E;
-	Mon, 17 Feb 2025 13:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="N47CXBfN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E58944E;
+	Mon, 17 Feb 2025 14:00:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAE613AA5D;
-	Mon, 17 Feb 2025 13:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238D533DF;
+	Mon, 17 Feb 2025 14:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739799775; cv=none; b=hIDcBuU/E5Ne6ijlsg8WjRnVs5IGXtrsZJJpvzLVS0rEJXIDn1ysyhWCt7rhw+U/MlETz8FIEW0SiEkJwKKIUVKQ6PmFSQNrDgr5+9xz48dkRwJusqFaqyg7wAh/tJXDtR8wj1wpnABZYlEcKwL+fnKclPQba9jiyzBM72T+I0s=
+	t=1739800828; cv=none; b=mktNbTnvf3JZu8i54CDGyjO+l+PUfMldgrKcozd8ULiWDRfjbSUQiuwdcyE2Tc/Qy2AheHxxtClSppSm8qCjggbBRpOWI58BRcdfTO7B7ew7vjc0eoHVKXtEs6+z6nxTC/fYwvLy6dXVSAlBbks+eHZyE/qXimsCNfTS5O8YPEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739799775; c=relaxed/simple;
-	bh=PJJl56wGhGbOSi7fd/XKLyf03o1+wNsu5UVIOH9q0YA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IwMlHoQ3R/nLVzVKmKyipUTuQp2PGNt6v73EOKA0yReCZ6JlQ+OTTYSg+AluKzOBkCebmL0yfQsuaKMdQKeCpb45dPbWx9J+6kSErF10yPvpiZdZocJx/YCv+sV5VoGD1Hy4ADMa4+DwmOeFiZnnuVL3o5iNR6fa/YyXJh5PsDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=N47CXBfN; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51HA8YHI008970;
-	Mon, 17 Feb 2025 13:42:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=wUe4fKrx5o4/Zt5xfEBsdlqjck4Hlq
-	HFST87BHRi/q8=; b=N47CXBfN4+2yzZ4J8YTD04o0EeMWbLKhXJ6RFbLJgEvDvW
-	RqKbiwAcuUN0p6YVqTKUeJlRiHa+pvuKaPqC+UnArV6cuzAo6JY30xwc6JRtsA75
-	YSHiCv0l38yFPHgelwyqUTIhAKcs4EpHGKY61DraX9ADM5+5VgnK9PRDnLr2J6hG
-	puAij6E19Q7lqHyXUBaHRTf5DCKXikZKbdrzYx6+Y7Ce/3L7P7WgDV+/ZUCKMIUp
-	26MxLm0+qqXLDP+g4T1hQk9RuqW81ohqDVi7AhIkBCbrGDft+ZDGvDvxcbf+pINs
-	QQqpnAgUqYthQOFhE5ocOCwf4Y+eWELGVhiptWHg==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44ujutmfk0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Feb 2025 13:42:49 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51HCleAg004038;
-	Mon, 17 Feb 2025 13:42:48 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44u68np9uv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Feb 2025 13:42:48 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51HDgkGD43909604
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 17 Feb 2025 13:42:46 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4339320043;
-	Mon, 17 Feb 2025 13:42:46 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CF3FF20040;
-	Mon, 17 Feb 2025 13:42:45 +0000 (GMT)
-Received: from osiris (unknown [9.171.53.224])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 17 Feb 2025 13:42:45 +0000 (GMT)
-Date: Mon, 17 Feb 2025 14:42:44 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/ftrace: Make uprobe test more robust
- against binary name
-Message-ID: <20250217134244.21424A57-hca@linux.ibm.com>
-References: <173625185823.1383744.4020760882101555349.stgit@devnote2>
- <173625187633.1383744.2840679071525852811.stgit@devnote2>
+	s=arc-20240116; t=1739800828; c=relaxed/simple;
+	bh=AtEqx9QGTWktOsZgYPLB/2CcwL4t2IRHK+54r66qrMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aYWUIMxbTTM4oHU4w7UMWIAWuo3T3Eo5LoPYS1nrd+NBkaZexsQ5ER/WOenXnhAvDaZtsmZqqTNDy5FQWx8meSdoYOWlHdE4/2GG/q5pm9kTo2N/UStCGXQClqY1wkbgxawFjQXlv7wc6n2qJQBmuU3kl1HPnRtQkfZtQStcov8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A029152B;
+	Mon, 17 Feb 2025 06:00:44 -0800 (PST)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B50D3F6A8;
+	Mon, 17 Feb 2025 06:00:23 -0800 (PST)
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+To: kunit-dev@googlegroups.com
+Cc: linux-kernel@vger.kernel.org,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] kunit: Clarify kunit_skip() argument name
+Date: Mon, 17 Feb 2025 14:00:08 +0000
+Message-ID: <20250217140008.1941287-1-kevin.brodsky@arm.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <173625187633.1383744.2840679071525852811.stgit@devnote2>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nr19yrfXbNrp8eyhPihgTjLj0320_c_Q
-X-Proofpoint-GUID: nr19yrfXbNrp8eyhPihgTjLj0320_c_Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-17_05,2025-02-13_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- suspectscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0
- adultscore=0 priorityscore=1501 clxscore=1011 mlxlogscore=789
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502170117
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 07, 2025 at 09:11:16PM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Make add_remove_uprobe test case more robust against various real
-> binary name.
-> Current add_remove_uprobe.tc test expects the real binary of /bin/sh
-> is '*/bin/*sh', but it does not work on busybox environment.
-> Instead of using fixed pattern, use readlink to identify real binary
-> name.
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  .../ftrace/test.d/dynevent/add_remove_uprobe.tc    |    4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
-> index a275decdc880..86c76679c56e 100644
-> --- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
-> @@ -6,8 +6,10 @@
->  echo 0 > events/enable
->  echo > dynamic_events
->  
-> +REALBIN=`readlink -f /bin/sh`
-> +
->  echo 'cat /proc/$$/maps' | /bin/sh | \
-> -	grep "r-xp .*/bin/.*sh$" | \
-> +	grep "r-xp .*${REALBIN}$" | \
->  	awk '{printf "p:myevent %s:0x%s\n", $6,$3 }' >> uprobe_events
+kunit_skip() and kunit_mark_skipped() can only be passed a pointer
+to a struct kunit, not struct kunit_suite (only kunit_log() actually
+supports both). Rename their first argument accordingly.
 
-This test fails on s390, not because of this change, but since the
-test seems to assume that the entry point of /bin/sh is at offset 0;
-or at least there is some code that is executed at least once at
-offset 0; but that is not the case (at least) for s390.
+Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+---
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
+Cc: linux-kselftest@vger.kernel.org
+---
+ include/kunit/test.h | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Not sure how this can be addressed. Using "readelf -f" to get the
-entry point address of the executable and use that for the uprobe
-would work, but it would also add a dependency to binutils for the
-ftrace selftests, which doesn't exist yet, as far as I can tell.
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 58dbab60f853..0ffb97c78566 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -553,9 +553,9 @@ void kunit_cleanup(struct kunit *test);
+ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt, ...);
+ 
+ /**
+- * kunit_mark_skipped() - Marks @test_or_suite as skipped
++ * kunit_mark_skipped() - Marks @test as skipped
+  *
+- * @test_or_suite: The test context object.
++ * @test: The test context object.
+  * @fmt:  A printk() style format string.
+  *
+  * Marks the test as skipped. @fmt is given output as the test status
+@@ -563,18 +563,18 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
+  *
+  * Test execution continues after kunit_mark_skipped() is called.
+  */
+-#define kunit_mark_skipped(test_or_suite, fmt, ...)			\
++#define kunit_mark_skipped(test, fmt, ...)				\
+ 	do {								\
+-		WRITE_ONCE((test_or_suite)->status, KUNIT_SKIPPED);	\
+-		scnprintf((test_or_suite)->status_comment,		\
++		WRITE_ONCE((test)->status, KUNIT_SKIPPED);		\
++		scnprintf((test)->status_comment,			\
+ 			  KUNIT_STATUS_COMMENT_SIZE,			\
+ 			  fmt, ##__VA_ARGS__);				\
+ 	} while (0)
+ 
+ /**
+- * kunit_skip() - Marks @test_or_suite as skipped
++ * kunit_skip() - Marks @test as skipped
+  *
+- * @test_or_suite: The test context object.
++ * @test: The test context object.
+  * @fmt:  A printk() style format string.
+  *
+  * Skips the test. @fmt is given output as the test status
+@@ -582,10 +582,10 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
+  *
+  * Test execution is halted after kunit_skip() is called.
+  */
+-#define kunit_skip(test_or_suite, fmt, ...)				\
++#define kunit_skip(test, fmt, ...)					\
+ 	do {								\
+-		kunit_mark_skipped((test_or_suite), fmt, ##__VA_ARGS__);\
+-		kunit_try_catch_throw(&((test_or_suite)->try_catch));	\
++		kunit_mark_skipped((test), fmt, ##__VA_ARGS__);		\
++		kunit_try_catch_throw(&((test)->try_catch));		\
+ 	} while (0)
+ 
+ /*
 
-Would it maybe an option for architectures to opt-in to use readelf
-and skip the test (exit_unsupported) if readelf is not available?
+base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+-- 
+2.47.0
+
 
