@@ -1,151 +1,107 @@
-Return-Path: <linux-kselftest+bounces-26783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28819A385F6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:20:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2802A38689
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 15:34:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 053511882558
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 14:19:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 244F6173F49
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 14:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CE12248AF;
-	Mon, 17 Feb 2025 14:17:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88BF92248A5;
+	Mon, 17 Feb 2025 14:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FzDTMiZo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lH65J6Pq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEB42248AC;
-	Mon, 17 Feb 2025 14:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE4722371A;
+	Mon, 17 Feb 2025 14:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739801858; cv=none; b=tc+is4th8AmJHOiEzjTAALc2mWMr4fgzR6Sa77lMkyhg41PFU4xBw63Robve3cQizKgSkbftI3uCp92JD/gEgIsSFNX4KMuomUByzuduUE+Z0peuVctRLsXL3nCQ6s/GEJpn+EU9VeYadO+4ilc9eZ+oFGhyJQiETlgbst8GU+c=
+	t=1739802638; cv=none; b=pJnnm5rHszTGBBsUVz+NDiwd+G/ZrK8xzqk0+c4xqrDg2ijUZTRQSN8/JuVAxF0vviu6uXPxn6SXr839LF3gIfLXC0cH4UsF5jpSGI7tf+B/9ZgeIcvlfJlzZGWwwUAZVhl1/mnHJBa7/AYbdMNMcIpWEMIPHiOo7FK1/aS5vHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739801858; c=relaxed/simple;
-	bh=o39YROBuVbA6O3ko9Qq4yI5dRM0+WT1BVbhUu9uV5uM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LNTx65Gn2qy6qoMWmsn9p9YG/QAxI/HuXSwO6kbuyGZk+VKMX9XcEJjh0Z9j4DUu+xo1AwEOYlQBLRCocvbD9mqncZniXaJBrVCiL2dDHLfbQtMvpyzU0VW5fPa3j5L74kodIdqZ+9d+ksOdmxdCfm1B362GthZpz80AzX9OhcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FzDTMiZo; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1739802638; c=relaxed/simple;
+	bh=sY+CA8clNRQT+8d3rmvYViciBC154ua4aCipVJOVrQ8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kO/BJf8ZOoYfXGYuRR1hcsYUDHgIwTok4UvmET8evK3wqvnxrlCgLFN4wSdYBlzadkfkkj6tEiYXTIb0RzPmJdI715C03/LDAYZTQjOpNXLjB5vmP7t6dx6tv8VKvAz4zVeXdfNmEJP93pyXYCdqlu3de1wub0rmvaZ5A2X1sBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lH65J6Pq; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21c2f1b610dso110864635ad.0;
-        Mon, 17 Feb 2025 06:17:37 -0800 (PST)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-543e49a10f5so4713726e87.1;
+        Mon, 17 Feb 2025 06:30:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739801856; x=1740406656; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=euGD3DtL6BCGM+b7jkbY7enHbQAEo+xzdmRvXrR2nc0=;
-        b=FzDTMiZo8/oAVe9Hd0uk1REysvhn++aw2bT7qFeoyp0MskM6JrJSeryanqpvODJ+0J
-         kIOR27hemeg53WmxgsHaukYzTjKkHL7lHVhkUguzNpuELph9NgemPTkZLMq1YC5dgEBK
-         wVr1FzxCHLuyxqWwLJU5KHbG9uyF0kftD+2nO8M/dhm5s/7d2+dB/UYarCmhsdMghS/u
-         4c5R3b3zV3iqV0A728ofUXsZAGQNOa6DO/vevondDQiVLGN/92WTrwfeDAVcmfK8HQrl
-         6AJpOTuVNfo/2jAHGKi3t9le08l9oaTdS2rOrzoeqJQ6W17JiTB+YrFm2ZrV3Dh9XHlQ
-         NRNg==
+        d=gmail.com; s=20230601; t=1739802635; x=1740407435; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sY+CA8clNRQT+8d3rmvYViciBC154ua4aCipVJOVrQ8=;
+        b=lH65J6PqXsTKNocXKNybVdEjmisTU1HM5SI/J8i5rrUIw6iFbEyRkWCVv3dAVm3Sqp
+         d78+qpVy8SqY7R1wdu4/P7Ymes9TWJlJ0naj9ruEg23Z6jTM5FfOhh+NJ5D9kSB7T5+f
+         dvJDWQ9UkFNmUgY25t+M1sZqQraCGjJlkFwAeMe4NFwOAoIifi0Bd0xaTIFijwD0d/T4
+         rAl7x4Af2oltUCOlEfmzO2wkqbXjScP7uL5R6Gymj+mtEPcB94VhWbVKTn6TNBG4jN0C
+         rudPVlH8sZY1pdedPsrwVa9wgFpg8jUgebIo6AqDgul5RU8wU0bVVYaIb6fu8dApb5UP
+         WvPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739801856; x=1740406656;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=euGD3DtL6BCGM+b7jkbY7enHbQAEo+xzdmRvXrR2nc0=;
-        b=PLVz9SE9ilvDrGivRPmDfgUvdKPs3ImUSGp5BsUV4o1S/DB2091GZDDanUe6ZQWC51
-         wYwl8AQo3fdUR/EC6uPxuGkQ9l4KOkQT7QTo5CNhn9LltWWbuTSrC4Vjfo/dtL55B91i
-         TCgqCPL2DJm0NpqNjG78XYRM5SQFsxJcCcdksChiuMnKyrRdyJnB5nMhsa7ty8CArCUe
-         Ex1xH1RFOqzoVLEuFxICn9PKzTGEVPjHpOaNZhjvkBf6v1BoUjJ/+CYv5EJ84WtElB6w
-         fqvKVf2br3Pwp5zzX4S8BN3oR3D3Df2THrBoI6ZHMcd3guNUx82ddgNQAmM00BIovTH6
-         rO9A==
-X-Forwarded-Encrypted: i=1; AJvYcCVG9yLppmEmXwelKlu68whs8TAZDAx8X4WsCiObQpYx406U5Y0TFgcZg5Dg+9J+AiFiZHjn6/0xEhxMjuMcgMU=@vger.kernel.org, AJvYcCXAUaAVoh36wjUF0w48lu6PYy3SGytGyI2yruJYuL0FBIn9VQ+S1bkoqov7S31PLTVwfeX9xepd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyftSJCf1OVFigyPasIg++x7EYXlChhNeqtZXMxhQ+T4ihg7ELu
-	lnS0iONpJhMIrhrQhJl7ZF7EAl1f/6Qk+o589IE4x147qZRifxeZ
-X-Gm-Gg: ASbGncubaqit+zjyMQrcbmNT3MR2z3IEtTK6lS6awgAMqQ1Oo2aV6oAuf9zD/xhHpzq
-	X/u500nNKZX6ysrdOAAePZITaSWFmCRL7uJD9ZElddgmb9YpVd2+TVSpBsIKocmQIuo7i3t2/UB
-	Ga24Pj9seluCsEh8T10kg+A5c5HwwCcTNyw4UqB8jz/w19T92gLdoUCIZz65kU/aUYkFAExhL35
-	yb/mEUecS/yccYPehkzEX+R17MU1DyAljQUrw7991PGybVHsMYxZDPNsyb1P2s3Lp1oLJBtipyB
-	YJL3Vd/8yd1ImZfyg4d3dCbpoXxIyEwspEHiyLcI
-X-Google-Smtp-Source: AGHT+IFpFeBSNuUJ9Jopviu3/MljT4Y04e+Tksr52wJhW7iAizRMSd95PeaL9LxYgEEhXppqNW6Htg==
-X-Received: by 2002:a17:903:1a0e:b0:220:f1a1:b6e1 with SMTP id d9443c01a7336-22104028854mr164379845ad.19.1739801856490;
-        Mon, 17 Feb 2025 06:17:36 -0800 (PST)
-Received: from localhost.localdomain ([122.171.19.71])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d545c8d1sm71648185ad.113.2025.02.17.06.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 06:17:36 -0800 (PST)
-From: Chandra Mohan Sundar <chandru.dav@gmail.com>
-To: skhan@linuxfoundation.org,
-	shuah@kernel.org
-Cc: Chandra Mohan Sundar <chandru.dav@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH] selftests: net : Fix few spelling mistakes
-Date: Mon, 17 Feb 2025 19:45:16 +0530
-Message-ID: <20250217141520.81033-1-chandru.dav@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1739802635; x=1740407435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sY+CA8clNRQT+8d3rmvYViciBC154ua4aCipVJOVrQ8=;
+        b=wcSL7ixtjShxMRjqfnUG2uP8KvckrKa51EcWxQElTSS/zzu+bT8Ai96Lzs6cUeZoVt
+         Xkz4sndu30hJl5uoMc5Odi7ctgPf1D9fBtM4zAPYD4zCpFpk0mPWpfeb/LNQ0eSKtGNv
+         myz4bfUhi2FwqcinQvJ4oqgC5yUM+BZjgB4WoNJYl/Kmthc4TmKIg2qCwVFqIGDR0x/C
+         0X8awYwCvkET4JqnU941vHOfKeWDKb3fe+AKrimoq4kxmi16qG4yMcg6MENfZJ84sNy3
+         fsSWtYHW25TsKy1pPACE62d+rv41r8rgAbkH5SBaUXnr3sxzKQDUMgjlpzLh1X+Kbu4N
+         zCqA==
+X-Forwarded-Encrypted: i=1; AJvYcCUVeszlYmjSs6MIEVVoVwe2mYjG+Xqa/zoFYJmw+NP4NiR/GLH7UrG7ZgtKkcs0xUBPKTo8elyUwaiOCP2bJAhh@vger.kernel.org, AJvYcCVdciX3akwbbF8WNYR0vvXhSrTsOoyP4TuviHdf/xQYC1sxDPFHlNpm8huT/89Oo7BKSwPdRQjuTF9wcCU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQIJYPma2gG/iByRPvl1n15mdb6AGWbJpCRfrwN7iA2eqvW3AS
+	UmYm1avxZYgSYzC/hcQFYfQqBQQddN3rgEcK+w7WDWxnpqwCSa5D8VQ40G/N/yyGSDlwJlLLJAu
+	f4CBW9dyyRb10QG6aaPPAnE0gR3E=
+X-Gm-Gg: ASbGnctL11PdMnW8dZULsVVm8xYmLHKGyA6dNfyHsevDsiKgOLGDrP3lbvKFZDMP48f
+	ALvhkq34H+YTBNHmdUTKO9BhyRbRiz6L5uZLogGyOqnnbXkWDeFjdv6463+jUS4HAT5qEdqHL8D
+	aADJquRKXYJRCkYOomau0MDUgdvEWb8i0=
+X-Google-Smtp-Source: AGHT+IFO026JFAoJlQESSwcdgxRJMbNRj6JcB1YuS4pFIcRjR6IQAVsiaDlUlmG8KabgDlbneF72bHJSl1+962Y2SQg=
+X-Received: by 2002:a05:6512:10c5:b0:545:576:cbd2 with SMTP id
+ 2adb3069b0e04-5452fe27304mr2917774e87.10.1739802634481; Mon, 17 Feb 2025
+ 06:30:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250214-scanf-kunit-convert-v8-3-5ea50f95f83c@gmail.com>
+ <202502160245.KUrryBJR-lkp@intel.com> <CAJ-ks9kkigKG=Nf_mZrA5CA=SUV2sSyY51_rLef42T+ZxCmk1Q@mail.gmail.com>
+ <Z7JI-YtgZzmOtMDK@smile.fi.intel.com>
+In-Reply-To: <Z7JI-YtgZzmOtMDK@smile.fi.intel.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 17 Feb 2025 09:29:58 -0500
+X-Gm-Features: AWEUYZkuvaFnvabs_GywBbkuo44d94Kql-DWL2E60D-MWBZySmrPMuLFMaMbzos
+Message-ID: <CAJ-ks9mjWOCjMOK+ktLdN0XJmRgT57CoHf_aCDLMOX6-mnKVwA@mail.gmail.com>
+Subject: Re: [PATCH v8 3/4] scanf: convert self-test to KUnit
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: kernel test robot <lkp@intel.com>, David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, oe-kbuild-all@lists.linux.dev, 
+	Linux Memory Management List <linux-mm@kvack.org>, Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix few spelling mistakes in net selftests
+On Sun, Feb 16, 2025 at 3:22=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Please, when reply, remove boielrplate stuff!
+> I have just wasted a couple of minutes to understand what's going on in t=
+he
+> message that is 2700 lines of text as the reply to the bot message which =
+was
+> ~700 lines.
 
-Signed-off-by: Chandra Mohan Sundar <chandru.dav@gmail.com>
----
- tools/testing/selftests/net/fcnal-test.sh   | 4 ++--
- tools/testing/selftests/net/fdb_flush.sh    | 2 +-
- tools/testing/selftests/net/fib_nexthops.sh | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 899dbad0104b..4fcc38907e48 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -3667,7 +3667,7 @@ ipv6_addr_bind_novrf()
- 	# when it really should not
- 	a=${NSA_LO_IP6}
- 	log_start
--	show_hint "Tecnically should fail since address is not on device but kernel allows"
-+	show_hint "Technically should fail since address is not on device but kernel allows"
- 	run_cmd nettest -6 -s -l ${a} -I ${NSA_DEV} -t1 -b
- 	log_test_addr ${a} $? 0 "TCP socket bind to out of scope local address"
- }
-@@ -3724,7 +3724,7 @@ ipv6_addr_bind_vrf()
- 	# passes when it really should not
- 	a=${VRF_IP6}
- 	log_start
--	show_hint "Tecnically should fail since address is not on device but kernel allows"
-+	show_hint "Technically should fail since address is not on device but kernel allows"
- 	run_cmd nettest -6 -s -l ${a} -I ${NSA_DEV} -t1 -b
- 	log_test_addr ${a} $? 0 "TCP socket bind to VRF address with device bind"
- 
-diff --git a/tools/testing/selftests/net/fdb_flush.sh b/tools/testing/selftests/net/fdb_flush.sh
-index d5e3abb8658c..9931a1e36e3d 100755
---- a/tools/testing/selftests/net/fdb_flush.sh
-+++ b/tools/testing/selftests/net/fdb_flush.sh
-@@ -583,7 +583,7 @@ vxlan_test_flush_by_remote_attributes()
- 	$IP link del dev vx10
- 	$IP link add name vx10 type vxlan dstport "$VXPORT" external
- 
--	# For multicat FDB entries, the VXLAN driver stores a linked list of
-+	# For multicast FDB entries, the VXLAN driver stores a linked list of
- 	# remotes for a given key. Verify that only the expected remotes are
- 	# flushed.
- 	multicast_fdb_entries_add
-diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
-index 77c83d9508d3..bea1282e0281 100755
---- a/tools/testing/selftests/net/fib_nexthops.sh
-+++ b/tools/testing/selftests/net/fib_nexthops.sh
-@@ -741,7 +741,7 @@ ipv6_fcnal()
- 	run_cmd "$IP nexthop add id 52 via 2001:db8:92::3"
- 	log_test $? 2 "Create nexthop - gw only"
- 
--	# gw is not reachable throught given dev
-+	# gw is not reachable through given dev
- 	run_cmd "$IP nexthop add id 53 via 2001:db8:3::3 dev veth1"
- 	log_test $? 2 "Create nexthop - invalid gw+dev combination"
- 
--- 
-2.43.0
-
+My apologies. I forgot what a mess a mobile email client makes.
 
