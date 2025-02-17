@@ -1,94 +1,94 @@
-Return-Path: <linux-kselftest+bounces-26803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E9FA38C69
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 20:31:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3FABA38C91
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 20:41:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E4BD3B25F3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 19:31:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D17333AEC30
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 19:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1084922B5A3;
-	Mon, 17 Feb 2025 19:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3249236445;
+	Mon, 17 Feb 2025 19:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M49zP0zO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MJ/5dOcO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4CF1624F9
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 19:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F266D1624F9
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 19:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739820687; cv=none; b=UV+iSky8ApkQGc81a2qZxzoc2QrYbuj8Z+Lz7lBf7jy2Qcsa7TgtH9uoWU+nGsKy80iOfQxetX3plZCUdOeycvVpo2XmIjknGm8L0uQWdUbbSEcrZJ/NR012PNB7X5FLUYYxznnKl6UU/9TLErMtkXD8bchWN3yCu8+5zvuj/Ok=
+	t=1739821268; cv=none; b=r71U69Wvkw8smh53zXxYtfJ9D5XLrwXOO6pHngMYgQ3uJ1nwNy1ZBCJ0324X/Hd4WdimMhRt2wKaU/Wylja6+X4beFvz/Nc8m2TXooRo7OsxRDsm+ra+Nh1t7WAFLSh4+zgnS5Zskqb7fyizqbseliJvwzEUV4SozwOUTj0rKuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739820687; c=relaxed/simple;
-	bh=x6hERZPuvEmfCqwjlTvlO6TY6uNufA0NZpWRreTwNxY=;
+	s=arc-20240116; t=1739821268; c=relaxed/simple;
+	bh=fZqtRM8RT1iWTUKXobHF6k5WgJxBwB9Q4GBzecCtjxU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HXtxJvZIAH5qbJoZ99D0TA09/f4nlyilU5sQEXttZR3E0GB0pF5bV6CUsL9SwBS6/RtmtJFZAzJtSqee/CWpH99KvQOunTiM+CPx+auWO4B+JYIKq6DEnsceWqZsQFMdrTUEG/aHCRIjH/d9Ivhqo+NBVFIGKC8JYjF30GXhTHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M49zP0zO; arc=none smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=ZiHHihi9Z9qOhYtB6zyeSZNBn2szuCg4nzrC14fsacQxNrMz9o8mr50g/vyNkGJ3P0k6sdqvhIwxoryIBKA/a8PX0UD87jbsyw8K6xdJoKnOQ/Zd7kO8cshovl+qa6FHHHEVH1QBi30UNcvtOwyBzn8jny+hEcBQZoK2tAUPScQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MJ/5dOcO; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739820684;
+	s=mimecast20190719; t=1739821265;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NX4hyJJY5LUfgHjXwSqyXtyBfsL13pYnI0Mr0EfX7HY=;
-	b=M49zP0zOWk3dtgtj4eUXA14lzo49TnurH6xGZHg347btF4lhhaAkrfY0zd74qaP7OzLrfU
-	fSoRv3N8nIfc6BSBaI5zfKOX88bq07tvIwkj9LvAt+MXdvXBmWjNPvm9KSrLhIc2ufcLBL
-	eV9NoAciUmTi72chvHlPsemjlSCsZWc=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=//bCVclOlkTbOALtHecBUWQzL7Q3Fqbtw0DYb0DfT7o=;
+	b=MJ/5dOcOIZXuAeJsNipxzR0g6JZ2B6HagZfVkakfrMMO/3bH/8Ey0wDxl6J0QEpw2eEosL
+	ERtpCzm0JpcKvPAbZKhGOtd1Rv8ZHJOLXNZUxSWYwtrFtCd9UDsGtnIvzJswhbfeLCPagn
+	+HS7OAZw6v34n1vTbXKqLdMvt7/xLdM=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-454-HO6VCJ_9M3OJeUVr8uucgQ-1; Mon, 17 Feb 2025 14:31:23 -0500
-X-MC-Unique: HO6VCJ_9M3OJeUVr8uucgQ-1
-X-Mimecast-MFC-AGG-ID: HO6VCJ_9M3OJeUVr8uucgQ_1739820682
-Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-e02fff66a83so5333007276.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 11:31:22 -0800 (PST)
+ us-mta-614-7QN54dYWNxivB8gr16SFkA-1; Mon, 17 Feb 2025 14:41:04 -0500
+X-MC-Unique: 7QN54dYWNxivB8gr16SFkA-1
+X-Mimecast-MFC-AGG-ID: 7QN54dYWNxivB8gr16SFkA_1739821264
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-6f465f0f314so63528147b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 11:41:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739820682; x=1740425482;
+        d=1e100.net; s=20230601; t=1739821264; x=1740426064;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NX4hyJJY5LUfgHjXwSqyXtyBfsL13pYnI0Mr0EfX7HY=;
-        b=eyZjszMPFZOFffVs9e1NY18hzlrkX+Mih2myCmlb9iuZzSNlIceBTv54oQb9+qANli
-         YPNFk1x2Bfvrzf5UuGNnM8UWoozgk4qewEERl+EQObB4fPGUsYrUMmcZdkYJYCyxOSiT
-         zuAlfiWd8itj3lOgnlHT031JJxjJlwBQBRxULZ/6vku+PF3k7H9oyaUYcWQYzQmPxlh6
-         sW2NOHxUaFYrJQ00ldQAgzFCukIzeQg/eQQ2YOGVSVrwcHNXi6oyMZN/zTn3B7fGFu16
-         je/VqMdk4zuQF1vU6Pfrbn9l9JaRarp+onrj65fh3BlOB/L9lRwJnGzkZ0jXEHzyVHSX
-         HR7A==
-X-Forwarded-Encrypted: i=1; AJvYcCVTCyZNjI1f2stLoUiNWoSFxToKIG6Jn3mQTDAGEq8IbB2v+QQ1QEibkGHviUlOnxdLPqyPOjCqLBHOnIT1UXI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRHXatbWkTK7lGAXE6P6xav2TyP8YKdsOqQ3mp09UcMOlbCh3k
-	gsxc1+XsaWNJNZNR730ZOpCx0Ze6LkO6KSFbCXmJMpaS8SR4R0O/eXpraUNjXFk9nFgIK9829IB
-	+GQ9Pq8LTLef+dtDBknHyoG+XPIzCW1Nb9XLteF8HHyz95IONtex9r5fgTaH4F7pLC8SFkOyKnK
-	tZ14pGccBk0wsUHi0HXMfoaWm5smwW8CDmfiKOnkgtSfmChpF6hbM=
-X-Gm-Gg: ASbGncucjPGLK5JxQR5OLWESCIrRkZBpjlfkCEHMFfepbjCaSY6Th7G8VLTdk7SztL6
-	VSCqO92PZSW+CQz0bSIXWwEOIc7RzWrQsMbfmgBAHqNiY6ARb2ndihuwpCsRdXnwLG2ZHVS9Eod
-	s=
-X-Received: by 2002:a05:6902:3486:b0:e5a:e6eb:d44f with SMTP id 3f1490d57ef6-e5dc900e998mr8015114276.6.1739820682086;
-        Mon, 17 Feb 2025 11:31:22 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFcDB0O4ITkNRkvRI81tFyLe3JFpMxEjsoT5YAFRkQrsXxl/3FtA6FECS+cW2MojiNPdBeyZA0rbetrrR9AAYw=
-X-Received: by 2002:a05:6902:3486:b0:e5a:e6eb:d44f with SMTP id
- 3f1490d57ef6-e5dc900e998mr8015078276.6.1739820681801; Mon, 17 Feb 2025
- 11:31:21 -0800 (PST)
+        bh=//bCVclOlkTbOALtHecBUWQzL7Q3Fqbtw0DYb0DfT7o=;
+        b=OABRu2raEOgebKHhE89Ry5ew/YXQwbYmGjF6zKquVaN0fd3R1t6d2gpwHqw252wcZU
+         Gj3xMIIniruMGVF6ex7HWo1XhPIEOXYP8iZwH6TTgVum1FWIPEL8iFNXFg49MHRqDLZ6
+         hH5XliShp9xUTUEjZj/ETLAY64ZDpctn/lsbMlvNKUqTXTTOfIZKyn6nR0JKuUXy2ARg
+         UbguohUrZexBW2LhEtsz/cGMuAPexZGAteZt7kGgTgjE5k+UDqqtWZmRFDvXfaAbxdU5
+         lZMmb8zf+b5ik46WsqEoSI0O9IQgpsqspJ5DKko1UfXPRxdy1HP3c0eZPkV3OwdvQyMF
+         ch0w==
+X-Forwarded-Encrypted: i=1; AJvYcCVFyZ5lbCEudOS5WN5vABQlAws1dttzPtQhIVxY6X3WZmqD8vJciez8V+tuiul/168+Vn7qFUPFSOlH+/Y34s0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkJNFE+13nL3kI0cXTevSFZK2CKwL8JG3EDzZeKGPk9MKR3bHP
+	y5JSTJE6kHeF0ssvkhQpoJsTyxqGodq4gD7mQkXoOeEqhZXIs93c36f3JQTSwZLh08tqquU0LrW
+	aXK9mLusOXOlFwau4/Ez4I7MZrWWRFNKFEInKVYYcLj3fqgNqTZ/BHX1QsfWvNod9p3WqtJ0kXR
+	cqr9NuySeaprIs7qOMtQaX+qTuC1GNMMx6k/OjTZZH
+X-Gm-Gg: ASbGnctt+K8zfyvo+A6JMXcIEG0MwGF58pbSuSsupi5sJThdgQgUAsx4OVPxHHTBNHy
+	CIosgPJt7MqPsIkhOIbrOKx88UqXxnnEw+Wjla5bBkO9wOJD9TeoA3S0X3n+BhmEKYM8yLGhlzc
+	8=
+X-Received: by 2002:a05:6902:1245:b0:e57:38e8:e484 with SMTP id 3f1490d57ef6-e5dc906a6efmr8517684276.25.1739821264178;
+        Mon, 17 Feb 2025 11:41:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEvnPQwnilhWswjs0ZcxjcGnVjg3Ge6f8VbjDNzW12TGEGsZB+XKpaQjNK13699ME9n3+vuSW3RJklFy1lTMg0=
+X-Received: by 2002:a05:6902:1245:b0:e57:38e8:e484 with SMTP id
+ 3f1490d57ef6-e5dc906a6efmr8517645276.25.1739821263702; Mon, 17 Feb 2025
+ 11:41:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250211004054.222931-1-npache@redhat.com> <20250211004054.222931-3-npache@redhat.com>
- <c408c854-134b-4758-931f-e6e3b7a58213@gmail.com>
-In-Reply-To: <c408c854-134b-4758-931f-e6e3b7a58213@gmail.com>
+References: <20250211004054.222931-1-npache@redhat.com> <20250211004054.222931-6-npache@redhat.com>
+ <3ef9a5f3-2d63-46db-b0b5-d6f7e78c7888@gmail.com>
+In-Reply-To: <3ef9a5f3-2d63-46db-b0b5-d6f7e78c7888@gmail.com>
 From: Nico Pache <npache@redhat.com>
-Date: Mon, 17 Feb 2025 12:30:56 -0700
-X-Gm-Features: AWEUYZkouadz-BzwdaTEV-k94b6IIL2-QD_uUEVTO5Cso96xfXhx8WXXPjrCpeI
-Message-ID: <CAA1CXcDVdmVEQ+NMC6JZNCVqtkUKLs=L3aQaYtKMSP9N3HAM3w@mail.gmail.com>
-Subject: Re: [RFC v2 2/5] mm: document transparent_hugepage=defer usage
+Date: Mon, 17 Feb 2025 12:40:38 -0700
+X-Gm-Features: AWEUYZkcwmtHBdpmUwP7X7Kw49HJAvQ6nyZR8Z4XfpL2-Rs1JAFL0zufMEm8KSA
+Message-ID: <CAA1CXcA7aG9MixWVX8vrTthayah0CXb9-HvKx-hU_wRYQ1fPxQ@mail.gmail.com>
+Subject: Re: [RFC v2 5/5] mm: document mTHP defer setting
 To: Usama Arif <usamaarif642@gmail.com>
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, ryan.roberts@arm.com, 
@@ -108,117 +108,148 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 17, 2025 at 8:04=E2=80=AFAM Usama Arif <usamaarif642@gmail.com>=
+On Mon, Feb 17, 2025 at 8:14=E2=80=AFAM Usama Arif <usamaarif642@gmail.com>=
  wrote:
 >
 >
 >
 > On 11/02/2025 00:40, Nico Pache wrote:
-> > The new transparent_hugepage=3Ddefer option allows for a more conservat=
-ive
-> > approach to THPs. Document its usage in the transhuge admin-guide.
+> > Now that we have mTHP support in khugepaged, lets add it to the
+> > transhuge admin guide to provide proper guidance.
 > >
+>
+> I think you should move this patch to the mTHP khugepaged series, and jus=
+t send
+> THP=3Ddefer separately from mTHP khguepaged.
+>
 > > Signed-off-by: Nico Pache <npache@redhat.com>
 > > ---
-> >  Documentation/admin-guide/mm/transhuge.rst | 22 +++++++++++++++++-----
-> >  1 file changed, 17 insertions(+), 5 deletions(-)
+> >  Documentation/admin-guide/mm/transhuge.rst | 22 ++++++++++++++++------
+> >  1 file changed, 16 insertions(+), 6 deletions(-)
 > >
 > > diff --git a/Documentation/admin-guide/mm/transhuge.rst b/Documentation=
 /admin-guide/mm/transhuge.rst
-> > index dff8d5985f0f..b3b18573bbb4 100644
+> > index b3b18573bbb4..99ba3763c1c4 100644
 > > --- a/Documentation/admin-guide/mm/transhuge.rst
 > > +++ b/Documentation/admin-guide/mm/transhuge.rst
-> > @@ -88,8 +88,9 @@ In certain cases when hugepages are enabled system wi=
-de, application
-> >  may end up allocating more memory resources. An application may mmap a
-> >  large region but only touch 1 byte of it, in that case a 2M page might
-> >  be allocated instead of a 4k page for no good. This is why it's
-> > -possible to disable hugepages system-wide and to only have them inside
-> > -MADV_HUGEPAGE madvise regions.
-> > +possible to disable hugepages system-wide, only have them inside
-> > +MADV_HUGEPAGE madvise regions, or defer them away from the page fault
-> > +handler to khugepaged.
+> > @@ -63,7 +63,7 @@ often.
+> >  THP can be enabled system wide or restricted to certain tasks or even
+> >  memory ranges inside task's address space. Unless THP is completely
+> >  disabled, there is ``khugepaged`` daemon that scans memory and
+> > -collapses sequences of basic pages into PMD-sized huge pages.
+> > +collapses sequences of basic pages into huge pages.
 > >
-> >  Embedded systems should enable hugepages only inside madvise regions
-> >  to eliminate any risk of wasting any precious byte of memory and to
-> > @@ -99,6 +100,15 @@ Applications that gets a lot of benefit from hugepa=
-ges and that don't
-> >  risk to lose memory by using hugepages, should use
-> >  madvise(MADV_HUGEPAGE) on their critical mmapped regions.
-> >
-> > +Applications that would like to benefit from THPs but would still like=
+> >  The THP behaviour is controlled via :ref:`sysfs <thp_sysfs>`
+> >  interface and using madvise(2) and prctl(2) system calls.
+> > @@ -103,8 +103,8 @@ madvise(MADV_HUGEPAGE) on their critical mmapped re=
+gions.
+> >  Applications that would like to benefit from THPs but would still like=
  a
-> > +more memory conservative approach can choose 'defer'. This avoids
-> > +inserting THPs at the page fault handler unless they are MADV_HUGEPAGE=
+> >  more memory conservative approach can choose 'defer'. This avoids
+> >  inserting THPs at the page fault handler unless they are MADV_HUGEPAGE=
 .
-> > +Khugepaged will then scan the mappings for potential collapses into PM=
+> > -Khugepaged will then scan the mappings for potential collapses into PM=
 D
-> > +sized pages. Admins using this the 'defer' setting should consider
-> > +tweaking khugepaged/max_ptes_none. The current default of 511 may
-> > +aggressively collapse your PTEs into PMDs. Lower this value to conserv=
+> > -sized pages. Admins using this the 'defer' setting should consider
+> > +Khugepaged will then scan the mappings for potential collapses into (m=
+)THP
+> > +pages. Admins using this the 'defer' setting should consider
+> >  tweaking khugepaged/max_ptes_none. The current default of 511 may
+> >  aggressively collapse your PTEs into PMDs. Lower this value to conserv=
 e
-> > +more memory (ie. max_ptes_none=3D64).
+> >  more memory (ie. max_ptes_none=3D64).
+> > @@ -119,11 +119,14 @@ Global THP controls
+> >
+> >  Transparent Hugepage Support for anonymous memory can be entirely disa=
+bled
+> >  (mostly for debugging purposes) or only enabled inside MADV_HUGEPAGE
+> > -regions (to avoid the risk of consuming more memory resources) or enab=
+led
+> > -system wide. This can be achieved per-supported-THP-size with one of::
+> > +regions (to avoid the risk of consuming more memory resources), defere=
+d to
+> > +khugepaged, or enabled system wide.
+> > +
+> > +This can be achieved per-supported-THP-size with one of::
+> >
+> >       echo always >/sys/kernel/mm/transparent_hugepage/hugepages-<size>=
+kB/enabled
+> >       echo madvise >/sys/kernel/mm/transparent_hugepage/hugepages-<size=
+>kB/enabled
+> > +     echo defer >/sys/kernel/mm/transparent_hugepage/hugepages-<size>k=
+B/enabled
+> >       echo never >/sys/kernel/mm/transparent_hugepage/hugepages-<size>k=
+B/enabled
+> >
+> >  where <size> is the hugepage size being addressed, the available sizes
+> > @@ -155,6 +158,13 @@ hugepage sizes have enabled=3D"never". If enabling=
+ multiple hugepage
+> >  sizes, the kernel will select the most appropriate enabled size for a
+> >  given allocation.
+> >
+> > +khugepaged use max_ptes_none scaled to the order of the enabled mTHP s=
+ize to
+> > +determine collapses. When using mTHPs its recommended to set max_ptes_=
+none low.
+> > +Ideally less than HPAGE_PMD_NR / 2 (255 on 4k page size). This will pr=
+event
+> > +undesired "creep" behavior that leads to continously collapsing to a l=
+arger
+> > +mTHP size. max_ptes_shared and max_ptes_swap have no effect when colla=
+psing to a
+> > +mTHP, and mTHP collapse will fail on shared or swapped out pages.
 > > +
 >
-> maybe remove the "(ie. max_ptes_none=3D64)", its appearing as a recommend=
-ation for
-> the value, but it might not be optimal for different workloads.
+> This paragraph definitely belongs in the khugepaged series, as it doesn't=
+ have anything
+> to do with THP=3Ddefer.
 >
-> >  .. _thp_sysfs:
-> >
-> >  sysfs
-> > @@ -136,6 +146,7 @@ The top-level setting (for use with "inherit") can =
-be set by issuing
-> >  one of the following commands::
-> >
-> >       echo always >/sys/kernel/mm/transparent_hugepage/enabled
-> > +     echo defer >/sys/kernel/mm/transparent_hugepage/enabled
-> >       echo madvise >/sys/kernel/mm/transparent_hugepage/enabled
-> >       echo never >/sys/kernel/mm/transparent_hugepage/enabled
-> >
-> > @@ -274,7 +285,8 @@ of small pages into one large page::
-> >  A higher value leads to use additional memory for programs.
-> >  A lower value leads to gain less thp performance. Value of
-> >  max_ptes_none can waste cpu time very little, you can
-> > -ignore it.
-> > +ignore it. Consider lowering this value when using
-> > +``transparent_hugepage=3Ddefer``
+> re "Ideally less than HPAGE_PMD_NR / 2",
+> what if you are running on amd, and using 16K and 2M THP=3Dalways only as=
+, thats where
+> the most TLB benefit is. Than this recommendation doesnt make sense?
+
+That may be correct, I believe the creep requires two adjacent mTHP
+levels ( ie 512kb, 1024kb) to be enabled for the issue to really
+present. Although with max_ptes_none=3D511, you will almost always
+satisfy the collapse request, so your 16Kb mTHPs will be promoted to
+PMDs. I dont believe 511 is a good default if using mTHPs.
 >
-> lowering this value even with thp=3Dalways makes sense, as there might be=
- cases
-> when pf might not give a THP, but a VMA becomes eligable to scan via khug=
-epaged
-> later? I would remove this line.
+> Also even if you have all mTHP sizes as always, shouldnt you start by col=
+lapsing to
+> the largest THP size first? (I haven't reviewed the khugepaged series yet=
+, so might
+> be have been discussed there, I will try and review it).
 
-Perhaps I should be more clear or create a different section for it.
-The point was that defer was created to prevent internal fragmentation
-and leave khugepaged to determine when a THP was "useful" (less
-wasteful). But to achieve this less waste we should also not be using
-the default.
-
-Ideally I would want to change "always" to ignore max_ptes_none (acts
-as max_ptes_none=3D511), and change the max_ptes_none default to 64 or
-128. But that's a separate discussion that I didn't want detracting
-from these postings.
+We do start at the largest first. The creep happens on a second pass
+of the PMD, not immediately in the same collapse.
 
 >
-> >
-> >  ``max_ptes_swap`` specifies how many pages can be brought in from
-> >  swap when collapsing a group of pages into a transparent huge page::
-> > @@ -299,8 +311,8 @@ Boot parameters
-> >
-> >  You can change the sysfs boot time default for the top-level "enabled"
-> >  control by passing the parameter ``transparent_hugepage=3Dalways`` or
-> > -``transparent_hugepage=3Dmadvise`` or ``transparent_hugepage=3Dnever``=
- to the
-> > -kernel command line.
-> > +``transparent_hugepage=3Dmadvise`` or ``transparent_hugepage=3Ddefer``=
- or
-> > +``transparent_hugepage=3Dnever`` to the kernel command line.
-> >
-> >  Alternatively, each supported anonymous THP size can be controlled by
+> Did you see the creep behavior you mentioned in your experiments?
+
+Yes, I provided an example of how it happens here.
+https://lore.kernel.org/lkml/CAA1CXcDiGLD=3DdZpFRyAuz4TLrVZZYGp=3Du7=3DZ9Q+=
+g9RXbf-s2nA@mail.gmail.com/
+
+>
+>
+> >  It's also possible to limit defrag efforts in the VM to generate
+> >  anonymous hugepages in case they're not immediately free to madvise
+> >  regions or to never try to defrag memory and simply fallback to regula=
+r
+> > @@ -318,7 +328,7 @@ Alternatively, each supported anonymous THP size ca=
+n be controlled by
 > >  passing ``thp_anon=3D<size>[KMG],<size>[KMG]:<state>;<size>[KMG]-<size=
 >[KMG]:<state>``,
+> >  where ``<size>`` is the THP size (must be a power of 2 of PAGE_SIZE an=
+d
+> >  supported anonymous THP)  and ``<state>`` is one of ``always``, ``madv=
+ise``,
+> > -``never`` or ``inherit``.
+> > +``defer``, ``never`` or ``inherit``.
+> >
+> >  For example, the following will set 16K, 32K, 64K THP to ``always``,
+> >  set 128K, 512K to ``inherit``, set 256K to ``madvise`` and 1M, 2M
 >
 
 
