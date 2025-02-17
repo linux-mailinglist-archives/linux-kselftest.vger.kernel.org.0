@@ -1,102 +1,153 @@
-Return-Path: <linux-kselftest+bounces-26800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26801-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C0DA38B36
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 19:23:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E934EA38C4E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 20:24:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04A1D1894025
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 18:23:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDC8416B2FA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Feb 2025 19:24:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461ED235BE8;
-	Mon, 17 Feb 2025 18:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FEB236445;
+	Mon, 17 Feb 2025 19:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLu68NYN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HJXuGHRP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122D822F3BA;
-	Mon, 17 Feb 2025 18:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D26F137C35
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 19:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739816589; cv=none; b=uHA6keqx+S2zD7O8j7OdbwFV3pIAA3+g/8SVbGgKcz4Bk0WWyGuDRAtXECQfR+zIiCX5Eovlz754V1Tfdc/22slXSj64dO4QK8sZ9WbABUFB1AIGb+F9+0ANf27J52BGEtiXoFd5joXxp8l6RNsyLzJUBRemRCYPoUGATh81Vkw=
+	t=1739820255; cv=none; b=EdL1cmNZ9b4etvCzjIOH54OHIyN1U7R5bpYEIpBU4rhcP4yuEEmtNhdlfza28PQYzfQGvA92ldelohtK+UgJ9VYmZueLn/VK5r9qNVGoIpRq+O2Mj42o+p9keYpDKsWr7O/jcdFfHtRnh0SNHjYn1EKmIT06MKXMZJev3izphOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739816589; c=relaxed/simple;
-	bh=n7g0gJyMQcouAhbIJm6xczE9AEtKmUwr5Noo4sba+Eo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p8u1YIhE4dny7vEYP7lw9kXBxkJtmzkhKqihKtBRgs6/+vhoa7SvZTWym9vnSOmoXe5JOanR502iZVgZykwqBvvCx7i4bsuD6u6sOTWMEFHokjFaCuh617G3iu27F8sAtHI3ipBaN+gjyxok94R4eWCfxE2TdGErTfWgPWKSgZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLu68NYN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6391CC4CED1;
-	Mon, 17 Feb 2025 18:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739816588;
-	bh=n7g0gJyMQcouAhbIJm6xczE9AEtKmUwr5Noo4sba+Eo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=LLu68NYN496qBbaqRSyGErO6IEO6gRJ4Q926sHunH4ZdV3Mt5L3UM/pSsGOW62oEk
-	 ehACslGrGgnIN1+lWVzjugfZiitQXZre+zEbe6GLY4pbSz5uydItbdAasum2JcQiDf
-	 5efrfPmdyUGzR8gMp/MysHuEVxmi11El5HTY+el8BLYPQI/f1Y2cjZzskSaM3oWgso
-	 g2Q1mCNRVh3SzmO+SXXarxxynkjblP+4o33D2CZDwVkHNWtRd3VNKpcUcjXmLwsP7u
-	 +nK/jO+Hh9Gtq6FeW1iXKTdIhegGjZTrOLCFowunMr+p6QB86RP/JuPe885gYI9DNw
-	 FP+mbNJQtbpnQ==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	kernel-team@meta.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	stable@vger.kernel.org,
-	kernel test robot <oliver.sang@intel.com>
-Subject: [PATCH] selftests/damon/damos_quota_goal: handle minimum quota that cannot be further reduced
-Date: Mon, 17 Feb 2025 10:23:04 -0800
-Message-Id: <20250217182304.45215-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1739820255; c=relaxed/simple;
+	bh=rdbMLJJGNPMZE86U034IIF2tHWWv7Jlyf8ALOn6BLhI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=taorotN1D75AMDlEOSV+7tTV+0TjEWyGcbIS3P2kObC7LBzULTdz/OAWc1+3J17AH4pxig7fvCQTvfRPLbWSHlD/HM1kHGxNCHK0qE1xlE+py9SzZl5FmDZUFnDGldCMxbrA/Yw8c7WgJNXLzgeSTmfYhfeFbD57bDykxwtZ4nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HJXuGHRP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739820253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rdbMLJJGNPMZE86U034IIF2tHWWv7Jlyf8ALOn6BLhI=;
+	b=HJXuGHRP55kFxTuu1I9ElP5O+f94fJKpLcNHNok4jxZSIkjd97TYXZpHi7NNo/juWGrp3c
+	sXLMHftbnBFMGiZZIxX6prmFceuOkp0gCIxWojttp3pCTW4N+T2ygM+gjM575aXLgMAgNV
+	GQC9iwGVNrSZGx6CGCXLvH0lf8oj/XA=
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
+ [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-4JBpNYHbMLSYnK4u1tI6rA-1; Mon, 17 Feb 2025 14:24:11 -0500
+X-MC-Unique: 4JBpNYHbMLSYnK4u1tI6rA-1
+X-Mimecast-MFC-AGG-ID: 4JBpNYHbMLSYnK4u1tI6rA_1739820251
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-e5b0f2778d6so5088594276.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 11:24:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739820251; x=1740425051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rdbMLJJGNPMZE86U034IIF2tHWWv7Jlyf8ALOn6BLhI=;
+        b=RgSXq/NQH/3HyrRXscoMLUddSP9RhgigK1GKKGgUOpNZpCh2Nku2zCB9JIB//CSwyc
+         cv6G3ID31f8wnqKD54TS+XQyvbxwiQw73nTCz88z+WnNjON7S2TNbne96egHIsyxlAWy
+         j4QaTl+zYZs7h/iIzfjPjqWDmIHpGq/IEiqfaRQALPD50zMAOQca5LoEP5YCTwEYABe6
+         Fm7s7QNlDI2pGNlazBezH/wn6D+x9f/adE13ciJGFoZ5qc/Go/B6c0bTNfTKCBr4psXc
+         jI13hX9YPFXIo41tjWIz34FTvZnhPNeQo419Ly6agYWLdBln7lw9hG6jBHG1e2vF7bUv
+         9ERw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDUhyERA9hkA6hfcdCfZzxT7h9xp9bd0KJys8UG0nSXyEPTIOx2CwRsC5hzEefFtoXqnE8AFgNkb5r3o6HVf0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuKtCGmvaZEcI7pk2WtwN5+quigMN1SYXhhfGOYihPaTpz47zS
+	69GEp2rhbdTI66gUgOqFMKq8E/pb1ZHurYOddXTSjDXKEg1GaEnKP2wivGoJNGs2+BLRKuLAPGM
+	xOVrSUOPYv4RENWtf3HVIhqMVV6WPko/UaBXdJJ0JCdeXyf/MRsnMGTyq3A2M5poEGvsUYCiqx4
+	3CDZr7zBxJ7VLswSGaXL88podKYu6jfZo7hnWrFzs5j7y67pUrVJQ4hA==
+X-Gm-Gg: ASbGnctvXpEU8jS9TfYnuGQIoWGgcAILIIoRzJ/EfvHztU2Kqb9rvwDbBmF2xqU5sR9
+	Ldjpum47r2FKiuInQHizMfzY50WdhdWoW7sbSeR/G4Qaov0aH9UW9lYXu51+6KTgl6aqEd9nH6m
+	k=
+X-Received: by 2002:a05:6902:707:b0:e58:14b:6f99 with SMTP id 3f1490d57ef6-e5dc901f547mr8915032276.1.1739820251044;
+        Mon, 17 Feb 2025 11:24:11 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFrYJ+VsXOI7bm6RpW9QE+8ogDjp6XZe+FrO+0Ua+m+u7LfKjMyLDagrscG092+H3ywzM9KEOxGNYAFwBDzmPg=
+X-Received: by 2002:a05:6902:707:b0:e58:14b:6f99 with SMTP id
+ 3f1490d57ef6-e5dc901f547mr8915020276.1.1739820250714; Mon, 17 Feb 2025
+ 11:24:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250211004054.222931-1-npache@redhat.com> <cd75eafc-e20a-4c32-bd29-7ab2c5c03008@gmail.com>
+In-Reply-To: <cd75eafc-e20a-4c32-bd29-7ab2c5c03008@gmail.com>
+From: Nico Pache <npache@redhat.com>
+Date: Mon, 17 Feb 2025 12:23:45 -0700
+X-Gm-Features: AWEUYZnrFfBm_wbf5EFCjaf6bQ2dpqtlNGkqHB1w5LssQl9ZQBUHAWZR74WN2LQ
+Message-ID: <CAA1CXcAK8tMVhWJLO9OrkyBpA6ZdPv7f99igBphLhLxVM5zJxA@mail.gmail.com>
+Subject: Re: [RFC v2 0/5] mm: introduce THP deferred setting
+To: Usama Arif <usamaarif642@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, ryan.roberts@arm.com, 
+	anshuman.khandual@arm.com, catalin.marinas@arm.com, cl@gentwo.org, 
+	vbabka@suse.cz, mhocko@suse.com, apopple@nvidia.com, 
+	dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org, jack@suse.cz, 
+	srivatsa@csail.mit.edu, haowenchao22@gmail.com, hughd@google.com, 
+	aneesh.kumar@kernel.org, yang@os.amperecomputing.com, peterx@redhat.com, 
+	ioworker0@gmail.com, wangkefeng.wang@huawei.com, ziy@nvidia.com, 
+	jglisse@google.com, surenb@google.com, vishal.moola@gmail.com, 
+	zokeefe@google.com, zhengqi.arch@bytedance.com, jhubbard@nvidia.com, 
+	21cnbao@gmail.com, willy@infradead.org, kirill.shutemov@linux.intel.com, 
+	david@redhat.com, aarcange@redhat.com, raquini@redhat.com, dev.jain@arm.com, 
+	sunnanyong@huawei.com, audra@redhat.com, akpm@linux-foundation.org, 
+	rostedt@goodmis.org, mathieu.desnoyers@efficios.com, tiwai@suse.de, 
+	baolin.wang@linux.alibaba.com, corbet@lwn.net, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-damos_quota_goal.py selftest see if DAMOS quota goals tuning feature
-increases or reduces the effective size quota for given score as
-expected.  The tuning feature sets the minimum quota size as one byte,
-so if the effective size quota is already one, we cannot expect it
-further be reduced.  However the test is not aware of the edge case, and
-fails since it shown no expected change of the effective quota.  Handle
-the case by updating the failure logic for no change to see if it was
-the case, and simply skips to next test input.
+On Mon, Feb 17, 2025 at 7:54=E2=80=AFAM Usama Arif <usamaarif642@gmail.com>=
+ wrote:
+>
+>
+>
+> On 11/02/2025 00:40, Nico Pache wrote:
+> > This series is a follow-up to [1], which adds mTHP support to khugepage=
+d.
+> > mTHP khugepaged support was necessary for the global=3D"defer" and
+> > mTHP=3D"inherit" case (and others) to make sense.
+> >
+>
+> Hi Nico,
+>
+> Thanks for the patches!
+Hi Usama,
 
-Fixes: f1c07c0a1662b ("selftests/damon: add a test for DAMOS quota goal")
-Cc: <stable@vger.kernel.org> # 6.10.x
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202502171423.b28a918d-lkp@intel.com
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/damos_quota_goal.py | 3 +++
- 1 file changed, 3 insertions(+)
+Thank you for the review!
 
-diff --git a/tools/testing/selftests/damon/damos_quota_goal.py b/tools/testing/selftests/damon/damos_quota_goal.py
-index 18246f3b62f7..f76e0412b564 100755
---- a/tools/testing/selftests/damon/damos_quota_goal.py
-+++ b/tools/testing/selftests/damon/damos_quota_goal.py
-@@ -63,6 +63,9 @@ def main():
-             if last_effective_bytes != 0 else -1.0))
- 
-         if last_effective_bytes == goal.effective_bytes:
-+            # effective quota was already minimum that cannot be more reduced
-+            if expect_increase is False and last_effective_bytes == 1:
-+                continue
-             print('efective bytes not changed: %d' % goal.effective_bytes)
-             exit(1)
- 
+>
+> Why is mTHP khugepaged a prerequisite for THP=3Ddefer?
+> THP=3Ddefer applies to PMD hugepages as well, so they should be independe=
+nt.
 
-base-commit: 20017459916819f8ae15ca3840e71fbf0ea8354e
--- 
-2.39.5
+Its not a hard prerequisite, but I explained it a little here:
+https://lore.kernel.org/lkml/CAA1CXcBPt4jHfH0Ggio5ghSYAQAXf08rO8R6b1faHzdjF=
+f_Ajw@mail.gmail.com/
+
+In general, the sysfs didnt really make sense without it, and given
+mTHPs came along right when i was working on defer, I decided to add
+it to mTHP too.
+
+I worked on and tested these together so it felt right to sync up the
+V2s for both of them.
+
+Cheers,
+-- Nico
+
+
+>
+>
+>
+
 
