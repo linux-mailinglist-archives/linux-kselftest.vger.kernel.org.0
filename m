@@ -1,181 +1,212 @@
-Return-Path: <linux-kselftest+bounces-26843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B6DA39627
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 09:54:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18834A3963E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 09:58:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA2E27A15AD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:53:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A83B27A161A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E946922E3FA;
-	Tue, 18 Feb 2025 08:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622F322DFBD;
+	Tue, 18 Feb 2025 08:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oy8paixi"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FUkJ67Mh";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IjnGMBZ1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBA71B6D11
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 08:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C78422DFAF;
+	Tue, 18 Feb 2025 08:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739868860; cv=none; b=cjWnmluHl2Xk5DPXA65yfEz4kUwN/nv9ASwlPORuchhPVfpQq2e4Rd+VKRJjKcyj3WiRZ72XoECuQfRHC04L2/XHYt1y6wam7asjqbAdRyyynAvNlSUYaiejGn/ZZaMPIYHJM9OtwLxsXMThxwHVE140zhBK1Kq/1nTa6pIu/8Q=
+	t=1739869061; cv=none; b=QFEQye5w/PPua2tZ6BRJan26VlBy+h00IjZzsLMbVpy0B4lKkEBeolmeGemVIPSVUo7hE6CmR78i0p+hkYZ/d7hh8gf0wcsZvztbW3bi7eLTc28pDXZoqq8oAghDdAQdob7DplXgDm7TbygYml88uP6ZesITLXE8Rf9cWG+tEV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739868860; c=relaxed/simple;
-	bh=jwI/lNP5dSvyttLJubFZYl0XG36disqSc5jQ94EQu84=;
+	s=arc-20240116; t=1739869061; c=relaxed/simple;
+	bh=7n8w+ERA8pojz2++WaPBKwjwqZFE9/DbJNIdVjRs0gE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hxUJGPTSPm58p/qVW/3cuOiHskNGFb652bnn55meXFIIBj79USBQdLHac3LooTRnoUaMmM6ngLmnOOnLRyXEvKIqCQTc8r8COfSiNdvrknCwMYroVZ3R3lg7jQYXOyvuCSxqam+MnQFZK546Ci0XvweyIi/bMmi1ijaa9VycYUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Oy8paixi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739868858;
+	 Content-Type:Content-Disposition:In-Reply-To; b=SGgrrFsaPnrCLikJXf5WdIK/TpWK2pL2A92db4qa9nOxbVBm0c2bgaATgshiYnZYP6KQqg49pgw/R4s+9XW585YFQC2ljAJ3jI3ATqCnTPuFjkLw6aYsZrSCnGwC3SsRasUw5VONDpxIARhPD1TQMrrhlcaZ7ZwN54G8/t55sMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FUkJ67Mh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IjnGMBZ1; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 18 Feb 2025 09:57:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739869057;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ag0dHU2PJNcElfhJQr4ZktwRcHGH3gFXUMCanAlAuaQ=;
-	b=Oy8paixixrZvTriK4BbsIYlNIh8irNXhX7UIlKw9PELwfIScJxDn6nZNgT+rPBbutYbXvA
-	UvmA6bP4XzrR1jFGiuGH3A6VlhFXLwS+crPG2Rho1sMogF8EzpGEml5P6XRGL75WIel3uh
-	qrhu0A7mKcQ4T+C9hEDTQuvEfkV7A9Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-66-md1NUDmfOWmHx9kMYI7hUQ-1; Tue, 18 Feb 2025 03:54:15 -0500
-X-MC-Unique: md1NUDmfOWmHx9kMYI7hUQ-1
-X-Mimecast-MFC-AGG-ID: md1NUDmfOWmHx9kMYI7hUQ_1739868854
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-438da39bb69so46227645e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 00:54:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739868854; x=1740473654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ag0dHU2PJNcElfhJQr4ZktwRcHGH3gFXUMCanAlAuaQ=;
-        b=lR+LB3texKZrPVl1tBwegT0NAJrGv4TtB8grWltaTr/AojDnC0dxWOVMRDiQw5LsWU
-         3d8OPP5Hv+jjl4W6Yp0yPU1ubSkAbuxiXEPHX+dY0UWZ/zJTZF149fmsG+Suqy+mQMuN
-         RirjEyOzeOssOI1TZBtlAZIAJJlxh2tOJL9i3x9eiTa16HD/tO6yRQ+NqOkNZDuMRC67
-         8vyBmWog2Y3/hl4vbZdQMsCygzDzehjlIWrAIdTQXQr3oOWicOGFCipO7mA9ai5GQ56V
-         5l+VQF/fsN2RehJjwurbXGro1J51B88PLBzbv/LBYfSJOT/qWFGVIDVUS/wJPBq+BvJa
-         N6zA==
-X-Forwarded-Encrypted: i=1; AJvYcCXNKXOMh781zEY7Ug3aczgg3qHC7T2MYRfQ72U3TeibkYR+hWbN33pA2QbOerchmeqcpwR0Cw9DhKV8sFfNSKE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkMAIPbYqbK6YvTFf50LwdOKMm53lvfaFPfa491VI5YLw9azNw
-	C4GSV+HdACts4YrUp4sgldIBmnWM8wc/9mHoWc154qKgKgMUk5Dzq6D1MzBrnf4lN6V7EcXKDdc
-	B7t6P3hujs88Y3x8U1pWAbaY92n7YVNDxdibsDUitSzMrp1tVLZeFwYFwyXhHoogT4g==
-X-Gm-Gg: ASbGncvc2tYXo1REIyYLSKeo7WD9t8w8mmLUj8taFB+kU8FOdQReympo9t3dKeLMrkn
-	K5/EjM0jaNbL83UWvc4cPqAwnctczcRLolqEAjBotwP3tw+ox/PSHdTnQrDEiIVHCTBt0fVcqqF
-	biJwR3Z6BersIuUANom2yto6AAZVnbLpwGWEAMDXR04EZOGGxd1AjcjQ05PE4MGaTk6abcSEKQd
-	RnwZOVYpwV33x+j3EkfaOw7C02Z5/du2G79AdI+RZopmYgE48LPdjSWUwd7VJKfKwKeuVPdGnSF
-	b3YndOhhR3szJJNI3RlRMx7dNy4vGzp4Q48ErkF0zDEjRbDTN7pQow==
-X-Received: by 2002:a05:600c:3848:b0:439:63de:3611 with SMTP id 5b1f17b1804b1-4396e70c72emr96432105e9.24.1739868853701;
-        Tue, 18 Feb 2025 00:54:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHrzQUcLDdRMbQ9tpTOvarMcJ+9b/19xmbIKWDGHi26EJ7bkp2+quEuTCCvx3hfiQoyjF9vvQ==
-X-Received: by 2002:a05:600c:3848:b0:439:63de:3611 with SMTP id 5b1f17b1804b1-4396e70c72emr96431525e9.24.1739868853107;
-        Tue, 18 Feb 2025 00:54:13 -0800 (PST)
-Received: from sgarzare-redhat (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43987088ecbsm43986245e9.31.2025.02.18.00.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 00:54:12 -0800 (PST)
-Date: Tue, 18 Feb 2025 09:54:07 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Bobby Eshleman <bobby.eshleman@bytedance.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 4/4] selftest/bpf: Add vsock test for sockmap
- rejecting unconnected
-Message-ID: <6p7yfobgfnms4m77k7whp4k3ft7m2vhmroacsd3stxmbxzzrwk@pmtz656ldbxc>
-References: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
- <20250213-vsock-listen-sockmap-nullptr-v1-4-994b7cd2f16b@rbox.co>
+	bh=qi00sFeb7intGV58iU7h9IRHzK7AVG7qi/qdH2z0KQQ=;
+	b=FUkJ67MhPasq8kvXjD/bsAI2FDmaN5qca6uZhURZGkoRKaE3rjjTB+2G+9MQipu9bP24rH
+	5zraI2X4z3gbbV5AAMS28pCNApEGpUEMQKh3amivMb+6PfKkkuSETG9N1g+QoY9T5K6sjL
+	U0pHyPkodErZ7cWF8fcQtolIY5tGm1smQJ8UlhgYv0M5/xroFcGaUFQ7yKNY7N/XHvLGaf
+	UkkgvtX9f6QKIiONuXuY6tf/zB+jYtoPT+aUK2xv4UdkWsOLC/qYoXOsVWPFtR03b7awWD
+	rZmU3F3stUIZKF7OQy1NOf38b9tbtbuP+gOmUHnjxENq6RHDbvjS74K76MC+2g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739869057;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qi00sFeb7intGV58iU7h9IRHzK7AVG7qi/qdH2z0KQQ=;
+	b=IjnGMBZ17v3aCASnhhz+y8ps26+DBt8gRKH6JNDsUUZehTAkI0aiHpImiua79+zsGbKPT+
+	BiXUzimJpXTAQrBg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: David Gow <davidgow@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Rae Moar <rmoar@google.com>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 00/12] kunit: Introduce UAPI testing framework
+Message-ID: <20250218093333-04552bed-4a2e-445d-9966-e1732a1f8b21@linutronix.de>
+References: <20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de>
+ <CABVgOSn5tGDj5rnR=a133ntv3GeoXQLnHRBg9HRf86hWve7T1w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250213-vsock-listen-sockmap-nullptr-v1-4-994b7cd2f16b@rbox.co>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABVgOSn5tGDj5rnR=a133ntv3GeoXQLnHRBg9HRf86hWve7T1w@mail.gmail.com>
 
-On Thu, Feb 13, 2025 at 12:58:52PM +0100, Michal Luczaj wrote:
->Verify that for a connectible AF_VSOCK socket, merely having a transport
->assigned is insufficient; socket must be connected for the sockmap to
->accept.
->
->This does not test datagram vsocks. Even though it hardly matters. VMCI is
->the only transport that features VSOCK_TRANSPORT_F_DGRAM, but it has an
->unimplemented vsock_transport::readskb() callback, making it unsupported by
->BPF/sockmap.
->
->Signed-off-by: Michal Luczaj <mhal@rbox.co>
->---
-> .../selftests/bpf/prog_tests/sockmap_basic.c       | 30 ++++++++++++++++++++++
-> 1 file changed, 30 insertions(+)
+On Tue, Feb 18, 2025 at 04:20:06PM +0800, David Gow wrote:
+> On Mon, 17 Feb 2025 at 19:00, Thomas Weißschuh
+> <thomas.weissschuh@linutronix.de> wrote:
+> >
+> > Currently testing of userspace and in-kernel API use two different
+> > frameworks. kselftests for the userspace ones and Kunit for the
+> > in-kernel ones. Besides their different scopes, both have different
+> > strengths and limitations:
+> >
+> > Kunit:
+> > * Tests are normal kernel code.
+> > * They use the regular kernel toolchain.
+> > * They can be packaged and distributed as modules conveniently.
+> >
+> > Kselftests:
+> > * Tests are normal userspace code
+> > * They need a userspace toolchain.
+> >   A kernel cross toolchain is likely not enough.
+> > * A fair amout of userland is required to run the tests,
+> >   which means a full distro or handcrafted rootfs.
+> > * There is no way to conveniently package and run kselftests with a
+> >   given kernel image.
+> > * The kselftests makefiles are not as powerful as regular kbuild.
+> >   For example they are missing proper header dependency tracking or more
+> >   complex compiler option modifications.
+> >
+> > Therefore kunit is much easier to run against different kernel
+> > configurations and architectures.
+> > This series aims to combine kselftests and kunit, avoiding both their
+> > limitations. It works by compiling the userspace kselftests as part of
+> > the regular kernel build, embedding them into the kunit kernel or module
+> > and executing them from there. If the kernel toolchain is not fit to
+> > produce userspace because of a missing libc, the kernel's own nolibc can
+> > be used instead.
+> > The structured TAP output from the kselftest is integrated into the
+> > kunit KTAP output transparently, the kunit parser can parse the combined
+> > logs together.
+> 
+> Wow -- this is really neat! Thanks for putting this together.
+> 
+> I haven't had a chance to play with it in detail yet, but here are a
+> few initial / random thoughts:
+> - Having support for running things from userspace within a KUnit test
+> seems like it's something that could be really useful for testing
+> syscalls (and maybe other mm / exec code as well).
 
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
+That's the target :-)
 
->
->diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
->index 21793d8c79e12b6e607f59ecebb26448c310044b..05eb37935c3e290ee52b8d8c7c3e3a8db026cba2 100644
->--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
->+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
->@@ -1065,6 +1065,34 @@ static void test_sockmap_skb_verdict_vsock_poll(void)
-> 	test_sockmap_pass_prog__destroy(skel);
-> }
->
->+static void test_sockmap_vsock_unconnected(void)
->+{
->+	struct sockaddr_storage addr;
->+	int map, s, zero = 0;
->+	socklen_t alen;
->+
->+	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
->+			     sizeof(int), 1, NULL);
->+	if (!ASSERT_OK_FD(map, "bpf_map_create"))
->+		return;
->+
->+	s = xsocket(AF_VSOCK, SOCK_STREAM, 0);
->+	if (s < 0)
->+		goto close_map;
->+
->+	/* Fail connect(), but trigger transport assignment. */
->+	init_addr_loopback(AF_VSOCK, &addr, &alen);
->+	if (!ASSERT_ERR(connect(s, sockaddr(&addr), alen), "connect"))
->+		goto close_sock;
->+
->+	ASSERT_ERR(bpf_map_update_elem(map, &zero, &s, BPF_ANY), "map_update");
->+
->+close_sock:
->+	xclose(s);
->+close_map:
->+	xclose(map);
->+}
->+
-> void test_sockmap_basic(void)
-> {
-> 	if (test__start_subtest("sockmap create_update_free"))
->@@ -1131,4 +1159,6 @@ void test_sockmap_basic(void)
-> 		test_skmsg_helpers_with_link(BPF_MAP_TYPE_SOCKHASH);
-> 	if (test__start_subtest("sockmap skb_verdict vsock poll"))
-> 		test_sockmap_skb_verdict_vsock_poll();
->+	if (test__start_subtest("sockmap vsock unconnected"))
->+		test_sockmap_vsock_unconnected();
-> }
->
->-- 
->2.48.1
->
+I'm also looking for more descriptive naming ideas.
 
+> - I don't think we can totally combine kselftests and KUnit for all
+> tests (some of the selftests definitely require more complicated
+> dependencies than I think KUnit would want to reasonably support or
+> require).
+
+Agreed, though I somewhat expect that some complex selftests would be
+simplified to work with this scheme as it should improve test coverage
+from the bots.
+
+> - The in-kernel KUnit framework doesn't have any knowledge of the
+> structure or results of a uapi test. It'd be nice to at least be able
+> to get the process exit status, and bubble up a basic
+> 'passed'/'skipped'/'failed' so that we're not reporting success for
+> failed tests (and so that simple test executables could run without
+> needing to output their own KTAP if they only run one test).
+
+Currently any exitcode != 0 fails the test.
+I'll add some proper handling for exit(KSFT_SKIP).
+
+> - Equally, for some selftests, it's probably a pain to have to write a
+> kernel module if there's nothing that needs to be done in the kernel.
+> Maybe such tests could still be built with nolibc and a kernel
+> toolchain, but be triggered directly from the python tooling (e.g. as
+> the 'init' process).
+
+Some autodiscovery based on linker sections could be done.
+However that would not yet define how to group them into suites.
+Having one explicit reference in a module makes everything easier
+to understand. What about a helper macro for the test case definition:
+KUNIT_CASE_UAPI(symbol)?
+
+All UAPI tests of a subsystem can share the same module,
+so the overhead should be limited.
+I'd like to keep it usable without needing the python tooling.
+
+Note in case it was not clear:
+All test executables are available as normal files in the build directory
+and can also be executed from there.
+
+> - There still seems to be some increased requirements over plain KUnit
+> at the moment: I'm definitely seeing issues from not having the right
+> libgcc installed for all architectures. (Though it's working for most
+> of them, which is very neat!)
+
+I'll look into that.
+
+> - This is a great example of how having standardised result formats is useful!
+
+Indeed, it was surprisingly compatible.
+
+> - If this is going to change or blur the boundary between "this is a
+> ksefltest" and "this is a kunit test", we probably will need to update
+> Documentation/dev-tools/testing-overview.rst -- it probably needs some
+> clarifications there _anyway_, so this is probably a good point to
+> ensure everyone's on the same page.
+
+Agreed.
+
+> Do you have a particular non-example test you'd like to either write
+> or port to use this? I think it'd be great to see some real-world
+> examples of where this'd be most useful.
+
+I want to use it for the vDSO selftests.
+To be usable for that another series is necessary[0].
+I tested the whole thing locally with one selftest and promptly found
+a bug in the selftests [1].
+
+> Either way, I'll keep playing with this a bit over the next few days.
+> I'd love to hear what Shuah and Rae think, as well, as this involves
+> kselftest and KTAP a lot.
+
+Thanks!
+I'm also looking forward to their feedback.
+
+
+Thomas
+
+<snip>
+
+[0] https://lore.kernel.org/lkml/20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de/
+[1] https://lore.kernel.org/lkml/20250217-selftests-vdso-s390-gnu-hash-v2-1-f6c2532ffe2a@linutronix.de/
 
