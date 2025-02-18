@@ -1,163 +1,118 @@
-Return-Path: <linux-kselftest+bounces-26835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62797A393C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:29:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F17F7A393E0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:41:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D53C188BCE3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 07:29:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9263A6D60
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 07:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2657B1B85CA;
-	Tue, 18 Feb 2025 07:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB951B87ED;
+	Tue, 18 Feb 2025 07:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XolKj72V"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CsLLs8bG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617B07E1
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 07:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52721ADC81
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 07:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739863782; cv=none; b=mbIRvdRkzmLL7goZ2lfYczaLaB9KGx5LytbA1ZPNOwHn9G9Tj6zRrxpVb4/aoiwkOUqzHjD3IHcHg+ZhIY5zJbQDmC/RhzEXO79lYFlquM4PuTWSejv+cDakw0k7HRuKgg9m/8EMfZuTcVKuVj/JFcWCgkRUVQqjlNUxvUY665w=
+	t=1739864491; cv=none; b=gj+9f67TMVednQzyx4mScDct30QWl0UDbXkFQTwLNhSgdher2yB473LyYcjOjSFx0vjS/OJMZHM4tyuoaWX0m0B4g1h4vPCzL7ro/osK448+36AP2j4YwZ4Ct24c7/2F0YhAnm43gwlnOITGmTZeSn1YofnwEenQbiYGJrayF88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739863782; c=relaxed/simple;
-	bh=IMtylmNdJBC1GhI21BFfpkqU6gPlYHoRu7iKbbT8KTo=;
+	s=arc-20240116; t=1739864491; c=relaxed/simple;
+	bh=wjn8YwcJ/UmonSrg42uXUCIJph6NBwvLw9HWEawtaE4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K/Xv6cKnoe7eitg8xL/5rq1DzccRFBUSnWJPDWBnnjDaVaZruN8Wfq+9Gh/Nk4PbqckU3acm6sacwuMOlTr0mKWrYlE++lDtw21iYs7srwxpXT1IJl80IqX8uuUB3boj78BsUJfwwfiq5vpVGLEQAvjlcjpIvE0Ydl/nM1Ls+cY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XolKj72V; arc=none smtp.client-ip=209.85.219.51
+	 To:Cc:Content-Type; b=eabD+b7JC2IuAJzP8RA1P71CEkYUrRED00nHHtWCH6XuQMelzzN2zZ5YMY+gUM9/ile7WSd3XEZfV2b+VEv4sAIcXtrWjwL5npv2c6jP9bR1pFQZU/N/408Yq7hJ4/ozfzTVifEvIMfgr4Zlj5q5eeU08pAVgmxjTRWc4crRvwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CsLLs8bG; arc=none smtp.client-ip=209.85.219.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e67fad4671so13608336d6.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 23:29:40 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6e660740061so47881876d6.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 23:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739863779; x=1740468579; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1739864488; x=1740469288; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CII9dIKAwcr9PGcA0qD3dDsT0iHP1QRTBcNedvmvUh0=;
-        b=XolKj72VllaO+1t5fB7XCe3XjJALKotptvkZb2S9VobbeYiPSbpPCw9zuJ6aE/1Cnc
-         Wf1PQL1lQ5bK3zGAxXw6u41nXkhvQuhptpjApUPEIqbwgI26lspY7zvdD6dFxqjCjztd
-         iIDdeVvRXplIdgpozTUajxL5RHs+Gp43zl0gRlgxEy2KcrTZBkWeC4J+UsfYysuq7dnR
-         jNEOBd0IwwZxxfbuHGwNQ554PQUphkmRcx4hJo1B01XOOdXag8zIPgXPghAYCjXB3rvO
-         52o/38MYWwcAMNl6KovXatfGyPkoNGLiJN7rHEfKXXthTluZWGf1U7YNxtFhmBrw6TxU
-         VfdQ==
+        bh=wjn8YwcJ/UmonSrg42uXUCIJph6NBwvLw9HWEawtaE4=;
+        b=CsLLs8bGWr7e7QnEVaR+NbrJgMHJkjODQXdg5HMAFL45dXI0/HNsZMLc603g19uJTs
+         s5lUMKOQXXS/y6a7i+IKIiV4o3M56CS3F7Gs1Cz2uc5vSzpjVGWRPDHACEbVbE65PIQ+
+         XyJ1JF23Hb2rwbg6Fpf0sf0+L5ZZL93dsUKVU9ejYUFN3UGFKxDi7YrQQeUPVOr7U7Rg
+         nI4jxGYnd59t0eKRX06lkg+lud9qZiTNgdOIfELs/Uzx+c6XjRU9QOESC38a3m2Itcpb
+         vY881N6yefUZuEVGwXC0FVJj2P2Wg1elu6jnp54Li7IOauNuevX3EkwDh7tqELsEsOI4
+         wJhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739863779; x=1740468579;
+        d=1e100.net; s=20230601; t=1739864488; x=1740469288;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CII9dIKAwcr9PGcA0qD3dDsT0iHP1QRTBcNedvmvUh0=;
-        b=eqlDOzftGh2fNMqDFaF3913I6igg/zBBj46JKNwokmo+JJ+OAvQiraHjYtUcw/tJkJ
-         Q8d1srju3GEUjFISyGJQ3Z9+9AQtAPRMPcsPG49qmLUd7KQHjeso0uVokA3AKx9kV0Fa
-         Imn8WoZCDv6sYQeA1T1X89PwoMwTyW6Kw0CX1RdiA+GLiCZXwDiNZ237xVY/8GH7DWEx
-         88DENb3AfamgNVRpvYoul5ihwjXrhVGgUxBlqOLTk7ymartY+Pq9bX/+CsFfnRkBDHQE
-         arCdxM0gvzaaSueMzRQhZTppL+He6UE423HlUdk7/nZfWUCr5Tu+JknA7JyVfuG5BLX8
-         v/rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUj5SNV4RZwmFRmLyu9/m5nqtbTjl/6bbyJ0rrdkUcLE/GenNKRMWrPOyrzx3bsjA6nM+00jKiqqaABTy/xPk4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4AXr2mCT5fqZtoyZwi9Lw6ZVemjiQFg9lWjINKZpNmyVmlDO6
-	mc1v289CSwvlmhGf8XSG3zKqgBd8ZZEfLgyyCSAN2ewFehY+0h2/fs9vyRYSL/1yKmBHFxg+H7B
-	Qpp3JBBIG7rPnbRwJPAt+5cY4EyAzMNkl6Zqb
-X-Gm-Gg: ASbGnct1vXpUNXJEz3R/t14qaTUtAV/nMDReGc6oirSHBGR2bHesk/i7SLusgMVyg9y
-	ARnXcXWzOxKH2NGgfv/BhAGqXvdH4obMG7UqYIBAER+DQQfZSfK4/I9zViBD3jo2wuYXsY4hdAw
+        bh=wjn8YwcJ/UmonSrg42uXUCIJph6NBwvLw9HWEawtaE4=;
+        b=XBdojuK46xi6FHjNNOnTRWjyhIRQn2ewbkLDVc5wjQRTWCA3UPARBD+CXr/EzuIUaH
+         yLrTJyU3irhEWRa0mC2xOwMTh5EHycT9ilIdQlhVz5h09u+eXHBSO7rgQ157gAMrycN3
+         o01PVB+UhCXU2xt+HtQQesOlggHvQJKWxGkBe0EoDObXIaZBikiWCBtnwxBhvgGj7oaJ
+         woepwCRuiX98UViO4VU8aLRUZMqmxo7hB1tv2+6mQVeoEHpOt3AuPo/xmwzD6WR1GYAh
+         FBXW9zCrewTtaDrasboRDeYlf3hofpv0td18f/VV+NIji4597Km0YfdXsC9wdDtYxlPT
+         4odQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfY3473J1ohPWqmClEn3FhEzhXsBrbUPiaE7A86eC1ZpgnIMb2aFHb06RCX/YRoGe3nH6w4cuEgIpWcl9kXXk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoGj3JbqAGLzh56Tyj2lDJL44FQ8mp2kYHiB5pXjyIGdFTI8uM
+	X9UB0+NafO5pgDZDM9kUumKEP6eS+OnzmmlH2NG5hDheCKjGtzK6ewf1O8zjWu+6cwv2UDSY1db
+	xJV7BnMgiOt8vf48F4ONBjdcujI9d26FBV49t
+X-Gm-Gg: ASbGncsKBjZK0GJPmbQcqFBPLnCJPoKov7UdjuEN5//CMgJIr5YRlYI18C1GeEptMnk
+	LfsaTO1HByxHn20zleQdfnzA/G1zhfPlhqGtjRUxPMCRksG1jCOzjAgvGoIx7fRtJ/l414gM93Q
 	==
-X-Google-Smtp-Source: AGHT+IGuezCMWsCPE9g7FSck1C8EvVEcQwzCboDd4puWooNEzvCStZod6Lh5GdCvlyZEseN0/xLuPbzRnWohBEuGudI=
-X-Received: by 2002:a05:6214:d07:b0:6e6:62fb:3503 with SMTP id
- 6a1803df08f44-6e66ccbcb4cmr141989586d6.12.1739863779102; Mon, 17 Feb 2025
- 23:29:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHlbszPPYw9+g2xxid6iEtrbF/hynF0NT1zT2p31zGky0Ry7FOa+jjqmFDNLjyLmre0RIpWVJlOGFVmaru4Ojk=
+X-Received: by 2002:a05:6214:300e:b0:6e4:7307:51af with SMTP id
+ 6a1803df08f44-6e66cd0b058mr204225386d6.36.1739864488529; Mon, 17 Feb 2025
+ 23:41:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250121-kunit-gdb-v1-1-faedfd0653ef@google.com>
-In-Reply-To: <20250121-kunit-gdb-v1-1-faedfd0653ef@google.com>
+References: <20250217140008.1941287-1-kevin.brodsky@arm.com>
+In-Reply-To: <20250217140008.1941287-1-kevin.brodsky@arm.com>
 From: David Gow <davidgow@google.com>
-Date: Tue, 18 Feb 2025 15:29:26 +0800
-X-Gm-Features: AWEUYZkp3myCmGtgAoVGs1PAsj22rRaz253Tvgn6ryp35woYhYGT31Aw7DSxbRA
-Message-ID: <CABVgOSmwVL-eX7RFJygP1ys6xa9XnGrfd2N5vB+_kw-FTJpAgQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Build GDB scripts
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
+Date: Tue, 18 Feb 2025 15:41:16 +0800
+X-Gm-Features: AWEUYZmJSzsbaQeedqgjs9EmCCwD3cqlBfMelDHfo71GgjY0GqWMWj0bud_5_GA
+Message-ID: <CABVgOSk3PxgPi-ZWiXeZy751Pra8O1OspsJGk_fotxVcmJ8SHw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Clarify kunit_skip() argument name
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	linux-kselftest@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000008a08b8062e659ad3"
+	boundary="000000000000d1c2a5062e65c42b"
 
---0000000000008a08b8062e659ad3
+--000000000000d1c2a5062e65c42b
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 21 Jan 2025 at 21:01, Brendan Jackman <jackmanb@google.com> wrote:
+On Mon, 17 Feb 2025 at 22:00, Kevin Brodsky <kevin.brodsky@arm.com> wrote:
 >
-> Following a similar rationale as commit e4835f1da425f ("kunit: tool:
-> Build compile_commands.json"), make a common developer tool available by
-> default for KUnit users.
+> kunit_skip() and kunit_mark_skipped() can only be passed a pointer
+> to a struct kunit, not struct kunit_suite (only kunit_log() actually
+> supports both). Rename their first argument accordingly.
 >
-> Compared to compile_commands.json, there is a little more work to be
-> done to build the GDB scripts. Is it enough to affect development cycle
-> duration? Unscientific evaluation:
->
-> rm -rf .kunit; time tools/testing/kunit/kunit.py build --kunitconfig ./lib/kunit/.kunitconfig --jobs 96
->
-> Without this patch it took 14.77s, with this patch it took 14.83. So,
-> although `make scripts_gdb` is pretty slow, presumably most of that is
-> just the overhead of running Kbuild at all, actually building the
-> scripts is approximately free.
->
-> Note also, to actually get the GDB scripts the user needs to enable
-> CONFIG_SCRIPTS_GDB, but building the scripts_gdb target without that is
-> still harmless.
->
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> ---
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Rae Moar <rmoar@google.com>
+> Cc: linux-kselftest@vger.kernel.org
 > ---
 
-I'm happy with this for now, particularly since we're already doing
-this for compile_commands.json, but I also think that this is a
-symptom of the KUnit configuration story being insufficient. Not
-really a problem for scripts_gdb, for which (as you mention)
-CONFIG_SCRIPTS_GDB still needs to be set, but it'd be nice to support
-this in a more generic way going forward. (The qemu_config python
-scripts come close, but the .kunitconfig files definitely won't.)
-
-Regardless, this is a distinct improvement for now, so:
+Thanks. We probably should support skipping (the rest of) a suite, but
+let's not pretend we do when we don't!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  tools/testing/kunit/kunit_kernel.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index e76d7894b6c5195ece49f0d8c7ac35130df428a9..33b5f7351cbb5d0be240cb52db2bc1fa94aeb75e 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -72,8 +72,8 @@ class LinuxSourceTreeOperations:
->                         raise ConfigError(e.output.decode())
->
->         def make(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> None:
-> -               command = ['make', 'all', 'compile_commands.json', 'ARCH=' + self._linux_arch,
-> -                          'O=' + build_dir, '--jobs=' + str(jobs)]
-> +               command = ['make', 'all', 'compile_commands.json', 'scripts_gdb',
-> +                          'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
->                 if make_options:
->                         command.extend(make_options)
->                 if self._cross_compile:
->
-> ---
-> base-commit: 521d60e196ecb215f425e04e9ab33e02beaffbe3
-> change-id: 20250121-kunit-gdb-b27315b4f2d8
->
-> Best regards,
-> --
-> Brendan Jackman <jackmanb@google.com>
->
-
---0000000000008a08b8062e659ad3
+--000000000000d1c2a5062e65c42b
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -247,14 +202,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgQPL7TCaOiSW0fdVm/q7IUa/wat3Y
-hlet3qeAG2aS+n8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MjE4MDcyOTM5WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgvqcGNHvtFSeAZv69xwF/ovRGRyyB
+4VYvwkAOSjYsPUowGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MjE4MDc0MTI4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAAOb8FIzi3uizP2+yVt9bYIvzgXpuMG1TUt3Q11vwRQLqsvG
-ebFAuLhTXmzWlAuUJToC2DOerds74/nSqpzAgifX+A6eAm8c+a1iNPTRMHsTfBHyrMAh3MJkvDoP
-5n0N3qIgL90/+28qloSUi0NRvsVQIEYYs+KeJnu0xZTI7jodYOl6+uz5Hke47ps70GjG/s6Ml48S
-MyPHB11FATPJfkaQJ6rKGzlUvmhm2skFvC5xiV3h+xoSuhWIUARNuCX0uOpYw8UvQVZarfWujkAm
-EFJufvFGdg/p1tWKpgPUM8pFIxTihWtNrRPygMS5za+7tTv6/B9HL9onY6F4qBuuWos=
---0000000000008a08b8062e659ad3--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAG9yFIG+nnA6Nawz7JYwbEv0sPhDuDRM0TZTLG80SpgBNnbD
+XbO+h59L/nLubPlVs1wx+NJhyFbLBaYYIOAtjBSnN9I5w8C2GVq3tUARYPYqR6Uc4/3uE5kZzC8H
+BLdemQThw1m3clMWUsKYvZ82rBM7xlP3z0zx/X7m+EMRNE7gOb8aYXcXud1OHYrvtxKwAHMhurtL
+hJDpSfNrndedlRoX2g8sy5IRYnh71FDw/6uOuybbWmYB3Qh6LeuzB5L5wdHohgNbkgq5OeA2EE6u
+MP6ei3/nclXkFozHXADRebi2zKDh0afO0SDIOyJmtPsJFNxxrczpTtbOgQ5g82zt7Wk=
+--000000000000d1c2a5062e65c42b--
 
