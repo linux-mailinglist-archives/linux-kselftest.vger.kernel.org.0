@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-26822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D019FA39094
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 02:47:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D481A3909C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 02:50:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29A4E171DC8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 01:47:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E9CB3B27EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 01:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C93F13B7B3;
-	Tue, 18 Feb 2025 01:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FF313BC0C;
+	Tue, 18 Feb 2025 01:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEk7WWFK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DCJx1oVm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FE6219FC;
-	Tue, 18 Feb 2025 01:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF4E182BD;
+	Tue, 18 Feb 2025 01:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739843258; cv=none; b=ZCW1soHSPuOfXQACEzfjQQoOXB+JrgCNifx2R+q8/bD+cgo7DYQZmm5aR5cMzLJ0K063m1O+dmCSQnrAm/NB6TDVrm8OdHuoHC9bpastLZSUnIBYHg3GWpRr0lvDtvpHb2+N5+lp1KfSJfLDUgVsR3PPbPE864ndlnOyRmBYeOw=
+	t=1739843439; cv=none; b=YBvfW6+Anx8trfvewaXcQV2XZjvvvgdhMwzkhwYLfpbZM7suhXGhS3qnVInx9h7AhKCjf38vzJlriSsgBUnh979HPNVvRkGPlF6rq19fjVG6fuMd+jCYJ7qIiU+6tFMjk1vztVtueGQbra4TRr+IJLaWkhyNIseBqHlwajdWWgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739843258; c=relaxed/simple;
-	bh=MD0O++YsPWI7g9h2EbnImSYEctbv5gi+1ZvRA2ioAg4=;
+	s=arc-20240116; t=1739843439; c=relaxed/simple;
+	bh=l6ZQJ6z++uOuRLVfZci/jNHlZxwZwwajaI0P/D1lkvY=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=YcChCDfsiHD1qPtY8FUfL/0qbLTAJvzThfaEv0QJ7YeX8ScH0N+qzgh534zmlPcZPZlGsqYCIGvVOEHjAv3X4mCh0G7oAB6wMZ9DEwkfeFCoLLV5mfYdXho04dMw3g6a/GQQgQIMlZ9UuHWUxS3KqdWdQXGm1U/lAS+TxmxirGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEk7WWFK; arc=none smtp.client-ip=209.85.160.173
+	 Mime-Version:Content-Type; b=WSQVJ74HAn8ILPUIXxM/6g2hgR/eqcVLsv1I0hHiP82e3l9nzFw8DVpIYQ9SmT+/96Ek7OJ2chkYi9UkrfwmmDK+vuQ0I30TjfUfe7uwIlnmhLKQfmlXtIAJKRx4Ly8AMfxYYSpouGG+U2bDFPFemvBRHcFSBqrh2tDbmpCbUdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DCJx1oVm; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-471fe5e0a80so4487661cf.1;
-        Mon, 17 Feb 2025 17:47:36 -0800 (PST)
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e67f377236so13241446d6.1;
+        Mon, 17 Feb 2025 17:50:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739843256; x=1740448056; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739843437; x=1740448237; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A2cOjmO89AYodXPo11gNtDewEZteT2LNDBnbm1wOXKY=;
-        b=CEk7WWFKhKLQ4CzCFitMPBQj4WSH6C1YrG3XPYuf4x+Ljls8uMzEUL74ucBTRMaz6B
-         1H5Ww90rW0RrHwCqrN4sySo2pnudFB835Txy1T2ZDX18a0fML26Q4nMfdbJw4fvpEQG8
-         UZ3wK6+77X0n99XdSEBdJ/c1hOaD23S1UysxtBeSPHsHbLrqurEgbAQJhjgPDAOhnAg5
-         xKkusZFhYlPuAe4EEWXfuG6HdQjN48E7YoZLNyTYHN0xKTe9dKOt1ZrTOUvb2rHlwxCW
-         YALWjrdKDHjXT2NMFawOgdMWRhPp0EXo04U2ahDCrbu5YGWmJ4LyedXd4cVALmyCzBkU
-         iuVA==
+        bh=weJhfUXcHldRk10NE9FkWe8JXq5XCSHR1Oi1+4jyWyI=;
+        b=DCJx1oVm3DGlqBMNML+SyjCeWe+s9rnnnMjxKFCp1eqAKnnuKItx7rGuT2Tu4Ultb+
+         P8owDk21VUK1b3EmbToDgovJRu0fonzqOQCptSnpnIY3BG1tRulLiKMqxY0OPzYlxsI/
+         nJbzIgq4fDQcsghGlZ0IaHWaWq1KhmdkLIEIC6rMogYCsPuZ7VU2Ilxex5BpoAlqc7le
+         7CVOtV2yyfRilAeeCA7UoSti5GDKH8gKxuYv/UCFNXPkB/NC4xSsuORdF1SLEEImc5ql
+         kh/1NL1xWDJGuK0HjC1uwEka0WK29D4dhHMRXGnajjSDsj5NcbDlztbH6eOxLL5Xc5Vn
+         LO7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739843256; x=1740448056;
+        d=1e100.net; s=20230601; t=1739843437; x=1740448237;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=A2cOjmO89AYodXPo11gNtDewEZteT2LNDBnbm1wOXKY=;
-        b=tTfDrnFc1TBoNg/6g8RkmqPvv2mVqsR5H1XQCluadQy842jrRKio4Ulpo/1uL+Q87S
-         q29hseNWz2/5AQ9SVgNQ1UdxKFH2qtZyo6cm2AIvg72QRodq5Sr1L1oRFOHYIl6eNxnl
-         3mK3caPyhTCMMm3sZzqEC3kM64+rgK+qDJZWMx5VfuOYG6fFBNw+wMrSsr7giCMLLx3Z
-         0lPU5RHDtrO3Ykef2MxJd0p/T2xwfk0Dr4HRrvA++maohUlkJ6molVORjAbHHYyPPB2P
-         BcASuAsZQD76Bk5yrmjqbg5zSd173kTK/WxwwEPfcjlI8rdtYS5JSaskkFqE0Di62GPa
-         oNWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBiG8YL1BdJ38K1EOqzWUOJWynEhveMa6iHcaNG7OuJFZAjH2iAcwyzmv7zBga5Qss7ZY=@vger.kernel.org, AJvYcCWYehNfMgLuKnwdxdzcoh1JoIivFO9PWqmExe2mb7aPOsjBNxfp7GSH9hNS8xynDSb2uAe6i6XA@vger.kernel.org, AJvYcCWj9sfQjHoVhML8x4iJO+ikRmJnr13uMxbGCHJnfbmdEs2ra6ad2+wqKj+AkFcWy8dX2kk6eh4CZUS0GEDdeNJ7@vger.kernel.org, AJvYcCX8z6imlkDcmdudHdgqZxgPxDNmfC3OpuOujHbJ2ezfA4/0tGkU/AtPRBqrhfyXJZd2IIpiGqebe9JCU8O9@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3OKQOyQEFTLle0eHFVpMm2zBqJetQqrIwYtkfQdJZwHoSfv7u
-	rGGh/etptj5oi7/9B/QTU1kUDkJpartRX/kitQSylAPsMnaB1rUC
-X-Gm-Gg: ASbGnctpqwVd+CjNCGTGMdyhRUpAlW0ephcEP7gb+tu47eRanssBL4mTbLKc4+c5y9g
-	sOtq7auamY31FwJES3GfcAbIg6QWyN3qnz6FZmBnOBu0EFzR3fZNBZoZo2HnE8cS3Ho2YpbuHnQ
-	33krX+fU/IXnY7zvB0DoeBWqVUCr5C5yz3E9ScjEA1Mh8QC1zBMv6+45ml3jvvouumv4ZtwftNm
-	oMWrpwBpGpSHE4LS0z0J3con3mkau9TF2idG7cd8m0jTv3379m9tRGFYfhlA8CMgL89ekGZWWnU
-	BjFGMjba4JC44g+j2Z2n4KhJVvRbJa6dRWgt0nEcBNzBFmZfNdONmXrVfxmWnx8=
-X-Google-Smtp-Source: AGHT+IFGgETKhlo/uMkwC6itYIAoHfWPc1J6iqltxry1ghsVvueLEc/nCmHXq/x8V7O65Ks6+inS6Q==
-X-Received: by 2002:ac8:7c47:0:b0:471:97db:60d4 with SMTP id d75a77b69052e-471dbe8d755mr137648981cf.45.1739843255555;
-        Mon, 17 Feb 2025 17:47:35 -0800 (PST)
+        bh=weJhfUXcHldRk10NE9FkWe8JXq5XCSHR1Oi1+4jyWyI=;
+        b=EfJfEJAb0u76Y+FgVb/XORCUVciaLJF7lgLTrplY2mCcfTl90AoJCCXyQDiwetfOvg
+         fqCuhf8jRg1PcuVEyG43s2mjO9Xyi6JjQ4ge41a5FtCy/vCCwgYUvRWs41o0+m9J1FCD
+         KQAq7bC3aDzmh+Z2nNNKiuhipSFzVhhjP2yyPw70NA8HMHt/K92VV1Q0MjPCMESEtoui
+         bgwd4KUALFkoeGkEs4N0qz6bOnRZ4X2nZLsBiUCsGqS54xtIXK6S8nC6VOuPWIB365VJ
+         gNaT9shn0E+H3mc7/sNahyU5wIg7b8xfF0w/JVVDsWhJ5naVcqiSan0YHNrnMW9WiVGT
+         ougw==
+X-Forwarded-Encrypted: i=1; AJvYcCUOFd73KnU2xgqJ3iMqvfQlMcER5YGUjvLktPpn0azcFnRjVlA7LWHb2bG197pNmxvzzoF8JCri8CV8XT/SNcqF@vger.kernel.org, AJvYcCVZLLjMBo/zTHph1S+U8/O/gvXSH+eQkF/PusAo08UxMSpareOKGlIIi0u2582DL5+cOtM=@vger.kernel.org, AJvYcCWAc+6/f4lUW5OZDkV/DsUh9THx/RT2y7WZwaHNTw4FP4MZ9zKhfkXQO4DuA/KTwR4vfzPD2pLE@vger.kernel.org, AJvYcCXygoEkr5FRX7PvtYy/oEiTB3wPmQj4xL7GXRRjii1bjQwdSOxaeoGSQVgeIMZNfK+4y94971lZjer4lK2m@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf8i9fbuSQgqokKz9jaBLfiXFs7e+awpjzF8XmME0d2gsXiXWE
+	+8t5fK7/scNlMa4xxfNTxNYLS9eq6If4sG2s0B2wasvRSYgyuTNw
+X-Gm-Gg: ASbGncv6dVpt2X/WL2lbSi9JYi5P0NkjPUoGXcZGtW4bnqdMFLP6NR7+1vbrDIR30q4
+	lmaV8aZ6Q5ZHGUW4XnDyOm7dT2fAEkS7fT2llbUuC4BAG72FNnXZP6VnEtadCvXnhuDAHkyRfy/
+	2L7pDiQazry6ZXowrQCDq5klCpOnTEnvZyFjzfZ1LN6TpWn0ZqLzMrquf22kOWvc+ilJy3IAzIS
+	6n9pUZld+MwYolipa9Hq834x2sV90F+8JsGO6mjIZisWfdIhrSyQ45kgiKH2Uw1lv88b6xMW3ea
+	vJeUvfgTCD7tjJvonQvoRoN8qrQUZT3vX6Dkh8/6rH222Mo4jJdgkltF4qnN/NM=
+X-Google-Smtp-Source: AGHT+IFfoPLbf5s/N7R2g9lkmO6xNtLhJQ9NoPNUEyPaHPgW8K+dhPbkci1ob3XtTRXjQAfWw4cu/g==
+X-Received: by 2002:a05:6214:29cb:b0:6e4:2e5f:c03b with SMTP id 6a1803df08f44-6e66ccce1femr180711246d6.22.1739843437085;
+        Mon, 17 Feb 2025 17:50:37 -0800 (PST)
 Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-471c2a130adsm53812931cf.26.2025.02.17.17.47.34
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d9f31b0sm58293606d6.90.2025.02.17.17.50.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 17:47:35 -0800 (PST)
-Date: Mon, 17 Feb 2025 20:47:34 -0500
+        Mon, 17 Feb 2025 17:50:36 -0800 (PST)
+Date: Mon, 17 Feb 2025 20:50:36 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>, 
  netdev@vger.kernel.org, 
@@ -102,12 +102,12 @@ Cc: willemdebruijn.kernel@gmail.com,
  shuah@kernel.org, 
  hawk@kernel.org, 
  marcus.wichelmann@hetzner-cloud.de
-Message-ID: <67b3e6b6b9dc6_c0e2529482@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250217172308.3291739-3-marcus.wichelmann@hetzner-cloud.de>
+Message-ID: <67b3e76c57313_c6df029486@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250217172308.3291739-4-marcus.wichelmann@hetzner-cloud.de>
 References: <20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de>
- <20250217172308.3291739-3-marcus.wichelmann@hetzner-cloud.de>
-Subject: Re: [PATCH bpf-next v2 2/6] net: tun: enable transfer of XDP metadata
- to skb
+ <20250217172308.3291739-4-marcus.wichelmann@hetzner-cloud.de>
+Subject: Re: [PATCH bpf-next v2 3/6] selftests/bpf: move open_tuntap to
+ network helpers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -119,118 +119,16 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Marcus Wichelmann wrote:
-> When the XDP metadata area was used, it is expected that the same
-> metadata can also be accessed from TC, as can be read in the description
-> of the bpf_xdp_adjust_meta helper function. In the tun driver, this was
-> not yet implemented.
-> 
-> To make this work, the skb that is being built on XDP_PASS should know
-> of the current size of the metadata area. This is ensured by adding
-> calls to skb_metadata_set. For the tun_xdp_one code path, an additional
-> check is necessary to handle the case where the externally initialized
-> xdp_buff has no metadata support (xdp->data_meta == xdp->data + 1).
-> 
-> More information about this feature can be found in the commit message
-> of commit de8f3a83b0a0 ("bpf: add meta pointer for direct access").
+> To test the XDP metadata functionality of the tun driver, it's necessary
+> to create a new tap device first. A helper function for this already
+> exists in lwt_helpers.h. Move it to the common network helpers header,
+> so it can be reused in other tests.
 > 
 > Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-> ---
->  drivers/net/tun.c | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index c95ab9c46bd2..3dde6cd29a84 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1604,7 +1604,8 @@ static bool tun_can_build_skb(struct tun_struct *tun, struct tun_file *tfile,
->  
->  static struct sk_buff *__tun_build_skb(struct tun_file *tfile,
->  				       struct page_frag *alloc_frag, char *buf,
-> -				       int buflen, int len, int pad)
-> +				       int buflen, int len, int pad,
-> +				       int metasize)
->  {
->  	struct sk_buff *skb = build_skb(buf, buflen);
->  
-> @@ -1613,6 +1614,8 @@ static struct sk_buff *__tun_build_skb(struct tun_file *tfile,
->  
->  	skb_reserve(skb, pad);
->  	skb_put(skb, len);
-> +	if (metasize)
-> +		skb_metadata_set(skb, metasize);
->  	skb_set_owner_w(skb, tfile->socket.sk);
->  
->  	get_page(alloc_frag->page);
-> @@ -1672,6 +1675,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
->  	char *buf;
->  	size_t copied;
->  	int pad = TUN_RX_PAD;
-> +	int metasize = 0;
->  	int err = 0;
->  
->  	rcu_read_lock();
-> @@ -1699,7 +1703,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
->  	if (hdr->gso_type || !xdp_prog) {
->  		*skb_xdp = 1;
->  		return __tun_build_skb(tfile, alloc_frag, buf, buflen, len,
-> -				       pad);
-> +				       pad, metasize);
->  	}
->  
->  	*skb_xdp = 0;
-> @@ -1734,12 +1738,18 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
->  
->  		pad = xdp.data - xdp.data_hard_start;
->  		len = xdp.data_end - xdp.data;
-> +
-> +		/* It is known that the xdp_buff was prepared with metadata
-> +		 * support, so no additional check is necessary.
-> +		 */
-> +		metasize = xdp.data - xdp.data_meta;
->  	}
->  	bpf_net_ctx_clear(bpf_net_ctx);
->  	rcu_read_unlock();
->  	local_bh_enable();
->  
-> -	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad);
-> +	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad,
-> +			       metasize);
->  
->  out:
->  	bpf_net_ctx_clear(bpf_net_ctx);
-> @@ -2456,6 +2466,7 @@ static int tun_xdp_one(struct tun_struct *tun,
->  	struct sk_buff_head *queue;
->  	u32 rxhash = 0, act;
->  	int buflen = hdr->buflen;
-> +	int metasize = 0;
->  	int ret = 0;
->  	bool skb_xdp = false;
->  	struct page *page;
-> @@ -2510,6 +2521,10 @@ static int tun_xdp_one(struct tun_struct *tun,
->  	skb_reserve(skb, xdp->data - xdp->data_hard_start);
->  	skb_put(skb, xdp->data_end - xdp->data);
->  
-> +	metasize = max(xdp->data - xdp->data_meta, 0);
 
-Can xdp->data_meta ever be greater than xdp->data?
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-This is pointer comparison, which is tricky wrt type. It likely is
-ptrdiff_t and thus signed. But may want to use max_t(long int, ..) to
-make this explicit.
-
-> +	if (metasize)
-> +		skb_metadata_set(skb, metasize);
-> +
-
-Not strictly needed. As skb_metadata_clear is just
-skb_metadata_set(skb, 0). But also not wrong, so fine to keep.
-
->  	if (virtio_net_hdr_to_skb(skb, gso, tun_is_little_endian(tun))) {
->  		atomic_long_inc(&tun->rx_frame_errors);
->  		kfree_skb(skb);
-> -- 
-> 2.43.0
-> 
-
-
+Both tests that include lwt_helpers.h also include network_helpers.h,
+so the linking with network_helpers.o is already addressed. This was
+not entirely obvious from just reading the code.
 
