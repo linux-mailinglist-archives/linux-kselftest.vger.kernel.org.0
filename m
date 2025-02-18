@@ -1,139 +1,127 @@
-Return-Path: <linux-kselftest+bounces-26899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79A0FA3A72C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 20:16:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19CCA3A74B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 20:24:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AABA16F5BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 19:13:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B22C3B184E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 19:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18B1127128E;
-	Tue, 18 Feb 2025 19:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E4F1E834D;
+	Tue, 18 Feb 2025 19:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HSGZJa4v"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CgXHt5HO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E05271265;
-	Tue, 18 Feb 2025 19:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503DD1E834B
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 19:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739905879; cv=none; b=JWnuHVqEQ+JQpdgA6u67kvjqFlomSks09oJ+p8O1StDTj5aWh9izE+yXDdi5vlqTuvcqdVpmZJ+WXheMoEfeqw6tUV+JGgrY6/OocaplLb9ZEUW3laNfMWH3/eb96eZFk9DHngslHrBjKTejQA6/BoCQehkFVCXMcyf343d/2Bc=
+	t=1739906592; cv=none; b=ZhxbvDrC+D6VYfj6we07UOFfqr51ZVXxV3c758eHGUPwEqDsfeFKevzj0eidgaMVkhl24LXSv6NAOL0jCY8O8aR0NX5dq91tbpXjPA/H1C9mLbmHUfiOU05BWkAkjraCOr+MSn+Ku6yen3X7b1DDyJsF+IiWKsgDxAMkQSbPt24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739905879; c=relaxed/simple;
-	bh=HAhbVYY0BFTrXeNHjiE12Hv0whhqsPdEA7Z/cepHjdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BIP5Ighbnk/a8kPH5R59Cm7O2QgMkNW4/YcdFYphZRPTJtI5J0wbCYrnw9YBaK7mXadyqhGB6tba+2v6joaARa0Ual2Nlx65BejyZ7mFNmcZApraO2QwfoehlduNO3gsarUz/Xp0if5cjJZ7W7tAH5sljUeXGY234p4FCp9UcNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HSGZJa4v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95CAC4CEE2;
-	Tue, 18 Feb 2025 19:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739905876;
-	bh=HAhbVYY0BFTrXeNHjiE12Hv0whhqsPdEA7Z/cepHjdI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HSGZJa4vmZo8KPPtt7ObQktcqNcxi/x/SlIp3NJC2JkgA2dKYg4o3yKvykS28TJ15
-	 CB4z3E2c616rmn1e+KNqe+srNCiDHJlxjOpCLD59DK0B1BnofPoT89A1AL8QXSPecU
-	 nnM295/8jhdbBvNPVxKg0Qmds9c+zHQLj+YV87ZPis3ChtApnLQPXkYsGrIYwHZ/Bq
-	 dbVdfzzbNY3eybrLBEtzEahE2nKu8mLg5fJASUXCMtHP1Rj7lCN/lFa4Qw6kHrEm/M
-	 JI4s31DmT5LIY4o0hLHat6Z+MAIuKIt5PIXnT+ZHnE+Je04QyTUeZSSuFu44k2jvwZ
-	 rAnFrsTwJVRbQ==
-Date: Tue, 18 Feb 2025 20:11:13 +0100
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Charlie Jenkins <charlie@rivosinc.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
-Message-ID: <Z7TbUbs4nvuLF-rq@x1>
-References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
- <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
- <Z6JdwSsAk1xCiSrn@ghost>
- <Z6JksXDRh8OSAh-u@google.com>
- <CAADnVQKmKf6wY3dg+PfAxtrrFWGO7D-m83dEndjWksPfWDt5wQ@mail.gmail.com>
- <Z6Khl1rHIAb7wOXw@ghost>
- <CAEf4Bza5nKk6_fVY2vmJjZgPb40zB+R3REy8==ZLc98eg1iHTA@mail.gmail.com>
- <Z6pF5pkH_bqvDwMK@ghost>
- <CAEf4BzYqOtfOiYcHWRP44rwkrdzi3aMkjgD1-Td5DVAOLV=2kA@mail.gmail.com>
- <Z7TT7Jw5QDx2G81v@x1>
+	s=arc-20240116; t=1739906592; c=relaxed/simple;
+	bh=rIbyj8Nfyu7DcneP0IRpGppUs09YF1sxNIX45ZVw0hE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=styROHXs7b4wVgLCoZRXVeBrbPDwEIvXUgVLNIbY/6D/exGZG1dyfH5fEl7EJVy08iaqHmmYlDtfGLPyzT7kilgh53q9ePrMJBR/xaogMdI3Ud8sXijaw/2bGBiTontD3i/Br0vWKyrqn+pO0GFdscVMDR8JizwQFhQpkVGjhfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CgXHt5HO; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739906590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MERCQpBpo0tKF1DN4IvIC5vT6oTv8oj1DKhfqvfja4w=;
+	b=CgXHt5HOOrx2uVxroYDQxTo6uKX8WfxFoV/uwGURoSfR7+MQ3ioYxGMRehshJYv1xzQ80Z
+	6/zZhCPf1OZUhF/pbDNO9b12Yq5+zoLZoddWo+rb2QOiUZNGZVw/yV/Se7J0wSKWNHSD5O
+	8xcY3QllgeTodeBwmA2qGBKR8S3gDSM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-sytx-8WxP9i_Ga2YRr4Ajw-1; Tue,
+ 18 Feb 2025 14:23:06 -0500
+X-MC-Unique: sytx-8WxP9i_Ga2YRr4Ajw-1
+X-Mimecast-MFC-AGG-ID: sytx-8WxP9i_Ga2YRr4Ajw_1739906585
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6AC891800878;
+	Tue, 18 Feb 2025 19:23:05 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.22.58.10])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D89C81800374;
+	Tue, 18 Feb 2025 19:23:03 +0000 (UTC)
+From: Rafael Aquini <aquini@redhat.com>
+To: linux-kselftest@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Peter Xu <peterx@redhat.com>,
+	David Hildenbrand <david@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH] selftests/mm: run_vmtests.sh: fix half_ufd_size_MB calculation
+Date: Tue, 18 Feb 2025 14:22:51 -0500
+Message-ID: <20250218192251.53243-1-aquini@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z7TT7Jw5QDx2G81v@x1>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Tue, Feb 18, 2025 at 07:39:44PM +0100, Arnaldo Carvalho de Melo wrote:
-> On Mon, Feb 10, 2025 at 04:23:49PM -0800, Andrii Nakryiko wrote:
-> > On Mon, Feb 10, 2025 at 10:31 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> > > On Wed, Feb 05, 2025 at 05:28:19PM -0800, Andrii Nakryiko wrote:
-> > > > On Tue, Feb 4, 2025 at 3:24 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> > > > So, can you please check and fix?
+From: Rafael Aquini <raquini@redhat.com>
 
-> > > I think I am misunderstanding what you are saying. The patch that we are
-> > > discussing on is the patch to fix this? You are showing the output from
-> > > the patch that is being fixed in this series.
+We noticed that uffd-stress test was always failing to run when invoked
+for the hugetlb profiles on x86_64 systems with a processor count of 64
+or bigger:
+  ...
+  # ------------------------------------
+  # running ./uffd-stress hugetlb 128 32
+  # ------------------------------------
+  # ERROR: invalid MiB (errno=9, @uffd-stress.c:459)
+  ...
+  # [FAIL]
+  not ok 3 uffd-stress hugetlb 128 32 # exit=1
+  ...
 
-> > Ah, it's me getting confused. It was the earlier perf commit that
-> > broke all this, makes sense. I just double-checked with your patches
-> > applied locally. It indeed fixes the issue, LGTM.
+The problem boils down to how run_vmtests.sh (mis)calculates the size
+of the region it feeds to uffd-stress. The latter expects to see an
+amount of MiB while the former is just giving out the number of free
+hugepages halved down. This measurement discrepancy ends up violating
+uffd-stress' assertion on number of hugetlb pages allocated per CPU,
+causing it to bail out with the error above.
 
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+This commit fixes that issue by adjusting run_vmtests.sh's half_ufd_size_MB
+calculation so it properly renders the region size in MiB, as expected,
+while maintaining all of its original constraints in place.
 
-> Thanks, b4 didn't pick this one, probably because you provided the Ack
-> for a previous version of this series, but the patch in it is the same
-> as in v2, so I'm keeping it, ok?
+Fixes: 2e47a445d7b3 ("selftests/mm: run_vmtests.sh: fix hugetlb mem size calculation")
+Signed-off-by: Rafael Aquini <raquini@redhat.com>
+---
+ tools/testing/selftests/mm/run_vmtests.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> Also since you applied the patches and tested it, can I promote the tag
-> to Tested-by you?
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 333c468c2699..157d07e5aaa3 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -304,7 +304,9 @@ uffd_stress_bin=./uffd-stress
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon 20 16
+ # Hugetlb tests require source and destination huge pages. Pass in half
+ # the size of the free pages we have, which is used for *each*.
+-half_ufd_size_MB=$((freepgs / 2))
++# uffd-stress expects a region expressed in MiB, so we adjust
++# half_ufd_size_MB accordingly.
++half_ufd_size_MB=$(((freepgs * hpgsize_KB) / 1024 / 2))
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 32
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
+-- 
+2.47.0
 
-> Humm, there is a slight difference, checking that in the e-mails
-> thread...
-
-> +  quiet = quiet_
-> +  Q = @
-> 
-> The above doesn´t  have spaces surrounding the = sign, lemme see...
-
-Got it, the comment about consistency, etc.
-
-Can I use the Tested-by: for the v3 series?
-
-- Arnaldo
 
