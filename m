@@ -1,84 +1,84 @@
-Return-Path: <linux-kselftest+bounces-26841-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E8DCA39619
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 09:52:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D89A39628
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 09:54:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FA901886829
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:52:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AA54188B096
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6EB22F381;
-	Tue, 18 Feb 2025 08:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A764122C336;
+	Tue, 18 Feb 2025 08:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="inZgeTAE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WjZ9gW5s"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192A122D7BA
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 08:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E986F188580
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 08:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739868735; cv=none; b=p/oBF5Lh9EL1pjMNn3ltC/YNcnUqLKXMa5SBWsiFGbCEL52fWCH+UXUSsvHd1nQpseII7xztAzb2iZh9oH6Umy+LLs7FRhS+xuTmdxZ8S8ybnroUNSERfpQmJMSYC6KhQj71AHJRuaFwvrN8ZwJldtgsh/+46ArgntWqSKX4TOM=
+	t=1739868829; cv=none; b=AZ8/U70b2q+GPc2mfVfs+ZlH4PkgwSgRfy7UoYEYXriVl9PYI5wFizzcbhoeEdbu4fLEYy1eJmaXFIeoFoE87JDbm08JeX/R8Hb9XGKiQcR8iRTQkDyK7Z9DqGT8n2N6uOT/jP2uLFo7kAtgRr+JcNYkTkRQD3+Yl3DNdP/hNTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739868735; c=relaxed/simple;
-	bh=qImDM2Aoz3Snnaan8A7pazPLk5kgxVW4GXVujSQsLH8=;
+	s=arc-20240116; t=1739868829; c=relaxed/simple;
+	bh=JgUl5opwg5yU2nZVF9yLHPyuaiHq0y6bQ11c/v1IZrg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zjam717uwzKDDd795fnQBcF6Q5Bo32U7odG0OEmnTxmh/3u5aDNb7qNe281wUGzcfcH8ddqJIUmkMjGdwu3/cetizY2f3ws+VxZFigN+vKWZGPUwu/xl0kPw12DBhY0bre4ZMnHazIKDNoWWEknGm/ks70+JXtrdilaeogEmiiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=inZgeTAE; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wbx2nrJDQu9cEtY16e98bT10+Jm5BE+vyHlokLA3eDRzx+o7/4AH6Pw3dLdYldkvWk9pzDInejW5WE+fPT5zMjUcRu4flhDC+2a+plSMP11HGetJ6AlG/VF2NamCZF3zLAgygz5JPx8t87Y2DImHdUz0qzeyvXAfJD3aPCaOmCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WjZ9gW5s; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739868731;
+	s=mimecast20190719; t=1739868827;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/40cidM9GqDVrc7T4DzVHlbImaecKAWNvPg5rw21iA8=;
-	b=inZgeTAEkAgB3k+Nq6TemODsnVHFOqFJWDfwqldJeVmF/0zE0abz0PqhwRjlCNbhstr2uk
-	rO91FF9yGC3TwPlgucl6c0TMlIDn3eeAgMccBZIU92pbzqItXDgG9uG8gRgQ/mwt0juqce
-	C8/hga2CD4sNAs6WB79fionVU0MeMv8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Mgl6hbo92Mxnck8gT/mfLwTqmZQ8Bgs9fRBCMTuEbCk=;
+	b=WjZ9gW5sO9M8ne8kfqLba7TscA45NjPcL/F97V5lo+hZPTACIUSnpPcDVa2Ezog49hPdUE
+	PxFT9iMVNpumHVfT4m3XszkOWxRM7o6zXQHGwSStexNapwTs/cElRlm5Gp4qb05fDSO3LC
+	R8bcCROdS5k5+Fbl39GXdKdin20X8MA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-442-vnVSsN2COciwQhzc9dY3ug-1; Tue, 18 Feb 2025 03:52:09 -0500
-X-MC-Unique: vnVSsN2COciwQhzc9dY3ug-1
-X-Mimecast-MFC-AGG-ID: vnVSsN2COciwQhzc9dY3ug_1739868728
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4399304b329so2544215e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 00:52:09 -0800 (PST)
+ us-mta-388-wUpDyAyyMfuI5zM0l4EDxA-1; Tue, 18 Feb 2025 03:53:45 -0500
+X-MC-Unique: wUpDyAyyMfuI5zM0l4EDxA-1
+X-Mimecast-MFC-AGG-ID: wUpDyAyyMfuI5zM0l4EDxA_1739868824
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43947a0919aso41733405e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 00:53:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739868728; x=1740473528;
+        d=1e100.net; s=20230601; t=1739868824; x=1740473624;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/40cidM9GqDVrc7T4DzVHlbImaecKAWNvPg5rw21iA8=;
-        b=usTt6o+2Lszs4ajYa7xyxlsTQTrUTBzA57BXz0lHXSu1wFcxmuFEF4A5pxQWlVqYM/
-         IlRkHvEojOIQPYgdAeV5IhEqx0nbDHhnh2gEYoDd+eZAwX8Ezqs0xavKwmsvSW4bMKk3
-         KLdv9SRVMikZbQpj9I/ikLh8GkG1mWcebZcM/QOvKoMWharO7kaLnXEaOqlozcxKsSmY
-         /tmlvpttcTlSWy2p8Pl1vwAynKQyG2HVub4nzWEwUvEriOZXWpWVJRiE1Hn1FtDuRdTz
-         PftLA4vj7UEVk70wi9xDH73gEKCjcTvr46JOXP9252T3TePR2a5IB+8Kgqn34wqLOm+n
-         +7wA==
-X-Forwarded-Encrypted: i=1; AJvYcCWy78pGqE0BPDP2lQkrMXfwZSiyPPhxYzU7NjAO3FJCnR/uT92RL2HGbBYGOL7YZI6uY+YJcjvT3+AijrDeKkk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2SxFC/DonMNAKoGI/7NFKqUT2/zAMtXyhfHThNws2JKCsIknL
-	cuiURf+xsfD62L1eGwWjVJQ6O8PeW2SrqSLBOcEsLpMlk7O/jlDm4J/erVlwhl6NeB3TnUI/xf2
-	DYABWWDzR/CZJJyBYFZbrgsZCTxSlFxK8k8/N76hKkO86qAxEtUEYX5CH0kvHFvC1mw==
-X-Gm-Gg: ASbGnctGba7SG0aYJXZwhGy0cZDpoB/4kHce2uK43j2M+yE1oxPBDfXVGTSP0RoWyaI
-	0L5kShjV8OxB6gZv6kJi3nBtVDhbzG2iiM8sG56Kw8SrpSbhayvQpfLOkuvC4I4Icg6ebUCV2uO
-	fgknfzkIvBJrvsnHL+hAdIujzcCf5it/2PgUUc+IsHsOe1prEp0uOyRcbl/bN4Js8SobVAgVRnM
-	hChgTNRePFqAO705/5kvqf0D629LML42+lFg167JAK28ORIlz8nUsI7py1rzfFo9E/V2jmQ2Lkb
-	ishKs/74quvQ+yqdI3m110rrIm80bhuipPosrssGOFcYEFvTb0cxDg==
-X-Received: by 2002:a05:6000:4023:b0:38f:483f:8319 with SMTP id ffacd0b85a97d-38f483f873emr5435467f8f.51.1739868728420;
-        Tue, 18 Feb 2025 00:52:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFC8X151MW+xEw5lnrOeLO/RfeyoGSXgW9uEKgZVTfGtKVJttz9myB5BqQJ3iioFx+lN1s7Ag==
-X-Received: by 2002:a05:6000:4023:b0:38f:483f:8319 with SMTP id ffacd0b85a97d-38f483f873emr5435418f8f.51.1739868727721;
-        Tue, 18 Feb 2025 00:52:07 -0800 (PST)
+        bh=Mgl6hbo92Mxnck8gT/mfLwTqmZQ8Bgs9fRBCMTuEbCk=;
+        b=jjm9i5w4+3WHGNXhaq1EVShT2fMj1uhsGfJ68oRS6DD0NELlaQCfrRPzPDejpN9Cly
+         D5b+eiBpX9Yn/JMwYJWcx0FM+u79ATtVWv+y1C7Pfllt2DWOmRIbMwTMWD0m39ids5cM
+         khdbLqfB+qLAr2y0UKdfTNcOO/L+D2CkMbKLHNLbjg7XWCx3z+Oe4pk25/uhi67/0iRm
+         oofE4RLIyYxwaPJ9RL1Nl85BKM4uMweFlJmKpCr7K7U3v9IhsfOeQFFdjV+OVp+Dqqk5
+         9zdc/hMHV98NrjOPEPQry1mCNMPn186NYiYfV/Mgcs3fdTl87lu3smPqqaNvxeesrBQK
+         1pbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUfAA1cAb0gMlHAFfaiNS4jRBLzG4N5IUCJuOEmRIUxj6DCG3NXvkZUJFxwusAlXOHcp6z+CowzIWxZdEEWGWs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxJEChBdF0IgRLNhfIL+d7SBQthhLYvZRICnU1x8cf5bZIaUhy
+	6kbp5wG4kg9q78U9iLBjLj2Oy/H+GHF6eXH0TQ1dIb1lVun9QcqNwXiYS53QRSaBV7MVs2YlG78
+	W1siDQ0mQA5tp7TnoGRZ6ViK7ZNUyLsCGfUz1qgt2ozcZ8bqQIWWc/rmUxkQ5tUZesA==
+X-Gm-Gg: ASbGncv6AueWmUP+g2bWqvF35Afe+/AgjJuZNkIK+9V39hlrQLMvf+UaSXR0ExlJx9q
+	iICyX/THCTiD8hifox/za2Hn6kBI9xEIBrBZ1hpH0eOb2cuCUxFtDvf35gGf33qyyG2C2Tu/Iyw
+	44Yr0KGjOeahgSLWabulB1wk/BEO9g5HoUN2edpJd9quYZpzIDbdk+XcxA7UHAnOFWIRLqLBA7+
+	o64RarAEF3oiBhZyNPRUFSFeMt9qjlBYHa1Lh0MMfa4vqlicj9t3ba//wK+M1sO7BDB95es/IbW
+	w8P5/c3Q2wXE7Q9hGIY0CMonCGuVTOW4+zjWQAPKOgk5OU9e/j4SFg==
+X-Received: by 2002:a05:600c:3594:b0:430:57e8:3c7e with SMTP id 5b1f17b1804b1-4396e730949mr115828145e9.28.1739868824093;
+        Tue, 18 Feb 2025 00:53:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG/EH7ZlWD6uvJ5Pwlyx12WqigUnKIwsQAbJ+vg+D+/MCEPIKisPa5XRvbKOf+AImCMDQH7/w==
+X-Received: by 2002:a05:600c:3594:b0:430:57e8:3c7e with SMTP id 5b1f17b1804b1-4396e730949mr115827485e9.28.1739868823355;
+        Tue, 18 Feb 2025 00:53:43 -0800 (PST)
 Received: from sgarzare-redhat (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259d65bcsm14463188f8f.65.2025.02.18.00.52.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439858741e9sm34660945e9.1.2025.02.18.00.53.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 00:52:07 -0800 (PST)
-Date: Tue, 18 Feb 2025 09:52:02 +0100
+        Tue, 18 Feb 2025 00:53:42 -0800 (PST)
+Date: Tue, 18 Feb 2025 09:53:39 +0100
 From: Stefano Garzarella <sgarzare@redhat.com>
 To: Michal Luczaj <mhal@rbox.co>
 Cc: John Fastabend <john.fastabend@gmail.com>, 
@@ -94,12 +94,11 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 1/4] sockmap, vsock: For connectible sockets allow
- only connected
-Message-ID: <yc5vdkuwpyrr7mfjp6ohqf4fzq4avgjh5pwrmox7rhipwnh7nk@26cyegopbks2>
+Subject: Re: [PATCH net 3/4] selftest/bpf: Adapt vsock_delete_on_close to
+ sockmap rejecting unconnected
+Message-ID: <onmllks7lojmjjglgq6ykseapzvcka4wlhazpchrbth64udy4d@rqaronc5ppwq>
 References: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
- <20250213-vsock-listen-sockmap-nullptr-v1-1-994b7cd2f16b@rbox.co>
- <251be392-7cd5-4c69-bc02-12c794ea18a1@rbox.co>
+ <20250213-vsock-listen-sockmap-nullptr-v1-3-994b7cd2f16b@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -108,182 +107,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <251be392-7cd5-4c69-bc02-12c794ea18a1@rbox.co>
+In-Reply-To: <20250213-vsock-listen-sockmap-nullptr-v1-3-994b7cd2f16b@rbox.co>
 
-On Fri, Feb 14, 2025 at 02:11:48PM +0100, Michal Luczaj wrote:
->> ...
->> Another design detail is that listening vsocks are not supposed to have any
->> transport assigned at all. Which implies they are not supported by the
->> sockmap. But this is complicated by the fact that a socket, before
->> switching to TCP_LISTEN, may have had some transport assigned during a
->> failed connect() attempt. Hence, we may end up with a listening vsock in a
->> sockmap, which blows up quickly:
->>
->> KASAN: null-ptr-deref in range [0x0000000000000120-0x0000000000000127]
->> CPU: 7 UID: 0 PID: 56 Comm: kworker/7:0 Not tainted 6.14.0-rc1+
->> Workqueue: vsock-loopback vsock_loopback_work
->> RIP: 0010:vsock_read_skb+0x4b/0x90
->> Call Trace:
->>  sk_psock_verdict_data_ready+0xa4/0x2e0
->>  virtio_transport_recv_pkt+0x1ca8/0x2acc
->>  vsock_loopback_work+0x27d/0x3f0
->>  process_one_work+0x846/0x1420
->>  worker_thread+0x5b3/0xf80
->>  kthread+0x35a/0x700
->>  ret_from_fork+0x2d/0x70
->>  ret_from_fork_asm+0x1a/0x30
+On Thu, Feb 13, 2025 at 12:58:51PM +0100, Michal Luczaj wrote:
+>Commit 515745445e92 ("selftest/bpf: Add test for vsock removal from sockmap
+>on close()") added test that checked if proto::close() callback was invoked
+>on AF_VSOCK socket release. I.e. it verified that a close()d vsock does
+>indeed get removed from the sockmap.
 >
->Perhaps I should have expanded more on the null-ptr-deref itself.
+>It was done simply by creating a socket pair and attempting to replace a
+>close()d one with its peer. Since, due to a recent change, sockmap does not
+>allow updating index with a non-established connectible vsock, redo it with
+>a freshly established one.
 >
->The idea is: force a vsock into assigning a transport and add it to the
->sockmap (with a verdict program), but keep it unconnected. Then, drop
->the transport and set the vsock to TCP_LISTEN. The moment a new
->connection is established:
->
->virtio_transport_recv_pkt()
->  virtio_transport_recv_listen()
->    sk->sk_data_ready(sk)            i.e. sk_psock_verdict_data_ready()
->      ops->read_skb()                i.e. vsock_read_skb()
->        vsk->transport->read_skb()   vsk->transport is NULL, boom
->
-
-Yes I agree, it's a little clearer with this, but I think it was also 
-clear the concept before. So with or without:
+>Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>---
+> .../selftests/bpf/prog_tests/sockmap_basic.c       | 40 ++++++++++++----------
+> 1 file changed, 22 insertions(+), 18 deletions(-)
 
 Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 
-
->Here's a stand-alone repro:
 >
->/*
-> * # modprobe -a vsock_loopback vhost_vsock
-> * # gcc test.c && ./a.out
-> */
->#include <stdio.h>
->#include <stdint.h>
->#include <stdlib.h>
->#include <unistd.h>
->#include <errno.h>
->#include <sys/socket.h>
->#include <sys/syscall.h>
->#include <linux/bpf.h>
->#include <linux/vm_sockets.h>
+>diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>index 884ad87783d59ef3d1ca84c3a542f3f8670cd463..21793d8c79e12b6e607f59ecebb26448c310044b 100644
+>--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>@@ -111,31 +111,35 @@ static void test_sockmap_create_update_free(enum bpf_map_type map_type)
 >
->static void die(const char *msg)
->{
->	perror(msg);
->	exit(-1);
->}
+> static void test_sockmap_vsock_delete_on_close(void)
+> {
+>-	int err, c, p, map;
+>-	const int zero = 0;
+>-
+>-	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
+>-	if (!ASSERT_OK(err, "create_pair(AF_VSOCK)"))
+>-		return;
+>+	int map, c, p, err, zero = 0;
 >
->static int sockmap_create(void)
->{
->	union bpf_attr attr = {
->		.map_type = BPF_MAP_TYPE_SOCKMAP,
->		.key_size = sizeof(int),
->		.value_size = sizeof(int),
->		.max_entries = 1
->	};
->	int map;
+> 	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
+> 			     sizeof(int), 1, NULL);
+>-	if (!ASSERT_GE(map, 0, "bpf_map_create")) {
+>-		close(c);
+>-		goto out;
+>-	}
+>+	if (!ASSERT_OK_FD(map, "bpf_map_create"))
+>+		return;
 >
->	map = syscall(SYS_bpf, BPF_MAP_CREATE, &attr, sizeof(attr));
->	if (map < 0)
->		die("map_create");
+>-	err = bpf_map_update_elem(map, &zero, &c, BPF_NOEXIST);
+>-	close(c);
+>-	if (!ASSERT_OK(err, "bpf_map_update"))
+>-		goto out;
+>+	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
+>+	if (!ASSERT_OK(err, "create_pair"))
+>+		goto close_map;
 >
->	return map;
->}
+>-	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
+>+	if (xbpf_map_update_elem(map, &zero, &c, BPF_NOEXIST))
+>+		goto close_socks;
+>+
+>+	xclose(c);
+>+	xclose(p);
+>+
+>+	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
+>+	if (!ASSERT_OK(err, "create_pair"))
+>+		goto close_map;
+>+
+>+	err = bpf_map_update_elem(map, &zero, &c, BPF_NOEXIST);
+> 	ASSERT_OK(err, "after close(), bpf_map_update");
 >
->static void map_update_elem(int fd, int key, int value)
->{
->	union bpf_attr attr = {
->		.map_fd = fd,
->		.key = (uint64_t)&key,
->		.value = (uint64_t)&value,
->		.flags = BPF_ANY
->	};
+>-out:
+>-	close(p);
+>-	close(map);
+>+close_socks:
+>+	xclose(c);
+>+	xclose(p);
+>+close_map:
+>+	xclose(map);
+> }
 >
->	if (syscall(SYS_bpf, BPF_MAP_UPDATE_ELEM, &attr, sizeof(attr)))
->		die("map_update_elem");
->}
+> static void test_skmsg_helpers(enum bpf_map_type map_type)
 >
->static int prog_load(void)
->{
->	/* mov %r0, 1; exit */
->	struct bpf_insn insns[] = {
->		{ .code = BPF_ALU64 | BPF_MOV | BPF_K, .dst_reg = 0, .imm = 1 },
->		{ .code = BPF_JMP | BPF_EXIT }
->	};
->	union bpf_attr attr = {
->		.prog_type = BPF_PROG_TYPE_SK_SKB,
->		.insn_cnt = sizeof(insns)/sizeof(insns[0]),
->		.insns = (long)insns,
->		.license = (long)"",
->	};
->	
->	int prog = syscall(SYS_bpf, BPF_PROG_LOAD, &attr, sizeof(attr));
->	if (prog < 0)
->		die("prog_load");
->
->	return prog;
->}
->
->static void link_create(int prog_fd, int target_fd)
->{
->	union bpf_attr attr = {
->		.link_create = {
->			.prog_fd = prog_fd,
->			.target_fd = target_fd,
->			.attach_type = BPF_SK_SKB_VERDICT
->		}
->	};
->
->	if (syscall(SYS_bpf, BPF_LINK_CREATE, &attr, sizeof(attr)) < 0)
->		die("link_create");
->}
->
->int main(void)
->{
->	struct sockaddr_vm addr = {
->		.svm_family = AF_VSOCK,
->		.svm_cid = VMADDR_CID_LOCAL,
->		.svm_port = VMADDR_PORT_ANY
->	};
->	socklen_t alen = sizeof(addr);
->	int s, map, prog, c;
->
->	s = socket(AF_VSOCK, SOCK_SEQPACKET, 0);
->	if (s < 0)
->		die("socket");
->
->	if (bind(s, (struct sockaddr *)&addr, alen))
->		die("bind");
->
->	if (!connect(s, (struct sockaddr *)&addr, alen) || errno != ECONNRESET)
->		die("connect #1");
->
->	map = sockmap_create();
->	prog = prog_load();
->	link_create(prog, map);
->	map_update_elem(map, 0, s);
->
->	addr.svm_cid = 0x42424242; /* non-existing */
->	if (!connect(s, (struct sockaddr *)&addr, alen) || errno != ESOCKTNOSUPPORT)
->		die("connect #2");
->
->	if (listen(s, 1))
->		die("listen");
->
->	if (getsockname(s, (struct sockaddr *)&addr, &alen))
->		die("getsockname");
->
->	c = socket(AF_VSOCK, SOCK_SEQPACKET, 0);
->	if (c < 0)
->		die("socket c");
->
->	if (connect(c, (struct sockaddr *)&addr, alen))
->		die("connect #3");
->
->	return 0;
->}
+>-- 
+>2.48.1
 >
 
 
