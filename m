@@ -1,60 +1,61 @@
-Return-Path: <linux-kselftest+bounces-26911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8516A3ACC8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 00:50:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 628DAA3ACCA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 00:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 659F416B2CF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 23:50:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5A2F7A5B22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 23:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42021D86CE;
-	Tue, 18 Feb 2025 23:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8DEE1DE3C2;
+	Tue, 18 Feb 2025 23:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="X6CaUWRU"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kZQmPmJ1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8FA1A8F6D;
-	Tue, 18 Feb 2025 23:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA461D8A0D;
+	Tue, 18 Feb 2025 23:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739922623; cv=fail; b=q1BBQL+YvQmIx7o2IZbEbQw1EnnVXJ5ERhSvIoxSzxsKtP6l1aPuZLnJ5Sy7QnSlexhtSwkVbuBWqh0mSrXnqUj+ybXWzab31V4hk4SZYeAcU9bF7eLR9O/eqegd+a9yi4MpmydE4geASJ4sxiXbDyMcaixGzl3s2ea5mGgzeg0=
+	t=1739922625; cv=fail; b=DN8yYxerKJngyzihjK2opeSj7EtcGrLxr9mwJZQuRLJsK8XpfEDUZk+8refXS26K/dorUm+QzEm99S9rq838EtIaybT4X4qAIRGd1c0pT2OaKsl+5cvX3nxeqCBzMFprG/QgR7y+sgSAVHKiCw83B9E5JUnTzf5wp2tzt/0Xuw8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739922623; c=relaxed/simple;
-	bh=i3UyFoOzULfKXeP4xm1A8MyLlEonRKF1R1y5h2xeeRU=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WmUj+DL/3alenXwx2ZsbYvjR8Gtkfgq88F6BnwHQT457rldGMzwADATJ0BdQ3WeM2L934Pla5jAAKljScABGV1VbqFEmwE8veyWuZjPi6pWembdD416fAnFQFG25K1IiL8vdttiB9vi/rKYIC5vbThWpVp1t2WWGnme1VToFt0Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=X6CaUWRU; arc=fail smtp.client-ip=40.107.237.64
+	s=arc-20240116; t=1739922625; c=relaxed/simple;
+	bh=KdkmW7tDzDjo1erXBiRihk/Gb0C2PVtzW0RA6w2ZXAw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YzFylFD5cfJk1w5rnCQRPzeeHHopfqcxBeYZXaKtYqc+acRWPmQ8MBhvHEUHpZWzU90ucrHJOCOnTqUXhffQP2czp3c+Dxeak56av1BNlMemwsSJAg9E1s7bU1UD5ROYC3QVDtyzXwCEcEPFVDQVbA5PIl1WGKhohpEbqDh3Ia8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kZQmPmJ1; arc=fail smtp.client-ip=40.107.237.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uK3P01D5R37Bq66E3i9ersHKGmfvWtFE2EJiN1tLXRgEFQZEf8v2nR0EYexQ06xsu2AFfoaDuUQLE44i2QCiSFOieyrxPs82cg4A6qOyMTh8VIVS787lRSIiPNPo68lspG1S/F/p8rjL6eGgyjIvoi/qcGA2NzNAl/qD7BH7l2LDQvtMIs8w3lyuNgXWpJu4K2DCsbfLAvSvpjl6e2MAavc7OYGBF3a3VCu/253INfdtcgJIX4P9OajJIIR12Y1bn01ANZK70n5SrxHnGWvxGDt+9YQaKvCLSSC/EN3Y+pON/Na0LIzbXOorhjT58OYC1WF17TSKGlylbNAPUeIeNw==
+ b=cHestNL2GmPxGn2+8euWhFd7xmT9UknVJTeAvMNNfyp1e0RD+egnflA+hUHuPR4ol/dA1rAtLgwkQic/IFZ5RUInMcgm5Kn0+PfQ21d7pEVFKHXLUP2j+XGbiv6y+uEvcZFdTVO7jhlTjNgtFUv/sIqJkd4S1sZZKg4mlg2mXY1n9yRyjjzSSmkf8G8K/B2lRlaGMLKJJe9V4zbf3duFSq/+gFUIKXfNxRhsMQavnUR8i7N3gQBfBGbcizFMfvC6gQaOYV/dSQgm7EQmV/3XQNBIMJdFvg3kB1HKcKe+735xni2ERaJ8bBNSan62JT6veBDZ5AlFQalF2nsjmqlp3g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cIQCg1CTj3Cy9Ox+HpgbxaMgQYW2Z7nw4/i/ZgUYxcI=;
- b=RxZHYtqrJkNMB84TknW7fmLZ3fhWmmOymr5IMi1GTQ8zn/5ednMqTXXoRV/hzlt9Bs2+LUB5toFlTbAyD1ZbDOp7w/1jas/zKkx/ZJHE8Wb+Ed8O5AViTfL1PHivgW82pIMMIkj05pZDCs9dET0aPKObMHAq2BO+8Lsb0hwNKUIQbteSmVD1o64f8FdQLkv1M2f+UTz+vM0MTUuk0SLocT1XslGaZhlL6YFUsWBHnsOriE0qAPt3TeC9vDv6vhMDLMJCQQLS5v4VwLLCcBHi4E6Xnp7JzTfdjkmYvHWwwAKEsbG91mteZ84EPCGUeLX5oU5MGACjhrvT4l9vG5t5gA==
+ bh=EgICjOcm38ocqZikxGIl6O6eXZ912RghvM9zgt1IXPs=;
+ b=WBfEdwKGhq/VavOSV+tLROmUqtnj7jPZsKeBuFiJBnTrjC25CQELQuml7b9VJCN7OdMHr86de+F6/QMAeAgD7HWDiMCvWKw9yZBB4dlSXl6itAymaXyiT21Y20/agxu9M6Blnvb/m4A6bnwSshdvVOs57iV/ln3FF7nu3uq8rjLVVDM+7YS/FGwOOViusEUO9vozAWZg0+xmkDDrv3p8QIlrvzfB3oLdZlXza3j+SkxGemyvn/KM/Ebylj3BayvhJfJ+REJ/bQrtxvHgIPVHxW6fFpBkfenJ0Wdo0IBiFtul47OiYuawUh4ZKKVauGhaaJ9xzZaUmZovk64hPXVGNg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cIQCg1CTj3Cy9Ox+HpgbxaMgQYW2Z7nw4/i/ZgUYxcI=;
- b=X6CaUWRU6a+1qXtJOc2lX7Mt5zUoqhIaP6EkEafLXg+XLlUsAOJOGIop1qC4wxf15Rw81h7nb5y/miSQQIsTiqBqcs5bYqj7cI4lI6Rmen5ee2KLmcqD2e+9JFZ8LMpY4jidcsDboObE3PwDhm5DG7zEP5pP20GQu4z6fy9orGQLQcTykE4aXB/Ers1LiKYduh90qjSsORP3wqD7z8YJv0V0j+iVJNun3L/xq7/v+C6MhVAQMVTAzCft1tY0Bxql8au8M7peMbsCnFnPg4LGoejBtkXQjzTsK/w9rgJp9/ReaPXA5OiiZ6yNU58W1ygQNC7zLiK/xj0eibQxARndmA==
+ bh=EgICjOcm38ocqZikxGIl6O6eXZ912RghvM9zgt1IXPs=;
+ b=kZQmPmJ1/pxpSHyYrqZkOP53CZuhxatgk9phuru2DOiU9QeECM8xufcvsYg9MSSrz4pnjQ3lcY4Yzhv26i1es/nIjkWig67GPjtvsaNVEYOIVn4PCxU14ki8L1B+VE3aCN8W3gaRXWjtXyZHSSaz75/uwAUOy2rLZFP3VHRWoHrXp/esyNlfiiR3yIlOFCT3xQMUq1EWaUclP4EkgiowtmCH0YdSIrovaV0RVENqVG17IKFUVX61K4x4kOje7yWbb4utdlnrv6qYnE/aKvIBaHFUPot4gCljSm9MA0O2l0VT1h5EpKhwooduSnK4a2hJFL8tuLlwP+ZoCOXwXQEHbQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
  CH2PR12MB4326.namprd12.prod.outlook.com (2603:10b6:610:af::11) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8466.14; Tue, 18 Feb 2025 23:50:17 +0000
+ 15.20.8466.14; Tue, 18 Feb 2025 23:50:18 +0000
 Received: from DS7PR12MB9473.namprd12.prod.outlook.com
  ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
  ([fe80::5189:ecec:d84a:133a%5]) with mapi id 15.20.8445.017; Tue, 18 Feb 2025
- 23:50:17 +0000
+ 23:50:18 +0000
 From: Zi Yan <ziy@nvidia.com>
 To: linux-mm@kvack.org,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -72,14 +73,16 @@ Cc: Ryan Roberts <ryan.roberts@arm.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v8 0/8] Buddy allocator like (or non-uniform) folio split
-Date: Tue, 18 Feb 2025 18:50:04 -0500
-Message-ID: <20250218235012.1542225-1-ziy@nvidia.com>
+Subject: [PATCH v8 1/8] xarray: add xas_try_split() to split a multi-index entry
+Date: Tue, 18 Feb 2025 18:50:05 -0500
+Message-ID: <20250218235012.1542225-2-ziy@nvidia.com>
 X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250218235012.1542225-1-ziy@nvidia.com>
+References: <20250218235012.1542225-1-ziy@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0070.namprd03.prod.outlook.com
- (2603:10b6:208:329::15) To DS7PR12MB9473.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0090.namprd03.prod.outlook.com
+ (2603:10b6:208:329::35) To DS7PR12MB9473.namprd12.prod.outlook.com
  (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -89,294 +92,447 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|CH2PR12MB4326:EE_
-X-MS-Office365-Filtering-Correlation-Id: 105925ff-c920-4b5c-47df-08dd5076ff20
+X-MS-Office365-Filtering-Correlation-Id: 86587819-ab44-4579-0fe8-08dd5076ffe5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?lxV7MOYZFhkTk76GVlbMxqN05e9ReP58rEqyDI4D6KmtvTls1U0WyQsShRdu?=
- =?us-ascii?Q?g1Fh4ENy9ytujcB95k/pMYwjX4D1xN+2Z+Sn6KSxeewliGaCRA122ye2W06c?=
- =?us-ascii?Q?MUENrVtAFQHK1CzRFR6MMKAp7cv7b/3YJr63ZCYGnUzpp8b+Jbhbr9JpA00U?=
- =?us-ascii?Q?4oxJL4PwOeCU/L5zZKZaEieJ0jt5E8/r+39FcToMazdX2Cen1nRU+0fYt/pi?=
- =?us-ascii?Q?Q7Y2xBV2n0IUY/9Y15AW2z3tAzck+p75aB/dL6/3p88y65PLlljvJ73zsa0D?=
- =?us-ascii?Q?bU4JB34VufVkjTP1SMsWCtGgjCY/j8d0Lq+YMmub04Uo1F8lFav+vWEy/IZ2?=
- =?us-ascii?Q?F7PnKULFdtexxY5BLRHpL/cFqB1+YhnKXWxf5krPvNjpm6eZkqjXx8hZdGq5?=
- =?us-ascii?Q?qy2P3m8OvapS1ruNnU4T4F6A3GSRmHjFs3fw78G3Xyu1N9EPYBaG0BI5HKMH?=
- =?us-ascii?Q?AHrBu6Ffldm+ap3qdMMxBoAqnHBSVes1CQbFuQHLx77Q2fXBNOmNI2Tt5X4u?=
- =?us-ascii?Q?dc/q+SXDuf6LbVx51AIU+FTOn6Km0Th57wVnATWh/MFijhCPXQGKdUwGJ9lx?=
- =?us-ascii?Q?w1/bQaELKMvp19hb57HRWLDrlNCU4ve9fts0yobDvbSIEkzl28YcJId/XtNN?=
- =?us-ascii?Q?XnQzJRNVClkp9nLJWTWQT7yr6An+2yNlQkvrz0PUJshp+6spDxLWb0ApOfnK?=
- =?us-ascii?Q?9AUQVDjDlegmQ3X2nVRYvuYyNevvfwYyH5lTJo+QbL2bm/5zxigpEHBBzcAS?=
- =?us-ascii?Q?b8zV/kAoPMk+ZfTOb7r86ggPK/dec3JSpltu4IVemZPoxF52ZtKpnxjHPVK0?=
- =?us-ascii?Q?cKCrJVV6/yoQ5vSsIgvUbIYJFWg9IsI3oN0dKRjhTXWudzMyi5y0yVrD2KOr?=
- =?us-ascii?Q?86b8AwA3tyJnz3gdQ9k99yqSsQgz1h289KMYI+agX9P9EHozfMFhqmO4UjiI?=
- =?us-ascii?Q?fz2Eby/T2+k63rH5dzbTHBi7vU3bbYjn+Az0Z4c4mCwyOmxWDg3JX1F9hfVo?=
- =?us-ascii?Q?HisM7zPL48Q4F/SsZNAz5ae0IAPWllyscZrTppipoVLm1DyP2fLAcT8L3s7/?=
- =?us-ascii?Q?kIY3LsyhJsZGwDx2UYpL/YoecNL0hC4wV4AyM87y4KhTZRhPPC42UQy2yyQe?=
- =?us-ascii?Q?cyieJ7o1+LMj5K5vMZSiUbn2fqobApC26DJ8K/m8MdfOIYobTYuBiFCypn57?=
- =?us-ascii?Q?rWBvnLku8bHRvcAXVa1XvNaj1Gd2NLKAN9jQndBWuGuDekNUuMRwzzFsZELo?=
- =?us-ascii?Q?1MuOPlJGtEAxiVrfhyzrgbrB9nNUi0aZUjpvaNOfJo/ttZcao5mkSuHzmBFp?=
- =?us-ascii?Q?HAiMJtg7VdgMdMVCkC1eIYlbsJs32gRXgyvz2vXJV5zRr49unX0+s5Jnk1Oq?=
- =?us-ascii?Q?/g1rBWcW9sMWeiFP4jLsr+Fy6kjC?=
+	=?us-ascii?Q?03cCbxOFHLCLHRlOlr9q4y37+bmMdZ42ZLBnc8+JtZLPV2mw19aMYTLj6EQo?=
+ =?us-ascii?Q?jrrjQJ89I8FsJaxks5OQlqFmOiHuXF3VQiGjoTR3wOO7H/DbOvHB7R5KuyhK?=
+ =?us-ascii?Q?WHMgDVjHnBKdxc4SlHgqQ9ILe3rXm7aa/JHTrc2R5JtNxXOtYbnM/1ikYoLQ?=
+ =?us-ascii?Q?7MliREnUFN3Xy/65oRuzTw2XwyF7j1RPKympJOw52WXEOCw1gDYfoDjD+k7V?=
+ =?us-ascii?Q?oRhJLuBa9RjFfyjVT1wnJKQip6IylhIbEDT5aDOnVEkzrtVIrSkMCGWPPIDs?=
+ =?us-ascii?Q?u3NsrLYUMK//U5nKLsALEGUhxZ8dAWlOhTZcmZnHH5af4cKITBH+3GqkrLd7?=
+ =?us-ascii?Q?ZWNqokrb7srsfGf72KR31K/iTgvcvx0AAj3qAgNLI5DQf2F6DNeq96P/mza+?=
+ =?us-ascii?Q?cs76IjjwEP5YGpOH+vizAAxLIZkx/IcAhPsZk/qw8uG1lfk5uIUmhqDee2t6?=
+ =?us-ascii?Q?ihZ/mgnlBj/1paVvSgGBqWuVpwTRFKUOJaJeUhumprj6j/6Dtuqo2IF9Gros?=
+ =?us-ascii?Q?UuEMf+to1NKx5Lf1EidvSYPXzDH8cf2DrodzX1DuVaYjuGG2A7M2u/UcZajz?=
+ =?us-ascii?Q?xfBSh6IjmKk3tBFqqESaNX462/xeas0V2SyHtDZn1AESRxrdEWB3qbI2BuOp?=
+ =?us-ascii?Q?4TdUBeRYvqeSXtnC2iXydBhF1GC7HSMVCVDwlZLDHdjpW+EPEYlY7zFquQd2?=
+ =?us-ascii?Q?ZZWIlSVLhdm3/cGhsdD1D3adliEbUx0qBbQjc12vN61jQKa69FcNQNpz5M/h?=
+ =?us-ascii?Q?hwiRw2GD2AoAZClP5h0BeKOCfSGvCwzEpOafxWkOsufyAkUzE650bSV2BLTV?=
+ =?us-ascii?Q?bdyXXC3gKWkJVv/90775zWRc4cEYgcq+nUQCWRjmqr3Q+MI7iQYhrXXIpj6L?=
+ =?us-ascii?Q?WKqoJ+v2b40qVF2NA986VnLVNawbVZQGd368PuMutjHhcNidT6WQ3mWYj6ln?=
+ =?us-ascii?Q?x67rq3BmyWphDeqB21umOrRQ9X6ZzzGsQGrEpwzkI4NCB0Qpyo370Yf0Asfv?=
+ =?us-ascii?Q?Ca+a+OMXmR8dQSNmt1tvPREIIJT1Iggp4fQ5RZT+h93UjNyG7ZQILwSO5RhM?=
+ =?us-ascii?Q?ZcA2AQZE5GNH4A2dnM+Fp3HnQBPpW+ZaJk3VRCyh28aUw5c3lw/pXCwRZwKT?=
+ =?us-ascii?Q?TncMh2EYnIBt6KUJnKfbb+EPE+dZO0XeX7yKmsYSAZE6bbuf6aqNL4yl/ZHJ?=
+ =?us-ascii?Q?cPiRYLvsV28pwEB7b2Zf+RSGuHnG57jNvGlF+Z3wclUS2grv47dvZ9RFEBh+?=
+ =?us-ascii?Q?fwPl9+CBPjeJnxMPBEFfG0R1XQcOB+sBsK7n0FVghQ3ynR67gstD6N2gStEX?=
+ =?us-ascii?Q?elr0XmpdRkzQl0doqU+oVTvFlWvhShGzismXbzLoMSwV35bqClTIslJoVWy+?=
+ =?us-ascii?Q?eJ+fYuVvkOoBwbe3Ar3U70myeIQQ?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZlvzTUfjYKxgSscrynelpDDPc4j229G583NlP7Zvm9lrwgXIss6oknuTaYoZ?=
- =?us-ascii?Q?WykWcc92JDOi8awbJnEnqLLIEbz/0U/BbXNOB3MJrSL9NQzV984oYGrH6P1r?=
- =?us-ascii?Q?exEP5wASIjuvt6q86/iUFgXOfxH4srh0I0MCi2ov/9piTdHivbvTjy5N2CMm?=
- =?us-ascii?Q?jIz/SnR9x3tatLvSyhMd/+a9GHvQSYR9ncoNlAuTt58JoDmVFmCZ2B43eIv+?=
- =?us-ascii?Q?BPQMHKwUm+19xliBkpCQe3fl0pbPI7YHmxeMj9B2jtOYmpyba6BIqapYHPx/?=
- =?us-ascii?Q?+AvQdrzCkU2tSahr7LqwkGv8H6nTDrATk8erakqeOJXbjYM6yvPxBNMTcARa?=
- =?us-ascii?Q?apcERr4ZkKbIWY+a/jg2fyk69c/gGCNmPbuNwUECCSXN1WPoLLJTLH8cgAfZ?=
- =?us-ascii?Q?gf83vX5BNszdY0t7JXcCx+6LV+vv3dd7JNTM9Naf1WmFex3XDszEnO+BhUzK?=
- =?us-ascii?Q?BD+H6VoA4doO7NSZVifxEs8RgWbvnkIVXJhVcFyLyWMGR7gLvotOZ72XEmFA?=
- =?us-ascii?Q?nG4wirxp6WzEy28Jmfa2jkELs1obkWhNr7rWuYTgCXe8dqXKVJCioq5TaJxF?=
- =?us-ascii?Q?ZshgTSLvlZpml1fTrKWg8H7eONxJ7a8bb/Mx3cnhtYNueeHGF2bCZyhsu5tc?=
- =?us-ascii?Q?fUtkA0ib3xnKmBYxjR9ZO4lEjdk+PiqevGB2cvBFYYJ0EDLoEIEG2DDUUzZD?=
- =?us-ascii?Q?dFDiYptKPMd7XaCPUFaYpWsgXBEkv4MVx6XOEOiTZWXpH++B4Wi54XA4KAgb?=
- =?us-ascii?Q?yGP9i3yP1qQn6a0XlOdZOcSQMGaiIOmWWUwjhd/iDveOkaMLVMXxYD1ht14R?=
- =?us-ascii?Q?qdJOab3Gkoat18K3dR/U1lGXSGV9ZKanTkncBEnv3ZMNH/RFKeMs42YmaLEB?=
- =?us-ascii?Q?h24Si2xwzqfdqK+ze6WomqWJijcZTEyD4kgjMCtCpKNop3ieNMIlHwkAOg70?=
- =?us-ascii?Q?DhCITsLuX4yNEhgK1hWW0NXf/+DW/j4hKLXp+OLjJqaresLIMWOPeNpn5sI/?=
- =?us-ascii?Q?izqFBfHwVRI93jLzj01hD1lIEjl9YCMKlo7bHr3OCozF7Z2lZl7IHVoGl+wm?=
- =?us-ascii?Q?wnC1J/9vjFUEomDxsLrlumTSWqhN1sMFlXg59N0KzzPgVLE1/UYQfXCS/hjm?=
- =?us-ascii?Q?99Sh9tI56gCL5i2e8cfKIjWeoSiudWezBNGuvfObL8HtDvq7eemFYRVGnFYq?=
- =?us-ascii?Q?+784LEfIW2eyiO5zzZxIS4XtA0ALMIyzA281EFIUWQMyK+BHH5UQ6jVD6P2A?=
- =?us-ascii?Q?d8xaXxt8XLP2BRidbWdu/XK1Ibb7Z8xIwW8mMBMXtVshTM8ZvdCO4HXLzaI9?=
- =?us-ascii?Q?nSXKbY5SZHLgpMXh7HzQ8rY7Iu6CY+25GLs+jbco/zdtvL94CeRlhvKCIq2f?=
- =?us-ascii?Q?FJc65OOkWqU2F9Y63COk4cu8OhkVPFgoSzLyJe0KqtM3EsSX3yp5qj+tf+9c?=
- =?us-ascii?Q?k0wESchQteYG3qAOyGF1JAvCG//JYhzwGdrNiiQ4151rxXarfcRxijSvRgit?=
- =?us-ascii?Q?RwkAxYkavDMs3CgoUG39eKmvbY6U+AkKEJH2FZMYH0I7fj9Ob/PUcrY3E2gA?=
- =?us-ascii?Q?slysJXPLikX2UPLU8I8=3D?=
+	=?us-ascii?Q?IalGbAuNCZtsE6g8SPJqktoN74YSV+vRrw31Qbk2Yfg2/QbYA2UU3Z6uxQet?=
+ =?us-ascii?Q?49mowjWfoyIEwFZshWv915VXHI1jd5qXpKHJ7Deb8GPYSp+LzUww7XYngLM9?=
+ =?us-ascii?Q?K6H4ld2124SlBj/cqaI/ueSROzh4BWb/bHE2uSOZccjrXPJVoPvH7kVriTni?=
+ =?us-ascii?Q?2/sDsMiCZ+r416wVVsFkuRoj9pVdMlmXjh1s3J5VcCGlnCmYbdCCYM4TR+Q9?=
+ =?us-ascii?Q?QN9M1jLRVoce9GD19X/NVIzCn0tjqgMmuPBZ7XWNXntsO2epLOfwKocWBkUz?=
+ =?us-ascii?Q?bfWOca2wzrsCn7YGILm/d+7LW/yTPBQKGR9SLq2h+8TFtEgaPaW+sU6/f3ME?=
+ =?us-ascii?Q?Uxj4fYi8lwn8HRrW4T2RrIN5XYkyBcrKsllCE1+TFasX09m1/328Yj+zncrT?=
+ =?us-ascii?Q?XFQ/2s/GI9pq74gvAispht/Q+r3WcM9kZnq6M7V07g5HIb4nPY7jd1E4XEuv?=
+ =?us-ascii?Q?GKFEYY/+TjMmooffv+DWcHOEVruQ3A6jgUzoXPeWh13f5UqR6eBOHqlEbxtm?=
+ =?us-ascii?Q?U5r5NPqpfDngM2XK75L254T+9PONZLxXBoku+3CYMx11TrF8S4xNpVuHVC5Y?=
+ =?us-ascii?Q?lIEYwal+/efFJ934iLsh58mkZTfy576vLNW03v7ULq2BwzcUaHZuT2xsCGg5?=
+ =?us-ascii?Q?YgLmBH95/3E7rYE1q3JhhEGgtG0zmWcFs3rd0iKv/BIvXu1oX5TAFkWRO2hZ?=
+ =?us-ascii?Q?izg+leQ9/Qfe4YnoGFYNLr4Kckz/4eRonMhlxUhvwDMZmZwoROXIBo4IBWx0?=
+ =?us-ascii?Q?LEwTAgySsikx4GqY8TtJKchmeDDPa0jHNHFjEjC7xCDLst/vjreGQkmWC9DC?=
+ =?us-ascii?Q?guriarNzkkUUCT5XSpQbAJFUSs+mJnUsWwTkO3d5cXIlg2lYN3pZDM7DcZHf?=
+ =?us-ascii?Q?kKfjw3WhXkHbOdME7mBqd11ulqjMgZ3s39Dq3slSjuTceKETZCMRZu9PAx4W?=
+ =?us-ascii?Q?/ikJXBYkDsILsOnZcQm20Lr3Z5ZQ/YKTYu1nVorNHQetlnlDSLVoFjPae9NS?=
+ =?us-ascii?Q?XyWkk6W6BvjOs34xofYJ68sa3LY0vB9OIUXaX3DcWk3BnVzguaw7t2mfJ8uf?=
+ =?us-ascii?Q?ESGkXQiYBMauliMLrg2RaHcNuQHzI0q8BFKmkARP7y+1MeTHBrvI3Gu3wtOW?=
+ =?us-ascii?Q?Fbp8ctNXyeC/o/Mwn4tDUbnnT+HJA0cWbKJQEmPuB3bSYrsCsbyIaMYLfaXZ?=
+ =?us-ascii?Q?AAsKbHVeL2+xFXsoMpl+9OWrgSPrIBKKNw239Z2lDFx2gexZMP2cjHKp0O/i?=
+ =?us-ascii?Q?5VtpPykCsZhM6wd1x9s2Vo+UXv6VoRiUOVdXIXuc6OkdRbMsXhVFnkvocL/X?=
+ =?us-ascii?Q?sX9nFuL28WrSipkpVW3Xu8LE/V/C5il599FEgOrdvwzrRDKCgQWXk1WZpmfW?=
+ =?us-ascii?Q?/lMAEIyMiBMp6xIiMWb4+1rNnwf+ZQsnvbAOZUtltCrtL/pC40Ssem4iALrD?=
+ =?us-ascii?Q?Ihiraq9Zal0mhAoclMo8Atzg1yCFGknLLW4fEnWmlXm1oGAgOnAW5hQTT+FM?=
+ =?us-ascii?Q?/majNpFYCzA5RNeJtnh7KQhLOD1wUpG607UnbViL7L+DinywLp9Q8Szk/1SO?=
+ =?us-ascii?Q?/PC27O7J99RWm87BIrm1aJoQBgQGV+H+W6+mhqIC?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 105925ff-c920-4b5c-47df-08dd5076ff20
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86587819-ab44-4579-0fe8-08dd5076ffe5
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 23:50:17.4416
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 23:50:18.7192
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VXMecVqcEgy7Exm6r+m9V4p3lCqDjNakgWOBc5pFsy6dusEwsw5iss1drPtAMhdd
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6Ptw7INMBVHc/oZUmG5EtYvUzIrgKvYOqQ7xmaWSt2+BfzBC5ieYicryTyrjEtQB
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4326
 
-Hi all,
+A preparation patch for non-uniform folio split, which always split a
+folio into half iteratively, and minimal xarray entry split.
 
-This patchset adds a new buddy allocator like (or non-uniform) large folio
-split from a order-n folio to order-m with m < n. It reduces
-1. the total number of after-split folios from 2^(n-m) to n-m+1;
-2. the amount of memory needed for multi-index xarray split from 2^(n/6-m/6) to
-   n/6-m/6, assuming XA_CHUNK_SHIFT=6;
-3. keep more large folios after a split from all order-m folios to
-   order-(n-1) to order-m folios.
-For example, to split an order-9 to order-0, folio split generates 10
-(or 11 for anonymous memory) folios instead of 512, allocates 1 xa_node
-instead of 8, and leaves 1 order-8, 1 order-7, ..., 1 order-1 and 2 order-0
-folios (or 4 order-0 for anonymous memory) instead of 512 order-0 folios.
+Currently, xas_split_alloc() and xas_split() always split all slots from a
+multi-index entry.  They cost the same number of xa_node as the
+to-be-split slots.  For example, to split an order-9 entry, which takes
+2^(9-6)=8 slots, assuming XA_CHUNK_SHIFT is 6 (!CONFIG_BASE_SMALL), 8
+xa_node are needed.  Instead xas_try_split() is intended to be used
+iteratively to split the order-9 entry into 2 order-8 entries, then split
+one order-8 entry, based on the given index, to 2 order-7 entries, ...,
+and split one order-1 entry to 2 order-0 entries.  When splitting the
+order-6 entry and a new xa_node is needed, xas_try_split() will try to
+allocate one if possible.  As a result, xas_try_split() would only need
+one xa_node instead of 8.
 
-It is on top of mm-everything-2025-02-15-05-49 with V7 reverted. It is ready to
-be merged.
+When a new xa_node is needed during the split, xas_try_split() can try to
+allocate one but no more.  -ENOMEM will be return if a node cannot be
+allocated.  -EINVAL will be return if a sibling node is split or cascade
+split happens, where two or more new nodes are needed, and these are not
+supported by xas_try_split().
 
+xas_split_alloc() and xas_split() split an order-9 to order-0:
 
-Instead of duplicating existing split_huge_page*() code, __folio_split()
-is introduced as the shared backend code for both
-split_huge_page_to_list_to_order() and folio_split(). __folio_split()
-can support both uniform split and buddy allocator like (or non-uniform) split.
-All existing split_huge_page*() users can be gradually converted to use
-folio_split() if possible. In this patchset, I converted
-truncate_inode_partial_folio() to use folio_split().
+         ---------------------------------
+         |   |   |   |   |   |   |   |   |
+         | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+         |   |   |   |   |   |   |   |   |
+         ---------------------------------
+           |   |                   |   |
+     -------   ---               ---   -------
+     |           |     ...       |           |
+     V           V               V           V
+----------- -----------     ----------- -----------
+| xa_node | | xa_node | ... | xa_node | | xa_node |
+----------- -----------     ----------- -----------
 
-xfstests quick group passed for both tmpfs and xfs.
+xas_try_split() splits an order-9 to order-0:
+   ---------------------------------
+   |   |   |   |   |   |   |   |   |
+   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+   |   |   |   |   |   |   |   |   |
+   ---------------------------------
+     |
+     |
+     V
+-----------
+| xa_node |
+-----------
 
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: Kirill A. Shuemov <kirill.shutemov@linux.intel.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Yang Shi <yang@os.amperecomputing.com>
+Cc: Yu Zhao <yuzhao@google.com>
+Cc: Zi Yan <ziy@nvidia.com>
+---
+ Documentation/core-api/xarray.rst |  14 ++-
+ include/linux/xarray.h            |   7 ++
+ lib/test_xarray.c                 |  47 ++++++++++
+ lib/xarray.c                      | 138 ++++++++++++++++++++++++++----
+ tools/testing/radix-tree/Makefile |   1 +
+ 5 files changed, 190 insertions(+), 17 deletions(-)
 
-Changelog
-===
-From V7[9]:
-1. Fixed a wrong function name in lib/test_xarray.c.
-2. Made __split_folio_to_order() never fail, since the old order check
-   is already done in __folio_split(). (per David Hildenbrand)
-3. Fixed an issue reported by syzbot[10] by not dropping the original
-   folio during truncate.
-4. Fixed a WARNING when READ_ONLY_THP_FOR_FS is enabled. (Thank David
-   Hildenbrand for reporting the issue)
-5. Used two separate struct page* parameters, split_at and lock_at, to
-   specify at which subpage the non-uniform split happens and which subpage
-   to keep locked after the split, respectively. It improves code
-   readability.
-
-From V6[8]:
-1. Added an xarray function xas_try_split() to support iterative folio split,
-   removing the need of using xas_split_alloc() and xas_split(). The
-   function guarantees that at most one xa_node is allocated for each
-   call.
-2. Added concrete numbers of after-split folios and xa_node savings to
-   cover letter, commit log. (per Andrew)
-
-From V5[7]:
-1. Split shmem to any lower order patches are in mm tree, so dropped
-   from this series.
-2. Rename split_folio_at() to try_folio_split() to clarify that
-   non-uniform split will not be used if it is not supported.
-
-From V4[6]:
-1. Enabled shmem support in both uniform and buddy allocator like split
-   and added selftests for it.
-2. Added functions to check if uniform split and buddy allocator like
-   split are supported for the given folio and order.
-3. Made truncate fall back to uniform split if buddy allocator split is
-   not supported (CONFIG_READ_ONLY_THP_FOR_FS and FS without large folio).
-4. Added the missing folio_clear_has_hwpoisoned() to
-   __split_unmapped_folio().
-
-From V3[5]:
-1. Used xas_split_alloc(GFP_NOWAIT) instead of xas_nomem(), since extra
-   operations inside xas_split_alloc() are needed for correctness.
-2. Enabled folio_split() for shmem and no issue was found with xfstests
-   quick test group.
-3. Split both ends of a truncate range in truncate_inode_partial_folio()
-   to avoid wasting memory in shmem truncate (per David Hildenbrand).
-4. Removed page_in_folio_offset() since page_folio() does the same
-   thing.
-5. Finished truncate related tests from xfstests quick test group on XFS and
-   tmpfs without issues.
-6. Disabled buddy allocator like split on CONFIG_READ_ONLY_THP_FOR_FS
-   and FS without large folio. This check was missed in the prior
-   versions.
-
-From V2[3]:
-1. Incorporated all the feedback from Kirill[4].
-2. Used GFP_NOWAIT for xas_nomem().
-3. Tested the code path when xas_nomem() fails.
-4. Added selftests for folio_split().
-5. Fixed no THP config build error.
-
-From V1[2]:
-1. Split the original patch 1 into multiple ones for easy review (per
-   Kirill).
-2. Added xas_destroy() to avoid memory leak.
-3. Fixed nr_dropped not used error (per kernel test robot).
-4. Added proper error handling when xas_nomem() fails to allocate memory
-   for xas_split() during buddy allocator like split.
-
-From RFC[1]:
-1. Merged backend code of split_huge_page_to_list_to_order() and
-   folio_split(). The same code is used for both uniform split and buddy
-   allocator like split.
-2. Use xas_nomem() instead of xas_split_alloc() for folio_split().
-3. folio_split() now leaves the first after-split folio unlocked,
-   instead of the one containing the given page, since
-   the caller of truncate_inode_partial_folio() locks and unlocks the
-   first folio.
-4. Extended split_huge_page debugfs to use folio_split().
-5. Added truncate_inode_partial_folio() as first user of folio_split().
-
-
-Design
-===
-
-folio_split() splits a large folio in the same way as buddy allocator
-splits a large free page for allocation. The purpose is to minimize the
-number of folios after the split. For example, if user wants to free the
-3rd subpage in a order-9 folio, folio_split() will split the order-9 folio
-as:
-O-0, O-0, O-0, O-0, O-2, O-3, O-4, O-5, O-6, O-7, O-8 if it is anon
-O-1,      O-0, O-0, O-2, O-3, O-4, O-5, O-6, O-7, O-9 if it is pagecache
-Since anon folio does not support order-1 yet.
-
-The split process is similar to existing approach:
-1. Unmap all page mappings (split PMD mappings if exist);
-2. Split meta data like memcg, page owner, page alloc tag;
-3. Copy meta data in struct folio to sub pages, but instead of spliting
-   the whole folio into multiple smaller ones with the same order in a
-   shot, this approach splits the folio iteratively. Taking the example
-   above, this approach first splits the original order-9 into two order-8,
-   then splits left part of order-8 to two order-7 and so on;
-4. Post-process split folios, like write mapping->i_pages for pagecache,
-   adjust folio refcounts, add split folios to corresponding list;
-5. Remap split folios
-6. Unlock split folios.
-
-
-__split_unmapped_folio() and __split_folio_to_order() replace
-__split_huge_page() and __split_huge_page_tail() respectively.
-__split_unmapped_folio() uses different approaches to perform
-uniform split and buddy allocator like split:
-1. uniform split: one single call to __split_folio_to_order() is used to
-   uniformly split the given folio. All resulting folios are put back to
-   the list after split. The folio containing the given page is left to
-   caller to unlock and others are unlocked.
-
-2. buddy allocator like (or non-uniform) split: (old_order - new_order) calls
-   to __split_folio_to_order() are used to split the given folio at order N to
-   order N-1. After each call, the target folio is changed to the one
-   containing the page, which is given as a folio_split() parameter.
-   After each call, folios not containing the page are put back to the list.
-   The folio containing the page is put back to the list when its order
-   is new_order. All folios are unlocked except the first folio, which
-   is left to caller to unlock.
-
-
-Patch Overview
-===
-1. Patch 1 added a new xarray function xas_try_split() to perform
-   iterative xarray split.
-2. Patch 2 added __split_unmapped_folio() and __split_folio_to_order() to
-   prepare for moving to new backend split code.
-
-3. Patch 3 moved common code in split_huge_page_to_list_to_order() to
-   __folio_split().
-
-4. Patch 4 added new folio_split() and made
-   split_huge_page_to_list_to_order() share the new
-   __split_unmapped_folio() with folio_split().
-
-5. Patch 5 removed no longer used __split_huge_page() and
-   __split_huge_page_tail().
-
-6. Patch 6 added a new in_folio_offset to split_huge_page debugfs for
-   folio_split() test.
-
-7. Patch 7 used try_folio_split() for truncate operation.
-
-8. Patch 8 added folio_split() tests.
-
-
-Any comments and/or suggestions are welcome. Thanks.
-
-[1] https://lore.kernel.org/linux-mm/20241008223748.555845-1-ziy@nvidia.com/
-[2] https://lore.kernel.org/linux-mm/20241028180932.1319265-1-ziy@nvidia.com/
-[3] https://lore.kernel.org/linux-mm/20241101150357.1752726-1-ziy@nvidia.com/
-[4] https://lore.kernel.org/linux-mm/e6ppwz5t4p4kvir6eqzoto4y5fmdjdxdyvxvtw43ncly4l4ogr@7ruqsay6i2h2/
-[5] https://lore.kernel.org/linux-mm/20241205001839.2582020-1-ziy@nvidia.com/
-[6] https://lore.kernel.org/linux-mm/20250106165513.104899-1-ziy@nvidia.com/
-[7] https://lore.kernel.org/linux-mm/20250116211042.741543-1-ziy@nvidia.com/
-[8] https://lore.kernel.org/linux-mm/20250205031417.1771278-1-ziy@nvidia.com/
-[9] https://lore.kernel.org/linux-mm/20250211155034.268962-1-ziy@nvidia.com/
-[10] https://lore.kernel.org/all/67af65cb.050a0220.21dd3.004a.GAE@google.com/
-
-Zi Yan (8):
-  xarray: add xas_try_split() to split a multi-index entry
-  mm/huge_memory: add two new (not yet used) functions for folio_split()
-  mm/huge_memory: move folio split common code to __folio_split()
-  mm/huge_memory: add buddy allocator like (non-uniform) folio_split()
-  mm/huge_memory: remove the old, unused __split_huge_page()
-  mm/huge_memory: add folio_split() to debugfs testing interface
-  mm/truncate: use buddy allocator like folio split for truncate
-    operation
-  selftests/mm: add tests for folio_split(), buddy allocator like split
-
- Documentation/core-api/xarray.rst             |  14 +-
- include/linux/huge_mm.h                       |  36 +
- include/linux/xarray.h                        |   7 +
- lib/test_xarray.c                             |  47 ++
- lib/xarray.c                                  | 138 +++-
- mm/huge_memory.c                              | 756 ++++++++++++------
- mm/truncate.c                                 |  31 +-
- tools/testing/radix-tree/Makefile             |   1 +
- .../selftests/mm/split_huge_page_test.c       |  34 +-
- 9 files changed, 783 insertions(+), 281 deletions(-)
-
+diff --git a/Documentation/core-api/xarray.rst b/Documentation/core-api/xarray.rst
+index f6a3eef4fe7f..c6c91cbd0c3c 100644
+--- a/Documentation/core-api/xarray.rst
++++ b/Documentation/core-api/xarray.rst
+@@ -489,7 +489,19 @@ Storing ``NULL`` into any index of a multi-index entry will set the
+ entry at every index to ``NULL`` and dissolve the tie.  A multi-index
+ entry can be split into entries occupying smaller ranges by calling
+ xas_split_alloc() without the xa_lock held, followed by taking the lock
+-and calling xas_split().
++and calling xas_split() or calling xas_try_split() with xa_lock. The
++difference between xas_split_alloc()+xas_split() and xas_try_alloc() is
++that xas_split_alloc() + xas_split() split the entry from the original
++order to the new order in one shot uniformly, whereas xas_try_split()
++iteratively splits the entry containing the index non-uniformly.
++For example, to split an order-9 entry, which takes 2^(9-6)=8 slots,
++assuming ``XA_CHUNK_SHIFT`` is 6, xas_split_alloc() + xas_split() need
++8 xa_node. xas_try_split() splits the order-9 entry into
++2 order-8 entries, then split one order-8 entry, based on the given index,
++to 2 order-7 entries, ..., and split one order-1 entry to 2 order-0 entries.
++When splitting the order-6 entry and a new xa_node is needed, xas_try_split()
++will try to allocate one if possible. As a result, xas_try_split() would only
++need 1 xa_node instead of 8.
+ 
+ Functions and structures
+ ========================
+diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+index 0b618ec04115..9eb8c7425090 100644
+--- a/include/linux/xarray.h
++++ b/include/linux/xarray.h
+@@ -1555,6 +1555,8 @@ int xa_get_order(struct xarray *, unsigned long index);
+ int xas_get_order(struct xa_state *xas);
+ void xas_split(struct xa_state *, void *entry, unsigned int order);
+ void xas_split_alloc(struct xa_state *, void *entry, unsigned int order, gfp_t);
++void xas_try_split(struct xa_state *xas, void *entry, unsigned int order,
++		gfp_t gfp);
+ #else
+ static inline int xa_get_order(struct xarray *xa, unsigned long index)
+ {
+@@ -1576,6 +1578,11 @@ static inline void xas_split_alloc(struct xa_state *xas, void *entry,
+ 		unsigned int order, gfp_t gfp)
+ {
+ }
++
++static inline void xas_try_split(struct xa_state *xas, void *entry,
++		unsigned int order, gfp_t gfp)
++{
++}
+ #endif
+ 
+ /**
+diff --git a/lib/test_xarray.c b/lib/test_xarray.c
+index 0e865bab4a10..b76d9809f5c1 100644
+--- a/lib/test_xarray.c
++++ b/lib/test_xarray.c
+@@ -1858,6 +1858,49 @@ static void check_split_1(struct xarray *xa, unsigned long index,
+ 	xa_destroy(xa);
+ }
+ 
++static void check_split_2(struct xarray *xa, unsigned long index,
++				unsigned int order, unsigned int new_order)
++{
++	XA_STATE_ORDER(xas, xa, index, new_order);
++	unsigned int i, found;
++	void *entry;
++
++	xa_store_order(xa, index, order, xa, GFP_KERNEL);
++	xa_set_mark(xa, index, XA_MARK_1);
++
++	xas_lock(&xas);
++	xas_try_split(&xas, xa, order, GFP_KERNEL);
++	if (((new_order / XA_CHUNK_SHIFT) < (order / XA_CHUNK_SHIFT)) &&
++	    new_order < order - 1) {
++		XA_BUG_ON(xa, !xas_error(&xas) || xas_error(&xas) != -EINVAL);
++		xas_unlock(&xas);
++		goto out;
++	}
++	for (i = 0; i < (1 << order); i += (1 << new_order))
++		__xa_store(xa, index + i, xa_mk_index(index + i), 0);
++	xas_unlock(&xas);
++
++	for (i = 0; i < (1 << order); i++) {
++		unsigned int val = index + (i & ~((1 << new_order) - 1));
++		XA_BUG_ON(xa, xa_load(xa, index + i) != xa_mk_index(val));
++	}
++
++	xa_set_mark(xa, index, XA_MARK_0);
++	XA_BUG_ON(xa, !xa_get_mark(xa, index, XA_MARK_0));
++
++	xas_set_order(&xas, index, 0);
++	found = 0;
++	rcu_read_lock();
++	xas_for_each_marked(&xas, entry, ULONG_MAX, XA_MARK_1) {
++		found++;
++		XA_BUG_ON(xa, xa_is_internal(entry));
++	}
++	rcu_read_unlock();
++	XA_BUG_ON(xa, found != 1 << (order - new_order));
++out:
++	xa_destroy(xa);
++}
++
+ static noinline void check_split(struct xarray *xa)
+ {
+ 	unsigned int order, new_order;
+@@ -1869,6 +1912,10 @@ static noinline void check_split(struct xarray *xa)
+ 			check_split_1(xa, 0, order, new_order);
+ 			check_split_1(xa, 1UL << order, order, new_order);
+ 			check_split_1(xa, 3UL << order, order, new_order);
++
++			check_split_2(xa, 0, order, new_order);
++			check_split_2(xa, 1UL << order, order, new_order);
++			check_split_2(xa, 3UL << order, order, new_order);
+ 		}
+ 	}
+ }
+diff --git a/lib/xarray.c b/lib/xarray.c
+index 116e9286c64e..b9a63d7fbd58 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -1007,6 +1007,31 @@ static void node_set_marks(struct xa_node *node, unsigned int offset,
+ 	}
+ }
+ 
++static struct xa_node *__xas_alloc_node_for_split(struct xa_state *xas,
++		void *entry, gfp_t gfp)
++{
++	unsigned int i;
++	void *sibling = NULL;
++	struct xa_node *node;
++	unsigned int mask = xas->xa_sibs;
++
++	node = kmem_cache_alloc_lru(radix_tree_node_cachep, xas->xa_lru, gfp);
++	if (!node)
++		return NULL;
++	node->array = xas->xa;
++	for (i = 0; i < XA_CHUNK_SIZE; i++) {
++		if ((i & mask) == 0) {
++			RCU_INIT_POINTER(node->slots[i], entry);
++			sibling = xa_mk_sibling(i);
++		} else {
++			RCU_INIT_POINTER(node->slots[i], sibling);
++		}
++	}
++	RCU_INIT_POINTER(node->parent, xas->xa_alloc);
++
++	return node;
++}
++
+ /**
+  * xas_split_alloc() - Allocate memory for splitting an entry.
+  * @xas: XArray operation state.
+@@ -1025,7 +1050,6 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
+ 		gfp_t gfp)
+ {
+ 	unsigned int sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
+-	unsigned int mask = xas->xa_sibs;
+ 
+ 	/* XXX: no support for splitting really large entries yet */
+ 	if (WARN_ON(xas->xa_shift + 2 * XA_CHUNK_SHIFT <= order))
+@@ -1034,23 +1058,9 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
+ 		return;
+ 
+ 	do {
+-		unsigned int i;
+-		void *sibling = NULL;
+-		struct xa_node *node;
+-
+-		node = kmem_cache_alloc_lru(radix_tree_node_cachep, xas->xa_lru, gfp);
++		struct xa_node *node = __xas_alloc_node_for_split(xas, entry, gfp);
+ 		if (!node)
+ 			goto nomem;
+-		node->array = xas->xa;
+-		for (i = 0; i < XA_CHUNK_SIZE; i++) {
+-			if ((i & mask) == 0) {
+-				RCU_INIT_POINTER(node->slots[i], entry);
+-				sibling = xa_mk_sibling(i);
+-			} else {
+-				RCU_INIT_POINTER(node->slots[i], sibling);
+-			}
+-		}
+-		RCU_INIT_POINTER(node->parent, xas->xa_alloc);
+ 		xas->xa_alloc = node;
+ 	} while (sibs-- > 0);
+ 
+@@ -1122,6 +1132,102 @@ void xas_split(struct xa_state *xas, void *entry, unsigned int order)
+ 	xas_update(xas, node);
+ }
+ EXPORT_SYMBOL_GPL(xas_split);
++
++/**
++ * xas_try_split() - Try to split a multi-index entry.
++ * @xas: XArray operation state.
++ * @entry: New entry to store in the array.
++ * @order: Current entry order.
++ * @gfp: Memory allocation flags.
++ *
++ * The size of the new entries is set in @xas.  The value in @entry is
++ * copied to all the replacement entries. If and only if one xa_node needs to
++ * be allocated, the function will use @gfp to get one. If more xa_node are
++ * needed, the function gives EINVAL error.
++ *
++ * Context: Any context.  The caller should hold the xa_lock.
++ */
++void xas_try_split(struct xa_state *xas, void *entry, unsigned int order,
++		gfp_t gfp)
++{
++	unsigned int sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
++	unsigned int offset, marks;
++	struct xa_node *node;
++	void *curr = xas_load(xas);
++	int values = 0;
++
++	node = xas->xa_node;
++	if (xas_top(node))
++		return;
++
++	if (xas->xa->xa_flags & XA_FLAGS_ACCOUNT)
++		gfp |= __GFP_ACCOUNT;
++
++	marks = node_get_marks(node, xas->xa_offset);
++
++	offset = xas->xa_offset + sibs;
++
++	if (xas->xa_shift < node->shift) {
++		struct xa_node *child = xas->xa_alloc;
++		unsigned int expected_sibs =
++			(1 << ((order - 1) % XA_CHUNK_SHIFT)) - 1;
++
++		/*
++		 * No support for splitting sibling entries
++		 * (horizontally) or cascade split (vertically), which
++		 * requires two or more new xa_nodes.
++		 * Since if one xa_node allocation fails,
++		 * it is hard to free the prior allocations.
++		 */
++		if (sibs || xas->xa_sibs != expected_sibs) {
++			xas_destroy(xas);
++			xas_set_err(xas, -EINVAL);
++			return;
++		}
++
++		if (!child) {
++			child = __xas_alloc_node_for_split(xas, entry,
++					gfp);
++			if (!child) {
++				xas_destroy(xas);
++				xas_set_err(xas, -ENOMEM);
++				return;
++			}
++		}
++
++		xas->xa_alloc = rcu_dereference_raw(child->parent);
++		child->shift = node->shift - XA_CHUNK_SHIFT;
++		child->offset = offset;
++		child->count = XA_CHUNK_SIZE;
++		child->nr_values = xa_is_value(entry) ?
++				XA_CHUNK_SIZE : 0;
++		RCU_INIT_POINTER(child->parent, node);
++		node_set_marks(node, offset, child, xas->xa_sibs,
++				marks);
++		rcu_assign_pointer(node->slots[offset],
++				xa_mk_node(child));
++		if (xa_is_value(curr))
++			values--;
++		xas_update(xas, child);
++
++	} else {
++		do {
++			unsigned int canon = offset - xas->xa_sibs;
++
++			node_set_marks(node, canon, NULL, 0, marks);
++			rcu_assign_pointer(node->slots[canon], entry);
++			while (offset > canon)
++				rcu_assign_pointer(node->slots[offset--],
++						xa_mk_sibling(canon));
++			values += (xa_is_value(entry) - xa_is_value(curr)) *
++					(xas->xa_sibs + 1);
++		} while (offset-- > xas->xa_offset);
++	}
++
++	node->nr_values += values;
++	xas_update(xas, node);
++}
++EXPORT_SYMBOL_GPL(xas_try_split);
+ #endif
+ 
+ /**
+diff --git a/tools/testing/radix-tree/Makefile b/tools/testing/radix-tree/Makefile
+index 8b3591a51e1f..b2a6660bbd92 100644
+--- a/tools/testing/radix-tree/Makefile
++++ b/tools/testing/radix-tree/Makefile
+@@ -14,6 +14,7 @@ include ../shared/shared.mk
+ 
+ main:	$(OFILES)
+ 
++xarray.o: ../../../lib/test_xarray.c
+ idr-test.o: ../../../lib/test_ida.c
+ idr-test: idr-test.o $(CORE_OFILES)
+ 
 -- 
 2.47.2
 
