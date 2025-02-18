@@ -1,501 +1,317 @@
-Return-Path: <linux-kselftest+bounces-26857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ED92A3A086
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 15:54:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB4C7A3A083
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 15:53:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B5061627FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 14:51:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9892918843E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 14:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9848F26A0C9;
-	Tue, 18 Feb 2025 14:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B2226AAB6;
+	Tue, 18 Feb 2025 14:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CjAxObCt"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jVBo0z3s";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UOb4/TOE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32161146D6A;
-	Tue, 18 Feb 2025 14:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739890303; cv=none; b=K7R6AXLUCHk3PtKQe76gtd4UnlqsI0UX93KjV9AktCfBpiEqLIlUd6Uaf/mQLajXs3YPFHBd8MZkvFvY1wZpXli/CxYcWBEMWH4HZ42LDlDaFIuuR888+OQHkLdBrj337emEjNmU7BvTvA30m/H6C0V31gtWNkHPHwo+GCEXhGs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739890303; c=relaxed/simple;
-	bh=oTF9OGgQOo7QUPMtiM1xfzhROy2FfVJqIg5oGqolJuE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WvA404sgyzv80/efKdwkjdUhXjvuAYuOeLg+5j8l1zbAbpzF3Uw4EGa1TK5/SRlCNhN3QkhGKHltYAILz8/9H3H0jrEvDjzf+0O8QZxe3ynkaIaXOG2svGkQ9Iuk0fnd1q55t6bPvOBt84HpFe5xazWhR+GXAUz5QcXGR2pZItU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CjAxObCt; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30613802a6bso57751231fa.1;
-        Tue, 18 Feb 2025 06:51:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B3B26A1D3;
+	Tue, 18 Feb 2025 14:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739890406; cv=fail; b=rgfnlqwrDAgu9N0Q0Nu/pWSanGch8PwNqXgEKFbcQWvnPTkFQ0OKlRBNg1JbkeWW+s9O/jLt5Tq1Me7nrcEH5qnyGpsSPrm0zZKrBsTZagibt/QUGiy4hlws6Lvf4hgZ0QCgFEMWRNUDDpCwX5GGaQanIzUaIXKaT8GPg1L+zSE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739890406; c=relaxed/simple;
+	bh=gow4xfUAB4sqZAiNfbGt5xELJYJyyKhPslmY8xFbELE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=jN6mLL/eQUHsVETdMpVLS3iUDXJMieF5c6qr7SPm1WeNDJRQq0lRgE83Jx4rWQ9usR1LIoMg54lzo+ar9bWYVVUQwmbRqVN+gEt+ug/2hgEL8qa4VU5gYV/wf7CIJREDahCGx2rF73WqA+AxXsIWJLpuZF9TUP6/4tcHOYixlzU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jVBo0z3s; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UOb4/TOE; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IEHrx2008208;
+	Tue, 18 Feb 2025 14:53:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=m4AbTK+MUT9Uq3NIVG
+	rSHFe6Q3Hs0Ps0s7gtWeEMGmM=; b=jVBo0z3sWnUhg5wVISqdbF7gP+xLqry6Ga
+	3mQmMOnuH3Q2N4fl6P6rrLYS4z1EJswonwlIugOsGQrwSI0mbSh6y7b/BqQIN92k
+	By7saG1/gSj2ygqsJZPw1/qTti8UFXYUJMwIgjEi83mVCq7vqRnK61wGzgw4MyRq
+	MyZ9BiEynzi0iEf7co5jN0YIFimMi0YsD8PhpLPA7Y09NwqmyVKnJQheoGNtRjuV
+	Ggn/WHAa3ZQKs9iX2rn6l7C6VEHmjT/RZKJUvexm06hPmEbwNCKglL2EK1vAUm3S
+	IM1cu5NrWRBoWUZC1PgzaEPag4wdlXPOvh52GmHKONE6q4EHrFmw==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44tqxh6b48-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 14:53:08 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51IEkZGD005194;
+	Tue, 18 Feb 2025 14:53:07 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2175.outbound.protection.outlook.com [104.47.73.175])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44thc8vgx2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 14:53:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=etlxOLYIAcDyQnfsWs3dpC34EE2hdLAmdAmTooO0dzzCMPZ2P74sTZxC4winHJajAqpwhlqGPDnlKPlPnmbF2wq7lT/9vWzfiCIJNHPtZlhFySXH0trMiMJtLCUqSYB6XlPWyqUn6+JVdp5F1tdt6/n5wwun1srAOVNwww5Sp3Od8r/92b9sd77tpHB4maqW0Sw822rRdGauDJklBAEephXEGRU53zSmgu1eMRNxGRa5VqFuMenGAbL1Tx2fXyobCqdgz8+UhmUaORY2P039SwJKjcFTq6kX6/sVOqsbEtqVNZILaEn8qCX2Fj/IFKyR/rOuSyFYOvRAmzJ0M7nsJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m4AbTK+MUT9Uq3NIVGrSHFe6Q3Hs0Ps0s7gtWeEMGmM=;
+ b=LisKbl0aUVsTN0Nw6LE3yADC+mqoFL8O/M/QWagq36s0X/zeTq9M3KUwB9O5T3b+moU0HEiUpuJ2v688gc5aXhHK7UMVR92ifw1I3qJfAHisLLDuFRmUT57xisCnpbbBTauud78iXxRIxfOSuzQFxl7pB7oTV0AFkPcSdmDwENsI72gKNcKkqxPQR+S6Ucb3GeJ7qWMpudBwJ5XqBwPLm0Xjn2dOKbyh8+1HHev2nUTOlkJp20DdZhKRlzjlWzAO/eT5NbLtDWmA6eQb0hr4fl7fnf/ceEiubeaYfILXfSXPsohc1DzFRU5kbwXOlP3QK4rsdtHe8uCKliP+p4qCGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739890298; x=1740495098; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Bvz/zhAQ0hIVx678swznPxuw5OPR9vqZoFb1gQtV3A=;
-        b=CjAxObCt8mboSqzwzLQGvMfFBOynk8cnY640nY9n2qCCBqMzHPpZK+tUefqjJ0ctGG
-         dqWhJb0htoW+nd8ys1Alq8Bct0xT2HcYh96sh5HPLAhmCMNwQZm9I247qLkPB/GLptrX
-         zzQ2KbIVuNa0QKzmgXeGoGU5AkwMjgPhqTPoaAhM+lZZxjPahJPmInJ88QwmZjdGvVBI
-         IGlAa6yzv39udDveEgiabQj3P6+5P/4m+mLhs/yjytIvsr38AbZVz64MpMdhqZab2ojl
-         5tjcPdZtwR2Mxw5N555oRxS+Mukl5w7l0adeS4R/z30I5EiD8Gve9pBG8k9dYCgp5NjX
-         4Rtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739890298; x=1740495098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Bvz/zhAQ0hIVx678swznPxuw5OPR9vqZoFb1gQtV3A=;
-        b=mSvvfacxWm1UiMQqaFkuvN5DspTZBW9M+rU74/B4+S+pAD6qWpg1KTfOEadl2e5i6a
-         /TkGYLIM9L7RXQ+gQzeactZGyhKqLj8jJhOlaTOIWDNj8CxXK5g5hN9M4R8jirFshcZQ
-         GcHERsoWoLmKSN3w2Md7l96k95gp5iJI9xCoSJrtQGARhN5bYahg1nBqMjm7WT7RhC7e
-         XAYC/lFL3QSueJXE60XeX1exIms9pGlJYhWvoM5jisOdtWQCqjIozxyZPuzObSCqlSPG
-         1Tab7PwpMDlT0ytSNPhHKKiZI2syq4Jy7QschVhgrmtRYX8+3h6UlskdSpmywhJKo7ye
-         if5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUIee3mL6pDfbFGi9swu/7+LhXCDCLFDfVXrjK4SafVkL8yoVnHQWfgtOIHT+X7h4OvaDr6x/1U8O37A6tJKQg=@vger.kernel.org, AJvYcCUqnPcwaL7UXcl2vsqFg2QQCqLVIbE02bZ+XEWyxM8MXDNmDf8CTJSUAtJa/WDwVa16SrJQRXGKpAgIaRM=@vger.kernel.org, AJvYcCWkW+GyOj/q2qocM7NaFiBGoev3ILxHLsSi82zvU4R3geWImb/RLr2aBuk7NoH3DxHjVwt2UsF9v7IO7tCL39ZP@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqsTnxpN/NJwkIAadA2hQrlIMEif7bazVv8ZQRsIqElFkxSbeU
-	9VjoCAHVY/IInY+w1RWcUPM7WVo1FTC4FlRc/G/MWgsttxShUPB6IMEdL9TJW/6z+P95WiRCaK1
-	TtxwObN7iky3fkH0mQXxTJUJq0U0=
-X-Gm-Gg: ASbGncspEPFrTFBzXxjd7GzpC1S+yObQ91TjqYIOxDEdSUgGEH1Nf8Ub4DkIq56qJoA
-	3PH8sfDcdo6jdIlNokobeZe+CpKTCNTeei54ZkFym6ElQ/BLY/SIPEXt3T4eQ+ppAwcSiHP6jFJ
-	Mx6as+TFtmHEI1Ilx9pLJeDwjS6cBfLho=
-X-Google-Smtp-Source: AGHT+IH7HGD0q4iPuGZhFRFcS6rATjqs/v6yGEfyKos2K/Ufa4UaO80TefatQT/GqBa/n3jaUbCOLON5jyZ64RxibuE=
-X-Received: by 2002:a2e:95c4:0:b0:308:eb58:6581 with SMTP id
- 38308e7fff4ca-30927950313mr40566901fa.0.1739890297828; Tue, 18 Feb 2025
- 06:51:37 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m4AbTK+MUT9Uq3NIVGrSHFe6Q3Hs0Ps0s7gtWeEMGmM=;
+ b=UOb4/TOEwnfTeVWxx+9/WRh8FzSTKxYCijBR7hBFIyLa8+NJJOdP/hH3fYNFTlFULPoc22ktJQahPc/gb+KwWoLL/6RYWt5PJJljjsTsdCDv+/BE7id5m/sG6+7U4sqQJkogI142mTO73KTgukHYM8vc3MrQ1sXxix7dnEzamuA=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by PH7PR10MB7765.namprd10.prod.outlook.com (2603:10b6:510:308::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.14; Tue, 18 Feb
+ 2025 14:53:04 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%5]) with mapi id 15.20.8445.017; Tue, 18 Feb 2025
+ 14:53:04 +0000
+Date: Tue, 18 Feb 2025 14:53:01 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>,
+        Juan Yescas <jyescas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>
+Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem
+ mappings
+Message-ID: <b5b9cfcb-341d-4a5a-a6b7-59526643ad71@lucifer.local>
+References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
+ <fbfae348-909b-48fa-9083-67696b02f15e@suse.cz>
+ <8d643393-ddc0-490d-8fad-ad0b2720afb1@lucifer.local>
+ <37b606be-f1ef-4abf-83ff-c1f34567568e@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37b606be-f1ef-4abf-83ff-c1f34567568e@redhat.com>
+X-ClientProxiedBy: LO4P265CA0118.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c6::8) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250214074051.1619256-1-davidgow@google.com> <20250214074051.1619256-2-davidgow@google.com>
- <CAJ-ks9kw7FTJ7EcHy8B+-1XFK8J4a-DuHLJhP1f3hPy10nOJZA@mail.gmail.com>
- <CABVgOSkcDPwWEz=Uo0q+HXSeQT4a5yPg8vb4BMkpZ0yyDu4wQA@mail.gmail.com>
- <CAJ-ks9mEocaBAhovLvjFuEPrSipLpOEzKOtJ7uGK5X-TG44QBw@mail.gmail.com> <CABVgOSmQVXAdRpZBCDo2G4at3-MNaX2xV565m_jVcyw0y7sDfg@mail.gmail.com>
-In-Reply-To: <CABVgOSmQVXAdRpZBCDo2G4at3-MNaX2xV565m_jVcyw0y7sDfg@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 18 Feb 2025 09:51:00 -0500
-X-Gm-Features: AWEUYZnDh82qsBXFcGIeQnh0619ef6POYyeoE5WFptffaGZZK5rmXWEWl3_J9_4
-Message-ID: <CAJ-ks9kL6e7hBUMN+jaVy=DP2ixHXUE19eKgb9fywZY8jM+mDA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] rust: kunit: add KUnit case and suite macros
-To: David Gow <davidgow@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
-	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Benno Lossin <benno.lossin@proton.me>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Matt Gilbride <mattgilbride@google.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|PH7PR10MB7765:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25f79209-44dd-4696-dbde-08dd502bf2eb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Yg1EJ7aLHzrjfQ9QLvxbXqcYOJm2RT7SzdjujwQC9MXPiwavKEfzBVcPVt3h?=
+ =?us-ascii?Q?Lr3X+hey3ulL23F9M79LBixedEeil+piAdJp2hwFSCWOBynFscCgZwvwQZDn?=
+ =?us-ascii?Q?jhFOGqYEuYrCGTotTLwjUhqsaJ3DJMDcjhHRmOoiZ+NbhdZz/YyZz9JMSZTX?=
+ =?us-ascii?Q?tFBRnQmgp/6vM1H+SHPUckivLQY9yRbdyeXjA4Uq2Jw2n/Ng0STQgxvclcEe?=
+ =?us-ascii?Q?MP833sX844VgVJABAo8/pOd8nL/WORbWIVcD0xCQSj2P4O+z5Ttjm9qzCF4X?=
+ =?us-ascii?Q?LAga+k57XwvKt5Aw5rR9Ju3kScF8AsK3/VPyQLxlN5SWLrF9mNangxPuwhvy?=
+ =?us-ascii?Q?NiMaD03//eShEJKDUPc8btTDdO2XUzMsW2s8d+5Kk36UA267CKo/9CwlDvWl?=
+ =?us-ascii?Q?N5mTYW0Oa/h/q1+xir+IveCChVf+IjD4MWR4f/J0WnJBaqZpAfY6fjcDZ2Cg?=
+ =?us-ascii?Q?wLTlEYZ8P9XYSb8r90LiEos1FOupHJRbbEc/7SlfamVmJqY41iHM9ALT7bDB?=
+ =?us-ascii?Q?+L7xfowuyma1NlvYpQX/bniuY8u9qaQcWbRgd0jfwDsy4AIu+UnFeNqxrvw0?=
+ =?us-ascii?Q?TogTNVIArHTG3T/omxdIaVSUCaDVAcB34iFTvdohhKsfeZZHxEYJW6kDhvZ/?=
+ =?us-ascii?Q?NmIdnCnAbTvvOaf4zRcPSy87hciZMEnW7kMjsOe1SzLKyTJikpX1uuD0JGNJ?=
+ =?us-ascii?Q?oYsUTx6R95OdyRQnXEAPo8zZ67hFD8xDFpY7e8KilbPKFa9ukfTX9XU8VFrS?=
+ =?us-ascii?Q?PZorht0SH3/RfArzEhTa/oyiLoG5P8kZmYdhCN69oYQWE0gajAELIceSscg+?=
+ =?us-ascii?Q?h0AaHLKPzc2TpEOf3fP2m9DKswVAeSboZSamwH/h6IpbPVzJxFniZRnGstJr?=
+ =?us-ascii?Q?7IvALWAqhg3zaoSmr4WYltaZiRns0a0jSCg0Si3NvtzYkHB18MQCUxgUYJyF?=
+ =?us-ascii?Q?1ulHtfDfKIc8BhNPw1Zren7MwVZhl26FS/fi7HDRvxdaOnsXqSPTt6wIty44?=
+ =?us-ascii?Q?347YRQcMH55SfreNEKupIVLhvLjkLrTP9fOTl928l5x9hjtjloyA2VjY8Tb6?=
+ =?us-ascii?Q?Tb4VjjJqUj71RK601MxItyVMMorE0p60/KLa66X78INBnAIfJcCTw/CupbUi?=
+ =?us-ascii?Q?k3p899RjHGYXvH6gOmQ4nKOe3cwfubs2AgyiMZ9KAiLZnRLsxpXpNWPEO6v/?=
+ =?us-ascii?Q?nTjDFMljuGiOJh0x1vdkMA0fsmx/FhRXg+Tsc05j0+vmFnfOzl7hWwH3r2N/?=
+ =?us-ascii?Q?9f44dv0+WZi16cT/dmcAwAi1riC8HnIkLptlT2CBPhDBszVbExZgdaFaRlTA?=
+ =?us-ascii?Q?dyZFXQ60bY+BMwcmbcvyQ50Q16PLPfNHWNzeTHrbuxyzs/s8L5zS/d9cw+l4?=
+ =?us-ascii?Q?5ND8p7s85TVvkC8t81nlMD0hIKMf?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Z34Cf/TYq0UxxPNq94uQoKTRaJ7fpNimaysEBUsbklDTUyvbjHCNFesxYeAs?=
+ =?us-ascii?Q?HSUfXVwJexnCEqxGeSDbBmosOZLtQCD7I6W3spYFgGBNUdYyQvAOppVIaPtq?=
+ =?us-ascii?Q?AK0vU5DyojW5RDqAAqqoEhxiPcySsewvKaCkuDwoXXXkM1iuTAGVtiYBt+HX?=
+ =?us-ascii?Q?DOwsY/Hz0n8fg1EJku+TZxNHcPWhi849s+iS8mcYI+KXMHS6A5moWz/IEXtM?=
+ =?us-ascii?Q?eGsGSwlyLxn9AGWcbn4ztiawTiBluzCcK+Kmfk6b3lt1eylcD9xzAT1nhNct?=
+ =?us-ascii?Q?VHcq5UY8/WsmBrpRRKmABLPVacQOBRGi553iqhFOJyDuJ86PgBhgAzktkNm7?=
+ =?us-ascii?Q?xXA0kHYoHxAQ3yGZOAK4b9ZyWj94Zn/UyMAiFWCYvqClVqiHYJAYHUq7h/3U?=
+ =?us-ascii?Q?ksuQ7jzfC+QIuxmF2/gfKgilRIL2LYvn9oSyFdUtRylS1jYu/5lgVyi66y1w?=
+ =?us-ascii?Q?A+lrIAIonIxWI/pZ/Cr+v+dojCwg0A9OLKa0qUh9QyVPCm50DDAxXu6Nkb4O?=
+ =?us-ascii?Q?1icZQObaF1mKytQlXIH8GSyWxIMArsO/WKnIjNxSyq4kZaNzVoQcnomeu5Cu?=
+ =?us-ascii?Q?agRJlqVmpuwld4s6Zt2ZNZZvUGAXiiwPMDJ6FJkq8nOjfKqyee+4tVh3L/VU?=
+ =?us-ascii?Q?zVnIhRQWPw++mhlUU9SrIgRelyzSMeVjeN0DivyoFT9cRnEDR7cfmNWqDBZp?=
+ =?us-ascii?Q?f3h3SDtRDVMReQUYFvjZFPphbuQpUgjLBNCSAfkU8EmqNYB9E3KYUMXs5Y9i?=
+ =?us-ascii?Q?uRsekl2ItN/NuKC8naNAnlhVR5o+HRWbUcxc6CA7GogORxSokxBkRr5uD/oH?=
+ =?us-ascii?Q?7Ly3v0g0AqR/GL4CPE+EJvFgd02SU4lEn8wvNFYZ1PmCHk+s0KpF6D0yNH1v?=
+ =?us-ascii?Q?m5SZAnQ1gnn7DzXarcuhIdYvhbpVOHteNo0KvWd15mgdHoIuy64uO1KhfWqV?=
+ =?us-ascii?Q?8Kl6uEmfuykf5kpPjsYXA36sbzqqo9ZhDGXvAxhfgGophKoaYpqnWwKcnp5O?=
+ =?us-ascii?Q?GAoOrd97CXypeVO6z7gXVQcXc4FCR4nurPPIkbEFpVGsegmpAMFGwEsM6GHF?=
+ =?us-ascii?Q?NitWUgWsF/sHJ9twDXJqYxNN2YDDxxyFj9PRawoLV3/44/yeW8TQ32o/8WtY?=
+ =?us-ascii?Q?bEB7bSZ5r1DND2de90DFbP6ui7tpBC+5UMHovwue4oq7RoTwJiiK1wsSpBa/?=
+ =?us-ascii?Q?HJUHdIfUraqsB69+WpVrsH6H5QCI7AWu5yuiXlZNNUvRZkSNQ3WnDhQ46grP?=
+ =?us-ascii?Q?IbE6yL4KWFbGRnq4dA4cYcCvqdIRSmvMIKqV445CjKXSvX6BFbmCV19xASsv?=
+ =?us-ascii?Q?wrSfXblomNDDsc+qk0Afa/WK4vhFKKbsGj4qYNdOyXAXMyMIGGZSNlM4BjvZ?=
+ =?us-ascii?Q?FJA4c6brw/Tow4Dt4qoA9Y+SX5k3peGMEUPFQ2uM7a91WauXimcdc3zeNVZ9?=
+ =?us-ascii?Q?2PAPoJt7iBIW/PBRw+YMvzH8XQXqy9UJJFwJO8QIYeOYlKXXCDWk4VgToeBb?=
+ =?us-ascii?Q?qqz8yb9xwxc8/xvRi57QVvEUcBamRMFl3D+jqIpAAlMVC/qaHYFBpkkggeBf?=
+ =?us-ascii?Q?nSG6o2MXnnU0sf0JiodEPgMvIymw0CKiOyJ9Dz37VPhIpZwy1i0is9o5fkv/?=
+ =?us-ascii?Q?Dw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Hmdq/mwktn9oXc6kBMxlet7ejpjdyLWFVeXY7BJVcgBsRhyPkaX5hFpSkMWyyu13RpGQSfaeHEQygQx2XbegEbLZmY8oK2XMW3ZFHmtNcWiGTxVWShOxw6nWCapjWtzKuykqMWPKUlWx80pe2d5ONn1Ef8+jWr4u0sR6bQlKaMnFT4WFZN99neWl2w7Z1BEcGZH2Nj8JGIFIZG8xroKfBClgvTYArbGZO0Ow0nqMFdcZA/uabAaKmgoU8fhSWv7Q2jxxgqCUEzd+vU/rH/mW91ssqpKcsrwgRlQyE0OAjB8qj1HPg+K02uZYyFJ7FkwYeR9mOMqTnx1U89TeBmN0j7EkA9AyAqw+Ix2OfT1OgMhr4U9Uv0hiMMBRQWcb6onfLGe/kVHFLWyuOIxgBj0LN1Il4jsJWzrzZ8ZCfFp/6wZBOowYzIBjpChLv4ejNYDjgMLmYbkYE6RE4fRp8u88zSDLIT4tsa/8l2Kb/dGAJButns6ruMKpfTZa86S+i7AWxlPLjQASHaDWFel1Bvok1zLX7TrrQNfUX5UWgVgm3LzStg3C8ocjeXggnUQ9qs/4wUbngyzUSDUlPJIpBBpU5gAIB1hslMrQK9LWtkWFKvY=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25f79209-44dd-4696-dbde-08dd502bf2eb
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 14:53:04.7110
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bgj3vCTBk1nQ2Ut+N2fVgtBXxaJ+X9sK0+ksBX1U73ethJu0yOCb42zgI0v91Fxm6Wm7ffA6+z+SbazoPzPqExaOml13HzhNy/TQEC3XxGE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB7765
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-18_07,2025-02-18_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2501170000 definitions=main-2502180110
+X-Proofpoint-ORIG-GUID: qCP1Zfs39O2QSwvqD8m8bh2Snxy0QyUc
+X-Proofpoint-GUID: qCP1Zfs39O2QSwvqD8m8bh2Snxy0QyUc
 
-On Tue, Feb 18, 2025 at 3:51=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
+On Tue, Feb 18, 2025 at 03:35:19PM +0100, David Hildenbrand wrote:
+> On 18.02.25 14:05, Lorenzo Stoakes wrote:
+> > On Tue, Feb 18, 2025 at 01:12:05PM +0100, Vlastimil Babka wrote:
+> > > On 2/13/25 19:16, Lorenzo Stoakes wrote:
+> > > > The guard regions feature was initially implemented to support anonymous
+> > > > mappings only, excluding shmem.
+> > > >
+> > > > This was done such as to introduce the feature carefully and incrementally
+> > > > and to be conservative when considering the various caveats and corner
+> > > > cases that are applicable to file-backed mappings but not to anonymous
+> > > > ones.
+> > > >
+> > > > Now this feature has landed in 6.13, it is time to revisit this and to
+> > > > extend this functionality to file-backed and shmem mappings.
+> > > >
+> > > > In order to make this maximally useful, and since one may map file-backed
+> > > > mappings read-only (for instance ELF images), we also remove the
+> > > > restriction on read-only mappings and permit the establishment of guard
+> > > > regions in any non-hugetlb, non-mlock()'d mapping.
+> > >
+> > > Do you plan to address mlock later too? I guess somebody might find use for
+> > > those. Is there some fundamental issue or just that we need to define some
+> > > good semantics for corner cases? (i.e. if pages are already populated in the
+> > > mlocked area, discarding them by replacing with guard pte's goes against
+> > > that, so do we allow it or not?).
+> >
+> > Yeah that's the fundamental issue with mlock, it does not interact with the
+> > zapping part of MADV_GUARD_INSTALL, and that is why we disallow it (but not so
+> > for MADV_GUARD_REMOVE, as if a VMA that contains guard regions is locked
+> > _afterwards_ there will be no zapping).
+> >
+> > We could potentially expose an equivalent, as there are for other flags, a
+> > _LOCKED variant of the madvise() flag, like MADV_GUARD_INSTALL_LOCKED to make
+> > this explicit.
+> >
+> > That is probably the most sensible option, if there is a need for this!
 >
-> On Sat, 15 Feb 2025 at 21:01, Tamir Duberstein <tamird@gmail.com> wrote:
-> >
-> > On Sat, Feb 15, 2025 at 4:03=E2=80=AFAM David Gow <davidgow@google.com>=
- wrote:
-> > >
-> > > On Fri, 14 Feb 2025 at 22:41, Tamir Duberstein <tamird@gmail.com> wro=
-te:
-> > > >
-> > > > Very excited to see this progress.
-> > > >
-> > > > On Fri, Feb 14, 2025 at 2:41=E2=80=AFAM David Gow <davidgow@google.=
-com> wrote:
-> > > > >
-> > > > > From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> > > > >
-> > > > > Add a couple of Rust const functions and macros to allow to devel=
-op
-> > > > > KUnit tests without relying on generated C code:
-> > > > >
-> > > > >  - The `kunit_unsafe_test_suite!` Rust macro is similar to the
-> > > > >    `kunit_test_suite` C macro. It requires a NULL-terminated arra=
-y of
-> > > > >    test cases (see below).
-> > > > >  - The `kunit_case` Rust function is similar to the `KUNIT_CASE` =
-C macro.
-> > > > >    It generates as case from the name and function.
-> > > > >  - The `kunit_case_null` Rust function generates a NULL test case=
-, which
-> > > > >    is to be used as delimiter in `kunit_test_suite!`.
-> > > > >
-> > > > > While these functions and macros can be used on their own, a futu=
-re
-> > > > > patch will introduce another macro to create KUnit tests using a
-> > > > > user-space like syntax.
-> > > > >
-> > > > > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com=
+> mlock is weird, because it assumes that memory will be faulted in in the whole VMA.
 >
-> > > > > Co-developed-by: Matt Gilbride <mattgilbride@google.com>
-> > > > > Signed-off-by: Matt Gilbride <mattgilbride@google.com>
-> > > > > Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> > > > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> > > > > Co-developed-by: David Gow <davidgow@google.com>
-> > > > > Signed-off-by: David Gow <davidgow@google.com>
-> > > > > ---
-> > > > >
-> > > > > Changes since v5:
-> > > > > https://lore.kernel.org/all/20241213081035.2069066-2-davidgow@goo=
-gle.com/
-> > > > > - Rebased against 6.14-rc1
-> > > > > - Several documentation touch-ups, including noting that the exam=
-ple
-> > > > >   test function need not be unsafe. (Thanks, Miguel)
-> > > > > - Remove the need for static_mut_refs, by using core::addr_of_mut=
-!()
-> > > > >   combined with a cast. (Thanks, Miguel)
-> > > > >   - While this should also avoid the need for const_mut_refs, it =
-seems
-> > > > >     to have been enabled for other users anyway.
-> > > > > - Use ::kernel::ffi::c_char for C strings, rather than i8 directl=
-y.
-> > > > >   (Thanks, Miguel)
-> > > > >
-> > > > > Changes since v4:
-> > > > > https://lore.kernel.org/linux-kselftest/20241101064505.3820737-2-=
-davidgow@google.com/
-> > > > > - Rebased against 6.13-rc1
-> > > > > - Allowed an unused_unsafe warning after the behaviour of addr_of=
-_mut!()
-> > > > >   changed in Rust 1.82. (Thanks Boqun, Miguel)
-> > > > > - Fix a couple of minor rustfmt issues which were triggering chec=
-kpatch
-> > > > >   warnings.
-> > > > >
-> > > > > Changes since v3:
-> > > > > https://lore.kernel.org/linux-kselftest/20241030045719.3085147-4-=
-davidgow@google.com/
-> > > > > - The kunit_unsafe_test_suite!() macro now panic!s if the suite n=
-ame is
-> > > > >   too long, triggering a compile error. (Thanks, Alice!)
-> > > > >
-> > > > > Changes since v2:
-> > > > > https://lore.kernel.org/linux-kselftest/20241029092422.2884505-2-=
-davidgow@google.com/
-> > > > > - The kunit_unsafe_test_suite!() macro will truncate the name of =
-the
-> > > > >   suite if it is too long. (Thanks Alice!)
-> > > > > - We no longer needlessly use UnsafeCell<> in
-> > > > >   kunit_unsafe_test_suite!(). (Thanks Alice!)
-> > > > >
-> > > > > Changes since v1:
-> > > > > https://lore.kernel.org/lkml/20230720-rustbind-v1-1-c80db349e3b5@=
-google.com/
-> > > > > - Rebase on top of rust-next
-> > > > > - As a result, KUnit attributes are new set. These are hardcoded =
-to the
-> > > > >   defaults of "normal" speed and no module name.
-> > > > > - Split the kunit_case!() macro into two const functions, kunit_c=
-ase()
-> > > > >   and kunit_case_null() (for the NULL terminator).
-> > > > >
-> > > > > ---
-> > > > >  rust/kernel/kunit.rs | 121 +++++++++++++++++++++++++++++++++++++=
-++++++
-> > > > >  1 file changed, 121 insertions(+)
-> > > > >
-> > > > > diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> > > > > index 824da0e9738a..d34a92075174 100644
-> > > > > --- a/rust/kernel/kunit.rs
-> > > > > +++ b/rust/kernel/kunit.rs
-> > > > > @@ -161,3 +161,124 @@ macro_rules! kunit_assert_eq {
-> > > > >          $crate::kunit_assert!($name, $file, $diff, $left =3D=3D =
-$right);
-> > > > >      }};
-> > > > >  }
-> > > > > +
-> > > > > +/// Represents an individual test case.
-> > > > > +///
-> > > > > +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminat=
-ed list of valid test cases.
-> > > > > +/// Use `kunit_case_null` to generate such a delimiter.
-> > > >
-> > > > Can both of these be linkified? [`kunit_unsafe_test_suite!`] and
-> > > > [`kunit_case_null`]. There are more instances below.
-> > > >
-> > >
-> > > I've done this here. I've not linkified absolutely everything, but th=
-e
-> > > most obvious/prominent ones should be done.
-> > >
-> > > > > +#[doc(hidden)]
-> > > > > +pub const fn kunit_case(
-> > > > > +    name: &'static kernel::str::CStr,
-> > > > > +    run_case: unsafe extern "C" fn(*mut kernel::bindings::kunit)=
-,
-> > > > > +) -> kernel::bindings::kunit_case {
-> > > > > +    kernel::bindings::kunit_case {
-> > > > > +        run_case: Some(run_case),
-> > > > > +        name: name.as_char_ptr(),
-> > > > > +        attr: kernel::bindings::kunit_attributes {
-> > > > > +            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NOR=
-MAL,
-> > > > > +        },
-> > > > > +        generate_params: None,
-> > > > > +        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
-> > > > > +        module_name: core::ptr::null_mut(),
-> > > > > +        log: core::ptr::null_mut(),
-> > > >
-> > > > These members, after `name`, can be spelled `..kunit_case_null()` t=
-o
-> > > > avoid some repetition.
-> > >
-> > > I'm going to leave this as-is, as logically, the NULL terminator case
-> > > and the 'default' case are two different things (even if, in practice=
-,
-> > > they have the same values). And personally, I find it clearer to have
-> > > them more explicitly set here for now.
-> > >
-> > > It is a nice thought, though, so I reserve the right to change my min=
-d
-> > > in the future. :-)
-> > >
-> > > > > +    }
-> > > > > +}
-> > > > > +
-> > > > > +/// Represents the NULL test case delimiter.
-> > > > > +///
-> > > > > +/// The `kunit_unsafe_test_suite!` macro expects a NULL-terminat=
-ed list of test cases. This
-> > > > > +/// function returns such a delimiter.
-> > > > > +#[doc(hidden)]
-> > > > > +pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
-> > > > > +    kernel::bindings::kunit_case {
-> > > > > +        run_case: None,
-> > > > > +        name: core::ptr::null_mut(),
-> > > > > +        generate_params: None,
-> > > > > +        attr: kernel::bindings::kunit_attributes {
-> > > > > +            speed: kernel::bindings::kunit_speed_KUNIT_SPEED_NOR=
-MAL,
-> > > > > +        },
-> > > > > +        status: kernel::bindings::kunit_status_KUNIT_SUCCESS,
-> > > > > +        module_name: core::ptr::null_mut(),
-> > > > > +        log: core::ptr::null_mut(),
-> > > > > +    }
-> > > > > +}
-> > > > > +
-> > > > > +/// Registers a KUnit test suite.
-> > > > > +///
-> > > > > +/// # Safety
-> > > > > +///
-> > > > > +/// `test_cases` must be a NULL terminated array of valid test c=
-ases.
-> > > > > +///
-> > > > > +/// # Examples
-> > > > > +///
-> > > > > +/// ```ignore
-> > > > > +/// extern "C" fn test_fn(_test: *mut kernel::bindings::kunit) {
-> > > > > +///     let actual =3D 1 + 1;
-> > > > > +///     let expected =3D 2;
-> > > > > +///     assert_eq!(actual, expected);
-> > > > > +/// }
-> > > > > +///
-> > > > > +/// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; =
-2] =3D [
-> > > > > +///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_f=
-n),
-> > > > > +///     kernel::kunit::kunit_case_null(),
-> > > > > +/// ];
-> > > > > +/// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASE=
-S);
-> > > > > +/// ```
-> > > > > +#[doc(hidden)]
-> > > > > +#[macro_export]
-> > > > > +macro_rules! kunit_unsafe_test_suite {
-> > > > > +    ($name:ident, $test_cases:ident) =3D> {
-> > > > > +        const _: () =3D {
-> > > > > +            const KUNIT_TEST_SUITE_NAME: [::kernel::ffi::c_char;=
- 256] =3D {
-> > > > > +                let name_u8 =3D ::core::stringify!($name).as_byt=
-es();
-> > > >
-> > > > This can be a little simpler:
-> > > >
-> > > > let name =3D $crate::c_str!(::core::stringify!($name)).as_bytes_wit=
-h_nul();
-> > > >
-> > >
-> > > I'm not sure this ends up being much simpler: it makes it (possible?,
-> > > obvious?) to get rid of the cast below, but we don't actually need to
-> > > copy the null byte at the end, so it seems wasteful to bother.
-> > >
-> > > So after playing around both ways, I think this is probably best.
-> >
-> > If you don't want to copy the null byte, you can s/as_bytes_with_nul/as=
-_bytes.
-> >
-> > The main thing is that `as` casts in Rust are a rare instance of
-> > unchecked coercion in the language, so I encourage folks to avoid
-> > them. The rest I don't feel strongly about.
-> >
->
-> As far as I can tell, as_bytes() returns a u8 slice anyway, so
-> shouldn't we need the cast anyway? Or is there something I'm missing?
+> You'd likely have to populate + mlock the page when removing the guard.
 
-Ah, we don't need the cast at all, I think. `kernel::ffi::c_char` is u8.
+Right yeah that'd be super weird. And I don't want to add that logic.
 
-> (Also, is there a difference between this and the Rust stdlib's
-> to_bytes()? Or is the name difference just a glitch?)
+> Also not sure what happens if one does an mlock()/mlockall() after
+> already installing PTE markers.
 
-It's just an inconsistency. I believe our CStr predates some necessary
-features in the standard library. There is
-https://lore.kernel.org/all/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com/=
-t/#u
-to replace our custom implementation with upstream's.
+The existing logic already handles non-present cases by skipping them, in
+mlock_pte_range():
 
-> Either way, I don't personally feel too strongly about it: the 'as'
-> cast doesn't worry me particularly (particularly out-on-the open like
-> this, rather than hidden behind lots of macros/indirection), but I'm
-> happy to bow to stronger opinions for now.
->
->
-> > > > > +                let mut ret =3D [0; 256];
-> > > > > +
-> > > > > +                if name_u8.len() > 255 {
-> > > > > +                    panic!(concat!(
-> > > > > +                        "The test suite name `",
-> > > > > +                        ::core::stringify!($name),
-> > > > > +                        "` exceeds the maximum length of 255 byt=
-es."
-> > > > > +                    ));
-> > > > > +                }
-> > > > > +
-> > > > > +                let mut i =3D 0;
-> > > > > +                while i < name_u8.len() {
-> > > > > +                    ret[i] =3D name_u8[i] as ::kernel::ffi::c_ch=
-ar;
-> > > > > +                    i +=3D 1;
-> > > > > +                }
-> > > >
-> > > > I'd suggest `ret[..name.len()].copy_from_slice(name)` but
-> > > > `copy_from_slice` isn't `const`. This can stay the same with the
-> > > > now-unnecessary cast removed, or it can be the body of
-> > > > `copy_from_slice`:
-> > > >
-> > > >                 // SAFETY: `name` is valid for `name.len()` element=
-s
-> > > > by definition, and `ret` was
-> > > >                 // checked to be at least as large as `name`. The
-> > > > buffers are statically know to not
-> > > >                 // overlap.
-> > > >                 unsafe {
-> > > >                     ::core::ptr::copy_nonoverlapping(name.as_ptr(),
-> > > > ret.as_mut_ptr(), name.len());
-> > > >
-> > > >                 }
-> > > >
-> > >
-> > > I think I'll keep this as the loop for now, as that's more obvious to
-> > > me, and avoids the extra unsafe block.
-> > >
-> > > If copy_from_slice ends up working in a const context, we can conside=
-r
-> > > that later (though, personally, I still find the loop easier to
-> > > understand).
-> > >
-> > > > > +
-> > > > > +                ret
-> > > > > +            };
-> > > > > +
-> > > > > +            #[allow(unused_unsafe)]
-> > > > > +            static mut KUNIT_TEST_SUITE: ::kernel::bindings::kun=
-it_suite =3D
-> > > > > +                ::kernel::bindings::kunit_suite {
-> > > > > +                    name: KUNIT_TEST_SUITE_NAME,
-> > > > > +                    // SAFETY: User is expected to pass a correc=
-t `test_cases`, given the safety
-> > > > > +                    // precondition; hence this macro named `uns=
-afe`.
-> > > > > +                    test_cases: unsafe {
-> > > > > +                        ::core::ptr::addr_of_mut!($test_cases)
-> > > > > +                            .cast::<::kernel::bindings::kunit_ca=
-se>()
-> > > > > +                    },
-> > > >
-> > > > This safety comment seems to be referring to the safety of
-> > > > `addr_of_mut!` but this was just a compiler limitation until Rust
-> > > > 1.82, right? Same thing below on `KUNIT_TEST_SUITE_ENTRY`.
-> > > >
-> > >
-> > > Yeah, this comment was originally written prior to 1.82 existing.
-> > >
-> > > But I think we probably should keep the safety comment here anyway, a=
-s
-> > > -- if I understand it -- 1.82 only makes this safe if $test_cases is
-> > > static, so it's still worth documenting the preconditions here.
-> >
-> > I don't think the safety guarantees changed. In the Rust 1.82 release n=
-otes:
-> >
-> > > In an expression context, STATIC_MUT and EXTERN_STATIC are place expr=
-essions. Previously, the compiler's safety checks were not aware that the r=
-aw ref operator did not actually affect the operand's place, treating it as=
- a possible read or write to a pointer. No unsafety is actually present, ho=
-wever, as it just creates a pointer.
-> >
-> > https://blog.rust-lang.org/2024/10/17/Rust-1.82.0.html#safely-addressin=
-g-unsafe-statics
-> >
-> > That's why I flagged this; the SAFETY comment is not actually correct.
-> >
->
-> I won't pretend to be an expert on the exact semantics of Rust
-> references / place expressions / etc here -- I still don't totally
-> understand why this needs the cast for a start -- but I do still think
-> there's more to the story than "this is just a compiler limitation".
->
-> The reason is that, whilst -- as you suggest -- this is always safe
-> when $test_cases is static, that's not actually guaranteed anywhere.
-> And with the unsafe block, it's up to the _user_ of
-> kunit_unsafe_test_suite() to guarantee that $test_cases is safe here.
+	for (pte = start_pte; addr != end; pte++, addr += PAGE_SIZE) {
+		ptent = ptep_get(pte);
+		if (!pte_present(ptent))
+			continue;
 
-It's the other way around. In Rust, it is unsafe to take mutable
-references to statics. What the compiler didn't understand until 1.82
-is that taking a raw pointer to the static did not require forming a
-reference, and thus wasn't unsafe (later dereferencing that pointer to
-create a reference would be unsafe, static or not).
+		...
+	}
 
-> Now, I don't think the current documentation is particularly clear
-> about this, so I'm definitely open to it changing, though I think we'd
-> need to change the overall documentation for the macro, not just the
-> safety comment. And maybe this will be something which, presumably, we
-> can have enforced by the compiler in the future, should we be able to
-> depend on rustc>1.82 and remove the 'unsafe' entirely. (But support
-> for older compilers is important to me, so I don't want to push that
-> point too much.)
+Which covers off guard regions. Removing the guard regions after this will
+leave you in a weird situation where these entries will be zapped... maybe
+we need a patch to make MADV_GUARD_REMOVE check VM_LOCKED and in this case
+also populate?
 
-I think there's a bit of confusion going on here because the same word
-is being used to describe the Rust notion of memory safety as well as
-the preconditions expected by KUnit. That's why this comment is so
-misleading; the compiler says "please tell me why it's safe to form a
-mutable reference to this static here" and the answer comes "it's safe
-because the user pinky promised to end the array with a null test
-case". It doesn't make sense.
+Actually I think the simpler option is to just disallow MADV_GUARD_REMOVE
+if you since locked the range? The code currently allows this on the
+proviso that 'you aren't zapping locked mappings' but leaves the VMA in a
+state such that some entries would not be locked.
+
+It'd be pretty weird to lock guard regions like this.
+
+Having said all that, given what you say below, maybe it's not an issue
+after all?...
 
 >
-> (Also, does anyone else find the whole 'lets change the unsafe rules
-> in a minor compiler version, and require a weird attribute to avoid a
-> warning' thing incredibly frustrating? I've read that it's not what
-> the formal purpose of Rust editions is, but it _feels_ like this sort
-> of change should be in an edition intuitively to me.)
+> __mm_populate() would skip whole VMAs in case populate_vma_page_range()
+> fails. And I would assume populate_vma_page_range() fails on the first
+> guard when it triggers a page fault.
 >
-> Anyway, I've got a few higher-priority non-Rust things to do by the
-> end of the month, so I'm unlikely to have time to spin up a v8 myself
-> for a few weeks. So if folks want to either send out an updated
-> version or the series, or accept it as-is and send out a follow-up
-> fix, I'm happy to review it, but otherwise it'll have to wait a little
-> bit.
+> OTOH, supporting the mlock-on-fault thingy should be easy. That's precisely where
+> MADV_DONTNEED_LOCKED originates from:
 >
+> commit 9457056ac426e5ed0671356509c8dcce69f8dee0
+> Author: Johannes Weiner <hannes@cmpxchg.org>
+> Date:   Thu Mar 24 18:14:12 2022 -0700
+>
+>     mm: madvise: MADV_DONTNEED_LOCKED
+>     MADV_DONTNEED historically rejects mlocked ranges, but with MLOCK_ONFAULT
+>     and MCL_ONFAULT allowing to mlock without populating, there are valid use
+>     cases for depopulating locked ranges as well.
+
+...Hm this seems to imply the current guard remove stuff isn't quite so
+bad, so maybe the assumption that VM_LOCKED implies 'everything is
+populated' isn't quite as stringent then.
+
+The restriction is as simple as:
+
+		if (behavior != MADV_DONTNEED_LOCKED)
+			forbidden |= VM_LOCKED;
+
+>
+>
+> Adding support for that would be indeed nice.
+
+I mean it's sort of maybe understandable why you'd want to MADV_DONTNEED
+locked ranges, but I really don't understand why you'd want to add guard
+regions to mlock()'ed regions?
+
+Then again we're currently asymmetric as you can add them _before_
+mlock()'ing...
+
+>
+> --
 > Cheers,
-> -- David
+>
+> David / dhildenb
+>
 
