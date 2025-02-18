@@ -1,121 +1,183 @@
-Return-Path: <linux-kselftest+bounces-26906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98DAEA3AAC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 22:22:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A462A3ABDA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 23:40:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 691F816A60B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 21:22:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 810513A86E5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 22:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8DB1C6FFD;
-	Tue, 18 Feb 2025 21:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7747A1DC9A7;
+	Tue, 18 Feb 2025 22:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jMRfW8mV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IvSDRWjQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074141C6FF8;
-	Tue, 18 Feb 2025 21:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72FE1D958E
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 22:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739913770; cv=none; b=aci43Mvbjf9P1Az5w2SzSzmuayqlaZqf3N69X1LWYRXfup2Ryokh7tatqisoJ2swqbNOP7TIimvfnadAXCcTf5cmdFimmnGBh9gozKrGcjQ1Fp4TttLAUqiFmx1Y/bL/yTCH3ZIniLqEmc2rimV/+bf0UkyqTl0jaTHHqcr4FeI=
+	t=1739918441; cv=none; b=JeWUvqO8CTQDdmidbHXPlBX+BfmAxsa3vRoxAdTupewWyElVpDtlqBpnvQy3ikwMmlnoIJAqOSdFbninNmJ80t6NSeDccPHuET9vja0RwwCywyYJoRpWeRy8PcpJVtYmBNyhgvTiF5x8az5lXdbHgEMKsZzltZ1DYuns4ZULOTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739913770; c=relaxed/simple;
-	bh=mO8/OX+TtD76PNCNMzPQnEVym+SvzLwOvgdAPrx2c0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cWqH2JcUWRHMEs8DzAB+32gOd6KL0CHcRvBQ0WB8cguR6C6jLFFZw95OalS6UEcQJ9DF0GHnmwKkCFWrbZWE3XNU2bZ+0IbDR8JMTxkfZDT5ivhycc17dR1MDQ3LaEgCe4nePRF98bgTbawGEfwKAVi6OvXyobS3HhRXdqu/yGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jMRfW8mV; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-220e989edb6so120581425ad.1;
-        Tue, 18 Feb 2025 13:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739913768; x=1740518568; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MCGLcaBsKIeSx5CrPCdbLx3FeDWUDA+FDmgXn6o6EGw=;
-        b=jMRfW8mVacTmPJChXGxt9gj4vDwAZcFsKXMFXBCDaVFByjyQeESdpy62umQ0/4P1pT
-         GkXWj+Lq/CkAlL+5taXmUHOjKw2MTXVG4f6DRidAtN58nm7L1TaV1aomAobkdJDLYOFS
-         UlgOBE7K0bfNyaxMKFYhlp/SAPRwPPC12S+z6aB3tKPDmx0x9joDtEIb4Z1OGfNyJYRc
-         EGkwhy0jN/lQezjP4ynCUPqTKp+SRVhi50jhWL3azJtzM8tBvjaaesYXyEa5TFAw7B/b
-         ItOjjEHLSzQAQ2LF3rqvnAAKPJWWzhAfuz7bj663A24O7LfY+C7weqHr5uT3zloKiJSc
-         A4WQ==
+	s=arc-20240116; t=1739918441; c=relaxed/simple;
+	bh=ivyLIcXrK8i6Sm3bd5ok9RWHX3VEX/cjKUj/8oDDJcE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Mp1X0B/R+MIjrU4mJkDHvT3CoJbFZa0PklT0dS1a1hfHfG6pBkRIx9YOemt0xN8MMuVlMryf6IksqjOXnRrfYQbIAwuNEJhpJttuUXdtGC9xtt/JdD+Nr0wZvQRd5y+edeiKkrtSabHxZeseY/f15EYvW6ICheGPM1y7n/8Ga0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IvSDRWjQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739918438;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ivyLIcXrK8i6Sm3bd5ok9RWHX3VEX/cjKUj/8oDDJcE=;
+	b=IvSDRWjQdRT4NGhiLewqXrvQBjvpefMgEe0SOgJq2yYLYqH11psVSMyQzhuaeplKwQUkdE
+	LBmOAI4AKSyzvglau5HjGQeUY7Cru6gGTs8WQiQUx1dBTPSitWTLr8VhR8bnOF+f1tm3na
+	CRPw44/drwXLsGZnG2r5HQGa2oaOxZE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-578-iKhPIujGMGSXjmF_UuchYg-1; Tue, 18 Feb 2025 17:40:36 -0500
+X-MC-Unique: iKhPIujGMGSXjmF_UuchYg-1
+X-Mimecast-MFC-AGG-ID: iKhPIujGMGSXjmF_UuchYg_1739918435
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4388eee7073so961985e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 14:40:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739913768; x=1740518568;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MCGLcaBsKIeSx5CrPCdbLx3FeDWUDA+FDmgXn6o6EGw=;
-        b=uA9Fqz5oHW5Dsh2pD1maehY57yB3+2iu6ZNI42zjQeAvGX76ZJyDoroPZtUYNPQGe4
-         /GscLHZwUaIkYbZWg2uaVL1nl2LsKip+2vdqoZ3rp0BHjmdIHxz8h1+3/c1tsZy43EPd
-         lgff80lVo+gN+dzaHaYbttDcUhi5elnlqA41ImB0KuN8c7/wtDanKZmWwwjnc+e7CaTx
-         PM6Nd4+rN8dRrL0ZMAIcH53H1w9h1YLeMDHffwgRHcTYTh0U5+2LfiVMmd4WdP7R1u9U
-         aJjRz0n5nL1Elm71Wwx2xJsRx2GJ8wpByaDrJ34zqfQiDSICryWCd98U7Tc89hmZNbpU
-         Xblw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBu7/w2h/6MC3MJD6dzRmVcg2rYGY8VKlK6EsICxJ+gNttqtvrJyDy8HWN0ZOiw+v+ZAY=@vger.kernel.org, AJvYcCVWQnlpHZIZeVvDl9pfztkwQML+NQo1Z11b9frdT8IkUdQN+HuHrGmTdTQy5lu3nLsSHK3DaONXD+63tQ0r@vger.kernel.org, AJvYcCWyIizNYZZ5qi31qq3fl1PejoH2IrfPdmZKmaLL89tKZ109ZvONDIeC8BFgKZkBgwKaYTo/q915yFPmjqawhRtX@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOt5o+UrYjxMmgdBPo6btHf5QHlgA3S8QZTbu7nD5m/0c6ERe7
-	T+yVmLOMGuVx+nlb5KmVmLue2K6cOy0LYZQ/i9+7DPx7P1hzXFM=
-X-Gm-Gg: ASbGncvqYtWkwT8kZEhhvPD2KHbnBskYvek9WEjiUj6N5U+Mkg0oMmODGiuAaGvPtWK
-	tflIYBBkLS8pzPlp9J4KtqDIhfD2wWiZDhFXl8Nk97pNI/Cq3HfXdkwwZ0kjfsKeWT6c9Uh2D0U
-	16aV66H4wyjYMjj2jwJgGMEmJiizmJXtWp6ioADwpcyG8uT9BgAd9K7SeFpoWUdJuilNGtKbV2Q
-	6FoEfoWT2D/gMeCv3Ca7qp6Q3OjOY0QePvnczZLyL1Crwtt/QcSQdYFiYHs+1JAaWn/tlAQ8/IK
-	ZLyqRsAp/tSsq/s=
-X-Google-Smtp-Source: AGHT+IFvRiZC16m7YP1vm9kCqjs9N5vCdVDj1JD3GUfBrBolSBWqxE9kNWL7zcEGz/Ex8QCXBrSg4A==
-X-Received: by 2002:a17:902:f54f:b0:216:4d1f:5c83 with SMTP id d9443c01a7336-221040bf8dfmr257329635ad.47.1739913768239;
-        Tue, 18 Feb 2025 13:22:48 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-220d5348f1esm93375405ad.51.2025.02.18.13.22.47
+        d=1e100.net; s=20230601; t=1739918435; x=1740523235;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivyLIcXrK8i6Sm3bd5ok9RWHX3VEX/cjKUj/8oDDJcE=;
+        b=O+ej8PwqD3+fF5gMOf1xP93IMm/Qic4ESICNb1bgPniwDPn0DemJLnr2w2VYADoUnO
+         ba6TmSRtM+HOoHC/51TLDUYrDyrzWXbkDkRWQBVm+jgM6w1ErfiLx+Ez5FTMrGnRFliO
+         L4S71sQS6yQ7per4iR1YTFGTxIycgLw0yJByIA53AUtdFZV5uTcjFOwMLHcN1nRU+Zbl
+         EHP7AZPzDdTDXSv6t5a2mTnJB/fAFnbcRui0aHh4J+cgjp4YEcbGOHHvznpoGfUBEFmv
+         7LOadIiFue3eoJUT705DAeuqRSVfgwIoDeOAGnEUisXwH3e+H4jqSiZdtM6m6cdT4OWJ
+         6n4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVFZUolArme0m2eGz+PB9rHS2uW+YKyHKNbk562naW2f6qt+vvnoZJALLbMUhyDPFcKA8AWJcz6WYUcstAZbA0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSMods1gfJpL8IfsG+2oHMVlG2ZmPUAZivd5jJBV8VO5z4ZA0h
+	1BhOrP1fbmmD2yTwpDbWgOe7ZfiwOIx1y8x5wM8YH087NCZoBuI2tuMrDKfpItx2rD7F+OmuDGG
+	Aj7BKEBc4b8nEUE+7Rl31FWYib1uLfhXaSXi2t8sVaigmCR4rUlcyXrv3eS+de3chCg==
+X-Gm-Gg: ASbGncsXx8zYBfWwOP8aiKRjCT9PY2mpK6p83YjbKW5ifB2TuoEdoB4Y+ZU+oygtzz3
+	oeLTg19T+U4J9SSHYfbk+4RbILUl6w/ws077/SQM7Erb9YLADFOPmD6+u6xrVadCJerEmub4TUC
+	SJwHuSYQ9rOuZB6VBjCKneK0aTNGyQnPZz4VcJ7/O2BujBeONsnKoRjnC1a2i+RZOqMC0yHC2wA
+	cDu66mIc/JHpggDQAoG1WRnNsSLmMlBFP3z0pu/B/gwyA2FZKijOT6On8dM5dbR1LQwc+beKmsy
+	dsH6unc/R4tTHy3IlKYJaCqokqhAycZ7m/uy6u/3cfGeUK+CImCZQzTxQ2DkWdW8OQ==
+X-Received: by 2002:a05:600c:314b:b0:439:86c4:a8d7 with SMTP id 5b1f17b1804b1-43999ae0dc8mr11798075e9.5.1739918435433;
+        Tue, 18 Feb 2025 14:40:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEI17xveq4qpUoXVn3jaf3vZekMu127UgmikmUhaFlSZ5tyuyrG+gdqtYt1+dNUau7VWeDZUA==
+X-Received: by 2002:a05:600c:314b:b0:439:86c4:a8d7 with SMTP id 5b1f17b1804b1-43999ae0dc8mr11797275e9.5.1739918434928;
+        Tue, 18 Feb 2025 14:40:34 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43993847f39sm32922065e9.14.2025.02.18.14.40.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 13:22:47 -0800 (PST)
-Date: Tue, 18 Feb 2025 13:22:47 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Alexis Lothore <alexis.lothore@bootlin.com>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 0/3] selftests/bpf: tc_links/tc_opts:
- Unserialize tests
-Message-ID: <Z7T6J4BpIrBcsWPM@mini-arch>
-References: <20250217-tc_links-v1-0-27f7965e3dcd@bootlin.com>
+        Tue, 18 Feb 2025 14:40:34 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+In-Reply-To: <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+ <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
+ <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
+Date: Tue, 18 Feb 2025 23:40:31 +0100
+Message-ID: <xhsmhjz9mj2qo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250217-tc_links-v1-0-27f7965e3dcd@bootlin.com>
+Content-Type: text/plain
 
-On 02/17, Bastien Curutchet (eBPF Foundation) wrote:
-> Hi all,
-> 
-> Both tc_links.c and tc_opts.c do their tests on the loopback interface.
-> It prevents from parallelizing their executions.
-> 
-> Use namespaces and the new append_tid() helper to allow this
-> parallelization.
-> 
-> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+On 11/02/25 06:22, Dave Hansen wrote:
+> On 2/11/25 05:33, Valentin Schneider wrote:
+>>> 2. It's wrong to assume that TLB entries are only populated for
+>>> addresses you access - thanks to speculative execution, you have to
+>>> assume that the CPU might be populating random TLB entries all over
+>>> the place.
+>> Gotta love speculation. Now it is supposed to be limited to genuinely
+>> accessible data & code, right? Say theoretically we have a full TLBi as
+>> literally the last thing before doing the return-to-userspace, speculation
+>> should be limited to executing maybe bits of the return-from-userspace
+>> code?
+>
+> In practice, it's mostly limited like that.
+>
+> Architecturally, there are no promises from the CPU. It is within its
+> rights to cache anything from the page tables at any time. If it's in
+> the CR3 tree, it's fair game.
+>
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+So what if the VMEMMAP range *isn't* in the CR3 tree when a CPU is
+executing in userspace?
 
-LGTM, thank you! Optionally, if there is more to convert, we can think
-about moving create_and_open_tid_ns to the test_progs itself. For example,
-if the test name starts with ns_, test_progs can probably do the
-create_and_open_tid_ns/netns_free part?
+AIUI that's the case with kPTI - the remaining kernel pages should mostly
+be .entry.text and cpu_entry_area, at least for x86.
+
+It sounds like it wouldn't do much for arm64 though, if with CnP a CPU executing in
+userspace and with the user/trampoline page table installed can still use
+TLB entries of another CPU executing in kernelspace with the kernel page
+table installed.
+
 
