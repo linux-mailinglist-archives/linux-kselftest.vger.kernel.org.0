@@ -1,95 +1,96 @@
-Return-Path: <linux-kselftest+bounces-26854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85791A39E85
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 15:17:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4D2BA39E89
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 15:18:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 882593A3789
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 14:17:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC8773A38DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 14:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BE6269D1C;
-	Tue, 18 Feb 2025 14:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23BC8269CF4;
+	Tue, 18 Feb 2025 14:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UCsHLH87";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pPEKOEXe";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2zd8it1I";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="9+psj/5T"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="o8gTPDpL";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="t3nAOjk7";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="o8gTPDpL";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="t3nAOjk7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0165269B07
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 14:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559AF23958C
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 14:18:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739888233; cv=none; b=ipqWX5+tuk0xah8hHWVvFAs4v+l49worJYUzbkYBBgeMmzVo5kBxpbw409+8aLvPoceylafjlwfQUCi4mAJEEirUAWhZ6tCN8103IFhU285jfIJ1f9+NRqmN6iaPeX4Ssvxy7mW0mYSCeYgJDb5lcIuAoffPwW/NSRttUTynK70=
+	t=1739888299; cv=none; b=n+ehOlWieMCCUNbSNZ8aXVyW9RJPpnSyAEwl/5NO32hIqYH0VplI2EOp+aOeNPSYSoN42ez9ZM1jTYNIE/AONJ6MOeoL1qW4qUbSQqetZwzcgfim8KCdeByomWNfEbp1wy+ddEgAnl8cNJ1/2s4DCzDoyKIA0Rh6VOZOJU13/3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739888233; c=relaxed/simple;
-	bh=Ktpgj47xjYLbHoKe0iF7uwi77mgpSmdWzzCOKJysf24=;
+	s=arc-20240116; t=1739888299; c=relaxed/simple;
+	bh=EEBSTvW0Senalm8U/aGpxQ0Jqzh99h+lPOsHlFUHLTY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uWudQpK5li+/C1XlmeIyKDB45VVIRAUBIlX7DqzOnmvOleJsY6qL/pmd1kAOMWplB14QlUMy9LbFu8eohrcXJTG5R5UeCJTY3G3lFf2nqjnA8mOwpPIZl8d3BifpcJ6VhDqZwvgau+cu9/nFLHdobP5bw9eHm7fzXLBElXc5xrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=fail smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UCsHLH87; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pPEKOEXe; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2zd8it1I; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=9+psj/5T; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=OBmW3bJF45/u0LgwctIygpFDCr0VGpm/oWCWye2UZiJ7USw3NKaec8rak8bw9lNwmN/erZvZW/Ue4Q6zZ4fLwHDt8Dy7VgH9WNqVuOjOB8W9k6Mrs9LkdLdPNqqhmza9k2/jWTbKdmouECzwavRcDWEeJMxTD83i+sy37zlpoPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=fail smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=o8gTPDpL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=t3nAOjk7; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=o8gTPDpL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=t3nAOjk7; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 19C781F399;
-	Tue, 18 Feb 2025 14:17:09 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 76EC61F442;
+	Tue, 18 Feb 2025 14:18:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1739888230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1739888295; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=p2LYRqHEzUN2qTLMBBsS85G6Q2Tk8/wzW713Ueseh8U=;
-	b=UCsHLH87DtmvsMmHuLoxsvXJugT2JXJFBekhIFUAyFS47t2jXh5/GvTMsIvt0vXmzkUmgH
-	F2NfcY55cweo4vyhfCC8X81BmtZRSb9KGdZ+wdvn7pxJVS3aYM5aa4N3B3sWL5OIb4DNPe
-	5b+jdumx1oOiciG4qlzJF7eyu4wafcE=
+	bh=6pKy3uUOm9ZXQ33TOui+wwTs1eIWK6u2ZjCPnnwJn8Y=;
+	b=o8gTPDpL3KJnpwxve1IkZ3cNG6mPUyWzS3Nj8mBntNPzyfJkj8x0eDCmbT4fGOr0BjAqnK
+	3CX/vZW8trTl1TayoIBOqAqHg+VdQ474N3BdmAlDeSGsVgHUGbE29zNLqiSArZvjezxklY
+	AroAeuwrc3ehGmarmm5H16+5v9L1vcA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1739888230;
+	s=susede2_ed25519; t=1739888295;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=p2LYRqHEzUN2qTLMBBsS85G6Q2Tk8/wzW713Ueseh8U=;
-	b=pPEKOEXeLizjyNnYzFpsMB66v3+zHmdrsD5J0d4W0ZRtvExFQTvB7qzj+WYe7ntSui9siz
-	xH6bqTphCFhBhiAw==
+	bh=6pKy3uUOm9ZXQ33TOui+wwTs1eIWK6u2ZjCPnnwJn8Y=;
+	b=t3nAOjk7mIIB01lowymN5gv/nh+YgKOLQdUlh6C4BEAOxYWqp8dOqG7jrCZbRVEuKNlusP
+	HbWQ67/Yvq99pJCA==
 Authentication-Results: smtp-out2.suse.de;
-	none
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=o8gTPDpL;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=t3nAOjk7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1739888229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1739888295; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=p2LYRqHEzUN2qTLMBBsS85G6Q2Tk8/wzW713Ueseh8U=;
-	b=2zd8it1ILj6/enzgCyvrK8LwAT54SHvUw7bQ5j9pjfY6TadQ0uuivmg1tsHff4YOdMeTBG
-	I6ZyOzyNjrWL4YOTYJ+bQMXz3RUMnOLrkvv2vb3kg7bZyiXX6ZeUQrnr6NBW4w56PcyDQ6
-	sxAl7iINAZ/ioGkST601BfN5g/uOJEI=
+	bh=6pKy3uUOm9ZXQ33TOui+wwTs1eIWK6u2ZjCPnnwJn8Y=;
+	b=o8gTPDpL3KJnpwxve1IkZ3cNG6mPUyWzS3Nj8mBntNPzyfJkj8x0eDCmbT4fGOr0BjAqnK
+	3CX/vZW8trTl1TayoIBOqAqHg+VdQ474N3BdmAlDeSGsVgHUGbE29zNLqiSArZvjezxklY
+	AroAeuwrc3ehGmarmm5H16+5v9L1vcA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1739888229;
+	s=susede2_ed25519; t=1739888295;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=p2LYRqHEzUN2qTLMBBsS85G6Q2Tk8/wzW713Ueseh8U=;
-	b=9+psj/5Tj6UKUa5t6LkZ6lYS4cxXLBNcnFMkeAJNqhwohEjtlttNc//v6LY/koQxa8/Fy4
-	sIeQ98edKZw3vwCQ==
+	bh=6pKy3uUOm9ZXQ33TOui+wwTs1eIWK6u2ZjCPnnwJn8Y=;
+	b=t3nAOjk7mIIB01lowymN5gv/nh+YgKOLQdUlh6C4BEAOxYWqp8dOqG7jrCZbRVEuKNlusP
+	HbWQ67/Yvq99pJCA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EAE6F132C7;
-	Tue, 18 Feb 2025 14:17:08 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4CBD3132C7;
+	Tue, 18 Feb 2025 14:18:15 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 7XT4OGSWtGdJXgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 18 Feb 2025 14:17:08 +0000
-Message-ID: <7e8a3bfd-b857-4528-a196-f237bf6d6cb9@suse.cz>
-Date: Tue, 18 Feb 2025 15:17:08 +0100
+	id QlQbEqeWtGejXgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 18 Feb 2025 14:18:15 +0000
+Message-ID: <69673396-96a2-4aa3-a958-c3ba0e52be45@suse.cz>
+Date: Tue, 18 Feb 2025 15:18:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,8 +98,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] tools/selftests: expand all guard region tests to
- file-backed
+Subject: Re: [PATCH 4/4] tools/selftests: add file/shmem-backed mapping guard
+ region tests
 Content-Language: en-US
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>
@@ -112,7 +113,7 @@ Cc: Suren Baghdasaryan <surenb@google.com>,
  John Hubbard <jhubbard@nvidia.com>, Juan Yescas <jyescas@google.com>,
  Kalesh Singh <kaleshsingh@google.com>
 References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
- <ab42228d2bd9b8aa18e9faebcd5c88732a7e5820.1739469950.git.lorenzo.stoakes@oracle.com>
+ <90c16bec5fcaafcd1700dfa3e9988c3e1aa9ac1d.1739469950.git.lorenzo.stoakes@oracle.com>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -153,53 +154,66 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  w9XOLH1IIWh7RURU7G1iOfEfmImFeC3cbbS73LQEFGe1urxvIH5K/7vX+FkNcr9ujwWuPE9b
  1C2o4i/yZPLXIVy387EjA6GZMqvQUFuSTs/GeBcv0NjIQi8867H3uLjz+mQy63fAitsDwLmR
  EP+ylKVEKb0Q2A==
-In-Reply-To: <ab42228d2bd9b8aa18e9faebcd5c88732a7e5820.1739469950.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <90c16bec5fcaafcd1700dfa3e9988c3e1aa9ac1d.1739469950.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
+X-Rspamd-Queue-Id: 76EC61F442
+X-Spam-Score: -4.51
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
 	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MX_GOOD(-0.01)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
 	MIME_TRACE(0.00)[0:+];
 	ARC_NA(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[16];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
 	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.cz:email,suse.cz:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -4.30
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.cz:dkim,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Flag: NO
+X-Spam-Level: 
 
 On 2/13/25 19:17, Lorenzo Stoakes wrote:
-> Extend the guard region tests to allow for test fixture variants for anon,
-> shmem, and local file files.
+> Extend the guard region self tests to explicitly assert that guard regions
+> work correctly for functionality specific to file-backed and shmem
+> mappings.
 > 
-> This allows us to assert that each of the expected behaviours of anonymous
-> memory also applies correctly to file-backed (both shmem and an a file
-> created locally in the current working directory) and thus asserts the same
-> correctness guarantees as all the remaining tests do.
+> In addition to testing all of the existing guard region functionality that
+> is currently tested against anonymous mappings against file-backed and
+> shmem mappings (except those which are exclusive to anonymous mapping), we
+> now also:
 > 
-> The fixture teardown is now performed in the parent process rather than
-> child forked ones, meaning cleanup is always performed, including unlinking
-> any generated temporary files.
-> 
-> Additionally the variant fixture data type now contains an enum value
-> indicating the type of backing store and the mmap() invocation is
-> abstracted to allow for the mapping of whichever backing store the variant
-> is testing.
-> 
-> We adjust tests as necessary to account for the fact they may now reference
-> files rather than anonymous memory.
-> 
+> * Test that MADV_SEQUENTIAL does not cause unexpected readahead behaviour.
+> * Test that MAP_PRIVATE behaves as expected with guard regions installed in
+>   both a shared and private mapping of an fd.
+> * Test that a read-only file can correctly establish guard regions.
+> * Test a probable fault-around case does not interfere with guard regions
+>   (or vice-versa).
+> * Test that truncation does not eliminate guard regions.
+> * Test that hole punching functions as expected in the presence of guard
+>   regions.
+> * Test that a read-only mapping of a memfd write sealed mapping can have
+>   guard regions established within it and function correctly without
+>   violation of the seal.
+> * Test that guard regions installed into a mapping of the anonymous zero
+>   page function correctly.
+
+Impressive.
+
 > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
