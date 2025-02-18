@@ -1,118 +1,297 @@
-Return-Path: <linux-kselftest+bounces-26836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26837-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F17F7A393E0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:41:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D1EA3952D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 09:25:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB9263A6D60
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 07:41:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E66A27A3B36
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 08:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB951B87ED;
-	Tue, 18 Feb 2025 07:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43421239095;
+	Tue, 18 Feb 2025 08:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CsLLs8bG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PWrCUrnQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52721ADC81
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 07:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4CD22DF83
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 08:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739864491; cv=none; b=gj+9f67TMVednQzyx4mScDct30QWl0UDbXkFQTwLNhSgdher2yB473LyYcjOjSFx0vjS/OJMZHM4tyuoaWX0m0B4g1h4vPCzL7ro/osK448+36AP2j4YwZ4Ct24c7/2F0YhAnm43gwlnOITGmTZeSn1YofnwEenQbiYGJrayF88=
+	t=1739866823; cv=none; b=sgWALzWKJwnCFaAEteZH8NkC5i4UMt4PT3B4E7N0oKp6HJ5v5ET6MJw2rlRZWy8oXEuYkGTtrzHN1kGD3OYE6JBEEzaLqhgRAPeW9eArJt4or6YsjliSEADmMnZtOeoHHanbnn0ZFfFolxkTXINL3suS1MOlQltTPEdTwFsXS1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739864491; c=relaxed/simple;
-	bh=wjn8YwcJ/UmonSrg42uXUCIJph6NBwvLw9HWEawtaE4=;
+	s=arc-20240116; t=1739866823; c=relaxed/simple;
+	bh=zN9qTlYIsKWkdElzRO+O5cgc7BG1CW7Q+5G1/YXBqR4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eabD+b7JC2IuAJzP8RA1P71CEkYUrRED00nHHtWCH6XuQMelzzN2zZ5YMY+gUM9/ile7WSd3XEZfV2b+VEv4sAIcXtrWjwL5npv2c6jP9bR1pFQZU/N/408Yq7hJ4/ozfzTVifEvIMfgr4Zlj5q5eeU08pAVgmxjTRWc4crRvwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CsLLs8bG; arc=none smtp.client-ip=209.85.219.46
+	 To:Cc:Content-Type; b=RICEkNmoWmEj49QlZttarKANVPaZsjuz/6gAF+RkVEHonTjiLtblXubu4Fls1FDnQ7fTn9e1luHLN23BwtdVAftfs4yV4HcwQeRu/kOxHFwhSQzvyAcWD7gUvfdzkPNCO8AyMh+KIFkaWo2PZ0P0Yn8TzO07a0EE3Lwxnqvt9zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PWrCUrnQ; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6e660740061so47881876d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Feb 2025 23:41:29 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6e6846bcde2so10007416d6.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 00:20:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739864488; x=1740469288; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1739866820; x=1740471620; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wjn8YwcJ/UmonSrg42uXUCIJph6NBwvLw9HWEawtaE4=;
-        b=CsLLs8bGWr7e7QnEVaR+NbrJgMHJkjODQXdg5HMAFL45dXI0/HNsZMLc603g19uJTs
-         s5lUMKOQXXS/y6a7i+IKIiV4o3M56CS3F7Gs1Cz2uc5vSzpjVGWRPDHACEbVbE65PIQ+
-         XyJ1JF23Hb2rwbg6Fpf0sf0+L5ZZL93dsUKVU9ejYUFN3UGFKxDi7YrQQeUPVOr7U7Rg
-         nI4jxGYnd59t0eKRX06lkg+lud9qZiTNgdOIfELs/Uzx+c6XjRU9QOESC38a3m2Itcpb
-         vY881N6yefUZuEVGwXC0FVJj2P2Wg1elu6jnp54Li7IOauNuevX3EkwDh7tqELsEsOI4
-         wJhQ==
+        bh=GuoQ19C3N119izu3AtNG1s9CgLBdYj10wUQqT6aat4s=;
+        b=PWrCUrnQsB/1PrYPC03GTaArlQ16hGBHgvjQQtvzHK8izVqd6uXOzhvql15tYsd+NN
+         76G6OFIfgg13n20MM2SEpOl6KKovULZbkR7f7lU2KVqK6Sj5dmU+imRZcn0aC9OrY7H3
+         sFJb/Y91oqdV2u4jlAHHJqVcF+JHotHdHlWWdGjGu0uUPThnho97HNMpfe4ryCG0OBAs
+         MYqXzOa3f0ID+KdIBysHVFxKk24Z6uBiV3KOp+y5vQXQf23Z1slZ3Dsp5FufyU1zsbWE
+         0rMFbX/yKoR5FeJPYKWwczSRE0f/Z4NMo+GlRSeCbfUK88mNMpxISnsxQbFVvEcnDyv9
+         iq1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739864488; x=1740469288;
+        d=1e100.net; s=20230601; t=1739866820; x=1740471620;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wjn8YwcJ/UmonSrg42uXUCIJph6NBwvLw9HWEawtaE4=;
-        b=XBdojuK46xi6FHjNNOnTRWjyhIRQn2ewbkLDVc5wjQRTWCA3UPARBD+CXr/EzuIUaH
-         yLrTJyU3irhEWRa0mC2xOwMTh5EHycT9ilIdQlhVz5h09u+eXHBSO7rgQ157gAMrycN3
-         o01PVB+UhCXU2xt+HtQQesOlggHvQJKWxGkBe0EoDObXIaZBikiWCBtnwxBhvgGj7oaJ
-         woepwCRuiX98UViO4VU8aLRUZMqmxo7hB1tv2+6mQVeoEHpOt3AuPo/xmwzD6WR1GYAh
-         FBXW9zCrewTtaDrasboRDeYlf3hofpv0td18f/VV+NIji4597Km0YfdXsC9wdDtYxlPT
-         4odQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXfY3473J1ohPWqmClEn3FhEzhXsBrbUPiaE7A86eC1ZpgnIMb2aFHb06RCX/YRoGe3nH6w4cuEgIpWcl9kXXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoGj3JbqAGLzh56Tyj2lDJL44FQ8mp2kYHiB5pXjyIGdFTI8uM
-	X9UB0+NafO5pgDZDM9kUumKEP6eS+OnzmmlH2NG5hDheCKjGtzK6ewf1O8zjWu+6cwv2UDSY1db
-	xJV7BnMgiOt8vf48F4ONBjdcujI9d26FBV49t
-X-Gm-Gg: ASbGncsKBjZK0GJPmbQcqFBPLnCJPoKov7UdjuEN5//CMgJIr5YRlYI18C1GeEptMnk
-	LfsaTO1HByxHn20zleQdfnzA/G1zhfPlhqGtjRUxPMCRksG1jCOzjAgvGoIx7fRtJ/l414gM93Q
+        bh=GuoQ19C3N119izu3AtNG1s9CgLBdYj10wUQqT6aat4s=;
+        b=pi/GatUiVF9MIHHAojISUN9QG7J8Ygvc56E//P5IKHlWr4xEnvmM11xuHOb7MO2Y7r
+         U50Z3bvQx9TyNtmc3AdQ2GSJGcT7G678RD0FpggpjveIaP2aY/InI1X/A3fz0ljCXvre
+         2cfE9xKxdnuuZpKVD/DPCXKRXQKUTeky1ww94/ONQNg+EMAEId+RAjro/C4mLhes0qNU
+         nfsYYHXVNFAoOd51rQW2nlgx1OIaB+qSz5vhrReDfhSwhQhFG+f67TWnEQFPcLYR00lc
+         h2IyGEqp+4Im3UYUJl7c13asPyNgvvuA7ACyZhxDc6w5KWVKgbrAF5rWnSuRDb1PXKRU
+         eOkg==
+X-Forwarded-Encrypted: i=1; AJvYcCX9f+FsBy0ZK0dPcB6kgq76Gh/O8MNdEhvFIbpEXgD3npxbz56mq7B3dfBcUec7OIDJoeqOa4C+2b4RKZeZOJY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2VmbZG5gzSkCmIDr+hfkEMHbXi+o93R5A9G+9TH8l4bwqxiD0
+	PbwoRHxsW2y/IvZmxNvSPfE+ZQOWE11LhRL8bvWVEfBz1o+DM1ZIJ6lDP7BpnJrPOkEwb6Prq9Z
+	2bSZRwXQjAzcY/Jf2a/b9wvtDzJoNdgnkUZrc
+X-Gm-Gg: ASbGncsgrhvJyMg82IAKs9o6lX6Vbfps6ErSTWy2IJyPc3cCxbQFkMhAJhStLu8UveU
+	ytI1gjRqUp+EvkD0XxfvHzEzWI1I7uTW+gBr5Ro5HJFRVEH/VF3GE1XI45OFhMj7P/shJEkOeng
 	==
-X-Google-Smtp-Source: AGHT+IHlbszPPYw9+g2xxid6iEtrbF/hynF0NT1zT2p31zGky0Ry7FOa+jjqmFDNLjyLmre0RIpWVJlOGFVmaru4Ojk=
-X-Received: by 2002:a05:6214:300e:b0:6e4:7307:51af with SMTP id
- 6a1803df08f44-6e66cd0b058mr204225386d6.36.1739864488529; Mon, 17 Feb 2025
- 23:41:28 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFUJfybEUXPvrsW87DgsnIvE+HQJ5a6+pzrlrCs1oeh+20Y0GTMrQexFX4rmjjFLGXQ/rxrdP5vqnXW/+QABmc=
+X-Received: by 2002:a05:6214:5019:b0:6e6:5ec3:868e with SMTP id
+ 6a1803df08f44-6e66cd19b75mr215529066d6.31.1739866819538; Tue, 18 Feb 2025
+ 00:20:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250217140008.1941287-1-kevin.brodsky@arm.com>
-In-Reply-To: <20250217140008.1941287-1-kevin.brodsky@arm.com>
+References: <20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de>
+In-Reply-To: <20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de>
 From: David Gow <davidgow@google.com>
-Date: Tue, 18 Feb 2025 15:41:16 +0800
-X-Gm-Features: AWEUYZmJSzsbaQeedqgjs9EmCCwD3cqlBfMelDHfo71GgjY0GqWMWj0bud_5_GA
-Message-ID: <CABVgOSk3PxgPi-ZWiXeZy751Pra8O1OspsJGk_fotxVcmJ8SHw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Clarify kunit_skip() argument name
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+Date: Tue, 18 Feb 2025 16:20:06 +0800
+X-Gm-Features: AWEUYZmvtT093vpdYvvuHuiOHYbXlWuuoZDfhVK3Xg7QvvIfkc59Z_7-vUrHOoI
+Message-ID: <CABVgOSn5tGDj5rnR=a133ntv3GeoXQLnHRBg9HRf86hWve7T1w@mail.gmail.com>
+Subject: Re: [PATCH 00/12] kunit: Introduce UAPI testing framework
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Andrew Morton <akpm@linux-foundation.org>, Willy Tarreau <w@1wt.eu>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
 	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	linux-kselftest@vger.kernel.org
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d1c2a5062e65c42b"
+	boundary="000000000000c4ef9b062e664fa1"
 
---000000000000d1c2a5062e65c42b
+--000000000000c4ef9b062e664fa1
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 17 Feb 2025 at 22:00, Kevin Brodsky <kevin.brodsky@arm.com> wrote:
+On Mon, 17 Feb 2025 at 19:00, Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
 >
-> kunit_skip() and kunit_mark_skipped() can only be passed a pointer
-> to a struct kunit, not struct kunit_suite (only kunit_log() actually
-> supports both). Rename their first argument accordingly.
+> Currently testing of userspace and in-kernel API use two different
+> frameworks. kselftests for the userspace ones and Kunit for the
+> in-kernel ones. Besides their different scopes, both have different
+> strengths and limitations:
 >
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Rae Moar <rmoar@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> ---
+> Kunit:
+> * Tests are normal kernel code.
+> * They use the regular kernel toolchain.
+> * They can be packaged and distributed as modules conveniently.
+>
+> Kselftests:
+> * Tests are normal userspace code
+> * They need a userspace toolchain.
+>   A kernel cross toolchain is likely not enough.
+> * A fair amout of userland is required to run the tests,
+>   which means a full distro or handcrafted rootfs.
+> * There is no way to conveniently package and run kselftests with a
+>   given kernel image.
+> * The kselftests makefiles are not as powerful as regular kbuild.
+>   For example they are missing proper header dependency tracking or more
+>   complex compiler option modifications.
+>
+> Therefore kunit is much easier to run against different kernel
+> configurations and architectures.
+> This series aims to combine kselftests and kunit, avoiding both their
+> limitations. It works by compiling the userspace kselftests as part of
+> the regular kernel build, embedding them into the kunit kernel or module
+> and executing them from there. If the kernel toolchain is not fit to
+> produce userspace because of a missing libc, the kernel's own nolibc can
+> be used instead.
+> The structured TAP output from the kselftest is integrated into the
+> kunit KTAP output transparently, the kunit parser can parse the combined
+> logs together.
 
-Thanks. We probably should support skipping (the rest of) a suite, but
-let's not pretend we do when we don't!
+Wow -- this is really neat! Thanks for putting this together.
 
-Reviewed-by: David Gow <davidgow@google.com>
+I haven't had a chance to play with it in detail yet, but here are a
+few initial / random thoughts:
+- Having support for running things from userspace within a KUnit test
+seems like it's something that could be really useful for testing
+syscalls (and maybe other mm / exec code as well).
+- I don't think we can totally combine kselftests and KUnit for all
+tests (some of the selftests definitely require more complicated
+dependencies than I think KUnit would want to reasonably support or
+require).
+- The in-kernel KUnit framework doesn't have any knowledge of the
+structure or results of a uapi test. It'd be nice to at least be able
+to get the process exit status, and bubble up a basic
+'passed'/'skipped'/'failed' so that we're not reporting success for
+failed tests (and so that simple test executables could run without
+needing to output their own KTAP if they only run one test).
+- Equally, for some selftests, it's probably a pain to have to write a
+kernel module if there's nothing that needs to be done in the kernel.
+Maybe such tests could still be built with nolibc and a kernel
+toolchain, but be triggered directly from the python tooling (e.g. as
+the 'init' process).
+- There still seems to be some increased requirements over plain KUnit
+at the moment: I'm definitely seeing issues from not having the right
+libgcc installed for all architectures. (Though it's working for most
+of them, which is very neat!)
+- This is a great example of how having standardised result formats is usef=
+ul!
+- If this is going to change or blur the boundary between "this is a
+ksefltest" and "this is a kunit test", we probably will need to update
+Documentation/dev-tools/testing-overview.rst -- it probably needs some
+clarifications there _anyway_, so this is probably a good point to
+ensure everyone's on the same page.
+
+Do you have a particular non-example test you'd like to either write
+or port to use this? I think it'd be great to see some real-world
+examples of where this'd be most useful.
+
+Either way, I'll keep playing with this a bit over the next few days.
+I'd love to hear what Shuah and Rae think, as well, as this involves
+kselftest and KTAP a lot.
 
 Cheers,
 -- David
 
---000000000000d1c2a5062e65c42b
+>
+> Further room for improvements:
+> * Call each test in its completely dedicated namespace
+> * Handle additional test files besides the test executable through
+>   archives. CPIO, cramfs, etc.
+> * Compatibility with kselftest_harness.h (in progress)
+> * Expose the blobs in debugfs
+> * Provide some convience wrappers around compat userprogs
+> * Figure out a migration path/coexistence solution for
+>   kunit UAPI and tools/testing/selftests/
+>
+> Output from the kunit example testcase, note the output of
+> "example_uapi_tests".
+>
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit example
+> ...
+> Running tests with:
+> $ .kunit/linux kunit.filter_glob=3Dexample kunit.enable=3D1 mem=3D1G cons=
+ole=3Dtty kunit_shutdown=3Dhalt
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D example=
+ (10 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [11:53:53] [PASSED] example_simple_test
+> [11:53:53] [SKIPPED] example_skip_test
+> [11:53:53] [SKIPPED] example_mark_skipped_test
+> [11:53:53] [PASSED] example_all_expect_macros_test
+> [11:53:53] [PASSED] example_static_stub_test
+> [11:53:53] [PASSED] example_static_stub_using_fn_ptr_test
+> [11:53:53] [PASSED] example_priv_test
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D exam=
+ple_params_test  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [11:53:53] [SKIPPED] example value 3
+> [11:53:53] [PASSED] example value 2
+> [11:53:53] [PASSED] example value 1
+> [11:53:53] [SKIPPED] example value 0
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] example=
+_params_test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [11:53:53] [PASSED] example_slow_test
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D (4 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> [11:53:53] [PASSED] procfs
+> [11:53:53] [PASSED] userspace test 2
+> [11:53:53] [SKIPPED] userspace test 3: some reason
+> [11:53:53] [PASSED] userspace test 4
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] exam=
+ple_uapi_test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D [PASSED] example =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> [11:53:53] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [11:53:53] Testing complete. Ran 16 tests: passed: 11, skipped: 5
+> [11:53:53] Elapsed time: 67.543s total, 1.823s configuring, 65.655s build=
+ing, 0.058s running
+>
+> Based on v6.14-rc1 and the series
+> "tools/nolibc: compatibility with -Wmissing-prototypes" [0].
+> For compatibility with LLVM/clang another series is needed [1].
+>
+> [0] https://lore.kernel.org/lkml/20250123-nolibc-prototype-v1-0-e1afc5c19=
+99a@weissschuh.net/
+> [1] https://lore.kernel.org/lkml/20250213-kbuild-userprog-fixes-v1-0-f255=
+fb477d98@linutronix.de/
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Thomas Wei=C3=9Fschuh (12):
+>       kconfig: implement CONFIG_HEADERS_INSTALL for Usermode Linux
+>       kconfig: introduce CONFIG_ARCH_HAS_NOLIBC
+>       kbuild: userprogs: respect CONFIG_WERROR
+>       kbuild: userprogs: add nolibc support
+>       kbuild: introduce blob framework
+>       kunit: tool: Add test for nested test result reporting
+>       kunit: tool: Don't overwrite test status based on subtest counts
+>       kunit: tool: Parse skipped tests from kselftest.h
+>       kunit: Introduce UAPI testing framework
+>       kunit: uapi: Add example for UAPI tests
+>       kunit: uapi: Introduce preinit executable
+>       kunit: uapi: Validate usability of /proc
+>
+>  Documentation/kbuild/makefiles.rst                 |  12 +
+>  Makefile                                           |   5 +-
+>  include/kunit/uapi.h                               |  17 ++
+>  include/linux/blob.h                               |  21 ++
+>  init/Kconfig                                       |   2 +
+>  lib/Kconfig.debug                                  |   1 -
+>  lib/kunit/Kconfig                                  |   9 +
+>  lib/kunit/Makefile                                 |  17 +-
+>  lib/kunit/kunit-example-test.c                     |  17 ++
+>  lib/kunit/kunit-uapi-example.c                     |  58 +++++
+>  lib/kunit/uapi-preinit.c                           |  61 +++++
+>  lib/kunit/uapi.c                                   | 250 +++++++++++++++=
+++++++
+>  scripts/Makefile.blobs                             |  19 ++
+>  scripts/Makefile.build                             |   6 +
+>  scripts/Makefile.clean                             |   2 +-
+>  scripts/Makefile.userprogs                         |  18 +-
+>  scripts/blob-wrap.c                                |  27 +++
+>  tools/include/nolibc/Kconfig.nolibc                |  18 ++
+>  tools/testing/kunit/kunit_parser.py                |  13 +-
+>  tools/testing/kunit/kunit_tool_test.py             |   9 +
+>  .../test_is_test_passed-failure-nested.log         |  10 +
+>  .../test_data/test_is_test_passed-kselftest.log    |   3 +-
+>  22 files changed, 584 insertions(+), 11 deletions(-)
+> ---
+> base-commit: 20e952894066214a80793404c9578d72ef89c5e0
+> change-id: 20241015-kunit-kselftests-56273bc40442
+>
+> Best regards,
+> --
+> Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+>
+
+--000000000000c4ef9b062e664fa1
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -202,14 +381,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgvqcGNHvtFSeAZv69xwF/ovRGRyyB
-4VYvwkAOSjYsPUowGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MjE4MDc0MTI4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgKWvTIDzDKHvkh+HzIVVioiaeUqrb
+vD6Az0VCNvZDpikwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MjE4MDgyMDIwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAG9yFIG+nnA6Nawz7JYwbEv0sPhDuDRM0TZTLG80SpgBNnbD
-XbO+h59L/nLubPlVs1wx+NJhyFbLBaYYIOAtjBSnN9I5w8C2GVq3tUARYPYqR6Uc4/3uE5kZzC8H
-BLdemQThw1m3clMWUsKYvZ82rBM7xlP3z0zx/X7m+EMRNE7gOb8aYXcXud1OHYrvtxKwAHMhurtL
-hJDpSfNrndedlRoX2g8sy5IRYnh71FDw/6uOuybbWmYB3Qh6LeuzB5L5wdHohgNbkgq5OeA2EE6u
-MP6ei3/nclXkFozHXADRebi2zKDh0afO0SDIOyJmtPsJFNxxrczpTtbOgQ5g82zt7Wk=
---000000000000d1c2a5062e65c42b--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAB+x+32dQJe+HlV23ej672XPDnZVY91JzcJlA2p5Vgm0kjJN
+IS4bc+kSgNEMfPiMPF6ttC+8DKxpHw2lW9/rh/B0HyPLTfM0NmCBBe9ic62C7NsuHEpN6KDWtUJg
++7dDkMbA7t5bPLFIAlkGjqRNHaUhA+igRefxt8OEKYoOkjJzayQfeKLaMAoQNIQVC8exnxifmwr4
+jXoVKbVUBVgEsvhk0JWK2oRDu+IzxTFco9CvO4VEGzZHLVsXdBk8CB61DCEhu5WOslZh0YNtBjVE
+lx6uAd/+UR8s7SkDC+Xps0DT4jF+w1co0B/DEMTVWAvHESBy6hO+GiL9b3QpLgsFyNM=
+--000000000000c4ef9b062e664fa1--
 
