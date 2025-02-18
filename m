@@ -1,183 +1,198 @@
-Return-Path: <linux-kselftest+bounces-26907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A462A3ABDA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 23:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B524CA3AC0F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 23:55:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 810513A86E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 22:40:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 694E03B20E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 22:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7747A1DC9A7;
-	Tue, 18 Feb 2025 22:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C951DDA39;
+	Tue, 18 Feb 2025 22:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IvSDRWjQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiOZcO7g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72FE1D958E
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 22:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930811D8A0D;
+	Tue, 18 Feb 2025 22:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739918441; cv=none; b=JeWUvqO8CTQDdmidbHXPlBX+BfmAxsa3vRoxAdTupewWyElVpDtlqBpnvQy3ikwMmlnoIJAqOSdFbninNmJ80t6NSeDccPHuET9vja0RwwCywyYJoRpWeRy8PcpJVtYmBNyhgvTiF5x8az5lXdbHgEMKsZzltZ1DYuns4ZULOTY=
+	t=1739919301; cv=none; b=kbLCz0MTw9i4aK2RbcNaskftyB7Eb5Pypv7jpT8mTOFZnr141vuqt4erjQOHV0SLQHLJ+lwVaTZgOz46MqH40X2mC4b0JRQ29ZZXh3aTT70l8xYY8+j6TCi0pOLOOFIrQKomhlIy7cvqGGXTQ4VariEDJ94Cbnj+8gRArYp+WHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739918441; c=relaxed/simple;
-	bh=ivyLIcXrK8i6Sm3bd5ok9RWHX3VEX/cjKUj/8oDDJcE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Mp1X0B/R+MIjrU4mJkDHvT3CoJbFZa0PklT0dS1a1hfHfG6pBkRIx9YOemt0xN8MMuVlMryf6IksqjOXnRrfYQbIAwuNEJhpJttuUXdtGC9xtt/JdD+Nr0wZvQRd5y+edeiKkrtSabHxZeseY/f15EYvW6ICheGPM1y7n/8Ga0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IvSDRWjQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739918438;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ivyLIcXrK8i6Sm3bd5ok9RWHX3VEX/cjKUj/8oDDJcE=;
-	b=IvSDRWjQdRT4NGhiLewqXrvQBjvpefMgEe0SOgJq2yYLYqH11psVSMyQzhuaeplKwQUkdE
-	LBmOAI4AKSyzvglau5HjGQeUY7Cru6gGTs8WQiQUx1dBTPSitWTLr8VhR8bnOF+f1tm3na
-	CRPw44/drwXLsGZnG2r5HQGa2oaOxZE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-578-iKhPIujGMGSXjmF_UuchYg-1; Tue, 18 Feb 2025 17:40:36 -0500
-X-MC-Unique: iKhPIujGMGSXjmF_UuchYg-1
-X-Mimecast-MFC-AGG-ID: iKhPIujGMGSXjmF_UuchYg_1739918435
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4388eee7073so961985e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 14:40:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739918435; x=1740523235;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivyLIcXrK8i6Sm3bd5ok9RWHX3VEX/cjKUj/8oDDJcE=;
-        b=O+ej8PwqD3+fF5gMOf1xP93IMm/Qic4ESICNb1bgPniwDPn0DemJLnr2w2VYADoUnO
-         ba6TmSRtM+HOoHC/51TLDUYrDyrzWXbkDkRWQBVm+jgM6w1ErfiLx+Ez5FTMrGnRFliO
-         L4S71sQS6yQ7per4iR1YTFGTxIycgLw0yJByIA53AUtdFZV5uTcjFOwMLHcN1nRU+Zbl
-         EHP7AZPzDdTDXSv6t5a2mTnJB/fAFnbcRui0aHh4J+cgjp4YEcbGOHHvznpoGfUBEFmv
-         7LOadIiFue3eoJUT705DAeuqRSVfgwIoDeOAGnEUisXwH3e+H4jqSiZdtM6m6cdT4OWJ
-         6n4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVFZUolArme0m2eGz+PB9rHS2uW+YKyHKNbk562naW2f6qt+vvnoZJALLbMUhyDPFcKA8AWJcz6WYUcstAZbA0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSMods1gfJpL8IfsG+2oHMVlG2ZmPUAZivd5jJBV8VO5z4ZA0h
-	1BhOrP1fbmmD2yTwpDbWgOe7ZfiwOIx1y8x5wM8YH087NCZoBuI2tuMrDKfpItx2rD7F+OmuDGG
-	Aj7BKEBc4b8nEUE+7Rl31FWYib1uLfhXaSXi2t8sVaigmCR4rUlcyXrv3eS+de3chCg==
-X-Gm-Gg: ASbGncsXx8zYBfWwOP8aiKRjCT9PY2mpK6p83YjbKW5ifB2TuoEdoB4Y+ZU+oygtzz3
-	oeLTg19T+U4J9SSHYfbk+4RbILUl6w/ws077/SQM7Erb9YLADFOPmD6+u6xrVadCJerEmub4TUC
-	SJwHuSYQ9rOuZB6VBjCKneK0aTNGyQnPZz4VcJ7/O2BujBeONsnKoRjnC1a2i+RZOqMC0yHC2wA
-	cDu66mIc/JHpggDQAoG1WRnNsSLmMlBFP3z0pu/B/gwyA2FZKijOT6On8dM5dbR1LQwc+beKmsy
-	dsH6unc/R4tTHy3IlKYJaCqokqhAycZ7m/uy6u/3cfGeUK+CImCZQzTxQ2DkWdW8OQ==
-X-Received: by 2002:a05:600c:314b:b0:439:86c4:a8d7 with SMTP id 5b1f17b1804b1-43999ae0dc8mr11798075e9.5.1739918435433;
-        Tue, 18 Feb 2025 14:40:35 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEI17xveq4qpUoXVn3jaf3vZekMu127UgmikmUhaFlSZ5tyuyrG+gdqtYt1+dNUau7VWeDZUA==
-X-Received: by 2002:a05:600c:314b:b0:439:86c4:a8d7 with SMTP id 5b1f17b1804b1-43999ae0dc8mr11797275e9.5.1739918434928;
-        Tue, 18 Feb 2025 14:40:34 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43993847f39sm32922065e9.14.2025.02.18.14.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 14:40:34 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
- kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
- Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
- <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
- Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
- <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
- Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
- <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
- <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
- <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
- Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
- Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
- Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
- Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
- <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
- Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
- Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
- Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
- <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
- Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
- flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-In-Reply-To: <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
-References: <20250114175143.81438-1-vschneid@redhat.com>
- <20250114175143.81438-30-vschneid@redhat.com>
- <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
- <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
- <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
- <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
-Date: Tue, 18 Feb 2025 23:40:31 +0100
-Message-ID: <xhsmhjz9mj2qo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1739919301; c=relaxed/simple;
+	bh=JfZZ5wVAOe/Y1NihNftjYuYbwLi7XmW8eEZlPrqPMd4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AtgLHhWS2qFYesAWal7ExFsAez1OBW0cB1j2SQvKVZCUuTaKFT+IW9DhOw+tGXpqgbmc4Zyqdim5rsGBDwa+09ctw+aDDKCfksoBg8ng1nObxQAWwMQWeIk2045a6WD22wq0nQ636c1L2roOs/ctLY+aTEn4GLpTMZl/bxomZl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiOZcO7g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F80C4CEE2;
+	Tue, 18 Feb 2025 22:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739919301;
+	bh=JfZZ5wVAOe/Y1NihNftjYuYbwLi7XmW8eEZlPrqPMd4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aiOZcO7gz+YKbzy7UfmkDhU3tc1GP77KXGgqZvo8QBWC5vgpTgTrmRki8TY27KEG9
+	 8HqF/60pEH5UBgtSchm3Se6wqh0dZaDowr6l0b6r0YUl+j0tajI/QC2mEqdWnL1GnL
+	 LiqABVRTk5NWk1BgguBFuStYX4r6uCiugCD746iyvxydi45/2eBqxBVJGd1AGnfWRG
+	 ylD6MnyNRCoHpbpVjxW/FVxP8oPsdm4slgSekZk/4aRmRIPRkFjtlJborqm0BF8/oW
+	 GCSKlZDlRTb1JiQ+9Nn3ndwQV91qYjgd4h0D3IG0l3MLO6jxlYtY1qBAyD9YDZ6pGA
+	 E6dhuaXIuBhyA==
+Date: Tue, 18 Feb 2025 22:54:57 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 00/27] KVM: arm64: Implement support for SME in
+ non-protected guests
+Message-ID: <Z7UPwXVqkaKZDtGk@finisterre.sirena.org.uk>
+References: <20250214-kvm-arm64-sme-v4-0-d64a681adcc2@kernel.org>
+ <86pljkswuk.wl-maz@kernel.org>
+ <Z69dsGn1JVWPCqAi@finisterre.sirena.org.uk>
+ <86h64ssyi1.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="S0+W34M0g75qMnHY"
+Content-Disposition: inline
+In-Reply-To: <86h64ssyi1.wl-maz@kernel.org>
+X-Cookie: Editing is a rewording activity.
 
-On 11/02/25 06:22, Dave Hansen wrote:
-> On 2/11/25 05:33, Valentin Schneider wrote:
->>> 2. It's wrong to assume that TLB entries are only populated for
->>> addresses you access - thanks to speculative execution, you have to
->>> assume that the CPU might be populating random TLB entries all over
->>> the place.
->> Gotta love speculation. Now it is supposed to be limited to genuinely
->> accessible data & code, right? Say theoretically we have a full TLBi as
->> literally the last thing before doing the return-to-userspace, speculation
->> should be limited to executing maybe bits of the return-from-userspace
->> code?
->
-> In practice, it's mostly limited like that.
->
-> Architecturally, there are no promises from the CPU. It is within its
-> rights to cache anything from the page tables at any time. If it's in
-> the CR3 tree, it's fair game.
->
 
-So what if the VMEMMAP range *isn't* in the CR3 tree when a CPU is
-executing in userspace?
+--S0+W34M0g75qMnHY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-AIUI that's the case with kPTI - the remaining kernel pages should mostly
-be .entry.text and cpu_entry_area, at least for x86.
+On Mon, Feb 17, 2025 at 09:37:26AM +0000, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Fri, Feb 14, 2025 at 09:24:03AM +0000, Marc Zyngier wrote:
 
-It sounds like it wouldn't do much for arm64 though, if with CnP a CPU executing in
-userspace and with the user/trampoline page table installed can still use
-TLB entries of another CPU executing in kernelspace with the kernel page
-table installed.
+> > > Why SVCR? This isn't a register, just an architected accessor to
+> > > PSTATE.{ZA,SM}. Userspace already has direct access to PSTATE, so I
+> > > don't understand this requirement.
 
+> > Could you be more explicit as to what you mean by direct access to
+> > PSTATE here?  The direct access to these PSTATE fields is in the form of
+
+> I'm painfully aware of the architecture limitations.
+
+> However, I don't get your mention of SPSR here. The architecture is
+> quite clear that PSTATE is where these bits are held, that they are
+> not propagated anywhere else, and that's where userspace should expect
+> to find them.
+
+> The fact that SW must use SVCR to alter PSTATE.{ZA,SM} doesn't matter.
+> We save/restore registers, not accessors. If this means we need to
+> play a dance when the VMM accesses PSTATE to reconciliate KVM's
+> internal view with the userspace view, so be it.
+
+Could you please clarify what you're referring to as the VMM accessing
+PSTATE here?  The KVM API documentation defines it's concept of PSTATE
+as:
+
+ 0x6030 0000 0010 0042 PSTATE      64  regs.pstate
+
+in api.rst but does not futher elaborate.  Looking at the code the
+values that appear there seem to be mapped fairly directly to SPSR
+values, this is why I was talking about them above.
+
+It's not clear to me that PSTATE in the architecture is a register
+exactly.  DDI0487 L.a D1.4 defines the PSTATE bits as being stored in a
+ProcState pseudocode structure (ProcState is defined in J1.3.3.457, the
+pseudocode maps PSTATE in J1.3.3.454) but has an explicit comment that
+"There is no significace in the field order".  I can't seem to locate an
+architectural definition of the layout of PSTATE as a whole.  I also
+can't find any direct observability of PSTATE as a whole which would
+require a layout definition for PSTATE itself from the architecture. =20
+
+There *is* a statement in R_DQXFW that "The contents of PSTATE
+immediately before the exception was taken are written to SPSR_ELx"
+which is somewhat in conflict with the absence of SM and ZA fields in
+any of SPSR_ELx.  There's also R_BWCFK similarly for exception return,
+though that also already has some additional text for PSTATE.{IT,T} for
+returns to AArch32.  If everything in PSTATE ends up getting written to
+SPSR then we can use SPSR as our representation of PSTATE.
+
+> It probably means you need to obtain a clarification of the
+> architecture to define *where* these bits are stored in PSTATE,
+> because that's not currently defined.
+
+I will raise the issue with R_DQXFW and friends with the architects but
+I'm not convinced that at this point the clarification wouldn't be an
+adjustment to those rules rather than the addition of fields for SM and
+ZA in the SPSRs.  Without any additions the only access we have is via
+SVCR.
+
+> > > Isn't it that there is simply a dependency between restoring PSTATE
+> > > and any of the vector stuff? Also, how do you preserve the current ABI
+> > > that do not have this requirement?
+
+> > Yes, that's the dependency - I'm spelling out explicitly what changes in
+> > the register view when PSTATE.{SM,ZA} are restored.  This ABI is what
+> > you appeared to be asking for the last time we discussed this.
+
+=2E..
+
+> > Would you prefer:
+
+> >  - Changing the register view based on the current value of PSTATE.SM.
+> >  - Exposing streaming mode Z and P as separate registers.
+> >  - Exposing the existing Z and P registers with the maximum S?E VL.
+
+> > or some other option?
+
+> My take on this hasn't changed. I want to see something that behaves
+> *exactly* like the architecture defines the expected behaviour of a
+> CPU.
+
+> But you still haven't answered my question: How is the *current* ABI
+> preserved? Does it require *not* selecting SME? Does it require
+> anything else? I'm expecting simple answers to simple questions, not a
+
+Yes, it requires not selecting SME and only that.  If the VMM does not
+enable SME then it should see no change.
+
+> wall of text describing something that is not emulating the
+> architecture.
+
+I'm not clear what you're referring to as not emulating the architecture
+here, I *think* it's the issues with PSTATE.{SM,ZA} not appearing in
+SPSR_ELx and hence KVM's pstate?
+
+Your general style of interaction means that it is not always altogether
+clear when your intent is to just ask a simple question or when it is to
+point out some problem you have seen.
+
+--S0+W34M0g75qMnHY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme1D8EACgkQJNaLcl1U
+h9Ag7Af9FSno1GEtP2DysLSKInBllL4rhNcN+6z7D0oMeZYX+CbjmeedfMLNVwdd
+quEjDrrV5PN76cyP3s35ABkWOUUUWyrUMYt3sP6vVesfNuMhjb54DETOj71CTEaW
+wt8TicvFuN6erEuz85tgB5CPng+CEGwJRhu6STP7/gBEfPou7y/9dH6xj++i/ueD
+Affm1jdtJAtdk6lDgtqjF0K9Tkawu8SM/0MkoITsCRK3R05LpSLBiCvr3S0e/rUv
+r616LswXOvPnYxuJ3Cr2phgx5ZTGgSo+IH/KQUOdK9lM1E6YkqXDtNQtw5qXldu+
+NYjTRYepfepTBCUZ6GVhkP7IEmi+tQ==
+=qowg
+-----END PGP SIGNATURE-----
+
+--S0+W34M0g75qMnHY--
 
