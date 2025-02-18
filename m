@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-26864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6C72A3A1A4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 16:46:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5F5A3A1FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 17:02:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC0BE1896499
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 15:44:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7383E3B1826
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2025 16:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388E126D5CF;
-	Tue, 18 Feb 2025 15:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E6326A0FD;
+	Tue, 18 Feb 2025 16:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gCqO7Fxu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ONwdfrKc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152C126B2B1
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 15:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF9917A5BE
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 16:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739893480; cv=none; b=X8HHQLlSgLYp46H5aDxdxeuprLaMw/XSJLG/z2KpQHJhUAm+gt2HYFot3X713TjNB+LMZPLrcSZ3oIwO9VnFN59stNGmpch31rP0gaCLMj7VKuR0R6KFFeJYaELnu4RewY7Cm7kEqmHbROUFYWdtQgYgvq0TNyM7VvOaVZ7stv8=
+	t=1739894487; cv=none; b=jeToiV6NvAaZuMM7q8k4CubFy7BsX+i5P1nDUcoGWe7tDL4ErevymaL65CZ2PVTrEPcVtV6bDAx2yxgyFsJwaYAlf4sjX2oDOTU4UsQAFIbC8fatdjTENPyf+INE21BNyrbuwYF50bp7c8r/o1Ulqal3oavv0LaLoO7LEYVyt7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739893480; c=relaxed/simple;
-	bh=hiqOyvIEADhwDnamhAD6b4fdHsnB2JQnJi9A7JWykdg=;
+	s=arc-20240116; t=1739894487; c=relaxed/simple;
+	bh=UvuZtIGK9MeHMo2aRo3rjzHxvVtxuAGf5O8DSxBo45I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hM1Plh2sZC5Ed8L/bX8qLyg0Hbetq7gs1D2kZmvEtQymhB7uV+ybJujAmfdcH2w1L0GIrV9wiPnEnJQoFl866lb8Ro/UN1ntZAHTTthNL+MOuBTDppUBtrH/QRbJBuHj0RXL3LznxUoPMy1uuPSKYnJj/JYY3nUkdy6hU/dpu5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gCqO7Fxu; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=QxqkEfAMUw7g+F9P5+o0XI2wpesYgtKj3WtdVNVXmnD/Bs9GM1VlrYAoCy8mqZSE/W2qaAV1iX0HUZVxmh40edG4rQf2hGf1x/aqZS1x3R/WbRnVpYENipTMHPAAce11iQviOEItrSTf0+PJIFa/EgPIuMd0eXn2ejbls6k154g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ONwdfrKc; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739893477;
+	s=mimecast20190719; t=1739894484;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WcUPNx2JQC70JR9g0edingK7bsjKh0hOq9aSnZC+a6M=;
-	b=gCqO7FxupRrBY9Wbo+jDuEt1U2M/iHMxPHVnvmPcUBb2EK/X3owA7n5e+w+ImEAdSV+nX6
-	wITqekGYMKFXc5f+Za0CB7bruFLzEmj4WeXRmo/BMDGjvgZJZjeetUfzrJbPKb/GO0CUHX
-	Fk3yK362CLPcVTYJ5zJ87yyIgyV6/ug=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=OZALwbNO1anqS1IpJTNPIJALYFX/VMX5QzhlDdb1MKc=;
+	b=ONwdfrKcryRgPc37ew5t623gda/PfrMwsr5JtPng391UxMZD/YpxvbW3E4mAvD1pfvGI/R
+	V7nmuIHDBgqZsrl2V5UDZaWzXs+wrr27sZq2rn4I8YFeQhzc7lS4aAAmvPDh5RG0qrpnZO
+	mYWI0XZe9UWr3XcWt1cZBOSOP9TZ4yg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-dyNj8moaM8SrBGThLh_m2Q-1; Tue, 18 Feb 2025 10:44:33 -0500
-X-MC-Unique: dyNj8moaM8SrBGThLh_m2Q-1
-X-Mimecast-MFC-AGG-ID: dyNj8moaM8SrBGThLh_m2Q_1739893473
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-38f2c0aa6d6so2077128f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 07:44:33 -0800 (PST)
+ us-mta-589-EBf6nM9fMmSfmdzOH1zowQ-1; Tue, 18 Feb 2025 11:01:23 -0500
+X-MC-Unique: EBf6nM9fMmSfmdzOH1zowQ-1
+X-Mimecast-MFC-AGG-ID: EBf6nM9fMmSfmdzOH1zowQ_1739894482
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43988b9ecfbso10415995e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2025 08:01:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739893472; x=1740498272;
+        d=1e100.net; s=20230601; t=1739894482; x=1740499282;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=WcUPNx2JQC70JR9g0edingK7bsjKh0hOq9aSnZC+a6M=;
-        b=StxGKRDPecLWV9z2IWbn3jYCKorQeoXnP12/YwU3sOOSa1oJOvxOmKfjVcPFKRtuej
-         fHA2m8oedTvOs0D4G8ws5gImmBaPCXODYSG6bskVcebcgVxLolD5Jpd3/2iY6kRrK0Rt
-         QRyI5AbPP0jLS5LA1bp1rs8gVYwBwLug5DrXh3ObWzcyts64eCJ3VM5zHnRcYvPdmlSw
-         5sBqphiJ71ALUjz3GeGPNZBFQpE5oVsNtgKhOTMN9/OY/O+S2yF2q1jt+npb8XDHhpS8
-         cV853wHaxL36NPUd6KzRwTts3NARSnKOYFbqVGhUy3gRqZ3RbT2q7b1+oTVvoqTEx9Je
-         oowA==
-X-Forwarded-Encrypted: i=1; AJvYcCU4bdYOgr15YvSEsIqKfAZ/BpPwZgQBlhIZjAMCMo81ry1sSS9MXw4cPHGGELXio7p934sV2vB18/P+E0PbNsM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzP/StmXc35mjB3WoZUZ/LxE2qhQVz4ShZhNv/xqBZcaQT23tGJ
-	ai225Fw3G6r42r8tgDed9pvVLzNMdRboo0lm9soalhvEnf6PaeUnVObpAS8uBOVUJW9HvDEdJ3u
-	X4JrE/xUkPTgpvNZP7lt63hTjB6oVfIQlsqEGb3/RSL7djx41SnKamyNAeN6ZjoSE1g==
-X-Gm-Gg: ASbGncuMs6t8WlcvV3fQbd4xlbhg36DWVqsjzaYKjCA7m1XN0leWIR3TmPsG0i+rAKJ
-	KvH5fLunwV04eYDiQkgI56q+nxBj+BrEnd8c/gaNPAvnGXJj0L/IVRsWq9ofqeuLATfI8vdtBYm
-	IjwhtPdYrBSwZBhwTuiwoajp7tAa6hT0Y7KXRoC/jqBvHrI9sEyvJg+5TErwGcYvS40uw4O0Lvt
-	2KXV+nBTv08O29LOBkI+2w34+P3CRqxLAz/qfz9K62NmJDo3ShBg5UF5d4F36Ppw3X8JWyaCBYZ
-	ZM2fC/9Cxh5S+erzkmfeYFmWJdM9NnmpCdc4egwLVhrP1jvh7yy3XyEnGTWMM0TMIzaitovqxt8
-	0zUNgJvvFlNI0kt2FWr1l412UdUgwxNmN
-X-Received: by 2002:a05:6000:1f84:b0:38d:dc03:a3d6 with SMTP id ffacd0b85a97d-38f57bce501mr200200f8f.4.1739893472531;
-        Tue, 18 Feb 2025 07:44:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGaCfKmA14NfZC6X6I9NJIGyPqDFslk1wKOQE8jruH0uq2xV6T15XNvNwo+oWnoq8Dr3kHSIA==
-X-Received: by 2002:a05:6000:1f84:b0:38d:dc03:a3d6 with SMTP id ffacd0b85a97d-38f57bce501mr200164f8f.4.1739893471971;
-        Tue, 18 Feb 2025 07:44:31 -0800 (PST)
+        bh=OZALwbNO1anqS1IpJTNPIJALYFX/VMX5QzhlDdb1MKc=;
+        b=bEZuHR5Uc4Bra3nGzdmQzdsAaKWLGOGfqBzt/V41Qkhc1eyjCL6MbgkA0SGYhMzezk
+         /SFgWZQlTQFSYy6/V3l8aswJFb6MmBFwy5dUNeDyoYbKRQm0N5WYojQG1nNylUuQHbrm
+         OzyjUPuuy6xLNvxSli2GK/a9xFLmPvzhe8BJEP5zRQgg2EwXSywnWbaknwuMtuSao/0O
+         FTJSP3dqhERET7YCAJbpS2ZA/4ppA9yuXKqEAiLITuRtr+W71CvXmbMr81rZgThgNGFF
+         p2ORCdoWUGtWcHD21a7V2HeKUNP2h/XVVvae2DO+qdpEIqCMnTJ2ngXSq3EenZo0hRLl
+         RCYg==
+X-Forwarded-Encrypted: i=1; AJvYcCX2cjvdLvLYkUM1fr1ag3+GQkrEa0mBl6hob+IIhWPiXV0bnY6/X9uSmrCaZuBhh8V/MPUjtdK8mJyQ/qBUe5E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6TWBfxzkYyd4wcGPwBWCqVVu0FRjW6yLe4h7TmWVwq8rHBQt/
+	J8Uw1LWvfCL45oULXveq/T+8CRcChK297CnC55pZpZ05IqTNZggyVP/JUZDvyxLwn8rZNRU5tZY
+	cw5EjOZqUEnGxeRkz5KIQ7dfqmhZ8rK5UoMAmwFMYRzZVG6GRRw8Jc57hlbFg7b70wA==
+X-Gm-Gg: ASbGncvL5U5cXEVHdDGS3VoOZw1KNqwUjne5COheCunoW4WAQ+RPgN0losL/GkhjBC+
+	P/Ere6TB9ShDgHiHu7/2WXVBDwck9CJuQ0WvswdJtyq96rQCe9t+Kdp0RRwPPktMg/Qlc5rdGNI
+	g1FBzplyHhy5Bss4Mbc4fiZqCGoUuU1HEuVjK8gyC/A3NmAF6MxrD5cqjLVU0Xhnap8B1NNCIVP
+	lHj1Id0AolWLqMxL5KuVrBq27n9/KRIpELDQRgOgtNpq0Y4KFq3CXG2DVy3Lbp+VSNHGXyAxKVG
+	N55TFpDT3Yzw29Dwk1duZ4k4g1qaCTz6nmkmwu687F661lMvJj28swnDXb810LxjpGKCPnuoRHZ
+	werqwtFp3/s/BBpXLf747mRx8Y3PGMeDt
+X-Received: by 2002:a05:600c:4e8c:b0:439:9274:81db with SMTP id 5b1f17b1804b1-43999d76ddcmr2054595e9.5.1739894480668;
+        Tue, 18 Feb 2025 08:01:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFvBVXumXyfefgpbaVSjPbx3tHV6CAyNCsTaIbB11MfRh7efHMuXI3E3gi2t7deJ94wH3ij8A==
+X-Received: by 2002:a05:600c:4e8c:b0:439:9274:81db with SMTP id 5b1f17b1804b1-43999d76ddcmr2053335e9.5.1739894479812;
+        Tue, 18 Feb 2025 08:01:19 -0800 (PST)
 Received: from ?IPV6:2003:cb:c70d:fb00:d3ed:5f44:1b2d:12af? (p200300cbc70dfb00d3ed5f441b2d12af.dip0.t-ipconnect.de. [2003:cb:c70d:fb00:d3ed:5f44:1b2d:12af])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4398a64febasm46852565e9.1.2025.02.18.07.44.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f258b4314sm15212358f8f.9.2025.02.18.08.01.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 07:44:31 -0800 (PST)
-Message-ID: <af3b230c-7aeb-44bf-8db3-3538dfb1b93c@redhat.com>
-Date: Tue, 18 Feb 2025 16:44:28 +0100
+        Tue, 18 Feb 2025 08:01:18 -0800 (PST)
+Message-ID: <6500a93f-aad1-4b21-a94e-feb493c344a3@redhat.com>
+Date: Tue, 18 Feb 2025 17:01:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,22 +90,20 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/8] xarray: add xas_try_split() to split a multi-index
- entry.
-To: Zi Yan <ziy@nvidia.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
- Yang Shi <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>,
- John Hubbard <jhubbard@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250211155034.268962-1-ziy@nvidia.com>
- <20250211155034.268962-2-ziy@nvidia.com>
- <0bb75517-9418-4145-8aa8-b05373010711@redhat.com>
- <F5D2A2F4-34DC-4967-A149-A4D5578B5DB2@nvidia.com>
+Subject: Re: [PATCH 1/4] mm: allow guard regions in file-backed and read-only
+ mappings
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>,
+ Juan Yescas <jyescas@google.com>, Kalesh Singh <kaleshsingh@google.com>
+References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
+ <d885cb259174736c2830a5dfe07f81b214ef3faa.1739469950.git.lorenzo.stoakes@oracle.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -153,382 +151,53 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <F5D2A2F4-34DC-4967-A149-A4D5578B5DB2@nvidia.com>
+In-Reply-To: <d885cb259174736c2830a5dfe07f81b214ef3faa.1739469950.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 17.02.25 23:05, Zi Yan wrote:
-> On 17 Feb 2025, at 16:44, David Hildenbrand wrote:
+On 13.02.25 19:17, Lorenzo Stoakes wrote:
+> There is no reason to disallow guard regions in file-backed mappings -
+> readahead and fault-around both function correctly in the presence of PTE
+> markers, equally other operations relating to memory-mapped files function
+> correctly.
 > 
->> On 11.02.25 16:50, Zi Yan wrote:
->>> It is a preparation patch for non-uniform folio split, which always split
->>> a folio into half iteratively, and minimal xarray entry split.
->>>
->>> Currently, xas_split_alloc() and xas_split() always split all slots from a
->>> multi-index entry. They cost the same number of xa_node as the to-be-split
->>> slots. For example, to split an order-9 entry, which takes 2^(9-6)=8
->>> slots, assuming XA_CHUNK_SHIFT is 6 (!CONFIG_BASE_SMALL), 8 xa_node are
->>> needed. Instead xas_try_split() is intended to be used iteratively to split
->>> the order-9 entry into 2 order-8 entries, then split one order-8 entry,
->>> based on the given index, to 2 order-7 entries, ..., and split one order-1
->>> entry to 2 order-0 entries. When splitting the order-6 entry and a new
->>> xa_node is needed, xas_try_split() will try to allocate one if possible.
->>> As a result, xas_try_split() would only need one xa_node instead of 8.
->>>
->>> When a new xa_node is needed during the split, xas_try_split() can try to
->>> allocate one but no more. -ENOMEM will be return if a node cannot be
->>> allocated. -EINVAL will be return if a sibling node is split or
->>> cascade split happens, where two or more new nodes are needed, and these
->>> are not supported by xas_try_split().
->>>
->>> xas_split_alloc() and xas_split() split an order-9 to order-0:
->>>
->>>            ---------------------------------
->>>            |   |   |   |   |   |   |   |   |
->>>            | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
->>>            |   |   |   |   |   |   |   |   |
->>>            ---------------------------------
->>>              |   |                   |   |
->>>        -------   ---               ---   -------
->>>        |           |     ...       |           |
->>>        V           V               V           V
->>> ----------- -----------     ----------- -----------
->>> | xa_node | | xa_node | ... | xa_node | | xa_node |
->>> ----------- -----------     ----------- -----------
->>>
->>> xas_try_split() splits an order-9 to order-0:
->>>      ---------------------------------
->>>      |   |   |   |   |   |   |   |   |
->>>      | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
->>>      |   |   |   |   |   |   |   |   |
->>>      ---------------------------------
->>>        |
->>>        |
->>>        V
->>> -----------
->>> | xa_node |
->>> -----------
->>>
->>> Signed-off-by: Zi Yan <ziy@nvidia.com>
->>> ---
->>>    Documentation/core-api/xarray.rst |  14 ++-
->>>    include/linux/xarray.h            |   7 ++
->>>    lib/test_xarray.c                 |  47 +++++++++++
->>>    lib/xarray.c                      | 136 ++++++++++++++++++++++++++----
->>>    tools/testing/radix-tree/Makefile |   1 +
->>>    5 files changed, 188 insertions(+), 17 deletions(-)
->>>
->>> diff --git a/Documentation/core-api/xarray.rst b/Documentation/core-api/xarray.rst
->>> index f6a3eef4fe7f..c6c91cbd0c3c 100644
->>> --- a/Documentation/core-api/xarray.rst
->>> +++ b/Documentation/core-api/xarray.rst
->>> @@ -489,7 +489,19 @@ Storing ``NULL`` into any index of a multi-index entry will set the
->>>    entry at every index to ``NULL`` and dissolve the tie.  A multi-index
->>>    entry can be split into entries occupying smaller ranges by calling
->>>    xas_split_alloc() without the xa_lock held, followed by taking the lock
->>> -and calling xas_split().
->>> +and calling xas_split() or calling xas_try_split() with xa_lock. The
->>> +difference between xas_split_alloc()+xas_split() and xas_try_alloc() is
->>> +that xas_split_alloc() + xas_split() split the entry from the original
->>> +order to the new order in one shot uniformly, whereas xas_try_split()
->>> +iteratively splits the entry containing the index non-uniformly.
->>> +For example, to split an order-9 entry, which takes 2^(9-6)=8 slots,
->>> +assuming ``XA_CHUNK_SHIFT`` is 6, xas_split_alloc() + xas_split() need
->>> +8 xa_node. xas_try_split() splits the order-9 entry into
->>> +2 order-8 entries, then split one order-8 entry, based on the given index,
->>> +to 2 order-7 entries, ..., and split one order-1 entry to 2 order-0 entries.
->>> +When splitting the order-6 entry and a new xa_node is needed, xas_try_split()
->>> +will try to allocate one if possible. As a result, xas_try_split() would only
->>> +need 1 xa_node instead of 8.
->>>     Functions and structures
->>>    ========================
->>> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
->>> index 0b618ec04115..9eb8c7425090 100644
->>> --- a/include/linux/xarray.h
->>> +++ b/include/linux/xarray.h
->>> @@ -1555,6 +1555,8 @@ int xa_get_order(struct xarray *, unsigned long index);
->>>    int xas_get_order(struct xa_state *xas);
->>>    void xas_split(struct xa_state *, void *entry, unsigned int order);
->>>    void xas_split_alloc(struct xa_state *, void *entry, unsigned int order, gfp_t);
->>> +void xas_try_split(struct xa_state *xas, void *entry, unsigned int order,
->>> +		gfp_t gfp);
->>>    #else
->>>    static inline int xa_get_order(struct xarray *xa, unsigned long index)
->>>    {
->>> @@ -1576,6 +1578,11 @@ static inline void xas_split_alloc(struct xa_state *xas, void *entry,
->>>    		unsigned int order, gfp_t gfp)
->>>    {
->>>    }
->>> +
->>> +static inline void xas_try_split(struct xa_state *xas, void *entry,
->>> +		unsigned int order, gfp_t gfp)
->>> +{
->>> +}
->>>    #endif
->>>     /**
->>> diff --git a/lib/test_xarray.c b/lib/test_xarray.c
->>> index 6932a26f4927..598ca38a2f5b 100644
->>> --- a/lib/test_xarray.c
->>> +++ b/lib/test_xarray.c
->>> @@ -1857,6 +1857,49 @@ static void check_split_1(struct xarray *xa, unsigned long index,
->>>    	xa_destroy(xa);
->>>    }
->>>   +static void check_split_2(struct xarray *xa, unsigned long index,
->>> +				unsigned int order, unsigned int new_order)
->>> +{
->>> +	XA_STATE_ORDER(xas, xa, index, new_order);
->>> +	unsigned int i, found;
->>> +	void *entry;
->>> +
->>> +	xa_store_order(xa, index, order, xa, GFP_KERNEL);
->>> +	xa_set_mark(xa, index, XA_MARK_1);
->>> +
->>> +	xas_lock(&xas);
->>> +	xas_try_halve(&xas, xa, order, GFP_KERNEL);
->>> +	if (((new_order / XA_CHUNK_SHIFT) < (order / XA_CHUNK_SHIFT)) &&
->>> +	    new_order < order - 1) {
->>> +		XA_BUG_ON(xa, !xas_error(&xas) || xas_error(&xas) != -EINVAL);
->>> +		xas_unlock(&xas);
->>> +		goto out;
->>> +	}
->>> +	for (i = 0; i < (1 << order); i += (1 << new_order))
->>> +		__xa_store(xa, index + i, xa_mk_index(index + i), 0);
->>> +	xas_unlock(&xas);
->>> +
->>> +	for (i = 0; i < (1 << order); i++) {
->>> +		unsigned int val = index + (i & ~((1 << new_order) - 1));
->>> +		XA_BUG_ON(xa, xa_load(xa, index + i) != xa_mk_index(val));
->>> +	}
->>> +
->>> +	xa_set_mark(xa, index, XA_MARK_0);
->>> +	XA_BUG_ON(xa, !xa_get_mark(xa, index, XA_MARK_0));
->>> +
->>> +	xas_set_order(&xas, index, 0);
->>> +	found = 0;
->>> +	rcu_read_lock();
->>> +	xas_for_each_marked(&xas, entry, ULONG_MAX, XA_MARK_1) {
->>> +		found++;
->>> +		XA_BUG_ON(xa, xa_is_internal(entry));
->>> +	}
->>> +	rcu_read_unlock();
->>> +	XA_BUG_ON(xa, found != 1 << (order - new_order));
->>> +out:
->>> +	xa_destroy(xa);
->>> +}
->>> +
->>>    static noinline void check_split(struct xarray *xa)
->>>    {
->>>    	unsigned int order, new_order;
->>> @@ -1868,6 +1911,10 @@ static noinline void check_split(struct xarray *xa)
->>>    			check_split_1(xa, 0, order, new_order);
->>>    			check_split_1(xa, 1UL << order, order, new_order);
->>>    			check_split_1(xa, 3UL << order, order, new_order);
->>> +
->>> +			check_split_2(xa, 0, order, new_order);
->>> +			check_split_2(xa, 1UL << order, order, new_order);
->>> +			check_split_2(xa, 3UL << order, order, new_order);
->>>    		}
->>>    	}
->>>    }
->>> diff --git a/lib/xarray.c b/lib/xarray.c
->>> index 116e9286c64e..c38beca77830 100644
->>> --- a/lib/xarray.c
->>> +++ b/lib/xarray.c
->>> @@ -1007,6 +1007,31 @@ static void node_set_marks(struct xa_node *node, unsigned int offset,
->>>    	}
->>>    }
->>>   +static struct xa_node *__xas_alloc_node_for_split(struct xa_state *xas,
->>> +		void *entry, gfp_t gfp)
->>> +{
->>> +	unsigned int i;
->>> +	void *sibling = NULL;
->>> +	struct xa_node *node;
->>> +	unsigned int mask = xas->xa_sibs;
->>> +
->>> +	node = kmem_cache_alloc_lru(radix_tree_node_cachep, xas->xa_lru, gfp);
->>> +	if (!node)
->>> +		return NULL;
->>> +	node->array = xas->xa;
->>> +	for (i = 0; i < XA_CHUNK_SIZE; i++) {
->>> +		if ((i & mask) == 0) {
->>> +			RCU_INIT_POINTER(node->slots[i], entry);
->>> +			sibling = xa_mk_sibling(i);
->>> +		} else {
->>> +			RCU_INIT_POINTER(node->slots[i], sibling);
->>> +		}
->>> +	}
->>> +	RCU_INIT_POINTER(node->parent, xas->xa_alloc);
->>> +
->>> +	return node;
->>> +}
->>> +
->>>    /**
->>>     * xas_split_alloc() - Allocate memory for splitting an entry.
->>>     * @xas: XArray operation state.
->>> @@ -1025,7 +1050,6 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
->>>    		gfp_t gfp)
->>>    {
->>>    	unsigned int sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
->>> -	unsigned int mask = xas->xa_sibs;
->>>     	/* XXX: no support for splitting really large entries yet */
->>>    	if (WARN_ON(xas->xa_shift + 2 * XA_CHUNK_SHIFT <= order))
->>> @@ -1034,23 +1058,9 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
->>>    		return;
->>>     	do {
->>> -		unsigned int i;
->>> -		void *sibling = NULL;
->>> -		struct xa_node *node;
->>> -
->>> -		node = kmem_cache_alloc_lru(radix_tree_node_cachep, xas->xa_lru, gfp);
->>> +		struct xa_node *node = __xas_alloc_node_for_split(xas, entry, gfp);
->>>    		if (!node)
->>>    			goto nomem;
->>> -		node->array = xas->xa;
->>> -		for (i = 0; i < XA_CHUNK_SIZE; i++) {
->>> -			if ((i & mask) == 0) {
->>> -				RCU_INIT_POINTER(node->slots[i], entry);
->>> -				sibling = xa_mk_sibling(i);
->>> -			} else {
->>> -				RCU_INIT_POINTER(node->slots[i], sibling);
->>> -			}
->>> -		}
->>> -		RCU_INIT_POINTER(node->parent, xas->xa_alloc);
->>>    		xas->xa_alloc = node;
->>>    	} while (sibs-- > 0);
->>>   @@ -1122,6 +1132,100 @@ void xas_split(struct xa_state *xas, void *entry, unsigned int order)
->>>    	xas_update(xas, node);
->>>    }
->>>    EXPORT_SYMBOL_GPL(xas_split);
->>> +
->>> +/**
->>> + * xas_try_split() - Try to split a multi-index entry.
->>> + * @xas: XArray operation state.
->>> + * @entry: New entry to store in the array.
->>> + * @order: Current entry order.
->>> + * @gfp: Memory allocation flags.
->>> + *
->>> + * The size of the new entries is set in @xas.  The value in @entry is
->>> + * copied to all the replacement entries. If and only if one xa_node needs to
->>> + * be allocated, the function will use @gfp to get one. If more xa_node are
->>> + * needed, the function gives EINVAL error.
->>> + *
->>> + * Context: Any context.  The caller should hold the xa_lock.
->>> + */
->>> +void xas_try_split(struct xa_state *xas, void *entry, unsigned int order,
->>> +		gfp_t gfp)
->>> +{
->>> +	unsigned int sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
->>> +	unsigned int offset, marks;
->>> +	struct xa_node *node;
->>> +	void *curr = xas_load(xas);
->>> +	int values = 0;
->>> +
->>> +	node = xas->xa_node;
->>> +	if (xas_top(node))
->>> +		return;
->>> +
->>> +	if (xas->xa->xa_flags & XA_FLAGS_ACCOUNT)
->>> +		gfp |= __GFP_ACCOUNT;
->>> +
->>> +	marks = node_get_marks(node, xas->xa_offset);
->>> +
->>> +	offset = xas->xa_offset + sibs;
->>> +	do {
->>> +		if (xas->xa_shift < node->shift) {
->>> +			struct xa_node *child = xas->xa_alloc;
->>> +			unsigned int expected_sibs =
->>> +				(1 << ((order - 1) % XA_CHUNK_SHIFT)) - 1;
->>> +
->>> +			/*
->>> +			 * No support for splitting sibling entries
->>> +			 * (horizontally) or cascade split (vertically), which
->>> +			 * requires two or more new xa_nodes.
->>> +			 * Since if one xa_node allocation fails,
->>> +			 * it is hard to free the prior allocations.
->>> +			 */
->>> +			if (sibs || xas->xa_sibs != expected_sibs) {
->>> +				xas_destroy(xas);
->>> +				xas_set_err(xas, -EINVAL);
->>> +				return;
->>> +			}
->>> +
->>> +			if (!child) {
->>> +				child = __xas_alloc_node_for_split(xas, entry,
->>> +						gfp);
->>> +				if (!child) {
->>> +					xas_destroy(xas);
->>> +					xas_set_err(xas, -ENOMEM);
->>> +					return;
->>> +				}
->>> +			}
->>
->> No expert on this, just wondering ...
->>
->> ... what is the effect if we halfway-through fail the split? Is it okay to leave that "partially split" thing in place? Can callers deal with that?
+> Additionally, read-only mappings if introducing guard-regions, only
+> restrict the mapping further, which means there is no violation of any
+> access rights by permitting this to be so.
 > 
-> Good question.
+> Removing this restriction allows for read-only mapped files (such as
+> executable files) correctly which would otherwise not be permitted.
 > 
-
-Let me rephrase: In __split_unmapped_folio(), we call xas_try_split(). 
-If that fails, we stop the split and effectively skip over the 
-__split_folio_to_order(). The folio remains unsplit (no order change: 
-old_order).
-
-xas_try_split() was instructed to split from old_order -> split_order.
-
-xas_try_split() documents that: "The value in @entry is copied to all 
-the replacement entries.", meaning after the split, all entries will be 
-pointing at the folio.
-
-Now, can it happen that xas_try_split() would ever perform a partial 
-split in any way, when invoked from __split_unmapped_folio(), such that 
-we run into the do { } while(); loop and fail with -ENOMEM after already 
-having performed changes -- xas_update().
-
-Or is that simply impossible?
-
-Maybe it's just the do { } while(); loop in there that is confusing me. 
-(again, no expert)
-
-> xas_try_split() imposes what kind of split it does and is usually used to
-> split from order N to order N-1:
-
-You mean that old_order -> split_order will in the case of 
-__split_unmapped_folio() always be a difference of 1?
-
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> ---
+>   mm/madvise.c | 8 +-------
+>   1 file changed, 1 insertion(+), 7 deletions(-)
 > 
-> 1. when N is a multiplier of XA_CHUNK_SHIFT, a new xa_node is needed, so
-> either child (namely xas->xa_alloc) is not NULL, meaning someone called
-> xa_nomem() to allocate a xa_node before xas_try_split() or child is NULL
-> and an allocation is needed. If child is still NULL after the allocation,
-> meaning we are out of memory, no split is done;
-> 
-> 2. when N is not, no new xa_node is needed, xas_try_split() just rewrites
-> existing slot values to perform the split (the code after the hunk above).
-> No fail will happen. For this split, since no new xa_node is needed,
-> the caller is actually allowed to split from N to a value smaller than
-> N-1 as long as N-1 is >= (N - N % XA_CHUNK_SHIFT).
-> 
-> 
-> Various checks make sure xas_try_split() only sees the two above situation:
-> 
-> a. "xas->xa_shift < node->shift" means the split crosses XA_CHUNK_SHIFT,
-> at least 1 new xa_node is needed; the else branch only handles the case
-> 2 above;
-> 
-> b. for the then branch the "if (sibs || xas->xa_sibs != expected_sibs)"
-> check makes sure N is a multiplier of XA_CHUNK_SHIFT and the new order
-> has to be N-1. In "if (sibs || xas->xa_sibs != expected_sibs)",
-> "sibs != 0" means the from order N covers more than 1 slot, so more than 1
-> new xa_node is needed, "xas->xa_sibs != expected_sibs" makes sure
-> the new order is N-1 (you can see it from how expected_sibs is assigned).
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 6ecead476a80..e01e93e179a8 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1051,13 +1051,7 @@ static bool is_valid_guard_vma(struct vm_area_struct *vma, bool allow_locked)
+>   	if (!allow_locked)
+>   		disallowed |= VM_LOCKED;
+>   
+> -	if (!vma_is_anonymous(vma))
+> -		return false;
+> -
+> -	if ((vma->vm_flags & (VM_MAYWRITE | disallowed)) != VM_MAYWRITE)
+> -		return false;
+> -
+> -	return true;
+> +	return !(vma->vm_flags & disallowed);
+>   }
+>   
+>   static bool is_guard_pte_marker(pte_t ptent)
 
-Thanks!
+Acked-by: David Hildenbrand <david@redhat.com>
 
-> 
-> Let me know if you have any other question.
-
-Thanks for the details!
+I assume these markers cannot completely prevent us from allocating 
+pages/folios for these underlying file/pageache ranges of these markers 
+in case of shmem during page faults, right?
 
 -- 
 Cheers,
