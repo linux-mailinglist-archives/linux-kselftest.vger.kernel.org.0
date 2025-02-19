@@ -1,116 +1,142 @@
-Return-Path: <linux-kselftest+bounces-26931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2627FA3B0C3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 06:11:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 373FFA3B0D3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 06:21:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F39FF17484E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 05:10:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 352B43AAC6C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 05:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC9781B0F35;
-	Wed, 19 Feb 2025 05:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41D21B415D;
+	Wed, 19 Feb 2025 05:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1/cei//h"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uNQkxR05"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73DC01A9B27;
-	Wed, 19 Feb 2025 05:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79961ACEC2
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 05:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739941750; cv=none; b=YP83wG92TcXUvO4E+EjB2NxJFn5LonjIhjkJFRSqiUL4z9LEiMcnODd5L6/XTY98bsM4bQ9ThbAdMKo6qWY6/DiDBDC2tGPEVWjtw1iDwIGwzekli2iNujSt4wqyUqJW2hA3+h/T3dVJNNxTwZzeKFsYRQ0vNX53qlIr2uP8c88=
+	t=1739942474; cv=none; b=ry1Pa6XfohKvA4D3BJ9G441NfQmA7JOMahmDEr28XrrQtspm7yPKs8+goVO05i4YKipGBxtwBQvQ8Qw1p3YHaqw088xC8n8i59TTInGKLhZiehYirS6exeu7KM7rNTZiiEgk4/7k0t9tLnNTYa7vIq+SY96KOgIl09lD27FMRv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739941750; c=relaxed/simple;
-	bh=6h8ecIB9RE8NEbkQcevOEnAlX8Vq8sQghBewctetbT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FFK6MVVFuuFmBHNqJTqxGPUCV8fpBjjqrsztBwBYL7Wwm+UVyMhZcyifkDxOCuh93tPtYGIlSJ7VZmUyZTNJ4JOTzyy/mmO/900uwzVf8JeU6+ohxq7WYKICWQSCUOpEAX2asnO7bCT8UCQgDfS6VmB/N+ij6Cn6NKRKA83MUhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1/cei//h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F9BC4CED1;
-	Wed, 19 Feb 2025 05:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739941749;
-	bh=6h8ecIB9RE8NEbkQcevOEnAlX8Vq8sQghBewctetbT8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1/cei//hPMxHqiGfMQsCIA1WAdFeWmLId42G5QRlkcGD06Wu3GP4q5F8IwWrX/K14
-	 4Ih+EFNXu2kpfU7tGWjzWXBgk5pyRkbuRxxuujV9lT0FQNyLkR94UQIYRGKHygdkBs
-	 jfOXdgQJakaJtw2enzxTVPTd5pmOsNbj4VaOaFDg=
-Date: Wed, 19 Feb 2025 06:09:07 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Yifei Liu <yifei.l.liu@oracle.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [External] : Re: [PATCH v2 Linux-6.12.y Linux-6.13.y 1/1]
- selftests/mm: build with -O2
-Message-ID: <2025021935-blandness-celibacy-5fea@gregkh>
-References: <20250204214723.1991309-1-yifei.l.liu@oracle.com>
- <2025020544-preview-worshiper-8539@gregkh>
- <C8A5840D-B312-40DC-A75D-3BA14614F8C4@oracle.com>
- <2025021143-limes-babble-e137@gregkh>
- <1D84255C-D49A-4056-9299-B1E6099154DE@oracle.com>
- <4FF4FFA8-1385-452D-9B44-D791B664D4E8@oracle.com>
+	s=arc-20240116; t=1739942474; c=relaxed/simple;
+	bh=nUYwlzScIIbN2ZMhtJfMG/Bc+5js96aLGGdW5oKg72s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YmOD/VZj5uBAy0wxmnX76JdgupnQ9/T93xx7wpFwKGuNg1F4of6Hi+mprKRF8eInXOlDfLNl6sOYXMuGSYGdNvC5VC3un4oj0SB7HwxYf5Ze2eU0E8+Dh4kvufZ3qHjpUEMgToawdpFyiaqb4j+CmUoL9L8DW5XyjeA/PF81TzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uNQkxR05; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1739942460;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XEsN6voX4JYgMmdCGL9ffI2Bq36Dpz6UUUJG1SIrl7M=;
+	b=uNQkxR05ewq2ft28WW+sv9hb9ng2EeqvNkYjzC5B56wk7fiI+2xSsdcOo5HnrCtcMid+Aa
+	PQPtfds6VNcpRH0EMtkfiTARrpQOQOGmCQFAJtqXMojgUj0h7nRsYt12NrqI5x6IkljU5K
+	HSHy8azdWjWE9Fx95xnUyo0TRbFa6Eo=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: borisp@nvidia.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	mrpre@163.com,
+	Jiayuan Chen <jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v2 0/2] bpf: fix ktls panic with sockmap and add tests
+Date: Wed, 19 Feb 2025 13:20:13 +0800
+Message-ID: <20250219052015.274405-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4FF4FFA8-1385-452D-9B44-D791B664D4E8@oracle.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Feb 19, 2025 at 02:13:29AM +0000, Yifei Liu wrote:
-> 
-> 
-> > On Feb 11, 2025, at 4:33 PM, Yifei Liu <yifei.l.liu@oracle.com> wrote:
-> > 
-> > 
-> > 
-> >> On Feb 10, 2025, at 10:24 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >> 
-> >> A: https://urldefense.com/v3/__http://en.wikipedia.org/wiki/Top_post__;!!ACWV5N9M2RV99hQ!I6O0EcBYMun5zy7pK39ZG9aJYrbv3Uy7IaJYl-fKOXJfmImBbzfXDFfOWeYY2o1JutHPBoAoI_b7xJQyjQ5nnfgv$ 
-> >> Q: Were do I find info about this thing called top-posting?
-> >> A: Because it messes up the order in which people normally read text.
-> >> Q: Why is top-posting such a bad thing?
-> >> A: Top-posting.
-> >> Q: What is the most annoying thing in e-mail?
-> >> 
-> >> A: No.
-> >> Q: Should I include quotations after my reply?
-> >> 
-> > Hi Greg,
-> > Sorry for the top-posting. I will not do that any more. 
-> >> https://urldefense.com/v3/__http://daringfireball.net/2007/07/on_top__;!!ACWV5N9M2RV99hQ!I6O0EcBYMun5zy7pK39ZG9aJYrbv3Uy7IaJYl-fKOXJfmImBbzfXDFfOWeYY2o1JutHPBoAoI_b7xJQyjanSNOhz$
-> >> 
-> >> On Mon, Feb 10, 2025 at 06:43:49PM +0000, Yifei Liu wrote:
-> >>> Hi Greg, 
-> >>> Yes, looks we only need this for linux-6.12.y. Maybe we could use the v1 version which does not include the linux-6.13.y tag. Or I can send a v3 with the linux-6.12.y only.
-> >> 
-> >> As you know, we can't take patches for only older kernels and not newer
-> >> ones.  Please submit them for all relevant branches, AND test your
-> >> patches before you submit them so that they don't fail on our side, as
-> >> that just wastes our energy :(
-> > For this patch, I believe it failed to apply to linux-6.13 due to another same patch applied before it. Commit d9eb5a1e76f5 ("selftests/mm: build with -O2”) goes into linux-6.13 with tag v6.13.2, last week’s tag. I checked the queue-6.12 and do not see this patch yet for v6.12. I think we still need this for v6.12. About the patch, it fixes a build issue for selftest/mm, which is bacported to v6.12. Thus this patch should only be backported to v6.12.
-> > 
-> > I tested it on my device and it works fine and solved the failure of selftest.
-> > 
-> Hi Greg, 
-> 
-> I checked the v6.12.16 tag released last Friday. It does not contain this patch. It looks we will not see the same situation we have for v6.13 like I mentioned above and it’s safe to include this in v6.12. 
+We can reproduce the issue using the existing test program:
+'./test_sockmap --ktls'
+Or use the selftest I provided, which will cause a panic:
 
-I don't know what "this patch" is here, sorry, I have no context.
+------------[ cut here ]------------
+kernel BUG at lib/iov_iter.c:629!
 
-> I could resend a v3 with all the linux-6.13.y tags removed if you want. 
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ ? die+0x36/0x90
+ ? do_trap+0xdd/0x100
+ ? iov_iter_revert+0x178/0x180
+ ? iov_iter_revert+0x178/0x180
+ ? do_error_trap+0x7d/0x110
+ ? iov_iter_revert+0x178/0x180
+ ? exc_invalid_op+0x50/0x70
+ ? iov_iter_revert+0x178/0x180
+ ? asm_exc_invalid_op+0x1a/0x20
+ ? iov_iter_revert+0x178/0x180
+ ? iov_iter_revert+0x5c/0x180
+ tls_sw_sendmsg_locked.isra.0+0x794/0x840
+ tls_sw_sendmsg+0x52/0x80
+ ? inet_sendmsg+0x1f/0x70
+ __sys_sendto+0x1cd/0x200
+ ? find_held_lock+0x2b/0x80
+ ? syscall_trace_enter+0x140/0x270
+ ? __lock_release.isra.0+0x5e/0x170
+ ? find_held_lock+0x2b/0x80
+ ? syscall_trace_enter+0x140/0x270
+ ? lockdep_hardirqs_on_prepare+0xda/0x190
+ ? ktime_get_coarse_real_ts64+0xc2/0xd0
+ __x64_sys_sendto+0x24/0x30
+ do_syscall_64+0x90/0x170
 
-Whatever needs to be applied, yes, please resend it properly.
+1. It looks like the issue started occurring after bpf being introduced to
+ktls and later the addition of assertions to iov_iter has caused a panic.
+If my fix tag is incorrect, please assist me in correcting the fix tag.
 
-thanks,
+2. I make minimal changes for now, it's enough to make ktls work
+correctly.
 
-greg k-h
+---
+v1->v2: Added more content to the commit message
+https://lore.kernel.org/all/20250123171552.57345-1-mrpre@163.com/#r
+---
+
+Jiayuan Chen (2):
+  bpf: fix ktls panic with sockmap
+  selftests/bpf: add ktls selftest
+
+ net/tls/tls_sw.c                              |   8 +-
+ .../selftests/bpf/prog_tests/sockmap_ktls.c   | 174 +++++++++++++++++-
+ .../selftests/bpf/progs/test_sockmap_ktls.c   |  26 +++
+ 3 files changed, 205 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_ktls.c
+
+-- 
+2.47.1
+
 
