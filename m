@@ -1,343 +1,233 @@
-Return-Path: <linux-kselftest+bounces-26956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26957-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F727A3BCD9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 12:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B056A3BE79
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 13:48:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 188DB189A3DD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 11:32:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 527D61895F86
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 12:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4791DF965;
-	Wed, 19 Feb 2025 11:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A54061E520A;
+	Wed, 19 Feb 2025 12:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eCl7gM4m"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="GtfQbXRG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11020104.outbound.protection.outlook.com [52.101.193.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB8D1DF73E
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 11:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739964690; cv=none; b=ZtlyUSw30veImBh7j0gE457XsDHxFPrVo5tXeVWKLF954QweIZbz264w/Jkn/nTpEm30ePDDDb3eeYupAlLGWc9HAhYHcO+pbtWhq70RlvDZmXD3MDRBJ12fGVeS83XINui94uPchwsebcnNieg5vPVt0l2JwMy1S5mvMzv6S9o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739964690; c=relaxed/simple;
-	bh=0K3d8F/xVoOQDemlJCe7zkTMGCdS+at9S4Wn6xK5jsM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bIpwe3z0F1HedMbWukIpTR02ZAEcWCo/P93gVxPgE8pkovAssfbI68gaZPN4dBVtFuuQv36WC6ruaRhQy8dWpI6HGt/Bp+g8GbhWwJHOTpUj5RIO7B2NW/tip5Vgw9Q17nsXipZYlAq7l6KkMzbHocrzw0fORbegC5rmWvt27gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eCl7gM4m; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739964687;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BbjEMY8/mdvBBPR5YIiGfY/QlRvz6+lINWP41WIENPI=;
-	b=eCl7gM4mxWly5RPMSC5KDcFVss2OCq3Bcu11nvIuO45J+r8ob9t5rSsmB6sbU/NPeyrqNL
-	tVIxsM5MuNefHQQ/qBs7WNgNvtBJ1LwdKMZ3vBZUu5ISjjnwJEz48F98c6ym/EADq6rWhK
-	78v4cAopVhlCB0i6FxPewt5EIXl0tPA=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-664-9wLcbiQ9N3SB-mdREZjGxw-1; Wed,
- 19 Feb 2025 06:31:24 -0500
-X-MC-Unique: 9wLcbiQ9N3SB-mdREZjGxw-1
-X-Mimecast-MFC-AGG-ID: 9wLcbiQ9N3SB-mdREZjGxw_1739964683
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 077BA19039C5;
-	Wed, 19 Feb 2025 11:31:23 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.45.226.122])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2F46A19560A3;
-	Wed, 19 Feb 2025 11:31:19 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Cc: Gabriele Monaco <gmonaco@redhat.com>,
-	Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH v7 2/2] selftests/rseq: Add test for mm_cid compaction
-Date: Wed, 19 Feb 2025 12:31:08 +0100
-Message-ID: <20250219113108.325545-3-gmonaco@redhat.com>
-In-Reply-To: <20250219113108.325545-1-gmonaco@redhat.com>
-References: <20250219113108.325545-1-gmonaco@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08B81E284C;
+	Wed, 19 Feb 2025 12:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.104
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739969261; cv=fail; b=CDDEMTl+f/jhyOXjJM/JhghRqwLr9g1yB48MV3bU4s8qszcuS81xKm4QalHQCEJmIkteeE4/ZoHlE2S7ftLXB/yNGqBuElpX8QUVkghkMdcyYWCeJuJqocby7ufN08JD9FoI5q8XoUOGDnUEImBxfxM3AeETekZSrKwQ80wdi/8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739969261; c=relaxed/simple;
+	bh=HHnB6ykZWhUxI66fNCko+nKXUUEeG9c0aDk+ot+Phdg=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=T6qnjD0dx9XUOoiu0VOYPBcrIFjgX8aEaqCURnFQUyPlgu3Kuwn39Wv8tA1echxqqJnRZrLFAJCRoGnePOOkaAKKrMe5L4YtMqZKzYh1im/T9XJwvCFWyTg7cCS1rkvrxieOgZVm1F0xUcETUzH7a5wXnj0kvJpqJzTAnNtayNE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=GtfQbXRG; arc=fail smtp.client-ip=52.101.193.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ot7wK0v39htRG8krWEjQ1/IcMuFsy3X+/BuHuqtgENIGkuY3QVVjydUNdUnpaYDADEE7UcBQlTfssEMIXB9o4s/uoe3RFblrNEEDsRwdFaXGxCDgNNVIEyMRJ4YcOQz/Ek3k9//4jL5Yom8jQk+8ztxlWnY3WA4U4Zmom4CRmJcX30YPq94ZFCkqsVfg55+6Hhm9uEjrnbGHlsHkP8jjnUrrL0hzPV+/xXnNyqyXu4/53QFPhgANnBqdpky07EdzaN2GfinazXwZ3xuOsEj/1Zt7mRuuwrcv7xeiHYLBjRZ6lI5cYScjD4dAuGIJVB3I7b4qpcEwqyO4QAofxcDCig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fbKaIHxho2feYh+C+9q1wXqZjtUj9B3WdPEoRvpon00=;
+ b=Z86mCUWL9wtBVAbwZs+FlM/whWZ5Bfyp/c5e0CJh0ZHjO/FFZyfC/hT0zM6pkEGa8W3m1ogxtxyzEBdkrOQBtRFMH98BxTSCt1K+4DEGttQqjHvDYo7VHl2nRHlojTVsps3pNjHdlAVwVdSvFrH1LTnCgM7oz7YtAJNQDvpWhImIx4nHGbOFGmza1gSuKC/kHBb8tdkUUg0HDq/WAlb0GL0Y/YAxIYo3ghS+05zmaQi+0OIWkKRscifgerAUXvokPeNOFTmnsn3tlo83QJwLz+i97ENmfN/QxEAPlmzULEdAwGNJbSabekLH6SaDhq/8YudWyMk+OHRmUqRLvbyeNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fbKaIHxho2feYh+C+9q1wXqZjtUj9B3WdPEoRvpon00=;
+ b=GtfQbXRGaQsfWcNi+PY/L5E3aR79ZL4q7s/uY2JI9b1i+w+d2P0lA18j1lxkmbkuFQwlQpOlNIhGWke84nyhyOB1LrSxxoR4OxzbD28OrtAbV7tOVcNr/++UhPR0gCBiOQYyKQe7ctUwo29sla46ipnQJODP1xGTm7Qrz+QgiKc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ2PR01MB8101.prod.exchangelabs.com (2603:10b6:a03:4f6::10) by
+ PH0PR01MB8165.prod.exchangelabs.com (2603:10b6:510:297::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8466.15; Wed, 19 Feb 2025 12:47:34 +0000
+Received: from SJ2PR01MB8101.prod.exchangelabs.com
+ ([fe80::292:6d9c:eb9a:95c9]) by SJ2PR01MB8101.prod.exchangelabs.com
+ ([fe80::292:6d9c:eb9a:95c9%4]) with mapi id 15.20.8466.009; Wed, 19 Feb 2025
+ 12:47:34 +0000
+Message-ID: <9bb48635-ce40-4710-8c43-be10ef217d9d@os.amperecomputing.com>
+Date: Wed, 19 Feb 2025 18:17:28 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/2] KVM: arm64: nv: selftests: Add guest hypervisor
+ test
+From: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com,
+ suzuki.poulose@arm.com, darren@os.amperecomputing.com,
+ scott@os.amperecomputing.com
+References: <20250206164120.4045569-1-gankulkarni@os.amperecomputing.com>
+ <20250206164120.4045569-2-gankulkarni@os.amperecomputing.com>
+ <86o6zeu668.wl-maz@kernel.org>
+ <9b4a8665-4fb8-42e7-b63f-d154ae75a4f0@os.amperecomputing.com>
+ <86jza1ua7w.wl-maz@kernel.org>
+ <5192ba8d-577a-4bd6-b8ee-7e3547f2c86b@os.amperecomputing.com>
+Content-Language: en-US
+In-Reply-To: <5192ba8d-577a-4bd6-b8ee-7e3547f2c86b@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR02CA0034.apcprd02.prod.outlook.com
+ (2603:1096:4:195::9) To SJ2PR01MB8101.prod.exchangelabs.com
+ (2603:10b6:a03:4f6::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR01MB8101:EE_|PH0PR01MB8165:EE_
+X-MS-Office365-Filtering-Correlation-Id: 879ffa86-0664-4855-b2b6-08dd50e3950b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T0dsQjhKOHBoWHYzTk5Ga0tHakZ4dGlqNUV4cUpXRTFOZ2RhQ2x2YTBjTkI0?=
+ =?utf-8?B?WUZyTW5EU3lGVldKOEp6anlQb05Ud2JRNENaVzZPZ3JRMmluTllIenpnbndp?=
+ =?utf-8?B?M3BqaGRDR0w1T3FJRS8vblRvb2Q0ZzF6dTdwK3ZoK3JmcUxHU2ZXZjVSYlpN?=
+ =?utf-8?B?ckMvRjV2Z3FvdzZpZWR2aXd6TkY4YTRZbVJxblJmbGhzTFAyeDVjdVJLUzYv?=
+ =?utf-8?B?VTRGTnlocVZPZk5Ic2dQTThPalhacGVJUExoRnlmdkpTYVJsa3NIeWo4NUtw?=
+ =?utf-8?B?MzU0YUkrS2dHeFM1cWNvNXJCbEVBdFFDVjltT3NLZW9qVkJPeklMTksvNDlX?=
+ =?utf-8?B?M25EQzFNSHd3SWdIUjVndGdxUUdETDhRZFZvUEY5QlZqUWZJTVBLNmlTSVIy?=
+ =?utf-8?B?L0t1d2ZHYzNlbFZZY2d5Y0Q5cFd1RTlzdG1tSDVpMUpQRCtNSlFLUzdWbkRj?=
+ =?utf-8?B?UHpFNGdiL210RDFNUDZjdVJFeFdxRVRacE00T0JoT0VNdThoOGVtL1RUd0VX?=
+ =?utf-8?B?K0NBVVl1WHoxY1dqTGdyTFJpU3VGTjI2d2drMW9KZzNOaXJia3JieEVuVWht?=
+ =?utf-8?B?WFRSOTlCYUpKL05QKzdjbC9rVlFBOWQxRlBwN0JhQW4rWjAyTmFrSkRKRGl6?=
+ =?utf-8?B?SEpLNGs1NGFGSXh1YkFNejBlaEphMUY0dTl6QU1sdklvRUNCbngzSEN0OUJZ?=
+ =?utf-8?B?NmFsT1hNMmx0Wnlva2hvT0x0K2xlLzJGTlp1WVRkb20xZ2dNWUFxUy9OWnJo?=
+ =?utf-8?B?SzhCbUQxdWN4dGJGL1RvTDY2UzBFL3hPaTREaEN6VUFabXNaajdEcTdTT0FX?=
+ =?utf-8?B?aUNhTDNNL1FnQmE4dEcvOEMzaDZGQ3BPRDRaU3ZFRWxLczU5UmZZWmRiV2t1?=
+ =?utf-8?B?N2VyVnVLTkxpYU1wMURrUHFYQW5CZjVZVFdTUnA4NXJZT05PQzAyTmkrREV2?=
+ =?utf-8?B?UlJlRWwzK0hGampBUDdMcTNSNUJOd0owWmF2bS85MzV0bStZSUZrRHFSTTRz?=
+ =?utf-8?B?TlJEOUN0bDZMZVdkRDA0eFJ0NkdtekIranhGK3FHWTBWTkd4WHBNbHd3MEFz?=
+ =?utf-8?B?WWUvUnYwSFhxVlMrM1hreFYwbndHdXNNZE1RdTFsZ21sSHBHaGR5ZWdnWU1x?=
+ =?utf-8?B?aFBmUWdIZXJNMHRiQzF1SDhoS3J3dGZwN3VYcjNwc3lOMXlmbytIbHp3eE9t?=
+ =?utf-8?B?L0o1QnJLY2RJcEhxVmdKNEphUHpYeDI3cDhtUUs2Q1NiWlFzOU9MV2t4VTRQ?=
+ =?utf-8?B?VkhQRXBlbE9mV2t1b1VKN24yZEJqQnpMMk00YVM4eVRsZi91MkROK3VLZWF4?=
+ =?utf-8?B?VlRwUFpDRDRYams2ampvR3E0TmlsK0pVU2kxNkg3cG85blhqQUJVTzdmR28v?=
+ =?utf-8?B?dlpZZ1k5QmpBYlhxa0FyK0NHa1FNelFlSE1JaGVIVXFJbGMrblV2VmlNb2NR?=
+ =?utf-8?B?WnlMemlLRjRnbi9xejJObGZFZFk2OUpqcll4UzB2WHlVZVJMZWpNRmMrcklM?=
+ =?utf-8?B?VFFkdG1CeituMmYwOGZhMXZEWDlOdmYxSFAwb2xNaEp2ZkExQTdBZHlxTXhP?=
+ =?utf-8?B?MGI5eXNlcUowSEgxMnV4c04yaUFxVmd3cWQvakd3VXRzb1lUdThmL2ZVRnkr?=
+ =?utf-8?B?WGpTSml4MnA1VkhYNmN5L3FGUlJuWUlaS2FOdUlXRkZCNXNxeDdaRHhXdm1k?=
+ =?utf-8?B?dmk3clIyQkJ3ODdjb21ESys4ZUR1c014eUNWcy9lU3dDRUN2TjR0cUFPNTJn?=
+ =?utf-8?B?UlZpR1FWUkt6bWNna01tcDBnMi9JeVZpcDV6N2lDSzVaaWUyektxUU5TNmJQ?=
+ =?utf-8?B?U0dnVGhIa3F1NVprc3pHRVJZemRlZENYcWlTajBhcmtDMnJWbit1MDVlUnd1?=
+ =?utf-8?Q?0XZGb7+0DYIyS?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR01MB8101.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MVFDWFg5THIwaUdpSlY0cWFvMXJVUzBBdEtrOG1JcGxibC9PaWxaZ0ZFNUQ3?=
+ =?utf-8?B?NGdJUlFrblpzYUpMeGRtNVYrb3NkQXd1bXJ4ZWl5Qlc3MTlzU1g1SGYyVFc2?=
+ =?utf-8?B?REV1T2F3VGszbVFmbnRTaEtUTkJ0SkhVd05MQTU2cjFNYnNEb21SeUR2ZlJv?=
+ =?utf-8?B?TkwzYXJtREo3Ykw0TzVtbzAvU3U3S0ZyNlEvQ2N5eUFuYW8ySndaanQ0WklJ?=
+ =?utf-8?B?aVpBWVBzek9NOFN1ZDBWd1Rma2l0aE1WMWlZQnZDQW1LLzF0MXpHZC9EUzBK?=
+ =?utf-8?B?YWNMVy9oMHJsNUh0aS9LVEd2MHdOaDhqUExEUitsL3pBOWM2Z0pBUHVzOVI5?=
+ =?utf-8?B?RW1uMHpkV1I2S1lRZHdpUFBnanNFUXNCdXF6d2JFRHRMckZBUDVES3oydjJE?=
+ =?utf-8?B?bDFQY1pna2RqazRBTlFsUXBubzIybXZQaTdobnhiTGExaFczeFc3b2NJRU5H?=
+ =?utf-8?B?YUJSV0lCd0h3WlRLdWdtT3NvODBtN01yd256SUlVdVpSWDBHajdra3ZLQVl2?=
+ =?utf-8?B?a0JqTkJSWUlCMVdFK3pSU09kaWMrYjVkOERrWDJXU1UyY2svSFhoVXBQTndq?=
+ =?utf-8?B?bFdHUlJXNjcwZ2NncFRWK0tGYitVTmRPNkJjVklxVHY0ZDhGS1VNcWxxRmZ0?=
+ =?utf-8?B?MzJZT1JWdFZDaTdRSm9jQVJ1K2xyVGszNVNaY3BnSFBQQ2NZb3NRSUZUUWNn?=
+ =?utf-8?B?RDlhek5oQ3RneHQrRkVqZmgzeVpVZzJEYjdxQm10KzZ4VUtuZHc3SEpSTzlK?=
+ =?utf-8?B?WjFlQlNZOVF5Ync2OHJBS2pqOFFCQTZXN3l3N1RGMDJVY3RJSmpJTldBTnFY?=
+ =?utf-8?B?Q0wvSnNNOGlaOGFQaWJ4cUtNMjdWTmdlUjFhRVZ2N3lvRUIzYWxvTFB3STFt?=
+ =?utf-8?B?WEU1S2NzTVBtTVlMbXkvSFovalV2dGlkS2QvcnJ3UTRVZmNHd0NaNzN3SmtN?=
+ =?utf-8?B?RU85UEQxWHhHYkJHbnlqeHNpRUJxSGNVTkVZd3haakMyN3pQTFlRTmJBZm8w?=
+ =?utf-8?B?NHIvODh1cWVWb3I3WTRKTGt6NmRXM1lZRVk1TWlpMGZIZlo2YkMydlptTEtm?=
+ =?utf-8?B?MC9uME9LRE1ib0U0MkxtUXVPSjE1YnVmclNmbzB3SzlHeG92SEVQcms3ZzV6?=
+ =?utf-8?B?d1VLalZZUGNJVFFmbTJFTjQvczkvdlRjL01WVjlSMldIM3BsRW15SmxxUi9M?=
+ =?utf-8?B?ODdFamdzMDdrQ3pZYUtRTGdSK0V4U3I3NG03V1llTXpuWUNPbnhmRCszQU00?=
+ =?utf-8?B?dXhzTFRZbWs4NEp6NTRWUmhnSjJMYzV2RmV0d3drVlhLdTRCb1IycDBUSkFL?=
+ =?utf-8?B?b1A5amt1T2RRUHJBU21tM0p2Zkp3NWMxNTVyNG42Q01JMXRBNDRQKzA1VTlp?=
+ =?utf-8?B?NzI3dGpVbE1sWWdyUk16SllvZEJ5TFdVVXM3aHAyV1hHSzFwOTZDeHFzU2Jp?=
+ =?utf-8?B?ZWNURjJsLzlLQVRSN2Vpd0NKNlFWRW5qRThqQ0JzRGd6QjBoNTNhaTFONkk1?=
+ =?utf-8?B?bWRxTHVSaDQ2bkg1K3F6Vnh1L01xVGh3MUVnOVZLV2JhQzNPRWo0ZXZraXIw?=
+ =?utf-8?B?WHBVd3E0VHZlQUpXbEladm5kaGdCQ2NvY0NISTdqb081ZzhTaHZZd1R4MXAy?=
+ =?utf-8?B?UWd2ZHdzcmhySG1NOGRhR3hDOUkwcW1YSUZ4Ui9mR2RYOEV0eGJMc3RiMCtr?=
+ =?utf-8?B?YzlYNHJKRXJPeWpUM0pkUjc2cDFSbmpTcWtOMER4TUtvL0xIMmhMbW4xV0to?=
+ =?utf-8?B?eU8rVHhOZVBFQk9kQWRWV0d2d3hQK250dE55MDZIb2pOS2laQm1wdjFwRGxs?=
+ =?utf-8?B?UTJkZWRMUlprWWZWNytENHBhblk4L1NESWluWlNxaVFzZ0tlUDdQWDFDNFFq?=
+ =?utf-8?B?RnJ1ekxxVDAzZlAxZkltUThqY25yY0Y5bHhwMGoycUF4MU83TFZTVmFmK2VG?=
+ =?utf-8?B?U2lzaU9YS1JCVnowTjBzbzUzbW1vUzBQcW9lSkdJamxDQTdsREpWcGRVTmlh?=
+ =?utf-8?B?M1pzVU5lelR2TFhLeG8vYjR2bTlYdVAyZGpUellzank1OEd4alAxSXN6RGwz?=
+ =?utf-8?B?WDhSc1U1cHY5L3FiOXloRGYyanVsaldWU1Z4aFVVUHlHMkpqTVJoSVp4UzhO?=
+ =?utf-8?B?aEhOV09LTXFranZwSmJZejlhV3M4TFU2N0d0YWZtWmVVRHRZU1lMSGxBUk1h?=
+ =?utf-8?Q?LnYqc0R9S+TqrC6eT2LHxxspg6XRvcOpnQwq09FvgMph?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 879ffa86-0664-4855-b2b6-08dd50e3950b
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR01MB8101.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 12:47:34.7848
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vr5/rqtnIoqkD3q9hC+jS175o8ehgttsJeU5Bn/f61oIPu9zn8ezQN3FZ2Pt8QS1QjbD7Z2jzSKJ5mHd1RWUzF38haeH0lBG+B5t3Lt4sHnHHY15AdQ5pYOHcj4z+Lzj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB8165
 
-A task in the kernel (task_mm_cid_work) runs somewhat periodically to
-compact the mm_cid for each process. Add a test to validate that it runs
-correctly and timely.
 
-The test spawns 1 thread pinned to each CPU, then each thread, including
-the main one, runs in short bursts for some time. During this period, the
-mm_cids should be spanning all numbers between 0 and nproc.
 
-At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
-is selected to be the new leader, all other threads terminate.
+On 07-02-2025 10:16 pm, Ganapatrao Kulkarni wrote:
+> 
+> 
+> On 07-02-2025 07:29 pm, Marc Zyngier wrote:
+>> On Fri, 07 Feb 2025 13:26:41 +0000,
+>> Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
+>>>
+>>>>> +    if (is_vcpu_nested(vcpu)) {
+>>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPTR_EL2), fpen);
+>>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL2), 
+>>>>> sctlr_el1);
+>>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2), tcr_el1);
+>>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL2), 
+>>>>> DEFAULT_MAIR_EL1);
+>>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL2), 
+>>>>> ttbr0_el1);
+>>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), vcpu- 
+>>>>> >id);
+>>>>
+>>>> How about some of the basics such as HCR_EL2, MDCR_EL2? A bunch of
+>>>> things there do have an impact on how the guest behaves, and relying
+>>>> on defaults feels like a bad idea.
+>>>
+>>> Sure, I will try to have these registers also set to required value
+>>> explicitly.
+>>>
+>>>>
+>>>> This also assumes VHE, without trying to enforce it.
+>>>
+>>> Ok, I will try to set specific bits of HCR_EL2 to force it run in VHE.
+>>>
+>>>>
+>>>> Finally, how to you plan to make all the existing tests run as EL2
+>>>> guests if TPIDR_EL1 isn't populated with the expected value? Surely
+>>>> you need to change the read side...
+>>>
 
-After some time, the only running thread should see 0 as mm_cid, if that
-doesn't happen, the compaction mechanism didn't work and the test fails.
+IIUC, we need not write to TPIDR_EL2, instead write always to TPIDR_EL1 
+and in guest code(like function cpu_copy_el2regs in Linux kernel) copy 
+TPIDR_EL1 value to TPIDR_EL2.
 
-The test never fails if only 1 core is available, in which case, we
-cannot test anything as the only available mm_cid is 0.
+OR, Write to both TPIDR_EL1 and TPIDR_EL2 in the test code itself during 
+vcpu setup.
 
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
----
- tools/testing/selftests/rseq/.gitignore       |   1 +
- tools/testing/selftests/rseq/Makefile         |   2 +-
- .../selftests/rseq/mm_cid_compaction_test.c   | 200 ++++++++++++++++++
- 3 files changed, 202 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
-
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index 16496de5f6ce4..2c89f97e4f737 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -3,6 +3,7 @@ basic_percpu_ops_test
- basic_percpu_ops_mm_cid_test
- basic_test
- basic_rseq_op_test
-+mm_cid_compaction_test
- param_test
- param_test_benchmark
- param_test_compare_twice
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 5a3432fceb586..ce1b38f46a355 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
- 
- TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
--		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
-+		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
- 
- TEST_GEN_PROGS_EXTENDED = librseq.so
- 
-diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-new file mode 100644
-index 0000000000000..7ddde3b657dd6
---- /dev/null
-+++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <stddef.h>
-+
-+#include "../kselftest.h"
-+#include "rseq.h"
-+
-+#define VERBOSE 0
-+#define printf_verbose(fmt, ...)                    \
-+	do {                                        \
-+		if (VERBOSE)                        \
-+			printf(fmt, ##__VA_ARGS__); \
-+	} while (0)
-+
-+/* 0.5 s */
-+#define RUNNER_PERIOD 500000
-+/* Number of runs before we terminate or get the token */
-+#define THREAD_RUNS 5
-+
-+/*
-+ * Number of times we check that the mm_cid were compacted.
-+ * Checks are repeated every RUNNER_PERIOD.
-+ */
-+#define MM_CID_COMPACT_TIMEOUT 10
-+
-+struct thread_args {
-+	int cpu;
-+	int num_cpus;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	pthread_t *tinfo;
-+	struct thread_args *args_head;
-+};
-+
-+static void __noreturn *thread_runner(void *arg)
-+{
-+	struct thread_args *args = arg;
-+	int i, ret, curr_mm_cid;
-+	cpu_set_t cpumask;
-+
-+	CPU_ZERO(&cpumask);
-+	CPU_SET(args->cpu, &cpumask);
-+	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to set affinity");
-+		abort();
-+	}
-+	pthread_barrier_wait(args->barrier);
-+
-+	for (i = 0; i < THREAD_RUNS; i++)
-+		usleep(RUNNER_PERIOD);
-+	curr_mm_cid = rseq_current_mm_cid();
-+	/*
-+	 * We select one thread with high enough mm_cid to be the new leader.
-+	 * All other threads (including the main thread) will terminate.
-+	 * After some time, the mm_cid of the only remaining thread should
-+	 * converge to 0, if not, the test fails.
-+	 */
-+	if (curr_mm_cid >= args->num_cpus / 2 &&
-+	    !pthread_mutex_trylock(args->token)) {
-+		printf_verbose(
-+			"cpu%d has mm_cid=%d and will be the new leader.\n",
-+			sched_getcpu(), curr_mm_cid);
-+		for (i = 0; i < args->num_cpus; i++) {
-+			if (args->tinfo[i] == pthread_self())
-+				continue;
-+			ret = pthread_join(args->tinfo[i], NULL);
-+			if (ret) {
-+				errno = ret;
-+				perror("Error: failed to join thread");
-+				abort();
-+			}
-+		}
-+		pthread_barrier_destroy(args->barrier);
-+		free(args->tinfo);
-+		free(args->token);
-+		free(args->barrier);
-+		free(args->args_head);
-+
-+		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
-+			curr_mm_cid = rseq_current_mm_cid();
-+			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
-+				       curr_mm_cid, sched_getcpu());
-+			if (curr_mm_cid == 0)
-+				exit(EXIT_SUCCESS);
-+			usleep(RUNNER_PERIOD);
-+		}
-+		exit(EXIT_FAILURE);
-+	}
-+	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
-+		       sched_getcpu(), curr_mm_cid);
-+	pthread_exit(NULL);
-+}
-+
-+int test_mm_cid_compaction(void)
-+{
-+	cpu_set_t affinity;
-+	int i, j, ret = 0, num_threads;
-+	pthread_t *tinfo;
-+	pthread_mutex_t *token;
-+	pthread_barrier_t *barrier;
-+	struct thread_args *args;
-+
-+	sched_getaffinity(0, sizeof(affinity), &affinity);
-+	num_threads = CPU_COUNT(&affinity);
-+	tinfo = calloc(num_threads, sizeof(*tinfo));
-+	if (!tinfo) {
-+		perror("Error: failed to allocate tinfo");
-+		return -1;
-+	}
-+	args = calloc(num_threads, sizeof(*args));
-+	if (!args) {
-+		perror("Error: failed to allocate args");
-+		ret = -1;
-+		goto out_free_tinfo;
-+	}
-+	token = malloc(sizeof(*token));
-+	if (!token) {
-+		perror("Error: failed to allocate token");
-+		ret = -1;
-+		goto out_free_args;
-+	}
-+	barrier = malloc(sizeof(*barrier));
-+	if (!barrier) {
-+		perror("Error: failed to allocate barrier");
-+		ret = -1;
-+		goto out_free_token;
-+	}
-+	if (num_threads == 1) {
-+		fprintf(stderr, "Cannot test on a single cpu. "
-+				"Skipping mm_cid_compaction test.\n");
-+		/* only skipping the test, this is not a failure */
-+		goto out_free_barrier;
-+	}
-+	pthread_mutex_init(token, NULL);
-+	ret = pthread_barrier_init(barrier, NULL, num_threads);
-+	if (ret) {
-+		errno = ret;
-+		perror("Error: failed to initialise barrier");
-+		goto out_free_barrier;
-+	}
-+	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
-+		if (!CPU_ISSET(i, &affinity))
-+			continue;
-+		args[j].num_cpus = num_threads;
-+		args[j].tinfo = tinfo;
-+		args[j].token = token;
-+		args[j].barrier = barrier;
-+		args[j].cpu = i;
-+		args[j].args_head = args;
-+		if (!j) {
-+			/* The first thread is the main one */
-+			tinfo[0] = pthread_self();
-+			++j;
-+			continue;
-+		}
-+		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
-+		if (ret) {
-+			errno = ret;
-+			perror("Error: failed to create thread");
-+			abort();
-+		}
-+		++j;
-+	}
-+	printf_verbose("Started %d threads.\n", num_threads);
-+
-+	/* Also main thread will terminate if it is not selected as leader */
-+	thread_runner(&args[0]);
-+
-+	/* only reached in case of errors */
-+out_free_barrier:
-+	free(barrier);
-+out_free_token:
-+	free(token);
-+out_free_args:
-+	free(args);
-+out_free_tinfo:
-+	free(tinfo);
-+
-+	return ret;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (!rseq_mm_cid_available()) {
-+		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
-+		return -1;
-+	}
-+	if (test_mm_cid_compaction())
-+		return -1;
-+	return 0;
-+}
 -- 
-2.48.1
+Thanks,
+Ganapat/GK
 
 
