@@ -1,313 +1,203 @@
-Return-Path: <linux-kselftest+bounces-26940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26941-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26041A3B48D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 09:44:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36410A3B5A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 09:59:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A06317859B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 08:40:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C34D3BBF74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 08:52:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B1C1DF724;
-	Wed, 19 Feb 2025 08:35:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66D5D1E832A;
+	Wed, 19 Feb 2025 08:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RnBz6kWs"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="PVSvwqaq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99A81DF277
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 08:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFA81E8322;
+	Wed, 19 Feb 2025 08:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739954127; cv=none; b=Y+5E5cFDxaugAT/P12UuIENkxJHiYU6sdPtjPgZFDv9u0QBDzgi+3BcW6S6tUnkl7ESzdiQjTbFoz707VgpLxlO6ZRQwxiYHxuYoaqh4LF0Vpb7V2SkbdAdTi2OaU7mDtQIDZ3UpngYo1c4pqM7iyDUevQclzI0tN1W+JSyF+3A=
+	t=1739954739; cv=none; b=OdhHTwMvkjS5YynwTP1d1eBoLmxuBsKedsXWvmY9PQNh3nc1Q8uWHiXZ9rLoKZKlXkdJUvf/oLCTYmBFC9zyWu1GgCFnDRuEPaJXsSeN/RQjQxf+UbmIveRBwG/daWOdYdeArB8tnKJBd9fAXlA4Bmwex95ae/M/iZJDwFROtOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739954127; c=relaxed/simple;
-	bh=mS2ERImW1IWdcM2cHUONXcpUeVpV6rwp0Wo9NrUajqw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KXetsyIpYgU+oXqqSCtG3c45wEhYM83P1zBO7n8J2e5W6gdaN7o5dofVMMkJqtOtwsoOhZ7bzXg2aM3XXU/3DP+chl1ffNnlkzTlNLXHdeVpo4HYC5sO4Z2ZcEJShCW4U/fx8QEt7LmY+eSdbmkbIU0hJZ4tD7cO/GJzvBR4Pl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RnBz6kWs; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-220e0575f5bso618855ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 00:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739954125; x=1740558925; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nh11V3R3PpQccWp7H0vYXQcsX+FHgC2HvQI3gNl8VR0=;
-        b=RnBz6kWs79eMemi6iEUZfopQql4LGTqhWtQYz1vS7FKSApLJw+6tY51qp751kl3V9r
-         fEooS42rQEGh8WcYJH90bnc1G5OXEV1KT7Lez4BB+KfCgs0mFg5R7zHmJzVadHTvl9z5
-         z439NpPO/u5t/p34Blz+CQvq14T39BgHCjVQd+Te0v7jEeGKYRmQY9XrF7W29NIcQxIQ
-         tImXdNIFRAf0qeu9IxMa+/1inoYKy1AQ+0W14tFcJpK+Dj9qeffhyVtkq+kjWPs+POtZ
-         ls0HMER6fM42nGJ9rLIugKNr46k62nVUJINPpxfpgJteYisruTYNFPCoAait383n95Si
-         BkEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739954125; x=1740558925;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nh11V3R3PpQccWp7H0vYXQcsX+FHgC2HvQI3gNl8VR0=;
-        b=Q6ePVvhrWWtJrsyjTwp3aS4U9CDjn8RsNPdBLoMqX+lvnfoXj3XcZndtTZUvKwoC0t
-         MHQEOdDmi0bEG/Ld52zpzolCJmnJGMjYajK2YUCsye5oChV1TNWVrEaB9r4PRsDauYcf
-         +bK3Cw8qMKTzTFYDS4dEkY5xUC2UM5vHljRfvu333zyIwcWwtZVALBMgkDTI2GweXzIN
-         S9AqGidqfBD6O6sizH4e3g7xKyW/gnpXgVzr/6bUK476lB0tiw0G+rHdYBqhSSY7E/co
-         LOz3+pXBrjo9pQk1eQb5Ukzhfm4wYxBngoINqPGdOyjVsH0zsfrefUKs7dy7QQ3Efp3f
-         3qnA==
-X-Forwarded-Encrypted: i=1; AJvYcCVsIYJckX17PD895Q6K+cYkk13Ct2EJk+k8f8jflh8uMjZuQGFXV+jlIrukjc6ZakqTK/ZnLxoyl7Pr68WSsbg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8O1uXj3xmjvi42s/2K6WLJCj4aBA1dR+p0topXvZ1vtUww3Uv
-	JWWx4VCFRKX+luZZvTXI89gcSOIm9dHuakjl09aAo3QSfxYSPN7NzooQ0F5xz1d1JnY7h9D5ous
-	p0Fgeuh/NnhCYH4anyK/JSlwhiPWuOaR6ZQJl
-X-Gm-Gg: ASbGncu480MNcHWFGkngXCqvYjv4fpPV2jT44sIhsZ5D3Hp+MAV2Uik/eKzNLboiosm
-	zTWiuli00y76R0AQ4BPv8pDNkO7Yv1TYrX9GS7/Ei1GIgnK5l2SAqzUqpUdapClrBuEk8ZXP9Tg
-	6Jdv644iEq2i4kT91L3pTFN/yTkMscBg==
-X-Google-Smtp-Source: AGHT+IF8lhN2VKRtkBG8lgw6HbFBNjGSvIa0tqHhUKQQlK5tOi+1VUQJdJ+dTtru3EjOzYbkzwwP/EYSufqagYHgcKs=
-X-Received: by 2002:a17:902:d491:b0:217:8612:b690 with SMTP id
- d9443c01a7336-221740eacc2mr2096905ad.8.1739954124714; Wed, 19 Feb 2025
- 00:35:24 -0800 (PST)
+	s=arc-20240116; t=1739954739; c=relaxed/simple;
+	bh=N8FKd1y9sx2kP6D+NpX8eCIKG+Qi7i1WGdQ3MQuOdIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ed022N4eQVSyqN3tyHIBTzWtfh4HLVkb6Q7yKLr/DoWAh2y9RjGoeyZ+z2kNXOEcmSzOhiJp69pTm8tOAs2aBjarHvH08WzY4oJwV7a7vJ46LW5SZSZeHMNulnY3xeghWO4me3rE7QG2M8mgZuPYe7uQvsuJq6YnVqWXtSiqXBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=PVSvwqaq; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1739954733; x=1740559533; i=ps.report@gmx.net;
+	bh=N8FKd1y9sx2kP6D+NpX8eCIKG+Qi7i1WGdQ3MQuOdIE=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=PVSvwqaqWxq+jCB+AtxPzPKKUFODgyMrZ7gt+K2NoBAWk/LrDDOaSzB4fGegAl+X
+	 rgmUGv7czPdp2a6bqiZI4cARsZGp/z/9Ub8aU0rTF21URu9PbvlVgwC2QXIROMWnc
+	 JI3VNKlqrryVpPzPFz1+yN6orm57JQKR9Jy81U3+3TmYdgcX8+lOCA/RzyRO2NtO/
+	 nWiuAdrDqmoZJ9rT14R44ZTlVvbH8jX61wOEy2oRlzXlBFAEyxg61m15KABOR9kr9
+	 1jsIFSS5zjySPYGJ9jp7EbDFzzj4RWsoE+bTHy9JJuxgLKTR3nTnOpTTe8eiBHywb
+	 SJxTob31coav4S7WGg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([82.135.81.84]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M72oH-1thcm22gQx-001O5Z; Wed, 19
+ Feb 2025 09:45:33 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Seiderer <ps.report@gmx.net>,
+	Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+	Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH net-next v6 0/7] Some pktgen fixes/improvments (part I)
+Date: Wed, 19 Feb 2025 09:45:20 +0100
+Message-ID: <20250219084527.20488-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1739469950.git.lorenzo.stoakes@oracle.com> <CAC_TJveMB1_iAUt81D5-+z8gArbVcbfDM=djCZG_bRVaCEMRmg@mail.gmail.com>
-In-Reply-To: <CAC_TJveMB1_iAUt81D5-+z8gArbVcbfDM=djCZG_bRVaCEMRmg@mail.gmail.com>
-From: Kalesh Singh <kaleshsingh@google.com>
-Date: Wed, 19 Feb 2025 00:35:12 -0800
-X-Gm-Features: AWEUYZkFYO4honuUctBjczHtttLmlYcLayKN2sdlCl_V5hwlV_Nm6uGMdSDX7hk
-Message-ID: <CAC_TJvfPNkJDWnG81GnJcFeMLYzN8=uM-oTrK6FKT7tD=E4TQg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem mappings
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>, 
-	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>, 
-	Juan Yescas <jyescas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:CU1ll5xGBegrW6P8sRPmNQW2NPo7XEfPHpUPvfxRXq7M88ncuA2
+ Hp+MjRwt+awObOF7FOSMPJh8Ug4rNKaKyd9Vh6vp1fqAaOrsTqwa3GY8kTHVNjNsnZRjyrQ
+ xqncPYjiyK3JpHrmnsXu8x2zL1npr1ewPZZGXUmcD0FQ1RIXBGLlpIX2OA6OA7RZy1ezjXU
+ sPexsr2e6OHli9wpoGUYQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Z5sx5iUzW30=;ziBqDdH42UmN0p2nBrl9K+I29Rf
+ XWU9+b882/YCmTNf4R7YpGQinXT8yGKXEr3NZC7EwSeiXBVZeJTZx3MjgDg3rApbEfqheyCGb
+ 7bZU0pD//6czmww1elfZh0IuNxu8mV7EO+l8i59Avtg4KJTvYzmXs3TDW/hyCQk12xKNbVk5z
+ VPkBQ5+PhIU0xy5X/ESMXs4S5AJnMzmPJ4oenpMes+SfxiWM2piA9McghfSPylLhDSuROxHob
+ 6uYrbwEoPNVn396RlyTGkoqz0MzpR0mHpI/K9UOPOyvbsUGyn1oXd4zRuWTfvijOu4upLiOzi
+ DSFU7lSUM3fPJH2SonND0D0m7vXjenYIZdizXqdQLO72Sttbtik3GVGSWihU3TNR2w40xPmZq
+ SNYh7vsmD8Z5utaKAnoYPNtJMxOuxDKMUxDDuUwUDZgF9I66pmtvMPcWZ2v0eYQDmJsmD0jQn
+ cDDv1SnFmojhpBpRp5ccR9/8ThWI2FFQNiWoUDjpADX9+CcfoFMOAop5qiSMlOBQB+jyr4no8
+ ULbb3XGokXwsfAJL3N3jgO9RlY3HLkeTEh7SHGvyNmjzEaS0bmND+ePFMlUORfKAGlQ9vYe5B
+ +07yWgLu7bxus8FEYngZt28S5QaYnD25MeG5o/8298tjFRVKuFLOBlZDNJQStuUCO5AEiye6C
+ v56dN2P/LMOgkWRn5aN7uJo+/O2LqOZYwYmJ3cZ7kNh3DUywRgrhB7q1uok6RvRWKgD1fBqdf
+ +q4QfCJUBjJfgzF1xnhvWQU4h0VKUHf+ldLB5yCLF6w5SmGBMCIt5nNUXhdkDaeVuOYdZDjID
+ 7XL36/rfcSlT8pJAiPpPpppicgVR9wLlrZAW+wgF5/STxiEWF0n4eJa5KOsoF9wZ3AhOU/L/w
+ 6b2MP4oOuYzCvMTPMT+wnFWfrz3UZEEWkz3u3/esam/1fvFci7GB9tdVFsenRocYoz82xC2d6
+ 6a/82tl0lr78JopktcoJYNeKrJNPzx8ZxmAXGHmiOQ1F3h8s+2iGrQZjsm7dQJDXdNqLOZVjI
+ Shqa1OPUR/wH+lf1guAmCv79KzRFRaRtcsF56sYCdMxgNOnXf50p6hMkQlKlDV5+VxQnzZZpR
+ DaYUW5UNUrzn6ir5+bdBx2nYXM4m8rYgxwEbtR7U369vVmh6/dZygYMFe9lIYkaL96vHJp8ED
+ K80e5zmuwOsQCFFItClgrv56PxkzgQnbscdEVHaq5EamaJkQtHj6DQCn1hXCzEsOU8O8WOdAH
+ hD9Z4a5cg06ypNbAO/3vocewMDX4kNH0Z3S1fihkVWw4ACBA2ux3PnPi2vILotpgRPQJjjF98
+ mAEPbgHXkdG9NkeuJkBHHz/kEUK2psmdzQ14Gds3Le1OuuTGeYzssDHSixvY55HQqKGq7N1XK
+ 2jk3eBbv74OSvL988OXGSaEdeaPukLByNh6utEGaU8WHc8oJByN0izvXKZ
 
-On Wed, Feb 19, 2025 at 12:25=E2=80=AFAM Kalesh Singh <kaleshsingh@google.c=
-om> wrote:
->
-> On Thu, Feb 13, 2025 at 10:18=E2=80=AFAM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > The guard regions feature was initially implemented to support anonymou=
-s
-> > mappings only, excluding shmem.
-> >
-> > This was done such as to introduce the feature carefully and incrementa=
-lly
-> > and to be conservative when considering the various caveats and corner
-> > cases that are applicable to file-backed mappings but not to anonymous
-> > ones.
-> >
-> > Now this feature has landed in 6.13, it is time to revisit this and to
-> > extend this functionality to file-backed and shmem mappings.
-> >
-> > In order to make this maximally useful, and since one may map file-back=
-ed
-> > mappings read-only (for instance ELF images), we also remove the
-> > restriction on read-only mappings and permit the establishment of guard
-> > regions in any non-hugetlb, non-mlock()'d mapping.
->
-> Hi Lorenzo,
->
-> Thank you for your work on this.
->
-> Have we thought about how guard regions are represented in /proc/*/[s]map=
-s?
->
-> In the field, I've found that many applications read the ranges from
-> /proc/self/[s]maps to determine what they can access (usually related
-> to obfuscation techniques). If they don't know of the guard regions it
-> would cause them to crash; I think that we'll need similar entries to
-> PROT_NONE (---p) for these, and generally to maintain consistency
-> between the behavior and what is being said from /proc/*/[s]maps.
-
-To clarify why the applications may not be aware of their guard
-regions -- in the case of the ELF mappings these PROT_NONE (guard
-regions) would be installed by the dynamic loader; or may be inherited
-from the parent (zygote in Android's case).
-
->
-> -- Kalesh
->
-> >
-> > It is permissible to permit the establishment of guard regions in read-=
-only
-> > mappings because the guard regions only reduce access to the mapping, a=
-nd
-> > when removed simply reinstate the existing attributes of the underlying
-> > VMA, meaning no access violations can occur.
-> >
-> > While the change in kernel code introduced in this series is small, the
-> > majority of the effort here is spent in extending the testing to assert
-> > that the feature works correctly across numerous file-backed mapping
-> > scenarios.
-> >
-> > Every single guard region self-test performed against anonymous memory
-> > (which is relevant and not anon-only) has now been updated to also be
-> > performed against shmem and a mapping of a file in the working director=
-y.
-> >
-> > This confirms that all cases also function correctly for file-backed gu=
-ard
-> > regions.
-> >
-> > In addition a number of other tests are added for specific file-backed
-> > mapping scenarios.
-> >
-> > There are a number of other concerns that one might have with regard to
-> > guard regions, addressed below:
-> >
-> > Readahead
-> > ~~~~~~~~~
-> >
-> > Readahead is a process through which the page cache is populated on the
-> > assumption that sequential reads will occur, thus amortising I/O and,
-> > through a clever use of the PG_readahead folio flag establishing during
-> > major fault and checked upon minor fault, provides for asynchronous I/O=
- to
-> > occur as dat is processed, reducing I/O stalls as data is faulted in.
-> >
-> > Guard regions do not alter this mechanism which operations at the folio=
- and
-> > fault level, but do of course prevent the faulting of folios that would
-> > otherwise be mapped.
-> >
-> > In the instance of a major fault prior to a guard region, synchronous
-> > readahead will occur including populating folios in the page cache whic=
-h
-> > the guard regions will, in the case of the mapping in question, prevent
-> > access to.
-> >
-> > In addition, if PG_readahead is placed in a folio that is now inaccessi=
-ble,
-> > this will prevent asynchronous readahead from occurring as it would
-> > otherwise do.
-> >
-> > However, there are mechanisms for heuristically resetting this within
-> > readahead regardless, which will 'recover' correct readahead behaviour.
-> >
-> > Readahead presumes sequential data access, the presence of a guard regi=
-on
-> > clearly indicates that, at least in the guard region, no such sequentia=
-l
-> > access will occur, as it cannot occur there.
-> >
-> > So this should have very little impact on any real workload. The far mo=
-re
-> > important point is as to whether readahead causes incorrect or
-> > inappropriate mapping of ranges disallowed by the presence of guard
-> > regions - this is not the case, as readahead does not 'pre-fault' memor=
-y in
-> > this fashion.
-> >
-> > At any rate, any mechanism which would attempt to do so would hit the u=
-sual
-> > page fault paths, which correctly handle PTE markers as with anonymous
-> > mappings.
-> >
-> > Fault-Around
-> > ~~~~~~~~~~~~
-> >
-> > The fault-around logic, in a similar vein to readahead, attempts to imp=
-rove
-> > efficiency with regard to file-backed memory mappings, however it diffe=
-rs
-> > in that it does not try to fetch folios into the page cache that are ab=
-out
-> > to be accessed, but rather pre-maps a range of folios around the faulti=
-ng
-> > address.
-> >
-> > Guard regions making use of PTE markers makes this relatively trivial, =
-as
-> > this case is already handled - see filemap_map_folio_range() and
-> > filemap_map_order0_folio() - in both instances, the solution is to simp=
-ly
-> > keep the established page table mappings and let the fault handler take
-> > care of PTE markers, as per the comment:
-> >
-> >         /*
-> >          * NOTE: If there're PTE markers, we'll leave them to be
-> >          * handled in the specific fault path, and it'll prohibit
-> >          * the fault-around logic.
-> >          */
-> >
-> > This works, as establishing guard regions results in page table mapping=
-s
-> > with PTE markers, and clearing them removes them.
-> >
-> > Truncation
-> > ~~~~~~~~~~
-> >
-> > File truncation will not eliminate existing guard regions, as the
-> > truncation operation will ultimately zap the range via
-> > unmap_mapping_range(), which specifically excludes PTE markers.
-> >
-> > Zapping
-> > ~~~~~~~
-> >
-> > Zapping is, as with anonymous mappings, handled by zap_nonpresent_ptes(=
-),
-> > which specifically deals with guard entries, leaving them intact except=
- in
-> > instances such as process teardown or munmap() where they need to be
-> > removed.
-> >
-> > Reclaim
-> > ~~~~~~~
-> >
-> > When reclaim is performed on file-backed folios, it ultimately invokes
-> > try_to_unmap_one() via the rmap. If the folio is non-large, then map_pt=
-e()
-> > will ultimately abort the operation for the guard region mapping. If la=
-rge,
-> > then check_pte() will determine that this is a non-device private
-> > entry/device-exclusive entry 'swap' PTE and thus abort the operation in
-> > that instance.
-> >
-> > Therefore, no odd things happen in the instance of reclaim being attemp=
-ted
-> > upon a file-backed guard region.
-> >
-> > Hole Punching
-> > ~~~~~~~~~~~~~
-> >
-> > This updates the page cache and ultimately invokes unmap_mapping_range(=
-),
-> > which explicitly leaves PTE markers in place.
-> >
-> > Because the establishment of guard regions zapped any existing mappings=
- to
-> > file-backed folios, once the guard regions are removed then the
-> > hole-punched region will be faulted in as usual and everything will beh=
-ave
-> > as expected.
-> >
-> > Lorenzo Stoakes (4):
-> >   mm: allow guard regions in file-backed and read-only mappings
-> >   selftests/mm: rename guard-pages to guard-regions
-> >   tools/selftests: expand all guard region tests to file-backed
-> >   tools/selftests: add file/shmem-backed mapping guard region tests
-> >
-> >  mm/madvise.c                                  |   8 +-
-> >  tools/testing/selftests/mm/.gitignore         |   2 +-
-> >  tools/testing/selftests/mm/Makefile           |   2 +-
-> >  .../mm/{guard-pages.c =3D> guard-regions.c}     | 921 ++++++++++++++++=
---
-> >  4 files changed, 821 insertions(+), 112 deletions(-)
-> >  rename tools/testing/selftests/mm/{guard-pages.c =3D> guard-regions.c}=
- (58%)
-> >
-> > --
-> > 2.48.1
+V2hpbGUgdGFraW5nIGEgbG9vayBhdCAnW1BBVENIIG5ldF0gcGt0Z2VuOiBBdm9pZCBvdXQtb2Yt
+cmFuZ2UgaW4KZ2V0X2ltaXhfZW50cmllcycgKFsxXSkgYW5kICdbUEFUQ0ggbmV0IHYyXSBwa3Rn
+ZW46IEF2b2lkIG91dC1vZi1ib3VuZHMKYWNjZXNzIGluIGdldF9pbWl4X2VudHJpZXMnIChbMl0s
+IFszXSkgYW5kIGRvaW5nIHNvbWUgdGVzdHMgYW5kIGNvZGUgcmV2aWV3CkkgZGV0ZWN0ZWQgdGhh
+dCB0aGUgL3Byb2MvbmV0L3BrdGdlbi8uLi4gcGFyc2luZyBsb2dpYyBkb2VzIG5vdCBob25vdXIg
+dGhlCnVzZXIgZ2l2ZW4gYnVmZmVyIGJvdW5kcyAocmVzdWx0aW5nIGluIG91dC1vZi1ib3VuZHMg
+YWNjZXNzKS4KClRoaXMgY2FuIGJlIG9ic2VydmVkIGUuZy4gYnkgdGhlIGZvbGxvd2luZyBzaW1w
+bGUgdGVzdCAoc29tZXRpbWVzIHRoZQpvbGQvJ2xvbmdlcicgcHJldmlvdXMgdmFsdWUgaXMgcmUt
+cmVhZCBmcm9tIHRoZSBidWZmZXIpOgoKICAgICAgICAkIGVjaG8gYWRkX2RldmljZSBsb0AwID4g
+L3Byb2MvbmV0L3BrdGdlbi9rcGt0Z2VuZF8wCgogICAgICAgICQgZWNobyAibWluX3BrdF9zaXpl
+IDEyMzQ1IiA+IC9wcm9jL25ldC9wa3RnZW4vbG9cQDAgJiYgZ3JlcCBtaW5fcGt0X3NpemUgL3By
+b2MvbmV0L3BrdGdlbi9sb1xAMApQYXJhbXM6IGNvdW50IDEwMDAgIG1pbl9wa3Rfc2l6ZTogMTIz
+NDUgIG1heF9wa3Rfc2l6ZTogMApSZXN1bHQ6IE9LOiBtaW5fcGt0X3NpemU9MTIzNDUgCgogICAg
+ICAgICQgZWNobyAtbiAibWluX3BrdF9zaXplIDEyMyIgPiAvcHJvYy9uZXQvcGt0Z2VuL2xvXEAw
+ICYmIGdyZXAgbWluX3BrdF9zaXplIC9wcm9jL25ldC9wa3RnZW4vbG9cQDAKUGFyYW1zOiBjb3Vu
+dCAxMDAwICBtaW5fcGt0X3NpemU6IDEyMzQ1ICBtYXhfcGt0X3NpemU6IDAKUmVzdWx0OiBPSzog
+bWluX3BrdF9zaXplPTEyMzQ1CgogICAgICAgICQgZWNobyAibWluX3BrdF9zaXplIDEyMyIgPiAv
+cHJvYy9uZXQvcGt0Z2VuL2xvXEAwICYmIGdyZXAgbWluX3BrdF9zaXplIC9wcm9jL25ldC9wa3Rn
+ZW4vbG9cQDAKUGFyYW1zOiBjb3VudCAxMDAwICBtaW5fcGt0X3NpemU6IDEyMyAgbWF4X3BrdF9z
+aXplOiAwClJlc3VsdDogT0s6IG1pbl9wa3Rfc2l6ZT0xMjMKClNvIGZpeCB0aGUgb3V0LW9mLWJv
+dW5kcyBhY2Nlc3MgKGFuZCBzb21lIG1pbm9yIGZpbmRpbmdzKSBhbmQgYWRkIGEgc2ltcGxlCnBy
+b2NfbmV0X3BrdGdlbiBzZWxmdGVzdC4uLgoKUGF0Y2ggc2V0IHNwbGl0ZWQgaW50byBwYXJ0IEkg
+KHRoaXMgb25lKQoKLSBuZXQ6IHBrdGdlbjogcmVwbGFjZSBFTk9UU1VQUCB3aXRoIEVPUE5PVFNV
+UFAKLSBuZXQ6IHBrdGdlbjogZW5hYmxlICdwYXJhbT12YWx1ZScgcGFyc2luZwotIG5ldDogcGt0
+Z2VuOiBmaXggaGV4MzJfYXJnIHBhcnNpbmcgZm9yIHNob3J0IHJlYWRzCi0gbmV0OiBwa3RnZW46
+IGZpeCAncmF0ZSAwJyBlcnJvciBoYW5kbGluZyAocmV0dXJuIC1FSU5WQUwpCi0gbmV0OiBwa3Rn
+ZW46IGZpeCAncmF0ZXAgMCcgZXJyb3IgaGFuZGxpbmcgKHJldHVybiAtRUlOVkFMKQotIG5ldDog
+cGt0Z2VuOiBmaXggY3RybCBpbnRlcmZhY2UgY29tbWFuZCBwYXJzaW5nCi0gbmV0OiBwa3RnZW46
+IGZpeCBhY2Nlc3Mgb3V0c2lkZSBvZiB1c2VyIGdpdmVuIGJ1ZmZlciBpbiBwa3RnZW5fdGhyZWFk
+X3dyaXRlKCkKCkFuZCBwYXJ0IElJICh3aWxsIGZvbGxvdyk6CgotIG5ldDogcGt0Z2VuOiBmaXgg
+bWl4IG9mIGludC9sb25nCi0gbmV0OiBwa3RnZW46IHJlbW92ZSBleHRyYSB0bXAgdmFyaWFibGUg
+KHJlLXVzZSBsZW4gaW5zdGVhZCkKLSBuZXQ6IHBrdGdlbjogcmVtb3ZlIHNvbWUgc3VwZXJmbHVv
+dXMgdmFyaWFibGUgaW5pdGlhbGl6aW5nCi0gbmV0OiBwa3RnZW46IGZpeCBtcGxzIG1heGltdW0g
+bGFiZWxzIGxpc3QgcGFyc2luZwotIG5ldDogcGt0Z2VuOiBmaXggYWNjZXNzIG91dHNpZGUgb2Yg
+dXNlciBnaXZlbiBidWZmZXIgaW4gcGt0Z2VuX2lmX3dyaXRlKCkKLSBuZXQ6IHBrdGdlbjogZml4
+IG1wbHMgcmVzZXQgcGFyc2luZwotIG5ldDogcGt0Z2VuOiByZW1vdmUgYWxsIHN1cGVyZmx1b3Vz
+IGluZGV4IGFzc2lnbmVtZW50cwotIHNlbGZ0ZXN0OiBuZXQ6IGFkZCBwcm9jX25ldF9wa3RnZW4K
+ClJlZ2FyZHMsClBldGVyCgpDaGFuZ2VzIHY1IC0+IHY2OgogLSBhZGQgcmV2LWJ5IFNpbW9uIEhv
+cm1hbgogLSBkcm9wIHBhdGNoICduZXQ6IHBrdGdlbjogdXNlIGRlZmluZXMgZm9yIHRoZSB2YXJp
+b3VzIGRlYy9oZXggbnVtYmVyCiAgIHBhcnNpbmcgZGlnaXRzIGxlbmd0aHMnCgpDaGFuZ2VzIHY0
+IC0+IHY1OgogLSBzcGxpdCB1cCBwYXRjaHNldCBpbnRvIHBhcnQgaS9paSAoc3VnZ2VzdGVkIGJ5
+IFNpbW9uIEhvcm1hbikKCkNoYW5nZXMgdjMgLT4gdjQ6CiAtIGFkZCByZXYtYnkgU2ltb24gSG9y
+bWFuCiAtIG5ldyBwYXRjaCAnbmV0OiBwa3RnZW46IHVzZSBkZWZpbmVzIGZvciB0aGUgdmFyaW91
+cyBkZWMvaGV4IG51bWJlciBwYXJzaW5nCiAgIGRpZ2l0cyBsZW5ndGhzJyAoc3VnZ2VzdGVkIGJ5
+IFNpbW9uIEhvcm1hbikKIC0gcmVwbGFjZSBDOTkgY29tbWVudCAoc3VnZ2VzdGVkIGJ5IFBhb2xv
+IEFiZW5pKQogLSBkcm9wIGF2YWlsYWJsZSBjaGFyYWN0ZXJzIGNoZWNrIGluIHN0cm5fbGVuKCkg
+KHN1Z2dlc3RlZCBieSBQYW9sbyBBYmVuaSkKIC0gZmFjdG9yZWQgb3V0IHBhdGNoICduZXQ6IHBr
+dGdlbjogYWxpZ24gc29tZSB2YXJpYWJsZSBkZWNsYXJhdGlvbnMgdG8gdGhlCiAgIG1vc3QgY29t
+bW9uIHBhdHRlcm4nIChzdWdnZXN0ZWQgYnkgUGFvbG8gQWJlbmkpCiAtIGZhY3RvcmVkIG91dCBw
+YXRjaCAnbmV0OiBwa3RnZW46IHJlbW92ZSBleHRyYSB0bXAgdmFyaWFibGUgKHJlLXVzZSBsZW4K
+ICAgaW5zdGVhZCknIChzdWdnZXN0ZWQgYnkgUGFvbG8gQWJlbmkpCiAtIGZhY3RvcmVkIG91dCBw
+YXRjaCAnbmV0OiBwa3RnZW46IHJlbW92ZSBzb21lIHN1cGVyZmx1b3VzIHZhcmlhYmxlCiAgIGlu
+aXRpYWxpemluZycgKHN1Z2dlc3RlZCBieSBQYW9sbyBBYmVuaSkKIC0gZmFjdG9yZWQgb3V0IHBh
+dGNoICduZXQ6IHBrdGdlbjogZml4IG1wbHMgbWF4aW11bSBsYWJlbHMgbGlzdCBwYXJzaW5nJwog
+ICAoc3VnZ2VzdGVkIGJ5IFBhb2xvIEFiZW5pKQogLSBmYWN0b3JlZCBvdXQgJ25ldDogcGt0Z2Vu
+OiBoZXgzMl9hcmcvbnVtX2FyZyBlcnJvciBvdXQgaW4gY2FzZSBubwogICBjaGFyYWN0ZXJzIGFy
+ZSBhdmFpbGFibGUnIChzdWdnZXN0ZWQgYnkgUGFvbG8gQWJlbmkpCiAtIGZhY3RvcmVkIG91dCAn
+bmV0OiBwa3RnZW46IG51bV9hcmcgZXJyb3Igb3V0IGluIGNhc2Ugbm8gdmFsaWQgY2hhcmFjdGVy
+CiAgIGlzIHBhcnNlZCcgKHN1Z2dlc3RlZCBieSBQYW9sbyBBYmVuaSkKCkNoYW5nZXMgdjIgLT4g
+djM6CiAtIG5ldyBwYXRjaDogJ25ldDogcGt0Z2VuOiBmaXggY3RybCBpbnRlcmZhY2UgY29tbWFu
+ZCBwYXJzaW5nJwogLSBuZXcgcGF0Y2g6ICduZXQ6IHBrdGdlbjogZml4IG1wbHMgcmVzZXQgcGFy
+c2luZycKIC0gdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L3Byb2NfbmV0X3BrdGdlbi5jOgog
+ICAtIGZpeCB0eXBvIGluIGNoYW5nZSBkZXNjcmlwdGlvbiAoJ3YxIC0+IHYxJyBhbmQgdHlvcCkK
+ICAgLSByZW5hbWUgc29tZSB2YXJzIHRvIGJldHRlciBtYXRjaCB1c2FnZQogICAgIGFkZF9sb29w
+YmFja18wIC0+IHRocl9jbWRfYWRkX2xvb3BiYWNrXzAKICAgICBybV9sb29wYmFja18wIC0+IHRo
+cl9jbWRfcm1fbG9vcGJhY2tfMAogICAgIHdyb25nX2N0cmxfY21kIC0+IHdyb25nX3Rocl9jbWQK
+ICAgICBsZWdhY3lfY3RybF9jbWQgLT4gbGVnYWN5X3Rocl9jbWQKICAgICBjdHJsX2ZkIC0+IHRo
+cl9mZAogICAtIGFkZCBjdHJsIGludGVyZmFjZSB0ZXN0cwoKQ2hhbmdlcyB2MSAtPiB2MjoKIC0g
+bmV3IHBhdGNoOiAnbmV0OiBwa3RnZW46IGZpeCBoZXgzMl9hcmcgcGFyc2luZyBmb3Igc2hvcnQg
+cmVhZHMnCiAtIG5ldyBwYXRjaDogJ25ldDogcGt0Z2VuOiBmaXggJ3JhdGUgMCcgZXJyb3IgaGFu
+ZGxpbmcgKHJldHVybiAtRUlOVkFMKScKIC0gbmV3IHBhdGNoOiAnbmV0OiBwa3RnZW46IGZpeCAn
+cmF0ZXAgMCcgZXJyb3IgaGFuZGxpbmcgKHJldHVybiAtRUlOVkFMKScKIC0gbmV0L2NvcmUvcGt0
+Z2VuLmM6IGFkZGl0aW9uYWwgZml4IGdldF9pbWl4X2VudHJpZXMoKSBhbmQgZ2V0X2xhYmVscygp
+CiAtIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9wcm9jX25ldF9wa3RnZW4uYzoKICAgLSBm
+aXggdHlvcCBub3QgdnMuIG5vZCAoc3VnZ2VzdGVkIGJ5IEpha3ViIEtpY2luc2tpKQogICAtIGZp
+eCBtaXNhbGlnbmVkIGxpbmUgKHN1Z2dlc3RlZCBieSBKYWt1YiBLaWNpbnNraSkKICAgLSBlbmFi
+bGUgZm9tZXJseSBjb21tZW50ZWQgb3V0IENPTkZJR19YRlJNIGRlcGVuZGVudCB0ZXN0IChjb21t
+YW5kIHNwaSksCiAgICAgYXMgQ09ORklHX1hGUk0gaXMgZW5hYmxlZCB2aWEgdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvbmV0L2NvbmZpZwogICAgIENPTkZJR19YRlJNX0lOVEVSRkFDRS9DT05GSUdf
+WEZSTV9VU0VSIChzdWdnZXN0ZXggYnkgSmFrdWIgS2ljaW5za2kpCiAgIC0gYWRkIENPTkZJR19O
+RVRfUEtUR0VOPW0gdG8gdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L2NvbmZpZwogICAgIChz
+dWdnZXN0ZWQgYnkgSmFrdWIgS2ljaW5za2kpCiAgIC0gYWRkIG1vZHByb2JlIHBrdGdlbiB0byBG
+SVhUVVJFX1NFVFVQKCkgKHN1Z2dlc3RlZCBieSBKYWt1YiBLaWNpbnNraSkKICAgLSBmaXggc29t
+ZSBjaGVja3BhdGNoIHdhcm5pbmdzIChNaXNzaW5nIGEgYmxhbmsgbGluZSBhZnRlciBkZWNsYXJh
+dGlvbnMpCiAgIC0gc2hyaW5rIGxpbmUgbGVuZ3RoIGJ5IHJlLW5hbWluZyBzb21lIHZhcmlhYmxl
+cyAoY29tbWFuZCAtPiBjbWQsCiAgICAgZGV2aWNlIC0+IGRldikKICAgLSBhZGQgJ3JhdGUgMCcg
+dGVzdGNhc2UKICAgLSBhZGQgJ3JhdGVwIDAnIHRlc3RjYXNlCgpbMV0gaHR0cHM6Ly9sb3JlLmtl
+cm5lbC5vcmcvbmV0ZGV2LzIwMjQxMDA2MjIxMjIxLjM3NDQ5OTUtMS1hcnRlbS5jaGVybnlzaGV2
+QHJlZC1zb2Z0LnJ1LwpbMl0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbmV0ZGV2LzIwMjUwMTA5
+MDgzMDM5LjE0MDA0LTEtcGNoZWxraW5AaXNwcmFzLnJ1LwpbM10gaHR0cHM6Ly9naXQua2VybmVs
+Lm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0L2NvbW1pdC8/
+aWQ9NzYyMDFiNTk3OTc2ODUwMGJjYTM2Mjg3MWRiNjZkNzdjYjRjMjI1ZQoKUGV0ZXIgU2VpZGVy
+ZXIgKDcpOgogIG5ldDogcGt0Z2VuOiByZXBsYWNlIEVOT1RTVVBQIHdpdGggRU9QTk9UU1VQUAog
+IG5ldDogcGt0Z2VuOiBlbmFibGUgJ3BhcmFtPXZhbHVlJyBwYXJzaW5nCiAgbmV0OiBwa3RnZW46
+IGZpeCBoZXgzMl9hcmcgcGFyc2luZyBmb3Igc2hvcnQgcmVhZHMKICBuZXQ6IHBrdGdlbjogZml4
+ICdyYXRlIDAnIGVycm9yIGhhbmRsaW5nIChyZXR1cm4gLUVJTlZBTCkKICBuZXQ6IHBrdGdlbjog
+Zml4ICdyYXRlcCAwJyBlcnJvciBoYW5kbGluZyAocmV0dXJuIC1FSU5WQUwpCiAgbmV0OiBwa3Rn
+ZW46IGZpeCBjdHJsIGludGVyZmFjZSBjb21tYW5kIHBhcnNpbmcKICBuZXQ6IHBrdGdlbjogZml4
+IGFjY2VzcyBvdXRzaWRlIG9mIHVzZXIgZ2l2ZW4gYnVmZmVyIGluCiAgICBwa3RnZW5fdGhyZWFk
+X3dyaXRlKCkKCiBuZXQvY29yZS9wa3RnZW4uYyB8IDM5ICsrKysrKysrKysrKysrKysrKysrKyst
+LS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyksIDE3IGRl
+bGV0aW9ucygtKQoKLS0gCjIuNDguMQoK
 
