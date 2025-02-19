@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-26989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58C9CA3C3D0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 16:40:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E002A3C3D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 16:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31940167A00
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 15:40:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 113EC1677B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 15:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369511FDE2B;
-	Wed, 19 Feb 2025 15:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15D7D1FE46C;
+	Wed, 19 Feb 2025 15:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmxnJETn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5lpIgR1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F761FCFDA;
-	Wed, 19 Feb 2025 15:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217E31FDE10;
+	Wed, 19 Feb 2025 15:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739979589; cv=none; b=ERI7ca0J3ozym0R3qBcVlEsqmYY9OwcyYlFNDiKF/jnI8PZqHlg7TX4x04p8zJa8dMtNL20zEw5U2fs1bNW3Vi0lXW122XxH3DCHaKinjkna9ROJ3egkDycZ9fMptzQXQWnKnLItpj3NbZdbH1pqTlsPUHeglR/aUbrzyilxWAA=
+	t=1739979591; cv=none; b=dsz4TwhNefze/LN5GVWKXEyZWx4vcqhc67cipKnJGqRb3+HmtrcawQd4CBrLCPlwDSOpM2QkUNQFlevfSU83sDDulQvUkrdscBRwuo2aUwc30tA3rkHj08Y9pV6zYssANvY2J2uX/73rdXzLo+jdmI8deG+2gdhCc1j8zzDR3eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739979589; c=relaxed/simple;
-	bh=Qu11x7NasF+MB9Td7DYoVtX6gPqDeWYjYwf+ItHRZwI=;
+	s=arc-20240116; t=1739979591; c=relaxed/simple;
+	bh=nz4/EkLWseE40NLXUhT4N656FcYiIt8edVQLtvFFTsA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ghBd77v1JHnPhl9x9ZwedIdkAx7/3Gmkh5XTHVpLvbVcMOaE6eTDEPWol8BRCauIt66/HMhuAAFIiP8zeYeSu2QpLL/8hHBtZb/0lcsTsDK6FPqH6L3wz0Tuq5d1r+0K5sGuZBIV3OQJwKZQrQ5kj+O6x00/ALZambt+roYxnA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmxnJETn; arc=none smtp.client-ip=209.85.219.44
+	 MIME-Version; b=tmb/HodYWwTrzEsfdVaO61i9xkofitowhp5yHrk5pvvtFDREWntYJZb1A4RqPojM+E+/sEUIDew1vqNKGa9tAcy2yuV4oOmNA9Trqg45h6CX/XNtUbd2wAROHr/OpS2HEvk4KoKXwPtRXpngkg0OwgEQUwG90fs6uy4A5m4BYIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5lpIgR1; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6e65be7d86fso9451726d6.1;
-        Wed, 19 Feb 2025 07:39:47 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7c0ba9825e9so43942185a.0;
+        Wed, 19 Feb 2025 07:39:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739979586; x=1740584386; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739979588; x=1740584388; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=4sQVmUK5IVtunQ4FZ3JCjmg6oGCHZcpUatJm4+/LB0I=;
-        b=dmxnJETn3NhsKdRrojx23J+dxxNUkqAOug49TBA6pyVHbnzBP8tN6RI095I7FjjIYc
-         TfTlW4DyRQZcpIBI/8eVxx9LzusBe0+Kzf0TR2Ae2FN7tLHloXEP0X7jgyOVlclwvnCX
-         nyR6mwpevXubUvSsylnRsPcVgqxHvP1LuDpk2cgb0pXZrt+KA2NStlMNgE9asm9r3q4N
-         29wUPKaK+pENe0kEYFVXKCl/tvKsXrGuK17BbfWpcBv6I96rflMirV5VPE3Ur9FCy/ZC
-         PxyMIVyeDd2u7lgQoKt1O3pnd+VWOH3jMm74WNeVoWAAzkiuQh9nq+5r7iUBMbfGmkZm
-         ygkg==
+        bh=2IGK/jN7/zS07b2i1C9QicOMxwRniAh4o+TnE4u4gaA=;
+        b=h5lpIgR1MkFuwCbcvU2hyVxstnovNrTcmNEv4lVNP62a75Opbs4/BLGq0zFTRtXa3N
+         5GrY/fLPAfNcwSvuZ9nDMwzDJmsY2ZMZIillmTjeXAx3o+yHncbQaaiiLhj6MFPUsFdE
+         3orXNuM8mpTcgefhVJMXGB8M5E82U017+aZC1ULBsSg5kfDZ0lgRVrzoq3phLfv4teIV
+         +ZN4Ta9dStaSVlARLfOiGIkrLQN/cFy4KuI9BEcdtkibhpzhf1DLBQtoPGzrnvlQZ/7J
+         n1C0nSxV9ztsjpaDQH32KYEV8PN1wN1ZQ42OnSeRcDK64KjJ4I48TRwkDIDdoXLP4tZk
+         eadg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739979586; x=1740584386;
+        d=1e100.net; s=20230601; t=1739979588; x=1740584388;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4sQVmUK5IVtunQ4FZ3JCjmg6oGCHZcpUatJm4+/LB0I=;
-        b=agdMzemCFeHZo0KUCKm0upua84EeUhfwrx1aL7Z0xK5VNasJp/Dbew3oc6zk7Jko2s
-         1TClb//TQLD0DfWBVHd0N2FkXJVo9dClwxKQMMvnPCD5GzL6K+cMESwyJBeriskyQ78r
-         JjSmhOSNflS9+LF2XJhm8xuBSdQt7k5OmazptQ02tDZqniHDCe70IKz9aQw2jN5afXKK
-         N4t6PbYWcn9ay+4J4ncvHcn0K5pUjVKptRbPzHBsPps914d4i3VZ1NXx1tFbDQONm8gq
-         0pWrElL+t9tcOAIJAE0Id6UqEICm0MaiBuLurCAYbZ52LgBQ9XQQRJHFUnz6DijisZFl
-         Txjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUrPEQ2kJ2fAPXhLDcZa+V6ZD0VBJykZ/6gXkb99qQHQiDhbSxfvSn/EfNR2MISLMUjqSpcC3Uk47w=@vger.kernel.org, AJvYcCV0beTzV3lKPvmDOFBygUW7L1TfICzbqZAijbwu4+/RNQvF4LXkjX5wScPadatDDHPrKJKygruAiMPZR0Ot@vger.kernel.org, AJvYcCVCWvPIaKJpSXA039ygchyiIqImqOrNT0aNGXNYwmNmNC+FBaUmrK4lhADnyYI9uLL5/BTvN7AKeRB2w9mPFIZn@vger.kernel.org, AJvYcCVzvrFQeZjrSvxZhMH/KB+txet8yFEXKK+wUKsnFBPk+0XRCC6sYxI2vrrtGLWNheRraHNBbsy2+xQnDBTvFKWno5Aj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjIP7lztzbxVmcFE0gIs8riHiOHRwmq7Cj5PMT3+w3W/4TKzfK
-	0bBAMpfl+cyPJ4922Lpv8kjUaLKf9+KWvZOp1FrmfSzvVtT8aYP4
-X-Gm-Gg: ASbGncvUYyFMh4iK1uJDZNyQ1yDw4h7/h4iPBRMAovBlRm8oyXpbIi3qBGEHLXLd9fq
-	KuRHQKh6uFXBtKfeimyZvWHiNQbwRn7hwL5gn1paM7Vkjy6/5pmRsl0/h2FhbWBWvPtZSSBDhO0
-	SBUG+ofxwuX7fdPSHVqejDULTMZhHPEQpCoX+qte9guCnLKiNGNm2f07x1+3os9dRrzy2nkBqew
-	QLqGqhsuCuFBLGBvGUjCMArcbcr8e3/1PGyqeL60QQmTwF8lCxkG5KdHSi+BhA09vi+I3ns3zCb
-	lo6B47ic9oqEEY5iTXNPVmK1jalRKvQYYDKQVONosk9udTemBm6e8P/Dek6YAacg1i2pzh4gqNu
-	IBqLLVQ==
-X-Google-Smtp-Source: AGHT+IHtpv3dpc70SaDr/V++5hlxUyvMZlKOx7+s1harXTHv++6MCeChn/jLHznKjqhAvJOkxc1YKg==
-X-Received: by 2002:a05:6214:21ca:b0:6d8:b733:47c with SMTP id 6a1803df08f44-6e6972de435mr70861356d6.22.1739979586160;
-        Wed, 19 Feb 2025 07:39:46 -0800 (PST)
+        bh=2IGK/jN7/zS07b2i1C9QicOMxwRniAh4o+TnE4u4gaA=;
+        b=DInTV4sNO9SrgKS8HAz2dvT1nd8GfVICQ8Edq02iy2qZoZjcsHrShOgfLxBE9r/3m+
+         K+pmnepOO4+KM/YXOSDGmM2iMj+HAthfFXhAZlxWNlsQ0iqaeZDSo/UzpTomVIqz2m+h
+         dkD6R+clpHdUyK4PkTxzWKgASxZnOzgaM+5jBmxQXFO2EgI3WSorFiVtOeyIwzSO6s2n
+         kav+k0veJhodaHe+JXm+G/aAuccY3LKY9HdHJo0Fj8Kh/UhMYvglru5WgL0S2VT0E9wY
+         BQL1e8dCjia3zup5RMA1jwO1YMSTsZUd/TGxBr2uqeZJe5L5Z/FyoFU74t8f7syCR1bd
+         PQJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUyYkiC/prAsnMnwfLmfIUjx5WoiUZ5qa1KXTnzR0cKHLpG7uLQO2kPS56XkszMnWOaerey3LvCS50=@vger.kernel.org, AJvYcCV4BS+Zy1wkW6VVMhzIpCMtxAuDDRMcUUzuXWhRQDEN6XNt1oKQOelDWvqrbFpGdingSoHEmkgdMiMTTB6uHxNd@vger.kernel.org, AJvYcCWWFqmNfyd2Br/tny3cbO9hVLKWV7IPlDq6jtg6Ujr4BAdVgoAFLkiYf14dWtj/5yelUPowKfGwU5k8YgqrawIPXLQn@vger.kernel.org, AJvYcCWqvtihdfBD9SzqJPnBo9KMTsKZxbrfaL+cNCEEW9ikQn4usQXwj8tirlFVk2TJQaoN6icrSmKJHa17FGb/@vger.kernel.org
+X-Gm-Message-State: AOJu0YwL2EJQDumd1gyN6QahFJSwXQM/R+CZOR6dHbGeDMAFANYo5rgV
+	RTQ+vC1On3d/zbnnGDFwPbOZaCfGGPT4life5pW/erfG1mV4axSK
+X-Gm-Gg: ASbGncujYCR/b2BKvXEemQ4w39bXB+toaqXi+cXYW8S+z5Oga+UWI4ESMkpe+MRY7ar
+	xHw0qjRma8gXT3zmeFjRsaJ4fXEAHRynulPEoT40zsl7NEQXJPV5Zpl8iu3XV1HSFAkNkgh+6eF
+	3tqu4xDVU2od6UQuwox7s5oLnYqmw/Qd2qQQAJCw3m7a1xko9GelpMjSXtoypEkVYBpYur2U32s
+	t7ObEzEwAUZMpqegDPx80bDu6R8UOul0h5X7xGPDRiWstWtn59dGXwdJ8QqHvP6SXlUZI+Wq7Zj
+	3zpugSwEJVmrpRrN1CMCDsuqWfZ5BBO+C+F9dLrGKtIeL7PJDXiL840XvI65IWgjSLfhp+nmThc
+	LU2ZpPg==
+X-Google-Smtp-Source: AGHT+IGKh1Jas2dHp+Xdvfua6mg+rQcOKK6ebxY6bWc8rbExgK1hbPdbNn0PYQeaPxsXI5XgxzjUAA==
+X-Received: by 2002:a05:620a:278c:b0:7c0:6af7:b71f with SMTP id af79cd13be357-7c0b5246a84mr584504385a.16.1739979587934;
+        Wed, 19 Feb 2025 07:39:47 -0800 (PST)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65dce9b56sm75743786d6.112.2025.02.19.07.39.45
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c0abf8a181sm231818585a.16.2025.02.19.07.39.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 07:39:45 -0800 (PST)
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 223B01200043;
-	Wed, 19 Feb 2025 10:39:45 -0500 (EST)
+        Wed, 19 Feb 2025 07:39:47 -0800 (PST)
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfauth.phl.internal (Postfix) with ESMTP id D83801200043;
+	Wed, 19 Feb 2025 10:39:46 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Wed, 19 Feb 2025 10:39:45 -0500
-X-ME-Sender: <xms:Qfu1Z_lqBFl3E0BWHdrDl-JqRemJSc_33H084LoX18eNXJguf6zoog>
-    <xme:Qfu1Zy1ef7LUCKL6GcZVfN5Qoym-NUdwEUMuUlwBptNMQPYgwOWg9xPXc4mMHetmc
-    y0f7TwI5g_Xi8SQAQ>
-X-ME-Received: <xmr:Qfu1Z1rfsz3V0Y0anbHRMyncvYsytYFRuuLylbBnFnSuyZ772g6kd3oNAQ>
+  by phl-compute-06.internal (MEProxy); Wed, 19 Feb 2025 10:39:46 -0500
+X-ME-Sender: <xms:Qvu1Z1miWkt3Tvxb5yHBlzPRNfFnT-xeRuPmIUx90HjV_kHG49em_Q>
+    <xme:Qvu1Zw0ydaN6VYavpWTALK9HJI1xeTao3umyYutfZmAkRlnvqb4rC6dWFOHgeSF63
+    2OgDrlHco0P2e8y5Q>
+X-ME-Received: <xmr:Qvu1Z7pVOkVaIZ2_nCyv88RTgkyYsFkfLtmeoXTOoFh7NIlos82x0heV6w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeigeeifecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
@@ -91,7 +91,7 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeigeeifecutefuodetgg
     ffeiueejhfeuiefggeeuheeggefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
     hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
     ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedvkedpmhho
+    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedvledpmhho
     uggvpehsmhhtphhouhhtpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdroh
     hrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphhtthhopehrohhs
     thgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohepmhhhihhrrghmrghtsehkvg
@@ -100,14 +100,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeigeeifecutefuodetgg
     hrghdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
     ohepnhgvvghrrghjrdhuphgrughhhigrhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
     epjhhovghlsehjohgvlhhfvghrnhgrnhguvghsrdhorhhg
-X-ME-Proxy: <xmx:Qfu1Z3lhHBjW-vZQkfT6tWZ9id_vNlCoodVhZmA8wPiLN5dpPkJk8A>
-    <xmx:Qfu1Z936d8mNZUvZLsfMe2BCxAQXYzN0bRPT5OALiTJC1cCCO1z3-g>
-    <xmx:Qfu1Z2v6Gv7mxc749ZKRrZUFv3sCGuhKj5L1Tpfdau5_mqOI1Pu-4A>
-    <xmx:Qfu1ZxVTuoXm3DqjR7tKhUuq1owNvgzJwT5LV2n1wEOkND3YeN9zfw>
-    <xmx:Qfu1Z80KBy2ZxSQhJy_VlJsy65MxUuEfafUGnLqYFubtHuYoVhhWCPK4>
+X-ME-Proxy: <xmx:Qvu1Z1kIN3u3fCVc0qcy0-vT7C3rLEGOyshfzAK-GdnP6b8JNYQZsQ>
+    <xmx:Qvu1Zz1IPgT2pNg4ILqWp8xJRKEAUjNqmUiMMdUtg5ySdAvtNJSvtw>
+    <xmx:Qvu1Z0ssjsK9N4Il2ldAg_ACBqbuYFqzgnBIvB3ZyVlmvGxryjFmHQ>
+    <xmx:Qvu1Z3XPFeQ1pqkbxuaz-UaLczJeMpXTG1Rco_fwAxqR6gLZEmTGgQ>
+    <xmx:Qvu1Z60_OXQj9FG7qcCZZvvoTUqy6m_AZemL31ph4UHPvd9ZQ-RpH0gb>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Feb 2025 10:39:44 -0500 (EST)
+ 19 Feb 2025 10:39:46 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: Jonathan Corbet <corbet@lwn.net>,	Steven Rostedt <rostedt@goodmis.org>,
@@ -128,10 +128,11 @@ Cc: Jonathan Corbet <corbet@lwn.net>,	Steven Rostedt <rostedt@goodmis.org>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,	Yury Norov <yury.norov@gmail.com>,
 	Valentin Schneider <vschneid@redhat.com>,	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu 02/11] rcutorture: Add a test_boost_holdoff module parameter
-Date: Wed, 19 Feb 2025 07:39:29 -0800
-Message-Id: <20250219153938.24966-3-boqun.feng@gmail.com>
+	linux-kselftest@vger.kernel.org,
+	kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH rcu 03/11] rcutorture: Include grace-period sequence numbers in failure/close-call
+Date: Wed, 19 Feb 2025 07:39:30 -0800
+Message-Id: <20250219153938.24966-4-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20250219153938.24966-1-boqun.feng@gmail.com>
 References: <20250219153938.24966-1-boqun.feng@gmail.com>
@@ -145,96 +146,215 @@ Content-Transfer-Encoding: 8bit
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-This commit adds a test_boost_holdoff module parameter that tells the RCU
-priority-boosting tests to wait for the specified number of seconds past
-the start of the rcutorture test.  This can be useful when rcutorture
-is built into the kernel (as opposed to being modprobed), especially on
-large systems where early start of RCU priority boosting can delay the
-boot sequence, which adds a full CPU's worth of load onto the system.
-This can in turn result in pointless stall warnings.
+This commit includes the grace-period sequence numbers at the beginning
+and end of each segment in the "Failure/close-call rcutorture reader
+segments" list.  These are in hexadecimal, and only the bottom byte.
+Currently, only RCU is supported, with its three sequence numbers (normal,
+expedited, and polled).
+
+Note that if all the grace-period sequence numbers remain the same across
+a given reader segment, only one copy of the number will be printed.
+Of course, if there is a change, both sets of values will be printed.
+
+Because the overhead of collecting this information can suppress
+heisenbugs, this information is collected and printed only in kernels
+built with CONFIG_RCU_TORTURE_TEST_LOG_GP=y.
+
+[ paulmck: Apply Nathan Chancellor feedback for IS_ENABLED(). ]
+[ paulmck: Apply feedback from kernel test robot. ]
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: kernel test robot <oliver.sang@intel.com>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- .../admin-guide/kernel-parameters.txt         |  5 +++++
- kernel/rcu/rcutorture.c                       | 19 ++++++++++++++++---
- 2 files changed, 21 insertions(+), 3 deletions(-)
+ kernel/rcu/Kconfig.debug | 14 ++++++++++++++
+ kernel/rcu/rcu.h         |  2 ++
+ kernel/rcu/rcutorture.c  | 34 ++++++++++++++++++++++++++++++++++
+ kernel/rcu/tiny.c        | 14 ++++++++++++++
+ kernel/rcu/tree.c        | 20 ++++++++++++++++++++
+ 5 files changed, 84 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index fb8752b42ec8..ed1a0df03b18 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5758,6 +5758,11 @@
- 	rcutorture.test_boost_duration= [KNL]
- 			Duration (s) of each individual boost test.
+diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
+index 6af90510a1ca..25a9dc2be0dc 100644
+--- a/kernel/rcu/Kconfig.debug
++++ b/kernel/rcu/Kconfig.debug
+@@ -84,6 +84,20 @@ config RCU_TORTURE_TEST_LOG_CPU
+ 	  Say Y here if you want CPU IDs logged.
+ 	  Say N if you are unsure.
  
-+	rcutorture.test_boost_holdoff= [KNL]
-+			Holdoff time (s) from start of test to the start
-+			of RCU priority-boost testing.	Defaults to zero,
-+			that is, no holdoff.
++config RCU_TORTURE_TEST_LOG_GP
++	bool "Log grace-period numbers for rcutorture failures"
++	depends on RCU_TORTURE_TEST
++	default n
++	help
++	  This option causes rcutorture to decorate each entry of its
++	  log of failure/close-call rcutorture reader segments with the
++	  corresponding grace-period sequence numbers.	This information
++	  can be useful, but it does incur additional overhead, overhead
++	  that can make both failures and close calls less probable.
 +
- 	rcutorture.test_boost_interval= [KNL]
- 			Interval (s) between each boost test.
++	  Say Y here if you want grace-period sequence numbers logged.
++	  Say N if you are unsure.
++
+ config RCU_REF_SCALE_TEST
+ 	tristate "Scalability tests for read-side synchronization (RCU and others)"
+ 	depends on DEBUG_KERNEL
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index feb3ac1dc5d5..a6098997a14b 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -590,6 +590,8 @@ void do_trace_rcu_torture_read(const char *rcutorturename,
+ #endif
+ static inline void rcu_gp_set_torture_wait(int duration) { }
+ #endif
++unsigned long rcutorture_gather_gp_seqs(void);
++void rcutorture_format_gp_seqs(unsigned long seqs, char *cp);
+ 
+ #ifdef CONFIG_TINY_SRCU
  
 diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index d26fb1d33ed9..fbf1d7fcf61d 100644
+index fbf1d7fcf61d..2113583cae34 100644
 --- a/kernel/rcu/rcutorture.c
 +++ b/kernel/rcu/rcutorture.c
-@@ -135,6 +135,7 @@ torture_param(int, stat_interval, 60, "Number of seconds between stats printk()s
- torture_param(int, stutter, 5, "Number of seconds to run/halt test");
- torture_param(int, test_boost, 1, "Test RCU prio boost: 0=no, 1=maybe, 2=yes.");
- torture_param(int, test_boost_duration, 4, "Duration of each boost test, seconds.");
-+torture_param(int, test_boost_holdoff, 0, "Holdoff time from rcutorture start, seconds.");
- torture_param(int, test_boost_interval, 7, "Interval between boost tests, seconds.");
- torture_param(int, test_nmis, 0, "End-test NMI tests, 0 to disable.");
- torture_param(bool, test_no_idle_hz, true, "Test support for tickless idle CPUs");
-@@ -1148,8 +1149,19 @@ static int rcu_torture_boost(void *arg)
- 	unsigned long gp_state;
- 	unsigned long gp_state_time;
- 	unsigned long oldstarttime;
-+	unsigned long booststarttime = get_torture_init_jiffies() + test_boost_holdoff * HZ;
- 
--	VERBOSE_TOROUT_STRING("rcu_torture_boost started");
-+	if (test_boost_holdoff <= 0 || time_after(jiffies, booststarttime)) {
-+		VERBOSE_TOROUT_STRING("rcu_torture_boost started");
-+	} else {
-+		VERBOSE_TOROUT_STRING("rcu_torture_boost started holdoff period");
-+		while (time_before(jiffies, booststarttime)) {
-+			schedule_timeout_idle(HZ);
-+			if (kthread_should_stop())
-+				goto cleanup;
-+		}
-+		VERBOSE_TOROUT_STRING("rcu_torture_boost finished holdoff period");
+@@ -273,6 +273,8 @@ struct rt_read_seg {
+ 	bool rt_preempted;
+ 	int rt_cpu;
+ 	int rt_end_cpu;
++	unsigned long rt_gp_seq;
++	unsigned long rt_gp_seq_end;
+ };
+ static int err_segs_recorded;
+ static struct rt_read_seg err_segs[RCUTORTURE_RDR_MAX_SEGS];
+@@ -407,6 +409,8 @@ struct rcu_torture_ops {
+ 	void (*gp_slow_register)(atomic_t *rgssp);
+ 	void (*gp_slow_unregister)(atomic_t *rgssp);
+ 	bool (*reader_blocked)(void);
++	unsigned long (*gather_gp_seqs)(void);
++	void (*format_gp_seqs)(unsigned long seqs, char *cp);
+ 	long cbflood_max;
+ 	int irq_capable;
+ 	int can_boost;
+@@ -611,6 +615,8 @@ static struct rcu_torture_ops rcu_ops = {
+ 	.reader_blocked		= IS_ENABLED(CONFIG_RCU_TORTURE_TEST_LOG_CPU)
+ 				  ? has_rcu_reader_blocked
+ 				  : NULL,
++	.gather_gp_seqs		= rcutorture_gather_gp_seqs,
++	.format_gp_seqs		= rcutorture_format_gp_seqs,
+ 	.irq_capable		= 1,
+ 	.can_boost		= IS_ENABLED(CONFIG_RCU_BOOST),
+ 	.extendables		= RCUTORTURE_MAX_EXTEND,
+@@ -656,6 +662,8 @@ static struct rcu_torture_ops rcu_busted_ops = {
+ 	.sync		= synchronize_rcu_busted,
+ 	.exp_sync	= synchronize_rcu_busted,
+ 	.call		= call_rcu_busted,
++	.gather_gp_seqs	= rcutorture_gather_gp_seqs,
++	.format_gp_seqs	= rcutorture_format_gp_seqs,
+ 	.irq_capable	= 1,
+ 	.extendables	= RCUTORTURE_MAX_EXTEND,
+ 	.name		= "busted"
+@@ -1978,6 +1986,12 @@ static void rcutorture_one_extend(int *readstate, int newstate, bool insoftirq,
+ 				rtrsp[-1].rt_preempted = cur_ops->reader_blocked();
+ 		}
+ 	}
++	// Sample grace-period sequence number, as good a place as any.
++	if (IS_ENABLED(CONFIG_RCU_TORTURE_TEST_LOG_GP) && cur_ops->gather_gp_seqs) {
++		rtrsp->rt_gp_seq = cur_ops->gather_gp_seqs();
++		if (!first)
++			rtrsp[-1].rt_gp_seq_end = rtrsp->rt_gp_seq;
 +	}
  
- 	/* Set real-time priority. */
- 	sched_set_fifo_low(current);
-@@ -1225,6 +1237,7 @@ checkwait:	if (stutter_wait("rcu_torture_boost"))
- 			sched_set_fifo_low(current);
- 	} while (!torture_must_stop());
+ 	/*
+ 	 * Next, remove old protection, in decreasing order of strength
+@@ -3566,6 +3580,7 @@ rcu_torture_cleanup(void)
+ 	int flags = 0;
+ 	unsigned long gp_seq = 0;
+ 	int i;
++	int j;
  
-+cleanup:
- 	/* Clean up and exit. */
- 	while (!kthread_should_stop()) {
- 		torture_shutdown_absorb("rcu_torture_boost");
-@@ -2512,7 +2525,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
- 		 "shuffle_interval=%d stutter=%d irqreader=%d "
- 		 "fqs_duration=%d fqs_holdoff=%d fqs_stutter=%d "
- 		 "test_boost=%d/%d test_boost_interval=%d "
--		 "test_boost_duration=%d shutdown_secs=%d "
-+		 "test_boost_duration=%d test_boost_holdoff=%d shutdown_secs=%d "
- 		 "stall_cpu=%d stall_cpu_holdoff=%d stall_cpu_irqsoff=%d "
- 		 "stall_cpu_block=%d stall_cpu_repeat=%d "
- 		 "n_barrier_cbs=%d "
-@@ -2526,7 +2539,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
- 		 stat_interval, verbose, test_no_idle_hz, shuffle_interval,
- 		 stutter, irqreader, fqs_duration, fqs_holdoff, fqs_stutter,
- 		 test_boost, cur_ops->can_boost,
--		 test_boost_interval, test_boost_duration, shutdown_secs,
-+		 test_boost_interval, test_boost_duration, test_boost_holdoff, shutdown_secs,
- 		 stall_cpu, stall_cpu_holdoff, stall_cpu_irqsoff,
- 		 stall_cpu_block, stall_cpu_repeat,
- 		 n_barrier_cbs,
+ 	if (torture_cleanup_begin()) {
+ 		if (cur_ops->cb_barrier != NULL) {
+@@ -3661,6 +3676,25 @@ rcu_torture_cleanup(void)
+ 				else
+ 					pr_cont(" ...");
+ 			}
++			if (IS_ENABLED(CONFIG_RCU_TORTURE_TEST_LOG_GP) &&
++			    cur_ops->gather_gp_seqs && cur_ops->format_gp_seqs) {
++				char buf1[16+1];
++				char buf2[16+1];
++				char sepchar = '-';
++
++				cur_ops->format_gp_seqs(err_segs[i].rt_gp_seq, buf1);
++				cur_ops->format_gp_seqs(err_segs[i].rt_gp_seq_end, buf2);
++				if (err_segs[i].rt_gp_seq == err_segs[i].rt_gp_seq_end) {
++					if (buf2[0]) {
++						for (j = 0; buf2[j]; j++)
++							buf2[j] = '.';
++						if (j)
++							buf2[j - 1] = ' ';
++					}
++					sepchar = ' ';
++				}
++				pr_cont(" %s%c%s", buf1, sepchar, buf2);
++			}
+ 			if (err_segs[i].rt_delay_ms != 0) {
+ 				pr_cont(" %s%ldms", firsttime ? "" : "+",
+ 					err_segs[i].rt_delay_ms);
+diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+index 4b3f31911465..f9c4a24dc59c 100644
+--- a/kernel/rcu/tiny.c
++++ b/kernel/rcu/tiny.c
+@@ -257,6 +257,20 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ EXPORT_SYMBOL_GPL(kvfree_call_rcu);
+ #endif
+ 
++#if IS_ENABLED(CONFIG_RCU_TORTURE_TEST)
++unsigned long rcutorture_gather_gp_seqs(void)
++{
++	return READ_ONCE(rcu_ctrlblk.gp_seq) & 0xff;
++}
++EXPORT_SYMBOL_GPL(rcutorture_gather_gp_seqs);
++
++void rcutorture_format_gp_seqs(unsigned long seqs, char *cp)
++{
++	snprintf(cp, 8, "g%02lx", seqs & 0xff);
++}
++EXPORT_SYMBOL_GPL(rcutorture_format_gp_seqs);
++#endif
++
+ void __init rcu_init(void)
+ {
+ 	open_softirq(RCU_SOFTIRQ, rcu_process_callbacks);
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 475f31deed14..e40c4b5c3267 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -538,6 +538,26 @@ void rcutorture_get_gp_data(int *flags, unsigned long *gp_seq)
+ }
+ EXPORT_SYMBOL_GPL(rcutorture_get_gp_data);
+ 
++/* Gather grace-period sequence numbers for rcutorture diagnostics. */
++unsigned long rcutorture_gather_gp_seqs(void)
++{
++	return ((READ_ONCE(rcu_state.gp_seq) & 0xff) << 16) |
++	       ((READ_ONCE(rcu_state.expedited_sequence) & 0xff) << 8) |
++	       (READ_ONCE(rcu_state.gp_seq_polled) & 0xff);
++}
++EXPORT_SYMBOL_GPL(rcutorture_gather_gp_seqs);
++
++/* Format grace-period sequence numbers for rcutorture diagnostics. */
++void rcutorture_format_gp_seqs(unsigned long seqs, char *cp)
++{
++	unsigned int egp = (seqs >> 8) & 0xff;
++	unsigned int ggp = (seqs >> 16) & 0xff;
++	unsigned int pgp = seqs & 0xff;
++
++	snprintf(cp, 16, "g%02x:e%02x:p%02x", ggp, egp, pgp);
++}
++EXPORT_SYMBOL_GPL(rcutorture_format_gp_seqs);
++
+ #if defined(CONFIG_NO_HZ_FULL) && (!defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK))
+ /*
+  * An empty function that will trigger a reschedule on
 -- 
 2.39.5 (Apple Git-154)
 
