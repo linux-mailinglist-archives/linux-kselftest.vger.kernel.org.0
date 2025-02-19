@@ -1,168 +1,253 @@
-Return-Path: <linux-kselftest+bounces-27001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D6EA3C46F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 17:06:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45FA7A3C4BF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 17:19:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38C637A569E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 16:05:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 574B5189C996
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 16:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D01D1FC0E7;
-	Wed, 19 Feb 2025 16:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05371FDE02;
+	Wed, 19 Feb 2025 16:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Sg05S6WT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="co6lGl8f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A54F1EB195;
-	Wed, 19 Feb 2025 16:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739981200; cv=fail; b=kZ4KApySCDAhK0FmMBaObvsNOCg7AeObaeRRFNM2cXSJVZAmgt4Mx9JVj9fI53eAfDPe3arFSzDnoMO8k6YDpJg23oDbw5+EzdFlcXkDnricU7oCkKs6j15QoZOYTL9XG7qEF4vN6y4jb/No6JlLft0UmrGFlpe/tRhrZh0R+Rs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739981200; c=relaxed/simple;
-	bh=paXWdCdc91R4P+kztvQPr7ryXllDZjpGkRqONYEqzEw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=le11RVh8uCpM23yCM5hK4ptVPqryONJFx+o7OJujtjbinxE0Dl1G7/lvXXDvVE5D4eiw6oU7McnnwsYle2elxSHwnlFhs/mvQaftVzhbBrCOh1r8sZIxTxT6EUS4Up1wRxVy8V66otfQxdtie0rMGtWQMUaanDSUlcibNR+mLfY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Sg05S6WT; arc=fail smtp.client-ip=40.107.220.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fM351ls9+kV3a95ERWpmynnNcG0f1yDAYxVXJKNRvb+NwDTSeiiacLmS+tChEz1iqrPk1Nj1ULQMr/3hD/OE97sXlcWwM/vl9dRALgafRbLjxgp/7SE+++wErL4vZ2JcJ86roYHEjtCPHSMDX/XJU7KZv7PsPlsczxT2dNMWDSdaUV7Y7/xTZT4qhVCNkJ5xO2QBhRhcNve9WZ4OA0quol/vf58WqHt1xX0G7tchbLRpOh3RfguDtie/ss95wF4fmWUvdFYYgPLA+s8ytqIoF1AkMIq+xGILMy6CnN2xDDEuihGDEvHEKjEqW3kSKDGerLzcDtjukBv4roiZ8Lf6Ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nhG67u2tjTkF5CD791owD87/LFti3YXPTa2JQneJOYg=;
- b=yfIfo1Vr/prsVaVwyaPdz3Sz6RfcK4ogImNm8D0ZrjWY8MMQaf9PqG9bLQ3S4mYBFzsVP4LdEaDdrVKVmpX3QuPMsqQYtEpRNNZZ6X+/Wk6VcaTDeqysbuDzi8mcviVzyRSRCpmSPp75u1KjoxSnB4XmTWiPwS6N+5XW9TkIMjLa802c+JCJpnyUm2SsPAx5OGAzXC1ePkDwqdJHjjlz+tYPbiM/YllmXB5Hy4OxFgY3Nq/PXXKAsWt/nBnAIFc2vAxAjGvHK/kx+IC0Bk4W6hr0zeeSzPB3YGWj2UbSYQbxuLktugULjzOC1bX6t5cjriVrE67xQD6RVdjH9q2NrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nhG67u2tjTkF5CD791owD87/LFti3YXPTa2JQneJOYg=;
- b=Sg05S6WTgzBYlnzg10MNtU1C1xA/uMo9hyJFXDb8vrU6QUIWTUNf6VpNag8rSdr9SdzHc9d6PrAb4Gggll5B1lSoAArzAeKVwocrU/AOdnVLGfrBI0yQ2U26XkiirEB+qr+623WpQvxosseOJFgKx/dmWE+7c68vdhNFv7AggsIYif4oJlnsqGO4kLIet5Ny+JvKjacmn2tHMVd+wpgIeGP4sNy9mgXPZo9z4dkimMBfAnQ5r4/usIFBlEy5+QRPmN7eTem2BGII4S2XQ89jun6lXkJQ/PsTWkK2kw5T1PJhLfqmEFfhgTvqZTfimWcYu0fxEFR2PZ66736LiR77Og==
-Received: from CH0PR03CA0322.namprd03.prod.outlook.com (2603:10b6:610:118::27)
- by SJ2PR12MB7961.namprd12.prod.outlook.com (2603:10b6:a03:4c0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Wed, 19 Feb
- 2025 16:06:34 +0000
-Received: from CH2PEPF00000099.namprd02.prod.outlook.com
- (2603:10b6:610:118:cafe::f1) by CH0PR03CA0322.outlook.office365.com
- (2603:10b6:610:118::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.14 via Frontend Transport; Wed,
- 19 Feb 2025 16:06:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CH2PEPF00000099.mail.protection.outlook.com (10.167.244.20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8466.11 via Frontend Transport; Wed, 19 Feb 2025 16:06:33 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 19 Feb
- 2025 08:06:15 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 19 Feb 2025 08:06:15 -0800
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Wed, 19 Feb 2025 08:06:14 -0800
-Date: Wed, 19 Feb 2025 08:06:13 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <tglx@linutronix.de>, <maz@kernel.org>,
-	<joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>,
-	<shuah@kernel.org>, <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<eric.auger@redhat.com>, <baolu.lu@linux.intel.com>, <yi.l.liu@intel.com>,
-	<yury.norov@gmail.com>, <jacob.pan@linux.microsoft.com>,
-	<patches@lists.linux.dev>
-Subject: Re: [PATCH v1 00/13] iommu: Add MSI mapping support with nested SMMU
-Message-ID: <Z7YBdSgKev6Hv7vi@Asurada-Nvidia>
-References: <cover.1739005085.git.nicolinc@nvidia.com>
- <20250219133723.GN4183890@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6221D1FE469
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 16:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739981905; cv=none; b=SiKGUPm6G9oal25dICrDvNS4CxBGjcr8u5YYRexIkrkeVzOGh7QfdNcXmHZON9ljTOeyXbTnNeBPmXzAtGCaikU/DET+mA6I6GoT/xUU7swrWPXoZGYUZhRGdzE2+PepWqYCbuTu+15v2f3Gn5D7YBwOaOOzKj4tDhXUvKR4uXw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739981905; c=relaxed/simple;
+	bh=b38N2G5pI18KXCo6dYoQ0A/4T04VhxVdQ6rNeU31Ph8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=YsTzWmtuvkzPTNg80Xo/XFW2+vhg+u0TsUJVVToRYVaILc3mdybgLe9RgeWc98LjkU4sxaPgNGgvQnEm7LGnIYCSl8qUwryJX6meTQLJwwIjBz9v0l/ddgqB25NnuIJ3Zzs6IuT0BWhmE85OOJxWp6NPpjzkP1IcgDdtIu/AAMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=co6lGl8f; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739981902;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b38N2G5pI18KXCo6dYoQ0A/4T04VhxVdQ6rNeU31Ph8=;
+	b=co6lGl8fYC4dTkPOxYlwGM/Z7S5GyonXvd/YAfs4hEqu0oXze8tm1RGXV5k0vYdtSL4v+0
+	8eLl32wh/UsRYvsICmYHGARtgbSYp8NxVzdWp+0vVQEks3E60lwnIVBkIQ5Bejz3QuHyyB
+	r1ohSdWEL/wQ+q8/w2C1C2Z/tCCP+hg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-649-Ke9WyMWNPv2xieIHvZhHFA-1; Wed, 19 Feb 2025 11:18:20 -0500
+X-MC-Unique: Ke9WyMWNPv2xieIHvZhHFA-1
+X-Mimecast-MFC-AGG-ID: Ke9WyMWNPv2xieIHvZhHFA_1739981899
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43947a0919aso58392115e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 08:18:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739981899; x=1740586699;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b38N2G5pI18KXCo6dYoQ0A/4T04VhxVdQ6rNeU31Ph8=;
+        b=JqK7Iu5/UD9E0aYwSuA00dCQLD86aggg5FaN44Kiyf2b/sFkaJoPgnjNTlmFQ35DcP
+         ogm4V2+DqayV54gSs8zVancqVxZXy3v6CqtmTv9kdBTzmdmn5FMXGrg9bNbMLqC9lxdC
+         LX3bfwugXS4owp1GBth+U8/P6a52iTRsW2rZzGdjOCAXgYtS/xzjaqO1btTZPzy+OcYD
+         l48SgAu9BnNW3l55nv+vsYRFolA0GJffNP5QKaf0D6WGhYvKMVfvjWUNPBsyGvg8W2lx
+         8U2dUKKoTCn6T0IzjKC7ddDdPEZOEpyT5cmX4WYsSrUfkHW48PMIq1H5qFqFGCU1MXGC
+         Ccjg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBX/3LZaYiuhtRiccTCe8pI0lhFAXNaWe0oUXOSPTt0rsiccH78CJkFSoQpSMEHbFS7ZP84aZHwfdfmb4yNPU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbAmTyyYtNx0YSq388hoBuh09cIl9qk4YDbj6WlTNZZzOFKNjl
+	qcHWDlby5W7xF3xPCOk4yCRVUfXhEtsNffaW+WuSS0h8p7Yeg5ebTQOuRREFzeML09Yf0l/5f9U
+	e/jVD5MSRCKWplC//95IEMlqjHA0AkjMDrbWIKFE642S8+zt8De+nEUEZSkf8LYPGPQ==
+X-Gm-Gg: ASbGncu4HHWFKbn+0/27viWEjxMtj1KKsScv13atm51pJ36SkfREKrQzI7O2n3RS2ju
+	3LaGajk62VLsaDS6NU/UIIhauTqaVkCDWGD1lCqEbiLv2xcw8zEq/G7NUAn0Q6tf5JvplKZfTyY
+	7Y4VJQIOXMTqGOu3uxLPlYUcf6w+vf1ASw9aTrg91wWdRWYqSX94uMSmGpwyv46mvpWG6IQkXYQ
+	QmNph0OrPuXYSefLbVyqXrCTFBvrpM4ULPbZv/+qCXpDcsGqGaKkERvJrgB3GmkyxVO233fpZQn
+	xb2Czq4NQzPRA20K+1fUZEo7t4EAbWb0+KgRLt99QFkxSzRujAjJMz30ZkZ3qKFSWQ==
+X-Received: by 2002:a05:600c:5246:b0:439:9d75:9e92 with SMTP id 5b1f17b1804b1-4399d75b257mr27951635e9.28.1739981899399;
+        Wed, 19 Feb 2025 08:18:19 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGrgaKWzB18Ksr+NPSQeT1o3+i2kAVUfh7lIILUz6n7wULpVTIiD8VAP1UIlBXohEkgY6+FYQ==
+X-Received: by 2002:a05:600c:5246:b0:439:9d75:9e92 with SMTP id 5b1f17b1804b1-4399d75b257mr27950675e9.28.1739981898863;
+        Wed, 19 Feb 2025 08:18:18 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f2591570esm18461449f8f.59.2025.02.19.08.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2025 08:18:17 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+In-Reply-To: <20250219145302.GA480110@joelnvbox>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+ <xhsmhzfjpfkky.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <20250219145302.GA480110@joelnvbox>
+Date: Wed, 19 Feb 2025 17:18:14 +0100
+Message-ID: <xhsmhecztj4c9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250219133723.GN4183890@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000099:EE_|SJ2PR12MB7961:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3365fe65-df24-4d0c-efc6-08dd50ff6169
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YhSTRkQ257p/3kYedxK24lbm2VdB1tWuzWCLY3p6ktlWn3eZ89B0ksoLSaKG?=
- =?us-ascii?Q?q9tOzfCwUt7eoN9Wo9CqkFbAYQ6oqr3R+4euVBNgUF1LDh6i8KGfskQj2xer?=
- =?us-ascii?Q?7jmFSFyDJ3CbqBuC++g4d/GpJDLv8anCwPlSJLEFRjhWbc7wz+2q1Sn+yUtH?=
- =?us-ascii?Q?bJP09/o86iDUUFCQJdjxiBVpUs+sn5LPKnR5Uu0EbnhEK0k3G/AlJCuZUJaT?=
- =?us-ascii?Q?xi8FdzC1pSHbhItUm6yuLdku8UpnTcO9/lZnLUbVgSFpENzllmgqXApao7VH?=
- =?us-ascii?Q?tWuj1TtmhmW93ZUP6RlzuaAl0gm82+vx67Ya4E8sKJ3o+AoTHzTCC7WMwFDq?=
- =?us-ascii?Q?mqAtcjsK5dnNgPQoTJV3wHohfYKl0aYRaz0cIIouVPvGuVFMp0mbi1/sErol?=
- =?us-ascii?Q?68/BOReY0GcLtwc+ALPpd95NWJ4jsNeh6xWJ3KSkuwK5QW/E4dg41j7q+ov/?=
- =?us-ascii?Q?8TvVTK5rMBuGlEie9Fyfsbip09Kl0lGKrPvJUhAKh0ST74nSFWSPYgmQE22f?=
- =?us-ascii?Q?gcX1HkevUvzN9PEeGRDTb/XReGfTRt3FYiOEb9oyr4gVd0mFMSjnJg1wnCmX?=
- =?us-ascii?Q?W0QkjVqfDRqu27BpJV1ye2jwvjzH3gnWZIguzj39SDWk/CfiINR2tWrmsbci?=
- =?us-ascii?Q?lvR3G/yEBXeJa92o8yG57yEOSjsB+h83wFffPyc75H9xtE4f/kaQHKWLKSE5?=
- =?us-ascii?Q?/ZIObP152o5k8I3GdUAluCMCs5EfDpGk8g2bI+EBsVR3LZZsChcv/73ix0jr?=
- =?us-ascii?Q?k1e6i876ETI+NdaQCwx4v5nX1Hv5Em08LAyUox8jHDmrjnvv61/iSNogu605?=
- =?us-ascii?Q?N+EcrZxogV2NKeKBc5czhUgT+SGjrbMnnpDjPukeNLB/aUe5zApHfOfvw4xK?=
- =?us-ascii?Q?j6O1Oc117F3qiWWH5/3hGY3kgTRDeylLkdqvFMwG9DndEyy6ZdKtnzSDpowj?=
- =?us-ascii?Q?2YxAdLza1uamtX01Ji+YqbuGqu2sBpiE/qnJU+CgWOPGdH/AVVHKoGZUt+IT?=
- =?us-ascii?Q?45xVjTqy1z5n9qKRDbJXBhQ4kRKADARCxXFdC/ezI8y6Nj6qRAp5ncHcoaxp?=
- =?us-ascii?Q?pZPW0p8l0lgwKnDS5E4bI4HNau36kZomNGC8NnuEyrthzGmhJBHm7B5tV/en?=
- =?us-ascii?Q?bLfpOBwdqnCUZF7//7GYHDx/6fObaEd+zBXuQv9pdpjULy/tjCvXl16FyT1M?=
- =?us-ascii?Q?6yxgM6IBjqjQZHD8ik82n/zIj4FGpI8uWYoU1RUvCCUPCqVXE2PFfS8/Nl9l?=
- =?us-ascii?Q?/9wgDBspku6pfp5uxzO/foV77SgHChYi8SioDQrhBlDyEApSGfBDic9wowXA?=
- =?us-ascii?Q?4/He+BIe4Nt0FLlgNQHClc08g+kijTtJI76Jrj6ppqWcVTUlwBU91lAbD6FM?=
- =?us-ascii?Q?mwMvx2xZvmvajkqxeaUi+TWNru55Y0UwYcSyX8k+J7MGkTEYYwcUSUQRALHC?=
- =?us-ascii?Q?T9uko+oWmL95QWApbQQwHhcsUpBFmlC6V4qTx62H2IE02Bmr69D+Xr6jAQSN?=
- =?us-ascii?Q?/LdPzs6WWgBiK5w=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 16:06:33.6131
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3365fe65-df24-4d0c-efc6-08dd50ff6169
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000099.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7961
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 19, 2025 at 09:37:23AM -0400, Jason Gunthorpe wrote:
-> On Sat, Feb 08, 2025 at 01:02:33AM -0800, Nicolin Chen wrote:
-> >   iommu: Turn iova_cookie to dma-iommu private pointer
-> 
-> I suggest you respin this with the updates and stop here at this
-> patch, it is enough to get the core infrastructure updated and does
-> not bring any uAPI changes. The remainder can be done after we get to
-> this merged.
+On 19/02/25 10:05, Joel Fernandes wrote:
+> On Fri, Jan 17, 2025 at 05:53:33PM +0100, Valentin Schneider wrote:
+>> On 17/01/25 16:52, Jann Horn wrote:
+>> > On Fri, Jan 17, 2025 at 4:25=E2=80=AFPM Valentin Schneider <vschneid@r=
+edhat.com> wrote:
+>> >> On 14/01/25 19:16, Jann Horn wrote:
+>> >> > On Tue, Jan 14, 2025 at 6:51=E2=80=AFPM Valentin Schneider <vschnei=
+d@redhat.com> wrote:
+>> >> >> vunmap()'s issued from housekeeping CPUs are a relatively common s=
+ource of
+>> >> >> interference for isolated NOHZ_FULL CPUs, as they are hit by the
+>> >> >> flush_tlb_kernel_range() IPIs.
+>> >> >>
+>> >> >> Given that CPUs executing in userspace do not access data in the v=
+malloc
+>> >> >> range, these IPIs could be deferred until their next kernel entry.
+>> >> >>
+>> >> >> Deferral vs early entry danger zone
+>> >> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> >> >>
+>> >> >> This requires a guarantee that nothing in the vmalloc range can be=
+ vunmap'd
+>> >> >> and then accessed in early entry code.
+>> >> >
+>> >> > In other words, it needs a guarantee that no vmalloc allocations th=
+at
+>> >> > have been created in the vmalloc region while the CPU was idle can
+>> >> > then be accessed during early entry, right?
+>> >>
+>> >> I'm not sure if that would be a problem (not an mm expert, please do
+>> >> correct me) - looking at vmap_pages_range(), flush_cache_vmap() isn't
+>> >> deferred anyway.
+>> >
+>> > flush_cache_vmap() is about stuff like flushing data caches on
+>> > architectures with virtually indexed caches; that doesn't do TLB
+>> > maintenance. When you look for its definition on x86 or arm64, you'll
+>> > see that they use the generic implementation which is simply an empty
+>> > inline function.
+>> >
+>> >> So after vmapping something, I wouldn't expect isolated CPUs to have
+>> >> invalid TLB entries for the newly vmapped page.
+>> >>
+>> >> However, upon vunmap'ing something, the TLB flush is deferred, and th=
+us
+>> >> stale TLB entries can and will remain on isolated CPUs, up until they
+>> >> execute the deferred flush themselves (IOW for the entire duration of=
+ the
+>> >> "danger zone").
+>> >>
+>> >> Does that make sense?
+>> >
+>> > The design idea wrt TLB flushes in the vmap code is that you don't do
+>> > TLB flushes when you unmap stuff or when you map stuff, because doing
+>> > TLB flushes across the entire system on every vmap/vunmap would be a
+>> > bit costly; instead you just do batched TLB flushes in between, in
+>> > __purge_vmap_area_lazy().
+>> >
+>> > In other words, the basic idea is that you can keep calling vmap() and
+>> > vunmap() a bunch of times without ever doing TLB flushes until you run
+>> > out of virtual memory in the vmap region; then you do one big TLB
+>> > flush, and afterwards you can reuse the free virtual address space for
+>> > new allocations again.
+>> >
+>> > So if you "defer" that batched TLB flush for CPUs that are not
+>> > currently running in the kernel, I think the consequence is that those
+>> > CPUs may end up with incoherent TLB state after a reallocation of the
+>> > virtual address space.
+>> >
+>>
+>> Ah, gotcha, thank you for laying this out! In which case yes, any vmalloc
+>> that occurred while an isolated CPU was NOHZ-FULL can be an issue if said
+>> CPU accesses it during early entry;
+>
+> So the issue is:
+>
+> CPU1: unmappes vmalloc page X which was previously mapped to physical page
+> P1.
+>
+> CPU2: does a whole bunch of vmalloc and vfree eventually crossing some la=
+zy
+> threshold and sending out IPIs. It then goes ahead and does an allocation
+> that maps the same virtual page X to physical page P2.
+>
+> CPU3 is isolated and executes some early entry code before receving said =
+IPIs
+> which are supposedly deferred by Valentin's patches.
+>
+> It does not receive the IPI becuase it is deferred, thus access by early
+> entry code to page X on this CPU results in a UAF access to P1.
+>
+> Is that the issue?
+>
 
-OK. I will split that and send the first 7 patches as Part-1.
+Pretty much so yeah. That is, *if* there such a vmalloc'd address access in
+early entry code - testing says it's not the case, but I haven't found a
+way to instrumentally verify this.
 
-Thanks
-Nicolin
 
