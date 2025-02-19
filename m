@@ -1,233 +1,297 @@
-Return-Path: <linux-kselftest+bounces-26957-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B056A3BE79
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 13:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28C2DA3BEA3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 13:51:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 527D61895F86
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 12:48:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79758188C3EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 12:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A54061E520A;
-	Wed, 19 Feb 2025 12:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A6121E102A;
+	Wed, 19 Feb 2025 12:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="GtfQbXRG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cvedAyzh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11020104.outbound.protection.outlook.com [52.101.193.104])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08B81E284C;
-	Wed, 19 Feb 2025 12:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.104
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739969261; cv=fail; b=CDDEMTl+f/jhyOXjJM/JhghRqwLr9g1yB48MV3bU4s8qszcuS81xKm4QalHQCEJmIkteeE4/ZoHlE2S7ftLXB/yNGqBuElpX8QUVkghkMdcyYWCeJuJqocby7ufN08JD9FoI5q8XoUOGDnUEImBxfxM3AeETekZSrKwQ80wdi/8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739969261; c=relaxed/simple;
-	bh=HHnB6ykZWhUxI66fNCko+nKXUUEeG9c0aDk+ot+Phdg=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=T6qnjD0dx9XUOoiu0VOYPBcrIFjgX8aEaqCURnFQUyPlgu3Kuwn39Wv8tA1echxqqJnRZrLFAJCRoGnePOOkaAKKrMe5L4YtMqZKzYh1im/T9XJwvCFWyTg7cCS1rkvrxieOgZVm1F0xUcETUzH7a5wXnj0kvJpqJzTAnNtayNE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b=GtfQbXRG; arc=fail smtp.client-ip=52.101.193.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ot7wK0v39htRG8krWEjQ1/IcMuFsy3X+/BuHuqtgENIGkuY3QVVjydUNdUnpaYDADEE7UcBQlTfssEMIXB9o4s/uoe3RFblrNEEDsRwdFaXGxCDgNNVIEyMRJ4YcOQz/Ek3k9//4jL5Yom8jQk+8ztxlWnY3WA4U4Zmom4CRmJcX30YPq94ZFCkqsVfg55+6Hhm9uEjrnbGHlsHkP8jjnUrrL0hzPV+/xXnNyqyXu4/53QFPhgANnBqdpky07EdzaN2GfinazXwZ3xuOsEj/1Zt7mRuuwrcv7xeiHYLBjRZ6lI5cYScjD4dAuGIJVB3I7b4qpcEwqyO4QAofxcDCig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fbKaIHxho2feYh+C+9q1wXqZjtUj9B3WdPEoRvpon00=;
- b=Z86mCUWL9wtBVAbwZs+FlM/whWZ5Bfyp/c5e0CJh0ZHjO/FFZyfC/hT0zM6pkEGa8W3m1ogxtxyzEBdkrOQBtRFMH98BxTSCt1K+4DEGttQqjHvDYo7VHl2nRHlojTVsps3pNjHdlAVwVdSvFrH1LTnCgM7oz7YtAJNQDvpWhImIx4nHGbOFGmza1gSuKC/kHBb8tdkUUg0HDq/WAlb0GL0Y/YAxIYo3ghS+05zmaQi+0OIWkKRscifgerAUXvokPeNOFTmnsn3tlo83QJwLz+i97ENmfN/QxEAPlmzULEdAwGNJbSabekLH6SaDhq/8YudWyMk+OHRmUqRLvbyeNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACED91C7018;
+	Wed, 19 Feb 2025 12:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739969457; cv=none; b=hi3Csvvb/hVjDk9MA8Gax2gi0hyljsB6JBajCfZwHCWc6jDs/XeLLvWPTtaW3ozdkAyh/1Lla/4YhVhbzMEog4OXMsknhBFqti7Nf4/AcoBCK2jzu7hd/ivEDK83OKcLNoJOapn2tYFjr2t/SVd0Y8wXdG0RPg5CdUXikbl/NlI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739969457; c=relaxed/simple;
+	bh=xkr//DIeJXWeI9t9OGQRsHzzt0mLyQ9yOF0ugDqOfuA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WsbfHeGhhM7uxXSmluhMvvgJultVywv9SATUiAoIgXP3LvDctEn0P1sYO8k76HajmPyoyuBa3BdN56K4n3LpWnOM2lSCmNFNWzpH/dyMKtjWPBrdo4Tf035SgrCRj1hFnjpH7h3d2Ex+PDo57qj2ZZwfdu2xW+rTo2Kz7tga5d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cvedAyzh; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-22100006bc8so75662145ad.0;
+        Wed, 19 Feb 2025 04:50:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fbKaIHxho2feYh+C+9q1wXqZjtUj9B3WdPEoRvpon00=;
- b=GtfQbXRGaQsfWcNi+PY/L5E3aR79ZL4q7s/uY2JI9b1i+w+d2P0lA18j1lxkmbkuFQwlQpOlNIhGWke84nyhyOB1LrSxxoR4OxzbD28OrtAbV7tOVcNr/++UhPR0gCBiOQYyKQe7ctUwo29sla46ipnQJODP1xGTm7Qrz+QgiKc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ2PR01MB8101.prod.exchangelabs.com (2603:10b6:a03:4f6::10) by
- PH0PR01MB8165.prod.exchangelabs.com (2603:10b6:510:297::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8466.15; Wed, 19 Feb 2025 12:47:34 +0000
-Received: from SJ2PR01MB8101.prod.exchangelabs.com
- ([fe80::292:6d9c:eb9a:95c9]) by SJ2PR01MB8101.prod.exchangelabs.com
- ([fe80::292:6d9c:eb9a:95c9%4]) with mapi id 15.20.8466.009; Wed, 19 Feb 2025
- 12:47:34 +0000
-Message-ID: <9bb48635-ce40-4710-8c43-be10ef217d9d@os.amperecomputing.com>
-Date: Wed, 19 Feb 2025 18:17:28 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/2] KVM: arm64: nv: selftests: Add guest hypervisor
- test
-From: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com,
- suzuki.poulose@arm.com, darren@os.amperecomputing.com,
- scott@os.amperecomputing.com
-References: <20250206164120.4045569-1-gankulkarni@os.amperecomputing.com>
- <20250206164120.4045569-2-gankulkarni@os.amperecomputing.com>
- <86o6zeu668.wl-maz@kernel.org>
- <9b4a8665-4fb8-42e7-b63f-d154ae75a4f0@os.amperecomputing.com>
- <86jza1ua7w.wl-maz@kernel.org>
- <5192ba8d-577a-4bd6-b8ee-7e3547f2c86b@os.amperecomputing.com>
-Content-Language: en-US
-In-Reply-To: <5192ba8d-577a-4bd6-b8ee-7e3547f2c86b@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR02CA0034.apcprd02.prod.outlook.com
- (2603:1096:4:195::9) To SJ2PR01MB8101.prod.exchangelabs.com
- (2603:10b6:a03:4f6::10)
+        d=gmail.com; s=20230601; t=1739969454; x=1740574254; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wOEjIz3jfJx7EGKo7QwRt3VtLNoT+pQ4mVUjPRekXyI=;
+        b=cvedAyzhxJKfPPoc/Kuv3u2OTRFf2/XJbWdzYv0D5f2RrdoQ42WEWDV8UU9dRbqEJf
+         Gh2KL0lpilrHhgr5iN8/tz8g8m0eULfQUm635HF/gnmbFnwrseV1uVRiEpiPdnE45blM
+         IukNQtZpglSiuspoaxrFNOzYikw0rEc+RFqv7hIVqkizVB4n8B+S9R5iqPoJSf23gyBQ
+         XBrBHIavd0OtvN0WZRg2/GcMetP2yFEteiXH1rIv+kuBq6RfMJE7hdbng3IaFphq9l0A
+         i8s/7p8GzL8LxqUcVyPLB2hSifpnRFmDjH+zsU1m9htTNe81q9mFOIeaiQZO2um/9IGZ
+         NHnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739969454; x=1740574254;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wOEjIz3jfJx7EGKo7QwRt3VtLNoT+pQ4mVUjPRekXyI=;
+        b=t7FkwOqw1V+JWcWm+JfX1Y/AZNOU6I5qaaRsNLtAdtC3gGB6z2BCJ7UoZOCigb0VD3
+         StL6t1uCeG0gBEYXYePuATqF28IXrqnBdWcfOXqzY2l1aAkjaIZetN4dNUpCsr+NKb78
+         +m6LXrQR7rFHO6ItnfXgyu2E+LX2tdXUO0HXj+/5ePmOIz+Nh8IKgtOk/HyyRcGZRmXH
+         /wOKv/v35x8V8lPCv8Luw1HIZuRkBhMBCABe7KjR3ERozWbx8uZ4VoqjaX/TUmVybzTF
+         WvO17sWNqgngkXyakB7GN/FT9HiVsr8kz/XuSTx1prf3Ny0nZNQ5SWzs26Oo2QXIfnnO
+         D6Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCU4wxo3/a4r4wJWyjpefVpQsnHbnRl4nKIXK2A0lpbf+eioMvQwedCqRz4EdMncis4zC/M=@vger.kernel.org, AJvYcCVMwPk4owKB05p7s6ZatJeKK/jerQWXkWCDRAqLXO/U4CR5YGE1mtjC9s8ECrdqcYAYZgyxv5lj1vri9z7DrNE=@vger.kernel.org, AJvYcCVixE6p8OvCHMLekk4/Ozqg1WedKfUHSdXRO9Uw4kSJk4kaPkKgDaxnCLHhMOcbn5VvEtseunekWOXe@vger.kernel.org, AJvYcCWQTRZIvlziMC8fY5MCibu37fMWy6qWwbEc/iZV60ItoPh7f00E1PrNI7zUSvQ56eZceSLYRn2ZEuem@vger.kernel.org, AJvYcCWSC0XV5y+T2aAsThw2tekdwwsz7c9yUYSfATDiCOF6jINYZtmcYRkfcZCEJllHSPuuMvMlkz8suLb+tsqP@vger.kernel.org, AJvYcCXcorfINW81uvLa6cVPzXOIcAkOk2AnqPs0p6CdbbS7bgmzQrrE/i+PzechFyYQ/RC2iruRir2k1aZkUg==@vger.kernel.org, AJvYcCXnpowksPKljH434+jxSGRxpZCYKqoIsf79HZ6zwt3Nv5/qMUW21an3B6heJ2EMYXtDlMJmQYVur7B/b5RebmBN@vger.kernel.org, AJvYcCXs07ZOPhsXWS/XJoDW/opgtnQY1efYyp37Fb9IpmJBFzQWy5bFIV2J7iJFAgvRvRJ4229DrD0GnA8LXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoktW+jWHB4HndiqMe9PL4EaIFcWtLKLqq0m7w4Qz3GuW/x7gz
+	bd08vz+ThdwjLKd33miaW3/snGvBVH91+PCkNEnNqQ/IR5nslEWaie40/OEEshw=
+X-Gm-Gg: ASbGncsvKaEauNEkp7YJGR0GqweyjMuQTLNXLdzY1pJYHVUPZ0y2aZFcVQOH7Xg6KeQ
+	lrc/8Spl/cZwJ2ziDtmpctQ84MPP/Fr/m/8TDI4ojllIcmbe18iix/O+EhbKHorrYvkFlikbNHv
+	19+pYlW3ynojizldG5c/NNfe4viROb4IoKRtQ6o317o06jDflTzQuJbnL/T+BqqDSzTs06azLU1
+	9vSgSIglPGrR3R7Fg2q5S4lK6PUINQ8m5FKqSS0fXylR2rqhruEVhY4k/DAqfqMph7V58rqbdXD
+	holTQA==
+X-Google-Smtp-Source: AGHT+IGTzmUs09YpyFPrUkefpGaoWuBh2+9iqLpiW9iEBwyuEmzG/kObjhneqUPTdxqOS7kfr/mohA==
+X-Received: by 2002:a17:902:d58b:b0:216:2426:767f with SMTP id d9443c01a7336-221040cec77mr301871725ad.49.1739969453951;
+        Wed, 19 Feb 2025 04:50:53 -0800 (PST)
+Received: from ws.. ([103.167.140.11])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d536436fsm103427175ad.64.2025.02.19.04.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2025 04:50:53 -0800 (PST)
+From: Xiao Liang <shaw.leon@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	linux-rdma@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	osmocom-net-gprs@lists.osmocom.org,
+	bpf@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	wireguard@lists.zx2c4.com,
+	linux-wireless@vger.kernel.org,
+	b.a.t.m.a.n@lists.open-mesh.org,
+	bridge@lists.linux.dev,
+	linux-wpan@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v10 00/13] net: Improve netns handling in rtnetlink
+Date: Wed, 19 Feb 2025 20:50:26 +0800
+Message-ID: <20250219125039.18024-1-shaw.leon@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR01MB8101:EE_|PH0PR01MB8165:EE_
-X-MS-Office365-Filtering-Correlation-Id: 879ffa86-0664-4855-b2b6-08dd50e3950b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?T0dsQjhKOHBoWHYzTk5Ga0tHakZ4dGlqNUV4cUpXRTFOZ2RhQ2x2YTBjTkI0?=
- =?utf-8?B?WUZyTW5EU3lGVldKOEp6anlQb05Ud2JRNENaVzZPZ3JRMmluTllIenpnbndp?=
- =?utf-8?B?M3BqaGRDR0w1T3FJRS8vblRvb2Q0ZzF6dTdwK3ZoK3JmcUxHU2ZXZjVSYlpN?=
- =?utf-8?B?ckMvRjV2Z3FvdzZpZWR2aXd6TkY4YTRZbVJxblJmbGhzTFAyeDVjdVJLUzYv?=
- =?utf-8?B?VTRGTnlocVZPZk5Ic2dQTThPalhacGVJUExoRnlmdkpTYVJsa3NIeWo4NUtw?=
- =?utf-8?B?MzU0YUkrS2dHeFM1cWNvNXJCbEVBdFFDVjltT3NLZW9qVkJPeklMTksvNDlX?=
- =?utf-8?B?M25EQzFNSHd3SWdIUjVndGdxUUdETDhRZFZvUEY5QlZqUWZJTVBLNmlTSVIy?=
- =?utf-8?B?L0t1d2ZHYzNlbFZZY2d5Y0Q5cFd1RTlzdG1tSDVpMUpQRCtNSlFLUzdWbkRj?=
- =?utf-8?B?UHpFNGdiL210RDFNUDZjdVJFeFdxRVRacE00T0JoT0VNdThoOGVtL1RUd0VX?=
- =?utf-8?B?K0NBVVl1WHoxY1dqTGdyTFJpU3VGTjI2d2drMW9KZzNOaXJia3JieEVuVWht?=
- =?utf-8?B?WFRSOTlCYUpKL05QKzdjbC9rVlFBOWQxRlBwN0JhQW4rWjAyTmFrSkRKRGl6?=
- =?utf-8?B?SEpLNGs1NGFGSXh1YkFNejBlaEphMUY0dTl6QU1sdklvRUNCbngzSEN0OUJZ?=
- =?utf-8?B?NmFsT1hNMmx0Wnlva2hvT0x0K2xlLzJGTlp1WVRkb20xZ2dNWUFxUy9OWnJo?=
- =?utf-8?B?SzhCbUQxdWN4dGJGL1RvTDY2UzBFL3hPaTREaEN6VUFabXNaajdEcTdTT0FX?=
- =?utf-8?B?aUNhTDNNL1FnQmE4dEcvOEMzaDZGQ3BPRDRaU3ZFRWxLczU5UmZZWmRiV2t1?=
- =?utf-8?B?N2VyVnVLTkxpYU1wMURrUHFYQW5CZjVZVFdTUnA4NXJZT05PQzAyTmkrREV2?=
- =?utf-8?B?UlJlRWwzK0hGampBUDdMcTNSNUJOd0owWmF2bS85MzV0bStZSUZrRHFSTTRz?=
- =?utf-8?B?TlJEOUN0bDZMZVdkRDA0eFJ0NkdtekIranhGK3FHWTBWTkd4WHBNbHd3MEFz?=
- =?utf-8?B?WWUvUnYwSFhxVlMrM1hreFYwbndHdXNNZE1RdTFsZ21sSHBHaGR5ZWdnWU1x?=
- =?utf-8?B?aFBmUWdIZXJNMHRiQzF1SDhoS3J3dGZwN3VYcjNwc3lOMXlmbytIbHp3eE9t?=
- =?utf-8?B?L0o1QnJLY2RJcEhxVmdKNEphUHpYeDI3cDhtUUs2Q1NiWlFzOU9MV2t4VTRQ?=
- =?utf-8?B?VkhQRXBlbE9mV2t1b1VKN24yZEJqQnpMMk00YVM4eVRsZi91MkROK3VLZWF4?=
- =?utf-8?B?VlRwUFpDRDRYams2ampvR3E0TmlsK0pVU2kxNkg3cG85blhqQUJVTzdmR28v?=
- =?utf-8?B?dlpZZ1k5QmpBYlhxa0FyK0NHa1FNelFlSE1JaGVIVXFJbGMrblV2VmlNb2NR?=
- =?utf-8?B?WnlMemlLRjRnbi9xejJObGZFZFk2OUpqcll4UzB2WHlVZVJMZWpNRmMrcklM?=
- =?utf-8?B?VFFkdG1CeituMmYwOGZhMXZEWDlOdmYxSFAwb2xNaEp2ZkExQTdBZHlxTXhP?=
- =?utf-8?B?MGI5eXNlcUowSEgxMnV4c04yaUFxVmd3cWQvakd3VXRzb1lUdThmL2ZVRnkr?=
- =?utf-8?B?WGpTSml4MnA1VkhYNmN5L3FGUlJuWUlaS2FOdUlXRkZCNXNxeDdaRHhXdm1k?=
- =?utf-8?B?dmk3clIyQkJ3ODdjb21ESys4ZUR1c014eUNWcy9lU3dDRUN2TjR0cUFPNTJn?=
- =?utf-8?B?UlZpR1FWUkt6bWNna01tcDBnMi9JeVZpcDV6N2lDSzVaaWUyektxUU5TNmJQ?=
- =?utf-8?B?U0dnVGhIa3F1NVprc3pHRVJZemRlZENYcWlTajBhcmtDMnJWbit1MDVlUnd1?=
- =?utf-8?Q?0XZGb7+0DYIyS?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR01MB8101.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MVFDWFg5THIwaUdpSlY0cWFvMXJVUzBBdEtrOG1JcGxibC9PaWxaZ0ZFNUQ3?=
- =?utf-8?B?NGdJUlFrblpzYUpMeGRtNVYrb3NkQXd1bXJ4ZWl5Qlc3MTlzU1g1SGYyVFc2?=
- =?utf-8?B?REV1T2F3VGszbVFmbnRTaEtUTkJ0SkhVd05MQTU2cjFNYnNEb21SeUR2ZlJv?=
- =?utf-8?B?TkwzYXJtREo3Ykw0TzVtbzAvU3U3S0ZyNlEvQ2N5eUFuYW8ySndaanQ0WklJ?=
- =?utf-8?B?aVpBWVBzek9NOFN1ZDBWd1Rma2l0aE1WMWlZQnZDQW1LLzF0MXpHZC9EUzBK?=
- =?utf-8?B?YWNMVy9oMHJsNUh0aS9LVEd2MHdOaDhqUExEUitsL3pBOWM2Z0pBUHVzOVI5?=
- =?utf-8?B?RW1uMHpkV1I2S1lRZHdpUFBnanNFUXNCdXF6d2JFRHRMckZBUDVES3oydjJE?=
- =?utf-8?B?bDFQY1pna2RqazRBTlFsUXBubzIybXZQaTdobnhiTGExaFczeFc3b2NJRU5H?=
- =?utf-8?B?YUJSV0lCd0h3WlRLdWdtT3NvODBtN01yd256SUlVdVpSWDBHajdra3ZLQVl2?=
- =?utf-8?B?a0JqTkJSWUlCMVdFK3pSU09kaWMrYjVkOERrWDJXU1UyY2svSFhoVXBQTndq?=
- =?utf-8?B?bFdHUlJXNjcwZ2NncFRWK0tGYitVTmRPNkJjVklxVHY0ZDhGS1VNcWxxRmZ0?=
- =?utf-8?B?MzJZT1JWdFZDaTdRSm9jQVJ1K2xyVGszNVNaY3BnSFBQQ2NZb3NRSUZUUWNn?=
- =?utf-8?B?RDlhek5oQ3RneHQrRkVqZmgzeVpVZzJEYjdxQm10KzZ4VUtuZHc3SEpSTzlK?=
- =?utf-8?B?WjFlQlNZOVF5Ync2OHJBS2pqOFFCQTZXN3l3N1RGMDJVY3RJSmpJTldBTnFY?=
- =?utf-8?B?Q0wvSnNNOGlaOGFQaWJ4cUtNMjdWTmdlUjFhRVZ2N3lvRUIzYWxvTFB3STFt?=
- =?utf-8?B?WEU1S2NzTVBtTVlMbXkvSFovalV2dGlkS2QvcnJ3UTRVZmNHd0NaNzN3SmtN?=
- =?utf-8?B?RU85UEQxWHhHYkJHbnlqeHNpRUJxSGNVTkVZd3haakMyN3pQTFlRTmJBZm8w?=
- =?utf-8?B?NHIvODh1cWVWb3I3WTRKTGt6NmRXM1lZRVk1TWlpMGZIZlo2YkMydlptTEtm?=
- =?utf-8?B?MC9uME9LRE1ib0U0MkxtUXVPSjE1YnVmclNmbzB3SzlHeG92SEVQcms3ZzV6?=
- =?utf-8?B?d1VLalZZUGNJVFFmbTJFTjQvczkvdlRjL01WVjlSMldIM3BsRW15SmxxUi9M?=
- =?utf-8?B?ODdFamdzMDdrQ3pZYUtRTGdSK0V4U3I3NG03V1llTXpuWUNPbnhmRCszQU00?=
- =?utf-8?B?dXhzTFRZbWs4NEp6NTRWUmhnSjJMYzV2RmV0d3drVlhLdTRCb1IycDBUSkFL?=
- =?utf-8?B?b1A5amt1T2RRUHJBU21tM0p2Zkp3NWMxNTVyNG42Q01JMXRBNDRQKzA1VTlp?=
- =?utf-8?B?NzI3dGpVbE1sWWdyUk16SllvZEJ5TFdVVXM3aHAyV1hHSzFwOTZDeHFzU2Jp?=
- =?utf-8?B?ZWNURjJsLzlLQVRSN2Vpd0NKNlFWRW5qRThqQ0JzRGd6QjBoNTNhaTFONkk1?=
- =?utf-8?B?bWRxTHVSaDQ2bkg1K3F6Vnh1L01xVGh3MUVnOVZLV2JhQzNPRWo0ZXZraXIw?=
- =?utf-8?B?WHBVd3E0VHZlQUpXbEladm5kaGdCQ2NvY0NISTdqb081ZzhTaHZZd1R4MXAy?=
- =?utf-8?B?UWd2ZHdzcmhySG1NOGRhR3hDOUkwcW1YSUZ4Ui9mR2RYOEV0eGJMc3RiMCtr?=
- =?utf-8?B?YzlYNHJKRXJPeWpUM0pkUjc2cDFSbmpTcWtOMER4TUtvL0xIMmhMbW4xV0to?=
- =?utf-8?B?eU8rVHhOZVBFQk9kQWRWV0d2d3hQK250dE55MDZIb2pOS2laQm1wdjFwRGxs?=
- =?utf-8?B?UTJkZWRMUlprWWZWNytENHBhblk4L1NESWluWlNxaVFzZ0tlUDdQWDFDNFFq?=
- =?utf-8?B?RnJ1ekxxVDAzZlAxZkltUThqY25yY0Y5bHhwMGoycUF4MU83TFZTVmFmK2VG?=
- =?utf-8?B?U2lzaU9YS1JCVnowTjBzbzUzbW1vUzBQcW9lSkdJamxDQTdsREpWcGRVTmlh?=
- =?utf-8?B?M1pzVU5lelR2TFhLeG8vYjR2bTlYdVAyZGpUellzank1OEd4alAxSXN6RGwz?=
- =?utf-8?B?WDhSc1U1cHY5L3FiOXloRGYyanVsaldWU1Z4aFVVUHlHMkpqTVJoSVp4UzhO?=
- =?utf-8?B?aEhOV09LTXFranZwSmJZejlhV3M4TFU2N0d0YWZtWmVVRHRZU1lMSGxBUk1h?=
- =?utf-8?Q?LnYqc0R9S+TqrC6eT2LHxxspg6XRvcOpnQwq09FvgMph?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 879ffa86-0664-4855-b2b6-08dd50e3950b
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR01MB8101.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 12:47:34.7848
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vr5/rqtnIoqkD3q9hC+jS175o8ehgttsJeU5Bn/f61oIPu9zn8ezQN3FZ2Pt8QS1QjbD7Z2jzSKJ5mHd1RWUzF38haeH0lBG+B5t3Lt4sHnHHY15AdQ5pYOHcj4z+Lzj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB8165
+Content-Transfer-Encoding: 8bit
+
+This patch series includes some netns-related improvements and fixes for
+rtnetlink, to make link creation more intuitive:
+
+ 1) Creating link in another net namespace doesn't conflict with link
+    names in current one.
+ 2) Refector rtnetlink link creation. Create link in target namespace
+    directly.
+
+So that
+
+  # ip link add netns ns1 link-netns ns2 tun0 type gre ...
+
+will create tun0 in ns1, rather than create it in ns2 and move to ns1.
+And don't conflict with another interface named "tun0" in current netns.
+
+Patch 01 avoids link name conflict in different netns.
+
+To achieve 2), there're mainly 3 steps:
+
+ - Patch 02 packs newlink() parameters into a struct, including
+   the original "src_net" along with more netns context. No semantic
+   changes are introduced.
+ - Patch 03 ~ 09 converts device drivers to use the explicit netns
+   extracted from params.
+ - Patch 10 ~ 11 removes the old netns parameter, and converts
+   rtnetlink to create device in target netns directly.
+
+Patch 12 ~ 13 adds some tests for link name and link netns.
+
+---
+
+BTW please note there're some issues found in current code:
+
+- In amt_newlink() drivers/net/amt.c:
+
+    amt->net = net;
+    ...
+    amt->stream_dev = dev_get_by_index(net, ...
+
+  Uses net, but amt_lookup_upper_dev() only searches in dev_net.
+  So the AMT device may not be properly deleted if it's in a different
+  netns from lower dev.
+
+- In lowpan_newlink() in net/ieee802154/6lowpan/core.c:
+
+    wdev = dev_get_by_index(dev_net(ldev), nla_get_u32(tb[IFLA_LINK]));
+
+  Looks for IFLA_LINK in dev_net, but in theory the ifindex is defined
+  in link netns.
+
+And thanks to Kuniyuki for fixing related issues in gtp and pfcp:
+https://lore.kernel.org/netdev/20250110014754.33847-1-kuniyu@amazon.com/
+
+---
+
+v10:
+ - Move link/peer net helper functions to from patch 02 to 03.
+ - Remove redundant tunnel->net assignment for IPv4 tunnels (patch 05).
+ - Initialize tunnel->net before calling register_netdevice() for IPv6
+   tunnels (patch 07).
+ - Coding style fixes.
+
+v9:
+ link: https://lore.kernel.org/all/20250210133002.883422-1-shaw.leon@gmail.com/
+ - Change the prototype of macvlan_common_newlink().
+ - Minor fixes of coding style and local variables.
+
+v8:
+ link: https://lore.kernel.org/all/20250113143719.7948-1-shaw.leon@gmail.com/
+ - Move dev and ext_ack out from param struct.
+ - Validate link_net and dev_net are identical for 6lowpan.
+
+v7:
+ link: https://lore.kernel.org/all/20250104125732.17335-1-shaw.leon@gmail.com/
+ - Add selftest kconfig.
+ - Remove a duplicated test of ip6gre.
+
+v6:
+ link: https://lore.kernel.org/all/20241218130909.2173-1-shaw.leon@gmail.com/
+ - Split prototype, driver and rtnetlink changes.
+ - Add more tests for link netns.
+ - Fix IPv6 tunnel net overwriten in ndo_init().
+ - Reorder variable declarations.
+ - Exclude a ip_tunnel-specific patch.
+
+v5:
+ link: https://lore.kernel.org/all/20241209140151.231257-1-shaw.leon@gmail.com/
+ - Fix function doc in batman-adv.
+ - Include peer_net in rtnl newlink parameters.
+
+v4:
+ link: https://lore.kernel.org/all/20241118143244.1773-1-shaw.leon@gmail.com/
+ - Pack newlink() parameters to a single struct.
+ - Use ynl async_msg_queue.empty() in selftest.
+
+v3:
+ link: https://lore.kernel.org/all/20241113125715.150201-1-shaw.leon@gmail.com/
+ - Drop "netns_atomic" flag and module parameter. Add netns parameter to
+   newlink() instead, and convert drivers accordingly.
+ - Move python NetNSEnter helper to net selftest lib.
+
+v2:
+ link: https://lore.kernel.org/all/20241107133004.7469-1-shaw.leon@gmail.com/
+ - Check NLM_F_EXCL to ensure only link creation is affected.
+ - Add self tests for link name/ifindex conflict and notifications
+   in different netns.
+ - Changes in dummy driver and ynl in order to add the test case.
+
+v1:
+ link: https://lore.kernel.org/all/20241023023146.372653-1-shaw.leon@gmail.com/
 
 
+Xiao Liang (13):
+  rtnetlink: Lookup device in target netns when creating link
+  rtnetlink: Pack newlink() params into struct
+  net: Use link/peer netns in newlink() of rtnl_link_ops
+  ieee802154: 6lowpan: Validate link netns in newlink() of rtnl_link_ops
+  net: ip_tunnel: Don't set tunnel->net in ip_tunnel_init()
+  net: ip_tunnel: Use link netns in newlink() of rtnl_link_ops
+  net: ipv6: Init tunnel link-netns before registering dev
+  net: ipv6: Use link netns in newlink() of rtnl_link_ops
+  net: xfrm: Use link netns in newlink() of rtnl_link_ops
+  rtnetlink: Remove "net" from newlink params
+  rtnetlink: Create link directly in target net namespace
+  selftests: net: Add python context manager for netns entering
+  selftests: net: Add test cases for link and peer netns
 
-On 07-02-2025 10:16 pm, Ganapatrao Kulkarni wrote:
-> 
-> 
-> On 07-02-2025 07:29 pm, Marc Zyngier wrote:
->> On Fri, 07 Feb 2025 13:26:41 +0000,
->> Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com> wrote:
->>>
->>>>> +    if (is_vcpu_nested(vcpu)) {
->>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_CPTR_EL2), fpen);
->>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL2), 
->>>>> sctlr_el1);
->>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL2), tcr_el1);
->>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL2), 
->>>>> DEFAULT_MAIR_EL1);
->>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL2), 
->>>>> ttbr0_el1);
->>>>> +        vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL2), vcpu- 
->>>>> >id);
->>>>
->>>> How about some of the basics such as HCR_EL2, MDCR_EL2? A bunch of
->>>> things there do have an impact on how the guest behaves, and relying
->>>> on defaults feels like a bad idea.
->>>
->>> Sure, I will try to have these registers also set to required value
->>> explicitly.
->>>
->>>>
->>>> This also assumes VHE, without trying to enforce it.
->>>
->>> Ok, I will try to set specific bits of HCR_EL2 to force it run in VHE.
->>>
->>>>
->>>> Finally, how to you plan to make all the existing tests run as EL2
->>>> guests if TPIDR_EL1 isn't populated with the expected value? Surely
->>>> you need to change the read side...
->>>
-
-IIUC, we need not write to TPIDR_EL2, instead write always to TPIDR_EL1 
-and in guest code(like function cpu_copy_el2regs in Linux kernel) copy 
-TPIDR_EL1 value to TPIDR_EL2.
-
-OR, Write to both TPIDR_EL1 and TPIDR_EL2 in the test code itself during 
-vcpu setup.
+ drivers/infiniband/ulp/ipoib/ipoib_netlink.c  |   9 +-
+ drivers/net/amt.c                             |  11 +-
+ drivers/net/bareudp.c                         |   9 +-
+ drivers/net/bonding/bond_netlink.c            |   6 +-
+ drivers/net/can/dev/netlink.c                 |   4 +-
+ drivers/net/can/vxcan.c                       |   7 +-
+ .../ethernet/qualcomm/rmnet/rmnet_config.c    |   9 +-
+ drivers/net/geneve.c                          |   9 +-
+ drivers/net/gtp.c                             |  10 +-
+ drivers/net/ipvlan/ipvlan.h                   |   3 +-
+ drivers/net/ipvlan/ipvlan_main.c              |   8 +-
+ drivers/net/ipvlan/ipvtap.c                   |   6 +-
+ drivers/net/macsec.c                          |   9 +-
+ drivers/net/macvlan.c                         |  21 +--
+ drivers/net/macvtap.c                         |   6 +-
+ drivers/net/netkit.c                          |  14 +-
+ drivers/net/pfcp.c                            |   9 +-
+ drivers/net/ppp/ppp_generic.c                 |   9 +-
+ drivers/net/team/team_core.c                  |   6 +-
+ drivers/net/veth.c                            |   7 +-
+ drivers/net/vrf.c                             |   5 +-
+ drivers/net/vxlan/vxlan_core.c                |   9 +-
+ drivers/net/wireguard/device.c                |   7 +-
+ drivers/net/wireless/virtual/virt_wifi.c      |   8 +-
+ drivers/net/wwan/wwan_core.c                  |  16 +-
+ include/linux/if_macvlan.h                    |   6 +-
+ include/net/ip_tunnels.h                      |   5 +-
+ include/net/rtnetlink.h                       |  40 ++++-
+ net/8021q/vlan_netlink.c                      |   9 +-
+ net/batman-adv/soft-interface.c               |   9 +-
+ net/bridge/br_netlink.c                       |   6 +-
+ net/caif/chnl_net.c                           |   5 +-
+ net/core/rtnetlink.c                          |  34 +++--
+ net/hsr/hsr_netlink.c                         |  12 +-
+ net/ieee802154/6lowpan/core.c                 |   7 +-
+ net/ipv4/ip_gre.c                             |  22 ++-
+ net/ipv4/ip_tunnel.c                          |   7 +-
+ net/ipv4/ip_vti.c                             |   9 +-
+ net/ipv4/ipip.c                               |   9 +-
+ net/ipv6/ip6_gre.c                            |  26 ++--
+ net/ipv6/ip6_tunnel.c                         |  18 ++-
+ net/ipv6/ip6_vti.c                            |  14 +-
+ net/ipv6/sit.c                                |  20 ++-
+ net/xfrm/xfrm_interface_core.c                |  15 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   5 +
+ .../testing/selftests/net/lib/py/__init__.py  |   2 +-
+ tools/testing/selftests/net/lib/py/netns.py   |  18 +++
+ tools/testing/selftests/net/link_netns.py     | 141 ++++++++++++++++++
+ tools/testing/selftests/net/netns-name.sh     |  10 ++
+ 50 files changed, 486 insertions(+), 181 deletions(-)
+ create mode 100755 tools/testing/selftests/net/link_netns.py
 
 -- 
-Thanks,
-Ganapat/GK
+2.48.1
 
 
