@@ -1,105 +1,247 @@
-Return-Path: <linux-kselftest+bounces-27007-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21474A3C6E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 19:00:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D01A3C7FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 19:52:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 002963B7D88
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 17:59:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A2341898BDD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 18:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80BD21480F;
-	Wed, 19 Feb 2025 18:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC567215042;
+	Wed, 19 Feb 2025 18:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiYsOzsu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S5Thh6vI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6E316F858;
-	Wed, 19 Feb 2025 18:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26305214A6E
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 18:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739988002; cv=none; b=rpdlCWog6FdEzh8Z9BasB8/lFQUDynkgaVnupSkX6WyEC7NN5bTegy5c4rbPfL0h59aSirVW+rJ2AaAHgZFHiPMgu+Hs9to60CZYbALDM1jZ8eb0Nb0+ODqVZMxAmaVO6ZxxVu1PWDqPBsDYJGOUw3Gz/nU0x21iCA18YlEiacQ=
+	t=1739991138; cv=none; b=DDjlJgo2y4PMkA8jHKYTOyws/iNJypP4ohTRGA2VfpGR67HJoXbhOBj0jxim1Lr4vcs4PyiWJmuNHrdWZVugS+aFFWrQWUGXVKYA30RjpCrqjrF4+2qSOPsbQYQbpvTgtKY2ZkravtKgXn1aWeA9YeLoyZjEI6fnapzgVRRdVZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739988002; c=relaxed/simple;
-	bh=8GH4isiEtxx4zmx1wFTQsbmQVm37L4dBhX2XWViqAXk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aHSts+aFNUyBydfD3mrt01qM51z4VF3LougY3wV6CAAzcmdReJ03DNV57cn7XptfmYZgrfgORWbCkzJBLF44heyxc4lLlN+O5YWb+ggCWbbQTNUHx8YQ41JwU/tLGPkXQ1ZJ4BjX0HumhHN44CR+nrdUE3yTRp67x6lJ1jKdRM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiYsOzsu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40003C4CED1;
-	Wed, 19 Feb 2025 18:00:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739988002;
-	bh=8GH4isiEtxx4zmx1wFTQsbmQVm37L4dBhX2XWViqAXk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=PiYsOzsuNs20ekgUQWtFKLhp3iI9HdjZqHxXNpUVfi/VPSEiMv8mA6oTQoe9j4OzQ
-	 4749m/XzzGYqiNjKk6DRhXTl7nc6X4+yRWllT48Pc06bvnwFUDYrWl9lzys+7DUAD9
-	 S2uW6qoDoHwsObEbeCwiIKxDBRlT+HrrmCJka4VZBHqAWXp9tzWMjm/LhRq/nBa47d
-	 EZimEsEiFsTBRDhSKH1sCxw92o9+enV2eb7Ufkq17omvSKcwb93mXDQQ1puEjUrm8X
-	 GhDoiN55tLd4R1iB9p3UHwbebeRiKwU4pzR+Xp3/chLQuTTTFPVJxYFoTGRIkL1uE1
-	 BWsHtKThPWinQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EC895380AAE9;
-	Wed, 19 Feb 2025 18:00:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1739991138; c=relaxed/simple;
+	bh=wcD2OY6TqU0MtXZVRtiMEPyv+P7BaI1CEM+zQ7fXeKU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MQcSbSnoqw7vxi90j2DPofIo+VtdmDCj46JpnAogOeDcJSl8VDP/RN+qyl1s80y9pYJQhdhzWTw0UZ6E3IQulNz54TkceCjLoFtZw3ao2UEj+BQDYXClq4iTI0EIN2OHUO0KBG8ss7RcUsy8bNvrt365UoelpyCWbJ2ZDVOQWcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S5Thh6vI; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22117c396baso14295ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 10:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739991136; x=1740595936; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wcD2OY6TqU0MtXZVRtiMEPyv+P7BaI1CEM+zQ7fXeKU=;
+        b=S5Thh6vIzcAdf21rmY0gyr3d2gFpkYOx243CDV4vbpYqkpqeO/TlhgkugExvppJwUH
+         ygg9YPR/IrC/52tWf8k6zBzhUk6OXaaEktEqJP/ab9oUXH5OB+1hctKQCACl/4SfVhyU
+         0OsZBUE32DGHxUFSitPD79Gl3nKmqaOExCMpuWEwY5ixN1zOzWjMz67uqhJ2+mPimnh8
+         ZOVmh3CTJdME3FFRSCYer1z5ymN65E9+5l8uijae/DIN4iH5yhPzd495lq/9EQdsPRIp
+         D3y7x9pslPZF4KOWLoQ2YkKba9cElYaKTFrEbxTd/nqmZ0LW/JiV7Z7Ns8WoucsYgYVt
+         Whzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739991136; x=1740595936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wcD2OY6TqU0MtXZVRtiMEPyv+P7BaI1CEM+zQ7fXeKU=;
+        b=gT9Xfd37rbdbr1n6UW176WLKBZCPI6iWu7rKuF0ml/5rCIYfZuBKryY0FA0P8FPWAI
+         IIgzs3h9/d58Lqph1SQBYzKBsNkWLb2hQj7QtxG1rPbyk04KSt2/MSo+Zg+GTdGB7LQf
+         qnuIEe+csOsoMlzBPGRu12NV7lFROrrr+nGCphLxqpwR6TyRsUjXFxZjIDy8183rpBY4
+         LO/2HbyjXZoIDuVyQei+gUk+9Dovwri3XI1aunwMxJV2IICrJWWKs7OZMmkici5IuC2n
+         GpAPC/AS7GLBAWSODrrNkRl0BE46MZkUxffdgyLLumco+KhScy3BLXpQqMpkjMkvZWit
+         g4Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCNRo96ftMea+97TJF20jBM69PAXwxeOY1GzGwNXbA8tTzVvNE/HtJUBshlKnSrazeXpEvVspatVWcd3MTnFg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVI+nH6ssq7T+sdX45hUkpftnN/hvLnWwdiz40T8ZG9Q5pKyn6
+	oU6M2YJv/8PhzSqLFh9BNMcA7u2oLuHYa3d2HE9ddIQ10NmrAyUuMBRUi2Tc+ByRyTVNVmtCIUp
+	2L9PrvuDXYqldIbpW1rUclHLPTXsK9DeROTcg
+X-Gm-Gg: ASbGncufxl/Xck/Adq2T/vlR1MK++lqWDEf83qi4XSQneJ5p8Xzno9GeK93CeFC9zWT
+	pRhoJrF1NnhEmkyY2mQUviAVcXM7pVDq63VWmrZxFtvG87mTP+seqHLCwZL5CsHwVzDJv1YAzbY
+	dRxteNB+3FAlPa8RnGljmdSF8LxCM=
+X-Google-Smtp-Source: AGHT+IHllOv/cA5pCN8NUTdnTUDAc13ch3qVkhVXnm87gBSv+gZjArMZqsuk6ANBMTbf+u7AL6UCc15z80Q4w3bHvEg=
+X-Received: by 2002:a17:903:234a:b0:216:607d:c867 with SMTP id
+ d9443c01a7336-2218e124af4mr16865ad.29.1739991136034; Wed, 19 Feb 2025
+ 10:52:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/4] selftests/bpf: tc_links/tc_opts:
- Unserialize tests
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173998803276.698021.4187184444862727581.git-patchwork-notify@kernel.org>
-Date: Wed, 19 Feb 2025 18:00:32 +0000
-References: <20250219-b4-tc_links-v2-0-14504db136b7@bootlin.com>
-In-Reply-To: <20250219-b4-tc_links-v2-0-14504db136b7@bootlin.com>
-To: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
+ <CAC_TJveMB1_iAUt81D5-+z8gArbVcbfDM=djCZG_bRVaCEMRmg@mail.gmail.com>
+ <45297010-a0a4-4a42-84e8-6f4764eab3b3@lucifer.local> <41af4ffb-0383-4d00-9639-0bf16e1f5f37@redhat.com>
+ <a2e12142-3eb2-48c9-b0d9-35a86cb56eec@lucifer.local>
+In-Reply-To: <a2e12142-3eb2-48c9-b0d9-35a86cb56eec@lucifer.local>
+From: Kalesh Singh <kaleshsingh@google.com>
+Date: Wed, 19 Feb 2025 10:52:04 -0800
+X-Gm-Features: AWEUYZlgAIPWYOaVEJVknMRVD_9aoQXv-WWi6eAsmm_A9LcKB1_-iA2G2pXLn74
+Message-ID: <CAC_TJvf6fOACObzR0ANFFrD+ecrP8MbXEZ_ZdzRu0Lg4RunS9g@mail.gmail.com>
+Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem mappings
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: David Hildenbrand <david@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org, 
+	John Hubbard <jhubbard@nvidia.com>, Juan Yescas <jyescas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Wed, Feb 19, 2025 at 1:17=E2=80=AFAM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+>
+> On Wed, Feb 19, 2025 at 10:15:47AM +0100, David Hildenbrand wrote:
+> > On 19.02.25 10:03, Lorenzo Stoakes wrote:
+> > > On Wed, Feb 19, 2025 at 12:25:51AM -0800, Kalesh Singh wrote:
+> > > > On Thu, Feb 13, 2025 at 10:18=E2=80=AFAM Lorenzo Stoakes
+> > > > <lorenzo.stoakes@oracle.com> wrote:
+> > > > >
+> > > > > The guard regions feature was initially implemented to support an=
+onymous
+> > > > > mappings only, excluding shmem.
+> > > > >
+> > > > > This was done such as to introduce the feature carefully and incr=
+ementally
+> > > > > and to be conservative when considering the various caveats and c=
+orner
+> > > > > cases that are applicable to file-backed mappings but not to anon=
+ymous
+> > > > > ones.
+> > > > >
+> > > > > Now this feature has landed in 6.13, it is time to revisit this a=
+nd to
+> > > > > extend this functionality to file-backed and shmem mappings.
+> > > > >
+> > > > > In order to make this maximally useful, and since one may map fil=
+e-backed
+> > > > > mappings read-only (for instance ELF images), we also remove the
+> > > > > restriction on read-only mappings and permit the establishment of=
+ guard
+> > > > > regions in any non-hugetlb, non-mlock()'d mapping.
+> > > >
+> > > > Hi Lorenzo,
+> > > >
+> > > > Thank you for your work on this.
+> > >
+> > > You're welcome.
+> > >
+> > > >
+> > > > Have we thought about how guard regions are represented in /proc/*/=
+[s]maps?
+> > >
+> > > This is off-topic here but... Yes, extensively. No they do not appear
+> > > there.
+> > >
+> > > I thought you had attended LPC and my talk where I mentioned this
+> > > purposefully as a drawback?
+> > >
+> > > I went out of my way to advertise this limitation at the LPC talk, in=
+ the
+> > > original series, etc. so it's a little disappointing that this is bei=
+ng
+> > > brought up so late, but nobody else has raised objections to this iss=
+ue so
+> > > I think in general it's not a limitation that matters in practice.
+> > >
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Sorry for raising this now, yes at the time I believe we discussed
+reducing the vma slab memory usage for the PROT_NONE mappings. I
+didn't imagine that apps could have dependencies on the mapped ELF
+ranges in /proc/self/[s]maps until recent breakages from a similar
+feature. Android itself doesn't depend on this but what I've seen is
+banking apps and apps that have obfuscation to prevent reverse
+engineering (the particulars of such obfuscation are a black box).
 
-On Wed, 19 Feb 2025 15:52:59 +0100 you wrote:
-> Hi all,
-> 
-> Both tc_links.c and tc_opts.c do their tests on the loopback interface.
-> It prevents from parallelizing their executions.
-> 
-> Add a new behaviour to the test_progs framework that creates and opens a
-> new network namespace to run a test in it. This is done automatically on
-> tests whose names start with 'ns_'.
-> 
-> [...]
+> > > >
+> > > > In the field, I've found that many applications read the ranges fro=
+m
+> > > > /proc/self/[s]maps to determine what they can access (usually relat=
+ed
+> > > > to obfuscation techniques). If they don't know of the guard regions=
+ it
+> > > > would cause them to crash; I think that we'll need similar entries =
+to
+> > > > PROT_NONE (---p) for these, and generally to maintain consistency
+> > > > between the behavior and what is being said from /proc/*/[s]maps.
+> > >
+> > > No, we cannot have these, sorry.
+> > >
+> > > Firstly /proc/$pid/[s]maps describes VMAs. The entire purpose of this
+> > > feature is to avoid having to accumulate VMAs for regions which are n=
+ot
+> > > intended to be accessible.
+> > >
+> > > Secondly, there is no practical means for this to be accomplished in
+> > > /proc/$pid/maps in _any_ way - as no metadata relating to a VMA indic=
+ates
+> > > they have guard regions.
+> > >
+> > > This is intentional, because setting such metadata is simply not prac=
+tical
+> > > - why? Because when you try to split the VMA, how do you know which b=
+it
+> > > gets the metadata and which doesn't? You can't without _reading page
+> > > tables_.
 
-Here is the summary with links:
-  - [bpf-next,v2,1/4] selftests/bpf: ns_current_pid_tgid: Rename the test function
-    https://git.kernel.org/bpf/bpf-next/c/4a06c5251ae3
-  - [bpf-next,v2,2/4] selftests/bpf: Optionally open a dedicated namespace to run test in it
-    https://git.kernel.org/bpf/bpf-next/c/c047e0e0e435
-  - [bpf-next,v2,3/4] selftests/bpf: tc_links/tc_opts: Unserialize tests
-    https://git.kernel.org/bpf/bpf-next/c/207cd7578ad1
-  - [bpf-next,v2,4/4] selftests/bpf: ns_current_pid_tgid: Use test_progs's ns_ feature
-    https://git.kernel.org/bpf/bpf-next/c/157feaaf18ce
+Yeah the splitting becomes complicated with any vm flags for this...
+meaning any attempt to expose this in /proc/*/maps have to
+unconditionally walk the page tables :(
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> > >
+> > > /proc/$pid/smaps _does_ read page tables, but we can't start pretendi=
+ng
+> > > VMAs exist when they don't, this would be completely inaccurate, woul=
+d
+> > > break assumptions for things like mremap (which require a single VMA)=
+ and
+> > > would be unworkable.
+> > >
+> > > The best that _could_ be achieved is to have a marker in /proc/$pid/s=
+maps
+> > > saying 'hey this region has guard regions somewhere'.
+> >
+> > And then simply expose it in /proc/$pid/pagemap, which is a better inte=
+rface
+> > for this pte-level information inside of VMAs. We should still have a s=
+pare
+> > bit for that purpose in the pagemap entries.
+>
+> Ah yeah thanks David forgot about that!
+>
+> This is also a possibility if that'd solve your problems Kalesh?
+
+I'm not sure what is the correct interface to advertise these. Maybe
+smaps as you suggested since we already walk the page tables there?
+and pagemap bit for the exact pages as well? It won't solve this
+particular issue, as 1000s of in field apps do look at this through
+/proc/*/maps. But maybe we have to live with that...
+
+We can argue that such apps are broken since they may trip on the
+SIGBUS off the end of the file -- usually this isn't the case for the
+ELF segment mappings.
+
+This is still useful for other cases, I just wanted to get some ideas
+if this can be extended to further use cases.
+
+Thanks,
+Kalesh
 
 
+>
+> This bit will be fought over haha
+>
+> >
+> > --
+> > Cheers,
+> >
+> > David / dhildenb
+> >
 
