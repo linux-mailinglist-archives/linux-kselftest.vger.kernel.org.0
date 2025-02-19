@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-26962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CBECA3BED9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 13:54:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7AEEA3BEE1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 13:55:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4142D174EF5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 12:53:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FCCA1788C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 12:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6DD1EFFB3;
-	Wed, 19 Feb 2025 12:51:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080781F30C3;
+	Wed, 19 Feb 2025 12:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqAKVtrs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K3Xn67lJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0EF1E1A18;
-	Wed, 19 Feb 2025 12:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FBC1E5B89;
+	Wed, 19 Feb 2025 12:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739969493; cv=none; b=NXgGbIvE/PpiCiXlDdQURBqEiQk2feLk3uh0TF9zpwyc1iW4RZFsHqCz1E0zTIRqnbrkXnjb+2YH/RX3g6uTKTiNdBNefXV/tjte2cF/vgmB9l9pGa/udsru2bJoS+aS2lFpJj8bGZvS9dPlf0aX4y7zkCMDYj2fu2swsdapR8U=
+	t=1739969501; cv=none; b=SiEkQKmojiuTDec4hYFRnX8nthpUzKNXcQ24ygQiFTt8VB/+o0o14pWbGopOP7k3Qj/P7I6bQzcIGYi7xHLjyVILtwaJP5lhpiTeRDRLbSQraJ5hr76hKv7v68OaN1GOrR3noqkGBcpF31uEj9UMCpmPyuLJqXNtqAR71RTgX5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739969493; c=relaxed/simple;
-	bh=wPBh+lm62MwNx5uxT7ebUmt4/Z+4/EESOV0PaYKRJhQ=;
+	s=arc-20240116; t=1739969501; c=relaxed/simple;
+	bh=jZGAovV5B1ykmJN882YjcynX9CWKmzmbJdKE/yIxe+k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sDQmV1cBdR/4BP7wab3zZslnhgpbcdrXrcbVeoVjNc+Zr+XOJjeqQGePEG7Lx3JKCqmfEJQ3t/FmloOwj+zNOR5MEQj39u+lUL/ymvBvmFkZOLf2YajWsyPLyV3BGndLrXtyrmaFD8f5TBzJBRO1gJHaY9k20yA0TrgxMGiliGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqAKVtrs; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=uBHQU7JPN2JKyBY2Ob7H2oD3HIs5SfQY8fsVj0jHMmYpVTsvP5wxTLh1mhPV2qBzy+ONjnoDgGPMo/jgch74kfciznnc2ofsYQdV42J94utB1duCVnBNvjCW71MAonCd0DzP83yLdMgPSw7Op7nshtAg98r6r2J0aW6UxnKi26k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K3Xn67lJ; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-220ecbdb4c2so2358725ad.3;
-        Wed, 19 Feb 2025 04:51:31 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2211cd4463cso68153535ad.2;
+        Wed, 19 Feb 2025 04:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739969490; x=1740574290; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739969499; x=1740574299; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=so6ixpN3+kGL2R8Euj1cLc9vRqq6Wkcgz/xNsuJc6Sk=;
-        b=IqAKVtrsIK9gPfYvB2qMyHNznqkv/bqL39s/TeYvl07ZnugiuA6iEKNeai4KI1M6G8
-         ICw8sihir6VBTGmR6m8LtIO9uBtzHXQxTgiZYXeYKH+cfufCVt74ziKaYs+NMr3boUOm
-         eAGGBv8W7bpeBmsjvGVxIhNx8gj6KzXPS//YKVoNHbVoit5siXdtuzEe81ZilpbjIC51
-         ApjksghQhcb002RpAo9Hc9WO0Q8Qcnu1crjvqNlL16/5DGaqSrmlhWJ1NV+24BGyfwNs
-         UDS4pewY33rqtWjR2ncQFgwhPywxfASXHHd9/1nJuwmhW9PGpVddb4ZO6o5BN85l+mGc
-         4iow==
+        bh=RiGtI+5ToMID9TUSdNCghgiM3EXs9/d4cQAhclrcdwo=;
+        b=K3Xn67lJqBF/v6y6nw+wxUqYN11rEXrC1frgwzEHvTuAcbyTmVGrGd8echiwO+RVN9
+         yZhiQQwOcU0Sgj+QSLuV5zsyZ1Q9VYEyEEpTClUObrYK5eYZgqxjQy77TwnhRc1Q0YBG
+         PSyuL/T7EIzZsj6+uz8/xqwkBMA+g9pmv7tVYJeD4Ctfhh7eKV5j4kVSfaXDL1CAgzz2
+         of3aebvDvjvrmQAaaKoa2A0dNofRlX4BsZc7JdwhEkINbbHivpU5s9+jduF+VD49IQeQ
+         592eXsJTa5MH3qhZIF3mz3+TxyO+R9wdEBVCeJQyvS/3BgSZBSkFVuGxuGmD0VLolzZU
+         3b4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739969490; x=1740574290;
+        d=1e100.net; s=20230601; t=1739969499; x=1740574299;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=so6ixpN3+kGL2R8Euj1cLc9vRqq6Wkcgz/xNsuJc6Sk=;
-        b=WICITx8dW38A8p4vfYw64NcXz3zFVlHEw2wD+fePXjXyzb34NGPNlSzdht8JM6fNH7
-         U1EFom/XmbBSP9A1l6nm7wMXTrJjR3fD14ENwKQqVgoH9eM3j3gJL4InCG8QiIefHBVt
-         lUSXJ9/dlITdw9VKVVVeXkroBnXK8ezgd8JN/uw0qn22+sgHv4fnC+Ie3vU6jBIZZ985
-         ibDy/tOvMSq7c9cLi46DjZN2RaKlYkpkMos0JoChawGDyrMDU1Rlm3NPZU0zjosPus48
-         YDDgNeEgM6E9H1LyYv0je/yMKfKRgxYCc04lEf0GFW4YOHEQ9VIyo1QuAB6V8n18buw/
-         NOcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTX5iYD4celzeoRnUPNXzhD0qjugCQ8dnrKQSjTqp14KH6r8GuOYiYBfn75hm6Gu4+7h4=@vger.kernel.org, AJvYcCUxcFoH08nYn6Ike5cSgoBX+AxuflvwwvhM6NLrl00NrxvCpOZyzbO+iyQt+TmFRhF05ODix6wl4HGoLw==@vger.kernel.org, AJvYcCWF8mseTqY3VvZmTT9+GYS9H/ZF3ZadpIhSgkwUerEv72x4I+ny94UKNxRJFWvyuF5m4hg6K2LIKhLiKwZ9gad3@vger.kernel.org, AJvYcCWpMeFmT0GlQFAQU3W8xF9hMRPY93Gfa+v5lJRAeU3ZJIRyIUEmEe21I7o2OViGYVu+U5eI72Yp2THV@vger.kernel.org, AJvYcCWpqL2+BmTFwAmiwD2InIlWDIAvNMAdCMzmHE5OPGDRcc1lH//NkRbSqAZZ2E5xYToFTaTXMGuYe5MUEU6m@vger.kernel.org, AJvYcCX0Zqt0Knq1/V8fVjFLrNGqh/BZwlgeo0nQlzF0gEqYS6LVmZ13gKMKPhyiGhEsn8QIGFOIzs+II6rFNg==@vger.kernel.org, AJvYcCXqa4DKLQ61oaFODfSX6zVnR44GsMSI3V/hzDf/w/Znv5lo8GKaeYTVUbrTit+HU+uX5XN24VMYCag7ahLjQIs=@vger.kernel.org, AJvYcCXzkzwDbk0YaZ1ml/FrUePO6kZtUpUCTjCRoIshSjltE1jl2yOP8YGI5ggMHPfVXDQB3G6JfkLaUpbq@vger.kernel.org
-X-Gm-Message-State: AOJu0YzF5793nj6pFhPx5qGD4s0kPRH0AJY6pxlY53aIWRWr+VCbmYve
-	p/0MlQIDec0xOsf0iQ/pUJt/dm1aqRx6+9TN5+GEGBScGs5uizaRBh0qkV4IXTI=
-X-Gm-Gg: ASbGncvfhRn5+KnBSAN6Teg5/T+r9LZmP8ew2nVGFpLl0NROugO1yrm0naNt00zhwke
-	QG0csqyg1TYi+uiA434zg6XeRiqjTl26/z9C8yb1HrykRRxyJSk2+riLtGvq1yKRT7ztpUquhOI
-	hTffb3rUGyij1kyD3qr2qbwiT7qju0mnBrJYJPBz7Jx3zcQ5srHFS5Yxb2n4Ovfctlw9qqvwAj7
-	l8t5vi9wuUee6kxIjD2K8Flh5MfjMY0bFt++01czcZize9PkY/+Xh52c7pmI9p0kNHKeccvCZLR
-	mTfDIA==
-X-Google-Smtp-Source: AGHT+IEqkCyGg/QTxep/fqv5CqcRvswNVHWV96b7TSvHtcfDnyWeYpeOAf5Az1bAxRJk7mW/W72uWQ==
-X-Received: by 2002:a17:902:ce0d:b0:215:a179:14ca with SMTP id d9443c01a7336-22103ef5861mr278510175ad.2.1739969490317;
-        Wed, 19 Feb 2025 04:51:30 -0800 (PST)
+        bh=RiGtI+5ToMID9TUSdNCghgiM3EXs9/d4cQAhclrcdwo=;
+        b=Q+QqXqNuvT5dDVSiPdNpL1bB9mY437qr56Yq9FasdkXTv2Aygkar/3P/gsffROtzaY
+         ePbnZOLLq406GA1tm7H+UI/ZD9XrXfk6BvPmhPYqGgddedfURl9kNoV/k6wb820RhE8x
+         zp56Nomv7sxi/esZ/60Ken6Lk34ezBx0bOxYXuYRePvlQDp8LAMyE21eris/c1Q6mD8u
+         44x/Pygdk1InJQJJDzR0rd0xNm887TsaSMhf7xBhz7HWx13R1CQ3uDWcQweFhKMlTAfK
+         EKuYBSC5Xkny0+ziwaLEhQ+CbGQyT3WcgnVMZDeo6K5aGd0evZH7Ccdbm29RwE1oZM8l
+         dNIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3f6LkuQ+cV3KYmoKVlKbGmz17hQmp+1MSJBuXzC/UGDpYiLGkSUQjn0ZpSGO4J2JY+8oggYxtGkHSb4Gj2u25@vger.kernel.org, AJvYcCVJBnQ8PAcOcMMVXp8i+lUrk+eWcC8x/rI7GaWjpUdRSi2KFoJa9TfyyiK7B5NGRO90DBfZNJfg67fkQiSj@vger.kernel.org, AJvYcCVSwA6KVDNYTRmArPKQNyU4D+8dJ13svxYdxO6Y63OiJGh4XUBiV3HFFwptmQUHhf8c+whszT4XEK9o@vger.kernel.org, AJvYcCVfZFbfjtfuNHV6WSh6+o/svvHYmcJjXPJWvQdZyLzFwOLR2jVsbRNY03TJllT+D4xaOzjZdUOIClazUQ==@vger.kernel.org, AJvYcCWM78bwSDY8Ppgr/XtUA2zVHXe9kOjwaRirFpkGtiZ93rvyfH/0GvG6WKGOl3Y3reo3orotvLPq2MsZmQ==@vger.kernel.org, AJvYcCX4MEFhFy4vOgYJGyBhybk2pvgFI7I+R0ZbX9I/C/kbVAsqA2iDEZTqErgohwytd94y5ZfQhXC6KLAUSAgtZms=@vger.kernel.org, AJvYcCX6xb5bMM8RqEcYx9vxHqQmBu/ZP58RDX4Emc/kq4t31d76MAfWY78zw45AOMxdxHgSa3Y=@vger.kernel.org, AJvYcCXpkVYzf6TwZNHiFtvyrJ2vFE9/oqApxDlWGBRngd2Jn4u0Uz5/o2CGcc2CRondKAGrvsi2D0h49kOS@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF4exJ2QHnVcRZH/u7mWSTdTMCd//TvvfRGPPCK3cHSxcVKevT
+	eERGL2WsEXGcYFne9hWt+VqI0DrEVPB/stN3JfOveFImcANEjzBDaFHFl49m7I0=
+X-Gm-Gg: ASbGncsh2S2eAZvejACFfhqsocjGQtUj89kEx1esvSphnTYyypa8RWO5GLDuLe+rz4p
+	JunK/btFa536s+i/7dIPRBAvhyPxgjphbXIoUUm9UQvzYm/BI/n2XuVT5fRU2F+npEC4GvPAbu6
+	PNWqJOkMckpm89WWa78/Ja+V1GeVADqaaTumALSnnAhl58PXFTjyhUlkurzcTyljnqsKtNLGwL5
+	VU9lyTDWXUihKK3eK0dLPeaHUoGBGShCy8A1JK08Y9+ZjINnc0LOSLXusGXQK4AvoVhrmFwH2LP
+	BHIIoA==
+X-Google-Smtp-Source: AGHT+IFttmTeAFp7rRNlCvGNA6c3f8HloQtXmzYtg/s+sWnJsGTKFqc7jLE1fU4ek1ihZeJfgcA+rA==
+X-Received: by 2002:a17:902:ec83:b0:21f:5933:b3eb with SMTP id d9443c01a7336-22104087bc1mr237554135ad.31.1739969499276;
+        Wed, 19 Feb 2025 04:51:39 -0800 (PST)
 Received: from ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d536436fsm103427175ad.64.2025.02.19.04.51.21
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d536436fsm103427175ad.64.2025.02.19.04.51.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 04:51:29 -0800 (PST)
+        Wed, 19 Feb 2025 04:51:38 -0800 (PST)
 From: Xiao Liang <shaw.leon@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -101,9 +101,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	bridge@lists.linux.dev,
 	linux-wpan@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v10 04/13] ieee802154: 6lowpan: Validate link netns in newlink() of rtnl_link_ops
-Date: Wed, 19 Feb 2025 20:50:30 +0800
-Message-ID: <20250219125039.18024-5-shaw.leon@gmail.com>
+Subject: [PATCH net-next v10 05/13] net: ip_tunnel: Don't set tunnel->net in ip_tunnel_init()
+Date: Wed, 19 Feb 2025 20:50:31 +0800
+Message-ID: <20250219125039.18024-6-shaw.leon@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250219125039.18024-1-shaw.leon@gmail.com>
 References: <20250219125039.18024-1-shaw.leon@gmail.com>
@@ -115,36 +115,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Device denoted by IFLA_LINK is in link_net (IFLA_LINK_NETNSID) or
-source netns by design, but 6lowpan uses dev_net.
-
-Note dev->netns_local is set to true and currently link_net is
-implemented via a netns change. These together effectively reject
-IFLA_LINK_NETNSID.
-
-This patch adds a validation to ensure link_net is either NULL or
-identical to dev_net. Thus it would be fine to continue using dev_net
-when rtnetlink core begins to create devices directly in target netns.
+ip_tunnel_init() is called from register_netdevice(). In all code paths
+reaching here, tunnel->net should already have been set (either in
+ip_tunnel_newlink() or __ip_tunnel_create()). So don't set it again.
 
 Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 ---
- net/ieee802154/6lowpan/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/ipv4/ip_tunnel.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/net/ieee802154/6lowpan/core.c b/net/ieee802154/6lowpan/core.c
-index 704bf9e3f097..ee318d46817d 100644
---- a/net/ieee802154/6lowpan/core.c
-+++ b/net/ieee802154/6lowpan/core.c
-@@ -143,6 +143,8 @@ static int lowpan_newlink(struct net_device *ldev,
+diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
+index 09b73acf037a..dd4b4e5be998 100644
+--- a/net/ipv4/ip_tunnel.c
++++ b/net/ipv4/ip_tunnel.c
+@@ -1326,7 +1326,6 @@ int ip_tunnel_init(struct net_device *dev)
+ 	}
  
- 	if (!tb[IFLA_LINK])
- 		return -EINVAL;
-+	if (params->link_net && !net_eq(params->link_net, dev_net(ldev)))
-+		return -EINVAL;
- 	/* find and hold wpan device */
- 	wdev = dev_get_by_index(dev_net(ldev), nla_get_u32(tb[IFLA_LINK]));
- 	if (!wdev)
+ 	tunnel->dev = dev;
+-	tunnel->net = dev_net(dev);
+ 	strscpy(tunnel->parms.name, dev->name);
+ 	iph->version		= 4;
+ 	iph->ihl		= 5;
 -- 
 2.48.1
 
