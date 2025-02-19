@@ -1,287 +1,152 @@
-Return-Path: <linux-kselftest+bounces-26938-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-26939-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E557AA3B39D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 09:26:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E86B7A3B3D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 09:30:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B7B47A58A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 08:25:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FEB81684C4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 08:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E21E21C760D;
-	Wed, 19 Feb 2025 08:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B6CA1CAA81;
+	Wed, 19 Feb 2025 08:30:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tq95LEUC"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="ZmckBGFJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA1642A93
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 08:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8551C3C1E;
+	Wed, 19 Feb 2025 08:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739953569; cv=none; b=MXprod0eD1oZ6BbXfOT2YBJv8iw6H/B8HqgSHvPwZVB9nzE0m3zAPN0nP1eOODd7w9bMzenaoO7KW8flLu0z/a05UevGot+QlocYYJ7/IDi6yLZFVBbfb8pCfzemt0xiLQ346qalYpRtm+DkSyv9EIzsAQ+xnGxcWB4nbdi3lWc=
+	t=1739953841; cv=none; b=qrrAVmdaHENgmIJjI8I19cmjNIzedQ2csTsXEnDLDWT3oafRYeE3HMQL9bQMMrqbdrda5GUrhe6ZNOb1Y3hbJWHUS6rXaU79DVSf04Hwx80WoM3c543UZPtoT4L5odOdkpbUoKuOQh0+tQ8UJjm3dOGU4DAjeUF1vsgm91OHUok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739953569; c=relaxed/simple;
-	bh=vrFCMIA7KIYH8LaNLZG0B9v640qqPtsEhFjTdIsfPJg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L6EcXfyo2YllBtKHu+VmdmCw13KbFC0IT8RPM/0yZ77OfmyBFN38oQ6ASKWHYIW36gCnzA9yNW0nCHb56b2zCtzEqZJ5wh8RSExF3TJ9shJhHwqC7iTKSp8np0E2riMzYF4cfZZeTCx7yKzOfr0od5YxjHrlUplKVdEsYWngafo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tq95LEUC; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-220e0575f5bso617285ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 00:26:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739953563; x=1740558363; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+t5Onokz1b/svrph82CzzTpTF1Pr5YEmQG97WWbLUbs=;
-        b=Tq95LEUCsk3ndAqVXjtcpKhnrR+ZRUhcLcPSEa42LSMM6ar++fPe5UprmQTdMF/Eha
-         0UEwyuy14Q2qTsL4NHU+3JgYHJDgkxzQBhb5xvDcCDUtZMZwFTNgA6zokIl/OmmwfB5D
-         zddaiQKAhmuTDXEYUDHZ81wK84hhbtQRwSfF7GvyG+7shVZGqJoN65NqqsvF7MKTMpcH
-         h73XxlTqzXrk4xUZitODEMuSFY6reSqIloz1lNVcPF2RJwQLDpsmklWTpcQdO+z1bns4
-         4XzEjDmAK6U//7RdVMLDPKqBIQDepxcKNlaA65e9nKJaVux3bPUvTym7yoGUcO2G/M0v
-         8a6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739953564; x=1740558364;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+t5Onokz1b/svrph82CzzTpTF1Pr5YEmQG97WWbLUbs=;
-        b=B6DyRWL3l10eAFhXEL8tqc31YFxaOfleWrNbUOckzfsEm5wPmy4Kw+mkCnn5J41OjX
-         AV9mpQtLO6Hy3n6VCLOB+erITKBhDZ8akZcUagam17Q6aEd2CI/Saip+p6vDss9SAYQ4
-         mOmt/1V/T9JYmPVWxZznLnAdQDQzYdhOMhz5Kpq3Dv2jzX21sNLkGFURa0l09BVneMFE
-         BNlcjO6OMytfv4fDr/qNxqVS+yxo4QtySzZXmV7OT7aEgoe6CuMOaj2kTRxRKFar3Pgg
-         AH2Wf5XowaG0Z1CHERPkFU6hkZh+q9XtjaUJk6GnHbfDd/utxv+XLzZBRc04acdybVaP
-         RAbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX214fGFtKbfeDMUx7WPTb1EYaARk0i9ZEMMTQJ4k8orebSyoIyTnqkQITlQfKIDWyzoPoYq5HoLyYUswSY39E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2y7QoFCbsny69JwLD1Ab+JnfRLWvlrGNqGs4MkAELfPJyiOzJ
-	5crWgy+TsdnI1Zfl3nENGwLr2UzokFN6HS2Sq8A1KVSgK/mo9UBRFZcA1EBkdUkzS91lvLzWrKA
-	EVkCPmCclB/Z3JEThxyeING80yPQQvaOJ0xZ7
-X-Gm-Gg: ASbGncvjh1s7MfxYzzbnk8CNyIz8uIrJHhxximkYVPnqo6Rn4OzveUJUUbfotYH2fOz
-	zvYzTQydpaQCO77MvLzkQm/kAsRGefa7NIKi4iynbLqVrZrndguKKqzEAm2P/b7D2YXglXEQ0qL
-	hgMZm4sIf/Th8XiQl4Opoof49jZaDwuQ==
-X-Google-Smtp-Source: AGHT+IEtWm56/q0Ma1nZnd6a0UtnIqMxj4FqJa/1GqPlJ/2nNKHewuObdmh1s2j/K5XMPESqCPuxQ8/36BYaDous39E=
-X-Received: by 2002:a17:902:e883:b0:220:c905:68a2 with SMTP id
- d9443c01a7336-22175a85109mr1518545ad.5.1739953563410; Wed, 19 Feb 2025
- 00:26:03 -0800 (PST)
+	s=arc-20240116; t=1739953841; c=relaxed/simple;
+	bh=ycMmntT6RYiK5scQQyQ1vBE7RgIc+pBQA6KccXjAD54=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J9DKQs9cyManOmNfCBcMuMUhLMHP0oByiZtnPcFQLixsu2bUjSdDR3mxR2NYkV5QGXH+mLsgfSZiU30qoOj6KoAxQNeO8KtiCdKJLq6g6wUr0a7JuE2ByP7jolo3/3vnxIBPoZRbeEAF4izj7Tw4gVvqisAZoZVe1zDKlu9dJsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=ZmckBGFJ; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1739953820; x=1740558620; i=ps.report@gmx.net;
+	bh=x5EWN2R4z/1IwzTQftryyia0iXMKaHI0maPKka1LwOI=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ZmckBGFJ6zPUEs34K+sQ40Fq9X3B+xzw28RAzMv28Nw1Kx0A03TJYLFsyJZsIE/9
+	 pPk3onq40RglhOvGBHAu7IfGgIGKMW3txQ+Cujatm4KGRQNP5o6VqRsznU0oLGDIE
+	 xMobx+o9kJISN40PYSTTdJcnlAYN60znc3JF8eFPnrzDtl6spFM9u05EGCAOWCAgF
+	 pIZpUFv7m9P+qNEwM9ymPf401Dsc/BZ8yIZl3UggCWhE0QTUllLQpDOeT13o4AiJi
+	 rN1PjoUiYcDdxJXnGNygb4SA14tKUBMyR4rDglyCG7CAx96ec2ITGSXNhZz9tMgKR
+	 9a5ivBExdabZxWZWIg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.84]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MryT9-1swlvl2X13-00mKHH; Wed, 19
+ Feb 2025 09:30:20 +0100
+Date: Wed, 19 Feb 2025 09:30:18 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Simon Horman <horms@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Artem Chernyshev
+ <artem.chernyshev@red-soft.ru>, Nam Cao <namcao@linutronix.de>, Frederic
+ Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH net-next v5 8/8] net: pktgen: use defines for the
+ various dec/hex number parsing digits lengths
+Message-ID: <20250219093018.7907296f@gmx.net>
+In-Reply-To: <20250218132905.GV1615191@kernel.org>
+References: <20250213110025.1436160-1-ps.report@gmx.net>
+	<20250213110025.1436160-9-ps.report@gmx.net>
+	<20250214201145.2f824428@kernel.org>
+	<20250216091739.GW1615191@kernel.org>
+	<20250217094740.76a25671@kernel.org>
+	<20250218132905.GV1615191@kernel.org>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
-In-Reply-To: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
-From: Kalesh Singh <kaleshsingh@google.com>
-Date: Wed, 19 Feb 2025 00:25:51 -0800
-X-Gm-Features: AWEUYZnXTwP78vbAHDN0pfKRVGtNSGUzzBBn7zOfu-Xg7h4c2hpipi0C25LOOb4
-Message-ID: <CAC_TJveMB1_iAUt81D5-+z8gArbVcbfDM=djCZG_bRVaCEMRmg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem mappings
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>, 
-	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>, 
-	Juan Yescas <jyescas@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Cgs668cn6wrF97BfN2bVd3FAJhAjX1x1hv67Apab+yN/2Xlj4EO
+ mef5eh5Kd7VsBqkNXd5cbAlZCKWlXcrVXFG3rHLbPfEteI23i1HrENP3ISEPUfPCg2ODGL9
+ eXkpjgjK9cyWHV39XY0BPw/85sqAG7OkDjrWCK9g0vGt2n1IhKc8OV6WQqbN4Zbwc1/ragU
+ jqnKyM18leFYLSbBW23+w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:51Tm+bc4Q+4=;lhQlaUuDjbQzR1uRxmJN9iL/w4I
+ 8Jm5L01C1lD9qstmj8SDuZXKAw0RDkNU7LGexQnH4ut4PBPSAeDSpfBeWzFk2P0uq+IHMhyoo
+ Ke23Xg/1s+8K02QH4ZCbC8HTWu3hljHHsjd60JOoUvnVcpUoLw3LPqoyhGv1ihaCzunPRH0E4
+ tbqkvtr0TehDyRglhU7xYzxgHPzUL0CUNdhjJvQ3CeGvr20EszHEfWDHuGOqLt7noTVqMffax
+ icKa6SgWbfEE2HXLkaszw5ih0mK6WLdhLsdDBbDnKV72Cp4HEckJfymSdnMt6L2F980We0NXl
+ didZcCPZ9HXQYaM/lfvueHiCPcolSto1eTWOSveISbuQpoYZg2C8aTPhlGSlvPSk9wkSjQE5w
+ BgqD6NgHxd9yQMqUuD1pFtz33QS1v+de2J2J4SeV3g9Od7wC3GO6lJ7Fm+35e8gtFALDMYOoR
+ UM5jQX7ifiQvHPnLXtqJIuoodwRBsSt1WkMVyeDxXRtx2YV1vcgo4Dtk4q7Ij2zPkyXG0Jopd
+ zFp6msWMegpWmyxtN6H79YS8ivC1z9EgsiQ32P1hIjrHZ/46kT15XNLHDxBfMNuLyTEYZrJSb
+ zoZ9IhzPI9yCJ8jkdOoJvwdlOTDL0cI/ZFpghYfSprDV0R+KQFNFVXZpF+fOhUUsuNpuGXC6Y
+ kWlVWNbwMAst9yNVrPZKvnadKozOGAV6s1kT0/lFPtNXfuI9Pl0Q2S4bD/1bgR8/xY+Sw9MYD
+ z5Xeq2L+MuLiNYAE+eR5rmVmdL5CPzwI0+zdRZ5aMZapahA2jdj/G3GNgIsviPihehMJmqBDH
+ ci4AXI4gFaFbI5vvMLMrzJaN+wgcp4AIuvplsURDxCF27h41P6o+0Fvfu8DEFhe349K+ZkkZ+
+ 8L3nrLVn7MH6ZNZaZEY3jE5PDhPDdA5jrRsAV+3vuQCuW32uBCnUaLS3ne9iXmpEd+ptkMa8x
+ JfkS70BAwli4WP/qn5lvVPGWfZG2EshbKEkejYnzmEACuu6NFn+MMNs0rzqNG+MVH3478W5is
+ kOnurVMjuCXlrirtZ5Qp0+Do/pYYTtUZ2SnMy7XN/zKMWuGpoQOXWwqHG1DmxEvEg7yYIXbKM
+ ykQnSZTvtPfyPWJK9m65Q2iTbc4SYWOkVuqqNOwU06PpnHzD74oWbEqY18Qinh75/3zaFXoLI
+ Yw7JaknoRrwdCkmavzH3QTQsl7XvhwbBtjFlKrLqytAjSrVqRr7ibeXYug+OautwS2f8xEx7L
+ Ahqhmm1dpSF/wN5c+KBTqiuUYW1yNzcU6lnPHmd+yAhgqS4RVLfnwkfMgTO8Et0BLQVKXSU5D
+ MtRealvLBrwthbdvlw3ZDSxxzC5Oj9ZrE74l1DvIWpokXGFkWzmjkRD38H+yYIBMX9nZMHWcz
+ u1YTdQ0r+0CgMogx93kAse2djnQCMheovyfb4EXB1LRBAjSS47EcTaEV62
 
-On Thu, Feb 13, 2025 at 10:18=E2=80=AFAM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
->
-> The guard regions feature was initially implemented to support anonymous
-> mappings only, excluding shmem.
->
-> This was done such as to introduce the feature carefully and incrementall=
-y
-> and to be conservative when considering the various caveats and corner
-> cases that are applicable to file-backed mappings but not to anonymous
-> ones.
->
-> Now this feature has landed in 6.13, it is time to revisit this and to
-> extend this functionality to file-backed and shmem mappings.
->
-> In order to make this maximally useful, and since one may map file-backed
-> mappings read-only (for instance ELF images), we also remove the
-> restriction on read-only mappings and permit the establishment of guard
-> regions in any non-hugetlb, non-mlock()'d mapping.
+Hello *,
 
-Hi Lorenzo,
+On Tue, 18 Feb 2025 13:29:05 +0000, Simon Horman <horms@kernel.org> wrote:
 
-Thank you for your work on this.
+> On Mon, Feb 17, 2025 at 09:47:40AM -0800, Jakub Kicinski wrote:
+> > On Sun, 16 Feb 2025 09:17:39 +0000 Simon Horman wrote:
+> > > On Fri, Feb 14, 2025 at 08:11:45PM -0800, Jakub Kicinski wrote:
+> > > > On Thu, 13 Feb 2025 12:00:25 +0100 Peter Seiderer wrote:
+> > > > > Use defines for the various dec/hex number parsing digits length=
+s
+> > > > > (hex32_arg/num_arg calls).
+> > > >
+> > > > I don't understand the value of this patch, TBH.
+> > > >
+> > > > Example:
+> > > >
+> > > > +#define HEX_2_DIGITS 2
+> > > >
+> > > > -		len =3D hex32_arg(&user_buffer[i], 2, &tmp_value);
+> > > > +		len =3D hex32_arg(&user_buffer[i], HEX_2_DIGITS, &tmp_value);
+> > > >
+> > > > The word hex is already there.
+> > > > There is still a two.
+> > > > I don't think the new define has any explanatory power?
+> > > >
+> > > > Previous 7 patches look ready indeed.
+> > >
+> > > This one is on me. I felt the magic number 2 and so on
+> > > was unclear. But if you prefer the code as-is that is fine by me too=
+.
+> >
+> > I agree that it's a bit hard to guess what the call does and what
+> > the arguments are. To me at least, the constants as named don't help.
+> > We can get a third opinion, or if none is provided skip the patch for
+> > now?
+>
+> Yes, I see your point.
+> No objections from me to skipping this patch.
 
-Have we thought about how guard regions are represented in /proc/*/[s]maps?
+O.k., will re-send the patch set without this one and the
+rev-by for patch 2 added...
 
-In the field, I've found that many applications read the ranges from
-/proc/self/[s]maps to determine what they can access (usually related
-to obfuscation techniques). If they don't know of the guard regions it
-would cause them to crash; I think that we'll need similar entries to
-PROT_NONE (---p) for these, and generally to maintain consistency
-between the behavior and what is being said from /proc/*/[s]maps.
+Regards,
+Peter
 
--- Kalesh
 
->
-> It is permissible to permit the establishment of guard regions in read-on=
-ly
-> mappings because the guard regions only reduce access to the mapping, and
-> when removed simply reinstate the existing attributes of the underlying
-> VMA, meaning no access violations can occur.
->
-> While the change in kernel code introduced in this series is small, the
-> majority of the effort here is spent in extending the testing to assert
-> that the feature works correctly across numerous file-backed mapping
-> scenarios.
->
-> Every single guard region self-test performed against anonymous memory
-> (which is relevant and not anon-only) has now been updated to also be
-> performed against shmem and a mapping of a file in the working directory.
->
-> This confirms that all cases also function correctly for file-backed guar=
-d
-> regions.
->
-> In addition a number of other tests are added for specific file-backed
-> mapping scenarios.
->
-> There are a number of other concerns that one might have with regard to
-> guard regions, addressed below:
->
-> Readahead
-> ~~~~~~~~~
->
-> Readahead is a process through which the page cache is populated on the
-> assumption that sequential reads will occur, thus amortising I/O and,
-> through a clever use of the PG_readahead folio flag establishing during
-> major fault and checked upon minor fault, provides for asynchronous I/O t=
-o
-> occur as dat is processed, reducing I/O stalls as data is faulted in.
->
-> Guard regions do not alter this mechanism which operations at the folio a=
-nd
-> fault level, but do of course prevent the faulting of folios that would
-> otherwise be mapped.
->
-> In the instance of a major fault prior to a guard region, synchronous
-> readahead will occur including populating folios in the page cache which
-> the guard regions will, in the case of the mapping in question, prevent
-> access to.
->
-> In addition, if PG_readahead is placed in a folio that is now inaccessibl=
-e,
-> this will prevent asynchronous readahead from occurring as it would
-> otherwise do.
->
-> However, there are mechanisms for heuristically resetting this within
-> readahead regardless, which will 'recover' correct readahead behaviour.
->
-> Readahead presumes sequential data access, the presence of a guard region
-> clearly indicates that, at least in the guard region, no such sequential
-> access will occur, as it cannot occur there.
->
-> So this should have very little impact on any real workload. The far more
-> important point is as to whether readahead causes incorrect or
-> inappropriate mapping of ranges disallowed by the presence of guard
-> regions - this is not the case, as readahead does not 'pre-fault' memory =
-in
-> this fashion.
->
-> At any rate, any mechanism which would attempt to do so would hit the usu=
-al
-> page fault paths, which correctly handle PTE markers as with anonymous
-> mappings.
->
-> Fault-Around
-> ~~~~~~~~~~~~
->
-> The fault-around logic, in a similar vein to readahead, attempts to impro=
-ve
-> efficiency with regard to file-backed memory mappings, however it differs
-> in that it does not try to fetch folios into the page cache that are abou=
-t
-> to be accessed, but rather pre-maps a range of folios around the faulting
-> address.
->
-> Guard regions making use of PTE markers makes this relatively trivial, as
-> this case is already handled - see filemap_map_folio_range() and
-> filemap_map_order0_folio() - in both instances, the solution is to simply
-> keep the established page table mappings and let the fault handler take
-> care of PTE markers, as per the comment:
->
->         /*
->          * NOTE: If there're PTE markers, we'll leave them to be
->          * handled in the specific fault path, and it'll prohibit
->          * the fault-around logic.
->          */
->
-> This works, as establishing guard regions results in page table mappings
-> with PTE markers, and clearing them removes them.
->
-> Truncation
-> ~~~~~~~~~~
->
-> File truncation will not eliminate existing guard regions, as the
-> truncation operation will ultimately zap the range via
-> unmap_mapping_range(), which specifically excludes PTE markers.
->
-> Zapping
-> ~~~~~~~
->
-> Zapping is, as with anonymous mappings, handled by zap_nonpresent_ptes(),
-> which specifically deals with guard entries, leaving them intact except i=
-n
-> instances such as process teardown or munmap() where they need to be
-> removed.
->
-> Reclaim
-> ~~~~~~~
->
-> When reclaim is performed on file-backed folios, it ultimately invokes
-> try_to_unmap_one() via the rmap. If the folio is non-large, then map_pte(=
-)
-> will ultimately abort the operation for the guard region mapping. If larg=
-e,
-> then check_pte() will determine that this is a non-device private
-> entry/device-exclusive entry 'swap' PTE and thus abort the operation in
-> that instance.
->
-> Therefore, no odd things happen in the instance of reclaim being attempte=
-d
-> upon a file-backed guard region.
->
-> Hole Punching
-> ~~~~~~~~~~~~~
->
-> This updates the page cache and ultimately invokes unmap_mapping_range(),
-> which explicitly leaves PTE markers in place.
->
-> Because the establishment of guard regions zapped any existing mappings t=
-o
-> file-backed folios, once the guard regions are removed then the
-> hole-punched region will be faulted in as usual and everything will behav=
-e
-> as expected.
->
-> Lorenzo Stoakes (4):
->   mm: allow guard regions in file-backed and read-only mappings
->   selftests/mm: rename guard-pages to guard-regions
->   tools/selftests: expand all guard region tests to file-backed
->   tools/selftests: add file/shmem-backed mapping guard region tests
->
->  mm/madvise.c                                  |   8 +-
->  tools/testing/selftests/mm/.gitignore         |   2 +-
->  tools/testing/selftests/mm/Makefile           |   2 +-
->  .../mm/{guard-pages.c =3D> guard-regions.c}     | 921 ++++++++++++++++--
->  4 files changed, 821 insertions(+), 112 deletions(-)
->  rename tools/testing/selftests/mm/{guard-pages.c =3D> guard-regions.c} (=
-58%)
->
-> --
-> 2.48.1
 
