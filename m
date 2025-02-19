@@ -1,93 +1,82 @@
-Return-Path: <linux-kselftest+bounces-27010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8D6AA3C8E6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 20:36:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F0BA3C8F4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 20:38:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C46443BA0ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 19:33:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8496D1887FF9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2025 19:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5594822ACE7;
-	Wed, 19 Feb 2025 19:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B9322AE7B;
+	Wed, 19 Feb 2025 19:37:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kcpvs2EK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jpIRhM1M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AAB214A82;
-	Wed, 19 Feb 2025 19:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62C0214A6E
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 19:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739993616; cv=none; b=dI1/qSc8MuBdzhLJWQPYcgM3WKVSsK0AtgeQNTz+n4BGfmN2h12i4Z7fzm0U2F51JSp0eO8TaEJVQwyiZmhSxnPkI6+uYriCsL8Wc7Mwg4E1eJvBf+WQ5X3Wv8f1BkDrfdJ0/ZFfBKdVaDXQVV5AWjwxZg6q+Wo6AQCg680Td4s=
+	t=1739993869; cv=none; b=Uo+J+YE5JOm6TJrN+PZcrNqDG5n1mtij9kSRC/1UcUuWoBr8nFebSlwXbmVSq/3rOly8fYhs/875LpnNnzQI4t7ztGaxa2ezWiTQE6Gn2vpGpI+MowhnTmZxxTZye2kKfHkxP9VQjJZKEd60nSURPwF49pNh77tvuDzgRGLKbjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739993616; c=relaxed/simple;
-	bh=GeZf4kDWRw/Af0VAE8UW473eCeB6nzQJVVunELl0mnY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ik4vhi6KxJLcon8gGz30w0f11nPdEp7d692/jSJlj0fmHn5avlMzj0b6kxBngrnj2yhKeDVB71s+lHj61hb5StC2tNPN4wx/r//Tv+rnVN7pySc1MIpUZuzwFkBrJqQKHnv1OjX3ZMtNwWvYcd6hPirj0sNiUOqOfrJn9DvpgTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kcpvs2EK; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1739993869; c=relaxed/simple;
+	bh=7oHGDbyl6Dcne/MfjHorGpTP8FaYWX/p4gX72iBwpNk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SGQwbO1lVGyjgQMm+goFy6CZglLTzeXwpdNUo9QcXQyyo59dpMPNbmzyrWsP938SStcJ2MN+aGVUG1/hov7lBSlu9NjVmod4e6IVNgr4b7pZD+Ja5bdWh47+VqPwCVRUbYdvJtkHcuJyxyP3Cy4zL3R2KvVsuRAP5uBt4qnmvpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jpIRhM1M; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2fcb6c42c47so267538a91.1;
-        Wed, 19 Feb 2025 11:33:34 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5ded46f323fso124275a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 11:37:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739993614; x=1740598414; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PSTRBDyjlCXG1A80Pr2C6LuOvywBhiJXPi7qtOpll3M=;
-        b=kcpvs2EKNbI8ywPvCR2SjznLFmZ6VFb77f25krON2uVoqzN6dhJugNKQnpMIqCkwCG
-         R1KE1tctuctH8//feipV3nTtgUwWmqQQbFLRUUiDHmqU/Sc9B5mKXwBzdClnrTx5GPq1
-         D7y5Bme1fbsbb4jZcfl3m7cqq3jZlRjIhCQREBA6qsWAMEgHSB0Atnb80hAHXwRrgs4K
-         nfYrlPS9srOEyeEliNqeVy+u2dqs0DVty0+vN0T8Joq6hOEv1CH4yjf/h95lL21IHgoQ
-         S5bipDXIyg9QcjT+cm0dVyWOZZYOib4dglydVB7IHMUXkVHqxkUldV4tek/kdI7PA0hp
-         yIRQ==
+        d=gmail.com; s=20230601; t=1739993866; x=1740598666; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3M+NteL0NuFSIEdJ9tl3BPKdfOAXHAX8E50cvBMx5DQ=;
+        b=jpIRhM1MoeUFSvaTci4xJYpUrUAlBdomNLOFLiRraF+uaFwMrEtXEdV2A72WGg/Ezv
+         GD+0INza4oym54Of2Ka/lmWiu79nEHFb6xhez54f/FFfiPOcH0VqR0oU6leZ4z4Z/0NS
+         ecqV2C4xwPfJtHXq9Sc14GYN64Gw6un/S5F4GMmvSY2bDRSL3lLc0jNM/+hRXGhKy3gC
+         uGK+58/NFBT0sL5mQdCm5HyVjoV6gmGCP6QPefQiG8T3G5YN6Z3GoG1DMADVh/PTm9w1
+         aNGiFw1SsFIhymFvoJqQaw0nplYgTsj7YSOqO4kKiQ2+Ogo+u/72dx+8+LV5x1aLdkdP
+         X5Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739993614; x=1740598414;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PSTRBDyjlCXG1A80Pr2C6LuOvywBhiJXPi7qtOpll3M=;
-        b=Nwds90aLkf83qN4LBUY+wW4j09YIwFrXCpD3AO3nPik7RHuVDJ8yLCX27AHhZ344I5
-         oIo4xpLam/mM7kLgAst3KzEXS/X3/HvlVCmEHAcVF34MiVxDXQlo2aocYsYygJcPDk/l
-         tHjMfGuRXp7fm6pCxe5L59/foH1M1FthHztdixjbGrWPrZ6dCb+7lHk6DofrekoJOfnL
-         d7S9XynDGNqoDmOAESF6eVrpqBwoYj8b4cDfiswwhBNAUlrv3rn5acbOUDPCRlvqcAno
-         qTb/BiuqxLnXMe23bmrZFtTNJOjMru2YZTqewcLmvHd4Z3UiPGKxe1bIN72SEwgTfsxp
-         gfEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVv+oj2CENSKD2vrhOqus9J/xsiWu2HWL36QlDnsVhfO+fDMvfav8F+rM9PJmHtxxsRPvYh5mAHT0SUy+TL@vger.kernel.org, AJvYcCWC69MEc7cRhiMEcIsykaXTVKvCZUUXg2M3jgDb6yyRRPlduf2amWOimglg6C6HjkYLPglWHDR94OPFu5Ws@vger.kernel.org, AJvYcCWFM3cdvgVLYi4Gcwajjb4o/LaSP3WelmdQ1GJTfwAoE39aydVuk3/44drfez2gzs7MsuenqmHeWY8YPqpvX+Lo@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywckl6Ez4rQjjt+nZ5XwJA+LACXLh/jfoCcQ6TMHg1tXYElJVuU
-	/YcRTU652GXRE42m66+WlHo533eyxvW9X1blDAfHPVDAVyUxOuFF
-X-Gm-Gg: ASbGncsvzitX8qhyIzDwzxdppPmvaTJssaLg6LYuWhwPaek8JbDkPbLbKa2Oh712/zn
-	DuNfNnMx2eoeSgA476vxIweO616V5yKMCdJmiDqXlTh+0DVkh/LmYVS1VQHz3yC6anf50C8td1x
-	xdL5+PYqJYpAa7JdkmDvFaaJDqN7ISviD3V+aU9WoSf0dHma3zH3f2r+VL/vrHzLeiskfQ563I7
-	Pj/vf7jZPhcW//PFe2RhB67UpJ5RTEbuMLZYHg/lYetk0GeuDENKgdwsc4DjqO106vERnOvTG93
-	z0nrLiqsH6TsD8c/8n6Sy+QJY+mcFs4/M5huvthOkHaYlVWDEa47qQ+T0OjlYb4IjBJgeGp1yg=
-	=
-X-Google-Smtp-Source: AGHT+IHTgtVoWn3jrKGALRPQNFfpnDcaIG9q9d3lBREc3fWPQIxYttYGlnxyXuJE2rxhVOnFy1zxbA==
-X-Received: by 2002:a17:90b:2887:b0:2fa:1a23:c01d with SMTP id 98e67ed59e1d1-2fc40f26600mr26453316a91.21.1739993613788;
-        Wed, 19 Feb 2025 11:33:33 -0800 (PST)
-Received: from node0.suho-242436.threadtune-pg0.utah.cloudlab.us ([128.110.217.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fbf98b3305sm14193282a91.6.2025.02.19.11.33.32
+        d=1e100.net; s=20230601; t=1739993866; x=1740598666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3M+NteL0NuFSIEdJ9tl3BPKdfOAXHAX8E50cvBMx5DQ=;
+        b=i64T0OApwW4pqOzsY/vrAkq0c7bGHAxd+GXYX5D2p2x5mwRQen9PMcK2Caa6kBaJiJ
+         iSdFIYDHFdm2E7/c4puM6ZSJ4Cx+9wxW4sDyd82nb7NBpr47MPkuBft6w2PS4Kt/yDk6
+         +JgwSZmNmBIhBH7ZWcajiCIqBOXDEGPwDEBulKJ4NSVI99tBihKiv9IXZMNjfWAEe4tv
+         EKPpr+GfFY0mmq7tEZryTzQcwvPtx+z+oP48Mb1iqGYX3cJ2SEMip67d63kYG0mSdM6H
+         ISUt6dW6uXGWRnNfZ2Vb/uT7WQ6WBYilOwGrh3uAOzqCcVhNaDKTMN0y3X/YHT8Kepy6
+         m5YQ==
+X-Gm-Message-State: AOJu0YzNkY3u3bdhKQvnINNBoybvp7CPWl1SJdu08UkEWK8NEXoe8j0W
+	TqFY6gUEprt6GUT5/Xp2h+4uaJIPSUOHT9RrBTyZ+WYIgYLdNQEe6TIuVJSb
+X-Gm-Gg: ASbGnctr/FGRYWUCRi12WwdwN2u40PGxa1Q7XleydhViuji5MiHl+kzfpemx9AAu7ZG
+	7YfT3ikrvIDV2azZEJQmaz6qR/Gbf/QBnmd7HUSeb9s80hAi3mTFXnJ5yBGQdUNVJiBo7Hv76Pz
+	CpJHG3bOXLATWbv1NSPO8D0Iw90ZPUfXBENyiW7My/0kabjEB0JRym+/+MTo5nvNI0/AX7bYDp+
+	Ex33AYi8a0tB5/rSzIZ5dHcqAoofi8czDGO/q/9vMLVwQaIrfJp4oFJYM7yHt5AXFJblGrvM1u3
+	fqJDygmZKE7VYdWvRzfx8BauCuiH4A==
+X-Google-Smtp-Source: AGHT+IErH0JAkyub+sl5wsFC6El5Q7pr6f7XUo31hsy5JQiPIsZtoiyPZ8iQ2QZrfNr6atRPYUofNw==
+X-Received: by 2002:a05:6402:510f:b0:5dc:c9ce:b01b with SMTP id 4fb4d7f45d1cf-5e089516781mr4518988a12.8.1739993865748;
+        Wed, 19 Feb 2025 11:37:45 -0800 (PST)
+Received: from baris-HP-ZBook-15-G3.. ([78.170.145.96])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece1c4483sm10971527a12.25.2025.02.19.11.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 11:33:33 -0800 (PST)
-From: Sumya Hoque <sumyahoque2012@gmail.com>
-To: skhan@linuxfoundation.org
-Cc: Sumya Hoque <sumyahoque2012@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	shuah@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	kees@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v2] selftests:sysctl:Fix minor typos in sysctl test
-Date: Wed, 19 Feb 2025 19:33:01 +0000
-Message-Id: <20250219193301.46563-1-sumyahoque2012@gmail.com>
+        Wed, 19 Feb 2025 11:37:45 -0800 (PST)
+From: goralbaris <goralbaris@gmail.com>
+To: linux-kselftest@vger.kernel.org
+Cc: shuah@kernel.org,
+	goralbaris <goralbaris@gmail.com>
+Subject: [PATCH] spelling mistake
+Date: Wed, 19 Feb 2025 22:37:41 +0300
+Message-Id: <20250219193741.16620-1-goralbaris@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202502190912.CA03B56796@keescook>
-References: <202502190912.CA03B56796@keescook>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,30 +85,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-
-Signed-off-by: Sumya Hoque <sumyahoque2012@gmail.com>
+Signed-off-by: goralbaris <goralbaris@gmail.com>
 ---
- tools/testing/selftests/sysctl/sysctl.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/x86_64/hyperv_features.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index 84472b436c07..323468653327 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -891,11 +891,11 @@ usage()
- 	echo "    -l      List all test ID list"
- 	echo " -h|--help  Help"
- 	echo
--	echo "If an error every occurs execution will immediately terminate."
-+	echo "If an error ever occurs execution will immediately terminate."
- 	echo "If you are adding a new test try using -w <test-ID> first to"
- 	echo "make sure the test passes a series of tests."
- 	echo
--	echo Example uses:
-+	echo Example usage:
- 	echo
- 	echo "$TEST_NAME.sh            -- executes all tests"
- 	echo "$TEST_NAME.sh -t 0002    -- Executes test ID 0002 number of times is recomended"
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+index 068e9c69710d..db442bf3b8d3 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+@@ -457,7 +457,7 @@ static void guest_test_msrs_access(void)
+ 			msr->fault_expected = true;
+ 			break;
+ 		case 45:
+-			/* MSR is vailable when CPUID feature bit is set */
++			/* MSR is available when CPUID feature bit is set */
+ 			if (!has_invtsc)
+ 				goto next_stage;
+ 			vcpu_set_cpuid_feature(vcpu, HV_ACCESS_TSC_INVARIANT);
 -- 
 2.34.1
 
