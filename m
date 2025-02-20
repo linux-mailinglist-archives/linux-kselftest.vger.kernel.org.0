@@ -1,256 +1,274 @@
-Return-Path: <linux-kselftest+bounces-27069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95EF9A3DD01
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:37:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95B39A3DD59
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:53:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B8AB177272
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 14:34:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11222189A77B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 14:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C20A1FAC46;
-	Thu, 20 Feb 2025 14:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052D81D5CC7;
+	Thu, 20 Feb 2025 14:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZTc0ZWIR"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QcRNTUlX";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="mxb84fvH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8F51F76C0;
-	Thu, 20 Feb 2025 14:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740062063; cv=none; b=pGxpkUMPmvh2ZxlK3ZHjPXOxznbnOz6WPzloGFjGBM8871f68iUk6hu920htpS7HwHm1Ut+fbbhAUYYg1dJS4vyYqSKAB0r0evLBGFyu58p4U6X7KjwE6sWxUKsSOeP1NYJppEsd+lbd8lA1cBLKS3pYCWDp+zABf1n3fNRV1uw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740062063; c=relaxed/simple;
-	bh=mCeM6ZuSrmKm5oF0yVYgvsfU9qZcRpt1hmqobG0b78s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R3CF0EqPZhw3k1MLfuA9wQbW777RQUWnbP9F5eRVL6hHiIQaYrYFU63UiMey7VQ8YhRNMHPP4uLzbqtOyP0QJEfyggETW9uAXd3oMRKNks6AcNrseXxCbXTBSuYt0CFVDV8idb4OlA1ipR0c50oC2V1oIBYGh6NkBdebG+R4dXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZTc0ZWIR; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abbec6a0bfeso170734566b.2;
-        Thu, 20 Feb 2025 06:34:20 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA351D5147;
+	Thu, 20 Feb 2025 14:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740063169; cv=fail; b=felSY7QB6LfRl7uDLHSEeaKPj8HuFw6cUn7S/3BP1U7/34C/IIk1F/1O4K61/7XZf6vBspJbs3/VMLObTWLC1SkbfxRQNo7sB+K0cWsK5f0rB1pzMbvbK1SUiF+IxNJgZwclLaXTj2VD53kVqfcj+Tq5fNPxruztDxySaoEy4TY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740063169; c=relaxed/simple;
+	bh=Sl8R+7iBUz9WaA+tsz9v4wF5ZTcMZgh7g4pgLLCzXT4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=L9WLsM83qHbojptrUsgIB3x0cFzKlDIPrvSCaffmbf0+NXC7E1VMo1TjrMdqCv3ild54bsbzX0vgOZBiB3IXQWEyxpJjjvJuJdK5wPyzjYDj6jhemw01fRDB9/iGuuZTz3cQjDQorFZfKAz05vlWcVmKSITUKR964NyWBFwkBJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QcRNTUlX; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=mxb84fvH; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51K9fb3S001626;
+	Thu, 20 Feb 2025 14:52:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=HENq3bA54GGH7Yb38frZloVcPvTzbWu6E96quwCWgPc=; b=
+	QcRNTUlXYiKO8F5eLZQWwoVjyzaDIaNZjrysk9kWEtxKcj+e+e/5VTcGJb7MJhY1
+	HJXBegQUOEpxms838KhXtRfPeUWLh25wQjZuIe6b59BnXcv3hAR5TQ7sdG6WRckf
+	6LkO89n+06FWTFw0015Xt36V2TWGxzmrYLPVwVEVkx6RmYnssAcmvzIVshK66G2s
+	xJIbTzhF6QCz4rWi5on/gGE3c4H/tw3VHx9ZgZ9GB2lR4G3s/tCYE+yEs9E1X2UL
+	TRxUxGHp6+zTrukDgdv0+NirmxDbbEozHWZ195GriqtEBHb4ej3tmm375tO/KkGR
+	sLbId0w2xV744q/HYqFEOQ==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44w00mv9yn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Feb 2025 14:52:43 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51KEkFEi010490;
+	Thu, 20 Feb 2025 14:52:42 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44w07f1qu4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Feb 2025 14:52:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ILuDekFEM7YJ7PB3jGMiGD/xBhc9GEiOT2TE1hQv7aRagOXhohK3eBSeuWNzVe+s1zXmStMpCSi0oXY/kulI9XuPtTGRgFTZjD9p/LQxR3mNGzTQBuus/R8j1XVonm7yaiEpP3NLnOTGGzdgP3mpXoj57eRvd+QgbFbMqIHhY8AmIernesQWmNtD7gxGJ7Jkp1ziZEywdpwPLr+jCd3Wy5RwD6fXhSCTUfAQKrR/hOkpQ4/KXBSYXGDNdnQjFJn/SElfHgMq42ytzIfbQ9l4lZnz/iFCff13wQvSyuKVbSaVvU3odEfAbJhVPLFmmYQgbP1MFoDKM5yJhjw4uOfoLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HENq3bA54GGH7Yb38frZloVcPvTzbWu6E96quwCWgPc=;
+ b=uKR0qEmsU/eHy8LWMHNvj6zjQAa2IFz+p36aaMKL8YfYmXqx3Wu3MACR1UdyYOZIuB9AjyDhYRMdy8rzHQqmbJbsehYY4mHsq3IsV9JJwNV9+6x/ixAxF9faiiWwy3slBaSf3Hbx3hvwnnS0S/UTAoFxWvZWr+4nwdBQlUdR0sE7nxG8qX+/6XY2qAFqO0A6WkUvZBZAB170vSceuBJTSRtdykRklzwj8yXrzMbfGDJWjIhzRD9YTls/EeOaMKaNoT4XmRG+oUTrb/NK4fFZQaOzhMQl1l04ns3jNrtnoCDtO3TjktLYid9SJ8Agbx4uBVbX3MiSODmSorTOdqmT3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740062059; x=1740666859; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SP8RnIeDpNVsIFAjPLo7muMaD4lYKk7nMDIuTCOWn10=;
-        b=ZTc0ZWIRqr872xIlA7qpob0XC9cAZXYNB07KFutOD7kE7i/NKF9Oa+q3C6iReKvNFn
-         DFiW1vtqY0S4N9FR+I1pb9IXc7VRSfNiIO8Nmo/tv5G8wm/mO8yKE0BgPIDDceKgEmfu
-         XYRut+7CHTCqupLAsbzCMZwVGifcsb8yUB72He4fVcXpVgsi5RvZb8Gy7HGgpWWRjoVx
-         t09IqDKF38DHBnOknz+8qALA4xeNBXFsvNVCs4/JpjblpE4ycrWj6XAn4TsIUYnV6tkr
-         /rMxXrotyg+XTqxSt0dEMNKiGOFIVe06ATg2+DKyJzBB7bvVUTNR5FF3bruh1Cplz0Bl
-         lFiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740062059; x=1740666859;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SP8RnIeDpNVsIFAjPLo7muMaD4lYKk7nMDIuTCOWn10=;
-        b=KVmAcxemueNT6U8RrrMSMJTbyyaagXqhfU7v9VsN4qGXvyrhLHdY2fm9kv4c7r+5wt
-         BWevKU0wOaQTDHMaIE8nyQih7KLmBwyJLKuPegKlpUTNeWPGLq8rrwwCzqmXzCydHouj
-         LlSUtPS0aLqRwbvbVM5gJG0vJ3WpAR6RwyEslE9HBd2wdjZqyjTW0B5XkBurAGw8GHWg
-         JasVEF0dujNvBcl+h6bSzA1IDBNcXZLIeGNGZVBTHR32B/l2rtBCMHGDCVigmWz7XRM1
-         CY5WLJakpTBY1c3IyEVgyQf8rYAuCOuwVWDXpExgdWVLwE/ZVf8dCirMMXbV6jPrUane
-         zIZw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHFPJ5TyyWKh6VLwpvBtvQ/bAOR5dmbt1FGraOjYOuqk+8n5ePkdQDYqgrMt45VcfYureacu7r7swjyOao427s@vger.kernel.org, AJvYcCVSZyxnhKmQVu7Y5By9GdKr9xmiltpSrdAwMh4EspvXSWxd9ZbdfgaPHlSych35zbQazXQGsvpWjKQ9@vger.kernel.org, AJvYcCW8yT9WETAm3s0M2akw/STuRWC8tPA2mjSTGewyBwt0S4TUSHWFo99yAdsNwmiz6ZAlOd8=@vger.kernel.org, AJvYcCWDA2bv777Uqmr6cAcF/XbdGi8Wy1LH/uCCqpSm70slFREjAp/lUjHavlr66kLAvRtVkktI+Rn86MHbEXEE@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWezxFh/+A5QZmXaqgOGqxBoGcs21AJZDmpzPhL+nZavePKxuI
-	zaRCbnYiMSZ4TQaatsYOwROM6LrD9wIWdKmpQOjh/MNRCCUg/dLj
-X-Gm-Gg: ASbGnctyptr7NS4ObteBV8PjZFUeHZt/LC+yrn8Gd3eGTymMlPWm6OI2OtALHQXCH3K
-	dbc2pKMd29NWkmLSovPzHz1bJjZmiAUNKX9iTWKsNGZKmN7JY8vtQNru6EjsrOiPpuVkWAUxlsp
-	ykIaErnIQ8oxmxy/EvcVVpDpTungyxTxlXL3uKUTCn/cTIBtrPJaMcR9MUGicfxNNdL4HWQOb9r
-	RNKfI6NX5baMxIb64euhRRVSL+f/PuhYvvKv/ApTv0OlgNiaiWIXchV7zNTyqwuNIWxbGWbhpLE
-	1J1RkuJj/JUZwbVO6hQfg3zFhgUGRIi4H7G0tGTK8lS8Ywbo
-X-Google-Smtp-Source: AGHT+IEUnYvTNKsvY9MrM+eSrclwuFXi6u43e2ImceV18idD0uHP1IUpkxxK3L69vw0GspWuGL/SmA==
-X-Received: by 2002:a17:907:c293:b0:ab7:5fcd:d4de with SMTP id a640c23a62f3a-abbf3d0c598mr285469666b.50.1740062059127;
-        Thu, 20 Feb 2025 06:34:19 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:f455])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abbaa56026fsm665714466b.113.2025.02.20.06.34.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2025 06:34:18 -0800 (PST)
-Message-ID: <e38090b0-f990-4347-b4bf-6f33f36bb851@gmail.com>
-Date: Thu, 20 Feb 2025 14:35:20 +0000
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HENq3bA54GGH7Yb38frZloVcPvTzbWu6E96quwCWgPc=;
+ b=mxb84fvHpwvVNOyjCbfBYIMnlyB8f/epJtMkaAR+w7g5rJH+8f61LfE1OdNrTk6O90j2paFafLz1ByefXZGvJcBKPOYDV6piVNzKWwfFoaMp5hIZXvvCQ1POYr2T3sE11DgjIvsfmbG6Px6RPTtkZlGa+Wo/mGCJaDfajKKz9CQ=
+Received: from CH3PR10MB7211.namprd10.prod.outlook.com (2603:10b6:610:125::22)
+ by DS7PR10MB5151.namprd10.prod.outlook.com (2603:10b6:5:3a4::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.15; Thu, 20 Feb
+ 2025 14:52:40 +0000
+Received: from CH3PR10MB7211.namprd10.prod.outlook.com
+ ([fe80::4c63:cc47:6a4:e38e]) by CH3PR10MB7211.namprd10.prod.outlook.com
+ ([fe80::4c63:cc47:6a4:e38e%5]) with mapi id 15.20.8445.019; Thu, 20 Feb 2025
+ 14:52:40 +0000
+Message-ID: <a3b5bbc0-f875-451f-8528-38a7eafc4949@oracle.com>
+Date: Thu, 20 Feb 2025 20:22:33 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: sched: add sched as a default selftest target
+To: Shrikanth Hegde <sshegde@linux.ibm.com>, chris.hyser@oracle.com
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah@kernel.org
+References: <20250219064658.449069-1-sinadin.shan@oracle.com>
+ <74dddd26-4a0e-4bb6-958a-229cca3c24d1@linux.ibm.com>
+Content-Language: en-US
+From: Shan <sinadin.shan@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <74dddd26-4a0e-4bb6-958a-229cca3c24d1@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SGXP274CA0019.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::31)
+ To CH3PR10MB7211.namprd10.prod.outlook.com (2603:10b6:610:125::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
- Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
- <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>,
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
- Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
- <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20250203223916.1064540-1-almasrymina@google.com>
- <20250203223916.1064540-6-almasrymina@google.com>
- <abc22620-d509-4b12-80ac-0c36b08b36d9@gmail.com>
- <CAHS8izNOqaFe_40gFh09vdBz6-deWdeGu9Aky-e7E+Wu2qtfdw@mail.gmail.com>
- <28343e83-6d93-4002-a691-f8273d4d24a8@gmail.com>
- <CAHS8izOE-JzMszieHEXtYBs7_6D-ngVx2kJyMwp8eCWLK-c0cQ@mail.gmail.com>
- <9210a12c-9adb-46ba-b92c-90fd07e1980f@gmail.com>
- <CAHS8izPHtk5x-W05_svxU53X-V4+++PiYErCgfr-3iDGgEaUig@mail.gmail.com>
- <4cdfaff8-0623-4d3a-9204-5165ccbb84db@gmail.com>
- <CAHS8izNHT_VjztrDk6t-OJoX=zB3vV81w2CYZTKA1yGB06tY-Q@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izNHT_VjztrDk6t-OJoX=zB3vV81w2CYZTKA1yGB06tY-Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR10MB7211:EE_|DS7PR10MB5151:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9239612e-52df-42d6-ed2c-08dd51be3914
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NW5OWVpDZlZXYXpqN0paRWZDdWptcDlVLzVLeWk4T2Z3NzNhZkUyaFhVM2xI?=
+ =?utf-8?B?cEw4OGpMZ2x4MFNkTGR4cmcwUkgvUUZXbFk5UlQrWmZydEt3T3lRVWlZM3U0?=
+ =?utf-8?B?aG9yQ2V0MXFvWjllMnhQOHhHblFxblVoRmhwcWV3NFpqVFVibzdJdXVhUm92?=
+ =?utf-8?B?UTBLRndzYnZjb3hFUHFkUDY2WXM0UEFGd3NXVU5GQ0JvT3FpY1FrU0hNZEZW?=
+ =?utf-8?B?N3Rnc3VyOFQzSUIvWVFqQ3JCYWdkMXN2TmRiSUlQbVBlZ1Y1aFIrc3lDMm9k?=
+ =?utf-8?B?ajBVTEZMTEtMZ1h6dEhITXA2THYzalBYLy91V1c1anpWb3IvRWlydFRLcUZ4?=
+ =?utf-8?B?clJtY0IxcE01WUxCR21Qak9uUkRUUzl3L0s3RWUxMThXbGZ0VmY4Y1lTcmpn?=
+ =?utf-8?B?OGxIK2RPak5TMGtjSU9BQ1JnQWZjUEJ6QU00dHJ6V2JqOGU5Y2ZZZFJHMmcr?=
+ =?utf-8?B?WlZFRkl5eHZqaUFpZ2ppT3d1eUg2YXIvRnEzanUxK1g4UDNyUEU4UFQxOURY?=
+ =?utf-8?B?RVFaSnA2SFZsRzY5QThibnlQRnp1TWFFWk1xaVdlSm9FUzB0MGgvaHNWMVN2?=
+ =?utf-8?B?VHFSNVZaYmptam82WlBkNndYUkgreCtFQk1UN3VHaXNEamhXYmxJN1NUZmVF?=
+ =?utf-8?B?K0ptNDI2MjVLUElhejhwamlqc0QwL0JqZGVHMWFjV0l2aWxtdEdXbkkxOEhG?=
+ =?utf-8?B?dmVVU3k1T0psSDZ0bnNNNmlKN1luTXRtZjFQZEd1c3F0V2JSQitBM0pPWi9B?=
+ =?utf-8?B?a2UvdU9CM2xEcjZtT3dycGw4NU1EaFU4aHNZZjd2Y1o2UFZiRXovZ09IeG9I?=
+ =?utf-8?B?OVRHWFBjK1YyQmhXUHltYk94RzBGTWVTY3M3enM3WmVmYWRiVXcyaFNOQnZE?=
+ =?utf-8?B?UUJvZVAwcWp6bkxlN3U3WGR0azJNejhqSGtYRm1NenJPZ21aUTZrRk0zNnA1?=
+ =?utf-8?B?NjIzY3VTSHpEd3Z2eDZJUmRDOTVkN2tVRkQzdjgxUmFteW1vK1ZIUXBPMWJi?=
+ =?utf-8?B?aHNNVmQ0SFVLY2ZvQkFRQldaa2ozamRRaHZFaVorSXNRUVhLWGNqNEU0bDNh?=
+ =?utf-8?B?SFRlTVNOeXNwVzEvTVQ3Vm9COFFKWDZoM2tEcWlscXhNM1UyTVBnYWZMWlZm?=
+ =?utf-8?B?YnhObXc4ZTlXL2h5UHVMdVZVLytLZW9yNmpMRTR0dEhxa2ZGcjhES3BjK2Jl?=
+ =?utf-8?B?Y3BPc01ZTkhPMDR1UXc1NWNkc2dGMlB1TVcxZVBpNmdFbjhtV1ZpRVdVQnRJ?=
+ =?utf-8?B?QzdoemFUUzhvcW5HM0JNM2VrenhrWHc4UURSWTJZVWNma00rZU5OeDRTL0Jz?=
+ =?utf-8?B?aUl3WmRVa0RndlVPOWhHT0loUmt5V216cWx5VGNkRjh2aVpCSWVVM2VHaVdj?=
+ =?utf-8?B?ZVM4S0pxY0Uxb3dLTE41OXM4d1hHT2dZS3l6R3BEOUY4NmtoOGVyeDE5cHht?=
+ =?utf-8?B?Mk9JMnNUR3ZzeUdkNGdYTGUzOERYR1BTUU1FSExLN1hwYXFKYjYzanc2Rjg3?=
+ =?utf-8?B?SFdnY2gwU2YveE1IQ2hMQUNvbkZjYWxPSHFWVFEweXUwNDJiZlNPNDRla293?=
+ =?utf-8?B?WFh6MzlTdkRiMXhSVHA5UW0wUUhhUlJDK1Rqdy9MeG9zamQ4OC9SOGVYblBj?=
+ =?utf-8?B?a1FCRXJRRlJZY3ZYU1ZpNEh2WGdWUTJudHJYN0IrY1Y2ZEllbmNYZTREcjNV?=
+ =?utf-8?B?ZGIxYllXZkUzNnQ4bUVHa1JrekQxODNYbWdwbnpsUXkwR0Q4aFM3bzRVU2l1?=
+ =?utf-8?B?MFdSRmZTSzN2U093Q2lpUGk4SnFZbGRtSlhLUGVxMU1TVmpIdGttZEJ0azhw?=
+ =?utf-8?B?K1l2bkhGYUg0MzZkamwzT3VQZjh2V0xNNDcxaU4vQW5MaVlaMm5Ra3RaaDhD?=
+ =?utf-8?Q?2vCHH4C6L5U5b?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB7211.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eWJVSFArM0t6NitKRi81YzgrN0cra0wxSmM3ZnJ2V1NudzZyTlh5TGV4NUcz?=
+ =?utf-8?B?cEtXM0prek5vZjVsaHdjOHlyUkNLU3grZ1FCbVFTMEhXdU8yOGR1OFFiRlJt?=
+ =?utf-8?B?YzVFTk9pdHhuNUdqTVRmR0lTbXNhQzFIM0VXOU13Q1lJeFRYbFkwWXBuOXFI?=
+ =?utf-8?B?d2l2UnVyWlZRZDV3OVlxTGxVR2lVMmtKckt1Mk1RM2l3OFBYUU1lcS9vOVY1?=
+ =?utf-8?B?Q0N5ZEs2K2NEVnFneTNrTEM0SEdMVlRickZJRzlHcWQrQWord1lwZ0paWHBz?=
+ =?utf-8?B?N1JmM0g4RFZnRnl6QUlYalRsOTFHY0dycWpzRlJYeG5Wc24zUW5oOUJKMUhj?=
+ =?utf-8?B?OVY5ZHBVaDJjTk1NeTA4cGhLV1ZtTXEyQnhvcndST0pxaTVEUXdkSDg1SEJy?=
+ =?utf-8?B?My9RU2k4ZDQ0c1luT2JESWxXazllcGdZQUwvZ09IZ09iejgvWUdZTmN3S1Jq?=
+ =?utf-8?B?VDJtaWorN0xaOWhOZ1UrQ3JwZ2tuYTU4UDBzVU5kVXV2T0ZXRWwrZGprRTdl?=
+ =?utf-8?B?WGFIajZvaU5DN1hYVitmelMzcHUvU0Y2c1VTNm95L1REYVJad3ZseE9ob21E?=
+ =?utf-8?B?Vlo1RWZVZmxZek0zbTl6blhYSURZd1U2YlBORkdRT3pCaElvK1J6ckd6ODBP?=
+ =?utf-8?B?U291L0M3YzJqTFZhWEtVbUxEYUE5TC9pT2tSaDZDakJXdGdML1lFTzN4WWRZ?=
+ =?utf-8?B?MEwxUWpnVXR1QnZ1aGVxbldOdlB2SzNFck5VQUZLbk4zUGdIKy9GU1lQbWp5?=
+ =?utf-8?B?L3NxczAvRjhjVVVZMVVEeWtvUGtYTG1MTXFLWm1sSVhjdmxxdWlVQTU1eE1R?=
+ =?utf-8?B?bDBka2dFa016TU40TnpVUVI2bCtsNTNZVHNMSGk0a2dJNGk4NEtjZWZwNmd6?=
+ =?utf-8?B?eG5MMlM3RWVNVExwN0htMkQ3VVRKQlgzcUx3dWRoWlIwVXdYUWwvaGJLODFo?=
+ =?utf-8?B?QXdFWjNvaTB2ZGMxTEFuamJIcVVvc3NQdEZLTWVGOHhXZ21neVVacEEwUjlF?=
+ =?utf-8?B?Y0s3RnlyMTIxRTFhdUNXWUhIdVlBTEF6aDBjbk9tUlZOVGdIUU5zNWg5MGpp?=
+ =?utf-8?B?NU1wWlhTM1JIcVE5N0x5M21WQ2s4aHI3T0F2VnVvOCtDOGVCRGtKQm1nOUNH?=
+ =?utf-8?B?NnRtcWdPT3pnbFUrRjR0dWMwS05zY3M4OFc1ZkpEVXB0eUZVQVFYS3hOS1Vj?=
+ =?utf-8?B?MHN1ejhpQncxajNRRVFBUDZGWlRra1BZVXQrTDVJcFAyamtNRDhBaUNmSDdu?=
+ =?utf-8?B?alRzYkZ3c2NjVGdvcm81c3VwVitWUHNITWV1UU10M0c0QTdycXQzNklUSmlm?=
+ =?utf-8?B?YXJnbk95ODlBOFBobTQ0cStwdkpuelg3bDBpeitjdmpZWjloYkJpOERySTJV?=
+ =?utf-8?B?RWtNSkVIc0J0cWg2cEJTd1pkNHN1eVoyWml2c3dENVlzb0NLM1IwazBsTE15?=
+ =?utf-8?B?ak95bHRNdzZ1ZHgrdVFkNXVKZkk2SFMwdFl2VW01bFh4M0x5enJVc2lUTGh6?=
+ =?utf-8?B?OW4xRS9jS2JFM211THV0NnF0QVFBVWtBa0ZKMVRhRTNoSWVrSXF3MWtaczBr?=
+ =?utf-8?B?SmhFUjdpV01rQlNQcFduaUl2R2kvdlNDZ1FzOWZXRzQ3dVoySkk5QjRCQVZJ?=
+ =?utf-8?B?aWRUN1R6aXVYTFFQY0V5dzVUYSt3NzNJNmxiOW40YkRvRmRtaVRsSlR3cjVU?=
+ =?utf-8?B?c3laL3Q4UE5WVkFkVHE0SGtxUXJ1VlhLTXY3QjJjVEEyM2R6ZUU1QlF1c010?=
+ =?utf-8?B?NFRWaDNhVHVqcjk1dTM5WnlZK3RzeXhINi9XQ0pVTUxYOEg2bjZXSkIyeUhZ?=
+ =?utf-8?B?dTNDWmdzVUJ1U0taSDVvb2Raa0l5dTBDSmVzV1I0SWI2d0UzWnp4Vk02ajFE?=
+ =?utf-8?B?RVBlVE1aeWlodnpWZSsrWVhWQzRDTXg1ZEwrS1FtOHgvdkJNZzRoS1cwMkEz?=
+ =?utf-8?B?NEVlRk9HZy9DR21jT1hBdzY5TUJyUENmQmIzR3VpK003SnFRSm1EamxZTzEx?=
+ =?utf-8?B?Z1JQMlNKNTdSckZNdStqNGh4SDBTeENrajh4cWZTbUI4cytIekRlL21MYks4?=
+ =?utf-8?B?b1VDTU84MXRPQk5sUnZOL2ZJMUtwa1piTFZxRDFyOEJENUFUZ0IraFhvTHZ6?=
+ =?utf-8?Q?DxFN9ZmpBBdp06jdbJQcK5UuW?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	HJKqkdo99TGFkCIYSoRlMwJGhySEXw3Un+/PiqJhTKmJR82K+Y+l33g7hrDawJxuVikiTAcwHUCoqgHAmpKTznc21xA1tckRT/uQmaIG65Ji2Rmskk5Pjt0cAhOJYenka0FkxLCkmI9Tee+VaUS220HDoQjtp7lD6Havf1NXWUYKm6aMvlLzoWguJVwguzk5vBpoF8wZbokyIDt3MpgyXbZX7zdFylKlt14iTMPqjdpxdSWLRYK037/vrncY6FIFuBuP7VmInxNFjWIz/PxWhwiVpZqYWQMtvdujUTWpd/fSBrgtm112Sq7zicCt0USSoutMd6zUc99HLGO349BLfNj60iWEnBegUVNn4fHsECqg8ZGiT97HYKmRLQUPIrJKSHo4XQMc7A/qBqsxesRIShZZFRd+weCkk22rXqkZwK0TXP8U5Ieq/BMXm64ANPWeMDPZixBxb7+IMhE98gQYDG9uG/GbDFob/lbtXCcKV4dDrAR7oGn3aw7LdlErdiVxCD4B1t4e+Vo7RgmYTNdLorbLfBD6zqgzq2YxTUxGMXNRwrOfgBzu5Mb5jtvr8Jy2j1wvDoyZmvUXDB9rZYdN5FJJnOTXD1mzbR4SUAiPwtQ=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9239612e-52df-42d6-ed2c-08dd51be3914
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB7211.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2025 14:52:40.4064
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iA10BBmSxyuTsIdSz3AG/pFn3iVDXWzaarIF2k2X+UFHVCYAmzQMw3cI0mxa0+B50caN6oAv9oH2jKxRkB8bVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5151
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-20_06,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 suspectscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
+ definitions=main-2502200106
+X-Proofpoint-ORIG-GUID: GDhRUBHOnsaFEi3qRgLp5xXVKMLq2DES
+X-Proofpoint-GUID: GDhRUBHOnsaFEi3qRgLp5xXVKMLq2DES
 
-On 2/20/25 01:46, Mina Almasry wrote:
-> On Wed, Feb 19, 2025 at 2:40 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+On 20-02-2025 01:15 pm, Shrikanth Hegde wrote:
+> 
+> 
+> On 2/19/25 12:16, Sinadin Shan wrote:
+>> The sched tests are missing a target entry and hence out-of-tree build
+>> support.
 >>
->> On 2/17/25 23:26, Mina Almasry wrote:
->>> On Thu, Feb 13, 2025 at 5:17 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->> ...
->>>>>>> It's asserting that sizeof(ubuf_info_msgzc) <= sizeof(skb->cb), and
->>>>>>> I'm guessing increasing skb->cb size is not really the way to go.
->>>>>>>
->>>>>>> What I may be able to do here is stash the binding somewhere in
->>>>>>> ubuf_info_msgzc via union with fields we don't need for devmem, and/or
->>>>>>
->>>>>> It doesn't need to account the memory against the user, and you
->>>>>> actually don't want that because dmabuf should take care of that.
->>>>>> So, it should be fine to reuse ->mmp.
->>>>>>
->>>>>> It's also not a real sk_buff, so maybe maintainers wouldn't mind
->>>>>> reusing some more space out of it, if that would even be needed.
->>>>>>
->>>>>
->>>>> netmem skb are real sk_buff, with the modification that frags are not
->>>>
->>>> We were discussing ubuf_info allocation, take a look at
->>>> msg_zerocopy_alloc(), it has nothing to do with netmems and all that.
->>>>
->>>
->>> Yes. My response was regarding the suggestion that we can use space in
->>> devmem skbs however we want though.
+>> For instance:
+>> make -C tools/testing/selftests install INSTALL_LOCATION=/foo/bar
 >>
->> Well, at least I didn't suggest that, assuming "devmem skbs" are skbs
->> filled with devmem frags. I think the confusion here is thinking
->> that skb->cb you mentioned above is about "devmem skbs", while it's
->> special skbs without data used only to piggy back ubuf allocation.
-> 
-> Ah, I see. I still don't see how we can just increase the size of
-> skb->cb when it's shared between these special skbs and regular skbs.
-
-The approach was not to increase ->cb but rather reuse some other unused
-in the path sk_buff fields. Though, looking at __msg_zerocopy_callback(),
-maybe it's better not to entertain that, as the skb is queued into the
-error queue. But again, not like you need it.
-
->> Functionally speaking, it'd be perfectly fine to get rid of the
->> warning and allocate it with kmalloc().
+>> is expected to build the sched tests and place them at /foo/bar.
+>> But this is not observed since a TARGET entry is not present for sched.
 >>
-> 
-> More suggestions to refactor unrelated things to force through a
-> msg->sg_from_iter approach.
-
-Mina, you're surprising me. Neither I suggested to do that, just
-trying to help with your confusion using analogies, nor I said that
-it'd be welcome, nor it's somehow "unrelated". And "forcing"
-is a misstatement, so far I've been extending a recommendation
-on how to make it better.
-
-...
->> If you've already done, maybe you can post it as a draft? At least
->> it'll be obvious why you say it's more complicated.
+>> This was suggested by Shuah in this conversation
+>> Link: https://lore.kernel.org/linux-kselftest/60dd0240-8e45-4958- 
+>> acf2-7eeee917785b@linuxfoundation.org/
 >>
-> 
-> I don't have anything worth sharing. Just went down this rabbit hole
-> and saw a bunch of MSG_ZEROCOPY checks (!msg->msg_ubuf checks around
-> MSG_ZEROCOPY code) and restrictions (skb->cb size) need to be
-> addressed and checks to be added. From this thread you seem to be
-> suggesting more changes to force in a msg->sg_from_iter approach
-> adding to the complications.
-
-To sum up, you haven't tried it.
-
->>> The complication could be worth it if there was some upside, but I
->>> don't see one tbh. Passing the binding down to
->>> zerocopy_fill_skb_from_devmem seems like a better approach to my eye
->>> so far
+>> Add support for sched selftests by adding sched as a default TARGET
 >>
->> The upside is that 1) you currently you add overhead to common
->> path (incl copy),
-> 
-> You mean the unlikely() check for devmem before delegating to
-> skb_zerocopy_fill_from_devmem? Should be minimal.
-
-Like keeping the binding in tcp_sendmsg_locked(). The point is,
-as you mentioned overhead ("adds more checks to the fast
-MSG_ZEROCOPY paths"), all things included the current approach
-will be adding more of it to MSG_ZEROCOPY and also other users.
-
->> 2) passing it down through all the function also
->> have overhead to the zerocopy and MSG_ZEROCOPY path, which I'd
->> assume is comparable to those extra checks you have.
-> 
-> Complicating/refactoring existing code for devmem TCP to force in a
-> msg->sg_from_iter and save 1 arg passed down a couple of functions
-> doesn't seem like a good tradeoff IMO.
-> 
->> 3) tcp would
->> need to know about devmem tcp and its bindings, while it all could
->> be in one spot under the MSG_ZEROCOPY check.
-> 
-> I don't see why this is binding to tcp somehow. If anything it makes
-
-I don't get what you're saying, but it refers to devmem binding,
-which you add to TCP path, and so tcp now has to know how to work
-with devmem instead of all of it being hidden behind the curtains
-of ubuf_info. And it sticks out not only for tcp, but for all
-zerocopy users by the virtue of dragging it down through all
-helpers.
-
-> the devmem TX implementation follow closely MSG_ZEROCOPY, and existing
-
-Following closely would be passing ubuf just like MSG_ZEROCOPY does,
-and not plumbing devmem all the way through all helpers.
-
-> MSG_ZEROCOPY code would be easily extended for devmem TX without
-> having to also carry refactors to migrate to msg->sg_from_iter
-
-Don't be afraid of refactoring when it makes things better. We're
-talking about minor changes touching only bits in the direct
-vicinity of your set.
-
-> approach (just grab the binding and pass it to
-> skb_zerocopy_iter_stream).
-> 
->> 4) When you'd want
->> another protocol to support that, instead of a simple
+>> Signed-off-by: Sinadin Shan <sinadin.shan@oracle.com>
+>> ---
+>>   tools/testing/selftests/Makefile | 1 +
+>>   1 file changed, 1 insertion(+)
 >>
->> ubuf = get_devmem_ubuf();
->>
->> You'd need to plumb binding passing through the stack there as
->> well.
->>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/ 
+>> selftests/Makefile
+>> index 8daac70c2f9d2..e2d0d389ad912 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -91,6 +91,7 @@ TARGETS += rlimits
+>>   TARGETS += rseq
+>>   TARGETS += rtc
+>>   TARGETS += rust
+>> +TARGETS += sched
+>>   TARGETS += sched_ext
+>>   TARGETS += seccomp
+>>   TARGETS += sgx
 > 
-> Similar to above, I think this approach will actually extend easier to
-> any protocol already using MSG_ZEROCOPY, because we follow that
-> closely instead of requiring refactors to force msg->sg_from_iter
-> approach.
+> There is only one test currently in sched: i.e cs_prctl_test.c. to see 
+> the cookies validation when core scheduling is in effect.
+> 
+> If CONFIG_SCHED_CORE=n, the test fails. So you might end up seeing 
+> default selftests failing on such systems? or this is only compiling?>
 
--- 
-Pavel Begunkov
+Yes, this patch would enable the test to be compiled and run by default.
+
+> Likely the selftests/sched needs to modified for CONFIG_SCHED_CORE=n
+
+Agree. Chris, I suppose then a graceful skip would be a more right 
+option for kernels with core scheduling disabled?
+
+Regards,
+Shan
+
+> 
+> When CONFIG_SCHED_CORE=n
+> ./cs_prctl_test
+> 
+> ## Create a thread/process/process group hierarchy
+> Not a core sched system
+> ...
+> Not a core sched system
+> (283) FAILED: get_cs_cookie(0) == 0
+
 
 
