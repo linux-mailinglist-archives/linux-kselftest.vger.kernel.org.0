@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-27075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2645A3DDDD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:10:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B593A3DDB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:05:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14CDA7AD843
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:04:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306303B2142
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:05:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB8A1D5CFB;
-	Thu, 20 Feb 2025 15:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A17C20C00C;
+	Thu, 20 Feb 2025 15:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qz2lb2jc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ilp8yF2m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DCF204855
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 15:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A94204F95
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 15:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740063830; cv=none; b=AbFCOvIkhSjaOxQIaOAEPTpUJIPPl7mvnDRnCmt2UWQ6VyZd98e91bO3jgAfa4twhIEdKEtMmKMtyvK4LxgKtXrkiEPrnkRFDgFvaiZdLJj8Ow1kKt3EYZFfj9V0urHwH33cWy6q7CstIYsbqvzuqqL5rvjeoF4/jGQXaqskxwA=
+	t=1740063832; cv=none; b=SvOVhyUMVg+AxaPfXNRr3jnQm6CbngT33e5+ZRiNTny2lZDI+zqO+7r503wrITzuqeBFV0mkj6I6Z7+CtvSdGTLoEHiDu89e52ORZ2kXr6VhNxO+9aIlQqQLAz5l3h+n9HowWV7TwdJU9NwUND1QOm4YrcFv80AZj1bEP/F2zwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740063830; c=relaxed/simple;
-	bh=Se/GydgHH9nLLIGfdGGZR9s2IiE5I/RUbIaLvfmjrag=;
+	s=arc-20240116; t=1740063832; c=relaxed/simple;
+	bh=6us0OPPk/bMiyXUbfdqsVWAztptDhX3dd4CerV72Gpc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Pis3jzEjofF/354ZXrR/REJ1aX9YwGk2tyFkMaOEO4wlFHw1d1IRXf4U7JCM1mF0ylpU0A0Xkqzt60CaVHcxm7bOj1fe2kYAhHoBwXgf5yppHh3Tt3jfeqyIjaSu42vonQJ/eMhroMPcIe5bxSUoMZogisWJFOKgdj9rtdfWXZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qz2lb2jc; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=YfNOVX6yNyI0howwy42BxsAhLJX40I++Pj3SlSYqdjaAS8ro3MGsA1zT8gwPD45XUwKSgoDJY9a8FYOSGyELI/jEotoq+Gys/uimdQ7XfErKVTTKNkHpw16PF1pche7ORnzoYjog8WZsHzsB4pXqh4g4zAUB5pmKo0sBunw1vBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ilp8yF2m; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-38f62a0ec3fso678861f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 07:03:47 -0800 (PST)
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-439385b08d1so6851235e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 07:03:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740063826; x=1740668626; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1740063828; x=1740668628; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y0OlocBh0Rs8sEPgodfZSsh3pCn2jLgGhmAgomJhmE4=;
-        b=qz2lb2jcxfwkhdfoOfo9B878dvkifMzWIFPKKRGP8cmDCdnz8WN1DSrdSwM8MEdzXt
-         4CTF+SxaF7CpeMY9yolDSYEfH2TY5H0s1QoKk1+roTraYawOhkddRlsmQhYehNfnf0x7
-         0pAq/Zi3ltCMA0W+WecLmyQQIjcXIKHY/5cm5Gj94SWVIf+mjIdX7y7+vvWcYlnnT2pu
-         gs0w6jdtoU4lvrMrVF4AKHYlrNfLYcStyZM5RnnsAp9D1DLNyPhQ9Vy0s1oGlFR/Vlzr
-         l7gdmCE0sKphXNOQXnAQp/E11WLP2/OXfn41kt2Tgaj3AsXQT38wJ9+vebM/IkPEMlQd
-         MRkg==
+        bh=n5anIIX08DH7I1Pe1I+Cw11KP1w7s/U6PELcC7zyacQ=;
+        b=Ilp8yF2mhlguBz/pE42gDVU1Yv/8+JSRN4l1WY/AAnGP4Zvv9c6sVxXWZh7iTWc8tU
+         BP8ZaZYjDnamyCYu4jDggFLG9NR3oCX8gGbubvw95jehcPWodq7by1FFqhP1OeZsc4Fk
+         md20EeZ1XdzV/tIakH6kWPPFyzxkH81I2DVU3DLBYCHyP/XBDB4/yU/iWqsWGLDLbHHH
+         RmuyZFXDSR5M5KAZudeNQ1uMhRaE0P3OulnLdIWCLRKW6ZrDvYDesGEtmkmdjK6fepad
+         oMCtXnFQFeN3MDpCmuHtdYal4irDfMDWGx7/nIehKlFLlJ9I6/GqDI/KQ1JhQb+oHnz5
+         FpBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740063826; x=1740668626;
+        d=1e100.net; s=20230601; t=1740063828; x=1740668628;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y0OlocBh0Rs8sEPgodfZSsh3pCn2jLgGhmAgomJhmE4=;
-        b=EZ/kF1+BMTalDFdU71pfi2baRRQZPOXAlaTKg+N48kdvIVpbaUa40IQhk9kHVqYqQ6
-         A85npoDxXuK7beONocKqX2rGi6fsGhAxevsIuqG0se7Xx67OdspfQu4OhS98TPWANfwB
-         kiMrKz7b2z2YNAFonFyDBHJep3BYKw8T+2bK25Bi+Fi64J5MXo43+O/RRA6dz+uORp/d
-         DhEL2xq0my/k5oEKr+DRY3NTbc7v+3fj0wfsXamRkSkYQBzHSI7n/bxOTJZRA/rliCne
-         OMZAZ2T4vWgueRvMwl28U6Evzntj3FvtGEiZJlcj5yH4FIN+vd6A7nKCnWu7DCH45HP7
-         Ld3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVqI7lyVAoU2s09daMqj1VtowyNcE6dyJ3CoH2/1e5vMmTqJOK40e+LiBNYOwsSIeawbr1EfKCVh4MI71urJhQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+/zkthpWJkzUJSrgura6EVB9DLl99zOmKBhb9vVBs4Yj1lShB
-	TMSmju1t8rQucPhYv2gHgkh/UWMLjx96jV/mkAHI4bhZUFXTDoCnciu1xWKDAVr8BYK9Gw634lV
-	f9Xf23ucDIA==
-X-Google-Smtp-Source: AGHT+IFsGg82gKlzl8tWzntDHJFghDx2t08uXQ7P5idCDRgaVqvqc920eCUSioT9wAdKGGY50Zw9lE7MF0GKww==
-X-Received: from wmbez7.prod.google.com ([2002:a05:600c:83c7:b0:439:67c6:5642])
+        bh=n5anIIX08DH7I1Pe1I+Cw11KP1w7s/U6PELcC7zyacQ=;
+        b=NhR2ftzeTqWyGDscQHWEBRjdL/OHpQKQVi3FkXGc3EBvoGCRzYIvHX2OuSVNJzLQ6B
+         +GtO6BN2gNPDkBQpGUflCmWRGqlmeVbGPiWJZZ/OdA8Ca3ItnIWlT+dAlUmSvTL6luo0
+         zZc+6st629wnz5esjczIc7/Q0eAOa13whhDGT9eTnqc0lxtxC7wrCgwcBd3FwzZcAQ3N
+         LcgShjx7BLTbgq51/+JVeETTv1As30cNNWGslSqmSgCMfnnlqS2iX48tOzfSaXE7uEa/
+         4tU4a8M+WZSlqIhndXNP+bHpe11IzytiiNuWyVPO2YZqtHtvPNwT0+oG4/uhSmqhrCCW
+         fi+g==
+X-Forwarded-Encrypted: i=1; AJvYcCUgKWPpv70PE+igTDDdeDEY+xStepruXIkploSaxBJuCaZG5YS5fMCT9eig8RDmFaglP2/MevAt1ErA6ru0awA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2aP8lV7Zw9lYwS/2iXrB4UkWAOX8QmExoL6nw1J0SNgMVaMdh
+	CkAaZY7h0PldZ+9KHNdi2g9MWB5eEW7TA9HomcAXFikWTy+5NZA0it0aYTWYCLW0ST5VHd9xRpG
+	KGP2v9Raehg==
+X-Google-Smtp-Source: AGHT+IGIpi/Y/94IOaJbe0uGO6m//Yh2Wsky4Ip3Q/V6kyqLVCBH3J882rU0thH0J4Ub/her4q4G/B/xr6R6VQ==
+X-Received: from wmbfk5.prod.google.com ([2002:a05:600c:cc5:b0:439:89d1:bf88])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a5d:47a7:0:b0:38f:4b15:32fc with SMTP id ffacd0b85a97d-38f4b153521mr12347926f8f.8.1740063826684;
- Thu, 20 Feb 2025 07:03:46 -0800 (PST)
-Date: Thu, 20 Feb 2025 15:03:16 +0000
+ 2002:a05:600c:3b26:b0:439:985b:17d6 with SMTP id 5b1f17b1804b1-43999ddaa0bmr75459345e9.27.1740063828632;
+ Thu, 20 Feb 2025 07:03:48 -0800 (PST)
+Date: Thu, 20 Feb 2025 15:03:17 +0000
 In-Reply-To: <20250220-mm-selftests-v1-0-9bbf57d64463@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250220-mm-selftests-v1-0-9bbf57d64463@google.com>
 X-Mailer: b4 0.15-dev
-Message-ID: <20250220-mm-selftests-v1-4-9bbf57d64463@google.com>
-Subject: [PATCH 4/6] selftests/mm: Skip uffd-wp-mremap if userfaultfd not available
+Message-ID: <20250220-mm-selftests-v1-5-9bbf57d64463@google.com>
+Subject: [PATCH 5/6] selftests/mm: Print some details when uffd-stress gets
+ bad params
 From: Brendan Jackman <jackmanb@google.com>
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Shuah Khan <shuah@kernel.org>
@@ -83,31 +84,27 @@ Cc: Mateusz Guzik <mjguzik@gmail.com>, linux-mm@kvack.org, linux-kselftest@vger.
 	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-It's obvious that this should fail in that case, but still, save the
-reader the effort of figuring out that they've run into this by just
-SKIPping
+So this can be debugged more easily.
 
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- tools/testing/selftests/mm/uffd-wp-mremap.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/uffd-stress.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-index 2c4f984bd73caa17e12b9f4a5bb71e7fdf5d8554..c2ba7d46c7b4581a3c32a6b6acd148e3e89c2172 100644
---- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-+++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-@@ -182,7 +182,10 @@ static void test_one_folio(size_t size, bool private, bool swapout, bool hugetlb
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index db5366b4766e5bfa2d1150d2f3c2d32469a6e28b..1facfb79e09aa4113e344d7d90dec06a37264058 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -456,7 +456,8 @@ int main(int argc, char **argv)
  
- 	/* Register range for uffd-wp. */
- 	if (userfaultfd_open(&features)) {
--		ksft_test_result_fail("userfaultfd_open() failed\n");
-+		if (errno == ENOENT)
-+			ksft_test_result_skip("userfaultfd not available\n");
-+		else
-+			ksft_test_result_fail("userfaultfd_open() failed\n");
- 		goto out;
+ 	nr_pages_per_cpu = bytes / page_size / nr_cpus;
+ 	if (!nr_pages_per_cpu) {
+-		_err("invalid MiB");
++		_err("invalid MiB %lu (%lu / %lu / %lu)",
++			nr_pages_per_cpu, bytes, page_size, nr_cpus);
+ 		usage();
  	}
- 	if (uffd_register(uffd, mem, size, false, true, false)) {
+ 
 
 -- 
 2.48.1.601.g30ceb7b040-goog
