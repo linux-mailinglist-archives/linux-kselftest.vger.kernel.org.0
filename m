@@ -1,101 +1,210 @@
-Return-Path: <linux-kselftest+bounces-27078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA2A3A3DE32
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:21:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D94FFA3DE9B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89F953BD5A1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:17:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D911A1883B87
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242AE1FCFF9;
-	Thu, 20 Feb 2025 15:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UWFTYJUD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C862F1EEA27;
+	Thu, 20 Feb 2025 15:32:36 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8348A1FCFDA
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 15:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6611D5AA0;
+	Thu, 20 Feb 2025 15:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740064654; cv=none; b=Wde4dMwdr36NKzno5JUgkXlWHDrQe7q/wVzxhcPUu5uSM1NJLlmJ6PH87taf0vM2fJ6pop9NAIj1e2JHIGDps0WMXs3Cx9xm5FkM+8uk4oiXOtbTRm199e/DJTUJ8x2WiTVHxPB2t28Q0o7OPmhSQA9k23Zq9cwoPrABEmOqnz8=
+	t=1740065556; cv=none; b=s8kWUMskTuoAfc7gYJ87/VoUOeTF8MAbKuVyZuq0CssMRwehb7Ohw0zhu/o+zyMHaBTUBzyTTSFGRuYCjiXy/TlqPcirvXXoqfC+CH9kYqUd5XWsTQBH1CD/OUVBFstAVKa4fcPvNWT2MoZ+pqFYw/OnmJOgqOqkvRKch/lWCWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740064654; c=relaxed/simple;
-	bh=hjbVevJDsAnw9R1jKzAcMVdMe+e0Cb/Fj4Olj9+4LeI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQoYhJRe7xFhAeS1YaRk+SSvA5wlxQVo3M1d0zIbeu/+oQcyz0har/SQFHQ82L5f/ZfY8G/7Axj/9f5+dt4t54oijtcKuxiXLnRgCjKLUY6KrLw5dQal5VEf+VvLHLoc3dqQfmU+LX2WCUdTkBXHJqGgczadRzkD1qalDPDR+xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UWFTYJUD; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-472098e6e75so286441cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 07:17:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740064651; x=1740669451; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nfqLAf2Bt1MZOxsTzROGpX4mEJpPOhYETeaZVqIiLtY=;
-        b=UWFTYJUD7pS3GoygUk9JfskGqEhvOeau99u+wB6fxkIyLvLz7Ht5/VbFnPYHYPeQ+e
-         dugAJzBy5hRVyXjm3yztp/bOiwOUitjvSgnjSNWa50amsQSt83thDkabxv7h5bgpNlG0
-         dWIkBCpi+rgqdYLifERzQ5ZaFdIBhceNNYuyfm9AUPeOLzxi40QfmiKkgpTl7V5R5+mn
-         6yBVAHAL8cg3junqRA8dVe1EKIlfhnOfPMEHWLU5os/W+6clQEh7D/gPTd+3ajWpopgw
-         9A2CnVpJ566AhDMI3hor1u+7eG5+bfV9odbUkqDbNGHcsqKzWz2GB6I4EkE878iV5Psu
-         FA+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740064651; x=1740669451;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nfqLAf2Bt1MZOxsTzROGpX4mEJpPOhYETeaZVqIiLtY=;
-        b=XPV4F045u1DAlZr4s9LywhVVci0ztDwlpkBBJ10pCdkYb7GpKOOeipMbGw8sn7pr6F
-         HjM/aqQI9J5bAWs86FlQema8lpFWTfVutOEY/ikstoVe+E6zMqaspAaGIU578yuqMY4f
-         1DDTm0MakfHxy4qXmzzsvBcCn/YIU0JhlaPGjSKJDYRAcqPYcg51zOU/7846rI4XR4S2
-         Ixbv+EuOA4E1yd67MLvKC8AU+v70Uu1wchN7kq2mylscSLQcgXjQPD/cD7tTTnV3b7c3
-         Fznl3I9yO6zkhzzc0RJ7eln4rP+R1cQUGgdgijcHfNfzl3mznZQShFaimAmRi8CZamI1
-         2Qxw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9nWPluJf0efpRUC8KOA+NmVJ76gYk0V9g5LWfpxOEjip1XHTUTUN4n6mpq74p9qklyFxAsh2UKGXzpvc9TgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNWe6fjELgskwLwmd4oiJnwhN3kzV4eX+YPUpTA2YNRX49heEI
-	o0HIBqpyQaV3gvELA5jSErmczHY3t9FzB8/JBrm8fUoM//CLkCTodiY+TaZb7G0Fb1hH8t7I0su
-	eaA3wEvduDAfAUmEqw5lvRwXNI3RZjdq3Rw2S
-X-Gm-Gg: ASbGncvw0HF+yUure8058PyJFLDaedfsM1lGdjYbxjklftRfbxZxkZBZh46U/UJbYaX
-	YoRqgZ698Cpp8vExc6TWjjuZ8d5fRBZ4veBN1Uc03HKJPDnvNNLzRxizpTPxc8/Gt/aoWbZ9SL1
-	15GWlHp8I8HmlLTMwbUOcbY8XLBMc=
-X-Google-Smtp-Source: AGHT+IGhyGVmDHiveCYislzBLpxmEyFf8bbj2ICmMKfXu+YhRG0z57YQ28qadOmItdhl4ZLbIN/D33o1DiOb1WYbGYM=
-X-Received: by 2002:a05:622a:1a88:b0:471:9ece:b13b with SMTP id
- d75a77b69052e-4721708fbf4mr3622511cf.1.1740064651173; Thu, 20 Feb 2025
- 07:17:31 -0800 (PST)
+	s=arc-20240116; t=1740065556; c=relaxed/simple;
+	bh=Pi33kls6Ei68GLKOGLPPA9sBFFLRww40fx6lP4Kt8UQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L9CWyysyY7z6Gm3EHINXK3w95abIE77PcFbLiGIpjPzelSK2b7hobS3Gh//ptFvk+SjETvFniEJykpNHO5trZ+uisFN6CCLPtxfIRKLARA25XjhK+ljAUyovvxf9KCND16RfNWMTJawOkpLE3T+3fhVGklHFkWgG/Pnl3ITiz6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC7BD16F3;
+	Thu, 20 Feb 2025 07:32:51 -0800 (PST)
+Received: from [10.163.39.71] (unknown [10.163.39.71])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E5F93F59E;
+	Thu, 20 Feb 2025 07:32:30 -0800 (PST)
+Message-ID: <6d1a298f-6af9-4568-b171-cb4a83121a95@arm.com>
+Date: Thu, 20 Feb 2025 21:02:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250220-mm-selftests-v1-0-9bbf57d64463@google.com> <20250220-mm-selftests-v1-5-9bbf57d64463@google.com>
-In-Reply-To: <20250220-mm-selftests-v1-5-9bbf57d64463@google.com>
-From: Brendan Jackman <jackmanb@google.com>
-Date: Thu, 20 Feb 2025 16:17:19 +0100
-X-Gm-Features: AWEUYZkyoMHZt5wOSmW4C7MoQ1154jjgu5NFAI7r6rF-taWxuY5uZ_vFpxeDUv8
-Message-ID: <CA+i-1C3K=Fm=OfNy_5a40HYDwp_FBy4BBV9+4L0gF3S1grE5sw@mail.gmail.com>
-Subject: Re: [PATCH 5/6] selftests/mm: Print some details when uffd-stress
- gets bad params
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>
-Cc: Mateusz Guzik <mjguzik@gmail.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] selftests/mm: Report errno when things fail
+To: Brendan Jackman <jackmanb@google.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Mateusz Guzik <mjguzik@gmail.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250220-mm-selftests-v1-0-9bbf57d64463@google.com>
+ <20250220-mm-selftests-v1-1-9bbf57d64463@google.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <20250220-mm-selftests-v1-1-9bbf57d64463@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 20 Feb 2025 at 16:03, Brendan Jackman <jackmanb@google.com> wrote:
->         nr_pages_per_cpu = bytes / page_size / nr_cpus;
->         if (!nr_pages_per_cpu) {
-> -               _err("invalid MiB");
-> +               _err("invalid MiB %lu (%lu / %lu / %lu)",
-> +                       nr_pages_per_cpu, bytes, page_size, nr_cpus);
 
-Oh this is actually wrong - the number it's printing isn't MiB.
 
-Assuming there's a v2 I'll fix that up. Otherwise honestly this patch
-could just be dropped, it's not important.
+On 20/02/25 8:33 pm, Brendan Jackman wrote:
+> Just reporting failure doesn't tell you what went wrong. This can fail
+> in different ways so report errno to help the reader get started
+> debugging.
+
+IMHO it would be even better if we reported strerror(errno).
+
+> 
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+>   tools/testing/selftests/mm/gup_longterm.c | 32 +++++++++++++++----------------
+>   1 file changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+> index 9423ad439a6140163bdef2974615bb86406a8c14..46a2139b3a646f6c050eb031a770f615be76c433 100644
+> --- a/tools/testing/selftests/mm/gup_longterm.c
+> +++ b/tools/testing/selftests/mm/gup_longterm.c
+> @@ -96,13 +96,13 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   	int ret;
+>   
+>   	if (ftruncate(fd, size)) {
+> -		ksft_test_result_fail("ftruncate() failed\n");
+> +		ksft_test_result_fail("ftruncate() failed (%d)\n", errno);
+>   		return;
+>   	}
+>   
+>   	if (fallocate(fd, 0, 0, size)) {
+>   		if (size == pagesize)
+> -			ksft_test_result_fail("fallocate() failed\n");
+> +			ksft_test_result_fail("fallocate() failed (%d)\n", errno);
+>   		else
+>   			ksft_test_result_skip("need more free huge pages\n");
+>   		return;
+> @@ -112,7 +112,7 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
+>   	if (mem == MAP_FAILED) {
+>   		if (size == pagesize || shared)
+> -			ksft_test_result_fail("mmap() failed\n");
+> +			ksft_test_result_fail("mmap() failed (%d)\n", errno);
+>   		else
+>   			ksft_test_result_skip("need more free huge pages\n");
+>   		return;
+> @@ -130,7 +130,7 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   		 */
+>   		ret = mprotect(mem, size, PROT_READ);
+>   		if (ret) {
+> -			ksft_test_result_fail("mprotect() failed\n");
+> +			ksft_test_result_fail("mprotect() failed (%d)\n", errno);
+>   			goto munmap;
+>   		}
+>   		/* FALLTHROUGH */
+> @@ -165,18 +165,18 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   		args.flags |= rw ? PIN_LONGTERM_TEST_FLAG_USE_WRITE : 0;
+>   		ret = ioctl(gup_fd, PIN_LONGTERM_TEST_START, &args);
+>   		if (ret && errno == EINVAL) {
+> -			ksft_test_result_skip("PIN_LONGTERM_TEST_START failed\n");
+> +			ksft_test_result_skip("PIN_LONGTERM_TEST_START failed (EINVAL)n");
+>   			break;
+>   		} else if (ret && errno == EFAULT) {
+>   			ksft_test_result(!should_work, "Should have failed\n");
+>   			break;
+>   		} else if (ret) {
+> -			ksft_test_result_fail("PIN_LONGTERM_TEST_START failed\n");
+> +			ksft_test_result_fail("PIN_LONGTERM_TEST_START failed (%d)\n", errno);
+>   			break;
+>   		}
+>   
+>   		if (ioctl(gup_fd, PIN_LONGTERM_TEST_STOP))
+> -			ksft_print_msg("[INFO] PIN_LONGTERM_TEST_STOP failed\n");
+> +			ksft_print_msg("[INFO] PIN_LONGTERM_TEST_STOP failed (%d)\n", errno);
+>   
+>   		/*
+>   		 * TODO: if the kernel ever supports long-term R/W pinning on
+> @@ -202,7 +202,7 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   		/* Skip on errors, as we might just lack kernel support. */
+>   		ret = io_uring_queue_init(1, &ring, 0);
+>   		if (ret < 0) {
+> -			ksft_test_result_skip("io_uring_queue_init() failed\n");
+> +			ksft_test_result_skip("io_uring_queue_init() failed (%d)\n", errno);
+>   			break;
+>   		}
+>   		/*
+> @@ -215,13 +215,13 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   		/* Only new kernels return EFAULT. */
+>   		if (ret && (errno == ENOSPC || errno == EOPNOTSUPP ||
+>   			    errno == EFAULT)) {
+> -			ksft_test_result(!should_work, "Should have failed\n");
+> +			ksft_test_result(!should_work, "Should have failed (%d)\n", errno);
+>   		} else if (ret) {
+>   			/*
+>   			 * We might just lack support or have insufficient
+>   			 * MEMLOCK limits.
+>   			 */
+> -			ksft_test_result_skip("io_uring_register_buffers() failed\n");
+> +			ksft_test_result_skip("io_uring_register_buffers() failed (%d)\n", errno);
+>   		} else {
+>   			ksft_test_result(should_work, "Should have worked\n");
+>   			io_uring_unregister_buffers(&ring);
+> @@ -249,7 +249,7 @@ static void run_with_memfd(test_fn fn, const char *desc)
+>   
+>   	fd = memfd_create("test", 0);
+>   	if (fd < 0) {
+> -		ksft_test_result_fail("memfd_create() failed\n");
+> +		ksft_test_result_fail("memfd_create() failed (%d)\n", errno);
+>   		return;
+>   	}
+>   
+> @@ -266,13 +266,13 @@ static void run_with_tmpfile(test_fn fn, const char *desc)
+>   
+>   	file = tmpfile();
+>   	if (!file) {
+> -		ksft_test_result_fail("tmpfile() failed\n");
+> +		ksft_test_result_fail("tmpfile() failed (%d)\n", errno);
+>   		return;
+>   	}
+>   
+>   	fd = fileno(file);
+>   	if (fd < 0) {
+> -		ksft_test_result_fail("fileno() failed\n");
+> +		ksft_test_result_fail("fileno() failed (%d)\n", errno);
+>   		goto close;
+>   	}
+>   
+> @@ -290,12 +290,12 @@ static void run_with_local_tmpfile(test_fn fn, const char *desc)
+>   
+>   	fd = mkstemp(filename);
+>   	if (fd < 0) {
+> -		ksft_test_result_fail("mkstemp() failed\n");
+> +		ksft_test_result_fail("mkstemp() failed (%d)\n", errno);
+>   		return;
+>   	}
+>   
+>   	if (unlink(filename)) {
+> -		ksft_test_result_fail("unlink() failed\n");
+> +		ksft_test_result_fail("unlink() failed (%d)\n", errno);
+>   		goto close;
+>   	}
+>   
+> @@ -317,7 +317,7 @@ static void run_with_memfd_hugetlb(test_fn fn, const char *desc,
+>   
+>   	fd = memfd_create("test", flags);
+>   	if (fd < 0) {
+> -		ksft_test_result_skip("memfd_create() failed\n");
+> +		ksft_test_result_skip("memfd_create() failed (%d)\n", errno);
+>   		return;
+>   	}
+>   
+> 
+
 
