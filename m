@@ -1,189 +1,259 @@
-Return-Path: <linux-kselftest+bounces-27027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 705A3A3CEC7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 02:34:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12679A3CEE2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 02:47:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B8F03B823C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 01:33:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 520F97A827B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 01:46:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAFC61C9DC6;
-	Thu, 20 Feb 2025 01:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F1A1C5D67;
+	Thu, 20 Feb 2025 01:46:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qdoOPKMD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZHvHWwyl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D04D18A6AE;
-	Thu, 20 Feb 2025 01:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740015177; cv=fail; b=CcWL4KdMdVM1yaoRffc88hi7NkxD/1mVT6hLe8KW0UpO+fUE9kPFNl9oaUng3GzjJWhSQYQuSSPZ/HW4aBor1QdtlK7zTWMRuVye17zZtXGkYABPcpuxiC093/wYBs9tEkMv0ow2t8Mz1d4BcyXgp2RczRiDAtLj44KsmU+yr3o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740015177; c=relaxed/simple;
-	bh=/awyj9GHIb7IT7jjDyg3mJmsavAAO3YGgJZNRckwSCc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EtXaizXQI6rJ40qjBClcOEk088d7XYuGdURURA7sGh3eJjjA88Az0/XOAd/7f3zD1d43wmi45odu3q7zeAA+Iq3VK8icCj48bfcB+ZJReYVfZbflCFyRAlmBISzpza2Xj3KLIu8hCs9gLo0srVsCcQ28O1/MdFroT1ULQjoZmXg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qdoOPKMD; arc=fail smtp.client-ip=40.107.93.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VBJZM4jrDoH+/X8mjINLGEj0NH9ToKa882sbXMCIQ0nGjox7hYH+r6GQoZ8uIexEosAGXGM6eYVdbh6yvQeRxMl7xMAn75nuJYJNS2atOQKMCFQSQj1eKuZkc19ExfGOFM4DOfppxI4JkQ8jdpqz2QSlc1UzoRcOGGmlmvd3GlcCgbOFS0fsuRO4QGUHWEa3X7MXeFhD7goQrTUaiUoQVzcOH1IoWXwaw6LiLPLcoRnxzKKmjI6dnYNW/5diNKPnG39208y2DsJsB3eqLJ0YFBGwyc+/BI5JygdpEsrAt5c2nVhXFedBSbrkVDYX0UTy44GdFi20nmEBEBZZkO/9hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wYz6ypHlJXMgFK72LsNye3N/Wjn3Y2DI+S220aephPE=;
- b=Rc6o7pb3B3JnnHci7bRsThL1DAxUEZ1NF9kiTUpfHn6OE5FTKS0Y4IcnEesq1/axjbCGdJ5faIY5TCLLLK61HDuM8xymOlWqArFnq/R7jUGuPRkNrxhbF2mx0w6RYjRBfBHwxafX5p8at9S/i4I0MejqwfYcm1D98uKJMzqO+QGY9IOxyzojWItpSFPK0RBR+bFKoej9nvHJwoZh1HNDtJ4xT1e4Sg5877/manzoIIJ5j+LrmoUXUXb8WZZTPz4BOBFe9I5qUtNzFuHsBX97xCAIRHkWOlUsYQUQH6WQEmFMO1xtSjjyvxiIf4wROYUnJxBrLjK+KBX1gqvNT4g80Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wYz6ypHlJXMgFK72LsNye3N/Wjn3Y2DI+S220aephPE=;
- b=qdoOPKMD311ub//DIaj3SgNWcYuhT8XQ9pCZ/hLNlvLTnYKpT0mAhB5usZBisqtBQyY6WIsaEh2FU0ZJX/uzXijlJO3a2qM5OExKW0f+rYi9egTsjF1qcgMVVoQMjBHJQx0ZpQR5TtIxSf0Y+j1CrDPVyGL2JrQ4l5zQjD2R2GeW3EIqT2QRsNZdojigjehYds4noKhnQMjfe4sbFuSZMBV9h0P1TKv9YShH4GgIYfsT8TxGZO5F3ENwbOCYG79qxH9Zs1z3TJAtNntZv02bukhnppiSu13ngP37e+dQmeg6VfZJP+Zx4N0OUJzPICj42a8uePE3wn14py3dgK3VLA==
-Received: from BN9PR03CA0896.namprd03.prod.outlook.com (2603:10b6:408:13c::31)
- by CH3PR12MB8546.namprd12.prod.outlook.com (2603:10b6:610:15f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.21; Thu, 20 Feb
- 2025 01:32:46 +0000
-Received: from BL6PEPF00022570.namprd02.prod.outlook.com
- (2603:10b6:408:13c:cafe::3f) by BN9PR03CA0896.outlook.office365.com
- (2603:10b6:408:13c::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.15 via Frontend Transport; Thu,
- 20 Feb 2025 01:32:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF00022570.mail.protection.outlook.com (10.167.249.38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8466.11 via Frontend Transport; Thu, 20 Feb 2025 01:32:46 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 19 Feb
- 2025 17:32:34 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 19 Feb
- 2025 17:32:34 -0800
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Wed, 19 Feb 2025 17:32:33 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <tglx@linutronix.de>,
-	<maz@kernel.org>
-CC: <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>,
-	<shuah@kernel.org>, <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<eric.auger@redhat.com>, <baolu.lu@linux.intel.com>, <yi.l.liu@intel.com>,
-	<yury.norov@gmail.com>, <jacob.pan@linux.microsoft.com>,
-	<patches@lists.linux.dev>
-Subject: [PATCH v2 7/7] iommu: Turn iova_cookie to dma-iommu private pointer
-Date: Wed, 19 Feb 2025 17:31:42 -0800
-Message-ID: <949e28875e01646feac5c4951b63723579d29b36.1740014950.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1740014950.git.nicolinc@nvidia.com>
-References: <cover.1740014950.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F336B1C245C
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 01:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740016012; cv=none; b=HpOIhsBg3xqIwrrt5NND372Hz/XsHdU7GW9rBVaYZAUv3nI2PkbfgE7RuxvmVwiV2pv1bDQvMoJCALYF3A7GRsyj6CkxlkSoLoAhmSEUcmiOXgrkwfDrhhBQ8jUnzTDoVAbSCWXlT6tKJ31p+xpVaWoxV+c/kvb2Kia3CpZ8KZo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740016012; c=relaxed/simple;
+	bh=arHaMf1VlgzmwsFpfVOXP4yaHpMS0ZNgicYCaJisT68=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kMClVknnIjmooIy+t/j1Xn07XEu7aTX0gr5jkt6hlMgj0iOhXRwvofPyPOgjpP5U9W2+pDV08BC+X7Y5dIM6USOfgkdQGYjITbPBsNimWVxhNhcpAlE3U9SSIdmZ3B8K/WuCzbRrqCx5rb7nLYUrVmLxc8dGQ7ZK7Dq4UKVfnm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZHvHWwyl; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2212222d4cdso73495ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2025 17:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740016010; x=1740620810; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=arHaMf1VlgzmwsFpfVOXP4yaHpMS0ZNgicYCaJisT68=;
+        b=ZHvHWwylli4v/kwyvblumZWi5uwyL7nVsf7ALukl/Rg1rEXCl+8VSd/u+0aXK1pVZj
+         sxqo8VEF3MrLM2h+xY8vzuZdbgt/1N6M/qODIzHqIYlzB29biHRT5jRRWRgoJNPhRnmY
+         3GJWi904l/R987K4DBzL01g1Ku/kTbrH8nNGBAsjdjsIRZ/n8rGWRRJ1OQKLLO1KY9cF
+         5Ak0gfM7R9HeTBpn7cNzvLISV2ujINdHHTAEMlVxQk9p99xnJXrCAThCovb4n/dJxckY
+         mEfqrVwgjHrqoSswuivNplzZFkOE+eN5HPDNOFMI6JRMA2s90pQzb9i6mTVDqOgs5HT0
+         qLIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740016010; x=1740620810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=arHaMf1VlgzmwsFpfVOXP4yaHpMS0ZNgicYCaJisT68=;
+        b=qUzWWIps4eVLFZchy4fuZU0dpQyxWgQqTce5GPICTZXdMWfFvfOmx38VT96NRmuTYO
+         uta9sgGTVo5f/cpHx2mAB+uo3cKBnlSQdh8Vmr8pPxMORqNCHedKFe8G17MX1QYqesRt
+         Wo8a41vBwGXg040hba1sYZ4yX+P2CQhHFu8cJYA0rIlOcLi9G2eEy6eQW2ICaUCm8hvf
+         9seuCrjhSiJ20nONXPUa7db+KhmnHbtmdMhM4NrutoIEPfY75lYSBdnmKYiMSK9biOB4
+         KlLDytpzFY2oEYU/iRU/UkAXKCXpDzSfDhiMvUF/JLGKSRdeqYaJ94+qEetWXPA3hV7V
+         4Jdg==
+X-Forwarded-Encrypted: i=1; AJvYcCVSnR6TGW+7O/eHFSiWF+sz1FNg0CxAWDwzzHuKV93mhhx3oG1Td9DgxcFoMNxzbpuZg4X7s1ZHqqkK9TbKG0Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxksmLEkR3iEaZqYI9OvQ+tWZsivh/7XRhC6Xgzw9x5K/XOI+y
+	+3k7xYPvfJMUC3vLMi5+e+EsNLPsDdF7fVzB6JSywo/Hj6srYtDdaf4yVdNFC1PkYbZwLcXBBrk
+	1qnnwYckVWyo4e5fuTupWwfSYGhvLQUCPKxvK
+X-Gm-Gg: ASbGncujKBCruOeZXeNSqC0knYn9tymIpR+XbbktDX2ryLsCEaRsZaDVWDWLneY+rz3
+	zHbaDf6T7Db9Zx4mzzAhPoQDRCtlJuSuPapVpcw1uec0o3z5vO7iwnk3p7QnyZanqlMM0Hwmm
+X-Google-Smtp-Source: AGHT+IEz/wy+PbvayGyl/ZC2Oa91Z8b/neItdKm+4+1vyV76jCH3mzoPtf/GRrixk+9Ls+oK+3gmWERSJ245t2qC3RY=
+X-Received: by 2002:a17:903:19ef:b0:215:f0c6:4dbf with SMTP id
+ d9443c01a7336-2218dd576f9mr1423265ad.14.1740016009988; Wed, 19 Feb 2025
+ 17:46:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00022570:EE_|CH3PR12MB8546:EE_
-X-MS-Office365-Filtering-Correlation-Id: d450ad5b-2e62-4606-f608-08dd514e7aef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uAN8LJnb13ziq0m6AjIYTQ6hgJ7uabm7HXW/ratGQr2/LCw02t7WteGlxN+c?=
- =?us-ascii?Q?jNydE7ZMJi+w7PXSuE+YXU22W1L+gkeY5paedGki1OEfQB2+t+PCK7525II9?=
- =?us-ascii?Q?AEU3317VFzrpQtrHIV6KxED7RN6SSL/kWloTLwuvBCX05vqqnXoCWdpDVeit?=
- =?us-ascii?Q?Zjkep01tQaVnZIBbptQjvocT1GSohPPJyYAWDkAW7HIrUDY9S2tTOxIHg3Bl?=
- =?us-ascii?Q?9oatPDwJ5wsC/kzZsr8Ex3lCrhhxImTRoAMwLUKd274RPDi6ZjpJf1JUMq3M?=
- =?us-ascii?Q?48jSeLesj+wDoKaEVyEISi69fVBrgJZDTCzeVpj+JtHdhVMdGfdvJwLFBWvn?=
- =?us-ascii?Q?spS35AuZVAdfp5w+QVGUpdQ5hwndCpmwP/6LiLPqMWfACguce2xaDMQCWJcF?=
- =?us-ascii?Q?d3DAdK7dmQBV0vPkF3EgvqbjlIm4XVPuYwpyPMk8rkN4DCaq/Hc7EaJB8ICw?=
- =?us-ascii?Q?Lvizhj4+hFMlql2JpoAXy8kOPOAwgV0fooygqEnUJffiDeLZgDPjrdjroxq7?=
- =?us-ascii?Q?JyWjKVo1J7IIteTl3PBK5dZVLmbfdmzVfqKDTO0oqQ5J19dcWLsJD0huNivL?=
- =?us-ascii?Q?s1yCYm6dpCKjuX/1YnlyAiaCPaM9wjYIRBUI7pnsGFRtJ+7kmiKQr20g3vZf?=
- =?us-ascii?Q?LZdmPf9DxGSRMAVsPhhyx6U2m1BjCOmH7tevPuKqzCs0B7q1aL3/OQmdb75u?=
- =?us-ascii?Q?uAtmeznj9MDgy8/BJpVuZxtLcWrYZkD7nc0ZW1R2HL0Yh/BUd9pebMZKZZv4?=
- =?us-ascii?Q?ebmz0CtyjywsTeKaBpVj/i8PSVn8bys8bF7Yw8LxMNFyC+MUzko37HbkZngP?=
- =?us-ascii?Q?zV/LlvEmA6bT2YUBB2bF6/MGDbkBZzuQC24jRJG+aggaC+0au5U0QZknMYvw?=
- =?us-ascii?Q?0unQHnv4tLft4faks0N6Ylj5KLTphxSpxTgLOFm9UnhgwfbrAdsMsxGqrOLD?=
- =?us-ascii?Q?ew0QfZsD/eu5E2JH4sIiIPD131r0ULJbqCDy1XZX+3AZhjY4l+jVQDYoZ6ZC?=
- =?us-ascii?Q?JT4KHGE9x3BJBqiN2FnHL4yh+HXRB+Zn2w5R05/GjhaOzax2eeCY3iJO32+s?=
- =?us-ascii?Q?Zz/zVXcw3RHeRUWVh2eZUYgv7yf6r9D86MXN5fbd8PtXXOZdrzG2WH5Qyj0e?=
- =?us-ascii?Q?hrJ+EiqbrjDHX7paBmV3iXW0YUDlRWplL9+NVVizU7wC23kp+oIgdaBC06E2?=
- =?us-ascii?Q?9EKJ06ttoL1MLqVwFITd9wVUZvuL26ykY/Y61WhpBaRWLhmZIbVHbfsdBp7E?=
- =?us-ascii?Q?wZ1dRgm52wpdKE6FeUMVb4YrbMC5+MUZR/Tt0oCWCw8MDfBMc4HM3FlHzvrF?=
- =?us-ascii?Q?US7jCTwzjufOXxZZ9o0NVLRPt/UuYWbWiJb4bezp9WejrlM44EO+wXeNm+mp?=
- =?us-ascii?Q?2uXCEOLDwTuw1xssF9vlZtOuUlROACphocgicJR5siGHa3ppNX28/GCRNoGl?=
- =?us-ascii?Q?Ulq//ypYmEOWtu3GU3aLBQN39ixT17gSBCTH/YPzG6Cx/vnFJuCUscFcd1RC?=
- =?us-ascii?Q?eNePPD7vzbh0ljk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2025 01:32:46.6292
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d450ad5b-2e62-4606-f608-08dd514e7aef
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00022570.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8546
+References: <20250203223916.1064540-1-almasrymina@google.com>
+ <20250203223916.1064540-6-almasrymina@google.com> <abc22620-d509-4b12-80ac-0c36b08b36d9@gmail.com>
+ <CAHS8izNOqaFe_40gFh09vdBz6-deWdeGu9Aky-e7E+Wu2qtfdw@mail.gmail.com>
+ <28343e83-6d93-4002-a691-f8273d4d24a8@gmail.com> <CAHS8izOE-JzMszieHEXtYBs7_6D-ngVx2kJyMwp8eCWLK-c0cQ@mail.gmail.com>
+ <9210a12c-9adb-46ba-b92c-90fd07e1980f@gmail.com> <CAHS8izPHtk5x-W05_svxU53X-V4+++PiYErCgfr-3iDGgEaUig@mail.gmail.com>
+ <4cdfaff8-0623-4d3a-9204-5165ccbb84db@gmail.com>
+In-Reply-To: <4cdfaff8-0623-4d3a-9204-5165ccbb84db@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 19 Feb 2025 17:46:37 -0800
+X-Gm-Features: AWEUYZkdYTArMvyspFK_MTvc6qB9T7tm4wBNfrCPa7PpZJsZ-6EA0AUf_amyQgU
+Message-ID: <CAHS8izNHT_VjztrDk6t-OJoX=zB3vV81w2CYZTKA1yGB06tY-Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 5/6] net: devmem: Implement TX path
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Neal Cardwell <ncardwell@google.com>, 
+	David Ahern <dsahern@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	sdf@fomichev.me, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>, 
+	Victor Nogueira <victor@mojatatu.com>, Pedro Tammela <pctammela@mojatatu.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Now that iommufd does not rely on dma-iommu.c for any purpose. We can
-combine the dma-iommu.c iova_cookie and the iommufd_hwpt under the same
-union. This union is effectively 'owner data' and can be used by the
-entity that allocated the domain. Note that legacy vfio type1 flows
-continue to use dma-iommu.c for sw_msi and still need iova_cookie.
+On Wed, Feb 19, 2025 at 2:40=E2=80=AFPM Pavel Begunkov <asml.silence@gmail.=
+com> wrote:
+>
+> On 2/17/25 23:26, Mina Almasry wrote:
+> > On Thu, Feb 13, 2025 at 5:17=E2=80=AFAM Pavel Begunkov <asml.silence@gm=
+ail.com> wrote:
+> ...
+> >>>>> It's asserting that sizeof(ubuf_info_msgzc) <=3D sizeof(skb->cb), a=
+nd
+> >>>>> I'm guessing increasing skb->cb size is not really the way to go.
+> >>>>>
+> >>>>> What I may be able to do here is stash the binding somewhere in
+> >>>>> ubuf_info_msgzc via union with fields we don't need for devmem, and=
+/or
+> >>>>
+> >>>> It doesn't need to account the memory against the user, and you
+> >>>> actually don't want that because dmabuf should take care of that.
+> >>>> So, it should be fine to reuse ->mmp.
+> >>>>
+> >>>> It's also not a real sk_buff, so maybe maintainers wouldn't mind
+> >>>> reusing some more space out of it, if that would even be needed.
+> >>>>
+> >>>
+> >>> netmem skb are real sk_buff, with the modification that frags are not
+> >>
+> >> We were discussing ubuf_info allocation, take a look at
+> >> msg_zerocopy_alloc(), it has nothing to do with netmems and all that.
+> >>
+> >
+> > Yes. My response was regarding the suggestion that we can use space in
+> > devmem skbs however we want though.
+>
+> Well, at least I didn't suggest that, assuming "devmem skbs" are skbs
+> filled with devmem frags. I think the confusion here is thinking
+> that skb->cb you mentioned above is about "devmem skbs", while it's
+> special skbs without data used only to piggy back ubuf allocation.
 
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- include/linux/iommu.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ah, I see. I still don't see how we can just increase the size of
+skb->cb when it's shared between these special skbs and regular skbs.
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index e93d2e918599..99dd72998cb7 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -216,7 +216,6 @@ struct iommu_domain {
- 	const struct iommu_ops *owner; /* Whose domain_alloc we came from */
- 	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
- 	struct iommu_domain_geometry geometry;
--	struct iommu_dma_cookie *iova_cookie;
- 	int (*iopf_handler)(struct iopf_group *group);
- 
- #if IS_ENABLED(CONFIG_IRQ_MSI_IOMMU)
-@@ -225,6 +224,7 @@ struct iommu_domain {
- #endif
- 
- 	union { /* Pointer usable by owner of the domain */
-+		struct iommu_dma_cookie *iova_cookie; /* dma-iommu */
- 		struct iommufd_hw_pagetable *iommufd_hwpt; /* iommufd */
- 	};
- 	union { /* Fault handler */
--- 
-2.43.0
+> Functionally speaking, it'd be perfectly fine to get rid of the
+> warning and allocate it with kmalloc().
+>
 
+More suggestions to refactor unrelated things to force through a
+msg->sg_from_iter approach.
+
+> ...
+> >>> But MSG_ZEROCOPY doesn't set msg->msg_ubuf. And not setting
+> >>> msg->msg_ubuf fails to trigger msg->sg_from_iter altogether.
+> >>>
+> >>> And also currently sg_from_iter isn't set up to take in a ubuf_info.
+> >>> We'd need that if we stash the binding in the ubuf_info.
+> >>
+> >> https://github.com/isilence/linux.git sg-iter-ops
+> >>
+> >> I have old patches for all of that, they even rebased cleanly. That
+> >> should do it for you, and I need to send then regardless of devmem.
+> >>
+> >>
+> >
+> > These patches help a bit, but do not make any meaningful dent in
+> > addressing the concern I have in the earlier emails.
+> >
+> > The concern is that we're piggybacking devmem TX on MSG_ZEROCOPY, and
+> > currently the MSG_ZEROCOPY code carefully avoids any code paths
+> > setting msg->[sg_from_iter|msg_ubuf].
+>
+> Fwiw, with that branch you don't need ->msg_ubuf at all, just pass
+> it as an argument from tcp_sendmsg_locked() as usual, and
+> ->sg_from_iter is gone from there as well.
+>
+> > If we want devmem to reuse both the MSG_ZEROCOPY mechanisms and the
+> > msg->[sg_from_iter|ubuf_info] mechanism, I have to dissect the
+> > MSG_ZEROCOPY code carefully so that it works with and without
+> > setting msg->[ubuf_info|msg->sg_from_iter]. Having gone through this
+> > rabbit hole so far I see that it complicates the implementation and
+> > adds more checks to the fast MSG_ZEROCOPY paths.
+>
+> If you've already done, maybe you can post it as a draft? At least
+> it'll be obvious why you say it's more complicated.
+>
+
+I don't have anything worth sharing. Just went down this rabbit hole
+and saw a bunch of MSG_ZEROCOPY checks (!msg->msg_ubuf checks around
+MSG_ZEROCOPY code) and restrictions (skb->cb size) need to be
+addressed and checks to be added. From this thread you seem to be
+suggesting more changes to force in a msg->sg_from_iter approach
+adding to the complications.
+
+> > The complication could be worth it if there was some upside, but I
+> > don't see one tbh. Passing the binding down to
+> > zerocopy_fill_skb_from_devmem seems like a better approach to my eye
+> > so far
+>
+> The upside is that 1) you currently you add overhead to common
+> path (incl copy),
+
+You mean the unlikely() check for devmem before delegating to
+skb_zerocopy_fill_from_devmem? Should be minimal.
+
+> 2) passing it down through all the function also
+> have overhead to the zerocopy and MSG_ZEROCOPY path, which I'd
+> assume is comparable to those extra checks you have.
+
+Complicating/refactoring existing code for devmem TCP to force in a
+msg->sg_from_iter and save 1 arg passed down a couple of functions
+doesn't seem like a good tradeoff IMO.
+
+> 3) tcp would
+> need to know about devmem tcp and its bindings, while it all could
+> be in one spot under the MSG_ZEROCOPY check.
+
+I don't see why this is binding to tcp somehow. If anything it makes
+the devmem TX implementation follow closely MSG_ZEROCOPY, and existing
+MSG_ZEROCOPY code would be easily extended for devmem TX without
+having to also carry refactors to migrate to msg->sg_from_iter
+approach (just grab the binding and pass it to
+skb_zerocopy_iter_stream).
+
+> 4) When you'd want
+> another protocol to support that, instead of a simple
+>
+> ubuf =3D get_devmem_ubuf();
+>
+> You'd need to plumb binding passing through the stack there as
+> well.
+>
+
+Similar to above, I think this approach will actually extend easier to
+any protocol already using MSG_ZEROCOPY, because we follow that
+closely instead of requiring refactors to force msg->sg_from_iter
+approach.
+
+
+> 5) And keeping it in one place makes it easier to keep around.
+>
+> I just don't see why it'd be complicated, but maybe I miss
+> something, which is why a draft prototype would explain it
+> better than any words.
+>
+> > I'm afraid I'm going to table this for now. If there is overwhelming
+> > consensus that msg->sg_from_iter is the right approach here I will
+> > revisit, but it seems to me to complicate code without a significant
+> > upside.
+>
+> --
+> Pavel Begunkov
+>
+
+
+--
+Thanks,
+Mina
 
