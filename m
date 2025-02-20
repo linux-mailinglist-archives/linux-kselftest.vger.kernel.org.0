@@ -1,174 +1,231 @@
-Return-Path: <linux-kselftest+bounces-27054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66781A3D435
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 10:10:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60501A3D48F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 10:23:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826A8177F00
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 09:10:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67277189C15E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 09:23:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2018B1EDA35;
-	Thu, 20 Feb 2025 09:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F8D1EFF89;
+	Thu, 20 Feb 2025 09:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kZpP3Sc7"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cTABLWA1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GxwIFsMy";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cTABLWA1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GxwIFsMy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2040.outbound.protection.outlook.com [40.107.93.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6167B1EE01B;
-	Thu, 20 Feb 2025 09:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740042606; cv=fail; b=RHxxQGf29a5CuBCF3X2GXAkQ5Gq2wKrUW0wk9GPJmMdGChhKG7yLSKy3RjtsQZkM6VeRN2gmOBJpZiq+Kz1sEXkMF7MK/GuJRs9uAyYSBKWjDWPkDaiP1S4NAdwuzXc1oAvD3/+8QLLrNUO+E6ujb2IMfg54OPlkumNsH39mNDg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740042606; c=relaxed/simple;
-	bh=iKr1QiCJn2M4b5KXxUEP47dE5v40W9eWuoTP5rQkHEo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hlWKBSd0s34v4hCOQ8XtEvOuTv+cyPaDwzV/1VHqnj6wUxgKgUnER+be0erkh4FIc7lDTkh2iVKqw+xRzQGHV6IvDvZKpCbDpctjuDPJJZPTestCu68BBN3fTezfsyH/fyAs4+6UVSSyHU2CqcgP3lHo4/AheXjNjDUExnYQ+jY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kZpP3Sc7; arc=fail smtp.client-ip=40.107.93.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ug9I+Cf9XgmYvEvCiTfoW1yeYFxn081VoBaQwMcvVl9ZIi7rjfFhoisg69ESegeesj43oCMlfh5wj4d3NU7wcMO+lAteerV4iQi1A7CsFNrfns0b986GFFhLCe5nOQFfuM/+Pr5aeb89pfBAcjbgzb7AMUhpakg0dN7FV8yyjHTrGyiauvlw/QCz1UyIVVhAxQqDGfHur7WcbwIe+Uq29uwieVQSofNOJGR5fmEF8Qi/OsARgaPsP4r2DAzK48cJNu06BHKBarTxL6zE3pEYNrdK6TVyWDx/IA/AR5LkLAbMJkKP/yQYU1RvppOP7R8fJkMNVX6mBoSdYT11fsiW7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VB4j2kiWPCZPvw7QqCRGZlMmeb+hsgzcLa/hXzGnXxk=;
- b=FrkuN6cdAa0nw9cPuAB28wrHfJT1OlUJ63rEllN0Zql2RrF91uMNjc4wQKl/9DkoQ/Wz9vIMCgx8wr1UosQ3ahcQqHL7i7OrdgVt+6gLSAaWeqZeCgz+ZOKcWKoit8uCL5VuIGqNV7IDWdzX4GGP7rD8pkMMZ7oxGJ9WgYzS6UZ09oT9zs/LuwNqQLcaFZ/xhvsovdeNhHRgJ9OnL1vOK0uGgr01hsNj+gHlk1RcMCdB56FIgs9kHObVUnjCkwQPf7xnTsxio6JsidrZMQ67WHrMSXUjfbF3H1TPN6GN0fm8xae7enu0VTI8ROTgSmoKsTKdwwC/7/znD7riLlFBBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VB4j2kiWPCZPvw7QqCRGZlMmeb+hsgzcLa/hXzGnXxk=;
- b=kZpP3Sc7XNIbgagW2wLh5rgthVUqVJdb070iDu37UXk+QZf+krwy0n7lo665HnjLRCJ6A6su7PyjXCy+oxljfjn3iiKR4vm+lb9RIFAHmDlYG3QRjgEZD7urwRSfzR8HibRbKsyXnJEr8ICVXsVVhMk0IKGgyPGdGb5MOtAc/7Qt9DJgkIOVWR4treDKeDGSRovu4B1FLvCz+CfQLYI1+E7iBosJzVvBbzSJq+XPiV5WplcEpGlKGBCffMJJZ/KWOu6qhTu4twlWhwLQ6gDHZ9nq2tj72AQGvNs8Xh103uEw+lfBKnEjBz0heOujoKMFFfcaQ0alJs1Kma77Ga5/dQ==
-Received: from CY8P220CA0031.NAMP220.PROD.OUTLOOK.COM (2603:10b6:930:47::17)
- by MN0PR12MB6343.namprd12.prod.outlook.com (2603:10b6:208:3c0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.14; Thu, 20 Feb
- 2025 09:10:00 +0000
-Received: from CY4PEPF0000E9DA.namprd05.prod.outlook.com
- (2603:10b6:930:47:cafe::5a) by CY8P220CA0031.outlook.office365.com
- (2603:10b6:930:47::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.16 via Frontend Transport; Thu,
- 20 Feb 2025 09:09:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000E9DA.mail.protection.outlook.com (10.167.241.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8466.11 via Frontend Transport; Thu, 20 Feb 2025 09:09:59 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 20 Feb
- 2025 01:09:42 -0800
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 20 Feb
- 2025 01:09:42 -0800
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Thu, 20 Feb 2025 01:09:41 -0800
-Date: Thu, 20 Feb 2025 01:09:39 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>
-CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v6 14/14] iommu/arm-smmu-v3: Set MEV bit in nested STE
- for DoS mitigations
-Message-ID: <Z7bxU3a0bc1i49Ip@Asurada-Nvidia>
-References: <cover.1737754129.git.nicolinc@nvidia.com>
- <436ac2021bb3d75114ca0e45f25a6a8257489d3b.1737754129.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A00A1E1C36
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 09:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740043353; cv=none; b=rv2Vsx4loIwrD8Qo4hWw9NUz3Vq6Lu1CE56KMbLfQ6QH5A8zl1KigkJJg3jIY2t4t8/LqW0z9VUX8N2KsdksbY0BOq6/Zg8gN9cJKwmurq9hTu/L39Yk13+TtEX311ybWSgekm3DCUfcDutEeS5dE3svuGH1PVGLDrWgtZdw3MI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740043353; c=relaxed/simple;
+	bh=xzg+zOCL9eXvDKwXM1Ze1Rmr5rHFnHN350xGkZdmSTg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TxhEpC924R5iUhjh6uvJQlHi2z1EnEIilGCEBI/c/JZMR8vtO13T3zyVLf6fBTpqZRHeERP1QjrPcPANevrA56JoMUheUcaFonDgu0nHJb1vHQqA2/ucAO5T6FJMNVb4oG3/TImi6K9xCqatKYHZoADr91ZxzgYMKRpkny+uPxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cTABLWA1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=GxwIFsMy; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cTABLWA1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=GxwIFsMy; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8108521172;
+	Thu, 20 Feb 2025 09:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1740043349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=7VfvyBLyGJBIuCnedMrhYstqeRSaOTT8ZfoDIjoIdoo=;
+	b=cTABLWA1W4wubC7UKoCdnrF1mI1WE5Ap0gWfSeHg7mjShVfQVVn7KuDp7wjOErgAn4c/kU
+	4IZZXBscd7SbErqKxRgGRkQ8CpEivnc7lPrV2pNgWgRklq3RswEm7jDLUYXdC57LHhB8Q9
+	QtzNX+7pfXAvj0CCnnuOaqi6JBJjThM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1740043349;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=7VfvyBLyGJBIuCnedMrhYstqeRSaOTT8ZfoDIjoIdoo=;
+	b=GxwIFsMyV2fbMWRwjaiB7RwVePq9xHEOleSGEy1FYsfBt+eVIS7/4XYahSeb5niVCvdmIr
+	j/g20BNmbVZ8PTBA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cTABLWA1;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=GxwIFsMy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1740043349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=7VfvyBLyGJBIuCnedMrhYstqeRSaOTT8ZfoDIjoIdoo=;
+	b=cTABLWA1W4wubC7UKoCdnrF1mI1WE5Ap0gWfSeHg7mjShVfQVVn7KuDp7wjOErgAn4c/kU
+	4IZZXBscd7SbErqKxRgGRkQ8CpEivnc7lPrV2pNgWgRklq3RswEm7jDLUYXdC57LHhB8Q9
+	QtzNX+7pfXAvj0CCnnuOaqi6JBJjThM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1740043349;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=7VfvyBLyGJBIuCnedMrhYstqeRSaOTT8ZfoDIjoIdoo=;
+	b=GxwIFsMyV2fbMWRwjaiB7RwVePq9xHEOleSGEy1FYsfBt+eVIS7/4XYahSeb5niVCvdmIr
+	j/g20BNmbVZ8PTBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4E9F313A69;
+	Thu, 20 Feb 2025 09:22:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id J8usElX0tmeecgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 20 Feb 2025 09:22:29 +0000
+Message-ID: <5fe78422-f348-414c-9ff2-78812ba9a949@suse.cz>
+Date: Thu, 20 Feb 2025 10:22:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <436ac2021bb3d75114ca0e45f25a6a8257489d3b.1737754129.git.nicolinc@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9DA:EE_|MN0PR12MB6343:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2563b60-df2e-4e19-fe07-08dd518e5a2b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tXpKN0JgNyvvH1ADrMqnCaR4QGJnw27ywdfKh/8JxNJhMfYpm9zIH6I69sUY?=
- =?us-ascii?Q?AozBNeS03g47yZMrygmCn6IEULJzuqYfkW8rYc2c92cmQolrPzDhd495rWmQ?=
- =?us-ascii?Q?YaH0iB8eyz+/svCVXOHk0Cdu9rPXAwmdrK5lradDtG86s64K13M4QQm1abza?=
- =?us-ascii?Q?XJ68mlgBk+kqqClbRVGd8KooNeUcdNrX8tfltzk3Y/8sz7b+Licakqh6Q2H4?=
- =?us-ascii?Q?Rd39MhqoK0yvbd6vocQlj3OdbHHmjpNvMCmvv4Je2k1nZ7Pw6mZeagRp0ZTl?=
- =?us-ascii?Q?l8pk1SdVQBPunp+8UOpUw1yAKo8HxUJzBAnoz9tmvWsrFmKVjTMhxDnywuyx?=
- =?us-ascii?Q?J0oyCnpb+mGh0PfRaS2AX3G7HnLdk5pDJgRBaUpfI4yiAqzrOxCbhqZeTzaN?=
- =?us-ascii?Q?NflZSV+SmghsLRyyaB/kJ+TTRdCAtTPLfeKGgKUUcRjdAN/bvBY5zuZcJSyj?=
- =?us-ascii?Q?Zw2o/O/WbM4imjiTzlzbuDs4V8NfffOiX0OYmZ6Rii5fSdRSdHy37Bupa5Bh?=
- =?us-ascii?Q?J69qnbaZ0LjlUL92KXliA2u88785jYZVS6waMYjQNBOWa2bmSNmk2A9U6Ikp?=
- =?us-ascii?Q?JZVBJKxRWTMXzQWoW1cQgSUHIuGq1+RU435Fs1CYR8d/yQU9AhXPYV6ANU3B?=
- =?us-ascii?Q?6nReP93NhgPIqj8RSfEIKTMLH+Er3beUrwhRZAKLP+hPAV+WR2/aVFQMnq8N?=
- =?us-ascii?Q?+U/Q7b5B9rGs5Rb81JabQAwYddwbXxTIBXl9i3UuFshBgUW+4X5YqeCfMQDc?=
- =?us-ascii?Q?lUHtWkRjJbUL8+8bJEeEbxUCCd9mGk3MNUbLJn/frUwS3iDVewMmIFKQ1imO?=
- =?us-ascii?Q?cDU9uRovHZtpgRTfySJFjaUNjzrnqsWkoTByA5id9XxxYMJl+dyaKjl0hhah?=
- =?us-ascii?Q?jcB8nn3FgUKXIB9BjXK9WTpPAFy0A5b1mb4w2Gp29QECvwTge0kc+nSIKf6r?=
- =?us-ascii?Q?iI1d/hnqK5ZYm5NesSJVGJuFTfizUFPu1RCBxahVtZHUMQ+MKNf7YIyKErjI?=
- =?us-ascii?Q?fkdVtMss2TmycgZsKFnlsNjNFTann9VLM5R5FI4i+Mm47MmW0ojExgVjwTRW?=
- =?us-ascii?Q?mzz4DxygrvG6d1oIglIPan+QgDv5fw6ohbTBODvSJxHRUR8+cDzvVvSMnZsp?=
- =?us-ascii?Q?xGw9qUXC5xpLNMqfPTpiMcjAj39DJdMcfkp1jsWJzECzNY3b5lQLadmqFtt1?=
- =?us-ascii?Q?IlHT+FaQ4NBYzxP6nZAjtXIXjlGVj4j16j1585HzQE4a84xK9NQPFMldKNPA?=
- =?us-ascii?Q?UKSmSCxZHLMiNhPaXfCXGSSOrqQMjZN/sb1ljFkv/UMgRJ3jvuB5MuOF19o1?=
- =?us-ascii?Q?dPuwvzAv5kE7OErfNXz+ayMKIvtGJPlpUYMcgcqHkCR3nmxVA6X4XxRK7mcQ?=
- =?us-ascii?Q?2vECmqTpbok7xNK8fhzqanpY2vDKI2YDJhjZBXgAoY9V0WBUHQ0YQ4C/9+Li?=
- =?us-ascii?Q?AcGMYzxJgEzUYO0Aw2xDHj2EmlG3xkiw2OtDZ1sqA1TsJd+Gv1KdDU0YV3wz?=
- =?us-ascii?Q?b36mUEk74ncEAHI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2025 09:09:59.5110
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2563b60-df2e-4e19-fe07-08dd518e5a2b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9DA.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6343
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem
+ mappings
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Kalesh Singh <kaleshsingh@google.com>
+Cc: David Hildenbrand <david@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
+ <paulmck@kernel.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>, Juan Yescas <jyescas@google.com>
+References: <cover.1739469950.git.lorenzo.stoakes@oracle.com>
+ <CAC_TJveMB1_iAUt81D5-+z8gArbVcbfDM=djCZG_bRVaCEMRmg@mail.gmail.com>
+ <45297010-a0a4-4a42-84e8-6f4764eab3b3@lucifer.local>
+ <41af4ffb-0383-4d00-9639-0bf16e1f5f37@redhat.com>
+ <a2e12142-3eb2-48c9-b0d9-35a86cb56eec@lucifer.local>
+ <CAC_TJvf6fOACObzR0ANFFrD+ecrP8MbXEZ_ZdzRu0Lg4RunS9g@mail.gmail.com>
+ <e07dfd31-197c-49d0-92bd-12aad02daa7e@lucifer.local>
+ <CAC_TJvfBvZZc=xyB0jez2VCDit-rettfQf7H4xhQbN7bYxKw-A@mail.gmail.com>
+ <6e356431-5ac9-4363-b876-78a69ae7622a@lucifer.local>
+From: Vlastimil Babka <vbabka@suse.cz>
+Content-Language: en-US
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <6e356431-5ac9-4363-b876-78a69ae7622a@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 8108521172
+X-Spam-Score: -4.51
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Fri, Jan 24, 2025 at 04:30:43PM -0800, Nicolin Chen wrote:
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> index ceeed907a714..20a0e39d7caa 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-> @@ -43,6 +43,8 @@ static void arm_smmu_make_nested_cd_table_ste(
->  	target->data[0] |= nested_domain->ste[0] &
->  			   ~cpu_to_le64(STRTAB_STE_0_CFG);
->  	target->data[1] |= nested_domain->ste[1];
-> +	/* Merge events for DoS mitigations on eventq */
-> +	target->data[1] |= STRTAB_STE_1_MEV;
+On 2/20/25 09:51, Lorenzo Stoakes wrote:
+> On Wed, Feb 19, 2025 at 12:56:31PM -0800, Kalesh Singh wrote:
+> 
+> As I said to you earlier, the _best_ we could do in smaps would be to add a
+> flag like 'Grd' or something to indicate some part of the VMA is
 
-This should have cpu_to_le64(). Fixed accordingly.
+In smaps we could say how many kB is covered by guard ptes and it would be
+in line with the current output, and the fact it's already scanning page
+tables, so virtually no new overhead. But it wouldn't tell you the address
+ranges, of course.
 
-Thanks
-Nicolin
+> guarded. But I won't do that unless somebody has an -actual use case- for
+> it.
+
+Right, we need to hear that first. Also I'm a bit confused about what's the
+issue with the existing Android apps and the proposals. Do the existing apps
+expect to see particular PROT_NONE regions, which would be gone (become part
+of the surrounding vma's) when using guards instead? Then clearly there's no
+way to use guards for them without breaking their assumptions.
+
+But assuming future versions of these apps for future android versions would
+have to adapt to guards instead of PROT_NONE, why do we have to promise them
+to represent the guards, if the point is just so they adapt to the new state
+of smaps in their dubious security checking code, and not break anymore?
+
+(but geez, if android apps are to use the android apis, which is java based
+(IIRC?) why were there ever allowed to read /proc in the first place? such a
+mistake, sigh)
+
+> David's /proc/$pid/pagemaps suggestion is excellent, avoids all the
+> pitfalls, exposes guard regions to anybody who really really wants to know
+> and doesn't interfere with anything else, so this is what we'll go with.
+> 
+> Regards, Lorenzo
+
 
