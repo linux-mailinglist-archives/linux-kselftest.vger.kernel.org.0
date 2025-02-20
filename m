@@ -1,280 +1,459 @@
-Return-Path: <linux-kselftest+bounces-27112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1172A3E60E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 21:46:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A66EA3E63A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 22:00:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7EBD7A82D7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 20:45:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87EA27A87A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 20:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C425B1EB198;
-	Thu, 20 Feb 2025 20:46:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06A4B1EB9FA;
+	Thu, 20 Feb 2025 21:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Br586DHA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwuPZOJ/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2042.outbound.protection.outlook.com [40.107.92.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21541E4AB;
-	Thu, 20 Feb 2025 20:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740084378; cv=fail; b=S6LgWFrUPIjeV2F/BOefhAmr0z9RQNCqk37Val1U7uVttno1R0nhQZGCpdy6Iy7Y8VnGzL6J4Qlj4FISeHtcCvUA/IE2slBKI7N39vX9P0CTOy6ULWRS4qopB9yuT03AkvUrWiy+vo+CIyC98G/82ZbZV34K0fa+h9MnztFc9kA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740084378; c=relaxed/simple;
-	bh=thQbq7lsK7utedwJjQoAv8Sx0IALEbnU5EXlvnj/EFU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t6vJZnmBHZsC7AMfhvmwKqnkOqudYvTPblAF/EaGJCHVsMB9Ak/mmw1uwAhjUT5hYhIpLvoEsDHCnS+xsKaBIb4G+421zDJRqIuH19ArZdm9it8llpUdoLg1n/zVtxAbEiUswzKe6D2NCTGU5cMG8Hce5cw6MKiXxtSEqeiaEiw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Br586DHA; arc=fail smtp.client-ip=40.107.92.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lLh1tdYN78lfBXWsygoBEaKldEATjq8lMUBfLuC0SqCDOjBTNULN0pJgHQJ7IfX10L+58JRIv1Sl3W6uTaWOdSJ/eLZ7iNLYCdXNeSd5pA+2NO69ZvGkfMGRQw1wT70Kf2TAYN+o9zCyIBDOxEn8AGRMKVwUWnjXn82fVfIckT3QdP2Y5Epw3xwE9GPHLyInpMLo2w+peWBXlBDhP10U1ILGwOSATGRpjj1jQ5eWF42FiXlIssZ9umaJhMyKAHD4agm6/sMl76nvEarM0idfijKxgegcvmRBDECpK20K5SeXRfDZO0KgMJg+daWGn4P4Z8KIRSVCd5GH2gA6IMGj1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rIgsBPUs1pAndce6o7L1w7JDUoloTdFqm3UKzTdqSpI=;
- b=sgz0BuieOCwhJW9mFUi5ac+FMWi1wFdymXK1shlbOreCtmvjXPSU9Cb4f5xHn+TsiG0gOmmkbRQoAix5J3xsdx/EEIYiDipnyIVDyqDmo4+/m/0o65Qx5LJ8Y6BiJpb68kZqOjsFuusgKDhVVDjgQZ3mPOzkNA0TAuj9lVXtbGCSCOteN2nlRl90EzwLPVXoZju8o+JkYDIgsdIT94tOZpHPZ0jfw07dD0mlGce+AAxHe6j8yHVxIWES+On4hi8mBgDS5T7CaIhzaEWzgQRZ3aWo/iG/SIJbwqEQmcfEEvNrOUBXnjgT7sZreVLYtmiIkpSEUTSPKbkGsjsvGEJ+jA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rIgsBPUs1pAndce6o7L1w7JDUoloTdFqm3UKzTdqSpI=;
- b=Br586DHAWklCRfViEadcPx8fz8L3oqYCm0OK0xYefDFEzUtBJnaoGf0w0T3r2+UMElOOIzT5nSKdATCO7zKf7bkI4c0Td8kxqrqkewmLCbp8zTSlYlhOB8i3AoErWdURhDR3HMF6GiWrBWVFDniPuLyI5vg2L/zXEQ4XzepE1955/EbO3BNUqiok25rpPruBUf6Mes4TRJ1gcK8Et0JD44ccWDt3NphPIonRwyVZ6WWL8cNE30y+Rbirg71C+viDOp7kJehX9ea0sdO5woy6JugSp7ee3kOrTQlLfQF/t9OoqVeQQ1x8mJVFKCIL4fz8igXHnbYJamWsZnEOoPqjKQ==
-Received: from BY5PR20CA0002.namprd20.prod.outlook.com (2603:10b6:a03:1f4::15)
- by LV2PR12MB5917.namprd12.prod.outlook.com (2603:10b6:408:175::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Thu, 20 Feb
- 2025 20:46:06 +0000
-Received: from SJ1PEPF000023D8.namprd21.prod.outlook.com
- (2603:10b6:a03:1f4:cafe::58) by BY5PR20CA0002.outlook.office365.com
- (2603:10b6:a03:1f4::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.14 via Frontend Transport; Thu,
- 20 Feb 2025 20:46:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF000023D8.mail.protection.outlook.com (10.167.244.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8489.2 via Frontend Transport; Thu, 20 Feb 2025 20:46:06 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 20 Feb
- 2025 12:45:49 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 20 Feb
- 2025 12:45:48 -0800
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com (10.129.68.10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Thu, 20 Feb 2025 12:45:47 -0800
-Date: Thu, 20 Feb 2025 12:45:46 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, <robin.murphy@arm.com>,
-	<will@kernel.org>
-CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <joro@8bytes.org>,
-	<suravee.suthikulpanit@amd.com>, <dwmw2@infradead.org>,
-	<baolu.lu@linux.intel.com>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v6 13/14] iommu/arm-smmu-v3: Report events that belong to
- devices attached to vIOMMU
-Message-ID: <Z7eUeg/SmiJGTgbi@Asurada-Nvidia>
-References: <cover.1737754129.git.nicolinc@nvidia.com>
- <b71a5b132e8ba771998c5b810675f10b100d4ff3.1737754129.git.nicolinc@nvidia.com>
- <20250218171821.GG4099685@nvidia.com>
- <Z7TRNL0u0YmN30ax@nvidia.com>
- <20250218185046.GK4099685@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A5022087;
+	Thu, 20 Feb 2025 21:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740085231; cv=none; b=HA5NOCzDzKp8+RlpbEUGBFhvK0N7VFCFS9/CX2nAkWigzEn3gWqa0CXqKah4mFGL548lhPwN53fsr+Ytc5mWGw+JhU11BJ3+bVOzhP0Co3xPNwFFpJmHuFcWKWn/hz5YKmESBqcrBTJDhrxmKkmMKPba7DPJy1J1OtA7c+h1vsU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740085231; c=relaxed/simple;
+	bh=wjKQPQ8w1mhfkx3/7oMVDnQGTMOD5B2byO68pcXjvio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XVMRsTQg37jmHFf8ex+bjca+xhKad5fY/d9YY4s+g7sKbGKFgUhDYBDXdiKCbBUt9bbvprYchy5eUIs5A1pxfwCHxayWVXdRRAR7vLDZFFzWwyLOMNUP918H0Vzof2Pe34EUW2WWZMsCiG7uvL73q/vuaAL2GvHzsIj0AnMoOEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwuPZOJ/; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2fc0bd358ccso2888858a91.2;
+        Thu, 20 Feb 2025 13:00:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740085229; x=1740690029; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ocAZMQJdnmPkwi++slUrJsYlfsHZyAYOpg1sHJK7ARg=;
+        b=XwuPZOJ/eXtj2iL/KNjdyVodsG9gpU0FO15IvD0BGveshInsjP6zjUYbBnVnVdNDkV
+         tqIYUY0iHFdBlumd186LfIO1J09hvJJE2B6O+DyuA5LaieIrJdH32fSf7yFMAItrOKGJ
+         3ibUzMjFPzEBp2IH7ypuXKlTHqYU1r4QNHO8wEAGtr2+EAHX0tMaSpKm0NRXwm2I8rzh
+         HOe9n8o5HZqztGJzYhPv+5r07dgemuCR6YBusT+LMXqIn70RZ1tD4JGB/RiLVt6QD/Ju
+         0PBInW0yLUc/pNoMWJfmwDk21QTR+Xdnq5UcrR0u0diGl9gcoA30YgbgSnKmsTAdFosJ
+         lZZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740085229; x=1740690029;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ocAZMQJdnmPkwi++slUrJsYlfsHZyAYOpg1sHJK7ARg=;
+        b=PbzcGUu84WksgXMMwVW1h+8eFwh3iFKAbZ649Uv7EfXRblMFhRkBC6ZBMb18R9d9ms
+         bz3/tcxzpeiAr8W+K+7k9gQ10T8bwfagrLn5lbWLUSQTuN3PTZyUM2czgXsEIf6XKasX
+         +BuNQyObwxkxfSiPVx4vasHjD/NffxRsE1YSFJwMzpxCNT0gXRQz/YxmwVg3UurdOv6S
+         gAZENoRMzG10pJtKaWERhfamyoVx0PrHiG+iR80my4ZckRU6Pm2w/vczzOwXDGnX/cmd
+         Q/p6xetYQu1aRgPenE1xhTXpU6frU4t6q6Mw1THkn5PZuX8O8tJHjt+D0IQDiv24HWWg
+         4viw==
+X-Forwarded-Encrypted: i=1; AJvYcCVAafO5HQRTtmH7+Iuq3zYlKLDtbnQNeYDYxwBZhV0R+wZWlvyovzKKsRfyIX73nqlz0vlzkRTCxCBZgvIu@vger.kernel.org, AJvYcCVcc4OnI/FNs6LkpHyvQXJfzXu4O7Yt41ADuIM+HPZC1xqk4VGxc3yXY7rrD7lgrtjTCIXyuvZCsi93RZMepP/D@vger.kernel.org, AJvYcCW13MvTdsfuoW6OyL5PU3H84cruLskDn4xekm1sV5y4tJLdJrfiVhFKnA5HgyI7PNlV/8g=@vger.kernel.org, AJvYcCWOfytg6Qmup/80oEcDsdBgBEQZy5K7Q+V24T0aPXzadGr9onFpvIY/BNy4lYyNxEwXVbiA1VKh/eDi@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx80Vi5K1iLJu4FEvp9DXK+hfOyPy1P4I8NXp2Kr9WTJOuch0sK
+	pYP+egVHR4qDkTmHce+cZHjasVOXcjZvwZ9HG4JROnzByf7ZAoo=
+X-Gm-Gg: ASbGncvXwSuFRbgg7SClnsMwM+PtrgyTeEHTAGVoj1uqZ0x41++/gUgFPi8Lwx4Chsu
+	kiynt2fDFotem7hmyzje/HLkLE2zINqpuyI2jJtg3iBc28dOl/679OK9ccofrUMbi8fRwuz+Ann
+	ytDO4WiT6Psok5mBUy+HcpyZuCVsh33wcmPVNBfOo9Nm7EF0h0//4lVBq3XRJsHidGLtRX0rnTc
+	cvkeQC3C1edXdzFtAkUHbJUh6ohdqNnQZi+wce1ir8iucedQd5ICs5ZZjB9sA5BJC+QADHXj1ky
+	GyTZu8G6fFRKr8w=
+X-Google-Smtp-Source: AGHT+IFtOMuMQhxcIAllXScRB6FKHAtOBoya+bQ7QQWvGb6kPdplhyv4FFHw5xoxXDq9Yn1+KHBWWg==
+X-Received: by 2002:a17:90b:3d0e:b0:2ee:f687:6acb with SMTP id 98e67ed59e1d1-2fce78a584dmr1036201a91.13.1740085229080;
+        Thu, 20 Feb 2025 13:00:29 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2fc13ad35absm14225674a91.25.2025.02.20.13.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2025 13:00:28 -0800 (PST)
+Date: Thu, 20 Feb 2025 13:00:27 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, virtualization@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Shailend Chand <shailend@google.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Willem de Bruijn <willemb@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me,
+	asml.silence@gmail.com, dw@davidwei.uk,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Victor Nogueira <victor@mojatatu.com>,
+	Pedro Tammela <pctammela@mojatatu.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v4 3/9] net: devmem: Implement TX path
+Message-ID: <Z7eX6yaRsGqmSzy7@mini-arch>
+References: <20250220020914.895431-1-almasrymina@google.com>
+ <20250220020914.895431-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250218185046.GK4099685@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D8:EE_|LV2PR12MB5917:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31e65159-6a33-416b-1b6b-08dd51ef9923
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?cLTVXT9N7doFeE5P4/0yE7+DZS7RiisSRSidhCRiFcjl681Hea0ojidE+u1s?=
- =?us-ascii?Q?SKO6KKhizJiD7GEoK8vbiqM+BbG8Vey+CoY+sxLM5c2dw4qK8ArCnVdkKA76?=
- =?us-ascii?Q?9HeVJRETQmsxO0I2obi/hbFJ9aBF0sXvsiowwMR7Dt0bzTgVWFcNMqZrnWvG?=
- =?us-ascii?Q?sxpH/WOHk3WAZSCjdL5WDlbPcFTduIEyBc4qM3OMRc1Rhic4ty/Slr5stjTY?=
- =?us-ascii?Q?BB0RiNQ85Tma51Q755W7OcWcHJRFUj6mWqrybq8NzaEK0Nr+AP0sXJ6EyirF?=
- =?us-ascii?Q?+4H64ld2aukTEqcXeuFzUaq6sJ3bIhvh0xyVBzWqgmu1ryWqUemKJQ4wSjsD?=
- =?us-ascii?Q?uFILy1B3oGRNZKkqyZNNitlyOybYUJ8aPa0SYn7ShGjqNgR32yEQMWGZAOps?=
- =?us-ascii?Q?gWv/TDKJTnHiiRs2ZOgNpxul1KuS9+HgBVgKG+60F459Thks3F9bx0+id3h9?=
- =?us-ascii?Q?/dFxTZ6/1JKwVN5QcuhUUKYuZR2xxAezhmYw8Kh5KmS2Ed5gaQl05EAH1DCr?=
- =?us-ascii?Q?cdGwqh8T6drt/oqf/Q0AOltP8ksO6rr8UY0+wlJh4bJqlTV/gkvDvT4BBxsD?=
- =?us-ascii?Q?mPsM6pnS+IbQvsc9ZoAq/NcNkenVjU4ClvJ35WxZzQ7Bqru9NI9XVV7Ra4KQ?=
- =?us-ascii?Q?tIdBDClSs6hcIM4A05GlbGBrEC8L0BE5SSHyRduW/wV/vGGJSM4ecVzrQJV7?=
- =?us-ascii?Q?LbWLFzOemrWaWiuZ6tRe1v3CWN6h0OuZpqpQsC6P6yI40tlxJyfN/vjK6jDB?=
- =?us-ascii?Q?/F2cWygWU7vO/xeeG3osOmRQQpjqsNrLgKMUPagq7LdjVkpLG/RstrNq9WYe?=
- =?us-ascii?Q?XZYe9C+3oAC0PBzaO3SdkEpd22mAKLVcKQQtRLrx+5UHfF6ULyhzTbYXTVJ6?=
- =?us-ascii?Q?TcfF3ZwUOywtqXigHz8WuKFQNTqhRypT/S7BB0koDPHhvd6OanbCBjGJ6N2F?=
- =?us-ascii?Q?dxbvYU8CZIBiv3v35r0BI9je7owz7vVsKESaxVFxELUxkUBW6olankHusSmt?=
- =?us-ascii?Q?nCmBTzBCcbtl5vO6CA6HIE4DSRNYAbgs67Le9ZKc6abD8ZxMlDoWGrctpA3U?=
- =?us-ascii?Q?ZrQIMc4z11ThWehS8dE08VMbNDzZUW9kwy+QSOV5Sqrmatwemus9eWc7Htte?=
- =?us-ascii?Q?3+XVnUuU6RdnLNXAla6WxHQD+0F/kaH+pmQomJ/OKaTO+p/TBirEQZuY0+zL?=
- =?us-ascii?Q?cEDHeSvAS2GCE9jlJsvEx7oSbqileJIRYiANkO12peQ0i0Mkhnn9sb3cciyf?=
- =?us-ascii?Q?HtqdixpbW11vOf4Nl9oZJiUbt9UXsJ+c6BQ88Dgnc4h8lP0Lkd91MvCXS6Ph?=
- =?us-ascii?Q?UGPZmgJSd9OrM5wzsPugxufzWsG4XmGmvbvv5FAed18ddRiMjmnmySrfh3Zg?=
- =?us-ascii?Q?pVb8fQCUcAutUjw3wkiF0UWKkDbH8Ex+FQnw4XuFjfntdCVd8GkbnOj1OjR7?=
- =?us-ascii?Q?FEgaJ3d/VkVGvlvvUnh1OQITNSP3rXiCZ515vqrgoGCUq8++1wJswW1frogn?=
- =?us-ascii?Q?0Sj+Vv8llIZ9vdM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2025 20:46:06.4570
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31e65159-6a33-416b-1b6b-08dd51ef9923
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023D8.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5917
+In-Reply-To: <20250220020914.895431-4-almasrymina@google.com>
 
-On Tue, Feb 18, 2025 at 02:50:46PM -0400, Jason Gunthorpe wrote:
-> On Tue, Feb 18, 2025 at 10:28:04AM -0800, Nicolin Chen wrote:
-> > On Tue, Feb 18, 2025 at 01:18:21PM -0400, Jason Gunthorpe wrote:
-> > > On Fri, Jan 24, 2025 at 04:30:42PM -0800, Nicolin Chen wrote:
-> > > 
-> > > > @@ -1831,31 +1831,30 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu,
-> > > >  		return -EOPNOTSUPP;
-> > > >  	}
-> > > 
-> > > There is still the filter at the top:
-> > > 
-> > > 	switch (event->id) {
-> > > 	case EVT_ID_TRANSLATION_FAULT:
-> > > 	case EVT_ID_ADDR_SIZE_FAULT:
-> > > 	case EVT_ID_ACCESS_FAULT:
-> > > 	case EVT_ID_PERMISSION_FAULT:
-> > > 		break;
-> > > 	default:
-> > > 		return -EOPNOTSUPP;
-> > > 	}
-> > > 
-> > > Is that right here or should more event types be forwarded to the
-> > > guest?
-> > 
-> > That doesn't seem to be right. Something like EVT_ID_BAD_CD_CONFIG
-> > should be forwarded too. I will go through the list.
+On 02/20, Mina Almasry wrote:
+> Augment dmabuf binding to be able to handle TX. Additional to all the RX
+> binding, we also create tx_vec needed for the TX path.
 > 
-> I think the above should decode into a 'faultable' path because they
-> all decode to something with an IOVA
+> Provide API for sendmsg to be able to send dmabufs bound to this device:
 > 
-> The rest should decode to things that include a SID and the SID decode
-> should always be forwarded to the VM. Maybe there are small
-> exclusions, but generally that is how I would see it..
+> - Provide a new dmabuf_tx_cmsg which includes the dmabuf to send from.
+> - MSG_ZEROCOPY with SCM_DEVMEM_DMABUF cmsg indicates send from dma-buf.
+> 
+> Devmem is uncopyable, so piggyback off the existing MSG_ZEROCOPY
+> implementation, while disabling instances where MSG_ZEROCOPY falls back
+> to copying.
+> 
+> We additionally pipe the binding down to the new
+> zerocopy_fill_skb_from_devmem which fills a TX skb with net_iov netmems
+> instead of the traditional page netmems.
+> 
+> We also special case skb_frag_dma_map to return the dma-address of these
+> dmabuf net_iovs instead of attempting to map pages.
+> 
+> Based on work by Stanislav Fomichev <sdf@fomichev.me>. A lot of the meat
+> of the implementation came from devmem TCP RFC v1[1], which included the
+> TX path, but Stan did all the rebasing on top of netmem/net_iov.
+> 
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+> 
+> v4:
+> - Remove dmabuf_tx_cmsg definition and just use __u32 for the dma-buf id
+>   (Willem).
+> - Check that iov_iter_type() is ITER_IOVEC in
+>   zerocopy_fill_skb_from_iter() (Pavel).
+> - Fix binding->tx_vec not being freed on error paths (Paolo).
+> - Make devmem patch mutually exclusive with msg->ubuf_info path (Pavel).
+> - Check that MSG_ZEROCOPY and SOCK_ZEROCOPY are provided when
+>   sockc.dmabuf_id is provided.
+> - Don't mm_account_pinned_pages() on devmem TX (Pavel).
+> 
+> v3:
+> - Use kvmalloc_array instead of kcalloc (Stan).
+> - Fix unreachable code warning (Simon).
+> 
+> v2:
+> - Remove dmabuf_offset from the dmabuf cmsg.
+> - Update zerocopy_fill_skb_from_devmem to interpret the
+>   iov_base/iter_iov_addr as the offset into the dmabuf to send from
+>   (Stan).
+> - Remove the confusing binding->tx_iter which is not needed if we
+>   interpret the iov_base/iter_iov_addr as offset into the dmabuf (Stan).
+> - Remove check for binding->sgt and binding->sgt->nents in dmabuf
+>   binding.
+> - Simplify the calculation of binding->tx_vec.
+> - Check in net_devmem_get_binding that the binding we're returning
+>   has ifindex matching the sending socket (Willem).
+> 
+> ---
+>  include/linux/skbuff.h                  |  17 +++-
+>  include/net/sock.h                      |   1 +
+>  net/core/datagram.c                     |  48 +++++++++++-
+>  net/core/devmem.c                       | 100 ++++++++++++++++++++++--
+>  net/core/devmem.h                       |  41 +++++++++-
+>  net/core/netdev-genl.c                  |  64 ++++++++++++++-
+>  net/core/skbuff.c                       |  18 +++--
+>  net/core/sock.c                         |   6 ++
+>  net/ipv4/ip_output.c                    |   3 +-
+>  net/ipv4/tcp.c                          |  46 ++++++++---
+>  net/ipv6/ip6_output.c                   |   3 +-
+>  net/vmw_vsock/virtio_transport_common.c |   5 +-
+>  12 files changed, 309 insertions(+), 43 deletions(-)
+> 
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index bb2b751d274a..b8783aa94c1e 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1707,13 +1707,16 @@ static inline void skb_set_end_offset(struct sk_buff *skb, unsigned int offset)
+>  extern const struct ubuf_info_ops msg_zerocopy_ubuf_ops;
+>  
+>  struct ubuf_info *msg_zerocopy_realloc(struct sock *sk, size_t size,
+> -				       struct ubuf_info *uarg);
+> +				       struct ubuf_info *uarg, bool devmem);
+>  
+>  void msg_zerocopy_put_abort(struct ubuf_info *uarg, bool have_uref);
+>  
+> +struct net_devmem_dmabuf_binding;
+> +
+>  int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>  			    struct sk_buff *skb, struct iov_iter *from,
+> -			    size_t length);
+> +			    size_t length,
+> +			    struct net_devmem_dmabuf_binding *binding);
+>  
+>  int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>  				struct iov_iter *from, size_t length);
+> @@ -1721,12 +1724,14 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>  static inline int skb_zerocopy_iter_dgram(struct sk_buff *skb,
+>  					  struct msghdr *msg, int len)
+>  {
+> -	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len);
+> +	return __zerocopy_sg_from_iter(msg, skb->sk, skb, &msg->msg_iter, len,
+> +				       NULL);
+>  }
+>  
+>  int skb_zerocopy_iter_stream(struct sock *sk, struct sk_buff *skb,
+>  			     struct msghdr *msg, int len,
+> -			     struct ubuf_info *uarg);
+> +			     struct ubuf_info *uarg,
+> +			     struct net_devmem_dmabuf_binding *binding);
+>  
+>  /* Internal */
+>  #define skb_shinfo(SKB)	((struct skb_shared_info *)(skb_end_pointer(SKB)))
+> @@ -3697,6 +3702,10 @@ static inline dma_addr_t __skb_frag_dma_map(struct device *dev,
+>  					    size_t offset, size_t size,
+>  					    enum dma_data_direction dir)
+>  {
+> +	if (skb_frag_is_net_iov(frag)) {
+> +		return netmem_to_net_iov(frag->netmem)->dma_addr + offset +
+> +		       frag->offset;
+> +	}
+>  	return dma_map_page(dev, skb_frag_page(frag),
+>  			    skb_frag_off(frag) + offset, size, dir);
+>  }
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index fac65ed30983..aac7e9d92ba5 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -1823,6 +1823,7 @@ struct sockcm_cookie {
+>  	u32 tsflags;
+>  	u32 ts_opt_id;
+>  	u32 priority;
+> +	u32 dmabuf_id;
+>  };
+>  
+>  static inline void sockcm_init(struct sockcm_cookie *sockc,
+> diff --git a/net/core/datagram.c b/net/core/datagram.c
+> index f0693707aece..3e60c83305cc 100644
+> --- a/net/core/datagram.c
+> +++ b/net/core/datagram.c
+> @@ -63,6 +63,8 @@
+>  #include <net/busy_poll.h>
+>  #include <crypto/hash.h>
+>  
+> +#include "devmem.h"
+> +
+>  /*
+>   *	Is a socket 'connection oriented' ?
+>   */
+> @@ -692,9 +694,49 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+>  	return 0;
+>  }
+>  
+> +static int
+> +zerocopy_fill_skb_from_devmem(struct sk_buff *skb, struct iov_iter *from,
+> +			      int length,
+> +			      struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	int i = skb_shinfo(skb)->nr_frags;
+> +	size_t virt_addr, size, off;
+> +	struct net_iov *niov;
+> +
+> +	/* Devmem filling works by taking an IOVEC from the user where the
+> +	 * iov_addrs are interpreted as an offset in bytes into the dma-buf to
+> +	 * send from. We do not support other iter types.
+> +	 */
+> +	if (iov_iter_type(from) != ITER_IOVEC)
+> +		return -EINVAL;
 
-I think we are safe to add these:
+It seems like the caller (skb_zerocopy_iter_stream) needs to special case
+EINVAL. Right now it only expects EFAULT or EMSGSIZE (and backtracks). The
+rest of errors are ignored and it reports the number of bytes copied
+(which will be zero in your case, but still not what we want).
 
-------------------------------------------------------------
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index fd2f13a63f27..be9746ecdc65 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -1067,7 +1067,16 @@ enum iommu_veventq_type {
-  * struct iommu_vevent_arm_smmuv3 - ARM SMMUv3 Virtual Event
-  *                                  (IOMMU_VEVENTQ_TYPE_ARM_SMMUV3)
-  * @evt: 256-bit ARM SMMUv3 Event record, little-endian.
-- *       (Refer to "7.3 Event records" in SMMUv3 HW Spec)
-+ *       Reported event records: (Refer to "7.3 Event records" in SMMUv3 HW Spec)
-+ *       - 0x02 C_BAD_STREAMID
-+ *       - 0x04 C_BAD_STE
-+ *       - 0x06 F_STREAM_DISABLED
-+ *       - 0x08 C_BAD_SUBSTREAMID
-+ *       - 0x0a C_BAD_STE
-+ *       - 0x10 F_TRANSLATION
-+ *       - 0x11 F_ADDR_SIZE
-+ *       - 0x12 F_ACCESS
-+ *       - 0x13 F_PERMISSION
-  *
-  * StreamID field reports a virtual device ID. To receive a virtual event for a
-  * device, a vDEVICE must be allocated via IOMMU_VDEVICE_ALLOC.
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 0efda55ad6bd..f3aa9ce16058 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1827,7 +1827,15 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu, u64 *evt,
-        case EVT_ID_ADDR_SIZE_FAULT:
-        case EVT_ID_ACCESS_FAULT:
-        case EVT_ID_PERMISSION_FAULT:
-+       case EVT_ID_BAD_CD_CONFIG:
-+       case EVT_ID_BAD_STE_CONFIG:
-+       case EVT_ID_BAD_STREAMID_CONFIG:
-+       case EVT_ID_BAD_SUBSTREAMID_CONFIG:
-+       case EVT_ID_STREAM_DISABLED_FAULT:
-                break;
-+       case EVT_ID_STE_FETCH_FAULT:
-+       case EVT_ID_CD_FETCH_FAULT:
-+               /* FIXME need to replace fetch_addr with IPA? */
-        default:
-                return -EOPNOTSUPP;
-        }
-------------------------------------------------------------
+Or maybe this check needs to happen earlier? In tcp_sendmsg_locked?
 
-All of the supported events require vSID replacement. Those faults
-with addresses are dealing with stage-1 IOVA or IPA, i.e. IOVA and
-PA for a VM. So, they could be simply forwarded.
+> +
+> +	while (length && iov_iter_count(from)) {
+> +		if (i == MAX_SKB_FRAGS)
+> +			return -EMSGSIZE;
+> +
+> +		virt_addr = (size_t)iter_iov_addr(from);
+> +		niov = net_devmem_get_niov_at(binding, virt_addr, &off, &size);
+> +		if (!niov)
+> +			return -EFAULT;
+> +
+> +		size = min_t(size_t, size, length);
+> +		size = min_t(size_t, size, iter_iov_len(from));
+> +
+> +		get_netmem(net_iov_to_netmem(niov));
+> +		skb_add_rx_frag_netmem(skb, i, net_iov_to_netmem(niov), off,
+> +				       size, PAGE_SIZE);
+> +		iov_iter_advance(from, size);
+> +		length -= size;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>  			    struct sk_buff *skb, struct iov_iter *from,
+> -			    size_t length)
+> +			    size_t length,
+> +			    struct net_devmem_dmabuf_binding *binding)
+>  {
+>  	unsigned long orig_size = skb->truesize;
+>  	unsigned long truesize;
+> @@ -702,6 +744,8 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+>  
+>  	if (msg && msg->msg_ubuf && msg->sg_from_iter)
+>  		ret = msg->sg_from_iter(skb, from, length);
+> +	else if (unlikely(binding))
+> +		ret = zerocopy_fill_skb_from_devmem(skb, from, length, binding);
+>  	else
+>  		ret = zerocopy_fill_skb_from_iter(skb, from, length);
+>  
+> @@ -735,7 +779,7 @@ int zerocopy_sg_from_iter(struct sk_buff *skb, struct iov_iter *from)
+>  	if (skb_copy_datagram_from_iter(skb, 0, from, copy))
+>  		return -EFAULT;
+>  
+> -	return __zerocopy_sg_from_iter(NULL, NULL, skb, from, ~0U);
+> +	return __zerocopy_sg_from_iter(NULL, NULL, skb, from, ~0U, NULL);
+>  }
+>  EXPORT_SYMBOL(zerocopy_sg_from_iter);
+>  
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index b1aafc66ebb7..2e576f80b1d8 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -17,6 +17,7 @@
+>  #include <net/netdev_rx_queue.h>
+>  #include <net/page_pool/helpers.h>
+>  #include <net/page_pool/memory_provider.h>
+> +#include <net/sock.h>
+>  #include <trace/events/page_pool.h>
+>  
+>  #include "devmem.h"
+> @@ -73,8 +74,10 @@ void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
+>  	dma_buf_detach(binding->dmabuf, binding->attachment);
+>  	dma_buf_put(binding->dmabuf);
+>  	xa_destroy(&binding->bound_rxqs);
+> +	kvfree(binding->tx_vec);
+>  	kfree(binding);
+>  }
+> +EXPORT_SYMBOL(__net_devmem_dmabuf_binding_free);
+>  
+>  struct net_iov *
+>  net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> @@ -119,6 +122,13 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  	unsigned long xa_idx;
+>  	unsigned int rxq_idx;
+>  
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> +
+> +	/* Ensure no tx net_devmem_lookup_dmabuf() are in flight after the
+> +	 * erase.
+> +	 */
+> +	synchronize_net();
+> +
+>  	if (binding->list.next)
+>  		list_del(&binding->list);
+>  
+> @@ -133,8 +143,6 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  		WARN_ON(netdev_rx_queue_restart(binding->dev, rxq_idx));
+>  	}
+>  
+> -	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> -
+>  	net_devmem_dmabuf_binding_put(binding);
+>  }
+>  
+> @@ -197,8 +205,9 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+>  }
+>  
+>  struct net_devmem_dmabuf_binding *
+> -net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> -		       struct netlink_ext_ack *extack)
+> +net_devmem_bind_dmabuf(struct net_device *dev,
+> +		       enum dma_data_direction direction,
+> +		       unsigned int dmabuf_fd, struct netlink_ext_ack *extack)
+>  {
+>  	struct net_devmem_dmabuf_binding *binding;
+>  	static u32 id_alloc_next;
+> @@ -241,7 +250,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  	}
+>  
+>  	binding->sgt = dma_buf_map_attachment_unlocked(binding->attachment,
+> -						       DMA_FROM_DEVICE);
+> +						       direction);
+>  	if (IS_ERR(binding->sgt)) {
+>  		err = PTR_ERR(binding->sgt);
+>  		NL_SET_ERR_MSG(extack, "Failed to map dmabuf attachment");
+> @@ -252,13 +261,23 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  	 * binding can be much more flexible than that. We may be able to
+>  	 * allocate MTU sized chunks here. Leave that for future work...
+>  	 */
+> -	binding->chunk_pool =
+> -		gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
+> +	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+>  	if (!binding->chunk_pool) {
+>  		err = -ENOMEM;
+>  		goto err_unmap;
+>  	}
+>  
+> +	if (direction == DMA_TO_DEVICE) {
+> +		binding->tx_vec = kvmalloc_array(dmabuf->size / PAGE_SIZE,
+> +						 sizeof(struct net_iov *),
+> +						 GFP_KERNEL);
+> +		if (!binding->tx_vec) {
+> +			err = -ENOMEM;
+> +			goto err_free_chunks;
+> +		}
+> +	}
+> +
+>  	virtual = 0;
+>  	for_each_sgtable_dma_sg(binding->sgt, sg, sg_idx) {
+>  		dma_addr_t dma_addr = sg_dma_address(sg);
+> @@ -300,6 +319,8 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  			niov->owner = &owner->area;
+>  			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
+>  						      net_devmem_get_dma_addr(niov));
+> +			if (direction == DMA_TO_DEVICE)
+> +				binding->tx_vec[owner->area.base_virtual / PAGE_SIZE + i] = niov;
+>  		}
+>  
+>  		virtual += len;
+> @@ -311,6 +332,9 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  	gen_pool_for_each_chunk(binding->chunk_pool,
+>  				net_devmem_dmabuf_free_chunk_owner, NULL);
+>  	gen_pool_destroy(binding->chunk_pool);
+> +
+> +	if (direction == DMA_TO_DEVICE)
+> +		kvfree(binding->tx_vec);
 
-But F_CD_FETCH and F_STE_FETCH seem to be complicated here, as both
-report PA in their FetchAddr fields, although the spec does mention
-both might be injected to a guest VM:
- - "Note: This event might be injected into a guest VM, as though
-    from a virtual SMMU, when a hypervisor receives a stage 2
-    Translation-related fault indicating CD fetch as a cause (with
-    CLASS == CD)."
- - "Note: This event might be injected into a guest VM, as though
-    from a virtual SMMU, when a hypervisor detects invalid guest
-    configuration that would cause a guest STE fetch from an illegal
-    IPA."
-
-For F_CD_FETCH, at least the CD table pointer in the nested STE is
-an IPA, and all the entries in the CD table that can be 2-level are
-IPAs as well. So, we need some kinda reverse translation from a PA
-to IPA using its stage-2 mapping. I am not sure what's the best way
-to do that...
-
-For F_STE_FETCH, the host prepared the nested STE, so there is no
-IPA involved. We would have to ask VMM to fill the field since an
-STE IPA should be just a piece of entry given the vSID. One thing
-that I am not sure is whether the FetchAddr is STE-size aligned or
-not, though we can carry the offset in the FetchAddr field via the
-vEVENT by masking away any upper bits...
-
-I wonder if @Robin or @Will may also shed some light on these two
-events.
-
-Otherwise, perhaps not-supporting them in this series might be a
-safer bet?
-
-Thanks
-Nicolin
+nit: we might unconditionally kvfree() here? worst case we do
+kvfree(NULL)
 
