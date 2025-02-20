@@ -1,201 +1,361 @@
-Return-Path: <linux-kselftest+bounces-27088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E61ADA3E06C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 17:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17147A3E085
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 17:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B1CF188C799
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:20:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B03A3189BE0B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A061FF1B5;
-	Thu, 20 Feb 2025 16:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F591FF5FE;
+	Thu, 20 Feb 2025 16:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PYFr4gY9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yU+jcc7g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2082.outbound.protection.outlook.com [40.107.101.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4225A1DF265;
-	Thu, 20 Feb 2025 16:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740068396; cv=fail; b=Ctf6AIZ06nlF+sY2Sr0yRvru3mLNeDIDsPynqcghZzgpQWEWKvrzvyqajgyz74ZqkDeBPHZRvIQZSYNFIhcSZ4RCrLeBf8nsxDsJkyiUA5r++QmfExGdqCxFy5PXbdxHg//tAqky6AFf6oLuJuI5SSXtXP3XF7ccFYeqt/LIfDg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740068396; c=relaxed/simple;
-	bh=tSzSFKKQXY3GflDBfpnBEc52yA3bC8Ironi4Yceft5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JTInCtvrH48d1N0EaxWy9UWP19wIEmgZEBdtfyCeeP3MtSgq1ue/rjQLpPxZDbkzp/5kFNc7Z7PLQ6XUkhvzW6zV0FNkeDnojGJAEiYW4BQNo0JfUz39j0Tq9otu3Gx6kV/O+EuTCpT8hyzJzIsC2T5LtsY422TCug9tO0g8Ugw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PYFr4gY9; arc=fail smtp.client-ip=40.107.101.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bwTe3isWenwY/FLPbvcDdsoPqqNCbfiBTUq2Z829bByXoaz20ho+hHCumwgzurQ92DZLo+gsxOZc8udyDqjExdHrFZMZDQKbsrOdmUOl5tki8tREFoeU3B73mJFlMXWY7jP3yZJ9TXqnnohcrko5WaL7CDW+dm+h2XfNVrLyNfPNphIkocVt103bRENsT+DUiAt4U4ODOBgvWsCc8SDVCfXBFSSWrYDzWS4KXvx7fvvYAmL5Ygu0O57/DT/V1Nj56yVgq2lrGCCt/xxSxT18ZjtnYk1SYH3qTbU7y9d4/4i3Wc99whtYlvkuxE+EMoKe1jQfrt/zevlE1bdLG7Nu4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I77ZRgB8avhZ/BD1zgwCsSVXVSH7s+4m0sJKEpbBRFA=;
- b=OcoSsfHBLOu/UjUyxTVi2J0yh+unExNiZYjpImETK0ihzyUnyjSup6uSMZTGRAht99GMpGPHcWi4UHizlUcZddZrLaEWHmMMmWUnAlbSvFsIk22yrmw9f1DhukmpX6go4Nty6B6aXGWsp59L+EWiGOJ1q+Mzy/HfjjDU1j6r/wR0BV8zQV/3EIcRBeZfQQEJt47P3v02MaOh41urfEApYYXIPgAqjc6Nb8MN9lPG9PyB1V1o1EKV7suty75wKNKteIQg78v+Lxqas3Pa3/SjaP2rcp9Snm6kms8aCUmjDwIVdONu/1Xacm7wWNTQvihBtkIu1GaDLg5s/ZO4yKDMRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I77ZRgB8avhZ/BD1zgwCsSVXVSH7s+4m0sJKEpbBRFA=;
- b=PYFr4gY9ZLvbU+mCot9jJBToQiJ1UZ7WOnMDqnhuVbrkEugnHFfNxioY938KJRuoyA19X8vB2b0TXVBfkcdhGYCxkxCzXiSwrNuDgHGf/hJArkWm+kjt9yaY/wdwTvylCyKdmZdhlat4bIu8rum6/oEgII+JzIvyGHuj9yS+bCJvBRswz2kwjQXqalAun6FJaFHQpxBXvHN0FNQeJBDEm7Te/GATTTeCwHT7ynGWH0GR2bQr+CTLOXqSJRowPla768niZuag1s8A5x0fAZ4Rf9rQsFguBCCJBsyk5peFdP6oOG7WoTXwhjvQtudEaX4hLZZvuUTt7I3/ygozje9ylA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by SJ2PR12MB8134.namprd12.prod.outlook.com (2603:10b6:a03:4fa::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.16; Thu, 20 Feb
- 2025 16:19:50 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8445.019; Thu, 20 Feb 2025
- 16:19:50 +0000
-Date: Thu, 20 Feb 2025 12:19:48 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, corbet@lwn.net, will@kernel.org, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
-	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v6 06/14] iommufd/viommu: Add iommufd_viommu_get_vdev_id
- helper
-Message-ID: <20250220161948.GD50639@nvidia.com>
-References: <cover.1737754129.git.nicolinc@nvidia.com>
- <313a27d92bd63e9571bf0f053eabfc3bfe4bfbae.1737754129.git.nicolinc@nvidia.com>
- <20250218153154.GC4099685@nvidia.com>
- <Z7a63pqKaIpCC7MW@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z7a63pqKaIpCC7MW@Asurada-Nvidia>
-X-ClientProxiedBy: BN9PR03CA0711.namprd03.prod.outlook.com
- (2603:10b6:408:ef::26) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83ED01F1521
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 16:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740068532; cv=none; b=bVyLf+qjYpJYybUhoNU8dHw2+eqU4KGw+jCZly74HV+2R+5OqV4mEq53si7K2vEtOGu1D545anWueBvZ2/WUplcUpxndpmkVZHmz/5oL/BzhueH17zCoLTAHu1wN8y5uLQ55w2iK/JE6zCJDQoDTOuTK78AZYxHTrEMb9BMbAE8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740068532; c=relaxed/simple;
+	bh=C5RWv4Oht+LsTsTvLtn0X1kIsGJ2QBZ4Q1SHZfo5328=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NoyUIdZRoNLQSMMiPX4yCdxgvipt2WwpQxZhQT+6KWNetbN+r0WM6f2qeskD2mBv9aXBWK8x3alhVapsIlUI//SuncwJZ+wgAHGMRgr96bfXAE6XSh33YwhuRn/t6YvtwfPtjAfktRCdwsKuN4EHFiSXIZd7gdc/5Vi6lP3TIgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yU+jcc7g; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4393ee912e1so53945e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 08:22:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740068529; x=1740673329; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C5RWv4Oht+LsTsTvLtn0X1kIsGJ2QBZ4Q1SHZfo5328=;
+        b=yU+jcc7gTJr2wnn5KigsB351k4YK/gJ7mjSAKHBWWPF9YiCTSoubdNnxAZlN5rHfQs
+         /Fg4cGMpMy0fvOeVyZ77Ze0euGebUDhvgYvcfuqT4FKhcLebRuScwWp37mc63NXXQJV0
+         mmL3D0Gc1h/oTps1goBLL3D8kJ3i4T1M7qON3wo4/8x0g6UK9H/jFVjf3k78c9ekB2YE
+         S/Y5/b+Zumu2l8Etjk8Lbx6nTi83gOeP370nSSFAHj//wJfU8Z/iKbsBLZuKZ6iVsTzF
+         Rlau8swbE4eQwCV+GnJIgFRxlbNjJHeyTDtU7VgC79XtEL/kKOkXaQtT05N2/Wy9EI6i
+         sTzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740068529; x=1740673329;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C5RWv4Oht+LsTsTvLtn0X1kIsGJ2QBZ4Q1SHZfo5328=;
+        b=wSNScTBM/GjSxsEgJJaTKrBiM6leO9cOoFxkobLfAFGkfK0ak8ILq8WJmDNBtbMZQV
+         QdLGWv2j1Qh5M8KHqeQIPx9SYEuI9ZHVlfB9HNu8lKfwNulyQtjqku4LK9SOMcUpwymH
+         rk7PDErpRbkMbalY4Tyzf3E2nVXaYcoWGbqWCxz0yyIFQf4JZnZUxdow2ZbhwYNQ/Lg2
+         w2NYH/D1Bf+sXPfa/Bv4fHKGObTw7OkJpOH7TqB1FtvVsoGh6FhnJqogjZVrPQ2PzXQF
+         WcQD/tQnG7cqjBBq/2Ktth+jzWNc/olA4VH2Qlhsi4qEE5A16mAjhmenTh8mVbIkCx6I
+         Nu5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUdQYZxSPrDhJwud7D9KMD4c4EOc/+AOYkUnsCM+L3uqFCQ93dg/poq0nZigd/IVTuVmQbaJPRcQsVfK+ysmgY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz3b9fMP5s2+MKVCblrupA7tgF8ogyyO00pxMRAeLUsaM5W5D+
+	ALQKwrf1BclIjHdq9FwH+Y75KJSCK375V3485xFjSqWmrnIox3UwJfd+8czNKT6EaO41atfpPdr
+	i29a2iA6FqTwnSkVzaCU9Z8JBZjJHc3kO9zkr
+X-Gm-Gg: ASbGncvngHXQed/A7o+mEGrOUHUN1VNx1K4JsNztZrjMMHHm5CRYP6OKoarHtdSgixh
+	+jPYXgvnsPsdSkOrIYiaGuvP9u3UdmalAMNKUMru8OjpRuBpcIZHvnLEyO14hE3SMX/UiIzx7
+X-Google-Smtp-Source: AGHT+IEOrIguQcBOjXWtiHCKwopXN+WtboolRWXtVmDAQGp+1Z6t0KvSTIc5/WYVKx9BFIkZehap41ICQaQzIQ/Xh1c=
+X-Received: by 2002:a05:600c:210f:b0:439:7fc2:c7ad with SMTP id
+ 5b1f17b1804b1-439a4767feamr1201225e9.7.1740068528532; Thu, 20 Feb 2025
+ 08:22:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SJ2PR12MB8134:EE_
-X-MS-Office365-Filtering-Correlation-Id: e27095d3-3304-4a48-d327-08dd51ca6668
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YjJYKWrqZZ8jgKYI+eTBbwhTZeEgEAvr3I/POztFai5eWJcx6ytOG4rQrinJ?=
- =?us-ascii?Q?RHi6pn97YAdBtuc2F8gVs0PNeY+utaA904txKq/jYHgFXJ3m8IjgejqSw5Mx?=
- =?us-ascii?Q?8Ieeb6wuBboCgYtmoLMAIak+znjIlHpY3oa7nhSw6BvQEA9ldFzAgm2tXqa5?=
- =?us-ascii?Q?gET+hmCBsavpkk6ighLX9djflAbNTXx+LzlNk+QQ8s+zRCSxLiP45DQA2in9?=
- =?us-ascii?Q?n8bOniGdBfQBYiwi8lPviFzm0Cnbbcp9QIvqDKzj9sMfkgnI2bkbnMIw4lfS?=
- =?us-ascii?Q?HPMt84TPlazP/AarCAzcFV4Wq+5PnCzgvROtQu1P2RQ3ZGTgKUTiQtdRGU0p?=
- =?us-ascii?Q?FAoiAmSJhjXDBwAcLM7cWk3SLVQJswoIsRCi93MPr0Vf6NAiM1+mBrWaCqYx?=
- =?us-ascii?Q?Ap7e/2Vzp1qXImO5gZq5896daESOJYy2PYvSLb4aWHLpjB9X+FLJDH307eAD?=
- =?us-ascii?Q?5BcJr4R7Yr2QlwqKYeZSu2Db7jFWJ3xJWhuSWW+jDjaWcPtKXnOKK+/0ZW1G?=
- =?us-ascii?Q?kYSE7e9fkPi1F/b5k8k0vMVY7Wk/0RdwlunCLejfRKypsiWtis2RnaXYqxI7?=
- =?us-ascii?Q?CibxPdvnrGvNB6s1Nfu7TWcLPacYwtJTwbcm9o0ONLe6giBMRFgWHnC9ZbZ6?=
- =?us-ascii?Q?blwPtaqw42qtCWuOJkXEbkOpCAnzi3Zkc/vzNBMan0ubvHAyC0OsdUaXWRR/?=
- =?us-ascii?Q?niNPDX0DI1vfuGwr0AQzzWhF4xW/7MzXzrYFi9OcqU4vxUwDkr7f9BqvMIHi?=
- =?us-ascii?Q?qGQWMnFQD6cbbMJj/PHGKsjpMMYBYKLL9UY43liMnQW6LczAq3dKOslm9evj?=
- =?us-ascii?Q?9ZJ7NCjU/1TlTgZrV7yEAh7WrPeYQmfjjxByPqwd4D4FliWEjhmJejGJs28a?=
- =?us-ascii?Q?3NIMb64tt2c5Kwgw9TyK/e/4Hy5tJ4GMiaM4HilObEPlcsMc9BIjGgMoFVji?=
- =?us-ascii?Q?RZEC7TCYNdqxPZjMI57qNExsT0JYs4nOT9aAkjrrVwNV2mjKtGp+b6z197yJ?=
- =?us-ascii?Q?GY470naNp/nTt9rT6MpZUZsOQ20DLozhhy83Et8X6DevYq5p6WvayIT27ucw?=
- =?us-ascii?Q?favzBZ+AMRFxwvdp8ASuFkmgiL8pJ+O57wCv2kk6PeWAmOdT82R1QpxZd2Ec?=
- =?us-ascii?Q?1We6vgWOzru+18ro4jimR3Cq5cIn25Bn3gDjYjL+qXDlKncEYFGjGvyAxM5e?=
- =?us-ascii?Q?EreMmF9fTetTnkBrjWN3teVnVlQRtZPgLzC/Go80hbSYh7xRSnAKdQ0N5sFC?=
- =?us-ascii?Q?qUmtXzo0J/t1QJ+IcjadLdW+Gd1x3fsP95CKIHLwi/BWandeNdMuPoNS2cOG?=
- =?us-ascii?Q?H19yGgPzDyBu2saLbCK0gps/Epq3oojGRt4558mbPh9GO1Kj95yD5AbJWuZ5?=
- =?us-ascii?Q?8DgocGfzVv5YVnGzFaHfFGTgbq7d?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?fyAFY5aYb2qSCgBl6AQjhhxh9xszE1OqLrE92+zrP6qVnr7v8i7GKQbTiKLN?=
- =?us-ascii?Q?PgmdsudZiYWuFq0y/SsGnWLcrdE0hh+5gZ+fG2HSiX0JMgb83qOAaBtxM/EL?=
- =?us-ascii?Q?weORG2nBUcG5dd19CP5oa0j6xtB41g3S9zEVCXHBp1v7xsR0a5lVR4OpRzEA?=
- =?us-ascii?Q?AXSGoIAiKLCuKlxqwip0o6UKZfjHM9IsZ7/UAtVlT6dRfo/U6MIKg+D1jpNJ?=
- =?us-ascii?Q?gmK8A8ue6Uay9fJM2NmilfqzIBl3ov1hU0ZKSe/AUMLjc/ssoyRr26UIaa1d?=
- =?us-ascii?Q?6EXqSBPt2yIH3+n1qc662PGzr91VseydP+umAFI2uQKUMYupMwU9A0bCHrrj?=
- =?us-ascii?Q?Q8I+PoQbv8+SfyoLqy5yicXOQRghLj5v5RbLaf/b3cvuHGyI8/YTu0S9cUOq?=
- =?us-ascii?Q?J/FnqSLHrpWXJF1WFlHMwW9libIkBO8/nBiGc/Gv/fkR3laSCjnJY66PP7Pn?=
- =?us-ascii?Q?1HabldntrBcDAtvPLBePaRBYvyzXHMvJwUuGLTVKul0Q1GASQihi0Vb4LH4u?=
- =?us-ascii?Q?sowFcjjVWg6GyQV6RpZ13cFj27/F+H/Jpe9dhT7dYi/DX3i46oRvQvzFLkA8?=
- =?us-ascii?Q?q7qyxN6Y2be04HOYPnh6HWqcPX2Xw+dFQWQGq5v+ksdpYpkcr27WK+6/cVoG?=
- =?us-ascii?Q?Z9oOE2lY59BTRj+eYJk2CL1Jw/wqBTjBvxnu2ctmlB4bnF8XQqH+UAiMfTAP?=
- =?us-ascii?Q?FmRRvJyHnHEWGOAcDwhsWbYJtURmOOL3czA+5042Ut/EmOqaXZz1yw4KGZkd?=
- =?us-ascii?Q?Tr9y7179Vght52XtOmaOcYwzYQKOQQJQUWiUE707NaENlffbMCoZXdcFCBOw?=
- =?us-ascii?Q?A4c6TdRQ5XVX/9A5YGDFGbcpx1B/KlxR4pTz3iXJjCKKP9ScmWYHVKDr259o?=
- =?us-ascii?Q?2ao6JMLyvKXMjdmEjjKKJsIbCkV8heevwCRXCld75mf3EqSTgqzzuwWAY1zR?=
- =?us-ascii?Q?UapXbHgzu3jOAX0K71iXCQmm58ZbnY0i+omN9K0o+XkbySdtNTBnvyb1O5yC?=
- =?us-ascii?Q?ewsJHHji2uUh0HaL3woqpJW2ZM47BUa78JaRyu3WwCb5KcHVcu95/LP4t4iV?=
- =?us-ascii?Q?WCd0f7Qer9/TjssdDXYPn7bjzd7lPEoNFtxO6HZLimH+wcz/vUvBNCsmhlAD?=
- =?us-ascii?Q?Brxh7R/72tO/nTF96pCLeRk3/R56sN+YFhzEA8jNKYFtTSqpOZ7H6mqHV8fA?=
- =?us-ascii?Q?nOdu42p17JP8mDd03DL4ZkGg20EjoNbHCMTGlLqjAIx6nzfKJrvqSKm/raDs?=
- =?us-ascii?Q?s3wrdfD4vNrs0eG6aYQ84T3A99QKq0Zo9BEc25ewl2OzanSHqAwiB2+htOup?=
- =?us-ascii?Q?WugocC1e9WomjlLY/EEjaBsqOE1aQV2xGMOLjT0B0K5ZNOXUbvgeq3KCPPui?=
- =?us-ascii?Q?bBTI/w9rls/suR1+zAr4tHF6wDFv0A9cy9DCTuvN6Enm5ICQrQPXR4UPl6bk?=
- =?us-ascii?Q?AtXaf1Fy7DISRjC0y44mruyAeup72WWwJZqFgarZiUutLSfe55lLMgyE5OKj?=
- =?us-ascii?Q?BMnDVYRWUa1FXXqfDKqdkLDTrz0jX2EHmFQNFA7M2EcwglOLR6BMSrMPfGx4?=
- =?us-ascii?Q?DrX9kmGfsYn9Uvm/HLh5gS9azSoNhFDeUpW2RkOg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e27095d3-3304-4a48-d327-08dd51ca6668
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2025 16:19:50.1767
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ++LZacEZHMXNiHzgFGMX6NAk22APsVciYe+ELlfN1Quh8kRJ+tMW7yPDze5MZnFu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8134
+References: <e07dfd31-197c-49d0-92bd-12aad02daa7e@lucifer.local>
+ <CAC_TJvfBvZZc=xyB0jez2VCDit-rettfQf7H4xhQbN7bYxKw-A@mail.gmail.com>
+ <6e356431-5ac9-4363-b876-78a69ae7622a@lucifer.local> <4aa97b5c-3ddc-442b-8ec9-cc43ebe9e599@redhat.com>
+ <b0a95f2c-093c-45fd-b4a2-2ba5cbc37e2c@lucifer.local> <387f3516-99f2-41e9-967e-4b051a8d21b8@redhat.com>
+ <72e044ba-64af-49c0-8b87-ead508654fb7@lucifer.local> <4f5a9c19-9bdd-47eb-bb14-205e3dcced90@redhat.com>
+ <1e959451-2534-44b7-bf62-bc75305048fe@lucifer.local> <bd4597b5-2da2-484c-9410-384e04336a9d@redhat.com>
+ <31a007c0-884f-495d-ba27-08e3e0dd767d@lucifer.local>
+In-Reply-To: <31a007c0-884f-495d-ba27-08e3e0dd767d@lucifer.local>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 20 Feb 2025 08:21:54 -0800
+X-Gm-Features: AWEUYZmUc3XJIdBmrSxEVAYvHGFXnZ-DZGtTP2XuTCRhGTOphXLfooYmt5dVI1Y
+Message-ID: <CAJuCfpHpchh0CzEgh5CKmRLwpscBLx32A-mGi4eudpir1wm=cQ@mail.gmail.com>
+Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem mappings
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: David Hildenbrand <david@redhat.com>, Kalesh Singh <kaleshsingh@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org, 
+	John Hubbard <jhubbard@nvidia.com>, Juan Yescas <jyescas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 19, 2025 at 09:17:18PM -0800, Nicolin Chen wrote:
-> On Tue, Feb 18, 2025 at 11:31:54AM -0400, Jason Gunthorpe wrote:
-> > On Fri, Jan 24, 2025 at 04:30:35PM -0800, Nicolin Chen wrote:
-> > > This is a reverse search v.s. iommufd_viommu_find_dev, as drivers may want
-> > > to convert a struct device pointer (physical) to its virtual device ID for
-> > > an event injection to the user space VM.
-> > > 
-> > > Again, this avoids exposing more core structures to the drivers, than the
-> > > iommufd_viommu alone.
-> > > 
-> > > Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> > > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > > ---
-> > >  include/linux/iommufd.h        |  9 +++++++++
-> > >  drivers/iommu/iommufd/driver.c | 24 ++++++++++++++++++++++++
-> > >  2 files changed, 33 insertions(+)
-> > 
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > 
-> > > +	xa_lock(&viommu->vdevs);
-> > > +	xa_for_each(&viommu->vdevs, index, vdev) {
-> > > +		if (vdev->dev == dev) {
-> > > +			*vdev_id = (unsigned long)vdev->id;
-> > 
-> > I don't think we need this cast
-> 
-> The left side is ulong for xarray index, while the right side is
-> __aligned_u64 for uAPI. Could there be a gcc warning when somebody
-> builds the kernel having a BITS_PER_LONG=32?
+On Thu, Feb 20, 2025 at 5:18=E2=80=AFAM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+>
+> On Thu, Feb 20, 2025 at 01:44:20PM +0100, David Hildenbrand wrote:
+> > On 20.02.25 11:15, Lorenzo Stoakes wrote:
+> > > On Thu, Feb 20, 2025 at 11:03:02AM +0100, David Hildenbrand wrote:
+> > > > > > Your conclusion is 'did not participate with upstream'; I don't=
+ agree with
+> > > > > > that. But maybe you and Kalesh have a history on that that let'=
+s you react
+> > > > > > on his questions IMHO more emotionally than it should have been=
+.
+> > > > >
+> > > > > This is wholly unfair, I have been very reasonable in response to=
+ this
+> > > > > thread. I have offered to find solutions, I have tried to underst=
+and the
+> > > > > problem in spite of having gone to great lengths to try to discus=
+s the
+> > > > > limitations of the proposed approach in every venue I possibly co=
+uld.
+> > > > >
+> > > > > I go out of my way to deal professionally and objectively with wh=
+at is
+> > > > > presented. Nothing here is emotional. So I'd ask that you please =
+abstain
+> > > > > from making commentary like this which has no basis.
+> > > >
+> > > > I appreciate everything you write below. But this request is just
+> > > > impossible. I will keep raising my opinion and misunderstandings wi=
+ll
+> > > > happen.
+> > >
+> > > Well I wouldn't ask you not to express your opinion David, you know I=
+ respect
+> > > and like you, and by all means push back hard or call out what you th=
+ink is bad
+> > > behaviour :)
+> > >
+> > > I just meant to say, in my view, that there was no basis, but I appre=
+ciate
+> > > miscommunications happen.
+> > > > So apologies if I came off as being difficult or rude, it actually
+> > wasn't
+> > > intended. And to re-emphasise - I have zero personal issue with anybo=
+dy in this
+> > > thread whatsoever!
+> >
+> > It sounded to me like you were trying to defend your work (again, IMHO =
+too
+> > emotionally, and I might have completely misinterpreted that) and slowl=
+y
+> > switching to "friendly fire" (towards me). Apologies from my side if I
+> > completely misunderstood/misinterpreted that.
+>
+> Right this was not at all my intent, sorry if it seemed that way. I may w=
+ell
+> have communicated terribly, so apologies on my side too.
 
-No. The kernel is full of these implicit casts
+Sorry for being late to the party. Was sick for a couple of days.
+Lorenzo is right, there was a breakdown in communication at Google and
+he has all the rights to be upset. The issue with obfuscators should
+have been communicated once it was discovered. I was in regular
+discussions with Lorenzo but wasn't directly involved with this
+particular project and wasn't aware or did not realize that the
+obfuscator issue renders guards unusable for this usecase. My
+apologies, I should have asked more questions about it. I suspect
+Lorenzo would have implemented this anyway...
 
-Jason
+To make guard regions work for this usecase, first we (Android) need
+to abstract /proc/pid/maps accesses. Only then we can use additional
+interfaces like /proc/pid/pagemaps to obtain guard region information.
+I'll start figuring out what it takes to insert such an abstraction.
+Thanks,
+Suren.
+
+
+>
+> >
+> > To recap: what we have upstream is great; you did a great job. Yes, the
+> > mechanism has its drawbacks, but that's just part of the design.
+>
+> Thanks :)
+>
+> >
+> > Some people maybe have wrong expectations, maybe there were
+> > misunderstandings, or maybe there are requirements that only now pop up=
+;
+> > it's sometimes unavoidable, and that's ok.
+> >
+> > We can try to document it better (and I was trying to find clues why pe=
+ople
+> > might be mislead), and see if/how we could sort out these requirements.=
+ But
+> > we can likely not make it perfect in any possible way (I'm sure there a=
+re
+> > plenty of use cases where what we currently have is more than sufficien=
+t).
+>
+> Sure and I"m very open to adding a documentation page for guard regions, =
+in
+> fact was considering this very thing recently. I already added man pages
+> but be good to be able to go into more depth.
+>
+> >
+> > > > I just want to find the best way forward, technically and am willin=
+g to
+> > do
+> > > whatever work is required to make the guard region implementation as =
+good as it
+> > > possibly can be.
+> > >
+> > > >
+> > > > Note that the whole "Honestly David you and the naming. .." thing c=
+ould have
+> > > > been written as "I don't think it's a naming problem."
+> > >
+> > > I feel like I _always_ get in trouble when I try to write in a 'tongu=
+e-in-cheek'
+> > > style, which is what this was meant to be... so I think herein lies t=
+he basis of
+> > > the miscommunication :)
+> > >
+> > > I apologise, the household is ill, which maybe affects my judgment in=
+ how I
+> > > write these, but in general text is a very poor medium. It was meant =
+to be said
+> > > in a jolly tone with a wink...
+> > >
+> > > I think maybe I should learn my lesson with these things, I thought t=
+he ':p'
+> > > would make this clear but yeah, text, poor medium.
+> > >
+> > > Anyway apologies if this seemed disrespectful.
+> >
+> > No worries, it's hard to really make me angry, and I appreciate your
+> > openness and your apology (well, and you and your work, obviously).
+> >
+> > I'll note, though, if my memory serves me right, that nobody so far eve=
+r
+> > criticized the way I communicate upstream, or even told me to abstain f=
+rom
+> > certain communication.
+>
+> I wish I could say the same haha, so perhaps this was a problem on my sid=
+e
+> honestly. I do have a habit of being 'tongue in cheek' and failing to
+> communicate that which I did say the last time I wouldn't repeat. It is n=
+ot
+> intended, I promise.
+>
+> As the abstain, was more a British turn of phrase, meaning to say - I
+> dispute the claim that this is an emotional thing and please don't say th=
+is
+> if it isn't so.
+>
+> But I understand that of course, you may have interpreted it as so, due t=
+o
+> my having failed to communicate it well.
+>
+> Again, I must say, text remains replete with possibilities for
+> miscommunication, misunderstanding and it can so often be difficult to
+> communicate one's intent.
+>
+> But again of course, I apologise if I overstepped the line in any way!
+>
+> >
+> > That probably hurt most, now that a couple of hours passed. Nothing tha=
+t a
+> > couple of beers and a bit of self-reflection on my communication style =
+can't
+> > fix ;)
+>
+> Ugh sorry, man. Not my intent. And it seems - I literally OWE YOU pints
+> now. :) we will fix this at lsf...
+>
+> Perhaps owe Kalesh some too should he be there... will budget
+> accordingly... :P
+>
+> >
+> > [...]
+> >
+> > > > > > > Yeah that's a good point, but honestly if you're reading smap=
+s that reads
+> > > > > > > the page tables, then reading /proc/$pid/pagemaps and reading=
+ page tables
+> > > > > > > TWICE that seems inefficient vs. just reading /proc/$pid/maps=
+, then reading
+> > > > > > > /proc/$pid/pagemaps and reading page tables once.
+> > > > > >
+> > > > > > Right; I recently wished that we would have an interface to obt=
+ain more VMA
+> > > > > > flags without having to go through smaps
+> > > > >
+> > > > > Well maybe that lends itself to the idea of adding a whole new in=
+terface in
+> > > > > general...
+> > > >
+> > > > An extended "maps" interface might be reasonable, that allows for e=
+xposing
+> > > > more things without walking the page tables. (e.g., flags)
+> > > >
+> > > > Maybe one could have an indicator that says "ever had guard regions=
+ in this
+> > > > mapping" without actually walking the page tables.
+> > >
+> > > Yeah this is something we've discussed before, but it's a little frau=
+ght. Let's
+> > > say it was a VMA flag, in this case we'd have to make this flag 'stic=
+ky' and not
+> > > impact merging (easy enough) to account for splits/merges.
+> > > > The problem comes in that we would then need to acquire the VMA wri=
+te
+> > lock to do
+> > > it, something we don't currently require on application of guard regi=
+ons.
+> >
+> > Right, and we shouldn't write-lock the mmap. We'd need some way to just
+> > atomically set such an indicator on a VMA.
+>
+> Hm yeah, could be tricky, we definitely can't manage a new field in
+> vm_area_struct, this is a very sensitive subject at the moment really wit=
+h
+> Suren's work with VMAs allocated via SLAB_TYPESAFE_BY_RCU, putting the lo=
+ck
+> into the VMA and the alignment requirements.
+>
+> Not sure what precedent we'd have with atomic setting of a VMA flag for
+> this... could be tricky.
+>
+> >
+> > I'll also note that it might be helpful for smallish region, but especi=
+ally
+> > for large ones (including when they are split and the indicator is wron=
+g),
+> > it's less helpful. I don't have to tell you about the VMA merging
+> > implications, probably it would be like VM_SOFTDIRTY handling :)
+>
+> Yeah indeed now we've simplified merging a lot of possibilities emerge,
+> this is one!
+>
+> >
+> > >
+> > > We'd also have to make sure nothing else makes any assumptions about =
+VMA flags
+> > > implying differences in VMAs in this one instance (though we do alrea=
+dy do this
+> > > for VM_SOFTDIRTY).
+> > >
+> > > I saw this as possibly something like VM_MAYBE_GUARD_REGIONS or somet=
+hing.
+> >
+> > Yes.
+> >
+> > --
+> > Cheers,
+> >
+> > David / dhildenb
+> >
+>
+> Best, Lorenzo
 
