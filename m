@@ -1,133 +1,121 @@
-Return-Path: <linux-kselftest+bounces-27086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE263A3E052
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 17:20:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE7DA3E054
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 17:20:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A78F3A6A00
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:16:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9135A16FBD1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F2521323C;
-	Thu, 20 Feb 2025 16:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 179491FDA94;
+	Thu, 20 Feb 2025 16:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QK7z78W2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JThSDjfx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B45A212FB3
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 16:15:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73853200B9F
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 16:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740068154; cv=none; b=W+3WmdqpAf07CEh1qThPFDJp+kxaTj4ssR19QCPElZOscAC1AqJnumIQp2gCZmDrAjOue/D3ETnKUo/iCbS8hz1ucqzAXhisBwnEtLmbAW1WAn4RCKYz4f+uGpiyyqlHdMcfOT2f1k8B6SbLTgQfYSs3dMwmA8bBqQDZJl6EN9U=
+	t=1740068293; cv=none; b=X5twFplejxdVL3OT/5yX7xqUg7KgAv3V4QYysNNnGRzRiL0HU3aHNIt8yZfzOvbQ/sAqHZS7V/E5liFLz0KsmZg7K7cAIx/UD5uPIrKs/XRZVDcf+v/eL2oftuzsWBq+YfxAUzcdmYwh/PLEJWlqxwmcpf0E+Q5hvK+PXBI+Ay8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740068154; c=relaxed/simple;
-	bh=sefj6hxNE4DKzJ9Uo+g0WJ+GyLGTay+PVJVsLpQlNGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J/6TsRNJLzDaQDZBpTVNbvMitvmKMKXE0RyKOPy6xHyYuGVMn849uadDPSCwUHZXGNQ+aIf3GGtXK6zFPwTAdHjsHZfCMyRuZwysAzekN+z3G0Y53e2AUh0l69wuQrPgb9k6+jjofiOIiCVTZ33OEq8p8GAknrMa2CUS9XhJW5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QK7z78W2; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22117c396baso172365ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 08:15:52 -0800 (PST)
+	s=arc-20240116; t=1740068293; c=relaxed/simple;
+	bh=/dWabNOB3H/l45GLrHuFpQul4Awb4+rHqOfNRlYWSVE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tqs6x3VSe4+RyAOtRqQLV+3wgyBEVr+w4+KWCUvfHgqf9wJGYlQv+l5NjdkbfCy/z/nfMimfHrITLUXBG9NbIiVpG5RqJM2SsQiGnnfNuyrVqEres8i84VGrZWM57KPubN5DnnP4MAKx/1pIbpqIX8yLUV58iCc1kH6mnASbZhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JThSDjfx; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-855d73856f3so11413739f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 08:18:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740068151; x=1740672951; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w9z6CJ8GEmOUY+R90CcF3D8uqozLmZO9LjzSZXbDX8o=;
-        b=QK7z78W2puJkm/e4WzNaLjgqCPZzGmRob1i3JzdKj9aAs7kILPT+75Ppo6D862n3MK
-         VmWcg8XZM2vk7vCrYL9kXopU0Bswy/C2Lo4LIEzDQJ6R4ntwFQbDNzQgXhHWD4nKqt0d
-         r6zBMYoR0FOmDuWiIR287BWwcADfhZ/QTmwa/6VCeYvqDdn0yRktRMg5itTYTbG7Z71e
-         ARFwtCIPAk/l4No1VlYd4u2+S2W59mePHENm10ecvO3CoGtgsDW+b5dqsUHA4vFU/kjD
-         XMHsZg+pKUEOJ4IoLjKiBBQyImvhRxG7x9yOxzi/JLcKmL+XXlbxWYrtgVYfuwbkyl9y
-         VkXg==
+        d=linuxfoundation.org; s=google; t=1740068290; x=1740673090; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XgyoPRXU6a6kG4N3+disEL2MEnPtdcZMZBxF77QaXes=;
+        b=JThSDjfxYNINHmAnk9NMcxlPw/YGxJiLcxuatlHW2d8cem7g3uF7+VCOvam6wXu3jN
+         V1nWqwwZZf8QksaJMEYHT4Jx7sX2A5wf+CfAkNyqi70iJ/HrF/2s8q3h1cqgrVZ8y9VU
+         91w+O3ObA+uUPuGF7rlYnZDga3LacDjT+RWxI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740068151; x=1740672951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w9z6CJ8GEmOUY+R90CcF3D8uqozLmZO9LjzSZXbDX8o=;
-        b=DB3u+/v1l8Mqc+6dv6znsP9XHGGPYURYUfgGNGa+LktFA56oFLTBVhsN1GbmZFXakn
-         zC4Ftk5D19OLpQyvy5CfnXaxMkQ+SCiBOkeOJMN8wIYWVQRKJbTVZV9k87+Qh0p//zVj
-         mhJgzQFT8vgzWnRdoZPUrtzgv88iHIT3TrIKrEjWIpBVdvj05DSMzvPOtUsF0z0790cQ
-         Yp7lZPxlCcJcUj5+CjiSk99AeiLkqC4x5pSRtBAKc6uSciD6GNE19hsPL3ngT7VPOS2t
-         K9NaEqH28WOFAksUmG1SjYki7uyRvRs05FW85nTHs1Doyk/1GbFZ1sfzRTmJw+vZsrJv
-         A5Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCWIbrfJK7Gdj3Ajv2IOQaURWnu+7FXK2uFiARmkiPYCB8FxN5KpWW3904RfR2xAPI35ENhfXirxyjdZp7eDejk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSlqFT/TZgM+OkW1w1jRUGipY3bgzqoSD8BPSFa049SidZdM9q
-	oWLvOiXh8kchjwwk/hAn4bZZWpPdET60GtZdyHxRlSDAdeak7o7M+zFn/L2Eag==
-X-Gm-Gg: ASbGncsQo0mvLlXr32pVYAeedxE9ghcSQUrXY+2OH2fIM6uEiIg2owZOA13Ut77fzlp
-	EdK34h6LXCISrPQhb4hZB/6DQS4WvorUtfNiEyRsQT9+YveLC2xlTTQ7+JC2I6OtcwKaEBr6+/W
-	wWAKfJHGdpUVgRxs9N2nIdJp9RaqBtBWW7zoPslIpgK0F2xAUq7e0iSlsJfaIELHp9HKLvHNKVP
-	kx+WarXceGWXtayNYQRjIH47PcLM4hdEKTjM0rTnSvM6vzm0FvMujHd+w9nHoryzyeT7KzPyd4H
-	1of/0d2vHVzTOsMd+quAnz8kVXwtxK7eMLg/coXNNlXqwFaPB4vp
-X-Google-Smtp-Source: AGHT+IEeeNO5YXG4GrTFzHJDa5KXpncdRPcsXRbYIZYGBm4w3MV78t3++PWrZwNmDnY5dth9MgRnnA==
-X-Received: by 2002:a17:902:dacf:b0:21f:3e29:9cd4 with SMTP id d9443c01a7336-2218debe8bamr3119545ad.20.1740068151245;
-        Thu, 20 Feb 2025 08:15:51 -0800 (PST)
-Received: from google.com (169.224.198.35.bc.googleusercontent.com. [35.198.224.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fc7e9325fesm8522382a91.46.2025.02.20.08.15.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 08:15:50 -0800 (PST)
-Date: Thu, 20 Feb 2025 16:15:40 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: "Tian, Kevin" <kevin.tian@intel.com>, "jgg@nvidia.com" <jgg@nvidia.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"will@kernel.org" <will@kernel.org>,
-	"joro@8bytes.org" <joro@8bytes.org>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"dwmw2@infradead.org" <dwmw2@infradead.org>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-	"mdf@kernel.org" <mdf@kernel.org>,
-	"mshavit@google.com" <mshavit@google.com>,
-	"shameerali.kolothum.thodi@huawei.com" <shameerali.kolothum.thodi@huawei.com>,
-	"smostafa@google.com" <smostafa@google.com>,
-	"ddutile@redhat.com" <ddutile@redhat.com>,
-	"Liu, Yi L" <yi.l.liu@intel.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v6 14/14] iommu/arm-smmu-v3: Set MEV bit in nested STE
- for DoS mitigations
-Message-ID: <Z7dVLNLhP7VfZ-Ph@google.com>
-References: <cover.1737754129.git.nicolinc@nvidia.com>
- <436ac2021bb3d75114ca0e45f25a6a8257489d3b.1737754129.git.nicolinc@nvidia.com>
- <BN9PR11MB5276291C74E2DF0C8821BE718CFA2@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Z7TOq-gIGPY_ztW7@google.com>
- <Z7TXQ9EdyvHp/lmD@nvidia.com>
+        d=1e100.net; s=20230601; t=1740068290; x=1740673090;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XgyoPRXU6a6kG4N3+disEL2MEnPtdcZMZBxF77QaXes=;
+        b=IsdhY6Lu9lS/n8SpKboKSUehSyx/eCxLmWQGBS7FLdfiyPAs95mB0nMcatIIlk+Ip3
+         fNuG2vJS/2yvHGHh4SxG698S6Yaq76lMKszbt4lUgQMUfVFXZzOvA3xgMSrRO1CfzB2U
+         UWHla5OMYpHD+cnWTULqckOoH4qHMHVCvv/X6LsVHoOhSgFXA8LfZa0GOfol3VXGXmET
+         NBUYysm+SUs/6PfduzT2HHXDPKgHlsvacq4W6RCsCtq4Urb3ZWQr82LV2Nt+odAX+/Kg
+         nA8HlG9lIr0iT7r82Se9vNi/95EsLhNFZRCebp+16dS9avjHn1TQSEds6+j0baxJPg7H
+         dr6w==
+X-Forwarded-Encrypted: i=1; AJvYcCUQtuUve2qVJiKKQPTiAR3Uye32BcokqhaTNpRYzn/7nNqjrpH9rPr4kCTXZAzJ2wIOQ6WERg2w9LMA44by7Fs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZtnxXE44Tzcd+W4IXsNzJOTRFeWaCsFFTawtRM1p9NSnUIASi
+	f9UtYtFYOALV4ZzIbZyEZEXxHYQM00Kpc26o/w7l+FL6rfBEmc3EWs3jzplaBqM=
+X-Gm-Gg: ASbGncthfqmWzUh27AHv2Xrlt5pofGuzRt4aQfdK1HnAXzLu59mXn2RdRXR8T0j5s7r
+	t4KkaNRuJWsXSR9y4ISRuD/RzwBeDaVgxcjTawFFbb5Pfj3WV66vu3QyZq1PJOtPhwZYg8DCouW
+	aV/8PXOTOX3ksmTIbwL3kehAHb1z5M7+BmbI0yGWA36BafUkNPC2s3M16BDDGZ7/JzJxPglRwtB
+	3h6KYSiYi/m/W181hIfjbCfNfvACXl2a+HJtoBxZfOS2lVdgxDuBJ8464gbAIo8PvXI3R/G7BSe
+	4gEgJRJZlVZXkVpuCi8Lmp6LQA==
+X-Google-Smtp-Source: AGHT+IEJ7Oc5HsTMETSfAVR01i2ff6EJ8L0D+zb08Ob/9RlyCuyRRRxFupWsQAosXlRZJP1IxnAqqQ==
+X-Received: by 2002:a05:6602:6c03:b0:855:bd9c:717a with SMTP id ca18e2360f4ac-855bd9c724cmr892782639f.4.1740068290492;
+        Thu, 20 Feb 2025 08:18:10 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-855c0791a3esm56942139f.29.2025.02.20.08.18.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Feb 2025 08:18:09 -0800 (PST)
+Message-ID: <3ae6c7de-fb0a-4c65-afca-c0c91289650b@linuxfoundation.org>
+Date: Thu, 20 Feb 2025 09:18:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z7TXQ9EdyvHp/lmD@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/tracing: Test only toplevel README file not the
+ instances
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+ linux-kselftest@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250115191758.35b62738@gandalf.local.home>
+ <20250115202607.00c6d353@gandalf.local.home>
+ <571133ce-b4ae-4a9f-8601-443774804d1e@linuxfoundation.org>
+ <20250123172530.474e873f@gandalf.local.home>
+ <d39de60f-c87f-4c59-9226-9080f9008f3e@linuxfoundation.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <d39de60f-c87f-4c59-9226-9080f9008f3e@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 18, 2025 at 10:53:55AM -0800, Nicolin Chen wrote:
-> > > Is MEV available only in nested mode? Otherwise it perhaps makes
-> > > sense to turn it on in all configurations in IOMMUFD paths...
-> > 
-> > I think the arm-smmu-v3's iommufd implementation only supports nested
-> > which could be the reason.
+On 1/23/25 16:54, Shuah Khan wrote:
+> On 1/23/25 15:25, Steven Rostedt wrote:
+>> On Thu, 23 Jan 2025 14:56:55 -0700
+>> Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>>>>
+>>>> Damn, I forgot to add Shuah and kselftests mailing list to that one though :-p
+>>>
+>>> Do I need to do anything or is this taken care of?
+>>
+>> I think you can take that series. If you want I can resend with you and the
+>> mailing list Cc'd.
+>>
 > 
-> I guess what Kevin says is that non-nested STE should set the MEV
-> as well, e.g. BYPASS and ABORT, and perhaps stage-1-only case too
-> where the attaching domain = UNMANAGED.
+> Yes please resend.
 > 
 
-Ohh okay, got it. Thanks!
+Steve, did you resend the series?
 
-Praan
+thanks,
+-- Shuah
 
