@@ -1,173 +1,180 @@
-Return-Path: <linux-kselftest+bounces-27048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28943A3D2DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 09:13:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 118E6A3D38A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 09:46:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E52E918932C6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 08:13:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57EEF17C61E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 08:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4931E9B36;
-	Thu, 20 Feb 2025 08:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999A21EBA0B;
+	Thu, 20 Feb 2025 08:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heF0dm3M"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HDKSYMxr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840921E9B15;
-	Thu, 20 Feb 2025 08:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E881B4247
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 08:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740039221; cv=none; b=fFd+PLov0zswtLL97awYp+oAIw9+l6Nan89h4Tgl4nVYX43ddrnJvl85aUaUufa4SDLAOrG/FjlZQOSOs8aBAXBVzBx6kebvcq86YjSmhaquf7jC4NmwVSiX3cGJ73IHF9u7oqfCWitO5otEWvHvos0gBtRMD85igQpjW0t8sf8=
+	t=1740041122; cv=none; b=b6cikfXLR7KImlq24+dnNU2ibotvQ0UPilYOpIUsn7+VTEV7+DgOFZZt6kWmSrB5J5FBxHfGoJ7DJYq6m69DPzVIi5TW6vIw8JJq4heeDV8zFpFt+4pLXe2pTPt1Tm2vovtmNdl8/R0YPH3bzv273YRRfgiCz08Pafnxe8JWTa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740039221; c=relaxed/simple;
-	bh=NR1AzEHW3X4hTDfCdv4wws5y6bJ4IHoskvMdZyfEWxQ=;
+	s=arc-20240116; t=1740041122; c=relaxed/simple;
+	bh=0SHhfqD/vA4cGXP3SZz7IhYLrGj9qnR4GeFeMVjfvsU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hBx6E2PMbdkAEpbuHT/p0u9c5tSw6GZi7dbs53iuWm79rWUXiV2Wd3lFwm6+W9Qe9acpqXQAdFPm8FpTcmC2SbJZvCjMA6lD0jMWudB1+m4I1rXDSno9YdhF62ET1dvTB/4Mzl7xRTkIHa1+3HJTWnAA0uueWk3wiLhOro9OjjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heF0dm3M; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21f2339dcfdso11382835ad.1;
-        Thu, 20 Feb 2025 00:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740039220; x=1740644020; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hz/pGvR+evldl5mhlvuI0J68W2mI9FP4/s36oM1FYLQ=;
-        b=heF0dm3MjHXMA7y+n0ZoAaOZzdbNAxYTWs2GjGgDNo/uYJQ6lO2hsvafXPpn7nZ1is
-         T/knW3AAniz+tpZihfOqP0QzRErEyLTZhuOm/CUJFE++/vVhJrxKvTmXFa7VB73am/Bu
-         L6fRTACx215w+S24yeFLoFfAHQQSRaulBQ7Rku0+xRlb8AfhY4oQ+oW0KUOcsVUXCy0q
-         paf3otP6lzxnJyJZ2txSeuZFrbsp0M8/Q6gOreMc0u6YeY3pi5OCt5vp1CQlnjuOK3tL
-         hbZU47/3NsogqWH9eMn41qazt53EZncx89MVf9f7u0j3+x1J2NrHI3s6mkmy6jmtmHQe
-         g0vw==
+	 Content-Type:Content-Disposition:In-Reply-To; b=XR4wZpA62qajJNRVyzYFdFAznx2RL2GO9i+8NgHHnckdkLkK6662d7oDDgrowUs7f/qMlfWmCf/RhYxSwjOjIAEeuRU30jgSTllqywn1m6dYEvN96zG4U4Rq44qFGbFBkxx3AlzL3mb1oF/ASiaZEh5O9p+9aT8shwsiE/KTbz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HDKSYMxr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740041119;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QowQNzpCtCsCtxr+X2Hdu42nsXJZ78IqGs75xqGcCm4=;
+	b=HDKSYMxrL8zXxl/Ph5nORd77ppKkIQX5WuXnf7idofE1RO7wFTKfRWyK/1qiMNu0M/auzj
+	R2SX5X9PMHqYakbhVf2C8AgL3rYTqZfxaEERvQCxgJmyPjsXrsjmjCeTJW2IExefwQYHZi
+	L9eEJNrdn+NpxAVhWkWmfqKLNuBNPNA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-451-2FTAbtOMPyWMziNWFjks2g-1; Thu, 20 Feb 2025 03:45:17 -0500
+X-MC-Unique: 2FTAbtOMPyWMziNWFjks2g-1
+X-Mimecast-MFC-AGG-ID: 2FTAbtOMPyWMziNWFjks2g_1740041117
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-abb8e0944bfso84096266b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 00:45:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740039220; x=1740644020;
+        d=1e100.net; s=20230601; t=1740041117; x=1740645917;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Hz/pGvR+evldl5mhlvuI0J68W2mI9FP4/s36oM1FYLQ=;
-        b=lwZm7CtAYxy1m75x9tC8mhNCbh2FrlEArGk7rmk8JoyM2rLY8lAD5rpdwMAy6VFy3V
-         jv6uJ+0h6lHqFAjPdJ3ltZiTwn3QKR/CY1X5CFiPqP4FJeW/thliTW6oPtW3H+Rn3Gxh
-         yVthrGiF8zQunOARlulL7lOL4BmvJHAlrx3Zp9Tv4XAZoX2TSovXn06xaW+8ycyUfR2/
-         UeoR1Vi4HiwKLw3MAycf5DY7X2TKWZy9ba9tJJc+T38eEwAJVrtAoVQvO++OtsYmSXyB
-         1sG9dveRIRAG7P0XI/inAk+CWvBRI2hEGWU+ch2qtRfTZjKJlCPRaKbZWVEFyzs38zAD
-         dgOw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPr/S2BkV5INySGwSqhG0sY5Nbks7dAafdVTfQMmsfRNFc411joUmKW6hWWyO2tPuk0K74RG9P@vger.kernel.org, AJvYcCWR31zaeVcuEM0bqAnDtUe1iIK2kHlfeuwtOFvgkGehAWptniK/A6TgLzNOflXLBKZ/N9s=@vger.kernel.org, AJvYcCWr4oLApZxYM5iStMQfO4rcDc6InW6ekEb5J/vopmjfAVIU6JlYbLdDLCIL+gL3VVwOG1uCO9R/UqYg@vger.kernel.org, AJvYcCWuC5bV4zUpc49+qC4Fa0eHPFhIoBgS+pUzu7H28Jy3QfvU4kAoB29u1qB/Vw7S6muiX0Vx+TZLF5pJ/Qvg7nA+@vger.kernel.org, AJvYcCXWrZKjCAXN5HOKHUyMl2wUM9dbsFbgNroODSjQpDTlaV+7MSwiD9pesFXJU0YaDiyj9To7I/48Wa15R7gm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3ydxZhvy+b8PtpCQaTY1VSmt+yEq3kJudHGtprE6dKq9cK7fq
-	lEOCBOk5/aWRrnRm9JWT+7fqCOzN4l/LLiEfBIM2WZK+HqtIJA68
-X-Gm-Gg: ASbGncsdZ241q4QnLQ30TNpK+bwBKY8bq3ekRWjsk9Z1Qi6ztWQ2ZJYWDdu04kcfrMw
-	LihueXm0WPHbWpP832Duih6aV3Iv07gxYlKNRHPVrETjU52ZUupuB//V0+72cSRzMlQSivr4NyE
-	H6caGlD5P3iA0xkfO0aEvCM9nqCaGlTQrbbAln2UOJ2SVeIWtHqD7FzwoQGwaL+QCymnWAOS7C2
-	A1chNYqgwSJndpinPTjFatGvIOmYbXAs5y5lc6myL+W+m4fY1+V5pClGP4TN6CZADKs1BlEMaN3
-	yod3JTm0XeWeHBA=
-X-Google-Smtp-Source: AGHT+IF3zZoqfKWUfFNv+FPNQ0UuIwZSkcWXCgHzMPO8Q84I63xMG6/s+7OLxm4EjnPNFrOg1ROUQQ==
-X-Received: by 2002:a17:903:40cc:b0:215:58be:3349 with SMTP id d9443c01a7336-2218c41f67dmr48108495ad.14.1740039219629;
-        Thu, 20 Feb 2025 00:13:39 -0800 (PST)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d5349634sm114661275ad.31.2025.02.20.00.13.37
+        bh=QowQNzpCtCsCtxr+X2Hdu42nsXJZ78IqGs75xqGcCm4=;
+        b=o+JkTxGRfa6F8pNKJwdXsZH7fMHOIwOJBBemz95JU+nM7eDN1JDNnRiA7bA3dBZR1Q
+         UW8iCOextGzglz7IoPNPCfgqowsrchArwAb2IDhFTSnDetCcU8oJATBKMbOcjCobKUfd
+         P+KhtPh7Xe+1F2r1TU9DmUr4/n5eu6Yugewyb74E7XovoWE9a3DtPyI/nps13zVCWwB4
+         G8YEkHPug5cc3/wU2gWRDR7HPHXdGatP/4Gt3m6Q3GFmDZABUc9TgZCBV39eJNma/E3S
+         NzGynwic6h2quG/lUkjATkmSPnW+BHR7648xTPvtwnFU/T1roa7PORuyGtYy6j+Z5xVM
+         oQeA==
+X-Forwarded-Encrypted: i=1; AJvYcCVdWcPy9Riv2/R8gj159BN1Z4V+HJTWPiJSU3DEITU9Lqc1PvXnt7Sy6amQWAcjbyI6gA8l2+dENJk6PFLYU9c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl8PzfzlOBe0FF+y8a9qLBWlNfGOZfu771F9vTzCIZ0pmqAUsq
+	xhUWT2ccvPnagZvfQKmJa7TAlTA8KiYGj0N5Yw/TjAiVIcN08Nkxrz4Ec/FiZ6yWeEi5XoNoUpT
+	tYEn8ixmK6/AgvWXVcFAACsIIZt9jjqFs6eQ4A0ap2lvYkhb6lC3J54to8SICtaKRTw==
+X-Gm-Gg: ASbGncvMp1YDIlP6LPabXezHkdNfjnIIfJUsLQDQQG920/opOYFEtyocdPv/2dzc3/R
+	A6yO7jLDJln/YFk2329omXIGxLv/EJdZSXVTJq+jrHTIDJl58zpFQBeeY+U7E4KT5m1OKUWhnm3
+	4+cX4my9+dxkrBOxDlXsW/gZiFTrU8qg5+rm0bNyzL+A8q7mn5SCqlP7l0JryO2v7jIS/nw5dAZ
+	wegGPpVljkQlfrGTRWAg12rurj/nNQyupbAez8JG5QhmJLVMGhBe9RAyP0fYNqexaoXig==
+X-Received: by 2002:a17:906:f5a2:b0:ab7:e3cb:ca81 with SMTP id a640c23a62f3a-abbcce2dce7mr658330266b.30.1740041116679;
+        Thu, 20 Feb 2025 00:45:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE3dogKAU3XJfB97xx6QDkV7Yj2gPqLTO6qgUQYyB3pQmxLIK3jEJkScPsnctuvKKAeoojJDg==
+X-Received: by 2002:a17:906:f5a2:b0:ab7:e3cb:ca81 with SMTP id a640c23a62f3a-abbcce2dce7mr658325866b.30.1740041116195;
+        Thu, 20 Feb 2025 00:45:16 -0800 (PST)
+Received: from redhat.com ([2.55.163.174])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb9bc1c667sm731938266b.131.2025.02.20.00.45.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 00:13:38 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id C04B84208FB6; Thu, 20 Feb 2025 15:13:35 +0700 (WIB)
-Date: Thu, 20 Feb 2025 15:13:35 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	virtualization@lists.linux.dev, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
+        Thu, 20 Feb 2025 00:45:15 -0800 (PST)
+Date: Thu, 20 Feb 2025 03:45:10 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Akihiko Odaki <akihiko.odaki@daynix.com>,
 	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Shailend Chand <shailend@google.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Willem de Bruijn <willemb@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Jason Wang <jasowang@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me,
-	asml.silence@gmail.com, dw@davidwei.uk,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Pedro Tammela <pctammela@mojatatu.com>,
-	Samiullah Khawaja <skhawaja@google.com>
-Subject: Re: [PATCH net-next v4 5/9] net: add devmem TCP TX documentation
-Message-ID: <Z7bkL7uuy8prxfTe@archie.me>
-References: <20250220020914.895431-1-almasrymina@google.com>
- <20250220020914.895431-6-almasrymina@google.com>
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+	linux-kselftest@vger.kernel.org,
+	Yuri Benditovich <yuri.benditovich@daynix.com>,
+	Andrew Melnychenko <andrew@daynix.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	gur.stavi@huawei.com, devel@daynix.com
+Subject: Re: [PATCH net-next v2] tun: Pad virtio headers
+Message-ID: <20250220034042-mutt-send-email-mst@kernel.org>
+References: <20250215-buffers-v2-1-1fbc6aaf8ad6@daynix.com>
+ <d4b7f8a0-db50-4b48-b5a3-f60eab76e96b@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="j3ck8zPX3Nllt0fQ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250220020914.895431-6-almasrymina@google.com>
+In-Reply-To: <d4b7f8a0-db50-4b48-b5a3-f60eab76e96b@redhat.com>
+
+On Thu, Feb 20, 2025 at 08:58:38AM +0100, Paolo Abeni wrote:
+> Hi,
+> 
+> On 2/15/25 7:04 AM, Akihiko Odaki wrote:
+> > tun simply advances iov_iter when it needs to pad virtio header,
+> > which leaves the garbage in the buffer as is. This will become
+> > especially problematic when tun starts to allow enabling the hash
+> > reporting feature; even if the feature is enabled, the packet may lack a
+> > hash value and may contain a hole in the virtio header because the
+> > packet arrived before the feature gets enabled or does not contain the
+> > header fields to be hashed. If the hole is not filled with zero, it is
+> > impossible to tell if the packet lacks a hash value.
+> 
+> Should virtio starting sending packets only after feature negotiation?
+> In other words, can the above happen without another bug somewhere else?
 
 
---j3ck8zPX3Nllt0fQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not if this is connected with a guest with the standard virtio driver, no.
+The issue is that tun has no concept of feature negotiation,
+and we don't know who uses the vnet header feature, or why.
 
-On Thu, Feb 20, 2025 at 02:09:10AM +0000, Mina Almasry wrote:
-> +The user application must use MSG_ZEROCOPY flag when sending devmem TCP.=
- Devmem
-> +cannot be copied by the kernel, so the semantics of the devmem TX are si=
-milar
-> +to the semantics of MSG_ZEROCOPY.
-> +
-> +	setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt, sizeof(opt));
-> +
-> +It is also recommended that the user binds the TX socket to the same int=
-erface
-> +the dma-buf has been bound to via SO_BINDTODEVICE.
-> +
-> +	setsockopt(socket_fd, SOL_SOCKET, SO_BINDTODEVICE, ifname, strlen(ifnam=
-e) + 1);
-> +
+> I guess the following question is mostly for Jason and Michael: could be
+> possible (/would it make any sense) to use a virtio_net_hdr `flags` bit
+> to explicitly signal the hash fields presence? i.e. making the actual
+> virtio_net_hdr size 'dynamic'.
 
-Wrap both setsockopts above in literal code-block (just like other snippets
-for consistency).
+But it is dynamic - that is why we have TUNSETVNETHDRSZ.
 
-> +The user should create a msghdr where,
-> +
-> +iov_base is set to the offset into the dmabuf to start sending from.
-> +iov_len is set to the number of bytes to be sent from the dmabuf.
 
-Should above be bullet list?
 
-Thanks.
+> > In theory, a user of tun can fill the buffer with zero before calling
+> > read() to avoid such a problem, but leaving the garbage in the buffer is
+> > awkward anyway so replace advancing the iterator with writing zeros.
+> > 
+> > A user might have initialized the buffer to some non-zero value,
+> > expecting tun to skip writing it. As this was never a documented
+> > feature, this seems unlikely.
+> > 
+> > The overhead of filling the hole in the header is negligible when the
+> > header size is specified according to the specification as doing so will
+> > not make another cache line dirty under a reasonable assumption. Below
+> > is a proof of this statement:
+> > 
+> > The first 10 bytes of the header is always written and tun also writes
+> > the packet itself immediately after the 
+> > packet unless the packet is
+> 
+>  ^^^^^ this possibly should be 'virtio header'. Otherwise the sentence
+> is hard to follow for me.
+> 
+> > empty. This makes a hole between these writes whose size is: sz - 10
+> > where sz is the specified header size.
+> > 
+> > Therefore, we will never make another cache line dirty when:
+> > sz < L1_CACHE_BYTES + 10
+> > where L1_CACHE_BYTES is the cache line size. Assuming
+> > L1_CACHE_BYTES >= 16, this inequation holds when: sz < 26.
+> > 
+> > sz <= 20 according to the current specification so we even have a
+> > margin of 5 bytes in case that the header size grows in a future version
+> > of the specification.
+> 
+> FTR, the upcoming GSO over UDP tunnel support will add other 4 bytes to
+> the header. but that will still fit the given boundary.
+> 
+> /P
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---j3ck8zPX3Nllt0fQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZ7bkKQAKCRD2uYlJVVFO
-o2s0AQCqEcmu39fAQOLMTwOYkn6NbqUyjT/e6q34LK5lpFeB7gEAw4iw+0dFGzFm
-S+/rpVCO8Pfw8Mt4Xg/RDLmSlwuOhgs=
-=QlMN
------END PGP SIGNATURE-----
-
---j3ck8zPX3Nllt0fQ--
 
