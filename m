@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-27073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 524FDA3DDCA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:08:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D327A3DDD8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 16:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8A03422150
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:04:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E44BC7AD4F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2025 15:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F8F1FF7D3;
-	Thu, 20 Feb 2025 15:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08B6D204598;
+	Thu, 20 Feb 2025 15:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OCjwY5vX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D4qL/pqf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6849F1FF5F4
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 15:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D461FF1DF
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 15:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740063826; cv=none; b=WQMUs0Wv4EOc7KhXurlDPUio/y9sBhUjHlXX8o93/qILWxfCfaXCoF5Y5z8x5TXBlxubtqt9WVz/tuZEzJsY/Ntqal7PRGa+mtv6TfI80f4OJzkkouoGFYXg6Om3chf+0hIbN3i2b+P7/ihGxhy8K5I7F3xAj0BLJVC1k3kobz0=
+	t=1740063827; cv=none; b=AS5TseB1ER3ktJuDq8YaZN1//BLq5XHcqsDdabnKsjzjZn9nokSfA+sVBCj8RNojT56IF7EOoLX5rc2sD/44o5WdRiBzB55K8w/3KxlE+I3U3vBchsT6hkZhgJQ51nWa/w0Q70y0HrMhNGuwxPt1v1eRgRXEU27Ok9pJqwmUU28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740063826; c=relaxed/simple;
-	bh=Ilk6+5tZclI1F7dj4D5Y8eYPtM9YM7Dc/fjaV8j1+O8=;
+	s=arc-20240116; t=1740063827; c=relaxed/simple;
+	bh=9/O8tij2wirjK4B8U/5x/9fVjzo452E6485tV+fUgJM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Iw5VAnY02addK4f1rOVwR10iC/A3WQmWjn/XAPaaJDIIahheH8CWiwCh08j9GLmrBA7GJOGhmA05vUfufDfoR909ipTaZnpHVElNICkroxiPM1mnn/+lMj1UMwECaN02obPY39Hy2Bnr15SQoi0rcwxtHP+Bnba3rYMlFOrcExc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OCjwY5vX; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=iyrFVxqhIDP3bhCfq9nneizylp/6otAsqdfxbKtxXnRTs09KK0448LnDfFVT64gavVmZWuTMWxLt14jdtwG4DX86Hk5hpcIHi3MWnU7sFjpDmUf30GKHf+AzgDsArwMXy2B6qke/YEcCs+Bj+EGcZsEQgn52a70pxD5bIhJzKDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D4qL/pqf; arc=none smtp.client-ip=209.85.221.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-439858c5911so5461095e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 07:03:44 -0800 (PST)
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-38f338525e1so539544f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 07:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740063823; x=1740668623; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1740063824; x=1740668624; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wiDbMltjmyaz+TufXV5xdn+s6ZmLgnlpLnjEPTqGgXg=;
-        b=OCjwY5vXJ5IiNskY7194N8VukxN38ZP9SQkZ0aCCPWWOjjrFjDBZq2N6NeX/rV+Fyz
-         4HjM7oJD/nLmAJDGMGNVD+A4sCa0LN6Z3ConMghkgNHAhKe59DD1tiz9N1kR/bXl6pAT
-         yxexElii3MaMJSFk2pBnPqijIRnwxDC0+eJ2gJeq9yuuI2gSwknv3L+0zejI4uKlHoNO
-         VMEXAwcJ+QhwE01G9RcBgwHT5qelrTDSfS1ku9OVqqwoxZIIFn0Cg+MCJgPP6TFaDSR1
-         Q/M97tSm6VOJt2KXibC5MSosSuhkGCBRPiCdQdT5XJu1/aUyrSM5dgWD7fQ8bd0qN3HA
-         ++uA==
+        bh=Pfnk8jRZQRXvEGJgMo7kX45MXuk74eHKcJOVD1/hcv8=;
+        b=D4qL/pqfz7t6i5X9OGWOI/i6vUeNz4tquOFDin4XQLG9mcFZL3bV8eKrUhycSpYz7R
+         PChUVwVxLugpvqnba4cbcBe+RaXB81Qy7G8qmRB5SyAl63nRkqlhLc8EjD5WvMixXESH
+         1rBiSj481MKpTon1Awim9nqbzlIaxPGMGs4XZFE1bhQMoED0bBdZF6aqHCH75hUzCvBf
+         R4HtebUll1A48MZVtxtEuJYF6nDDyCGcuITyEBOoPsWBlMH4AI/X2Of7qkxxXtM5pD+b
+         BrZMiRQy/b7QJvC6Cq4vRzXCfU8d2vq8ZD2pEmVE7RIkODVxauiFHBJEBA5ugL5FOaap
+         DYCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740063823; x=1740668623;
+        d=1e100.net; s=20230601; t=1740063824; x=1740668624;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wiDbMltjmyaz+TufXV5xdn+s6ZmLgnlpLnjEPTqGgXg=;
-        b=D1/XACdaMQ6YaBCCU/pmkosLSDCQuZ37XyvUbaFZchcuhM3FPzyDee/psCTwkrhLLP
-         C1XBv7aJjgQfvkpYwMW13vgVJziluH4bJKFHPANP9bdoxitCb1bbER4bxMPJ53QqAZYt
-         2pJX0iDEddBOfzJZdNiaZA2SMdtHdTHIuqjWl/j/cxF6iNrMLpkAB9emM6QQgy9Jls2F
-         LDg4/008NaIDfyKxUYknBPHgRnL32dCdnbfODnjWN+d6qwnMArs7qd2r72h9AXPBgr8R
-         hYJ+WXp2e7KRBcj73EJVxwYMnZA7OpbavbugnVH1/gxZHEyh/s/CCS5/F5PRb1WjNSq0
-         bjLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8a49CLSJJIfytqpUH6zFHivRgDlY9HYHBn583ycOtCadLfcXTL4jwPux8lso0le3b/pjAlxyBG3v1O/3UUzM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXipaTXGqta0ODmOk3uIXmECFjj/bpDwL42oNDzpexiQnPfNxk
-	tU1NxpAGj2HCYf0hiGa8ysCGuyBV9DLPQLJokw+HazmREl61m0pracuV1lNqEOiGwH0n5MVI+VB
-	GrGiVWsJGEQ==
-X-Google-Smtp-Source: AGHT+IGMX6sUMZFB6kcF1FLDPNy7JKgv9mVpVnHmQkgAM/qSvu5gFbpVA6vpmtah98EUgiAhA5SqxJEjJc185A==
-X-Received: from wmbg23.prod.google.com ([2002:a05:600c:a417:b0:439:95b9:9200])
+        bh=Pfnk8jRZQRXvEGJgMo7kX45MXuk74eHKcJOVD1/hcv8=;
+        b=iu6L8Tjn0+xr5KSndw8sLOA3dyPyldb1I0/IadPNiCUE4D8MyD5sjEEOjMnGwwv7gC
+         pDLEwbp+HbFSGYctF/CXn678Ks3n+j/gAkFoU1A3vB38zr31SO3Pb1ry6OMsdoxBVmcz
+         DX2Rgc5zo49IJg2RESHXH9ifWOnwN2MbqlZMoFgjGIykvuDYNWFTskWfR1OxoXASx024
+         ctuIoEwVciW8EaydbcML1jLY+qvvKySX0dRzaJB8lg/GufbkusQuyadMaQy7/aGjwsgw
+         +7fAMXK3aQk8p4CHAAWHxCCf9N7GuVS6oxX5AwHP+G+GJ1yfqKSEKd3nwPhyQJ/AojK0
+         dAQA==
+X-Forwarded-Encrypted: i=1; AJvYcCVg70ig5zHq+SPFBm7aZ9nQ0VydguLv8ouYYMRYLuzLUIelkLd4E1DFlSdJx/PlbKOy64/0yMd8jP89A22OtGo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzPhB2BcTksNAG1cCdMJfzO5Z0SjDU0+gzmxcu0A5Qmd/mvfh8
+	2NyzR2TgGLaCWljRYTfm1OV7GIeRR9f/hpUKVXF1vpoMJngWW4nqZ4CkrxSd084CkPiGKff13Tc
+	6LsY9LRJSwQ==
+X-Google-Smtp-Source: AGHT+IEZkoGqvABvYTvvXiRtV+S/mpL0J7HYkw5xP36OjVJpS+4DgqAiy+8j1WNNFXzaMG5CNB+I1Lj8O+cs0A==
+X-Received: from wrbfu21.prod.google.com ([2002:a05:6000:25f5:b0:38f:3cf0:aac7])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:450b:b0:439:9225:2f50 with SMTP id 5b1f17b1804b1-43999db0139mr80231185e9.16.1740063822867;
- Thu, 20 Feb 2025 07:03:42 -0800 (PST)
-Date: Thu, 20 Feb 2025 15:03:14 +0000
+ 2002:a05:6000:2c6:b0:38f:3344:361e with SMTP id ffacd0b85a97d-38f33f2e954mr20711279f8f.23.1740063824704;
+ Thu, 20 Feb 2025 07:03:44 -0800 (PST)
+Date: Thu, 20 Feb 2025 15:03:15 +0000
 In-Reply-To: <20250220-mm-selftests-v1-0-9bbf57d64463@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250220-mm-selftests-v1-0-9bbf57d64463@google.com>
 X-Mailer: b4 0.15-dev
-Message-ID: <20250220-mm-selftests-v1-2-9bbf57d64463@google.com>
-Subject: [PATCH 2/6] selftests/mm: Fix assumption that sudo is present
+Message-ID: <20250220-mm-selftests-v1-3-9bbf57d64463@google.com>
+Subject: [PATCH 3/6] selftests/mm: Skip uffd-stress if userfaultfd not available
 From: Brendan Jackman <jackmanb@google.com>
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Shuah Khan <shuah@kernel.org>
@@ -83,62 +83,30 @@ Cc: Mateusz Guzik <mjguzik@gmail.com>, linux-mm@kvack.org, linux-kselftest@vger.
 	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-If we are root, sudo isn't needed. If we are not root, we need sudo, so
-skip the test if it isn't present.
-
-We already do this for on-fault-limit, but this uses separate
-infrastructure since that is specifically for sudo-ing to the nobody
-user.
-
-Note this ptrace_skip configuration still fails if that file doesn't
-exist, but in that case the test is still fine, so this just prints an
-error but doesn't break anything. I suspect that's probably deliberate.
+It's pretty obvious that the test wouldn't work if you don't have the
+feature enabled. But, it's still useful to SKIP instead of failing so
+the reader can immediately tell that this is the reason why.
 
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- tools/testing/selftests/mm/run_vmtests.sh | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/uffd-stress.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index da7e266681031d2772fb0c4139648904a18e0bf9..9c963f50927ab2b10c3f942cedd087087d4d0def 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -89,6 +89,17 @@ RUN_ALL=false
- RUN_DESTRUCTIVE=false
- TAP_PREFIX="# "
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index a4b83280998ab7ce8d31e91d8f9fbb47ef11d742..db5366b4766e5bfa2d1150d2f3c2d32469a6e28b 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -411,8 +411,8 @@ static void parse_test_type_arg(const char *raw_type)
+ 	 * feature.
+ 	 */
  
-+# We can do stuff as root either if we are already root, or if sudo exists.
-+if [ "$(id -u)" == 0 ]; then
-+	HAVE_SUDO_ROOT=true
-+	SUDO_ROOT=
-+elif command -v sudo >/dev/null 2>&1; then
-+	HAVE_SUDO_ROOT=true
-+	SUDO_ROOT=sudo
-+else
-+	HAVE_SUDO_ROOT=false
-+fi
-+
- while getopts "aht:n" OPT; do
- 	case ${OPT} in
- 		"a") RUN_ALL=true ;;
-@@ -384,10 +395,13 @@ CATEGORY="madv_guard" run_test ./guard-pages
- # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
- CATEGORY="madv_populate" run_test ./madv_populate
+-	if (uffd_get_features(&features))
+-		err("failed to get available features");
++	if (uffd_get_features(&features) && errno == ENOENT)
++		ksft_exit_skip("failed to get avialable features (%d)\n", errno);
  
--if [ -x ./memfd_secret ]
--then
--(echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope 2>&1) | tap_prefix
--CATEGORY="memfd_secret" run_test ./memfd_secret
-+if [ -x ./memfd_secret ]; then
-+	if $HAVE_SUDO_ROOT; then
-+		(echo 0 | $SUDO_ROOT tee /proc/sys/kernel/yama/ptrace_scope 2>&1) | tap_prefix
-+		CATEGORY="memfd_secret" run_test ./memfd_secret
-+	else
-+		echo "# SKIP ./memfd_secret"
-+	fi
- fi
- 
- # KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+ 	test_uffdio_wp = test_uffdio_wp &&
+ 		(features & UFFD_FEATURE_PAGEFAULT_FLAG_WP);
 
 -- 
 2.48.1.601.g30ceb7b040-goog
