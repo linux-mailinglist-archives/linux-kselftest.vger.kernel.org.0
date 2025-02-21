@@ -1,257 +1,232 @@
-Return-Path: <linux-kselftest+bounces-27181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 451EBA3FA8C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 17:16:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 469C0A3FA88
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 17:16:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E1DD442E45
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 16:10:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 212877ADCAA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 16:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C18E1E7C1E;
-	Fri, 21 Feb 2025 16:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9791E7C2F;
+	Fri, 21 Feb 2025 16:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2reqoYI"
+	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="fFSUHhBk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8511DF73A;
-	Fri, 21 Feb 2025 16:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0219F1DB958;
+	Fri, 21 Feb 2025 16:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740154028; cv=none; b=uZSXdZauLSOjJ5SvGSfuhBxfzmD3mu5mwKXKLYZQifPIHLQpVcCGRDoGuVoVzrZ9qGcrwPTdnzLksoJtmZct4bruBbSbkxUF5PitUfu2wpN2gHk5eVRU191SM6KgG0QaskFBy4cmeqlGRACg0iNmW647Q1/gZAnVWqxrV8aREQk=
+	t=1740154157; cv=none; b=qg0SGxNW8SizS9A0vyIXuXaI6wUBUeEjM6PRZ9R1xhT1SeciB4g/flDtlSEK23AfnD8D3GBTO+UMInCiMtNBxAB8uUYlHuEyfESNzm6h2/V7R4tx6qwaNp1gp4z/WcGmBfOqQAf7QW66aezV2giKtGEY2KDuRu23zkmCgj3mScA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740154028; c=relaxed/simple;
-	bh=R9CX2qGFOMKtOpbBq89u8Ru20KtYEUQdBPmdT7JZ0kY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NElYi510QuJI9Mb8uwFFG439512bg13PFZ4rRSdzE4VgIj7F3aAh7tmmJzC1SgxjqW2NWwsjeJniYpvjsnpie5KIsoTsDPh77Gs1XDOwe8jbkJyju52ARvaG9lfCwSFCCsHn22hLFMzGdxs2gOCbYcsFRF3wgQoAHpQ+FqSMxjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X2reqoYI; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-220d601886fso35458495ad.1;
-        Fri, 21 Feb 2025 08:07:04 -0800 (PST)
+	s=arc-20240116; t=1740154157; c=relaxed/simple;
+	bh=C6wt0QpOubA3Wo2Ui6kiIdrONu63xbeBPLkcu3iw5sc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cReiOPDACy241VdxCBKGj9Cj7nXTIK5at5DeQy/NvhsQE1heUdIPisUHsKyx/Pqn5vL+hJUHoDiXD9Nkq2/UtwCx9uu0DjJRs5D+taaMLJRnaPzN4jjNktAn1607ydMh7bnrkbjkLXf2Mms3AfHzQ+lamnfQASBNXObFUbwLOkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=fFSUHhBk; arc=none smtp.client-ip=52.119.213.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740154024; x=1740758824; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EXMa2xyXvo743Y0woStBvwk3tmVqDmNqL4DB+2dBsrk=;
-        b=X2reqoYIqIVBb6n7llu45SeONXH9raVFq7xOYesqM7uSsNOc1MCrb92iMkj8PGnEi8
-         9CP4EBLmty0F15Zu4PTBE+fLxa9rcHGl2Oto2eImXoixBrF2YxoIbdi/TY1jQQvsX7F5
-         vMSXTzFZzjGVMdXc0BXTk2gXm26wQvVhVqeByWwAcecOOJSnQmwInP7iMtgs8fTmpjLp
-         xaWWUvSlfrgbhYGw6+t9yu7K5N+xDfaJAp0Jq147cORwCcvGSKL1bMvG9sZA22dhUhG+
-         YH3Yj3s1HWuRijTozlK60rCNWVLnTbNQYClE/slGQUhfFAShTX4eKiNOunoytFxhI7zA
-         jvOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740154024; x=1740758824;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EXMa2xyXvo743Y0woStBvwk3tmVqDmNqL4DB+2dBsrk=;
-        b=rkOcLM+UFzfcIXZUXqbxH5EaN6KRgJo3KIOg5Fx4fCSLjYI8SEuaThHJ3T89gw55Or
-         Wp193YcN9jLhhEX1BThM9xKfjTqUzS6QFVDj0ujLaI+b9PtYRm3H9dhkGJhFDrsc6uRG
-         OgZzMCWAfw1LDMxkbwFSE6rnmmBJGAbDoJUpZqoPCH6gBk+rqLeOCEpr8THW36khJ7+j
-         huaHk0FJQj4vbswUq/wk9vdaVK5CFhqw4lxkik0nStHOsXcwzzz6Yup1Vt6xBC2TKCNg
-         5zDTlnl4LfGHiZXMVVnz6mycoCxtm2GTP3QIkSKhUdoihdKl/wgRAYbomC/7xQO8Txj0
-         MtBg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7yGN3oSLfWwQQZfJdQcEmjnnJpkdTrOD2Eels8c+eQKtiTsqe/MjH8HwqB/mfNsrUhUuxRomuSLDDEFI6/yI=@vger.kernel.org, AJvYcCUG0gB4JtrQfXQbWGzkLApG2o3xeN5KX6uSorsCQloQn/SjIZOI428cdeYdehwbBC6OTQ9U6Pon@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLYcn0K/PdqHqA7R5E8pGBr8qWW5MXBrcDE8l+wTGzbYng+92b
-	BDMSTbEkMTFGu8ug2BQwMIqe/FK4HXjvlnvDR2vVB9LECkyEmi0=
-X-Gm-Gg: ASbGnctShnaYP8ORvmCVqyArmHrw6aAco2qImbWc962VSqsO8bEPMJz37h83aHNgdHG
-	64N0WoQFyMTp2q2ptl94YweI4L/dohZH50lREra992lOyG79913KlTQjXjCocL3dS8K+0zomC8g
-	9abOU90fIH9SdwTiWbFn+rHtrACEoY6kHEQFnqcP7LENTuz2jC59Lw7dYwP525QIZo49zs+qdyA
-	h5mbvLisoqD0G1XFKOW3pgzCqJXKSltWJKfEm0uC0tiPuEzbGphqUtTxu+VoD9l2GjPMntOEEk9
-	ZPiJmJOEVloCU1WvBKVBOCCwCw==
-X-Google-Smtp-Source: AGHT+IHml8fjUCSIE2ZuwvEzvgY1J8JC+QeEzEUMGL3CllgCnM7QU6VIWvUwwN17Oh6lW2+w27AZYQ==
-X-Received: by 2002:a05:6a21:688:b0:1ee:ced0:f0a4 with SMTP id adf61e73a8af0-1eef3d6b2ffmr8315655637.34.1740154023777;
-        Fri, 21 Feb 2025 08:07:03 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-ae6d9079f20sm3310928a12.48.2025.02.21.08.07.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 08:07:03 -0800 (PST)
-Date: Fri, 21 Feb 2025 08:07:02 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	dxu@dxuuu.xyz, shuah@kernel.org, hawk@kernel.org, petrm@nvidia.com,
-	willemb@google.com, jstancek@redhat.com,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 2/2] selftests: drv-net: test XDP, HDS auto and
- the ioctl path
-Message-ID: <Z7ikpmXut900JqA1@mini-arch>
-References: <20250221025141.1132944-1-kuba@kernel.org>
- <20250221025141.1132944-2-kuba@kernel.org>
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1740154155; x=1771690155;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PHVzDpLvU92kBE3YeWHx+UpvZAPAAQDXw2hzc0F/GoM=;
+  b=fFSUHhBkkevI7NlreBT905I8xXzs0r5IEvvZ+SEhw+jcZG/Nk+n5rZtx
+   Mgv9z84Qv8HDSjaB+eLuikPa90E3iiSsdCvP7xU+gkmm18kITzyd+MTAm
+   aluEyQAFzVj3Dz1qZB31m+SmKiIl8nn677mWkYJahoVkdGfJoobSgsfUb
+   M=;
+X-IronPort-AV: E=Sophos;i="6.13,305,1732579200"; 
+   d="scan'208";a="68171595"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 16:09:09 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.38.20:27470]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.48.97:2525] with esmtp (Farcaster)
+ id 0f0eb951-77e0-44a7-963b-1320b4a5ebbf; Fri, 21 Feb 2025 16:09:09 +0000 (UTC)
+X-Farcaster-Flow-ID: 0f0eb951-77e0-44a7-963b-1320b4a5ebbf
+Received: from EX19D003UWB004.ant.amazon.com (10.13.138.24) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Fri, 21 Feb 2025 16:08:57 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (10.250.64.143) by
+ EX19D003UWB004.ant.amazon.com (10.13.138.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Fri, 21 Feb 2025 16:08:57 +0000
+Received: from email-imr-corp-prod-pdx-all-2b-c1559d0e.us-west-2.amazon.com
+ (10.25.36.210) by mail-relay.amazon.com (10.250.64.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
+ 15.2.1258.39 via Frontend Transport; Fri, 21 Feb 2025 16:08:57 +0000
+Received: from ua2d7e1a6107c5b.ant.amazon.com (dev-dsk-roypat-1c-dbe2a224.eu-west-1.amazon.com [172.19.88.180])
+	by email-imr-corp-prod-pdx-all-2b-c1559d0e.us-west-2.amazon.com (Postfix) with ESMTPS id 5BAFC404C9;
+	Fri, 21 Feb 2025 16:08:50 +0000 (UTC)
+From: Patrick Roy <roypat@amazon.co.uk>
+To: <rppt@kernel.org>, <david@redhat.com>, <seanjc@google.com>
+CC: Patrick Roy <roypat@amazon.co.uk>, <pbonzini@redhat.com>,
+	<corbet@lwn.net>, <willy@infradead.org>, <akpm@linux-foundation.org>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+	<sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
+	<Liam.Howlett@oracle.com>, <lorenzo.stoakes@oracle.com>, <vbabka@suse.cz>,
+	<jannh@google.com>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <tabba@google.com>, <jgowans@amazon.com>,
+	<graf@amazon.com>, <kalyazin@amazon.com>, <xmarcalx@amazon.com>,
+	<derekmn@amazon.com>
+Subject: [PATCH v4 00/12] Direct Map Removal for guest_memfd
+Date: Fri, 21 Feb 2025 16:07:13 +0000
+Message-ID: <20250221160728.1584559-1-roypat@amazon.co.uk>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250221025141.1132944-2-kuba@kernel.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 02/20, Jakub Kicinski wrote:
-> Test XDP and HDS interaction. While at it add a test for using the IOCTL,
-> as that turned out to be the real culprit.
-> 
-> Testing bnxt:
-> 
->   # NETIF=eth0 ./ksft-net-drv/drivers/net/hds.py
->   KTAP version 1
->   1..12
->   ok 1 hds.get_hds
->   ok 2 hds.get_hds_thresh
->   ok 3 hds.set_hds_disable # SKIP disabling of HDS not supported by the device
->   ok 4 hds.set_hds_enable
->   ok 5 hds.set_hds_thresh_zero
->   ok 6 hds.set_hds_thresh_max
->   ok 7 hds.set_hds_thresh_gt
->   ok 8 hds.set_xdp
->   ok 9 hds.enabled_set_xdp
->   ok 10 hds.ioctl
->   ok 11 hds.ioctl_set_xdp
->   ok 12 hds.ioctl_enabled_set_xdp
->   # Totals: pass:11 fail:0 xfail:0 xpass:0 skip:1 error:0
-> 
-> and netdevsim:
-> 
->   # ./ksft-net-drv/drivers/net/hds.py
->   KTAP version 1
->   1..12
->   ok 1 hds.get_hds
->   ok 2 hds.get_hds_thresh
->   ok 3 hds.set_hds_disable
->   ok 4 hds.set_hds_enable
->   ok 5 hds.set_hds_thresh_zero
->   ok 6 hds.set_hds_thresh_max
->   ok 7 hds.set_hds_thresh_gt
->   ok 8 hds.set_xdp
->   ok 9 hds.enabled_set_xdp
->   ok 10 hds.ioctl
->   ok 11 hds.ioctl_set_xdp
->   ok 12 hds.ioctl_enabled_set_xdp
->   # Totals: pass:12 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> Netdevsim needs a sane default for tx/rx ring size.
-> 
-> ethtool 6.11 is needed for the --disable-netlink option.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Unmapping virtual machine guest memory from the host kernel's direct map
+is a successful mitigation against Spectre-style transient execution
+issues: If the kernel page tables do not contain entries pointing to
+guest memory, then any attempted speculative read through the direct map
+will necessarily be blocked by the MMU before any observable
+microarchitectural side-effects happen. This means that Spectre-gadgets
+and similar cannot be used to target virtual machine memory. Roughly 60%
+of speculative execution issues fall into this category [1, Table 1].
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+This patch series extends guest_memfd with the ability to remove its
+memory from the host kernel's direct map, to be able to attain the above
+protection for KVM guests running inside guest_memfd.
 
-> ---
-> Since this is targeting net there is no cfg.rpath(),
-> I'll follow up once in net-next.
-> 
-> v2:
->  - add the ioctl tests
->  - factor out some common logic
-> 
-> CC: shuah@kernel.org
-> CC: hawk@kernel.org
-> CC: petrm@nvidia.com
-> CC: willemb@google.com
-> CC: jstancek@redhat.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/net/lib/Makefile      |   3 +
->  drivers/net/netdevsim/ethtool.c               |   2 +
->  .../testing/selftests/net/lib/xdp_dummy.bpf.c |  13 ++
->  tools/testing/selftests/drivers/net/hds.py    | 145 +++++++++++++++++-
->  4 files changed, 160 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/net/lib/xdp_dummy.bpf.c
-> 
-> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
-> index bc6b6762baf3..c22623b9a2a5 100644
-> --- a/tools/testing/selftests/net/lib/Makefile
-> +++ b/tools/testing/selftests/net/lib/Makefile
-> @@ -9,7 +9,10 @@ TEST_FILES := ../../../../../Documentation/netlink/specs
->  TEST_FILES += ../../../../net/ynl
->  
->  TEST_GEN_FILES += csum
-> +TEST_GEN_FILES += $(patsubst %.c,%.o,$(wildcard *.bpf.c))
->  
->  TEST_INCLUDES := $(wildcard py/*.py sh/*.sh)
->  
->  include ../../lib.mk
-> +
-> +include ../bpf.mk
-> diff --git a/drivers/net/netdevsim/ethtool.c b/drivers/net/netdevsim/ethtool.c
-> index 5c80fbee7913..7ab358616e03 100644
-> --- a/drivers/net/netdevsim/ethtool.c
-> +++ b/drivers/net/netdevsim/ethtool.c
-> @@ -184,9 +184,11 @@ static const struct ethtool_ops nsim_ethtool_ops = {
->  
->  static void nsim_ethtool_ring_init(struct netdevsim *ns)
->  {
-> +	ns->ethtool.ring.rx_pending = 512;
->  	ns->ethtool.ring.rx_max_pending = 4096;
->  	ns->ethtool.ring.rx_jumbo_max_pending = 4096;
->  	ns->ethtool.ring.rx_mini_max_pending = 4096;
-> +	ns->ethtool.ring.tx_pending = 512;
->  	ns->ethtool.ring.tx_max_pending = 4096;
->  }
->  
-> diff --git a/tools/testing/selftests/net/lib/xdp_dummy.bpf.c b/tools/testing/selftests/net/lib/xdp_dummy.bpf.c
-> new file mode 100644
-> index 000000000000..d988b2e0cee8
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/lib/xdp_dummy.bpf.c
-> @@ -0,0 +1,13 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define KBUILD_MODNAME "xdp_dummy"
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +SEC("xdp")
-> +int xdp_dummy_prog(struct xdp_md *ctx)
-> +{
-> +	return XDP_PASS;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-> diff --git a/tools/testing/selftests/drivers/net/hds.py b/tools/testing/selftests/drivers/net/hds.py
-> index 394971b25c0b..90807b21a6eb 100755
-> --- a/tools/testing/selftests/drivers/net/hds.py
-> +++ b/tools/testing/selftests/drivers/net/hds.py
-> @@ -2,17 +2,54 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  import errno
-> +import os
->  from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_raises, KsftSkipEx
-> -from lib.py import EthtoolFamily, NlError
-> +from lib.py import CmdExitFailure, EthtoolFamily, NlError
->  from lib.py import NetDrvEnv
-> +from lib.py import defer, ethtool, ip
->  
-> -def get_hds(cfg, netnl) -> None:
-> +
-> +def _get_hds_mode(cfg, netnl) -> str:
->      try:
->          rings = netnl.rings_get({'header': {'dev-index': cfg.ifindex}})
->      except NlError as e:
->          raise KsftSkipEx('ring-get not supported by device')
->      if 'tcp-data-split' not in rings:
->          raise KsftSkipEx('tcp-data-split not supported by device')
-> +    return rings['tcp-data-split']
-> +
-> +
-> +def _xdp_onoff(cfg):
-> +    test_dir = os.path.dirname(os.path.realpath(__file__))
-> +    prog = test_dir + "/../../net/lib/xdp_dummy.bpf.o"
-> +    ip(f"link set dev %s xdp obj %s sec xdp" %
-> +        (cfg.ifname, prog))
-> +    ip(f"link set dev %s xdp off" % cfg.ifname)
+=== Changes to RFC v3 ===
 
-nit: any reason you're not using {format} strings here?
+- Settle relationship between direct map removal and shared/private
+  memory in guest_memfd (David H.)
+- Omit TLB flushes upon direct map removal again
+- Settle uABI for how KVM accesses guest memory in non-CoCo guest_memfd
+  VMs (upstream guest_memfd calls)
+- Add selftests that exercise the codepaths of non-CoCo guest_memfd VMs
 
-    ip(f"link set dev {cfg.ifname} xdp obj {prog} sec xdp")
-    ip(f"link set dev {cfg.ifname} xdp off")
+Lastly, this series is rebased on top of Fuad's v4 for shared mapping of
+guest_memfd [2]. The KVM parts should also apply on top of 0ad2507d5d93
+("Linux 6.14-rc3"), but the selftest patches need Fuad's series as base.
+
+=== Overview ===
+
+guest_memfd should be usable for "non-CoCo" VMs - virtual machines where
+host userspace is trusted (e.g. can have access to all of guest memory),
+but which should still be hardened against speculative execution attacks
+(Spectre, etc.) staged through potentially existing gadgets in the host
+kernel.
+
+To attain this hardening, unmap guest memory from the host kernels
+address space (e.g. zap direct map entries), while allowing KVM to
+continue accessing guest memory through userspace mappings. This works
+because KVM already almost always uses userspace mappings whenever KVM
+needs to access guest memory - the only parts that require direct map
+entries (because they use GUP) are KVM's MMU, and kvm-clock on x86.
+
+Building on top of guest_memfd sidesteps the MMU problem, as for
+memslots with KVM_MEM_GUEST_MEMFD set, the MMU consumes fd + offset
+directly without going through any VMAs. kvm-clock on the other hand is
+not strictly needed (guests boot fine without it), so ignore it for
+now.
+
+=== Implementation ===
+
+Make KVM_CREATE_GUEST_MEMFD accept a flag (KVM_GMEM_NO_DIRECT_MAP) that
+instructs it to remove newly allocated folios from the host kernels
+direct map immediately after preparation.
+
+Nothing further is needed to make non-CoCo VMs work - particularly, KVM
+does not need to be taught any special ways of accessing guest memory if
+it is in guest_memfd. Userspace can simply mmap guest_memfd (via
+KVM_GMEM_SHARED_MEM added in Fuad's series), and set the memslot's
+userspace_addr to this userspace mapping of guest_memfd.
+
+=== Open Questions ===
+
+In this patch series, stale TLB entries do not get flushed after direct
+map entries are marked as not present. This is fine from a functional
+point of view (as the mapping is still valid, it's just temporarily not
+supposed to be used), but pokes a theoretical hole into the speculation
+protection: Something could try to keep alive stale TLB entries for
+specific pages until the guest starts using them for sensitive
+information, and then stage a Spectre attack on that memory, despite it
+being unmapped. In practice, this would require knowing in advance, at
+gmem fault-time, which pages will eventually contain information of
+interest, and then preventing these specific TLB entries from getting
+naturally evicted (where the number of pages that can be targeted like
+this is limited by the size of the TLB). These seem to be fairly
+difficult requisites to fulfill, but we were wondering what the
+community thinks.
+
+=== Summary ===
+
+Patch 1 adds a struct address_space flag that indices that folios in a
+mapping are direct map removed, and threads it through mm code to ensure
+direct map removed folios don't end up in places where they can cause
+mayhem (particularly, we reject them in get_user_pages).  Since these
+checks end up being duplicates of already existing checks for secretmem
+folios, patch 2 unifies the two by using the new address_space flag for
+secretmem mappings. Patches 3 through 5 are about support for direct map
+removal in guest_memfd, while patches 6 through 12 are about testing the
+non-CoCo setup in KVM selftests, with patches 6 through 9 being
+preparatory, and patches 10 through 12 adding the actual test cases.
+
+[1]: https://download.vusec.net/papers/quarantine_raid23.pdf
+[2]: https://lore.kernel.org/kvm/20250218172500.807733-1-tabba@google.com/
+[RFC v1]: https://lore.kernel.org/kvm/20240709132041.3625501-1-roypat@amazon.co.uk/
+[RFC v2]: https://lore.kernel.org/kvm/20240910163038.1298452-1-roypat@amazon.co.uk/
+[RFC v3]: https://lore.kernel.org/kvm/20241030134912.515725-1-roypat@amazon.co.uk/
+
+Patrick Roy (12):
+  mm: introduce AS_NO_DIRECT_MAP
+  mm/secretmem: set AS_NO_DIRECT_MAP instead of special-casing
+  KVM: guest_memfd: Add flag to remove from direct map
+  KVM: Add capability to discover KVM_GMEM_NO_DIRECT_MAP support
+  KVM: Documentation: document KVM_GMEM_NO_DIRECT_MAP flag
+  KVM: selftests: load elf via bounce buffer
+  KVM: selftests: set KVM_MEM_GUEST_MEMFD in vm_mem_add() if guest_memfd
+    != -1
+  KVM: selftests: Add guest_memfd based vm_mem_backing_src_types
+  KVM: selftests: stuff vm_mem_backing_src_type into vm_shape
+  KVM: selftests: adjust test_create_guest_memfd_invalid
+  KVM: selftests: set KVM_GMEM_NO_DIRECT_MAP in mem conversion tests
+  KVM: selftests: Test guest execution from direct map removed gmem
+
+ Documentation/virt/kvm/api.rst                | 13 ++++
+ include/linux/pagemap.h                       | 16 +++++
+ include/linux/secretmem.h                     | 18 ------
+ include/uapi/linux/kvm.h                      |  3 +
+ lib/buildid.c                                 |  4 +-
+ mm/gup.c                                      | 14 +---
+ mm/mlock.c                                    |  2 +-
+ mm/secretmem.c                                |  6 +-
+ .../testing/selftests/kvm/guest_memfd_test.c  |  2 +-
+ .../testing/selftests/kvm/include/kvm_util.h  | 29 ++++++---
+ .../testing/selftests/kvm/include/test_util.h |  8 +++
+ tools/testing/selftests/kvm/lib/elf.c         |  8 +--
+ tools/testing/selftests/kvm/lib/io.c          | 23 +++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 64 +++++++++++--------
+ tools/testing/selftests/kvm/lib/test_util.c   |  8 +++
+ tools/testing/selftests/kvm/lib/x86/sev.c     |  1 +
+ .../selftests/kvm/pre_fault_memory_test.c     |  1 +
+ .../selftests/kvm/set_memory_region_test.c    | 40 ++++++++++++
+ .../kvm/x86/private_mem_conversions_test.c    |  7 +-
+ virt/kvm/guest_memfd.c                        | 24 ++++++-
+ virt/kvm/kvm_main.c                           |  5 ++
+ 21 files changed, 214 insertions(+), 82 deletions(-)
+
+
+base-commit: da40655874b54a2b563f8ceb3ed839c6cd38e0b4
+-- 
+2.48.1
+
 
