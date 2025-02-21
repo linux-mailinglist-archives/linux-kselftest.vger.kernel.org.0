@@ -1,163 +1,145 @@
-Return-Path: <linux-kselftest+bounces-27121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1C6EA3E9A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 02:04:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61A4AA3E9BC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 02:15:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0ECAE17A2E7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 01:04:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57DB03B1265
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 01:15:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75F0E2C187;
-	Fri, 21 Feb 2025 01:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7EB142E6F;
+	Fri, 21 Feb 2025 01:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uyc25Qeo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V/bHJm7H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B25C7080D;
-	Fri, 21 Feb 2025 01:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E368678F20
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2025 01:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740099851; cv=none; b=YMCpn3K5fqw+mUET+PHD6KEzvZRhH8v41Vj3FWEynhTP1l5lO+A6HE3VOZyx3Bfn6HoaPYfduaIxpwrIEqTtye3klilnfJIKmMQ3vklG3AKLaC+SrX45VXHtvr1gM3Fj/NQYX2PIJx01igquqjyWKg8G+223gvkeEZXbxAMtwv4=
+	t=1740100514; cv=none; b=BDKsmKk+sP4zKG1/4eAk2HcH9Ah/3p3NS6l850UVJuU61LQjl3Aocrd4DnciLBMORFUozI7iXs6K8vipeH9pOEKK29p29wQkDmbV9uf5/Sc9fFAEZCh7ySWMiPnsw1MbNJRmVKXTRAB4sEiAr6foFsmzGnQeFU6p0YwBLwa8aN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740099851; c=relaxed/simple;
-	bh=XDOcSSu0rDcbE3pPzb8t2eP2JuFEMVZB5io3X9ORrmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=adixGZaSfFSSfODsNzEusqMylpu4Gs81xzicGTx/0eNGXSty32X7O+3brbVr1eLlH8REXggQGSSgKdbNKQjkDe4eLCBBOXjOvDFribgbALXHRjXDtNDVLL7+tgzo2bKvbfhlV89LJSGi/kl0D378umDZvsVeFCMOIKX/mIamGR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uyc25Qeo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6033CC4CED1;
-	Fri, 21 Feb 2025 01:04:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740099850;
-	bh=XDOcSSu0rDcbE3pPzb8t2eP2JuFEMVZB5io3X9ORrmE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=uyc25QeobqYnzKDgAhcZ9cLZwGYw/jAYJpZBhYLRSFQeAGzVa6tuuqlHMtvJt2NWc
-	 u8hJPnbQkE2bkB5l0vE9t2vQ/Canbq6h3d2haPKU6LbrAnhiCDXuO31z7GDrSrsN0n
-	 fQBeTaCUmQGIajV80zqhSA3G52FSksAHegUimUDEy0hgxwLQEZ0vy5EnHIFIV8/O2x
-	 MmSfGckrhP7SFZhzxQeuP66+bSEU69oJJgO9tB+e9hPQtOcdTanG1hZ+5PVfCLSFlL
-	 rIBT2+JcKr6f4VuDVDAKjkvfEUCg0SPb7Ng5tCGHqPdn2PLV0JkMIq7JYqjgPxAWVr
-	 1yMN2K8NuMQpw==
-Date: Thu, 20 Feb 2025 17:04:09 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Kevin Krakauer <krakauer@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
- <shuah@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/net: deflake GRO tests and fix return value
- and output
-Message-ID: <20250220170409.42cce424@kernel.org>
-In-Reply-To: <20250218164555.1955400-1-krakauer@google.com>
-References: <20250218164555.1955400-1-krakauer@google.com>
+	s=arc-20240116; t=1740100514; c=relaxed/simple;
+	bh=/bGiavS8jq7e1a/UcoH9zlpN1YkLl+PW6P8a+yl2sIA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g5RIv2vA5UOsh3yQV8AuF6e8o49bzXAQ0QloH5M9uruBeHBkO9XwZoSqh+ja4w99/upBbcKJK1VwutNGkHtzjbZMhUdPgA68ByNYUo1kSLuBQX7cdrTYIETz+MJQzmmFi2UevUQ4k1GbMy0mnbknZUqDfAlNBbY3r9yt4HOFYy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V/bHJm7H; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740100511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/bGiavS8jq7e1a/UcoH9zlpN1YkLl+PW6P8a+yl2sIA=;
+	b=V/bHJm7HHy849dnbGLvJyMOjN+PYg876C2iBic+Znf3c+MNBD/1XIGCO45SYbPXqZ8Rv60
+	ql6ZhVXlPJvivicbIRx5bvhnmbi4VhrVXkKGe2fM9+bVZpyCw2x/IC6SZqshiFCkGkme3j
+	ZOyORzpUCIAbXr2dXrPp98m4/toJPkw=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-674-nYF1QYgQPuuno6cfPa3qoA-1; Thu, 20 Feb 2025 20:15:09 -0500
+X-MC-Unique: nYF1QYgQPuuno6cfPa3qoA-1
+X-Mimecast-MFC-AGG-ID: nYF1QYgQPuuno6cfPa3qoA_1740100508
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-220ec5c16e9so34480405ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2025 17:15:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740100508; x=1740705308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/bGiavS8jq7e1a/UcoH9zlpN1YkLl+PW6P8a+yl2sIA=;
+        b=vBB6TN/gP3XN5C3HZSgdqmeBchXswWYeSLw38imaxIvlqUmiFVphyA9SUvOxnATJtI
+         0/Y9e/4XgXj9Q3wASlTBLBABAj0r7FYVOs8/bH82+IMg76mZpbURhNum+t2VsXwovKe1
+         kspmE5HsrheOQCl0+mOK150wYyNaUGnyJl3yRJk5SHWfvXkMgEaozmdqDGrD8JupEevl
+         B3dnB8nOdQDGu2STh9Zqvq+jgiErvhUgc941sPAVItQBulUROw6SzEq2UIi9uDQrO2O+
+         xWCBwaKVtnt1g982a8hGVMHde8SQ4bjZmH9T82SSZYA4U23cV8RPCJ+sLVk2NCu6JISx
+         K5Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCXF9Gq6ObJM64RaqO0nifaUIZ5zVHUypgD0/CED1JJuBqc4fXrAZFXr86Vd65h0LiZVQWxgYeRhFqMsf3Xdgvk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxdzEDUQKqKdg7viiYtvliU3iPOmNzj3fcFYFNkjJkFbBupvYL
+	YIU53X4BcHq7Gc6ImW7YY3jwo2SFw0RBWilXBSiL/tLPvufwoV8p9sR9YyoFUTNcLnKqpXz+9Uk
+	KwB+M4qOmJVSTy0otvpNHn4BbaFGEbtg+kw5KGAaF4C6ZGcPfvA2qFiFAey9jrsnFRTP6ij5W+A
+	PsXEDV9KS339t6ZV29Gu+Fv6H0w8zqj/Gr7Aajv30E
+X-Gm-Gg: ASbGncvd+laRCENjKVjOg7HJeSbvwga7Ez6MKUKnYlziGXtf4UGabh+lNeLijp9nf4s
+	8QaljoGnh3Xqmeu6gpteD2qgktYUCSKdv7Av0QDRm/zVTsUFV7/ufgy7R+4M5u4g=
+X-Received: by 2002:a17:902:fc44:b0:215:bb50:6a05 with SMTP id d9443c01a7336-221a0ec944cmr13551835ad.9.1740100508434;
+        Thu, 20 Feb 2025 17:15:08 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHNUoAtdLLCDrmQ4E0KhxP1/v8E8OjE3hwAErurd7Thltd/lsB3alr0YyGDAyw/Vnr52MolQRVxcb5jecipEJY=
+X-Received: by 2002:a17:902:fc44:b0:215:bb50:6a05 with SMTP id
+ d9443c01a7336-221a0ec944cmr13551285ad.9.1740100507900; Thu, 20 Feb 2025
+ 17:15:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250215-buffers-v2-1-1fbc6aaf8ad6@daynix.com>
+ <d4b7f8a0-db50-4b48-b5a3-f60eab76e96b@redhat.com> <20250220034042-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20250220034042-mutt-send-email-mst@kernel.org>
+From: Jason Wang <jasowang@redhat.com>
+Date: Fri, 21 Feb 2025 09:14:56 +0800
+X-Gm-Features: AWEUYZk12eKYMoRdAhOr_VqKFdK71rl0l2JCQtxsCVicbAIDmOs5Fp4sSGUmfl4
+Message-ID: <CACGkMEtN1K7jRVmZwxah1vET=p5k_Nd0cpov=R0B8sP=bjC-sA@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] tun: Pad virtio headers
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, Akihiko Odaki <akihiko.odaki@daynix.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, devel@daynix.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 18 Feb 2025 08:45:55 -0800 Kevin Krakauer wrote:
-> GRO tests are timing dependent and can easily flake. This is partially
-> mitigated in gro.sh by giving each subtest 3 chances to pass. However,
-> this still flakes on some machines.
+On Thu, Feb 20, 2025 at 4:45=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
+>
+> On Thu, Feb 20, 2025 at 08:58:38AM +0100, Paolo Abeni wrote:
+> > Hi,
+> >
+> > On 2/15/25 7:04 AM, Akihiko Odaki wrote:
+> > > tun simply advances iov_iter when it needs to pad virtio header,
+> > > which leaves the garbage in the buffer as is. This will become
+> > > especially problematic when tun starts to allow enabling the hash
+> > > reporting feature; even if the feature is enabled, the packet may lac=
+k a
+> > > hash value and may contain a hole in the virtio header because the
+> > > packet arrived before the feature gets enabled or does not contain th=
+e
+> > > header fields to be hashed. If the hole is not filled with zero, it i=
+s
+> > > impossible to tell if the packet lacks a hash value.
+> >
+> > Should virtio starting sending packets only after feature negotiation?
+> > In other words, can the above happen without another bug somewhere else=
+?
+>
+>
+> Not if this is connected with a guest with the standard virtio driver, no=
+.
+> The issue is that tun has no concept of feature negotiation,
+> and we don't know who uses the vnet header feature, or why.
+>
+> > I guess the following question is mostly for Jason and Michael: could b=
+e
+> > possible (/would it make any sense) to use a virtio_net_hdr `flags` bit
+> > to explicitly signal the hash fields presence? i.e. making the actual
+> > virtio_net_hdr size 'dynamic'.
+>
+> But it is dynamic - that is why we have TUNSETVNETHDRSZ.
 
-To be clear - are you running this over veth or a real device?
+Yes, tun currently only recognizes a subset of the whole virtio-net header.
 
-> Set the device's napi_defer_hard_irqs to 50 so that GRO is less likely
-> to immediately flush. This already happened in setup_loopback.sh, but
-> wasn't added to setup_veth.sh. This accounts for most of the reduction
-> in flakiness.
+Thanks
 
-That doesn't make intuitive sense to me. If we already defer flushes
-why do we need to also defer IRQs?
-
-> We also increase the number of chances for success from 3 to 6.
-> 
-> `gro.sh -t <test>` now returns a passing/failing exit code as expected.
-> 
-> gro.c:main no longer erroneously claims a test passes when running as a
-> server.
-> 
-> Tested: Ran `gro.sh -t large` 100 times with and without this change.
-> Passed 100/100 with and 64/100 without. Ran inside strace to increase
-> flakiness.
-> 
-> Signed-off-by: Kevin Krakauer <krakauer@google.com>
-> ---
->  tools/testing/selftests/net/gro.c         | 8 +++++---
->  tools/testing/selftests/net/gro.sh        | 5 +++--
->  tools/testing/selftests/net/setup_veth.sh | 1 +
->  3 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-> index b2184847e388..d5824eadea10 100644
-> --- a/tools/testing/selftests/net/gro.c
-> +++ b/tools/testing/selftests/net/gro.c
-> @@ -1318,11 +1318,13 @@ int main(int argc, char **argv)
->  	read_MAC(src_mac, smac);
->  	read_MAC(dst_mac, dmac);
->  
-> -	if (tx_socket)
-> +	if (tx_socket) {
->  		gro_sender();
-> -	else
-> +	} else {
-> +		/* Only the receiver exit status determines test success. */
->  		gro_receiver();
-> +		fprintf(stderr, "Gro::%s test passed.\n", testname);
-> +	}
->  
-> -	fprintf(stderr, "Gro::%s test passed.\n", testname);
-
-
-That seems quite separate to the stability fix?
-
->  	return 0;
->  }
-> diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
-> index 02c21ff4ca81..703173f8c8a9 100755
-> --- a/tools/testing/selftests/net/gro.sh
-> +++ b/tools/testing/selftests/net/gro.sh
-> @@ -21,7 +21,7 @@ run_test() {
->    # Each test is run 3 times to deflake, because given the receive timing,
->    # not all packets that should coalesce will be considered in the same flow
->    # on every try.
-> -  for tries in {1..3}; do
-> +  for tries in {1..6}; do
->      # Actual test starts here
->      ip netns exec $server_ns ./gro "${ARGS[@]}" "--rx" "--iface" "server" \
->        1>>log.txt &  
-> @@ -100,5 +100,6 @@ trap cleanup EXIT
->  if [[ "${test}" == "all" ]]; then
->    run_all_tests
->  else
-> -  run_test "${proto}" "${test}"
-> +  exit_code=$(run_test "${proto}" "${test}")
-> +  exit $exit_code
-
-Also separate from stability?
-
-Let's split the patch up into logically separate changes.
-
->  fi;
-> diff --git a/tools/testing/selftests/net/setup_veth.sh b/tools/testing/selftests/net/setup_veth.sh
-> index 1f78a87f6f37..9882ad730c24 100644
-> --- a/tools/testing/selftests/net/setup_veth.sh
-> +++ b/tools/testing/selftests/net/setup_veth.sh
-> @@ -12,6 +12,7 @@ setup_veth_ns() {
->  
->  	[[ -e /var/run/netns/"${ns_name}" ]] || ip netns add "${ns_name}"
->  	echo 1000000 > "/sys/class/net/${ns_dev}/gro_flush_timeout"
-> +	echo 50 > "/sys/class/net/${ns_dev}/napi_defer_hard_irqs"
->  	ip link set dev "${ns_dev}" netns "${ns_name}" mtu 65535
->  	ip -netns "${ns_name}" link set dev "${ns_dev}" up
->  
--- 
-pw-bot: cr
 
