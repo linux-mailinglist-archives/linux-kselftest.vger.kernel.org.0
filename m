@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-27133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44078A3EBB2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 05:12:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 468E8A3EBC0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 05:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86A703B9EC7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 04:12:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C8634210E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 04:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C211D1FAC33;
-	Fri, 21 Feb 2025 04:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7EE1F9AB6;
+	Fri, 21 Feb 2025 04:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="c8vkWCwi"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="RkkvPJd8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318291D54E2;
-	Fri, 21 Feb 2025 04:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.95.48.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FD71367;
+	Fri, 21 Feb 2025 04:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740111147; cv=none; b=hXlyZVQdGq4Y6iZ/LqBzSZogbkGKnv6vPICBUOeJH4k6FDk1oggL0vX06w/FK4t62aMaIh9/rdT65lfHI3/apAMpPA121Nk/UtmA+sfYZArF89D9q7ay9o217VV5xxrK0udJyQ3uFC4YUz02iiedn3g9gG5rgfMi+qwcOjyrjBw=
+	t=1740111422; cv=none; b=tpurKS/T7F0G6p+OYEjKiVpAVEPyNQgrnXAaq0BtpbwuqZQir7g0ilAq0MbMhnVcUxpPs73yW84jJw1k1NQ6PGjdToFlrDEOwOlo+K2tKu0BwdKohTm4nnMCB9LD4Wo2YcjcIGkJz7y0y4tOkvprorTyf9IDcfe1ZQFJuoXhcdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740111147; c=relaxed/simple;
-	bh=9eFro1cZSR7h6W4E0c7vvZc5M0AlGe832eUs6PbfLJ0=;
+	s=arc-20240116; t=1740111422; c=relaxed/simple;
+	bh=Esg0+MPPM15uaOdVXzF/MSCj0bUc/MRrHxpLbvSdgtk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TIWf+UPBKMgPp/LCGiCBvVSTs85P4i/XS0tdrv37XGoHGys+3AUQVoKnm1HT9MVpnqEnBAcvN12c6hCUwv8NRaf8yPylpqIvxYsNdL/bt08muYLtipdFlYmla4t7fjiTCkodrtNTuCte/xU0gYA35xFg3xL1xT60J6j6IM3QzPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=c8vkWCwi; arc=none smtp.client-ip=52.95.48.154
+	 MIME-Version:Content-Type; b=IMuK8/mC0HhFX3APh1m756JQyeNtPyW0Z7/evapNt3lwp8e2Z/K9aAqjetyFkLQeBR60s8PdD3m9jMKMrvQGUriHWPJkF8U5YGRJWaedhW+R6XaEXg5Nyk3m0qa3+ZMw31OJWVlt3XjHgY2gDwtBcdl0Vc1iOAayc/IUlFd8IjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=RkkvPJd8; arc=none smtp.client-ip=99.78.197.219
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1740111146; x=1771647146;
+  t=1740111420; x=1771647420;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YzTaMIXfTQW5u2lkanlpdTtaryhWFAt2zcKLntOoUF0=;
-  b=c8vkWCwi2ELlOKOVS0Z5qMctzduFPKd5fXiDmluSBgKNsyj240afYodj
-   WKf87Nc1/RnvjhXs+1n/3GOl4Xsw/2VtV8fseN7z+Tzla2o+Mt4rIhgXH
-   9k3UQDW0eOeOp1HIOOTSQ9rgCeWLgbk7Dv+/aThfI/8U0teOqiDXm1fDe
-   I=;
+  bh=2RBr407lfpNcQNLCj0KAWf8UC6PZVgFWPwamtTvf6ec=;
+  b=RkkvPJd8TMDI5ceL0p4sD25LzP6k/4tr+FtSc5of12DwvEPmYNH5Td4b
+   qNWRY+jX3G8xw6z3vEenLshzYaEu09LTByVimVgLycXwD8ASqaxGRG8kS
+   fA13ZaYSM6v9SgNlkmJGDnPrUTJhIvCHKp4dP90jZelIWnFE2nLM3/nGF
+   U=;
 X-IronPort-AV: E=Sophos;i="6.13,303,1732579200"; 
-   d="scan'208";a="464524007"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 04:12:20 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:45617]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.6.186:2525] with esmtp (Farcaster)
- id f7b7ed86-b5d1-4be4-9e7b-55d4fb0bed97; Fri, 21 Feb 2025 04:12:14 +0000 (UTC)
-X-Farcaster-Flow-ID: f7b7ed86-b5d1-4be4-9e7b-55d4fb0bed97
+   d="scan'208";a="171697267"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 04:16:58 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.38.20:44806]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.18.70:2525] with esmtp (Farcaster)
+ id 3d34885b-f494-4c98-a1a4-c9b8261fc88d; Fri, 21 Feb 2025 04:16:58 +0000 (UTC)
+X-Farcaster-Flow-ID: 3d34885b-f494-4c98-a1a4-c9b8261fc88d
 Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
  EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
- Fri, 21 Feb 2025 04:12:08 +0000
+ Fri, 21 Feb 2025 04:16:55 +0000
 Received: from 6c7e67bfbae3.amazon.com (10.135.209.63) by
  EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Fri, 21 Feb 2025 04:12:03 +0000
+ Fri, 21 Feb 2025 04:16:49 +0000
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 To: <shaw.leon@gmail.com>
 CC: <alex.aring@gmail.com>, <andrew+netdev@lunn.ch>,
@@ -71,12 +71,12 @@ CC: <alex.aring@gmail.com>, <andrew+netdev@lunn.ch>,
 	<netdev@vger.kernel.org>, <osmocom-net-gprs@lists.osmocom.org>,
 	<pabeni@redhat.com>, <shuah@kernel.org>, <stefan@datenfreihafen.org>,
 	<steffen.klassert@secunet.com>, <wireguard@lists.zx2c4.com>
-Subject: Re: [PATCH net-next v10 10/13] rtnetlink: Remove "net" from newlink params
-Date: Thu, 20 Feb 2025 20:11:54 -0800
-Message-ID: <20250221041155.78502-1-kuniyu@amazon.com>
+Subject: Re: [PATCH net-next v10 11/13] rtnetlink: Create link directly in target net namespace
+Date: Thu, 20 Feb 2025 20:16:41 -0800
+Message-ID: <20250221041641.79788-1-kuniyu@amazon.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250219125039.18024-11-shaw.leon@gmail.com>
-References: <20250219125039.18024-11-shaw.leon@gmail.com>
+In-Reply-To: <20250219125039.18024-12-shaw.leon@gmail.com>
+References: <20250219125039.18024-12-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,13 +85,17 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D042UWA003.ant.amazon.com (10.13.139.44) To
+X-ClientProxiedBy: EX19D046UWA002.ant.amazon.com (10.13.139.39) To
  EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
 From: Xiao Liang <shaw.leon@gmail.com>
-Date: Wed, 19 Feb 2025 20:50:36 +0800
-> Now that devices have been converted to use the specific netns instead
-> of ambiguous "net", let's remove it from newlink parameters.
+Date: Wed, 19 Feb 2025 20:50:37 +0800
+> Make rtnl_newlink_create() create device in target namespace directly.
+> Avoid extra netns change when link netns is provided.
+> 
+> Device drivers has been converted to be aware of link netns, that is not
+> assuming device netns is and link netns is the same when ops->newlink()
+> is called.
 > 
 > Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 
