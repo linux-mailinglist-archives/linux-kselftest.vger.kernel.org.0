@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-27232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD06EA401B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 22:06:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A382CA401B0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 22:05:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC2EE3B82C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 21:05:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 752F1168AE8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 21:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B038253F35;
-	Fri, 21 Feb 2025 21:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD604256C70;
+	Fri, 21 Feb 2025 21:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gA59DnBW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RzLUusTC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2073.outbound.protection.outlook.com [40.107.95.73])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A849D253F2E;
-	Fri, 21 Feb 2025 21:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E342566FE;
+	Fri, 21 Feb 2025 21:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740171848; cv=fail; b=YRwKDgkQTqH24/A9guAoByoUBApdi95IgWI0TJJySut1FCqPb2DdtKDvv48E/mf/7Wbrfa19zNyc/yV5l7EkwO9hE6F0l5rHsJVPYS1xED24x8cU0bFLnS5kXThb30uRgF6v+mfnEwgmL0I4Oc13As5Q8+rqZ6IeuKmGbauBdCM=
+	t=1740171855; cv=fail; b=Kuvli7gPjYoNdBdCaS2kfGhmxYxN2m23hGgq46KUCfXFbjKNVeUz5n15g2cu7Y6KKw7nGG6FJsg0gCpIPghMud0guT6ipXztqjBlXEJjBbo5R76y6y9eiYFiko1tYi8TMUO1JKS4snoktBujefqfzpkwiWAxMJCCayHKXdqRVMc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740171848; c=relaxed/simple;
-	bh=Wh1VQunxSshhzHGnqMnZr2cx1/MbSN/znQMG2r1BSzU=;
+	s=arc-20240116; t=1740171855; c=relaxed/simple;
+	bh=ixJK/CP2k2A81zoZaeIc2hb5z3TbTa9HA77/twLMXNc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kWEAr6kjccuDgoGZ8GnwmhZEOMx/puaVy5FZEPBCgIuQDPKgtQf7pyFvTbb/EXBI9tsRwf9juAWYBPemBTaAyZzf+KaAVqOvpkcHu4avWlE6zYmfra6JoSJLBdRrm5NyL7IKPCVNZHz7FJFSlvwhsRiC5SLtBUlMdF+0fg3yixE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gA59DnBW; arc=fail smtp.client-ip=40.107.95.73
+	 MIME-Version:Content-Type; b=SkQEj8sLHAdTYHnRS376WWVnUKqwqXQmrPlqh6F5jl8JVuvfWSe5BL9teKPntBW/a/EpQZ+xDqKTjVWgl8wWKFP0bLTzy1lnaFZYqT8In42D7287jg4ks4kgYihsVHseZwF8GYHxD2GAeSambrsTKiIcf5g+5zkwjasYh6qRqm8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RzLUusTC; arc=fail smtp.client-ip=40.107.220.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nbYP6F30Oid0VgtJVlfVc3RMu/E9BBaqI6vJnjFtdaU11HOuxd6eaa8Wrvh7a1XpMr/ddC1OJMfgQoP2uz3tznrsjfXjcbPPMcD/XMX3RhVT4PoMHSZmapwyjHEvuFz22mj2LmFTpENWG/RMAGjn/RGrXyvDSc4IIv97m2yidIvQz5Zi8HQlzLun0M0SOW8lYuDGNyN2XoW80I+bqVEZQbwvGic1lFRL5xoEs0tvbgOwdAlLhVQGQS/pU4iDypOQYbmp14jr8wzCR5ipBUQb/IJeKMNd/PFjuvEBoj2MIEViF+KRYC9QWZHRxRZ1lS7MnKzmV9eUvOIDWNHXeuVwXQ==
+ b=MFcZ9VeGQKxRLaJjDoTk4NnLzZH5oJgNp4WxevIZGgW0+57w7bymPctXqWDvZ87RV0dRSlQzSPMxYzCA8OLBj3oVcU9OiUgYnkIcIwQvz0JQYy0HxI3QyCdWZZC5fR7oOVGE00jjfU+DlBz2kRr9K2dNjUQNHHeD5LrIhVqME8ZJTavJRqQ+/MOtEqHrERFIIbXX2JGxPnfDtDGmMDUdjZOm6kyfZ+bClJ4Zns6jQOdxFgi3Cb6ASJ5wWmN6yxaBG9esxryAATu4Pe4ibvAAlOV+0ISVeFfxpJKdTnrf2HLxGiB7Ddv2N58xZTfatKKQLq2YrQo24DA7z/VWMTETZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TPm/75WmSpIvUKzTZ946aEih21z1rjQg7DpJCU55CTY=;
- b=bkUrtabv17WwJA+FQQFYOyPnW5bDklwpL22yfHAczUv67NPno7IRTbV22+KpbwXlES/r9+/E78J7/P3WeuATfxs8WzoaK+9Kn1bao97m+fD7wGh/8cQ41RBgVGO/d+ftnH5SOo/f894juPY9fO8zDBspyBC8j91XZqGb/XShqe3s1JbJOrCqIHD1T4rZteBmirXPna6MLRrI2qOzXZ2s8yLZBPay2v/IlPB0Cqp+Gm4AmA4bUsmpvDMrxahR0/tITxHBX8iUn/n87r5bPbP4Cev+25GIRO4ryH9HkdK8Pi4hmHF3GI8P6gqM4IJ/fVMrDCLYs9/oW9uD4YIPD9SD6Q==
+ bh=Bj0g5jDg/+Rd3ezcsVtzEm1qZyuHkgSjTft0xKmnT9s=;
+ b=fcwGLsO4KulgQfcbxGI3WAP2vPqOe0iJOt6atqHRkscm/qo2/SEYoxIcLWkB8wnl/0s/Xsz1CjPwvbf1qjaZOovb9sx2TkXXZXLrzyR/ute7Z+wCS/YG1SFdrfQxYK3Jr2MMpxApNP9BuTKARdnWwyLOBp1l+8rxPctgskmlWyKcUv1FvGEDFuNsQqx4MB7Olo9TxvwdsGd2qOlhNmgxwI/T7SPJe4+doQwpeWS9O5+NlHPMYPSNeBpFafCna20DTGXiPkDUdR30xTgs8+e78Vz20fpYTYbXU1gy/z3kI6WhnvB3xjOlvNh9mXy+QbaB01KFU3GvadFRUqARQaq7vg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TPm/75WmSpIvUKzTZ946aEih21z1rjQg7DpJCU55CTY=;
- b=gA59DnBWiqLOewB/QTjkkiZDkfNvlCY7ucXKa01K4pq+gqpohqwv9LM6bp7XXrVcutxo3/xE9k7C8DgYnRLW1WcyaNfgOdEEaAR6d4YmcjPfMmi70SjxyoawlUt9r/zGHtWNnD11XLB1o1+a2NY/aRiaRoG58iQ8pycpcPhrjTA=
-Received: from BN9PR03CA0166.namprd03.prod.outlook.com (2603:10b6:408:f4::21)
- by DM6PR12MB4169.namprd12.prod.outlook.com (2603:10b6:5:215::22) with
+ bh=Bj0g5jDg/+Rd3ezcsVtzEm1qZyuHkgSjTft0xKmnT9s=;
+ b=RzLUusTCBZYsh8coCB95BGRCvtYNmt/xbumFif9y2q17P7Hx4CBA/CBfUcMycxfPEEFqk11STzVrnzYwWRKRQ5H6NnLARUMKF7xg+jBjCX/FHTMi5Na18NwJC8a0JJlpa/mDBfFn4/vfMO25iS11GAaJI88TgD8OgqWwL4H9NHs=
+Received: from MN2PR18CA0003.namprd18.prod.outlook.com (2603:10b6:208:23c::8)
+ by SJ0PR12MB6710.namprd12.prod.outlook.com (2603:10b6:a03:44c::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.18; Fri, 21 Feb
- 2025 21:03:59 +0000
-Received: from BL02EPF00021F6E.namprd02.prod.outlook.com
- (2603:10b6:408:f4:cafe::37) by BN9PR03CA0166.outlook.office365.com
- (2603:10b6:408:f4::21) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.14; Fri, 21 Feb
+ 2025 21:04:10 +0000
+Received: from BL02EPF00021F68.namprd02.prod.outlook.com
+ (2603:10b6:208:23c:cafe::86) by MN2PR18CA0003.outlook.office365.com
+ (2603:10b6:208:23c::8) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.16 via Frontend Transport; Fri,
- 21 Feb 2025 21:03:59 +0000
+ 21 Feb 2025 21:04:10 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF00021F6E.mail.protection.outlook.com (10.167.249.10) with Microsoft
+ BL02EPF00021F68.mail.protection.outlook.com (10.167.249.4) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8466.11 via Frontend Transport; Fri, 21 Feb 2025 21:03:58 +0000
+ 15.20.8466.11 via Frontend Transport; Fri, 21 Feb 2025 21:04:10 +0000
 Received: from sampat-dell.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 21 Feb
- 2025 15:03:55 -0600
+ 2025 15:04:08 -0600
 From: "Pratik R. Sampat" <prsampat@amd.com>
 To: <linux-kernel@vger.kernel.org>, <x86@kernel.org>, <kvm@vger.kernel.org>,
 	<linux-crypto@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
@@ -78,9 +78,9 @@ CC: <seanjc@google.com>, <pbonzini@redhat.com>, <thomas.lendacky@amd.com>,
 	<dave.hansen@linux.intel.com>, <shuah@kernel.org>, <pgonda@google.com>,
 	<ashish.kalra@amd.com>, <nikunj@amd.com>, <pankaj.gupta@amd.com>,
 	<michael.roth@amd.com>, <sraithal@amd.com>, <prsampat@amd.com>
-Subject: [PATCH v7 08/10] KVM: selftests: Force GUEST_MEMFD flag for SNP VM type
-Date: Fri, 21 Feb 2025 15:01:58 -0600
-Message-ID: <20250221210200.244405-9-prsampat@amd.com>
+Subject: [PATCH v7 09/10] KVM: selftests: Abstractions for SEV to decouple policy from type
+Date: Fri, 21 Feb 2025 15:01:59 -0600
+Message-ID: <20250221210200.244405-10-prsampat@amd.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250221210200.244405-1-prsampat@amd.com>
 References: <20250221210200.244405-1-prsampat@amd.com>
@@ -96,89 +96,186 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00021F6E:EE_|DM6PR12MB4169:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c4ce0fe-6f3b-4c77-30cb-08dd52bb42c0
+X-MS-TrafficTypeDiagnostic: BL02EPF00021F68:EE_|SJ0PR12MB6710:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ead7977-6b1c-4590-885e-08dd52bb498c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026;
+	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?J75oymspuRIi9jd8BSXgke98qvN/pnTB5K+H73bU2hvaUm0xpAkvDGNAG173?=
- =?us-ascii?Q?uNdvxmFM7MR6AGAzcsstIiaD2P0QnQZwUsM41Z3C+fKJsO98HMWXxSES9hNk?=
- =?us-ascii?Q?MNXhl3FXZmgGCNevGh8pJ6cIYaTQpQHVmSxgvbw0CBNa0GL79LiLVGZYvyXI?=
- =?us-ascii?Q?+dywdb+k0NwaBaZrlqzLz79kbTK79eoUfwLHr7MmtMAcbUqxqWRFo/UDE4Mg?=
- =?us-ascii?Q?XPH/iWXSO8Ik/MNTXcApFviQixwGQcXHfQwFNyAKmh1OLH+gwOgCHxx8J4jJ?=
- =?us-ascii?Q?nWCCw6Nhm54iwKNOtoTG7JCDEQLltBPdtMMxHrlFUNpy6Ct6IrGFMP74ArxF?=
- =?us-ascii?Q?81REu50wZntc969rsxqejWxq34R2wgb151oi7MOcHL+FncKzYMw9sRaGes5E?=
- =?us-ascii?Q?RfRpIPRTzCOqxN5/TPhHt7HOQTfYSnvpuvXC2KcP3ys1M+BOeKHab/uIsYDr?=
- =?us-ascii?Q?zvtF+CwXy1YXGZrc1yiRKEtbZrqldyutUJrzhTexqTOUljuoBrXE7feQzHgZ?=
- =?us-ascii?Q?9G1EGSzlcE7mTBIwuLsTCJKY3gMO3OEsDIaViwhzNnMJlh1HRir8KYuVmk3o?=
- =?us-ascii?Q?1H9zpBDSUoNGQunpyeiIEfF/WvuTZQlj3g4nY2bJ8uYJoPQwBOvqudzQ797o?=
- =?us-ascii?Q?p6DpQL6zLk5SIQ1zKqX1oPoZEMZOdLhty1ZbhFjwbQ1YyacrclD5f8XQ9aB8?=
- =?us-ascii?Q?IEZ1+TWwSp7sMrSn5GoylwNDuMRL5vaUm0seMavCpkFL03xsqijl2/BvGG8B?=
- =?us-ascii?Q?WnhdxrwDwSx6fx8dB0r1d18Zk04frSVpNFYcrf2Hk3m03F5k0XN3LDQRAQJm?=
- =?us-ascii?Q?JFRsVZwgXhEl+eP4fSl+5kBbtfO04afXvoqdbjGkXOGhgi4K6KrR9aqTZc0S?=
- =?us-ascii?Q?vQEZY1hjptmuNS2NYeVXNAoZ+wvXimwn3uyWzYVZ9o2y93Z4IZ1G2HZQ2aME?=
- =?us-ascii?Q?ro8hATv8lVG7LxyMBanUSTnBNLdlULE+i6QXuNGnqlszaFQ0ZOApW1DdOy7/?=
- =?us-ascii?Q?Lb7F4C+aqoHpn8kUaqNK5M+bGQ7UhT68pnIif7eDPoc43ADIYFlj6oWmA053?=
- =?us-ascii?Q?58hmt2qgW7Acp+kTvnbNaP94jwPzNA0UC4iZpjAkREF4ZOwiP8B6NApXCJqq?=
- =?us-ascii?Q?vMHCsFL4Wn0FZcYFafoLfI8QBRvqQljm7GdivZfp4sJTT6lblqvkKDXx2p4I?=
- =?us-ascii?Q?yjhqGAxgiosI82g9cYjEVm4cLG6Yoddmw+QSHVSm9yFj3GSj71Zru7IrFETo?=
- =?us-ascii?Q?liJAkDhKyMjYXjH3GZYs5n1JMxDIJ1BdI9gxLQbs10ccH/dbc5EccHSpgsil?=
- =?us-ascii?Q?nDF08LodusYA9F6LclAvHYujsfvhMOAu3HG4Xp3Ourhkye8xmZvQQ25YuogQ?=
- =?us-ascii?Q?nwvyTjIwDmf5tbdFntSU5CpN/4WwxLEBEGfybY1WddVRFWc9sBcUhPd+wLvw?=
- =?us-ascii?Q?nmd/gUySgQ4WeMAivbiHOlqjwsPjF4Xdl/DSqJDb6FbalSD5X0WJNO33/WAh?=
- =?us-ascii?Q?UwM5zkmvMTOU+2Q=3D?=
+	=?us-ascii?Q?QGAOC5iiQVYl+dQ0j6GcJXabyaMi2KAaZjp84yuVayxCBQtGgrR2EkI6neY7?=
+ =?us-ascii?Q?ADf/w03P/B+RGODYAQJsMbRCydBzcRe7kF2LDzHWXq/t1bE8T4HCT2O3Se6X?=
+ =?us-ascii?Q?bJMPGd05YeglqR8jIWuVLTsXpnkXelB//gXdMtT0PSv8IR+ZlLtZG8Tiuwt4?=
+ =?us-ascii?Q?yIbxo3qXcW9axMfpKcQpvcnRFuXS/pR0BONGG+EamlrtbfLjPpbCrsfufxYA?=
+ =?us-ascii?Q?NYK7Ot2FNVhq6o8ra5+5Q3FGid58dFhNdK38TdN+BlSIlIP72NHvf+kbDNba?=
+ =?us-ascii?Q?PWkcRiiBwG3kB/dmzNoyZN/zIfgpt8WvOZ9rNVEClUhQB5BvITXWL8KWBMR/?=
+ =?us-ascii?Q?ohOsrOxPZ1PQK/8HdfGt9JmocjzcBwgLtGiMX2PUYgnfI0EA3sXNfF79HPZ7?=
+ =?us-ascii?Q?LX84TNt1iTfQVSTHUZSOrJi+g+jw/BAep0+swEuPFlNVjdHxAihFqTvVKXC6?=
+ =?us-ascii?Q?aTnKOP3EhzIJFpSO8YTEBqwN9VworzLrJvhUH2dUsjwvP/EPxMfFd2lNt4CD?=
+ =?us-ascii?Q?Brti6dvGyLzudwQOWGyNE5hnNJU1M/yB3ra6ZtnnL7zhqwI2DHfhxQqqrK2Z?=
+ =?us-ascii?Q?WMWsXA89wKyHYrIW/ptJy4DHKVWPADUe9fmoelJDmqp3Qhqef2qTKGankbXi?=
+ =?us-ascii?Q?enXAiaGmjErEyCTSS0ZX9wFZMan54B+PiBVVqpY0XBz//JLgloLshORBizGX?=
+ =?us-ascii?Q?mdhI6MDtU7QVJZmw+R/fbW0+VA+J0AT+2h/+WpZb3m5KtReiUffOPEmP4ZGc?=
+ =?us-ascii?Q?b/9OHvQ7IPqSYic0LjphiNqesQSejPPZuJij8//rasRxsAucqHPCJh0Zc/dP?=
+ =?us-ascii?Q?/yShnPy6YrXAFNJY2zTz1LWax5XYTDtvEX9OtcVdFxafOuFe/5aD/kwP5Vka?=
+ =?us-ascii?Q?SUBZzt8fk+YnQvcLJK1hjadYq5+s/HF77toBGRiA3TaWYaOZKcqTmoYsAedP?=
+ =?us-ascii?Q?HVyfbCRuSzLhjHPdf5//91sqoBaQbhlPnedvD5kSRf3AgbjqzsN5oEAID1C4?=
+ =?us-ascii?Q?nyloVRe1QkrkrXKovQCeB3cHpJMHGUK/77eA8sWRcISnAKzoortTvL3vsGbr?=
+ =?us-ascii?Q?Zw+C/a0zR4hVXznZG73GSgUjR5mZMEoltCCaEGLAJo0NCka0G9d5ea4cXYIS?=
+ =?us-ascii?Q?icnjniwIkDQt4VYCGXqVw+6kZyaKXvhDC6KnbFFweF2q0AYLTx1dv5zS+POd?=
+ =?us-ascii?Q?3TEKH5P9YgGimEiIdiMAcaTnnxuFIbU33znFv7d1brN4tNzHf0T0J5ZY5bx0?=
+ =?us-ascii?Q?+wASQrPWtfQBZFbdXAj9do1BsAEP2bD7y6fjCX5vKYzTq9C4r06UdWwLpErX?=
+ =?us-ascii?Q?yMS6V2VNlWWvcIoJUjViD5v6RhdCpYB1jND7NMITVNNk1pCUr1qOfvifeTh/?=
+ =?us-ascii?Q?ofdHOr8mB/D6u19CnxbNyk9aHU+o6zB2sznKX59PlFr/ucQk+ri8xgX77enc?=
+ =?us-ascii?Q?YN8Zewu+80Udrklouj3+AGf7V0tWMDoJ0L7HH0TymEZn+KS7O/vQrZr6Mzl3?=
+ =?us-ascii?Q?NoVT8MgLngaZPk4RRuuX1CWcFhpHjq3ZnEYY?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2025 21:03:58.7950
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2025 21:04:10.2005
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c4ce0fe-6f3b-4c77-30cb-08dd52bb42c0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ead7977-6b1c-4590-885e-08dd52bb498c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF00021F6E.namprd02.prod.outlook.com
+	BL02EPF00021F68.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4169
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6710
 
-Force the SEV-SNP VM type to set the KVM_MEM_GUEST_MEMFD flag for the
-creation of private memslots.
+In preparation for SNP, cleanup the smoke test to decouple deriving type
+from policy. This enables us to reuse existing interfaces as well as
+deduplicate the test calls that are called for SEV and SEV-ES.
 
+No functional change intended.
+
+[seanjc@google.com: deduplication of common SEV+ test calls]
+Link: https://lore.kernel.org/kvm/Z6wIDsbjt2ZaiX0I@google.com/
 Signed-off-by: Pratik R. Sampat <prsampat@amd.com>
 ---
 v6..v7:
 
-* No change
+* Remove individual wrappers around sev and sev-es helpers
+* Combine common tests and deduplicate the SEV, SEV-ES calls from the
+  main function (Sean)
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ .../selftests/kvm/x86/sev_smoke_test.c        | 50 ++++++++++---------
+ 1 file changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 33fefeb3ca44..089488e2eaf6 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -413,14 +413,17 @@ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
- 						 nr_extra_pages);
- 	struct userspace_mem_region *slot0;
+diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+index a2de1e63c3cb..620aa7c41f7a 100644
+--- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
++++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+@@ -61,7 +61,7 @@ static void compare_xsave(u8 *from_host, u8 *from_guest)
+ 		abort();
+ }
+ 
+-static void test_sync_vmsa(uint32_t policy)
++static void test_sync_vmsa(uint32_t type, uint64_t policy)
+ {
+ 	struct kvm_vcpu *vcpu;
  	struct kvm_vm *vm;
--	int i;
-+	int i, flags = 0;
+@@ -71,7 +71,7 @@ static void test_sync_vmsa(uint32_t policy)
+ 	double x87val = M_PI;
+ 	struct kvm_xsave __attribute__((aligned(64))) xsave = { 0 };
  
- 	pr_debug("%s: mode='%s' type='%d', pages='%ld'\n", __func__,
- 		 vm_guest_mode_string(shape.mode), shape.type, nr_pages);
+-	vm = vm_sev_create_with_one_vcpu(KVM_X86_SEV_ES_VM, guest_code_xsave, &vcpu);
++	vm = vm_sev_create_with_one_vcpu(type, guest_code_xsave, &vcpu);
+ 	gva = vm_vaddr_alloc_shared(vm, PAGE_SIZE, KVM_UTIL_MIN_VADDR,
+ 				    MEM_REGION_TEST_DATA);
+ 	hva = addr_gva2hva(vm, gva);
+@@ -88,7 +88,7 @@ static void test_sync_vmsa(uint32_t policy)
+ 	    : "ymm4", "st", "st(1)", "st(2)", "st(3)", "st(4)", "st(5)", "st(6)", "st(7)");
+ 	vcpu_xsave_set(vcpu, &xsave);
  
- 	vm = ____vm_create(shape);
+-	vm_sev_launch(vm, SEV_POLICY_ES | policy, NULL);
++	vm_sev_launch(vm, policy, NULL);
  
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, 0);
-+	if (shape.type == KVM_X86_SNP_VM)
-+		flags |=  KVM_MEM_GUEST_MEMFD;
+ 	/* This page is shared, so make it decrypted.  */
+ 	memset(hva, 0, 4096);
+@@ -107,14 +107,12 @@ static void test_sync_vmsa(uint32_t policy)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_sev(void *guest_code, uint64_t policy)
++static void test_sev(void *guest_code, uint32_t type, uint64_t policy)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 	struct ucall uc;
+ 
+-	uint32_t type = policy & SEV_POLICY_ES ? KVM_X86_SEV_ES_VM : KVM_X86_SEV_VM;
+-
+ 	vm = vm_sev_create_with_one_vcpu(type, guest_code, &vcpu);
+ 
+ 	/* TODO: Validate the measurement is as expected. */
+@@ -160,16 +158,14 @@ static void guest_shutdown_code(void)
+ 	__asm__ __volatile__("ud2");
+ }
+ 
+-static void test_sev_es_shutdown(void)
++static void test_sev_shutdown(uint32_t type, uint64_t policy)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	uint32_t type = KVM_X86_SEV_ES_VM;
+-
+ 	vm = vm_sev_create_with_one_vcpu(type, guest_shutdown_code, &vcpu);
+ 
+-	vm_sev_launch(vm, SEV_POLICY_ES, NULL);
++	vm_sev_launch(vm, policy, NULL);
+ 
+ 	vcpu_run(vcpu);
+ 	TEST_ASSERT(vcpu->run->exit_reason == KVM_EXIT_SHUTDOWN,
+@@ -179,27 +175,33 @@ static void test_sev_es_shutdown(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-int main(int argc, char *argv[])
++static void test_sev_smoke(void *guest, uint32_t type, uint64_t policy)
+ {
+ 	const u64 xf_mask = XFEATURE_MASK_X87_AVX;
+ 
+-	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
+-
+-	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
+-	test_sev(guest_sev_code, 0);
++	test_sev(guest, type, policy | SEV_POLICY_NO_DBG);
++	test_sev(guest, type, policy);
+ 
+-	if (kvm_cpu_has(X86_FEATURE_SEV_ES)) {
+-		test_sev(guest_sev_es_code, SEV_POLICY_ES | SEV_POLICY_NO_DBG);
+-		test_sev(guest_sev_es_code, SEV_POLICY_ES);
++	if (type == KVM_X86_SEV_VM)
++		return;
+ 
+-		test_sev_es_shutdown();
++	test_sev_shutdown(type, policy);
+ 
+-		if (kvm_has_cap(KVM_CAP_XCRS) &&
+-		    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask) {
+-			test_sync_vmsa(0);
+-			test_sync_vmsa(SEV_POLICY_NO_DBG);
+-		}
++	if (kvm_has_cap(KVM_CAP_XCRS) &&
++	    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask) {
++		test_sync_vmsa(type, policy);
++		test_sync_vmsa(type, policy | SEV_POLICY_NO_DBG);
+ 	}
++}
 +
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags);
- 	for (i = 0; i < NR_MEM_REGIONS; i++)
- 		vm->memslots[i] = 0;
++int main(int argc, char *argv[])
++{
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
++
++	test_sev_smoke(guest_sev_code, KVM_X86_SEV_VM, 0);
++
++	if (kvm_cpu_has(X86_FEATURE_SEV_ES))
++		test_sev_smoke(guest_sev_es_code, KVM_X86_SEV_ES_VM, SEV_POLICY_ES);
  
+ 	return 0;
+ }
 -- 
 2.43.0
 
