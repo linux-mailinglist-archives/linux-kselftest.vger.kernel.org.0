@@ -1,105 +1,65 @@
-Return-Path: <linux-kselftest+bounces-27145-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27146-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B6DA3F04D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 10:32:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22DADA3F05C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 10:34:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B33F8860A58
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 09:30:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47653188FFBF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 09:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C840E204C03;
-	Fri, 21 Feb 2025 09:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="z0oFasjw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ocZ9Ror/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F065202C5C;
+	Fri, 21 Feb 2025 09:33:36 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FF82046B7;
-	Fri, 21 Feb 2025 09:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0E51F4299
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2025 09:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740130207; cv=none; b=WuE6TATnBmHZtB08VFQifCQGYHGrWWwT3Ogwd2Aw2r2fKMKZ3rSwPpM0s48oanuzJnLYj9C/tqqi2PgrfwneVLQSRAgbw5uinZENMx4xAV46ZBce/MrfLCL+bva3FbL8Egroj/smBXEosyQ6EV2sGzOqGCYxCzn0dbVooGoZwbU=
+	t=1740130416; cv=none; b=YblkFinlY7GBHc/JWOq12QH+QftYpa13KxwEiiSknMkAQrxlvg3OsZBqTU2QTmjBkfjCJsmpvmIfAMirbm1yMsSEE7Ojlf8t12Q6yQvvvJQNCz1SVL1sFSvBRkhFGg6PReOfZovu03czcAXAsqxsFjTVBseNG9BJ4WbnZH4wJGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740130207; c=relaxed/simple;
-	bh=RpcsefhhnfEYfdsMxYPb96qCBSHbkyV+wZHSLURNl3A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UnPlsCk5ZNXwro+xo1Z86FMrXkpSGJ97GlSbKxC06A3QTEJn1X6I58ueOKiAn3r3Tr1LsvXH0Ukpv4DhZ98icxZyJ9DDRahcaGNA5lu/E7dvmkxkDorr6Nq1u1aSAJZ8SQf+awj44fl+DwN4c5/hnZEYympRgw5f+16QsmuD2jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=z0oFasjw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ocZ9Ror/; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1740130204;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xn1YK5Rbwl21fIMQLMa2jkRsxua5z7AprrlyzmypaHk=;
-	b=z0oFasjwUX4OqPrCTmczsUAX4b9VPP+qb/2lqi56qbQKsREDNb7LRXybObX4Sri8xtEh40
-	pJ/0xgrS406ocbif7fccA9wR1Np72hrF44BBcnSI/EN+VIOD8hdnL9v4vA+8wUfeqQh1x1
-	vDg26BX0Y/Pd0GDfdmhbnJdaQ1WSqaU7N20QizOoRgSdEBk7ETU0pnHuA62oHYDh9oVl/t
-	kYbV1/ynbFj4z7RjHX6LGzL6iivPjH406BMza5ecuWaRFsG+1bDTV70jZTI7m02vDDIY89
-	aqc3yU3daGVh138wwksFkfXPsCeSQH9kAmKGNesuEv3SLNlxOrUF8P9+akghfA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1740130204;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xn1YK5Rbwl21fIMQLMa2jkRsxua5z7AprrlyzmypaHk=;
-	b=ocZ9Ror/AAB+Q4FTa3HD5O9awyQCTRyOoL8WdHe7hnu0bgWzMQd+Vig5zy5amULt0hWGjE
-	Mc0A5LU5PKJ2e6BQ==
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
- kevin.tian@intel.com, maz@kernel.org
-Cc: joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
- shuah@kernel.org, iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
- eric.auger@redhat.com, baolu.lu@linux.intel.com, yi.l.liu@intel.com,
- yury.norov@gmail.com, jacob.pan@linux.microsoft.com,
- patches@lists.linux.dev
-Subject: Re: [PATCH v2 4/7] irqchip: Have CONFIG_IRQ_MSI_IOMMU be selected
- by irqchips that need it
-In-Reply-To: <a2620f67002c5cdf974e89ca3bf905f5c0817be6.1740014950.git.nicolinc@nvidia.com>
-References: <cover.1740014950.git.nicolinc@nvidia.com>
- <a2620f67002c5cdf974e89ca3bf905f5c0817be6.1740014950.git.nicolinc@nvidia.com>
-Date: Fri, 21 Feb 2025 10:30:04 +0100
-Message-ID: <87frk7hcgz.ffs@tglx>
+	s=arc-20240116; t=1740130416; c=relaxed/simple;
+	bh=ZJBW8GSp4qyddv3ydxRQ3CEnkWVZOCVS6lbOg4bBig8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RlPCO5PjARu8F3NCLyKf1fwP5TOvinKwj1/KjNHB0uLE99QQJ3wxogBUxeBk/HFiVJ+E69fmg8+OUvsKwTLNqtFxjLDFYShAwJxhhZXq9CkZDNurFa9kOaYgh+Za/aHVDGq6nmYbUtY+zbWj2KjlPC4zOF6JWe/OOHdTP9U/hL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F38C4CED6;
+	Fri, 21 Feb 2025 09:33:34 +0000 (UTC)
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Yang Shi <yang@os.amperecomputing.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH 0/2] kselftest/arm64: mte: Minor fixes to the MTE hugetlb test
+Date: Fri, 21 Feb 2025 09:33:29 +0000
+Message-Id: <20250221093331.2184245-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 19 2025 at 17:31, Nicolin Chen wrote:
+The first patch makes use of the correct terminology for synchronous and
+asynchronous errors. The second patch checks whether PROT_MTE is
+supported on hugetlb mappings before continuing with the tests. Such
+support was added in 6.13 but people tend to use current kselftests on
+older kernels. Avoid the failure reporting on such kernels, just skip
+the tests.
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
->
-> Currently, IRQ_MSI_IOMMU is selected if DMA_IOMMU is available to provide
-> an implementation for iommu_dma_prepare/compose_msi_msg(). However, it'll
-> make more sense for irqchips that call prepare/compose to select it, and
-> that will trigger all the additional code and data to be compiled into
-> the kernel.
->
-> If IRQ_MSI_IOMMU is selected with no IOMMU side implementation, then the
-> prepare/compose() will be NOP stubs.
->
-> If IRQ_MSI_IOMMU is not selected by an irqchip, then the related code on
-> the iommu side is compiled out.
->
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Catalin Marinas (2):
+  kselftest/arm64: mte: Use the correct naming for tag check modes in
+    check_hugetlb_options.c
+  kselftest/arm64: mte: Skip the hugetlb tests if MTE not supported on
+    such mappings
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+ .../arm64/mte/check_hugetlb_options.c         | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-I don't think I have conflicting changes here, so the MSI/IRQ related
-changes can be routed through the IOMMU tree along with the rest.
-
-Thanks,
-
-        tglx
 
