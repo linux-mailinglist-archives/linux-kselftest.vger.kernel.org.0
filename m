@@ -1,135 +1,195 @@
-Return-Path: <linux-kselftest+bounces-27199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880D4A3FC7E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 18:01:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D757FA3FD19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 18:14:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A8FC7AD49F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 16:58:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E9D019C23A0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 17:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7CB21CC59;
-	Fri, 21 Feb 2025 16:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378B824CEEE;
+	Fri, 21 Feb 2025 17:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TYK6ehXe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZWCwY+GT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAC9216E00;
-	Fri, 21 Feb 2025 16:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7B224C693
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2025 17:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740157113; cv=none; b=ef4VpgHRlOuvSFsVp5vXFgxz6k1r1hQfYxWB8XREfvlWlb3oeCEj9z+6LQgfjZqEctjPg//xaCo4E1pE9FCDEfgMJHmUlQzfGj9E0opRcRY2+/CsOs0XvGaoMJBxiINq+wqydZ3dsf8bweobkV8TQJaY9shhGREIa4AUkgG/318=
+	t=1740157857; cv=none; b=FW2x+4I0cqf7Gq74pr8SfV0ConyVSpERPxCsBT/N/woqgcDGO2S4FQH+nsAKAB+3OJZ+C4jhqtHL1ra4/1NL1KK90Xvol3TIZGEodIX/NHHeVnVhicz8DisfbG19PwQKEPs4AIAbZL17GDTqHVtQCGZEBWyz3bPtanhrkfmU3QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740157113; c=relaxed/simple;
-	bh=a9YmoQJudTCJXJbygeI13L8U1BuxiSVyIGvEwomsDj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=brmDyP2OsG9bvVv+BgmHeAmyXEoO5hsDowVWMKlNIJGRD1Xgm1+3F1pQXnXFE63e+2Kj3Z+aXtjt2fqCcHN5VkY2uouXyh47sEa1MYbDqIS8c+y/2JnL9tJj5QdHuZnXkb5vPENRal4SdrD14eChR51dcfbzBf0YVC0RuFNOtMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TYK6ehXe; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E21244327;
-	Fri, 21 Feb 2025 16:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740157103;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E0vFszfjLRPUBsYWT5+eUQORh5cGIC4pgSuTijYp52A=;
-	b=TYK6ehXeLbHK0RIEExHccJKgNtcaYsy53jurbwoa4CiaZqXiOv96PkqPPed+4qwAYpjAuO
-	r2uhzLSM4bH6moFmPA2saexW4KimCSKoGMXa9hpqk9Lgf5vynKkwJwe3tADJjZxFz6tw78
-	C4mULaELttNGUC0aQyQMG+PLkRTKcfHJ5svUbmhyVud1is/g4ZRumQwGBlgx/nFDAV4vNj
-	FF95HbqmPoG0cegOhkGupJZXzmmqlu7u2D5MQijyFopXD3na0bVoFWlOXhgGaeD4Qnn4n9
-	Yo27SAheJ0IDMmb/mJk47MKUbAybOUZu16HVxvGmS4ku/9b7Z/Ibw8yYp7Ji1g==
-Message-ID: <b41cb993-3cdf-4cfb-a131-14c1a66c8824@bootlin.com>
-Date: Fri, 21 Feb 2025 17:58:18 +0100
+	s=arc-20240116; t=1740157857; c=relaxed/simple;
+	bh=zLivjvSwcKhzlo3svCNKQUA1a6rIcuwqxFgzLbvteDo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=miKDELnxUg/n0n43UObFXhRR/QNxKauB8vu0rwbVXkIkigOC5Ykw5Yg/LzbOjsn4Aqg1JyhpfqL6H4idvAFR/ymBeFl41HzkRf5b5yLw3NLnDYVLtUxYCBAOt+fqbx32jP6ZXX4XnQRuAspCRw1XoCD9eXpgbkeXfuZ8qZNRvZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZWCwY+GT; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22117c396baso183285ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2025 09:10:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740157854; x=1740762654; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v/06cutobvSL148SHg+rXF1/EKMBeC15diJi2NLvYxY=;
+        b=ZWCwY+GTFO1iI+FQVPsHIwyBpRTmBQ7AxQKENZYhr1JVm/AArUyEyHaZatbtEJ4ZJk
+         XaGGpLFyLhmmClseqZACnUYcxfghU/pK4dxF96CuHC7xVNQF5rBmM6hKmIJe+f0uYh0z
+         VG8kiDRAiYyikaVcQpYy4OwWw4JoescXotRxPKgdqdb8rO6wcyF9IhiiW8Uer2iFripx
+         aR6a+rRCu33U7ThjgnX6ri1cMtgiW4qDoLwcigOe9X58ywAq+XUfyvyBeLHEzYVr0EeB
+         iwV3SIBdjEobm53uMmoG188zeGM5U0585Rrfm5qOQbcwz0Sj9VBDAde5c5CkJ++dy7sT
+         +1bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740157854; x=1740762654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v/06cutobvSL148SHg+rXF1/EKMBeC15diJi2NLvYxY=;
+        b=kVUIPIQY8NU31QqhXno/0/azTvsE5yo/Pa//x7s1TknmjX2NC+ueJcwnD/83HNt0To
+         teJPwnglNTrcCJGSlHtjfBoOftNu5gT1MAbra4DBKUiBqeBFHTjuGn1GGyW6iotmF+sg
+         jqnRFPqVc+tiyH2theBuaaOR8jfW+EAZTVtrCNDy/5vVZ4QeRV8d0AKuk4yfixDwyS2C
+         8ras92wqbvKA6hwtAHSiaNuZXpy8NmWcWUvA4IO7FJqUwXSkuAfYZObhxxx63FvvRzJC
+         +bvGh3TY+kIcaG7KFP+WuAsC9AVnBkkiauv+RUAkq5QX8INc+gA3mhTNnD+m33ksGYSe
+         mnwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVYPMhO5K2id/E2d4tAdXXDPtts6zCWY3Yc/B5bMNndInjla7afisvbSDaboU1fQnHYnloUb9yumusPfMAt6Gw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCetnxsNeYl0igt45tcAG5zWIYhMMLIDue4qfQ6Gwp+tB9BJmD
+	FzVXgbSgNrPRXspVLrY1cYjqdCQ8WuLrKepbIYK4ZSOtxNaPufxI/3L5zdAQVtQ5KiT298EzgO+
+	rTYGTRQvELUTc6bykka+GdlGATqTeDf8aDxiw
+X-Gm-Gg: ASbGncuE4FLFcQCt/CUF4r4ACkYBl05JX7laOP8Ll93Gs4wpRWP5t+DpvQ87sNq8YP5
+	hC2KYXuomxKg8nDd0Io1GZflhFZnb6B6QJ+z/KZAAEWfTUB4JUQDIxNTGdW5zcXUO8Q2FSKqSOo
+	wGZdO3l9VvUiJEZ5OXwXQseYkePrrrm+Uq4D0X2e5W
+X-Google-Smtp-Source: AGHT+IGldTX8YPxNiHq5GCgGriPX+2NeZhhwxRgXaqAzM2MGUPniBZmpaA4CLGFWvvlR3adETlTMpcRMFGLlc6gV27Q=
+X-Received: by 2002:a17:902:e5c6:b0:215:8723:42d1 with SMTP id
+ d9443c01a7336-221a0417e96mr2978475ad.10.1740157854187; Fri, 21 Feb 2025
+ 09:10:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] arm64, bpf: Add 12-argument support for bpf
- trampoline
-To: Puranjay Mohan <puranjay@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay12@gmail.com>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Florent Revest <revest@chromium.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
- Bastien Curutchet <bastien.curutchet@bootlin.com>
-References: <20240705125336.46820-1-puranjay@kernel.org>
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20240705125336.46820-1-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejtdehiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttddvjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeduuedugeevveelledtudegleethfffuedtgffhlefgudektdeuheegkeekudehfeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehpdhhvghloheplgfkrfggieemvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekhegnpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvhedprhgtphhtthhopehpuhhrrghnjhgrhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehio
- hhgvggrrhgsohigrdhnvghtpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeihohhnghhhohhnghdrshhonhhgsehlihhnuhigrdguvghv
-X-GND-Sasl: alexis.lothore@bootlin.com
+References: <cover.1740139449.git.lorenzo.stoakes@oracle.com> <521d99c08b975fb06a1e7201e971cc24d68196d1.1740139449.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <521d99c08b975fb06a1e7201e971cc24d68196d1.1740139449.git.lorenzo.stoakes@oracle.com>
+From: Kalesh Singh <kaleshsingh@google.com>
+Date: Fri, 21 Feb 2025 09:10:42 -0800
+X-Gm-Features: AWEUYZnbM5nA9kkqZnhzwGTEHPz7kvvIuks0mem2iJOt7iRv8etO859ySZMIHY4
+Message-ID: <CAC_TJvf-R6MuSS9e0b4orhxLrFwXTnvZV-vf3sB+BnSbEqsprw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs/proc/task_mmu: add guard region bit to pagemap
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>, Juan Yescas <jyescas@google.com>, 
+	linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-api@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello everyone,
+On Fri, Feb 21, 2025 at 4:05=E2=80=AFAM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+>
+> Currently there is no means by which users can determine whether a given
+> page in memory is in fact a guard region, that is having had the
+> MADV_GUARD_INSTALL madvise() flag applied to it.
+>
+> This is intentional, as to provide this information in VMA metadata would
+> contradict the intent of the feature (providing a means to change fault
+> behaviour at a page table level rather than a VMA level), and would requi=
+re
+> VMA metadata operations to scan page tables, which is unacceptable.
+>
+> In many cases, users have no need to reflect and determine what regions
+> have been designated guard regions, as it is the user who has established
+> them in the first place.
+>
+> But in some instances, such as monitoring software, or software that reli=
+es
+> upon being able to ascertain the nature of mappings within a remote proce=
+ss
+> for instance, it becomes useful to be able to determine which pages have
+> the guard region marker applied.
+>
+> This patch makes use of an unused pagemap bit (58) to provide this
+> information.
+>
+> This patch updates the documentation at the same time as making the chang=
+e
+> such that the implementation of the feature and the documentation of it a=
+re
+> tied together.
+>
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> ---
+>  Documentation/admin-guide/mm/pagemap.rst | 3 ++-
+>  fs/proc/task_mmu.c                       | 6 +++++-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/adm=
+in-guide/mm/pagemap.rst
+> index caba0f52dd36..a297e824f990 100644
+> --- a/Documentation/admin-guide/mm/pagemap.rst
+> +++ b/Documentation/admin-guide/mm/pagemap.rst
+> @@ -21,7 +21,8 @@ There are four components to pagemap:
+>      * Bit  56    page exclusively mapped (since 4.2)
+>      * Bit  57    pte is uffd-wp write-protected (since 5.13) (see
+>        Documentation/admin-guide/mm/userfaultfd.rst)
+> -    * Bits 58-60 zero
+> +    * Bit  58    pte is a guard region (since 6.15) (see madvise (2) man=
+ page)
 
-On 7/5/24 14:53, Puranjay Mohan wrote:
-> The arm64 bpf JIT currently supports attaching the trampoline to
-> functions with <= 8 arguments. This is because up to 8 arguments can be
-> passed in registers r0-r7. If there are more than 8 arguments then the
-> 9th and later arguments are passed on the stack, with SP pointing to the
-> first stacked argument. See aapcs64[1] for more details.
-> 
-> If the 8th argument is a structure of size > 8B, then it is passed fully
-> on stack and r7 is not used for passing any argument. If there is a 9th
-> argument, it will be passed on the stack, even though r7 is available.
-> 
-> Add the support of storing and restoring arguments passed on the stack
-> to the arm64 bpf trampoline. This will allow attaching the trampoline to
-> functions that take up to 12 arguments.
-> 
-> [1] https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst#parameter-passing
-> 
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+Should this be 6.14 ?
 
-[...]
-
-+cc Xu Kuohai + cc Florent Revest, who are involved in [0]
-
-We at Bootlin are currently working on improving eBPF selftests coverage and
-aligning ARM64 support with other platforms. For this second topic, one
-remaining point is the support for 12 arguments in bpf trampolines. It looks
-like a big part of the work has been done and submitted through two different
-versions, the first one from Xu ([0]), and this one from Puranjay ([1]). There
-is still some rework needed in both versions to properly handle some alignment
-constraints.
-
-@Puranjay @Xu are you (or anyone else) actively working on those series (I kind
-of understand that you both agreed that Puranjay was continuing this work) ? If
-so, if there a way to assist you on this topic ? If not, can we take and revive
-your work to try to handle the missing points and make this feature integrated ?
+Other than that: Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
 
 Thanks,
+Kalesh
 
-Alexis
-
-[0] https://lore.kernel.org/bpf/20230917150752.69612-1-xukuohai@huaweicloud.com/
-[1] https://lore.kernel.org/bpf/20240705125336.46820-1-puranjay@kernel.org/
-
--- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +    * Bits 59-60 zero
+>      * Bit  61    page is file-page or shared-anon (since 3.5)
+>      * Bit  62    page swapped
+>      * Bit  63    page present
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index f02cd362309a..c17615e21a5d 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1632,6 +1632,7 @@ struct pagemapread {
+>  #define PM_SOFT_DIRTY          BIT_ULL(55)
+>  #define PM_MMAP_EXCLUSIVE      BIT_ULL(56)
+>  #define PM_UFFD_WP             BIT_ULL(57)
+> +#define PM_GUARD_REGION                BIT_ULL(58)
+>  #define PM_FILE                        BIT_ULL(61)
+>  #define PM_SWAP                        BIT_ULL(62)
+>  #define PM_PRESENT             BIT_ULL(63)
+> @@ -1732,6 +1733,8 @@ static pagemap_entry_t pte_to_pagemap_entry(struct =
+pagemapread *pm,
+>                         page =3D pfn_swap_entry_to_page(entry);
+>                 if (pte_marker_entry_uffd_wp(entry))
+>                         flags |=3D PM_UFFD_WP;
+> +               if (is_guard_swp_entry(entry))
+> +                       flags |=3D  PM_GUARD_REGION;
+>         }
+>
+>         if (page) {
+> @@ -1931,7 +1934,8 @@ static const struct mm_walk_ops pagemap_ops =3D {
+>   * Bit  55    pte is soft-dirty (see Documentation/admin-guide/mm/soft-d=
+irty.rst)
+>   * Bit  56    page exclusively mapped
+>   * Bit  57    pte is uffd-wp write-protected
+> - * Bits 58-60 zero
+> + * Bit  58    pte is a guard region
+> + * Bits 59-60 zero
+>   * Bit  61    page is file-page or shared-anon
+>   * Bit  62    page swapped
+>   * Bit  63    page present
+> --
+> 2.48.1
+>
 
