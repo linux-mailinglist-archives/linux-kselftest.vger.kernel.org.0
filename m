@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-27147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3B53A3F05D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 10:34:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B0B1A3F066
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 10:35:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD69A188FE7C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 09:33:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72CB386042D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 09:33:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09FA201017;
-	Fri, 21 Feb 2025 09:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C109202F96;
+	Fri, 21 Feb 2025 09:33:39 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986391FFC6A
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2025 09:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EF83FD4
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2025 09:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740130417; cv=none; b=PS+RzxU86sGVYxcRkQAewFOUksFW/YALEi0mlpOJivihClOR5ZBISD2117bHrDA3zyiyKeiU57Xw8h0AR2JCOWoblVjqPcwIVEZO+WQV4hDbOGHNBduBCT2qcvQxhkEg2wKP4YH7BpY93ufp2ogLWBzoHnD/sKFWFO6lLyPkeHE=
+	t=1740130419; cv=none; b=Uwzsb69zy5i/xZ+59xAU1JmHA+2HueBBNiUqcfgjdoFXKwsynoHK1uxhQeAtvQ3kVXjV+j/vfIMCTo8C8ycibJSXPbZOYuJ2kksqaDzRMflbnLMcAWb4TVg9gLz4Vb/I7xdJcxyDaCfqlZ0Q1usCOCnhuhBzFqQm/RGeLTkOKoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740130417; c=relaxed/simple;
-	bh=rB3sKCNcAvS2k2MiPjdBaQ4gAzv+DXj2dzV8m3LLkjI=;
+	s=arc-20240116; t=1740130419; c=relaxed/simple;
+	bh=AgiPjyj+GZGQVfJyADV4HcULtk2jTxWfn2MGp4+sU5g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BMEs064/iNlBrvq+j2Q/Y4E1ZtigjDOremdG1ev0HEJG5tp+17H6Af27Q9IidfQIyDAhrxiFSSkg5BmOfUs0lN27DcyyYLJINf3CqQsnXe8/uDDgd0PM+b1QUyDOryYzFVEsDubJ9Jcv91OEZNeG25yih6ZUsjgJVdWeo87zXAo=
+	 MIME-Version; b=bUd55DS5tIOFSjyKMX0/ISzC2ixVDxxs//ai8CrHdN0vzsVmUXfIVYA8vVPBNAhunMmU4MafnAdTlJkOfoyr1t3EbiwYUWx3551M/PuvfFX6Egz1lLSaJ6RoLSpsSksUTNMmQKdSai5VKeYjXPfCqBjzyCMj6DKhjZT35n8mkts=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DD2C4CEDD;
-	Fri, 21 Feb 2025 09:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E015C4CED6;
+	Fri, 21 Feb 2025 09:33:37 +0000 (UTC)
 From: Catalin Marinas <catalin.marinas@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org
 Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
 	Yang Shi <yang@os.amperecomputing.com>,
 	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 1/2] kselftest/arm64: mte: Use the correct naming for tag check modes in check_hugetlb_options.c
-Date: Fri, 21 Feb 2025 09:33:30 +0000
-Message-Id: <20250221093331.2184245-2-catalin.marinas@arm.com>
+Subject: [PATCH 2/2] kselftest/arm64: mte: Skip the hugetlb tests if MTE not supported on such mappings
+Date: Fri, 21 Feb 2025 09:33:31 +0000
+Message-Id: <20250221093331.2184245-3-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250221093331.2184245-1-catalin.marinas@arm.com>
 References: <20250221093331.2184245-1-catalin.marinas@arm.com>
@@ -49,37 +49,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The architecture doesn't define precise/imprecise MTE tag check modes,
-only synchronous and asynchronous. Use the correct naming and also
-ensure they match the MTE_{ASYNC,SYNC}_ERR type.
+While the kselftest was added at the same time with the kernel support
+for MTE on hugetlb mappings, the tests may be run on older kernels. Skip
+the tests if PROT_MTE is not supported on MAP_HUGETLB mappings.
 
 Fixes: 27879e8cb6b0 ("selftests: arm64: add hugetlb mte tests")
 Cc: Yang Shi <yang@os.amperecomputing.com>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- tools/testing/selftests/arm64/mte/check_hugetlb_options.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../selftests/arm64/mte/check_hugetlb_options.c       | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/tools/testing/selftests/arm64/mte/check_hugetlb_options.c b/tools/testing/selftests/arm64/mte/check_hugetlb_options.c
-index 303260a6dc65..11f812635b51 100644
+index 11f812635b51..3bfcd3848432 100644
 --- a/tools/testing/selftests/arm64/mte/check_hugetlb_options.c
 +++ b/tools/testing/selftests/arm64/mte/check_hugetlb_options.c
-@@ -270,13 +270,13 @@ int main(int argc, char *argv[])
- 	"Check clear PROT_MTE flags with private mapping and sync error mode and mmap/mprotect memory\n");
+@@ -227,6 +227,8 @@ static int check_child_hugetlb_memory_mapping(int mem_type, int mode, int mappin
+ int main(int argc, char *argv[])
+ {
+ 	int err;
++	void *map_ptr;
++	unsigned long map_size;
  
- 	evaluate_test(check_child_hugetlb_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE | MAP_HUGETLB),
--		"Check child hugetlb memory with private mapping, precise mode and mmap memory\n");
-+		"Check child hugetlb memory with private mapping, sync error mode and mmap memory\n");
- 	evaluate_test(check_child_hugetlb_memory_mapping(USE_MMAP, MTE_ASYNC_ERR, MAP_PRIVATE | MAP_HUGETLB),
--		"Check child hugetlb memory with private mapping, precise mode and mmap memory\n");
-+		"Check child hugetlb memory with private mapping, async error mode and mmap memory\n");
- 	evaluate_test(check_child_hugetlb_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_PRIVATE | MAP_HUGETLB),
--		"Check child hugetlb memory with private mapping, precise mode and mmap/mprotect memory\n");
-+		"Check child hugetlb memory with private mapping, sync error mode and mmap/mprotect memory\n");
- 	evaluate_test(check_child_hugetlb_memory_mapping(USE_MPROTECT, MTE_ASYNC_ERR, MAP_PRIVATE | MAP_HUGETLB),
--		"Check child hugetlb memory with private mapping, precise mode and mmap/mprotect memory\n");
-+		"Check child hugetlb memory with private mapping, async error mode and mmap/mprotect memory\n");
+ 	err = mte_default_setup();
+ 	if (err)
+@@ -243,6 +245,15 @@ int main(int argc, char *argv[])
+ 		return KSFT_FAIL;
+ 	}
  
- 	mte_restore_setup();
- 	free_hugetlb();
++	/* Check if MTE supports hugetlb mappings */
++	map_size = default_huge_page_size();
++	map_ptr = mmap(NULL, map_size, PROT_READ | PROT_MTE,
++		       MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
++	if (map_ptr == MAP_FAILED)
++		ksft_exit_skip("PROT_MTE not supported with MAP_HUGETLB mappings\n");
++	else
++		munmap(map_ptr, map_size);
++
+ 	/* Set test plan */
+ 	ksft_set_plan(12);
+ 
 
