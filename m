@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-27170-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79852A3F68B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 14:55:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A33A3F681
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 14:54:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C4FD1890374
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 13:54:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 128C97A7E97
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 13:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE795212D83;
-	Fri, 21 Feb 2025 13:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4C82139B0;
+	Fri, 21 Feb 2025 13:52:30 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099F021146E;
-	Fri, 21 Feb 2025 13:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD26211A2F;
+	Fri, 21 Feb 2025 13:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740145948; cv=none; b=o5EC7t/7oS/COmtEoQ0CDdzV0vzl2+wtyhcgnwEfKigpmFiTKFgq4ljoCqn8wP9WVZ4oeJQ3euzcux7ircw1Ut1fNZ1NoaQsE9TX5mXyzCeVNYCDsWfOFfUFMUo9kJqLwzg3HSsR3i2Az9bfqdYrDLllPt3PZyg/UqoibKA1I18=
+	t=1740145950; cv=none; b=iJOzuHc0ZktbpG0+RmVGrmSN68T6dKDYqYQE0unH8SHI0B8cg/z2CDW8bG6XUBPwI8WfRqG65T4RxgqobotwiVPVADH+Ary42uS6YXtr9UbiMxryICe18GnOY/K/BEmX0W/6bCmBCitZiu11gLyZLxVwxwdhcp8nA3t4b5JSCEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740145948; c=relaxed/simple;
-	bh=Ob2n3Gjxes2mq/Ts8e3t4uuvkN8LtpNdlLQUukz3fEE=;
+	s=arc-20240116; t=1740145950; c=relaxed/simple;
+	bh=UAMiYSp0KHUcRLeGDdf4eEUuv3guyClaUcJy9nLPA7w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tAXpqDe0TeqjpL3jftQYQQr5Rn9r3I+3sF3ynlzpbSTazZUoOFn9tuZ1WSagnmlRvBvRnW39TU5cDorCuJnuHMqFnV8Ko/mj9co9orxIqcBJ7eKiaLoWWGx+wvl80te/MMAyCUcJ7cP1C/rxrElqSV8/r+VldPn4BoCb01FEcvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:To:Cc; b=RqS9PgFxpaLoXyxve8KQMwfg5YJAiVhTTopeVY3x4+TuBpaPaKv26J4T1PHnY1I43FTLRnMwfvyQk74jNBj34Iz1Oh6+vvy1sCCPeqQhwML1bJZI527tv2M8b852DLtWcTmRKP+aS6lKkx6lEPkCsuCogPIyM63s1BVL725Me2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5dee07e51aaso4007161a12.3;
-        Fri, 21 Feb 2025 05:52:26 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e050b1491eso5648348a12.0;
+        Fri, 21 Feb 2025 05:52:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740145945; x=1740750745;
+        d=1e100.net; s=20230601; t=1740145946; x=1740750746;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OhLoXurUg9nsUH5I3z7BRsf0MsfxSUDScjQg851KMjo=;
-        b=xTeLRVJBVmSKCYCtEKI3xzahuCUJu9exMUsjPNhMz200l+CHFK5TtbsXwJ+4lILFdI
-         CK1OG3G4r/dTwak27uHLuhsJ4rN92UrRxiIJr8MPWgtqI63UeY20irud/bELETGlHnWy
-         vkeecgKZyIS6d2rmJaLE7Vd/Gv/bcpXrtydPh0Fya0tifviXG08ch/VL84974Q/2AOyy
-         DitEz0eDcLKWD8+AUuGykHz/BShk1x5vwKyNgk9AGZMY99+KBaSLt/PwgnGJ67bqpieU
-         Y3+EpAaVhtq5bCstbug/p8Ol90XvwB5gvaBXTYlI5WZ/VEYf22RjzHidDssyEIiSoTos
-         3v+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUsNLTbJF+/pSDd5veJVZQTJ+yZKKls9c/3yqmACiKyWvz3UVS76Nydiai3Awh7+xNjFjH865MfO3c=@vger.kernel.org, AJvYcCX6JNSX1++subzc9iAhxwYU1gBRyX4ESzsx2+J4qZjBVOj1SszkS+r58rJc96+/n2NvQdeS/p1/ihv85lCI@vger.kernel.org, AJvYcCX7W7d4gC9KXXTqmNLSjjJv1vrOKST3Y4llcmW5TR2uczu3ydi80cL0mbZHvOeiQFaniCb7E4lgzW/czr+2Rzgp@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8G6qq/pPpZPvSAsu0+0hyodVJ8/H6Uxsp8j2X0ckhznhu4YF4
-	aWtZOCl2dV29zPGdY52dHWSX1U/40fyw8qrQUTldURhhag1gmLMPbRWI5Q==
-X-Gm-Gg: ASbGncv8gIKhcT4gp1d0vQXGvKCGjZylSIjjdL16mwTQjVSJu+B3Ax3TZRVRBZwf+B0
-	vd48L8dgH3cpKC1c9TLEK3zdRTuXyXmX3GXbracLfJdjMODeLSBKYZFuQ5ther2CZTPctu6E/cI
-	wooOXSN5LOC5W0t+Ax0WkhE3wT/rBGIXXt7tfiT8DnnORH0PQmmf3uUTHfxvQ/VHdI3R1OPd+1P
-	7dIMKZ+W9w08Yv6qXD3NfMzmNv1u+6lS9kZK3/4W3uksB8XKSemDqn3KGtownTtJYvTBf2ewpcy
-	Bs01bZGNOQuTsm5h
-X-Google-Smtp-Source: AGHT+IGyyXHo3KUES95XHnDPWbIM/9t2Rcs2i4ef+6srCMDnYSmMw/LOm/ofPOs8TwXax2JPzTvJeA==
-X-Received: by 2002:a05:6402:430a:b0:5de:6bc2:7bb with SMTP id 4fb4d7f45d1cf-5e0b7103f28mr2936975a12.17.1740145944740;
-        Fri, 21 Feb 2025 05:52:24 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:1::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e09072247esm4257416a12.51.2025.02.21.05.52.23
+        bh=TUXvrwelqbD1V75CQwnY7FgY79R0MbcECGMShqCA46U=;
+        b=ju7CPHthny4esZN31/cJHUrahdxHpAAj8L8ZJqZmyk9eL8ILRFAQCWgf93DJRr3tgM
+         L6pgtkzuVm/zfz3ohNhUOjZJYx8oMLCGgbWhXCRZr2WTRZyTHiqNWmMJeQsq1fILgkSN
+         Q9kAZVAAubzoAqOfnyn44cT7JZAd3JL2rVdrxv7dCGI8xVngfARn8wXhofXbMc0843qb
+         fC+Ojtxn4H912vOeaHEk2vs76SXL+zVbcclpySgj9gnAz610dEfstNi58gO4nYTDR2XA
+         mXswC8THfC7HJuFe3uQ4Ml8k+dGokkLhl0jLeFQKawWPBhFWX7LmEzjt+YCJhKX5Sb5U
+         Nz+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWVyqEydfh9ynrXcfKDiMjT3BNKYQzmNe2zRYSMqJAn2Dh1H3DFjqboOlyfIwHKoQgrU5bagZYrGg4=@vger.kernel.org, AJvYcCWk76RweSnX35W5/H64oMs+ZKOcL6HGhcewwlYHcQeH6dDnwQFS9xNzLtD3WDv145Ete2NYDfKs6iBP+i5k@vger.kernel.org, AJvYcCX8toQTbO8sMcZrqnSKl//ucZ+7rJDBGhyI5yuEJaAMK0+tBMIOky/0VFDi/5Il46jgFC3UUK687r6EpwWbNNkp@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYf+w/LFFX7dFdLlvirXdUQnwSUsrgt71kvmiAu8hnNMkH1qha
+	AFaUmMho4vHW8bHIwCxUeBEhbfltmXrG14LnyAeO3dYvolGeATyGCodklA==
+X-Gm-Gg: ASbGncuwlGsa7pAXGOEGxl/u/FoQQXSloO2aBDsemYhfLTChEKrqS0NwvP0UOh2sqv9
+	urfsuu6CgfoEdL8oHe9MlbMdzKEAsDjjBX0pEco6SFO+bZ7fQtcLFddRoARuOYFIKrGGcMwLPII
+	fX+4cOWsezMAVXAWcekqJCFYfFAws2TKHULFOBk6GnCOI6pBM13BRTta7zxYFV2vbC8rwlms1OX
+	QcNr5I9uJWM1vQXex7zrnu14K0Y+3ycVkyuRbOLKxSCxzTXBt9YthmeQlhyNgVSV+Nvc92s/Oxy
+	NshwDeUPqHZ5Alec
+X-Google-Smtp-Source: AGHT+IFM2bCjUEEf+k8Bat7h8Tcg/3FtntblsSmSvoqqXX0anKjWVo6IaqCfPW2KnZT1GZBkNuPhmw==
+X-Received: by 2002:a17:907:7a88:b0:ab6:fe30:f49e with SMTP id a640c23a62f3a-abc0b0e5fcdmr354463666b.28.1740145946307;
+        Fri, 21 Feb 2025 05:52:26 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:7::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb8a647c7dsm1112639866b.72.2025.02.21.05.52.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 05:52:24 -0800 (PST)
+        Fri, 21 Feb 2025 05:52:25 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 21 Feb 2025 05:52:11 -0800
-Subject: [PATCH net-next 6/7] netconsole: docs: document the task name
- feature
+Date: Fri, 21 Feb 2025 05:52:12 -0800
+Subject: [PATCH net-next 7/7] netconsole: selftest: add task name append
+ testing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250221-netcons_current-v1-6-21c86ae8fc0d@debian.org>
+Message-Id: <20250221-netcons_current-v1-7-21c86ae8fc0d@debian.org>
 References: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
 In-Reply-To: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -82,76 +82,153 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2198; i=leitao@debian.org;
- h=from:subject:message-id; bh=Ob2n3Gjxes2mq/Ts8e3t4uuvkN8LtpNdlLQUukz3fEE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnuIUM2R8RCAjq9vUavbVP3mpQxIAhAsHXr2Szg
- ayP0uMgaUmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ7iFDAAKCRA1o5Of/Hh3
- bRVJD/oCHdk1nUcH7d6syKrxakso9UyrwJtwZUnnyKRcgzirBpgLO/ZtLlwD0c88LinpUW2TdYw
- bDGuNP7mmAFrgKKJuP0LHNkG231wgf/GJh+vttzPfSiiYRAhlcg1PX9g5sepZZHYcAlEc+xpBJu
- 24W5iusSAbN2K8kdEa9EUuPiYn7ywNCA+uQOLCAvp6DUw/eM0JrF3pS9Ao10bbP8WltjxxwtaQR
- P/7KtLMlvUHW63wIa72faiDVti4S+2gS9rZSB+AJq8OQkht5pUSTy2mtGnEKAB4nJRbdgjI5iOm
- JEMuDBwYQBbTcWaAjgz2bNjMJWyFKnDwPBL4u+Sm9T0YhP4NIim8QI9d3jaUh+6e5J1nxNzO/Wp
- Oeqk1O/FNRdnzjqa55L9NbgCHQRloYD4jQ7V+PkA31TkGDON6lAdXH0v2EE48c6M/0u3GXT4Z0H
- PaVtGBsGpKZkdlthE7aQaUvbpwy8+8PNEifm4Svd7uxjGS4c1A/cLmLIYltQW2b4dFB+DqaQQQr
- 9ID3JlCXdSeM/XzN1Xh3v3KqmJxbH9WvBO09ldLE4NPY/c/4PQwLzldGJPABXzlaBC8v4T5pf6f
- U//UZeG4YnC1rFj9BB7G2GfftS7b2FdG5/gnkzhKhYQN55FvPXOL0nLhKJ9eLhtQSYlunhZB/UU
- XtJaSr2ptoRJj4w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4260; i=leitao@debian.org;
+ h=from:subject:message-id; bh=UAMiYSp0KHUcRLeGDdf4eEUuv3guyClaUcJy9nLPA7w=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnuIUMJjAspGO8HO4uoPYIg3Zb0goymWI1KXVBp
+ 5X9ErcMswGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ7iFDAAKCRA1o5Of/Hh3
+ bcWaD/40iZKArz5bw2/fo5GELpRSNZJaC5y6BS2xxBnjo2saV3YWhbLi0pxmEL2onRCMCpodDcl
+ UjD0CcjCH+uzzD0gWu+8Mt3d5cQhH0pKn0vMwlEs7WSYFxbOrGbyUdcuu5NzXp9RGiPbr3NhAK1
+ cbIMapTpCf5hTxYHlEp2/+Oaqq0huFRQDunx7OGmSqwIWNZhfKjmm5YZ9hkcZ4vTLRuHm5LovFE
+ B3W41m3OBO1Fmv3zdbNJUDsavQn9irAPh2OEzkUEymSY4Kel2DCJ74URKCexprXfwEC/2I2MbbL
+ 6PgJNcUCgUNc4KrovHLwjtiFEGfVMJkoXUaB6V1tqfS1UghFQV+JZ1xFTuOOxg8FUK7Pt6PpxFD
+ WK7D2xTTpoYPJYEPQJPiKIwx3MNFULh/+QAHLmswgYSDZHTA5dsUZ2kpQgnRpBsN8HEGHb50quR
+ q4rghn+WklsZ7jBOWW4LiAjiUTJXMt98pRZFGOC5qZHCX5X6xhybo9URTa9UxydjF+79MhHg+os
+ su+nlBdiXBxveM/CwfDVnCk987m19xqkIIR7UTenqcJTXeVwSaAo3YH0rkVI+xdG1PleBWv4knd
+ w2rGLwi4htMUVLGLIb2KbHbT41pCZfhe9TjmwwxlPN+syBIJ3NHwIZB87ABTxvG2U6Qk6Lirzqj
+ q4YirEV3TMWRoAw==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Add documentation for the netconsole task name feature in
-Documentation/networking/netconsole.rst. This explains how to enable
-task name via configfs and demonstrates the output format.
+Add test coverage for the netconsole task name feature to the existing
+sysdata selftest script. This extends the test infrastructure to verify
+that task names are correctly appended when enabled and absent when
+disabled.
 
-The documentation includes:
-- How to enable/disable the feature via taskname_enabled
-- The format of the task name in the output
-- An example showing the task name appearing in messages
+The test validates that:
+  - Task names appear in the expected format "taskname=<name>"
+  - Task names are included when the feature is enabled
+  - Task names are excluded when the feature is disabled
+  - The feature works correctly alongside other sysdata fields like CPU
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- Documentation/networking/netconsole.rst | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../selftests/drivers/net/netcons_sysdata.sh       | 51 +++++++++++++++++++---
+ 1 file changed, 44 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
-index 84803c59968a3237012fab821f432eb531aba45c..ae82a6337a8d8a07a0d691e2da170f6cf70ae86f 100644
---- a/Documentation/networking/netconsole.rst
-+++ b/Documentation/networking/netconsole.rst
-@@ -240,6 +240,34 @@ Delete `userdata` entries with `rmdir`::
+diff --git a/tools/testing/selftests/drivers/net/netcons_sysdata.sh b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
+index 2b78fd1f5982fee81b379bf9ac6f64a38d915974..f351206ed1bda4d46269a521b27b9b8e56d524be 100755
+--- a/tools/testing/selftests/drivers/net/netcons_sysdata.sh
++++ b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
+@@ -31,17 +31,38 @@ function set_cpu_nr() {
+ 	echo 1 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
+ }
  
-    It is recommended to not write user data values with newlines.
++# Enable the taskname to be appended to sysdata
++function set_taskname() {
++	if [[ ! -f "${NETCONS_PATH}/userdata/taskname_enabled" ]]
++	then
++		echo "Not able to enable taskname sysdata append. Configfs not available in ${NETCONS_PATH}/userdata/taskname_enabled" >&2
++		exit "${ksft_skip}"
++	fi
++
++	echo 1 > "${NETCONS_PATH}/userdata/taskname_enabled"
++}
++
+ # Disable the sysdata cpu_nr feature
+ function unset_cpu_nr() {
+ 	echo 0 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
+ }
  
-+Task name auto population in userdata
-+-------------------------------------
+-# Test if MSG content and `cpu=${CPU}` exists in OUTPUT_FILE
+-function validate_sysdata_cpu_exists() {
++# Once called, taskname=<..> will not be appended anymore
++function unset_taskname() {
++	echo 0 > "${NETCONS_PATH}/userdata/taskname_enabled"
++}
 +
-+Inside the netconsole configfs hierarchy, there is a file called
-+`taskname_enabled` under the `userdata` directory. This file is used to enable
-+or disable the automatic task name population feature. This feature
-+automatically populates the current task name that is scheduled in the CPU
-+sneding the message.
++# Test if MSG contains sysdata
++function validate_sysdata() {
+ 	# OUTPUT_FILE will contain something like:
+ 	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
+ 	#  userdatakey=userdatavalue
+ 	#  cpu=X
++	#  taskname=<taskname>
 +
-+To enable task name auto-population::
-+
-+  echo 1 > /sys/kernel/config/netconsole/target1/userdata/taskname_enabled
-+
-+When this option is enabled, the netconsole messages will include an additional
-+line in the userdata field with the format `taskname=<task name>`. This allows
-+the receiver of the netconsole messages to easily find which application was
-+currently scheduled when that message was generated, providing extra context
-+for kernel messages and helping to categorize them.
-+
-+Example::
-+
-+  echo "This is a message" > /dev/kmsg
-+  12,607,22085407756,-;This is a message
-+   taskname=echo
-+
-+In this example, the message was generated while "echo" was the current
-+scheduled process.
-+
- CPU number auto population in userdata
- --------------------------------------
++	# Echo is what this test uses to create the message. See runtest()
++	# function
++	SENDER="echo"
  
+ 	if [ ! -f "$OUTPUT_FILE" ]; then
+ 		echo "FAIL: File was not generated." >&2
+@@ -62,12 +83,19 @@ function validate_sysdata_cpu_exists() {
+ 		exit "${ksft_fail}"
+ 	fi
+ 
++	if ! grep -q "taskname=${SENDER}" "${OUTPUT_FILE}"; then
++		echo "FAIL: 'taskname=echo' not found in ${OUTPUT_FILE}" >&2
++		cat "${OUTPUT_FILE}" >&2
++		exit "${ksft_fail}"
++	fi
++
+ 	rm "${OUTPUT_FILE}"
+ 	pkill_socat
+ }
+ 
+-# Test if MSG content exists in OUTPUT_FILE but no `cpu=` string
+-function validate_sysdata_no_cpu() {
++# Test if MSG content exists in OUTPUT_FILE but no `cpu=` and `taskname=`
++# strings
++function validate_no_sysdata() {
+ 	if [ ! -f "$OUTPUT_FILE" ]; then
+ 		echo "FAIL: File was not generated." >&2
+ 		exit "${ksft_fail}"
+@@ -85,6 +113,12 @@ function validate_sysdata_no_cpu() {
+ 		exit "${ksft_fail}"
+ 	fi
+ 
++	if grep -q "taskname=" "${OUTPUT_FILE}"; then
++		echo "FAIL: 'taskname=  found in ${OUTPUT_FILE}" >&2
++		cat "${OUTPUT_FILE}" >&2
++		exit "${ksft_fail}"
++	fi
++
+ 	rm "${OUTPUT_FILE}"
+ }
+ 
+@@ -133,10 +167,12 @@ OUTPUT_FILE="/tmp/${TARGET}_1"
+ MSG="Test #1 from CPU${CPU}"
+ # Enable the auto population of cpu_nr
+ set_cpu_nr
++# Enable taskname to be appended to sysdata
++set_taskname
+ runtest
+ # Make sure the message was received in the dst part
+ # and exit
+-validate_sysdata_cpu_exists
++validate_sysdata
+ 
+ #====================================================
+ # TEST #2
+@@ -148,7 +184,7 @@ OUTPUT_FILE="/tmp/${TARGET}_2"
+ MSG="Test #2 from CPU${CPU}"
+ set_user_data
+ runtest
+-validate_sysdata_cpu_exists
++validate_sysdata
+ 
+ # ===================================================
+ # TEST #3
+@@ -160,8 +196,9 @@ OUTPUT_FILE="/tmp/${TARGET}_3"
+ MSG="Test #3 from CPU${CPU}"
+ # Enable the auto population of cpu_nr
+ unset_cpu_nr
++unset_taskname
+ runtest
+ # At this time, cpu= shouldn't be present in the msg
+-validate_sysdata_no_cpu
++validate_no_sysdata
+ 
+ exit "${ksft_pass}"
 
 -- 
 2.43.5
