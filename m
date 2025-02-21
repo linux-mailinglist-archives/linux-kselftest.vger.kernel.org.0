@@ -1,272 +1,162 @@
-Return-Path: <linux-kselftest+bounces-27222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ADD4A4010E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 21:35:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A802A4011F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 21:37:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFBCB701B7C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 20:35:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA25A169700
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 20:36:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A89253F3A;
-	Fri, 21 Feb 2025 20:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06BB11FBEB9;
+	Fri, 21 Feb 2025 20:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fa02rRWu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HjjyM2rr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42346253F07;
-	Fri, 21 Feb 2025 20:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC6D1D8A14;
+	Fri, 21 Feb 2025 20:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740170085; cv=none; b=DaZlOzpQ6eXh3TWTs7j9hKuno/Hthxfb/73iV+Z7Wrpdl/M0VKyircvanl9wrgOOyDdezID35eCBbs0BG4rE+EChAg4+IzSJFhlXsF9TyJY5/uDI5BERp45xE2CgumVpW8gKW0yMyuXp2K9e3eNfvpkqn10i3/jqy9ZWXSJ/vJE=
+	t=1740170196; cv=none; b=G0Mt1Fq8+xkF7IQ6IzXjEZaV3Wxebuf+gbvRgJnlWCXQLc0dBmGzYQuzYbSZTO6GznBo3+iWOn4ryGLHilc4otqh1uaS/AxSUqbdUW428CH7H9QNR1xKonge3WKnjCw66RIxGBCXh9dooBcL20zKOZWIXmCxzou9A55Xu1d95Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740170085; c=relaxed/simple;
-	bh=rviAPBtUobspkNDwfOwDylqUb3/l41NbO4AFds2nZuY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rhGOap6A7DVfBMP4vXZhihR9G55GMM0MPp6FrKWHjDrI4pBEj00+61v14SNb/bw8gCT8nwAXX2A1j0g+8nbkyY6EmZ8l42cl3fNSDhJXc20Y74Mjr13+ipyMx+cymA58p7d0BhQFooMb+AZ4wpyHymrxfiMU4vTM+NMD31ZB+BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fa02rRWu; arc=none smtp.client-ip=209.85.219.48
+	s=arc-20240116; t=1740170196; c=relaxed/simple;
+	bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lZxk8PYTKP60fKqCpnXOY/4Gysy5j1KLjVMQI7bJ4Y+F995CYeF3zBYuLl+SXiVVKie6Ot5sEXPV2SsfaRoNpanYqK6nJ2jxMwrlascAc/pV18yhieb2LAllUkdEHUgcHOduwDYQ9bRQAEf6NvBiJfJVqUgekM6q9g3/gClYKyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HjjyM2rr; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e66b4607d2so11546856d6.3;
-        Fri, 21 Feb 2025 12:34:42 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e095d47a25so4853007a12.0;
+        Fri, 21 Feb 2025 12:36:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740170081; x=1740774881; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Eoi45DrFExaeO8JTjw8qgTrj/TOzu6Gqxn36YdKMoVM=;
-        b=Fa02rRWu565WCJyFnY9mqr1/7OJW9D+YDnFk36IF8HteIz2U0nNdrAz0qJxrMZuXiq
-         uK9AfALH5blT+nIoW+PeUSzTsglNChKobXi6GhaQd/PRA7gJ9ExTHyPRziDS7CXdKsjF
-         n4HY6QPxYXtIqNqij+wpqle6N2iivw2yQAFGiLELWCbzlO5jT5LgFadYxumPHXwxWUrB
-         wb/BwvOOfD/U0cNg7n5IZ0bnOgJsBnwnchiuxvc0Ye57kAE9elsVDVKz3k/Br42G45vV
-         ImG98SwY35+U8GnBlbGra8CwQsH5cNwNmsnmho137AK9JIL3RMdY7m969gb0KsxShSTS
-         iOkw==
+        d=gmail.com; s=20230601; t=1740170193; x=1740774993; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
+        b=HjjyM2rrXBoSm00Kz3GNgUxMo2PFfn3mLK1bARjQvu5+xgX1M9DmDlSjViolN4pfBp
+         Iale+dvjzL8qO7Ky4oUK5smWoNNV7+nf/vvtfvfk7m+XCkTUd2riLofGSLd2NCEPaIF8
+         cb3expB5u8GHbTfsTsOPWvN3aKFbUQy9pSZiXq8mzyeMX2S+k3/cNiK04cDbaIVw2VdA
+         3JKlNG7LoiC1c2YVUP71gdtS5rHTYutR3cgxkMhTDmuZUnSXmHvCltKdK5YToeJICiGq
+         SaFAsCvt83Fx9X17WUJ+PGzen1Cl53DGB9DsjOFdtBa3g+WkmY+Cq5zK/KHbCGZuQLmg
+         cXVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740170081; x=1740774881;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1740170193; x=1740774993;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Eoi45DrFExaeO8JTjw8qgTrj/TOzu6Gqxn36YdKMoVM=;
-        b=fYIG2bRZLK0Qg2JQDWRruuM5YhGgAvyABvdD2nef4aztSzR5Py0a9oNw5fNQFjmIIK
-         fjsZMEVDShSE1vC46nBJXhQzX6FmCLe34IdhI69XOCeoMnh/rIxbZ91MzxHJrC3NYttl
-         bEX+LAneHddCgoLcV21NhpLVszgfZOoQJnvi+a5G2BtSkeP3yh6jxL12QOVcNydrasMC
-         Qpi+fX+29u60SJqGc82/EmHXZO/mqZcMPU3aeJBh3G9HaGjhCIOc9cpbKaKWGAQnLuDB
-         TTkspKVtkAhdoqHr0ZLRaJ220T2yvElU6lRdK4t7402qseayBeMZu1Uzc307d+tqM5EP
-         LPLA==
-X-Forwarded-Encrypted: i=1; AJvYcCWfpCBxBZ5rjaddfB8dpFHt3VjSKSUezwgC0wCC0nFQM0WsU1Bgh8sloPbnEuxS9x9hXVcqURl3vp4=@vger.kernel.org, AJvYcCXqzSktyFzvTgEbmS26c2IpxuwZsRVUr0y/cwxgh1INjSn69uyQuH2cFLp3wnX1uIhelwqYUmsW9+AvUqU/tk54@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwuMbeaDUYunvCFBStEk2X3IbB9WcKvhXdHHuCuH4AUAWUp5Cp
-	C1ljQU803yCyx6SnAQyMIy58sck8TTQ86dd7apeXWcLLZK/us047pIwshV0EvhI=
-X-Gm-Gg: ASbGncu8tTFcvkZjFsM2jgkP2KYgqIg7miGCCSl8oKAsOoWtgGPERYmLumDA/m+PHWS
-	7Lb4O4uVZ/fl37AfKpwW+Sk4nSOK0jLP8yP4jvOrVcsKSVV7ZGg1JjIUQrDTq6WzhpdgRHwO5Zx
-	5akB2Yl2XUNjCkNvI0NaAmYR+DHoeEsW2MeJXGl0eZRDFdCgiaIZiq212rA84exgJRM7MKb9Y/+
-	DOaA0hEAtA1sLYVWHDI6SyTssil9Eaeyy2+AekGYT2fUCVQMqsiZajdCnBEIiiFGChdCiYiJKMh
-	5sT/8djGqPBW3rC16B5L92JRO9BQkbZbGSnkqpVCTXziMbZmlw==
-X-Google-Smtp-Source: AGHT+IHZk626/PCbkUmvjSlL6T9hQUoiEhcd/cjugAXTLDwX+GAde7Djl8OMDd5sudOZWoO2zG+F+w==
-X-Received: by 2002:a05:6214:2422:b0:6d8:9a85:5b44 with SMTP id 6a1803df08f44-6e6ae9959bdmr52539466d6.29.1740170081234;
-        Fri, 21 Feb 2025 12:34:41 -0800 (PST)
-Received: from tamird-mac.local ([2600:4041:5be7:7c00:880f:47d4:56c6:b852])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d9f36easm101677546d6.74.2025.02.21.12.34.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 12:34:40 -0800 (PST)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 21 Feb 2025 15:34:32 -0500
-Subject: [PATCH v5 3/3] printf: implicate test line in failure messages
+        bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
+        b=L9zMW8Gr7Q7reaGbPkfe0Kpr6P0sWYpmFMT9A55CA5g0tC//3A/eTQlm8ik4xCZ66D
+         zOUC9N98hDB7bDF9TQym3jAKhWCbz0VHfDH3Xno2sFjlq4UB0dyL1lKpDrScsH1W9AEQ
+         6JEguBzdkhcIH/nd0Eh0lmgYNI6DoT2szcrSekDrrD9ky1CHJvNvCLkn4+6a982j3iPC
+         HT0gPFF2ZaeOaR+8FV467PRJJLICg7QsJS7fUWedvZv8KVv1MwzdG1gIe+2kcGOTTzim
+         kVJ3RsjiX+R0q795MXKpea83NQUCCH+k8AaHcHcPD37rnY5BuvYZPpENZsuPdLS8305L
+         04wg==
+X-Forwarded-Encrypted: i=1; AJvYcCVegnpTTeyaxxUfaTjMzwDUG7qKLJt+U59iXZ/MKqfpVG7G1fmY4eCQ8mn4GjYmus6o+uFC9JwxdpQEVmE=@vger.kernel.org, AJvYcCWhiyNyubAFiV6+a1fkKq937V0ECYqM1RYf25OhahrrtO/UuZ/HT3n08ZPQnV1wTP43IDymtsZPwLEyYWz/bUjz@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUWtrHY+bvbHD7Ys8PzpXOsbJrJqDCZLkn0GYKvjBG8+TNBQL9
+	3mcgTbqcYrHNNr1ilTWl/oTa3TB2tG0wqeCxQVzCWA8yHI8lCYfv+awJXLZNlOkVH+5TN22qgj3
+	ZZs4oRoaWljWuvzf9/zJbw2xYRypkOYmpX4w=
+X-Gm-Gg: ASbGncuBhtctTPhe5FRN9ituBGCmhbTn+elun5/xtk/AQv3fzmBiZ6r9bCgQ79hf3sF
+	7wJFj/TVEh7MFDIZVOmhqEOPA28kbiss223y+GpiOhKNIsgXwZldtc4h9w6/Se4ltznWFk0xpln
+	egbL5M3lY3s+Ej8GIdGV3UU8Osn3MxyS7uFJjwZQ2HKA==
+X-Google-Smtp-Source: AGHT+IETtMfsp+oxVVvJtgbE795zNbuHaeWF8ofCjtDM153d6TyT0rI+Niqk7EWeS2I9xBqTyLh7p3er1/ZJuxxHIcQ=
+X-Received: by 2002:a17:907:1c07:b0:aa6:7a81:3077 with SMTP id
+ a640c23a62f3a-abc09e394a1mr453579866b.54.1740170193331; Fri, 21 Feb 2025
+ 12:36:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250221-printf-kunit-convert-v5-3-5db840301730@gmail.com>
-References: <20250221-printf-kunit-convert-v5-0-5db840301730@gmail.com>
-In-Reply-To: <20250221-printf-kunit-convert-v5-0-5db840301730@gmail.com>
-To: Arpitha Raghunandan <98.arpi@gmail.com>, 
- David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Geert Uytterhoeven <geert@linux-m68k.org>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linuxppc-dev@lists.ozlabs.org, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
+References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
+ <20250213115951.GF28068@noisy.programming.kicks-ass.net> <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
+ <20250214094856.GD21726@noisy.programming.kicks-ass.net> <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
+In-Reply-To: <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 21 Feb 2025 15:35:57 -0500
+X-Gm-Features: AWEUYZmTNrzRMQDfcvC1uKAS9y2OW_n7SKmU92RpVTg0NimjM8ab7XRa3qA78u8
+Message-ID: <CAJ-ks9=BjaQJh0L3K2ywPFhP4XBxZiY9mqJzu1TsmpiH-AG9uA@mail.gmail.com>
+Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This improves the failure output by pointing to the failing line at the
-top level of the test, e.g.:
-      # test_number: EXPECTATION FAILED at lib/printf_kunit.c:103
-  lib/printf_kunit.c:167: vsnprintf(buf, 256, "%#-12x", ...) wrote '0x1234abcd  ', expected '0x1234abce  '
-      # test_number: EXPECTATION FAILED at lib/printf_kunit.c:142
-  lib/printf_kunit.c:167: kvasprintf(..., "%#-12x", ...) returned '0x1234abcd  ', expected '0x1234abce  '
+On Fri, Feb 14, 2025 at 7:37=E2=80=AFAM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
+>
+> On Fri, Feb 14, 2025 at 4:48=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
+org> wrote:
+> >
+> > On Thu, Feb 13, 2025 at 10:42:24AM -0500, Tamir Duberstein wrote:
+> > > On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infrad=
+ead.org> wrote:
+> > > >
+> > > > On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
+> > > > > Convert this unit test to a KUnit test. This allows the test to b=
+enefit
+> > > > > from the KUnit tooling. Note that care is taken to avoid test-end=
+ing
+> > > > > assertions in worker threads, which is unsafe in KUnit (and wasn'=
+t done
+> > > > > before this change either).
+> > > >
+> > > > So this was something simple, and now I need to know how to operate=
+ this
+> > > > kunit nonsense :-(
+> > > >
+> > > > How is that an improvement?
+> > >
+> > > Hi Peter,
+> > >
+> > > David enumerated some of the benefits of KUnit in another
+> > > thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLx=
+mTY2T2Ti53DQADrW+sJg@mail.gmail.com/.
+> > >
+> > > My personal reason for preferring KUnit is that it's much easier to
+> > > run from userspace; the tooling takes care of building, starting the
+> > > VM, running the tests, and producing a human-friendly report.
+> >
+> > Wait what -- you have to run a VM just to use Kunit? That's a hard pass=
+.
+> >
+> > If I can't simply run it natively on my test box, its a no go. And it
+> > using python also don't help, you shouldn't be needing that to load a
+> > module.
+>
+> The tooling I mention is all optional. You can still use modprobe to
+> run the test as a module or at boot. In this case you'd set:
+>
+> CONFIG_KUNIT=3Dy
+> CONFIG_WW_MUTEX_KUNIT_TEST=3Dm
+>
+> and then run the test via:
+>
+> ```
+> modprobe ww_mutex_kunit
+> ```
+>
+> or to run at boot:
+>
+> CONFIG_KUNIT=3Dy
+> CONFIG_WW_MUTEX_KUNIT_TEST=3Dy
+>
+> Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips=
+.html#running-built-in-tests
+> Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips=
+.html#running-tests-as-modules
 
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- lib/tests/printf_kunit.c | 62 ++++++++++++++++++++++++++----------------------
- 1 file changed, 34 insertions(+), 28 deletions(-)
-
-diff --git a/lib/tests/printf_kunit.c b/lib/tests/printf_kunit.c
-index 013df6f6dd49..ed6e708ddb61 100644
---- a/lib/tests/printf_kunit.c
-+++ b/lib/tests/printf_kunit.c
-@@ -38,9 +38,9 @@ static unsigned int total_tests;
- static char *test_buffer;
- static char *alloced_buffer;
- 
--static void __printf(5, 0)
--do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
--	const char *fmt, va_list ap)
-+static void __printf(7, 0)
-+do_test(struct kunit *kunittest, const char *file, const int line, int bufsize, const char *expect,
-+	int elen, const char *fmt, va_list ap)
- {
- 	va_list aq;
- 	int ret, written;
-@@ -53,21 +53,24 @@ do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
- 	va_end(aq);
- 
- 	if (ret != elen) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d",
--			   bufsize, fmt, ret, elen);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d",
-+			   file, line, bufsize, fmt, ret, elen);
- 		return;
- 	}
- 
- 	if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote before buffer",
--			   bufsize, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote before buffer",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (!bufsize) {
- 		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE)) {
--			KUNIT_FAIL(kunittest, "vsnprintf(buf, 0, \"%s\", ...) wrote to buffer",
--				   fmt);
-+			KUNIT_FAIL(kunittest,
-+				   "%s:%d: vsnprintf(buf, 0, \"%s\", ...) wrote to buffer",
-+				   file, line, fmt);
- 		}
- 		return;
- 	}
-@@ -75,33 +78,36 @@ do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
- 	written = min(bufsize-1, elen);
- 	if (test_buffer[written]) {
- 		KUNIT_FAIL(kunittest,
--			   "vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer",
--			   bufsize, fmt);
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, bufsize - (written + 1))) {
- 		KUNIT_FAIL(kunittest,
--			   "vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator",
--			   bufsize, fmt);
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + bufsize, FILL_CHAR, BUF_SIZE + PAD_SIZE - bufsize)) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer",
--			   bufsize, fmt);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer",
-+			   file, line, bufsize, fmt);
- 		return;
- 	}
- 
- 	if (memcmp(test_buffer, expect, written)) {
--		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'",
--			   bufsize, fmt, test_buffer, written, expect);
-+		KUNIT_FAIL(kunittest,
-+			   "%s:%d: vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'",
-+			   file, line, bufsize, fmt, test_buffer, written, expect);
- 		return;
- 	}
- }
- 
--static void __printf(4, 0)
--__test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, ...)
-+static void __printf(6, 0)
-+__test(struct kunit *kunittest, const char *file, const int line, const char *expect, int elen,
-+	const char *fmt, ...)
- {
- 	va_list ap;
- 	int rand;
-@@ -109,8 +115,8 @@ __test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, .
- 
- 	if (elen >= BUF_SIZE) {
- 		KUNIT_FAIL(kunittest,
--			   "error in test suite: expected length (%d) >= BUF_SIZE (%d). fmt=\"%s\"",
--			   elen, BUF_SIZE, fmt);
-+			   "%s:%d: error in test suite: expected length (%d) >= BUF_SIZE (%d). fmt=\"%s\"",
-+			   file, line, elen, BUF_SIZE, fmt);
- 		return;
- 	}
- 
-@@ -122,19 +128,19 @@ __test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, .
- 	 * enough and 0), and then we also test that kvasprintf would
- 	 * be able to print it as expected.
- 	 */
--	do_test(kunittest, BUF_SIZE, expect, elen, fmt, ap);
-+	do_test(kunittest, file, line, BUF_SIZE, expect, elen, fmt, ap);
- 	rand = get_random_u32_inclusive(1, elen + 1);
- 	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
--	do_test(kunittest, rand, expect, elen, fmt, ap);
--	do_test(kunittest, 0, expect, elen, fmt, ap);
-+	do_test(kunittest, file, line, rand, expect, elen, fmt, ap);
-+	do_test(kunittest, file, line, 0, expect, elen, fmt, ap);
- 
- 	p = kvasprintf(GFP_KERNEL, fmt, ap);
- 	if (p) {
- 		total_tests++;
- 		if (memcmp(p, expect, elen+1)) {
- 			KUNIT_FAIL(kunittest,
--				   "kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'",
--				   fmt, p, expect);
-+				   "%s:%d: kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'",
-+				   file, line, fmt, p, expect);
- 		}
- 		kfree(p);
- 	}
-@@ -142,7 +148,7 @@ __test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, .
- }
- 
- #define test(expect, fmt, ...)					\
--	__test(kunittest, expect, strlen(expect), fmt, ##__VA_ARGS__)
-+	__test(kunittest, __FILE__, __LINE__, expect, strlen(expect), fmt, ##__VA_ARGS__)
- 
- static void
- test_basic(struct kunit *kunittest)
-@@ -153,7 +159,7 @@ test_basic(struct kunit *kunittest)
- 	test("", &nul);
- 	test("100%", "100%%");
- 	test("xxx%yyy", "xxx%cyyy", '%');
--	__test(kunittest, "xxx\0yyy", 7, "xxx%cyyy", '\0');
-+	__test(kunittest, __FILE__, __LINE__, "xxx\0yyy", 7, "xxx%cyyy", '\0');
- }
- 
- static void
-
--- 
-2.48.1
-
+Gentle ping. Peter, does the above address your concerns?
 
