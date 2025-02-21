@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-27165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E6D7A3F663
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 14:52:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BF22A3F672
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 14:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 684C317C88F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 13:52:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB5A318937AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2025 13:52:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32A020E70B;
-	Fri, 21 Feb 2025 13:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E3B20FA8F;
+	Fri, 21 Feb 2025 13:52:22 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CDC20B80A;
-	Fri, 21 Feb 2025 13:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34E420A5DB;
+	Fri, 21 Feb 2025 13:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740145940; cv=none; b=qCCRgLlaZ2dV1/wYZvyd6WvVJFxb4dm0rduT2qnf6P0WIqVZN494R/fmzx8aAWL9xJGJ8M6RANc0h3hIc/lm98VekfF8+wWHzIyvGf182UVXHeRyLXycBWP1NOt/F98+M3ndHyvvmrQDhZi/aPF6c5vyiv1Wdv9cZx8j4PjOnbU=
+	t=1740145942; cv=none; b=ZueiESP3XGXdNpTsvW+pIvcX9EL7onld26ps+XZfSMBUJtHYt/JrzTLFnjV/qnlP+3G9acr9okDHa+MDiV0hVTxGE/Jswr+uGb8Xb7BCDOBeqAhEe3qPq3DiNOMYl9UaF3JN3u12eu4p4CfrYmZZBfuYqyRyqBCwT8vi9Tu7Jrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740145940; c=relaxed/simple;
-	bh=qd79kNXwt/HQTrzjcvKIpR/xJTo/G9eIk5zkjXwC4rk=;
+	s=arc-20240116; t=1740145942; c=relaxed/simple;
+	bh=ouzsS6LEZy5R1+wbJDmnkKV4jTSjqxGnKLnsqYxr+B4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dhX/H9PNS9SBGGWq7KRLcTnv2VVl+ISo8SeFOVfyJiEzZkVbQ+W+DbNHwVtVH30HOWiqxv31WljiigTOG92RA+X/U9KHzOafQuIYEGTwubKNeCppdMLZPx+POPT1lwQSOXincqVGZKaSUXgsHcHwgxDJUW7WwF7ZqsrXEgfp1Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+	 In-Reply-To:To:Cc; b=MavQnnuc0ZmgvaSUIhFp1YVKzuzpCGxiANaP60axUNLQW1c/bNYeR4O6+ZPKfhu5TQTSjOHLxoavJNqVowsnua1FyoA7fhUW5/DeaqYE49RqsIIsjrAsHpxyVGqQ9B9KyfJ0xLc9GAsYrQ+/ua68hIvy4tsKas4yJZnJMcEJ6xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abbd96bef64so344811966b.3;
-        Fri, 21 Feb 2025 05:52:18 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-abbdc4a0b5aso401467266b.0;
+        Fri, 21 Feb 2025 05:52:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740145937; x=1740750737;
+        d=1e100.net; s=20230601; t=1740145939; x=1740750739;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AMQIzzUDLylhdt65XZnHbHj+QNMnnT9fm3s4NlvWkE4=;
-        b=TGm+7ojobpL3Vrk7FUGsmiQQBAWfXK4sH47ZS5xrMhvrrjApPiASvjKIJ5KhHq2nF8
-         gZzIS1FPWbK8ybrEX9Lz6zwM/70b77jX/ll/vMLC9C9B4Z83X9m56G03STVRtoBnON8H
-         KR9uwijoClL9uIfPdZWGX0M1NjFubOMt4vgkRcYFNtQFOflftAwyT/yk1JjbNMaa9J38
-         oB5IaB7qO/SHSkivdC4fNSfih4P9aBKlPa4VksGp/56iKcAKbzpC+CWoVQBmyFu5EliR
-         o6tUMxY1Ge2Qpr/axqboWLXay665uZ8NaeWK+YtUrlOsc9aZT6SSMkhmVwAdqik4mY5s
-         NB4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUOAXs7RrXrE/bToug345/7AskZZqy6/S6RUvfCRmPuOKxLjwz3C8BTpdU1AFagU5RAo3kblnTav1U=@vger.kernel.org, AJvYcCVdd41KoZCVldLFfl7dmz/8cQa3YoucW+cBf4R1IZVm9Mz7fSnmgDVWpgvj+l8qGVtgpGJpDAkS0NHKtgGINwjv@vger.kernel.org, AJvYcCVwkwplMuKY5M4VAyeemVUcGuNoZzCSJbwoA7By9Rm7u1iwUHsSD0E7uyj9en1CYbhh+0nJJmWCBCB4q6fD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5RVku4dXfDM69fIT6YvXTkHI44jgUHqYEsftM+B9ukxe7IdvA
-	00Oa2dXBm8G4oSXw561e0R/ItSMzrlHPGzeeoPIBbTN7b75h4cKsxwZ6Ig==
-X-Gm-Gg: ASbGnctTtuU20Aqi5ly0JXDvcMYRAI8Mz61LbXRuLjK6ENNHOO3UZBPi4cYZ6AAORlQ
-	4e3+q2uxsvqx6/xB2poosBpY2Hy9BngnLCSN6qPV7r3XY23Gm4nxiu335yuKkrTyJaILr/uNyL9
-	C7Egw0b/mL0fcabUF7/KC2MwCxXj5twVmIZi2X55Rj4VPvMgrDEeQD3x+d6qCdq9llv4TQuUoXb
-	dZbMf+ogbBixpcCbmFItoPSuidreHtN10fJPCuK7J+6lkgH/t9197JAXCaT8biSv+r1oNT1Smuo
-	fkPul9wSB9VSRw==
-X-Google-Smtp-Source: AGHT+IHug/ztUo0GwBXc3XkhycLt7jEmpZVXVlASuiFgB8erdIaD3w17ljV228j7iujwrfl/TlTW2w==
-X-Received: by 2002:a17:907:9814:b0:abb:b1a4:b0fe with SMTP id a640c23a62f3a-abc099cca23mr328795566b.1.1740145936580;
-        Fri, 21 Feb 2025 05:52:16 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb7c76b0cfsm1203699766b.28.2025.02.21.05.52.15
+        bh=h2zfb+4gI7tn7/YbAaJLOzfVab5hlUbmHbxbNlQhJLU=;
+        b=Wa8jcywGoMXXr0q02nfF4XvO1nh5AMx01rL7pPr22uLkVn6g3Ti42NETqJKtOUT48b
+         9RV9XwbIHcIqobq5I5MeANA6E92PkFvUwurdhZI7SIes+v930RpFjAXDhB7l4stXMp1a
+         LAAzq22xoYgMoQv2joWnRmqnCLV6lU/k9JT3I+yG5Csnokz6k3Kzpe74G5Ev+jsX8eWg
+         n3c42cSaOe+oswvSRRmq2RhH76gcH5Z60jdB+FwegT3s02LlJnPF0Suw216zec3tKu6Y
+         iGUIK38J4MdKXveJwbmdBOASMDSJqmx3RMsEuYoFv74M2IittF1knHZlDCZuYVYx95Dt
+         9jlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUndSsLiQJDyIm76gCcSOY3aRPD3ZU9IcusV/Nvz7nkh4oUxZr9usOuEvmJ2MVCic1zjhJfzw9jIyzFQIQlbvKs@vger.kernel.org, AJvYcCVcCyFCsaSkBl1mwKDY+FFtkDQF6dtEsshqRRwrikz/z0yl9Awsnz1wqIqSeu1StmrrYGqB7sPqpfs=@vger.kernel.org, AJvYcCXBe+JA49rKJzXBq8GE2EBBkVzg+jvJ6QdTzzBUr7Ffua4M7ACypoXZaof5zLt/0gbhCQ19m5ShclgpgRyo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/mdYoMhoZTohryf88VJJq6Npm4xaqEyi9ATAiOa1o+y0NGuFq
+	Ad113FZEBpDEDY1TU1+kyaBDYIXoEfVMOKdsioGFOFBgkm89Rwu2JujUqQ==
+X-Gm-Gg: ASbGnctvLv75+NXDgxynJQuo3ok9Mf2k2+s1RYxI2/6nby/bfyoWfF++FqZFCYKmvf+
+	WaitCfvUuozGKIcbK81XWzHhjaHUYVKpdtqK36U9Xp4YsHyVWpVhnToWQCEmkv7xGO8Vj5tI/1k
+	V62vHKTfQ24n55dOIRsaH5JpXueyatiiGklmlwElRurY9BsXoydT7Is6iAlFN/kyLuaMNc9v5PG
+	QKPEYjrwaeterhIGGX+wOkiqADihyvR/GMbluH28MejFOPZm9OTxPNslZzOq9NQs8eCm5M2ZI4G
+	rvnXHgFPDqFOgABv8A==
+X-Google-Smtp-Source: AGHT+IGMUCJOPm0mkufH1pHQ6A4LkbIgOHvnbQOpIFyEPIcdewG3uisCTkveNRpP4uPuHRSN3hkcgg==
+X-Received: by 2002:a17:906:308c:b0:ab3:9aba:ce7d with SMTP id a640c23a62f3a-abc0ae1ab4cmr259483566b.1.1740145938327;
+        Fri, 21 Feb 2025 05:52:18 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:40::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb9e44b7fasm934937266b.120.2025.02.21.05.52.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 05:52:15 -0800 (PST)
+        Fri, 21 Feb 2025 05:52:17 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 21 Feb 2025 05:52:06 -0800
-Subject: [PATCH net-next 1/7] netconsole: prefix CPU_NR sysdata feature
- with SYSDATA_
+Date: Fri, 21 Feb 2025 05:52:07 -0800
+Subject: [PATCH net-next 2/7] netconsole: refactor CPU number formatting
+ into separate function
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250221-netcons_current-v1-1-21c86ae8fc0d@debian.org>
+Message-Id: <20250221-netcons_current-v1-2-21c86ae8fc0d@debian.org>
 References: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
 In-Reply-To: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -82,100 +82,83 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2740; i=leitao@debian.org;
- h=from:subject:message-id; bh=qd79kNXwt/HQTrzjcvKIpR/xJTo/G9eIk5zkjXwC4rk=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnuIUMmKrAKNkKqrRTLD/DEaZxsJynw0aSK2Nw5
- pyuKs1kxA6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ7iFDAAKCRA1o5Of/Hh3
- bUs/D/kBp6+nezMAR/BNox0ur+m0Rk6CysSAPfH6/5CsNA7pHdNb+5PygsI1qLADPwoeMMO4gc1
- 0eQJ71wTUQpbdslkXsNjFV72e7c3njPPiTBT2r4SjbXgO7Gz1sV/xaXPBGkmb0bJBN4pxS7zTuJ
- RW1i+VnAe8E99scZaR8OS3wag6fjtCNL0domk8OFx087uRurL2YCKpluckA6HTWm2/5PwnumQS5
- evhIAuSESXAR29DBJNPoCXkQ7iX3TmnlESmndUdvxuCgD8eh1eXhvTuWTXgxCD3TXTg+gEcmc/k
- Ap6xldjckb3aD2WLh1irRJOz2VoYB25b0fbICKNhw5max/SRYc1V/6LTkpB/vsHt9WCNUMfpGWe
- NhfyLI2nv4v7q7RlgbN0yDtCw34q7OQeETynbP8sU1O9Y9X/9W5Mk2DUHC+Dj5cWJIwc07tVFW5
- a7u4FvmV3ORED5h1C6Y9cWQf7wMQtyZFZQEuLp3pySbv7p7Pp9yITY0n/l2BhKZq0hEoLec3sDO
- Mod+JxeFwd2Kj1zp3is/1iRt34BvkyyCw5mvSPmW4e3FfyZ6JdrZbm46KCWAIsqBMZd21aqX/+2
- JnV/Q5UmGF5JECsWxaUeNa+dotVNfb8lcOVpQQZ0dLLN1qJ059LBNCCJIyxGvEibrIQhMCO0aqQ
- mdTnYKWSv8Vez5A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2265; i=leitao@debian.org;
+ h=from:subject:message-id; bh=ouzsS6LEZy5R1+wbJDmnkKV4jTSjqxGnKLnsqYxr+B4=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnuIUMOSMCwnRQu+wfrEnqGdzKJblDAs5/gtCvK
+ dZgc/jPS96JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ7iFDAAKCRA1o5Of/Hh3
+ bdz1D/9W1LCNzsx6Hrt4u39U2I1T6Wwn2YlH1by7/phhojTF4sicrQAthnWxApREcKFD16MA0UK
+ SdsdsnVV1i7w3mwTVa2YqWms9PTeypySJCpwDNOqVoYO4TgigjYYD82KOLZbSUoYh3YktHHAE21
+ 0NXssSAgqu2oDXElJ1spRMCei/iPEk5ywsVxJf3oFd78wDv/uN38S/KprHexJswrWFf5DFJJQRW
+ Lsemz2g+g4aUxMpB0dlHoTjEuQ8Bc6Tm6ybyiLRRebplN4yAXr2ersS6W53ivKfd5MvaiHhymsQ
+ pr1n7K2eP/ki7281GnxAfpaRaq7uTrtq9YEh4N9KPmJXTLd2pULNiwZIVBK86JBBkkDnzP19yeN
+ SXgdQbvHD2ehUad8XfAlbk1SegMACKnw4ocUcMzelYHotkX544cZO3yE01EJgLxECegQuIibETN
+ +bG18In96Wkw99pKXgm2k5za8XHp7PCMPa+0Eg8BDg51hwMr9U4tAEO3TxYhdKFe6ErEFN3X9v9
+ ND3WDxVZQwJq17op6RnSxaNLp4JjmWUi8JPm68KOaSUf/Tuvm82f4jin7JjYSK4AZrxV1swiQyy
+ vZFBOOjKqJ5WuwyPxcCAZp0SJHgsxQapX77ZZhYXjo7p+0o24NijEGQiXzHlTAPKhbH3ot47cox
+ 6nJaBfYXHz0s3jA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Rename the CPU_NR enum value to SYSDATA_CPU_NR to establish a consistent
-naming convention for sysdata features. This change prepares for
-upcoming additions to the sysdata feature set by clearly grouping
-related features under the SYSDATA prefix.
+Extract CPU number formatting logic from prepare_extradata() into a new
+append_cpu_nr() function.
 
-This change is purely cosmetic and does not modify any functionality.
+This refactoring improves code organization by isolating CPU number
+formatting into its own function while reducing the complexity of
+prepare_extradata().
+
+The change prepares the codebase for the upcoming taskname feature by
+establishing a consistent pattern for handling sysdata features.
+
+The CPU number formatting logic itself remains unchanged; only its
+location has moved to improve maintainability.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/netconsole.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index f77eddf221850fe2778cd479e49c91ad695aba3c..c086e2fe51f874812379e6f89c421d7d32980f91 100644
+index c086e2fe51f874812379e6f89c421d7d32980f91..26ff2ed4de16bce58e9eeaf8b5b362dfaafaca0a 100644
 --- a/drivers/net/netconsole.c
 +++ b/drivers/net/netconsole.c
-@@ -103,7 +103,7 @@ struct netconsole_target_stats  {
+@@ -1117,13 +1117,21 @@ static void populate_configfs_item(struct netconsole_target *nt,
+ 	init_target_config_group(nt, target_name);
+ }
+ 
++static int append_cpu_nr(struct netconsole_target *nt, int offset)
++{
++	/* Append cpu=%d at extradata_complete after userdata str */
++	return scnprintf(&nt->extradata_complete[offset],
++			 MAX_EXTRADATA_ENTRY_LEN, " cpu=%u\n",
++			 raw_smp_processor_id());
++}
++
+ /*
+  * prepare_extradata - append sysdata at extradata_complete in runtime
+  * @nt: target to send message to
   */
- enum sysdata_feature {
- 	/* Populate the CPU that sends the message */
--	CPU_NR = BIT(0),
-+	SYSDATA_CPU_NR = BIT(0),
- };
+ static int prepare_extradata(struct netconsole_target *nt)
+ {
+-	int sysdata_len, extradata_len;
++	int extradata_len;
  
- /**
-@@ -418,7 +418,7 @@ static ssize_t sysdata_cpu_nr_enabled_show(struct config_item *item, char *buf)
- 	bool cpu_nr_enabled;
- 
- 	mutex_lock(&dynamic_netconsole_mutex);
--	cpu_nr_enabled = !!(nt->sysdata_fields & CPU_NR);
-+	cpu_nr_enabled = !!(nt->sysdata_fields & SYSDATA_CPU_NR);
- 	mutex_unlock(&dynamic_netconsole_mutex);
- 
- 	return sysfs_emit(buf, "%d\n", cpu_nr_enabled);
-@@ -699,7 +699,7 @@ static size_t count_extradata_entries(struct netconsole_target *nt)
- 	/* Userdata entries */
- 	entries = list_count_nodes(&nt->userdata_group.cg_children);
- 	/* Plus sysdata entries */
--	if (nt->sysdata_fields & CPU_NR)
-+	if (nt->sysdata_fields & SYSDATA_CPU_NR)
- 		entries += 1;
- 
- 	return entries;
-@@ -850,7 +850,7 @@ static ssize_t sysdata_cpu_nr_enabled_store(struct config_item *item,
- 		return ret;
- 
- 	mutex_lock(&dynamic_netconsole_mutex);
--	curr = nt->sysdata_fields & CPU_NR;
-+	curr = nt->sysdata_fields & SYSDATA_CPU_NR;
- 	if (cpu_nr_enabled == curr)
- 		/* no change requested */
- 		goto unlock_ok;
-@@ -865,13 +865,13 @@ static ssize_t sysdata_cpu_nr_enabled_store(struct config_item *item,
- 	}
- 
- 	if (cpu_nr_enabled)
--		nt->sysdata_fields |= CPU_NR;
-+		nt->sysdata_fields |= SYSDATA_CPU_NR;
- 	else
- 		/* This is special because extradata_complete might have
- 		 * remaining data from previous sysdata, and it needs to be
- 		 * cleaned.
- 		 */
--		disable_sysdata_feature(nt, CPU_NR);
-+		disable_sysdata_feature(nt, SYSDATA_CPU_NR);
- 
- unlock_ok:
- 	ret = strnlen(buf, count);
-@@ -1130,7 +1130,7 @@ static int prepare_extradata(struct netconsole_target *nt)
- 	 */
- 	extradata_len = nt->userdata_length;
- 
--	if (!(nt->sysdata_fields & CPU_NR))
-+	if (!(nt->sysdata_fields & SYSDATA_CPU_NR))
+ 	/* userdata was appended when configfs write helper was called
+ 	 * by update_userdata().
+@@ -1133,12 +1141,8 @@ static int prepare_extradata(struct netconsole_target *nt)
+ 	if (!(nt->sysdata_fields & SYSDATA_CPU_NR))
  		goto out;
  
- 	/* Append cpu=%d at extradata_complete after userdata str */
+-	/* Append cpu=%d at extradata_complete after userdata str */
+-	sysdata_len = scnprintf(&nt->extradata_complete[nt->userdata_length],
+-				MAX_EXTRADATA_ENTRY_LEN, " cpu=%u\n",
+-				raw_smp_processor_id());
+-
+-	extradata_len += sysdata_len;
++	if (nt->sysdata_fields & SYSDATA_CPU_NR)
++		extradata_len += append_cpu_nr(nt, nt->userdata_length);
+ 
+ 	WARN_ON_ONCE(extradata_len >
+ 		     MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS);
 
 -- 
 2.43.5
