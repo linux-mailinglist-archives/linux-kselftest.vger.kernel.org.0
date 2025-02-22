@@ -1,99 +1,111 @@
-Return-Path: <linux-kselftest+bounces-27257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D15FA406E8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2025 10:30:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7065FA406FF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2025 10:39:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69E5842587D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2025 09:30:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54C557AEAAA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2025 09:38:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C46F2066F8;
-	Sat, 22 Feb 2025 09:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WGXNIDYW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F4A207653;
+	Sat, 22 Feb 2025 09:39:06 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D613E1D7E42;
-	Sat, 22 Feb 2025 09:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C13246434;
+	Sat, 22 Feb 2025 09:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740216651; cv=none; b=ji9uw2lNvUEZ+1odszT/gdzxL2Ga8/93AnBZ0irdHSup0edxCAAOwj7GDx3r6uVvH3mBBvJ1U6OeO+bPnEQP6Iv1f4cmQrCyfrREv2mHETkc8rbjiiKHsJ30vEbze+aXem82KHw/rQYYbHMNlUz7F/TVsgHxASnrt7gjgzQ6TEQ=
+	t=1740217146; cv=none; b=FmRD1mDVgLeKRqK3E/6QfNRwKmcmOMQLs6Nec0u4JGWJ4VWObkUA5vvZTzCdw+VW7dJfYE9UgaC72tca36xAfA8+ppXc9mpgTwBRyUU6guZRqI5AN0FZgP6srnMJa5mp4ZkKkXN2pHtbie36wwdPmfzcTNl1GIXV8/ZJtxFS6Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740216651; c=relaxed/simple;
-	bh=hXAr6oIEi+/PIbCR5b0ihPtXixUgLNht0f3STJblDVk=;
+	s=arc-20240116; t=1740217146; c=relaxed/simple;
+	bh=tBnJOe2Jp2iK2XG+QCQzCSHSREDatiniWapDQu8szXg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZnPWFx29SiXXsYf/qprXLuB0Qq3UduzdndG1Zm2tH0avuLZYPS5NEw2mzzJE8uKtVnRvHsLG1Gw9jWBJINkjB2lDbp+szCV1dkhQl6U9k4kegXvb7Wn3o8Dc4dRulEtyuz80qICUHOAd4WX4CgiusJpw14HyelJTyCmaeF6ocEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WGXNIDYW; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-220f4dd756eso58735985ad.3;
-        Sat, 22 Feb 2025 01:30:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740216649; x=1740821449; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXAr6oIEi+/PIbCR5b0ihPtXixUgLNht0f3STJblDVk=;
-        b=WGXNIDYWSpRntp9kA1YnO+pZu25Mdpx8/yKZwg1/HPakvl0RIz/4VAJQZmpc+nh+cC
-         SHMpof9ZIFbk0QbMqCwZ+qLbACwwvERfeCtemmeNM5UjnldtzrIsrANVZ0EmpKssV/Lk
-         0VRqbb6cIwaUJsW3TyDU+eJR9Ym+tJruJicb00oi9Muq3OoJYBSEUDlaJ/NtBjDjjwlr
-         KFQ9kOIGUxAfYCU3dx+szaYKfe7tB2NVdnITeUaY5v2oW7ue0dOhhTvxwlbzf0yM0C+L
-         rtR96DFXDYLtqpUcMrhlJ5D+kICGgI6LiknkCUXEOs6yrdH/vEGKAu885xqOrzVAlV1k
-         7kSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740216649; x=1740821449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hXAr6oIEi+/PIbCR5b0ihPtXixUgLNht0f3STJblDVk=;
-        b=Xcx73cclWYbAN9xpMXJwAc9/8PHuykPTU7U1UrxF2/3zIEOmZ4cACk9cE/xZqOihxO
-         UQZy02w+o+0zxod/wPtczL0QOfQjqmevzmt1kpqaCl0XVx+pOH9cV2KQobt9jDwz8vY6
-         +IKypOYNddMwHxcnSTUevwy4U7dMNQsdfHE+rSXjVmwnT8OzbCITYCZ3M9yHh4r1Hh4e
-         bKv9w/3Xk16q5DPbmwaMfR/raM08s1oXenPj8bwCAWF7e5ksjWKY9vLoGhwFB6G219MG
-         sowdhc3wZBzfeho94r2vwNTAhbahk45pwEHP1XeKGmffddef3H2chlwIFladHgTGYmJy
-         gKqw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6/FMn9AVCVZyAbzpiOpjGaOngVmkejlII3DlyCVQKOaW2kQYhtIv/rs3pWrRWSwKPl3rzBgATuNcxuuY=@vger.kernel.org, AJvYcCXF/+pdgE9CyNlwED2X1HYPO3Lhs3UAgkVyVeu+lO1Qb4aXMtDjaOm8KseUmE2177V9nej/6PTXv9IOddr/QTpa@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZFgducslNIR1VfL5ryn8FF+5CIpzjAIRy0N+OrhJMHFp4RsK3
-	8mkYIBSF5m8domjBmNXRMXfclmtzbevZqCHtrcJByyJybzRYc5m0
-X-Gm-Gg: ASbGncvv+dDCs60BvB25RPvwf/zGvvBCI2qf8Fa8AW2Ae2+15LCvfPqGTno26154rHp
-	eeNxXbsdG4FNP3rgKdD88IQb7WWaWIUgjOHBsl72yTaIsHoxHPENjlNjK6QVScBgmVyQivv0iGG
-	URsboUxGfoNiOkrlZnea/odN+wzW5XUTBEsjdznJkQh1p+WRyVrrVcvb5oPZm83QgiSr/Xhttqv
-	/rKaCQzkSC0oDf1IsqF16opND/yXdKIkMhZ7JTH/etiwbyaUNBCJhuCorVpzwW57JA1TJOFg8tm
-	aMj7RbpJJzFTYkYgM89TRzZnFHorRY8ooXaYZN1UBraxo1OT
-X-Google-Smtp-Source: AGHT+IHdUVu20s80g9zpUNttiyeCSlx4ll29y5Rr7CdK3ZqQIPl/f/zJ6Puh0U3kaJqAewMl+0S1jQ==
-X-Received: by 2002:a17:903:178b:b0:21f:140e:2929 with SMTP id d9443c01a7336-2219ff4e2f6mr101409025ad.15.1740216649065;
-        Sat, 22 Feb 2025 01:30:49 -0800 (PST)
-Received: from ritvikos.localdomain ([49.36.192.173])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fcb8351600sm4025373a91.0.2025.02.22.01.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Feb 2025 01:30:48 -0800 (PST)
-Received: by ritvikos.localdomain (Postfix, from userid 1000)
-	id 55655ED9143; Sat, 22 Feb 2025 15:00:44 +0530 (IST)
-Date: Sat, 22 Feb 2025 15:00:44 +0530
-From: Ritvik Gupta <ritvikfoss@gmail.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests/mount: Explicitly define buffer size
-Message-ID: <Z7mZRO0eCwRU2JhG@ritvikos>
-References: <20250222081711.48208-1-ritvikfoss@gmail.com>
- <2025022257-easter-shower-61df@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAXsKGXQjz89SicpWhinwLmbNZMtg+ZNKd5rPgxeWrsrUeq4ja3dc2vZckOVMbcPnhi485gpcPd1A7ZU+K2LC7pytli+T4shMSLniejzlgH1NoSZNqMnM5ftVLOl3/qiK8fMu6Mrvg3UTKWAbh436MrXwuUMXLOwMhSRYNEZDMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 51M9cp1k013291;
+	Sat, 22 Feb 2025 10:38:51 +0100
+Date: Sat, 22 Feb 2025 10:38:51 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: only run constructor tests on nolibc
+Message-ID: <20250222093851.GA13258@1wt.eu>
+References: <20250212-nolibc-test-constructor-v1-1-c963875b3da4@weissschuh.net>
+ <20250216093940.GA2192@1wt.eu>
+ <670b08a4-9bc5-4700-94bb-272fda5c59d7@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <2025022257-easter-shower-61df@gregkh>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <670b08a4-9bc5-4700-94bb-272fda5c59d7@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Got it :)
-Thanks for reviewing!
-Regards Ritvik
+Hi Thomas,
+
+On Mon, Feb 17, 2025 at 10:24:11PM +0100, Thomas Weißschuh wrote:
+> On 2025-02-16 10:39:40+0100, Willy Tarreau wrote:
+> > On Wed, Feb 12, 2025 at 07:01:01PM +0100, Thomas Weißschuh wrote:
+> > > The nolibc testsuite can be run against other libcs to test for
+> > > interoperability. Some aspects of the constructor execution are not
+> > > standardized and musl does not provide all tested feature, for one it
+> > > does not provide arguments to the constructors, anymore?
+> > >
+> > > Skip the constructor tests on non-nolibc configurations.
+> > 
+> > I'm not much surprised, I've always avoided arguments in my use of
+> > constructors due to a lack of portability. However the patch disables
+> > all constructors tests, while I'm seeing that the linkage_test version
+> > does not make use of arguments, though there is an implied expectation
+> > that they're executed in declaration order, which is not granted.
+> 
+> The tests are written specifically to test for execution order.
+> While we can not rely on the order for other libcs, the idea was to
+> expect a given order for the nolibc implementation.
+
+OK.
+
+> > I'm wondering if we shouldn't make the tests more robust:
+> >   1) explicitly set linkage_test_constructor_test_value to zero in the
+> >      declaration, because here it's not set so we have no guarantee
+> >      (we're not in the kernel)
+> 
+> Ack.
+> 
+> >   2) only add values to check for cumulated values (e.g. |1 in const1,
+> >      |2 in const2) and verify that the result is properly 3
+> 
+> This would stop validating the order.
+
+That was my purpose but OK I got it. Then there's another option which
+preserves the order and even gives history:
+
+  __attribute__((constructor))
+  static void constructor1(void)
+  {
+      constructor_test_value = constructor_test_value * 0x10 + 1;
+  }
+
+  __attribute__((constructor))
+  static void constructor2(void)
+  {
+      constructor_test_value = constructor_test_value * 0x10 + 2;
+  }
+ 
+Then if executed in the right order, you'll find 0x12. If both
+are executed in any order, it will always be >= 0x10. If only one
+is executed, it will be < 0x10, and if none is executed, it's 0.
+
+Willy
 
