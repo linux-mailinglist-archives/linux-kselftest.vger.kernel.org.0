@@ -1,310 +1,271 @@
-Return-Path: <linux-kselftest+bounces-27332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27333-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69346A4191F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 10:31:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEAD0A41954
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 10:40:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 729E71888E62
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 09:29:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8D53AF842
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 09:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE0E24BC06;
-	Mon, 24 Feb 2025 09:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FCF21FE46B;
+	Mon, 24 Feb 2025 09:39:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TR+l/N2h"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="EwzBQAI5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D03245027;
-	Mon, 24 Feb 2025 09:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBD678F2E;
+	Mon, 24 Feb 2025 09:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740389265; cv=none; b=p8MOq4L54wuQ/LA0DAjUfzWGRQZGgQ9kfaZWFQivX2TD9x1A7vROBhBi9CKlHYGSZMUqZZjGa/N4iK9JJqIKoVzeG3H9/We2+0f+JbeFMxpglPoT6lzN8sVl0qXqDYMiC3iRHSPRVRn6xKwF/NolnylG+8C1bb4cCS2G5y44COs=
+	t=1740389947; cv=none; b=ra4IDYWYu2WeiA1cDMm+5eB+41/OfXrGXMdu3Xy9+m53GC3fSN0FIZYF4KIVZvfGQLyIciQZGGYOTOWwybDJf+CNNc449lCzpLWGTreQKUyopcY63C70XSAVnkRfhHAyFpOLxyliajqepQEEHV6g4h9smk2FDgqnJfImXXQNjOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740389265; c=relaxed/simple;
-	bh=xtPJ+9TPcQnIoTApT2qVmDx4XC/2epsxSLv0GCkiSg4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j6wxrIW+Yo3clv5k0Suw2zYWxrQwKCLrWYu9fbvB0rHrtHjr1FNfVkEfXo/z8OotuKAJhYIxLrG8SwoPIKmyb4O/hHtaWFtaMp55noxUQIQOo/A1szeWXmkVopkvBx6/uy93PAl9728h+F1PIQt9/EGuQEM5uMPct9Vn0hOQcm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TR+l/N2h; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 56299433F8;
-	Mon, 24 Feb 2025 09:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740389259;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bv9esbM3X3XFxLbrYON0o0vsKE/aVAnt/YyaYFae7xk=;
-	b=TR+l/N2hF7PDXRr6GdLqFUHz4pzP3rrdAMLp9Fd8O7SLWvARUubTLB8RON9mdUxDC7Pmdp
-	4TfRCP7DzbIf0gRofSK86Hj0EHJrAehc8USbBKCJ0Fu4f/+skggRj281kRW9Z+dMRMSNdP
-	Pljh70F0KT7m8e3YrCXONvSk2F3fy21YLeK0hXf/xyC/9BY9CjZ3GArRlHFPj51qn+vcL3
-	trc1MnIn3Rg/0nN78UwGsAjZW1/XD73s/kC9ZwPE6RPBCPoz4LAlKJr1lh4zYYWYL/i5Qf
-	4S7iNp39MdMwdfeOork7R7Rj5sUa1fEGUfpthSJaQ6uD1VDV71rqs8vtNmxq/g==
-Message-ID: <4c39f9cf-a9cb-493b-b44f-b9ac264019c6@bootlin.com>
-Date: Mon, 24 Feb 2025 10:27:37 +0100
+	s=arc-20240116; t=1740389947; c=relaxed/simple;
+	bh=/HpH0//Sd9ANVoi0x2M7SEPliUKtNSAcq4jivyv/0Z0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TAn7AU+wqjWLbGMi0V5uHP72Zz79dYSbxhT10/Y0cVPUIPN7EVYblcvaVkpeuBNtE20VtBdOvucSA0V/FfW4V2fAFIFnM5BKWQT2sXSkTk+6GmhoIkjzdpFpwhmbRYDpj4iAsyITe7dh5zpzZDolCX6JnTpY/IqVE7MqgGIEkxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=EwzBQAI5; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1740389938; x=1740994738; i=ps.report@gmx.net;
+	bh=rBw6xYsOHK0PSghpi+JD9vE8vBfcTAhCyiK4cG4ZtPM=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=EwzBQAI5W4GW7NjWUqX3x/kSnzdJGWK+fVeAIG3RwIrH2CWTJuKdrxNx5W+2RJnG
+	 M/ZEA9t/pqNJAjnBsPqe9KnWpJG1BqsKhhmM01lEReMAHByYRlIRJ0HJWObz0ok3D
+	 ci0ThekP6wjle6BJ6AEw2MIF6wT4H9GO06148tbr9HJEVMH0Nh+BI8Byxp++VBsz2
+	 Op3GzyGmlc6GdvoJivOUVSbfQxj1oh8zh+V6boB47ikZ8GbLzYrI+m4B35wvlwszc
+	 tO6aJbfbYHh+yOPwFWas7lDIvmulw4INvVyViv6Z8FltyWP9wYH5w/Otb5CZA185y
+	 yFgKZFjkavV/BoS4DA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.227]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3UZG-1tn2tE1ABu-00DwCy; Mon, 24
+ Feb 2025 10:38:58 +0100
+Date: Mon, 24 Feb 2025 10:38:56 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, "David S
+ . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+ Frederic Weisbecker <frederic@kernel.org>, Nam Cao <namcao@linutronix.de>
+Subject: Re: [PATCH net-next v7 1/8] net: pktgen: fix mix of int/long
+Message-ID: <20250224103856.31dc0260@gmx.net>
+In-Reply-To: <20250224092242.13192-2-ps.report@gmx.net>
+References: <20250224092242.13192-1-ps.report@gmx.net>
+	<20250224092242.13192-2-ps.report@gmx.net>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Migrate test_xdp_vlan.sh into
- test_progs
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250221-xdp_vlan-v1-0-7d29847169af@bootlin.com>
- <20250221-xdp_vlan-v1-2-7d29847169af@bootlin.com>
- <Z7imfH-Adq5qUUsB@mini-arch>
-Content-Language: en-US
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-In-Reply-To: <Z7imfH-Adq5qUUsB@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejkeegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpeeurghsthhivghnucevuhhruhhttghhvghtuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfehgefgteffkeehveeuvdekvddvueefgeejvefgleevveevteffveefgfehieejnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvgedprhgtphhtthhopehsthhfohhmihgthhgvvhesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtt
- hhopehhrgifkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: bastien.curutchet@bootlin.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tisrOSfy4uCVTiyzps2E/dGQ4F2zlzbHDtizmbtjmAcn4nVKxyv
+ XZ1eS2CyhWPPNl/fgHp4uGRNa/zvU1DzBVgoijD6BeivKwgwzDADhIhe2DVv6QgDQEy75rx
+ GtLCQIdYHY8x9jnLy/Sjx77/uFBPGn+mJ7VuGewIHtFIT6qPLgrZkpF2zjzxAFg5qFoYBbH
+ AM5U77NqVMLbIbFxDpXLQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:AmSkhg488Mo=;iHJ7wqyPGccxdVNfniaDHrlnSjv
+ z3GK1A0d6uwxgax1oFN+z31CkEZWbqcGaUFzG2MOATvgdDuDIKC7bDH4lKa3dPEQKoiQ01Uzg
+ ueJU6FxX67/zPE2xH54Wz8YT5ZMouuu2ZlB3LzT/rLRVMQ/dxv+jYiVZ0d8Dm8UEDdFfkQOpL
+ q2XBF//HcgYKYOylor+UYxQEEvsDUPdDLcrvaZgT+CWVRWibAKJiihxFbkafAQHQbl9tRqAbE
+ QvFzE/Adt0YCxni1I9amxOtVRh2z/TSGVPW/KI3qFERrMeZOfA0aTR6+uRL9HBTVA9Bsnq5uH
+ gMAD7CLAFx6dRBQldpobHmb+5agBboDOfhOREMcLMNYDUcRIq5zFqGHir3aa3d04aJHSK+ir4
+ WJ59S7R0iWVWQN6QsFBBH4Y0Zc3wVF6HnbV81LG5gbitOw6tWfdfrsq1ezCPtHMNGw9wQuXkJ
+ PdVW0S7IWnE2UTfV+9Ph+wZdfXcoviTa530kLpv1vsGKWL83ahTtzjZoTPAp0OJpnfakP+EtP
+ 2YMI17ff3yii1t5Lu4F3uU3YhGitxnJvkaMdCtTrHm0b/oKJArGY15p7rJ/TCORC0A53uYIOg
+ 7fhUelzRnPTcDT1YSt1G2zC+PnhD0qcIjj3qqttPtW0eUiUS4OrYyOqLnx0KNM3QC65VQ+AFc
+ F0q35wNN2AE7zXttpMB9/NzXGURhZT5FPgJl6pmXjOrKMRhRDUFH9dFdFSnMFtkPFr++buLqP
+ Y9xVIDzqRyN7O2XfffDPj8AiZteUQ2SZWvoWSZPaa7KJBsHvsKK1OBW8SHhwrLB/YxeZr8aFa
+ yRuLYlFo+1nnCG1PPd38+aKsikqtrSlVoPyrECm8kRfF2yCqQtz/L0LK5PEWduAr4Wf3ixrUj
+ CnvzlhBHekotbKA17U2v2wFMEN5U2oY0maQ1AIHMEpniXyTY2nQOWfxTGsTAFz4cM0MABsTpo
+ 8OcKFWyPoe6MIF2S9NQWTBx/+G4aiDDMvd12OA14zTsonsqCgQeZmj5oN27HakbsoWsr8gvr0
+ te25PEIBQ6Vhyf5na8+3VgWe25QPNMZtRrDAdLD6HJ86M+DGOCNtrmJEriPOpprhHGQ+GUTa/
+ BttVZkejqacglR/5BsXUtMYS2+VxFAOB0OmoPhB/Pe9UzUrQnuAgfKAYjrOW3gn+1iNmlBlY/
+ ZTTL0YXgB5R3uDV5ylVKnAiHhGrdHVTQDPjN6TXozeNA5CYYD4EDRhD0txd/1w9jTaW2wvoX9
+ 10DB5yxSBccl+wgzepqGOCF4SNXeoBITJma8/XPcp5/bbGKVUp7v5zkBHDjXOgvgBS8sOHogY
+ DlIVyokCsOhlkBEdS2b3aQVlBp+uCwxtElRgd+Vt/vIMMgIV3zQQtpfFj/Wt6ohpj40o7O8Bw
+ EdRF3Tb0YqU8xzMCj1fTZdQ2Gsa41HlV06dM9OXeXtgzMKtnzZ8BwL2j7T
 
-Hi Stanislav,
+Hello *,
 
-On 2/21/25 5:14 PM, Stanislav Fomichev wrote:
-> On 02/21, Bastien Curutchet (eBPF Foundation) wrote:
->> test_xdp_vlan.sh isn't used by the BPF CI.
->>
->> Migrate test_xdp_vlan.sh in prog_tests/xdp_vlan.c.
->> It uses the same BPF programs located in progs/test_xdp_vlan.c and the
->> same network topology.
->> Remove test_xdp_vlan*.sh and their Makefile entries.
->>
->> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
->> ---
->>   tools/testing/selftests/bpf/Makefile               |   4 +-
->>   tools/testing/selftests/bpf/prog_tests/xdp_vlan.c  | 175 ++++++++++++++++
->>   tools/testing/selftests/bpf/test_xdp_vlan.sh       | 233 ---------------------
->>   .../selftests/bpf/test_xdp_vlan_mode_generic.sh    |   9 -
->>   .../selftests/bpf/test_xdp_vlan_mode_native.sh     |   9 -
->>   5 files changed, 176 insertions(+), 254 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index 5dc9c84ed30f6e5a46572a9e428f692a79623469..09c1f731b8280696c729e3c87020ef749fee9dcb 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -103,8 +103,6 @@ TEST_PROGS := test_kmod.sh \
->>   	test_tunnel.sh \
->>   	test_lwt_seg6local.sh \
->>   	test_lirc_mode2.sh \
->> -	test_xdp_vlan_mode_generic.sh \
->> -	test_xdp_vlan_mode_native.sh \
->>   	test_lwt_ip_encap.sh \
->>   	test_tc_tunnel.sh \
->>   	test_tc_edt.sh \
->> @@ -118,7 +116,7 @@ TEST_PROGS := test_kmod.sh \
->>   
->>   TEST_PROGS_EXTENDED := \
->>   	ima_setup.sh verify_sig_setup.sh \
->> -	test_xdp_vlan.sh test_bpftool.py
->> +	test_bpftool.py
->>   
->>   TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
->>   	bpf_test_modorder_y.ko
->> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_vlan.c b/tools/testing/selftests/bpf/prog_tests/xdp_vlan.c
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..18dd25344de768aa83a162a0c091f28a4e5f505e
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_vlan.c
->> @@ -0,0 +1,175 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +/*
->> + * Network topology:
->> + *  -----------        -----------
->> + *  |  NS1    |        |   NS2   |
->> + *  | veth0  -|--------|- veth0  |
->> + *  -----------        -----------
->> + *
->> + */
->> +
->> +#define _GNU_SOURCE
->> +#include <net/if.h>
->> +#include <uapi/linux/if_link.h>
->> +
->> +#include "network_helpers.h"
->> +#include "test_progs.h"
->> +#include "test_xdp_vlan.skel.h"
->> +
->> +
->> +#define VETH_NAME	"veth0"
->> +#define NS_MAX_SIZE	32
->> +#define NS1_NAME	"ns-xdp-vlan-1-"
->> +#define NS2_NAME	"ns-xdp-vlan-2-"
->> +#define NS1_IP_ADDR	"100.64.10.1"
->> +#define NS2_IP_ADDR	"100.64.10.2"
->> +#define VLAN_ID		4011
->> +
->> +static int setup_network(char *ns1, char *ns2)
->> +{
->> +	if (!ASSERT_OK(append_tid(ns1, NS_MAX_SIZE), "create ns1 name"))
->> +		goto fail;
->> +	if (!ASSERT_OK(append_tid(ns2, NS_MAX_SIZE), "create ns2 name"))
->> +		goto fail;
->> +
-> 
-> [..]
-> 
->> +	SYS(fail, "ip netns add %s", ns1);
->> +	SYS(fail, "ip netns add %s", ns2);
-> 
-> Will replacing these with open_netns work? Or we don't setup up enough
-> state to cooperate with 'ip' tool? (same for cleanup_network if it
-> works)
-> 
+On Mon, 24 Feb 2025 10:22:35 +0100, Peter Seiderer <ps.report@gmx.net> wro=
+te:
 
-Yes, it will work. Initially I planned to use it but it isn't very 
-convenient in this case because struct netns_obj is defined in 
-test_progs.c, not in the header. This means you can't access ns->nsname 
-to get the namespace name and as I use append_tid() this name is 
-dynamic. So using netns_new / close_netns / netns_free would require 
-keeping both the namespace names (for further ip commands / open_netns) 
-and the netns_objs objects (for netns_free) whereas here I only keep the 
-namespace name.
+> Fix mix of int/long (and multiple conversion from/to) by using consequen=
+tly
+> size_t for i and max and ssize_t for len and adjust function signatures
+> of hex32_arg(), count_trail_chars(), num_arg() and strn_len() accordingl=
+y.
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-I can send a V2 using netns_* helpers if you prefer, though. Maybe I can 
-also either move the netns_obj definition in test_progs.h or create a 
-'get_nsname()' helper ?
+Actual missing the rev-by Simon Horman given for the v5 version of the
+patch set (see [1]) and indicated in the change description v5->v6...
 
->> +	SYS(fail, "ip -n %s link add %s type veth peer name %s netns %s",
->> +	    ns1, VETH_NAME, VETH_NAME, ns2);
->> +
->> +	/* NOTICE: XDP require VLAN header inside packet payload
->> +	 *  - Thus, disable VLAN offloading driver features
->> +	 */
->> +	SYS(fail, "ip netns exec %s ethtool -K %s rxvlan off txvlan off", ns1, VETH_NAME);
->> +	SYS(fail, "ip netns exec %s ethtool -K %s rxvlan off txvlan off", ns2, VETH_NAME);
->> +
->> +	/* NS1 configuration */
->> +	SYS(fail, "ip -n %s addr add %s/24 dev %s", ns1, NS1_IP_ADDR, VETH_NAME);
->> +	SYS(fail, "ip -n %s link set %s up", ns1, VETH_NAME);
->> +
->> +	/* NS2 configuration */
->> +	SYS(fail, "ip -n %s link add link %s name %s.%d type vlan id %d",
->> +	    ns2, VETH_NAME, VETH_NAME, VLAN_ID, VLAN_ID);
->> +	SYS(fail, "ip -n %s addr add %s/24 dev %s.%d", ns2, NS2_IP_ADDR, VETH_NAME, VLAN_ID);
->> +	SYS(fail, "ip -n %s link set %s up", ns2, VETH_NAME);
->> +	SYS(fail, "ip -n %s link set %s.%d up", ns2, VETH_NAME, VLAN_ID);
->> +
->> +	/* At this point ping should fail because VLAN tags are only used by NS2 */
->> +	return !SYS_NOFAIL("ip netns exec %s ping -W 1 -c1 %s", ns2, NS1_IP_ADDR);
->> +
->> +fail:
->> +	return -1;
->> +}
->> +
->> +static void cleanup_network(const char *ns1, const char *ns2)
->> +{
->> +	SYS_NOFAIL("ip netns del %s", ns1);
->> +	SYS_NOFAIL("ip netns del %s", ns2);
->> +}
->> +
->> +static void xdp_vlan(struct bpf_program *xdp, struct bpf_program *tc, u32 flags)
->> +{
->> +	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_EGRESS);
->> +	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
->> +	char ns1[NS_MAX_SIZE] = NS1_NAME;
->> +	char ns2[NS_MAX_SIZE] = NS2_NAME;
->> +	struct nstoken *nstoken = NULL;
->> +	int interface;
->> +	int ret;
->> +
->> +	if (!ASSERT_OK(setup_network(ns1, ns2), "setup network"))
->> +		goto cleanup;
->> +
->> +	nstoken = open_netns(ns1);
->> +	if (!ASSERT_OK_PTR(nstoken, "open NS1"))
->> +		goto cleanup;
->> +
->> +	interface = if_nametoindex(VETH_NAME);
->> +	if (!ASSERT_NEQ(interface, 0, "get interface index"))
->> +		goto cleanup;
->> +
->> +	ret = bpf_xdp_attach(interface, bpf_program__fd(xdp), flags, NULL);
->> +	if (!ASSERT_OK(ret, "attach xdp_vlan_change"))
->> +		goto cleanup;
->> +
->> +	tc_hook.ifindex = interface;
->> +	ret = bpf_tc_hook_create(&tc_hook);
->> +	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
->> +		goto detach_xdp;
->> +
->> +	/* Now we'll use BPF programs to pop/push the VLAN tags */
->> +	tc_opts.prog_fd = bpf_program__fd(tc);
->> +	ret = bpf_tc_attach(&tc_hook, &tc_opts);
->> +	if (!ASSERT_OK(ret, "bpf_tc_attach"))
->> +		goto detach_xdp;
->> +
->> +	close_netns(nstoken);
->> +	nstoken = NULL;
->> +
->> +	/* Now the namespaces can reach each-other, test with pings */
->> +	SYS(detach_tc, "ip netns exec %s ping -i 0.2 -W 2 -c 2 %s > /dev/null", ns1, NS2_IP_ADDR);
->> +	SYS(detach_tc, "ip netns exec %s ping -i 0.2 -W 2 -c 2 %s > /dev/null", ns2, NS1_IP_ADDR);
->> +
->> +
->> +detach_tc:
->> +	bpf_tc_detach(&tc_hook, &tc_opts);
->> +detach_xdp:
->> +	bpf_xdp_detach(interface, flags, NULL);
->> +cleanup:
->> +	close_netns(nstoken);
->> +	cleanup_network(ns1, ns2);
->> +}
->> +
->> +/* First test: Remove VLAN by setting VLAN ID 0, using "xdp_vlan_change"
->> + * egress use TC to add back VLAN tag 4011
->> + */
->> +void test_xdp_vlan_change(void)
->> +{
->> +	struct test_xdp_vlan *skel;
->> +
->> +	skel = test_xdp_vlan__open_and_load();
->> +	if (!ASSERT_OK_PTR(skel, "xdp_vlan__open_and_load"))
->> +		return;
->> +
-> 
-> [..]
-> 
->> +	if (test__start_subtest("0"))
->> +		xdp_vlan(skel->progs.xdp_vlan_change, skel->progs.tc_vlan_push, 0);
-> 
-> Does the original test also test with flags=0? What is the purpose?
+Regards,
+Peter
 
-The original test allows testing the 'xdp', 'xdpgeneric' and 'xdpdrv' 
-modes. My understanding is that flags=0 is the 'xdp' equivalent. IIRC, 
-there are fallbacks that will set these flags to SKB or DRV mode at some 
-point but, since it's allowed by the bpf_xdp_attach API, I thought it 
-was worth testing. This way, if the fallbacks stop working at some 
-point, we'll be noticed.
+[1] https://lore.kernel.org/netdev/20250216135748.GD1615191@kernel.org/
 
-Best regards,
-Bastien
+> ---
+> Changes v6 -> v7
+>   - rebased on actual net-next/main
+>   - no changes
+>
+> Changes v5 -> v6
+>   - adjust to dropped patch ''net: pktgen: use defines for the various
+>     dec/hex number parsing digits lengths'
+>   - add rev-by Simon Horman
+>   - fix line break (suggested by Simon Horman)
+>
+> Changes v4 -> v5
+>   - split up patchset into part i/ii (suggested by Simon Horman)
+>   - instead of align to most common pattern (int) adjust all usages to
+>     size_t for i and max and ssize_t for len and adjust function signatu=
+res
+>     of hex32_arg(), count_trail_chars(), num_arg() and strn_len() accord=
+ingly
+>   - respect reverse xmas tree order for local variable declarations (whe=
+re
+>     possible without too much code churn)
+>   - update subject line and patch description
+>   - fix checkpatch warning '"foo * bar" should be "foo *bar"' for
+>     count_trail_chars() and strn_len()
+>
+> Changes v3 -> v4
+>   - new patch (factored out of patch 'net: pktgen: fix access outside of=
+ user
+>     given buffer in pktgen_if_write()')
+> ---
+>  net/core/pktgen.c | 38 ++++++++++++++++++++------------------
+>  1 file changed, 20 insertions(+), 18 deletions(-)
+>
+> diff --git a/net/core/pktgen.c b/net/core/pktgen.c
+> index 55064713223e..cd6b6c0dc0dc 100644
+> --- a/net/core/pktgen.c
+> +++ b/net/core/pktgen.c
+> @@ -746,10 +746,11 @@ static int pktgen_if_show(struct seq_file *seq, vo=
+id *v)
+>  }
+>
+>
+> -static int hex32_arg(const char __user *user_buffer, unsigned long maxl=
+en,
+> -		     __u32 *num)
+> +static ssize_t hex32_arg(const char __user *user_buffer, size_t maxlen,
+> +			 __u32 *num)
+>  {
+> -	int i =3D 0;
+> +	size_t i =3D 0;
+> +
+>  	*num =3D 0;
+>
+>  	for (; i < maxlen; i++) {
+> @@ -768,10 +769,9 @@ static int hex32_arg(const char __user *user_buffer=
+, unsigned long maxlen,
+>  	return i;
+>  }
+>
+> -static int count_trail_chars(const char __user * user_buffer,
+> -			     unsigned int maxlen)
+> +static ssize_t count_trail_chars(const char __user *user_buffer, size_t=
+ maxlen)
+>  {
+> -	int i;
+> +	size_t i;
+>
+>  	for (i =3D 0; i < maxlen; i++) {
+>  		char c;
+> @@ -793,10 +793,10 @@ static int count_trail_chars(const char __user * u=
+ser_buffer,
+>  	return i;
+>  }
+>
+> -static long num_arg(const char __user *user_buffer, unsigned long maxle=
+n,
+> -				unsigned long *num)
+> +static ssize_t num_arg(const char __user *user_buffer, size_t maxlen,
+> +		       unsigned long *num)
+>  {
+> -	int i;
+> +	size_t i;
+>  	*num =3D 0;
+>
+>  	for (i =3D 0; i < maxlen; i++) {
+> @@ -812,9 +812,9 @@ static long num_arg(const char __user *user_buffer, =
+unsigned long maxlen,
+>  	return i;
+>  }
+>
+> -static int strn_len(const char __user * user_buffer, unsigned int maxle=
+n)
+> +static ssize_t strn_len(const char __user *user_buffer, size_t maxlen)
+>  {
+> -	int i;
+> +	size_t i;
+>
+>  	for (i =3D 0; i < maxlen; i++) {
+>  		char c;
+> @@ -844,9 +844,9 @@ static int strn_len(const char __user * user_buffer,=
+ unsigned int maxlen)
+>  static ssize_t get_imix_entries(const char __user *buffer,
+>  				struct pktgen_dev *pkt_dev)
+>  {
+> -	const int max_digits =3D 10;
+> -	int i =3D 0;
+> -	long len;
+> +	const size_t max_digits =3D 10;
+> +	size_t i =3D 0;
+> +	ssize_t len;
+>  	char c;
+>
+>  	pkt_dev->n_imix_entries =3D 0;
+> @@ -895,9 +895,9 @@ static ssize_t get_imix_entries(const char __user *b=
+uffer,
+>  static ssize_t get_labels(const char __user *buffer, struct pktgen_dev =
+*pkt_dev)
+>  {
+>  	unsigned int n =3D 0;
+> +	size_t i =3D 0;
+> +	ssize_t len;
+>  	char c;
+> -	ssize_t i =3D 0;
+> -	int len;
+>
+>  	pkt_dev->nr_labels =3D 0;
+>  	do {
+> @@ -956,7 +956,8 @@ static ssize_t pktgen_if_write(struct file *file,
+>  {
+>  	struct seq_file *seq =3D file->private_data;
+>  	struct pktgen_dev *pkt_dev =3D seq->private;
+> -	int i, max, len;
+> +	size_t i, max;
+> +	ssize_t len;
+>  	char name[16], valstr[32];
+>  	unsigned long value =3D 0;
+>  	char *pg_result =3D NULL;
+> @@ -1883,7 +1884,8 @@ static ssize_t pktgen_thread_write(struct file *fi=
+le,
+>  {
+>  	struct seq_file *seq =3D file->private_data;
+>  	struct pktgen_thread *t =3D seq->private;
+> -	int i, max, len, ret;
+> +	size_t i, max;
+> +	ssize_t len, ret;
+>  	char name[40];
+>  	char *pg_result;
+>
+
 
