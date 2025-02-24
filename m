@@ -1,126 +1,128 @@
-Return-Path: <linux-kselftest+bounces-27318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C55FBA4146E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 05:14:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AA14A4147C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 05:40:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCB947A5FBD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 04:13:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B97C165224
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 04:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D5C1A3172;
-	Mon, 24 Feb 2025 04:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1A611AAE2E;
+	Mon, 24 Feb 2025 04:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="c8kZ0Ibr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kizl+SjV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423621EB3E;
-	Mon, 24 Feb 2025 04:14:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602AD1A3160
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 04:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740370478; cv=none; b=PwCG4t1JT6yQxqjZ5KaZAg65l6rGPq96PQlPmlGk3YGwRNIDd7rBTZCUHcD5F4VVGYrxG2YT7UTuvTN99Ii5Mle6SbHEKlGP1fVZ8FdS/PUI4jggiTJ5HSCF4AzsTyF4xdL7HvHIkEmy+J6awpCXrU1/AJSeUFLhrTU44UBvqGo=
+	t=1740371912; cv=none; b=VNv0NVc856swFw942YotLEHHfdwTdBhbbADpe5cbJqCqDl5GeLzsGCHzFcd/RLCgrcm5f9RDuAfF2nAmoymgzPVWCzZwZXixJde8gD0zGWt8XYZyq3DUxcND8VEJ3+BcHz4CCvhWEY/Ba5Ow62dUxcrxGHAUA4iUju1ds06QTVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740370478; c=relaxed/simple;
-	bh=Q32jPkfBVfYf3TEwyBJF066Q+2lZ165Aft6mCGepb18=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p2QOyNyZvbvPWFTxdrnxnFra7OhZNAcNNGxt0fRZD10vlCSwruNkpSwWw06w5N/vBFYKD0pP/KkNVPBSotlt+DRWNyz6FitzVdalKD7L78jvYsXYTGhsFTT4F0k16RwU1pGrrmRu3zWj8M4G58gJja0yUryLn5oPOCSmevkiUvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=c8kZ0Ibr; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1740370417;
-	bh=QUnxINV4h0+72Ou0M9jqMPGNZyrytkwHTR/8PMwxqYM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=c8kZ0IbrnJln1gGF2ss+9B9o962Jy1/Fts1QmfBmJvqOc52a5LmNXVK5NcvFreDO9
-	 1Vsf5Ivqc6Paj2fo86XtC6HEDKyySPgHCI60lLKoaxiJ+eKHZVUV89s8/9733RXC0Z
-	 Wqt4/eNAhX1QezmoGXIGrj6KXm+o1PT7SJxg5+Vs=
-X-QQ-mid: bizesmtpip4t1740370367th0m8ul
-X-QQ-Originating-IP: YACropfZKbFnsY+WYSwIdCcFXQBCfwM3OPJ2699B36A=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 24 Feb 2025 12:12:45 +0800 (CST)
-X-QQ-SSF: 0002000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 210867971091029739
-From: WangYuli <wangyuli@uniontech.com>
-To: Jason@zx2c4.com,
-	shuah@kernel.org
-Cc: wangyuli@uniontech.com,
-	horms@kernel.org,
-	tglx@linutronix.de,
-	jstultz@google.com,
-	wireguard@lists.zx2c4.com,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhanjun@uniontech.com,
-	niecheng1@uniontech.com,
-	guanwentao@uniontech.com,
-	chenlinxuan@uniontech.com
-Subject: [RESEND PATCH v2] wireguard: selftests: Cleanup CONFIG_UBSAN_SANITIZE_ALL
-Date: Mon, 24 Feb 2025 12:12:38 +0800
-Message-ID: <6945896DD80A71BD+20250224041238.45039-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1740371912; c=relaxed/simple;
+	bh=Kxoqux8ig1bneZc8TPbOtwtdCXGrWd1siptghYniyZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lKF/pLECdDnVJM88qIogWq60+Vw10iUYUOOgWaRG7HedtLDyOlngMv5z2dmNdA5kNwfiJnOltkl5XNlBKYubgpLTA+a6Y7p6cVjUzOjpS/Tfq/3RL21+exJcvtfKfxzTZ8DM4diyEuotbSt0137HheDG1DlVEv/UAw89VeARj7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kizl+SjV; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-220e0575f5bso256115ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 23 Feb 2025 20:38:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740371911; x=1740976711; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QXOPbjowj6Hzwuap/XS84BFQBW4l8rdr65xne9mv6JE=;
+        b=kizl+SjVEdYyYRBc+wlQ40LGSLSjwyo74CUKXBJYTdQLSFnF1eF2ElZxbaI8cyiv2H
+         iKXCmR1sc2skCyXMiEs3MdQookieYK7/EBInHWlvPT5C6w9HvfnA2bjVRfpcm2dB/PlC
+         jqusrzMadkjxeehlc49pXSVi2cgRs92EY+VeMpFYaQ3PqgXCAzyx4GeD0kTbfVG+FcEC
+         IFbIxzFqvCW/+BUyLaXZPemWIpWDcDlqyrJFIRMj0HKUQmNJdFXdafx1TUHwhGlRiEco
+         GXutFi16dxX625XC5c2xILjip9Vdci3aL2bkBEaM95A0f/E1sSVDhu3PPoiAnFWGjxc6
+         tS+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740371911; x=1740976711;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QXOPbjowj6Hzwuap/XS84BFQBW4l8rdr65xne9mv6JE=;
+        b=TZ3FqaDzlFlJOo1+2Pn9WsYAd52IGawPla+CLaxm/TzZTlxY4ScuQyGfnK+H2N3Pzc
+         zh8H+djqwKB5tdtrFWAcdRYeUd2VgblWIH/5LMKwRViMa2F009ObS7AGjJ58+5h0sceA
+         I1wm8E55wTXbF5GUZFW/el+AmojjzHSzTLpeq4UzbLU4F0ivExTtGlV39xl+NsQ61CQH
+         NJ6vB4FNZy6s6PTnLloU2xxaprKTmD4TReKm6QJC903ts6v5PPtQA6+AIedezJiCkAQ4
+         IzJ36YeFN4sCrrBYrWnqy+0cqNR1u1pFrw7mPopj/KTF0V3iHV5amWJUHMx33HZ/A72l
+         4tZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXdX1xAVe3ZhiJr/u9qzFQaYkZoJOQ64mxvmEASkLWVuaQpDDSSwDWeyOXOECaIdu5SyqZ2LXHlhh7hEwCi3So=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr9OjPJT4G/D9T+ZH3Cz7faCiTupvFYYBikKp21PWLkpC9i1/c
+	MjDgqZlE5I+VpTwpaFsG1pCJmV7zcn0dy0GXEc606ShN5ZTAbUkTAqURZBWk7Q==
+X-Gm-Gg: ASbGncvEQHOBd9PxlURn2jyxA9fa38AQVTZrdhYun5BJ41B9PjlBcAsXBXcbzY3m3VJ
+	cCmxY0nJxY8m8c+/Wr9qryFupbOP+YtYCUECC6N5HLFkMXF87ikkRvbw8CQAvuymZrq6YdConUU
+	LJtJLqcftIYdN/szpsCVT1NT/O6CYANJIb+nOy5mrZJS8pmKibn84dUaGBEplc9SoKEqhuRiZNG
+	bMG42hXCtJEpWk4oPRKZGlll7VRWZL6gypuqIOJ0BlUXXAT0EpEMWvddO7CFOnbTQNKXfMtUXlX
+	6Ru7BMh+Cn2g1ZpnTfm5PQ889VnB36rOH0XtJlb6hbvISj14FH6xjT0hv0BVum8=
+X-Google-Smtp-Source: AGHT+IEdLGzG2X3YEfsIyog+f9j0aXsArsFeUuMcB+n8G7DuxjBKyqLer9ZGTISS6pMA8Im0wRP9Ug==
+X-Received: by 2002:a17:902:da8c:b0:216:21cb:2e14 with SMTP id d9443c01a7336-2226cc46c3amr2333105ad.21.1740371910429;
+        Sun, 23 Feb 2025 20:38:30 -0800 (PST)
+Received: from google.com (169.224.198.35.bc.googleusercontent.com. [35.198.224.169])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-add540f75f7sm15349070a12.46.2025.02.23.20.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Feb 2025 20:38:29 -0800 (PST)
+Date: Mon, 24 Feb 2025 04:38:19 +0000
+From: Pranjal Shrivastava <praan@google.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org,
+	joro@8bytes.org, suravee.suthikulpanit@amd.com,
+	robin.murphy@arm.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
+	shuah@kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
+	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
+	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v7 14/14] iommu/arm-smmu-v3: Set MEV bit in nested STE
+ for DoS mitigations
+Message-ID: <Z7v3u55JNDqveAuD@google.com>
+References: <cover.1740238876.git.nicolinc@nvidia.com>
+ <2b088fe8d2c7e692426b0d1f58d4f2c12ecb907e.1740238876.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: MPAlP4yRn0xgUjN0gIBL01n/MBhEZCsEcAKtVOEh6kVYgpA/OKfZoppR
-	Gy6EExKtL9VBD3aHP+/Q82Y9EGvQGXbmdW9Dr5czGaJ9imlQUVxv4dKorSyUO2inX3k2Mfl
-	fFnOhKhkLoPx+oP/McSyZ+l3VGyZKW1xPzZRxzQSlgA+kJOQ97bRtTfdJjWwKlL0JXNIHIX
-	lJuCO/KDy2DDseG20VpucLPWAxrA+0RlGZNa7i0xVJdNx/oTKC0bCxna4bY4wx6sjpG+g1v
-	UdmOZJOD4aU4rNteih3M1YsLbdO+BTHId2NDmotndPq0ycWZHyqYLFUfevkkmaRMfY4ABZ1
-	1shpjAvb/otOTk3+WRxGeZPSNWm5O+9g2NvAiu7YednSYioZV+7tBLkxbc2ClJ2+3oSsyBg
-	WM9hCFuo9wgrHFx18fP6L6U3qIjOTZlXO4bhFqJX4vSLIDeVMGLXxOKVbM9JpLjEtp89sP+
-	ISNQU29BpvyLC55XzFeBcWtlzZ6VC0hwhrOw8RV7GOiY5yWo79kcpYGtQPXbE9cOddyaiLf
-	L1gXJf4eo1WsCynmtGsdvz8pzxaPcw5kXjJmd9VkS6ndRDD2WjpQpluOvJFxWdaWw55r9aT
-	Zk04ixLKjQC0JdM7q/a/OAGsaTWwcYMxy3jVdWCXb1iADItmua6w0ZxRis0OC1IYsIoBnOU
-	PLdn8fqOMde0XYJtnI/dpztOfBPH7v8FRGiuH7m3bcgQYmjjhXLOXYLyGkNG3eBfiyXH9vG
-	6pETQth2Blt0TqE85r12KEatLXQ+bzsNUAUCGY+3nVArClmJTsIuFba8UuakeYqnLr2x20y
-	310j6D1CE1saKKrSccQ1+xlTJ3pkRbBPROOM1SioXYH3pR3m2Bfz7zZm647YK+3crx4XEGx
-	d+s7riJflmY3lUteAhitHc0suL1r7yRx8P6iWLClOJaKMN1FR/BgOfXXoPBEUGPXHRPJ+TV
-	nJBqRcER7zOpLkDzQ3u8JxgrJlwWOami8Y9JsAquIrW8b02uNToVFxC5advjrl6jVBjUVp1
-	PoWxtjAtwjvg3wNEVIClI/Lq1376VgH/wl7e7XXPrlclnjj/SKDJErt/5Iof7uUEqTptrTf
-	w==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b088fe8d2c7e692426b0d1f58d4f2c12ecb907e.1740238876.git.nicolinc@nvidia.com>
 
-Commit 918327e9b7ff ("ubsan: Remove CONFIG_UBSAN_SANITIZE_ALL")
-removed the CONFIG_UBSAN_SANITIZE_ALL configuration option.
-Eliminate invalid configurations to improve code readability.
+On Sat, Feb 22, 2025 at 07:54:11AM -0800, Nicolin Chen wrote:
+> There is a DoS concern on the shared hardware event queue among devices
+> passed through to VMs, that too many translation failures that belong to
+> VMs could overflow the shared hardware event queue if those VMs or their
+> VMMs don't handle/recover the devices properly.
+> 
+> The MEV bit in the STE allows to configure the SMMU HW to merge similar
+> event records, though there is no guarantee. Set it in a nested STE for
+> DoS mitigations.
+> 
+> In the future, we might want to enable the MEV for non-nested cases too
+> such as domain->type == IOMMU_DOMAIN_UNMANAGED or even IOMMU_DOMAIN_DMA.
+> 
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h         | 1 +
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c | 2 ++
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c         | 4 ++--
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+> 
 
-Link: https://lore.kernel.org/all/20250123105743.GO395043@kernel.org/
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
-Changelog:
- *v1->v2: Add Simon Horman's "Reviewed-by" tag.
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- tools/testing/selftests/wireguard/qemu/debug.config | 1 -
- 1 file changed, 1 deletion(-)
+Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
-diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
-index 139fd9aa8b12..828f14300d0a 100644
---- a/tools/testing/selftests/wireguard/qemu/debug.config
-+++ b/tools/testing/selftests/wireguard/qemu/debug.config
-@@ -22,7 +22,6 @@ CONFIG_HAVE_ARCH_KASAN=y
- CONFIG_KASAN=y
- CONFIG_KASAN_INLINE=y
- CONFIG_UBSAN=y
--CONFIG_UBSAN_SANITIZE_ALL=y
- CONFIG_DEBUG_KMEMLEAK=y
- CONFIG_DEBUG_STACK_USAGE=y
- CONFIG_DEBUG_SHIRQ=y
--- 
-2.47.2
-
+Thanks,
+Praan
 
