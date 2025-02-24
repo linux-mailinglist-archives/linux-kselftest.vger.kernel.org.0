@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-27307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83A33A41367
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 03:25:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55DB6A4136B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 03:25:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE03D7A56A7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 02:24:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 306CC7A4932
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 02:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF951FC7D1;
-	Mon, 24 Feb 2025 02:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36FB1FE468;
+	Mon, 24 Feb 2025 02:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jup5R1a8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wyrlz9Ge"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58C01A23A4;
-	Mon, 24 Feb 2025 02:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7FF1FC0F3;
+	Mon, 24 Feb 2025 02:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740363757; cv=none; b=cbc9yTacV7bywOxCzPzMcgzwK6eZ/TGpJkYkYHIaHhu7gLyZFyek6Y/bCGfTnJliG02ahJTO3AJkUpr1yVA0USpbLLDexNllChb1zTVDXMN1nQaOsDCB5byplcDqn+/v+vqJkxgObxrKUysLinZNeccYB7erUR5z7AwtBHxwKZI=
+	t=1740363758; cv=none; b=tBCyP+H/NqXXG6U83/jWA2CJDpzQryDjOTMoDBQU9vZ2+sd5a7FboALQidTlSJjttPON+HHFrJRoZ0Bl1KoJB5Fjn6qAIv8esgovWuvw+3BaDpEjiOLNZbL37sPjxyw4eSiC3hkDfTf/mI5uXdkvSbIgnlcVbAnwSOlAsYwzvVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740363757; c=relaxed/simple;
-	bh=YrHT1FYi1+OzGm9Y+UlE/vWNj9k1nIL2jAmcMpxhAJs=;
+	s=arc-20240116; t=1740363758; c=relaxed/simple;
+	bh=vYGr4oase6oAhv/S3mUkEU7TFl9z4yEqQk+LuMvaIG0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GOyCj22EcRv1y0qYhC6Ngi3bhdhjfDmEjtZYSMColdtvweVWA005cLQCAZcEdcgWnp20fsMY3nW3aAm7V+huFLaOJYF2ofCDNnyHR78GAK0jrOcgVWb69nYfx7mZmO15qJL+2EBynBtk8QWXsPW4eiOXlfQ3++jnJftSd/h9pAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jup5R1a8; arc=none smtp.client-ip=209.85.222.176
+	 MIME-Version; b=ajf4yj5QAE6bknpFi5wt4gufo5+XxFkzoI8pVY35wB67GEq6J7jopGY/Nx0JW03J/LU8iMJwIIoLqYa0g0IKWlXvV1vLyrt9HvHyxCvf/U0MwiLnG7RwTjDT+B/wixKM73lFyeQQO3UQHbQtSe9AfULXK3vJuMSyg/N77aNnwpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wyrlz9Ge; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7be8f281714so496476385a.1;
-        Sun, 23 Feb 2025 18:22:35 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-47210ab1283so57653511cf.1;
+        Sun, 23 Feb 2025 18:22:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740363755; x=1740968555; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740363756; x=1740968556; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=b4UbglbVJKQ61dofpRaNQb5dypoLHjOhU9tZFxlz6Bc=;
-        b=jup5R1a86jcAl3VM3zxMtAbP0Te58weFlknwBvoT7br5OWuPYqhlP4jwlFkSyKkDP+
-         vkV6XNas+/pf48gKE1DpqhPO21/xsDkAakLr4tygXorBzFZWOmsbkFkC3dmd+/yKeUs0
-         U7mh1DFRLwwg1UiOmg4cPwZeqsJ07XVcWSW0sXEoouLMSJ3eH+Cs+Ou1vY1E8tQJ0dOh
-         95quRa5UNt+CRS8SKgipYSudZbEjibua42Gi3kLmz1zpd4qmWa/tIF8hcuo0ux697kSD
-         1Q4ojUfpRRzS5p8LWLjZb0qQhu0P82sBG9ZJZgB9D61rJSjiGYnsJToK9lQzcTIZB9p9
-         qxXQ==
+        bh=9xc+k+HYzIVy9Ic6oMLdV0EroWNk+iKQ9YparoGG0Ik=;
+        b=Wyrlz9GeIxY2YjJXe5tWrd95p9p7msqGEXxXi7/xqTBOWk15M67/8i6xjkyjPEnxfY
+         7whIWckBQfsOppeoMzX8gqiDmThtLSLLx7CNewck+VgH5IJkC1iwKJf5iN/bZOiTc4OL
+         NKhF3NEHxA2Q5IFTOetiKYqIavYrWiQRYF0g+mZLItX2t6zviYxXoLtlkiHRFPDPwtlK
+         H3b0/jHXKExi8KFpXcC8TlMT0UlYsqiK6jGTqfpBEiEOABU45LTPaMGA9WCLHqYRSBxL
+         IbBcZ27krs1gKqlvRQmqJ57HZGCaMQMN/iM1T1zxVBtiuk8Bd5q3fPp9UCo2BYzHwiVI
+         cbFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740363755; x=1740968555;
+        d=1e100.net; s=20230601; t=1740363756; x=1740968556;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b4UbglbVJKQ61dofpRaNQb5dypoLHjOhU9tZFxlz6Bc=;
-        b=vkBQQFc11HymwggBzD0LVp8U0/KeGAmFtfQA4/RwKUak4nXsulIq3HSvsEwVIRXJsO
-         U3qxkygVfS8GoSbASljjX9/16/XCznf14WT8nYV82f3ZmswMOPKDyVmxU6KiGZmizwpz
-         yc8XtmEq/S9NC4B4B1h1JtYhrK1moC2B+Ru4qIAG1Jm/HuTLG9oDsXE2yJAzSaLQXW2I
-         TzpyPEqzUygn15AgJJ5P4wW7FMsi81Ha8Y/FRmGOkRZ2DY0W/IrHN/LtkSGhR1qxwhIe
-         cGwhHjxYubbXF2sFfj6yYxHfNvlZjlM+SwHQmI5BntN91qFl12aatszllmgesBcSjsJx
-         2BHw==
-X-Forwarded-Encrypted: i=1; AJvYcCV13iIWB4PTaMdNhngWdzO7QWIMm0BhMCTyCXlB5b/nOICy1YSyLJDAKQ+QePcV3DNbcRE=@vger.kernel.org, AJvYcCX+sMxBpt1ahnN7ttznoPbHpjXHfkluO08OAqMHYSmDphWSsEQAFnY+XZZ+gnpCOhgpro/Jq0uDuLPdBGWh@vger.kernel.org, AJvYcCXr8qW9jb0GufzFgjffbeZj0uDs5M8pjRFqCfykF1R7Eh48NXDYUdiD7KHKtWUJ+Kpmt+97bIFhKAYLaTZt2A3D@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQXKhL2MHqNQP1K2vs+5W/KCgYEcFWYTDU0F+wni0BAWntPgbv
-	LVbuq0fIC5DHk48qAgJtNlhNSac0wcghKgJper5l/OUM1wC7lShZ
-X-Gm-Gg: ASbGncsdHhkOOCVeqOk7TA9VcCz+8UsThKMiFLq7Zyt2jZ66vXUOydqu53OU3H3ahBk
-	ufCRAffA0CO6rZrzVyFfO1laA3/QNGf256z6NlV9RO9Ds7khGBnFdow9UyfrW2wpLOERl4dcWVL
-	GBvfCuXOvvaA9tu/7K4zGWNJUn8yVHJgFTt6dhuJoL+BH4SFOV+kJFJd9BbAxVGw+Jgv4oPM1Yq
-	vrd9ymtdV4n0YXbPxRXhgo5mxY1okbq4/IjrCyRvodGRH4Zf0/zcfwyDrFnpnxYaMWxKOVYx39a
-	laV00hKkJ6yROP3BdxHR7PZWXVinohR/0FxSM9fsMPQtrxZwiYL34JpYBTSj8LGd4tGhLgzxWYf
-	ewTZ93g1BPTcC97gd
-X-Google-Smtp-Source: AGHT+IFJ0c4dK35a+uqh/H+mgY4++zlo+aC7ovaC3i7iZFv0MXgycDMLedqpsay7Y6JGaqjxgV3XgA==
-X-Received: by 2002:a05:620a:1a04:b0:7c0:9df3:a0d7 with SMTP id af79cd13be357-7c0cef49da6mr1415529885a.41.1740363754658;
-        Sun, 23 Feb 2025 18:22:34 -0800 (PST)
+        bh=9xc+k+HYzIVy9Ic6oMLdV0EroWNk+iKQ9YparoGG0Ik=;
+        b=XAE0xVenYtwI2iEnypHaVncaOZqYupa3hnDtyZ7ZBsAFyw3ELng6Z1MJJkebQVcP62
+         Ah2cTVjzHbxz1C1zEUyn59iMrfDmuYoHT7WX/qLup+GYqFXH/eS+8CJjRHRLayxdPXSH
+         Xec7Mp983Y1iOgZXz+QYFq/sbup4Xc1aRoT5qZavA9p7iKtDOGreM2Ezq4ItGeJDSOSZ
+         +eVZFflxVnvIZFS8Qdd4fWDdzHOtR/YQQ9BJt1uu2NH0e/Br9BO08DD/eT+bX78d+UyU
+         ggKAuwZQ+LAiJrH1kbJ5rYG3CrE/UVZvyD3m541b3+nldk+qSPgo0f6+Nk/mZyc/1P7W
+         72OQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUYVXgGI3Zhbm/451ylKto2Ngp9o9DlE/s1UC69F1nXqBsu6qsxAdaSEooXf3P2gv4SYVU=@vger.kernel.org, AJvYcCV7hMTbtS+HFsQDNoNrGKiBA4375C3eYAOqWfBQHqkv++sCUMSrIMfgK+hg2njCuPStzrRH4RE8GR+EqgIxyeib@vger.kernel.org, AJvYcCWECpV444VOB/ZhaCFlRFBaz6KZBnvGKirat0hzS+OdIT+CsaVSIbbFybjEdiax1rjAxrOU3ktMyvb/Bfr4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzacwxkFy1U4fXaZEG9uhAgBn6kIpF5pzn3ch39XObqenW8uHL0
+	MiK6DKfYGCkMdfRNfKAZ7a6M9A7n/yzD/iTG8lrLtsO81fLCne/2
+X-Gm-Gg: ASbGncuk+uIJ5IBm0xjHXwHwGLSBkzx9TEGNCKQEXUkzF2ov4zrWTARI0HozmIV+QMt
+	+/+A6W9szofq0x1Q/vMWVAZgVsY5qRLCHHK7aTgCnX+piE6BiNTykKy18DfCV0YNNpcWUFgd7HE
+	JxtPmMNEcqCWfdz5BkCKrX9jsqfzpQsSBzEJXluB73NAqyoS257qkzIPsDmnzCIddzGE4LEq+ti
+	MS45pMURDV0rDEpgxQbY5z/U6qO9DQVNvbTvH4QOzmWw7U7ORpuwhTFWOZPmfrEkmpo6yLf2Zml
+	t32jIFk83dfPJ3T58Fv4T6G+QvkcoTHBhJA+Bz1ZwfBbylKjM8IeRaXjz0MKYnt4oGBx2m/Du4z
+	rhGNJVYEgLd2Klof+
+X-Google-Smtp-Source: AGHT+IFYTMVp6JYLVO/whvadX5BcZfW43b4gbDKbaMnb7W7u3y3MHECALfKNOxhOC+OdWqH3s0bwIw==
+X-Received: by 2002:a05:622a:388:b0:471:fde4:f09e with SMTP id d75a77b69052e-4722295d3c7mr159638211cf.36.1740363755990;
+        Sun, 23 Feb 2025 18:22:35 -0800 (PST)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d785c09sm127670766d6.36.2025.02.23.18.22.33
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c09d5980e1sm952821385a.13.2025.02.23.18.22.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Feb 2025 18:22:34 -0800 (PST)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id CCFCF1200043;
-	Sun, 23 Feb 2025 21:22:33 -0500 (EST)
+        Sun, 23 Feb 2025 18:22:35 -0800 (PST)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 2987F1200043;
+	Sun, 23 Feb 2025 21:22:35 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Sun, 23 Feb 2025 21:22:33 -0500
-X-ME-Sender: <xms:6de7ZyQwcei_UZOOQUyUz0RRKe4VZGoJUsM7hDVpAyA0c6wX0qRFmg>
-    <xme:6de7Z3zzl4pw_1mU4_TgRVP856Fg7nCA8AOeVx-qRlOks1Lh8C4zorYmUQ6SAq3Zt
-    Jao_TWamBwNIIHHyg>
-X-ME-Received: <xmr:6de7Z_1rJH1fbmAQgh5fc1WD5xSn-sOOYjFb6jdfGZGcGrlx2zhAD3Uxkw>
+  by phl-compute-04.internal (MEProxy); Sun, 23 Feb 2025 21:22:35 -0500
+X-ME-Sender: <xms:69e7Z2bdXUvhY2q_ktEj6_4mxum1XbtvojSQpWZHtVbD2e3KOkZTvQ>
+    <xme:69e7Z5YE30GFYBxHyIGzDVMhVBripm2iQhnU3P540mBuFSjDAVdxczf7RE1vS9ow3
+    faP82UIwb4s8o20Mg>
+X-ME-Received: <xmr:69e7Zw8QvK-L3Uutd9Ta1XScPhv8NaY7xP1ojzXbBDPijgFLAsfkTpo4cg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejjeehgecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
@@ -100,14 +100,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejjeehgecutefuodetgg
     gvfhhfihgtihhoshdrtghomhdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghl
     rdhorhhgpdhrtghpthhtohepnhgvvghrrghjrdhuphgrughhhigrhieskhgvrhhnvghlrd
     horhhgpdhrtghpthhtohepjhhovghlsehjohgvlhhfvghrnhgrnhguvghsrdhorhhg
-X-ME-Proxy: <xmx:6de7Z-C0pjnakYsGSjQtVLXXodxNiJGyqtkejK4PrWAUBfCvaI7QGA>
-    <xmx:6de7Z7gHQI0I_OgfV8jeFMpqcpOWmGto7EnEgWrbi4FfbML8fVuloA>
-    <xmx:6de7Z6o1udmB7foGPhFVr28oUsnFkhJFwHWh1qeJ2i3e7CR--l2wWw>
-    <xmx:6de7Z-gmaHGgAySwQfTrwaopu2q63x2LfMdUOD9xzWUs63UJNBSUXw>
-    <xmx:6de7Z6TN3fLrw9IoVamb-UqQbWgiasCFNfK5j0e2HBtFiEOaU57Aa6hv>
+X-ME-Proxy: <xmx:69e7Z4q8N94WyYkduFouVOnfQNXQODc2TFgOC1nJdzwgRDArSUkJ8g>
+    <xmx:69e7ZxoHm2hG5JusReTkwPBfeIpZcYrT-AaWfYhqki6VpY_qASU_nw>
+    <xmx:69e7Z2T-QWsqI1hJnXaWjGEq4tyhEcd0xy9R2XtmSp4spZRYFcV5Gw>
+    <xmx:69e7Zxq6dKTx9pB3U3S-3Amlzz34BUiK66MPgHW1tSjMLnXRHExD1g>
+    <xmx:69e7Z-5ljwnvTJ3DJYxig6SaLx4usaoBO6pF3hLCK_K397_EeE8Ac2iP>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Feb 2025 21:22:33 -0500 (EST)
+ 23 Feb 2025 21:22:34 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
@@ -130,9 +130,9 @@ Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [PATCH rcu 11/20] srcu: Pull integer-to-pointer conversion into __srcu_ctr_to_ptr()
-Date: Sun, 23 Feb 2025 18:22:05 -0800
-Message-Id: <20250224022214.12037-12-boqun.feng@gmail.com>
+Subject: [PATCH rcu 12/20] srcu: Move SRCU Tree/Tiny definitions from srcu.h
+Date: Sun, 23 Feb 2025 18:22:06 -0800
+Message-Id: <20250224022214.12037-13-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20250224022214.12037-1-boqun.feng@gmail.com>
 References: <20250224022214.12037-1-boqun.feng@gmail.com>
@@ -146,12 +146,10 @@ Content-Transfer-Encoding: 8bit
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-This commit abstracts the srcu_read_unlock*() integer-to-pointer
-conversion into a new __srcu_ctr_to_ptr().  This will be used
-in rcutorture for testing an srcu_read_unlock_fast() that avoids
-array-indexing overhead by taking a pointer rather than an integer.
-
-[ paulmck: Apply kernel test robot feedback. ]
+There are a couple of definitions under "#ifdef CONFIG_TINY_SRCU"
+in include/linux/srcu.h.  There is no point in them being there,
+so this commit moves them to include/linux/srcutiny.h and
+include/linux/srcutree.c, thus eliminating that #ifdef.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -161,62 +159,65 @@ Cc: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: <bpf@vger.kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- include/linux/srcutree.h | 9 ++++++++-
- kernel/rcu/srcutree.c    | 6 ++----
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ include/linux/srcu.h     | 10 +---------
+ include/linux/srcutiny.h |  3 +++
+ include/linux/srcutree.h |  1 +
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 505f5bdce444..2bd0e24e9b55 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -52,6 +52,7 @@ int init_srcu_struct(struct srcu_struct *ssp);
+ #define SRCU_READ_FLAVOR_SLOWGP	SRCU_READ_FLAVOR_LITE
+ 						// Flavors requiring synchronize_rcu()
+ 						// instead of smp_mb().
++void __srcu_read_unlock(struct srcu_struct *ssp, int idx) __releases(ssp);
+ 
+ #ifdef CONFIG_TINY_SRCU
+ #include <linux/srcutiny.h>
+@@ -64,15 +65,6 @@ int init_srcu_struct(struct srcu_struct *ssp);
+ void call_srcu(struct srcu_struct *ssp, struct rcu_head *head,
+ 		void (*func)(struct rcu_head *head));
+ void cleanup_srcu_struct(struct srcu_struct *ssp);
+-int __srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp);
+-void __srcu_read_unlock(struct srcu_struct *ssp, int idx) __releases(ssp);
+-#ifdef CONFIG_TINY_SRCU
+-#define __srcu_read_lock_lite __srcu_read_lock
+-#define __srcu_read_unlock_lite __srcu_read_unlock
+-#else // #ifdef CONFIG_TINY_SRCU
+-int __srcu_read_lock_lite(struct srcu_struct *ssp) __acquires(ssp);
+-void __srcu_read_unlock_lite(struct srcu_struct *ssp, int idx) __releases(ssp);
+-#endif // #else // #ifdef CONFIG_TINY_SRCU
+ void synchronize_srcu(struct srcu_struct *ssp);
+ 
+ #define SRCU_GET_STATE_COMPLETED 0x1
+diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
+index b347bde1aac2..a6194f7a7e34 100644
+--- a/include/linux/srcutiny.h
++++ b/include/linux/srcutiny.h
+@@ -71,6 +71,9 @@ static inline int __srcu_read_lock(struct srcu_struct *ssp)
+ 	return idx;
+ }
+ 
++#define __srcu_read_lock_lite __srcu_read_lock
++#define __srcu_read_unlock_lite __srcu_read_unlock
++
+ static inline void synchronize_srcu_expedited(struct srcu_struct *ssp)
+ {
+ 	synchronize_srcu(ssp);
 diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-index f41bb3a55a04..55fa400624bb 100644
+index 55fa400624bb..ef3065c0cadc 100644
 --- a/include/linux/srcutree.h
 +++ b/include/linux/srcutree.h
-@@ -218,6 +218,13 @@ static inline bool __srcu_ptr_to_ctr(struct srcu_struct *ssp, struct srcu_ctr __
- 	return scpp - &ssp->sda->srcu_ctrs[0];
- }
+@@ -207,6 +207,7 @@ struct srcu_struct {
+ #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
+ #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, static)
  
-+// Converts an integer to a per-CPU pointer to the corresponding
-+// ->srcu_ctrs[] array element.
-+static inline struct srcu_ctr __percpu *__srcu_ctr_to_ptr(struct srcu_struct *ssp, int idx)
-+{
-+	return &ssp->sda->srcu_ctrs[idx];
-+}
-+
- /*
-  * Counts the new reader in the appropriate per-CPU element of the
-  * srcu_struct.  Returns an index that must be passed to the matching
-@@ -252,7 +259,7 @@ static inline int __srcu_read_lock_lite(struct srcu_struct *ssp)
- static inline void __srcu_read_unlock_lite(struct srcu_struct *ssp, int idx)
- {
- 	barrier();  /* Avoid leaking the critical section. */
--	this_cpu_inc(ssp->sda->srcu_ctrs[idx].srcu_unlocks.counter);  /* Z */
-+	this_cpu_inc(__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks.counter);  /* Z */
- 	RCU_LOCKDEP_WARN(!rcu_is_watching(), "RCU must be watching srcu_read_unlock_lite().");
- }
- 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index a91651866485..7a8ace83c98d 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -765,7 +765,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_lock);
- void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
- {
- 	smp_mb(); /* C */  /* Avoid leaking the critical section. */
--	this_cpu_inc(ssp->sda->srcu_ctrs[idx].srcu_unlocks.counter);
-+	this_cpu_inc(__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks.counter);
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock);
- 
-@@ -794,10 +794,8 @@ EXPORT_SYMBOL_GPL(__srcu_read_lock_nmisafe);
-  */
- void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
- {
--	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
--
- 	smp_mb__before_atomic(); /* C */  /* Avoid leaking the critical section. */
--	atomic_long_inc(&sdp->srcu_ctrs[idx].srcu_unlocks);
-+	atomic_long_inc(&raw_cpu_ptr(__srcu_ctr_to_ptr(ssp, idx))->srcu_unlocks);
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock_nmisafe);
- 
++int __srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp);
+ void synchronize_srcu_expedited(struct srcu_struct *ssp);
+ void srcu_barrier(struct srcu_struct *ssp);
+ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
 -- 
 2.39.5 (Apple Git-154)
 
