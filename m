@@ -1,199 +1,240 @@
-Return-Path: <linux-kselftest+bounces-27321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2337BA41733
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 09:22:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D765EA41916
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 10:30:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92F41174ADE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 08:21:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDF653B2C7C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 09:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1391925AB;
-	Mon, 24 Feb 2025 08:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA00253B51;
+	Mon, 24 Feb 2025 09:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C5ox613m"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="QwkbY93Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84BF158558;
-	Mon, 24 Feb 2025 08:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DA42512FD;
+	Mon, 24 Feb 2025 09:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740385221; cv=none; b=NAZrrlwigNJzHupYKhcfSDE+WScNgSn10I1+Y6Vj3BOuEeaEcjoR43zEqpxv7J/ih7N2fxeTGGv4FS9eDiekl9eN2+M8XYtUAee1CoI8RUVPpmJNuukFLt4mJDKcOXAL4KgdXLSydgla8a55Usi0wQ62TuhbonudgjERqjk8748=
+	t=1740388993; cv=none; b=C+Fjk2xuyyZ3FTicq0BVIfzTqbzz+YgjWY9DSc9729Q/oMwurkAdVYLGUo2c9bdpq+w/SPdMAqwrJSfNBM1DW27AVO0aT0bEGwWrlhYkkWrNQ0viuv0ixaNn7ACCcKLI9dy8eQjeaPqi3JNyiLjlXDjsgPvoS3tu4pRkeDJhwgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740385221; c=relaxed/simple;
-	bh=bnADvqVjOnZxk0sLsbIJnA70d9jXuiQCyeY3qHVIUC4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NyGv0hsDfqjUq80HmUMwGmQMWx37d0PpBWdkignzDtTntDQytyCsE4NgUZ0gitpJZgB9Oa0xPUBXtjYNzVDjgfiZIMrZgXp6Gxy1wnNijdeCV+NxX0u1rySC20AqHzHNDaNI9yFvi8dhr+0+jwHFhsHWQ4iUQRQYBhEAXR+2no0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C5ox613m; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51O2DZIq013806;
-	Mon, 24 Feb 2025 08:20:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=OsFn2Z
-	xs78d5dqGLlCyQmgsyPmdY+R0BhdnGfkT9/Zo=; b=C5ox613mD1RC7jeghh13/A
-	Om8herRKgwjAzp8Ft6qwbhw+uEIp/dXZGAxE2da9Lfbw3z4NxCCNqAODMmHhIHFI
-	xleIWy83W6bCxDgy7Pe+sn+eNDZ3ZptS3tT1moGIHRjX92UyRvK9Ffv8eigBZidl
-	+HUs8I28yZLVLvd6DxbXJd+tB+5dT1LXw10Ex+cvLwtIUwmcvtuKWDFVHDCK9A1o
-	nzijXwcT1Hh+muS9iglEdwD85+uUbhjfPYzv2izX6sD7vwksWk4HT85OYDDEVJOU
-	q9bGafHHlPtSB3vsvTzTRQmK4kHtCl4sF0HGR+ndGcEoohAvprJ9/C2iOWfYTo4A
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 450fm017sv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Feb 2025 08:20:02 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51O5PVj5002548;
-	Mon, 24 Feb 2025 08:20:02 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44yu4jdv4x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Feb 2025 08:20:02 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51O8K0eD34865894
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 24 Feb 2025 08:20:00 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 82F6C2004E;
-	Mon, 24 Feb 2025 08:20:00 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9A18F20040;
-	Mon, 24 Feb 2025 08:19:59 +0000 (GMT)
-Received: from [9.109.215.252] (unknown [9.109.215.252])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 24 Feb 2025 08:19:59 +0000 (GMT)
-Message-ID: <ed7386c2-50f9-4fa0-8a94-fd67ae2bba4f@linux.ibm.com>
-Date: Mon, 24 Feb 2025 13:49:58 +0530
+	s=arc-20240116; t=1740388993; c=relaxed/simple;
+	bh=GasDPFQCK9Vo+y9Jthkc9rqHin1OvrAixg/Q3HSc+bw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dCpn4sj3+uiHkm/miBqkJLpQT36SISQ5Mldc2kmTJSq0I02wwICnqpCKUF3voLdA9NXxe8K5TeS+zWrckhbiL54rTvStj58Ku9FLsdA0LwvzJH8nZALBX/nA8pl6ciQgGGtlvDWRXfM+E4NOE70T/TChe6K96vkIMFLL40Jce/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=QwkbY93Z; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1740388970; x=1740993770; i=ps.report@gmx.net;
+	bh=GasDPFQCK9Vo+y9Jthkc9rqHin1OvrAixg/Q3HSc+bw=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=QwkbY93ZdqtM4kafaYMxtDOlnBMIk8TRWrkGg4QUXFjls4p72Ip3jhEiDk8WCaLL
+	 /95DG39lLjAKSvkHOGAuJLbOw+JmdmnTovvBiKfcCZHaV/UiLMV2M7d0c+bYHa8PI
+	 gGS6eYkSgJq1gdPFE3qC5IXCFh48WVconZPMNMGf1wEpZhs0K7SuRez0T8p6O+TFk
+	 0z4FqMi4hRo58TSw4eI6tkv+0rw9Q0WshepqrLW932nBwbybjL8vk36pG8YnBmQpz
+	 n326MLr7UITUswj3dfbSGMEUzoSbu3NGEYAfi1k65CnDAk5jN0yzHxuJrdXPW+Vge
+	 Pt/3XIsClkXTBeIcgw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([82.135.81.227]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N8XPn-1tI7ul2cYj-012rqN; Mon, 24
+ Feb 2025 10:22:50 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Seiderer <ps.report@gmx.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Artem Chernyshev <artem.chernyshev@red-soft.ru>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Nam Cao <namcao@linutronix.de>
+Subject: [PATCH net-next v7 0/8] Some pktgen fixes/improvments (part II)
+Date: Mon, 24 Feb 2025 10:22:34 +0100
+Message-ID: <20250224092242.13192-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests: sched: skip cs_prctl_test for systems
- with core scheduling disabled
-To: Sinadin Shan <sinadin.shan@oracle.com>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chris.hyser@oracle.com
-References: <20250221115750.631990-1-sinadin.shan@oracle.com>
- <20250221115750.631990-3-sinadin.shan@oracle.com>
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <20250221115750.631990-3-sinadin.shan@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7vOjMe4Hu1fsyWyIqGqTylDuh1GtC0-3
-X-Proofpoint-GUID: 7vOjMe4Hu1fsyWyIqGqTylDuh1GtC0-3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-24_03,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 priorityscore=1501
- mlxlogscore=999 impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502240057
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:nCvJSsPYjUdIChk28cLUErz5A9U0Km0CQkvCP8bwA1vPBnDhema
+ bj1OIGmwf4qIpuWwxffqC4TtRdWfGx8BAX5LAJi06xnWMl24gNU6M/8BWL8FHqZJ05czOhx
+ vKYQ3ke5Jw8nBCSKIK8kXQeS/xa2pQhSPZNgUJ7Bo98IoDniV9/15xO19kJuj8M+P6bp0lr
+ UnKpqHoIaAlJiUG8UtlIg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ovGPJV05NyA=;iP4pVOQjk4IBLm4V5S4PCFOAIPb
+ 6jx4wWk3JEy6hE5NlWBLt5fMsvrdesfLULUOGDso/3GmrZZ0rpDycYwYL8GfSl2FOjTPZSBx7
+ tZkPFDtPk3BPlO2rbmOR9cTnqJAdVbumXqBgP2hrTjrua+e9bkKuoluD5j/tFwOp9FBaWq38I
+ 3hTFxO+dDf/s0e4D63U5ESfBCw0+pgauy3OS5s3wfLjfrfMndurPj+3S7ufDg1auGCXsiQqYg
+ BYVoUaAGpj4STkUVdmoBa1LNRBWzLj8vDak2zWSgC34OfhYPoSFGY5U3vX5KK1Ps1NAuHh0HQ
+ 2KAWKNFwIkeXuCRqFHPW+cUfCkd5bGCVRN80x6apMukg57t5XqkXstLaE3d36jqNUT19cqeWK
+ 1F8KWEnbZLyBYDfOBPBN7BT1DqUoEBZgePHwGIHHm1R0x9/u4IcM85gOn4QGXK2AHE5h/6Y78
+ URgjPTSleKy+6si7mt9OIjwPu4XJ/vLRkbZG8LjB442KL3+F7LNa87jeZjEtyb0mN4d9qr/DX
+ amaP2X74uHrI9ebpWZAUkZcqLU42Q9QIxyJWImEtjqRotrfAmbzTUrM/LqHTRREqBJPGdgKIc
+ TiksjKdjFTfLycn6FrrRdRVPcdni5g1bBRHsv66nutkFfegbAxJsvCpRNJ6c73YU5QNjTn3qK
+ WdgQC737EivH1BzxUxsU0t5jrYSFpAiHidHR57o8r80/3EAnSMlFnuI8n1QaVxeVbGX3rA7XR
+ i5FrzG32dEIWj2kQf6oNddKJ9FivD5vZSeVK2xfsmoCM+hgeRxAseBiBtkPKfQkECDJRP1T3s
+ sTE0nCPCbp+AS+a/IXmPodD9Ru4JktcjJR3gv8EmGw6qR6WClkPu6Eq4hRo0hnbzy/c1Z5U5q
+ cADtnwgOfIWrsEeoiO29KHbDT9/2YI51CQ6HTPu89G6dsEjQxF2d0TRTw1N78mx5Cv91ZrlWS
+ e/66pRSjiNnoANM9mbH683OtXlAXXT5tZYWZOhbv8SPQGFuPCO8KOg8D07C050pVT5cx8DvXm
+ SimojbwqzkTZf+YCM6ZWopzJZTGAyGrs6HM2+yFeLK2bahs9Gni++pnUZAhhUk8FG8R5DY9UM
+ UVcgH5jLUkhbdcedA8WztjHbW5CxC1SBCs06XlMa5F4rpxKtV23DT8ggjKnRQbuCDIPrmPMdQ
+ QzbF+0hx6ZtTB3etD+bpzyZPch825j9qFXR0Fhp13rVFXqw7KUs6D4fc39Fl3RMrCBQOAoVSo
+ v2X1ZQ6YtJ0VJ2pry6RUMy6OVEYG9eQlZVGFtZCJRzrDqEe6hg60Roy7Es8zFnbzw6vlvT9T0
+ gep/38XAXbL3nqlynTpPEO3YcQBlMGcrVu/S85G+5pmJZjJKQAtaimVN++LxftQ8V2yvFhTiq
+ n+JwH5QkZ4aMe/teigDThoGSBka2STFgNpOrnTtk8nJLs7bCCgrMYvSsaK
 
-
-
-On 2/21/25 17:27, Sinadin Shan wrote:
-> For kernels with CONFIG_SCHED_CORE=n, the sched selftest cs_prctl_test
-> fails with "Not a core sched system" error. Change this to gracefully
-> skip the test for systems with core scheduling disabled. Exiting early
-> would also ensure failures reported in obtaining cookie are valid
-> failures and not due to the config.
-> 
-> Skip cs_prctl_test for systems with CONFIG_SCHED_CORE=n
-
-I tried this on kernel built with CONFIG_SCHED_CORE=y.
-I did make, make modules_install and make install and reboot.
-
-./cs_prctl_test
-## Checking for CONFIG_SCHED_CORE support
-Cannot find kernel config in /proc or /boot
-
-This happens because, make install wouldnt copy the .config to 
-/boot/config-<kernel-release>.
-
-If the self-tests are to be used in development flow, these checks may 
-not be sufficient.
-
-Not sure if i have missed any steps in building process.
-
-
-> 
-> Signed-off-by: Sinadin Shan <sinadin.shan@oracle.com>
-> ---
->   tools/testing/selftests/sched/cs_prctl_test.c | 29 ++++++++++++++++++-
->   1 file changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-> index 52d97fae4dbd8..60fd657b56c84 100644
-> --- a/tools/testing/selftests/sched/cs_prctl_test.c
-> +++ b/tools/testing/selftests/sched/cs_prctl_test.c
-> @@ -23,6 +23,7 @@
->   #include <sys/eventfd.h>
->   #include <sys/wait.h>
->   #include <sys/types.h>
-> +#include <sys/utsname.h>
->   #include <sched.h>
->   #include <sys/prctl.h>
->   #include <unistd.h>
-> @@ -109,6 +110,30 @@ static void handle_usage(int rc, char *msg)
->   	exit(rc);
->   }
->   
-> +static void check_core_sched_support(void)
-> +{
-> +	char config[128] = "/proc/config.gz";
-> +	char cmd[128];
-> +	struct utsname kernel;
-> +
-> +	printf("## Checking for CONFIG_SCHED_CORE support\n");
-> +
-> +	if (access(config, F_OK) != 0)
-> +		if (uname(&kernel) == 0)
-> +			snprintf(config, sizeof(config), "/boot/config-%s", kernel.release);
-> +
-> +	if (access(config, F_OK) != 0) {
-> +		printf("Cannot find kernel config in /proc or /boot\n");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	snprintf(cmd, sizeof(cmd), "zgrep CONFIG_SCHED_CORE=[ym] %s", config);
-> +	if (system(cmd)) {
-> +		printf("Core scheduling not enabled in kernel, hence skipping tests\n");
-> +		exit(4);
-> +	}
-> +}
-> +
->   static unsigned long get_cs_cookie(int pid)
->   {
->   	unsigned long long cookie;
-> @@ -117,7 +142,7 @@ static unsigned long get_cs_cookie(int pid)
->   	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
->   		    (unsigned long)&cookie);
->   	if (ret) {
-> -		printf("Not a core sched system\n");
-> +		printf("Failed to get cookie\n");
->   		return -1UL;
->   	}
->   
-> @@ -270,6 +295,8 @@ int main(int argc, char *argv[])
->   	if (keypress)
->   		delay = -1;
->   
-> +	check_core_sched_support();
-> +
->   	srand(time(NULL));
->   
->   	/* put into separate process group */
-
+V2hpbGUgdGFraW5nIGEgbG9vayBhdCAnW1BBVENIIG5ldF0gcGt0Z2VuOiBBdm9pZCBvdXQtb2Yt
+cmFuZ2UgaW4KZ2V0X2ltaXhfZW50cmllcycgKFsxXSkgYW5kICdbUEFUQ0ggbmV0IHYyXSBwa3Rn
+ZW46IEF2b2lkIG91dC1vZi1ib3VuZHMKYWNjZXNzIGluIGdldF9pbWl4X2VudHJpZXMnIChbMl0s
+IFszXSkgYW5kIGRvaW5nIHNvbWUgdGVzdHMgYW5kIGNvZGUgcmV2aWV3CkkgZGV0ZWN0ZWQgdGhh
+dCB0aGUgL3Byb2MvbmV0L3BrdGdlbi8uLi4gcGFyc2luZyBsb2dpYyBkb2VzIG5vdCBob25vdXIg
+dGhlCnVzZXIgZ2l2ZW4gYnVmZmVyIGJvdW5kcyAocmVzdWx0aW5nIGluIG91dC1vZi1ib3VuZHMg
+YWNjZXNzKS4KClRoaXMgY2FuIGJlIG9ic2VydmVkIGUuZy4gYnkgdGhlIGZvbGxvd2luZyBzaW1w
+bGUgdGVzdCAoc29tZXRpbWVzIHRoZQpvbGQvJ2xvbmdlcicgcHJldmlvdXMgdmFsdWUgaXMgcmUt
+cmVhZCBmcm9tIHRoZSBidWZmZXIpOgoKICAgICAgICAkIGVjaG8gYWRkX2RldmljZSBsb0AwID4g
+L3Byb2MvbmV0L3BrdGdlbi9rcGt0Z2VuZF8wCgogICAgICAgICQgZWNobyAibWluX3BrdF9zaXpl
+IDEyMzQ1IiA+IC9wcm9jL25ldC9wa3RnZW4vbG9cQDAgJiYgZ3JlcCBtaW5fcGt0X3NpemUgL3By
+b2MvbmV0L3BrdGdlbi9sb1xAMApQYXJhbXM6IGNvdW50IDEwMDAgIG1pbl9wa3Rfc2l6ZTogMTIz
+NDUgIG1heF9wa3Rfc2l6ZTogMApSZXN1bHQ6IE9LOiBtaW5fcGt0X3NpemU9MTIzNDUKCiAgICAg
+ICAgJCBlY2hvIC1uICJtaW5fcGt0X3NpemUgMTIzIiA+IC9wcm9jL25ldC9wa3RnZW4vbG9cQDAg
+JiYgZ3JlcCBtaW5fcGt0X3NpemUgL3Byb2MvbmV0L3BrdGdlbi9sb1xAMApQYXJhbXM6IGNvdW50
+IDEwMDAgIG1pbl9wa3Rfc2l6ZTogMTIzNDUgIG1heF9wa3Rfc2l6ZTogMApSZXN1bHQ6IE9LOiBt
+aW5fcGt0X3NpemU9MTIzNDUKCiAgICAgICAgJCBlY2hvICJtaW5fcGt0X3NpemUgMTIzIiA+IC9w
+cm9jL25ldC9wa3RnZW4vbG9cQDAgJiYgZ3JlcCBtaW5fcGt0X3NpemUgL3Byb2MvbmV0L3BrdGdl
+bi9sb1xAMApQYXJhbXM6IGNvdW50IDEwMDAgIG1pbl9wa3Rfc2l6ZTogMTIzICBtYXhfcGt0X3Np
+emU6IDAKUmVzdWx0OiBPSzogbWluX3BrdF9zaXplPTEyMwoKU28gZml4IHRoZSBvdXQtb2YtYm91
+bmRzIGFjY2VzcyAoYW5kIHNvbWUgbWlub3IgZmluZGluZ3MpIGFuZCBhZGQgYSBzaW1wbGUKcHJv
+Y19uZXRfcGt0Z2VuIHNlbGZ0ZXN0Li4uCgpQYXRjaCBzZXQgc3BsaXRlZCBpbnRvIHBhcnQgSSAo
+bm93IGFscmVhZHkgYXBwbGllZCB0byBuZXQtbmV4dCkKCi0gbmV0OiBwa3RnZW46IHJlcGxhY2Ug
+RU5PVFNVUFAgd2l0aCBFT1BOT1RTVVBQCi0gbmV0OiBwa3RnZW46IGVuYWJsZSAncGFyYW09dmFs
+dWUnIHBhcnNpbmcKLSBuZXQ6IHBrdGdlbjogZml4IGhleDMyX2FyZyBwYXJzaW5nIGZvciBzaG9y
+dCByZWFkcwotIG5ldDogcGt0Z2VuOiBmaXggJ3JhdGUgMCcgZXJyb3IgaGFuZGxpbmcgKHJldHVy
+biAtRUlOVkFMKQotIG5ldDogcGt0Z2VuOiBmaXggJ3JhdGVwIDAnIGVycm9yIGhhbmRsaW5nIChy
+ZXR1cm4gLUVJTlZBTCkKLSBuZXQ6IHBrdGdlbjogZml4IGN0cmwgaW50ZXJmYWNlIGNvbW1hbmQg
+cGFyc2luZwotIG5ldDogcGt0Z2VuOiBmaXggYWNjZXNzIG91dHNpZGUgb2YgdXNlciBnaXZlbiBi
+dWZmZXIgaW4gcGt0Z2VuX3RocmVhZF93cml0ZSgpCgpBbmQgcGFydCBJSSAodGhpcyBvbmUpOgoK
+LSBuZXQ6IHBrdGdlbjogdXNlIGRlZmluZXMgZm9yIHRoZSB2YXJpb3VzIGRlYy9oZXggbnVtYmVy
+IHBhcnNpbmcgZGlnaXRzIGxlbmd0aHMKLSBuZXQ6IHBrdGdlbjogZml4IG1peCBvZiBpbnQvbG9u
+ZwotIG5ldDogcGt0Z2VuOiByZW1vdmUgZXh0cmEgdG1wIHZhcmlhYmxlIChyZS11c2UgbGVuIGlu
+c3RlYWQpCi0gbmV0OiBwa3RnZW46IHJlbW92ZSBzb21lIHN1cGVyZmx1b3VzIHZhcmlhYmxlIGlu
+aXRpYWxpemluZwotIG5ldDogcGt0Z2VuOiBmaXggbXBscyBtYXhpbXVtIGxhYmVscyBsaXN0IHBh
+cnNpbmcKLSBuZXQ6IHBrdGdlbjogZml4IGFjY2VzcyBvdXRzaWRlIG9mIHVzZXIgZ2l2ZW4gYnVm
+ZmVyIGluIHBrdGdlbl9pZl93cml0ZSgpCi0gbmV0OiBwa3RnZW46IGZpeCBtcGxzIHJlc2V0IHBh
+cnNpbmcKLSBuZXQ6IHBrdGdlbjogcmVtb3ZlIGFsbCBzdXBlcmZsdW91cyBpbmRleCBhc3NpZ25l
+bWVudHMKLSBzZWxmdGVzdDogbmV0OiBhZGQgcHJvY19uZXRfcGt0Z2VuCgpSZWdhcmRzLApQZXRl
+cgoKQ2hhbmdlcyB2NiAtPiB2NzoKICAtIHJlYmFzZWQgb24gYWN0dWFsIG5ldC1uZXh0L21haW4K
+ICAtIHNlbGZ0ZXN0OiBuZXQ6IGFkZCBwcm9jX25ldF9wa3RnZW4KICAgIC0gZml4ZWQgY29uZmxp
+Y3QgaW4gdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L2NvbmZpZwoKQ2hhbmdlcyB2NSAtPiB2
+NjoKIC0gYWRkIHJldi1ieSBTaW1vbiBIb3JtYW4KIC0gZHJvcCBwYXRjaCAnbmV0OiBwa3RnZW46
+IHVzZSBkZWZpbmVzIGZvciB0aGUgdmFyaW91cyBkZWMvaGV4IG51bWJlcgogICBwYXJzaW5nIGRp
+Z2l0cyBsZW5ndGhzJwogLSBhZGp1c3QgdG8gZHJvcHBlZCBwYXRjaCAnJ25ldDogcGt0Z2VuOiB1
+c2UgZGVmaW5lcyBmb3IgdGhlIHZhcmlvdXMKICAgZGVjL2hleCBudW1iZXIgcGFyc2luZyBkaWdp
+dHMgbGVuZ3RocycKIC0gbmV0OiBwa3RnZW46IGZpeCBtaXggb2YgaW50L2xvbmcKICAgLSBmaXgg
+bGluZSBicmVhayAoc3VnZ2VzdGVkIGJ5IFNpbW9uIEhvcm1hbikKCkNoYW5nZXMgdjQgLT4gdjU6
+CiAtIHNwbGl0IHVwIHBhdGNoc2V0IGludG8gcGFydCBpL2lpIChzdWdnZXN0ZWQgYnkgU2ltb24g
+SG9ybWFuKQogLSBhZGQgcmV2LWJ5IFNpbW9uIEhvcm1hbgogLSBuZXQ6IHBrdGdlbjogYWxpZ24g
+c29tZSB2YXJpYWJsZSAgZGVjbGFyYXRpb25zIHRvIHRoZSBtb3N0IGNvbW1vbiBwYXR0ZXJuCiAg
+IC0+IG5ldDogcGt0Z2VuOiBmaXggbWl4IG9mIGludC9sb25nCiAgIC0gaW5zdGVhZCBvZiBhbGln
+biB0byBtb3N0IGNvbW1vbiBwYXR0ZXJuIChpbnQpIGFkanVzdCBhbGwgdXNhZ2VzIHRvCiAgICAg
+IHNpemVfdCBmb3IgaSBhbmQgbWF4IGFuZCBzc2l6ZV90IGZvciBsZW4gYW5kIGFkanVzdCBmdW5j
+dGlvbiBzaWduYXR1cmVzCiAgICAgIG9mIGhleDMyX2FyZygpLCBjb3VudF90cmFpbF9jaGFycygp
+LCBudW1fYXJnKCkgYW5kIHN0cm5fbGVuKCkgYWNjb3JkaW5nbHkKICAgLSByZXNwZWN0IHJldmVy
+c2UgeG1hcyB0cmVlIG9yZGVyIGZvciBsb2NhbCB2YXJpYWJsZSBkZWNsYXJhdGlvbnMgKHdoZXJl
+CiAgICAgICAgcG9zc2libGUgd2l0aG91dCB0b28gbXVjaCBjb2RlIGNodXJuKQogICAtIHVwZGF0
+ZSBzdWJqZWN0IGxpbmUgYW5kIHBhdGNoIGRlc2NyaXB0aW9uCiAtIGRyb3BwZWQgbmV0OiBwa3Rn
+ZW46IGhleDMyX2FyZy9udW1fYXJnIGVycm9yIG91dCBpbiBjYXNlIG5vIGNoYXJhY3RlcnMgYXJl
+CiAgIGF2YWlsYWJsZQogICAtIGtlZXAgZW1wdHkgaGV4L251bSBhcmcgaXMgaW1wbGljaXQgYXNz
+dW1lZCBhcyB6ZXJvIHZhbHVlCiAtIGRyb3BwZWQgbmV0OiBwa3RnZW46IG51bV9hcmcgZXJyb3Ig
+b3V0IGluIGNhc2Ugbm8gdmFsaWQgY2hhcmFjdGVyIGlzIHBhcnNlZAogICAtIGtlZXAgZW1wdHkg
+aGV4L251bSBhcmcgaXMgaW1wbGljaXQgYXNzdW1lZCBhcyB6ZXJvIHZhbHVlCiAtIENoYW5nZSBw
+YXRjaCBkZXNjcmlwdGlvbiAoJ0ZpeGVzOicgLT4gJ0FkZHJlc3NlcyB0aGUgZm9sbG93aW5nOics
+CiAgIHN1Z2dlc3RlZCBieSBTaW1vbiBIb3JtYW4pCiAtIG5ldDogcGt0Z2VuOiByZW1vdmUgYWxs
+IHN1cGVyZmx1b3VzIGluZGV4IGFzc2lnbmVtZW50cwogICAtIG5ldyBwYXRjaCAoc3VnZ2VzdGVk
+IGJ5IFNpbW9uIEhvcm1hbikKIC0gc2VsZnRlc3Q6IG5ldDogYWRkIHByb2NfbmV0X3BrdGdlbgog
+ICAtIGFkZGFwdCB0byBkcm9wcGVkIHBhdGNoICduZXQ6IHBrdGdlbjogaGV4MzJfYXJnL251bV9h
+cmcgZXJyb3Igb3V0IGluIGNhc2UKICAgICBubyBjaGFyYWN0ZXJzIGFyZSBhdmFpbGFibGUnLCBl
+bXB0eSBoZXgvbnVtIGFyZyBpcyBub3cgaW1wbGljaXQgYXNzdW1lZCBhcwogICAgIHplcm8gdmFs
+dWUgKGluc3RlYWQgb2YgZmFpbHVyZSkKCkNoYW5nZXMgdjMgLT4gdjQ6CiAtIGFkZCByZXYtYnkg
+U2ltb24gSG9ybWFuCiAtIG5ldyBwYXRjaCAnbmV0OiBwa3RnZW46IHVzZSBkZWZpbmVzIGZvciB0
+aGUgdmFyaW91cyBkZWMvaGV4IG51bWJlciBwYXJzaW5nCiAgIGRpZ2l0cyBsZW5ndGhzJyAoc3Vn
+Z2VzdGVkIGJ5IFNpbW9uIEhvcm1hbikKIC0gcmVwbGFjZSBDOTkgY29tbWVudCAoc3VnZ2VzdGVk
+IGJ5IFBhb2xvIEFiZW5pKQogLSBkcm9wIGF2YWlsYWJsZSBjaGFyYWN0ZXJzIGNoZWNrIGluIHN0
+cm5fbGVuKCkgKHN1Z2dlc3RlZCBieSBQYW9sbyBBYmVuaSkKIC0gZmFjdG9yZWQgb3V0IHBhdGNo
+ICduZXQ6IHBrdGdlbjogYWxpZ24gc29tZSB2YXJpYWJsZSBkZWNsYXJhdGlvbnMgdG8gdGhlCiAg
+IG1vc3QgY29tbW9uIHBhdHRlcm4nIChzdWdnZXN0ZWQgYnkgUGFvbG8gQWJlbmkpCiAtIGZhY3Rv
+cmVkIG91dCBwYXRjaCAnbmV0OiBwa3RnZW46IHJlbW92ZSBleHRyYSB0bXAgdmFyaWFibGUgKHJl
+LXVzZSBsZW4KICAgaW5zdGVhZCknIChzdWdnZXN0ZWQgYnkgUGFvbG8gQWJlbmkpCiAtIGZhY3Rv
+cmVkIG91dCBwYXRjaCAnbmV0OiBwa3RnZW46IHJlbW92ZSBzb21lIHN1cGVyZmx1b3VzIHZhcmlh
+YmxlCiAgIGluaXRpYWxpemluZycgKHN1Z2dlc3RlZCBieSBQYW9sbyBBYmVuaSkKIC0gZmFjdG9y
+ZWQgb3V0IHBhdGNoICduZXQ6IHBrdGdlbjogZml4IG1wbHMgbWF4aW11bSBsYWJlbHMgbGlzdCBw
+YXJzaW5nJwogICAoc3VnZ2VzdGVkIGJ5IFBhb2xvIEFiZW5pKQogLSBmYWN0b3JlZCBvdXQgJ25l
+dDogcGt0Z2VuOiBoZXgzMl9hcmcvbnVtX2FyZyBlcnJvciBvdXQgaW4gY2FzZSBubwogICBjaGFy
+YWN0ZXJzIGFyZSBhdmFpbGFibGUnIChzdWdnZXN0ZWQgYnkgUGFvbG8gQWJlbmkpCiAtIGZhY3Rv
+cmVkIG91dCAnbmV0OiBwa3RnZW46IG51bV9hcmcgZXJyb3Igb3V0IGluIGNhc2Ugbm8gdmFsaWQg
+Y2hhcmFjdGVyCiAgIGlzIHBhcnNlZCcgKHN1Z2dlc3RlZCBieSBQYW9sbyBBYmVuaSkKCkNoYW5n
+ZXMgdjIgLT4gdjM6CiAtIG5ldyBwYXRjaDogJ25ldDogcGt0Z2VuOiBmaXggY3RybCBpbnRlcmZh
+Y2UgY29tbWFuZCBwYXJzaW5nJwogLSBuZXcgcGF0Y2g6ICduZXQ6IHBrdGdlbjogZml4IG1wbHMg
+cmVzZXQgcGFyc2luZycKIC0gdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L3Byb2NfbmV0X3Br
+dGdlbi5jOgogICAtIGZpeCB0eXBvIGluIGNoYW5nZSBkZXNjcmlwdGlvbiAoJ3YxIC0+IHYxJyBh
+bmQgdHlvcCkKICAgLSByZW5hbWUgc29tZSB2YXJzIHRvIGJldHRlciBtYXRjaCB1c2FnZQogICAg
+IGFkZF9sb29wYmFja18wIC0+IHRocl9jbWRfYWRkX2xvb3BiYWNrXzAKICAgICBybV9sb29wYmFj
+a18wIC0+IHRocl9jbWRfcm1fbG9vcGJhY2tfMAogICAgIHdyb25nX2N0cmxfY21kIC0+IHdyb25n
+X3Rocl9jbWQKICAgICBsZWdhY3lfY3RybF9jbWQgLT4gbGVnYWN5X3Rocl9jbWQKICAgICBjdHJs
+X2ZkIC0+IHRocl9mZAogICAtIGFkZCBjdHJsIGludGVyZmFjZSB0ZXN0cwoKQ2hhbmdlcyB2MSAt
+PiB2MjoKIC0gbmV3IHBhdGNoOiAnbmV0OiBwa3RnZW46IGZpeCBoZXgzMl9hcmcgcGFyc2luZyBm
+b3Igc2hvcnQgcmVhZHMnCiAtIG5ldyBwYXRjaDogJ25ldDogcGt0Z2VuOiBmaXggJ3JhdGUgMCcg
+ZXJyb3IgaGFuZGxpbmcgKHJldHVybiAtRUlOVkFMKScKIC0gbmV3IHBhdGNoOiAnbmV0OiBwa3Rn
+ZW46IGZpeCAncmF0ZXAgMCcgZXJyb3IgaGFuZGxpbmcgKHJldHVybiAtRUlOVkFMKScKIC0gbmV0
+L2NvcmUvcGt0Z2VuLmM6IGFkZGl0aW9uYWwgZml4IGdldF9pbWl4X2VudHJpZXMoKSBhbmQgZ2V0
+X2xhYmVscygpCiAtIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9wcm9jX25ldF9wa3RnZW4u
+YzoKICAgLSBmaXggdHlvcCBub3QgdnMuIG5vZCAoc3VnZ2VzdGVkIGJ5IEpha3ViIEtpY2luc2tp
+KQogICAtIGZpeCBtaXNhbGlnbmVkIGxpbmUgKHN1Z2dlc3RlZCBieSBKYWt1YiBLaWNpbnNraSkK
+ICAgLSBlbmFibGUgZm9tZXJseSBjb21tZW50ZWQgb3V0IENPTkZJR19YRlJNIGRlcGVuZGVudCB0
+ZXN0IChjb21tYW5kIHNwaSksCiAgICAgYXMgQ09ORklHX1hGUk0gaXMgZW5hYmxlZCB2aWEgdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L2NvbmZpZwogICAgIENPTkZJR19YRlJNX0lOVEVSRkFD
+RS9DT05GSUdfWEZSTV9VU0VSIChzdWdnZXN0ZXggYnkgSmFrdWIgS2ljaW5za2kpCiAgIC0gYWRk
+IENPTkZJR19ORVRfUEtUR0VOPW0gdG8gdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L2NvbmZp
+ZwogICAgIChzdWdnZXN0ZWQgYnkgSmFrdWIgS2ljaW5za2kpCiAgIC0gYWRkIG1vZHByb2JlIHBr
+dGdlbiB0byBGSVhUVVJFX1NFVFVQKCkgKHN1Z2dlc3RlZCBieSBKYWt1YiBLaWNpbnNraSkKICAg
+LSBmaXggc29tZSBjaGVja3BhdGNoIHdhcm5pbmdzIChNaXNzaW5nIGEgYmxhbmsgbGluZSBhZnRl
+ciBkZWNsYXJhdGlvbnMpCiAgIC0gc2hyaW5rIGxpbmUgbGVuZ3RoIGJ5IHJlLW5hbWluZyBzb21l
+IHZhcmlhYmxlcyAoY29tbWFuZCAtPiBjbWQsCiAgICAgZGV2aWNlIC0+IGRldikKICAgLSBhZGQg
+J3JhdGUgMCcgdGVzdGNhc2UKICAgLSBhZGQgJ3JhdGVwIDAnIHRlc3RjYXNlCgpbMV0gaHR0cHM6
+Ly9sb3JlLmtlcm5lbC5vcmcvbmV0ZGV2LzIwMjQxMDA2MjIxMjIxLjM3NDQ5OTUtMS1hcnRlbS5j
+aGVybnlzaGV2QHJlZC1zb2Z0LnJ1LwpbMl0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbmV0ZGV2
+LzIwMjUwMTA5MDgzMDM5LjE0MDA0LTEtcGNoZWxraW5AaXNwcmFzLnJ1LwpbM10gaHR0cHM6Ly9n
+aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0
+L2NvbW1pdC8/aWQ9NzYyMDFiNTk3OTc2ODUwMGJjYTM2Mjg3MWRiNjZkNzdjYjRjMjI1ZQoKClBl
+dGVyIFNlaWRlcmVyICg4KToKICBuZXQ6IHBrdGdlbjogZml4IG1peCBvZiBpbnQvbG9uZwogIG5l
+dDogcGt0Z2VuOiByZW1vdmUgZXh0cmEgdG1wIHZhcmlhYmxlIChyZS11c2UgbGVuIGluc3RlYWQp
+CiAgbmV0OiBwa3RnZW46IHJlbW92ZSBzb21lIHN1cGVyZmx1b3VzIHZhcmlhYmxlIGluaXRpYWxp
+emluZwogIG5ldDogcGt0Z2VuOiBmaXggbXBscyBtYXhpbXVtIGxhYmVscyBsaXN0IHBhcnNpbmcK
+ICBuZXQ6IHBrdGdlbjogZml4IGFjY2VzcyBvdXRzaWRlIG9mIHVzZXIgZ2l2ZW4gYnVmZmVyIGlu
+CiAgICBwa3RnZW5faWZfd3JpdGUoKQogIG5ldDogcGt0Z2VuOiBmaXggbXBscyByZXNldCBwYXJz
+aW5nCiAgbmV0OiBwa3RnZW46IHJlbW92ZSBhbGwgc3VwZXJmbHVvdXMgaW5kZXggYXNzaWduZW1l
+bnRzCiAgc2VsZnRlc3Q6IG5ldDogYWRkIHByb2NfbmV0X3BrdGdlbgoKIG5ldC9jb3JlL3BrdGdl
+bi5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDI4OCArKysrLS0tLQogdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMvbmV0L01ha2VmaWxlICAgICAgICAgIHwgICAxICsKIHRvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL25ldC9jb25maWcgICAgICAgICAgICB8ICAgMSArCiB0b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy9uZXQvcHJvY19uZXRfcGt0Z2VuLmMgfCA2NDYgKysrKysrKysrKysrKysrKysr
+CiA0IGZpbGVzIGNoYW5nZWQsIDgwNSBpbnNlcnRpb25zKCspLCAxMzEgZGVsZXRpb25zKC0pCiBj
+cmVhdGUgbW9kZSAxMDA2NDQgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L3Byb2NfbmV0X3Br
+dGdlbi5jCgotLSAKMi40OC4xCgo=
 
