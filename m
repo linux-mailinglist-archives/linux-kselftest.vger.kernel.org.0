@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-27351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2FE9A4247A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 15:57:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCB87A42493
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 15:58:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BECAF17152B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 14:49:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36704443D7F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2025 14:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8D024EF7C;
-	Mon, 24 Feb 2025 14:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D19D22512D0;
+	Mon, 24 Feb 2025 14:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UG2p7037"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lYIlqsAV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C09118C01D
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 14:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4EA24EF7F
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 14:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740408452; cv=none; b=R1WKSMfOP6/7Nf0rcPERNh9IQwRHxecjUyvHokxRQjPUq/KzqnpALCewS9zD37Ob4IO5mZwcRHkUHohMs0bTt1TidvYelihI74jdrEIuWuMjFxL288enytOY2H+pRGbgKwTDFSoPf4JxPKSaS5no9gzYh2uqzkwtcCO2ykD8Et4=
+	t=1740408454; cv=none; b=i+yQHkv08viOD7powECZ/+46kiq3hXqxP7DE7zYORXNIeC5tu9gzCA7qHPcgSLtN+KIpBztENeqeP8GveF+G2v+dJRy8B1sESZmL9NXablaK+3jnezM5hpvRPeM1YWspSodyNDe+whWc5CRY7lzP5QJC0PmddfRbYvsqalTrgro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740408452; c=relaxed/simple;
-	bh=P68516FL20Q73MKJrvoy+KUUJ1cdsXSffNv5b3x6YAY=;
+	s=arc-20240116; t=1740408454; c=relaxed/simple;
+	bh=E+1O1rAL1bQoC3910IAA8+5w8gcxHtPnJaOqoJosgNg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=eQpEuHfOtLBLyk3du/tqf88JVzhZwjpho8DFu5IBlSs7UZCbiGtrCnm1ghMr9BZcChJ2Kcmx3rrSObx1jqSfeGWM9Pnt1TRoCf8CESfyacPQd23SrbPnw4rIm1HQlIjBlwNdKzqDc9eOsAKmoC5CwbBLNrgwvHhZcO9usbTekV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UG2p7037; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=tJXh3XnVAp7CZS2XkycleDFsa/GTonz9sU6yfMnk1l/YSRA8tLbb7EHD76pcUiugbagXLSZRBna5/f0aSw6DtjERkdfapbHZIZVLJMQcTQ9J2E5uiwfRjrQJn+atn9OjCcRyrJ/se5QKWbRjApgSOkrEcjF5rG5LT4+9jlMp8K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lYIlqsAV; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43aafafe6b7so2200805e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 06:47:30 -0800 (PST)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43935e09897so31879945e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Feb 2025 06:47:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740408449; x=1741013249; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1740408451; x=1741013251; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cx79yAQvvtOreEIgXQgmWnaukRcNTY0vcbEckVNMqhA=;
-        b=UG2p7037ZKGP2jLzBbvtmbmH6p+4QeJjtUD4CwALbDjCWxx1i6TYevWluhCA7bI2p9
-         VnpJ4aeHW8v0s7cnmFB7ExgktkL4WxmiGuwwEZObJ/ONYiwofOA8xjFmokhmwxgEpu87
-         /56lF4wTnyJoF3meowETV4e1h9NcgB+xRaQI60F0rexuizMmKLkuy7NYK1bbNw4L20DB
-         sZgRdc4K3CLaK0AbSeW6BBNr89sjI9FN7bhaWSMfln8kqp/mAnSDgg90gHmonG0lKME/
-         ShRxz90G9wMdjqLXXbZCkuyB9m0JBwgVaoX0DpPwwc2+4FKJbSM91jIKPCzGJwTfx5iR
-         ZntA==
+        bh=GCHGbSH5u71x3rPQwLU8VHf0HNWJtt0XTaDImu1fyhU=;
+        b=lYIlqsAVBPlBXFDqoacq35h+XbpIhL1xPW/D5XXuNfi6etUPeSdzZXZxYXjHT+kFxb
+         QRDu2q97NhXuNYPtvJY2e6wi7WPdI/7QFLgcwrnSU5EcHJtG/izSzCrXZEMkrV5rBn7s
+         zeC9Zifm4K+7J1ovi4khGg0RQtB0zMoFc+pqX/aforQ8B3TAoMEXRicuk4+EIKpmX0kw
+         FCGKCyr8vSw8O9lurmvl8D+Mji9wdXDbfGp0rKdMuXWCD7bSWlx/bBwpbsMyVTIFahJn
+         G9Nlq/u3RHnUKaheKHCLIp4X2B6cQz2EVaLrBP5SI3BphcP/GnUQ43fEjsWhOdSL85wU
+         WRxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740408449; x=1741013249;
+        d=1e100.net; s=20230601; t=1740408451; x=1741013251;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cx79yAQvvtOreEIgXQgmWnaukRcNTY0vcbEckVNMqhA=;
-        b=agSQBtfYriWo4v23Dw+N7sIY5339HHkgHG2C/nt5QanVcBgrhHbpUjPQheQpQe7MSC
-         t6uWpnUsRDzF2pL4J9aqvTNAWsi81OAYQQG2XYZg3Dmk0oVd40VOQTWzOuyiRvhiFJDk
-         XkGFdE13dKMJQmGW3uq1GFgG8U/rNyG5/rtpuzY6Dpx99gt2tpq3z5xwJK0EGgMbZANH
-         LXhEM065JPyG0RWpCaW8rmd9UH9BiCTvA9COWPM2Lx/X2qxlmPY5Zoonz3J5Jxz+ZOB6
-         8wZ3+p9CN5gny0vXTeuB3Am3Kb91XNAgDlZrPM6pqZr8/ICqKg9MpooJrE+6tHjJkxiy
-         /tYw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkM/B5Ezgd8Kai4HRZFdg/gwSltUceoS4QK+960b+NKGq9ZDqWIpMklI02DBFHUyTQ/np7QJM1wAKZ57XmW8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynNSlpGtL8j3nMK+zMXBOTuSH1HpSdVbkJMIYNpUeGMEp87NUX
-	ypoZqcen38wr7GxgY4gsTfVl8zquK/9wwetAWlp/CUJmI+ae6AMTXUMG0xBitjYNiRoMRp45/dC
-	Vd9SSKSw4xQ==
-X-Google-Smtp-Source: AGHT+IFgzCZS8e4eXhzZ0Xu7b9rwIWCAcRNX6T6m7WXpW/BUkn6CvzEZFi5nDx4xFkLSY1Sid/xnIUacfnELow==
-X-Received: from wmqd6.prod.google.com ([2002:a05:600c:34c6:b0:439:98eb:28cd])
+        bh=GCHGbSH5u71x3rPQwLU8VHf0HNWJtt0XTaDImu1fyhU=;
+        b=c8+ftyNJF/YTF7RV6qgWTT2LWHpxqzV6Zu8HDMMqsPs1BnP2W3R9g+91CE7LGer+M4
+         RjkHs2GwWA2K/WBU6RdR4O3MCrGnoBsFJ7Y2a7+umHJ1Y6HJ24j7VKA57AkyVk7E0te6
+         1MRUE4mdrWPuzb/zOpFNq3iBevciudRcBHooMWfsXfUaG3nCvTNdtDDckAU4+lwQD4ee
+         vWXA5HkeL9NmHeQAPNDpS5S7oSIsepWQRGKji7DaDbgxbj9BojN1QjP2FWQTKTiPxhsH
+         Ybjj11hnJzNj1p6xUrE4V+5f4egr8PNNgJSRgrrx5nbQrWkXeV13XfYmT8jQRKjY7rxZ
+         /WlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtvcgx5bDxkzCK5fMtXN/6h6QhGV/V7wm3p87fbmbwdSu8HXEA/6dbMDMKEG1dqTiyOvipl+VkMAtgkmBitCU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWA1It2bdCD0vOrmaPV3S5HRQwVF0a/ZObqJsfkGPHR+b3lGKT
+	0HjsRO3b1r3tf8hfFD/7VI+ZTGURtXIDF1OcFVKDufebFx8APy9/j1nPVcKhvK5cFu32yietmxh
+	0peD9sGz5Nw==
+X-Google-Smtp-Source: AGHT+IFwIHbdkreZNxpIcvirfoEEWXDLZ8e9Qs1I57U8z8tdFzGqrcazUy7/EH9Qq/dKoOv0alrn0GIwiDqq/Q==
+X-Received: from wmrn16.prod.google.com ([2002:a05:600c:5010:b0:439:846f:f9c8])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:b9b:b0:439:8ef6:5782 with SMTP id 5b1f17b1804b1-439ae1e8be4mr121933775e9.10.1740408449496;
- Mon, 24 Feb 2025 06:47:29 -0800 (PST)
-Date: Mon, 24 Feb 2025 14:47:11 +0000
+ 2002:a05:600c:4fd3:b0:439:9543:9488 with SMTP id 5b1f17b1804b1-439ae2196a6mr90807405e9.21.1740408451368;
+ Mon, 24 Feb 2025 06:47:31 -0800 (PST)
+Date: Mon, 24 Feb 2025 14:47:12 +0000
 In-Reply-To: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
 X-Mailer: b4 0.15-dev
-Message-ID: <20250224-page-alloc-kunit-v1-1-d337bb440889@google.com>
-Subject: [PATCH RFC 1/4] kunit: Allocate assertion data with GFP_ATOMIC
+Message-ID: <20250224-page-alloc-kunit-v1-2-d337bb440889@google.com>
+Subject: [PATCH RFC 2/4] mm/page_alloc_test: Add empty KUnit boilerplate
 From: Brendan Jackman <jackmanb@google.com>
 To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
 	Rae Moar <rmoar@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
@@ -86,65 +86,85 @@ Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.c
 	Brendan Jackman <jackmanb@google.com>, Yosry Ahmed <yosry.ahmed@linux.dev>
 Content-Type: text/plain; charset="utf-8"
 
-At present KUnit doesn't handle assertions happening in atomic contexts.
-A later commit will add tests that make assertions with spinlocks held.
-
-In preparation, switch to GFP_ATOMIC.
-
-"Just use GFP_ATOMIC" is not generally a solution to this kind of
-problem: since it uses up memory reserves, instead it should be only
-used when truly needed.
-
-However, for test code that should not be expected to run in production
-systems it seems tolerable, given that it avoids creating more complex
-APIs.
+Add the Kbuild plumbing to create a new KUnit suite. Create the suite,
+with no tests inside it.
 
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- lib/kunit/assert.c   | 2 +-
- lib/kunit/resource.c | 2 +-
- lib/kunit/test.c     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ mm/.kunitconfig      |  2 ++
+ mm/Kconfig           |  8 ++++++++
+ mm/Makefile          |  2 ++
+ mm/page_alloc_test.c | 21 +++++++++++++++++++++
+ 4 files changed, 33 insertions(+)
 
-diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-index 867aa5c4bccf764757e190948b8e3a2439116786..f08656c5fb247b510c4215445cc307ed1205a96c 100644
---- a/lib/kunit/assert.c
-+++ b/lib/kunit/assert.c
-@@ -101,7 +101,7 @@ VISIBLE_IF_KUNIT bool is_literal(const char *text, long long value)
- 	if (strlen(text) != len)
- 		return false;
+diff --git a/mm/.kunitconfig b/mm/.kunitconfig
+new file mode 100644
+index 0000000000000000000000000000000000000000..fcc28557fa1c1412b21f9dbddbf6a63adca6f2b4
+--- /dev/null
++++ b/mm/.kunitconfig
+@@ -0,0 +1,2 @@
++CONFIG_KUNIT=y
++CONFIG_PAGE_ALLOC_KUNIT_TEST=y
+\ No newline at end of file
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 1b501db064172cf54f1b1259893dfba676473c56..1fac51c536c66243a1321195a78eb40668386158 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1358,6 +1358,14 @@ config PT_RECLAIM
  
--	buffer = kmalloc(len+1, GFP_KERNEL);
-+	buffer = kmalloc(len+1, GFP_ATOMIC);
- 	if (!buffer)
- 		return false;
+ 	  Note: now only empty user PTE page table pages will be reclaimed.
  
-diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
-index f0209252b179f8b48d47ecc244c468ed80e23bdc..eac511af4f8d7843d58c4e3976c77a9c4def86a7 100644
---- a/lib/kunit/resource.c
-+++ b/lib/kunit/resource.c
-@@ -98,7 +98,7 @@ int kunit_add_action(struct kunit *test, void (*action)(void *), void *ctx)
++config PAGE_ALLOC_KUNIT_TEST
++	tristate "KUnit test for page allocator" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Builds unit tests for page allocator.
++
++	  If unsure, say N.
  
- 	KUNIT_ASSERT_NOT_NULL_MSG(test, action, "Tried to action a NULL function!");
+ source "mm/damon/Kconfig"
  
--	action_ctx = kzalloc(sizeof(*action_ctx), GFP_KERNEL);
-+	action_ctx = kzalloc(sizeof(*action_ctx), GFP_ATOMIC);
- 	if (!action_ctx)
- 		return -ENOMEM;
+diff --git a/mm/Makefile b/mm/Makefile
+index 850386a67b3e0e3b543b27691a6512c448815697..7b8018e0e6510881fac6e4295fdd1472e38d743d 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -61,6 +61,8 @@ obj-y			:= filemap.o mempool.o oom_kill.o fadvise.o \
+ page-alloc-y := page_alloc.o
+ page-alloc-$(CONFIG_SHUFFLE_PAGE_ALLOCATOR) += shuffle.o
  
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 146d1b48a0965e8aaddb6162928f408bbb542645..08d0ff51bd85845a08b40cd3933dd588bd10bddf 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -279,7 +279,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
++obj-$(CONFIG_PAGE_ALLOC_KUNIT_TEST) += page_alloc_test.o
++
+ # Give 'memory_hotplug' its own module-parameter namespace
+ memory-hotplug-$(CONFIG_MEMORY_HOTPLUG) += memory_hotplug.o
  
- 	kunit_set_failure(test);
- 
--	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
-+	stream = kunit_alloc_string_stream(test, GFP_ATOMIC);
- 	if (IS_ERR(stream)) {
- 		WARN(true,
- 		     "Could not allocate stream to print failed assertion in %s:%d\n",
+diff --git a/mm/page_alloc_test.c b/mm/page_alloc_test.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..377dfdd50a3c6928e15210cc87d5399c1db80da7
+--- /dev/null
++++ b/mm/page_alloc_test.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/errname.h>
++#include <linux/list.h>
++#include <linux/gfp.h>
++#include <linux/memory.h>
++#include <linux/nodemask.h>
++#include <linux/percpu.h>
++#include <linux/smp.h>
++
++#include <kunit/test.h>
++
++static struct kunit_case test_cases[] = { {} };
++
++static struct kunit_suite test_suite = {
++	.name = "page_alloc",
++	.test_cases = test_cases,
++};
++kunit_test_suite(test_suite);
++
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
 
 -- 
 2.48.1.601.g30ceb7b040-goog
