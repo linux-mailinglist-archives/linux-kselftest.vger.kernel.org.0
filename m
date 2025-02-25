@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-27536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0486A45003
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 23:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0D06A45005
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 23:28:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7D287AE47A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 22:25:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 627977AB0A9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 22:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C93C2192ED;
-	Tue, 25 Feb 2025 22:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2A721A42D;
+	Tue, 25 Feb 2025 22:23:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZIvuyQsG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S66W9kHZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2762192E1;
-	Tue, 25 Feb 2025 22:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8451B219A93;
+	Tue, 25 Feb 2025 22:23:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740522220; cv=none; b=AtyLHAMc0C8FzFfCu7VD2UhkSUJJguIpswWVNnPoeq6+6ahBVdhq4lSLgIpKMDiyKzSAnoViFbMIUyDElSfKThAnVJr4q8/2ctubs80ahi1lpkDk5otckPmr1V3bWjDe9+vQBnMlt49DSs9USFbErb5UXRfGbTJ8T9Qfiwsz1Zw=
+	t=1740522221; cv=none; b=mAOuzEwPl19M8vFynhhJ8RCHFjoB0CpElvV1fgfYPu+CinG3jkTSLqgak9dzWpHzs8Rfzg4vlEu0B6SXfA4DFjVk0qHPGjynqjtpfTritODZwIE0WK6Tw3a6hOuU6NKRaD+EfW/y3ICFgqqUxK4foQ0fPkBBkVkTqgxqqUO8gY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740522220; c=relaxed/simple;
-	bh=R+F4A/CbzeGBYRaqycEJB0fqs7IcWZvoisrzTTX4FCA=;
+	s=arc-20240116; t=1740522221; c=relaxed/simple;
+	bh=JZwrDWNwK0HGwgbbnUAETnfdZFPS3H25nSzCsf8e/C4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lYG4uJt98+anto3HqnWwKWeELY0tkD+x7178UMP3Dy/bPLyiwndFlaGu5CRhy8eEqEOApLJJyaOR4m4lxPBZM2NWClx7EvGRwrvYOAUxtnE9CPNNyxKk5Tis8GIumBb9pjyBg5/Y2cbybe5Ij09EyrVwqZ/uP5wtoXbFzb+jxKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZIvuyQsG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5258C4CEE7;
-	Tue, 25 Feb 2025 22:23:39 +0000 (UTC)
+	 MIME-Version; b=dssNFQsn7nEb3lK6cocTmBcs24XHeDk3p757q4ymNNHtC6dLMb1AoPEbuxRQvfKaqNQnC+52Jy8ntYN17yxmOazhiZj325PCJI+DAaB5FkAVJBogM31+dFwGNOTN9ttoR6Ru3b0oeEhbxn/YpXTo6cPfPEn6RKy/URjXpMeAmyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S66W9kHZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15F3C4CEE7;
+	Tue, 25 Feb 2025 22:23:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740522219;
-	bh=R+F4A/CbzeGBYRaqycEJB0fqs7IcWZvoisrzTTX4FCA=;
+	s=k20201202; t=1740522220;
+	bh=JZwrDWNwK0HGwgbbnUAETnfdZFPS3H25nSzCsf8e/C4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZIvuyQsGxF37rpHewq7AAWFKTlEi+j1hVtsngREZ0OkZyWFTBHbX+0SDkyU2I0qQ5
-	 sNZMkQ3/1oZMX1ERqiWgGdBS236k1va2ee/Oy1nd9yzEdgTrg5mMrmkOOnfrFARgem
-	 cB5jzHvvwvT9f2wPey/TApuPoCCO7bibHCTFxGwsBLBevIqs7DcaaNJq74PIZrkZay
-	 1w7Ry/eTdCG6Ty3OKGohi8V6KC7sbUdRKz5x6nSEXzmUOTSw23IzXWlqIwARFDYRiG
-	 L68jQgZFDDw4s57u4v1R8Sn1Cip00BP8mOyzKENdZUxE9XnKtzhqN31tfGNzrhXPdd
-	 QKJfCvjaghjDQ==
+	b=S66W9kHZZShg8xZlcQ533Ohn8T+1do/8o72DrPZ2fNwWyRvPGR7e3p1nLBNM6lOYD
+	 3toGrsMjMc//M4hGKTPTB3s78O9hrdbCHlo+AD0EqnU2zAVSwfqqZfv4BakSmdyJCV
+	 m7lNZ48We5IKAq3puevP6JLpbJcdJEtMRLYQX+eOPhaEPR1iaYhMtErRQvmhWuMpGl
+	 zNsMZF3FvtkOuAyxphChsIcljZbXj7ErHf1l3iQjzAcS3zFNj2a1uL0MnZgQyi6Y0a
+	 KnFR2rqlwbq4oYUlj4hleJXVioXQkHhOisYWyziPULl1L2jll3EAtWzB1nq/SK9edi
+	 gsbniAPsLXUFQ==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -51,9 +51,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org,
 	stable@vger.kernel.org
-Subject: [PATCH 2/3] selftests/damon/damon_nr_regions: set ops update for merge results check to 100ms
-Date: Tue, 25 Feb 2025 14:23:32 -0800
-Message-Id: <20250225222333.505646-3-sj@kernel.org>
+Subject: [PATCH 3/3] selftests/damon/damon_nr_regions: sort collected regiosn before checking with min/max boundaries
+Date: Tue, 25 Feb 2025 14:23:33 -0800
+Message-Id: <20250225222333.505646-4-sj@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250225222333.505646-1-sj@kernel.org>
 References: <20250225222333.505646-1-sj@kernel.org>
@@ -65,23 +65,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-damon_nr_regions.py updates max_nr_regions to a number smaller than
-expected number of real regions and confirms DAMON respect the harsh
-limit.  To give time for DAMON to make changes for the regions, 3
-aggregation intervals (300 milliseconds) are given.
+damon_nr_regions.py starts DAMON, periodically collect number of regions
+in snapshots, and see if it is in the requested range.  The check code
+assumes the numbers are sorted on the collection list, but there is no
+such guarantee.  Hence this can result in false positive test success.
+Sort the list before doing the check.
 
-The internal mechanism works with not only the max_nr_regions, but also
-sz_limit, though.  It avoids merging region if that casn make region of
-size larger than sz_limit.  In the test, sz_limit is set too small to
-achive the new max_nr_regions, unless it is updated for the new
-min_nr_regions.  But the update is done only once per operations set
-update interval, which is one second by default.
-
-Hence, the test randomly incurs false positive failures.  Fix it by
-setting the ops interval same to aggregation interval, to make sure
-sz_limit is updated by the time of the check.
-
-Fixes: 8bf890c81612 ("selftests/damon/damon_nr_regions: test online-tuned max_nr_regions")
+Fixes: 781497347d1b ("selftests/damon: implement test for min/max_nr_regions")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
@@ -89,17 +79,17 @@ Signed-off-by: SeongJae Park <sj@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/damon/damon_nr_regions.py b/tools/testing/selftests/damon/damon_nr_regions.py
-index 2e8a74aff543..6f1c1d88e309 100755
+index 6f1c1d88e309..58f3291fed12 100755
 --- a/tools/testing/selftests/damon/damon_nr_regions.py
 +++ b/tools/testing/selftests/damon/damon_nr_regions.py
-@@ -109,6 +109,7 @@ def main():
-     attrs = kdamonds.kdamonds[0].contexts[0].monitoring_attrs
-     attrs.min_nr_regions = 3
-     attrs.max_nr_regions = 7
-+    attrs.update_us = 100000
-     err = kdamonds.kdamonds[0].commit()
-     if err is not None:
-         proc.terminate()
+@@ -65,6 +65,7 @@ def test_nr_regions(real_nr_regions, min_nr_regions, max_nr_regions):
+ 
+     test_name = 'nr_regions test with %d/%d/%d real/min/max nr_regions' % (
+             real_nr_regions, min_nr_regions, max_nr_regions)
++    collected_nr_regions.sort()
+     if (collected_nr_regions[0] < min_nr_regions or
+         collected_nr_regions[-1] > max_nr_regions):
+         print('fail %s' % test_name)
 -- 
 2.39.5
 
