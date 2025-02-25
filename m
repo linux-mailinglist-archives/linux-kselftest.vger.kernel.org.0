@@ -1,75 +1,77 @@
-Return-Path: <linux-kselftest+bounces-27419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7D9FA439EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 10:42:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EE8DA439FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 10:43:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E89B63AF1A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 09:40:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B836717B00B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 09:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24CC26138C;
-	Tue, 25 Feb 2025 09:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F9C2641C5;
+	Tue, 25 Feb 2025 09:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PYICDjSq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cjko5+IK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472F62139C8;
-	Tue, 25 Feb 2025 09:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E42263C75;
+	Tue, 25 Feb 2025 09:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740476460; cv=none; b=GbTzkc7AfntIM5m1xZfcwMsKMA5FLgjCoc9mmH4fhKiDLxfnBcdsXFvTdE67qXUlt8ygjKVZBajnP5oBJdrMxxZtopGImxvhijFVgSVtNCrPlkEbqez3SHOnGz4iUxR8vXU4lFI4JU57WuOR7Vz1OeSbvqc3elIjucOBytj3YsM=
+	t=1740476466; cv=none; b=GBrguCSZjS/5xv3xjRZirnhu/VIubySzx8amcDpUsvihRcy7QCACfTjZK8ucMF/PvY/BO4cPxpTBymKjOK0Gyp7CZh8chHSstuwfmeuY7CMy82Ndq7Iv1L0KcMVkGQJmgC9e4/Kjw9rNKHbM7ZTKz0MU2SFMDGLI8/bQZ9oA8TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740476460; c=relaxed/simple;
-	bh=HU7YrCSOKlhUhH+jPehuRHs6KX1rnYdknZ7MDxwzrmM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mAvFQkY6ScxYp2EbmIbOQR41+eZe5LTmD9wD3Md5Ks4vx4NlB1GNoCnwRHncOet/wCh3pr0Y4RssvbGOEpk8SE4QwSVLMvzdTMYExzCr1yuAzdeSNbCgv10rXHATAHyoARTHILvATytynMniFyJWx1gYL91xD+fo4P8qKFKVJGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PYICDjSq; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1740476466; c=relaxed/simple;
+	bh=BEzs8YbLaCpXnNQyZJ+tusTm4nslyHs9SxGIY6yBz3k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BuIdWr89wnSue4/dRPqv8IDCpNOvRZIYlfMuF2MdVyc1bjTxRJOFbh/c08xbX9/oQp0pQdpuf1a3IWthek9T+JqAM1HrhxATDN/bAnC6mo/1D1LV5fi+DOoYN4+nffVbTEajTJ2e4aplB8VnyDlX3TTY032uGIJGCIKwiiIw8Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cjko5+IK; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-219f8263ae0so112452165ad.0;
-        Tue, 25 Feb 2025 01:40:58 -0800 (PST)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-220ec47991aso73768835ad.1;
+        Tue, 25 Feb 2025 01:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740476458; x=1741081258; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZUnQ49xocVEo+4W639fekw7PlmecA3NGgOg9BDPiz0o=;
-        b=PYICDjSqueR/i++yk5SscipSIpw8zc/S0eeNVnmG7G3tzrou18MdknMETKpcyhCS8y
-         2NllbW24YgQwrInJXohGZzdgS5khSvOWhWZ3H0XobDTZo+yS4g1HS/22OBI9V8xB++F0
-         d6UhDM+FXUJt3BlZvsmGwn/wWaeIZ0RlKaWNj0077jMfgisnTp2ov1I7P64HJZCHPlVr
-         9iFNCJrFHf0QTv9d/tSUdcFEK6PNZh9g8SjL3wIZiy8AN3tHFtWTvB5nQ6cXtXBYIsT0
-         G4U1JpMVQ5y2sCYy0xw/QW12kvIogJK6uAhe2/caUuO8Ekpokvflp68hXu6KdPyr3hHb
-         c0Ww==
+        d=gmail.com; s=20230601; t=1740476464; x=1741081264; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OCGnd0iVXOo+JNaWHHfQALr3MIKC4v3263hGTUjjNTU=;
+        b=cjko5+IKqScFFM2o/7F7KghvtMFjYORKUGU+rUqDBVAH8cFOlg6a+WEHLocHgu9tEV
+         uLQihiAjOBwmxNTRHSIaI22GY928jgh+xmN4bBA4jIiMTDuUgIzkTZnV+m/XsxkdRwBp
+         by5iGZcIWDqLcLl2pA7CkGwK9lLBNURGwdcNP4DeI//0EqidhmW/NIUGILxfySoIERLd
+         b/afRuqJ6WauTMS5SiwGngPjXE4H5i0NVYX/1zHk+rrN15UJPBBuxzjqYfaAeUUlDzpS
+         G6j/dXNg5e1pB8fQMzV+QFyr+9Y5QgidaQ9XZWS5t9QWioh3hseZNIZ7oCMOghToovND
+         MHaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740476458; x=1741081258;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZUnQ49xocVEo+4W639fekw7PlmecA3NGgOg9BDPiz0o=;
-        b=sqRWGHxlSsSMY7YgwIULTVe2jTRFyugDRPv5rnKvt6/wf1TVU+ePTLmEtk6X6rc9rK
-         XTcjT1PncCYb5g7AdFc+Cct4TCN+Vc4eA/h2YzDRAJ+hVBdWjuUqNjx6BA5kV/OtIm98
-         M4+EnCWqKRjTwali5nslbT8RvstxgTCtXY8dGo6R5hNnXQPBw4Koa27BJwRFLGZBUrs8
-         WXNmLtk9I6JnvKj6tRjTH2MINXeJaY6rkxbI8igSRQ/66j27S/cRgoI4KCRwVcCep1jO
-         jb43CHEAcn9eQlqoihaGcwnN9lURYAHwXOb3PISwhfgFRaf5aGY7mQf1nU5JtJswG8XA
-         PQ/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUyMbCgBdBw9rMHy1Xts4y3r/ONeJhzEX0BvFQFyHUJcR+2Lc/pXPhv/rrS7O09fFX2eAcAL9K2lauxkJps36Dg@vger.kernel.org, AJvYcCXKQI2u+BZmIXmM2uGoydXJpBp9xXoM9HBWw5ucdzrOcZRsr8kCdLKiTl75ZtxCthsuGFrIT8AfamF7Kuk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaBZ8fckK91bJQg2vSO3opQPo6TTVKGPft96LOBXprwKlzm7r3
-	bItbgRvJkLb9alynojFZFPF3vSj2cYsdXYxX6ISa9SWRzL83rNYlnW01h+vSsKBPEw==
-X-Gm-Gg: ASbGncsLh4tF68DrKu/W546Vf+PBeBGRLW2utoFcSH3jFD4SVri5raSnk30MWGV4llg
-	LVGSVDAx5yBwyqW854h4UeVBTGU6c318v0VRuur3p4ofRaqrPkQpFM03o9+TIlerQjaBBOR9Tap
-	1Bg+2kotPPBjNNGV/5h2oB1GN5Ep8OixYg+dUzTF9hkjcXBnRjVLXcbYi6lGujbnKuBJqIXE6kW
-	HV1TPelOL/VH5rSytkZCwoMdDWEsBww8hrMjgTI09H6+THn/F9xHlv7ytfsTzMtnxQo2NfqrPyF
-	MUEgZgB1Uh13WxZsazYcLb+YmLDh+USkkwA8vU7MQ64Kpw==
-X-Google-Smtp-Source: AGHT+IGsZlRQkzS+G8gVYWA2C9Yx+g1f3g9kKPPlULLYG2liKAVwngq0X1ZRp8n+Njl9DLAXQQHWIw==
-X-Received: by 2002:a05:6a20:9e46:b0:1f0:fcda:ce63 with SMTP id adf61e73a8af0-1f0fcdace8dmr4447982637.20.1740476458062;
-        Tue, 25 Feb 2025 01:40:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740476464; x=1741081264;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OCGnd0iVXOo+JNaWHHfQALr3MIKC4v3263hGTUjjNTU=;
+        b=o6L0CU50ADYSucQ3LsMe5Fh4PBp4vX9BtgtXBEauLbH7G0l4U22n6iQCdTHV1Smecg
+         iw716qECQOSrlrd9xaBNZWf2X/IixHE47uKFFJFOq3E4c9Q/jVS3NEbC2eTXP3M+dfg2
+         fdZZWCXcPvcXDP1cGUUN5hFh7oFNyhrINH56Ha4HiqSge5xVtOG1U6qooN9Y+UxaS9n8
+         vqXylzfdCkNlhiktr9obEygLX8qUUkM7bjavcZuCxuT6m+fOFRZ/TLg17tg/F5b0hvtK
+         kHfzI9dUXoi2IvA9Dp31rBALONXQP7n1FNe8TxrXJHpeSGGPtMrRkDUzkKFZUHm/j+UJ
+         PQhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgxeat5geXOPcDwoImnlVIYzFZmuzMwxP6hKKzsOuH3WqQrEQ0iO8kHY2yt80jpWBNjGWHZ/wdDe+Zp7M=@vger.kernel.org, AJvYcCWuH1H6WS1AOSQXNOp1c12SN5t/SF+kiHQD4LwCgqW8upknKlrIOgGfES7A3jHJy26rQV4LNp56cORtL6WF0b/d@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHBNgyybCRPHjbKaPIm5w5W2t+Ph87NcndqyOGjSbc/rv2Nc/d
+	Aqb8rc5lhjYAxgIccHJt1ytTht70Is7IAacsOd7RrEP5LayR63FQcxDHuHIbB7s/iw==
+X-Gm-Gg: ASbGnctgAYlh1cZ/tmN6EhfVc64qldsr02/F6jSuCRMk8OLmACu2ffAbM51LpRxpqZE
+	1w/l0yx6JajNLSxnJnYBK4z++dKijcOB6dPV9w0oNPgELv0xUwAMFZpHSuU26JWFxfODzLkFutE
+	LQvRagETBq8SlmACEN0bWvCvkVGyHXpqM5gP+LndEmIQWDPTWYQ7+s7L8R0RjN+0UljqWOM/nr9
+	M+HU5NgaUbsiznqNqQ7dj10cMv64D9nS/T9wiAIhIDSigbn3D/jmPphg0AeNw0lWV3lNMtrYSwN
+	iW2lISp76MhM8uZUSkJZZzT1IRShr9vOZgQ0hI73PnfFNg==
+X-Google-Smtp-Source: AGHT+IEFzn5DHnpazMBJ2UhcKkfBsGgPLtZe9b8aR3mBBWinCqfQBNuc3ZSZ0NUGYqjQZn+NYN5EFA==
+X-Received: by 2002:a05:6a00:1898:b0:732:5164:3cc with SMTP id d2e1a72fcca58-73426d728b6mr28039130b3a.19.1740476463722;
+        Tue, 25 Feb 2025 01:41:03 -0800 (PST)
 Received: from fedora.dns.podman ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6f9e6dsm1065597b3a.64.2025.02.25.01.40.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6f9e6dsm1065597b3a.64.2025.02.25.01.40.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 01:40:57 -0800 (PST)
+        Tue, 25 Feb 2025 01:41:03 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -89,10 +91,12 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net 0/3] bond: fix xfrm offload issues
-Date: Tue, 25 Feb 2025 09:40:46 +0000
-Message-ID: <20250225094049.20142-1-liuhangbin@gmail.com>
+Subject: [PATCHv2 net 1/3] bonding: move mutex lock to a work queue for XFRM GC tasks
+Date: Tue, 25 Feb 2025 09:40:47 +0000
+Message-ID: <20250225094049.20142-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20250225094049.20142-1-liuhangbin@gmail.com>
+References: <20250225094049.20142-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,26 +105,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The first patch fixes the incorrect locks using in bond driver.
-The second patch fixes the xfrm offload feature during setup active-backup
-mode. The third patch add a ipsec offload testing.
+The fixed commit placed mutex_lock() inside spin_lock_bh(), which triggers
+a warning like:
 
-v2: move the mutex lock to a work queue (Cosmin Ratiu)
+BUG: sleeping function called from invalid context at...
 
-Hangbin Liu (3):
-  bonding: move mutex lock to a work queue for XFRM GC tasks
-  bonding: fix xfrm offload feature setup on active-backup mode
-  selftests: bonding: add ipsec offload test
+Fix this by moving the mutex_lock() operation to a work queue.
 
- drivers/net/bonding/bond_main.c               |  43 +++--
- drivers/net/bonding/bond_netlink.c            |  16 +-
- include/net/bonding.h                         |   7 +
- .../selftests/drivers/net/bonding/Makefile    |   3 +-
- .../drivers/net/bonding/bond_ipsec_offload.sh | 155 ++++++++++++++++++
- .../selftests/drivers/net/bonding/config      |   4 +
- 6 files changed, 209 insertions(+), 19 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
+Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Closes: https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ drivers/net/bonding/bond_main.c | 41 +++++++++++++++++++++++++--------
+ include/net/bonding.h           |  6 +++++
+ 2 files changed, 37 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index e45bba240cbc..cc7064aa4b35 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -551,6 +551,25 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
+ 	mutex_unlock(&bond->ipsec_lock);
+ }
+ 
++static void bond_xfrm_state_gc_work(struct work_struct *work)
++{
++	struct bond_xfrm_work *xfrm_work = container_of(work, struct bond_xfrm_work, work);
++	struct bonding *bond = xfrm_work->bond;
++	struct xfrm_state *xs = xfrm_work->xs;
++	struct bond_ipsec *ipsec;
++
++	mutex_lock(&bond->ipsec_lock);
++	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
++		if (ipsec->xs == xs) {
++			list_del(&ipsec->list);
++			kfree(ipsec);
++			xfrm_state_put(xs);
++			break;
++		}
++	}
++	mutex_unlock(&bond->ipsec_lock);
++}
++
+ /**
+  * bond_ipsec_del_sa - clear out this specific SA
+  * @xs: pointer to transformer state struct
+@@ -558,9 +577,9 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
+ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+ {
+ 	struct net_device *bond_dev = xs->xso.dev;
++	struct bond_xfrm_work *xfrm_work;
+ 	struct net_device *real_dev;
+ 	netdevice_tracker tracker;
+-	struct bond_ipsec *ipsec;
+ 	struct bonding *bond;
+ 	struct slave *slave;
+ 
+@@ -592,15 +611,17 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+ 	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
+ out:
+ 	netdev_put(real_dev, &tracker);
+-	mutex_lock(&bond->ipsec_lock);
+-	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+-		if (ipsec->xs == xs) {
+-			list_del(&ipsec->list);
+-			kfree(ipsec);
+-			break;
+-		}
+-	}
+-	mutex_unlock(&bond->ipsec_lock);
++
++	xfrm_work = kmalloc(sizeof(*xfrm_work), GFP_ATOMIC);
++	if (!xfrm_work)
++		return;
++
++	INIT_WORK(&xfrm_work->work, bond_xfrm_state_gc_work);
++	xfrm_work->bond = bond;
++	xfrm_work->xs = xs;
++	xfrm_state_hold(xs);
++
++	queue_work(bond->wq, &xfrm_work->work);
+ }
+ 
+ static void bond_ipsec_del_sa_all(struct bonding *bond)
+diff --git a/include/net/bonding.h b/include/net/bonding.h
+index 8bb5f016969f..d54ba5e3affb 100644
+--- a/include/net/bonding.h
++++ b/include/net/bonding.h
+@@ -209,6 +209,12 @@ struct bond_ipsec {
+ 	struct xfrm_state *xs;
+ };
+ 
++struct bond_xfrm_work {
++	struct work_struct work;
++	struct bonding *bond;
++	struct xfrm_state *xs;
++};
++
+ /*
+  * Here are the locking policies for the two bonding locks:
+  * Get rcu_read_lock when reading or RTNL when writing slave list.
 -- 
 2.46.0
 
