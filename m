@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-27421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AFE9A439FC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 10:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0028BA43A02
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 10:44:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CFD117C012
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 09:41:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F08817FA41
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 09:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E075D26281A;
-	Tue, 25 Feb 2025 09:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA65266B61;
+	Tue, 25 Feb 2025 09:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WNrij+Nd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQgV0xHc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52929263C75;
-	Tue, 25 Feb 2025 09:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3212638B2;
+	Tue, 25 Feb 2025 09:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740476471; cv=none; b=WrARrB2hyoq4PCYl4+ii7TOlPdef/5HQkgpHmrvzD2JVfi48nKxJStlbdGKi9y0Gv5ItdL2/A+spEyAktGYcU/+jk5Yy/15XJejo32aSFeU/rRPrgdCyS0FL67lvREwffIndX4D1brFHCHNvkKs/lmBhcJNokpysfXBCpnGvn/k=
+	t=1740476478; cv=none; b=kXhEmGp7gNyWHV2SupBpQDwwxzVTXIwzdtnBen4s1FHNYY67uYTzg95LgDNmox1w2ivn50StN9IRK+6bzf8f5O42lIAJJYeAwVrrLcM1EWi7saq8GBJZXekr5kjSmCTDEaJz0yuKBpF+0l1WHJ2hrbq9B8/uWsDRV89ELtC04lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740476471; c=relaxed/simple;
-	bh=sQhxvoukCDtsyFQ2gDfGlhvbXHHwIBvtZyvewvnGC78=;
+	s=arc-20240116; t=1740476478; c=relaxed/simple;
+	bh=FzT/ECMeABHeNeF84rIs6l8GIuZokm7ac23EJgGF+xs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LJCa8OCJxpNZRrfjK/Scg3g1lLxkkIPrFcqRPFZJ29U0kVAfBe6GxIFIPOHU9I4GIvThPyADdk1qRJkFKKwpJYUlp8R4Fc+fwtWBuejCpSmb6wTa+tJ6Yjr/dGeIclBHNRiKSxEb7BIDCAnLeOmOkA8jdBqUI6Vs5vTua0QPPwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WNrij+Nd; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=qvrFE/7LvKoKUG3tSKk1kUgHgqjSk1ChTzZCplslPST6wSinWnFMBcSQVPFIOwgEVQweS71yrvBdKRtQz5FGR3HVZ1UAzthMUsqAiv5OgrTHXwDGwgBdG67QXyrbgiTQCpIHO44YolZ8owwxBEg1LdMazuc3wENfM9E4l0iQz8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gQgV0xHc; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-220c8cf98bbso26770315ad.1;
-        Tue, 25 Feb 2025 01:41:10 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-220f048c038so101624705ad.2;
+        Tue, 25 Feb 2025 01:41:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740476469; x=1741081269; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740476475; x=1741081275; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LKV50k5oKnw6MK8vZSME6ax/mJXjZVzGCmPzRh9r8Fo=;
-        b=WNrij+Nd84uldIsr0W5xug1OQYHCwr/oFXpulXhRBxuGDrbOAT/26KY989D4IzAALN
-         KpjK/FLOsdxPjgWH9SCHrDgs+pLD5Is8LKPRDwAZeQvlijSJnmfRqwCbOz9GYVvmai/O
-         DT3ehffa0hmeSGkbinkWcKSyiCuG/IBsyTkiU8W+Em9sBsg1PGprwthFAkXWcKb01S1G
-         LpfjNkLJOqKybimwWkLaXmjuiDx6qozNJHUgDpz4yJvyaclNFDJuLWxW4x2PeG1HfN8E
-         ahtY68hoxjTcbfxm4btMYIkiJD8hLStPnc2YUc5UN8ZWbX4pJqVgnnOsalIgG9ARpGac
-         TnJQ==
+        bh=afOILgA/zHRb8Nw9ui16zGP2yzgeLzRcNXnyvIsurfI=;
+        b=gQgV0xHcs066hJfCuDGQYpTx3bFJY/f6ZF7cKrk6jCvpanyveq+RiHnZfceda0MH3a
+         bsFCvHjEA0t5tvmPK95LA6Z1wJL70cBbIPlsnuiwT9neLOVYkipbSUuJLK44hkANpjDq
+         UbKtzSq1w7y9US1l+4taAjUWjL3GtIk7djLscBpPYBYbKe0RFxIjzh9KYJDuEL1kLgTI
+         lqF60c1oakWWLymZSMjmykRUedb/twoGePkN0r82Jhf7MwYUBaMa0ZwfNE3omKTI7icR
+         XOI3MPETjknbBVOza7gOmtDx28iw4unN0xDmrUPvBlX/k4fYjKIMZQoQw3M3zpXBuZqr
+         rlSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740476469; x=1741081269;
+        d=1e100.net; s=20230601; t=1740476475; x=1741081275;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LKV50k5oKnw6MK8vZSME6ax/mJXjZVzGCmPzRh9r8Fo=;
-        b=YtJr93KpZCWwo2toZl6UXUzXXkdMfxr/oKcm7onNfkdOfY1MS98wcdC3PSeTTxLPgi
-         tElX5P/vMkzr1+eQyvmMhSJsma8EVI4Abvld4brcnOaqTQoLE/KHZg//Zwjk/b13L/so
-         ByIqRP+1h98RFQn6A1hmRSFFM2adhVataM90O7/0RlVPE8v1P0MdFT92gl2ce9yxRRsG
-         mNpn4VMewzBI3Ksv3r7h7Y3+wCts7L3RVGnXnNiTSxborbq3LXKJfUpSd6T2RiMTfgej
-         SdS8apHLKVTPaKjakxKQDERRD9tflM7Iy7Wd7XuYQlF28rT8iL53vdBu76eR36jf8SIY
-         Jazw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBJNOLzT1+jkeytjYCF8RJ0kXNF8X/8KhnNxD4iG4ijEV/plauOvM3QXrldajexLsvrggaAbZMXHuc+2CjtgKR@vger.kernel.org, AJvYcCXHCJI6MafDRDcna5LoeR0EiPjNnU31ZbrGmvMhmr2d23uOBXUk/IhNIdpIkID1zJr9DI4wBvCm3mY/zNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2CNUT8PdPyyMxIk8SxIONB1XsLzY8i/55sM9bAHtJoDv93lvN
-	8MCNH5tkaBR0g/iSsVSCg6UGYX5wIqXnY5gKkhDvZeSlZFnouMhvT7y3PvcBsNiN2Q==
-X-Gm-Gg: ASbGnctGr88GKJ6gdX5RRcTChFY+cBTu37woYhDfrkbHMzn9oj340eyB2S1ejHPE/ya
-	4NA/TdvkZDfHU3ymlBdRUYbheCgFrbVoVQxqd5F5RW4q+wKNHG6xZJTE4jlptUfdKlHxHhYwitk
-	1/CvcvooanOIzKVJvORl0anG/GUTH2GphJHlP06d9ijSfUwr0s7spUh4Tj0IYUaTLScF1qlo30C
-	JKDFZGcLvcAJQ97jLEGglZRy53z+7q0kaJWP5UlRzArKtvLLAvFYRnyxYWg4IIe3moCnpRs3sYn
-	z34TlmTF1a30Lej16HhBR013epN43JCX9gOpFCKWfWXXzg==
-X-Google-Smtp-Source: AGHT+IHGrX3RShBzXNqqV1Asd6wqOTK/PbOyHp8r7dSAjVFWnm231L/QjCTXrCJV5At0/kThynXQSA==
-X-Received: by 2002:a05:6a20:7348:b0:1f1:432:5396 with SMTP id adf61e73a8af0-1f104325399mr871796637.22.1740476469357;
-        Tue, 25 Feb 2025 01:41:09 -0800 (PST)
+        bh=afOILgA/zHRb8Nw9ui16zGP2yzgeLzRcNXnyvIsurfI=;
+        b=eDLoXsO9YlnsXqW0Q0JAxF7mRuzNzRVTQICJiaIF8WydJEuDQc1lvsKDHjjaF1k5aN
+         pt5yWYWPzkvwT7jlt63jn+0DI6nAztvaSzu9yRXi2GxGqu94f0a+69o3Hky/itbieHRf
+         G8B7zop1+2M1mwsOAE+NzhoSs6/1w8pU7XAR3AsrSvB337yJXdAKk7Fz+yLBDgfxt9Tg
+         3nKdcJr+Sqsnb+ExzCjCzUOxT+Jktz7tAyG7RhSwqkht3LkPKeE2hNzqPDxYTTIy2xzF
+         kDEC08i7MRkkMtPniL7Y5baof2sAP2Z77RiiekeMjxvwLKgjeDJBLA/rt3XyGkd0QVSl
+         wHMg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7/AKFviAEqdISWGM0951PzX+BBbCyRBBbC1bSCaHIIhfMVhoRk1ntpL1+77BmIoz1DBuASfLphHgatYmXTX+H@vger.kernel.org, AJvYcCV4G+jlAhECvhp24Tnq34UupMZngwKjJpPbS8JyESEvHmEfYCEhs+5CwZBg/IpftpmfE+79Fqp0eHPSbsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIE0kSc2J9pnxvyv1amsstXzBopW7xCLXYVhx38YntfZb4Eayf
+	MX64UNfsVZ7oeR1yEsW3zFNYDePqu30zuA0KHSfM+6MFwOkK/772YBzGNmfZ2wWDQg==
+X-Gm-Gg: ASbGncvRbLy1Kc/fflpBmbuYYItwBpHZOjvrqCh0HI3xyzAZcp0DljRMdc2YtdLueXr
+	ddfSFjrqkJ+nbU+1i/DzLzFD2bHAY+COg2srCj38b9TYk7RoGM+jD28IQt8Zkcp+G8BK3Wr5WHM
+	/0JRlFmDrfYzTySs9n3Vtncba6VUqG0NFJKsYV8gIQ+xbjDHOoPjV9locT2rkxw5yvgJMLB4XPa
+	bClacBK8V6PrmJW0+2eXoNlbx9pwaMkCM20QxZkhMKZo/+zfzrVI+bB/KntJ7mM4DPVMdBljRJ3
+	SpS/6YOc/YqQ91IADqDcHoHXV56c2agtvXVTwBxzndHAVA==
+X-Google-Smtp-Source: AGHT+IFJmZ7Sk5dhvMYx5VBnMk7wHl+pK6YrB7A+OwFAyOenTMOJ9d+agjqzGuYDcyJliI4uA5kqUw==
+X-Received: by 2002:a05:6a21:7a93:b0:1ee:df88:9f80 with SMTP id adf61e73a8af0-1f0fc7795dfmr4290781637.26.1740476474968;
+        Tue, 25 Feb 2025 01:41:14 -0800 (PST)
 Received: from fedora.dns.podman ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6f9e6dsm1065597b3a.64.2025.02.25.01.41.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6f9e6dsm1065597b3a.64.2025.02.25.01.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 01:41:08 -0800 (PST)
+        Tue, 25 Feb 2025 01:41:14 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Jay Vosburgh <jv@jvosburgh.net>,
@@ -91,9 +91,9 @@ Cc: Jay Vosburgh <jv@jvosburgh.net>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net 2/3] bonding: fix xfrm offload feature setup on active-backup mode
-Date: Tue, 25 Feb 2025 09:40:48 +0000
-Message-ID: <20250225094049.20142-3-liuhangbin@gmail.com>
+Subject: [PATCHv2 net 3/3] selftests: bonding: add ipsec offload test
+Date: Tue, 25 Feb 2025 09:40:49 +0000
+Message-ID: <20250225094049.20142-4-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20250225094049.20142-1-liuhangbin@gmail.com>
 References: <20250225094049.20142-1-liuhangbin@gmail.com>
@@ -105,84 +105,206 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The active-backup bonding mode supports XFRM ESP offload. However, when
-a bond is added using command like `ip link add bond0 type bond mode 1
-miimon 100`, the `ethtool -k` command shows that the XFRM ESP offload is
-disabled. This occurs because, in bond_newlink(), we change bond link
-first and register bond device later. So the XFRM feature update in
-bond_option_mode_set() is not called as the bond device is not yet
-registered, leading to the offload feature not being set successfully.
+This introduces a test for IPSec offload over bonding, utilizing netdevsim
+for the testing process, as veth interfaces do not support IPSec offload.
+The test will ensure that the IPSec offload functionality remains operational
+even after a failover event occurs in the bonding configuration.
 
-To resolve this issue, we can modify the code order in bond_newlink() to
-ensure that the bond device is registered first before changing the bond
-link parameters. This change will allow the XFRM ESP offload feature to be
-correctly enabled.
-
-Fixes: 007ab5345545 ("bonding: fix feature flag setting at init time")
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- drivers/net/bonding/bond_main.c    |  2 +-
- drivers/net/bonding/bond_netlink.c | 16 +++++++++-------
- include/net/bonding.h              |  1 +
- 3 files changed, 11 insertions(+), 8 deletions(-)
+ .../selftests/drivers/net/bonding/Makefile    |   3 +-
+ .../drivers/net/bonding/bond_ipsec_offload.sh | 155 ++++++++++++++++++
+ .../selftests/drivers/net/bonding/config      |   4 +
+ 3 files changed, 161 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index cc7064aa4b35..881d8d94dd9f 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -4410,7 +4410,7 @@ void bond_work_init_all(struct bonding *bond)
- 	INIT_DELAYED_WORK(&bond->slave_arr_work, bond_slave_arr_handler);
- }
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 2b10854e4b1e..d5a7de16d33a 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -10,7 +10,8 @@ TEST_PROGS := \
+ 	mode-2-recovery-updelay.sh \
+ 	bond_options.sh \
+ 	bond-eth-type-change.sh \
+-	bond_macvlan_ipvlan.sh
++	bond_macvlan_ipvlan.sh \
++	bond_ipsec_offload.sh
  
--static void bond_work_cancel_all(struct bonding *bond)
-+void bond_work_cancel_all(struct bonding *bond)
- {
- 	cancel_delayed_work_sync(&bond->mii_work);
- 	cancel_delayed_work_sync(&bond->arp_work);
-diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
-index 2a6a424806aa..ed16af6db557 100644
---- a/drivers/net/bonding/bond_netlink.c
-+++ b/drivers/net/bonding/bond_netlink.c
-@@ -568,18 +568,20 @@ static int bond_newlink(struct net *src_net, struct net_device *bond_dev,
- 			struct nlattr *tb[], struct nlattr *data[],
- 			struct netlink_ext_ack *extack)
- {
-+	struct bonding *bond = netdev_priv(bond_dev);
- 	int err;
- 
--	err = bond_changelink(bond_dev, tb, data, extack);
--	if (err < 0)
-+	err = register_netdevice(bond_dev);
-+	if (err)
- 		return err;
- 
--	err = register_netdevice(bond_dev);
--	if (!err) {
--		struct bonding *bond = netdev_priv(bond_dev);
-+	netif_carrier_off(bond_dev);
-+	bond_work_init_all(bond);
- 
--		netif_carrier_off(bond_dev);
--		bond_work_init_all(bond);
-+	err = bond_changelink(bond_dev, tb, data, extack);
-+	if (err) {
-+		bond_work_cancel_all(bond);
-+		unregister_netdevice(bond_dev);
- 	}
- 
- 	return err;
-diff --git a/include/net/bonding.h b/include/net/bonding.h
-index d54ba5e3affb..aa326fd90eba 100644
---- a/include/net/bonding.h
-+++ b/include/net/bonding.h
-@@ -713,6 +713,7 @@ struct bond_vlan_tag *bond_verify_device_path(struct net_device *start_dev,
- int bond_update_slave_arr(struct bonding *bond, struct slave *skipslave);
- void bond_slave_arr_work_rearm(struct bonding *bond, unsigned long delay);
- void bond_work_init_all(struct bonding *bond);
-+void bond_work_cancel_all(struct bonding *bond);
- 
- #ifdef CONFIG_PROC_FS
- void bond_create_proc_entry(struct bonding *bond);
+ TEST_FILES := \
+ 	lag_lib.sh \
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh b/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
+new file mode 100755
+index 000000000000..169866b47a67
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
+@@ -0,0 +1,155 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# IPsec over bonding offload test:
++#
++#  +----------------+
++#  |     bond0      |
++#  |       |        |
++#  |  eth0    eth1  |
++#  +---+-------+----+
++#
++# We use netdevsim instead of physical interfaces
++#-------------------------------------------------------------------
++# Example commands
++#   ip x s add proto esp src 192.0.2.1 dst 192.0.2.2 \
++#            spi 0x07 mode transport reqid 0x07 replay-window 32 \
++#            aead 'rfc4106(gcm(aes))' 1234567890123456dcba 128 \
++#            sel src 192.0.2.1/24 dst 192.0.2.2/24
++#            offload dev bond0 dir out
++#   ip x p add dir out src 192.0.2.1/24 dst 192.0.2.2/24 \
++#            tmpl proto esp src 192.0.2.1 dst 192.0.2.2 \
++#            spi 0x07 mode transport reqid 0x07
++#
++#-------------------------------------------------------------------
++
++lib_dir=$(dirname "$0")
++source "$lib_dir"/../../../net/lib.sh
++algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
++srcip=192.0.2.1
++dstip=192.0.2.2
++ipsec0=/sys/kernel/debug/netdevsim/netdevsim0/ports/0/ipsec
++ipsec1=/sys/kernel/debug/netdevsim/netdevsim0/ports/1/ipsec
++ret=0
++
++cleanup()
++{
++	modprobe -r netdevsim
++	cleanup_ns $ns
++}
++
++active_slave_changed()
++{
++        local old_active_slave=$1
++        local new_active_slave=$(ip -n ${ns} -d -j link show bond0 | \
++				 jq -r ".[].linkinfo.info_data.active_slave")
++        [ "$new_active_slave" != "$old_active_slave" -a "$new_active_slave" != "null" ]
++}
++
++test_offload()
++{
++	# use ping to exercise the Tx path
++	ip netns exec $ns ping -I bond0 -c 3 -W 1 -i 0 $dstip >/dev/null
++
++	active_slave=$(ip -n ${ns} -d -j link show bond0 | \
++		       jq -r ".[].linkinfo.info_data.active_slave")
++
++	if [ $active_slave = $nic0 ]; then
++		sysfs=$ipsec0
++	elif [ $active_slave = $nic1 ]; then
++		sysfs=$ipsec1
++	else
++		echo "FAIL: bond_ipsec_offload invalid active_slave $active_slave"
++		ret=1
++	fi
++
++	# The tx/rx order in sysfs may changed after failover
++	if grep -q "SA count=2 tx=3" $sysfs && grep -q "tx ipaddr=$dstip" $sysfs; then
++		echo "PASS: bond_ipsec_offload has correct tx count with link ${active_slave}"
++	else
++		echo "FAIL: bond_ipsec_offload incorrect tx count with link ${active_slave}"
++		ret=1
++	fi
++}
++
++if ! mount | grep -q debugfs; then
++	mount -t debugfs none /sys/kernel/debug/ &> /dev/null
++fi
++
++# setup netdevsim since dummy/veth dev doesn't have offload support
++if [ ! -w /sys/bus/netdevsim/new_device ] ; then
++	modprobe -q netdevsim
++	if [ $? -ne 0 ]; then
++		echo "SKIP: can't load netdevsim for ipsec offload"
++		exit $ksft_skip
++	fi
++fi
++
++trap cleanup EXIT
++
++setup_ns ns
++ip -n $ns link add bond0 type bond mode active-backup miimon 100
++ip -n $ns addr add $srcip/24 dev bond0
++ip -n $ns link set bond0 up
++
++ifaces=$(ip netns exec $ns bash -c '
++	sysfsnet=/sys/bus/netdevsim/devices/netdevsim0/net/
++	echo "0 2" > /sys/bus/netdevsim/new_device
++	while [ ! -d $sysfsnet ] ; do :; done
++	udevadm settle
++	ls $sysfsnet
++')
++nic0=$(echo $ifaces | cut -f1 -d ' ')
++nic1=$(echo $ifaces | cut -f2 -d ' ')
++ip -n $ns link set $nic0 master bond0
++ip -n $ns link set $nic1 master bond0
++
++# create offloaded SAs, both in and out
++ip -n $ns x p add dir out src $srcip/24 dst $dstip/24 \
++    tmpl proto esp src $srcip dst $dstip spi 9 \
++    mode transport reqid 42
++
++ip -n $ns x p add dir in src $dstip/24 dst $srcip/24 \
++    tmpl proto esp src $dstip dst $srcip spi 9 \
++    mode transport reqid 42
++
++ip -n $ns x s add proto esp src $srcip dst $dstip spi 9 \
++    mode transport reqid 42 $algo sel src $srcip/24 dst $dstip/24 \
++    offload dev bond0 dir out
++
++ip -n $ns x s add proto esp src $dstip dst $srcip spi 9 \
++    mode transport reqid 42 $algo sel src $dstip/24 dst $srcip/24 \
++    offload dev bond0 dir in
++
++# does offload show up in ip output
++lines=`ip -n $ns x s list | grep -c "crypto offload parameters: dev bond0 dir"`
++if [ $lines -ne 2 ] ; then
++	echo "FAIL: bond_ipsec_offload SA offload missing from list output"
++	ret=1
++fi
++
++# we didn't create a peer, make sure we can Tx by adding a permanent neighbour
++# this need to be added after enslave
++ip -n $ns neigh add $dstip dev bond0 lladdr 00:11:22:33:44:55
++
++# start Offload testing
++test_offload
++
++# do failover
++ip -n $ns link set $active_slave down
++slowwait 5 active_slave_changed $active_slave
++test_offload
++
++# make sure offload get removed from driver
++ip -n $ns x s flush
++ip -n $ns x p flush
++line0=$(grep -c "SA count=0" $ipsec0)
++line1=$(grep -c "SA count=0" $ipsec1)
++if [ $line0 -ne 1 -o $line1 -ne 1 ]  ; then
++	echo "FAIL: bond_ipsec_offload SA not removed from driver"
++	ret=1
++else
++	echo "PASS: bond_ipsec_offload SA removed from driver"
++fi
++
++exit $ret
+diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+index dad4e5fda4db..054fb772846f 100644
+--- a/tools/testing/selftests/drivers/net/bonding/config
++++ b/tools/testing/selftests/drivers/net/bonding/config
+@@ -9,3 +9,7 @@ CONFIG_NET_CLS_FLOWER=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_NLMON=y
+ CONFIG_VETH=y
++CONFIG_INET_ESP=y
++CONFIG_INET_ESP_OFFLOAD=y
++CONFIG_XFRM_USER=m
++CONFIG_NETDEVSIM=m
 -- 
 2.46.0
 
