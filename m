@@ -1,139 +1,109 @@
-Return-Path: <linux-kselftest+bounces-27443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035F7A43D3F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0D1DA43D51
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:20:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 892EB19C0CCA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:17:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6043319C3A6D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:20:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0361206F22;
-	Tue, 25 Feb 2025 11:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256FE2661B5;
+	Tue, 25 Feb 2025 11:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JfKFlxNW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2670B1A239E;
-	Tue, 25 Feb 2025 11:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E865257447
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 11:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740482260; cv=none; b=TvQViiDLZIeJlGsnApVsY9pBxLhVYWuA1GQfo9qFsGh1tN5VyE0KzjSb+zUysklgXTOl28ar1feUq/cUaKJJ0yUrwSR7WLWPMNdOBcaVXczOw90ihht3AgwnNmErJ2pBxtC1FakbaLg0Wr9rPr46MVGk4Pb1YuJbWgnGWhmYtTQ=
+	t=1740482448; cv=none; b=l9LM2iK+hBb8XbBe4CaigSeKHfcWh0HZvHtuPWhDjBDWE9x/0Hs9D6Ti6IM+l4TCjM8kIOlVSVJY4Gn04ugo71g3XPNFAyCtqpNL964hpBk3bu/JLkzgLe6hbiyKIB32Fq5z0EcKRcvdsVBUUjvpZG4SucjnHIV4YEj3dnPdG/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740482260; c=relaxed/simple;
-	bh=Y4qrHsZ4YlKYiMw1liY09TYi5suU2srUrdPV71CkQiE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dTxMbz0RPtPbdbYhm/sYFzh34FU0LxdJ1OgGLQQEjcaBjWMLxyJQ2h02lq+SCfu4llqH32+g0BuRcDZ2HQua2MSV8ccvbyrLrPWRSSm6KN+MrvPskXrC0BSbk/J09mAOd+7YPH2j+aQUpmyijD9QCiFK6tllxZ8sM+6SmtYDmvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abb999658fbso681915766b.3;
-        Tue, 25 Feb 2025 03:17:38 -0800 (PST)
+	s=arc-20240116; t=1740482448; c=relaxed/simple;
+	bh=ZfKFZZC2tmOCbwC1r8CVgXiCVrT0QAUCI8q2gJHsnIA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BV4oBfd9uLMNJRsrJ+ERkTUl+3NIw8E1GI4FyrqDFatwNS7HJ9P8WUTsdX5U+HJVMOkHcC8/L8BFJva/7ZZcXnGZm0PzHBOdybUt19TuKB8rgiIL8R62UHmXWU4iBejpeafjccc/vzJ5LYKYnF4r4fnHoKFua1HfcHFGkQgNneg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JfKFlxNW; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-471fbfe8b89so320341cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 03:20:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740482445; x=1741087245; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZfKFZZC2tmOCbwC1r8CVgXiCVrT0QAUCI8q2gJHsnIA=;
+        b=JfKFlxNWjlq5clU5vEd271dAFSLau7gSI034IwmlfLGdq1M0x7gxKZ8Aot3SH+AhhL
+         TRibXLmsVnGxfZZwzvhAegPDvsi/Bg4CubdmdVqn9ZmqL7z6daA+W9h+sevcf7ZTFP7o
+         FOaHJdVvEBs3rT+IAfpZKgRHyLQk3Rul6KPvCW7dSUieEQt4IF9/iic23awvsCmOXzz7
+         kqMSu2JEaTNYo5bGd2pxS3BgmgYO4w5p3COEURgYEzJ158/TzuJORw9U55SWhHpeyyMc
+         H16rvDuc6bXW07vKk9YAoBqcjGVqttjZnIyLOs08JkV71K/hVFotIrIY32+cT1o1dqJ8
+         HXGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740482257; x=1741087057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1j29+YwywkVdnOwJpODDXLXoxVQ80C41eZ3nGoHPbf4=;
-        b=Df+K/BVTSZ/FqgrWjulI3eyLIxO3aIZSwXCw7zluU+nT/HVEYg/RgauJAOlO3VdhBs
-         4EuASt3XFlhFLici9PYpIDVpDmx/AwFiGdoMQWsN7jywrlHs4SE0N9Fc9akwzhYeqgTy
-         Aa7n0u7ykIIHlN1H3CFaCIUekzXRoKthjz2jdvqFFSIA9CCGe14q6AaeON07tZRpmvfr
-         lOuDsw98ERZqM4wpqDYk/wxb1uAa4jhjy/R6AiA6US9hoEgrVDHxTwoQ6YO20qtrZOkC
-         ypvR2v9wXeLJtJVgAm0Kwx8SR06+JqQivFSRPlCVyd3w7VojSkR+MqzLWPpooAFG3H8k
-         TFZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUP7juvDNcZzQZiHBW78+8HwecbW/lnEA9GsQBn/Waem2Nw+gN7P2RKvUk/n0cIYLVC3GOYiRFI@vger.kernel.org, AJvYcCW4CTCPWntj3TpSgI8TVXiAJePaiuYuk5E+JEGEDOxI+E3WFoinpGjdiZQ3tGhXV66Or45djW8zJjU=@vger.kernel.org, AJvYcCWmt3hUi4jRx8f+ECaUOkHXx23MegENHGHMoIo3rHPqvRKZIeaypcTsPXGeIxIi8CbjjnAQy9tii+vCjeM2@vger.kernel.org, AJvYcCXLDJOa2USegPdllpZWmNmd61QVJnq8KYV6pzzpKQC7iEa9wsnY6MkW2iH+LlT7N7b0ZEx1n0p5vm3/LbEUK3Ho@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO4EXn6N/vDmUSKbK1BPoylpZwMMy/U39h+RNo9rZqv2gPKsx7
-	qy8XiCfqTUHDCX2qNBYaaA2uJSk+Fvbkr7jZor4aZFwSQpqNC1pw
-X-Gm-Gg: ASbGncsrBl0ISsRmfKyFlDO1sPyve6HKgiNSWNjMl4L4idsaRs9CMyUMCWXhEcv/Mwp
-	4OOfGFn/ZyP+9Ouq+46hQ2KPnsVKBS+lJhYHNxvAVpldQqN9K7KlyG9DSghM6PJxzsiEfe1vsA9
-	Lt7AzD9uHE3vF77CQEEzXYPg2SJHnY5gRh/J1RYmkNP2OnywQrg/7HMGVugSwGnoVnWJ5p4h04t
-	hpn4pfCFvCn1Q5lPQqqchXN5hcXUoZyRLFoJRbAYreGFJWU+jO6llSGidlHqmvWX2dtIxTlZfwp
-	6xcyvglItCaqEFugGA==
-X-Google-Smtp-Source: AGHT+IF9N08H7jTMLFCvTUzvTml6TjwoMntNUKf+GwIhdyS7gvhSXa+0EhXsIhy4Y/1NGXa86oTn0A==
-X-Received: by 2002:a05:6402:34d0:b0:5e0:818a:5f4d with SMTP id 4fb4d7f45d1cf-5e44bb36997mr7209455a12.28.1740482257036;
-        Tue, 25 Feb 2025 03:17:37 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e45a8b8b48sm1069172a12.20.2025.02.25.03.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 03:17:35 -0800 (PST)
-Date: Tue, 25 Feb 2025 03:17:33 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next 5/7] netconsole: add task name to extra data
- fields
-Message-ID: <20250225-doberman-of-scientific-champagne-640c69@leitao>
-References: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
- <20250221-netcons_current-v1-5-21c86ae8fc0d@debian.org>
- <20250225101910.GM1615191@kernel.org>
+        d=1e100.net; s=20230601; t=1740482445; x=1741087245;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZfKFZZC2tmOCbwC1r8CVgXiCVrT0QAUCI8q2gJHsnIA=;
+        b=AnsHNthOM/qyP83bdbxPI9XPGWae336P8kUdpArfoaWJAnZGVanZd8b34l0FOTt/FE
+         IDei2oigZ2tVSiRZAR/YU+nW0lCfjpTvZlwa/5okv2c9ecE+7UXQT9CUrYJPdVTJwfUY
+         Eun5GXGPEG5XVY/licGkpJVcBvfqWo3PLlLwye1ssp/9xGHw3H6uxQxc/6q4Y9DiS6FI
+         XjCJQ2YdC7WHVmnSZQOeZdVKAIalqu/Jh71KVwOiM8ItFjBLLOPavBf4WN8I6B3veNee
+         C8BKTAF5dqS4wM+KtojCVZuTuUAOyWyFL+V0bJg9KM4O2qMCiyhbnoF5qQqKibOnp5HH
+         v7CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8lXrKwcexcZ8M+rWJGMEWLSLbp5B94pF5yMlgFrODBYcvteIaI98aSA0jUAI4pgvLkOItXie/Pm+oG8UhdMQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQr1C3ar3oWc39Zh+FHRMngnjnX+EgNqsNbpEk0qO0e82Ir8mp
+	cSDi+H/K15JCwg0OXRwr+ZZLOABT+sjQnHOr/1T1wncRmE+b80CuCwCiRtOsgUGxuGoVNcy7EQp
+	4tW0lZupjxDZi/r4OvTp6HcKz3Ihsx6nJj5EN
+X-Gm-Gg: ASbGncsTu2Zu7yRLnDRVIhGqDgBixtxsbG7kPkIcqOgzOp3Fzwn/GJA4m2/AHpTxXJb
+	aGDVCPEbTnNnk0uLsHitupQvFGMAG1dpyDJbjZRWf7CCA/5qHZ+lvl1iwfNICp6+S8zv86MLiDy
+	ky6mxRUY1P68x3QY4cB20WlOM9pPOHDTRrGgk/oA==
+X-Google-Smtp-Source: AGHT+IHFjJ0yKRObJdxsUgiD7JtmY8937g0CLtK//OiCCtPNNX1uIrk24753sc2sHUgmgRxIlWeBRTGfby6XhQp16yk=
+X-Received: by 2002:ac8:7d12:0:b0:471:f2dd:4184 with SMTP id
+ d75a77b69052e-47376e80f47mr4296161cf.11.1740482445292; Tue, 25 Feb 2025
+ 03:20:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250225101910.GM1615191@kernel.org>
+References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
+ <20250224-page-alloc-kunit-v1-3-d337bb440889@google.com> <Z7y7ltOSDjamYmhP@google.com>
+In-Reply-To: <Z7y7ltOSDjamYmhP@google.com>
+From: Brendan Jackman <jackmanb@google.com>
+Date: Tue, 25 Feb 2025 12:20:34 +0100
+X-Gm-Features: AQ5f1JqLPRqnWEZHqnvgC9tC15jeAnKsKuFlQFRcyxCvqPiNNGA6fSRNHtlD5as
+Message-ID: <CA+i-1C31w5yjVRBLNr9b2WwghP_=Wv0+SymWKOQtG8SEszKxxA@mail.gmail.com>
+Subject: Re: [PATCH RFC 3/4] mm/page_alloc_test: Add logic to isolate a node
+ for testing
+To: Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Oscar Salvador <osalvador@suse.de>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Michal Hocko <mhocko@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello Simon,
+On Mon, 24 Feb 2025 at 19:34, Yosry Ahmed <yosry.ahmed@linux.dev> wrote:
+> > +#ifdef CONFIG_KUNIT
+>
+> Why not CONFIG_PAGE_ALLOC_KUNIT_TEST?
 
-On Tue, Feb 25, 2025 at 10:19:10AM +0000, Simon Horman wrote:
-> On Fri, Feb 21, 2025 at 05:52:10AM -0800, Breno Leitao wrote:
-> > This is the core patch for this whole patchset. Add support for
-> > including the current task's name in netconsole's extra data output.
-> > This adds a new append_taskname() function that writes the task name
-> > (from current->comm) into the target's extradata buffer, similar to how
-> > CPU numbers are handled.
-> > 
-> > The task name is included when the SYSDATA_TASKNAME field is set,
-> > appearing in the format "taskname=<name>" in the output. This additional
-> > context can help with debugging by showing which task generated each
-> > console message.
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> >  drivers/net/netconsole.c | 14 +++++++++++++-
-> >  1 file changed, 13 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-> > index 5a29144ae37ee7b487b1a252b0f2ce8574f9cefa..625f4c0be11d8deb454139b1c526abc842697219 100644
-> > --- a/drivers/net/netconsole.c
-> > +++ b/drivers/net/netconsole.c
-> > @@ -1179,12 +1179,22 @@ static int append_cpu_nr(struct netconsole_target *nt, int offset)
-> >  			 raw_smp_processor_id());
-> >  }
-> >  
-> > +static int append_taskname(struct netconsole_target *nt, int offset)
-> > +{
-> > +	if (WARN_ON_ONCE(!current))
-> > +		return 0;
-> 
-> Hi Breno,
-> 
-> I gather that theoretically this could occur, but it isn't expected
-> to happen in practice. Is that right?
+VISIBLE_IF_KUNIT is paired with #ifdef CONFIG_KUNIT elsewhere (I think
+there might even be docs that do this in an example) so I just
+followed the pattern.
 
-That's correct. `current` isn't expected to be NULL in practice.
-I've been running this code on several servers for days and have never
-encountered this warning. 
+#ifdef CONFIG_KUNIT -> things are consistent and you just don't have
+to think about this very much.
 
-While the taskname feature isn't enabled during early boot, netconsole
-might be active at that time, which is why I exercised extra caution
-here.
+#ifdef CONFIG_PAGE_ALLOC_KUNIT_TEST -> better scoping.
 
-If you also think this is safe, I am more than happy to remove this
-check.
-
-Thanks for the review,
---breno
+So yeah, shrug. Maybe David/Rae/Brendan has an opinion.
 
