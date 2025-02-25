@@ -1,192 +1,188 @@
-Return-Path: <linux-kselftest+bounces-27449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62ECFA43FC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 13:56:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52144A44025
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:09:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E3AD7A65C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:55:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 220F717C1C0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 13:05:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4848268C5A;
-	Tue, 25 Feb 2025 12:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B104C269896;
+	Tue, 25 Feb 2025 13:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ke6xQC6D"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PEjLUe8o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DB0267AE1
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 12:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02297268FFC
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 13:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740488200; cv=none; b=gCbz6uK1fCzC3A16kePW5izg/wQ9RNHMRn3Qm3Gh9EU5eqyT1AKFENzphTNpfrSCryZ+3SmlY8RSouTzogUyQ3eRevaz6Ex66gsKjTgAtPht/qTPCec/+2PQZMrnCcbxLShrG9v35+r2E6ks2iJZY0cTwtFvdelUzEeexyYB9O0=
+	t=1740488690; cv=none; b=AwDCqk4nDC+k/w9ND7qGIATVd/ex9kwaitEdFOVes0woOcrIdysnUcoe1YswXkOirIAYA3fLzAwGw2jIwNrLWOh0l43KByadIahC/M3hAeD9sLcCAiv5NgbwngUZPY/7NhfjAx00Bm9vewxIN8BNwY2GdAX+19kGFNxk9Mk69EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740488200; c=relaxed/simple;
-	bh=qeHqr2N7h2hbEwkQv0Vwe6G5E97ceWLeI1LIx1Yu2ZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CRoU1hYXKNj3pTBvtzG+0gKskGfy4Fms6PpvvfwAgaMI3tw73yov2imqHsKkirIfliEe6PgJlEk0d7JiOArDdEoLRXlKtkAqiGrbeWGq1YZSsyOgQ5DuOln47ggbQ+onrjAGOX+QQpYBseFNAIxzMlZrpLqot/o7gNqXoocd+gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ke6xQC6D; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-439849103c8so48435e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 04:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740488197; x=1741092997; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MC9KPLvVqWKMt0reEhfmjJu692XzkFN80RWzCGUDFJk=;
-        b=Ke6xQC6Dwzf3Xr8Rlh5t/4YYHw5cWoLpDtX1wrSkbWEnPnwMVvbAZmEZ4mSfoGYXFn
-         QS+JeD0oYjuzX1bFXXT7rHFJqs5mTfKH93PKdB0ivvQzx8raYzLPPm2qPkkpPqb+zoFW
-         VVaxU48EljrpNC3R1Lthmv9WsiebuEBPwH/5cZFxYRQYRzWyN4rWl9QqeZFJE6mNYjqD
-         QeN6oCDrTW18iv6QTUsg4pqiNQcq04BqRPl0UKR98Nx3ZMMlMGBhR9ML9HKeJ051mxpG
-         KcygWzBCAklppDwfjaOtIwjutywMVWi0tsvc/1xazNRGKINFEAHVadvoAuqpAe1rQDpp
-         KFSQ==
+	s=arc-20240116; t=1740488690; c=relaxed/simple;
+	bh=PoqjAs48+8ee6d8AS/JvwD5Eq5M+o52O3KMWUPpMR28=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MLnVJycaimtUFXuKFcDktWqKSTVIbYKx1raevHsowkPfTBYNiN+/4UvsN5iPNQBIdFuYfM8TyISTdxSV0eoasdNWojGSu2k1+pzW0KsWABT39tBdFrzW41xRNVhvo+X8lEsBConFKFiFf6VpPNbZGh23YqWX5rF3yUSBZz0sAGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PEjLUe8o; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740488688;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NEjZiA0tpgBSlB/iySqtUo2D0VDFNUAgdeGczXOHVDE=;
+	b=PEjLUe8ocKkBHbG74sRHEQqVDN3iwXxK2xW44quAIfSXELWNXg8S9Cbke/Z1Y1sLVi5aGI
+	NX7pdWdMz5CFkbFOY+qkLiOSi5mx3N5eP+uaEIZJ2iCwpq3OVdjTlHvqusnq5NFEi2hd8T
+	iuvgKMqSG5UYdrqh2yMz2t5VavwnYN8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-104-6g0eOqIlNbuzktWCxb02FA-1; Tue, 25 Feb 2025 08:04:46 -0500
+X-MC-Unique: 6g0eOqIlNbuzktWCxb02FA-1
+X-Mimecast-MFC-AGG-ID: 6g0eOqIlNbuzktWCxb02FA_1740488684
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-38f338525e1so2322630f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 05:04:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740488197; x=1741092997;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MC9KPLvVqWKMt0reEhfmjJu692XzkFN80RWzCGUDFJk=;
-        b=KQBBsFtAFLgeDH2+Frq9X33T4pcI1JNutRWhH1Njhp6TYBVgDHcM6YVgiLqM76BbY6
-         XYX4Fy7m6EYq9i+BPWoofIeMCjn+22ruw60s96S1CfO2QJvUPk0+A2de4nQXFlYSCo5f
-         9tBB+0RDiEv2gtz5Zpxuegl3cZTjmd/PZ7yFhb46tKxqA7c9gpRYJRLh0Mwp8AB/yA/u
-         PVNGbqGoEmTGG+J80rs05zvVn6HZQSF/wHPwId5BhnlTf1ys6PPXwbGwOX6XdRgFmPCi
-         skbxdj9SULkFkP6sbjPv9U++IixgtEYS8fXDAYzGEFECo4WPpGS0DkeOjcUbfIfKZfQZ
-         Eg4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW+k7qb1O4cKlZHhWSO+neUUdoa9LvayWo1c3rGyYDy6rt9doRSdKoCoUpid3TfhS631QUI0HgPyh1KCs7wI78=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydfIY4errrFtOYaHgDJivAabUEawy5vbmvRJbLCAnnguK0aOPW
-	joXHYF5iz4JDGUqhhu3IfhgmNbtsvd46GMysfVwnDU6WJB8h66jHvXTnffAiig==
-X-Gm-Gg: ASbGncuUv1o8V14d2V+Th5/KrEXSGjjQO9zYVEIHo9J9C/HmcE3k2EMNv+ouemeoFpj
-	/AtauAtj3FCDjU6cFp8ExeoFD74UF8kILsAnPOmaGW9TbQ+Iif2wjYXP3GTnaHlpw2/SQ9oVKUX
-	RnKByrJM3jeKL3TULJkNHHm174Tcm+twpj2sMf5/nhI+M9JiGVPbgjy0lrj5SEXcS5r8aPkbNdY
-	bXgB5KlGFRyqs6cHJEvNKiL5E9d1nPQ513ZzTm4GflhCJCLHtj1+MpuAuckQZFZ1gOSmHSdmEQf
-	MafgTK/vSLDiswdwgZa/CzDCiRrbLK8t6uUVVjwfWUFKgmJ3GyXq7tho/i1eig==
-X-Google-Smtp-Source: AGHT+IHHx1tnED5DbqgakpRRi9n7AbytxVfYjoT3lvOaag4Ekssq2e8VL3NZ4DRLo24ldsb4E07AvA==
-X-Received: by 2002:a05:600c:590c:b0:439:8f59:2c56 with SMTP id 5b1f17b1804b1-43ab0fa8bd4mr1345945e9.2.1740488197133;
-        Tue, 25 Feb 2025 04:56:37 -0800 (PST)
-Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ab156a183sm24997255e9.40.2025.02.25.04.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 04:56:36 -0800 (PST)
-Date: Tue, 25 Feb 2025 12:56:32 +0000
-From: Brendan Jackman <jackmanb@google.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Oscar Salvador <osalvador@suse.de>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Michal Hocko <mhocko@kernel.org>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	Yosry Ahmed <yosry.ahmed@linux.dev>
-Subject: Re: [PATCH RFC 0/4] mm: KUnit tests for the page allocator
-Message-ID: <Z72-AP-yQ2hPwpKe@google.com>
-References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
- <0449ff75-0a6b-4c1e-bf12-ff052aad5287@redhat.com>
+        d=1e100.net; s=20230601; t=1740488684; x=1741093484;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NEjZiA0tpgBSlB/iySqtUo2D0VDFNUAgdeGczXOHVDE=;
+        b=GDPVnmJe+QTfojdoEG0Ld2KMgzej6FXBgd0zYTq8+ga/7UnZuITemLxjeaNUxef+Yf
+         YMTvu2FgO5slppV80Fr0+QcoFgGVmzuRjSi508tqOWhRcNkVjVVs1TFI6SI4RX1IUOGt
+         7IVHb0Tl7mLdkymnWVZRios17eGeRLdRIdkBgkUCem/YrqrwRbGKw3snLGkBUSaGgusa
+         pnwlL0EKTvRnOmbKblEnhUj4LvG7XpQJrHIy7/RrUJXcTPo6SzmvzwDbXCdVgWfh/0LW
+         jh+WMODrVq9qlDmYStxmgSixREyo6Rutuf8bHVaVCmR6cmTN7nChR5Eg/zKj/VVZv49Q
+         q2UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXpfwyOrjR3GkfVX7/jlNrqolXCQyI3DFwUjV8xXrJVjiO2TNO40S0TO4n9HFgb1KIqAOn0Gytwlpmz9MCBOkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl135IrmM0XaCEAS3M3t+BcETBVf2jcHEnZofjziGuEiz9ygKl
+	BIJq8nCOhy6cQ8BLr1D8DcPgLn7kPXuuOdKmV6dqktVNpSucEZ752He/noZJz2E9FHFSW8Mr24g
+	WGPmLKOQ9d29oOXazYESCu6lwxWq/BPqdNhQ2geBzKsrHajHG8q5xRCohc8pE090qhA==
+X-Gm-Gg: ASbGncsgh+eyXIyObaChoBFI9RiXAum/fTSzYlJR1EnOXiXuNvjViPJbvyuO+4wzGro
+	L/C60KMkfdayJganUcVLBn5WAtNjtZi3fvtZ9BefwGBB0sKRGWRlJi/wcFVs3L3qzZbXJuIrZf8
+	Fa+yVj6jJZVGWJ61ytj7kXNNa/GMA7b393/tSSan1lZzaJSmp++9Hrcnh/7ZrfXjO/RLTOB+zqX
+	F/lNcdeig+guD656sbfnryIIaEShY7GRJEiXHrcxNZbS+hQsnkKIu/9wySYn685JTMKpIrw3+uV
+	DOdOqrybI7evcUEeJjsjJpVqwIsaeg0JxK4Y2ex6Inc=
+X-Received: by 2002:a05:6000:1a87:b0:38f:3344:361e with SMTP id ffacd0b85a97d-38f7079ec17mr15303984f8f.23.1740488684079;
+        Tue, 25 Feb 2025 05:04:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGzXYHaIMYF6GMizRa4fNCOG8+4IpljILlUq8KxSNpA12i9exQXViaMTl+bM5c0ACpAig5+BQ==
+X-Received: by 2002:a05:6000:1a87:b0:38f:3344:361e with SMTP id ffacd0b85a97d-38f7079ec17mr15303910f8f.23.1740488683687;
+        Tue, 25 Feb 2025 05:04:43 -0800 (PST)
+Received: from [192.168.88.253] (146-241-59-53.dyn.eolo.it. [146.241.59.53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ab37403cfsm15578055e9.1.2025.02.25.05.04.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Feb 2025 05:04:43 -0800 (PST)
+Message-ID: <a814c41a-40f9-4632-a5bb-ad3da5911fb6@redhat.com>
+Date: Tue, 25 Feb 2025 14:04:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0449ff75-0a6b-4c1e-bf12-ff052aad5287@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/9] net: devmem: Implement TX path
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ virtualization@lists.linux.dev, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
+ <willemb@google.com>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, sdf@fomichev.me,
+ asml.silence@gmail.com, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
+ Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20250222191517.743530-1-almasrymina@google.com>
+ <20250222191517.743530-4-almasrymina@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250222191517.743530-4-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 25, 2025 at 11:01:47AM +0100, David Hildenbrand wrote:
-> > This is an RFC and not a PATCH because:
-> > 
-> > 1. I have not taken much care to ensure the isolation is complete.
-> >     There are probably sources of flakiness and nondeterminism in here.
-> > 
-> > 2. I suspect the the basic idea might be over-complicated: do we really
-> >     need memory hotplug here? Do we even need the instance of the
-> >     allocator we're testing to actual memory behind the pages it's
-> >     allocating, or could we just hallucinate a new region of vmemmap
-> >     without any of that awkwardness?
-> > 
-> >     One significant downside of relying on memory hotplug is that the
-> >     test won't run if we can't hotplug anything out. That means you have
-> >     to fiddle with the platform to even run the tests - see the
-> >     --kernel_args and --qemu_args I had to add to my kunit.py command
-> >     above.
-> > 
-> >     So yeah, other suggestions welcome.
-> > 
-> >     2b. I'm not very confident I'm using the hotplug API properly.
-> 
-> Me neither ;)
-> 
-> Dynamically adding memory to that "fake" node is certainly interesting, but
-> which guarantees do we have that some other features (page migration, memory
-> offlining, page reporting ...) don't interact in weird ways with this "fake"
-> node? Adding special-casing all over the place for that feels wrong. I
-> assume this is point 1. you note above.
+On 2/22/25 8:15 PM, Mina Almasry wrote:
+[...]
+> @@ -119,6 +122,13 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+>  	unsigned long xa_idx;
+>  	unsigned int rxq_idx;
+>  
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> +
+> +	/* Ensure no tx net_devmem_lookup_dmabuf() are in flight after the
+> +	 * erase.
+> +	 */
+> +	synchronize_net();
 
-Yeah, basically this is the big downside. Changing the system we're
-trying to test in order to make it testable can't be avoided entirely,
-but I am also pretty unhappy with sprinkling "if (node_isolated(node))"
-everywhere.
+Is the above statement always true? can the dmabuf being stuck in some
+qdisc? or even some local socket due to redirect?
 
-I guess the ideal approach is one where, instead of having to modify
-the meaning of node_data, we just support replacing it completely,
-e.g:
+> @@ -252,13 +261,23 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+>  	 * binding can be much more flexible than that. We may be able to
+>  	 * allocate MTU sized chunks here. Leave that for future work...
+>  	 */
+> -	binding->chunk_pool =
+> -		gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
+> +	binding->chunk_pool = gen_pool_create(PAGE_SHIFT,
+> +					      dev_to_node(&dev->dev));
+>  	if (!binding->chunk_pool) {
+>  		err = -ENOMEM;
+>  		goto err_unmap;
+>  	}
+>  
+> +	if (direction == DMA_TO_DEVICE) {
+> +		binding->tx_vec = kvmalloc_array(dmabuf->size / PAGE_SIZE,
+> +						 sizeof(struct net_iov *),
+> +						 GFP_KERNEL);
+> +		if (!binding->tx_vec) {
+> +			err = -ENOMEM;
+> +			goto err_free_chunks;
 
-struct page *__alloc_frozen_pages_noprof(gfp_t gfp, unsigned int order,
-		int preferred_nid, nodemask_t *nodemask, 
-		struct pagelist_data *node_data)
-{
-	struct alloc_context ac = { .node_data = node_data };
+Possibly my comment on v3 has been lost:
 
-	// ...
-}
+"""
+It looks like the later error paths (in the for_each_sgtable_dma_sg()
+loop) could happen even for 'direction == DMA_TO_DEVICE', so I guess an
+additional error label is needed to clean tx_vec on such paths.
+"""
 
-Ideally this could be done in such a way that it disappears completely
-outside of KUnit builds, the interface should be private and we'd
-wanna get rid of any unnecessary pointer chasing with stuff like:
+[...]
+> @@ -1071,6 +1072,16 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+>  
+>  	flags = msg->msg_flags;
+>  
+> +	sockc = (struct sockcm_cookie){ .tsflags = READ_ONCE(sk->sk_tsflags),
+> +					.dmabuf_id = 0 };
+> +	if (msg->msg_controllen) {
+> +		err = sock_cmsg_send(sk, msg, &sockc);
+> +		if (unlikely(err)) {
+> +			err = -EINVAL;
+> +			goto out_err;
+> +		}
+> +	}
 
-#ifdef CONFIG_PAGE_ALLOC_KUNIT_TESTS
-static inline struct ac_node_data(struct alloc_context *ac, int node)
-{
-	return ac->node_data[node];
-}
-#else
-#define ac_node_data(ac, node) (NODE_DATA(node))
-#endif
+I'm unsure how much that would be a problem, but it looks like that
+unblocking sendmsg(MSG_FASTOPEN) with bad msg argument will start to
+fail on top of this patch, while they should be successful (EINPROGRESS)
+before.
 
-I initially rejected this approach because it felt "too intrusive",
-but now that I've actually written this RFC I think it could be less
-intrusive than the node_isolated() thing I've proposed here.
+/P
 
-The most obvious challenges I can see there are:
-
-- There might be places that page_alloc.c calls out to that care about
-  node_data but where we really don't want to plumb the alloc_context
-  through (maybe vmscan.c is already such a place)?
-
-- I dunno how many more such helpers we'd need beyond ac_node_data(),
-  like do we need ac_nodes_possible_mask() etc etc etc?
-
-But maybe worth a try - can you see any obvious reason this idea is
-stupid?
-
-> So I don't quite love the idea on first sight ... but I haven't grasped all
-> details of the full picture yet I'm afraid.
-
-Do you have any thoughts about "making up" memory instead of
-hot-unplugging real memory for test usage? That might simplify things
-a bit?
-
-It seems possible that very little mm code cares if the memory we're
-managing actually exists. (For ASI code we did briefly experiment with
-tracking information about free pages in the page itself, but it's
-pretty sketchy and the presence of debug_pagealloc makes me think
-nobody does it today).
-
-There might be arch-specific issues there, but for unit tests it
-seems OK if they don't work on every ISA.
 
