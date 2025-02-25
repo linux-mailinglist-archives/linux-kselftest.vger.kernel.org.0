@@ -1,175 +1,160 @@
-Return-Path: <linux-kselftest+bounces-27460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DE71A44210
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 15:12:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5B2EA44221
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 15:14:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB5973A8DFF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:07:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16AE31893681
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:09:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8B92698A8;
-	Tue, 25 Feb 2025 14:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B675626A0F8;
+	Tue, 25 Feb 2025 14:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="LH+T2tIp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FfpNrfvf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B108B26869E
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 14:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866FC2698A2;
+	Tue, 25 Feb 2025 14:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740492457; cv=none; b=ehHbEukHCxF4bDSrcdTU2BtKHigpaRHSpffPQP5idIC7SPOglfHGZvVhb6vuXHjr/IsWh9T/S8L4sPDoGGUfril7oeV9Bt0U7v5jOcocLAIJeG1eGgo38nmWGUnZMxttPiAp6fI8nksgedbr3CXLmXmzwyhzvx92EyL1zTtDH6A=
+	t=1740492498; cv=none; b=Bsg3BRHjHg/ukSFgRdJnl8fOT+AfLVVh+QFHTLrxAqSnW1igCC5uRVlnsHpCDo5yNHsVQkkTxW2Zwl/5wX63y1nV0mqtb2wwSxwpOSAh9YIogoUta/4G1rXzBk1/YcUq5ZHNV24qQo3Gb/uFOUcKOsSB1624nZJ9K9l3dKadWeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740492457; c=relaxed/simple;
-	bh=ETtbGfre+8vSSFzKt9ffhumK3/zdteTUO6XQ0C3bBjQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EIwW9+AMGU62r0z7rvjevWs9SX+CaOasbtaEbr+9sDW6k96/oAt0sjn7JL7tK+s9ZRjXEzp0NklC0tNFefvG41NXjykllRUkTTcB/J3i47h5/DJYM++/csFq0Sesx5TSt4GZmZqbLL3t6Ud061skF2V1K4sUFgMfXlH7n/Qnp0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=LH+T2tIp; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5dec996069aso9115145a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 06:07:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1740492454; x=1741097254; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=52CPMxSHvISiy3Wem3SvA0rcU6ZBPvQeZSq+VknVkPQ=;
-        b=LH+T2tIpPx+3OFkO6sCUd9tdPB58WVN9RwewDrON/AQztGGEv9RlSftC4ODM2NS+iB
-         qcLeORO43fsyj4vHCpIHTsfzGJ1ol01bXOm6YYMQi1Pct63mD+fTiLoR1yeMW1vOJDGR
-         b38XW7xtR6fzG83GdfyqrU3ti2D5kWzanUGzJK0Mb2TdENfkPKQx7x79VMnXranmSg2E
-         aTdrEfKx/tR4RdbTpvaKi1s5nlPqa3znvzx0oJOFAGiwBSArwqUwdXq/i+XKHaRSQ0UP
-         gFUXrmFh+UtbgVOr9OdrnXLM6LJZgur13cE9D7cigFe6vLK7oQ/dPjrfJcZc+dwLiitv
-         qbow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740492454; x=1741097254;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=52CPMxSHvISiy3Wem3SvA0rcU6ZBPvQeZSq+VknVkPQ=;
-        b=R0sylWrvbfNhy2qBIr15ZH9/0dpqTJNLE9rkS3OPLfMh2Ru9jeOioHaDkSvc3EYUp6
-         +0KSH8lx8l9dBKaU3+wu9V4s4ez6x3oKcm+pB3bigfoMpmCZk40fyLiVmSs+cv+rTofx
-         ALp6CJPaRCK7Zi0sBBHI+TMVmhkF77G+sAS6QL5/vUOuCpSPqWx843Mo40GF0BGQakjY
-         WG0MV/JUIr8XoJk2C0m8oJQCTBsDYSbmhI+egSRlw0p0m5MGDNongFHs0l4gdGiOIILo
-         37/Pak4q9rvHKJtr+qHpggefEfzu5NRSsJVI9q5DVKzah3AmCECxvjRcVKPOqVanguyt
-         Wm3w==
-X-Forwarded-Encrypted: i=1; AJvYcCX+iD6bPZyB59N+04O1pQmNgSvSDHbbyFJRGYRc2BzQUdAi4/fA03t3NBdrw7syGL4DsFC7xIYLiNE6enx1fxc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQGQD9r6zgVeWNLEGGCIpC7yvDzR1i9nVd9ep69rrbFV8ZyZ04
-	RIGYtTEkWcIU2y09mvDxxvaoOVFFJ/A9xkPHj7QJv5Pp6TY9heen0KFfh0bH4Hr7Pz/NVWztiET
-	f6ng/EVEYqAMvwbnln4VrruckgGzEWDZkfISRXA==
-X-Gm-Gg: ASbGncu5Qo4pIFEooYc8LEgnuvF1bdtM8zmoIBTlAJdeFIuKM48Tf0kEs3/fXkknRaL
-	UfloEBWIXn2ovKx/7rpRS11eOdNVKcTvMnlLqtLDqqtJb3Ky/iUjSn+yMskPcddtkNRuJLouuF1
-	vW/oPWdLc=
-X-Google-Smtp-Source: AGHT+IEQN2EDCAAeHFkbNRXvx783uJdY53BszHXjfFa/MVQdphVBraQZDPpAVQvXLTkAQT+0PQSNrmUIWMt1Q9RBz8w=
-X-Received: by 2002:a05:6402:42c9:b0:5d3:cff5:634f with SMTP id
- 4fb4d7f45d1cf-5e0b721e1famr17991883a12.24.1740492454054; Tue, 25 Feb 2025
- 06:07:34 -0800 (PST)
+	s=arc-20240116; t=1740492498; c=relaxed/simple;
+	bh=agLMng6UV0rzQJfX3gB/TEHY9nLHE/M+0WctUU7L3p0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ig7Kvm3F+HIFp3VjmSXK35GP6Ge7dFzUgLCSlxGldBjqPxARWbezaTXKXTVKYaq8jEwSstI9LvVxdmnqDpu8SgwdD5d2APwc9iTPK+H+JB9zi4vZrFbjZ5nh5I9WzctlPTgRrJKfA+VD0uAOoUCnlvUF914TI9tJ6Ybwmno7i/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FfpNrfvf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C31C4CEDD;
+	Tue, 25 Feb 2025 14:08:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740492498;
+	bh=agLMng6UV0rzQJfX3gB/TEHY9nLHE/M+0WctUU7L3p0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FfpNrfvfIigB/A0z/RS3QwyHB6692+C8GbgY+b2HE1jfQpcEssFeHl8D63nfv5PFm
+	 IKU3P+dHBocLEP96eRaOckIcW3RomNy9Oc+kRiE7xl5X/SRCWU8jWGBQ9bVmbeYX4r
+	 Z7GdO4554ffptxCp1c8VkV7dJaKmcPbrX0kyjMRs/+z0nkj90gPVKQTRrKySFdW5Zb
+	 ObePE0pbW+yFzQu83m8qHRfj8Z4rIQAUqqn/8JmiZiE9wygy00VBWPzdgMnOM/iYGS
+	 38HGOPL2SpmJPx3Pff1fWAUiyNbiYnFAZ0Kujx19lwkhw58bUNVtHDYoOPIeAhpEUB
+	 rbLXiHYP/G3vg==
+Date: Tue, 25 Feb 2025 14:08:13 +0000
+From: Simon Horman <horms@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH net-next 2/7] netconsole: refactor CPU number formatting
+ into separate function
+Message-ID: <20250225140813.GU1615191@kernel.org>
+References: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
+ <20250221-netcons_current-v1-2-21c86ae8fc0d@debian.org>
+ <20250225101748.GL1615191@kernel.org>
+ <20250225-diamond-gaur-of-anger-b0f77e@leitao>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250115024024.84365-1-cuiyunhui@bytedance.com>
- <CAHVXubhapunBD_+cZ=WeEp9GPJec795xOWSnMKmh_iSH09r2Yw@mail.gmail.com> <CAEEQ3wkeLrTFVqVZEAYSsROSLHzkC-EeKvuPHmW=qH3CxamwhA@mail.gmail.com>
-In-Reply-To: <CAEEQ3wkeLrTFVqVZEAYSsROSLHzkC-EeKvuPHmW=qH3CxamwhA@mail.gmail.com>
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Tue, 25 Feb 2025 15:07:23 +0100
-X-Gm-Features: AQ5f1Jq1ao-dkwxD2tcF7rBD5LcSaT1gKrmPFXFhH7IkW09oLtBAZAZXrkzMTtc
-Message-ID: <CAHVXubhCOivB8oxG7gcCNKTfK0DgHdu721SxsyGX2E4XAjbi6w@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v5 0/3] Enable Zicbom in usermode
-To: yunhui cui <cuiyunhui@bytedance.com>
-Cc: ajones@ventanamicro.com, andybnac@gmail.com, aou@eecs.berkeley.edu, 
-	charlie@rivosinc.com, cleger@rivosinc.com, conor.dooley@microchip.com, 
-	conor@kernel.org, corbet@lwn.net, evan@rivosinc.com, jesse@rivosinc.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	palmer@dabbelt.com, paul.walmsley@sifive.com, samuel.holland@sifive.com, 
-	shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225-diamond-gaur-of-anger-b0f77e@leitao>
 
-On Tue, Feb 25, 2025 at 2:27=E2=80=AFPM yunhui cui <cuiyunhui@bytedance.com=
-> wrote:
->
-> Hi Alex,
->
-> On Tue, Feb 25, 2025 at 9:21=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosi=
-nc.com> wrote:
-> >
-> > Hi Yunhui,
-> >
-> > On Wed, Jan 15, 2025 at 3:40=E2=80=AFAM Yunhui Cui <cuiyunhui@bytedance=
-.com> wrote:
-> > >
-> > > v1/v2:
-> > > There is only the first patch: RISC-V: Enable cbo.clean/flush in user=
-mode,
-> > > which mainly removes the enabling of cbo.inval in user mode.
-> > >
-> > > v3:
-> > > Add the functionality of Expose Zicbom and selftests for Zicbom.
-> > >
-> > > v4:
-> > > Modify the order of macros, The test_no_cbo_inval function is added
-> > > separately.
-> > >
-> > > v5:
-> > > 1. Modify the order of RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE in hwprobe=
-.rst
-> > > 2. "TEST_NO_ZICBOINVAL" -> "TEST_NO_CBO_INVAL"
-> > >
-> > > Yunhui Cui (3):
-> > >   RISC-V: Enable cbo.clean/flush in usermode
-> > >   RISC-V: hwprobe: Expose Zicbom extension and its block size
-> > >   RISC-V: selftests: Add TEST_ZICBOM into CBO tests
-> > >
-> > >  Documentation/arch/riscv/hwprobe.rst        |  6 ++
-> > >  arch/riscv/include/asm/hwprobe.h            |  2 +-
-> > >  arch/riscv/include/uapi/asm/hwprobe.h       |  2 +
-> > >  arch/riscv/kernel/cpufeature.c              |  8 +++
-> > >  arch/riscv/kernel/sys_hwprobe.c             |  6 ++
-> > >  tools/testing/selftests/riscv/hwprobe/cbo.c | 66 +++++++++++++++++--=
---
-> > >  6 files changed, 78 insertions(+), 12 deletions(-)
-> > >
-> > > --
-> > > 2.39.2
-> > >
-> >
-> > So a v6 needs to be sent with:
-> >
-> > - the fix for hwprobe_ext0_has() reported by kernel test robot
-> > - a rebase on top of 6.14 since patch 2 will conflict with
-> > RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0
->
-> Thank you for the reminder. In fact, version 6 was sent out almost a
-> month ago. Reference:
-> https://lore.kernel.org/lkml/20250124035959.45499-1-cuiyunhui@bytedance.c=
-om/
+On Tue, Feb 25, 2025 at 03:09:20AM -0800, Breno Leitao wrote:
+> Hello Simon,
+> 
+> On Tue, Feb 25, 2025 at 10:17:48AM +0000, Simon Horman wrote:
+> > On Fri, Feb 21, 2025 at 05:52:07AM -0800, Breno Leitao wrote:
+> > > Extract CPU number formatting logic from prepare_extradata() into a new
+> > > append_cpu_nr() function.
+> > > 
+> > > This refactoring improves code organization by isolating CPU number
+> > > formatting into its own function while reducing the complexity of
+> > > prepare_extradata().
+> > > 
+> > > The change prepares the codebase for the upcoming taskname feature by
+> > > establishing a consistent pattern for handling sysdata features.
+> > > 
+> > > The CPU number formatting logic itself remains unchanged; only its
+> > > location has moved to improve maintainability.
+> > > 
+> > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > > ---
+> > >  drivers/net/netconsole.c | 18 +++++++++++-------
+> > >  1 file changed, 11 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> > > index c086e2fe51f874812379e6f89c421d7d32980f91..26ff2ed4de16bce58e9eeaf8b5b362dfaafaca0a 100644
+> > > --- a/drivers/net/netconsole.c
+> > > +++ b/drivers/net/netconsole.c
+> > > @@ -1117,13 +1117,21 @@ static void populate_configfs_item(struct netconsole_target *nt,
+> > >  	init_target_config_group(nt, target_name);
+> > >  }
+> > >  
+> > > +static int append_cpu_nr(struct netconsole_target *nt, int offset)
+> > > +{
+> > > +	/* Append cpu=%d at extradata_complete after userdata str */
+> > > +	return scnprintf(&nt->extradata_complete[offset],
+> > > +			 MAX_EXTRADATA_ENTRY_LEN, " cpu=%u\n",
+> > > +			 raw_smp_processor_id());
+> > > +}
+> > > +
+> > >  /*
+> > >   * prepare_extradata - append sysdata at extradata_complete in runtime
+> > >   * @nt: target to send message to
+> > >   */
+> > >  static int prepare_extradata(struct netconsole_target *nt)
+> > >  {
+> > > -	int sysdata_len, extradata_len;
+> > > +	int extradata_len;
+> > >  
+> > >  	/* userdata was appended when configfs write helper was called
+> > >  	 * by update_userdata().
+> > > @@ -1133,12 +1141,8 @@ static int prepare_extradata(struct netconsole_target *nt)
+> > >  	if (!(nt->sysdata_fields & SYSDATA_CPU_NR))
+> > >  		goto out;
+> > >  
+> > > -	/* Append cpu=%d at extradata_complete after userdata str */
+> > > -	sysdata_len = scnprintf(&nt->extradata_complete[nt->userdata_length],
+> > > -				MAX_EXTRADATA_ENTRY_LEN, " cpu=%u\n",
+> > > -				raw_smp_processor_id());
+> > > -
+> > > -	extradata_len += sysdata_len;
+> > > +	if (nt->sysdata_fields & SYSDATA_CPU_NR)
+> > > +		extradata_len += append_cpu_nr(nt, nt->userdata_length);
+> > 
+> > Hi Breno,
+> > 
+> > As this is the only caller of append_cpu_nr() I'm wondering
+> > if it would be nicer if nt was the only argument to append_cpu_nr().
+> 
+> Yes, I can do it. I just kept both functions the same:
+> 
+>   static int append_taskname(struct netconsole_target *nt, int offset)
+>   static int append_cpu_nr(struct netconsole_target *nt, int offset)
+> 
+> Another option is to use extradata_len as the second argument, instead
+> of nt->userdata_length. That might(?) make the code easier to read? it
+> would look like the following:
+> 
+>           extradata_len = nt->userdata_length;
+>           if (nt->sysdata_fields & SYSDATA_CPU_NR)
+>                   extradata_len += append_cpu_nr(nt, extradata_len);
+>           if (nt->sysdata_fields & SYSDATA_TASKNAME)
+>                   extradata_len += append_taskname(nt, extradata_len);
+> 
+> What would you write yourself?
 
-Oh sorry, I missed it somehow!
-
-I think we can fix RISCV_HWPROBE_MAX_KEY when merging the patch.
-
-Sorry again and thanks!
-
-Alex
-
->
-> >
-> > Do you think you can do that soon so that it gets merged in 6.15? The
-> > patchset received a lot of RB so it would be too bad to miss this
-> > release.
-> >
-> > Thanks,
-> >
-> > Alex
->
-> Thanks,
-> Yunhui
+I think that I would reduce the number of parameters of append_cpu_nr() and
+append_taskname(). But really, any of the options, including this patch
+as-is, are fine. So please chose whichever you think is best.
 
