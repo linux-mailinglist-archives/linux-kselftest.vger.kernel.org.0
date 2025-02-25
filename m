@@ -1,31 +1,31 @@
-Return-Path: <linux-kselftest+bounces-27466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B06AEA443CF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 16:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 65757A443EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 16:08:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 770EC7A2F3C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 15:02:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 134C87A41CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 15:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36987265610;
-	Tue, 25 Feb 2025 15:03:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AE152686B1;
+	Tue, 25 Feb 2025 15:07:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E046B21ABA3;
-	Tue, 25 Feb 2025 15:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5EA1C6FF3;
+	Tue, 25 Feb 2025 15:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740495807; cv=none; b=s/5qBn8uUY7WlbCYkWgvP7v01rHcj1+if28UjA3+sgHI/hvswqO/2t/upUZUh+IafvoN3rQYTkFP7/Fcy2K9TLDtq6xpQ8lmx+exuPjVYZf9k6AVi3bxKAPJ/3WXY8LR5NcVu2vq2QbNcb5EjHzj1+O43qyqcnZ/HgDURYbzshA=
+	t=1740496067; cv=none; b=DDLp0PJF8vdmdqmbbnilnH2RBTXxs4iAZhMpqVhH79t1Ikz9cKtyl1L4BCcQz7KxAd51NRCl/NMgegSE2BJfQBhpo850dBZBUY+JlnTpNoUaHQUGx8XsyKOdr5QPEbaHmQOSThKqGC36Yg7BvMr+1GmUJkwmWY99xwXMwj50CcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740495807; c=relaxed/simple;
-	bh=NmDieNqa0hKn4613+QefhA0S3lXIlcoi+rTSENIZIgc=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=mwERPWuoCnUhLInjKXeh+fmd17+6Jh8WHt/pCqDp416WRAmDC8X+VeMB+F56IfRx7uiSN7bPl58C3TeTranROva8asf4jGW6dUxLwsRB0aYMzMByua9IJ9TwHsbGvjStdKR0G/6n6FYj6ptHoMQTBBvKQN5jUjrYIvdmdkKSeU4=
+	s=arc-20240116; t=1740496067; c=relaxed/simple;
+	bh=bhmQGmo6H06KAaOwOt7dtvkEEcgzxnb3as45HbNo+/4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=etPgfD9+oyclSCzwwv+B7u7cszRInnVsnBb7QwLhknqWqSGEIlRbr7P7Apbg7Ef+9ywSz01E64Tka26H5KQXlisMK6cAYsBQOHASULMGyQOIllspvFq3f99+K7wD9VMFHn2edgaYKYRUtHK5T1X7sUaJ7KpJkBd62lj/catzo2o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -33,15 +33,15 @@ Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmwSe-0008sc-Aq; Tue, 25 Feb 2025 16:03:04 +0100
+	id 1tmwWw-00098H-UI; Tue, 25 Feb 2025 16:07:30 +0100
 Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmwSe-000FtS-1g;
-	Tue, 25 Feb 2025 16:03:04 +0100
-Message-ID: <e378ffb9-2424-4b09-b5fd-688f4f3d1556@hetzner-cloud.de>
-Date: Tue, 25 Feb 2025 16:03:02 +0100
+	id 1tmwWx-000Mo3-0R;
+	Tue, 25 Feb 2025 16:07:30 +0100
+Message-ID: <efcc6e11-2d3a-489e-80bc-cbc3f72f7afa@hetzner-cloud.de>
+Date: Tue, 25 Feb 2025 16:07:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,18 +49,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: jasowang@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
- eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org,
- Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: refactor
+ xdp_context_functional test and bpf program
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org, eddyz87@gmail.com,
+ mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ shuah@kernel.org, hawk@kernel.org
 References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <67bdd9e0c54d9_2474a12947d@willemb.c.googlers.com.notmuch>
+ <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
 Content-Language: en-US
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
@@ -107,38 +108,26 @@ Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
  VUssNEOhjUERfkdnHNeuNBWfiABIb1Yn7QC2BUmwOvN2DsqsChyfyuknCbiyQGjAmj8mvfi/
  18FxnhXRoPx3wr7PqGVWgTJD1pscTrbKnoI1jI1/pBCMun+q9v6E7JCgWY181WjxgKSnen0n
  wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-Subject: Re: [PATCH bpf-next v3 0/6] XDP metadata support for tun driver
-In-Reply-To: <67bdd9e0c54d9_2474a12947d@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27560/Tue Feb 25 10:44:40 2025)
 
-Am 25.02.25 um 15:55 schrieb Willem de Bruijn:
-> Marcus Wichelmann wrote:
->> [...]
->>
->> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
->> Acked-by: Jason Wang <jasowang@redhat.com>
->> Reviewed-by: Willem de Bruijn <willemb@google.com>
-> 
-> Please don't add tags, unless a person has explicitly added them.
-> 
-> And they are only sticky when the code has not been changed since
-> they added them.
-> 
-> These are only in the cover letter, so not picked up. But for future
-> revisions and patches.
+Am 24.02.25 um 16:29 schrieb Marcus Wichelmann:
+> [...]
+> +	/* By default, Linux sends IPv6 multicast listener reports which
+> +	 * interfere with this test. Set the IFF_NOARP flag to ensure
+> +	 * silence on the interface.
+> +	 */
+> +	SYS(close, "ip link set dev " RX_NAME " arp off");
+>   	SYS(close, "ip link set dev " RX_NAME " up");
 
-Oh, I'm sorry. I checked https://docs.kernel.org/process/submitting-patches.html
-but must have misunderstood it then.
+Hm, setting the NOARP flag seems to have not been sufficient to fix the flaky
+test:
+https://github.com/kernel-patches/bpf/actions/runs/13507111620/job/37739614229
 
-To clarify:
-So these tags are limited to a single patch of the patch series and I should only
-carry them over, when the single patch where they were added to is re-sent in a
-follow-up patch series without changes?
-
-Thank you. I still have to familiarise myself with the mailinglist processes.
-
-Marcus
+I was not able to reproduce it locally or with my own CI runs unfortunately, but
+I'll try something else in the next patch version which should definitely stop
+IPv6 multicast listener report packets from messing with the tests.
 
