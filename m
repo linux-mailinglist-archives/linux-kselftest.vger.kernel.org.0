@@ -1,166 +1,161 @@
-Return-Path: <linux-kselftest+bounces-27530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F7DDA44C07
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 21:10:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E76EA44DE0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 21:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7D4A189E24E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 20:10:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BDA61683A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 20:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B764A20FAB0;
-	Tue, 25 Feb 2025 20:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1017A40C03;
+	Tue, 25 Feb 2025 20:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Hj+G5pO8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iOGI11ig"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2312C664C6;
-	Tue, 25 Feb 2025 20:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16C61A9B58
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 20:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740514178; cv=none; b=qkGmEhtXeu2yGUWhgheVw6gZAk4C5zAnJIZof0JNlfgjisAafWh7ZjasTMPlSE2IPrvkNrrOWJZxgLYjniTHC/6esAh+p7U4yD7KRH8n1thBW7mExg9MKTWv4AwiInaZuh7fMIDJ76/WkcHVFIHOadF1gR89wfCqsn/TT+W/KGI=
+	t=1740515840; cv=none; b=eHDBVgDwK2yiC5YFkF6hSyGwIXqPLor9Bn6jl+oS8dRUi0mXs1MWb2H1b6Sps9NcpEm5K/V+62r05HsLDXz1XlP6IUS4Unp9moXR+710CMxA/5QqoeyWOmECGox1umR+u2MN4uH8lBtNMG6d42DVtQmI0S1tKfZSlqhTwY0Ahkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740514178; c=relaxed/simple;
-	bh=t6FX7aiyLcuF+EBK+sm1jtBKgO+cgZnG8RW8hEwGgJo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=todJmOQUUeX4oPFpt4Z8Js+a4F7dco1GEheGxyA6Vpr4KnI2MV64Ypv7pMUSlKBLd8cN8dt0j6EZpZfazQG+T2SGGeUwPRWIFKNa/kOwRSanijCmR6zV8wxFhNmiQCj9j9SUqS2SD+dAL8ABPq209p8EskzrMSwD15NxAiMvWeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Hj+G5pO8; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51PIXkB3026181;
-	Tue, 25 Feb 2025 20:09:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=n1mC9
-	zPGNwKL8lTZ1e+ewcz0xtS8oHnw63G64cKjM/E=; b=Hj+G5pO8RPeVhQmd7dMVg
-	79DHldrCHw0P0Anm1xqB8okLq5TXn9u0xqvvBj6zQOisVMJ5saWv6PWAHJghioA5
-	sz6L/o7hrCsklLGQvpmRNWUFrP1x/C38EpiFg8BnUp3t//WBg8KlhSxjEkFxK2Ja
-	/FXpSHRwKE/OxDi0d3J1fP8TnhMP/srl6ns0VX8wrMsYo8miLdX2UTsmIQHmOXuq
-	xf7IAbBTcq0eJG+A2QnTwoKY1me8BmNqgOhCd29qVGGzPRXPV/Gqan0EbC6L7lrm
-	HeDxDW12kPA5zVyj0i5JphMM6nFxIcSBIOYSUHh92O1W3bIZu5z1fd+Ock3JfBY9
-	A==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44y56067uy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 25 Feb 2025 20:09:32 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51PJ4E2s025528;
-	Tue, 25 Feb 2025 20:09:30 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44y51g9yum-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 25 Feb 2025 20:09:30 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 51PK9QpX011891;
-	Tue, 25 Feb 2025 20:09:30 GMT
-Received: from sishan-generic.osdevelopmeniad.oraclevcn.com (sishan-generic.appad1iad.osdevelopmeniad.oraclevcn.com [100.100.231.227])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 44y51g9yrn-3;
-	Tue, 25 Feb 2025 20:09:30 +0000
-From: Sinadin Shan <sinadin.shan@oracle.com>
-To: shuah@kernel.org, sshegde@linux.ibm.com, chris.hyser@oracle.com
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sinadin Shan <sinadin.shan@oracle.com>
-Subject: [PATCH v3 2/2] selftests: sched: skip cs_prctl_test for systems with core scheduling disabled
-Date: Tue, 25 Feb 2025 20:09:10 +0000
-Message-ID: <20250225200910.260569-3-sinadin.shan@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250225200910.260569-1-sinadin.shan@oracle.com>
-References: <20250225200910.260569-1-sinadin.shan@oracle.com>
+	s=arc-20240116; t=1740515840; c=relaxed/simple;
+	bh=iANJ7jUuLPOAUdWYvwdIPBdpaK1PGcaz53zJhHH7W28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k1opZz2Sjyz5NV0NytsnCIp8XrtkiARLyi3P6UOPy1jxjLVMYX6Z3WBJPjEGaBY8WCAnZSrYtfCzFiO0cxlq2WARQ6Dft8CeRW/hO27rJwQE0P6EFDNsEV8VV5OapyX+jMlwf1GGdblXVL+K+QgTi4u4Zo+Vbpvu7tgixjdWJX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iOGI11ig; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740515835;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zRqlIAwXEZAt9A8J1cznfUQsjJ6aJaejVBOoC9QBm/E=;
+	b=iOGI11igcjgJFF8tzY6bS4Ui92NtzARpkbgRR/Y3L9WYW/bxyLdP/62XRU06WZuviYddyb
+	YgU+u1PqGQNhL3bIwkXk0ax4YSDHFjJjfZevtAyyIgI1ACd9yKgSadelhIX6zXj7Z/coPK
+	fQJ4CZu5vQUVMOf3xyZyob1bTg552RU=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-99-Yqd-S2X2MhSLsgh54rm0Ng-1; Tue, 25 Feb 2025 15:37:14 -0500
+X-MC-Unique: Yqd-S2X2MhSLsgh54rm0Ng-1
+X-Mimecast-MFC-AGG-ID: Yqd-S2X2MhSLsgh54rm0Ng_1740515833
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-7272acb753bso5769693a34.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 12:37:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740515833; x=1741120633;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zRqlIAwXEZAt9A8J1cznfUQsjJ6aJaejVBOoC9QBm/E=;
+        b=b0Dq9cbZl9IcafDgiKVCQZ08/hGZD6qWy4mQLZT8g3x556wgm1sqwUor0MDbhqIQG4
+         /oU5DGSugJBdnIrzB6nvTw/mJSSLs5VCEFXFogvnzUMUzV1OMfK0etpJMShrkGFrjmOb
+         3IPzpl4Ci6AbdlUMdOagPaBkjT43SFLgaiCH5C9GEUl1d8hQilFtCK9m/p+P21i3YAJW
+         odhyLSSJcEU+IXJt7Ni2qYiyAg1X9L5tv00XHc2m4qpQ3nafwLBI+ED2tlTw8x0Ub/Tl
+         YL1yzIUoIjUMBIECst2g2gQojijt23jODG1gSnq6/UEKiHazfTR0FMohe1HNW/vMfT7A
+         3gKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWSnNgR0uLExenqFi9oGBqp3AaLbaMbhtOP7FfjCQnsEbFuWsN7ukscFAVtAn4J4BJsPbE5omi+DkFigt53vSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuVoFLhxHsAfweFZbDgY4OyN5srl7/39X+wZzrKDfDxBPemO15
+	TMCNDsbFpYqzykqmlcWcf46idKM1bFygKG5QfmY3isY1HZ1slj5YTnj9+C9EGbR18iMPuZDtZVO
+	Nbnor9Z0yOKPoQ3A9gO5AcGqAI/Q0bJiKucXj/OJZ2xJfRvxCj8fr7PIeVP/2hoBctw==
+X-Gm-Gg: ASbGncuwipRZLk7Jnx7FYlVSN0HuuSHPWemFwq2VbSo4nQhZIBPfZu331UJgnOzrWX5
+	Oc/BuFbBAdeEqIkPP+Jh9un9NvmrsqD42qPyzFtAENKl/SzSbh8ZIpNPCrClbu26ZL8XNnMYeYk
+	T03G39pmV/iA9mskkdtMr9tpK51eZArjSan00KimrMND6phSNuD2XFXTuIDUaiHi2jEW8DKiRhY
+	VYA93WhQJcvmY1RGA15TFFlLzAHApTmcczbRgEyf1z0uegRU9F8KwjHENrKFUnIweOqtg==
+X-Received: by 2002:a05:6830:6c11:b0:727:25c6:1b60 with SMTP id 46e09a7af769-7274c1840famr14524645a34.5.1740515833595;
+        Tue, 25 Feb 2025 12:37:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFotTZ/dQhUmhniqjIu8SiEBEne0EGahBIhmibL4OkgpDX+sNTQXhjiXbEsxwXRiWLeeDe4Vw==
+X-Received: by 2002:a05:6830:6c11:b0:727:25c6:1b60 with SMTP id 46e09a7af769-7274c1840famr14524623a34.5.1740515833295;
+        Tue, 25 Feb 2025 12:37:13 -0800 (PST)
+Received: from x1.local ([2604:7a40:2041:2b00::1000])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7289deed409sm431155a34.40.2025.02.25.12.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 12:37:12 -0800 (PST)
+Date: Tue, 25 Feb 2025 15:37:07 -0500
+From: Peter Xu <peterx@redhat.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk,
+	jgg@nvidia.com, david@redhat.com, rientjes@google.com,
+	fvdl@google.com, jthoughton@google.com, seanjc@google.com,
+	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com,
+	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev,
+	mike.kravetz@oracle.com, erdemaktas@google.com,
+	vannapurve@google.com, qperret@google.com, jhubbard@nvidia.com,
+	willy@infradead.org, shuah@kernel.org, brauner@kernel.org,
+	bfoster@redhat.com, kent.overstreet@linux.dev, pvorel@suse.cz,
+	rppt@kernel.org, richard.weiyang@gmail.com, anup@brainfault.org,
+	haibo1.xu@intel.com, ajones@ventanamicro.com, vkuznets@redhat.com,
+	maciej.wieczor-retman@intel.com, pgonda@google.com,
+	oliver.upton@linux.dev, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-fsdevel@kvack.org
+Subject: Re: [RFC PATCH 26/39] KVM: guest_memfd: Track faultability within a
+ struct kvm_gmem_private
+Message-ID: <Z74p8-l6BhOmR1B_@x1.local>
+References: <cover.1726009989.git.ackerleytng@google.com>
+ <bd163de3118b626d1005aa88e71ef2fb72f0be0f.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-25_06,2025-02-25_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 suspectscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
- definitions=main-2502250122
-X-Proofpoint-GUID: EfVJsXmgymTraPvFSI5KDg5oUxi4oLKQ
-X-Proofpoint-ORIG-GUID: EfVJsXmgymTraPvFSI5KDg5oUxi4oLKQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bd163de3118b626d1005aa88e71ef2fb72f0be0f.1726009989.git.ackerleytng@google.com>
 
-For kernels with CONFIG_SCHED_CORE=n, the sched selftest cs_prctl_test
-fails with "Not a core sched system" error. Change this to gracefully
-skip the test for systems with core scheduling disabled. Exiting early
-would also ensure failures reported in obtaining cookie are valid
-failures and not because core scheduling isn't supported.
+On Tue, Sep 10, 2024 at 11:43:57PM +0000, Ackerley Tng wrote:
+> @@ -1079,12 +1152,20 @@ static struct inode *kvm_gmem_inode_make_secure_inode(const char *name,
+>  	if (err)
+>  		goto out;
+>  
+> +	err = -ENOMEM;
+> +	private = kzalloc(sizeof(*private), GFP_KERNEL);
+> +	if (!private)
+> +		goto out;
+> +
+>  	if (flags & KVM_GUEST_MEMFD_HUGETLB) {
+> -		err = kvm_gmem_hugetlb_setup(inode, size, flags);
+> +		err = kvm_gmem_hugetlb_setup(inode, private, size, flags);
+>  		if (err)
+> -			goto out;
+> +			goto free_private;
+>  	}
+>  
+> +	xa_init(&private->faultability);
+> +	inode->i_mapping->i_private_data = private;
+> +
+>  	inode->i_private = (void *)(unsigned long)flags;
 
-Skip cs_prctl_test for systems with CONFIG_SCHED_CORE=n
+Looks like inode->i_private isn't used before this series; the flags was
+always zero before anyway.  Maybe it could keep kvm_gmem_inode_private
+instead? Then make the flags be part of the struct.
 
-Signed-off-by: Sinadin Shan <sinadin.shan@oracle.com>
----
- tools/testing/selftests/sched/cs_prctl_test.c | 34 ++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+It avoids two separate places (inode->i_mapping->i_private_data,
+inode->i_private) to store gmem private info.
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 52d97fae4dbd8..5b0047b50e640 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -109,6 +109,36 @@ static void handle_usage(int rc, char *msg)
- 	exit(rc);
- }
- 
-+static void check_core_sched(void)
-+{
-+	unsigned long long cookie;
-+	int ret, num_max_process;
-+	char buffer[32];
-+
-+	FILE *fp = fopen("/proc/sys/kernel/pid_max", "r");
-+
-+	if (fp == NULL) {
-+		perror("Failed to obtain max process number");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (fgets(buffer, sizeof(buffer), fp) == NULL) {
-+		fclose(fp);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	num_max_process = atoi(buffer);
-+	fclose(fp);
-+
-+	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, num_max_process+1, PIDTYPE_PID,
-+			(unsigned long)&cookie);
-+	if (ret == -1 && errno != ESRCH) {
-+		perror("prctl failed");
-+		printf("Core sched not supported, hence skipping tests\n");
-+		exit(4);
-+	}
-+}
-+
- static unsigned long get_cs_cookie(int pid)
- {
- 	unsigned long long cookie;
-@@ -117,7 +147,7 @@ static unsigned long get_cs_cookie(int pid)
- 	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
- 		    (unsigned long)&cookie);
- 	if (ret) {
--		printf("Not a core sched system\n");
-+		printf("Failed to get cookie\n");
- 		return -1UL;
- 	}
- 
-@@ -270,6 +300,8 @@ int main(int argc, char *argv[])
- 	if (keypress)
- 		delay = -1;
- 
-+	check_core_sched();
-+
- 	srand(time(NULL));
- 
- 	/* put into separate process group */
+>  	inode->i_op = &kvm_gmem_iops;
+>  	inode->i_mapping->a_ops = &kvm_gmem_aops;
+> @@ -1097,6 +1178,8 @@ static struct inode *kvm_gmem_inode_make_secure_inode(const char *name,
+>  
+>  	return inode;
+>  
+> +free_private:
+> +	kfree(private);
+>  out:
+>  	iput(inode);
+>  
+> -- 
+> 2.46.0.598.g6f2099f65c-goog
+> 
+
 -- 
-2.43.5
+Peter Xu
 
 
