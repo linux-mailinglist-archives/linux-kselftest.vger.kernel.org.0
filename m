@@ -1,90 +1,92 @@
-Return-Path: <linux-kselftest+bounces-27448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D090A43F89
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 13:37:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62ECFA43FC9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 13:56:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23FE3188873F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:37:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E3AD7A65C8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3605E267B8A;
-	Tue, 25 Feb 2025 12:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4848268C5A;
+	Tue, 25 Feb 2025 12:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iKKJckXA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ke6xQC6D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA07025487C;
-	Tue, 25 Feb 2025 12:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DB0267AE1
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 12:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740487029; cv=none; b=lm9EIyjfll0SEyaTp4yWo0S486F2Pf0C35v2+Ol3OD7kZUtXI1X6/5sb5pTrCLxLwX9YLpjVz1A27GnEO43DLQ6Asi/bFRe09OaVdmEPDaIN8WcowNbavM5DPTjnQ7+sCZd5a2b0GMwPCRGkTNPzDjwzYCTiqC5MuGh+6P7T14g=
+	t=1740488200; cv=none; b=gCbz6uK1fCzC3A16kePW5izg/wQ9RNHMRn3Qm3Gh9EU5eqyT1AKFENzphTNpfrSCryZ+3SmlY8RSouTzogUyQ3eRevaz6Ex66gsKjTgAtPht/qTPCec/+2PQZMrnCcbxLShrG9v35+r2E6ks2iJZY0cTwtFvdelUzEeexyYB9O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740487029; c=relaxed/simple;
-	bh=W5InabegADnboM8GpEhi3zVlkCTOZ31FZiTmuk1cFaE=;
+	s=arc-20240116; t=1740488200; c=relaxed/simple;
+	bh=qeHqr2N7h2hbEwkQv0Vwe6G5E97ceWLeI1LIx1Yu2ZA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O/IPnD2Bq4gkot9o0GByy1+fnr8FWgsrQwyHVU15tDmFo6TTkxVafi+3YC3wOu7wfN/63G7efQyCKPdHWhu2sWMeH4Vk/rxz/HYQxMJwpuytZMuZeofikgr1YS9jXZKMlGRNjNJl5MyOZbjJ/5v2ROFaJyX2W7oFdSNySbD0kUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iKKJckXA; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-220c92c857aso92872665ad.0;
-        Tue, 25 Feb 2025 04:37:07 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CRoU1hYXKNj3pTBvtzG+0gKskGfy4Fms6PpvvfwAgaMI3tw73yov2imqHsKkirIfliEe6PgJlEk0d7JiOArDdEoLRXlKtkAqiGrbeWGq1YZSsyOgQ5DuOln47ggbQ+onrjAGOX+QQpYBseFNAIxzMlZrpLqot/o7gNqXoocd+gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ke6xQC6D; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-439849103c8so48435e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 04:56:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740487027; x=1741091827; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1740488197; x=1741092997; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zmzilI70g+hJ2t2NvDXbcqT58xMGphKxl1+puSjOTVQ=;
-        b=iKKJckXAtPvql4xzEJQxZqsu2Q/HftEyW8YsBtOc+6jw0/dBVQ8SNaV9h9DSMaZZeb
-         wuvV5W7odDXFSYMjTcOvpvI6rWn0HGJSWyD0fQWA9NAx85Htc571SDd2Aw4WctdHcJge
-         lkfmA8Ls53CUVCQIDwc3jwVUflEYngIODt8b0BgQvYqeH0CwQcnh5CBL1sTtWLN+it1D
-         QUTTIqXlGnnd8k+fnnY7gVd4BOJjRVxPN7a+3FrHAAI4TREE9yUxUaIb8mv5WBGb+CRt
-         OhTRzORzeNsYrZ6BRC54QbpKwZAvVerRDYBh/z7WzdAogfeNrImDxgQmIABGr4112cY/
-         PMYw==
+        bh=MC9KPLvVqWKMt0reEhfmjJu692XzkFN80RWzCGUDFJk=;
+        b=Ke6xQC6Dwzf3Xr8Rlh5t/4YYHw5cWoLpDtX1wrSkbWEnPnwMVvbAZmEZ4mSfoGYXFn
+         QS+JeD0oYjuzX1bFXXT7rHFJqs5mTfKH93PKdB0ivvQzx8raYzLPPm2qPkkpPqb+zoFW
+         VVaxU48EljrpNC3R1Lthmv9WsiebuEBPwH/5cZFxYRQYRzWyN4rWl9QqeZFJE6mNYjqD
+         QeN6oCDrTW18iv6QTUsg4pqiNQcq04BqRPl0UKR98Nx3ZMMlMGBhR9ML9HKeJ051mxpG
+         KcygWzBCAklppDwfjaOtIwjutywMVWi0tsvc/1xazNRGKINFEAHVadvoAuqpAe1rQDpp
+         KFSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740487027; x=1741091827;
+        d=1e100.net; s=20230601; t=1740488197; x=1741092997;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zmzilI70g+hJ2t2NvDXbcqT58xMGphKxl1+puSjOTVQ=;
-        b=LkSD1350ubwPKFLOryfELM/1sIO/Npe/uWe6XMOk0tQpfy6e4SlAfF5I4s3Yrd/UPV
-         dN2ZUwSazBAjRyt6WNWBfJkTTlAmEKEMzUnvl7AvYECgXMFk0EwInFCLa0he7p6kWYU3
-         2UHjbERZo31HMajkkmBWwPOC+Xv6ok6iwVahHex9HAmPvvCNx0Zv/JMKaL/MlfjUgPjT
-         6IVJiCoAv0Vzc0y3oaOcaLqesig7a8nxo5FOb0YmEGuuzTTNGe81VI+VfMtWOTcz67rZ
-         L0rviVRBGYQb330cmjsF4rf1EQFzKWCfsT3bSlskY/Q613imbvue0lEqxCHcA/m3yq13
-         ZF1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUHDjTi9ZGRQo6H4bwzirkFF+SJZ3KTuv1FvoTVvx5sziKEhulCR8P4htcfgRx1fPeKLYlyy1kun96/54A=@vger.kernel.org, AJvYcCUNhOp21qC2IVPwS7QDgO1PYGHOcBh2OaOS0VThBCruxPELJCwSZbaBGk4vwDxAaD6GTaHTgoEIDSfa00AmQM64@vger.kernel.org, AJvYcCUSRRlaDHTCNJiqrNA+vTnnlvM0AWqtLuwg6uuB1RzhzQJcgJgR92I55HnBR6uN9QlNUk82yf+F@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDEEQ1nDceeSNL7EwFOtWDuDOcFb3TOr1CRiByiSSOnqq/J/jK
-	doxHn2MxV2cbyakycq/UT05ZGiMURVtLW8cUIigHTX64WSiwpBFK
-X-Gm-Gg: ASbGncvEh/3CNgLmfyYX86Uszny2OrGc9aqtPB8VnV9gKKAL7SeICMyfNmLakGeBhol
-	vfNnetGgx5Z4Uvq06nr0YfNQnXEO+p2/bxHf9qRuuGiT+lASUzxGWaBX/ZcWpB7A0o+Yh8cnQvQ
-	klq3bStqygWHOF7g139oFuhiwd3/vYlin4dGeI6XnisIAVbwcBlBQ2ulQJx2fqmkNDXw94o2cLj
-	lm7Z3fyxPchr8lnbu9hNNv/LfqSN91sWlimOK5t8J4FZfAxaY7qodlssH2AMkUNJA9DveOiOG0F
-	aOjCeTVy+l+wh5DhcogajFN7CIgyc5U=
-X-Google-Smtp-Source: AGHT+IHmiqmSEz1C/XUho9yYXkMQSiCuDmaZZMTBM0LAyu+f0CCLeXaJHbngax8Bvyp10xXZQUSpxg==
-X-Received: by 2002:a17:902:cec1:b0:215:58be:3349 with SMTP id d9443c01a7336-2219ffa04dcmr320989835ad.14.1740487026762;
-        Tue, 25 Feb 2025 04:37:06 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2230a000520sm12949155ad.52.2025.02.25.04.37.03
+        bh=MC9KPLvVqWKMt0reEhfmjJu692XzkFN80RWzCGUDFJk=;
+        b=KQBBsFtAFLgeDH2+Frq9X33T4pcI1JNutRWhH1Njhp6TYBVgDHcM6YVgiLqM76BbY6
+         XYX4Fy7m6EYq9i+BPWoofIeMCjn+22ruw60s96S1CfO2QJvUPk0+A2de4nQXFlYSCo5f
+         9tBB+0RDiEv2gtz5Zpxuegl3cZTjmd/PZ7yFhb46tKxqA7c9gpRYJRLh0Mwp8AB/yA/u
+         PVNGbqGoEmTGG+J80rs05zvVn6HZQSF/wHPwId5BhnlTf1ys6PPXwbGwOX6XdRgFmPCi
+         skbxdj9SULkFkP6sbjPv9U++IixgtEYS8fXDAYzGEFECo4WPpGS0DkeOjcUbfIfKZfQZ
+         Eg4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW+k7qb1O4cKlZHhWSO+neUUdoa9LvayWo1c3rGyYDy6rt9doRSdKoCoUpid3TfhS631QUI0HgPyh1KCs7wI78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydfIY4errrFtOYaHgDJivAabUEawy5vbmvRJbLCAnnguK0aOPW
+	joXHYF5iz4JDGUqhhu3IfhgmNbtsvd46GMysfVwnDU6WJB8h66jHvXTnffAiig==
+X-Gm-Gg: ASbGncuUv1o8V14d2V+Th5/KrEXSGjjQO9zYVEIHo9J9C/HmcE3k2EMNv+ouemeoFpj
+	/AtauAtj3FCDjU6cFp8ExeoFD74UF8kILsAnPOmaGW9TbQ+Iif2wjYXP3GTnaHlpw2/SQ9oVKUX
+	RnKByrJM3jeKL3TULJkNHHm174Tcm+twpj2sMf5/nhI+M9JiGVPbgjy0lrj5SEXcS5r8aPkbNdY
+	bXgB5KlGFRyqs6cHJEvNKiL5E9d1nPQ513ZzTm4GflhCJCLHtj1+MpuAuckQZFZ1gOSmHSdmEQf
+	MafgTK/vSLDiswdwgZa/CzDCiRrbLK8t6uUVVjwfWUFKgmJ3GyXq7tho/i1eig==
+X-Google-Smtp-Source: AGHT+IHHx1tnED5DbqgakpRRi9n7AbytxVfYjoT3lvOaag4Ekssq2e8VL3NZ4DRLo24ldsb4E07AvA==
+X-Received: by 2002:a05:600c:590c:b0:439:8f59:2c56 with SMTP id 5b1f17b1804b1-43ab0fa8bd4mr1345945e9.2.1740488197133;
+        Tue, 25 Feb 2025 04:56:37 -0800 (PST)
+Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ab156a183sm24997255e9.40.2025.02.25.04.56.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 04:37:06 -0800 (PST)
-Date: Tue, 25 Feb 2025 12:37:00 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Davide Caratti <dcaratti@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests/net: ensure mptcp is enabled in netns
-Message-ID: <Z725bDY9YJX8ydEu@fedora>
-References: <20250224094013.13159-1-liuhangbin@gmail.com>
- <b7bbe504-d6f3-4262-af19-1edad4129fa9@kernel.org>
+        Tue, 25 Feb 2025 04:56:36 -0800 (PST)
+Date: Tue, 25 Feb 2025 12:56:32 +0000
+From: Brendan Jackman <jackmanb@google.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oscar Salvador <osalvador@suse.de>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Michal Hocko <mhocko@kernel.org>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	Yosry Ahmed <yosry.ahmed@linux.dev>
+Subject: Re: [PATCH RFC 0/4] mm: KUnit tests for the page allocator
+Message-ID: <Z72-AP-yQ2hPwpKe@google.com>
+References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
+ <0449ff75-0a6b-4c1e-bf12-ff052aad5287@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,43 +95,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b7bbe504-d6f3-4262-af19-1edad4129fa9@kernel.org>
+In-Reply-To: <0449ff75-0a6b-4c1e-bf12-ff052aad5287@redhat.com>
 
-On Mon, Feb 24, 2025 at 02:53:13PM +0100, Matthieu Baerts wrote:
-> Hi Hangbin, Davide,
+On Tue, Feb 25, 2025 at 11:01:47AM +0100, David Hildenbrand wrote:
+> > This is an RFC and not a PATCH because:
+> > 
+> > 1. I have not taken much care to ensure the isolation is complete.
+> >     There are probably sources of flakiness and nondeterminism in here.
+> > 
+> > 2. I suspect the the basic idea might be over-complicated: do we really
+> >     need memory hotplug here? Do we even need the instance of the
+> >     allocator we're testing to actual memory behind the pages it's
+> >     allocating, or could we just hallucinate a new region of vmemmap
+> >     without any of that awkwardness?
+> > 
+> >     One significant downside of relying on memory hotplug is that the
+> >     test won't run if we can't hotplug anything out. That means you have
+> >     to fiddle with the platform to even run the tests - see the
+> >     --kernel_args and --qemu_args I had to add to my kunit.py command
+> >     above.
+> > 
+> >     So yeah, other suggestions welcome.
+> > 
+> >     2b. I'm not very confident I'm using the hotplug API properly.
 > 
-> On 24/02/2025 10:40, Hangbin Liu wrote:
-> > Some distributions may not enable MPTCP by default. All other MPTCP tests
-> > source mptcp_lib.sh to ensure MPTCP is enabled before testing. However,
-> > the ip_local_port_range test is the only one that does not include this
-> > step.
+> Me neither ;)
 > 
-> This modification is OK for me, but would it not be time to stop
-> patching the kernel of these distributions to disable MPTCP by default?
-> 
-> As far as I know, only one Linux distribution is doing that, and that's
-> the one supporting MPTCP the best :)
+> Dynamically adding memory to that "fake" node is certainly interesting, but
+> which guarantees do we have that some other features (page migration, memory
+> offlining, page reporting ...) don't interact in weird ways with this "fake"
+> node? Adding special-casing all over the place for that feels wrong. I
+> assume this is point 1. you note above.
 
-> It was making sense when MPTCP was backported to older kernels, but now
-> that v6.12 is used as a new base, it probably no longer makes sense, no?
+Yeah, basically this is the big downside. Changing the system we're
+trying to test in order to make it testable can't be avoided entirely,
+but I am also pretty unhappy with sprinkling "if (node_isolated(node))"
+everywhere.
 
-Hi Matthieu,
+I guess the ideal approach is one where, instead of having to modify
+the meaning of node_data, we just support replacing it completely,
+e.g:
 
-Thanks for your review. I can't control the decisions. I also hope
-we don't need to do this in future :)
+struct page *__alloc_frozen_pages_noprof(gfp_t gfp, unsigned int order,
+		int preferred_nid, nodemask_t *nodemask, 
+		struct pagelist_data *node_data)
+{
+	struct alloc_context ac = { .node_data = node_data };
 
-Regards
-Hangbin
-> 
-> > Let's also ensure MPTCP is enabled in netns for ip_local_port_range so
-> > that it passes on all distributions.
-> 
-> Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+	// ...
+}
 
-> 
-> Cheers,
-> Matt
-> -- 
-> Sponsored by the NGI0 Core fund.
-> 
+Ideally this could be done in such a way that it disappears completely
+outside of KUnit builds, the interface should be private and we'd
+wanna get rid of any unnecessary pointer chasing with stuff like:
+
+#ifdef CONFIG_PAGE_ALLOC_KUNIT_TESTS
+static inline struct ac_node_data(struct alloc_context *ac, int node)
+{
+	return ac->node_data[node];
+}
+#else
+#define ac_node_data(ac, node) (NODE_DATA(node))
+#endif
+
+I initially rejected this approach because it felt "too intrusive",
+but now that I've actually written this RFC I think it could be less
+intrusive than the node_isolated() thing I've proposed here.
+
+The most obvious challenges I can see there are:
+
+- There might be places that page_alloc.c calls out to that care about
+  node_data but where we really don't want to plumb the alloc_context
+  through (maybe vmscan.c is already such a place)?
+
+- I dunno how many more such helpers we'd need beyond ac_node_data(),
+  like do we need ac_nodes_possible_mask() etc etc etc?
+
+But maybe worth a try - can you see any obvious reason this idea is
+stupid?
+
+> So I don't quite love the idea on first sight ... but I haven't grasped all
+> details of the full picture yet I'm afraid.
+
+Do you have any thoughts about "making up" memory instead of
+hot-unplugging real memory for test usage? That might simplify things
+a bit?
+
+It seems possible that very little mm code cares if the memory we're
+managing actually exists. (For ASI code we did briefly experiment with
+tracking information about free pages in the page itself, but it's
+pretty sketchy and the presence of debug_pagealloc makes me think
+nobody does it today).
+
+There might be arch-specific issues there, but for unit tests it
+seems OK if they don't work on every ISA.
 
