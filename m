@@ -1,80 +1,96 @@
-Return-Path: <linux-kselftest+bounces-27453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E6BA44064
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:16:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87AE0A4407F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F96017EE03
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 13:12:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C4C23B6695
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 13:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592F02690DB;
-	Tue, 25 Feb 2025 13:12:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABBB2690F4;
+	Tue, 25 Feb 2025 13:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F5Vfqr2W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F04A2690CF;
-	Tue, 25 Feb 2025 13:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA5F2690C8;
+	Tue, 25 Feb 2025 13:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740489167; cv=none; b=HwzfMwe1XQfxvhzSsPLwXrzhJA7cFb2+XY8dbWkCLsVTYHOjWgiELypYjffrMz3NQafct3KYu5SSEf34pe6wmJnf5wF4+wEadvCGf0GJj6+Uqzk552ags41clIJZzWN+sdQ+nT//CGr5YTzHqw3S5PTRkJ71bF71IGgHFCFA3iw=
+	t=1740489233; cv=none; b=agFNh5yGEsGEfyXLxCl5xiWh3eZeSff4DGGo6WKnIK7ZTfpAH8l28S590AL8TJOdfilqoHHb5wwT6oQ4fNmDL44aLQKdP94b5yDe74IpnCG8cQVxlrXMXYfUUAWVlu9E6uG6naEtRZVIo0r7OXvybUnZIcVQpA3brLtZb1f39Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740489167; c=relaxed/simple;
-	bh=3WjxgzbN4yGK9NfJVETwPvCEg4jcFsjHzAIqxYBtDuE=;
+	s=arc-20240116; t=1740489233; c=relaxed/simple;
+	bh=6kRCQ7fXHrIH6ekv/Ss52bOswcnen3yxj0SgzL/vpsg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nFMv6WAHpFhEJ33ir+wgF5WZ8QAA2i7bobvtpjrMtZI7pBZzt7zmD3T9eCB+u2bIt5w9WmyNDipFgcwZy44sFfCDqbD+c7gzGpYjuKPyszusdhyiAVOfvrzakmlwp5K651l0ZKfBsWmt10aQMS6clS/6di23reWorpEgcBHZm4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=QrT3TJVVhXfywiJECrwecXi/69PqJDDMzKKiTwJDTs7RjqT16uWIHqGEBDrV8Kx8ajFQnlnrXHCiRqqoE3j1hwPzMyZtkZ4Hn90Rrzcf1uMQsvgUKoyBA4cwo3ha2aV/c/Fo1gkfqC6MM4fE4BIqXEDg6sbU5jwfC19jmRslZDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F5Vfqr2W; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5e05780509dso7873066a12.2;
-        Tue, 25 Feb 2025 05:12:45 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22113560c57so27039565ad.2;
+        Tue, 25 Feb 2025 05:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740489231; x=1741094031; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z9TsjSO1IWqsIvdlcJcY3GR2q1JpemyZTlLz+DhSQuM=;
+        b=F5Vfqr2W3zi6x8HIeLov93J6/jw5NBX3N1I/SSWeW67vU5sIg5HakhoIsPqn7+FW+P
+         MlSVGtHrx7zZ43yK/r5CqGNQ0bImTkfXrk3S9rB6GfM9Eg6a5tGNDIsULoNgpfEZIOvq
+         OwTgqzEEQJ/0BAcctM4q38mPSTKdoST+5kt3SJllpJhzjIuu9NFKF5ogH5mZxLmYLT6G
+         w1hWWw8UYYTPvCfZcgq2gbHgxEdMSmr8pCVWEyBbHYdphJ59W74SglFn0Xml6MUEPAO0
+         hU3NcWQGUnXE8SQvwWpyDYNKLmybaZwAPH7U++L/UVJPCsEkUSh7Fk73rah565I+cbDT
+         oHBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740489164; x=1741093964;
+        d=1e100.net; s=20230601; t=1740489231; x=1741094031;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=huyKeKicvAsO+vZpf8pNQmuBsQVHWr+7B6dkrLsJZHE=;
-        b=i5SPtjS29YKjSK3A6OFokznpbkHo88irxGwV2KMKqRNHW6Xsi6TCha2P2KcrSNVn+6
-         qZt6KhxKoeJy8ZqM7RKdyCTi9VDESOagQOiI43RnKZOTJOVlVTGM6Mm/oz3epBoMBhRo
-         Dz1Lc4qRLu0LjewD4Ki0j9vHePqueWfb9Co/IgOMfdyhqwL6b0Mv/L3wneaDDKYoxm6J
-         8PAa9ixGJwj5FFqrpSPfXdwztazida1SVhbTlZY12bN8ZppTdrfo83tTMbYPHSPb4Gq8
-         /bc62AIEzwLF8oaM7VkP6LhYagskPxPNDWvsk4PWoZ9ZZBmGoqNSdKdt6s2xUCkilsmD
-         vXAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVk/Cx1TZM/8mJLHKvNo8nHT/U8lY4KC3lmOWCfO9KLggpv8duUrcfjgSHtuoAWBkI8jzbsdd/ujvuyfJ7wwdte@vger.kernel.org, AJvYcCWE3MEufr8X7nqLAfXqucsWHl6PjVf1KaITgmGjqvT04prE1H0ld/7OfqaHaXWyBs/G+IAwhVHKcug=@vger.kernel.org, AJvYcCWU8aOL0Q25dqUxnSSSu2lcI1c4dfTaQ2RNSC/fNfhWvwLgfec1kQLgATjJSbV/8gnUmQ5eCCyrEh/o/3V2@vger.kernel.org, AJvYcCWbTB0ja6xLPkJSeuEpnnGuBJlt6vRKhUG/W4GPlwyQqGRYMfNoC40pHNq/QsPHwErY9NfCBFhj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJNji9mVw7T2REL8gzj0MBKtr0hT+dm/nDBo05Xb5vcy++LMLd
-	K61vXykTyxxBJlJm3BgCs41BHL4+TiUaJs8kOlwydwhx50hMQQzd
-X-Gm-Gg: ASbGncuOWxnNdd2UfSyt3ch3ETgV3TjvGVs0T34imt6HO7c9X7y5NOmNyDOu9y1t6EP
-	bWHtHSd570Tvu1fkkETMokjnYxvs74v8qIV5cDafmQAPY3TKJl+dAlmyAi8A/+1p9tHLAeDBtnx
-	gfySrcY2cbf83/cpgGqk1UHfmWvLaceEyYC4xpKaII7/TZn5z0jHRV91ZBrj/7hGt99nCyxkQMm
-	nfj4VSGqdsbOZqLbRkLTR7z1YPZQvEbv+ccnv+ptcEwpjU1v+BBV2ZBBNChOkRv3J/3Xif12ibF
-	NJLLHbWvQwn5k7Oe
-X-Google-Smtp-Source: AGHT+IFlxa/+8iEwcPmxNR8k8h8OkLnc2bi5Cian4c/8JlV7dVrkWbU9Bfqx1Ids2urTRQbj+bOtvg==
-X-Received: by 2002:a17:907:7d8e:b0:ab7:ef48:1668 with SMTP id a640c23a62f3a-abed10feb98mr355246166b.57.1740489163680;
-        Tue, 25 Feb 2025 05:12:43 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:6::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed1cdbe0asm139551366b.36.2025.02.25.05.12.42
+        bh=z9TsjSO1IWqsIvdlcJcY3GR2q1JpemyZTlLz+DhSQuM=;
+        b=jxL+yxDBLYl3Qp/uRzFs9Ix3l2MjvEtHapysnAkhsSi+oADbCy4/VZsQkF01kSDK5e
+         mS9+9jxuhQWfLbB/eMAht+PNZiROCFPJQJZXDr/NUUu5wOiKb3XpKVnIcWj+eBb6nhKg
+         wRgtXtFuK/PKKc5X4Eb7l2QNWlpZDbArbCuOke3DuQuj1jKnS92IRybmYcDQ+KZM677b
+         hp3uHuWvfkPQSOHLWBsQ99xcoRrRQX+e8PhZFE1WqeiMC+6MdmsWphCjOPhSYg5gJ8bA
+         pW4GiAcUo5RyymGImfqms+/nJu/CGGdTC9SUYvD5IRdphsLkvh9CH6B8d7UuRUuWdiZ7
+         y4Ww==
+X-Forwarded-Encrypted: i=1; AJvYcCUiLup6UKJOsPYYTMrWnRP5+kgsVnTiFRErCuL7UzUTOVm++qmuN9DA0eUZPh+NLmk7pcqw0HDH+ZcG04c=@vger.kernel.org, AJvYcCWxddEzxUw79qPJepphbJSO8NieHc7KyWy2s+RwnrAJSgHMJcUU2ORwpLBfOj2mpQoU+wy8WUEPEvWbcbuyuiWz@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMvjpC6IsQs3MWBaouLwyDiTRfg5hKE3inV5LKFA3RIZM+Nawl
+	UwmcBVoqGXcjzfZ2zCXN7tF15pz0mbi7LKjjzGA+TD/2vhv5R4SYlKWwBZkx6FG6kw==
+X-Gm-Gg: ASbGncuX4sFjhP6Jh4SNqcoqyf2jZfFYkNTFcVNipCr+B/TIOaamYAgbF/lRXWOVCQv
+	090LjyCqW/udh76XlMt8Z8FVrkpLUnc+t52InDcd6Mbuo7tpy6FJUhFITIzSaKQB2fYYofph+rE
+	YzP7j9iVT0FyZZPg4MSCrNpeiZTNvEbGCU+QqN3Q3uQOMGHHwuQJiGqP1A6pXkIlMbtnF0bs5Tx
+	Z9VQh9IqX7wBLMCLknvJb59FvACUUvfkRf9B6fEQVPE4Y+WfnxMAWqbpbsnCAxrVgDBp4LuXQEe
+	qSvV1w0U6YR69EtBVqBV6PEvQhHGrsE=
+X-Google-Smtp-Source: AGHT+IHJeOQlK9PS9RNyAPhLNtr0dg5YGqS2UGl7RUfoXHxhWKx8lHHwKT7XMi/jaVu93pbVEFfEkw==
+X-Received: by 2002:a17:903:2282:b0:216:644f:bc0e with SMTP id d9443c01a7336-221a10dddbbmr308706845ad.24.1740489230926;
+        Tue, 25 Feb 2025 05:13:50 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2230a092ce6sm13476975ad.127.2025.02.25.05.13.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 05:12:43 -0800 (PST)
-Date: Tue, 25 Feb 2025 05:12:40 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        Tue, 25 Feb 2025 05:13:50 -0800 (PST)
+Date: Tue, 25 Feb 2025 13:13:43 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next 4/7] netconsole: add configfs controls for
- taskname sysdata feature
-Message-ID: <20250225-persimmon-narwhal-of-management-41bafb@leitao>
-References: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
- <20250221-netcons_current-v1-4-21c86ae8fc0d@debian.org>
- <7309e760-63b0-4b58-ad33-2fb8db361141@redhat.com>
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+	Jarod Wilson <jarod@redhat.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 net 1/3] bonding: move mutex lock to a work queue for
+ XFRM GC tasks
+Message-ID: <Z73CBzgTVucuOMMb@fedora>
+References: <20250225094049.20142-1-liuhangbin@gmail.com>
+ <20250225094049.20142-2-liuhangbin@gmail.com>
+ <a658145a-df99-4c79-92a2-0f67dd5c157b@blackwall.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,76 +99,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7309e760-63b0-4b58-ad33-2fb8db361141@redhat.com>
+In-Reply-To: <a658145a-df99-4c79-92a2-0f67dd5c157b@blackwall.org>
 
-On Tue, Feb 25, 2025 at 12:41:50PM +0100, Paolo Abeni wrote:
-> On 2/21/25 2:52 PM, Breno Leitao wrote:
-> > Add configfs interface to enable/disable the taskname sysdata feature.
-> > This adds the following functionality:
-> > 
-> > The implementation follows the same pattern as the existing CPU number
-> > feature, ensuring consistent behavior and error handling across sysdata
-> > features.
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> >  drivers/net/netconsole.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> > 
-> > diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-> > index 1b109f46512ffb7628c6b34c6efdfc301376dd53..5a29144ae37ee7b487b1a252b0f2ce8574f9cefa 100644
-> > --- a/drivers/net/netconsole.c
-> > +++ b/drivers/net/netconsole.c
-> > @@ -426,6 +426,20 @@ static ssize_t sysdata_cpu_nr_enabled_show(struct config_item *item, char *buf)
-> >  	return sysfs_emit(buf, "%d\n", cpu_nr_enabled);
-> >  }
-> >  
-> > +/* configfs helper to display if taskname sysdata feature is enabled */
-> > +static ssize_t sysdata_taskname_enabled_show(struct config_item *item,
-> > +					     char *buf)
-> > +{
-> > +	struct netconsole_target *nt = to_target(item->ci_parent);
-> > +	bool taskname_enabled;
+On Tue, Feb 25, 2025 at 01:05:24PM +0200, Nikolay Aleksandrov wrote:
+> > @@ -592,15 +611,17 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+> >  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
+> >  out:
+> >  	netdev_put(real_dev, &tracker);
+> > -	mutex_lock(&bond->ipsec_lock);
+> > -	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+> > -		if (ipsec->xs == xs) {
+> > -			list_del(&ipsec->list);
+> > -			kfree(ipsec);
+> > -			break;
+> > -		}
+> > -	}
+> > -	mutex_unlock(&bond->ipsec_lock);
 > > +
-> > +	mutex_lock(&dynamic_netconsole_mutex);
-> > +	taskname_enabled = !!(nt->sysdata_fields & SYSDATA_TASKNAME);
-> > +	mutex_unlock(&dynamic_netconsole_mutex);
+> > +	xfrm_work = kmalloc(sizeof(*xfrm_work), GFP_ATOMIC);
+> > +	if (!xfrm_work)
+> > +		return;
 > > +
-> > +	return sysfs_emit(buf, "%d\n", taskname_enabled);
-> > +}
-> > +
-> >  /*
-> >   * This one is special -- targets created through the configfs interface
-> >   * are not enabled (and the corresponding netpoll activated) by default.
-> > @@ -841,6 +855,40 @@ static void disable_sysdata_feature(struct netconsole_target *nt,
-> >  	nt->extradata_complete[nt->userdata_length] = 0;
-> >  }
-> >  
-> > +static ssize_t sysdata_taskname_enabled_store(struct config_item *item,
-> > +					      const char *buf, size_t count)
-> > +{
-> > +	struct netconsole_target *nt = to_target(item->ci_parent);
-> > +	bool taskname_enabled, curr;
-> > +	ssize_t ret;
-> > +
-> > +	ret = kstrtobool(buf, &taskname_enabled);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mutex_lock(&dynamic_netconsole_mutex);
-> > +	curr = nt->sysdata_fields & SYSDATA_TASKNAME;
 > 
-> Minor nit:
-> 	curr = !!(nt->sysdata_fields & SYSDATA_TASKNAME);
-> 
-> would be preferable, and more robust if later on other SYSDATA_ bits are
-> added, 'moving down' SYSDATA_TASKNAME definition.
-> 
-> Also it would be more consistent with previous usage in
-> `sysdata_taskname_enabled_show()`
+> What happens if this allocation fails? I think you'll leak memory and
+> potentially call the xdo_dev callbacks for this xs again because it's
+> still in the list. Also this xfrm_work memory doesn't get freed anywhere, so
+> you're leaking it as well.
 
-Good point, in fact. I will update!
+Yes, I thought this too simply and forgot free the memory.
+> 
+> Perhaps you can do this allocation in add_sa, it seems you can sleep
+> there and potentially return an error if it fails, so this can never
+> fail later. You'll have to be careful with the freeing dance though.
 
-Thanks for the review,
---breno
+Hmm, if we allocation this in add_sa, how to we get the xfrm_work
+in del_sa? Add the xfrm_work to another list will need to sleep again
+to find it out in del_sa.
+
+> Alternatively, make the work a part of struct bond so it doesn't need
+> memory management, but then you need a mechanism to queue these items (e.g.
+> a separate list with a spinlock) and would have more complexity with freeing
+> in parallel.
+
+I used a dealy work queue in bond for my draft patch. As you said,
+it need another list to queue the xs. And during the gc works, we need
+to use spinlock again to get the xs out...
+
+> 
+> > +	INIT_WORK(&xfrm_work->work, bond_xfrm_state_gc_work);
+> > +	xfrm_work->bond = bond;
+> > +	xfrm_work->xs = xs;
+> > +	xfrm_state_hold(xs);
+> > +
+> > +	queue_work(bond->wq, &xfrm_work->work);
+> 
+> Note that nothing waits for this work anywhere and .ndo_uninit runs before
+> bond's .priv_destructor which means ipsec_lock will be destroyed and will be
+> used afterwards when destroying bond->wq from the destructor if there were
+> any queued works.
+
+Do you mean we need to register the work queue in bond_init and cancel
+it in bond_work_cancel_all()?
+
+Thanks
+Hangbin
 
