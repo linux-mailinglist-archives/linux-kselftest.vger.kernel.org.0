@@ -1,97 +1,97 @@
-Return-Path: <linux-kselftest+bounces-27411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FD65A433F8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 04:56:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EE27A433FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 04:56:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB54176329
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 03:56:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4499D3B6002
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 03:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E312512E4;
-	Tue, 25 Feb 2025 03:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFD3253B4A;
+	Tue, 25 Feb 2025 03:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q92DnqcU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1wSVsYR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5EA1624F8;
-	Tue, 25 Feb 2025 03:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD0F2512DA;
+	Tue, 25 Feb 2025 03:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740455731; cv=none; b=LlxtvM6UtpT/6gRryuLntVI7VUQv/qOZrCKseffegHvMQeJaMAuam2KxOHCdclwKIGiSj4v1y/6h4u9Adwn7aN7VKqZ4Ss7u2vHdk18uMMZ1N5ZPLToXSDBWW7W+s1X+GOIwdAh4/BycJrF6OtOETX3/rbbPMIuEAplZefNZuPU=
+	t=1740455732; cv=none; b=CEQ29hTHZ91zYVeywUy2mIdNxXG1nwVfsSm6RAXiamXdzCAFwo63o7mJtjjSDdDBRxhGax8d2qv0BmpeQ3cqFXDA3Odw4Fj7Tz/p5mSPAwDilaY397WntV/ly9wlOJn/IQpn21XQxqnnUln6Ad+rJ93lW1/DdT/ecAAQ1F+nCac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740455731; c=relaxed/simple;
-	bh=+xWSr+nkJ64yuyk2bAtOMGffsUZkkwlgArf+svUx41k=;
+	s=arc-20240116; t=1740455732; c=relaxed/simple;
+	bh=vAoTryD7Ubn6jeOom5AqCgaUTXh/NIMl45CYHdmRAEw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Y27l1Ff6E9de04PTY2UmpUV8TerX6voY5cuQrRO9yFYApWkWAAtVz98ssk2c0I/Xhvw9iQWEj9meHN16bA4EP7OAp2IyxLdAzMVrGws28lo7fbmBIHRvttq/9nhBaZres41Z0iA6Yo2G3J17QqJqRPdiKEY5FVAmNGAUtlKmKKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q92DnqcU; arc=none smtp.client-ip=209.85.222.181
+	 MIME-Version; b=hvlJ47p1IS0KWzd+Nb/ot+mhrEthz8qYmMFM11tCVzyxHu7UqNNhxZDMMsp9yJfPLowOGlkwDGJlspC8BV82Irue77/GhFl6mRSGYhdjrBcfxcWboIxkj83CbAvA5nXdzsopfIuAl79zaN6aynjfdFnIGHHY6m9yblpLoCdDByM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1wSVsYR; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c0892e4b19so618526585a.3;
-        Mon, 24 Feb 2025 19:55:29 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c0155af484so761459285a.0;
+        Mon, 24 Feb 2025 19:55:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740455728; x=1741060528; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740455730; x=1741060530; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=jdozoCwQSzFwrrBbMNFpZ8ApNw9FrREQJIW7RONrtaw=;
-        b=Q92DnqcUNMhWvJPA8wEbk6/EfjU29KXL8I0QfW5t/DtmCYvqghfIQoEER2OzElAbw0
-         VXEymbwS9VcVkHkK7U0tiuvrcf5453N4bG4HXvHgMuwkWwLUtWySRTwxsGGj9Ut4ODKJ
-         NKOY4rufoKRejCYqKpz0NN17KXwg8eyGnqGKih1SfLz8/gzQ/BULue9aFvGZdzfImFFp
-         Nce4KABWQOMZpkVXJy38VPnvF/rFyD1f0NMTxanZKa6Xn1iePwRKCVc0scVKw5b5xv5Q
-         1FSq2zFlcPnFu/ncRIh8ESPirHv0NNZx21PAqN7NJMy5l12R1+DcPc8duAyUq8NtE3u0
-         Z7cA==
+        bh=HQARWggofyARbzO1v8dhj3CLs+WsMSpSVZ/wO7/jEqQ=;
+        b=B1wSVsYRL6U+gSCg+MLCkmM88uDandHBOwnJy4f3S/2zLFnN6CWEfsZxhYSPUtbtrT
+         wh246dtk+kdhIj7+xST8DoorB1LL8gzxZa7Dzg/HbZFDRLRBu9JXuKPzD3oPFxvq7IP+
+         nQqbapBJZS2HXsYk6Os3HaovEch8GNb/thMigEGvIC6G9OX0SYCzeIBnIP++CJAbjFGN
+         W0yTBWDfBZN1YJBuckcwv9lr9jJpi/e1v0PMa4oWw5lqwVHZI1W7X4tkkeV3cb9uDcW4
+         xNcSunt/hdmHrcR3K55wkGiLliMm4cbmm9FbxA1luQVX9fzco9s6exSoKdKEtT4mcdG1
+         zIVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740455728; x=1741060528;
+        d=1e100.net; s=20230601; t=1740455730; x=1741060530;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jdozoCwQSzFwrrBbMNFpZ8ApNw9FrREQJIW7RONrtaw=;
-        b=GbkCuMk1oWQX0h0GbNROoa2QfXPW/aKKYVwy754o/a9RT1uPPOiiPHbWe0CnKZkXmQ
-         ve8i36X+p6u4skyoEPdNYZ9Jm0gsbZkrurC7HbjaS9ZwqIXkr1QgNdNPk01PX4mnWzgT
-         rPH2ADeiSOI/yRlBjvoM5Uwon9qjTRNmMfd5xy8g9rt2vx1+N5WNvW5e/SLTZNc0rHDw
-         JUB2HHlR/4iFeR98o5UvC9hqgCU9FaLmJJnz0oU1cF3DWQws7MSmKbHZBG/8T9nt0nZG
-         Mim4C1EnyVkILqubGYq3Ip4wpxeTdxyuJ11DOyzByrL290h0y1mfNYiCaA7UPIsYiefM
-         OJhg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9eXusX3xL7t9mK4FEFq/admPDLGxvM4qQyfPDr/1qY4qgTZ7Q2sYycuYOsMMWVqU35Q9bcPLb8wDQsmf2eTN6xkyy@vger.kernel.org, AJvYcCVBKgcVCk0QqePrkLmK6nA7QFvwypRofOHxSDd2s3UpaLfmy7IiXDgjIlWox25Y0vJxNx18F9wxdYFb9N25e7FW@vger.kernel.org, AJvYcCX6j1C4UkCougBuYMQDcyEl7sx7YfgSTlpYPUX3WW50VrqETzZ7y22XrCPI4WLjeluFpizbKGGtuGmG55A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCiDoMJudwbYnRtEFwpPn70YjwmmoOXplAb/lf5UHah2nmM+cQ
-	D78BcHiFU4hp3bemvmLdO3IjJ4oxVgYDAygVAP8VBA4k070mJDCE
-X-Gm-Gg: ASbGncsZwuqZNs1LJN1dZDt5155vg6CyWBdNQft5xELC5MZUYLMZo2OrOwYpFFBF/Sr
-	WSSMTDX2v3IA/ZDSHffqB0mSlyWQkZkaZaKi7TeLy/FtjqDiUPSdGxkjTtXcN8A2GmAog5eCE9l
-	ff+AuEsiK8F7CkNwLUmVQYllWSt54+YEZxltY6vOn3C92cENVB4YNNLLt7locHLAfSlK5rHUELV
-	Jbja+gfN0hGxECEsZQnce6EHfDsusCFOQtg1jB/Ayzbujwhw+KFLdScFRUkL+6zdm/n3cRLPRvs
-	KCEfObi/gCb7YkuX0BoaXNboX2pi1CO5QdKMLEApkR7tXkOlQpVBrm3UiK7/m96Xmgz1vBgndO7
-	Ds5n8ZvROF2h0z16o
-X-Google-Smtp-Source: AGHT+IFTwNMKfPJKSVdkAd2wzvyYLeX43jvuaeqy4yYDCxwRmbSxY2gEiMA5fWXJHX7/6sVrC3Ghhw==
-X-Received: by 2002:a05:620a:4606:b0:7c0:7d34:6a7b with SMTP id af79cd13be357-7c0ceefe59cmr2223508885a.19.1740455728549;
-        Mon, 24 Feb 2025 19:55:28 -0800 (PST)
+        bh=HQARWggofyARbzO1v8dhj3CLs+WsMSpSVZ/wO7/jEqQ=;
+        b=jTYZSRuRVksXANQTBlcoPvuzVqXWMmYASvIAeRfNt2a/YEHh9GM0UXwBNqoA4pGjLz
+         1ctnhPKy65wZ+5h0883j7zZ4odYVxQxzN0Nj/icSlNSb68t/jvDs16Ddolq5km2VXB29
+         zIZE7sThloZuV0ChLmFVX2llonznhJssbv8Kl2H3kYDbICvpV3kliQOBxfbCCdzuHzr3
+         4A9pRxJI5aA8eMMfuciLWXimjx/wnHMwuoMXoe4rm9vmpS7mqocfppdiVZWJjP3g/7Kv
+         r9bA4B3f4dEyWVpjP/ivC3REf7cMxA1mlgUZvkRZTZ9nPj1jtpYWdrVgWCHUcObdVmPi
+         lguw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHQHGk4iHV5BniZO/ocfQQLLy1sWkU6GssqO+8kWEMLwGbzxde39YxquV5TDK7w8FTPxpLfNXyvdwSlB34oIAF@vger.kernel.org, AJvYcCUPNPnyzxRFad+P/lGCOwaKDopvkDK6Lw0G3T+55kdKA3Nsl2XNbb8qy/dZUD6UafB2POtTu+KkrcCjvwI=@vger.kernel.org, AJvYcCV0+DPa/MHcoCE5Eto0Dcl/hn2A+w3kmoIwhsgY1yn16xCH+hGacgVc40iY3npM0ybgjmN5dQvUtut7ZShAI3m4nkVL@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuZJzKvghTu6jv4Y6IdEs5GgFlNxZ45zZoIbH7T18XrGjnC6tn
+	SH1R00Lebj7Om4bNRLMzV1kF3H8hKhys2WXzk51uiT6DGRZD2J2O
+X-Gm-Gg: ASbGnctRZbubu2TmhDg3+TPLWQZKVWLJwoSE+MYF60Onva6JP6tqgstdCnC8ajfP9w+
+	XQpps5V6YN+OM/cE0/SO1V2KegXOfDGpHt/g4o1GS4Zmhx0vHPGi+/yq++8PcEgzPAMBGwmtD31
+	/ve8SwSjgCJSvR/yj9vRaD2V3tR7VsrCI/ewc+HlZTeSJo9AkxJkB9TM6J23NbiYMWVpIb1Tl1+
+	3s8/jZASFt8pIl4ooaxlqoPhBwDC8xgCX9aug+wARCHzuoCAtPLyqV0FO1R23AMB3izfm8ZJoFl
+	ZEpNsNYhjDw/Ss5kc4QaZyKOcu82TnHjsAUf9KuJTAosASszbJ79wx+gy7S/huKFpSy3vBGhKkR
+	mEhhGBSfsUGpQZEYB
+X-Google-Smtp-Source: AGHT+IEse+IHb8ym/dd3Pk98eVbMhrTZY6i51QAsLVcIqmgSrvsy8pR/7b123U5idbXYlGhD7E9XWg==
+X-Received: by 2002:a05:620a:1706:b0:7c0:aaf7:76d9 with SMTP id af79cd13be357-7c23be12855mr199242185a.24.1740455729971;
+        Mon, 24 Feb 2025 19:55:29 -0800 (PST)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2c241dsm60007785a.58.2025.02.24.19.55.27
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2a3239sm60559485a.37.2025.02.24.19.55.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 19:55:28 -0800 (PST)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 6B68B1200043;
-	Mon, 24 Feb 2025 22:55:27 -0500 (EST)
+        Mon, 24 Feb 2025 19:55:29 -0800 (PST)
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfauth.phl.internal (Postfix) with ESMTP id D9A901200043;
+	Mon, 24 Feb 2025 22:55:28 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Mon, 24 Feb 2025 22:55:27 -0500
-X-ME-Sender: <xms:Lz-9Z1ntkdjB-ig_XPh83pP8VtIJZhM_mp8c0GTmZf2It08_6g-6sA>
-    <xme:Lz-9Zw0hYpVlIsjQxPH3BZYQlvWB_1kiTLBxD0_SX_g_ZmfsORfZm1C9VTiUGfB0F
-    jbFKUIE2EFWId7elQ>
-X-ME-Received: <xmr:Lz-9Z7oY1nnwz51wobKv6Et71hWNkyMzylWcCfs3Y4KLc9hAYCuncQ0RZQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdektdeihecutefuodetggdotefrod
+  by phl-compute-09.internal (MEProxy); Mon, 24 Feb 2025 22:55:28 -0500
+X-ME-Sender: <xms:MD-9Z6eRuRRDYlfazbwLM7IaOBmE-ECwIR-a9AW4ngZNSKSs7I5TYA>
+    <xme:MD-9Z0MqyeuVP8JXzx9prtUnKYlCOT0EiyoY1aUNWLOZdL0ZKihuj3UKbmJkpDEzD
+    iDVaRI31lmAcTRPbw>
+X-ME-Received: <xmr:MD-9Z7iIwyf05xXqA4nlSr7-smxrJIVpKA1WbyyCUL1wOV-0AgzzPE8iVg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdektdeiiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
     hnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddt
     necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
     drtghomheqnecuggftrfgrthhtvghrnhepgeeljeeitdehvdehgefgjeevfeejjeekgfev
-    ffeiueejhfeuiefggeeuheeggefgnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrg
+    ffeiueejhfeuiefggeeuheeggefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
     hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
     ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeeftddpmhho
+    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeefuddpmhho
     uggvpehsmhhtphhouhhtpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdroh
     hrghdprhgtphhtthhopehprghulhhmtghksehkvghrnhgvlhdrohhrghdprhgtphhtthho
     pehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvvghrrghjrd
@@ -100,14 +100,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdektdeihecutefuodetgg
     hlvghtthdrohhrghdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtgho
     mhdprhgtphhtthhopehurhgviihkihesghhmrghilhdrtghomhdprhgtphhtthhopehroh
     hsthgvughtsehgohhoughmihhsrdhorhhg
-X-ME-Proxy: <xmx:Lz-9Z1kPu5YaqLrnWSfvXJIvMKwBFrnwnsTWZI4XCBXDTZNcY-u_VA>
-    <xmx:Lz-9Zz1Dv81tx_ttsaFyq1QJe-8B6AzkGJ8g3EqsAvS-JcfA2F-Vcw>
-    <xmx:Lz-9Z0sL-9OBc9_Ac-vlNfMkOYHmC4t3lcyi5OQR0_6sXuDkYzPATA>
-    <xmx:Lz-9Z3XCyrPSaYPqtSpnQnKeGfxCMWMowDC1ynszNxCKmNkUo_7McA>
-    <xmx:Lz-9Z622lnr25oL4SH-gxvSuf-mFwlA67Gi8WGXBtmfpqKpSiEWRqwHg>
+X-ME-Proxy: <xmx:MD-9Z3_ymXnj-qKt5-_ZupGOqn--bjqZHuDk5ON84hQrqOYuXzlWlg>
+    <xmx:MD-9Z2sewgHd0SnO8O4nhVLe0H70NQTPjeVvfnWQqdY5-TWgLCUTzw>
+    <xmx:MD-9Z-GxhXxCzTg5g7Gop7I7PzGX-a2HZR3ENtkxTDEhzMPJ-RZhXw>
+    <xmx:MD-9Z1N0xq5XXDwwKPjijXdAD3PInf7VjK1VfFCb6qAkBMSoD-plLQ>
+    <xmx:MD-9ZzPmNvYftR-CC2ku2JM2lxfVJQ2sifVfJ5lkpsSxJ67R0VJpH4Mt>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Feb 2025 22:55:26 -0500 (EST)
+ 24 Feb 2025 22:55:28 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: "Paul E. McKenney" <paulmck@kernel.org>,
@@ -130,10 +130,11 @@ Cc: "Paul E. McKenney" <paulmck@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Clark Williams <clrkwllms@kernel.org>,	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,	Ankur Arora <ankur.a.arora@oracle.com>
-Subject: [PATCH rcu 05/11] rcu: handle quiescent states for PREEMPT_RCU=n, PREEMPT_COUNT=y
-Date: Mon, 24 Feb 2025 19:55:10 -0800
-Message-Id: <20250225035516.26443-6-boqun.feng@gmail.com>
+	linux-rt-devel@lists.linux.dev,	Ankur Arora <ankur.a.arora@oracle.com>,
+	Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [PATCH rcu 06/11] osnoise: provide quiescent states
+Date: Mon, 24 Feb 2025 19:55:11 -0800
+Message-Id: <20250225035516.26443-7-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20250225035516.26443-1-boqun.feng@gmail.com>
 References: <20250225035516.26443-1-boqun.feng@gmail.com>
@@ -147,56 +148,84 @@ Content-Transfer-Encoding: 8bit
 
 From: Ankur Arora <ankur.a.arora@oracle.com>
 
-With PREEMPT_RCU=n, cond_resched() provides urgently needed quiescent
-states for read-side critical sections via rcu_all_qs().
-One reason why this was needed: lacking preempt-count, the tick
-handler has no way of knowing whether it is executing in a
-read-side critical section or not.
+To reduce RCU noise for nohz_full configurations, osnoise depends
+on cond_resched() providing quiescent states for PREEMPT_RCU=n
+configurations. For PREEMPT_RCU=y configurations -- where
+cond_resched() is a stub -- we do this by directly calling
+rcu_momentary_eqs().
 
-With (PREEMPT_LAZY=y, PREEMPT_DYNAMIC=n), we get (PREEMPT_COUNT=y,
-PREEMPT_RCU=n). In this configuration cond_resched() is a stub and
-does not provide quiescent states via rcu_all_qs().
-(PREEMPT_RCU=y provides this information via rcu_read_unlock() and
-its nesting counter.)
+With (PREEMPT_LAZY=y, PREEMPT_DYNAMIC=n), however, we have a
+configuration with (PREEMPTION=y, PREEMPT_RCU=n) where neither
+of the above can help.
 
-So, use the availability of preempt_count() to report quiescent states
-in rcu_flavor_sched_clock_irq().
+Handle that by providing an explicit quiescent state here for all
+configurations.
 
+As mentioned above this is not needed for non-stubbed cond_resched(),
+but, providing a quiescent state here just pulls in one that a future
+cond_resched() would provide, so doesn't cause any extra work for
+this configuration.
+
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
 Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- kernel/rcu/tree_plugin.h | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ kernel/trace/trace_osnoise.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 9573408a9800..3c0bbbbb686f 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -984,13 +984,16 @@ static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp)
-  */
- static void rcu_flavor_sched_clock_irq(int user)
- {
--	if (user || rcu_is_cpu_rrupt_from_idle()) {
-+	if (user || rcu_is_cpu_rrupt_from_idle() ||
-+	     (IS_ENABLED(CONFIG_PREEMPT_COUNT) &&
-+	      (preempt_count() == HARDIRQ_OFFSET))) {
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index f3a2722ee4c0..512034e365ad 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -1542,27 +1542,25 @@ static int run_osnoise(void)
  
  		/*
- 		 * Get here if this CPU took its interrupt from user
--		 * mode or from the idle loop, and if this is not a
--		 * nested interrupt.  In this case, the CPU is in
--		 * a quiescent state, so note it.
-+		 * mode, from the idle loop without this being a nested
-+		 * interrupt, or while not holding the task preempt count
-+		 * (with PREEMPT_COUNT=y). In this case, the CPU is in a
-+		 * quiescent state, so note it.
+ 		 * In some cases, notably when running on a nohz_full CPU with
+-		 * a stopped tick PREEMPT_RCU has no way to account for QSs.
+-		 * This will eventually cause unwarranted noise as PREEMPT_RCU
+-		 * will force preemption as the means of ending the current
+-		 * grace period. We avoid this problem by calling
+-		 * rcu_momentary_eqs(), which performs a zero duration
+-		 * EQS allowing PREEMPT_RCU to end the current grace period.
+-		 * This call shouldn't be wrapped inside an RCU critical
+-		 * section.
++		 * a stopped tick PREEMPT_RCU or PREEMPT_LAZY have no way to
++		 * account for QSs. This will eventually cause unwarranted
++		 * noise as RCU forces preemption as the means of ending the
++		 * current grace period.  We avoid this by calling
++		 * rcu_momentary_eqs(), which performs a zero duration EQS
++		 * allowing RCU to end the current grace period. This call
++		 * shouldn't be wrapped inside an RCU critical section.
  		 *
- 		 * No memory barrier is required here because rcu_qs()
- 		 * references only CPU-local variables that other CPUs
+-		 * Note that in non PREEMPT_RCU kernels QSs are handled through
+-		 * cond_resched()
++		 * Normally QSs for other cases are handled through cond_resched().
++		 * For simplicity, however, we call rcu_momentary_eqs() for all
++		 * configurations here.
+ 		 */
+-		if (IS_ENABLED(CONFIG_PREEMPT_RCU)) {
+-			if (!disable_irq)
+-				local_irq_disable();
++		if (!disable_irq)
++			local_irq_disable();
+ 
+-			rcu_momentary_eqs();
++		rcu_momentary_eqs();
+ 
+-			if (!disable_irq)
+-				local_irq_enable();
+-		}
++		if (!disable_irq)
++			local_irq_enable();
+ 
+ 		/*
+ 		 * For the non-preemptive kernel config: let threads runs, if
 -- 
 2.39.5 (Apple Git-154)
 
