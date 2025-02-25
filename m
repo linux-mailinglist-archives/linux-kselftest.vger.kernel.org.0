@@ -1,144 +1,158 @@
-Return-Path: <linux-kselftest+bounces-27440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F2B1A43D3A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:17:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72FF9A43D5A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:21:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBF1D16254A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:14:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD36E3BAF2E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C9D20AF78;
-	Tue, 25 Feb 2025 11:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF3E26773B;
+	Tue, 25 Feb 2025 11:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mWeGPYYq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Cl16CYMr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1JdV71WP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2386A3DBB6;
-	Tue, 25 Feb 2025 11:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D16267706
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 11:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740482036; cv=none; b=J6Nnzj2CAPnEdk6CaitUoBJHwlSWzDfwmndNrtOWFeQPjFqaxxYT6iH4TQ9We31ROR1JDvx7oI2JjyStNYvzmyRwE3bJXPZlOoXp4Giku8qXm8JypQMEIZf5TnsesMuQf8x438nBK4JyqJmmy3AcHtXyJiVxgIinLyRXygHhey0=
+	t=1740482111; cv=none; b=NqUFxVBZplG9w+nEREFYpa3q93d4cHMqB/PWCa5JY6IKNgaLE2ieXAmNd4wkP2TOFbCQTSBZf8z4wxNHdkimUjYJ/Z+5F235zk6ACz4tAf7Qxz1Pz9//WLGNPLi872ddaN4pGgBgBiHt/jZ/f1D/PSaSmXwwmvzrV8kyyDElI1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740482036; c=relaxed/simple;
-	bh=8OZuyHpvsUVbfiGFhXm25KHhZEJBKdeeXHeNu3ALA4Y=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=R6i4mbzpQFSryjOpB1KPEVWX02WEzCEv+QqDrFwRh4JRm63yjG/DIqTpqYmjI/QBDnHeF4Px7CGrsQHnT40KIY04eHf0Zc7kWYHanE6nFl6jOwtqEIW8tjdolhtwrIDbdiJipduDrvZmLMr+Qgo626ftdTgyKMzGQXQzksdUJm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mWeGPYYq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Cl16CYMr; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id AD0E425401A7;
-	Tue, 25 Feb 2025 06:13:52 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-11.internal (MEProxy); Tue, 25 Feb 2025 06:13:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1740482032;
-	 x=1740568432; bh=8OZuyHpvsUVbfiGFhXm25KHhZEJBKdeeXHeNu3ALA4Y=; b=
-	mWeGPYYq0c+Voz1qnm2FhSsI7U8mrjHqAzAu62vmmyoS3DhDjhlDjb423TXNpojS
-	N+8DfUEFJhpnrI71lzRaO23Ivf2oR5SUdxx4NMCeF/vlULuNWGtB21mY8iowjNqP
-	2Pk9d47gwynUlIvZHnj/7P1ZMb6kAXhFuIBHw9vNCX/rOxrFOHG0FTFqpOwv4C8y
-	xAeoaKR/7xtERIEuQOZnF2jzEZ6j5PV5xlv0trWawbxmbq7yOoObJuuOcRB8x1ap
-	/d0zBKo7V0nfIecD8TdHqqw94IQqzOS3AdHSYRXAH5NN0/HTTCP2ovf343qNLq8a
-	dYVlkT9KC2rfgUwoLozJaA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740482032; x=
-	1740568432; bh=8OZuyHpvsUVbfiGFhXm25KHhZEJBKdeeXHeNu3ALA4Y=; b=C
-	l16CYMr3RfZCBZOPoHsg/fUIr0ytp7z4P+FMV7mbRiPIhK9UyfFU8679PxtgYbu+
-	JdLwX1H9KzDbGQj5POLFfp0/4PE197XkeTqm5aCyeZzHR/VTu5Q6957bL/nOxjbG
-	dGc0AbPUMFbsuCKUwSVhxUONUtFbPiIIe2hZXA4dCAQ9t/JjevvaKqRDjrXpJHes
-	kJkSNHiE9SXDfLgz+nvzr4gRqfGEW7XGUkXMjwpc9a6wA8fBdDNZYFc+jL1gDpep
-	xCkwMq2y6RTNk0P/lTIGdDW2onT8qCbT30YZIrODmKzh8/75DclN6twj0cuiuP8x
-	bCDWp0tjaHFxz0hRK4fvg==
-X-ME-Sender: <xms:8KW9Z5PunitMNPM4PYDZJczPgIO4hiJFlvvX16mJX078TOlX2zRL9A>
-    <xme:8KW9Z7_CfQ7qGFN8kK3yeh0Orn9fOKe0JFJmHdPle3cfUNV4F6PitYd9zV_l9MO2n
-    kjHK2oYMqqffKNlML8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    fedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghhvghlghgrrghssehgohhogh
-    hlvgdrtghomhdprhgtphhtthhopegtrghsshgvlheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepkhhishhhohhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlphhivghrrg
-    hlihhsiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepmhgrnhhivhgrnhhnrghnrdhsrgguhhgrshhivhgrmheslh
-    hinhgrrhhordhorhhgpdhrtghpthhtohepkhifsehlihhnuhigrdgtohhmpdhrtghpthht
-    ohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
-    ephhgrhigrshhhihdrkhhunhhihhhikhhosehsohgtihhonhgvgihtrdgtohhm
-X-ME-Proxy: <xmx:8KW9Z4Td90mKZqTBkvmK8xHIWtnOQo0wAPE6FgKUia1urs-w9AY8cQ>
-    <xmx:8KW9Z1tVISLlzuXTNCAY8cZpzL1027zd185fK7i-g7dlXcoNayuUiQ>
-    <xmx:8KW9ZxfeCFEvPWeUaRk2r8xDyRw_v1_mKLqZEPbjgfsJJW9tFVBW8w>
-    <xmx:8KW9Zx3WaahY2phJachF8QGZ2TQx5wc7Uz3QI2Czt-twEQ_p0FYoiw>
-    <xmx:8KW9Z_3_BcgusIHbm1RyJLyshHGnvdPXZxQndvKDNB5ePz0nTP8pc-gA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2BE2E2220072; Tue, 25 Feb 2025 06:13:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1740482111; c=relaxed/simple;
+	bh=ObW0ySAp2NYqfEvC+jiKAOzw8shS/kdjO9OS0VOsQjo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KmPOyrW2L05GyJhyGBTeJYWN4fJg2UIphiTOVMtqvKteuQhuISwBypXlunnT6I2e5J/alhUi3a60HHKbGWxNmQx6L0wdiVkGRiS3yEpze4HwPsl4sLKclFxfObeydBeFAPdFLr5un2IcMCpQ3OFEsemkFnEfsfGxernzo4TCDTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1JdV71WP; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-471fbfe8b89so318821cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 03:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740482108; x=1741086908; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xc5yW/4rgg5KqhOxif21KGnv89ZFaMc+1AokhRRA/h0=;
+        b=1JdV71WPJItk2UzfZN5cVoCUbpJYLgUscOOOUnTbvtLEbbaIf0TMz7pBCZOcsfjphT
+         p/XRQyd+GOSSAU8KMVwkNltZpktjbow5gQkcv/9U5LNjcMRvBDrxgTE/Y2lgM/Ri4ioc
+         9Q/AILPOLcqMKXI6n8AdyWr1XuWtsUaS/l3KVhmvbmzwiggMff6clrfi5xVLLBsJLbbI
+         5L8HEC+AKVeVGG8Tnk03O7TFq5upTyHdsIROkhrCEQhwNJQN22CkfPS2i9CmhSkABBRI
+         yLBfK6FXJr9GGU7wxSG6tiN18PWyVzvw+W4VyaJSAJs5s5B0hgjkdozq1izK0axayq9a
+         03AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740482108; x=1741086908;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xc5yW/4rgg5KqhOxif21KGnv89ZFaMc+1AokhRRA/h0=;
+        b=pq8Jr55bKlJ65b4Sw/Mj0tQR+catsVVSOgqZHo4vqd1HwikMtYmdk+S7b0R1OLKXtA
+         RhHs8o+WTgwI5i9sqGOG5NSVLinK6/K/P5LPQHi06SbxSMtY7pnMfDb9VtpnAHGIjgWx
+         3TztAFOYDV/UX0wEBU9iY9Y7o6izTfoWafo7h1KJZgMcO29KooFFcKCko4Zd6mAXeQgs
+         11bJWHfAnWYUtijQdebB2ijg+f3Fz7fV5WPTvXW8fiNS09tY1Hao7bTN9Bg/zv8VjF2J
+         X2mkJokTL81d/QhiZ0M5U2utHhLtqNJN+SqKt5mdbca9Tu28GNa+1bF5B5H2GlhPEil8
+         RmLw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxePRlXvPgKlJPG8TBtIySeIzJc0tyy9S0+o8qSCnsj3iAlI2ZTdZRL3Eb50L8bIdfky+PtLAhRUd7hYBoR6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8Lo5eGqhVHkxAxKvkW6+pQ5sreQPnTNIO9qI7psd7IQ22PQuk
+	/fsrFyrBJUsjjjlcoihg6Py1e1JCRh1dNGEJhab2DU02OkSLESpI1supNKc122x+isUjXwJjwf8
+	lQw382T8MqLy/xbDd5TBTKkVzoPy86xFgyk5i
+X-Gm-Gg: ASbGnctMMSnHc0NN1OhRkxkXcle/XrJRVgbJVymnS+0iZMzzvpqV3rUcQTnENB7qYCt
+	LA9tqAVwdSdt5Dj5F0A1ya+8NHpZ+rmR7bf0ljafG4waNZB/+HFvPfIYU9CBfcvmQP1GshbSSIu
+	bmrnRd8LfH8MWDMGvrb4nYGN2dBwMdwLCiXih+dQ==
+X-Google-Smtp-Source: AGHT+IF293xeVyj4/wAp5kXWhSXHvlqZ+hGOq5jwSu7o+tmHkKY22JHmZitJTtCcPuuUlKFOv+HkABOvq5lh90WmCTc=
+X-Received: by 2002:ac8:7c48:0:b0:471:fb3a:5bfb with SMTP id
+ d75a77b69052e-47376e5de43mr4324371cf.1.1740482107770; Tue, 25 Feb 2025
+ 03:15:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 25 Feb 2025 12:13:31 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
- "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "Kishon Vijay Abraham I" <kishon@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- "Gustavo Pimentel" <gustavo.pimentel@synopsys.com>,
- "Bjorn Helgaas" <bhelgaas@google.com>, shuah <shuah@kernel.org>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Niklas Cassel" <cassel@kernel.org>
-Message-Id: <87857a72-eca0-4919-8e1d-ff04b9047d82@app.fastmail.com>
-In-Reply-To: <20250225110252.28866-6-hayashi.kunihiko@socionext.com>
-References: <20250225110252.28866-1-hayashi.kunihiko@socionext.com>
- <20250225110252.28866-6-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH v4 5/6] misc: pci_endpoint_test: Remove global 'irq_type' and
- 'no_msi'
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
+ <20250224-page-alloc-kunit-v1-4-d337bb440889@google.com> <Z7y5vK1M5IOizIWR@google.com>
+In-Reply-To: <Z7y5vK1M5IOizIWR@google.com>
+From: Brendan Jackman <jackmanb@google.com>
+Date: Tue, 25 Feb 2025 12:14:56 +0100
+X-Gm-Features: AQ5f1Jr2V__EQDgXK12d3od3hg4EIBPZN4EogawQjt_yGI4eSiDAQDJGxAHmIjU
+Message-ID: <CA+i-1C1KL9uJALuU=ZND0U0HQoqihzyH6HoZhdKmmTQP25qDuw@mail.gmail.com>
+Subject: Re: [PATCH RFC 4/4] mm/page_alloc_test: Add smoke-test for page allocation
+To: Yosry Ahmed <yosry.ahmed@linux.dev>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Oscar Salvador <osalvador@suse.de>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Michal Hocko <mhocko@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Feb 25, 2025, at 12:02, Kunihiko Hayashi wrote:
-> The global variable "irq_type" preserves the current value of
-> ioctl(GET_IRQTYPE).
+On Mon, 24 Feb 2025 at 19:26, Yosry Ahmed <yosry.ahmed@linux.dev> wrote:
+> > +static void action_nodemask_free(void *ctx)
+> > +{
+> > +     NODEMASK_FREE(ctx);
+> > +}
+> > +
+> > +/*
+> > + * Call __alloc_pages_noprof with a nodemask containing only the nid.
+> > + *
+> > + * Never returns NULL.
+> > + */
+> > +static inline struct page *alloc_pages_force_nid(struct kunit *test,
+> > +                                              gfp_t gfp, int order, int nid)
+> > +{
+> > +     NODEMASK_ALLOC(nodemask_t, nodemask, GFP_KERNEL);
 >
-> However, all tests that use interrupts first call ioctl(SET_IRQTYPE)
-> to set test->irq_type, then write the value of test->irq_type into the
-> register pointed by test_reg_bar, and request the interrupt to the
-> endpoint. The endpoint function driver, pci-epf-test, refers to the
-> register, and determine which type of interrupt to raise.
->
-> The global variable "irq_type" is never used in the actual test,
-> so remove the variable and replace it with test->irq_type.
->
-> And also for the same reason, the variable "no_msi" can be removed.
->
-> Initially, test->irq_type has IRQ_TYPE_UNDEFINED, and the
-> ioctl(GET_IRQTYPE) before calling ioctl(SET_IRQTYPE) will return an error.
->
-> Suggested-by: Niklas Cassel <cassel@kernel.org>
-> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> For the sake of the test can't we just put the nodemask on the stack?
 
-Nice catch, always good to remove global variables with too generic names.
+Hm, I think whether or not it's test code is irrelevant to whether we
+can put it on the stack. Presumably the nodemask code is written as it
+is because nodemasks can be massive, so we can overflow the stack here
+just as easily and confusingly as anywhere else.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+(I think we're not in a very deep stack here right now but KUnit could
+easily change that).
+
+FWIW I think when using the mm/.kunitconfig provided in this series it
+does actually go on the stack.
+
+> > +     struct page *page;
+> > +
+> > +     KUNIT_ASSERT_NOT_NULL(test, nodemask);
+> > +     kunit_add_action(test, action_nodemask_free, &nodemask);
+>
+> Why aren't we just freeing the nodemask after using it, before we make
+> any assertions?
+
+I guess that's just a philosophical question, I usually default to
+writing KUnit code such that you can throw an assertion in ~anywhere
+and things just work.
+
+But, I'm not passionate about it, I would also be fine with freeing it
+directly (it would certainly save quite a few lines of code).
+
+> > +/* Generate test cases as the cross product of orders and alloc_fresh_gfps.  */
+> > +static const void *alloc_fresh_gen_params(const void *prev, char *desc)
+> > +{
+> > +     /* Buffer to avoid allocations. */
+> > +     static struct alloc_fresh_test_case tc;
+> > +
+> > +     if (!prev) {
+> > +             /* First call */
+> > +             tc.order = 0;
+> > +             tc.gfp_idx = 0;
+> > +             return &tc;
+> > +     }
+>
+> We need to set 'tc' here to whatever 'prev' is pointing at, right?
+
+prev always points at tc (or is NULL). Sounds like it needs a comment
+to that effect!
+
+(Note tc is static).
+
+Ack to everything else, thanks for the review!
 
