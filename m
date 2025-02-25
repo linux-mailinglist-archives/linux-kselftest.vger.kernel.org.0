@@ -1,130 +1,139 @@
-Return-Path: <linux-kselftest+bounces-27442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB731A43D32
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 035F7A43D3F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:17:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BF98188AF30
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:16:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 892EB19C0CCA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:17:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A031A2673BC;
-	Tue, 25 Feb 2025 11:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="INaGGT12";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jFgehLMg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0361206F22;
+	Tue, 25 Feb 2025 11:17:40 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED871A2391;
-	Tue, 25 Feb 2025 11:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2670B1A239E;
+	Tue, 25 Feb 2025 11:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740482153; cv=none; b=N+e+Ow2Vc5PbZHjUqLS5WFnIB0pkLkGt6qC/piLtARtch1fobz0+34RDCzjnyVaeW001GF0KSzu5BxfmSSNg7AGUykKlZIS3DgXNT6Mj/+gLnZ8j7qjuD7nsX2IvWxPlXgk5U1t1eiiLJfZt957K/Ps58l8a/MxTDqiTg4CpWCk=
+	t=1740482260; cv=none; b=TvQViiDLZIeJlGsnApVsY9pBxLhVYWuA1GQfo9qFsGh1tN5VyE0KzjSb+zUysklgXTOl28ar1feUq/cUaKJJ0yUrwSR7WLWPMNdOBcaVXczOw90ihht3AgwnNmErJ2pBxtC1FakbaLg0Wr9rPr46MVGk4Pb1YuJbWgnGWhmYtTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740482153; c=relaxed/simple;
-	bh=2JbZLuj3gbAS/CbcAaVAbFtDG+KHZF7DLmbgxyIVdWQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=X/fS7k9S0m3Djzcegkm+TLK+I2WTKxXglfovJdO4rEgMtNdXLnX3cxT3/Dy3ItbPgcAxTJkhjQHV+l1SDPWbgeJSB2QrDDN+UUswKH/26QB9Cdt7d2gGegWihmc1JMmWaFbBDlT9FYMS9Y+DF+QE74uu9RNwW40oYn6fw+9HmFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=INaGGT12; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jFgehLMg; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.stl.internal (Postfix) with ESMTP id A13651140191;
-	Tue, 25 Feb 2025 06:15:49 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-11.internal (MEProxy); Tue, 25 Feb 2025 06:15:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1740482149;
-	 x=1740568549; bh=2JbZLuj3gbAS/CbcAaVAbFtDG+KHZF7DLmbgxyIVdWQ=; b=
-	INaGGT129xfkpqF5JmO4oiulg/DKpw8utIl0dIVUsZGJm5YiASR6S1TENPbFLpj8
-	rJRQG1lViCOHdykU8p0eK71aKnJtjmzATZ8XaI51JtoMhcSDJXI2gbITN5PVebLg
-	eKUleHAZGBNwAoyEd/SYQBNVhmIEd71BPuJ/r7BUAmdVV65/2BDN1dfjxlgNPCn4
-	uxP6S35gSCgR2BM2xykMr+0jwhrARJ6IwsIeHFdVK8wy6IlgnI9yybu+PhtVhAXQ
-	U7ok/yWrOGRJ5YOteNgGGEVjvjs1/Y/rXXHUkjQGhM/r52xoHxndSfQKy+vkyk3c
-	b6pSNRO70aJf8Ct1EzcnMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740482149; x=
-	1740568549; bh=2JbZLuj3gbAS/CbcAaVAbFtDG+KHZF7DLmbgxyIVdWQ=; b=j
-	FgehLMga9x22Qe1q+5CdaggFBURAIfb7eEv10MkS1W40Lp4nbDeU4WvPavX+9FTV
-	cSppr8+Iy6JSRPW4ce7x7hVLw9k1VcjWX29hExnx71l7AHGKyAGUCbTzUpMbGo+e
-	2YgP5FuC4ZB782MKAqBXnj9IM7/eFUwWAVme5HeMajKXj6lp27yJgIwNYr8Vsi2f
-	W9gtCxajB6gwrM8aASF4JwvAb872PDprYL4TN+m1B4iq98Dznsy/xJnYQ6J5QLqH
-	TvvolAI4ii0v8ecCSudhyxNhlSBGvcojG3Mmi5U4BiOUTbCRhrC0l+YokQ58s+IG
-	pNsmuG553BWU4UZcMAZUg==
-X-ME-Sender: <xms:Zaa9Z4cWoi5hJHhCXT2ocnSVnM-UgwFpUA2sGuO0TfBsn60U90PwmQ>
-    <xme:Zaa9Z6P9qpnKbh-2mjWdjynBBzzI2e_KUgJegRkFVF2mQ7pOroaBq7QBGV4KucylJ
-    8mH6bn28XRrcbrkUV8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    vddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghhvghlghgrrghssehgohhogh
-    hlvgdrtghomhdprhgtphhtthhopehkihhshhhonheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtoheplhhpihgvrhgrlhhishhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshh
-    hurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghnihhvrghnnhgrnhdrshgr
-    ughhrghsihhvrghmsehlihhnrghrohdrohhrghdprhgtphhtthhopehkfieslhhinhhugi
-    drtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdr
-    ohhrghdprhgtphhtthhopehhrgihrghshhhirdhkuhhnihhhihhkohesshhotghiohhnvg
-    igthdrtghomhdprhgtphhtthhopehguhhsthgrvhhordhpihhmvghnthgvlhesshihnhho
-    phhshihsrdgtohhm
-X-ME-Proxy: <xmx:Zaa9Z5jIUjGNPM7FPng7NDjphrrovOju_7eZ94LYXhw9foJOGaLT3w>
-    <xmx:Zaa9Z99ke2HCyobHq4MO9qjaYbCWIhRUvYqplTd2CH-2Y2lkKDskmA>
-    <xmx:Zaa9Z0sRAvrNSkVtpekX9qLISUUgIndLgjCvEtHzSb9yzKMkf-XLcw>
-    <xmx:Zaa9Z0FbdcreJf6cFTCWEY0WdJh7VDyMMjFlH_-J3QhK45D6PC9HIA>
-    <xmx:Zaa9Z0HAjEqJyRKrvKu-xQBO8IDK3eyNTWbHzJ2ikyujrBkEQ0lZh-8t>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0332B2220072; Tue, 25 Feb 2025 06:15:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1740482260; c=relaxed/simple;
+	bh=Y4qrHsZ4YlKYiMw1liY09TYi5suU2srUrdPV71CkQiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dTxMbz0RPtPbdbYhm/sYFzh34FU0LxdJ1OgGLQQEjcaBjWMLxyJQ2h02lq+SCfu4llqH32+g0BuRcDZ2HQua2MSV8ccvbyrLrPWRSSm6KN+MrvPskXrC0BSbk/J09mAOd+7YPH2j+aQUpmyijD9QCiFK6tllxZ8sM+6SmtYDmvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abb999658fbso681915766b.3;
+        Tue, 25 Feb 2025 03:17:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740482257; x=1741087057;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1j29+YwywkVdnOwJpODDXLXoxVQ80C41eZ3nGoHPbf4=;
+        b=Df+K/BVTSZ/FqgrWjulI3eyLIxO3aIZSwXCw7zluU+nT/HVEYg/RgauJAOlO3VdhBs
+         4EuASt3XFlhFLici9PYpIDVpDmx/AwFiGdoMQWsN7jywrlHs4SE0N9Fc9akwzhYeqgTy
+         Aa7n0u7ykIIHlN1H3CFaCIUekzXRoKthjz2jdvqFFSIA9CCGe14q6AaeON07tZRpmvfr
+         lOuDsw98ERZqM4wpqDYk/wxb1uAa4jhjy/R6AiA6US9hoEgrVDHxTwoQ6YO20qtrZOkC
+         ypvR2v9wXeLJtJVgAm0Kwx8SR06+JqQivFSRPlCVyd3w7VojSkR+MqzLWPpooAFG3H8k
+         TFZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUP7juvDNcZzQZiHBW78+8HwecbW/lnEA9GsQBn/Waem2Nw+gN7P2RKvUk/n0cIYLVC3GOYiRFI@vger.kernel.org, AJvYcCW4CTCPWntj3TpSgI8TVXiAJePaiuYuk5E+JEGEDOxI+E3WFoinpGjdiZQ3tGhXV66Or45djW8zJjU=@vger.kernel.org, AJvYcCWmt3hUi4jRx8f+ECaUOkHXx23MegENHGHMoIo3rHPqvRKZIeaypcTsPXGeIxIi8CbjjnAQy9tii+vCjeM2@vger.kernel.org, AJvYcCXLDJOa2USegPdllpZWmNmd61QVJnq8KYV6pzzpKQC7iEa9wsnY6MkW2iH+LlT7N7b0ZEx1n0p5vm3/LbEUK3Ho@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO4EXn6N/vDmUSKbK1BPoylpZwMMy/U39h+RNo9rZqv2gPKsx7
+	qy8XiCfqTUHDCX2qNBYaaA2uJSk+Fvbkr7jZor4aZFwSQpqNC1pw
+X-Gm-Gg: ASbGncsrBl0ISsRmfKyFlDO1sPyve6HKgiNSWNjMl4L4idsaRs9CMyUMCWXhEcv/Mwp
+	4OOfGFn/ZyP+9Ouq+46hQ2KPnsVKBS+lJhYHNxvAVpldQqN9K7KlyG9DSghM6PJxzsiEfe1vsA9
+	Lt7AzD9uHE3vF77CQEEzXYPg2SJHnY5gRh/J1RYmkNP2OnywQrg/7HMGVugSwGnoVnWJ5p4h04t
+	hpn4pfCFvCn1Q5lPQqqchXN5hcXUoZyRLFoJRbAYreGFJWU+jO6llSGidlHqmvWX2dtIxTlZfwp
+	6xcyvglItCaqEFugGA==
+X-Google-Smtp-Source: AGHT+IF9N08H7jTMLFCvTUzvTml6TjwoMntNUKf+GwIhdyS7gvhSXa+0EhXsIhy4Y/1NGXa86oTn0A==
+X-Received: by 2002:a05:6402:34d0:b0:5e0:818a:5f4d with SMTP id 4fb4d7f45d1cf-5e44bb36997mr7209455a12.28.1740482257036;
+        Tue, 25 Feb 2025 03:17:37 -0800 (PST)
+Received: from gmail.com ([2a03:2880:30ff:73::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e45a8b8b48sm1069172a12.20.2025.02.25.03.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 03:17:35 -0800 (PST)
+Date: Tue, 25 Feb 2025 03:17:33 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Simon Horman <horms@kernel.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH net-next 5/7] netconsole: add task name to extra data
+ fields
+Message-ID: <20250225-doberman-of-scientific-champagne-640c69@leitao>
+References: <20250221-netcons_current-v1-0-21c86ae8fc0d@debian.org>
+ <20250221-netcons_current-v1-5-21c86ae8fc0d@debian.org>
+ <20250225101910.GM1615191@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 25 Feb 2025 12:15:28 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
- "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "Kishon Vijay Abraham I" <kishon@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- "Gustavo Pimentel" <gustavo.pimentel@synopsys.com>,
- "Bjorn Helgaas" <bhelgaas@google.com>, shuah <shuah@kernel.org>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Message-Id: <05d8a0bb-2b75-44ac-855a-1abcef5f09c2@app.fastmail.com>
-In-Reply-To: <20250225110252.28866-7-hayashi.kunihiko@socionext.com>
-References: <20250225110252.28866-1-hayashi.kunihiko@socionext.com>
- <20250225110252.28866-7-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH v4 6/6] misc: pci_endpoint_test: Do not use managed irq functions
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225101910.GM1615191@kernel.org>
 
-On Tue, Feb 25, 2025, at 12:02, Kunihiko Hayashi wrote:
-> The pci_endpoint_test_request_irq() and pci_endpoint_test_release_irq()
-> are called repeatedly by the users through pci_endpoint_test_set_irq().
-> So using the managed version of IRQ functions within these functions
-> has no effect.
->
-> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Hello Simon,
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+On Tue, Feb 25, 2025 at 10:19:10AM +0000, Simon Horman wrote:
+> On Fri, Feb 21, 2025 at 05:52:10AM -0800, Breno Leitao wrote:
+> > This is the core patch for this whole patchset. Add support for
+> > including the current task's name in netconsole's extra data output.
+> > This adds a new append_taskname() function that writes the task name
+> > (from current->comm) into the target's extradata buffer, similar to how
+> > CPU numbers are handled.
+> > 
+> > The task name is included when the SYSDATA_TASKNAME field is set,
+> > appearing in the format "taskname=<name>" in the output. This additional
+> > context can help with debugging by showing which task generated each
+> > console message.
+> > 
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> >  drivers/net/netconsole.c | 14 +++++++++++++-
+> >  1 file changed, 13 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> > index 5a29144ae37ee7b487b1a252b0f2ce8574f9cefa..625f4c0be11d8deb454139b1c526abc842697219 100644
+> > --- a/drivers/net/netconsole.c
+> > +++ b/drivers/net/netconsole.c
+> > @@ -1179,12 +1179,22 @@ static int append_cpu_nr(struct netconsole_target *nt, int offset)
+> >  			 raw_smp_processor_id());
+> >  }
+> >  
+> > +static int append_taskname(struct netconsole_target *nt, int offset)
+> > +{
+> > +	if (WARN_ON_ONCE(!current))
+> > +		return 0;
+> 
+> Hi Breno,
+> 
+> I gather that theoretically this could occur, but it isn't expected
+> to happen in practice. Is that right?
+
+That's correct. `current` isn't expected to be NULL in practice.
+I've been running this code on several servers for days and have never
+encountered this warning. 
+
+While the taskname feature isn't enabled during early boot, netconsole
+might be active at that time, which is why I exercised extra caution
+here.
+
+If you also think this is safe, I am more than happy to remove this
+check.
+
+Thanks for the review,
+--breno
 
