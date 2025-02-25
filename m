@@ -1,94 +1,94 @@
-Return-Path: <linux-kselftest+bounces-27410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DDBEA433F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 04:56:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FD65A433F8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 04:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4E053B5FCC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 03:55:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB54176329
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 03:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F5B24EF96;
-	Tue, 25 Feb 2025 03:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E312512E4;
+	Tue, 25 Feb 2025 03:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i6TgZHoQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q92DnqcU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA1D1F5EA;
-	Tue, 25 Feb 2025 03:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5EA1624F8;
+	Tue, 25 Feb 2025 03:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740455729; cv=none; b=AQ4wahre8KU154QyS1PxEUxRGQA1o2QaMqFmxfLYfyUW9EstvFCTncCb5+D35h0WNB0g7k7i+dejodIY0ULriCRp8Bp2d1Ja6Qp3cjbk3egBMMS/JlAw2v0wgZmKt/9acF1aQyYds+ilOZUVPRsGzQIFU+jf/0lKRRbxWtawfUM=
+	t=1740455731; cv=none; b=LlxtvM6UtpT/6gRryuLntVI7VUQv/qOZrCKseffegHvMQeJaMAuam2KxOHCdclwKIGiSj4v1y/6h4u9Adwn7aN7VKqZ4Ss7u2vHdk18uMMZ1N5ZPLToXSDBWW7W+s1X+GOIwdAh4/BycJrF6OtOETX3/rbbPMIuEAplZefNZuPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740455729; c=relaxed/simple;
-	bh=N77KqbFVCj3RUrUBBHfg6qA4TgoamCkJ9sF4ME/N0iw=;
+	s=arc-20240116; t=1740455731; c=relaxed/simple;
+	bh=+xWSr+nkJ64yuyk2bAtOMGffsUZkkwlgArf+svUx41k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uRZ8yES9/04CGU6x5WgNfBRvDNXEeLgnPSPUIUJ23b1qyxE1f1SUzXiJmuV3XMnFZqV458RUwGKdh4GT1LVD4L3Yo/dcA4cQLLo+Yld8yojv+4kyjlo205EBmkxKKNbF1RB8KWs1rPXbmGTVx7Iued9fXTTTaYgDyqx09r9k6OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i6TgZHoQ; arc=none smtp.client-ip=209.85.222.173
+	 MIME-Version; b=Y27l1Ff6E9de04PTY2UmpUV8TerX6voY5cuQrRO9yFYApWkWAAtVz98ssk2c0I/Xhvw9iQWEj9meHN16bA4EP7OAp2IyxLdAzMVrGws28lo7fbmBIHRvttq/9nhBaZres41Z0iA6Yo2G3J17QqJqRPdiKEY5FVAmNGAUtlKmKKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q92DnqcU; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7c0848d475cso733078185a.2;
-        Mon, 24 Feb 2025 19:55:28 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c0892e4b19so618526585a.3;
+        Mon, 24 Feb 2025 19:55:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740455727; x=1741060527; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740455728; x=1741060528; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=6bZjSIhc7HiilOm6x/1wfoYX7rNiE79eoPzAm1Y0WKw=;
-        b=i6TgZHoQ/RMyvw98bRrOwmlHNpPi0IDP+aTHHsjQ5QuR3CzktNAQRR3UNypekzwTKP
-         YPo/5d1PJlh6xAuu2jnWgMSYhrCTDjpX+23ZL8XinXHSiKimS6ESyBMhtXM9dmadmgXX
-         Fyehhg+yEDtnyNdmBIMJBCnn7VEQLkOqhcm9bn+dTtplZgW0N2D2MvksQqJphb0WjX/j
-         YYjdu5vKx/Tx8zoQko8klrM1iKx+nDz2VbgKU/uLwl0npU8S3o75KkuTwbD6Nn9vtoRK
-         qJmma7qZ+tM84vlxj/2KaQXoXUVw8mvIYd7UUGuY9GxSoqibJUzM8lM+D79tuI9leF0f
-         HDkQ==
+        bh=jdozoCwQSzFwrrBbMNFpZ8ApNw9FrREQJIW7RONrtaw=;
+        b=Q92DnqcUNMhWvJPA8wEbk6/EfjU29KXL8I0QfW5t/DtmCYvqghfIQoEER2OzElAbw0
+         VXEymbwS9VcVkHkK7U0tiuvrcf5453N4bG4HXvHgMuwkWwLUtWySRTwxsGGj9Ut4ODKJ
+         NKOY4rufoKRejCYqKpz0NN17KXwg8eyGnqGKih1SfLz8/gzQ/BULue9aFvGZdzfImFFp
+         Nce4KABWQOMZpkVXJy38VPnvF/rFyD1f0NMTxanZKa6Xn1iePwRKCVc0scVKw5b5xv5Q
+         1FSq2zFlcPnFu/ncRIh8ESPirHv0NNZx21PAqN7NJMy5l12R1+DcPc8duAyUq8NtE3u0
+         Z7cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740455727; x=1741060527;
+        d=1e100.net; s=20230601; t=1740455728; x=1741060528;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6bZjSIhc7HiilOm6x/1wfoYX7rNiE79eoPzAm1Y0WKw=;
-        b=n6ahyp8YuFUWX+yZXvYLvGOpsB8TfldbMa+CRVgCySfZ/7p67wxYhECdVbP7nLaDfS
-         zHeQs7Damug36D9FBh+lu3ehCyKYbBhWdAbqUFFYeA14lb7ncjRx9F7IyNQWueymxRuc
-         o81N4FlCuDkmPEfZRZbch3Yidw+xu7QnFC5z/1I92KIW/67vuq6BM7dtnarYCaFrJdMt
-         2oO08wOyzPRRbP89IpguvP382/QdN5XVYfzU7NzRUPsDOxvpcpqnr+QHh6vQQRoTLdkW
-         7dFooUJqf6i3tHw44nRTDjSINoWIfPUKM7w69EtmjSHDvSXFxesMSr3xnFiuVHIeWFFO
-         ZzNg==
-X-Forwarded-Encrypted: i=1; AJvYcCWbqXTDrD24Ze69B6TR4nuDt/H2d0GYMkU/m/ubEX9ifRp2lhDfAZofgZJJDuZM2AFgu85chW5ZmCyOIllMvfHL@vger.kernel.org, AJvYcCX8KaJXuxPgB2OO90UCXd9Y8tme/jZa3YSWxRUMe8hlb1/y7va+Au7jK3H/ZBdT+RFcprmjWszh6Czx1tGT7t45rK3H@vger.kernel.org, AJvYcCXtoaya/sGccy5hpMLwSW5Cm5v6uew6kux+2qtJ451Fet7BMhZiLQ2Hx5bUdOPDoPJDABLYbVztOAIaXfI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG0aZ9cRrXGgenEI63wi8c0AgoyG6s/eokKIjv6OzIWB31NaA7
-	BYbZbeOkdo0AUNX+yM2YGCAP9EmcIgtRTK3ba/3aq2rcri67F68V
-X-Gm-Gg: ASbGncvPxHV6pRw56pviRKT2CMsfsHisS3lGLCELjcB6//j7sFZqcjDLefU8M5A+irn
-	Ii6syTk0Mfs+DPDar614I/SUyRNYUPzjbrngRLa2susROCCVEGvraEbtWAfsevizY6jYPwfBsf1
-	8Kf5JUkjvGzRihYTdC8cZ0A8kqN674SLYkn+49sqfO5kO0clVj4WAZxB7hw1gFzhHqwBMgZ9Fa4
-	hpxZcXHdcvuArcGUYfaNcVvHk5i99F4cUmZDHALDQznTtpkFDYT9UI4UFOE3E8AJYRMVHe0UR6k
-	9TaG0d3p00MAER0RVkNiN6IxGEJP52VPraHml2KqbO6bYzpa7y+D+SqidXzZ//UBLkwkU6JcxO2
-	wDnVmTEUvx6QUHS4X
-X-Google-Smtp-Source: AGHT+IEC0C0d+DYM8KdIaUvUgJgks+JgO4LiPSAwNKNuUQIS0gx2Q8fQIw/0qV9UDTxtFURTT38lEg==
-X-Received: by 2002:a05:620a:f02:b0:7c0:a389:f26f with SMTP id af79cd13be357-7c23c047145mr175846085a.56.1740455727170;
-        Mon, 24 Feb 2025 19:55:27 -0800 (PST)
+        bh=jdozoCwQSzFwrrBbMNFpZ8ApNw9FrREQJIW7RONrtaw=;
+        b=GbkCuMk1oWQX0h0GbNROoa2QfXPW/aKKYVwy754o/a9RT1uPPOiiPHbWe0CnKZkXmQ
+         ve8i36X+p6u4skyoEPdNYZ9Jm0gsbZkrurC7HbjaS9ZwqIXkr1QgNdNPk01PX4mnWzgT
+         rPH2ADeiSOI/yRlBjvoM5Uwon9qjTRNmMfd5xy8g9rt2vx1+N5WNvW5e/SLTZNc0rHDw
+         JUB2HHlR/4iFeR98o5UvC9hqgCU9FaLmJJnz0oU1cF3DWQws7MSmKbHZBG/8T9nt0nZG
+         Mim4C1EnyVkILqubGYq3Ip4wpxeTdxyuJ11DOyzByrL290h0y1mfNYiCaA7UPIsYiefM
+         OJhg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9eXusX3xL7t9mK4FEFq/admPDLGxvM4qQyfPDr/1qY4qgTZ7Q2sYycuYOsMMWVqU35Q9bcPLb8wDQsmf2eTN6xkyy@vger.kernel.org, AJvYcCVBKgcVCk0QqePrkLmK6nA7QFvwypRofOHxSDd2s3UpaLfmy7IiXDgjIlWox25Y0vJxNx18F9wxdYFb9N25e7FW@vger.kernel.org, AJvYcCX6j1C4UkCougBuYMQDcyEl7sx7YfgSTlpYPUX3WW50VrqETzZ7y22XrCPI4WLjeluFpizbKGGtuGmG55A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCiDoMJudwbYnRtEFwpPn70YjwmmoOXplAb/lf5UHah2nmM+cQ
+	D78BcHiFU4hp3bemvmLdO3IjJ4oxVgYDAygVAP8VBA4k070mJDCE
+X-Gm-Gg: ASbGncsZwuqZNs1LJN1dZDt5155vg6CyWBdNQft5xELC5MZUYLMZo2OrOwYpFFBF/Sr
+	WSSMTDX2v3IA/ZDSHffqB0mSlyWQkZkaZaKi7TeLy/FtjqDiUPSdGxkjTtXcN8A2GmAog5eCE9l
+	ff+AuEsiK8F7CkNwLUmVQYllWSt54+YEZxltY6vOn3C92cENVB4YNNLLt7locHLAfSlK5rHUELV
+	Jbja+gfN0hGxECEsZQnce6EHfDsusCFOQtg1jB/Ayzbujwhw+KFLdScFRUkL+6zdm/n3cRLPRvs
+	KCEfObi/gCb7YkuX0BoaXNboX2pi1CO5QdKMLEApkR7tXkOlQpVBrm3UiK7/m96Xmgz1vBgndO7
+	Ds5n8ZvROF2h0z16o
+X-Google-Smtp-Source: AGHT+IFTwNMKfPJKSVdkAd2wzvyYLeX43jvuaeqy4yYDCxwRmbSxY2gEiMA5fWXJHX7/6sVrC3Ghhw==
+X-Received: by 2002:a05:620a:4606:b0:7c0:7d34:6a7b with SMTP id af79cd13be357-7c0ceefe59cmr2223508885a.19.1740455728549;
+        Mon, 24 Feb 2025 19:55:28 -0800 (PST)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2992ffsm60738785a.7.2025.02.24.19.55.26
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2c241dsm60007785a.58.2025.02.24.19.55.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 19:55:26 -0800 (PST)
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id F0B7B1200043;
-	Mon, 24 Feb 2025 22:55:25 -0500 (EST)
+        Mon, 24 Feb 2025 19:55:28 -0800 (PST)
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 6B68B1200043;
+	Mon, 24 Feb 2025 22:55:27 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Mon, 24 Feb 2025 22:55:25 -0500
-X-ME-Sender: <xms:LT-9Z94wqxXEYd4aQd8FQQBiH3TCBbiDYF-MPjfU6ZXFbLuSQPPPYw>
-    <xme:LT-9Z65eaeBmrbM5QPhBbQ-Wi8wJ5pgHWJgSomr214ztzKZ2Inhfo6Lj92C987FnF
-    jv58jRB_fXQDmue-w>
-X-ME-Received: <xmr:LT-9Z0f8tVthd4rh6FLd-k3bZEpE3Nwk3fB-8YMTfHh8meFFWihfY9WQEw>
+  by phl-compute-08.internal (MEProxy); Mon, 24 Feb 2025 22:55:27 -0500
+X-ME-Sender: <xms:Lz-9Z1ntkdjB-ig_XPh83pP8VtIJZhM_mp8c0GTmZf2It08_6g-6sA>
+    <xme:Lz-9Zw0hYpVlIsjQxPH3BZYQlvWB_1kiTLBxD0_SX_g_ZmfsORfZm1C9VTiUGfB0F
+    jbFKUIE2EFWId7elQ>
+X-ME-Received: <xmr:Lz-9Z7oY1nnwz51wobKv6Et71hWNkyMzylWcCfs3Y4KLc9hAYCuncQ0RZQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdektdeihecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
     hnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddt
     necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
     drtghomheqnecuggftrfgrthhtvghrnhepgeeljeeitdehvdehgefgjeevfeejjeekgfev
-    ffeiueejhfeuiefggeeuheeggefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    ffeiueejhfeuiefggeeuheeggefgnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrg
     hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
     ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
     hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeeftddpmhho
@@ -100,14 +100,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdektdeihecutefuodetgg
     hlvghtthdrohhrghdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtgho
     mhdprhgtphhtthhopehurhgviihkihesghhmrghilhdrtghomhdprhgtphhtthhopehroh
     hsthgvughtsehgohhoughmihhsrdhorhhg
-X-ME-Proxy: <xmx:LT-9Z2Kge_WH8db9hxIRgKx0JEF9dZhmCPkZT2LPYp1XKLI2x5uTlQ>
-    <xmx:LT-9ZxIaV6oovYWBbGLhe0Pjj4lNrQNGl4JwLaZaAbC5gFu-W7M7aA>
-    <xmx:LT-9Z_zhAO4j5QbU50oKFaHgHOi5YeootZcSw0g4TG-OYx9-3nDKAg>
-    <xmx:LT-9Z9IxVnDpg55DtbFw2prqduNbfmznnAjDG-IRQJPJ47Kat1Cw7Q>
-    <xmx:LT-9Z0avvlfckIdmAmRwyrnZyynz_10N1ggMfdUkeDhgCF8GHfoLfMfg>
+X-ME-Proxy: <xmx:Lz-9Z1kPu5YaqLrnWSfvXJIvMKwBFrnwnsTWZI4XCBXDTZNcY-u_VA>
+    <xmx:Lz-9Zz1Dv81tx_ttsaFyq1QJe-8B6AzkGJ8g3EqsAvS-JcfA2F-Vcw>
+    <xmx:Lz-9Z0sL-9OBc9_Ac-vlNfMkOYHmC4t3lcyi5OQR0_6sXuDkYzPATA>
+    <xmx:Lz-9Z3XCyrPSaYPqtSpnQnKeGfxCMWMowDC1ynszNxCKmNkUo_7McA>
+    <xmx:Lz-9Z622lnr25oL4SH-gxvSuf-mFwlA67Gi8WGXBtmfpqKpSiEWRqwHg>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Feb 2025 22:55:25 -0500 (EST)
+ 24 Feb 2025 22:55:26 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: "Paul E. McKenney" <paulmck@kernel.org>,
@@ -131,9 +131,9 @@ Cc: "Paul E. McKenney" <paulmck@kernel.org>,
 	Clark Williams <clrkwllms@kernel.org>,	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev,	Ankur Arora <ankur.a.arora@oracle.com>
-Subject: [PATCH rcu 04/11] rcu: handle unstable rdp in rcu_read_unlock_strict()
-Date: Mon, 24 Feb 2025 19:55:09 -0800
-Message-Id: <20250225035516.26443-5-boqun.feng@gmail.com>
+Subject: [PATCH rcu 05/11] rcu: handle quiescent states for PREEMPT_RCU=n, PREEMPT_COUNT=y
+Date: Mon, 24 Feb 2025 19:55:10 -0800
+Message-Id: <20250225035516.26443-6-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20250225035516.26443-1-boqun.feng@gmail.com>
 References: <20250225035516.26443-1-boqun.feng@gmail.com>
@@ -147,61 +147,56 @@ Content-Transfer-Encoding: 8bit
 
 From: Ankur Arora <ankur.a.arora@oracle.com>
 
-rcu_read_unlock_strict() can be called with preemption enabled
-which can make for an unstable rdp and a racy norm value.
+With PREEMPT_RCU=n, cond_resched() provides urgently needed quiescent
+states for read-side critical sections via rcu_all_qs().
+One reason why this was needed: lacking preempt-count, the tick
+handler has no way of knowing whether it is executing in a
+read-side critical section or not.
 
-Fix this by dropping the preempt-count in __rcu_read_unlock()
-after the call to rcu_read_unlock_strict(), adjusting the
-preempt-count check appropriately.
+With (PREEMPT_LAZY=y, PREEMPT_DYNAMIC=n), we get (PREEMPT_COUNT=y,
+PREEMPT_RCU=n). In this configuration cond_resched() is a stub and
+does not provide quiescent states via rcu_all_qs().
+(PREEMPT_RCU=y provides this information via rcu_read_unlock() and
+its nesting counter.)
 
-Suggested-by: Frederic Weisbecker <frederic@kernel.org>
+So, use the availability of preempt_count() to report quiescent states
+in rcu_flavor_sched_clock_irq().
+
+Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- include/linux/rcupdate.h |  2 +-
- kernel/rcu/tree_plugin.h | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ kernel/rcu/tree_plugin.h | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 48e5c03df1dd..257e9ae34414 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -95,9 +95,9 @@ static inline void __rcu_read_lock(void)
- 
- static inline void __rcu_read_unlock(void)
- {
--	preempt_enable();
- 	if (IS_ENABLED(CONFIG_RCU_STRICT_GRACE_PERIOD))
- 		rcu_read_unlock_strict();
-+	preempt_enable();
- }
- 
- static inline int rcu_preempt_depth(void)
 diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 3600152b858e..9573408a9800 100644
+index 9573408a9800..3c0bbbbb686f 100644
 --- a/kernel/rcu/tree_plugin.h
 +++ b/kernel/rcu/tree_plugin.h
-@@ -833,8 +833,17 @@ void rcu_read_unlock_strict(void)
+@@ -984,13 +984,16 @@ static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp)
+  */
+ static void rcu_flavor_sched_clock_irq(int user)
  {
- 	struct rcu_data *rdp;
+-	if (user || rcu_is_cpu_rrupt_from_idle()) {
++	if (user || rcu_is_cpu_rrupt_from_idle() ||
++	     (IS_ENABLED(CONFIG_PREEMPT_COUNT) &&
++	      (preempt_count() == HARDIRQ_OFFSET))) {
  
--	if (irqs_disabled() || preempt_count() || !rcu_state.gp_kthread)
-+	if (irqs_disabled() || in_atomic_preempt_off() || !rcu_state.gp_kthread)
- 		return;
-+
-+	/*
-+	 * rcu_report_qs_rdp() can only be invoked with a stable rdp and
-+	 * from the local CPU.
-+	 *
-+	 * The in_atomic_preempt_off() check ensures that we come here holding
-+	 * the last preempt_count (which will get dropped once we return to
-+	 * __rcu_read_unlock().
-+	 */
- 	rdp = this_cpu_ptr(&rcu_data);
- 	rdp->cpu_no_qs.b.norm = false;
- 	rcu_report_qs_rdp(rdp);
+ 		/*
+ 		 * Get here if this CPU took its interrupt from user
+-		 * mode or from the idle loop, and if this is not a
+-		 * nested interrupt.  In this case, the CPU is in
+-		 * a quiescent state, so note it.
++		 * mode, from the idle loop without this being a nested
++		 * interrupt, or while not holding the task preempt count
++		 * (with PREEMPT_COUNT=y). In this case, the CPU is in a
++		 * quiescent state, so note it.
+ 		 *
+ 		 * No memory barrier is required here because rcu_qs()
+ 		 * references only CPU-local variables that other CPUs
 -- 
 2.39.5 (Apple Git-154)
 
