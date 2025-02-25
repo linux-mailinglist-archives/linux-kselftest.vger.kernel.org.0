@@ -1,88 +1,77 @@
-Return-Path: <linux-kselftest+bounces-27481-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27482-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864F6A44740
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:03:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DB02A4471B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 17:59:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EA837B1DD9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 16:52:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24C40174F8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 16:54:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17C920C02B;
-	Tue, 25 Feb 2025 16:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48831624E9;
+	Tue, 25 Feb 2025 16:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z4uUfH49"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4JtFQ2m0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2075.outbound.protection.outlook.com [40.107.94.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550D21A2389
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 16:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740502105; cv=none; b=bAjUTc4eC5rorL9fRkRbAFPnHmiHvFtBgekz6Pdyou3KvwWj6D/4YaCXjS6xvDV88QeZvc/iNiDsIGhuzBrtiuUPok8lPaAzywBPxcImLLs4NoKplwsSzuG6Rzrhd6QLbUdrQNPMAyHkGYoTp1UtJT/uCpCRBE+ptecaIvhuXSU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740502105; c=relaxed/simple;
-	bh=QLeXofl8oz+1YDj2uHG9Af1DIWMS8S6ol/g/+nY++FQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kmw6e7y9CkOyIujBKs3PDc4D2dWt31wyvMAz7i1cArG4DrJdUZPPo2Za/+AVfi2LsEestGYAMhCI6QmV4MZ1JmGdRb3jnyY1Dlzk/QSYfT0z+NGq0wh0lrtckHylurZJtK96cHWMbEzYfSkrSX99cnjr23w0xFVhlvuyyvYyeDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z4uUfH49; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740502103;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=jw2CX8GJqxuLRFAFx88zTCcWlXcKTO/rHj8BJTgdWyk=;
-	b=Z4uUfH494yPKf+qWMKBmLoNxiI948PB3j16TGiZaRDoTA6wdKzq/SC/oNJzzORITsJvrYv
-	jrissvshBpo4KYV1rZfT5nfgKJ/MOIpjtOgj94kB4S6IQB8yREvzSo5VTTbV9YuoxFZWmH
-	HSKcZuLTKMjUm2R9EKLP069+Ypfy5v4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-l053ePB6OQeY-YgjtBGbQQ-1; Tue, 25 Feb 2025 11:48:21 -0500
-X-MC-Unique: l053ePB6OQeY-YgjtBGbQQ-1
-X-Mimecast-MFC-AGG-ID: l053ePB6OQeY-YgjtBGbQQ_1740502100
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-439858c5911so27922885e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 08:48:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740502100; x=1741106900;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jw2CX8GJqxuLRFAFx88zTCcWlXcKTO/rHj8BJTgdWyk=;
-        b=K0yx2B1xOud61ZhwM4dxJ1kSSWJh2raDZayZWZAMjxYIyj4xuJ+NfG7rJ0fYYk9D+A
-         Z/U3uNWETnIVpbgWptNAPNHYdgQy4KlUWgjz1ALth9j4wUXHxjBZ+qPEwYJHHcYMKrxm
-         G7MAmPo+865E7zoNiaVPDewq6m/cA1IxzdHM+WeyDRshuZb7EKp0HmFeJNcIemgZJcJh
-         wvib24GiyS60M/VfVKzhIPPLXAYqOAttfLKxt4r/hB6xUGHkkm9zHwGBXLdWreFM98y8
-         6L4PChYl0mIwvWnFoN38dduM8Q92v4UGc0cubkx6KAqzdElJdlLHjiWOZq525owjjJvN
-         PZUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWsnXifOuaLBr+GVbcfCWCjgtwnbUq8e8nS7pLI5BtzQ2g8Eg4OG84trOMQT8jcDkDHzYSK2DbWF4M/nRajft8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9g0qYqKAhu/J0vFlamN1dzTqNqI5wraAJSvCDDsvwJSnwWNcp
-	A2Q7yCnz0Xm7n7wp72p7wZHGDhheZ+JSo8p8Hcah//8K3vfq463lmH/MDkbgUKaN7ureznI3o8n
-	4hjl42j9kOYOWoDGBPZk46psaFOdC1cR94/+N6rhkarx01j1TlSWLZBKdkBbGLdjMcg==
-X-Gm-Gg: ASbGncsfUBPUoXQGf3WZJ9tgIt5xtAM2Xu7aQLYWvWVtLNCLmvc8ghVHsgFB/hGGZsS
-	Y6ZXot1qriB0FULYNFqzhXp1+VxQM9rbBDM8rCYBNYfDt255sExLxOkKvEmT0uif6FtYcJRFQOy
-	JNOqrTpODilJxzyxzNaw2mu8YEfAXuAzRNqekVVpPHw/FmRtRUsq3ls7vx/CtGBYcx54+LTaw8V
-	ciPQV/ZzjnhASQ0AeJnm5W+qvjMPVD5QlerpnBZl6u/qFll63rXFw7+m2Y5tDWvwoHo6QsE2IkE
-	ON7X1y0JMTBJRBmQ4WOgFmGJxYIvvDztQPkI5rsRG59itUq6srWPC/y6lBBjxUL5V7DLZi2eeIE
-	Q+kHx7rMVVZF2mnhSIcFBneSYAMadr5Lj3+VYBpf9iDo=
-X-Received: by 2002:a5d:59a3:0:b0:38d:e15e:17e9 with SMTP id ffacd0b85a97d-38f6f0b2161mr20087647f8f.35.1740502100269;
-        Tue, 25 Feb 2025 08:48:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE8sdF4FkFqdZXDiyQJpYRdr9jotf0bgjSy0tUCoeN9Ynzu8FAq0ynzblVc1iJsuqV0PE3uGw==
-X-Received: by 2002:a5d:59a3:0:b0:38d:e15e:17e9 with SMTP id ffacd0b85a97d-38f6f0b2161mr20087605f8f.35.1740502099887;
-        Tue, 25 Feb 2025 08:48:19 -0800 (PST)
-Received: from ?IPV6:2003:cb:c73e:aa00:c9db:441d:a65e:6999? (p200300cbc73eaa00c9db441da65e6999.dip0.t-ipconnect.de. [2003:cb:c73e:aa00:c9db:441d:a65e:6999])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ab15476f0sm32638635e9.23.2025.02.25.08.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2025 08:48:19 -0800 (PST)
-Message-ID: <48ffe442-5015-44fe-bbd6-708ba8500505@redhat.com>
-Date: Tue, 25 Feb 2025 17:48:17 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADB2440C;
+	Tue, 25 Feb 2025 16:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740502220; cv=fail; b=fZQap5BJ9hlQfJqeKUjuOf3hCpi77cQ2JbCr6EjYL51MIa3XlF/C20thxXD3qWMOh5FxPYdZvfv5bZW2fcOQ2JfWNgrGJ8VBWZxxJqig7bF3z5wT1tYYScoTpC4rx06byy4Wjh+VhEpjANrFYkI/ljJu2IpSTUcirt9hYc6qSJ8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740502220; c=relaxed/simple;
+	bh=XQQsODO8wZWerJBF31WxiewZg16STYQqqKXs1zqpbM0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dWKZmIXsZ2ABMBsH01AG4H8nJ+gEBSibKC9RujUw5RYc2rzli7u2LdUuKt6QbNLHhy1w7jigHcwatmadvKm/uQvs4hxckZfLDfNOII9kKeREyBzAV2EvlfoJy7BgX7+f314F8aRH5S3aozQb4QSR/WgjEbK/KEXIg28S4aDAxcY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=4JtFQ2m0; arc=fail smtp.client-ip=40.107.94.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GmNSscw8ModOJtl+jL/jWd8vTwAp0HJ3cGKax7FOHvlyXL+1xFl86496Usbin1ERNvP3kLtOzNW25R39ezGBt4uAEScPaehsW6YkkUEpxN+lEcpgi764/1s+j+aoizzNtesKMeir9HZpeUj/hueksEZAFMjTJ0/SoOUT1vDUTrhgcFp5DFRklaHMPmWdshd4o5Pray4ikoBvzCvD4kguTt7cQ+vagzDrKNgB1Za7aU4f5ff5KCgDLj2Tg26NOQ2d8dOUUn0K4taghiOqHcH8uVF97FNzrnscdzH+Hd2DE1nKlPQnhPvQzv9TSX8j55wgC9Sv9NEij6YhEdNgurS1fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CUsFI2J7KQTplpsnCqkn6dN5Y6psR3kEJbYFpTXAnVg=;
+ b=fqYUek4dyugd51kyU2DbzhNkgX8BYzFofvcMW9tfXa8kgT+SBhTfanj5y3U2+JyFNTVCAhMQOwZP3N/RM6LCZPCKWNi+1UM7YUuQ1odYsz28ZVP/Q8qPVQSYPf6XG0tGWKJiLrDEfMSUQNePjIDvzZGQJqqQu4c5tLyU83QzJ0aFl2FA4neW/B9pBa5WDlIpKz/FV5/iC1ZERhRVc1Bp2VYOpomlVDaO4Pdqy7RQNOnVTzMhbRECH0SFuC3iX0qTw+I2gsmyFA2V6CGq4dW34AvDxKYdsEDvNaJ4La11uqeLkdJ8OQNdT/IH5ljYBvNJ7MThq0tdveiacow8PhlEZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=oracle.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CUsFI2J7KQTplpsnCqkn6dN5Y6psR3kEJbYFpTXAnVg=;
+ b=4JtFQ2m0IYnBgrkTrAzaKbkHIyuPxo0U3ZDAiMuYhjuXsTboCJMDLQQoEYRalJ6U8jpR8bKqU5wOqquPqQz4A/+NgFEVnSG/xaY1/0Y55bzMFqx0HsZIP71sNHJdGqW5MmprznEM0/kJbSQX4rkuRSWAyZSwZXk6ULJshm/lh6M=
+Received: from BN9PR03CA0928.namprd03.prod.outlook.com (2603:10b6:408:107::33)
+ by CH3PR12MB8709.namprd12.prod.outlook.com (2603:10b6:610:17c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.18; Tue, 25 Feb
+ 2025 16:50:16 +0000
+Received: from BL6PEPF0001AB51.namprd04.prod.outlook.com
+ (2603:10b6:408:107:cafe::5d) by BN9PR03CA0928.outlook.office365.com
+ (2603:10b6:408:107::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.21 via Frontend Transport; Tue,
+ 25 Feb 2025 16:50:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB51.mail.protection.outlook.com (10.167.242.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8489.16 via Frontend Transport; Tue, 25 Feb 2025 16:50:16 +0000
+Received: from [10.236.185.178] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 25 Feb
+ 2025 10:50:13 -0600
+Message-ID: <f66c47d0-d111-45a8-8cf5-bd4577bbe6e5@amd.com>
+Date: Tue, 25 Feb 2025 10:50:13 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,106 +79,179 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] mm: permit guard regions for file-backed/shmem
- mappings
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>, Juan Yescas <jyescas@google.com>,
- Kalesh Singh <kaleshsingh@google.com>
-References: <8d643393-ddc0-490d-8fad-ad0b2720afb1@lucifer.local>
- <37b606be-f1ef-4abf-83ff-c1f34567568e@redhat.com>
- <b5b9cfcb-341d-4a5a-a6b7-59526643ad71@lucifer.local>
- <0db666da-10d3-4b2c-9b33-781fb265343f@redhat.com>
- <62c0ba1c-7724-4033-b1de-d62a59751ca5@lucifer.local>
- <a49d277e-128c-4853-bdeb-3a94134acbf6@redhat.com>
- <6eb33b5d-3040-4637-b627-48f8f78e4e28@lucifer.local>
- <b30a6306-d62b-4515-add8-4550d044501c@redhat.com>
- <c0e079bd-a840-4240-93ae-0ee2755d425a@lucifer.local>
- <e0954e13-2c7d-447c-ba86-19875c74bc3b@suse.cz>
- <3102ab3b-67b6-4047-9db7-e83c3b9c1c53@lucifer.local>
-From: David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v7 01/10] KVM: SEV: Disable SEV-SNP support on
+ initialization failure
+To: Liam Merwick <liam.merwick@oracle.com>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+CC: <seanjc@google.com>, <pbonzini@redhat.com>, <thomas.lendacky@amd.com>,
+	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <shuah@kernel.org>, <pgonda@google.com>,
+	<ashish.kalra@amd.com>, <nikunj@amd.com>, <pankaj.gupta@amd.com>,
+	<michael.roth@amd.com>, <sraithal@amd.com>
+References: <20250221210200.244405-1-prsampat@amd.com>
+ <20250221210200.244405-2-prsampat@amd.com>
+ <593571c4-39c5-4647-82f2-98094ec9f437@oracle.com>
 Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <3102ab3b-67b6-4047-9db7-e83c3b9c1c53@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Pratik R. Sampat" <prsampat@amd.com>
+In-Reply-To: <593571c4-39c5-4647-82f2-98094ec9f437@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB51:EE_|CH3PR12MB8709:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82c93964-b002-4a24-f11e-08dd55bc7ae8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?enMxS2FRbXNnNVJ4NzVNaEx5S3Y2b2h5a3FFRzZWdHpNUFBWWEo0RGxJVzNs?=
+ =?utf-8?B?Q3ZSejdwOFZtMGp5Nzlhenl1T1VCeWgrRlJ6Z0kvcjVyZkNnWHY4Z0hpcXd5?=
+ =?utf-8?B?aERDQ1psVnEyNXRDMHhpQU5EaUlJYXYyOTFZaENDd3hiQUkxVzJYTUN1MlpC?=
+ =?utf-8?B?cllXekk3eVhJSmJ1cUVEMnNjWmN0Q0NBVnRZOW4zY3FYVHhOeVlRZHlDbERo?=
+ =?utf-8?B?SU1ONjJydDQyM2JzMG1oTElzd0U3aWdCN1JWT01TaGxLSXJYNDZZcDRmcXZw?=
+ =?utf-8?B?Ulpqa2oxdExEbnBqYjN6UXRtZS9XVUtpcEFzK1puRTdFR2RwQ3B1NHdRSDYy?=
+ =?utf-8?B?ekpKN09uZmFQcjA2QnJkVTlySzhhQ3VscUtZZG1sNGFJTkJQVWc3TWo5UTRW?=
+ =?utf-8?B?NWpwVXVPekZGODhZNkZPVktzNmp3TElWNEoxaGF0dWdHM1lhM1g4djFjRjlK?=
+ =?utf-8?B?OVFPMitBVmRXdGxHa2xwUVRidEtvd2pmNUh5bW1wazZZV3g4NlhxUWxpeFhQ?=
+ =?utf-8?B?QzBtdUZJMkxKQTJ2YjJhWUtpTUlBVmhKL2VuZXUvY1hSb3FoRUI4YVpKMWEy?=
+ =?utf-8?B?V1pYc2hPanluNDFWaFdnSzdBUnNHMy9uTCtNV0JxVk5TS1Rvbk1SSVBEVVpu?=
+ =?utf-8?B?MG02K25GNldHcWl6NXRhdHlnVjE3MkcyUnlNWmhWTCs3S1plbFpNZXpQOXh1?=
+ =?utf-8?B?UHBISjk5aTdJczlmUzRLMTB6c0piUXUzeE9CYURjSjFyWFd5bHNVVzRHRXQ2?=
+ =?utf-8?B?TnA3d1lFRldJRS9EWVNVM3kxeHEwRFRrNWVQMk93SmVlQW5VMm1ja0FRNGJi?=
+ =?utf-8?B?UVZ0bnpYQ0o0NWlPS3lVNHZHU0hNOENWTmVVYVlQOVg4MHR3R3VQNXVRWUlH?=
+ =?utf-8?B?V01EOFR5b3BOcjNXVklCSkJHTzIzeTNJSDh4R3FxZGxCL2l1bFdCMCtnTnZM?=
+ =?utf-8?B?TjNNTVRJLytNbDR1OU92NWhyQVFZUGN6TWU0TE4rOWFLc3pUMFpidDRVRVV3?=
+ =?utf-8?B?SkxXeFVwWnB6TFhPRFRzWkdPRFErSkg2K3FUM285UmNFMVVWK1hkNmdTQldR?=
+ =?utf-8?B?V2FmUEtBR0xsUzg3elJHV0dQbU5hWmwvRExWcDlta2NDZlZleXpBZklBVW5J?=
+ =?utf-8?B?akxtZUdzRGRPWldJUmUwSTJ6UEtENTFJYm1GM1R3YjZXNkp6dDNhNlBBTEJP?=
+ =?utf-8?B?cC8rK0c3UlhqUTlNclpOVGl0WWpSbjl6L3I4aDk5eU91TllTMTVrVmxwVWhR?=
+ =?utf-8?B?OWI3REpWdjF1dlU5SmFXUnhsZnB1TzVmbDkyMk9aRGErTkJpa0xEamZqTCtk?=
+ =?utf-8?B?VE8weTVaMURxZmVkcUVmVU83TWlPUGErYjJSUXBZdFJJazZHbkNWQWNBYk4r?=
+ =?utf-8?B?ZTY4WXZuQ00veXpCWS9xMmQwbFg3S3V5bXBPVVUxOHFXVWF6U2k2NGF5YTk1?=
+ =?utf-8?B?Ukg2UEdmdFlDS3ZVdXFZYVM1UDNCZXBDRFBxWnk4S1crS2kwT042NDdJcVh4?=
+ =?utf-8?B?UVQ5R3BxZ1dJcXFoWmx4VTNGZzhGTjdKMzJPRjRXNzhOcldXVFRtSG1zVzlK?=
+ =?utf-8?B?VWxCLzJUTjJXOGRuTlBvcEZYZWVFdnJDN0ZDd2xDNkxPOFcyY3ROWHdZbVkx?=
+ =?utf-8?B?VzRtaFp6TnNKSzRGWW1mM0pqbHJIR3pCREpzSi8wMklCTmFlek5zRCttaFlI?=
+ =?utf-8?B?bEt3aC84VFNmSHBRN283ZGVWR0VPdkZmRmZ5cytDRXQrMmN0L25GWjd3ZitR?=
+ =?utf-8?B?eVIvdGovU2N0bGxUTWc5QVA2UDBwYXlpZURGZWtFdnJqYjFuZk4xMG8zMnVF?=
+ =?utf-8?B?UjJtUllUR1hLNW1YZ0M0YjhRZitsOEpZVFQ1M2FDNWgrbXZnaGRSVExoajhy?=
+ =?utf-8?B?aTVERitHYXZKd1Fjd3JxdjNmTmZSeC9NbHNPSWQ5Z1FwcGFqNkFseHVrRWVF?=
+ =?utf-8?B?MDZGRUVQSjd0Tkd5aXMzS0F4WGcxd2hOUVo4UVBIK0xNVzBpYjA2T0lObndt?=
+ =?utf-8?Q?rykh8LPAaqu2UOCrXgU1PjaER/0yzs=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 16:50:16.0308
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82c93964-b002-4a24-f11e-08dd55bc7ae8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB51.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8709
 
->> As for compatibility with VM_LOCKONFAULT, do we need a new
->> MADV_GUARD_INSTALL_LOCKED or can we say MADV_GUARD_INSTALL is new enough
->> that it can be just retrofitted (like you retrofit file backed mappings)?
->> AFAIU the only risk would be breaking somebody that already relies on a
->> failure for VM_LOCKONFAULT, and it's unlikely there's such a somebody now.
->>
->>
+Hi Liam,
+
+Thanks for review!
+
+On 2/24/2025 1:01 PM, Liam Merwick wrote:
 > 
-> Hmm yeah I suppose. I guess just to be consistent with the other _LOCKED
-> variants? (which seem to be... undocumented at least in man pages :P, and yes I
-> realise this is me semi-volunteering to do that obviously...).
 > 
-> But on the other hand, we could also expand this if you and I see also Dave feel
-> this makes sense and wouldn't be confusing.
+> On 21/02/2025 21:01, Pratik R. Sampat wrote:
+>> During platform init, SNP initialization may fail for several reasons,
+>> such as firmware command failures and incompatible versions. However,
+>> the KVM capability may continue to advertise support for it. Export this
+>> information to KVM and withdraw SEV-SNP support if has not been
+>> successfully initialized.
+>>
+>> Fixes: 1dfe571c12cf ("KVM: SEV: Add initial SEV-SNP support")
+>> Suggested-by: Sean Christopherson <seanjc@google.com>
+>> Signed-off-by: Pratik R. Sampat <prsampat@amd.com>
+>> ---
+>> v6..v7:
+>>
+>> * Replace FW version check with sev->snp_initialized (Sean)
+>> ---
+>>   arch/x86/kvm/svm/sev.c       | 4 +++-
+>>   drivers/crypto/ccp/sev-dev.c | 8 ++++++++
+>>   include/linux/psp-sev.h      | 3 +++
+>>   3 files changed, 14 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>> index 0dbb25442ec1..87b5d63a5817 100644
+>> --- a/arch/x86/kvm/svm/sev.c
+>> +++ b/arch/x86/kvm/svm/sev.c
+>> @@ -3050,7 +3050,9 @@ void __init sev_hardware_setup(void)
+>>       sev_es_asid_count = min_sev_asid - 1;
+>>       WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV_ES,
+>> sev_es_asid_count));
+>>       sev_es_supported = true;
+>> -    sev_snp_supported = sev_snp_enabled &&
+>> cc_platform_has(CC_ATTR_HOST_SEV_SNP);
+>> +    sev_snp_supported = (sev_snp_enabled &&
+>> +                cc_platform_has(CC_ATTR_HOST_SEV_SNP) &&
+>> +                snp_initialized());
+>>     out:
+>>       if (boot_cpu_has(X86_FEATURE_SEV))
+>> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+>> index 2e87ca0e292a..8d2cf8552bc2 100644
+>> --- a/drivers/crypto/ccp/sev-dev.c
+>> +++ b/drivers/crypto/ccp/sev-dev.c
+>> @@ -1352,6 +1352,14 @@ int sev_platform_init(struct
+>> sev_platform_init_args *args)
+>>   }
+>>   EXPORT_SYMBOL_GPL(sev_platform_init);
+>>   +bool snp_initialized(void)
+>> +{
+>> +    struct sev_device *sev = psp_master->sev_data;
+> 
+> 
+> Should check psp_master isn't NULL before accessing just in case
+> (particularly for future potential callers).
+> 
+> (e.g. see ccb88e9549e7 ("crypto: ccp - Fix null pointer dereference in
+> __sev_platform_shutdown_locked")
+> 
 
-Just my 2 cents: one thing that came to mind: an existing library would 
-have to be updated to use the _LOCKED variant if the app would be using 
-mlockall(future), which is a bit unfortunate -- and if it could be 
-avoided, it would be great.
+Thanks for pointing this out, if I end up using this interface, I'll put
+the NULL check in.
 
-But yeah, devil is in the detail ...
-
--- 
-Cheers,
-
-David / dhildenb
+Thanks!
+Pratik
+> 
+> 
+> 
+>> +
+>> +    return sev->snp_initialized;
+>> +}
+>> +EXPORT_SYMBOL_GPL(snp_initialized);
+>> +
+>>   static int __sev_platform_shutdown_locked(int *error)
+>>   {
+>>       struct psp_device *psp = psp_master;
+>> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+>> index f3cad182d4ef..d34068c87a28 100644
+>> --- a/include/linux/psp-sev.h
+>> +++ b/include/linux/psp-sev.h
+>> @@ -954,6 +954,7 @@ int sev_do_cmd(int cmd, void *data, int *psp_ret);
+>>   void *psp_copy_user_blob(u64 uaddr, u32 len);
+>>   void *snp_alloc_firmware_page(gfp_t mask);
+>>   void snp_free_firmware_page(void *addr);
+>> +bool snp_initialized(void);
+>>     #else    /* !CONFIG_CRYPTO_DEV_SP_PSP */
+>>   @@ -988,6 +989,8 @@ static inline void
+>> *snp_alloc_firmware_page(gfp_t mask)
+>>     static inline void snp_free_firmware_page(void *addr) { }
+>>   +static inline bool snp_initialized(void) { return false; }
+>> +
+>>   #endif    /* CONFIG_CRYPTO_DEV_SP_PSP */
+>>     #endif    /* __PSP_SEV_H__ */
+> 
 
 
