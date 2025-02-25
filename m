@@ -1,158 +1,130 @@
-Return-Path: <linux-kselftest+bounces-27441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72FF9A43D5A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:21:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB731A43D32
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 12:16:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD36E3BAF2E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:15:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BF98188AF30
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 11:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF3E26773B;
-	Tue, 25 Feb 2025 11:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A031A2673BC;
+	Tue, 25 Feb 2025 11:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1JdV71WP"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="INaGGT12";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jFgehLMg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D16267706
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 11:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED871A2391;
+	Tue, 25 Feb 2025 11:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740482111; cv=none; b=NqUFxVBZplG9w+nEREFYpa3q93d4cHMqB/PWCa5JY6IKNgaLE2ieXAmNd4wkP2TOFbCQTSBZf8z4wxNHdkimUjYJ/Z+5F235zk6ACz4tAf7Qxz1Pz9//WLGNPLi872ddaN4pGgBgBiHt/jZ/f1D/PSaSmXwwmvzrV8kyyDElI1M=
+	t=1740482153; cv=none; b=N+e+Ow2Vc5PbZHjUqLS5WFnIB0pkLkGt6qC/piLtARtch1fobz0+34RDCzjnyVaeW001GF0KSzu5BxfmSSNg7AGUykKlZIS3DgXNT6Mj/+gLnZ8j7qjuD7nsX2IvWxPlXgk5U1t1eiiLJfZt957K/Ps58l8a/MxTDqiTg4CpWCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740482111; c=relaxed/simple;
-	bh=ObW0ySAp2NYqfEvC+jiKAOzw8shS/kdjO9OS0VOsQjo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KmPOyrW2L05GyJhyGBTeJYWN4fJg2UIphiTOVMtqvKteuQhuISwBypXlunnT6I2e5J/alhUi3a60HHKbGWxNmQx6L0wdiVkGRiS3yEpze4HwPsl4sLKclFxfObeydBeFAPdFLr5un2IcMCpQ3OFEsemkFnEfsfGxernzo4TCDTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1JdV71WP; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-471fbfe8b89so318821cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 03:15:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740482108; x=1741086908; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xc5yW/4rgg5KqhOxif21KGnv89ZFaMc+1AokhRRA/h0=;
-        b=1JdV71WPJItk2UzfZN5cVoCUbpJYLgUscOOOUnTbvtLEbbaIf0TMz7pBCZOcsfjphT
-         p/XRQyd+GOSSAU8KMVwkNltZpktjbow5gQkcv/9U5LNjcMRvBDrxgTE/Y2lgM/Ri4ioc
-         9Q/AILPOLcqMKXI6n8AdyWr1XuWtsUaS/l3KVhmvbmzwiggMff6clrfi5xVLLBsJLbbI
-         5L8HEC+AKVeVGG8Tnk03O7TFq5upTyHdsIROkhrCEQhwNJQN22CkfPS2i9CmhSkABBRI
-         yLBfK6FXJr9GGU7wxSG6tiN18PWyVzvw+W4VyaJSAJs5s5B0hgjkdozq1izK0axayq9a
-         03AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740482108; x=1741086908;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xc5yW/4rgg5KqhOxif21KGnv89ZFaMc+1AokhRRA/h0=;
-        b=pq8Jr55bKlJ65b4Sw/Mj0tQR+catsVVSOgqZHo4vqd1HwikMtYmdk+S7b0R1OLKXtA
-         RhHs8o+WTgwI5i9sqGOG5NSVLinK6/K/P5LPQHi06SbxSMtY7pnMfDb9VtpnAHGIjgWx
-         3TztAFOYDV/UX0wEBU9iY9Y7o6izTfoWafo7h1KJZgMcO29KooFFcKCko4Zd6mAXeQgs
-         11bJWHfAnWYUtijQdebB2ijg+f3Fz7fV5WPTvXW8fiNS09tY1Hao7bTN9Bg/zv8VjF2J
-         X2mkJokTL81d/QhiZ0M5U2utHhLtqNJN+SqKt5mdbca9Tu28GNa+1bF5B5H2GlhPEil8
-         RmLw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxePRlXvPgKlJPG8TBtIySeIzJc0tyy9S0+o8qSCnsj3iAlI2ZTdZRL3Eb50L8bIdfky+PtLAhRUd7hYBoR6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8Lo5eGqhVHkxAxKvkW6+pQ5sreQPnTNIO9qI7psd7IQ22PQuk
-	/fsrFyrBJUsjjjlcoihg6Py1e1JCRh1dNGEJhab2DU02OkSLESpI1supNKc122x+isUjXwJjwf8
-	lQw382T8MqLy/xbDd5TBTKkVzoPy86xFgyk5i
-X-Gm-Gg: ASbGnctMMSnHc0NN1OhRkxkXcle/XrJRVgbJVymnS+0iZMzzvpqV3rUcQTnENB7qYCt
-	LA9tqAVwdSdt5Dj5F0A1ya+8NHpZ+rmR7bf0ljafG4waNZB/+HFvPfIYU9CBfcvmQP1GshbSSIu
-	bmrnRd8LfH8MWDMGvrb4nYGN2dBwMdwLCiXih+dQ==
-X-Google-Smtp-Source: AGHT+IF293xeVyj4/wAp5kXWhSXHvlqZ+hGOq5jwSu7o+tmHkKY22JHmZitJTtCcPuuUlKFOv+HkABOvq5lh90WmCTc=
-X-Received: by 2002:ac8:7c48:0:b0:471:fb3a:5bfb with SMTP id
- d75a77b69052e-47376e5de43mr4324371cf.1.1740482107770; Tue, 25 Feb 2025
- 03:15:07 -0800 (PST)
+	s=arc-20240116; t=1740482153; c=relaxed/simple;
+	bh=2JbZLuj3gbAS/CbcAaVAbFtDG+KHZF7DLmbgxyIVdWQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=X/fS7k9S0m3Djzcegkm+TLK+I2WTKxXglfovJdO4rEgMtNdXLnX3cxT3/Dy3ItbPgcAxTJkhjQHV+l1SDPWbgeJSB2QrDDN+UUswKH/26QB9Cdt7d2gGegWihmc1JMmWaFbBDlT9FYMS9Y+DF+QE74uu9RNwW40oYn6fw+9HmFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=INaGGT12; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jFgehLMg; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfout.stl.internal (Postfix) with ESMTP id A13651140191;
+	Tue, 25 Feb 2025 06:15:49 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Tue, 25 Feb 2025 06:15:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740482149;
+	 x=1740568549; bh=2JbZLuj3gbAS/CbcAaVAbFtDG+KHZF7DLmbgxyIVdWQ=; b=
+	INaGGT129xfkpqF5JmO4oiulg/DKpw8utIl0dIVUsZGJm5YiASR6S1TENPbFLpj8
+	rJRQG1lViCOHdykU8p0eK71aKnJtjmzATZ8XaI51JtoMhcSDJXI2gbITN5PVebLg
+	eKUleHAZGBNwAoyEd/SYQBNVhmIEd71BPuJ/r7BUAmdVV65/2BDN1dfjxlgNPCn4
+	uxP6S35gSCgR2BM2xykMr+0jwhrARJ6IwsIeHFdVK8wy6IlgnI9yybu+PhtVhAXQ
+	U7ok/yWrOGRJ5YOteNgGGEVjvjs1/Y/rXXHUkjQGhM/r52xoHxndSfQKy+vkyk3c
+	b6pSNRO70aJf8Ct1EzcnMQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740482149; x=
+	1740568549; bh=2JbZLuj3gbAS/CbcAaVAbFtDG+KHZF7DLmbgxyIVdWQ=; b=j
+	FgehLMga9x22Qe1q+5CdaggFBURAIfb7eEv10MkS1W40Lp4nbDeU4WvPavX+9FTV
+	cSppr8+Iy6JSRPW4ce7x7hVLw9k1VcjWX29hExnx71l7AHGKyAGUCbTzUpMbGo+e
+	2YgP5FuC4ZB782MKAqBXnj9IM7/eFUwWAVme5HeMajKXj6lp27yJgIwNYr8Vsi2f
+	W9gtCxajB6gwrM8aASF4JwvAb872PDprYL4TN+m1B4iq98Dznsy/xJnYQ6J5QLqH
+	TvvolAI4ii0v8ecCSudhyxNhlSBGvcojG3Mmi5U4BiOUTbCRhrC0l+YokQ58s+IG
+	pNsmuG553BWU4UZcMAZUg==
+X-ME-Sender: <xms:Zaa9Z4cWoi5hJHhCXT2ocnSVnM-UgwFpUA2sGuO0TfBsn60U90PwmQ>
+    <xme:Zaa9Z6P9qpnKbh-2mjWdjynBBzzI2e_KUgJegRkFVF2mQ7pOroaBq7QBGV4KucylJ
+    8mH6bn28XRrcbrkUV8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    vddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghhvghlghgrrghssehgohhogh
+    hlvgdrtghomhdprhgtphhtthhopehkihhshhhonheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtoheplhhpihgvrhgrlhhishhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshh
+    hurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghnihhvrghnnhgrnhdrshgr
+    ughhrghsihhvrghmsehlihhnrghrohdrohhrghdprhgtphhtthhopehkfieslhhinhhugi
+    drtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdr
+    ohhrghdprhgtphhtthhopehhrgihrghshhhirdhkuhhnihhhihhkohesshhotghiohhnvg
+    igthdrtghomhdprhgtphhtthhopehguhhsthgrvhhordhpihhmvghnthgvlhesshihnhho
+    phhshihsrdgtohhm
+X-ME-Proxy: <xmx:Zaa9Z5jIUjGNPM7FPng7NDjphrrovOju_7eZ94LYXhw9foJOGaLT3w>
+    <xmx:Zaa9Z99ke2HCyobHq4MO9qjaYbCWIhRUvYqplTd2CH-2Y2lkKDskmA>
+    <xmx:Zaa9Z0sRAvrNSkVtpekX9qLISUUgIndLgjCvEtHzSb9yzKMkf-XLcw>
+    <xmx:Zaa9Z0FbdcreJf6cFTCWEY0WdJh7VDyMMjFlH_-J3QhK45D6PC9HIA>
+    <xmx:Zaa9Z0HAjEqJyRKrvKu-xQBO8IDK3eyNTWbHzJ2ikyujrBkEQ0lZh-8t>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 0332B2220072; Tue, 25 Feb 2025 06:15:48 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
- <20250224-page-alloc-kunit-v1-4-d337bb440889@google.com> <Z7y5vK1M5IOizIWR@google.com>
-In-Reply-To: <Z7y5vK1M5IOizIWR@google.com>
-From: Brendan Jackman <jackmanb@google.com>
-Date: Tue, 25 Feb 2025 12:14:56 +0100
-X-Gm-Features: AQ5f1Jr2V__EQDgXK12d3od3hg4EIBPZN4EogawQjt_yGI4eSiDAQDJGxAHmIjU
-Message-ID: <CA+i-1C1KL9uJALuU=ZND0U0HQoqihzyH6HoZhdKmmTQP25qDuw@mail.gmail.com>
-Subject: Re: [PATCH RFC 4/4] mm/page_alloc_test: Add smoke-test for page allocation
-To: Yosry Ahmed <yosry.ahmed@linux.dev>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Oscar Salvador <osalvador@suse.de>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Michal Hocko <mhocko@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Date: Tue, 25 Feb 2025 12:15:28 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
+ "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ "Kishon Vijay Abraham I" <kishon@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+ "Gustavo Pimentel" <gustavo.pimentel@synopsys.com>,
+ "Bjorn Helgaas" <bhelgaas@google.com>, shuah <shuah@kernel.org>
+Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Message-Id: <05d8a0bb-2b75-44ac-855a-1abcef5f09c2@app.fastmail.com>
+In-Reply-To: <20250225110252.28866-7-hayashi.kunihiko@socionext.com>
+References: <20250225110252.28866-1-hayashi.kunihiko@socionext.com>
+ <20250225110252.28866-7-hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH v4 6/6] misc: pci_endpoint_test: Do not use managed irq functions
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, 24 Feb 2025 at 19:26, Yosry Ahmed <yosry.ahmed@linux.dev> wrote:
-> > +static void action_nodemask_free(void *ctx)
-> > +{
-> > +     NODEMASK_FREE(ctx);
-> > +}
-> > +
-> > +/*
-> > + * Call __alloc_pages_noprof with a nodemask containing only the nid.
-> > + *
-> > + * Never returns NULL.
-> > + */
-> > +static inline struct page *alloc_pages_force_nid(struct kunit *test,
-> > +                                              gfp_t gfp, int order, int nid)
-> > +{
-> > +     NODEMASK_ALLOC(nodemask_t, nodemask, GFP_KERNEL);
+On Tue, Feb 25, 2025, at 12:02, Kunihiko Hayashi wrote:
+> The pci_endpoint_test_request_irq() and pci_endpoint_test_release_irq()
+> are called repeatedly by the users through pci_endpoint_test_set_irq().
+> So using the managed version of IRQ functions within these functions
+> has no effect.
 >
-> For the sake of the test can't we just put the nodemask on the stack?
+> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-Hm, I think whether or not it's test code is irrelevant to whether we
-can put it on the stack. Presumably the nodemask code is written as it
-is because nodemasks can be massive, so we can overflow the stack here
-just as easily and confusingly as anywhere else.
-
-(I think we're not in a very deep stack here right now but KUnit could
-easily change that).
-
-FWIW I think when using the mm/.kunitconfig provided in this series it
-does actually go on the stack.
-
-> > +     struct page *page;
-> > +
-> > +     KUNIT_ASSERT_NOT_NULL(test, nodemask);
-> > +     kunit_add_action(test, action_nodemask_free, &nodemask);
->
-> Why aren't we just freeing the nodemask after using it, before we make
-> any assertions?
-
-I guess that's just a philosophical question, I usually default to
-writing KUnit code such that you can throw an assertion in ~anywhere
-and things just work.
-
-But, I'm not passionate about it, I would also be fine with freeing it
-directly (it would certainly save quite a few lines of code).
-
-> > +/* Generate test cases as the cross product of orders and alloc_fresh_gfps.  */
-> > +static const void *alloc_fresh_gen_params(const void *prev, char *desc)
-> > +{
-> > +     /* Buffer to avoid allocations. */
-> > +     static struct alloc_fresh_test_case tc;
-> > +
-> > +     if (!prev) {
-> > +             /* First call */
-> > +             tc.order = 0;
-> > +             tc.gfp_idx = 0;
-> > +             return &tc;
-> > +     }
->
-> We need to set 'tc' here to whatever 'prev' is pointing at, right?
-
-prev always points at tc (or is NULL). Sounds like it needs a comment
-to that effect!
-
-(Note tc is static).
-
-Ack to everything else, thanks for the review!
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
