@@ -1,228 +1,227 @@
-Return-Path: <linux-kselftest+bounces-27509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DCD8A448D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:49:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0548CA4489C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E0688852C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 17:31:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65FE37A7A4E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 17:41:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812E42144C0;
-	Tue, 25 Feb 2025 17:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED7719AD8B;
+	Tue, 25 Feb 2025 17:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ulacjx3h"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fhpO8Rmx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2054.outbound.protection.outlook.com [40.107.94.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A4C2139B0;
-	Tue, 25 Feb 2025 17:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740504404; cv=fail; b=TYzOd0l/HeMfF4roTu0t5OuHipus+SCLlV6Y69nThgs2fdMEVea0KVHzGO2xfqmM91v0nGwBd89G9NnDJzNCgDC4Pe88ZmHENkTjw2VLz0EytCOkYk/Tvw+0Zncde/7NUv7X+o8skSQzLEqXIijtpqWnIM9Z+jNvrdfYEWlaN4k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740504404; c=relaxed/simple;
-	bh=/X+09Vsc4VNJQvbEU9KMf9p8UYEDL0uvP9TGQnPsgpU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XaUq2SdxO/VqzXt5gM1lDWip+foNpwu1csV8YZo0Isv7U6yAJ854OwGwvkSBNLacRbvBcPkrSiuxSUXy/5vY2FkdUQJBEY1ec9rjxKcdFn0J7H+s1kuWh9PbOnJ9rQilwHyqVs6oBvZ21SjBWQcQtN5j7W4kyJyvU/YqBuIxeAY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ulacjx3h; arc=fail smtp.client-ip=40.107.94.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J1YsB4tDe7hDZA9sXA7KRibo71Bz9cvsWSCbhfYiBMu49XzYH3JJ67ZdDxTKPgYE54bVpEx/05i8nyjRCIpo3NVtVXTfXao63URP4bKHZTNR/NLQOOVJLAXFXqNj7Xien1OKs0jh3QOw+E4/gRCpSxOyHXfDiLkweoxwjWgYcvRDNfObrY+26N0JwwPyHAJ3KdrT9UA31SR89DYp4gVEsVTIn+0m4XQsNtJ6bNs95KDYUOc+lpZOMamwvsyFXY7iv3ZAAbYfpoDd5q5fyL/dNmoZ/EejDb/H7sUG/47d+oBdP3nKBj+BEymqGXXXPBA09QOeZouYdqbFmCGC7d8GXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wsmRbpLmY8d02Z/q83YM8QZLbPFpQKH3bXuv1IOmY+0=;
- b=dKALfzKOOaxS4ZUmMyA1C+F0RQ+IPpCOIgNYXExk13v1qFZKOUilwojU1r173qTODPrqqzAhcNUynszb+hohfdYVjL7XkCotOO9Dw1PTxOEQspi3SRot+UxFt8/J3O2F+e1AmKyVFgg0xADr4JyP/9WPUmxmY5CrNS7mQn6k4LkAPIGybo5egrW+1lZ/Ffmlge5iHq/YEXLTM87FJCwdvmHwNBdOxClgmetVJCgkDAf++Lhxc++WXPSAsyj/wA69gvMx/RHD6dnsDWkofWOGPDCbz6KpmF0EEbqgRWODLygiR+4C/FoC8YFdFbIHthOqZaE0uOPwbEc+a17X759MjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wsmRbpLmY8d02Z/q83YM8QZLbPFpQKH3bXuv1IOmY+0=;
- b=Ulacjx3hdLJqx6BErkNpPlNxSHOxrt2Jj0NW6k/HBkIhtXWSsjK1hEBHhtyFgWNTeNK02gmTFsmGGeNpKn231jZ4tsHIOcBKiuUCpTOQjBK+IUwMx9T/apupOvqyTl/vbmeDFDoNHMDmSugR27zgwIx2fZ1gSzarNaWkinW+eAH6boFSgjdecFgTsfLJdOkXH1Y1SRwr1HzPdfzgkuF4qSen0AlAj/JVHUVaR5s0zQ5YSX1GpxnpLzaDnw8ix98fxBHE1avJPvbxeRa2a36abTtxCpIUOMk3YasK+t5n61zQyqAieoTK+b/8/wHYRRKg2XVKPAyxNo5hpJhwseK9rQ==
-Received: from MN0PR02CA0001.namprd02.prod.outlook.com (2603:10b6:208:530::21)
- by LV8PR12MB9407.namprd12.prod.outlook.com (2603:10b6:408:1f9::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.18; Tue, 25 Feb
- 2025 17:26:37 +0000
-Received: from BL6PEPF00020E5F.namprd04.prod.outlook.com
- (2603:10b6:208:530:cafe::82) by MN0PR02CA0001.outlook.office365.com
- (2603:10b6:208:530::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.20 via Frontend Transport; Tue,
- 25 Feb 2025 17:26:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF00020E5F.mail.protection.outlook.com (10.167.249.20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8489.16 via Frontend Transport; Tue, 25 Feb 2025 17:26:37 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 25 Feb
- 2025 09:26:13 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 25 Feb
- 2025 09:26:13 -0800
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
- Transport; Tue, 25 Feb 2025 09:26:12 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>
-CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <praan@google.com>,
-	<patches@lists.linux.dev>
-Subject: [PATCH v8 14/14] iommu/arm-smmu-v3: Set MEV bit in nested STE for DoS mitigations
-Date: Tue, 25 Feb 2025 09:25:42 -0800
-Message-ID: <f465dd9defdc0fc748c2fa2cfc829e37778a4ced.1740504232.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1740504232.git.nicolinc@nvidia.com>
-References: <cover.1740504232.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A4E19922F
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 17:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740505318; cv=none; b=kUMgzdxHgfhJu2DM1CXZXJBgxQAIk3yWh2xXN5HPYdfXnnkYhvqi1tJbvD8/CpEVy62Fcr6cXCXziS41KFYwzxYl6qhciSFY+YcMh6Am1zbjVac2GzlMIzgjRU0MQ04MIqUPSeg2UVynxSx8ZX4skI9Yulzn0eyhcduIOJK3ck4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740505318; c=relaxed/simple;
+	bh=iCX+nG23CjC2fxQmPixSN8EXGqI2yLXhnVoBGQ220Lk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IZsFEeGBBUmHjS9YTdY8ZPpJpsTAlP9rfMG2qC1WIIwqjyihgJvz4pkz5oNpNEKIPMkUV6GXjfpK+XhoPKuAr2mdvQTOwvrFY180WRM2ete02Vj4Q8jdOjcT2AfuhMsBrajbHV0tdxgCMUe8SFkqVSNWaXD3o9sUzS1iJlYYfVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fhpO8Rmx; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2212222d4cdso3515ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 09:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740505315; x=1741110115; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vqjq5AFXxwlxfq4VPVA6M5Ee2CpyweWj+2y/hfe9AzE=;
+        b=fhpO8RmxBeBGKT/5ZKbYywJBbdjJlmt3ng8Wjc4s/xgU+uY7xS01nlIK/TUBh6YfxA
+         dMg04rKf1e6n12Aq9NXmheY6VKIokCil6E/Cn6Dt1d0bsyOlT8ODB/9XEAm4JcQPT3ZB
+         Dhto1cUSl6rI9dZly5XAVVQSDEkOlMNtfNbF1AxgMbSmatvMLQR7mpKdD+6Mq4hv+D/6
+         Rktp688V8SegHs1CqB2RF1hNZjq2TgXtIQt6bAXicdTVTn4MHN42Ds++qsKdCkYASL2E
+         q0s7RUrtkkIkdmIabrI68/KioDWhOPMPpFp2Ig6fRmct79NFZedPvxpDISLltrLfgb91
+         c9+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740505315; x=1741110115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vqjq5AFXxwlxfq4VPVA6M5Ee2CpyweWj+2y/hfe9AzE=;
+        b=IZ0auumMIKUvwnk/VEDJc7qQ2xbB9EBT879N9oLiP8aObK5mLKHk8UZfh6UawXoWlP
+         5O3c7pwXBvN61qJ76/Vr3eCdbrY1a2/pTGwa8IDfBEbeajBLTpv6rf46YMxY4oWOfePp
+         A9jq//BX7+W93cllT53eolOL/0Y+DIuITWjKpn0fB9K1h2OBt5Ye7HrIQITauSl8Dt1j
+         8/3sOB+5vhuCduhQaeIUJnix/AWYoEOe9249utOnKxeMDtgzy1vy6DA00p/QQlqnCuFH
+         TeBVU061jLRSDalv1q11zPogWGZqPAhoswQ+3XRwGCDJZhT5Wx0uzmqLTOdE9e3od7TM
+         pLow==
+X-Forwarded-Encrypted: i=1; AJvYcCUyU1drr59ZEAKyqxmk0sLq8ghK3Auo5PUgUfWuOnijI0mk2cPBEtyk2Eu/soXBdnEcU3yVJ3pZx0nl1pbx1lE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKALG398g8rPj0WzTnM2IiyTtMWYRhY4IjqOVXQowIIUAdhYqM
+	fcdmXwuK2GQWbqffMa5KjOfMzP5qWCOgu3tJWvSIOXSNSixAlUc+Iub4sjK24iEvIxr0ArnyM7X
+	zzYe6xd+AwyTykdYWuHguDmfISF4NEKTXK+Up
+X-Gm-Gg: ASbGncs04BWAHzxMcoN51b0WEPpJm4t60xpcDzTTPFQTl423oYMbPyyOQZIfdFNiJN6
+	azwEXvMkSAfRMxQKhKGsa5eIKDa1HO9xNd/kGoHJwebvHpQeW3Bx3KkbgXvF6Ae8Dkmp9GtK7l2
+	VzO7pPxz0=
+X-Google-Smtp-Source: AGHT+IHPa/zeMhv5rS+FoFIXRfGiR3W5Ojq1INXwGU+EkhH1BWbASSdZ3ThN+JgVulgi4m91g+jKNlJGa8ARq6KoZcI=
+X-Received: by 2002:a17:902:d50a:b0:21f:3e29:9cd4 with SMTP id
+ d9443c01a7336-22307a98cbcmr3805795ad.20.1740505314655; Tue, 25 Feb 2025
+ 09:41:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00020E5F:EE_|LV8PR12MB9407:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00c1617d-7199-403d-96b8-08dd55c18f21
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?yUzymq6KwZ4CeU0CioFDIa4pjQ0RLEAKzqh8xyn6Co0MMOl0vQqUOeFUZ98a?=
- =?us-ascii?Q?fdrnlx8qT4v8JbD4yETGt5x/3ykL4AiQBfDEmu7yEiq4I5RvKQ17gfIGUVZ8?=
- =?us-ascii?Q?v459zat4oBnv1uLQ87IveN5ZZg9y74iLLISKcAGEUR42cgz5BrEjM5HOh8Y2?=
- =?us-ascii?Q?7+yJlytsnciLKqqE7O7g/zqX+8qghBQQ8Wxo826/XCba2CXa/WoAnlwUjvJ+?=
- =?us-ascii?Q?L70FmQOXUbrglBjaesWIEwCGdxugLiIo/WzO7UmMhdDpHlASJA7ZqUbGwyOf?=
- =?us-ascii?Q?Pgtd81dTvRqWbS/4uQk84Rdjws+MOy9Kg8aIbZdb2oNZ/9gksIC+r5CwMiox?=
- =?us-ascii?Q?8+KNnvpiQ43Dd+MkRnq4Yc0TnTIzA155MRrXkHCws06fdnh/IARj3P5o2nAN?=
- =?us-ascii?Q?iOPSXUdBFONymh8hVBgAHfjT3qzd1BI2d4XB7ZhwSJxxEfWf7cVPi2tT4Byr?=
- =?us-ascii?Q?k1CrSblu/qTY3HefIpHsm5ICPwVmnTIAZ7tQWxMOs9b+E2R2XfMWnpC0Ieva?=
- =?us-ascii?Q?INyFSaIWMRFtGxbT46bxdyh6hdK9CCsJfmx2M2JsioFmxcHTwXs+PnDvmk5Y?=
- =?us-ascii?Q?sAU+iSC41dGmn8bcRRDCR50DoYvQWQEAOn9UiUXsOZ5JBNXVpXlEgn3VjGgL?=
- =?us-ascii?Q?bF8Vgig2xeRC6sem0ijOI1NXGgqVXBzlYdTkfTZFGmQwU+MjbWbr4jf+qz7F?=
- =?us-ascii?Q?MHRcC/iDI0I4p6EOe2e3R/P0yMzr+QfcuVf37A417dbCk4I0Urza+9flqLIm?=
- =?us-ascii?Q?AavJVlERr/ktXC4yvOGuYJQHzwayiK8fhYQhDPz2nw0Ck4UmFZDWHW3uyVSY?=
- =?us-ascii?Q?r2Wu2n9PcnaodAeOEZVxEI2mbf0xNxBFy5+n2Wzz/s85b8OUfX5aeXIqHnBV?=
- =?us-ascii?Q?3s9pio0qXPRosOp92c8Ccnj/vfaa76tlmr/lHM5WMJO2ucrKzzrdaTev6hro?=
- =?us-ascii?Q?ZiSUNu7eHuSisgomyJdw+taK8zYdh5gQa/1tsHhRFN9A1u56U4Gqabg+a34o?=
- =?us-ascii?Q?TGFixmF6Ub9eTevcDGj+pTACaw4tGb95u0v9oK7pOgVCIWCZmuUbB5BgOlIh?=
- =?us-ascii?Q?eALKWUdGNB6FckXDyL63m9t3rmdM2eUe/640fm9MXsPjwB291RONocbbQDPi?=
- =?us-ascii?Q?J1UShTKMCrBGOz1CsfZfCK3eQQ88teiJBTp+cfNYmbeFwrc5hbSYIS+IS7Tm?=
- =?us-ascii?Q?t0WsiEjHPznozJjTT0k7mnKGcirEPFm7XQBpR7o3P1OLduAeevo7qoixl2ai?=
- =?us-ascii?Q?dNO+Pd7u4De+0Pvxpu8u05/nhbTPS9hIr13FhFzh3flIkZ3tWGXm5of4BwQS?=
- =?us-ascii?Q?ZLfT+yCTuHRFpnSmf+TItYX1QYGygsSDS+Q+2kovXXTXdM9WwSa407cMnWX+?=
- =?us-ascii?Q?hngBCNLcQ1eyQm6+lCJZhHFqkOhwyFrqX4GXoOzrXk37S+17HkGTajjAQHqZ?=
- =?us-ascii?Q?4peSr15XUagPglQP5PAP8ehGnN0pJDgO9Yjdxs0zfevHBPmWmHRwfadYIBql?=
- =?us-ascii?Q?iLcmpR7GrOXEsAQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 17:26:37.2839
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00c1617d-7199-403d-96b8-08dd55c18f21
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00020E5F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9407
+References: <20250222191517.743530-1-almasrymina@google.com>
+ <20250222191517.743530-4-almasrymina@google.com> <a814c41a-40f9-4632-a5bb-ad3da5911fb6@redhat.com>
+In-Reply-To: <a814c41a-40f9-4632-a5bb-ad3da5911fb6@redhat.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 25 Feb 2025 09:41:41 -0800
+X-Gm-Features: AWEUYZlYYSHH7_9N4ByWFALTxxtUrWQmHLefEElJbkJw4zmyNRZgN3GST52xcig
+Message-ID: <CAHS8izNfNJLrMtdR0je3DsXDAvP2Hs8HfKf5Jq7_kQJsVUbrzg@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 3/9] net: devmem: Implement TX path
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, virtualization@lists.linux.dev, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Jeroen de Borst <jeroendb@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
+	Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, 
+	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
+	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There is a DoS concern on the shared hardware event queue among devices
-passed through to VMs, that too many translation failures that belong to
-VMs could overflow the shared hardware event queue if those VMs or their
-VMMs don't handle/recover the devices properly.
+On Tue, Feb 25, 2025 at 5:04=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
+te:
+>
+> On 2/22/25 8:15 PM, Mina Almasry wrote:
+> [...]
+> > @@ -119,6 +122,13 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dm=
+abuf_binding *binding)
+> >       unsigned long xa_idx;
+> >       unsigned int rxq_idx;
+> >
+> > +     xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> > +
+> > +     /* Ensure no tx net_devmem_lookup_dmabuf() are in flight after th=
+e
+> > +      * erase.
+> > +      */
+> > +     synchronize_net();
+>
+> Is the above statement always true? can the dmabuf being stuck in some
+> qdisc? or even some local socket due to redirect?
+>
 
-The MEV bit in the STE allows to configure the SMMU HW to merge similar
-event records, though there is no guarantee. Set it in a nested STE for
-DoS mitigations.
+Yes, we could have have netmems in the TX path in the qdisc or waiting
+for retransmits that still have references to the dmabuf, and that's
+fine here I think.
 
-In the future, we might want to enable the MEV for non-nested cases too
-such as domain->type == IOMMU_DOMAIN_UNMANAGED or even IOMMU_DOMAIN_DMA.
+What is happening here is that tcp_sendmsg_locked() will look for a
+binding in net_devmem_dmabuf_bindings with binding->id =3D=3D
+sockc.dmabuf_id, and then grab a reference on it.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Pranjal Shrivastavat <praan@google.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h         | 1 +
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c | 2 ++
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c         | 4 ++--
- 3 files changed, 5 insertions(+), 2 deletions(-)
+In parallel, net_devmem_unbind_dmabuf will remove the binding from
+net_devmem_dmabuf_bindings, and then drop its refcount (which may be
+the last one if the 'get' in tcp_sendmsg_locked has not yet executed,
+triggering the binding to be freed).
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index f3c5c49bf131..bc4f536f72ce 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -266,6 +266,7 @@ static inline u32 arm_smmu_strtab_l2_idx(u32 sid)
- #define STRTAB_STE_1_S1COR		GENMASK_ULL(5, 4)
- #define STRTAB_STE_1_S1CSH		GENMASK_ULL(7, 6)
- 
-+#define STRTAB_STE_1_MEV		(1UL << 19)
- #define STRTAB_STE_1_S2FWB		(1UL << 25)
- #define STRTAB_STE_1_S1STALLD		(1UL << 27)
- 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-index 649e3aa39a48..8e8ea3702ce5 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-@@ -43,6 +43,8 @@ static void arm_smmu_make_nested_cd_table_ste(
- 	target->data[0] |= nested_domain->ste[0] &
- 			   ~cpu_to_le64(STRTAB_STE_0_CFG);
- 	target->data[1] |= nested_domain->ste[1];
-+	/* Merge events for DoS mitigations on eventq */
-+	target->data[1] |= cpu_to_le64(STRTAB_STE_1_MEV);
- }
- 
- /*
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 22aa5c8d1e9d..3fcb1089a7c7 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1052,7 +1052,7 @@ void arm_smmu_get_ste_used(const __le64 *ent, __le64 *used_bits)
- 			cpu_to_le64(STRTAB_STE_1_S1DSS | STRTAB_STE_1_S1CIR |
- 				    STRTAB_STE_1_S1COR | STRTAB_STE_1_S1CSH |
- 				    STRTAB_STE_1_S1STALLD | STRTAB_STE_1_STRW |
--				    STRTAB_STE_1_EATS);
-+				    STRTAB_STE_1_EATS | STRTAB_STE_1_MEV);
- 		used_bits[2] |= cpu_to_le64(STRTAB_STE_2_S2VMID);
- 
- 		/*
-@@ -1068,7 +1068,7 @@ void arm_smmu_get_ste_used(const __le64 *ent, __le64 *used_bits)
- 	if (cfg & BIT(1)) {
- 		used_bits[1] |=
- 			cpu_to_le64(STRTAB_STE_1_S2FWB | STRTAB_STE_1_EATS |
--				    STRTAB_STE_1_SHCFG);
-+				    STRTAB_STE_1_SHCFG | STRTAB_STE_1_MEV);
- 		used_bits[2] |=
- 			cpu_to_le64(STRTAB_STE_2_S2VMID | STRTAB_STE_2_VTCR |
- 				    STRTAB_STE_2_S2AA64 | STRTAB_STE_2_S2ENDI |
--- 
-2.43.0
+I need to make sure the lookup + get of the dmabuf in
+net_devmem_lookup_dmabuf() doesn't race with the erase + put in
+net_devmem_unbind_dmabuf() in a way that causes UAF, and I use
+rcu_read_lock for that coupled with synchronize_net().
 
+Note that net_devmem_dmabuf_binding_put() won't free the dmabuf unless
+we put the last ref, so any netmems stuck in retransmit paths or qdisc
+will still pin the underlying dmabuf.
+
+Let me know if you still see an issue here.
+
+
+> > @@ -252,13 +261,23 @@ net_devmem_bind_dmabuf(struct net_device *dev, un=
+signed int dmabuf_fd,
+> >        * binding can be much more flexible than that. We may be able to
+> >        * allocate MTU sized chunks here. Leave that for future work...
+> >        */
+> > -     binding->chunk_pool =3D
+> > -             gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
+> > +     binding->chunk_pool =3D gen_pool_create(PAGE_SHIFT,
+> > +                                           dev_to_node(&dev->dev));
+> >       if (!binding->chunk_pool) {
+> >               err =3D -ENOMEM;
+> >               goto err_unmap;
+> >       }
+> >
+> > +     if (direction =3D=3D DMA_TO_DEVICE) {
+> > +             binding->tx_vec =3D kvmalloc_array(dmabuf->size / PAGE_SI=
+ZE,
+> > +                                              sizeof(struct net_iov *)=
+,
+> > +                                              GFP_KERNEL);
+> > +             if (!binding->tx_vec) {
+> > +                     err =3D -ENOMEM;
+> > +                     goto err_free_chunks;
+>
+> Possibly my comment on v3 has been lost:
+>
+> """
+> It looks like the later error paths (in the for_each_sgtable_dma_sg()
+> loop) could happen even for 'direction =3D=3D DMA_TO_DEVICE', so I guess =
+an
+> additional error label is needed to clean tx_vec on such paths.
+> """
+>
+
+I think I fixed the issue pointed to in v3, but please correct me if I
+missed anything. I added kvfree(), but we don't really need an
+additional error label.
+
+If we hit any of the error paths conditions in
+for_each_sgtable_dma_sg, we will `goto err_free_chunks;`, which will
+free all the genpool chunks, destroy the gen pool, then do
+`kvfree(binding->tx_vec);` to free the memory allocated for tx_vec.
+
+> [...]
+> > @@ -1071,6 +1072,16 @@ int tcp_sendmsg_locked(struct sock *sk, struct m=
+sghdr *msg, size_t size)
+> >
+> >       flags =3D msg->msg_flags;
+> >
+> > +     sockc =3D (struct sockcm_cookie){ .tsflags =3D READ_ONCE(sk->sk_t=
+sflags),
+> > +                                     .dmabuf_id =3D 0 };
+> > +     if (msg->msg_controllen) {
+> > +             err =3D sock_cmsg_send(sk, msg, &sockc);
+> > +             if (unlikely(err)) {
+> > +                     err =3D -EINVAL;
+> > +                     goto out_err;
+> > +             }
+> > +     }
+>
+> I'm unsure how much that would be a problem, but it looks like that
+> unblocking sendmsg(MSG_FASTOPEN) with bad msg argument will start to
+> fail on top of this patch, while they should be successful (EINPROGRESS)
+> before.
+>
+
+Thanks for catching indeed. I guess what I can do here is record that
+the cmsg is invalid, then process up to MSG_FASTOPEN, and return
+EINVAL after that.
+
+Although that complicates this already complicated function a bit. Let
+me know if you have a better/different solution in mind.
+
+--
+Thanks,
+Mina
 
