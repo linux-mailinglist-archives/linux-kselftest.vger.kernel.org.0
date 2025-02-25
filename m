@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-27521-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC318A44A48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 19:28:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5742DA44A58
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 19:29:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 989984232FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:26:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 351461895463
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC8020DD7A;
-	Tue, 25 Feb 2025 18:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED2B1A23BA;
+	Tue, 25 Feb 2025 18:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6JbI9ua"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GKcrpguM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18F519E998;
-	Tue, 25 Feb 2025 18:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51BB19AA63;
+	Tue, 25 Feb 2025 18:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740507895; cv=none; b=jsWN3U8gxm+kkcQm9DwiVhxB0uWM4+7Qeo5qtIG9dxJqlG6TAS0ZODe0D/qoz3Vi8GQUeFqLGT22GvMWMgnw+0aPYWPeEi6DQn2ldgvm6I6U+ELTWiONxxDeUYeSnSescEFDVnERg11YAri+sg2yZnJ426rpJGqC/EwVTN3L72o=
+	t=1740508004; cv=none; b=DBBvUUpnqyPOb5l1yBx8q5xqIJDjfrYf/FIPPR7jYUauf6beABzdO0OPxnR3L9+LvgX1aHoAoA0DYeJ+jWek2EwROCCfN3woHlrvDmJHEosBcWWQ4KFmvZUZ3gpu+zZTBYZ9CXSXA0LZucj9HC8H9254Y2x9VN4atnDUIuyuJ0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740507895; c=relaxed/simple;
-	bh=e12//0ouSuYLnVYPUmLDp7+6wElM0flmFydsFm2XJB0=;
+	s=arc-20240116; t=1740508004; c=relaxed/simple;
+	bh=Cu9wG7ZBz95WikpGH7F6FGb1NfH0hS44wFnRTG8v2IQ=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=hUUd2+hUgBMKXqlS52REur/RlOAOqNl+LusF2aV1ud1dJ7qJ+oUQuuwEGME+JBzEAlYszX6v4xLNx5riWjEganexhR1U1XID1ZHIMjBljUASAl678LTf1T7imgEZwNQm61x22fcBwDzxfBf7l9IVZvtnJ+AjN3m+X9cnQelOHlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6JbI9ua; arc=none smtp.client-ip=209.85.222.170
+	 Mime-Version:Content-Type; b=ISe8RbGzlx5kzmsccG6KrwLJDjOzLpRk/SZTNGBzik3/WrqMyNM5swz8yJ/LmaPpzsB25SnmZFjMIZyJp1veaKVTahtjlRp2OdgCzj9S+3SGM/NmYYRvH29GJgekFMcQW43fvotf1ZfVcPHAyMfHrR/w3SHirePr9y1SqfqZpvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GKcrpguM; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c0893f9aa6so536043785a.1;
-        Tue, 25 Feb 2025 10:24:53 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c0893f9aa6so536213585a.1;
+        Tue, 25 Feb 2025 10:26:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740507893; x=1741112693; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740508001; x=1741112801; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0IN/wgdM/wrAvot6cEOXlKkAGhjZU8WUV09Vtdsf31A=;
-        b=c6JbI9ua2p+yguKTnsQTJIll2cOZALrC9flTAvd9hT61Y9FK6fc4mqYekP+8JPs1Er
-         q2AIz1MkE8kG1pWMqbJO+jzgS6x557F/MAN6KcpxzOWdUFP/5aEhedJdUYJcZWuLrHhg
-         6Hi+GewAEitXcy2WxzK0KlsnlYLy9MH3H6bi1DzS0t0r3eBCg/8ZRE57pMfEjstLy/OG
-         5/bVutjhEHPDGam7zXVexCa5edBZEWI6aOOTvRuvCXy/r2be9hOY8LTrToPP/ndW+aJa
-         Z48F8Gs/zj9H46eWbxsOP2jyQfqe4VldFkozVmFwafd8fZK8quazRSHAV0Xgq05rLK5F
-         lAEw==
+        bh=5gDZQ9BD+kFiQmfLAnOLzXMn4KMvNYmUm2rUCj72UEY=;
+        b=GKcrpguMMD+310ykZ5Ww4kbbHZvJ/KrMgKgQERf2BtgG9x4l/14NQS8oHH9ZJ90LjH
+         rEhGHnj71Jorc1tzjOTAOEx5x14JZOyHCUdnBC8ByBn7QZD4Q9Z1Y88s9ZgQQagz4GHC
+         2JXVLZJqC7+kdLky2Wh3B2ng9/ypElCUFtOIzlmVp8C4iUADdeLqFnEIJaqJux/xYopj
+         ENJ90ZQ00jK981a4llc6puUXKHZATjA8d2D33GmmkpbfyTnGnc9UNgdPZVcHxMFZ7a2y
+         80s+mVt0acCvXHC+fGUob8p5kOhFjgjenyTxJZvcAerLERW7qd1tD30/mBS4T3cXmQAF
+         u8kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740507893; x=1741112693;
+        d=1e100.net; s=20230601; t=1740508001; x=1741112801;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0IN/wgdM/wrAvot6cEOXlKkAGhjZU8WUV09Vtdsf31A=;
-        b=isV4E2Z4F+gcbZW3xDBh+0ThSIrOd4iJjskox/SmXD+8ts4slqHFiFo4rw19G3P4QV
-         uG3CU/pB+7L7QxlQMdL9D3tm1OgyYxhyUc66KgDqU9OFbllT/VlQydOYS1wgC22wqGgb
-         An7D2JjBLePcwH686ZTluVlUxWtZ07Xrdeo+IQTEpuc9gaTpeB7TRMZRq1SFEfADUeGX
-         JlmZDy9AlujUot6LCkuGgxJ5zJhOsjdIe1mfAuOzX6kSSY0qYKClTR3lDCxHFNZbX2V5
-         XvjUv4xgLYw14vrumHipWYKtnM1JUso12x6aZuWliAtseo+I4oxlfnGzxHOqTnfJkM0D
-         vZrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUna2ahw/ydT11CM4/9aQMdJvO+noYhCNJyjyX/bQtMogpqKPHczwbcV9a78CojU/gfNprIcRHitP2fN59Y@vger.kernel.org, AJvYcCWEOkNQT48rH1lJMcLMn4SqBBlZRyO8qNt1F2yFmr0Xx+vZI31BTSKp9lw6XN60TAq29OiTr7Yg1eq7tGTwF4tU@vger.kernel.org, AJvYcCWNckhL/asMZDppNK0KVb6dujC08n1ouAUYE6xCWiIS3lAWiMT5e2vSy7FLLYRkNwaxXww=@vger.kernel.org, AJvYcCXFEKK8S5OtV0/ZRPzFPuNK0tZ1EJgHddRTdIBrAQI6+HuN8JqHQO5vKEHDfHnmDH4L7QCgxix3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw15cYT4PD3kygaKxjXVVrGml0/HhJLyBaKKAwPpka1fx05gt95
-	RjTnIPehFTjwxlMJXI6Oz8cgzrFNueRwQTNFn287n5YRUC99PvdN
-X-Gm-Gg: ASbGncsKrcxNmdvz9Yl9OFkmDtQPmBBKRowv6kqawcMD/DvApnPGuYn+iXa64sJRGQM
-	Kfb4brRCqHl1439CwjmF1jEUrgx7uiErk5fm/q/wqBHvwAHWK6ZQjmKxE77Do/ebFnwCAzVGQ4P
-	fjF6ZHUNTc+ldMkHPh40dZgnValGV0g1J9/VzHuSvipfu3+BiFbtY5X569sylltkSunBarP3AGE
-	HSsxq8eCtrYODOKPcA1R2SX0NPn1JCJYyflYNpNWkdrZWSEMhozUurWcegwfq2HLlpxgh6VMIhE
-	Ke9vmdJbpHt8CsxOb9K+r5BTzSWWx8N0AgpmAyXywI+EgHo3cj2sZDEpvdXwakbKv/jIp1LD64m
-	sFIk=
-X-Google-Smtp-Source: AGHT+IE0uqadArm2YyxmryYO6uV+0djUKpmQp6U0wfVS3CUcxbQVu8M6YUav4D1eNxARKeUZWioYCA==
-X-Received: by 2002:a05:620a:4148:b0:7c0:9f12:2b90 with SMTP id af79cd13be357-7c0cf8aea46mr2519889085a.6.1740507892562;
-        Tue, 25 Feb 2025 10:24:52 -0800 (PST)
+        bh=5gDZQ9BD+kFiQmfLAnOLzXMn4KMvNYmUm2rUCj72UEY=;
+        b=J28JBqDykbLBbzjBxNaQMePJcMBbX173fZU+Ku9XGFjKQ4Ybc0PH3WgOFGMH7QN48+
+         BKAaqbKGjzEKOu/+z54Fd9CFBtLewpNHNBRvLLQxpEPZTzol86/hE3tFKvF/I7SwDnzk
+         MaHIsgmJDv/WbpIe3Jkpolui1xwPcSKnRADxyoFK9W3rGr/giaspU5/l5Z5wPLX7X8Ky
+         26MudEkbpuAK2aGRc5VVE6z1WZWcTJVd5iD94Y1TAdrmlaU6MflPbVwtIx4UxCNjLC8/
+         WWEctd23J1pn+gNkcMGntRfOzxFgFKfbmXJqNA/GASajlUlaEFMphCmtvyADJZ87svKb
+         FSvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSOaW/mrECTAPLR0touTQz4mGBh0hDzgXzGA4PA2nIMDKMxXIbqqipp6xDaEwwYVZrU42tWiCfCWE4jbXR@vger.kernel.org, AJvYcCUksNmQLBhuyoHG40bADrHPFdieD4VaiX61VEuOu8Ww6IHyOGFXx/XcDhQknmBRJPwbJRmrYKC1@vger.kernel.org, AJvYcCUtbNNuyybmNuxoGgbsH2E1PH6WJopeOx2P2tLRSYvBrfOGG+Yzw3uV6y2cjuRx4a5bR/M=@vger.kernel.org, AJvYcCXSwUC5NXf30qzTTbX9Jy6rTp0LvgUCw1sLpQbRYpOZYlKhd2MvUhZHBQt+yGpghHA4CArv6ZJZGrswVj7Sj5oI@vger.kernel.org
+X-Gm-Message-State: AOJu0YyicsegMFSxlhRctqSJSV3bCk6ZwgqTc840zz0T6SaQ+YezlbJi
+	tXdgTBIoaZ99D7JM/Vg9QTULvD22FrWfFS9tg7JXRMM9vjyWnt/n
+X-Gm-Gg: ASbGncs8hyZME7reeoJLunRAtyz3ZeXSm889fRpDqqVSKz6yBhy1xkBhQilaKtHQsFB
+	KvPMlTlYy9ci2eSRPzl6WZhBk7BVl6yUWdF1dMXgPeitJ5vTLaACdtFxhpQxtAJ213jx7mZ+74Q
+	fS5j7tnBOBAkGJStEk2oeNH2tSoTt9IWJIxFF/Jt+xtZMaJGP8C8MMnIqE4/p4zqXmhCduuThfa
+	rjWopIefnuwlm+k3oDArsMrFyN/dBa3w/iwbHhZN5DFJREqHx+2VDJlB6ix7Pu88MZOCQj9Lw3H
+	BpVa4MnD/E9sTDkDuJJXJFQxvZs6lbQBOvhw/2iiCiUyNzsDuLNQ0WNy0niNvwBNsoNsNzaSuEr
+	5jF0=
+X-Google-Smtp-Source: AGHT+IG2L9+/QnRBY30Z5GQpQaOCH6qq9WKM/KL20ZK9jkyMwUHw3tKODUV92fSWRpapIs1d3AUtRg==
+X-Received: by 2002:a05:620a:4552:b0:7c0:a46d:fa87 with SMTP id af79cd13be357-7c0cf8e624bmr2664114485a.27.1740508001598;
+        Tue, 25 Feb 2025 10:26:41 -0800 (PST)
 Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c329847sm136097285a.74.2025.02.25.10.24.51
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e87b06dc0esm12237956d6.22.2025.02.25.10.26.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 10:24:51 -0800 (PST)
-Date: Tue, 25 Feb 2025 13:24:51 -0500
+        Tue, 25 Feb 2025 10:26:40 -0800 (PST)
+Date: Tue, 25 Feb 2025 13:26:40 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>, 
  netdev@vger.kernel.org, 
@@ -103,12 +103,12 @@ Cc: willemdebruijn.kernel@gmail.com,
  shuah@kernel.org, 
  hawk@kernel.org, 
  marcus.wichelmann@hetzner-cloud.de
-Message-ID: <67be0af39dbf7_25ccfc2943c@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250224152909.3911544-7-marcus.wichelmann@hetzner-cloud.de>
+Message-ID: <67be0b60a6b36_25ccfc294f5@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250224152909.3911544-3-marcus.wichelmann@hetzner-cloud.de>
 References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <20250224152909.3911544-7-marcus.wichelmann@hetzner-cloud.de>
-Subject: Re: [PATCH bpf-next v3 6/6] selftests/bpf: fix file descriptor
- assertion in open_tuntap helper
+ <20250224152909.3911544-3-marcus.wichelmann@hetzner-cloud.de>
+Subject: Re: [PATCH bpf-next v3 2/6] net: tun: enable transfer of XDP metadata
+ to skb
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -120,23 +120,19 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Marcus Wichelmann wrote:
-> The open_tuntap helper function uses open() to get a file descriptor for
-> /dev/net/tun.
+> When the XDP metadata area was used, it is expected that the same
+> metadata can also be accessed from TC, as can be read in the description
+> of the bpf_xdp_adjust_meta helper function. In the tun driver, this was
+> not yet implemented.
 > 
-> The open(2) manpage writes this about its return value:
+> To make this work, the skb that is being built on XDP_PASS should know
+> of the current size of the metadata area. This is ensured by adding
+> calls to skb_metadata_set. For the tun_xdp_one code path, an additional
+> check is necessary to handle the case where the externally initialized
+> xdp_buff has no metadata support (xdp->data_meta == xdp->data + 1).
 > 
->   On success, open(), openat(), and creat() return the new file
->   descriptor (a nonnegative integer).  On error, -1 is returned and
->   errno is set to indicate the error.
-> 
-> This means that the fd > 0 assertion in the open_tuntap helper is
-> incorrect and should rather check for fd >= 0.
-> 
-> When running the BPF selftests locally, this incorrect assertion was not
-> an issue, but the BPF kernel-patches CI failed because of this:
-> 
->   open_tuntap:FAIL:open(/dev/net/tun) unexpected open(/dev/net/tun):
->   actual 0 <= expected 0
+> More information about this feature can be found in the commit message
+> of commit de8f3a83b0a0 ("bpf: add meta pointer for direct access").
 > 
 > Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 
