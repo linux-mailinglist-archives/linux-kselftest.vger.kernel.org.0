@@ -1,253 +1,190 @@
-Return-Path: <linux-kselftest+bounces-27464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41CD6A442C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 15:30:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12DBEA443BE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 16:00:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F36016C1BF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:27:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3C5C18976C2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 14:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83079269AE6;
-	Tue, 25 Feb 2025 14:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0DDB269AEA;
+	Tue, 25 Feb 2025 14:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="uZKXyjii"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OcpfU73g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983532698A8
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 14:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC1F2686B3;
+	Tue, 25 Feb 2025 14:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740493629; cv=none; b=NDU6BrGeiEcuAjjRWAgjgtjIM1U38WyxMpTEs5fYMTK6ZXhcyrBD9Q1MsJ3fSk3N7O/nb9zPFWNCOGPHdohUbnRxGmnCX+u5YGpltFqsyEyyAkY8aFoR8Kg/aB2NXF8n7y96HAOR8xkOtSLlyHA48vGo0Gtg7y0W24WFw86+bIk=
+	t=1740495332; cv=none; b=HGOOvyfmiW4UD98DKy7dg7R2yXswmpE2PboULqQgCIIhVs0uLH8e9tUQnElZpjPDutTmGzjGAid3zYSmkm0UnDams01mHar20UNG9mlWe9asr3Vx4RDKdm7QDRebqw97l3J7dkXYzZQYcTVEHkXUxmReKqBXBDs6iYA2KjpvD5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740493629; c=relaxed/simple;
-	bh=C3ccY3ZwLQzrjCIq91J7594C9RCW7z3ZBoYXdo9TRY4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qExdYwDgFN0KOx1KpYMyvxEeHA3PzBjSG4XSBWwMmzcJIquhIhOHzrEGr1Y1FsU4kjIqyLFXl+PcqzBPvR36zQf1K7MTYYaZicHiQIiU1HokSRzZvTHTF0boN6lgqyUbPrquMmcRGhiO8ZHv8PiqdjGjDQn0/WsMjvpUdozdeQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=uZKXyjii; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-38f2b7ce2e5so3326497f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 06:27:07 -0800 (PST)
+	s=arc-20240116; t=1740495332; c=relaxed/simple;
+	bh=r/ZZoZr2ULO+NtzPA4njXHi/b/AtJLxzrOEJzxEhTEk=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=S+fbNZd/r8RWGCqhPZh1g+1P/2MFb8g1y7OutIdboJ6YbOFr1gdhfXH9xIFrj5M6imHSYoWgJzIMXx9drv8NrO1pNGuCeGJ00fX1HjSD8+QpjSqRfiihoqrgDNE3C6lQjEQriMpSpFzs5hQ8OPx+ILqsNVwqGOmF+NHLBpWXRc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OcpfU73g; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7c2303a56d6so227492985a.3;
+        Tue, 25 Feb 2025 06:55:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1740493626; x=1741098426; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9QMi4VwrXU66Ki1nrs6Wu07Na08oHbBCCOqst7KVciY=;
-        b=uZKXyjiirVKrZtOv4mtkmz5YbjG90NsdeG1q9ISWkKMi+E06Yf/GnBcR02ARkbNqgD
-         OQorZi0DdW+aCHk8fUZum2yqczwUu226l0xEtr0vEw1S1rOBxTwSZDdWFBeH+nGwVcj7
-         cdaW6GFS3DlrP+x6/bpzrMM2IsrXYlTFRe1kkg/tqH+dG5xQSregssHVd/ryB/XV4iOk
-         E76SfbbE3KZMEN/xZVuEktQJMCfPMogEQqkwVtrSBtZHfFUkUCwG2c+aJL41LjSrdqZ/
-         7DUwT1sTjvpGEsD5INGLjuVRE735/5MKLKs97nFKJmzgxHPwUqdeOFNCnH4qsSToYpva
-         8jKA==
+        d=gmail.com; s=20230601; t=1740495330; x=1741100130; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hjv1BVttWy8yEf+ech4rBoic+lPnV1nxxM8d9pp6mDA=;
+        b=OcpfU73g187VXJUQSlVKjrMQCgHwblswuei4zVS2NgXEQ83pxB3lIY/rwISqaFbft1
+         RZMgjRuLyqHBN9CjAwlc3dXd2lc5eIhaVki/vFZSrf7C9sRzo98CM72/5nPkidq/IirI
+         fHFDPgQYWBgllyHwSxA+cRF4sGEtKMVx7mCbJsGJHWDs6DeaXO345nlZZ2kg5yQIxtig
+         BUdfvZgLh7Cp4AQLiMh8G5bvz39GGY/fsUCLYIgSypCAc3hR5f1hGppWHlnFBgq4pGiZ
+         P8PKwn2/sNH7jYj0AfGurF95D232LKonJZANxVRbl6U8k61e6GdVIdMoUa7BmKy7IDC7
+         CnqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740493626; x=1741098426;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9QMi4VwrXU66Ki1nrs6Wu07Na08oHbBCCOqst7KVciY=;
-        b=Ru4XMRfffV1py2gUyWeJ6TDRvQqL1lYauOK1R2LqGAUbmku8tT+fniQTy2YBKaqM7Q
-         eN533Pcye4z3RaY28n0AdQrDT8lEl+fO/jg+k2Yq+yL1bHF5+W04rOqv9d/RYEDMDnOg
-         Pe2Lywqr9S/lvltx1sADooow/UWssa63knM136u2N47k3uPich7guOJHidOsacZl/wd1
-         c8kDb/IpDvGJSB29E0OhYnSPJI448AKKmGrObrzRwX5hgxMpJQ3UOzkib5XJiz1MOe3H
-         71OkuH1YwdqYu/XxK//AfLY3IUNUH8k/ChDo83I/8RWXnW+GWxKMmfZUeO+IPpbVq/gF
-         OmTg==
-X-Forwarded-Encrypted: i=1; AJvYcCWb0n9YZKiZPVAH+ULHvmLtaV2Kq8lxEVBknH1hXUTMcnWxfuyKLa67Lg6tZU2TzithZfBPZiDf/D9UWtolmY8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC8M1yTxZ5OhgAl+37dPYY3DrvhlhnJgnvFpJkMxc5PdtR6iX4
-	dhXTqU7+hh+aShy9mu4FaUCX2KOxFqc2TATK3J+nGbJrBxNOi+RrCgDMZ/bISM3V/ifiZh5tp/l
-	IB9I=
-X-Gm-Gg: ASbGncu5UzPIIPHv9CMbPFZdLkOoakCIgdztrGkb0UOvVbJl+x2wKwgL1yrUzSQeuRr
-	IIxqJY4cFkfKJO+6KXXTrOD6eRdosMXvF+NHaYP8Pl1ohyCL6KsSs179TnGmsj5Nrrobrxakujn
-	f+jkF4C1dWLdOrt6B++ql1TSYk21sWXhxTP5ZguLsvroxeJTHBilr9sU86mbjWqwa/IcTZVvC05
-	4VDg3jgjoWqBdb3QwYAjbgaQFfGe0cL0JM6Rs4nyaYb4nqMgu4rPkXBCKcrwN1AgyzNoYjwzmrI
-	gkBq4eg3LoW7IzVr3PbCeVEr/guh3NrtbmqbQn9c2um7KZsdUWl+JAYzqw==
-X-Google-Smtp-Source: AGHT+IFNcS5uUX050ewRgWcIyhrXix/tCXL61jbnelT4nfWUEiLJOaKXbpfRwTQNi9QiybtpYofh5A==
-X-Received: by 2002:a5d:5846:0:b0:38d:dc4d:3473 with SMTP id ffacd0b85a97d-390cc63e06dmr2928097f8f.51.1740493625602;
-        Tue, 25 Feb 2025 06:27:05 -0800 (PST)
-Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390cd8fbc31sm2390594f8f.85.2025.02.25.06.27.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2025 06:27:05 -0800 (PST)
-Message-ID: <70c953c7-f442-4e38-9071-c7bb6ad5fedc@blackwall.org>
-Date: Tue, 25 Feb 2025 16:27:04 +0200
+        d=1e100.net; s=20230601; t=1740495330; x=1741100130;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hjv1BVttWy8yEf+ech4rBoic+lPnV1nxxM8d9pp6mDA=;
+        b=Ml7p+5Ncgw+A3EPjvNG1nvi68WXisoRfxtvErWDmKEIgqdv1lbxdMctehWxADGEkoE
+         BIlLvF6cTU/RqR3+wLeamBuaws1BF0Zo8KvNKFKRg+d6sl4T/jQWdy3xlS/Mm7DBzavW
+         70bYlTdm4jcgsUgBatnpVxMmhRtB3lo3VmBrxYubS1is3YQl2LpZErhA6FC9b2lOh7gb
+         pkZPsX4cUuHeue4SnrvjBAMDuXya+IYnQGtImQOe2cvaa904xemdQDGqTEKCG3vkRgW9
+         ok78agWyMfeeEctQZnQYiwiGxs1IWl8n9nJ3i4YB6g5mQfkdXvjkYsvAadG5SHT5jQIs
+         E9tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVbZxPW65Bqb2JsIaAXsRYLCfRzMGsAgvbG0MHumTy0dFJbOnWs05j8HbBsOOzczfPx6ln5rkUX@vger.kernel.org, AJvYcCWzh6tvm9HVns6TpZ+YADSZZVr3pmEylVkPac+AihT6TKAGzfvFniV9DZfuZbVSZFiLOTUxqLcA969hWppM@vger.kernel.org, AJvYcCX4X0bj9/8sNyI5OiYxYpPBojbOTYtBig6WbrulE8QhRL+KBQkI/NDSHwy0jvRYJyL1Z8U=@vger.kernel.org, AJvYcCXFdlnsTzgyLAy3F4Hq/HwREP9imqL61hpwklMoAzx0YIOnOYeOJ1cIc1z1xt+8rrP9gKlZGeSzC4kSbr36tsOZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW5uOwp9jGcZ+a9JB6wGosCczYiR8VnUSpI70lWdNwsHyyTy4N
+	IU7WGjHtvXQMFj5VOCU0uWf6ciVWiWxSi0CKyJaB1z7loNldvp9G
+X-Gm-Gg: ASbGncsQiZa8ahrECZYQRZ9rqV8alKjOtMWghzyLOkO9ttC5wypI8sxADLscOFiyWti
+	7uWxQW2Moutr8lpiQe5hhCJg6HxYvgA2LL3LYOSFmL4Y7eZANzCX0HgKviT9dM/huGRj7XsfVP5
+	KnhbXrBPWQEd0MiD5QNtfqRQZVJJQHAqpuxBObThNAU6G4dMrSclwPd80bbAaAV2KJLuP1H+jpU
+	MEKPXJ+hZUCXIzsQkjz2Rq6jGyjDuNox1Bh64i4iWhQbQ3NOOO75G3bPtumhIWMCIXFfnJdCX98
+	KBxS0zBpkPk4v/rED9sgdmrUDTfmprNlscn53vQwr6xlQnGws9IUP6CEhGpqnCdlYvUNQqkrJHA
+	llUI=
+X-Google-Smtp-Source: AGHT+IGjv2NvDrduope8pvx/36i17irAfSvtdZpt+ljFP0O7tK4Zc2qgfkUk4vwB434o/1wqwg4SIA==
+X-Received: by 2002:a05:620a:800b:b0:7c0:c264:6737 with SMTP id af79cd13be357-7c0cf8b015emr2386412885a.4.1740495329747;
+        Tue, 25 Feb 2025 06:55:29 -0800 (PST)
+Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2c2925sm115007585a.61.2025.02.25.06.55.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 06:55:29 -0800 (PST)
+Date: Tue, 25 Feb 2025 09:55:28 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Cc: willemdebruijn.kernel@gmail.com, 
+ jasowang@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ andrii@kernel.org, 
+ eddyz87@gmail.com, 
+ mykolal@fb.com, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ martin.lau@linux.dev, 
+ song@kernel.org, 
+ yonghong.song@linux.dev, 
+ john.fastabend@gmail.com, 
+ kpsingh@kernel.org, 
+ sdf@fomichev.me, 
+ haoluo@google.com, 
+ jolsa@kernel.org, 
+ shuah@kernel.org, 
+ hawk@kernel.org, 
+ marcus.wichelmann@hetzner-cloud.de, 
+ Willem de Bruijn <willemb@google.com>
+Message-ID: <67bdd9e0c54d9_2474a12947d@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+Subject: Re: [PATCH bpf-next v3 0/6] XDP metadata support for tun driver
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2 net 1/3] bonding: move mutex lock to a work queue for
- XFRM GC tasks
-To: Cosmin Ratiu <cratiu@nvidia.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "liuhangbin@gmail.com" <liuhangbin@gmail.com>
-Cc: "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
- "jarod@redhat.com" <jarod@redhat.com>,
- "davem@davemloft.net" <davem@davemloft.net>, Tariq Toukan
- <tariqt@nvidia.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "shuah@kernel.org" <shuah@kernel.org>,
- "steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
- "jv@jvosburgh.net" <jv@jvosburgh.net>, "pabeni@redhat.com"
- <pabeni@redhat.com>, "horms@kernel.org" <horms@kernel.org>,
- "edumazet@google.com" <edumazet@google.com>,
- "kuba@kernel.org" <kuba@kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- Jianbo Liu <jianbol@nvidia.com>
-References: <20250225094049.20142-1-liuhangbin@gmail.com>
- <20250225094049.20142-2-liuhangbin@gmail.com>
- <d298da7bc638c323e6d492b2dec7f1b9ea1e1350.camel@nvidia.com>
-Content-Language: en-US
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <d298da7bc638c323e6d492b2dec7f1b9ea1e1350.camel@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On 2/25/25 16:00, Cosmin Ratiu wrote:
-> On Tue, 2025-02-25 at 09:40 +0000, Hangbin Liu wrote:
->> The fixed commit placed mutex_lock() inside spin_lock_bh(), which
->> triggers
->> a warning like:
->>
->> BUG: sleeping function called from invalid context at...
->>
->> Fix this by moving the mutex_lock() operation to a work queue.
->>
->> Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to
->> mutex")
->> Reported-by: Jakub Kicinski <kuba@kernel.org>
->> Closes:
->> https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
->> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
->> ---
->>  drivers/net/bonding/bond_main.c | 41 +++++++++++++++++++++++++------
->> --
->>  include/net/bonding.h           |  6 +++++
->>  2 files changed, 37 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/net/bonding/bond_main.c
->> b/drivers/net/bonding/bond_main.c
->> index e45bba240cbc..cc7064aa4b35 100644
->> --- a/drivers/net/bonding/bond_main.c
->> +++ b/drivers/net/bonding/bond_main.c
->> @@ -551,6 +551,25 @@ static void bond_ipsec_add_sa_all(struct bonding
->> *bond)
->>  	mutex_unlock(&bond->ipsec_lock);
->>  }
->>  
->> +static void bond_xfrm_state_gc_work(struct work_struct *work)
->> +{
->> +	struct bond_xfrm_work *xfrm_work = container_of(work, struct
->> bond_xfrm_work, work);
->> +	struct bonding *bond = xfrm_work->bond;
->> +	struct xfrm_state *xs = xfrm_work->xs;
->> +	struct bond_ipsec *ipsec;
->> +
->> +	mutex_lock(&bond->ipsec_lock);
->> +	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->> +		if (ipsec->xs == xs) {
->> +			list_del(&ipsec->list);
->> +			kfree(ipsec);
->> +			xfrm_state_put(xs);
+Marcus Wichelmann wrote:
+> Hi,
 > 
-> I would expect xfrm_state_put to be called from outside the loop,
-> regardless of whether an entry is found in the list or not, because it
-> was unconditionally referenced when the work was created.
+> thank you for your reviw. As promised, here is V3 of this patch series.
 > 
->> +			break;
->> +		}
->> +	}
->> +	mutex_unlock(&bond->ipsec_lock);
->> +}
->> +
->>  /**
->>   * bond_ipsec_del_sa - clear out this specific SA
->>   * @xs: pointer to transformer state struct
->> @@ -558,9 +577,9 @@ static void bond_ipsec_add_sa_all(struct bonding
->> *bond)
->>  static void bond_ipsec_del_sa(struct xfrm_state *xs)
->>  {
->>  	struct net_device *bond_dev = xs->xso.dev;
->> +	struct bond_xfrm_work *xfrm_work;
->>  	struct net_device *real_dev;
->>  	netdevice_tracker tracker;
->> -	struct bond_ipsec *ipsec;
->>  	struct bonding *bond;
->>  	struct slave *slave;
->>  
->> @@ -592,15 +611,17 @@ static void bond_ipsec_del_sa(struct xfrm_state
->> *xs)
->>  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
->>  out:
->>  	netdev_put(real_dev, &tracker);
->> -	mutex_lock(&bond->ipsec_lock);
->> -	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->> -		if (ipsec->xs == xs) {
->> -			list_del(&ipsec->list);
->> -			kfree(ipsec);
->> -			break;
->> -		}
->> -	}
->> -	mutex_unlock(&bond->ipsec_lock);
->> +
->> +	xfrm_work = kmalloc(sizeof(*xfrm_work), GFP_ATOMIC);
->> +	if (!xfrm_work)
->> +		return;
->> +
->> +	INIT_WORK(&xfrm_work->work, bond_xfrm_state_gc_work);
->> +	xfrm_work->bond = bond;
->> +	xfrm_work->xs = xs;
->> +	xfrm_state_hold(xs);
->> +
->> +	queue_work(bond->wq, &xfrm_work->work);
->>  }
->>  
->>  static void bond_ipsec_del_sa_all(struct bonding *bond)
->> diff --git a/include/net/bonding.h b/include/net/bonding.h
->> index 8bb5f016969f..d54ba5e3affb 100644
->> --- a/include/net/bonding.h
->> +++ b/include/net/bonding.h
->> @@ -209,6 +209,12 @@ struct bond_ipsec {
->>  	struct xfrm_state *xs;
->>  };
->>  
->> +struct bond_xfrm_work {
->> +	struct work_struct work;
->> +	struct bonding *bond;
->> +	struct xfrm_state *xs;
->> +};
+> I noticed that the updated selftests were flaky sometimes due to the kernel
+> networking stack sending IPv6 multicast listener reports on the created
+> test interfaces.
+> This can be seen here:
+> https://github.com/kernel-patches/bpf/actions/runs/13449071153/job/37580497963
 > 
-> Also, like Nikolai said, something needs to wait on all in-flight work
-> items.
+> Setting the NOARP flag on the interfaces should fix this race condition.
 > 
-> This got me to stare at the code again. What if we move the removal of
-> the xs from bond->ipsec from bond_ipsec_del_sa to bond_ipsec_free_sa?
-> bond_ipsec_free_sa, unlike bond_ipsec_del_sa, is not called with x-
->> lock held. It is called from the xfrm gc task or directly via
-> xfrm_state_put_sync and therefore wouldn't suffer from the locking
-> issue.
+> Successful pipeline:
+> https://github.com/kernel-patches/bpf/actions/runs/13500667544
 > 
-> The tricky part is to make sure that inactive bond->ipsec entries
-> (after bond_ipsec_del_sa calls) do not cause issues if there's a
-> migration (bond_ipsec_del_sa_all is called) happening before
-> bond_ipsec_free_sa. Perhaps filtering by x->km.state != XFRM_STATE_DEAD
-> in bond_ipsec_del_sa_all.
-> 
-> What do you think about this idea?
-> 
-> Cosmin.
+> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-I know the question was for Hangbin, but I do like this solution. I missed
-the xdo_dev_state_free callback, it could lead to a much simpler solution
-with some care.
+Please don't add tags, unless a person has explicitly added them.
 
-Cheers,
- Nik
+And they are only sticky when the code has not been changed since
+they added them.
+
+These are only in the cover letter, so not picked up. But for future
+revisions and patches.
+
+I'll take a closer look at the actual patches in a bit.
+ 
+> ---
+> 
+> v3:
+> - change the condition to handle xdp_buffs without metadata support, as
+>   suggested by Willem de Bruijn <willemb@google.com>
+> - add clarifying comment why that condition is needed
+> - set NOARP flag in selftests to ensure that the kernel does not send
+>   packets on the test interfaces that may interfere with the tests
+> 
+> v2: https://lore.kernel.org/bpf/20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de/
+> - submit against bpf-next subtree
+> - split commits and improved commit messages
+> - remove redundant metasize check and add clarifying comment instead
+> - use max() instead of ternary operator
+> - add selftest for metadata support in the tun driver
+> 
+> v1: https://lore.kernel.org/all/20250130171614.1657224-1-marcus.wichelmann@hetzner-cloud.de/
+> 
+> Marcus Wichelmann (6):
+>   net: tun: enable XDP metadata support
+>   net: tun: enable transfer of XDP metadata to skb
+>   selftests/bpf: move open_tuntap to network helpers
+>   selftests/bpf: refactor xdp_context_functional test and bpf program
+>   selftests/bpf: add test for XDP metadata support in tun driver
+>   selftests/bpf: fix file descriptor assertion in open_tuntap helper
+> 
+>  drivers/net/tun.c                             |  28 ++-
+>  tools/testing/selftests/bpf/network_helpers.c |  28 +++
+>  tools/testing/selftests/bpf/network_helpers.h |   3 +
+>  .../selftests/bpf/prog_tests/lwt_helpers.h    |  29 ----
+>  .../bpf/prog_tests/xdp_context_test_run.c     | 163 ++++++++++++++++--
+>  .../selftests/bpf/progs/test_xdp_meta.c       |  56 +++---
+>  6 files changed, 230 insertions(+), 77 deletions(-)
+> 
+> -- 
+> 2.43.0
+> 
+
 
 
