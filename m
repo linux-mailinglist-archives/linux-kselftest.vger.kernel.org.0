@@ -1,150 +1,168 @@
-Return-Path: <linux-kselftest+bounces-27517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14F5AA449FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 19:17:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78BADA449EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 19:16:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76F6717794F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:14:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BE1D19C0143
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2025 18:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E463199FB0;
-	Tue, 25 Feb 2025 18:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3992519CD0B;
+	Tue, 25 Feb 2025 18:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CLitZWsa"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="uWFfmlxL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B67F610D;
-	Tue, 25 Feb 2025 18:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E8A19E966
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 18:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740507286; cv=none; b=ghuDIhl6o4+SggyUSun2TPGqB45TIQfpy1HUVKmY39JK/a+IN7Ivh6cW0QuitlocKNfYB9s/nqBIE1Ny+dftsthhULDYiGAZRUTFjqSYdk9NGXMBHg+aRDdMyrWZ5+qgbEg18CVnHEzVU7HWjclMrc2ZaMSwD/Pq+tR49tqTmhk=
+	t=1740507305; cv=none; b=rcg8JkvC2Vrq0jB4NAQj8vCUi7fQFR2Fi0csepB8HLMqv2pfmxF+pOz85L5Sl9URVFWHrhBjqbJd25T9wEI9Ulx8eEMw4eo8TiHiKMWJiZPzFRrpEeZBmq+QcJN9SpliGq0SifMhV5rxU3p4iCcHxCJ7k4U8xONUnC1ZWdwIDfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740507286; c=relaxed/simple;
-	bh=GW5jTXwKGESC3dgp5ePQ2pu7cawyAP5JV0KqR9Z3Fis=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=QsL8iqZpY4vFYn6srLRzxFSSRnoJ9ocmXDCDfyx2nGHAMdD4GIyuMksIzvu4olXdVJgJrfP9Y/KZsIiKYP+V/mn/5ehwilQ6hWbhn6XekXguAe6qGLqs+Jfgwch9gFvRomROTYEI8v+pQLJ85KNzYq8KxtogPjUZJdo8sSf1aG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CLitZWsa; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6e69db792daso49977036d6.0;
-        Tue, 25 Feb 2025 10:14:44 -0800 (PST)
+	s=arc-20240116; t=1740507305; c=relaxed/simple;
+	bh=YvdPm7vuUDrTxozOZ2XSpjgPIGCpumydcNBSnKjQLGY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S39paaaq8okBlVrmpPjd4I/yqJaIxm53i3ucoUYMr8r8Pld0GHaVq5xrW5HnpXqXcnXyyJ3+trqCHGalqXKw3b5GGYV2sZ1VZqy3JwNJtjvujn4zIzRK7A24lFjtuw2AWPTHYm+aRqHs3Mkue9ZUPysompJBqdVSMOgoNusYjzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=uWFfmlxL; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220bff984a0so127369815ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 10:15:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740507283; x=1741112083; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Afk27/X80PuVJHRhAC5WWQqoXLETvNztAeuyGDXpES8=;
-        b=CLitZWsa+MSG3TLuYnL/WLKupELTGNc9uNbr9+LGInBN13yhZNwHdAFYXbbxVox8tz
-         eID5RyykFEGhJKgLvAvTEIxtxySCtFpNe2LtTzAdJpk9zhdInDe3X2hL2yoaJh0SpWn+
-         Z/gHgmVRNYG7QEjIwPro7nX1MF3eJ/vg6wAHvAwj2CGZN0w3G67xK8ZFLBBI1Fu90/00
-         Wu0x/1Hb1BSmqYFluQl4pXqAH0wW6QxqUO0L2L6sIP1aiV3JNKbUARNbsrMRwzh4IiCW
-         V4Pj8WegQrk8A9L3hqoPztppkG6pHxifQsu4MdJjq3KNzdwx1s+cCcttT5t1SXsMgejd
-         poxw==
+        d=fastly.com; s=google; t=1740507303; x=1741112103; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4eD4lJxu0UTZTdJ0UdYe5FZrfntCk4zu0rxUqF0TWic=;
+        b=uWFfmlxL/P2/9d33o/QhRSrAUH9CQbxvEVBPLs7TAieSIERisiFpeCvgYxQ86Ox41X
+         +c2Pd/Ci/nc01naiB/FXvXVoP5AumsBVsZk0Gavt6iPa8prEowYmiZ8+yTlrO5az0lQD
+         9MLpoyJTSNUzBun/Xtus9+v5fM/Ikmbu6SJvE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740507283; x=1741112083;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Afk27/X80PuVJHRhAC5WWQqoXLETvNztAeuyGDXpES8=;
-        b=qTzRtVRWjFJROY+3aiZXUq8Dcbibm8euCc5dlq2uqcZrC3aNg8/ybU/y8xs8/00R30
-         ggU9/hMTJ3b41yENTN6TCtYopJTdmiUHhLKI9MHLt2kUnP+CgoV6p9Nd+l/TTRZ/96iC
-         ZuWx0Zu38la7KlqVd2BNBvVKDU//77Qy4FO6ALrkzr0tP2jgoShZ49fVwhsIH8K6wBhx
-         RwIB+ZXyrGO/51x6pbr8sLLmu3X7b8NCiMb7OyhJOt6m07nWCfJHkh7LWTqxU0ySbs09
-         MrinmtdoR58qAbaKbK0a8KYM6JNDNOcqXWktMPO5RFhPNtrbWGitUuQdwRFfOn/K/Xbl
-         mlQA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNx9cGQgOL/AmrwKbRusnkD7K8Vu7eYw+Dwe350dKaAKyp+FCLuTgk6l2Tu6anIBSIVL7LUSed2FEDj1/Xk+mA@vger.kernel.org, AJvYcCUtu6MeWQOwp9Xerb9CgBef3zCQZ851WT3HLQNRKv9dzxj+vkL2P+kFKNeOUUiZHAKXdd3CW7SpaUSNXZ94@vger.kernel.org, AJvYcCXJNYFd7RstMUx0JSsxcvaR4BFQBeJS81d44aUcudcWDJDKc/T+T84ENlzuUw3Zn2Z8UOZkM+zB@vger.kernel.org, AJvYcCXoBT/QqpiayMrXCHoGDjBG3mNwiXBiLfRxOw/DFxiUi3Bm6QnlwvyXZcoAGLbe5mvptfs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN1V5+2jsIsrjPbCseG0KRuZgRXdIEpIzv6FxdSORRZ/YHoRea
-	cbM+sjHpRWYPTidKTltBuiTSheiI0I+xHtsXkPMC/1casW6C9bWQ
-X-Gm-Gg: ASbGncsjVmo45mJ4IEjLx82+I6gS+ztHHh4tlvloo8cO+qCopdJX+6EqkJ7WMkQnA8c
-	yGGmHhiP1MJfj6bqE0NJWNQE+PIqx96nGams5xAIDJdhtuufuM5w7JO4EjIaiabatbrlIjHqPBj
-	xcAo/yXIjY0lDax8DIZYBckAflUt9Gln7Q2he1RZJYY33vEUgG4h7GCWDOL4gLR94/Wb18qaHXl
-	Dm/8eguqi2q0gghxt2R3rAbfcUJ8EbsymAbKYrNAwjWZF/+bvOraXM9IygpKMP3VZ8HGGxriywn
-	m8SiKQse5rj4tyeiNAp6NpoG6iQFPG73TTs6RMa/Tpq5OJuFwxElVkXzBm7+MDsMrKFyJpKzQSB
-	c3gE=
-X-Google-Smtp-Source: AGHT+IExX7eM9fEZD7F0QtCwB+XhIqdpIe1EHNeoOZoYnsihPmyVx9XhY4575vLAyIyrtN6sLu19OQ==
-X-Received: by 2002:a05:6214:21e9:b0:6e6:5aa2:4e4f with SMTP id 6a1803df08f44-6e6b01a9dcemr283977046d6.32.1740507283356;
-        Tue, 25 Feb 2025 10:14:43 -0800 (PST)
-Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e87b06ddd4sm12063936d6.17.2025.02.25.10.14.42
+        d=1e100.net; s=20230601; t=1740507303; x=1741112103;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4eD4lJxu0UTZTdJ0UdYe5FZrfntCk4zu0rxUqF0TWic=;
+        b=AJiJJXcmwLf0czo+f7RLdJnvVFh6aylHBLruRLkTr82+8XrjRmoVM91SZKoi+BBG8u
+         Xiea4Qgd4l3vwOTEbWDVhSl8l492lB/9BcCYoVtZ0KKI3rQV5gdYxhSYrMGtPkoTN9XW
+         87fUa8NeCUtct1zH8gJK4ou5CnsgbpjUsPa+G+Qkjt/YbWaJiry+VaaGN3mK+KX1/7Mk
+         yPtgZCsrg4fwXvI2zPdk/XWxmG6OB+YFNl6ji2Qp2CHMx4iK8WRHgOHxo6W270W2Lthu
+         /KELxe86aAWgnJgvYaD2wJAcHBMfYh0Nq8Pd0a0kHEV5RZxcMdcw9ci3KjvDOYZv6B7Q
+         dhqA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0dOqJX4Ez0hw2e1FKS5BwACKyZ2eUuw/hQs5HhW4TZsHPs4kLM2J+yS5eZw67p5NBXZ5K/GxqWgxMJiU5a6c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVMfwPWqyv92GYjCv7gP+f9h3LauKA1pWvzBqnrWnsyAps20pm
+	QqMi3OdpnAIU4aOVHEWovGAgwKD0c2tPftOBV3xJ/2TNByTsPvb3/otVjYLZq4M=
+X-Gm-Gg: ASbGncvZ9+M5Lelsxhcu1XhOvKldejiimONYwS+tlbf8oEBFEPb9eNjs4edlE6ICDej
+	z5b05K0MldgCY9zA6zwoW1Dn5hfFL1CwmPdUg7QeTb/0mqW+TL27OsawCafSoIKPwHLR7Mp+sY5
+	HReCnuFsS2rY3XXdfBfZP/mooehQIe0BWLqSQeREZo9CZU0/mEf2FxGj4adsZ4RvGYM7wdl1Rv8
+	kbLxFu1ccCoNwpDZz/Mu03YFyDIukCUjP7pcqRxCrHT4zrXcwHE8eFKPl0epa1u5ikZlj9kG1fc
+	H+L1iGmA3O5utE4CVrxeUhnYCTXekga77A==
+X-Google-Smtp-Source: AGHT+IHbdHzM51PF3kPVqKty+t5U0xSAB/6wSbzhQ4o196SMvHU4bg4PiG4X3iXqYNIp9TLrFTleGA==
+X-Received: by 2002:a05:6a00:4f84:b0:732:5696:51db with SMTP id d2e1a72fcca58-734791bb213mr8234240b3a.24.1740507302769;
+        Tue, 25 Feb 2025 10:15:02 -0800 (PST)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a72f732sm1821716b3a.84.2025.02.25.10.15.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 10:14:42 -0800 (PST)
-Date: Tue, 25 Feb 2025 13:14:42 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: jasowang@redhat.com, 
- andrew+netdev@lunn.ch, 
- davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- andrii@kernel.org, 
- eddyz87@gmail.com, 
- mykolal@fb.com, 
- ast@kernel.org, 
- daniel@iogearbox.net, 
- martin.lau@linux.dev, 
- song@kernel.org, 
- yonghong.song@linux.dev, 
- john.fastabend@gmail.com, 
- kpsingh@kernel.org, 
- sdf@fomichev.me, 
- haoluo@google.com, 
- jolsa@kernel.org, 
- shuah@kernel.org, 
- hawk@kernel.org, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <67be08921f167_25ccfc294bb@willemb.c.googlers.com.notmuch>
-In-Reply-To: <e378ffb9-2424-4b09-b5fd-688f4f3d1556@hetzner-cloud.de>
-References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <67bdd9e0c54d9_2474a12947d@willemb.c.googlers.com.notmuch>
- <e378ffb9-2424-4b09-b5fd-688f4f3d1556@hetzner-cloud.de>
-Subject: Re: [PATCH bpf-next v3 0/6] XDP metadata support for tun driver
+        Tue, 25 Feb 2025 10:15:01 -0800 (PST)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: dw@davidwei.uk,
+	Joe Damato <jdamato@fastly.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] selftests: drv-net: Check if combined-count exists
+Date: Tue, 25 Feb 2025 18:14:54 +0000
+Message-ID: <20250225181455.224309-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Marcus Wichelmann wrote:
-> Am 25.02.25 um 15:55 schrieb Willem de Bruijn:
-> > Marcus Wichelmann wrote:
-> >> [...]
-> >>
-> >> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-> >> Acked-by: Jason Wang <jasowang@redhat.com>
-> >> Reviewed-by: Willem de Bruijn <willemb@google.com>
-> > 
-> > Please don't add tags, unless a person has explicitly added them.
-> > 
-> > And they are only sticky when the code has not been changed since
-> > they added them.
-> > 
-> > These are only in the cover letter, so not picked up. But for future
-> > revisions and patches.
-> 
-> Oh, I'm sorry. I checked https://docs.kernel.org/process/submitting-patches.html
-> but must have misunderstood it then.
-> 
-> To clarify:
-> So these tags are limited to a single patch of the patch series and I should only
-> carry them over, when the single patch where they were added to is re-sent in a
-> follow-up patch series without changes?
+Some drivers, like tg3, do not set combined-count:
 
-That's right.
+$ ethtool -l enp4s0f1
+Channel parameters for enp4s0f1:
+Pre-set maximums:
+RX:		4
+TX:		4
+Other:		n/a
+Combined:	n/a
+Current hardware settings:
+RX:		4
+TX:		1
+Other:		n/a
+Combined:	n/a
 
+In the case where combined-count is not set, the ethtool netlink code
+in the kernel elides the value and the code in the test:
+
+  netnl.channels_get(...)
+
+With a tg3 device, the returned dictionary looks like:
+
+{'header': {'dev-index': 3, 'dev-name': 'enp4s0f1'},
+ 'rx-max': 4,
+ 'rx-count': 4,
+ 'tx-max': 4,
+ 'tx-count': 1}
+
+Note that the key 'combined-count' is missing. As a result of this
+missing key the test raises an exception:
+
+ # Exception|     if channels['combined-count'] == 0:
+ # Exception|        ~~~~~~~~^^^^^^^^^^^^^^^^^^
+ # Exception| KeyError: 'combined-count'
+
+Change the test to check if 'combined-count' is a key in the dictionary
+first and if not assume that this means the driver has separate RX and
+TX queues.
+
+With this change, the test now passes successfully on tg3 and mlx5
+(which does have a 'combined-count').
+
+Fixes: 1cf270424218 ("net: selftest: add test for netdev netlink queue-get API")
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+---
+ tools/testing/selftests/drivers/net/queues.py | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/queues.py b/tools/testing/selftests/drivers/net/queues.py
+index 38303da957ee..baa8845d9f64 100755
+--- a/tools/testing/selftests/drivers/net/queues.py
++++ b/tools/testing/selftests/drivers/net/queues.py
+@@ -45,10 +45,13 @@ def addremove_queues(cfg, nl) -> None:
+ 
+     netnl = EthtoolFamily()
+     channels = netnl.channels_get({'header': {'dev-index': cfg.ifindex}})
+-    if channels['combined-count'] == 0:
+-        rx_type = 'rx'
++    if 'combined-count' in channels:
++        if channels['combined-count'] == 0:
++            rx_type = 'rx'
++        else:
++            rx_type = 'combined'
+     else:
+-        rx_type = 'combined'
++        rx_type = 'rx'
+ 
+     expected = curr_queues - 1
+     cmd(f"ethtool -L {cfg.dev['ifname']} {rx_type} {expected}", timeout=10)
+
+base-commit: bc50682128bde778a1ddc457a02d92a637c20c6f
+-- 
+2.43.0
 
 
