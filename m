@@ -1,103 +1,194 @@
-Return-Path: <linux-kselftest+bounces-27540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 896F5A4519C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 01:38:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED8F1A451E9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 02:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C75C19C27FB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 00:38:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5CF03A9FE0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 01:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C622145FE8;
-	Wed, 26 Feb 2025 00:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BED153BE8;
+	Wed, 26 Feb 2025 01:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zlC7O0zx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iFCiMIFa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F0C219FF
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 00:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D16563CF;
+	Wed, 26 Feb 2025 01:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740530301; cv=none; b=FgFwviM6vuT2BvGZNFsGpit7he8edDHRytnd3y/hsiO32+eoR0iM9eMoCXkgVGw+P6YCkhK5VDu84utzYfbQXeTL+m8qsum5LkwV2gY+7fcpdPBGag2x+OcTAk05GASQsc7ZiEDjHIxJ+ZVb5ajemg18duLf++e2UjaOjoPUIrI=
+	t=1740532056; cv=none; b=OHozBbikioVRc2h3gBZs7XAESn9YJ9RMb1qWh3hhg6cZ/wt63ivo3yjADzFdPF/cVvIxll7Qbuj5KD38MOA2UE9FlE5pn99LKs0SDxx3wpl4I2+X/1sieHweHhPC4CeLusyIrRGiL6j3jmAFveKgBQvMSyXwP61L1cTcDySJsQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740530301; c=relaxed/simple;
-	bh=98qmeHuxb8kfZLw5go0ikVnX5IuVeWrIvgaBxJXsmBk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=O6oZ/2eRTo2xiN2TuS0RMY4O8zLv42XOZI0HmXkE2eTY/E5obQrzUejMjc//tJn+MpdI1Mh9jy3am6F2/VNxrb6uaeRht2oxqXg/OGwybNbK+RIkE42yc4BCvEerDoz6QiJpM1zjl3lg3ZTX32NAiVmRJbWLNSgMoLzQJk7QeM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zlC7O0zx; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fc43be27f8so20566448a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2025 16:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740530298; x=1741135098; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yhtOhpsyhbNKeQJImuwdKpcruoCv+uVBV7M0rzTsAqo=;
-        b=zlC7O0zx59DAFZPGynsUpEExuW7qIVVVfiQjR2OaA9HOyKY6Ol35giCWuFra7kuHJU
-         hkW/6xkgwOFNP+Qwlc1nUxuNbDaEHhZcf6T3zZdJbXS3wTFOA1u8yfDemqXcjgOoginY
-         WjGHb3WjTV+Z0J1pyjcDa8PktQLp5ZTIfs1+LdPJSQJDp+bE/zc60WatDGNbbi3vslJh
-         vwsKrYD5Fv+QC9h6mhSvrteRR3keUJcKVxHr5cy2qZNk6oGRJMyeeyOMcR3QOBzWasFI
-         o87Nih34LxIdOQ6pXw60p15DvE8/DGzrMCz94M8g6Xg5R3lZpgZI2KJjNSE4XjxWm0jA
-         p6Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740530298; x=1741135098;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yhtOhpsyhbNKeQJImuwdKpcruoCv+uVBV7M0rzTsAqo=;
-        b=UItn1jILvn/GE9WTENHRW+S7jYEJ206IzbnXNs65C1/TFNBnjvlx10DG+onimJM8qX
-         CRGfgQZNWb/UXagb5hgkd2VLPT9Ogh2Xe1wyRrwWY/nPcF+TRjFMpiGDWW15hRj1Tg+B
-         DA90ipiDutOkyD4kHWtN35GnIx9nj951RZWq8ZS9x5VEzX2nsIw08km06lz0nZ3xq/dI
-         OUTBdSYGNint2r+1iSWtoqVFgkzBHbKi6VCZJU3caDGXYk13RFuKcscyW83gn6fEkgTs
-         jAbpw3MjrfB4bMOHb7vZWtpsGyczqYVUwmsnVsdmYIfhMpCz9t7GpUeRCw1csGEImTDu
-         RzXg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkZNYaGIbAEmftcy/p3njUUxa7UqMXlNxxUzxvbWDA31zoPkv067qlIXUHw8K+IVfsYgE9pqV29RnywQsuMgk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykxW9+afz9IG1oP2X6DFfTqx0J3kFI12oGxkPIz7cFtOV22d3t
-	+cIjdq7HHQw1BPz1r1bgiOLrD9EPvglSrAANs3oRhKRDS23UWnryxkAPJG3xIDr6PTSLVlv8oJe
-	apA==
-X-Google-Smtp-Source: AGHT+IHC1eUdH6w7RjlDG4zAxVr4I3LM4m2Ye/XQ5yW5Z/A6BJVF+fnZnmY1FqR7/bd15OP7K5YZ4bIV1J8=
-X-Received: from pjbsw3.prod.google.com ([2002:a17:90b:2c83:b0:2fa:15aa:4d2b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:54cd:b0:2f2:8bdd:cd8b
- with SMTP id 98e67ed59e1d1-2fe7e3b1756mr2196568a91.29.1740530297782; Tue, 25
- Feb 2025 16:38:17 -0800 (PST)
-Date: Tue, 25 Feb 2025 16:38:16 -0800
-In-Reply-To: <20250128124812.7324-4-manali.shukla@amd.com>
+	s=arc-20240116; t=1740532056; c=relaxed/simple;
+	bh=eYDNCmtkmFlzVyVO7qge4AhwAqruXRUwlcg/pjbp2b4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XAVO2/A/pVeBLUPwLt3ZOgSuiCTmLT90eXbTA/+kXgJqYHgIA5dRreNfhYwCx0hwksM3Ggkbv3UG61stY8BPo15ItDLzftIP3+WUgmZmiXv0CSLgL0n2XB1UCJe/zNIoBoid+8rGJrWZ9wSjuzsxByuZ46v1RPzX7wIwyMYiE8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iFCiMIFa; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740532054; x=1772068054;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eYDNCmtkmFlzVyVO7qge4AhwAqruXRUwlcg/pjbp2b4=;
+  b=iFCiMIFarUoyBXD+g4WCE0ky9fCA1JAUpzaz7VidaMfWHVr3ittB4Jkx
+   XDQh960hkHc/NvoKLa2fv+/FHisqeY8a0wcCqboJUaopqQSPt2YAnEMt4
+   0PujsQrffOTOJdmi0B+0cMGHDFuv85W7BQFmaTJgUKTnxIXVcfk4yG7wU
+   tCfrKnciI5LOpYWPfcsYgK5rGDXNDwxGL4j9S8NnM1Ner4PIXFDYUAWN6
+   cu7f4K2QvCC8LuYHDzyVVC9+0fppXPYU1fEzhiJVKegWGenpY7yvwKen1
+   Bmo4is3pDV+Mna5kh6RHN3TRNfaqBUozFN7Ik/t99jNwgrAeJ6qRlQgQt
+   Q==;
+X-CSE-ConnectionGUID: RU3XitX4TsukX3KPi21Bgw==
+X-CSE-MsgGUID: aj632BOzRtSxW4sQ6ZJifA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="52362176"
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="52362176"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 17:07:33 -0800
+X-CSE-ConnectionGUID: AWdVZjqZR/K77cmw8oo8yg==
+X-CSE-MsgGUID: br/EYFkMRsKS4R3Drrb/NA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="147467330"
+Received: from cbae1-mobl.amr.corp.intel.com (HELO cbae1-mobl.intel.com) ([10.124.166.169])
+  by fmviesa001.fm.intel.com with ESMTP; 25 Feb 2025 17:07:32 -0800
+From: "Chang S. Bae" <chang.seok.bae@intel.com>
+To: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: x86@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	shuah@kernel.org,
+	chang.seok.bae@intel.com
+Subject: [PATCH 0/9] selftests/x86/xstate: Introduce common code for testing extended states
+Date: Tue, 25 Feb 2025 17:07:20 -0800
+Message-ID: <20250226010731.2456-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250128124812.7324-1-manali.shukla@amd.com> <20250128124812.7324-4-manali.shukla@amd.com>
-Message-ID: <Z75iePyU3PK01oG7@google.com>
-Subject: Re: [PATCH v6 3/3] KVM: selftests: Add self IPI HLT test
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com, 
-	vkuznets@redhat.com, bp@alien8.de, babu.moger@amd.com, 
-	neeraj.upadhyay@amd.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 28, 2025, Manali Shukla wrote:
-> +	if (kvm_cpu_has(X86_FEATURE_IDLE_HLT))
+Hi all,
 
-Well, shoot.  I gave you bad input, and we're stuck.
+This series proposes a rework of xstate-related tests to improve
+maintainability and expand test coverage.
 
-this_cpu_has() isn't correct, because the part of my previous feedback about
-needing to check *KVM* support was 100% correct.  But kvm_cpu_has() isn't right
-either, because that checks what KVM supports exposing to the guest, not what
-KVM itself supports/uses.  E.g. even if we add full nested support, the test would
-fail if nested=0 due to KVM not "supporting" Idle HLT despite using it under the
-hood.
+== Motivation: Addressing Missing and New XSTATE Tests ==
 
-The lack of a way for KVM to communicate support to the user has come up in the
-past, e.g. in discussion around /proc/cpuinfo.  Sadly, AFAIK there are no (good)
-ideas on what that should look like.
+With the introduction of AMX, a new test suite [1] was created to verify
+dynamic state handling by the kernel as observed from userspace. However,
+previous tests for non-dynamic states like AVX lacked ABI validation,
+leaving gaps in coverage. While these states currently function without
+major issues (following the alternate sigstack fix [2]), xstate testing
+in the x86 selftest suite has been largely overlooked.
 
-For now, I'll just skip this patch, even though doing so makes me quite sad.
+Now, with Intel introducing another extended state, Advanced Performance
+Extensions (APX) [3], a correspondent test case is need. The APX enabling
+series will follow shortly and will leverage this refactored selftest
+framework.
+
+== Selftest Code Rework ==
+
+To ensure ABI validation and core functionality across various xstates,
+refactoring the test code is necessary. Without this, existing code from
+amx.c would need to be duplicated, compromising the structural quality of
+xstate tests.
+
+This series introduces a shared test framework for extended state
+validation, applicable to both existing and new xstates. The test cases
+cover:
+* Context switching
+* ABI compatibility for signal handling
+* ABI compatibility for ptrace interactions
+
+== Patch Organization ==
+
+The patchset is structured as follows:
+
+* PATCH1: Preparatory cleanup — removing redundant signal handler
+  registration code.
+* PATCH2/3: Introduce low-level XSAVE helpers and xstate component
+  enumeration.
+* PATCH4/5: Refactor existing test code.
+* PATCH6: Introduce a new signal test case.
+* PATCH7/8: Consolidate test invocations and clarify the list of
+  supported features.
+* PATCH9: Add test coverage for AVX.
+
+== Coverage and Future Work Considerations ==
+
+Currently, these tests are aligned with 64-bit mode only. Support for
+32-bit cases will be considered when necessary, but only after this phase
+of rework is finalized.
+
+FWIW, the AMX TILECFG state is trivial, requiring almost constant values.
+Additionally, various PKRU tests are already established in
+tools/selftests/mm.
+
+This series is based on the tip/master branch. You can also find it in
+the following repository:
+    git://github.com/intel/apx.git selftest-xstate_v1
+
+Thanks,
+Chang
+
+[1] https://lore.kernel.org/all/20211026122523.AFB99C1F@davehans-spike.ostc.intel.com/
+[2] https://lore.kernel.org/lkml/20210518200320.17239-1-chang.seok.bae@intel.com/
+[3] https://www.intel.com/content/www/us/en/developer/articles/technical/advanced-performance-extensions-apx.html
+
+Chang S. Bae (9):
+  selftests/x86: Consolidate redundant signal helper functions
+  selftests/x86/xstate: Refactor XSAVE helpers for general use
+  selftests/x86/xstate: Enumerate and name xstate components
+  selftests/x86/xstate: Refactor context switching test
+  selftests/x86/xstate: Refactor ptrace ABI test
+  selftests/x86/xstate: Introduce signal ABI test
+  selftests/x86/xstate: Consolidate test invocations into a single entry
+  selftests/x86/xstate: Clarify supported xstates
+  selftests/x86/avx: Add AVX test
+
+ tools/testing/selftests/x86/Makefile          |   6 +-
+ tools/testing/selftests/x86/amx.c             | 442 +---------------
+ tools/testing/selftests/x86/avx.c             |  12 +
+ .../selftests/x86/corrupt_xstate_header.c     |  14 +-
+ tools/testing/selftests/x86/entry_from_vm86.c |  24 +-
+ tools/testing/selftests/x86/fsgsbase.c        |  24 +-
+ tools/testing/selftests/x86/helpers.h         |  28 +
+ tools/testing/selftests/x86/ioperm.c          |  25 +-
+ tools/testing/selftests/x86/iopl.c            |  25 +-
+ tools/testing/selftests/x86/ldt_gdt.c         |  18 +-
+ tools/testing/selftests/x86/mov_ss_trap.c     |  14 +-
+ tools/testing/selftests/x86/ptrace_syscall.c  |  24 +-
+ tools/testing/selftests/x86/sigaltstack.c     |  26 +-
+ tools/testing/selftests/x86/sigreturn.c       |  24 +-
+ .../selftests/x86/single_step_syscall.c       |  22 -
+ .../testing/selftests/x86/syscall_arg_fault.c |  12 -
+ tools/testing/selftests/x86/syscall_nt.c      |  12 -
+ tools/testing/selftests/x86/sysret_rip.c      |  24 +-
+ tools/testing/selftests/x86/test_vsyscall.c   |  13 -
+ tools/testing/selftests/x86/unwind_vdso.c     |  12 -
+ tools/testing/selftests/x86/xstate.c          | 477 ++++++++++++++++++
+ tools/testing/selftests/x86/xstate.h          | 195 +++++++
+ 22 files changed, 753 insertions(+), 720 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/avx.c
+ create mode 100644 tools/testing/selftests/x86/xstate.c
+ create mode 100644 tools/testing/selftests/x86/xstate.h
+
+
+base-commit: 5bff053d066ba892464995ae4a7246f7a78fce2d
+-- 
+2.45.2
+
 
