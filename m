@@ -1,149 +1,205 @@
-Return-Path: <linux-kselftest+bounces-27607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDBD6A45EED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 13:27:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ED78A46038
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 14:07:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA85018895AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:23:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 868293B0525
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 13:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07B5621D3E7;
-	Wed, 26 Feb 2025 12:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CFD1DE2A1;
+	Wed, 26 Feb 2025 13:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Vxns5nMo"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W90ilfAt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4450113D8A0
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 12:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028E042A8B;
+	Wed, 26 Feb 2025 13:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740572513; cv=none; b=hkFkWNmgHhtpaiQfnWsM2AfSOnGruqFk0QRI3CEzbaWsUFV9VgHAMrjWK0sjpk2c3JlXjz/8TlKxgd2abgKdYlybenpP739JdTflYc+wUQFNMvHHGQ9jiyg9wNimD3+cdlwdih5qNNAO3X6u4Wruau40KNGE6txzKyKF8ffFXBU=
+	t=1740575184; cv=none; b=iMgo1YX0Fvrfi9UGOxPJDoUz2HGF7NDtPlum/q5EGdBp1FbarkLN40yUF8PPeQrDJoDV03pgMOC6h4pcg10vp1JbFRUlMWjW4VXJ1Sb2J7Mg4G6ijCImxhu2ayJAccRcbXnY/WCUbTEfxnry5Vy0fq4PA7uDcDjFrpjbQ3SGeno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740572513; c=relaxed/simple;
-	bh=AwiFrWtV+715zMILrRkjE/bS7f4TFBxTFpu/weZEttM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ckd2kvyvPdCxJPF9tpf1Rwetwre1nPUEBm6f20IL9oeZZ1i8MXpwauckiPujdYbUvnaOiHjCm350c/6CZgfhiJbaBuBGL3DgpQvjr9yAkmHmv5G//pZ0NGbxEejWPEcC5YJ8Q6n+/fKNqWSmy53C6M0f34s1ZvZuGM1VXZS8Cgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Vxns5nMo; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-472098e6e75so238881cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 04:21:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740572511; x=1741177311; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FZ8fLnFs5jC511KEwwc78QvRtxNOftae4m622VwEotA=;
-        b=Vxns5nMohq2469Yc/t3p9uzRVo1FuK2/q9QgWRJamyKImSY2r4GoG1MVpRv/WWkOQe
-         Cn4mw9TSk1116/mFRffkP+uGA/dNNiJJJtmdyShWDcGzCGCBPVEtDhxbjyPeD5Y3JQ/V
-         xk2TvBCwF35h3Hmbj2gWlm6Zh2bj89mgZRhi7ABvc3j4EMNX5yB1szg1UOpLxagesKXk
-         Da4ZoBZ7/URkUddjVt2UcUkovCCg410wDs3OKOFnshELdyQQwD3GuXVY0t3SBCItrs8p
-         Z5H7viuQP4UF06WudfhMyTX00WORC5Ww6ZKL5JWPYI2H2Ng/iNbiNghqc4AlWichLdOD
-         eIJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740572511; x=1741177311;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FZ8fLnFs5jC511KEwwc78QvRtxNOftae4m622VwEotA=;
-        b=XEMM5Vy58NnbHee8vxlhACjvawY2Lx9jJ9nEWCf9yyDaGuGa3uzuhJ9dpBNN06ivNc
-         TDX7M1APTVEM84AZ/1sKuH4+CkndfOnUb4MX/cgx+uKKlSdduBuwysrpw1d15gbtFreM
-         +lAU6Ggww84kUxZWVV8sZf5225L2XyV1d8+LcjX/GMnKH3DaqQXPo/r1w8kgu06U3uno
-         q/CTWDylJz5V+ES8VPlaA2kcZC5YxakFUWg2DZ0xdO4dTKKbhcnUulM8lyqM5Z6wrAbF
-         TiVQNtiHizBAcYGsvn9oAZmG6nVZ+TqOB9S0xn/ICt4U/JNF5efegY/vyZ2eHgHgJAvh
-         7gyg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1s3KZCkE96BXXK6DFBd5IU6gKgastKfUcKi8OzXt5jhVc/3J69DG49+phuuJmjvlNt2y+Api0vU4XM47UHrE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjbZVDmifoFvcEb/lfWVpLQ91ZFzsqcKfTry+PWFuxN33u90MS
-	WMyE4lkt1WUIge5SDt8fTy5orzERF4eSzkSbgKha0HcZ4o2i27fV99iwtN4IL8F6Hgc09jcG5eu
-	vzmB5y+ODtL6i3RocG7+fZX7Bx2Oi4nupbL1o
-X-Gm-Gg: ASbGncue7qNVLdEJs6ScMMAAmSUGPaJNjIe7LKO+e5i7LhwnI3JvsaCCWzPA7JM7TL4
-	mKNXq/vs20op3b0LYntTFvXNJw8yVNsuMV9l9FzA22ja0uSDTGdLBIxy0cWoZb1oLLc8e9IA3zB
-	6ylgcAEBuPTO7u6kcrJYuGWxhtBA5nHnlqw6E=
-X-Google-Smtp-Source: AGHT+IHhkPpVrAfcuu6cQ99DaZetDklozQpTm2/0R7nz9+TlVkUIb9LVAMa4c37TFqY7rDF6/NSPiYVd6iEl3BowJcw=
-X-Received: by 2002:a05:622a:1806:b0:46e:1311:5920 with SMTP id
- d75a77b69052e-47376dd1d49mr8958801cf.0.1740572510952; Wed, 26 Feb 2025
- 04:21:50 -0800 (PST)
+	s=arc-20240116; t=1740575184; c=relaxed/simple;
+	bh=ZqchcqI2FkHT1qBiJQSk6eN2q4a9QuFS8ZMIoFhRXYM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QvivfYQG0pw21cKXaQ5qAG7S+Y9f3R89uiyQVjXSeGOW01x9JzK+FgS1hW8+0EfcbsWYi5HokZ4o1r/FN0/19uTlWpZQt9t57feYvf/qNjHqvID+zM2G01zntDAlBpogjJGncU/Af06RG/DUkUpEUa88s+/ksLvbYcvWWGKP9Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W90ilfAt; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51QCjQxI012268;
+	Wed, 26 Feb 2025 13:05:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Sjtn6a
+	QSkW7Zb/PPaco0QhyyJeAQF+aQOBPQNDVG+jY=; b=W90ilfAticGKauusKeP4E9
+	rdBTAI4cod+aWIc1lzirWUQepkCQtPVIBnvwNUgTDv4WbXEg9yVxhKGDxfkSjHwa
+	8ZnUyj1M62G+VxRI7MUIclyKaz1NuiDVaoy2fUOiZR+ApWvitE5fJcG/6l5r/M8h
+	X5XzKEZKncKmACG+p8GKR+7krvXm+pUTIHMDvLdECt51oLpLxumdbuBSjM4W6G+Z
+	0q/qzxZBIsB1KpUD6a0IttFlAOiUPqxQAkmt6ZKc4H20aEaUIQ2C5NhshglO3M5V
+	PPcNhhXyiXpoH0YezsxFzhr5mvJKNu89lsuiM945JjZfK+O64VOzT91rpQqVrzZw
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 451s19asd9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Feb 2025 13:05:58 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51QB6qqQ012491;
+	Wed, 26 Feb 2025 13:05:56 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44ys9yjx1f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Feb 2025 13:05:56 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51QD5si856492352
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 26 Feb 2025 13:05:55 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D000220040;
+	Wed, 26 Feb 2025 13:05:54 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7E84A2004B;
+	Wed, 26 Feb 2025 13:05:53 +0000 (GMT)
+Received: from [9.124.212.40] (unknown [9.124.212.40])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 26 Feb 2025 13:05:53 +0000 (GMT)
+Message-ID: <93e10bcf-3537-45f0-b282-ae4fd4573c6e@linux.ibm.com>
+Date: Wed, 26 Feb 2025 18:35:52 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
- <0449ff75-0a6b-4c1e-bf12-ff052aad5287@redhat.com> <Z72-AP-yQ2hPwpKe@google.com>
- <657f10ed-4e82-4048-98ab-1c4b65349298@redhat.com>
-In-Reply-To: <657f10ed-4e82-4048-98ab-1c4b65349298@redhat.com>
-From: Brendan Jackman <jackmanb@google.com>
-Date: Wed, 26 Feb 2025 13:21:39 +0100
-X-Gm-Features: AQ5f1JpRBblxfE48EKs85Q8pbMMgiuSClFK4hMJuxnVUG4HT_JiUqeb3ib6VHjM
-Message-ID: <CA+i-1C01x3CUf_pVEZCmr-rWV26-JZoRoF_uBkchOhobraKGvg@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/4] mm: KUnit tests for the page allocator
-To: David Hildenbrand <david@redhat.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Oscar Salvador <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, Michal Hocko <mhocko@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Yosry Ahmed <yosry.ahmed@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests: sched: skip cs_prctl_test for systems
+ with core scheduling disabled
+To: Sinadin Shan <sinadin.shan@oracle.com>, shuah@kernel.org,
+        chris.hyser@oracle.com
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250225200910.260569-1-sinadin.shan@oracle.com>
+ <20250225200910.260569-3-sinadin.shan@oracle.com>
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <20250225200910.260569-3-sinadin.shan@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XIZLN3TF-z33Jl9yrPg-b5kxRpLWKHfg
+X-Proofpoint-ORIG-GUID: XIZLN3TF-z33Jl9yrPg-b5kxRpLWKHfg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-26_03,2025-02-26_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ phishscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502260104
 
-On Wed, 26 Feb 2025 at 12:52, David Hildenbrand <david@redhat.com> wrote:
->  > > It seems possible that very little mm code cares if the memory we're
-> > managing actually exists. (For ASI code we did briefly experiment with
-> > tracking information about free pages in the page itself, but it's
-> > pretty sketchy and the presence of debug_pagealloc makes me think
-> > nobody does it today).
->
-> At least when it comes to the buddy, only page zeroing+poisoning should
-> access actual page content.
->
-> So making up memory might actually work in quite some setups, assuming
-> that it will never get allocated.
->
-> The "complicated" thing is still that we are trying to test parts of the
-> buddy in a well-controlled way while other kernel infrastructure is
-> using the buddy in rather uncontrolled ways.
 
-Thanks, yeah that makes sense, and I agree that's the hard part. If we
-can design a way to actually test the interface in an isolated way,
-where we get the "memory" that we use to do that is kinda secondary
-and can be changed later.
 
-> > There might be arch-specific issues there, but for unit tests it
-> > seems OK if they don't work on every ISA.
->
-> Just pointing it out: for memblock tests (tools/testing/memblock/) we
-> actually compile memblock.c to be used in a user space application,
-> stubbing all external function calls etc such that we get the basics
-> running.
->
-> It'd probably be quite some work to get page_alloc.c into a similar
-> shape, likely we'd have to move a lot of unrelated-for-the tests stuff,
-> and think about how to handle some nasty details like pcp etc. Just
-> wondering, did you think about that option as well?
->
-> The nice thing about such an approach is that we can test the allcator
-> without any possible side effects from the running system.
+On 2/26/25 01:39, Sinadin Shan wrote:
+> For kernels with CONFIG_SCHED_CORE=n, the sched selftest cs_prctl_test
+> fails with "Not a core sched system" error. Change this to gracefully
+> skip the test for systems with core scheduling disabled. Exiting early
+> would also ensure failures reported in obtaining cookie are valid
+> failures and not because core scheduling isn't supported.
+> 
+> Skip cs_prctl_test for systems with CONFIG_SCHED_CORE=n
+> 
+> Signed-off-by: Sinadin Shan <sinadin.shan@oracle.com>
+> ---
+>   tools/testing/selftests/sched/cs_prctl_test.c | 34 ++++++++++++++++++-
+>   1 file changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
+> index 52d97fae4dbd8..5b0047b50e640 100644
+> --- a/tools/testing/selftests/sched/cs_prctl_test.c
+> +++ b/tools/testing/selftests/sched/cs_prctl_test.c
+> @@ -109,6 +109,36 @@ static void handle_usage(int rc, char *msg)
+>   	exit(rc);
+>   }
+>   
+> +static void check_core_sched(void)
+> +{
+> +	unsigned long long cookie;
+> +	int ret, num_max_process;
+> +	char buffer[32];
+> +
+> +	FILE *fp = fopen("/proc/sys/kernel/pid_max", "r");
+> +
+> +	if (fp == NULL) {
+> +		perror("Failed to obtain max process number");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	if (fgets(buffer, sizeof(buffer), fp) == NULL) {
+> +		fclose(fp);
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	num_max_process = atoi(buffer);
+> +	fclose(fp);
+> +
+> +	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, num_max_process+1, PIDTYPE_PID,
+> +			(unsigned long)&cookie);
+> +	if (ret == -1 && errno != ESRCH) {
+> +		perror("prctl failed");
+> +		printf("Core sched not supported, hence skipping tests\n");
+> +		exit(4);
+> +	}
+> +}
+> +
+>   static unsigned long get_cs_cookie(int pid)
+>   {
+>   	unsigned long long cookie;
+> @@ -117,7 +147,7 @@ static unsigned long get_cs_cookie(int pid)
+>   	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
+>   		    (unsigned long)&cookie);
+>   	if (ret) {
+> -		printf("Not a core sched system\n");
+> +		printf("Failed to get cookie\n");
+>   		return -1UL;
+>   	}
+>   
+> @@ -270,6 +300,8 @@ int main(int argc, char *argv[])
+>   	if (keypress)
+>   		delay = -1;
+>   
+> +	check_core_sched();
+> +
+>   	srand(time(NULL));
+>   
+>   	/* put into separate process group */
 
-Yeah Lorenzo also pointed me to tools/testing/vma and I am pretty sold
-that it's a better approach than KUnit where it's possible. But, I'm
-doubtful about using it for page_alloc.
 
-I think it could definitely be a good idea for the really core buddy
-logic (like rmqueue_buddy() and below), where I'm sure we could stub
-out stuff like percpu_* and locking and have the tests still be
-meaningful. But I'm not sure that really low-level code is calling out
-for more testing.
+This works for me in my workflow. I don't know full selftest framework 
+or how to trigger it.
 
-Whereas I suspect if you zoom out even just to the level of
-__alloc_frozen_pages_noprof(), it starts to get a bit impractical
-already. And that's where I really wanna get coverage.
+When CONFIG_SCHED_CORE=n
+-----------------------------
+./cs_prctl_test
+prctl failed: Invalid argument
+Core sched not supported, hence skipping tests
 
-Anyway, I'm thinking the next step here is to explore how to get away
-from the node_isolated() stuff in this RFC, so I'll keep that idea in
-mind and try to get a feel for whether it looks possible.
+
+When CONFIG_SCHED_CORE=y
+-----------------------------
+./cs_prctl_test
+(369) PASSED: _prctl(PR_SCHED_CORE, PR_SCHED_CORE_MAX, 0, PIDTYPE_PGID, 
+0) < 0 && errno == EINVAL
+-1 = prctl(62, 2, 0, 2, 1)
+(372) PASSED: _prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, 0, 
+PIDTYPE_PGID, 1) < 0 && errno == EINVAL
+SUCCESS !!!
+
+
+So for this patch,
+Tested-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+
 
