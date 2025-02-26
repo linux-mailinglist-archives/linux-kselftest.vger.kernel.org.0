@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-27587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0B26A45D6D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:45:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2015FA45D6E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:45:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CBDA188E961
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:45:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D36DA188F173
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A4D2165E9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2EA21764B;
 	Wed, 26 Feb 2025 11:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HG2/OSTT";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nld6xex1"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JPxjA3rj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NogC8iL5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7433218DB2D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99212153F0;
 	Wed, 26 Feb 2025 11:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570313; cv=none; b=GHpdydMnU9Zyu9foXse9C9l6fahgLR75m0f7Z8O4XEVMCqkZLJEBVFLQNYdOaB1FT/6BnmPll7MfTajHsYBjyU/QgCXF6/T4qOhaV+1z1onpsXfIr40RIvuk6CK88BOY/rDcl0Aa/rYwH1UJHWxtG+gMDPDI3ylgl8ZTsB2LBeA=
+	t=1740570313; cv=none; b=tLs43/6pR/Zf5AWiVk17O0AZ3MoZbu2pYiQSsWTFP+zQNti/p6rIvAK2lYaI+iiD+Wsno1ZdwqUnuYujqXJgvXiZwGpSduNawbJnaBy5GuXQR/Z9xOtyipxnlE0BEym2sbie0DXdKj50xuwsUD6D5YXAYD/Veas/XRreqtdQeac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740570313; c=relaxed/simple;
-	bh=s3dkTBDXdzo+I16hjaEXfC4T5xD6NlAF4J47urRaCBo=;
+	bh=jOcl4jChzaOfnuMhe6CWOzQik5bw/m/LULE4SM4Wwic=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Qr3wP7om28tBtRuLaf37T6OiU9Q3Uxi0q0jcc5qo83iYRcabPnN9/EI+K2wmpAsn/NNjViahOcmrjZLVEQZM3rWdlZyYYP8/Sg6eBw6ZQswYRSjZd/JjrqQrV6eTF37mPRIyUBCt32BQGng7OVJ5Spp8/7ak6iuhrW3LbcVVjZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HG2/OSTT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nld6xex1; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=slEANvLYB6GT+rp68VMrNuXkUtqT2tmFi97k1CQDy1DM2sX1Vn07QJ0Ei+sKWlqRpRyByYa53W7+gZaYv+lvr2owcoWsEmKidQ3z8b/xsR+hpYkF2IEk36mUnthbTdCkvYFqVX4LXV+I2R58purhVquUq1Q98e76v3YEX2fmzpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JPxjA3rj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NogC8iL5; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1740570309;
+	s=2020; t=1740570310;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Mc60C8g9Fb1tmdPaCWjP2wsKb3/BHTAaOKy7dD4Q/9Y=;
-	b=HG2/OSTTB6A6DxnV9fJlxcbHxinFNkvCoc5Av0QoN/O5O+YI/YJJ/bruh7X8hN/Pw9tgph
-	IvazjtlrEHvE70F096sE5glzpOsk/2seGBEE6mnWqKyR7quNplEuJULu48Ip6K1P9ALaSc
-	CcIEO0Wx17XWQkF/v0cKIMDE2HGNkckrrXzPp8dEFRrg3wND1aSJFNIdawyf9uLxaTABRo
-	ZaLQlEl5Ls8TI0NZ/sV4xP68+0hmYhn07h0uUoBEBcFcOZKdXrp6IW2fE9PtWJkDyHEUD0
-	oQtSjyeQ/Xpg2WNBMg2fGnBibELpAJAVp21s+DjKJ5dw3tCPwi51eWcUjp5leg==
+	bh=lMDiGbYVSI2UFf1LCxWO6nyQEZB+Om9MsywMKZqQgCo=;
+	b=JPxjA3rjz6xx4GTC7I8oaWdo6JKP5/SU+MZYtxrPCtbpIT6X3MBJTtspm+D3CEgeb/rGz0
+	TIwScseTkmK+tv0QaLucWZcdi7zu5lWTZllLIPEth+U6QNA7ZDutG838PWSniAlvZ5ahWC
+	0LU6v2uQDsmxRX5nsy9c/Cis8PC/Q1IHXZb+7MWEbaxt9tUHqJ7kKtA4EYETE4lsDIKZpa
+	HJfXRZJvOSLXJNl442y+s1e545AMCTgZpPgaVWCujHEFBcobNhSRSsLqNr7p75EmCu1fCB
+	3UPM8em6xc+wLNOxbvByppfB07n2A/LCz2/v9s/kEJqPMEna1tDWxq6xKKZ3vQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1740570309;
+	s=2020e; t=1740570310;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Mc60C8g9Fb1tmdPaCWjP2wsKb3/BHTAaOKy7dD4Q/9Y=;
-	b=nld6xex166KgiTl4cwebgevCV8SivocBIvcZsJEvFPKYFQRriCZczK7R2BtRLLOQ4JjzCQ
-	SUUrhpc+PqFJSfDQ==
-Date: Wed, 26 Feb 2025 12:44:40 +0100
-Subject: [PATCH v2 01/16] MAINTAINERS: Add vDSO selftests
+	bh=lMDiGbYVSI2UFf1LCxWO6nyQEZB+Om9MsywMKZqQgCo=;
+	b=NogC8iL5YzrQpwMRQZ93LpyvPa5B8vMn/uJTGvcGCDvF9ORegZ4u77l7P0pYsd9hV5eT+D
+	tm/sp4VhOqmVeBCg==
+Date: Wed, 26 Feb 2025 12:44:41 +0100
+Subject: [PATCH v2 02/16] elf, uapi: Add definition for STN_UNDEF
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250226-parse_vdso-nolibc-v2-1-28e14e031ed8@linutronix.de>
+Message-Id: <20250226-parse_vdso-nolibc-v2-2-28e14e031ed8@linutronix.de>
 References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 In-Reply-To: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
@@ -79,34 +79,38 @@ Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  llvm@lists.linux.dev, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=675;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=885;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=s3dkTBDXdzo+I16hjaEXfC4T5xD6NlAF4J47urRaCBo=;
- b=RmTkrNBpC+8rUj4SUZbDrfqW5Rz+2JesNkGa22nnnObwaeaPhHsLR2eLjesHwiz9iee7NIV4Q
- XJaNIHxUageD+jmnkXoAdx2diftbLQQUokA/XWcB8tDXaA54QQQwuSI
+ bh=jOcl4jChzaOfnuMhe6CWOzQik5bw/m/LULE4SM4Wwic=;
+ b=qt2UpwulQT6NmPqm+BCm/x9gmi8yb5q4QxLrpncjEM195FECfP4GUiMb0tEXnI6jNVxzs5MLk
+ c8OLcJCsa1SBT8bdPVaKrK+Hc3gm7a3UVHR9oQ0/xyDKxXTMTcKdumk
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-These currently have no maintainer besides the default kselftest ones.
-Add the general vDSO maintainers, too.
+The definition is used by tools/testing/selftests/vDSO/parse_vdso.c.
+To be able to build the vDSO selftests without a libc dependency,
+add the definition to the kernels own UAPI headers.
 
+Link: https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.symtab.html
+Reviewed-by: Kees Cook <kees@kernel.org>
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ include/uapi/linux/elf.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 896a307fa06545e2861abe46ea7029f9b4d3628e..959c8a86844eb1e5c6218e8fdbde6c3ebf68e25d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9777,6 +9777,7 @@ F:	include/asm-generic/vdso/vsyscall.h
- F:	include/vdso/
- F:	kernel/time/vsyscall.c
- F:	lib/vdso/
-+F:	tools/testing/selftests/vDSO/
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index b44069d29cecc0f9de90ee66bfffd2137f4275a8..448695c7364042b10682acc8223eb6053ad039dd 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -125,6 +125,8 @@ typedef __s64	Elf64_Sxword;
+ #define STB_GLOBAL 1
+ #define STB_WEAK   2
  
- GENWQE (IBM Generic Workqueue Card)
- M:	Frank Haverkamp <haver@linux.ibm.com>
++#define STN_UNDEF 0
++
+ #define STT_NOTYPE  0
+ #define STT_OBJECT  1
+ #define STT_FUNC    2
 
 -- 
 2.48.1
