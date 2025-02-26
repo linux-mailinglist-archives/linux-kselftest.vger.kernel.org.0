@@ -1,126 +1,221 @@
-Return-Path: <linux-kselftest+bounces-27671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A14CA46DC9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 22:43:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D2A6A46E32
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 23:10:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0DCE188D71D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 21:42:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E665167D0B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 22:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964FB25D53D;
-	Wed, 26 Feb 2025 21:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F41C26B968;
+	Wed, 26 Feb 2025 22:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EgNtw+4H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWGeZDxQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846AD25D539
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 21:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56ACD2561D6;
+	Wed, 26 Feb 2025 22:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740606090; cv=none; b=VjDQzf8YHz+gbqyCapZt83kepY056py5B6S2YEsCCn4TfLnYpSDdZKRY6QvpawS7xuLtLXGd6L1k7i+MXmxhTdg51zIv01VFKeiM588BFu/fkvdo6GZdAazajvEgaev6HNsTYfTMd++9YQ4mm/MZDNQqtZ7chYBsGThmlrHvdf8=
+	t=1740607850; cv=none; b=ie+ESvSa+jnj7Nz+BvLhXKTx6TzYtb+jQLwTx320knifichn6HODrQMB2wn79Kh1Rctd5G6hN4zqAptRAUZ6yRO15+dcohoqrqXtmrQ8rtobXxxXFQL7k+zsZYLZhQFml45/f1gJ8JgnNF3czpE9yDgoP7l/gyZ2ktGoqCtgVhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740606090; c=relaxed/simple;
-	bh=Di9FYpPtVfl7GsOFof37nEkaTPeYYC8IFNc3O29zZBc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BKCKz54+QJyDP9G2RKyhm3NR7QQyJB3dMjN+TW4OLI6eU7EoiqklOl5tdJ0EWyJ1Cq8nfCmgQSkFp4JYk55Rn1OZUHW41SxthKTmJ5UkEdPTsjwl7TWCdsECWbv0RoktuHdVxHuzdFS9Ef9N2GilZvvgw7rpnjLnMXOfr+ZBhUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EgNtw+4H; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3ce886a2d5bso2696005ab.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 13:41:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1740606087; x=1741210887; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FGewUZ9tiTuQ/iU86a6R/FdqPI/FHFuOTv+IuUM0fSI=;
-        b=EgNtw+4HYem2fMOMePu2C/PlLFff29/G4o4Xd13ceHo70FesJOCOcdhZUdhDn6gxP3
-         HB/xmEcQmsssCccSgTG4sUEWKdSLaqB/KpS1HgB2Js9dvBGtPLdMI+azSqx6g8zn7pv0
-         eZRIXMZoP5MyXrHC78aogofKGm+47rgefZTtU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740606087; x=1741210887;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FGewUZ9tiTuQ/iU86a6R/FdqPI/FHFuOTv+IuUM0fSI=;
-        b=SNOA/2Dr7lIiqMjPQnlBqqFpcgg/mwfUgTCdT5oQ1KJ/oflWM4uKHtHVpIMDKnouQg
-         t+6XC6TSgEVypchci5ttWvFOcdcs606SZIU5rc1BCzQ4oaMtYV98HMTrqPGeUOwqv1Qv
-         ftEcXqy+IeS67QAzS8bJCRyATRqrJASVoJRb6NdUAbRhMR3CyOfznc2YgqLXiDPvmpn7
-         PubV0lXE703SE+r8vsmcohEHT1pe8CCDf4xJ85Kw01R+xQRhmIQJ5VTHfIl4XG5k3a2l
-         TxqU/T278JAvyem74zQzExuOlAD/pMYcORR9u6iPeNxBwruW8nDvgqeBODAOM5Q92hC+
-         Ni+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVUHFvZxV8qwF9hKxPLrI3NBbHy9tK0hWPh4VAuwPAm/gkROYjDhp+c9DijBKbHSneH+8qA0VI8xPWOKnL9dbE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy29BnylCQ9d6zqlDE2jfjNGC1BV2Jb3tAScERMFOQ8+SyTh576
-	JWp/mDd4GJEp98RIp8C0Mz3ApXNi5cd+4H86tIN5Lq9UPiGi2Vvb2RTVt22t5z4=
-X-Gm-Gg: ASbGncvUu5gpwBoJSCnGZgYTnb+SqV1wet/X7qrl85m3ZwZPxKZOWi1tA1rA0kGtOee
-	BapTHXCqtOLUacY30fiAsgFj+3Sxcz0qQrVyTBrtkU4b/x/KrRtVpzasP/kkA0HXwof20pPUk09
-	X5dvtyjvdaw56fpZRJ+++6k3aQ16N2Bjiq6YGap9teAM75hv/rlbDoCxTSzFuErRxoDBZO1eJfA
-	FX7SooKIxl7/VP8eFiJHhgwrCPLKud/OPWmspWr7P0jn6vRxZKB2O5m+LaIhTrTEnCLzk/4wRCr
-	A+MPhwV8oUAQBA8VIP4k+pYyLBTanUajpZWQ
-X-Google-Smtp-Source: AGHT+IGEnHXG2qu9LDh932QF8VC4PSeuGzxYdyTHYY6hisaHR02G7GnV2uKJV/Dq51cIKq8C5TdmhQ==
-X-Received: by 2002:a05:6e02:1c09:b0:3d3:ce83:527c with SMTP id e9e14a558f8ab-3d3d1f140cdmr58022385ab.1.1740606087525;
-        Wed, 26 Feb 2025 13:41:27 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f061f790bcsm38180173.126.2025.02.26.13.41.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 13:41:27 -0800 (PST)
-Message-ID: <0758d73d-98b7-4f9b-a3b2-001d69eb949d@linuxfoundation.org>
-Date: Wed, 26 Feb 2025 14:41:26 -0700
+	s=arc-20240116; t=1740607850; c=relaxed/simple;
+	bh=8z/EktT9cohwewcwTxovsYIKkMv5C9KelOQJmHXC5vs=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=QFhJtWKvPbfBsNgrXh5SYj08QwwDvgrQ+BPC9JFu0aeEhyfQgTnK4NUlaV+/8q2QfI3ykfMHqla5pRMkR5PUUHPtNeItMnNsoRRNEd+2Dh7PyEJjELoUhDP4RhR5i1FNrFAWJw9sdsvy7eqQ0GOQHHpHsjscIVvkrLg/lLDCl8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWGeZDxQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8065C4CED6;
+	Wed, 26 Feb 2025 22:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740607849;
+	bh=8z/EktT9cohwewcwTxovsYIKkMv5C9KelOQJmHXC5vs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YWGeZDxQp4p/Ow8Cwd4BbDC5nT+8mq4ln92DLGBjAp31SnHtlHpAU7rCbUV9czI36
+	 2V527EiGj4s6ddqK2BzEcb21Bqjw1TLtQIukAikASMtmH4kfTNvRlyidYe1ipXSObp
+	 dBZcMHlm85R2BaETFgLPGhhyFqLz0K6DdbAP+gX+hprb52736Jed+ubHvaaep7WgTx
+	 4KbsFIHzhlmizU+qNZixL65+KJeUXDsWzi5wcCyoRbGDVTpgAhu5pLOEiYce+XTw2Q
+	 gDXbUZ2O9rsqJD3yIdfmqjfuacFYeLozc/GKZThZ57IQs+VzqmOqPUuTKmqFZrfjHM
+	 8TEe+lFOl20ZA==
+Date: Thu, 27 Feb 2025 07:10:45 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Shuah Khan <shuah@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Hari Bathini <hbathini@linux.ibm.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/8] tracing: fprobe-events: Log error for exceeding the
+ number of entry args
+Message-Id: <20250227071045.7ead04fb9f467b0a7120c05a@kernel.org>
+In-Reply-To: <20250226102223.586d7119@gandalf.local.home>
+References: <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
+	<174055074269.4079315.17809232650360988538.stgit@mhiramat.tok.corp.google.com>
+	<20250226102223.586d7119@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/dma: Fix bad array reference.
-To: liuye <liuye@kylinos.cn>, shuah@kernel.org
-Cc: zhujun2@cmss.chinamobile.com, iommu@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250206021239.51897-1-liuye@kylinos.cn>
- <3b51ae45-4dd4-4238-bf3f-3cb4d263eda4@kylinos.cn>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <3b51ae45-4dd4-4238-bf3f-3cb4d263eda4@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2/25/25 18:31, liuye wrote:
-> Friendly ping.
+On Wed, 26 Feb 2025 10:22:23 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Wed, 26 Feb 2025 15:19:02 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> 在 2025/2/6 10:12, Liu Ye 写道:
->> dir[directions] should be directions[dir] to correctly index the
->> directions array.
->>
->> Signed-off-by: Liu Ye <liuye@kylinos.cn>
->> ---
->>   tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
->> index b12f1f9babf8..b925756373ce 100644
->> --- a/tools/testing/selftests/dma/dma_map_benchmark.c
->> +++ b/tools/testing/selftests/dma/dma_map_benchmark.c
->> @@ -118,7 +118,7 @@ int main(int argc, char **argv)
->>   	}
->>   
->>   	printf("dma mapping benchmark: threads:%d seconds:%d node:%d dir:%s granule: %d\n",
->> -			threads, seconds, node, dir[directions], granule);
->> +			threads, seconds, node, directions[dir], granule);
->>   	printf("average map latency(us):%.1f standard deviation:%.1f\n",
->>   			map.avg_map_100ns/10.0, map.map_stddev/10.0);
->>   	printf("average unmap latency(us):%.1f standard deviation:%.1f\n",
+> > index 85f037dc1462..e27305d31fc5 100644
+> > --- a/kernel/trace/trace_fprobe.c
+> > +++ b/kernel/trace/trace_fprobe.c
+> > @@ -1230,6 +1230,11 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+> >  	if (is_return && tf->tp.entry_arg) {
+> >  		tf->fp.entry_handler = trace_fprobe_entry_handler;
+> >  		tf->fp.entry_data_size = traceprobe_get_entry_data_size(&tf->tp);
+> 
+> Looking at traceprobe_get_entry_data_size(), the setting of the offset and
+> what it returns is a bit of magic. It's not intuitive and really could use
+> some comments. This isn't against this patch, but it does make it hard to
+> review this patch.
 
-How did you find this problem?
+Indeed. It is a bit tricky.
 
-thanks,
--- Shuah
+> 
+> > +		if (ALIGN(tf->fp.entry_data_size, sizeof(long)) > MAX_FPROBE_DATA_SIZE) {
+> > +			trace_probe_log_set_index(2);
+> > +			trace_probe_log_err(0, TOO_MANY_EARGS);
+> > +			return -E2BIG;
+> > +		}
+> >  	}
+> >  
+> >  	ret = traceprobe_set_print_fmt(&tf->tp,
+> 
+> 
+> We have this in trace_probe.c:
+> 
+> static int __store_entry_arg(struct trace_probe *tp, int argnum)
+> {
+> 	struct probe_entry_arg *earg = tp->entry_arg;
+> 	bool match = false;
+> 	int i, offset;
+> 
+> 	if (!earg) {
+> 		earg = kzalloc(sizeof(*tp->entry_arg), GFP_KERNEL);
+> 		if (!earg)
+> 			return -ENOMEM;
+> 		earg->size = 2 * tp->nr_args + 1;
+> 		earg->code = kcalloc(earg->size, sizeof(struct fetch_insn),
+> 				     GFP_KERNEL);
+> 		if (!earg->code) {
+> 			kfree(earg);
+> 			return -ENOMEM;
+> 		}
+> 		/* Fill the code buffer with 'end' to simplify it */
+> 		for (i = 0; i < earg->size; i++)
+> 			earg->code[i].op = FETCH_OP_END;
+> 		tp->entry_arg = earg;
+> 	}
+> 
+> 	offset = 0;
+> 	for (i = 0; i < earg->size - 1; i++) {
+> 		switch (earg->code[i].op) {
+> 		case FETCH_OP_END:
+> 			earg->code[i].op = FETCH_OP_ARG;
+> 			earg->code[i].param = argnum;
+> 			earg->code[i + 1].op = FETCH_OP_ST_EDATA;
+> 			earg->code[i + 1].offset = offset;
+> 
+> // There's definitely some dependency between FETCH_OP_END, FETCH_OP_ARG
+> // and FETCH_OP_ST_EDATA that isn't documented. At least not in this file.
+
+This accumurates the fetching operation on the code. The problem is
+limitation of the entry data size. So this scans the entry code and
+checks whether the specified function argument is already stored, and
+reuse it (return the offset where it is stored). If there isn't,
+it stores a pair of FETCH_OP_ARG + FETCH_OP_ST_EDATA at the end of
+the code array.
+
+> 
+> 			return offset;
+> 		case FETCH_OP_ARG:
+> 			match = (earg->code[i].param == argnum);
+> 			break;
+> 		case FETCH_OP_ST_EDATA:
+> 			offset = earg->code[i].offset;
+> 			if (match)
+> 				return offset;
+> 			offset += sizeof(unsigned long);
+> 			break;
+> 		default:
+> 			break;
+> 		}
+> 	}
+> 	return -ENOSPC;
+> }
+> 
+> int traceprobe_get_entry_data_size(struct trace_probe *tp)
+> {
+> 	struct probe_entry_arg *earg = tp->entry_arg;
+> 	int i, size = 0;
+> 
+> 	if (!earg)
+> 		return 0;
+> 
+> 	for (i = 0; i < earg->size; i++) {
+> 		switch (earg->code[i].op) {
+> 		case FETCH_OP_END:
+> 			goto out;
+> 		case FETCH_OP_ST_EDATA:
+> 			size = earg->code[i].offset + sizeof(unsigned long);
+> 
+> // What makes earg->code[i].offset so special?
+> // What is the guarantee that code[i + 1].offset is greater than code[i].offset?
+> // I guess the above function guarantees that, but it's not obvious here.
+
+Yeah, let me explain.
+
+	/*
+	 * earg->code[] array has an operation sequence which is run in
+	 * the entry handler.
+	 * The sequence stopped by FETCH_OP_END and each data stored in
+	 * the entry data buffer by FETCH_OP_ST_EDATA. The FETCH_OP_ST_EDATA
+	 * stores the data at the data buffer + its offset, and all data are
+	 * "unsigned long" size. The offset must be increased when a data is
+	 * stored. Thus we need to find the last FETCH_OP_ST_EDATA in the
+	 * code array.
+	 */
+
+> 
+> 			break;
+> 		default:
+> 			break;
+> 		}
+> 	}
+> out:
+> 	return size;
+> }
+> 
+> Assuming that traceprobe_get_entry_data_size() does properly return the max size.
+
+Yes, maybe we can scan the code array from the end for optimization but it still
+needs the explanation.
 
 
+> 
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+Thank you!
+
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
