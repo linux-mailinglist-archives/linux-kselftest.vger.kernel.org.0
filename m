@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-27546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6138A451F1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 02:08:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 309B2A451F4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 02:08:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9552D17DD2F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 01:08:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A66C619C387C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 01:08:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98FD18CC08;
-	Wed, 26 Feb 2025 01:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD76C18E35D;
+	Wed, 26 Feb 2025 01:07:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FAIeS7Nm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V6hettGc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0612178372;
-	Wed, 26 Feb 2025 01:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C213A187342;
+	Wed, 26 Feb 2025 01:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740532060; cv=none; b=HVHXfS/omylmWSsuU9JyoWv8g15hEEswVZKni5rkZeu396h5xF7JHKBsjCfKy2bOD1pU/eixxzUv/jlDTJJkKdUk+4mMFbkcBIKs3CKMGJ6qqhTdGwq17ir80ifGrpD7UlNmAk5sELOlGpCBml/kq4w1NBtCk0uZOdAvX0Apg78=
+	t=1740532061; cv=none; b=hg4s7dHful26ron4h7lw/WhKiz90+MdjHJKMTPi+DNShoqntKHhxOsgl0aLzilhIZ2J2ttUaTRkOMvl+jpAn5eobeFeVygmczHB5YaagaDDMT6WO2jkdxG3Vr4EoAjSvzoLLnVUufjbhXLSJjTrjlm3YHhl05Och8ulm7LrDIl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740532060; c=relaxed/simple;
-	bh=b+YHZn2oe7fZ7lyCIm3gb0IseuEDVm4QkMMYsFhiiT8=;
+	s=arc-20240116; t=1740532061; c=relaxed/simple;
+	bh=coXXT2jWow+DVw31djbygBL3uwg6cY+eFGQfiQPL7G8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sl0Ui2ppO0dkZZ47xciOExTGq2Ah0nKi0zZQC4/z9bykQSzKgFkxa7fKeLN0TdpV1G217gL4bAk38At7Y5IqjRWFWlmI9XQvqkXxbFhwbZ27cZRnMkBGNC2Ht1Begm0y6n5YpDFOPJe7M/nihOazhKPnVDpVttOhIf002UqTjUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FAIeS7Nm; arc=none smtp.client-ip=198.175.65.13
+	 MIME-Version; b=FY37VKId4jiy9qZSlL8rqOAgVhAF41K4hxB4HVc8HeVR5zMaxJQvjF8cfpqC/G/lgR/R5DuqRhsDxMcRsCMTbXuzutmiBRcEwUyeJLg28vYBYk44kUgmR/mB67tIpE5RAUueuB47SKLGox1y4oFONdQb8JVvz1NdvKuyVJ09MQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V6hettGc; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740532059; x=1772068059;
+  t=1740532060; x=1772068060;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b+YHZn2oe7fZ7lyCIm3gb0IseuEDVm4QkMMYsFhiiT8=;
-  b=FAIeS7Nmu00CgX/H2ETGVZn3E414OxWBlspA4EXa/eb8zlfFZZ3CMW4H
-   dSmJFy4xgkuSE7WFH2OBeo4w8uiUvIqgQb+BjiWBO7crduzT5go4SOhF2
-   vjeVZKe8asecAcI7c+A1N0aH93piDpuSeOJC563iQEjZRC4hUu2vt4Fcy
-   bBdB3OnF3d58bUcO9+/EyWHs8iYca9iUNvzLJEKtLck4OUWHDyXgRzCAf
-   qwRy2cVdKH/fPTLbqcjCdDedvVM4UCd68mB9E8SPGRII4b37HZa3OrVi+
-   XcHYJEWvdjedlDxsvd91/w0H3sWjK23ynBCUn8Uo/YUMOc4K0ZnlLF10d
-   w==;
-X-CSE-ConnectionGUID: 9IcWbaYDTPWEvlrCW3NQUg==
-X-CSE-MsgGUID: jV8WEgZJTMe410czHx8pxg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="52362208"
+  bh=coXXT2jWow+DVw31djbygBL3uwg6cY+eFGQfiQPL7G8=;
+  b=V6hettGc0Xj/Qv4RiIcuzfQyLI1FY8HBRpwK0bOtslgApYq5R+exy+H9
+   2VdMb2eRU+76/b1BlolStHNz/uN2Wdnfu1qPmDePl5b5bt0qHoB876R9B
+   ia/Rm+FCHVmDQ/49teyWC6P1pLsukRoaj2be9RLD4EXZg386trUc8+OAs
+   /PGUiQqQSwHpcTxOrssNm3r8QktYLvP6wpyd7YIwS4jxzIClf3rzGiNKX
+   ZEXCPpMlPJg62/qM6FAc0Ggas+RIh3GwxgRjwaD0XJcxeXNXYpzEeANK2
+   giWDLmLlbXjcMZJJZD5YP9tCw/oGlIuMu4/mn5jwOoOwCp5EV+RF6HTlR
+   Q==;
+X-CSE-ConnectionGUID: wYHq7ZDbT6qaU0vAtXvb0g==
+X-CSE-MsgGUID: BMAo3DD6Qr2NZdksxjjRqw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="52362214"
 X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="52362208"
+   d="scan'208";a="52362214"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 17:07:38 -0800
-X-CSE-ConnectionGUID: r1xqzPQjQDKN/mH9hUC9sw==
-X-CSE-MsgGUID: eXxteRbpRmWJOiUTaTDVfg==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 17:07:39 -0800
+X-CSE-ConnectionGUID: 0Kec9owVTN2U+DEYJ1KHNQ==
+X-CSE-MsgGUID: hv8aXUN7T6WRep0eqdL+IA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="147467352"
+   d="scan'208";a="147467355"
 Received: from cbae1-mobl.amr.corp.intel.com (HELO cbae1-mobl.intel.com) ([10.124.166.169])
-  by fmviesa001.fm.intel.com with ESMTP; 25 Feb 2025 17:07:38 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 25 Feb 2025 17:07:39 -0800
 From: "Chang S. Bae" <chang.seok.bae@intel.com>
 To: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
@@ -68,9 +68,9 @@ Cc: x86@kernel.org,
 	dave.hansen@linux.intel.com,
 	shuah@kernel.org,
 	chang.seok.bae@intel.com
-Subject: [PATCH 5/9] selftests/x86/xstate: Refactor ptrace ABI test
-Date: Tue, 25 Feb 2025 17:07:25 -0800
-Message-ID: <20250226010731.2456-6-chang.seok.bae@intel.com>
+Subject: [PATCH 6/9] selftests/x86/xstate: Introduce signal ABI test
+Date: Tue, 25 Feb 2025 17:07:26 -0800
+Message-ID: <20250226010731.2456-7-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250226010731.2456-1-chang.seok.bae@intel.com>
 References: <20250226010731.2456-1-chang.seok.bae@intel.com>
@@ -82,350 +82,190 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Following the refactor of the context switching test, the ptrace test is
-another component reusable for other xstate features. As part of this
-restructuring, add a missing check to validate the
-user_xstateregs->xstate_fx_sw field in the ABI.
+With the refactored test cases, another xstate exposure to userspace is
+through signal delivery. While amx.c includes signal-related scenarios,
+its primary focus is on xstate permission management, which is largely
+specific to dynamic states.
 
-Also, replace err() and fatal_error() with ksft_exit_fail_msg() for
-consistency in error handling.
+The remaining gap is testing xstate preservation and restoration across
+signal delivery. The kernel defines an ABI for presenting xstate in the
+signal frame, closely resembling the hardware XSAVE format, where xstate
+modification is also possible.
+
+Introduce a new test case to verify xstate preservation across signal
+delivery and return, that is ensuring ABI compatibility by:
+
+- Loading xstate before raising a signal.
+- Verifying correct exposure in the signal frame
+- Modifying xstate in the signal frame before returning.
+- Checking the state restoration upon signal return.
+
+Integrate this test into the AMX test suite as an initial usage site.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 ---
-Expected out:
+Expected output:
 $ amx_64
 ...
-[RUN]   AMX Tile data: inject xstate via ptrace().
-[OK]    'xfeatures' in SW reserved area was correctly written
-[OK]    xstate was correctly updated.
+[RUN]   AMX Tile data: load xstate and raise SIGUSR1
+[OK]    'magic1' is valid
+[OK]    'xfeatures' in SW reserved area is valid
+[OK]    'xfeatures' in XSAVE header is valid
+[OK]    xstate delivery was successful
+[OK]    'magic2' is valid
+[RUN]   AMX Tile data: load new xstate from sighandler and check it after sigreturn
+[OK]    xstate was restored correctly
 ---
- tools/testing/selftests/x86/amx.c    | 108 +---------------------
- tools/testing/selftests/x86/xstate.c | 129 +++++++++++++++++++++++++++
+ tools/testing/selftests/x86/amx.c    |   2 +
+ tools/testing/selftests/x86/xstate.c | 108 +++++++++++++++++++++++++++
  tools/testing/selftests/x86/xstate.h |   1 +
- 3 files changed, 131 insertions(+), 107 deletions(-)
+ 3 files changed, 111 insertions(+)
 
 diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index b3c51dd25abc..4bafbb72aa1b 100644
+index 4bafbb72aa1b..9cb691d67ef4 100644
 --- a/tools/testing/selftests/x86/amx.c
 +++ b/tools/testing/selftests/x86/amx.c
-@@ -13,10 +13,8 @@
- #include <sys/auxv.h>
- #include <sys/mman.h>
- #include <sys/shm.h>
--#include <sys/ptrace.h>
- #include <sys/syscall.h>
- #include <sys/wait.h>
--#include <sys/uio.h>
+@@ -510,6 +510,8 @@ int main(void)
  
- #include "helpers.h"
- #include "xstate.h"
-@@ -32,8 +30,6 @@
- #define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
- #define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
+ 	test_ptrace(XFEATURE_XTILEDATA);
  
--static uint32_t xbuf_size;
--
- struct xstate_info xtiledata;
- 
- /* The helpers for managing XSAVE buffer and tile states: */
-@@ -154,13 +150,6 @@ static inline bool load_rand_tiledata(struct xsave_buffer *xbuf)
- 	return xrstor_safe(xbuf, XFEATURE_MASK_XTILEDATA);
- }
- 
--/* Return XTILEDATA to its initial configuration. */
--static inline void init_xtiledata(void)
--{
--	clear_xstate_header(stashed_xsave);
--	xrstor_safe(stashed_xsave, XFEATURE_MASK_XTILEDATA);
--}
--
- enum expected_result { FAIL_EXPECTED, SUCCESS_EXPECTED };
- 
- /* arch_prctl() and sigaltstack() test */
-@@ -489,99 +478,6 @@ static void test_fork(void)
- 	_exit(0);
- }
- 
--/* Ptrace test */
--
--/*
-- * Make sure the ptracee has the expanded kernel buffer on the first
-- * use. Then, initialize the state before performing the state
-- * injection from the ptracer.
-- */
--static inline void ptracee_firstuse_tiledata(void)
--{
--	load_rand_tiledata(stashed_xsave);
--	init_xtiledata();
--}
--
--/*
-- * Ptracer injects the randomized tile data state. It also reads
-- * before and after that, which will execute the kernel's state copy
-- * functions. So, the tester is advised to double-check any emitted
-- * kernel messages.
-- */
--static void ptracer_inject_tiledata(pid_t target)
--{
--	struct xsave_buffer *xbuf;
--	struct iovec iov;
--
--	xbuf = alloc_xbuf();
--	if (!xbuf)
--		fatal_error("unable to allocate XSAVE buffer");
--
--	printf("\tRead the init'ed tiledata via ptrace().\n");
--
--	iov.iov_base = xbuf;
--	iov.iov_len = xbuf_size;
--
--	memset(stashed_xsave, 0, xbuf_size);
--
--	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
--		fatal_error("PTRACE_GETREGSET");
--
--	if (!__compare_tiledata_state(stashed_xsave, xbuf))
--		printf("[OK]\tThe init'ed tiledata was read from ptracee.\n");
--	else
--		printf("[FAIL]\tThe init'ed tiledata was not read from ptracee.\n");
--
--	printf("\tInject tiledata via ptrace().\n");
--
--	load_rand_tiledata(xbuf);
--
--	memcpy(&stashed_xsave->bytes[xtiledata.xbuf_offset],
--	       &xbuf->bytes[xtiledata.xbuf_offset],
--	       xtiledata.size);
--
--	if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
--		fatal_error("PTRACE_SETREGSET");
--
--	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
--		fatal_error("PTRACE_GETREGSET");
--
--	if (!__compare_tiledata_state(stashed_xsave, xbuf))
--		printf("[OK]\tTiledata was correctly written to ptracee.\n");
--	else
--		printf("[FAIL]\tTiledata was not correctly written to ptracee.\n");
--}
--
--static void test_ptrace(void)
--{
--	pid_t child;
--	int status;
--
--	child = fork();
--	if (child < 0) {
--		err(1, "fork");
--	} else if (!child) {
--		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
--			err(1, "PTRACE_TRACEME");
--
--		ptracee_firstuse_tiledata();
--
--		raise(SIGTRAP);
--		_exit(0);
--	}
--
--	do {
--		wait(&status);
--	} while (WSTOPSIG(status) != SIGTRAP);
--
--	ptracer_inject_tiledata(child);
--
--	ptrace(PTRACE_DETACH, child, NULL, NULL);
--	wait(&status);
--	if (!WIFEXITED(status) || WEXITSTATUS(status))
--		err(1, "ptrace test");
--}
--
- int main(void)
- {
- 	const unsigned int ctxtsw_num_threads = 5, ctxtsw_iterations = 10;
-@@ -594,8 +490,6 @@ int main(void)
- 		return KSFT_SKIP;
- 	}
- 
--	xbuf_size = get_xbuf_size();
--
- 	xtiledata = get_xstate_info(XFEATURE_XTILEDATA);
- 	if (!xtiledata.size || !xtiledata.xbuf_offset) {
- 		fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
-@@ -614,7 +508,7 @@ int main(void)
- 
- 	test_context_switch(XFEATURE_XTILEDATA, ctxtsw_num_threads, ctxtsw_iterations);
- 
--	test_ptrace();
-+	test_ptrace(XFEATURE_XTILEDATA);
- 
++	test_signal(XFEATURE_XTILEDATA);
++
  	clearhandler(SIGILL);
  	free_stashed_xsave();
+ 
 diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-index e5b51e7d13e1..d318b35ba547 100644
+index d318b35ba547..b5600f492632 100644
 --- a/tools/testing/selftests/x86/xstate.c
 +++ b/tools/testing/selftests/x86/xstate.c
-@@ -2,12 +2,25 @@
+@@ -21,6 +21,11 @@ static inline uint64_t xgetbv(uint32_t index)
+ 	return eax + ((uint64_t)edx << 32);
+ }
  
- #define _GNU_SOURCE
- 
-+#include <elf.h>
- #include <pthread.h>
- #include <stdbool.h>
- 
-+#include <sys/ptrace.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+
- #include "helpers.h"
- #include "xstate.h"
- 
-+static inline uint64_t xgetbv(uint32_t index)
++static inline uint64_t get_xstatebv(struct xsave_buffer *xbuf)
 +{
-+	uint32_t eax, edx;
-+
-+	asm volatile("xgetbv" : "=a" (eax), "=d" (edx) : "c" (index));
-+	return eax + ((uint64_t)edx << 32);
++	return *(uint64_t *)(&xbuf->header);
 +}
 +
  static struct xstate_info xstate;
  
  struct futex_info {
-@@ -27,6 +40,19 @@ static inline void load_rand_xstate(struct xstate_info *xstate, struct xsave_buf
- 	xrstor(xbuf, xstate->mask);
- }
- 
-+static inline void load_init_xstate(struct xstate_info *xstate, struct xsave_buffer *xbuf)
-+{
-+	clear_xstate_header(xbuf);
-+	xrstor(xbuf, xstate->mask);
-+}
-+
-+static inline void copy_xstate(struct xsave_buffer *xbuf_dst, struct xsave_buffer *xbuf_src)
-+{
-+	memcpy(&xbuf_dst->bytes[xstate.xbuf_offset],
-+	       &xbuf_src->bytes[xstate.xbuf_offset],
-+	       xstate.size);
-+}
-+
- static inline bool validate_xstate_same(struct xsave_buffer *xbuf1, struct xsave_buffer *xbuf2)
- {
- 	int ret;
-@@ -196,3 +222,106 @@ void test_context_switch(uint32_t feature_num, uint32_t num_threads, uint32_t it
- 
- 	free(finfo);
+@@ -325,3 +330,106 @@ void test_ptrace(uint32_t feature_num)
+ 	if (!WIFEXITED(status) || WEXITSTATUS(status))
+ 		ksft_exit_fail_msg("ptracee exit error\n");
  }
 +
 +/*
-+ * Ptrace test for the ABI format as described in arch/x86/include/asm/user.h
++ * Test signal delivery for the ABI compatibility.
++ * See the ABI format: arch/x86/include/uapi/asm/sigcontext.h
 + */
 +
 +/*
-+ * Make sure the ptracee has the expanded kernel buffer on the first use.
-+ * Then, initialize the state before performing the state injection from
-+ * the ptracer. For non-dynamic states, this is benign.
++ * Avoid using printf() in signal handlers as it is not
++ * async-signal-safe.
 + */
-+static inline void ptracee_touch_xstate(void)
++#define SIGNAL_BUF_LEN 1000
++static char signal_message_buffer[SIGNAL_BUF_LEN];
++static void sig_print(char *msg)
 +{
-+	struct xsave_buffer *xbuf;
++	int left = SIGNAL_BUF_LEN - strlen(signal_message_buffer) - 1;
 +
-+	xbuf = alloc_xbuf();
-+
-+	load_rand_xstate(&xstate, xbuf);
-+	load_init_xstate(&xstate, xbuf);
-+
-+	free(xbuf);
++	strncat(signal_message_buffer, msg, left);
 +}
 +
-+/*
-+ * Ptracer injects the randomized xstate data. It also reads before and
-+ * after that, which will execute the kernel's state copy functions.
-+ */
-+static void ptracer_inject_xstate(pid_t target)
++static struct xsave_buffer *stashed_xbuf;
++
++static void validate_sigfpstate(int sig, siginfo_t *si, void *ctx_void)
 +{
-+	uint32_t xbuf_size = get_xbuf_size();
-+	struct xsave_buffer *xbuf1, *xbuf2;
-+	struct iovec iov;
++	ucontext_t *ctx = (ucontext_t *)ctx_void;
++	void *xbuf = ctx->uc_mcontext.fpregs;
++	struct _fpx_sw_bytes *sw_bytes;
++	uint32_t magic2;
 +
-+	/*
-+	 * Allocate buffers to keep data while ptracer can write the
-+	 * other buffer
-+	 */
-+	xbuf1 = alloc_xbuf();
-+	xbuf2 = alloc_xbuf();
-+	if (!xbuf1 || !xbuf2)
-+		ksft_exit_fail_msg("unable to allocate XSAVE buffer\n");
++	/* Reset the signal message buffer: */
++	signal_message_buffer[0] = '\0';
 +
-+	iov.iov_base = xbuf1;
-+	iov.iov_len  = xbuf_size;
-+
-+	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-+		ksft_exit_fail_msg("PTRACE_GETREGSET failed\n");
-+
-+	printf("[RUN]\t%s: inject xstate via ptrace().\n", xstate.name);
-+
-+	load_rand_xstate(&xstate, xbuf1);
-+	copy_xstate(xbuf2, xbuf1);
-+
-+	if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-+		ksft_exit_fail_msg("PTRACE_SETREGSET failed\n");
-+
-+	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-+		ksft_exit_fail_msg("PTRACE_GETREGSET failed\n");
-+
-+	if (*(uint64_t *)get_fpx_sw_bytes(xbuf1) == xgetbv(0))
-+		printf("[OK]\t'xfeatures' in SW reserved area was correctly written\n");
++	sw_bytes = get_fpx_sw_bytes(xbuf);
++	if (sw_bytes->magic1 == FP_XSTATE_MAGIC1)
++		sig_print("[OK]\t'magic1' is valid\n");
 +	else
-+		printf("[FAIL]\t'xfeatures' in SW reserved area was not correctly written\n");
++		sig_print("[FAIL]\t'magic1' is not valid\n");
 +
-+	if (validate_xstate_same(xbuf2, xbuf1))
-+		printf("[OK]\txstate was correctly updated.\n");
++	if (get_fpx_sw_bytes_features(xbuf) & xstate.mask)
++		sig_print("[OK]\t'xfeatures' in SW reserved area is valid\n");
 +	else
-+		printf("[FAIL]\txstate was not correctly updated.\n");
++		sig_print("[FAIL]\t'xfeatures' in SW reserved area is not valid\n");
 +
-+	free(xbuf1);
-+	free(xbuf2);
++	if (get_xstatebv(xbuf) & xstate.mask)
++		sig_print("[OK]\t'xfeatures' in XSAVE header is valid\n");
++	else
++		sig_print("[FAIL]\t'xfeatures' in XSAVE hader is not valid\n");
++
++	if (validate_xstate_same(stashed_xbuf, xbuf))
++		sig_print("[OK]\txstate delivery was successful\n");
++	else
++		sig_print("[FAIL]\txstate delivery was not successful\n");
++
++	magic2 = *(uint32_t *)(xbuf + sw_bytes->xstate_size);
++	if (magic2 == FP_XSTATE_MAGIC2)
++		sig_print("[OK]\t'magic2' is valid\n");
++	else
++		sig_print("[FAIL]\t'magic2' is not valid\n");
++
++	set_rand_data(&xstate, xbuf);
++	copy_xstate(stashed_xbuf, xbuf);
 +}
 +
-+void test_ptrace(uint32_t feature_num)
++void test_signal(uint32_t feature_num)
 +{
-+	pid_t child;
-+	int status;
++	bool valid_xstate;
 +
 +	xstate = get_xstate_info(feature_num);
 +
-+	child = fork();
-+	if (child < 0) {
-+		ksft_exit_fail_msg("fork() failed\n");
-+	} else if (!child) {
-+		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+			ksft_exit_fail_msg("PTRACE_TRACEME failed\n");
++	/*
++	 * The signal handler will access this to verify xstate context
++	 * preservation.
++	 */
 +
-+		ptracee_touch_xstate();
++	stashed_xbuf = alloc_xbuf();
++	if (!stashed_xbuf)
++		ksft_exit_fail_msg("unable to allocate XSAVE buffer\n");
 +
-+		raise(SIGTRAP);
-+		_exit(0);
-+	}
++	printf("[RUN]\t%s: load xstate and raise SIGUSR1\n", xstate.name);
 +
-+	do {
-+		wait(&status);
-+	} while (WSTOPSIG(status) != SIGTRAP);
++	sethandler(SIGUSR1, validate_sigfpstate, 0);
 +
-+	ptracer_inject_xstate(child);
++	load_rand_xstate(&xstate, stashed_xbuf);
 +
-+	ptrace(PTRACE_DETACH, child, NULL, NULL);
-+	wait(&status);
-+	if (!WIFEXITED(status) || WEXITSTATUS(status))
-+		ksft_exit_fail_msg("ptracee exit error\n");
++	raise(SIGUSR1);
++
++	/*
++	 * Immediately record the test result, deferring printf() to
++	 * prevent unintended state contamination by that.
++	 */
++	valid_xstate = validate_xregs_same(stashed_xbuf);
++	printf("%s", signal_message_buffer);
++
++	printf("[RUN]\t%s: load new xstate from sighandler and check it after sigreturn\n",
++	       xstate.name);
++
++	if (valid_xstate)
++		printf("[OK]\txstate was restored correctly\n");
++	else
++		printf("[FAIL]\txstate restoration failed\n");
++
++	clearhandler(SIGUSR1);
++	free(stashed_xbuf);
 +}
 diff --git a/tools/testing/selftests/x86/xstate.h b/tools/testing/selftests/x86/xstate.h
-index 5ef66f247eb9..2bf11d3a3ce9 100644
+index 2bf11d3a3ce9..4d0ffe9609f8 100644
 --- a/tools/testing/selftests/x86/xstate.h
 +++ b/tools/testing/selftests/x86/xstate.h
-@@ -190,5 +190,6 @@ static inline void set_rand_data(struct xstate_info *xstate, struct xsave_buffer
- }
+@@ -191,5 +191,6 @@ static inline void set_rand_data(struct xstate_info *xstate, struct xsave_buffer
  
  void test_context_switch(uint32_t feature_num, uint32_t num_threads, uint32_t iterations);
-+void test_ptrace(uint32_t feature_num);
+ void test_ptrace(uint32_t feature_num);
++void test_signal(uint32_t feature_num);
  
  #endif /* __SELFTESTS_X86_XSTATE_H */
 -- 
