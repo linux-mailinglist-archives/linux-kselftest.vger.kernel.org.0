@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-27595-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E052AA45D7B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:46:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D796A45D7A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:46:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D9C218917AC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:46:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FBEE171CC3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA7F21C194;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F54F21C19F;
 	Wed, 26 Feb 2025 11:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CGbWN4J9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bhuZL5sz"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nasqugvG";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CWmvpnCr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A98421A438;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8E521A436;
 	Wed, 26 Feb 2025 11:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570318; cv=none; b=s5Gdmxl46hQ1E+KZwuTS2o/kJ3Iyjy23ikFfogiwOOWFT01Da4XWrs2sSFnSRiUBkRD9flvXtySmgsHX7oh3ZR9/tm8eIsLmYQnaZpB/UtiX8nT2hmP8Po3a/nUFH5GU8gdNfUKKQS/ETKLuuYZdeOR5nWFhbdKyyOJPTdQaa2g=
+	t=1740570318; cv=none; b=hI64Fr8mEZ4d5fyinH7jG8TrST5yIT07wtzZf3f9NHDnJusiSXb08CFeyfhMgQgOBWrd5iry4+gzYPikHxu3mGj3RR2udzwBIjRHYDDJWdd3lcl+rIYxRRhOgLuJtd9Qyd0PI7IG1SNepvhAVvSfTtp1/OV3F9aEOrKwIgHa2hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740570318; c=relaxed/simple;
-	bh=2r9nJga0gN/RLQi1JecZ+vj+TP6CqTjTd0CFYa5Ukqk=;
+	bh=C3WrIXo4pF6mfQdzvKKu1BjqdXgy4M3jnZi0dZUjrCw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=svr0RSh5BMEGWQlyOgoPmh0oqx+ptbGEIehJqXEi0Z/R/XBqN6pXQN5CbI4FDofOaGp57hjHZRN9W18dhl1YWD372UuPXmvql9qYbaRGD4nT2agOEd5JJbiVyWbfv6aH5DMvOXWag9jedScIhCK47DFvmUoV57aeMH1L65HLE3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CGbWN4J9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bhuZL5sz; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=m4d/2kd79LUa5PArcFqn30DpG5VzR92EhK93My06+I+Pki3I1UZIVrhM3NYPGz0w5VQkK1f0iMffxdeW0D7c+2WAdNLpuTThiFyVDnD8VqBWJ2k3TrhW5FHkwnGTX7vcUfmC9aB6IGFKYaCdm1GhOS4Q01HTvQsTIUH+U9AiVLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nasqugvG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CWmvpnCr; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+tIB/mKrbgkR1FZXRW2I7qFNU+LB59/l0MfkLrZgBDg=;
-	b=CGbWN4J9YC9gQ8VFg1RJ3j0QwS6+MDp5+Vg1d0K6/xdUSk8P/5jVl4lkjzjYeg21Ln2oPc
-	NRXcQIZIMdiVDpEafvYjyLG/0FbBTHyR1Qywp0XTlu4TgIjzJGBdWCJy+q6e2qR03dLHR2
-	qIVm5mobIHK3AuxVd0RGLCSqqxuHy9Mnu79eP5TkQ3YjiSLl7t8S/PONktXMtxRh8Sxjy4
-	utFqh7lW66yJAWy5kT/08Uq0PEAehK4rl7s+1HipYyU47H8CdJNCIxFU2HVBlzXmioHPea
-	kyNhxm7uOrHkd4OwbXT85jkwWFGGEi8MpL9R7AszlAK6DEhg3uqwUIOsRZXHqg==
+	bh=cRuD5hbVHSSw/8cljIctKIY+Y3ZkYhQFJxv3Eq1eG8c=;
+	b=nasqugvGFKackdKOCTch+AP72kWRqEucxypuXDsMds9gPwL8RK61E3IAURJfFRwVz6qCFV
+	borLyAg+H0LG9tWwXNBlUwuDFwYZPS4sMuMxBeAx6ObJr9TGjNFDhtRAWyulzmylyhWtwJ
+	P723Y+vsU/GF2dTuLScSrd42stge6MnfiMB8FerpsLUDR/zDnvtjIEmaOYfykQmjZqPh6N
+	9J2wj71O+zBQnyIXpq2/C7y6QezLH5rhiXHdkKjY0lULjTCFb6/K4L75NxQ/9D4sys6/zp
+	nDlUnoAgYdIMx/DPTHflxDyqMuOQYiBxugcpuMRiDOgqbdn4WR2SX8G87j/Qbg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1740570314;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+tIB/mKrbgkR1FZXRW2I7qFNU+LB59/l0MfkLrZgBDg=;
-	b=bhuZL5sznPwFLNCRTYT+wLH304bB/beR5NLTZXOoHPC1GpGXUdMA3ElesLimSaaplKYvoh
-	/8ilpqRBW8p6ieCA==
-Date: Wed, 26 Feb 2025 12:44:48 +0100
-Subject: [PATCH v2 09/16] tools/nolibc: add limits.h shim header
+	bh=cRuD5hbVHSSw/8cljIctKIY+Y3ZkYhQFJxv3Eq1eG8c=;
+	b=CWmvpnCrI4ggnNzOB2bFK5VZej2qGU4p7haIEM0fQFYcPsUdGJejZoOoBmHUpDnIp5RS2p
+	vfN2Hj/oogOEL1BA==
+Date: Wed, 26 Feb 2025 12:44:49 +0100
+Subject: [PATCH v2 10/16] selftests: vDSO: vdso_standalone_test_x86: Use
+ vdso_init_form_sysinfo_ehdr
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250226-parse_vdso-nolibc-v2-9-28e14e031ed8@linutronix.de>
+Message-Id: <20250226-parse_vdso-nolibc-v2-10-28e14e031ed8@linutronix.de>
 References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 In-Reply-To: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
@@ -79,51 +80,82 @@ Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  llvm@lists.linux.dev, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=1273;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=1895;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=2r9nJga0gN/RLQi1JecZ+vj+TP6CqTjTd0CFYa5Ukqk=;
- b=UR2y1fGcblPNg0O5kcvnoNHTSKtyj3XWN7IytHuyCM71JEFzSt2H5e99rPFC0rsb8HCCsc+cq
- XvTFkUQ6lAbASxWR1nevyAGKs9n+hfYs1eH3HfjincxtnoNj0Zj8bNC
+ bh=C3WrIXo4pF6mfQdzvKKu1BjqdXgy4M3jnZi0dZUjrCw=;
+ b=eQDHEgBbcQlTMN155d79X04vEswgzq72yKppWr5aBDgxbIbLYxd/IvNp2Y1YQ9/fNaQ7z11QT
+ DAUfoLznQjjCZKLGqX216kBJX2mCS9MUbVbIRKbqrvmzEqOe0Ab+zYq
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-limits.h is a widely used standard header.
-Missing it from nolibc requires adoption effort to port applications.
+vdso_standalone_test_x86 is the only user of vdso_init_from_auxv().
+Instead of combining the parsing the aux vector with the parsing of the
+vDSO, split them apart into getauxval() and the regular
+vdso_init_from_sysinfo_ehdr().
 
-Add a shim header which includes the global nolibc.h header.
-It makes all nolibc symbols available.
+The implementation of getauxval() is taken from
+tools/include/nolibc/stdlib.h.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/include/nolibc/Makefile | 1 +
- tools/include/nolibc/limits.h | 7 +++++++
- 2 files changed, 8 insertions(+)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index a1f55fb24bb38c1f49c653af5825e8bcc569a56d..c1299a053145786da89001a5f95f5527ffbe2fa4 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -30,6 +30,7 @@ all_files := \
- 		crt.h \
- 		ctype.h \
- 		errno.h \
-+		limits.h \
- 		nolibc.h \
- 		signal.h \
- 		stackprotector.h \
-diff --git a/tools/include/nolibc/limits.h b/tools/include/nolibc/limits.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..306d4141f4d245ca3f801f451745540b0f7294cd
---- /dev/null
-+++ b/tools/include/nolibc/limits.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Shim limits.h header for NOLIBC.
-+ * Copyright (C) 2025 Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-+ */
+---
+All of this code will be deleted later again.
+---
+ .../selftests/vDSO/vdso_standalone_test_x86.c      | 27 +++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+index 644915862af8883131e5defd336f1bd80736fc0f..500608f89c66b5747e3d845ebc54e4c3a35b6ccd 100644
+--- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
++++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+@@ -15,6 +15,7 @@
+ #include <sys/time.h>
+ #include <unistd.h>
+ #include <stdint.h>
++#include <linux/auxvec.h>
+ 
+ #include "parse_vdso.h"
+ 
+@@ -84,6 +85,30 @@ void to_base10(char *lastdig, time_t n)
+ 	}
+ }
+ 
++unsigned long getauxval(const unsigned long *auxv, unsigned long type)
++{
++	unsigned long ret;
 +
-+#include "nolibc.h"
++	if (!auxv)
++		return 0;
++
++	while (1) {
++		if (!auxv[0] && !auxv[1]) {
++			ret = 0;
++			break;
++		}
++
++		if (auxv[0] == type) {
++			ret = auxv[1];
++			break;
++		}
++
++		auxv += 2;
++	}
++
++	return ret;
++}
++
+ void c_main(void **stack)
+ {
+ 	/* Parse the stack */
+@@ -96,7 +121,7 @@ void c_main(void **stack)
+ 	stack++;
+ 
+ 	/* Now we're pointing at auxv.  Initialize the vDSO parser. */
+-	vdso_init_from_auxv((void *)stack);
++	vdso_init_from_sysinfo_ehdr(getauxval((unsigned long *)stack, AT_SYSINFO_EHDR));
+ 
+ 	/* Find gettimeofday. */
+ 	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
 
 -- 
 2.48.1
