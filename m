@@ -1,259 +1,192 @@
-Return-Path: <linux-kselftest+bounces-27634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46123A467A9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 18:14:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54C4FA4682A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 18:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 389D53A28D6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 17:14:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE0EA1884B07
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 17:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3C6224898;
-	Wed, 26 Feb 2025 17:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC704224B15;
+	Wed, 26 Feb 2025 17:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="shkujR8w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2089.outbound.protection.outlook.com [40.107.237.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E46192D63;
-	Wed, 26 Feb 2025 17:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740590085; cv=none; b=TG4Kcg27FxpIRuGuJZbtZXyATXor00G7d8+tE7+kDYB8ElEXjzzJTYShAYNp+1+9xHOxsYwKPWhzoXUvOJ1xrY0iNU+AF4ucOcvdISTSe6ulcLKWx/OiueCeZHxMroGxdAc/7SYsn7lPiuyjg16UlWq0CW7uyi5hqg/ZVFIkRKE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740590085; c=relaxed/simple;
-	bh=KxFN3aNE7TxRGAXyhYwm0L9K2okbb+lZv7kvdmTMwlw=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=TaoMBIn1HBnopVnntjq+8fJJ2qQRvNSIAKNZSERXrWjhJ+/eiX6H3uwESy4kFiebWUJpiyzE9z+bAE8Rksl0KKF7xUg3r4WV7kUYXx3PZTD8zq6czCO7w/U6tFP4uZUXofK0aiRImEBJPoEcdD9cz+q0OlBGe82mf0HHtgnbmg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnKzE-000Kjt-53; Wed, 26 Feb 2025 18:14:20 +0100
-Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnKzE-000CxP-0Q;
-	Wed, 26 Feb 2025 18:14:19 +0100
-Message-ID: <c2fc1cc2-b0e4-40de-9f0c-0e383c0fe1b3@hetzner-cloud.de>
-Date: Wed, 26 Feb 2025 18:14:18 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0451E1E1A;
+	Wed, 26 Feb 2025 17:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740591378; cv=fail; b=EXltJg+SPSRn/L5cpkHaao2R4DoWZpLCBsCduIl8ZQby1NYpf2BSY78lAoeC/f+p9lxMLDNa0eOezC9aNp3J7/flUBsh6B+wZxUdcqblqTJhwVUCXT92FkhfEZheby0Zi6PmDyprzkteQO2rZzRj86+HEcuEEDqQr7qpZKuYNB4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740591378; c=relaxed/simple;
+	bh=0Bl3Iqp8C8XUhaBpNI5QmNIwyK87UbxaEak5pZShxdw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YthmsYD7gn1IRO8q5Kz4vauZ9gkdLcya4BBnk/9TdIqhoOaDYJ4pzWsdfgXMSsRpq8EBw/RJkTZedWfyJB3rt+4CmlP4A7172MzBnZ7OVgaampB0+6rKruLef9cD+JzxXBZBdV0RTkZ0ogMePNKFurocnRJTtjbkQjZk9HxHzz0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=shkujR8w; arc=fail smtp.client-ip=40.107.237.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EtGB9PIi1ZmxNUDPp0yrAceIwSmUuc+1IA+H5vSwYVBxH6LBc25ia8PwuJpRZe2d+zFtE9SqbfMWtF1b4Uy8TEVETkLNUP1LNocET3Vk0U7YUSc8s0scD4Lw6M0ZfRRGwqBJmpZ+UGWJpxV6W2YW0X1rhHDnvfiLRPvJ0A2gQhWwXJsCV47sp8n+tIDRwTv+IfYcUZuvafTTdI/ObmDK0+6mOskzpFn8zaqurGa/MrEtlpc3WfPaS+erk56sst4303MY6M/CbKJRhdu8E2lSsXDG6jquEk3yZmcpminBMLPEVt5jtuNiqb1jNCZ67PT7NbFZbdXM4m6KKowzuzZa4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/dJhByED9KmeAfa8cQOEyTQUL3lqj2ilupRNu5JsX0o=;
+ b=VPjfJngKalgVyIyJE/+m0AvCMl3kugehCko81jihMlboOHpr8UbLetIgXZQp6+vK3c9U8xKDKWQGbGxWmyIhsT4R5QmWo5DazrN83vj3HYv3GLuIu84Q5JaMlQ1991yb4a0TGwAk6KBPpB84IZkIwu6tMIjTU0cRRkG+oLxjq2AZcI44tdfXFyG3EaG80izcqHE0rxAr5IrlLok4PgYyevTmPJfR7VqQHAIxlcv3Yy8yFNdykZvYGQvYSdp6R+GxSuD2BBEoLc1MuIg3ctMb29rDzUxZTd7TpiKJ+gm8pOKuaHDEHNybb1LBFuyUilMZRgCKk20qDw/CXr8oCpa+9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/dJhByED9KmeAfa8cQOEyTQUL3lqj2ilupRNu5JsX0o=;
+ b=shkujR8w3L/6/VU673vWwODCBnZ0TKO0oxE0ljGM90Gx4GGV3j/7iyqxUTvTv9YJjrUWSBi0EFbqpS9ficiJTw7Rwgv5RmNRbpGvFultLFAleHMHuUi/pzLjqRgNCT5yACNXMUj47qWdus3tkHAKc7/32WBfZqBpM+EMLh/Ic3wnwQtG9SQjN3RjWBHiosrC8MAuF932OsG3SeEXB87wrTcuNtHbqSsywq+OEopRdk3vEMX6d+rTNMD11A+rLvcN0Mjuq9WUg/vNOBK9ujr4wzxKfv3ongKb9dce9QdEb8Ygzfq8BrI8u5/rMCC3hqiSi6T21wjoS7DrIqwm2huGNA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by MN0PR12MB5762.namprd12.prod.outlook.com (2603:10b6:208:375::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.21; Wed, 26 Feb
+ 2025 17:36:13 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8466.016; Wed, 26 Feb 2025
+ 17:36:12 +0000
+Date: Wed, 26 Feb 2025 13:36:10 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: kevin.tian@intel.com, tglx@linutronix.de, maz@kernel.org,
+	joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+	shuah@kernel.org, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
+	baolu.lu@linux.intel.com, yi.l.liu@intel.com, yury.norov@gmail.com,
+	jacob.pan@linux.microsoft.com, patches@lists.linux.dev
+Subject: Re: [PATCH v2 7/7] iommu: Turn iova_cookie to dma-iommu private
+ pointer
+Message-ID: <20250226173610.GE28425@nvidia.com>
+References: <cover.1740014950.git.nicolinc@nvidia.com>
+ <949e28875e01646feac5c4951b63723579d29b36.1740014950.git.nicolinc@nvidia.com>
+ <20250221143959.GA272220@nvidia.com>
+ <Z757lz6ucDE6Otix@Asurada-Nvidia>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z757lz6ucDE6Otix@Asurada-Nvidia>
+X-ClientProxiedBy: BN9PR03CA0139.namprd03.prod.outlook.com
+ (2603:10b6:408:fe::24) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: jasowang@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
- eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org
-References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
- <67be0cac4d366_25ccfc294e8@willemb.c.googlers.com.notmuch>
-Content-Language: en-US
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
- 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
- wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: refactor
- xdp_context_functional test and bpf program
-In-Reply-To: <67be0cac4d366_25ccfc294e8@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27561/Wed Feb 26 10:36:26 2025)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|MN0PR12MB5762:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6644acf-5a15-4a5b-724f-08dd568c0fea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?tclUH77wq0JGtuqxdLshUyUZ60AwL/avN0TDUMK1zhA8fPWbwkIcYsGhlNTW?=
+ =?us-ascii?Q?esLKx4Sy2Fva9bBvevBam1AH75zOSccYJSPRXT5QtDkT9h4vPnyEAg4HDk+q?=
+ =?us-ascii?Q?Q9V8QPiEcQdqe2r7NHq+CS6B1GsD2Mq2fn95prSeYGrZjzrZioSx7X3r7BF+?=
+ =?us-ascii?Q?M+SYZ0N8v2kr698k88q6GX/UfTRYFjt+KkSP+sBqBqpHxoDpSkOXbRlKT9VQ?=
+ =?us-ascii?Q?248ykMzyDRe3Q561A9FO+NhbfwxTwzmF+phpR7kXd4jCXabImvtncKVIKdYH?=
+ =?us-ascii?Q?zjZDqjEWJFyFwVCGbrVyoNI69uYm5LGOmZtHF7BkeeM2tzEI49NlH/jgWZl7?=
+ =?us-ascii?Q?QpI9gAJZr1Ut1E4UMyBA6SF1Flz8Jwk8ZEw4KdC6uNcBcyZ1cwb0O2ZTENoj?=
+ =?us-ascii?Q?DLEed9j15x8jDWLF0Mfk6VWD8TCIMNecpGdux1rs6+dq9SQ/VSx+UUaw3jdl?=
+ =?us-ascii?Q?Nd1yxRIF1qY6uDaqEjyreTXiaMC45K7QS+kWyaw8HL/58pcwpIfc6zWg8Ow1?=
+ =?us-ascii?Q?UjIEHd2eY82NfM9jOUhq09m8T5R+E0KEAXoO7Cv5NSs7KI6JXSLF4MNzPorm?=
+ =?us-ascii?Q?EsDu75DERPsGMsWHBvd1wi+/2EV9fgoiYPwQ8ZW/VZNeolrTIbN8vg8mxu19?=
+ =?us-ascii?Q?GlcauzRFQn2VyrNvk9YuTnjg4tu3tmmvaESeyrC0GFbyQxwAGBPZfmP0sxqR?=
+ =?us-ascii?Q?exmr+Rm8lqQDWCUKDSrHdR879tYugOHQuGIxJx3Xzohv/pP37BLAZ+y8E0Jf?=
+ =?us-ascii?Q?Ku/r/M12ZMfoXJuyacuji8r8VQqLq3x3aLcFOKN0JZQWW7U/MTu5dPpE6qy/?=
+ =?us-ascii?Q?5rpj7Hw7+PLarQ5gmRHgkJKVL7rtbXtcAsBjx44L4Wyxp8bMU0qAPfQJUpUI?=
+ =?us-ascii?Q?nsidBZsRpnmQA0y9AvwVM+cseCIgX0ly/CPZDt2AqRlUcXyhLwJ0AAm98amu?=
+ =?us-ascii?Q?qbOjwd2zL67ZIIuj4Fj4kdhNPEHfN4jVPVTbN/T19yIgS5yJkbZ7cCIdentW?=
+ =?us-ascii?Q?jee7aPx8VG6y4AAkPpKUqOJmcor7UgkN19oi4KmQQ2cl55QQLhTONgG+42Cu?=
+ =?us-ascii?Q?sH/l6fVEKWk27k15RQ4p2xbLYz8xdhHFlxp23dISIUESk0CCA4aiQ0rJ67an?=
+ =?us-ascii?Q?KC5egv3+C86LK+ID/GcW6jFzHX4IsYhneRf6Dqegps+o5Pp5L/6R6SqpEVAb?=
+ =?us-ascii?Q?Ea5wF7xrkIbMV8iPIlVYI8Oy/YZt0/qnTQfoKk9uCid74QYA5I2n6gIUENzc?=
+ =?us-ascii?Q?yPsUDmWZgj7LpHpjrsi6s/lzgVyFrKeXVgVAShknmOPj8kGZOa2BlEje8WLZ?=
+ =?us-ascii?Q?QQRjyx5ipjtld+wStvluc06u8Iqq3wDyxgICx9ud6RgOzJOoXigdeveQGbTe?=
+ =?us-ascii?Q?/RqJfEmzmGPwPKRDvZGeRGRPuUIX?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?51ACzUF4Bn1uPX4jrcm0ia37PMoIngLep6DKn1cD8flEQblP0CXENR5s4ABX?=
+ =?us-ascii?Q?MviL3BH/9OMSmPh6Wf3lFFvqT6Qrtms+SaT+q64F4FxrKfJepv1934VsiZSC?=
+ =?us-ascii?Q?n11wxeccUU2vYbizq/UGUz7GMR7tcUrkQptWO0qV6x6MKhETq1rEGwcu/9iS?=
+ =?us-ascii?Q?aQruYuWXqZ7S0U2pJBVg83UDDbXUCl+rVFnjhyAniBwObN8NdSXsm0lOAkKk?=
+ =?us-ascii?Q?fCX44vk2BA/pBRUI82QrZ4Eqsb6ZW24q7MjwK/ihjGHhttoE9k6gCmynZ+HJ?=
+ =?us-ascii?Q?TQoxrNSaJntoaZKUweLbqYkc4AoTzkqPUPvheAx66DEFFxZahr7DENt8SR48?=
+ =?us-ascii?Q?9wKefPBKDAim0/eICQwG7XYgfkUnp1SpctA9tQV09Xl8eAWgt3MjsPYNq2MI?=
+ =?us-ascii?Q?Okx7VQjIo+JJGWQzCHY58oW/U3HGGW3nQ2Q0xffh/qGeB7JF2iSKOr2FQIKi?=
+ =?us-ascii?Q?qdhIiZ9FvOQtLaVWJKt9lC1h39U6UsVLmtWYObT8GBX/UytbuV+uFJbTFEYj?=
+ =?us-ascii?Q?gQxsVl+fPlZa7V6hbZIRIxZCJ11unszY64skKs1Jhrly/b5N5sezlbh8Fpdj?=
+ =?us-ascii?Q?gQ3yYfHvgHry1JDwDVPkSejdKqZipIeIAeccJPoHtBDkApYWv1dH3Dqg6ssl?=
+ =?us-ascii?Q?23d9YJAUmn3F3Lk4u3RHAlgMuLcH0g1wA7C5qs/mfh8whPPRxjBE2uykRK9c?=
+ =?us-ascii?Q?FSuTiIHJ+AW+Dt0asbkbj/5WKurHJ3FoY/Wd6X/IBtEgZXun47Zur8DG5bkM?=
+ =?us-ascii?Q?FoBNlzE0MSJcbBu2naXLAu3szXMAjFbyEl1GOIh4RM2EMwvzW/hxvo2Qfmh+?=
+ =?us-ascii?Q?2QMbZCK//11CfUuoDALU3S7Sauljf4YDLhyOS8swm0H4RlkkzgAuQ+Ud4JTi?=
+ =?us-ascii?Q?b6PMzd1xOsJQFCHL/tMupusRr1oCYFtEFRNdPd429yjbWI7v9u/jWfdJrfNR?=
+ =?us-ascii?Q?xrq+Hcpnn2x3dIsth0RHt/QJXS75jX2LhMSsapcZaGHyQesHpadUwoEhHYaA?=
+ =?us-ascii?Q?yDud6D22teZAqp8wm0zVB79X8JUCp/zr/WTNX+qT1AXN5Nweto5JY90K08o6?=
+ =?us-ascii?Q?HpKPSilPqaA2CemIYtenTF0yihZSUCuF7tDMemPO4le7FLb1qd2g2yktQtfs?=
+ =?us-ascii?Q?XnyP06yStV6gYGWLlHryAGcvzLLHdnrR4Rhhox0k7rX8JuAW49Ue0yAWSPz8?=
+ =?us-ascii?Q?yHaCPa60XSld1TC77wO8JyA3oE1wcRqgGUFB2vYSl7BWNOptmyQGMsoAdOAU?=
+ =?us-ascii?Q?wWL1rlsRnJ+c1JHvHa5h3uFLhN+aIBLQQZ12QmcH+GNiIK/N0QGtkt9FNWoj?=
+ =?us-ascii?Q?AGmp27/VxGDi9DLHBPX+F5g8WSF0C9h7CcAQUGKQBsk6ZoCY4+ZShrcwcpiT?=
+ =?us-ascii?Q?PbAXoQx67DPj6fD1+QBrd+m7u5DfnXvpEMDYp+2uuXQS66bNgDrFs4d6K84P?=
+ =?us-ascii?Q?ekFlhZoQlKUzqn92hjUCEt56Wu3Ow9jplp1Yl4yePFN+CcxlcOJ+bbvvw6Zq?=
+ =?us-ascii?Q?+sFSAwxP9YwMTRk9uZ6Y28aLKwolG5XrEb4+rez0fU4oXbGv4NDDWtk0TDJB?=
+ =?us-ascii?Q?IIyxKJtIDvlqjuOTXjrgMk9Qb2jFxvrMIOUIECwz?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6644acf-5a15-4a5b-724f-08dd568c0fea
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 17:36:12.0949
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZlaaHI8f/4WltJsliUTuAiHjM/mz0UliRglQ2hESHWvDvS17axBV6uRtBQlp3Ux+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5762
 
-Am 25.02.25 um 19:32 schrieb Willem de Bruijn:
-> Marcus Wichelmann wrote:
->> The existing XDP metadata test works by creating a veth pair and
->> attaching XDP & TC programs that drop the packet when the condition of
->> the test isn't fulfilled. The test then pings through the veth pair and
->> succeeds when the ping comes through.
->>
->> While this test works great for a veth pair, it is hard to replicate for
->> tap devices to test the XDP metadata support of them. A similar test for
->> the tun driver would either involve logic to reply to the ping request,
->> or would have to capture the packet to check if it was dropped or not.
->>
->> To make the testing of other drivers easier while still maximizing code
->> reuse, this commit refactors the existing xdp_context_functional test to
->> use a test_result map. Instead of conditionally passing or dropping the
->> packet, the TC program is changed to copy the received metadata into the
->> value of that single-entry array map. Tests can then verify that the map
->> value matches the expectation.
->>
->> This testing logic is easy to adapt to other network drivers as the only
->> remaining requirement is that there is some way to send a custom
->> Ethernet packet through it that triggers the XDP & TC programs.
->>
->> The payload of the Ethernet packet is used as the test data that is
->> expected to be passed as metadata from the XDP to the TC program and
->> written to the map. It has a fixed size of 32 bytes which is a
->> reasonalbe size that should be supported by both drivers. Additional
->> packet headers are not necessary for the test and were therefore skipped
->> to keep the testing code short.
->>
->> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+On Tue, Feb 25, 2025 at 06:25:27PM -0800, Nicolin Chen wrote:
+> On Fri, Feb 21, 2025 at 10:39:59AM -0400, Jason Gunthorpe wrote:
+> > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> > index 99dd72998cb7f7..082274e8ba6a3d 100644
+> > --- a/include/linux/iommu.h
+> > +++ b/include/linux/iommu.h
+> > @@ -1534,12 +1534,16 @@ void iommu_debugfs_setup(void);
+> >  static inline void iommu_debugfs_setup(void) {}
+> >  #endif
+> >  
+> > -#ifdef CONFIG_IOMMU_DMA
+> > +#if defined(CONFIG_IOMMU_DMA) && IS_ENABLED(CONFIG_IRQ_MSI_IOMMU)
+> >  int iommu_get_msi_cookie(struct iommu_domain *domain, dma_addr_t base);
+> > +void iommu_put_msi_cookie(struct iommu_domain *domain);
+> >  #else /* CONFIG_IOMMU_DMA */
+> >  static inline int iommu_get_msi_cookie(struct iommu_domain *domain, dma_addr_t base)
+> >  {
+> > -	return -ENODEV;
+> > +	return 0;
 > 
->> -	SYS(close, "ip addr add " RX_ADDR "/24 dev " RX_NAME);
-> 
-> Why remove the Rx and Tx addresses?
+> Should we keep the -ENODEV here for !CONFIG_IOMMU_DMA?
 
-Because the testing methodology is changed from pinging and IP address
-to sending a custom packet and handling it in XDP instead, the IP addresses
-are no longer relevant for this test.
-I removed them to reduce the testing code to only the setup tasks that are
-needed for the test to do its job.
+My feeling was if the system doesn't have an IRQ driver that needs
+MSI_IOMMU but does have a IOMMU driver that reports SW_MSI reserved
+regions then iommufd/vfio should not fail.
 
-I can add a note about this to the commit message.
+I don't think it is realistic that we'd ever hit this return.
 
->> [...]
->>   
->> -	tc_prog = bpf_object__find_program_by_name(skel->obj, "ing_cls");
->> -	if (!ASSERT_OK_PTR(tc_prog, "open ing_cls prog"))
->> -		goto close;
->> -
->> -	tc_opts.prog_fd = bpf_program__fd(tc_prog);
->> +	tc_opts.prog_fd = bpf_program__fd(skel->progs.ing_cls);
-> 
-> This refactor seems irrelevant to the goal of this patch? Same below.
-
-Fair point. These were drive-by cleanups to make the testing code less
-verbose. But you're right, they are not relevant and just inflate the diff.
-I'll remove them from the patch.
-
->> [...]
->> @@ -179,9 +231,18 @@ void test_xdp_context_functional(void)
->>   	if (!ASSERT_OK_PTR(nstoken, "setns tx_ns"))
->>   		goto close;
->>   
->> -	SYS(close, "ip addr add " TX_ADDR "/24 dev " TX_NAME);
->> +	SYS(close, "ip link set dev " TX_NAME " arp off");
->>   	SYS(close, "ip link set dev " TX_NAME " up");
-> 
->>   SEC("tc")
->>   int ing_cls(struct __sk_buff *ctx)
->>   {
->> -	__u8 *data, *data_meta, *data_end;
->> -	__u32 diff = 0;
->> +	void *data_meta = (void *)(unsigned long)ctx->data_meta;
->> +	void *data = (void *)(unsigned long)ctx->data;
->>   
->> -	data_meta = ctx_ptr(ctx, data_meta);
->> -	data_end  = ctx_ptr(ctx, data_end);
->> -	data      = ctx_ptr(ctx, data);
-> 
-> Similarly: why these changes?
-> 
-> In general, please minimize your patch to the core purpose. Avoid
-> including "cleanups" or other such refactors. Or justify the choice
-> explicitly in the commit message.
-
-I had rewritten the function bodies of these two BPF programs from
-scratch because the functionality changed significantly. That's where
-this comes from.
-I'll try to reuse more of the existing code to make the diff shorter.
-
->> -
->> -	if (data + ETH_ALEN > data_end ||
->> -	    data_meta + round_up(ETH_ALEN, 4) > data)
->> +	if (data_meta + META_SIZE > data)
->>   		return TC_ACT_SHOT;
->>   
->> -	diff |= ((__u32 *)data_meta)[0] ^ ((__u32 *)data)[0];
->> -	diff |= ((__u16 *)data_meta)[2] ^ ((__u16 *)data)[2];
->> +	int key = 0;
->> +
->> +	bpf_map_update_elem(&test_result, &key, data_meta, BPF_ANY);
->>   
->> -	return diff ? TC_ACT_SHOT : TC_ACT_OK;
->> +	return TC_ACT_SHOT;
->>   }
->>   
->>   SEC("xdp")
->>   int ing_xdp(struct xdp_md *ctx)
->>   {
->> -	__u8 *data, *data_meta, *data_end;
->> -	int ret;
->> -
->> -	ret = bpf_xdp_adjust_meta(ctx, -round_up(ETH_ALEN, 4));
->> +	int ret = bpf_xdp_adjust_meta(ctx, -META_SIZE);
->>   	if (ret < 0)
->>   		return XDP_DROP;
->>   
->> -	data_meta = ctx_ptr(ctx, data_meta);
->> -	data_end  = ctx_ptr(ctx, data_end);
->> -	data      = ctx_ptr(ctx, data);
->> +	void *data_meta = (void *)(unsigned long)ctx->data_meta;
->> +	void *data = (void *)(unsigned long)ctx->data;
->> +	void *data_end = (void *)(unsigned long)ctx->data_end;
->>   
->> -	if (data + ETH_ALEN > data_end ||
->> -	    data_meta + round_up(ETH_ALEN, 4) > data)
->> +	void *payload = data + sizeof(struct ethhdr);
->> +
->> +	if (data_meta + META_SIZE > data || payload + META_SIZE > data_end)
->>   		return XDP_DROP;
->>   
->> -	__builtin_memcpy(data_meta, data, ETH_ALEN);
->> +	__builtin_memcpy(data_meta, payload, META_SIZE);
->> +
->>   	return XDP_PASS;
->>   }
->>   
->> -- 
->> 2.43.0
->>
+Jason
 
