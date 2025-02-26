@@ -1,235 +1,426 @@
-Return-Path: <linux-kselftest+bounces-27613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDFE6A461B6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 15:05:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71A3CA463EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 16:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0974B3B0211
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 14:05:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 802F03AD3A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 15:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7E6218AB4;
-	Wed, 26 Feb 2025 14:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9E0221DA7;
+	Wed, 26 Feb 2025 15:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jrIHwxAa"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uMjZOfTR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2055.outbound.protection.outlook.com [40.107.96.55])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2079.outbound.protection.outlook.com [40.107.101.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBB42904;
-	Wed, 26 Feb 2025 14:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C632021D3E6;
+	Wed, 26 Feb 2025 15:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740578730; cv=fail; b=GKEzxCNhnOGLP/mb6BmWOvRJsfR/fkdXAVzjoTHejAP+dlyAexjSnbzI2UuKPoXUix6AMqoB/tPM9UtpN+kUKsivuQts7f8xwJQ89XvHBOW17XIw+UuQ9uhZEutC8En8DY/yHcvOZmCV6gYi3IYqm0G1bCJ+ZtslPf2Rphx2JT4=
+	t=1740582038; cv=fail; b=btirChwJcCE3/AvyJGU0DXY9kt9PfBQDnfgCFeZB1BeAaFgc7/oEkbhhk4HfaIxJ0XaFigvhyQQkC/KUMvmCOPJeeihc7fidXwWpuOuUd0e7xrTdnA06p4pMZyVpQwk78RCqeAc1IKjj/KPPiVBP/8jwAtgpVJgBGfxswa4hXTU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740578730; c=relaxed/simple;
-	bh=zpwmIojlP1TChiyxumrQ4+SOUS7yikV09HChuqfGqII=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=jv1B7Qz2zmrCVfLf7FXd0UtN2/NerYp53u8bc1wgUZpc8/JyjNYN2i89tx7CD6VWawfkwJgnluuzVHJ6qqx71iuNgVBvwZmhKPABhvkqkVPMeCc/87zcKbHDUHwNT4RVoYP0tQ8MJYlhoY6DgseH69vT0N9seXLHxV/e8M9BLZM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jrIHwxAa; arc=fail smtp.client-ip=40.107.96.55
+	s=arc-20240116; t=1740582038; c=relaxed/simple;
+	bh=XWrtUPcxGgNOXTRTcSRUNlS+Xe9XmUSZzUtDibumbAY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qEiq7/rCYwkjmD97YMbkFyKLFBR4Q0TYXbx3E4Hwc40MhIin5Wi8CXzqvO3oWTz5PKB4QUPiU/Y1CActjasC+WczB7D4uro+fYRTZsGkX/URg0BNwk+KnTU47gDB4aXKeBOWJ6UvA2YlNYzBDDHViwZIB8sqAorkBlARF3lsRrM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uMjZOfTR; arc=fail smtp.client-ip=40.107.101.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PppXoDBRKL9RSDsBVIOZF43E85kON2hQ4sVS4fAmh3B1gBbVSDV6/YluNs+taeQhv8MlYK3VXeyx+QSZWcFpnOgIv+bJAQOxFESwnOO9VpNTdF+U8AOxklCFsp0s6/lXKFA1EPgFnXbqjTwk0e02DNJOkQG4mOwS1GJmVY1OECa3MLI1WZKYSvNjDgLDqi/onRSw8zW9GiM3vmXhhKT3XRvuHXCbNwAG8jLsKwnDRxnnawZ25/w9N3IHXmS84fghWNKatFp/CecPKVZZadJm9OoMM5e4ZBdGzQg9UBaB3rHaccr+pBjdg9wi1t6srYzEv3vXNe8f4AgJFUkUHm+VNg==
+ b=QZ+pk1bvcqaKE7O4znNk64YW2xOk06NkSWQU0PJroksdBesAfvmL7skD0LlqmA87nKowakGW+dYKXatl62/IztTj6gm3LpfPXlRFBLEzjSZBps6wsdi4O49IBpC7zBBiHTCYkgUIwlFUQPrvwSjnwbXoQYXYoxKLy2d/A9kD+a5XhtIwjncR6BH22xQAFUuiisBuZxZ5bGnNbI2yoMudHXu6xIXwLDOiGR9Ej7/RvHqWjJbkdmslC9cWVsmr85JFOYCJm5MoqS0E52FppdsuHVOITq5w6oOkoy3uMiywZ1megnymhc1KwhvakCFi9f9m7LfeyOKQojgHUnbwJ9988Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zpwmIojlP1TChiyxumrQ4+SOUS7yikV09HChuqfGqII=;
- b=HOefOqbuqOgIeAcGmJi4Doq1PQNVaRmtGaIY3TN5ESK7zzU41/iloKny90kV5OsKMKrxHENU/LbP6o82pf5NdxxPmznlyNbtLtfi81/Janiba+26LnYd1x45q3fm+VshY2qHSC3EOfQJGYU+l+sH266/PQXYLKPuSuVl/Zf8TfS7XrFKKPxVM5WVRi3t1eu1XtNs5sHaNhAKJy7H6Ot838rysAjgkdsg9Td7injwli6d2MRetOcpua4+hx9yFFLMVtfPMt290ng/9IKekmQkOpiFs46JtVfnPjIKvRswsUzCXLMm6TijQFUmd0sp1kgwUcFuBxaXYfgP65VB10n1dg==
+ bh=QIQkrFarMjpufCouOsby06lL+9IvhoBP9akGnh8Qet8=;
+ b=pUG/8pE48ZhJtX0tVUAly2J9RwSPO8J2J+8FlD6oSMEuYniUc5dJY8gaucHLFH+PJzlJTbr2kXNBgEl/A5i+VQhzlMvDDaakRCMIm7+lukb4PXT92c7j+G4qb8DK78GVrEWIWEwPWCv05tqOr9yWbXoEHLg1JcaY8KqwO31RaEkfcEt70tsVhZzO6ZUxzoEv94RJ2QHUEktnLZAZMOm7qzqkfKY7gEDHH4KzcrRGPG7z8H5le35MNfye4402hQyqqiti2t4sipIJdXROtrutn8/N2obotkBzZYNBskHDIzh1R4IhazAQzf2YdRhEgF4cuLg54nz4Bk3tRAw61SoTrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zpwmIojlP1TChiyxumrQ4+SOUS7yikV09HChuqfGqII=;
- b=jrIHwxAaDrUYZJRLZyspEqv5SAHheqW61YMyZ6OOBWMa2wctyNdqHyL1lQOab3xNMKgfcp3ph3OVafDWxg3hWQoBUr2yun/sywKoEJX/AGxj8um2l8TPP3EVt1lVG6XehDtSNUsOp2O/QPIR/vOWVPpaGN5F1527UqjzitGoK4mlxdxvyzTsNHVJjeuRWC9PSG9+xjvirqVmalbsRj6G6fg/CKXtXdMsNhXjzj3wLrG2YzUfr8jWc7BbVMZfxWi7+MVVdBY707SOD3Ko9nMg9GJF28JafjYhoFEm758isjWLiOPnGKNDOFBOqYv8sHKcBtMt/qBIuqM65u1S0ftZTQ==
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com (2603:10b6:8:d0::22) by
- MW4PR12MB6897.namprd12.prod.outlook.com (2603:10b6:303:20a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.21; Wed, 26 Feb
- 2025 14:05:22 +0000
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af]) by DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af%4]) with mapi id 15.20.8466.016; Wed, 26 Feb 2025
- 14:05:21 +0000
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: "liuhangbin@gmail.com" <liuhangbin@gmail.com>
-CC: "shuah@kernel.org" <shuah@kernel.org>, "andrew+netdev@lunn.ch"
-	<andrew+netdev@lunn.ch>, "davem@davemloft.net" <davem@davemloft.net>, Jianbo
- Liu <jianbol@nvidia.com>, "jarod@redhat.com" <jarod@redhat.com>,
-	"razor@blackwall.org" <razor@blackwall.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"edumazet@google.com" <edumazet@google.com>, "jv@jvosburgh.net"
-	<jv@jvosburgh.net>, "horms@kernel.org" <horms@kernel.org>, "kuba@kernel.org"
-	<kuba@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "steffen.klassert@secunet.com"
-	<steffen.klassert@secunet.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCHv2 net 1/3] bonding: move mutex lock to a work queue for
- XFRM GC tasks
-Thread-Topic: [PATCHv2 net 1/3] bonding: move mutex lock to a work queue for
- XFRM GC tasks
-Thread-Index: AQHbh2ll1/r6krzjmEu6zwJW6lI7lLNYDFAAgAFMEYCAABWRAIAAEUCAgAAg6wA=
-Date: Wed, 26 Feb 2025 14:05:21 +0000
-Message-ID: <f0dbb1cfdda52597b068aa785a876b48020ad975.camel@nvidia.com>
-References: <20250225094049.20142-1-liuhangbin@gmail.com>
-	 <20250225094049.20142-2-liuhangbin@gmail.com>
-	 <d298da7bc638c323e6d492b2dec7f1b9ea1e1350.camel@nvidia.com>
-	 <Z77jc8AB3D2xWczl@fedora>
-	 <0605dc53cdcee5ea71b89114f2318dd5d0a83276.camel@nvidia.com>
-	 <Z78EA2LEuFAwufNJ@fedora>
-In-Reply-To: <Z78EA2LEuFAwufNJ@fedora>
-Reply-To: Cosmin Ratiu <cratiu@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
+ bh=QIQkrFarMjpufCouOsby06lL+9IvhoBP9akGnh8Qet8=;
+ b=uMjZOfTR9yASk2GuPbeOpmVXTjAnHLHqJhv3J88y37dpDFAmjk8sTsLFIBxKLkDWlrhG4wTd8quOWbVqUtFzRNUv3r9CHWBm3QQ/35i9+nRG8ZNOmY5xehmuFbU7e20cKREqIiSUjrWKMsDN9VTICCk0hoT7lCP7m5quu43WLisfxfC1ads6NOnZK3zYDnFQ9rW9PCBfEV34+Vj7K2psMO2fOiCJnqSpGH7kJr+ysHKnoJdrXJNXTc/yZU+uLDwmg1WMj7mbFpO/LGlofi21P3Jz/pZtP8OjMDNeWCc3qknWoXCMOOfn7YimerQ7GG1GOypN4RVNc/Q+XtT8v4ZqOQ==
+Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR12MB6560:EE_|MW4PR12MB6897:EE_
-x-ms-office365-filtering-correlation-id: 04cf69d3-78c4-4c6b-dd08-08dd566e9be6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?enNBNFZDR0pZZlJudlBrN2pIeENWU2x0ZjhuS2JZZWFHd201d2VFVjkyOC93?=
- =?utf-8?B?UWdnUkU3MDZFdXROVVdZa1I0dFpoNkk5aUlZcTRhazhsTmk5cGtmTnNyVGlX?=
- =?utf-8?B?K2ZNbDNSRzQ2SjJlNVlHVjR3UDVNVTFzKzhhSUlhUzFLOGdCZ3BvTDV6ZDBm?=
- =?utf-8?B?SFBhTXJqd3F3aUYrVDBIWFpJMzFlN2l4QXdiMytRK1NCQ0RnTjVSdlE1bGtQ?=
- =?utf-8?B?cG9DdG5MOEN2cXJ3a1FINUEvNkRnWXBKSUloOTFtajlSU3VzYjhmZ3pOcEVk?=
- =?utf-8?B?STdvbzJZb0xlRUtxMzVDeU44Z3FVVHppVHpIOXV0TDZQay93QU1KTTRiZzAx?=
- =?utf-8?B?Z3d1NHh6T0JodlM2SlZ2T3J6dFBsZUI1ZnpUcUp5NFkzaGY0aEZFQlRqbmlm?=
- =?utf-8?B?NXpCQ0p4UGMwNC9GSGJrYmljZlFlL1RtWjdFUkpjTkRWdGhXZjJYRXFyMDBi?=
- =?utf-8?B?WFFvMjZTNHhra3RRRHMzQ244NDNwbHNXbm5aL2w5VG1OZU0zbStIU003Yis2?=
- =?utf-8?B?VXpUbUpIL2MxR25hZmRtSWlycGpFMEs4dVZ4T1RNRTJpQ09uTUcreVhNdk9N?=
- =?utf-8?B?YUlZbk02a0c0M3VhRHNkSzJZV0N4TnEyckxPNlZMelRlb3k0amQ0Y0huTUpa?=
- =?utf-8?B?ZnB0WWp5ankvcyswUGNkZnl0REhIeHIyNVlPL1BvZExabzFmY1dFWXg5c1VQ?=
- =?utf-8?B?UkhDRXNRQnpKTFlaRzhGMS9tQ1lpSk5QNjNveVU1UHRQUGRYcXRudVY3T3pr?=
- =?utf-8?B?VDZrdlhuckNldlBKbnRxWGpBdllNVk91ekpTVlZUayt2M05GVjlMTWVFbk5M?=
- =?utf-8?B?YXMrTnpoVUxRTEZRS3MrUTVpb0x2RkNaRzdaR0RZWHhGOFFqRlFsMUhzMTRz?=
- =?utf-8?B?UWtZalNRV2RvNU12STRzUTJlUng1ckxPMVcwZEZ3c1ljSDJZZ2lVclhXeTAr?=
- =?utf-8?B?bm80ajVYZnNUWlpCZGp4Um5XZG5mS2VQaXVlTURWTUFNMEk5UVVuQUxXSWFu?=
- =?utf-8?B?T2grYzh0OTVFQVdEbXE4a1AyU2lsc2hTSmJZOXJIRW9xcS8wbVlPdXZ2UVlO?=
- =?utf-8?B?RGt2dnJicHJzRXNxUmdmS3p2NjVCcDE5d2Z2bHg2Rk1XUmFOeC91WFJSY2gx?=
- =?utf-8?B?UmFWbUNMeHh4SVRrcGpKUzYvdHVUaEFlejd6ZXorclRWd3ZpM2FhdmpJZnhr?=
- =?utf-8?B?N0dDRnorNnJnUTgxRkNsOHN2SUJGNXRnMDNhOHJoNXk4RkV6aVhtZTNvdTU1?=
- =?utf-8?B?elI0WmFORGpNVmNIOGZIWjdqdGhrT0N1N1BYTGVoYXp1bjE4b0lBSElSTGxq?=
- =?utf-8?B?ZC84endTeFBLSlErMzlvRUs4c0t2bzNNWFNuZHhGOExFcWorcEF1YmxoZHZs?=
- =?utf-8?B?NXhsamF5NnVUZFlrTXhJVFJpQkFLOENCYUI1d0RBdVUveTJaRU9EbW1kVml5?=
- =?utf-8?B?OEJ5bnowU2txZUpqOHphbDFHWDNMdjVZU3JMc1Iwd3VOOUhxSkZrOE1Nam1E?=
- =?utf-8?B?U3BJUHNUMUZqYzRPUUMzc2ErcXZqYzBoSTJtQ0JLTE9scWV5RjRaQ0YyQXpI?=
- =?utf-8?B?VWM3ajM2aksrVTFvWWpydGMxSUFBVGdwbnBLVnZPVGsrUXBBV2lxMmc2dVZ3?=
- =?utf-8?B?WlRCVG45QmFxNzBqNEMwZExTTjN1Z3F0eDB3cXE5UjZreXRyckRCMTVmRGJq?=
- =?utf-8?B?by83Z0h1L3pOK3Uxc0hkeDZKS0QzWDV6VGtvTElLcllsZy9tWklVc2J0NktU?=
- =?utf-8?B?cHRzWjN5MGxvS3V2RWNWajVDQ1lUdzV0bDRZUlg0S2RWczRyUHJVOXJ0eVQv?=
- =?utf-8?B?R01RZEVEWVpxSXdxU21hWUpzUmJhU2ZRYWtiSlpQbGdjSFh5ZzRYblRnSUJD?=
- =?utf-8?B?MFh6WWtPR0p1SmFWNm1SdU95ZE9WNVo3SVhsVkFnNzQ4M2FVOHdDVnM0OGxB?=
- =?utf-8?Q?Ko7YHYEtreI8yw9dfHRKC9rvAozV2GrG?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6560.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?ZmszS1pRR0VNamF2MHZqMDhhNkZEUHBIU1FaYm9ITFowOHFLK3FSVmM4WndT?=
- =?utf-8?B?bFVlWjJJVE1JZnVVN2JBMjRuTE40NXQzRDZZY3FDeEpvbDlCQ2c0NldNYjIx?=
- =?utf-8?B?SFJFb2hMR2ZPRjdyNEpnNUhBd3Voc3ZSSlVkSTkwdklrKzg3VUFVdk04UUJL?=
- =?utf-8?B?Rm02Wm1VcDVwVVoweCsvOG54VTJMQWRDZnhvYWIxVGlKZXQrRzN4MU0yWHR3?=
- =?utf-8?B?eFZuK2hPV0N6cVF4cHE5WVJzOFlHMmpQL3JJWkdLR3h3VllPNjUwYVQrS2hE?=
- =?utf-8?B?TnFoREtaNGdGTmxSNXpWdWkxbFZ6dnRBMVdPeTV3OVcxMWtEbEtBWXdzNC91?=
- =?utf-8?B?RmNIYzNxQ1RIcVhkbVk2Z1N6dlNSNVhTa21OTDVTaUIwWERnR0tqZ0VJZEZL?=
- =?utf-8?B?Mmd1d1g3RlFZSVdXRzRGZUU2ZFppUGRmS2FXVm9sS3ZhWUJScVFPRHRCcnJZ?=
- =?utf-8?B?ZHgrMFl3OE9LUENLQXFIZzVxTEgwVFJqWllVWmZwK3laU1NXblV4eVBFSE5N?=
- =?utf-8?B?YmJQWWVPSU5uZGVLcTdsN2dYd3h1SURIRGh3MWNjS0pSZWRyTFM1NFFkVTJO?=
- =?utf-8?B?Y0NiK081c3MxTzR1RnBWWi82QXB3eVEva1NnNzVuUnFWekNBdUJwd3FkK3lM?=
- =?utf-8?B?N0orc0ZnKy80aW5hT2pCaVdJanJ0em9WblpTRFZuVmlzSmJoMWt4a0FhOUgy?=
- =?utf-8?B?K2JJK0hmSjZTc3BQN0tqdmUyMmhCR2tEdm1uTm9QL2tCaHg2b2JPRlN1eUJo?=
- =?utf-8?B?c0I5L1ErNUNQeFRJRkphWVlOWHlIVG1pczNBTmd5S3BIdy9PTHVYajUwejNw?=
- =?utf-8?B?aEhROXJrdzBPRTQxT05VNDF2WUpYOThFLzIvMzJnWk1va0YzZjJTaWptOTFY?=
- =?utf-8?B?RmY0eExheG9ocHRXQ1FoRFJxK2ZmSnFCL1JNRFBjU0c4VEpXb0xpd3JLQXpx?=
- =?utf-8?B?bW1OdlJhVURLSmx4akt4ZFZpakt2VlNWWldId280cmllSUR1c21kRHN4Y1hr?=
- =?utf-8?B?NFlBSkFkcWFqc2ZFbGF3MG1wS1BhSjFHKzBrNXU2eEkzN3prbjhFT1JuL2Qx?=
- =?utf-8?B?NVBMUEpvZGI1dUxsVURQUzRSbW92RWsyQVF2NmI4QnFyNThDbXdNQVE3amJ0?=
- =?utf-8?B?U2I5MnpYdjNCazBNSWRBbXZYRndXTEVMQzRYSUFLclFHcWk5V3EzdzVQd1VH?=
- =?utf-8?B?V3k1ajkwZVZHeHB4MlBjYk5RUVc0SERyK0pCM0t1RjR6NTk0cnlOU3dKbDQr?=
- =?utf-8?B?b3FveWxMcUVKSm9wTXplLzBOZ3lsNGxLeHdFUTV0YlZ1T2tCMHJFNWU3NWdV?=
- =?utf-8?B?OHZZL092TG1ucW5kRmtQUTV3eVE1VlNTMXdzc0RaZjZreEQrcWdDSy9BNGtJ?=
- =?utf-8?B?RVU2N1FhWmJMZ21jeXZsWTZFd2NBUTEwbktmSmhkN0RSMHEyczc3Y2FnZXc2?=
- =?utf-8?B?anQ2VmJNS2tPZmN1L3hrR2JidmZaajlSMURPN2MrNS9TUlZ6U1RGVnMxNFBj?=
- =?utf-8?B?cGxZK3JvRkFGUHd4NTVFdWlYV29TZ09mdzdiQWs4TnZjSEMxbDgyaERQSzln?=
- =?utf-8?B?dGR4UGx0dHNzMTZ3WVhSSXIyNHgyWjBqdHBsaDM3VEhZdW8zTTN1bjRkcXNS?=
- =?utf-8?B?NTd3OXJ1Q1ZiazlzRFdoMnU3UkNEcjFCeUpzNU5SaXZFOFBablFZVjdoN0xK?=
- =?utf-8?B?Y21UTW5NWWpjaTY4STMzU0k4TWpJRTFNSUZ5RGJRZnR6WVRXeXNVQUw5Q3lN?=
- =?utf-8?B?YzlkSmJhWVcxbVlLK2xZOE50S1lzVXB3TDFrLzBDVzRzcVpFdjR6QTcrbVF2?=
- =?utf-8?B?QlBsUGZXYXJIUExZbXVVbU4vd2RlOGE4Znp6cDNoVEdKRkdLOWsvS00vd2Nq?=
- =?utf-8?B?aDZINzJRdzU4cGxzTkVWcWNOUWZhb2FrZXZZTEdrNDFVTW5VOXQvNVZ1Mkdk?=
- =?utf-8?B?ODMxVVNZZmpKVVp1dTNiZ3BLSXlzNWRid21EVmRFekFJbE4vdHllMUU1eWkz?=
- =?utf-8?B?SXZXQW9ScVVKVWVSSmtLOU9PMStMZ1dEN2xaRDdxeG45Y3EvOXNBcU95dGJ2?=
- =?utf-8?B?MlFtRlZiajF2NzNHUzdnRERzZU0wNWordURsTmd5N1lhUTZpZ1VhNkpRam1E?=
- =?utf-8?Q?NVk+o9BZ6Qp1YGRtC/tpXvtwi?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <09B226F25691494F87685453292B0194@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ PH7PR12MB5950.namprd12.prod.outlook.com (2603:10b6:510:1d9::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8489.21; Wed, 26 Feb 2025 15:00:28 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%5]) with mapi id 15.20.8466.016; Wed, 26 Feb 2025
+ 15:00:27 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
+ David Hildenbrand <david@redhat.com>, Yang Shi <yang@os.amperecomputing.com>,
+ Miaohe Lin <linmiaohe@huawei.com>, Kefeng Wang <wangkefeng.wang@huawei.com>,
+ Yu Zhao <yuzhao@google.com>, John Hubbard <jhubbard@nvidia.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 1/8] xarray: add xas_try_split() to split a multi-index
+ entry
+Date: Wed, 26 Feb 2025 10:00:22 -0500
+X-Mailer: MailMate (2.0r6222)
+Message-ID: <8FC0353E-EB2D-4C4C-B96D-8BEC06FE77F7@nvidia.com>
+In-Reply-To: <e5d967b9-fbc0-497f-a4a4-6f2bdc902400@linux.alibaba.com>
+References: <20250218235012.1542225-1-ziy@nvidia.com>
+ <20250218235012.1542225-2-ziy@nvidia.com>
+ <e5d967b9-fbc0-497f-a4a4-6f2bdc902400@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: SJ0PR03CA0136.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::21) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|PH7PR12MB5950:EE_
+X-MS-Office365-Filtering-Correlation-Id: 824263ad-86f0-4d6e-b838-08dd56764e49
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?V2JYcWpibGFqUkJEVWFrbXFoNXJTdFhCVkFlTnBRckR4K00raXB2YkFLVHRW?=
+ =?utf-8?B?ZWZMcy9SK2xraHhyMkQ3ZVlndkg5ZHFEV2hxRzd3amkwMFBpTzQrRDlNMnRC?=
+ =?utf-8?B?ay9ya01EWmI4bi9rUHhzRTFoZVQwQi8yZmVpK3hmNzVhYUF3Um9aNUNLeThW?=
+ =?utf-8?B?ZXNsOGZrUFkrdWlBZkNpWXNvdTd4Z1B6aXJJTDVncWtGT2RueVdjd1o5Tk9F?=
+ =?utf-8?B?UVJRSHlURUZsL1BJaVh3QnJJVm5WSUVWSnRXL1FUWldtWW1SaFZST2RMczQ0?=
+ =?utf-8?B?YWd0MXBNbStWb1N1UDEyRjlPenZRbFFyWHp2WVJnTFhNL2Z6ZmlFOU9uczZu?=
+ =?utf-8?B?eHVZR2ViRjBrcTlQazhzNDF4TEl4TUdJOUQ4N2lZVmJJVUs0b1BVRzZyLzhj?=
+ =?utf-8?B?bjFYMlpTZzkzWVRpaDVtRjh5QmV0RVFvaTE1UjJVOWNvbXByUU9EcE1ZWXVq?=
+ =?utf-8?B?akZmblVodDJCWEF5VU9qOGJvUnJ2MkFiOERNUmIwbFBBcWk5YmdzdE1CM0p0?=
+ =?utf-8?B?cjFlQ2ZpaVJtN01QUzhkbWVzeVdQejVwMGd4QWJtdmhYMWYxZ0s3QmhaMUcx?=
+ =?utf-8?B?S2FoSFowTzFvbWRRenA3Z1psUEN5NTBYczU3MlBJbFhDaDBZV0tjZ3NMYXBn?=
+ =?utf-8?B?c1E0S3JCa0pMa1BVQS9mS0JjUU9aQlhLK3h1YTNaQ2R2OGpHbEhydTc2TnNY?=
+ =?utf-8?B?dGlCRUFRZHp3Qm91V0xrOXNzVEJnUDJTelVIcThLVnFnMWhxdzJwdlg3eXVh?=
+ =?utf-8?B?cytRV1ZJeUFiMjB1Z05jYno3UVRPWjVQTXE5VXB2WUo3OVhpendhV3NTVDkr?=
+ =?utf-8?B?MGpKKzFMWVR4MmFzaGx5TDhBVDY5WWlncUJNK1dvNnJyVkF3MkI4enZrVjJs?=
+ =?utf-8?B?b2lIbE9ybkRDZU0vZk4xSmZhN0NmTElZNEEvcjd0aUFBN3IxczA2SUZUbm94?=
+ =?utf-8?B?TXp0d0tFSWhSZCsrME94REN2QTg3RjB5UmJmT3I1dUxodE5CTlI3UkhpM0tI?=
+ =?utf-8?B?QTR5aXZjeHAvWk5kbjRvN2QyQWhRc0JxNEdxaFhLdnVFVTdlVVV3UCtqc3No?=
+ =?utf-8?B?S0FvYU1OTjNDNWVERmxDUmFMQy9sV0NjTzZrNW8wTk9PNUxKMHE5NTlwOXhq?=
+ =?utf-8?B?K3NUOUlJSkswajRjTU5PRVpJWWFqQ29sSk0ycXhabE1nR0xpSmVBT0N6V1Bk?=
+ =?utf-8?B?RzlvdzVMbG1qSGFLc25COHhiVXprelFORWhhNHFuUXlETC9xS0NQZjhSTkFP?=
+ =?utf-8?B?R0NkdUNGK1kzWWppR2NYME1QV3FTcDhEakpKL1BzcjRKeFRLbUhocVAwRXRE?=
+ =?utf-8?B?bWNleWlYVk9XQmhJR0NGdVFzZGhvcmIxWVpRaVVYV2J3VTJ5dUprcmYxeVRq?=
+ =?utf-8?B?SHNTcGY5bCtndkxpOElkVWxXeW4yRHRJRXZZUGNNbHpLaUl4cWg1aXVBUjZO?=
+ =?utf-8?B?OWl5OVlyZnVhSHZQcUkyL1dkSG9xRzdvaFBWWlpwZlRUcXQxQ2N6ZUJsMzdN?=
+ =?utf-8?B?Q1NkZmF4SndpU0lRSmtWK2xpU0RvOW8xZjVLSGxJZVkrQ1pTYkRYMnJrOVhL?=
+ =?utf-8?B?S3ZuWEhBWmFVcERnSVd2cWpjY0VkcmhzN3VTMFdka1hRSWRhaXJLcXlwYWtz?=
+ =?utf-8?B?MHhMSm5WVzB2SWI1UDBOMThwWmlPK0JyQVh3Y1dKc3pPTDM4cDJvWXZXUktR?=
+ =?utf-8?B?djZzaHdRMFNKTEcyVjZYLzluV051VDkrVGZrVjNLaXMyUE1oc25HU09pc1JF?=
+ =?utf-8?B?anJxa29VMEtLRUY0amJKWk5wdXlWMGJqQWgzUzdZL3g0VVhlQnRjcWhiLzc0?=
+ =?utf-8?B?emgvbWl5U2NuWlJrZlVlN0x2Nit5Y2k5cGxYWFhvSTNTWWEyT1lwbzBpaXBy?=
+ =?utf-8?Q?/QqAmqjZhBTsV?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RnM1Ly9pREVEK2tOblA3aTU0TDhYUWVYU3NtVVRRa0xzNmUyK2wrUy96N1pi?=
+ =?utf-8?B?Q1ZZZC9sZTVwVG44elI0amtIbzRaSzlYNElMYStwd0Iwa3BwYlJiQm84RjdN?=
+ =?utf-8?B?L01LRkZJM2Nqd1ZldzA1NEFIbDJXek1GaXpIVUp0dnNGYzgreS8rcCs4bWZa?=
+ =?utf-8?B?NnVEbG5RSG4vMmJhUnZlcWNCNnY0eXo0VjdzVHdWTWxkb0dQdCtBaUZPRXdz?=
+ =?utf-8?B?am1NaWJReFU5akFwYUlPbmtnYzNGbzdIVTZsVlkzdnFXd2FqYmZpenAyQ3Q4?=
+ =?utf-8?B?UE9NRVRTcGxWc0tSZklHV1ovNHQ0aVZPa2U3Q2ZwTEZNR2trYit5Zmt2UUZq?=
+ =?utf-8?B?YTFubmtLYzNXdVFCVzlFTG8zVUJNNlU5TjNWNEYwM2h5ZkJxR2FXTkh1TEN1?=
+ =?utf-8?B?ZGtCSHFXZmVhU2xOSnM3QmVZV1NDbGZoS0RJYUZwaHFWT2hTUTc2SUxvTUJj?=
+ =?utf-8?B?Zk5xbTNiSnpLbnNQTWNUaktEeWt0Vk05TWdRMy9lTVNTS1FRVmhyVHV3cC9G?=
+ =?utf-8?B?eTVSYkZTcEZ0bVQrclpOK3lOUTQ5UjQrL3k1K1k0UWY4azI1eitnREFkbzFZ?=
+ =?utf-8?B?ejdLMlh5RGNrckRCSWcraFR1NENjSk9MYXZ4VmpvMjNVaWtuZXZyZk9lY29i?=
+ =?utf-8?B?T2N0WUhMcHQrZVhFbGcyMmN4NmV0M3pVNTJVS1dtMmdqOGZZaEtpTEkzcmVE?=
+ =?utf-8?B?QXpKU3VacW43QlhaU2xtNXRIbThUWk1FclR5VmRzQ3VUVmo3QXpmbEdzdElJ?=
+ =?utf-8?B?UFI3YVZlZlNEUXN5blp6aStmcnFMa2tLb09saFlReGFtS2xyODhOcFhZWkVD?=
+ =?utf-8?B?a3cwWVJvT2JZS1p4ekF3MUNZdmRqR3pEY09UOEo1OTB1TTY3N3VxVDNmbkdO?=
+ =?utf-8?B?MGFUajVSNVRFTTBtd1VtTGl5UGFWcWFmcVF2VWpvZVpFcjdUS3h2OEJiZXZL?=
+ =?utf-8?B?bUxxM2pYRk43eW8yb0VyWjNNdGNGT1RsWGhiK2RZQnBNWFdqNUxlQWlKK3Ru?=
+ =?utf-8?B?YlBuNlBTZmJCemJCK2cyK2lTajkrc1R6YkkvWG1FeFZzaFRKc2IyQ1JZSWdH?=
+ =?utf-8?B?M2k1Z203am1HbHdQbU85VnI5M1IrY0ZuTWhTMmhnS2RXYWV4QjdmTndQa3Js?=
+ =?utf-8?B?QUZHbDZBbnZiVkhGb3dad2t3ZDF3WHhqRHM3dEg3TmxSL3Y0OTV2R1dUVFl6?=
+ =?utf-8?B?V0F0cnZFOS9YZTh1VEtodU9hK2dYcktzU295MWlRTTdqK04yUWdneXdVRHEz?=
+ =?utf-8?B?Tk50d3dYc3FOTDhQaXBPLzNDaVNsSmltVkRyVzZUTGtGbkZVSnVNNUk5SXd5?=
+ =?utf-8?B?R2NOV2ZxMmJnc0pVZkVxU28vYVpCVlhScXllRFRTVDVqVUlWejRpTEx3Q0Qr?=
+ =?utf-8?B?bUZtZktxdVRMS0tZQ0phZ3oreUJUWnU2b1l1dmVkNEJEVUJTbnZtV2dPSURl?=
+ =?utf-8?B?SlhhZVY4ZHVJZWlzTHlaMXlOa2llaUZzRWlpV0NhSFBNVSszaFEyYm0yZE1M?=
+ =?utf-8?B?N1hONHhhL1dpZXFtUVpFSnBpbHJWZzFyb2U5WXJGSGFOY0Z6SFF6NnFhdHdx?=
+ =?utf-8?B?TkxWaFJyTkRBVHJWaDlKMWQrUzlqWG5nTUgyWGN6N2dmWXNOR0ZQaFIxUzBI?=
+ =?utf-8?B?cHM1Y1g3SE41c3lXTnczeENISUtTZWpkZkhrZXJpWURwdysrRFlHeWFUOWUr?=
+ =?utf-8?B?ZVZUTFRpVUdmRWhwc29Na3R0Qm40c2d2Uk9hTHpEc0RWTjBQVm9PVEZhSHZP?=
+ =?utf-8?B?M2NsWStQRTM4c3pNS0xvK3pWVGwxTXQxcGRuR01aUmNCY3ozUkUxRUQ4d2F3?=
+ =?utf-8?B?ZHdEbjcyUDdnWng2STJDMVVrR2tkKzNGSjdtWUcvQjhraWhMRkJmNFJvS2o5?=
+ =?utf-8?B?SDVQTkRkcUx6cG1tSllvZ1l0N0tRczBPd3FGL28rWnhTK3hZSzc2eFFVWWt4?=
+ =?utf-8?B?V2lEOGdIdjd1cWhhYmxBWGR2TmdRMHgvS09SS0lQQS8wditFdnhIbW96eHNa?=
+ =?utf-8?B?RDBhRldwN3UxVlBocDlDbVRLTTYzYjBzeHk4RG1TQk9LT0lFc1ZuQ3orUkZs?=
+ =?utf-8?B?bjZMZTl1YWk1R3pBM3BMaGlKZ3paQWE0YVQ2NWpyT0xrS2tsT2JYT3lYdnA0?=
+ =?utf-8?Q?Wms5wlEHXC+5AvV64eHoei0Pf?=
 X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 824263ad-86f0-4d6e-b838-08dd56764e49
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6560.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04cf69d3-78c4-4c6b-dd08-08dd566e9be6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2025 14:05:21.8066
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 15:00:27.7422
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MyzHGVMqsb10RRRkA6qgZWNR9jf47GEhXcEz+4UlUJAoan/veJXVMbxsPL3YcMsCVYT3a0rn3avgSbtvXRETsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6897
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mrUli/TY6b2vXxNHFR9yAOAiI0VyFHiwrxujwjb9Gh7rreQojkeQStqvZ9FTCbLg
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5950
 
-T24gV2VkLCAyMDI1LTAyLTI2IGF0IDEyOjA3ICswMDAwLCBIYW5nYmluIExpdSB3cm90ZToNCj4g
-DQo+IER1cmluZyBib25kaW5nIHRlc3RpbmcsIHdlIGFsc28gZm91bmQgYSBjYXNlIHRoYXQgd291
-bGQgdHJpZ2dlcg0KPiB0aGUgV0FSTl9PTih4cy0+eHNvLnJlYWxfZGV2ICE9IHJlYWxfZGV2KS4N
-Cj4gDQo+IElmIHdlIGNyZWF0ZSBhY3RpdmUtYmFja3VwIG1vZGUgYm9uZGluZyBhbmQgY3JlYXRl
-IGlwc2VjIHR1bm5lbCBvdmVyDQo+IGJvbmRpbmcgZGV2aWNlLCB0aGVuIHJlbW92ZSBib25kaW5n
-IGRldmljZS4gVGhlcmUgaXMgYSBwb3NzaWJpbGl0eQ0KPiB0aGF0DQo+IHRoZSBib25kIGNhbGwg
-Ym9uZF9pcHNlY19kZWxfc2FfYWxsKCkgdG8gZGVsZXRlIHRoZSBpcHNlYyBzdGF0ZQ0KPiBmaXJz
-dCwNCj4gdGhlbiBjaGFuZ2UgYWN0aXZlIHNsYXZlIHRvIGFub3RoZXIgaW50ZXJmYWNlLg0KPiAN
-Cj4gQXQgdGhlIHNhbWUgdGltZSwgaXBzZWMgZ2Mgd2FzIGNhbGxlZCBhbmQgdGhlbiBib25kX2lw
-c2VjX2ZyZWVfc2EoKS4NCj4gVGhpcyB3aWxsIGNhdXNlIHRoZSB4cy0+eHNvLnJlYWxfZGV2ICE9
-IGFjdGl2ZV9zbGF2ZSBhcyB0aGUgZmFpbG92ZXINCj4gdHJpZ2dlcmVkLiBUaGUgY2FsbCB0cmFj
-ZXMgbG9va3MgbGlrZToNCj4gWy4uXQ0KPiANCj4gVGhpcyBzZWVtcyBsaWtlIGFub3RoZXIgc2l0
-dWF0aW9uIHRoYXQgY291bGQgbm90IHNpbXBseSBmaXQNCj4gMy4gImlmICh4cy0+eHNvLnJlYWxf
-ZGV2ICE9IHJlYWxfZGV2KSwgZ290byBvdXQuDQo+IEknbSBub3Qgc3VyZSB3aGF0J3MgdGhlIHhz
-LT5rbS5zdGF0ZSBzaG91bGQgYmUgZHVyaW5nDQo+IHhmcm1fc3RhdGVfZ2NfdGFzaygpLg0KPiBJ
-cyBpdCBhbHNvIHNldCB0byBYRlJNX1NUQVRFX0RFQUQsIGJlY2F1c2UgSSBkaWRuJ3Qgc2VlIGl0
-Lg0KDQpYRlJNX1NUQVRFX0RFQUQgaXMgc2V0IGluIF9feGZybV9zdGF0ZV9kZWxldGUoKSAoYW5k
-IG90aGVyIHBsYWNlcyBmb3INCndoYXQgc2VlbXMgbGlrZSBlcnJvciBjb25kaXRpb25zKSwgcGx1
-cyB0aGVyZSdzIGEgV0FSTl9PTih4LT5rbS5zdGF0ZQ0KIT0gWEZSTV9TVEFURV9ERUFEKSBpbiBf
-X3hmcm1fc3RhdGVfZGVzdHJveSgpLiBUaGlzIGxhc3QgZnVuY3Rpb24gaXMNCnRoZSBtYWluIHdh
-eSB4ZnJtIHN0YXRlcyBhcmUgZGVzdHJveWVkLCBiZXNpZGVzIHhmcm1fZGV2X3N0YXRlX2ZsdXNo
-DQphbmQgeGZybV9zdGF0ZV9maW5kICh3aGVyZSB4ZnJtX3N0YXRlX2RlbGV0ZSArIHhmcm1fZGV2
-X3N0YXRlX2ZyZWUgYXJlDQp1c2VkIGRpcmVjdGx5KS4NClNvIEkgYW0gcHJldHR5IHN1cmUgdGhh
-dCB3aGVuIGJvbmQgLnhkb19kZXZfc3RhdGVfZnJlZSgpIGlzIGNhbGxlZCB2aWENCmVpdGhlciBv
-bmUgb2YgdGhlIGFib3ZlIHRocmVlIG1lY2hhbmlzbXMsIHRoZSBzdGF0ZSBzaG91bGQgYmUNClhG
-Uk1fU1RBVEVfREVBRC4gQnV0IG1heWJlIEknbSBtaXNzaW5nIHNvbWV0aGluZy4NCg0KPiANCj4g
-RXNwZWNpYWxseSBpZiB0aGUgYm9uZCBjaGFuZ2UgYWN0aXZlIHNsYXZlIGFuZCB4ZnJtX3N0YXRl
-X2djX3Rhc2soKQ0KPiBydW4NCj4gaW4gcGFyYWxsZWwsIGxpa2UNCj4gDQo+IMKgIGJvbmRfaXBz
-ZWNfZGVsX3NhX2FsbCgpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB4ZnJtX3N0YXRlX2djX3Rhc2soKQ0KPiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgeGZybV9kZXZfc3RhdGVfZnJlZSgpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBib25kX2lwc2VjX2ZyZWVf
-c2EoKQ0KPiDCoCBib25kX2lwc2VjX2FkZF9zYV9hbGwoKQ0KPiANCj4gSWYgdGhlIHhzLT5rbS5z
-dGF0ZSBpcyBub3QgWEZSTV9TVEFURV9ERUFELiBIb3cgdG8gYXZvaWQgdGhlDQo+IFdBUk5fT04o
-eHMtPnhzby5yZWFsX2RldiAhPSByZWFsX2RldikgaW4gYm9uZF9pcHNlY19mcmVlX3NhKCkNCj4g
-YW5kIGhvdyB0byBtYWtlIGJvbmRfaXBzZWNfYWRkX3NhX2FsbCgpIG5vdCBhZGRlZCB0aGUgZW50
-cnkgYWdhaW4uDQoNCkkgYW0gcHJvcG9zaW5nIHlvdSBjaGFuZ2UgdGhpcyBXQVJOX09OIHRvIGFu
-IGlmLCBhdm9pZCBjYWxsaW5nDQp4ZG9fZGV2X3N0YXRlX2ZyZWUgb24gcmVhbF9kZXYgaW4gdGhh
-dCBjYXNlIGFuZCBqdXN0IHJlbW92ZSB0aGUgZW50cnkNCmZyb20gYm9uZC0+aXBzZWMuDQoNCkNv
-c21pbi4NCg==
+On 26 Feb 2025, at 2:11, Baolin Wang wrote:
+
+> Hi Zi,
+>
+> On 2025/2/19 07:50, Zi Yan wrote:
+>> A preparation patch for non-uniform folio split, which always split a
+>> folio into half iteratively, and minimal xarray entry split.
+>>
+>> Currently, xas_split_alloc() and xas_split() always split all slots from=
+ a
+>> multi-index entry.  They cost the same number of xa_node as the
+>> to-be-split slots.  For example, to split an order-9 entry, which takes
+>> 2^(9-6)=3D8 slots, assuming XA_CHUNK_SHIFT is 6 (!CONFIG_BASE_SMALL), 8
+>> xa_node are needed.  Instead xas_try_split() is intended to be used
+>> iteratively to split the order-9 entry into 2 order-8 entries, then spli=
+t
+>> one order-8 entry, based on the given index, to 2 order-7 entries, ...,
+>> and split one order-1 entry to 2 order-0 entries.  When splitting the
+>> order-6 entry and a new xa_node is needed, xas_try_split() will try to
+>> allocate one if possible.  As a result, xas_try_split() would only need
+>> one xa_node instead of 8.
+>>
+>> When a new xa_node is needed during the split, xas_try_split() can try t=
+o
+>> allocate one but no more.  -ENOMEM will be return if a node cannot be
+>> allocated.  -EINVAL will be return if a sibling node is split or cascade
+>> split happens, where two or more new nodes are needed, and these are not
+>> supported by xas_try_split().
+>>
+>> xas_split_alloc() and xas_split() split an order-9 to order-0:
+>>
+>>           ---------------------------------
+>>           |   |   |   |   |   |   |   |   |
+>>           | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+>>           |   |   |   |   |   |   |   |   |
+>>           ---------------------------------
+>>             |   |                   |   |
+>>       -------   ---               ---   -------
+>>       |           |     ...       |           |
+>>       V           V               V           V
+>> ----------- -----------     ----------- -----------
+>> | xa_node | | xa_node | ... | xa_node | | xa_node |
+>> ----------- -----------     ----------- -----------
+>>
+>> xas_try_split() splits an order-9 to order-0:
+>>     ---------------------------------
+>>     |   |   |   |   |   |   |   |   |
+>>     | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+>>     |   |   |   |   |   |   |   |   |
+>>     ---------------------------------
+>>       |
+>>       |
+>>       V
+>> -----------
+>> | xa_node |
+>> -----------
+>>
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: David Hildenbrand <david@redhat.com>
+>> Cc: Hugh Dickins <hughd@google.com>
+>> Cc: John Hubbard <jhubbard@nvidia.com>
+>> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> Cc: Kirill A. Shuemov <kirill.shutemov@linux.intel.com>
+>> Cc: Miaohe Lin <linmiaohe@huawei.com>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Ryan Roberts <ryan.roberts@arm.com>
+>> Cc: Yang Shi <yang@os.amperecomputing.com>
+>> Cc: Yu Zhao <yuzhao@google.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> ---
+>>   Documentation/core-api/xarray.rst |  14 ++-
+>>   include/linux/xarray.h            |   7 ++
+>>   lib/test_xarray.c                 |  47 ++++++++++
+>>   lib/xarray.c                      | 138 ++++++++++++++++++++++++++----
+>>   tools/testing/radix-tree/Makefile |   1 +
+>>   5 files changed, 190 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/Documentation/core-api/xarray.rst b/Documentation/core-api/=
+xarray.rst
+>> index f6a3eef4fe7f..c6c91cbd0c3c 100644
+>> --- a/Documentation/core-api/xarray.rst
+>> +++ b/Documentation/core-api/xarray.rst
+>> @@ -489,7 +489,19 @@ Storing ``NULL`` into any index of a multi-index en=
+try will set the
+>>   entry at every index to ``NULL`` and dissolve the tie.  A multi-index
+>>   entry can be split into entries occupying smaller ranges by calling
+>>   xas_split_alloc() without the xa_lock held, followed by taking the loc=
+k
+>> -and calling xas_split().
+>> +and calling xas_split() or calling xas_try_split() with xa_lock. The
+>> +difference between xas_split_alloc()+xas_split() and xas_try_alloc() is
+>> +that xas_split_alloc() + xas_split() split the entry from the original
+>> +order to the new order in one shot uniformly, whereas xas_try_split()
+>> +iteratively splits the entry containing the index non-uniformly.
+>> +For example, to split an order-9 entry, which takes 2^(9-6)=3D8 slots,
+>> +assuming ``XA_CHUNK_SHIFT`` is 6, xas_split_alloc() + xas_split() need
+>> +8 xa_node. xas_try_split() splits the order-9 entry into
+>> +2 order-8 entries, then split one order-8 entry, based on the given ind=
+ex,
+>> +to 2 order-7 entries, ..., and split one order-1 entry to 2 order-0 ent=
+ries.
+>> +When splitting the order-6 entry and a new xa_node is needed, xas_try_s=
+plit()
+>> +will try to allocate one if possible. As a result, xas_try_split() woul=
+d only
+>> +need 1 xa_node instead of 8.
+>>    Functions and structures
+>>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+>> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+>> index 0b618ec04115..9eb8c7425090 100644
+>> --- a/include/linux/xarray.h
+>> +++ b/include/linux/xarray.h
+>> @@ -1555,6 +1555,8 @@ int xa_get_order(struct xarray *, unsigned long in=
+dex);
+>>   int xas_get_order(struct xa_state *xas);
+>>   void xas_split(struct xa_state *, void *entry, unsigned int order);
+>>   void xas_split_alloc(struct xa_state *, void *entry, unsigned int orde=
+r, gfp_t);
+>> +void xas_try_split(struct xa_state *xas, void *entry, unsigned int orde=
+r,
+>> +		gfp_t gfp);
+>>   #else
+>>   static inline int xa_get_order(struct xarray *xa, unsigned long index)
+>>   {
+>> @@ -1576,6 +1578,11 @@ static inline void xas_split_alloc(struct xa_stat=
+e *xas, void *entry,
+>>   		unsigned int order, gfp_t gfp)
+>>   {
+>>   }
+>> +
+>> +static inline void xas_try_split(struct xa_state *xas, void *entry,
+>> +		unsigned int order, gfp_t gfp)
+>> +{
+>> +}
+>>   #endif
+>>    /**
+>
+> [snip]
+>
+>> diff --git a/lib/xarray.c b/lib/xarray.c
+>> index 116e9286c64e..b9a63d7fbd58 100644
+>> --- a/lib/xarray.c
+>> +++ b/lib/xarray.c
+>> @@ -1007,6 +1007,31 @@ static void node_set_marks(struct xa_node *node, =
+unsigned int offset,
+>>   	}
+>>   }
+>>  +static struct xa_node *__xas_alloc_node_for_split(struct xa_state *xas=
+,
+>> +		void *entry, gfp_t gfp)
+>> +{
+>> +	unsigned int i;
+>> +	void *sibling =3D NULL;
+>> +	struct xa_node *node;
+>> +	unsigned int mask =3D xas->xa_sibs;
+>> +
+>> +	node =3D kmem_cache_alloc_lru(radix_tree_node_cachep, xas->xa_lru, gfp=
+);
+>> +	if (!node)
+>> +		return NULL;
+>> +	node->array =3D xas->xa;
+>> +	for (i =3D 0; i < XA_CHUNK_SIZE; i++) {
+>> +		if ((i & mask) =3D=3D 0) {
+>> +			RCU_INIT_POINTER(node->slots[i], entry);
+>> +			sibling =3D xa_mk_sibling(i);
+>> +		} else {
+>> +			RCU_INIT_POINTER(node->slots[i], sibling);
+>> +		}
+>> +	}
+>> +	RCU_INIT_POINTER(node->parent, xas->xa_alloc);
+>> +
+>> +	return node;
+>> +}
+>> +
+>>   /**
+>>    * xas_split_alloc() - Allocate memory for splitting an entry.
+>>    * @xas: XArray operation state.
+>> @@ -1025,7 +1050,6 @@ void xas_split_alloc(struct xa_state *xas, void *e=
+ntry, unsigned int order,
+>>   		gfp_t gfp)
+>>   {
+>>   	unsigned int sibs =3D (1 << (order % XA_CHUNK_SHIFT)) - 1;
+>> -	unsigned int mask =3D xas->xa_sibs;
+>>    	/* XXX: no support for splitting really large entries yet */
+>>   	if (WARN_ON(xas->xa_shift + 2 * XA_CHUNK_SHIFT <=3D order))
+>> @@ -1034,23 +1058,9 @@ void xas_split_alloc(struct xa_state *xas, void *=
+entry, unsigned int order,
+>>   		return;
+>>    	do {
+>> -		unsigned int i;
+>> -		void *sibling =3D NULL;
+>> -		struct xa_node *node;
+>> -
+>> -		node =3D kmem_cache_alloc_lru(radix_tree_node_cachep, xas->xa_lru, gf=
+p);
+>> +		struct xa_node *node =3D __xas_alloc_node_for_split(xas, entry, gfp);
+>>   		if (!node)
+>>   			goto nomem;
+>> -		node->array =3D xas->xa;
+>> -		for (i =3D 0; i < XA_CHUNK_SIZE; i++) {
+>> -			if ((i & mask) =3D=3D 0) {
+>> -				RCU_INIT_POINTER(node->slots[i], entry);
+>> -				sibling =3D xa_mk_sibling(i);
+>> -			} else {
+>> -				RCU_INIT_POINTER(node->slots[i], sibling);
+>> -			}
+>> -		}
+>> -		RCU_INIT_POINTER(node->parent, xas->xa_alloc);
+>>   		xas->xa_alloc =3D node;
+>>   	} while (sibs-- > 0);
+>>  @@ -1122,6 +1132,102 @@ void xas_split(struct xa_state *xas, void *entr=
+y, unsigned int order)
+>>   	xas_update(xas, node);
+>>   }
+>>   EXPORT_SYMBOL_GPL(xas_split);
+>> +
+>> +/**
+>> + * xas_try_split() - Try to split a multi-index entry.
+>> + * @xas: XArray operation state.
+>> + * @entry: New entry to store in the array.
+>> + * @order: Current entry order.
+>> + * @gfp: Memory allocation flags.
+>> + *
+>> + * The size of the new entries is set in @xas.  The value in @entry is
+>> + * copied to all the replacement entries. If and only if one xa_node ne=
+eds to
+>> + * be allocated, the function will use @gfp to get one. If more xa_node=
+ are
+>> + * needed, the function gives EINVAL error.
+>> + *
+>> + * Context: Any context.  The caller should hold the xa_lock.
+>> + */
+>> +void xas_try_split(struct xa_state *xas, void *entry, unsigned int orde=
+r,
+>> +		gfp_t gfp)
+>
+> The xas_try_split() may sleep if =E2=80=98gfp=E2=80=99 flags permit while=
+ holding the xa_lock, which can cause issues. So can we add a check for the=
+ =E2=80=98gfp=E2=80=99 or only use GFP_NOWAIT?
+
+You mean only allow gfp to be GFP_NOWAIT or GFP_ATOMIC?
+
+Best Regards,
+Yan, Zi
 
