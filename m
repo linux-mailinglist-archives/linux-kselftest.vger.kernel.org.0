@@ -1,127 +1,207 @@
-Return-Path: <linux-kselftest+bounces-27630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D658A46652
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 17:15:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E1EA46712
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 17:53:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A68593A16EF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 16:13:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEC253A8B86
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 16:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA2621CC50;
-	Wed, 26 Feb 2025 16:13:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B7419005F;
+	Wed, 26 Feb 2025 16:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="VUUaK42l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J+gLlw62"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CDE21C9E8;
-	Wed, 26 Feb 2025 16:13:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEEA1A01BF
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 16:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740586426; cv=none; b=srQKlPMmYd/0sNbYidX8LbfzPlwGDBAJqqRtQ5NbDPXpJRXRoLcvuuuzTYYzOH3l/jUMKy18w9pJpXd087sXfbsuGYIizAzHOORfl5J7s9jJArinpT+LC5/h9NU5FCAW7ZoxAn6/HNu1c+7zFjMsq2yes93isqv/yNh4EWhGW9w=
+	t=1740588779; cv=none; b=X/5I6VsqsWc8Q0fE80UASGYVFmmhpI23FdE/ADUq8rCq63JJtx7RgnjRpJUMru7/qT2R8vjs6Rphj/FikQVyjFC8SeSEMxJ7nGXugh5mtr4Ln8tbWOMGEfaMWh/Ab2Bx31H9UqQqrrexgRilm7ndA/q7uQmyqRX7CwVBhiiXum8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740586426; c=relaxed/simple;
-	bh=nbk32YFzMdxsXfzMgqNjh2MOqm+b8/DeI5pYD18xT44=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=sljEep1FefXojWdu/cdRekQ4qvgkrP+UbC5CXfV0oOShxRTklYQZXe+SR0IFO5gWpjqTn1P69+i0danCf052Ty5po+AdKLv5px280gv//6HnLblQpmHzHTAYBOgrjVx94gTthIPv/uErKBLVEmKvHtKlpZtQdPlrcU6RNMtNYk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=VUUaK42l; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1740586399; x=1741191199; i=markus.elfring@web.de;
-	bh=C3c05qXcKU5hYx1ptwwL1abjQhPrDsvUvAbpYz2Al6M=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=VUUaK42lfERESAXrLV120LCFragepAPzgvI9ZM2xzkwhRfWz2rCQI0xrnzCXbXOe
-	 s1AdW0bqYJnBXuSuEeDjvELiRCWXl+m9p+UTWrlpApBnJMB5djX8WCI3EnfAH1KOn
-	 DsYY/sjIOy1jz9gZM6y2S7+TxohVfYBvEu5V3oPDWPVwSVzqsC3rc/ctaG8UPPB0x
-	 4SIaFmw0DMQ9WtSU0Cb6xT/jlY6EoOCrh1V09nGeD2tHo1PSHSoFiXFZcALLvEe7O
-	 oKpJaVlzJNxMaOLdIalXHQMc1POlQRfeujOmuW5EUVvP0OhGGlTq33/44AlyKJ7+O
-	 5jXtJHQnEpewF8vYhg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.70.43]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MLifq-1u4zRW3dui-00Iw5U; Wed, 26
- Feb 2025 17:13:18 +0100
-Message-ID: <516ea911-acc6-47c2-87d5-2df0a18468de@web.de>
-Date: Wed, 26 Feb 2025 17:13:17 +0100
+	s=arc-20240116; t=1740588779; c=relaxed/simple;
+	bh=Qf/Qm0nkzf7U3vlvRsLDs3vQoV9ABJSWnA6WtOiN2ig=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=D+58hBp18OmDeZCFEqakEaqutkwmrX8DtPYDjTlAuSdBGYHLKcmxoMv4f1FHlZFRZnLD3kyvCEcIU02GG63pERlP9qjhyrHPTXsajXPXknR9H+qrcI1fmRNELnAAM2JkCZPCqpinD0vVUyLCTArcsMIIJEICihsPdvPczPsdXnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J+gLlw62; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740588776;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Qf/Qm0nkzf7U3vlvRsLDs3vQoV9ABJSWnA6WtOiN2ig=;
+	b=J+gLlw62K7t4nQLqh/eCztgxf5Fg2RUFnZfalzbLz7G4JkaSaI98fxLoJofLamUdKiq9lF
+	AR5TImaky7EeD9LjA8lc2AfffaIe1F5zPSAVzupIlXI8hJbREi5Xvylty0oavr+Tqbm+xj
+	K1XIY0YigzYySnTUVOWTEqhsAoXWxVI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-556-fD21C53VPi-u4vRt6PUcag-1; Wed, 26 Feb 2025 11:52:55 -0500
+X-MC-Unique: fD21C53VPi-u4vRt6PUcag-1
+X-Mimecast-MFC-AGG-ID: fD21C53VPi-u4vRt6PUcag_1740588774
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4388eee7073so4954905e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 08:52:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740588774; x=1741193574;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qf/Qm0nkzf7U3vlvRsLDs3vQoV9ABJSWnA6WtOiN2ig=;
+        b=mMDisny+vq59n58pqv0Fg5g2ugA7YBCaLjy8McU+Qr/VR0QajAQOTzYIelSzkhCFTl
+         PZg7SVqiAWMjEZFfX962W9w3LoRbDd+OfvPqe7ne38LPnDV/C9VkkkX3ArDJTPeZ+dxF
+         aGbtrKkVtPth+SL/TU976wQTHTXvQtf1v8017egxukyaWoW/yHehtPRuCrDbvYquAgkW
+         MBn9kS5ycMIFn8+6lfGNtlQmkpv2PiZ4KGnwZ3OdZ7FAl/1zxX45ZGDRUHAjeVOT9VPV
+         I57wwJO5P+KJRyvNRUARNXDH0lD3HWfcoNbvfio4+xTAY8U2dXXd3yuwMrq3TvU2/l1Q
+         8+AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF5T5oSrbGml+ZIllhjpSlJVVykhATxDG7v4KxxL2umbmI8bAqWvOvKj/TCZKdWOW0Uk59wYG2oggJaRx//Gc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeOp9JP9bpc6K0PJOomP0qGzthwZqP7IU4p+hl0kIwIlVYVozq
+	7dgS86xN/xrmo1IT5Zul6iMO5o1LO6spq6ybZLnqrR4Hl8ODt+kBAlPAtWFIX1PaxbI/owY/CGu
+	+tYI50v0reDHSZ9Jzr40QSjU+X0xj37NtfGlW5T1ZYWF/YccBTtKvO+Ul0UQeuHiFbA==
+X-Gm-Gg: ASbGncuuLWPZ0vLwQCOEnW5IOn7gCod9OWVbya5dNTY6aGvPo7jmiNYhFUfcsRb/sAh
+	1BQdyawD+Gk48IH6slT26VSV9h2cJk8POMHJvLAL193Ud/p/6i9IeDwCRnp1liYsv66+L+VUuKr
+	5v/304BX6vqtp4GxoW/TYli05Rmq5VqX/mH8R1AHEGalg61B8JZRHZf6kzxzjO77ut2mvoVHuxK
+	5zb9+8bfNePj1/k922m0Wdlki4Bo5Ff4yHVsTRwJ6N8waNBKZHeHtZFrZoxVIolb9lNyUkhMx4F
+	nIDnAv5rEIM2rCULCu5KN8kTuEiBEaELqWFtBML059P4PaaUdaKYLJaCMJeAMP7m+C4MI4NMRKf
+	T
+X-Received: by 2002:a05:600c:ca:b0:439:91c7:895a with SMTP id 5b1f17b1804b1-43afddc6489mr797605e9.7.1740588774304;
+        Wed, 26 Feb 2025 08:52:54 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGWpDWParbyEFSiQubNArY/pYMHk4T+vY7Yfjqs/xu0tXoSgFv+Leti7F7TfR+hujI+3HmBjw==
+X-Received: by 2002:a05:600c:ca:b0:439:91c7:895a with SMTP id 5b1f17b1804b1-43afddc6489mr797035e9.7.1740588773857;
+        Wed, 26 Feb 2025 08:52:53 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390d98c0642sm2242326f8f.81.2025.02.26.08.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2025 08:52:53 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+In-Reply-To: <408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+ <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
+ <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
+ <xhsmhjz9mj2qo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <d0450bc8-6585-49ca-9cad-49e65934bd5c@intel.com>
+ <xhsmhh64qhssj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <eef09bdc-7546-462b-9ac0-661a44d2ceae@intel.com>
+ <xhsmhfrk84k5k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com>
+Date: Wed, 26 Feb 2025 17:52:50 +0100
+Message-ID: <xhsmhfrk0lkbh.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Masami Hiramatsu <mhiramat@kernel.org>,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Hari Bathini
- <hbathini@linux.ibm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
-Subject: Re: [PATCH 4/8] tracing: probe-events: Log errro for exceeding the
- number of arguments
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UZdbfm8Jyj5pDTg2dnA4FRZxSZY84azYIEQUKAQgH2svbyxX3gu
- 08c1/2YY9/U6YbnQzqnDDT2auFa+9vVjjl6S16nghJZEWPGQ7obrvuxMMULQzw5S30hp0t6
- 3mYCXYGrFIswosXM+Cje2vEYJ1qA/ceTfU5jvsfrZsmJLUyZMOBpC7FH5JzB9tBzhevGPFV
- +SM2PdtNd8yyWlMDLBFQw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:JXcb3I61tNg=;j+LC9tXYsMbwwkJH+9vLK8PTLft
- GTV0+z46Q4Buyk95uhIoHhh0x0ew1PNvQ59yD61Md0ylNf/mXVexSk7k8mqbKDQSqvg6hITtt
- oTSxNZLfW4zD1+KCrX+J1pKn+j0Cg3RWSEKcolqV36DEHsSVK5QzRfVm+tFOUDsZJjT1EvZv/
- xjhihTTDLG5PtBSBA+eoshvgKfUwMwi+xdEXH5Eultf22PEzNdOfMA2bON9FiJYtINuBnnCDM
- yXNCaDf+3WwWF2oo61QwUs7tASmMMYAOcSbH24PRv6Levs8pWJvVUhxer4xsrvj9g1ipGa/5e
- aXbhcKVz4U3mr54ERojgyXRISBHr9R/JVq1farA5z4b8X17oteG3UDEYZS+Tqt5nSNipMyK57
- jNEVekhGgkWqKmwS6TiWxkq69d6wimfAr22MqrrSEgMD5KcsIjROYILU/jGo8ghYApcGX488I
- LLV4PtjK8u0r/ZYNb2cpdMo9PSvIlUNz0CIAru8GE+0F9f/TVQtgdh/7Ehw/m5N5f1oFiM7GH
- qwCiO6VKfYSLYmywQJ7jnbr9VNCAYIwwQAqIx5Yqahs6rVzq5q5kTIAu+vzIkbeMKWtP0y3+5
- 550amv7K5gY6tbxX7uN50H1fKDlNELnM+rn5icD7KX4ZuWrA2NJp00uH91RWBkJVoLYh7Qdct
- SAHQ56kPLqzDAyF+vJ9cXgcFMdpFzxZUW+FoqtI3+VUJJ9EGXwHKERQnbbuDAzdxIEm651Tpj
- Od7PW/4y0uLZnJcwCbCf0X2xRBs1bvvfMSu3l/e/Tkf+TssOR8W6/scogXnni2F9yGiAoZO1q
- f6Ui6tsWl8L6xMMegRn75XDQmoQl/ADXdwb59zF+Xm2eTzKkYUfV29q/JNuNVvbrBElxN6ezy
- cB6+Oubz/PAtw224atbNTcTM1FEK3QEhaAk4YFg87wbf1969RxzBH68VukVvM9eby55vjyf/I
- b3sZ4UB98h9TGvof5WhN4XsBJtRDz+jpA7WtW4HmWc3KbKyIveivvVbLoCR1INLUNinC6ilKO
- ZPHd0fAHy20sK0uMtXBvvlQLRcJtBqTzNaYAbLfv8P4EdratUae+HGfhj1OeDyvYTrorn/2kX
- 17e9avdGI94T2r41jcl9LG6mTR839837KN0uUI0Us+lwzQy6kElnbQtQHG1wBwcey63lZGcvV
- lgi2B35cdFxU9SmHmEIA4XB18ZuvUwGBysNhUofUY1Jgv8O6/GDxBJDDBGBgBPeq4wPGKBkal
- VN7BS+RTSZvU7YRTRPFVUTt8CY+J0fJbZ6UIUs5gOtKAXdqAI/bVvZyHHvDU/zFDjDvDtV8pv
- 4bKJj2R+VI5K7oBw8KMYuT4evKB/gLMKGUkyMp+Xk+whQTwCyfVvDSucWNBCzAsZXkp+J4NP6
- rv9s5Dpy4oSx3qgwtro+elBMlzTlU9WivbCaYjlSK30ghqEjhRg9ngrTUfCBtypKbwegEm6Ib
- GGgw+rQ==
+Content-Type: text/plain
 
-=E2=80=A6
-> +++ b/kernel/trace/trace_fprobe.c
-> @@ -1201,8 +1201,11 @@ static int trace_fprobe_create_internal(int argc,=
- const char *argv[],
->  		argc =3D new_argc;
->  		argv =3D new_argv;
->  	}
-> -	if (argc > MAX_TRACE_ARGS)
-> +	if (argc > MAX_TRACE_ARGS) {
-> +		trace_probe_log_set_index(2);
-> +		trace_probe_log_err(0, TOO_MANY_ARGS);
->  		return -E2BIG;
-> +	}
+On 20/02/25 09:38, Dave Hansen wrote:
+> On 2/20/25 09:10, Valentin Schneider wrote:
+>>> The LDT and maybe the PEBS buffers are the only implicit supervisor
+>>> accesses to vmalloc()'d memory that I can think of. But those are both
+>>> handled specially and shouldn't ever get zapped while in use. The LDT
+>>> replacement has its own IPIs separate from TLB flushing.
+>>>
+>>> But I'm actually not all that worried about accesses while actually
+>>> running userspace. It's that "danger zone" in the kernel between entry
+>>> and when the TLB might have dangerous garbage in it.
+>>>
+>> So say we have kPTI, thus no vmalloc() mapped in CR3 when running
+>> userspace, and do a full TLB flush right before switching to userspace -
+>> could the TLB still end up with vmalloc()-range-related entries when we're
+>> back in the kernel and going through the danger zone?
 >
->  	ret =3D traceprobe_expand_dentry_args(argc, argv, &dbuf);
-=E2=80=A6
+> Yes, because the danger zone includes the switch back to the kernel CR3
+> with vmalloc() fully mapped. All bets are off about what's in the TLB
+> the moment that CR3 write occurs.
+>
+> Actually, you could probably use that.
+>
+> If a mapping is in the PTI user page table, you can't defer the flushes
+> for it. Basically the same rule for text poking in the danger zone.
+>
+> If there's a deferred flush pending, make sure that all of the
+> SWITCH_TO_KERNEL_CR3's fully flush the TLB. You'd need something similar
+> to user_pcid_flush_mask.
+>
 
-May a bit of exception handling code be shared by an additional jump targe=
-t?
-Will another goto chain become helpful here?
+Right, that's what I (roughly) had in mind...
 
+> But, honestly, I'm still not sure this is worth all the trouble. If
+> folks want to avoid IPIs for TLB flushes, there are hardware features
+> that *DO* that. Just get new hardware instead of adding this complicated
+> pile of software that we have to maintain forever. In 10 years, we'll
+> still have this software *and* 95% of our hardware has the hardware
+> feature too.
 
-How do you think about to avoid a typo in the summary phrase?
+... But yeah, it pretty much circumvents arch_context_tracking_work, or at
+the very least adds an early(er) flushing of the context tracking
+work... Urgh.
 
-Regards,
-Markus
+Thank you for grounding my wild ideas into reality. I'll try to think some
+more see if I see any other way out (other than "buy hardware that does
+what you want and ditch the one that doesn't").
+
 
