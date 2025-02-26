@@ -1,212 +1,125 @@
-Return-Path: <linux-kselftest+bounces-27656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ECC2A46C5D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 21:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2810A46CC9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 21:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 905783AD0FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 20:26:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD2063AFA23
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 20:55:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D0625C6F1;
-	Wed, 26 Feb 2025 20:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 055942505B0;
+	Wed, 26 Feb 2025 20:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="jQh2RCUk"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Cv3MOR7P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42792257ACA
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 20:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A0A244E8C
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 20:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740601516; cv=none; b=biShXxhJsFLQ2/gKCDo/+WY4uPbkVodd3llkc9yonHf7UkQyDo6T3xmV/P8qGCC1jCY4roYzgIKqIyYDFiZdfQO2YJdyVSKhY6fWycgvjTmrwmIkZiOEAumhDCsOpKV+6A0JDqRDZ5Ym/4/PT5DW46EKRd1HsRUiN8JP580Y9Os=
+	t=1740603361; cv=none; b=W1nPOnzgXvJZzgjHt8WARr50gT/7botARNmSzlGb7f56bbxWx2RFjQiHUnekJzAXJujKFRMDc0pi13CdJERXIz/NM0nHilWOHrok6VX2YLnMZzz75HbG4tsMJRp5KPISOZtJj4UWH53A3zWw/gjyyguNlyyWkWxE4WY7z5vk1ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740601516; c=relaxed/simple;
-	bh=60wxU0lkF9ES7Q2Y1xRG0c1Mze/bj/KB7bV531P/zP8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XFKKwWCyDCt1/GJRrlzdc+SKpfjn5x81Ox/8m4PzOszICC4VhdM0Q4Qe7wQcXWohIUL8pQc6IB8dOpIaAEnEIgfDIQwh+bXX5djzceAn0Kg4kmElUy1hwbNUJsflEhgwjok9LUOdRwTITR5Brbw4XbgFmjrqYIs0YvKMDkRAamI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=jQh2RCUk; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22349bb8605so3534615ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 12:25:15 -0800 (PST)
+	s=arc-20240116; t=1740603361; c=relaxed/simple;
+	bh=mqYzICldJl61KdyHfxq8I6OeV9x311OW0csxdK20FtI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MH09v5x2Fr4luvs67nBHDmYCLLW0CS3mTNYvnm1QtpXNDOEZyLvBAIbOvS025OnpGnW7im1PVzbJRRwPgVM4FGP1B4JxndxBpQPU82b6lqA/2/ZPglinG4VH+sLXDnCV+sVplM8vSx5kGcrbPmcIzMo8Dd1hLUaZhnVa2I8Ndj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Cv3MOR7P; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-855c122b3e7so16414939f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 12:55:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1740601514; x=1741206314; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K+xf5rb3O3ZrwcS1pmKysmwXefhXbLuGjQJfAu9gHOI=;
-        b=jQh2RCUkMktFEZfucqbsRKlUqXy3ySCsKrij1MvceFCF9AKTip/2M8+Z/TrZhGc5xV
-         OI8V/eSdPtEgZP1jaz8FI1+4mGffnWv0yJesWBHnNQl3y7M2z7BwrqiUtXoG0Zz/+y7D
-         Eb2U2yIjPFmt/Y9df93LdHK/ixYNHQjjT2tddfvqP9vgRLFehQ+yFfjBGwcODwZuF/nB
-         urD5L0jjR8JVJ3GeP1KStQxy+8iP6zsU4uDw9vRXmQCFnDUPxZ59ba73PUKmD4bwcfLf
-         YLjGUMssmv/JChM1rnL2v3LxXqiOhXH0SEF9RNL0OBfN4qLqfT+UCShgDylR7+fWc2ui
-         vtvw==
+        d=linuxfoundation.org; s=google; t=1740603359; x=1741208159; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ACXceot6so0qEECSDnrDchyxYrTH5BMNjPgKlk4vqYE=;
+        b=Cv3MOR7PfOlBCHo3kE3GZlSf4noqQpj3XAbOflR+DpQjGZAZrsPbajaNp1sPREKfny
+         nUZ2l84GiLiptGORPyxWvYXwF5dNwWBzSYPRkWK6QGrhCVvkNYgylNZCLT87d30Fi+Mm
+         Uat7XL9Lmj/mu2/22Ekg4F3oV8EcinwsAt7gQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740601514; x=1741206314;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K+xf5rb3O3ZrwcS1pmKysmwXefhXbLuGjQJfAu9gHOI=;
-        b=aAmRJXVjfUeWpnGiCOayItcqcSQfyKbxft7wdgAAhqAsfl68sDskJvndeaZzuPU5yn
-         +laruzACuaJiBSM0wv+SqgmX/6ckJt/ZKCmLw4dR3sZmB6l8YB2U5FTAC5b6GJNmMJmB
-         +Nj7gLB9DDWXxjdvd/w4yRljWJJAIBkioBlNLSACrWqVdkPZvW+XV0Xq1yyePr57Ys+7
-         KHJI8ISvQ/LJ/yBwl8Us2QfTgERJlkJAZUFSmT/CeyCTZ1A7+TecHGqwxdV1XqbLkAkP
-         UUFMchg6h3gfyIJT0oR/MRQHenTs4SPHaUiJdyJLvGcQ462pLv1dp+Hc3V9Qp8TRBf3J
-         rhMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWo1ZVnSp2CX0fN6f6Ax4ZuBsex/BiTn2NDBrgZVlN7APZJNUPrQGLho1uDYyYqNfW88FO+ity7YwqbUn1QKpc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1fQaOOAI6E2mZkScF7BVlL4KEMOp31ZHypD6Zj9Ne23EK4bik
-	qX7KX0SGqVAELcwvEMGEQQHjP0TmUxcrBC0tCJVQF/vjn90+ZF5pxNszVyKqzgo=
-X-Gm-Gg: ASbGncu/ceOocTV2NCt+iGY3hUdAYIlmD+f3xQuwvI3KRVPntgzE/Mvfumm7l1/Lfl3
-	jubmNlRcL1p8OsN5VgYJ/5Zl7kzEQ3v6SypLVlJak9b7piM3nGbTXURElg6+QbieLn7fQU1h1w6
-	Zzb5CSzW+izu2FzBVeUMfhvdX378YFFo5XnG/9RIC+8shtaUtk1X8OXkXN5ezJe5ABRU3VwvOXl
-	lMYVm3rzacPnmIDm+9CKyPN6Bwn+0TojSqB09JMpTRRBVNJHoMIM4uxtFjUap4zbAj1ovGTrmWo
-	5RFmE5zspRDpY3olNnpIhBzJloPfMiV/mZ4UV2E=
-X-Google-Smtp-Source: AGHT+IHw0vBB+PSny2qMliUf6DTVa+ZvGcPh/rPnK0tt+c9UR1fNAKJeSn8VDRagyarmbZCnK8Ejgg==
-X-Received: by 2002:a05:6a00:a26:b0:72d:3b2e:fef9 with SMTP id d2e1a72fcca58-734791aa184mr14536500b3a.20.1740601514558;
-        Wed, 26 Feb 2025 12:25:14 -0800 (PST)
-Received: from atishp.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a7f7de2sm4100963b3a.106.2025.02.26.12.25.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 12:25:14 -0800 (PST)
-From: Atish Patra <atishp@rivosinc.com>
-Date: Wed, 26 Feb 2025 12:25:06 -0800
-Subject: [PATCH 4/4] KVM: riscv: selftests: Allow number of interrupts to
- be configurable
+        d=1e100.net; s=20230601; t=1740603359; x=1741208159;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACXceot6so0qEECSDnrDchyxYrTH5BMNjPgKlk4vqYE=;
+        b=PfozIM2cGwMSQyhBB5ba3a6hh/Hqjhze/sCwlWkX9zY71kwWwgSGorCKkMfndscF5s
+         ZAZp0uz87Tg0YGo2A3eu+WjYrolvioP2mcW36PV+sPKwCe6QIEtV1ZOEIvK8+UsDyXAS
+         06IhuqbJ4HOnnMRjjGTGW1Vtjom9N1fbDAVdiAdPla4FsF8p1i8g1+nBV8EWjGboYRzA
+         9wyovmxgxKRjyIGYXtI/6wi60eLii77IdSb55RN8dhrQ6CMOuq4gyuUNa58i8vK6ZKnX
+         v80l0r9arYFUOUX7cr9p93EvM0pnfayUezc+ptw59xxweRl310lyS1sz4r+tWi7yMqu+
+         DuVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNE0umg4qSU28Sx31QvwdXIDrG6QFuiydCgU0YHHl67iTm7fpcwgwrPcOZMfEuzeIoobw+nf0DZhmXHfdIYPY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzqm+ZVRBzDfcgrpM+mfMN2d1ulOD0I7eXkKgH/1ANRrLPF6N5+
+	UVgGfIVygJlEOFq0RqIWYhUpKiXYcrUeBU3ooTggnUxPh0P4gQfOeNaIc26PwlU=
+X-Gm-Gg: ASbGnctILrKWbI2ID/zexAQ+/y4RgACvbbG4ARxcscBRXHg7j2ubjs6fOv9d3HqWpn7
+	VEoF2qAapGX92QWuo0PD/TXf/tU1Jisj+ClaIvIaDj8MAIrx44P94RxaOcsFQGfUcOS/DW51za0
+	+YWQqJQxKmX9pZ1lDWGxC+tykTsFuzxVJm37kgq7kaOINzaAzo8SBCL+YXpeF7v1mPRNTVV/K5k
+	oRosVag1soFqNUpbBK6O0+DUO8Y7ZFQkNr9ffFJi+ZWXX2lDvjaXnSRniQztXRQtTV/ZQ9+SQB6
+	VqkhGEx9Tahn576XyBU2cr8AgU+qpqBQVjE/
+X-Google-Smtp-Source: AGHT+IEdrq2nDcrlokLWu5B99Vt7XXGUTSjVaYnvuG/TeLYt4skaR2JoYGjFSX/j14RH9VpA4xleeA==
+X-Received: by 2002:a05:6602:3d0:b0:855:c980:6eb4 with SMTP id ca18e2360f4ac-855dabd790cmr2360259239f.1.1740603359298;
+        Wed, 26 Feb 2025 12:55:59 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f061f3905fsm21244173.88.2025.02.26.12.55.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Feb 2025 12:55:58 -0800 (PST)
+Message-ID: <04c7f895-d587-4023-9fdf-60085c329ff3@linuxfoundation.org>
+Date: Wed, 26 Feb 2025 13:55:58 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/ftrace: Use readelf to find entry point in
+ uprobe test
+To: Steven Rostedt <rostedt@goodmis.org>, Heiko Carstens <hca@linux.ibm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250220130102.2079179-1-hca@linux.ibm.com>
+ <20250226121316.7653ae38@gandalf.local.home>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250226121316.7653ae38@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250226-kvm_pmu_improve-v1-4-74c058c2bf6d@rivosinc.com>
-References: <20250226-kvm_pmu_improve-v1-0-74c058c2bf6d@rivosinc.com>
-In-Reply-To: <20250226-kvm_pmu_improve-v1-0-74c058c2bf6d@rivosinc.com>
-To: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Andrew Jones <ajones@ventanamicro.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
-X-Mailer: b4 0.15-dev-13183
 
-It is helpful to vary the number of the LCOFI interrupts generated
-by the overflow test. Allow additional argument for overflow test
-to accommodate that. It can be easily cross-validated with
-/proc/interrupts output in the host.
+On 2/26/25 10:13, Steven Rostedt wrote:
+> On Thu, 20 Feb 2025 14:01:02 +0100
+> Heiko Carstens <hca@linux.ibm.com> wrote:
+> 
+>> The uprobe events test fails on s390, but also on x86 (Fedora 41). The
+>> problem appears to be that there is an assumption that adding a uprobe to
+>> the beginning of the executable mapping of /bin/sh is sufficient to trigger
+>> a uprobe event when /bin/sh is executed.
+>>
+>> This assumption is not necessarily true. Therefore use "readelf -h" to find
+>> the entry point address of /bin/sh and use this address when adding the
+>> uprobe event.
+>>
+>> This adds a dependency to readelf which is not always installed. Therefore
+>> add a check and exit with exit_unresolved if it is not installed.
+>>
+>> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+> 
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> Shuah,
+> 
+> Can you take this in your tree?
+> 
+> -- Steve
 
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 36 ++++++++++++++++++++----
- 1 file changed, 30 insertions(+), 6 deletions(-)
+Applied to linux_kselftest next for Linux 6.15-rc1.
 
-diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-index 533b76d0de82..7c273a1adb17 100644
---- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-+++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-@@ -39,8 +39,10 @@ static bool illegal_handler_invoked;
- #define SBI_PMU_TEST_SNAPSHOT	BIT(2)
- #define SBI_PMU_TEST_OVERFLOW	BIT(3)
- 
-+#define SBI_PMU_OVERFLOW_IRQNUM_DEFAULT 5
- struct test_args {
- 	int disabled_tests;
-+	int overflow_irqnum;
- };
- 
- static struct test_args targs;
-@@ -478,7 +480,7 @@ static void test_pmu_events_snaphost(void)
- 
- static void test_pmu_events_overflow(void)
- {
--	int num_counters = 0;
-+	int num_counters = 0, i = 0;
- 
- 	/* Verify presence of SBI PMU and minimum requrired SBI version */
- 	verify_sbi_requirement_assert();
-@@ -495,11 +497,15 @@ static void test_pmu_events_overflow(void)
- 	 * Qemu supports overflow for cycle/instruction.
- 	 * This test may fail on any platform that do not support overflow for these two events.
- 	 */
--	test_pmu_event_overflow(SBI_PMU_HW_CPU_CYCLES);
--	GUEST_ASSERT_EQ(vcpu_shared_irq_count, 1);
-+	for (i = 0; i < targs.overflow_irqnum; i++)
-+		test_pmu_event_overflow(SBI_PMU_HW_CPU_CYCLES);
-+	GUEST_ASSERT_EQ(vcpu_shared_irq_count, targs.overflow_irqnum);
-+
-+	vcpu_shared_irq_count = 0;
- 
--	test_pmu_event_overflow(SBI_PMU_HW_INSTRUCTIONS);
--	GUEST_ASSERT_EQ(vcpu_shared_irq_count, 2);
-+	for (i = 0; i < targs.overflow_irqnum; i++)
-+		test_pmu_event_overflow(SBI_PMU_HW_INSTRUCTIONS);
-+	GUEST_ASSERT_EQ(vcpu_shared_irq_count, targs.overflow_irqnum);
- 
- 	GUEST_DONE();
- }
-@@ -621,8 +627,11 @@ static void test_vm_events_overflow(void *guest_code)
- 
- static void test_print_help(char *name)
- {
--	pr_info("Usage: %s [-h] [-t <test name>]\n", name);
-+	pr_info("Usage: %s [-h] [-t <test name>] [-n <number of LCOFI interrupt for overflow test>]\n",
-+		name);
- 	pr_info("\t-t: Test to run (default all). Available tests are 'basic', 'events', 'snapshot', 'overflow'\n");
-+	pr_info("\t-n: Number of LCOFI interrupt to trigger for each event in overflow test (default: %d)\n",
-+		SBI_PMU_OVERFLOW_IRQNUM_DEFAULT);
- 	pr_info("\t-h: print this help screen\n");
- }
- 
-@@ -631,6 +640,8 @@ static bool parse_args(int argc, char *argv[])
- 	int opt;
- 	int temp_disabled_tests = SBI_PMU_TEST_BASIC | SBI_PMU_TEST_EVENTS | SBI_PMU_TEST_SNAPSHOT |
- 				  SBI_PMU_TEST_OVERFLOW;
-+	int overflow_interrupts = -1;
-+
- 	while ((opt = getopt(argc, argv, "h:t:n:")) != -1) {
- 		switch (opt) {
- 		case 't':
-@@ -646,12 +657,24 @@ static bool parse_args(int argc, char *argv[])
- 				goto done;
- 			targs.disabled_tests = temp_disabled_tests;
- 			break;
-+		case 'n':
-+			overflow_interrupts = atoi_positive("Number of LCOFI", optarg);
-+			break;
- 		case 'h':
- 		default:
- 			goto done;
- 		}
- 	}
- 
-+	if (overflow_interrupts > 0) {
-+		if (targs.disabled_tests & SBI_PMU_TEST_OVERFLOW) {
-+			pr_info("-n option is only available for overflow test\n");
-+			goto done;
-+		} else {
-+			targs.overflow_irqnum = overflow_interrupts;
-+		}
-+	}
-+
- 	return true;
- done:
- 	test_print_help(argv[0]);
-@@ -661,6 +684,7 @@ static bool parse_args(int argc, char *argv[])
- int main(int argc, char *argv[])
- {
- 	targs.disabled_tests = 0;
-+	targs.overflow_irqnum = SBI_PMU_OVERFLOW_IRQNUM_DEFAULT;
- 
- 	if (!parse_args(argc, argv))
- 		exit(KSFT_SKIP);
-
--- 
-2.43.0
-
+thanks,
+-- Shuah
 
