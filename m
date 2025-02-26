@@ -1,280 +1,289 @@
-Return-Path: <linux-kselftest+bounces-27604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27605-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A80DA45DD5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:54:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73CD9A45E74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 13:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 508283AE623
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:52:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75BEE189B76C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C84F2165E9;
-	Wed, 26 Feb 2025 11:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08206221556;
+	Wed, 26 Feb 2025 12:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ahTLmZ2h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zx9vR92F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774BB216397
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 11:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F4721D3D3;
+	Wed, 26 Feb 2025 12:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570757; cv=none; b=bM+oyqwhABnVVmFZXo0pa1QLhzOkVHrXIDzOdeJc8RN2undlbmlO9GgTimQw/NqpvKOSCHA4ErxdGcDFE98Tv0PUjxliF7eM6QvvkO/AA7xuFmRXahxX1/m0JXkyvzIVi7sdGOOs0MXdvMeWXViu0/pepipCJAXjzh69ZpihbrM=
+	t=1740571664; cv=none; b=cO8CrqBapuckQ2fiLUmbUGinAiLe0suLp9XrLPRriJ8SFVu+IwmmEvfyh2b7nLE3DPoKRi0b88H6S7+Cx0yaRIbJU2Z4oZLFeVnzpTKGfpg5M8Q3DHicIcSULTlPp4DbATXrq4pMQADSW4SC6Qe4Z40HOXkjZIFn/Ts1gXVCv08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740570757; c=relaxed/simple;
-	bh=lAP5jCkkR0TPWw9dGfqZRBeM8Juv+VZLV55JUEKWdDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sfrgrq8HO6ktv66vdX3mPZDdSntCFTwpzdraj94A/1/QwaUmUTFT9b1sfLWhwQeYTS60r2pi8GREuRmnGlmAJlHUdKxXEXZAXEbsjb85Zjkq5RH/WRC55d2c4zvTtSGgi2m14Un+ujxj4ntGMpDRF16cXZuf8HtRmGClgS5uFCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ahTLmZ2h; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740570754;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=0p71Bc+tSNk19U8eoW67nNiNmqlLTYbFS9i3TH6hlEU=;
-	b=ahTLmZ2hKw5nqPhQEik4b4bnFJZbbqulVoCu2bANMp26FFZJShY2AY9Kpa7zwIP3jQUD3H
-	Z7Hso02Wh9RLUHM0WS71HEKoqlXsWLmFXvz1SDNVC/5ROKkJ1FQBREP4HjBQj4zrJUPYS6
-	kLxRb3ng6uuKjYAjHx2JBhreVEGKbAk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-593-N84lSM0_P3CM9N9id3gRHg-1; Wed, 26 Feb 2025 06:52:32 -0500
-X-MC-Unique: N84lSM0_P3CM9N9id3gRHg-1
-X-Mimecast-MFC-AGG-ID: N84lSM0_P3CM9N9id3gRHg_1740570752
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-38f44be93a8so3323982f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 03:52:32 -0800 (PST)
+	s=arc-20240116; t=1740571664; c=relaxed/simple;
+	bh=AuH3N96iFlk5in14Z7t9Ib0iFEWLt6NpkGCyvjo/ASE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=isUeH2FDvBba268REHtVVkvuSkNIWDup3zmnXlV/qaYMiM2zBPOTrDo+tUTPPcPPW24EDCC3Tais1Qz1O+O0LqNC4siMze4w0ex0uPEVEDR+FN61yvL/kv5Wqrs5+3XFizN9WanitEOCtf0iSsloNx3t4ipNR/d7xYeLiN4+3bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zx9vR92F; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2fc1c80cdc8so10203634a91.2;
+        Wed, 26 Feb 2025 04:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740571662; x=1741176462; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0gqkCHlRt6qeAq3lmw4OlHwxr8yfkouB8dBCSTizu1c=;
+        b=Zx9vR92FxLAR/M7RvcMcwmu3mJnPrJOZQeVuS034h+7B6FaLEvQ6mQirep1DykNwWs
+         fKKOWnfsGiyx71Lh2GN9IioI1+xGJUlCgyOwh3aaCwB10YWv84mdvchAeQ/8LO3n1vtV
+         t5a0RC319lU4yMB2xci5bRmX2VqBY63jRs90E5dfCKnv/AYKlfHBPAKTcobKE67YZs1r
+         52sa562DVA0Z/gMAhA4uh+lDSY5S9iMx+NO7AeEGX61cl7BgULr7pMhMa1nDsBEHEt6k
+         hDEFfaf4nOq+5bQJpWEA6R51w7eVylTn4XvGbJafpqsiwGQp3g/hwyrLRuLZQ3QIB8ln
+         ijGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740570751; x=1741175551;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0p71Bc+tSNk19U8eoW67nNiNmqlLTYbFS9i3TH6hlEU=;
-        b=GFSTSXnVCUCXoMDeVkC4cUzUdyWXDF5laTQHDN+MM6yu/yuvt/Se06rkBehPbKFDGx
-         x0GK+6g7vZXXgiuZ1B6lM5ju5iGgNJBkj9Ge37tveWe/9TlEHYZI81rrCgCdCtp9lbXq
-         CXpRPQ5KvihjUObArDQPSBYolfbS3RoVGqPE1N/oi4fNIHaspwedCJWo7U2jJU/AHpi6
-         bHJpgmMe2mWYZkydie4GmcoCqyXwGFPPrMwgsQ6zwRTzFhrLhRdPWNYOivegPCmqKhb4
-         LMWkNFeEkQ2TOvk0/EZXe/ST6PVCM2tylnLTnxpgrULGyCSCTrmurI0piPka5ZgNV1JI
-         IXfg==
-X-Forwarded-Encrypted: i=1; AJvYcCVPN1pbe86bNiSWRrKJoXUfhn2jZ1hxLrsnfFb3xyhBuBaWRtJfK3t+/eH58cHTnofxfDG97J86hZPUc1xLDBg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi+q3SRDG+pU9O835Uf3BPgZLSlEjywFnI/+7Wqx8O4+AOjlzV
-	N6mackfK9vVegP3x6BCDQr3l1lkweNMRU8PE7giu29SQn/LIvmrKI2vuzKKNdYC7SeGJhLQwu9r
-	W9cNHNCgPU8vn3SMmAL9oinM7tTQW7ifZmAHXsoFXdL6BC70L9gaeIF/2YFcduJfwnA==
-X-Gm-Gg: ASbGncv894TcLxmp67fT8fF5hXBHEvu+Fj0V97/3uelWNuDryJgsNFt7ngwjHjeb+oP
-	JPmVS1QJPDjUvgVUavo+iz1+wdwRFl/AMu9/FQYbY66quuI8cPwPj4UU7DNHrjxhfsTJNbdKV3B
-	vGKOtjRXaEknWFLIJ9uydWSXUkhs+Lm8nnG2y39EGiJNj13oUkaJ3gpbygYGt55MLw1u61uva/R
-	B0ASHYDZmLt+jxaOZkEO1VM+8lLUeAEFNzARHdSNqXojGENFQaNidI9cmp14minSgatK4+pcEIu
-	HinMHokCsBxgxdvI6HpLfGdSiecIgnd4oXpjqBgETeLU/miDLkJFSmAH9gOOpHcraTzIydv0+0v
-	RIt6RqNPWVhFOvvhaSeMIFPXJV1Dn9WD7eOGgf99HtXU=
-X-Received: by 2002:a05:6000:2a7:b0:38f:4fa6:e641 with SMTP id ffacd0b85a97d-390d4f84740mr3006490f8f.43.1740570751449;
-        Wed, 26 Feb 2025 03:52:31 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEw6LTiRCfqsNc3pw3LySJCXKQPJIe6Q8/sql2dmRjbzjqWwsMFFiGxlF1FuddtHIXqDIK76Q==
-X-Received: by 2002:a05:6000:2a7:b0:38f:4fa6:e641 with SMTP id ffacd0b85a97d-390d4f84740mr3006423f8f.43.1740570751066;
-        Wed, 26 Feb 2025 03:52:31 -0800 (PST)
-Received: from ?IPV6:2003:cb:c747:ff00:9d85:4afb:a7df:6c45? (p200300cbc747ff009d854afba7df6c45.dip0.t-ipconnect.de. [2003:cb:c747:ff00:9d85:4afb:a7df:6c45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390cd86cd10sm5467317f8f.37.2025.02.26.03.52.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 03:52:30 -0800 (PST)
-Message-ID: <657f10ed-4e82-4048-98ab-1c4b65349298@redhat.com>
-Date: Wed, 26 Feb 2025 12:52:29 +0100
+        d=1e100.net; s=20230601; t=1740571662; x=1741176462;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gqkCHlRt6qeAq3lmw4OlHwxr8yfkouB8dBCSTizu1c=;
+        b=UsagGytJH94xTNm14WgjMVxqflzbFhmRmPf4+BeQvs2Ncx1ozpbnC5rAlCcTAne9K2
+         YCNdYBUlNuZaqZBD83dM9vtR1UNDnS2kcxWSt1q40Ul8+jiZQOcT1L25SRJH18Ytxtae
+         eWTIWJJTJb0jw+Jezjc9pOFgFkXcCP9YbYcciIaKC409W3Sxn6emxCDsOY7HKAZ5zMQ4
+         vo0113hHgnndQALgpunAQ/U05BJzmk0Z6Rm+lZpqHJXWi5FVr38zvymZRC2StROIXPUP
+         nyMgpUFwRc6hEcLbD/MOTzdS3/43sGLMnm/cU/qaz/uWdjNV7I7ZhO6YHP2QdJDH26JQ
+         xRUw==
+X-Forwarded-Encrypted: i=1; AJvYcCU38hwIM462tYCdEAJWgLn+fD1tmGLmWc6QenxOvEh8eBqr9CfLkcnrVdKEJ8A6/IxmskqWavhrj9USB+mXYSNm@vger.kernel.org, AJvYcCUGMTR2ZxLiP70tceUIyS1EgZs+hnFOBtJNaDE9wDOFTgi780jv+yqMEh5u2zx2lw1XTuNbwd4L@vger.kernel.org, AJvYcCX7sByFWnXFRntYkb+TQtY/iPdJ+a37OC645PaGgZwzOJjI0ZoyXI2guGR2ew6bpCfuTXNG7xEiHqpk3UI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBisenTQNCgVNf+YnWx0ZLeSn6n1SREzGNwN+UeSITxpoxRX/S
+	/YnWY1Pwb+Uj2gEcww4b/dyj+M1It3YAP7k//LKFV0y02GV8w5a5
+X-Gm-Gg: ASbGnctZbvexetsSVVN38w25BCUBGKcPXCDS60FZFSQ/9AIYrR3urpihAQCHyZwlYHo
+	IoZxHPYbNVlZbM4EypDAXXbmBKf3JzsjLuMuL8yqOCuqD8wzZgi3I7zS4Pi12aFYYIa4wER3HJU
+	ZllJXLM6x0pn7wi+RShdfsYbMfCK3J6Epd+q0Tzw8jmJVNAzPJjMGRUSaKdpKbySeEd2yZbHwGS
+	xcHMqlsc+KWzdQ9eacX5s/kCR6AzqkpwTLa276m23UK5EsZYUVEhoajOm0j3TapDsjpGviBl7B7
+	eUwzd34mZhBforc23YPdO8QrxgBWSjQ=
+X-Google-Smtp-Source: AGHT+IFjwD3XZMah3YqtgD+xdLRELkvMCz/B5PniZYmtxxBeR1ijtRKmjKAe4fTxtU0/VXK2woSiHA==
+X-Received: by 2002:a17:90b:2590:b0:2fc:2a9c:21de with SMTP id 98e67ed59e1d1-2fe7e389a4cmr5081133a91.35.1740571662237;
+        Wed, 26 Feb 2025 04:07:42 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fe825bb358sm1302139a91.12.2025.02.26.04.07.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2025 04:07:41 -0800 (PST)
+Date: Wed, 26 Feb 2025 12:07:31 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: "shuah@kernel.org" <shuah@kernel.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"jv@jvosburgh.net" <jv@jvosburgh.net>,
+	"jarod@redhat.com" <jarod@redhat.com>,
+	"razor@blackwall.org" <razor@blackwall.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	Jianbo Liu <jianbol@nvidia.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCHv2 net 1/3] bonding: move mutex lock to a work queue for
+ XFRM GC tasks
+Message-ID: <Z78EA2LEuFAwufNJ@fedora>
+References: <20250225094049.20142-1-liuhangbin@gmail.com>
+ <20250225094049.20142-2-liuhangbin@gmail.com>
+ <d298da7bc638c323e6d492b2dec7f1b9ea1e1350.camel@nvidia.com>
+ <Z77jc8AB3D2xWczl@fedora>
+ <0605dc53cdcee5ea71b89114f2318dd5d0a83276.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/4] mm: KUnit tests for the page allocator
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Oscar Salvador
- <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Michal Hocko <mhocko@kernel.org>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- Yosry Ahmed <yosry.ahmed@linux.dev>
-References: <20250224-page-alloc-kunit-v1-0-d337bb440889@google.com>
- <0449ff75-0a6b-4c1e-bf12-ff052aad5287@redhat.com>
- <Z72-AP-yQ2hPwpKe@google.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <Z72-AP-yQ2hPwpKe@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0605dc53cdcee5ea71b89114f2318dd5d0a83276.camel@nvidia.com>
 
-On 25.02.25 13:56, Brendan Jackman wrote:
-> On Tue, Feb 25, 2025 at 11:01:47AM +0100, David Hildenbrand wrote:
->>> This is an RFC and not a PATCH because:
->>>
->>> 1. I have not taken much care to ensure the isolation is complete.
->>>      There are probably sources of flakiness and nondeterminism in here.
->>>
->>> 2. I suspect the the basic idea might be over-complicated: do we really
->>>      need memory hotplug here? Do we even need the instance of the
->>>      allocator we're testing to actual memory behind the pages it's
->>>      allocating, or could we just hallucinate a new region of vmemmap
->>>      without any of that awkwardness?
->>>
->>>      One significant downside of relying on memory hotplug is that the
->>>      test won't run if we can't hotplug anything out. That means you have
->>>      to fiddle with the platform to even run the tests - see the
->>>      --kernel_args and --qemu_args I had to add to my kunit.py command
->>>      above.
->>>
->>>      So yeah, other suggestions welcome.
->>>
->>>      2b. I'm not very confident I'm using the hotplug API properly.
->>
->> Me neither ;)
->>
->> Dynamically adding memory to that "fake" node is certainly interesting, but
->> which guarantees do we have that some other features (page migration, memory
->> offlining, page reporting ...) don't interact in weird ways with this "fake"
->> node? Adding special-casing all over the place for that feels wrong. I
->> assume this is point 1. you note above.
+On Wed, Feb 26, 2025 at 11:05:47AM +0000, Cosmin Ratiu wrote:
+> > > What do you think about this idea?
+> > 
+> > Thanks a lot for the comments. I also skipped the DEAD xs in
+> > add_sa_all.
+> > What about the patch like:
 > 
-> Yeah, basically this is the big downside. Changing the system we're
-> trying to test in order to make it testable can't be avoided entirely,
-> but I am also pretty unhappy with sprinkling "if (node_isolated(node))"
-> everywhere.
-> 
-> I guess the ideal approach is one where, instead of having to modify
-> the meaning of node_data, we just support replacing it completely,
-> e.g:
-> 
-> struct page *__alloc_frozen_pages_noprof(gfp_t gfp, unsigned int order,
-> 		int preferred_nid, nodemask_t *nodemask,
-> 		struct pagelist_data *node_data)
-> {
-> 	struct alloc_context ac = { .node_data = node_data };
-> 
-> 	// ...
-> }
-> 
-> Ideally this could be done in such a way that it disappears completely
-> outside of KUnit builds, the interface should be private and we'd
-> wanna get rid of any unnecessary pointer chasing with stuff like:
-> 
-> #ifdef CONFIG_PAGE_ALLOC_KUNIT_TESTS
-> static inline struct ac_node_data(struct alloc_context *ac, int node)
-> {
-> 	return ac->node_data[node];
-> }
-> #else
-> #define ac_node_data(ac, node) (NODE_DATA(node))
-> #endif
-> 
-> I initially rejected this approach because it felt "too intrusive",
-> but now that I've actually written this RFC I think it could be less
-> intrusive than the node_isolated() thing I've proposed here.
-> 
-> The most obvious challenges I can see there are:
-> 
-> - There might be places that page_alloc.c calls out to that care about
->    node_data but where we really don't want to plumb the alloc_context
->    through (maybe vmscan.c is already such a place)?
-> 
-> - I dunno how many more such helpers we'd need beyond ac_node_data(),
->    like do we need ac_nodes_possible_mask() etc etc etc?
-> 
-> But maybe worth a try - can you see any obvious reason this idea is
-> stupid?
-> 
->> So I don't quite love the idea on first sight ... but I haven't grasped all
->> details of the full picture yet I'm afraid.
-> 
-> Do you have any thoughts about "making up" memory instead of
-> hot-unplugging real memory for test usage? That might simplify things
-> a bit?
- > > It seems possible that very little mm code cares if the memory we're
-> managing actually exists. (For ASI code we did briefly experiment with
-> tracking information about free pages in the page itself, but it's
-> pretty sketchy and the presence of debug_pagealloc makes me think
-> nobody does it today).
+> This is what I had in mind, thanks for proposing it. Maybe you should
+> package it in a new submission with a proper title/etc.?
+> I'll do the initial review here.
 
-At least when it comes to the buddy, only page zeroing+poisoning should 
-access actual page content.
-
-So making up memory might actually work in quite some setups, assuming 
-that it will never get allocated.
-
-The "complicated" thing is still that we are trying to test parts of the 
-buddy in a well-controlled way while other kernel infrastructure is 
-using the buddy in rather uncontrolled ways.
-
+This is a draft patch and I think there may have something need to be fixed.
+So I just paste it here :)
 
 > 
-> There might be arch-specific issues there, but for unit tests it
-> seems OK if they don't work on every ISA.
+> > 
+> > diff --git a/drivers/net/bonding/bond_main.c
+> > b/drivers/net/bonding/bond_main.c
+> > index e45bba240cbc..0e4db43a833a 100644
+> > --- a/drivers/net/bonding/bond_main.c
+> > +++ b/drivers/net/bonding/bond_main.c
+> > @@ -537,6 +537,12 @@ static void bond_ipsec_add_sa_all(struct bonding
+> > *bond)
+> >  	}
+> >  
+> >  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+> > +		/* No need to handle DEAD XFRM, as it has already
+> > been
+> > +		 * deleted and will be freed later.
+> > +		 */
+> 
+> Nit: Maybe rephrase that as "Skip dead xfrm states, they'll be freed
+> later."
+> 
+> > +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
+> > +			continue;
+> > +
+> >  		/* If new state is added before ipsec_lock acquired
+> > */
+> >  		if (ipsec->xs->xso.real_dev == real_dev)
+> >  			continue;
+> > @@ -592,15 +598,6 @@ static void bond_ipsec_del_sa(struct xfrm_state
+> > *xs)
+> >  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
+> >  out:
+> >  	netdev_put(real_dev, &tracker);
+> > -	mutex_lock(&bond->ipsec_lock);
+> > -	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+> > -		if (ipsec->xs == xs) {
+> > -			list_del(&ipsec->list);
+> > -			kfree(ipsec);
+> > -			break;
+> > -		}
+> > -	}
+> > -	mutex_unlock(&bond->ipsec_lock);
+> >  }
+> >  
+> >  static void bond_ipsec_del_sa_all(struct bonding *bond)
+> > @@ -617,6 +614,12 @@ static void bond_ipsec_del_sa_all(struct bonding
+> > *bond)
+> >  
+> >  	mutex_lock(&bond->ipsec_lock);
+> >  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+> > +		/* No need to handle DEAD XFRM, as it has already
+> > been
+> > +		 * deleted and will be freed later.
+> > +		 */
+> > +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
+> > +			continue;
+> > +
+> 
+> If this doesn't free dead entries now and bond_ipsec_add_sa_all is
+> called soon after, the pending bond_ipsec_free_sa() call will then hit
+> the WARN_ON(xs->xso.real_dev != real_dev) before attempting to call
+> free on the wrong device.
+> To fix that, these entries should be freed here and the WARN_ON in
+> bond_ipsec_free_sa() should be converted to an if...goto out, so that 
+> bond_ipsec_free_sa() calls would hit one of these conditions:
+> 1. "if (!slave)", when no active device exists.
+> 2. "if (!xs->xso.real_dev)", when xdo_dev_state_add() failed.
+> 3. "if (xs->xso.real_dev != real_dev)", when a DEAD xs was already
+> freed by bond_ipsec_del_sa_all() migration to a new device.
+> In all 3 cases, xdo_dev_state_free() shouldn't be called, only xs
+> removed from the bond->ipsec list.
+> 
+> I hope I didn't miss any corner case.
 
-Just pointing it out: for memblock tests (tools/testing/memblock/) we 
-actually compile memblock.c to be used in a user space application, 
-stubbing all external function calls etc such that we get the basics 
-running.
+Thumb up! Thanks a lot for your review and comments. You thought much more
+than me. During bonding testing, we also found a case that would trigger
+the WARN_ON(xs->xso.real_dev != real_dev).
 
-It'd probably be quite some work to get page_alloc.c into a similar 
-shape, likely we'd have to move a lot of unrelated-for-the tests stuff, 
-and think about how to handle some nasty details like pcp etc. Just 
-wondering, did you think about that option as well?
+If we create active-backup mode bonding and create ipsec tunnel over
+bonding device, then remove bonding device. There is a possibility that
+the bond call bond_ipsec_del_sa_all() to delete the ipsec state first,
+then change active slave to another interface.
 
-The nice thing about such an approach is that we can test the allcator 
-without any possible side effects from the running system.
+At the same time, ipsec gc was called and then bond_ipsec_free_sa().
+This will cause the xs->xso.real_dev != active_slave as the failover
+triggered. The call traces looks like:
 
--- 
-Cheers,
+[14504.421247] bond0: (slave enp23s0f1np1): Enslaving as a backup interface with an up link
+[14506.761933] mlx5_core 0000:17:00.0: lag map active ports: 1
+[14506.767520] mlx5_core 0000:17:00.0: shared_fdb:0 mode:hash
+[14550.992133] bond0: (slave enp23s0f0np0): Releasing backup interface
+[14550.994150] mlx5_core 0000:17:00.0: lag map active ports: 1, 2
+[14550.998407] bond0: (slave enp23s0f1np1): making interface the new active one
+[14551.013286] ------------[ cut here ]------------
+[14551.017912] WARNING: CPU: 7 PID: 1537 at drivers/net/bonding/bond_main.c:664 bond_ipsec_free_sa+0x9b/0xa0 [bonding]
+[14551.117875] Unloaded tainted modules: bonding(E):33 fjes(E):1 padlock_aes(E):2 [last unloaded: bonding(E)]
+[14551.148449] CPU: 7 UID: 0 PID: 1537 Comm: kworker/7:2 Kdump: loaded Tainted: G            E      6.13.0-rc7+ #5
+[14551.158536] Tainted: [E]=UNSIGNED_MODULE
+[14551.162461] Hardware name: Dell Inc. PowerEdge R750/0WT8Y6, BIOS 1.5.4 12/17/2021
+[14551.169941] Workqueue: events xfrm_state_gc_task
+[14551.174559] RIP: 0010:bond_ipsec_free_sa+0x9b/0xa0 [bonding]
+[14551.180227] Code: 8b 85 38 05 00 00 65 ff 08 5b 5d c3 cc cc cc cc 5b 5d e9 e8 e3 01 da e8 e3 e3 01 da 48 83 bb b0 02 00 00 00 74 e3 0f 0b eb df <0f> 0b eb b4 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3
+[14551.198972] RSP: 0018:ff61163a49eb3e00 EFLAGS: 00010287
+[14551.204200] RAX: ff42be3fe4bd8000 RBX: ff42be3fa7359d40 RCX: 00000000802a0025
+[14551.211336] RDX: ff42be4edc534280 RSI: 00000000fffffe00 RDI: ff42be4edc534280
+[14551.218476] RBP: ff42be3f50128000 R08: 0000000000000000 R09: 0000000000000001
+[14551.225606] R10: 00000000802a0025 R11: ff42be404d917f60 R12: ff42be5e7edb4e80
+[14551.232740] R13: ff42be4edc534280 R14: ffffffff9db3db40 R15: 0000000000000000
+[14551.239872] FS:  0000000000000000(0000) GS:ff42be5e7ed80000(0000) knlGS:0000000000000000
+[14551.247957] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[14551.253704] CR2: 00007fff69f55df0 CR3: 0000001158a22002 CR4: 0000000000773ef0
+[14551.260836] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[14551.267970] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[14551.275101] PKRU: 55555554
+[14551.277814] Call Trace:
+[14551.280268]  <TASK>
+[14551.282374]  ? show_trace_log_lvl+0x1b0/0x2f0
+[14551.286742]  ? show_trace_log_lvl+0x1b0/0x2f0
+[14551.291102]  ? xfrm_dev_state_free+0x84/0xb0
+[14551.295374]  ? bond_ipsec_free_sa+0x9b/0xa0 [bonding]
+[14551.300435]  ? __warn.cold+0x93/0xf4
+[14551.304020]  ? bond_ipsec_free_sa+0x9b/0xa0 [bonding]
+[14551.309076]  ? report_bug+0xff/0x140
+[14551.312662]  ? handle_bug+0x53/0x90
+[14551.316157]  ? exc_invalid_op+0x17/0x70
+[14551.319994]  ? asm_exc_invalid_op+0x1a/0x20
+[14551.324183]  ? bond_ipsec_free_sa+0x9b/0xa0 [bonding]
+[14551.329242]  xfrm_dev_state_free+0x84/0xb0
+[14551.333343]  ___xfrm_state_destroy+0xe3/0x160
+[14551.337701]  xfrm_state_gc_task+0x7a/0xb0
+[14551.341713]  process_one_work+0x174/0x330
+[14551.345729]  worker_thread+0x252/0x390
+[14551.349487]  ? __pfx_worker_thread+0x10/0x10
+[14551.353761]  kthread+0xcf/0x100
+[14551.356908]  ? __pfx_kthread+0x10/0x10
+[14551.360668]  ret_from_fork+0x31/0x50
+[14551.364249]  ? __pfx_kthread+0x10/0x10
+[14551.368009]  ret_from_fork_asm+0x1a/0x30
+[14551.371943]  </TASK>
+[14551.374136] ---[ end trace 0000000000000000 ]---
+[14551.735092] bond0: (slave enp23s0f1np1): Releasing backup interface
+[14552.110577] bond0 (unregistering): Released all slaves
 
-David / dhildenb
+This seems like another situation that could not simply fit
+3. "if (xs->xso.real_dev != real_dev), goto out.
+I'm not sure what's the xs->km.state should be during xfrm_state_gc_task().
+Is it also set to XFRM_STATE_DEAD, because I didn't see it.
 
+Especially if the bond change active slave and xfrm_state_gc_task() run
+in parallel, like
+
+  bond_ipsec_del_sa_all()
+                                  xfrm_state_gc_task()
+                                  xfrm_dev_state_free()
+                                  bond_ipsec_free_sa()
+  bond_ipsec_add_sa_all()
+
+If the xs->km.state is not XFRM_STATE_DEAD. How to avoid the
+WARN_ON(xs->xso.real_dev != real_dev) in bond_ipsec_free_sa()
+and how to make bond_ipsec_add_sa_all() not added the entry again.
+
+Thanks
+Hangbin
 
