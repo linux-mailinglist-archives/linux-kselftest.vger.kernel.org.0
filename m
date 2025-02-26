@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-27562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55540A45576
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 07:20:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F71A4557A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 07:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8683A188C8E9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 06:20:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EAE8188C1D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 06:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17BB267F56;
-	Wed, 26 Feb 2025 06:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF753269AE6;
+	Wed, 26 Feb 2025 06:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERR1doFU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1ObwY1r"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C7C266F07;
-	Wed, 26 Feb 2025 06:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54C1267AFA;
+	Wed, 26 Feb 2025 06:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740550761; cv=none; b=BWUy1HEje6aDqlKxsoh08oJA1OiGNU+qoMiYY3M8VBHEuj6wnvqdbM6YtZ0kKd00MR4ZQQhm0cftj8gDFSmw/6/m2l3yoy2f1D4xqd6aFlTJ8fSIJ7pxQbAZ+ly2LWFSptOKwgvOXyMg1HMpbdwJOsr/o4aBaqAflluYdlhjUUs=
+	t=1740550769; cv=none; b=AG9x22qyxsnseAAYPQF889d50UO7NWTCUOOMZxJsMGvvMT/fzIJRkybFctIF8fb6APRaB/qbbL9azmyhWtMaS8Q8ZmdoIf6l06piP104xmoIm+xdz/2bZqQfVD6j/G8ukpatghrKWtX5NMQ/qAYdowhl2e7LjuzPGgoYyFNlll0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740550761; c=relaxed/simple;
-	bh=A3IrqD3/pDT6M/w+w7YSAeLSdPShreoTsKFR3QXVzBI=;
+	s=arc-20240116; t=1740550769; c=relaxed/simple;
+	bh=1Ffr/p7PmfPrfKjUIW3MrhT7Kx5dqB1g0DewxTnlqlo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RkQP1dSnpzoxLR273UkYrpE6icZDe35hDdcjNMZdUhJTAKdYW8j96LwvgtKlHedDTeGtazBeEg8V0vOEb1i2jTXng3wkgKksHmErWhozm000YhcW5F6JbCr4nOgajPvpLlE4OGhrBv1Ut0traA39l07Xse0r6b3f/Xdtp1gNl4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERR1doFU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C07C4CED6;
-	Wed, 26 Feb 2025 06:19:20 +0000 (UTC)
+	 MIME-Version:Content-Type; b=m7yPS7ejdAz3Avye4xTPVv/va1BHjw5i6xaEQSMIW1Ag0/MIDp6E61r9daBm1gdCuoMiM4HysYpuCn5CY29zuWRu9F+O8Uhh4xuLX5NWftlpvK+TbPzgPXF66bkMg8e3HSxxT9JzTfrT1Qp6eF0ky9NrF3wBxTmFDMGvk207OXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1ObwY1r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867DDC4CED6;
+	Wed, 26 Feb 2025 06:19:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740550761;
-	bh=A3IrqD3/pDT6M/w+w7YSAeLSdPShreoTsKFR3QXVzBI=;
+	s=k20201202; t=1740550769;
+	bh=1Ffr/p7PmfPrfKjUIW3MrhT7Kx5dqB1g0DewxTnlqlo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ERR1doFUFIJE93Hx//c9t6RYC5uo+pxk/l2U4ZvsSaErsVJoUGbQmRCmg1Y2UX1Fl
-	 8+c7f8mT0RzYXtZbDATl7uQw4kdk8hIGRuvtu6ch+qyLyPGlZs5TVUqZTZsUMGbSrs
-	 UTFtLCXAgcJXgzQEabXim3q9kyKYl6xoNGMm+CXoZbL+Tar6HdYvdjh0mx9VxJ1ZpS
-	 tKRR+MrEtx11vSSoGgIVC/TcN4txD5cqtSRPVrRPfqfT0xjA/zWXB+ab3MMOPei4Zc
-	 diwCsk2Lm4vsLrY2JNPZ/HSLUoTT/Ebrh5mFmSs4p0g2PxYwGtMesLZvwsrOzrVj1a
-	 m+CA4ZzeKo6lw==
+	b=Q1ObwY1rKJE/plerVVpkb3ghF1HQ33LGi/Q5L5tsIRoEZ/sf6GuGEO8OG9Rk2F/6Y
+	 x2IICWIg7blK6hLueyOH509P3ZXv84muSbYKaG8N0cuhNHmtqBbhpNuG1UCMsXYZFA
+	 zcStTAImaz5cwAYOERllTOH3Sns9XSKAG5NNN7yr34HwMNmpsEZlxtKwAaxwuNJKfE
+	 JqJAmvMAC9/MWt1bRhBiipwT+nEWQaVs31PW+d3HLPcYm3DxYq2taWOQQRzfOaHb1+
+	 Iu4FzZ5QUJ5NhAC4gcSd/j0MrH9H4Sk4Bajl00Vbaq+bpP4C5KgJ+atpLlwMWsWnFY
+	 TH8eubKv952CA==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -50,9 +50,9 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 5/8] tracing: probe-events: Remove unused MAX_ARG_BUF_LEN macro
-Date: Wed, 26 Feb 2025 15:19:18 +0900
-Message-ID:  <174055075876.4079315.8805416872155957588.stgit@mhiramat.tok.corp.google.com>
+Subject: [PATCH 6/8] selftests/ftrace: Expand the tprobe event test to check wrong format
+Date: Wed, 26 Feb 2025 15:19:27 +0900
+Message-ID:  <174055076681.4079315.16941322116874021804.stgit@mhiramat.tok.corp.google.com>
 X-Mailer: git-send-email 2.48.1.658.g4767266eb4-goog
 In-Reply-To:  <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
 References:  <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
@@ -68,27 +68,43 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Commit 18b1e870a496 ("tracing/probes: Add $arg* meta argument for all
-function args") introduced MAX_ARG_BUF_LEN but it is not used.
-Remove it.
+Expand the tprobe event test case to check wrong tracepoint
+format.
 
-Fixes: 18b1e870a496 ("tracing/probes: Add $arg* meta argument for all function args")
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- kernel/trace/trace_probe.h |    1 -
- 1 file changed, 1 deletion(-)
+ .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 6075afc8ea67..854e5668f5ee 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -36,7 +36,6 @@
- #define MAX_BTF_ARGS_LEN	128
- #define MAX_DENTRY_ARGS_LEN	256
- #define MAX_STRING_SIZE		PATH_MAX
--#define MAX_ARG_BUF_LEN		(MAX_TRACE_ARGS * MAX_ARG_NAME_LEN)
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+index 155792eaeee5..f271c4238b72 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+@@ -6,6 +6,7 @@
+ echo 0 > events/enable
+ echo > dynamic_events
  
- /* Reserved field names */
- #define FIELD_STRING_IP		"__probe_ip"
++SUBSYSTEM=kmem
+ TRACEPOINT1=kmem_cache_alloc
+ TRACEPOINT2=kmem_cache_free
+ 
+@@ -24,4 +25,17 @@ grep -q myevent1 dynamic_events
+ 
+ echo > dynamic_events
+ 
++# auto naming check
++echo "t $TRACEPOINT1" >> dynamic_events
++
++test -d events/tracepoints/$TRACEPOINT1
++
++echo > dynamic_events
++
++# SUBSYSTEM is not supported
++echo "t $SUBSYSTEM/$TRACEPOINT1" >> dynamic_events && exit_fail ||:
++echo "t $SUBSYSTEM:$TRACEPOINT1" >> dynamic_events && exit_fail ||:
++echo "t:myevent3 $SUBSYSTEM/$TRACEPOINT1" >> dynamic_events && exit_fail ||:
++echo "t:myevent3 $SUBSYSTEM:$TRACEPOINT1" >> dynamic_events && exit_fail ||:
++
+ clear_trace
 
 
