@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-27558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFAC3A4556F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 07:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A702DA45572
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 07:19:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A2A1174E5F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 06:19:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B710117BDCC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 06:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FD2E25D55B;
-	Wed, 26 Feb 2025 06:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19ABE268FD2;
+	Wed, 26 Feb 2025 06:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6bA4kPb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLNMeZQE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B6616DEB1;
-	Wed, 26 Feb 2025 06:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45BE267AFA;
+	Wed, 26 Feb 2025 06:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740550730; cv=none; b=bowyyKRuldU7mEw8qTtR3dOg8m95AE+Pm02i5xgWEJzjYDYuf25+Wva2zBpJK3J2OaxOtv0ePx6GRDiZPVMR4pG21cBxBSNDBVC/eI5A4UeczMmJhvk1CLuVOcOtwQ0m3rQAugZ1/c3OGzFSsVsosZ79h5OrovLal3EsQx9PlDU=
+	t=1740550738; cv=none; b=HThjXm6QMooO91yZ11MGBn5i35ojzwxvEFghW0Ew/ksc2c0LBPh4yoLABTCg6jJjlpQ5eetfNsb0R2uHyypbwxEzckDsHKFdmKFoW0oLPJbS98gkEStWqbVb2tAbNBaa8wVKETgeNRJRku/oSoxlXOoM6GiBXOMdjdkAxOgp66o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740550730; c=relaxed/simple;
-	bh=+bFB+UIXTzShMgtc9dzzTezRum4ZGFk351/mwu8Mh0I=;
+	s=arc-20240116; t=1740550738; c=relaxed/simple;
+	bh=3A/uAbVPL2SDGbn5Bzb+/MWog9HnommDHmQhGEpBL90=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EB02nCtyOI1N3vDmXJQMRJ+6Lbnb1VFAxb+4sjXyZiwWSUQI3m558SFwZ1WcSD0BDyK2t3HKIYTBjadWi2pa/52bXCxyV9yABl7cHJduOrHeOogtRh3fDVY19bcBhH/b2upgp/ix7fVMXvy6yQmdpbRjulZLL5eBzLjvAcAO7QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6bA4kPb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FDEC4CED6;
-	Wed, 26 Feb 2025 06:18:48 +0000 (UTC)
+	 MIME-Version:Content-Type; b=B2qO4qt1IYMOiDXdGets+wMlxud3R80ILpeJUJPzHGuELajEeUcMdl+nfMAQ10ZQpfq1MUi4NMjInKUxvdcBLqqpRu6GhKZERtnagWh2RBdsWkJzDiIgIotKCIS/XXAVIRJ5Phq+MUw0VUOU/kPOH2JeELYICj00Lb/ggKJlgQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLNMeZQE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B14CC4CEE2;
+	Wed, 26 Feb 2025 06:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740550729;
-	bh=+bFB+UIXTzShMgtc9dzzTezRum4ZGFk351/mwu8Mh0I=;
+	s=k20201202; t=1740550737;
+	bh=3A/uAbVPL2SDGbn5Bzb+/MWog9HnommDHmQhGEpBL90=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F6bA4kPbQSHFPdwwfPe9oiGcgJW9ldf26wrGzFXYaBpWYCTRu0yjVe9/s9PuJoDxc
-	 pSukI92q5INSKqXbybhANoBdOnsgA3poZjfmjfvi1CatCDkOZ6RcjFnCtFbq+aSD3s
-	 2eugAHFeHi7ojcAYRRP7jbqIWOhANc4p9Cxsy9CERE0BrsBNoJ872VfuDWHuxEQyG+
-	 xDOiA9aAeDAdmEDugyuCP19TCvxeq7+1oJHEmJOeNFIWHpR3/n2zv2aX8ENFGWMw/Y
-	 XmAPBIXAhCVXBM2O6vHrhdbYx158LKxcaTJvKnjUD17GPizs1VY/6pII7c0Jjaad0G
-	 P13HM/jQ2QMnA==
+	b=BLNMeZQEmjWeGIqJycHNaBGppBV7lbjGeKJBL7GA+cagWvGSF/BMjCsdpCDGTDIMA
+	 3ZR07xV5tgCj/IK5WDf7pllRtL0mgf8147oSYuNKs88F32B9x2lK7MYTdQQK81Fc4s
+	 RP5S8MaAS/gzvIVZ4HVIVxyvKt+wrRilhvppRPcm7TLDM/lsErkXgG3WxEKSxNntjL
+	 ZZFgPubWJezlqOoEtZhlmHF00dCNFT6WfbxEuc4JBEhaR7hQVd/1dndsI3M5adZOHv
+	 q8517qwAVuMcyIGsrxHdt7Wo00rDCFxGJjJwFNShT2V+BOCVt469AdrzUO9sikzgDF
+	 Mr9364851UC5w==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -50,9 +50,9 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/8] tracing: tprobe-events: Fix a memory leak when tprobe with $retval
-Date: Wed, 26 Feb 2025 15:18:46 +0900
-Message-ID:  <174055072650.4079315.3063014346697447838.stgit@mhiramat.tok.corp.google.com>
+Subject: [PATCH 2/8] tracing: tprobe-events: Reject invalid tracepoint name
+Date: Wed, 26 Feb 2025 15:18:54 +0900
+Message-ID:  <174055073461.4079315.15875502830565214255.stgit@mhiramat.tok.corp.google.com>
 X-Mailer: git-send-email 2.48.1.658.g4767266eb4-goog
 In-Reply-To:  <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
 References:  <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
@@ -68,30 +68,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix a memory leak when a tprobe is defined with $retval. This
-combination is not allowed, but the parse_symbol_and_return() does
-not free the *symbol which should not be used if it returns the error.
-Thus, it leaks the *symbol memory in that error path.
+Commit 57a7e6de9e30 ("tracing/fprobe: Support raw tracepoints on
+future loaded modules") allows user to set a tprobe on non-exist
+tracepoint but it does not check the tracepoint name is acceptable.
+So it leads tprobe has a wrong character for events (e.g. with
+subsystem prefix). In this case, the event is not shown in the
+events directory.
 
-Fixes: ce51e6153f77 ("tracing: fprobe-event: Fix to check tracepoint event and return")
+Reject such invalid tracepoint name.
+
+The tracepoint name must consist of alphabet or digit or '_'.
+
+Fixes: 57a7e6de9e30 ("tracing/fprobe: Support raw tracepoints on future loaded modules")
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Cc: stable@vger.kernel.org
 ---
- kernel/trace/trace_fprobe.c |    2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace_fprobe.c |   13 +++++++++++++
+ kernel/trace/trace_probe.h  |    1 +
+ 2 files changed, 14 insertions(+)
 
 diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-index b8f3c4ba309b..8826f44f69a4 100644
+index 8826f44f69a4..85f037dc1462 100644
 --- a/kernel/trace/trace_fprobe.c
 +++ b/kernel/trace/trace_fprobe.c
-@@ -1056,6 +1056,8 @@ static int parse_symbol_and_return(int argc, const char *argv[],
- 			if (is_tracepoint) {
- 				trace_probe_log_set_index(i);
- 				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
-+				kfree(*symbol);
-+				*symbol = NULL;
- 				return -EINVAL;
- 			}
- 			*is_return = true;
+@@ -1049,6 +1049,19 @@ static int parse_symbol_and_return(int argc, const char *argv[],
+ 	if (*is_return)
+ 		return 0;
+ 
++	if (is_tracepoint) {
++		tmp = *symbol;
++		while (*tmp && (isalnum(*tmp) || *tmp == '_'))
++			tmp++;
++		if (*tmp) {
++			/* find a wrong character. */
++			trace_probe_log_err(tmp - *symbol, BAD_TP_NAME);
++			kfree(*symbol);
++			*symbol = NULL;
++			return -EINVAL;
++		}
++	}
++
+ 	/* If there is $retval, this should be a return fprobe. */
+ 	for (i = 2; i < argc; i++) {
+ 		tmp = strstr(argv[i], "$retval");
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 5803e6a41570..fba3ede87054 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -481,6 +481,7 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+ 	C(NON_UNIQ_SYMBOL,	"The symbol is not unique"),		\
+ 	C(BAD_RETPROBE,		"Retprobe address must be an function entry"), \
+ 	C(NO_TRACEPOINT,	"Tracepoint is not found"),		\
++	C(BAD_TP_NAME,		"Invalid character in tracepoint name"),\
+ 	C(BAD_ADDR_SUFFIX,	"Invalid probed address suffix"), \
+ 	C(NO_GROUP_NAME,	"Group name is not specified"),		\
+ 	C(GROUP_TOO_LONG,	"Group name is too long"),		\
 
 
