@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-27563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2F71A4557A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 07:20:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB031A4557E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 07:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EAE8188C1D4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 06:20:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56A0D17B8DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 06:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF753269AE6;
-	Wed, 26 Feb 2025 06:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9F726869E;
+	Wed, 26 Feb 2025 06:19:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1ObwY1r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1sxNdH9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54C1267AFA;
-	Wed, 26 Feb 2025 06:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3171C25D537;
+	Wed, 26 Feb 2025 06:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740550769; cv=none; b=AG9x22qyxsnseAAYPQF889d50UO7NWTCUOOMZxJsMGvvMT/fzIJRkybFctIF8fb6APRaB/qbbL9azmyhWtMaS8Q8ZmdoIf6l06piP104xmoIm+xdz/2bZqQfVD6j/G8ukpatghrKWtX5NMQ/qAYdowhl2e7LjuzPGgoYyFNlll0=
+	t=1740550778; cv=none; b=aglvSlM1n30nfjL5RcjO+kVcIasjztHF1XELMkK1Hqwo4yZKm84Vklo71FBLt4/UCgFqvbZv7Yur6vIERLMANLefKfp4YbsCXbPURz0+I5hVpsaeQqv4ezmIBou3rSvVffCTar7q1FWcsUya7W+Uza2z+ySAg1wHC1Vs1RUsdyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740550769; c=relaxed/simple;
-	bh=1Ffr/p7PmfPrfKjUIW3MrhT7Kx5dqB1g0DewxTnlqlo=;
+	s=arc-20240116; t=1740550778; c=relaxed/simple;
+	bh=rTIWsvwSXOxRGP7gdPh5Kj5+1kZtjKcGRJoEmjFzL94=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m7yPS7ejdAz3Avye4xTPVv/va1BHjw5i6xaEQSMIW1Ag0/MIDp6E61r9daBm1gdCuoMiM4HysYpuCn5CY29zuWRu9F+O8Uhh4xuLX5NWftlpvK+TbPzgPXF66bkMg8e3HSxxT9JzTfrT1Qp6eF0ky9NrF3wBxTmFDMGvk207OXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1ObwY1r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867DDC4CED6;
-	Wed, 26 Feb 2025 06:19:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=cb/QA8Krj8H32ucjbVu3J+A6xq05ha3Xh8mZUElOV4TPf81wtZfble2IlBmpv5xKqcS88uZzLr+OZ/ml9EWTd0VwEhpyizLKDJhF4Rg1zxmWv/4i/pxIMIAokHIbYY0dCXIu6bO/u0bsiCfvQlc8LDpU+uQdPCg/+s/YCykDHYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1sxNdH9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F2CC4CEE2;
+	Wed, 26 Feb 2025 06:19:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740550769;
-	bh=1Ffr/p7PmfPrfKjUIW3MrhT7Kx5dqB1g0DewxTnlqlo=;
+	s=k20201202; t=1740550777;
+	bh=rTIWsvwSXOxRGP7gdPh5Kj5+1kZtjKcGRJoEmjFzL94=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q1ObwY1rKJE/plerVVpkb3ghF1HQ33LGi/Q5L5tsIRoEZ/sf6GuGEO8OG9Rk2F/6Y
-	 x2IICWIg7blK6hLueyOH509P3ZXv84muSbYKaG8N0cuhNHmtqBbhpNuG1UCMsXYZFA
-	 zcStTAImaz5cwAYOERllTOH3Sns9XSKAG5NNN7yr34HwMNmpsEZlxtKwAaxwuNJKfE
-	 JqJAmvMAC9/MWt1bRhBiipwT+nEWQaVs31PW+d3HLPcYm3DxYq2taWOQQRzfOaHb1+
-	 Iu4FzZ5QUJ5NhAC4gcSd/j0MrH9H4Sk4Bajl00Vbaq+bpP4C5KgJ+atpLlwMWsWnFY
-	 TH8eubKv952CA==
+	b=u1sxNdH9K5GH7hn4OGHnIraoyvp5d9iEK5FAL/VQZIZXPwZpUO4ch6TAgzA/s3vEx
+	 Z8/IcnmC8URMVb5LLpOcK4yNC/GcKXk8ui/NJS/a8f1/XPboScV/lpk6Hd2JHcVPQ8
+	 7ImrbH6945f7+uw9KbTCUCXei2iSwjk1Lg/7aW5f7q/4Fg3NVW3nYwx7GFIihjzKu3
+	 EkqUFvo7yl6hGZ8IBglY2XfsZf9L6LHfc20BgJ1UNvMviQksmtQMV135Z5ELapLTc4
+	 5tX3nWvM6C4Yv9tu6k/lmEBLSw0A96QwmgIIbCjSzbcOeGCKIkEKbAoEubDjsC+v2o
+	 UyJ3cKWdF2+Jw==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -50,9 +50,9 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 6/8] selftests/ftrace: Expand the tprobe event test to check wrong format
-Date: Wed, 26 Feb 2025 15:19:27 +0900
-Message-ID:  <174055076681.4079315.16941322116874021804.stgit@mhiramat.tok.corp.google.com>
+Subject: [PATCH 7/8] selftests/ftrace: Add new syntax error test
+Date: Wed, 26 Feb 2025 15:19:35 +0900
+Message-ID:  <174055077485.4079315.3624012056141021755.stgit@mhiramat.tok.corp.google.com>
 X-Mailer: git-send-email 2.48.1.658.g4767266eb4-goog
 In-Reply-To:  <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
 References:  <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
@@ -68,43 +68,24 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Expand the tprobe event test case to check wrong tracepoint
-format.
+Add BAD_TP_NAME syntax error message check.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
-index 155792eaeee5..f271c4238b72 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
-@@ -6,6 +6,7 @@
- echo 0 > events/enable
- echo > dynamic_events
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+index c9425a34fae3..fee479295e2f 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+@@ -27,6 +27,7 @@ check_error 'f:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
+ check_error 'f:^ vfs_read'		# NO_EVENT_NAME
+ check_error 'f:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
+ check_error 'f:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
++check_error 't kmem^/kfree'       # BAD_TP_NAME
  
-+SUBSYSTEM=kmem
- TRACEPOINT1=kmem_cache_alloc
- TRACEPOINT2=kmem_cache_free
+ check_error 'f vfs_read ^$stack10000'	# BAD_STACK_NUM
  
-@@ -24,4 +25,17 @@ grep -q myevent1 dynamic_events
- 
- echo > dynamic_events
- 
-+# auto naming check
-+echo "t $TRACEPOINT1" >> dynamic_events
-+
-+test -d events/tracepoints/$TRACEPOINT1
-+
-+echo > dynamic_events
-+
-+# SUBSYSTEM is not supported
-+echo "t $SUBSYSTEM/$TRACEPOINT1" >> dynamic_events && exit_fail ||:
-+echo "t $SUBSYSTEM:$TRACEPOINT1" >> dynamic_events && exit_fail ||:
-+echo "t:myevent3 $SUBSYSTEM/$TRACEPOINT1" >> dynamic_events && exit_fail ||:
-+echo "t:myevent3 $SUBSYSTEM:$TRACEPOINT1" >> dynamic_events && exit_fail ||:
-+
- clear_trace
 
 
