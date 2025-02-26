@@ -1,154 +1,110 @@
-Return-Path: <linux-kselftest+bounces-27645-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8385AA46AEE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 20:24:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFBF4A46AFD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 20:28:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9291E3A4456
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 19:24:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 194DB163E7A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 19:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF01A236A70;
-	Wed, 26 Feb 2025 19:24:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072E523906A;
+	Wed, 26 Feb 2025 19:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="IsHfiaQS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JtIjqmS6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F9D41C71
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 19:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF74239597
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 19:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740597862; cv=none; b=dXGJSfNiHsDyHyxmla6F2L1OLooJduUBcakQ7LtKt0m491H/lKmSGl73YG3hk3NcKGSW7HTVGgoB/iD8tdIv9llCu5r4KppVWFCWLJyXRGBo8GwAfmtK1MDdP32No8lNHAPkfQyXtE0Vfjp9sqCxt2C2bj/8cWaKUkpmfr2z6es=
+	t=1740598098; cv=none; b=Hc+DWEC5xmlzswC28yAWsAH0pQju7bEuIjwqQcFGuD/UBMxawY2qlP3+Bw2JqwvGiUf2DaQzYlmCPn6ILybqk7An2VsDtqjLA58aPAApxH1bbGwbpXSK4foHv6CI2+AjeGHh3RMNRLkytapcNG+OvXcfQgZAGWl+8sRFVMOWBxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740597862; c=relaxed/simple;
-	bh=+MPxJiszOeCmFsn8+9MqxMgk4It36YrHrcETxZymxZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jHDYw6J25SD9CIjsSxXQ0or2CdZBfK48lzRFDSHYYfWVyREd+GTr8pzLmJPm2FtIpiQ2ZOFoks/RzP+lrpWJL9f/r0D+C86//DuVVREVpg1qAmPdcTJDkXfUBhUKhjbV7EI3KzpT0AlyvkTtBsDsD7UEv7XscvYgfSqYYw/bZXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=IsHfiaQS; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-220e6028214so2635355ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 11:24:21 -0800 (PST)
+	s=arc-20240116; t=1740598098; c=relaxed/simple;
+	bh=bl9Plq6JnXW74ZZ2OyZkxJ1bQfSDrH+0T8qUb2SbqgY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bdf/UwL1u5Ryw95t6z279GWNyntO0gtyEtEQTfO/bUprTqiwZmSe2X/bNHkjBaMaxo1tk8b0hpoQJKrGJs0ji8Cf4O2v1K0HTnCI6xZt2xLQWnePNXF+yVnFsSHirtEkO74ejr5SttnVSngcbiLJ5kdjbGI18jJtbwEazufYA3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--krakauer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JtIjqmS6; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--krakauer.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-220d8599659so2010895ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 11:28:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1740597861; x=1741202661; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/sflnpIC6yKwseTfHm3vT9z2UOLJa7dEKR1pgDETj+Y=;
-        b=IsHfiaQS04ZUz/3DCH5S0DOwiRC7GjFG/TLqvpLRYM6MtZgPsmMMchJo7hM34E9dzp
-         GYY1nVx32t9BWNt4Cge9fW7lnvbsmNg9JvUk8UJRdnw7+4pC9Q8OxIY5zhd73G/T9t3f
-         1FUy8KyIGv1r6p/3lonrpTJ0I969LTDxq3By3DoslF0xmJ1kD983XlJBMA+Q7o3ipqjF
-         TGAEobrE1aJwwIaomr8zPADA8ZUSOULcM+nfxR8dpkynLZfUxNP6j1+AWcyyTjqbg4lu
-         cj1LCALJNC7GvavlWfD4SwW0ScnPMoT66gRBPpyhgiOUJKsFMoDBWJvRp2A5PRzkjtLZ
-         3+HQ==
+        d=google.com; s=20230601; t=1740598097; x=1741202897; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qKg29E18EQ/8K9KKxW0a2f9wLs1Xc02tFARhkKQdFJI=;
+        b=JtIjqmS6IYgExDgS6kJWBRzm7hW5KLRv3qNhDdu4R5/AxHzceNro3vmM+Vz9BCpL4t
+         Rq5H4ZTpBA+0X5wzNrZdavjmpVQzGFqHl9wk4Ojrs/NpVPY5rfdNxJP6PsR6pwyiw2no
+         uujzXnSg94EReU8HPNdl1ZUbjsUIgpFeRYmDN+xHP3cT47gBZhKvuiIrywCdCWMlR/T9
+         x9QyacQapqkvSYxVDHXDNZTuBu0NYQuR55OC22xFoX3XA2+FYJFA6hcCexbCKgqVMdnU
+         o8t2vGZsfzvhCs10Oh1Vyjhgo+jKenDTysLDNfSDfg+rfjDmt0/qevl64d0ggr7xa7f9
+         aRCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740597861; x=1741202661;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/sflnpIC6yKwseTfHm3vT9z2UOLJa7dEKR1pgDETj+Y=;
-        b=RdCA9ZTPtikdrax6/3VZKx6v7wm3YcbhS0CZNmuX8v84jspPbVzjFdAGdLkiAEoXhK
-         a7DPBua7sOwsqQtAsz5Dmpr1HrKh3cYimECs/fRPTpBYL98Nl9Va0GI4FSptu0D9wp8k
-         gU+d28be/snWuhgw6cCKRjvcx7xSO/Ht1PGkLoDBHLmB64OtIWkAjyIUPUwXZUcLA4j8
-         YzbHh0e2lPw3s33dgNkKBWdWsTjVzqkQnyJUSz7RSVe2ZEnNnP5roAbPp3/n95l9r8st
-         MME5AKVgIUbncEEu8Ah59Sca6GrV1p3bhgrbfT+AMpLojliK687GMdKGMOhLQU4zz7AC
-         lwtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQVoeg2LPEqTPraGOaym7PcduoTfjh6J4sn35ZZrYYvS2VDAQeRIFymTa4lVJ2OEdFwqvT3m37bHQciVMCL54=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNVKSIz9COe2NPSzh0A01RicgTCJGbBoKvwlrtN3WoJlvvN0mO
-	Vzat+H2P7z2rw7ivKBb7FaaWhqbS9a5Cgq67KmWia96S4UzdQKAUcnNYOWoAVKE=
-X-Gm-Gg: ASbGncsOboMEYQULImTy1WyIPS+Xj9DAW3H1KB6G8L3kZeKnVW8SY5Q5XPg0OhiDWAP
-	JLiqgiSVRXTQJcEbysodb5ejQIMSDvHQNxQg2xcCiI9N8xdA8L+Xu57JR72hofPbFrite2sQQ09
-	UROjAHbxAt+Sh79mghbiCwnOvTOEoqxCEupAbVWibOKs+ll5ZrXwTnSL3MuXwgC4lWhzYHu+LOJ
-	6svMR8yGH/7GLqJ7kFrsRFvh9cIgWmkUAprYzFJwY1yYqJ43WxTpdKnDUG3980rKwY7NuBFt5W2
-	EsfneLSToTL69bmQL9xvw1mXKPU/K8+b/cYeEq39sfbflJPFc8+uGB9zN/FhEpnAZGzRZA==
-X-Google-Smtp-Source: AGHT+IG0kO7k4eegwSBS0bGAJzlZ+5QciSS8EYAlWnYhxBYs9Vs7ZY1jsyhgzaQSgGTs4piCQxxvzw==
-X-Received: by 2002:a17:902:f60b:b0:216:725c:a137 with SMTP id d9443c01a7336-2219ffb8b58mr407759205ad.28.1740597859464;
-        Wed, 26 Feb 2025 11:24:19 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1156:1:18cb:90d0:372a:99ae? ([2620:10d:c090:500::4:af20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2230a0908eesm36470885ad.124.2025.02.26.11.24.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 11:24:19 -0800 (PST)
-Message-ID: <35c55f5b-7c1c-46cf-8d6c-50ee2479bbda@davidwei.uk>
-Date: Wed, 26 Feb 2025 11:24:16 -0800
+        d=1e100.net; s=20230601; t=1740598097; x=1741202897;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qKg29E18EQ/8K9KKxW0a2f9wLs1Xc02tFARhkKQdFJI=;
+        b=BfFmRDOQvsuuKHuQGM0sKhTEsAQZXtFsWMzeVfEH4Ne2dgT99TiCIdVdeM5cMdUDCO
+         XwpbzW04Hk6n/f2QIt9SrvY74fnoJ0a3u/QrQKqpmRjjYSX1EXp4OMfeKoMu69dzWg30
+         RrV8ARx2oVSxc9m7V/BQ3y/TLG1DUty/NZMuxtoUkl20RRA7JUzP+kdwmxZAKY+oyLOZ
+         0+xcVEGCl/qDE1ySjPJAxoiN6CPcTTLbiGWApuU220gYVsCrBbT2HJzXy/4mjxujt/iO
+         /fY1qztj3tDZTk5L8q/CiinZbHy89p4PIKT0+dHKm65gyapfcjMruB4o+85yqkIcHox4
+         7E7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQmHFkaSz+3CeDdBHr5Ot/XroQuqVpv3au7OnYr+cdGfIW/MLfo/pxS2Q39LqpUzjerhdej6Jvpvi+3Bp0xcA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/GOwvHBdbgC4PdX1bD8AeJPGDajEHvYc6tr3UrgOMKhOIhoMt
+	vcGHfLiijntjWq/WpWnyj3eJv6G0R5JI0Z2rAUWAPwvu7TZQsYs1CRznz0fIIqF+2HutLVlJ51n
+	rFt6zr3NG
+X-Google-Smtp-Source: AGHT+IHKu4c7meNjkGUZE1g8urh4/azLv13+UGEM3NtUkBkRgsExSR+jbSrEuSkHB2KxuBwP29fasZf1vU6dkQ==
+X-Received: from pfhj23.prod.google.com ([2002:a62:e917:0:b0:725:1ef3:c075])
+ (user=krakauer job=prod-delivery.src-stubby-dispatcher) by
+ 2002:aa7:8d41:0:b0:72f:590f:2859 with SMTP id d2e1a72fcca58-7348bdd0046mr5402845b3a.13.1740598096762;
+ Wed, 26 Feb 2025 11:28:16 -0800 (PST)
+Date: Wed, 26 Feb 2025 11:27:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] selftests: drv-net: Check if combined-count exists
-Content-Language: en-GB
-To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org
-Cc: gerhard@engleder-embedded.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <20250226181957.212189-1-jdamato@fastly.com>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20250226181957.212189-1-jdamato@fastly.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.658.g4767266eb4-goog
+Message-ID: <20250226192725.621969-1-krakauer@google.com>
+Subject: [PATCH v2 0/3] selftests/net: deflake GRO tests and fix return value
+ and output
+From: Kevin Krakauer <krakauer@google.com>
+To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	Kevin Krakauer <krakauer@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025-02-26 10:19, Joe Damato wrote:
-> Some drivers, like tg3, do not set combined-count:
-> 
-> $ ethtool -l enp4s0f1
-> Channel parameters for enp4s0f1:
-> Pre-set maximums:
-> RX:		4
-> TX:		4
-> Other:		n/a
-> Combined:	n/a
-> Current hardware settings:
-> RX:		4
-> TX:		1
-> Other:		n/a
-> Combined:	n/a
-> 
-> In the case where combined-count is not set, the ethtool netlink code
-> in the kernel elides the value and the code in the test:
-> 
->   netnl.channels_get(...)
-> 
-> With a tg3 device, the returned dictionary looks like:
-> 
-> {'header': {'dev-index': 3, 'dev-name': 'enp4s0f1'},
->  'rx-max': 4,
->  'rx-count': 4,
->  'tx-max': 4,
->  'tx-count': 1}
-> 
-> Note that the key 'combined-count' is missing. As a result of this
-> missing key the test raises an exception:
-> 
->  # Exception|     if channels['combined-count'] == 0:
->  # Exception|        ~~~~~~~~^^^^^^^^^^^^^^^^^^
->  # Exception| KeyError: 'combined-count'
-> 
-> Change the test to check if 'combined-count' is a key in the dictionary
-> first and if not assume that this means the driver has separate RX and
-> TX queues.
-> 
-> With this change, the test now passes successfully on tg3 and mlx5
-> (which does have a 'combined-count').
-> 
-> Fixes: 1cf270424218 ("net: selftest: add test for netdev netlink queue-get API")
-> Signed-off-by: Joe Damato <jdamato@fastly.com>
-> ---
->  v2:
->    - Simplify logic and reduce indentation as suggested by David Wei.
->      Retested on both tg3 and mlx5 and test passes as expected.
-> 
->  v1: https://lore.kernel.org/lkml/20250225181455.224309-1-jdamato@fastly.com/
+The GRO selftests can flake and have some confusing behavior. These
+changes make the output and return value of GRO behave as expected, then
+deflake the tests.
 
-Thanks Joe.
+v2:
+- Split into multiple commits.
+- Reduced napi_defer_hard_irqs to 1.
+- Reduced gro_flush_timeout to 100us.
+- Fixed comment that wasn't updated.
 
-Reviewed-by: David Wei <dw@davidwei.uk>
+v1: https://lore.kernel.org/netdev/20250218164555.1955400-1-krakauer@google.com/
+
+Kevin Krakauer (3):
+  selftests/net: have `gro.sh -t` return a correct exit code
+  selftests/net: only print passing message in GRO tests when tests pass
+  selftests/net: deflake GRO tests
+
+ tools/testing/selftests/net/gro.c         | 8 +++++---
+ tools/testing/selftests/net/gro.sh        | 7 ++++---
+ tools/testing/selftests/net/setup_veth.sh | 3 ++-
+ 3 files changed, 11 insertions(+), 7 deletions(-)
+
+-- 
+2.48.1.658.g4767266eb4-goog
+
 
