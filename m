@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-27596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D796A45D7A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:46:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E66A45D7E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 12:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FBEE171CC3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:46:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E38A918901F3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 11:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F54F21C19F;
-	Wed, 26 Feb 2025 11:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481F721CC7D;
+	Wed, 26 Feb 2025 11:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nasqugvG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CWmvpnCr"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mm50riJ/";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gwEw/R+G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8E521A436;
-	Wed, 26 Feb 2025 11:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C736D4A1A;
+	Wed, 26 Feb 2025 11:45:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570318; cv=none; b=hI64Fr8mEZ4d5fyinH7jG8TrST5yIT07wtzZf3f9NHDnJusiSXb08CFeyfhMgQgOBWrd5iry4+gzYPikHxu3mGj3RR2udzwBIjRHYDDJWdd3lcl+rIYxRRhOgLuJtd9Qyd0PI7IG1SNepvhAVvSfTtp1/OV3F9aEOrKwIgHa2hA=
+	t=1740570319; cv=none; b=LYb3QYVxBSyijq6yNoAJKHY4aepo9139EhZLgX6xBqUdiwGbKt1Bba/zUZe1jI5xTkWUKMfo9Y7+a8eOQ0xdUb0bTW+8TDzmrYmmlEt8KE0tzeGpEZNBCtfBOAhJbIuw1QVGqEvsMFVj/dcTgiMYZXEXS3IiT0WLygpYW/2OCYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740570318; c=relaxed/simple;
-	bh=C3WrIXo4pF6mfQdzvKKu1BjqdXgy4M3jnZi0dZUjrCw=;
+	s=arc-20240116; t=1740570319; c=relaxed/simple;
+	bh=A1kWnuxSjddtYmSNb4mmBChj4pwVLpMyiEtralFeWbQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=m4d/2kd79LUa5PArcFqn30DpG5VzR92EhK93My06+I+Pki3I1UZIVrhM3NYPGz0w5VQkK1f0iMffxdeW0D7c+2WAdNLpuTThiFyVDnD8VqBWJ2k3TrhW5FHkwnGTX7vcUfmC9aB6IGFKYaCdm1GhOS4Q01HTvQsTIUH+U9AiVLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nasqugvG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CWmvpnCr; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=JSns1yQClSA14yX+zFbeOWzWW86r4881gLcLc6KyKs1Gr9UBW9d6IO2O89KdSl/KUezDkqHr5qHjkU0pwulllSd7s1HRUOvZqmv7kQQYY99yN0Vt0m+4xVZJvGqPqIZnZvY7GqD0oV89tPoJjn7Az32uXqgOhvQGh+Jzxg/XVo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mm50riJ/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gwEw/R+G; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1740570314;
+	s=2020; t=1740570315;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cRuD5hbVHSSw/8cljIctKIY+Y3ZkYhQFJxv3Eq1eG8c=;
-	b=nasqugvGFKackdKOCTch+AP72kWRqEucxypuXDsMds9gPwL8RK61E3IAURJfFRwVz6qCFV
-	borLyAg+H0LG9tWwXNBlUwuDFwYZPS4sMuMxBeAx6ObJr9TGjNFDhtRAWyulzmylyhWtwJ
-	P723Y+vsU/GF2dTuLScSrd42stge6MnfiMB8FerpsLUDR/zDnvtjIEmaOYfykQmjZqPh6N
-	9J2wj71O+zBQnyIXpq2/C7y6QezLH5rhiXHdkKjY0lULjTCFb6/K4L75NxQ/9D4sys6/zp
-	nDlUnoAgYdIMx/DPTHflxDyqMuOQYiBxugcpuMRiDOgqbdn4WR2SX8G87j/Qbg==
+	bh=6vZq6Mizd+5YJ4l7yIE5cDkh9TCxZxJ/8pRyPBqAE2A=;
+	b=mm50riJ/QI0hYXWmgp0n2Ceaq6y2i025mU/Nrb8myNu711a1XqRiDrMXNzqa7Tt1hRD1Ra
+	3iqNvW3MVDUfUONWeLBASeCGTSBeBf5FnRvFeaPh1cLl4dYaUYSM7RBRXh+VdMF95j1wV2
+	c63AcrZP4KXL+322jcLkogbb3//zJd6l9yQk5nYlNVrxglpvjW7HRyt+FWuDRllSmA+G0M
+	qPRzw7MyOOPhErWVKSidF0ASRhEeBN8AQczBqVwWj/U0jwY1L48GK7ClkjIb/7Zp2D1o93
+	L0+qvX11dFa5cgTeP8Jr8YoA/47FzTwREZkTzGuku1pTPMMM/p5hKQLJNCCZzw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1740570314;
+	s=2020e; t=1740570315;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cRuD5hbVHSSw/8cljIctKIY+Y3ZkYhQFJxv3Eq1eG8c=;
-	b=CWmvpnCrI4ggnNzOB2bFK5VZej2qGU4p7haIEM0fQFYcPsUdGJejZoOoBmHUpDnIp5RS2p
-	vfN2Hj/oogOEL1BA==
-Date: Wed, 26 Feb 2025 12:44:49 +0100
-Subject: [PATCH v2 10/16] selftests: vDSO: vdso_standalone_test_x86: Use
- vdso_init_form_sysinfo_ehdr
+	bh=6vZq6Mizd+5YJ4l7yIE5cDkh9TCxZxJ/8pRyPBqAE2A=;
+	b=gwEw/R+GbXArirKPDsiQS2N5OssetzDHeesyeOVlrNMhJCwMZTg+UKL8OGaYLCPX6pvgSF
+	z+NIf+s5ryqkapAQ==
+Date: Wed, 26 Feb 2025 12:44:50 +0100
+Subject: [PATCH v2 11/16] selftests: vDSO: parse_vdso: Drop
+ vdso_init_from_auxv()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250226-parse_vdso-nolibc-v2-10-28e14e031ed8@linutronix.de>
+Message-Id: <20250226-parse_vdso-nolibc-v2-11-28e14e031ed8@linutronix.de>
 References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 In-Reply-To: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
@@ -80,82 +80,58 @@ Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  llvm@lists.linux.dev, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=1895;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=1530;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=C3WrIXo4pF6mfQdzvKKu1BjqdXgy4M3jnZi0dZUjrCw=;
- b=eQDHEgBbcQlTMN155d79X04vEswgzq72yKppWr5aBDgxbIbLYxd/IvNp2Y1YQ9/fNaQ7z11QT
- DAUfoLznQjjCZKLGqX216kBJX2mCS9MUbVbIRKbqrvmzEqOe0Ab+zYq
+ bh=A1kWnuxSjddtYmSNb4mmBChj4pwVLpMyiEtralFeWbQ=;
+ b=6Mmz3dXcabGtLn+Rg9aEA6+Z37gSWfeF8Jy/tPN9nrrE42fFeHYx1hDFmq5TzYJvJGLe1Yz35
+ bAGyI6jHtmpBF4EPpdiHgELAoUeTpUf5JZqzrj1TNwYpaxlZtzN0l3N
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-vdso_standalone_test_x86 is the only user of vdso_init_from_auxv().
-Instead of combining the parsing the aux vector with the parsing of the
-vDSO, split them apart into getauxval() and the regular
-vdso_init_from_sysinfo_ehdr().
+There are no users left.
 
-The implementation of getauxval() is taken from
-tools/include/nolibc/stdlib.h.
+This also removes the usage of ElfXX_auxv_t,
+which is not formally standardized.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-
 ---
-All of this code will be deleted later again.
----
- .../selftests/vDSO/vdso_standalone_test_x86.c      | 27 +++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vDSO/parse_vdso.c | 14 --------------
+ tools/testing/selftests/vDSO/parse_vdso.h |  1 -
+ 2 files changed, 15 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-index 644915862af8883131e5defd336f1bd80736fc0f..500608f89c66b5747e3d845ebc54e4c3a35b6ccd 100644
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -15,6 +15,7 @@
- #include <sys/time.h>
- #include <unistd.h>
- #include <stdint.h>
-+#include <linux/auxvec.h>
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 2fe5e983cb22f1ed066d0310a54f6aef2ed77ed8..3638fe605e80ca41b29d43c6ac452964eef35d56 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -297,17 +297,3 @@ void *vdso_sym(const char *version, const char *name)
  
- #include "parse_vdso.h"
- 
-@@ -84,6 +85,30 @@ void to_base10(char *lastdig, time_t n)
- 	}
+ 	return 0;
  }
+-
+-void vdso_init_from_auxv(void *auxv)
+-{
+-	ELF(auxv_t) *elf_auxv = auxv;
+-	for (int i = 0; elf_auxv[i].a_type != AT_NULL; i++)
+-	{
+-		if (elf_auxv[i].a_type == AT_SYSINFO_EHDR) {
+-			vdso_init_from_sysinfo_ehdr(elf_auxv[i].a_un.a_val);
+-			return;
+-		}
+-	}
+-
+-	vdso_info.valid = false;
+-}
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.h b/tools/testing/selftests/vDSO/parse_vdso.h
+index de0453067d7cd0d8b63f7d3738842f60370db813..09d068ed11f97f0c5c8f4e7b341f08fa261c9735 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.h
++++ b/tools/testing/selftests/vDSO/parse_vdso.h
+@@ -26,6 +26,5 @@
+  */
+ void *vdso_sym(const char *version, const char *name);
+ void vdso_init_from_sysinfo_ehdr(uintptr_t base);
+-void vdso_init_from_auxv(void *auxv);
  
-+unsigned long getauxval(const unsigned long *auxv, unsigned long type)
-+{
-+	unsigned long ret;
-+
-+	if (!auxv)
-+		return 0;
-+
-+	while (1) {
-+		if (!auxv[0] && !auxv[1]) {
-+			ret = 0;
-+			break;
-+		}
-+
-+		if (auxv[0] == type) {
-+			ret = auxv[1];
-+			break;
-+		}
-+
-+		auxv += 2;
-+	}
-+
-+	return ret;
-+}
-+
- void c_main(void **stack)
- {
- 	/* Parse the stack */
-@@ -96,7 +121,7 @@ void c_main(void **stack)
- 	stack++;
- 
- 	/* Now we're pointing at auxv.  Initialize the vDSO parser. */
--	vdso_init_from_auxv((void *)stack);
-+	vdso_init_from_sysinfo_ehdr(getauxval((unsigned long *)stack, AT_SYSINFO_EHDR));
- 
- 	/* Find gettimeofday. */
- 	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
+ #endif
 
 -- 
 2.48.1
