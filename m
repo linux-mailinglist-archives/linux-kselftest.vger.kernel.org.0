@@ -1,131 +1,131 @@
-Return-Path: <linux-kselftest+bounces-27625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4D92A4662A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 17:09:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17D85A46650
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 17:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75D47174D32
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 15:57:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D53E19E4149
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 16:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E578A21D01B;
-	Wed, 26 Feb 2025 15:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B21121ABA1;
+	Wed, 26 Feb 2025 15:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HwQujOqZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE9919CC3E;
-	Wed, 26 Feb 2025 15:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70796225413
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 15:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740585429; cv=none; b=RO5shzWP/puReFOWtzwxJXaZOAcsuRafmUuG7sIx7HcaqSGZ5Pei6mg+so5I6kB/uoNrxhUBirvs+Ae0IY/1iD+j2YBhOoffU6v+2ypwuIfy1N+rhiRD649LhkL97NG86sp8yWKm6sehoJSK7sBAw/+WsYSl06RZ2A2TXQXDT8A=
+	t=1740585542; cv=none; b=hbDgSxVFmlqB99eKjknfpFnaiJkdjDl8x6uGzuIGd4JVN6fJPiFaGRZ3Vy1hm69JJQ60Vef5Nm/AMtLfIG3kuos7TBgB05Fhddsclefo7c8B9jvBCeyQh/Nbdzba2N1ypaRswHd8Ibz4fZSXoiHugmERQhzwSLRd15nIvSH0sJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740585429; c=relaxed/simple;
-	bh=GKMzlZ2maRtkgC5P94Kko9bp/n+VqxMprs5WYnSKGPA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y6OCmHV/MFEtC2f7VhS1aMzAJkPFlxJWZSgSxREVc5TuUmPlSVa6Qhl/82JxTgEgJWNpIJ9ZNF6HF6XMnWm0sqo2jj7bEftKEfuVJzRdkQ7RrJQar2e4DqnXaQA/S0fxseqmP0ZjbrlP9KsQGKo9yJhIlg6FoZbjG0QlCqPL0tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnJm0-000Fvw-Fh; Wed, 26 Feb 2025 16:56:36 +0100
-Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnJm0-000FGH-0e;
-	Wed, 26 Feb 2025 16:56:36 +0100
-Message-ID: <9c00cff3-92a8-492a-b059-7d8c66c23daf@hetzner-cloud.de>
-Date: Wed, 26 Feb 2025 16:56:35 +0100
+	s=arc-20240116; t=1740585542; c=relaxed/simple;
+	bh=lVmdjTx9DPHEs4/ZixrF+Hcv29z2fxqJ1H+sQPn8zyI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bzhwuoC38Yt0/v5ApIxE9p3dJmYsHqm50XoUARx6bI/TIpS2EjVAgFJvA7Tz5duaDoMOg3PIwp3GEwzzaQMQXWEV4WCOmvg0npgdlDwGUsXB/Sf3VdHzMZRlOL20HmrCeIL9L/5ENNCsatiwuF5GbMNWIBoK9Ops254Z0wtDXKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HwQujOqZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740585539;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=46hmh7gDdbwl6kn/Gq2HdkYyqMLGwmt0/b3Oy+FeV4c=;
+	b=HwQujOqZjT4b8/YyP38KuMrL08d2zcjalFhhpg6WPLlxZpJA7wrpOr0qLIJI/1LCTHCd8L
+	pRnaWCwshc6mkwBmD13oYsMrqsUmFoXuUv9gr2gahM1IagXDGgTNlkd6+GHa4Al9RJy7Py
+	Aorvz+bLsSCIi0mkQhgityL/2Fib0N4=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-386-dYVtDb9RNHCBkeNNr_cAyA-1; Wed,
+ 26 Feb 2025 10:58:55 -0500
+X-MC-Unique: dYVtDb9RNHCBkeNNr_cAyA-1
+X-Mimecast-MFC-AGG-ID: dYVtDb9RNHCBkeNNr_cAyA_1740585533
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 759411809CA0;
+	Wed, 26 Feb 2025 15:58:51 +0000 (UTC)
+Received: from localhost (unknown [10.72.116.7])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2C5161800357;
+	Wed, 26 Feb 2025 15:58:49 +0000 (UTC)
+From: Ming Lei <ming.lei@redhat.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	linux-block@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	Keith Busch <kbusch@kernel.org>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH V2 0/3] selftests: add ublk selftests
+Date: Wed, 26 Feb 2025 23:58:35 +0800
+Message-ID: <20250226155841.2489284-1-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: refactor
- xdp_context_functional test and bpf program
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, jasowang@redhat.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- hawk@kernel.org
-References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
- <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
- <Z7yof3pafRsMwBrf@mini-arch>
-Content-Language: en-US
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
- 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
- wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-In-Reply-To: <Z7yof3pafRsMwBrf@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27561/Wed Feb 26 10:36:26 2025)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Am 24.02.25 um 18:12 schrieb Stanislav Fomichev:
-> On 02/24, Marcus Wichelmann wrote:
-> [..]
-> 
->> +int send_test_packet(int ifindex)
-> 
-> nit: static? same for assert_test_result below
-> 
+Hello Guys,
 
-Yeah why not. Will change it.
+The 1st patch adds one ublk utility and one entry test.
 
-Thanks!
+The 2nd patch adds test over file backed ublk.
+
+The 3rd patch adds test for ublk zero copy.
+
+How to run:
+
+	- make install
+	- make headers_install INSTALL_HDR_PATH=/usr	# in case UAPI is changed
+	- reboot
+	- make -C tools/testing/selftests TARGETS=ublk run_test
+
+Thanks,
+
+V2:
+	- fix one sqe allocation bug, so ublk zero copy with io_link can pass
+	- dump log in case of error
+	- add one more test for mkfs/mount on zero copy
+
+
+Ming Lei (3):
+  selftests: ublk: add kernel selftests for ublk
+  selftests: ublk: add file backed ublk
+  selftests: ublk: add ublk zero copy test
+
+ MAINTAINERS                                  |    1 +
+ tools/testing/selftests/Makefile             |    1 +
+ tools/testing/selftests/ublk/.gitignore      |    3 +
+ tools/testing/selftests/ublk/Makefile        |   15 +
+ tools/testing/selftests/ublk/config          |    1 +
+ tools/testing/selftests/ublk/kublk.c         | 1679 ++++++++++++++++++
+ tools/testing/selftests/ublk/test_common.sh  |  112 ++
+ tools/testing/selftests/ublk/test_loop_01.sh |   30 +
+ tools/testing/selftests/ublk/test_loop_02.sh |   21 +
+ tools/testing/selftests/ublk/test_loop_03.sh |   32 +
+ tools/testing/selftests/ublk/test_loop_04.sh |   21 +
+ tools/testing/selftests/ublk/test_null_01.sh |   18 +
+ 12 files changed, 1934 insertions(+)
+ create mode 100644 tools/testing/selftests/ublk/.gitignore
+ create mode 100644 tools/testing/selftests/ublk/Makefile
+ create mode 100644 tools/testing/selftests/ublk/config
+ create mode 100644 tools/testing/selftests/ublk/kublk.c
+ create mode 100755 tools/testing/selftests/ublk/test_common.sh
+ create mode 100755 tools/testing/selftests/ublk/test_loop_01.sh
+ create mode 100755 tools/testing/selftests/ublk/test_loop_02.sh
+ create mode 100755 tools/testing/selftests/ublk/test_loop_03.sh
+ create mode 100755 tools/testing/selftests/ublk/test_loop_04.sh
+ create mode 100755 tools/testing/selftests/ublk/test_null_01.sh
+
+-- 
+2.47.0
+
 
