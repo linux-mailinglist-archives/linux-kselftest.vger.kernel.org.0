@@ -1,205 +1,206 @@
-Return-Path: <linux-kselftest+bounces-27608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ED78A46038
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 14:07:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF11BA460B4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 14:25:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 868293B0525
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 13:06:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA2BA7A4DEA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2025 13:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CFD1DE2A1;
-	Wed, 26 Feb 2025 13:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293C62222B8;
+	Wed, 26 Feb 2025 13:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W90ilfAt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MF1PRG5Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028E042A8B;
-	Wed, 26 Feb 2025 13:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D3B221559
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 13:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740575184; cv=none; b=iMgo1YX0Fvrfi9UGOxPJDoUz2HGF7NDtPlum/q5EGdBp1FbarkLN40yUF8PPeQrDJoDV03pgMOC6h4pcg10vp1JbFRUlMWjW4VXJ1Sb2J7Mg4G6ijCImxhu2ayJAccRcbXnY/WCUbTEfxnry5Vy0fq4PA7uDcDjFrpjbQ3SGeno=
+	t=1740576202; cv=none; b=X4683IL28ZlI5/tOxc8K1H9334LCpe4w9oNkeBxMDao7Z3NKe9ahI1yzSN2dSpNhzVBBpfm4T/X6oUA12vvaBpX0slguM6/Khdvc5I6YOKbmgXq/mSvsG3SFmTDtNdfA/OYPGm/XRMfjqnI1/oGYJCXXYbXn6NuseKNRFBo8m/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740575184; c=relaxed/simple;
-	bh=ZqchcqI2FkHT1qBiJQSk6eN2q4a9QuFS8ZMIoFhRXYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QvivfYQG0pw21cKXaQ5qAG7S+Y9f3R89uiyQVjXSeGOW01x9JzK+FgS1hW8+0EfcbsWYi5HokZ4o1r/FN0/19uTlWpZQt9t57feYvf/qNjHqvID+zM2G01zntDAlBpogjJGncU/Af06RG/DUkUpEUa88s+/ksLvbYcvWWGKP9Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W90ilfAt; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51QCjQxI012268;
-	Wed, 26 Feb 2025 13:05:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Sjtn6a
-	QSkW7Zb/PPaco0QhyyJeAQF+aQOBPQNDVG+jY=; b=W90ilfAticGKauusKeP4E9
-	rdBTAI4cod+aWIc1lzirWUQepkCQtPVIBnvwNUgTDv4WbXEg9yVxhKGDxfkSjHwa
-	8ZnUyj1M62G+VxRI7MUIclyKaz1NuiDVaoy2fUOiZR+ApWvitE5fJcG/6l5r/M8h
-	X5XzKEZKncKmACG+p8GKR+7krvXm+pUTIHMDvLdECt51oLpLxumdbuBSjM4W6G+Z
-	0q/qzxZBIsB1KpUD6a0IttFlAOiUPqxQAkmt6ZKc4H20aEaUIQ2C5NhshglO3M5V
-	PPcNhhXyiXpoH0YezsxFzhr5mvJKNu89lsuiM945JjZfK+O64VOzT91rpQqVrzZw
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 451s19asd9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Feb 2025 13:05:58 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51QB6qqQ012491;
-	Wed, 26 Feb 2025 13:05:56 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44ys9yjx1f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Feb 2025 13:05:56 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51QD5si856492352
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 26 Feb 2025 13:05:55 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D000220040;
-	Wed, 26 Feb 2025 13:05:54 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7E84A2004B;
-	Wed, 26 Feb 2025 13:05:53 +0000 (GMT)
-Received: from [9.124.212.40] (unknown [9.124.212.40])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 26 Feb 2025 13:05:53 +0000 (GMT)
-Message-ID: <93e10bcf-3537-45f0-b282-ae4fd4573c6e@linux.ibm.com>
-Date: Wed, 26 Feb 2025 18:35:52 +0530
+	s=arc-20240116; t=1740576202; c=relaxed/simple;
+	bh=BNBjN9eojJuckvSPmE2E6Krsv7VXfHHr3UGTTgvNq2w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Okp4RqbsgMIq+v1Il9XjgLy8mO8Y6ni+kB7gFSMFjje/v8K9j5Vf3CHZT54o6kmEsIKsnc0u7/n9s7IgbS1pS4YHiALVXAaz+02i7eIr1HFhNUTXslcIf0NZKRSbF4dzrxIaXZrA8rS3bKmY1F0DaIts6UP33jQMISMQQWbe3O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MF1PRG5Q; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740576186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LIrVE00T1J3Jz4vdwi9do6q1hDo8nGa1bNYBlY2fo8E=;
+	b=MF1PRG5QQ1Lqq7wFZG6q8r8CMol2naHU/jSKSQcnkINwj7weVztyp1WqNvpg3VINv/Eagu
+	UQJz/MQx3uCsrKpXXyVmU+KtzlQ4AXW1YfmXE0s9Tuz3zDBtPXfEZ4vaH44dG5/ZLgL+t0
+	FzDdjq2JIzguGZDV3fxP8WfDZtVwvis=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: cong.wang@bytedance.com,
+	john.fastabend@gmail.com,
+	jakub@cloudflare.com
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	mhal@rbox.co,
+	jiayuan.chen@linux.dev,
+	sgarzare@redhat.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	mrpre@163.com
+Subject: [PATCH bpf-next v1 0/3] bpf: Fix use-after-free of sockmap
+Date: Wed, 26 Feb 2025 21:22:39 +0800
+Message-ID: <20250226132242.52663-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] selftests: sched: skip cs_prctl_test for systems
- with core scheduling disabled
-To: Sinadin Shan <sinadin.shan@oracle.com>, shuah@kernel.org,
-        chris.hyser@oracle.com
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250225200910.260569-1-sinadin.shan@oracle.com>
- <20250225200910.260569-3-sinadin.shan@oracle.com>
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <20250225200910.260569-3-sinadin.shan@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XIZLN3TF-z33Jl9yrPg-b5kxRpLWKHfg
-X-Proofpoint-ORIG-GUID: XIZLN3TF-z33Jl9yrPg-b5kxRpLWKHfg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-26_03,2025-02-26_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=999 mlxscore=0 spamscore=0 clxscore=1015 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502260104
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+1. Issue
+Syzkaller reported this issue [1].
 
+2. Reproduce
 
-On 2/26/25 01:39, Sinadin Shan wrote:
-> For kernels with CONFIG_SCHED_CORE=n, the sched selftest cs_prctl_test
-> fails with "Not a core sched system" error. Change this to gracefully
-> skip the test for systems with core scheduling disabled. Exiting early
-> would also ensure failures reported in obtaining cookie are valid
-> failures and not because core scheduling isn't supported.
-> 
-> Skip cs_prctl_test for systems with CONFIG_SCHED_CORE=n
-> 
-> Signed-off-by: Sinadin Shan <sinadin.shan@oracle.com>
-> ---
->   tools/testing/selftests/sched/cs_prctl_test.c | 34 ++++++++++++++++++-
->   1 file changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-> index 52d97fae4dbd8..5b0047b50e640 100644
-> --- a/tools/testing/selftests/sched/cs_prctl_test.c
-> +++ b/tools/testing/selftests/sched/cs_prctl_test.c
-> @@ -109,6 +109,36 @@ static void handle_usage(int rc, char *msg)
->   	exit(rc);
->   }
->   
-> +static void check_core_sched(void)
-> +{
-> +	unsigned long long cookie;
-> +	int ret, num_max_process;
-> +	char buffer[32];
-> +
-> +	FILE *fp = fopen("/proc/sys/kernel/pid_max", "r");
-> +
-> +	if (fp == NULL) {
-> +		perror("Failed to obtain max process number");
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	if (fgets(buffer, sizeof(buffer), fp) == NULL) {
-> +		fclose(fp);
-> +		exit(EXIT_FAILURE);
-> +	}
-> +
-> +	num_max_process = atoi(buffer);
-> +	fclose(fp);
-> +
-> +	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, num_max_process+1, PIDTYPE_PID,
-> +			(unsigned long)&cookie);
-> +	if (ret == -1 && errno != ESRCH) {
-> +		perror("prctl failed");
-> +		printf("Core sched not supported, hence skipping tests\n");
-> +		exit(4);
-> +	}
-> +}
-> +
->   static unsigned long get_cs_cookie(int pid)
->   {
->   	unsigned long long cookie;
-> @@ -117,7 +147,7 @@ static unsigned long get_cs_cookie(int pid)
->   	ret = prctl(PR_SCHED_CORE, PR_SCHED_CORE_GET, pid, PIDTYPE_PID,
->   		    (unsigned long)&cookie);
->   	if (ret) {
-> -		printf("Not a core sched system\n");
-> +		printf("Failed to get cookie\n");
->   		return -1UL;
->   	}
->   
-> @@ -270,6 +300,8 @@ int main(int argc, char *argv[])
->   	if (keypress)
->   		delay = -1;
->   
-> +	check_core_sched();
-> +
->   	srand(time(NULL));
->   
->   	/* put into separate process group */
+We can reproduce this issue by using the test_sockmap_with_close_on_write()
+test I provided in selftest, also you need to apply the following patch to
+ensure 100% reproducibility (sleep after checking sock):
 
+'''
+static void sk_psock_verdict_data_ready(struct sock *sk)
+{
+        .......
+        if (unlikely(!sock))
+                return;
++       if (!strcmp("test_progs", current->comm)) {
++               printk("sleep 2s to wait socket freed\n");
++               mdelay(2000);
++               printk("sleep end\n");
++       }
+        ops = READ_ONCE(sock->ops);
+        if (!ops || !ops->read_skb)
+                return;
+}
+'''
 
-This works for me in my workflow. I don't know full selftest framework 
-or how to trigger it.
+Then running './test_progs -v sockmap_basic', and if the kernel has KASAN
+enabled [2], you will see the following warning:
 
-When CONFIG_SCHED_CORE=n
------------------------------
-./cs_prctl_test
-prctl failed: Invalid argument
-Core sched not supported, hence skipping tests
+'''
+BUG: KASAN: slab-use-after-free in sk_psock_verdict_data_ready+0x29b/0x2d0
+Read of size 8 at addr ffff88813a777020 by task test_progs/47055
 
+Tainted: [O]=OOT_MODULE
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x53/0x70
+ print_address_description.constprop.0+0x30/0x420
+ ? sk_psock_verdict_data_ready+0x29b/0x2d0
+ print_report+0xb7/0x270
+ ? sk_psock_verdict_data_ready+0x29b/0x2d0
+ ? kasan_addr_to_slab+0xd/0xa0
+ ? sk_psock_verdict_data_ready+0x29b/0x2d0
+ kasan_report+0xca/0x100
+ ? sk_psock_verdict_data_ready+0x29b/0x2d0
+ sk_psock_verdict_data_ready+0x29b/0x2d0
+ unix_stream_sendmsg+0x4a6/0xa40
+ ? __pfx_unix_stream_sendmsg+0x10/0x10
+ ? fdget+0x2c1/0x3a0
+ __sys_sendto+0x39c/0x410
+'''
 
-When CONFIG_SCHED_CORE=y
------------------------------
-./cs_prctl_test
-(369) PASSED: _prctl(PR_SCHED_CORE, PR_SCHED_CORE_MAX, 0, PIDTYPE_PGID, 
-0) < 0 && errno == EINVAL
--1 = prctl(62, 2, 0, 2, 1)
-(372) PASSED: _prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, 0, 
-PIDTYPE_PGID, 1) < 0 && errno == EINVAL
-SUCCESS !!!
+3. Reason
+'''
+CPU0                                             CPU1
+unix_stream_sendmsg(sk):
+  other = unix_peer(sk)
+  other->sk_data_ready(other):
+    socket *sock = sk->sk_socket
+    if (unlikely(!sock))
+        return;
+                                                 close(other):
+                                                   ...
+                                                   other->close()
+                                                   free(socket)
+    READ_ONCE(sock->ops)
+    ^
+    use 'sock' after free
+'''
 
+For TCP, UDP, or other protocols, we have already performed
+rcu_read_lock() when the network stack receives packets in ip_input.c:
+'''
+ip_local_deliver_finish():
+    rcu_read_lock()
+    ip_protocol_deliver_rcu()
+        xxx_rcv
+    rcu_read_unlock()
+'''
 
-So for this patch,
-Tested-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+However, for Unix sockets, sk_data_ready is called directly from the
+process context without rcu_read_lock() protection.
+
+4. Solution
+Based on the fact that the 'struct socket' is released using call_rcu(),
+We add rcu_read_{un}lock() at the entrance and exit of our sk_data_ready.
+It will not increase performance overhead, at least for TCP and UDP, they
+are already in a relatively large critical section.
+
+Of course, we can also add a custom callback for Unix sockets and call
+rcu_read_lock() before calling _verdict_data_ready like this:
+'''
+if (sk_is_unix(sk))
+    sk->sk_data_ready = sk_psock_verdict_data_ready_rcu;
+else
+    sk->sk_data_ready = sk_psock_verdict_data_ready;
+
+sk_psock_verdict_data_ready_rcu():
+    rcu_read_lock()
+    sk_psock_verdict_data_ready()
+    rcu_read_unlock()
+'''
+However, this will cause too many branches, and it's not suitable to
+distinguish network protocols in skmsg.c.
+
+[1] https://syzkaller.appspot.com/bug?extid=dd90a702f518e0eac072
+[2] https://syzkaller.appspot.com/text?tag=KernelConfig&x=1362a5aee630ff34
+
+Jiayuan Chen (3):
+  bpf, sockmap: avoid using sk_socket after free
+  selftests/bpf: Add socketpair to create_pair to support unix socket
+  selftests/bpf: Add edge case tests for sockmap
+
+ net/core/skmsg.c                              | 18 ++++--
+ .../selftests/bpf/prog_tests/socket_helpers.h | 13 ++++-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 57 +++++++++++++++++++
+ 3 files changed, 82 insertions(+), 6 deletions(-)
+
+-- 
+2.47.1
 
 
