@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-27750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566FFA47FCE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 863C6A47FD8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:48:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C1E018975E8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 13:47:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6851E1893FAC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 13:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF15230D2B;
-	Thu, 27 Feb 2025 13:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D341323371B;
+	Thu, 27 Feb 2025 13:43:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="LwEUZPKp"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="LCHhE1yp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88EC22F177;
-	Thu, 27 Feb 2025 13:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE67523315A;
+	Thu, 27 Feb 2025 13:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740663777; cv=none; b=rt1DhlsuSq6b4hLTeRRqlxEvoP5fDLytrqR0r5Ugg4Nuwm7QRAlX8sx1NLeBtz/AU3O82OlGSrULfPORPjvt6Wct/zwAjTu534/5vRds75LyXZsSdLAt6S/5+Qgs+lCw4dsgvQ/zPaiveaX9VDrQkbr16Z3QLJhJGB+GPQ5W7SE=
+	t=1740663832; cv=none; b=ce9ngD1M/+FwfQ0hmryeNOcidCsoxJOPV1Xsj19s2vCtZHbpKAmJRZAopwNAs7blceI35nB4NxJHDlAZ9yJs5Kf3PLYdlk0PeUq2EBFEzrL2bfJKNGWRB7ecHCPxx09rJV+YizWA5FluKKcJTEVQNX0PJzBYiIimZfq/uthn+tE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740663777; c=relaxed/simple;
-	bh=riiiXkoDRvE48j0agmwVCiNuVc3bnAzwfJ9sDlQrhkU=;
+	s=arc-20240116; t=1740663832; c=relaxed/simple;
+	bh=EnaYxEWNVhiFd2VwNTO/O1KVXGEdkXwFWZgqg0p8524=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ioz5DftqLcjqoYzYFGYsQSiJrw4rLF/SHy0P99xsP+n4sYeW5503yTYeMRPG8X11UB4lEnNRFXsvySLQ212Hq+Ro7OPJPIc0mFW+558m7ACMcj09UqNoWI8pk27Ct0xzKIFKc2Ip3nntMCXxvbF0oSeoTOb5aa+9coc6/9QlEG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=LwEUZPKp; arc=none smtp.client-ip=212.227.15.19
+	 MIME-Version:Content-Type; b=QaYM0Ev6TzIamFBEQWove9z4pESDfP2AKjeiKpZhZTFgn43ekfjt1ovEys1HMUZ/q+HstnKuwuTVUIx0poPotRzS9X1eAMLJrJAbwRXlVSCC+tJp9GSeFkg0WrxzehwzHIR98aq0aise2sU0bTeRkh3070elAPdeSfzXmk22QcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=LCHhE1yp; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1740663766; x=1741268566; i=ps.report@gmx.net;
-	bh=riiiXkoDRvE48j0agmwVCiNuVc3bnAzwfJ9sDlQrhkU=;
+	s=s31663417; t=1740663816; x=1741268616; i=ps.report@gmx.net;
+	bh=R5lsuEL3fy+5WqWDG/oNetmCKrc6oS9esNqoBlre/so=;
 	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
 	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=LwEUZPKp16ey/JhfbdX7rVNG7RevUp/6qrJVf432XaarOiRZQ255NBOdmHM5NPyd
-	 h6izrnTNBNg7iIuMTjAfm/vkGe0y9juO4R3GEds7TAGnolT766gOFwdLKqxKEgxeR
-	 KiSmUTreUp+ckjVaYAy6QUojFQSRiE/5uOEirH4UelrwdhkrX1keHaiCvtK9peVEU
-	 bK78uYRudK3EBBNBmauzCGE98E5fWS/G51TTSr6cu9rMx5bKZ/nw3KGQAZstULjJI
-	 Zp5i5LHuvNO6YdIhTK+Ph7LjM99Ms9/4Gxz1fDAg9wFR+irNu37VFlqzeFrBPAZak
-	 k48VJfKPa2cUmTjIWA==
+	b=LCHhE1ypB0Y/4QiWnOiNTpNKaQpFrxF/zOeH9BKO9Nlyd3W9qnvqqpqywV9ZBSjA
+	 vcs+DljMpHsjNPNWAOSTiiBrH1WxBEOFg4Ung0RRz849Wah8oEyONRvuNSOhIGCd7
+	 BfXsvgh58EEJPvo9hSCOS4OCqoOB9YASbKV6dAhwC6lP8sMJpO/4Lshj8LI271QAU
+	 NsLXVU9+DWB4rzQIhcF4Ad6btJeVd0yUsEEZZZkxqpU8ELbb1mr53Oy9gD23bc6WJ
+	 xE5Zsd21jH5RfI+5I6BZoxXhIdWnc8Rn2y7kuD6xXHT/i75us/cTIPe85uYT30Poh
+	 xYfltYFv5yIojOKPbg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([82.135.81.151]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MPGW7-1tdxtr04Hl-00S1SZ; Thu, 27
- Feb 2025 14:42:46 +0100
-Date: Thu, 27 Feb 2025 14:42:43 +0100
+Received: from localhost ([82.135.81.151]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIdeR-1u2CVx3LCH-00CzJU; Thu, 27
+ Feb 2025 14:43:36 +0100
+Date: Thu, 27 Feb 2025 14:43:35 +0100
 From: Peter Seiderer <ps.report@gmx.net>
 To: Paolo Abeni <pabeni@redhat.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -57,13 +57,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Thomas Gleixner
  <tglx@linutronix.de>, Artem Chernyshev <artem.chernyshev@red-soft.ru>,
  Frederic Weisbecker <frederic@kernel.org>, Nam Cao <namcao@linutronix.de>
-Subject: Re: [PATCH net-next v7 4/8] net: pktgen: fix mpls maximum labels
- list parsing
-Message-ID: <20250227144243.6953f14e@gmx.net>
-In-Reply-To: <ec8fbe36-138f-4a0b-a8d3-95e49187a47a@redhat.com>
+Subject: Re: [PATCH net-next v7 6/8] net: pktgen: fix mpls reset parsing
+Message-ID: <20250227144335.6e3af335@gmx.net>
+In-Reply-To: <02e13783-1f87-46a7-9396-96bf17e36a9f@redhat.com>
 References: <20250224092242.13192-1-ps.report@gmx.net>
-	<20250224092242.13192-5-ps.report@gmx.net>
-	<ec8fbe36-138f-4a0b-a8d3-95e49187a47a@redhat.com>
+	<20250224092242.13192-7-ps.report@gmx.net>
+	<02e13783-1f87-46a7-9396-96bf17e36a9f@redhat.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -73,47 +72,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:yCmN0tzwMYCyh7IloeH9BsWmZLeaCd3Y/OD8EmO4xS7g/1Lfquc
- 2jeVNSAp88WQ+zWU4BxTm7NWN7q+WTF8k04bPVDhrOTH3y795Sv5DiEDa72N2xyqaQttYwC
- DNL0WNBayo1+b3gonTLecBA7oplVGnIgV1r4nSnIIaG1+9z8MKLj2PJD7/FIkwViV52Z/sN
- rKKm/1oKgrtGZZrPEhHOw==
+X-Provags-ID: V03:K1:+Ztxo+GrUJYyVZhX+OnkbPgV2ht0yZ5uRxFD7snG/hFp5of1rre
+ jatBeqzu2XfW0vjdWweSwBDvOkVExDh7nl24N6pzNIuP3YMnm5mOsCQiTgHZpYwrVU8bxOt
+ 6R9avd1lAsoKIxpTae8I1JUohvRDLIgJpSYIjvqt5Di75kgSbuIhkxpihrzgZpFK0sskQRH
+ 09kSpT9nrinD3xh8X/9zQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:NwqR4tfaEww=;hKi3n6DMSwzCKMS2pz22cXcYYJE
- gT+PrLJ4MpmU4BUsqQIkBQvKEAZ70I+w2l1YKtdezisbMckEK/FQ97fTFUqES/+o6LcVbOXxs
- VTo9dzDEhtlkK71FIGpv+YH0oqJ1eZOnpATPifNSftiWD95HPVq7ALbpl5xX336dBe1kVHesD
- crZynMAdAeXxtzGDjZ92Aa7o4112AyOSUR/63W5eBm4Iqh4VkwARw+gT36XlKjW+As0jssQsp
- 9uCGIRD95CEoil+f3sH3H0pKoEJbrezV0xSXYIDUg6yGvhULsrsTRaUSxAeFqPmplbKr37bDI
- oX89fPgyZEdaVRnN3ccpnHurzTFerTCCQ7pqZjmhEO6zlG1a0z2oSmFKVTJsO/jpOsaARcTUF
- EAdDTif4iIRcZX6ha+RNHakEy3Bm0BvYjjebUc1PXPWZoQm9xCt9fQifhl5UZEMtqyGk1gZu5
- 5PRUXEQ+dJMbmIejlnM55LwWrtAK8clcCwLS7AJFQOmKTSa7yjhz8RquaAQqKp1oMl2AZFjaK
- GJYW1E4mBLoJ76yZ0kw8i4zsQXk2NG8/zaUahW5nnEkU2zzZ3wQAMp+C1tOj0nnXczV+9l+Hh
- 2OQhWN8lQkS8HD/yZFfYDPSlKaFlU68RsegfSH+VgIJATa2KI88fdK6OwgnwzyjGhMBBwSVZ2
- UJdurc3HWxhlhWty4zBwRLQnEOd59du9uO5af7AbPvlGF71ODKRSOJ0it3LnIedHfXt/tzkYF
- 76jFCkVP5C2lpDmslT9hecq8Vo1ZfhJDsMteW6PnAXOg7XUpZx35LcflFfY4XSFrxLAZifl2y
- NuwnhwAmQho/MUbOLe1j3y729OFFKo5TsY9maTc3jn4d3KxbI3VkO+hH7Z/H2uHUgEfbCUw0r
- MjkoNyJUWqjPIGMnsck24/sUmo+rRluwuhK+hhqW4WsqAA93wrLcpsAP96GgnmBAdfFaEBUKr
- 7wNaMfYKmdK/yXfK6asq979tv+PF0rf4eLnpjG58wo21bDD4Ubdgu86fKh/JJrvVcjQBA2bRF
- HoCQnla89N1cLXPGFNgm5he71JNy73Edq0euomOaEXjEOWnK87lC97TlmWVDiO0IW+dTqhs0O
- keSulSnDkgl+Vd+dlnRhrenXyemkwDF5K2QmBMuTd0ymbqdU2sIAM9L3a1UW7r2UBOBA3p6Fi
- m3mv5I6hDXErX+2jYECAv29w969uG/UcXUN8zdNoQ4kxormDeRIdGC5NHXnhXaciF5NnjPQld
- P0hWKl/L/OYO42aTGckYdnDLKH7LjpKy8bN036DUcsIzYb+fk80+BaQIxmDpxlbCvAKg2hXVF
- vb88SxNBnFAh1acmhT8VgE5wA1vRo+xuj8HTLokSjpdXwjNoESKHXbhQr0dXr3sf124Qq2/iC
- p3Bp0xnfhZseTQh4/L4VExNEu88HlmSLuTWSyGBcJ8ossYN+WGGLDjm8ai
+UI-OutboundReport: notjunk:1;M01:P0:22gMgeXLusM=;QEzdzt+ltYk8UIsghpU4FNh1kxs
+ QVFuVJa4x6bzDcOW7AYh23h2owGM1tQPg9uNWNOIybZOyKJTKZkZxV68j2IBLyhvZd93AlJcW
+ yQsedKkMqowh0V6u3lBwM0yKyvEXnbi1GKMNiV2gbVBJ3zHd4gABLuyeOewcSj4oFGgzFSy/d
+ lM33E7QY6IjIY5jKnUIv8kSHPAMqeBuSsUJJbTjsl9FteqWXDZglsgWYHjWvLzPHFeuwnVG4S
+ kfe6jbEmcXccq70sJwVUOZKryH+9ZfL2d8AxiHIqQFWdrzb3QZaU4CreGuZzmkblrpcTiFkN/
+ fa3FaXqCvkotD3PCf7g54EyXdBYuikdcAsFyAE4qGjzhggpbcCYOyGB5UwPyhFmsIwshyJiZO
+ uJGPah6/7WC5rntpF+jwsgBw5eUcFEoGvfE2AWtsDPPWEvI75kCNWmL3ea4SkIDCLpAcEKetK
+ aDDSvMypLoQhRLP3MlxiXB4KUfZpeGD3w4DjhWu652qV6j+ufPqT8rTEIGzHNeHlor8wbkPaW
+ IRVNa9esf0CAThhZf1VxC62Bl6j2HSNmlG76Q2XqWmMA5lrTeOzG2cxmX+mb9e05TA9OpHtGW
+ qgtGt4JbZBjir4k8HVyQ1l8FlyngONwV0nWU+qKEjvN1uBYJrJwYQFFESE33iIcRlnXeYRBix
+ J8ZuIoaIqsQ8yvuaj+n0OXLSAydAbm58M4eqT5BQAX5Br6o8D9O06+QERauEn7ZfOIPc105x2
+ K34DTSYbnoBD+O+BpM43PVLH3ICYULeNQy6t6RBUVppOGYHU03omFURlpUmVIkj51F0KTFd5k
+ HTbE6HZ3DqA/gvEXO6TdEzUnUdoCes6R32Y8utfYOGMPTfm70cafALKOFtOihcwxHXODGiFgS
+ ToCfQObqERzxBlteDf+F318lI679ibBsnsIYZjRr4d4R3/EKVttMIHbnDKH3PCy7AbwzGhLHU
+ nne8PYAp9DDGB7WUYOSH6cMBXFqWQZHZrKzZNXEa2Fbn+G5Gkn13Fy235mlhy3clYG9nHARtU
+ Rhn3ksG2RJ/+5KsU/hhRnuQaClZTXh4JkXxGExoV57ZmkKZW+4nLS4r3/ycLkJd6/tr/zNy8p
+ I664AryV0JdqMdaczyR24gEKObpdFw8LIuBPqtwO73XvcU9mSFcICmTCSZtQzB+1N2/WLWK9q
+ PwdQXzODfdOq1SIYShBioDcRLDTd5y9HncTOIXepR8VKYREPNvRi1BdrDKixYrCAyzjuY0O1g
+ SLg6vh/XG9MlugYwtaDSQqF6MYHYIK1F683MPAq+wSlYXQcjiXX0wpIU4zX5yICAHkuTVx3J9
+ WCd1UV7nQD9cZXlqY4rIfsc4qE7HmJOt6wOuZc5KQswK/SQc4CR0lDYGYRP4hqQB6E1AYQ1BE
+ c6AgnTl44jEUGC19FzzzM7UziLpB0Y7ZJsetd4OyxJC3zPfg9mdnO1dZAJ
 
-Hello Paolo,
-
-On Thu, 27 Feb 2025 11:24:48 +0100, Paolo Abeni <pabeni@redhat.com> wrote:
+On Thu, 27 Feb 2025 11:19:33 +0100, Paolo Abeni <pabeni@redhat.com> wrote:
 
 > On 2/24/25 10:22 AM, Peter Seiderer wrote:
-> > Fix mpls maximum labels list parsing up to MAX_MPLS_LABELS/16 entries
-> > (instead of up to MAX_MPLS_LABELS - 1).
+> > diff --git a/net/core/pktgen.c b/net/core/pktgen.c
+> > index ae5e81e62733..bb13a4591709 100644
+> > --- a/net/core/pktgen.c
+> > +++ b/net/core/pktgen.c
+> > @@ -915,8 +915,13 @@ static ssize_t get_labels(const char __user *buff=
+er,
+> >
+> >  		max =3D min(8, maxlen - i);
+> >  		len =3D hex32_arg(&buffer[i], max, &tmp);
+> > -		if (len <=3D 0)
+> > +		if (len < 0)
+> >  			return len;
+> > +
+> > +		// return empty list in case of invalid input and/or zero value
 >
-> Very minor nit...
->
-> The above comments sounds misleading to me. I read it as the new limit
-> is MAX_MPLS_LABELS divided by 16, that is 1.
+> I'm sorry for nit picking, but C-99 comments should be avoided
 
-O.k, will rephrase on next patch iteration, thanks for review!
+O.k., will change on next patch iteration, thanks for review!
 
 Regards,
 Peter
