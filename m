@@ -1,345 +1,232 @@
-Return-Path: <linux-kselftest+bounces-27716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3C4A4773A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:06:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D1CCA4774D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07190171E94
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 08:03:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F5CC18831D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 08:08:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92DE1225A4F;
-	Thu, 27 Feb 2025 08:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 486F91F9F5C;
+	Thu, 27 Feb 2025 08:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UKirZCsX"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="e1cQWA37"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6C22222AC;
-	Thu, 27 Feb 2025 08:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C8D2192FF
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 08:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740643204; cv=none; b=kfrZg002xSQHcgW2ULddWtspiFWtNKHEaRJ7G589TlPcezVGGX0t+qMKJ8VL2XHc9K8cTcfekFWrQma89vY1VNUYC6LxhluTmpK5yjpdIcieN+rXq0tvFkF/X7Lqfbprx58C3t3wBZUPbPQH3pOBjVQ2HI3oDnMEyKczVS08pEY=
+	t=1740643717; cv=none; b=rh4RtFz6+WlRFDu/oiDzoi2V4fJqJQR+wTi+P3TkHCsqk+Ks63zGpA35U8e/6GNvnWDguqOd+G28ubN1iePsWLolgS4wj/u4VxsFgQJgXyRum2KsDARr3tv81s0v0X+hXd3OyEbIiudGOLYJDxJuwEzXa21K+5wCwUyDCrgbdRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740643204; c=relaxed/simple;
-	bh=F/Q/rQMBhG8QlQ0hvZO4Vy6dvWhPpbp2iZ88VJNmuaQ=;
+	s=arc-20240116; t=1740643717; c=relaxed/simple;
+	bh=r5MYi7hZkFxlnQNhgITPV8HgnQ6Ea2Joi+mAWXpJyyc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gRXF/bS6o70Ga/A4t5QwpIBN/zeO64lW5wAPMnetXX7KneDUwZPySH2sJsNj0orLAIWenTAwixlGhXlR70dA2zo8Ocyam9Bk1n1NUv84Mbc44IP04KsIQnUIg4qc++ZpmlaaYLlTmgk3iZqfWGetdBk1IzfbjeEJNSFIJ5wF8Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UKirZCsX; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22337bc9ac3so10294445ad.1;
-        Thu, 27 Feb 2025 00:00:02 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BdL3VDNWuJwFEpbyrKXOqV0tfvEM9llkqT9TDmbIBVsok2FAQyGnjMjA2w1wV2Ikeclm7x/HUGGMsBfICADb2Tt+mOY0TrGCeaJqA7ItDg3NjhuYPVT+3oQKo2VmO44WhpWBC+3BlrIKhv4WAyztfbK1Ex7JdOM2ilG6wSCIIog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=e1cQWA37; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38dcac27bcbso1185213f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 00:08:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740643202; x=1741248002; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1740643713; x=1741248513; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+VhD1FcQ4v0IAeCPGXacuvSg0+RMPQMMHyVhpvcmHA=;
-        b=UKirZCsX5tRGNE/5mAhj3FsL1I6H4QCbI7FZckmmbzJvaeZ1SqzGkHmTiUQwrO8npp
-         R4IIjNNFFop1hbea9O4NeYjtez+qwp/cLPRotG1UeRPocyriETZShMUStWl+nI6omuUT
-         Xk0t3oPlhS/nOeGWMX88byrEx+CvVe+AFvuVhoCSZ40YZJHjKTSMRPX3gW3K4IlhL0lZ
-         8z9lJnwzut331eF0BH2HVT6U7xe24+4uKRr3Nt2mP5MFb8rusuylepI1w6/+p+qnznHa
-         N3b8pgcSQFRsy+VZSgRuGqhBILWNaTxtePBSUHgPhrp1LmYh+9kSHJoa/eyXfCXTy2Er
-         pvwQ==
+        bh=SXEKvsRH1IHGZjXRKII/sR3OF5jBOeQXuZKp+7GCCWk=;
+        b=e1cQWA37aUhyGsR2OBViUQPAq6FgG+YLOGWZRsc4sHnPG4EpG3XUGvLqBiMOOasXM/
+         lFnrajwvHe5m5ZXImLhJ8tc0nBEvMOvPanmfXg0xlPITTjAGoG8cAcw5kpFmAjBxdJo/
+         5s94IBY49j52HmTWEr6g7FKUmku1O7f1gBuD5cyPFn3A8SLWvYnddTAtQUAwZReCDFaU
+         YRJLQRbpxkDRFx3AmZV5Mmmd6/2LV+EoMwQfbxzPeG0uSItAhE7db6WPii0vJ1OqNr57
+         l8bbgjxxtOqciDkKCrYa8mhWOTqn86TTljeI2p0mEndi+byXz5o2UjrhusQukCCo0fZt
+         wL5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740643202; x=1741248002;
+        d=1e100.net; s=20230601; t=1740643713; x=1741248513;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e+VhD1FcQ4v0IAeCPGXacuvSg0+RMPQMMHyVhpvcmHA=;
-        b=wuO76JAa62qrMx5U4+t7UMAivj2FHFgRZ+3PMpbvDkB+08vf6odnDvv4tP7zveYzRS
-         ridw18lHUUopXlIKZxzWU8rWqfHdG1FSBHRRbHSMZ65ujMDm2VMq9Y2tmuNUJ5fc+TwI
-         eKpXlCvOjm8tEKEVEx+LVS1VBUNnrq/FsW1ss29PCntpOt8DC42HsExmoSRtnh86tEL0
-         5/koIYJJ+gvVuKhfKjJk+uvPwgLbX4RK2lvWXsL/JKSCX7KuDiWyFPJ5D71On8Xzlfb6
-         9Xznu96ZEM3ouYqLL7qqjzwIg0oaqYI+enjumQDKPa3F0rywTcIceMCp7zsSwofBruI4
-         OrWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUPL36GVOi+/4mDbfRMsyagvgicsi+6AUyAilcJc+JzCLR2I4E0tl4qlXDhOuEDvSA3LNHz9/iDALnK@vger.kernel.org, AJvYcCVaKzrv7czdjwUyBAqUKerBpNzHqOORW05kSVFzfWyjdd6oH+MUHnJtXRc1mwXROtQk8tc=@vger.kernel.org, AJvYcCXLlsjgBQkLaeo9ubVuTnHAvZv8PgeFLUDWJZhqdA2NPd33jLcj2miZi4mzF+t/a/juDqPI6GEc@vger.kernel.org, AJvYcCXct7HGDyN7KbTOUmZ6eCiWyGAObf+Yu0plSIOroU/woeiXfU+EWQd4tQUWqwd675ncDCNc2la8i5IBpZNM@vger.kernel.org, AJvYcCXkAGhnw/chUSLsGmiUQNDCfcpszDqkp4+w5Ip7ZAm1ESeIP/f++IdRUDTKCLAghRhiC0L/o2ZfkbMacrzmrJt+@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmMusFA6jxYwyQ5xJ+3o6YkGStT8fd3NeZT4P0FjexFqgDe4nL
-	cUl2LAtMDCCtHlm2h8yYX81szpd/qhAnWUMNcZ4NZu2Ax6TcWj66
-X-Gm-Gg: ASbGncvA6sLkV/ApCYsYsdvDLwP4GDo0iK8YDL2v1OWqA8rYkJ48j6nNNlVzZ4YRypG
-	v2Vd3uQyGHTVj2FsAXxTLdJD3EnQofFCwZZkGnlS/xvle3eOdfyp68O9WC0KAeoF2YTlBM+6EsZ
-	vkws9L6m723OGL3VJWrd12SSqtKUz8x2vQ6zTay76tFtV4B/2QlqLXD1CQfEoiuUUZXatfOFpTA
-	dbcqKFIaROoyKt+eu/KgJaG0V0tYwE+nH8tszslbr63KrewLinBp2GZ+2KOVrvSUHKkLow3Pom9
-	6BKsuct9SFqkpasohO7gIsssEw==
-X-Google-Smtp-Source: AGHT+IHbgNhJloGNS3WGI/ZiBYGWLiZc0ShwSla+EDWIC7+o+EwVg1hEUCizPi07PZDxpMZGk59OJg==
-X-Received: by 2002:a17:903:2311:b0:220:dff2:18ee with SMTP id d9443c01a7336-221a0edbf42mr392893445ad.14.1740643201794;
-        Thu, 27 Feb 2025 00:00:01 -0800 (PST)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505336f9sm8356295ad.245.2025.02.27.00.00.00
+        bh=SXEKvsRH1IHGZjXRKII/sR3OF5jBOeQXuZKp+7GCCWk=;
+        b=pJYhznjpNbrmMGjr5iFyUxshLK0kM5IdJJgoIohexAM2e55tIIhgRZdTIfu98aRhrC
+         dSd+9qLa+Crc9Hlx7Lek/i8HVl+k+FlCeWr27BagPKpeS9n/ho4EUwtN8IIASGC5nRop
+         QqTW1Vn/7/lnhqM9ee04J9f0vAcscuXussIa5IfuVzvWDXuupzddcL5Z3BvSJIcOASYk
+         tGj+6YLjKCiw9UYgyNKy2hEOFr9JSif8IQjxjm7Jw0I90A2OfrVeDQk9nUIPNe4QyNko
+         cbb5tPKIFfrqjEZnFrbleYY9Ije00wEdAPc7ccbVa2RCGzi8hmXpSXD+Yf+VvOFF4W/Z
+         ZbNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCViK4F0Snia2Cwo3RcMj1o+2GtfsWmnG2KdAIh+RaFiBK5DnR7YH9eJ6OTjbsqiOH2wBVF6P1GpxG2bi2LD0e0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpBPapiZc47KwVkzK48L4+IdfJJBTSaG3G+H8Csq7CVVkoSOvt
+	sgYUiHfNymmdqztZeZNXiM4yxoCRs6WtTvgsC1xlUUeNfjMdFKm39E2SXN5geZo=
+X-Gm-Gg: ASbGncswR+y8/VHcXm760NcA0pGim4y6FB1MVVzbcDDxm9WLL5AmN/gNNJ+D5O/DVX1
+	lUnwly3IA2xBJB13mKcSNxFX0CgydLMx32bxe+gd9IVREUR5pEDJndGhxC6UZa/27ZzifgwivzS
+	tHCBI/MHhR6iwOYyFrQv9BVS8sEpiyu6R/dpjqCb3FnlJKUYwYk0I7LIRiY+mCDZKRo3iCKi4RI
+	MJFkFLs8aK7hErAAKkeu9qbqeaTQs7BrlJWmgcQOYaZPfQNKyjWoH8mVknJv0sNzsiCbqcQDQ2w
+	9IJlXpcMK0LkRg==
+X-Google-Smtp-Source: AGHT+IFfzFnOGuM3XpELAhnmFcvI3sNcf5fvXpL9iafVg+5GXrJpxNcbrV4SnJPTY8dCnZQ7wtZd1A==
+X-Received: by 2002:a5d:5f93:0:b0:38b:f4e6:21aa with SMTP id ffacd0b85a97d-390e1648bd8mr1563072f8f.5.1740643713445;
+        Thu, 27 Feb 2025 00:08:33 -0800 (PST)
+Received: from localhost ([2a02:8308:a00c:e200::8cf0])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e47b6cd8sm1198683f8f.44.2025.02.27.00.08.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 00:00:00 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 55C6941296D8; Thu, 27 Feb 2025 14:59:58 +0700 (WIB)
-Date: Thu, 27 Feb 2025 14:59:57 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, virtualization@lists.linux.dev,
+        Thu, 27 Feb 2025 00:08:33 -0800 (PST)
+Date: Thu, 27 Feb 2025 09:08:32 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Willem de Bruijn <willemb@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me,
-	asml.silence@gmail.com, dw@davidwei.uk,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Victor Nogueira <victor@mojatatu.com>,
-	Pedro Tammela <pctammela@mojatatu.com>,
-	Samiullah Khawaja <skhawaja@google.com>
-Subject: Re: [PATCH net-next v6 4/8] net: add devmem TCP TX documentation
-Message-ID: <Z8AbfZg98HS_QQjb@archie.me>
-References: <20250227041209.2031104-1-almasrymina@google.com>
- <20250227041209.2031104-5-almasrymina@google.com>
+Subject: Re: [PATCH 3/4] KVM: riscv: selftests: Change command line option
+Message-ID: <20250227-eb9e3d8de1de2ff609ac8f64@orel>
+References: <20250226-kvm_pmu_improve-v1-0-74c058c2bf6d@rivosinc.com>
+ <20250226-kvm_pmu_improve-v1-3-74c058c2bf6d@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="AMvatQGVE1g1y7TH"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227041209.2031104-5-almasrymina@google.com>
+In-Reply-To: <20250226-kvm_pmu_improve-v1-3-74c058c2bf6d@rivosinc.com>
 
+On Wed, Feb 26, 2025 at 12:25:05PM -0800, Atish Patra wrote:
+> The PMU test commandline option takes an argument to disable a
+> certain test. The initial assumption behind this was a common use case
+> is just to run all the test most of the time. However, running a single
+> test seems more useful instead. Especially, the overflow test has been
+> helpful to validate PMU virtualizaiton interrupt changes.
+> 
+> Switching the command line option to run a single test instead
+> of disabling a single test also allows to provide additional
+> test specific arguments to the test. The default without any options
+> remains unchanged which continues to run all the tests.
+> 
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 40 +++++++++++++++---------
+>  1 file changed, 26 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+> index 284bc80193bd..533b76d0de82 100644
+> --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+> +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+> @@ -39,7 +39,11 @@ static bool illegal_handler_invoked;
+>  #define SBI_PMU_TEST_SNAPSHOT	BIT(2)
+>  #define SBI_PMU_TEST_OVERFLOW	BIT(3)
+>  
+> -static int disabled_tests;
+> +struct test_args {
+> +	int disabled_tests;
+> +};
+> +
+> +static struct test_args targs;
+>  
+>  unsigned long pmu_csr_read_num(int csr_num)
+>  {
+> @@ -604,7 +608,11 @@ static void test_vm_events_overflow(void *guest_code)
+>  	vcpu_init_vector_tables(vcpu);
+>  	/* Initialize guest timer frequency. */
+>  	timer_freq = vcpu_get_reg(vcpu, RISCV_TIMER_REG(frequency));
+> +
+> +	/* Export the shared variables to the guest */
+>  	sync_global_to_guest(vm, timer_freq);
+> +	sync_global_to_guest(vm, vcpu_shared_irq_count);
+> +	sync_global_to_guest(vm, targs);
+>  
+>  	run_vcpu(vcpu);
+>  
+> @@ -613,28 +621,30 @@ static void test_vm_events_overflow(void *guest_code)
+>  
+>  static void test_print_help(char *name)
+>  {
+> -	pr_info("Usage: %s [-h] [-d <test name>]\n", name);
+> -	pr_info("\t-d: Test to disable. Available tests are 'basic', 'events', 'snapshot', 'overflow'\n");
+> +	pr_info("Usage: %s [-h] [-t <test name>]\n", name);
+> +	pr_info("\t-t: Test to run (default all). Available tests are 'basic', 'events', 'snapshot', 'overflow'\n");
 
---AMvatQGVE1g1y7TH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's probably fine to drop '-d', since we don't make any claims about
+support, but doing so does risk breaking some CI somewhere. If that
+potential breakage is a concern, then we could keep '-d', since nothing
+stops us from having both.
 
-On Thu, Feb 27, 2025 at 04:12:05AM +0000, Mina Almasry wrote:
-> diff --git a/Documentation/networking/devmem.rst b/Documentation/networki=
-ng/devmem.rst
-> index d95363645331..1c476522d6f5 100644
-> --- a/Documentation/networking/devmem.rst
-> +++ b/Documentation/networking/devmem.rst
-> @@ -62,15 +62,15 @@ More Info
->      https://lore.kernel.org/netdev/20240831004313.3713467-1-almasrymina@=
-google.com/
-> =20
-> =20
-> -Interface
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +RX Interface
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> =20
->  Example
->  -------
-> =20
-> -tools/testing/selftests/net/ncdevmem.c:do_server shows an example of set=
-ting up
-> -the RX path of this API.
-> +./tools/testing/selftests/drivers/net/hw/ncdevmem:do_server shows an exa=
-mple of
-> +setting up the RX path of this API.
-> =20
-> =20
->  NIC Setup
-> @@ -235,6 +235,148 @@ can be less than the tokens provided by the user in=
- case of:
->  (a) an internal kernel leak bug.
->  (b) the user passed more than 1024 frags.
-> =20
-> +TX Interface
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +
-> +Example
-> +-------
-> +
-> +./tools/testing/selftests/drivers/net/hw/ncdevmem:do_client shows an exa=
-mple of
-> +setting up the TX path of this API.
-> +
-> +
-> +NIC Setup
-> +---------
-> +
-> +The user must bind a TX dmabuf to a given NIC using the netlink API::
-> +
-> +        struct netdev_bind_tx_req *req =3D NULL;
-> +        struct netdev_bind_tx_rsp *rsp =3D NULL;
-> +        struct ynl_error yerr;
-> +
-> +        *ys =3D ynl_sock_create(&ynl_netdev_family, &yerr);
-> +
-> +        req =3D netdev_bind_tx_req_alloc();
-> +        netdev_bind_tx_req_set_ifindex(req, ifindex);
-> +        netdev_bind_tx_req_set_fd(req, dmabuf_fd);
-> +
-> +        rsp =3D netdev_bind_tx(*ys, req);
-> +
-> +        tx_dmabuf_id =3D rsp->id;
-> +
-> +
-> +The netlink API returns a dmabuf_id: a unique ID that refers to this dma=
-buf
-> +that has been bound.
-> +
-> +The user can unbind the dmabuf from the netdevice by closing the netlink=
- socket
-> +that established the binding. We do this so that the binding is automati=
-cally
-> +unbound even if the userspace process crashes.
-> +
-> +Note that any reasonably well-behaved dmabuf from any exporter should wo=
-rk with
-> +devmem TCP, even if the dmabuf is not actually backed by devmem. An exam=
-ple of
-> +this is udmabuf, which wraps user memory (non-devmem) in a dmabuf.
-> +
-> +Socket Setup
-> +------------
-> +
-> +The user application must use MSG_ZEROCOPY flag when sending devmem TCP.=
- Devmem
-> +cannot be copied by the kernel, so the semantics of the devmem TX are si=
-milar
-> +to the semantics of MSG_ZEROCOPY::
-> +
-> +	setsockopt(socket_fd, SOL_SOCKET, SO_ZEROCOPY, &opt, sizeof(opt));
-> +
-> +It is also recommended that the user binds the TX socket to the same int=
-erface
-> +the dma-buf has been bound to via SO_BINDTODEVICE::
-> +
-> +	setsockopt(socket_fd, SOL_SOCKET, SO_BINDTODEVICE, ifname, strlen(ifnam=
-e) + 1);
-> +
-> +
-> +Sending data
-> +------------
-> +
-> +Devmem data is sent using the SCM_DEVMEM_DMABUF cmsg.
-> +
-> +The user should create a msghdr where,
-> +
-> +* iov_base is set to the offset into the dmabuf to start sending from
-> +* iov_len is set to the number of bytes to be sent from the dmabuf
-> +
-> +The user passes the dma-buf id to send from via the dmabuf_tx_cmsg.dmabu=
-f_id.
-> +
-> +The example below sends 1024 bytes from offset 100 into the dmabuf, and =
-2048
-> +from offset 2000 into the dmabuf. The dmabuf to send from is tx_dmabuf_i=
-d::
-> +
-> +       char ctrl_data[CMSG_SPACE(sizeof(struct dmabuf_tx_cmsg))];
-> +       struct dmabuf_tx_cmsg ddmabuf;
-> +       struct msghdr msg =3D {};
-> +       struct cmsghdr *cmsg;
-> +       struct iovec iov[2];
-> +
-> +       iov[0].iov_base =3D (void*)100;
-> +       iov[0].iov_len =3D 1024;
-> +       iov[1].iov_base =3D (void*)2000;
-> +       iov[1].iov_len =3D 2048;
-> +
-> +       msg.msg_iov =3D iov;
-> +       msg.msg_iovlen =3D 2;
-> +
-> +       msg.msg_control =3D ctrl_data;
-> +       msg.msg_controllen =3D sizeof(ctrl_data);
-> +
-> +       cmsg =3D CMSG_FIRSTHDR(&msg);
-> +       cmsg->cmsg_level =3D SOL_SOCKET;
-> +       cmsg->cmsg_type =3D SCM_DEVMEM_DMABUF;
-> +       cmsg->cmsg_len =3D CMSG_LEN(sizeof(struct dmabuf_tx_cmsg));
-> +
-> +       ddmabuf.dmabuf_id =3D tx_dmabuf_id;
-> +
-> +       *((struct dmabuf_tx_cmsg *)CMSG_DATA(cmsg)) =3D ddmabuf;
-> +
-> +       sendmsg(socket_fd, &msg, MSG_ZEROCOPY);
-> +
-> +
-> +Reusing TX dmabufs
-> +------------------
-> +
-> +Similar to MSG_ZEROCOPY with regular memory, the user should not modify =
-the
-> +contents of the dma-buf while a send operation is in progress. This is b=
-ecause
-> +the kernel does not keep a copy of the dmabuf contents. Instead, the ker=
-nel
-> +will pin and send data from the buffer available to the userspace.
-> +
-> +Just as in MSG_ZEROCOPY, the kernel notifies the userspace of send compl=
-etions
-> +using MSG_ERRQUEUE::
-> +
-> +        int64_t tstop =3D gettimeofday_ms() + waittime_ms;
-> +        char control[CMSG_SPACE(100)] =3D {};
-> +        struct sock_extended_err *serr;
-> +        struct msghdr msg =3D {};
-> +        struct cmsghdr *cm;
-> +        int retries =3D 10;
-> +        __u32 hi, lo;
-> +
-> +        msg.msg_control =3D control;
-> +        msg.msg_controllen =3D sizeof(control);
-> +
-> +        while (gettimeofday_ms() < tstop) {
-> +                if (!do_poll(fd)) continue;
-> +
-> +                ret =3D recvmsg(fd, &msg, MSG_ERRQUEUE);
-> +
-> +                for (cm =3D CMSG_FIRSTHDR(&msg); cm; cm =3D CMSG_NXTHDR(=
-&msg, cm)) {
-> +                        serr =3D (void *)CMSG_DATA(cm);
-> +
-> +                        hi =3D serr->ee_data;
-> +                        lo =3D serr->ee_info;
-> +
-> +                        fprintf(stdout, "tx complete [%d,%d]\n", lo, hi);
-> +                }
-> +        }
-> +
-> +After the associated sendmsg has been completed, the dmabuf can be reuse=
-d by
-> +the userspace.
-> +
-> +
->  Implementation & Caveats
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
+>  	pr_info("\t-h: print this help screen\n");
+>  }
+>  
+>  static bool parse_args(int argc, char *argv[])
+>  {
+>  	int opt;
+> -
+> -	while ((opt = getopt(argc, argv, "hd:")) != -1) {
+> +	int temp_disabled_tests = SBI_PMU_TEST_BASIC | SBI_PMU_TEST_EVENTS | SBI_PMU_TEST_SNAPSHOT |
+> +				  SBI_PMU_TEST_OVERFLOW;
+> +	while ((opt = getopt(argc, argv, "h:t:n:")) != -1) {
 
-Looks good, thanks!
+'-h' doesn't need an argument and '-n' should be introduced with the next
+patch.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>  		switch (opt) {
+> -		case 'd':
+> +		case 't':
+>  			if (!strncmp("basic", optarg, 5))
+> -				disabled_tests |= SBI_PMU_TEST_BASIC;
+> +				temp_disabled_tests &= ~SBI_PMU_TEST_BASIC;
+>  			else if (!strncmp("events", optarg, 6))
+> -				disabled_tests |= SBI_PMU_TEST_EVENTS;
+> +				temp_disabled_tests &= ~SBI_PMU_TEST_EVENTS;
+>  			else if (!strncmp("snapshot", optarg, 8))
+> -				disabled_tests |= SBI_PMU_TEST_SNAPSHOT;
+> +				temp_disabled_tests &= ~SBI_PMU_TEST_SNAPSHOT;
+>  			else if (!strncmp("overflow", optarg, 8))
+> -				disabled_tests |= SBI_PMU_TEST_OVERFLOW;
+> +				temp_disabled_tests &= ~SBI_PMU_TEST_OVERFLOW;
+>  			else
+>  				goto done;
+> +			targs.disabled_tests = temp_disabled_tests;
+>  			break;
+>  		case 'h':
+>  		default:
+> @@ -650,25 +660,27 @@ static bool parse_args(int argc, char *argv[])
+>  
+>  int main(int argc, char *argv[])
+>  {
+> +	targs.disabled_tests = 0;
+> +
+>  	if (!parse_args(argc, argv))
+>  		exit(KSFT_SKIP);
+>  
+> -	if (!(disabled_tests & SBI_PMU_TEST_BASIC)) {
+> +	if (!(targs.disabled_tests & SBI_PMU_TEST_BASIC)) {
+>  		test_vm_basic_test(test_pmu_basic_sanity);
+>  		pr_info("SBI PMU basic test : PASS\n");
+>  	}
+>  
+> -	if (!(disabled_tests & SBI_PMU_TEST_EVENTS)) {
+> +	if (!(targs.disabled_tests & SBI_PMU_TEST_EVENTS)) {
+>  		test_vm_events_test(test_pmu_events);
+>  		pr_info("SBI PMU event verification test : PASS\n");
+>  	}
+>  
+> -	if (!(disabled_tests & SBI_PMU_TEST_SNAPSHOT)) {
+> +	if (!(targs.disabled_tests & SBI_PMU_TEST_SNAPSHOT)) {
+>  		test_vm_events_snapshot_test(test_pmu_events_snaphost);
+>  		pr_info("SBI PMU event verification with snapshot test : PASS\n");
+>  	}
+>  
+> -	if (!(disabled_tests & SBI_PMU_TEST_OVERFLOW)) {
+> +	if (!(targs.disabled_tests & SBI_PMU_TEST_OVERFLOW)) {
+>  		test_vm_events_overflow(test_pmu_events_overflow);
+>  		pr_info("SBI PMU event verification with overflow test : PASS\n");
+>  	}
+> 
+> -- 
+> 2.43.0
+>
 
---=20
-An old man doll... just what I always wanted! - Clara
+Otherwise,
 
---AMvatQGVE1g1y7TH
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZ8AbdwAKCRD2uYlJVVFO
-o5L6AP94BQBQkG23E8CUzSu2bJ8z0CxxYycEKJqhqTQ+o4ZjrAEA+k30eIV66TQg
-+CdsIvY8VaYj1OlgpJ5nlSex5IoycAg=
-=GAXk
------END PGP SIGNATURE-----
-
---AMvatQGVE1g1y7TH--
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
