@@ -1,138 +1,123 @@
-Return-Path: <linux-kselftest+bounces-27737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9D55A47EF4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:24:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B830A47F02
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDDE2188FFA0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 13:22:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C5D9188F121
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 13:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE4822F3A3;
-	Thu, 27 Feb 2025 13:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6C522FDF2;
+	Thu, 27 Feb 2025 13:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dTLi7iSH"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VQMF8q3H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3740B22A7F6;
-	Thu, 27 Feb 2025 13:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D6922FAFD;
+	Thu, 27 Feb 2025 13:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740662529; cv=none; b=PVgQiePCpG60yudTFg8Ep4jJnwGoRoxys3tvZIUmYpyuh7ivC1G/8GAknuGujco9nfXSiv3czPBNIv9hMXBX/YE7bHXPv4Ym/abcKGPRbfFZmGTEIV4K8lQWyG5nh/C8Dms/aEaYaat4cJ5k3s9qVy+z2gqGcOdozeFsuISI1sI=
+	t=1740662670; cv=none; b=ZVT2TBWTJt5qIrs4aU+B1pbRA9CR01ExvMXIPRFnuZJlAoHchHH6kvNNIIadpnyqmtosABCEC6RBzEOU9plqLcZHNdGrp6uRwQu1moV0wn6zzh/G+kaMYLIUs8wXQtUMM7Wlp/uMZwRwhJPgduMnoreTdJGASRQvZ/qzo978X4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740662529; c=relaxed/simple;
-	bh=r/CLzxCZ5FYGCMymFFiFdSPlgQsWDLWMufpnP3S+8+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YZpmV4kouiGhtIUEOyve6w8qgSRsOD+D9PoHAN3aCiFM9dEjUtdM+ZBkQRKfHXlu9pvYBEzalRGyQXpaNXivEI6ZXJPBXZygzLl67DQvaPLjQh+iEXLEEKwbccLl6SYD/yPb5IYtPfuj7HHa8ESYtTSqLKPUIlVSINHkVXGH2Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dTLi7iSH; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2fe8c35b6cbso1479825a91.3;
-        Thu, 27 Feb 2025 05:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740662527; x=1741267327; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kTwlexDbSiKgA71dqOMrXjGZFVAtedcpmBJNTgk17lI=;
-        b=dTLi7iSHMLtX9WG36V/GcYlgWeAVKHaWwp95FxhS5JFdxsZm1iTTB5YhaULC1Gv8SG
-         B8XKdRBlBHATO5d2Y32SezV65j7cmsT5NqFodoIFjb1IjBhXOIwFtgaMK7Ci+evjyuZW
-         uTXGhpUs8/jWxumRBAvdIGWSJmiNwqcY+NEsLGVqTV92hScCjk81sj6bf4zX4pkCR1aq
-         TmIV8uvivXFzeQB4qzzjb1qFQT1daltne7lV0C5iLwuk3l8c7A/D6jIKvbMWngD+8LtQ
-         SmQttyz9R4YVVS3l1KqfXmOYzb8ZDZGiAgbrl6FMsSn8TkpZIQc7enkKj8tpyw9MFu+n
-         cc3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740662527; x=1741267327;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kTwlexDbSiKgA71dqOMrXjGZFVAtedcpmBJNTgk17lI=;
-        b=dxCEoaqBq7Qt+b8FsOywVYLO7Kh+c18Yyk/IfCIDNtBtj5gb+XQh7+h4ejGFJWh1cA
-         3WAFTjv3p7fJBO+bnGu6dFOBZSlm+iyAR7KNVaM/mnJXTCtq3jpKDAIiMXsZKTHg3rOQ
-         HjRdpK9hSijSTKKQiiBMnL2g2eBWrY4KBxOhnlSCsTo2kdJia5a/YArrNRoajjx5p77i
-         RWrU19Wyn4H0VFXf4j/8sKtgN1q/aq6WeTbaj7mFvUkSn9xkcV4JJ5yRhGAiK2uo4BZh
-         FNBRbTo7hpQifrY59O6s+usLed84yZcpDlJncCWCkE/UnvdkfBlVlQBIUr9BQ4obC8R5
-         fraA==
-X-Forwarded-Encrypted: i=1; AJvYcCURn0QC3wd1ZAFMBzPh6AyzrNwa4otVL0G7OViEdHA8QvRWYB8hqMsyzmGECDz3JFNL8PD/p8Z3QaFbNXU=@vger.kernel.org, AJvYcCW0T4bPhMXD4gIbXiY3BkmzwQOJ5tTcmM/CN5lbkqvCR0qQpf0ZfOV8kGjohvIJsO8CZxPPwQJoRw59+OqXp19p@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOM6w0hREAoEan1d2cv/pFPPUPANMQjIWsz88TJoJW7xIsxvDN
-	2GXqdZ9zDg3DWPmXjFoW83rpdd8x8qi4VITWEAyJ46In7HkdBrGSfVWSe6gqZC5HOA==
-X-Gm-Gg: ASbGnctaZNkQHfjoaNyGTF4nrRS04ubV+ebLSK1pHVSweeS0ZV8jB/TM+qX21zAi78p
-	svcQOJr2wfSIipHBZ+mPSfbrO39yCMcB5V7GTrkNCo+zFqApr1AL0crQPFyvR/Krp/WHxMbIOSi
-	iXiC3CYOs/ZJycdopnKPuHjUzevKszZWfHR+8hRL3auhdeT+/GVM+Adb+3lJH3wm67U9itUBt4x
-	jFyHVXwn9H0EqprAVtsvg4ougvKOyITCHFk9fYTFwz32UnQtTLuqK49jHJ3QL1LOpIUUPakVAZS
-	OassrdRBtHV9Xkq3tajTp7mUd+HwsrI=
-X-Google-Smtp-Source: AGHT+IHv8UFqqZlp9xxiAF3Mld0xObzcFjK0O2fQo0lYaCrVgqtD/DIuA9W8ExAUSaRUUAIHzpeO8g==
-X-Received: by 2002:a17:90b:1808:b0:2fe:9e6c:add9 with SMTP id 98e67ed59e1d1-2fe9e6cb035mr6345024a91.18.1740662527388;
-        Thu, 27 Feb 2025 05:22:07 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fea696e40csm1536583a91.34.2025.02.27.05.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 05:22:06 -0800 (PST)
-Date: Thu, 27 Feb 2025 13:21:58 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
-	Jarod Wilson <jarod@redhat.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 net 1/3] bonding: move IPsec deletion to
- bond_ipsec_free_sa
-Message-ID: <Z8Bm9i9St0zzDhRZ@fedora>
-References: <20250227083717.4307-1-liuhangbin@gmail.com>
- <20250227083717.4307-2-liuhangbin@gmail.com>
- <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
- <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
+	s=arc-20240116; t=1740662670; c=relaxed/simple;
+	bh=q78T31r8ZzsIZ6l2LVv9q89HNLhFvW4dCxCXOTAfIlg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Yekp5CQCdbsm6rI2BDwLVIhxsb20mqx5G2uZe9RXMQCs/m6qxivKjmAss/455eyzzRB3eVMXeq5K4JMsLdU+4w3jyWp+ozUYQTX7bDbRRVpjgc0Ht4sJ6+g1I2/vAQwfF+XGGdZlIZKWPD0V7a5B/drSZxq8yYsxBx3GJs/3LVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VQMF8q3H; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 29EA8441D1;
+	Thu, 27 Feb 2025 13:24:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1740662665;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ev6fUAp7eyoqQUZCt0Ye0W7Edj16g7jXZKrOMsCZZGg=;
+	b=VQMF8q3HE+DIsj1Zg1fXthpCf00GO5tNsure50nQNxcZjft8eRwKR/YwLIWS2GRr2XsUq4
+	SsmvOGdmsL2fHE9YbE+Cs1dxgSQx89mzJaKMpACDAnD2jB8zSynSqlgaVdC5uJDTkl8rX0
+	aKUnYDsmHvQbS9YJ3NvX4L2mltEtaFqSCOEkYTOoF49/cXs9/aTd3+TrsT4he3ugFvDQ2Y
+	657tIWMNIEuW2VcXg0oZaGOVH2+nbzwUIuL1W3a7T0LJjXy1EVp1RDVxvaRePMUVmYeSMy
+	fuIH8mD0vFfiokG+f0ufImxjhRwzIEV4DoGbNSlmI/9spDPuEC4562AVF/NLVQ==
+From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
+Subject: [PATCH bpf-next 00/10] selftests/bpf: Migrate test_tunnel.sh to
+ test_progs
+Date: Thu, 27 Feb 2025 14:24:15 +0100
+Message-Id: <20250227-tunnels-v1-0-33df5c30aa04@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH9nwGcC/x3MSwqAMAwA0atI1hYaf6BXERetphqQKI2KIN7d4
+ vLBMA8oRSaFLnsg0sXKmyRgnsG4OJnJ8JQMhS1qiyWa4xShVU3d+qZCcmVAC6neIwW+/1MPfg9
+ G6D5geN8PNauVM2MAAAA=
+X-Change-ID: 20250131-tunnels-59b641ea3f10
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Alexis Lothore <alexis.lothore@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpedfuegrshhtihgvnhcuvehurhhuthgthhgvthculdgvuefrhfcuhfhouhhnuggrthhiohhnmddfuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkedtkefgtedtgeekhfdujeevfefhvdetgfduudeifedvhfdvgfefteehhfdvvefhnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqk
+ hgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhg
+X-GND-Sasl: bastien.curutchet@bootlin.com
 
-On Thu, Feb 27, 2025 at 11:21:51AM +0200, Nikolay Aleksandrov wrote:
-> >> @@ -617,6 +611,12 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
-> >>  
-> >>  	mutex_lock(&bond->ipsec_lock);
-> >>  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
-> >> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
-> >> +			list_del(&ipsec->list);
-> > 
-> > To be able to do this here, you'll have to use list_for_each_entry_safe().
-> > 
-> 
-> One more thing - note I'm not an xfrm expert by far but it seems to me here you have
-> to also call  xdo_dev_state_free() with the old active slave dev otherwise that will
-> never get called with the original real_dev after the switch to a new
-> active slave (or more accurately it might if the GC runs between the switching
-> but it is a race), care must be taken wrt sequence of events because the XFRM
+Hi all,
 
-Can we just call xs->xso.real_dev->xfrmdev_ops->xdo_dev_state_free(xs)
-no matter xs->xso.real_dev == real_dev or not? I'm afraid calling
-xdo_dev_state_free() every where may make us lot more easily.
+This patch series continues the work to migrate the *.sh tests into
+prog_tests framework.
 
-> GC may be running in parallel which probably means that in bond_ipsec_free_sa()
-> you'll have to take the mutex before calling xdo_dev_state_free() and check
-> if the entry is still linked in the bond's ipsec list before calling the free_sa
-> callback, if it isn't then del_sa_all got to it before the GC and there's nothing
-> to do if it also called the dev's free_sa callback. The check for real_dev doesn't
-> seem enough to protect against this race.
+The test_tunnel.sh script has already been partly migrated to
+test_progs in prog_tests/test_tunnel.c so I add my work to it.
 
-I agree that we need to take the mutex before calling xdo_dev_state_free()
-in bond_ipsec_free_sa(). Do you think if this is enough? I'm a bit lot here.
+PATCH 1 & 2 create some helpers to avoid code duplication and ease the
+migration in the following patches.
+PATCH 3 to 9 migrate the tests of gre, ip6gre, erspan, ip6erspan,
+geneve, ip6geneve and ip6tnl tunnels.
+PATCH 10 removes test_tunnel.sh
 
-Thanks
-Hangbin
+Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+---
+Bastien Curutchet (eBPF Foundation) (10):
+      selftests/bpf: test_tunnel: Add generic_attach* helpers
+      selftests/bpf: test_tunnel: Add ping helpers
+      selftests/bpf: test_tunnel: Move gre tunnel test to test_progs
+      selftests/bpf: test_tunnel: Move ip6gre tunnel test to test_progs
+      selftests/bpf: test_tunnel: Move erspan tunnel tests to test_progs
+      selftests/bpf: test_tunnel: Move ip6erspan tunnel test to test_progs
+      selftests/bpf: test_tunnel: Move geneve tunnel test to test_progs
+      selftests/bpf: test_tunnel: Move ip6geneve tunnel test to test_progs
+      selftests/bpf: test_tunnel: Move ip6tnl tunnel tests to test_progs
+      selftests/bpf: test_tunnel: Remove test_tunnel.sh
+
+ tools/testing/selftests/bpf/Makefile               |   1 -
+ .../testing/selftests/bpf/prog_tests/test_tunnel.c | 627 +++++++++++++++++---
+ tools/testing/selftests/bpf/test_tunnel.sh         | 645 ---------------------
+ 3 files changed, 532 insertions(+), 741 deletions(-)
+---
+base-commit: 16566afa71143757b49fc4b2a331639f487d105a
+change-id: 20250131-tunnels-59b641ea3f10
+
+Best regards,
+-- 
+Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+
 
