@@ -1,135 +1,121 @@
-Return-Path: <linux-kselftest+bounces-27791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD71EA48544
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 17:38:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB66A48602
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 18:01:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F4D93A53FA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:36:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FA4D178097
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 539E31B3935;
-	Thu, 27 Feb 2025 16:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842AE1DDC1E;
+	Thu, 27 Feb 2025 16:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3naGwzD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fI4QZOX5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689554EB38;
-	Thu, 27 Feb 2025 16:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8771DE4FE
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 16:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740674173; cv=none; b=HYxfSoZ8fz0sq/es52L6Y+4ivOWv/+p29MvFsOgl8NgXBknsMoIo1EOagm9VIyvzF4EaQLhyOnG9R2lR8VJN2zCLit5clroU8DDHnG1JpS58xO2LB6cA7v9L1hASyMpxgspzqeOH5mCzpZ4I26OZWogx7/QKr/7PYTdKhSBqKFI=
+	t=1740675087; cv=none; b=hvMR3/5GWJcYt05//LNQ8CbDb5HnbAPTmlhVm4BgJNNigSBq+cScNmvgeNw9H4OFf1DK3CvC4WZWFI5s5N/LSeDr/iRmI+dl7C3ycuSd69eeGPTXtbK9rnTszrTZnSb87SiXFQxiUVOEDjuBp9EF/ybk1xjyzGXlm+AtXxIhOaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740674173; c=relaxed/simple;
-	bh=tW6s2JKeVYmMjgRZ0LxOh+ZtmueuEyrTI2i0CLDEnCA=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=tNrPYQsnOm+wo2JfnBDIq+oobRmpGt2spQIXflQVOd4LyBy23Taze5pz2EOmkm9HRHjVI2tpo0O5BWB+oMWzRybmuWO57tiSlLg8XN2e985USN9I/93M/u+0Cw8zmPjiS3pXh0jhjHEl/AlGzOndz1d5fzvD3Uge1hO8j4eXeEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3naGwzD; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6e889e77249so10284536d6.1;
-        Thu, 27 Feb 2025 08:36:08 -0800 (PST)
+	s=arc-20240116; t=1740675087; c=relaxed/simple;
+	bh=4gouhfhaxGfgdJQT2qIfnmuu//pDsJmSVA/PYTeND9I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R85EosM4WgAjQnpZyp/2V23W3grBaXH/X16sC6sq+DI82Ne0qMBfm9oB4Sm7qUEOJYv+vF9w3X9l1Vk9DNL5M7Hqz+/ALJRBTD9OAo2UAn1Oa2u1x29LOzfkTedWbC+18zkH72jhGpMaq+8sqXQcpqPuRRglrqO9EjU0U9+5ldw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fI4QZOX5; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-856295d1f6cso86587239f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 08:51:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740674167; x=1741278967; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YLuG7vjn/hSKib3SZKgP6rgyU2H+3BpnRfZM3277BQA=;
-        b=X3naGwzDxFd2n/juLJmVg9Ny9khVmzLCbtx62DaODl0y0UEEzymk0wTOlz0IOmCVoR
-         PNgS8fCNu6vPmXr0p0CGz/sywuNQaFq8U2hAj4OdlLBQwRZseem25H2nXtgezxsSlNk+
-         j1zRIAfLYaffgwaFuqXPij7zYU+31BByk7LQWxuxg0PFiq4FTy53GG0FwfJ/sbgDfLXR
-         WGDWVNim2o/rfuULyzx3h4k0aChT5VITm2HU8kOSp6wyT7oEF59pTVaP4ANBzjThbo1B
-         qLfN4VLgG2C+eOt3IV5VlqEBXF4sLZ7S5cDELn9XQLLT2rj8NpO7iwNdQW9X3FpoKaCd
-         4gwA==
+        d=linuxfoundation.org; s=google; t=1740675084; x=1741279884; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ic5EBkS7+JFP3KMIJYtrI+hREWqtDoF6xlcqoBHvEdI=;
+        b=fI4QZOX5h031J1FhYTfKdSftuW3lwo3bPIjsE6Ert7Y2PJA96rab9OVfRSdYzYPPwL
+         C+5SyaoFV+1+cj5sitAMk6OK5qEVn3d9iRlpFt99VVJcPCSnVJlDl8A1lrvrUMz4hpPs
+         M41/8ZUCWXucaeBVjBsfYaYzXVy2PeCx8OlJU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740674167; x=1741278967;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YLuG7vjn/hSKib3SZKgP6rgyU2H+3BpnRfZM3277BQA=;
-        b=aJdFt72erBp3+eUhltzxPRZoMc75yisJNnAKgUByZPF1qf2G7Jva6FTj2nBulmtK6I
-         DnnYVeqlGPZZdrz2hBDp8tLJ9ar9H5RM5E7R6+HOI57yZjPUmOrQhZ8zGGeaUSbXiTdx
-         7XnGq9RNHayEn9m7+INIAHsl7YwI0X1m45aoKRVZ8WgOTCkS64qC5x5bBVXuxoX7gjZS
-         pjvsRUe/zZ3vFdM8kijU/Yf/d6jc/bw28Kgd/dlqjg1KTBYVr7DEz6k1tAeCc3uB7M+d
-         YHF+uZGF+3kfzVSQyKMNAAjbWNc0RCqqNMVocWvcA+OGyUOvyn2+TN+HMKDPAUFjgSTB
-         4UBA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6JhOG+/wLbQHm0/yPXffBVQtnI8JICM2FmuSifxyUtg11SWsvFgGR9eA6xeDwUojH4cXU8ynR2nUBzBx5imo9@vger.kernel.org, AJvYcCXTdzyqS/q1WWEOHkzeyExzC8P6REh8pAz/BQcdXUzuh8hnJsqvywx1yUFUDKfjOH3wq0+92PNfDkicfhs=@vger.kernel.org, AJvYcCXktGFKEwn0FqlOQYjpU9FUW/nI5221H/SB84PorwnGPCpmaTqRgJs5OnDa8GgGybcvphY7+Vvy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4m5dDzQkYQZx7H/5jexhq8PTOUMR9eEvozwWrn0eGm3Mv+ByE
-	GI0Jjw++sgsfahHgNByeTzWdgjOuvlTkUmRBAL/X6J+xU33ZWKBZ
-X-Gm-Gg: ASbGncv20xY10jYH7ueSwIgpltXOaR0J41lWAtk8hivl2Qrm3ngOht6FeLCOBq5xXUo
-	T+/S2t3MxzJe6WOrIvaZ61GS4/UCLerD9CQcumJQr96oThLBZ9KPyoZWNoRlqo1Co4QCb6U26JX
-	F3548HA1WEK8s9X7X9AZySZl8cZpzzjh8HGDf6CJhYPrEmMadSNtUuDTSq+Qg8Ggdbu1+wo6h0H
-	x+InukQc2651Z4HyuIGdDMQdJUlF0ueGJyAb0gSebTjovsZ9uOVya+Lj1xgpSYm65iqBNFL7+aC
-	ci5num24ZthP4ocJ9zDiyPeXjOpzVelP++IERkhN8pK8ppNj48LZB759bGWieA47wDQvPZ3c2Hc
-	1jBo=
-X-Google-Smtp-Source: AGHT+IFNLlyGHLJ8yNyFO5ni48kZW3U6VXxOlfgUtSsr3Wug6ZtI+rA6mhO8eVO9q1umiyhsXnA4pQ==
-X-Received: by 2002:ad4:5f0a:0:b0:6e8:9444:7ac8 with SMTP id 6a1803df08f44-6e8a0d093a0mr1377866d6.17.1740674167401;
-        Thu, 27 Feb 2025 08:36:07 -0800 (PST)
-Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e897634d3esm11507256d6.11.2025.02.27.08.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 08:36:06 -0800 (PST)
-Date: Thu, 27 Feb 2025 11:36:06 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Kevin Krakauer <krakauer@google.com>, 
- netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- linux-kernel@vger.kernel.org, 
- Kevin Krakauer <krakauer@google.com>
-Message-ID: <67c0947690e22_37f92929444@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250226192725.621969-1-krakauer@google.com>
-References: <20250226192725.621969-1-krakauer@google.com>
-Subject: Re: [PATCH v2 0/3] selftests/net: deflake GRO tests and fix return
- value and output
+        d=1e100.net; s=20230601; t=1740675084; x=1741279884;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ic5EBkS7+JFP3KMIJYtrI+hREWqtDoF6xlcqoBHvEdI=;
+        b=tQJq97Fpyw/EsYW2BdtmysDH5L4hWhIksxH7vbLNBCVbEGlk1+kl2O5aYhOpmNamOl
+         icQF1lgz4J11LHg1X5FY48LU2M+h48zry0DXSAE839wXa3o4TCsOqQF09mqFJlcJB34q
+         7ODM3UqAu7Q3gMWMz6pZmK8lyJ/gkTjugYr00dv6UswMQWvA6ZW85vx2zM3fCwLSpAmO
+         53cR3igw7V+78gp56jJqd8RLywg1oxfL7pHVm0iL50y5m2x8ElXhkGdhjrFXXFdF3+Za
+         9lwYnkwYw8c6Huw3NE0Bb6WCLZ8WYFC/dfebD7/o9TUFxUFDSol71sbv0sMKQerU+mSa
+         4Tcw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7IzeosKtiiZ3bu6JiwAkf4mD2msKK3XOVrtjcF3CxHi/7erHvf6eZ9OYL199A6cyoTka9yorOMp1bhEWOZdw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwqYTbUmnP+xGhBnqTRbCVT6MODjNQiSt1RVAaOGPSzqEC1uWZ
+	VW+eSS8Ygxx0fq7G4ZK0CEWFQpjkOT9ocKV49dXgSIvX9NuHrl2WF9XP+wVHWPM=
+X-Gm-Gg: ASbGnct9OjBBlHhfIEqolARiCM8MAZAwI5990eOEp2Pnx9B99q9b5VjL2zYgfswYnfc
+	lKiBxDYxQBulY/OUbsIE+3C2baOFAuMiMM+6wiRmZtPq4rPUBJ5O20oFeelHmosuIUkk5M7ggbv
+	xOxhXc/K13Y1EUhSdf73Ee4X7gFPSAwebhUR+RAm6UwF6p38MRg6JDLWYZRnsog5ArKygMGHKFM
+	w0pnldP7t3l77ZXzKzbj7gMTKerdXXhauitI4GhQr1THDwFLbZiSa8a/aZzCcrclX2tveDO9rFh
+	UQB0MpG0LbwNVgMDN9VVnrfVFxk9HrC4qLXd
+X-Google-Smtp-Source: AGHT+IEKP5jXvQi+gty0oL9paLtd6bEvnw21y9vRTtZa86aBrZwrysNK0Dih3A+SeI1kAgbG7udiYQ==
+X-Received: by 2002:a05:6602:154c:b0:855:c7a0:1e33 with SMTP id ca18e2360f4ac-8562014a579mr1407018139f.2.1740675084458;
+        Thu, 27 Feb 2025 08:51:24 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85875115643sm38408539f.14.2025.02.27.08.51.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 08:51:23 -0800 (PST)
+Message-ID: <083e94e0-dc37-4cdd-94a3-db258635a684@linuxfoundation.org>
+Date: Thu, 27 Feb 2025 09:51:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/2 RESEND] update kselftest framework to check for
+ required configs
+To: Siddharth Menon <simeddon@gmail.com>, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+Cc: pmladek@suse.com, mbenes@suse.cz, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250227053322.114215-1-simeddon@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250227053322.114215-1-simeddon@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Kevin Krakauer wrote:
-> The GRO selftests can flake and have some confusing behavior. These
-> changes make the output and return value of GRO behave as expected, then
-> deflake the tests.
-> 
-> v2:
-> - Split into multiple commits.
-> - Reduced napi_defer_hard_irqs to 1.
-> - Reduced gro_flush_timeout to 100us.
-> - Fixed comment that wasn't updated.
-> 
-> v1: https://lore.kernel.org/netdev/20250218164555.1955400-1-krakauer@google.com/
+On 2/26/25 22:29, Siddharth Menon wrote:
+> Currently, kselftests does not have a generalised mechanism to skip
+> compilation and run tests when required kernel configuration options
+> are disabled.
 
-For next time: add target: [PATCH net-next]
+Skipping compile by default is not what we want to do. Tests are
+supposed to compile and run even when config options are not enabled.
 
- 
-> Kevin Krakauer (3):
->   selftests/net: have `gro.sh -t` return a correct exit code
->   selftests/net: only print passing message in GRO tests when tests pass
->   selftests/net: deflake GRO tests
+There is something wrong if the test doesn't compile when a config
+option isn't enabled in the kernel.
+
 > 
->  tools/testing/selftests/net/gro.c         | 8 +++++---
->  tools/testing/selftests/net/gro.sh        | 7 ++++---
->  tools/testing/selftests/net/setup_veth.sh | 3 ++-
->  3 files changed, 11 insertions(+), 7 deletions(-)
+> This patch series adresses this issue by checking whether all required
+> configs from selftest/<test>/config are enabled in the current kernel
 > 
-> -- 
-> 2.48.1.658.g4767266eb4-goog
+> Siddharth Menon (2):
+>    selftests: Introduce script to validate required dependencies
+>    selftests/lib.mk: Introduce check to validate required dependencies
+> 
+>   .../testing/selftests/check_kselftest_deps.pl | 170 ++++++++++++++++++
+>   tools/testing/selftests/lib.mk                |  15 +-
+>   2 files changed, 183 insertions(+), 2 deletions(-)
+>   create mode 100755 tools/testing/selftests/check_kselftest_deps.pl
 > 
 
-
+thanks,
+-- Shuah
 
