@@ -1,79 +1,56 @@
-Return-Path: <linux-kselftest+bounces-27729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8342A478F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 10:22:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F0CFA479E6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 11:14:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FBFE7A52C7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:21:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFA8F3A5035
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 10:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C61227BA7;
-	Thu, 27 Feb 2025 09:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14E5227EAE;
+	Thu, 27 Feb 2025 10:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="n6ytZsN9"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Lw8hEZER"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFD0227B95
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 09:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553A021B9EE;
+	Thu, 27 Feb 2025 10:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740648116; cv=none; b=JGJsKeIx20+3wEQu/9zH1ETMFFtCfMQH3HRhFxJh3yOsa65hzImV2jI9ZhIdc+9vKMgjLcxUcXsXrrth9nmZBxyPGhsgbrGAlvoYBt3L+hhXMfMLQnoUCPTcAtQ5YyryfWR5qkv+BGPwvs3A+WyrrMaIszeHFnPrr/IcpJqS4CY=
+	t=1740651233; cv=none; b=uCYA/Alvkzp0/vQORtBJ09xdHH7qgEOEoq+7iRsUAdtLra8oUjAMt3xXhY3oN+nCI1UBG4SpWzQOt/u9deK9SGvT/QvgG9pEzswN1pY6d+IqXIVIVI+0CQG4PL0rX+ly8yNAm9MmX5gH/C2wH0VJwZyrq2cV6B6CNHFauNmsKbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740648116; c=relaxed/simple;
-	bh=qJ6d6yyVEiOIzWKAFqn29zVljBDyaAUEI1J5TgXK8MA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ofGund55dNOqWbUOtK7HKsoOz4d1dq2WOmpc6oJuiKfzJLODC/I64LROwbp1o7Tdbk1ybNVp1Bt07PVlm/lePV9CbNTKuPr2Wm8jL34yEMYfVMY9gxFAhLmIMN9N7I3YXS/fWWjdn0lfDJmll0zdIscz9tzJ2IzVoEMGroGazYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=n6ytZsN9; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-abba1b74586so100737966b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 01:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1740648113; x=1741252913; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QGKuyOFdmCrFZDueE7tG98lW1JYRuqGd31pjDPdwi0A=;
-        b=n6ytZsN9bCZOytA5VLbihqdX0iuFDF1y6DcGq8WceZddRdPOc33d+6PLBb+Ej454Kb
-         GfGyu2CNZ0u03yzImi5gZNQ4bRcqxQ5jlEa+nwhtYt0MXWZx8d9HLyEomoigX2Wmg9jr
-         YFOFpSaO4g7ZqUozXLMwYSQPhYOeZbJjGTIC11m2IHsqMwgaQo4gvh2FWqaby4AuvltE
-         Jk7Qo5bWETupQiI75zzai2Xk/JSkO8vGGXKflj7iW+kYVtD+wBmhV9RKbPYV8g5p7w+d
-         4z8H1xAFYOmlURRFX7gBKXHv2RsTGPfBojfdgq2mDGPmwfCERSs+3Tlg9t0Bv63fZooD
-         ljiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740648113; x=1741252913;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGKuyOFdmCrFZDueE7tG98lW1JYRuqGd31pjDPdwi0A=;
-        b=pa0s96ZdntFZ/NXCnUmpQ/fTyrk5k0lpkBNOvmymSh/5cBBmacAFE7t1CuShWKqgVb
-         Z7byYIMiVbrvfQSvGBHuFsiBMOpKMQHeXDfRkOa6K5D8Wa7dZxe9+TasTNJw3n+2i0jb
-         7IEmEyxt7EjqMAVQ1g1o6wdNAhB/i2Q1DKZb0TMpfC+WkyCzsWYmzc92e7lU2uFqy/DE
-         OOCZcZoDwGT8WjqacKl+K9778ZgDuRSWVgfsNWaSvi/4TryT/0E0iMUDCKbP61eONOuZ
-         zsawn/SQIl1uib7t/a1zv3ulxZmqVt9DQopDCL7qTZBgjBwoULhBer1TNa7b2qK1uIGF
-         joWw==
-X-Forwarded-Encrypted: i=1; AJvYcCVvs4htNOaUP6M4WMigt36A0q3hIjcOAaUG0pzM4UFwxozJ3et/LOYVBtc43kN6hUzHCVi2bxER2QgtXe21WyQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi3U8FF+4ERt1usqo2FaZBIMmSWPgWEn2XcBtXTjIa/SjgArzs
-	p38lnPsHgvf3Msu2A1cBJszV6fqWIQ6Xr1hq+Glwq3Yhe4AJ+fT9TWfkxAihL7M=
-X-Gm-Gg: ASbGncvBk6E5r656SdBp9ntJEJ/JwG077Odz3pKLsdNNAd0ObTQzz6UaEmF9udpWqbk
-	TxjqB+uK+AM3qflwlQi8FeoYjqn3IxmRzStucDbJeJxyu9rfyFXemmvLb7orzT9iXl3kjiuOTUq
-	HRKkD+lWSsKQHNEDZmIBOGPe0k42BPO7QEMekxGmTHPitx5eE20Bu0RcCIP5s6SPu1V1n/vRi4Q
-	TLkHDEahLLrtPmlNeT+ngWCk2f+YOt1tR6suebs6L/kmmcUy7556i2JMMqMWjThCEGOL/X3ayVD
-	9oNRIGKG4ioLrc3+lXZDD/Mzx9n0wxb2JP3h29vZXOzUhJInIZTj5Qlb4w==
-X-Google-Smtp-Source: AGHT+IHD+cNx6yl3X1EnkFEtFKEHouxEwyh4QDe/AW5lHxTVz7/szNt45pitj7P8HvFW9mO2l6DKdg==
-X-Received: by 2002:a17:907:7fa3:b0:abb:b12b:e103 with SMTP id a640c23a62f3a-abed0dd817amr1443127466b.34.1740648113102;
-        Thu, 27 Feb 2025 01:21:53 -0800 (PST)
-Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c6e9c25sm91516366b.108.2025.02.27.01.21.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2025 01:21:52 -0800 (PST)
-Message-ID: <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
-Date: Thu, 27 Feb 2025 11:21:51 +0200
+	s=arc-20240116; t=1740651233; c=relaxed/simple;
+	bh=ZYrecEk+Tp1l07obRlnqI5FqzHeKhzKzCSwOWo+CHy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=thACHSz/YKdjeLhtkr1lLSeRKAvPKqfGf842CaGjnLSvks4rtu5DXLPvQ4a7qkmYaioeVbaN/TyilOrFNb97vZ4Y/PqpqQKZ0O6f8rmdC2muydBhF6R+59EYIg8c+GNzzUgyh+VXxaZIaQMlKCfV4v6u7xCxXqXr44N2OElEzrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Lw8hEZER; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1740651216; x=1741256016; i=markus.elfring@web.de;
+	bh=ZYrecEk+Tp1l07obRlnqI5FqzHeKhzKzCSwOWo+CHy8=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Lw8hEZERotn4tzrn0kcTaofnQX5bKVIGjdumqQyO/0yRjTQhY4uRjcB6K4hOWnJW
+	 IvsRWR2Fh/HyCzIox/Z2LagvRw7ZgKjhEhMXwCkQ6z9hZITVSLQKQuvZSOQHbqL3R
+	 lYx0I+vcjlmkJ1YsanH4J9jMKXY4mI7jFjXj4TumMXsajDvG0ft79gUAJuZy9D0UH
+	 r70tbenRYg7TR7xKX38qFcrosqZQs4ULiY3Nj1g592R2WCSLufJF6TbmcG82HtmNR
+	 C38u3zrITX3+YZ78I8J6KVrBfAsqTYeD0Q3upjLvrtmf0ZGoPh4z0icVfd7sR4UZP
+	 yNxDUHwvOm4+K0NbCw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.70.82]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1M8Bw1-1tsngp2m9r-00GHAT; Thu, 27
+ Feb 2025 11:13:36 +0100
+Message-ID: <bc03e16b-3c6c-4379-8af0-28cd8e269508@web.de>
+Date: Thu, 27 Feb 2025 11:13:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,168 +58,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv3 net 1/3] bonding: move IPsec deletion to
- bond_ipsec_free_sa
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
- Jarod Wilson <jarod@redhat.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Cosmin Ratiu <cratiu@nvidia.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250227083717.4307-1-liuhangbin@gmail.com>
- <20250227083717.4307-2-liuhangbin@gmail.com>
- <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
-Content-Language: en-US
-In-Reply-To: <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
+Subject: Re: [4/8] tracing: probe-events: Log errro for exceeding the number
+ of arguments
+To: Masami Hiramatsu <mhiramat@kernel.org>,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Hari Bathini
+ <hbathini@linux.ibm.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>
+References: <174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
+ <516ea911-acc6-47c2-87d5-2df0a18468de@web.de>
+ <20250227091904.a072168412d6d94efc5b0852@kernel.org>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250227091904.a072168412d6d94efc5b0852@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:0fSE91QN7qSi8m6wzasRk1biQMjb4gyGsoug1Ocka6uVqFfSM/p
+ x3dHlbI95miCm1GQ8FiyRYb05vUKcIsn1b/7GNe/srj8AVFHS+l8q+9iIaVIX+LpNiiy+A/
+ aIrnCzszXDCMtvDnXvvFMKk/UQGcFsC7xkegVSrOkXYhIff+Bol260W+b6dVhxsitW0qiOi
+ 5mcHqcg2N5lFlybq00U3Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:M95len23fBc=;3d80qJ+HAoyGgWtQxWzatIZPw3h
+ q2eClVviWuc7Fr15Sa4EM5Pitm2zMp54CeCiYEL0WQ5lstvkRqA6NSkzejzJBFjh0EbFptGQO
+ P1VNNvv45HNzKxxBJYxNFVwVvt19WNkpsnCcUYW0ZAi7vwEju2T8TlA6OoPiUxoNmZHm/5Ush
+ OKn8SHG8ry9mlWw90rBx32T1kicfRhdWehuqGXUlCi1an3rsi4rdPXaXBw6+QHVPnvJ4VIu4m
+ pZs8Y+kvVkmZh3pP/Dt6qUsqEeeVhsnjlZJmCUArNare8TAkUbl76UHnAs29Q/ZJ53no6kaZE
+ kOYn64iFTUSFY3vMp0nuu4bfN8/YTWi2e3YJV8nfld6kk+epvk+G+q5TnKE/Ao1bye3vW4qWl
+ E0hJZiWeqqRDKaetfaot85wPDo/rfI7Aalzr7p7PTPila35g104hTt1P4WGdKUgG2w4RoKA7U
+ SIrDzbXf8sWqTvGIqU/V5JzJUVBbxrbKPRE/g6WRutvv29POvISd6L8BpK8QNaxa0cn52I771
+ ObNwW5SM5O/Jb4Rjh+fBXWRRqBemosHy/SwD/tDlNA31lnLu6MrJVQrXuPc+7fRQCvoXKefSh
+ MjJ/XGHk6VZLVuAGBb/ktCP4NfhN+2U9OKSitHN7ZlkdogIk9sS+Pn1sIaKpzJdySWvLMwWy7
+ /0l3EpYLDCqctDcMWmI/6qlUuvBOlsVLWJtwY0tA76DNalc/RHIbuarrgpDB08/7CoiarIXLF
+ zMKnf8VIJ74TqmqE3un7mK/P09VmdOMSabFPZewLQ9sGgQk8xQiF7wPQVYBqKCKYmeH7akoBK
+ VuK1r8ukeo9bAqMNve0jdSFdZdyWtoaG8R2k9dcxZAr2L7vJ7F+Y2CpzgkE123JNP5Utfg5qa
+ tYRI2hrJR99CgjbTGOyIQ2p+cZN97r+pMa3lRi5wEudqswCcXdVHZgL6CP6Uyiw1MdQqhpigN
+ NDbqsyakQRPXXWmbHUEDd3ulWP/ZRaeIsTPGraEezrK9sO9Oyi9uKnva8koONNCrKH+iTYQQl
+ AxE5W2dQMBPM7Su5Z4IDpEBsXEPTX3Vp/t4mABJo4G8C6dc/HHC5sC3kcj2aZXePaj4WVDm+p
+ tsGHHCsmpnlKT/xaske3yZLs9tvmIKezr2unNUJLM2oPyr8kXYNn//yHS3K1rYEM4QSqR5NlP
+ 2KD4cXCwikyzKjt2ygR8dMrY12Djx/PYp/k7aYIoryIkYfUx31YgRT0PEuyKxPew++Or4fndV
+ iGC6rMmy4jmYiyEnFtw3ia3hRhvDc7xtfj5EcBgaRwXN1j1AKxsMGcS0WHXDFeIIEro2loGAw
+ hmr3FU5JSHxz48FiJ3Gvw1a1VdsvVeR3TJwDjvkf9bDM0JalDj8vPTy+hev4B5uXVN+bP/gE5
+ zGtbwZwU6S3JXIvs+lce54oUlj/oB93NZHV45epz0NebjBBxL3PXDbv9MkeuDXitTvwZTHcIg
+ M5xeFsNNPnClKq0yVKrRiXF07O1g=
 
-On 2/27/25 10:50, Nikolay Aleksandrov wrote:
-> On 2/27/25 10:37, Hangbin Liu wrote:
->> The fixed commit placed mutex_lock() inside spin_lock_bh(), which triggers
->> a warning:
->>
->>   BUG: sleeping function called from invalid context at...
->>
->> Fix this by moving the IPsec deletion operation to bond_ipsec_free_sa,
->> which is not held by spin_lock_bh().
->>
->> Additionally, delete the IPsec list in bond_ipsec_del_sa_all() when the
->> XFRM state is DEAD to prevent xdo_dev_state_free() from being triggered
->> again in bond_ipsec_free_sa().
->>
->> For bond_ipsec_free_sa(), there are now three conditions:
->>
->>   1. if (!slave): When no active device exists.
->>   2. if (!xs->xso.real_dev): When xdo_dev_state_add() fails.
->>   3. if (xs->xso.real_dev != real_dev): When an xs has already been freed
->>      by bond_ipsec_del_sa_all() due to migration, and the active slave has
->>      changed to a new device. At the same time, the xs is marked as DEAD
->>      due to the XFRM entry is removed, triggering xfrm_state_gc_task() and
->>      bond_ipsec_free_sa().
->>
->> In all three cases, xdo_dev_state_free() should not be called, only xs
->> should be removed from bond->ipsec list.
->>
->> Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
->> Reported-by: Jakub Kicinski <kuba@kernel.org>
->> Closes: https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
->> Suggested-by: Cosmin Ratiu <cratiu@nvidia.com>
->> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
->> ---
->>  drivers/net/bonding/bond_main.c | 34 ++++++++++++++++++++++-----------
->>  1 file changed, 23 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
->> index e45bba240cbc..683bf1221caf 100644
->> --- a/drivers/net/bonding/bond_main.c
->> +++ b/drivers/net/bonding/bond_main.c
->> @@ -537,6 +537,10 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
->>  	}
->>  
->>  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->> +		/* Skip dead xfrm states, they'll be freed later. */
->> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
->> +			continue;
->> +
->>  		/* If new state is added before ipsec_lock acquired */
->>  		if (ipsec->xs->xso.real_dev == real_dev)
->>  			continue;
->> @@ -560,7 +564,6 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
->>  	struct net_device *bond_dev = xs->xso.dev;
->>  	struct net_device *real_dev;
->>  	netdevice_tracker tracker;
->> -	struct bond_ipsec *ipsec;
->>  	struct bonding *bond;
->>  	struct slave *slave;
->>  
->> @@ -592,15 +595,6 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
->>  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
->>  out:
->>  	netdev_put(real_dev, &tracker);
->> -	mutex_lock(&bond->ipsec_lock);
->> -	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->> -		if (ipsec->xs == xs) {
->> -			list_del(&ipsec->list);
->> -			kfree(ipsec);
->> -			break;
->> -		}
->> -	}
->> -	mutex_unlock(&bond->ipsec_lock);
->>  }
->>  
->>  static void bond_ipsec_del_sa_all(struct bonding *bond)
->> @@ -617,6 +611,12 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
->>  
->>  	mutex_lock(&bond->ipsec_lock);
->>  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
->> +			list_del(&ipsec->list);
-> 
-> To be able to do this here, you'll have to use list_for_each_entry_safe().
-> 
+>> May a bit of exception handling code be shared by an additional jump ta=
+rget?
+>> Will another goto chain become helpful here?
+>
+> Honestly, I don't want to introduce jump any more.
 
-One more thing - note I'm not an xfrm expert by far but it seems to me here you have
-to also call  xdo_dev_state_free() with the old active slave dev otherwise that will
-never get called with the original real_dev after the switch to a new
-active slave (or more accurately it might if the GC runs between the switching
-but it is a race), care must be taken wrt sequence of events because the XFRM
-GC may be running in parallel which probably means that in bond_ipsec_free_sa()
-you'll have to take the mutex before calling xdo_dev_state_free() and check
-if the entry is still linked in the bond's ipsec list before calling the free_sa
-callback, if it isn't then del_sa_all got to it before the GC and there's nothing
-to do if it also called the dev's free_sa callback. The check for real_dev doesn't
-seem enough to protect against this race.
+Would you like to avoid any duplicate source code (including error handlin=
+g)?
 
-Cheers,
- Nik
-
->> +			kfree(ipsec);
->> +			continue;
->> +		}
->> +
->>  		if (!ipsec->xs->xso.real_dev)
->>  			continue;
->>  
->> @@ -640,6 +640,7 @@ static void bond_ipsec_free_sa(struct xfrm_state *xs)
->>  	struct net_device *bond_dev = xs->xso.dev;
->>  	struct net_device *real_dev;
->>  	netdevice_tracker tracker;
->> +	struct bond_ipsec *ipsec;
->>  	struct bonding *bond;
->>  	struct slave *slave;
->>  
->> @@ -659,13 +660,24 @@ static void bond_ipsec_free_sa(struct xfrm_state *xs)
->>  	if (!xs->xso.real_dev)
->>  		goto out;
->>  
->> -	WARN_ON(xs->xso.real_dev != real_dev);
->> +	if (xs->xso.real_dev != real_dev)
->> +		goto out;
->>  
->>  	if (real_dev && real_dev->xfrmdev_ops &&
->>  	    real_dev->xfrmdev_ops->xdo_dev_state_free)
->>  		real_dev->xfrmdev_ops->xdo_dev_state_free(xs);
->>  out:
->>  	netdev_put(real_dev, &tracker);
->> +
->> +	mutex_lock(&bond->ipsec_lock);
->> +	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->> +		if (ipsec->xs == xs) {
->> +			list_del(&ipsec->list);
->> +			kfree(ipsec);
->> +			break;
->> +		}
->> +	}
->> +	mutex_unlock(&bond->ipsec_lock);
->>  }
->>  
->>  /**
-> 
-
+Regards,
+Markus
 
