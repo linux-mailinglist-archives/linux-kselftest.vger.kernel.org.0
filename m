@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-27772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBBBA4815A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:33:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA67CA48152
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:32:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABB2F3B7519
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:28:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09E3F7A88AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F91223816C;
-	Thu, 27 Feb 2025 14:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03CE238D21;
+	Thu, 27 Feb 2025 14:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gNGnGPuk"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fvJIXCW5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842E62376E6
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 14:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163B92343AB;
+	Thu, 27 Feb 2025 14:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740666448; cv=none; b=DAUYFQpDBEwPvAP1MyXR61liLDwdaNX1zwkmga98hxhbQmLMJ6KnkRg8sqxNmzlCCeXStCoe9VNz8DCv9nfbZTyY23RSmGZxEWChoYj+oMP+Jq25uW0Blrd/G9dAvcSwwxp38laZoODwuBMXsiF1Ytzbdd6MYKTgl0z9raftmic=
+	t=1740666453; cv=none; b=HBnJIxuYtHFm/UzC1FxwtRZNBNJm/M0XiWFNF+nCAuZf+svoX7hVmQF/RhQ0QeOIFDRs+Ln6iCM65vk19gJOKKEXFt6Y5pXyqt5VTuLl/ahQJxrASYfg8OPvI1tuua7KCtbW9HZ2CKr+r+eTlchOBuQhYjVKKcPBE32Ln1iESVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740666448; c=relaxed/simple;
-	bh=rDWiyqunZGTOtFOaj6bPovFS1empQsc83Ctjli5d8AA=;
+	s=arc-20240116; t=1740666453; c=relaxed/simple;
+	bh=n4EvS2tujlITFMmhI1w8JTOm/HL+ES1yhv6hk/Wk0Hs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hm1106ktr0b+WFFNTKajriU8NrAiS4GGG6XrgFd78YW5lFnu6HNsohFmTzmAXb8SXNCmbEagJsXlrOSJFAw2dqY3F3VOk6nnYpuGYhVkH4rD03CvZSfX/aHCAya7dfa6qc8eBFc+oxQjwTWngC1yTQ2nUlOoETK0YFGGk7eC33E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gNGnGPuk; arc=none smtp.client-ip=91.218.175.175
+	 MIME-Version; b=KeXK9r/TYNpqqVAjMQLkOM+gc0+D+HgahVekLh9gX0WrOREoxlxwSkf//uedqTsGJsxVYb6VodVLDxO1cZw88yNE68igIbEvIJB65HPM4qay/yj0hZL+A+QkG1B1lO2fnbXOzFbWg/EK6rbovE87DUnD3Bj2Tff9MoKEJG/Csmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fvJIXCW5; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740666443;
+	t=1740666450;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZM2tKqXjjo4I4618vU5KeTgE7YE43jJgVbf+MnAQmK4=;
-	b=gNGnGPuk3qV2Kf4osot90TYQKn6u2hTi1fGtYIo6FtHBtsVui939+Ge7rD9knRdCvppp71
-	zyHz7s0ufy2lNLANAc8V0OZ5R+eNb6TnTLIabEfLb9KyTCMn2E48zOqrCbn4pZdEjvdFFS
-	VzuUybXQq/8gcQP4QNpg16iBBkyrWZY=
+	bh=7aagjyEaL1HJrTcuwbXuuxWhha8H/1pOmC7GbTqPHhw=;
+	b=fvJIXCW5O3SFzdRVlqNHIXFvxueNSmtKxq4Uu1qC8YagvVdnuIQ/TqRUcKyaVIhnw1ldCB
+	q3k9GzOa44xYHh3wle8san33RyvGO/v+gs47VgID+CVz7WJC/hVEY4eeI1+Xx/FfGjXmhy
+	yEl9Gsqn2NJeBdP6GN0ekdQSgFTn0ro=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: john.fastabend@gmail.com,
@@ -66,9 +66,9 @@ Cc: john.fastabend@gmail.com,
 	linux-kselftest@vger.kernel.org,
 	mrpre@163.com,
 	Jiayuan Chen <jiayuan.chen@linux.dev>
-Subject: [PATCH bpf-next v1 2/3] selftests/bpf: Allow auto port binding for bpf nf
-Date: Thu, 27 Feb 2025 22:26:45 +0800
-Message-ID: <20250227142646.59711-3-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 3/3] selftests/bpf: Fixes for test_maps test
+Date: Thu, 27 Feb 2025 22:26:46 +0800
+Message-ID: <20250227142646.59711-4-jiayuan.chen@linux.dev>
 In-Reply-To: <20250227142646.59711-1-jiayuan.chen@linux.dev>
 References: <20250227142646.59711-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -80,57 +80,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Allow auto port binding for bpf nf test to avoid binding conflict.
+BPF CI has failed 3 times in the last 24 hours. Add retry for ENOMEM.
+It's similar to the optimization plan:
+commit 2f553b032cad ("selftsets/bpf: Retry map update for non-preallocated per-cpu map")
 
-./test_progs -a bpf_nf
-24/1    bpf_nf/xdp-ct:OK
-24/2    bpf_nf/tc-bpf-ct:OK
-24/3    bpf_nf/alloc_release:OK
-24/4    bpf_nf/insert_insert:OK
-24/5    bpf_nf/lookup_insert:OK
-24/6    bpf_nf/set_timeout_after_insert:OK
-24/7    bpf_nf/set_status_after_insert:OK
-24/8    bpf_nf/change_timeout_after_alloc:OK
-24/9    bpf_nf/change_status_after_alloc:OK
-24/10   bpf_nf/write_not_allowlisted_field:OK
-24      bpf_nf:OK
-Summary: 1/10 PASSED, 0 SKIPPED, 0 FAILED
+Failed CI:
+https://github.com/kernel-patches/bpf/actions/runs/13549227497/job/37868926343
+https://github.com/kernel-patches/bpf/actions/runs/13548089029/job/37865812030
+https://github.com/kernel-patches/bpf/actions/runs/13553536268/job/37883329296
+
+selftests/bpf: Fixes for test_maps test
+Fork 100 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_update_delete'
+......
+test_task_storage_map_stress_lookup:PASS
+test_maps: OK, 0 SKIPPED
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/test_maps.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index a4a1f93878d4..dbd13f8e42a7 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -72,11 +72,14 @@ static void test_bpf_nf_ct(int mode)
- 	if (!ASSERT_OK(system(cmd), cmd))
- 		goto end;
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 8b40e9496af1..986ce32b113a 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -1396,9 +1396,10 @@ static void test_map_stress(void)
+ #define MAX_DELAY_US 50000
+ #define MIN_DELAY_RANGE_US 5000
  
--	srv_port = (mode == TEST_XDP) ? 5005 : 5006;
--	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", srv_port, TIMEOUT_MS);
-+	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, TIMEOUT_MS);
- 	if (!ASSERT_GE(srv_fd, 0, "start_server"))
- 		goto end;
+-static bool retry_for_again_or_busy(int err)
++static bool can_retry(int err)
+ {
+-	return (err == EAGAIN || err == EBUSY);
++	return (err == EAGAIN || err == EBUSY ||
++		(err == ENOMEM && map_opts.map_flags == BPF_F_NO_PREALLOC));
+ }
  
-+	srv_port = get_socket_local_port(srv_fd);
-+	if (!ASSERT_GE(srv_port, 0, "get_sock_local_port"))
-+		goto end;
-+
- 	client_fd = connect_to_server(srv_fd);
- 	if (!ASSERT_GE(client_fd, 0, "connect_to_server"))
- 		goto end;
-@@ -91,7 +94,7 @@ static void test_bpf_nf_ct(int mode)
- 	skel->bss->saddr = peer_addr.sin_addr.s_addr;
- 	skel->bss->sport = peer_addr.sin_port;
- 	skel->bss->daddr = peer_addr.sin_addr.s_addr;
--	skel->bss->dport = htons(srv_port);
-+	skel->bss->dport = srv_port;
+ int map_update_retriable(int map_fd, const void *key, const void *value, int flags, int attempts,
+@@ -1451,12 +1452,12 @@ static void test_update_delete(unsigned int fn, void *data)
  
- 	if (mode == TEST_XDP)
- 		prog_fd = bpf_program__fd(skel->progs.nf_xdp_ct_test);
+ 		if (do_update) {
+ 			err = map_update_retriable(fd, &key, &value, BPF_NOEXIST, MAP_RETRIES,
+-						   retry_for_again_or_busy);
++						   can_retry);
+ 			if (err)
+ 				printf("error %d %d\n", err, errno);
+ 			assert(err == 0);
+ 			err = map_update_retriable(fd, &key, &value, BPF_EXIST, MAP_RETRIES,
+-						   retry_for_again_or_busy);
++						   can_retry);
+ 			if (err)
+ 				printf("error %d %d\n", err, errno);
+ 			assert(err == 0);
 -- 
 2.47.1
 
