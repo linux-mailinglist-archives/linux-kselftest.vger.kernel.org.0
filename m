@@ -1,137 +1,204 @@
-Return-Path: <linux-kselftest+bounces-27774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D4FEA48184
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:37:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32D55A482BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:18:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCE9A3A8863
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:32:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F34B31888959
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7969230D35;
-	Thu, 27 Feb 2025 14:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E788425F7B4;
+	Thu, 27 Feb 2025 15:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tl6wkvrI"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XJ4ZUnqj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD0E2309A8
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 14:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE1025F7A2;
+	Thu, 27 Feb 2025 15:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740666778; cv=none; b=lNNC8ppWJ1rsuARCYO21rQmMHuo6pI06XR4ySEz0AgLaX7u+mIqG1Ut3IoOLJkc00JtAtN+0g69mbOIDamo+a6yC9cUN1YVJTYYACY01hJmfWxKmF5xo+ZDL2X4N52YLgtxtJ7KnW+zHSO5V3qO08N5mmAquAAiVPbvvKapEnU8=
+	t=1740669272; cv=none; b=beXBUmx28wzdrbgRjw9T/tziFVNqLClDRIM0GcTRdjDUTR/+pD5LU5GclXLz5eN31+KYjpCt14/79Xn6rQh1tZGzKTVNQGziRvIvugcQToyInybFUDZEc+9oVq1Ln3s8oik03iYa8+Zf4j9tYHJ54jHvtawiCr0vZIXZrT2iPq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740666778; c=relaxed/simple;
-	bh=nwUmpwjVHRe61AX1sa2fDIX4r9ggEykHzNM3puJmYlA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GewcFOqhQhIenj6BDTRH9wmIXXmxsr4wGfJTONUDM//Kdir8eZ+tEFR9QkNTQpS/6iJXuaabOEBXRZc+9c2OHKxtWIKQbQjuN5W0txYrAkeIDu7G4c7y90KQSguEGffA6VN+MXSSRrt6+9Elico4Fy86xrpSctESQqsiwXAA5Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tl6wkvrI; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2fe86c01e2bso2245482a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 06:32:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740666776; x=1741271576; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GzX6RifgECI79FHPbY0or0NYOknovZYzIoHacFEQfXE=;
-        b=tl6wkvrIOZ+kQTTAeh8FiavqnTxXx5WRhXN0ZsUNeIg2fx3h4ViJg6Szo6y/+CfIZ3
-         cF1wHtDDrK9wg/saRt47t80BBwK5krmiqeaLhCcqSQWfd3iD5oSBhd1bcAgDpHyVXCJZ
-         hI6R/yOtSI2vKW/ri4NlzNtZi3jBLN8pBkIvgLoF+hL9fEglXQuFnThkEVf+OB8RtHso
-         qy6Y8gF1o2hg57Gh4MCEbuK1QgJrX3B35cipTC0djCIZjfbv30vNQUqcv/dYLna23E9c
-         AFllXe8UVjCHYK8iGUsKSX4wOtudIvDy56rYjQgiXAwAcSfC6g13UAneuNo6xq8JxaFN
-         Bvcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740666776; x=1741271576;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GzX6RifgECI79FHPbY0or0NYOknovZYzIoHacFEQfXE=;
-        b=gA/9t/lZ22zOVgJYLDPAeQruNnkKMCCTlc+5ycEivQxF07NtUnhelEkdkZImh8JsmU
-         ZhpKeIDiHHhmNpFfHgt1QmiLrJ2w9JgpWOXhxlUs7AierNdb6s9B6uhQRCzRq1bfM0Hp
-         L9GBfJpsZ8iLWQQkxPj54dEm2rrdWiFYEyO9rl4zcg8EaGzfC1s9mHRguCkpVaraSIqe
-         85Sjuf0Xl/cQTxOWw7z9lFxkNgKMBzL7QzX4mWmxqwsumKKgvnZY5Sdff9WktVNjHgla
-         uyZo8gWwnyGtiqXQgta7Nbu4JzcFUGNy8ZHcJM2teJLjBkTW5AbaZfJ1aQ4wCW82uLUY
-         oo3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWUMjOFuBtscSepMYh5HnAw2Tz/MSf8PuI0IUS1WBYiGX93sN4fySLCtVOJ6cr0Iy1dBS7jTcF+K7Pk4NT+IcE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiQUx7BMpx5/JxxTQC8rSv5GChJa8H4acrsqEO+iTPNTrKP/p1
-	Fca8ZR3CcwJvYGAAtjbX+OdEAcXA2GjTDafjpUvdMlh/GDE6ZFVeMrtcyqnQiznXZ6UsUBC/zPk
-	jBQ==
-X-Google-Smtp-Source: AGHT+IFLgt1HXgLiOKtKDvHYRpSTc3CznmCb5CmKQq3WTADWz9n0nIbP0qGZSkrWbsy0knvFAOa1tCwXrI8=
-X-Received: from pjboh11.prod.google.com ([2002:a17:90b:3a4b:b0:2fe:800f:23a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3cc4:b0:2ee:ee77:227c
- with SMTP id 98e67ed59e1d1-2fce868cbb8mr36260845a91.3.1740666776586; Thu, 27
- Feb 2025 06:32:56 -0800 (PST)
-Date: Thu, 27 Feb 2025 06:32:55 -0800
-In-Reply-To: <454ba4ae-4be7-49ae-a9b9-3b25cad8433a@amd.com>
+	s=arc-20240116; t=1740669272; c=relaxed/simple;
+	bh=cVSgDCggYpw8xN5dH8v583jJU/1xhO0S9v5k3RuLRuc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NGrsiM7AzXhcUdq2k7vHK9dURoPZ2wPMxbkDqtYpTRx0MjjWKHL/xzOwtGvGOKlN9N7M0ASOxyaPy1swIvjeJTvVuCcFi2wBZjxUoFTrxFT6/ACBGp4vN/ETj/BD8owwNRaPbQw9j0RnDLnSPdVtunJKsEr1QkUYwOLmI1yeIzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XJ4ZUnqj; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ZG1Z/AvQvy2Nn3Xs8i93g3gloTg9fkysRZ6eqtmzy+k=; b=XJ4ZUnqjgLZkjeds3l3Ic0yv1U
+	ObWbqQi6a6BVYlVNqnxDtt6v37SdHaPvrZ4WvucLlDkmwBNF5rVBaagjMv7SAP5A0VHRZqP8VM4zF
+	Ulf9Mu+bTr7XlUC/vk40Z4an/G073wAhtzOI3kWlh6xrJzGQAOB1I7bdtJXWAXjcsnH9kImMFWda0
+	KrmcC5e1VfO/+8P8gLZIqGEVHIUmbrTOT51JakD1/1lobLxEbwUx2GLQDYbhkx8B6QhYqjHEJSQNB
+	8jULkx0X1hMsTiNPE5nsVuzZKQX4K29Sw1fWklz1jt55EUUyZFnCJ4bl2pEpbS58sJDkcpwJwnkwv
+	yL0wZQOA==;
+Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1tnfaO-000000009ty-35Id;
+	Thu, 27 Feb 2025 15:14:05 +0000
+Date: Thu, 27 Feb 2025 15:14:04 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Zi Yan <ziy@nvidia.com>
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Hugh Dickins <hughd@google.com>,
+	David Hildenbrand <david@redhat.com>,
+	Yang Shi <yang@os.amperecomputing.com>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
+	Yu Zhao <yuzhao@google.com>, John Hubbard <jhubbard@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH v9 2/8] mm/huge_memory: add two new (not yet used)
+ functions for folio_split()
+Message-ID: <Z8CBPF9_gDZuDjED@casper.infradead.org>
+References: <20250226210032.2044041-1-ziy@nvidia.com>
+ <20250226210032.2044041-3-ziy@nvidia.com>
+ <Z7_-XweaPpfdRz1h@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250128124812.7324-1-manali.shukla@amd.com> <20250128124812.7324-3-manali.shukla@amd.com>
- <Z74_HQaQ1jY4eKBB@google.com> <454ba4ae-4be7-49ae-a9b9-3b25cad8433a@amd.com>
-Message-ID: <Z8B3l8VGA2RHRI1j@google.com>
-Subject: Re: [PATCH v6 2/3] KVM: SVM: Add Idle HLT intercept support
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com, 
-	vkuznets@redhat.com, bp@alien8.de, babu.moger@amd.com, 
-	neeraj.upadhyay@amd.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z7_-XweaPpfdRz1h@casper.infradead.org>
 
-On Thu, Feb 27, 2025, Manali Shukla wrote:
-> On 2/26/2025 3:37 AM, Sean Christopherson wrote:
-> >> @@ -5225,6 +5230,8 @@ static __init void svm_set_cpu_caps(void)
-> >>  		if (vnmi)
-> >>  			kvm_cpu_cap_set(X86_FEATURE_VNMI);
-> >>  
-> >> +		kvm_cpu_cap_check_and_set(X86_FEATURE_IDLE_HLT);
-> > 
-> > I am 99% certain this is wrong.  Or at the very least, severly lacking an
-> > explanation of why it's correct.  If L1 enables Idle HLT but not HLT interception,
-> > then it is KVM's responsibility to NOT exit to L1 if there is a pending V_IRQ or
-> > V_NMI.
-> > 
-> > Yeah, it's buggy.  But, it's buggy in part because *existing* KVM support is buggy.
-> > If L1 disables HLT exiting, but it's enabled in KVM, then KVM will run L2 with
-> > HLT exiting and so it becomes KVM's responsibility to check for valid L2 wake events
-> > prior to scheduling out the vCPU if L2 executes HLT.  E.g. nVMX handles this by
-> > reading vmcs02.GUEST_INTERRUPT_STATUS.RVI as part of vmx_has_nested_events().  I
-> > don't see the equivalent in nSVM.
-> > 
-> > Amusingly, that means Idle HLT is actually a bug fix to some extent.  E.g. if there
-> > is a pending V_IRQ/V_NMI in vmcb02, then running with Idle HLT will naturally do
-> > the right thing, i.e. not hang the vCPU.
-> > 
-> > Anyways, for now, I think the easiest and best option is to simply skip full nested
-> > support for the moment.
-> > 
+On Thu, Feb 27, 2025 at 05:55:43AM +0000, Matthew Wilcox wrote:
+> On Wed, Feb 26, 2025 at 04:00:25PM -0500, Zi Yan wrote:
+> > +static int __split_unmapped_folio(struct folio *folio, int new_order,
+> > +		struct page *split_at, struct page *lock_at,
+> > +		struct list_head *list, pgoff_t end,
+> > +		struct xa_state *xas, struct address_space *mapping,
+> > +		bool uniform_split)
+> > +{
+> [...]
+> > +		/* complete memcg works before add pages to LRU */
+> > +		split_page_memcg(&folio->page, old_order, split_order);
+> > +		split_page_owner(&folio->page, old_order, split_order);
+> > +		pgalloc_tag_split(folio, old_order, split_order);
 > 
-> Got it, I see the issue you're talking about. I'll need to look into it a bit more to
-> fully understand it. So yeah, we can hold off on full nested support for idle HLT 
-> intercept for now.
+> At least split_page_memcg() needs to become aware of 'uniform_split'.
 > 
-> Since we are planning to disable Idle HLT support on nested guests, should we do
-> something like this ?
+>         if (folio_memcg_kmem(folio))
+>                 obj_cgroup_get_many(__folio_objcg(folio), old_nr / new_nr - 1);
 > 
-> @@ -167,10 +167,15 @@ void recalc_intercepts(struct vcpu_svm *svm)
->         if (!nested_svm_l2_tlb_flush_enabled(&svm->vcpu))
->                 vmcb_clr_intercept(c, INTERCEPT_VMMCALL);
-> 
-> +       if (!guest_cpu_cap_has(&svm->vcpu, X86_FEATURE_IDLE_HLT))
-> +               vmcb_clr_intercept(c, INTERCEPT_IDLE_HLT);
-> +
-> 
-> When recalc_intercepts copies the intercept values from vmc01 to vmcb02, it also copies
-> the IDLE HLT intercept bit, which is set to 1 in vmcb01. Normally, this isn't a problem 
-> because the HLT intercept takes priority when it's on. But if the HLT intercept gets 
-> turned off for some reason, the IDLE HLT intercept will stay on, which is not what we
-> want.
+> If we're doing uniform_split, that calculation should be
+> 	old_order - new_order - 1
 
-Why don't we want that?
+umm, old_order - new_order.  Anyway, here's a patch I've done on top of
+your work, but it probably needs to be massaged slightly and placed
+before your work?
+
+
+From 190e13ed77e562eb59fa1fa4bfefdefe5d0416ed Mon Sep 17 00:00:00 2001
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Date: Mon, 28 Oct 2024 16:23:30 -0400
+Subject: [PATCH] mm: Separate folio_split_memcg() from split_page_memcg()
+
+Folios always use memcg_data to refer to the mem_cgroup while pages
+allocated with GFP_ACCOUNT have a pointer to the obj_cgroup.  Since the
+caller already knows what it has, split the function into two and then
+we don't need to check.
+
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ include/linux/memcontrol.h |  7 +++++++
+ mm/huge_memory.c           |  6 ++++--
+ mm/memcontrol.c            | 18 +++++++++++++++---
+ 3 files changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 57664e2a8fb7..155c3f81f4df 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1039,6 +1039,8 @@ static inline void memcg_memory_event_mm(struct mm_struct *mm,
+ }
+ 
+ void split_page_memcg(struct page *head, int old_order, int new_order);
++void folio_split_memcg(struct folio *folio, unsigned old_order,
++		unsigned new_order, bool uniform_split);
+ 
+ static inline u64 cgroup_id_from_mm(struct mm_struct *mm)
+ {
+@@ -1463,6 +1465,11 @@ static inline void split_page_memcg(struct page *head, int old_order, int new_or
+ {
+ }
+ 
++static inline void folio_split_memcg(struct folio *folio, unsigned old_order,
++		unsigned new_order, bool uniform)
++{
++}
++
+ static inline u64 cgroup_id_from_mm(struct mm_struct *mm)
+ {
+ 	return 0;
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1e45064046a0..75fa9c9d9ec9 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3401,6 +3401,9 @@ static void __split_folio_to_order(struct folio *folio, int new_order)
+ 			folio_set_young(new_folio);
+ 		if (folio_test_idle(folio))
+ 			folio_set_idle(new_folio);
++#ifdef CONFIG_MEMCG
++		new_folio->memcg_data = folio->memcg_data;
++#endif
+ 
+ 		folio_xchg_last_cpupid(new_folio, folio_last_cpupid(folio));
+ 	}
+@@ -3529,8 +3532,7 @@ static int __split_unmapped_folio(struct folio *folio, int new_order,
+ 			}
+ 		}
+ 
+-		/* complete memcg works before add pages to LRU */
+-		split_page_memcg(&folio->page, old_order, split_order);
++		folio_split_memcg(folio, old_order, split_order, uniform_split);
+ 		split_page_owner(&folio->page, old_order, split_order);
+ 		pgalloc_tag_split(folio, old_order, split_order);
+ 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 16f3bdbd37d8..c2d41e1337cb 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3064,10 +3064,22 @@ void split_page_memcg(struct page *head, int old_order, int new_order)
+ 	for (i = new_nr; i < old_nr; i += new_nr)
+ 		folio_page(folio, i)->memcg_data = folio->memcg_data;
+ 
+-	if (folio_memcg_kmem(folio))
+-		obj_cgroup_get_many(__folio_objcg(folio), old_nr / new_nr - 1);
++	obj_cgroup_get_many(__folio_objcg(folio), old_nr / new_nr - 1);
++}
++
++void folio_split_memcg(struct folio *folio, unsigned old_order,
++		unsigned new_order, bool uniform_split)
++{
++	unsigned new_refs;
++
++	if (mem_cgroup_disabled() || !folio_memcg_charged(folio))
++		return;
++
++	if (uniform_split)
++		new_refs = (1 << (old_order - new_order)) - 1;
+ 	else
+-		css_get_many(&folio_memcg(folio)->css, old_nr / new_nr - 1);
++		new_refs = old_order - new_order;
++	css_get_many(&__folio_memcg(folio)->css, new_refs);
+ }
+ 
+ unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap)
+-- 
+2.47.2
+
 
