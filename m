@@ -1,105 +1,89 @@
-Return-Path: <linux-kselftest+bounces-27787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 472F2A4849F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 17:20:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2016AA48503
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 17:31:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C5BE7A11E0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:19:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3C6117878B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:21:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7694B1A9B29;
-	Thu, 27 Feb 2025 16:20:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C671A841C;
+	Thu, 27 Feb 2025 16:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMtq2638"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8RDKIiO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442FF198823;
-	Thu, 27 Feb 2025 16:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69308F40;
+	Thu, 27 Feb 2025 16:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740673200; cv=none; b=Fc7La2vdDInJ1yxx42zbBF/mMyS90P+uq+JVUbU+mJ254wmEt5UW3N9EKCPa+GYAIXoMxcRLBMF9pHTvrRcE7CWJYcA9QIVksIl5x2DiYUtLoxzrQe1nVHoso7AlOEAss2C50OuWueWkhxXJuvT2AqdFoCK7WXh3PK7Q6BE4dEw=
+	t=1740673305; cv=none; b=khhJE10ShYJlKjdu3E7uGMjC+HGL18tQkbsLbzc5v06kwkdKrNvNvdlVk+S4uWg6xCKxP8jzDTMQJaoPtajbEl79J+yRNaQTAIBAMRt9+tcQy1VWbEXoGubjyG8rdAg1ajqGyBn2QUfPqPki/ikNLhjGHAA46vFHGFUWVXVcRsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740673200; c=relaxed/simple;
-	bh=y/2Nr36NXLKaDCoN5EX8Qk/6K0dQTdt6rNcVkgwm6DI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mogavSuZky0wVMMD0zmk88A8OXsTOIeoGWprEQkiTOoOJuTap6pFzT08HjwlkLaEQuO7pjV6+ijhXTcrGRm7o+yS9KpiALwoQe6ZKFUFsGg7AzzyjQaGFaQXEb7qTwdrXQkVq3EY7PeqlqlMJo0X3MmuYdGcndnr9s9xc46mv8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMtq2638; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89D2C4CEDD;
-	Thu, 27 Feb 2025 16:19:59 +0000 (UTC)
+	s=arc-20240116; t=1740673305; c=relaxed/simple;
+	bh=sQlGGH25GF/utpCa8TrdW+aJYJDmWgb1GYvuLn4jCAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XVn0mxhFfqFe7SiphAp3KAeDwyGDWkcujW/dfgF7G12mZavzjfcSk3sACj9kSRJIlkN7RfvkSidMtzfnI2uu4XTGx4guJKTaed/nHtUsDmvIr+B4k6luxK6HqjdXe7YqhqM/4HQFIJt3lDWvJb+W4IDQHFr3VXUAaaWrko5TSOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8RDKIiO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560E8C4CEDD;
+	Thu, 27 Feb 2025 16:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740673199;
-	bh=y/2Nr36NXLKaDCoN5EX8Qk/6K0dQTdt6rNcVkgwm6DI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=CMtq2638oo+hngEcmTw3lpKtE1Ao9udiTyUaYD9Fk5U1zOMK5CPffOxsoWZomLbN6
-	 MIGAVVskGyLKqBo0tlL+PFtDfie2igvMcG6T/n+tflYep44X8yx4EAQc9gXHmkAq8Q
-	 muFLchyyZzpgQ9CFlfGwsv5Ls5xC6rywQk6DGTT4qDBPczWu3stHax7JUH0svMuHQV
-	 am+raCymkOcyWstED+Aoa2XGsZuUyjvH6xhtJ+iUWMrDdRsHHTLwUAIGg5kdyS/F4t
-	 utQ1WTHBeN5Ev7tFujrhHS0fKDvTgwEezxL6klihaZx7r8hsP2aJjXa9DKiPYoz7kP
-	 +zEqm9zUpo6Ng==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB3FA380AACB;
-	Thu, 27 Feb 2025 16:20:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1740673303;
+	bh=sQlGGH25GF/utpCa8TrdW+aJYJDmWgb1GYvuLn4jCAs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=j8RDKIiOyCSaYuBH82JphMKE2yS4OtBZVgpEa4tsNDfprl+ZiQ4F6hQ0colXqNNG5
+	 aNnHt6cPHK4gffZEMubVgqAJwCq24wsNqo+oza643jKiTF2+k1b/jk1V4xrP5Zv7Ws
+	 6cPWvWs59d/erzBLa5Z5wK/OL8akFXlGoGV5NCFwR8/KPRczckOzN0JSFL1zS0OXa8
+	 +Wl6KCYZyYuWfPUAXrc+TDQHtxHq2PCbWbozMauTar4/6HpPelyIeTv/WB/lfkjp8I
+	 /o70+GI34UHbh5p7pxKkYny8PDcEfU++Equ10mKQncWS7n0OIKf7PQjYA/YQV3L3eY
+	 Vq6Gn/Cs9PIcg==
+Date: Thu, 27 Feb 2025 08:21:41 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Xiao Liang
+ <shaw.leon@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ steffen.klassert@secunet.com, antony.antony@secunet.com,
+ willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>, Andrew
+ Lunn <andrew@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH net-next v20 00/25] Introducing OpenVPN Data Channel
+ Offload
+Message-ID: <20250227082141.3513de3d@kernel.org>
+In-Reply-To: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1 0/3] Optimize bpf selftest to increase CI success
- rate
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174067323175.1484560.1369764651554494631.git-patchwork-notify@kernel.org>
-Date: Thu, 27 Feb 2025 16:20:31 +0000
-References: <20250227142646.59711-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20250227142646.59711-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, john.fastabend@gmail.com, davem@davemloft.net,
- kuba@kernel.org, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mrpre@163.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, 27 Feb 2025 02:21:25 +0100 Antonio Quartulli wrote:
+> After some time of struggle trying to fix all hidden bugs that Sabrina
+> has found...here is v20!
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 27 Feb 2025 22:26:43 +0800 you wrote:
-> 1. Optimized some static bound port selftests to avoid port occupation
-> when running test_progs -j.
-> 2. Optimized the retry logic for test_maps.
+> Please note that some patches were already reviewed/tested by a few
+> people. These patches have retained the tags as they have hardly been
+> touched.
+> (Due to the amount of changes applied to the kselftest scripts, I dropped
+> the Reviewed-by Shuah Khan tag on that specific patch)
 > 
-> Some Failed CI:
-> https://github.com/kernel-patches/bpf/actions/runs/13275542359/job/37064974076
-> https://github.com/kernel-patches/bpf/actions/runs/13549227497/job/37868926343
-> https://github.com/kernel-patches/bpf/actions/runs/13548089029/job/37865812030
-> https://github.com/kernel-patches/bpf/actions/runs/13553536268/job/37883329296
-> (Perhaps it's due to the large number of pull requests requiring CI runs?)
+> The latest code can also be found at:
 > 
-> [...]
+> https://github.com/OpenVPN/ovpn-net-next
 
-Here is the summary with links:
-  - [bpf-next,v1,1/3] selftests/bpf: Allow auto port binding for cgroup connect
-    https://git.kernel.org/bpf/bpf-next/c/27e3162a0364
-  - [bpf-next,v1,2/3] selftests/bpf: Allow auto port binding for bpf nf
-    https://git.kernel.org/bpf/bpf-next/c/dbe7d46ed109
-  - [bpf-next,v1,3/3] selftests/bpf: Fixes for test_maps test
-    https://git.kernel.org/bpf/bpf-next/c/09de329523c8
+coccicheck has a new nitpick:
 
-You are awesome, thank you!
+drivers/net/ovpn/netlink.c:439:11-59: WARNING avoid newline at end of message in NL_SET_ERR_MSG_FMT_MOD
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
 
