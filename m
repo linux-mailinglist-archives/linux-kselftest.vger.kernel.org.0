@@ -1,31 +1,31 @@
-Return-Path: <linux-kselftest+bounces-27765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 830B6A48171
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:35:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEC6AA48169
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:34:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B121171DCA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:24:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B290C19C0B00
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:24:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9FA2356DD;
-	Thu, 27 Feb 2025 14:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE1E92343D4;
+	Thu, 27 Feb 2025 14:23:50 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C90923314A;
-	Thu, 27 Feb 2025 14:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C680722C35C;
+	Thu, 27 Feb 2025 14:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740666232; cv=none; b=QFqYiMGLr/k1H6nGXXTd8N3ln1eP+1m5IvgVX+0yssKSxFeDvO4EtVidbfNG+J8nf7At8/jyX78lBTLfU09dodteyJ/aga8okisJzJ1W7FgVj6uzcvgErE+JfY30Fh34OYQM3dnLB5BxaJXZmWZ+4n0K1qyj4M1Mg4nyey6j3sg=
+	t=1740666230; cv=none; b=QAL7p2pHIB23vFbugiWJ4T71J9gs1JtJXEJQI5kKt0RbZp2wicLHQisOBRQUgye4nJyDVEGKfk+1XbNL+sN3XSUSfh+LimY078ovnjAdRIGl4KNu0pboFegjtmSy6eCzPnUr6v+magHjMMscDxwXKehT1MZoOfEnjXgqtPtLI6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740666232; c=relaxed/simple;
-	bh=03sAEGF3NOk7mjI1ev2+8BtpFDYJbhutU/3ZJkMU0hs=;
+	s=arc-20240116; t=1740666230; c=relaxed/simple;
+	bh=SSqHWrknnY7505F637lnweG9d5BZUuo0jaS5Md8BNbk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RWnDlXrdZybTdmteFbh8otu1cfsnCUPPjBR2WFMNX6bQ5zvuuj/8D+EWiaDFQ35uhU1w3YTu1Q4sIQXiNbbdP1m7WbGVTO0LpVe2plzgVib877J4ZGtawxGRUbDZAjs3vba3SYKQIz9uFM6prwaWGB3KSrI6QLszQeD3r4c5NbE=
+	 MIME-Version; b=iVUmK7wLgB97yEFWY2lVBiul0ae7VUvvrZ6tzm/y0NRxQPlZllHSKn+Q5Z4n1Y2JRm62m8u2lAlwTxvBvUDLXdW0wI1rib9URXcGMp2hOZaIUGfkeGH0x9h1AEk34QrLwoS8vEijUmhrXfQQ40DQPxRZgIaLb5kqkH2dU6uocsI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -33,12 +33,12 @@ Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnenV-0005EW-Um; Thu, 27 Feb 2025 15:23:33 +0100
+	id 1tnenW-0005EY-2k; Thu, 27 Feb 2025 15:23:34 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tnenW-000B1d-0J;
+	id 1tnenW-000B1d-0g;
 	Thu, 27 Feb 2025 15:23:33 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
@@ -67,11 +67,10 @@ Cc: willemdebruijn.kernel@gmail.com,
 	mykolal@fb.com,
 	shuah@kernel.org,
 	hawk@kernel.org,
-	marcus.wichelmann@hetzner-cloud.de,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH bpf-next v4 3/6] selftests/bpf: move open_tuntap to network helpers
-Date: Thu, 27 Feb 2025 14:23:27 +0000
-Message-ID: <20250227142330.1605996-4-marcus.wichelmann@hetzner-cloud.de>
+	marcus.wichelmann@hetzner-cloud.de
+Subject: [PATCH bpf-next v4 4/6] selftests/bpf: refactor xdp_context_functional test and bpf program
+Date: Thu, 27 Feb 2025 14:23:28 +0000
+Message-ID: <20250227142330.1605996-5-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
 References: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
@@ -85,127 +84,264 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27562/Thu Feb 27 10:48:50 2025)
 
-To test the XDP metadata functionality of the tun driver, it's necessary
-to create a new tap device first. A helper function for this already
-exists in lwt_helpers.h. Move it to the common network helpers header,
-so it can be reused in other tests.
+The existing XDP metadata test works by creating a veth pair and
+attaching XDP & TC programs that drop the packet when the condition of
+the test isn't fulfilled. The test then pings through the veth pair and
+succeeds when the ping comes through.
+
+While this test works great for a veth pair, it is hard to replicate for
+tap devices to test the XDP metadata support of them. A similar test for
+the tun driver would either involve logic to reply to the ping request,
+or would have to capture the packet to check if it was dropped or not.
+
+To make the testing of other drivers easier while still maximizing code
+reuse, this commit refactors the existing xdp_context_functional test to
+use a test_result map. Instead of conditionally passing or dropping the
+packet, the TC program is changed to copy the received metadata into the
+value of that single-entry array map. Tests can then verify that the map
+value matches the expectation.
+
+This testing logic is easy to adapt to other network drivers as the only
+remaining requirement is that there is some way to send a custom
+Ethernet packet through it that triggers the XDP & TC programs.
+
+The Ethernet header of that custom packet is all-zero, because it is not
+required to be valid for the test to work. The zero ethertype also helps
+to filter out packets that are not related to the test and would
+otherwise interfere with it.
+
+The payload of the Ethernet packet is used as the test data that is
+expected to be passed as metadata from the XDP to the TC program and
+written to the map. It has a fixed size of 32 bytes which is a
+reasonable size that should be supported by both drivers. Additional
+packet headers are not necessary for the test and were therefore skipped
+to keep the testing code short.
+
+This new testing methodology no longer requires the veth interfaces to
+have IP addresses assigned, therefore these were removed.
 
 Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 28 ++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  3 ++
- .../selftests/bpf/prog_tests/lwt_helpers.h    | 29 -------------------
- 3 files changed, 31 insertions(+), 29 deletions(-)
+ .../bpf/prog_tests/xdp_context_test_run.c     | 79 +++++++++++++++++--
+ .../selftests/bpf/progs/test_xdp_meta.c       | 53 +++++++++----
+ 2 files changed, 110 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 737a952dcf80..e1cfa1b37754 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -565,6 +565,34 @@ void close_netns(struct nstoken *token)
- 	free(token);
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+index 937da9b7532a..78ca01edb050 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+@@ -4,13 +4,19 @@
+ #include "test_xdp_context_test_run.skel.h"
+ #include "test_xdp_meta.skel.h"
+ 
+-#define TX_ADDR "10.0.0.1"
+-#define RX_ADDR "10.0.0.2"
+ #define RX_NAME "veth0"
+ #define TX_NAME "veth1"
+ #define TX_NETNS "xdp_context_tx"
+ #define RX_NETNS "xdp_context_rx"
+ 
++#define TEST_PAYLOAD_LEN 32
++static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
++	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
++	0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
++	0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
++	0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
++};
++
+ void test_xdp_context_error(int prog_fd, struct bpf_test_run_opts opts,
+ 			    __u32 data_meta, __u32 data, __u32 data_end,
+ 			    __u32 ingress_ifindex, __u32 rx_queue_index,
+@@ -112,7 +118,59 @@ void test_xdp_context_test_run(void)
+ 	test_xdp_context_test_run__destroy(skel);
  }
  
-+int open_tuntap(const char *dev_name, bool need_mac)
+-void test_xdp_context_functional(void)
++static int send_test_packet(int ifindex)
 +{
-+	int err = 0;
-+	struct ifreq ifr;
-+	int fd = open("/dev/net/tun", O_RDWR);
++	int n, sock = -1;
++	__u8 packet[sizeof(struct ethhdr) + TEST_PAYLOAD_LEN];
 +
-+	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
-+		return -1;
++	/* The ethernet header is not relevant for this test and doesn't need to
++	 * be meaningful.
++	 */
++	struct ethhdr eth = { 0 };
 +
-+	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
-+	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
-+	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
++	memcpy(packet, &eth, sizeof(eth));
++	memcpy(packet + sizeof(eth), test_payload, TEST_PAYLOAD_LEN);
 +
-+	err = ioctl(fd, TUNSETIFF, &ifr);
-+	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
-+		close(fd);
-+		return -1;
-+	}
++	sock = socket(AF_PACKET, SOCK_RAW, IPPROTO_RAW);
++	if (!ASSERT_GE(sock, 0, "socket"))
++		goto err;
 +
-+	err = fcntl(fd, F_SETFL, O_NONBLOCK);
-+	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
-+		close(fd);
-+		return -1;
-+	}
++	struct sockaddr_ll saddr = {
++		.sll_family = PF_PACKET,
++		.sll_ifindex = ifindex,
++		.sll_halen = ETH_ALEN
++	};
++	n = sendto(sock, packet, sizeof(packet), 0, (struct sockaddr *)&saddr,
++		   sizeof(saddr));
++	if (!ASSERT_EQ(n, sizeof(packet), "sendto"))
++		goto err;
 +
-+	return fd;
++	close(sock);
++	return 0;
++
++err:
++	if (sock >= 0)
++		close(sock);
++	return -1;
 +}
 +
- int get_socket_local_port(int sock_fd)
- {
- 	struct sockaddr_storage addr;
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 9f6e05d886c5..99d1417c1d8b 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -8,6 +8,7 @@
- typedef __u16 __sum16;
- #include <linux/if_ether.h>
- #include <linux/if_packet.h>
-+#include <linux/if_tun.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
- #include <linux/ethtool.h>
-@@ -98,6 +99,8 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes);
- int make_netns(const char *name);
- int remove_netns(const char *name);
- 
-+int open_tuntap(const char *dev_name, bool need_mac);
++static void assert_test_result(struct test_xdp_meta *skel)
++{
++	int err;
++	__u32 map_key = 0;
++	__u8 map_value[TEST_PAYLOAD_LEN];
 +
- /**
-  * append_tid() - Append thread ID to the given string.
-  *
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-index fb1eb8c67361..ccec0fcdabc1 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-@@ -5,7 +5,6 @@
++	err = bpf_map__lookup_elem(skel->maps.test_result, &map_key,
++				   sizeof(map_key), &map_value,
++				   TEST_PAYLOAD_LEN, BPF_ANY);
++	if (!ASSERT_OK(err, "lookup test_result"))
++		return;
++
++	ASSERT_MEMEQ(&map_value, &test_payload, TEST_PAYLOAD_LEN,
++		     "test_result map contains test payload");
++}
++
++void test_xdp_context_veth(void)
+ {
+ 	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
+ 	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
+@@ -120,7 +178,7 @@ void test_xdp_context_functional(void)
+ 	struct bpf_program *tc_prog, *xdp_prog;
+ 	struct test_xdp_meta *skel = NULL;
+ 	struct nstoken *nstoken = NULL;
+-	int rx_ifindex;
++	int rx_ifindex, tx_ifindex;
+ 	int ret;
  
- #include <time.h>
- #include <net/if.h>
--#include <linux/if_tun.h>
- #include <linux/icmp.h>
+ 	tx_ns = netns_new(TX_NETNS, false);
+@@ -138,7 +196,6 @@ void test_xdp_context_functional(void)
+ 	if (!ASSERT_OK_PTR(nstoken, "setns rx_ns"))
+ 		goto close;
  
- #include "test_progs.h"
-@@ -37,34 +36,6 @@ static inline int netns_delete(void)
- 	return system("ip netns del " NETNS ">/dev/null 2>&1");
+-	SYS(close, "ip addr add " RX_ADDR "/24 dev " RX_NAME);
+ 	SYS(close, "ip link set dev " RX_NAME " up");
+ 
+ 	skel = test_xdp_meta__open_and_load();
+@@ -179,9 +236,17 @@ void test_xdp_context_functional(void)
+ 	if (!ASSERT_OK_PTR(nstoken, "setns tx_ns"))
+ 		goto close;
+ 
+-	SYS(close, "ip addr add " TX_ADDR "/24 dev " TX_NAME);
+ 	SYS(close, "ip link set dev " TX_NAME " up");
+-	ASSERT_OK(SYS_NOFAIL("ping -c 1 " RX_ADDR), "ping");
++
++	tx_ifindex = if_nametoindex(TX_NAME);
++	if (!ASSERT_GE(tx_ifindex, 0, "if_nametoindex tx"))
++		goto close;
++
++	ret = send_test_packet(tx_ifindex);
++	if (!ASSERT_OK(ret, "send_test_packet"))
++		goto close;
++
++	assert_test_result(skel);
+ 
+ close:
+ 	close_netns(nstoken);
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+index fe2d71ae0e71..fcf6ca14f2ea 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+@@ -4,37 +4,50 @@
+ 
+ #include <bpf/bpf_helpers.h>
+ 
+-#define __round_mask(x, y) ((__typeof__(x))((y) - 1))
+-#define round_up(x, y) ((((x) - 1) | __round_mask(x, y)) + 1)
++#define META_SIZE 32
++
+ #define ctx_ptr(ctx, mem) (void *)(unsigned long)ctx->mem
+ 
++/* Demonstrates how metadata can be passed from an XDP program to a TC program
++ * using bpf_xdp_adjust_meta.
++ * For the sake of testing the metadata support in drivers, the XDP program uses
++ * a fixed-size payload after the Ethernet header as metadata. The TC program
++ * copies the metadata it receives into a map so it can be checked from
++ * userspace.
++ */
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__uint(value_size, META_SIZE);
++} test_result SEC(".maps");
++
+ SEC("tc")
+ int ing_cls(struct __sk_buff *ctx)
+ {
+-	__u8 *data, *data_meta, *data_end;
+-	__u32 diff = 0;
++	__u8 *data, *data_meta;
++	__u32 key = 0;
+ 
+ 	data_meta = ctx_ptr(ctx, data_meta);
+-	data_end  = ctx_ptr(ctx, data_end);
+ 	data      = ctx_ptr(ctx, data);
+ 
+-	if (data + ETH_ALEN > data_end ||
+-	    data_meta + round_up(ETH_ALEN, 4) > data)
++	if (data_meta + META_SIZE > data)
+ 		return TC_ACT_SHOT;
+ 
+-	diff |= ((__u32 *)data_meta)[0] ^ ((__u32 *)data)[0];
+-	diff |= ((__u16 *)data_meta)[2] ^ ((__u16 *)data)[2];
++	bpf_map_update_elem(&test_result, &key, data_meta, BPF_ANY);
+ 
+-	return diff ? TC_ACT_SHOT : TC_ACT_OK;
++	return TC_ACT_SHOT;
  }
  
--static int open_tuntap(const char *dev_name, bool need_mac)
--{
--	int err = 0;
--	struct ifreq ifr;
--	int fd = open("/dev/net/tun", O_RDWR);
--
--	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
--		return -1;
--
--	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
--	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
--	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
--
--	err = ioctl(fd, TUNSETIFF, &ifr);
--	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
--		close(fd);
--		return -1;
--	}
--
--	err = fcntl(fd, F_SETFL, O_NONBLOCK);
--	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
--		close(fd);
--		return -1;
--	}
--
--	return fd;
--}
--
- #define ICMP_PAYLOAD_SIZE     100
+ SEC("xdp")
+ int ing_xdp(struct xdp_md *ctx)
+ {
+-	__u8 *data, *data_meta, *data_end;
++	__u8 *data, *data_meta, *data_end, *payload;
++	struct ethhdr *eth;
+ 	int ret;
  
- /* Match an ICMP packet with payload len ICMP_PAYLOAD_SIZE */
+-	ret = bpf_xdp_adjust_meta(ctx, -round_up(ETH_ALEN, 4));
++	ret = bpf_xdp_adjust_meta(ctx, -META_SIZE);
+ 	if (ret < 0)
+ 		return XDP_DROP;
+ 
+@@ -42,11 +55,21 @@ int ing_xdp(struct xdp_md *ctx)
+ 	data_end  = ctx_ptr(ctx, data_end);
+ 	data      = ctx_ptr(ctx, data);
+ 
+-	if (data + ETH_ALEN > data_end ||
+-	    data_meta + round_up(ETH_ALEN, 4) > data)
++	eth = (struct ethhdr *)data;
++	payload = data + sizeof(struct ethhdr);
++
++	if (payload + META_SIZE > data_end ||
++	    data_meta + META_SIZE > data)
++		return XDP_DROP;
++
++	/* The Linux networking stack may send other packets on the test
++	 * interface that interfere with the test. Just drop them.
++	 * The test packets can be recognized by their ethertype of zero.
++	 */
++	if (eth->h_proto != 0)
+ 		return XDP_DROP;
+ 
+-	__builtin_memcpy(data_meta, data, ETH_ALEN);
++	__builtin_memcpy(data_meta, payload, META_SIZE);
+ 	return XDP_PASS;
+ }
+ 
 -- 
 2.43.0
 
