@@ -1,116 +1,121 @@
-Return-Path: <linux-kselftest+bounces-27811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECA75A48B50
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 23:21:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1605A48B5B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 23:23:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0769188E20E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 22:21:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 850607A29C6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 22:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F351527291A;
-	Thu, 27 Feb 2025 22:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715C927427B;
+	Thu, 27 Feb 2025 22:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTSTOnwa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eZkAJqjA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A8E272903;
-	Thu, 27 Feb 2025 22:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC25E274270;
+	Thu, 27 Feb 2025 22:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740694891; cv=none; b=eW2s7iw6CM3YS3JynA8ZfrtmLqdULsnB0MUbMQYe42EAAIfK5rrAvY33n813ps3KDILBs8IZ/FIilC/QFKW5OlrFbzfxnMQ+EwMWlseL5h/qxKj2h3aQjpzhCcOdymOnDDZxi+/qr5w2Bw7Celf95Ge8zxBE3OOG1brwpgyaKGU=
+	t=1740694908; cv=none; b=tSsw6K7GstYvjxSpWInji1Fq9ERgZxWSLomk8ytCKho5ajndgnuq9WhLn1Nl2sVZBw/y0P1YMDixd2b2zcMNOs7o0peEWHjN20G3m9biQbWTanH5/lsYI2shO10yhrO6YRwxYDOQhWgl48/iPbZSWP+9o4PNJhPpYoXrP9SCL98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740694891; c=relaxed/simple;
-	bh=Mh/4iXLUB3Pnxg08CIwmzUUPg4yTpsUSyIqdEojyAaw=;
+	s=arc-20240116; t=1740694908; c=relaxed/simple;
+	bh=9mrpVRh9LCe6Cx7DhW4a9O8r1znb4UUGRuzbaoZAdAA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XgXqe+DG8pJZ/LmG4oNOO/Ojc7Tjdk8YegB/JLP9J86vEvM3ZfzAwFDohrOuV7kfIqoFsiwGtHLozGdfhVOF03cVjawzH4UcCcIdRc3YuWW/k0ESnUXWuqYe0X6VPM5tFy4J6Hv687YR49+5MRfzFFwFysC9JqpYajvo9X/1ZNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTSTOnwa; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=bYUg+dqwDx3JbdvI5vG7FsO2gNnqcCEmgxjgJjRipEp2e6oLH5EZIQxDUfAieEoqf2jqa6jq6rbYM/k862sHD8UWsOX2vstHxfuECt8UOIarXC4DkENIhQL/XnAVvgNBTuYCVQaJNtJm/TGTG4i7wLUc16lGE92UelpYutvYmX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eZkAJqjA; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22328dca22fso24139725ad.1;
-        Thu, 27 Feb 2025 14:21:30 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220d132f16dso21617135ad.0;
+        Thu, 27 Feb 2025 14:21:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740694890; x=1741299690; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740694906; x=1741299706; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjcFu4QJ69OtpdwIdEkRfaI1N2rsWL887lgwcRC5wmM=;
-        b=NTSTOnwaBrXrD3xZKmX0knENsx0ehpO5f9d8RNLD+VWNXizYrstHV2+cz0bnXzmzRy
-         qvadU3h35UPACtyPWkM0ivbC4OfOiiQbNcU3pCwJXFLfOkP4/lQ0EGrvM8abqK1mOtR/
-         W6o3WV3b0KGr18IzeIPuzQQabHPKjHemkwxYKDUheSUapsiqLGbUZb8aOTKoXnca15Nv
-         gDqfJDG/VAwBWQOpIfuvgyaXPOg/YrYmbjllCPaiSJPsmLdgcAA1T8UvLMuf64ZWqYnQ
-         T7bKcHz5iFTBRJKVUFKZpeUqODNE+Yetyc0NVwCkyXsy5Gwh8UKY5A/N53AwEb/dOFPN
-         EtJA==
+        bh=fIcVrtq95e3d6hB6s4EQxlcOTWBSWsLA7dFATbPAJjk=;
+        b=eZkAJqjA3ajWWlkI1tV98d8KLHbYcNHFSGVkgddnBx4Jmpy3XixK85Cqi3qv0/Fq0y
+         o7/ChyeG4aXiw7sp0BXauUR5ea2JeXhhg9tv/Nrt40ftCoqZLoy8OQccOZaZJlEPy8r9
+         WsDdtTbKlnhBMKPZVIHMq/f5que8bAXXN3YrbYmUnCtSxf4oJcB7Z2hARVZPMdrd7HX7
+         uLtrlSALaYZDVZ6WGv8yAzXUmw4XJ/83k8L8d26cuiGpbrhZPDn1o7pcJX2HEx6JfIvm
+         H4HUarSUmef9H7ETKRJkgrZCwGpl8/CaZ3NxN76oJcTNvL+BPZL6JELc+pTvECCBA4xS
+         +zGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740694890; x=1741299690;
+        d=1e100.net; s=20230601; t=1740694906; x=1741299706;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gjcFu4QJ69OtpdwIdEkRfaI1N2rsWL887lgwcRC5wmM=;
-        b=q9TUbySl/HCmHQoPAeek6rtChyzZ2nBP9xlD556sBB/UlGv9XfLEb8r+PeE2FyKymG
-         SC+zMfB1DvBIMW9yfaX6lQ9PFbwjEnjtoiBWeeLO3eFE27Kvl3WIWn7Ec3d77H0MLmDr
-         a5hRy0TLkXLadFH8zdbtJL3tNJ7EbQtebJdyWqrW4+WnwvO/klmsfpHTuBGejbnbU/YH
-         PSgrKATl3upM0Y1DzNKeLresgeIPqLEeczR1AaxkguroCit4PAs8m/b0XD8ScrCX8qEo
-         hXsWrKA85pyWPsphioZ2URvI9WbWvV3yuAvfpR62StW3C9vOmrAf+02j1O/8kArD6D4K
-         7UFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGxzpd+ViZKd5gbCZIg2zLITHIcZQyfbSro5Z69Y1bmSHFbPO4PRELK2XdKRVdvCfPeXI=@vger.kernel.org, AJvYcCVYY9oLTfEay4hugd6Y3ncPtlHUlEasOuhUMnnxQzZtxMxNM9XL7pqUKMr83hfbBuLxQvzTxhjTvspJd1yH@vger.kernel.org, AJvYcCX/TME3BdChZKdOTJOqi/PgHZ7slDfeWbcgG4l0zvacGuwliePSCM9icOoh2TSt5AhjIuzRfMGDgJHeMc7igDnG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9GV7eOChyWozk5eg/MbqLhGwA52F/FjNSkAI2H5HdTQPNQ/Hw
-	y1eVB+LB2YpM2Y132HvpYotpXOvEF6RF32U5eXzS0FKfT46M6e8=
-X-Gm-Gg: ASbGncs2WVPr7LFJvNPC9/3Nftlb8al85v9amU33BSyTG6QEwNIzfCyQM/tYeVML0Dh
-	peC0wDMkT+FljBYMP4WYZf2V03PBEnjLifzms/LdkGlHAswXjlu5KVpunJAmDhNeDdx9yvZnLj7
-	LDigeUXUSW+r70pHM2uKN9L92AF5mcZYVXrRuGz8jgVn2/kh7dESMJ8uV6PCVbyElL104SADBAa
-	7wuHsdzMhBjvQD/fbiaZIEzp0ORTvy1kaDwYnXBFgLMYxexgjtOxXhqiwW8bwywKVpP0g7ia1HD
-	1awR4vBfcQB0wjiw7hS52ODnGA==
-X-Google-Smtp-Source: AGHT+IFF0RPFfhexEjkENhbnL8UXdlvXeM575JiT765G6UKPAigJXPviJvci1kdBs/beEuh9+MVcow==
-X-Received: by 2002:a05:6a00:b8b:b0:730:794e:7aca with SMTP id d2e1a72fcca58-734ac3f4ce4mr1548090b3a.16.1740694889829;
-        Thu, 27 Feb 2025 14:21:29 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-734a005f9a1sm2310439b3a.175.2025.02.27.14.21.29
+        bh=fIcVrtq95e3d6hB6s4EQxlcOTWBSWsLA7dFATbPAJjk=;
+        b=gO1ANJ02zbRik3nf/KCDmUNiMcsXxr5ml515rVLEhpcy3pL1BCMbazZluMHY9G+zM0
+         3+K+tOSrtcKgQsTxIMAInFzzGmUdFpeMrK7f/lHUCk/LmZmM5TwfbAQhWlFzhJg68GpL
+         AkMMkXHrIxiIbDwAjCbioqikIrEpqV3+g3j38fTwyDemkOOOaRyCWLmvsxvX6Dw6b2eX
+         AAviLBgQa8J+0hX4zpbyUNE0WPWuXQGFMkVbBXm5fTB4+9uRHO/d7xMKCy9drIoa5MbF
+         pqui91F/sew65RikcV7tixKL2Z8tDUHi8HuJgiQ0X7ouIbmBIWMHqqy1H1RxphbEZUmF
+         VPnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9XYrxesquhux1Iz4fTN68AqZYYR8M6jjC64no8d4KzgDT2Zu5fENqsmxg/olRwwun9csRRgrDyow7DIf/Wjgu@vger.kernel.org, AJvYcCWThfI/ThAT7IIRhF7ZtJ3yR8bVT9lLS50SxKBBo71R+xvg+Sd3BWbhLD2XBKYAp6gLDsw=@vger.kernel.org, AJvYcCWoCKg93CI1q33FEZbmKpG6192XNvLYf4YrWv+azLD8iADYECQxagpg8LHtzgvDsDUnuAC6ElNYYvrZt46A@vger.kernel.org, AJvYcCXssdBipy0rgCt9sifHLO4IWfDlWaxZXeUbUpWKbBEpf+A3YnaREJ5jrYZ2PesVnHU+9b8JhjWA@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG+2EExu0VQp2iRbPAtI7X0L+/mslxux33vPEEHoc0yemwO8o8
+	p8qgPzIazcC3EY8XH2jIV2ud2RqnFp2iqetuzCqeVkW9baU2aFVW
+X-Gm-Gg: ASbGncteUU7wz7ltDXC8f4s9V/Uy05YzUhxzUaV9+vNw8O2nfl9F4Ybq3n3Ri0uCUQj
+	hSE3mytkLqT8L3qYBlXG6Vj21jYzQFASvkqhPzjVk4nf75sHec7kPcOOHn4k0HQKdYFosyQqlz3
+	wo55+iKtBhMulqVLYz4s47CS2/sJKSg1CM2dyV1norJsm6VZAUNSyHgjSXP2EOiDVQyTse9F/ez
+	96hlGzHgOJSN0k3t906KVBGVCMx7De237n0MWriK7CoTM862exRr/Qr8y86XpmfSsqyOwelxX1Y
+	82//jkB1Bze80Hm7P6ClceWb
+X-Google-Smtp-Source: AGHT+IHFDPtA7Rh1Tbm1AAknO5KNAPlcPWVIhUujcQtL3AbXorqi10ylyIaAaiPmb1x7jE/kaGHSrg==
+X-Received: by 2002:a17:902:f60a:b0:220:e9f5:4b7c with SMTP id d9443c01a7336-22368fc0c0amr13191975ad.17.1740694906007;
+        Thu, 27 Feb 2025 14:21:46 -0800 (PST)
+Received: from gmail.com ([98.97.44.1])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fe8284f041sm4788667a91.41.2025.02.27.14.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 14:21:29 -0800 (PST)
-Date: Thu, 27 Feb 2025 14:21:28 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Alexis Lothore <alexis.lothore@bootlin.com>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 07/10] selftests/bpf: test_tunnel: Move geneve
- tunnel test to test_progs
-Message-ID: <Z8DlaB3u2HLWZKdu@mini-arch>
-References: <20250227-tunnels-v1-0-33df5c30aa04@bootlin.com>
- <20250227-tunnels-v1-7-33df5c30aa04@bootlin.com>
+        Thu, 27 Feb 2025 14:21:45 -0800 (PST)
+Date: Thu, 27 Feb 2025 14:21:41 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, cong.wang@bytedance.com,
+	jakub@cloudflare.com, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+	ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+	shuah@kernel.org, mhal@rbox.co, sgarzare@redhat.com,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	mrpre@163.com
+Subject: Re: [PATCH bpf-next v1 2/3] selftests/bpf: Add socketpair to
+ create_pair to support unix socket
+Message-ID: <20250227222141.mnvpmnvafisd2pjk@gmail.com>
+References: <20250226132242.52663-1-jiayuan.chen@linux.dev>
+ <20250226132242.52663-3-jiayuan.chen@linux.dev>
+ <Z8DCZO8n39avsvnF@pop-os.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227-tunnels-v1-7-33df5c30aa04@bootlin.com>
+In-Reply-To: <Z8DCZO8n39avsvnF@pop-os.localdomain>
 
-On 02/27, Bastien Curutchet (eBPF Foundation) wrote:
-> geneve tunnels are tested in the test_tunnel.sh but not in the test_progs
-> framework.
+On 2025-02-27 11:52:04, Cong Wang wrote:
+> On Wed, Feb 26, 2025 at 09:22:41PM +0800, Jiayuan Chen wrote:
+> > Current wrapper function create_pair() is used to create a pair of
+> > connected links and returns two fds, but it does not support unix sockets.
+> > 
+> > Here we introduce socketpair() into create_pair(), which supports creating
+> > a pair of unix sockets, since the semantics of the two are the same.
 > 
-> Add a new test in test_progs to test geneve tunnels. It uses the same
-> network topology and the same BPF programs than the script.
-> Remove test_geneve() from the script.
-> 
-> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+> Since it is only for UDS and only has effectively 1 line of code, how
+> about just calling socketpair(AF_UNIX) in your patch 3/3?
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+If we run that test with more than AF_UNIX it might be best as is. I
+think there might be some value testing that flow on TCP/UDP even if
+its not related to the bug.
+
+Thanks,
+John
 
