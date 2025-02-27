@@ -1,311 +1,153 @@
-Return-Path: <linux-kselftest+bounces-27723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC4E4A47803
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92885A4781B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92BE21700F6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 08:38:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4665416AE28
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 08:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BCE8229B00;
-	Thu, 27 Feb 2025 08:38:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E15B0225A24;
+	Thu, 27 Feb 2025 08:44:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G2M8TUyu"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="RHIADAo0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F4222686B;
-	Thu, 27 Feb 2025 08:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554A742065
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 08:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740645484; cv=none; b=obs+GUyc70Nc1NWEudVxyNbOTcI5rBqYaTCHS/R9Ub/KLLXTMQ6LCEWY8ywSalpUkkr/2tybw8Fe4Yv4bOrJv6hoVCLaw0oFy00nVBq4dR9Un/KGsg6QIXDWdjK3vKcIMyBdVtJiwZ/y5JO+Z21fdnmWlBpPkNCOcGzc6LYgrfI=
+	t=1740645861; cv=none; b=AH9OdAPZRMhU6IKUluKs7x3wojOs1aq0Ss0xDNqDdYX4d569yG3rAj5Ou8E+BS5YrmvkLHRT9NWEVxlPJ+YnjF6FK/rq3wr69HqEZZdLxowBHZTv83lPoy9o4dFGdxVPtmQndxAxEkyonxtvjp5UN2NpLNdrj2s0Ot7jyT+EBIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740645484; c=relaxed/simple;
-	bh=FzT/ECMeABHeNeF84rIs6l8GIuZokm7ac23EJgGF+xs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KkHIxChBjikIzDY1s+yv66PwvYKaQ/WK7W6/85RdqmXgqIyYHcyJc9h+kBBQdWKQQAumfZrc3BeOvPWgesfSAzSB5vkC4dpCtWoECMrlbbyzMo/fM+VMyp5NHx1ADcPcEUnDwzMLDKn4SGRPn8sM2E7ZqmdUf/hwprZnH4Rv3vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G2M8TUyu; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-221057b6ac4so9651465ad.2;
-        Thu, 27 Feb 2025 00:38:02 -0800 (PST)
+	s=arc-20240116; t=1740645861; c=relaxed/simple;
+	bh=q5DyFV5gTaMxqJ16Z1qIG2jXFLnd0OlbWwYkvNtHfZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AakbFyhTs5ADE72ejbIevjqX5f1V20/WeEUUzKukqZKKj+OV/mcvCX/9rn3qhwIfsI+73GKt0hLrT3LCwqriCrT1vLRXlVA/NO6yXZrv8MdzXOjsGcgYTgayu1LZ4bd6iXNrs9XzLgqobjKSiI/aqAGI6YA20ByxfEkEWVQdYvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=RHIADAo0; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-439a2780b44so4061785e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 00:44:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740645481; x=1741250281; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=afOILgA/zHRb8Nw9ui16zGP2yzgeLzRcNXnyvIsurfI=;
-        b=G2M8TUyuNbk3PJqGjNqaykfnQByFwuT477qP/84jioILor9XCOA+6nDxyCqcBocYyr
-         i8jsTf/KERui8GVgwaGg1xMOSaeQKgYY2AbGprTdc5KO3ExnLW2reLJS3X39etU8Zejz
-         mN4JgsE2GbqZOQas3ym/Ep9ay4p0hKXEZh94vp2UVZ0bleEJ5eZJB8557SfMsvwAYFve
-         0Tn2RC3FFO/SO5f5Y5Bf2X1xZraYRpUfGW1IKf5ewIL5SV4louML7J2+zkr7dlJvN4q9
-         nH7jwPlIwy1cvXdN+euCxHCWuLqmiJZA/oyu4+k/KrWjMepV6AXlZHHDSAQZLnNvfirb
-         5owg==
+        d=ventanamicro.com; s=google; t=1740645858; x=1741250658; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0eD4WdY2Ar0Qpt9c3iLvWQtqo0+f9AP00jRPqQ8lu4I=;
+        b=RHIADAo0VDugGIIeAcng1OLrH5DX8+FoJnJV6CA3b7I3oQKeOu9D15rnJfjHZNbPJ0
+         iULCF9ZDS+pCiTLwTwTBAFfdPOBHs5Wc0Egy6mcUxj77XXKFOZPqkub6A1FD6hVACOp9
+         TVFDHp1RRBvMe1DMB6ul0FSPNU0Fs3xX1CyBe4Iu0cuy3F0V5iYmA2x+vnAilHXl2dyO
+         mGn3IgmNKNy3xDKsKEBkPFSbD/Nx70OWEt8GcBSTAl7uIMWWMc4l9cHMPlf9jK229Fxu
+         fk6enje3N8CqylKl6I71O6+mcjZ8AOyttkU+T9vZXtvKLx4kr08M0FiN7YRy/dfpTTjq
+         Dc/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740645481; x=1741250281;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=afOILgA/zHRb8Nw9ui16zGP2yzgeLzRcNXnyvIsurfI=;
-        b=B9wj2C2i0/STpTKJvoMcCODtNODwiFA3pKy+fqBNqE5fBwRQE6cTuhIfK94Re07Jlp
-         qm3kBi40903RD86x0/qYB9w1sreamaGJZLyAwlqf7Y6ZNzcgu68KMDptOW8MpuDDNq2g
-         aJTMeISeaexamC1n9N4WAYTPKrthN6LwJTJVBt+S3DpK5DfPClJSvcAFJ3AkLv/Ub5we
-         QRKkEGrLlgaV4i/biypwavFElOjJGFpKEt8N/wy+ArbTYY89+qgDd5lZsD+wty7Cw2fl
-         Tn4WA0F2amMNjCvCtoe9NJvCIaVzFkxFrGDztEkaoeCEUPxmcdtx09t3RXTod9wSgQ3d
-         SWuA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzcSab93NBUaGHI+bMgmxrOOvsXCGrcPMhKMaQkApivKGXrx3VaYj59WOg/MAbJAVrqgnaEuR06yEcxbaZ0Jcy@vger.kernel.org, AJvYcCWkDF+1dyBtUEUfpBJRHw6sgIutWPHMkceaUrjWEVTIgnAJv5zTwyhWi6CPn91hPTkNWoi7Dou8HJj8I0c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyPsjT3EZk1kXolbTWQl621ZITO25zlY0JiwINDngKGrKD2iOu
-	XB3rf+Ol9WqUeNG3Yz1O6n/VqitQvmqnYrKNdlgga1vNqiunZvOeC4EK3O0wQLHJsg==
-X-Gm-Gg: ASbGncu3JtR/JtuYz1J4YarHsXjiTAipjTrS44uZix/qioL/19+hT6QRDS29+W72mmj
-	ab4JQ7HKBir5enhCINSo1dLlnUDFfZoFE7S7c++XAwmbxYQaGHZZrGHL1A+vfyceOpFBlxndWMP
-	snOdrDmAM5mDRMMWW4oDkG6FYYroagJ4EJ7BAdvkmhacf4xhkextf+iFy8HaZJt4phHqsOkRGRa
-	BtQ/gAVuQN6aRQSQyoTES3jf0G9nryhPvBfwEGokgZFIks3s2LNNQKFb5LziHCe7KyFqQuQp5RE
-	pkJVZr0patC08IaGspLHDt9HnuXIfEMGOZgfIk0OdpS8DA==
-X-Google-Smtp-Source: AGHT+IHiJQm5gAuu/tcXr9gjobQJUohYDDCYEQIOHXiFQx8G4kRB5uinLdfdfdRoaXUFc7YbuSpWGA==
-X-Received: by 2002:a05:6a00:4615:b0:732:5651:e892 with SMTP id d2e1a72fcca58-73426ce7667mr38760848b3a.14.1740645481450;
-        Thu, 27 Feb 2025 00:38:01 -0800 (PST)
-Received: from fedora.dns.podman ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003ec7esm966796b3a.153.2025.02.27.00.37.56
+        d=1e100.net; s=20230601; t=1740645858; x=1741250658;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0eD4WdY2Ar0Qpt9c3iLvWQtqo0+f9AP00jRPqQ8lu4I=;
+        b=McRPZVYglmCO++5YlEl+XhxbQRL/b67epoVg9FnnqOOCxQ9k1zm+u/zr1wvvwFfyXZ
+         qWl3emTnbawUch7ODAW51vnlC6aW8eOqOaYaWDFoN3+KtJ3g/njHbeGGdiLEXrMwAOT9
+         UBO4TWtbmt60Wn2zz/O3EnRJIQL6UX2FN5SQbCUF0z4tah64EUrQpcUrKz8A3jaL1gam
+         b7JRXhIC0o/6udJ5ehdOaTikOUos7kGQm8hZiU3CEj2ep/XbcxVB0NHgCb75Prn77APv
+         bayapL7C6URnCeCoust1k78ShhDV50BSD8s/I6eMPMWa6IhlDWqG/lmL4v8tmXmRQ6BY
+         SqSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMSjbvsXspmzPwoz2P8c9xdj7Kab4Gf4Zzw7ScTnd86kny+oGVME5KFpd/dCxEKwauy/haDH0pr4hrnS6T5Lk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4EOM7ykoJLN6x7aGYgXal/r+DrG/IQP8Qun78hTDhbWhM+PKL
+	zcvLLOdnOqAgrnokRztXwnn1IB+J2+Gb9FaEw9endehLziZs4X9ml5k6Avj91oM=
+X-Gm-Gg: ASbGncvQvJ+CqEatxmR5AQKaXi9s8dejTMSUzGAQt+GZREfmVG6HRv8CsPXq/zU9ST0
+	+OIb5zhXqUe08bXaqa1rGPbSoNegkYBNTMu7IfyNItWN+mqUkHogn6bNqH9gjx+GMBfN5YVNsVU
+	yEL4nEeHLBgnadeiJLguz+lkiDzVuWC52vlHcMIwOwe8Uv6H9nqx+QfhgwVJ9LAyRnQZqxGl2dl
+	cT3aeHjNbHQHN9V3WHhtXR5ozw5DuVqX+NgfNn1ZE+x6caDoqtrBsnNc6SShvhhNt5rn7a1v1LF
+	8TZG+2UxhVDGtQ==
+X-Google-Smtp-Source: AGHT+IG7ml0QUrxxm1q148UuaevZWwyImW/BG/iHf4sSOi4FAdGUGP1loq2o5+xFJijpyPDy5kgSvA==
+X-Received: by 2002:a05:600c:3c86:b0:439:9377:fa29 with SMTP id 5b1f17b1804b1-43ab903fe5bmr54754285e9.31.1740645857622;
+        Thu, 27 Feb 2025 00:44:17 -0800 (PST)
+Received: from localhost ([2a02:8308:a00c:e200::8cf0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43b736f990esm15612155e9.5.2025.02.27.00.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 00:38:00 -0800 (PST)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Jianbo Liu <jianbol@nvidia.com>,
-	Jarod Wilson <jarod@redhat.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv3 net 3/3] selftests: bonding: add ipsec offload test
-Date: Thu, 27 Feb 2025 08:37:17 +0000
-Message-ID: <20250227083717.4307-4-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250227083717.4307-1-liuhangbin@gmail.com>
-References: <20250227083717.4307-1-liuhangbin@gmail.com>
+        Thu, 27 Feb 2025 00:44:16 -0800 (PST)
+Date: Thu, 27 Feb 2025 09:44:15 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: riscv: selftests: Do not start the counter in
+ the overflow handler
+Message-ID: <20250227-3799414d0651c86f6a815046@orel>
+References: <20250226-kvm_pmu_improve-v1-0-74c058c2bf6d@rivosinc.com>
+ <20250226-kvm_pmu_improve-v1-2-74c058c2bf6d@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250226-kvm_pmu_improve-v1-2-74c058c2bf6d@rivosinc.com>
 
-This introduces a test for IPSec offload over bonding, utilizing netdevsim
-for the testing process, as veth interfaces do not support IPSec offload.
-The test will ensure that the IPSec offload functionality remains operational
-even after a failover event occurs in the bonding configuration.
+On Wed, Feb 26, 2025 at 12:25:04PM -0800, Atish Patra wrote:
+> There is no need to start the counter in the overflow handler as we
+> intend to trigger precise number of LCOFI interrupts through these
+> tests. The overflow irq handler has already stopped the counter. As
+> a result, the stop call from the test function may return already
+> supported error which is fine as well.
+  ^ stopped
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../selftests/drivers/net/bonding/Makefile    |   3 +-
- .../drivers/net/bonding/bond_ipsec_offload.sh | 155 ++++++++++++++++++
- .../selftests/drivers/net/bonding/config      |   4 +
- 3 files changed, 161 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
+> 
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+> index f45c0ecc902d..284bc80193bd 100644
+> --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+> +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+> @@ -118,8 +118,8 @@ static void stop_counter(unsigned long counter, unsigned long stop_flags)
+>  
+>  	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP, counter, 1, stop_flags,
+>  			0, 0, 0);
+> -	__GUEST_ASSERT(ret.error == 0, "Unable to stop counter %ld error %ld\n",
+> -			       counter, ret.error);
+> +	__GUEST_ASSERT(ret.error == 0 || ret.error == SBI_ERR_ALREADY_STOPPED,
+> +		       "Unable to stop counter %ld error %ld\n", counter, ret.error);
+>  }
+>  
+>  static void guest_illegal_exception_handler(struct ex_regs *regs)
+> @@ -137,7 +137,6 @@ static void guest_irq_handler(struct ex_regs *regs)
+>  	unsigned int irq_num = regs->cause & ~CAUSE_IRQ_FLAG;
+>  	struct riscv_pmu_snapshot_data *snapshot_data = snapshot_gva;
+>  	unsigned long overflown_mask;
+> -	unsigned long counter_val = 0;
+>  
+>  	/* Validate that we are in the correct irq handler */
+>  	GUEST_ASSERT_EQ(irq_num, IRQ_PMU_OVF);
+> @@ -151,10 +150,6 @@ static void guest_irq_handler(struct ex_regs *regs)
+>  	GUEST_ASSERT(overflown_mask & 0x01);
+>  
+>  	WRITE_ONCE(vcpu_shared_irq_count, vcpu_shared_irq_count+1);
+> -
+> -	counter_val = READ_ONCE(snapshot_data->ctr_values[0]);
+> -	/* Now start the counter to mimick the real driver behavior */
+> -	start_counter(counter_in_use, SBI_PMU_START_FLAG_SET_INIT_VALUE, counter_val);
+>  }
+>  
+>  static unsigned long get_counter_index(unsigned long cbase, unsigned long cmask,
+> 
+> -- 
+> 2.43.0
+>
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 2b10854e4b1e..d5a7de16d33a 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -10,7 +10,8 @@ TEST_PROGS := \
- 	mode-2-recovery-updelay.sh \
- 	bond_options.sh \
- 	bond-eth-type-change.sh \
--	bond_macvlan_ipvlan.sh
-+	bond_macvlan_ipvlan.sh \
-+	bond_ipsec_offload.sh
- 
- TEST_FILES := \
- 	lag_lib.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh b/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
-new file mode 100755
-index 000000000000..169866b47a67
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_ipsec_offload.sh
-@@ -0,0 +1,155 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# IPsec over bonding offload test:
-+#
-+#  +----------------+
-+#  |     bond0      |
-+#  |       |        |
-+#  |  eth0    eth1  |
-+#  +---+-------+----+
-+#
-+# We use netdevsim instead of physical interfaces
-+#-------------------------------------------------------------------
-+# Example commands
-+#   ip x s add proto esp src 192.0.2.1 dst 192.0.2.2 \
-+#            spi 0x07 mode transport reqid 0x07 replay-window 32 \
-+#            aead 'rfc4106(gcm(aes))' 1234567890123456dcba 128 \
-+#            sel src 192.0.2.1/24 dst 192.0.2.2/24
-+#            offload dev bond0 dir out
-+#   ip x p add dir out src 192.0.2.1/24 dst 192.0.2.2/24 \
-+#            tmpl proto esp src 192.0.2.1 dst 192.0.2.2 \
-+#            spi 0x07 mode transport reqid 0x07
-+#
-+#-------------------------------------------------------------------
-+
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/../../../net/lib.sh
-+algo="aead rfc4106(gcm(aes)) 0x3132333435363738393031323334353664636261 128"
-+srcip=192.0.2.1
-+dstip=192.0.2.2
-+ipsec0=/sys/kernel/debug/netdevsim/netdevsim0/ports/0/ipsec
-+ipsec1=/sys/kernel/debug/netdevsim/netdevsim0/ports/1/ipsec
-+ret=0
-+
-+cleanup()
-+{
-+	modprobe -r netdevsim
-+	cleanup_ns $ns
-+}
-+
-+active_slave_changed()
-+{
-+        local old_active_slave=$1
-+        local new_active_slave=$(ip -n ${ns} -d -j link show bond0 | \
-+				 jq -r ".[].linkinfo.info_data.active_slave")
-+        [ "$new_active_slave" != "$old_active_slave" -a "$new_active_slave" != "null" ]
-+}
-+
-+test_offload()
-+{
-+	# use ping to exercise the Tx path
-+	ip netns exec $ns ping -I bond0 -c 3 -W 1 -i 0 $dstip >/dev/null
-+
-+	active_slave=$(ip -n ${ns} -d -j link show bond0 | \
-+		       jq -r ".[].linkinfo.info_data.active_slave")
-+
-+	if [ $active_slave = $nic0 ]; then
-+		sysfs=$ipsec0
-+	elif [ $active_slave = $nic1 ]; then
-+		sysfs=$ipsec1
-+	else
-+		echo "FAIL: bond_ipsec_offload invalid active_slave $active_slave"
-+		ret=1
-+	fi
-+
-+	# The tx/rx order in sysfs may changed after failover
-+	if grep -q "SA count=2 tx=3" $sysfs && grep -q "tx ipaddr=$dstip" $sysfs; then
-+		echo "PASS: bond_ipsec_offload has correct tx count with link ${active_slave}"
-+	else
-+		echo "FAIL: bond_ipsec_offload incorrect tx count with link ${active_slave}"
-+		ret=1
-+	fi
-+}
-+
-+if ! mount | grep -q debugfs; then
-+	mount -t debugfs none /sys/kernel/debug/ &> /dev/null
-+fi
-+
-+# setup netdevsim since dummy/veth dev doesn't have offload support
-+if [ ! -w /sys/bus/netdevsim/new_device ] ; then
-+	modprobe -q netdevsim
-+	if [ $? -ne 0 ]; then
-+		echo "SKIP: can't load netdevsim for ipsec offload"
-+		exit $ksft_skip
-+	fi
-+fi
-+
-+trap cleanup EXIT
-+
-+setup_ns ns
-+ip -n $ns link add bond0 type bond mode active-backup miimon 100
-+ip -n $ns addr add $srcip/24 dev bond0
-+ip -n $ns link set bond0 up
-+
-+ifaces=$(ip netns exec $ns bash -c '
-+	sysfsnet=/sys/bus/netdevsim/devices/netdevsim0/net/
-+	echo "0 2" > /sys/bus/netdevsim/new_device
-+	while [ ! -d $sysfsnet ] ; do :; done
-+	udevadm settle
-+	ls $sysfsnet
-+')
-+nic0=$(echo $ifaces | cut -f1 -d ' ')
-+nic1=$(echo $ifaces | cut -f2 -d ' ')
-+ip -n $ns link set $nic0 master bond0
-+ip -n $ns link set $nic1 master bond0
-+
-+# create offloaded SAs, both in and out
-+ip -n $ns x p add dir out src $srcip/24 dst $dstip/24 \
-+    tmpl proto esp src $srcip dst $dstip spi 9 \
-+    mode transport reqid 42
-+
-+ip -n $ns x p add dir in src $dstip/24 dst $srcip/24 \
-+    tmpl proto esp src $dstip dst $srcip spi 9 \
-+    mode transport reqid 42
-+
-+ip -n $ns x s add proto esp src $srcip dst $dstip spi 9 \
-+    mode transport reqid 42 $algo sel src $srcip/24 dst $dstip/24 \
-+    offload dev bond0 dir out
-+
-+ip -n $ns x s add proto esp src $dstip dst $srcip spi 9 \
-+    mode transport reqid 42 $algo sel src $dstip/24 dst $srcip/24 \
-+    offload dev bond0 dir in
-+
-+# does offload show up in ip output
-+lines=`ip -n $ns x s list | grep -c "crypto offload parameters: dev bond0 dir"`
-+if [ $lines -ne 2 ] ; then
-+	echo "FAIL: bond_ipsec_offload SA offload missing from list output"
-+	ret=1
-+fi
-+
-+# we didn't create a peer, make sure we can Tx by adding a permanent neighbour
-+# this need to be added after enslave
-+ip -n $ns neigh add $dstip dev bond0 lladdr 00:11:22:33:44:55
-+
-+# start Offload testing
-+test_offload
-+
-+# do failover
-+ip -n $ns link set $active_slave down
-+slowwait 5 active_slave_changed $active_slave
-+test_offload
-+
-+# make sure offload get removed from driver
-+ip -n $ns x s flush
-+ip -n $ns x p flush
-+line0=$(grep -c "SA count=0" $ipsec0)
-+line1=$(grep -c "SA count=0" $ipsec1)
-+if [ $line0 -ne 1 -o $line1 -ne 1 ]  ; then
-+	echo "FAIL: bond_ipsec_offload SA not removed from driver"
-+	ret=1
-+else
-+	echo "PASS: bond_ipsec_offload SA removed from driver"
-+fi
-+
-+exit $ret
-diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
-index dad4e5fda4db..054fb772846f 100644
---- a/tools/testing/selftests/drivers/net/bonding/config
-+++ b/tools/testing/selftests/drivers/net/bonding/config
-@@ -9,3 +9,7 @@ CONFIG_NET_CLS_FLOWER=y
- CONFIG_NET_SCH_INGRESS=y
- CONFIG_NLMON=y
- CONFIG_VETH=y
-+CONFIG_INET_ESP=y
-+CONFIG_INET_ESP_OFFLOAD=y
-+CONFIG_XFRM_USER=m
-+CONFIG_NETDEVSIM=m
--- 
-2.46.0
+Other than the commit message,
 
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
