@@ -1,120 +1,248 @@
-Return-Path: <linux-kselftest+bounces-27728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B3CA478C7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 10:16:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8342A478F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 10:22:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B586167416
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:16:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FBFE7A52C7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 09:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 254B120C49C;
-	Thu, 27 Feb 2025 09:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C61227BA7;
+	Thu, 27 Feb 2025 09:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQOJVIe3"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="n6ytZsN9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72493610D;
-	Thu, 27 Feb 2025 09:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFD0227B95
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 09:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740647772; cv=none; b=FUjODXw1KwpatDBKK15G5UAmTZtCq65KHb5tnRR612jDodr0mHZH6ND5nfeX2iXUGpIUpxsUJJDpGjJQsvvv/XOd6ghjVsyt1jQSkz4VNzumUiatl+0v81OLPxNyBYj4ISZMJN2u1hBkshIAN5apiq+ok2OzKKDHJN1pS+W5ElI=
+	t=1740648116; cv=none; b=JGJsKeIx20+3wEQu/9zH1ETMFFtCfMQH3HRhFxJh3yOsa65hzImV2jI9ZhIdc+9vKMgjLcxUcXsXrrth9nmZBxyPGhsgbrGAlvoYBt3L+hhXMfMLQnoUCPTcAtQ5YyryfWR5qkv+BGPwvs3A+WyrrMaIszeHFnPrr/IcpJqS4CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740647772; c=relaxed/simple;
-	bh=yOsfABMZ0sE1ZHQj1FgKQRJ1VKmnNc9RYKwfEyQsWZc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UpRVEWRBBCuTA+Gv8JwwS5my/YeUQzlJwo8LRWNUlJrqneMSbScRwDVzZeHRu7cvYWaAI+q7n3n7L7+ji+B87iIXrTsP7zzZFyw94JR6xgL+/ohdPT+3td5tKcBp8hC6SpU9uM5CesJHYjw9A9riI2+hNFkFfWCGmPsC2LL0/7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OQOJVIe3; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-390e3b3d3f4so227067f8f.2;
-        Thu, 27 Feb 2025 01:16:10 -0800 (PST)
+	s=arc-20240116; t=1740648116; c=relaxed/simple;
+	bh=qJ6d6yyVEiOIzWKAFqn29zVljBDyaAUEI1J5TgXK8MA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ofGund55dNOqWbUOtK7HKsoOz4d1dq2WOmpc6oJuiKfzJLODC/I64LROwbp1o7Tdbk1ybNVp1Bt07PVlm/lePV9CbNTKuPr2Wm8jL34yEMYfVMY9gxFAhLmIMN9N7I3YXS/fWWjdn0lfDJmll0zdIscz9tzJ2IzVoEMGroGazYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=n6ytZsN9; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-abba1b74586so100737966b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 01:21:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740647769; x=1741252569; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WFYMYntfI5RNwyhQrJtu6qewVIVsOL5AS7y8ehMaJFM=;
-        b=OQOJVIe3f4KrDcYbdJiGDh4mgWXilGopQ+BiJrJ2/EE81ULQI9QmjaLiOA30TxPCm6
-         pUJy0KaCLRN8yX/jAC/7LB/J6iQESoF9Yuqowucpw8udMnUYjtuOCuZ1rkZrMfDHeHav
-         JEIr/PIGNz/GjDkOjpvDguSB3g3x0/70QEaShK4CyzJTJWcYgBf+pOB0vWTIdQ9H+eqX
-         HEt5xI9sYrZuED8NK1Uxyw4VwgVvi9wJk6vD5Qd3Ble16WwA8Ckw+OQTyJnawRPHIvZV
-         uMUEgHxkLswRmBuEQ24zzJAMCynPyfNvyxbiVKa8CmsK3ohgOP0Vc3XxwdAI68JCDKcg
-         hOEg==
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1740648113; x=1741252913; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QGKuyOFdmCrFZDueE7tG98lW1JYRuqGd31pjDPdwi0A=;
+        b=n6ytZsN9bCZOytA5VLbihqdX0iuFDF1y6DcGq8WceZddRdPOc33d+6PLBb+Ej454Kb
+         GfGyu2CNZ0u03yzImi5gZNQ4bRcqxQ5jlEa+nwhtYt0MXWZx8d9HLyEomoigX2Wmg9jr
+         YFOFpSaO4g7ZqUozXLMwYSQPhYOeZbJjGTIC11m2IHsqMwgaQo4gvh2FWqaby4AuvltE
+         Jk7Qo5bWETupQiI75zzai2Xk/JSkO8vGGXKflj7iW+kYVtD+wBmhV9RKbPYV8g5p7w+d
+         4z8H1xAFYOmlURRFX7gBKXHv2RsTGPfBojfdgq2mDGPmwfCERSs+3Tlg9t0Bv63fZooD
+         ljiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740647769; x=1741252569;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WFYMYntfI5RNwyhQrJtu6qewVIVsOL5AS7y8ehMaJFM=;
-        b=e8dutXgh8ZyvXV8s/vT6rYvgQOzO6eAQQ6c/BpzEwpXKa5SjLyUYcEK2iksooV3wQ/
-         TYLPC8laksmPrCFecyEcUx+HWwaukbHDxViODeVQM0/lEk0THGS6eiMVz5WGVqZ+hIrI
-         Ja1TYQpoOhnUGx7EuEPGDHNLodjH5CbMYUkFqcleLOEgjr9bbY2QGa3CxlHiDQ+zEzyw
-         lTqxw6lrj+WJrF6Qw3GAkzOfIVc3oo8UKpHXY+gJUplH/8B3uIEu/ugMuT6OeTBJYS4G
-         WbOqZ1FZPYj6c3jwASP/bNYoubtSDa8MFJ7k3lbYKHnxEyD498oNvFSJksEi54c6CFoN
-         00lg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHF0KJasmuWv88M5uT2UsOInhE4/NLFTfOJeEUPGmva6IGZg8PuVAkJRhPMeNjIdzS+sTVrL1/kxcfDuyW74bn@vger.kernel.org, AJvYcCWiwASnSZUoqF2MjjXIN4mEqCfYFnvrCcKpblS5/nUp4wM3BniivXY6b1ThjOgoBMO6IxOCCqEBYUNdA+8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYEZ5IjhE4QHixBpg5FtwnRIoeCxmpZnDULRSwNKFosfTk75Iy
-	CkGbuZuHXRaJ2n59PYmJWbU6UCxo0QTnbjv1CaLiBcQa1OAYmT0e
-X-Gm-Gg: ASbGncvhel/1JjCGj6AMDjlmlYDdtDMOb5tUQVjrFg0vq98NBo7GtHwtELO5fuB1ok9
-	Zx+NJ/CnNRhecKheod+VQho2qq6Nr4R8wN9/e9n9EBgqxmbLr44pVehUHUJp+gh7g7NzxO1GPIa
-	oKsn3BcziWAjRfCzILaTfuxlCcCffLApjLjWGubsGan4GLcPY4Rrx/MkvgtWM+fR+VWjjyb+dPg
-	2YqwRLJFeLejcuzQmno6QS2p72Bl85NXkN5qb4IPxEKF+X9NzGWK/HG28N8BMRxjpIZdqMAmUJc
-	/OXrSlwWzHZoT+9ingfxA2JpfhI=
-X-Google-Smtp-Source: AGHT+IFAPTikd8GhfINysJU7hs90/Y2JHzQmgBsIhed/Xp8RlqinQ5hbzAaTGOM0p/I+9bU3S4ieTg==
-X-Received: by 2002:a05:6000:1541:b0:38d:d767:364 with SMTP id ffacd0b85a97d-38f70789915mr18817554f8f.13.1740647768502;
-        Thu, 27 Feb 2025 01:16:08 -0800 (PST)
-Received: from localhost ([194.120.133.72])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-390e4844c0dsm1355881f8f.80.2025.02.27.01.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 01:16:08 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/x86/xstate: Fix spelling mistake "hader" -> "header"
-Date: Thu, 27 Feb 2025 09:15:33 +0000
-Message-ID: <20250227091533.599213-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.47.2
+        d=1e100.net; s=20230601; t=1740648113; x=1741252913;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QGKuyOFdmCrFZDueE7tG98lW1JYRuqGd31pjDPdwi0A=;
+        b=pa0s96ZdntFZ/NXCnUmpQ/fTyrk5k0lpkBNOvmymSh/5cBBmacAFE7t1CuShWKqgVb
+         Z7byYIMiVbrvfQSvGBHuFsiBMOpKMQHeXDfRkOa6K5D8Wa7dZxe9+TasTNJw3n+2i0jb
+         7IEmEyxt7EjqMAVQ1g1o6wdNAhB/i2Q1DKZb0TMpfC+WkyCzsWYmzc92e7lU2uFqy/DE
+         OOCZcZoDwGT8WjqacKl+K9778ZgDuRSWVgfsNWaSvi/4TryT/0E0iMUDCKbP61eONOuZ
+         zsawn/SQIl1uib7t/a1zv3ulxZmqVt9DQopDCL7qTZBgjBwoULhBer1TNa7b2qK1uIGF
+         joWw==
+X-Forwarded-Encrypted: i=1; AJvYcCVvs4htNOaUP6M4WMigt36A0q3hIjcOAaUG0pzM4UFwxozJ3et/LOYVBtc43kN6hUzHCVi2bxER2QgtXe21WyQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi3U8FF+4ERt1usqo2FaZBIMmSWPgWEn2XcBtXTjIa/SjgArzs
+	p38lnPsHgvf3Msu2A1cBJszV6fqWIQ6Xr1hq+Glwq3Yhe4AJ+fT9TWfkxAihL7M=
+X-Gm-Gg: ASbGncvBk6E5r656SdBp9ntJEJ/JwG077Odz3pKLsdNNAd0ObTQzz6UaEmF9udpWqbk
+	TxjqB+uK+AM3qflwlQi8FeoYjqn3IxmRzStucDbJeJxyu9rfyFXemmvLb7orzT9iXl3kjiuOTUq
+	HRKkD+lWSsKQHNEDZmIBOGPe0k42BPO7QEMekxGmTHPitx5eE20Bu0RcCIP5s6SPu1V1n/vRi4Q
+	TLkHDEahLLrtPmlNeT+ngWCk2f+YOt1tR6suebs6L/kmmcUy7556i2JMMqMWjThCEGOL/X3ayVD
+	9oNRIGKG4ioLrc3+lXZDD/Mzx9n0wxb2JP3h29vZXOzUhJInIZTj5Qlb4w==
+X-Google-Smtp-Source: AGHT+IHD+cNx6yl3X1EnkFEtFKEHouxEwyh4QDe/AW5lHxTVz7/szNt45pitj7P8HvFW9mO2l6DKdg==
+X-Received: by 2002:a17:907:7fa3:b0:abb:b12b:e103 with SMTP id a640c23a62f3a-abed0dd817amr1443127466b.34.1740648113102;
+        Thu, 27 Feb 2025 01:21:53 -0800 (PST)
+Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c6e9c25sm91516366b.108.2025.02.27.01.21.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 01:21:52 -0800 (PST)
+Message-ID: <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
+Date: Thu, 27 Feb 2025 11:21:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv3 net 1/3] bonding: move IPsec deletion to
+ bond_ipsec_free_sa
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+ Jarod Wilson <jarod@redhat.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Cosmin Ratiu <cratiu@nvidia.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250227083717.4307-1-liuhangbin@gmail.com>
+ <20250227083717.4307-2-liuhangbin@gmail.com>
+ <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
+Content-Language: en-US
+In-Reply-To: <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-There is a spelling mistake in a sig_print message. Fix it.
+On 2/27/25 10:50, Nikolay Aleksandrov wrote:
+> On 2/27/25 10:37, Hangbin Liu wrote:
+>> The fixed commit placed mutex_lock() inside spin_lock_bh(), which triggers
+>> a warning:
+>>
+>>   BUG: sleeping function called from invalid context at...
+>>
+>> Fix this by moving the IPsec deletion operation to bond_ipsec_free_sa,
+>> which is not held by spin_lock_bh().
+>>
+>> Additionally, delete the IPsec list in bond_ipsec_del_sa_all() when the
+>> XFRM state is DEAD to prevent xdo_dev_state_free() from being triggered
+>> again in bond_ipsec_free_sa().
+>>
+>> For bond_ipsec_free_sa(), there are now three conditions:
+>>
+>>   1. if (!slave): When no active device exists.
+>>   2. if (!xs->xso.real_dev): When xdo_dev_state_add() fails.
+>>   3. if (xs->xso.real_dev != real_dev): When an xs has already been freed
+>>      by bond_ipsec_del_sa_all() due to migration, and the active slave has
+>>      changed to a new device. At the same time, the xs is marked as DEAD
+>>      due to the XFRM entry is removed, triggering xfrm_state_gc_task() and
+>>      bond_ipsec_free_sa().
+>>
+>> In all three cases, xdo_dev_state_free() should not be called, only xs
+>> should be removed from bond->ipsec list.
+>>
+>> Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
+>> Reported-by: Jakub Kicinski <kuba@kernel.org>
+>> Closes: https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
+>> Suggested-by: Cosmin Ratiu <cratiu@nvidia.com>
+>> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+>> ---
+>>  drivers/net/bonding/bond_main.c | 34 ++++++++++++++++++++++-----------
+>>  1 file changed, 23 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+>> index e45bba240cbc..683bf1221caf 100644
+>> --- a/drivers/net/bonding/bond_main.c
+>> +++ b/drivers/net/bonding/bond_main.c
+>> @@ -537,6 +537,10 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
+>>  	}
+>>  
+>>  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+>> +		/* Skip dead xfrm states, they'll be freed later. */
+>> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
+>> +			continue;
+>> +
+>>  		/* If new state is added before ipsec_lock acquired */
+>>  		if (ipsec->xs->xso.real_dev == real_dev)
+>>  			continue;
+>> @@ -560,7 +564,6 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+>>  	struct net_device *bond_dev = xs->xso.dev;
+>>  	struct net_device *real_dev;
+>>  	netdevice_tracker tracker;
+>> -	struct bond_ipsec *ipsec;
+>>  	struct bonding *bond;
+>>  	struct slave *slave;
+>>  
+>> @@ -592,15 +595,6 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+>>  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
+>>  out:
+>>  	netdev_put(real_dev, &tracker);
+>> -	mutex_lock(&bond->ipsec_lock);
+>> -	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+>> -		if (ipsec->xs == xs) {
+>> -			list_del(&ipsec->list);
+>> -			kfree(ipsec);
+>> -			break;
+>> -		}
+>> -	}
+>> -	mutex_unlock(&bond->ipsec_lock);
+>>  }
+>>  
+>>  static void bond_ipsec_del_sa_all(struct bonding *bond)
+>> @@ -617,6 +611,12 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
+>>  
+>>  	mutex_lock(&bond->ipsec_lock);
+>>  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+>> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
+>> +			list_del(&ipsec->list);
+> 
+> To be able to do this here, you'll have to use list_for_each_entry_safe().
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/x86/xstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+One more thing - note I'm not an xfrm expert by far but it seems to me here you have
+to also call  xdo_dev_state_free() with the old active slave dev otherwise that will
+never get called with the original real_dev after the switch to a new
+active slave (or more accurately it might if the GC runs between the switching
+but it is a race), care must be taken wrt sequence of events because the XFRM
+GC may be running in parallel which probably means that in bond_ipsec_free_sa()
+you'll have to take the mutex before calling xdo_dev_state_free() and check
+if the entry is still linked in the bond's ipsec list before calling the free_sa
+callback, if it isn't then del_sa_all got to it before the GC and there's nothing
+to do if it also called the dev's free_sa callback. The check for real_dev doesn't
+seem enough to protect against this race.
 
-diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-index 875777911d82..23c1d6c964ea 100644
---- a/tools/testing/selftests/x86/xstate.c
-+++ b/tools/testing/selftests/x86/xstate.c
-@@ -391,7 +391,7 @@ static void validate_sigfpstate(int sig, siginfo_t *si, void *ctx_void)
- 	if (get_xstatebv(xbuf) & xstate.mask)
- 		sig_print("[OK]\t'xfeatures' in XSAVE header is valid\n");
- 	else
--		sig_print("[FAIL]\t'xfeatures' in XSAVE hader is not valid\n");
-+		sig_print("[FAIL]\t'xfeatures' in XSAVE header is not valid\n");
- 
- 	if (validate_xstate_same(stashed_xbuf, xbuf))
- 		sig_print("[OK]\txstate delivery was successful\n");
--- 
-2.47.2
+Cheers,
+ Nik
+
+>> +			kfree(ipsec);
+>> +			continue;
+>> +		}
+>> +
+>>  		if (!ipsec->xs->xso.real_dev)
+>>  			continue;
+>>  
+>> @@ -640,6 +640,7 @@ static void bond_ipsec_free_sa(struct xfrm_state *xs)
+>>  	struct net_device *bond_dev = xs->xso.dev;
+>>  	struct net_device *real_dev;
+>>  	netdevice_tracker tracker;
+>> +	struct bond_ipsec *ipsec;
+>>  	struct bonding *bond;
+>>  	struct slave *slave;
+>>  
+>> @@ -659,13 +660,24 @@ static void bond_ipsec_free_sa(struct xfrm_state *xs)
+>>  	if (!xs->xso.real_dev)
+>>  		goto out;
+>>  
+>> -	WARN_ON(xs->xso.real_dev != real_dev);
+>> +	if (xs->xso.real_dev != real_dev)
+>> +		goto out;
+>>  
+>>  	if (real_dev && real_dev->xfrmdev_ops &&
+>>  	    real_dev->xfrmdev_ops->xdo_dev_state_free)
+>>  		real_dev->xfrmdev_ops->xdo_dev_state_free(xs);
+>>  out:
+>>  	netdev_put(real_dev, &tracker);
+>> +
+>> +	mutex_lock(&bond->ipsec_lock);
+>> +	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+>> +		if (ipsec->xs == xs) {
+>> +			list_del(&ipsec->list);
+>> +			kfree(ipsec);
+>> +			break;
+>> +		}
+>> +	}
+>> +	mutex_unlock(&bond->ipsec_lock);
+>>  }
+>>  
+>>  /**
+> 
 
 
