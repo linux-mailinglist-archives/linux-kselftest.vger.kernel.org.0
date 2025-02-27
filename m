@@ -1,208 +1,343 @@
-Return-Path: <linux-kselftest+bounces-27776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03979A48306
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:33:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 118B2A4830D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 16:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C53816F0F5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:32:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 536BA3B5822
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 15:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF4125F7BB;
-	Thu, 27 Feb 2025 15:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC62B26D5AB;
+	Thu, 27 Feb 2025 15:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dFDuJiN/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PAVL7+P4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2079.outbound.protection.outlook.com [40.107.100.79])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEBA13AA5D;
-	Thu, 27 Feb 2025 15:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740670369; cv=fail; b=FCm0nSqnwUedF4mEzDl72KW4NUc+T8AbMZ7X3sm1tj/ZWV/x66KFf/47X/gvjPA8A97efE+pQf42n4lG8RllkCem4NhMcZ6u95wF6lft9g+8Hb7kHLwSbaL+tPEOf5CMCP4K4dG0Gudv3yz0isK2l73YTqNKSFjb1tLFRhnB6X4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740670369; c=relaxed/simple;
-	bh=9Zh6XMyampM+o+7OhrMM0i3Ot1PlX/e2mMFn4n+hEzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=W0yxPx7/2fd0nrtt+pZ0+oeqeIGINLKk5gcnuBU97wDwwwwIjfRqn0VcJFgO5p5D8alsjsTO/GklpATW+Xpr1a1C5OS3ZDWuutv5Edpoyubww+tFj1IC0m/juPgB8re7z1mt+EOr3j26cLIZbluWzzAFKJeFVJzIzWWmK0j2Evw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dFDuJiN/; arc=fail smtp.client-ip=40.107.100.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=t+GcWN10KOeD8/YPlYYoqHfZVUyVD2wLp4i8RoyAHacRKtzVFxYYPZ0YPpOiSPIA80F3tvTu0g7OZWiw/sAp+tNK16lbe2nCPJFKLkfGGBxK6ELZDJDs1MnCoqH9Xxy1fQRFDlVV0pGFvvgCgQwCI/GU7d+aoD6a1y5ZdVPI01RTYCSwlC81AF95RVY8GZqbEdd5by8bVdFzhulVV496SQFLudaIBociE8MhjVMAZyIra2CjFJQKu3qPwN7GfZTuqSuH8bms5LE2mXh4tnPFVkhDOyhEI263ZsJuVMHVkoF+hbEmLAtFCqKk3rt6UQdpay6/YYIk77mZofptpLgrHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Zh6XMyampM+o+7OhrMM0i3Ot1PlX/e2mMFn4n+hEzM=;
- b=P2MUdjua7+im7uDoO+4YDW51m4hlLLIq9O4aqvzNKH0FALTyANcBu6fqxb8L2S4sDxuxrWjgbNepXWQdrNB8ZIE7okwaTCyfpzvxsfsRTtPwCLQ67d2gSO1q1F9o+CPRC53JcB8iFpgDjtP+v+AkHv/20z1MEYwnrSNFXKLkxhO0kiBppT2rxv3ucrY+5P+V1cDaOYqXIunlPBJ6Oro0nkZaSasObnyMeKq+oNvQA/LAiuy+ivlC1CXi2OD9TOTuTJkywxQEhrcU5xkHjaYL97Nkhcym3LuDnbPlzl8ObBYp7PjkhIs13LTEPNyqOSL0eHz3GEqphRqrXbFOcxCKrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Zh6XMyampM+o+7OhrMM0i3Ot1PlX/e2mMFn4n+hEzM=;
- b=dFDuJiN/fmsLtftrQePiE3VaQT9y8fc4oxTJ4G74gGfY1cVBAUBgoAsfUi8gY5a7WK7M5o5UDicj4ESh/7yHEGBLCL1Ad9mX0DfduVGaiiuTvEYrnzufIzVNeHm+y0ByUDVRee3Ux+13b6WDkEgZEgRyOvZ6ukKmS6+Rn+hQ6z8LVXpmS4/dWDLWoCr/H48wY+NgfkKPIYLjLBEB8tg0CAjYcfX2rkpH28PaC7JELyKb1Esex4gdYBCoiI/ULs3ZUm9zuPv220fUpb1QMjDqg4aEvVwy7ifKrDtNNsYIJX1q77/Byn9jKy6p2rwRU5fnVR9/0lRhmpcD8uZ5DD/01w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MW6PR12MB8663.namprd12.prod.outlook.com (2603:10b6:303:240::9)
- by SN7PR12MB6909.namprd12.prod.outlook.com (2603:10b6:806:263::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.25; Thu, 27 Feb
- 2025 15:32:44 +0000
-Received: from MW6PR12MB8663.namprd12.prod.outlook.com
- ([fe80::594:5be3:34d:77f]) by MW6PR12MB8663.namprd12.prod.outlook.com
- ([fe80::594:5be3:34d:77f%2]) with mapi id 15.20.8489.018; Thu, 27 Feb 2025
- 15:32:44 +0000
-Date: Thu, 27 Feb 2025 11:32:42 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
-	tglx@linutronix.de, maz@kernel.org, joro@8bytes.org,
-	will@kernel.org, shuah@kernel.org, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	baolu.lu@linux.intel.com, yi.l.liu@intel.com, yury.norov@gmail.com,
-	jacob.pan@linux.microsoft.com, patches@lists.linux.dev
-Subject: Re: [PATCH v2 3/7] iommu: Make iommu_dma_prepare_msi() into a
- generic operation
-Message-ID: <20250227153242.GG39591@nvidia.com>
-References: <cover.1740014950.git.nicolinc@nvidia.com>
- <4ca696150d2baee03af27c4ddefdb7b0b0280e7b.1740014950.git.nicolinc@nvidia.com>
- <5b9e15e1-8081-46ef-b9db-3872e98a6f35@arm.com>
- <20250221164400.GN50639@nvidia.com>
- <634c60ea-fec3-43ad-923a-cf9ba5e76065@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <634c60ea-fec3-43ad-923a-cf9ba5e76065@arm.com>
-X-ClientProxiedBy: BL1PR13CA0404.namprd13.prod.outlook.com
- (2603:10b6:208:2c2::19) To MW6PR12MB8663.namprd12.prod.outlook.com
- (2603:10b6:303:240::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE8D26D5A2
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 15:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740670447; cv=none; b=cOStluEEf5IWlfrZmUA4x1Hi9SVhIpc8E8JReKX/93EPYu6R98Kid7bXBIWM62guveIxgFJahlC6iYQU8PAd0t3hUmNLJwk67rwNTXjoXN3D3Nm1YC0MA08ZTsSW8BVIZQh2r7tv1bXHXg1XQleu4KrCmQ3cpFIBlWFgF/OSmZY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740670447; c=relaxed/simple;
+	bh=0K3d8F/xVoOQDemlJCe7zkTMGCdS+at9S4Wn6xK5jsM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JufricxfQu+tZ0R23p2qmcdbspp2KwlD8eawCiZu+ZEZWfq9bBznJRb39hs3ihvzE8WH3PzY7QJ9WrXm9/68fNxWJpHNTZw152kDjqufXWv7kCfpklVbW3XDuAlxCrnNyQDJiIRTTCS5aM/pe98KigRc/x2zIi7wJOmhHiQQ9GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PAVL7+P4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740670444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BbjEMY8/mdvBBPR5YIiGfY/QlRvz6+lINWP41WIENPI=;
+	b=PAVL7+P4OjwCwmd0yr/ebtVTrPWgLWmAlFgA3YHVeLv0fjDI4EZTcr2AQR/V9aK4LhVj5a
+	j1XmDosrfOc/lyIBkjZS8ExTNp5KhfLxKWFlNLIzq4I+WsY5pPdoAtTDybwRtA+v/skNMj
+	SCnMDHtzAXNq0rMTXxIkamNXhKOsS3k=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-612-7HggNbDrNra1N4q56Om2mQ-1; Thu,
+ 27 Feb 2025 10:34:01 -0500
+X-MC-Unique: 7HggNbDrNra1N4q56Om2mQ-1
+X-Mimecast-MFC-AGG-ID: 7HggNbDrNra1N4q56Om2mQ_1740670439
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4F98C19560BC;
+	Thu, 27 Feb 2025 15:33:59 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.45.225.72])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 47B8F1800358;
+	Thu, 27 Feb 2025 15:33:56 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Ingo Molnar <mingo@redhat.org>
+Subject: [PATCH v11 3/3] selftests/rseq: Add test for mm_cid compaction
+Date: Thu, 27 Feb 2025 16:33:27 +0100
+Message-ID: <20250227153329.672079-4-gmonaco@redhat.com>
+In-Reply-To: <20250227153329.672079-1-gmonaco@redhat.com>
+References: <20250227153329.672079-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW6PR12MB8663:EE_|SN7PR12MB6909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5b050f2c-fd06-475d-0742-08dd5743faab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?OKn1r7/8vOGoJ1nkN3BHg/PP2nTBr/H13fwaJRfhyyUL+jPo8yN17LWaE+ib?=
- =?us-ascii?Q?7GYhk0zntWXjv12VrQH6Y/vAvkU7FmhGlI6JfyjV0Trsoo2hYFPX3SBqry7u?=
- =?us-ascii?Q?CweIWGiS9ImOT5XruJ2IuJxvno/52L/1eOWQKi7ekq8hNxCfjBFEyUDbaY2+?=
- =?us-ascii?Q?kUzzHcjHHRQGEXrNshfDwOvtlmrnVOXBF415OfpHDnogkjcuZ8g4Map2YbYz?=
- =?us-ascii?Q?TOHMwOR4OhwWorqNNGIa92zQaEiHH1+/ubWlgRuAN+GPUF6b32YllIli3FTS?=
- =?us-ascii?Q?qXURMKqBPJvODSEU8XKZ3BD8kcOjKINRbgqaaSNs5SFTozwyUlEvj32lbVre?=
- =?us-ascii?Q?Ha2DWoMyTL1SVBI+LTR9i/ebGwMDmi0FzQMN9PUi2CLiBjHokWi2BqKnReM6?=
- =?us-ascii?Q?2dTf6EVCS1DKHdKk5lDZZtxEbODN5tnJRfJs7lxBsRouOV8lCTW1SmlgozPD?=
- =?us-ascii?Q?wSQmUOQdn4hY3KNh6R7Wn+XvqEuPMtkZSeWPWx7sy5nyuv/dhxXD1+8Lhaa1?=
- =?us-ascii?Q?9eBlsmAh2QcMccUKf5GylDjWL4N2aOX0F8fNZSDSX8+aIjvJw1wpESa1wFJW?=
- =?us-ascii?Q?PFL3Uykb4gqMqYb1iQkpHjgJszPZElD7UnViflBIR2BKgxACMYS7xAvCAH0P?=
- =?us-ascii?Q?59nXmdnxXgoQ8/aI1+i1ec1gcjClowlH6vjAQO96ih4J3MdvGOfhplZLI7aM?=
- =?us-ascii?Q?z22Bq6AQ12BYuQrBR4XW/0qDbwuOgqcSeedcSba73L/J1rswtlreRV9p7n1u?=
- =?us-ascii?Q?X6qGfFc45Xiu58GQXZIJ16R00Nfxc4Joreerhnpa5u8m2qq+8yrBBfzkVMgP?=
- =?us-ascii?Q?L/6r1OJg9CODaI21ghRQB0qw7oagri2KfJ10V8uOsNCZnuG7ogEo4Nawb594?=
- =?us-ascii?Q?mz+2MAtB3na7slliPE7jIt1fiSzTihKw/Xb6Ay2+PXxQ0SHXXXQ3XrHvvn12?=
- =?us-ascii?Q?AS3reWrLUdQ4zFp+Hk6yXmNR9Tyj1GlUZJr+68BVLNcEqVDq6f5ocTH71Pre?=
- =?us-ascii?Q?Kbu0uwM6FfB9CFSj7q64EbBtbKNSEt76daSJqKubuq/ryNjkLV6vMNDrFe6D?=
- =?us-ascii?Q?4LR0jvJC2mlFst2GvABh5kzNTXpPcogkoo87QK6QplqTHq7b6+QAEkQgRE5H?=
- =?us-ascii?Q?LTVJI5prrp7sBiz8h/hpFeOjcFMBwn2XpZDnhYDEWzb59auMRE7qiQQM7HD3?=
- =?us-ascii?Q?D2Rg56lotIltO3MmILqXkOi7YuRCYMDqwqnHAbOLB8UprmAPsjJbiGI5krY7?=
- =?us-ascii?Q?FnfbMLnpqwjNdQpTgr4lDDHPI29HL+r3dpE27tttczlh+E08w1OT4KitG0P0?=
- =?us-ascii?Q?RTBVQRNdndszRn4CX1jhnvpDU8CK/ib5ag0f45++C70XarDUM6X6GzE3l6QC?=
- =?us-ascii?Q?6vgHMg8eS+uNAUFOaoVJ11zp8+8q?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR12MB8663.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?nhxSyEfNBsD2t9L8dYKGVJqj1uPO7oRxkxmL19bDRQudisfs1ERwnHZ2TUZL?=
- =?us-ascii?Q?FMNiCXyELp4BFjpbdM71b/BHwnfOlso/q5NwJmjEt15qAwakDQNNupCWGC5C?=
- =?us-ascii?Q?r0lPzJLCVhEYdfT8Kt+Whu0YMHvG3lXHJKfOdxMOJ8UI+7x5UCat/5erwRfl?=
- =?us-ascii?Q?XXcwsUUqGvWSuF5i/c/xPNES5jgnqBjTivMCn451MnMPKHG/dOFXDzzXN8RM?=
- =?us-ascii?Q?1KOFyFIpTij62DN81AejxKM2XsAJp0JZBREBz36ZLUPXSmndy+JytYL0rP8H?=
- =?us-ascii?Q?lbVLpBRx4cg972s9r+ue8y0bGeg5Cl0VAo3D3FGpo6h2EYU1PWtuMwWC0D0t?=
- =?us-ascii?Q?YEkXpOYhgwK2fBBP6bUI2LAm2HJdvO6MELe9pT4BlVgkMhAsaDD5IKU6YeDM?=
- =?us-ascii?Q?FcHomvyiJe2BylTUaMjM8aqjkkPMTIsxlF+Bi2zCgVtnkk/E+bqOlfTRFHq3?=
- =?us-ascii?Q?GBw8ee5wrYo/Pih/GbqrWgMR3gIakbxrDKdSC0/ZPKSscNGbgLa76mpq4s/2?=
- =?us-ascii?Q?+kNp7cjLoz1eCNvvuP9DwIEj5hnCIaBWIx9R5W4Z3oPVLiOtaU0wLbSS3LGT?=
- =?us-ascii?Q?/8gI6Fbw25Q6A0e+1002pdQigspVUr6S1Kkz2sVSHSivtHfARip3qhZMwmkR?=
- =?us-ascii?Q?osmbfdujsdXVhNcW6GcbzsZdTg9m+uxHdEoZIoDrgVdSCNIOoImy8xurP+2C?=
- =?us-ascii?Q?fGbWnM7K8RHW5j98C5/ZPoF38hJQyHv6W80II0S4FW7Lf34EeHDuCwG91+G8?=
- =?us-ascii?Q?dFfNshs29cMCQiL8tErN6ZAilXs1mAJIdQFBhOcr52qPSd7NI+gf+SxnsfDR?=
- =?us-ascii?Q?ZdGHls22EESCNVu5tJl3vDjfsm60883DfbjkdCFmucuVKdclAOHsLhBDXIjB?=
- =?us-ascii?Q?SDtj9qrxroY0Mq/jZ1dhqfuYEoarslxg/z5oGzFA2LzSBJSS1i3TLgd1mGoQ?=
- =?us-ascii?Q?rTGkhgcoBPNqXLFRL2wnEQ2OrYbx0eMC6n51oaCEEu+GkMd4zw7ovKg2j25W?=
- =?us-ascii?Q?EmhUL8SvgT86se4Digi8gpmUXiYMIVu45ZJqrb9QzLj+S4lbHZqOobVZDmh+?=
- =?us-ascii?Q?90cpxd3bBPBZpFOm2nPXf3aA8BVnQpqgq3djG8+TidP9rhEEq/CnkKuszd5q?=
- =?us-ascii?Q?uj+XNqjOc2oJYbnwaPZi2I67YQgTN3hksv+QkyUdKILM6SuNjnZFrapBr9oV?=
- =?us-ascii?Q?ws6C0toJOiCHFmkh3ztuDXrj6Y9ctHpUIjPCE7Ujy94iqvBKEk7JeokKEv9S?=
- =?us-ascii?Q?V5es/54Fs25IgHXsqdxECc4BgB5dMjM8QJUSIaAqsw6Qsy0xmr7uV8VmQPlT?=
- =?us-ascii?Q?kAdjohqf2zppXdhh1c6fCDNYblnRKRG3VDcjJ0TytSkpgupJDbwu2ioTu0sc?=
- =?us-ascii?Q?V0+ajTmh/og2dn3tVkIt2CUPYbedAEMzr4w4vhv/WLrvhoUXlg6N1Y9P6a9A?=
- =?us-ascii?Q?J6JZI/hgrwq1SolxDSYvELPB+weRF6qUftcUndeUe3ONTOYdww6HRwzSYXDo?=
- =?us-ascii?Q?mxqQcKuiT9j42pOyb/tl9r2C/ptg4lm9nW2RnvXn4g7aFqLdmBFTZxajqPxd?=
- =?us-ascii?Q?NOaelLXjHKCoAL1FbXJYI57sw9QgElSx3S9bUq4a?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b050f2c-fd06-475d-0742-08dd5743faab
-X-MS-Exchange-CrossTenant-AuthSource: MW6PR12MB8663.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2025 15:32:43.8622
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l9r9e+NRf0+UkhnobGoCCpnXISXiWHJilEyOl70Z8pbuhyDNLdhCLk7qksOm/EJY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6909
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu, Feb 27, 2025 at 11:21:28AM +0000, Robin Murphy wrote:
+A task in the kernel (task_mm_cid_work) runs somewhat periodically to
+compact the mm_cid for each process. Add a test to validate that it runs
+correctly and timely.
 
-> It wouldn't need a hard dependency, it's easy to have a trivial built-in
-> stub function which becomes valid once the module loads - you literally have
-> the iommufd_driver infrastructure for precisely that sort of thing already.
+The test spawns 1 thread pinned to each CPU, then each thread, including
+the main one, runs in short bursts for some time. During this period, the
+mm_cids should be spanning all numbers between 0 and nproc.
 
-Yes, but I also kinda dislike using it because it bloats the built in
-kernel for a narrow use case..
+At the end of this phase, a thread with high enough mm_cid (>= nproc/2)
+is selected to be the new leader, all other threads terminate.
 
-> All I'm saying is to hide the callback detail in the IOMMUFD code because
-> being IOMMUFD modular is unique to IOMMUFD and not the rest of the core
-> code's problem.
+After some time, the only running thread should see 0 as mm_cid, if that
+doesn't happen, the compaction mechanism didn't work and the test fails.
 
-Maybe we could use a global function pointer set/cleared on iommufd
-module load?
+The test never fails if only 1 core is available, in which case, we
+cannot test anything as the only available mm_cid is 0.
 
-Regardless, we need to first find a way for the core code to tell if
-the domain is iommufd owned or not.
+Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ tools/testing/selftests/rseq/.gitignore       |   1 +
+ tools/testing/selftests/rseq/Makefile         |   2 +-
+ .../selftests/rseq/mm_cid_compaction_test.c   | 200 ++++++++++++++++++
+ 3 files changed, 202 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
 
-We should also make it so we can tell if dma-iommu.c is linked to that
-domain (eg vfio or the default_domain), then we can do the iova_cookie
-move without changing the destruction flows. This would be the missing
-union struct tag you mentioned in the other email.
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+index 16496de5f6ce4..2c89f97e4f737 100644
+--- a/tools/testing/selftests/rseq/.gitignore
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -3,6 +3,7 @@ basic_percpu_ops_test
+ basic_percpu_ops_mm_cid_test
+ basic_test
+ basic_rseq_op_test
++mm_cid_compaction_test
+ param_test
+ param_test_benchmark
+ param_test_compare_twice
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index 5a3432fceb586..ce1b38f46a355 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
+ 
+ TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
+ 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
+-		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
++		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
+ 
+ TEST_GEN_PROGS_EXTENDED = librseq.so
+ 
+diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+new file mode 100644
+index 0000000000000..7ddde3b657dd6
+--- /dev/null
++++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: LGPL-2.1
++#define _GNU_SOURCE
++#include <assert.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stddef.h>
++
++#include "../kselftest.h"
++#include "rseq.h"
++
++#define VERBOSE 0
++#define printf_verbose(fmt, ...)                    \
++	do {                                        \
++		if (VERBOSE)                        \
++			printf(fmt, ##__VA_ARGS__); \
++	} while (0)
++
++/* 0.5 s */
++#define RUNNER_PERIOD 500000
++/* Number of runs before we terminate or get the token */
++#define THREAD_RUNS 5
++
++/*
++ * Number of times we check that the mm_cid were compacted.
++ * Checks are repeated every RUNNER_PERIOD.
++ */
++#define MM_CID_COMPACT_TIMEOUT 10
++
++struct thread_args {
++	int cpu;
++	int num_cpus;
++	pthread_mutex_t *token;
++	pthread_barrier_t *barrier;
++	pthread_t *tinfo;
++	struct thread_args *args_head;
++};
++
++static void __noreturn *thread_runner(void *arg)
++{
++	struct thread_args *args = arg;
++	int i, ret, curr_mm_cid;
++	cpu_set_t cpumask;
++
++	CPU_ZERO(&cpumask);
++	CPU_SET(args->cpu, &cpumask);
++	ret = pthread_setaffinity_np(pthread_self(), sizeof(cpumask), &cpumask);
++	if (ret) {
++		errno = ret;
++		perror("Error: failed to set affinity");
++		abort();
++	}
++	pthread_barrier_wait(args->barrier);
++
++	for (i = 0; i < THREAD_RUNS; i++)
++		usleep(RUNNER_PERIOD);
++	curr_mm_cid = rseq_current_mm_cid();
++	/*
++	 * We select one thread with high enough mm_cid to be the new leader.
++	 * All other threads (including the main thread) will terminate.
++	 * After some time, the mm_cid of the only remaining thread should
++	 * converge to 0, if not, the test fails.
++	 */
++	if (curr_mm_cid >= args->num_cpus / 2 &&
++	    !pthread_mutex_trylock(args->token)) {
++		printf_verbose(
++			"cpu%d has mm_cid=%d and will be the new leader.\n",
++			sched_getcpu(), curr_mm_cid);
++		for (i = 0; i < args->num_cpus; i++) {
++			if (args->tinfo[i] == pthread_self())
++				continue;
++			ret = pthread_join(args->tinfo[i], NULL);
++			if (ret) {
++				errno = ret;
++				perror("Error: failed to join thread");
++				abort();
++			}
++		}
++		pthread_barrier_destroy(args->barrier);
++		free(args->tinfo);
++		free(args->token);
++		free(args->barrier);
++		free(args->args_head);
++
++		for (i = 0; i < MM_CID_COMPACT_TIMEOUT; i++) {
++			curr_mm_cid = rseq_current_mm_cid();
++			printf_verbose("run %d: mm_cid=%d on cpu%d.\n", i,
++				       curr_mm_cid, sched_getcpu());
++			if (curr_mm_cid == 0)
++				exit(EXIT_SUCCESS);
++			usleep(RUNNER_PERIOD);
++		}
++		exit(EXIT_FAILURE);
++	}
++	printf_verbose("cpu%d has mm_cid=%d and is going to terminate.\n",
++		       sched_getcpu(), curr_mm_cid);
++	pthread_exit(NULL);
++}
++
++int test_mm_cid_compaction(void)
++{
++	cpu_set_t affinity;
++	int i, j, ret = 0, num_threads;
++	pthread_t *tinfo;
++	pthread_mutex_t *token;
++	pthread_barrier_t *barrier;
++	struct thread_args *args;
++
++	sched_getaffinity(0, sizeof(affinity), &affinity);
++	num_threads = CPU_COUNT(&affinity);
++	tinfo = calloc(num_threads, sizeof(*tinfo));
++	if (!tinfo) {
++		perror("Error: failed to allocate tinfo");
++		return -1;
++	}
++	args = calloc(num_threads, sizeof(*args));
++	if (!args) {
++		perror("Error: failed to allocate args");
++		ret = -1;
++		goto out_free_tinfo;
++	}
++	token = malloc(sizeof(*token));
++	if (!token) {
++		perror("Error: failed to allocate token");
++		ret = -1;
++		goto out_free_args;
++	}
++	barrier = malloc(sizeof(*barrier));
++	if (!barrier) {
++		perror("Error: failed to allocate barrier");
++		ret = -1;
++		goto out_free_token;
++	}
++	if (num_threads == 1) {
++		fprintf(stderr, "Cannot test on a single cpu. "
++				"Skipping mm_cid_compaction test.\n");
++		/* only skipping the test, this is not a failure */
++		goto out_free_barrier;
++	}
++	pthread_mutex_init(token, NULL);
++	ret = pthread_barrier_init(barrier, NULL, num_threads);
++	if (ret) {
++		errno = ret;
++		perror("Error: failed to initialise barrier");
++		goto out_free_barrier;
++	}
++	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
++		if (!CPU_ISSET(i, &affinity))
++			continue;
++		args[j].num_cpus = num_threads;
++		args[j].tinfo = tinfo;
++		args[j].token = token;
++		args[j].barrier = barrier;
++		args[j].cpu = i;
++		args[j].args_head = args;
++		if (!j) {
++			/* The first thread is the main one */
++			tinfo[0] = pthread_self();
++			++j;
++			continue;
++		}
++		ret = pthread_create(&tinfo[j], NULL, thread_runner, &args[j]);
++		if (ret) {
++			errno = ret;
++			perror("Error: failed to create thread");
++			abort();
++		}
++		++j;
++	}
++	printf_verbose("Started %d threads.\n", num_threads);
++
++	/* Also main thread will terminate if it is not selected as leader */
++	thread_runner(&args[0]);
++
++	/* only reached in case of errors */
++out_free_barrier:
++	free(barrier);
++out_free_token:
++	free(token);
++out_free_args:
++	free(args);
++out_free_tinfo:
++	free(tinfo);
++
++	return ret;
++}
++
++int main(int argc, char **argv)
++{
++	if (!rseq_mm_cid_available()) {
++		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
++		return -1;
++	}
++	if (test_mm_cid_compaction())
++		return -1;
++	return 0;
++}
+-- 
+2.48.1
 
-What I've been thinking of is changing type into flags. I think we
-have now removed type from all drivers so this should be a small
-enough work.
-
-Nicolin should be able to look into some followup here, it is not a
-small change.
-
-> And frankly otherwise, what even is the benefit of moving the iova_cookie
-> pointer into the union if we have to replace it with another whole pointer
-> to make it work?
-
-It makes a lot more semantic sense that the domain owners all share a
-single "private data" pointer.
-
-> This is just adding more code and more complexity in in
-> order to make struct iommu_domain... the same size it already is :/
-
-That we get back the space we spent on sw_msi is a nice bonus.
-
-Jason
 
