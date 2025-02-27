@@ -1,296 +1,158 @@
-Return-Path: <linux-kselftest+bounces-27748-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27749-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8E25A47F15
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:27:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58F20A47F4A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 14:37:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0F903B7846
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 13:26:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5884165540
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 13:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88B48237160;
-	Thu, 27 Feb 2025 13:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7E123024D;
+	Thu, 27 Feb 2025 13:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Qn2JbTKL"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="ihRs/256"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4112356BC;
-	Thu, 27 Feb 2025 13:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA8C21C19C
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 13:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740662680; cv=none; b=ja5YS/VbhljZdU1tqYyMrhitGLnptroKtjaj9JmtfR6X6BhXZXjkhKle+o1xUmhUgonYQAIvsQRx3VUAcczfXdWFAiXqdQPQMJjpcozWcKACKoCDboirvahZo71am3OJT+0ubJiN3KYZPEr81LOyLNPAvAc7PBsfQOIdk6nbBY0=
+	t=1740663068; cv=none; b=MHQB8PMxUwj28eqrL9x36o2jgouOEnCFRLoCo057ip3sCFKFgRwIBepuAfp0TBhvAvbCTz+iE8dGiFQI34QPob8puKTvCW+wngzkkKBSUFno/zlZ5IpdEjaEy/45C1xw/6e6Zkbk/ejathkO56+X3q4IxYzCIHgH4ouoX+Xa6bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740662680; c=relaxed/simple;
-	bh=ITagGTuza+iR15t7opNU3Qq6476FMYcERfhKVz54Sxo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RcHdYo6gZLJW5CV5EtPUB2qCnl3Qd2aXCfjLmuP/7bl7NYTeb0Je0QKNlQnD/lfJvAUd0c2ztFCteOc6DSvBAddBunvSaV0NQLmuEfeFY6hNaL0UqZKTJlIWlyZrfyDW/H2bjlQNugoCsIDZ4kAFw1RvgJhIir56T009i0A6Qzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Qn2JbTKL; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3564344281;
-	Thu, 27 Feb 2025 13:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740662676;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F5iP14eZwyuKdEASQCjopxMOFmpr40OqDKrxtNJLgPY=;
-	b=Qn2JbTKLNbqm3ldew3ZOxScg1q4Xo0zdEw3JrDNmU7+AKb/Sg3+hsbAAfUxiqw1HPnlk6f
-	TNYWx8E8nq9kKCFMURRMLctWRQWNlvOhacIJZwI9gpeglAiXRb+Ak2CX/r/c4Brq38FU6d
-	VQfOjEUIW1fOy9XTpeH27zzCJu1W7IsWt+28Usy0V1HRjW6e5x2wcFBYjOKVSYnl3kyh8h
-	IZlLWolF/VzA0jVZrcGoUoQgS2p3qaqTbFR3SChnqNaKr+ujLFTanNfduXTvgvtU5KL0P1
-	DYXxHiWVn72SQEQeikfX/Rx08rOKocw3Su9TzTW5K21sb0+Bqm0gUQ8LZb4afg==
-From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Thu, 27 Feb 2025 14:24:25 +0100
-Subject: [PATCH bpf-next 10/10] selftests/bpf: test_tunnel: Remove
- test_tunnel.sh
+	s=arc-20240116; t=1740663068; c=relaxed/simple;
+	bh=5K1DQgpCnV8OGVSz6GIqpEfTt8kjItGXwWAZ4X3AWLM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XqMG6bVLddJe7xgjh2a3JLDmgmxfik2WBSbcjwJ4cDitz1pgOa5eiuSOgf49uikt5eGgrS1yl6I7VxuZ8cWANxTQ2lpZ0sPmL2na1VbyMBPtfe/Z+2nhtJTKV35as7eBiUy5eM/Mp4I7ROPFq/U/jJR9I15+pcLKBT9fENI9ssk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=ihRs/256; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-abbae92be71so90191466b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 05:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1740663064; x=1741267864; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7wXFTKX1544/JIF02ehdLe2SrnajJcR6+uQqWAAhPPY=;
+        b=ihRs/256BSg5Z5Cbra1h9RobjQnf2t4kdPCyir05PZiMdHHq2oLTr9+YSTW2Uxs6a/
+         gprp/a+hdm2GYPbvkQZbSPKMOJ208igladzRPsXOF/+5oE6KnU+hy3oNqQ4Fo5stVxOX
+         UsEB92c8vXgcvgnlTbuKBOgiJidholdphkNBvweODGLqY9EkSzUx/Cbl/jGWqcSbafWy
+         iI2HFPvWEJXsEBGDS7v3+20X1//GKO7PokvUK11CmDnJB+rjSkNEk3ehgUg2iBRlZnHT
+         qLTnjIhXJYAAhMueyiZeni/wQoSlXZDOX7ordoirjSy3tCOCyHvjxouD4XgyY6lvWgy/
+         ZEZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740663064; x=1741267864;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7wXFTKX1544/JIF02ehdLe2SrnajJcR6+uQqWAAhPPY=;
+        b=Op+m4KA2iDVzV/JnkieYSjBFZV18We0OA9o7mtXiveW29TgDAGiOs616Ja5mNyyZ20
+         GngkYmKZAA64LPxRAuPbZYdZDJwELF8v09jaIBtbvqDGjgapQ2M2ssVKysmRadmk2Yo7
+         ZmkIOW7DtciB3LLXeT4xMNpZl9akOFoSa2ZGWtGBpx1lJUdMWFQPITP1cgIAWuYGI0bd
+         GF5X5KFb12b8Qauz1mt+PTw4OKICsZa6Uy/93k5GXkk+dBVmm5LoPAJMJ1q0FY0mY4IH
+         Tw8TXh70yIjlBC6+7VugqFqGNIPMcJJpXUEYs5jCjyDFtlUBuwHMaNQ2TjWcxU8l1E32
+         q5VA==
+X-Forwarded-Encrypted: i=1; AJvYcCXIulUVF/IJKK9iZvRzvyonZhUWHUH1QQ/gOCdR1RFx4H7l2Xb/m7vqc+imKx5rMDVLT4CGH5p9GsUVYIMsRYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/SxwnngzBzrCBy+g8fm8cGthMOepKsurCDBRh3OVji60CkiOU
+	Otoshtn/jki5DUWYjAbHezGQ0Mdn79FgHKFbxy7tiTvzGGIbIMdkWXPoO33nt/Q=
+X-Gm-Gg: ASbGncvQXgJ6TD6Uu4y4otgz099ptXaXfry8PWGzLsIpWJGusGHBVa9CiEYU2cgE18J
+	zujTmBZ+BhbjRcWRQRDflckx3/DboFrGWb6opCeWzdg/mW+ljoLpYEn7W6N6Ww03XY2vHsZLx+V
+	uRd4e9R9oGUbDHyyNkyF8nNFKNjty4NkQTD7Aw3y36sYj9uMrGPu/ZjN31XYtTxZhrBMjwBcekQ
+	f83YHQ6hWHn8E61vvkxbgN6ypoPbn4ppylNP4JeLxoknHCZA6II5iimOJX6wYHGRe0++lrrJxIm
+	yLscram6vwiJBwhCjlYuFNJYFZK0nmUcxgjqOmL1na6DrnSk8+GXptyEkw==
+X-Google-Smtp-Source: AGHT+IE0aNnzvv1Qi4koQK1Hzo4GjpUtdykg2u0L4Pn0RkAUHo9vRWuUm6DYMvxfLSo0bViwlkQMRQ==
+X-Received: by 2002:a05:6402:2553:b0:5de:594d:e9aa with SMTP id 4fb4d7f45d1cf-5e4455c30f9mr28084142a12.8.1740663063527;
+        Thu, 27 Feb 2025 05:31:03 -0800 (PST)
+Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0b86e84csm125023766b.0.2025.02.27.05.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 05:31:03 -0800 (PST)
+Message-ID: <f88b234a-37ec-46a4-b920-35f598ab6c38@blackwall.org>
+Date: Thu, 27 Feb 2025 15:31:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv3 net 1/3] bonding: move IPsec deletion to
+ bond_ipsec_free_sa
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+ Jarod Wilson <jarod@redhat.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Cosmin Ratiu <cratiu@nvidia.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250227083717.4307-1-liuhangbin@gmail.com>
+ <20250227083717.4307-2-liuhangbin@gmail.com>
+ <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
+ <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
+ <Z8Bm9i9St0zzDhRZ@fedora>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <Z8Bm9i9St0zzDhRZ@fedora>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250227-tunnels-v1-10-33df5c30aa04@bootlin.com>
-References: <20250227-tunnels-v1-0-33df5c30aa04@bootlin.com>
-In-Reply-To: <20250227-tunnels-v1-0-33df5c30aa04@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Alexis Lothore <alexis.lothore@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpedfuegrshhtihgvnhcuvehurhhuthgthhgvthculdgvuefrhfcuhfhouhhnuggrthhiohhnmddfuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeefudfhuedttdeiffetffeljeffkeevveeiuddtgeejleeftdejgedtjedttdfhnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepleenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhug
- idqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: bastien.curutchet@bootlin.com
 
-All tests from test_tunnel.sh have been migrated into test test_progs.
-The last test remaining in the script is the test_ipip() that is already
-covered in the test_prog framework by the NONE case of test_ipip_tunnel().
+On 2/27/25 15:21, Hangbin Liu wrote:
+> On Thu, Feb 27, 2025 at 11:21:51AM +0200, Nikolay Aleksandrov wrote:
+>>>> @@ -617,6 +611,12 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
+>>>>  
+>>>>  	mutex_lock(&bond->ipsec_lock);
+>>>>  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+>>>> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
+>>>> +			list_del(&ipsec->list);
+>>>
+>>> To be able to do this here, you'll have to use list_for_each_entry_safe().
+>>>
+>>
+>> One more thing - note I'm not an xfrm expert by far but it seems to me here you have
+>> to also call  xdo_dev_state_free() with the old active slave dev otherwise that will
+>> never get called with the original real_dev after the switch to a new
+>> active slave (or more accurately it might if the GC runs between the switching
+>> but it is a race), care must be taken wrt sequence of events because the XFRM
+> 
+> Can we just call xs->xso.real_dev->xfrmdev_ops->xdo_dev_state_free(xs)
+> no matter xs->xso.real_dev == real_dev or not? I'm afraid calling
+> xdo_dev_state_free() every where may make us lot more easily.
+> 
 
-Remove the test_tunnel.sh script and its Makefile entry
+You'd have to check all drivers that implement the callback to answer that and even then
+I'd stick to the canonical way of how it's done in xfrm and make the bond just passthrough.
+Any other games become dangerous and new code will have to be carefully reviewed every
+time, calling another device's free_sa when it wasn't added before doesn't sound good.
 
-Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
----
- tools/testing/selftests/bpf/Makefile       |   1 -
- tools/testing/selftests/bpf/test_tunnel.sh | 179 -----------------------------
- 2 files changed, 180 deletions(-)
+>> GC may be running in parallel which probably means that in bond_ipsec_free_sa()
+>> you'll have to take the mutex before calling xdo_dev_state_free() and check
+>> if the entry is still linked in the bond's ipsec list before calling the free_sa
+>> callback, if it isn't then del_sa_all got to it before the GC and there's nothing
+>> to do if it also called the dev's free_sa callback. The check for real_dev doesn't
+>> seem enough to protect against this race.
+> 
+> I agree that we need to take the mutex before calling xdo_dev_state_free()
+> in bond_ipsec_free_sa(). Do you think if this is enough? I'm a bit lot here.
+> 
+> Thanks
+> Hangbin
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index abfb450c26bb360ad23ff1201fb113557d3eced1..e6a02d5b87d123cef7e6b41bfbc96d34083f38e1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -100,7 +100,6 @@ TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)
- 
- # Order correspond to 'make run_tests' order
- TEST_PROGS := test_kmod.sh \
--	test_tunnel.sh \
- 	test_lwt_seg6local.sh \
- 	test_lirc_mode2.sh \
- 	test_xdp_vlan_mode_generic.sh \
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-deleted file mode 100755
-index 165023d1b5f70fd48ff05f0a53a332ef50e175da..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ /dev/null
-@@ -1,179 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--# End-to-end eBPF tunnel test suite
--#   The script tests BPF network tunnel implementation.
--#
--# Topology:
--# ---------
--#     root namespace   |     at_ns0 namespace
--#                      |
--#      -----------     |     -----------
--#      | tnl dev |     |     | tnl dev |  (overlay network)
--#      -----------     |     -----------
--#      metadata-mode   |     native-mode
--#       with bpf       |
--#                      |
--#      ----------      |     ----------
--#      |  veth1  | --------- |  veth0  |  (underlay network)
--#      ----------    peer    ----------
--#
--#
--# Device Configuration
--# --------------------
--# Root namespace with metadata-mode tunnel + BPF
--# Device names and addresses:
--# 	veth1 IP: 172.16.1.200, IPv6: 00::22 (underlay)
--# 	tunnel dev <type>11, ex: gre11, IPv4: 10.1.1.200, IPv6: 1::22 (overlay)
--#
--# Namespace at_ns0 with native tunnel
--# Device names and addresses:
--# 	veth0 IPv4: 172.16.1.100, IPv6: 00::11 (underlay)
--# 	tunnel dev <type>00, ex: gre00, IPv4: 10.1.1.100, IPv6: 1::11 (overlay)
--#
--#
--# End-to-end ping packet flow
--# ---------------------------
--# Most of the tests start by namespace creation, device configuration,
--# then ping the underlay and overlay network.  When doing 'ping 10.1.1.100'
--# from root namespace, the following operations happen:
--# 1) Route lookup shows 10.1.1.100/24 belongs to tnl dev, fwd to tnl dev.
--# 2) Tnl device's egress BPF program is triggered and set the tunnel metadata,
--#    with remote_ip=172.16.1.100 and others.
--# 3) Outer tunnel header is prepended and route the packet to veth1's egress
--# 4) veth0's ingress queue receive the tunneled packet at namespace at_ns0
--# 5) Tunnel protocol handler, ex: vxlan_rcv, decap the packet
--# 6) Forward the packet to the overlay tnl dev
--
--BPF_FILE="test_tunnel_kern.bpf.o"
--BPF_PIN_TUNNEL_DIR="/sys/fs/bpf/tc/tunnel"
--PING_ARG="-c 3 -w 10 -q"
--ret=0
--GREEN='\033[0;92m'
--RED='\033[0;31m'
--NC='\033[0m' # No Color
--
--config_device()
--{
--	ip netns add at_ns0
--	ip link add veth0 type veth peer name veth1
--	ip link set veth0 netns at_ns0
--	ip netns exec at_ns0 ip addr add 172.16.1.100/24 dev veth0
--	ip netns exec at_ns0 ip link set dev veth0 up
--	ip link set dev veth1 up mtu 1500
--	ip addr add dev veth1 172.16.1.200/24
--}
--
--add_ipip_tunnel()
--{
--	# at_ns0 namespace
--	ip netns exec at_ns0 \
--		ip link add dev $DEV_NS type $TYPE \
--		local 172.16.1.100 remote 172.16.1.200
--	ip netns exec at_ns0 ip link set dev $DEV_NS up
--	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
--
--	# root namespace
--	ip link add dev $DEV type $TYPE external
--	ip link set dev $DEV up
--	ip addr add dev $DEV 10.1.1.200/24
--}
--
--test_ipip()
--{
--	TYPE=ipip
--	DEV_NS=ipip00
--	DEV=ipip11
--	ret=0
--
--	check $TYPE
--	config_device
--	add_ipip_tunnel
--	ip link set dev veth1 mtu 1500
--	attach_bpf $DEV ipip_set_tunnel ipip_get_tunnel
--	ping $PING_ARG 10.1.1.100
--	check_err $?
--	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
--	check_err $?
--	cleanup
--
--	if [ $ret -ne 0 ]; then
--                echo -e ${RED}"FAIL: $TYPE"${NC}
--                return 1
--        fi
--        echo -e ${GREEN}"PASS: $TYPE"${NC}
--}
--
--attach_bpf()
--{
--	DEV=$1
--	SET=$2
--	GET=$3
--	mkdir -p ${BPF_PIN_TUNNEL_DIR}
--	bpftool prog loadall ${BPF_FILE} ${BPF_PIN_TUNNEL_DIR}/
--	tc qdisc add dev $DEV clsact
--	tc filter add dev $DEV egress bpf da object-pinned ${BPF_PIN_TUNNEL_DIR}/$SET
--	tc filter add dev $DEV ingress bpf da object-pinned ${BPF_PIN_TUNNEL_DIR}/$GET
--}
--
--cleanup()
--{
--        rm -rf ${BPF_PIN_TUNNEL_DIR}
--
--	ip netns delete at_ns0 2> /dev/null
--	ip link del veth1 2> /dev/null
--	ip link del ipip11 2> /dev/null
--}
--
--cleanup_exit()
--{
--	echo "CATCH SIGKILL or SIGINT, cleanup and exit"
--	cleanup
--	exit 0
--}
--
--check()
--{
--	ip link help 2>&1 | grep -q "\s$1\s"
--	if [ $? -ne 0 ];then
--		echo "SKIP $1: iproute2 not support"
--	cleanup
--	return 1
--	fi
--}
--
--enable_debug()
--{
--	echo 'file ipip.c +p' > /sys/kernel/debug/dynamic_debug/control
--}
--
--check_err()
--{
--	if [ $ret -eq 0 ]; then
--		ret=$1
--	fi
--}
--
--bpf_tunnel_test()
--{
--	local errors=0
--
--	echo "Testing IPIP tunnel..."
--	test_ipip
--	errors=$(( $errors + $? ))
--
--	return $errors
--}
--
--trap cleanup 0 3 6
--trap cleanup_exit 2 9
--
--cleanup
--bpf_tunnel_test
--
--if [ $? -ne 0 ]; then
--	echo -e "$(basename $0): ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "$(basename $0): ${GREEN}PASS${NC}"
--exit 0
+Well, the race is between the xfrm GC and del_sa_all, in bond's free_sa if you
+walk the list under the mutex before calling real_dev's free callback and
+don't find the current element that's being freed in free_sa then it was
+cleaned up by del_sa_all, otherwise del_sa_all is waiting to walk that
+list and clean the entries. I think it should be fine as long as free_sa
+was called once with the proper device.
 
--- 
-2.48.1
+
 
 
