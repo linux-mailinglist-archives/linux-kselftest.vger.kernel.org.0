@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-27703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3C1BA47408
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 05:12:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35389A4740E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 05:13:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74C261886689
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 04:12:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E57C0188BFB5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 04:13:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFFE1EB5D6;
-	Thu, 27 Feb 2025 04:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29FA1F417F;
+	Thu, 27 Feb 2025 04:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sNIboicW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VALVXiG6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3506D1E5207
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 04:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEEDC1EA7F3
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2025 04:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740629536; cv=none; b=pTAN5+F9p7Meziy7L77XSs2xqOGgf2TzOVM5e9jqr2f6kFHjOOJUqtXNdUFI3GXFQewPjDg7VgZ9/N9LB3aQrWUXx4eu2BDZetKzd8ArVUW6TPiMf5rnJvppKNCo3G0vEcJUqGP2iHOEdojfhWI6JY8fOZIaA014pgvdPi3vk1Y=
+	t=1740629537; cv=none; b=H+Vvjk+pBRYJdyDPRyyITmzXhBJl6RSsHJFe0DqC/nf3oP6AXjUV4fqe1kfZidXjDdLKH0J1TXOx778pJvKhnmkISQhUKZHwLAp7A7kSvEoJC5u6xxlpBeyqrYnA0L1d9esVKxseIv+RNuE3DRhfRTYbJdCQ4FLOczv7d5+sgt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740629536; c=relaxed/simple;
-	bh=aqMhgLGRT8wqD2vwklXc4v8x4EwzyFP01zvcFnJEYok=;
+	s=arc-20240116; t=1740629537; c=relaxed/simple;
+	bh=gN836nos7mIuoP7bbWE2UL78Iqz4QtgvY29xyyv1MUw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CW/3J4bribFZL5ZgHvIF8f+jxWyORjNJFsAb606TP/+fU0Rk2enBORzkIxja2C3tRFrcZ0kQcrLcr/jqVEOooGOXxEosfU1Ckpc81Vx0z23/l42BKBSGvYWKmMiZBpTfLVEI184fl1HAmgi6BkAXYOcurA1vJZ3ey43vzAGYjSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sNIboicW; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=Nm7unbTCl7IY5t3zAugtP2PiRJKug30v9WDpeYnpRs0FxohlTkoij3Hcvt1WJRrGAIZ8fUWm0klrPdQA0mckOE4FdacjYY53Ym0nfsJkkbJtk5jAZfIviz8/AyE/y3nsKqb7JJX18NZyx/tY66TbTklNDYscDkUQYW3ACeEVnpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VALVXiG6; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fc0bc05afdso1303088a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 20:12:13 -0800 (PST)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fe8fdfdd94so1282097a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2025 20:12:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740629533; x=1741234333; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1740629535; x=1741234335; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AAzyaCI9OiQ43qRYK7phukQVVG/+Mxsaskx4pqrfHKU=;
-        b=sNIboicWjBVixm9PQeV+ha3X5Hy7P+xptolkg6u4NDR+9jQPlVftPp4GPyhecDgovv
-         gzojpLk2tGxJ8fOc7NQ37yISQ7k9S94dHla6ZALuMw+Es2eSwH8TDL6zLVl9PT891of5
-         XRxyGIjMHEgEzHh7NS3EcC8wg9SMubKK28ytgMAwYAyB7zlGP9d6HJThD1LzTHpRZWFi
-         TRXNl9GuaJbhiuvB/hFy+s84o7XCT+Q8h/4RHqMPS1dT8unwcp1nJXcOgPikt35itntC
-         +8Ph0rQk7lZjG6T4LEsSobG+Bpwvedc1K7tEJ1JzlRC98+wDsYs4f4ID1C04qr4doUdx
-         n0qw==
+        bh=gwhkdvFGGUQ8slu9w7VIDdlvTkfuSHgYe1F/fjEXF9M=;
+        b=VALVXiG6VRb8rSOr5A4KOad+jwXEVYrthstcAXpTvqeWQtNWW/KXyV7/LJM5lXXMIw
+         TWBF4SJatdxJp4yzKq/4fzMYBRQECwBZbargAyBHX9iU0xahUkDx0jO4gYwpTUThcf6B
+         SQQ6CjdsJJAo/jvH47drUAZw06Fa+327aVDO0SCI7fSJXqryfmqoUGuFy+sJLyCcsH4o
+         Yu+7CzAT3/GPT+dBnWSRhUHcT6AiEzGQneCdHx0kPKY3hnABdjPVAtob4kx9smtOHQNl
+         qpnKK8EJwWVHI93Rwf/TdTCpf0WHYb1EvAQZh/MTnFJBazVk6mA/DqGU7OCNyOhMmr72
+         /3YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740629533; x=1741234333;
+        d=1e100.net; s=20230601; t=1740629535; x=1741234335;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AAzyaCI9OiQ43qRYK7phukQVVG/+Mxsaskx4pqrfHKU=;
-        b=A4nngf/HNJOxc+wxNX0HA3PPDKHC1eZLQSgYLnUmJ37VHJQypzCKmmzLWvrcfsLqFV
-         NF9K00nJPAEOQbahZ3qUMn0rEIfqdfbqGPb5suUOVAwvnqZAiJeIT1/YsyncMRYZOXm/
-         jriwTsd9mi4ypplcXE8/zxiKmQQ9HM7uhSs8URm60MlRgMKX0dp6SezwhWMeY/eD8I0J
-         bzZmlIXp5siXO0lHo0dX6NqJe+uR1QDSd/matJDJVCbMunpL9EbkfcKDLOmf/5FKbUk7
-         6pk1SphONxf46+GfZQsnbsSH+JhhROl4k/A74q7pUG5LC8S3zU/aU5QJxTqeGyV8PMSq
-         4qdA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0RqXbXJKImfYk11/o0UiRmRPDpykJ91hRl808+I86t+in2SXLZSwY0D6HmmUPsz74jmvBqcKXzZ+E2cOF8tU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCE3l2yoY1HDI8vprj164IHQ1246thRQXAfRVF6TwUCrtD4iw/
-	p9wUH5P2agAGs0jblWzkuttbyUCqmqa+52Np9M3+5r4N2L9kMPcwQMjqDpGZwjwsyItM4ODi420
-	aODWJwZLBgp8ZdL0x0xDnOQ==
-X-Google-Smtp-Source: AGHT+IHBvdyTom8JJlmu7UpTE/MQ0+/6X7SoVmUqu4Fb8bwlhz+gM2+RPyQZrGi1044sHGola3AGFAckzKcIOJeXsg==
-X-Received: from pgll189.prod.google.com ([2002:a63:25c6:0:b0:ad5:4a28:559a])
+        bh=gwhkdvFGGUQ8slu9w7VIDdlvTkfuSHgYe1F/fjEXF9M=;
+        b=MnopT6KX360RQjM+C58OnrposyRQVcrru9VlNzEDlMlKgvXK0r42KsKzzEN+Mk8XmE
+         UDPNR4KQbYTwfRzP76J0irX+2yuyz0XUIS0JZjIKyawX3f1I4FZRyaINIWSaH/EynJi3
+         PQDiFHZoURNFqxHHH55EWw35A2jfFtJjjxuANYR6bDuC0npDtsiPI9oJsgbJbKj2qSjz
+         6/Or9znGr9HuokyMDCOaNzzqtvRAkbul/G5Dd4sy9g6nvSq7YmP4dkdLjNXqdXwiKe6b
+         7/RwWEj9EmdVgnm48CmWe9JLHUzdcF2LttY+4fJjc4tUz3/+IOZJ3Cz27q3b2SGIuEYR
+         /i2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWXEB40UDdXzJjIxbqlUOTuKaGSsAQ6TPy70EUHPa8DX3Iq6ESXlLPFADezeKo73BCc0mdlyEU7L9ckDlC5YyM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz18Dk6L+c5M19JBYaM4VinKuHgGm+XoSrCqU1YHyqxzOZ1XnB
+	k1WaNT4qKd52RxH5BCkJi2fM1RgOw45mDg+PHv1SmIyfjuU1ydrgfU649BJthwIcYTMyLmzRZ9x
+	sM8veR75rZGCqdDhHVwTiHQ==
+X-Google-Smtp-Source: AGHT+IH/4RueHONVuGMDfiHkQyoQ8yYY2AJwLJHF/NIJbSz8pwho3TSM8Joo6iBkHJmUYAOUt69hIDhfHF27mc/tGQ==
+X-Received: from pjboh8.prod.google.com ([2002:a17:90b:3a48:b0:2fc:2b96:2d4b])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:4a98:b0:1ee:c75c:beda with SMTP id adf61e73a8af0-1f0fc99c10emr18478742637.35.1740629533442;
- Wed, 26 Feb 2025 20:12:13 -0800 (PST)
-Date: Thu, 27 Feb 2025 04:12:02 +0000
+ 2002:a17:90b:524f:b0:2ee:863e:9ffc with SMTP id 98e67ed59e1d1-2fe7e33eb33mr8504454a91.21.1740629535189;
+ Wed, 26 Feb 2025 20:12:15 -0800 (PST)
+Date: Thu, 27 Feb 2025 04:12:03 +0000
 In-Reply-To: <20250227041209.2031104-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250227041209.2031104-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.48.1.658.g4767266eb4-goog
-Message-ID: <20250227041209.2031104-2-almasrymina@google.com>
-Subject: [PATCH net-next v6 1/8] net: add get_netmem/put_netmem support
+Message-ID: <20250227041209.2031104-3-almasrymina@google.com>
+Subject: [PATCH net-next v6 2/8] net: devmem: TCP tx netlink api
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
@@ -95,195 +95,135 @@ Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.co
 	Samiullah Khawaja <skhawaja@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Currently net_iovs support only pp ref counts, and do not support a
-page ref equivalent.
+From: Stanislav Fomichev <sdf@fomichev.me>
 
-This is fine for the RX path as net_iovs are used exclusively with the
-pp and only pp refcounting is needed there. The TX path however does not
-use pp ref counts, thus, support for get_page/put_page equivalent is
-needed for netmem.
+Add bind-tx netlink call to attach dmabuf for TX; queue is not
+required, only ifindex and dmabuf fd for attachment.
 
-Support get_netmem/put_netmem. Check the type of the netmem before
-passing it to page or net_iov specific code to obtain a page ref
-equivalent.
-
-For dmabuf net_iovs, we obtain a ref on the underlying binding. This
-ensures the entire binding doesn't disappear until all the net_iovs have
-been put_netmem'ed. We do not need to track the refcount of individual
-dmabuf net_iovs as we don't allocate/free them from a pool similar to
-what the buddy allocator does for pages.
-
-This code is written to be extensible by other net_iov implementers.
-get_netmem/put_netmem will check the type of the netmem and route it to
-the correct helper:
-
-pages -> [get|put]_page()
-dmabuf net_iovs -> net_devmem_[get|put]_net_iov()
-new net_iovs ->	new helpers
-
+Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
 ---
 
-v2:
-- Add comment on top of refcount_t ref explaining the usage in the XT
-  path.
-- Fix missing definition of net_devmem_dmabuf_binding_put in this patch.
+v3:
+- Fix ynl-regen.sh error (Simon).
 
 ---
- include/linux/skbuff_ref.h |  4 ++--
- include/net/netmem.h       |  3 +++
- net/core/devmem.c          | 10 ++++++++++
- net/core/devmem.h          | 20 ++++++++++++++++++++
- net/core/skbuff.c          | 30 ++++++++++++++++++++++++++++++
- 5 files changed, 65 insertions(+), 2 deletions(-)
+ Documentation/netlink/specs/netdev.yaml | 12 ++++++++++++
+ include/uapi/linux/netdev.h             |  1 +
+ net/core/netdev-genl-gen.c              | 13 +++++++++++++
+ net/core/netdev-genl-gen.h              |  1 +
+ net/core/netdev-genl.c                  |  6 ++++++
+ tools/include/uapi/linux/netdev.h       |  1 +
+ 6 files changed, 34 insertions(+)
 
-diff --git a/include/linux/skbuff_ref.h b/include/linux/skbuff_ref.h
-index 0f3c58007488..9e49372ef1a0 100644
---- a/include/linux/skbuff_ref.h
-+++ b/include/linux/skbuff_ref.h
-@@ -17,7 +17,7 @@
-  */
- static inline void __skb_frag_ref(skb_frag_t *frag)
+diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+index 36f1152bfac3..e560b05eb528 100644
+--- a/Documentation/netlink/specs/netdev.yaml
++++ b/Documentation/netlink/specs/netdev.yaml
+@@ -743,6 +743,18 @@ operations:
+             - defer-hard-irqs
+             - gro-flush-timeout
+             - irq-suspend-timeout
++    -
++      name: bind-tx
++      doc: Bind dmabuf to netdev for TX
++      attribute-set: dmabuf
++      do:
++        request:
++          attributes:
++            - ifindex
++            - fd
++        reply:
++          attributes:
++            - id
+ 
+ kernel-family:
+   headers: [ "linux/list.h"]
+diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+index 7600bf62dbdf..7eb9571786b8 100644
+--- a/include/uapi/linux/netdev.h
++++ b/include/uapi/linux/netdev.h
+@@ -219,6 +219,7 @@ enum {
+ 	NETDEV_CMD_QSTATS_GET,
+ 	NETDEV_CMD_BIND_RX,
+ 	NETDEV_CMD_NAPI_SET,
++	NETDEV_CMD_BIND_TX,
+ 
+ 	__NETDEV_CMD_MAX,
+ 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
+diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
+index 996ac6a449eb..f27608d6301c 100644
+--- a/net/core/netdev-genl-gen.c
++++ b/net/core/netdev-genl-gen.c
+@@ -99,6 +99,12 @@ static const struct nla_policy netdev_napi_set_nl_policy[NETDEV_A_NAPI_IRQ_SUSPE
+ 	[NETDEV_A_NAPI_IRQ_SUSPEND_TIMEOUT] = { .type = NLA_UINT, },
+ };
+ 
++/* NETDEV_CMD_BIND_TX - do */
++static const struct nla_policy netdev_bind_tx_nl_policy[NETDEV_A_DMABUF_FD + 1] = {
++	[NETDEV_A_DMABUF_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
++	[NETDEV_A_DMABUF_FD] = { .type = NLA_U32, },
++};
++
+ /* Ops table for netdev */
+ static const struct genl_split_ops netdev_nl_ops[] = {
+ 	{
+@@ -190,6 +196,13 @@ static const struct genl_split_ops netdev_nl_ops[] = {
+ 		.maxattr	= NETDEV_A_NAPI_IRQ_SUSPEND_TIMEOUT,
+ 		.flags		= GENL_ADMIN_PERM | GENL_CMD_CAP_DO,
+ 	},
++	{
++		.cmd		= NETDEV_CMD_BIND_TX,
++		.doit		= netdev_nl_bind_tx_doit,
++		.policy		= netdev_bind_tx_nl_policy,
++		.maxattr	= NETDEV_A_DMABUF_FD,
++		.flags		= GENL_CMD_CAP_DO,
++	},
+ };
+ 
+ static const struct genl_multicast_group netdev_nl_mcgrps[] = {
+diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
+index e09dd7539ff2..c1fed66e92b9 100644
+--- a/net/core/netdev-genl-gen.h
++++ b/net/core/netdev-genl-gen.h
+@@ -34,6 +34,7 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
+ 				struct netlink_callback *cb);
+ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info);
+ int netdev_nl_napi_set_doit(struct sk_buff *skb, struct genl_info *info);
++int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info);
+ 
+ enum {
+ 	NETDEV_NLGRP_MGMT,
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 2b774183d31c..6e5f2de4d947 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -931,6 +931,12 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ 	return err;
+ }
+ 
++/* stub */
++int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
++{
++	return 0;
++}
++
+ void netdev_nl_sock_priv_init(struct list_head *priv)
  {
--	get_page(skb_frag_page(frag));
-+	get_netmem(skb_frag_netmem(frag));
- }
+ 	INIT_LIST_HEAD(priv);
+diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
+index 7600bf62dbdf..7eb9571786b8 100644
+--- a/tools/include/uapi/linux/netdev.h
++++ b/tools/include/uapi/linux/netdev.h
+@@ -219,6 +219,7 @@ enum {
+ 	NETDEV_CMD_QSTATS_GET,
+ 	NETDEV_CMD_BIND_RX,
+ 	NETDEV_CMD_NAPI_SET,
++	NETDEV_CMD_BIND_TX,
  
- /**
-@@ -40,7 +40,7 @@ static inline void skb_page_unref(netmem_ref netmem, bool recycle)
- 	if (recycle && napi_pp_put_page(netmem))
- 		return;
- #endif
--	put_page(netmem_to_page(netmem));
-+	put_netmem(netmem);
- }
- 
- /**
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index c61d5b21e7b4..a2148ffb203d 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -264,4 +264,7 @@ static inline unsigned long netmem_get_dma_addr(netmem_ref netmem)
- 	return __netmem_clear_lsb(netmem)->dma_addr;
- }
- 
-+void get_netmem(netmem_ref netmem);
-+void put_netmem(netmem_ref netmem);
-+
- #endif /* _NET_NETMEM_H */
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 7c6e0b5b6acb..b1aafc66ebb7 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -325,6 +325,16 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
- 	return ERR_PTR(err);
- }
- 
-+void net_devmem_get_net_iov(struct net_iov *niov)
-+{
-+	net_devmem_dmabuf_binding_get(net_devmem_iov_binding(niov));
-+}
-+
-+void net_devmem_put_net_iov(struct net_iov *niov)
-+{
-+	net_devmem_dmabuf_binding_put(net_devmem_iov_binding(niov));
-+}
-+
- /*** "Dmabuf devmem memory provider" ***/
- 
- int mp_dmabuf_devmem_init(struct page_pool *pool)
-diff --git a/net/core/devmem.h b/net/core/devmem.h
-index 7fc158d52729..946f2e015746 100644
---- a/net/core/devmem.h
-+++ b/net/core/devmem.h
-@@ -29,6 +29,10 @@ struct net_devmem_dmabuf_binding {
- 	 * The binding undos itself and unmaps the underlying dmabuf once all
- 	 * those refs are dropped and the binding is no longer desired or in
- 	 * use.
-+	 *
-+	 * net_devmem_get_net_iov() on dmabuf net_iovs will increment this
-+	 * reference, making sure that the binding remains alive until all the
-+	 * net_iovs are no longer used.
- 	 */
- 	refcount_t ref;
- 
-@@ -111,6 +115,9 @@ net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
- 	__net_devmem_dmabuf_binding_free(binding);
- }
- 
-+void net_devmem_get_net_iov(struct net_iov *niov);
-+void net_devmem_put_net_iov(struct net_iov *niov);
-+
- struct net_iov *
- net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding);
- void net_devmem_free_dmabuf(struct net_iov *ppiov);
-@@ -120,6 +127,19 @@ bool net_is_devmem_iov(struct net_iov *niov);
- #else
- struct net_devmem_dmabuf_binding;
- 
-+static inline void
-+net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
-+{
-+}
-+
-+static inline void net_devmem_get_net_iov(struct net_iov *niov)
-+{
-+}
-+
-+static inline void net_devmem_put_net_iov(struct net_iov *niov)
-+{
-+}
-+
- static inline void
- __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
- {
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 5b241c9e6f38..6e853d55a3e8 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -89,6 +89,7 @@
- #include <linux/textsearch.h>
- 
- #include "dev.h"
-+#include "devmem.h"
- #include "netmem_priv.h"
- #include "sock_destructor.h"
- 
-@@ -7253,3 +7254,32 @@ bool csum_and_copy_from_iter_full(void *addr, size_t bytes,
- 	return false;
- }
- EXPORT_SYMBOL(csum_and_copy_from_iter_full);
-+
-+void get_netmem(netmem_ref netmem)
-+{
-+	if (netmem_is_net_iov(netmem)) {
-+		/* Assume any net_iov is devmem and route it to
-+		 * net_devmem_get_net_iov. As new net_iov types are added they
-+		 * need to be checked here.
-+		 */
-+		net_devmem_get_net_iov(netmem_to_net_iov(netmem));
-+		return;
-+	}
-+	get_page(netmem_to_page(netmem));
-+}
-+EXPORT_SYMBOL(get_netmem);
-+
-+void put_netmem(netmem_ref netmem)
-+{
-+	if (netmem_is_net_iov(netmem)) {
-+		/* Assume any net_iov is devmem and route it to
-+		 * net_devmem_put_net_iov. As new net_iov types are added they
-+		 * need to be checked here.
-+		 */
-+		net_devmem_put_net_iov(netmem_to_net_iov(netmem));
-+		return;
-+	}
-+
-+	put_page(netmem_to_page(netmem));
-+}
-+EXPORT_SYMBOL(put_netmem);
+ 	__NETDEV_CMD_MAX,
+ 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
 -- 
 2.48.1.658.g4767266eb4-goog
 
