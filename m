@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-27909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A556A49C33
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:39:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF8FA49C36
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:40:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4852D17425E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:39:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C978E3AA16F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96F7271268;
-	Fri, 28 Feb 2025 14:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C88A27183E;
+	Fri, 28 Feb 2025 14:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWpqs9Lc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSN504o+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0CA270ECB;
-	Fri, 28 Feb 2025 14:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C39C270ECB;
+	Fri, 28 Feb 2025 14:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740753551; cv=none; b=t4w858vjnvL+ZaVxfOR4n9ZtbekeSZKePQ/HMxTqSLSVqH8sFMGj4i00K7CUNzw+wlSzfwy7RJjJRsaozUD/ZqaKT3Jef+Yeeh4YJnQB0ETwmGaT8PQcrD8JECHFWagQ50q2OS42TqYdLCEZUWShVJqlqpt4xYxqQosz3J+ts7A=
+	t=1740753555; cv=none; b=V/tp8SJAGSUkFoywiN9IL4z/aSWerVLFA6DNpOoV432CtsU8HAD/2hs4cbzoR790diWTF6KkS6ufRqzpFIa/UIEakTYFrlpboiDLfpDLPxCKe1fFwNqvqgdxPhn58lWBuogRNM0an5J6D5vfcIiHLKZACJJ56rLPp4gJBwTDFPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740753551; c=relaxed/simple;
-	bh=PBull/qL4EnlVYCdULdKO210sRFlo5bSFoSY3Jb0pzI=;
+	s=arc-20240116; t=1740753555; c=relaxed/simple;
+	bh=SR01wZtxowcLXs3yfy5Y+LMxNUyuNtRfD7LDE0dllEo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aX4z8Ykuxkxga9LyM4YFLj5KcS3XjUmlogZWgZtUeSLYKgcp+jCC84xP3VnW/flFz5hVRHU87jXCPrAbhE6NlNzBJD0LcKLlKLe3NRrEqkY4EMV3lGhAowzpmoD3AwwZ0dOltnt/4rvPOkEFjBlV7PHSt0CTTiPjTzUE6wDscFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWpqs9Lc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B727EC4CED6;
-	Fri, 28 Feb 2025 14:39:08 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=IbWdtTh2h/NOIcfWDGfFV6EUdkrHAvdEzDAHqt29O+1ouqZ2ME1EZghB0+NxKtUyjMSAcnK3Fg2fsEJnT11rQv03RpzPSFwk+qU9c5nDj3wZwjAAKCY1phNURynpfRIZR5JOJYbnRjDYntzFqaK8v9xFLXhpM2ACkxJc5VCtCa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSN504o+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF384C4CED6;
+	Fri, 28 Feb 2025 14:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740753551;
-	bh=PBull/qL4EnlVYCdULdKO210sRFlo5bSFoSY3Jb0pzI=;
+	s=k20201202; t=1740753554;
+	bh=SR01wZtxowcLXs3yfy5Y+LMxNUyuNtRfD7LDE0dllEo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=SWpqs9Lc6dimnPbsk4V41IWpeD2dyWWTDm72cOXgmET/bxJi6dQ7Tn6DulOnihGYN
-	 c8jGwLeDpqBTJot4zgIHGO8HcQl5Bj2aH0XEhmW4ZoaAHviIvz7OU64eo3T+3e3KV/
-	 zwomc6zR1qGmzGC1YHV+70hTDYobt1neghFAElHfdpkyXEcSG3KanydBiMEzWMaKnx
-	 S/MEzkz+Lh1uvNIXv3XRESf6Hrl9gxq1EdQ1lpxfcKWVmF/dnW5Yxv6zm3/AJlgPHa
-	 HpvqDm9SN8EH7JVRqHoM6FTLGWBBD0keVZEwyxe90Bnbptqt0qA+VTYoM4o7eKlVfk
-	 LKFtm84d8XaBw==
+	b=PSN504o+fdeerOBzbDOBDgBGbpi31KAqYWTJmxnX3OWzM8rklxBlW3kMhaNBOkhdc
+	 pgCiVm8f7I5GBG5Ca1So4JbaRTVVQaXEqOYaOvVHcoFhggrQaBfrKsbzPPe/NmEQcq
+	 AiWagZl/5OK/fuCgO1MEUJ2cXO623JP6nw3ZIa2EpCz5VRbnHGdwTAY8lN/Vyy7NVq
+	 pS/oSmglMWUmNQVc28zWGDBRqyYbQYFw287CGQiqgnVuaIkputc4otbBAz1BVL2wIg
+	 SQXZlPXtxtbFfkYLpv+LWNad6E3MCb3dbpCYJb+YcDzWezm+6AvxC+9ljwwJCfjfyb
+	 fGaNAiQZ+f0xA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 28 Feb 2025 15:38:36 +0100
-Subject: [PATCH net-next 2/5] selftests: mptcp: add a test for
- mptcp_diag_dump_one
+Date: Fri, 28 Feb 2025 15:38:37 +0100
+Subject: [PATCH net-next 3/5] mptcp: pm: in-kernel: avoid access entry
+ without lock
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250228-net-next-mptcp-coverage-small-opti-v1-2-f933c4275676@kernel.org>
+Message-Id: <20250228-net-next-mptcp-coverage-small-opti-v1-3-f933c4275676@kernel.org>
 References: <20250228-net-next-mptcp-coverage-small-opti-v1-0-f933c4275676@kernel.org>
 In-Reply-To: <20250228-net-next-mptcp-coverage-small-opti-v1-0-f933c4275676@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,85 +64,55 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Gang Yan <yangang@kylinos.cn>
+ Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1853; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=uJ3BowRDasHG/ibhvtm/YcPktKuZNbP0h9Q/mTsvLwk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnwcqFl6DKH1VmIejGlssmsUc5aGHkWeKg9d1qU
- NWgRelVCr+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ8HKhQAKCRD2t4JPQmmg
- c/2ZEADNWFnBscvZ3y1VpJ1S5qxzVrbpdLoGjxtTf4+BJaS/4RHKTq7fifwirEVWCHb081T0iPH
- X+croirikV6B5vfaHq5rX0IvQIXmcjBldc82JRsf7Bwx3GSKR2h6dgU4wU1NC0BKMHI+bzTKW+a
- 1WgYWncqZscnNOPPeJDyEn6c/IVdSGEpMo5lUPgN60zFuKGRSe62Ju9LBbxrtxoZ5kHkgZ20RE4
- bKaUFbbnDEYqrQxjp/vrXlCBVKjff3Ed+iSck95lQhgC26jCDifN+2YPWbXwhTFMDmG+/Zq7G3j
- zbcyrxIkBsbsHySuOLHo9ha3baMuN6inr4K5D5uyW9tRpDt7R6qw1BgA+nEIFH+aE5qbtKq2MA1
- SyGH8Xc3pnkcR9Epn5UQ6Yi4QqBrZlCBXhdo5N+QoTTPhJung6kTKXyYqzkMWQoDIvVli4yUhzJ
- HfExWR86ColSunnLyTjS56bnwL++BSdvbSlifKFMbSuuCeERzhyysW9nXiqDkz0NeUEIuqLGEWD
- r+S1pNsdRpKVGdnsl7tI3X9XlGgZizsN9vPEQGAuoxRh2+RGKTckOMi3FM4dHCCt4puGEpc8Xm+
- BjiDu0Tpm8cu0yB/9KDJyQbJAK09aeLwZmTB1VEncNA7EMemJV9FLjzClXQn14l3IQp+z346DkW
- H1nMN5a+l7wfKqA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1158; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=bhkcrEKDjMhUYJUOxRM2zlReKNBUTor3uckMu+ugIiE=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnwcqFvzrOx6fNwMZQlnoEMpTz/oLWpwaxhhuot
+ ElA54xiL2CJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ8HKhQAKCRD2t4JPQmmg
+ cwPVD/9q05P8hFCgqDiWpqsVltd8uQk1rn1RiU5trR1QdKNJhLgjBFdRrsdf8pxpliUfIxzhuey
+ RGjG6tr5MOM0XV8YSEsueYvBGZutZ5i+uhdU1wG6UOi5oeXi/gMld+x16k4SVrLgmy0mk1mTE1q
+ DmpG6/2XiPXcqcwz3yhceFwwFHhUVXfuvnQgC7KB3G9y+jOchqqT0y+Q/boJeFbw3Q5CjEZvKTS
+ 2tr2eWj+EBwRNq0tO1crzm+k9A5e6DlvDM/VartN5wFICjRHLhH3/AnhI5PbeLAC1JundSPZtgI
+ Qka/4EWqXbw0rxp6d7lcez3slVepGJvUOgT8cp8cmbLTDvajLhi+hpohz2fW1VcjYdQZ2WCfvKo
+ VjC2bow4yXsqrVKVLTnPHYAkfXKsPdFbNwtcK3bYMpmES0yzaoMF8gh+fwMObWUr6i/yoOExOZN
+ ZZr0WG0+RqdnLXuR0EgIZXtkvS+DE+/5EmaxBjN+BzBQv5uVF36t4ATZDpAf2qH5Gz+fB6vSHIL
+ D5PVeNHOlprRLK3KUsC11+pet7bCCT4rka5waOPHihgjnrN+Jf+u9A1aMkKRwxD33a0Pc6DoceN
+ k32uE2LFfqUtnG9UCGpf8nNxnFpnnrzLaDuO/pUKEHG5Ignc+MyzB5EFPL2G42uXbpZygufp4lk
+ U2pP0LLhzRkOXHQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Gang Yan <yangang@kylinos.cn>
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch introduces a new 'chk_diag' test in diag.sh. It retrieves
-the token for a specified MPTCP socket (msk) using the 'ss' command and
-then accesses the 'mptcp_diag_dump_one' in kernel via ./mptcp_diag
-to verify if the correct token is returned.
+In mptcp_pm_nl_set_flags(), "entry" is copied to "local" when pernet->lock
+is held to avoid direct access to entry without pernet->lock.
 
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/524
-Signed-off-by: Gang Yan <yangang@kylinos.cn>
+Therefore, "local->flags" should be passed to mptcp_nl_set_flags instead
+of "entry->flags" when pernet->lock is not held, so as to avoid access to
+entry.
+
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Fixes: 145dc6cc4abd ("mptcp: pm: change to fullmesh only for 'subflow'")
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/diag.sh | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ net/mptcp/pm_netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 2bd0c1eb70c5b69b4ab364eec3f4017898ff7f03..4f55477ffe087721ad13774e82a5e2b1e6cec7c4 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -200,6 +200,32 @@ chk_msk_cestab()
- 		 "${expected}" "${msg}" ""
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index d4328443d844dbe52d2b0cc0018dcac1e4245320..fb83eba041f17c09923a8ed1a033983692962c5a 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -1983,7 +1983,7 @@ int mptcp_pm_nl_set_flags(struct mptcp_pm_addr_entry *local,
+ 	*local = *entry;
+ 	spin_unlock_bh(&pernet->lock);
+ 
+-	mptcp_nl_set_flags(net, &local->addr, entry->flags, changed);
++	mptcp_nl_set_flags(net, &local->addr, local->flags, changed);
+ 	return 0;
  }
  
-+chk_dump_one()
-+{
-+	local ss_token
-+	local token
-+	local msg
-+
-+	ss_token="$(ss -inmHMN $ns | grep 'token:' |\
-+		    head -n 1 |\
-+		    sed 's/.*token:\([0-9a-f]*\).*/\1/')"
-+
-+	token="$(ip netns exec $ns ./mptcp_diag -t $ss_token |\
-+		 awk -F':[ \t]+' '/^token/ {print $2}')"
-+
-+	msg="....chk dump_one"
-+
-+	mptcp_lib_print_title "$msg"
-+	if [ -n "$ss_token" ] && [ "$ss_token" = "$token" ]; then
-+		mptcp_lib_pr_ok
-+		mptcp_lib_result_pass "${msg}"
-+	else
-+		mptcp_lib_pr_fail "expected $ss_token found $token"
-+		mptcp_lib_result_fail "${msg}"
-+		ret=${KSFT_FAIL}
-+	fi
-+}
-+
- msk_info_get_value()
- {
- 	local port="${1}"
-@@ -290,6 +316,7 @@ chk_msk_remote_key_nr 2 "....chk remote_key"
- chk_msk_fallback_nr 0 "....chk no fallback"
- chk_msk_inuse 2
- chk_msk_cestab 2
-+chk_dump_one
- flush_pids
- 
- chk_msk_inuse 0 "2->0"
 
 -- 
 2.47.1
