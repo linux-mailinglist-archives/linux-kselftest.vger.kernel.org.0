@@ -1,100 +1,126 @@
-Return-Path: <linux-kselftest+bounces-27906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38DFEA49C05
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D5AAA49C2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:39:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4632F3AAA3C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:29:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 557C53A831F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB50B26E62F;
-	Fri, 28 Feb 2025 14:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB04126FDB3;
+	Fri, 28 Feb 2025 14:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PY5O/cwx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ThEVMJpv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64BC224CC;
-	Fri, 28 Feb 2025 14:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BDD2686A0;
+	Fri, 28 Feb 2025 14:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740752989; cv=none; b=AD1vAKwuKQ5dD9Yk76YhhCYBcw7r6L2xd0E0NB8Qpb+OIsKryggwyLP9RrWW2WAFFvwXT1vYWDtAP2eE8m+pOs6Wlq7zZnjkAbOW39b6ZwIGBUwZOS7f5jQ5eBvw2F+/o1u5Z1EaXiXvaAd1XgNgMDx4XmjbH3QpIAWrSniHLPc=
+	t=1740753546; cv=none; b=eC43oZj5zxkIeaL4oruIT0pYKAnbt31ZlNbxjeV7I7OxTmaBqziAyt5IZZKo+A3prAXgp3AZYAMLgkNoGinh7eoo1iUrLG98Ynw+zbnMICCL7Sl+zJ5p5T5A1N9DC0JZ7pxIHzPSrGwu3788i4krR4ydGgvWoLhXDOHSUoNCTNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740752989; c=relaxed/simple;
-	bh=AY6KTggfG+2NZyh4MNhPng9mblge+5h8fWPaN9vRs4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=raBUJCK0Fs5oguwjNAmtMr2OilU/4lVJ7YY7eiZUlno0ryqA2VmLgvSmXucvl2Z6YJ+u8UHIQWm9mGPZOm8vJilQlvS9QjMFTgK3RyBfqZsgOMrIcBHwf8yo2zO1/hbiJiLMYOnRu+oeRNbgruXOuSuu/q0enuC37bmnYPx8nT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PY5O/cwx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6891EC4CED6;
-	Fri, 28 Feb 2025 14:29:48 +0000 (UTC)
+	s=arc-20240116; t=1740753546; c=relaxed/simple;
+	bh=LSZ43G3RguyR8JT13Yid9ixB8s/FRWLidQd9lifiub8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=i1gKnJFwRpSmc7PPlRixs1Vl791WK0RTNjTdWPwKS33If5UxK8UPKPTh5PfnLByvGNeqwzWCh2bJNDkBfl7yvA+djNraN2WWCh+dA3+CBpFhOJtZERg81ncMiseKJIzSYOrnlXUM+poKirVi9vSs5C9JiTgAwjaCgcH06Oc7TnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ThEVMJpv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EEAC4CED6;
+	Fri, 28 Feb 2025 14:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740752989;
-	bh=AY6KTggfG+2NZyh4MNhPng9mblge+5h8fWPaN9vRs4g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PY5O/cwxqxGLSaoACpfVg8SBBsGU7X8sCCbwt2WaNaSJM188KFrQ1NJlA1llaK1h5
-	 W8+lMdcP7Ed0rrxJ9K8q68rCEeFhpCBYO+rCwVYvY2pXkef3HQSjICnUnoh0I6VLlp
-	 YNERk5kXkPB0RyuYIQedzL61nc49kcQq897Ga/IiFWrWPnwwcZeU45v1m9wFelEktG
-	 PCfg1foDNZykiybW+k42CR878DQ85frAgVgDbj41geD2PWGYKSMmbYCLxSxP0L1M3p
-	 m07ouhO/PQ/yMy7+FB5N5jlDEoHo8SzaoBh3AV5576HyXpb2G2Ponp5l53ssIqcTXk
-	 93Cj4wOH1T+PA==
-Date: Fri, 28 Feb 2025 06:29:47 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>, Jason Wang <jasowang@redhat.com>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko
- <andrew@daynix.com>, Stephen Hemminger <stephen@networkplumber.org>,
- gur.stavi@huawei.com, Lei Yang <leiyang@redhat.com>
-Subject: Re: [PATCH net-next v7 5/6] selftest: tun: Add tests for virtio-net
- hashing
-Message-ID: <20250228062947.7864a59c@kernel.org>
-In-Reply-To: <20250228-rss-v7-5-844205cbbdd6@daynix.com>
-References: <20250228-rss-v7-0-844205cbbdd6@daynix.com>
-	<20250228-rss-v7-5-844205cbbdd6@daynix.com>
+	s=k20201202; t=1740753545;
+	bh=LSZ43G3RguyR8JT13Yid9ixB8s/FRWLidQd9lifiub8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=ThEVMJpvPz1h4Bnn8Ta0YAgpbhe40tCCl8a7+4tg1JOhTXTKfCEZU4hbHd25THMmz
+	 8oMAaE6qF4jyHRKz0ljMlMJbH9S3fpjmVG6TtpWVbU7pfCAZngVTLJJwPy831SUyEI
+	 1aRpqUdNV92JtJNX0PQ8xJpqT5IUszNfQbIABhqZV2QdrzNUcYGTofJWYvOPVXpBEB
+	 FC7SyboLdhJu9Q6IxIAHVL4DwYNT3suVWhFGaiBNr0cIo8yNBPlZH0WNpCR4dzktar
+	 Ub+Q0Z2BlqtrJBe2AJ+r7vpO/9uctNrilVs3p3/IyPoOdAbu6YZQnKIWc2+rJ6tc3x
+	 nXnFI6D4hJyUQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/5] mptcp: improve code coverage and small
+ optimisations
+Date: Fri, 28 Feb 2025 15:38:34 +0100
+Message-Id: <20250228-net-next-mptcp-coverage-small-opti-v1-0-f933c4275676@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGrKwWcC/zWNwQqDMBBEf0X27EJcKbX9leIhZLftgiYhCSKI/
+ +5S6GEOD+bNHFClqFR4dgcU2bRqigZD30H4+vgRVDYGcnRzRBNGaZa94ZpbyBjSJsVbra5+WTD
+ lpnh3PHEYeKQHgw3lIm/dfycv+Pswn+cFeIPC634AAAA=
+X-Change-ID: 20250228-net-next-mptcp-coverage-small-opti-70d8dc1d329d
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Gang Yan <yangang@kylinos.cn>, Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1407; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=LSZ43G3RguyR8JT13Yid9ixB8s/FRWLidQd9lifiub8=;
+ b=owEBbAKT/ZANAwAIAfa3gk9CaaBzAcsmYgBnwcqFAlyzhVa9vJHyOS5n85FwY4QCgdzPROzqU
+ aY3AB36xciJAjIEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ8HKhQAKCRD2t4JPQmmg
+ c9ngD/dobU2167VR16CyPlajKR2shZJyNQJ9LTHUGKH/2ooDvYdjk2V/qKLtJnR6OL+HXjCb3+q
+ FEMsRj+48xxy4mqcOlJ4uM3NC3NFHWHAaPr516Y9XRDbhluV0U6OMkcWhp5lU3pF/6SjJvHrjdb
+ Q1xgbBX8ZMSMbDt0cPn0trbEesye9LSSjBJtQ7UZ71vtqOtc2oJxLqY67glV0s0wCLlw9rZgnNY
+ WiR4ulW9S87XBhyAmXREEjmHo3z9X8bsAVjWC8AaRZ54tbf3ead1vubwinwNr8TO4P+KyvkLxi/
+ Vh/kc9yQLUBIX7Yb+p7U1sjB6G/1+ATeE4poETwDJ/r18yLRStFLkRSmwy2MzV1G99KDGKjX3yd
+ /8WoopSISCrNCW4IV8xE8q98eDtIMkQXjrX+PJmgc1mCjd3EitTiaQ9gyA9dNFX1mjqETXgf5QF
+ EKdCsYRKqflMkSr8TPos+8HwEXWcb8BpP5Pne3PBibx/csrLu1PTGsP9pKv78dc/fvKe67vafAF
+ eII2RDNIgg6WSbAC4mgUDqqDoTt4ztM+GZaQPnUXU4O4Z1W4Gb5DmVtZF1/h/Qaaei+lZrGd50F
+ pwldfa64EIg5viDc/pKnwAS5sr+ayenHjq8ngjZUwDHK0ypBWnaHq/ScGp+PTfXhZ5OhNoyBw75
+ fURSw3/Med34z
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Fri, 28 Feb 2025 16:58:51 +0900 Akihiko Odaki wrote:
-> The added tests confirm tun can perform RSS and hash reporting, and
-> reject invalid configurations for them.
+This small series have various unrelated patches:
 
-The tests may benefit from using FIXTURE_VARIANT(), up to you.
+- Patch 1 and 2: improve code coverage by validating mptcp_diag_dump_one
+  thanks to a new tool displaying MPTCP info for a specific token.
 
-The IPv4 tests fail reliably on a VM with a debug kernel
-(kernel/configs/debug.config included in the config):
+- Patch 3: a fix for a commit which is only in net-next.
 
-# 5.90 [+0.00] ok 14 tun_vnet_hash.unclassified
-# 5.90 [+0.00] #  RUN           tun_vnet_hash.ipv4 ...
-# 6.18 [+0.28] # tun.c:669:ipv4:Expected 0 (0) != tun_vnet_hash_check(self->source_fd, self->dest_fds, &packet, sizeof(packet), 0, VIRTIO_NET_HASH_REPORT_IPv4, 0x6e45d952) (0)
-# 15.09 [+8.92] # ipv4: Test failed
-# 15.10 [+0.00] #          FAIL  tun_vnet_hash.ipv4
-# 15.10 [+0.00] not ok 15 tun_vnet_hash.ipv4
-# 15.10 [+0.00] #  RUN           tun_vnet_hash.tcpv4 ...
-# 15.36 [+0.26] # tun.c:689:tcpv4:Expected 0 (0) != tun_vnet_hash_check(self->source_fd, self->dest_fds, &packet, sizeof(packet), VIRTIO_NET_HDR_F_DATA_VALID, VIRTIO_NET_HASH_REPORT_TCPv4, 0xfb63539a) (0)
-# 24.76 [+9.40] # tcpv4: Test failed
-# 24.76 [+0.00] #          FAIL  tun_vnet_hash.tcpv4
-# 24.76 [+0.00] not ok 16 tun_vnet_hash.tcpv4
-# 24.77 [+0.00] #  RUN           tun_vnet_hash.udpv4 ...
-# 25.05 [+0.28] # tun.c:710:udpv4:Expected 0 (0) != tun_vnet_hash_check(self->source_fd, self->dest_fds, &packet, sizeof(packet), VIRTIO_NET_HDR_F_DATA_VALID, VIRTIO_NET_HASH_REPORT_UDPv4, 0xfb63539a) (0)
-# 32.11 [+7.06] # udpv4: Test failed
-# 32.11 [+0.00] #          FAIL  tun_vnet_hash.udpv4
-# 32.11 [+0.00] not ok 17 tun_vnet_hash.udpv4
+- Patch 4: reduce parameters for one in-kernel PM helper.
+
+- Patch 5: exit early when processing an ADD_ADDR echo to avoid unneeded
+  operations.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Gang Yan (2):
+      selftests: mptcp: Add a tool to get specific msk_info
+      selftests: mptcp: add a test for mptcp_diag_dump_one
+
+Geliang Tang (2):
+      mptcp: pm: in-kernel: avoid access entry without lock
+      mptcp: pm: in-kernel: reduce parameters of set_flags
+
+Matthieu Baerts (NGI0) (1):
+      mptcp: pm: exit early with ADD_ADDR echo if possible
+
+ net/mptcp/pm.c                                 |   3 +
+ net/mptcp/pm_netlink.c                         |  15 +-
+ tools/testing/selftests/net/mptcp/Makefile     |   2 +-
+ tools/testing/selftests/net/mptcp/diag.sh      |  27 +++
+ tools/testing/selftests/net/mptcp/mptcp_diag.c | 272 +++++++++++++++++++++++++
+ 5 files changed, 311 insertions(+), 8 deletions(-)
+---
+base-commit: 56794b5862c5a9aefcf2b703257c6fb93f76573e
+change-id: 20250228-net-next-mptcp-coverage-small-opti-70d8dc1d329d
+
+Best regards,
 -- 
-pw-bot: cr
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
 
