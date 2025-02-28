@@ -1,100 +1,94 @@
-Return-Path: <linux-kselftest+bounces-27823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27824-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F81FA48EDF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 03:50:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F4C2A49080
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 05:50:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C67C16CCC9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 02:50:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 842FD189304D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 04:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1434B14B08C;
-	Fri, 28 Feb 2025 02:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28BA1AAA1C;
+	Fri, 28 Feb 2025 04:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YymxivtC"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GymhFrAS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8B8224D6;
-	Fri, 28 Feb 2025 02:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8491157487
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 04:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740710999; cv=none; b=jFU2VAiLNGWyb516qRrU7DEwqztc46DMtzksBsAuYx62vQs3A+2fZiiJkz49PCHwHtJ20cPjIQ1pBCQrESGZJy4kvp4+R08JwXdQdYD/SeMsvlAnnzUykwbL52iT96I93kGVOtG06FZ3dec7+I8vFmsTq6nu3ejCSnzHE4fvz6A=
+	t=1740718219; cv=none; b=INK9ZinTXjxHoX3abH8ELzkZ7b19jOBF74PL3rihVHtEKOBebqsc7/UP12gBpMofStqmHFDJfiE2JzP10rathbPeGAKWlqj/Sf2SWuN+SKuMIwPJSI/adPzMkLJC/UfjJAc98491i/sGUH5iZX2JHUXxqydiCSbEffTvLiNoWT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740710999; c=relaxed/simple;
-	bh=ydxu/skYurmAld4vb7S643yLAKc57hVF7vBSFY1pjPU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hWAW0ZAejwtX5h2lhu88zMUK0LYjrpm50k1IO5SGfofOp5rWXapMIDIUniXSraF4D2xM9KxzTHYRbxS2CpI3HIAJyEBYa5m1LSnHlh0i+pF8dHvJ04dI9yOVNGZD9Z4c39o0U0/QGUy8w3iOUI5TMtOyHfZ5kaRB4NoruymcaYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YymxivtC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FCE3C4CEDD;
-	Fri, 28 Feb 2025 02:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740710998;
-	bh=ydxu/skYurmAld4vb7S643yLAKc57hVF7vBSFY1pjPU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YymxivtCeZTphclh1mW2FSkq66ehF5xMsP6BU2pTHt2fO2EiJkm3VDw7JxUrij8Pq
-	 H3Vlt8dkB+TyYkiUElZDSHs7U8RuBRjL2Aco1pOckVRgqO1l1Of/ZJrribb4JQ0T8E
-	 cn0yt2ZNdFv00+l8F25OYnRZ2P/dF4OKtYq+ADDBzQp2srVGblT4P0cSKNJHFmixVo
-	 bjVtknKh86DAaSLr7hu+ovpdWUab4YbQlkBLbZSVYGAi9FH+i/ZtjSHzlKLdoHAhdj
-	 Bx6Qrm0XwEaode9SZkY0FXzViR0k2BQ0zGbBPxEEUs3g44ioPCr3F8D49DZGIi/zMr
-	 Ktm7ed+8qgDeQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADDA8380AACB;
-	Fri, 28 Feb 2025 02:50:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1740718219; c=relaxed/simple;
+	bh=vKRGBPVxFRzASCrgNUPfeminx0NxPnVIpYw7FilDZ5E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iQJC8wJNCw343aQW3evEn3IeGTzV75awVOKqfUV4HfH5fYjV6AsyLLbWLw1ucddpwKOApcZeoFLOJD1rBauCzFBzUWaYe0xX/G0oDwUDIrPcJq1/qAJiCfU8aukxBzqPia+8vcEaKh62BKXIeotzvdH2Ch5nsF9ZazNKi+gIaMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GymhFrAS; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 28 Feb 2025 12:49:49 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740718205;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TOL3Sxz/lRQTI2ovRj5bAO2y5w38NS5Crps3LkHhwlc=;
+	b=GymhFrASED4qRmLM1tNiylCzCa2MouSeuTDdP6Fld3rWSibc38FZuG3uklpF5smxZWL0Hc
+	ICsAb9HWA8yA5ux9tgdt4qqvjms54wwaEekwTTbwlhC218MfQXlBw1v6BA3XlO/5E4C5Rb
+	hkDAQ8Px+/fEXaG4xiPleMG90mJfQRk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: cong.wang@bytedance.com, john.fastabend@gmail.com, 
+	jakub@cloudflare.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net, song@kernel.org, 
+	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
+	jolsa@kernel.org, shuah@kernel.org, mhal@rbox.co, sgarzare@redhat.com, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, mrpre@163.com, 
+	syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com
+Subject: Re: [PATCH bpf-next v1 1/3] bpf, sockmap: avoid using sk_socket
+ after free
+Message-ID: <4jsnhbf2sjzdwdg6i3nzdp7skpcdpuujxr2ggt5dcaqwufh3bf@urvrkhaulgsy>
+References: <20250226132242.52663-1-jiayuan.chen@linux.dev>
+ <20250226132242.52663-2-jiayuan.chen@linux.dev>
+ <84f25c32-1aa6-42d6-a5b1-efce822bfcd6@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/3] selftests/net: deflake GRO tests and fix return value
- and output
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174071103050.1664035.10238417641881750067.git-patchwork-notify@kernel.org>
-Date: Fri, 28 Feb 2025 02:50:30 +0000
-References: <20250226192725.621969-1-krakauer@google.com>
-In-Reply-To: <20250226192725.621969-1-krakauer@google.com>
-To: Kevin Krakauer <krakauer@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <84f25c32-1aa6-42d6-a5b1-efce822bfcd6@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 26 Feb 2025 11:27:22 -0800 you wrote:
-> The GRO selftests can flake and have some confusing behavior. These
-> changes make the output and return value of GRO behave as expected, then
-> deflake the tests.
+On Thu, Feb 27, 2025 at 03:04:26PM -0800, Martin KaFai Lau wrote:
+> On 2/26/25 5:22 AM, Jiayuan Chen wrote:
+> > Use RCU lock to protect sk_socket, preventing concurrent close and release
+> > by another thread.
+> > 
+> > Because TCP/UDP are already within a relatively large critical section:
+> > '''
+> > ip_local_deliver_finish
+> >    rcu_read_lock
+> >    ip_protocol_deliver_rcu
+> >        tcp_rcv/udp_rcv
+> >    rcu_read_unlock
+> > '''
+> > 
+> > Adding rcu_read_{un}lock() at the entrance and exit of sk_data_ready
+> > will not increase performance overhead.
 > 
-> v2:
-> - Split into multiple commits.
-> - Reduced napi_defer_hard_irqs to 1.
-> - Reduced gro_flush_timeout to 100us.
-> - Fixed comment that wasn't updated.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,1/3] selftests/net: have `gro.sh -t` return a correct exit code
-    https://git.kernel.org/netdev/net-next/c/784e6abd99f2
-  - [v2,2/3] selftests/net: only print passing message in GRO tests when tests pass
-    https://git.kernel.org/netdev/net-next/c/41cda5728470
-  - [v2,3/3] selftests/net: deflake GRO tests
-    https://git.kernel.org/netdev/net-next/c/51bef03e1a71
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Can it use a Fixes tag?
+Thanks, Martin.
+It seems that this issue has existed since sockmap supported unix.
+I'll find the corresponding commit as the Fixes tag.
 
