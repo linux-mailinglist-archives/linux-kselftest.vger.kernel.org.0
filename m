@@ -1,108 +1,170 @@
-Return-Path: <linux-kselftest+bounces-27820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5380A48CF1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 00:47:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18A50A48E0B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 02:40:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EDF53B5C2E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2025 23:47:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDDA53B1A19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 01:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A2822B5BC;
-	Thu, 27 Feb 2025 23:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC6335963;
+	Fri, 28 Feb 2025 01:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RgKWI+Gs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hc57WRjR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C68276D13;
-	Thu, 27 Feb 2025 23:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22B4276D0B;
+	Fri, 28 Feb 2025 01:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740700058; cv=none; b=EqSWhDla0b30x2fBsQJQvlLCtjJ2qyhgE5f91r54M1q179HPKeD8IuPkFJadaNy4UPMgbD5lYPRMpkbIvce6ZGHhlyBw4M9PvaDMpchB5DE7/NVakn3G9ebUzKqP760Ol6Bpi2wvg9Op//FGIqfpBnfCfW8dU1Dz0OGeM6OwUms=
+	t=1740706797; cv=none; b=mVAwHYqHFLIlXFvYS4FUAqE4KbVAKvh1eLSlksGXzmuDiwO076HnFDD46x4pAIyvsIjWc9DQwrm76FEVet/7PuAdkXkj9skTsTCqklCoRB30ijCaRx3i8wd+HfGx9JCKvvlKvNhc0/IhKycNcJtLCcAxgqkBD0jeZQJ0YBbzy68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740700058; c=relaxed/simple;
-	bh=c0oYsmyu//bfUW48faBRQo8ItRj/gBwXXjbw7H7EfQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jew09JcQsO+0V+LLjMCGbM1yX0aU60gQUFB9ciARidG43R9GaTJGfnWr0N+nkv5bLahM00WNTEcP0T0WV963V9tWwaQj0jHGVqX/d9cUre4DqqZS5j22O4xz++R5cTmZuJ5JZreGt0hvtc/ILirZgpPwKNlJAZpu3xWzA+zsis0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RgKWI+Gs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57319C4CEDD;
-	Thu, 27 Feb 2025 23:47:37 +0000 (UTC)
+	s=arc-20240116; t=1740706797; c=relaxed/simple;
+	bh=ojYLpVNPiRkjG8JoB/rvzAys6XHFkDYl+wJ0eo47Uho=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sLrJuLRfpB9+X+lcNO65t4DQ5xnCvoBUrD/mSdmNs4yowL4BbB6Ych+UQmfrvTcz8KbgDKQuJ2m//WRsv/UCLhVUBFHyh/jo1xgQ8MXtbntqCJoLzbFj6JGyVKlupVcZ+KxsR+gs2K73F3i2tJpDUdnu6CQfKcKVxVCpKVMvz7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hc57WRjR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277B8C4CEDD;
+	Fri, 28 Feb 2025 01:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740700057;
-	bh=c0oYsmyu//bfUW48faBRQo8ItRj/gBwXXjbw7H7EfQE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=RgKWI+GspJn7hE7J9mcDJJ2vqB3NUtVCZFG4YE3vLwMRajxDv/fyEoclXVe+u/WAN
-	 jaQAFcaaqpw6/B3uIMG427FUVOVWVOjF5DPHhaBmg7GdF2gjYmRvOMzHMIa2w9PYE3
-	 nLvq8CAram0W7yR+6F9p8wT1rZ1x+ypelEc+iDD2JEdfelcUZWwOr91va0431r6Ny9
-	 b8x7N43CGE4DWZa0Qx/Fkj02WvppLE2Y6JQLNdj8CaqS3gqZ52ZkrehMjle4RTcbjt
-	 GkY6P9G3giZSYPyDdK8r0X/MqNVZva684PqoYv8UbEf7482/zYfiMaiY0AX9nlq1ke
-	 01QijDOrvvDsw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id F22ECCE04CA; Thu, 27 Feb 2025 15:47:36 -0800 (PST)
-Date: Thu, 27 Feb 2025 15:47:36 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Davidlohr Bueso <dave@stgolabs.net>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH rcu 00/11] Lazy Preempt changes for v6.15
-Message-ID: <a43b531a-241e-4a0a-b373-5a111b519d0f@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250225035516.26443-1-boqun.feng@gmail.com>
- <87mse70xqn.fsf@oracle.com>
+	s=k20201202; t=1740706797;
+	bh=ojYLpVNPiRkjG8JoB/rvzAys6XHFkDYl+wJ0eo47Uho=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Hc57WRjRWgPxvI5x4oZe7U5i7nReS6+twzVrGZUGgkF9MevODBXdV9m6St3cK6xfH
+	 lOCgTx54ZLZ6Z90uJfRA1XlsOBfU+TQIx/K+nsamSVL7epVdUGTxdEwQRbSgNxjQo5
+	 oKaIz7LvmBM2BCo/Qu+WZL1wtzYcR0qOv0EFCZJSOmxkyWE2A2OcwMRQycEz2tvr9s
+	 UxahWL5eNe5jGEzpDj7v1/oiOM4wkz5awKSBDPHlN8263VBxqgKBFdzLh5UIEclXo+
+	 YENTZXWV6zwNeoolIjbHfdFiXRyOYdqdlryRlP96Oozg1+SWqTgeJYodW+8ivkxqbG
+	 OSOtLrAh2SOfg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DA1380AACB;
+	Fri, 28 Feb 2025 01:40:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mse70xqn.fsf@oracle.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v20 00/25] Introducing OpenVPN Data Channel
+ Offload
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174070682925.1649415.10325310803686050485.git-patchwork-notify@kernel.org>
+Date: Fri, 28 Feb 2025 01:40:29 +0000
+References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+In-Reply-To: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, donald.hunter@gmail.com, shuah@kernel.org,
+ sd@queasysnail.net, ryazanov.s.a@gmail.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shaw.leon@gmail.com,
+ akpm@linux-foundation.org, steffen.klassert@secunet.com,
+ antony.antony@secunet.com, willemdebruijn.kernel@gmail.com,
+ dsahern@kernel.org, andrew@lunn.ch, skhan@linuxfoundation.org
 
-On Thu, Feb 27, 2025 at 03:33:04PM -0800, Ankur Arora wrote:
-> 
-> Boqun Feng <boqun.feng@gmail.com> writes:
-> 
-> > Hi,
-> >
-> > Please find the upcoming changes for CONFIG_PREEMPT_LAZY in RCU. The
-> > changes can also be found at:
-> >
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git lazypreempt.2025.02.24a
-> >
-> > Paul & Ankur, I put patch #7 and #8 (bug fixes in rcutorture) before
-> > patch #9 (which is the one that enables non-preemptible RCU in
-> > preemptible kernel), because I want to avoid introduce a bug in-between
-> > a series, appreciate it if you can double check on this. Thanks!
-> 
-> Makes sense to me.
+Hello:
 
-Looks good to me as well, and thank you for spotting this!
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-							Thanx, Paul
+On Thu, 27 Feb 2025 02:21:25 +0100 you wrote:
+> After some time of struggle trying to fix all hidden bugs that Sabrina
+> has found...here is v20!
+> 
+> Notable changes since v19:
+> * copyright years updated to 2025
+> * rtnl_link_ops.newlink adapted to new signature
+> * removed admindown del-peer-reason attribute from netlink API
+>   (it should have gone away in v19 already)
+> * removed asynchronous socket cleanup. All cleanup now happens in the
+>   same context as the peer removal. I used a "deferred list" to
+>   collect all peers that needed socket release and traversed it
+>   after releasing the socket. This wasy there was no need to spawn
+>   workers to leave the atomic context. Code looks way more linear now
+> * provided implementation for sk_prot->close() in order to catch when
+>   userspace is releasing a socet and act accordingly. This way we can
+>   avoid the dangling netns problem discussed in v19
+> * due to the previous item, it is now expected that the process that
+>   created a socket stays alive all time long.
+> * kselftest scripts have been re-arranged as per the previous item
+>   in order to keep ovpn-cli processes alive in background during the
+>   tests
+> * improved TCP shutdown coordination across involved components
+> * fixed false deadlock reporting by using nested lock class (thanks a
+>   lot to Sean Anderson!)
+> * exported udpv6_prot via EXPORT_SYMBOL_GPL
+> * merged patch for exporting inet6_stream_ops with its user
+> * moved TCP code that may sleep during detach out of lock_sock area
+> * reverted tcp_release_cb to EXPORT_SYMBOL
+> * improved kselftest Makefile to allow kselftest_deps.sh to detect
+>   all dependencies
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v20,01/25] mailmap: remove unwanted entry for Antonio Quartulli
+    https://git.kernel.org/netdev/net/c/ada9ce437a4d
+  - [net-next,v20,02/25] net: introduce OpenVPN Data Channel Offload (ovpn)
+    (no matching commit)
+  - [net-next,v20,03/25] ovpn: add basic netlink support
+    (no matching commit)
+  - [net-next,v20,04/25] ovpn: add basic interface creation/destruction/management routines
+    (no matching commit)
+  - [net-next,v20,05/25] ovpn: keep carrier always on for MP interfaces
+    (no matching commit)
+  - [net-next,v20,06/25] ovpn: introduce the ovpn_peer object
+    (no matching commit)
+  - [net-next,v20,07/25] ovpn: introduce the ovpn_socket object
+    (no matching commit)
+  - [net-next,v20,08/25] ovpn: implement basic TX path (UDP)
+    (no matching commit)
+  - [net-next,v20,09/25] ovpn: implement basic RX path (UDP)
+    (no matching commit)
+  - [net-next,v20,10/25] ovpn: implement packet processing
+    (no matching commit)
+  - [net-next,v20,11/25] ovpn: store tunnel and transport statistics
+    (no matching commit)
+  - [net-next,v20,12/25] ovpn: implement TCP transport
+    (no matching commit)
+  - [net-next,v20,13/25] skb: implement skb_send_sock_locked_with_flags()
+    (no matching commit)
+  - [net-next,v20,14/25] ovpn: add support for MSG_NOSIGNAL in tcp_sendmsg
+    (no matching commit)
+  - [net-next,v20,15/25] ovpn: implement multi-peer support
+    (no matching commit)
+  - [net-next,v20,16/25] ovpn: implement peer lookup logic
+    (no matching commit)
+  - [net-next,v20,17/25] ovpn: implement keepalive mechanism
+    (no matching commit)
+  - [net-next,v20,18/25] ovpn: add support for updating local UDP endpoint
+    (no matching commit)
+  - [net-next,v20,19/25] ovpn: add support for peer floating
+    (no matching commit)
+  - [net-next,v20,20/25] ovpn: implement peer add/get/dump/delete via netlink
+    (no matching commit)
+  - [net-next,v20,21/25] ovpn: implement key add/get/del/swap via netlink
+    (no matching commit)
+  - [net-next,v20,22/25] ovpn: kill key and notify userspace in case of IV exhaustion
+    (no matching commit)
+  - [net-next,v20,23/25] ovpn: notify userspace when a peer is deleted
+    (no matching commit)
+  - [net-next,v20,24/25] ovpn: add basic ethtool support
+    (no matching commit)
+  - [net-next,v20,25/25] testing/selftests: add test tool and scripts for ovpn module
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
