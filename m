@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-27911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F295A49C39
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:40:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 739E1A49C3C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:40:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC10E7A8457
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:39:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CBCE3A80C9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF5A274245;
-	Fri, 28 Feb 2025 14:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACB62755E1;
+	Fri, 28 Feb 2025 14:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fQhO1PQ+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjL5juOd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24CE27293F;
-	Fri, 28 Feb 2025 14:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6B0274276;
+	Fri, 28 Feb 2025 14:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740753557; cv=none; b=J2EBDI7gQDrxYRggqcSj4r3/kRw2eihgf1qblaLSnqpnPW3FETE0Ogxo/TsPZ9Mp49rHwKI21PfcQULTmzMueiaJ3mSzSc+XbVp1MDtfc2NqfwZr/vxGr8vdKsSo8rERL9CNKPSfnmPzKxvVvA1zR3qCqfXmA/C8pbmoEMkeHuo=
+	t=1740753560; cv=none; b=EmRID7VjrffK4ZvUBjlWg6cNqfPsb+MKivzcuqFBAXCSYdSv99fdsJs+JTrpzBP3xgHWeBNnHrEt8B72kTRQ8in2ALqQ+O6iBe0PGTAFS9ssr20RC3uuO3bKim0WLa6IA5cbvDrg3IBwEuZHzHjskQcVxueI1Km29XwukSjW1E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740753557; c=relaxed/simple;
-	bh=J8Tl2NKMo+qr7ei2meOGOP4gBjitzEyJVWkZmB4YUcM=;
+	s=arc-20240116; t=1740753560; c=relaxed/simple;
+	bh=qd5Hx+b04eodl3pyAKUj3non7RIQIXEm2HBEpyB2Mtg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LOzLDkCu0VPr+Pl7LVeDLr7Pf+MjoKi+wGMz5/VOCcLQ8CVQZxchjmOoHfdFoQ2DRov7V1vpTZpVLttmquizdvUuW9e2m/c1rs6qB0RRfxmWw7S/A3zHcj8HAfoGuPGnh6safCKkZ7ke3I9+SnkXOLo8ycdWGackoPF8VlsovIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fQhO1PQ+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CEFC4CEE2;
-	Fri, 28 Feb 2025 14:39:14 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=X1y0PHThAY1GQu8qEfRDQyc6IQlKbolHwFn43cY+d8ypkYDEA6Ad/mt0offGytNr1FfacIUt2NJw6zio24fWBoewDqaYPKkoAKWYvmYDFlRfAX/keKOpYmJsZS6jAlvNdKokNSTZlWqOhhX+dvFFTLAMyoWh7vuN2rOiDq6y2XU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjL5juOd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E985C4CEE9;
+	Fri, 28 Feb 2025 14:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740753557;
-	bh=J8Tl2NKMo+qr7ei2meOGOP4gBjitzEyJVWkZmB4YUcM=;
+	s=k20201202; t=1740753560;
+	bh=qd5Hx+b04eodl3pyAKUj3non7RIQIXEm2HBEpyB2Mtg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fQhO1PQ+4TjZ9Drewusd7vanS1n2Ye1bJhaffnbxhsWkx8RxlqqQ9zRbNCkOXEWqE
-	 gEg4v70GbRmE1GuLxVaGyZ4HHF+WDyC0OmLVGbMRJ4Ae84vkpRlhah6TjRbRLlMov+
-	 BFHGo/3e0QJ1ijBldNBUpA6s+ILczCHnXU2txFogQG2hT2ju/SPGBsTJo6/GzKswlZ
-	 CkSnVkrL6BXFLa2P6T8YKzm3iSK5LqrZ3HCqS5g6cySsOvqGfNMGxpGQfYI2O8RwEE
-	 spMwaPQEopuJS4JZRc3VxxUFXUWr7c1mF1jdDDP1/DYDp/z67L1QiPTClunJMzGQ03
-	 MO4AqaNd0CL9Q==
+	b=gjL5juOdjhNiffaQnvoZA/5O1CZ5Zc0QVZaaanQNUaVEWwBYVPBYtaDqhLkrb/hJ/
+	 Ns4wIVfwLrZlYds7T+fZOBnn6sodWU9yVIxmLZjU/4raK+849IhEu9vzxXkIMRb+s/
+	 0cq5QdmqtVOAmU2jB8qpZeDybCnCrRAZAGnxgv4x8aRAxC6mwdaMJf0p87cLFAV6iF
+	 2kdcyUzX0VGfsTncmLg7nnievmt4rfWP+DGzEWoXejpwuNsSFT7DCcP1ECFdeW+0fq
+	 +LeXBFAvPkbILRS8n/DJ8jVkoW9NGnMb35mjPge3IU1VWVLsctZahhBRPcrSQwaJOv
+	 grbQnUzGWezTg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 28 Feb 2025 15:38:38 +0100
-Subject: [PATCH net-next 4/5] mptcp: pm: in-kernel: reduce parameters of
- set_flags
+Date: Fri, 28 Feb 2025 15:38:39 +0100
+Subject: [PATCH net-next 5/5] mptcp: pm: exit early with ADD_ADDR echo if
+ possible
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250228-net-next-mptcp-coverage-small-opti-v1-4-f933c4275676@kernel.org>
+Message-Id: <20250228-net-next-mptcp-coverage-small-opti-v1-5-f933c4275676@kernel.org>
 References: <20250228-net-next-mptcp-coverage-small-opti-v1-0-f933c4275676@kernel.org>
 In-Reply-To: <20250228-net-next-mptcp-coverage-small-opti-v1-0-f933c4275676@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,82 +63,54 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2140; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=gAvAYApL2HJsNtessX1RPs02bE58IWJJTWitllsLOPU=;
- b=kA0DAAgB9reCT0JpoHMByyZiAGfByoWgSM9DX9bP8UFav8hhqSHKVwNJpXMMEPtG83Owe+xWf
- IkCMwQAAQgAHRYhBOjLhfdodwV6bif3eva3gk9CaaBzBQJnwcqFAAoJEPa3gk9CaaBzrDQQAOzh
- kqIjMeZ4MDSuShXg2GV884zgDLnPfQLVFDnfgElMKwpzzRjsz9+NMk/RmsGsTZATcU73oh5U1TW
- BCvlF/gb1FEXG4sLQEU0L41ZXBWtqk0aT1rNKDEADLYprPKH8I2Mwdckh+pQ8U8F2Xy2JRAbhow
- j6v4+VCmtKN4EnGO6yeOI0nltXhctDyLAXQ6xDlftjI/42hPm3bAvKgYiYoELuB3wZodc/q227c
- Ev4vpwOXUB+1WvWM1yU/BVfO8gGU60SHaXZcM4VJglgMyCfp3ngy6GMxrMlZXmSfye7LS/ebgRw
- +t9s6625KaTzMqUaAUyzGDhG5kPoy2bYZb5mGCbdDZVgGkEeuKo+Xzxe6RuNhjUhcA7IWW4c2kG
- PbEV997sv3KhwuMzy5uEWf4Yy8BWIHkDuu44I0POFE9ZZ+YRWE6bS1hVYuokcnd2u6Z9f7qfcSU
- urlVzqyBLNnXQmop1vPdx3U9xIE0PK7g0XcfRJ0bMNQkOWnzA5RUe/zQhjP31gx5OsN9Yn22r8C
- PkJtT4NgfotNilt5pFAG5QHEM+4VXtLHg07kFAeM6A5fkDghO93XTHrwSdGNGvnT6M83ysz5Jw+
- aG6pykSoBwQ8ODrpAcjA0GZ0TKcdqAsRZDWlX+zkfpV0v8N6TVRLz80kySrKECelAeaw5Xdbsjp
- 3dG9v
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1131; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=qd5Hx+b04eodl3pyAKUj3non7RIQIXEm2HBEpyB2Mtg=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnwcqFRGWhiK+FmMNzI5GxPtdFL4gcycU+ET7Ve
+ UyUuRGVIByJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ8HKhQAKCRD2t4JPQmmg
+ c3N/D/4jcKzyFYnI5GE2aFSqdSEmywcQQ2plQvMZxTIx8OxQlDE7WRHFCeZvXbOC6mm8X20wb5M
+ BoUk9yTJyVdlPVf0wJFOBtyBNAqcTXy6GYnhmeHVKqReB24J1oxnNxStlSGefYURTzwgHNfIpDg
+ +tgy7RLESh68oo0LoYv5TsmixZLAOu+59DnNy4de9FQlkIi89DqFEkzhl+xDfRWuG31H5ha0JqA
+ FkOCU3WfwtY3unE5KOgpb3eapb8REspvdX2qm7ACT/roYSRhKwIgfBRYGUpLTwHLdIuOxIpCLmn
+ 4UVtKhEXkGr2BiWTlZnxtY+YWAwK7pP5KFKT47H4/quEvjzoDl1uB13OQyt8yZXQr1tB6U80aeZ
+ uje4epxSYc2NZXELZO5SIGn9SSxYwiYCHmu03ZQXe7zLLVY0QIKTiLrI4YyhmxRJAFRnPt/jpTl
+ 1SILxV38Lpcb7dST3OQ6LzYFPXQ0NJm4iuqydU3ncVkT53e16fw03bx3Ao1zM3HYCnkSXMMV7lS
+ 028NbpKSKG236apoqO3iRvxVzm/ObZsJNB4nUvgKzkfLRChik1iaST3kTI5bhNNFA227soOVIHD
+ E/zp+AvLN4uiivGg/vU36K6iZ28Aps+rD6s4Sm2/QjFNEoOk1LmQ71clUOsSGKRadgKDVWp+WrW
+ VJu2rIp4zvLSZ8g==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+When the userspace PM is used, or when the in-kernel limits are reached,
+there will be no need to schedule the PM worker to signal new addresses.
+That corresponds to pm->work_pending set to 0.
 
-The number of parameters in mptcp_nl_set_flags() can be reduced.
-Only need to pass a "local" parameter to it instead of "local->addr"
-and "local->flags".
+In this case, an early exit can be done in mptcp_pm_add_addr_echoed()
+not to hold the PM lock, and iterate over the announced addresses list,
+not to schedule the worker anyway in this case. This is similar to what
+is done when a connection or a subflow has been established.
 
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ net/mptcp/pm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index fb83eba041f17c09923a8ed1a033983692962c5a..4bebc4963c42d481f041999ef8976a58889919d5 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -1907,11 +1907,12 @@ static void mptcp_pm_nl_fullmesh(struct mptcp_sock *msk,
- 	spin_unlock_bh(&msk->pm.lock);
- }
+diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
+index 16cacce6c10fe86467aa7ef8e588f9f535b586fb..6c8cadf84f31f4c7dcc38b787beda048d5362dc8 100644
+--- a/net/mptcp/pm.c
++++ b/net/mptcp/pm.c
+@@ -251,6 +251,9 @@ void mptcp_pm_add_addr_echoed(struct mptcp_sock *msk,
  
--static void mptcp_nl_set_flags(struct net *net, struct mptcp_addr_info *addr,
--			       u8 flags, u8 changed)
-+static void mptcp_nl_set_flags(struct net *net,
-+			       struct mptcp_pm_addr_entry *local,
-+			       u8 changed)
- {
--	u8 is_subflow = !!(flags & MPTCP_PM_ADDR_FLAG_SUBFLOW);
--	u8 bkup = !!(flags & MPTCP_PM_ADDR_FLAG_BACKUP);
-+	u8 is_subflow = !!(local->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW);
-+	u8 bkup = !!(local->flags & MPTCP_PM_ADDR_FLAG_BACKUP);
- 	long s_slot = 0, s_num = 0;
- 	struct mptcp_sock *msk;
+ 	pr_debug("msk=%p\n", msk);
  
-@@ -1926,10 +1927,10 @@ static void mptcp_nl_set_flags(struct net *net, struct mptcp_addr_info *addr,
++	if (!READ_ONCE(pm->work_pending))
++		return;
++
+ 	spin_lock_bh(&pm->lock);
  
- 		lock_sock(sk);
- 		if (changed & MPTCP_PM_ADDR_FLAG_BACKUP)
--			mptcp_pm_nl_mp_prio_send_ack(msk, addr, NULL, bkup);
-+			mptcp_pm_nl_mp_prio_send_ack(msk, &local->addr, NULL, bkup);
- 		/* Subflows will only be recreated if the SUBFLOW flag is set */
- 		if (is_subflow && (changed & MPTCP_PM_ADDR_FLAG_FULLMESH))
--			mptcp_pm_nl_fullmesh(msk, addr);
-+			mptcp_pm_nl_fullmesh(msk, &local->addr);
- 		release_sock(sk);
- 
- next:
-@@ -1983,7 +1984,7 @@ int mptcp_pm_nl_set_flags(struct mptcp_pm_addr_entry *local,
- 	*local = *entry;
- 	spin_unlock_bh(&pernet->lock);
- 
--	mptcp_nl_set_flags(net, &local->addr, local->flags, changed);
-+	mptcp_nl_set_flags(net, local, changed);
- 	return 0;
- }
- 
+ 	if (mptcp_lookup_anno_list_by_saddr(msk, addr) && READ_ONCE(pm->work_pending))
 
 -- 
 2.47.1
