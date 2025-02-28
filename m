@@ -1,211 +1,172 @@
-Return-Path: <linux-kselftest+bounces-27903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04A8CA49A13
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 13:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 494FEA49BC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03674173260
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 12:59:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43CB2169513
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 14:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 612DE26B2C8;
-	Fri, 28 Feb 2025 12:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEAC926E16D;
+	Fri, 28 Feb 2025 14:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmTTycId"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="IFrfcr39"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF80126A1CB;
-	Fri, 28 Feb 2025 12:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF0526D5A4
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 14:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740747560; cv=none; b=BuMyidCd5x7fkGZ0Hz+KRG55go/VNs4FqEk2X9BpVyeabNVcxuSAllMgQQUR27sI3OPO8oF/gdg02rku548hcyhK/3Ei6/e8iqO1GYSAIHIorOTOcxYe+ToO5Kbe20uwL1JWwfe1FYKmOGjrV/JJgxO7y4sOEsimveeWPlkwVRw=
+	t=1740752479; cv=none; b=faI2LPs5eO1GPNKEUx0IILVZKW8Ar2EfZVIPVj/PBQhZRNZK3UsCNFtbfVsHebI5Ha8rB3hcOaC0vgQxfuWKeGBoc6J0gIYXoo8gxSL1wyLsyP5LCe28XuSREdbb9Q6PUZs0z1iIak+g0xpHgZRNQqoZrGOU7stsqQ7NdFQbAFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740747560; c=relaxed/simple;
-	bh=88IU8/0u30ca6QDimILms/murtRd5qE99O/Lp87DcKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jBnd+9ZIGXe0dYSLZJdtkqKg7TuBCK4ZMrRCgqkfJvU3f6kvORXMrbi7j4Xq5IannaqJ/8t2BalJdkUwbwLuZoSSSfXzqhOOwzq0DUCDvy2JV2mG4phCrW4aSoL+rqDYQB5aKVeD5YQ/bFLhBgV1b9cXczP3QbXT+W0ILP8pCRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmTTycId; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2232aead377so39903345ad.0;
-        Fri, 28 Feb 2025 04:59:17 -0800 (PST)
+	s=arc-20240116; t=1740752479; c=relaxed/simple;
+	bh=RI6mieHVmJ+2T7KWGP6DaYCVSIovyx1OV8K5vLZ1IYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a/M/vUjPXSGXYUsAKbdYjmOjiuWI/QBSX4GCkz0xzkzqLLUtkIxscQwTmakUbn2IGB4P9kzybucL3Xnf8utnEc20iLm+yEwGY7ojmOtK/oURnauesBAQVeaHEoma94SNuZOp2KxLDEgZq9TIEExtO80D5Iu4FyRJvVHup+Bwb+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=IFrfcr39; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38dcac27bcbso2282709f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 06:21:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740747557; x=1741352357; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0YlmhnhGiW/WmeWzlvZTi5qHU7i/VbxVrz0eaQngxXk=;
-        b=dmTTycIdL2C7CKXTCjNNRdB2QGXNJLQ+u7EbWXSNfY32882Xv8uJjCWOkKjbmW/Pjh
-         8uZ9NP8t835xJHEsX4adHO/q16XSa9+taf0WeBL82lURxioyVLW7ZqMg6YoEVsS/BJFU
-         9uw5UGE+8M8sxCSvlC5eXh/UX1TG6DorSoQATXl4JaE1q/5InZvQdSSeUsSK1gy0mOSF
-         yb5rZRoW3FKqaop11OaxO8gbpqBHdToZf2+yn8Z0Sldy2LUDZaykK7McXefcAEOx96pE
-         5eNG404ljapnS7Y+oQmMhnDVINRFrLKYyoeG52nHOttCfg42kzzeuFTtVNwXTJ8l0FVB
-         Ok0A==
+        d=openvpn.net; s=google; t=1740752476; x=1741357276; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lsm7zHaYH2jIwvMQk5vbbkkvVtAbnIssNnslsMzrf2w=;
+        b=IFrfcr39JClGsgpS65l5EPvRmJQp4/brfFE1PHDHX2Va9UVDVWqX3ZHjgf/Gbxy5gN
+         DOFzVmd1zQa4gGI1l/fL2YpR4jzg2mPb9DQosMPDgy9dH2rTFV6WbP041NkONZQT2wwH
+         0lf9AiJ9zTdon9TNQVoPp7l0iAhV6j13E/C0Hh9QgJbJdqO0fZyeLDhc4fkCARQdNPHf
+         xUxO086hOQWvDXQ0o47IYJTQuAIB8q4ZNddBRu0zusg0scda7Zgc1MMON8w2iOC5a2VP
+         CzPKY3n5xSIRxRcm4ikgpTVtz6M95o01ECfS2/t8372jv2pKGGCg3wX/hjeZRC9KM2+2
+         ViOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740747557; x=1741352357;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0YlmhnhGiW/WmeWzlvZTi5qHU7i/VbxVrz0eaQngxXk=;
-        b=WQi08ZvS1paIxR7fKAiQW+fuxN+u+lYxQahLiy4BTTMwprgQeIip0uY5USCBDs/tve
-         W3TT6Y87jOMHnckLb90R1zZ28aGOwJ604MnF90yQBq4qwrF2wMXLcwgxrdBJVCFR9hDz
-         ynWX8f8bddpUkuzk9tCgcSRjQXzUlUSCrCmhm0paHBPQlYed50VeKi+NYFylXlRUbE6+
-         oWn5HcLG4Mv/OrFc+d7IeiI8tRDX8nUzMXogugmZKJqrGjFNAnIKua6xuvu6OLTx+OsO
-         G2vm78faJKH0JRAMp8KAQZRlltPlRH+ftsENuF5Lb9SD0O8zNhTUyrjP8h36Q6NvRsoQ
-         Eopg==
-X-Forwarded-Encrypted: i=1; AJvYcCUij4oIEfGTw1Uzu5P2DCk3KROKdowk6Pkgl44zpVTGLPgB8o5HJ7BXUsANlXIlWiyWR+U4UzRe0p8DFzNlF/lX@vger.kernel.org, AJvYcCVSSMH3/huXU/u+z5Ddyp4enbSGP9PnIm4OBFmJo3y/uADuwRjdUy7sCoA6nfrrSzjO3TECHYS3@vger.kernel.org, AJvYcCX4Qg4O2f810/e44x8QOUpTD7OdctyyPIDyW9rkWD1w3VnN2ug9emX5n3wFkpcFow1WbBamIa5iPfnNiUU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5j7KrNXPIav4Tz6mw83BF/tnhsL7cJXKSNHyy4TIbtzjxcWeB
-	rR1yTaKgumxqpzcOwdJBTn6yCgy6cxzmi9F6tKLRxv3pHPmAPtDa
-X-Gm-Gg: ASbGncvfa40IBHRKgvcM1psuXGuqeJgIZWODou1r9OPbJGybwL8pJfeBIRKbOyKMc7H
-	adtwfW9jB7Fv0dmUxAJQD+8A13PzALj71uNxMFYIXy7cJXMIgiepTNzDMSrdPCLU5ayijtasAEx
-	V9b/42mnoQf1SS2mCnikgJRC6cPFivEuq6TP+UFVVpGh4SJReXVC8RMvZifBT4o3O9HjMpxxHFi
-	/NTDhzBkKAElPDbYGkjh2BdbJhx55gLzcSBKM4tOX9KF9RbFSAeWgumRaOONaCLzKFI9hYfRg2y
-	MVpKpenYfR58KksL/BDki99jA1B7JzY=
-X-Google-Smtp-Source: AGHT+IGPENQOxmmMjzKNCn5DTT6b72tUp76AFx8HqHhY0vo3qjWV6jWnSAnx9igUcmcxYYry24NcOw==
-X-Received: by 2002:a17:902:ecd0:b0:223:2aab:4626 with SMTP id d9443c01a7336-22368f60a3fmr57556395ad.11.1740747557057;
-        Fri, 28 Feb 2025 04:59:17 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223501fb54esm32501415ad.99.2025.02.28.04.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 04:59:16 -0800 (PST)
-Date: Fri, 28 Feb 2025 12:59:08 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: "razor@blackwall.org" <razor@blackwall.org>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"jarod@redhat.com" <jarod@redhat.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
-	"jv@jvosburgh.net" <jv@jvosburgh.net>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Jianbo Liu <jianbol@nvidia.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>
-Subject: Re: [PATCHv3 net 1/3] bonding: move IPsec deletion to
- bond_ipsec_free_sa
-Message-ID: <Z8GzHATDUapN3EoD@fedora>
-References: <20250227083717.4307-1-liuhangbin@gmail.com>
- <20250227083717.4307-2-liuhangbin@gmail.com>
- <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
- <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
- <Z8Bm9i9St0zzDhRZ@fedora>
- <f88b234a-37ec-46a4-b920-35f598ab6c38@blackwall.org>
- <Z8EdatcTr9weRfHr@fedora>
- <76ed1d018596b81548d095aa2d4a9b31b360479c.camel@nvidia.com>
+        d=1e100.net; s=20230601; t=1740752476; x=1741357276;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lsm7zHaYH2jIwvMQk5vbbkkvVtAbnIssNnslsMzrf2w=;
+        b=XxQO2VEdgNlPlgkulC2MVcTO795gniJf5RVEF4GDOf6wZ7YJe6OWeMkpze/Vd2Riy/
+         HeAkfrIFyf+4OiUKxP87gVnFzCjUPz39BvlnoeXphIkxvDd+pUYt3lPlz4PeU7BTsP6J
+         fCzIuwX9Gh3j+F4vsvmCwzHvjDp4vmeeo2wHNq+7at1aB0eDULPdd+MuRf9si88z8hws
+         acJnGFytj/XZM5vM1iuzxB7++aL4Yz5acUp45STZqVxBEhkabVTMOrsqx+A400ErJZ7E
+         CMht5bHHjZ0H02IfB5GxPsJj1jfHG9iWr5y2Ge1MrSNjp8fGf73xPN0GPx5sTtpInwBq
+         +odw==
+X-Forwarded-Encrypted: i=1; AJvYcCVs+xTPaJ3lBX/G5FNOBahheN0yvvFZgwSQCIAyITzMD4j/7LFM+JrYPXEmmTCi73eWyVB+DlTG0hsYkcP/Eg0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/cZmuRhLHOIt/4JjccZm8KaWRY0fJeOutPFRlDdO9TEOheJ8I
+	KI8te1lFr2WtTiOA3RVOK67icrxzYty5NCfoGlzn0IvvRH7zu44L3OJOSWyW0Dk=
+X-Gm-Gg: ASbGncv3T0Gfzh8Klgt2RJTkiu0bD2HpJe4xRFfozH+Dx1b95LyNMYlF33MvO4lT/ir
+	/Qv8CLZSxAFMvUneVUdXXgsxpqw5gJweXBeEs4QOalCxM0R9/YiG+gFL8Q+N88dIONK8KlQiVsH
+	s3m95BkEOUv9r4Km0k/HAxIVxDhz0IhEjnghJWkZ4Ts6CDUbW63bTexpmvZmE3Ngao2xnIowGky
+	+et2D1gGhbnPNllfxxYQMderAIaoQAYHvNJr44Nbnjo0Y4lfgVkSErD2/z7dymo83QAJn6iFcJh
+	lpYUL79FYdE0c/kTA0+OEgxWFqJiZ8JFao0Bu2cEsbCq9UG9ZvWZKNn+jIyseh+U
+X-Google-Smtp-Source: AGHT+IG0ioEwXDlYS7sa6bw1K9Hhx8cMRAwN8lNnfokMsiHC+FK0+y3Hs9ldHBe+DVrWXZW+FTL8dA==
+X-Received: by 2002:a05:6000:1787:b0:38d:df15:2770 with SMTP id ffacd0b85a97d-390e15da77amr6810295f8f.0.1740752475677;
+        Fri, 28 Feb 2025 06:21:15 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:73ee:d580:e499:4244? ([2001:67c:2fbc:1:73ee:d580:e499:4244])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba5327f0sm89954975e9.9.2025.02.28.06.21.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Feb 2025 06:21:15 -0800 (PST)
+Message-ID: <8c55efe1-f771-479a-a334-372b03c97054@openvpn.net>
+Date: Fri, 28 Feb 2025 15:21:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <76ed1d018596b81548d095aa2d4a9b31b360479c.camel@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v20 00/25] Introducing OpenVPN Data Channel
+ Offload
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Xiao Liang <shaw.leon@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ steffen.klassert@secunet.com, antony.antony@secunet.com,
+ willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+ <20250227082141.3513de3d@kernel.org>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <20250227082141.3513de3d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Cosmin,
-On Fri, Feb 28, 2025 at 10:31:58AM +0000, Cosmin Ratiu wrote:
-> On Fri, 2025-02-28 at 02:20 +0000, Hangbin Liu wrote:
-> > On Thu, Feb 27, 2025 at 03:31:01PM +0200, Nikolay Aleksandrov wrote:
-> > > > > One more thing - note I'm not an xfrm expert by far but it
-> > > > > seems to me here you have
-> > > > > to also call  xdo_dev_state_free() with the old active slave
-> > > > > dev otherwise that will
-> > > > > never get called with the original real_dev after the switch to
-> > > > > a new
-> > > > > active slave (or more accurately it might if the GC runs
-> > > > > between the switching
-> > > > > but it is a race), care must be taken wrt sequence of events
-> > > > > because the XFRM
-> > > > 
-> > > > Can we just call xs->xso.real_dev->xfrmdev_ops-
-> > > > >xdo_dev_state_free(xs)
-> > > > no matter xs->xso.real_dev == real_dev or not? I'm afraid calling
-> > > > xdo_dev_state_free() every where may make us lot more easily.
-> > > > 
-> > > 
-> > > You'd have to check all drivers that implement the callback to
-> > > answer that and even then
-> > > I'd stick to the canonical way of how it's done in xfrm and make
-> > > the bond just passthrough.
-> > > Any other games become dangerous and new code will have to be
-> > > carefully reviewed every
-> > > time, calling another device's free_sa when it wasn't added before
-> > > doesn't sound good.
-> > > 
-> > > > > GC may be running in parallel which probably means that in
-> > > > > bond_ipsec_free_sa()
-> > > > > you'll have to take the mutex before calling
-> > > > > xdo_dev_state_free() and check
-> > > > > if the entry is still linked in the bond's ipsec list before
-> > > > > calling the free_sa
-> > > > > callback, if it isn't then del_sa_all got to it before the GC
-> > > > > and there's nothing
-> > > > > to do if it also called the dev's free_sa callback. The check
-> > > > > for real_dev doesn't
-> > > > > seem enough to protect against this race.
-> > > > 
-> > > > I agree that we need to take the mutex before calling
-> > > > xdo_dev_state_free()
-> > > > in bond_ipsec_free_sa(). Do you think if this is enough? I'm a
-> > > > bit lot here.
-> > > > 
-> > > > Thanks
-> > > > Hangbin
-> > > 
-> > > Well, the race is between the xfrm GC and del_sa_all, in bond's
-> > > free_sa if you
-> > > walk the list under the mutex before calling real_dev's free
-> > > callback and
-> > > don't find the current element that's being freed in free_sa then
-> > > it was
-> > > cleaned up by del_sa_all, otherwise del_sa_all is waiting to walk
-> > > that
-> > > list and clean the entries. I think it should be fine as long as
-> > > free_sa
-> > > was called once with the proper device.
-> > 
-> > OK, so the free will be called either in del_sa_all() or free_sa().
-> > Something like this?
-> > 
-> [...]
+On 2/27/25 5:21 PM, Jakub Kicinski wrote:
+> On Thu, 27 Feb 2025 02:21:25 +0100 Antonio Quartulli wrote:
+>> After some time of struggle trying to fix all hidden bugs that Sabrina
+>> has found...here is v20!
 > 
-> Unfortunately, after applying these changes and reasoning about them
-> for a bit, I don't think this will work. There are still races left.
-> For example:
-> 1. An xs is marked DEAD (in __xfrm_state_delete, with x->lock held) and
-> before .xdo_dev_state_delete() is called on it, bond_ipsec_del_sa_all
-> is called in parallel, doesn't call delete on xs (because it's dead),
-> then calls free (incorrect without delete first), then removes the list
-> entry. Later, xdo_dev_state_delete( == bond_ipsec_del_sa) is called,
-> and calls delete (incorrect, out of order with free). Finally,
-> bond_ipsec_free_sa is called, which fortunately doesn't do anything
-> silly in the new proposed form because xs is no longer in the list.
+>> Please note that some patches were already reviewed/tested by a few
+>> people. These patches have retained the tags as they have hardly been
+>> touched.
+>> (Due to the amount of changes applied to the kselftest scripts, I dropped
+>> the Reviewed-by Shuah Khan tag on that specific patch)
+>>
+>> The latest code can also be found at:
+>>
+>> https://github.com/OpenVPN/ovpn-net-next
 > 
-> 2. A more sinister form of the above race can happen when 
-> bond_ipsec_del_sa_all() calls delete on real_dev, then in parallel and
-> immediately after __xfrm_state_delete marks xs as DEAD and calls
-> bond_ipsec_del_sa() which happily calls delete on real_dev again.
+> coccicheck has a new nitpick:
 > 
-> In order to fix these races (and others like it), I think
-> bond_ipsec_del_sa_all and bond_ipsec_add_sa_all *need* to acquire x-
-> >lock for each xs being processed. This would prevent xfrm from
-> concurrently initiating add/delete operations on the managed states.
-> 
+> drivers/net/ovpn/netlink.c:439:11-59: WARNING avoid newline at end of message in NL_SET_ERR_MSG_FMT_MOD
 
-Thanks a lot for the careful checking. I will add the x->lock
-in del/add_sa_all.
+Thanks for the report. I'll get this fixed in v21.
 
-Regards
-Hangbin
+Cheers,
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
+
 
