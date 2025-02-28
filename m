@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-27885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882F8A49935
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 13:27:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07BD6A49939
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 13:28:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF07E1899437
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 12:27:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B86E816BBBB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 12:28:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE7226B2C5;
-	Fri, 28 Feb 2025 12:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1116E26AAAB;
+	Fri, 28 Feb 2025 12:28:13 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B290726B2CB;
-	Fri, 28 Feb 2025 12:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3072356D1;
+	Fri, 28 Feb 2025 12:28:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740745626; cv=none; b=GLZIpSfQtiYxiVyp9nZDUY2p/pdzOU0WXjM/lsZ7zzbXTQXyKmr1OpBKa6in2st/Uo5Jm2EyOl1U1bkGqdCRW/1lDHqxNj6swuncAGr/OP1gdVhVELdWKiLiUQ2qJV3sxX/VHdMy9Fi8cqrjpFCO+VDbxUtA2GrMXXu4UvAIabk=
+	t=1740745693; cv=none; b=SgaelUAk+D18CBOUjhS9RYpmIc8F+GpCv4lI+gzO6HsyDQWnnNkjiMiBLfgRr/AFosQ9udV3MSS9OP2yQIcOd+QU9tl0MB6WXCai4ATZLS+H+QHVTqUjv8mDyB8UHAfyJF4nA3GjQiDk0UWM1x2kTXoO0PZwDvqoCT9EGr7esaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740745626; c=relaxed/simple;
-	bh=uJ5ssx/1V5lN3iy4yBnWCDCp4/Q8YuL2p1SBWJOTBRg=;
+	s=arc-20240116; t=1740745693; c=relaxed/simple;
+	bh=dPQQeCJ6zMXLp4WRSXuju/fSqlI129Q0WmkmNQYgv0s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iyguPOBP9mNQVkueXtVTwgfZdyDQD0KC4RwwF5ElVvkpKTxFpcLkDmLmELv+DpvWNMS+LeeFwfYDkIxk3z9PzJj7ATm1QTXLztsdb1sq+yjorjrHgW9vEJRfh6s0CPytR13W4E5LYR5bsjtmQ/7cKuEPeM1E1uVqWsZPb+eNVhw=
+	 In-Reply-To:Content-Type; b=C7jZoFlmiv75IYrK8frv67vGZLwUXgHRK3yrVhIykjcg/1zLCFV3cg1jaSQ+ORaZ6J8devralzYUgJOI1t2I46bluyYhEZvooVi0TJkkuCjMYvsFu5cER8LfXOVuHOENZXYUGi0jBvB+oG6Zhsr2bV1O7IJpImgALAv/lA1YBIs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60BD21688;
-	Fri, 28 Feb 2025 04:27:19 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 030F71688;
+	Fri, 28 Feb 2025 04:28:26 -0800 (PST)
 Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF3583F6A8;
-	Fri, 28 Feb 2025 04:27:01 -0800 (PST)
-Message-ID: <608911a5-c0c9-4115-98a2-3e31b6b360af@arm.com>
-Date: Fri, 28 Feb 2025 12:27:00 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 612313F6A8;
+	Fri, 28 Feb 2025 04:28:08 -0800 (PST)
+Message-ID: <fe56c774-dcd8-475f-8008-e5baa87908ef@arm.com>
+Date: Fri, 28 Feb 2025 12:28:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,7 +42,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/16] tools/nolibc: add limits.h shim header
+Subject: Re: [PATCH v2 10/16] selftests: vDSO: vdso_standalone_test_x86: Use
+ vdso_init_form_sysinfo_ehdr
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
  Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
@@ -56,56 +57,87 @@ Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  llvm@lists.linux.dev
 References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
- <20250226-parse_vdso-nolibc-v2-9-28e14e031ed8@linutronix.de>
+ <20250226-parse_vdso-nolibc-v2-10-28e14e031ed8@linutronix.de>
 Content-Language: en-US
 From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <20250226-parse_vdso-nolibc-v2-9-28e14e031ed8@linutronix.de>
+In-Reply-To: <20250226-parse_vdso-nolibc-v2-10-28e14e031ed8@linutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
 On 26/02/2025 11:44, Thomas Weißschuh wrote:
-> limits.h is a widely used standard header.
-> Missing it from nolibc requires adoption effort to port applications.
+> vdso_standalone_test_x86 is the only user of vdso_init_from_auxv().
+> Instead of combining the parsing the aux vector with the parsing of the
+> vDSO, split them apart into getauxval() and the regular
+> vdso_init_from_sysinfo_ehdr().
 > 
-> Add a shim header which includes the global nolibc.h header.
-> It makes all nolibc symbols available.
+> The implementation of getauxval() is taken from
+> tools/include/nolibc/stdlib.h.
 > 
 > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> 
 
 Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
 > ---
->  tools/include/nolibc/Makefile | 1 +
->  tools/include/nolibc/limits.h | 7 +++++++
->  2 files changed, 8 insertions(+)
+> All of this code will be deleted later again.
+> ---
+>  .../selftests/vDSO/vdso_standalone_test_x86.c      | 27 +++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-> index a1f55fb24bb38c1f49c653af5825e8bcc569a56d..c1299a053145786da89001a5f95f5527ffbe2fa4 100644
-> --- a/tools/include/nolibc/Makefile
-> +++ b/tools/include/nolibc/Makefile
-> @@ -30,6 +30,7 @@ all_files := \
->  		crt.h \
->  		ctype.h \
->  		errno.h \
-> +		limits.h \
->  		nolibc.h \
->  		signal.h \
->  		stackprotector.h \
-> diff --git a/tools/include/nolibc/limits.h b/tools/include/nolibc/limits.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..306d4141f4d245ca3f801f451745540b0f7294cd
-> --- /dev/null
-> +++ b/tools/include/nolibc/limits.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-> +/*
-> + * Shim limits.h header for NOLIBC.
-> + * Copyright (C) 2025 Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> + */
+> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> index 644915862af8883131e5defd336f1bd80736fc0f..500608f89c66b5747e3d845ebc54e4c3a35b6ccd 100644
+> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> @@ -15,6 +15,7 @@
+>  #include <sys/time.h>
+>  #include <unistd.h>
+>  #include <stdint.h>
+> +#include <linux/auxvec.h>
+>  
+>  #include "parse_vdso.h"
+>  
+> @@ -84,6 +85,30 @@ void to_base10(char *lastdig, time_t n)
+>  	}
+>  }
+>  
+> +unsigned long getauxval(const unsigned long *auxv, unsigned long type)
+> +{
+> +	unsigned long ret;
 > +
-> +#include "nolibc.h"
+> +	if (!auxv)
+> +		return 0;
+> +
+> +	while (1) {
+> +		if (!auxv[0] && !auxv[1]) {
+> +			ret = 0;
+> +			break;
+> +		}
+> +
+> +		if (auxv[0] == type) {
+> +			ret = auxv[1];
+> +			break;
+> +		}
+> +
+> +		auxv += 2;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  void c_main(void **stack)
+>  {
+>  	/* Parse the stack */
+> @@ -96,7 +121,7 @@ void c_main(void **stack)
+>  	stack++;
+>  
+>  	/* Now we're pointing at auxv.  Initialize the vDSO parser. */
+> -	vdso_init_from_auxv((void *)stack);
+> +	vdso_init_from_sysinfo_ehdr(getauxval((unsigned long *)stack, AT_SYSINFO_EHDR));
+>  
+>  	/* Find gettimeofday. */
+>  	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
 > 
 
 -- 
