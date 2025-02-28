@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-27916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36A0AA49E1B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 16:56:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A54D5A49E5D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 17:08:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19EAD3B44F3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 15:56:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B7957A86DA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 16:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6397F27291F;
-	Fri, 28 Feb 2025 15:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A731521C191;
+	Fri, 28 Feb 2025 16:08:40 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EE227126A;
-	Fri, 28 Feb 2025 15:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB86188CCA;
+	Fri, 28 Feb 2025 16:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740758170; cv=none; b=CgLKYZhzdsYnCB1Ik3dz1h2HMPssBg0aPpC+vys3xeHD4MfU72trv8jwK3JBehTsTq6cchA6JaMqzxaq0uhOw+DCkt9zhiKXlPoYOkXoCBeEtHlEqZOksGjt54Dv0EaxZn8cwYWLPMC+Gu/vD3Ft2efR9dhQl1dvRn5Y0oUHhfg=
+	t=1740758920; cv=none; b=OwFAyR1TPJI9yaZl+iNUvycR3DHv74AvWc15eeycrrPRy6AqwpWDKv0RgfBTyKExn2qGdyWRJnxZDq+0vWY+QkCzFxSNJl61xA7LJeQfK9RaBd6ut5j4Tj5e59hvFU0uTpXc/IxHtgAb9eCku6cHJONg2j01BpfPX5H1GG/uJrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740758170; c=relaxed/simple;
-	bh=LLgN1Qa4YDx2jNxmqVz2R6UToXM6OqZZqylhOcuSfj4=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=KWaHN7cob+RX65ZXxy8I0szv5voQ9DlChFCM8irG0TnLhri6qDsNUrxPYN2Wn90KotLTMduxTIVED3SNGlFbFOVe1faN+8QSlrHVxb5O8rpjreWuGeEL7Wxuy/vH3draDEe/TRyn/P+4HwdNFQafhl6VRlV13/dD9Inw4PSbZO4=
+	s=arc-20240116; t=1740758920; c=relaxed/simple;
+	bh=GBGR7fAnoa1MrE+FTmswdxLhjH6N3U8RXuA8gE9Y/gg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IdpyF6sYLMgtrB9W3sxQq8P0HC76mIiHaEUlcexqs1ADfBAUvBnd/xY2nlbs0zRfZ6XiEle4Kl4MHGru3k6gMcvRjLP8J9nt2C8KwjZq7Q7GO3JhSlnAU1ZrX+0gUfrNZpGBUG3FuTXee52Xq4znsfii24o6jFbbmYBP4WyE0gQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy03.your-server.de ([88.198.220.132])
+Received: from sslproxy04.your-server.de ([78.46.152.42])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1to2i5-000PBv-7I; Fri, 28 Feb 2025 16:55:33 +0100
+	id 1to2uT-000093-7O; Fri, 28 Feb 2025 17:08:21 +0100
 Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1to2i5-000KUm-1R;
-	Fri, 28 Feb 2025 16:55:32 +0100
-Message-ID: <a1dcd271-c347-4d90-a1fc-fa18bbad3ebe@hetzner-cloud.de>
-Date: Fri, 28 Feb 2025 16:55:31 +0100
+	id 1to2uT-000GWU-2G;
+	Fri, 28 Feb 2025 17:08:20 +0100
+Message-ID: <d46f5f84-41a4-40ab-bcf4-f604ea3199c9@hetzner-cloud.de>
+Date: Fri, 28 Feb 2025 17:08:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,6 +49,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 0/6] XDP metadata support for tun driver
 To: Lei Yang <leiyang@redhat.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -107,106 +108,176 @@ Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
  VUssNEOhjUERfkdnHNeuNBWfiABIb1Yn7QC2BUmwOvN2DsqsChyfyuknCbiyQGjAmj8mvfi/
  18FxnhXRoPx3wr7PqGVWgTJD1pscTrbKnoI1jI1/pBCMun+q9v6E7JCgWY181WjxgKSnen0n
  wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-Subject: Re: [PATCH bpf-next v4 0/6] XDP metadata support for tun driver
 In-Reply-To: <CAPpAL=wLk0Z3jfg9eY75c3ZFhH-3w7H--WqFuaGMcCJ+Bm5q+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27563/Fri Feb 28 11:01:44 2025)
 
-QW0gMjguMDIuMjUgdW0gMDY6NDMgc2NocmllYiBMZWkgWWFuZzoNCj4gSGkgTWFyY3VzDQo+
-IA0KPiBTaW5jZSB5b3VyIHBhdGNoZXMgYXJlIGFib3V0IHRoZSB2aXJ0dWFsIG5ldHdvcmss
-IEknZCBsaWtlIHRvIHRlc3QgaXQsDQo+IGJ1dCBpdCBjb25mbGljdHMgKFBsZWFzZSByZXZp
-ZXcgdGhlIGF0dGFjaG1lbnQgdG8gcmV2aWV3IG1vcmUgZGV0YWlscykNCj4gd2hlbiBJIGFw
-cGx5IGl0IHRvIHRoZSBtYXN0ZXIgYnJhbmNoLg0KPiBNeSB0ZXN0IGJhc2VkIG9uIHRoaXMg
-Y29tbWl0Og0KPiBjb21taXQgMWUxNTUxMGI3MWM5OWM2ZTQ5MTM0ZDc1NmRmOTEwNjlmN2Qx
-ODE0MSAob3JpZ2luL21hc3Rlciwgb3JpZ2luL0hFQUQpDQo+IE1lcmdlOiBmMDlkNjk0Y2Y3
-OTkgNTRlMWI0YmVjZjVlDQo+IEF1dGhvcjogTGludXMgVG9ydmFsZHMgPHRvcnZhbGRzQGxp
-bnV4LWZvdW5kYXRpb24ub3JnPg0KPiBEYXRlOiAgIFRodSBGZWIgMjcgMDk6MzI6NDIgMjAy
-NSAtMDgwMA0KPiANCj4gICAgICBNZXJnZSB0YWcgJ25ldC02LjE0LXJjNScgb2YNCj4gZ2l0
-Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L25ldGRldi9uZXQN
-Cj4gDQo+ICAgICAgUHVsbCBuZXR3b3JraW5nIGZpeGVzIGZyb20gSmFrdWIgS2ljaW5za2k6
-DQo+ICAgICAgICJJbmNsdWRpbmcgZml4ZXMgZnJvbSBibHVldG9vdGguDQo+IA0KDQpIaSwN
-Cg0KdGhhbmsgeW91IGZvciBpbmNsdWRpbmcgaXQgaW4geW91ciB0ZXN0cy4NCg0KVGhlIG1l
-bnRpb25lZCBjb21taXQgaXMgbm90IHlldCBpbiBicGYtbmV4dCwgYnV0IEkgcmViYXNlZCBt
-eSBwYXRjaCBvbg0KbGF0ZXN0IG1haW5saW5lIGFuZCBhdHRhY2hlZCB0aGUgdXBkYXRlZCBw
-YXRjaCBmb3IgdGhlIGNvbmZsaWN0aW5nDQpjb21taXQuDQoNClRoZSBjb25mbGljdCB3YXMg
-anVzdCBhYm91dCBhIHNlY3Rpb24gdGhhdCB3YXMgcmVtb3ZlZCByaWdodCBiZWxvdw0KbXkg
-YWRkZWQgbGluZSBpbiBuZXR3b3JrX2hlbHBlcnMuaCwgc28gbm8gZnVuY3Rpb25hbCBjaGFu
-Z2UuDQoNCi0tLQ0KDQogRnJvbSBjNzE4MmU1YTRkMjE2OTZiOWU4Y2QyNWY5MmU2NGUyODEy
-OWUyYzZlIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQ0KRnJvbTogTWFyY3VzIFdpY2hlbG1h
-bm4gPG1hcmN1cy53aWNoZWxtYW5uQGhldHpuZXItY2xvdWQuZGU+DQpEYXRlOiBUaHUsIDEz
-IEZlYiAyMDI1IDE2OjI4OjE5ICswMDAwDQpTdWJqZWN0OiBbUEFUQ0hdIHNlbGZ0ZXN0cy9i
-cGY6IG1vdmUgb3Blbl90dW50YXAgdG8gbmV0d29yayBoZWxwZXJzDQoNClRvIHRlc3QgdGhl
-IFhEUCBtZXRhZGF0YSBmdW5jdGlvbmFsaXR5IG9mIHRoZSB0dW4gZHJpdmVyLCBpdCdzIG5l
-Y2Vzc2FyeQ0KdG8gY3JlYXRlIGEgbmV3IHRhcCBkZXZpY2UgZmlyc3QuIEEgaGVscGVyIGZ1
-bmN0aW9uIGZvciB0aGlzIGFscmVhZHkNCmV4aXN0cyBpbiBsd3RfaGVscGVycy5oLiBNb3Zl
-IGl0IHRvIHRoZSBjb21tb24gbmV0d29yayBoZWxwZXJzIGhlYWRlciwNCnNvIGl0IGNhbiBi
-ZSByZXVzZWQgaW4gb3RoZXIgdGVzdHMuDQoNClNpZ25lZC1vZmYtYnk6IE1hcmN1cyBXaWNo
-ZWxtYW5uIDxtYXJjdXMud2ljaGVsbWFubkBoZXR6bmVyLWNsb3VkLmRlPg0KUmV2aWV3ZWQt
-Ynk6IFdpbGxlbSBkZSBCcnVpam4gPHdpbGxlbWJAZ29vZ2xlLmNvbT4NCkFja2VkLWJ5OiBK
-YXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KLS0tDQogIHRvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL2JwZi9uZXR3b3JrX2hlbHBlcnMuYyB8IDI4ICsrKysrKysrKysrKysrKysr
-Kw0KICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbmV0d29ya19oZWxwZXJzLmggfCAg
-MyArKw0KICAuLi4vc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2x3dF9oZWxwZXJzLmggICAg
-fCAyOSAtLS0tLS0tLS0tLS0tLS0tLS0tDQogIDMgZmlsZXMgY2hhbmdlZCwgMzEgaW5zZXJ0
-aW9ucygrKSwgMjkgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9icGYvbmV0d29ya19oZWxwZXJzLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9icGYvbmV0d29ya19oZWxwZXJzLmMNCmluZGV4IDgwODQ0YTVmYjFmZS4uZmNlZTJj
-NGE2MzdhIDEwMDY0NA0KLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL25ldHdv
-cmtfaGVscGVycy5jDQorKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbmV0d29y
-a19oZWxwZXJzLmMNCkBAIC01NDgsNiArNTQ4LDM0IEBAIHZvaWQgY2xvc2VfbmV0bnMoc3Ry
-dWN0IG5zdG9rZW4gKnRva2VuKQ0KICAJZnJlZSh0b2tlbik7DQogIH0NCiAgDQoraW50IG9w
-ZW5fdHVudGFwKGNvbnN0IGNoYXIgKmRldl9uYW1lLCBib29sIG5lZWRfbWFjKQ0KK3sNCisJ
-aW50IGVyciA9IDA7DQorCXN0cnVjdCBpZnJlcSBpZnI7DQorCWludCBmZCA9IG9wZW4oIi9k
-ZXYvbmV0L3R1biIsIE9fUkRXUik7DQorDQorCWlmICghQVNTRVJUX0dUKGZkLCAwLCAib3Bl
-bigvZGV2L25ldC90dW4pIikpDQorCQlyZXR1cm4gLTE7DQorDQorCWlmci5pZnJfZmxhZ3Mg
-PSBJRkZfTk9fUEkgfCAobmVlZF9tYWMgPyBJRkZfVEFQIDogSUZGX1RVTik7DQorCXN0cm5j
-cHkoaWZyLmlmcl9uYW1lLCBkZXZfbmFtZSwgSUZOQU1TSVogLSAxKTsNCisJaWZyLmlmcl9u
-YW1lW0lGTkFNU0laIC0gMV0gPSAnXDAnOw0KKw0KKwllcnIgPSBpb2N0bChmZCwgVFVOU0VU
-SUZGLCAmaWZyKTsNCisJaWYgKCFBU1NFUlRfT0soZXJyLCAiaW9jdGwoVFVOU0VUSUZGKSIp
-KSB7DQorCQljbG9zZShmZCk7DQorCQlyZXR1cm4gLTE7DQorCX0NCisNCisJZXJyID0gZmNu
-dGwoZmQsIEZfU0VURkwsIE9fTk9OQkxPQ0spOw0KKwlpZiAoIUFTU0VSVF9PSyhlcnIsICJm
-Y250bChPX05PTkJMT0NLKSIpKSB7DQorCQljbG9zZShmZCk7DQorCQlyZXR1cm4gLTE7DQor
-CX0NCisNCisJcmV0dXJuIGZkOw0KK30NCisNCiAgaW50IGdldF9zb2NrZXRfbG9jYWxfcG9y
-dChpbnQgc29ja19mZCkNCiAgew0KICAJc3RydWN0IHNvY2thZGRyX3N0b3JhZ2UgYWRkcjsN
-CmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbmV0d29ya19oZWxw
-ZXJzLmggYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbmV0d29ya19oZWxwZXJzLmgN
-CmluZGV4IGViZWM4YThkNmY4MS4uMTc1ZGQ1NDc4NDlmIDEwMDY0NA0KLS0tIGEvdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYnBmL25ldHdvcmtfaGVscGVycy5oDQorKysgYi90b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbmV0d29ya19oZWxwZXJzLmgNCkBAIC04LDYgKzgsNyBA
-QA0KICB0eXBlZGVmIF9fdTE2IF9fc3VtMTY7DQogICNpbmNsdWRlIDxsaW51eC9pZl9ldGhl
-ci5oPg0KICAjaW5jbHVkZSA8bGludXgvaWZfcGFja2V0Lmg+DQorI2luY2x1ZGUgPGxpbnV4
-L2lmX3R1bi5oPg0KICAjaW5jbHVkZSA8bGludXgvaXAuaD4NCiAgI2luY2x1ZGUgPGxpbnV4
-L2lwdjYuaD4NCiAgI2luY2x1ZGUgPGxpbnV4L2V0aHRvb2wuaD4NCkBAIC05OCw2ICs5OSw4
-IEBAIGludCBzZW5kX3JlY3ZfZGF0YShpbnQgbGZkLCBpbnQgZmQsIHVpbnQzMl90IHRvdGFs
-X2J5dGVzKTsNCiAgaW50IG1ha2VfbmV0bnMoY29uc3QgY2hhciAqbmFtZSk7DQogIGludCBy
-ZW1vdmVfbmV0bnMoY29uc3QgY2hhciAqbmFtZSk7DQogIA0KK2ludCBvcGVuX3R1bnRhcChj
-b25zdCBjaGFyICpkZXZfbmFtZSwgYm9vbCBuZWVkX21hYyk7DQorDQogIHN0YXRpYyBfX3Ux
-NiBjc3VtX2ZvbGQoX191MzIgY3N1bSkNCiAgew0KICAJY3N1bSA9IChjc3VtICYgMHhmZmZm
-KSArIChjc3VtID4+IDE2KTsNCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9icGYvcHJvZ190ZXN0cy9sd3RfaGVscGVycy5oIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvYnBmL3Byb2dfdGVzdHMvbHd0X2hlbHBlcnMuaA0KaW5kZXggZmIxZWI4YzY3MzYxLi5j
-Y2VjMGZjZGFiYzEgMTAwNjQ0DQotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYv
-cHJvZ190ZXN0cy9sd3RfaGVscGVycy5oDQorKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9icGYvcHJvZ190ZXN0cy9sd3RfaGVscGVycy5oDQpAQCAtNSw3ICs1LDYgQEANCiAgDQog
-ICNpbmNsdWRlIDx0aW1lLmg+DQogICNpbmNsdWRlIDxuZXQvaWYuaD4NCi0jaW5jbHVkZSA8
-bGludXgvaWZfdHVuLmg+DQogICNpbmNsdWRlIDxsaW51eC9pY21wLmg+DQogIA0KICAjaW5j
-bHVkZSAidGVzdF9wcm9ncy5oIg0KQEAgLTM3LDM0ICszNiw2IEBAIHN0YXRpYyBpbmxpbmUg
-aW50IG5ldG5zX2RlbGV0ZSh2b2lkKQ0KICAJcmV0dXJuIHN5c3RlbSgiaXAgbmV0bnMgZGVs
-ICIgTkVUTlMgIj4vZGV2L251bGwgMj4mMSIpOw0KICB9DQogIA0KLXN0YXRpYyBpbnQgb3Bl
-bl90dW50YXAoY29uc3QgY2hhciAqZGV2X25hbWUsIGJvb2wgbmVlZF9tYWMpDQotew0KLQlp
-bnQgZXJyID0gMDsNCi0Jc3RydWN0IGlmcmVxIGlmcjsNCi0JaW50IGZkID0gb3BlbigiL2Rl
-di9uZXQvdHVuIiwgT19SRFdSKTsNCi0NCi0JaWYgKCFBU1NFUlRfR1QoZmQsIDAsICJvcGVu
-KC9kZXYvbmV0L3R1bikiKSkNCi0JCXJldHVybiAtMTsNCi0NCi0JaWZyLmlmcl9mbGFncyA9
-IElGRl9OT19QSSB8IChuZWVkX21hYyA/IElGRl9UQVAgOiBJRkZfVFVOKTsNCi0Jc3RybmNw
-eShpZnIuaWZyX25hbWUsIGRldl9uYW1lLCBJRk5BTVNJWiAtIDEpOw0KLQlpZnIuaWZyX25h
-bWVbSUZOQU1TSVogLSAxXSA9ICdcMCc7DQotDQotCWVyciA9IGlvY3RsKGZkLCBUVU5TRVRJ
-RkYsICZpZnIpOw0KLQlpZiAoIUFTU0VSVF9PSyhlcnIsICJpb2N0bChUVU5TRVRJRkYpIikp
-IHsNCi0JCWNsb3NlKGZkKTsNCi0JCXJldHVybiAtMTsNCi0JfQ0KLQ0KLQllcnIgPSBmY250
-bChmZCwgRl9TRVRGTCwgT19OT05CTE9DSyk7DQotCWlmICghQVNTRVJUX09LKGVyciwgImZj
-bnRsKE9fTk9OQkxPQ0spIikpIHsNCi0JCWNsb3NlKGZkKTsNCi0JCXJldHVybiAtMTsNCi0J
-fQ0KLQ0KLQlyZXR1cm4gZmQ7DQotfQ0KLQ0KICAjZGVmaW5lIElDTVBfUEFZTE9BRF9TSVpF
-ICAgICAxMDANCiAgDQogIC8qIE1hdGNoIGFuIElDTVAgcGFja2V0IHdpdGggcGF5bG9hZCBs
-ZW4gSUNNUF9QQVlMT0FEX1NJWkUgKi8NCi0tIA0KMi40My4wDQoNCg==
+Am 28.02.25 um 06:43 schrieb Lei Yang:
+> Hi Marcus
+>=20
+> Since your patches are about the virtual network, I'd like to test it,
+> but it conflicts (Please review the attachment to review more details)
+> when I apply it to the master branch.
+> My test based on this commit:
+> commit 1e15510b71c99c6e49134d756df91069f7d18141 (origin/master, origin/=
+HEAD)
+> Merge: f09d694cf799 54e1b4becf5e
+> Author: Linus Torvalds <torvalds@linux-foundation.org>
+> Date:   Thu Feb 27 09:32:42 2025 -0800
+>=20
+>     Merge tag 'net-6.14-rc5' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+>=20
+>     Pull networking fixes from Jakub Kicinski:
+>      "Including fixes from bluetooth.
+>=20
+
+Hi,
+
+thank you for including it in your tests.
+
+The mentioned commit is not yet in bpf-next, but I rebased my patch on
+latest mainline and attached the updated patch for the conflicting
+commit (now with proper formatting, hopefully).
+
+The conflict was just about a section that was removed right below
+my added line in network_helpers.h, so no functional change.
+
+---
+
+=46rom c7182e5a4d21696b9e8cd25f92e64e28129e2c6e Mon Sep 17 00:00:00 2001
+From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Date: Thu, 13 Feb 2025 16:28:19 +0000
+Subject: [PATCH] selftests/bpf: move open_tuntap to network helpers
+
+To test the XDP metadata functionality of the tun driver, it's necessary
+to create a new tap device first. A helper function for this already
+exists in lwt_helpers.h. Move it to the common network helpers header,
+so it can be reused in other tests.
+
+Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 28 ++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  3 ++
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 29 -------------------
+ 3 files changed, 31 insertions(+), 29 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testin=
+g/selftests/bpf/network_helpers.c
+index 80844a5fb1fe..fcee2c4a637a 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -548,6 +548,34 @@ void close_netns(struct nstoken *token)
+ 	free(token);
+ }
+=20
++int open_tuntap(const char *dev_name, bool need_mac)
++{
++	int err =3D 0;
++	struct ifreq ifr;
++	int fd =3D open("/dev/net/tun", O_RDWR);
++
++	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
++		return -1;
++
++	ifr.ifr_flags =3D IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
++	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
++	ifr.ifr_name[IFNAMSIZ - 1] =3D '\0';
++
++	err =3D ioctl(fd, TUNSETIFF, &ifr);
++	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
++		close(fd);
++		return -1;
++	}
++
++	err =3D fcntl(fd, F_SETFL, O_NONBLOCK);
++	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
++		close(fd);
++		return -1;
++	}
++
++	return fd;
++}
++
+ int get_socket_local_port(int sock_fd)
+ {
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testin=
+g/selftests/bpf/network_helpers.h
+index ebec8a8d6f81..175dd547849f 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -8,6 +8,7 @@
+ typedef __u16 __sum16;
+ #include <linux/if_ether.h>
+ #include <linux/if_packet.h>
++#include <linux/if_tun.h>
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/ethtool.h>
+@@ -98,6 +99,8 @@ int send_recv_data(int lfd, int fd, uint32_t total_byte=
+s);
+ int make_netns(const char *name);
+ int remove_netns(const char *name);
+=20
++int open_tuntap(const char *dev_name, bool need_mac);
++
+ static __u16 csum_fold(__u32 csum)
+ {
+ 	csum =3D (csum & 0xffff) + (csum >> 16);
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools=
+/testing/selftests/bpf/prog_tests/lwt_helpers.h
+index fb1eb8c67361..ccec0fcdabc1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+@@ -5,7 +5,6 @@
+=20
+ #include <time.h>
+ #include <net/if.h>
+-#include <linux/if_tun.h>
+ #include <linux/icmp.h>
+=20
+ #include "test_progs.h"
+@@ -37,34 +36,6 @@ static inline int netns_delete(void)
+ 	return system("ip netns del " NETNS ">/dev/null 2>&1");
+ }
+=20
+-static int open_tuntap(const char *dev_name, bool need_mac)
+-{
+-	int err =3D 0;
+-	struct ifreq ifr;
+-	int fd =3D open("/dev/net/tun", O_RDWR);
+-
+-	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
+-		return -1;
+-
+-	ifr.ifr_flags =3D IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
+-	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
+-	ifr.ifr_name[IFNAMSIZ - 1] =3D '\0';
+-
+-	err =3D ioctl(fd, TUNSETIFF, &ifr);
+-	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	err =3D fcntl(fd, F_SETFL, O_NONBLOCK);
+-	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	return fd;
+-}
+-
+ #define ICMP_PAYLOAD_SIZE     100
+=20
+ /* Match an ICMP packet with payload len ICMP_PAYLOAD_SIZE */
+--=20
+2.43.0
+
 
