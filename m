@@ -1,237 +1,211 @@
-Return-Path: <linux-kselftest+bounces-27902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08154A499F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 13:53:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04A8CA49A13
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 13:59:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A5AC173795
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 12:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03674173260
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 12:59:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4F4270EBD;
-	Fri, 28 Feb 2025 12:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 612DE26B2C8;
+	Fri, 28 Feb 2025 12:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmTTycId"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAC32702CA;
-	Fri, 28 Feb 2025 12:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF80126A1CB;
+	Fri, 28 Feb 2025 12:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740747058; cv=none; b=GKDujVPgjQ1mvF91Ps77ceQj8CvO3ZAuIyiAS/cJEEn0n5IOHMX0/1ZyPo9uun9mupLqGrfEoXo+ICl9Xr+lyua/zDUedyTcIqn9iWT+a6I6MwWSwHyHmskd+YQ9T9TQWZ3gAcFsmHjW2ev40EiKICDvjD4cUPpTb1RPEpFZUdI=
+	t=1740747560; cv=none; b=BuMyidCd5x7fkGZ0Hz+KRG55go/VNs4FqEk2X9BpVyeabNVcxuSAllMgQQUR27sI3OPO8oF/gdg02rku548hcyhK/3Ei6/e8iqO1GYSAIHIorOTOcxYe+ToO5Kbe20uwL1JWwfe1FYKmOGjrV/JJgxO7y4sOEsimveeWPlkwVRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740747058; c=relaxed/simple;
-	bh=bQuZdV89ViO+C8ea3V/SA2TtywKFo513J57gSGk0RZk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SIbgM5/n6IwmfK0Otf4DluCjot6CceKxwy7L7Ai4GQx88SVvcGUdP3mVM1nuNHhcFA6MEciKiew35LHJj8eykEk1fPp8fdSXb+wYwXmLwZa3wBZXYVeaL+dNeLn+hu1PpiJyFuO/ynyFEJRfeNWjDLfzRFz597dd+OxaYBSAnkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+	s=arc-20240116; t=1740747560; c=relaxed/simple;
+	bh=88IU8/0u30ca6QDimILms/murtRd5qE99O/Lp87DcKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jBnd+9ZIGXe0dYSLZJdtkqKg7TuBCK4ZMrRCgqkfJvU3f6kvORXMrbi7j4Xq5IannaqJ/8t2BalJdkUwbwLuZoSSSfXzqhOOwzq0DUCDvy2JV2mG4phCrW4aSoL+rqDYQB5aKVeD5YQ/bFLhBgV1b9cXczP3QbXT+W0ILP8pCRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmTTycId; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5dca468c5e4so3442038a12.1;
-        Fri, 28 Feb 2025 04:50:56 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2232aead377so39903345ad.0;
+        Fri, 28 Feb 2025 04:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740747557; x=1741352357; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0YlmhnhGiW/WmeWzlvZTi5qHU7i/VbxVrz0eaQngxXk=;
+        b=dmTTycIdL2C7CKXTCjNNRdB2QGXNJLQ+u7EbWXSNfY32882Xv8uJjCWOkKjbmW/Pjh
+         8uZ9NP8t835xJHEsX4adHO/q16XSa9+taf0WeBL82lURxioyVLW7ZqMg6YoEVsS/BJFU
+         9uw5UGE+8M8sxCSvlC5eXh/UX1TG6DorSoQATXl4JaE1q/5InZvQdSSeUsSK1gy0mOSF
+         yb5rZRoW3FKqaop11OaxO8gbpqBHdToZf2+yn8Z0Sldy2LUDZaykK7McXefcAEOx96pE
+         5eNG404ljapnS7Y+oQmMhnDVINRFrLKYyoeG52nHOttCfg42kzzeuFTtVNwXTJ8l0FVB
+         Ok0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740747055; x=1741351855;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/RoRzffhAWFwu1880cu+JXgdjT1m36rkED8fGCNHUI4=;
-        b=aiPDD2HXMJSnbnG/m/qGTXY0aC+dfiRmOnGSbK+IFwbTolxRYCZNceDZNdb9kHFznb
-         LYHcFShCk0KJe9WhM6zZCaaRB9FWJqRpjVQCaaizCjFyePTF4YwZ3hrXj6kdUKKMf+n3
-         AMLd8zhiDehfB9d2J4RYgGOPkH0x86+7P9taTxP08zEFMY4CSH9PcijuQaroNdUIpyyk
-         TGphpLVNa6p6sAvrF31g9Is35HCkFP/7oGchlD6X6VyLjhJz0jUfHdBRgGq7QcF/v08m
-         0ujXtnvG9n0wwv8YVR9SIF9aZ+dbS53xb8hBrpVLZAR9DnUs9qUFLbBlWBvsdjXm3irN
-         d3RQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU06KbnkicGDmbMNTN/MbTpi6BbkX9ZDG2sdS5J4eIPO7bC3PnbvEkz3+Zno23VUJEE2K18zDszetDBGkcsxhAb@vger.kernel.org, AJvYcCUqLjXagfJtxgp8wA0nVQRTRW1DoLSIrqMIY0Pr9d5DVea+i1qnbCOE3C+AtZPcqWd8R0BbrmG2y4QGlyQT@vger.kernel.org, AJvYcCW4XBKeN98aLIrIRRfTB4FWpwenIwaAaZPGOCXrhD9Secvs7x46lrV3NAstp+C9jqSLNJUPbvrbuSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg5XrSJsMi2J9FnLly5ChhWzNb3hPgon/6Q7GimwxTt6JZ+tmY
-	sFUE5ZFoSxMuNRFQM8CASUQaptLfbEJgTj+STTfN2Y1N50eCU+3C
-X-Gm-Gg: ASbGnctlQ+pk6s8PAP98uWY7zFNt2mH46ih+Xqp0ijtEnGNBohs0th9QNQOewMQKqiD
-	dgEh+D5y2Xi9UbIumvo9NNzZRCJOq1KL2zP5MwH8M/IkkCbffKxhrdvW5dn/6w3hUFzGcJjgw4h
-	mT+IDGQLHVdoyZUTEQVRqYVIXHOv5SVS7kmqGs/12baY0FNL/3cPrM5e0/fiSeL8tVs/89ItR12
-	wpCZ1LduqVtPyF0/yHBmal5XCsWEigxmiXgK9oh0xFGC/ZG0h8AuNKME7SP1zOEb8Ms1mWn/xb+
-	ijHkpfnVVN0ZkAVX+Q==
-X-Google-Smtp-Source: AGHT+IFpcD4G0piaxn5eQhCYdsfhQ9AlB7Wf9C7Rk0yV7/3HEUfMAwI1lrGIckYABSHHB07CwJusEA==
-X-Received: by 2002:a17:907:98b:b0:aa6:a87e:f2e1 with SMTP id a640c23a62f3a-abf26824d2bmr366979366b.56.1740747055099;
-        Fri, 28 Feb 2025 04:50:55 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf1f1d5b4csm194129566b.85.2025.02.28.04.50.54
+        d=1e100.net; s=20230601; t=1740747557; x=1741352357;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0YlmhnhGiW/WmeWzlvZTi5qHU7i/VbxVrz0eaQngxXk=;
+        b=WQi08ZvS1paIxR7fKAiQW+fuxN+u+lYxQahLiy4BTTMwprgQeIip0uY5USCBDs/tve
+         W3TT6Y87jOMHnckLb90R1zZ28aGOwJ604MnF90yQBq4qwrF2wMXLcwgxrdBJVCFR9hDz
+         ynWX8f8bddpUkuzk9tCgcSRjQXzUlUSCrCmhm0paHBPQlYed50VeKi+NYFylXlRUbE6+
+         oWn5HcLG4Mv/OrFc+d7IeiI8tRDX8nUzMXogugmZKJqrGjFNAnIKua6xuvu6OLTx+OsO
+         G2vm78faJKH0JRAMp8KAQZRlltPlRH+ftsENuF5Lb9SD0O8zNhTUyrjP8h36Q6NvRsoQ
+         Eopg==
+X-Forwarded-Encrypted: i=1; AJvYcCUij4oIEfGTw1Uzu5P2DCk3KROKdowk6Pkgl44zpVTGLPgB8o5HJ7BXUsANlXIlWiyWR+U4UzRe0p8DFzNlF/lX@vger.kernel.org, AJvYcCVSSMH3/huXU/u+z5Ddyp4enbSGP9PnIm4OBFmJo3y/uADuwRjdUy7sCoA6nfrrSzjO3TECHYS3@vger.kernel.org, AJvYcCX4Qg4O2f810/e44x8QOUpTD7OdctyyPIDyW9rkWD1w3VnN2ug9emX5n3wFkpcFow1WbBamIa5iPfnNiUU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5j7KrNXPIav4Tz6mw83BF/tnhsL7cJXKSNHyy4TIbtzjxcWeB
+	rR1yTaKgumxqpzcOwdJBTn6yCgy6cxzmi9F6tKLRxv3pHPmAPtDa
+X-Gm-Gg: ASbGncvfa40IBHRKgvcM1psuXGuqeJgIZWODou1r9OPbJGybwL8pJfeBIRKbOyKMc7H
+	adtwfW9jB7Fv0dmUxAJQD+8A13PzALj71uNxMFYIXy7cJXMIgiepTNzDMSrdPCLU5ayijtasAEx
+	V9b/42mnoQf1SS2mCnikgJRC6cPFivEuq6TP+UFVVpGh4SJReXVC8RMvZifBT4o3O9HjMpxxHFi
+	/NTDhzBkKAElPDbYGkjh2BdbJhx55gLzcSBKM4tOX9KF9RbFSAeWgumRaOONaCLzKFI9hYfRg2y
+	MVpKpenYfR58KksL/BDki99jA1B7JzY=
+X-Google-Smtp-Source: AGHT+IGPENQOxmmMjzKNCn5DTT6b72tUp76AFx8HqHhY0vo3qjWV6jWnSAnx9igUcmcxYYry24NcOw==
+X-Received: by 2002:a17:902:ecd0:b0:223:2aab:4626 with SMTP id d9443c01a7336-22368f60a3fmr57556395ad.11.1740747557057;
+        Fri, 28 Feb 2025 04:59:17 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223501fb54esm32501415ad.99.2025.02.28.04.59.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 04:50:54 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 28 Feb 2025 04:50:24 -0800
-Subject: [PATCH net-next v2 8/8] netconsole: selftest: add task name append
- testing
+        Fri, 28 Feb 2025 04:59:16 -0800 (PST)
+Date: Fri, 28 Feb 2025 12:59:08 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: "razor@blackwall.org" <razor@blackwall.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"jarod@redhat.com" <jarod@redhat.com>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
+	"jv@jvosburgh.net" <jv@jvosburgh.net>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Jianbo Liu <jianbol@nvidia.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>
+Subject: Re: [PATCHv3 net 1/3] bonding: move IPsec deletion to
+ bond_ipsec_free_sa
+Message-ID: <Z8GzHATDUapN3EoD@fedora>
+References: <20250227083717.4307-1-liuhangbin@gmail.com>
+ <20250227083717.4307-2-liuhangbin@gmail.com>
+ <446e8ef4-7ac0-43ad-99ff-29c21a2ee117@blackwall.org>
+ <13cb4b16-51b0-4042-8435-6dac72586e55@blackwall.org>
+ <Z8Bm9i9St0zzDhRZ@fedora>
+ <f88b234a-37ec-46a4-b920-35f598ab6c38@blackwall.org>
+ <Z8EdatcTr9weRfHr@fedora>
+ <76ed1d018596b81548d095aa2d4a9b31b360479c.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250228-netcons_current-v2-8-f53ff79a0db2@debian.org>
-References: <20250228-netcons_current-v2-0-f53ff79a0db2@debian.org>
-In-Reply-To: <20250228-netcons_current-v2-0-f53ff79a0db2@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4252; i=leitao@debian.org;
- h=from:subject:message-id; bh=bQuZdV89ViO+C8ea3V/SA2TtywKFo513J57gSGk0RZk=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnwbEeOlpLZz+jnYyR9K+wnsSZH4aDZZ19EMuR2
- yd/tIPKlICJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ8GxHgAKCRA1o5Of/Hh3
- bfaWEACiJ9VntVXYjyI2qIax5VJSP6kSsBySEMH1ZKxbeKgyGhZ93Q8ygigvOiBWKKyVWp4cfaO
- oRuJvy6JFosQlkRNhwQoyCm1F4/RSsDO0z9TJvE/qVQK/vu39fxUYo+pFIPfJTj1plmhzMEMtOt
- VQ4+rCN4z3ouvh5bZOyNJPSbZ/zvxesii7/2wQ3AJaFNHskeMaQeOJnaVn9Fshv8QzkaepCBAp4
- JkzYe7KcVdkQujg0O7tjhpZ29f6LW23JWaHHa0VjqvATTnuOFDMTlGEJkDqsA1kn3PmQRfDb32n
- jsUnwcuDGi2xshZ4JUWp/ULtCRz9LDefmsx5n3ioJQ0vJ9mUnUlIFJJzy5DSySZaO4W7Nti9U59
- S4Aycxv3dqWcW5e/vHnc7HiMFa4xz5H4bujSK+1qC2DvVvCMu+CNk27Lij5P2wusHr5dZ6kef9b
- F/GUc73TAYww4dz85ZXjDkCOpaLRR8n1aYnkR2OwvcclIJHyw22RCCic0dp2TWqGvsAp+ZA9Lzf
- mPwDxOrOKF+brh1JfZK+2WfBEAkmqbWHnZdWZv8HozdIk8Y0886xRiLvUa67gE24t3aVYiljfVX
- hgPmCZ4YwWAF9845e8Bs6HXPNuYWlPr5w9f+ds05MjoVVBKmKy9IAPRk442270AqfLgOSsKAgZJ
- OjVeK/SZqu0mMUQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <76ed1d018596b81548d095aa2d4a9b31b360479c.camel@nvidia.com>
 
-Add test coverage for the netconsole task name feature to the existing
-sysdata selftest script. This extends the test infrastructure to verify
-that task names are correctly appended when enabled and absent when
-disabled.
+Hi Cosmin,
+On Fri, Feb 28, 2025 at 10:31:58AM +0000, Cosmin Ratiu wrote:
+> On Fri, 2025-02-28 at 02:20 +0000, Hangbin Liu wrote:
+> > On Thu, Feb 27, 2025 at 03:31:01PM +0200, Nikolay Aleksandrov wrote:
+> > > > > One more thing - note I'm not an xfrm expert by far but it
+> > > > > seems to me here you have
+> > > > > to also call  xdo_dev_state_free() with the old active slave
+> > > > > dev otherwise that will
+> > > > > never get called with the original real_dev after the switch to
+> > > > > a new
+> > > > > active slave (or more accurately it might if the GC runs
+> > > > > between the switching
+> > > > > but it is a race), care must be taken wrt sequence of events
+> > > > > because the XFRM
+> > > > 
+> > > > Can we just call xs->xso.real_dev->xfrmdev_ops-
+> > > > >xdo_dev_state_free(xs)
+> > > > no matter xs->xso.real_dev == real_dev or not? I'm afraid calling
+> > > > xdo_dev_state_free() every where may make us lot more easily.
+> > > > 
+> > > 
+> > > You'd have to check all drivers that implement the callback to
+> > > answer that and even then
+> > > I'd stick to the canonical way of how it's done in xfrm and make
+> > > the bond just passthrough.
+> > > Any other games become dangerous and new code will have to be
+> > > carefully reviewed every
+> > > time, calling another device's free_sa when it wasn't added before
+> > > doesn't sound good.
+> > > 
+> > > > > GC may be running in parallel which probably means that in
+> > > > > bond_ipsec_free_sa()
+> > > > > you'll have to take the mutex before calling
+> > > > > xdo_dev_state_free() and check
+> > > > > if the entry is still linked in the bond's ipsec list before
+> > > > > calling the free_sa
+> > > > > callback, if it isn't then del_sa_all got to it before the GC
+> > > > > and there's nothing
+> > > > > to do if it also called the dev's free_sa callback. The check
+> > > > > for real_dev doesn't
+> > > > > seem enough to protect against this race.
+> > > > 
+> > > > I agree that we need to take the mutex before calling
+> > > > xdo_dev_state_free()
+> > > > in bond_ipsec_free_sa(). Do you think if this is enough? I'm a
+> > > > bit lot here.
+> > > > 
+> > > > Thanks
+> > > > Hangbin
+> > > 
+> > > Well, the race is between the xfrm GC and del_sa_all, in bond's
+> > > free_sa if you
+> > > walk the list under the mutex before calling real_dev's free
+> > > callback and
+> > > don't find the current element that's being freed in free_sa then
+> > > it was
+> > > cleaned up by del_sa_all, otherwise del_sa_all is waiting to walk
+> > > that
+> > > list and clean the entries. I think it should be fine as long as
+> > > free_sa
+> > > was called once with the proper device.
+> > 
+> > OK, so the free will be called either in del_sa_all() or free_sa().
+> > Something like this?
+> > 
+> [...]
+> 
+> Unfortunately, after applying these changes and reasoning about them
+> for a bit, I don't think this will work. There are still races left.
+> For example:
+> 1. An xs is marked DEAD (in __xfrm_state_delete, with x->lock held) and
+> before .xdo_dev_state_delete() is called on it, bond_ipsec_del_sa_all
+> is called in parallel, doesn't call delete on xs (because it's dead),
+> then calls free (incorrect without delete first), then removes the list
+> entry. Later, xdo_dev_state_delete( == bond_ipsec_del_sa) is called,
+> and calls delete (incorrect, out of order with free). Finally,
+> bond_ipsec_free_sa is called, which fortunately doesn't do anything
+> silly in the new proposed form because xs is no longer in the list.
+> 
+> 2. A more sinister form of the above race can happen when 
+> bond_ipsec_del_sa_all() calls delete on real_dev, then in parallel and
+> immediately after __xfrm_state_delete marks xs as DEAD and calls
+> bond_ipsec_del_sa() which happily calls delete on real_dev again.
+> 
+> In order to fix these races (and others like it), I think
+> bond_ipsec_del_sa_all and bond_ipsec_add_sa_all *need* to acquire x-
+> >lock for each xs being processed. This would prevent xfrm from
+> concurrently initiating add/delete operations on the managed states.
+> 
 
-The test validates that:
-  - Task names appear in the expected format "taskname=<name>"
-  - Task names are included when the feature is enabled
-  - Task names are excluded when the feature is disabled
-  - The feature works correctly alongside other sysdata fields like CPU
+Thanks a lot for the careful checking. I will add the x->lock
+in del/add_sa_all.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Simon Horman <horms@kernel.org>
----
- .../selftests/drivers/net/netcons_sysdata.sh       | 51 +++++++++++++++++++---
- 1 file changed, 44 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/netcons_sysdata.sh b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-index 2b78fd1f5982f..f351206ed1bda 100755
---- a/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_sysdata.sh
-@@ -31,17 +31,38 @@ function set_cpu_nr() {
- 	echo 1 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
- }
- 
-+# Enable the taskname to be appended to sysdata
-+function set_taskname() {
-+	if [[ ! -f "${NETCONS_PATH}/userdata/taskname_enabled" ]]
-+	then
-+		echo "Not able to enable taskname sysdata append. Configfs not available in ${NETCONS_PATH}/userdata/taskname_enabled" >&2
-+		exit "${ksft_skip}"
-+	fi
-+
-+	echo 1 > "${NETCONS_PATH}/userdata/taskname_enabled"
-+}
-+
- # Disable the sysdata cpu_nr feature
- function unset_cpu_nr() {
- 	echo 0 > "${NETCONS_PATH}/userdata/cpu_nr_enabled"
- }
- 
--# Test if MSG content and `cpu=${CPU}` exists in OUTPUT_FILE
--function validate_sysdata_cpu_exists() {
-+# Once called, taskname=<..> will not be appended anymore
-+function unset_taskname() {
-+	echo 0 > "${NETCONS_PATH}/userdata/taskname_enabled"
-+}
-+
-+# Test if MSG contains sysdata
-+function validate_sysdata() {
- 	# OUTPUT_FILE will contain something like:
- 	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
- 	#  userdatakey=userdatavalue
- 	#  cpu=X
-+	#  taskname=<taskname>
-+
-+	# Echo is what this test uses to create the message. See runtest()
-+	# function
-+	SENDER="echo"
- 
- 	if [ ! -f "$OUTPUT_FILE" ]; then
- 		echo "FAIL: File was not generated." >&2
-@@ -62,12 +83,19 @@ function validate_sysdata_cpu_exists() {
- 		exit "${ksft_fail}"
- 	fi
- 
-+	if ! grep -q "taskname=${SENDER}" "${OUTPUT_FILE}"; then
-+		echo "FAIL: 'taskname=echo' not found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+
- 	rm "${OUTPUT_FILE}"
- 	pkill_socat
- }
- 
--# Test if MSG content exists in OUTPUT_FILE but no `cpu=` string
--function validate_sysdata_no_cpu() {
-+# Test if MSG content exists in OUTPUT_FILE but no `cpu=` and `taskname=`
-+# strings
-+function validate_no_sysdata() {
- 	if [ ! -f "$OUTPUT_FILE" ]; then
- 		echo "FAIL: File was not generated." >&2
- 		exit "${ksft_fail}"
-@@ -85,6 +113,12 @@ function validate_sysdata_no_cpu() {
- 		exit "${ksft_fail}"
- 	fi
- 
-+	if grep -q "taskname=" "${OUTPUT_FILE}"; then
-+		echo "FAIL: 'taskname=  found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+
- 	rm "${OUTPUT_FILE}"
- }
- 
-@@ -133,10 +167,12 @@ OUTPUT_FILE="/tmp/${TARGET}_1"
- MSG="Test #1 from CPU${CPU}"
- # Enable the auto population of cpu_nr
- set_cpu_nr
-+# Enable taskname to be appended to sysdata
-+set_taskname
- runtest
- # Make sure the message was received in the dst part
- # and exit
--validate_sysdata_cpu_exists
-+validate_sysdata
- 
- #====================================================
- # TEST #2
-@@ -148,7 +184,7 @@ OUTPUT_FILE="/tmp/${TARGET}_2"
- MSG="Test #2 from CPU${CPU}"
- set_user_data
- runtest
--validate_sysdata_cpu_exists
-+validate_sysdata
- 
- # ===================================================
- # TEST #3
-@@ -160,8 +196,9 @@ OUTPUT_FILE="/tmp/${TARGET}_3"
- MSG="Test #3 from CPU${CPU}"
- # Enable the auto population of cpu_nr
- unset_cpu_nr
-+unset_taskname
- runtest
- # At this time, cpu= shouldn't be present in the msg
--validate_sysdata_no_cpu
-+validate_no_sysdata
- 
- exit "${ksft_pass}"
-
--- 
-2.43.5
-
+Regards
+Hangbin
 
