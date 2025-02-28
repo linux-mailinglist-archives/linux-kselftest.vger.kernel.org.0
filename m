@@ -1,126 +1,106 @@
-Return-Path: <linux-kselftest+bounces-27944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBBFCA4A108
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 19:00:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D6CA4A30D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 20:50:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36E743B2BC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 18:00:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41E5118898B6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 19:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2389225DD1D;
-	Fri, 28 Feb 2025 18:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8E4E230BD8;
+	Fri, 28 Feb 2025 19:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWJfdFCk"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qKIFCgZm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED05C1F09B8;
-	Fri, 28 Feb 2025 18:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8E91BD01D
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 19:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740765611; cv=none; b=tTn3qvfzD7/7pvwRCEOUo6X2HNez9Zc0bt1MQYKxZcdoHMYlnsWVgdAJXvK9gfKkBArb6WbgCzzDXkmGqTqp+3M3t9of5ND+F7sJcej/6Qxlfd+UT3MJ8J9Cw5M0hrMInqIZTHaB662sjFD6856XxX3ePXrpCXIPEdnFQIZabaE=
+	t=1740772229; cv=none; b=ByS9+S0VI20JFSSKklMGT24YePFnJsgGiD01uMWmXiO+DJC/KMMHN/MRno7S43z4U9t5Fo2X/fwGYaIGwJbnf1emaODZVPoc3ytXDxXXVg9sP+EmYceVQ18jBb673fqN4p05DHlud5MMWblhOfOQuat9QbOBRwagjNfyxpGm2wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740765611; c=relaxed/simple;
-	bh=LNGek2KEOoXjwsDtMm0drAz/BTi7FE9zL0fgU5scCuc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VJS9E379aGmWHKcYrSTkblV4VEzM6v76dk5vo/CgEVOBN9r6zuYsXRisibZXCMAWZZ2OstcvWXmX8tm3nfJ1kojJXVrr9QEIOc3acy+wI1Qyk0szvcnTPgsNo3aLQ75zVq2JLmMjYNYecXxh6Pg3Y1Euam9dWwUdibfHXXW539E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWJfdFCk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17211C4CED6;
-	Fri, 28 Feb 2025 18:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740765609;
-	bh=LNGek2KEOoXjwsDtMm0drAz/BTi7FE9zL0fgU5scCuc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sWJfdFCkuLChzaVVG2Q3xH+36H2Tzb90t2gwSQ6bQ4CRaC74cU8ZtkLyjol2ROJgs
-	 wzMgK/URjcxHzzcqYTcyLk9j6jjXuwiLRpI84ngHIEvuqnBVTyw03fIdIdbZdweVV2
-	 8kkn8d3b3LWzCYkX/mF56DXw1p5qJTEvBmEhNjK6/W8RAQ6k4H6fi5AhpxJxPTm5Jr
-	 sL269Zlw5+jF1vSGO7E1OkbKyvlf1ZRLvYGXynlSiC14B77EUv1BfVxvUq0cmp7NGq
-	 jkpjSTMrOAIUGHSz3IJh3htt8p0teRBnOWYe8CGPkgNQgwsKwvi7ANHfvJmYOEo/wC
-	 YZj8NS3irHYTw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	petrm@nvidia.com,
-	matttbe@kernel.org,
-	willemb@google.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: net: report output format as TAP 13 in Python tests
-Date: Fri, 28 Feb 2025 10:00:07 -0800
-Message-ID: <20250228180007.83325-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1740772229; c=relaxed/simple;
+	bh=H+/rFxlMCRXtsUIXaqplXnOl3vhpfrKqlr5qeT3CSQQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p3IPdK7ufaqpDyZYdudQz4xjpbbgormeD0E1t40z15LWvzKpdwKKVD8/s7JKQ4vMqycpiFrDshFr4lYud8o5OTUmU3Kn1ZfkZwQT6YwC/FHxKsJoZf9TGm1D36efKtD1a246La1O5QTZya/cZkRmzyoX0Tvf2r6+pXySOwKPpwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qKIFCgZm; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <090ede76-0c9f-4297-9d5a-7b75aa20ca27@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740772226;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z8JhYOSrQ/mtuWZBihElqgcYA53A3WApd7koMNxDy5g=;
+	b=qKIFCgZmtfTeuqOKGKfZhCOqVjRJ5xsU8AOpsmyyumpPJnjQqE0131CpgZ2Eyt1ICUppFL
+	jH9T7RIap2aSjAMWb+Tm1X+GHIQRg6/GGN1JSsFTYYVgLsiHhrRPvArj3G/L9fYhDX8Ji+
+	eyYifs2mRReSEU+lG94ExWpX6Dbom/s=
+Date: Fri, 28 Feb 2025 11:49:03 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 2/6] net: tun: enable transfer of XDP metadata
+ to skb
+To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Cc: willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, hawk@kernel.org, Willem de Bruijn <willemb@google.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
+ <20250227142330.1605996-3-marcus.wichelmann@hetzner-cloud.de>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20250227142330.1605996-3-marcus.wichelmann@hetzner-cloud.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-The Python lib based tests report that they are producing
-"KTAP version 1", but really we aren't making use of any
-KTAP features, like subtests. Our output is plain TAP.
+On 2/27/25 6:23 AM, Marcus Wichelmann wrote:
+> When the XDP metadata area was used, it is expected that the same
+> metadata can also be accessed from TC, as can be read in the description
+> of the bpf_xdp_adjust_meta helper function. In the tun driver, this was
+> not yet implemented.
+> 
+> To make this work, the skb that is being built on XDP_PASS should know
+> of the current size of the metadata area. This is ensured by adding
+> calls to skb_metadata_set. For the tun_xdp_one code path, an additional
+> check is necessary to handle the case where the externally initialized
+> xdp_buff has no metadata support (xdp->data_meta == xdp->data + 1).
+> 
+> More information about this feature can be found in the commit message
+> of commit de8f3a83b0a0 ("bpf: add meta pointer for direct access").
+> > Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+> ---
+>   drivers/net/tun.c | 25 ++++++++++++++++++++++---
+>   1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 4ec8fbd93c8d..70208b3a2e93 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
 
-Report TAP 13 instead of KTAP 1, this is what mptcp tests do,
-and what NIPA knows how to parse best. For HW testing we need
-precise subtest result tracking.
+The changes have conflicts with the commit 2506251e81d1 ("tun: Decouple vnet handling").
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: petrm@nvidia.com
-CC: matttbe@kernel.org
-CC: willemb@google.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/README.rst | 4 ++--
- tools/testing/selftests/net/lib/py/ksft.py     | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+It is better to rebase the works onto the bpf-next/net,
+i.e. the "net" branch instead of the "master" branch.
 
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index 3b6a29e6564b..eb838ae94844 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -107,7 +107,7 @@ Example
-   1..1
-   # timeout set to 45
-   # selftests: drivers/net: ping.py
--  # KTAP version 1
-+  # TAP version 13
-   # 1..3
-   # ok 1 ping.test_v4
-   # ok 2 ping.test_v6
-@@ -128,7 +128,7 @@ Example
- Run the test::
- 
-   [/root] # ./ksft-net-drv/drivers/net/ping.py
--  KTAP version 1
-+  TAP version 13
-   1..3
-   ok 1 ping.test_v4
-   ok 2 ping.test_v6 # SKIP Test requires IPv6 connectivity
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index fd23349fa8ca..3cfad0fd4570 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -207,7 +207,7 @@ KSFT_DISRUPTIVE = True
- 
-     totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
- 
--    print("KTAP version 1")
-+    print("TAP version 13")
-     print("1.." + str(len(cases)))
- 
-     global KSFT_RESULT
--- 
-2.48.1
 
 
