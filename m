@@ -1,162 +1,151 @@
-Return-Path: <linux-kselftest+bounces-27952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27953-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4757AA4A763
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 02:29:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08702A4A773
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 02:32:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94AB516AD2C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 01:29:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA1707AAF81
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 01:31:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8937B2F852;
-	Sat,  1 Mar 2025 01:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S0VaiX8p"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760311401B;
+	Sat,  1 Mar 2025 01:32:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5111BC3F
-	for <linux-kselftest@vger.kernel.org>; Sat,  1 Mar 2025 01:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882C128F5;
+	Sat,  1 Mar 2025 01:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740792569; cv=none; b=mhAvfzhSNSO0r4dNXRxui5P58zkixr1mS5HkYNNZ3doFZhHD4r6YEN3tWuGrypgFLl+TH18oUWADnkHDcBmVcOsBO0glPoCFO6bXNjGP8uNTs4YGHPjzZfIoQr2JB2BEe9G9vEDZzvVyBRWkmSv/WExmlr1sot7DCxOu4/5QO8g=
+	t=1740792729; cv=none; b=CgbsTBPH0DCONjpHxTL4yxl64imr0Cn0n4lgZhYpMLs9m3arhylXpNsBRlccuZMJPQgQTnoxIlFB+zI/kR0HuX+DMhrJRWifznmRt6EbCNXva6G0Vr/lqoCGHcWQVIC9V7oQWHpm3VmNIlPMWBPezg+KRjBdmSVn/VB/peE897c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740792569; c=relaxed/simple;
-	bh=x30Ghtnf2mwjQ7C24lb6dNTXdFIuMS5fxSzqclDeaDU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RcQDygfnl9/oMHxq7E42se/SEN2Z8czaJka7F/wBIqlxDO0q9YXRqGnRcK2R95hpQR+Y1Hn0ecwUnBvs/VPxbYszAmFVhVZQgh6UJ1QU6HBJJ+EJKxGfqqFvAIpXEjsIAualnXs2AhOEHGKLKMVfk+hFVyeM9woq3c6sBEDb0JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S0VaiX8p; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2212222d4cdso71995ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 17:29:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740792567; x=1741397367; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kc38nFBS6hSU0vji9D+YzzpAjSlnqZ5qJGUo2AO471s=;
-        b=S0VaiX8p5oTZx9ICATxbmh2T98PF+gxmFdn5K7Dqs3yN7BRYfSPZcD7BpIrlV3/JWD
-         g59Bpj5SyQ7kp7GDINxMbFp9sBrVu1zUYCkt5Lx0nWDgUEVBJTiCshbzOXvSvvVNLWK2
-         QWOBISMETj1cm6T+hbYmPck540G8K9T5Jl/QirOuVwzeeRV96vQeKFpCZQR0sU2T2oPo
-         HFPA6k+/LCZc92394kHeB0gnw3Iq3E3m+b88/NeZ/KCobUGJoSVnnqYQ1taIddl9IUlC
-         ciSumnvRSAIPV8TufYdNZM1nIHMj98bEI6Y1XCO41aCpMHKTpuSMdr/C9tPGsu7QYMCX
-         xH5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740792567; x=1741397367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kc38nFBS6hSU0vji9D+YzzpAjSlnqZ5qJGUo2AO471s=;
-        b=NJMBIwAMSjk98NR9TuYVoBKMzJgHOtLtywryO/k4JparWvnWSJ+eryY6fj5D9D3sdV
-         iw0tk7MOWzVP8FzfZVbtQ0G0vpdQKlwHrYZoo7veaXwxvtTSVEIixPeF65XAcCxJbXrC
-         M9fO47/abgbP2x/rERbMHMVouuA8cF6m6OcCP2DcraRsVZnQpYCGBQEMulhlhlY6zw05
-         8Hb2lg6lNJu+OkVNrtSDLxniDTCO1lDmMaxKuZcszU/FDZmuHIsmlWmv2Kvd+KqiYD7E
-         bB/zHOfZ0gJ3JXoIbOQzpjrY9SQW5sFecooNAR0QhCc/iPIiW9qOEFSMmNbxH7iGq9U2
-         ADyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHkLNTL8rcs3c1jqxU3oUWAqm3qhNqtRHXJ+2C9qGS9z/6gwd436+0wtHcoWIg2DTJUha+6yuu6XdeAMURlR4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwGnppLxBVsu0bBgaGjgakntdXny6K0U/FG8UkfeYotQGbWl9o
-	ZqUksQKABzHiwaS4RKVjAKc4kK4+kMCgoe1/8+npbHQ2FhY1ohoui2uTB38zfU5kc69F0PMAjqn
-	5bae+x20Z7xEYSSQNk4XV16AdJC8xFIzZiZUM
-X-Gm-Gg: ASbGnctTPqu9J9T7itgItpJa1lpp9PLuxk36GA4v5KjA6iTFWZ8dNvevn8nD7EMpNyq
-	TH8qerrfOa8LAxH/NuxRwEci6NqMJZLB7gCL45vrz/eaunkHXjx3iaNa0O7A8nyl5eQ662gOk5F
-	VoJMUnu+AXo++/VGpX4lKc4rlyFQ==
-X-Google-Smtp-Source: AGHT+IGncPbBhrhz7q7nYtSkG3NCU3eJmen24UIv0X8fbRWFxDMMC/F2mnfn4/23C53PdlyFhZfhFGySOLAkJbQVaoI=
-X-Received: by 2002:a17:902:ccca:b0:220:c905:689f with SMTP id
- d9443c01a7336-22385a2665emr571665ad.25.1740792566772; Fri, 28 Feb 2025
- 17:29:26 -0800 (PST)
+	s=arc-20240116; t=1740792729; c=relaxed/simple;
+	bh=C0xF352bf3NSJ1MxeiWrWudgMezqRE5qZ+gXR8Mw3Gs=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=pXVgG0tsLVnirFsOWfgiV8s3Yk+xj+/Qs+qwHAnL/hQolvBz3TXZzHqf9hYOs1qnp8XF5towKtiC5yJg8p8NF/VGjH5FTLS/xmQmnvJFx0L2mxF9bKsUSlRDR/HhqS4Uximd+Y7u7mp6Ury+dCEvtsFPwCQbL3+jOsXU+CfLp3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Z4SGg5Gm1z4f3lxG;
+	Sat,  1 Mar 2025 09:31:39 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id A65291A07BB;
+	Sat,  1 Mar 2025 09:32:01 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP3 (Coremail) with SMTP id _Ch0CgC3CMONY8Jn2r2AFA--.18363S2;
+	Sat, 01 Mar 2025 09:32:01 +0800 (CST)
+Subject: Re: [PATCH bpf-next v1 3/3] selftests/bpf: Fixes for test_maps test
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+Cc: john.fastabend@gmail.com, davem@davemloft.net, kuba@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, mrpre@163.com
+References: <20250227142646.59711-1-jiayuan.chen@linux.dev>
+ <20250227142646.59711-4-jiayuan.chen@linux.dev>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <69d3cd4f-3ea3-78c5-59ea-d4a1185a4251@huaweicloud.com>
+Date: Sat, 1 Mar 2025 09:31:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250227041209.2031104-1-almasrymina@google.com>
- <20250227041209.2031104-2-almasrymina@google.com> <20250228163846.0a59fb40@kernel.org>
-In-Reply-To: <20250228163846.0a59fb40@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 28 Feb 2025 17:29:13 -0800
-X-Gm-Features: AQ5f1JqnucwSW-6yoUTgklaGGj9zlmp1rtei3-w0QbA66_zGizdQVdrhRtrAPr0
-Message-ID: <CAHS8izNQnTW7sad_oABtxhy3cHxGR0FWJucrHTSVX7ZAA6jT3Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/8] net: add get_netmem/put_netmem support
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Jeroen de Borst <jeroendb@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
-	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250227142646.59711-4-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:_Ch0CgC3CMONY8Jn2r2AFA--.18363S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw18tr15KFyfuFy7Zw45Awb_yoW5GF4Upr
+	Wruay5KrW5tFy2qr1xtw40gF4F9anrG34jyryqqrZrA34kGwn2vryxCF1Fyr9FgrZ5Zan3
+	Aa93trWfGF18XFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07jIksgUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Fri, Feb 28, 2025 at 4:38=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+Hi,
+
+On 2/27/2025 10:26 PM, Jiayuan Chen wrote:
+> BPF CI has failed 3 times in the last 24 hours. Add retry for ENOMEM.
+> It's similar to the optimization plan:
+> commit 2f553b032cad ("selftsets/bpf: Retry map update for non-preallocated per-cpu map")
 >
-> On Thu, 27 Feb 2025 04:12:02 +0000 Mina Almasry wrote:
-> >  static inline void __skb_frag_ref(skb_frag_t *frag)
-> >  {
-> > -     get_page(skb_frag_page(frag));
-> > +     get_netmem(skb_frag_netmem(frag));
-> >  }
+> Failed CI:
+> https://github.com/kernel-patches/bpf/actions/runs/13549227497/job/37868926343
+> https://github.com/kernel-patches/bpf/actions/runs/13548089029/job/37865812030
+> https://github.com/kernel-patches/bpf/actions/runs/13553536268/job/37883329296
+
+Er, it is suspicious that the allocation of htab_elem failed, because
+the size of key and value is small in these cases. It usually means that
+there is something wrong with bpf mem allocator or the slub, therefore,
+I think it is a bad idea to retry for ENOMEM in this case. Will try to
+reproduce the problem first when get some time.
 >
-> Silently handling types of memory the caller may not be expecting
-> always worries me.
-
-Sorry, I'm not following. What caller is not expecting netmem? Here
-we're making sure __skb_frag_ref() handles netmem correctly, i.e. we
-were not expecting netmem here before, and after this patch we'll
-handle it correctly.
-
-> Why do we need this?
+> selftests/bpf: Fixes for test_maps test
+> Fork 100 tasks to 'test_update_delete'
+> Fork 100 tasks to 'test_update_delete'
+> Fork 100 tasks to 'test_update_delete'
+> Fork 100 tasks to 'test_update_delete'
+> ......
+> test_task_storage_map_stress_lookup:PASS
+> test_maps: OK, 0 SKIPPED
 >
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  tools/testing/selftests/bpf/test_maps.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+> index 8b40e9496af1..986ce32b113a 100644
+> --- a/tools/testing/selftests/bpf/test_maps.c
+> +++ b/tools/testing/selftests/bpf/test_maps.c
+> @@ -1396,9 +1396,10 @@ static void test_map_stress(void)
+>  #define MAX_DELAY_US 50000
+>  #define MIN_DELAY_RANGE_US 5000
+>  
+> -static bool retry_for_again_or_busy(int err)
+> +static bool can_retry(int err)
+>  {
+> -	return (err == EAGAIN || err == EBUSY);
+> +	return (err == EAGAIN || err == EBUSY ||
+> +		(err == ENOMEM && map_opts.map_flags == BPF_F_NO_PREALLOC));
+>  }
+>  
+>  int map_update_retriable(int map_fd, const void *key, const void *value, int flags, int attempts,
+> @@ -1451,12 +1452,12 @@ static void test_update_delete(unsigned int fn, void *data)
+>  
+>  		if (do_update) {
+>  			err = map_update_retriable(fd, &key, &value, BPF_NOEXIST, MAP_RETRIES,
+> -						   retry_for_again_or_busy);
+> +						   can_retry);
+>  			if (err)
+>  				printf("error %d %d\n", err, errno);
+>  			assert(err == 0);
+>  			err = map_update_retriable(fd, &key, &value, BPF_EXIST, MAP_RETRIES,
+> -						   retry_for_again_or_busy);
+> +						   can_retry);
+>  			if (err)
+>  				printf("error %d %d\n", err, errno);
+>  			assert(err == 0);
 
-The MSG_ZEROCOPY TX path takes a page reference on the passed memory
-in zerocopy_fill_skb_from_iter() that kfree_skb() later drops when the
-skb is sent. We need an equivalent for netmem, which only supports pp
-refs today. This is my attempt at implementing a page_ref equivalent
-to net_iov and generic netmem.
-
-I think __skb_frag_[un]ref is used elsewhere in the TX path too,
-tcp_mtu_probe for example calls skb_frag_ref eventually.
-
-> In general, I'm surprised by the lack of bug reports for devmem.
-
-I guess we did a good job making sure we don't regress the page paths.
-
-The lack of support in any driver that qemu will run is an issue. I
-wonder if also the fact that devmem needs some setup is also an issue.
-We need headersplit enabled, udmabuf created, netlink API bound, and
-then a connection referring to created and we don't support loopback.
-I think maybe it all may make it difficult for syzbot to repro. I've
-had it on my todo list to investigate this more.
-
-> Can you think of any way we could expose this more to syzbot?
-> First thing that comes to mind is a simple hack in netdevsim,
-> to make it insert a netmem handle (allocated locally, not a real
-> memory provider), every N packets (controllable via debugfs).
-> Would that work?
-
-Yes, great idea. I don't see why it wouldn't work.
-
-We don't expect mixing of net_iovs and pages in the same skb, but
-netdevsim could create one net_iov skb every N skbs.
-
-I guess I'm not totally sure something is discoverable to syzbot. Is a
-netdevsim hack toggleable via a debugfs sufficient for syzbot? I'll
-investigate and ask.
-
---
-Thanks,
-Mina
 
