@@ -1,164 +1,220 @@
-Return-Path: <linux-kselftest+bounces-27962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC741A4AAA3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 12:24:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F6D7A4AAAD
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 12:37:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 535261898074
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 11:24:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE0C0172854
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 11:37:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EF01DE890;
-	Sat,  1 Mar 2025 11:24:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3B001DE3D7;
+	Sat,  1 Mar 2025 11:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ifQAO72m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C4YkjQGX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3203E1DA614;
-	Sat,  1 Mar 2025 11:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACD81CEAC3;
+	Sat,  1 Mar 2025 11:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740828260; cv=none; b=RhscUuvo15yuEOw3KcxcsFM7S+qpBbF0vwO9LPsG8pZOo9ciYsLHvYhFY28TxwlR4RkowdyXelb9gbJ2YEsNXEPKnZ5LxJXcgLHQvIyrILN017b81r84piDovlv43zxw9ncyj2ium/fRYRUXC5wgjC7nrmXGRDmLjN/sHNudHpI=
+	t=1740829039; cv=none; b=uIc28j42mnQRbpP+dFuiz33I8XDGH23/RtBVz0mlZjJJQU2UqwHWxKbLZmizkw6zoLj5JB5+B/tY5rlE9cWMp/8jWEbFLYxWqzeEleh1Ldp3Y9LdRi4x9vZ5+4BHzK+VjeHuxboZQIsdDVjiOKtUvU1FHE36uHe/3LdFoE2mrvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740828260; c=relaxed/simple;
-	bh=N7ZWUnKVuIBNSW6j79uZezmUkip3hXepNP58JvVypS0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fNXsqfK9u8I27dpqkZ2MZigSVnPTeIHdWksr0ZUeF39NXgCPFFUw5DEAOxcQ8+4gPRXIZq+fZQLwL67f9YNmzv5olyiwRnm17lH6liaWGfhpd9gJMVY6exEzSWmi9I0I4rEi0jRhfy6mtdutFt+IlrNO8HFuzAOJQyeUKv3Z/tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ifQAO72m; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1740828247;
-	bh=N7ZWUnKVuIBNSW6j79uZezmUkip3hXepNP58JvVypS0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ifQAO72m5tvA5EjMYl2I4UDlty1hx9BfiiRgItWQH3ISevpMsHar4Gf3IFSYZFekd
-	 XufsqsWOvA6sP3M5X8lNtEvOFhY7+Rqz58WDKxDWNYwZQDlATYRksRYCIPBdUSDKPU
-	 21v/luRiC6y76ItgQ5WWhz0e0/Kk5QGHsabwpurs=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 01 Mar 2025 12:24:00 +0100
-Subject: [PATCH 2/2] selftests/nolibc: add armthumb configuration
+	s=arc-20240116; t=1740829039; c=relaxed/simple;
+	bh=dT1M1OX+ylPajgi5Td8FsnYT9PqPEbMJ8aqpho8rjqg=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f5tTayQWvl83Lm1moGzPOHS2jJdhwG7tlpGZfFyj6C10wa32ATpFNK94YzLJWQQC1tnj1rVZbFOKJKS4tRxwAZ+Q7XTP/qGqO147id7Jhp8TGLgW21nyVnvhiaVcnjfQ9M4nf3EUnlAcfG40vJZdl6olJXuT5OGrGQzJjROVlNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C4YkjQGX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65B4C4CEDD;
+	Sat,  1 Mar 2025 11:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740829038;
+	bh=dT1M1OX+ylPajgi5Td8FsnYT9PqPEbMJ8aqpho8rjqg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=C4YkjQGX6x6uoqD6Yp0dQzTZmmjynM5ZIjQO1YdQc/B25rqm+rh5x1Bvsl3Dj58HK
+	 YScw9Ja1tcJ+UlVcN96f3Jy3ZvCLC1oGKJxQcwbyNt5yXICRQyar9NwH56rNV0topG
+	 jrVpGwESZOOLk5ipIfxlDX5vS8c+mUKwL0v88GwfqX20dXbetBND2cLR2SEdaQhU4k
+	 IITTb+dvnaHe598YW8cwOLVdH9RtR9jrl1Il7lpAqzLA/77pRVd8khTcG878nI227d
+	 QMiaFy+Li24BsLTa+GTXdBejTqgQ+27pLw8Y1XEw33fAy0FBukYnULAwheiuenQiU9
+	 unJQ/MU58slxQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1toL9f-009LZ4-9D;
+	Sat, 01 Mar 2025 11:37:15 +0000
+Date: Sat, 01 Mar 2025 11:37:14 +0000
+Message-ID: <86o6ylouc5.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,	"Rafael J. Wysocki"
+ <rafael@kernel.org>,	Thomas Gleixner <tglx@linutronix.de>,	Anup Patel
+ <apatel@ventanamicro.com>,	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>,	Manivannan Sadhasivam
+ <manivannan.sadhasivam@linaro.org>,	Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
+ <kw@linux.com>,	Bjorn Helgaas <bhelgaas@google.com>,	Arnd Bergmann
+ <arnd@arndb.de>,	Shuah Khan <shuah@kernel.org>,	Richard Zhu
+ <hongxing.zhu@nxp.com>,	Lucas Stach <l.stach@pengutronix.de>,	Lorenzo
+ Pieralisi <lpieralisi@kernel.org>,	Rob Herring <robh@kernel.org>,	Shawn Guo
+ <shawnguo@kernel.org>,	Sascha Hauer <s.hauer@pengutronix.de>,	Pengutronix
+ Kernel Team <kernel@pengutronix.de>,	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,	Conor Dooley
+ <conor+dt@kernel.org>,	Niklas Cassel <cassel@kernel.org>,
+	dlemoal@kernel.org,	jdmason@kudzu.us,	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,	linux-pci@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,	imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v15 04/15] irqchip/gic-v3-its: Add support for device tree msi-map and msi-mask
+In-Reply-To: <20250211-ep-msi-v15-4-bcacc1f2b1a9@nxp.com>
+References: <20250211-ep-msi-v15-0-bcacc1f2b1a9@nxp.com>
+	<20250211-ep-msi-v15-4-bcacc1f2b1a9@nxp.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250301-nolibc-armthumb-v1-2-d1f04abb5f6d@weissschuh.net>
-References: <20250301-nolibc-armthumb-v1-0-d1f04abb5f6d@weissschuh.net>
-In-Reply-To: <20250301-nolibc-armthumb-v1-0-d1f04abb5f6d@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740828247; l=3801;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=N7ZWUnKVuIBNSW6j79uZezmUkip3hXepNP58JvVypS0=;
- b=PS9zm1uV+QWq2zw/BHUdLsH0c6niEyt3zZEsDQe1oczKVy7HqYIeBFMVp/lvlctXVKknASmbN
- 7aEcnDoTBVEBN5WAp4104H2iP4aBmXhL8IKZ21q8WyOnoWnkmHwU+aw
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Frank.Li@nxp.com, kishon@kernel.org, rafael@kernel.org, tglx@linutronix.de, apatel@ventanamicro.com, gregkh@linuxfoundation.org, dakr@kernel.org, manivannan.sadhasivam@linaro.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, shuah@kernel.org, hongxing.zhu@nxp.com, l.stach@pengutronix.de, lpieralisi@kernel.org, robh@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, krzk+dt@kernel.org, conor+dt@kernel.org, cassel@kernel.org, dlemoal@kernel.org, jdmason@kudzu.us, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-While nolibc does support ARM Thumb instructions,
-that support was not tested specifically.
+On Tue, 11 Feb 2025 19:21:57 +0000,
+Frank Li <Frank.Li@nxp.com> wrote:
+>=20
+> Some platform devices create child devices dynamically and require the
+> parent device's msi-map to map device IDs to actual sideband information.
+>=20
+> A typical use case is using ITS as a PCIe Endpoint Controller(EPC)'s
+> doorbell function, where PCI hosts send TLP memory writes to the EP
+> controller. The EP controller converts these writes to AXI transactions
+> and appends platform-specific sideband information.  See below figure.
+>=20
+>                =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=90
+>                =E2=94=82                                =E2=94=82
+>                =E2=94=82     PCI Endpoint Controller    =E2=94=82
+>                =E2=94=82                                =E2=94=82
+>                =E2=94=82  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=90   =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=90     =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=90 =E2=94=82
+>     PCI Bus    =E2=94=82  =E2=94=82     =E2=94=82   =E2=94=82     =E2=94=
+=82     =E2=94=82     =E2=94=82 =E2=94=82
+>     =E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=96=BA =E2=94=82  =E2=94=82Func1=E2=94=82   =E2=94=82Func2=
+=E2=94=82 ... =E2=94=82Func =E2=94=82 =E2=94=82
+>     TLP Memory =E2=94=82  =E2=94=82     =E2=94=82   =E2=94=82     =E2=94=
+=82     =E2=94=82<n>  =E2=94=82 =E2=94=82
+>     Write Push =E2=94=82  =E2=94=82     =E2=94=82   =E2=94=82     =E2=94=
+=82     =E2=94=82     =E2=94=82 =E2=94=82
+>     DoorBell   =E2=94=82  =E2=94=94=E2=94=80=E2=94=AC=E2=94=80=E2=94=AC=
+=E2=94=80=E2=94=98   =E2=94=94=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=80=
+=E2=94=98     =E2=94=94=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=80=E2=94=
+=98 =E2=94=82
+>                =E2=94=82    =E2=94=82 =E2=94=82        =E2=94=82         =
+  =E2=94=82    =E2=94=82
+>                =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=
+=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=98
+>         sideband    =E2=94=82 =E2=94=82 Address=E2=94=82           =E2=94=
+=82
+>         information =E2=96=BC =E2=96=BC /Data  =E2=96=BC           =E2=96=
+=BC
+>                    =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=90
+>                    =E2=94=82    MSI Controller      =E2=94=82
+>                    =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=98
+>
 
-Add a new test configuration for it.
+Please stop using these figures in commit messages. I don't think they
+help, and they are not in consistent with the way the commit messages
+are managed.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/Makefile     | 6 ++++++
- tools/testing/selftests/nolibc/run-tests.sh | 5 +++--
- 2 files changed, 9 insertions(+), 2 deletions(-)
+> EPC's DTS will provide such information by msi-map and msi-mask. A
+> simplified dts as
+>=20
+> pcie-ep@10000000 {
+> 	...
+> 	msi-map =3D <0 &its 0xc 8>;
+>                           ^^^ 0xc is implement defined sideband informati=
+on,
+> 			      which append to AXI write transaction.
+> 	           ^ 0 is function index.
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 1dd2841a5fe781254a7f4b7b1ade677bd4bc0691..58bcbbd029bc3ad9ccac968191b703ccf5df0717 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -47,6 +47,7 @@ XARCH_riscv      = riscv64
- XARCH            = $(or $(XARCH_$(ARCH)),$(ARCH))
- 
- # map from user input variants to their kernel supported architectures
-+ARCH_armthumb    = arm
- ARCH_ppc         = powerpc
- ARCH_ppc64       = powerpc
- ARCH_ppc64le     = powerpc
-@@ -63,6 +64,7 @@ IMAGE_x86_64     = arch/x86/boot/bzImage
- IMAGE_x86        = arch/x86/boot/bzImage
- IMAGE_arm64      = arch/arm64/boot/Image
- IMAGE_arm        = arch/arm/boot/zImage
-+IMAGE_armthumb   = arch/arm/boot/zImage
- IMAGE_mips32le   = vmlinuz
- IMAGE_mips32be   = vmlinuz
- IMAGE_ppc        = vmlinux
-@@ -83,6 +85,7 @@ DEFCONFIG_x86_64     = defconfig
- DEFCONFIG_x86        = defconfig
- DEFCONFIG_arm64      = defconfig
- DEFCONFIG_arm        = multi_v7_defconfig
-+DEFCONFIG_armthumb   = multi_v7_defconfig
- DEFCONFIG_mips32le   = malta_defconfig
- DEFCONFIG_mips32be   = malta_defconfig generic/eb.config
- DEFCONFIG_ppc        = pmac32_defconfig
-@@ -107,6 +110,7 @@ QEMU_ARCH_x86_64     = x86_64
- QEMU_ARCH_x86        = x86_64
- QEMU_ARCH_arm64      = aarch64
- QEMU_ARCH_arm        = arm
-+QEMU_ARCH_armthumb   = arm
- QEMU_ARCH_mips32le   = mipsel  # works with malta_defconfig
- QEMU_ARCH_mips32be  = mips
- QEMU_ARCH_ppc        = ppc
-@@ -136,6 +140,7 @@ QEMU_ARGS_x86_64     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(
- QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_armthumb   = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips32le   = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips32be   = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -161,6 +166,7 @@ endif
- 
- CFLAGS_i386 = $(call cc-option,-m32)
- CFLAGS_arm = -marm
-+CFLAGS_armthumb = -mthumb -march=armv6t2
- CFLAGS_ppc = -m32 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
- CFLAGS_ppc64 = -m64 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
- CFLAGS_ppc64le = -m64 -mlittle-endian -mno-vsx $(call cc-option,-mabi=elfv2)
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index d716124f5e82b74deb48c9c2c3c699e4c076418c..0299a0912d4049dd12217f9835b81d231e1d2bfd 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -19,7 +19,7 @@ werror=1
- llvm=
- all_archs=(
- 	i386 x86_64
--	arm64 arm
-+	arm64 arm armthumb
- 	mips32le mips32be
- 	ppc ppc64 ppc64le
- 	riscv32 riscv64
-@@ -103,6 +103,7 @@ fi
- crosstool_arch() {
- 	case "$1" in
- 	arm64) echo aarch64;;
-+	armthumb) echo arm;;
- 	ppc) echo powerpc;;
- 	ppc64) echo powerpc64;;
- 	ppc64le) echo powerpc64;;
-@@ -116,7 +117,7 @@ crosstool_arch() {
- 
- crosstool_abi() {
- 	case "$1" in
--	arm) echo linux-gnueabi;;
-+	arm | armthumb) echo linux-gnueabi;;
- 	*) echo linux;;
- 	esac
- }
+What does this sideband field represent? How is the ITS driver
+supposed to use that data? Is it the full devid as presented to the
+ITS? Something combined with the "function index"? Is the "function
+index" a full RID, as defined in the documentation?
 
--- 
-2.48.1
+Also, msi-map is so far reserved to a PCIe RC, not this sort of wonky
+contraption. This needs to be documented.
 
+>=20
+> 	msi-mask =3D <0x7>
+> }
+>=20
+> Check msi-map if msi-parent missed to keep compatility with existed syste=
+m.
+>=20
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> change from v14 to v15
+> - none
+>=20
+> change from v13 to v14
+> new patch
+> ---
+>  drivers/irqchip/irq-gic-v3-its-msi-parent.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/irqchip/irq-gic-v3-its-msi-parent.c b/drivers/irqchi=
+p/irq-gic-v3-its-msi-parent.c
+> index e150365fbe892..6c7389bb84a4a 100644
+> --- a/drivers/irqchip/irq-gic-v3-its-msi-parent.c
+> +++ b/drivers/irqchip/irq-gic-v3-its-msi-parent.c
+> @@ -118,6 +118,14 @@ static int of_pmsi_get_dev_id(struct irq_domain *dom=
+ain, struct device *dev,
+>  		index++;
+>  	} while (!ret);
+> =20
+> +	if (ret) {
+> +		struct device_node *np =3D NULL;
+> +
+> +		ret =3D of_map_id(dev->of_node, dev->id, "msi-map", "msi-map-mask", &n=
+p, dev_id);
+> +		if (np)
+> +			of_node_put(np);
+> +	}
+> +
+>  	return ret;
+>  }
+> =20
+>=20
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
 
