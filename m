@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-27949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1AAFA4A71B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 01:38:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A9AFA4A72C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 01:43:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9CB916FA55
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 00:38:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80145189CD7A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 00:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D07A179A7;
-	Sat,  1 Mar 2025 00:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71727179BC;
+	Sat,  1 Mar 2025 00:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wx7qpfWJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qqwYnfQY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CCCD2FB;
-	Sat,  1 Mar 2025 00:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3564B442C;
+	Sat,  1 Mar 2025 00:43:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740789529; cv=none; b=doLtjz8NVtsgkoguyLciOBruQK3/eXtI3UldYkY5DJ84EsGXBO8N2DHSwJVzv5abET92FAkH8rA8pL/xBmf1Y7kw84d1OmmyP/IYpwNoP6N7tE5gDOcK8/PlyVQFaClj64F2FAiQguZLHOHF9rNcDxErLy84r1R1X+0KhCn7jjk=
+	t=1740789784; cv=none; b=Tsp1kpGED9CwUv4ktAw+3USbmZnA5C5/2evpY8hOAGdS3WAgfzFDlR7+SDv5W1s0cPcbP0ixaqmyXmQ1OZNq46L4KHF9NoEq7EA/j3efNGPp88AgZBRYWxQmNYk+7KyhL1IET73zEfjiBJeSsTXMwWTHlnoHCgQfuk4ILJc5rUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740789529; c=relaxed/simple;
-	bh=cmEKSxw5aeNZwvCuEFEfP9uDWkInDxdoU9TEsCWxJek=;
+	s=arc-20240116; t=1740789784; c=relaxed/simple;
+	bh=ea5nB3P0PJidb6Y9nt5u1AfiiG2H38AOo9WolZSdhKM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ri7aOQHrgn8GVdxwYLMnV4OThbeJg66LU9p+emlQnEaZ65cfcUMQ3AmGOEurhXvDrZAIBJB6nY/yEMuScD/jBzL0SxkZ9AGfc4XSfTcG/hLY9u6WAE7EWUCna9xQJ/dOSMnxGhTtpHpqjFrebpY4bukZJYMNiW0YT3oVcxFFiJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wx7qpfWJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C15C4CED6;
-	Sat,  1 Mar 2025 00:38:47 +0000 (UTC)
+	 MIME-Version:Content-Type; b=QTpL9ik0Ve/3RvLc9VGH+skmuDTaIeDMH6kyQ5lRM9yv/2ZtvM0uvF95z7cCF3zjrv0obk8IteP3vN5F2bzOOnEVgS7oXwoIITuGKSv0KFiGLoAwyG1ZFjt7vQYVjDOl4trJRIQXnNPzkn0NLMOKKluZf/qtUjZ1/B/SgJia2H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qqwYnfQY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7277FC4CED6;
+	Sat,  1 Mar 2025 00:43:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740789528;
-	bh=cmEKSxw5aeNZwvCuEFEfP9uDWkInDxdoU9TEsCWxJek=;
+	s=k20201202; t=1740789783;
+	bh=ea5nB3P0PJidb6Y9nt5u1AfiiG2H38AOo9WolZSdhKM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Wx7qpfWJvYWHknPi9Aun0tomKq5sp4voC+U+ORaApPCm2IgZqdxBBIEcpWCLtDRdW
-	 6EiOpd+nJhMAImD6p2Rc85gRB6+X5OOVMzfQdmDpubtWCqfwtvaP98gLUr4mrbJQdv
-	 /XFDpoPC9RdKXd0mrMfIQQs3M56mG0T0nNWzakp7NXoDnEWl4EHeNdIq8ly/P7Et9m
-	 q+5pxa36GxuvLqbyyJEexBfEp2MUEixM2uohZA8HHAxo9LsddhVHpC/7zzNOykHDam
-	 4dq9f5Yr0rZgv/rIJyvhqoeOiQAH5ZrbrmGfplYxFGj2jShF7JTSqIUIWT+Vsp52gV
-	 Vm9YCNerdDN9A==
-Date: Fri, 28 Feb 2025 16:38:46 -0800
+	b=qqwYnfQYrlR1UpE8jgFQrfswPrd8Pu4rD5K17AXsR2Uxuv9cIki/GMieTKEhQWql1
+	 mumC5yO6c4Tx5JD/DtCgkBlaFLgVDkMdT2As2T71+mdqI1KAARm0smjT9Zrs+CWp/U
+	 B/WeWVvPuxnDKqLWhCkg0Gr2vR0t6YQw2sdF3OzkrMLhXPw3pU6Prqryse4avpW+5H
+	 iSMt0GZOPuEtACd51EBhAGMV1vKBUD1hFqrdZWfuVxTH2PTXVWhHJ5QZBfuvyLWRVw
+	 04jZdaEGkrWM5XKQYzJNo6qbd+xH7uPC3x5dQRRj+6WaQb5i0SVV0GzdkxwHoiVQ83
+	 JKSyI+RjW3gkA==
+Date: Fri, 28 Feb 2025 16:43:01 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -61,11 +61,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, Jamal Hadi Salim
  <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
  <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
-Subject: Re: [PATCH net-next v6 1/8] net: add get_netmem/put_netmem support
-Message-ID: <20250228163846.0a59fb40@kernel.org>
-In-Reply-To: <20250227041209.2031104-2-almasrymina@google.com>
+Subject: Re: [PATCH net-next v6 7/8] net: check for driver support in netmem
+ TX
+Message-ID: <20250228164301.07af6753@kernel.org>
+In-Reply-To: <20250227041209.2031104-8-almasrymina@google.com>
 References: <20250227041209.2031104-1-almasrymina@google.com>
-	<20250227041209.2031104-2-almasrymina@google.com>
+	<20250227041209.2031104-8-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,20 +76,12 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 27 Feb 2025 04:12:02 +0000 Mina Almasry wrote:
->  static inline void __skb_frag_ref(skb_frag_t *frag)
->  {
-> -	get_page(skb_frag_page(frag));
-> +	get_netmem(skb_frag_netmem(frag));
->  }
+On Thu, 27 Feb 2025 04:12:08 +0000 Mina Almasry wrote:
+> +	if (!skb_frags_readable(skb) && !dev->netmem_tx)
 
-Silently handling types of memory the caller may not be expecting
-always worries me. Why do we need this? 
+How do you know it's for _this_ device tho?
+The driver doesn't seem to check the DMA mapping belongs to it either.
 
-In general, I'm surprised by the lack of bug reports for devmem.
-Can you think of any way we could expose this more to syzbot?
-First thing that comes to mind is a simple hack in netdevsim,
-to make it insert a netmem handle (allocated locally, not a real
-memory provider), every N packets (controllable via debugfs).
-Would that work?
+Remind me, how do we prevent the unreadable skbs from getting into the
+Tx path today? 
 
