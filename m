@@ -1,97 +1,94 @@
-Return-Path: <linux-kselftest+bounces-27948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88268A4A6A8
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 00:41:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1AAFA4A71B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 01:38:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77220189C9E1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2025 23:41:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9CB916FA55
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 00:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31641DFE18;
-	Fri, 28 Feb 2025 23:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D07A179A7;
+	Sat,  1 Mar 2025 00:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qot7tse1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wx7qpfWJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D221DF268
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 23:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CCCD2FB;
+	Sat,  1 Mar 2025 00:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740786063; cv=none; b=RGCIFD472irGrseD9m2Yz4eA24dW+Qh0KjMHYyQWWQZYMU3rDQhgazTy0Udtb1zuVVJ9BkfmSfU1qp0+L25b9nGudRYIZI3ENPEibR4yWiccO5HtC2LJwOWTnxLnEclVMeT577IxZjNvH9+ijiA1SspO+7zDaSAZYRKVkafHy1o=
+	t=1740789529; cv=none; b=doLtjz8NVtsgkoguyLciOBruQK3/eXtI3UldYkY5DJ84EsGXBO8N2DHSwJVzv5abET92FAkH8rA8pL/xBmf1Y7kw84d1OmmyP/IYpwNoP6N7tE5gDOcK8/PlyVQFaClj64F2FAiQguZLHOHF9rNcDxErLy84r1R1X+0KhCn7jjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740786063; c=relaxed/simple;
-	bh=czHtOKFbuWT4IFwIXGB3dzoMikaoJb8csCThNc+R2Tk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ROqj6V9h8wFQxSv1X7U03vhSHOIao/C8wywP2QlsWb3FNEVuFfVHaHzFlQWhkHKdOlue4ueWAHJvHhNrVVOFwd4hPyn2s4IUGP6pVZiiptGSVsnA7pCHTYdsfUZgb+UZirUYt0r7jSdyJnCX9qAuO78+Y5ErntgLLqqngDW8H48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qot7tse1; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fec3e38b60so1853898a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2025 15:41:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740786062; x=1741390862; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Rd2zkA90OfrPC56kZ5TgBkpFyoSsKiSMEhRKLUnwKE=;
-        b=Qot7tse1Mzw2ETR/1mp9X6jcUp3fC+TzmauBU+FMS/A0f65iDRuWYD1LCpZ1K9oVDR
-         GrMlgrZlt7755lqwkJHquj/f59KFVmaYV7JDFxWSfk2CUBEUvVPfYMnLldrs/wKCWFZP
-         /1zaWQkSapYbGWlPOXGjPwyNhS3m8RLgLjNaDWKJgVT1LNiLVbJSv4GJfMmLnwMj8mwp
-         DUQyQtouu9TRfoVvXxd1Fsckj6BM1ZkV/Fid5MX0c5tXcqllCFAKy5T2UJYZILKNQIp0
-         XQD8SZMM8I1Ovzqdz0TOhOXo7Ki5kH5JD4CNYOsNCBUtleB9W/AZcHyYEig+onmi191p
-         a85Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740786062; x=1741390862;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Rd2zkA90OfrPC56kZ5TgBkpFyoSsKiSMEhRKLUnwKE=;
-        b=GzEsb74PKvgGOOr2TY5m0Yu8c2C+arw3jqsJ8XM24tMTWfvzyXKH/IdFNe6CJ9DD+I
-         FLko082lrgIurJths/8JpBmSOArdzg7qPLiUi8ACR1skYsxwRpU62EnML6NaF5e1IejL
-         mxjl5Vz4hunYUdwVuEn5ujIFMxKkYtbIATdh0ep/ZOIdqfDLOFoBRF1nwjeHebCkZhJ+
-         I9hcGHJzHWj2hwKxI21sKCl7HlP9S9FOcpF0d+jgY/KoxsUN2PoazbVjxiyFViy+CrmT
-         kGywZv3KRewLoWfAiccLRQ9PgLOqx0loPmVfJp7o6hVW22zTSC16uqqHNvBUskjPS09N
-         W6iA==
-X-Forwarded-Encrypted: i=1; AJvYcCUzcm+pQDv6+zbwIxPwD+UbbDJZgxe/yZ4SGX3SYD+OELN1iY0HN1CUxmrwrhcGI6XbVJbahLx0cwhVRwSN6Hs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1ZYbiE+qKYI6bzzwXwYH8t7DesiCTO0XNhnrEc3US0ONtyliy
-	rLA6U2cCjH8EGUb0klIW9n14BypWpVQQVqFjH6Y00DSCDjYycermCOHwVHJtoZG9l9hP79+4smc
-	5Bg==
-X-Google-Smtp-Source: AGHT+IG7CvYyko2UbVPuAkNZZPDFMXpjB4wXlD6Ru8cf7no7JS4XUdhwodgR3HqRriolKmpqFez0BPUdclk=
-X-Received: from pjblb1.prod.google.com ([2002:a17:90b:4a41:b0:2fc:1158:9fe5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4acb:b0:2ee:a583:e616
- with SMTP id 98e67ed59e1d1-2febab3e417mr8593663a91.9.1740786062022; Fri, 28
- Feb 2025 15:41:02 -0800 (PST)
-Date: Fri, 28 Feb 2025 15:40:30 -0800
-In-Reply-To: <20250227220819.656780-1-colin.i.king@gmail.com>
+	s=arc-20240116; t=1740789529; c=relaxed/simple;
+	bh=cmEKSxw5aeNZwvCuEFEfP9uDWkInDxdoU9TEsCWxJek=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ri7aOQHrgn8GVdxwYLMnV4OThbeJg66LU9p+emlQnEaZ65cfcUMQ3AmGOEurhXvDrZAIBJB6nY/yEMuScD/jBzL0SxkZ9AGfc4XSfTcG/hLY9u6WAE7EWUCna9xQJ/dOSMnxGhTtpHpqjFrebpY4bukZJYMNiW0YT3oVcxFFiJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wx7qpfWJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C15C4CED6;
+	Sat,  1 Mar 2025 00:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740789528;
+	bh=cmEKSxw5aeNZwvCuEFEfP9uDWkInDxdoU9TEsCWxJek=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Wx7qpfWJvYWHknPi9Aun0tomKq5sp4voC+U+ORaApPCm2IgZqdxBBIEcpWCLtDRdW
+	 6EiOpd+nJhMAImD6p2Rc85gRB6+X5OOVMzfQdmDpubtWCqfwtvaP98gLUr4mrbJQdv
+	 /XFDpoPC9RdKXd0mrMfIQQs3M56mG0T0nNWzakp7NXoDnEWl4EHeNdIq8ly/P7Et9m
+	 q+5pxa36GxuvLqbyyJEexBfEp2MUEixM2uohZA8HHAxo9LsddhVHpC/7zzNOykHDam
+	 4dq9f5Yr0rZgv/rIJyvhqoeOiQAH5ZrbrmGfplYxFGj2jShF7JTSqIUIWT+Vsp52gV
+	 Vm9YCNerdDN9A==
+Date: Fri, 28 Feb 2025 16:38:46 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, Donald
+ Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Jeroen de Borst <jeroendb@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>,
+ Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, "Eugenio =?UTF-8?B?UMOpcmV6?="
+ <eperezma@redhat.com>, Stefan Hajnoczi <stefanha@redhat.com>, Stefano
+ Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, Jamal Hadi Salim
+ <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+Subject: Re: [PATCH net-next v6 1/8] net: add get_netmem/put_netmem support
+Message-ID: <20250228163846.0a59fb40@kernel.org>
+In-Reply-To: <20250227041209.2031104-2-almasrymina@google.com>
+References: <20250227041209.2031104-1-almasrymina@google.com>
+	<20250227041209.2031104-2-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250227220819.656780-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.48.1.711.g2feabab25a-goog
-Message-ID: <174076278043.3736049.13548260851648046331.b4-ty@google.com>
-Subject: Re: [PATCH]][next] KVM: selftests: Fix spelling mistake
- "UFFDIO_CONINUE" -> "UFFDIO_CONTINUE"
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Colin Ian King <colin.i.king@gmail.com>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 27 Feb 2025 22:08:19 +0000, Colin Ian King wrote:
-> There is a spelling mistake in a PER_PAGE_DEBUG debug message. Fix it.
+On Thu, 27 Feb 2025 04:12:02 +0000 Mina Almasry wrote:
+>  static inline void __skb_frag_ref(skb_frag_t *frag)
+>  {
+> -	get_page(skb_frag_page(frag));
+> +	get_netmem(skb_frag_netmem(frag));
+>  }
 
-Applied to kvm-x86 selftests, thanks!
+Silently handling types of memory the caller may not be expecting
+always worries me. Why do we need this? 
 
-[1/1] KVM: selftests: Fix spelling mistake "UFFDIO_CONINUE" -> "UFFDIO_CONTINUE"
-      https://github.com/kvm-x86/linux/commit/75418e222e30
-
---
-https://github.com/kvm-x86/linux/tree/next
+In general, I'm surprised by the lack of bug reports for devmem.
+Can you think of any way we could expose this more to syzbot?
+First thing that comes to mind is a simple hack in netdevsim,
+to make it insert a netmem handle (allocated locally, not a real
+memory provider), every N packets (controllable via debugfs).
+Would that work?
 
