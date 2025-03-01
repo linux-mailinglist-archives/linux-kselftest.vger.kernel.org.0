@@ -1,107 +1,88 @@
-Return-Path: <linux-kselftest+bounces-27959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A8F6A4AA90
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 12:10:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9FBFA4AA9F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 12:24:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FCBC16C56D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 11:10:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C5AB3B9B2C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Mar 2025 11:24:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F2C1DDA31;
-	Sat,  1 Mar 2025 11:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B832F1DE4E0;
+	Sat,  1 Mar 2025 11:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RqcJd/cY"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ViO9aZVZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739FD1A5B97;
-	Sat,  1 Mar 2025 11:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FE01A5B97;
+	Sat,  1 Mar 2025 11:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740827441; cv=none; b=nJ0DAY7Z/b6WE/q8k7mPvc9MWPy/HMJ8M7dfF8/qJrVk61Q5hTQG9F5/fa7eZaho9HY8Cm17MJyKnu5jOnOTGuISuPbTVrYYikPplufwJsw80eEwOt8TJrLIseVUw3984xTEsdK+Tu1FvWRVcDXF2SWcjNnSyfRVom9+/T0/qkQ=
+	t=1740828259; cv=none; b=eaZubA81M2XWvqgWAF6vuROdHEtrwrylVWQSi67y+trB3alP1ed14mqZhMa6DTtedjMXqSgW3QcgGNB/4IjBxhD6/zeoyEMzaA6J45lRVvPCW6ME/g589VuN05fOpsOYVT4MfiaiDnRcBRCpGsVEV+NwSOAY+c2947wM53+Uv7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740827441; c=relaxed/simple;
-	bh=nNqG0GMewRObnyRAAVI9p6JFUYawaXI8WiP+ukd2A5o=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EwQutLlUhC5d/bIRepbzwDQYS+4msRVN867eRnRlViBd+OY9aQPmzqR2VSzWatfPnFC12zbhhl6UbREKZWEGndqOcV03jvtHFuLvMDJF8GA9ucjEUq2sNZPsshLXe2qHZ61++XYt3xKWpF6aaXADog1LOtlJ90K82fwhGvj4qL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RqcJd/cY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E79C4CEDD;
-	Sat,  1 Mar 2025 11:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740827439;
-	bh=nNqG0GMewRObnyRAAVI9p6JFUYawaXI8WiP+ukd2A5o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RqcJd/cYGKltRT9h6KNka1heUSDbeIOA2o7SOUY8yXx1mXGc/buNEIQrzp8usT0R5
-	 oIIAoVNh0/DFsFRbxtgmVt5jIleViLUgMrXRnxLJeOPdu0Fhv6ZiVvg6T7/6vJBl6D
-	 QxEbxiEZeQC53aFcFH2ROVff6XP2uhKcZDO8GUBU/ndaT3+ZdKFvuOGWcf/+NkyIIM
-	 yOr4n7pLdKhjqdyyCBiHm4Pwpm650y90r0D/I6bYgRHAWjMSE7fV7tOKEP39Rb2RnM
-	 WyhQnNBNMTsQdpIlcwxbUoMhjZzG440kCGXu7d/ZX6w82326HJnqQ9NbHvq+EG7t9k
-	 ZI7SN1pmRobeA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1toKjt-009LKs-1e;
-	Sat, 01 Mar 2025 11:10:37 +0000
-Date: Sat, 01 Mar 2025 11:10:35 +0000
-Message-ID: <86plj1ovkk.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,	"Rafael J. Wysocki"
- <rafael@kernel.org>,	Thomas Gleixner <tglx@linutronix.de>,	Anup Patel
- <apatel@ventanamicro.com>,	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,	Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>,	Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
- <kw@linux.com>,	Bjorn Helgaas <bhelgaas@google.com>,	Arnd Bergmann
- <arnd@arndb.de>,	Shuah Khan <shuah@kernel.org>,	Richard Zhu
- <hongxing.zhu@nxp.com>,	Lucas Stach <l.stach@pengutronix.de>,	Lorenzo
- Pieralisi <lpieralisi@kernel.org>,	Rob Herring <robh@kernel.org>,	Shawn Guo
- <shawnguo@kernel.org>,	Sascha Hauer <s.hauer@pengutronix.de>,	Pengutronix
- Kernel Team <kernel@pengutronix.de>,	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,	Conor Dooley
- <conor+dt@kernel.org>,	Niklas Cassel <cassel@kernel.org>,
-	dlemoal@kernel.org,	jdmason@kudzu.us,	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,	linux-pci@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,	imx@lists.linux.dev,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v15 02/15] irqdomain: Add IRQ_DOMAIN_FLAG_MSI_IMMUTABLE and irq_domain_is_msi_immutable()
-In-Reply-To: <20250211-ep-msi-v15-2-bcacc1f2b1a9@nxp.com>
-References: <20250211-ep-msi-v15-0-bcacc1f2b1a9@nxp.com>
-	<20250211-ep-msi-v15-2-bcacc1f2b1a9@nxp.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1740828259; c=relaxed/simple;
+	bh=gd26XQ8ONI1ozrwUhB1nJA3aNf9fIixlqpS31qTvRY4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AD1Kluvup7KTaX2vfgka6dg0UHe8OyK8mNuLeKPivSVFSyWZUbQmpElr5XU8QVEevX05VKGESDFWA8JdIx5F4aqSDH4IkDsQZTAVYe1JEh8VaZfB2cvGv0/PTkJG1e0lYKtE4h+7+NfYH8TsMJJ5WW6MhjnVt/E3N+ZA0/YnG38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ViO9aZVZ; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1740828247;
+	bh=gd26XQ8ONI1ozrwUhB1nJA3aNf9fIixlqpS31qTvRY4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=ViO9aZVZN/HBAD9u1u3kyjs8g8my/0+z/lGPFKrQoGNAYiIbFc63g4Ia6FZSFhX7E
+	 wCkSBWx4dwFcGfvTA4ey9MI9RYJjToIv9uz4ZT3I+NB/L0vqJHtKWaa1FkiP3pCSAJ
+	 7PuBA2lK2bILFPzUAKO+pT6ua03twCu1ynYYcxF0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/2] selftests/nolibc: add armthumb configuration
+Date: Sat, 01 Mar 2025 12:23:58 +0100
+Message-Id: <20250301-nolibc-armthumb-v1-0-d1f04abb5f6d@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: Frank.Li@nxp.com, kishon@kernel.org, rafael@kernel.org, tglx@linutronix.de, apatel@ventanamicro.com, gregkh@linuxfoundation.org, dakr@kernel.org, manivannan.sadhasivam@linaro.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, shuah@kernel.org, hongxing.zhu@nxp.com, l.stach@pengutronix.de, lpieralisi@kernel.org, robh@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, krzk+dt@kernel.org, conor+dt@kernel.org, cassel@kernel.org, dlemoal@kernel.org, jdmason@kudzu.us, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org, imx@lists.linux.dev, devicetree@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAE7uwmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIyML3bz8nMykZN3EotySjNLcJF1jcyNLM2NDEwMjM3MloK6CotS0zAq
+ widGxtbUApxq+EmEAAAA=
+X-Change-ID: 20250228-nolibc-armthumb-372963140267
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740828247; l=628;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=gd26XQ8ONI1ozrwUhB1nJA3aNf9fIixlqpS31qTvRY4=;
+ b=SPI0X4PDT3YzeTs1/FN/NnexmNmTXks71zRe19VmgnNvRkXhl27kg3cDBdVWyMzELkftyOAnA
+ jTL4k4dryCLArmOoNW1t3hujk49CSEfo4ZqtKwg2D6yEi7ImflQtQRI
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Tue, 11 Feb 2025 19:21:55 +0000,
-Frank Li <Frank.Li@nxp.com> wrote:
-> 
-> Add the flag IRQ_DOMAIN_FLAG_MSI_IMMUTABLE and the API function
-> irq_domain_is_msi_immutable() to check if the MSI controller retains an
-> immutable address/data pair during irq_set_affinity().
-> 
-> Ensure compatibility with MSI users like PCIe Endpoint Doorbell, which
-> require the address/data pair to remain unchanged after setup. Use this
-> function to verify if the MSI controller is immutable.
+While nolibc does support ARM Thumb instructions,
+that support was not tested specifically.
 
-Why is that a requirement? Why should a driver even care?
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (2):
+      selftests/nolibc: explicitly enable ARM mode
+      selftests/nolibc: add armthumb configuration
 
-	M.
+ tools/testing/selftests/nolibc/Makefile     | 7 +++++++
+ tools/testing/selftests/nolibc/run-tests.sh | 5 +++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+---
+base-commit: 3bd53b2fa57d9472d3af63b3f4d26023ba07b579
+change-id: 20250228-nolibc-armthumb-372963140267
 
+Best regards,
 -- 
-Without deviation from the norm, progress is not possible.
+Thomas Weißschuh <linux@weissschuh.net>
+
 
