@@ -1,182 +1,109 @@
-Return-Path: <linux-kselftest+bounces-27983-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C845EA4B4AA
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 21:27:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC388A4B4C6
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 21:59:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF62A169FAA
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 20:27:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7DED3AF031
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 20:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056351EBA18;
-	Sun,  2 Mar 2025 20:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2EC1EC01C;
+	Sun,  2 Mar 2025 20:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b="GrSDVLRe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDdAb+he"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF601E32BE
-	for <linux-kselftest@vger.kernel.org>; Sun,  2 Mar 2025 20:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E465A169397;
+	Sun,  2 Mar 2025 20:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740947243; cv=none; b=QznXppC/cLhFSnCO/ECnRmvSj35lnnAczQifGwlAPeAkDouGHlJAuFhOmq7iEq7utd006AMxwvr80vsGVNyRlOjleiAVpTl8WlsmHmJ09B42++Hkvj12QbWr4HByEyalZ7D6tM75CehjerQpMt+C/DxA1KmwRltjuaMQju3vv3E=
+	t=1740949158; cv=none; b=nPxZpNXJ3HOljCTCZvCvniO3ZkRWB+XWf52uXzt65Y8PuqR0Y/4KHfguXwhBSibNS3efRxALEemNGod6Wrozyh/xa4wamEp/XOBZE3EqeqM+hThK+mKNjDX3jv9fcI6RtpCEpITFQBDY5U2VUFat9rXz8N1IyOdKpL+yAtdm9TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740947243; c=relaxed/simple;
-	bh=FoAngoI/MZZsdcjDEJuPOT1p8rOyhmYEoGGRxCCCKtI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CPa87DkGcZlAyfoHeKgVH1/GFYDgchHnlMUPwGrl2YYkNnNYSlhoClFUuqVkqxWX03L+/vRAGCu6iMhgErl0eyMr7PDR/zMDOOVPjWMno6XkLPm2X6KsM8pya1JgrLll1e3ghYotb5eiDF562mKHEqyHGdO3aV0UPdVNvA69220=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=kragniz.eu; dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=GrSDVLRe; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kragniz.eu
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-390dc0a7605so2001690f8f.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 02 Mar 2025 12:27:21 -0800 (PST)
+	s=arc-20240116; t=1740949158; c=relaxed/simple;
+	bh=rP+alRinymgCxjKudWj/HY6iao/PpoZjg9vipcYUpXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qJ2scdXnAMgeIby9+bbOHgLN82PGw9CL9tpivcSB6j3GT0xOW7fvBecrAL6ptYL2ExcHEKdLTe95+qgkt8dB3lrRTiaKw+04LnYPxvpp7qkqdBKKsDhS3gbS2y8NfRh01f+6WqvpHFzIe0NYqCy/1CZplk7oiQf20BubuyYq1pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDdAb+he; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2fe82414cf7so7394441a91.0;
+        Sun, 02 Mar 2025 12:59:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kragniz.eu; s=google; t=1740947240; x=1741552040; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740949156; x=1741553956; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Toe+H3M/fPbLKjUPwqPGSh5JqM5rSp09PnBJvQRrlzo=;
-        b=GrSDVLRe36b6HQCzwZgF4YuFk7zyjDG+svju8FtfgEhRmJ/pnSSKG1TqKmocX14mUn
-         sXfNyTBOH6QjxTOc8ZMlIqECPJAj6dqIscg+ur65fypchIT/njIYmJWBYgU6F4ZMUpdq
-         4n2L5INBXfbkFnt2Ul5jQSbdIiZHWJ9Z/Fom0=
+        bh=CstAINYAdh9SkRPuTu5l3jqM1YjiAYtnuWwBPbW1Me0=;
+        b=SDdAb+heYLTyBhDmPoOGFRNDCWfzHFfEf13UCJYkpP6fNev9ZQlzCu9GvwhCMV8Z7o
+         2ysPp9/hHhmsbeC7LqFCNQM9tJ/w1iGadWpL5zVOpX3Bb7jF2QFmSPcGsM6NjD96XFqE
+         uCWAOaeHb/CJz4vMO3rXmUPNAD8A6kz3j6S8aujklB5ss0lhj/V8JIepGRA9XumFC6OX
+         0RYrSKFHgqTJ/VVnqO0YSMPFmJ1BVm+4aQeB4FRTrDAcsBf+dHaNx1F/yuOKMZAe236X
+         x4YacbbucL8rZTj/UK7WdiFDfBbCsF+hkxcD4h8B+0LMJ6fKqL3YmH52nqo4IgVi4lW9
+         MyIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740947240; x=1741552040;
+        d=1e100.net; s=20230601; t=1740949156; x=1741553956;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Toe+H3M/fPbLKjUPwqPGSh5JqM5rSp09PnBJvQRrlzo=;
-        b=blCxQKz9krJdRyzyGKSX/6SOtmVSL73ZuJKR2/3N7EvgtXaopGyKtMVGE/TKhZSjbK
-         fk+rF9UvXJvY1bZxfT47X6z2cDMY97H1doXJcD3zc+z/dkOiDrnh4jgtln3IdqMOld6j
-         bNOYhPHswKcI64ay/sBdOjfGJJtRYgDJUeiT9wD5AVDMMaRl78WwCrelDljKZqQ2yxY4
-         atIWou+uMm03RMHF1t/tLWzuzsoMqpz+XE1EKPOemRWoln72sxLoNZxsFNY2Id2q9E8c
-         hps+9YwZI1pxPaT5jy3eyUbCW6DZ95MEPgOH/Qv/SHAQ+u1jcyfdZSL/wtZiSOCTbn/i
-         QgCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWyuvptnVVGdJeFBRuy6TGD0xLqcChNqd6iu9Zz5PRj8FUXobumgt3z8x9ZixQ1r8AWpCJCm20gX1ZqUmF+Yl0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5QfTcq6bhfJXV7WOFSw3qjwwvRgVyQij4oy9/KzRlScL/OTia
-	75T5bcijk2co5LQ9Lm54/3Ho0L6BnWMotnrC0NwwNReeYC3srcHfFnngxrkE+4I=
-X-Gm-Gg: ASbGncugBxqMIMqpeqSDHwfmhu0Fbw0ZXBK7ccr90wT5YrQ4shOZkpM7l4DZJ1Scgv7
-	8LosSB7RGAwVbaanchWfbrdTkSkLfwq0gtwP4R48J777DGJDPxMHaAekJoBaVcsR5myH6AltUrE
-	4XtuHsK0/OoRR1oixmhVQAgdmBqWTIPDssfViD8ZLNveQwrrDq93LIReJY4cEHygc0u57BB7G31
-	1wPPsSY4BlEO7GEWbDfH6/IToR3NFjdQvCMBZ8mE+E9KpvDx97CqVbJxl+JupfeKebRRndztzfH
-	4MCTsX7r/XXilTfcthku0RTqhR6X37XxgJHkvR5zEtJxggrzvkOU+H71CUiVjxlaNI2gaCSo/ew
-	PYVKZ7w==
-X-Google-Smtp-Source: AGHT+IHs9J8Ly/fXvEU8Y5V9qY4tcCR+glMwH6IFLDwq0w/R5uvEyofQymw0Rg1+CP7r0YIBRunl9g==
-X-Received: by 2002:a05:600c:1d0e:b0:439:88bb:d020 with SMTP id 5b1f17b1804b1-43ba66e1dafmr93255355e9.8.1740947239536;
-        Sun, 02 Mar 2025 12:27:19 -0800 (PST)
-Received: from localhost.localdomain (161.26.169.217.in-addr.arpa. [217.169.26.161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43b73703caesm133585295e9.12.2025.03.02.12.27.18
+        bh=CstAINYAdh9SkRPuTu5l3jqM1YjiAYtnuWwBPbW1Me0=;
+        b=tLgQuRSzJ31upBtF2Ktkwd36iuHxQusgCN8AlSVG6J1M0gPALtKi7cz4rjwUwiCoRU
+         DVA7xE6PraUtHWh1lfCS4r7c4+1f/JHH29EjyxDY641B1bS//T+26Gcfobrxg8Dbfxu5
+         v/ZoHeYofi1OAT2sl8e3RoJPhfhn4+XTh3yOOnnDtRVBwtMlNazwNpFO5j4YwiKYEcVk
+         +sqvAIyYadpXzQTQEkc9+eDX/aFz66a/ZWPy8B+qyYwwzMReFlQeQiFbU7wfP1MLt9Q4
+         tu1By6CbBkNYtSxGNsRVnTye1fBirolPtkfYjxY0KPy5i32kQb9loKljb/7gsBbrW+ZS
+         VMtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+FVEq/XWMJfIonQ4RguAuxJ5En8YwYwhoQ/YxV2J0DJoR3gyfS2u+4ZnABSzXrWI65tAOmgNbmkSXq+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwslI7lkG7BEZWZi28F0NmwFhnzXn8b0ca+lyPIj4UMWwE7yyqA
+	5/VZkPwoiO+UkgLrZwzDSzpddQWkjbGRDgQCy1YUvH/Yc2OFmQfg
+X-Gm-Gg: ASbGncv0j0IaDMEkRDvbjC52l4fKHNPTmnG4myjz13Bb//b+bm/9Tck6fZ5RrNr7tZ0
+	jrmLjPdf64sTk2EHnPmqjY2ORdvEOw06tOrKjehgVhLbhrVxSV5rsPP9K8SFAltMFAbMWokZQcW
+	m3i9xonpyu8jcjg+9OMrLpuz8z4dP3p3OhpVv58rRXqH6iaUSPfGnxRS3mQV0Eff45F4tTh+BtL
+	0jFBgqyyeYGeO3M5CpBJ/c58FDXaGCinaS0perdEfwUPyjdJnI5n9oeDeTfm9u1j4ge5yGipYwK
+	xTLnM8OCVl8S4xEg/Mse4ARxIKOjdwsEnq4qoTfO0MMIX0DCfN3RoBggwsHwqjn1hpM=
+X-Google-Smtp-Source: AGHT+IFmFpduAgf6WZEhvgUOaDiEB9rpG2pbLvcGn8o+vuTmgEuskufpEMp4Bx3Q6i/Ah9hYln7SDA==
+X-Received: by 2002:a05:6a20:12c5:b0:1ee:d418:f764 with SMTP id adf61e73a8af0-1f2f4e01887mr19476003637.38.1740949156029;
+        Sun, 02 Mar 2025 12:59:16 -0800 (PST)
+Received: from fedora.am.students.amrita.edu ([175.184.253.10])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7dec3e05sm6827947a12.49.2025.03.02.12.59.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 12:27:19 -0800 (PST)
-From: Louis Taylor <louis@kragniz.eu>
-To: Willy Tarreau <w@1wt.eu>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Louis Taylor <louis@kragniz.eu>,
+        Sun, 02 Mar 2025 12:59:15 -0800 (PST)
+From: Siddharth Menon <simeddon@gmail.com>
+To: shuah@kernel.org,
+	brauner@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] tools/nolibc: add support for openat(2)
-Date: Sun,  2 Mar 2025 20:25:23 +0000
-Message-ID: <20250302202528.4169024-1-louis@kragniz.eu>
-X-Mailer: git-send-email 2.45.2
+	Siddharth Menon <simeddon@gmail.com>
+Subject: [PATCH 0/2] selftests/pidfd: Fix missing headers
+Date: Mon,  3 Mar 2025 02:22:44 +0530
+Message-ID: <20250302205859.14782-1-simeddon@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-openat is useful to avoid needing to construct relative paths, so expose
-a wrapper for using it directly.
+Fix compilation errors caused by missing headers in the pidfd selftest.
 
-Signed-off-by: Louis Taylor <louis@kragniz.eu>
----
- tools/include/nolibc/sys.h                   | 29 ++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 22 +++++++++++++++
- 2 files changed, 51 insertions(+)
+The errors include:
+pidfd_fdinfo_test.c:230:13: error: implicit declaration of function ‘mount’
+pidfd_setns_test.c:172:54: error: implicit declaration of function ‘ioctl’
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 8f44c33b1213..e5ff34df4aee 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -765,6 +765,35 @@ int mount(const char *src, const char *tgt,
- 	return __sysret(sys_mount(src, tgt, fst, flags, data));
- }
- 
-+/*
-+ * int openat(int dirfd, const char *path, int flags[, mode_t mode]);
-+ */
-+
-+static __attribute__((unused))
-+int sys_openat(int dirfd, const char *path, int flags, mode_t mode)
-+{
-+#ifdef __NR_openat
-+	return my_syscall4(__NR_openat, dirfd, path, flags, mode);
-+#else
-+	return __nolibc_enosys(__func__, dirfd, path, flags, mode);
-+#endif
-+}
-+
-+static __attribute__((unused))
-+int openat(int dirfd, const char *path, int flags, ...)
-+{
-+	mode_t mode = 0;
-+
-+	if (flags & O_CREAT) {
-+		va_list args;
-+
-+		va_start(args, flags);
-+		mode = va_arg(args, int);
-+		va_end(args);
-+	}
-+
-+	return __sysret(sys_openat(dirfd, path, flags, mode));
-+}
- 
- /*
-  * int open(const char *path, int flags[, mode_t mode]);
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 79c3e6a845f3..97ded6c76f99 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1028,6 +1028,26 @@ int test_rlimit(void)
- 	return 0;
- }
- 
-+int test_openat(void)
-+{
-+	int dev;
-+	int null;
-+
-+	dev = openat(AT_FDCWD, "/dev", O_DIRECTORY);
-+	if (dev < 0)
-+		return -1;
-+
-+	null = openat(dev, "null", 0);
-+	if (null < 0) {
-+		close(dev);
-+		return -1;
-+	}
-+
-+	close(dev);
-+	close(null);
-+
-+	return 0;
-+}
- 
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-@@ -1116,6 +1136,8 @@ int run_syscall(int min, int max)
- 		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
- 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(openat_fdcwd);      EXPECT_SYSNE(1, tmp = openat(AT_FDCWD, "/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(openat_dir);        EXPECT_SYSNE(1, test_openat(), -1); break;
- 		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
- 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
+Siddharth Menon (2):
+  selftests/pidfd: Fix missing header
+  selftests/pidfd: Fix missing header
+
+ tools/testing/selftests/pidfd/pidfd_fdinfo_test.c | 1 +
+ tools/testing/selftests/pidfd/pidfd_setns_test.c  | 1 +
+ 2 files changed, 2 insertions(+)
+
 -- 
-2.45.2
+2.48.1
 
 
