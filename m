@@ -1,137 +1,93 @@
-Return-Path: <linux-kselftest+bounces-27980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3525A4B40C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 19:24:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6F87A4B432
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 19:51:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 547513AEE7A
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 18:24:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0E5A16C997
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 18:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF2CF1EB5D0;
-	Sun,  2 Mar 2025 18:24:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 477361E9B32;
+	Sun,  2 Mar 2025 18:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="X7G5ZBWv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0mR329K3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fa24pm6H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21D418BBA8;
-	Sun,  2 Mar 2025 18:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB5612B93;
+	Sun,  2 Mar 2025 18:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740939862; cv=none; b=CyTXd6kL4unbKtgnZyXCJwlXKpFQwuHnVd4OMZVodpzKL6hiecYW2Xg7+mdwJT017vTK+S+z39h+fwWWRVYsfHHKppyMGHFTkKwl1EcUja0cwgZaDhFiitDJxf20TRapRzbT3or7S3W3AX0Ya4ouI+qwL3V8UKTINzhj1RSdOJA=
+	t=1740941462; cv=none; b=qlJjmVfVVbaKN58dhfzGqp2c4q9P2O6OD2blf+oIuLUhWktrb58/T62O76AGSg9fdhz9ADDVLUpCjn4AA7j3Bm8qeL2G7TGp53anFJjHANDepmOBK5AcfdptHDZX9+lEjO0gqa9SSdBVqh3yOfoNhIhMdzZANU+666jgRz3zGVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740939862; c=relaxed/simple;
-	bh=RTb9Ohk7mRbGTgMtcH0ebJfOQQb87PiScFc/UMSe3RM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S6vwF2mb3z/Y4em3SntGDlnD7QUEkovuKOzjslVcCyoxAoddwWuRjq/vQiqa8BbPWzwc0fudv2dph039Da9rf3KYRb/f+cjkdroirjv1rsrCJjw7rXJUeeU59ns5ZVot7REkQ+tQoO6FA8re1YU+CIDX2O0VJeXj30HOB8DPV/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=X7G5ZBWv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=0mR329K3; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 3CD9D1140144;
-	Sun,  2 Mar 2025 13:24:18 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Sun, 02 Mar 2025 13:24:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1740939858; x=
-	1741026258; bh=vbDBbOj0P076q30CuM2H8hrlu1dzNSJq+H1MlcuN+n8=; b=X
-	7G5ZBWvVYtgL92wliiWQLOoPPLEsbW6qvxPWOWO2L31SI2Pn7pzCn0OtHcoGbeQ0
-	U5uY9d4JrMYQ0SnV1t8edjWN2DIljmb3gBWSLAyVzUNunqCgsc2Nz2Gs/WAxVoLJ
-	ZrrvjIUINpe4gBFFOzM9nBlxqfC8leKTvJRzZEk8ntcfqFzpA+zAhasoRhYNkx75
-	qtocaZNWFahYOa8cUdxWDqRZjvoo0O35fAJ7B9ljE6EfjoENW+vTMjBSjWOTJehw
-	uIIfxdEHpgeLDHc5tT5TRFLMpzhUQoHh0HiERDMRTSnmDxUHDr8eYFbCLTU4D39u
-	hHBPQCe1Kd2Lh8wUUJJgg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1740939858; x=1741026258; bh=vbDBbOj0P076q30CuM2H8hrlu1dzNSJq+H1
-	MlcuN+n8=; b=0mR329K3REKRIgKSPebDDB7SQ8XsB6tAX39yW10+XOQKOvXZ7RT
-	/jtwbNHWyieMjKUmEvhVL1eNRETQcshMdOcJnZMfuf2fJXAXav6/s58G1PJBm9He
-	WFDoS8Lp2B0/TY4k5UMZ6gdCZinIIktATJh2jk0koAzdLYy4TZ8NscFaeQ/kr8UM
-	MDwGX9s6mbPdxcYSmiftk8EM/S0J6SfEZf5IgKK9R4xX3cKFWMFej8zvc3XXIgt9
-	WdR0JYIsARDeKO3Ap5O/F7vuDYcbLy/QQ0Lc+Tx/1gLz/5K68TkGSM/MtdT5sobh
-	PRrIBR6QVjhqRCbfJinkPjZ5j62IPEpx9PQ==
-X-ME-Sender: <xms:UaLEZ5J6oaOLtF1CkeIhG95QfTi44C0aKfmBrhMrqE1Zw1rvUMz0xw>
-    <xme:UaLEZ1J4bqLz34XyeRHS4uoPBRwyCbUY_xbO7i7r5QtRrH5asGUuST-EtEsG29KLd
-    nlLWeswwWEuAtl7XXM>
-X-ME-Received: <xmr:UaLEZxs_G2jDjvfowvvzPZ6rq6ya_0IOJzKdhL6ihfE3mko2xtn7e_LgTW2a>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelieelvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
-    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
-    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
-    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
-    pghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
-    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
-    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
-    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
-    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
-X-ME-Proxy: <xmx:UaLEZ6aME6pA6a_NQ89RWNsBp6blRqjrQSSkYaZGkHhQbDdArBNrcg>
-    <xmx:UaLEZwbL-9P45mrNHenV1Q8xo2a9C154d5xvs3VahbM_Kyfb7hUSBA>
-    <xmx:UaLEZ-BxC1mNMqbd-s_BT2rjghXA8XFmMJprXM3dJ5hiz8IbruMFig>
-    <xmx:UaLEZ-ZNTN9t1eEaL4QnOUURDC6PDw-lPSZjHiVs_24nPRcuajSpkw>
-    <xmx:UqLEZwp-BRLoq-FXlmkkvUDDqPnypzR4VeAsfLaCZCP3WKwIog6hKgR6>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 2 Mar 2025 13:24:16 -0500 (EST)
-Date: Sun, 2 Mar 2025 19:24:14 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v20 20/25] ovpn: implement peer
- add/get/dump/delete via netlink
-Message-ID: <Z8SiTgEmj2Vr-p-E@hog>
-References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
- <20250227-b4-ovpn-v20-20-93f363310834@openvpn.net>
+	s=arc-20240116; t=1740941462; c=relaxed/simple;
+	bh=WZtBeODplm5GUGD8QRqFOv2/tB9nkdyCL2v9FGAFync=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Hs0nLlOCEqZV2a473+1HPyFXIhvt3qwNHXO5HjrEZG3gB7d1T0Vfmy6I+BLEgZEHgcfIbk1rkFHSGOUUlVrqli5wtmyqWJ/JtEW3oj3vit7EUPBvr5Crb4Iv0NKxTzdAsAfPK5bW7X0qTVkTmFz54S+0FUQFqsljBI+4m5FH4Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fa24pm6H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17628C4CED6;
+	Sun,  2 Mar 2025 18:51:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740941461;
+	bh=WZtBeODplm5GUGD8QRqFOv2/tB9nkdyCL2v9FGAFync=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Fa24pm6HIjs7KDkcVqo4hAGUoR4frIjl/ui3RSD1RYYNTypyI6Z4joWX0vkSbW2CA
+	 wJu8HtFWkbi6EJlmtyTa8t7qVRhztHFbl6ZTJcA0EmrizAP5dg1dHTrnjdG7RSwoof
+	 2A8h3CmB0dIKFYonKLUApjj+A07qaFI0bTcViSerJ65949vEeRJc1grqYS6qvjrmEk
+	 2NFPdJvAOC/EMV1rbR6JM5mFwCyeGLlsp/M8oY7Pxs3Fz9QhC9spX25aVv26C8A/XB
+	 4Tpi/uDeS8qwLDVRxK77VPl2H/LHbIYb3cg83396Kzs7u48U905FlliQ/ipD8KLrGt
+	 wvgxbGSfUEJMw==
+Date: Sun, 2 Mar 2025 10:50:59 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, petrm@nvidia.com, willemb@google.com,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: report output format as TAP 13
+ in Python tests
+Message-ID: <20250302105059.5f35fc3b@kernel.org>
+In-Reply-To: <0f196026-02ec-4db0-90b0-10c1e720c345@kernel.org>
+References: <20250228180007.83325-1-kuba@kernel.org>
+	<0f196026-02ec-4db0-90b0-10c1e720c345@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250227-b4-ovpn-v20-20-93f363310834@openvpn.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-2025-02-27, 02:21:45 +0100, Antonio Quartulli wrote:
-> @@ -1310,9 +1329,12 @@ void ovpn_peer_keepalive_work(struct work_struct *work)
->  	if (next_run > 0 && ovpn->registered) {
->  		netdev_dbg(ovpn->dev,
->  			   "scheduling keepalive work: now=%llu next_run=%llu delta=%llu\n",
-> -			   next_run, now, next_run - now);
-> +			   next_run, now, next_run - now ?: 0);
+On Sat, 1 Mar 2025 11:52:06 +0100 Matthieu Baerts wrote:
+> On 28/02/2025 19:00, Jakub Kicinski wrote:
+> > The Python lib based tests report that they are producing
+> > "KTAP version 1", but really we aren't making use of any
+> > KTAP features, like subtests. Our output is plain TAP.
+> > 
+> > Report TAP 13 instead of KTAP 1, this is what mptcp tests do,  
+> 
+> Indeed, and also TC tests, and all the ones using kselftest_harness.h I
+> think.
+> 
+> > and what NIPA knows how to parse best. For HW testing we need
+> > precise subtest result tracking.  
+> 
+> I guess the best would be to have the kselftests infrastructure fully
+> supporting KTAP, and then have a way for each test to print subtests
+> correctly, not nested in the comments like it is done for the moment.
+> But that looks harder to put in place, and the current solution is used
+> in a few areas.
 
-nit: I don't think this "?: 0" does anything
+Right. So for additional context for folks less familiar with selftests
+the two minor inconveniences which made "supporting KTAP" a less
+exciting option are: (a) we run make run_tests which wraps things
+in an outer TAP, so we'd end up with a hybrid, anyway; (b) NIPA
+only supports one level of subtests.
 
-> +		/* due to the waiting above, the next_run deadline may have
-> +		 * passed: in this case we reschedule the worker immediately
-> +		 */
->  		schedule_delayed_work(&ovpn->keepalive_work,
-> -				      (next_run - now) * HZ);
-> +				      (next_run - now) * HZ ?: 0);
-
-nit: same here
-
--- 
-Sabrina
+Thanks for the review!
 
