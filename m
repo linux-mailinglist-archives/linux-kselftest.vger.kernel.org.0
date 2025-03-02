@@ -1,125 +1,137 @@
-Return-Path: <linux-kselftest+bounces-27979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A1FA4B3D4
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 18:36:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3525A4B40C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 19:24:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2119A188F579
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 17:37:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 547513AEE7A
+	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 18:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3461E98FB;
-	Sun,  2 Mar 2025 17:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF2CF1EB5D0;
+	Sun,  2 Mar 2025 18:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="X7G5ZBWv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="0mR329K3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [65.21.191.19])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68A9C13B
-	for <linux-kselftest@vger.kernel.org>; Sun,  2 Mar 2025 17:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.21.191.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21D418BBA8;
+	Sun,  2 Mar 2025 18:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740937012; cv=none; b=bmQqkKHP8EVmVEFU5WpRL5PhQzZA/pE1UBzoS0TMFwTKfqrL3Jz8PULvT/7y3lyPPLZVd0Y4z0yh2k4OsM+E2J9S6nWB6tBOrHp015OELRaeqdUZvAR+du6E98y9u+V3Q8gxsIfb/ErYOJ4ycJhAFrpk1ZMSVPNS6ko22K129Sk=
+	t=1740939862; cv=none; b=CyTXd6kL4unbKtgnZyXCJwlXKpFQwuHnVd4OMZVodpzKL6hiecYW2Xg7+mdwJT017vTK+S+z39h+fwWWRVYsfHHKppyMGHFTkKwl1EcUja0cwgZaDhFiitDJxf20TRapRzbT3or7S3W3AX0Ya4ouI+qwL3V8UKTINzhj1RSdOJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740937012; c=relaxed/simple;
-	bh=fZlCL3tgFWd+ewz/ksj/DhebgJDZ+jizwASouF5/ng4=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=rF1vkKkBDVYMQDvcb/8vgFPtOb3U4yo50DSDox3S2kRSpwpCqde5ZcZU8xZuvquRDUaEO0qug42xEq+8AwzGAEvBHj+ca+K5EYAA03lNHAtqC4ydpPB0L+S7AeAz+a8j6k+SrHiho7dJotaZcxWSraJm67Hj7r4d2cGjgwG9Law=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk; spf=pass smtp.mailfrom=decadent.org.uk; arc=none smtp.client-ip=65.21.191.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=decadent.org.uk
-Received: from [2a02:578:851f:1502:391e:c5f5:10e2:b9a3] (helo=deadeye)
-	by maynard with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ben@decadent.org.uk>)
-	id 1tonF5-007SoF-2M;
-	Sun, 02 Mar 2025 17:36:42 +0000
-Received: from ben by deadeye with local (Exim 4.98)
-	(envelope-from <ben@decadent.org.uk>)
-	id 1tonF3-00000003rL6-12qI;
-	Sun, 02 Mar 2025 18:36:41 +0100
-Message-ID: <7286c87d1ad7b705d123f23ad213ec40a9f23351.camel@decadent.org.uk>
-Subject: CVE-2024-56741: apparmor: test: Fix memory leak for
- aa_unpack_strdup()
-From: Ben Hutchings <ben@decadent.org.uk>
-To: John Johansen <john.johansen@canonical.com>, Jinjie Ruan
-	 <ruanjinjie@huawei.com>, cve@kernel.org
-Cc: apparmor@lists.ubuntu.com, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com
-Date: Sun, 02 Mar 2025 18:36:35 +0100
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-Z2ofoIoxQj9X1BsaAHHv"
-User-Agent: Evolution 3.54.1-1 
+	s=arc-20240116; t=1740939862; c=relaxed/simple;
+	bh=RTb9Ohk7mRbGTgMtcH0ebJfOQQb87PiScFc/UMSe3RM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S6vwF2mb3z/Y4em3SntGDlnD7QUEkovuKOzjslVcCyoxAoddwWuRjq/vQiqa8BbPWzwc0fudv2dph039Da9rf3KYRb/f+cjkdroirjv1rsrCJjw7rXJUeeU59ns5ZVot7REkQ+tQoO6FA8re1YU+CIDX2O0VJeXj30HOB8DPV/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=X7G5ZBWv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=0mR329K3; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 3CD9D1140144;
+	Sun,  2 Mar 2025 13:24:18 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sun, 02 Mar 2025 13:24:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1740939858; x=
+	1741026258; bh=vbDBbOj0P076q30CuM2H8hrlu1dzNSJq+H1MlcuN+n8=; b=X
+	7G5ZBWvVYtgL92wliiWQLOoPPLEsbW6qvxPWOWO2L31SI2Pn7pzCn0OtHcoGbeQ0
+	U5uY9d4JrMYQ0SnV1t8edjWN2DIljmb3gBWSLAyVzUNunqCgsc2Nz2Gs/WAxVoLJ
+	ZrrvjIUINpe4gBFFOzM9nBlxqfC8leKTvJRzZEk8ntcfqFzpA+zAhasoRhYNkx75
+	qtocaZNWFahYOa8cUdxWDqRZjvoo0O35fAJ7B9ljE6EfjoENW+vTMjBSjWOTJehw
+	uIIfxdEHpgeLDHc5tT5TRFLMpzhUQoHh0HiERDMRTSnmDxUHDr8eYFbCLTU4D39u
+	hHBPQCe1Kd2Lh8wUUJJgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1740939858; x=1741026258; bh=vbDBbOj0P076q30CuM2H8hrlu1dzNSJq+H1
+	MlcuN+n8=; b=0mR329K3REKRIgKSPebDDB7SQ8XsB6tAX39yW10+XOQKOvXZ7RT
+	/jtwbNHWyieMjKUmEvhVL1eNRETQcshMdOcJnZMfuf2fJXAXav6/s58G1PJBm9He
+	WFDoS8Lp2B0/TY4k5UMZ6gdCZinIIktATJh2jk0koAzdLYy4TZ8NscFaeQ/kr8UM
+	MDwGX9s6mbPdxcYSmiftk8EM/S0J6SfEZf5IgKK9R4xX3cKFWMFej8zvc3XXIgt9
+	WdR0JYIsARDeKO3Ap5O/F7vuDYcbLy/QQ0Lc+Tx/1gLz/5K68TkGSM/MtdT5sobh
+	PRrIBR6QVjhqRCbfJinkPjZ5j62IPEpx9PQ==
+X-ME-Sender: <xms:UaLEZ5J6oaOLtF1CkeIhG95QfTi44C0aKfmBrhMrqE1Zw1rvUMz0xw>
+    <xme:UaLEZ1J4bqLz34XyeRHS4uoPBRwyCbUY_xbO7i7r5QtRrH5asGUuST-EtEsG29KLd
+    nlLWeswwWEuAtl7XXM>
+X-ME-Received: <xmr:UaLEZxs_G2jDjvfowvvzPZ6rq6ya_0IOJzKdhL6ihfE3mko2xtn7e_LgTW2a>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelieelvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
+    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
+    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
+    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
+    pghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
+    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
+    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
+    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
+    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:UaLEZ6aME6pA6a_NQ89RWNsBp6blRqjrQSSkYaZGkHhQbDdArBNrcg>
+    <xmx:UaLEZwbL-9P45mrNHenV1Q8xo2a9C154d5xvs3VahbM_Kyfb7hUSBA>
+    <xmx:UaLEZ-BxC1mNMqbd-s_BT2rjghXA8XFmMJprXM3dJ5hiz8IbruMFig>
+    <xmx:UaLEZ-ZNTN9t1eEaL4QnOUURDC6PDw-lPSZjHiVs_24nPRcuajSpkw>
+    <xmx:UqLEZwp-BRLoq-FXlmkkvUDDqPnypzR4VeAsfLaCZCP3WKwIog6hKgR6>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 2 Mar 2025 13:24:16 -0500 (EST)
+Date: Sun, 2 Mar 2025 19:24:14 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+Subject: Re: [PATCH net-next v20 20/25] ovpn: implement peer
+ add/get/dump/delete via netlink
+Message-ID: <Z8SiTgEmj2Vr-p-E@hog>
+References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+ <20250227-b4-ovpn-v20-20-93f363310834@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a02:578:851f:1502:391e:c5f5:10e2:b9a3
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250227-b4-ovpn-v20-20-93f363310834@openvpn.net>
 
+2025-02-27, 02:21:45 +0100, Antonio Quartulli wrote:
+> @@ -1310,9 +1329,12 @@ void ovpn_peer_keepalive_work(struct work_struct *work)
+>  	if (next_run > 0 && ovpn->registered) {
+>  		netdev_dbg(ovpn->dev,
+>  			   "scheduling keepalive work: now=%llu next_run=%llu delta=%llu\n",
+> -			   next_run, now, next_run - now);
+> +			   next_run, now, next_run - now ?: 0);
 
---=-Z2ofoIoxQj9X1BsaAHHv
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+nit: I don't think this "?: 0" does anything
 
-Hi all,
+> +		/* due to the waiting above, the next_run deadline may have
+> +		 * passed: in this case we reschedule the worker immediately
+> +		 */
+>  		schedule_delayed_work(&ovpn->keepalive_work,
+> -				      (next_run - now) * HZ);
+> +				      (next_run - now) * HZ ?: 0);
 
-CVE-2024-56741 is supposed to be fixed by commit 7290f5923191 "apparmor:
-test: Fix memory leak for aa_unpack_strdup()"=C2=A0but I think this
-assignment should be rejected.
+nit: same here
 
-While a user-triggered memory leak may be exploitable for denial-of-
-service, the code that was fixed here is a part of KUnit tests.
-KUnit tests usually run a single time at boot, not under user control,
-and can then later be invoked through debugfs by the root user.
-
-Firstly, it is intended that the root user can deny service through the
-reboot system call, so I don't think additional ways to do this are
-security flaws.
-
-Secondly, the KUnit documentation at <https://docs.kernel.org/dev-
-tools/kunit/run_manual.html> says:
-
-    Note:
-
-    KUnit is not designed for use in a production system. It is possible
-=C2=A0   that tests may reduce the stability or security of the system.
-
-so I don't think security issues in KUnit tests generally deserve CVE
-IDs.  (That said, the help text for CONFIG_KUNIT does not have such a
-warning.)
-
-Ben.
-
---=20
-Ben Hutchings
-Any smoothly functioning technology is indistinguishable
-from a rigged demo.
-
-
---=-Z2ofoIoxQj9X1BsaAHHv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmfElyQACgkQ57/I7JWG
-EQnXoQ//Utms7NmGWZ5h2MUx5gI1gYg65pGmAs7q4RNtBsRw0RASrQtmIRKZx4Wg
-kc4nlmB5Vl1xnigli8ukg+OjgpXJVgmtoL5Q74Ed6ru5BpNx+jHrHBVPt/3YSCoc
-miObFDjPBdlbJ9W93R4FrK4guJIYo1mgjxXRm64cMt+c+cjN5KlVEXsxEPM08JHK
-T0TsBzoTM2r6gmx7jfqckAExdg5ZuwmgUsOqfrpwHtkd7GmgVcT/B2Em/1ojkgn3
-K5ZsEFuyAMDIK2qfeFZx+O98yPf5zW75yjffemerOZE/+rzteSaDpFA/4JXll9q4
-DniGs+xfz0K4nrg+yEwVp6jEkaNss5zAEEPvo05H9vsB3jnbg+dloflX6ufJRLFy
-8jYVTDduc4Q+tTqci21ws2Sj9pVJDTUxvQWS4shQZbnA2keaCz3yaiCOUdYI4/js
-Jcl0LFa2UVzCBTNGzYzMaUVkqEeIwe3WINBI95JrsjsyDC2lbOFNs/AD3NHPpERm
-db2jdFy0Wc6J8q/m+G7OCs6K+9HrEO850G/QgCS3Bpx8yMIxh8DViXDmHLLtWjtk
-jjmHc0RKo67bySGySf3YkD9rwVnmoapGGBkd4HMcOBwiMpPaQcsJDVRjqcfipigl
-DC9rHF9FTeTE1/jjMs9WYcS92TSKwevJrUzvJW0QGUpAPDSViu8=
-=gStR
------END PGP SIGNATURE-----
-
---=-Z2ofoIoxQj9X1BsaAHHv--
+-- 
+Sabrina
 
