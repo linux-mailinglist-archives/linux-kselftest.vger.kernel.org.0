@@ -1,79 +1,81 @@
-Return-Path: <linux-kselftest+bounces-28103-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89ED3A4CECE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 23:54:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1557CA4CECA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 23:54:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3524B1898093
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 22:54:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04BB516E829
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 22:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF74323F272;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B9823F267;
 	Mon,  3 Mar 2025 22:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="eC5Ah8SC"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="WdJuMiIk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B524123956D
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 22:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE26239594
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 22:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741042395; cv=none; b=N1c+9ROmyQFHSZsA/AGUtfXgYuG+G5/YBveVp/UlKPbCeJRRjp7b2bqRRXohCjQKWE6i0TG0jMpc/YK5aNMCaNI/Juj88yYfcAeK9CChXlRCJtvn/o/Rdx6guc8B2m4rs09ysoC0HJkB8yyzAWaKlbUr78Y8sZrCuXxTURwjZRI=
+	t=1741042395; cv=none; b=oLzuUlXnG3bQt1zEjTgyk9nRgKDDPD4dq793rd6Ph0KLbpzZEUnskn4eucqkslzQUj91GX7LjhrUZQPAMr4g4DZ2c0Q50urjR3dQ76un1A1Ii+3tXe2ufiTGEZXQSo3nCq0h/mmrOknVZd3PDSsWg7vIBzsWdPs88x9mQdNQIsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741042395; c=relaxed/simple;
-	bh=/5XukNlXJKyGVREeQdU7wG2r6Y2lbVhDem2XgJQlNlw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CnTc8cudYWiB3nY027wWQDSmrMeoGlsAqPDN30OOvV9AF7AqG3FJ+t11uMf2yRoOeg9Ep2hH/pizIE/F5h1w+Wd+5ldBvvWkwAUifolJ08rYF5pD10EGrHFiN1RC0lQc1lOEgnbfmn8j9baefkaY08vu1Svn7uSpszqyhvM6uQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=eC5Ah8SC; arc=none smtp.client-ip=209.85.214.169
+	bh=DxQuXHMlgc7H5Iz7LRmGc2M8YCqPk4tOjdxPmN2FNfI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Ry0dQW4qkVxNDgAleRy3TcG11T+WgaNvl8up5Qauc5zTbvzYb1A19JKG6OikfHm5lE+NFEQ5yZpRMAs4NyhZFSlf93J4q/6FPasLag5mIJniXDf7cbDGMljI1HCQQdZxRcaTVMQv9BklX2/O6xgdDBUCXhuh0+9qPgF1qTMgq/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=WdJuMiIk; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-22113560c57so95207995ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Mar 2025 14:53:12 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2234e4b079cso90571265ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Mar 2025 14:53:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741042392; x=1741647192; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHRREGcSp2krqTtJr5eO01PBlpy/oFOdFDc6Qvhwm80=;
-        b=eC5Ah8SC6TMYOUVmlaMcM1AwBDdWEVI5AmzthZHRqMyA8yy8WYZ5ktV6BBKAEeRCR6
-         rwbNySYdv3leiCupxi9m9pMANdzLBLvC1a40wJzax/uSuWqf3Z5Xc2jKimK1QSKVLKC4
-         fALS2U97NGJHd01JfqMxqQQ7LZX1q0SFNZMunQyerZp67EOQj2BetMoCYgaVrfGwWOCK
-         RqUNunYS4RLoilcVkVvtbnKPU2vCB7yP5MrLkhaWTZSBlc5eUj6Y4XYA4hKJr3S1wJla
-         FzAKSJglFqXgwoTe/0uGqBoc0zQK3wLvl6wP3LXIxcrgGtiTf0CPvVTt2eHcTxjWlS0R
-         4dDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741042392; x=1741647192;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741042393; x=1741647193; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rHRREGcSp2krqTtJr5eO01PBlpy/oFOdFDc6Qvhwm80=;
-        b=RSeBIC23t0OJ7bqfqCu+Q2FzyIMZ/+bXlSEmlbwrU0aFdQLLh38meVxQcRfYf4r09/
-         4kdM29ciCmgcQn6Sz5cGss2ZzbMVoUMiUeoTwuI71rk3ak3yvQFd1awzUogEUx0SQehl
-         dII0euZ9M6MP396Q9gZ/vD99/71s7Tmvz67n4pGHFNZLWmRjzt1r0KkDMMTTO+DpnO7f
-         BiMXJPnXtV7dKSUjoVW9aAnZhNsHmUEH7CbJzdeRLqh19ioteq+aSU5CwdLKFvp56ngo
-         Z9mSGKrjAfhBcfci20h2UCl/y658eDkmUGChTzSqa8XDGKA/6GN7feHqAHQd4cB6ZpI1
-         o9KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUspkB7/6zZFh0PbkH2zJLzVTw7umbEe13Sww+w2AeWI//DP90XFF6uGiMBx0eMKwAygKf0hZVJ8SLMZMWv+Y0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN4qVeMiCNkWWs6sj05WtZCiyJaCzk+mKygQLRmGdNjgPbg0g4
-	1lqjsVG982S/J8X5b8gg7DlCu8/+P85cwQ89GOhAkXgeUp9dFRCpUnxTb45hWiY=
-X-Gm-Gg: ASbGncuJarUMck7TjKHIYVjcA7U+YbkFqbIpyvj5SPrb28VCnl7t0iFOqNtJapB0w8C
-	ccjpBQcDROVQpQL/9oNOh3xdcMwDoiNvC1aXITIEdqiRfmzA+xWQzkOIE7aH8QVPh3SPFhUNBnt
-	ZkiVTjinw+ajZN2+Gts8xMSBTyt60UvW0EaVh68BRzUXIgE44t7sY5W0AIWhQAg3lvIfkXuBJvA
-	qivryq7JQMHmipBzPT3OXrECa3gyF95iVNNh0pMPXSvK5AlztnN8Dp1IPo1u4hCaFs16afwPwyE
-	9ysX/D8zHAM03YDDVJl9YGJIobODO+QMoapSEjUvzIYvFVm14yNiJOayqQ==
-X-Google-Smtp-Source: AGHT+IFTnPiC8gGn23TPq+Loy5LwqUVXrpZ/genl7BFYk1BAOqQRQeXw3l+mF/ky73QXi/CT689qMQ==
-X-Received: by 2002:a05:6a00:a91:b0:731:e974:f9c2 with SMTP id d2e1a72fcca58-734abed5bbfmr23190306b3a.0.1741042391979;
-        Mon, 03 Mar 2025 14:53:11 -0800 (PST)
+        bh=mugBhowmjHeOZ8voD78niLPk8kFDSWBL6lZCl8cn1Qg=;
+        b=WdJuMiIkIs3pUQXpxz7Z9HmUtPvCC79mJk/occ7KYGG/aZdiOmBHRmCNJhdTOf3/ef
+         ovpBWaFkZU/v2DMGUw9V6pXveZmqaYiGBC56j7XIAZad2ocyzUG4D6T6+hEk5gaP94Fw
+         VsXkGx+7uzLOu6QNKgxQZDi4HxBscik0se8xvAPweYri0I7hRmHEPx0d0wqW2CcqCN/h
+         N4o+RyBR5xgif1GKI770sWlsnhnzzyufnWMaoEritGhZ29py8V5tvja0pu0oehAjlZy+
+         7I/spmdEj4WD2ny8Xc1m55EZRBYIwT6a33H+8dc1T906V1Jmn7Qk8d7bPbSMbFd/dkTJ
+         xihw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741042393; x=1741647193;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mugBhowmjHeOZ8voD78niLPk8kFDSWBL6lZCl8cn1Qg=;
+        b=rhFZ4FX8693d7Ns5Aywdt4peBuDl10Km/hf9sAjJlbts9424prqTofG0d2xQLTnT62
+         qJ350zsN/aNd4XWjHsUNWgLIgKHu6Xkm2dO9FRcNK0cGi4zpgan8QIMMrnln5+gVlJX7
+         FUjEtTf88LIJsT06HKvX/Xz0aS9BWvQXvQWUe68Bdu8M2mtOGcYXk2eoyRD1qBbCsGGB
+         iPKozbTbIH8E0mlIN+7S1lc7rkmgq3OI60lz0nEADv4VePVWrw1/SEBBXL9y2gXXD0Rs
+         r4HPurZKtkteqdqxtab+mluH/41n3nKvC/4TzjqBo9KC7mQQqoKGX2BU6HAhvlZkhszF
+         yS2w==
+X-Forwarded-Encrypted: i=1; AJvYcCU0jlK8yMu8s0DDt9ikmnzqVRGuHDcOAmEKQ1GKT9cA1lSRwqFMpWVE+IePfSRiR1lA+7oB7ySV6bALQs1zXiI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz02TObtsYO8SUxVx+c65MXyKxZ5+QW3mOckNvDdtepMna9134U
+	Oc/eBwXu0j7ZcL5Ot9wkOKyGSbPNHNDiip1x7xmqZSIFc8NlynPJPn3lml91sX4=
+X-Gm-Gg: ASbGncsTIRSEZt7uAwh/hpXVevkY9WCLwcdQg9NAkS+7mVeYMDW2ypbooAfNeLFc8H1
+	PxddqRx16IDnjZfCGdPordPUTu7KuVB8xCfeYk9ZwQBVNpUsWUtbKeaqmtQuJKNSzv72vplG4jy
+	q+SQ8LqLlCzh2K3AYVUZ1NrUx0TEAOkn+lo+xB3Rf1VkdivOHlTJTtxD0sF3kicASit851NXBsr
+	YjO169MBuBdJ+HRCFaLGZ+/u60Xb2pQfqaNchC2pUxzRs+qwq2FXF8We4ZUsPMn4effX7PnlqxR
+	eoHQocdd8yZ+RJCTNi5zOwiFIKx63Tcg4YmGIsftO7bxS83t0pIDDVsOuw==
+X-Google-Smtp-Source: AGHT+IGcN7KmSzWUc3x2Q9hIKcCxmrhzor1ESo6ey42ZNpnLuX0uKU0+qCp3SXFy7hHj8nlBIEN6rA==
+X-Received: by 2002:a05:6a00:240c:b0:732:2170:b68b with SMTP id d2e1a72fcca58-734abee4a68mr22681643b3a.0.1741042393072;
+        Mon, 03 Mar 2025 14:53:13 -0800 (PST)
 Received: from atishp.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003eb4fsm9440601b3a.129.2025.03.03.14.53.11
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003eb4fsm9440601b3a.129.2025.03.03.14.53.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 14:53:11 -0800 (PST)
+        Mon, 03 Mar 2025 14:53:12 -0800 (PST)
 From: Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v2 0/4] RISC-V KVM PMU fix and selftest improvement
-Date: Mon, 03 Mar 2025 14:53:05 -0800
-Message-Id: <20250303-kvm_pmu_improve-v2-0-41d177e45929@rivosinc.com>
+Date: Mon, 03 Mar 2025 14:53:06 -0800
+Subject: [PATCH v2 1/4] RISC-V: KVM: Disable the kernel perf counter during
+ configure
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,11 +84,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANEyxmcC/2WNywrCMBBFf6XM2kg6JrW48j+kFJuHHSRNSDQoJ
- f9uLLhyeQ7cc1dIJpJJcGpWiCZTIr9UwF0Dar4uN8NIVwbkKDmiZPfsxuCeI7kQfTbMWqv5oZ9
- QcAF1FaKx9NqKl6HyTOnh43s7yO3X/lrdXyu3jLOjUFz2Cifb6XOk7BMtaq+8g6GU8gGwP2/cs
- QAAAA==
-X-Change-ID: 20250225-kvm_pmu_improve-fffd038b2404
+Message-Id: <20250303-kvm_pmu_improve-v2-1-41d177e45929@rivosinc.com>
+References: <20250303-kvm_pmu_improve-v2-0-41d177e45929@rivosinc.com>
+In-Reply-To: <20250303-kvm_pmu_improve-v2-0-41d177e45929@rivosinc.com>
 To: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
  Paul Walmsley <paul.walmsley@sifive.com>, 
  Palmer Dabbelt <palmer@dabbelt.com>, Andrew Jones <ajones@ventanamicro.com>, 
@@ -96,34 +96,35 @@ Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
  linux-kselftest@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
 X-Mailer: b4 0.15-dev-42535
 
-This series adds a fix for KVM PMU code and improves the pmu selftest
-by allowing generating precise number of interrupts. It also provided
-another additional option to the overflow test that allows user to
-generate custom number of LCOFI interrupts.
+The perf event should be marked disabled during the creation as
+it is not ready to be scheduled until there is SBI PMU start call
+or config matching is called with auto start. Otherwise, event add/start
+gets called during perf_event_create_kernel_counter function.
+It will be enabled and scheduled to run via perf_event_enable during
+either the above mentioned scenario.
 
+Fixes: 0cb74b65d2e5 ("RISC-V: KVM: Implement perf support without sampling")
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
-Changes in v2:
-- Initialized the local overflow irq variable to 0 indicate that it's not a
-  allowed value. 
-- Moved the introduction of argument option `n` to the last patch. 
-- Link to v1: https://lore.kernel.org/r/20250226-kvm_pmu_improve-v1-0-74c058c2bf6d@rivosinc.com
+ arch/riscv/kvm/vcpu_pmu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
----
-Atish Patra (4):
-      RISC-V: KVM: Disable the kernel perf counter during configure
-      KVM: riscv: selftests: Do not start the counter in the overflow handler
-      KVM: riscv: selftests: Change command line option
-      KVM: riscv: selftests: Allow number of interrupts to be configurable
+diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+index 2707a51b082c..78ac3216a54d 100644
+--- a/arch/riscv/kvm/vcpu_pmu.c
++++ b/arch/riscv/kvm/vcpu_pmu.c
+@@ -666,6 +666,7 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+ 		.type = etype,
+ 		.size = sizeof(struct perf_event_attr),
+ 		.pinned = true,
++		.disabled = true,
+ 		/*
+ 		 * It should never reach here if the platform doesn't support the sscofpmf
+ 		 * extension as mode filtering won't work without it.
 
- arch/riscv/kvm/vcpu_pmu.c                        |  1 +
- tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 81 ++++++++++++++++--------
- 2 files changed, 57 insertions(+), 25 deletions(-)
----
-base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
-change-id: 20250225-kvm_pmu_improve-fffd038b2404
---
-Regards,
-Atish patra
+-- 
+2.43.0
 
 
