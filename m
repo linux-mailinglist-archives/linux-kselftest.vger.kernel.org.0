@@ -1,292 +1,314 @@
-Return-Path: <linux-kselftest+bounces-28236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 429BCA4EC24
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 19:43:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA63A4EC1B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 19:43:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47AC51889652
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 18:39:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFF18885D2A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 18:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B7A25E83F;
-	Tue,  4 Mar 2025 18:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D69B207E1A;
+	Tue,  4 Mar 2025 17:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b="XLaSwOOW"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="suFG/FlY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B8FprFIt";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="suFG/FlY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B8FprFIt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8545D2512FC
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 18:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C299020459A
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 17:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741113139; cv=pass; b=p9gus6SfGfIUPrfucQCL4PSZghcNrgX4Zc5mKYPxf+ap7qUHcAtY5SE0QwpG5spgCj3028K3mZ8HOBFw8X6g3NKeEN+OXAKZlrf9gaDwxNZIs6/OznpzjSzGRHhzyK/TkyaIXYF8c2to4Mqo9hRbBNmc3yCkDOa9IMzQn/A0U4I=
+	t=1741111118; cv=pass; b=WqROpX5FmEHiy83nmzOgX00BvOrVKzb/yQq8QWoMitXrpVVmgbfbIu19XZBeQZ/X7CVUEuIMJ1+0/5hvGs+OBpHbQZQHjCxG3kW8vJ2+L9zshGfnOlYEO67Z+mVILXq//KQZBHQmtkb55pse23mJ4+TebMzDKYY2guNtNKfPJtQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741113139; c=relaxed/simple;
-	bh=xYs8oQZuRfB0zoSFhmCjBgJ5r8qarpmQYj5NC33B8P8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=MWuQP/XQwHdfb7D5T8LS790cYqv71nF/SwWfbgitYsM1P/7T6Cz8MWc3Et6VMWXyqDZwz19tY8JUPdHa8ThPuY72X8wPps8F44vPLpDnoGVM5JMOjG4WzAsfm25wKUBXqcopxYgv02AzbsxZH9Oz/pP43IIXSf5ai+Qy1WbGvGQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW; arc=none smtp.client-ip=209.85.221.54; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=kragniz.eu; arc=pass smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu
+	s=arc-20240116; t=1741111118; c=relaxed/simple;
+	bh=9Cbkt6zSkkx3XsqzbnzOWO/5wx0/MMZJ8cnKPDT1DwI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vkd+4IS9WvSudMtn/cHNEUTQK4bLBzGF9WZhQqq6kT1oOXRSsOk8nC8nAkfOAiyHzXeoOBnZdpM8HwUeMIqWhFpmjqgr5ua3TwDYwXXKcXjwh5IUM2CN/IyEJ33AgnUVq7A1NR58Y+2QtcqoTj9ev3ZJR2g97qWGDzvdlsIATyA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFIt; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFIt; arc=none smtp.client-ip=195.135.223.130; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=pass smtp.client-ip=160.75.25.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id A965D40CFBBE
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 21:32:15 +0300 (+03)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id DC1BF40D977B
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 20:58:34 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (1024-bit key, unprotected) header.d=kragniz.eu header.i=@kragniz.eu header.a=rsa-sha256 header.s=google header.b=XLaSwOOW
+	dkim=temperror header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=suFG/FlY;
+	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=B8FprFIt;
+	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=suFG/FlY;
+	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=B8FprFIt
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6h711klrzG3SQ
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 19:32:45 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6hRy1XBWzG4Hv
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 19:47:26 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 0F9F342726; Tue,  4 Mar 2025 19:32:28 +0300 (+03)
+	id 0BD7542747; Tue,  4 Mar 2025 19:47:13 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW
-X-Envelope-From: <linux-kernel+bounces-541201-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dmIp7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=;
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UOM9L7EPWLwk0fyoDg==;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dmIp7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=;
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UOM9L7EPWLwk0fyoDg==
+X-Envelope-From: <linux-kernel+bounces-541274-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id DB30B42A8D
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:56:25 +0300 (+03)
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 22E052DCE3
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:56:24 +0300 (+03)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dmIp7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=;
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UOM9L7EPWLwk0fyoDg==;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dmIp7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=;
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UOM9L7EPWLwk0fyoDg==
+Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
+	by le2 (Postfix) with ESMTP id F22864233E
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:30:26 +0300 (+03)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id 5E1D53063EFC
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:30:26 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C0EF7A4094
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:53:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68E723A8026
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 09:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7DD1F0E40;
-	Mon,  3 Mar 2025 08:49:47 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18491F0E50;
+	Mon,  3 Mar 2025 09:29:44 +0000 (UTC)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1E11F03CA
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 08:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF9F1F0E4F
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 09:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740991783; cv=none; b=C9LfG3/JlmzZEbFE35VLQfNZpAkjSd6t0+QVdVfia+VnyIUbm5o5m8L5LdstjGPaOSnUUZpXiEJkJD60lUQGB6ooTunKb6GlrExphYNyrrlr6TEzqDBHXwqYnGFuNnjJdspNMAgYdny81u80WM0p5Dd0FwNX1OJTFpF0B+vQcOk=
+	t=1740994181; cv=none; b=DBZZPNS8heXUz8IRP3PPCpm3Hi3H72ji36jhP8oa6stFBXROx7vl6dkuvUUoxfsU8zkeSh60zcsccp+lfzY4uPPpuharO3oQVHTH60wmy96h5xnXo9BernhvCl2bx2GUtvtyE4cfvpo3KepqsD3pjEoO+6rtNQHJJ9eAXju9pos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740991783; c=relaxed/simple;
-	bh=xYs8oQZuRfB0zoSFhmCjBgJ5r8qarpmQYj5NC33B8P8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=kUlHvvgh60T0WYsxdDmPlNbAZE2gijNg/eX7klajYGwOUX/FYwyDOOFTDVXcB4wu/nWzeGs23l7467V9CYdkHax0hVpanXkSe5ryVpRIv/Bz50sSVYLkt2ZDoxdllnDcfSn6+mMPYxo8Cej87q2iW7F7tcBRxZoLf0qhLXPRN4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=kragniz.eu; dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kragniz.eu
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-390dd35c78dso2695052f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 00:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kragniz.eu; s=google; t=1740991779; x=1741596579; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JWOcI3LfOtoqMvDoa0uHK2j1WwNZ7lsxEpbnE3uhycI=;
-        b=XLaSwOOWP/FEWlLmfbmsqOV5jRPowbPiJ3EZl/edCkGg+eAbE5exqIl5Vuv+qSjlaz
-         Cb/Xjo8cY1THudUUaGCaqntLyqXWCtFPI34GlUAy+TB3eeMQZevxpX1lljrppNYyOEFz
-         3qRnDOdYkHGM/1ifzmNak09HszzDjgU87sHVM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740991779; x=1741596579;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JWOcI3LfOtoqMvDoa0uHK2j1WwNZ7lsxEpbnE3uhycI=;
-        b=bYkezG0T2xQtU2R2TlFsCWIndVlgPbdd2VBSMq6+0oDwuwhvpAJ7/qHBHRbmjxxmbU
-         ssO/wxKV8G26eF23SWza9JTMNCSZmwCuTG0Uxd8uw1/kaFEUkFaikKSbE5qZx8kPvB/Y
-         ZuqPC6iUN5suJYtKAKdhiYkGe9iDQkHwYqjrlvtmQDOtp74ZKAcuL3FT4VadEy5JV1VW
-         tLc/qfg1MfM0MD34x1/tdeH4/2QoIHgKlzKbuQ9g+UfXn1XRCl9za36h1K11zJqsGYdy
-         WL+xkPZ2ejBixjgpB5FpKlIoFcgomSDLr0JR+4bp0corQcAMs1DFrih7rfzMPPkv5/lq
-         LOKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXWXBoBG9c1VkAOiOU3oUaI628Kdbbpcc1eu3OvRvIi8E4+trjjlVVmCFWMVW8zTB99gBmyTdvhKu9MrWk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMqAKT0VFu+vU0+yiQzQkRu7ST+D2uhOydi2C+GfFk2QZcWcNW
-	vdYznMcRL+6cyDPWIAiFad4TfEl0ZB4d8XPHxWT0n6dDcw53sLrWBjmsV8dJWDU=
-X-Gm-Gg: ASbGncuCYug7ErAKdNWoEwNy71+pmFHWrwGF/0Ok5u37PQDHhbK/DZ0V2rtQLWXdUXX
-	WT2w1h3xXsAONbCd8axk5aHxtuer+kSTSHmHMx9YffQSF67oZM8EHMv9RX7FVoLoXA44FFsmjri
-	uKLsWoegG2WLBfq/EeQu2g7cul8tdZ4+zhmvTsquJKseAjgPdICFnZctEtXMqeJoCbvHOWrnpV1
-	92FoYwtfvsKnf/U+IDEUh0OhnWMd3WFKFAQkz0CEypAx+V0Bjacj5H/N7OotyWYTM+rOJIIHV94
-	CsQwf9qd8TgncBQ29J8qO5kmu/TBFGSp0bEfEI/PAPx2CzdYWDwbNazMihCtwzih1A==
-X-Google-Smtp-Source: AGHT+IHVLjZBMOHPs+saOKuJEuqmctdpDU92+SVxz5HFg3qV39sxng1lBC4zbTnM/QwHjaV0RHgfIQ==
-X-Received: by 2002:a5d:5f96:0:b0:38d:afc8:954e with SMTP id ffacd0b85a97d-390e168d26amr12668179f8f.11.1740991778861;
-        Mon, 03 Mar 2025 00:49:38 -0800 (PST)
-Received: from localhost (161.26.169.217.in-addr.arpa. [217.169.26.161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba5710c2sm178368295e9.32.2025.03.03.00.49.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 00:49:38 -0800 (PST)
+	s=arc-20240116; t=1740994181; c=relaxed/simple;
+	bh=9Cbkt6zSkkx3XsqzbnzOWO/5wx0/MMZJ8cnKPDT1DwI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WusFN2xAskNM2j8ggE7lU80xQn4hfeNfMbqbOhYdrJvVJJTKIWkA1bRKWAP/WGuvhwPRi3tQJD5bW4vj/Y1Tf33hZ/GAqitT3tw927+eTHWZhu/uen1lUQcMxeiEWlZm+164pJ5TIsaQL9YMSutaxNtEvahBUS/6Rvz+01oSElo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFIt; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFIt; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 9737A2116B;
+	Mon,  3 Mar 2025 09:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1740994175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
+	b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15
+	FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dm
+	Ip7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1740994175;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
+	b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UO
+	M9L7EPWLwk0fyoDg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="suFG/FlY";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=B8FprFIt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1740994175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
+	b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15
+	FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dm
+	Ip7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1740994175;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
+	b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UO
+	M9L7EPWLwk0fyoDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 43C9613A61;
+	Mon,  3 Mar 2025 09:29:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ML9YD392xWc1BQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 03 Mar 2025 09:29:35 +0000
+Message-ID: <12b82997-0129-4fef-afc0-e925e542be88@suse.cz>
+Date: Mon, 3 Mar 2025 10:29:34 +0100
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/12] mm: introduce AS_NO_DIRECT_MAP
+Content-Language: en-US
+To: David Hildenbrand <david@redhat.com>, Patrick Roy <roypat@amazon.co.uk>,
+ rppt@kernel.org, seanjc@google.com
+Cc: pbonzini@redhat.com, corbet@lwn.net, willy@infradead.org,
+ akpm@linux-foundation.org, song@kernel.org, jolsa@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com,
+ jannh@google.com, shuah@kernel.org, kvm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, tabba@google.com, jgowans@amazon.com,
+ graf@amazon.com, kalyazin@amazon.com, xmarcalx@amazon.com,
+ derekmn@amazon.com, jthoughton@google.com
+References: <20250221160728.1584559-1-roypat@amazon.co.uk>
+ <20250221160728.1584559-2-roypat@amazon.co.uk>
+ <3dc4bb80-0beb-4bbb-bfd8-47fc096f70e9@redhat.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <3dc4bb80-0beb-4bbb-bfd8-47fc096f70e9@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Mar 2025 08:49:37 +0000
-Message-Id: <D86I2TBQIPLZ.TCUUJWWM5DMO@kragniz.eu>
-From: "Louis Taylor" <louis@kragniz.eu>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Willy Tarreau" <w@1wt.eu>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] tools/nolibc: add support for openat(2)
-X-Mailer: aerc 0.18.1
-References: <20250302202528.4169024-1-louis@kragniz.eu>
- <d0ed3b0d-4b7d-40cb-bbce-1f2a6605db7f@t-8ch.de>
-In-Reply-To: <d0ed3b0d-4b7d-40cb-bbce-1f2a6605db7f@t-8ch.de>
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 9737A2116B
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_TWELVE(0.00)[38];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[redhat.com,lwn.net,infradead.org,linux-foundation.org,kernel.org,iogearbox.net,linux.dev,gmail.com,fomichev.me,google.com,oracle.com,vger.kernel.org,kvack.org,amazon.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLo3k5aap4ysuunujcz1d3qjj5)];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6h711klrzG3SQ
+X-ITU-Libra-ESVA-ID: 4Z6hRy1XBWzG4Hv
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741717846.30743@l7It5n5CbofUuocEfG7rmw
+X-ITU-Libra-ESVA-Watermark: 1741715799.16944@tXm1RDL/7wJ7Dpb2rYEgcQ
 X-ITU-MailScanner-SpamCheck: not spam
 
-On Sun Mar 2, 2025 at 10:24 PM GMT, Thomas Wei=C3=9Fschuh wrote:
-> Hi Louis,
->
-> On 2025-03-02 20:25:23+0000, Louis Taylor wrote:
-> > openat is useful to avoid needing to construct relative paths, so expos=
-e
-> > a wrapper for using it directly.
->
-> Can you say what you are using nolibc for? I'm curious :-)
+On 2/25/25 17:52, David Hildenbrand wrote:
+> On 21.02.25 17:07, Patrick Roy wrote:
+>> Add AS_NO_DIRECT_MAP for mappings where direct map entries of folios are
+>> set to not present . Currently, mappings that match this description are
+>> secretmem mappings (memfd_secret()). Later, some guest_memfd
+>> configurations will also fall into this category.
+>> 
+>> Reject this new type of mappings in all locations that currently reject
+>> secretmem mappings, on the assumption that if secretmem mappings are
+>> rejected somewhere, it is precisely because of an inability to deal with
+>> folios without direct map entries.
+>> 
+>> Use a new flag instead of overloading AS_INACCESSIBLE (which is already
+>> set by guest_memfd) because not all guest_memfd mappings will end up
+>> being direct map removed (e.g. in pKVM setups, parts of guest_memfd that
+>> can be mapped to userspace should also be GUP-able, and generally not
+>> have restrictions on who can access it).
+>> 
+>> Signed-off-by: Patrick Roy <roypat@amazon.co.uk>
+>> ---
+> 
+> ...
+> 
+>>   static inline gfp_t mapping_gfp_mask(struct address_space * mapping)
+>>   {
+>>   	return mapping->gfp_mask;
+>> diff --git a/lib/buildid.c b/lib/buildid.c
+>> index c4b0f376fb34..80b5d805067f 100644
+>> --- a/lib/buildid.c
+>> +++ b/lib/buildid.c
+>> @@ -65,8 +65,8 @@ static int freader_get_folio(struct freader *r, loff_t file_off)
+>>   
+>>   	freader_put_folio(r);
+>>   
+>> -	/* reject secretmem folios created with memfd_secret() */
+>> -	if (secretmem_mapping(r->file->f_mapping))
+>> +	/* reject secretmem folios created with memfd_secret() or guest_memfd() */
+>> +	if (secretmem_mapping(r->file->f_mapping) || mapping_no_direct_map(r->file->f_mapping))
+>>   		return -EFAULT;
+> 
+> Maybe I'm missing it, but why do we have to special-case secretmem with 
+> that at all anymore?
+> 
+> Couldn't we just let secretmem set AS_NO_DIRECT_MAP as well, and convert 
+> all/most secretmem specific stuff to check AS_NO_DIRECT_MAP as well?
 
-An incredibly dumb side project which involves creating a very small
-static binary. So far I've also needed a few other functions (for
-example clock_gettime) which I've just added local wrappers for, since
-I'm not sure if they're in scope for nolibc. If they are, I can also
-send patches for those as well.
+That's done in patch 02. But yeah, squashing them together would reduce some
+churn. I guess because it removes some !IS_ENABLED(CONFIG_SECRETMEM)
+optimizations, a separate change for review was preferred.
 
-> > Signed-off-by: Louis Taylor <louis@kragniz.eu>
-> > ---
-> >  tools/include/nolibc/sys.h                   | 29 ++++++++++++++++++++
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 22 +++++++++++++++
-> >  2 files changed, 51 insertions(+)
-> >=20
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 8f44c33b1213..e5ff34df4aee 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -765,6 +765,35 @@ int mount(const char *src, const char *tgt,
-> >  	return __sysret(sys_mount(src, tgt, fst, flags, data));
-> >  }
-> > =20
-> > +/*
-> > + * int openat(int dirfd, const char *path, int flags[, mode_t mode]);
-> > + */
-> > +
-> > +static __attribute__((unused))
-> > +int sys_openat(int dirfd, const char *path, int flags, mode_t mode)
-> > +{
-> > +#ifdef __NR_openat
-> > +	return my_syscall4(__NR_openat, dirfd, path, flags, mode);
-> > +#else
-> > +	return __nolibc_enosys(__func__, dirfd, path, flags, mode);
-> > +#endif
->
-> All architectures support openat(), so the #else could be dropped.
-
-I agree, but I followed the existing implementation for sys_open which
-only uses openat if it is defined. If openat can be assumed to always
-exist, that other #ifdef should be dropped (which I can do in another
-patch).
-
-> > +}
-> > +
-> > +static __attribute__((unused))
-> > +int openat(int dirfd, const char *path, int flags, ...)
-> > +{
-> > +	mode_t mode =3D 0;
-> > +
-> > +	if (flags & O_CREAT) {
-> > +		va_list args;
-> > +
-> > +		va_start(args, flags);
-> > +		mode =3D va_arg(args, int);
->
-> mode_t instead of int?
-
-This implementation is yoinked directly from open() below. I have no
-opinions, but if it should be changed it should be changed in both
-functions.
-
-> > +		va_end(args);
-> > +	}
-> > +
-> > +	return __sysret(sys_openat(dirfd, path, flags, mode));
-> > +}
-> > =20
-> >  /*
-> >   * int open(const char *path, int flags[, mode_t mode]);
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testi=
-ng/selftests/nolibc/nolibc-test.c
-> > index 79c3e6a845f3..97ded6c76f99 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -1028,6 +1028,26 @@ int test_rlimit(void)
-> >  	return 0;
-> >  }
-> > =20
-> > +int test_openat(void)
->
-> static.
-
-I'll change this. Should the other test_ functions in this file also be
-static?
-
-> > +{
-> > +	int dev;
-> > +	int null;
-> > +
-> > +	dev =3D openat(AT_FDCWD, "/dev", O_DIRECTORY);
-> > +	if (dev < 0)
-> > +		return -1;
-> > +
-> > +	null =3D openat(dev, "null", 0);
-> > +	if (null < 0) {
-> > +		close(dev);
-> > +		return -1;
-> > +	}
-> > +
-> > +	close(dev);
-> > +	close(null);
-> > +
-> > +	return 0;
-> > +}
-> > =20
-> >  /* Run syscall tests between IDs <min> and <max>.
-> >   * Return 0 on success, non-zero on failure.
-> > @@ -1116,6 +1136,8 @@ int run_syscall(int min, int max)
-> >  		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); b=
-reak;
-> >  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp =3D open("/dev/nul=
-l", 0), -1); if (tmp !=3D -1) close(tmp); break;
-> >  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp =3D open("/proc/se=
-lf/blah", 0), -1, ENOENT); if (tmp !=3D -1) close(tmp); break;
-> > +		CASE_TEST(openat_fdcwd);      EXPECT_SYSNE(1, tmp =3D openat(AT_FDCW=
-D, "/dev/null", 0), -1); if (tmp !=3D -1) close(tmp); break;
->
-> AT_FDCWD is already used in test_openat(). What additional value does
-> the test above add?
-
-None, I just wrote that one first before thinking about how I'd test
-opening something relative to an fd. I'll drop it.
-
->
-> > +		CASE_TEST(openat_dir);        EXPECT_SYSNE(1, test_openat(), -1); br=
-eak;
-> >  		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
-> >  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); bre=
-ak;
-> >  		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds =
-=3D { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
-> > --=20
-> > 2.45.2
-> >=20
 
 
 
