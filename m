@@ -1,319 +1,292 @@
-Return-Path: <linux-kselftest+bounces-28221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39680A4E80A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 18:14:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 429BCA4EC24
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 19:43:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D36A2177BDB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 17:03:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47AC51889652
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 18:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3CAB27BF6F;
-	Tue,  4 Mar 2025 16:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B7A25E83F;
+	Tue,  4 Mar 2025 18:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p7F306IK"
+	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b="XLaSwOOW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
+Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E72238142
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 16:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8545D2512FC
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 18:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741106489; cv=pass; b=d+sk/TnCuEcHJ3soeSSRySTYduT6cV+zJGkuoGHKY5hT9y84sLoIVIbi9F3UeUuuFi51xOdIMMx9OpSqcF3S4cs3WNYlNRImhiINw0PuqiaBrwr6TqoL4P9XfwJpynbD4fRbktkWTBsX8GhvgwpldnnAzEsYi+6ZLncXcAo/xgA=
+	t=1741113139; cv=pass; b=p9gus6SfGfIUPrfucQCL4PSZghcNrgX4Zc5mKYPxf+ap7qUHcAtY5SE0QwpG5spgCj3028K3mZ8HOBFw8X6g3NKeEN+OXAKZlrf9gaDwxNZIs6/OznpzjSzGRHhzyK/TkyaIXYF8c2to4Mqo9hRbBNmc3yCkDOa9IMzQn/A0U4I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741106489; c=relaxed/simple;
-	bh=DLb+kC1uvEhmBCVhzWxb76oHegZQEMeQ8pFfnrbUdkc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tk1U1egojRhLVXtowu+wrpjibkaZahqOtyX3pW3eVJ1480UIqhtaQg5941kfEjXr0aPbB6SObYblHfZ3X0JNypNlpNzTjsTPYw+kfw9rgpRfDXZ1JOQ80PIjgdgONdgY/0EYZxMawxB1fkv+wMK9P+wKGMIIq5g0MZsAhDHpLhI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p7F306IK; arc=none smtp.client-ip=217.70.183.200; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; arc=pass smtp.client-ip=160.75.25.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+	s=arc-20240116; t=1741113139; c=relaxed/simple;
+	bh=xYs8oQZuRfB0zoSFhmCjBgJ5r8qarpmQYj5NC33B8P8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=MWuQP/XQwHdfb7D5T8LS790cYqv71nF/SwWfbgitYsM1P/7T6Cz8MWc3Et6VMWXyqDZwz19tY8JUPdHa8ThPuY72X8wPps8F44vPLpDnoGVM5JMOjG4WzAsfm25wKUBXqcopxYgv02AzbsxZH9Oz/pP43IIXSf5ai+Qy1WbGvGQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW; arc=none smtp.client-ip=209.85.221.54; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=kragniz.eu; arc=pass smtp.client-ip=160.75.25.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 938FA40CFB50
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 19:41:26 +0300 (+03)
+	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id A965D40CFBBE
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 21:32:15 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=gm1 header.b=p7F306IK
+	dkim=pass (1024-bit key, unprotected) header.d=kragniz.eu header.i=@kragniz.eu header.a=rsa-sha256 header.s=google header.b=XLaSwOOW
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6hH63lyGzG3w7
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 19:39:46 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6h711klrzG3SQ
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 19:32:45 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 9A82342738; Tue,  4 Mar 2025 19:39:40 +0300 (+03)
+	id 0F9F342726; Tue,  4 Mar 2025 19:32:28 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p7F306IK
-X-Envelope-From: <linux-kernel+bounces-541143-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW
+X-Envelope-From: <linux-kernel+bounces-541201-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p7F306IK
+	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW
 Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id E6306425F9
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:25:33 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id C47AC2DCE4
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:25:33 +0300 (+03)
+	by le2 (Postfix) with ESMTP id DB30B42A8D
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:56:25 +0300 (+03)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 22E052DCE3
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:56:24 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32B7A18934AB
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:25:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C0EF7A4094
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:53:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702321F1927;
-	Mon,  3 Mar 2025 08:23:09 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7DD1F0E40;
+	Mon,  3 Mar 2025 08:49:47 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9813E1F0E33;
-	Mon,  3 Mar 2025 08:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1E11F03CA
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 08:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990185; cv=none; b=nIJW1Y6jHoDqXkX5DUzMsALUA+9VBR7V3t+HeyYHkAf4GFni+7VQ5hGJuQ7FH/p8byzuoaom0CHiTpwFaTEDE9iwc+z0oSD8i9RBPqIzEbazsqjAb2dOt7Re5/GQ2uYgSSrzomJFnqjj77RO/3HkjkC98hlGLrMfZrdayX8KV6k=
+	t=1740991783; cv=none; b=C9LfG3/JlmzZEbFE35VLQfNZpAkjSd6t0+QVdVfia+VnyIUbm5o5m8L5LdstjGPaOSnUUZpXiEJkJD60lUQGB6ooTunKb6GlrExphYNyrrlr6TEzqDBHXwqYnGFuNnjJdspNMAgYdny81u80WM0p5Dd0FwNX1OJTFpF0B+vQcOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990185; c=relaxed/simple;
-	bh=DLb+kC1uvEhmBCVhzWxb76oHegZQEMeQ8pFfnrbUdkc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WaGp3S2uJpAIbu0sCSR3RVo+gfFgqC/cF2wlx6r/igkLkLce8e+uwKIV99+IId3GutVrUylHFUYPlPpfR708BYxe4PvT55qx0RS1gLwWiMlORNAvvblneY1y8nPpYFnHpTUiwF3r7CkeP2Ba6qdpBymKoMWd2dA44s8LXXuO9hU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p7F306IK; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E666944368;
-	Mon,  3 Mar 2025 08:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740990182;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P0GUh+DQGnmEkb4YfirW4vH0ak6X+T55tKrGKJHVFhQ=;
-	b=p7F306IKxrvwW8Bti9UfXJTq7uJ1tWZT1v1bIEscxrCA/66NlD0qf8CI5gWffr0tAJwEf8
-	vi3NPAdkSX/OGMhbUuF9+vb+fF73bLUhPAQKshjOztzsVKybV/ahou3G7eq6ucFIBdUmZb
-	wxYD97Tv+wYVlfCGa30aDEFZpniAzEywINYfR56TniGaHIC2e16/5OcjamKnPk9Tzfq1VI
-	ji2PWYrr5P3zrVJwPaTqwAl2tM0rD2aMcyx22ziSDzUzNLrMooSNVxzJnZYihs5h3The5y
-	70VSGaoV2jH6ej+UTzCEwA06UhochvkoUjpfZZmT0SuB/NeiWMmnM4adKp6/Ug==
-From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Mon, 03 Mar 2025 09:22:56 +0100
-Subject: [PATCH bpf-next v2 08/10] selftests/bpf: test_tunnel: Move
- ip6geneve tunnel test to test_progs
+	s=arc-20240116; t=1740991783; c=relaxed/simple;
+	bh=xYs8oQZuRfB0zoSFhmCjBgJ5r8qarpmQYj5NC33B8P8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=kUlHvvgh60T0WYsxdDmPlNbAZE2gijNg/eX7klajYGwOUX/FYwyDOOFTDVXcB4wu/nWzeGs23l7467V9CYdkHax0hVpanXkSe5ryVpRIv/Bz50sSVYLkt2ZDoxdllnDcfSn6+mMPYxo8Cej87q2iW7F7tcBRxZoLf0qhLXPRN4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=kragniz.eu; dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=XLaSwOOW; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kragniz.eu
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-390dd35c78dso2695052f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 00:49:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kragniz.eu; s=google; t=1740991779; x=1741596579; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JWOcI3LfOtoqMvDoa0uHK2j1WwNZ7lsxEpbnE3uhycI=;
+        b=XLaSwOOWP/FEWlLmfbmsqOV5jRPowbPiJ3EZl/edCkGg+eAbE5exqIl5Vuv+qSjlaz
+         Cb/Xjo8cY1THudUUaGCaqntLyqXWCtFPI34GlUAy+TB3eeMQZevxpX1lljrppNYyOEFz
+         3qRnDOdYkHGM/1ifzmNak09HszzDjgU87sHVM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740991779; x=1741596579;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JWOcI3LfOtoqMvDoa0uHK2j1WwNZ7lsxEpbnE3uhycI=;
+        b=bYkezG0T2xQtU2R2TlFsCWIndVlgPbdd2VBSMq6+0oDwuwhvpAJ7/qHBHRbmjxxmbU
+         ssO/wxKV8G26eF23SWza9JTMNCSZmwCuTG0Uxd8uw1/kaFEUkFaikKSbE5qZx8kPvB/Y
+         ZuqPC6iUN5suJYtKAKdhiYkGe9iDQkHwYqjrlvtmQDOtp74ZKAcuL3FT4VadEy5JV1VW
+         tLc/qfg1MfM0MD34x1/tdeH4/2QoIHgKlzKbuQ9g+UfXn1XRCl9za36h1K11zJqsGYdy
+         WL+xkPZ2ejBixjgpB5FpKlIoFcgomSDLr0JR+4bp0corQcAMs1DFrih7rfzMPPkv5/lq
+         LOKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWXBoBG9c1VkAOiOU3oUaI628Kdbbpcc1eu3OvRvIi8E4+trjjlVVmCFWMVW8zTB99gBmyTdvhKu9MrWk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMqAKT0VFu+vU0+yiQzQkRu7ST+D2uhOydi2C+GfFk2QZcWcNW
+	vdYznMcRL+6cyDPWIAiFad4TfEl0ZB4d8XPHxWT0n6dDcw53sLrWBjmsV8dJWDU=
+X-Gm-Gg: ASbGncuCYug7ErAKdNWoEwNy71+pmFHWrwGF/0Ok5u37PQDHhbK/DZ0V2rtQLWXdUXX
+	WT2w1h3xXsAONbCd8axk5aHxtuer+kSTSHmHMx9YffQSF67oZM8EHMv9RX7FVoLoXA44FFsmjri
+	uKLsWoegG2WLBfq/EeQu2g7cul8tdZ4+zhmvTsquJKseAjgPdICFnZctEtXMqeJoCbvHOWrnpV1
+	92FoYwtfvsKnf/U+IDEUh0OhnWMd3WFKFAQkz0CEypAx+V0Bjacj5H/N7OotyWYTM+rOJIIHV94
+	CsQwf9qd8TgncBQ29J8qO5kmu/TBFGSp0bEfEI/PAPx2CzdYWDwbNazMihCtwzih1A==
+X-Google-Smtp-Source: AGHT+IHVLjZBMOHPs+saOKuJEuqmctdpDU92+SVxz5HFg3qV39sxng1lBC4zbTnM/QwHjaV0RHgfIQ==
+X-Received: by 2002:a5d:5f96:0:b0:38d:afc8:954e with SMTP id ffacd0b85a97d-390e168d26amr12668179f8f.11.1740991778861;
+        Mon, 03 Mar 2025 00:49:38 -0800 (PST)
+Received: from localhost (161.26.169.217.in-addr.arpa. [217.169.26.161])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba5710c2sm178368295e9.32.2025.03.03.00.49.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Mar 2025 00:49:38 -0800 (PST)
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250303-tunnels-v2-8-8329f38f0678@bootlin.com>
-References: <20250303-tunnels-v2-0-8329f38f0678@bootlin.com>
-In-Reply-To: <20250303-tunnels-v2-0-8329f38f0678@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Alexis Lothore <alexis.lothore@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelkeeifecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpedfuegrshhtihgvnhcuvehurhhuthgthhgvthculdgvuefrhfcuhfhouhhnuggrthhiohhnmddfuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeefudfhuedttdeiffetffeljeffkeevveeiuddtgeejleeftdejgedtjedttdfhnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgepjeenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvtddprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiekjeesghhmr
- ghilhdrtghomhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: bastien.curutchet@bootlin.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 03 Mar 2025 08:49:37 +0000
+Message-Id: <D86I2TBQIPLZ.TCUUJWWM5DMO@kragniz.eu>
+From: "Louis Taylor" <louis@kragniz.eu>
+To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Willy Tarreau" <w@1wt.eu>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] tools/nolibc: add support for openat(2)
+X-Mailer: aerc 0.18.1
+References: <20250302202528.4169024-1-louis@kragniz.eu>
+ <d0ed3b0d-4b7d-40cb-bbce-1f2a6605db7f@t-8ch.de>
+In-Reply-To: <d0ed3b0d-4b7d-40cb-bbce-1f2a6605db7f@t-8ch.de>
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6hH63lyGzG3w7
+X-ITU-Libra-ESVA-ID: 4Z6h711klrzG3SQ
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741711198.8988@qYq9rJzJ+Cy4Xo9rhBU7Rw
+X-ITU-Libra-ESVA-Watermark: 1741717846.30743@l7It5n5CbofUuocEfG7rmw
 X-ITU-MailScanner-SpamCheck: not spam
 
-ip6geneve tunnels are tested in the test_tunnel.sh but not in the
-test_progs framework.
+On Sun Mar 2, 2025 at 10:24 PM GMT, Thomas Wei=C3=9Fschuh wrote:
+> Hi Louis,
+>
+> On 2025-03-02 20:25:23+0000, Louis Taylor wrote:
+> > openat is useful to avoid needing to construct relative paths, so expos=
+e
+> > a wrapper for using it directly.
+>
+> Can you say what you are using nolibc for? I'm curious :-)
 
-Add a new test in test_progs to test ip6geneve tunnels. It uses the same
-network topology and the same BPF programs than the script.
-Remove test_ip6geneve() from the script.
+An incredibly dumb side project which involves creating a very small
+static binary. So far I've also needed a few other functions (for
+example clock_gettime) which I've just added local wrappers for, since
+I'm not sure if they're in scope for nolibc. If they are, I can also
+send patches for those as well.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
----
- .../testing/selftests/bpf/prog_tests/test_tunnel.c | 48 +++++++++++++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh         | 49 ----------------------
- 2 files changed, 48 insertions(+), 49 deletions(-)
+> > Signed-off-by: Louis Taylor <louis@kragniz.eu>
+> > ---
+> >  tools/include/nolibc/sys.h                   | 29 ++++++++++++++++++++
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 22 +++++++++++++++
+> >  2 files changed, 51 insertions(+)
+> >=20
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 8f44c33b1213..e5ff34df4aee 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -765,6 +765,35 @@ int mount(const char *src, const char *tgt,
+> >  	return __sysret(sys_mount(src, tgt, fst, flags, data));
+> >  }
+> > =20
+> > +/*
+> > + * int openat(int dirfd, const char *path, int flags[, mode_t mode]);
+> > + */
+> > +
+> > +static __attribute__((unused))
+> > +int sys_openat(int dirfd, const char *path, int flags, mode_t mode)
+> > +{
+> > +#ifdef __NR_openat
+> > +	return my_syscall4(__NR_openat, dirfd, path, flags, mode);
+> > +#else
+> > +	return __nolibc_enosys(__func__, dirfd, path, flags, mode);
+> > +#endif
+>
+> All architectures support openat(), so the #else could be dropped.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-index 2210a1d768362634b5baa729121c460f99244756..b5d48d4fd423a4eb1dc541e2c242943a5f3110aa 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-@@ -115,6 +115,9 @@
- #define GENEVE_TUNL_DEV0 "geneve00"
- #define GENEVE_TUNL_DEV1 "geneve11"
- 
-+#define IP6GENEVE_TUNL_DEV0 "ip6geneve00"
-+#define IP6GENEVE_TUNL_DEV1 "ip6geneve11"
-+
- #define PING_ARGS "-i 0.01 -c 3 -w 10 -q"
- 
- static int config_device(void)
-@@ -462,6 +465,22 @@ static int add_geneve_tunnel(const char *dev0, const char *dev1,
- 	return -1;
- }
- 
-+static int add_ip6geneve_tunnel(const char *dev0, const char *dev1,
-+			     const char *type, const char *opt)
-+{
-+	if (!type || !opt || !dev0 || !dev1)
-+		return -1;
-+
-+	SYS(fail, "ip -n at_ns0 link add dev %s type %s id 22 %s remote %s",
-+	    dev0, type, opt, IP6_ADDR1_VETH1);
-+
-+	SYS(fail, "ip link add dev %s type %s %s external", dev1, type, opt);
-+
-+	return set_ipv6_addr(dev0, dev1);
-+fail:
-+	return -1;
-+}
-+
- static int test_ping(int family, const char *addr)
- {
- 	SYS(fail, "%s %s %s > /dev/null", ping_command(family), PING_ARGS, addr);
-@@ -999,6 +1018,34 @@ static void test_geneve_tunnel(void)
- 	delete_tunnel(GENEVE_TUNL_DEV0, GENEVE_TUNL_DEV1);
- 	test_tunnel_kern__destroy(skel);
- }
-+
-+static void test_ip6geneve_tunnel(void)
-+{
-+	struct test_tunnel_kern *skel;
-+	int set_fd, get_fd;
-+	int err;
-+
-+	skel = test_tunnel_kern__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_tunnel_kern__open_and_load"))
-+		return;
-+
-+	err = add_ip6geneve_tunnel(IP6GENEVE_TUNL_DEV0, IP6GENEVE_TUNL_DEV1,
-+				   "geneve", "");
-+	if (!ASSERT_OK(err, "add tunnel"))
-+		goto done;
-+
-+	set_fd = bpf_program__fd(skel->progs.ip6geneve_set_tunnel);
-+	get_fd = bpf_program__fd(skel->progs.ip6geneve_get_tunnel);
-+	if (generic_attach(IP6GENEVE_TUNL_DEV1, get_fd, set_fd))
-+		goto done;
-+
-+	ping_dev0();
-+	ping_dev1();
-+done:
-+	delete_tunnel(IP6GENEVE_TUNL_DEV0, IP6GENEVE_TUNL_DEV1);
-+	test_tunnel_kern__destroy(skel);
-+}
-+
- #define RUN_TEST(name, ...)						\
- 	({								\
- 		if (test__start_subtest(#name)) {			\
-@@ -1027,6 +1074,7 @@ static void *test_tunnel_run_tests(void *arg)
- 	RUN_TEST(ip6erspan_tunnel, V1);
- 	RUN_TEST(ip6erspan_tunnel, V2);
- 	RUN_TEST(geneve_tunnel);
-+	RUN_TEST(ip6geneve_tunnel);
- 
- 	return NULL;
- }
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 7f2b1c846a72f07f578afbc9b4bb9882cabc838b..f46628f70399e2a049859709e9db9e8419e74770 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -64,26 +64,6 @@ config_device()
- 	ip addr add dev veth1 172.16.1.200/24
- }
- 
--add_ip6geneve_tunnel()
--{
--	ip netns exec at_ns0 ip addr add ::11/96 dev veth0
--	ip netns exec at_ns0 ip link set dev veth0 up
--	ip addr add dev veth1 ::22/96
--	ip link set dev veth1 up
--
--	# at_ns0 namespace
--	ip netns exec at_ns0 \
--		ip link add dev $DEV_NS type $TYPE id 22 \
--		remote ::22     # geneve has no local option
--	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
--	ip netns exec at_ns0 ip link set dev $DEV_NS up
--
--	# root namespace
--	ip link add dev $DEV type $TYPE external
--	ip addr add dev $DEV 10.1.1.200/24
--	ip link set dev $DEV up
--}
--
- add_ipip_tunnel()
- {
- 	# at_ns0 namespace
-@@ -121,30 +101,6 @@ add_ip6tnl_tunnel()
- 	ip link set dev $DEV up
- }
- 
--test_ip6geneve()
--{
--	TYPE=geneve
--	DEV_NS=ip6geneve00
--	DEV=ip6geneve11
--	ret=0
--
--	check $TYPE
--	config_device
--	add_ip6geneve_tunnel
--	attach_bpf $DEV ip6geneve_set_tunnel ip6geneve_get_tunnel
--	ping $PING_ARG 10.1.1.100
--	check_err $?
--	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
--	check_err $?
--	cleanup
--
--	if [ $ret -ne 0 ]; then
--                echo -e ${RED}"FAIL: ip6$TYPE"${NC}
--                return 1
--        fi
--        echo -e ${GREEN}"PASS: ip6$TYPE"${NC}
--}
--
- test_ipip()
- {
- 	TYPE=ipip
-@@ -247,7 +203,6 @@ cleanup()
- 	ip link del ipip11 2> /dev/null
- 	ip link del ipip6tnl11 2> /dev/null
- 	ip link del ip6ip6tnl11 2> /dev/null
--	ip link del ip6geneve11 2> /dev/null
- }
- 
- cleanup_exit()
-@@ -283,10 +238,6 @@ bpf_tunnel_test()
- {
- 	local errors=0
- 
--	echo "Testing IP6GENEVE tunnel..."
--	test_ip6geneve
--	errors=$(( $errors + $? ))
--
- 	echo "Testing IPIP tunnel..."
- 	test_ipip
- 	errors=$(( $errors + $? ))
+I agree, but I followed the existing implementation for sys_open which
+only uses openat if it is defined. If openat can be assumed to always
+exist, that other #ifdef should be dropped (which I can do in another
+patch).
 
--- 
-2.48.1
+> > +}
+> > +
+> > +static __attribute__((unused))
+> > +int openat(int dirfd, const char *path, int flags, ...)
+> > +{
+> > +	mode_t mode =3D 0;
+> > +
+> > +	if (flags & O_CREAT) {
+> > +		va_list args;
+> > +
+> > +		va_start(args, flags);
+> > +		mode =3D va_arg(args, int);
+>
+> mode_t instead of int?
+
+This implementation is yoinked directly from open() below. I have no
+opinions, but if it should be changed it should be changed in both
+functions.
+
+> > +		va_end(args);
+> > +	}
+> > +
+> > +	return __sysret(sys_openat(dirfd, path, flags, mode));
+> > +}
+> > =20
+> >  /*
+> >   * int open(const char *path, int flags[, mode_t mode]);
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testi=
+ng/selftests/nolibc/nolibc-test.c
+> > index 79c3e6a845f3..97ded6c76f99 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -1028,6 +1028,26 @@ int test_rlimit(void)
+> >  	return 0;
+> >  }
+> > =20
+> > +int test_openat(void)
+>
+> static.
+
+I'll change this. Should the other test_ functions in this file also be
+static?
+
+> > +{
+> > +	int dev;
+> > +	int null;
+> > +
+> > +	dev =3D openat(AT_FDCWD, "/dev", O_DIRECTORY);
+> > +	if (dev < 0)
+> > +		return -1;
+> > +
+> > +	null =3D openat(dev, "null", 0);
+> > +	if (null < 0) {
+> > +		close(dev);
+> > +		return -1;
+> > +	}
+> > +
+> > +	close(dev);
+> > +	close(null);
+> > +
+> > +	return 0;
+> > +}
+> > =20
+> >  /* Run syscall tests between IDs <min> and <max>.
+> >   * Return 0 on success, non-zero on failure.
+> > @@ -1116,6 +1136,8 @@ int run_syscall(int min, int max)
+> >  		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); b=
+reak;
+> >  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp =3D open("/dev/nul=
+l", 0), -1); if (tmp !=3D -1) close(tmp); break;
+> >  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp =3D open("/proc/se=
+lf/blah", 0), -1, ENOENT); if (tmp !=3D -1) close(tmp); break;
+> > +		CASE_TEST(openat_fdcwd);      EXPECT_SYSNE(1, tmp =3D openat(AT_FDCW=
+D, "/dev/null", 0), -1); if (tmp !=3D -1) close(tmp); break;
+>
+> AT_FDCWD is already used in test_openat(). What additional value does
+> the test above add?
+
+None, I just wrote that one first before thinking about how I'd test
+opening something relative to an fd. I'll drop it.
+
+>
+> > +		CASE_TEST(openat_dir);        EXPECT_SYSNE(1, test_openat(), -1); br=
+eak;
+> >  		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
+> >  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); bre=
+ak;
+> >  		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds =
+=3D { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
+> > --=20
+> > 2.45.2
+> >=20
 
 
 
