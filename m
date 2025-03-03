@@ -1,248 +1,112 @@
-Return-Path: <linux-kselftest+bounces-28019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F9F5A4BACB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 10:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C969A4BB21
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 10:48:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 774BA170AFF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 09:29:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB3A61633FE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 09:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1BB1F1501;
-	Mon,  3 Mar 2025 09:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002F71F151A;
+	Mon,  3 Mar 2025 09:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="suFG/FlY";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B8FprFIt";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="suFG/FlY";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B8FprFIt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RgiLBA6V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0681F0E52
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 09:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A47E1F1300
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 09:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740994180; cv=none; b=T/GxEE1TwRcCQJqV3OkXvkAefW4TTupIyg7VTTneErWM9Nk+GcL7aHH6AQRBSuM5BLnCxBEcyNNK/HbW0LV8bOlKvFH2n6hK0uud0aPE6FeZDHqzMtKjs2p5g0o/SBMv38oKiR8atYATfQybJphGZcRCBlzLSiun6Ei0hABj7Wc=
+	t=1740995278; cv=none; b=rzP1JzivraEpx4eZdFMW/5f/H0ZhaxU/WnH0xbgoCHQT4L30F7f56Iyl6yeLgweTOyteWWTJcq+utwyDw0vKu6MkdobtCOaWiE0YXAlYlT7AClnKQlhjmaYcobhYNUlDf6KTmm7dSw8u9GrM/OtvGmg0rgkqN4AcOr5mbh+8BZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740994180; c=relaxed/simple;
-	bh=9Cbkt6zSkkx3XsqzbnzOWO/5wx0/MMZJ8cnKPDT1DwI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sz8f2bIxiOyBd9KqH3n9q/OQKHuUoDjBsVaBiSnAGM5nvEfbHLZE7kV6U04Uq1WlLitS8MIoFUwquqqCMSG7SbGGWRcgTdL9HerZ2uwfsJeTObUy/sUFiQPW1rOleVkvYpILJK6WwwF+DuBuYcBUQfHhDtRrI0CgkaOOCxoQzvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFIt; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=suFG/FlY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B8FprFIt; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9737A2116B;
-	Mon,  3 Mar 2025 09:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1740994175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
-	b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15
-	FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dm
-	Ip7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1740994175;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
-	b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UO
-	M9L7EPWLwk0fyoDg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="suFG/FlY";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=B8FprFIt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1740994175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
-	b=suFG/FlYmMKcbVomcogtNbITCCy7ix5NnqSD8V5LAedrCCBP3DdQx3zv7/xkvsVYY6jb15
-	FdmtwEdXsAfuIHBitriasDfW6qpNs1WV9ryqfIlojgg3tqme5wsyvAZUlvx6JP/xG4F8dm
-	Ip7SNiKvp3zfo+eOgpcrOV2hvOsGpTU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1740994175;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=k20e0qHL6dXusoDcwpaKQhA8JbIFxFlDyPMo74Hll8Y=;
-	b=B8FprFItVpmkhESKHSrsJp0b4ojWcAjtS0PIkiIuktfOgQyT3sWPlR9cur7f30G2Tfl9UO
-	M9L7EPWLwk0fyoDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 43C9613A61;
-	Mon,  3 Mar 2025 09:29:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ML9YD392xWc1BQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 03 Mar 2025 09:29:35 +0000
-Message-ID: <12b82997-0129-4fef-afc0-e925e542be88@suse.cz>
-Date: Mon, 3 Mar 2025 10:29:34 +0100
+	s=arc-20240116; t=1740995278; c=relaxed/simple;
+	bh=oGUOj05rbDaMdTXzu4kbEqsK4Jpmf3wR1xuqACOFY5A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2IiTuhSSEPP9XmjFo8uXinlCP5WDhy+OB1R8AARWijRQjv9bKUx3Rt3t7pBA9k9GOmbYnD0pQQXHdQ4NmCj36FGXj6S3u2fV5skxEI2tZpqsfR/0QAvtEioJXmHJ6mbepVCwVMkBntGM25falItz6ue1gawQRiwDuDX31EuI0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RgiLBA6V; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-438d9c391fcso77445e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Mar 2025 01:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740995275; x=1741600075; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oGUOj05rbDaMdTXzu4kbEqsK4Jpmf3wR1xuqACOFY5A=;
+        b=RgiLBA6VqA1r/rTZL53gs0kfR6RUEaqQDh9RaY1qKZjeOunf26kirb6BD0I2qGWOFU
+         yaxxzXs5YwFnooGBfWq3+wbFk/wCAG4el8F39wUkIcIj7DhW5WmYrAo8mop/6TZVYrc2
+         LXjF1vCgECoOPUJdR4TrNL73Ky2id1q1c7ysIkbfCuzPz89nJhES7XjqWjmd3zvh8o6H
+         HnoVQGzesXYQAfqbv5NHe7zIZf/fJD/8pJp8yZ4nobqxdE5xw4q8Ew+mEDouXGwzuBQH
+         mYhLOJo35AfRH5y28lGBrtIxjk4rKRsFchMwl7eF8CD9EYUQ0OCoC94E3OWEroYFOvhc
+         IzAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740995275; x=1741600075;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oGUOj05rbDaMdTXzu4kbEqsK4Jpmf3wR1xuqACOFY5A=;
+        b=i37m2OkTfslOcBud0u3v+/IIbPEytSFMAnsnBFcCVzf5So7rT7BguF2HX+K4iVOfwv
+         yL3D/o2EXfOs8sC/t5QomEpEpCZQN54PY4AKYLlWjDv+fxdiCaJcoJ5X5CepAg54RV8N
+         b+lnATCjpRMtuEES5t8W4TPI3557qTq/w+D7s+nkNXay3WxEyuJgJuAHSdy5bnrxLoL5
+         W3LmgszQ6hk9N3LHDyBlckrjbqUOS+FlSjtBVfjSKzhBOJdEt/rrZUbeY6XXmUsIYgtj
+         XbSoj03ybHk6NWpn/c47PsrjghPk/cdjQ9EQRLq/Ec5tBMHBgKOqHWBN4uRMg1j4ew93
+         mP7A==
+X-Forwarded-Encrypted: i=1; AJvYcCWS7l6ClCxQ1tVRDI2T7eq/ethnMTrbLm4cZ4QV4hzceT68ik5Xo+sXRBNAz5YAYNWvbbSB2xOAVR0lzW083Xo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG6w6RerPwLP5IV3L/KquYWWux9XfGAPVsy/Q9aKVYxACi7TmU
+	RffzzUK6lyNOO2cGwseB+Gfn2nBbfbZG6KOEOhc2BSlfSH9j7q3YXgwv+Gc4Pw==
+X-Gm-Gg: ASbGnctWxaJV8rCJelzkOk2xfZAFkrsrMd0SplqUiq22TI8yjcYOQJndpUnyjE3osFh
+	aTThWhCmnpL3HdPtxCPTPZLnSyRVtqkFWEB2lzG9BaC4goXbr8Vs1v+Vdh58vyjdDo0CeslPFqR
+	jRPPmXa4laXTWRc758ydbAdGEOrMtQ3/bMqrTUrW3LnRIFa5fzwnm68zo5hK7EH52PBe68x/GPc
+	MWQbNNk865aHTWc43nox/Db3R7v2BWyZdatDcqE/cBSk9ECZAm9P1CNX0vUtlaYqEk2lPLPMyZl
+	kevo4qyyu39p9T9dO7hleZosnPtf7TB8G7FacJPVNanOHBWxhz8x/N7UVlsZlVlWC69qT7ziNfq
+	Cc+qm
+X-Google-Smtp-Source: AGHT+IGuRRTpZx51thwL2b5hSvmhDVaJN8ebU23ciUC+XksIIzRnxpwUI7JqUrlrpyq52tUWkeY7xg==
+X-Received: by 2002:a05:600c:3c90:b0:439:9434:1b66 with SMTP id 5b1f17b1804b1-43baff09304mr2232035e9.1.1740995275531;
+        Mon, 03 Mar 2025 01:47:55 -0800 (PST)
+Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e4844a16sm13935378f8f.79.2025.03.03.01.47.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 01:47:54 -0800 (PST)
+Date: Mon, 3 Mar 2025 09:47:49 +0000
+From: Brendan Jackman <jackmanb@google.com>
+To: Dev Jain <dev.jain@arm.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/10] selftests/mm/uffd: Rename nr_cpus -> nr_threads
+Message-ID: <Z8V6xYvqqkPxULgN@google.com>
+References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
+ <20250228-mm-selftests-v3-4-958e3b6f0203@google.com>
+ <b5b1e43d-0298-4772-ba0d-acec63a05149@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/12] mm: introduce AS_NO_DIRECT_MAP
-Content-Language: en-US
-To: David Hildenbrand <david@redhat.com>, Patrick Roy <roypat@amazon.co.uk>,
- rppt@kernel.org, seanjc@google.com
-Cc: pbonzini@redhat.com, corbet@lwn.net, willy@infradead.org,
- akpm@linux-foundation.org, song@kernel.org, jolsa@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com,
- jannh@google.com, shuah@kernel.org, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, tabba@google.com, jgowans@amazon.com,
- graf@amazon.com, kalyazin@amazon.com, xmarcalx@amazon.com,
- derekmn@amazon.com, jthoughton@google.com
-References: <20250221160728.1584559-1-roypat@amazon.co.uk>
- <20250221160728.1584559-2-roypat@amazon.co.uk>
- <3dc4bb80-0beb-4bbb-bfd8-47fc096f70e9@redhat.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <3dc4bb80-0beb-4bbb-bfd8-47fc096f70e9@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9737A2116B
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_TWELVE(0.00)[38];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[redhat.com,lwn.net,infradead.org,linux-foundation.org,kernel.org,iogearbox.net,linux.dev,gmail.com,fomichev.me,google.com,oracle.com,vger.kernel.org,kvack.org,amazon.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLo3k5aap4ysuunujcz1d3qjj5)];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b5b1e43d-0298-4772-ba0d-acec63a05149@arm.com>
 
-On 2/25/25 17:52, David Hildenbrand wrote:
-> On 21.02.25 17:07, Patrick Roy wrote:
->> Add AS_NO_DIRECT_MAP for mappings where direct map entries of folios are
->> set to not present . Currently, mappings that match this description are
->> secretmem mappings (memfd_secret()). Later, some guest_memfd
->> configurations will also fall into this category.
->> 
->> Reject this new type of mappings in all locations that currently reject
->> secretmem mappings, on the assumption that if secretmem mappings are
->> rejected somewhere, it is precisely because of an inability to deal with
->> folios without direct map entries.
->> 
->> Use a new flag instead of overloading AS_INACCESSIBLE (which is already
->> set by guest_memfd) because not all guest_memfd mappings will end up
->> being direct map removed (e.g. in pKVM setups, parts of guest_memfd that
->> can be mapped to userspace should also be GUP-able, and generally not
->> have restrictions on who can access it).
->> 
->> Signed-off-by: Patrick Roy <roypat@amazon.co.uk>
->> ---
-> 
-> ...
-> 
->>   static inline gfp_t mapping_gfp_mask(struct address_space * mapping)
->>   {
->>   	return mapping->gfp_mask;
->> diff --git a/lib/buildid.c b/lib/buildid.c
->> index c4b0f376fb34..80b5d805067f 100644
->> --- a/lib/buildid.c
->> +++ b/lib/buildid.c
->> @@ -65,8 +65,8 @@ static int freader_get_folio(struct freader *r, loff_t file_off)
->>   
->>   	freader_put_folio(r);
->>   
->> -	/* reject secretmem folios created with memfd_secret() */
->> -	if (secretmem_mapping(r->file->f_mapping))
->> +	/* reject secretmem folios created with memfd_secret() or guest_memfd() */
->> +	if (secretmem_mapping(r->file->f_mapping) || mapping_no_direct_map(r->file->f_mapping))
->>   		return -EFAULT;
-> 
-> Maybe I'm missing it, but why do we have to special-case secretmem with 
-> that at all anymore?
-> 
-> Couldn't we just let secretmem set AS_NO_DIRECT_MAP as well, and convert 
-> all/most secretmem specific stuff to check AS_NO_DIRECT_MAP as well?
+On Fri, Feb 28, 2025 at 11:06:35PM +0530, Dev Jain wrote:
+> Taking a cursory look at the test, it creates three threads for each cpu.
+> The bounding of the variable is fine but that being the reason to rename the
+> variable is not making sense to me.
 
-That's done in patch 02. But yeah, squashing them together would reduce some
-churn. I guess because it removes some !IS_ENABLED(CONFIG_SECRETMEM)
-optimizations, a separate change for review was preferred.
+Hmm yeah the name needs to be more abstract. Do you think nr_workers
+would be confusing? Or even just "parallelism" or nr_parallel? Or any
+other ideas?
 
+FWIW I briefly looked at just cleaning this up to remove the global
+variable but that's a bigger time investment than I can afford here I
+think. (The local variable in stress() would still need a better name
+anyway).
 
+Thanks for the review BTW!
 
