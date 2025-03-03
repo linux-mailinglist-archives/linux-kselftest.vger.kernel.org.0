@@ -1,271 +1,250 @@
-Return-Path: <linux-kselftest+bounces-28064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28066-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01528A4C43B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 16:07:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CC41A4C447
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 16:08:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3D553A9A1A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 15:06:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB13C18966AC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 15:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69873214229;
-	Mon,  3 Mar 2025 15:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6A7214231;
+	Mon,  3 Mar 2025 15:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ca0hTlA2";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="py9MEdPH"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="mm2Hi89V";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SNuczT8P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3A7214227;
-	Mon,  3 Mar 2025 15:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741014397; cv=fail; b=PXdt+yXP3V6PZ/HzHsOgYS3YYZ2PIZTqPj/z20qeLkrJVYbXus03lJ8j04de0RrZyf9Sr5muV9YtYKJ/ZhaIRyT+sfBoYmOe88YoHv/RysjAoeDHMsguc0zjP/8xadYa2yXX/uIA1LI+Ji184HphDu/zUVncTUhjm6yIT15DFl8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741014397; c=relaxed/simple;
-	bh=RKWW8+/1gpTCM240U3oQuQ5MMXn+fi/dez9sP1l+Y2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=n8BL+QX8Z048nqyjzlmyKSuLDUgsN35uP6t86XmxA+x4Zaq19SKXL8G5UfsyXCI96Q8CRgrUDLFhSGc9zS6ds9jfVzDwtiez/p1ati70pSBIqHPTtBgSXsbPoLVkwpLz9tm3EXfrWo5sGMD9hAs1n04IRTWjwuImnkm+sBpxmkE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ca0hTlA2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=py9MEdPH; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5237uDMK008103;
-	Mon, 3 Mar 2025 15:05:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=D+aoD8jmeMobV+lEmb
-	h32JZPs9zy0DOa4vdEWAVYqmw=; b=ca0hTlA2PbNGcDgi3bZB1sFOwS3mvggK6k
-	F+rYHBcbUHCmz0r/nDbGmHf9Rm/b0yHPuIpbAOX1TwM8mfdBgIou7WmEuRT3Kiiq
-	mi73I7AOAWSV51La66N9jTKfswVU/zBrRmhkEI1qwwQpCJun0/uZ8Kpm7HILVK0b
-	duvI5l0bRbnzbfurq+zG6G+FhGz9eiltbFcA0BD4GZ65lwLHEqYM8dZc5cFXy7qn
-	7xVK5TTHs7V1xBHyppwIfidFdR8hFq0shelJ2yn5On5N0bPxc/SVVsWQhHnT81/b
-	8zQ/6EaqxpBg85U7ZfgSC4DTOcYAoyensrJLWK/tGLFjSUSph6NQ==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 453ub72uws-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 03 Mar 2025 15:05:37 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 523E0SIk015768;
-	Mon, 3 Mar 2025 15:05:36 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 453rp8uafy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 03 Mar 2025 15:05:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MV2pgdM6m+UiEAAv4svpUQ84NyoTKH+1n3rvtaZX6pAXvnUbEqpncw/5CtPyKWvIXgzGjEdEvzBU1VZ46gsjZHUa3Zjz5QkIRAOi2inAW4kWaxsLfY6YSq49QSd6KtN2ZeORcY38OVTOo4sFx2ytMfs2rxWPJcErWDD3V23oejqQMbbW/elD5oHsYc12wIQcACN7lYjjvRfS4rWicsVGd0m75PJYKkWOvhZMO3SgZQGLHnan4UvExiNAQu0HYnD0na4kLdk6y0KkW+NFoOpOGiaAb8nETkPGaCNU0wUq/ApAk5Wja2GdID/gn7kqQbJ7dLImBFxS+lLS35xrheOMzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D+aoD8jmeMobV+lEmbh32JZPs9zy0DOa4vdEWAVYqmw=;
- b=JTMe6TwdSLoxXfgzmiNmaDGssRffk/bV2IyuRpmEYr9G4eZkl9+wlTgzP46Lwsi/Hy6IvkLbctgdljd3RjlOcICkSoDJ+cki14F8OxiwSlBqDrpyum7XrnLNuorQzu+JJRbN63t09xXa5JnerUR95szPQKsB3aXLSpcvCJlwsUComafhWcqmnybczzyanvtuZ9hYomfpxqOvmLEldvdbY0/gm48LhZk7vUeH2eX4PFqu0ajpWhNRJoNShN8bXCmC4ydgBHYnNoHn6H10i4YmuYrrxXKITZg1svE7xN+X6dITnlES9BupgwSvzK6RFvJa5Lk/PrIZ+PIxGSx202G+1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D+aoD8jmeMobV+lEmbh32JZPs9zy0DOa4vdEWAVYqmw=;
- b=py9MEdPHtYszPJhr8x+HiAUlq4h7gRgQG5BiCbSUGR03AXa0XZoaTWkPux60XdqY9c8DXOQefAp5G0N3K35MTiu36rLRb9LhjVPR60plLYv68yS+FeCJkJYOnqhg3bWQs4HE6LhXshQwZMGLq4TAmDRqO0kjdVXSEsREsBWFipY=
-Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
- by SJ1PR10MB5931.namprd10.prod.outlook.com (2603:10b6:a03:48a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.28; Mon, 3 Mar
- 2025 15:05:32 +0000
-Received: from PH0PR10MB5777.namprd10.prod.outlook.com
- ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
- ([fe80::75a8:21cc:f343:f68c%4]) with mapi id 15.20.8489.025; Mon, 3 Mar 2025
- 15:05:32 +0000
-Date: Mon, 3 Mar 2025 10:05:26 -0500
-From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To: jeffxu@chromium.org
-Cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
-        torvalds@linux-foundation.org, vbabka@suse.cz,
-        lorenzo.stoakes@oracle.com, adhemerval.zanella@linaro.org,
-        oleg@redhat.com, avagin@gmail.com, benjamin@sipsolutions.net,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        jorgelo@chromium.org, sroettger@google.com, hch@lst.de,
-        ojeda@kernel.org, thomas.weissschuh@linutronix.de, adobriyan@gmail.com,
-        johannes@sipsolutions.net, pedro.falcato@gmail.com, hca@linux.ibm.com,
-        willy@infradead.org, anna-maria@linutronix.de, mark.rutland@arm.com,
-        linus.walleij@linaro.org, Jason@zx2c4.com, deller@gmx.de,
-        rdunlap@infradead.org, davem@davemloft.net, peterx@redhat.com,
-        f.fainelli@gmail.com, gerg@kernel.org, dave.hansen@linux.intel.com,
-        mingo@kernel.org, ardb@kernel.org, mhocko@suse.com,
-        42.hyeyoo@gmail.com, peterz@infradead.org, ardb@google.com,
-        enh@google.com, rientjes@google.com, groeck@chromium.org,
-        mpe@ellerman.id.au, aleksandr.mikhalitsyn@canonical.com,
-        mike.rapoport@gmail.com, Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v8 6/7] mseal sysmap: update mseal.rst
-Message-ID: <rsb7p65sv6e3tbhresv2ebj2aqiz57wedaz46ndp3jnd476qgn@yvedccpo57bu>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org, 
-	jannh@google.com, torvalds@linux-foundation.org, vbabka@suse.cz, 
-	lorenzo.stoakes@oracle.com, adhemerval.zanella@linaro.org, oleg@redhat.com, avagin@gmail.com, 
-	benjamin@sipsolutions.net, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, jorgelo@chromium.org, 
-	sroettger@google.com, hch@lst.de, ojeda@kernel.org, thomas.weissschuh@linutronix.de, 
-	adobriyan@gmail.com, johannes@sipsolutions.net, pedro.falcato@gmail.com, 
-	hca@linux.ibm.com, willy@infradead.org, anna-maria@linutronix.de, 
-	mark.rutland@arm.com, linus.walleij@linaro.org, Jason@zx2c4.com, deller@gmx.de, 
-	rdunlap@infradead.org, davem@davemloft.net, peterx@redhat.com, f.fainelli@gmail.com, 
-	gerg@kernel.org, dave.hansen@linux.intel.com, mingo@kernel.org, ardb@kernel.org, 
-	mhocko@suse.com, 42.hyeyoo@gmail.com, peterz@infradead.org, ardb@google.com, 
-	enh@google.com, rientjes@google.com, groeck@chromium.org, mpe@ellerman.id.au, 
-	aleksandr.mikhalitsyn@canonical.com, mike.rapoport@gmail.com, Kees Cook <kees@kernel.org>
-References: <20250303050921.3033083-1-jeffxu@google.com>
- <20250303050921.3033083-7-jeffxu@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250303050921.3033083-7-jeffxu@google.com>
-User-Agent: NeoMutt/20240425
-X-ClientProxiedBy: YT1PR01CA0078.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2d::17) To PH0PR10MB5777.namprd10.prod.outlook.com
- (2603:10b6:510:128::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECA02144D7;
+	Mon,  3 Mar 2025 15:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741014491; cv=none; b=DPYgg2tDdyDwPKiG5gbp916XjE9NIph5ikTL2Mte1OJuvjoruKN0W84aFse1paADu+FsbtNQpEB7UW6V2WrSwA5sirHdSbH26d3uQafoigvQqaUhEglzHB/L+ThGpWPjD9IPzZgxpiL3hF4hlAjVxHPbxbss1l3zeG9bZ3bPNhM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741014491; c=relaxed/simple;
+	bh=uY37hLsnqfunlnVgAETJ5yHs5LSi7CEAJHOGRdcxCs4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qzbG04L3kjv5PJnfl4lGe+o8ITxJ+NRzXhqrkLdWfEb0DDmVQ7EHsb+znJl5LRzRLcUQPaRkjeZnnplcq6cvNzi4oF31sMiJgiooTSp7kNCK9HiKgYpPQHwmGHogSx9K8HOG/errdU+seyiijsLHVp/4yAUTPiKn8Z4EsXf5Xeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=mm2Hi89V; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SNuczT8P; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 32A6F25401AC;
+	Mon,  3 Mar 2025 10:08:06 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Mon, 03 Mar 2025 10:08:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1741014486; x=
+	1741100886; bh=YIJosWGKOL8Klp9iSMuyg2RpazBkO4MxPj7H5SheFlc=; b=m
+	m2Hi89V2fT7r6Roi3/lc0vngNy9e37HyxmZGQTQoMt7KfpsHnRuTLtV+Uhg88OK/
+	cl34golA25zuxLXn+BjNYThdoMVCHWptElad2O+iBB65pPt0SqqgaumKQVt2dMSI
+	xchOIg/3EbEiIeqstj9xzxTivZ7Yoi9fMyrAIUY1MO05AnE2UJq9wCiFsAuQzdvV
+	6gAqzm5O0Ph1Il7FPTSa+fqlsZkkmU2vUGBUGzyJjMrgq8bQC8nKCIpNgv/5qHsx
+	MzYsobBCcKoo87G2J4R1Zu/qIGHksMx4o04mGVIMZMUfV4DVL/AxbwEo6Plf131L
+	oIl031dm2WJjQHi1A83fw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1741014486; x=1741100886; bh=YIJosWGKOL8Klp9iSMuyg2RpazBkO4MxPj7
+	H5SheFlc=; b=SNuczT8PKYv9M2K0NHaMxphWX+0rMGp24HVkZoOIY+ExmRy99CJ
+	SK5cUEdQWK9Rp1wuvK7L/ON9c65WG9FjIPNQ8I8s3XFaAWWSTEk7+Do6CuEJk4Qt
+	Yk+39mbyAhmjTKGI2YLr2PeCBw8J9GTJ3tZRctfGicba2VE3f6lB9LU9vERTHP7y
+	q73zauLNqLJ6IhCLZSOEsH0P3DiUG98CC0HNaqV1Lo8z7IV+L0uSq8/P/WPJyh2D
+	kbY/cApr++IzCPGKCSIik2RZgP19L7BwM7hD7tkTmDGVDKXUMHjiZeZIVJJa0ngs
+	fniAjxlEGdQPZXlraMQQnhphxb4ym8i0qaQ==
+X-ME-Sender: <xms:1cXFZ1NxRqoKHtFVWrx22zOHDXVyVLuoLStVC6ganB7d7kvC_MSlkg>
+    <xme:1cXFZ3_uSISOtyAnqk94HobRkUfaBcdxKxez35NX12AuIrBYGARQrvzHwU6hbuf5O
+    p4rzuw2B1yI0nQPJ2I>
+X-ME-Received: <xmr:1cXFZ0T-x8-3SZ_fGj1BxD_bqI-uiAGGcP_o1i9ilNiyqByelN7zd9-qJLEG>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelleeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
+    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
+    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefh
+    keegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgs
+    pghrtghpthhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtoh
+    hnihhosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgr
+    sggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhunhhtvg
+    hrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpth
+    htoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:1cXFZxvHK8rV59ErlSEq6rapSTX0EUkDxjEEIZqfUEAKsafSukAN3A>
+    <xmx:1cXFZ9fMrZzuzRlNtDJImglxEFzA3-OYs0Hme0PF-1d9nyy8ytHgkw>
+    <xmx:1cXFZ939I6VzwMqxSyoK-tqkzWmpWpSZ1bHN8n1Qt3E7EWPleXxO-g>
+    <xmx:1cXFZ582wcZlSXRvSiMHvmo4a1y7LJMSCUO4602hbKr4x8UcIkR-TQ>
+    <xmx:1sXFZ40Pw7Z-JjexMJaJZd2zpb8_9jTTBfT6lJ_AMh4kg1gsXhKzTZh1>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Mar 2025 10:08:04 -0500 (EST)
+Date: Mon, 3 Mar 2025 16:08:03 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+	David Ahern <dsahern@kernel.org>
+Subject: Re: [PATCH net-next v20 12/25] ovpn: implement TCP transport
+Message-ID: <Z8XF06vDCNreOL4E@hog>
+References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
+ <20250227-b4-ovpn-v20-12-93f363310834@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|SJ1PR10MB5931:EE_
-X-MS-Office365-Filtering-Correlation-Id: 442a6603-31d9-4c52-b294-08dd5a64d81f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fChHZJaAlhpAPd2zg33F2QYILGoEZlFSwA9vLHPyZ12yvTtkiMwe2m6wUL4P?=
- =?us-ascii?Q?nrDvlkD70/kDVtIRahIUw5atk7FbTi3hnkBOutEeivdIVI0QIdnNBLq+Ku8t?=
- =?us-ascii?Q?WPnBN1rDhFdFsDVlSI68A5MP2hdDaPVSrnuaD5wff5VGuf5iVAjXViZVWxAJ?=
- =?us-ascii?Q?usBc+HujQZoIrpaqU9DikLWbWLIhgxpWXJVAiDNsgmggnU/gjbv4fbhkTquR?=
- =?us-ascii?Q?WraW/+GTJN8rtDgOVcb0dPeWNGguREjPsvKZxm0+L9rAXS481+d5oMAPS6vK?=
- =?us-ascii?Q?3PDxCyy6fHFgF79SdVfR0+yxNOcjnmJKD1p9cXWYBcPksZ6cWzx+4waO4wzp?=
- =?us-ascii?Q?cmyzLot2+NOFYnif8C4gWOsYU8eF7X6HUPkeWt2FKIS5BrYrOkECdFTxcS9U?=
- =?us-ascii?Q?7fpUw9t7PD/AdaONHNkf9+LPow4u/x+BcImB2qugYmtdn513MyWz2mq+X86r?=
- =?us-ascii?Q?Jjlj+xfhGk0f0c38NqERfJ7zkRtibNCKLdjx8UxqpfN259I5IkfFTNoScR3Y?=
- =?us-ascii?Q?mOY3d1HuDPbuTlfnkP+wGL8mupqQK2EViUirOPEvTuCzW82sRIf+SN9vSDPu?=
- =?us-ascii?Q?GAlB9FG6EMrQdMjUZL/QkkcbMvY8aOtCoKZxP2BpSFJ34U8N+V/bzru1Pfpr?=
- =?us-ascii?Q?6GgFiZfgGrT3ed9r69kjX7OLHO467sj/Ow8veeEoqb8xBXgMXtz8MD6nTjL9?=
- =?us-ascii?Q?n8TEKM3rkjbaFesaN5aH0vmoJtLPafJwtnma/Ta9Lnr0PTUxZlCffbN5hsIf?=
- =?us-ascii?Q?UgjK5jSngdCqQcnEzsKZwEjwjTIL7VoBqjcdsWRk9+DKthQbY4NC+0Jo+me4?=
- =?us-ascii?Q?SGXrJuO5pngmAVO9dV4hY8G3Zk808zquiZUqwdSlv9Hfwi217GhRqxBf3gHN?=
- =?us-ascii?Q?WJGqV2n4nAEW6p5F9bsx1CJuxR5Q9ETsFecCXQidxCzXaD0pv8tmqkwJbxmq?=
- =?us-ascii?Q?38KCDbynYvMUDu3bXBYiqDAzrMa/yNGfxxbmAraRZvjrUTq7gVes5JDBbLfU?=
- =?us-ascii?Q?RedPXENXlatkQgbG6R2jD3ZiVnIYIVKEIvHo8YhZnJsuW7SGk/SfL3+Rqm/A?=
- =?us-ascii?Q?+RMWS1CzYrN1Frpexz5Z7hED6QYMXW4Aold7ynVXtLIs+YI/MGRPOz0o5wW0?=
- =?us-ascii?Q?1qdm5HhWo7rAvOgWLEObB0oRaAj6srMJKfC3W4VZzZt6VwBAdnz9xFF3KS0W?=
- =?us-ascii?Q?WoFSjaq5lmbD9zda0tNcy2g+SmTpOaMUgKoHsfnOCMSxNWM4WajAYXRCKDou?=
- =?us-ascii?Q?fodKxMU1Ha36461ScKPRWFRjZLJT8b/G9zse/mqxFmS3E/pyQsGXZCc7mgYl?=
- =?us-ascii?Q?eIZS6xFDfAon8qkWAYvEpHtGoxWZ5WpsP2KQCoFbuZt21REE2Duzfd9XE8z+?=
- =?us-ascii?Q?MroG0PwIs7RqUm/IO5wsdLiRGKF4?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?68RZc/Upuj0lNGzNW3QkuVFowFPPdiRZDzADOhri6iaJVBBu4a/n3/U9Uw4D?=
- =?us-ascii?Q?d8zC6mIyQT3QdDbxizcaRJd1Aw9ESU4exWZ+z6XKG5nYAJ/r0NMYSqQ7GzFf?=
- =?us-ascii?Q?DucE2mQTXSzijqJ5hxK/rhXZlSu5euxsqDCa8cGaLRziD6kzuVXqLzW3a0G6?=
- =?us-ascii?Q?YYpA/+L1vz+6wWFDgx9TK/WMi8MbL3SfaDF9aTl9UKXrr1grFIc1wQFLdSGy?=
- =?us-ascii?Q?lM7aOSxzPHuuE2zPoyG0FVLa1czsE9ahzHYiJUgMaEmMm4JVhP2GVSVc/qNF?=
- =?us-ascii?Q?2RZ8bz0x72wyYv6pWThkPi2MghMlOVgLlUG2waiIHPqvaKzK0ZsVia0W1UJ3?=
- =?us-ascii?Q?0XfQ0qxVX54UC4teWXekFt143V0qHMhGbOYUu/hAhS1lLLb06WQ930RkK7t+?=
- =?us-ascii?Q?UpG0LCFt/E0m3vQ2Gr6ybUKajYdK7q74n50x1ILZic+WJ0JaggVAl0bQXa/T?=
- =?us-ascii?Q?jg7d4X1PCFWGfZc2qPyToyjenfzpC2EIgMLyuz/JX83OgP7GyuDrbAkOE9x4?=
- =?us-ascii?Q?nwVY9VE9cnxcqRVfKIj42JJvXOBWuXiycq63aO0fK+uVHAIzCDW01I9jCms5?=
- =?us-ascii?Q?yG1uO75qY/24Vvvx8GUFp6RvF76HGvUELWozTRWvcWRjiTQItj+2JPatldK0?=
- =?us-ascii?Q?2qHDH+OLha+/5vEZUOW8L4QQvML2FKBBgB1FG78GdoylQfVwmwS7qwMgS8Wz?=
- =?us-ascii?Q?Vo+srUPRmjDvaXb8AwlE2+re0zRwMqJQ5wMzczdJ1dCnecxedw+8Zo1JfVGz?=
- =?us-ascii?Q?9u00Ww0usKmt3cB3fBNeY6HgWIa++CIKLGVFs+BhyPBUP41T4zTeRH91uA/j?=
- =?us-ascii?Q?e5ns/BQ82cm7zFQ4rvGys3Bgt1Q6FpNmVwtTc0CdcwpKUQ9Hu8MmBn5pB4qG?=
- =?us-ascii?Q?FShqOzvYAFnC1xtU2RghyLYdBAQx4DUb7zaGS+KDQVNRcjz8km/mGn5hQpkk?=
- =?us-ascii?Q?nkeINRwrRU1wOO0kcbfYc3Ieu7Q7tE4wfp7vex/f0nH0fZDc2kDewjmEkAuk?=
- =?us-ascii?Q?bbvQgq3o6tcmwE5u2XLc0Z9PRFZHPntqlzHcAjLL6WVTKlQhP0b4NJlJdV6D?=
- =?us-ascii?Q?OW4BBjQ+TCY1Gtdxrm4gPHp/jd04PGDapFDfePH6Dm+VyUD2PD8MAHuXdif9?=
- =?us-ascii?Q?NKHyWCqttkWeWQgsVVHNktxJXCdPTiJGlIVjATGCLA9pzkXEzhJmM/0pHyRP?=
- =?us-ascii?Q?R5N6N+NXoryJeNnzbozr8L9KYCSH3B2pWycg6y6Oej2FzH3OjkAofNC/K0Zd?=
- =?us-ascii?Q?5rVRAf2vLxIg+oB+k1q/URZNqnZiN0aCvLCAm1AaaTHuk1SEwAJ1vMzIEjhj?=
- =?us-ascii?Q?EZ7d3vbXbShYyKosWCnA5zXg5mLTunO48AhuskhfsqmHaNMqhGqwgbz3zCXZ?=
- =?us-ascii?Q?NWZSzUPYYFo15+Set/IIVbtMBIIdqQ/JTpTjNHMYfsaGW5SE8rsu6mxtMBqG?=
- =?us-ascii?Q?ROb3EjsEcWCYtPfIjfoNAFtnXRlr5F8KtwuCeoq0/+H5GXevZWQQ09yS9rV1?=
- =?us-ascii?Q?3nvxmp4HysmQv5xawv5Kfc+b/jOKm8wr14wqYLE+S1CX4F80saIkctn6oFS8?=
- =?us-ascii?Q?6tm5qgwBFP00olYXTv6jcEoWAoal7rSebGl225Du?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	8odp8kB4B/yiauxpdJOPMQ4XQQZMCT1R3YH57k4UpqLjxZNaKGwxDSz9lmDKvOUdqQquRvZhdAnhLFonYX3PVR2vUS6rIIUZPJrHpk5XBnzijkFn4U7cQ3V7Ug1xbf4vT9m4zzdeNaoVywyacVJ4FcEUe/WWvyTwHN60BvHIGLVY1fGYsE/7pq3ucEUry4bqike5lFlpmnpC5XTps7xKPG9ln8RREl1nLFlAov7HSmF/kfiHCJkbpeBtG2ajEq3EClomNLLT/MAhTvvWAxnzaPIm9L1ShmR1CsrxWLVMnUSqZ+ROADPX9UfmZS0K3LmK1h9AxivsvXR+xUbJU4ZI65KGKW48w76uTJFlnF3H2i0THyckTYHL+fGOnE6TEnGU/BD1fglHB+8PZWTdRtkniQ+b3pX1InDzopRR9YyHgdymi0sPyZeSioptB6fuJJgBzrNLI33paTxLrYgb6I3If8M8hPsNvRlmNdnM22Z2mqFnb3iWw9Y3CmL2GQi5AxiCRccPyEtJNvj7IAlORU2tPLQLJFUfmQYz6rdBkBIxkvaXCEeh1cyvBaZrrgCggRglMv08QMZw5XH/UU4+aPNu/wGNfj3tsmlazv4sdeIjck0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 442a6603-31d9-4c52-b294-08dd5a64d81f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2025 15:05:32.6911
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U/NAaN61B5dU2PgV7IdgJ5GL8yTQ0XaYQcpARuESBCjgJV7r2EtDSYmLEOYpS33dcajle7zQZjMPsz/2+utngw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR10MB5931
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-03_07,2025-03-03_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
- definitions=main-2503030115
-X-Proofpoint-GUID: wIDhnoAN8c-kM1pgqczDQnwqKBEuSLT9
-X-Proofpoint-ORIG-GUID: wIDhnoAN8c-kM1pgqczDQnwqKBEuSLT9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250227-b4-ovpn-v20-12-93f363310834@openvpn.net>
 
-* jeffxu@chromium.org <jeffxu@chromium.org> [250303 00:09]:
-> From: Jeff Xu <jeffxu@chromium.org>
-> 
-> Update memory sealing documentation to include details about system
-> mappings.
-> 
-> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> Reviewed-by: Kees Cook <kees@kernel.org>
-
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-
-> ---
->  Documentation/userspace-api/mseal.rst | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/userspace-api/mseal.rst
-> index 41102f74c5e2..76e10938302a 100644
-> --- a/Documentation/userspace-api/mseal.rst
-> +++ b/Documentation/userspace-api/mseal.rst
-> @@ -130,6 +130,26 @@ Use cases
+2025-02-27, 02:21:37 +0100, Antonio Quartulli wrote:
+> @@ -94,11 +96,23 @@ void ovpn_socket_release(struct ovpn_peer *peer)
+>  	 * detached before it can be picked by a concurrent reader.
+>  	 */
+>  	lock_sock(sock->sock->sk);
+> -	ovpn_socket_put(peer, sock);
+> +	released = ovpn_socket_put(peer, sock);
+>  	release_sock(sock->sock->sk);
 >  
->  - Chrome browser: protect some security sensitive data structures.
+>  	/* align all readers with sk_user_data being NULL */
+>  	synchronize_rcu();
+> +
+> +	/* following cleanup should happen with lock released */
+> +	if (released) {
+> +		if (sock->sock->sk->sk_protocol == IPPROTO_UDP) {
+> +			netdev_put(sock->ovpn->dev, &sock->dev_tracker);
+> +		} else if (sock->sock->sk->sk_protocol == IPPROTO_TCP) {
+> +			/* wait for TCP jobs to terminate */
+> +			ovpn_tcp_socket_wait_finish(sock);
+> +			ovpn_peer_put(sock->peer);
+> +		}
+> +		kfree_rcu(sock, rcu);
+
+kfree_rcu after synchronize_rcu is a bit unexpected. Do we still need
+to wait before we free sock, now that we have synchronize_rcu before?
+
+> +	}
+>  }
 >  
-> +- System mappings:
-> +  The system mappings are created by the kernel and includes vdso, vvar,
-> +  vvar_vclock, vectors (arm compact-mode), sigpage (arm compact-mode), uprobes.
+
+
+
+> +static int ovpn_tcp_parse(struct strparser *strp, struct sk_buff *skb)
+> +{
+> +	struct strp_msg *rxm = strp_msg(skb);
+> +	__be16 blen;
+> +	u16 len;
+> +	int err;
 > +
-> +  Those system mappings are readonly only or execute only, memory sealing can
-> +  protect them from ever changing to writable or unmmap/remapped as different
-> +  attributes. This is useful to mitigate memory corruption issues where a
-> +  corrupted pointer is passed to a memory management system.
+> +	/* when packets are written to the TCP stream, they are prepended with
+> +	 * two bytes indicating the actual packet size.
+> +	 * Here we read those two bytes and move the skb data pointer to the
+> +	 * beginning of the packet
+
+There's no update to skb->data being done in ovpn_tcp_parse AFAICT.
+
+[...]
+> +static void ovpn_tcp_rcv(struct strparser *strp, struct sk_buff *skb)
+> +{
+> +	struct ovpn_peer *peer = container_of(strp, struct ovpn_peer, tcp.strp);
+> +	struct strp_msg *msg = strp_msg(skb);
+> +	size_t pkt_len = msg->full_len - 2;
+> +	size_t off = msg->offset + 2;
+> +	u8 opcode;
 > +
-> +  If supported by an architecture (CONFIG_ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS),
-> +  the CONFIG_MSEAL_SYSTEM_MAPPINGS seals all system mappings of this
-> +  architecture.
+> +	/* ensure skb->data points to the beginning of the openvpn packet */
+> +	if (!pskb_pull(skb, off)) {
+
+Is that the one you mean in the previous comment?
+
+> +		net_warn_ratelimited("%s: packet too small for peer %u\n",
+> +				     netdev_name(peer->ovpn->dev), peer->id);
+> +		goto err;
+> +	}
+[some checks]
+> +	/* DATA_V2 packets are handled in kernel, the rest goes to user space */
+> +	opcode = ovpn_opcode_from_skb(skb, 0);
+> +	if (unlikely(opcode != OVPN_DATA_V2)) {
+> +		if (opcode == OVPN_DATA_V1) {
+> +			net_warn_ratelimited("%s: DATA_V1 detected on the TCP stream\n",
+> +					     netdev_name(peer->ovpn->dev));
+> +			goto err;
+
+In TCP encap, receiving OVPN_DATA_V1 packets is going to kill the peer:
+
+> +err:
+> +	dev_core_stats_rx_dropped_inc(peer->ovpn->dev);
+> +	kfree_skb(skb);
+> +	ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_TRANSPORT_ERROR);
+> +}
 > +
-> +  The following architectures currently support this feature: x86-64 and arm64.
+
+but that's not the case with the UDP encap (ovpn_udp_encap_recv simply
+drops those packets). Should the TCP/UDP behavior be consistent?
+
+
+
+
+> +void ovpn_tcp_send_skb(struct ovpn_peer *peer, struct socket *sock,
+> +		       struct sk_buff *skb)
+> +{
+> +	u16 len = skb->len;
 > +
-> +  WARNING: This feature breaks programs which rely on relocating
-> +  or unmapping system mappings. Known broken software at the time
-> +  of writing includes CHECKPOINT_RESTORE, UML, gVisor, rr. Therefore
-> +  this config can't be enabled universally.
+> +	*(__be16 *)__skb_push(skb, sizeof(u16)) = htons(len);
 > +
->  When not to use mseal
->  =====================
->  Applications can apply sealing to any virtual memory region from userspace,
-> -- 
-> 2.48.1.711.g2feabab25a-goog
-> 
+> +	spin_lock_nested(&sock->sk->sk_lock.slock, OVPN_TCP_DEPTH_NESTING);
+
+With this, lockdep is still going to complain in the unlikely case
+that ovpn-TCP traffic is carried over another ovpn-TCP socket, right?
+(probably fine to leave it like that)
+
+
+[...]
+> +static int ovpn_tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+> +{
+> +	struct ovpn_socket *sock;
+> +	int ret, linear = PAGE_SIZE;
+> +	struct ovpn_peer *peer;
+> +	struct sk_buff *skb;
+> +
+> +	lock_sock(sk);
+> +	rcu_read_lock();
+> +	sock = rcu_dereference_sk_user_data(sk);
+> +	if (unlikely(!sock || !sock->peer || !ovpn_peer_hold(sock->peer))) {
+> +		rcu_read_unlock();
+> +		release_sock(sk);
+> +		return -EIO;
+> +	}
+> +	rcu_read_unlock();
+> +	peer = sock->peer;
+
+This used to be done under RCU in previous versions of the series. Why
+is it after rcu_read_unlock now? (likely safe since we're under
+lock_sock so detach can't happen)
+
+> +
+> +	if (msg->msg_flags & ~MSG_DONTWAIT) {
+> +		ret = -EOPNOTSUPP;
+> +		goto peer_free;
+> +	}
+
+
+-- 
+Sabrina
 
