@@ -1,110 +1,86 @@
-Return-Path: <linux-kselftest+bounces-28068-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8616A4C560
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 16:40:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAB69A4C56A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 16:41:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C041160EB9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 15:38:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F4633A75F6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 15:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F4E1C84A8;
-	Mon,  3 Mar 2025 15:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700AB1C8604;
+	Mon,  3 Mar 2025 15:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="gfyVgLKw";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A1oiCjgT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IaUgqaa7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D02D190468;
-	Mon,  3 Mar 2025 15:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B0423F36F;
+	Mon,  3 Mar 2025 15:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741016321; cv=none; b=V3H7VVAn+CGSb0IAMgtGle3ufWuSCQrOjiwLuyJ2RrepatL6kD7vBF1bCzhBiIFnvvGgQN4aos49lsfkK9TQW7D4aF34ruu1OoPeV0lnFVp0V+UBLe8fTx12FG/VYZFXbTinIyVMuA1NEDrsMxVvX9t3w2SjCh+Qin1xD6zUyyk=
+	t=1741016441; cv=none; b=tloIFsxno3UwTFs2H82FnmIl9xS/TWDfT8SzDYFdH5QYao0DzqAzG3NIgjSo4SVAXyZy40/HDN6Sii84/Ge24rE8PLqwbI1BAVLP62jRWNlxd0zEiiQSB+lOXFfxEAUViwp6WW1fQY5uRuEzCkmHPhAv4AJYzadPz3QJFhO7uyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741016321; c=relaxed/simple;
-	bh=zwcRo8Jb1qRhXHfePb8v1xljWs0mJ5UAz4GPWrIhfuA=;
+	s=arc-20240116; t=1741016441; c=relaxed/simple;
+	bh=v8Brl5yQ4WQhto4L2yYKd8rbfme3g9Kpi8JSyVRfYqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pgb4OywEkK3ceO1GptVJ/D7cHo9NrCjPeYD9rKduFJ+eRL0DEq70y9+ywcCtSoUpiYvGuoNmr8nsntOTGF2CTsAS5hxvMo2q9kCnDVKsJA0p3H7vR0t9mbNZgXcIg6oHr9ysv7ZzF0mMQmhzarjyj0Z6td2/qnzSUYjC80J8tQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=gfyVgLKw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A1oiCjgT; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 1EEE425401FA;
-	Mon,  3 Mar 2025 10:38:37 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Mon, 03 Mar 2025 10:38:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1741016316; x=
-	1741102716; bh=O1f/uHg0aPjtGKCT9KiWQYEt0A1Zdgh12YD7b9SeJK0=; b=g
-	fyVgLKwmlgD+q/LWPncJcwJh0nZRMkPlUWXzrvf/QX/rFbUDkZuV/XAG7OP39sdR
-	1e0kJXlFvgE/n1DQf9hjs0DKG9ZnYKXZ35suwBXQ4A+a52Oo2S/qiUnPwhwgA65p
-	xNORG1MwBQkS/oXZI4KKXY764i3FtcvJ5E4OzdCIM7vskIb0egvIGHJ38J8Dgs4G
-	W2j8CVXCUA0e2NI7wQ4ICFIIiakvGGfii1gSTx+9gL5CEYn15G2VfEUXXKYggZHe
-	nlzAuI0BAH/ZhxEO1ZX9PrnFGK2CE1qYEj4esJoipdqW5LJnia0ywyfakfn9Fk7U
-	/kqFK0LZPH+MebWUtAWjw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1741016316; x=1741102716; bh=O1f/uHg0aPjtGKCT9KiWQYEt0A1Zdgh12YD
-	7b9SeJK0=; b=A1oiCjgTowaGp+i2BJteKXRqRJ1xjsnSoME3lqE9hoqCuUG5PZk
-	1vRF5y1RwoB5WI6dLVby8nIZM+Nej7Norkf3zzKNphrJqKvtehLESbqSdj2VdDQ8
-	KK5Dj5Nml73aVakpEnJjb2Q9g1GoWUAsQxTfWuGW0pWlruDqUq+GLVDp1RwtPqft
-	YqRbiazom928cNST79mLrlIpRbh9Kqt4V4SPenJ7KzU/I22G/R/ji/1RpMDZlZAq
-	VJWnxT3SsNkNT+kXf4mtBMhDwHc14FroJ6PjZoI4iiV/DrUpN4ar2of+w3DUOt1k
-	prDy9YUqDbDJ5Kt7ptHl/h0ziT57tmshRJw==
-X-ME-Sender: <xms:_MzFZ7CBzETl4XS4mg9Zb0Q9LsUlMrA4vUY4w3aJuhtkQOSUu7gnMQ>
-    <xme:_MzFZxh0zX37Uac9085qE7D2AAzJDvxXXCdskkd1B7OxEi4VbNMmgaNK8LZlRpqRt
-    tPjb68XYx_GotX3AfU>
-X-ME-Received: <xmr:_MzFZ2lWSPTJyr7PXHTAk0XT8Bu3CF-yeqTeMFS3hyfp-bAX1tcUiwaU60SY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelleehudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdej
-    necuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnh
-    grihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeghffftdevudfgkeffjedvieeilefh
-    tefffeefgfehvdevhfejjedvkeefleeggfenucffohhmrghinhepkhgvrhhnvghlrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgu
-    sehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedufedpmhhouggvpe
-    hsmhhtphhouhhtpdhrtghpthhtoheprghnthhonhhiohesohhpvghnvhhpnhdrnhgvthdp
-    rhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpd
-    hrtghpthhtohepughonhgrlhgurdhhuhhnthgvrhesghhmrghilhdrtghomhdprhgtphht
-    thhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrhigriigrnhhovh
-    drshdrrgesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghv
-    sehluhhnnhdrtghh
-X-ME-Proxy: <xmx:_MzFZ9yMHvyXfXiX_OqQfHQsmGC-muLeLJJqdWYlnePg3B9HZB24bg>
-    <xmx:_MzFZwRmo6r_Twm2u976IvcrptgmPadn2fBcN6dsGWF4NYFdJ-KL7w>
-    <xmx:_MzFZwak0HnaYdR6BEcQ10bftjc-COx8ESLw6D0OAvzxrO-cP5DRmg>
-    <xmx:_MzFZxTMWC3A9yA6vWxWt9hTfkoNThPWCbyNzzODUK7gSlcjd8u-iw>
-    <xmx:_MzFZyAd8xjTBdGSaZlbYlP6apyWu0GKk1M1auvtRfkuJtuOkZMbhLEV>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Mar 2025 10:38:36 -0500 (EST)
-Date: Mon, 3 Mar 2025 16:38:34 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v20 15/25] ovpn: implement multi-peer support
-Message-ID: <Z8XM-g0LUz4djxvL@hog>
-References: <20250227-b4-ovpn-v20-0-93f363310834@openvpn.net>
- <20250227-b4-ovpn-v20-15-93f363310834@openvpn.net>
- <Z8WpxDpHYzG9pXNl@hog>
- <2682e274-6be1-4366-a2f6-c870aa9e1252@openvpn.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hByur2j/Jd2VKXGPNfV69Xy5Q1zR0iAXqnN9ALJpjp7DgnY2EcATOrr2nz695RW2laeJPvxzS1PlIxGfwDQOAp8y3K7003mybZrR0YJH7L8oZgYKqGwJE+qtRloOTwR+KslBRsvsCAeDtKHlP30MvyE6qP0e43i06mfBN/j6+iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IaUgqaa7; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fe848040b1so9548720a91.3;
+        Mon, 03 Mar 2025 07:40:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741016439; x=1741621239; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mGwd6xUM0r4PEs7C4twkbH67RpqqXDyOhZuYc7QxA+Q=;
+        b=IaUgqaa7eUs9NNmeSknp/vUN1ifZyEMcdfwJ5Rcinya76txid0vena196GAVZlN8fZ
+         vSsFmh+MJ7f+/Y5cNYKAj3KzPb3EQM78y+6eb+yTE/v9RDvAXaItbISHCqDmAaVIQed3
+         HaI2N/l00kpnSy3n0+31hfoWuY/4nU/ncczBhJ2EJmp/HT4Fc3LqN+FPmSyfvPKHdBau
+         5sL2uD7AC5Vx75kb0ey450piFmLRh/HtdOGjUBPL1gJjCc3ymPYn0MZuKwuti0zgjt43
+         wRz6RDoXEiKfeDBCt7TGEMIGUl0Eg1kCE5ud67JTjFL8BryGUNCgj7pSc5jNu2zacxF0
+         d0KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741016439; x=1741621239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mGwd6xUM0r4PEs7C4twkbH67RpqqXDyOhZuYc7QxA+Q=;
+        b=tu5L+1KRYJFRrvW1rKvL5z8auhDG40xhRXH+VbriDRoxQAEqR3KnDzQE2ptuXMfWi7
+         sO0KJNzyLkmjGtm4blrpBaIP+R9AE2W9mXBJRC9CDu13n1hcBGpnIownvO1kouVlV9lm
+         t9HGgcW/FZ6GWG9vhlcm+nlEDj+x4mqxR4rUyJSEdsXbJ3Mgij+qcBSJkk8D3tnSM7lp
+         7gd6o4W+QfEsPBDag4tCKakd4Yc7kOc1Op5J/8cKR7heISo2/FEPtj/R0VkiXaCJvKzh
+         h3eeK2SjFqVA7sNMfsQdu7pyQ33/u8MDUPNrZKr9hbv4hr7dWig4vrK+xoQNJk0Ac8uD
+         Ck+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUBohcjQ0eyGeRqmp9V+b0wIuZpxepk4JAXHzhDuMRldaUIiJGk+if8z5fTIt7LwGiGibuG25wQ@vger.kernel.org, AJvYcCWzUYiV1TJy3WsODlXXxnJG8jTw977V8qRuc/wO7dimtKDCRcEgZLYj/1D9SDPhMmeF+ZOcK/8pXcte7VG3MNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNQ1lPNm2JbpB37490dVx0qpMhUimZtg5T67adnJ4S1CNXUJ4M
+	/eZlSKLhZ1gIEA1DOcIIv9bbNUrYvPG5dEvhWqiNzG1vWQ5DRAM=
+X-Gm-Gg: ASbGncuiX20yqVXQqzqblWX/X9vWTAeDBN0khN+lsDShfntLpO18deug+A9+wo3HCgq
+	HyYKHRydrn8j5RA3pQF/nWUFuvUQ9KNsQ7JxTi0/9cpNiQ4PwiMPCbKFCm2xTnW+08KUf6FMFjx
+	7VpTxO/hBjRVR3LixkDXvXP6X4BJkpoF0xxYbpxqTUkrbQhNfh5cpzc8CHERtsl5ft7rDyq7f9P
+	uMPS/WIYdQlAYKoX02Vj8JbT0fFUoNLp687jTxwMAiun2/1RVAXFR569Jpor8Sfn9C+14QP0Oia
+	kDliRJJD2jwzJD3XGQEzNLxjXTS/L2c/noF/3v9TCy35
+X-Google-Smtp-Source: AGHT+IGG3yBIo5Dcd8R7th0UeHo+FznYtPDw1jL32H4Kd4U1YoX5XLpkDQPq7fTQR/zE2zZ71OJV8w==
+X-Received: by 2002:a17:90b:48c3:b0:2ee:5958:828 with SMTP id 98e67ed59e1d1-2febab57073mr21679909a91.9.1741016439289;
+        Mon, 03 Mar 2025 07:40:39 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:2844:3d8f:bf3e:12cc])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2fe8284f083sm11176243a91.43.2025.03.03.07.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 07:40:38 -0800 (PST)
+Date: Mon, 3 Mar 2025 07:40:38 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: use env.rpath in the
+ HDS test
+Message-ID: <Z8XNdi4hxzE3QfFi@mini-arch>
+References: <20250228212956.25399-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -113,60 +89,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2682e274-6be1-4366-a2f6-c870aa9e1252@openvpn.net>
+In-Reply-To: <20250228212956.25399-1-kuba@kernel.org>
 
-2025-03-03, 15:45:23 +0100, Antonio Quartulli wrote:
-> On 03/03/2025 14:08, Sabrina Dubroca wrote:
-> > > +			if (ovpn_sock && ovpn_sock->sock->sk == sk)
-> > > +				skip = false;
-> > > +			rcu_read_unlock();
-> > > +
-> > > +			if (skip)
-> > > +				continue;
-> > 
-> > 
-> > The skip/continue logic looks a tiny bit strange to me, maybe this:
+On 02/28, Jakub Kicinski wrote:
+> Commit 29b036be1b0b ("selftests: drv-net: test XDP, HDS auto and
+> the ioctl path") added a new test case in the net tree, now that
+> this code has made its way to net-next convert it to use the env.rpath()
+> helper instead of manually computing the relative path.
 > 
-> Hehe, it's like a double negation. I agree it can be improved.
-> 
-> > 
-> > 	hash_for_each_safe(ovpn->peers->by_id, bkt, tmp, peer, hash_entry_id) {
-> > 		bool remove = true;
-> 
-> does the netdev coding style allow to use locally scoped variables?
-> Or should I declare everything at the beginning of the function?
-> 
-> I had this rule in mind, but it may have been eliminated by now.
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Based on a few samples from net/core/dev.c, I'd say it's allowed:
-https://web.git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/core/dev.c?id=357660d7596b#n4634
-https://web.git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/core/dev.c?id=357660d7596b#n11404
-https://web.git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/core/dev.c?id=357660d7596b#n12319
-https://web.git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/core/dev.c?id=357660d7596b#n12531
-
-> > 
-> > 		/* if a socket was passed as argument, skip all peers except
-> > 		 * those using it
-> > 		 */
-> > 		if (sk) {
-> > 			rcu_read_lock();
-> > 			ovpn_sock = rcu_dereference(peer->sock);
-> > 			remove = ovpn_sock && ovpn_sock->sock->sk == sk;
-> > 			rcu_read_unlock();
-> > 		}
-> > 
-> > 		if (remove)
-> > 			ovpn_peer_remove(peer, reason, &release_list);
-> > 	}
-> > 
-> > 
-> > (only if you agree it looks better - if it's my opinion against yours,
-> > ignore me since it's really just coding style/taste)
-> 
-> Yours look simpler/cleaner. I'll go with it.
-
-ok :)
-
--- 
-Sabrina
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
