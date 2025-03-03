@@ -1,121 +1,243 @@
-Return-Path: <linux-kselftest+bounces-28088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA547A4CBF5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 20:29:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F3DDA4CBF9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 20:29:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A71A3AA537
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 19:28:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82AE4173906
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 19:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C4222DFBE;
-	Mon,  3 Mar 2025 19:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A8922F17B;
+	Mon,  3 Mar 2025 19:29:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GegXOxQO"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fXBDlPdh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3BC2144B8
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 19:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7428A1EF0B7
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 19:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741030137; cv=none; b=DkweYrWvcwfFwVedfWAlh2GVhuXM/TRRAhH79pVztn1KCjfqmNvhcY8rvpw2s0leQwDxwRRfIKVc7/LYtQLfp72cB/jV3ZRtImw+zV+wB+pSiotrBXaq22fj+YWPJNhVJOnyTrtbrvWEU2yDU/L5TYTqjEi9f2bLL0wc92euTiI=
+	t=1741030176; cv=none; b=F1dZTt6psWJrDhTiNoj+R3E+0AMI3bz8nORPU2iue90u2wFOEv1aofe1VKbBXm4/z6sNHwHHeo8vxZ0KH4b7klWdxb1EGqZ6tblAHkb4H4YDoSQTh2Qk31OXhKLNSwqtQgTx/amANQdEFAiM2KYkNH96JIA7LlYiE8RztIL+gUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741030137; c=relaxed/simple;
-	bh=GrTUyx/IeJfdqo7iKYYR4uGFEkbDgD/G++8REVC7toM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n0rX6eiPxmLMWVpnnkqyW37vwGMSO32FnVGhEz8nksAcd6hE8csyFTSI96QNAo+sRxn5P0tzyrVIDERii+WT4fNdoQ5Pa/AMXOPjVCsGK1eOlwyCXo3Jz/I3vhug7t8Ln5Fbd66VhGo+OSWKtzv5U1mytRY2VTxnSwNfF55NhrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GegXOxQO; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <eb6f77f2-3518-4fa4-bdb8-7438cd708ad1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1741030133;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9U5IgeW+FuaLX038UuIvA2IE6lvvCpFaZI1MTKj94Hg=;
-	b=GegXOxQO0A+ZajvVObN4wZmpn4po8WAFAUeYPFu/cTv67xV8+Xi+YT9pnoOSYriC3RsOKP
-	gepGH3Uh5nhHzxOFe9t2zzCGy714V6APgsy3SYZflirByEWHsjfxmsEWSboIr3v1dIqRB/
-	fkuh4w6j/QVWFAXQ6mMs2btM1PdJ95A=
-Date: Mon, 3 Mar 2025 11:28:45 -0800
+	s=arc-20240116; t=1741030176; c=relaxed/simple;
+	bh=cg5RFTUeHXvHldBYXq+EDsTRu38vvlrrKZ5Iv5575aA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PmHp73KrLp2ZwONEOvLoLOw4nhB4Z3lfLtx93GNB3kfbB0hnbAW7DBS8eKmOtynTYcznsTaXQVy+7UsUgZTMzev586j2kJE7eykcf9u+xUEpSCh+I0D9/O0mWeIpHqSURBTPNxPX+QD/KqLjS45euMV05+xGAntwRoK2xwtOLuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fXBDlPdh; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-2b1f2b286f5so499413fac.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Mar 2025 11:29:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1741030173; x=1741634973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wm1bw6PogSWQ/oeY0cZaU0D8DinTMlzqO3h/YyHdka4=;
+        b=fXBDlPdhSfjM8CGY17i+INbHZ/re1yv7RpigtEwE2yv7Ok9phVI5JhplNDzqJtejWI
+         gTxSmq1BmQqjFD78Z6gsZagraTiYWf9yJHnrtS7HNrHskm0cFgzV24pymPfCDmi5oJ7m
+         tUtiU5iS81hPZwjP6vWtQXCTrgii3V9sKgmoU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741030173; x=1741634973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wm1bw6PogSWQ/oeY0cZaU0D8DinTMlzqO3h/YyHdka4=;
+        b=BOpbMmDbvPHAbhEQDvCM2bVccjxuWM0xT0frLn2Iap/i8Pd0fxGtYMHV2qxfgb4lOI
+         /jDHdI9XVForp70u+NFZM7rGMks+OPBYSgBIW1xSwdvVkuW5HyVf3cP56NAIH0IPg82s
+         vH4w1pqzzODlfqkqLoh6ZFDkKEKaCV89pniNHGt4vaJJ2/RQl5i0AALHJ2QLUGmI/nfI
+         G+ZpeIgdXE3dVPy4zq3ScYqUm0IYw/fEvXfn/RyK3QEX0w1yBgiywKfc70aNBRurn/LI
+         Nxqrxx1gTKltcgAS4rblvO/2jEAswErKvr+714v8vnE7WbGHPOFlloSMLyztNv6NRx0U
+         CMzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWBdFrQQN81JYO636euLf6ENzk6JVS/RnmQe3+SRqE1Cufda5loNJoXiOXGe0v/O5G788Mkufh5dOy8ddjQE8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAXAkIFuJ8hUa+aCeO4Q5QiPDXtwaVvru0SWnOKQJhcSt6Jhoq
+	Ycbv6h9m2+52Fh+KcH5+G3hvWYU1ibpQezDmvFVo/PMCxj5QcHX0E5a76AgiLR9eg30WMfpaqUK
+	+NrEPCho6BZsj/jfHYiWNXnFXP4lZbADeUlQV
+X-Gm-Gg: ASbGnct2MCvv+ONVnyNK3u5AgyjX3VP6LFKepmS8gJhLwKW0oF1dJVmLne6Dzqqh9ai
+	a03Xhe6yPdUz6ZfQGit+0onibMAS6PNFm/TmVSyIXwa5FkOGpqVjesWBHyZWjXucDMpUQq27ZB0
+	c995TK4D0L1/gklYupZxXvq9XC/xf7kS22ge/8ZcnD0U00dKZHvdozWls=
+X-Google-Smtp-Source: AGHT+IF6t86k4HXZQOpYrZhTArHYnjZ+cSsTfbGMol0i8lJDnf/V6fvf43xFaF25VFFNhp6135KGfflzyp8sId/j2Ao=
+X-Received: by 2002:a05:6808:1a27:b0:3f4:756:52e6 with SMTP id
+ 5614622812f47-3f5584f51b0mr3566805b6e.1.1741030173329; Mon, 03 Mar 2025
+ 11:29:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 2/6] net: tun: enable transfer of XDP metadata
- to skb
-To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Cc: willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, hawk@kernel.org, Willem de Bruijn <willemb@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250227142330.1605996-1-marcus.wichelmann@hetzner-cloud.de>
- <20250227142330.1605996-3-marcus.wichelmann@hetzner-cloud.de>
- <090ede76-0c9f-4297-9d5a-7b75aa20ca27@linux.dev>
- <4b69bd2b-a0ad-44f6-9f43-070241bd8089@hetzner-cloud.de>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <4b69bd2b-a0ad-44f6-9f43-070241bd8089@hetzner-cloud.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20250303050921.3033083-1-jeffxu@google.com> <20250303050921.3033083-2-jeffxu@google.com>
+ <202503030834.C4ED5911A@keescook>
+In-Reply-To: <202503030834.C4ED5911A@keescook>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Mon, 3 Mar 2025 11:29:21 -0800
+X-Gm-Features: AQ5f1JpNJhlC4d3_-OlZv4_ZKEKPcTm851BECZGkcYWdJqb17n518uve8jCwfqo
+Message-ID: <CABi2SkUgmxLe6GOeRq1Lo7yz-FG0dfeAuxK4woz2JPVPH9c-Ow@mail.gmail.com>
+Subject: Re: [PATCH v8 1/7] mseal sysmap: kernel config and header change
+To: Kees Cook <kees@kernel.org>
+Cc: akpm@linux-foundation.org, jannh@google.com, torvalds@linux-foundation.org, 
+	vbabka@suse.cz, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, 
+	adhemerval.zanella@linaro.org, oleg@redhat.com, avagin@gmail.com, 
+	benjamin@sipsolutions.net, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, jorgelo@chromium.org, sroettger@google.com, 
+	hch@lst.de, ojeda@kernel.org, thomas.weissschuh@linutronix.de, 
+	adobriyan@gmail.com, johannes@sipsolutions.net, pedro.falcato@gmail.com, 
+	hca@linux.ibm.com, willy@infradead.org, anna-maria@linutronix.de, 
+	mark.rutland@arm.com, linus.walleij@linaro.org, Jason@zx2c4.com, 
+	deller@gmx.de, rdunlap@infradead.org, davem@davemloft.net, peterx@redhat.com, 
+	f.fainelli@gmail.com, gerg@kernel.org, dave.hansen@linux.intel.com, 
+	mingo@kernel.org, ardb@kernel.org, mhocko@suse.com, 42.hyeyoo@gmail.com, 
+	peterz@infradead.org, ardb@google.com, enh@google.com, rientjes@google.com, 
+	groeck@chromium.org, mpe@ellerman.id.au, aleksandr.mikhalitsyn@canonical.com, 
+	mike.rapoport@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/3/25 8:13 AM, Marcus Wichelmann wrote:
-> Am 28.02.25 um 20:49 schrieb Martin KaFai Lau:
->> On 2/27/25 6:23 AM, Marcus Wichelmann wrote:
->>> When the XDP metadata area was used, it is expected that the same
->>> metadata can also be accessed from TC, as can be read in the description
->>> of the bpf_xdp_adjust_meta helper function. In the tun driver, this was
->>> not yet implemented.
->>>
->>> To make this work, the skb that is being built on XDP_PASS should know
->>> of the current size of the metadata area. This is ensured by adding
->>> calls to skb_metadata_set. For the tun_xdp_one code path, an additional
->>> check is necessary to handle the case where the externally initialized
->>> xdp_buff has no metadata support (xdp->data_meta == xdp->data + 1).
->>>
->>> More information about this feature can be found in the commit message
->>> of commit de8f3a83b0a0 ("bpf: add meta pointer for direct access").
->>>> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
->>> Reviewed-by: Willem de Bruijn <willemb@google.com>
->>> Acked-by: Jason Wang <jasowang@redhat.com>
->>> ---
->>>    drivers/net/tun.c | 25 ++++++++++++++++++++++---
->>>    1 file changed, 22 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
->>> index 4ec8fbd93c8d..70208b3a2e93 100644
->>> --- a/drivers/net/tun.c
->>> +++ b/drivers/net/tun.c
->>
->> The changes have conflicts with the commit 2506251e81d1 ("tun: Decouple vnet handling").
->>
->> It is better to rebase the works onto the bpf-next/net,
->> i.e. the "net" branch instead of the "master" branch.
-> 
-> Alright, will do that. Should I send it as a v5 and still with "PATCH bpf-next"
-> in the header or something else?
+On Mon, Mar 3, 2025 at 8:37=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>
+> On Mon, Mar 03, 2025 at 05:09:15AM +0000, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@chromium.org>
+> >
+> > Provide infrastructure to mseal system mappings. Establish
+> > two kernel configs (CONFIG_MSEAL_SYSTEM_MAPPINGS,
+> > ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS) and VM_SEALED_SYSMAP
+> > macro for future patches.
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> > ---
+> >  include/linux/mm.h | 10 ++++++++++
+> >  init/Kconfig       | 22 ++++++++++++++++++++++
+> >  security/Kconfig   | 21 +++++++++++++++++++++
+> >  3 files changed, 53 insertions(+)
+> >
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 7b1068ddcbb7..8b800941678d 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -4155,4 +4155,14 @@ int arch_get_shadow_stack_status(struct task_str=
+uct *t, unsigned long __user *st
+> >  int arch_set_shadow_stack_status(struct task_struct *t, unsigned long =
+status);
+> >  int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long=
+ status);
+> >
+> > +
+> > +/*
+> > + * mseal of userspace process's system mappings.
+> > + */
+> > +#ifdef CONFIG_MSEAL_SYSTEM_MAPPINGS
+> > +#define VM_SEALED_SYSMAP     VM_SEALED
+> > +#else
+> > +#define VM_SEALED_SYSMAP     VM_NONE
+> > +#endif
+> > +
+> >  #endif /* _LINUX_MM_H */
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index d0d021b3fa3b..c90dd8778993 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -1882,6 +1882,28 @@ config ARCH_HAS_MEMBARRIER_CALLBACKS
+> >  config ARCH_HAS_MEMBARRIER_SYNC_CORE
+> >       bool
+> >
+> > +config ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS
+> > +     bool
+> > +     help
+> > +       Control MSEAL_SYSTEM_MAPPINGS access based on architecture.
+> > +
+> > +       A 64-bit kernel is required for the memory sealing feature.
+> > +       No specific hardware features from the CPU are needed.
+> > +
+> > +       To enable this feature, the architecture needs to update their
+> > +       special mappings calls to include the sealing flag and confirm
+> > +       that it doesn't unmap/remap system mappings during the life
+> > +       time of the process. The existence of this flag for an architec=
+ture
+> > +       implies that it does not require the remapping of thest system
+>
+> typo nit: "the" instead of "thest"
+>
+> > +       mappings during process lifetime, so sealing these mappings is =
+safe
+> > +       from a kernel perspective.
+> > +
+> > +       After the architecture enables this, a distribution can set
+> > +       CONFIG_MSEAL_SYSTEM_MAPPING to manage access to the feature.
+> > +
+> > +       For complete descriptions of memory sealing, please see
+> > +       Documentation/userspace-api/mseal.rst
+> > +
+> >  config HAVE_PERF_EVENTS
+> >       bool
+> >       help
+> > diff --git a/security/Kconfig b/security/Kconfig
+> > index f10dbf15c294..5311f4a6786c 100644
+> > --- a/security/Kconfig
+> > +++ b/security/Kconfig
+> > @@ -51,6 +51,27 @@ config PROC_MEM_NO_FORCE
+> >
+> >  endchoice
+> >
+> > +config MSEAL_SYSTEM_MAPPINGS
+> > +     bool "mseal system mappings"
+> > +     depends on 64BIT
+> > +     depends on ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS
+> > +     depends on !CHECKPOINT_RESTORE
+> > +     help
+> > +       Apply mseal on system mappings.
+> > +       The system mappings includes vdso, vvar, vvar_vclock,
+> > +       vectors (arm compact-mode), sigpage (arm compact-mode), uprobes=
+.
+>
+> typo nits: "compat" instead of "compact".
+>
+Got it, I will change everywhere for this (mseal.rst, coverletter)
 
-That should do. The bpf CI should pick up the bpf-next/net if it fails to apply 
-to the bpf-next/master because of the conflict mentioned above.
 
-For patch 3, it should help to avoid the future merge conflict if the 
-open_tuntap() is added a few lines above in the network_helpers.h. For patch 6, 
-the "test_ns_" naming is not in bpf-next/net yet. Other tests in the same file 
-is doing netns_new. May be just do the same and cleanup all at once of this file 
-later.
+> > +
+> > +       A 64-bit kernel is required for the memory sealing feature.
+> > +       No specific hardware features from the CPU are needed.
+> > +
+> > +       WARNING: This feature breaks programs which rely on relocating
+> > +       or unmapping system mappings. Known broken software at the time
+> > +       of writing includes CHECKPOINT_RESTORE, UML, gVisor, rr. Theref=
+ore
+> > +       this config can't be enabled universally.
+> > +
+> > +       For complete descriptions of memory sealing, please see
+> > +       Documentation/userspace-api/mseal.rst
+> > +
+> >  config SECURITY
+> >       bool "Enable different security models"
+> >       depends on SYSFS
+> > --
+> > 2.48.1.711.g2feabab25a-goog
+> >
+>
+> Perhaps akpm can fix these up directly instead of a v9 spin?
+>
+V9 is relatively easy for me. I probably need a good version for
+backporting to chromeOS/Android.
 
+If all goes well, I'll follow up with a V10 based on Thomas
+Wei=C3=9Fschuh's vdso refactor branch [1] [2].
+
+[1] https://lore.kernel.org/all/CABi2SkXwaJ=3Ds3XqHKu1aFVfcacgxpQ5Ji1_BqaN+=
+ch2i_RnA9Q@mail.gmail.com/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=3Dti=
+mers/vdso
+
+
+> But otherwise, yes, reads well to me:
+>
+> Reviewed-by: Kees Cook <kees@kernel.org>
+>
+> --
+> Kees Cook
 
