@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-28078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04F25A4C89B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 18:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F29EA4C8A7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 18:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEA2B174767
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 17:00:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B89A166FEB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 17:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B4E23ED6A;
-	Mon,  3 Mar 2025 16:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA882241105;
+	Mon,  3 Mar 2025 16:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PzeAP3xR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNft3v+5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D03214A60;
-	Mon,  3 Mar 2025 16:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE21023C8C6;
+	Mon,  3 Mar 2025 16:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741019923; cv=none; b=VLHnXUtaHUERUpaeUezyR5G2WngstUsBX+Gs+wOadFNXNsnSTXW8DyXIi3PBJw3HSA0Y7sNi74e0Sdyd5+s4/F+kSv54osnlSaCqPH8m9yP4N2K2TcI5/2F2Sd2+5mQ5xLipE7O3z5tLkztl2NJB6FOcG3boQwX3oc3myXvpnZU=
+	t=1741019949; cv=none; b=sgxWYK4/NHvtkYSE2ZRBpmPTLxMwndcuLI5FEDwm8mh+CmvUSjYk3G9deHD8Bhdt8Z6JqaRtQW+GkySonrmsbGpno1cCFz4izNFjgp/J1KzwMkhMpeOjySfGBImIBWKIicg4zPbOAt9sqtWZ0Yn9pK/wPRR47V+wd5+dZT26+ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741019923; c=relaxed/simple;
-	bh=ItXRa2uqt/C9qeLij/vvz0rp/Rg3JjhhUzFdeg6ND0g=;
+	s=arc-20240116; t=1741019949; c=relaxed/simple;
+	bh=QPfkATgquTERDhGCt9aWlkqA2HdE4q8VEe95HfOR4xM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uzSYBsAHA8eIgf4kXEcTueQuttGqpF8KKv7Ge3CpwjJ8QEngXT6ii+ysq6ZDxCq9z74//rTTlZ0IPuRANVQfZuD2qnmpMEaSLBD9vbIhwK8KQiA3jFOhy/+aCc9oDTehlnHdNLDklytF3x5SCCeRUYcocOigsj7Snwix570x/0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PzeAP3xR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2949C4CED6;
-	Mon,  3 Mar 2025 16:38:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TtqLHAqW+3c7FIfz1WiKYCJ3hJtxafvr76Z6ESn3M7iqdWWVM3I8nTUMAjqEt9gDOVDYH5sBoU9i/EwXPRUQdVklVsBuwwnRKDa/kVLtM4E/ntMBS1u913Eb7yJAqbx5ByUWqOzVa2hA7Cpl7GWVnVmBzhuO2m8yvSswkz7QzMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNft3v+5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8F3C4CED6;
+	Mon,  3 Mar 2025 16:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741019921;
-	bh=ItXRa2uqt/C9qeLij/vvz0rp/Rg3JjhhUzFdeg6ND0g=;
+	s=k20201202; t=1741019949;
+	bh=QPfkATgquTERDhGCt9aWlkqA2HdE4q8VEe95HfOR4xM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PzeAP3xR5Revl4EJY+aRrDdCoPXrPAervQ6D4Z992Jx1etThQtrw3iRtovmZASb9S
-	 nMlxjGGLFwvcHNdQjcasjLy1YRLE4siQS92eU9V/jcOyEUkrh2zHahw6vGoac8l4LH
-	 ny90SeLv/uSnkb7/Z6Ws9RddYuchgjQG69Q/HzViwBRruvQzADjhENSq+IoFv3QXIx
-	 l+GnvhWl5P+BH7tOTh3wx8vHDjJYqZxe1N0mRR/S3wbEfJXZS4L+7btN2D7xMapHnr
-	 eNjMyRhUsTuT9egrf0eDeqH7IrJEnlGs3PAR3uXUUHy9i08eguYdb8/nqRXmwMWZ12
-	 FlBUKVynk/F7w==
-Date: Mon, 3 Mar 2025 08:38:37 -0800
+	b=NNft3v+5T8OLvXt9aobTpNHkAd0/UGrLN6BbaaMewdS8vIEkBB7fSBumk7JUKm5Km
+	 FnU6xGrcbsGc+lzu9rgFicDCiHybyzPlnXGYkyRkRdjp43Qp4tCVlScUCkXCsrgCJd
+	 bPYZAAEHZwEjZySKywTCfThAORcaKSxjrGwIZBD3tMqDSMJD/JP361rO12mRQcVOwL
+	 TmxWcpWf6xEgm427rOBAimCZUXHGo/RgxLrkv0o8Y+hJ2w0WDGBv37Ce9UBHY5GzKL
+	 jce/zt+eihibN23ldAVht7Kt61DZMDEvjBKOP4ITrFIFMrEINZm4paB5+1aWXUyoET
+	 6xeNusgboc3sA==
+Date: Mon, 3 Mar 2025 08:39:06 -0800
 From: Kees Cook <kees@kernel.org>
 To: jeffxu@chromium.org
 Cc: akpm@linux-foundation.org, jannh@google.com,
@@ -63,10 +63,10 @@ Cc: akpm@linux-foundation.org, jannh@google.com,
 	ardb@google.com, enh@google.com, rientjes@google.com,
 	groeck@chromium.org, mpe@ellerman.id.au,
 	aleksandr.mikhalitsyn@canonical.com, mike.rapoport@gmail.com
-Subject: Re: [PATCH v8 3/7] mseal sysmap: enable x86-64
-Message-ID: <202503030838.E05CCEC78@keescook>
+Subject: Re: [PATCH v8 4/7] mseal sysmap: enable arm64
+Message-ID: <202503030838.8D991B5ED5@keescook>
 References: <20250303050921.3033083-1-jeffxu@google.com>
- <20250303050921.3033083-4-jeffxu@google.com>
+ <20250303050921.3033083-5-jeffxu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,19 +75,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303050921.3033083-4-jeffxu@google.com>
+In-Reply-To: <20250303050921.3033083-5-jeffxu@google.com>
 
-On Mon, Mar 03, 2025 at 05:09:17AM +0000, jeffxu@chromium.org wrote:
+On Mon, Mar 03, 2025 at 05:09:18AM +0000, jeffxu@chromium.org wrote:
 > From: Jeff Xu <jeffxu@chromium.org>
 > 
-> Provide support for CONFIG_MSEAL_SYSTEM_MAPPINGS on x86-64,
-> covering the vdso, vvar, vvar_vclock.
+> Provide support for CONFIG_MSEAL_SYSTEM_MAPPINGS on arm64, covering
+> the vdso, vvar, and compat-mode vectors and sigpage mappings.
 > 
 > Production release testing passes on Android and Chrome OS.
 > 
 > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
 
-Short and to the point. :)
+Like x86, clean and simple.
 
 Reviewed-by: Kees Cook <kees@kernel.org>
 
