@@ -1,252 +1,200 @@
-Return-Path: <linux-kselftest+bounces-28094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28095-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E064A4CD7A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 22:28:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F34FBA4CD82
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 22:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60EE3188F6B8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 21:28:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D4FF3ACE5D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 21:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07EE1214A93;
-	Mon,  3 Mar 2025 21:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB54D1F03CF;
+	Mon,  3 Mar 2025 21:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="s7BJda2u"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LwysIRCE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DB21EEA36
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 21:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AC723642B
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Mar 2025 21:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741037281; cv=none; b=Td/hd+lo2ZTlJNx5RTJorQyBSGeA3KhhG5LlDY64GhgpuXPYdkdGnN63KztQCfCK11t3O0Q6brCkfKWRmZ8iG3QI2NB2XTsdPnc2mpD9qDJa8XIpZwSAeWer7mLIXK71PwveVySlmbsYXu6O2BXnZwVUw/JGW+EJYYRrMrKTOSY=
+	t=1741037383; cv=none; b=GWKGS30hsgnUjYJEI8HSFzTl+bxzJPHQ84LIjjsRbYdVSWjKWD190aXKISyuhljubL22QQMdsrYuZTifX6u5+FqxQUIxKmzvVxqhheG4H1oUiiSWAAx0XIrlq0vv0ZldStGD7d+gCOfcNhTvw3Qt8agIWghNVHjbalSw00XYDnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741037281; c=relaxed/simple;
-	bh=BZpx2gEPJd0PbhiRp9w8O40w2vRLkWNOVY9o7RR6hiY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OP4i9+no4d/7TTfsR2hv5tq6WchFMfYhI2yp6ZpsKOJXTuCqrPMNZhyQzW19x0WrK8+bOPqijxkyighE4j7YDZ6XQJr36vlBgijejkuk6U2k3JRyH9I4tv7S0SMNgrMypwjSsC9bqVLwWfh9LNNexGJRn0/VGpwXU7l040YvsJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=s7BJda2u; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-22349bb8605so95255795ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Mar 2025 13:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741037278; x=1741642078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t5+6u/YZI5K5WSEGZ9NbKf7JrIHJ+VjnAiqNVQjLR1U=;
-        b=s7BJda2uMTrkTrB5J0AbWvMnXcwH9GEWJadsCnZ+gwNGIBxNkzd64dpo/ikmiVV28e
-         shtbUZVw7z4RBMVibt5phKRletpUML9JkzwUIHKxftDSenFtCOM64/RuNHsMSRSXMMG9
-         r+gte/u5URlJSuSIf9hx8bzfeQ6xMAYCuX3WOX2EjbDq3fAi3US50dbfAsub3xbZ0jKJ
-         xQmCi9/M6zI950tAkOtTnkuurT2ANbrBi+n4oDPHjm8gWJCQ43k0gmabrG9pIYDsvLhH
-         l5mPeqi3hmhPBnd3ZHz+A+OtBppbT2gwvTFW7B5g+LVnAq8+vRsqexL/Y6EW9zAOebaX
-         nhEA==
+	s=arc-20240116; t=1741037383; c=relaxed/simple;
+	bh=uGCOquydQMu7XE8XjxA6YgTbUc8YWG3dslP5N8e1NUI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kGFfi7YJ8fw6Tzh2WPSAtRTjXG9DfEDeJAiLU8zfUEhFp1H/DCKoeHwKMC859E/glsKqsPrD3uhjK1QF9Gp67ZCaeKM8tY1Tx1cztQmfcjEjQW27EPqAc2BnSyrDnjxHKdDDMSf6UOeZeOnLGVQcfNh/wWKqQ5A2nCiovcG84Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LwysIRCE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741037381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4XHKmdvqQLV0kinajoxf6W7WfTOeuSd3If/M5JQf010=;
+	b=LwysIRCEtalOKt8VpJ9w5zAzjkfGUqly2A+aeM9CztLgFtxfPLS2vz9bRH8Q2SyXZ3Nbl3
+	zZ6DEekp72d0kN6w9Oj14H0Zml3RfQ6reS+dRpUU6CgH00b5oer4NalhpwlMRQehsLi/dI
+	/2IeN+uWtCZxmRDfVzz7/hr0XkO7btY=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-612-8U_izW1BMYCCikiRiCOw8g-1; Mon, 03 Mar 2025 16:29:35 -0500
+X-MC-Unique: 8U_izW1BMYCCikiRiCOw8g-1
+X-Mimecast-MFC-AGG-ID: 8U_izW1BMYCCikiRiCOw8g_1741037374
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-474eb86a314so26959001cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Mar 2025 13:29:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741037278; x=1741642078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t5+6u/YZI5K5WSEGZ9NbKf7JrIHJ+VjnAiqNVQjLR1U=;
-        b=Uf8HHCl23Lkl6L9dQ8oFYoD8wKVsC5JosHXcsPKNplpcBotx30OLxm1VIat746f4VQ
-         SE2qOeMN5EQoI9wwqHC6ub9Wy4FmE2O2srXbGYP2pIUHGe6RphWlmQERTfLSDBWx9uIu
-         HJrr1bm3Q3q2IzkXafQuxiqMdVaQ3kr8eMHG+dqYwEDq30UfNkn8ExomYjbfT30T7Npb
-         6ojvzoXW3c+uhGmShLRykWZyuSulRusiZKXvWUpCDEbZ5XzMNb9Sblr87xBPh1Fgv2lX
-         PpAMafblq33IAl1sAPN1R0COjh/U3Ggq/yEx0uxW2994YGwpEEkdbAScYwtIa6EhRBEn
-         2EJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXaJYjMCmFVayfpvY7EfDvqC1NLsZC6suqCWsMD4apMa2Qnfp+9sP1kJLw5IJqMM0+S3NtNBVdQvbEbROEjkg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6UEbjTcvpW07FZBJsPXAc8Xz5rRHL6IkB0XyJ62s/2LS7MGfD
-	JBA/7+PJwOwipHtQ3sKizSJesXjkfffH7wC7agUmZ+K1/mNlBwgkcIV2utfi6w9e3SuMwchZrI0
-	30+TrMrirzLr/jyd6ADYXySD9/i77tFXA+mVJow==
-X-Gm-Gg: ASbGnctWPVVXmfA+RXL5TxZ35FWm+iwZRU/ZC9aids2EuZLonN1t5E2srCLRb2nkiyx
-	e6uHfu4ktRMnBCLr0TaBnebwUPGfsnLw5CAIVjQ+YvnpZUIWoMHX9UmboHFlczarlA2+39y78Tx
-	QGgdaMsPcn6JkMQYF2NNOYNxXg
-X-Google-Smtp-Source: AGHT+IFWa898pYBSsl/XtTire00C+/Mez1s46zY3VD5s0DWQi6LGPCXHd85UBauAj0l5XQztYMk3Koj9EeRJt1F3O/w=
-X-Received: by 2002:a05:6a00:10d5:b0:736:54c9:df2c with SMTP id
- d2e1a72fcca58-73654c9e5damr7398143b3a.15.1741037278523; Mon, 03 Mar 2025
- 13:27:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741037374; x=1741642174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4XHKmdvqQLV0kinajoxf6W7WfTOeuSd3If/M5JQf010=;
+        b=hGl8BA7TsekfU7TTvWZAVLWzOI0yNoDNvjPtvT1DF126QVrNx+4EC2weecku0x1qao
+         rsKi5AUFPyDTE+mbQ17ww0GX6hgzxmFzDgLWgrVV+JGxb9qQ6IuTG1sIpL3dkxm2pPAn
+         pEJDdg9+7vW3byIPvyDVURBrGgGSlulkRZ5CZ55JOolXsBYB2koWMFco8VsZoQb3qu2J
+         mMPjpCck+haQsyApBAnPCvHAsro2BKl6smD4CfuedDbGGSfH8VbGzAPkWGGJDhujmTVx
+         /UFdRMX65j00gFowDD0YV6PAq/cAB7Z3fvB8eVkb5+oCZdx6gaVNP+LWSbRNA6IFKjUS
+         /pbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCQ2im9hdpIsUwhesKQuI2wIL8Zhj7hTnzR7fGc8BL6EZlCXcDJc2/ANY35k8n47pAgOBa76Av4+TI6JDkZq8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8QBP/UtZBydNU0dPTU7c6x5XD02urE83aIeEkX2PK724PjEMx
+	/FkrRfLZaoCv+IGvizgwQO/ABQ5PDY/Ks0MP3BnqPw/3DDpauLhrSNYoaAXLTdEGNC5v7KLMCzH
+	vpvTWU4KpDRfyiQZRgqlfPO2DZUABN08Rs6S7TYyseWxIAYUStFJ08Jhh9J3iP9s7Gg==
+X-Gm-Gg: ASbGncukof8DXkLX/TQHcbR2wie82L3JDUlsaboAiUH/5505vrLMVvkqSeGb1yPuYtc
+	g8X//sCwN82PaRsGwl4rurVMbyYsc1zaYy8WW+ctcElF5PFAFPbTrHgUokVhG28hi9HS7h2FqMn
+	5joMQ4vop5fSk4wponcZe6sm6xYq/BDM4GHs/bO/wZ39xdlmpTTxnc7S7N1ivJZVZIWlCxs9ZrU
+	zBrOaxyWD/eIU9eh8F0nz8wRi4pEQZmyq90vwFfi7UGIjRyhQQAy+ChTr9eENPX4ThEXgTLxAu4
+	7CILGR0=
+X-Received: by 2002:a05:622a:1195:b0:471:f1c6:54a6 with SMTP id d75a77b69052e-474bbf8989cmr203598911cf.0.1741037374584;
+        Mon, 03 Mar 2025 13:29:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGyEWewqQv6y2LaIpicJJ1HPCHenu4T0jWbilaFvqyXO2dsNaQSyH7LiAJDW9m7DNjxLw6PZg==
+X-Received: by 2002:a05:622a:1195:b0:471:f1c6:54a6 with SMTP id d75a77b69052e-474bbf8989cmr203598501cf.0.1741037374182;
+        Mon, 03 Mar 2025 13:29:34 -0800 (PST)
+Received: from x1.local ([85.131.185.92])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-474fd3a8bdasm603971cf.74.2025.03.03.13.29.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 13:29:33 -0800 (PST)
+Date: Mon, 3 Mar 2025 16:29:29 -0500
+From: Peter Xu <peterx@redhat.com>
+To: Nikita Kalyazin <kalyazin@amazon.com>
+Cc: akpm@linux-foundation.org, pbonzini@redhat.com, shuah@kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	lorenzo.stoakes@oracle.com, david@redhat.com, ryan.roberts@arm.com,
+	quic_eberman@quicinc.com, jthoughton@google.com, graf@amazon.de,
+	jgowans@amazon.com, roypat@amazon.co.uk, derekmn@amazon.com,
+	nsaenz@amazon.es, xmarcalx@amazon.com
+Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
+Message-ID: <Z8YfOVYvbwlZST0J@x1.local>
+References: <20250303133011.44095-1-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250226-kvm_pmu_improve-v1-0-74c058c2bf6d@rivosinc.com>
- <20250226-kvm_pmu_improve-v1-4-74c058c2bf6d@rivosinc.com> <20250227-f7b303813dab128b5060b0c3@orel>
-In-Reply-To: <20250227-f7b303813dab128b5060b0c3@orel>
-From: Atish Kumar Patra <atishp@rivosinc.com>
-Date: Mon, 3 Mar 2025 13:27:47 -0800
-X-Gm-Features: AQ5f1JoAkFSTZhtomPL4SLm3WBUMZBjoFu7rVfDIUHdBaeUMfROdiGWXnMT4KxU
-Message-ID: <CAHBxVyGGw6Ur4Kdd8Vvwp6viKWPx64w7gNvNiUzmAGeXF2PGoA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] KVM: riscv: selftests: Allow number of interrupts to
- be configurable
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250303133011.44095-1-kalyazin@amazon.com>
 
-On Thu, Feb 27, 2025 at 12:16=E2=80=AFAM Andrew Jones <ajones@ventanamicro.=
-com> wrote:
->
-> On Wed, Feb 26, 2025 at 12:25:06PM -0800, Atish Patra wrote:
-> > It is helpful to vary the number of the LCOFI interrupts generated
-> > by the overflow test. Allow additional argument for overflow test
-> > to accommodate that. It can be easily cross-validated with
-> > /proc/interrupts output in the host.
-> >
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 36 ++++++++++++++++=
-++++----
-> >  1 file changed, 30 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/t=
-esting/selftests/kvm/riscv/sbi_pmu_test.c
-> > index 533b76d0de82..7c273a1adb17 100644
-> > --- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> > +++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-> > @@ -39,8 +39,10 @@ static bool illegal_handler_invoked;
-> >  #define SBI_PMU_TEST_SNAPSHOT        BIT(2)
-> >  #define SBI_PMU_TEST_OVERFLOW        BIT(3)
-> >
-> > +#define SBI_PMU_OVERFLOW_IRQNUM_DEFAULT 5
-> >  struct test_args {
-> >       int disabled_tests;
-> > +     int overflow_irqnum;
-> >  };
-> >
-> >  static struct test_args targs;
-> > @@ -478,7 +480,7 @@ static void test_pmu_events_snaphost(void)
-> >
-> >  static void test_pmu_events_overflow(void)
-> >  {
-> > -     int num_counters =3D 0;
-> > +     int num_counters =3D 0, i =3D 0;
-> >
-> >       /* Verify presence of SBI PMU and minimum requrired SBI version *=
-/
-> >       verify_sbi_requirement_assert();
-> > @@ -495,11 +497,15 @@ static void test_pmu_events_overflow(void)
-> >        * Qemu supports overflow for cycle/instruction.
-> >        * This test may fail on any platform that do not support overflo=
-w for these two events.
-> >        */
-> > -     test_pmu_event_overflow(SBI_PMU_HW_CPU_CYCLES);
-> > -     GUEST_ASSERT_EQ(vcpu_shared_irq_count, 1);
-> > +     for (i =3D 0; i < targs.overflow_irqnum; i++)
-> > +             test_pmu_event_overflow(SBI_PMU_HW_CPU_CYCLES);
-> > +     GUEST_ASSERT_EQ(vcpu_shared_irq_count, targs.overflow_irqnum);
-> > +
-> > +     vcpu_shared_irq_count =3D 0;
-> >
-> > -     test_pmu_event_overflow(SBI_PMU_HW_INSTRUCTIONS);
-> > -     GUEST_ASSERT_EQ(vcpu_shared_irq_count, 2);
-> > +     for (i =3D 0; i < targs.overflow_irqnum; i++)
-> > +             test_pmu_event_overflow(SBI_PMU_HW_INSTRUCTIONS);
-> > +     GUEST_ASSERT_EQ(vcpu_shared_irq_count, targs.overflow_irqnum);
-> >
-> >       GUEST_DONE();
-> >  }
-> > @@ -621,8 +627,11 @@ static void test_vm_events_overflow(void *guest_co=
-de)
-> >
-> >  static void test_print_help(char *name)
-> >  {
-> > -     pr_info("Usage: %s [-h] [-t <test name>]\n", name);
-> > +     pr_info("Usage: %s [-h] [-t <test name>] [-n <number of LCOFI int=
-errupt for overflow test>]\n",
-> > +             name);
-> >       pr_info("\t-t: Test to run (default all). Available tests are 'ba=
-sic', 'events', 'snapshot', 'overflow'\n");
-> > +     pr_info("\t-n: Number of LCOFI interrupt to trigger for each even=
-t in overflow test (default: %d)\n",
-> > +             SBI_PMU_OVERFLOW_IRQNUM_DEFAULT);
-> >       pr_info("\t-h: print this help screen\n");
-> >  }
-> >
-> > @@ -631,6 +640,8 @@ static bool parse_args(int argc, char *argv[])
-> >       int opt;
-> >       int temp_disabled_tests =3D SBI_PMU_TEST_BASIC | SBI_PMU_TEST_EVE=
-NTS | SBI_PMU_TEST_SNAPSHOT |
-> >                                 SBI_PMU_TEST_OVERFLOW;
-> > +     int overflow_interrupts =3D -1;
->
-> Initializing to -1 made me think that '-n 0' would be valid and a way to
-> disable the overflow test, but...
->
+On Mon, Mar 03, 2025 at 01:30:06PM +0000, Nikita Kalyazin wrote:
+> This series is built on top of the v3 write syscall support [1].
+> 
+> With James's KVM userfault [2], it is possible to handle stage-2 faults
+> in guest_memfd in userspace.  However, KVM itself also triggers faults
+> in guest_memfd in some cases, for example: PV interfaces like kvmclock,
+> PV EOI and page table walking code when fetching the MMIO instruction on
+> x86.  It was agreed in the guest_memfd upstream call on 23 Jan 2025 [3]
+> that KVM would be accessing those pages via userspace page tables.  In
+> order for such faults to be handled in userspace, guest_memfd needs to
+> support userfaultfd.
+> 
+> This series proposes a limited support for userfaultfd in guest_memfd:
+>  - userfaultfd support is conditional to `CONFIG_KVM_GMEM_SHARED_MEM`
+>    (as is fault support in general)
+>  - Only `page missing` event is currently supported
+>  - Userspace is supposed to respond to the event with the `write`
+>    syscall followed by `UFFDIO_CONTINUE` ioctl to unblock the faulting
+>    process.   Note that we can't use `UFFDIO_COPY` here because
+>    userfaulfd code does not know how to prepare guest_memfd pages, eg
+>    remove them from direct map [4].
+> 
+> Not included in this series:
+>  - Proper interface for userfaultfd to recognise guest_memfd mappings
+>  - Proper handling of truncation cases after locking the page
+> 
+> Request for comments:
+>  - Is it a sensible workflow for guest_memfd to resolve a userfault
+>    `page missing` event with `write` syscall + `UFFDIO_CONTINUE`?  One
+>    of the alternatives is teaching `UFFDIO_COPY` how to deal with
+>    guest_memfd pages.
 
-Is there any benefit ? I found it much more convenient to select a
-single test and run instead of disabling
-a single test.
+Probably not..  I don't see what protects a thread fault concurrently
+during write() happening, seeing partial data.  Since you check the page
+cache it'll let it pass, but the partial page will be faulted in there.
 
-Once you single or a set of tests, all other tests are disabled anyways.
+I think we may need to either go with full MISSING or full MINOR traps.
 
-> > +
-> >       while ((opt =3D getopt(argc, argv, "h:t:n:")) !=3D -1) {
-> >               switch (opt) {
-> >               case 't':
-> > @@ -646,12 +657,24 @@ static bool parse_args(int argc, char *argv[])
-> >                               goto done;
-> >                       targs.disabled_tests =3D temp_disabled_tests;
-> >                       break;
-> > +             case 'n':
-> > +                     overflow_interrupts =3D atoi_positive("Number of =
-LCOFI", optarg);
->
-> ...here we use atoi_positive() and...
->
-> > +                     break;
-> >               case 'h':
-> >               default:
-> >                       goto done;
-> >               }
-> >       }
-> >
-> > +     if (overflow_interrupts > 0) {
->
-> ...here we only change from the default of 5 for nonzero.
->
-> Should we allow '-n 0'? Otherwise overflow_interrupts can be initialized
-> to zero (not that it matters).
->
+One thing to mention is we probably need MINOR sooner or later to support
+gmem huge pages.  The thing is for huge folios in gmem we can't rely on
+missing in page cache, as we always need to allocate in hugetlb sizes.
 
-I will change the default value to 0 to avoid ambiguity for now.
-Please let me know if you strongly think we should support -n 0.
-We can always support it. I just don't see the point of specifying the
-test with options to disable it anymore.
+>  - What is a way forward to make userfaultfd code aware of guest_memfd?
+>    I saw that Patrick hit a somewhat similar problem in [5] when trying
+>    to use direct map manipulation functions in KVM and was pointed by
+>    David at Elliot's guestmem library [6] that might include a shim for that.
+>    Would the library be the right place to expose required interfaces like
+>    `vma_is_gmem`?
 
-> > +             if (targs.disabled_tests & SBI_PMU_TEST_OVERFLOW) {
-> > +                     pr_info("-n option is only available for overflow=
- test\n");
-> > +                     goto done;
-> > +             } else {
-> > +                     targs.overflow_irqnum =3D overflow_interrupts;
-> > +             }
-> > +     }
-> > +
-> >       return true;
-> >  done:
-> >       test_print_help(argv[0]);
-> > @@ -661,6 +684,7 @@ static bool parse_args(int argc, char *argv[])
-> >  int main(int argc, char *argv[])
-> >  {
-> >       targs.disabled_tests =3D 0;
-> > +     targs.overflow_irqnum =3D SBI_PMU_OVERFLOW_IRQNUM_DEFAULT;
-> >
-> >       if (!parse_args(argc, argv))
-> >               exit(KSFT_SKIP);
-> >
-> > --
-> > 2.43.0
-> >
->
-> Thanks,
-> drew
+Not sure what's the best to do, but IIUC the current way this series uses
+may not work as long as one tries to reference a kvm symbol from core mm..
+
+One trick I used so far is leveraging vm_ops and provide hook function to
+report specialties when it's gmem.  In general, I did not yet dare to
+overload vm_area_struct, but I'm thinking maybe vm_ops is more possible to
+be accepted.  E.g. something like this:
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 5e742738240c..b068bb79fdbc 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -653,8 +653,26 @@ struct vm_operations_struct {
+         */
+        struct page *(*find_special_page)(struct vm_area_struct *vma,
+                                          unsigned long addr);
++       /*
++        * When set, return the allowed orders bitmask in faults of mmap()
++        * ranges (e.g. for follow up huge_fault() processing).  Drivers
++        * can use this to bypass THP setups for specific types of VMAs.
++        */
++       unsigned long (*get_supported_orders)(struct vm_area_struct *vma);
+ };
+ 
++static inline bool vma_has_supported_orders(struct vm_area_struct *vma)
++{
++       return vma->vm_ops && vma->vm_ops->get_supported_orders;
++}
++
++static inline unsigned long vma_get_supported_orders(struct vm_area_struct *vma)
++{
++       if (!vma_has_supported_orders(vma))
++               return 0;
++       return vma->vm_ops->get_supported_orders(vma);
++}
++
+
+In my case I used that to allow gmem report huge page supports on faults.
+
+Said that, above only existed in my own tree so far, so I also don't know
+whether something like that could be accepted (even if it'll work for you).
+
+Thanks,
+
+-- 
+Peter Xu
+
 
