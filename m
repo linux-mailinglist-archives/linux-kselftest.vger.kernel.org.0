@@ -1,181 +1,122 @@
-Return-Path: <linux-kselftest+bounces-27992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E27DDA4B605
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 03:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B18AA4B677
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 04:24:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFAB718907B1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 02:17:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 482131890511
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 03:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EDEE1482F5;
-	Mon,  3 Mar 2025 02:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQtCIWiL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B81CA1A08AF;
+	Mon,  3 Mar 2025 03:24:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF5F22611;
-	Mon,  3 Mar 2025 02:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B402A142900;
+	Mon,  3 Mar 2025 03:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740968247; cv=none; b=CwJtj+qXKFQNg1RkTe+pJetqXMetwCXJMc20sngFdeXj+bGRvqY/p8PqvCFZjjfdfXfUxYL8YF0I2yRxuXW0CWagzmW0xa7mIAHDdRU18Qvx5q8lZ4d4caTFvfoi2vVDPaCuc9Q9xeMZQn4WogTqrDvZY6TmWJCO79eLPvyGgLE=
+	t=1740972281; cv=none; b=nc40CyHLZ/x+/u3FcyOaI8BAlQo7AZqv2MUBJP47/wir8JqG/u0RU9NTqMFujuh5Uu/l55sHu13GwfssVqfMV6Y873HKEi99549B5v32blsoj0OFjwAhxJbmO6W28a96feYe9ZlvLvmrLNSNOFHa8DyNd0+e/v5C54Tsdg1+9rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740968247; c=relaxed/simple;
-	bh=GbrPH0tIFyJAiYao72KxIdzmQ/EXoIRpJp9qNrvdixI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ZDNtJX7hEC00L8YpiJShsUtIl/ol8SxJGxsHvld/NcuhBq7Cb/vAsPHg50cfqxrKEbuGq55iwNQLarXF1BDLJExPAIkEu0GwxAU3F6bYcEFx0znniIO2YpjOAFIgHrESf5harhIhuDUAr5olQ9g/3itAO15dK58Z1XUBkjERciU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQtCIWiL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD73C4CED6;
-	Mon,  3 Mar 2025 02:17:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740968246;
-	bh=GbrPH0tIFyJAiYao72KxIdzmQ/EXoIRpJp9qNrvdixI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EQtCIWiL5MabiXwGCiheE9uWuAMeWnsJnos9pCI1omGhXQhXG36kdqDF0lm9+R4Dq
-	 1y4pNiEQjZOi1aw/xM5tSF3sYaBXK4P4e/ZjL0JZ2uVq1+HKK/cFU0RJCPeharENer
-	 AU2l90DCSlY3L/eb69SXgksK2UzxEM0f32azaWiyJl6bWlOJ8MmG4IZ+AsODqX8Xft
-	 xa7eNxq//lCXvKhviI0OIPYJRv+NUQlWCPEeCqMpFTNCgUBPP+KN18eiWDHYagiHOb
-	 /Rvz8gd9nPc8YqEkwbwWSJkriepf446cl32r9KTVzmCfsTbWt22IfSz50AZJ/rExil
-	 x3Y68xgt/XWJA==
-Date: Mon, 3 Mar 2025 11:17:21 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Hari Bathini
- <hbathini@linux.ibm.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 4/8] tracing: probe-events: Log errro for exceeding the
- number of arguments
-Message-Id: <20250303111721.87cd676bacaa29326a575452@kernel.org>
-In-Reply-To: <174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
-References: <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
-	<174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1740972281; c=relaxed/simple;
+	bh=UcP3opEi5PP9Ja8NK4VfQ8fuAffygbj26lA15ZkNhBI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=duDUDH5a3eh4a7LAkMcG+D5D2PVzV4uDApSerL3CrTCTYdN0P+nue9TDtZN0MXcMknPDH9U62EyB7AuiUsjt1V8G68G0Zz+pRDUX8ne7Oec0nh6kpMR8AEfY2BEcDUtiwui9oW05MKWYEPXL0fmOkZVQfRamJu5tYp4QCDEmQTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 04fd338ef7df11efa216b1d71e6e1362-20250303
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:a0c845bf-8a62-4b64-817b-71fe6da47bd4,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:4f134b344d0d9fd307ada4f0dd2ebdd0,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102,TC:nil,Content:0|52,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 04fd338ef7df11efa216b1d71e6e1362-20250303
+Received: from node2.com.cn [(10.44.16.197)] by mailgw.kylinos.cn
+	(envelope-from <liuye@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 2042143849; Mon, 03 Mar 2025 11:24:30 +0800
+Received: from node2.com.cn (localhost [127.0.0.1])
+	by node2.com.cn (NSMail) with SMTP id 4B7C2B807587;
+	Mon,  3 Mar 2025 11:24:29 +0800 (CST)
+X-ns-mid: postfix-67C520ED-258227829
+Received: from [172.30.70.73] (unknown [172.30.70.73])
+	by node2.com.cn (NSMail) with ESMTPA id B58AAB807587;
+	Mon,  3 Mar 2025 03:24:28 +0000 (UTC)
+Message-ID: <e46e7143-84e7-4f98-962c-27467bef5457@kylinos.cn>
+Date: Mon, 3 Mar 2025 11:23:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: liuye <liuye@kylinos.cn>
+Subject: Re: [PATCH] selftests/dma: Fix bad array reference.
+To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
+Cc: zhujun2@cmss.chinamobile.com, iommu@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250206021239.51897-1-liuye@kylinos.cn>
+ <3b51ae45-4dd4-4238-bf3f-3cb4d263eda4@kylinos.cn>
+ <0758d73d-98b7-4f9b-a3b2-001d69eb949d@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <0758d73d-98b7-4f9b-a3b2-001d69eb949d@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 26 Feb 2025 15:19:10 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Add error message when the number of arguments exceeeds the limitation.
-> 
-
-Hmm, this is not a fix patch so this should be handled as enhancement.
-I'll drop this from probes/fixes.
+By code observation only.
 
 Thanks,
+Liu Ye
 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  kernel/trace/trace_eprobe.c |    2 ++
->  kernel/trace/trace_fprobe.c |    5 ++++-
->  kernel/trace/trace_kprobe.c |    5 ++++-
->  kernel/trace/trace_probe.h  |    1 +
->  kernel/trace/trace_uprobe.c |    9 +++++++--
->  5 files changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index 82fd637cfc19..af9fa0632b57 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -913,6 +913,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
->  	}
->  
->  	if (argc - 2 > MAX_TRACE_ARGS) {
-> +		trace_probe_log_set_index(2);
-> +		trace_probe_log_err(0, TOO_MANY_ARGS);
->  		ret = -E2BIG;
->  		goto error;
->  	}
-> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-> index e27305d31fc5..372936163c21 100644
-> --- a/kernel/trace/trace_fprobe.c
-> +++ b/kernel/trace/trace_fprobe.c
-> @@ -1201,8 +1201,11 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
->  		argc = new_argc;
->  		argv = new_argv;
->  	}
-> -	if (argc > MAX_TRACE_ARGS)
-> +	if (argc > MAX_TRACE_ARGS) {
-> +		trace_probe_log_set_index(2);
-> +		trace_probe_log_err(0, TOO_MANY_ARGS);
->  		return -E2BIG;
-> +	}
->  
->  	ret = traceprobe_expand_dentry_args(argc, argv, &dbuf);
->  	if (ret)
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index d8d5f18a141a..8287b175667f 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1007,8 +1007,11 @@ static int trace_kprobe_create_internal(int argc, const char *argv[],
->  		argc = new_argc;
->  		argv = new_argv;
->  	}
-> -	if (argc > MAX_TRACE_ARGS)
-> +	if (argc > MAX_TRACE_ARGS) {
-> +		trace_probe_log_set_index(2);
-> +		trace_probe_log_err(0, TOO_MANY_ARGS);
->  		return -E2BIG;
-> +	}
->  
->  	ret = traceprobe_expand_dentry_args(argc, argv, &dbuf);
->  	if (ret)
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index c47ca002347a..6075afc8ea67 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -546,6 +546,7 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
->  	C(BAD_BTF_TID,		"Failed to get BTF type info."),\
->  	C(BAD_TYPE4STR,		"This type does not fit for string."),\
->  	C(NEED_STRING_TYPE,	"$comm and immediate-string only accepts string type"),\
-> +	C(TOO_MANY_ARGS,	"Too many arguments are specified"),	\
->  	C(TOO_MANY_EARGS,	"Too many entry arguments specified"),
->  
->  #undef C
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index ccc762fbb69c..3386439ec9f6 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -562,8 +562,14 @@ static int __trace_uprobe_create(int argc, const char **argv)
->  
->  	if (argc < 2)
->  		return -ECANCELED;
-> -	if (argc - 2 > MAX_TRACE_ARGS)
-> +
-> +	trace_probe_log_init("trace_uprobe", argc, argv);
-> +
-> +	if (argc - 2 > MAX_TRACE_ARGS) {
-> +		trace_probe_log_set_index(2);
-> +		trace_probe_log_err(0, TOO_MANY_ARGS);
->  		return -E2BIG;
-> +	}
->  
->  	if (argv[0][1] == ':')
->  		event = &argv[0][2];
-> @@ -582,7 +588,6 @@ static int __trace_uprobe_create(int argc, const char **argv)
->  		return -ECANCELED;
->  	}
->  
-> -	trace_probe_log_init("trace_uprobe", argc, argv);
->  	trace_probe_log_set_index(1);	/* filename is the 2nd argument */
->  
->  	*arg++ = '\0';
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+=E5=9C=A8 2025/2/27 05:41, Shuah Khan =E5=86=99=E9=81=93:
+> On 2/25/25 18:31, liuye wrote:
+>> Friendly ping.
+>>
+>> =E5=9C=A8 2025/2/6 10:12, Liu Ye =E5=86=99=E9=81=93:
+>>> dir[directions] should be directions[dir] to correctly index the
+>>> directions array.
+>>>
+>>> Signed-off-by: Liu Ye <liuye@kylinos.cn>
+>>> ---
+>>> =C2=A0 tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
+>>> =C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/=
+testing/selftests/dma/dma_map_benchmark.c
+>>> index b12f1f9babf8..b925756373ce 100644
+>>> --- a/tools/testing/selftests/dma/dma_map_benchmark.c
+>>> +++ b/tools/testing/selftests/dma/dma_map_benchmark.c
+>>> @@ -118,7 +118,7 @@ int main(int argc, char **argv)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 printf("dma mapping benchmark: =
+threads:%d seconds:%d node:%d dir:%s granule: %d\n",
+>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 t=
+hreads, seconds, node, dir[directions], granule);
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 t=
+hreads, seconds, node, directions[dir], granule);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 printf("average map latency(us):%.1f s=
+tandard deviation:%.1f\n",
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 map.avg_map_100ns/10.0, map.map_stddev/10.0);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 printf("average unmap latency(us):%.1f=
+ standard deviation:%.1f\n",
+>
+> How did you find this problem?
+>
+> thanks,
+> -- Shuah
+>
+>
 
