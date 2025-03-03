@@ -1,169 +1,181 @@
-Return-Path: <linux-kselftest+bounces-27991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-27992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2E7A4B545
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 23:24:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E27DDA4B605
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 03:17:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2F077A5697
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Mar 2025 22:23:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFAB718907B1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Mar 2025 02:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C23A1EEA54;
-	Sun,  2 Mar 2025 22:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EDEE1482F5;
+	Mon,  3 Mar 2025 02:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pAUO5yLz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQtCIWiL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8091C5D50;
-	Sun,  2 Mar 2025 22:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF5F22611;
+	Mon,  3 Mar 2025 02:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740954289; cv=none; b=Eo8KcjW6YTZtPnd5aZ5ZLdrfAux97U2L4X+NZY/uXSIbk1/YeXTqzZymue94DLWASt1J0EeXrWr5CrYavXEurtBmuH9i2HCO6BojdMgsj2OREpTUFXOv4SwWxrwGg+cUt8kyKVcu8bO/jq8Ylz/hnwBsQg0ZHd63y68Z3YaiVZg=
+	t=1740968247; cv=none; b=CwJtj+qXKFQNg1RkTe+pJetqXMetwCXJMc20sngFdeXj+bGRvqY/p8PqvCFZjjfdfXfUxYL8YF0I2yRxuXW0CWagzmW0xa7mIAHDdRU18Qvx5q8lZ4d4caTFvfoi2vVDPaCuc9Q9xeMZQn4WogTqrDvZY6TmWJCO79eLPvyGgLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740954289; c=relaxed/simple;
-	bh=/hlDwvxLYyxxaCdGAumRss9X64xeO1ztGhDkk6sK0to=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iJHs3dnLk5gj0DaW7pm8WizSuEmmTYf3CnnLRYWXDORSClstzJJF/nVEztIuX2i4YTyFgBa7rZMN8WV++WKCbYZmwwDmhB+OXD3HMrqviw1JeK/AJZT2V93teT9mwezrLSw46ncNr2MB2EQMboCF+DIB3ROl4Yb6AaywE6Ey2a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pAUO5yLz; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1740954283;
-	bh=/hlDwvxLYyxxaCdGAumRss9X64xeO1ztGhDkk6sK0to=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pAUO5yLz0rLqLnTSUiXtT6af/tLaDefSVgDUG1acgkvj3UNGHGizyrtb9wacM2ZEi
-	 ax4mZpA3MBb3ghzG6IINTD4D7wH+CuBbDHEY+AHOGPER5EMl7Ihxkm3kaCaizyZJAH
-	 +1rTpe9KyhGbjeFPoXTnwnJAvn2osHzd432A564E=
-Date: Sun, 2 Mar 2025 23:24:43 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Louis Taylor <louis@kragniz.eu>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: add support for openat(2)
-Message-ID: <d0ed3b0d-4b7d-40cb-bbce-1f2a6605db7f@t-8ch.de>
-References: <20250302202528.4169024-1-louis@kragniz.eu>
+	s=arc-20240116; t=1740968247; c=relaxed/simple;
+	bh=GbrPH0tIFyJAiYao72KxIdzmQ/EXoIRpJp9qNrvdixI=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ZDNtJX7hEC00L8YpiJShsUtIl/ol8SxJGxsHvld/NcuhBq7Cb/vAsPHg50cfqxrKEbuGq55iwNQLarXF1BDLJExPAIkEu0GwxAU3F6bYcEFx0znniIO2YpjOAFIgHrESf5harhIhuDUAr5olQ9g/3itAO15dK58Z1XUBkjERciU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQtCIWiL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD73C4CED6;
+	Mon,  3 Mar 2025 02:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740968246;
+	bh=GbrPH0tIFyJAiYao72KxIdzmQ/EXoIRpJp9qNrvdixI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EQtCIWiL5MabiXwGCiheE9uWuAMeWnsJnos9pCI1omGhXQhXG36kdqDF0lm9+R4Dq
+	 1y4pNiEQjZOi1aw/xM5tSF3sYaBXK4P4e/ZjL0JZ2uVq1+HKK/cFU0RJCPeharENer
+	 AU2l90DCSlY3L/eb69SXgksK2UzxEM0f32azaWiyJl6bWlOJ8MmG4IZ+AsODqX8Xft
+	 xa7eNxq//lCXvKhviI0OIPYJRv+NUQlWCPEeCqMpFTNCgUBPP+KN18eiWDHYagiHOb
+	 /Rvz8gd9nPc8YqEkwbwWSJkriepf446cl32r9KTVzmCfsTbWt22IfSz50AZJ/rExil
+	 x3Y68xgt/XWJA==
+Date: Mon, 3 Mar 2025 11:17:21 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Hari Bathini
+ <hbathini@linux.ibm.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 4/8] tracing: probe-events: Log errro for exceeding the
+ number of arguments
+Message-Id: <20250303111721.87cd676bacaa29326a575452@kernel.org>
+In-Reply-To: <174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
+References: <174055071644.4079315.12468865615828925878.stgit@mhiramat.tok.corp.google.com>
+	<174055075075.4079315.10916648136898316476.stgit@mhiramat.tok.corp.google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250302202528.4169024-1-louis@kragniz.eu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Louis,
+On Wed, 26 Feb 2025 15:19:10 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-On 2025-03-02 20:25:23+0000, Louis Taylor wrote:
-> openat is useful to avoid needing to construct relative paths, so expose
-> a wrapper for using it directly.
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Add error message when the number of arguments exceeeds the limitation.
+> 
 
-Can you say what you are using nolibc for? I'm curious :-)
+Hmm, this is not a fix patch so this should be handled as enhancement.
+I'll drop this from probes/fixes.
 
-> Signed-off-by: Louis Taylor <louis@kragniz.eu>
+Thanks,
+
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > ---
->  tools/include/nolibc/sys.h                   | 29 ++++++++++++++++++++
->  tools/testing/selftests/nolibc/nolibc-test.c | 22 +++++++++++++++
->  2 files changed, 51 insertions(+)
+>  kernel/trace/trace_eprobe.c |    2 ++
+>  kernel/trace/trace_fprobe.c |    5 ++++-
+>  kernel/trace/trace_kprobe.c |    5 ++++-
+>  kernel/trace/trace_probe.h  |    1 +
+>  kernel/trace/trace_uprobe.c |    9 +++++++--
+>  5 files changed, 18 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 8f44c33b1213..e5ff34df4aee 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -765,6 +765,35 @@ int mount(const char *src, const char *tgt,
->  	return __sysret(sys_mount(src, tgt, fst, flags, data));
->  }
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 82fd637cfc19..af9fa0632b57 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -913,6 +913,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>  	}
 >  
-> +/*
-> + * int openat(int dirfd, const char *path, int flags[, mode_t mode]);
-> + */
-> +
-> +static __attribute__((unused))
-> +int sys_openat(int dirfd, const char *path, int flags, mode_t mode)
-> +{
-> +#ifdef __NR_openat
-> +	return my_syscall4(__NR_openat, dirfd, path, flags, mode);
-> +#else
-> +	return __nolibc_enosys(__func__, dirfd, path, flags, mode);
-> +#endif
-
-All architectures support openat(), so the #else could be dropped.
-
-> +}
-> +
-> +static __attribute__((unused))
-> +int openat(int dirfd, const char *path, int flags, ...)
-> +{
-> +	mode_t mode = 0;
-> +
-> +	if (flags & O_CREAT) {
-> +		va_list args;
-> +
-> +		va_start(args, flags);
-> +		mode = va_arg(args, int);
-
-mode_t instead of int?
-
-> +		va_end(args);
+>  	if (argc - 2 > MAX_TRACE_ARGS) {
+> +		trace_probe_log_set_index(2);
+> +		trace_probe_log_err(0, TOO_MANY_ARGS);
+>  		ret = -E2BIG;
+>  		goto error;
+>  	}
+> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> index e27305d31fc5..372936163c21 100644
+> --- a/kernel/trace/trace_fprobe.c
+> +++ b/kernel/trace/trace_fprobe.c
+> @@ -1201,8 +1201,11 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
+>  		argc = new_argc;
+>  		argv = new_argv;
+>  	}
+> -	if (argc > MAX_TRACE_ARGS)
+> +	if (argc > MAX_TRACE_ARGS) {
+> +		trace_probe_log_set_index(2);
+> +		trace_probe_log_err(0, TOO_MANY_ARGS);
+>  		return -E2BIG;
 > +	}
-> +
-> +	return __sysret(sys_openat(dirfd, path, flags, mode));
-> +}
 >  
->  /*
->   * int open(const char *path, int flags[, mode_t mode]);
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 79c3e6a845f3..97ded6c76f99 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -1028,6 +1028,26 @@ int test_rlimit(void)
->  	return 0;
->  }
->  
-> +int test_openat(void)
-
-static.
-
-> +{
-> +	int dev;
-> +	int null;
-> +
-> +	dev = openat(AT_FDCWD, "/dev", O_DIRECTORY);
-> +	if (dev < 0)
-> +		return -1;
-> +
-> +	null = openat(dev, "null", 0);
-> +	if (null < 0) {
-> +		close(dev);
-> +		return -1;
+>  	ret = traceprobe_expand_dentry_args(argc, argv, &dbuf);
+>  	if (ret)
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index d8d5f18a141a..8287b175667f 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1007,8 +1007,11 @@ static int trace_kprobe_create_internal(int argc, const char *argv[],
+>  		argc = new_argc;
+>  		argv = new_argv;
+>  	}
+> -	if (argc > MAX_TRACE_ARGS)
+> +	if (argc > MAX_TRACE_ARGS) {
+> +		trace_probe_log_set_index(2);
+> +		trace_probe_log_err(0, TOO_MANY_ARGS);
+>  		return -E2BIG;
 > +	}
-> +
-> +	close(dev);
-> +	close(null);
-> +
-> +	return 0;
-> +}
 >  
->  /* Run syscall tests between IDs <min> and <max>.
->   * Return 0 on success, non-zero on failure.
-> @@ -1116,6 +1136,8 @@ int run_syscall(int min, int max)
->  		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
->  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
->  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
-> +		CASE_TEST(openat_fdcwd);      EXPECT_SYSNE(1, tmp = openat(AT_FDCWD, "/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
-
-AT_FDCWD is already used in test_openat(). What additional value does
-the test above add?
-
-> +		CASE_TEST(openat_dir);        EXPECT_SYSNE(1, test_openat(), -1); break;
->  		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
->  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
->  		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
-> -- 
-> 2.45.2
+>  	ret = traceprobe_expand_dentry_args(argc, argv, &dbuf);
+>  	if (ret)
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index c47ca002347a..6075afc8ea67 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -546,6 +546,7 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+>  	C(BAD_BTF_TID,		"Failed to get BTF type info."),\
+>  	C(BAD_TYPE4STR,		"This type does not fit for string."),\
+>  	C(NEED_STRING_TYPE,	"$comm and immediate-string only accepts string type"),\
+> +	C(TOO_MANY_ARGS,	"Too many arguments are specified"),	\
+>  	C(TOO_MANY_EARGS,	"Too many entry arguments specified"),
+>  
+>  #undef C
+> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> index ccc762fbb69c..3386439ec9f6 100644
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -562,8 +562,14 @@ static int __trace_uprobe_create(int argc, const char **argv)
+>  
+>  	if (argc < 2)
+>  		return -ECANCELED;
+> -	if (argc - 2 > MAX_TRACE_ARGS)
+> +
+> +	trace_probe_log_init("trace_uprobe", argc, argv);
+> +
+> +	if (argc - 2 > MAX_TRACE_ARGS) {
+> +		trace_probe_log_set_index(2);
+> +		trace_probe_log_err(0, TOO_MANY_ARGS);
+>  		return -E2BIG;
+> +	}
+>  
+>  	if (argv[0][1] == ':')
+>  		event = &argv[0][2];
+> @@ -582,7 +588,6 @@ static int __trace_uprobe_create(int argc, const char **argv)
+>  		return -ECANCELED;
+>  	}
+>  
+> -	trace_probe_log_init("trace_uprobe", argc, argv);
+>  	trace_probe_log_set_index(1);	/* filename is the 2nd argument */
+>  
+>  	*arg++ = '\0';
 > 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
