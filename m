@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-28164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29BC5A4D46F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 08:14:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA34A4D477
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 08:14:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 623F6174B12
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:13:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DC6D1889475
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:14:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBD31FCCF9;
-	Tue,  4 Mar 2025 07:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B971FCF74;
+	Tue,  4 Mar 2025 07:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZRVOMELx";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GhWr6W8J"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GHujb//n";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZV9fPS+c"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA011FBEB6;
-	Tue,  4 Mar 2025 07:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABD01FBEB3;
+	Tue,  4 Mar 2025 07:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741072281; cv=none; b=PGbdI9g/Fgxc3RY3mc/rDZ+yKkQgp747PYK/YP8HSeMJIOQv13i7U27++HR7KLUPL0grVG1VRfCRlF5k7iLyvuyNirpKp+LgVfZiddNS2ofo629a/Jg+Z8mOEfwnut7Cz+kEprij32uvMjDlA0+2CroScMoBP5+qsj2V1+GwCW4=
+	t=1741072281; cv=none; b=o4i55imxnHIQk+WmdVNC0OAkbJfkuqyZEcmAwMAB67O1ft87ZZ6k3nfhbXwqa9BDAMcLzGm6AfvSPQiO+Zo45HJE9fzLfs6wjfKw3yV094qsKVkVgzStqN8c4iQFJpYeso6NXXg9zXRRKT4iPduJhTa7VWLo8KJLk8A9FXY4gkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741072281; c=relaxed/simple;
-	bh=DvYCS+XpF/Y1UcDD/KTufBOFdovc2i4ISIZYldLZTCg=;
+	bh=dS++BGRUZ8SyBKb8wrBLyLZJ16G6+M6eh/EHuTJW21M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=h+jIxyp76c6Xay6fpo7AyuNOK3Mw0nLMtRR5h6ouFlhpepbqKt/ikh7yjVeSjxAAETDusTZfvvb4Z/HrdYIk5IegHHwsgMXqnriV5I2lz75alEXNTxwfz/GcNmJnGkoQvh3+IUHoyHk1WXyyRexkzrx9RqMLKDyVn6xmI4x7vbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZRVOMELx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GhWr6W8J; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=FILU2BDHELybl1os9jgN95VLzWUsb+rmrD/qziBN/dlJcir12P4mFLZ/ZTtDN+WGWpaqK3D9dcnX8Ph5gUt7vGQIWe1xoJB31wo/ZEM88wCZ+TDXK/HhlEhRMx4w8VwCY9+nKR64PIF+5IYEg1bN9WtUidwqRKXqHEsfi0kVoGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GHujb//n; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZV9fPS+c; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=esZ1MyoLFihoItJ0rYNhv5H/yjCSPS4o6Hrs74S1dRc=;
-	b=ZRVOMELxnfjSFJMv9zvKQWnoMx0nNwnCtj4LOh5pgne+8qp2sPzFi28gYCf20gxxb7MC2P
-	IYCk0sDmPJtJ9MmxYJgBILaYcy0lT6OeJFEt9zn1cwUTCgnkmOehNjbprvWUPkI65ONDo1
-	PULSdJ9ZvONnpDhnkNXUARS44kS8YldUqYMGvlrOWhNBBsSNC9LUlqnEqhu+2YzdQR96+n
-	ZkTWHMznNU0DaTtqWW9LgJtJ3drXrJtSBOclIEyFdmcMBYd7dEmBdZ1XBHFP3hZxU3pGDx
-	h8neNFCPD0Z3QZQKF0DoYjPy6SDwmA/cDRs3+FPevoSUS3y75/thmAy0D9hHwA==
+	bh=Mhj9O/bQAXH7Ixrn4zEe0m9E2qHXDCFbSeY2nHcL8ss=;
+	b=GHujb//nwN0ap7Dn8LqsWs/k5aG3Pna/SLGixCpvB1cC2kr35SwS9BbonempJcBAudfB+2
+	VUHI3gc3IDYIxtpgKwxvBG0ztCspy4WjgKxRSA5dTaBPZG/K7U7Unq2E2PC5nmoLRMBxbM
+	WxCp8NaqRtWh8KabK4heu+2RbHFMlTT9b/JZ8NV8fAIl2W3rIjy8Cz66uTMKwnFnoQ1oSE
+	ilGVxMuTH3I0WBnKs5aOzioINBJeGKioOCd6TCTVIe5rbo5xYweX/QgqZp8oIKTieZPSG1
+	rS33PGE2AqRYF3CA/SZXsJZE5paAzTmYHJeeRPlIDr0aejMAZo0ihbGlDkz1sQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1741072277;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=esZ1MyoLFihoItJ0rYNhv5H/yjCSPS4o6Hrs74S1dRc=;
-	b=GhWr6W8JClAdvlU+EinOTh6dMFFv9Zq/tcNaPAUd4Q89r+rPPyymF9uYHq1nIgsX+xbnlU
-	66rG/o+5m/AVtYCg==
-Date: Tue, 04 Mar 2025 08:10:47 +0100
-Subject: [PATCH 17/32] tools/nolibc: use ppoll_time64 if available
+	bh=Mhj9O/bQAXH7Ixrn4zEe0m9E2qHXDCFbSeY2nHcL8ss=;
+	b=ZV9fPS+caiLrSUiTQmKmqN3euaLYtnBGyaP+lsuZjcpOGWB/5r0VXveMQ0gCsomLnaqnoB
+	6e6kxjHvLb/zbhCg==
+Date: Tue, 04 Mar 2025 08:10:48 +0100
+Subject: [PATCH 18/32] tools/nolibc: add tolower() and toupper()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-nolibc-kselftest-harness-v1-17-adca7cd231e2@linutronix.de>
+Message-Id: <20250304-nolibc-kselftest-harness-v1-18-adca7cd231e2@linutronix.de>
 References: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 In-Reply-To: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -72,41 +72,73 @@ To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=1050;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=2172;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=DvYCS+XpF/Y1UcDD/KTufBOFdovc2i4ISIZYldLZTCg=;
- b=IGrmgnij8B7ekublFPUTECiIpi/SQXF7hmzuVi1HPJPcS6fyIsmuM/QZDIvk+Ax/KVhmmp6qu
- mPFakTMi2lzCztnBGP0gAyjkmYk0KOB+U6BTOzMteYjUTxs1ZqpH5YY
+ bh=dS++BGRUZ8SyBKb8wrBLyLZJ16G6+M6eh/EHuTJW21M=;
+ b=A0T7CIeiH6BRy9KRrOkb20Zy9rX0C7YMyWvpDQ/nB5nDmMnUdbsKuO7aQUSV2PHgogr/UHYL6
+ 1DaQ1G8VHyKB+UHAo8APcHMrkB+f7teAOj3jr2wNeUy+Ol3vuqM69Lu
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-riscv32 does not have any of the older poll systemcalls.
-Use ppoll_time64 instead.
+The kselftest harness uses these functions.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/include/nolibc/sys.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/include/nolibc/string.h                | 17 +++++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c |  5 +++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 128a11441ba1f95a4331b63ff1cdfb9507d4fb33..e28b26f9c3fe8aeb11dedce5106e52228b753e37 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -875,6 +875,14 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
- 		t.tv_nsec = (timeout % 1000) * 1000000;
- 	}
- 	return my_syscall5(__NR_ppoll, fds, nfds, (timeout >= 0) ? &t : NULL, NULL, 0);
-+#elif defined(__NR_ppoll_time64)
-+	struct __kernel_timespec t;
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index ba84ab700e3001a7d105e1c9e40c01bf45db9d8c..f0d335f0e467ec870066811289dfd11e46e60a92 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -289,6 +289,23 @@ char *strrchr(const char *s, int c)
+ 	return (char *)ret;
+ }
+ 
++static __attribute__((unused))
++int tolower(int c)
++{
++	if (c >= 'A' && c <= 'Z')
++		return c - 'A' + 'a';
++	return c;
++}
 +
-+	if (timeout >= 0) {
-+		t.tv_sec  = timeout / 1000;
-+		t.tv_nsec = (timeout % 1000) * 1000000;
-+	}
-+	return my_syscall5(__NR_ppoll_time64, fds, nfds, (timeout >= 0) ? &t : NULL, NULL, 0);
- #elif defined(__NR_poll)
- 	return my_syscall3(__NR_poll, fds, nfds, timeout);
- #else
++static __attribute__((unused))
++int toupper(int c)
++{
++	if (c >= 'a' && c <= 'z')
++		return c - 'a' + 'A';
++	return c;
++}
++
++
+ /* make sure to include all global symbols */
+ #include "nolibc.h"
+ 
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 3c0431e9917acf57e94dc3f7a8347762e6a5335a..7eb7f3fb067553cccefefdaa2ccfc81af281336b 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -40,6 +40,7 @@
+ #include <stdint.h>
+ #include <unistd.h>
+ #include <limits.h>
++#include <ctype.h>
+ #endif
+ #endif
+ 
+@@ -1264,6 +1265,10 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(strerror_EINVAL);         EXPECT_STREQ(is_nolibc, strerror(EINVAL), "errno=22"); break;
+ 		CASE_TEST(strerror_int_max);        EXPECT_STREQ(is_nolibc, strerror(INT_MAX), "errno=2147483647"); break;
+ 		CASE_TEST(strerror_int_min);        EXPECT_STREQ(is_nolibc, strerror(INT_MIN), "errno=-2147483648"); break;
++		CASE_TEST(tolower);                 EXPECT_EQ(1, tolower('A'), 'a'); break;
++		CASE_TEST(tolower_noop);            EXPECT_EQ(1, tolower('a'), 'a'); break;
++		CASE_TEST(toupper);                 EXPECT_EQ(1, toupper('a'), 'A'); break;
++		CASE_TEST(toupper_noop);            EXPECT_EQ(1, toupper('A'), 'A'); break;
+ 
+ 		case __LINE__:
+ 			return ret; /* must be last */
 
 -- 
 2.48.1
