@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-28237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ECC1A4EC39
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 19:46:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CA83A4EC99
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 20:02:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67A53162CCA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 18:42:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5DD188FCDC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 19:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA5624EABD;
-	Tue,  4 Mar 2025 18:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C85132512FB;
+	Tue,  4 Mar 2025 19:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="qrrWfi+W";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kLjTaXfd"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="lHabd9vs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ev+jCEBw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D0E1FC7FF;
-	Tue,  4 Mar 2025 18:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C4924EABA;
+	Tue,  4 Mar 2025 19:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741113446; cv=none; b=myQtHyFMTiG5AlRbRQxq9HJWT19P/pZbOcTnnwtL06nPoiWFQ/Kh5sU6dsM4S980eUxYGCSuviXaP3ZUc3w/ZijlVtfR6bCwdvLWD0VU+ID1e9/4rdkxDsD/d4+y8NhUK98fCkps7Ab6fBBZFkNVJeeXh2Lnq6izdE7h196pKEM=
+	t=1741114946; cv=none; b=p4LDFqCnIw1Bj2I9IcDuoeRAwX3BH+XjXDzQBybDvgJ8jfcw6bCjNKws0W2pXhGHnmEuVgYp/2cZP58fSiFczyv9wgTZlYEKZgSoJ41IfQ6PmBPW3uOvOWsvL9AUyFPDfHtyFxHBYVEIVVUUzw4pe+fDSJKUEAXQhiP3rUvdR5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741113446; c=relaxed/simple;
-	bh=3oTo4HsepLNOrxVRw/IauYMjtUPldg3lclpNkHh/29g=;
+	s=arc-20240116; t=1741114946; c=relaxed/simple;
+	bh=oeO3k+fQ2uc2xW3PAoVoZusaYb/VRHAyBWTKFEnt+OA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mqi4mx86+WEk6eq5q6ZDkgME388yS4WHdbBypFcTl4+KQ7qzI//pexlK+OkBrplGj1T9qxfP8/0qNUFyKxLRVqR2p9pbOr7RRs4OoxcLPDMd2gf60ZaRZpCoY7P7RQ/QvWK8LM8ZaLa0zAGeij/spsKAOUtQiLmXvgl31nwNfa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=qrrWfi+W; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kLjTaXfd; arc=none smtp.client-ip=103.168.172.148
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZRSGT5oL5sB2CNhYJo9iuFlg1LIUYVDybs/VidzSmBUHpsFXyHeAmOyY04/bRof3XPkfWkdSg2cPjtCd28Ukc0EJ6ZQfGMdkgPGPXHzw99AjKMON184eg9KAsLdX6PP6+NfVX4hzyzYopjEFAEEm05h1NKvgPVyXIPzQnUsC4S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=lHabd9vs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ev+jCEBw; arc=none smtp.client-ip=103.168.172.159
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id 951AF138275A;
-	Tue,  4 Mar 2025 13:37:21 -0500 (EST)
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 294C61140109;
+	Tue,  4 Mar 2025 14:02:22 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Tue, 04 Mar 2025 13:37:21 -0500
+  by phl-compute-02.internal (MEProxy); Tue, 04 Mar 2025 14:02:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1741113441; x=
-	1741199841; bh=BTMdi2sO4qcCbYw3uZrxjQBXPSMDoPBpMctb92eWqz8=; b=q
-	rrWfi+W8kY4+Qu0KjcLo04owoZcz8IHtvpR1fd+B8CDonDFFb/211SJiGDh/5B1z
-	SSpXzu3gXQ+NSuGDHsZwHD91kSlZIwTWsIods8qes37lo13YIhAZtEBUoz6zhu8U
-	T/D8JBmcqDc0gO59Kl0RkB90PuM69mJEyV3+R4iTzbhnrPTMVgMO75ljgnm3+gmJ
-	4jGYCaVDqRhFQ3Ilxr9ZdwoUIlZ6uSEKnoQ4ErDUDmH/PGyvrB4zZGrxGfyqxfR2
-	qqce9aeF0s9NAXYQL4LgOITuFLw244Ht7PC84IKntRBSEBrDjJXwc5Y+8BbKlF/z
-	Ys/TFNP54NlrDmyCP+2EA==
+	:reply-to:subject:subject:to:to; s=fm2; t=1741114942; x=
+	1741201342; bh=Pgi+DunqwLwq74Jly3YwOvG4Ta4hOiz0xroRVd15Urw=; b=l
+	Habd9vs30fdL28oTItRbA1XW+04wrHPY5ODRttgyEguacL3rY/m+PJS+sEbwU233
+	BmqT6V8s4lQa8kNge/9sGtF5D7dnNi2cBFAWNLFDNKdZW0GE4/macfFpiaTBd3kR
+	m8cC98Lp6mJI2907ZezUlvLGsEr64b7j2aJoQBcIHv5HjriqJkBY259yw4VrY7IA
+	qMycTjQIVNntwRVftQTX/vk+a80/0zqz95iMtL48C/D+e0cTW8c+F2+p8i7PsNev
+	oFzu+u6rmgRex+JDBuWQAynOsN/uFB21ZGIDh5LEle873yrTNFcvExg/IE//mffE
+	NoCvEDi7btr1jEsbz4Z+A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1741113441; x=1741199841; bh=BTMdi2sO4qcCbYw3uZrxjQBXPSMDoPBpMct
-	b92eWqz8=; b=kLjTaXfddhk8nLWPNWbM0tORYkhvD99Zqpo6E6arL8tPl7YX13H
-	GGTSl/B59ggDbP5YH4tATYWJvoB0iBkNcZqvW6s2/BecrcyZ577j7ItqkOyGOZw5
-	Kv36LVUX9EJQxXWrsAy5DFH7dOS7oD5KqIHBL0mOE8Xl8Sqh53FODK/+C3pFeTit
-	Gupd36oRZrG9HvdL5or2vIVX8qX1k83SN5RXhbB2P7/704WtkGESMXXij/DD421p
-	adpjO3Sj6barnVPaftHj7o1xmU/2WDOk34g/eCaOUi05vVY9QrpoGyOuTSXGst4o
-	oVF3FcUyn2ycLefaJKkd1dlIEeXYcf+YTkQ==
-X-ME-Sender: <xms:YUjHZzum3ZHEKm4JmCOsGL3SNbLTgqOd3ZYq4otmLqA8TOPEao13aQ>
-    <xme:YUjHZ0flEu_UUsYDpB_SfqGJfdK1vdbKlsjBFMfWZTnHlvms6if-GztaRuD7nz5xs
-    5YiWJsXqOTL7XBW0Ik>
-X-ME-Received: <xmr:YUjHZ2zB3asC5om_GtKOiv-aDyVnGHZkXwHI8FkDOk_9F4SXGa5Sa4N1bpXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutddvjeekucetufdoteggodetrf
+	1741114942; x=1741201342; bh=Pgi+DunqwLwq74Jly3YwOvG4Ta4hOiz0xro
+	RVd15Urw=; b=Ev+jCEBwgjl+CCT5iDqMekTBNCU2vL9lY5sYtgpide4sM81W/C2
+	PKXxDqa7n7NfdSjuF/wcKHL0pSJTAbCsbggHy4G7BsZv3J97QfY9wzbXOQgd9U/h
+	AJy6WZJzMEmwrRBAt7x+uehZDsPX87DfLdlO1t/v+msZ1ijaNiof7S6GlAOnV0oQ
+	kbE2AbEOKNzNIiqOfVwOF7ynglupW33s+SP6l5u9YYcK/gxy3OwwMvyLpIEB9LeW
+	3E9+HcMLCO/YvFzSSAHWe3XdcK5aoZaOHfwptvLku/USF9zExk2b/9DqtXqeMW6O
+	ffJW2JyXTynfTyFiSmR/1QMvoBnWWRthPuw==
+X-ME-Sender: <xms:PU7HZ5YJaYoe3gBUiQdMtZcL_S6evoKtVMTWuwWHHU5YeORy_N4fBg>
+    <xme:PU7HZwb1k3_T_U657_1x1p1uIO3jMzzSao1wnpWGuPq9UzeaPMtdDllWu6VWS8j77
+    x0TNFwF8RDqlpLD9Y0>
+X-ME-Received: <xmr:PU7HZ78PC01jiQHPUtrAFZmiTb83BAwkRqA84QWLADDTOsCXnBy8fDwTAvKz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutddvkeefucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
     gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
@@ -80,15 +80,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutddvjeekucetufdote
     gvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhr
     ghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtph
     htthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:YUjHZyPPpaWNsh9MEPuhpnqZEhCyyjasqHuXrzXz6Igl8_A-ocjqGQ>
-    <xmx:YUjHZz9oOgpyLK7podKYOie9e7NE_aSptL30V2vfQexlaD3aL_pwmA>
-    <xmx:YUjHZyWZgRFkmNaqUpjBlaDW3b9vHPLTv2CciBXfMWlqUUECEn6Igw>
-    <xmx:YUjHZ0cEf5pm_Wc2vALrdXwNPxh64zcW8YjE6jce_VNt_BBaCyqHGg>
-    <xmx:YUjHZ5c4FjKOB-cWWzDdrTbwmBhaY6G0GWj_luoi4Xq4z8NDUh6v7Sto>
+X-ME-Proxy: <xmx:PU7HZ3q60ijFSyPaYi875yQA9SYT06ZrmrAYtnVXUQL68g_0y2bIoA>
+    <xmx:PU7HZ0rG_qUw2z0DBkJzZ5BM2pME_11XtYPZHfex2tqLuQrVJGQWeQ>
+    <xmx:PU7HZ9SFvwxCDmVEKjsZBn3bBnBBY7O9tT4DT0qIsX1ygk8uRR3kCw>
+    <xmx:PU7HZ8oE1ilRcAHF2QGVk_qNg9JJdf2ZhITX2riumaUzfezeucodng>
+    <xmx:Pk7HZx4ileAH-OCVIQb-UsPWKcNc6GMp4HwKKCsZ29BOdn4DiYjRa1dJ>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Mar 2025 13:37:20 -0500 (EST)
-Date: Tue, 4 Mar 2025 19:37:18 +0100
+ 4 Mar 2025 14:02:20 -0500 (EST)
+Date: Tue, 4 Mar 2025 20:02:19 +0100
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
@@ -98,10 +98,10 @@ Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH v21 18/24] ovpn: add support for peer floating
-Message-ID: <Z8dIXjwZ3QmiEcd-@hog>
+Subject: Re: [PATCH v21 09/24] ovpn: implement packet processing
+Message-ID: <Z8dOOy9tSpJ1UCiR@hog>
 References: <20250304-b4-ovpn-tmp-v21-0-d3cbb74bb581@openvpn.net>
- <20250304-b4-ovpn-tmp-v21-18-d3cbb74bb581@openvpn.net>
+ <20250304-b4-ovpn-tmp-v21-9-d3cbb74bb581@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,153 +110,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250304-b4-ovpn-tmp-v21-18-d3cbb74bb581@openvpn.net>
+In-Reply-To: <20250304-b4-ovpn-tmp-v21-9-d3cbb74bb581@openvpn.net>
 
-2025-03-04, 01:33:48 +0100, Antonio Quartulli wrote:
-> A peer connected via UDP may change its IP address without reconnecting
-> (float).
+2025-03-04, 01:33:39 +0100, Antonio Quartulli wrote:
+> +struct crypto_aead *ovpn_aead_init(const char *title, const char *alg_name,
+> +				   const unsigned char *key,
+> +				   unsigned int keylen)
 
-Should that trigger a reset of the peer->dst_cache? And same when
-userspace updates the remote address? Otherwise it seems we could be
-stuck with a cached dst that cannot reach the peer.
+nit: static? I don't see it used outside this file.
 
 
-> +void ovpn_peer_endpoints_update(struct ovpn_peer *peer, struct sk_buff *skb)
+[...]
+> +static inline struct ovpn_crypto_key_slot *
+> +ovpn_crypto_key_id_to_slot(const struct ovpn_crypto_state *cs, u8 key_id)
 > +{
-> +	struct hlist_nulls_head *nhead;
-> +	struct sockaddr_storage ss;
-> +	const u8 *local_ip = NULL;
-> +	struct sockaddr_in6 *sa6;
-> +	struct sockaddr_in *sa;
-> +	struct ovpn_bind *bind;
-> +	size_t salen = 0;
+> +	struct ovpn_crypto_key_slot *ks;
+> +	u8 idx;
 > +
-> +	spin_lock_bh(&peer->lock);
-> +	bind = rcu_dereference_protected(peer->bind,
-> +					 lockdep_is_held(&peer->lock));
-> +	if (unlikely(!bind))
-> +		goto unlock;
+> +	if (unlikely(!cs))
+> +		return NULL;
 > +
-> +	switch (skb->protocol) {
-> +	case htons(ETH_P_IP):
-> +		/* float check */
-> +		if (unlikely(!ovpn_bind_skb_src_match(bind, skb))) {
-> +			if (bind->remote.in4.sin_family == AF_INET)
-> +				local_ip = (u8 *)&bind->local;
+> +	rcu_read_lock();
+> +	idx = cs->primary_idx;
 
-If I'm reading this correctly, we always reuse the existing local
-address when we have to re-create the bind, even if it doesn't match
-the skb? The "local endpoint update" chunk below is doing that, but
-only if we're keeping the same remote? It'll get updated the next time
-we receive a packet and call ovpn_peer_endpoints_update.
+I'd go with slots[0] and slots[1], since it doesn't really matter
+whether we check the primary or secondary first. It would avoid a
+possible reload of cs->primary_idx (which might be updated
+concurrently by a key swap and cause us to look into the same slot
+twice) -- a READ_ONCE would also prevent that.
 
-That might irritate the RPF check on the other side, if we still use
-our "old" source to talk to the new dest?
-
-> +			sa = (struct sockaddr_in *)&ss;
-> +			sa->sin_family = AF_INET;
-> +			sa->sin_addr.s_addr = ip_hdr(skb)->saddr;
-> +			sa->sin_port = udp_hdr(skb)->source;
-> +			salen = sizeof(*sa);
-> +			break;
-> +		}
+> +	ks = rcu_dereference(cs->slots[idx]);
+> +	if (ks && ks->key_id == key_id) {
+> +		if (unlikely(!ovpn_crypto_key_slot_hold(ks)))
+> +			ks = NULL;
+> +		goto out;
+> +	}
 > +
-> +		/* local endpoint update */
-> +		if (unlikely(bind->local.ipv4.s_addr != ip_hdr(skb)->daddr)) {
-> +			net_dbg_ratelimited("%s: learning local IPv4 for peer %d (%pI4 -> %pI4)\n",
-> +					    netdev_name(peer->ovpn->dev),
-> +					    peer->id, &bind->local.ipv4.s_addr,
-> +					    &ip_hdr(skb)->daddr);
-> +			bind->local.ipv4.s_addr = ip_hdr(skb)->daddr;
-> +		}
-> +		break;
-
-[...]
-> +	if (peer->ovpn->mode == OVPN_MODE_MP) {
-> +		spin_lock_bh(&peer->ovpn->lock);
-> +		spin_lock_bh(&peer->lock);
-> +		bind = rcu_dereference_protected(peer->bind,
-> +						 lockdep_is_held(&peer->lock));
-> +		if (unlikely(!bind)) {
-> +			spin_unlock_bh(&peer->lock);
-> +			spin_unlock_bh(&peer->ovpn->lock);
-> +			return;
-> +		}
+> +	ks = rcu_dereference(cs->slots[!idx]);
+> +	if (ks && ks->key_id == key_id) {
+> +		if (unlikely(!ovpn_crypto_key_slot_hold(ks)))
+> +			ks = NULL;
+> +		goto out;
+> +	}
 > +
-> +		/* his function may be invoked concurrently, therefore another
-
-typo:
-                   ^ This
-
-
-[...]
-> -/* variable name __tbl2 needs to be different from __tbl1
-> - * in the macro below to avoid confusing clang
-> - */
-> -#define ovpn_get_hash_slot(_tbl, _key, _key_len) ({	\
-> -	typeof(_tbl) *__tbl2 = &(_tbl);			\
-> -	jhash(_key, _key_len, 0) % HASH_SIZE(*__tbl2);	\
-> -})
-> -
-> -#define ovpn_get_hash_head(_tbl, _key, _key_len) ({		\
-> -	typeof(_tbl) *__tbl1 = &(_tbl);				\
-> -	&(*__tbl1)[ovpn_get_hash_slot(*__tbl1, _key, _key_len)];\
-> -})
-> -
->  /**
->   * ovpn_peer_get_by_vpn_addr4 - retrieve peer by its VPN IPv4 address
->   * @ovpn: the openvpn instance to search
-> @@ -522,51 +694,6 @@ static void ovpn_peer_remove(struct ovpn_peer *peer,
->  	llist_add(&peer->release_entry, release_list);
->  }
->  
-> -/**
-> - * ovpn_peer_update_local_endpoint - update local endpoint for peer
-> - * @peer: peer to update the endpoint for
-> - * @skb: incoming packet to retrieve the destination address (local) from
-> - */
-> -void ovpn_peer_update_local_endpoint(struct ovpn_peer *peer,
-> -				     struct sk_buff *skb)
-> -{
-> -	struct ovpn_bind *bind;
-> -
-> -	rcu_read_lock();
-> -	bind = rcu_dereference(peer->bind);
-> -	if (unlikely(!bind))
-> -		goto unlock;
-> -
-> -	spin_lock_bh(&peer->lock);
-> -	switch (skb->protocol) {
-> -	case htons(ETH_P_IP):
-> -		if (unlikely(bind->local.ipv4.s_addr != ip_hdr(skb)->daddr)) {
-> -			net_dbg_ratelimited("%s: learning local IPv4 for peer %d (%pI4 -> %pI4)\n",
-> -					    netdev_name(peer->ovpn->dev),
-> -					    peer->id, &bind->local.ipv4.s_addr,
-> -					    &ip_hdr(skb)->daddr);
-> -			bind->local.ipv4.s_addr = ip_hdr(skb)->daddr;
-> -		}
-> -		break;
-> -	case htons(ETH_P_IPV6):
-> -		if (unlikely(!ipv6_addr_equal(&bind->local.ipv6,
-> -					      &ipv6_hdr(skb)->daddr))) {
-> -			net_dbg_ratelimited("%s: learning local IPv6 for peer %d (%pI6c -> %pI6c\n",
-> -					    netdev_name(peer->ovpn->dev),
-> -					    peer->id, &bind->local.ipv6,
-> -					    &ipv6_hdr(skb)->daddr);
-> -			bind->local.ipv6 = ipv6_hdr(skb)->daddr;
-> -		}
-> -		break;
-> -	default:
-> -		break;
-> -	}
-> -	spin_unlock_bh(&peer->lock);
-> -
-> -unlock:
-> -	rcu_read_unlock();
-> -}
-
-I guess you could squash this and the previous patch into one to
-reduce the churn (and get a little bit closer to the 15-patch limit :))
+> +	/* when both key slots are occupied but no matching key ID is found, ks
+> +	 * has to be reset to NULL to avoid carrying a stale pointer
+> +	 */
+> +	ks = NULL;
+> +out:
+> +	rcu_read_unlock();
+> +
+> +	return ks;
+> +}
 
 -- 
 Sabrina
