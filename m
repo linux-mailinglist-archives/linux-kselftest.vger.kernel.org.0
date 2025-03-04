@@ -1,31 +1,31 @@
-Return-Path: <linux-kselftest+bounces-28144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28145-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB33FA4D381
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:11:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04C3DA4D383
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:11:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6F9C3A9B70
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 06:11:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32984172E23
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 06:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A591F4E30;
-	Tue,  4 Mar 2025 06:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BCF1F416B;
+	Tue,  4 Mar 2025 06:11:18 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC251F4CA2
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 06:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBEC1F473A
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Mar 2025 06:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741068672; cv=none; b=l8ThrcqCa7zTSBr33TWwh4sSKUho3aOUNfZoJvp6elVbFtj+yfKfu2RSYcPV7zac/S/Ac0mK5PYn5JCZiz09RkT1hVgXATqyHn3rbo4PtGWIoqJwwd6XIjquiN1bYf75tSsyTzrCtV0FnRht/0TRV+FGlGvyBCuzL+OR9e2s9so=
+	t=1741068678; cv=none; b=K9+ShZ6ZgWMmnceT7+/11Tnk85Ee6zPFq+IbAlwrYCJ4ng6d5Bvvd3MVwYss6jZHmgKi4BG9EW1EOeJnV0UBeYWyHtFqRXjVrqNRvvLFO2kf3wuqQ5orgKSNP2tcvSr5LiXRPyk+MsUPryznWZUj6PWnB2O6elHraIXoIYssGKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741068672; c=relaxed/simple;
-	bh=Z2XdDkakfcn0EXCB6W5wjFngphXEDKUG6SzKPfMUQSc=;
+	s=arc-20240116; t=1741068678; c=relaxed/simple;
+	bh=s/MLrsZFxuwfkP4egpHy7WZYFKlEtB/YLVrfclejCAw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uTk80crGy7jMGnRo5RYOu8pz24/mnlhQ01SRHUmx5/Q6AKQMU++i246yLtT8/88vIrhO+RHvKU28N46ju/Gu/h9hHlg4oU8KnmJKIYgzx5snayiaiwmYLSrdtBCBvLTXvm9/4HUBNi8XNGgDwJxJH6revn2K/EWDsBrjO6qVDWQ=
+	 MIME-Version; b=apAz0cAuv4loyxn6JtO3YzSYkV7DQyHX3e9A1evQ7GteUjRyVf5jCxea9iBSR+loAJDvptkAYOXIV6mt6DpTzRjksh25srYcHthemOgj3N27mYQJ/nQ+RFpgl8UaXMQCsI8KhMo/9fl+DcjmSyj4Oq0jThWMhbAEtmp35WzDhTw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
@@ -33,29 +33,29 @@ Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 195241F74C;
-	Tue,  4 Mar 2025 06:10:49 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id A69631F74D;
+	Tue,  4 Mar 2025 06:10:51 +0000 (UTC)
 Authentication-Results: smtp-out2.suse.de;
 	none
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 151161393C;
-	Tue,  4 Mar 2025 06:10:46 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A10961393C;
+	Tue,  4 Mar 2025 06:10:49 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 6PjGL2aZxmfADQAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Tue, 04 Mar 2025 06:10:46 +0000
+	id UIlWFmmZxmfADQAAD6G6ig
+	(envelope-from <ddiss@suse.de>); Tue, 04 Mar 2025 06:10:49 +0000
 From: David Disseldorp <ddiss@suse.de>
 To: linux-fsdevel@vger.kernel.org
 Cc: linux-kselftest@vger.kernel.org,
 	Al Viro <viro@zeniv.linux.org.uk>,
 	Christian Brauner <brauner@kernel.org>,
 	David Disseldorp <ddiss@suse.de>
-Subject: [PATCH v4 6/8] initramfs: reuse name_len for dir mtime tracking
-Date: Tue,  4 Mar 2025 16:57:49 +1100
-Message-ID: <20250304061020.9815-7-ddiss@suse.de>
+Subject: [PATCH v4 7/8] initramfs: fix hardlink hash leak without TRAILER
+Date: Tue,  4 Mar 2025 16:57:50 +1100
+Message-ID: <20250304061020.9815-8-ddiss@suse.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250304061020.9815-1-ddiss@suse.de>
 References: <20250304061020.9815-1-ddiss@suse.de>
@@ -69,60 +69,105 @@ Content-Transfer-Encoding: 8bit
 X-Rspamd-Pre-Result: action=no action;
 	module=replies;
 	Message is reply to one we originated
+X-Spam-Level: 
 X-Spamd-Result: default: False [-4.00 / 50.00];
 	REPLY(-4.00)[];
 	ASN(0.00)[asn:25478, ipnet:::/0, country:RU]
-X-Spam-Flag: NO
 X-Spam-Score: -4.00
-X-Rspamd-Queue-Id: 195241F74C
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: A69631F74D
 X-Rspamd-Pre-Result: action=no action;
 	module=replies;
 	Message is reply to one we originated
 X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
 
-We already have a nulterm-inclusive, checked name_len for the directory
-name, so use that instead of calling strlen().
+Covered in Documentation/driver-api/early-userspace/buffer-format.rst ,
+initramfs archives can carry an optional "TRAILER!!!" entry which serves
+as a boundary for collecting and associating hardlinks with matching
+inode and major / minor device numbers.
+
+Although optional, if hardlinks are found in an archive without a
+subsequent "TRAILER!!!" entry then the hardlink state hash table is
+leaked, e.g. unfixed kernel, with initramfs_test.c hunk applied only:
+unreferenced object 0xffff9405408cc000 (size 8192):
+  comm "kunit_try_catch", pid 53, jiffies 4294892519
+  hex dump (first 32 bytes):
+    01 00 00 00 01 00 00 00 00 00 00 00 ff 81 00 00  ................
+    00 00 00 00 00 00 00 00 69 6e 69 74 72 61 6d 66  ........initramf
+  backtrace (crc a9fb0ee0):
+    [<0000000066739faa>] __kmalloc_cache_noprof+0x11d/0x250
+    [<00000000fc755219>] maybe_link.part.5+0xbc/0x120
+    [<000000000526a128>] do_name+0xce/0x2f0
+    [<00000000145c1048>] write_buffer+0x22/0x40
+    [<000000003f0b4f32>] unpack_to_rootfs+0xf9/0x2a0
+    [<00000000d6f7e5af>] initramfs_test_hardlink+0xe3/0x3f0
+    [<0000000014fde8d6>] kunit_try_run_case+0x5f/0x130
+    [<00000000dc9dafc5>] kunit_generic_run_threadfn_adapter+0x18/0x30
+    [<000000001076c239>] kthread+0xc8/0x100
+    [<00000000d939f1c1>] ret_from_fork+0x2b/0x40
+    [<00000000f848ad1a>] ret_from_fork_asm+0x1a/0x30
+
+Fix this by calling free_hash() after initramfs buffer processing in
+unpack_to_rootfs(). An extra hardlink_seen global is added as an
+optimization to avoid walking the 32 entry hash array unnecessarily.
+The expectation is that a "TRAILER!!!" entry will normally be present,
+and initramfs hardlinks are uncommon.
+
+There is one user facing side-effect of this fix: hardlinks can
+currently be associated across built-in and external initramfs archives,
+*if* the built-in initramfs archive lacks a "TRAILER!!!" terminator. I'd
+consider this cross-archive association broken, but perhaps it's used.
 
 Signed-off-by: David Disseldorp <ddiss@suse.de>
 ---
- init/initramfs.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ init/initramfs.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/init/initramfs.c b/init/initramfs.c
-index df75624cdefbf..b9cacdc54eaf1 100644
+index b9cacdc54eaf1..e0b11f8d6f3d6 100644
 --- a/init/initramfs.c
 +++ b/init/initramfs.c
-@@ -144,9 +144,8 @@ struct dir_entry {
- 	char name[];
- };
+@@ -76,6 +76,7 @@ static __initdata struct hash {
+ 	struct hash *next;
+ 	char name[N_ALIGN(PATH_MAX)];
+ } *head[32];
++static __initdata bool hardlink_seen;
  
--static void __init dir_add(const char *name, time64_t mtime)
-+static void __init dir_add(const char *name, size_t nlen, time64_t mtime)
+ static inline int hash(int major, int minor, int ino)
  {
--	size_t nlen = strlen(name) + 1;
- 	struct dir_entry *de;
+@@ -109,19 +110,21 @@ static char __init *find_link(int major, int minor, int ino,
+ 	strcpy(q->name, name);
+ 	q->next = NULL;
+ 	*p = q;
++	hardlink_seen = true;
+ 	return NULL;
+ }
  
- 	de = kmalloc(sizeof(struct dir_entry) + nlen, GFP_KERNEL);
-@@ -170,7 +169,7 @@ static void __init dir_utime(void)
- #else
- static void __init do_utime(char *filename, time64_t mtime) {}
- static void __init do_utime_path(const struct path *path, time64_t mtime) {}
--static void __init dir_add(const char *name, time64_t mtime) {}
-+static void __init dir_add(const char *name, size_t nlen, time64_t mtime) {}
- static void __init dir_utime(void) {}
- #endif
+ static void __init free_hash(void)
+ {
+ 	struct hash **p, *q;
+-	for (p = head; p < head + 32; p++) {
++	for (p = head; hardlink_seen && p < head + 32; p++) {
+ 		while (*p) {
+ 			q = *p;
+ 			*p = q->next;
+ 			kfree(q);
+ 		}
+ 	}
++	hardlink_seen = false;
+ }
  
-@@ -394,7 +393,7 @@ static int __init do_name(void)
- 		init_mkdir(collected, mode);
- 		init_chown(collected, uid, gid, 0);
- 		init_chmod(collected, mode);
--		dir_add(collected, mtime);
-+		dir_add(collected, name_len, mtime);
- 	} else if (S_ISBLK(mode) || S_ISCHR(mode) ||
- 		   S_ISFIFO(mode) || S_ISSOCK(mode)) {
- 		if (maybe_link() == 0) {
+ #ifdef CONFIG_INITRAMFS_PRESERVE_MTIME
+@@ -564,6 +567,8 @@ char * __init unpack_to_rootfs(char *buf, unsigned long len)
+ 		len -= my_inptr;
+ 	}
+ 	dir_utime();
++	/* free any hardlink state collected without optional TRAILER!!! */
++	free_hash();
+ 	kfree(bufs);
+ 	return message;
+ }
 -- 
 2.43.0
 
