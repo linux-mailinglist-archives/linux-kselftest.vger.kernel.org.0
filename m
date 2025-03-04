@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-28171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D85B9A4D482
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 08:16:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBF4FA4D484
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 08:16:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9B971888FEC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:14:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BFCD188B747
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3F01FE473;
-	Tue,  4 Mar 2025 07:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BA21F63C3;
+	Tue,  4 Mar 2025 07:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JOZiM7on";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E4Ln4FLT"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VkN/Ntmu";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OWj9fEX+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0BE1FDA78;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCC11FCD18;
 	Tue,  4 Mar 2025 07:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741072285; cv=none; b=C8rC7xDfssmVM0zWlnzGemO/iuUamY1IZTrBZZWo9XLBMoT/qeSw+A0Jh6u3GJtRwcblAP3IgXcSU1JiyB3mvvFFXaIZXjrjPs48gmW3eTyJsLfYAOgmo0bSSmzVdJ6SFlZY8RzTk1M3+J6ZOSSy7Zl2DZac1+xE9jdWXrypyjo=
+	t=1741072285; cv=none; b=ks/vVUOxu9vQCgGxXVVHOdA4ORGPdpcXExLpsYJWbjurERj+7DG5Y8jWP70pFQyuTxgflhGej2Se4ROyvN/7QYeRDjUJnpFcdKOZKrv1wUZulfaQXjPd92bEZKHv/+P3pv+PRY8Qty/8rViYzzzKl222LHfiZCrgaNubhGLO9cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741072285; c=relaxed/simple;
-	bh=VAitc4TpEayA62P7PzIris09IKbI6DnHkqqiFFANP2o=;
+	bh=gptYJeI7zIa0m6z25MFDa2zENatJrEBZvF+Qu777d3Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FrRnqFZ8PceqrjOcL8B/NOnMMSFitA8FGvs17pfOCrosktZTcBpDJHoBZvcvl81zpBy48MtgHzfy9fmfgQchHbpdLhJhXl2Y8G4qzBEEapVS+X7tiqTbuQKGcsh5du3FEVzpEQnHtNSPCWr+uJMJ9B6B3jVOxuTeIY8hRqz4Q1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JOZiM7on; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=E4Ln4FLT; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=mh2YJ4ge4Qz39t0AfNVqrnLnxkQztIAVyISE7XqcjUYlEun7TEUqjFzkDrWWcyToCKBMleTOz6AIE19Zl0u/12OO2EA/YX2CZ/4GyzUdG9qeWKku214EfiN2V3lFEfprDU/NVMjWcmOzIGICIAxCNnvhjp3bQdHQloFzWWl8VB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VkN/Ntmu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OWj9fEX+; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741072281;
+	s=2020; t=1741072282;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lP373sJm7fLQ44Jh21r4D7xLZ1+CcxGOeWWhA71PxgQ=;
-	b=JOZiM7onQBRPaC143jCUAdy5pXbodMe7NGoalCg2nXC7p2tUI1KY2Cu+txCh76zJi96f2b
-	66iIRY5918U5D9gXgIUASXxGZ6MnM6rlndc6+N7HeZ6R0PCL/irWPnrAyZsSQ/mT3aaobD
-	9V4rxRAIjniCmvdViXxESCUkUWhUU6KqOSSEgGOHK4RmbbEwDz7nh4w8bnBrY9ey/EF6hw
-	tAinbAZREuF11lfOCxd+QmKU6ficPRqkXEGIH0mVPBAHtc44jmXKgYDKJAmXfUEHk/9IZv
-	WNAJgX9Afbf7k7J5y70bMg4OIYDOfBvjwczLXIgWsTLtCSABauFeNgfVlV6UzQ==
+	bh=NLxRp/JkTIfoLlcPQDYEqa9/SCMFJG4UakDwlT6QSyY=;
+	b=VkN/NtmugUrtHpSW0xxVfNQcwkWD3L89WDe1fXIdapPzA+WlhNau6GxJ/mTnbYzd5U8uWi
+	ooK84bZ10pXC7PTPz2Vd3dBE325ewM/GWaTmRNC/yjTIE2xfnXX41bxLsakH3S6RsPcOzK
+	D+wD+P3BhwBBRgBiK+K6/6puwNELdtGvzgQ+EIBBa/Zkgb7RVOalzAdIu+bYjZUhgdPq96
+	nNQVDG2Z3S5mS9x+zMeEqwwyiLu0tnkceLyuZNGa4PrkS3k/jo5mBRqp+TNwivAHxfsPhS
+	MNHJrew6R7GikoLnIFCbLwBtKBh7QZ9LZ73bsZg+k+Yv3ytTXDGQpYfyULT5pA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741072281;
+	s=2020e; t=1741072282;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lP373sJm7fLQ44Jh21r4D7xLZ1+CcxGOeWWhA71PxgQ=;
-	b=E4Ln4FLToAv5kFatqppDjnktR3RjR4MtwZ/V9ioYLZ68gkA9sJ3WG3O32cB5rnFcOhKUZ1
-	KrrVGtKXHIRDgHCg==
-Date: Tue, 04 Mar 2025 08:10:55 +0100
-Subject: [PATCH 25/32] tools/nolibc: allow different write callbacks in
- printf
+	bh=NLxRp/JkTIfoLlcPQDYEqa9/SCMFJG4UakDwlT6QSyY=;
+	b=OWj9fEX+yyEYPJDMI0ShPXvCRd5YAtum2o5o11R0WyXU/3vU/xl0FPoo5pZCz7oGMp4yEg
+	oo1AzboF6zvpa6CA==
+Date: Tue, 04 Mar 2025 08:10:56 +0100
+Subject: [PATCH 26/32] tools/nolibc: allow limiting of printf destination
+ size
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-nolibc-kselftest-harness-v1-25-adca7cd231e2@linutronix.de>
+Message-Id: <20250304-nolibc-kselftest-harness-v1-26-adca7cd231e2@linutronix.de>
 References: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 In-Reply-To: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -73,72 +73,68 @@ To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=1990;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=1977;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=VAitc4TpEayA62P7PzIris09IKbI6DnHkqqiFFANP2o=;
- b=36r1jcdLB7HWYJLkaB9ww4n3omXOBiOYNGXvuAsoRisC7XkNElex38a27q9s091lgCW45SVwb
- z3rNMFH/3QFCQPD/UN3a6g5QkRyffof/Cg31oBtodkzxG3Wxrezse3X
+ bh=gptYJeI7zIa0m6z25MFDa2zENatJrEBZvF+Qu777d3Q=;
+ b=kg8Do5Q+0Aezad9wGTryJ8SqwrVWpOnZIp+KKn+32QIIofCtR3gc17wbpjW5bSai/DAgY1l/2
+ MRa09pcQU6IC/rBF9CQCZ5hxRzE9YpV3Fef+Y6qLTIieo4ytmIqo8fD
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Decouple the formatting logic from the writing logic to later enable
-writing straight to a buffer in sprintf().
+snprintf() allows limiting the output buffer, while still returning the
+number of all bytes that would have been written.
+Implement the limitation logic in preparation for snprintf().
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/include/nolibc/stdio.h | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+ tools/include/nolibc/stdio.h | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index 262d0da4da9062e0c83b55661b2509f36548cf88..434fbaddae7a216159fecf618da85889d631dff7 100644
+index 434fbaddae7a216159fecf618da85889d631dff7..b484a19466394d55d7d21248031837238b58f3ff 100644
 --- a/tools/include/nolibc/stdio.h
 +++ b/tools/include/nolibc/stdio.h
-@@ -208,13 +208,15 @@ char *fgets(char *s, int size, FILE *stream)
- }
- 
- 
--/* minimal vfprintf(). It supports the following formats:
-+/* minimal printf(). It supports the following formats:
-  *  - %[l*]{d,u,c,x,p}
-  *  - %s
-  *  - unknown modifiers are ignored.
+@@ -215,13 +215,13 @@ char *fgets(char *s, int size, FILE *stream)
   */
--static __attribute__((unused, format(printf, 2, 0)))
--int vfprintf(FILE *stream, const char *fmt, va_list args)
-+typedef int (*_printf_cb)(intptr_t state, const char *buf, size_t size);
-+
-+static __attribute__((unused, format(printf, 3, 0)))
-+int _printf(_printf_cb cb, intptr_t state, const char *fmt, va_list args)
+ typedef int (*_printf_cb)(intptr_t state, const char *buf, size_t size);
+ 
+-static __attribute__((unused, format(printf, 3, 0)))
+-int _printf(_printf_cb cb, intptr_t state, const char *fmt, va_list args)
++static __attribute__((unused, format(printf, 4, 0)))
++int _printf(_printf_cb cb, intptr_t state, size_t n, const char *fmt, va_list args)
  {
  	char escape, lpref, c;
  	unsigned long long v;
-@@ -304,7 +306,7 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
+ 	unsigned int written;
+-	size_t len, ofs;
++	size_t len, ofs, w;
+ 	char tmpbuf[21];
+ 	const char *outstr;
+ 
+@@ -306,8 +306,12 @@ int _printf(_printf_cb cb, intptr_t state, const char *fmt, va_list args)
  			outstr = fmt;
  			len = ofs - 1;
  		flush_str:
--			if (_fwrite(outstr, len, stream) != 0)
-+			if (cb(state, outstr, len) != 0)
- 				break;
+-			if (cb(state, outstr, len) != 0)
+-				break;
++			if (n) {
++				w = len < n ? len : n;
++				n -= w;
++				if (cb(state, outstr, w) != 0)
++					break;
++			}
  
  			written += len;
-@@ -321,6 +323,17 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
- 	return written;
+ 		do_escape:
+@@ -331,7 +335,7 @@ static int _fprintf_cb(intptr_t state, const char *buf, size_t size)
+ static __attribute__((unused, format(printf, 2, 0)))
+ int vfprintf(FILE *stream, const char *fmt, va_list args)
+ {
+-	return _printf(_fprintf_cb, (intptr_t)stream, fmt, args);
++	return _printf(_fprintf_cb, (intptr_t)stream, SIZE_MAX, fmt, args);
  }
  
-+static int _fprintf_cb(intptr_t state, const char *buf, size_t size)
-+{
-+	return _fwrite(buf, size, (FILE *)state);
-+}
-+
-+static __attribute__((unused, format(printf, 2, 0)))
-+int vfprintf(FILE *stream, const char *fmt, va_list args)
-+{
-+	return _printf(_fprintf_cb, (intptr_t)stream, fmt, args);
-+}
-+
  static __attribute__((unused, format(printf, 1, 0)))
- int vprintf(const char *fmt, va_list args)
- {
 
 -- 
 2.48.1
