@@ -1,148 +1,111 @@
-Return-Path: <linux-kselftest+bounces-28209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3471EA4E126
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 15:37:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 298ADA4E1EB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 15:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D44087A31E9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 14:36:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A58F1188AB29
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 14:51:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8AE425D215;
-	Tue,  4 Mar 2025 14:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEF92620D4;
+	Tue,  4 Mar 2025 14:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="VuNzS7MB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uhv181ey"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qZLWl/t3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721C226E169;
-	Tue,  4 Mar 2025 14:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B583E25F98D;
+	Tue,  4 Mar 2025 14:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741098932; cv=none; b=XpD0Eahmcgp4BgJPPqL/Fba5xMe3lOdTs194SU4eaTHq8ZLOX4XWGqx4D/L7nqeBRsLZZpzKBBLpa6RfX4Mz5tcjecolr22rJWFEXIymgOkLMFCwh9R5vQBuSdTCHrTCbDKhcQXoBV6zeiWNGHOG5EPmHsHwCUk2+uMtFvl+44U=
+	t=1741099800; cv=none; b=WAy4rAaCfMy1mBQTC5dFhM5cd1h1quYwIAlGqqkk8EjypyUr27mO1UNC2Y5T2gC/RFcZA7eqEpjFpcDZOUOrV9k0kphBHOKt1sbkGM71AqBt0UE83L1eaL/hnJv76+xdKF+n9lVXfM8V0XwxOhqDfc555nPCZuZlI9CG2eljwZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741098932; c=relaxed/simple;
-	bh=YMy5gkaueEQktqoKVHPtEIDeqrmLdBspWegegQlhlwA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EVJkfK9I6myaU27z/BpAvz7MLYFXiMVIZhosNsRT0P65VDbLpMKw9qzgH79JZM7UEmBTBuZj79st8UZiyjwqnLy23wuUkNUrRH9fRdxi+2gI3cFVqplBSeM35WTeIGU4ZnPOvVYTdrxP6WwrzbrfGXI/DV4pHA75ygrH2YJ/N98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=VuNzS7MB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=uhv181ey; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 3253B11400BC;
-	Tue,  4 Mar 2025 09:35:28 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Tue, 04 Mar 2025 09:35:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1741098928; x=
-	1741185328; bh=wRZRNLutIoBb8oF0ngDTZPa0vNaZ5AVJbj6GM4zyYs0=; b=V
-	uNzS7MBwuIfKhW8lgt3WmAlh/dEDeB9BAEpXZA0kq/kFyXTEQ6e3Eb0OYf4sbv6j
-	1XQ5JUrSGlkB28TpkUxvizOi1rwa3CSZeoxTPiGLtltlmk6DbpaVaCsH761tWRvy
-	64PByEuc4xFsKng3HBimzgv0xeTIGQ1RyqsJslnlRwCihmW6uzw22sMPgbD5BUdI
-	EwMvaf/uMGhP0Yfu6VMZcLGezNlE0r8W3yBweAJmDVr0FT5m/DJ/fVTqGnMMuh+J
-	P/6/I5QQCVJWUhwPOAiYhdggrTgYu3aowRT/n1vtWTLTyp4fuDe2Z0A+ybjSDR7w
-	oGPnBTKUz7rZexUCPWMqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1741098928; x=1741185328; bh=wRZRNLutIoBb8oF0ngDTZPa0vNaZ5AVJbj6
-	GM4zyYs0=; b=uhv181eyF6LArvZTYb+QgVT4sGvPPkZCDqtMihzV3VZ1ZXhhGyV
-	p4YSj6jJ9XamrqG+UFCxH0oaL9qc2gw7vHZElq9Yue6TRERldW6pLnVGuDGpHb0i
-	fKYs8We9FotWJdvw/CoWosjlT3I/gieIGVQ4/Eq8O8TIDmiTuSyiTNR02n/jcD0s
-	VRb/EE36pJwO8LzBgTiQgXcA501/7tDDa1/PRoKRyhD+dfoAZfWVIOK6nQTrwWiW
-	1FINh9L1G6i9vox5bpO0vPzNBVsdLZ+XuirVPvn0Ekr7nfsQ6qnFgdn1BgUFYhDz
-	3KhrX2MiQSHKfpSTbPO4oVgdEjp3LCF0uaA==
-X-ME-Sender: <xms:rw_HZ0yOSUDvbujyVfQwEGipbyNwKEa-3YlwR4nAaZKQf6SNKDAcPQ>
-    <xme:rw_HZ4T6L9OyXdwzg29l8jZayeMWhr_wqyhMtNVWZ9S7mJojGka83Mtzb3sQPl687
-    dIYXMZNzOm2AdghMiw>
-X-ME-Received: <xmr:rw_HZ2WakGeJ-7hOIfr5eiL_vUYvmz1lK-d1_9Qld-U7PU1Wm8vz4ryZw9Ol>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutddvfedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
-    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdef
-    hfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
-    sggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnth
-    honhhiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrd
-    gtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehp
-    rggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnth
-    gvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtph
-    htthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:rw_HZyjnRzMpCPET0Wf_HyOZ7PAV7OQyX2bABphrYL7SiS0-uaAn1A>
-    <xmx:rw_HZ2Agb3RXYN6qnR7-G0xL2-kTG2msyZxIup5-PvdhJZVpypoozA>
-    <xmx:rw_HZzKlzQPdAt8Rbp9jcErn-vs5qMD8RAIubDGwCCZwCXaCW-jOFw>
-    <xmx:rw_HZ9DTr3nx2qlyFXlQdZ0m9Br1gKwapkEoKGpg2bjO-snTP11DgQ>
-    <xmx:sA_HZywrZwyOiY_19rSz2RZ2nE-bBI55aqdOZKkchKu2upcW8fp1Z7t0>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Mar 2025 09:35:27 -0500 (EST)
-Date: Tue, 4 Mar 2025 15:35:25 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH v21 19/24] ovpn: implement peer add/get/dump/delete via
- netlink
-Message-ID: <Z8cPrYs0TuQfLlKX@hog>
-References: <20250304-b4-ovpn-tmp-v21-0-d3cbb74bb581@openvpn.net>
- <20250304-b4-ovpn-tmp-v21-19-d3cbb74bb581@openvpn.net>
+	s=arc-20240116; t=1741099800; c=relaxed/simple;
+	bh=iHjkyEOwAJNsi2EtZYCaCGQOASUoDIn5YqQ9oOR4Y/U=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uqVBk9caYvpJYUr393NcWDS9uOi7Di+l9nqO3bJg4y0CRemWGJdPo2q+pwhieAygVbOkF+tl1N+9zW6bczwp+ZGVu030xU1N1pEsSucwRdqL1ayS0KH/LCOl4x6WciP2qC6MF07obWpCmq62/K1Cy+ERpR+LlBMIsfD6TSAxbYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qZLWl/t3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2095AC4CEE5;
+	Tue,  4 Mar 2025 14:50:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741099800;
+	bh=iHjkyEOwAJNsi2EtZYCaCGQOASUoDIn5YqQ9oOR4Y/U=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=qZLWl/t3sC0XsH8r7kXYJJPQzrVYn59BsW3dT+Jh8xz3AxJekxgByK1yF8AlThyNC
+	 aXZ6YZ9m8a8Xx6oJd+a64woIcZe354w1tGK0kePdOsIBwOm3CdrjSmuvg0djNZrVHs
+	 PVZTGWAOoZZznhfK121kU38QalZy99CRIZxkZIB56k3+syrgfswPpIELunW7wOD3e/
+	 imxOT/B4fDSMvK8llM76GIDF8RF8c/9wRyi2wbGS1PRP5AzGRnYOazb/dd0RtRWgZR
+	 YeVum9qo19qpbm5nBGJUoYVq+nMrWeJpHoSwv7cPZ7bXU8dc8mvdlf6bLLvVQLgj3d
+	 ShoSESDHynL4w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D89380AA7F;
+	Tue,  4 Mar 2025 14:50:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250304-b4-ovpn-tmp-v21-19-d3cbb74bb581@openvpn.net>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/8] netconsole: Add taskname sysdata support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174109983302.170664.16431215519500952572.git-patchwork-notify@kernel.org>
+Date: Tue, 04 Mar 2025 14:50:33 +0000
+References: <20250228-netcons_current-v2-0-f53ff79a0db2@debian.org>
+In-Reply-To: <20250228-netcons_current-v2-0-f53ff79a0db2@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
 
-2025-03-04, 01:33:49 +0100, Antonio Quartulli wrote:
-> @@ -1317,11 +1336,16 @@ void ovpn_peer_keepalive_work(struct work_struct *work)
->  
->  	/* prevent rearming if the interface is being destroyed */
->  	if (next_run > 0 && ovpn->registered) {
-> +		time64_t delta = next_run - now;
-> +
->  		netdev_dbg(ovpn->dev,
->  			   "scheduling keepalive work: now=%llu next_run=%llu delta=%llu\n",
-> -			   next_run, now, next_run - now);
-> +			   next_run, now, delta > 0 ? delta : 0);
-> +		/* due to the waiting above, the next_run deadline may have
-> +		 * passed: in this case we reschedule the worker immediately
-> +		 */
+Hello:
 
-I don't understand this bit. I don't see what waiting you're refering
-to (in particular within this patch), and I don't see how we could get
-next_run < now based on how next_run is computed in
-ovpn_peer_keepalive_work_single (next_run1/next_run2 is always set to
-now + X or something that we just tested to be > now).
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Am I missing something?
+On Fri, 28 Feb 2025 04:50:16 -0800 you wrote:
+> This patchset introduces a new feature to the netconsole extradata
+> subsystem that enables the inclusion of the current task's name in the
+> sysdata output of netconsole messages.
+> 
+> This enhancement is particularly valuable for large-scale deployments,
+> such as Meta's, where netconsole collects messages from millions of
+> servers and stores them in a data warehouse for analysis. Engineers
+> often rely on these messages to investigate issues and assess kernel
+> health.
+> 
+> [...]
 
->  		schedule_delayed_work(&ovpn->keepalive_work,
-> -				      (next_run - now) * HZ);
-> +				      delta * HZ > 0 ? delta * HZ : 0);
->  	}
->  	unlock_ovpn(ovpn, &release_list);
->  }
+Here is the summary with links:
+  - [net-next,v2,1/8] netconsole: prefix CPU_NR sysdata feature with SYSDATA_
+    https://git.kernel.org/netdev/net-next/c/8a683295c226
+  - [net-next,v2,2/8] netconsole: Make boolean comparison consistent
+    https://git.kernel.org/netdev/net-next/c/efb878fbe8d1
+  - [net-next,v2,3/8] netconsole: refactor CPU number formatting into separate function
+    https://git.kernel.org/netdev/net-next/c/4d989521a93b
+  - [net-next,v2,4/8] netconsole: add taskname to extradata entry count
+    https://git.kernel.org/netdev/net-next/c/33e4b29f2b3b
+  - [net-next,v2,5/8] netconsole: add configfs controls for taskname sysdata feature
+    https://git.kernel.org/netdev/net-next/c/09e877590bc2
+  - [net-next,v2,6/8] netconsole: add task name to extra data fields
+    https://git.kernel.org/netdev/net-next/c/dd30ae533242
+  - [net-next,v2,7/8] netconsole: docs: document the task name feature
+    https://git.kernel.org/netdev/net-next/c/7010b619830f
+  - [net-next,v2,8/8] netconsole: selftest: add task name append testing
+    https://git.kernel.org/netdev/net-next/c/d7a2522426e8
 
+You are awesome, thank you!
 -- 
-Sabrina
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
