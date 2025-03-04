@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-28153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2DB4A4D45A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 08:12:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66916A4D45C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 08:12:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AB5F1890B9D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:12:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BF21172EA0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Mar 2025 07:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F801F9421;
-	Tue,  4 Mar 2025 07:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF071FA14B;
+	Tue,  4 Mar 2025 07:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DXP+8HYS";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="q+eetx4L"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JEdOQDka";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QYPO9Crf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1DA1F584F;
-	Tue,  4 Mar 2025 07:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E74C1F5853;
+	Tue,  4 Mar 2025 07:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741072275; cv=none; b=r5XJssS6RzjtJS5pKI5YuA1zVp3OTeYSfEhsi+AKpTQeSrdeuX+8mCQldNL1z598r+Lr70PXlRk0x072Q4mCWdtO/GYUSPQBhEze4OosQG30ErrUPFWEQ8xJgWA24eFMEYR58mM5KxmAbhrJ/LV+eH0x0wjCvvUxm6M9n0rRT/g=
+	t=1741072276; cv=none; b=seXWIlQskwTR7xvdjC4giLf/ihT6bHTrJBEGYQhdh2coIQUnVrrq4Mu7nFWo67xRGC6y9Jtlxyrb8pta2X3PgEv+Y8n2Thj4XoaRbOiVgl4f4wUSNEoE8HJSTCIGhvSm7vzwW/IQyAmqAkrsa/+ysX9fhZb0ulKfTc9soZyLm1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741072275; c=relaxed/simple;
-	bh=8vvtUkkfHU7xlGs3lJ+IYJc5qNLYbAx060rjbFlvpuU=;
+	s=arc-20240116; t=1741072276; c=relaxed/simple;
+	bh=LoHEuTmyCWfppdxzkuks0aIW+fGsuAaTBTLeqSXo1HM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ac3RDkW5lwDOm4pD/U1Fl4tTRYi0pYW5GDrmx8HgIuel+dgCZcJQpN4PglEw1CM1NfU5MQNmV0RiZybpyj2PK+B5Af3uTkrKfID4Agg+gAM+vPqsloBzxwxoEh1kSZ59MBgdB2ICKQMpzZOi7Pzlr6d08YQfrvZEIsFhFkyRYWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DXP+8HYS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=q+eetx4L; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Iimq7f6NCUSHMAXjL1P1ApXJS6u6SVaFeOG9KLtwhgdsJLe932Yo/PR/q54PqQ5kqMlFoXvrtgS0Apx6Ko2/NdFvHpzB05HZ0RVpF5c1IMCs5os41MGYucH4sUYVSSxl/e9kysCp5KFOVZYIJNNEr/hKKZy7Ps4pWdDHV4dsWiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JEdOQDka; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QYPO9Crf; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=god5WALMpEkXYpkoV5aKX9NrjAlOqlLEXSMF+UWBpRw=;
-	b=DXP+8HYSw9ANj+wG4s31OnOGHxrg5UTHMavkMwQSvPdFBzqMOEl9mswdQVfTp6H4bndTIC
-	GN7V4tNCdJRehxbgr9kIUiHiKOCZvoEZ2sUWFkK5Eu8nZq+twkJAQ2dVZzTOI0bKhXjQKh
-	B8FAsdw8pdKNjoLZFxxRMiQAAiLJy6LZanxhmI8Luw26nE0++B3AeB4lzXc/DhCPcZtjYH
-	+FKei4KF5Kx/B5sEXnTmqL/Uo3Wbx/VQ9XiejuxRq7udr8mW6wkhq8WfHKP1EFm5MdhmcX
-	XFpoY6kiD9WpuzV1YA4dVmUf8aN6ibrK0prIQpRv1wTjlBQ49LTjRGU7fPZwNw==
+	bh=d7JoiIctFus6hhdRs7mtzErie5kNL1JBaIkwvaX5ucM=;
+	b=JEdOQDka31P3RBSjD94xWJMLqIhOyUbuzcmjL2qLo3d1beF4cbW8ggc4iChzn8tW6i1v6q
+	Kmxia1DhoDEGw7pEIIY0XCgXMhiv9ExGbafVmNDgMZ45ZmL2lebLlzM3Htjebg5+GmciYK
+	fXqJsY1+E4oCx9OS4czDHN8LhElhUDa4dz74FFVz0pIpTWIqvUq3n0U+Y34zP9n6KFUhjZ
+	sshxfv07Qtub5a7k8CivmVZSF/cbBaMTRyxC2bbU5DETKQmAjU8bsma8GWwfggg0gZjig0
+	w2tSRrAaFS56mgto78sucfHej4hd8L/p/j30bNGlOrd5Kt02R8Gk6gsibosZbw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1741072272;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=god5WALMpEkXYpkoV5aKX9NrjAlOqlLEXSMF+UWBpRw=;
-	b=q+eetx4LyQAMto+5SowB626tpFF4LmW3DZZMDRx4dkhPxHUokP2V4Abr9E5Gt1EBNKRGlk
-	qBhu/7ODeIy57vCA==
-Date: Tue, 04 Mar 2025 08:10:37 +0100
-Subject: [PATCH 07/32] selftests: harness: Remove dependency on libatomic
+	bh=d7JoiIctFus6hhdRs7mtzErie5kNL1JBaIkwvaX5ucM=;
+	b=QYPO9CrfXNReqXBf6IPla0tRqU7EKzJxj2rYcqkdRxx7q+wGcWecHJydm1AMkDgrXA013Q
+	zz0dXpaVWDnaXqCQ==
+Date: Tue, 04 Mar 2025 08:10:38 +0100
+Subject: [PATCH 08/32] selftests: harness: Implement test timeouts through
+ pidfd
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-nolibc-kselftest-harness-v1-7-adca7cd231e2@linutronix.de>
+Message-Id: <20250304-nolibc-kselftest-harness-v1-8-adca7cd231e2@linutronix.de>
 References: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 In-Reply-To: <20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -72,42 +73,143 @@ To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=1409;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741072266; l=4078;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=8vvtUkkfHU7xlGs3lJ+IYJc5qNLYbAx060rjbFlvpuU=;
- b=1xqyfb93DD9zV6ixSsFKx8ObiOnTGVdqzRrqpICbcltbHN9MY18YjxcX9RDdOiss+vj8KJA5r
- zEUdkTqaLhJAcCHCznKxXPantI+0KrwuS4S9H1z5rlIPGSs6XMmqCcm
+ bh=LoHEuTmyCWfppdxzkuks0aIW+fGsuAaTBTLeqSXo1HM=;
+ b=aqVq/wFtfuw2Kgvlc9EYJp8nHDm96QSb2Ma/6rIu5p8LZdiT/9JfGAjHKaZmVKGoGY+exEvq8
+ V1L3AxUmVkVC+ASD1Vim1X6ARVyaAIrCrdivFU27JEF2VaNPA0G2SKd
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-__sync_bool_compare_and_swap() is deprecated and requires libatomic on
-GCC. Compiler toolchains don't necessarily have libatomic available, so
-avoid this requirement by using atomics that don't need libatomic.
+Make the harness compatible with nolibc which does not implement signals
+by replacing the signal logic with pidfds.
+The code also becomes simpler.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/kselftest_harness.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 72 ++++++++++-------------------
+ 1 file changed, 25 insertions(+), 47 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 6659c10f4d8fc7c750bc5e8a36ebcbcacda5de60..bf5ffc594a4a864d2e8bb6f47c29fa56d58919d9 100644
+index bf5ffc594a4a864d2e8bb6f47c29fa56d58919d9..d265b45c86d03c6f854047138ee8dc19dcc7a4d9 100644
 --- a/tools/testing/selftests/kselftest_harness.h
 +++ b/tools/testing/selftests/kselftest_harness.h
-@@ -443,12 +443,12 @@
- 		} \
- 		if (child == 0) { \
- 			if (_metadata->setup_completed && !fixture_name##_teardown_parent && \
--					__sync_bool_compare_and_swap(teardown, false, true)) \
-+					!__atomic_test_and_set(teardown, __ATOMIC_RELAXED)) \
- 				fixture_name##_teardown(_metadata, self, variant->data); \
- 			_exit(0); \
- 		} \
- 		if (_metadata->setup_completed && fixture_name##_teardown_parent && \
--				__sync_bool_compare_and_swap(teardown, false, true)) \
-+				!__atomic_test_and_set(teardown, __ATOMIC_RELAXED)) \
- 			fixture_name##_teardown(_metadata, self, variant->data); \
- 		munmap(teardown, sizeof(*teardown)); \
- 		if (self && fixture_name##_teardown_parent) \
+@@ -65,6 +65,8 @@
+ #include <asm/types.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <linux/unistd.h>
++#include <poll.h>
+ #include <sys/mman.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+@@ -918,7 +920,6 @@ struct __test_metadata {
+ 	int exit_code;
+ 	int trigger; /* extra handler after the evaluation */
+ 	int timeout;	/* seconds to wait for test timeout */
+-	bool timed_out;	/* did this test timeout instead of exiting? */
+ 	bool aborted;	/* stopped test due to failed ASSERT */
+ 	bool setup_completed; /* did setup finish? */
+ 	jmp_buf env;	/* for exiting out of test early */
+@@ -968,75 +969,52 @@ static inline void __test_check_assert(struct __test_metadata *t)
+ 		abort();
+ }
+ 
+-struct __test_metadata *__active_test;
+-static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
+-{
+-	struct __test_metadata *t = __active_test;
+-
+-	/* Sanity check handler execution environment. */
+-	if (!t) {
+-		fprintf(TH_LOG_STREAM,
+-			"# no active test in SIGALRM handler!?\n");
+-		abort();
+-	}
+-	if (sig != SIGALRM || sig != info->si_signo) {
+-		fprintf(TH_LOG_STREAM,
+-			"# %s: SIGALRM handler caught signal %d!?\n",
+-			t->name, sig != SIGALRM ? sig : info->si_signo);
+-		abort();
+-	}
+-
+-	t->timed_out = true;
+-	/* signal process group */
+-	kill(-(t->pid), SIGKILL);
+-}
+-
+ static void __wait_for_test(struct __test_metadata *t)
+ {
+-	struct sigaction action = {
+-		.sa_sigaction = __timeout_handler,
+-		.sa_flags = SA_SIGINFO,
+-	};
+-	struct sigaction saved_action;
+ 	/*
+ 	 * Sets status so that WIFEXITED(status) returns true and
+ 	 * WEXITSTATUS(status) returns KSFT_FAIL.  This safe default value
+ 	 * should never be evaluated because of the waitpid(2) check and
+-	 * SIGALRM handling.
++	 * timeout handling.
+ 	 */
+ 	int status = KSFT_FAIL << 8;
+-	int child;
++	struct pollfd poll_child;
++	int ret, child, childfd;
++	bool timed_out = false;
+ 
+-	if (sigaction(SIGALRM, &action, &saved_action)) {
++	childfd = syscall(__NR_pidfd_open, t->pid, 0);
++	if (childfd == -1) {
+ 		t->exit_code = KSFT_FAIL;
+ 		fprintf(TH_LOG_STREAM,
+-			"# %s: unable to install SIGALRM handler\n",
++			"# %s: unable to open pidfd\n",
+ 			t->name);
+ 		return;
+ 	}
+-	__active_test = t;
+-	t->timed_out = false;
+-	alarm(t->timeout);
+-	child = waitpid(t->pid, &status, 0);
+-	if (child == -1 && errno != EINTR) {
++
++	poll_child.fd = childfd;
++	poll_child.events = POLLIN;
++	ret = poll(&poll_child, 1, t->timeout * 1000);
++	if (ret == -1) {
+ 		t->exit_code = KSFT_FAIL;
+ 		fprintf(TH_LOG_STREAM,
+-			"# %s: Failed to wait for PID %d (errno: %d)\n",
+-			t->name, t->pid, errno);
++			"# %s: unable to wait on child pidfd\n",
++			t->name);
+ 		return;
++	} else if (ret == 0) {
++		timed_out = true;
++		/* signal process group */
++		kill(-(t->pid), SIGKILL);
+ 	}
+-
+-	alarm(0);
+-	if (sigaction(SIGALRM, &saved_action, NULL)) {
++	child = waitpid(t->pid, &status, WNOHANG);
++	if (child == -1 && errno != EINTR) {
+ 		t->exit_code = KSFT_FAIL;
+ 		fprintf(TH_LOG_STREAM,
+-			"# %s: unable to uninstall SIGALRM handler\n",
+-			t->name);
++			"# %s: Failed to wait for PID %d (errno: %d)\n",
++			t->name, t->pid, errno);
+ 		return;
+ 	}
+-	__active_test = NULL;
+ 
+-	if (t->timed_out) {
++	if (timed_out) {
+ 		t->exit_code = KSFT_FAIL;
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: Test terminated by timeout\n", t->name);
 
 -- 
 2.48.1
