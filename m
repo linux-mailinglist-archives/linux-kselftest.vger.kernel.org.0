@@ -1,94 +1,95 @@
-Return-Path: <linux-kselftest+bounces-28300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9B7FA4FB2F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 11:06:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B74EA4FB5E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 11:11:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17C2A165404
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 10:06:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B7113A4A7F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 10:11:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A090A20550C;
-	Wed,  5 Mar 2025 10:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B5C205AAC;
+	Wed,  5 Mar 2025 10:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="hJpocj7v";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="u/NHKT/Z"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="f4PMkdPd";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="W+pTjfBM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4148F1F3D30;
-	Wed,  5 Mar 2025 10:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EC71E2847;
+	Wed,  5 Mar 2025 10:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741169213; cv=none; b=b+Z46M0y7ABTWQfbCXYgepex/lMonMvCwGse1QPmDHUqNzqsj/eESJbosZGVo3Y2qYGLNhdLki5SqXN/NEqS3jt3SVsXQPqSsKGhjhMLs+SfJHLcxSZyimdqiZOUfBOgMOqJVzSDMx1FUqL0h3o3zzOv5mzobCBB830n6BIgGnI=
+	t=1741169506; cv=none; b=PxDWLI/TFcky9lRNyLB4AUFFZXKTXUNAVx45EVl0W9ZqEERr7gWykTNGbx3kzl1F4NvMUXmBrwhuUbmrVCxpR7ATVrjJ1T5OwUqgLML5HZnLqxbdGXJDpk1kK2ELCs4dPwYfgc+lwn/evBmYpEJLT3u8vUXpgfRGtHvVURW9j3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741169213; c=relaxed/simple;
-	bh=POFkgzO8rm1oQNp6ytUtiiNRXbGm7AOdYqXhxPgh4sc=;
+	s=arc-20240116; t=1741169506; c=relaxed/simple;
+	bh=u8nSbs0xTwX5BtGNGGk1U4xJg451vP+0nM368luQfKs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8olgLNdYNl3XCAPUdKGnx0EiDEIPYB9vMsqnrNQPQi4m937oyZFQ7Ft9bl2xI6Vo9VVUH6bYMpJ4BXOaBcdhqFgo+32glCdx2HGKwi3qWcCGFXHqm5PMq0qrByPiuJ9Tl6JcwMYpeCs28qxndG+K6vNlx4kGhOcdlq4Ksfn8Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=hJpocj7v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=u/NHKT/Z; arc=none smtp.client-ip=202.12.124.154
+	 Content-Type:Content-Disposition:In-Reply-To; b=tj/HLeiRDTNYJ7HnIHyXj6pFMbsVN1cMsneRTCIHmGPlIBaTJoUX78nYwy0c9EKYM7XTKDsU9mmHwP0kB7vOA8vz2eg3O+iA6UiFoyB4a+Ormrse4eFCbtTbKMQ09g/i3KMbzbEBmhjhQzKbCWGs+7PLkh0Vhi/DjIpshXNGf40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=f4PMkdPd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=W+pTjfBM; arc=none smtp.client-ip=202.12.124.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id C036025401EA;
-	Wed,  5 Mar 2025 05:06:48 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 05 Mar 2025 05:06:49 -0500
+	by mailfout.stl.internal (Postfix) with ESMTP id ABD2011400C7;
+	Wed,  5 Mar 2025 05:11:43 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Wed, 05 Mar 2025 05:11:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1741169208; x=
-	1741255608; bh=OV22lrFV3DQBTGcw06CXISDEH3SxqJT8NlQedF2+oH8=; b=h
-	Jpocj7vtNqNLdr/VV90HwI4omf9lvjbPmLOfpwnKOH6B7DiFJld7FF9oKKoHZTbN
-	l+ELUcNjW7/sa3MguXc5X2c6axxaNzrMAzSF5o9uP5haAgGogOvVHA8M9CLxcWoH
-	xIQSt0GkHsqaxorzOMT9UF3cIN2by8apiQd4df5JzJALX35BqlHw5CTDROBuHwrA
-	l3JW8pngLevn7peJbN/2cob+O4Jdfk8PQNzaH4550AvAiE0K6+P+cq/czxcgXeno
-	oFYBW4OXOln3ARE6Aw6zctlNOchroRZPJ9L/gq+LJzORNuq0PqbNg8FabrQhipxR
-	+0UBXkK3JQbq3/CjHT92w==
+	:reply-to:subject:subject:to:to; s=fm2; t=1741169503; x=
+	1741255903; bh=FgqevE7dp9jIfFGQb8KyY7Usp35oeBUE8Vi5Z6q1pgo=; b=f
+	4PMkdPdzhOAgVvNaujf/h2UbyV/FUe0m26HKbbJl0/sQYut7W1336g8bsGMM6UbS
+	LGQOowu62xtfd7P1aNtmKsR4G7PMHr9p/7lbQxUxouzQt7UtARkWx5dGK5xsjsMO
+	Q0/iDzlkMTqdQX1G4/jIWmxxJb7D2mJTRfPPcG7uN3P6Bwew7sxtI3tZnUOGc0MC
+	7TKX9ZKMjZBFYUfyhF9Qc2Pg4dPqYudHS2MYjWxd+f5DcJjWj0wjACUqU8k0nJFT
+	vOZDquu+pbrKYmrnmSlLeMob2DT7clhOj8dIfREzVY6SFKJYPuHwLqnj55Zq8WsU
+	+q/ykWUEl7pj25bLW0+gg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1741169208; x=1741255608; bh=OV22lrFV3DQBTGcw06CXISDEH3SxqJT8NlQ
-	edF2+oH8=; b=u/NHKT/ZQpVgl5aBzzP59XVl/aCDb4nvJ2ZY5LWWM5PurauNq6/
-	W8Q91FenyD/jdrEEVIlO59jQG5OzxQ6fBt4kBfX9rYkggrEAFPcHs6cZrcd/R+Vy
-	wynEPhKFHqHtBn3e5cZwXvs68QC+l3K8BpacUCE3Y+JjsHK9rkAxZg3VaEwxyVoe
-	YJBBrdCgLrxBsg+IrdufdIPyE+UCZrmi9dYzrvSL8yd0Ud2sbxoSPVNv+5JoZQlv
-	cb1p/prCwrzwJAXESNJTtvT0g5Q6je/eBK4bPq0rHhQe9hu3SuqUUeYhYDLaUtIH
-	2/Dl/Q8rqBhG1/aqMI8lfltciwE3+kXzfaA==
-X-ME-Sender: <xms:NyLIZ-MYNr-jPlNECyHoRQo8x3eET31MTCVcp3Rnoky1eaWR5NZ7fg>
-    <xme:NyLIZ8-mnhcmeDFjLUUAi0Z4pIECapTlB-TrXy8ob69K4qxPPDl-UGtB3mJyJ7yaG
-    -Gp1zhI4uwsqUFZXII>
-X-ME-Received: <xmr:NyLIZ1RYn9jL2cyfIOWhBijdan2Z6qfoQXWZTpuZaopB8o5cedW7mJ1cuUDS>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdegheefucetufdoteggodetrf
+	1741169503; x=1741255903; bh=FgqevE7dp9jIfFGQb8KyY7Usp35oeBUE8Vi
+	5Z6q1pgo=; b=W+pTjfBMAKYVc5L3Ldg6L+dO1hz2jiJ/AZWtyPf9BJHRWNDdkIm
+	5E+svGGsu0CdiU2OSYVeMBHWvGl6C6Sq9aeFsYVHLLmZ7oyXJF7Ocdaw3SKkeIM3
+	oa0x+42YCpA61Bg+j/ItbjuN+Brrz0YrcehV3JYwOK36jpPMJIMEjCGAtDZPsvpq
+	suLw1AiaNua7nVzVy8osPm6BRcfti/cqf46w6heqfJnMC3SjebG/O/mfA4ZJ/WLM
+	hY3ZU5R6XIxtrbpwT0qhopsHfq1+VObXNLLzYYknpHePAd9luRrA7EX+eoTM7yiR
+	lZ9qKhoJozyo9wbTsNjCsbLOlG5g7wwAzdQ==
+X-ME-Sender: <xms:XyPIZ-m5w2fvBjED8u53ZLNp-yxFM5lfPSP_Nuh9uIAB8k7ikIq0-g>
+    <xme:XyPIZ12aH8BJIAKCBSbS1TMM_mmD3axiaYG9UdPrRVJUGPLnTVdo02J4LJTz6U_a0
+    Yc0F5v5Fzmk_-fy0bo>
+X-ME-Received: <xmr:XyPIZ8qfQB1PHBpRr9PMQvOYGihyBbOGsECUwMkc6kyoWP2o6Q4E_ohvvuyJ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdegheegucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
     gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
     jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
-    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdef
-    hfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
-    sggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnth
-    honhhiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrd
-    gtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehp
-    rggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnth
-    gvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtph
-    htthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:OCLIZ-t_h-9lFtez33rBhZBpt-3v6dALYDF2d7_Mm2mxSQStfF_VIQ>
-    <xmx:OCLIZ2ddhqzYJbEY-MnrzkuBFVDrL0gqPjro7dOdCFxIkUAsNiWHZA>
-    <xmx:OCLIZy3r-hp_mMMb_0tAGapuBE-PDYZpWp3zLlhaRBsXQZ26wqAPDQ>
-    <xmx:OCLIZ68hOjID9-T7dJuLvtMLrY3Q_NZdNAHaBMdpLPtlsggfh8RPMQ>
-    <xmx:OCLIZ98PVQUB5BNVcHQeXGESQtEWdNuRxrhAlZyFDCv3qG5U9wEl9KON>
+    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepgefhffdtvedugfekffejvdeiieel
+    hfetffeffefghedvvefhjeejvdekfeelgefgnecuffhomhgrihhnpehkvghrnhgvlhdroh
+    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehs
+    ugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudefpdhmohguvg
+    epshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnihhosehophgvnhhvphhnrdhnvght
+    pdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrges
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
+    dprhgtphhtthhopeguohhnrghlugdrhhhunhhtvghrsehgmhgrihhlrdgtohhmpdhrtghp
+    thhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhihrgiirghnoh
+    hvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrvgifodhnvghtuggv
+    vheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:XyPIZynxLkMwU1dS3B3gmluF7RqutfIl5jCYp0RrBR1x7m6hISL4QQ>
+    <xmx:XyPIZ81It-Om4u5CkzG0BdXTKUlku7sSKcocsG7yXMXm0flW67P2sQ>
+    <xmx:XyPIZ5vJVAS0zyQppNYiSCfRVbkxT74JW-hz9C2d8lNyi7QM-Nyltg>
+    <xmx:XyPIZ4WqvLyEr6N5ubGlWp_GA70lVuB6lHKoYGHdw6b2-tMDbItinA>
+    <xmx:XyPIZ32a6YS_g4zYcQrOEzp-A-FWLjUNpRMSLH4ACUe-ECxL99PgSUUW>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Mar 2025 05:06:47 -0500 (EST)
-Date: Wed, 5 Mar 2025 11:06:45 +0100
+ 5 Mar 2025 05:11:42 -0500 (EST)
+Date: Wed, 5 Mar 2025 11:11:40 +0100
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
@@ -98,12 +99,15 @@ Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH v21 09/24] ovpn: implement packet processing
-Message-ID: <Z8giNYKBWzQEtZJu@hog>
+Subject: Re: [PATCH v21 20/24] ovpn: implement key add/get/del/swap via
+ netlink
+Message-ID: <Z8gjXLepPcRByLTZ@hog>
 References: <20250304-b4-ovpn-tmp-v21-0-d3cbb74bb581@openvpn.net>
- <20250304-b4-ovpn-tmp-v21-9-d3cbb74bb581@openvpn.net>
- <Z8dOOy9tSpJ1UCiR@hog>
- <8abd4290-cef5-4ea3-bdfc-b872c16efb8a@openvpn.net>
+ <20250304-b4-ovpn-tmp-v21-20-d3cbb74bb581@openvpn.net>
+ <Z8braoc3yeBY7lcE@hog>
+ <07c73e1d-3c9c-46c7-92cd-28d728929d18@openvpn.net>
+ <Z8eIJH1LtTtfljSj@hog>
+ <71c1db26-f147-4578-89ae-c5b95da0ec9a@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -112,45 +116,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8abd4290-cef5-4ea3-bdfc-b872c16efb8a@openvpn.net>
+In-Reply-To: <71c1db26-f147-4578-89ae-c5b95da0ec9a@openvpn.net>
 
-2025-03-05, 00:35:09 +0100, Antonio Quartulli wrote:
-> On 04/03/2025 20:02, Sabrina Dubroca wrote:
-> > 2025-03-04, 01:33:39 +0100, Antonio Quartulli wrote:
-> > [...]
-> > > +static inline struct ovpn_crypto_key_slot *
-> > > +ovpn_crypto_key_id_to_slot(const struct ovpn_crypto_state *cs, u8 key_id)
-> > > +{
-> > > +	struct ovpn_crypto_key_slot *ks;
-> > > +	u8 idx;
-> > > +
-> > > +	if (unlikely(!cs))
-> > > +		return NULL;
-> > > +
-> > > +	rcu_read_lock();
-> > > +	idx = cs->primary_idx;
+2025-03-05, 02:00:21 +0100, Antonio Quartulli wrote:
+> On 05/03/2025 00:09, Sabrina Dubroca wrote:
+> > 2025-03-04, 13:11:28 +0100, Antonio Quartulli wrote:
+> > > On 04/03/2025 13:00, Sabrina Dubroca wrote:
+> > > > 2025-03-04, 01:33:50 +0100, Antonio Quartulli wrote:
+> > > > >    int ovpn_nl_key_new_doit(struct sk_buff *skb, struct genl_info *info)
+> > > > >    {
+> > > > ...
+> > > > > +	pkr.slot = nla_get_u8(attrs[OVPN_A_KEYCONF_SLOT]);
+> > > > > +	pkr.key.key_id = nla_get_u16(attrs[OVPN_A_KEYCONF_KEY_ID]);
+> > > > > +	pkr.key.cipher_alg = nla_get_u16(attrs[OVPN_A_KEYCONF_CIPHER_ALG]);
+> > > > 
+> > > > 
+> > > > [...]
+> > > > > +static int ovpn_nl_send_key(struct sk_buff *skb, const struct genl_info *info,
+> > > > > +			    u32 peer_id, enum ovpn_key_slot slot,
+> > > > > +			    const struct ovpn_key_config *keyconf)
+> > > > > +{
+> > > > ...
+> > > > > +	if (nla_put_u32(skb, OVPN_A_KEYCONF_SLOT, slot) ||
+> > > > > +	    nla_put_u32(skb, OVPN_A_KEYCONF_KEY_ID, keyconf->key_id) ||
+> > > > > +	    nla_put_u32(skb, OVPN_A_KEYCONF_CIPHER_ALG, keyconf->cipher_alg))
+> > > > 
+> > > > That's a bit inconsistent. nla_put_u32 matches the generated policy,
+> > > > but the nla_get_u{8,16} don't (and nla_get_u16 also doesn't match "u8
+> > > > key_id" it's getting stored into).
+> > > > 
+> > > > [also kind of curious that the policy/spec uses U32 with max values of 1/2/7]
+> > > 
+> > >  From https://www.kernel.org/doc/html/next/userspace-api/netlink/specs.html#fix-width-integer-types
+> > > 
+> > > "Note that types smaller than 32 bit should be avoided as using them does
+> > > not save any memory in Netlink messages (due to alignment)."
+> > > 
+> > > Hence I went for u32 attributes, although values stored into them are much
+> > > smaller.
 > > 
-> > I'd go with slots[0] and slots[1], since it doesn't really matter
-> > whether we check the primary or secondary first. It would avoid a
-> > possible reload of cs->primary_idx (which might be updated
-> > concurrently by a key swap and cause us to look into the same slot
-> > twice) -- a READ_ONCE would also prevent that.
+> > Right.
 > 
-> Reason for looking into primary first is that we will most likely need the
-> primary key to decrypt the incoming traffic.
-> 
-> Secondary is used only during a small (if at all) time window where we moved
-> to a new key, but our peer was still sending traffic encrypted with the old
-> (secondary) key.
-> 
-> Therefore optimizing for primary-first may make a non-negligible difference
-> under heavy load.
-> 
-> Code doesn't get more complex due to this logic, therefore I'd keep this
-> version (with READ_ONCE(cs->primary_idx)), unless there is a strong argument
-> against it.
+> What's wrong with key_id being u8 tough?
 
-Ok, sounds reasonable.
+Nothing. It would make a little bit more sense to use nla_get_u16 if
+key_id was u16 (even with OVPN_A_KEYCONF_KEY_ID defined as U32), or to
+use nla_get_u8 for u8, but here it was just 3 different int sizes and
+that triggered my "uh? what?" :)
+
+> I am a bit reluctant to change all key_id fields/variables to u32, just
+> because the netlink APIs prefers using u32 instead of u8.
+> 
+> Keeping variables/fields u8 allows to understand what values we're going to
+> store internally.
+
+Sure.
+
+> And thanks to the netlink policy we know that no larger value will be
+> attempted to be saved, even if the field is actually u32.
+
+Yes.
 
 -- 
 Sabrina
