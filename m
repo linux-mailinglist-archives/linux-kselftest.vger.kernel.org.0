@@ -1,196 +1,201 @@
-Return-Path: <linux-kselftest+bounces-28274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E849BA4F4EE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:54:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 953F2A4F511
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:05:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71DB67A1CAC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 02:53:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A366D188FA83
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:05:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD0B153800;
-	Wed,  5 Mar 2025 02:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 784433FBB3;
+	Wed,  5 Mar 2025 03:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4B4NUjW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ydz45RRq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D0545C18;
-	Wed,  5 Mar 2025 02:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4D7469D;
+	Wed,  5 Mar 2025 03:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741143285; cv=none; b=PMjgOKi++Qyp0nNA0h5ZGpu2X/1Os7eOZGKDqOxA/tddIrAkZ2+PXEV1zzijx1Wh+qumx2AmuwR5bgSVy9f+lBaupHfYsLmzfc23Bm/lbkeVyJCQ7xwEKitVgHGmy5jiZ4zuR2v9cxrTokZda8Tu5uWvL11cFb5qJgxqITkswcE=
+	t=1741143914; cv=none; b=pXEBKxx9raXPA4IBerxej/qZGPVeDFW0JQjE0qgxZYzXpkNc37M2czMzIiUwIFN7I64vFxgmH4FKST+PPZQw3g9hn43MIyVGdprqkcVyR0f/h2UlhL1Np+arbRHq6uBpDp3WcYxluF4VX+Iz8ud+tvxze13mXTMufUntAQxW2b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741143285; c=relaxed/simple;
-	bh=UV6gyGazzJ42NubyrUwHa0PU0qVcgVll114FV7ifGlA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GrcQRhLV+dXW72XusvMWbxglGrv86WRI7Na6VYuWkT4B8mzxGyHC9JvIo1FsDRW4yCQPs8JnmYFuHc31z+k1kyPoJT6+ZfslzMTMzw3cs0sYLcOQx7I8gRwkA+NtLm8Ih0cxs+kI1JLmSN+JR/DSIdOKsOx4G00t6eRYf9snuUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4B4NUjW; arc=none smtp.client-ip=209.85.222.175
+	s=arc-20240116; t=1741143914; c=relaxed/simple;
+	bh=uIzTrgOptV+UJekRK9fZqgVZ4HuhUabXU00kNLk3AQs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=X8ZTKJ3OtILmqz9z5Yi6WjB6gR5nwCR3/D1fUSm2pVuoF6WkpjYSqk6uw2EMwlZ1JzRm1VFCNDqihV9/fEtjM0AmhqQb8BUQIrnI5/40PmDeijVr3lIIr7KjgviMREhtfrNZ5jp/CKF8/j8LvSqrWKONOugpOPEJpng6wV3qYSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ydz45RRq; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c3b4c4b409so495400785a.3;
-        Tue, 04 Mar 2025 18:54:43 -0800 (PST)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7be49f6b331so615689485a.1;
+        Tue, 04 Mar 2025 19:05:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741143283; x=1741748083; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UV6gyGazzJ42NubyrUwHa0PU0qVcgVll114FV7ifGlA=;
-        b=C4B4NUjWr9adFGs1UGGtUwqZQAcB5IHNJq1++qHwkFlsLCKvoHOoJ/0115JMQssPgT
-         MsCan0gxBrwsOwbPXsFHBGepmZlSUzBlCRO6WkK1xhfBOCu3VxUlttE2FfiZSUdU8l2F
-         dxGqOdFA/I063Tf8/+lbFrGPnygor5CDX1AOks8d/7e8QdDl1ulTucX//gMfQTJ+zrwt
-         ljzQ84A34REWanHJRO5gXBVTY/DlBo42Ah+Koprf5UAQd1SnnEr59XrSck78u1i8VEma
-         IBWxjf+gToPfM87u+0u30qOfC4B2Z9+S1f7fm+Cafw5wnF3K3mEe+EUa+15cbK7qiQxa
-         bRRw==
+        d=gmail.com; s=20230601; t=1741143912; x=1741748712; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TtAhruDk29bBD+n/3w0sFbMJ4Qpp/JAWf4U/2iqtCyo=;
+        b=Ydz45RRqYOLcT7H/sK6vDJjSg0DdQ3L5oNBADSBWHPKC5+vWmDKZYiX4TykSU7kDvD
+         +uquPwyIxQuZ9ZxKCfBL4VeoGIAE54DBn8y73NEHmxJ/lvDG+4C0G61gkFde0coIX0DY
+         Frdgdc0s1C6fUpIwecBKIsAiShhaKdy6jfWPswGvKw95wiGPX5AbL6BaWum/UEgCiaoI
+         ZRWGO01LS6tKOh4UTiGDd5rGDdTNlNpTM4bWgFwVy32QPUq4pTwoSq0pe7gaYbGq7ICn
+         09URTTDVzdQx8O2GryF9WpQEco4nbK1Pb9gcWOp26QJlLJ/Tzh5KNI9H48/A1sl2hK8K
+         6D2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741143283; x=1741748083;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UV6gyGazzJ42NubyrUwHa0PU0qVcgVll114FV7ifGlA=;
-        b=D4ABOLKCMiOsj2u7yLophJF5yhM3BGa0DlkdzUvwCjfOCP0uQkjgQQgvJPv9zMLZ3x
-         8H1d8EE2T259KpVXmA2Zp/ANgg65CFe5szzz+rTNhBsTNPTbFL/SjWcjpAouvcnn8LW/
-         NIRlDrqIWXUus9SPKWZI/Hnng3+RkAQZ4OUzcroudMH8RU/Rf2xBMDb5HQukdQziClMB
-         yu7R3NMWTvyztibUMntAp0xDFQ9SmneURMbJkA9UINZ0gXqQ9HSHqkcBy3gf5gtrcbTH
-         YkLXNQGU9bCV5b8YhpkL70Wu4KDgQloRqtTY96+PZVC58Uyc5EHxH2OlFBYlSdCTVh5X
-         Jifg==
-X-Forwarded-Encrypted: i=1; AJvYcCUrdEdC78OMUSZ4rk1fYgPnriLn7UwkEe0aNzgBXh4mS8LYYSYWO957iXTy2Z7QgIE1adMfG5yDpErz7WeD3qNi@vger.kernel.org, AJvYcCWgxPnrx29q+gAU4BXE3vMjQKo7TJDJXaW6z2fk+G34d0sGpng8MS+5YKGgJWnFandgMYuy3lbudebMfI2ckaCPKfXG@vger.kernel.org, AJvYcCWnfmVU3QQxiU/U3a0Ah0jYWAegfJrppPglaehbI+6J4cj3yF6pEBNDx5l7e2N8m1XfC67MG7ziMdNnNmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpRNTzuQk+6WB7Ff3huGIRnhiQbXbTBmoMf2hYfPnjNE2k8Si6
-	vtzxTCWYffxsPuFYeQSgViNUbVufQ6MjpyVuq8RkY3fpHVQUjokv
-X-Gm-Gg: ASbGncsyjzMxhnx4CcF9bHCrMRc4q214bzUzkNdujlHcUSsztrY28tGikmZVQNuhNFg
-	HZu0wrpAf/8+5lQyDjALaiwpzEq2iPosb8Q1Qjcvo0fSCoBZsIO0F4K9OJK0XEQ7Y5oo+bdU22X
-	aBGK8eaYQKg+6VS0govHROurwO9etnOdzgxSweJKnTaRV2zyzhius7Q3A/xo1GiDdKzzDHw112U
-	HVX123LGX5b475Zc9HPS9yHWq36Hwb/GwXJr0R848+p49WBc9CG+otKiIjOVQIIn9i3q2Ocqqjl
-	KmzmkMry8em59RVtmI+PPpp2EhBHMTLcms905hT3O4FPumZlYUzTcthVqNn2A/EHHgZ3VC23NZ8
-	YDRtU7Beqj5cuIUxWsa2f4fwZJIjVgthED/g=
-X-Google-Smtp-Source: AGHT+IHBoQiW7YLCUvoHR0BGtgdkr30Lh1JWx2qiZpsHE/51TJNn1Bw7Jeixsoev4iKBvUmgHnx5uQ==
-X-Received: by 2002:a05:620a:2607:b0:7c2:40d1:8593 with SMTP id af79cd13be357-7c3d8e20ee3mr236316985a.3.1741143282793;
-        Tue, 04 Mar 2025 18:54:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741143912; x=1741748712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TtAhruDk29bBD+n/3w0sFbMJ4Qpp/JAWf4U/2iqtCyo=;
+        b=nfJt+lIlRjgK5c2PJx3NzN/2lBWsjpgr/T7OeLv6BOaww/e3sTd1B/Nv6U5kOoVoqq
+         fVO0YH2Nm97EBAZyG8mxREHoEt1xSlHGpURZAtIyt3/6rShwAycFaHJK6CuvPS4EvM60
+         E3h6OEtNR54asJKYAwiCGTfgCLclxz/kuCmsbw0//zwFPHTWGxKoWkKrDWyDH+jJgH1m
+         CsCIKxg4rS52fML2jawkasCZdqFxuGgibOAFlcJgSh2Eh8GALnoYNcNwLAKGDN7eJb9T
+         zmqW3jZdld2wt6WrnewOOh9PVsUG/wmHHStXFu8Dt5XttrAPTJ8Uv9do581E5kFwPCXz
+         rJRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVi3gvcO5My4yzZyLDMpHRruWuRxMqjf4gQlta2ESyCBIt8476iz5gTq4wKP8kXE+DpHd5gvUt4gUO5yaLEgFqc@vger.kernel.org, AJvYcCXGmMUhLKM3U58CfXqiUbjftJKDwroQeBo5gTqWamnuKi4d/+CQdlOcDOeX4H6XDtBf6+Uvr8xD7SD9EQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwenMmcxMlD9DECzO2T0F3BiG2AAvHs2pSeYW6QaexTmU+Idwct
+	UHJAeNJpbvR+ptM9HFk8ZuALkk0dat/1dwKzO8UxgyfJnLo73Vzy
+X-Gm-Gg: ASbGnctVq6L7jpZI/yxbZguOXVUuKH4FZsYTlOnxXm2QDJNQteeukproSY4+7m2zMQy
+	kluVemb37/+iFFuwD8eqxrDqajIvN5YQPrK4bfiV9TD31PSOQvtsAYig/GeNF088dMiRS6v4xgw
+	iHumOeIUxz7AF1xZzFZfg5KNBGYxzPRoj4ReDeak/CVZK+aMgN9BYXfnHs9k9seixIRfCxx0Id/
+	NvBpUIILqqwJcBz5YQuwU//oE0HPLI6FQqp1cxI3VipEszck0cKh7MYtR5RSbGpQY0wkAWsXLji
+	O7kk+kX62r3GRwPSVcsfBIG3687eE7tdRo9Ou1dPeJfUQVNiqOzVSWhbesEomjvC5s2EtHNZwTu
+	YfIruHjSz8z9a9Vxmcg9jn1YWLWfljPfBY1w=
+X-Google-Smtp-Source: AGHT+IHwQLXuLEQr6SIyS0fEOaahuVSMv1SsSL+2Iy9aA+a8PVMQN3EvE91Y8mnyVFrxKHSo2M8kYg==
+X-Received: by 2002:a05:620a:6190:b0:7c3:c3e1:3200 with SMTP id af79cd13be357-7c3d8e4638amr284054285a.1.1741143911563;
+        Tue, 04 Mar 2025 19:05:11 -0800 (PST)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3ca43ad81sm228200185a.80.2025.03.04.18.54.41
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3bfb2a5e3sm331906985a.41.2025.03.04.19.05.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 18:54:42 -0800 (PST)
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 71EED1200068;
-	Tue,  4 Mar 2025 21:54:41 -0500 (EST)
+        Tue, 04 Mar 2025 19:05:11 -0800 (PST)
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 652D8120006A;
+	Tue,  4 Mar 2025 22:05:10 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Tue, 04 Mar 2025 21:54:41 -0500
-X-ME-Sender: <xms:8bzHZ9LFSO-a7ihBB_pv8V5rMhqrCR_uO6brALv_DTsMkbnINqpj9w>
-    <xme:8bzHZ5ICRQVksAlERae5OZAvduwZlz1qAgrERq5bNKjTQt0f2uYUbcUpoMigZ3QGd
-    UpwwI3GC1dXsBLtQA>
-X-ME-Received: <xmr:8bzHZ1ucqTCiCh6UQ1HAcC2SWKqx4g4_vR06lzjQbgjSp2dCVHYOF0BiRw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjedtucetufdoteggodetrf
+  by phl-compute-07.internal (MEProxy); Tue, 04 Mar 2025 22:05:10 -0500
+X-ME-Sender: <xms:Zr_HZ8wbXq--XXYslbbNxSkkZNsZ2GNp0gajfIbKWwhTnagViLFghA>
+    <xme:Zr_HZwQ6EQghexBNJ_NCy_XUXiyroWQBaVLV4KWENh8h5FtDYKmgLbyMoQsERaFNc
+    gCPGsY9uFg533882Q>
+X-ME-Received: <xmr:Zr_HZ-WjhdQ2eIlHZQlGRjv_MqUrJXcyitg5QguQSIHwzAx0ZgSZAtJHow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtqhfstddt
-    tddvnecuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrg
-    hilhdrtghomheqnecuggftrfgrthhtvghrnhepheeufeduuefftdevffffhfehudeitdff
-    uedvveegleffudetueegvdehtdfhlefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhn
-    rghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpe
-    epghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeeftddp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhish
-    drohhrghdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfhhrvgguvg
-    hrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdruhhprgguhhih
-    rgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohgvlhesjhhovghlfhgvrhhnrg
-    hnuggvshdrohhrghdprhgtphhtthhopehjohhshhesjhhoshhhthhrihhplhgvthhtrdho
-    rhhgpdhrtghpthhtohepuhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepmh
-    grthhhihgvuhdruggvshhnohihvghrshesvghffhhitghiohhsrdgtohhm
-X-ME-Proxy: <xmx:8bzHZ-bAeG0ZN1GRSTXMehPu8GzSaSPV29guxqRdGz2fwFl_WYKV5Q>
-    <xmx:8bzHZ0aKBJ5-5VFBHCz5DMRPMteMbfFZAPBaND6ZAQN2X7WHkXQD7Q>
-    <xmx:8bzHZyBgmAnxKIcGNuSZ5RxojsTbDVVWDzKB6k-raS6dr88qNYe3dQ>
-    <xmx:8bzHZyY_W8yOb5yK3MJYbCUbBXmGtxXxETMRJS4EIEmVEcYWau52eQ>
-    <xmx:8bzHZwrUTjFR0__3g6VW5Q28j-I-8Okx3u1SPTqqw8wuH5BuD7BoXgjr>
+    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdej
+    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
+    drtghomheqnecuggftrfgrthhtvghrnhepkefggfevuedtuefhgeetveduudffjeejvdej
+    ffettdekgfeujeegvddtuedtfeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhn
+    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejje
+    ekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhn
+    rghmvgdpnhgspghrtghpthhtohepfeejpdhmohguvgepshhmthhpohhuthdprhgtphhtth
+    hopehrtghusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphhmlhgruggv
+    khesshhushgvrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdroh
+    hrghdprhgtphhtthhopehjohhhnhdrohhgnhgvshhssehlihhnuhhtrhhonhhigidruggv
+    pdhrtghpthhtohepshgvnhhoiihhrghtshhkhiestghhrhhomhhiuhhmrdhorhhgpdhrtg
+    hpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfhhrvggu
+    vghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdruhhprgguhh
+    ihrgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohgvlhesjhhovghlfhgvrhhn
+    rghnuggvshdrohhrgh
+X-ME-Proxy: <xmx:Zr_HZ6jyJYC-it1RQ1vHWM6KRbNUjAO_svgO2G93Sli1db6dQNnazA>
+    <xmx:Zr_HZ-AFT0fk9hl3lxH-jR1XicCJd9oXRkUXduBH0JGB0SpwmCDW4g>
+    <xmx:Zr_HZ7JcU4eenAE7l1N2fVw1g3bCv25xYSXBz4-s-OjQ6S3Zb6I-6g>
+    <xmx:Zr_HZ1D1e8ahvlEpSZgU844TsTsP0D7ZalwjCIweHyPzZjDGpMrKxA>
+    <xmx:Zr_HZ-wfnm9C1Th2OCSrnxBms7W5hEcu7QuLOTBQbTvKjkT46Y1siCSM>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Mar 2025 21:54:40 -0500 (EST)
-Date: Tue, 4 Mar 2025 18:54:38 -0800
+ 4 Mar 2025 22:05:08 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: rcu@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
- 	Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- 	Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>,
- 	Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- 	Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang1211@gmail.com>, 	Davidlohr Bueso <dave@stgolabs.net>,
- Ingo Molnar <mingo@redhat.com>, 	Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- 	Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- 	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- 	Valentin Schneider <vschneid@redhat.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, 	Shuah Khan <shuah@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- 	Clark Williams <clrkwllms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, 	Ankur Arora <ankur.a.arora@oracle.com>
-Subject: Re: [PATCH rcu 06/11] osnoise: provide quiescent states
-Message-ID: <hrwgh7fevnkmkaizc7226kyywgzi22efmtnepzwah7ticrozbv@lcg23v6j7p7g>
-References: <20250225035516.26443-1-boqun.feng@gmail.com>
- <20250225035516.26443-7-boqun.feng@gmail.com>
- <20250304142127.391ca6bd@gandalf.local.home>
+To: rcu@vger.kernel.org
+Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,	Davidlohr Bueso <dave@stgolabs.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,	Yuntao Wang <ytcoode@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Guo Weikang <guoweikang.kernel@gmail.com>,	KP Singh <kpsingh@kernel.org>,
+	Huang Shijie <shijie@os.amperecomputing.com>,
+	Raul E Rangel <rrangel@chromium.org>,
+	Joel Granados <joel.granados@kernel.org>,
+	Anna Schumaker <anna.schumaker@oracle.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	zhangguopeng <zhangguopeng@kylinos.cn>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Neeraj Upadhyay (AMD)" <neeraj.iitr10@gmail.com>,
+	linux-kernel@vger.kernel.org,	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH rcu 00/10] Miscellaneous RCU changes for v6.15
+Date: Tue,  4 Mar 2025 19:04:55 -0800
+Message-ID: <20250305030505.94059-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250304142127.391ca6bd@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 04, 2025 at 02:21:27PM -0500, Steven Rostedt wrote:
-> On Mon, 24 Feb 2025 19:55:11 -0800
-> Boqun Feng <boqun.feng@gmail.com> wrote:
->=20
-> > From: Ankur Arora <ankur.a.arora@oracle.com>
-> >=20
-> > To reduce RCU noise for nohz_full configurations, osnoise depends
-> > on cond_resched() providing quiescent states for PREEMPT_RCU=3Dn
-> > configurations. For PREEMPT_RCU=3Dy configurations -- where
-> > cond_resched() is a stub -- we do this by directly calling
-> > rcu_momentary_eqs().
-> >=20
-> > With (PREEMPT_LAZY=3Dy, PREEMPT_DYNAMIC=3Dn), however, we have a
-> > configuration with (PREEMPTION=3Dy, PREEMPT_RCU=3Dn) where neither
-> > of the above can help.
-> >=20
-> > Handle that by providing an explicit quiescent state here for all
-> > configurations.
-> >=20
-> > As mentioned above this is not needed for non-stubbed cond_resched(),
-> > but, providing a quiescent state here just pulls in one that a future
-> > cond_resched() would provide, so doesn't cause any extra work for
-> > this configuration.
-> >=20
-> > Cc: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
->=20
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->=20
+Hi,
 
-Applied, thanks!
+Please find the upcoming miscellaneous RCU changes. The changes can also
+be found at:
+
+        git://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git misc.2025.03.04a
 
 Regards,
 Boqun
 
-> -- Steve
->=20
-> > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-> > Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> > Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> > Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > ---
+Paul E. McKenney (6):
+  rcu: Split rcu_report_exp_cpu_mult() mask parameter and use for
+    tracing
+  rcu: Fix get_state_synchronize_rcu_full() GP-start detection
+  rcu-tasks: Move RCU Tasks self-tests to core_initcall()
+  rcu/nocb: Print segment lengths in show_rcu_nocb_gp_state()
+  context_tracking: Make RCU watch ct_kernel_exit_state() warning
+  Flush console log from kernel_power_off()
+
+Uladzislau Rezki (Sony) (3):
+  rcutorture: Allow a negative value for nfakewriters
+  rcu: Update TREE05.boot to test normal synchronize_rcu()
+  rcu: Use _full() API to debug synchronize_rcu()
+
+Zilin Guan (1):
+  rcu: Remove READ_ONCE() for rdp->gpwrap access in __note_gp_changes()
+
+ include/linux/printk.h                        |  6 ++++
+ include/linux/rcupdate.h                      |  6 ----
+ include/linux/rcupdate_wait.h                 |  3 ++
+ init/main.c                                   |  1 -
+ kernel/context_tracking.c                     |  9 +++---
+ kernel/printk/printk.c                        |  4 +--
+ kernel/rcu/rcu.h                              |  2 +-
+ kernel/rcu/rcutorture.c                       | 22 ++++++++++----
+ kernel/rcu/tasks.h                            |  5 +++-
+ kernel/rcu/tree.c                             | 29 +++++++++++--------
+ kernel/rcu/tree_exp.h                         |  6 ++--
+ kernel/rcu/tree_nocb.h                        | 20 +++++++++----
+ kernel/reboot.c                               |  1 +
+ .../rcutorture/configs/rcu/TREE05.boot        |  6 ++++
+ 14 files changed, 78 insertions(+), 42 deletions(-)
+
+-- 
+2.48.1
+
 
