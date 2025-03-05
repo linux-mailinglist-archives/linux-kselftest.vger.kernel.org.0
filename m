@@ -1,128 +1,159 @@
-Return-Path: <linux-kselftest+bounces-28293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69DFCA4F8BB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 09:25:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D82FDA4F8BE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 09:25:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 997A316FD9A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 08:25:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DDBB170725
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 08:25:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E721F78E6;
-	Wed,  5 Mar 2025 08:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECB611FC7DB;
+	Wed,  5 Mar 2025 08:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLBoavu4"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="IYC5s83F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DDB31EF0BC;
-	Wed,  5 Mar 2025 08:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741163117; cv=none; b=Du0cGG39zs7I4brl/YyyuRKpCroOjuKJVZV6rgtcO7blFQgcScNRnUmv2EOheOx2qSc5nCvKvlCDCrsZ3OjO/gH77UVucx9Eo7dSGci7Ba0uDBUUHVJdOYl3zlI8ixMyuVB+ClDj9muvZRvtE3fg2zdU5P7zBuiMQLizySiH+3o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741163117; c=relaxed/simple;
-	bh=xjCV87QS9rWKgqppFDXKt0vI9eyLO6QuERActP80ONM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T+E/kRQmZIxUdSkgXn8dSzDYuPgtSRdkF3ttSXSJvDhatEFLkx0gBBkTKqWi0NhkBltby+sJ3sZx7Yy6hSDJFmWd4ND4Moi0MlzzAWxLzS8gBhgkKvxNTttdsCAvGgYNHiOynUK2u9UjsHqvQhyDA02sYUT6pZPlW7/NtnsZdMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLBoavu4; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-223959039f4so74390495ad.3;
-        Wed, 05 Mar 2025 00:25:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741163114; x=1741767914; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OAy0yRAMT7Smqg+BRU5KQgKll8wiYK//bScug3inKX8=;
-        b=HLBoavu4sl8NWzMf+ZVvTaSfzND2IIqwVvNqZYS5+GRhwEsY2UgnWWyHjfrAEG16wY
-         BsfbIpyTda6MBoOOyi8uF8kJSAq04idBaZM+RRlmWfbzBhvYEqh1/IXDDHx/rRl+cwlt
-         3crdcuHTkTHQ7gAv0M5ZDo1//gdQxu7jeOsRAAl8Q2uHXJ2gkhMxxr4IRICq/Zh7Dkgj
-         rbqindMSOfMOviheTYxftKV5Ux+zWVm9Ty8VF1YMEkvIDECYKpda70ozyMXymZs66Zcp
-         Oa4PFjZhG1YhSeeLEX3QraD3JhzZDnMySwfJhEG3reflH3cnEgdznhoESR0UmMyXttBG
-         Fqpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741163114; x=1741767914;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OAy0yRAMT7Smqg+BRU5KQgKll8wiYK//bScug3inKX8=;
-        b=FzRwD9SxQW47HZv2OHA9fTPNeP78psWM+tM/zquUGPIso4W6jzRmW6JNsvDJWoSaHz
-         osXp2D5GPtmDDtIRQzsjVSZI9FxS4kdLiDyeCl/XuJA2i/UMWBDOMkh1vdGNOZH6+aj/
-         +HJQ4fNSj457OZDw0Ot7pyKC/Is+4lpyAjshvl6E1LrFY1KIcwfQK46TlELhcBOVFGud
-         36Byn9Hoi7HiUptfJX2SsIDLczAVYTZXLUPl6AGaqYmeMWWlZVv8xW7/yY1pGDDNEaIH
-         gurG4ScrphYME5VSrRTXXeHJn2blRn14FZ482zNzLXpAhE0rfWmIcYJQqhpoqyjJKShs
-         wz6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUIC7e9g0f9IDPA/vU6QDAHtZlJNaZ5VT/jLcZJtL3uXzb/6h8350TdKQW40mi7A8+CiRegsMQpS5UWaIlEScHe@vger.kernel.org, AJvYcCWmOG07egnlLPe3D290aQruJv3BQsAJHFN5+7eNs5hghUs/tUQRqFw7wAfiAfCYn+FzLrFaIbEO@vger.kernel.org, AJvYcCXvcE6D6v6L0LqNooDvgp255LB8JGbwYFPigra1LN/ILlveM5I2dKZTOL1DHKtrYhL762N8QhRuA8Jl3is=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRJSL2UD9fkBKy+bfHaLxwVt5ySt12wDeVxYmE88whHfpwqrE+
-	l3p76+O7X7KFJa4Cd3EQMAfhO5pxEOqbEYGx7JP2ktkGqPWg/Xn8
-X-Gm-Gg: ASbGnctvnuiOxBxqTIAXwMEEVrfqhKyXbFjw8RqOTFI4e69LwHKuvcdf3SYZqybeEeN
-	8LcaFdmfOYaQ+Y5KyxwdvbQy+cDfAu37rYnzu0gqxDiDE2GMQYhAXUtAt3tNyx/wu7l2sjIe9NC
-	a4KnZAcl4xGysInyZgjjZ1J5LruGBGQMP9X59HlnnxuHY3tiI70ZthiSu8LTMO6Czpmzzo71oOf
-	WK42gyNUKDCpSwEz7+Q1uAn+xa3jjH2bXI9L0Kj7wK8K/PKGxBHrRhPDQ6reVdKedsMn6uWt6vL
-	olpRD1uSnfRDfUeDLxHPbdaVh089ykWdrRFUjDECLbPvoJuIMQ==
-X-Google-Smtp-Source: AGHT+IEut6J9FI4nbFHnxEVhs0CR48OzGreX689CQaBRcgMg7yHEPcx5k0ExcEptJCVyddHSOWAMVA==
-X-Received: by 2002:a17:902:d482:b0:221:7e04:d791 with SMTP id d9443c01a7336-223f1c9b5d4mr29996435ad.31.1741163114516;
-        Wed, 05 Mar 2025 00:25:14 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223501d5247sm107558115ad.26.2025.03.05.00.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 00:25:13 -0800 (PST)
-Date: Wed, 5 Mar 2025 08:25:07 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 net 0/2] bonding: fix incorrect mac address setting
-Message-ID: <Z8gKYzpJw_DoYEMx@fedora>
-References: <20250207092920.543458-1-liuhangbin@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E7C1FC7D0;
+	Wed,  5 Mar 2025 08:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741163122; cv=pass; b=pNjuhi/N83QxHN4IZkL66GYT0VZy3wYeBVyFRgyMGZ7OERBh22NlauV+kG2tGjLB96ZtgH/A99LLPQ6/fsMh5d5sii8GwFEsuKcd0uaYKP/nvJSz12hXIWTysAg+FU3Xr+nLjcKASXk1/s6yLH4gFuhM/NvjYoLY72D/n9x4wbs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741163122; c=relaxed/simple;
+	bh=4QI8Os9GuwQ7DhSddhreLLWvpLqNFJoNSXjsqV4n9QA=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dLxG6FyXkzPFlH22OIobOW/p8kA/jbIRu+zy5AUUtCrZsVrYptKsRzdrsEUf3L+56mUHiVpAOQdmuAw/b5Fiv5vIvhFMcKZHZnqIrvOcIRGcZlKvPYcxqHud/jaPNvVjJcXhACstRyWqOZ6UAUUiq/vShVFert+vKnvkj+6a90w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=IYC5s83F; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1741163106; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=K3xJNcfU2hs9jipz1svUwZ9VkazhJ+W4aRHFlQf898M6Z5H/KFfzsaKFbPkap3v41D1f4MtYKuuNvytrLgyBgqzf+uzJx7xa99OR9tQ3olB2u6fUm0I230EDpK/wvv3NtDCj+MyHfeMPLNWcV4y1jVDt/tWlu2+ktu4pTcmnxb0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1741163106; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=HqK6YABSFwp1gboqFKvcbJeiOgK8OI1HggxDTa8DH08=; 
+	b=MlWDrmptzUsmjSWNVtowT3Q+LLHMc1pflL/hetj7Tx55bDML3M8dZgsmWlmd+vhOVvh81+6gFXlWL9taOR7cdKmx+rJwOHE7eQPAeQv7UyaN91zZ2PpAxXdFdOJucCS3sKocaxcu3TcBSvLGSGfHP75z3mPtlSd/dz2NwlVgaN4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
+	dmarc=pass header.from=<Usama.Anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741163106;
+	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=HqK6YABSFwp1gboqFKvcbJeiOgK8OI1HggxDTa8DH08=;
+	b=IYC5s83FWR8MjxtXFJEziEP4iyTAkKSYIAJEu3n/yKkqPvITb+K8DHrVpbtvDjTX
+	2S9IQ8VSyBBvGYqj0Y2kYqbbbW+K2fGKcLmh1AxJY4JElk7nkPGhC8fRswRR4xGTVAu
+	MiAll9E9otUITp1EeolR3SaFwNCsztilkq/Osbto=
+Received: by mx.zohomail.com with SMTPS id 1741163102954848.6112037464146;
+	Wed, 5 Mar 2025 00:25:02 -0800 (PST)
+Message-ID: <13019f33-0882-4af3-acf6-e41c2495f78d@collabora.com>
+Date: Wed, 5 Mar 2025 13:25:40 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207092920.543458-1-liuhangbin@gmail.com>
+User-Agent: Mozilla Thunderbird
+Cc: Usama.Anjum@collabora.com, Dev Jain <dev.jain@arm.com>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Mateusz Guzik <mjguzik@gmail.com>
+Subject: Re: [PATCH v3 00/10] selftests/mm: Some cleanups from trying to run
+ them
+To: Brendan Jackman <jackmanb@google.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+In-Reply-To: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-Hi David,
+Hi,
 
-This patch set was marked as "Changes Requested" due to my initial reply.
-The series has now been approved by Jay and Nikolay.
+Thanks for adding to the series Dev Jain. The series looks good. Thanks for doing
+such a series. It helps everyone.
 
-Could you help process it, or should I re-post it?
+For the series:
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Thanks
-Hangbin
+On 2/28/25 9:54 PM, Brendan Jackman wrote:
+> I never had much luck running mm selftests so I spent a few hours
+> digging into why.
+> 
+> Looks like most of the reason is missing SKIP checks, so this series is
+> just adding a bunch of those that I found. I did not do anything like
+> all of them, just the ones I spotted in gup_longterm, gup_test, mmap,
+> userfaultfd and memfd_secret.
+> 
+> It's a bit unfortunate to have to skip those tests when ftruncate()
+> fails, but I don't have time to dig deep enough into it to actually make
+> them pass. I have observed the issue on 9pfs and heard rumours that NFS
+> has a similar problem.
+> 
+> I'm now able to run these test groups successfully:
+> 
+> - mmap
+> - gup_test
+> - compaction
+> - migration
+> - page_frag
+> - userfaultfd
+> 
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+> Changes in v3:
+> - Added fix for userfaultfd tests.
+> - Dropped attempts to use sudo.
+> - Fixed garbage printf in uffd-stress.
+>   (Added EXTRA_CFLAGS=-Werror FORCE_TARGETS=1 to my scripts to prevent
+>    such errors happening again).
+> - Fixed missing newlines in ksft_test_result_skip() calls.
+> - Link to v2: https://lore.kernel.org/r/20250221-mm-selftests-v2-0-28c4d66383c5@google.com
+> 
+> Changes in v2 (Thanks to Dev for the reviews):
+> - Improve and cleanup some error messages
+> - Add some extra SKIPs
+> - Fix misnaming of nr_cpus variable in uffd tests
+> - Link to v1: https://lore.kernel.org/r/20250220-mm-selftests-v1-0-9bbf57d64463@google.com
+> 
+> ---
+> Brendan Jackman (10):
+>       selftests/mm: Report errno when things fail in gup_longterm
+>       selftests/mm: Skip uffd-stress if userfaultfd not available
+>       selftests/mm: Skip uffd-wp-mremap if userfaultfd not available
+>       selftests/mm/uffd: Rename nr_cpus -> nr_threads
+>       selftests/mm: Print some details when uffd-stress gets bad params
+>       selftests/mm: Don't fail uffd-stress if too many CPUs
+>       selftests/mm: Skip map_populate on weird filesystems
+>       selftests/mm: Skip gup_longerm tests on weird filesystems
+>       selftests/mm: Drop unnecessary sudo usage
+>       selftests/mm: Ensure uffd-wp-mremap gets pages of each size
+> 
+>  tools/testing/selftests/mm/gup_longterm.c    | 45 ++++++++++++++++++----------
+>  tools/testing/selftests/mm/map_populate.c    |  7 +++++
+>  tools/testing/selftests/mm/run_vmtests.sh    | 25 ++++++++++++++--
+>  tools/testing/selftests/mm/uffd-common.c     |  8 ++---
+>  tools/testing/selftests/mm/uffd-common.h     |  2 +-
+>  tools/testing/selftests/mm/uffd-stress.c     | 42 ++++++++++++++++----------
+>  tools/testing/selftests/mm/uffd-unit-tests.c |  2 +-
+>  tools/testing/selftests/mm/uffd-wp-mremap.c  |  5 +++-
+>  8 files changed, 95 insertions(+), 41 deletions(-)
+> ---
+> base-commit: 76544811c850a1f4c055aa182b513b7a843868ea
+> change-id: 20250220-mm-selftests-2d7d0542face
+> 
+> Best regards,
 
-On Fri, Feb 07, 2025 at 09:29:18AM +0000, Hangbin Liu wrote:
-> The mac address on backup slave should be convert from Solicited-Node
-> Multicast address, not from bonding unicast target address.
-> 
-> v3: also fix the mac setting for slave_set_ns_maddr. (Jay)
->     Add function description for slave_set_ns_maddr/slave_set_ns_maddrs (Jay)
-> v2: fix patch 01's subject
-> 
-> Hangbin Liu (2):
->   bonding: fix incorrect MAC address setting to receive NS messages
->   selftests: bonding: fix incorrect mac address
-> 
->  drivers/net/bonding/bond_options.c            | 55 ++++++++++++++++---
->  .../drivers/net/bonding/bond_options.sh       |  4 +-
->  2 files changed, 49 insertions(+), 10 deletions(-)
-> 
-> -- 
-> 2.46.0
-> 
+
+-- 
+BR,
+Muhammad Usama Anjum
 
