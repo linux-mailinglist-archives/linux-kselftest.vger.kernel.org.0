@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-28279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8287A4F51A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:06:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83E12A4F51C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:06:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2139188FB02
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:06:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FFD0188FD22
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E927E18FDB1;
-	Wed,  5 Mar 2025 03:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12115192B65;
+	Wed,  5 Mar 2025 03:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d4+IfiPx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OGw5oyCB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3977D18E362;
-	Wed,  5 Mar 2025 03:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457C9191F6D;
+	Wed,  5 Mar 2025 03:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741143928; cv=none; b=LHeXh59rqaSZPF8KKekBgCFiWOQsaQ1U1vDrzN2/SwIH5vgtU2F697UInI4/r8b9ESKHgCpHQatJA/xxKgpC2rwOUgec1mqJyxztEllDB53BdWrdGWmxQh8Gs5HRVYauwSIvTHga/u+DYMbe8A+d20xJ5uTkDie8rbKWskc2ZHs=
+	t=1741143933; cv=none; b=NKlTAiYVw1Nv1vbEPxJbgOXbxW8DYPaD84bODlYcCKTbQGRT47uPOa2NIs4nE0XM5uJ7qmDm9I+cGY0CLXrruCZ4EcjLLfsozTniXa3q6eD4lopITA0Pq2JV7SQf04ydirSU2UcKZtmwYzjm43yJKiRuN5/sn0hbddJ7HLlrtgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741143928; c=relaxed/simple;
-	bh=yaJ+DQyu7jgku83hxrldRW9Dcg/hxCWf9piH4QXexso=;
+	s=arc-20240116; t=1741143933; c=relaxed/simple;
+	bh=hNiZZCSUKvfl7+umet8AF50whccofULzH7u022xq+jE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hWpVcc3wQedRJ7pC/ZGmm3gSZOPONqxFopsgBzXxW+a1Qi6avFVY0m07uKRJligP2snxcAMNGZ+lFgr8q0TrShN+8W+117ONehb7+EyJ+n8+amXRgpRSnTuVgU/b8KYfrRuuDE2pkC00X3kfD4qC+o+06wMQcTEqtF3UcA0hv44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d4+IfiPx; arc=none smtp.client-ip=209.85.160.179
+	 MIME-Version; b=AgsjZp9Z63UGiAbl8SgA2067NTTfZp5mw0Tzo1ZPmdaYtsvX5weTFaICj/w3kUaBFkMGzzM2vTxBpL8EMH1yWeHrfwnM+Z7dnRuaMr/89MkRcejfvigPKkkVPYtN5djg6dwcw6YE5JEw01ZcHwPVRpVbg+rXXakAOTWE5e1SkTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OGw5oyCB; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-47208e35f9cso73429061cf.3;
-        Tue, 04 Mar 2025 19:05:26 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4750ca77d47so2872311cf.0;
+        Tue, 04 Mar 2025 19:05:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741143926; x=1741748726; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741143930; x=1741748730; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=p1+X3BI72665Sj5vQpqBBeIcR4eyUiWJXeRi1lyT/24=;
-        b=d4+IfiPxoUsQ2TMTjW0XcWD/m6ksqPW1Co6nieFNcOFcEv6mST7eLR9+atoqmBVDnc
-         w9mWPRW087AN4XIZauLmiuLHcDcnc8tsA+j0Y6IxX+t6bztl0LsDHXXcgG1tTjw5TuGq
-         2MMxGJ+3mdiwVyJwb9GioODHEY93lm+3jaXkLEagEYad0W0QHdOcLvVbSK+dX29IcZvn
-         XTId34aOg0tRXe8oS9z0PZaZ2Uzm6rboLlUO/jICLL1GHv+qlkn6ibHEbV4QUojCcyrB
-         HvuFdC5nX9qFH1oBKHT1pNF9txJW/f4Tf2wLQVLEgFePN5YP6gfeueMC/GU3VtTSqPwO
-         fTMA==
+        bh=XCzSTpBwfsU59VREINAqcwK+Vgtr2DU2DpO7Ee45wZ8=;
+        b=OGw5oyCBZdPw1Pe1Sppsm211coeaPlWVS1twYqIgWCwgv1tDGfUfnaU2QkC8atF0p4
+         IbAHsAIcvbGY6CsViFscsKsZ56l9UTCcE5pyxZQ1l92fT4DGqnQim3dRUhN06siHaxtb
+         g1nzda+fznNUMLlkaBJqE3IcHJfh2I7OdQ40iVbORquth1vZjxtwZVR3lyDhn6ACYJ3+
+         gI01bGcjfC9YzSKeXeyYhibjTDWbDkurCOHqFdWpsfefdvjD2Rz0qqIDnoL51AKyMvWK
+         61jhnVnH3T85m2fEShdF+1ebExB9fubklf1YBurTZ8OfNpx+VTgKHWM3D+gZpl7MY8un
+         st8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741143926; x=1741748726;
+        d=1e100.net; s=20230601; t=1741143930; x=1741748730;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p1+X3BI72665Sj5vQpqBBeIcR4eyUiWJXeRi1lyT/24=;
-        b=tXVHwXlZN1plKXnkcMtK9vShNg2M0KZfRTRId64LLC8I5Lx9WisWYiag6QNUNlK7Qw
-         3dg9+jOuSNY8Us5raisWZvoC740nSG3EDb+yII5igIEB8Uj3cpmgwwMYZ6ql+LSA8vFu
-         EgVuK9WEQe6G4v30Kv1ivHjbVJ+JJjTOPOXSohsDWcO0Oox7Uux50mxSkCIJOlANbWGM
-         P5dLAGM6k4W6lUpMgDBCMSOUqOXEWt4zjAKeJyLtMQS1z2ZDEpb8AF6gpfHznAt/fcCH
-         jTRgo6JxPwrN+iCx3LoarMPYHouCV+nRsTnjztoOc0CwYkOKgcvc7nNVZMo+he3ue5jB
-         t54Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWKTnC8W5qhokBM7oaHQKwdjqvvWnNnR0IVVYBRe9wA41lB/nPqewDGFTbNpkRe82CzLKHLwGMD2fBtLSsBb7+HAiMQ@vger.kernel.org, AJvYcCWoww8zMiYYVMgM6Fr55c45TEGUHkivA6gcwYjTUEoWTYGfA8bjk4KLX3jeZJn9CTJkxD5N+X4ZMEocwLxczWl4@vger.kernel.org, AJvYcCXcyLwxUjhn7uvuMc85EOfe2sOQwnW1RjIXcyKg3KF3/ItIs4lUHa8BOGasItKi/m+YmeW5ZlMPOoIzdCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1OK1xtoO8UxgiD1kYgriUDL7QsRDT/mecVHYOOUcTmEri4Eth
-	hbZpW7VoTHBzEMffvTyJ31kDo6C2Hu0ejfmQZZvUWvQJc9Hnegb+
-X-Gm-Gg: ASbGncsnLlyfmVtVMvn5VDlh80QNUXtq/URF3BEy5Xq4uQXv4PNDUhr7zgFN9MVGTiq
-	cfeBqDbql4QJDkAek3bYby6T4d00PMX8eZ/cJ/e+FE4SLhGbAUNZK7qXYbNvybvibaUfKmQ5uCK
-	vYqN63gkIbOiNuj5XyTPA2bEw85lDDjIg6GI+X/2FryT70Jdv4WpmzLPA9haJ0LJ+5fbJec9i3Q
-	l7jIdAckm/BocZM+a+hBpQM3KJQPdI5lf4c4jcs3Sngs6uxIMC2aX6KUgr+4nzOPtkTYBo4NUJO
-	6n16lFHMUyMtBbpl6gG/1r96SnSO4T/y27w1vyO2x7XXu+1IaUbGQEtwoD3y032ZQD1KjFtrVOh
-	Pdl9KHi0EVfSM84eClAr+svZV+3TdABsFCHA=
-X-Google-Smtp-Source: AGHT+IFbBzLp/C77QcAR9BoVEbCyhnuueyF8GxM8KCxvhjob14XQ4UwhaxUTFVNhUWH98KTaLoUecg==
-X-Received: by 2002:a05:622a:20a:b0:474:fd83:46c2 with SMTP id d75a77b69052e-4750b23c91dmr14286011cf.9.1741143925875;
-        Tue, 04 Mar 2025 19:05:25 -0800 (PST)
+        bh=XCzSTpBwfsU59VREINAqcwK+Vgtr2DU2DpO7Ee45wZ8=;
+        b=ajE3wGW0L4CjsKE/VB39Lk5GUDNv8puMN/8UozDUGMs5aCpI7Vwj0nv/43aHIutSYi
+         O6TOqb5y8axIBpxfEumrgUQvTGhfdquMuZPiDzPp6zHXCx0OUCwUkWGfZ346c/wYpAuF
+         iCO+/LhvI6SYaCmnKqj964ZmFTnrbQtJ6sEDCiEDArMBgs52SC0Glur8wbZXdxbejc3Z
+         35CbbWWmZKRRTs3oGRy7knCAl8/INM5YqHXPwTrULUG8AGqent5avr4h8nnhfhJSknJo
+         HpbfWTCHmUmwdtk6BDUiKhAe4ccEm3dB5TF5cRVyj8gWjVvw3UnSD/+4kN7nD5IGv+4J
+         06Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCVHWLvjvv1KyDQK5E2dTddyrwnlOG9gn4tFE6xxFqqoGP7uSZuytyQCtYLfSbQU9gWVT2QLrr/hO8fARpxFQWJY@vger.kernel.org, AJvYcCVS6PcGB95lpwZp5z5a0k4O61h4FVEvFxyXTONhF0w0u1QtdoI5JI2BoEkSLFbqiYY24EbxYss6reaGN78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLPegkm97Ee7efU5iYot/0WLW5+CG3jENIDR8D1gkis1CVVMsF
+	473aEZS2ae+EbdrEx3GyhI+E6Mhv0UaRwCBKbFi7bkrLAzBstNEe
+X-Gm-Gg: ASbGncsDuflDs28J0y6y0VaLf6IeztZHZvyEXOA62GKjAopS1rih+O4nmBG9yOQPWyE
+	n/qJHdiS1XvXkHUqDk3T+u1PKW4J04mKxm9PXzKRJdKWiDVbpNSerZfRxRQD+EHtHqNBzwB3k6D
+	NPOuxiA78CyOzSHt+tNxLSg6uKFaNglSXp2lceApe8dyhH3nUWXDU5fBxeq8H34NHcd4FX6UANf
+	fAihXg/l6tEWd/HyKdbXY6lwohjBHRleq+lJGYELJfosioIycvEbm+6++/oNmoWaq1vDcTMR8NA
+	uqVCps/yW/qZM2VjVhp8/YHWMqfr/ovV8hAT9ikwBPhe5wOByhYddps+Eqpujpti4q+tWL8P8Up
+	fO07Un59J9vNA0yW7b20X2LjJG+Mr7bwPDqI=
+X-Google-Smtp-Source: AGHT+IEuiQDV23EHLSAqALRzSuoMugSbMB/MT1RJRogJrMdDmPlxKFA23NwZEG9gtrXQh9L3GdXQpA==
+X-Received: by 2002:ac8:5891:0:b0:474:f074:e85e with SMTP id d75a77b69052e-4750b4bdb1bmr26172761cf.41.1741143930057;
+        Tue, 04 Mar 2025 19:05:30 -0800 (PST)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4750a6b3b86sm6741061cf.42.2025.03.04.19.05.24
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4750804b8c7sm9595601cf.33.2025.03.04.19.05.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 19:05:25 -0800 (PST)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id A5EE4120006A;
-	Tue,  4 Mar 2025 22:05:24 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Tue, 04 Mar 2025 22:05:24 -0500
-X-ME-Sender: <xms:dL_HZ9qtZOaaW9oxQ019BZx-0y7OX2USLVBpRgRrNLrcCjVy-xhWSg>
-    <xme:dL_HZ_r9_SUcHs0ePJ399Y_sMWTs3BhEig7xJDjv19MLwYvXc-H_3Qaooz4D04oNH
-    O8B5nCwWIiihtJ6lg>
-X-ME-Received: <xmr:dL_HZ6MXLEVc1LXqMWrvGPcwnTnk73wfod9dh2L1FgOMfPZZt7AjpWB0jA>
+        Tue, 04 Mar 2025 19:05:29 -0800 (PST)
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfauth.phl.internal (Postfix) with ESMTP id ED03B120006A;
+	Tue,  4 Mar 2025 22:05:28 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Tue, 04 Mar 2025 22:05:28 -0500
+X-ME-Sender: <xms:eL_HZy0GsMthYdnOzh5BUg2WxuhrLYrfillg7Lmiu7HSmE0tyqrzCw>
+    <xme:eL_HZ1Er8d7FJ8m_UNGwofGX2bjqjeq8H8y8KfFUtLmd2GK4pka8Bb4Xq1EVxde-C
+    Kgg6QAvtiPU5tObZg>
+X-ME-Received: <xmr:eL_HZ66Ppr2HOPq0B60_Fd6O_tbxamUDSde7WFqKUGtjgc4a7rYh0ujU5g>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
@@ -91,7 +91,7 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdote
     veffieeujefhueeigfegueehgeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
     grmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgr
     lhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppe
-    hgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepgedtpdhm
+    hgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepfeejpdhm
     ohguvgepshhmthhpohhuthdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvghlrd
     horhhgpdhrtghpthhtohepphhmlhgruggvkhesshhushgvrdgtohhmpdhrtghpthhtohep
     rhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtthhopehjohhhnhdrohhgnh
@@ -100,14 +100,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdote
     hlrdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgt
     phhtthhopehnvggvrhgrjhdruhhprgguhhihrgihsehkvghrnhgvlhdrohhrghdprhgtph
     htthhopehjohgvlhesjhhovghlfhgvrhhnrghnuggvshdrohhrgh
-X-ME-Proxy: <xmx:dL_HZ47uKXqCsi9H7XyXN8MO3BLXA70sCyQITPQiNC6lJXtn7-g-5w>
-    <xmx:dL_HZ87qWfu9EIkwf-QQmosPhsns1yuzpKkm1BeiWWIhCoQgFMl88Q>
-    <xmx:dL_HZwiqDGm_MD4F6t5KuLwDEAy3QFsL5i1CRxG9m5LZq2vH9KCJUQ>
-    <xmx:dL_HZ-4mJT3RT3TGbcbfAiaZ7u4xyx_EjB4P0md9UaeBOxf8cTyEmw>
-    <xmx:dL_HZzI05LkmgU0oE8vPA0_3ENZjnIIQ5bxIMtU95Ymk-69thWK-Qqdr>
+X-ME-Proxy: <xmx:eL_HZz3tTALhBHrkdtsNV6PgLb4Va4U8ij98yDkVvCqe_qrGc8KddA>
+    <xmx:eL_HZ1GVZe7NhPj3MFXe-r5tuaAPyOXM_54Xfl6wK3y-cc_-WosUfg>
+    <xmx:eL_HZ8_1-SrkzrJaGa1s5UEGpkNZUjzPmZILMlcwYRZ8PBlmnYsMYA>
+    <xmx:eL_HZ6k0t253gxqj4H_VhFdlFCw1Ei1I9OV08Xd_bM8X-U1I9ciQNQ>
+    <xmx:eL_HZ9EOzt_OVciliAoopAmF6lU3Vj2wmQdxQLLrZzP6w4O6jO8F14Eh>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Mar 2025 22:05:22 -0500 (EST)
+ 4 Mar 2025 22:05:27 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
@@ -139,11 +139,10 @@ Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	"Neeraj Upadhyay (AMD)" <neeraj.iitr10@gmail.com>,
 	linux-kernel@vger.kernel.org,	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH rcu 04/10] rcu-tasks: Move RCU Tasks self-tests to core_initcall()
-Date: Tue,  4 Mar 2025 19:04:59 -0800
-Message-ID: <20250305030505.94059-5-boqun.feng@gmail.com>
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH rcu 05/10] rcu/nocb: Print segment lengths in show_rcu_nocb_gp_state()
+Date: Tue,  4 Mar 2025 19:05:00 -0800
+Message-ID: <20250305030505.94059-6-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250305030505.94059-1-boqun.feng@gmail.com>
 References: <20250305030505.94059-1-boqun.feng@gmail.com>
@@ -157,92 +156,78 @@ Content-Transfer-Encoding: 8bit
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-The timer and hrtimer softirq processing has moved to dedicated threads
-for kernels built with CONFIG_IRQ_FORCED_THREADING=y.  This results in
-timers not expiring until later in early boot, which in turn causes the
-RCU Tasks self-tests to hang in kernels built with CONFIG_PROVE_RCU=y,
-which further causes the entire kernel to hang.  One fix would be to
-make timers work during this time, but there are no known users of RCU
-Tasks grace periods during that time, so no justification for the added
-complexity.  Not yet, anyway.
+Analysis of an rcutorture callback-based forward-progress test failure was
+hampered by the lack of ->cblist segment lengths.  This commit therefore
+adds this information, so that what would have been ".W85620.N." (there
+are some callbacks waiting for grace period sequence number 85620 and
+some number more that have not yet been assigned to a grace period)
+now prints as ".W2(85620).N6." (there are 2 callbacks waiting for grace
+period 85620 and 6 not yet assigned to a grace period).  Note that
+"D" (done), "N" (next and not yet assigned to a grace period, and "B"
+(bypass, also not yet assigned to a grace period) have just the number
+of callbacks without the parenthesized grace-period sequence number.
 
-This commit therefore moves the call to rcu_init_tasks_generic() from
-kernel_init_freeable() to a core_initcall().  This works because the
-timer and hrtimer kthreads are created at early_initcall() time.
+In contrast, "W" (waiting for the current grace period) and "R" (ready
+to wait for the next grace period to start) both have parenthesized
+grace-period sequence numbers.
 
-Fixes: 49a17639508c3 ("softirq: Use a dedicated thread for timer wakeups on PREEMPT_RT.")
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: <linux-trace-kernel@vger.kernel.org>
-Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- include/linux/rcupdate.h | 6 ------
- init/main.c              | 1 -
- kernel/rcu/tasks.h       | 5 ++++-
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ kernel/rcu/tree_nocb.h | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 48e5c03df1dd..36849a4ea141 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -121,12 +121,6 @@ void rcu_init(void);
- extern int rcu_scheduler_active;
- void rcu_sched_clock_irq(int user);
- 
--#ifdef CONFIG_TASKS_RCU_GENERIC
--void rcu_init_tasks_generic(void);
--#else
--static inline void rcu_init_tasks_generic(void) { }
--#endif
--
- #ifdef CONFIG_RCU_STALL_COMMON
- void rcu_sysrq_start(void);
- void rcu_sysrq_end(void);
-diff --git a/init/main.c b/init/main.c
-index 2a1757826397..7f0a2a3dbd29 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1553,7 +1553,6 @@ static noinline void __init kernel_init_freeable(void)
- 
- 	init_mm_internals();
- 
--	rcu_init_tasks_generic();
- 	do_pre_smp_initcalls();
- 	lockup_detector_init();
- 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 59314da5eb60..466668eb4fad 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -2256,7 +2256,7 @@ void __init tasks_cblist_init_generic(void)
- #endif
- }
- 
--void __init rcu_init_tasks_generic(void)
-+static int __init rcu_init_tasks_generic(void)
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 2605dd234a13..5ff3bc56ff51 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1557,8 +1557,11 @@ static void show_rcu_nocb_gp_state(struct rcu_data *rdp)
+ /* Dump out nocb kthread state for the specified rcu_data structure. */
+ static void show_rcu_nocb_state(struct rcu_data *rdp)
  {
- #ifdef CONFIG_TASKS_RCU
- 	rcu_spawn_tasks_kthread();
-@@ -2272,7 +2272,10 @@ void __init rcu_init_tasks_generic(void)
+-	char bufw[20];
+-	char bufr[20];
++	char bufd[22];
++	char bufw[45];
++	char bufr[45];
++	char bufn[22];
++	char bufb[22];
+ 	struct rcu_data *nocb_next_rdp;
+ 	struct rcu_segcblist *rsclp = &rdp->cblist;
+ 	bool waslocked;
+@@ -1572,9 +1575,13 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
+ 					      typeof(*rdp),
+ 					      nocb_entry_rdp);
  
- 	// Run the self-tests.
- 	rcu_tasks_initiate_self_tests();
-+
-+	return 0;
- }
-+core_initcall(rcu_init_tasks_generic);
- 
- #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
- static inline void rcu_tasks_bootup_oddness(void) {}
+-	sprintf(bufw, "%ld", rsclp->gp_seq[RCU_WAIT_TAIL]);
+-	sprintf(bufr, "%ld", rsclp->gp_seq[RCU_NEXT_READY_TAIL]);
+-	pr_info("   CB %d^%d->%d %c%c%c%c%c F%ld L%ld C%d %c%c%s%c%s%c%c q%ld %c CPU %d%s\n",
++	sprintf(bufd, "%ld", rsclp->seglen[RCU_DONE_TAIL]);
++	sprintf(bufw, "%ld(%ld)", rsclp->seglen[RCU_WAIT_TAIL], rsclp->gp_seq[RCU_WAIT_TAIL]);
++	sprintf(bufr, "%ld(%ld)", rsclp->seglen[RCU_NEXT_READY_TAIL],
++		      rsclp->gp_seq[RCU_NEXT_READY_TAIL]);
++	sprintf(bufn, "%ld", rsclp->seglen[RCU_NEXT_TAIL]);
++	sprintf(bufb, "%ld", rcu_cblist_n_cbs(&rdp->nocb_bypass));
++	pr_info("   CB %d^%d->%d %c%c%c%c%c F%ld L%ld C%d %c%s%c%s%c%s%c%s%c%s q%ld %c CPU %d%s\n",
+ 		rdp->cpu, rdp->nocb_gp_rdp->cpu,
+ 		nocb_next_rdp ? nocb_next_rdp->cpu : -1,
+ 		"kK"[!!rdp->nocb_cb_kthread],
+@@ -1586,12 +1593,15 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
+ 		jiffies - rdp->nocb_nobypass_last,
+ 		rdp->nocb_nobypass_count,
+ 		".D"[rcu_segcblist_ready_cbs(rsclp)],
++		rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ? "" : bufd,
+ 		".W"[!rcu_segcblist_segempty(rsclp, RCU_WAIT_TAIL)],
+ 		rcu_segcblist_segempty(rsclp, RCU_WAIT_TAIL) ? "" : bufw,
+ 		".R"[!rcu_segcblist_segempty(rsclp, RCU_NEXT_READY_TAIL)],
+ 		rcu_segcblist_segempty(rsclp, RCU_NEXT_READY_TAIL) ? "" : bufr,
+ 		".N"[!rcu_segcblist_segempty(rsclp, RCU_NEXT_TAIL)],
++		rcu_segcblist_segempty(rsclp, RCU_NEXT_TAIL) ? "" : bufn,
+ 		".B"[!!rcu_cblist_n_cbs(&rdp->nocb_bypass)],
++		!rcu_cblist_n_cbs(&rdp->nocb_bypass) ? "" : bufb,
+ 		rcu_segcblist_n_cbs(&rdp->cblist),
+ 		rdp->nocb_cb_kthread ? task_state_to_char(rdp->nocb_cb_kthread) : '.',
+ 		rdp->nocb_cb_kthread ? (int)task_cpu(rdp->nocb_cb_kthread) : -1,
 -- 
 2.48.1
 
