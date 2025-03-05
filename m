@@ -1,112 +1,113 @@
-Return-Path: <linux-kselftest+bounces-28275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 953F2A4F511
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76D8DA4F514
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:05:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A366D188FA83
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:05:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B05CD188FAB5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 784433FBB3;
-	Wed,  5 Mar 2025 03:05:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 718CE16F271;
+	Wed,  5 Mar 2025 03:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ydz45RRq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IbT6ht7e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4D7469D;
-	Wed,  5 Mar 2025 03:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C311624CF;
+	Wed,  5 Mar 2025 03:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741143914; cv=none; b=pXEBKxx9raXPA4IBerxej/qZGPVeDFW0JQjE0qgxZYzXpkNc37M2czMzIiUwIFN7I64vFxgmH4FKST+PPZQw3g9hn43MIyVGdprqkcVyR0f/h2UlhL1Np+arbRHq6uBpDp3WcYxluF4VX+Iz8ud+tvxze13mXTMufUntAQxW2b4=
+	t=1741143918; cv=none; b=Is9yuRbxg6VtC+YMxA5AkycIvmsCI9G7tB9nh4W4x1as/mJn0VU/9W1crN5bWP0hxmoUnyGUjmkg5ZzLWcvnpzTyTsYreLt6Ju+maZZh8feFAV4xhHtMArqgKxQmBgW6ZwRh31rA9tg4OQA5AW79ZvV6aBnR4FV6Opwy8M8Qqto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741143914; c=relaxed/simple;
-	bh=uIzTrgOptV+UJekRK9fZqgVZ4HuhUabXU00kNLk3AQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=X8ZTKJ3OtILmqz9z5Yi6WjB6gR5nwCR3/D1fUSm2pVuoF6WkpjYSqk6uw2EMwlZ1JzRm1VFCNDqihV9/fEtjM0AmhqQb8BUQIrnI5/40PmDeijVr3lIIr7KjgviMREhtfrNZ5jp/CKF8/j8LvSqrWKONOugpOPEJpng6wV3qYSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ydz45RRq; arc=none smtp.client-ip=209.85.222.170
+	s=arc-20240116; t=1741143918; c=relaxed/simple;
+	bh=ktfnCTdprKnslNhLJY+ueq/kb0WJC7nvwCfvHWR/fNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=K080qV9kmGHXYTHwdt0ghTcEY238zxlcDYTCuKzdn29Wb1yeSvPcYI5uHtNxwPjS+vGuRSWK3Sltrbaiw3inVlObZSQv7PfHl+ko3NgX2oR6JbZCroNjeQ0FnRQZQ2QhTGPeqt+FykZWDJckAi2LM1k2C8M53TC/saDSfUpEArk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IbT6ht7e; arc=none smtp.client-ip=209.85.219.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7be49f6b331so615689485a.1;
-        Tue, 04 Mar 2025 19:05:12 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6e8e6dee861so4296266d6.1;
+        Tue, 04 Mar 2025 19:05:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741143912; x=1741748712; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TtAhruDk29bBD+n/3w0sFbMJ4Qpp/JAWf4U/2iqtCyo=;
-        b=Ydz45RRqYOLcT7H/sK6vDJjSg0DdQ3L5oNBADSBWHPKC5+vWmDKZYiX4TykSU7kDvD
-         +uquPwyIxQuZ9ZxKCfBL4VeoGIAE54DBn8y73NEHmxJ/lvDG+4C0G61gkFde0coIX0DY
-         Frdgdc0s1C6fUpIwecBKIsAiShhaKdy6jfWPswGvKw95wiGPX5AbL6BaWum/UEgCiaoI
-         ZRWGO01LS6tKOh4UTiGDd5rGDdTNlNpTM4bWgFwVy32QPUq4pTwoSq0pe7gaYbGq7ICn
-         09URTTDVzdQx8O2GryF9WpQEco4nbK1Pb9gcWOp26QJlLJ/Tzh5KNI9H48/A1sl2hK8K
-         6D2g==
+        d=gmail.com; s=20230601; t=1741143915; x=1741748715; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6dypZEQA15NBPzNlTYgAS3T1CsEbXqMrVbTKXugqbh8=;
+        b=IbT6ht7eLj4wmunbcz6BEpWSSxGtPN2iKGs1iSU2ELZuDQ0SLPgzN760eiEnwBtV6k
+         eK9ugn0RUnWSWvpd/teklt2uc6InysHiE8uggl6BPHQWSWedNsHIyaSHT/hqmeXkCskn
+         6GA2kHKH3Uv2niqGGCWW9q8r209+vcenO6QUQKtEKoIVEk4VJiFGMzu/+VzYVqinWulC
+         L2SBwBGJU1t1m5Zfb3qxZS1YYUOpX1hGUGBWp0bw6k2ZZC9oKRtgHHHM0u8cRYXwYiga
+         /lzTTPFilvm1E+LQtiNRDJ/YjM6GbbXXMWqXt6X0Iwb2uKy3weWTVLOuzvc5cDa9ED6W
+         saDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741143912; x=1741748712;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TtAhruDk29bBD+n/3w0sFbMJ4Qpp/JAWf4U/2iqtCyo=;
-        b=nfJt+lIlRjgK5c2PJx3NzN/2lBWsjpgr/T7OeLv6BOaww/e3sTd1B/Nv6U5kOoVoqq
-         fVO0YH2Nm97EBAZyG8mxREHoEt1xSlHGpURZAtIyt3/6rShwAycFaHJK6CuvPS4EvM60
-         E3h6OEtNR54asJKYAwiCGTfgCLclxz/kuCmsbw0//zwFPHTWGxKoWkKrDWyDH+jJgH1m
-         CsCIKxg4rS52fML2jawkasCZdqFxuGgibOAFlcJgSh2Eh8GALnoYNcNwLAKGDN7eJb9T
-         zmqW3jZdld2wt6WrnewOOh9PVsUG/wmHHStXFu8Dt5XttrAPTJ8Uv9do581E5kFwPCXz
-         rJRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVi3gvcO5My4yzZyLDMpHRruWuRxMqjf4gQlta2ESyCBIt8476iz5gTq4wKP8kXE+DpHd5gvUt4gUO5yaLEgFqc@vger.kernel.org, AJvYcCXGmMUhLKM3U58CfXqiUbjftJKDwroQeBo5gTqWamnuKi4d/+CQdlOcDOeX4H6XDtBf6+Uvr8xD7SD9EQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwenMmcxMlD9DECzO2T0F3BiG2AAvHs2pSeYW6QaexTmU+Idwct
-	UHJAeNJpbvR+ptM9HFk8ZuALkk0dat/1dwKzO8UxgyfJnLo73Vzy
-X-Gm-Gg: ASbGnctVq6L7jpZI/yxbZguOXVUuKH4FZsYTlOnxXm2QDJNQteeukproSY4+7m2zMQy
-	kluVemb37/+iFFuwD8eqxrDqajIvN5YQPrK4bfiV9TD31PSOQvtsAYig/GeNF088dMiRS6v4xgw
-	iHumOeIUxz7AF1xZzFZfg5KNBGYxzPRoj4ReDeak/CVZK+aMgN9BYXfnHs9k9seixIRfCxx0Id/
-	NvBpUIILqqwJcBz5YQuwU//oE0HPLI6FQqp1cxI3VipEszck0cKh7MYtR5RSbGpQY0wkAWsXLji
-	O7kk+kX62r3GRwPSVcsfBIG3687eE7tdRo9Ou1dPeJfUQVNiqOzVSWhbesEomjvC5s2EtHNZwTu
-	YfIruHjSz8z9a9Vxmcg9jn1YWLWfljPfBY1w=
-X-Google-Smtp-Source: AGHT+IHwQLXuLEQr6SIyS0fEOaahuVSMv1SsSL+2Iy9aA+a8PVMQN3EvE91Y8mnyVFrxKHSo2M8kYg==
-X-Received: by 2002:a05:620a:6190:b0:7c3:c3e1:3200 with SMTP id af79cd13be357-7c3d8e4638amr284054285a.1.1741143911563;
-        Tue, 04 Mar 2025 19:05:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741143915; x=1741748715;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6dypZEQA15NBPzNlTYgAS3T1CsEbXqMrVbTKXugqbh8=;
+        b=Zxn5v+jswXfIpajl0Bc1VuLyStLQF5H8tWthRmRTHWEC9SUToOxTGw9UYilIC86v/S
+         jGDuN4wcEELExeKLnA3XqF64gS3nCV85XLdFiSzcXY8W1NKj0jB+GOhG6hB1Mr3R5BMe
+         K0jK23aMjKw/jr3snzNtePtsW6hutc3Y4sXWW6Y8ACmA+CBSB4nswKLCakEmekDBdDg4
+         ezTP/5Q6lYJ5F8EOGtbwujZTRpnzGVCsuZApjc+JOH3eoNpJXQQiio1j9Fz5SRCIdGYq
+         9iOZFRcvHBwfuAyCQBPiBeVfzg03SjoXXjG6iAlL0Px/+cSQmRQix29XYXKLzXKBU5n6
+         i0qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUI7HulfIqeytx9VJ9akdrIZssIutlRxJP3RmAT7M8/Xs0rW9g8bpQ1aTmaWnccFSsK0wfDcffY6S0R4RyAkii0@vger.kernel.org, AJvYcCXZJwZAxh7X0VHPATll0FxadlhwVGvyBypKYl86GNSqSDASIbf+8rQNl5SRs2kUV9L9WM5pR3BcPzwY0zo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG1LEJIqw9tLZfpFeNVY57BkzzBwajW1IWKnboXcZW0SpzxIqH
+	wmFazXjLqRGS8ZA9k7YNf95Q/X5RLy3S2PgQ8Ga7yJgdo/HI8UeH
+X-Gm-Gg: ASbGncsCz5/Wv9iU3YyhIX+oqO2ieQBi1II17lalIh/gOT1ChXVyonHKddNqEghM+3u
+	J39YGCC2BgR4GBsWAkLrY7PM5t3xJWrsJMh4N57DS9nNKpvMXAUyxbn4DCSo8nM8pIlTg8OBDnu
+	uQznAU3ciihFHgmsDF6tAeylkHJ4pblEyeDb6cApeDLikKSXa7/+6uq4l7nYmtwe+u57Ry4oJwg
+	6OhMH7alB80BpSdyTDxjkukn9v1/nmMnSpkwgIZAsA1XD/y6XcgviJ3qYKcmNkuwhncCrCZv/og
+	RTmsEhYZWzHn1Fz40CDT8eXQJ0a63ZiW3mcNVZOho4vR7zA9BpUFXS682KLrJ+CZjHaq4jY/g3X
+	m9Y+cv2m9OFxW6fTcdB388gxN1Iw9pc96jPc=
+X-Google-Smtp-Source: AGHT+IGdU8coVX+JMyUMPQF4yyJnAWCWWGbGkl/W+cncdRf0cJd+55o4XN6k3TifudLcwTrFi2c1Sg==
+X-Received: by 2002:a05:6214:da5:b0:6e6:646d:7550 with SMTP id 6a1803df08f44-6e8e6f8fdd9mr28695586d6.19.1741143914630;
+        Tue, 04 Mar 2025 19:05:14 -0800 (PST)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3bfb2a5e3sm331906985a.41.2025.03.04.19.05.10
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8976ccbacsm74260296d6.93.2025.03.04.19.05.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 19:05:11 -0800 (PST)
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 652D8120006A;
-	Tue,  4 Mar 2025 22:05:10 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-07.internal (MEProxy); Tue, 04 Mar 2025 22:05:10 -0500
-X-ME-Sender: <xms:Zr_HZ8wbXq--XXYslbbNxSkkZNsZ2GNp0gajfIbKWwhTnagViLFghA>
-    <xme:Zr_HZwQ6EQghexBNJ_NCy_XUXiyroWQBaVLV4KWENh8h5FtDYKmgLbyMoQsERaFNc
-    gCPGsY9uFg533882Q>
-X-ME-Received: <xmr:Zr_HZ-WjhdQ2eIlHZQlGRjv_MqUrJXcyitg5QguQSIHwzAx0ZgSZAtJHow>
+        Tue, 04 Mar 2025 19:05:14 -0800 (PST)
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 7CCAF120006A;
+	Tue,  4 Mar 2025 22:05:13 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-12.internal (MEProxy); Tue, 04 Mar 2025 22:05:13 -0500
+X-ME-Sender: <xms:ab_HZy6Nr8aDYHRCzVcvMqY5CZWkycap1Y7bhFbrrqos8V3d6ljr5Q>
+    <xme:ab_HZ76M9KPtg8mSAIaZwetYztoS4dWbsP-xABV1kZabRKbM9nQyMKxg7jPUvG44u
+    2Vu0bdeWb1OSsv7Ow>
+X-ME-Received: <xmr:ab_HZxf5GgD3aceLwI9MJlkrRDSFDwOH_mFO7K1uAxwyDeKTOlE26nqdmA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdej
-    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
-    drtghomheqnecuggftrfgrthhtvghrnhepkefggfevuedtuefhgeetveduudffjeejvdej
-    ffettdekgfeujeegvddtuedtfeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhn
-    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejje
-    ekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhn
-    rghmvgdpnhgspghrtghpthhtohepfeejpdhmohguvgepshhmthhpohhuthdprhgtphhtth
-    hopehrtghusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphhmlhgruggv
-    khesshhushgvrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdroh
-    hrghdprhgtphhtthhopehjohhhnhdrohhgnhgvshhssehlihhnuhhtrhhonhhigidruggv
-    pdhrtghpthhtohepshgvnhhoiihhrghtshhkhiestghhrhhomhhiuhhmrdhorhhgpdhrtg
-    hpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfhhrvggu
-    vghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdruhhprgguhh
-    ihrgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohgvlhesjhhovghlfhgvrhhn
-    rghnuggvshdrohhrgh
-X-ME-Proxy: <xmx:Zr_HZ6jyJYC-it1RQ1vHWM6KRbNUjAO_svgO2G93Sli1db6dQNnazA>
-    <xmx:Zr_HZ-AFT0fk9hl3lxH-jR1XicCJd9oXRkUXduBH0JGB0SpwmCDW4g>
-    <xmx:Zr_HZ7JcU4eenAE7l1N2fVw1g3bCv25xYSXBz4-s-OjQ6S3Zb6I-6g>
-    <xmx:Zr_HZ1D1e8ahvlEpSZgU844TsTsP0D7ZalwjCIweHyPzZjDGpMrKxA>
-    <xmx:Zr_HZ-wfnm9C1Th2OCSrnxBms7W5hEcu7QuLOTBQbTvKjkT46Y1siCSM>
+    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
+    tdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
+    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeegleejiedthedvheeggfejveefjeejkefg
+    veffieeujefhueeigfegueehgeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgr
+    lhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppe
+    hgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepfeejpdhm
+    ohguvgepshhmthhpohhuthdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvghlrd
+    horhhgpdhrtghpthhtohepphhmlhgruggvkhesshhushgvrdgtohhmpdhrtghpthhtohep
+    rhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtthhopehjohhhnhdrohhgnh
+    gvshhssehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepshgvnhhoiihhrghtshhk
+    hiestghhrhhomhhiuhhmrdhorhhgpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehnvggvrhgrjhdruhhprgguhhihrgihsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehjohgvlhesjhhovghlfhgvrhhnrghnuggvshdrohhrgh
+X-ME-Proxy: <xmx:ab_HZ_IkXh-xOyAZBux8mCyKIsOvsv9eCa17foP8lu0UrF-utp0DKQ>
+    <xmx:ab_HZ2Lrohff5LX6ZppFN6Ak-NL783jc7oBPLTytDKhyCo-zG_VBkQ>
+    <xmx:ab_HZwzhFutHzFwXNDJVp5Nz2nx0-jU7oFqTuCk2zjIXhaxTR25cVg>
+    <xmx:ab_HZ6IrnPhgPE4KrRz0V-yLZM6D0MlrVaJqpZSQb2CVU3yOao0EQw>
+    <xmx:ab_HZ9bsuufxlUWyc75wJIFXxkN88rndaDTc5rFPDXBUassM55riBVX2>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Mar 2025 22:05:08 -0500 (EST)
+ 4 Mar 2025 22:05:12 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
@@ -139,62 +140,59 @@ Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
 	"Neeraj Upadhyay (AMD)" <neeraj.iitr10@gmail.com>,
 	linux-kernel@vger.kernel.org,	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: [PATCH rcu 00/10] Miscellaneous RCU changes for v6.15
-Date: Tue,  4 Mar 2025 19:04:55 -0800
-Message-ID: <20250305030505.94059-1-boqun.feng@gmail.com>
+Subject: [PATCH rcu 01/10] rcu: Split rcu_report_exp_cpu_mult() mask parameter and use for tracing
+Date: Tue,  4 Mar 2025 19:04:56 -0800
+Message-ID: <20250305030505.94059-2-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250305030505.94059-1-boqun.feng@gmail.com>
+References: <20250305030505.94059-1-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-Please find the upcoming miscellaneous RCU changes. The changes can also
-be found at:
+This commit renames the rcu_report_exp_cpu_mult() function from "mask"
+to "mask_in" and introduced a "mask" local variable to better support
+upcoming event-tracing additions.
 
-        git://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git misc.2025.03.04a
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+---
+ kernel/rcu/tree_exp.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Regards,
-Boqun
-
-Paul E. McKenney (6):
-  rcu: Split rcu_report_exp_cpu_mult() mask parameter and use for
-    tracing
-  rcu: Fix get_state_synchronize_rcu_full() GP-start detection
-  rcu-tasks: Move RCU Tasks self-tests to core_initcall()
-  rcu/nocb: Print segment lengths in show_rcu_nocb_gp_state()
-  context_tracking: Make RCU watch ct_kernel_exit_state() warning
-  Flush console log from kernel_power_off()
-
-Uladzislau Rezki (Sony) (3):
-  rcutorture: Allow a negative value for nfakewriters
-  rcu: Update TREE05.boot to test normal synchronize_rcu()
-  rcu: Use _full() API to debug synchronize_rcu()
-
-Zilin Guan (1):
-  rcu: Remove READ_ONCE() for rdp->gpwrap access in __note_gp_changes()
-
- include/linux/printk.h                        |  6 ++++
- include/linux/rcupdate.h                      |  6 ----
- include/linux/rcupdate_wait.h                 |  3 ++
- init/main.c                                   |  1 -
- kernel/context_tracking.c                     |  9 +++---
- kernel/printk/printk.c                        |  4 +--
- kernel/rcu/rcu.h                              |  2 +-
- kernel/rcu/rcutorture.c                       | 22 ++++++++++----
- kernel/rcu/tasks.h                            |  5 +++-
- kernel/rcu/tree.c                             | 29 +++++++++++--------
- kernel/rcu/tree_exp.h                         |  6 ++--
- kernel/rcu/tree_nocb.h                        | 20 +++++++++----
- kernel/reboot.c                               |  1 +
- .../rcutorture/configs/rcu/TREE05.boot        |  6 ++++
- 14 files changed, 78 insertions(+), 42 deletions(-)
-
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 77efed89c79e..8d4895c854c5 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -230,17 +230,19 @@ static void __maybe_unused rcu_report_exp_rnp(struct rcu_node *rnp, bool wake)
+  * specified leaf rcu_node structure, which is acquired by the caller.
+  */
+ static void rcu_report_exp_cpu_mult(struct rcu_node *rnp, unsigned long flags,
+-				    unsigned long mask, bool wake)
++				    unsigned long mask_in, bool wake)
+ 				    __releases(rnp->lock)
+ {
+ 	int cpu;
++	unsigned long mask;
+ 	struct rcu_data *rdp;
+ 
+ 	raw_lockdep_assert_held_rcu_node(rnp);
+-	if (!(rnp->expmask & mask)) {
++	if (!(rnp->expmask & mask_in)) {
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 		return;
+ 	}
++	mask = mask_in & rnp->expmask;
+ 	WRITE_ONCE(rnp->expmask, rnp->expmask & ~mask);
+ 	for_each_leaf_node_cpu_mask(rnp, cpu, mask) {
+ 		rdp = per_cpu_ptr(&rcu_data, cpu);
 -- 
 2.48.1
 
