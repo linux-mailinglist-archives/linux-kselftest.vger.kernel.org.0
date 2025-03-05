@@ -1,218 +1,335 @@
-Return-Path: <linux-kselftest+bounces-28358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28360-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90C9FA53DF0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 00:05:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5802A53E4B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 00:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B45F918915E0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 23:05:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E44A43A87CD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 23:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F23207A0A;
-	Wed,  5 Mar 2025 23:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 103511EE03B;
+	Wed,  5 Mar 2025 23:18:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KSrL7Pnm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dtlnrTdb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F17D205AD6;
-	Wed,  5 Mar 2025 23:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741215764; cv=fail; b=eybJOj/JwdMKYtQ2HBx9TNQK2FlHN5Ue5NKRwK1RfKlM6he8up/uMs9C8/ZQg/IkSEBY5u/Nwmb1fWEV8CiOl/1rUg6E2/OS/x1c5Xva5suSZCr7SFacs/il2sdcze8eTY8HqUtF1obJuG37gZoB+LZYg/wACLFq6JbaUlNeB5A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741215764; c=relaxed/simple;
-	bh=RFYa9WD8MlAi5rvaLTmSbjXe5T/nmPNuTqO4PXcBJ1s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fzuFwkHLOJxxVFK/wyhnbZvZa02jT0lcs3L2p2cFh3upfIZRBQ1bbl1bYoFz/SIUHh/OaL6CQDP8tXt+LJcKB/LGA7GXD4Uo2ps84qaug6/erdLHCnDXbKwdOKe0t2doOAwQXMY2zTDol3L7vr1X9O867Lu5fJo0KPaKEMrtMDg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KSrL7Pnm; arc=fail smtp.client-ip=40.107.244.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tjZuMv3lOMhFE5O7wMXx02vwYjik8F1ghCCjkk6M/Lq7Y87W/1vLtGamqNhTGmZoH6ggUh9APvxnjLRijMOaFKwKY1aHPDH0mPuWFZq7A9jA9swCSiTswLNDQU5+LvAcVEnEn4u2tHLVy7t9boOg2UeDURA/ZSRqTXM++yHjh0QDwwzpM8IKmBejBL+25/XsI6PE9p7b5WUE0P9Inks3nTK4+nQVEpa8AT5nkCwaKjcGdvCWe2bKJTXi3SeuuskDcWmRMSyBkPeLK/Vo5vu6CWcfrKTsLLz5shxQoLxtipiBSxoNQ0d/q4SosBbyvy8YqSEuQDXZhX/KDl33ac3ARg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n3YD95RsUY5eTxx8ae5CVScVbNwbwBFPsy+5uUC4FJ8=;
- b=u0pTW8B8BlZuwdiYHZkkWlCSA/PEWRdbok1UPbRLfaglOXdon/e1uZ25UwaH2mz59swNcx9v7J/t3nsjSFZS5q3Yhoo6d6xrnwQfDjB4iEFQ85rolKTgIF/T8qZSVp2QhnRi6+4l8MFDlBVX8f8dg27vdJfidg4XkQf+0QmIKpsljnlySoLBup60f30LHgBX5yJy+u8CeL2bfWqHKP0TaP/lNguGeusBraAtaWXLxq8eTSMvHNexHs+HL8OsniywqjEVjVL9HAxDCghbC8IBkDnQADn5tl3D+7bmzP0L3+IPWjwWj8Rpgpkxw3RZgzOS76A55+KID3iQ68VduY+/ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n3YD95RsUY5eTxx8ae5CVScVbNwbwBFPsy+5uUC4FJ8=;
- b=KSrL7Pnm2zVWdKKn7HSNf0u465etDifAXsAw4Vtc7Bb6XDP5oq6xTsCTmuHSKbGLG5H92cbKxsWyqugQFDxbhTiz36ipowQMOR0O+8UTsqGaB75Cl042hyuvyItH/NJNwgffxjn0PY/ubhULtl6ykrV5OFf4RXuaBwtK4xtRhtQ=
-Received: from MN2PR05CA0010.namprd05.prod.outlook.com (2603:10b6:208:c0::23)
- by DM6PR12MB4353.namprd12.prod.outlook.com (2603:10b6:5:2a6::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.16; Wed, 5 Mar
- 2025 23:02:36 +0000
-Received: from MN1PEPF0000F0DF.namprd04.prod.outlook.com
- (2603:10b6:208:c0:cafe::3d) by MN2PR05CA0010.outlook.office365.com
- (2603:10b6:208:c0::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8511.15 via Frontend Transport; Wed,
- 5 Mar 2025 23:02:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MN1PEPF0000F0DF.mail.protection.outlook.com (10.167.242.37) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8511.15 via Frontend Transport; Wed, 5 Mar 2025 23:02:35 +0000
-Received: from zenon.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 5 Mar
- 2025 17:02:34 -0600
-From: "Pratik R. Sampat" <prsampat@amd.com>
-To: <linux-kernel@vger.kernel.org>, <x86@kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-CC: <seanjc@google.com>, <pbonzini@redhat.com>, <thomas.lendacky@amd.com>,
-	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <shuah@kernel.org>, <pgonda@google.com>,
-	<ashish.kalra@amd.com>, <nikunj@amd.com>, <pankaj.gupta@amd.com>,
-	<michael.roth@amd.com>, <sraithal@amd.com>, <prsampat@amd.com>
-Subject: [PATCH v8 10/10] KVM: selftests: Add a basic SEV-SNP smoke test
-Date: Wed, 5 Mar 2025 17:00:00 -0600
-Message-ID: <20250305230000.231025-11-prsampat@amd.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250305230000.231025-1-prsampat@amd.com>
-References: <20250305230000.231025-1-prsampat@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EDB1A5BB2
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 23:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741216687; cv=none; b=m7vAh77Rs03NZa5tMj9ZIdpDAQnGTL8L2o+VdsImmIHRil6zvFqXVaeNlQX9mV607mFkgkYciEHOmQwcDh/DlLGu4MWD2HiGWUz1p+oh3FnlVCS1dtmngpQJ3F9q+134Bsp4N9h3Oowt+mx9CkDw+in06bjiu0Dp7oMaBeZwAzc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741216687; c=relaxed/simple;
+	bh=RjrOEY5xBWbb9vIZTQoHjd0JCvfKWp1YPIBIRXBCIyo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F/Y+jkf7tSIn7jBAQPFvxlo4p6WnTbYE1jAikhncJCxBni8q3W0TSXYbF4NlrU8CXh9/SSorCAjMBVJkqAH1kvvQJe3sOCjWXBc8BfsY5zLevgsdh9heNNZpjwTal0onYjp6F7SzrJ9bpHrZ0/8N8ij5bw1aS3ykYZtnSX4hzlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dtlnrTdb; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6e895f3365aso794336d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 15:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741216684; x=1741821484; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zGW8NA+qaOK/6mvNEBoQiCzB2M+/FGL5kz9mP/r6zrk=;
+        b=dtlnrTdbZUGA1r33noXoM1lOKN7r1LXU07jOET6LMt0rreciLuG983WLg9HUZl9ReO
+         au9WyPRYrc+fbEEPQirpIkd0Q67jmeR/jpkf/0nchwyucxDrMHohV9AcGqAuq0sFWvWx
+         zTwnTIMukjKFQDILUF/W+j1H4UG6rIyJbuTR6Hb8sjEckeSs/4EvTC2Rw2DnvkWhJNG9
+         AslgaQZp+21v1tr56gRXH/2ZANcrrFwapfp9N5TnYd/B44QgP4JGcvEZnQ5G6z7BZfvY
+         XYRXim+kOyXm0bn23XpwM/J+AZ+H3iZ4XKvmNHl9TLRko1V7nIrThbfxu46P97+NFQeV
+         QOhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741216684; x=1741821484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zGW8NA+qaOK/6mvNEBoQiCzB2M+/FGL5kz9mP/r6zrk=;
+        b=TK3UwtyhkzNkHmHW8nDKZwgA4t7rWWRCfHU0xQVaj0bhDNY2DBsj/UUM95JapT1VvH
+         9B6ffe/juZpiauWjDj1OTQ6WoVUL2xAH3ExHix1OW/OD82lE6h7lRoHyQ/7rMl2fjXFd
+         c11RQpxpVzkkja2nbBtKPEQw3Ax93WOFAjWgEJJiVEBG4PeorETL7/t1xD4tL71iFuKO
+         bvx4dS7GIqPdUvK3loKmptn0XTiF1Ceb/UXIxmgAhT1H1+W9YIstd/LzqjSqjlzuHR4z
+         Th7gJhDtfue6EE4Gi9XhqdhLPosdrAVCeNb/DKl1ymDpoa0T8fAcIN38IOgiFHa2uvji
+         lMjw==
+X-Forwarded-Encrypted: i=1; AJvYcCV90YUeITOBFDWNsDr42E1cF5W+0tFx4uYA+PnFq5SUZroMoP4gtFn8uu8oZvkNs/x1QvFwXWUtxz04HwwjeYQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1refZuw4wYgKu1lVSwTmvsRAOvqSpYZclWHFHgha5806t0zoU
+	nQc/yuM8NxmDeVvoXnk3XwB6JfS2KEY7i1Q6iNftlOQn30Q1fFYeW2DJm0xxaHo9OIkOWpbuTl1
+	MDPQa5qH1+fhX4qOOFZOvOhQbOdkphm/g0lty
+X-Gm-Gg: ASbGncvAZUtBkd4mzX+QZ/kxiXAcYyFXOUyXYLzC4V/8B/qgJRSUAToADAcBJvZ6EJk
+	4vvRTP3EuoIYznSZ72KD22bvgh+4ToM39jMC9/+TJXoxRJGOgKeNyufnRqv0GBruC6iU3AwqZbe
+	QFsIR0MMbUDzWWrrW2jsu67hicFU2tw/AqHiZbSss1hRip29u5LBFhAZ9jK+HT
+X-Google-Smtp-Source: AGHT+IHHySWEtVSXkSbDQpUQIThvZ1hpg7GnLI3hT91ZYcvIqyHEqJLgOkDfCVdyHJwcshahAuA0hzH1Q1gaU1DbZII=
+X-Received: by 2002:a05:6214:258b:b0:6e4:4331:aae0 with SMTP id
+ 6a1803df08f44-6e8e6cffdb6mr64730556d6.1.1741216683832; Wed, 05 Mar 2025
+ 15:18:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0DF:EE_|DM6PR12MB4353:EE_
-X-MS-Office365-Filtering-Correlation-Id: a91919c2-a281-41aa-33ee-08dd5c39d1cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BJHjwriffoFLJ+rFRMvj7+ywyyyYqki7zOdiFzii2Yz2MDkjUmCorXMbybs8?=
- =?us-ascii?Q?BvNUlLVQLrmLt7cRjQvhfOFhfv2PPZhpN7GPnNQ3QoNE5mfAGKyRPhzVk667?=
- =?us-ascii?Q?Tu8hWm+2EwDWnjIN37XeEFu2FVFUfYWlMW62FZ8WNmKbiOnJE+63cZ/sruJC?=
- =?us-ascii?Q?q6dOR3T/aP8HvRBQK9j0ly5HVpvs0beDYGrSxg2T8c0RDzSZxm5U+M0pPDSR?=
- =?us-ascii?Q?jRHUzaj9bn7ZJb4OlSa0VaPugzc5r1hz4Xg7rA7cWHTHBGOFiqGJ5CuLYVqX?=
- =?us-ascii?Q?z8zZEQBUS9LkBBEvlKLKdTVAatLSJ3GddvNet4cPrIRN0MNJso23KVAIgIIs?=
- =?us-ascii?Q?/6hesMhEs5SOHHgmi5RMGbsIvZwCqP8BJcfxcFE4jmTkl1FAK871TOKC35w3?=
- =?us-ascii?Q?+Byc1zOiqOu7ZCwfJJlC/EesVEwKNbSYCRvnDZ3KUnzDKc9DXkP15KY3etFK?=
- =?us-ascii?Q?PuqcUI2Xm6Ofl5jwASyNFdn6Wxe8/WPViCBMFxHY4/Mm4OetoazbN1lBUfUo?=
- =?us-ascii?Q?WRl3gN+L9+uMgbmWQzqqozE25DAGG4CdJNEMz6b1MCsQFQ5ye2KCabmRgvY4?=
- =?us-ascii?Q?v+6KnmcTROnvud7zeBH95xVxJLuoDJnpyfY5zHwRbbzK1ipsFeybA2XkeAN9?=
- =?us-ascii?Q?yQZPFO6LsEWCLl74ppn62qW6ve9Ivc6vW9JQ5cBG7idCUyYeARXFz1ePFjNX?=
- =?us-ascii?Q?c8NtNHmHAVr3J9lPKI3tjk2Fpwc819Id05+fmDHWx7Riq7Kf+A8bJkfTlTTi?=
- =?us-ascii?Q?6K92Pf04LLBnLABY1eSkZNsIo2AS2fKQ6+vz+KMtJ7HgEPEP5yjMapIcEC9P?=
- =?us-ascii?Q?SDdh6e8AyBXh9s2MbsZIc5Ui6Ronj5/OXvbGJL6BTSnMSZRtWUYPPeFht5nT?=
- =?us-ascii?Q?GEh6SWJS7VvlYLWtplHP9KUK9sW+QavsG72XTjpAHthXT6hoGTRJcNhDOmDe?=
- =?us-ascii?Q?LLwc1gOXSDPZ1P31l7fxosk5WLpUfGYZcERoosoXh99Y9UzLYWkEjmI9wh0S?=
- =?us-ascii?Q?7FPNwBwrhOVGEBYHkm86bpm8Z82C8kGfBysg3guVtGktmdSgkzWbsRucN97b?=
- =?us-ascii?Q?PT1MtuufZ8wY5SSOa23UMURaFnhbxRBrmI/GMgLOJOQpXR5rgwVfuBdhn2Ms?=
- =?us-ascii?Q?M9XVTbei+eSbzkkq8P/DnLltPGIBL0QNcjvjwQww7Ml5SEvXcrQu9wrwB6SA?=
- =?us-ascii?Q?JgzopxBxsEabcU9L+ipCjorcm53Yxpzr+0yy/6WbiCx8Dm4xkC/Wml0AeCDU?=
- =?us-ascii?Q?xBwQX4Y58T+JKLMZD2Pyn34Oc6XvCLMlzFq0j3nzgH8Etx7jLCSoPXxOYh2M?=
- =?us-ascii?Q?5OAmfFF6OCYaKKsNS2DSmFQcXHGJ6KNd8xJpayNIigck+vXaIZ7EvrUnJxft?=
- =?us-ascii?Q?6xz/8/P+O3yCOvKO8Y6kdxSmPGkIYhFljpvtKc3P4ZVVLkbJ4RieYmkmLccj?=
- =?us-ascii?Q?lgFaq6w9ilEnPiRaDgDtMS7NOiGtLcYltlXvCt5sSu/jbgPV8Qdiy4BWi3Ep?=
- =?us-ascii?Q?r/9HWYBvD1xRFQI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2025 23:02:35.8787
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a91919c2-a281-41aa-33ee-08dd5c39d1cd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000F0DF.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4353
+References: <20250302221518.76874-1-sergio.collado@gmail.com>
+In-Reply-To: <20250302221518.76874-1-sergio.collado@gmail.com>
+From: Rae Moar <rmoar@google.com>
+Date: Wed, 5 Mar 2025 18:17:52 -0500
+X-Gm-Features: AQ5f1Jopmd_6Jpyt6OPDyNi0XtCysbyV65mh0GDzFLW3gDMrF-hBQmtmZu7FtS4
+Message-ID: <CA+GJov65LdxqZTk_Dm252BJOBSAY2dEmdRAxtTgRei4UDxV0hA@mail.gmail.com>
+Subject: Re: [PATCH v9] Kunit to check the longest symbol length
+To: =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
+Cc: David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, David Rheinsberg <david@readahead.eu>, 
+	rust-for-linux@vger.kernel.org, x86@kernel.org, 
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Extend sev_smoke_test to also run a minimal SEV-SNP smoke test that
-initializes and sets up private memory regions required to run a simple
-SEV-SNP guest.
+On Sun, Mar 2, 2025 at 5:15=E2=80=AFPM Sergio Gonz=C3=A1lez Collado
+<sergio.collado@gmail.com> wrote:
+>
+> The longest length of a symbol (KSYM_NAME_LEN) was increased to 512
+> in the reference [1]. This patch adds kunit test suite to check the longe=
+st
+> symbol length. These tests verify that the longest symbol length defined
+> is supported.
+>
 
-Similar to its SEV-ES smoke test counterpart, this also does not
-support GHCB and ucall yet and uses the GHCB MSR protocol to trigger an
-exit of the type KVM_EXIT_SYSTEM_EVENT.
+Hello!
 
-Signed-off-by: Pratik R. Sampat <prsampat@amd.com>
----
- .../selftests/kvm/x86/sev_smoke_test.c        | 25 +++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+Thanks for all the updates! This is now applying cleanly for me and it
+looks good to me.
 
-diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-index 620aa7c41f7a..0505cde77358 100644
---- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-+++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-@@ -16,6 +16,18 @@
- 
- #define XFEATURE_MASK_X87_AVX (XFEATURE_MASK_FP | XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)
- 
-+static void guest_snp_code(void)
-+{
-+	uint64_t sev_msr = rdmsr(MSR_AMD64_SEV);
-+
-+	GUEST_ASSERT(sev_msr & MSR_AMD64_SEV_ENABLED);
-+	GUEST_ASSERT(sev_msr & MSR_AMD64_SEV_ES_ENABLED);
-+	GUEST_ASSERT(sev_msr & MSR_AMD64_SEV_SNP_ENABLED);
-+
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-+	vmgexit();
-+}
-+
- static void guest_sev_es_code(void)
- {
- 	/* TODO: Check CPUID after GHCB-based hypercall support is added. */
-@@ -179,7 +191,10 @@ static void test_sev_smoke(void *guest, uint32_t type, uint64_t policy)
- {
- 	const u64 xf_mask = XFEATURE_MASK_X87_AVX;
- 
--	test_sev(guest, type, policy | SEV_POLICY_NO_DBG);
-+	if (type == KVM_X86_SNP_VM)
-+		test_sev(guest, type, policy | SNP_POLICY_DBG);
-+	else
-+		test_sev(guest, type, policy | SEV_POLICY_NO_DBG);
- 	test_sev(guest, type, policy);
- 
- 	if (type == KVM_X86_SEV_VM)
-@@ -190,7 +205,10 @@ static void test_sev_smoke(void *guest, uint32_t type, uint64_t policy)
- 	if (kvm_has_cap(KVM_CAP_XCRS) &&
- 	    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask) {
- 		test_sync_vmsa(type, policy);
--		test_sync_vmsa(type, policy | SEV_POLICY_NO_DBG);
-+		if (type == KVM_X86_SNP_VM)
-+			test_sync_vmsa(type, policy | SNP_POLICY_DBG);
-+		else
-+			test_sync_vmsa(type, policy | SEV_POLICY_NO_DBG);
- 	}
- }
- 
-@@ -203,5 +221,8 @@ int main(int argc, char *argv[])
- 	if (kvm_cpu_has(X86_FEATURE_SEV_ES))
- 		test_sev_smoke(guest_sev_es_code, KVM_X86_SEV_ES_VM, SEV_POLICY_ES);
- 
-+	if (kvm_cpu_has(X86_FEATURE_SEV_SNP))
-+		test_sev_smoke(guest_snp_code, KVM_X86_SNP_VM, snp_default_policy());
-+
- 	return 0;
- }
--- 
-2.43.0
+Reviewed-by: Rae Moar <rmoar@google.com>
 
+Thanks!
+-Rae
+
+> This test can also help other efforts for longer symbol length,
+> like [2].
+>
+> The test suite defines one symbol with the longest possible length.
+>
+> The first test verify that functions with names of the created
+> symbol, can be called or not.
+>
+> The second test, verify that the symbols are created (or
+> not) in the kernel symbol table.
+>
+> [1] https://lore.kernel.org/lkml/20220802015052.10452-6-ojeda@kernel.org/
+> [2] https://lore.kernel.org/lkml/20240605032120.3179157-1-song@kernel.org=
+/
+>
+> Tested-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Sergio Gonz=C3=A1lez Collado <sergio.collado@gmail.com>
+> Link: https://github.com/Rust-for-Linux/linux/issues/504
+> ---
+> V8 -> V9: removed unused macro & corrected error message
+> ---
+> V7 -> V8: typo fixed & rebased
+> ---
+> V6 -> V7: rebased
+> ---
+> V5 -> V6: remove tests with symbols of length KSYM_NAME_LEN+1
+> ---
+> V4 -> V5: fixed typo, added improved description
+> ---
+> V3 -> V4: add x86 mantainers, add new reference.
+> ---
+> V2 -> V3: updated base and added MODULE_DESCRIPTION() and MODULE_AUTHOR()
+> ---
+> V1 -> V2: corrected CI tests. Added fix proposed at [3]
+>
+> [3] https://lore.kernel.org/lkml/Y9ES4UKl%2F+DtvAVS@gmail.com/T/#m3ef0e12=
+bb834d01ed1ebdcae12ef5f2add342077
+>
+> The test execution should result in something like:
+> ```
+> [20:04:35] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D longest-symbol (=
+4 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [20:04:35] [PASSED] test_longest_symbol
+> [20:04:35] [PASSED] test_longest_symbol_kallsyms
+> [20:04:35] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] l=
+ongest-symbol =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [20:04:35] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [20:04:35] Testing complete. Ran 4 tests: passed: 4
+> ```
+> ---
+>  arch/x86/tools/insn_decoder_test.c |  3 +-
+>  lib/Kconfig.debug                  |  9 ++++
+>  lib/Makefile                       |  2 +
+>  lib/longest_symbol_kunit.c         | 82 ++++++++++++++++++++++++++++++
+>  4 files changed, 95 insertions(+), 1 deletion(-)
+>  create mode 100644 lib/longest_symbol_kunit.c
+>
+> diff --git a/arch/x86/tools/insn_decoder_test.c b/arch/x86/tools/insn_dec=
+oder_test.c
+> index 472540aeabc2..6c2986d2ad11 100644
+> --- a/arch/x86/tools/insn_decoder_test.c
+> +++ b/arch/x86/tools/insn_decoder_test.c
+> @@ -10,6 +10,7 @@
+>  #include <assert.h>
+>  #include <unistd.h>
+>  #include <stdarg.h>
+> +#include <linux/kallsyms.h>
+>
+>  #define unlikely(cond) (cond)
+>
+> @@ -106,7 +107,7 @@ static void parse_args(int argc, char **argv)
+>         }
+>  }
+>
+> -#define BUFSIZE 256
+> +#define BUFSIZE (256 + KSYM_NAME_LEN)
+>
+>  int main(int argc, char **argv)
+>  {
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 1af972a92d06..62d43aa9e8f0 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2838,6 +2838,15 @@ config FORTIFY_KUNIT_TEST
+>           by the str*() and mem*() family of functions. For testing runti=
+me
+>           traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
+>
+> +config LONGEST_SYM_KUNIT_TEST
+> +       tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
+> +       depends on KUNIT && KPROBES
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Tests the longest symbol possible
+> +
+> +         If unsure, say N.
+> +
+>  config HW_BREAKPOINT_KUNIT_TEST
+>         bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TE=
+STS
+>         depends on HAVE_HW_BREAKPOINT
+> diff --git a/lib/Makefile b/lib/Makefile
+> index d5cfc7afbbb8..e8fec9defec2 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -393,6 +393,8 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) +=3D fortify_kunit.o
+>  obj-$(CONFIG_CRC_KUNIT_TEST) +=3D crc_kunit.o
+>  obj-$(CONFIG_SIPHASH_KUNIT_TEST) +=3D siphash_kunit.o
+>  obj-$(CONFIG_USERCOPY_KUNIT_TEST) +=3D usercopy_kunit.o
+> +obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) +=3D longest_symbol_kunit.o
+> +CFLAGS_longest_symbol_kunit.o +=3D $(call cc-disable-warning, missing-pr=
+ototypes)
+>
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
+>
+> diff --git a/lib/longest_symbol_kunit.c b/lib/longest_symbol_kunit.c
+> new file mode 100644
+> index 000000000000..e3c28ff1807f
+> --- /dev/null
+> +++ b/lib/longest_symbol_kunit.c
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test the longest symbol length. Execute with:
+> + *  ./tools/testing/kunit/kunit.py run longest-symbol
+> + *  --arch=3Dx86_64 --kconfig_add CONFIG_KPROBES=3Dy --kconfig_add CONFI=
+G_MODULES=3Dy
+> + *  --kconfig_add CONFIG_RETPOLINE=3Dn --kconfig_add CONFIG_CFI_CLANG=3D=
+n
+> + *  --kconfig_add CONFIG_MITIGATION_RETPOLINE=3Dn
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <kunit/test.h>
+> +#include <linux/stringify.h>
+> +#include <linux/kprobes.h>
+> +#include <linux/kallsyms.h>
+> +
+> +#define DI(name) s##name##name
+> +#define DDI(name) DI(n##name##name)
+> +#define DDDI(name) DDI(n##name##name)
+> +#define DDDDI(name) DDDI(n##name##name)
+> +#define DDDDDI(name) DDDDI(n##name##name)
+> +
+> +/*Generate a symbol whose name length is 511 */
+> +#define LONGEST_SYM_NAME  DDDDDI(g1h2i3j4k5l6m7n)
+> +
+> +#define RETURN_LONGEST_SYM 0xAAAAA
+> +
+> +noinline int LONGEST_SYM_NAME(void);
+> +noinline int LONGEST_SYM_NAME(void)
+> +{
+> +       return RETURN_LONGEST_SYM;
+> +}
+> +
+> +_Static_assert(sizeof(__stringify(LONGEST_SYM_NAME)) =3D=3D KSYM_NAME_LE=
+N,
+> +"Incorrect symbol length found. Expected KSYM_NAME_LEN: "
+> +__stringify(KSYM_NAME_LEN) ", but found: "
+> +__stringify(sizeof(LONGEST_SYM_NAME)));
+> +
+> +static void test_longest_symbol(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, LONGEST_SYM_NAME());
+> +};
+> +
+> +static void test_longest_symbol_kallsyms(struct kunit *test)
+> +{
+> +       unsigned long (*kallsyms_lookup_name)(const char *name);
+> +       static int (*longest_sym)(void);
+> +
+> +       struct kprobe kp =3D {
+> +               .symbol_name =3D "kallsyms_lookup_name",
+> +       };
+> +
+> +       if (register_kprobe(&kp) < 0) {
+> +               pr_info("%s: kprobe not registered", __func__);
+> +               KUNIT_FAIL(test, "test_longest_symbol kallsyms: kprobe no=
+t registered\n");
+> +               return;
+> +       }
+> +
+> +       kunit_warn(test, "test_longest_symbol kallsyms: kprobe registered=
+\n");
+> +       kallsyms_lookup_name =3D (unsigned long (*)(const char *name))kp.=
+addr;
+> +       unregister_kprobe(&kp);
+> +
+> +       longest_sym =3D
+> +               (void *) kallsyms_lookup_name(__stringify(LONGEST_SYM_NAM=
+E));
+> +       KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, longest_sym());
+> +};
+> +
+> +static struct kunit_case longest_symbol_test_cases[] =3D {
+> +       KUNIT_CASE(test_longest_symbol),
+> +       KUNIT_CASE(test_longest_symbol_kallsyms),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite longest_symbol_test_suite =3D {
+> +       .name =3D "longest-symbol",
+> +       .test_cases =3D longest_symbol_test_cases,
+> +};
+> +kunit_test_suite(longest_symbol_test_suite);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Test the longest symbol length");
+> +MODULE_AUTHOR("Sergio Gonz=C3=A1lez Collado");
+>
+> base-commit: 7eb172143d5508b4da468ed59ee857c6e5e01da6
+> --
+> 2.39.2
+>
 
