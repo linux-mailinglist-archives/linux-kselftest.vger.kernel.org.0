@@ -1,158 +1,182 @@
-Return-Path: <linux-kselftest+bounces-28307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B33A4FEF6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 13:46:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD77DA4FF1A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 13:56:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DE5016BDD0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 12:46:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F62D3ADE8C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 12:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C22E1FCF6D;
-	Wed,  5 Mar 2025 12:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57BAF24886A;
+	Wed,  5 Mar 2025 12:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FxVzKQp7"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UYkk13TG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PqSWQihC";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UYkk13TG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PqSWQihC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9B41DC9AA
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 12:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC132475D0
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 12:56:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741178802; cv=none; b=n2srQ3iKLeC7fJfa/4mfa7lR+WvytwY+kzRPaGmxfhHJSbQGgcvNCf5J0GrSXiMFKN3gV4MakOehmHnkHjcklVsLFRHsFOAw2JKbB1IPgTPtbjDkq27rsiXPWOudDCnOqc0LAKkgiR665whwB8PlnZLnlwRr94DP16oVu2GGySA=
+	t=1741179393; cv=none; b=TJgXzycAqTlCZuWo/JELAAbM9vx2xDeapLd/ggh7024WMOsUWJEEP6YIdvywRbp4/XJQOpfNl8ED/zatGPml6+0skbzGnEcyNYqIDMEpiapPsEzgZTc/wwa7gri3F7d23eyU9l5ivIO/M4521UylM/Mdg3haJLRj0kWrMgiKSQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741178802; c=relaxed/simple;
-	bh=WdS934lDxFuI+lDi4WoiWzb2Te4Np1NHLjMjIUYas7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gL5CV6W0/hOi1V/A+6BolUM67XhRj81p9X/pSSYjJ+wuAAvRfGoa5YhqwRIMKE1nCEp0WVpU40ipitWLAJkMAamB94BesdU6RFAbpDRylRMYOyiv5OPyVv2swaZjqV2Mz4D09Pb9K3ow2U2YqUHVd3vffyxU6yi8Bm6xxgk2bbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FxVzKQp7; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-390fb1b987fso4775726f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 04:46:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741178798; x=1741783598; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KijU2RK+5QiUTMaMHbVobX3TCajOSEvmIS7Lj9sfhOM=;
-        b=FxVzKQp7cZaM+4mdVVPpvwZdWqQF4tPb/k3yWkANko/ac8GB8GHSavmos/mkTnbotl
-         5t7Zhj4ElTHAw+OxBE2pXfWgHFTETcwRsztNa/JGr4h9K2kMvJbq5BKrXk0oLp0lj4AD
-         qOQoDggpJFK9ZdNasDnDOF2L7pjAiz1bqtub2dk05WMashNTmPaisAeCoZcRnOPs+hTF
-         WN/qachUuOHOWD1HfyX9ctvMteY1n5Dc2H8vSaC4xmLqkWobwxy3ppc6+091lclOrs1k
-         1glW+3HYbu5Yqkxn4XEt3uhU88PJfrVGyvET73R+pBcTyCUTzS26LhuPEyYBlTgrSQ2S
-         Df5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741178798; x=1741783598;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KijU2RK+5QiUTMaMHbVobX3TCajOSEvmIS7Lj9sfhOM=;
-        b=xQzhkJX142XAHQ2A9zzNqx19SbItpratRZjkQVwsyeO/dWQq/e2gpu+q+uQ2DfC4LD
-         0YAh/1/emE63WGQ8Oy8NUJa/SG7+JJgVJTRFUednoAp5YRQlRUgEepOTHQUJ0Kay1PlD
-         BFT8tarbhVC+/lBXfHHOgBZp2jYGxG13hwWqigSQ3rWuXwScKKj3J7tTwopgVhNEocVp
-         VDtf/WJ5tomJOUREryIzlEV93St+vKa5SDRas4QPn9o2uZovBEGOKfIahm4do+gCPPNH
-         pSfYgMlX1HxCHy6HTn+GYFX7/T48LXzh3col9yk0+/BAZdvYR140501HuXrmvBaax6WG
-         hbiA==
-X-Forwarded-Encrypted: i=1; AJvYcCWC6j53AS5kNqO+eW2G/D8on331nqNOsKj0FuUyV5AkXBF7XGtp7Sgxio7RpwHKgSYo299ojWq4GF5MkIowioM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJKUmOvjGh7dCVGQ9OEU7RWsM4jGRKhCqjHcxr4svRzxTrXufp
-	KPOHl0CiaQu9THk2b71jgN10CX4TtgzBbY/wg9X17wVNw7e5CnlwHGC8ICqTTwo=
-X-Gm-Gg: ASbGnctiz8TkQyiHOeJ01pYy4Lm7flYa1qD4LDWp+Godw3Q/SfcjlKe78jQ+xeH5uL3
-	sjHSlU1+YycKsk6XjI/lFZT7k1en4VVqj7JEbO/SifwCZU7uIDJj8c+0XoQNPtxeQNshNUT6a33
-	uhvGIhyo84pA4uf/nf3+Kv1/OYcz/JCPQ3UQDQwrq8ioXKqcF/buFCHq1XrUdD4sdeMhK3FeG05
-	cOGlYXEW5m1rMoR2UqLh8vQ1+dwYLOmai8gkkPhTKG6DO2lITRmCNzgUBar4uoKt2vEG4UYIsAy
-	LB9SJRdsCwd7HI5Hw6uvr3EhmwO/YXmM3ONHEfaQNN/M07g=
-X-Google-Smtp-Source: AGHT+IEPLJpRRf5FYWw3IKOdFaaLj6UT7vruoSQtSNaRt2Dkg2TweUaV2rcBDSTkZ88x2LYdtyxZrg==
-X-Received: by 2002:a5d:59ae:0:b0:391:10f9:f3a1 with SMTP id ffacd0b85a97d-3911f7bba1fmr3029040f8f.35.1741178798392;
-        Wed, 05 Mar 2025 04:46:38 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e47a6a9fsm21175534f8f.36.2025.03.05.04.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 04:46:37 -0800 (PST)
-Date: Wed, 5 Mar 2025 13:46:36 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 3/4] scanf: convert self-test to KUnit
-Message-ID: <Z8hHrIz2wwAMtQc8@pathway.suse.cz>
-References: <20250214-scanf-kunit-convert-v8-0-5ea50f95f83c@gmail.com>
- <20250214-scanf-kunit-convert-v8-3-5ea50f95f83c@gmail.com>
+	s=arc-20240116; t=1741179393; c=relaxed/simple;
+	bh=7rP1q4sjtPGTwvZCo6TvJK937m2vMlozF4ddOFBImF4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nx7F2x0B+6j6C9/PqiVeYBwg/jfMBTgKs8ypuOPOd/D8W+GoMDg9nYfqmfBq6ZNoLn8xJQycXz5z3PGg6ZhOlkjdBaZtS29hoVzqRfmvI5IN5CPDTJ9rboZYflsQDAye9zqlscwFrsPHB4v/CbcleZtz4Vm1nOq1bCYcD5g0xPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UYkk13TG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PqSWQihC; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UYkk13TG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PqSWQihC; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8B2571F455;
+	Wed,  5 Mar 2025 12:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1741179389; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xMTJEHhe2iHM3A9CeRbjgCSsa/If8US42GvM//vLAL0=;
+	b=UYkk13TGu+2jm/3NyxzZibOSqRhWQf8t+4AD8jm8ZVimZ8QkIitwtjI/3b+jzGuA2+Q6e7
+	FIo2XcXmMfCq3d5EQtew0gn6bGWXJ3yNMrnJ5dqM8RTOBm35NydCevbcO/lb7JjfsfmeCF
+	qgjr10iXna+luJmO+zFxwJKaeJvnm1o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1741179389;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xMTJEHhe2iHM3A9CeRbjgCSsa/If8US42GvM//vLAL0=;
+	b=PqSWQihCXupiDI21nzFsmWx/KgqHMRyEaV/cbx5o/2wASBnfVi/BV+wB+ZmRhJObu1l3jo
+	7+XpL7sMQ4yMM4BQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1741179389; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xMTJEHhe2iHM3A9CeRbjgCSsa/If8US42GvM//vLAL0=;
+	b=UYkk13TGu+2jm/3NyxzZibOSqRhWQf8t+4AD8jm8ZVimZ8QkIitwtjI/3b+jzGuA2+Q6e7
+	FIo2XcXmMfCq3d5EQtew0gn6bGWXJ3yNMrnJ5dqM8RTOBm35NydCevbcO/lb7JjfsfmeCF
+	qgjr10iXna+luJmO+zFxwJKaeJvnm1o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1741179389;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xMTJEHhe2iHM3A9CeRbjgCSsa/If8US42GvM//vLAL0=;
+	b=PqSWQihCXupiDI21nzFsmWx/KgqHMRyEaV/cbx5o/2wASBnfVi/BV+wB+ZmRhJObu1l3jo
+	7+XpL7sMQ4yMM4BQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EC91E13939;
+	Wed,  5 Mar 2025 12:56:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id OE2iKPpJyGevMQAAD6G6ig
+	(envelope-from <ddiss@suse.de>); Wed, 05 Mar 2025 12:56:26 +0000
+Date: Wed, 5 Mar 2025 23:56:01 +1100
+From: David Disseldorp <ddiss@suse.de>
+To: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>, Christian Brauner
+ <brauner@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [brauner-github:vfs.all 205/231] WARNING: modpost: vmlinux:
+ section mismatch in reference: initramfs_test_cases+0x0 (section: .data) ->
+ initramfs_test_extract (section: .init.text)
+Message-ID: <20250305235601.464f6432.ddiss@suse.de>
+In-Reply-To: <20250305114701.28c0ee0b.ddiss@suse.de>
+References: <202503050109.t5Ab93hX-lkp@intel.com>
+	<20250305114701.28c0ee0b.ddiss@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250214-scanf-kunit-convert-v8-3-5ea50f95f83c@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -3.30
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[intel.com,lists.linux.dev,gmail.com,kernel.org,canb.auug.org.au];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Fri 2025-02-14 11:20:00, Tamir Duberstein wrote:
-> Convert the scanf() self-test to a KUnit test.
+On Wed, 5 Mar 2025 11:47:01 +1100, David Disseldorp wrote:
+
+> [cc'ing linux-kselftest and kunit-dev]
 > 
-> In the interest of keeping the patch reasonably-sized this doesn't
-> refactor the tests into proper parameterized tests - it's all one big
-> test case.
+> Hi,
 > 
-> --- a/lib/test_scanf.c
-> +++ b/lib/tests/scanf_kunit.c
-> @@ -15,48 +13,35 @@
->  #include <linux/slab.h>
->  #include <linux/string.h>
->  
-> -#include "../tools/testing/selftests/kselftest_module.h"
-> -
->  #define BUF_SIZE 1024
->  
-> -KSTM_MODULE_GLOBALS();
-> -static char *test_buffer __initdata;
-> -static char *fmt_buffer __initdata;
-> -static struct rnd_state rnd_state __initdata;
-> +static char *test_buffer;
-> +static char *fmt_buffer;
-> +static struct rnd_state rnd_state;
->  
-> -typedef int (*check_fn)(const char *file, const int line, const void *check_data,
-> -			const char *string, const char *fmt, int n_args, va_list ap);
-> +typedef void (*check_fn)(struct kunit *test, const char *file, const int line,
-> +			 const void *check_data, const char *string, const char *fmt, int n_args,
-> +			 va_list ap);
->  
-> -static void __scanf(6, 0) __init
-> -_test(const char *file, const int line, check_fn fn, const void *check_data, const char *string,
-> -	const char *fmt, int n_args, ...)
-> +static void __scanf(7, 0)
+> On Wed, 5 Mar 2025 01:47:55 +0800, kernel test robot wrote:
+> 
+> > tree:   https://github.com/brauner/linux.git vfs.all
+> > head:   ea47e99a3a234837d5fea0d1a20bb2ad1eaa6dd4
+> > commit: b6736cfccb582b7c016cba6cd484fbcf30d499af [205/231] initramfs_test: kunit tests for initramfs unpacking
+> > config: x86_64-buildonly-randconfig-002-20250304 (https://download.01.org/0day-ci/archive/20250305/202503050109.t5Ab93hX-lkp@intel.com/config)
+> > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503050109.t5Ab93hX-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202503050109.t5Ab93hX-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> >   
+> > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x0 (section: .data) -> initramfs_test_extract (section: .init.text)
+> > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x30 (section: .data) -> initramfs_test_fname_overrun (section: .init.text)
+> > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x60 (section: .data) -> initramfs_test_data (section: .init.text)
+> > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x90 (section: .data) -> initramfs_test_csum (section: .init.text)
+> > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xc0 (section: .data) -> initramfs_test_hardlink (section: .init.text)
+> > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xf0 (section: .data) -> initramfs_test_many (section: .init.text)    
+> 
+> These new warnings are covered in the commit message. The
+> kunit_test_init_section_suites() registered tests aren't in the .init
+> section as debugfs entries are retained for results reporting (without
+> an ability to rerun them).
+> IIUC, the __kunit_init_test_suites->CONCATENATE(..., _probe) suffix is
+> intended to suppress the modpost warning - @kunit-dev: any ideas why
+> this isn't working as intended?
 
-This should be:
+Stephen Rothwell (cc'ed) mentioned that we might be able to use
+__refdata for initramfs_test_cases. The __ref* description in init.h
+does indicate that it's suitable, and I now see that it's present in
+kunit-example-test.c . I'll propose a patch which can be squashed in
+with the existing commit.
 
-static void __scanf(7, 9)
-
-Otherwise, the compilation with W=1 produces the warning reported by
-the lkp@intel.com kernel test robot, see
-https://lore.kernel.org/r/202502160245.KUrryBJR-lkp@intel.com
-
-> +_test(struct kunit *test, const char *file, const int line, check_fn fn, const void *check_data,
-> +	const char *string, const char *fmt, int n_args, ...)
->  {
->  	va_list ap, ap_copy;
->  	int ret;
-
-Otherwise, it looks good to me.
-
-With the above fix:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
+Thanks, David
 
