@@ -1,325 +1,196 @@
-Return-Path: <linux-kselftest+bounces-28273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92F7BA4F496
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:19:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E849BA4F4EE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5FCE188C82C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 02:19:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71DB67A1CAC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 02:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29498197A8B;
-	Wed,  5 Mar 2025 02:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD0B153800;
+	Wed,  5 Mar 2025 02:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C1i+UPTV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4B4NUjW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D691946AA
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 02:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D0545C18;
+	Wed,  5 Mar 2025 02:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741141057; cv=none; b=KGWQxUPk7vFAZ3hVcD8gOTiMImfTLg9nJvn5/JwotL6JXPQaWVm1EXjtOLMXgsqTGwz3frrhleRXzot3xePFNvu6tfeBWedg52trgYEcCLsI86NygA9zaZEFD6WMSSoRg7hyh59dUTXPJohWLujjEWTO1W4/gIZ/VTt/eovct4M=
+	t=1741143285; cv=none; b=PMjgOKi++Qyp0nNA0h5ZGpu2X/1Os7eOZGKDqOxA/tddIrAkZ2+PXEV1zzijx1Wh+qumx2AmuwR5bgSVy9f+lBaupHfYsLmzfc23Bm/lbkeVyJCQ7xwEKitVgHGmy5jiZ4zuR2v9cxrTokZda8Tu5uWvL11cFb5qJgxqITkswcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741141057; c=relaxed/simple;
-	bh=UmY/ayF8HBN/ulyyItJ7lAYgnpBsHJWqhLt8h/dNxHs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y0fiFduYyi98gpFTfKzxiIYSRhpKynAsoooyzxOPT2Mr1AS81LDRIcr/EYbyO0hgnVw2y9RBFPYNYJDlXWCCBAeifsEJp24Gm705BEV+iafb2CDBvdJqufq0aQMfIdmEdVLZKuai9CL4VQYRxfsDRhwzjZk9KYT2lVZ9wwpZvSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=C1i+UPTV; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ab7f9f57192so96675866b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Mar 2025 18:17:34 -0800 (PST)
+	s=arc-20240116; t=1741143285; c=relaxed/simple;
+	bh=UV6gyGazzJ42NubyrUwHa0PU0qVcgVll114FV7ifGlA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrcQRhLV+dXW72XusvMWbxglGrv86WRI7Na6VYuWkT4B8mzxGyHC9JvIo1FsDRW4yCQPs8JnmYFuHc31z+k1kyPoJT6+ZfslzMTMzw3cs0sYLcOQx7I8gRwkA+NtLm8Ih0cxs+kI1JLmSN+JR/DSIdOKsOx4G00t6eRYf9snuUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4B4NUjW; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c3b4c4b409so495400785a.3;
+        Tue, 04 Mar 2025 18:54:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1741141053; x=1741745853; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pcCXP5+9u/FLOTwAJWuE/Eiiwb6Tr4w/nKcMIQwNMtE=;
-        b=C1i+UPTV6AA+ewFKbZqsLZmuLRob1bl+nC1SJXQK7vRnqeejuIhwDoai008RgyRYDy
-         cyVHJ+PSmulhyXzM1CuE4YKfXf/9FDzTJObKeo3vISeb2B7VyD75HkHC0rmSzB3sOxh6
-         ddFvlOydoxRRvD/aztyv/e/JEmRHMJkz/PCmg=
+        d=gmail.com; s=20230601; t=1741143283; x=1741748083; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UV6gyGazzJ42NubyrUwHa0PU0qVcgVll114FV7ifGlA=;
+        b=C4B4NUjWr9adFGs1UGGtUwqZQAcB5IHNJq1++qHwkFlsLCKvoHOoJ/0115JMQssPgT
+         MsCan0gxBrwsOwbPXsFHBGepmZlSUzBlCRO6WkK1xhfBOCu3VxUlttE2FfiZSUdU8l2F
+         dxGqOdFA/I063Tf8/+lbFrGPnygor5CDX1AOks8d/7e8QdDl1ulTucX//gMfQTJ+zrwt
+         ljzQ84A34REWanHJRO5gXBVTY/DlBo42Ah+Koprf5UAQd1SnnEr59XrSck78u1i8VEma
+         IBWxjf+gToPfM87u+0u30qOfC4B2Z9+S1f7fm+Cafw5wnF3K3mEe+EUa+15cbK7qiQxa
+         bRRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741141053; x=1741745853;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pcCXP5+9u/FLOTwAJWuE/Eiiwb6Tr4w/nKcMIQwNMtE=;
-        b=jxVgqGwHFn8HrPCZsUeNtD5hUqHDdzsYpI0bSQwohTrIwvqUWYiJasLFqUMDm5vzUD
-         y+emrVV6WrN8oGGhdDmkJRjTmIWxG9RqsxMxos2vbzMpXxzqqUaPPKAZLLaO5t6A8CeA
-         6RekJLx34zHW+5tewWp3743F5GKC/OzY0t887iVC3s38wo8ITLpJOxOqIYoF4R1qcBz1
-         uuUzGPp9HzPg3VMu9/0aPhaqJodVaQF1BsSkr60pUljuBOnpqcJpqkE7+A1QfZsfT93r
-         t8NW9WDP4N6AVQyXTCUzmJx+mQcINt5oGSq3PaQtzSk4cZmf9I3/cODBNeA0qSpdEek5
-         5vsA==
-X-Forwarded-Encrypted: i=1; AJvYcCWJUyFgeYS3MScoMYgK5ZH86Q9/pmCc7ZRJ3hQGBdwUYD1Itvpc/TqavV16I8GFMseJLn4Uikf0C10sqJnc5Ho=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5W7yIJEmtO8fLZH/XZO6iIkkskmL7agw8bNbFyB1mBp14eSwh
-	ehhJxgCGWOqbpDhvfKnTO8WTwBPwlIrmaljTEow6/DWjQnCMAnQCHZY5qEmWig==
-X-Gm-Gg: ASbGnctUZopUGyrR96ErzbQdWae3Bz4EzT220X/Yt9hFlD+tsIL8pabyGgu/jUuysxU
-	hypG1Cl/zbGFJw4NIqrIWe7i681GTDEgmkvFa1IS1LwU5HZ+Ts2jG3HYdSKthXjge5lDBn95SnX
-	DfOID4iSbg3a0unIlzaBXMGN2zlWoK44Ew3roV0EDLO//XlxhAYbMXdWeA8LVH9UQ5PHyE5KtSb
-	asJBhAGx8a9SUzsXmts9m+7PgNaNSpCIKc0iHVA3Sz3EBJtigkXi/frbNUHo3DEgKNLppwuszvj
-	VtYTt83/qHTeJEM9v19cC06oiXeRl/Znx6fRb6F4eMNFZQd9t5Cgp98waqdwtD205d83uhbuljJ
-	M
-X-Google-Smtp-Source: AGHT+IF66plIcsj14Sd9utRPSZXYkhyhx8Xszzbcm4MTAIg/x5pKqpJrtPh/c/C2SNaU4l/Ayi6xCg==
-X-Received: by 2002:a05:6402:2693:b0:5e4:d499:5e1 with SMTP id 4fb4d7f45d1cf-5e59f3747a9mr478745a12.1.1741141053293;
-        Tue, 04 Mar 2025 18:17:33 -0800 (PST)
-Received: from cfish.c.googlers.com.com (40.162.204.35.bc.googleusercontent.com. [35.204.162.40])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c43a55besm8891211a12.72.2025.03.04.18.17.31
+        d=1e100.net; s=20230601; t=1741143283; x=1741748083;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UV6gyGazzJ42NubyrUwHa0PU0qVcgVll114FV7ifGlA=;
+        b=D4ABOLKCMiOsj2u7yLophJF5yhM3BGa0DlkdzUvwCjfOCP0uQkjgQQgvJPv9zMLZ3x
+         8H1d8EE2T259KpVXmA2Zp/ANgg65CFe5szzz+rTNhBsTNPTbFL/SjWcjpAouvcnn8LW/
+         NIRlDrqIWXUus9SPKWZI/Hnng3+RkAQZ4OUzcroudMH8RU/Rf2xBMDb5HQukdQziClMB
+         yu7R3NMWTvyztibUMntAp0xDFQ9SmneURMbJkA9UINZ0gXqQ9HSHqkcBy3gf5gtrcbTH
+         YkLXNQGU9bCV5b8YhpkL70Wu4KDgQloRqtTY96+PZVC58Uyc5EHxH2OlFBYlSdCTVh5X
+         Jifg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrdEdC78OMUSZ4rk1fYgPnriLn7UwkEe0aNzgBXh4mS8LYYSYWO957iXTy2Z7QgIE1adMfG5yDpErz7WeD3qNi@vger.kernel.org, AJvYcCWgxPnrx29q+gAU4BXE3vMjQKo7TJDJXaW6z2fk+G34d0sGpng8MS+5YKGgJWnFandgMYuy3lbudebMfI2ckaCPKfXG@vger.kernel.org, AJvYcCWnfmVU3QQxiU/U3a0Ah0jYWAegfJrppPglaehbI+6J4cj3yF6pEBNDx5l7e2N8m1XfC67MG7ziMdNnNmE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpRNTzuQk+6WB7Ff3huGIRnhiQbXbTBmoMf2hYfPnjNE2k8Si6
+	vtzxTCWYffxsPuFYeQSgViNUbVufQ6MjpyVuq8RkY3fpHVQUjokv
+X-Gm-Gg: ASbGncsyjzMxhnx4CcF9bHCrMRc4q214bzUzkNdujlHcUSsztrY28tGikmZVQNuhNFg
+	HZu0wrpAf/8+5lQyDjALaiwpzEq2iPosb8Q1Qjcvo0fSCoBZsIO0F4K9OJK0XEQ7Y5oo+bdU22X
+	aBGK8eaYQKg+6VS0govHROurwO9etnOdzgxSweJKnTaRV2zyzhius7Q3A/xo1GiDdKzzDHw112U
+	HVX123LGX5b475Zc9HPS9yHWq36Hwb/GwXJr0R848+p49WBc9CG+otKiIjOVQIIn9i3q2Ocqqjl
+	KmzmkMry8em59RVtmI+PPpp2EhBHMTLcms905hT3O4FPumZlYUzTcthVqNn2A/EHHgZ3VC23NZ8
+	YDRtU7Beqj5cuIUxWsa2f4fwZJIjVgthED/g=
+X-Google-Smtp-Source: AGHT+IHBoQiW7YLCUvoHR0BGtgdkr30Lh1JWx2qiZpsHE/51TJNn1Bw7Jeixsoev4iKBvUmgHnx5uQ==
+X-Received: by 2002:a05:620a:2607:b0:7c2:40d1:8593 with SMTP id af79cd13be357-7c3d8e20ee3mr236316985a.3.1741143282793;
+        Tue, 04 Mar 2025 18:54:42 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3ca43ad81sm228200185a.80.2025.03.04.18.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 18:17:32 -0800 (PST)
-From: jeffxu@chromium.org
-To: akpm@linux-foundation.org,
-	keescook@chromium.org,
-	jannh@google.com,
-	torvalds@linux-foundation.org,
-	vbabka@suse.cz,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@Oracle.com,
-	adhemerval.zanella@linaro.org,
-	oleg@redhat.com,
-	avagin@gmail.com,
-	benjamin@sipsolutions.net
-Cc: linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	jorgelo@chromium.org,
-	sroettger@google.com,
-	hch@lst.de,
-	ojeda@kernel.org,
-	thomas.weissschuh@linutronix.de,
-	adobriyan@gmail.com,
-	johannes@sipsolutions.net,
-	pedro.falcato@gmail.com,
-	hca@linux.ibm.com,
-	willy@infradead.org,
-	anna-maria@linutronix.de,
-	mark.rutland@arm.com,
-	linus.walleij@linaro.org,
-	Jason@zx2c4.com,
-	deller@gmx.de,
-	rdunlap@infradead.org,
-	davem@davemloft.net,
-	peterx@redhat.com,
-	f.fainelli@gmail.com,
-	gerg@kernel.org,
-	dave.hansen@linux.intel.com,
-	mingo@kernel.org,
-	ardb@kernel.org,
-	mhocko@suse.com,
-	42.hyeyoo@gmail.com,
-	peterz@infradead.org,
-	ardb@google.com,
-	enh@google.com,
-	rientjes@google.com,
-	groeck@chromium.org,
-	mpe@ellerman.id.au,
-	aleksandr.mikhalitsyn@canonical.com,
-	mike.rapoport@gmail.com,
-	Jeff Xu <jeffxu@chromium.org>
-Subject: [PATCH v9 7/7] selftest: test system mappings are sealed.
-Date: Wed,  5 Mar 2025 02:17:11 +0000
-Message-ID: <20250305021711.3867874-8-jeffxu@google.com>
-X-Mailer: git-send-email 2.48.1.711.g2feabab25a-goog
-In-Reply-To: <20250305021711.3867874-1-jeffxu@google.com>
-References: <20250305021711.3867874-1-jeffxu@google.com>
+        Tue, 04 Mar 2025 18:54:42 -0800 (PST)
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 71EED1200068;
+	Tue,  4 Mar 2025 21:54:41 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Tue, 04 Mar 2025 21:54:41 -0500
+X-ME-Sender: <xms:8bzHZ9LFSO-a7ihBB_pv8V5rMhqrCR_uO6brALv_DTsMkbnINqpj9w>
+    <xme:8bzHZ5ICRQVksAlERae5OZAvduwZlz1qAgrERq5bNKjTQt0f2uYUbcUpoMigZ3QGd
+    UpwwI3GC1dXsBLtQA>
+X-ME-Received: <xmr:8bzHZ1ucqTCiCh6UQ1HAcC2SWKqx4g4_vR06lzjQbgjSp2dCVHYOF0BiRw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtqhfstddt
+    tddvnecuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrg
+    hilhdrtghomheqnecuggftrfgrthhtvghrnhepheeufeduuefftdevffffhfehudeitdff
+    uedvveegleffudetueegvdehtdfhlefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhn
+    rghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpe
+    epghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeeftddp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhish
+    drohhrghdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfhhrvgguvg
+    hrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnvggvrhgrjhdruhhprgguhhih
+    rgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohgvlhesjhhovghlfhgvrhhnrg
+    hnuggvshdrohhrghdprhgtphhtthhopehjohhshhesjhhoshhhthhrihhplhgvthhtrdho
+    rhhgpdhrtghpthhtohepuhhrvgiikhhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepmh
+    grthhhihgvuhdruggvshhnohihvghrshesvghffhhitghiohhsrdgtohhm
+X-ME-Proxy: <xmx:8bzHZ-bAeG0ZN1GRSTXMehPu8GzSaSPV29guxqRdGz2fwFl_WYKV5Q>
+    <xmx:8bzHZ0aKBJ5-5VFBHCz5DMRPMteMbfFZAPBaND6ZAQN2X7WHkXQD7Q>
+    <xmx:8bzHZyBgmAnxKIcGNuSZ5RxojsTbDVVWDzKB6k-raS6dr88qNYe3dQ>
+    <xmx:8bzHZyY_W8yOb5yK3MJYbCUbBXmGtxXxETMRJS4EIEmVEcYWau52eQ>
+    <xmx:8bzHZwrUTjFR0__3g6VW5Q28j-I-8Okx3u1SPTqqw8wuH5BuD7BoXgjr>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Mar 2025 21:54:40 -0500 (EST)
+Date: Tue, 4 Mar 2025 18:54:38 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: rcu@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+ 	Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ 	Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>,
+ 	Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ 	Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, 	Davidlohr Bueso <dave@stgolabs.net>,
+ Ingo Molnar <mingo@redhat.com>, 	Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ 	Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ 	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ 	Valentin Schneider <vschneid@redhat.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, 	Shuah Khan <shuah@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ 	Clark Williams <clrkwllms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, 	Ankur Arora <ankur.a.arora@oracle.com>
+Subject: Re: [PATCH rcu 06/11] osnoise: provide quiescent states
+Message-ID: <hrwgh7fevnkmkaizc7226kyywgzi22efmtnepzwah7ticrozbv@lcg23v6j7p7g>
+References: <20250225035516.26443-1-boqun.feng@gmail.com>
+ <20250225035516.26443-7-boqun.feng@gmail.com>
+ <20250304142127.391ca6bd@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250304142127.391ca6bd@gandalf.local.home>
 
-From: Jeff Xu <jeffxu@chromium.org>
+On Tue, Mar 04, 2025 at 02:21:27PM -0500, Steven Rostedt wrote:
+> On Mon, 24 Feb 2025 19:55:11 -0800
+> Boqun Feng <boqun.feng@gmail.com> wrote:
+>=20
+> > From: Ankur Arora <ankur.a.arora@oracle.com>
+> >=20
+> > To reduce RCU noise for nohz_full configurations, osnoise depends
+> > on cond_resched() providing quiescent states for PREEMPT_RCU=3Dn
+> > configurations. For PREEMPT_RCU=3Dy configurations -- where
+> > cond_resched() is a stub -- we do this by directly calling
+> > rcu_momentary_eqs().
+> >=20
+> > With (PREEMPT_LAZY=3Dy, PREEMPT_DYNAMIC=3Dn), however, we have a
+> > configuration with (PREEMPTION=3Dy, PREEMPT_RCU=3Dn) where neither
+> > of the above can help.
+> >=20
+> > Handle that by providing an explicit quiescent state here for all
+> > configurations.
+> >=20
+> > As mentioned above this is not needed for non-stubbed cond_resched(),
+> > but, providing a quiescent state here just pulls in one that a future
+> > cond_resched() would provide, so doesn't cause any extra work for
+> > this configuration.
+> >=20
+> > Cc: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+>=20
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>=20
 
-Add sysmap_is_sealed.c to test system mappings are sealed.
+Applied, thanks!
 
-Note: CONFIG_MSEAL_SYSTEM_MAPPINGS must be set, as indicated in
-config file.
+Regards,
+Boqun
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
----
- tools/testing/selftests/Makefile              |   1 +
- .../mseal_system_mappings/.gitignore          |   2 +
- .../selftests/mseal_system_mappings/Makefile  |   6 +
- .../selftests/mseal_system_mappings/config    |   1 +
- .../mseal_system_mappings/sysmap_is_sealed.c  | 119 ++++++++++++++++++
- 5 files changed, 129 insertions(+)
- create mode 100644 tools/testing/selftests/mseal_system_mappings/.gitignore
- create mode 100644 tools/testing/selftests/mseal_system_mappings/Makefile
- create mode 100644 tools/testing/selftests/mseal_system_mappings/config
- create mode 100644 tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8daac70c2f9d..be836be8f03f 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -61,6 +61,7 @@ TARGETS += mount
- TARGETS += mount_setattr
- TARGETS += move_mount_set_group
- TARGETS += mqueue
-+TARGETS += mseal_system_mappings
- TARGETS += nci
- TARGETS += net
- TARGETS += net/af_unix
-diff --git a/tools/testing/selftests/mseal_system_mappings/.gitignore b/tools/testing/selftests/mseal_system_mappings/.gitignore
-new file mode 100644
-index 000000000000..319c497a595e
---- /dev/null
-+++ b/tools/testing/selftests/mseal_system_mappings/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+sysmap_is_sealed
-diff --git a/tools/testing/selftests/mseal_system_mappings/Makefile b/tools/testing/selftests/mseal_system_mappings/Makefile
-new file mode 100644
-index 000000000000..2b4504e2f52f
---- /dev/null
-+++ b/tools/testing/selftests/mseal_system_mappings/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -std=c99 -pthread -Wall $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS := sysmap_is_sealed
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/mseal_system_mappings/config b/tools/testing/selftests/mseal_system_mappings/config
-new file mode 100644
-index 000000000000..675cb9f37b86
---- /dev/null
-+++ b/tools/testing/selftests/mseal_system_mappings/config
-@@ -0,0 +1 @@
-+CONFIG_MSEAL_SYSTEM_MAPPINGS=y
-diff --git a/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c b/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c
-new file mode 100644
-index 000000000000..0d2af30c3bf5
---- /dev/null
-+++ b/tools/testing/selftests/mseal_system_mappings/sysmap_is_sealed.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * test system mappings are sealed when
-+ * KCONFIG_MSEAL_SYSTEM_MAPPINGS=y
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <errno.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <stdbool.h>
-+
-+#include "../kselftest.h"
-+#include "../kselftest_harness.h"
-+
-+#define VMFLAGS "VmFlags:"
-+#define MSEAL_FLAGS "sl"
-+#define MAX_LINE_LEN 512
-+
-+bool has_mapping(char *name, FILE *maps)
-+{
-+	char line[MAX_LINE_LEN];
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		if (strstr(line, name))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+bool mapping_is_sealed(char *name, FILE *maps)
-+{
-+	char line[MAX_LINE_LEN];
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		if (!strncmp(line, VMFLAGS, strlen(VMFLAGS))) {
-+			if (strstr(line, MSEAL_FLAGS))
-+				return true;
-+
-+			return false;
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+FIXTURE(basic) {
-+	FILE *maps;
-+};
-+
-+FIXTURE_SETUP(basic)
-+{
-+	self->maps = fopen("/proc/self/smaps", "r");
-+	if (!self->maps)
-+		SKIP(return, "Could not open /proc/self/smap, errno=%d",
-+			errno);
-+};
-+
-+FIXTURE_TEARDOWN(basic)
-+{
-+	if (self->maps)
-+		fclose(self->maps);
-+};
-+
-+FIXTURE_VARIANT(basic)
-+{
-+	char *name;
-+	bool sealed;
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, vdso) {
-+	.name = "[vdso]",
-+	.sealed = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, vvar) {
-+	.name = "[vvar]",
-+	.sealed = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, vvar_vclock) {
-+	.name = "[vvar_vclock]",
-+	.sealed = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, sigpage) {
-+	.name = "[sigpage]",
-+	.sealed = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, vectors) {
-+	.name = "[vectors]",
-+	.sealed = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, uprobes) {
-+	.name = "[uprobes]",
-+	.sealed = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(basic, stack) {
-+	.name = "[stack]",
-+	.sealed = false,
-+};
-+
-+TEST_F(basic, check_sealed)
-+{
-+	if (!has_mapping(variant->name, self->maps)) {
-+		SKIP(return, "could not find the mapping, %s",
-+			variant->name);
-+	}
-+
-+	EXPECT_EQ(variant->sealed,
-+		mapping_is_sealed(variant->name, self->maps));
-+};
-+
-+TEST_HARNESS_MAIN
--- 
-2.48.1.711.g2feabab25a-goog
-
+> -- Steve
+>=20
+> > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+> > Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> > Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
 
