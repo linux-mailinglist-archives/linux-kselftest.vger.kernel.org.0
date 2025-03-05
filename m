@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-28283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E13C3A4F522
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:06:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FCDEA4F524
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 04:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 333B23A9E16
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:06:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D64BF3A978F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 03:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9962319B5A9;
-	Wed,  5 Mar 2025 03:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E8319D062;
+	Wed,  5 Mar 2025 03:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgG+aZCp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WwNrF/m3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D739B194A75;
-	Wed,  5 Mar 2025 03:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266CC199E89;
+	Wed,  5 Mar 2025 03:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741143943; cv=none; b=rBEizOTg0+sNhR+V8Ob1YYXVPkNZVXi2Mz5beHfmLsxirxWu7133RNBAL1/MV9xT/UfpASYaTvKXiGmP2FpPcpKePNYm5KWFnG/uw1oP4h0rhG+JT0tqRFWqgp5FoU6PaHJ9kkMY/JZbfHTTwyvOMWbHYKQwy71/5BHpinjCcdg=
+	t=1741143946; cv=none; b=SlSxvgnddFWQNceAL6LchnYjv4nid5ixAR+R1Ao8a/2EBLAsjbo9ZskM3LmaPmI22Btp0oa5F7wNSMQPGz4Kv3tSnJjz0xXUkk0SetXGg3K77NEgvjkPU9nObOWdOUN9eIxlJ0h5b2ID78jFmWTOGCkWPrM/wIT7whhahDDmWjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741143943; c=relaxed/simple;
-	bh=FTbCxoRNzeptyiCsRyZeAdbu5kGrrtfegvCbyVJPKRg=;
+	s=arc-20240116; t=1741143946; c=relaxed/simple;
+	bh=tmzTUwcDvfcoyJpi6SQQUu4XwTaZg+heQ4riDadkSPI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FdRS7IH036ZUtb6Kn7FglhkiUuxMcRZArhvqMIYjEKFZCg5MCx4eSAxYGFaZ/lwRBZXSSUxUzAC7uGDPZ1+wQ8XfM4oj+Y7U5HNEz59GbckKD2OwjdiMtp5fmGEswL/iTtJ9MwDJCWYbw1xkXdlfDMXO5DC/mkUGXW5T2RwgX0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RgG+aZCp; arc=none smtp.client-ip=209.85.222.171
+	 MIME-Version; b=S5SqrmDWnsMKnNtulSQD/LpEPrSGI4uVyAU9L6DDsSOaFqpi7bTTODl91n0NQASJaBeYARvshZnd+HQ/stoOy7iPnhVa5Yd77H15MQE+QjNZ40nxlLtk7gZuM0Uh95+Qxh9Diki1LV3fCmRjhfoUFJSxabvui0GJkZs+4Nvdufc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WwNrF/m3; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c3b533a683so316093185a.2;
-        Tue, 04 Mar 2025 19:05:41 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7be49f6b331so615729485a.1;
+        Tue, 04 Mar 2025 19:05:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741143941; x=1741748741; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741143944; x=1741748744; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=u6CYER+QWDFGbqGupxQEB5sdNaMc6sLr8skppdSjdWU=;
-        b=RgG+aZCpYc/QG9nIwQogyY733KubmOsI2LaZiRCjgGbtFOsjmUB57begpeROQkzb4Z
-         rzPImilxoTkihWZb0S86TqxItZNP6tLlH1IveWKZyARIQGVXij1UqBtOTSN1YIsD8VYB
-         jkCaGaU9RkNRe08QJMQL5LosSItyZmd4sIzrACBwhtztttSlaKSpWvXOjFwRvObHQDZP
-         r9E7voJmU/N15gMRSd+lkJpUSx9xnHArJUWLJtoiZSVe/fzeDqwYpFzFtk4Z0z5+oQs9
-         kKM+E1MJk0tw7cngiv1fHAy06eo8ljzNPRm3ker22q78AKLYshVL59UKH4Cc7QmCU8D5
-         d07w==
+        bh=ZWUbTmfZeSTAjfInLJsRKj3El0zpw1/MvyJ1JvXIc1U=;
+        b=WwNrF/m3DzrKJIka2pBn9Mf15dXkgXe6/dod3d6YmHKOpSJdvxrsB2wTi3hdvDNYFo
+         xrEDnFiJPRWDCk8TGfURDPs/EE3ZuCg/0497NQSQ19OwiEseliYJnZBVRhPdnJP3NmYL
+         4Y5anx++QmLL4Zzf6HIdVNayuRj1/I4jDtobB7J1goaPumLfYil8LoZqmzQh/TJGiKeT
+         ASDC+vK919IN3rKDZQoWY0rB7jqN41ag652lyDFusF/aTNvYJFbLytzu8HdxPTamA9oO
+         cNId6FaEHqW5A8lWAT1lMyC1NoIYLvfp+EiBhinTgaO1Zsrru0jnTTEK5CmF6VcpjRsf
+         BPnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741143941; x=1741748741;
+        d=1e100.net; s=20230601; t=1741143944; x=1741748744;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=u6CYER+QWDFGbqGupxQEB5sdNaMc6sLr8skppdSjdWU=;
-        b=Q7yDRaRmo/5z1w/uI8rNczs4WPYWcmtxB71Ym+H1iqfyPzZ+lz5hsCYVnaqFVs3a/7
-         YiAawROs8FhvXFKhEXCWzkWwmntDAMEJEnXvxpTYiccEp9EdNSRuVLI3hb4FKQ40Majg
-         Dd5j2o2Ns2Ofss/5vvemwEwFfxNK1D6lInCkVzrUC55CmUpM7C0fohhPvlERTlYjRElL
-         Tl2Hm/u9iU3EvsPriXu5aR48tEKi/nC/mV/+r0Q2xrouCtCZdrCUNvWlLVoZ9GsU3sCu
-         MOJ4vrlAMopkjtoOcJLRr8110IIklOAluDAFGUhpSdxiKrn6DSEQp/9lMUPAJp6YqNOu
-         S9EA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9XqiUOc2RZ2f1oY3dfJEUZGErxAOGKBIETF1BQKno8oyRl89xKdUaDTmzhBjfJA9E1BmbvLFdqTbuuqpIWkQQ@vger.kernel.org, AJvYcCWUJUkQoyeb3pNAUdbLzbCyXLCKAfM6KSlur3zSzJFNd3Kb5HCVcguhrvCAlFdod9qWGgDK+dfNGb8D/ZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy95J/wn9CJE+6+5wVz3mVFs27g4FeOfM6c7lFAFeuWRvpV5vp4
-	/iWOlRPQt5ryXHP27M260AdzHiAcFNGWabfT6VW0u06lWegYbbay
-X-Gm-Gg: ASbGncuCij53nY6R/sGx++8WxD5bY6PXhrdNFYJjcZoKGiH/PrI9c21oGfEx+sj5VLI
-	DxGn80g+zXCOrDo4YNEVDjDRWupy/jyNKIq8pQ6oAmPAwq9DiC1rTo/VkwjoCmOOOC5w3tGoPnQ
-	d5iHDUxAQv7ulLHtAB6rkcujL0yLwc0uiPMJx8N+jxyqV7N6jyxliJAp3+Y0PZq/SgsG+bF5guO
-	q6fTIP/aOvRy5hLDq4AZ2/EslODvoLkaXde53ELuveDJn1PcJ0XwHcSMu+bxkXSvhRh7s2bDduJ
-	arQfbhk0W39bOB0eV0gnVf8AgZAF4O406cjX6vYZGU6gpr90B0PBriZ0QFpEQenNBM7rX0j9BX9
-	sxkNO9h2huyCMwIYAJnol3eaZTkejWZc+s24=
-X-Google-Smtp-Source: AGHT+IFFQiKwXNk+FSZRxYuGGL1vRU4+A1PP9vowX0NB2SJbrCiTrutdhkP19/BkACOv1Vq3pcdscQ==
-X-Received: by 2002:a05:620a:6887:b0:7c0:9f12:2b90 with SMTP id af79cd13be357-7c3d8bd2be6mr306010285a.6.1741143940679;
-        Tue, 04 Mar 2025 19:05:40 -0800 (PST)
+        bh=ZWUbTmfZeSTAjfInLJsRKj3El0zpw1/MvyJ1JvXIc1U=;
+        b=UaJTB8oP+Yx6k/ZBvHhfpMVmv9/u8G8L4ysXA/xikdzElm+BFZSyT7i04dLY/GufN0
+         p5nU73YC4qLBowB3OtbbVoJXlInEAdU3L0XTZnDoVw0uDmjWVSzeBclpV356xvwIZQNQ
+         sbxU5Cc+qpW64ykvlgjkLFHN/LH/qHnzotYKj4ntHTaiuwMfWhAEAdtNwRg0h1MN9FgG
+         XW+qplzsrg7bMLE5ipwA05CJCdaJpG/njg+sSQGaQS6czYYQBuhWAMSxd+TKE+AizhT/
+         3q+u75yFQUwcjlL9zfpQDTidr9EQ3DkJ8rj20R4HO+zzr5BGwViQptJ3KO2+tcgS/y4m
+         aYTw==
+X-Forwarded-Encrypted: i=1; AJvYcCVZsdD0smYPmXW8krW1zElovfvR+t0aw+ucDSSn7qW6btBgXzVFRUqQnPqLd8OdU4jTKCKc9UKLtamJwHV8d3Tp@vger.kernel.org, AJvYcCWAhkwQDG9/g4v+F1Va3ZbLgYOxTu9mPCCBC8Tq59mi6QF44Iw+lb1upXf4a/5v5EmHB4krbKaJYmhYDds=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxd05E5ge8HSNAiRfcyz9Ye8Tg8RnatVzWB86zebB/s1NIsN4RI
+	RFF2tvB3Ca811u3aAhCQlO4UguNLGQp7iXiM3f+tDg19wbIal5JR
+X-Gm-Gg: ASbGnctZCxuAVudQKcq2kjggBuOKe5k8EZ0UZjzK90V0eqVrjwvlZjAhTElYlV6LDYM
+	Vrz3w4JeWU0aMBkwjyHxpdudUBUd/gVV3X8aplvuIjH0YgmWs1TDPfqzMibMn/ze/R630keO6Nt
+	lyElVsxt1fjWRYtqv57E9zz0GC2NI72yAUyPkbm/d/jfkhqe4gkSwMi4y5OlB4M2FJg//gr/K1q
+	vZbPvdccbFBEu5Wty42RRdRIsaLPSclQ52B53OMAp1xagd20a4qUa0MIC6VdBdrK4XdFFo6tccL
+	DJGDrcY8Yr0XKiri5Ac+27IQsQELNMdYAbn2n87NNr3GjXLqxQO/R8HSCgfQFqQxiFkoe3W6pVt
+	JDV9j0Ewd4rSvQMk6Hryzs5Po+7FjNH+/qfY=
+X-Google-Smtp-Source: AGHT+IGbpMYWPfZVn/GZecxLR58PtHpyaPX50Ibx/nZVKroR/TmXFshuqFOaLzZeECRWUFdnxpEcCA==
+X-Received: by 2002:a05:622a:1389:b0:471:ef27:a314 with SMTP id d75a77b69052e-4750b442bafmr21764871cf.18.1741143943723;
+        Tue, 04 Mar 2025 19:05:43 -0800 (PST)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3cc0c20ffsm210181585a.91.2025.03.04.19.05.39
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-474e3affc66sm38282841cf.4.2025.03.04.19.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 19:05:40 -0800 (PST)
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 9F431120006A;
-	Tue,  4 Mar 2025 22:05:39 -0500 (EST)
+        Tue, 04 Mar 2025 19:05:43 -0800 (PST)
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 97BEF120006C;
+	Tue,  4 Mar 2025 22:05:42 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Tue, 04 Mar 2025 22:05:39 -0500
-X-ME-Sender: <xms:g7_HZwoI9S3YbbAnHf1moH797XFX3UyPuvIXmDQFzTrBpPTKw0P-ZQ>
-    <xme:g7_HZ2qEuxNyNjEUstgVK9wgbX-j7VjMZVBJb2N_qVC6779E_olqTDjHEynNv5Y8v
-    x5yx4NW3fsiuuABzQ>
-X-ME-Received: <xmr:g7_HZ1P15tTlF_NbxQnR1dP6l1S27xzsmFiXRrbJgwYiQgdyfAXciUjpPg>
+  by phl-compute-08.internal (MEProxy); Tue, 04 Mar 2025 22:05:42 -0500
+X-ME-Sender: <xms:hr_HZzVCp4811y1v0HMNE_DtrqokZWSdaDFbovUtWwaERI2lu0Aq4Q>
+    <xme:hr_HZ7nqhLbFnarche3oZknQ6XfgFb7KrnZd6ncqcdRJ7FGK_KIXlVNHH1iGrASeF
+    GQWKoPQ9BK-M_zocg>
+X-ME-Received: <xmr:hr_HZ_Z-Zumty-cK5DUOI51o9ch5ijm1kpdkpk-PbWHDfDowJaFBEuy6zQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
@@ -101,14 +101,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdefjeefucetufdote
     uggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvvghrrghjrdhuphgrug
     hhhigrhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhovghlsehjohgvlhhfvghr
     nhgrnhguvghsrdhorhhg
-X-ME-Proxy: <xmx:g7_HZ35yJo5JC9T3C3UBjJiirBDHIIGMOrNm1pNmTjrppmyrTx2pUA>
-    <xmx:g7_HZ_63px3W2ID3AFigu0-VMR8SKmhPwuC1EkGDwTmerElniwMS7A>
-    <xmx:g7_HZ3gnxrJMYKMGLdeYWpeIPNNL4umh7WEiqvsHYjcz8GEzapWHnA>
-    <xmx:g7_HZ54vEgvP0Jcf4MV-QDJnuqoluZoJrnsNKHJxMciZ0Zr4pEuGyg>
-    <xmx:g7_HZyIH3__g4X_Tka2Cc60lNHQKEszLrjTohkY_Gsvp2dvArTvvnB-b>
+X-ME-Proxy: <xmx:hr_HZ-V-YBozAK7CCv8OxamG-SRbo5G15qpPCTYu4D9taV01LIDD6g>
+    <xmx:hr_HZ9mJd7oxi4FK58Ax757qYdoqz4-06OfOi7t-hK3sXm-GFV4iQA>
+    <xmx:hr_HZ7dDsY1vyGHFINXzWx92JYLFx8XN55FOhLYkfWClvMcUPRb9iQ>
+    <xmx:hr_HZ3HQoSgxVXQpi0-j-6QNgesuJC1i_0KriWtVJI5OBaaesmne6Q>
+    <xmx:hr_HZ_kSCN3Axlt1Ye46jHGuLLDHmwIStdSvnRj_-BNEeWxlziVot4bQ>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Mar 2025 22:05:38 -0500 (EST)
+ 4 Mar 2025 22:05:41 -0500 (EST)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rcu@vger.kernel.org
 Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
@@ -141,9 +141,9 @@ Cc: Petr Mladek <pmladek@suse.com>,	Steven Rostedt <rostedt@goodmis.org>,
 	"Neeraj Upadhyay (AMD)" <neeraj.iitr10@gmail.com>,
 	linux-kernel@vger.kernel.org,	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: [PATCH rcu 08/10] rcutorture: Allow a negative value for nfakewriters
-Date: Tue,  4 Mar 2025 19:05:03 -0800
-Message-ID: <20250305030505.94059-9-boqun.feng@gmail.com>
+Subject: [PATCH rcu 09/10] rcu: Update TREE05.boot to test normal synchronize_rcu()
+Date: Tue,  4 Mar 2025 19:05:04 -0800
+Message-ID: <20250305030505.94059-10-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250305030505.94059-1-boqun.feng@gmail.com>
 References: <20250305030505.94059-1-boqun.feng@gmail.com>
@@ -157,96 +157,38 @@ Content-Transfer-Encoding: 8bit
 
 From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 
-Currently "nfakewriters" parameter can be set to any value but
-there is no possibility to adjust it automatically based on how
-many CPUs a system has where a test is run on.
+Add extra parameters for rcutorture module. One is the "nfakewriters"
+which is set -1. There will be created number of test-kthreads which
+correspond to number of CPUs in a test system. Those threads randomly
+invoke synchronize_rcu() call.
 
-To address this, if the "nfakewriters" is set to negative it will
-be adjusted to num_online_cpus() during torture initialization.
+Apart of that "rcu_normal" is set to 1, because it is specifically for
+a normal synchronize_rcu() testing, also a newly added parameter which
+is "rcu_normal_wake_from_gp" is set to 1 also. That prevents interaction
+with other callbacks in a system.
 
 Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Link: https://lore.kernel.org/r/20250227131613.52683-1-urezki@gmail.com
+Link: https://lore.kernel.org/r/20250227131613.52683-2-urezki@gmail.com
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- kernel/rcu/rcutorture.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ tools/testing/selftests/rcutorture/configs/rcu/TREE05.boot | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index d26fb1d33ed9..726c2d63ab66 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -147,6 +147,7 @@ MODULE_PARM_DESC(torture_type, "Type of RCU to torture (rcu, srcu, ...)");
- 
- static int nrealnocbers;
- static int nrealreaders;
-+static int nrealfakewriters;
- static struct task_struct *writer_task;
- static struct task_struct **fakewriter_tasks;
- static struct task_struct **reader_tasks;
-@@ -1728,7 +1729,7 @@ rcu_torture_fakewriter(void *arg)
- 	do {
- 		torture_hrtimeout_jiffies(torture_random(&rand) % 10, &rand);
- 		if (cur_ops->cb_barrier != NULL &&
--		    torture_random(&rand) % (nfakewriters * 8) == 0) {
-+		    torture_random(&rand) % (nrealfakewriters * 8) == 0) {
- 			cur_ops->cb_barrier();
- 		} else {
- 			switch (synctype[torture_random(&rand) % nsynctypes]) {
-@@ -2522,7 +2523,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
- 		 "nocbs_nthreads=%d nocbs_toggle=%d "
- 		 "test_nmis=%d "
- 		 "preempt_duration=%d preempt_interval=%d\n",
--		 torture_type, tag, nrealreaders, nfakewriters,
-+		 torture_type, tag, nrealreaders, nrealfakewriters,
- 		 stat_interval, verbose, test_no_idle_hz, shuffle_interval,
- 		 stutter, irqreader, fqs_duration, fqs_holdoff, fqs_stutter,
- 		 test_boost, cur_ops->can_boost,
-@@ -3597,7 +3598,7 @@ rcu_torture_cleanup(void)
- 	rcu_torture_reader_mbchk = NULL;
- 
- 	if (fakewriter_tasks) {
--		for (i = 0; i < nfakewriters; i++)
-+		for (i = 0; i < nrealfakewriters; i++)
- 			torture_stop_kthread(rcu_torture_fakewriter,
- 					     fakewriter_tasks[i]);
- 		kfree(fakewriter_tasks);
-@@ -3994,6 +3995,14 @@ rcu_torture_init(void)
- 
- 	rcu_torture_init_srcu_lockdep();
- 
-+	if (nfakewriters >= 0) {
-+		nrealfakewriters = nfakewriters;
-+	} else {
-+		nrealfakewriters = num_online_cpus() - 2 - nfakewriters;
-+		if (nrealfakewriters <= 0)
-+			nrealfakewriters = 1;
-+	}
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE05.boot b/tools/testing/selftests/rcutorture/configs/rcu/TREE05.boot
+index c419cac233ee..54f5c9053474 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE05.boot
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE05.boot
+@@ -2,3 +2,9 @@ rcutree.gp_preinit_delay=3
+ rcutree.gp_init_delay=3
+ rcutree.gp_cleanup_delay=3
+ rcupdate.rcu_self_test=1
 +
- 	if (nreaders >= 0) {
- 		nrealreaders = nreaders;
- 	} else {
-@@ -4050,8 +4059,9 @@ rcu_torture_init(void)
- 					  writer_task);
- 	if (torture_init_error(firsterr))
- 		goto unwind;
--	if (nfakewriters > 0) {
--		fakewriter_tasks = kcalloc(nfakewriters,
-+
-+	if (nrealfakewriters > 0) {
-+		fakewriter_tasks = kcalloc(nrealfakewriters,
- 					   sizeof(fakewriter_tasks[0]),
- 					   GFP_KERNEL);
- 		if (fakewriter_tasks == NULL) {
-@@ -4060,7 +4070,7 @@ rcu_torture_init(void)
- 			goto unwind;
- 		}
- 	}
--	for (i = 0; i < nfakewriters; i++) {
-+	for (i = 0; i < nrealfakewriters; i++) {
- 		firsterr = torture_create_kthread(rcu_torture_fakewriter,
- 						  NULL, fakewriter_tasks[i]);
- 		if (torture_init_error(firsterr))
++# This part is for synchronize_rcu() testing
++rcutorture.nfakewriters=-1
++rcutorture.gp_sync=1
++rcupdate.rcu_normal=1
++rcutree.rcu_normal_wake_from_gp=1
 -- 
 2.48.1
 
