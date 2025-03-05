@@ -1,181 +1,139 @@
-Return-Path: <linux-kselftest+bounces-28298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38F89A4FA93
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 10:47:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECA4CA4FAE9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 10:58:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 507221892B06
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 09:47:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78DC416CDB8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 09:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC162054E3;
-	Wed,  5 Mar 2025 09:47:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693A4205ABE;
+	Wed,  5 Mar 2025 09:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="epMLIdSe"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ay0jmRYT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DECE320370C
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 09:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDC0205507
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 09:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741168044; cv=none; b=Q7MT000CbRGJiMNPCSGLTYXpJf2bcV2ak41e/tpvXgBo5VQ/eZSB3PVnjxLpPGCAq2bjexU/nhdXxCIHUqWaWWqPYK3+ErPIb2b+NtbVLW7rNdNhaXnuMl1sml+LzWDxJzcjfKQLtCHgedB9KG2q8A1tVo1wwQT7DHWtJ6tl2ko=
+	t=1741168568; cv=none; b=bX27KbrdrjqE5sIKnmK4zJ1wQ64X7Zc6rBvMg0S5QcpXq7OCKRcsVa6Idq+Xie10PJTLtAJj5M3xEL6yMVLzW9m9nYwNvx9GAva0RpyAL2c59IcQgjmAbRB3GRBHKuZWwT68jJjTtB5cDD408mfyxG3PcGpaLYltRc99Dla0GLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741168044; c=relaxed/simple;
-	bh=Z+VMDSOKrwtG6lviKJiCsWBEfYDhlcUqD9qS1eoXGw4=;
+	s=arc-20240116; t=1741168568; c=relaxed/simple;
+	bh=lKqS/mAvx4HVq33Hmdz699WevQkr9nXw23GBMPTSQaw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gLq42SvtFMOYAaK49C1TyMWfXUhFoFJwrDZnlsjdcDRL/+neK6R1hZUaIn4ClcegOqtF+E8YIXnXyrXWG/A5lBjbl2zKrWr4N+0GMekGbH9g9mfP6jePzIMSudXmJxt4AaTSpTpXrNJ+BkNArs7HwEdJsWlaYg3Tb0wrlWX3YbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=epMLIdSe; arc=none smtp.client-ip=209.85.221.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=PdSTiW4aNR2WDCemgY4b2VRpJwGQa7srvmhuXbsv2ZLNXhbdnBNessbMmrpLoJYRgvG5qN3sJYNrklFjCVrDhp39rtrH0Hcw6o9ZU6KDD5h1HmPNMnNfwLVn0rWp6ol4OxGP5hkYjgde4Q85gglDe06+FKYUF1cP/7ivtdXbVwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ay0jmRYT; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3910e101d0fso2047944f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 01:47:21 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43bb6b0b898so30321085e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 01:56:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741168040; x=1741772840; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EMPfkT27lV8Ojg2DFZYdlrmMaeah6M4ccrm/4GlS09M=;
-        b=epMLIdSeTSMn7obw5QuRDczC5fsK7bKRQQLbYNU+9nGOtoIo0ZRyhK/uk4T7A/SltK
-         QsdQXKvkQKNZYqR8/cSsKU15Pma014EUYQEeEVe2LQ3V6wIu+2poI90gL+auiSW0fCOt
-         Cqx/DJIlPFRUrFhTGMLoNzokeMxnc930S2ykHwMZUFUKEmSXul1tYOGjTeeEmdMWG+1L
-         5BDXrKR/dZYc1kCRZBoAVJTEPNclxddEBhnQOu87oNtvdTsIs6QyNborgl/OI3X8lNxY
-         u5yLEmTnIsLGmgKOY9lO8N8LpTkq6gqJRSNHUyPNqpjwqV0LD/OM3vSVNPEFGu9j0glH
-         4q3g==
+        d=suse.com; s=google; t=1741168564; x=1741773364; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pkxl4a4YQVJ31Qn6F9vVuT6sik+nqtnuunl+H2yyS6k=;
+        b=Ay0jmRYTWrsl4EYGmT2NWlDmaxS2LENcQf3c6N1UV//uwak0kMRe9fBbxXnaEXnjAB
+         MIC+2nvZAOR256+ZlA+uJAj9pe1aB4GmP0iusOBKRZuCaxsbyTyd738N5fAnvYTnse8Q
+         LjF384av2iHSOp6e/HAOe6iAI48zxCTKuG5I94LGIeCIA5Z2h1AlHQcOAJccNvjYXzQ+
+         6yyjgndL8gtq09OZPyU7o9Zvjqeem5ttUjHUEoWN/HVvqayS9t2JrhrjoYmHE7kU4xUN
+         +a2Ocl3Za1WNRDMie1mukCL8ZALNnN2f/WJvw9isvN2t6eKbeJGF5DhhxfUr5WHQVg0L
+         Nnuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741168040; x=1741772840;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EMPfkT27lV8Ojg2DFZYdlrmMaeah6M4ccrm/4GlS09M=;
-        b=Laz+nu5EnHmPhMY33x6a66Wut7w7zLrorawrD5+3AOb/LTppENdZyKXS+FGMkh9hJL
-         Wzz6O9m/HDEjcdCbT/m0J3a02EeXctU5RgHBH39Dw92+pCIO2ITrHOlf/kiIB1baNsvo
-         9HgfWrQREuEh3qARjtkQbaodg7wCraM0MjMSKgdQua9nfhZS3OPtmAVJaWRAnefZMX8V
-         UavITwU3YYgNz10A9hvetM0kfq3aGzYlEFF7i9qL2hODie15zYtgsSuFPLE3e1oM1QLU
-         ucLCD4pAVc0+H/iU5XvLCGQKZhrqNSo7SdpLM0hsFaUA5AEV4JLsdyUSN5aGgBkOgELi
-         gqxA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsWC//s7zEId2dbS1qfggpT71yQvuD+RNKQ6TlylZiAP53bd2fjTwlNk3a2S5dfCrpV4YUji/K8ng2msVI4pE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVC0G+KMc+A4S4+S3CAB3oT+NxozzIXtnE5bEHA2dnSPRNgoOZ
-	xYZkR9SMLA9TWFPKq4IXqOoLoWXYVKyiwEvNCfv76iu7khz8IdGj22MOykoNb/Q=
-X-Gm-Gg: ASbGncskyDRrIzy4+p7irAFHqpb2brjiZT7onRMtqtEPNAzMsPA3s+xy1aspDWsiLmc
-	RmEVv0ROs3Uw5bD66kjZa/jcs6tPlNbNE2caQAU6TRknLa6HmoW0SNDG8tYrqnokmWZoEHG5u+U
-	KW4ZDzlZIo78lLKu4mtBCOTLyjUAhdPrQnVI/B39bL6sPqER1u61Fi2jkKWp+4ri+ZebRjk+yRE
-	h6Xu+CA8yJqSKFwAa+2W2iPKvdWA20LIt/YU+q3pV2NybicBP0DbIdHIKbDXj+EgwnthK9geLY6
-	h7IEvPOJjRTJv652AhSEyE6JmvBHm8ouulLKbMufmcTllkg=
-X-Google-Smtp-Source: AGHT+IFcrWp+Eg2JeW3nr+EIF9j4IDp9lzyAN7AdFjhbyzx7Y+kawoeWfXaT79Mlsm2wvfce/91S1g==
-X-Received: by 2002:a5d:6486:0:b0:391:a74:d7dc with SMTP id ffacd0b85a97d-3911f7ce121mr1800951f8f.50.1741168040117;
-        Wed, 05 Mar 2025 01:47:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741168564; x=1741773364;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pkxl4a4YQVJ31Qn6F9vVuT6sik+nqtnuunl+H2yyS6k=;
+        b=W75sdWFovv8CIhh5u71DGgy1YqX56aSmzO3IX2erx5C8mLL175OXxYo8KXElugKxYk
+         F84QV3YHmsUqNqkAC6wc4SdGB92wxwVDZ2tvzZZRdtQdO4edLbwuZ0SFqNbNfA70VJTR
+         4oLifP9nePARKql1QAA+jWAuSxd6rDVDDzEt+HRH1rQBBrfz6u6Mg1g0F5SCtJJLIaiv
+         YEYR6A2tRtPt7rFLafbWRzbSaym9TBQWNDtCQDKkrJyHwZ8GrFslLTGyynRf5jLOBs9w
+         aqWPgBjsrPmmzCCIx4uOMRnhmU4+/paNld7a+9BVjRJ1U5orOLQmWn7lD5LEFSxEdpEH
+         jAAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVP5fk3qxwRkdCkrBk2NPuSdxxPlwtzU75CAfx+jVyOYmrGot6+92lTQBEmJmI6RraFDC7Ar9PVc2DUVNKDWiM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEBvxKbmgY/Xlgd+nhJnyJsP2U8Y7nW8GiU0MxKZFSUXTsNZWg
+	oqfIChqx8AzQ8rbTCWhDYZCxKtY7ZdvAyo6oBqngigKa1+myyOAQcwzooMpuF3E=
+X-Gm-Gg: ASbGncvWly0uwlnElU2xA5/tOlbgPiQdTGxa2Qnra2Jokxdj7PeunnskaZVLZtcgvTj
+	15O+gHLd/qn4mKdH28eFHI4zt2OgDg9vgscG2WUp12LdXs990xq9j17pBsl7hjWYBcjq2e/iSHu
+	GdzYuOeTlMLKCmJY2wtbFP4D4/uplS0yOLrU1umS+Pp4s/U+sC7/uT63F9uf/rpZqgFaSGVr1EG
+	5BwoGhsYgULmTg4aAeqnhHypi9jOdgl5x7Eg5YSykevp4V+vIQdkHZU0hn+LxdW4b+LATeNI2EG
+	IzShvX3/XNOjlynGhIjhXfPVqdGMb4WiTwTb70eSfJ2hZdI=
+X-Google-Smtp-Source: AGHT+IFavas8h9Jpgn+Nt6h5D6vRmK+7QGtc1IeskIoqBgpTaq4AuCMVrXevu5HZeem2ji3RiSe5Tg==
+X-Received: by 2002:a05:600c:190f:b0:43b:cbe2:ec03 with SMTP id 5b1f17b1804b1-43bd2aeaa86mr15746195e9.27.1741168563908;
+        Wed, 05 Mar 2025 01:56:03 -0800 (PST)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bd429215asm12099625e9.11.2025.03.05.01.47.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e4844c0dsm20059607f8f.80.2025.03.05.01.56.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 01:47:19 -0800 (PST)
-Date: Wed, 5 Mar 2025 10:47:17 +0100
+        Wed, 05 Mar 2025 01:56:03 -0800 (PST)
+Date: Wed, 5 Mar 2025 10:56:01 +0100
 From: Petr Mladek <pmladek@suse.com>
 To: Tamir Duberstein <tamird@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, David Gow <davidgow@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
+Cc: David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Sergey Senozhatsky <senozhatsky@chromium.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
+	Shuah Khan <shuah@kernel.org>,
 	Geert Uytterhoeven <geert@linux-m68k.org>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 3/4] scanf: convert self-test to KUnit
-Message-ID: <Z8gdpSErMCMCZZNP@pathway.suse.cz>
-References: <20250214-scanf-kunit-convert-v8-3-5ea50f95f83c@gmail.com>
- <202502160245.KUrryBJR-lkp@intel.com>
- <CAJ-ks9kkigKG=Nf_mZrA5CA=SUV2sSyY51_rLef42T+ZxCmk1Q@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] scanf: implicate test line in failure messages
+Message-ID: <Z8gfsd5V9wrPKkiA@pathway.suse.cz>
+References: <20250214-scanf-kunit-convert-v8-0-5ea50f95f83c@gmail.com>
+ <20250214-scanf-kunit-convert-v8-1-5ea50f95f83c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ-ks9kkigKG=Nf_mZrA5CA=SUV2sSyY51_rLef42T+ZxCmk1Q@mail.gmail.com>
+In-Reply-To: <20250214-scanf-kunit-convert-v8-1-5ea50f95f83c@gmail.com>
 
-On Sat 2025-02-15 14:52:22, Tamir Duberstein wrote:
-> On Sat, Feb 15, 2025 at 1:51 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Tamir,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on 7b7a883c7f4de1ee5040bd1c32aabaafde54d209]
-> >
-> > url:
-> https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/scanf-implicate-test-line-in-failure-messages/20250215-002302
-> > base:   7b7a883c7f4de1ee5040bd1c32aabaafde54d209
-> > patch link:
-> https://lore.kernel.org/r/20250214-scanf-kunit-convert-v8-3-5ea50f95f83c%40gmail.com
-> > patch subject: [PATCH v8 3/4] scanf: convert self-test to KUnit
-> > config: sh-randconfig-002-20250216 (
-> https://download.01.org/0day-ci/archive/20250216/202502160245.KUrryBJR-lkp@intel.com/config
-> )
-> > compiler: sh4-linux-gcc (GCC) 14.2.0
-> > reproduce (this is a W=1 build): (
-> https://download.01.org/0day-ci/archive/20250216/202502160245.KUrryBJR-lkp@intel.com/reproduce
-> )
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new
-> version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes:
-> https://lore.kernel.org/oe-kbuild-all/202502160245.KUrryBJR-lkp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    In file included from <command-line>:
-> >    lib/tests/scanf_kunit.c: In function 'numbers_list_ll':
-> > >> include/linux/compiler.h:197:61: warning: function 'numbers_list_ll'
-> might be a candidate for 'gnu_scanf' format attribute
-> [-Wsuggest-attribute=format]
+On Fri 2025-02-14 11:19:58, Tamir Duberstein wrote:
+> This improves the failure output by pointing to the failing line at the
+> top level of the test.
 > 
-> I am not able to reproduce these warnings with clang 19.1.7. They also
-> don't obviously make sense to me.
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+>  lib/test_scanf.c | 66 ++++++++++++++++++++++++++++----------------------------
+>  1 file changed, 33 insertions(+), 33 deletions(-)
+> 
+> diff --git a/lib/test_scanf.c b/lib/test_scanf.c
+> index 44f8508c9d88..d1664e0d0138 100644
+> --- a/lib/test_scanf.c
+> +++ b/lib/test_scanf.c
+> @@ -24,12 +24,12 @@ static char *test_buffer __initdata;
+>  static char *fmt_buffer __initdata;
+>  static struct rnd_state rnd_state __initdata;
+>  
+> -typedef int (*check_fn)(const void *check_data, const char *string,
+> -			const char *fmt, int n_args, va_list ap);
+> +typedef int (*check_fn)(const char *file, const int line, const void *check_data,
+> +			const char *string, const char *fmt, int n_args, va_list ap);
+>  
+> -static void __scanf(4, 6) __init
+> -_test(check_fn fn, const void *check_data, const char *string, const char *fmt,
+> -	int n_args, ...)
+> +static void __scanf(6, 0) __init
 
-I have reproduced the problem with gcc:
+This should be:
 
-$> gcc --version
-gcc (SUSE Linux) 14.2.1 20250220 [revision 9ffecde121af883b60bbe60d00425036bc873048]
+static void __scanf(6, 8) __init
 
-$> make W=1 lib/test_scanf.ko
-  CALL    scripts/checksyscalls.sh
-  DESCEND objtool
-  INSTALL libsubcmd_headers
-  CC [M]  lib/test_scanf.o
-In file included from <command-line>:
-lib/test_scanf.c: In function ‘numbers_list_ll’:
-./include/linux/compiler.h:197:61: warning: function ‘numbers_list_ll’ might be a candidate for ‘gnu_scanf’ format attribute [-Wsuggest-attribute=format]
-  197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
-      |                                                             ^
-[...]
+The zero (0) is used when the parameters are passed via the va_list.
+The value must be the position of the first parameter when they are passed
+via the variable list of parameters, aka (...).
 
-It seems that it is a regression introduced by the first
-patch of this patch set. And the fix is:
-
-diff --git a/lib/test_scanf.c b/lib/test_scanf.c
-index d1664e0d0138..e65b10c3dc11 100644
---- a/lib/test_scanf.c
-+++ b/lib/test_scanf.c
-@@ -27,7 +27,7 @@ static struct rnd_state rnd_state __initdata;
- typedef int (*check_fn)(const char *file, const int line, const void *check_data,
- 			const char *string, const char *fmt, int n_args, va_list ap);
- 
--static void __scanf(6, 0) __init
-+static void __scanf(6, 8) __init
- _test(const char *file, const int line, check_fn fn, const void *check_data, const char *string,
- 	const char *fmt, int n_args, ...)
- {
+Otherwise, it triggers the warnings reported by the lkp@intel.com
+kernel test robot, see
+https://lore.kernel.org/r/202502160245.KUrryBJR-lkp@intel.com
 
 Best Regards,
 Petr
