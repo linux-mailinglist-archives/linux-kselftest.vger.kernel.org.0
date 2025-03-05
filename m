@@ -1,155 +1,152 @@
-Return-Path: <linux-kselftest+bounces-28334-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0867DA50CD5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 21:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA1FA50CDA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 21:55:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 295F61883A09
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 20:51:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3F79188582F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 20:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4C525486B;
-	Wed,  5 Mar 2025 20:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5650B254B08;
+	Wed,  5 Mar 2025 20:55:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zi9CWjHW"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XGbEPJ1R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9065918DF73
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 20:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E897B24E4B4
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Mar 2025 20:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741207872; cv=none; b=sOyS56T5CsB502/ukuwtnEM4/cv3PEuG4KzDbiJzN9q3iti3/hhQwYIXKZV7AXV6gAgrHLBGppbawsiS/pbhTlHKJBVkqMys+L2kCBI9PqNUx9SjcngGzam3u1WpdHflR+AjHUvrfymwnhwvItYbmK6DH5y7ddkKxDezWw7PRpw=
+	t=1741208142; cv=none; b=r0FWWGcPoZ2P6/XWeZCPS5OganaXL8teJHiyx5GxMwrVs1TOk3Ck91sNJ76G+ImZvG7M4inJKXmb9JxZbOj6Gm7h6YMMVUZDkbe1L5GH9uAjly3X8JIxqETTNWYUojzAWjSE+POpG1IPiSZrgNjY4+SLQDqnozLxaalBD6vqLUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741207872; c=relaxed/simple;
-	bh=2UPD4fl38N/nwlwseUvqmubw1Wm+DVOh9gqY4Pt0mHA=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Dcd7o6brHaxr5BZd0+gLOYfKekBKBunP3K4mT6y+Vrhs76dt0Z/hEhUbSiknmb4n2PZE+9gWuaNoa/paZU1LnicnE0TKZ2ixSUrgA0Ao3ihZimIHOirXwfFn3R7uKAmopk15oG+dHVOPnJGtd+9bAYju42K5YsMjjqYEma7pisg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zi9CWjHW; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-223a7065ff8so21580285ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 12:51:10 -0800 (PST)
+	s=arc-20240116; t=1741208142; c=relaxed/simple;
+	bh=bSmgTlvwLJjJS9L24cNfFPZSeRDSXYM8VhcAjGh++W8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y+Djcr0fFtYF80yC9wr69BWTdA7fCHBzOiTGWFGRjkFYsWJEJCi84DpLNI3ToA0HR6xpVjzFqJppOw1SMS2ni3iPcIRn82eDY7CykXDcQ/mzclnX4ju87P9j5dBeoLxL6dJZMqHwXdqSPsgVSclDDEXs61zUz5/dUwDGmW2x070=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XGbEPJ1R; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3d284b9734fso69935175ab.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 12:55:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741207870; x=1741812670; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GhfWjnxi423UGUnC8mciMuHBQ1z3/MYrVutTlINTcRs=;
-        b=zi9CWjHW2t7EyqYXf0J9R+hjwK67BIbPqVQ+p7WDkf4W6JUK7rpw3YddrrHyVRFabU
-         QJS6kdgb/jnygRiOQB/IcSFFdwP7WFDv+JN+L0SVTa0Oqi9ueb1SyWvGE96nPMimJbl8
-         jjRHN1K/cdMftK09GN/YjF36uunKq4reWHhDmcFM1XP9hqR3RSax+T14DqNSQ2pqPJOZ
-         GGQxN7PjTma5DoaT1Akmdy2O9letn4XGE4D2sDaoGMwX5MkC8X/E51Bm44HtohXkzlP6
-         EAhiAK6f8oQedeUQ2LPg6aWr3xVbg47/bs5IN2NmHWXfS/5aJdWhe7lVvQqE/nCR4chx
-         8nIw==
+        d=linuxfoundation.org; s=google; t=1741208138; x=1741812938; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TN8E9XEAktH2/BlknMuwwP6SKex4SrVTEApM/n+g1SI=;
+        b=XGbEPJ1R7diNBroP0CN6KuG3oDaIZIARDkDbd7KK9q6gXIThtKdR2aB/nhWq6FP83Z
+         aBcq0e19AJwODJ2clkq39Bmfp64X46zlcE4TNOXoakQWX+So5096ODQH48YQh84WotK/
+         S/e1aPqVSAdDStSb1zJ9NprYw/dkGJ+9XwKAY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741207870; x=1741812670;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GhfWjnxi423UGUnC8mciMuHBQ1z3/MYrVutTlINTcRs=;
-        b=sf2dSdbhVoa7WjWxL/l/f+EmlSMX+xwpa2P4Zl3YJ8ad8SKSD6sqWHSVqtpyjsHbjM
-         EnFKAZSvclnybO/jJLvARAlQ7FaZLv61VIUswW+k2LVFJXcBK3OVfJfzo7JGFpEmd5fd
-         DAGx/SDfPlS8PLuGvpFJCMjTuznfMx+VzHkll+m+CX1jR5q5dN+MS7jPrY5cscyByq7A
-         czhP7HPBzIOEAQPDbP6f11bJoweot5IlyxFQ899Fkhiy1KRNjwiG/LVbXKnj1ts5XjPL
-         wmDqnxUeKG/jclEULRSmzk/RsU2gKDnmsRi746CUsHcLPQ/b9wMLLw0+X5G+3TKsEZGr
-         TvbA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqgO3uzoLWzoGs7EFGpYgft98xaWF7RboAHsuP+RHKsG27i1wB8g8yHNrlegFqEOt4fags6j3eavXGdSKDjKg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytugWKzKgkbDosN+M44kE8MJByXetssng7IqkyGN/f3LGLV3Ky
-	u9ld3ZNRF3cmJzUGDJajpYlLvi4KvOy2kzcGUXaUAbc/RHj78bKHGw4VYzb2ERBG91VnlD4Egvf
-	WHQ==
-X-Gm-Gg: ASbGnctw1srDjXOoOnHhAAeMUn+MeGtERd8n7QWvcqcazzStgfepmcNVfrcuTTKHijc
-	cRWGvTe223hQDaObLKA9GGhgg2qRw1EdqUC6Qw0cfz6jK049xBj5apos2h+qIkqGaJrB0QwyRrZ
-	AJ53tiHJBx3oaEtszADum4CQrapWzLp1vMwJepWO+mK+tauBBBJyAPTD/7STMl/HxwrLm7AhzT+
-	me46yQZbHXmBKe8t1aValF8q3HM9wGuSi1G8tI/FvBOYsjCxgtFUBIoAWpGwjeqGeWhoXE8AN7n
-	ytqMpv+tvcC37vzjhm5gtTrPSD10cJ4k7y/2CR8uZroVnKk9ib3VCkDi0VxZ71T1HrBE7uDobJi
-	fYsbS7I3CLRylDL+JqTVQSNhdy/IT
-X-Google-Smtp-Source: AGHT+IE32bLw2wlU1GnZf/65XqA6smz9VmkaRVDH9Oh8jcxy1XpzYMw+ZpyVO6VEHxvdny06qkBlLw==
-X-Received: by 2002:a05:6a20:9c9b:b0:1f3:290b:7be with SMTP id adf61e73a8af0-1f3495aaff7mr8642792637.41.1741207869678;
-        Wed, 05 Mar 2025 12:51:09 -0800 (PST)
-Received: from darker.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734a003ec5csm13872238b3a.144.2025.03.05.12.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 12:51:07 -0800 (PST)
-Date: Wed, 5 Mar 2025 12:50:58 -0800 (PST)
-From: Hugh Dickins <hughd@google.com>
-To: Zi Yan <ziy@nvidia.com>
-cc: Hugh Dickins <hughd@google.com>, linux-mm@kvack.org, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, 
-    "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-    Ryan Roberts <ryan.roberts@arm.com>, David Hildenbrand <david@redhat.com>, 
-    Yang Shi <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>, 
-    Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>, 
-    John Hubbard <jhubbard@nvidia.com>, 
-    Baolin Wang <baolin.wang@linux.alibaba.com>, 
-    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    Kairui Song <kasong@tencent.com>, Liu Shixin <liushixin2@huawei.com>
-Subject: Re: [PATCH v9 2/8] mm/huge_memory: add two new (not yet used)
- functions for folio_split()
-In-Reply-To: <FB1376C8-E0AD-40CE-BDE8-AF9269EA68CC@nvidia.com>
-Message-ID: <238c28cb-ce1c-40f5-ec9e-82c5312f0947@google.com>
-References: <20250226210032.2044041-1-ziy@nvidia.com> <20250226210032.2044041-3-ziy@nvidia.com> <2fae27fe-6e2e-3587-4b68-072118d80cf8@google.com> <FB1376C8-E0AD-40CE-BDE8-AF9269EA68CC@nvidia.com>
+        d=1e100.net; s=20230601; t=1741208138; x=1741812938;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TN8E9XEAktH2/BlknMuwwP6SKex4SrVTEApM/n+g1SI=;
+        b=sPcdDrIJ8DiaxlIs9KfNp2NFYmlijeCXhTH7cuNcWa1PkOGjQqArhDBe2o3fMmOiA9
+         8hPKFyVFyXoZQ7Kd9X0ROSTVw4b1gsweulVEsYb/GxcE4o4h6a9QBjT7y6pIJdbzEPki
+         ah5qQPSxmWGULMwiqSHstlLlaJSgboCRHXaOmw9f9H/QgCh8csk7Q6b7LIjlTzFtSgG+
+         FBX+q8zw845Tg9S3AFeDm8fCP1XD90xCwC6VHNGTcpLSoGmRGq44BTWoi/aAS+s914Tm
+         4yA1UsiZVJafwahRdXw7Fhew/Vgujnf3ohJ1e2X9XdspPUU4VBHzryzKIlgSpEcAyXrH
+         bYxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLB+crrW2OMAHsrHhZscfNxNs9WYrionhiEaIwUzBI+i7wFrYqMOIchS9obooWibRxeE8gSP6j4Wds6R1B/Jw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj3H8DHJFnQZZdDQMwzipMuicrcUFOk8+gQfoF83lMIkBMc55Q
+	Www7ECWG2o2xMH5PE2n2hr1nplflzR/ZmEBLmjuosUKHvCMUbOiUVCeDvDoN000=
+X-Gm-Gg: ASbGncv7Mu9OeLmxN5Mix7z7ObS2yKU6WCxEnVMotXi7cSLCf8lQ1vnfz8THNtBNVNF
+	ojGrKZvAbx4aDf3/3YgzrwxQiBe9iD903fyG3hOFW9D5yhI8rgL8mhRS3s0C0wsKVCo0AVufGyA
+	rlaP3bw6Un85o+1Yq5L0rZXvRFqaxjx1VGODLlxqCiTv+MyxYnk1XsXQf9ekfjSQdJqcGedsRIm
+	8/2sDoISR7Nw9QpD6IT/HwOgJpLMfeeUvKAnM/2/YnRoaIf1NIDRkxgJRhUhCV0NUu0eBinSLjd
+	9mRIWf+VbnwbPwac6AratSboNvKhz9NAIAGC0HEXI2gUK1d7L1O9Ca0=
+X-Google-Smtp-Source: AGHT+IFrK0wfx0wuMhLxEg3F3kYX4kOQtUjrt8xsLzF6cSSoaI3+ZeJj3tJLZ7Y1D69zwAQp2NcUtA==
+X-Received: by 2002:a05:6e02:1c25:b0:3d0:19c6:c9e1 with SMTP id e9e14a558f8ab-3d42b8bf084mr52134995ab.13.1741208137900;
+        Wed, 05 Mar 2025 12:55:37 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f086a996fesm2503730173.33.2025.03.05.12.55.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Mar 2025 12:55:37 -0800 (PST)
+Message-ID: <c82318cf-39f2-4b08-9eb9-7e7a89fbb34a@linuxfoundation.org>
+Date: Wed, 5 Mar 2025 13:55:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [brauner-github:vfs.all 205/231] WARNING: modpost: vmlinux:
+ section mismatch in reference: initramfs_test_cases+0x0 (section: .data) ->
+ initramfs_test_extract (section: .init.text)
+To: David Disseldorp <ddiss@suse.de>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>
+Cc: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+ Christian Brauner <christianvanbrauner@gmail.com>,
+ Christian Brauner <brauner@kernel.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
+References: <202503050109.t5Ab93hX-lkp@intel.com>
+ <20250305114701.28c0ee0b.ddiss@suse.de>
+ <20250305235601.464f6432.ddiss@suse.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250305235601.464f6432.ddiss@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 5 Mar 2025, Zi Yan wrote:
-> On 4 Mar 2025, at 6:49, Hugh Dickins wrote:
-> >
-> > I think (might be wrong, I'm in a rush) my mods are all to this
-> > "add two new (not yet used) functions for folio_split()" patch:
-> > please merge them in if you agree.
-> >
-> > 1. From source inspection, it looks like a folio_set_order() was missed.
+On 3/5/25 05:56, David Disseldorp wrote:
+> On Wed, 5 Mar 2025 11:47:01 +1100, David Disseldorp wrote:
 > 
-> Actually no. folio_set_order(folio, new_order) is called multiple times
-> in the for loop above. It is duplicated but not missing.
+>> [cc'ing linux-kselftest and kunit-dev]
 
-I was about to disagree with you, when at last I saw that, yes,
-it is doing that on "folio" at the time of setting up "new_folio".
++ Adding David and Brendan
 
-That is confusing: in all other respects, that loop is reading folio
-to set up new_folio.  Do you have a reason for doing it there?
+David, Brendan, Any thoughts on how this can be fixed?
 
-The transient "nested folio" situation is anomalous either way.
-I'd certainly prefer it to be done at the point where you
-ClearPageCompound when !new_order; but if you think there's an issue
-with racing isolate_migratepages_block() or something like that, which
-your current placement handles better, then please add a line of comment
-both where you do it and where I expected to find it - thanks.
-
-(Historically, there was quite a lot of difficulty in getting the order
-of events in __split_huge_page_tail() to be safe: I wonder whether we
-shall see a crop of new weird bugs from these changes. I note that your
-loops advance forwards, whereas the old ones went backwards: but I don't
-have anything to say you're wrong.  I think it's mainly a matter of how
-the first tail or two gets handled: which might be why you want to
-folio_set_order(folio, new_order) at the earliest opportunity.)
-
+>>
+>> Hi,
+>>
+>> On Wed, 5 Mar 2025 01:47:55 +0800, kernel test robot wrote:
+>>
+>>> tree:   https://github.com/brauner/linux.git vfs.all
+>>> head:   ea47e99a3a234837d5fea0d1a20bb2ad1eaa6dd4
+>>> commit: b6736cfccb582b7c016cba6cd484fbcf30d499af [205/231] initramfs_test: kunit tests for initramfs unpacking
+>>> config: x86_64-buildonly-randconfig-002-20250304 (https://download.01.org/0day-ci/archive/20250305/202503050109.t5Ab93hX-lkp@intel.com/config)
+>>> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503050109.t5Ab93hX-lkp@intel.com/reproduce)
+>>>
+>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>> the same patch/commit), kindly add following tags
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202503050109.t5Ab93hX-lkp@intel.com/
+>>>
+>>> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+>>>    
+>>>>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x0 (section: .data) -> initramfs_test_extract (section: .init.text)
+>>>>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x30 (section: .data) -> initramfs_test_fname_overrun (section: .init.text)
+>>>>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x60 (section: .data) -> initramfs_test_data (section: .init.text)
+>>>>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x90 (section: .data) -> initramfs_test_csum (section: .init.text)
+>>>>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xc0 (section: .data) -> initramfs_test_hardlink (section: .init.text)
+>>>>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xf0 (section: .data) -> initramfs_test_many (section: .init.text)
+>>
+>> These new warnings are covered in the commit message. The
+>> kunit_test_init_section_suites() registered tests aren't in the .init
+>> section as debugfs entries are retained for results reporting (without
+>> an ability to rerun them).
+>> IIUC, the __kunit_init_test_suites->CONCATENATE(..., _probe) suffix is
+>> intended to suppress the modpost warning - @kunit-dev: any ideas why
+>> this isn't working as intended?
 > 
-> >
-> > 2. Why is swapcache only checked when folio_test_anon? I can see that
-> >    you've just copied that over from the old __split_huge_page(), but
-> >    it seems wrong to me here and there - I guess a relic from before
-> >    shmem could swap out a huge page.
+> Stephen Rothwell (cc'ed) mentioned that we might be able to use
+> __refdata for initramfs_test_cases. The __ref* description in init.h
+> does indicate that it's suitable, and I now see that it's present in
+> kunit-example-test.c . I'll propose a patch which can be squashed in
+> with the existing commit.
 > 
-> Yes, it is a relic, but it is still right before I change another relic
-> in __folio_split() or split_huge_page_to_list_to_order() from mainline,
-> if (!mapping) { ret = -EBUSY; goto out; }. It excludes the shmem in swap
-> cache case. I probably will leave it as is in my next folio_split() version
-> to avoid adding more potential bugs, but will come back later in another
-> patch.
+> Thanks, David
+> 
 
-I agree.  The "Truncated ?" check.  Good.  But I do prefer that you use
-that part of my patch, referring to mapping and swap_cache instead of anon,
-rather than rely on that accident of what's done at the higher level.
-
-Thanks,
-Hugh
 
