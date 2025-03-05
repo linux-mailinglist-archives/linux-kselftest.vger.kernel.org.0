@@ -1,31 +1,31 @@
-Return-Path: <linux-kselftest+bounces-28339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40508A50D91
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 22:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2271A50DAD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 22:37:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85C693AF0F5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 21:35:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45E823AF4C3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Mar 2025 21:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5A6200B9B;
-	Wed,  5 Mar 2025 21:35:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3559125A358;
+	Wed,  5 Mar 2025 21:35:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9509D1FF1BC;
-	Wed,  5 Mar 2025 21:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBB52580F7;
+	Wed,  5 Mar 2025 21:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741210515; cv=none; b=f2iUbED5IgzPaLYxCrZ3aBRF0DNrPD8GZuQI7rzeZBIolBodHnEkiBwQbNxT/IygtU5+XK5YDjY2zvcXZMuFTOhTVEu7u1jFvxyraBWAGei9HnntA9AxR1CjAKnQJO1BxwlrM6pNArSkW14tzqpi9s6Zdxj5726zDHv0yjV3hBg=
+	t=1741210521; cv=none; b=SI0Nnghe/3IxJ1OOYzrGzAMuXdJ/aidH7psee+UICFEuQdyWutdfI7x/lNzobntZxWvr2AitfQjDtYudQ+jQKw8hAFWJJKlzCmTz8XfrrYXQAkpLIdNdi5Z+Mx2FZcjPgIaBchq7hqux8lWHNY1yX6vJOOlOb0dHP/ZKO7H4XKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741210515; c=relaxed/simple;
-	bh=zlGgBAlWuOEjljzHx527vCLgLwRc8G7Otpo+WD97lwY=;
+	s=arc-20240116; t=1741210521; c=relaxed/simple;
+	bh=SqEnaK+MvxXR6Rdu8s12RiSEt6JOkLY1YRco0lsyCv0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ggkKaR2FZo0sdGmVtkdOhSj1Q+AnwkPHKX/BC3zR+TmCZ9c9jXwDyhwKznhvxMxpXRODz068Me+Lxq7WTbsFqUm0UsrpCSO5HoZoN7pMKC96lPUrAjpTpt970478m2vlYsNz7emaXfc6VuYLeqS4Eymw4B9/Mfq4agUEnjADeXY=
+	 MIME-Version; b=YtMutx7uxFsLmugVehgOK/iYfVW/sGMkV00+gcReorGjdBSM7sICD8hWyuiIfTptZ+tOsJAyrU6EJPye+TGawUCtRZa2peCvTvj+d3OndYLVEUo7WdIcojQYOau8tSvgjsy4kyrdjnf/iana3gTMTFFaB4E8fsajI9LuW8rRqKI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -33,13 +33,13 @@ Received: from sslproxy06.your-server.de ([78.46.172.3])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tpwO3-000K1F-0j; Wed, 05 Mar 2025 22:34:43 +0100
+	id 1tpwO3-000K1K-50; Wed, 05 Mar 2025 22:34:43 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tpwO2-000MHO-0D;
-	Wed, 05 Mar 2025 22:34:42 +0100
+	id 1tpwO2-000MHO-0a;
+	Wed, 05 Mar 2025 22:34:43 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -67,11 +67,10 @@ Cc: willemdebruijn.kernel@gmail.com,
 	jolsa@kernel.org,
 	shuah@kernel.org,
 	hawk@kernel.org,
-	marcus.wichelmann@hetzner-cloud.de,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH bpf-next v5 2/6] net: tun: enable transfer of XDP metadata to skb
-Date: Wed,  5 Mar 2025 21:34:34 +0000
-Message-ID: <20250305213438.3863922-3-marcus.wichelmann@hetzner-cloud.de>
+	marcus.wichelmann@hetzner-cloud.de
+Subject: [PATCH bpf-next v5 3/6] selftests/bpf: move open_tuntap to network helpers
+Date: Wed,  5 Mar 2025 21:34:35 +0000
+Message-ID: <20250305213438.3863922-4-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
 References: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
@@ -85,110 +84,125 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27568/Wed Mar  5 10:48:48 2025)
 
-When the XDP metadata area was used, it is expected that the same
-metadata can also be accessed from TC, as can be read in the description
-of the bpf_xdp_adjust_meta helper function. In the tun driver, this was
-not yet implemented.
-
-To make this work, the skb that is being built on XDP_PASS should know
-of the current size of the metadata area. This is ensured by adding
-calls to skb_metadata_set. For the tun_xdp_one code path, an additional
-check is necessary to handle the case where the externally initialized
-xdp_buff has no metadata support (xdp->data_meta == xdp->data + 1).
-
-More information about this feature can be found in the commit message
-of commit de8f3a83b0a0 ("bpf: add meta pointer for direct access").
+To test the XDP metadata functionality of the tun driver, it's necessary
+to create a new tap device first. A helper function for this already
+exists in lwt_helpers.h. Move it to the common network helpers header,
+so it can be reused in other tests.
 
 Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/tun.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 28 ++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  3 ++
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 29 -------------------
+ 3 files changed, 31 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index cd463833a0ad..f75f912a0225 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1535,7 +1535,8 @@ static bool tun_can_build_skb(struct tun_struct *tun, struct tun_file *tfile,
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 80844a5fb1fe..fcee2c4a637a 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -548,6 +548,34 @@ void close_netns(struct nstoken *token)
+ 	free(token);
+ }
  
- static struct sk_buff *__tun_build_skb(struct tun_file *tfile,
- 				       struct page_frag *alloc_frag, char *buf,
--				       int buflen, int len, int pad)
-+				       int buflen, int len, int pad,
-+				       int metasize)
++int open_tuntap(const char *dev_name, bool need_mac)
++{
++	int err = 0;
++	struct ifreq ifr;
++	int fd = open("/dev/net/tun", O_RDWR);
++
++	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
++		return -1;
++
++	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
++	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
++	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
++
++	err = ioctl(fd, TUNSETIFF, &ifr);
++	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
++		close(fd);
++		return -1;
++	}
++
++	err = fcntl(fd, F_SETFL, O_NONBLOCK);
++	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
++		close(fd);
++		return -1;
++	}
++
++	return fd;
++}
++
+ int get_socket_local_port(int sock_fd)
  {
- 	struct sk_buff *skb = build_skb(buf, buflen);
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index ebec8a8d6f81..9235976d0c50 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -8,6 +8,7 @@
+ typedef __u16 __sum16;
+ #include <linux/if_ether.h>
+ #include <linux/if_packet.h>
++#include <linux/if_tun.h>
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/ethtool.h>
+@@ -85,6 +86,8 @@ int get_socket_local_port(int sock_fd);
+ int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
+ int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
  
-@@ -1544,6 +1545,8 @@ static struct sk_buff *__tun_build_skb(struct tun_file *tfile,
- 
- 	skb_reserve(skb, pad);
- 	skb_put(skb, len);
-+	if (metasize)
-+		skb_metadata_set(skb, metasize);
- 	skb_set_owner_w(skb, tfile->socket.sk);
- 
- 	get_page(alloc_frag->page);
-@@ -1603,6 +1606,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 	char *buf;
- 	size_t copied;
- 	int pad = TUN_RX_PAD;
-+	int metasize = 0;
- 	int err = 0;
- 
- 	rcu_read_lock();
-@@ -1630,7 +1634,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 	if (hdr->gso_type || !xdp_prog) {
- 		*skb_xdp = 1;
- 		return __tun_build_skb(tfile, alloc_frag, buf, buflen, len,
--				       pad);
-+				       pad, metasize);
- 	}
- 
- 	*skb_xdp = 0;
-@@ -1665,12 +1669,18 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 
- 		pad = xdp.data - xdp.data_hard_start;
- 		len = xdp.data_end - xdp.data;
++int open_tuntap(const char *dev_name, bool need_mac);
 +
-+		/* It is known that the xdp_buff was prepared with metadata
-+		 * support, so the metasize will never be negative.
-+		 */
-+		metasize = xdp.data - xdp.data_meta;
- 	}
- 	bpf_net_ctx_clear(bpf_net_ctx);
- 	rcu_read_unlock();
- 	local_bh_enable();
+ struct nstoken;
+ /**
+  * open_netns() - Switch to specified network namespace by name.
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+index fb1eb8c67361..ccec0fcdabc1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+@@ -5,7 +5,6 @@
  
--	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad);
-+	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad,
-+			       metasize);
+ #include <time.h>
+ #include <net/if.h>
+-#include <linux/if_tun.h>
+ #include <linux/icmp.h>
  
- out:
- 	bpf_net_ctx_clear(bpf_net_ctx);
-@@ -2353,6 +2363,7 @@ static int tun_xdp_one(struct tun_struct *tun,
- 	struct sk_buff_head *queue;
- 	u32 rxhash = 0, act;
- 	int buflen = hdr->buflen;
-+	int metasize = 0;
- 	int ret = 0;
- 	bool skb_xdp = false;
- 	struct page *page;
-@@ -2407,6 +2418,14 @@ static int tun_xdp_one(struct tun_struct *tun,
- 	skb_reserve(skb, xdp->data - xdp->data_hard_start);
- 	skb_put(skb, xdp->data_end - xdp->data);
+ #include "test_progs.h"
+@@ -37,34 +36,6 @@ static inline int netns_delete(void)
+ 	return system("ip netns del " NETNS ">/dev/null 2>&1");
+ }
  
-+	/* The externally provided xdp_buff may have no metadata support, which
-+	 * is marked by xdp->data_meta being xdp->data + 1. This will lead to a
-+	 * metasize of -1 and is the reason why the condition checks for > 0.
-+	 */
-+	metasize = xdp->data - xdp->data_meta;
-+	if (metasize > 0)
-+		skb_metadata_set(skb, metasize);
-+
- 	if (tun_vnet_hdr_to_skb(tun->flags, skb, gso)) {
- 		atomic_long_inc(&tun->rx_frame_errors);
- 		kfree_skb(skb);
+-static int open_tuntap(const char *dev_name, bool need_mac)
+-{
+-	int err = 0;
+-	struct ifreq ifr;
+-	int fd = open("/dev/net/tun", O_RDWR);
+-
+-	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
+-		return -1;
+-
+-	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
+-	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
+-	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
+-
+-	err = ioctl(fd, TUNSETIFF, &ifr);
+-	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	err = fcntl(fd, F_SETFL, O_NONBLOCK);
+-	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	return fd;
+-}
+-
+ #define ICMP_PAYLOAD_SIZE     100
+ 
+ /* Match an ICMP packet with payload len ICMP_PAYLOAD_SIZE */
 -- 
 2.43.0
 
