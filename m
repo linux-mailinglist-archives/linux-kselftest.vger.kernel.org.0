@@ -1,142 +1,109 @@
-Return-Path: <linux-kselftest+bounces-28428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6674AA55719
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 20:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8BD8A55794
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 21:40:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90B4A16E34B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 19:49:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E14C0176940
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 20:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD7226FDB4;
-	Thu,  6 Mar 2025 19:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6486F276D25;
+	Thu,  6 Mar 2025 20:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b="Woqq7Kca"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1i7/cgf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAAC26FA7D
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 19:49:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A92249E5;
+	Thu,  6 Mar 2025 20:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741290586; cv=none; b=i2r1RIZe79qTOdqckO+2JtBc1SN/uoviF/7nh2vj89GSqBJ6Sm7x2qo4S78Bw/YL/of/hAbgIj2h03RWjXlPALTbBZbCLFKRXgllWE7FPXnUsJf/n4Ahq2JDlS4n6b0q4cNp0oaoHG7DT7sQr4kYHWO/QzaF9Nh5CvXu99sde6E=
+	t=1741293602; cv=none; b=G8f6hHony2rVDHvb6VQFtgKPpdJ2mHYacaUI4u7K1CChwT3yLlkdihPEcc561oF/hZlTvQlrKj3zaew7QkBv1nq/lapLx16fzFcLheS2iW9GyWcvi0vyW/wChwCr+KWhpgTH48hqhWkDRD4Pe33sdCFfez0owm1ZtJ1Bs4RmOEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741290586; c=relaxed/simple;
-	bh=I7/pS/ZjDOrhdm0B+91sVfRepedE7aeBt8yijFHJB38=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KSOzJ0+FklOTknTLJNzSVqdq+T5EUX783rGJDRetVf9NiqsUQN/l+kpDDNtCGLnfZjZ0QL1x36Re8cNYtZrCSi4K5cr4QWlEGlrhH/maKoNobT1mrjP8+C2eQ+reV4ae3M/a5/zA0b8r1sKpQ5zxzeyFENzD2TUWU56tnRAnr9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com; spf=pass smtp.mailfrom=iencinas.com; dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b=Woqq7Kca; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iencinas.com
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iencinas.com;
-	s=key1; t=1741290581;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1pLENHPcmZUPIKEuLyD6Q5KL/3y3ps8NKG8+iORBPzI=;
-	b=Woqq7KcaOuw73MND/CJ+dS09hGfOAOtzBgcT+dtblRLADUAHmiaT1Q0L4JXXvkCGBjvoeR
-	z7d0fU0PyBnqDdsD8ZhIlk1gtGs6QEcWfg+XYtMSj5tLjWyKjqruCC2J8Sod6yp2aPyka1
-	hKQcUH+4oo7XThVmvI0AyRJ1z5JbO6Q1SnKVJJnRHsBivZcFn1G5wbW/CjFeOjETE3vaph
-	9k9tGJvGYMG6aYdYg621dQnntElEgRy6l3VMQyvFeQPESZHTlWKr7d7Hu8VkexFqIswLti
-	wZu8tAr56eMwCruUdBCcSBA3qRRyEC0ysv6RcicjIoFxpiuDaH2CaSGLAFkTTQ==
-From: Ignacio Encinas <ignacio@iencinas.com>
-Date: Thu, 06 Mar 2025 20:49:27 +0100
-Subject: [PATCH v2] selftests: riscv: fix v_exec_initval_nolibc.c
+	s=arc-20240116; t=1741293602; c=relaxed/simple;
+	bh=WpTquylpPERu/EGgiaXhIPQetlGdcCAvXf1ghOlVDq8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=RCuTcSOLxTTUER8l7g4KJYHGfW2znZNZ/CtEiHrwM7xJZiDmfchaHSbhwKCFbXXgty6Wf60YphzAHFinVHw3A8Ighp5ILu3p2rVWNMtG7ooGH7La0VH0AuJWnhaAjW6LXX5ZwvxQ17cJ1F489mdAlNuAWc1/D6Iigp/BujTGzgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1i7/cgf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 898ABC4CEE0;
+	Thu,  6 Mar 2025 20:40:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741293601;
+	bh=WpTquylpPERu/EGgiaXhIPQetlGdcCAvXf1ghOlVDq8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=P1i7/cgfjFM4Z0erfsxIZDrpB0fD05BsnHLHfDSFDe387ahjP/T5HmiP9SZiaDaja
+	 pmjLxKipBtF87VcT5BHe2BwSXxB4Veh+GObr6t5b/u6QWgx0YLEYQqv/X4RwnwqlZd
+	 WhbM/OTze8JV84OaWHz+5esg1hx5gh8JBjJ6i6R4xddeWz3GZTHD/qyq/wh4k3QctH
+	 uaAbhukLZ9ncqMOgDJLndXdb9WUwqFFvblutuxWFlXVzZH65+PZqmbghtcsoimaysG
+	 vRq8sOXodQg5ySiIF5If/vDaanoOI54Izaer2ZAYIayPu6gylrAz8rufy3nTAK0QE8
+	 4iEo0Z1NLO6FQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEFF380CEE6;
+	Thu,  6 Mar 2025 20:40:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250306-fix-v_exec_initval_nolibc-v2-1-97f9dc8a7faf@iencinas.com>
-X-B4-Tracking: v=1; b=H4sIAEb8yWcC/32NywrCMBREf6XctZE8+nTlf0gpSXq1F2oiSQmV0
- n83Fty6PMPMmQ0iBsIIl2KDgIkieZdBngqwk3YPZDRmBsllxRUX7E4rSwOuaAdytCQ9D87PZCw
- ru3bsmtqqRo6Q96+AuXy4b33mieLiw/u4SuKb/qzVH2sSTDDTNqbmWCrO5ZXQWXI6nq1/Qr/v+
- wdmehr5xQAAAA==
-X-Change-ID: 20250301-fix-v_exec_initval_nolibc-498d976c372d
-To: linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, 
- Charlie Jenkins <charlie@rivosinc.com>
-Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Ignacio Encinas <ignacio@iencinas.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 0/6] XDP metadata support for tun driver
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174129363479.1769540.9069391610888799796.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Mar 2025 20:40:34 +0000
+References: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
+In-Reply-To: <20250305213438.3863922-1-marcus.wichelmann@hetzner-cloud.de>
+To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, willemdebruijn.kernel@gmail.com,
+ jasowang@redhat.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
+ eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org
 
-Vector registers are zero initialized by the kernel. Stop accepting
-"all ones" as a clean value.
+Hello:
 
-Note that this was not working as expected given that
-	value == 0xff
-can be assumed to be always false by the compiler as value's range is
-[-128, 127]. Both GCC (-Wtype-limits) and clang
-(-Wtautological-constant-out-of-range-compare) warn about this.
+This series was applied to bpf/bpf-next.git (net)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-Tested-by: Charlie Jenkins <charlie@rivosinc.com>
-Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
----
-Changes in v2:
+On Wed,  5 Mar 2025 21:34:32 +0000 you wrote:
+> Hi all,
+> 
+> this v5 of the patch series is very similar to v4, but rebased onto the
+> bpf-next/net branch instead of bpf-next/master.
+> Because the commit c047e0e0e435 ("selftests/bpf: Optionally open a
+> dedicated namespace to run test in it") is not yet included in this branch,
+> I changed the xdp_context_tuntap test to manually create a namespace to run
+> the test in.
+> 
+> [...]
 
-Remove code that becomes useless now that the only "clean" value for
-vector registers is 0.
+Here is the summary with links:
+  - [bpf-next,v5,1/6] net: tun: enable XDP metadata support
+    https://git.kernel.org/bpf/bpf-next/c/c2315ebb0588
+  - [bpf-next,v5,2/6] net: tun: enable transfer of XDP metadata to skb
+    https://git.kernel.org/bpf/bpf-next/c/0ca23a4d64ce
+  - [bpf-next,v5,3/6] selftests/bpf: move open_tuntap to network helpers
+    https://git.kernel.org/bpf/bpf-next/c/d5ca409c86d3
+  - [bpf-next,v5,4/6] selftests/bpf: refactor xdp_context_functional test and bpf program
+    https://git.kernel.org/bpf/bpf-next/c/b46aa22b66d3
+  - [bpf-next,v5,5/6] selftests/bpf: add test for XDP metadata support in tun driver
+    https://git.kernel.org/bpf/bpf-next/c/73eeecc3cdfe
+  - [bpf-next,v5,6/6] selftests/bpf: fix file descriptor assertion in open_tuntap helper
+    https://git.kernel.org/bpf/bpf-next/c/49306d5bfc6a
 
-- Link to v1: https://lore.kernel.org/r/20250305-fix-v_exec_initval_nolibc-v1-1-b87b60e43002@iencinas.com
----
- tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-index 35c0812e32de0c82a54f84bd52c4272507121e35..4dde05e45a04122b566cedc36d20b072413b00e2 100644
---- a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-+++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
-@@ -6,7 +6,7 @@
-  * the values. To further ensure consistency, this file is compiled without
-  * libc and without auto-vectorization.
-  *
-- * To be "clean" all values must be either all ones or all zeroes.
-+ * To be "clean" all values must be all zeroes.
-  */
- 
- #define __stringify_1(x...)	#x
-@@ -14,9 +14,8 @@
- 
- int main(int argc, char **argv)
- {
--	char prev_value = 0, value;
-+	char value = 0;
- 	unsigned long vl;
--	int first = 1;
- 
- 	if (argc > 2 && strcmp(argv[2], "x"))
- 		asm volatile (
-@@ -44,14 +43,11 @@ int main(int argc, char **argv)
- 			"vsrl.vi " __stringify(register) ", " __stringify(register) ", 8\n\t" \
- 			".option pop\n\t"					\
- 			: "=r" (value));					\
--		if (first) {							\
--			first = 0;						\
--		} else if (value != prev_value || !(value == 0x00 || value == 0xff)) { \
-+		if (value != 0x00) {						\
- 			printf("Register " __stringify(register)		\
- 				" values not clean! value: %u\n", value);	\
- 			exit(-1);						\
- 		}								\
--		prev_value = value;						\
- 	}									\
- })
- 
-
----
-base-commit: 03d38806a902b36bf364cae8de6f1183c0a35a67
-change-id: 20250301-fix-v_exec_initval_nolibc-498d976c372d
-
-Best regards,
+You are awesome, thank you!
 -- 
-Ignacio Encinas <ignacio@iencinas.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
