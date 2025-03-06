@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-28384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F454A54647
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 10:28:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6221FA5466A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 10:34:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7221A1716A6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 09:28:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DD253AC672
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 09:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665B120A5C7;
-	Thu,  6 Mar 2025 09:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C261917D0;
+	Thu,  6 Mar 2025 09:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jDvlQSYu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hMF2CTOi"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B772ED2FF
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 09:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410B71DA634
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 09:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741253310; cv=none; b=Om9zjMj+cgkByXKJ693Aq33MbRdCobivt4W7QFcwRKf0LbQGbm3yCNRJLr8mF7XaTcMBZdBpk4wcQnvGojYbnIk6x7+uyzuf4b2gdtHPRfpyl1w827BtL2oF890eBSzUX5KncspBhjyCJb9Vnv1vWjbRmt8WswKioK5Mg612QvU=
+	t=1741253673; cv=none; b=UgUMvBouspNS4tdyss7dIMchcPx9i+alQgDEC4edt3dTMOmFkD4MT5ABUqMeuRsHydT0P7Rp0+Y0qing04dvPvjjuFrfvhiw4NkultEz36lgT7DtUdmmjufA8V13vFVBmuEwkyGU+1Tfz4hiWRIHKqYlpYtlMUf4nAF7W6+4EyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741253310; c=relaxed/simple;
-	bh=e1FU4/LUiVNBTqldIDpCuyOXjaB2MNtq2Q3AsgjVgO4=;
+	s=arc-20240116; t=1741253673; c=relaxed/simple;
+	bh=Fe6UbuIosZEojIJBItys7pxoaTtlXX7n6Q1kUptuAT8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rbt+37xePXk8Etu4CumbKGaFqEIQaJW+a3X1cczw+hkYeVC6XvnT0c8U9EAlQ1XrK6Iix2Ff1itzBP7i3nj59U6+vmN/9V/cm8XCxWDfDM2awi6M1buIjZHvEqsuOwK3BMCURvMLBDjEASVUaxQQdfBRltW6HvaGbMb73Cj5UWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jDvlQSYu; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=b5sIu3v3SNknBIwJhl/N34OsLtg6EVHkQ+MvRdFSrp2RnbOZRllap+rToDiFpILDw9fOPmob/wIVllmeFmv6b6m7LCNdFFh/t79+Em7f+KwkCP1jNUZYXHu3fmXheCZTkEOGqwcn2+XVPw6yQdQ4mdrVIlWnZK0Oftb3hZ1eKaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hMF2CTOi; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741253307;
+	s=mimecast20190719; t=1741253670;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=fgOIGFO0KNslC6ocif/kgfcUvHoBKSQ+gkoKczc7WGg=;
-	b=jDvlQSYujQKuMgaOsHIOsYHvkEO7GTHec3+od0nKdUwkzxE2IRE0uO3kghBAXgTIUFjTED
-	1bPP1lTg5KzoYwlxSy+q0fXs4qLvXifzYLxv7LGg4ZpzU30zARLTbpJzbl8EsHgauwh04w
-	HaUx3ze8orkT7cjv+wC8J3spC4J7/mE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=ZqCkyjz1OlMe+qw/kRDJYRT1lbnf8jOcemKypLfKPiM=;
+	b=hMF2CTOiSEYI/GbrjlEgpuO72qhQeNhO2wPu7DS7C9v8+LD83mw3waOJvz/A3JD2nnsNCy
+	j+bq+jTAXDvAc9LG/yfjqNlfaRoLluXbpokyFMGx5ZCzSM8jIXRF6ajmB46RFEFD3I/UkR
+	NKQTxQDIEeJrKE6muJTAwnlws62Lfrc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-510-mUPXXfiTNL6XVBKBURXSCQ-1; Thu, 06 Mar 2025 04:28:14 -0500
-X-MC-Unique: mUPXXfiTNL6XVBKBURXSCQ-1
-X-Mimecast-MFC-AGG-ID: mUPXXfiTNL6XVBKBURXSCQ_1741253293
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4393e89e910so1861425e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 01:28:14 -0800 (PST)
+ us-mta-304-Gkf5h69ONwKWxsbWZbqjag-1; Thu, 06 Mar 2025 04:34:23 -0500
+X-MC-Unique: Gkf5h69ONwKWxsbWZbqjag-1
+X-Mimecast-MFC-AGG-ID: Gkf5h69ONwKWxsbWZbqjag_1741253662
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-390fd681712so208884f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 01:34:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741253293; x=1741858093;
+        d=1e100.net; s=20230601; t=1741253662; x=1741858462;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=fgOIGFO0KNslC6ocif/kgfcUvHoBKSQ+gkoKczc7WGg=;
-        b=T5pNOqJRQmItUiU9HkbieAaJ3iw5rCHQOU+SQKWH4+wK/ZzUw/OC2u1OazYGC5KM1h
-         tkmguccOYpW9iOQLhxMU2T0UdcP1A5uhblCDiATYBQx+lSb0szju8yzDS7QhO90O3YSg
-         PP1q4GMHzBIE7Aa2v5Pj3h5PVzU7qmRHGnPYR+cCXhQJlgbCiXsI3a1zX/q+Lktjyy8z
-         UAuN+SDuG6UqQOYCVTk28WCZxrhUeBP4QehJjTnMPLFkjqWvT1mhAyZ5Y72RCE5r/XrN
-         MryGceamQjUjzWbrPgmY63Oa4VwYVLQZpv0RIrEHJ1+Heg/B3MIqrPoI4YrOExVMlSLr
-         YABA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgrcm8tTXJKxfXiH2GUbUoEV5+cx3UIM/vjjezKX+jNd9+LqE+eRWR+ecUJQpsEJU1FOJ8qv8Fi42kDG7Bq5A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRcTQDR6Jp53MJobJ2wbIh4a6HDMuiLmoiagZZRJ5A8b7yCsnw
-	WZseDHrCbXWJqwmS6tRuHksOXNNYykI79QJInwrKa5jDDlkNR9hEAZd//qJ0qxXriRjoOlmzzp4
-	GauK3nWVX6zGgUzURlmz55rfuxMRFTmwD7FEXXuScxbLp4cZ5oGrvYdU2cA1xP2qf3A==
-X-Gm-Gg: ASbGnctrPps3QCUjHN7BQ8Y+M2FP/jwp1/BHR5lYQRxTzj10xdgKWHbpSYfyW5pVMsG
-	briGR0/UVdeimPzDOkGbNp/25yPJcFekQ8vCSNbUYY5VoW2AXDytg7LBsuBSqYrxOxw/BTKfIFg
-	EN+03avfgsQYPsYHTbPJxqCA666KYhwXaPzeohdwanzJ1nvJRDcV8KpnIa6p5fo3j3crtAhVCli
-	1dRpokYkn4DoObklHHTN82d4+QvFE2n0CikiJoL0qM/kGjlpMqwqnFZopj2yaaSvOyUAmqkSE69
-	h2uaOsqMVQa/4kItQllBVsehh5neFsmKcLZri0C++A5ujQ4qCVe9IyzpKwz3b+ueXtTun/DqLv2
-	vaPXG3lleiM1wWL7s0Ep4LJjER/veeC/5ZFrt+S/31fg=
-X-Received: by 2002:a5d:6c62:0:b0:390:e158:a1b8 with SMTP id ffacd0b85a97d-3911f7ca744mr6005778f8f.43.1741253293336;
-        Thu, 06 Mar 2025 01:28:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGwciK0KkFRXPVUO9aQuqIhjlXAUuInlRk5dnn+MniJZY8Vq2QFnXscKZmGMNQehLBVRxPJog==
-X-Received: by 2002:a5d:6c62:0:b0:390:e158:a1b8 with SMTP id ffacd0b85a97d-3911f7ca744mr6005752f8f.43.1741253292990;
-        Thu, 06 Mar 2025 01:28:12 -0800 (PST)
+        bh=ZqCkyjz1OlMe+qw/kRDJYRT1lbnf8jOcemKypLfKPiM=;
+        b=eIbleu5FwNeoMwuUylwV3i5EXm3YsD805PaXxZsAMH/lJlkMs9wPRsjdZ3jCowSKiH
+         /LfJyH8I+17eQyl9SEPP9j3t3z2G419ZD4iMcUP6iobb2DQrXcnleq0coxae7qAGwVho
+         +0gTx7fgkUPZ6ykYwu/b2RQjDpw/ktEfKN1lbQIQYrNWRctslNV0SQL6/KlgZT4NQX53
+         Zoyx5FXxS/cZ9JrRdgxYFYM76KlUUBQF+7siA0fxN9VQO3JqDoHgoRnRRPmuEtR107PV
+         Vcz9NAV2OzzyVNOqtQ9BCdutRADOdxTTL7G1b29g5sujgeVXNAb9OHO9SgoAqdZ2/gvE
+         rdcg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5T/2WQb1SELKmCViIYCNF7W0az3US9yLQWcvyWYjlAzywZTvbUFCjzwcEJwuf+b6Kv3t84oBUfdKfENpayBU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs6/NaPZ0OwcmzrzNoDrh8s4HjBulKwWuuuKRdia5BPNiuJCTi
+	QAZtiAuMVXQx/Vcx3WpRZPf420WS+lj0UxmIAI55d5h34cb/C1QlYo7BTruw6X62IH+apYU6is3
+	Jxb6s+8YWlJm1Jmc5Kr7z7tlrSEEZiA1gkAZxjzxfRfFdT+bJp/N2mLL184pJuksnJA==
+X-Gm-Gg: ASbGncs+fU/7hn5Z9gezKWIMBmNrAZwrn7zX1Ej3/2R73jcClbKyegdOoGwbqcmigCw
+	7Lq3gxnyTIPeJej5xG/G8iJbw8ffy3Y2elb2vyRDnLPSOlnsjIlAgYyxGU8hhq0+19MgIARhoCV
+	judZ/ol7oFgyHDNdKZbC2ranXzrMmBLnV88f4gYlxRglLy5UzVPxtVttop0d3FZXds6gQMdMzfF
+	GQpxpmxWrK2/tyyJ5avC4dp8U9wdA3UFkUEP4dCdKLkOkrHfjYlV1M7aSEvDsnPHjIpOmA6v1y7
+	/OqUST2gsngZBcA5QQL9kCSSl5SuofsR6PypUyBnilqRFPdXiwiOvd0XHI3I32TLWOF0IDiY3Ac
+	T5yN00cbakhq5ieqiTVwIp31OdVt7V6Mtg41Aydqp9c4=
+X-Received: by 2002:a5d:59ac:0:b0:391:ba6:c066 with SMTP id ffacd0b85a97d-3911f7a9568mr6605740f8f.35.1741253662371;
+        Thu, 06 Mar 2025 01:34:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHEdssV16m28QlGvjts6KPm6IS/YZ9DRQCSJFu22wgj2GXjDRoqtu57e6vr6hvQlvK6nb8u+Q==
+X-Received: by 2002:a5d:59ac:0:b0:391:ba6:c066 with SMTP id ffacd0b85a97d-3911f7a9568mr6605709f8f.35.1741253661996;
+        Thu, 06 Mar 2025 01:34:21 -0800 (PST)
 Received: from ?IPV6:2003:cb:c74d:4400:2f98:9b35:6822:ce54? (p200300cbc74d44002f989b356822ce54.dip0.t-ipconnect.de. [2003:cb:c74d:4400:2f98:9b35:6822:ce54])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912bfba66esm1470172f8f.18.2025.03.06.01.28.10
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bdd8dbb4csm14143855e9.23.2025.03.06.01.34.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 01:28:12 -0800 (PST)
-Message-ID: <08023d47-dcf4-4efb-bf13-5aef3c6dca14@redhat.com>
-Date: Thu, 6 Mar 2025 10:28:09 +0100
+        Thu, 06 Mar 2025 01:34:21 -0800 (PST)
+Message-ID: <88d8d030-c37d-433f-82f7-aed4f3a0fe4a@redhat.com>
+Date: Thu, 6 Mar 2025 10:34:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,15 +90,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/10] selftests/mm: Skip gup_longerm tests on weird
- filesystems
+Subject: Re: [PATCH v3 01/10] selftests/mm: Report errno when things fail in
+ gup_longterm
 To: Brendan Jackman <jackmanb@google.com>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
 Cc: Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
- <20250228-mm-selftests-v3-8-958e3b6f0203@google.com>
+ <20250228-mm-selftests-v3-1-958e3b6f0203@google.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -146,51 +146,26 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250228-mm-selftests-v3-8-958e3b6f0203@google.com>
+In-Reply-To: <20250228-mm-selftests-v3-1-958e3b6f0203@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 28.02.25 17:54, Brendan Jackman wrote:
-> Some filesystems don't support funtract()ing unlinked files. They return
-> ENOENT. In that case, skip the test.
-> 
-
-That's not documented in the man page, so is this a bug of these 
-filesystems?
-
-What are examples for these weird filesystems?
-
-As we have the fstype available, we could instead simply reject more 
-filesystems earlier. See fs_is_unknown().
-
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> ---
->   tools/testing/selftests/mm/gup_longterm.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-> index 879e9e4e8cce8127656fabe098abf7db5f6c5e23..494ec4102111b9c96fb4947b29c184735ceb8e1c 100644
-> --- a/tools/testing/selftests/mm/gup_longterm.c
-> +++ b/tools/testing/selftests/mm/gup_longterm.c
-> @@ -96,7 +96,15 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
->   	int ret;
 >   
->   	if (ftruncate(fd, size)) {
-> -		ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
-> +		if (errno == ENOENT) {
-> +			/*
-> +			 * This can happen if the file has been unlinked and the
-> +			 * filesystem doesn't support truncating unlinked files.
-> +			 */
-> +			ksft_test_result_skip("ftruncate() failed with ENOENT\n");
-> +		} else {
-> +			ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
-> +		}
->   		return;
->   	}
->   
-> 
+>   		/*
+>   		 * TODO: if the kernel ever supports long-term R/W pinning on
+> @@ -202,7 +204,8 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   		/* Skip on errors, as we might just lack kernel support. */
+>   		ret = io_uring_queue_init(1, &ring, 0);
+>   		if (ret < 0) {
+> -			ksft_test_result_skip("io_uring_queue_init() failed\n");
+> +			ksft_test_result_skip("io_uring_queue_init() failed (%s)\n",
+> +					      strerror(errno));
 
+This function is documented to return -errno. I'm not sure if errno is 
+guaranteed to be left unmodified (not clearly documented in the man 
+page). So you might just want to use strerror(-ret) here.
+
+Same applies to the other io_uring functions.
 
 -- 
 Cheers,
