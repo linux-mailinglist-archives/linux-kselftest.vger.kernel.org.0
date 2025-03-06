@@ -1,221 +1,144 @@
-Return-Path: <linux-kselftest+bounces-28368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7364A541B4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 05:38:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F9BA54276
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 06:55:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 096971891B19
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 04:38:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACDAE16D143
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 05:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7948C1991B6;
-	Thu,  6 Mar 2025 04:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F7F1990AB;
+	Thu,  6 Mar 2025 05:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LlO46Of4"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="anvF/6cV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F6A10E4;
-	Thu,  6 Mar 2025 04:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741235921; cv=fail; b=mRB5jN1aDRVIiRp90sLJ315s5Y4RiZvK0PiTmNKCkpxkdsdafpM7VpscX0OWvvXwXE0MhH0xsP/jzQY65kxQx3ztd4bCK9ptOldaYix/yJXUDBb1zesWH10oLkyxoe1U8bSdb54ncKuINtV8J83Mtvc8Tukl106yhYST7A4JOeo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741235921; c=relaxed/simple;
-	bh=HUZ8x3Q+3+XD13zQTckdPm7Ks5r5GCTdG39Z1hm84HU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=q+4+1JumDipv/LQF/Qu4roHECOPhjLiXvUlLkkVbNt9/7FtS6454M/ZjorjGUe3IKZR8oP29xgCgBzzIiUL2o0AXOFctYnrlCh7hg8Mms0dM/0158LhQS/n3Tk7tFpTir3tyPYPPMZuNIcYmPh651lgU0ettBV0yH8QJvor15Ck=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LlO46Of4; arc=fail smtp.client-ip=40.107.243.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QT7W+VTS/xz/YojIJ553LlzgDcBVGB58hpsmunvWi+jHnT5jh/R7pApJJqmDmCqf4ZNSfkIqi6jKND+6di96/kv+cs1331/TELF9nsS3NRzNPO1dKgiCtfEv9PlaKj7SvqS3ZAWcK/m5MScoyLV8usy5pAO6wq3noT7WhjN7wPczoEDYQs0lasXUuWJYtfYW9+9V8LQBRtuR6XFZmG/lfeWHgZRF7M+LGtc6miNrEvM3txEe+N0HuCEuZwSDZdAWVFSh1pNbdD1LxeXV0PtxbHRRiXZUE+zwa2mOrqvDtBL/rNyJcGJ3iKNyqMx5Fes2Xb77/+VnoCX6Jq4iGbmPcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rWUDF/Io9+q9IalTTht+IvGmPZPRdzTgExgzlbkUSFA=;
- b=hWZbLBLn8oFpX1Nz5xRdCORIYVfCtZO8j5Ol7HqGowXXDFjP9K+b8d8YUKLxtxlWEfY5fCJyPCw5UE0dQXwLY0rS5lEVHnFSEZMgV94o2v9PTRmJVJFnIKL63iqbell/U/uZYed4pmSrbArdXex5c+gWflWPVeV7T9ynie/aSRUCcpSEGtnfQM8ZaYNrzNJgPN9+4fN0VwrUHAT5JRUuY+AcPgS6CIZQ4sLnejvQhOzbDmC6CalTwIEnX6seBlU8Q9DtAhBCe+gAqlHx4rzplfGI01b3tqBMljEgyHeguyki/2MIgFTHJK1diHe8R7bSD3+QBAZupEK2/eaj5xPbBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rWUDF/Io9+q9IalTTht+IvGmPZPRdzTgExgzlbkUSFA=;
- b=LlO46Of4ZoBDNqldRGbDojjQM1nOVIs3AnX8D4zSXhHb3/GZX1eVVWR21rexT78HnXEAEr9uY6UGOtHGryCoRCA5/qZ5aDVCwsVls3LdjDIHXKO3ta8hitkFAfpTNm5QRa300wvPTYWKtd42N1PL614rjabsHqnJRXssL96HNOw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from IA1PR12MB8189.namprd12.prod.outlook.com (2603:10b6:208:3f0::13)
- by MW6PR12MB8898.namprd12.prod.outlook.com (2603:10b6:303:246::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.17; Thu, 6 Mar
- 2025 04:38:37 +0000
-Received: from IA1PR12MB8189.namprd12.prod.outlook.com
- ([fe80::193b:bbfd:9894:dc48]) by IA1PR12MB8189.namprd12.prod.outlook.com
- ([fe80::193b:bbfd:9894:dc48%7]) with mapi id 15.20.8489.025; Thu, 6 Mar 2025
- 04:38:36 +0000
-Message-ID: <6e342579-efed-462d-ba2c-c844e0d614df@amd.com>
-Date: Thu, 6 Mar 2025 05:38:31 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 03/10] KVM: selftests: Add vmgexit helper
-To: "Pratik R. Sampat" <prsampat@amd.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: seanjc@google.com, pbonzini@redhat.com, thomas.lendacky@amd.com,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, shuah@kernel.org, pgonda@google.com,
- ashish.kalra@amd.com, nikunj@amd.com, michael.roth@amd.com, sraithal@amd.com
-References: <20250305230000.231025-1-prsampat@amd.com>
- <20250305230000.231025-4-prsampat@amd.com>
-Content-Language: en-US
-From: "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20250305230000.231025-4-prsampat@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0078.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::20) To IA1PR12MB8189.namprd12.prod.outlook.com
- (2603:10b6:208:3f0::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E25D38DFC
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 05:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741240536; cv=none; b=BUU53ed34VU6zN9sAlEjniL0/UA5vgWzdiqu8A5obHiHpTjYamkwCSeBSMHoxeARA+0yRQsYQk0s7pPaVbOUeRrhlE/39J0LBMTnR1GmV3I2jkz28L+XqqS0ifK6jFRMdxgwR34bB6Ppbv5Zyy72AXgZ8IH0o+vA3XL0q8LqF/4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741240536; c=relaxed/simple;
+	bh=fStPxmsCJIjNv3GU3HTZoAXZLVWt4JfQuG8MDVhJlTI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=V+dfnnbBkHcS8wdv5tAnaIkNbHu6/by2zTrqupLzA9PqOLtpHny9neYeb8MHqzB8Lw6hoI27RbZz77x6reh2lpRv4RH4/2LIHHR+l21ibIRLgc1a7FBy9dBkNK0J7cTjQKR1vSQNN/6WSPle2aa6hkNkomLQl0YUMUoFYjFHXEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=anvF/6cV; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-223fb0f619dso4153445ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Mar 2025 21:55:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1741240534; x=1741845334; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sUdx3QRyuZIX7/o+JJ2wds9H9VcUk1U/xmQVPBXai18=;
+        b=anvF/6cV9SGBke0ReSodh++QuZwCEU/BnTwRR6j26ZjgYoU1O/KIbl6MgQ53ZnH1Ra
+         2IAkvZsNltj0nILEToutdduayMnLHOQtXqzt6wyrn+oceYEMlwutxNCibv1andkrPPq1
+         p5mM8rFUk+vRD10BUFTAHVjWZitunFie2prYiOLcyAQMSpJZ6F4hRnLgutOyuSE/RaW/
+         /GSWCngVhrUzmgvCgMJP3OW82HB8VN8dbuB5Cyq+AJrS4nv28BXIV9PypGmuZDW6votk
+         WEdC4t212ctL99u9sphpgV4M399X/PlaBdYz1Mv1q3cay/UGUHjCbkXGtG/1AvvRi/cZ
+         iYmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741240534; x=1741845334;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sUdx3QRyuZIX7/o+JJ2wds9H9VcUk1U/xmQVPBXai18=;
+        b=mfPeb4hxn2fXXVZCP9V8p5Vs7QcSlgAi6403o4OCViux/7XpMNdCujQZFeaM2zbpaK
+         UJptKMSwMCPvpZ6H4zGMjsuUX8Df7LHW+W0gfiMAlQDs7h5v/caoprX2djF3WN0k912t
+         LS7hacVid3rNNt+M/Tk/T6vU8Rqafv0KmP4Q3+9+4nqYvgmQ1dyC6hKqRHaD7T586yA5
+         LxuJR3BL3UKkmQ1z8f9LBe1kCZlVfNaBasEYw5bA+/BTklfLAs42GF3retG+sxx+jg4z
+         x5bRbk0bMask/TdatRqI1dW/rHoqCJgecJMjfNsImmheEJAtIbCqWaxXr8o41AfiaooY
+         ueQA==
+X-Gm-Message-State: AOJu0Yxs/9lo1qCisE8RRgoDbTjYSZNzeCaC19tYgDidoZI27Y0aQPnH
+	DsAsWGPXxjzgjIprIZL6ipFi6RfMjDpJjwuiYjgq/qvyured1U6+s7AY7DxBKnc=
+X-Gm-Gg: ASbGncvr02YzSkh4IHe/LOnS83wOFi7lbSk3jfMPInb/qkc7nfxPAq3tfRk1CjFTs20
+	m9Dt100Fs8ywP21qFrbMQOMZ6mrMXnBpPBBA/S27sTtrA3GEGUnPhzvVLJXX1lCoLPHDmS7+EvU
+	5Xr1asPi3AIu59Ji0AmD6vVIHFyddnFK5+3gfNfK07LLkgYDKDWdKA1ZDDIZ1u1rOBaqMoc++D8
+	2sN983uD7bU0hJoIzZHsLep/Y00QnHmdo2BxRhaIy+CwGce1KJ7uaLKgY6iZ/jg+JC/+Y8p2NAr
+	Y+y2yWZtYPc5eAIGvvGqAFgXH5WOxlmgLBpCJZ8Mm3tGqHH6
+X-Google-Smtp-Source: AGHT+IHWmtVby/odXZZF6dFxs4Y5suzRcbfsujqB5xfNftQwM4rblktBoE/1Jwu1suHSRVUrEebhQw==
+X-Received: by 2002:a05:6a00:2d1d:b0:736:61c9:f9a6 with SMTP id d2e1a72fcca58-73682b6c31fmr8000931b3a.5.1741240534431;
+        Wed, 05 Mar 2025 21:55:34 -0800 (PST)
+Received: from localhost ([157.82.207.107])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-73698515094sm458717b3a.131.2025.03.05.21.55.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Mar 2025 21:55:34 -0800 (PST)
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+Date: Thu, 06 Mar 2025 14:55:19 +0900
+Subject: [PATCH] selftests: Override command line in lib.mk
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB8189:EE_|MW6PR12MB8898:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20dc9949-33cd-48d0-c4c8-08dd5c68c236
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UW1XdWpKSkVRRkZzdklrS0JlbnIvcjZjWlI2UjFweWVYQ3k5TmFLbGt1SE1a?=
- =?utf-8?B?TzNvWHh3cmY4UXU4RWwyUEJFOW15enAya1pldmJUTmtkWlpWdVg2aFI3OEJr?=
- =?utf-8?B?cHlhNFBpUXdqaTBmTnNHSTB2QU1OTmRsclBFVXg4OHhmRjRTajhLQWowRVho?=
- =?utf-8?B?UWhRYURmK3hCbkd3Sk1YeitsenkzcXV0WnVqV241UEhqeFR5cDdPSHVFQ3ZG?=
- =?utf-8?B?NW56N1M4NFkwemJnOE10L1U5bzZTQllVVGsrOSs3ZlUyWFdBUXJ4dldBd2R6?=
- =?utf-8?B?TFdvMHBac0pGRzgyTWxCa3FFUmF4RjJSMW1vV3VXUnJsRS9URVI5cHdwZ1dE?=
- =?utf-8?B?VW04SlYwcWJndGlWS1VKZDNNNVpUZ2xHVzR2L0pIdW1pclhTb3RpSXBCL2ww?=
- =?utf-8?B?dkxuMFUxTXQvcmxnSHg5TWxnQXgrMVl4dENkR2g3OEtxaHU1OUZ3cHQ1dVJx?=
- =?utf-8?B?NVdYekVuV2M5TkdEelNqNDZwNG5FSmxCVFNSY1FTL1YzTVd0cmRlQ0hnamlH?=
- =?utf-8?B?Wmlmbm94akF3Q0ZPaHpPVVUrQmtjUUN6WDRsbEF3S3QvTm5tUko5K0xiYjFC?=
- =?utf-8?B?aFVrMkRUazZKdmJXeTk3a21YQ2pRalp4M09zY3VwZnpTcHJFbXZuc093NW5i?=
- =?utf-8?B?TURjclpjL3U5Witxek4zSXZKbkJsR2NOTUlzc0JteHQxWDBIY2cvWW9QTXc1?=
- =?utf-8?B?eG4vdE9FMUZVbXNvVEhMWnBPbExtT0wwbExOUlZTbHEvQzlESjhTa1hBT0lt?=
- =?utf-8?B?WXgxNVRPWnJ6MHJ4MG4zKzdSOVozVVdRMDZPVkhKa1ZZbEYyd3V6UnZ0VU1T?=
- =?utf-8?B?QnJXK1k5ZkZnZjQzMkh1L0tFajhSaXJUSE9zeGg5ZDNQMGhTMWRRY0xua0Zy?=
- =?utf-8?B?czJrQ0VuNlhHVi9TTW82RXBZYi85bkp6WVR5RnplQVVXVCthZjlWVFltQU5Z?=
- =?utf-8?B?SWVwVE5GcEdSeXlyU2pyVzdsTWNWcnBnM0pmRXZzMVkwMlI1SC9CZ29kM1Yv?=
- =?utf-8?B?eDJHL2hvemdqMjgwdkttRW5wN1lUM3FHWUwwTHp1cytVQURHZk02b21qZnh1?=
- =?utf-8?B?VmlPRkpZS1R5dGN1RFFWVnl1dWJEQzUvYVZBVmVnbEEvamx4VUl0cnVVUDU5?=
- =?utf-8?B?dnIxRURFckEvNzFnTXkwWVkrQzZQOXFzT0NoUVJHMlJJL21qdEtCNXJDYStl?=
- =?utf-8?B?M2xsYkdyNnFuR2tIWlQ3U1lXT3NySVJzYWRYN0tQd3ZPTVFPRWkraXpYTGht?=
- =?utf-8?B?TUZpNk9uN3M3NTRSRjduWVFkc2hNbFZqTStYZWxUeEI0ZWNXMmlrTjJrR2Yw?=
- =?utf-8?B?bS9zTFBWN3Noak9oT2g4dEFpSkRqUDNCMnJ6SW1Wa1dtQWx5UUZEOVBxYXFI?=
- =?utf-8?B?bk5BM2NnUStkb2dnYmRHY1lncXloK2NzYmIrNVZFRjY1UHFqRmxZaVdZUlBm?=
- =?utf-8?B?K3k3blRaSHNJVllWNk53UnFoVU9xcURFdVJHQVBXbTFtR3lmTkJxdUI5Mnk4?=
- =?utf-8?B?ZngvZlV2QUd4Szg4V0VCN1FvbFluOUR3T3NmRFB1VGFWNTB2dlVNbnRiRVgv?=
- =?utf-8?B?Q3gxMC9mSkd0RjlXc21WRkYxYXhGYW1oYVJJdE5pYmxsOC9BV3l2ZXJoNllL?=
- =?utf-8?B?a3dZa1V2VERwZVFickpZNFJja1BIN2xRUHFJa2l2V3ZXNit6QldXb1VTQ28z?=
- =?utf-8?B?VDg4QXhRTDV6RVoxeG9IelNjU1MxY0pJUm1jYXZDbWZuallQMzJHN096VnZl?=
- =?utf-8?B?NnlvM0p6YXh4cVlvdGVjR0swa2pzUU53K2VCUGNQWHZFNFl3VXVWSGt0Wklx?=
- =?utf-8?B?QjhWUGNIUnVnVUZ5MjNtYUROb01EeEJsVm1rMS9zL25PMVNXRUxUTXBJaHlF?=
- =?utf-8?Q?ONDAc8tXQpxl2?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB8189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SlFsQUY2NDRqZWdna0U1djAwWk5XOU5hUVJYWU5YQmFKK3FiVVF0Smg2dE4x?=
- =?utf-8?B?RThjSFhMQTA1ZitRdVpBQXk1SjBMRHk4ZUljN09sa2swekdJWFNIZ2pyZ1k1?=
- =?utf-8?B?dlZFSTllRzMrTGZySWlJV3ZhMlRNYWZ0ejMyaVg2YlJ1YWF1RGVYYkxNVi9q?=
- =?utf-8?B?WklVRFMzVGhOL0kwOVgrWVFLK2IxTk9jb1E5R3lheERmalFnTVgrSEdnYVZC?=
- =?utf-8?B?TmNhdDJUNjZSQ2tZa1BCbXJLVnJiZ1BuTGM0azY3dXZWckRGU2hPSXpBNzNr?=
- =?utf-8?B?VlJEWGNRbFJSQkU4YXRPbjRXaW5hT3lNcjluOVh2RVBSMlNPOGFtaDlJTkxK?=
- =?utf-8?B?OEszRW5jZ3AwWG4wQ1JtUFdUZlkrNktRVWJBZWhjdkJzY09IUWl4Vm5qZko0?=
- =?utf-8?B?T2lPNDJnSlFNL0VkdDFHaTlqM1lVWHBjaEoxV0tReEpuQmp3S2szbTdVRnpq?=
- =?utf-8?B?NzUwUVF4RHp5bEpsVWRBUVhDT0t6dEZ1Zi9rYkFUMFFtZEtiU3JmaHVpcFYv?=
- =?utf-8?B?M0RkQlc3eVRsMGJyUFVBZ0k1bEFtRTNDMGFaUCtxVnBNOHNQc1l5ZlB6R2p6?=
- =?utf-8?B?NWVpYm1MM2duaXZ4S0o2S3R3VnlyTDhJZVVWQ3pMNXJDMDlBN2tFS2pNSHd6?=
- =?utf-8?B?bDFoTndXQlhVY1A0VE1oZEozRHJwM2pCZ3JSdTEvUUFHYkxqKzRIRlB1U01T?=
- =?utf-8?B?dTl5MVIxYWRvSEdkZE1HRzlTTStweWdDcTluMFRwOGhkY29tbnJnMTQ0eFRX?=
- =?utf-8?B?RzVhTTNydDJab2N0TE9Mc3hrTXBBZWtwTkhSMTVBeFZXbCtQSkhCVzBvb2xI?=
- =?utf-8?B?MnMxS1dlMyt1RDlkUTEzYXNXclNhc1U3ZHdMVTFIRTRnaFQyMWdPV01FejRu?=
- =?utf-8?B?V3VsTDBBeWR3VXJVdm8zbmxrQWUyZ0pBbUNFOUtNTHp5MDE0eWhOWHcrUUFm?=
- =?utf-8?B?M2tvT3kyNnV3MkplVmQ5bGR6RVUrSkIxa0FQa2QyWWlUcWlJbis2Wm1ZR2Vt?=
- =?utf-8?B?Q3dQM1lxS3hVUHd4ZHVFZ21rRHhmbXJCUHcxNzRWbEpjNWlkRlRtWXpPeVRr?=
- =?utf-8?B?MkYzaFNtZWZoeXBpL2UyU2RLTWNkOEVtZDlJVFpoa3VzMlU1bVdEdzRiRW9w?=
- =?utf-8?B?Q1dhdG1QT1haLzJZVWJTUFRCbDY0ZDBBU2Z5T09FWGJ1ZEFZNktyQStiQk4w?=
- =?utf-8?B?SXBjL0R5R1BvUi9HSGZOOXduU09raWdFVVZxZWYyRVQyV2Z2dFBVSENZb3Fq?=
- =?utf-8?B?cXBPTVo2Qk1RcjlIWTRVRjJiMmNSNFFNTnlvbkRGK3BSNytPWUZ5SW03OFJQ?=
- =?utf-8?B?dG04WnZuRDR5UkV6MndXdkttU2p4SnFkQjJERFRycFRrTzNIRUFUelJNeVo1?=
- =?utf-8?B?VW5HcElXdXJDZUJYa09ZUTk4VkkwVWkzbnZMbTQ3TDFLL2FnNnpYMGRDRGxn?=
- =?utf-8?B?cVZsMldVK2IxSmJ5WkQ2UHNDNjBCRUt6akhGMzFxZC9XVHZCQVNQaHd6aytZ?=
- =?utf-8?B?VEcyNEUrR0Y3VTlkK0FtWE1RUUx3TDFGbUZHaEtDZW9mUElyTFRVYkdlb00v?=
- =?utf-8?B?L0R0YWF6cXEyMWJWZEQ2NnNDa0pzK01qU2xKamFiajYvMjZId3lTcW5pVWZO?=
- =?utf-8?B?UXZLRmlOYWRFMUVocDBTL1lSaXF6MTJna0RJYkpiMFhXT2k4djJnYWdVaEdC?=
- =?utf-8?B?MDE0aGR5Q0NYT3ZqNFhxREpFNU4wWXptUTRCM0NkQ1N4QlhYWk1YVEpPcjRS?=
- =?utf-8?B?ZnUxV21idFpGaS83OFFNT2Uvd3gzc2YwTDNCQmNqSThXVGYxbnFZZUNqeHR6?=
- =?utf-8?B?YlkrdlJYUHdJbW10Q0xrdGlPOGk0bXFEQVFEc05HUGhzY3didC9sL0tsL1d5?=
- =?utf-8?B?OFUza1ZTWXA0dVVvL2NVQ2Z0Rkl4akdzeDRGQklNT0VEdlRsUTA1dU1YNFl1?=
- =?utf-8?B?K0J1eVRHcVFvbmd0Mm12WlNkVjVNRytIVitweTAyTk4yTmZBOWRYZCt5aHc1?=
- =?utf-8?B?aXpXdWNXQU5qVWhiOFE3NXZDa0crMEFQMWdEMXRCeFdLbUdoaXN5RGFYYnVE?=
- =?utf-8?B?Rll4ODZqSDFXU0JJT2xRNExoaFhOcWtFVXZkTStteVdSc1FYTlV6Y0RXb1BN?=
- =?utf-8?Q?uWcuWZQ3nufyDSnTDUcOkcTc+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20dc9949-33cd-48d0-c4c8-08dd5c68c236
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB8189.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2025 04:38:36.4405
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A0DmD1V4vEHpyuP/Yb4mXDVz3lKqee2Npjto9qXfZ7BRKXXXMoIHtblvlh+DaNOj/eRPUVHnc3SF/6RGAXS22A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8898
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250306-lib-v1-1-85692f1a7ce4@daynix.com>
+X-B4-Tracking: v=1; b=H4sIAMY4yWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDYwMz3ZzMJF2TxGRLc0PDZEODRCMloMqCotS0zAqwKdGxtbUAszSkVlU
+ AAAA=
+X-Change-ID: 20250306-lib-4ac9711c10a2
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devel@daynix.com, Akihiko Odaki <akihiko.odaki@daynix.com>
+X-Mailer: b4 0.14.2
 
-On 3/5/2025 11:59 PM, Pratik R. Sampat wrote:
-> Abstract rep vmmcall coded into the vmgexit helper for the sev
-> library.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Pratik R. Sampat <prsampat@amd.com>
+Documentation/dev-tools/kselftest.rst says you can use the "TARGETS"
+variable on the make command line to run only tests targeted for a
+single subsystem:
 
-Reviewed-by: Pankaj Gupta <pankaj.gupta@amd.com>
+  $ make TARGETS="size timers" kselftest
 
-> ---
->   tools/testing/selftests/kvm/include/x86/sev.h    | 5 +++++
->   tools/testing/selftests/kvm/x86/sev_smoke_test.c | 2 +-
->   2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86/sev.h b/tools/testing/selftests/kvm/include/x86/sev.h
-> index 82c11c81a956..3003dc837fb7 100644
-> --- a/tools/testing/selftests/kvm/include/x86/sev.h
-> +++ b/tools/testing/selftests/kvm/include/x86/sev.h
-> @@ -71,6 +71,11 @@ kvm_static_assert(SEV_RET_SUCCESS == 0);
->   void sev_vm_init(struct kvm_vm *vm);
->   void sev_es_vm_init(struct kvm_vm *vm);
->   
-> +static inline void vmgexit(void)
-> +{
-> +	__asm__ __volatile__("rep; vmmcall");
-> +}
-> +
->   static inline void sev_register_encrypted_memory(struct kvm_vm *vm,
->   						 struct userspace_mem_region *region)
->   {
-> diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-> index a1a688e75266..6812b94bf5b6 100644
-> --- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-> +++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-> @@ -27,7 +27,7 @@ static void guest_sev_es_code(void)
->   	 * force "termination" to signal "done" via the GHCB MSR protocol.
->   	 */
->   	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-> -	__asm__ __volatile__("rep; vmmcall");
-> +	vmgexit();
->   }
->   
->   static void guest_sev_code(void)
+A natural way to narrow down further to a particular test in a subsystem
+is to specify e.g., TEST_GEN_PROGS:
+
+  $ make TARGETS=net TEST_PROGS= TEST_GEN_PROGS=tun kselftest
+
+However, this does not work well because the following statement in
+tools/testing/selftests/lib.mk gets ignored:
+
+  TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+
+Add the override directive to make it and similar ones will be effective
+even when TEST_GEN_PROGS and similar variables are specified in the
+command line.
+
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+ tools/testing/selftests/lib.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index d6edcfcb5be832ddee4c3d34b5ad221e9295f878..68116e51f97d62376c63f727ba3fd1f616c67562 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -93,9 +93,9 @@ TOOLS_INCLUDES := -isystem $(top_srcdir)/tools/include/uapi
+ # TEST_PROGS are for test shell scripts.
+ # TEST_CUSTOM_PROGS and TEST_PROGS will be run by common run_tests
+ # and install targets. Common clean doesn't touch them.
+-TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+-TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+-TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
++override TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
++override TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
++override TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+ 
+ all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
+ 	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
+
+---
+base-commit: dd83757f6e686a2188997cb58b5975f744bb7786
+change-id: 20250306-lib-4ac9711c10a2
+
+Best regards,
+-- 
+Akihiko Odaki <akihiko.odaki@daynix.com>
 
 
