@@ -1,162 +1,151 @@
-Return-Path: <linux-kselftest+bounces-28409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9060A55001
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 17:02:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A049BA5505E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 17:18:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19B401888210
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 16:02:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4214C3AD07D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 16:17:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E101991C9;
-	Thu,  6 Mar 2025 16:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77138212B15;
+	Thu,  6 Mar 2025 16:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Im1WvO6k"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4noyEX8D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AF0EC2
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 16:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCB618FDD8
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 16:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741276948; cv=none; b=rSND+KK2aJXKsSIdxqahQKgFoYtTef5h+1lNDju451lFBAVNmn9C/+xJ1e3m+Y52kqDXQUlQqbGJ7ZpInFb93wTmO7jkL0R0UVsQBnpH4ZA0k3opoAikEwZnmCJaVct3/EAzTw6hkq6WurTAyc5QE2BwP0+ydT8skPqPhCJtNcE=
+	t=1741277856; cv=none; b=MttA1BJJ2TwL7K9Ul9E/IYBtLucCRhTQcbtlYqA7jaKGUKEcyNsCpKTT66sBGDpSK/B5yFRDc6p9lmP9MzNLqCqOYVpeGufEzn6c8kBc4zDC67zRrP3CKTTLQTXjwVHthPiijRQKFofgWbI333Gxopr4EgGEfYCtJXV+FaQM36w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741276948; c=relaxed/simple;
-	bh=6aKgQ+tug2/1fc1q/T01kVpV17q2c5r3wjQoFm7zsF4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qngcw6yzh39MJwQLeWAAVqGv9PScht2VcLAian3YRro4mPU5mQ9bFReInCGi4RoOHWi/m2j/5zksoV8JmR7NMTiXafxFSbz95GME3CIfSHb6Y+RyLjhJ5K0sfvYd3AqDnfdW9jOwW4WydD54PIJFHI3eThaRVchGGf0vchdYc80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Im1WvO6k; arc=none smtp.client-ip=209.85.219.47
+	s=arc-20240116; t=1741277856; c=relaxed/simple;
+	bh=gr+QGcJ/zC1AFPXrM2eyX8oCllpuc/ysmFxvsfANXyw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ksfdrWT4f3cjRRBgprkyzVyShP6U9NkaYooz6TKRLN/KbcGSmPU7HDCTNsHt5/do85UlAHLew6mYbNYkiF/05Ba0U4tI8um+2AS+f8DnbhYZMVFALV5t4zzTbf0QcjmEi9sTUvlbwtri7kHYpESJEX1KnVyWBjbpMrw/6fXkz3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4noyEX8D; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6e8f6970326so6140206d6.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 08:02:26 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4393ee912e1so52545e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 08:17:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741276945; x=1741881745; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uMo/M/d0EFIcvJgavIcd9kpQdMrMPexMxRrHFLPNiR4=;
-        b=Im1WvO6k745BRyomEtOi0hyirMxpv1cuQ2QxLiqWaP9dkj5qKSrvkqgtBxUou13fUg
-         FTG1aYOiIibnu+Qk4MARgpffMUUArOWb7HkeW8gS5OY3xBuAVZCtVeAI9qZruH9QqcBD
-         bPIbiUWUoapNz3O5TPcAtLWxus6ebyJnewxEsfKccK6KQUEDoJKYyGwUpYoNFhkOoYTD
-         heUyBVACk/COHH3dx31gwlEis2Jb/Kvbj1fcVqvgatlhPeeKtKHqUuFhvSnaAZDSi2UF
-         Yb5uuqv7CJnW0yUPfPL65krGFke78RxqlUQf27T0tyLwjG11nwlxF6hB5VgS954N4dyf
-         dQ2Q==
+        d=google.com; s=20230601; t=1741277853; x=1741882653; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XzIG+I9NlmGXCMCH1grBuizviCE0Zw+vO1fKyPynjqI=;
+        b=4noyEX8D0M4eD83rXKwVpolhcUeYXwAQCuIDobniLV2/+sZof2mBvDCL9HNh2Uj8Sw
+         lSKeBlsFBD9hG0kgRYxeJS6pzDww8zXoba9G7UeoKbHkERXPYnksY920YRUqfoxHK/ZS
+         j0oBeRNJYgQ5rtbwbguboC9MqL8aYxd/jxMMb59VC6XC/a6r/EmR42Zk7bU8V4EK02Bx
+         LudisuXcsZqbaCIWwuktq4RjHgV34K2nd8NB1X/3Wnk/uxiCKCrs5CyFuhly02WY2o64
+         tB5cxDzvEGN0eaCCcV4sbCtdGMthfEkxXyrTreZ6OeH+b3N/nF4+X2gtIZid8IGprFTY
+         6Rpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741276945; x=1741881745;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uMo/M/d0EFIcvJgavIcd9kpQdMrMPexMxRrHFLPNiR4=;
-        b=sBBtD5YyLwg+PVAYL5hoBFmVWcEiN0yLnmkAP2/KrIGhTqeiVcWSfOp/ME+cXlfKCl
-         FVzB/K/Dd7UzglWyTAq7QQZdchrwsdwlpzLD/9cKUinE0xjTwIOk6+8Ww4IqVDEiZ8Ky
-         H32OZbRkPXWc8BNr4gLZzZciMjQCUG5esre/Vu2WhubooffhKo9IpulTpZH1mPYBeaxN
-         m0it2P1LxSSeuxQBMT0w+f49dvjpIhn7EhyTOKVDFo4/N4yxR7OhW/ycZpBhyGB9Nifh
-         h8OXOskwqfH+EXME0BnUG2GPVFis3AC4ONae8YNeXSVGASAsqah1njRrb4YEtXrl+Im8
-         KT0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW6a3PLKkSUJf0jyw7cwLUoocF7D7fSZfRzYRqDxsxE4PFAYanX4p0A4roTYD0wHBVoMANz0J26CTBMAzu/Jz4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykjVMmeWO+VakUuG/PK7HB9U+wPX2shSMoufN1opMjXcxwEfey
-	liuLX3XYJ+l2bJ71qZkWJUeY5eiVr2pe2YWXd+XuhA8rmQ3o0Z/hmBYfZQC/uTTgGKKzuHQ8VJ5
-	aWC5kMvr1mkMQeaXYfzya0xp0Df0zCdDaYV3J
-X-Gm-Gg: ASbGnctqXvgerjzrltauv1lzCOT7E3S5zrVnbcvan5SSw5cXMED0GQDpR8UJBWIC7AB
-	6BkHrdXDHiyv0SkwZx4g0WXZCMbZn8J1MUyxC2sTSo2u9K6JRhhDDEx4/QlDHbqrrF1zKT00U7w
-	ftZF6IH+XDeV8EMjimaOxvNCEr3R253A1pTXRf9sTLSfLYJWnOVaB92mD6
-X-Google-Smtp-Source: AGHT+IGX/E2PHF/+YLwoVkYYiH/aSpMz8sD+kNIhAFRSQzVHlUIXuGHEMDAwEmby3tNrlm1sVt67699NsHmIFr4orEo=
-X-Received: by 2002:a05:6214:d05:b0:6e6:6699:7e58 with SMTP id
- 6a1803df08f44-6e8e6d1551fmr101937866d6.1.1741276945215; Thu, 06 Mar 2025
- 08:02:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741277853; x=1741882653;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XzIG+I9NlmGXCMCH1grBuizviCE0Zw+vO1fKyPynjqI=;
+        b=XwvS83bXSGX7qZ4QfqkEh/ZtkrDLPvsEGTr4gB9MYCoVEuLgozu6avLkDnhijuhB8O
+         1L2JyWA83QHFMNSuR0KmcvR0vlYiAAXSYTaijqeNg2cu9B8stPyfjkKy2F53IWg9fXNI
+         Oo8XN+CS1j2+/N6KYQFuOchqwb/Qlaa4JaD5Kb01pNJOVezY8LFO8r3MUDhvFkbPGIz8
+         VcEXx9tKf6WpdiaFQJ+xwFkUXH72+pt2iU9TWD4plRXGDp3+z3yUsWujQcWw6tCtDEL4
+         w10daADl53LZP7uXw656ybOhTaKdi3EwPmrVKJcbv+NrI+h4aw4HBwlVWpTY+5ZKHhKG
+         d0aw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7QsMvfsFIwkbCfbURwinMHvHafKzxkp8NHwI1njbtpwicl/W4vvSQSDvbJHZSIu57DSQzA6TX49SsJQKhTFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0gdgAtqFn7lHMDEhDMZDgbzlxzZOANmC1HuNKDV2nhLR9lSy7
+	zY++lv+96b+GuNUdyPmssgrOKwjWnpDAOtRG/ZPluBF+0fTygYqv7jjUqFbDuw==
+X-Gm-Gg: ASbGncs0yk1YIWgjOdB56EMRtD84OYELkK+FCrgNrqHA6yOD3Dcvn+2UdrqARbvziwh
+	H0Z+7ySpRFNB7Ch7DSnJaLKATH+5OR3yh8me3LQ8cJKE4sjRIEZRnZLJCzesuV3FaVNvE7e5X4a
+	dSOfZfph1s4jKUGIcKfUIlMxMgEnjPLmwCwJy5H8KSjDcD+FJg9FXWRrK/El13hcxJJz9/uyQoA
+	FtCfLP+fbDtBnv6MxO+HR3OxkVEUsXRRFr1MJZq10GWJuIGzJ1l9f65RW6429dSgpzfWqkBKjC9
+	TSb662AqaRWxnvVUDYfUwehyvCiPUDGWf6iBvS02KftJa/QOH+lXkDLJat1FWIj/gXd06ArwEIO
+	kwTpW
+X-Google-Smtp-Source: AGHT+IGsHHNZR9C11HbjY6cSeLPINopbox+mfM7DoTvgIhmcRrtEMk7y/uxtTv5B1t0em/wnAY68bw==
+X-Received: by 2002:a05:600c:22d0:b0:43b:bfe6:d898 with SMTP id 5b1f17b1804b1-43bdbac5f6dmr1381675e9.0.1741277852683;
+        Thu, 06 Mar 2025 08:17:32 -0800 (PST)
+Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912c0e1476sm2484502f8f.70.2025.03.06.08.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Mar 2025 08:17:32 -0800 (PST)
+Date: Thu, 6 Mar 2025 16:17:28 +0000
+From: Brendan Jackman <jackmanb@google.com>
+To: Rae Moar <rmoar@google.com>
+Cc: David Gow <davidgow@google.com>, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: tool: Fix bug in parsing test plan
+Message-ID: <Z8nKmGwSu9RvxbWc@google.com>
+References: <20250306002933.1893355-1-rmoar@google.com>
+ <CABVgOSkwrb36rrhH3H17fhYOnywhTgTh06aDaKXT4jZp474sRQ@mail.gmail.com>
+ <CA+i-1C12kG9t=jqnVaKnvN4xCn58cTeph4QHOTL0+eg98rn52w@mail.gmail.com>
+ <CA+GJov5kKD+QX+kdEG3LQun=zo_aPwbA7=1NUw0dTLSGg-h=mw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250306002933.1893355-1-rmoar@google.com> <CABVgOSkwrb36rrhH3H17fhYOnywhTgTh06aDaKXT4jZp474sRQ@mail.gmail.com>
- <CA+i-1C12kG9t=jqnVaKnvN4xCn58cTeph4QHOTL0+eg98rn52w@mail.gmail.com>
-In-Reply-To: <CA+i-1C12kG9t=jqnVaKnvN4xCn58cTeph4QHOTL0+eg98rn52w@mail.gmail.com>
-From: Rae Moar <rmoar@google.com>
-Date: Thu, 6 Mar 2025 11:02:13 -0500
-X-Gm-Features: AQ5f1JqAFBgL17msmF4WXZwSYJ4ufzR46Gs0RyKsZz7of0uvV6CYwmBsv3o3TjM
-Message-ID: <CA+GJov5kKD+QX+kdEG3LQun=zo_aPwbA7=1NUw0dTLSGg-h=mw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Fix bug in parsing test plan
-To: Brendan Jackman <jackmanb@google.com>
-Cc: David Gow <davidgow@google.com>, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+GJov5kKD+QX+kdEG3LQun=zo_aPwbA7=1NUw0dTLSGg-h=mw@mail.gmail.com>
 
-On Thu, Mar 6, 2025 at 7:26=E2=80=AFAM Brendan Jackman <jackmanb@google.com=
-> wrote:
->
-> On Thu, 6 Mar 2025 at 10:00, David Gow <davidgow@google.com> wrote:
+Hi Rae,
+
+On Thu, Mar 06, 2025 at 11:02:13AM -0500, Rae Moar wrote:
+> On Thu, Mar 6, 2025 at 7:26 AM Brendan Jackman <jackmanb@google.com> wrote:
+> > Since I reported this bug, I discovered that the example above is in
+> > fact valid TAP:
 > >
-> > On Thu, 6 Mar 2025 at 08:29, Rae Moar <rmoar@google.com> wrote:
-> > >
-> > > A bug was identified where the KTAP below caused an infinite loop:
-> > >
-> > >  TAP version 13
-> > >  ok 4 test_case
-> > >  1..4
-> > >
-> > > The infinite loop was caused by the parser not parsing a test plan
-> > > if following a test result line.
-> > >
-> > > Fix bug to correctly parse test plan and add error if test plan is
-> > > missing.
-> > >
-> > > Signed-off-by: Rae Moar <rmoar@google.com>
->
-> Thanks for taking a look at this Rae! I tried to take a look myself
-> but I could not really get a grip on the parsing logic in the time I
-> had.
->
-> > Thanks for looking into this: I don't think we want to unconditionally
-> > error if there's no test plan, though. Pretty much no parameterised
-> > tests include one -- it's not always possible to know how many tests
-> > there'll be in advance -- so this triggers all of the time.
+> > > The plan [...] must appear once, whether at the beginning or end of the output.
 > >
-> > Maybe we can only include an error if we find a test plan line after
-> > an existing result, or something?
->
-> Since I reported this bug, I discovered that the example above is in
-> fact valid TAP:
->
-> > The plan [...] must appear once, whether at the beginning or end of the=
- output.
->
-> From https://testanything.org/tap-version-13-specification.html
+> > From https://testanything.org/tap-version-13-specification.html
+> 
+> Hi!
+> This brings up an interesting question because the parser has been
+> mainly geared towards parsing KTAP
+> (https://docs.kernel.org/dev-tools/ktap.html) rather than TAP.
+> (Although we do try to have backwards compatibility with TAP v14
+> "Subtest" lines)
+> 
+> For example,
+> 
+> TAP version 13
+> 1..1
+>   TAP version 13
+>   1..1
+>   ok 1 test_case
+> ok 1 test_suite
+> 
+> This would be accepted by the parser without error because it is valid
+> KTAP even though it is not valid TAP v13.
+> 
+> The scenario above that caused the infinite loop would be incorrect
+> KTAP (which requires the test plan to follow a version line) but
+> correct TAP v13. So do we accept it without error? Ideally, we would
+> parse based on the version given in the version line.
+> 
+> Just an interesting thought. Either way, I will remove the error for
+> now as our parameterized tests don't properly produce a test plan,
+> which causes errors.
 
-Hi!
-This brings up an interesting question because the parser has been
-mainly geared towards parsing KTAP
-(https://docs.kernel.org/dev-tools/ktap.html) rather than TAP.
-(Although we do try to have backwards compatibility with TAP v14
-"Subtest" lines)
+OK yeah sounds good. Now I think about it, I should note that I am
+abusing the KUnit scripts to parse the result of a kselftest run. I
+just assumed that this would be supported but actually there's no
+particular reason I should have assumed that :)
 
-For example,
-
-TAP version 13
-1..1
-  TAP version 13
-  1..1
-  ok 1 test_case
-ok 1 test_suite
-
-This would be accepted by the parser without error because it is valid
-KTAP even though it is not valid TAP v13.
-
-The scenario above that caused the infinite loop would be incorrect
-KTAP (which requires the test plan to follow a version line) but
-correct TAP v13. So do we accept it without error? Ideally, we would
-parse based on the version given in the version line.
-
-Just an interesting thought. Either way, I will remove the error for
-now as our parameterized tests don't properly produce a test plan,
-which causes errors.
-
-Thanks!
--Rae
+I would like to have general support in the tree for parsing test
+output ([K]TAP it's not really a human-readable format IMO... even in
+the best case like nice tidy KUnit tests I find the structure very
+hard to read. And without something like 'kunit.py parse' I find it
+extremely difficult to get a high-level gestalt of how a test run
+went). But that doesn't mean kunit.py is responsible for the whole
+kernel tree's output! Still, it would be nice to handle it to the
+extent that's practical (and at least, with no infinite loops :D).
 
