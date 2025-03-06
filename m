@@ -1,119 +1,135 @@
-Return-Path: <linux-kselftest+bounces-28426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C04FDA5553F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 19:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BA5BA556D4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 20:35:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76251170BCA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 18:43:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36D1917621A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 19:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56750270EA5;
-	Thu,  6 Mar 2025 18:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044B52144BC;
+	Thu,  6 Mar 2025 19:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b="EFWz9dw6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUM+hBqW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06AD2702C2
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 18:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5701B1862BD;
+	Thu,  6 Mar 2025 19:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741286545; cv=none; b=UCtWrWhhioRUK4ZFrbgWXLlN8EFZcTFvEx4qYhTk6toEJtqDwT/3Jc9K/9SS5V9ua8qZk17FOITRmM7QkaKFfoWjeq8g+w0dS+gDCAhqTw5sSLe2ykfd/RWwTKQyIxR1jPASs+3LsanIsrGCOC0kGnDRPB3rkJSAxb6lnnJAXVg=
+	t=1741289712; cv=none; b=oz/4StS1z9eo55frrGKEx0Yxh0BPucFNXHNLPEy5aRE6QvYb0jvqjXI1VMY7dVqpuhFIonp+rmQP1rTo8w24W5rxRQPJ75zSMedI9fgT0EJ94CnDKr2qStotxwEI43BlYWt1bb9/JV0+Gn41qZJVRUJ3BYTKseSxvuSuIWC6x1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741286545; c=relaxed/simple;
-	bh=9Dig6sAHtsyHbkq2491f7Tg8tRugSKtgbFGFfoTAC3Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WjcZVafHgr3sj8MAWP42PHJrF9sg4vLgpVQRNBHqaVk/U/UWqRiAhpzNAOORstLr7oINbdHKFTv+vfAMtiLDp33vUWHSa2NCG09PlB6BUKYbxXZMvaR75FB4z2i9U+TGw4/lHlrjlx3ZKZ7up6EmyEKGo/YkgS6uB7xuGWrXpSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu; spf=none smtp.mailfrom=kragniz.eu; dkim=pass (1024-bit key) header.d=kragniz.eu header.i=@kragniz.eu header.b=EFWz9dw6; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kragniz.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kragniz.eu
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43bbb440520so12277405e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 10:42:23 -0800 (PST)
+	s=arc-20240116; t=1741289712; c=relaxed/simple;
+	bh=eUBRx9zrJOuo2cMJ67QLDl5g4eHEppyXry99Vimhyrw=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=LlEaXO9XNt9cR8M+PVqJkZJQIVSPix4u5xzZhilaxH6sBIerY7dfgRuVd8X58TyovyftAV7wkPcM/JqSffQtSLSBBT8EI3ta6twcpLdiieagW9QsAqtwKV9WrcrRA26IGqDI2Nr3F9FyctevoOUwI3+zvEg0yD58450BvZt8Br4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUM+hBqW; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6e8f4503104so8220576d6.3;
+        Thu, 06 Mar 2025 11:35:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kragniz.eu; s=google; t=1741286542; x=1741891342; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1741289710; x=1741894510; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QAl6qbd5AUIqBk2GNL7RYgkgYgmohGeVwmROfTx+sCw=;
-        b=EFWz9dw6n6WUMBqu2bwYeIT6Oh7OKtdAXlw04wweBBV/anWKZmrRtGxaSdE1KZf0EK
-         RvaDX0TmekAoxoGUWTxHbYPi5/kePwX+YxYSoJNV5MRkQK5t3aoaD9VcR9axCASVDjNE
-         5/7oRzDzbhnOFDI10ZDQSFkKXNIGF9fmswR+E=
+        bh=nncCfojn+eOfHNfAM38v/adQ/H6A8XS9sVQrG87maOM=;
+        b=CUM+hBqWjCEson0+oD8eWiTtER1HZutxXSmPwUMyz0jfC7nFMa+4Mfur4KLTOOlC/V
+         pZ4aSU94BPSmg3bOHmdimrgYsb/IkIkhNUXh73UQ7eQbYnw4Y83KAWm17BuS/U2Y6ysi
+         WSCRYv82BYzyHqfSjs6W6HtQtPWk60fSgX0Y33EtGWRf48x1DZ9l5ZJVtG4DI0GI58SV
+         L168eVZr3tkIh27SFsU1XbYGkn8N9XBMknlV/amQgcoc8rWPQpsryPrdCqc/SX8u5nJK
+         Sc6axrXgb8GqNNDow1va57LIMS2qy6bH3euvm4pWAwDVZ6+VE9HMHsM0vX/W52vJZcBW
+         CIrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741286542; x=1741891342;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QAl6qbd5AUIqBk2GNL7RYgkgYgmohGeVwmROfTx+sCw=;
-        b=mk2xZNie5DmBwY7zRL6UVWxYoVwz20+LbEBTByw4Xuje5NccCGbhb2SrklzYCFTATo
-         ngp5bMpnxwpFBtLwFq5uiw+5V+gUP3Fj7Mtnd7DqWfnvJWzCvdRcdJp5yAA13VBHENCS
-         sfPUOapkqQVWIA4n91g1kjO3byNY3MvHFSdJI5TMJg8emM1FcDezzGWdR9Fi5QUZLXhj
-         yKJgXWoIgTWC+f+afKeQgHAGNg4CsJMrm/6rXZL81SkDthdg6MzjXghYU4FqqDIUckPX
-         r1ug7hk4NImQgeKIoL7+wovpq5vGd4Dq/Pb2zRE269MquyiBpM0WjItpg4J1I6BxV9nN
-         JdCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVFzYgtsKNzRVLr7150A4d2h8X8cIXGzWjPALHYcbRe7Z/CNaRbntryriHf/DGZH617e4YzFjYs/MMVftC28Ks=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9mb2rVgcNmIImr+N//cdlsO9AIWmlmar9FtR/7PnfV9tdXtEG
-	uX73zgAYprnpqSxLU57j1fdLQd9AMCvCLEQGgFg24SPHtOeJMMhInL5PLWBo2LA=
-X-Gm-Gg: ASbGncvEFCYC7LfvpTm3rDXPMEQ+D4OrJlDohcd4fC2ZK/2YVKQRivBFxZcYTQKGe95
-	Qtpy3v7cGBLaEoencQJ/YNY2aocP0TJByV3MxqnpX2ZyjXnQZGCjt5SRFC4DqZfbpW8UG3vTN92
-	9JbR5YPO5DHp4XgrGj7VSzcyFJ8DG5NAMf02ZSvYf/EIwLjre4FAGy8y2A44aaMsh4eQZsy7JcB
-	uFa7hVPcvgpoeeFuKB9UiJOFuu8ZJe+qi2mM3uF23h5Kb9vnd+WchvDr7mFjp06qaJ5KdJaYnAA
-	AUah+qIwPLGJRq3q5ngD6uEbMW8ZIcUpngltzIigPKBBFj4+o4/Z35FNMQFT1QKYDuE+OpjmjMA
-	N30w6QA==
-X-Google-Smtp-Source: AGHT+IEe5BwBXjl5g/UzaCny2ATgwBksaUC6y4ZTKWmkNFRie4pvQ0MC4LOjIjjxc7s/T6NPUmwSxg==
-X-Received: by 2002:a05:600c:3b1e:b0:439:9ee1:86bf with SMTP id 5b1f17b1804b1-43c5c98089bmr7080135e9.7.1741286541998;
-        Thu, 06 Mar 2025 10:42:21 -0800 (PST)
-Received: from localhost.localdomain (161.26.169.217.in-addr.arpa. [217.169.26.161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bd42c55e6sm57052725e9.23.2025.03.06.10.42.21
+        d=1e100.net; s=20230601; t=1741289710; x=1741894510;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nncCfojn+eOfHNfAM38v/adQ/H6A8XS9sVQrG87maOM=;
+        b=C7xnJvvi81xRHXUqlyQAb117hy8RyguAMxlN0nJ2/2JGOzBOEAMoW2c7qp0scUvMji
+         0R7XLK5mO9n3kbWNkUSJdhjdHthf7mH8/73RYYAveNp7TlcEde6SiBPpySwhLOomxbSp
+         wjzWKcKneqd08lE+5w88ZE0pK6yLJpIZDxgeu1jUv4RIvLU7UsrPytEw9S7706dZoBRd
+         CZQOg38iImx3tUP99Mn47IE97og20aYH9r16qK/Kpvhw8HpNyB3i2NnOUPKB6P8ZSsfJ
+         6Py2iqrmLfK0HQPxuROKDRKoKUuaO8t6Nv6+4/aW163lkWRkuRqBmbqwK+/Z1MQBLwDN
+         pcww==
+X-Forwarded-Encrypted: i=1; AJvYcCVe87R0rvwHvYvtEEzS9JOCpJmXUzc0vlyqQH+WLGUJpySgi3iud9nSJvDLrbBgPkdBinQW6r2AqgSAAt86O0A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww0SZ3nlQqCGylNHFUO5c2FYu+h2FPeWOK9CVMV1iKDS9vj8cs
+	Wd0A9CDhIT3U4D2bS+oQ8iotPQ7dBEm3w+ugWlaykMb1VcjStqY+
+X-Gm-Gg: ASbGncvLdz48ZnU4KjesusP6xcYG6Vgkx0YtBfODypdIAXphnJtUheAqoiStUBMW+gY
+	N1VZ8MYb0LlNvm2qTA9r5mrGdmjsxc9IHAMUhYG6PG9RqqNWtvwcDAFW+jQKP3eJAtupz/RIc8d
+	zWY9o7PhkiKXEq1Szq5wU+ZhNJsNXQY4b8qEJVYTbxjXogXHLgVCrf2k6MAvDlEJI86NXNIWQ3s
+	e4Te4xgWfCSbZibFwnhOKQbb/22Mh/TUPM4PBAuJn0pVypDtzM0RBYMVTiKwtkrGFvNBG22Jsah
+	PzqlGNYDqRrTK5mj2maPVpirtSfLwdN2Htc6XcqSuJTYBxk3Ib2cE+OsBtjaqZUrGXxXJPM9BDS
+	/09VSVt44GBBFiixGRKLrGg==
+X-Google-Smtp-Source: AGHT+IGgWNnrb3K0RdtbFdzJTK5KID8LLekqZUhrHo/sOGw4xMDVR78n4rCAIQfrFlTRQ1obzcx4rQ==
+X-Received: by 2002:a05:6214:da9:b0:6e6:68e3:8d84 with SMTP id 6a1803df08f44-6e9006041damr4717946d6.18.1741289710173;
+        Thu, 06 Mar 2025 11:35:10 -0800 (PST)
+Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f7090d6csm10412936d6.29.2025.03.06.11.35.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 10:42:21 -0800 (PST)
-From: Louis Taylor <louis@kragniz.eu>
-To: Willy Tarreau <w@1wt.eu>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Louis Taylor <louis@kragniz.eu>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] selftests/nolibc: use O_RDONLY flag instead of 0
-Date: Thu,  6 Mar 2025 18:41:22 +0000
-Message-ID: <20250306184147.208723-5-louis@kragniz.eu>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250306184147.208723-1-louis@kragniz.eu>
-References: <20250306184147.208723-1-louis@kragniz.eu>
+        Thu, 06 Mar 2025 11:35:09 -0800 (PST)
+Date: Thu, 06 Mar 2025 14:35:09 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ shuah@kernel.org, 
+ willemb@google.com, 
+ petrm@nvidia.com, 
+ sdf@fomichev.me, 
+ linux-kselftest@vger.kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>
+Message-ID: <67c9f8ed24f9c_1580029416@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250306171158.1836674-2-kuba@kernel.org>
+References: <20250306171158.1836674-1-kuba@kernel.org>
+ <20250306171158.1836674-2-kuba@kernel.org>
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: use the dummy bpf from
+ net/lib
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-This doesn't matter much, but is what the standard says.
+Jakub Kicinski wrote:
+> Commit 29b036be1b0b ("selftests: drv-net: test XDP, HDS auto and
+> the ioctl path") added an sample XDP_PASS prog in net/lib, so
+> that we can reuse it in various sub-directories. Delete the old
+> sample and use the one from the lib in existing tests.
+> 
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Signed-off-by: Louis Taylor <louis@kragniz.eu>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> diff --git a/tools/testing/selftests/net/udpgro_bench.sh b/tools/testing/selftests/net/udpgro_bench.sh
+> index c51ea90a1395..815fad8c53a8 100755
+> --- a/tools/testing/selftests/net/udpgro_bench.sh
+> +++ b/tools/testing/selftests/net/udpgro_bench.sh
+> @@ -7,7 +7,7 @@ source net_helper.sh
+>  
+>  readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+>  
+> -BPF_FILE="xdp_dummy.bpf.o"
+> +BPF_FILE="lib/xdp_dummy.bpf.o"
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index e8faddcecf9d..a5abf16dbfe0 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1130,8 +1130,8 @@ int run_syscall(int min, int max)
- 		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
- 		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap(NULL, 0), -1, EINVAL); break;
- 		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
--		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
--		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", O_RDONLY), -1); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", O_RDONLY), -1, ENOENT); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(openat_dir);        EXPECT_SYSZR(1, test_openat()); break;
- 		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
--- 
-2.45.2
+Just curious:
 
+How does tools/testing/selftests/net/lib get compiled? The other
+subdirs of net are separate explicit targets in
+tools/testing/selftests/Makefile
+
+And what is the magic that avoids the need for adding bpf objects to
+.gitignore?
 
