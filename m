@@ -1,187 +1,152 @@
-Return-Path: <linux-kselftest+bounces-28381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A294DA545B2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 10:00:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2788DA54606
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 10:14:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9D5D1883376
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 09:00:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50DCB3B0210
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 09:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B731C861F;
-	Thu,  6 Mar 2025 09:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40465208979;
+	Thu,  6 Mar 2025 09:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HHf0+04U"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P5qsMhIA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E015E207E11
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 09:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8736D1F95A
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 09:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741251605; cv=none; b=ciXIdocjvwAMQ9p3cLyD2dGg/WZ4H0x85tmhf7tf6G1IP6mPWiyhK7G26vArGZhDdq/bl3ws6I1Q0T5/faL900q8c25x190hVDMKktXNK4cgYg9uli/f+fT2t2ck+v0rPcp3i53a4F5VkYErTHlg8e1KpRnNW6gH8kw3E8oxecg=
+	t=1741252423; cv=none; b=Qfnu22qGY2sxOrEudf0aXYg+NgKpiMlf/dCNNkHmi9Nnof0HMMs32gwBijc8+UdUBwOkwCRxxQnbimMKkOqrRcT+zPOHuZPW6p8VgDR3/8zgkdYSOLupO/Xts8eW8Hdf3T6qLq2EQHy/CrfKmNulzt3539/fZJGyw0qr9W+BmXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741251605; c=relaxed/simple;
-	bh=va9mITd4oo1Sgkbyc5hOTuLhBCn2glHA7AQoz8RP2QI=;
+	s=arc-20240116; t=1741252423; c=relaxed/simple;
+	bh=Ro3jrnjLRZkuwjiZOrWvZmXDFupnjB2WKFd49yRhkL8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uDvXjS7AB5jxDnOikzmKH/yHyfzv7UmKCQxuEbgE5P7+B+T2t/iwogfdLCqs+aicUFb8fJKRXwk5IPUIsN2Qko85axdBSxAWKOVGf84h2MqM3hHtvR3coXi4NGtIyCZZeY7palW2dOwY7KF3M5//EfQVGnUqxo0Xqm1G87hTSrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HHf0+04U; arc=none smtp.client-ip=209.85.219.41
+	 To:Cc:Content-Type; b=N/GgkEmcj2J0tC19ai5KvKd7txkVcWbxlJeOOZ3wtyZMp6SqbyzOwn/lxMGWlTjKylEMp0GN0OGIy2cUKKqDrbVJQICAmhqSD7krc8K1r26bdM/DHNk4YMFrRlcgiaKjzhiKreSXfEyjeBaG3JHMFNh0zwtQUvhf3ygs3bGccpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P5qsMhIA; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6dd049b5428so4085296d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 01:00:03 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4750c3b0097so3540081cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 01:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741251603; x=1741856403; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1741252420; x=1741857220; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=min2nR3M70cpd3J+GI+jV/w1GYtiV5d40qZezL/fx3k=;
-        b=HHf0+04UxmF2v4bAaXjX/LzxJxF2YT2Fjus+LNlI3GQZipwZs9MSxdftzxfDXok36q
-         6AbGPXYhdJF8cFL2gMvThAqbjqIGrjhGTs6+3RTehko2NjQuuLFTgHrzCYN9jRrHZj10
-         m1Ez1ZNeheJYK4YyFeHIPn1jLIg6hq8XE9CAiqvI7hWI/C595xrGoGrV1Ajx8vWoejnl
-         Pjpx7wJocG6S2yu+v57j/+n9TCHYmD8spiuOJ150y1G01qPaIU3ksqO+1brRRHfcpy2k
-         5XIOZ1Yy5AOobKuNA70kuHqcFnG+AwrKVHhwiUxpLsb/RWwSMayFlcXhD8MdpV9oYlW5
-         2/Bg==
+        bh=3LgAFecl2+n4HWkDjcSu6geX5GYl7G8gPC2X9ESVE3g=;
+        b=P5qsMhIAAwc+OBryzs1gTkCe04fnpx6vVNCZETufwnivUuA9XWPGEjufSpjN/sYsUs
+         8txisIATAQ/8yUqAn827Ixfg6Kg3CzgV8w9+kiN8Pz/ovNWtVrw5bmV3UcaYDDouoPB7
+         N+FJbY5SBY83AxCwZUdcmmNaMe/0muLAIM/Dqzz1Km0uF5y96hoRt3DciVTIAqFboeN3
+         CoE8mwv9s1ePBsj099ZEWyro6+L2ZygzIRHUo0TkUXI8unEEdeLFDLv3kHaWP9YbUSQ9
+         hCWDUIrW3V0/yrzJsNxCDmc10ikdzdXVk6wOor1CrHgW90Df9VRKoFOY+iECtU+43QHe
+         CzMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741251603; x=1741856403;
+        d=1e100.net; s=20230601; t=1741252420; x=1741857220;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=min2nR3M70cpd3J+GI+jV/w1GYtiV5d40qZezL/fx3k=;
-        b=ZGtphBTbOFrKn+5xx1rFFr1uPVf5rjjDeq7Dhu3ZibZmVd8KwVwSc9CuT/TQ+quKi0
-         4ZZPAt8XyrWiUunUYt5UTZvRMFltNLvhikUohp7b66Y76KNKdBNcjUjgy/RgA0W0nfSY
-         PmKtoZS2U9SYQv+pD7qrnYNlgUTpaQHNFUU32NQ5JCsDyt6RprfY+RfrWdsKTk0u2Qyk
-         Ue8l0g0yzl5CFXK1Vs2FWTC3PV5Pvze4yYKUCWhrzXXVNO/+mY7v+QLcNeT+6AGKFnJK
-         aHw98ckveUIAn0vMMlTQqq33dlEIC2jLgsKVXl5gGHfAmVhYWuUS3Bj70873zaSrPY+B
-         tZgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXwhcognwywFcZrg5aw4Y+Hz8BBabqDdCB370LL8YDLj4GoFId7N4N76y0ypSeMAa19xtSYlHX0ye4j21ym4Ac=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQAAjjZbNk+hW+ybj/TWcn6rFXjQm/6aYRKbeIGY8xVz2cgbsu
-	g/dmJ0cQKV+NOA6xls40SgRBe3wGI5IXr1LazIBopWtC37ah/DMgpSiocUqLQTAX69CMnaXXaFi
-	DSMbbo+zq5SEKyLid7ZlBpyYxph8bXn1QXIPC
-X-Gm-Gg: ASbGncucZxx80xL7+di/TbaFNAuTbkwn20GEkzZUFhyPofJrh9+p5OqZAfAbZSxIdAs
-	5Hgnsya6+RgcruA7Kqg+cye6gxZvSyTN87WkJLdTffeBdRe3AHxKgMGhLiKL5nNeZQcy8qEBTxn
-	xygFwLBvRaw56b9eQjirNt4k2apcA=
-X-Google-Smtp-Source: AGHT+IEnTFk+qPOlTSbiY7+YUxlqRjEgDgoxk4hAxmHddfCpJ8+QENxWifylJ16vDQJsXnW7ueQYkIbHgErRNL+2GnQ=
-X-Received: by 2002:ad4:5ae9:0:b0:6e8:9a55:8259 with SMTP id
- 6a1803df08f44-6e8e6cfedf3mr93849766d6.9.1741251602571; Thu, 06 Mar 2025
- 01:00:02 -0800 (PST)
+        bh=3LgAFecl2+n4HWkDjcSu6geX5GYl7G8gPC2X9ESVE3g=;
+        b=QP3K332a52T90gxSdqV6oH0Y2cxGsBzXberKR9n1ZwmSQCInS4rDV6w1vxL1+QhjSm
+         AMsap2qknuD+S8hWYxtj5+esLK8+ZmCrmis28QNCyD2GWUZ5wbzdiH46qyG24pCdznJh
+         0GGqBxotYAJ2atWrUL+KnDkv/QvRk/ltgVLkOgJn5EUm9kE90aI3BoodkG9sb1pVa9Bm
+         W8QKSx3OKWWzyYqosaSBKlscCenIItCiaQK4DBfubXhPkHssE6uT/r2oJUsGDevT0Q2M
+         Zil5w8/wViIVMatdjvlUuAPrv4TUfeALx60v4NOzOxb9RsG57Lg3IaGK3uRbVr3/UkY0
+         UgTA==
+X-Gm-Message-State: AOJu0YxR+8fcMNZLi7NAMdDf7/Uiluh7zF0aC5VE14iodAZBa80xMOz9
+	ZOIklBW4Aeaxyf8LBs9DTPxSARIVYYCiYJJTx6qjIsGJCM9vrY4r1c+3UlFqRmTY5uiAZH/cBad
+	j+w6jAs1qpZ0p5moegoejQeLt3xpl/u0x1v6r
+X-Gm-Gg: ASbGnctEqIubtyorCIf/WvuH0QKY4ni9Zt5WfOV47UM6djR7s44OhonCb6hXfaPeW+z
+	ZAztY1O5gbAQWnahFKF3wclC01NUb1nC/nrpZ2SRuX3OZskpmed5oewlVJvTjLKxEOLP2jp7ctx
+	Jm8uVN4xRS2nv+IgfV+rlCLBkWn9w=
+X-Google-Smtp-Source: AGHT+IH7dfXebne1Aq5TQoBi/YJUjiQTo9TQYqLkhUmoLRQFvDRerorJ8Uw4toHXVxboXwE3qcWl2owo81irp6P5b5c=
+X-Received: by 2002:a05:6214:4008:b0:6e8:97f6:3229 with SMTP id
+ 6a1803df08f44-6e8e6ccee0emr88743726d6.16.1741252419742; Thu, 06 Mar 2025
+ 01:13:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250306002933.1893355-1-rmoar@google.com>
-In-Reply-To: <20250306002933.1893355-1-rmoar@google.com>
+References: <202503050109.t5Ab93hX-lkp@intel.com> <20250305114701.28c0ee0b.ddiss@suse.de>
+ <20250305235601.464f6432.ddiss@suse.de>
+In-Reply-To: <20250305235601.464f6432.ddiss@suse.de>
 From: David Gow <davidgow@google.com>
-Date: Thu, 6 Mar 2025 16:59:49 +0800
-X-Gm-Features: AQ5f1Jry7uhKagxn_pWuMsODdfHkO3aKU3Urde0moQ7csvmBpcY3u_Da2JYfP8Q
-Message-ID: <CABVgOSkwrb36rrhH3H17fhYOnywhTgTh06aDaKXT4jZp474sRQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Fix bug in parsing test plan
-To: Rae Moar <rmoar@google.com>
-Cc: shuah@kernel.org, jackmanb@google.com, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Date: Thu, 6 Mar 2025 17:13:26 +0800
+X-Gm-Features: AQ5f1JpbtRWYKTD8KTTuCPDPC3boBhy8F3aSIB8u7nfqccd4ksOLAnjQpms_PsA
+Message-ID: <CABVgOSkec8W=_xM++3GcevAyL=ggKGcemaRZm-g7-cCEUxpqeg@mail.gmail.com>
+Subject: Re: [brauner-github:vfs.all 205/231] WARNING: modpost: vmlinux:
+ section mismatch in reference: initramfs_test_cases+0x0 (section: .data) ->
+ initramfs_test_extract (section: .init.text)
+To: David Disseldorp <ddiss@suse.de>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev, 
+	Christian Brauner <christianvanbrauner@gmail.com>, Christian Brauner <brauner@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000043dd65062fa8bb31"
+	boundary="000000000000f98249062fa8ebfc"
 
---00000000000043dd65062fa8bb31
+--000000000000f98249062fa8ebfc
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 6 Mar 2025 at 08:29, Rae Moar <rmoar@google.com> wrote:
+On Wed, 5 Mar 2025 at 20:56, David Disseldorp <ddiss@suse.de> wrote:
 >
-> A bug was identified where the KTAP below caused an infinite loop:
+> On Wed, 5 Mar 2025 11:47:01 +1100, David Disseldorp wrote:
 >
->  TAP version 13
->  ok 4 test_case
->  1..4
+> > [cc'ing linux-kselftest and kunit-dev]
+> >
+> > Hi,
+> >
+> > On Wed, 5 Mar 2025 01:47:55 +0800, kernel test robot wrote:
+> >
+> > > tree:   https://github.com/brauner/linux.git vfs.all
+> > > head:   ea47e99a3a234837d5fea0d1a20bb2ad1eaa6dd4
+> > > commit: b6736cfccb582b7c016cba6cd484fbcf30d499af [205/231] initramfs_test: kunit tests for initramfs unpacking
+> > > config: x86_64-buildonly-randconfig-002-20250304 (https://download.01.org/0day-ci/archive/20250305/202503050109.t5Ab93hX-lkp@intel.com/config)
+> > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503050109.t5Ab93hX-lkp@intel.com/reproduce)
+> > >
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503050109.t5Ab93hX-lkp@intel.com/
+> > >
+> > > All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> > >
+> > > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x0 (section: .data) -> initramfs_test_extract (section: .init.text)
+> > > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x30 (section: .data) -> initramfs_test_fname_overrun (section: .init.text)
+> > > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x60 (section: .data) -> initramfs_test_data (section: .init.text)
+> > > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x90 (section: .data) -> initramfs_test_csum (section: .init.text)
+> > > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xc0 (section: .data) -> initramfs_test_hardlink (section: .init.text)
+> > > >> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0xf0 (section: .data) -> initramfs_test_many (section: .init.text)
+> >
+> > These new warnings are covered in the commit message. The
+> > kunit_test_init_section_suites() registered tests aren't in the .init
+> > section as debugfs entries are retained for results reporting (without
+> > an ability to rerun them).
+> > IIUC, the __kunit_init_test_suites->CONCATENATE(..., _probe) suffix is
+> > intended to suppress the modpost warning - @kunit-dev: any ideas why
+> > this isn't working as intended?
 >
-> The infinite loop was caused by the parser not parsing a test plan
-> if following a test result line.
+> Stephen Rothwell (cc'ed) mentioned that we might be able to use
+> __refdata for initramfs_test_cases. The __ref* description in init.h
+> does indicate that it's suitable, and I now see that it's present in
+> kunit-example-test.c . I'll propose a patch which can be squashed in
+> with the existing commit.
 >
-> Fix bug to correctly parse test plan and add error if test plan is
-> missing.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
 
-Thanks for looking into this: I don't think we want to unconditionally
-error if there's no test plan, though. Pretty much no parameterised
-tests include one -- it's not always possible to know how many tests
-there'll be in advance -- so this triggers all of the time.
+Yup: __refdata for the test cases array is the way to work around this.
 
-Maybe we can only include an error if we find a test plan line after
-an existing result, or something?
+As noted, this is in the example, but probably needs to be documented better.
 
+Cheers,
 -- David
 
->  tools/testing/kunit/kunit_parser.py    | 12 +++++++-----
->  tools/testing/kunit/kunit_tool_test.py |  5 ++---
->  2 files changed, 9 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 29fc27e8949b..5dcbc670e1dc 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -761,20 +761,22 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
->                 test.name = "main"
->                 ktap_line = parse_ktap_header(lines, test, printer)
->                 test.log.extend(parse_diagnostic(lines))
-> -               parse_test_plan(lines, test)
-> +               plan_line = parse_test_plan(lines, test)
->                 parent_test = True
->         else:
->                 # If not the main test, attempt to parse a test header containing
->                 # the KTAP version line and/or subtest header line
->                 ktap_line = parse_ktap_header(lines, test, printer)
->                 subtest_line = parse_test_header(lines, test)
-> +               test.log.extend(parse_diagnostic(lines))
-> +               plan_line = parse_test_plan(lines, test)
->                 parent_test = (ktap_line or subtest_line)
->                 if parent_test:
-> -                       # If KTAP version line and/or subtest header is found, attempt
-> -                       # to parse test plan and print test header
-> -                       test.log.extend(parse_diagnostic(lines))
-> -                       parse_test_plan(lines, test)
->                         print_test_header(test, printer)
-> +
-> +       if parent_test and not plan_line:
-> +                       test.add_error(printer, 'missing test plan!')
-> +
->         expected_count = test.expected_count
->         subtests = []
->         test_num = 1
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 0bcb0cc002f8..e1e142c1a850 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -181,8 +181,7 @@ class KUnitParserTest(unittest.TestCase):
->                         result = kunit_parser.parse_run_tests(
->                                 kunit_parser.extract_tap_lines(
->                                 file.readlines()), stdout)
-> -               # A missing test plan is not an error.
-> -               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=10, errors=0))
-> +               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=10, errors=2))
->                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
->
->         def test_no_tests(self):
-> @@ -203,7 +202,7 @@ class KUnitParserTest(unittest.TestCase):
->                 self.assertEqual(
->                         kunit_parser.TestStatus.NO_TESTS,
->                         result.subtests[0].subtests[0].status)
-> -               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=1))
-> +               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=2))
->
->
->         def test_no_kunit_output(self):
->
-> base-commit: 0619a4868fc1b32b07fb9ed6c69adc5e5cf4e4b2
-> --
-> 2.48.1.711.g2feabab25a-goog
->
-
---00000000000043dd65062fa8bb31
+--000000000000f98249062fa8ebfc
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -271,14 +236,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg2ERQGafR2K3SU77d/gRKgSMUJ8Dc
-6XQa9prbdxBnXSowGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MzA2MDkwMDAzWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgLzSiocPcZxGeIn9gEUbtZsG4brVP
+x+3zqBJ/czCQ+mgwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MzA2MDkxMzQwWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEABp2uoUthODqlYcwjbnhQK4eN/UJWZQgUdd3lmRBTonA3XZltQdNQqg2W7oLds4ou
-KYUhSwiaQZHP+R45eOdaLHq6w8M4RAzgVXZaNJyZ6TSeR6gUGlZ6CbUyHycG+xc/pOIT5TFEzsyj
-9MkGvQLvUhSoIdAOm6hVLFFSy6FDwVHgfoX1JKDpmt7TgGajWaiby3XtqB3R1qUjOMF7171b4JL2
-5QtvFTRpTL/H6hpMMcQu7V+r7hX/77oXJLmFIWfrW/XoOPgOEyzvMXyBB7tgwizfxvx9YHCbhPoT
-TAnc8dWkomrgZnnCFZX7324qXmlmdnI1Mxezvlt5yysHzM1NqQ==
---00000000000043dd65062fa8bb31--
+AQEBBQAEggEAVhN1o/MHxqIGpGawbM5fTVbGWvU8BpDiWgUMk9nIZaS/NGW0RLn1clGr+dHmJliF
+yB/a/wS17PUzxqvgB4szTRZMS6UbQoPuEpjpddRuFN3uwHF/YcWyZxeUAW+8pFiTSU/s+S2zcBeY
+82/lwIKieCbeQU3z0c0zf4Uuh6iQz/lCYycyNZI0bJaXrc9XMR1OmhpXnlYztG/5mdx6GUcIG2R0
+v6j1TqEjtt0s8ZU7WDE+d6pKQ3qaqv293DWYv9aSb7g14mkxXjU8EtVI8cZihZOZXL5VS+xfLJFQ
+EnGW5i8Zy1A2HlgNa3SgFZBWiCeUQyINRFHEPEJIeTXojSY84A==
+--000000000000f98249062fa8ebfc--
 
