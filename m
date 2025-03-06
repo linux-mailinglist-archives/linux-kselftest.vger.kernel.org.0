@@ -1,108 +1,96 @@
-Return-Path: <linux-kselftest+bounces-28370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6E4A542CF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 07:31:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2CB7A54368
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 08:14:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C2B716BCC4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 06:31:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFA1A1894ACC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 07:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F373C19D090;
-	Thu,  6 Mar 2025 06:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1011C84DE;
+	Thu,  6 Mar 2025 07:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b="cGqsCgJ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cub8HJYt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BA419882F;
-	Thu,  6 Mar 2025 06:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608971B4234;
+	Thu,  6 Mar 2025 07:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741242691; cv=none; b=KTXlsfAq3NFu3yk0TT1knsTtaQ/01y+VFDlV/Ip1//tOmyzNfWWL1BcA0tbzwoxwUJLTtkSTfE05rRfr7eNSdhQmTWsy59/W9swyj2ngVpi9yiPpk2SiR2FR0dxTWDopuxlsbQioBBXgQwil7grqHes4LdkMEf1iCzHD8CK/Nb8=
+	t=1741245242; cv=none; b=HsjpRJXBPe2Cma/Ey+YX7UXyyAiG73VQlToxzAJyRZ/t0gnZ57iaeAq9pbn5LhtefBCP3h2GmpKhIM3ncD7sctjSTQZ1byTDN75IgAHojSxKFYG9kicbZlGgtfbtZrrfWzgNGQZ1q088XC04zt6mHb1mBPzAtaQgGyKLML8SX7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741242691; c=relaxed/simple;
-	bh=ru0yOM3azaebE5Y1U1SpcUqyVYne8Lt/4X1VvUoX//c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EMKkPCn8sJD1wdvuYTOLoRoph/SGuEuZcTV/D/zyIWrWM42zH50JSbuqdyRWXd0hkuk7kuGLDMCfUFWUE4/ZXYOmWmSWqBD0eqbKAKEIm56NvRtl8GCT32254GgC/JVFRUzwen5aG8ij80jjZZJdjZKbOtbE6DkJ6snjvS+lieE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com; spf=pass smtp.mailfrom=iencinas.com; dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b=cGqsCgJ0; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iencinas.com
-Message-ID: <f3bde84d-b53e-4b81-b995-3b81d614b789@iencinas.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iencinas.com;
-	s=key1; t=1741242686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bblUkYK5rTVes/OOwKXM7H10R1JrlrPcUhP5Wq4e/a4=;
-	b=cGqsCgJ05RfBl8CUHOvSxMvx0U4R/sCtc1iKSgkqKMnU3rRPu7bKNSBxMf27yiTAmAL0ll
-	BXHMH9QeIZEnpKdBieyhWzOgdDigRbRj4p6+Uddozp9Gfz7PrlQV4SVEtULETnw2b5k39W
-	kVMUcADcB1l5sgDny6PMFFZEMCAl6HoURzD1W5YOxrQYuqnndzs96u/Z9iu7aDYXYwCczc
-	r/uAiZ4ssjiMHJhP27jjIpyRZzP2xo+KYWm4ebGYZcI495r51Teq9xBl+mowyOLRsziGdL
-	yT2l4g3ZFf9PxWELid/G3tbQZfgNMWelyLLXFPHfNJs3p49WYyy8mnzTqPmjyg==
-Date: Thu, 6 Mar 2025 07:31:22 +0100
+	s=arc-20240116; t=1741245242; c=relaxed/simple;
+	bh=yDUsXU1iuR+Iruf45BeS8vYPFTr2B42zbUKkpU1dRMk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZBO97LPKZ/Lgr//Te5CDHZMi5E7IsAKG/5dMdfKl2MFffA2ZYnETu1oj0v9TAD9z21Tc1dcL9W6HfOsuBLbvHYwNBHWuzu7CmFR/JvlsYu2jVFH7OQs33CF741PsHmFYiAF8iwGg2v0yFf5Kk4Q42scfZHO9wid8glbBwtoSMqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cub8HJYt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E570C4CEE4;
+	Thu,  6 Mar 2025 07:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741245241;
+	bh=yDUsXU1iuR+Iruf45BeS8vYPFTr2B42zbUKkpU1dRMk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=cub8HJYtB0n+5+jJrToWJZjk3U3nfX7GfByMKXl77EJvK1EmA2tQreaU7UZlPRjRG
+	 jBZHncELS2h6qBDUp17XIOIhGODzPQrnn45gS175zFQgVyaChx4OKzH7cXf07BDKA6
+	 rOMLtba4JwZl3e5uZcX1qsXcfqItgZjvknm3kuft/d6fHECvrVoDLLCQqFkbFxUkGw
+	 tDdNRMpMSCYgLAflYarH6r+1mucBZ5GDuuPAHxIc7xu5ETNSVZdGREFmel2dL6oWTx
+	 dqcQyx5R92a2fu170rMW13YiPVSTFqWf8yCvhgJg5RfJxTnXQmUrrv3IkEjjP9nlws
+	 RiIU1/NH+TRwA==
+From: Christian Brauner <brauner@kernel.org>
+To: David Disseldorp <ddiss@suse.de>
+Cc: Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] initramfs_test: flag kunit_case __refdata to suppress warning
+Date: Thu,  6 Mar 2025 08:13:45 +0100
+Message-ID: <20250306-dickicht-kopfzerbrechen-87959b0c717a@brauner>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250305130955.24658-2-ddiss@suse.de>
+References: <20250304-anfingen-kondor-c7f9cc352472@brauner> <20250305130955.24658-2-ddiss@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests: riscv: fix v_exec_initval_nolibc.c
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20250305-fix-v_exec_initval_nolibc-v1-1-b87b60e43002@iencinas.com>
- <Z8jG1ViOUbw79cEN@ghost>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ignacio Encinas Rubio <ignacio@iencinas.com>
-Autocrypt: addr=ignacio@iencinas.com; keydata=
- xjMEZgaZEBYJKwYBBAHaRw8BAQdAYZxeXU5yoeLYkQpvN+eE3wmAF4V0JUzIlpm/DqiSeBnN
- LElnbmFjaW8gRW5jaW5hcyBSdWJpbyA8aWduYWNpb0BpZW5jaW5hcy5jb20+wo8EExYIADcW
- IQSXV5vKYfM26lUMmYnH3J3Ka8TsNgUCZgaZEAUJBaOagAIbAwQLCQgHBRUICQoLBRYCAwEA
- AAoJEMfcncprxOw21F4BAJe+mYh3sIdSvydyDdDXLFqtVkzrFB8PVNSU9eZpvM0mAP9996LA
- N0gyY7Obnc3y59r9jOElOn/5fz5mOEU3nE5lCc44BGYGmRESCisGAQQBl1UBBQEBB0CVC5o6
- qnsTzmmtKY1UWa/GJE53dV/3UPJpZu42p/F0OAMBCAfCfgQYFggAJhYhBJdXm8ph8zbqVQyZ
- icfcncprxOw2BQJmBpkRBQkFo5qAAhsMAAoJEMfcncprxOw2N8ABAPcrkHouJPn2N8HcsL4S
- SVgqxNLVOpsMX9kAYgIMqM0WAQCA40v0iYH1q7QHa2IfgkrBzX2ZLdXdwoxfUr8EY5vtAg==
-In-Reply-To: <Z8jG1ViOUbw79cEN@ghost>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1032; i=brauner@kernel.org; h=from:subject:message-id; bh=yDUsXU1iuR+Iruf45BeS8vYPFTr2B42zbUKkpU1dRMk=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSf9DaJjvn0z7VgtsGXFvmJFhbaCUJz5AxmiT/J/dS90 fb8tL2iHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABM5dI3hf6gPy+npbB9i+5sM Lpk51x77IKyp9eXzAU7m4Lv6R7bsz2f4X1ptwXd1g1Ck0pPiiInRR7/VMcXM/5nN0rwseOo+lTe zeAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-
-
-On 5/3/25 22:49, Charlie Jenkins wrote:
-> On Wed, Mar 05, 2025 at 05:39:28PM +0100, Ignacio Encinas wrote:
->> Vector registers are zero initialized by the kernel. Stop accepting
->> "all ones" as a clean value.
->>
->> Note that this was not working as expected given that
->> 	value == 0xff
->> can be assumed to be always false by the compiler as value's range is
->> [-128, 127]. Both GCC (-Wtype-limits) and clang
->> (-Wtautological-constant-out-of-range-compare) warn about this.
+On Thu, 06 Mar 2025 00:09:56 +1100, David Disseldorp wrote:
+> We already have a comment regarding why .data -> .init references are
+> present for initramfs_test_cases[]. This allows us to suppress the
+> modpost warning.
 > 
-> This check was included because the "dirty" value is an implementation
-> detail that I believe is not strongly defined in the ABI. Since linux
-> does always set this value to zero (currently) we can safely remove this
-> check. 
+> 
 
-Thanks for the review. Just after sending the patch I noticed it should
-also remove some code that becomes useless after this change: 
-_prev_value_ and _first_ variables were only needed because two "clean" 
-values were supported.
+Folded, thanks!
 
-I'll send a v2 tomorrow. I'm guessing keeping your "Reviewed-by" and
-"Tested-by" is the appropriate thing to do as the changes are very
-simple. Let me know if that's not the case.
+---
 
-Thanks again!
+Applied to the vfs-6.15.initramfs branch of the vfs/vfs.git tree.
+Patches in the vfs-6.15.initramfs branch should appear in linux-next soon.
+
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-6.15.initramfs
+
+[1/1] initramfs_test: flag kunit_case __refdata to suppress warning
+      (no commit info)
 
