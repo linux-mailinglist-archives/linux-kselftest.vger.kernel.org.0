@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-28383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E866A5461C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 10:20:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F454A54647
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 10:28:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B87AE170ECF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 09:20:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7221A1716A6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Mar 2025 09:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D47208988;
-	Thu,  6 Mar 2025 09:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665B120A5C7;
+	Thu,  6 Mar 2025 09:28:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QBhL/fJ1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jDvlQSYu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD97208979
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 09:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B772ED2FF
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Mar 2025 09:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741252791; cv=none; b=rNpVqgrq5K+ht/gEoAz5auHdhmzLP9FBpVad6eEn6JqVnmabJfeKSwZ4ECa8zjbEbNWXIP6qViFidWQI5Cxo+hELxqxKqCB1YsrPm4ktr1AtDUXU294LvBy2zfOxQ80VyFqjcAqmmMM26SQUnqzv49FlPtRXTQS9Dap94Y2X1D0=
+	t=1741253310; cv=none; b=Om9zjMj+cgkByXKJ693Aq33MbRdCobivt4W7QFcwRKf0LbQGbm3yCNRJLr8mF7XaTcMBZdBpk4wcQnvGojYbnIk6x7+uyzuf4b2gdtHPRfpyl1w827BtL2oF890eBSzUX5KncspBhjyCJb9Vnv1vWjbRmt8WswKioK5Mg612QvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741252791; c=relaxed/simple;
-	bh=mf58Myv1K0m3ZaI7IqcyVzcArb/fIOAqAO4NCBEARQk=;
+	s=arc-20240116; t=1741253310; c=relaxed/simple;
+	bh=e1FU4/LUiVNBTqldIDpCuyOXjaB2MNtq2Q3AsgjVgO4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n2/ZJivRVdrYVD32AxIpMZd4V/4RkDCtA7hHrhQN2ZOWLt+cD1f2fTWPGQ9+rnqCk5d0E1oV73L9xpWrqMJVbzs46azZHdUuqS/s30w4Np9dZTNE8GE0c+lsADt0PT+ZgVd/mGPQHyMupf47Etl04ltL7og4Tw4Oc01+XTE3/VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QBhL/fJ1; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=Rbt+37xePXk8Etu4CumbKGaFqEIQaJW+a3X1cczw+hkYeVC6XvnT0c8U9EAlQ1XrK6Iix2Ff1itzBP7i3nj59U6+vmN/9V/cm8XCxWDfDM2awi6M1buIjZHvEqsuOwK3BMCURvMLBDjEASVUaxQQdfBRltW6HvaGbMb73Cj5UWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jDvlQSYu; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741252788;
+	s=mimecast20190719; t=1741253307;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=j4u9DLEhIx3HFuqYUpbNqKrefyTEPoTUC28xU5Dyl5E=;
-	b=QBhL/fJ13eWOszQv/fgRjMvnfkpVc5pjo27tZ4jxMsFyBl5E9DD1IkSoQulh1DqbdrzUrG
-	lZJCjE9j8D0AueKGRHJJiA/g1YzZWbkxzfJqRD7+Qb4MNPE21iMl4v3YiYE7txxmGPWcr3
-	spseNNKFGObFu5D3DGBfd1iWXMx9lEQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=fgOIGFO0KNslC6ocif/kgfcUvHoBKSQ+gkoKczc7WGg=;
+	b=jDvlQSYujQKuMgaOsHIOsYHvkEO7GTHec3+od0nKdUwkzxE2IRE0uO3kghBAXgTIUFjTED
+	1bPP1lTg5KzoYwlxSy+q0fXs4qLvXifzYLxv7LGg4ZpzU30zARLTbpJzbl8EsHgauwh04w
+	HaUx3ze8orkT7cjv+wC8J3spC4J7/mE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-301-Vkfaylq0NaOGrRI1Ooud0Q-1; Thu, 06 Mar 2025 04:19:47 -0500
-X-MC-Unique: Vkfaylq0NaOGrRI1Ooud0Q-1
-X-Mimecast-MFC-AGG-ID: Vkfaylq0NaOGrRI1Ooud0Q_1741252786
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3912a0439afso164613f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 01:19:47 -0800 (PST)
+ us-mta-510-mUPXXfiTNL6XVBKBURXSCQ-1; Thu, 06 Mar 2025 04:28:14 -0500
+X-MC-Unique: mUPXXfiTNL6XVBKBURXSCQ-1
+X-Mimecast-MFC-AGG-ID: mUPXXfiTNL6XVBKBURXSCQ_1741253293
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4393e89e910so1861425e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Mar 2025 01:28:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741252786; x=1741857586;
+        d=1e100.net; s=20230601; t=1741253293; x=1741858093;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=j4u9DLEhIx3HFuqYUpbNqKrefyTEPoTUC28xU5Dyl5E=;
-        b=Iw3gGhuZyB6Kcg3G1P64Sk9skJHOwtvzjru2tEfUqz6K9Zw2vjewTmcZHYBWWLkic6
-         liNjm+0zZQP0UNiU9qpuEoCzYQLsmhti/lwVS4mSs43L9PotOOkUbgyRjJFigyjdizPL
-         k9DHAK5USkTjiBkrnKM6Onp9/KsNZLg8IkKTsINpU5zMCzy79jn+c3PNTkdsRh3nNnKZ
-         S4LAJB9zKcqnAUdWDbR7L3yHADq0K6JX0GIKp1bqrPyXhXNIsK80CXFaYcHdLkv9m5bd
-         5dfYwQI2gkVoZDKm3Bt7Aie+wUuZzBkMPpVbGJKFFP53nzoWIOZpVlE1411p8fdd4Jnl
-         oKLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXPXxtghLhv/rlhZ3Xp3Y1kqwiLe+4dxk9fjn1jaqwfLZNNt71ouQYKnGYGSWGwjA7572WrWCB5TNIu2ydahL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTQ62fOom8ZNvCyHQ+WWqWQDa8yywWWgfsginqS7pJgBIPgkZH
-	36YKx2kV83ra1l4IWLcQlOEbTzNCwJKKNzKCJKkZEHyOwuJyJkCNc6jXZTEaYT5q25rFva+pOaf
-	iPeCJatvFfrhS3SS3Tp3hhdob91vU0lwEOaeqRN8Yvj6KclnqZA6gBjRXmOXS3EhGuQ==
-X-Gm-Gg: ASbGncsbkcQKAGA0ZSCvdMBNE3WMYBM1eLuJsTNtZpjoYGq28Z0eKsploCuSMyFD11k
-	Nmqw9ToLRqcANfOzlfP40lKbq+mixv8UXj/9RQL+IgfOuU50tYHnqTcX6Z/HRgN9Wy7wCOi8MuG
-	Fgl1bLlDl6FZ78+tm94oP/YT4YD8NyCgr+xcJPQxSQ9dABLZD8zolm7YKt5Q8pXRVZoEH3OIFdz
-	gvQxWEi6owvlIgSxdD2Y8lPji3oOJNRPhOuYfwcSLRrGkcUWgXkPqBJqNaeirHsAWQbn3KV94so
-	dNxCuHrv9wRnSDI/g5zkYKDNOgRkn4L0u538kgFo+K5LPzoq40ZWYnbYibgopWhlK4tZHpJPfhQ
-	56n3lKnJy1xZ+xtg+OBy+fMsrae8cKs3psk3+IB6Jvh8=
-X-Received: by 2002:a5d:64ae:0:b0:391:10c5:d1c6 with SMTP id ffacd0b85a97d-3911f72ff44mr5895161f8f.2.1741252786104;
-        Thu, 06 Mar 2025 01:19:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGgHNDlyxd7gScP5sRIupjVHZHV0IbVTS8wDNRrqJlrNF8ED9HuMeKDsApwMXgdi6IQFHmMpw==
-X-Received: by 2002:a5d:64ae:0:b0:391:10c5:d1c6 with SMTP id ffacd0b85a97d-3911f72ff44mr5895129f8f.2.1741252785657;
-        Thu, 06 Mar 2025 01:19:45 -0800 (PST)
+        bh=fgOIGFO0KNslC6ocif/kgfcUvHoBKSQ+gkoKczc7WGg=;
+        b=T5pNOqJRQmItUiU9HkbieAaJ3iw5rCHQOU+SQKWH4+wK/ZzUw/OC2u1OazYGC5KM1h
+         tkmguccOYpW9iOQLhxMU2T0UdcP1A5uhblCDiATYBQx+lSb0szju8yzDS7QhO90O3YSg
+         PP1q4GMHzBIE7Aa2v5Pj3h5PVzU7qmRHGnPYR+cCXhQJlgbCiXsI3a1zX/q+Lktjyy8z
+         UAuN+SDuG6UqQOYCVTk28WCZxrhUeBP4QehJjTnMPLFkjqWvT1mhAyZ5Y72RCE5r/XrN
+         MryGceamQjUjzWbrPgmY63Oa4VwYVLQZpv0RIrEHJ1+Heg/B3MIqrPoI4YrOExVMlSLr
+         YABA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgrcm8tTXJKxfXiH2GUbUoEV5+cx3UIM/vjjezKX+jNd9+LqE+eRWR+ecUJQpsEJU1FOJ8qv8Fi42kDG7Bq5A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRcTQDR6Jp53MJobJ2wbIh4a6HDMuiLmoiagZZRJ5A8b7yCsnw
+	WZseDHrCbXWJqwmS6tRuHksOXNNYykI79QJInwrKa5jDDlkNR9hEAZd//qJ0qxXriRjoOlmzzp4
+	GauK3nWVX6zGgUzURlmz55rfuxMRFTmwD7FEXXuScxbLp4cZ5oGrvYdU2cA1xP2qf3A==
+X-Gm-Gg: ASbGnctrPps3QCUjHN7BQ8Y+M2FP/jwp1/BHR5lYQRxTzj10xdgKWHbpSYfyW5pVMsG
+	briGR0/UVdeimPzDOkGbNp/25yPJcFekQ8vCSNbUYY5VoW2AXDytg7LBsuBSqYrxOxw/BTKfIFg
+	EN+03avfgsQYPsYHTbPJxqCA666KYhwXaPzeohdwanzJ1nvJRDcV8KpnIa6p5fo3j3crtAhVCli
+	1dRpokYkn4DoObklHHTN82d4+QvFE2n0CikiJoL0qM/kGjlpMqwqnFZopj2yaaSvOyUAmqkSE69
+	h2uaOsqMVQa/4kItQllBVsehh5neFsmKcLZri0C++A5ujQ4qCVe9IyzpKwz3b+ueXtTun/DqLv2
+	vaPXG3lleiM1wWL7s0Ep4LJjER/veeC/5ZFrt+S/31fg=
+X-Received: by 2002:a5d:6c62:0:b0:390:e158:a1b8 with SMTP id ffacd0b85a97d-3911f7ca744mr6005778f8f.43.1741253293336;
+        Thu, 06 Mar 2025 01:28:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGwciK0KkFRXPVUO9aQuqIhjlXAUuInlRk5dnn+MniJZY8Vq2QFnXscKZmGMNQehLBVRxPJog==
+X-Received: by 2002:a5d:6c62:0:b0:390:e158:a1b8 with SMTP id ffacd0b85a97d-3911f7ca744mr6005752f8f.43.1741253292990;
+        Thu, 06 Mar 2025 01:28:12 -0800 (PST)
 Received: from ?IPV6:2003:cb:c74d:4400:2f98:9b35:6822:ce54? (p200300cbc74d44002f989b356822ce54.dip0.t-ipconnect.de. [2003:cb:c74d:4400:2f98:9b35:6822:ce54])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912bfdfcb8sm1425864f8f.33.2025.03.06.01.19.42
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912bfba66esm1470172f8f.18.2025.03.06.01.28.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 01:19:45 -0800 (PST)
-Message-ID: <4a9f102a-60db-475a-a933-975edb2fb1dd@redhat.com>
-Date: Thu, 6 Mar 2025 10:19:41 +0100
+        Thu, 06 Mar 2025 01:28:12 -0800 (PST)
+Message-ID: <08023d47-dcf4-4efb-bf13-5aef3c6dca14@redhat.com>
+Date: Thu, 6 Mar 2025 10:28:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,24 +90,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/8] mm/huge_memory: add two new (not yet used)
- functions for folio_split()
-To: Zi Yan <ziy@nvidia.com>, Hugh Dickins <hughd@google.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Ryan Roberts <ryan.roberts@arm.com>, Yang Shi <yang@os.amperecomputing.com>,
- Miaohe Lin <linmiaohe@huawei.com>, Kefeng Wang <wangkefeng.wang@huawei.com>,
- Yu Zhao <yuzhao@google.com>, John Hubbard <jhubbard@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kairui Song <kasong@tencent.com>, Liu Shixin <liushixin2@huawei.com>
-References: <20250226210032.2044041-1-ziy@nvidia.com>
- <20250226210032.2044041-3-ziy@nvidia.com>
- <2fae27fe-6e2e-3587-4b68-072118d80cf8@google.com>
- <FB1376C8-E0AD-40CE-BDE8-AF9269EA68CC@nvidia.com>
- <238c28cb-ce1c-40f5-ec9e-82c5312f0947@google.com>
- <43642DB0-17E5-4B3E-9095-665806FE38C5@nvidia.com>
+Subject: Re: [PATCH v3 08/10] selftests/mm: Skip gup_longerm tests on weird
+ filesystems
+To: Brendan Jackman <jackmanb@google.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
+ <20250228-mm-selftests-v3-8-958e3b6f0203@google.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -155,83 +146,51 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <43642DB0-17E5-4B3E-9095-665806FE38C5@nvidia.com>
+In-Reply-To: <20250228-mm-selftests-v3-8-958e3b6f0203@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 05.03.25 22:08, Zi Yan wrote:
-> On 5 Mar 2025, at 15:50, Hugh Dickins wrote:
+On 28.02.25 17:54, Brendan Jackman wrote:
+> Some filesystems don't support funtract()ing unlinked files. They return
+> ENOENT. In that case, skip the test.
 > 
->> On Wed, 5 Mar 2025, Zi Yan wrote:
->>> On 4 Mar 2025, at 6:49, Hugh Dickins wrote:
->>>>
->>>> I think (might be wrong, I'm in a rush) my mods are all to this
->>>> "add two new (not yet used) functions for folio_split()" patch:
->>>> please merge them in if you agree.
->>>>
->>>> 1. From source inspection, it looks like a folio_set_order() was missed.
->>>
->>> Actually no. folio_set_order(folio, new_order) is called multiple times
->>> in the for loop above. It is duplicated but not missing.
->>
->> I was about to disagree with you, when at last I saw that, yes,
->> it is doing that on "folio" at the time of setting up "new_folio".
->>
->> That is confusing: in all other respects, that loop is reading folio
->> to set up new_folio.  Do you have a reason for doing it there?
+
+That's not documented in the man page, so is this a bug of these 
+filesystems?
+
+What are examples for these weird filesystems?
+
+As we have the fstype available, we could instead simply reject more 
+filesystems earlier. See fs_is_unknown().
+
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+>   tools/testing/selftests/mm/gup_longterm.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> No. I agree your fix is better. Just point out folio_set_order() should
-> not trigger a bug.
+> diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+> index 879e9e4e8cce8127656fabe098abf7db5f6c5e23..494ec4102111b9c96fb4947b29c184735ceb8e1c 100644
+> --- a/tools/testing/selftests/mm/gup_longterm.c
+> +++ b/tools/testing/selftests/mm/gup_longterm.c
+> @@ -96,7 +96,15 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>   	int ret;
+>   
+>   	if (ftruncate(fd, size)) {
+> -		ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
+> +		if (errno == ENOENT) {
+> +			/*
+> +			 * This can happen if the file has been unlinked and the
+> +			 * filesystem doesn't support truncating unlinked files.
+> +			 */
+> +			ksft_test_result_skip("ftruncate() failed with ENOENT\n");
+> +		} else {
+> +			ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
+> +		}
+>   		return;
+>   	}
+>   
 > 
->>
->> The transient "nested folio" situation is anomalous either way.
->> I'd certainly prefer it to be done at the point where you
->> ClearPageCompound when !new_order; but if you think there's an issue
->> with racing isolate_migratepages_block() or something like that, which
->> your current placement handles better, then please add a line of comment
->> both where you do it and where I expected to find it - thanks.
-> 
-> Sure. I will use your patch unless I find some racing issue.
-> 
->>
->> (Historically, there was quite a lot of difficulty in getting the order
->> of events in __split_huge_page_tail() to be safe: I wonder whether we
->> shall see a crop of new weird bugs from these changes. I note that your
->> loops advance forwards, whereas the old ones went backwards: but I don't
->> have anything to say you're wrong.  I think it's mainly a matter of how
->> the first tail or two gets handled: which might be why you want to
->> folio_set_order(folio, new_order) at the earliest opportunity.)
-> 
-> I am worried about that too. In addition, in __split_huge_page_tail(),
-> page refcount is restored right after new tail folio split is done,
-> whereas I needed to delay them until all new after-split folios
-> are done, since non-uniform split is iterative and only the after-split
-> folios NOT containing the split_at page will be released. These
-> folios are locked and frozen after __split_folio_to_order() like
-> the original folio. Maybe because there are more such locked frozen
-> folios than before?
 
-What's the general concern here?
-
-A frozen folio cannot be referenced and consequently not trusted. For 
-example, if we want to speculatively lookup a folio in the pagecache and 
-find it to be frozen, we'll have to spin (retry) until we find a folio 
-that is unfrozen.
-
-While a folio has a refcount of 0, there are no guarantees. It could 
-change its size, it could be freed + reallocated (changed mapping etc) ...
-
-So whoever wants to grab a speculative reference -- using 
-folio_try_get() -- must re-verify folio properties after grabbing the 
-speculative reference succeeded. Including whether it is small/large, 
-number of pages, mapping, ...
-
-The important part is to unfreeze a folio only once it was fully 
-prepared (e.g., order set, compound pages links to head set up etc).
-
-I am not sure if the sequence in which you process folios during a split 
-matters here when doing a split: only that, whatever new folio  is 
-unfrozen, is properly initialized.
 
 -- 
 Cheers,
