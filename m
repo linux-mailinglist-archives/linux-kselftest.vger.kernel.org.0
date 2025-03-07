@@ -1,114 +1,155 @@
-Return-Path: <linux-kselftest+bounces-28450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402FEA55D5A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 02:56:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F6BA55DC1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 03:40:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A2DD7A3315
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 01:55:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C0427A47CB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 02:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2EC91624E9;
-	Fri,  7 Mar 2025 01:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A212188733;
+	Fri,  7 Mar 2025 02:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pla5hmcm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcyMEv9I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F953155C82;
-	Fri,  7 Mar 2025 01:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5D118785D;
+	Fri,  7 Mar 2025 02:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741312552; cv=none; b=GUZZ5IkOKXASat4CifV/KbWMuVBKMJJD+9YrJ5C8D+3uAIfOrlTQ8J2nVP94EHqXhl4+iTrTau0lpsDSlr2TSTsfV0H0HwnmBVROMdg08VM57xSQHS3G4SvLIJ9+XJEYxACc5tbfeEnqTjZBQIc1Jk/XwlK4vovI/bxtRzyk1vs=
+	t=1741315168; cv=none; b=GV27WZDyMiXVuNUs1jFnOLS+MCnLbKPGkboH2V4ZC/sCO0depgF0e9B5Uxvy+DlZKB+i7VBe6jL1drZVPOn7+5T+B4Kd2z9eNa0bae5PyBJOv/D0UtCbQOvNal0JB2R4EwCXkwdrmIg5oSw9mig2skhgcAjsgW2sMDNejWM5IwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741312552; c=relaxed/simple;
-	bh=jzCmZGAmwpg8bHyOWaxlRBOX2RWJnHDIlNa1nRCaMD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MQ+qIw0HdGBe1BOcgtOQ8x11k2ry+5SEc9KcixNLyqIT5u++xRwxGQk+T4XU72qlMBe5OAvkcNZm9pEeSHTJrEYyabpiDlErNJr3fsALbXA7J922KIXOXiM0m/8uBNteW36GFpavu1PmpCsXMHhB2TRcbH4FsngtOubXk5JfCYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pla5hmcm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD84C4CEE0;
-	Fri,  7 Mar 2025 01:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741312552;
-	bh=jzCmZGAmwpg8bHyOWaxlRBOX2RWJnHDIlNa1nRCaMD4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pla5hmcmfU6ZtpRhWTOzsslFVyiBa054pxuL5go/J3ZWEvP7lqtehS1RtojkvKTB8
-	 WPOltc4Y12RSTAuftoMZGlfZRHKl6WbkyNuSJecUj/escsX1elPw5iZOw3vyloWA4z
-	 j0gUGcwCsNgc0bXt571JJAJbMKPhJ7oV90et1yPZe4kNU7QPKQIsBY674NZraSoxSJ
-	 OHgF4c4abqScmwgPIZC+8tm78Z6cAD4LSoyFopu7rWVCRi3qBJXTOq2CPdDfOMQ2dX
-	 CxKS2ox3S14Fsb4Q5USTLGXN5dpzW6ex9cXPWVB0KykY93hF1BrQ4weU68SPcHJmvO
-	 HLiinPIsaUNYA==
-Date: Thu, 6 Mar 2025 17:55:50 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>, Jason Wang <jasowang@redhat.com>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko
- <andrew@daynix.com>, Stephen Hemminger <stephen@networkplumber.org>,
- gur.stavi@huawei.com, Lei Yang <leiyang@redhat.com>, Simon Horman
- <horms@kernel.org>
-Subject: Re: [PATCH net-next v8 3/6] tun: Introduce virtio-net hash feature
-Message-ID: <20250306175550.03c90e21@kernel.org>
-In-Reply-To: <20250306-rss-v8-3-7ab4f56ff423@daynix.com>
-References: <20250306-rss-v8-0-7ab4f56ff423@daynix.com>
-	<20250306-rss-v8-3-7ab4f56ff423@daynix.com>
+	s=arc-20240116; t=1741315168; c=relaxed/simple;
+	bh=6OU9bNzpGoUP8m+6t7CMEqs1s2CSGxSHRzD25S3S57U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XoINMAxd9aVKmT6JiqxKq7wnT3SKWvxTuI0YFUsKWWMJj2syb3u0nEgEO4C/wtgaqmVdfl3cLd6bQPn3HvX5CsHwH+L7we8HEoI5ARSgB+G4KIpOPqDhw/m+DH1ly7aXeNp6MLcLmziOVSYQKfSCxBgPfN///vsL1IR3/vQmkDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcyMEv9I; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2fee4d9c2efso2515642a91.3;
+        Thu, 06 Mar 2025 18:39:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741315166; x=1741919966; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0d4XpVOjBbNecE/XmRwQFw87n6IpADVfzl27NW7S8cM=;
+        b=XcyMEv9I4r/BZMDwgjJ5W8b9t45sKBExMoYdnoQEDng5YuLvkFvM/XboNNGy1YS89g
+         fBPmXQq6Q1YW7yPyObVkckNgirBchJAsfwf22TK2jooHQqYM5ZNFh7fXLbLDPb0lUjO8
+         rhDtaJBN+b1uSJduBidqHIJDzS2CeoBuESn1fALKvO66gZJppsEIUe0m07c489sXBloz
+         nKADFvh5iPKOjvA6qaq/Yr1Hx4jn9C6Wh971yJWuToDAbxEog0QIMcZESQ3KC8WYMxrw
+         8SyU5NaXiNdfMWIZzWWtCiJN1H9P/z6i7YJclVd5294A9fXaleEO7mjYW8qQ3/GzDKHV
+         p04w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741315166; x=1741919966;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0d4XpVOjBbNecE/XmRwQFw87n6IpADVfzl27NW7S8cM=;
+        b=WqMTcUbrHSIaNJ09U105vDSSZZr3JnOq+YOAExd9pX652moeLTtq5d1UKr9hfTvZvm
+         tmHot1LM24GBWAsr7V2Xvqn/sag1hpciEpBqpASFUtsmYA/SdGzHwWmOmSbn+JtigDwn
+         +V5+xnvW1NFbwGr6qM5HkY/AOli9ykfx8zIO1Br3fQIF5ByOPk9uBJlDXK2HYoJCocmK
+         rxGDBEJxiFKoZjKQ+6yg3GfxpPH18urt7KahPSwp4+JJGvLEMqPiZ93iw8VFz0R3U0Tn
+         jHDBHGQeozssU8BJYgQEoyKlKdvzslBUfMFKHA2TWnmx2+ztSvLwfkOC0VCirxpKjVFp
+         HNMA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCmuirdKSEsKy6M0YeygREpQJqtEeNVpRQ5UMRqHettpxoTpaRlT48SShLMHzJrV+w+olVpcvo6fLVvlc=@vger.kernel.org, AJvYcCVOQGhiSCi1C9yIXPIohLTnRgQjSAT7srMvimd7lRdpZkflduItasWHdprQeSq7P44RBSLQvqKO@vger.kernel.org, AJvYcCVjStzII0q3g7xQQC+QgnYHV7YfqUU471Jhxrgxr73gxqtU36MJDmXXxsQzcCLCn1+EjzDnbiGIgnukF2WOauRf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpOOxre6u9RBsP1DB+IKZoD4NsF9yDogfAH8vKUPxHM4fdjlGX
+	409L0zoZcMcq1d3f/XDkebA3FJPRqYv58c0QRE0k0DfpckUBDkDE
+X-Gm-Gg: ASbGnctj/ZPhr44r7yP51wBqMHATIM5BOTwM6BAtaIUFbHIuIK+x5rk3baRPBHiSip5
+	knZFMOpVhQ5SMjBUuHxiaOxrq23zHBPfpyUB47q9Bc6YAThnbLfQ7PJL3Qn5CfEcnWx90XH+gsG
+	NR9TKKwGiNZVU9L8GFllyOs4Lxq87gdbeDRx9xAX5koz8dtliZypgAg0cnSf/uPawTrs/x7zQdy
+	+Gfrt7pHrgFYrdzlqqhaeBfqRp8wDyoWrT9BS1XCLfTETFNkfwNCKYlzR/wpIIR7FMgAlZAHsKI
+	s/utqjsb7EnVhrZD/OeXmgx5oofB0/iuVdlZRwKfhWRiV1xEaQ==
+X-Google-Smtp-Source: AGHT+IFIZCp6xuHzpUsYKy0v3LgrML3vB01/8gnmD5Qfx9LBkQTRH+vITz9B5AClpfZbdNC2kQVIgw==
+X-Received: by 2002:a05:6a21:3287:b0:1f3:1b78:ceb2 with SMTP id adf61e73a8af0-1f544ad7944mr2951706637.9.1741315166026;
+        Thu, 06 Mar 2025 18:39:26 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736a336010dsm1378308b3a.59.2025.03.06.18.39.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Mar 2025 18:39:25 -0800 (PST)
+Date: Fri, 7 Mar 2025 02:39:16 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: Petr Machata <petrm@nvidia.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	Jianbo Liu <jianbol@nvidia.com>,
+	"jarod@redhat.com" <jarod@redhat.com>,
+	"razor@blackwall.org" <razor@blackwall.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"jv@jvosburgh.net" <jv@jvosburgh.net>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCHv4 net 1/3] bonding: move IPsec deletion to
+ bond_ipsec_free_sa
+Message-ID: <Z8pcVHdEkwk2w0En@fedora>
+References: <20250304131120.31135-1-liuhangbin@gmail.com>
+ <20250304131120.31135-2-liuhangbin@gmail.com>
+ <4108bfd8-b19f-46ea-8820-47dd8fb9ee7c@blackwall.org>
+ <Z8hcFSElK7iF8u9o@fedora>
+ <f9bf79aff80eae232bc16863aa7a3ea56c80069a.camel@nvidia.com>
+ <Z8ls6fAwBtiV_C9b@fedora>
+ <Z8lysOLMnYoknLsW@fedora>
+ <60cfc1af3f85dda740ac19ac06a27880e79c9c1e.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <60cfc1af3f85dda740ac19ac06a27880e79c9c1e.camel@nvidia.com>
 
-On Thu, 06 Mar 2025 18:56:33 +0900 Akihiko Odaki wrote:
-> Hash reporting
-> ==============
+On Thu, Mar 06, 2025 at 01:37:15PM +0000, Cosmin Ratiu wrote:
+> On Thu, 2025-03-06 at 10:02 +0000, Hangbin Liu wrote:
+> > > For bond_ipsec_add_sa_all(), I will move the xso.real_dev =
+> > > real_dev
+> > > after .xdo_dev_state_add() in case the following situation.
 > 
-> Allow the guest to reuse the hash value to make receive steering
-> consistent between the host and guest, and to save hash computation.
+> xso.real_dev needs to be initialized before the call to
+> xdo_dev_state_add, since many of the implementations look in
+> xso.real_dev to determine on which device to operate on.
+> So the ordering should be:
+> - get the lock
+> - set xso.real_dev to real_dev
+> - release the lock
+> - call xdo_dev_state_add
+> - if it fails, reacquire the lock and set the device to NULL.
 > 
-> RSS
-> ===
+> Unfortunately, this doesn't seem to protect against the scenario below,
+> as after dropping the spinlock from bond_ipsec_add_sa_all,
+> bond_ipsec_del_sa can freely call xdo_dev_state_delete() on real_dev
+> before xdo_dev_state_add happens.
 > 
-> RSS is a receive steering algorithm that can be negotiated to use with
-> virtio_net. Conventionally the hash calculation was done by the VMM.
-> However, computing the hash after the queue was chosen defeats the
-> purpose of RSS.
-> 
-> Another approach is to use eBPF steering program. This approach has
-> another downside: it cannot report the calculated hash due to the
-> restrictive nature of eBPF steering program.
-> 
-> Introduce the code to perform RSS to the kernel in order to overcome
-> thse challenges. An alternative solution is to extend the eBPF steering
-> program so that it will be able to report to the userspace, but I didn't
-> opt for it because extending the current mechanism of eBPF steering
-> program as is because it relies on legacy context rewriting, and
-> introducing kfunc-based eBPF will result in non-UAPI dependency while
-> the other relevant virtualization APIs such as KVM and vhost_net are
-> UAPIs.
+> I don't know what to do in this case...
 
-drivers/net/tap.c:1056:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
- 1056 |         case SIOCGIFHWADDR:
-      |         ^
-drivers/net/tap.c:1056:2: note: insert '__attribute__((fallthrough));' to silence this warning
- 1056 |         case SIOCGIFHWADDR:
-      |         ^
-      |         __attribute__((fallthrough)); 
-drivers/net/tap.c:1056:2: note: insert 'break;' to avoid fall-through
- 1056 |         case SIOCGIFHWADDR:
-      |         ^
-      |         break; 
--- 
-pw-bot: cr
+Yes, me neither. How about add a note and leave it there until we
+have a solution?
+
+Regards
+Hangbin
+> 
+> > > 
+> > > bond_ipsec_add_sa_all()
+> > > spin_unlock(&ipsec->x->lock);
+> > > ipsec->xs->xso.real_dev = real_dev;
+> > >                                 __xfrm_state_delete x->state = DEAD
+> > >                                   - bond_ipsec_del_sa()
+> > >                                     - .xdo_dev_state_delete()
+> > > .xdo_dev_state_add()
+> 
+> Cosmin.
 
