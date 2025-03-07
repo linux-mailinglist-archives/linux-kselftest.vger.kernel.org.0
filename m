@@ -1,82 +1,79 @@
-Return-Path: <linux-kselftest+bounces-28479-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28480-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0139DA5662A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 12:04:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1674A566B2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 12:28:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 216A1172017
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:03:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40F2C1899C59
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57E4215F49;
-	Fri,  7 Mar 2025 11:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C16C217673;
+	Fri,  7 Mar 2025 11:27:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="BV8lPg2W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TB6tgUgQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376C721018A
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Mar 2025 11:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED40213252;
+	Fri,  7 Mar 2025 11:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741345330; cv=none; b=KKmPrv5E4vagORqjmgYYZWoyc+hHad9WnpfKwxJEUbgNp2nwTa8u6btzDyhtxx6fSRl5QpEd/bN7rMsjQYUri+xWU3tLauOJPGuhip79UDVGB1aR6rT7l08rs9MJqo+HIHMQjb6seuInn+bEnN8TGKn7R6ge0bxeqiODePyfgAM=
+	t=1741346869; cv=none; b=aJbDis0KbpQq4k4kZ7UuGRGO+EVBC2Es8y8BuVgBVb6twlMZE+J3Fxof5pwBGuHYI1/r0NrUdSY7riyh2RSKAcArtRt1LfS4Pao3vFO48IzkVEbUQ04bgo4itjOK1bCXWIU6Ti5qCk9kqiaRIEcCq+Vgdg7pF6wTirxERCCTxOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741345330; c=relaxed/simple;
-	bh=bUqgi3dszTeuIO6Jayt7FNCSfLxGF0Q3vs9yEXuCbLI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To; b=gsre34SeXIcTOHXvcVqnoOwv80o/Y70LTey5+VdYxglKa1zTR1GiF74jz4bYH9U3Z/4sUMFKcDXeRCXCe0jkA76cc+P++Ejp81LmnIBDltDbisPdXFSe7ZmU+an2J1E62LN/kmAkmXIy9IzWy1SsjoT2jns7CqRcIJpwxHe6vAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=BV8lPg2W; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2239c066347so30255225ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Mar 2025 03:02:08 -0800 (PST)
+	s=arc-20240116; t=1741346869; c=relaxed/simple;
+	bh=ylxScfKTNCFu+UpEsGa/mhjpsyQ8gq/Ch3uBfdHP8CA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OzjxRjjWEJk8oLV4RXoaMNpmgtYUIsXYF2Q+S6IayyQTxkL3GtoBvODtr0ZSGUGO4cyn1JbBHbzMDiWu3uN0uz60RdzwcNPLtf90TXI96nqrhDz4mk23e5gcHWVfhGRJYV9qbZ4yMCkOMmxDmb9M16NIfifzxICZ4yU6jnm0pb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TB6tgUgQ; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6e8ec399427so11430956d6.2;
+        Fri, 07 Mar 2025 03:27:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1741345328; x=1741950128; darn=vger.kernel.org;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y12vdXD8IUD5lnVxvCmdhC+FVPs9nLD3u7Whh+JFE1I=;
-        b=BV8lPg2W+w8JYUuHvukENfQu1yEcqAfhTffhdX84e9KY40mWidZAHKVgite9chElwl
-         565JSX43tcP+myeQSpriEqik41rF+49s27l9Bs9I63gnt7xAr75bkYd2ofHi01ApKBnR
-         tYo5xZjmPnyCU0X/r3W0Mtn1vQ26v875DGlGOVgq5k/OB4pDwIDGqR6pe2qKg0pfeb7r
-         guT/kuRyEa1z76tXhAK9rdHJSiy+fIczLF+0HkKnkh3PUgA5ZAmKrjYoRGm++P5Box3w
-         4QJ80cMva+6bc1BrKw3ELlcY5UmOKKA4H4hJFtyAEZxISJX6UarGhJw6f69rvQ6vVeVK
-         meMA==
+        d=gmail.com; s=20230601; t=1741346866; x=1741951666; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PViXvgr7+AksTv5jRkRgKLWPpVwtKlnjDY8GR6GZb2c=;
+        b=TB6tgUgQvectD41cOBAdURsIEGI6cz9tZ6zd0hGc4xrghKoIpMf04BVt+Wv8qGy6E7
+         ri2RbIh6rQV/30TSD2soEznRffDzotkTxXdqJ1Bo5mAbGlJfAThX1uufJeXHcFv4QhWP
+         tgTttHr46A4OV8KsDm2xTt9oDdAIrZyEfIA7woy/TzOzxgbHqJykC6HdQzhGGiv5R5Ku
+         uZ91DFkmpuns8YDzMXKq8AzhudYtvomH/HyOSulwXKIe7nzXK0YarJR+cU46Uhb/KXnq
+         Bk8QCDV1xwucCX2kiIz+7mQqLG42DallyMIhnkvJqVI+gvCkQvi56wRzfV0d/Z4AmvqG
+         zV1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741345328; x=1741950128;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y12vdXD8IUD5lnVxvCmdhC+FVPs9nLD3u7Whh+JFE1I=;
-        b=LNw1L4IEv2iA2MXeIWziSdSaf9Of8hChm9jFATg1UPxgXFso4zS0fjDstVhRobrNyp
-         aDqygj1Zo2OfykPek8bz+RJ6bScbsFMfA8qVR5k+ksVGX2/0NifIS3dbCCspnTyrDHQa
-         Cb4c4zHmM3vwnrBQ8YqK0uqdj62zape8cyaeuDc5lkT5I6q57jyq1oOhpB6rTNKNSCx5
-         VVWYhIegVIV1KY10Bh22UPumQ/vMsCPAH/lwx005Bq90Ik4cPRUjHfN2EIAHmAc6EEaM
-         vyhAAAFlhz/mqvkRouXGVhv/cbpK6fTDdePHeThu09XcSxHN7XgRSZleNJU18MMM6YnI
-         2XPA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwZJTUGqTqF8lfp3tOxAiGj4jls/+cbBaJlfoXvI1rqJLGWj6mX7YUC+310J3LaUz48qXw2JzdGveDfcELPro=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/Fv1ogCDZ4SCIgKsmde1C8ajMUY2nH/whI1yRioyTcRz8hFSx
-	O1ix8lDl8nllHs+0g9cI82whgjAc6T8FO5daEoXCFYK4g9IbF9rEZ0K922p84yuP4he8q1JIl8L
-	5f6U=
-X-Gm-Gg: ASbGnctp7LAGgeQsH8qjZJ8Iej+CHPW0rbwNAN1l53bkI0C64WC/g3UVJ7lHOnPDQW4
-	9eFjHZMS64kYhDgeOn9lv66uqOXTzIODqG62LbPxlEj8RZ1ZrW3fjgogUbZFAHBedt4ggZDHBAK
-	uFaBPHzKkqBumawN9TAB+gO6DIHiGC2XOLUP8EmohYU72Ks/6R5lKnFaFfRmr7n9gnAaONzWueM
-	Vbtti68EO2SDLnHiPuJeEfegPWTXQNw/OPW7+AlYEy0oXwBpwkAFVN1kL0l/r8xU6F16vmBlWbl
-	3OyhWDLILFbZ0DWxeCKjgMYa2Lfc3S3HwUiNbtNLZ8Mq70KG
-X-Google-Smtp-Source: AGHT+IF6zWuYi6fdLJEcdg62jGV3EWL/4omMjcZtlNvZShjxdxWSb6A2HX3eGBs7ZpbGb0lfsNdgeA==
-X-Received: by 2002:a17:903:283:b0:21f:6a36:7bf3 with SMTP id d9443c01a7336-224288974admr56342095ad.12.1741345328248;
-        Fri, 07 Mar 2025 03:02:08 -0800 (PST)
-Received: from localhost ([157.82.205.237])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-224109ddfd2sm27280985ad.39.2025.03.07.03.02.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Mar 2025 03:02:07 -0800 (PST)
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-Date: Fri, 07 Mar 2025 20:01:22 +0900
-Subject: [PATCH net-next v9 6/6] vhost/net: Support
- VIRTIO_NET_F_HASH_REPORT
+        d=1e100.net; s=20230601; t=1741346866; x=1741951666;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PViXvgr7+AksTv5jRkRgKLWPpVwtKlnjDY8GR6GZb2c=;
+        b=EKXTONraAhyRfQFHSz2WsWVAqXgUACJ6v8+uJX/YoTUR5zzrpltdYpg7/6Y2+FI80C
+         TqfHqHeaxhK3Na/Uh4INaYFRPeJxFo1k4/ZhkXFfWSR6dt0pXDmWqCUCOgbltJMWF6gS
+         55qgUPCXCoBxuBEaoJqDBDBdlahi8qDpaWWByQx1CktK+BWyjAf79FCZ4E5+Jr2xSwc8
+         Ei6eTRE5/p0D8sOr9fFRnL271PySmwmWcKd9joPMRyEDP6yPU7mjZ74wCjbuLZSxg9J8
+         Rm99vovfnCKPP03MccMUTd5zDgfSujd35Oj0iwlGhzIipafQEBiVaCJd8HD9/+mIwam+
+         v6fw==
+X-Forwarded-Encrypted: i=1; AJvYcCU7MGnZTSL87ohBJJU73Lk1lL/PdHjWMZ2YpImetTOtlSeNGYW52FDB9e+VYjEz+kV3JUc6L+NHLNG679c=@vger.kernel.org, AJvYcCXI6NcZ2/m+9ggVQ8H14f6cv9hFouJVgTlbfnMY1NhJ0uydib1fOG9qJ1D5lDDE4rjd/98nVPn5tYE3sWosXyyt@vger.kernel.org
+X-Gm-Message-State: AOJu0YzteULbYv2/x+sS1+ZFi0iDDNvj9zjGFH+PghPVOzi1n7Nz/T8R
+	8qCyIaDDixMdN+6y7EWk4cjC7C8EFetNuAfthUdME/8NNycbNI4ExCSyz+yZh5U=
+X-Gm-Gg: ASbGncsCPKXUiauqeSbe0TN5gO/Q8348MReujaCZLQcHgOlcwjQk5YmC0Bl+Yw1fMxC
+	KA5p+SlfQBuJwT8ZCZOTEY8y76cO0Ixv++KZRE92+sR0XctKTI8hiRJEiV1Wufsjv7JiPMakleD
+	vfzqvPTDqD9zjVqHmf1eEtl6npuKz88GzzWJgBfVVv9GCFpjV56ZYHL/89uhcUNMarqM7NOCgJ3
+	44EtwY59Ob4m4rFJb/rCnM2T9bU8gTjbhYpkWGF/jI9dWD3ly0Ms5R7/ssO1iDTen9XuriH9clv
+	wT1e0dAOCt5dWWgqUN8Qixt0frlppo+qnzNPmYaQC5qG5cGlj0Bkiae9sb5BfOFZsJg=
+X-Google-Smtp-Source: AGHT+IFr6s9DfnKItfwASDMfKh5qY46cMyQ8mlyJJ626h0vPU3ljWWT3gvPm797nbddpF3hS9qbzeg==
+X-Received: by 2002:a05:6214:1d29:b0:6e6:61a5:aa54 with SMTP id 6a1803df08f44-6e900693575mr32260986d6.44.1741346866341;
+        Fri, 07 Mar 2025 03:27:46 -0800 (PST)
+Received: from [192.168.1.159] ([2600:4041:5be7:7c00:f0dd:49a0:8ab6:b3b6])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f70a446dsm18509416d6.56.2025.03.07.03.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Mar 2025 03:27:45 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v9 0/6] scanf: convert self-test to KUnit
+Date: Fri, 07 Mar 2025 06:27:33 -0500
+Message-Id: <20250307-scanf-kunit-convert-v9-0-b98820fa39ff@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,148 +82,169 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250307-rss-v9-6-df76624025eb@daynix.com>
-References: <20250307-rss-v9-0-df76624025eb@daynix.com>
-In-Reply-To: <20250307-rss-v9-0-df76624025eb@daynix.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, kvm@vger.kernel.org, 
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
- Yuri Benditovich <yuri.benditovich@daynix.com>, 
- Andrew Melnychenko <andrew@daynix.com>, 
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
- Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>, 
- Akihiko Odaki <akihiko.odaki@daynix.com>
-X-Mailer: b4 0.14.2
+X-B4-Tracking: v=1; b=H4sIACXYymcC/43RzU7DMAwH8FeZcibIifO5E++BOKSJs0WwFrWlA
+ k17d7JdiEqHOP4t+WfZPrOJxkIT2+/ObKSlTGXoa/APOxaPoT8QL6lmJkFqECj4FEOf+etHX2Y
+ eh36hcebZQoqIXYcqstr5PlIunzf1+aXmY5nmYfy6DVnEtfq3twguOHhrtFQZqAtPh1Mob49xO
+ LGrt8gfQwJuG7Ia0tpghEsOFK0NbA21bSAHjs4kG5HICrU2VGvYbUNVI0gkGXKgRG5t6MYQsG3
+ oajgyKmOwibxfG+YfhqmGStphApu9TGvDtsadv9hqRNA2Q8Dk069dXGvcuamrhqagIXudHcbWu
+ Fwu3zwu+tWSAgAA
+X-Change-ID: 20250131-scanf-kunit-convert-f70dc33bb34c
+To: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-VIRTIO_NET_F_HASH_REPORT allows to report hash values calculated on the
-host. When VHOST_NET_F_VIRTIO_NET_HDR is employed, it will report no
-hash values (i.e., the hash_report member is always set to
-VIRTIO_NET_HASH_REPORT_NONE). Otherwise, the values reported by the
-underlying socket will be reported.
+This is one of just 3 remaining "Test Module" kselftests (the others
+being bitmap and printf), the rest having been converted to KUnit. In
+addition to the enclosed patch, please consider this an RFC on the
+removal of the "Test Module" kselftest machinery.
 
-VIRTIO_NET_F_HASH_REPORT requires VIRTIO_F_VERSION_1.
+I tested this using:
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-Tested-by: Lei Yang <leiyang@redhat.com>
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 scanf
+
+Failure output before this series:
+  [  383.100048] test_scanf: vsscanf("1574 9 64ca 935b 7 142d ff58 0", "%4hx %1hx %4hx %4hx %1hx %4hx %4hx %1hx", ...) expected 2472240330 got 1690959881
+  [  383.102843] test_scanf: vsscanf("f12:2:d:2:c166:1:36b:1906", "%3hx:%1hx:%1hx:%1hx:%4hx:%1hx:%3hx:%4hx", ...) expected 131085 got 851970
+  [  383.105376] test_scanf: vsscanf("4,b2fe,3,593,6,0,3bde,0", "%1hx,%4hx,%1hx,%3hx,%1hx,%1hx,%4hx,%1hx", ...) expected 93519875 got 242430
+  [  383.105659] test_scanf: vsscanf("6-1-2-1-d9e6-f-93e-e567", "%1hx-%1hx-%1hx-%1hx-%4hx-%1hx-%3hx-%4hx", ...) expected 65538 got 131073
+  [  383.106127] test_scanf: vsscanf("72d6/35/e88d/1/0/6c8c/7/1", "%4hx/%2hx/%4hx/%1hx/%1hx/%4hx/%1hx/%1hx", ...) expected 125069 got 3901554741
+  [  383.106235] test_scanf: vsscanf("c9bea1b8122113e9a168df573", "%4hx%4hx%1hx%4hx%4hx%1hx%4hx%3hx", ...) expected 571539457 got 106936
+  ...
+  [  383.106398] test_scanf: failed 6 out of 2545 tests
+
+Failure output after this series:
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("0 1e 3e43 31f0 0 0 5797 9c70", "%1hx %2hx %4hx %4hx %1hx %1hx %4hx %4hx", ...) expected 837828163 got 1044578334
+          not ok 1 " "
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("dc2:1c:0:3531:2621:5172:1:7", "%3hx:%2hx:%1hx:%4hx:%4hx:%4hx:%1hx:%1hx", ...) expected 892403712 got 28
+          not ok 2 ":"
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("e083,8f6e,b,70ca,1,1,aab1,10e4", "%4hx,%4hx,%1hx,%4hx,%1hx,%1hx,%4hx,%4hx", ...) expected 1892286475 got 757614
+          not ok 3 ","
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("2e72-8435-1-2fc-7cbd-c2f1-7158-2b41", "%4hx-%4hx-%1hx-%3hx-%4hx-%4hx-%4hx-%4hx", ...) expected 50069505 got 99381
+          not ok 4 "-"
+      # numbers_list_field_width_val_width: ASSERTION FAILED at lib/scanf_kunit.c:94
+  lib/scanf_kunit.c:555: vsscanf("403/0/17/1/11e7/1/1fe8/34ba", "%3hx/%1hx/%2hx/%1hx/%4hx/%1hx/%4hx/%4hx", ...) expected 65559 got 1507328
+          not ok 5 "/"
+
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- drivers/vhost/net.c | 49 +++++++++++++++++++++++++++++--------------------
- 1 file changed, 29 insertions(+), 20 deletions(-)
+Changes in v9:
+- Use __scanf correctly on `_test`. (Thanks to Petr Mladek).
+- Split header `#include` cleanup into separate patch. (Petr Mladek)
+- In "scanf: break kunit into test cases", revert to KUNIT_FAIL. (Petr
+  Mladek)
+- Rebase on linux-next.
+- Add provisional patch "scanf: further break kunit into test cases".
+  Please feel free to take this series without this patch if you prefer.
+- Link to v8: https://lore.kernel.org/r/20250214-scanf-kunit-convert-v8-0-5ea50f95f83c@gmail.com
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index b9b9e9d40951856d881d77ac74331d914473cd56..16b241b44f89820a42c302f3586ea6bb5e0d4289 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -73,6 +73,7 @@ enum {
- 	VHOST_NET_FEATURES = VHOST_FEATURES |
- 			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
- 			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			 (1ULL << VIRTIO_NET_F_HASH_REPORT) |
- 			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
- 			 (1ULL << VIRTIO_F_RING_RESET)
- };
-@@ -1097,9 +1098,11 @@ static void handle_rx(struct vhost_net *net)
- 		.msg_controllen = 0,
- 		.msg_flags = MSG_DONTWAIT,
- 	};
--	struct virtio_net_hdr hdr = {
--		.flags = 0,
--		.gso_type = VIRTIO_NET_HDR_GSO_NONE
-+	struct virtio_net_hdr_v1_hash hdr = {
-+		.hdr = {
-+			.flags = 0,
-+			.gso_type = VIRTIO_NET_HDR_GSO_NONE
-+		}
- 	};
- 	size_t total_len = 0;
- 	int err, mergeable;
-@@ -1110,7 +1113,6 @@ static void handle_rx(struct vhost_net *net)
- 	bool set_num_buffers;
- 	struct socket *sock;
- 	struct iov_iter fixup;
--	__virtio16 num_buffers;
- 	int recv_pkts = 0;
- 
- 	mutex_lock_nested(&vq->mutex, VHOST_NET_VQ_RX);
-@@ -1191,30 +1193,30 @@ static void handle_rx(struct vhost_net *net)
- 			vhost_discard_vq_desc(vq, headcount);
- 			continue;
- 		}
-+		hdr.hdr.num_buffers = cpu_to_vhost16(vq, headcount);
- 		/* Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET_HDR */
- 		if (unlikely(vhost_hlen)) {
--			if (copy_to_iter(&hdr, sizeof(hdr),
--					 &fixup) != sizeof(hdr)) {
-+			if (copy_to_iter(&hdr, vhost_hlen,
-+					 &fixup) != vhost_hlen) {
- 				vq_err(vq, "Unable to write vnet_hdr "
- 				       "at addr %p\n", vq->iov->iov_base);
- 				goto out;
- 			}
--		} else {
-+		} else if (likely(set_num_buffers)) {
- 			/* Header came from socket; we'll need to patch
- 			 * ->num_buffers over if VIRTIO_NET_F_MRG_RXBUF
- 			 */
--			iov_iter_advance(&fixup, sizeof(hdr));
-+			iov_iter_advance(&fixup, offsetof(struct virtio_net_hdr_v1, num_buffers));
-+
-+			if (copy_to_iter(&hdr.hdr.num_buffers, sizeof(hdr.hdr.num_buffers),
-+					 &fixup) != sizeof(hdr.hdr.num_buffers)) {
-+				vq_err(vq, "Failed num_buffers write");
-+				vhost_discard_vq_desc(vq, headcount);
-+				goto out;
-+			}
- 		}
- 		/* TODO: Should check and handle checksum. */
- 
--		num_buffers = cpu_to_vhost16(vq, headcount);
--		if (likely(set_num_buffers) &&
--		    copy_to_iter(&num_buffers, sizeof num_buffers,
--				 &fixup) != sizeof num_buffers) {
--			vq_err(vq, "Failed num_buffers write");
--			vhost_discard_vq_desc(vq, headcount);
--			goto out;
--		}
- 		nvq->done_idx += headcount;
- 		if (nvq->done_idx > VHOST_NET_BATCH)
- 			vhost_net_signal_used(nvq);
-@@ -1607,10 +1609,13 @@ static int vhost_net_set_features(struct vhost_net *n, u64 features)
- 	size_t vhost_hlen, sock_hlen, hdr_len;
- 	int i;
- 
--	hdr_len = (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
--			       (1ULL << VIRTIO_F_VERSION_1))) ?
--			sizeof(struct virtio_net_hdr_mrg_rxbuf) :
--			sizeof(struct virtio_net_hdr);
-+	if (features & (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+		hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-+	else if (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			     (1ULL << VIRTIO_F_VERSION_1)))
-+		hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
-+	else
-+		hdr_len = sizeof(struct virtio_net_hdr);
- 	if (features & (1 << VHOST_NET_F_VIRTIO_NET_HDR)) {
- 		/* vhost provides vnet_hdr */
- 		vhost_hlen = hdr_len;
-@@ -1691,6 +1696,10 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
- 			return -EFAULT;
- 		if (features & ~VHOST_NET_FEATURES)
- 			return -EOPNOTSUPP;
-+		if ((features & ((1ULL << VIRTIO_F_VERSION_1) |
-+				 (1ULL << VIRTIO_NET_F_HASH_REPORT))) ==
-+		    (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+			return -EINVAL;
- 		return vhost_net_set_features(n, features);
- 	case VHOST_GET_BACKEND_FEATURES:
- 		features = VHOST_NET_BACKEND_FEATURES;
+Changes in v8:
+- Expand "scanf: remove redundant debug logs" commit message. (Andy
+  Shevchenko)
+- Add patch "implicate test line in failure messages".
+- Rebase on linux-next, move scanf_kunit.c into lib/tests/.
+- Link to v7: https://lore.kernel.org/r/20250211-scanf-kunit-convert-v7-0-c057f0a3d9d8@gmail.com
 
+Changes in v7:
+- Remove redundant debug logs. (Petr Mladek)
+- Drop Petr's Acked-by.
+- Use original test assertions as KUNIT_*_EQ_MSG produces hard-to-parse
+  messages. The new failure output is:
+- Link to v6: https://lore.kernel.org/r/20250210-scanf-kunit-convert-v6-0-4d583d07f92d@gmail.com
+
+Changes in v6:
+- s/at boot/at runtime/ for consistency with the printf series.
+- Go back to kmalloc. (Geert Uytterhoeven)
+- Link to v5: https://lore.kernel.org/r/20250210-scanf-kunit-convert-v5-0-8e64f3a7de99@gmail.com
+
+Changes in v5:
+- Remove extraneous trailing newlines from failure messages.
+- Replace `pr_debug` with `kunit_printk`.
+- Use static char arrays instead of kmalloc.
+- Drop KUnit boilerplate from CONFIG_SCANF_KUNIT_TEST help text.
+- Drop arch changes.
+- Link to v4: https://lore.kernel.org/r/20250207-scanf-kunit-convert-v4-0-a23e2afaede8@gmail.com
+
+Changes in v4:
+- Bake `test` into various macros, greatly reducing diff noise.
+- Revert control flow changes.
+- Link to v3: https://lore.kernel.org/r/20250204-scanf-kunit-convert-v3-0-386d7c3ee714@gmail.com
+
+Changes in v3:
+- Reduce diff noise in lib/Makefile. (Petr Mladek)
+- Split `scanf_test` into a few test cases. New output:
+  : =================== scanf (10 subtests) ====================
+  : [PASSED] numbers_simple
+  : ====================== numbers_list  =======================
+  : [PASSED] delim=" "
+  : [PASSED] delim=":"
+  : [PASSED] delim=","
+  : [PASSED] delim="-"
+  : [PASSED] delim="/"
+  : ================== [PASSED] numbers_list ===================
+  : ============ numbers_list_field_width_typemax  =============
+  : [PASSED] delim=" "
+  : [PASSED] delim=":"
+  : [PASSED] delim=","
+  : [PASSED] delim="-"
+  : [PASSED] delim="/"
+  : ======== [PASSED] numbers_list_field_width_typemax =========
+  : =========== numbers_list_field_width_val_width  ============
+  : [PASSED] delim=" "
+  : [PASSED] delim=":"
+  : [PASSED] delim=","
+  : [PASSED] delim="-"
+  : [PASSED] delim="/"
+  : ======= [PASSED] numbers_list_field_width_val_width ========
+  : [PASSED] numbers_slice
+  : [PASSED] numbers_prefix_overflow
+  : [PASSED] test_simple_strtoull
+  : [PASSED] test_simple_strtoll
+  : [PASSED] test_simple_strtoul
+  : [PASSED] test_simple_strtol
+  : ====================== [PASSED] scanf ======================
+  : ============================================================
+  : Testing complete. Ran 22 tests: passed: 22
+  : Elapsed time: 5.517s total, 0.001s configuring, 5.440s building, 0.067s running
+- Link to v2: https://lore.kernel.org/r/20250203-scanf-kunit-convert-v2-1-277a618d804e@gmail.com
+
+Changes in v2:
+- Rename lib/{test_scanf.c => scanf_kunit.c}. (Andy Shevchenko)
+- Link to v1: https://lore.kernel.org/r/20250131-scanf-kunit-convert-v1-1-0976524f0eba@gmail.com
+
+---
+Tamir Duberstein (6):
+      scanf: implicate test line in failure messages
+      scanf: remove redundant debug logs
+      scanf: convert self-test to KUnit
+      scanf: break kunit into test cases
+      scanf: tidy header `#include`s
+      scanf: further break kunit into test cases
+
+ MAINTAINERS                               |   2 +-
+ lib/Kconfig.debug                         |  12 +-
+ lib/Makefile                              |   1 -
+ lib/tests/Makefile                        |   1 +
+ lib/{test_scanf.c => tests/scanf_kunit.c} | 360 ++++++++++++++++--------------
+ tools/testing/selftests/lib/Makefile      |   2 +-
+ tools/testing/selftests/lib/config        |   1 -
+ tools/testing/selftests/lib/scanf.sh      |   4 -
+ 8 files changed, 201 insertions(+), 182 deletions(-)
+---
+base-commit: 7ec162622e66a4ff886f8f28712ea1b13069e1aa
+change-id: 20250131-scanf-kunit-convert-f70dc33bb34c
+
+Best regards,
 -- 
-2.48.1
+Tamir Duberstein <tamird@gmail.com>
 
 
