@@ -1,134 +1,111 @@
-Return-Path: <linux-kselftest+bounces-28469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2A92A56430
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:45:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8613DA56467
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:54:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 984ED3A8ADD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 09:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 676343B4247
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 09:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 266501EDA10;
-	Fri,  7 Mar 2025 09:45:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B1E20C48A;
+	Fri,  7 Mar 2025 09:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Fpv3ofoW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qKcRlBRp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288D01E1E04
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Mar 2025 09:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6B0204C2A
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Mar 2025 09:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741340754; cv=none; b=C4uRGwbubeIzIQbx8T9Q44J1v0N5RHBWItT7qNcQY7fX4GWUIaFUKjEczCPHzq/GqiUV1uPH1qkmYQJ8SACuXPcwBc4OfWvWMQFadNlUq+eD4FGZNVVwAU4mUuwnDVq7UilZ4cpujA7wW7fIkIqNdJ21nn7luPaUa6K05GT2PBg=
+	t=1741341278; cv=none; b=spuxU3r0EMO1kltPmib+wul0y1jpDQtDUy0p6zFC3vf8XtC8wqnQlaBqeGk8z5uuoPoW4bBLzvU1RMru58qiTGPVd6LGEudcT3s5MijZANf9KK8Svxxuwi5MVH5lNQDSHJQ6d1Zh9keBcVvTXAiJe/qPtd1vrV1Rj09cCDdn31M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741340754; c=relaxed/simple;
-	bh=8BxwcUC03a1oPRZ2pAlv3i2yCxXMrV7cP/jYoHXH/zs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=kigRZpEFqV9V8AhF7MGBRjaIbVpGGgiwYZx+no6Q3UOJpG0evaFwtwbar/5clRLr2elkHY7GJOLvifTosqsN62Ied1NOVi9+3tOHjCyZr8UgZMJiI8zBWa9AKup0cSwGF8xWUUNjI/d+0HehsB33ulAHXDoOPggdGGB9TeM/Wqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Fpv3ofoW; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1tqUGs-0034iJ-8j; Fri, 07 Mar 2025 10:45:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=8tA/kRSVyx+JyEIR4+usiCzAfmuIpsak7pwQ/jnN35Y=; b=Fpv3ofoWZmCgQnpYPTTrolVu6P
-	de8JefFtWeInaxjfUg6dvQf0fUMLHGZAWWioaw1DKq2pRg6rudQT4aJqR9D4nsI3a6I8wPG33XdWB
-	8ktI4nOIW40I3Dycgnpt/LHRPDIQceBf4zW8rLy37gvK2Zf3mGEmxZ8axKldzz5/shnBQY3FhrqCa
-	xySf0CsXSEEiR3LVnC6gDAo9QTdYg1onBEwRlHQ9wN00pIku4eado38x+zfsxt0Mdw8LPd/eu6hq6
-	/IOIurS90GnhKLVxkwwHaesvOfewix+ImcI5Sz82I+c7v3hHOeoWN9TkumkXoCAHDmVoTZm62hlFX
-	BQVMGIlg==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1tqUGq-0003Tb-67; Fri, 07 Mar 2025 10:45:32 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1tqUGl-006bBn-4U; Fri, 07 Mar 2025 10:45:27 +0100
-Message-ID: <baeca627-e6f1-4d0a-aea5-fa31689edc4d@rbox.co>
-Date: Fri, 7 Mar 2025 10:45:25 +0100
+	s=arc-20240116; t=1741341278; c=relaxed/simple;
+	bh=SNJTu6S+RxKk0mGGesiSe0L7+Yc327mwzneSBK2eWwE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MqAtQKs6WZH/VTqHKBWY1zXeOp5p5xvn7Sb0Zl/ioswPuQcCLTA0KKCd8qFl4IfZtkYCEZfKXtCFaa/xI/KZsaOITEcjaJ9NMqWIbe0Ef5C63/GmvsrzQkTMcTvw9F+O+U2yjKhg1PwuR3tGeWYw027etvDe0txPqex0o/cMnyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qKcRlBRp; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4750a85a0ddso160241cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Mar 2025 01:54:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741341275; x=1741946075; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rKx/7WZeBAnXPF4y8oCkUH3yJ/CY8cCFbTvTuih92iE=;
+        b=qKcRlBRpzHLPUApiTpdmPyvC+vR5x64cYaEFyjROkard/9J+zQDIQUVc0/KNZU65p9
+         cH+SOtFGZ4sCAJ/zaLpGD81Q/wNqkEbG2bT0dD/Y/FGZZbfEQVzBrjqhBK0KbAyhYEwD
+         i/P+hr6U7Vhr02KEvmADOFquZ1sB/q3A5aZLxz5recqvMcAAL0bQzVsNN9s5NlNvCiQR
+         pTpyt8Q7vVTMMHr0XybP2+Nd50G+JFz8Jqv/+kUammqOuWKY/+RnMFsHFY59NDpqKFwT
+         zciz6J6X+AmqD0Kbl6xCDdn8A1HkLByZfEcSFUJoR53fHJZC3+yzFEaSHtChOxzRnSJo
+         1LCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741341275; x=1741946075;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rKx/7WZeBAnXPF4y8oCkUH3yJ/CY8cCFbTvTuih92iE=;
+        b=ckhwqKR5I7INglhx8YxRVkA9kwq23VSmxtwJuDF/yQoGYtuUJoy9AXEtikeOH5Yg5D
+         6BIeT0esk86bvH/sHTcYZuMgXUxX9Gyo9sFgyr3oCIYxxLJUpD6pjoMimWeiE8VjOWXf
+         iaig24bcBnKI/a6uCuBqrXgm8Gj0Ikz3Dd0faMXdByuOk+Jg0CYm3LDIUh+u66Iy1Rau
+         INiStE8tMIgSwKRREc/mDsLvVjtD+fE5b+7vlsp9tv8+0mp912LJ8/GSb5dQoHHp7A5J
+         qh1afRDgHmSW2JYWvzJiud7yYIExxBO7xVysl56xC+QNFnUwyu7eRXz9/Hw0sPKzVl6i
+         xGCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGSoc1xAyEoGZt3S1qo4eqo9dvmG8jTXgRk19V1fd5HFr6O83lVn0hR8iy5VjdcQ+iLzCQ9G6bgHMGuEOLAGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpCEMPO/W4WtXbFr0lsGOQ6p69C+N+ccSAvkgSbJcCIOEQSyIS
+	ChJgo1orV+L/GhtC3m38z7iSkTKkWrfU1lnvTZ4mrt5ZNRi1jCYKDxfE76ParNi8vv0A6IpY+jU
+	ai9ilvcG/7xwxMDoGssI8tOM2fVktWAlX2jnl7ejKaQrmBIisAX0V
+X-Gm-Gg: ASbGncsq0Qtxb3zpml0osvDoGsF9XpRfjV5huaStaQPOABgF9p31ScPHzrDWiU//u61
+	p4VfrAjh294w6IQSRErdW1tkQpddUV0uAuCjlbLf08bdSSFdZNdIcWfOsPzGWn5MUOHQwVV7P14
+	5+UfvUC1dKYB6HwgeS0EqavejZwe5wKq3P4sUxL06fkYJIQscEcKGN2JxZ
+X-Google-Smtp-Source: AGHT+IHocbYX04XnyKsC1RJwxG/GRnY9nk+ZaOYJZwAitetHw+vWivG5XOzbvlrUcVf71jsz/DdzJdaVcUStr/fGaHM=
+X-Received: by 2002:ac8:5d54:0:b0:472:538:b795 with SMTP id
+ d75a77b69052e-47621059cbfmr3098391cf.22.1741341274687; Fri, 07 Mar 2025
+ 01:54:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf, sockmap: avoid using sk_socket after
- free
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, xiyou.wangcong@gmail.com,
- john.fastabend@gmail.com, jakub@cloudflare.com, martin.lau@linux.dev
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, sgarzare@redhat.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mrpre@163.com, cong.wang@bytedance.com,
- syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com
-References: <20250228055106.58071-1-jiayuan.chen@linux.dev>
- <20250228055106.58071-2-jiayuan.chen@linux.dev>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <20250228055106.58071-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250306182009.2255241-1-rmoar@google.com>
+In-Reply-To: <20250306182009.2255241-1-rmoar@google.com>
+From: Brendan Jackman <jackmanb@google.com>
+Date: Fri, 7 Mar 2025 10:54:23 +0100
+X-Gm-Features: AQ5f1JpaRFS0OagxHIcY7KNQGrxr1iik6OffimOoxb01BkKIkyepohF5FdpbICo
+Message-ID: <CA+i-1C2RgoRR-46uD+PBP0N5oLcJYDp05iE96QAXfRRz__e-BA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: Fix bug in parsing test plan
+To: Rae Moar <rmoar@google.com>
+Cc: shuah@kernel.org, davidgow@google.com, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/28/25 06:51, Jiayuan Chen wrote:
-> ...
->  static void sk_psock_verdict_data_ready(struct sock *sk)
->  {
-> -	struct socket *sock = sk->sk_socket;
-> +	struct socket *sock;
->  	const struct proto_ops *ops;
->  	int copied;
->  
->  	trace_sk_data_ready(sk);
->  
-> +	/* We need RCU to prevent the sk_socket from being released.
-> +	 * Especially for Unix sockets, we are currently in the process
-> +	 * context and do not have RCU protection.
-> +	 */
-> +	rcu_read_lock();
-> +	sock = sk->sk_socket;
->  	if (unlikely(!sock))
-> -		return;
-> +		goto unlock;
-> +
->  	ops = READ_ONCE(sock->ops);
->  	if (!ops || !ops->read_skb)
-> -		return;
-> +		goto unlock;
-> +
->  	copied = ops->read_skb(sk, sk_psock_verdict_recv);
->  	if (copied >= 0) {
->  		struct sk_psock *psock;
->  
-> -		rcu_read_lock();
->  		psock = sk_psock(sk);
->  		if (psock)
->  			sk_psock_data_ready(sk, psock);
-> -		rcu_read_unlock();
->  	}
-> +unlock:
-> +	rcu_read_unlock();
->  }
+On Thu, 6 Mar 2025 at 19:20, Rae Moar <rmoar@google.com> wrote:
+>
+> A bug was identified where the KTAP below caused an infinite loop:
+>
+>  TAP version 13
+>  ok 4 test_case
+>  1..4
+>
+> The infinite loop was caused by the parser not parsing a test plan
+> if following a test result line.
+>
+> Fix this bug to correctly parse test plan line.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 
-Hi,
+Hi Rae thanks again for taking a look at this. I just noticed
+kunit_tool_test.py has unit tests for the parsing logic. Maybe worth
+adding one for the case that was infinite looping before?
 
-Doesn't sk_psock_handle_skb() (!ingress path) have the same `struct socket`
-release race issue? Any plans on fixing that one, too?
-
-BTW, lockdep (CONFIG_LOCKDEP=y) complains about calling AF_UNIX's
-read_skb() under RCU read lock.
-
-Thanks,
-Michal
+(I am not really able to offer an actual review as I couldn't really
+understand the parsing code after a quick reading, but if you need it
+then let me know and I'll chase you up to ask questions until I can
+follow it, then I can review!)
 
