@@ -1,53 +1,54 @@
-Return-Path: <linux-kselftest+bounces-28466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23A02A56372
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:18:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 695BBA56378
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:19:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F28A1759F5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 09:18:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C56C47A87EA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 09:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFFBF1FC0E3;
-	Fri,  7 Mar 2025 09:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D640520A5C1;
+	Fri,  7 Mar 2025 09:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ptzGaUH0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mD+2175h"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83888202F9A;
-	Fri,  7 Mar 2025 09:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF5F206F16;
+	Fri,  7 Mar 2025 09:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741339122; cv=none; b=My+eZMh8wdJfcD/iX3oaDzIK1FboSWE49Ek8G6r5G3Ea+vO9vx8/uItVIhj2zgkh8BuxZ6Zfw8HxVE55VlW+oo7+NxvfZCkYNjRcTOag+XJItzgi6rOay0Y0g6a/0U12d/AylcC+gvIkevBQ0OeJeBOJzIzBw6UdQdZvVTBDFRo=
+	t=1741339125; cv=none; b=uUMBcZX/SvxaGEg14pj4xP+oWR4+/OqyhUp/hXHLaqARXBfot8F7fGII5ujdSq+BcmiVONhEED/q1OuhPnzUoIUCwewTc94cf8jr0EhObhSb1SzMGKS8ocEStHhUDPXiJcrz7j4DScvzljqOEPi3/KNmjr7vkJKxa4bB4nrXUvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741339122; c=relaxed/simple;
-	bh=4FFtFEAghaw8Fxm+0QcQSP352FEs3EHEKWLpqW/iUy8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=A6wrkcV+/gQX5m7++C4eEPe78lDDffDuxmRUgYLYN6cDKcnHD3lsMN7jW245c4pfH/2GJhTPicrYFA7uYMK95e2FABffFxTBEBQ6B2XQhhgvT69GVawUP5Z2+7gljACATJquuqZt6n9vesuxIqaxksZ1Das3x51eBF00uowmxJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ptzGaUH0; arc=none smtp.client-ip=217.70.183.193
+	s=arc-20240116; t=1741339125; c=relaxed/simple;
+	bh=UcblwryEiR71Xfu/dHRtNCXOR5qYBSqNNgTJihF0uOU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=nl2KY8S2HW7seaEs+FmDxzKz3VFahBz4FszFuYdIjo9Itq9esxemXN2tUnsbISvxGmLf0qdKbmTWIXhG7PIMWi3ji2IJyr3WVBFJMRif+FFzPiXy5G3ikF3b7tB1/ylcI5+3H5mu/jWgKzmhUpG3OO1/vjC6xhwDVCT4d8ZqPDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mD+2175h; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B01614326B;
-	Fri,  7 Mar 2025 09:18:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BE4EF432F5;
+	Fri,  7 Mar 2025 09:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741339113;
+	t=1741339114;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=acms9IK6zQkC5xrSpOuATQi+b7do71St7Vfny2KwyEo=;
-	b=ptzGaUH099OlY/n4qguKI8Aw71Z6UTx94ap1k2b7u6Neq0BdxnD0qGi15sVPvDTk2zZkTz
-	03NlKwZZLRMjCeVuvqXt31vgVDR2CBkW1G3kiV69ZP/sRtbypTCnb3gYBaNUFo6amlxuCS
-	abiVr+RGN0XP4uU0iR5pxs3FlfTPtJEFUwAdbwsHQct1SqhnIuYWnvSBwn6k6v3W3g6v+8
-	A7obr0NAxuesLMQo2wCnm/RN6szYHhb/reunsEVYwf5HTlXf+JqfPxvDNLwU89biqsAw9/
-	fH1Gzbmt/E1xFQERppQep+/q9ENOdnlvpWkWoCVJoNBKkmu/E86FYvo2pi9y/A==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hotar4zMqOb9mVGLlRBJrVzkTVe0vONc6YkWTjZAAas=;
+	b=mD+2175hCQdf85YQwoDinDAQfwQvl1VEsXZxYtZVDXGugmtTclGLB15Ln3PeaevSJdsLmL
+	mzgsUbyeWiZ7v6CSYP9Z6I3/GIkv0Dk2RleolIL5cSULC+Ri3pw+k0bEBrU/ZkE1iKym/6
+	QCtLWkR5JKl2dw3LovlZfMhcmrZeG2HzsmpEU3mWkOgyAOeiJDzLJBFIVr9kXn42vHYayo
+	tGDrxnBouJkjOB0c+UHi97JzguIn/qt9JIHXybf+pNLa6J6UwyAVNBwR+4iSatEfK+Svp1
+	r3rNTr+bvyfr1CAgj/zqSj4tW1Y0TMbpuJv/feya5jut+fN2RXQSaM4gw5C4DA==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Subject: [PATCH bpf-next 0/2] selftests/bpf: Move test_lwt_seg6local to
- test_progs
-Date: Fri, 07 Mar 2025 10:18:22 +0100
-Message-Id: <20250307-seg6local-v1-0-990fff8f180d@bootlin.com>
+Date: Fri, 07 Mar 2025 10:18:23 +0100
+Subject: [PATCH bpf-next 1/2] selftests/bpf: lwt_seg6local: Remove unused
+ routes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,10 +57,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAN65ymcC/x3MQQqAIBRF0a3EHyekmIO2Eg3UXvZBLDQiCPeeN
- DxwuS8VZEahqXsp4+bCR2qQfUd+tylA8NpMalDjoKQWBcHEw9sojHZ+hdbOGFDrz4yNn/81kzs
- 3kfBctNT6ATnG+jllAAAA
-X-Change-ID: 20250214-seg6local-64bcde44b66e
+Message-Id: <20250307-seg6local-v1-1-990fff8f180d@bootlin.com>
+References: <20250307-seg6local-v1-0-990fff8f180d@bootlin.com>
+In-Reply-To: <20250307-seg6local-v1-0-990fff8f180d@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -77,40 +77,47 @@ Cc: Alexis Lothore <alexis.lothore@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddtvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomhepfdeurghsthhivghnucevuhhruhhttghhvghtucdlvgeurffhucfhohhunhgurghtihhonhdmfdcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeektdekgfettdegkefhudejveefhfdvtefgudduieefvdfhvdfgfeethefhvdevhfenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplgduledvrdduieekrddtrddugegnpdhmrghilhhfrhhomhepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddtpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmhihkohhlrghlsehfsgdrtghomhdprhgtphhtthhop
- ehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddtvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepfdeurghsthhivghnucevuhhruhhttghhvghtucdlvgeurffhucfhohhunhgurghtihhonhdmfdcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegfeduhfeutddtieffteffleejffekveeviedutdegjeelfedtjeegtdejtddthfenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplgduledvrdduieekrddtrddugegnpdhmrghilhhfrhhomhepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddtpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmhihkohhlrghlsehfsgdrtghomhdprhgtphhtt
+ hhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomh
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Hi all,
+Some routes in fb00:: are initialized during setup, even though they
+aren't needed by the test as the UDP packets will travel through the
+lightweight tunnels.
 
-This patch series continues the work to migrate the script tests into
-prog_tests.
-
-test_lwt_seg6local.sh tests some bpf_lwt_* helpers. It contains only one
-test that uses a network topology quite different than the ones that
-can be found in others prog_tests/lwt_*.c files so I add a new
-prog_tests/lwt_seg6local.c file.
-
-While working on the migration I noticed that some routes present in the
-script weren't needed so PATCH 1 deletes them and then PATCH 2 migrates
-the test into the test_progs framework.
+Remove these unnecessary routes.
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
-Bastien Curutchet (eBPF Foundation) (2):
-      selftests/bpf: lwt_seg6local: Remove unused routes
-      selftests/bpf: lwt_seg6local: Move test to test_progs
+ tools/testing/selftests/bpf/test_lwt_seg6local.sh | 5 -----
+ 1 file changed, 5 deletions(-)
 
- tools/testing/selftests/bpf/Makefile               |   1 -
- .../selftests/bpf/prog_tests/lwt_seg6local.c       | 176 +++++++++++++++++++++
- tools/testing/selftests/bpf/test_lwt_seg6local.sh  | 156 ------------------
- 3 files changed, 176 insertions(+), 157 deletions(-)
----
-base-commit: 86eb3a47230a41c6ccf5cdae8ee0a7e7292aa29d
-change-id: 20250214-seg6local-64bcde44b66e
+diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+index 0efea2292d6aac3a33f4745b1cdbda803fd1f307..9c74b88730ffd98f8e988a078d218ffbcd9ee95c 100755
+--- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
++++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+@@ -99,19 +99,14 @@ ip netns exec ${NS6} ip link set dev lo up
+ 
+ # All link scope addresses and routes required between veths
+ ip netns exec ${NS1} ip -6 addr add fb00::12/16 dev veth1 scope link
+-ip netns exec ${NS1} ip -6 route add fb00::21 dev veth1 scope link
+ ip netns exec ${NS2} ip -6 addr add fb00::21/16 dev veth2 scope link
+ ip netns exec ${NS2} ip -6 addr add fb00::34/16 dev veth3 scope link
+-ip netns exec ${NS2} ip -6 route add fb00::43 dev veth3 scope link
+-ip netns exec ${NS3} ip -6 route add fb00::65 dev veth5 scope link
+ ip netns exec ${NS3} ip -6 addr add fb00::43/16 dev veth4 scope link
+ ip netns exec ${NS3} ip -6 addr add fb00::56/16 dev veth5 scope link
+ ip netns exec ${NS4} ip -6 addr add fb00::65/16 dev veth6 scope link
+ ip netns exec ${NS4} ip -6 addr add fb00::78/16 dev veth7 scope link
+-ip netns exec ${NS4} ip -6 route add fb00::87 dev veth7 scope link
+ ip netns exec ${NS5} ip -6 addr add fb00::87/16 dev veth8 scope link
+ ip netns exec ${NS5} ip -6 addr add fb00::910/16 dev veth9 scope link
+-ip netns exec ${NS5} ip -6 route add fb00::109 dev veth9 scope link
+ ip netns exec ${NS5} ip -6 route add fb00::109 table 117 dev veth9 scope link
+ ip netns exec ${NS6} ip -6 addr add fb00::109/16 dev veth10 scope link
+ 
 
-Best regards,
 -- 
-Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+2.48.1
 
 
