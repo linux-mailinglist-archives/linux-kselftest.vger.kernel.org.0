@@ -1,137 +1,243 @@
-Return-Path: <linux-kselftest+bounces-28460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C45DA5628E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 09:29:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40635A56297
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 09:34:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 761581890F41
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 08:29:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B3CA16A591
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 08:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683B71C84B5;
-	Fri,  7 Mar 2025 08:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C11C1AE876;
+	Fri,  7 Mar 2025 08:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="Zdl2TGmN"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="HUcJE0gl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5C91A727D
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Mar 2025 08:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8357D15382E
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Mar 2025 08:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741336142; cv=none; b=T3F2Zj22Gl8l7ZJ+lOG8lPWXgGYg+s1/xbBm43MBiZ2HZiLEXr5JCD3QiJt+W+AojoO7d33KsbqwVaQBT480WJYXJJErPsrBw+QQD5uZXLjE9lCW21hAu5sLPAjh5qLv4xqNWBJUMxBAbW6SR9TQMZiP5ObuRv13+2F+9nCQzPY=
+	t=1741336442; cv=none; b=LH8k78eYlsNVIDPN8zV/ib0XX5wtyOsogHEKRszlVqD6FrWzJTxJWMJhHTWMi7PQJVbcP4xC+AYiAzOFbfybPyKKFOJl+K3Wh7+/551jQJJXQqiAGvb9VBvKRdjJmG6ICAv9N3n2XG3NB2apVVMpQ95kQwdoxfW5Hfx7DPn+tg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741336142; c=relaxed/simple;
-	bh=KAEABgo5QmoLhvA8/dKPBOR8Bq/G4TG267wdgb4RRRs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j6DbIggkcr3xO6GcibqG34Uf8VXFYOFP2V00y9bVEdptez8O5EAxUtBbUtfvm9pbpEiPBmrZJsRY189qj/D5qbI4X5V6QdA69b+ayXfUXLCKFGDWY1FIB+/dg0mF9Y71iP34lEJF7WdzyU6v7vezjO6Rsryki7hg5Cde/A+0IYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=Zdl2TGmN; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-85b018062a5so133708639f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Mar 2025 00:28:59 -0800 (PST)
+	s=arc-20240116; t=1741336442; c=relaxed/simple;
+	bh=Sh+rfGzLOB1b2a9HdUZm3hMkw4gRexqTGwuwkToRcCo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aUKVW0E3QBGTFDpf1mqa6D9u+zO5ZicibNzz0oeTw9HndKh54UNdghtFcuODL/HVWa99h9g4CuMTqZwQsNc9esWH5ahDEIqeg5RR0nfYyU5J0dPiykHurVLqAWGtoeqPiFstZj5PHNo903pmR7OpRWQFKCDMVj2KB1IiMEE8qrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=HUcJE0gl; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aaf900cc7fbso321090866b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Mar 2025 00:34:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1741336139; x=1741940939; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8YlIiXhwG4KRcbOBdAmDvGTlkxDSVAhUX3csscpKyVg=;
-        b=Zdl2TGmNjlXM06Ncz5wDIhQU5kU/XKpjSvqrO1WU+20bi93on/Dr62PNLgLzq9njkp
-         A8KIVGFrLsy6+qndjyEmbO95Zr9dOkP8syd5rWFfnC2jbYWCXShunygvVFuEMETsqr1R
-         p2FHgbc9iNynHkzuCPeJudsXw+miMPttLaIuKfprPvD4txughSOtIA1L4FzOEg8KQJtN
-         UTsi1t8uwlne33L0gE9Z7lOnAnPEunKdvAB11dPz6hZa8aalqxCEsIfJEYfFo6vx97aC
-         BjoZQfopMDxP4m7pjK1GHHPdHRTuPMtOoeL4ZFtGYM390tdduHD4cgli6tmcMPIYlI4V
-         XRSg==
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1741336439; x=1741941239; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=omvOTZNwfWYDk44NVBjyy3sj3JkUlQjIuVhlR5xVZsk=;
+        b=HUcJE0glopRm2s2EVRLmgyiXPnj7czeCa6DesDG07VeU9PKz0I30Q2DKSwft8j53hG
+         O4EXvXXdJYOKOtOzmHWPx6Y9MS/9OLC5JsIhoHSwboKYIhcavptDy+vcxDOUargYb2gp
+         o0zaKIEq4aF8+XmRDqnHkSoKnMHwlUD1kF0sq8XqzoTzylI7GmpYTc8QIpXsuR/80qB9
+         oEL4l8rKV/H+2TgHkefftRKfW6WWUjjSe1kOrYgsWjkSwcAeICCdRQAVAp8imT11XUGy
+         pvmKtcnAeHBl41BtDXrVpXRGOR7iY/H6VnF2eGX0+VAra/nHRZMO6oet14JJmQ3xF+fr
+         /B9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741336139; x=1741940939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8YlIiXhwG4KRcbOBdAmDvGTlkxDSVAhUX3csscpKyVg=;
-        b=s6fdHqzWyhvhRDLOdDqfrJv4G6aUtHDRpUGH0RqnDvkY3cjZOF1kNccFbewAg+ewyW
-         bWsdU9L/6fWK5qO8QcVAWo+Xd2I5A5DuIjd0FUHOyYwbsHVnnvI+FCfMy5KB3GH8UXQu
-         Vl8PtbQwZjmduUM5Y6GlU3vd+KbaxuJebXyF8Io9LaQdfgLO5X1FAj2pHffLszbbVOaK
-         pQGzMc0008MQAXSrPUxC/l/VdSMilbFN4vU8HUdxIwongD/NR6rssqNlHUDOMKivSa/0
-         Q1TBkZ6qfd334iMWhM1M+rRC0fr74CB6m8ktj0MBqbHn/Ses39nAK1sp1J8qYHl97eJV
-         qiQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAQ9+gI3nLSSl6pnO22VqTyrkIXuSwEH9eYmMMcK4D91P+9x5aAuQ6q+VpHXy/hS2kbzIu+61Mh4X+n5zGNfA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzybMdeV2tMj3pR4v+3XyGocVg30nfSDIz7a763eXRL44WpkANx
-	K4jyV3TOWB7S6cYTu9OCzaUk/X/hfc15rXyKytAISk/WSjVOsiWuXgyHfWsxBTsiCar0C0bMUFN
-	CaTK8XGNS8YsSIg2Oi6n8zxdN4mnKcnzD50qi2w==
-X-Gm-Gg: ASbGncsWrPNY7BOcQ43CJ4htfM/Asyvw/8iAXdpxLAzviJu4+AdQMbTkY9KcArHyjIo
-	rAFWI4gfFTuE0sftpxNhPdM+D1ujpFwCFopL8Op6mp2KJN8y4bw3jwE+FS83p+09II1vz2KdzN1
-	EUa8jtxMBS/xMUMVVTFSDIne3ZWgk=
-X-Google-Smtp-Source: AGHT+IHpyge1YXB1VBykLP/dh9ft8HFAB3zzw6CmKWnhV8/XYcR00xSa4YW+S5Z3jF04shZ9TO0vf5OuS0Vy70VC954=
-X-Received: by 2002:a05:6e02:16c7:b0:3d0:239a:c46a with SMTP id
- e9e14a558f8ab-3d44194816cmr30189715ab.9.1741336139186; Fri, 07 Mar 2025
- 00:28:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741336439; x=1741941239;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=omvOTZNwfWYDk44NVBjyy3sj3JkUlQjIuVhlR5xVZsk=;
+        b=gLuQbKX/x0iy3SoePIgU0h9G+dr1KLljnDgKVXdWGexBhIZFrZEGbwOJMK0Ed0pu/n
+         HiRozbpAUxj5BFkiKsLyQwXjB+BPF/Tom8ncZmOqB+lfSJU0vNlN0WXU6S3tFO9U7GuS
+         UUZQaCPlpn7ziyNfn9eR3OXfSsorp8R8Ecdye7wvVIxAaAFxB6jG5RQo5mgJIP2eMSpI
+         IAGHtpm0tK/O6F67DaiHfLLKDVFNzhFCjNxEl1xODWZUk4it5OcSs7A8Iw0hPM5mwQ9U
+         EYdKo0fGlXIYnjjMX7rznkCt5PbKkGSDHtnYn75QstYPvXeFupvJZenj/vGhVJXarrhS
+         Y/5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWtJjCSI4s4uizuG4nLk9eJ7DIP6SQ3LzClY/mY3q8ngkQ1Db1kcxye1liiXVN3BsbKq1hUSgdedm4TufWexYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdG2kQfU/bp6M2O6A7jlZP3LUqmS1u07Gsg2YLK1apeEiKDraG
+	gOMOhkY0jGmyLZOAFcwMvwTxsmcym+FrX5pI4Lcbnj/2SkoV8L3PMAX7OT7p8Ug=
+X-Gm-Gg: ASbGncvnXJ/6pumZnTp7Oa2V9NSx7L872HcsiUAAb1D4pft4/WTkub8gX1IVg8L/M4d
+	epAwrWua2y8o38SKw9Yn6ToW5xkRJFKpLBnvHonQH+NxNAvOZbh53SCr2wZhF/BCuKV4MRPEfT9
+	NF9UxrGhLG/EUc8gRx12q1ywEhsxfrr85XJ+epP5757x+03p1RKW1pcaYZ0u3E7dRgiKH0vD3GC
+	Xc7J8NMwZ3552j3yXRNEy8HXpIYJdP3yhhDBFANseIwNLcahBu+tllunjIXqg0dRxr6h7AMBN3r
+	J9VnMveazNqp+JrEtlmvxbxLQGKBLOFxLeZftKzlb3dSffWL6O1JSUJwc8i1j6u8IiRuqDyww2D
+	/
+X-Google-Smtp-Source: AGHT+IFYSQRuaqRplHXA2kM66xT02LPg8//qgKuUDazDg3f9slGb176+oPKyRdb+pVUCcWIuBeQN8A==
+X-Received: by 2002:a17:907:94ce:b0:ac2:344:a15e with SMTP id a640c23a62f3a-ac252658e60mr239230766b.22.1741336438714;
+        Fri, 07 Mar 2025 00:33:58 -0800 (PST)
+Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac23973b09asm234762766b.119.2025.03.07.00.33.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Mar 2025 00:33:58 -0800 (PST)
+Message-ID: <9b0312c8-dc96-494e-86f9-69ee45369029@blackwall.org>
+Date: Fri, 7 Mar 2025 10:33:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250303-kvm_pmu_improve-v2-0-41d177e45929@rivosinc.com>
-In-Reply-To: <20250303-kvm_pmu_improve-v2-0-41d177e45929@rivosinc.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Fri, 7 Mar 2025 13:58:46 +0530
-X-Gm-Features: AQ5f1JqfLRDl2sXghMrs9tGiGCXrhEWfy1IvZjbEz2be6tiJtFVbpcg_wKAhY44
-Message-ID: <CAAhSdy3KncYJhPAa20oH=bB1Zi5-=sD8m69OYFS451q3_EMiEA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] RISC-V KVM PMU fix and selftest improvement
-To: Atish Patra <atishp@rivosinc.com>
-Cc: Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv5 net 1/3] bonding: fix calling sleeping function in spin
+ lock and some race conditions
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+ Jarod Wilson <jarod@redhat.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Cosmin Ratiu <cratiu@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250307031903.223973-1-liuhangbin@gmail.com>
+ <20250307031903.223973-2-liuhangbin@gmail.com>
+ <6dd52efd-3367-4a77-8e7b-7f73096bcb3f@blackwall.org>
+ <Z8qqS9IlRAMYIqXb@fedora>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <Z8qqS9IlRAMYIqXb@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 4, 2025 at 4:23=E2=80=AFAM Atish Patra <atishp@rivosinc.com> wr=
-ote:
->
-> This series adds a fix for KVM PMU code and improves the pmu selftest
-> by allowing generating precise number of interrupts. It also provided
-> another additional option to the overflow test that allows user to
-> generate custom number of LCOFI interrupts.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
-> Changes in v2:
-> - Initialized the local overflow irq variable to 0 indicate that it's not=
- a
->   allowed value.
-> - Moved the introduction of argument option `n` to the last patch.
-> - Link to v1: https://lore.kernel.org/r/20250226-kvm_pmu_improve-v1-0-74c=
-058c2bf6d@rivosinc.com
->
-> ---
-> Atish Patra (4):
->       RISC-V: KVM: Disable the kernel perf counter during configure
->       KVM: riscv: selftests: Do not start the counter in the overflow han=
-dler
->       KVM: riscv: selftests: Change command line option
->       KVM: riscv: selftests: Allow number of interrupts to be configurabl=
-e
+On 3/7/25 10:11, Hangbin Liu wrote:
+> Hi Nikolay,
+> On Fri, Mar 07, 2025 at 09:42:49AM +0200, Nikolay Aleksandrov wrote:
+>> On 3/7/25 05:19, Hangbin Liu wrote:
+>>> The fixed commit placed mutex_lock() inside spin_lock_bh(), which triggers
+>>> a warning:
+>>>
+>>>   BUG: sleeping function called from invalid context at...
+>>>
+>>> Fix this by moving the IPsec deletion operation to bond_ipsec_free_sa,
+>>> which is not held by spin_lock_bh().
+>>>
+>>> Additionally, there are also some race conditions as bond_ipsec_del_sa_all()
+>>> and __xfrm_state_delete could running in parallel without any lock.
+>>> e.g.
+>>>
+>>>   bond_ipsec_del_sa_all()            __xfrm_state_delete()
+>>>     - .xdo_dev_state_delete            - bond_ipsec_del_sa()
+>>>     - .xdo_dev_state_free                - .xdo_dev_state_delete()
+>>>                                        - bond_ipsec_free_sa()
+>>>   bond active_slave changes              - .xdo_dev_state_free()
+>>>
+>>>   bond_ipsec_add_sa_all()
+>>>     - ipsec->xs->xso.real_dev = real_dev;
+>>>     - xdo_dev_state_add
+>>>
+>>> To fix this, let's add xs->lock during bond_ipsec_del_sa_all(), and delete
+>>> the IPsec list when the XFRM state is DEAD, which could prevent
+>>> xdo_dev_state_free() from being triggered again in bond_ipsec_free_sa().
+>>>
+>>> In bond_ipsec_add_sa(), if .xdo_dev_state_add() failed, the xso.real_dev
+>>> is set without clean. Which will cause trouble if __xfrm_state_delete is
+>>> called at the same time. Reset the xso.real_dev to NULL if state add failed.
+>>>
+>>> Despite the above fixes, there are still races in bond_ipsec_add_sa()
+>>> and bond_ipsec_add_sa_all(). If __xfrm_state_delete() is called immediately
+>>> after we set the xso.real_dev and before .xdo_dev_state_add() is finished,
+>>> like
+>>>
+>>>   ipsec->xs->xso.real_dev = real_dev;
+>>>                                        __xfrm_state_delete
+>>>                                          - bond_ipsec_del_sa()
+>>>                                            - .xdo_dev_state_delete()
+>>>                                          - bond_ipsec_free_sa()
+>>>                                            - .xdo_dev_state_free()
+>>>   .xdo_dev_state_add()
+>>>
+>>> But there is no good solution yet. So I just added a FIXME note in here
+>>> and hope we can fix it in future.
+>>>
+>>> Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
+>>> Reported-by: Jakub Kicinski <kuba@kernel.org>
+>>> Closes: https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
+>>> Suggested-by: Cosmin Ratiu <cratiu@nvidia.com>
+>>> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+>>> ---
+>>>  drivers/net/bonding/bond_main.c | 69 ++++++++++++++++++++++++---------
+>>>  1 file changed, 51 insertions(+), 18 deletions(-)
+>>>
+>>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+>>> index e45bba240cbc..dd3d0d41d98f 100644
+>>> --- a/drivers/net/bonding/bond_main.c
+>>> +++ b/drivers/net/bonding/bond_main.c
+>>> @@ -506,6 +506,7 @@ static int bond_ipsec_add_sa(struct xfrm_state *xs,
+>>>  		list_add(&ipsec->list, &bond->ipsec_list);
+>>>  		mutex_unlock(&bond->ipsec_lock);
+>>>  	} else {
+>>> +		xs->xso.real_dev = NULL;
+>>>  		kfree(ipsec);
+>>>  	}
+>>>  out:
+>>> @@ -541,7 +542,15 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
+>>>  		if (ipsec->xs->xso.real_dev == real_dev)
+>>>  			continue;
+>>>  
+>>> +		/* Skip dead xfrm states, they'll be freed later. */
+>>> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
+>>> +			continue;
+>>
+>> As we commented earlier, reading this state without x->lock is wrong.
+> 
+> But even we add the lock, like
+> 
+> 		spin_lock_bh(&ipsec->xs->lock);
+> 		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
+> 			spin_unlock_bh(&ipsec->xs->lock);
+> 			continue;
+> 		}
+> 
+> We still may got the race condition. Like the following note said.
+> So I just leave it as the current status. But I can add the spin lock
+> if you insist.
+> 
 
-Queued this series for Linux-6.15.
+I don't insist at all, I just pointed out that this is buggy and the value doesn't
+make sense used like that. Adding more bugs to the existing code wouldn't make it better.
 
-Thanks,
-Anup
+>>> +
+>>>  		ipsec->xs->xso.real_dev = real_dev;
+>>> +		/* FIXME: there is a race that before .xdo_dev_state_add()
+>>> +		 * is called, the __xfrm_state_delete() is called in parallel,
+>>> +		 * which will call .xdo_dev_state_delete() and xdo_dev_state_free()
+>>> +		 */
+>>>  		if (real_dev->xfrmdev_ops->xdo_dev_state_add(ipsec->xs, NULL)) {
+>>>  			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
+>>>  			ipsec->xs->xso.real_dev = NULL;
+>> [snip]
+>>
+>> TBH, keeping buggy code with a comment doesn't sound good to me. I'd rather remove this
+>> support than tell people "good luck, it might crash". It's better to be safe until a
+>> correct design is in place which takes care of these issues.
+> 
+> I agree it's not a good experience to let users using an unstable feature.
+> But this is a race condition, although we don't have a good fix yet.
+> 
+> On the other hand, I think we can't remove a feature people is using, can we?
+> What I can do is try fix the issues as my best.
+> 
 
->
->  arch/riscv/kvm/vcpu_pmu.c                        |  1 +
->  tools/testing/selftests/kvm/riscv/sbi_pmu_test.c | 81 ++++++++++++++++--=
-------
->  2 files changed, 57 insertions(+), 25 deletions(-)
-> ---
-> base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
-> change-id: 20250225-kvm_pmu_improve-fffd038b2404
-> --
-> Regards,
-> Atish patra
->
+I do appreciate the hard work you've been doing on this, don't get me wrong, but this is
+not really uapi, it's an optimization. The path will become slower as it won't be offloaded,
+but it will still work and will be stable until a proper fix or new design comes in.
+
+Are you suggesting to knowingly leave a race condition that might lead to a number
+of problems in place with a comment?
+IMO that is not ok, but ultimately it's up to the maintainers to decide if they can live
+with it. :)
+
+> By the way, I started this patch because my patch 2/3 is blocked by the
+> selftest results from patch 3/3...
+> 
+> Thanks
+> Hangbin
+
+
 
