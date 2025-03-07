@@ -1,631 +1,268 @@
-Return-Path: <linux-kselftest+bounces-28486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B1D5A566BD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 12:29:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C197A5670E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 12:50:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EC11188AB57
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:28:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73ABE17753E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C3A2192EB;
-	Fri,  7 Mar 2025 11:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D9B217F5C;
+	Fri,  7 Mar 2025 11:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VuZ7/pji"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDWnw6xR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA94D218AC4;
-	Fri,  7 Mar 2025 11:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273E4211A29;
+	Fri,  7 Mar 2025 11:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741346883; cv=none; b=IpU8ZCNKv3+M/Dfh4X+gj/Y8oEdo02M7+10fnjymPpJiLXL/MBSrLnS1rEewhDlhqqWWDg3R4Mb4mQBF95B70oz6ktZZAaqM+Zu5LpkonuMD3kgQjWzQlhxn3xjKnLMsVIcSiTwPXXdl4xDqgV9/U8xRQI6W1udw/Ot1LtKRiIM=
+	t=1741348236; cv=none; b=GkbOGnxp8il5nmoQ9RmOAmEj2w0sEW8ls/kEYYTEKFdCSG9syaJQuCsd2HTk7ZvdQD1m+B0hxPExX0KwrnjyCxZq/J/Q2Dha0R2QvatpDQaF8weRJs2vnQJqqxMfoyzB9Xd+i3S0vQaPXxfcw0VMs+vkGTe9Q2yiA8TuPOrAX2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741346883; c=relaxed/simple;
-	bh=WMRpjACzk4VO0An9XD7k3Ws5EqbeN/Qdyl5iBDK/vAI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hzXhNqjJVm9zfY0JB4QFwrFXyuao0kGlVi3uaM8ieeLef4yaIR/kbaS4kxWKUTFiCuWknVdK9SCP5NJktM0HKVN5IORELUYDPbEKe2FJCxMJRjbVR/bp91MPR4lB4xSK5Ufl1+mwpPgsHzY8VPJ8kYeIsGosCxqn8z1LUlg9EGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VuZ7/pji; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6dd01781b56so19059466d6.0;
-        Fri, 07 Mar 2025 03:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741346879; x=1741951679; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ayI/af+TSyQ1KE77y+2nHn400A/mD2p9rOFZzbDzfrs=;
-        b=VuZ7/pji+c1AKvxUWvvEEG4aCNvzoyWC02r6qsaOtZvA6Y2rSBIRL1DOV+tZzTVBRa
-         0/NHjpdfjfE4ZIfXsV6r5yh0v43h5D/JTePLDMiH+F2SfucCudWM/EKKbe2S6nPJ7ZIu
-         iWgge5RH0P/uW2dN9npv0B6NwXyHTuz8KCASfdJK/Woihc/9MkLYM3xMqUpjINbQvRYh
-         hwBwWvAlZr3Rjw5aZ9Z3nxaoIsz46fONHj0/oxwik83KO0lOR9u+do+Z1Sm2rrcPgqC9
-         RLu0ygX2iZxf9aWfN0T0wvLKeGULnNy7jI33s9eFOUgK4jCUIftzmYgrtE0GHQCIyUR/
-         nxbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741346879; x=1741951679;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ayI/af+TSyQ1KE77y+2nHn400A/mD2p9rOFZzbDzfrs=;
-        b=lVbxriRRNp5wYCyrZ+jCImpn/jZoh5zY8sVoZRsXqxMQyWuD7Fy7tW6NIFwZ5c0q1t
-         BFrIxugUaatYHtbN520l0KBx4W4jbKjyg6hvHRGZm+fjg4siSt1xOc+nzsTC7O9FyoVw
-         yhbSKT44bpqcrY42s6cXkapsf9In2+fyX07XHWoL7T92HWLyf3sd9grh9zgoAcDvIh1p
-         uuyWWjNLCqqyef1//rJPMlB+YYBFGGnHGCo8DOsTrGgwDUtKRT4OOqMjpiFuh5bPXZjW
-         4CJwYGYFOu8jq0SXDfVd5PBsPlGIXRS0T8M0uOxvoHwU3oRcAavOFpjIlJVi9l63oa3B
-         4IHg==
-X-Forwarded-Encrypted: i=1; AJvYcCU68KgCHVcgLkqNv1tWYTpDbQJWpnwxs6VxL7F7vG0cvo0Kl1DxRmux+rEM/YkTioLaS28M55X9xMyZw4T3iz/m@vger.kernel.org, AJvYcCUcL4em76cxZW8e4CdYckdtk52Cgs8AO53GQKw2WcpoqTw4uX6AbSwhHOZteWEN0wannDRC2tG+pG/3PIc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtBlx3ub7mIQfRv+uKTRxR7Hd5aAVZ60dbJ2/G9TXPsf3RFfWV
-	pghGh0HsWK99H1DFMJJCsHRKjH2mHmgPfv0P0/Z3BbnRKwZx0HGbuD3lS6jd7EI=
-X-Gm-Gg: ASbGnctHQ6WGNIQRQFt5KAipvcORLlH4TTK+g3Th/1Ve115xVF1ddqRwEOsHxZax8Gz
-	eTZYVfTRW34DEH2Lxr7zdmxoq2zFIbeDzv1g9PsNU92Xc7pYqqJnd5uDxxPTWbEEuXpDU+ABJUI
-	k48DTkNT6SN3CWrz9BqEvmBeEkKlLpjM4KJQoxrjna3+xROQ5ZSC2k9FRIZfX23NEunMlXIGtcB
-	WkekyAo9986qTgYoNcsEB6MrZ3D5tGw6GiCpDkByHUM6GLVDpv1urA7loH+yD8LClctSXMMBtxG
-	ZGFwwvBUmAIkbO/K5H23PBArrMZ9wuYJZ700nRe49KfI5jaCc8+7SBUIRaMAsMiBpTs=
-X-Google-Smtp-Source: AGHT+IHwrYuYUInVetAgUWMiXJhkVXRVylqnhUV+4QY+2mH3K0buQDTc+qLsoHa7qXkQOV2kdyXJNQ==
-X-Received: by 2002:a05:6214:212b:b0:6e4:4393:de7 with SMTP id 6a1803df08f44-6e9005b5e1emr30380416d6.2.1741346879049;
-        Fri, 07 Mar 2025 03:27:59 -0800 (PST)
-Received: from [192.168.1.159] ([2600:4041:5be7:7c00:f0dd:49a0:8ab6:b3b6])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f70a446dsm18509416d6.56.2025.03.07.03.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 03:27:57 -0800 (PST)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 07 Mar 2025 06:27:39 -0500
-Subject: [PATCH v9 6/6] scanf: further break kunit into test cases
+	s=arc-20240116; t=1741348236; c=relaxed/simple;
+	bh=T+Orm0wQjlNfpFi4uG0aCx02nXd2HC1pXE9JVAR8020=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qwt0vsDWgE8HJraHkR5T4txxoDRfjGXtUey4Fymjw5wbJ70uQix20AieR3tPXCGu2TYzSfQOGC8bcdLg1xnm77InPWDdfXd/nbDhk1v2iP6EgiTY+EvoDG7cAZoYCtv+o+dhs40b81ck8X8yJH++ZUK+h4o6ZH1BY8LbvkaiZI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jDWnw6xR; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741348235; x=1772884235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T+Orm0wQjlNfpFi4uG0aCx02nXd2HC1pXE9JVAR8020=;
+  b=jDWnw6xRryroPQMMDUYOWz40FKGSgDEEO2me+T0f8CZC12C6blftaM00
+   ktgenbTJgith/uhUOZeM8Hw+zzIUOFkN2rzEUtBA4rN8zmNaanzfJkTCw
+   G/8tDtkoXR9XwkFTj8r9IJyrTYYApmejdG7Jr2MfvPsEfDotybsgj7g54
+   Y9NIzR86VaZTY/u8Occ3FzMYNQpbkcWBCL12N/qmJDkeDdlEaEQiLxKEI
+   PCddUnXhPWpR+Wspczu42VT1hhkV40M1GMO9ghLMvYRJuq+inEthiSMpH
+   YxLPSr6uPIFJYR+0SeR/K9pB7WnOGDeXdKLXzCUQm+kycEuKEO0F/oxMB
+   A==;
+X-CSE-ConnectionGUID: FviWXe+3Q9ScvEGl4z150g==
+X-CSE-MsgGUID: Et57ws7vSzy2ItOKvAq8/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="46048711"
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="46048711"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 03:50:34 -0800
+X-CSE-ConnectionGUID: E0BrROxpTHqLf8kj9yuT+w==
+X-CSE-MsgGUID: O2Lf7UYNTs2kDv3mgNZ5Xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="124526006"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 07 Mar 2025 03:50:27 -0800
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqWDh-0000Pb-1J;
+	Fri, 07 Mar 2025 11:50:25 +0000
+Date: Fri, 7 Mar 2025 19:50:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Akihiko Odaki <akihiko.odaki@daynix.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Jason Wang <jasowang@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	linux-kselftest@vger.kernel.org,
+	Yuri Benditovich <yuri.benditovich@daynix.com>,
+	Andrew Melnychenko <andrew@daynix.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	gur.stavi@huawei.com, Lei Yang <leiyang@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v8 3/6] tun: Introduce virtio-net hash feature
+Message-ID: <202503071936.EzoojQZO-lkp@intel.com>
+References: <20250306-rss-v8-3-7ab4f56ff423@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250307-scanf-kunit-convert-v9-6-b98820fa39ff@gmail.com>
-References: <20250307-scanf-kunit-convert-v9-0-b98820fa39ff@gmail.com>
-In-Reply-To: <20250307-scanf-kunit-convert-v9-0-b98820fa39ff@gmail.com>
-To: David Gow <davidgow@google.com>, Petr Mladek <pmladek@suse.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250306-rss-v8-3-7ab4f56ff423@daynix.com>
 
-This gives us more granular test output.
+Hi Akihiko,
 
-Output before:
+kernel test robot noticed the following build warnings:
 
-> KTAP version 1
-> 1..1
->     KTAP version 1
->     # Subtest: scanf
->     # module: scanf_kunit
->     1..10
->     ok 1 numbers_simple
->         KTAP version 1
->         # Subtest: numbers_list
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list: pass:5 fail:0 skip:0 total:5
->     ok 2 numbers_list
->         KTAP version 1
->         # Subtest: numbers_list_field_width_typemax
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_typemax: pass:5 fail:0 skip:0 total:5
->     ok 3 numbers_list_field_width_typemax
->         KTAP version 1
->         # Subtest: numbers_list_field_width_val_width
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_val_width: pass:5 fail:0 skip:0 total:5
->     ok 4 numbers_list_field_width_val_width
->     ok 5 numbers_slice
->     ok 6 numbers_prefix_overflow
->     ok 7 test_simple_strtoull
->     ok 8 test_simple_strtoll
->     ok 9 test_simple_strtoul
->     ok 10 test_simple_strtol
-> # scanf: pass:10 fail:0 skip:0 total:10
-> # Totals: pass:22 fail:0 skip:0 total:22
-> ok 1 scanf
+[auto build test WARNING on dd83757f6e686a2188997cb58b5975f744bb7786]
 
-Output after:
+url:    https://github.com/intel-lab-lkp/linux/commits/Akihiko-Odaki/virtio_net-Add-functions-for-hashing/20250306-180546
+base:   dd83757f6e686a2188997cb58b5975f744bb7786
+patch link:    https://lore.kernel.org/r/20250306-rss-v8-3-7ab4f56ff423%40daynix.com
+patch subject: [PATCH net-next v8 3/6] tun: Introduce virtio-net hash feature
+config: x86_64-buildonly-randconfig-001-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071936.EzoojQZO-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071936.EzoojQZO-lkp@intel.com/reproduce)
 
-> KTAP version 1
-> 1..1
->     KTAP version 1
->     # Subtest: scanf
->     # module: scanf_kunit
->     1..21
->     ok 1 numbers_simple
->         KTAP version 1
->         # Subtest: numbers_list_ll
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_ll: pass:5 fail:0 skip:0 total:5
->     ok 2 numbers_list_ll
->         KTAP version 1
->         # Subtest: numbers_list_l
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_l: pass:5 fail:0 skip:0 total:5
->     ok 3 numbers_list_l
->         KTAP version 1
->         # Subtest: numbers_list_d
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_d: pass:5 fail:0 skip:0 total:5
->     ok 4 numbers_list_d
->         KTAP version 1
->         # Subtest: numbers_list_h
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_h: pass:5 fail:0 skip:0 total:5
->     ok 5 numbers_list_h
->         KTAP version 1
->         # Subtest: numbers_list_hh
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_hh: pass:5 fail:0 skip:0 total:5
->     ok 6 numbers_list_hh
->         KTAP version 1
->         # Subtest: numbers_list_field_width_ll
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_ll: pass:5 fail:0 skip:0 total:5
->     ok 7 numbers_list_field_width_ll
->         KTAP version 1
->         # Subtest: numbers_list_field_width_l
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_l: pass:5 fail:0 skip:0 total:5
->     ok 8 numbers_list_field_width_l
->         KTAP version 1
->         # Subtest: numbers_list_field_width_d
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_d: pass:5 fail:0 skip:0 total:5
->     ok 9 numbers_list_field_width_d
->         KTAP version 1
->         # Subtest: numbers_list_field_width_h
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_h: pass:5 fail:0 skip:0 total:5
->     ok 10 numbers_list_field_width_h
->         KTAP version 1
->         # Subtest: numbers_list_field_width_hh
->         ok 1 " "
->         ok 2 ":"
->         ok 3 ","
->         ok 4 "-"
->         ok 5 "/"
->     # numbers_list_field_width_hh: pass:5 fail:0 skip:0 total:5
->     ok 11 numbers_list_field_width_hh
->         KTAP version 1
->         # Subtest: numbers_list_field_width_val_ll
->         ok 1 ""
->         ok 2 " "
->         ok 3 ":"
->         ok 4 ","
->         ok 5 "-"
->         ok 6 "/"
->     # numbers_list_field_width_val_ll: pass:6 fail:0 skip:0 total:6
->     ok 12 numbers_list_field_width_val_ll
->         KTAP version 1
->         # Subtest: numbers_list_field_width_val_l
->         ok 1 ""
->         ok 2 " "
->         ok 3 ":"
->         ok 4 ","
->         ok 5 "-"
->         ok 6 "/"
->     # numbers_list_field_width_val_l: pass:6 fail:0 skip:0 total:6
->     ok 13 numbers_list_field_width_val_l
->         KTAP version 1
->         # Subtest: numbers_list_field_width_val_d
->         ok 1 ""
->         ok 2 " "
->         ok 3 ":"
->         ok 4 ","
->         ok 5 "-"
->         ok 6 "/"
->     # numbers_list_field_width_val_d: pass:6 fail:0 skip:0 total:6
->     ok 14 numbers_list_field_width_val_d
->         KTAP version 1
->         # Subtest: numbers_list_field_width_val_h
->         ok 1 ""
->         ok 2 " "
->         ok 3 ":"
->         ok 4 ","
->         ok 5 "-"
->         ok 6 "/"
->     # numbers_list_field_width_val_h: pass:6 fail:0 skip:0 total:6
->     ok 15 numbers_list_field_width_val_h
->         KTAP version 1
->         # Subtest: numbers_list_field_width_val_hh
->         ok 1 ""
->         ok 2 " "
->         ok 3 ":"
->         ok 4 ","
->         ok 5 "-"
->         ok 6 "/"
->     # numbers_list_field_width_val_hh: pass:6 fail:0 skip:0 total:6
->     ok 16 numbers_list_field_width_val_hh
->     ok 17 numbers_prefix_overflow
->     ok 18 test_simple_strtoull
->     ok 19 test_simple_strtoll
->     ok 20 test_simple_strtoul
->     ok 21 test_simple_strtol
-> # scanf: pass:21 fail:0 skip:0 total:21
-> # Totals: pass:86 fail:0 skip:0 total:86
-> ok 1 scanf
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503071936.EzoojQZO-lkp@intel.com/
 
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- lib/tests/scanf_kunit.c | 170 ++++++++++++++++++++++++++----------------------
- 1 file changed, 94 insertions(+), 76 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/lib/tests/scanf_kunit.c b/lib/tests/scanf_kunit.c
-index d96d7ca85b52..2193937039a4 100644
---- a/lib/tests/scanf_kunit.c
-+++ b/lib/tests/scanf_kunit.c
-@@ -383,8 +383,11 @@ do {										\
- 	test_array_8(fn, expect, test_buffer, fmt_buffer, result);		\
- } while (0)
- 
--static void numbers_list_ll(struct kunit *test, const char *delim)
-+static void numbers_list_ll(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_8(unsigned long long, "%llu",   delim, "llu", check_ull);
- 	numbers_list_8(long long,	   "%lld",   delim, "lld", check_ll);
- 	numbers_list_8(long long,	   "%lld",   delim, "lli", check_ll);
-@@ -393,8 +396,11 @@ static void numbers_list_ll(struct kunit *test, const char *delim)
- 	numbers_list_8(long long,	   "0x%llx", delim, "lli", check_ll);
- }
- 
--static void numbers_list_l(struct kunit *test, const char *delim)
-+static void numbers_list_l(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_8(unsigned long,	   "%lu",    delim, "lu", check_ulong);
- 	numbers_list_8(long,		   "%ld",    delim, "ld", check_long);
- 	numbers_list_8(long,		   "%ld",    delim, "li", check_long);
-@@ -403,8 +409,11 @@ static void numbers_list_l(struct kunit *test, const char *delim)
- 	numbers_list_8(long,		   "0x%lx",  delim, "li", check_long);
- }
- 
--static void numbers_list_d(struct kunit *test, const char *delim)
-+static void numbers_list_d(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_8(unsigned int,	   "%u",     delim, "u", check_uint);
- 	numbers_list_8(int,		   "%d",     delim, "d", check_int);
- 	numbers_list_8(int,		   "%d",     delim, "i", check_int);
-@@ -413,8 +422,11 @@ static void numbers_list_d(struct kunit *test, const char *delim)
- 	numbers_list_8(int,		   "0x%x",   delim, "i", check_int);
- }
- 
--static void numbers_list_h(struct kunit *test, const char *delim)
-+static void numbers_list_h(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_8(unsigned short,	   "%hu",    delim, "hu", check_ushort);
- 	numbers_list_8(short,		   "%hd",    delim, "hd", check_short);
- 	numbers_list_8(short,		   "%hd",    delim, "hi", check_short);
-@@ -423,8 +435,11 @@ static void numbers_list_h(struct kunit *test, const char *delim)
- 	numbers_list_8(short,		   "0x%hx",  delim, "hi", check_short);
- }
- 
--static void numbers_list_hh(struct kunit *test, const char *delim)
-+static void numbers_list_hh(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_8(unsigned char,	   "%hhu",   delim, "hhu", check_uchar);
- 	numbers_list_8(signed char,	   "%hhd",   delim, "hhd", check_char);
- 	numbers_list_8(signed char,	   "%hhd",   delim, "hhi", check_char);
-@@ -433,20 +448,11 @@ static void numbers_list_hh(struct kunit *test, const char *delim)
- 	numbers_list_8(signed char,	   "0x%hhx", delim, "hhi", check_char);
- }
- 
--static void numbers_list(struct kunit *test)
-+static void numbers_list_field_width_ll(struct kunit *test)
- {
- 	const char * const *param = test->param_value;
- 	const char *delim = *param;
- 
--	numbers_list_ll(test, delim);
--	numbers_list_l(test, delim);
--	numbers_list_d(test, delim);
--	numbers_list_h(test, delim);
--	numbers_list_hh(test, delim);
--}
--
--static void numbers_list_field_width_ll(struct kunit *test, const char *delim)
--{
- 	numbers_list_fix_width(unsigned long long, "%llu",   delim, 20, "llu", check_ull);
- 	numbers_list_fix_width(long long,	   "%lld",   delim, 20, "lld", check_ll);
- 	numbers_list_fix_width(long long,	   "%lld",   delim, 20, "lli", check_ll);
-@@ -455,8 +461,11 @@ static void numbers_list_field_width_ll(struct kunit *test, const char *delim)
- 	numbers_list_fix_width(long long,	   "0x%llx", delim, 18, "lli", check_ll);
- }
- 
--static void numbers_list_field_width_l(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_l(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- #if BITS_PER_LONG == 64
- 	numbers_list_fix_width(unsigned long,	"%lu",	     delim, 20, "lu", check_ulong);
- 	numbers_list_fix_width(long,		"%ld",	     delim, 20, "ld", check_long);
-@@ -474,8 +483,11 @@ static void numbers_list_field_width_l(struct kunit *test, const char *delim)
- #endif
- }
- 
--static void numbers_list_field_width_d(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_d(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_fix_width(unsigned int,	"%u",	     delim, 10, "u", check_uint);
- 	numbers_list_fix_width(int,		"%d",	     delim, 11, "d", check_int);
- 	numbers_list_fix_width(int,		"%d",	     delim, 11, "i", check_int);
-@@ -484,8 +496,11 @@ static void numbers_list_field_width_d(struct kunit *test, const char *delim)
- 	numbers_list_fix_width(int,		"0x%x",	     delim, 10, "i", check_int);
- }
- 
--static void numbers_list_field_width_h(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_h(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_fix_width(unsigned short,	"%hu",	     delim, 5, "hu", check_ushort);
- 	numbers_list_fix_width(short,		"%hd",	     delim, 6, "hd", check_short);
- 	numbers_list_fix_width(short,		"%hd",	     delim, 6, "hi", check_short);
-@@ -494,8 +509,11 @@ static void numbers_list_field_width_h(struct kunit *test, const char *delim)
- 	numbers_list_fix_width(short,		"0x%hx",     delim, 6, "hi", check_short);
- }
- 
--static void numbers_list_field_width_hh(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_hh(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_fix_width(unsigned char,	"%hhu",	     delim, 3, "hhu", check_uchar);
- 	numbers_list_fix_width(signed char,	"%hhd",	     delim, 4, "hhd", check_char);
- 	numbers_list_fix_width(signed char,	"%hhd",	     delim, 4, "hhi", check_char);
-@@ -504,24 +522,11 @@ static void numbers_list_field_width_hh(struct kunit *test, const char *delim)
- 	numbers_list_fix_width(signed char,	"0x%hhx",    delim, 4, "hhi", check_char);
- }
- 
--/*
-- * List of numbers separated by delim. Each field width specifier is the
-- * maximum possible digits for the given type and base.
-- */
--static void numbers_list_field_width_typemax(struct kunit *test)
-+static void numbers_list_field_width_val_ll(struct kunit *test)
- {
- 	const char * const *param = test->param_value;
- 	const char *delim = *param;
- 
--	numbers_list_field_width_ll(test, delim);
--	numbers_list_field_width_l(test, delim);
--	numbers_list_field_width_d(test, delim);
--	numbers_list_field_width_h(test, delim);
--	numbers_list_field_width_hh(test, delim);
--}
--
--static void numbers_list_field_width_val_ll(struct kunit *test, const char *delim)
--{
- 	numbers_list_val_width(unsigned long long, "%llu",   delim, "llu", check_ull);
- 	numbers_list_val_width(long long,	   "%lld",   delim, "lld", check_ll);
- 	numbers_list_val_width(long long,	   "%lld",   delim, "lli", check_ll);
-@@ -530,8 +535,11 @@ static void numbers_list_field_width_val_ll(struct kunit *test, const char *deli
- 	numbers_list_val_width(long long,	   "0x%llx", delim, "lli", check_ll);
- }
- 
--static void numbers_list_field_width_val_l(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_val_l(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_val_width(unsigned long,	"%lu",	     delim, "lu", check_ulong);
- 	numbers_list_val_width(long,		"%ld",	     delim, "ld", check_long);
- 	numbers_list_val_width(long,		"%ld",	     delim, "li", check_long);
-@@ -540,8 +548,11 @@ static void numbers_list_field_width_val_l(struct kunit *test, const char *delim
- 	numbers_list_val_width(long,		"0x%lx",     delim, "li", check_long);
- }
- 
--static void numbers_list_field_width_val_d(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_val_d(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_val_width(unsigned int,	"%u",	     delim, "u", check_uint);
- 	numbers_list_val_width(int,		"%d",	     delim, "d", check_int);
- 	numbers_list_val_width(int,		"%d",	     delim, "i", check_int);
-@@ -550,8 +561,11 @@ static void numbers_list_field_width_val_d(struct kunit *test, const char *delim
- 	numbers_list_val_width(int,		"0x%x",	     delim, "i", check_int);
- }
- 
--static void numbers_list_field_width_val_h(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_val_h(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_val_width(unsigned short,	"%hu",	     delim, "hu", check_ushort);
- 	numbers_list_val_width(short,		"%hd",	     delim, "hd", check_short);
- 	numbers_list_val_width(short,		"%hd",	     delim, "hi", check_short);
-@@ -560,8 +574,11 @@ static void numbers_list_field_width_val_h(struct kunit *test, const char *delim
- 	numbers_list_val_width(short,		"0x%hx",     delim, "hi", check_short);
- }
- 
--static void numbers_list_field_width_val_hh(struct kunit *test, const char *delim)
-+static void numbers_list_field_width_val_hh(struct kunit *test)
- {
-+	const char * const *param = test->param_value;
-+	const char *delim = *param;
-+
- 	numbers_list_val_width(unsigned char,	"%hhu",	     delim, "hhu", check_uchar);
- 	numbers_list_val_width(signed char,	"%hhd",	     delim, "hhd", check_char);
- 	numbers_list_val_width(signed char,	"%hhd",	     delim, "hhi", check_char);
-@@ -570,38 +587,6 @@ static void numbers_list_field_width_val_hh(struct kunit *test, const char *deli
- 	numbers_list_val_width(signed char,	"0x%hhx",    delim, "hhi", check_char);
- }
- 
--/*
-- * List of numbers separated by delim. Each field width specifier is the
-- * exact length of the corresponding value digits in the string being scanned.
-- */
--static void numbers_list_field_width_val_width(struct kunit *test)
--{
--	const char * const *param = test->param_value;
--	const char *delim = *param;
--
--	numbers_list_field_width_val_ll(test, delim);
--	numbers_list_field_width_val_l(test, delim);
--	numbers_list_field_width_val_d(test, delim);
--	numbers_list_field_width_val_h(test, delim);
--	numbers_list_field_width_val_hh(test, delim);
--}
--
--/*
-- * Slice a continuous string of digits without field delimiters, containing
-- * numbers of varying length, using the field width to extract each group
-- * of digits. For example the hex values c0,3,bf01,303 would have a
-- * string representation of "c03bf01303" and extracted with "%2x%1x%4x%3x".
-- */
--static void numbers_slice(struct kunit *test)
--{
--	const char *delim = "";
--
--	KUNIT_ASSERT_PTR_EQ(test, test->param_value, NULL);
--	test->param_value = &delim;
--
--	numbers_list_field_width_val_width(test);
--}
--
- #define test_number_prefix(T, str, scan_fmt, expect0, expect1, n_args, fn)	\
- do {										\
- 	const T expect[2] = { expect0, expect1 };				\
-@@ -758,16 +743,49 @@ static void number_delimiter_param_desc(const char * const *param,
- 
- KUNIT_ARRAY_PARAM(number_delimiters, number_delimiters, number_delimiter_param_desc);
- 
-+static const void *optional_number_delimiters_gen_params(const void *prev, char *desc)
-+{
-+	static const char * const blank = "";
-+
-+	if (prev == NULL) {
-+		number_delimiter_param_desc(&blank, desc);
-+		return &blank;
-+	}
-+	if (prev == &blank)
-+		return number_delimiters_gen_params(NULL, desc);
-+	return number_delimiters_gen_params(prev, desc);
-+}
-+
- static struct kunit_case scanf_test_cases[] = {
- 	KUNIT_CASE(numbers_simple),
- 	/* String with multiple numbers separated by delimiter. */
--	KUNIT_CASE_PARAM(numbers_list, number_delimiters_gen_params),
--	/* Field width may be longer than actual field digits. */
--	KUNIT_CASE_PARAM(numbers_list_field_width_typemax, number_delimiters_gen_params),
--	/* Each field width exactly length of actual field digits. */
--	KUNIT_CASE_PARAM(numbers_list_field_width_val_width, number_delimiters_gen_params),
--	/* Slice continuous sequence of digits using field widths. */
--	KUNIT_CASE(numbers_slice),
-+	KUNIT_CASE_PARAM(numbers_list_ll, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_l, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_d, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_h, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_hh, number_delimiters_gen_params),
-+
-+	/*
-+	 * Lists of numbers separated by delim. Each field width specifier is the
-+	 * maximum possible digits for the given type and base.
-+	 */
-+	KUNIT_CASE_PARAM(numbers_list_field_width_ll, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_l, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_d, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_h, number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_hh, number_delimiters_gen_params),
-+
-+	/*
-+	 * Lists of numbers separated by delim. Each field width specifier is the
-+	 * exact length of the corresponding value digits in the string being scanned.
-+	 * The empty string is included in the list of delimiters.
-+	 */
-+	KUNIT_CASE_PARAM(numbers_list_field_width_val_ll, optional_number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_val_l, optional_number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_val_d, optional_number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_val_h, optional_number_delimiters_gen_params),
-+	KUNIT_CASE_PARAM(numbers_list_field_width_val_hh, optional_number_delimiters_gen_params),
-+
- 	KUNIT_CASE(numbers_prefix_overflow),
- 
- 	KUNIT_CASE(test_simple_strtoull),
+>> drivers/net/tap.c:1056:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    1056 |         case SIOCGIFHWADDR:
+         |         ^
+   drivers/net/tap.c:1056:2: note: insert '__attribute__((fallthrough));' to silence this warning
+    1056 |         case SIOCGIFHWADDR:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/net/tap.c:1056:2: note: insert 'break;' to avoid fall-through
+    1056 |         case SIOCGIFHWADDR:
+         |         ^
+         |         break; 
+   1 warning generated.
+
+
+vim +1056 drivers/net/tap.c
+
+2be5c76794b0e5 drivers/net/macvtap.c Vlad Yasevich      2013-06-25   964  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   965  /*
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   966   * provide compatibility with generic tun/tap interface
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   967   */
+635b8c8ecdd271 drivers/net/tap.c     Sainath Grandhi    2017-02-10   968  static long tap_ioctl(struct file *file, unsigned int cmd,
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   969  		      unsigned long arg)
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   970  {
+635b8c8ecdd271 drivers/net/tap.c     Sainath Grandhi    2017-02-10   971  	struct tap_queue *q = file->private_data;
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10   972  	struct tap_dev *tap;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   973  	void __user *argp = (void __user *)arg;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   974  	struct ifreq __user *ifr = argp;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   975  	unsigned int __user *up = argp;
+39ec7de7092ba9 drivers/net/macvtap.c Michael S. Tsirkin 2014-12-16   976  	unsigned short u;
+55afbd0810922a drivers/net/macvtap.c Michael S. Tsirkin 2010-04-29   977  	int __user *sp = argp;
+7f460d30c8e130 drivers/net/macvtap.c Justin Cormack     2015-05-13   978  	struct sockaddr sa;
+55afbd0810922a drivers/net/macvtap.c Michael S. Tsirkin 2010-04-29   979  	int s;
+02df55d28c6001 drivers/net/macvtap.c Arnd Bergmann      2010-02-18   980  	int ret;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   981  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   982  	switch (cmd) {
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   983  	case TUNSETIFF:
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   984  		/* ignore the name, just look at flags */
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   985  		if (get_user(u, &ifr->ifr_flags))
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   986  			return -EFAULT;
+b9fb9ee07e67fc drivers/net/macvtap.c Arnd Bergmann      2010-02-18   987  
+b9fb9ee07e67fc drivers/net/macvtap.c Arnd Bergmann      2010-02-18   988  		ret = 0;
+635b8c8ecdd271 drivers/net/tap.c     Sainath Grandhi    2017-02-10   989  		if ((u & ~TAP_IFFEATURES) != (IFF_NO_PI | IFF_TAP))
+b9fb9ee07e67fc drivers/net/macvtap.c Arnd Bergmann      2010-02-18   990  			ret = -EINVAL;
+b9fb9ee07e67fc drivers/net/macvtap.c Arnd Bergmann      2010-02-18   991  		else
+635b8c8ecdd271 drivers/net/tap.c     Sainath Grandhi    2017-02-10   992  			q->flags = (q->flags & ~TAP_IFFEATURES) | u;
+b9fb9ee07e67fc drivers/net/macvtap.c Arnd Bergmann      2010-02-18   993  
+b9fb9ee07e67fc drivers/net/macvtap.c Arnd Bergmann      2010-02-18   994  		return ret;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   995  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30   996  	case TUNGETIFF:
+441ac0fcaadc76 drivers/net/macvtap.c Vlad Yasevich      2013-06-25   997  		rtnl_lock();
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10   998  		tap = tap_get_tap_dev(q);
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10   999  		if (!tap) {
+441ac0fcaadc76 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1000  			rtnl_unlock();
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1001  			return -ENOLINK;
+441ac0fcaadc76 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1002  		}
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1003  
+02df55d28c6001 drivers/net/macvtap.c Arnd Bergmann      2010-02-18  1004  		ret = 0;
+39ec7de7092ba9 drivers/net/macvtap.c Michael S. Tsirkin 2014-12-16  1005  		u = q->flags;
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1006  		if (copy_to_user(&ifr->ifr_name, tap->dev->name, IFNAMSIZ) ||
+39ec7de7092ba9 drivers/net/macvtap.c Michael S. Tsirkin 2014-12-16  1007  		    put_user(u, &ifr->ifr_flags))
+02df55d28c6001 drivers/net/macvtap.c Arnd Bergmann      2010-02-18  1008  			ret = -EFAULT;
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1009  		tap_put_tap_dev(tap);
+441ac0fcaadc76 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1010  		rtnl_unlock();
+02df55d28c6001 drivers/net/macvtap.c Arnd Bergmann      2010-02-18  1011  		return ret;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1012  
+815f236d622721 drivers/net/macvtap.c Jason Wang         2013-06-05  1013  	case TUNSETQUEUE:
+815f236d622721 drivers/net/macvtap.c Jason Wang         2013-06-05  1014  		if (get_user(u, &ifr->ifr_flags))
+815f236d622721 drivers/net/macvtap.c Jason Wang         2013-06-05  1015  			return -EFAULT;
+441ac0fcaadc76 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1016  		rtnl_lock();
+635b8c8ecdd271 drivers/net/tap.c     Sainath Grandhi    2017-02-10  1017  		ret = tap_ioctl_set_queue(file, u);
+441ac0fcaadc76 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1018  		rtnl_unlock();
+82a19eb8c02ab9 drivers/net/macvtap.c Jason Wang         2013-07-16  1019  		return ret;
+815f236d622721 drivers/net/macvtap.c Jason Wang         2013-06-05  1020  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1021  	case TUNGETFEATURES:
+635b8c8ecdd271 drivers/net/tap.c     Sainath Grandhi    2017-02-10  1022  		if (put_user(IFF_TAP | IFF_NO_PI | TAP_IFFEATURES, up))
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1023  			return -EFAULT;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1024  		return 0;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1025  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1026  	case TUNSETSNDBUF:
+3ea79249e81e5e drivers/net/macvtap.c Michael S. Tsirkin 2015-09-18  1027  		if (get_user(s, sp))
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1028  			return -EFAULT;
+93161922c658c7 drivers/net/tap.c     Craig Gallek       2017-10-30  1029  		if (s <= 0)
+93161922c658c7 drivers/net/tap.c     Craig Gallek       2017-10-30  1030  			return -EINVAL;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1031  
+3ea79249e81e5e drivers/net/macvtap.c Michael S. Tsirkin 2015-09-18  1032  		q->sk.sk_sndbuf = s;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1033  		return 0;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1034  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1035  	case TUNSETOFFLOAD:
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1036  		/* let the user check for future flags */
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1037  		if (arg & ~(TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TSO6 |
+399e0827642f6a drivers/net/tap.c     Andrew Melnychenko 2022-12-07  1038  			    TUN_F_TSO_ECN | TUN_F_UFO |
+399e0827642f6a drivers/net/tap.c     Andrew Melnychenko 2022-12-07  1039  			    TUN_F_USO4 | TUN_F_USO6))
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1040  			return -EINVAL;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1041  
+2be5c76794b0e5 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1042  		rtnl_lock();
+2be5c76794b0e5 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1043  		ret = set_offload(q, arg);
+2be5c76794b0e5 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1044  		rtnl_unlock();
+2be5c76794b0e5 drivers/net/macvtap.c Vlad Yasevich      2013-06-25  1045  		return ret;
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1046  
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1047  	case TUNGETVNETHASHCAP:
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1048  		return tun_vnet_ioctl_gethashcap(argp);
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1049  
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1050  	case TUNSETVNETHASH:
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1051  		rtnl_lock();
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1052  		tap = rtnl_dereference(q->tap);
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1053  		ret = tap ? tun_vnet_ioctl_sethash(&tap->vnet_hash, true, argp) : -EBADFD;
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1054  		rtnl_unlock();
+2c592c9b450ea4 drivers/net/tap.c     Akihiko Odaki      2025-03-06  1055  
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11 @1056  	case SIOCGIFHWADDR:
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1057  		rtnl_lock();
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1058  		tap = tap_get_tap_dev(q);
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1059  		if (!tap) {
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1060  			rtnl_unlock();
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1061  			return -ENOLINK;
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1062  		}
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1063  		ret = 0;
+3b23a32a63219f drivers/net/tap.c     Cong Wang          2021-02-11  1064  		dev_get_mac_address(&sa, dev_net(tap->dev), tap->dev->name);
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1065  		if (copy_to_user(&ifr->ifr_name, tap->dev->name, IFNAMSIZ) ||
+3b23a32a63219f drivers/net/tap.c     Cong Wang          2021-02-11  1066  		    copy_to_user(&ifr->ifr_hwaddr, &sa, sizeof(sa)))
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1067  			ret = -EFAULT;
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1068  		tap_put_tap_dev(tap);
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1069  		rtnl_unlock();
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1070  		return ret;
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1071  
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1072  	case SIOCSIFHWADDR:
+7f460d30c8e130 drivers/net/macvtap.c Justin Cormack     2015-05-13  1073  		if (copy_from_user(&sa, &ifr->ifr_hwaddr, sizeof(sa)))
+7f460d30c8e130 drivers/net/macvtap.c Justin Cormack     2015-05-13  1074  			return -EFAULT;
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1075  		rtnl_lock();
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1076  		tap = tap_get_tap_dev(q);
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1077  		if (!tap) {
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1078  			rtnl_unlock();
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1079  			return -ENOLINK;
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1080  		}
+3b23a32a63219f drivers/net/tap.c     Cong Wang          2021-02-11  1081  		ret = dev_set_mac_address_user(tap->dev, &sa, NULL);
+6fe3faf86757eb drivers/net/tap.c     Sainath Grandhi    2017-02-10  1082  		tap_put_tap_dev(tap);
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1083  		rtnl_unlock();
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1084  		return ret;
+b5082083392224 drivers/net/macvtap.c Justin Cormack     2015-05-11  1085  
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1086  	default:
+69113cb5de68da drivers/net/tap.c     Akihiko Odaki      2025-02-07  1087  		return tun_vnet_ioctl(&q->vnet_hdr_sz, &q->flags, cmd, sp);
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1088  	}
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1089  }
+20d29d7a916a47 drivers/net/macvtap.c Arnd Bergmann      2010-01-30  1090  
 
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
