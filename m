@@ -1,248 +1,266 @@
-Return-Path: <linux-kselftest+bounces-28471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50F92A564DE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:13:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4072A56564
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:32:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE150175EFA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:13:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1545318998C2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9D120DD7F;
-	Fri,  7 Mar 2025 10:12:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21098212B0D;
+	Fri,  7 Mar 2025 10:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="LVQ6ggg1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mkuUJvPY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDBTqGfE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941AF20CCF5;
-	Fri,  7 Mar 2025 10:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63724211A0A;
+	Fri,  7 Mar 2025 10:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741342374; cv=none; b=BGyz/VTrGXD08Cz48brJPdPNmO+buZKcTZ3uvwMN3gb4cH3/1HP0HU7GxJv9QT60YwyzjXdsJf0AGnJiYXfgJPcPmcT4uwsi78qE9Paupj0mAIDwz/mLKc/kyi+CecXE9tJJF6U8iy7nZxpwPeURqLx3QBhl+EnWyPc7GLPBMKg=
+	t=1741343482; cv=none; b=gHa0SuDOvU1z+cOSsCE9kk8W6jiIuvvyxBSyJuB+0QpOMCtfpe/sBKHM/DxRVU+4UYLY91WYotpMhNl71RPAmOUI4rIIfEjUV7ehF23fMqMQDbPBw+QHQ6NCYBN3DcdKxRSvGOOuyq0nDozV4IP6+SOyrCG0VEtKLhX+30c0Fw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741342374; c=relaxed/simple;
-	bh=9uIC5gZH8Qm7HDH6SwlK89APamrJxmZZP5bnWb+3pf4=;
+	s=arc-20240116; t=1741343482; c=relaxed/simple;
+	bh=xxkzx7ZQrcVJJTyEe9gXKoVs2uaL0Wfs92qWjEYjYsY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cu4MM/Er6mIur1hgmH90e7J0AQOrGjslztTNgPA7HCTQNYXDBk78ya53jrJuDGdV+ajYif+VGM3cnQWnVvrvUWzMzEm1rwbqrDS6G84QWgCqhrvNeryvE8c0miXCdiXcdA4/r7AwcUi5gX6vR5p3OLhJUadOzAWSy6nK+Ae5oTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=LVQ6ggg1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mkuUJvPY; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id EB8AB25401C3;
-	Fri,  7 Mar 2025 05:12:48 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Fri, 07 Mar 2025 05:12:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1741342368; x=
-	1741428768; bh=qHQnYT/Qyj9dWXE+hev7Uqrdhl7JEOFfEEcRNdgyx2I=; b=L
-	VQ6ggg1uTqb7YhLEiEMuTCpkK6J55k/cUrCgcDcZmZJHAHOtvN132XlQsAQ7W4oy
-	LmoqRVYLPCFly8nZeAfgfURXgDq+Ve3HH/r/I49tCaPIG0JIn2dZNjB34cJ3GJsm
-	NPW1bSJYNlOHfNVdUAWof91qI+FnIfYNK24G803Mbx08IQcVz6QUrZTFGTRE1P45
-	E6So1mIh1SiI4CsixBroogl+W1095Ca5Nd0gWD8HSp8BiuIx+1YbuuGleCm87yn5
-	6U2XXprRVYJA7D6jwFUtjWrdtc9iFxmRosqt4X8blJDLVS6fHPxoDgOKDa8A+XqU
-	xTot1fJBJQbSkCbvO/jAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1741342368; x=1741428768; bh=qHQnYT/Qyj9dWXE+hev7Uqrdhl7JEOFfEEc
-	RNdgyx2I=; b=mkuUJvPY3b/cGMcdym4n2sD7Xv1vEn0e8Gs87hz2tOMnK7GQj5o
-	eWPiTsxA3YVQ0DahT/J4fE+w9J+ryVSacNudMd5BdDuP+NSYJtDmchKo/2BxXzei
-	ZDLBXHDjuLmR/EJABKRRpGJoTDWv/pwBcIEx+mcoL3XBaFsgNk00TIFDW1DpmF5e
-	ZwlR476pH25wAKEbgGEhZOVlAU9i6zewHxUtIPP0wNLKVUgytcXM3jyEYfFNxUsC
-	OZRhEIzLykOkz099FEb7/hur4m/cY48Bd0wAMJ8a5OuUn7nGWjx4fCvHHuHkdSxm
-	XXT2Pd4mRqzVmuCeN8HIoAYBk/uJY8Ypnpw==
-X-ME-Sender: <xms:oMbKZw6R9jVOMyg5qNb_fS5q0ppeisHdSYlDhBygyBaDekNnNIzDbg>
-    <xme:oMbKZx5zLKVwuBZcD7xi4VA80aBonb0Y2oU1b3U3yy8NLoR9wtiwriR4cruLMlsHU
-    1_lu3_M-bgLxWiNQIM>
-X-ME-Received: <xmr:oMbKZ_dPYl73KXtjaC1fceRhcAFqBiDkFxBP7kg5xbmKtz6HuGNp5G8M4ck8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddtfeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
-    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdef
-    hfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
-    sggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnth
-    honhhiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrd
-    gtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehp
-    rggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnth
-    gvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtph
-    htthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:oMbKZ1JiS7ItpmdrVIHsUgCb54-z7hIekeGvw22wtrIS0WKV1qw30Q>
-    <xmx:oMbKZ0JNSqDPSYZ2CaElrCP3cOf2xJ5xb7XaMBgXaExrNsH4CFxnCg>
-    <xmx:oMbKZ2zNyvY2IKWNs08SBicNxeS7NdABDXIkf6ZZrMkxMlG4SDCbQg>
-    <xmx:oMbKZ4IQFsPSi8H6GHOdf9G23jMTvUithDaNPgvTXgjcsRLQmKLHQg>
-    <xmx:oMbKZ3Z1jwjygpZeMHxzIoxnZwuWTdjf0zZE_eeoy1aVrRroofwts9vr>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Mar 2025 05:12:47 -0500 (EST)
-Date: Fri, 7 Mar 2025 11:12:45 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	 Content-Type:Content-Disposition:In-Reply-To; b=dHz3mN61/rsndIgasqoOzKtA5Xk/VIyuiykObQdo1tTjRRC5+O6qjDlUMqB1Xaog94Bxe21ALyLcbQWOwVaGuAxwqbxgUH1l4nqKdxKtOeJQ3sh+hrhlD07xNahejjBNZuuICzWHKva1B8Uu1ZCvu3cGgaj2HPuk0rGq0PXBAO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VDBTqGfE; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2235189adaeso27480615ad.0;
+        Fri, 07 Mar 2025 02:31:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741343479; x=1741948279; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eqR/U3tGslJZPPUyjeJ8EJvxyW57iNVS/C65eSn9Z50=;
+        b=VDBTqGfEJIJixuqaIUFbHFwh3rzgj1dgsGQzcf2FQ0TfYjJdNpbflXLSjL9DaRHMcI
+         EoQIyOmbGpsDEeGcKuzs5dKnZhI03/6oJN3+98Oau5sWkEB1iO13G2SBIG9sE1r6G7qu
+         StJ8JnAgOZViWiABq1P5nqxCJ5gkLbcFWoBFnEzamOq4gvHq/q0qBbXqhWz7HwZSh22n
+         YUAGlieVYgVNd9dyAe+7sE2TfZaG2bYCiUVnN1BBf76GN2ang691cxhFx7RolRXNR2An
+         w/RfUe77olsy4Ry8tpULCqW+rJiOfB0Vh/Mig7ZYuT/sGbM2M/cZF+0qbk5FhVUWeO7Q
+         aqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741343479; x=1741948279;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eqR/U3tGslJZPPUyjeJ8EJvxyW57iNVS/C65eSn9Z50=;
+        b=PWVA2+ZPGqomApSPjKrWIBWLAHucvGJglKko4Dhby0kXsW5FxBvR2wDH7yvJE1m0Gj
+         67J+arILDEJfuH+0llacoc7y8trUXVk+qgZCYUxKZBVt6NljH7V+x6JHNIuL3sYNQVRZ
+         KYQj8+HOAErtPFONXfxnkYH9K04uliAyS6ws72d1Y9Md6xpuAzwDzgpFwbB2Z3OzRPEm
+         24NMXuXhipRzXOD+TGkj4p0HfmEHeFVb0Ma+npHZ/CCSl4ECofngS9V/mBhQvG0hQqzk
+         SuMz1w6+QWnz+ktr8S1j4FX41KtYqD6fat0Sh2864ofzGtcw7DUhbMDeLSmQ+NrwBm6o
+         ljsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUMQ/4ObO5ZCiqODfy0+nRQEn1aBpst+rNa1nZm/P/rBf3VVo7UtsBHKEZ7vjBb3jU5OwgiEJ+/zC5D+OCBvSfT@vger.kernel.org, AJvYcCXUy9cyOLeRuWkmOVWGh7gUO9oMk5flcUvnqal5bICte0dNP/FBjvn2Vm7cXb5QRS/fkoiN4zbqlk4nXKQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGybHgWeZ6PqaBUBAFdp7aRRj8LXAqI8cvSf2Fka7FS9Csew0H
+	7YgtXxpASZfI/mmuI879oKubLVD4FWFE+sB/sxuLOZQg1y+f730c
+X-Gm-Gg: ASbGncuySeqBnjUh6a+boo467CYiaC2NFad/5lABlVdvIL+s+xBcfi9hSFZ6iBBRNbP
+	jmvsr363PffmUOOCgZxYFELlAlf9rNAJ9krJgq4L2sbDWM9KRLYCWUCi96y/qt35zg83wq9qLRP
+	e4pVufYjAEMMSpFIi0m/lFcfa8FAhUfxb59504/DbzkUP4kGUCmgiVFGiSFvkzBmitExmgX1PKD
+	rStjxWqCEbFpGAGBbhnfJItDXBz4rho/48c1y4928j5y/Bt7syr4ekiiljC7KNGd4orOPg7H9wZ
+	yWDuBg+c8bBvDBDWkL9A45ZosaLodbf54mfMmQDsqtk541XkeA==
+X-Google-Smtp-Source: AGHT+IEnR31Z8EtVjUQRHM9ZaAiIDKHmXCKpcH09SLEe6uV5R05/HdtuJ2qNJOpAt3eMhi13CBhUjQ==
+X-Received: by 2002:a17:902:cf0b:b0:223:3eed:f680 with SMTP id d9443c01a7336-22409477568mr105676185ad.18.1741343479448;
+        Fri, 07 Mar 2025 02:31:19 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a7fa24sm26764585ad.108.2025.03.07.02.31.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Mar 2025 02:31:18 -0800 (PST)
+Date: Fri, 7 Mar 2025 10:31:11 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH v21 18/24] ovpn: add support for peer floating
-Message-ID: <Z8rGnTaRE_mph_tD@hog>
-References: <20250304-b4-ovpn-tmp-v21-0-d3cbb74bb581@openvpn.net>
- <20250304-b4-ovpn-tmp-v21-18-d3cbb74bb581@openvpn.net>
- <Z8dIXjwZ3QmiEcd-@hog>
- <9c919407-fb91-48d7-bf2d-8437c2f3f4da@openvpn.net>
- <Z8gzbz6YjdeGPqgu@hog>
- <cd9df084-8633-49f0-a851-ed2b1c9946d3@openvpn.net>
- <Z8iCKvIfFaskshlz@hog>
- <e3def5b5-3450-4ad0-aced-fd80af943c31@openvpn.net>
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+	Jarod Wilson <jarod@redhat.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 net 1/3] bonding: fix calling sleeping function in spin
+ lock and some race conditions
+Message-ID: <Z8rK7_qiIze88yGv@fedora>
+References: <20250307031903.223973-1-liuhangbin@gmail.com>
+ <20250307031903.223973-2-liuhangbin@gmail.com>
+ <6dd52efd-3367-4a77-8e7b-7f73096bcb3f@blackwall.org>
+ <Z8qqS9IlRAMYIqXb@fedora>
+ <9b0312c8-dc96-494e-86f9-69ee45369029@blackwall.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <e3def5b5-3450-4ad0-aced-fd80af943c31@openvpn.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9b0312c8-dc96-494e-86f9-69ee45369029@blackwall.org>
 
-2025-03-06, 11:02:50 +0100, Antonio Quartulli wrote:
-> On 05/03/2025 17:56, Sabrina Dubroca wrote:
-> > 2025-03-05, 14:14:36 +0100, Antonio Quartulli wrote:
-> > > On 05/03/2025 12:20, Sabrina Dubroca wrote:
-> > > > 2025-03-05, 00:19:32 +0100, Antonio Quartulli wrote:
-> > > > > On 04/03/2025 19:37, Sabrina Dubroca wrote:
-> > > > > > 2025-03-04, 01:33:48 +0100, Antonio Quartulli wrote:
-> > > > > > > +void ovpn_peer_endpoints_update(struct ovpn_peer *peer, struct sk_buff *skb)
-> > > > > > > +{
-> > > > > > > +	struct hlist_nulls_head *nhead;
-> > > > > > > +	struct sockaddr_storage ss;
-> > > > > > > +	const u8 *local_ip = NULL;
-> > > > > > > +	struct sockaddr_in6 *sa6;
-> > > > > > > +	struct sockaddr_in *sa;
-> > > > > > > +	struct ovpn_bind *bind;
-> > > > > > > +	size_t salen = 0;
-> > > > > > > +
-> > > > > > > +	spin_lock_bh(&peer->lock);
-> > > > > > > +	bind = rcu_dereference_protected(peer->bind,
-> > > > > > > +					 lockdep_is_held(&peer->lock));
-> > > > > > > +	if (unlikely(!bind))
-> > > > > > > +		goto unlock;
-> > > > > > > +
-> > > > > > > +	switch (skb->protocol) {
-> > > > > > > +	case htons(ETH_P_IP):
-> > > > > > > +		/* float check */
-> > > > > > > +		if (unlikely(!ovpn_bind_skb_src_match(bind, skb))) {
-> > > > > > > +			if (bind->remote.in4.sin_family == AF_INET)
-> > > > > > > +				local_ip = (u8 *)&bind->local;
-> > > > > > 
-> > > > > > If I'm reading this correctly, we always reuse the existing local
-> > > > > > address when we have to re-create the bind, even if it doesn't match
-> > > > > > the skb? The "local endpoint update" chunk below is doing that, but
-> > > > > > only if we're keeping the same remote? It'll get updated the next time
-> > > > > > we receive a packet and call ovpn_peer_endpoints_update.
-> > > > > > 
-> > > > > > That might irritate the RPF check on the other side, if we still use
-> > > > > > our "old" source to talk to the new dest?
-> > > > > > 
-> > > > > > > +			sa = (struct sockaddr_in *)&ss;
-> > > > > > > +			sa->sin_family = AF_INET;
-> > > > > > > +			sa->sin_addr.s_addr = ip_hdr(skb)->saddr;
-> > > > > > > +			sa->sin_port = udp_hdr(skb)->source;
-> > > > > > > +			salen = sizeof(*sa);
-> > > > > > > +			break;
-> > > > > 
-> > > > > I think the issue is simply this 'break' above - by removing it, everything
-> > > > > should work as expected.
-> > > > 
-> > > > Only if the bind was of the correct family? Checking an IPv4 local
-> > > > address (in the bind) against an IPv6 source address in the packet (or
-> > > > the other way around) isn't going to work well.
-> > > 
-> > > Ah I understand what you mean.
-> > > 
-> > > The purpose of "local_ip" is to provide a working local endpoint to be used
-> > > with the new remote address.
-> > > However, if the float is switching family we can't re-use the same old local
-> > > endpoint (hence the check).
-> > > In this case we'll learn the "new" local address later.
-> > > 
-> > > Does it make sense?
+On Fri, Mar 07, 2025 at 10:33:57AM +0200, Nikolay Aleksandrov wrote:
+> On 3/7/25 10:11, Hangbin Liu wrote:
+> > Hi Nikolay,
+> > On Fri, Mar 07, 2025 at 09:42:49AM +0200, Nikolay Aleksandrov wrote:
+> >> On 3/7/25 05:19, Hangbin Liu wrote:
+> >>> The fixed commit placed mutex_lock() inside spin_lock_bh(), which triggers
+> >>> a warning:
+> >>>
+> >>>   BUG: sleeping function called from invalid context at...
+> >>>
+> >>> Fix this by moving the IPsec deletion operation to bond_ipsec_free_sa,
+> >>> which is not held by spin_lock_bh().
+> >>>
+> >>> Additionally, there are also some race conditions as bond_ipsec_del_sa_all()
+> >>> and __xfrm_state_delete could running in parallel without any lock.
+> >>> e.g.
+> >>>
+> >>>   bond_ipsec_del_sa_all()            __xfrm_state_delete()
+> >>>     - .xdo_dev_state_delete            - bond_ipsec_del_sa()
+> >>>     - .xdo_dev_state_free                - .xdo_dev_state_delete()
+> >>>                                        - bond_ipsec_free_sa()
+> >>>   bond active_slave changes              - .xdo_dev_state_free()
+> >>>
+> >>>   bond_ipsec_add_sa_all()
+> >>>     - ipsec->xs->xso.real_dev = real_dev;
+> >>>     - xdo_dev_state_add
+> >>>
+> >>> To fix this, let's add xs->lock during bond_ipsec_del_sa_all(), and delete
+> >>> the IPsec list when the XFRM state is DEAD, which could prevent
+> >>> xdo_dev_state_free() from being triggered again in bond_ipsec_free_sa().
+> >>>
+> >>> In bond_ipsec_add_sa(), if .xdo_dev_state_add() failed, the xso.real_dev
+> >>> is set without clean. Which will cause trouble if __xfrm_state_delete is
+> >>> called at the same time. Reset the xso.real_dev to NULL if state add failed.
+> >>>
+> >>> Despite the above fixes, there are still races in bond_ipsec_add_sa()
+> >>> and bond_ipsec_add_sa_all(). If __xfrm_state_delete() is called immediately
+> >>> after we set the xso.real_dev and before .xdo_dev_state_add() is finished,
+> >>> like
+> >>>
+> >>>   ipsec->xs->xso.real_dev = real_dev;
+> >>>                                        __xfrm_state_delete
+> >>>                                          - bond_ipsec_del_sa()
+> >>>                                            - .xdo_dev_state_delete()
+> >>>                                          - bond_ipsec_free_sa()
+> >>>                                            - .xdo_dev_state_free()
+> >>>   .xdo_dev_state_add()
+> >>>
+> >>> But there is no good solution yet. So I just added a FIXME note in here
+> >>> and hope we can fix it in future.
+> >>>
+> >>> Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
+> >>> Reported-by: Jakub Kicinski <kuba@kernel.org>
+> >>> Closes: https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
+> >>> Suggested-by: Cosmin Ratiu <cratiu@nvidia.com>
+> >>> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> >>> ---
+> >>>  drivers/net/bonding/bond_main.c | 69 ++++++++++++++++++++++++---------
+> >>>  1 file changed, 51 insertions(+), 18 deletions(-)
+> >>>
+> >>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> >>> index e45bba240cbc..dd3d0d41d98f 100644
+> >>> --- a/drivers/net/bonding/bond_main.c
+> >>> +++ b/drivers/net/bonding/bond_main.c
+> >>> @@ -506,6 +506,7 @@ static int bond_ipsec_add_sa(struct xfrm_state *xs,
+> >>>  		list_add(&ipsec->list, &bond->ipsec_list);
+> >>>  		mutex_unlock(&bond->ipsec_lock);
+> >>>  	} else {
+> >>> +		xs->xso.real_dev = NULL;
+> >>>  		kfree(ipsec);
+> >>>  	}
+> >>>  out:
+> >>> @@ -541,7 +542,15 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
+> >>>  		if (ipsec->xs->xso.real_dev == real_dev)
+> >>>  			continue;
+> >>>  
+> >>> +		/* Skip dead xfrm states, they'll be freed later. */
+> >>> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
+> >>> +			continue;
+> >>
+> >> As we commented earlier, reading this state without x->lock is wrong.
 > > 
-> > Sure, but we could have learned it immediately from the packet we just
-> > got, whether we're changing family or not. No need to wait for the
-> > next RX packet to also learn the new local address.
-> 
-> Indeed.
-> 
+> > But even we add the lock, like
 > > 
-> > But if we now do a dst_cache_reset with the peer float,
-> > ovpn_udp*_output will have to do a new route/local address lookup and
-> > I guess that should clean up the local address stored in the bind, and
-> > then update the dst_cache with the local address we just found.
+> > 		spin_lock_bh(&ipsec->xs->lock);
+> > 		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
+> > 			spin_unlock_bh(&ipsec->xs->lock);
+> > 			continue;
+> > 		}
+> > 
+> > We still may got the race condition. Like the following note said.
+> > So I just leave it as the current status. But I can add the spin lock
+> > if you insist.
+> > 
 > 
-> Right and this may not truly be what we want.
+> I don't insist at all, I just pointed out that this is buggy and the value doesn't
+> make sense used like that. Adding more bugs to the existing code wouldn't make it better.
+
+I'm a little lost here. Do you mean we should hold spin lock for all xs
+readings or just the km.state. The current bonding code didn't hold any
+xs lock for xs readings. And I saw in xfrm code it only hold rcu read lock
+when check the km.state.
+
 > 
-> If peer X is sending packets to our IP1, we should at least try to reply
-> from the same address.
->
-> If we have two IPs, IP1 and IP2, and both can be used to reach peer X, we
-> should always try to use the one where we received traffic from X in the
-> first place.
-
-I had a thought that it might not be our prefered address to talk to
-X, but it would probably be, since we decided to use it (and thus X
-used it as remote to talk to us).
-
-> OTOH hand it is also true that with floating detection on both sides, the
-> situation will converge quickly, but there might be a reason why X chose IP1
-> as destination, therefore we should do our best to respect that.
-
-And I guess the primary reason for X to choose IP1 would be "we sent
-packets to X from IP1".
-
-> So, even in case of float, we should still store the local endpoint and
-> attempt fetching a route that takes that into consideration.
-> Which I think is what is happening (assuming we reset the dst_cache on
-> float).
-
-Not at the same time as float, unless ovpn_peer_endpoints_update sets
-local_ip = ip_hdr(skb)->daddr unconditionally on float?
-
-Otherwise the next route lookup in ovpn_udpX_output will pick whatever
-source address it wants (which would likely match what's in the
-received skb during float, so probably fine anyway).
-
-> ovpn_udpX_output() will:
-> * get no rt from the cache
-> * possibly confirm that saddr is ok
-> * fetch the new rt using the provided saddr and daddr
-> * update the cache.
+> >>> +
+> >>>  		ipsec->xs->xso.real_dev = real_dev;
+> >>> +		/* FIXME: there is a race that before .xdo_dev_state_add()
+> >>> +		 * is called, the __xfrm_state_delete() is called in parallel,
+> >>> +		 * which will call .xdo_dev_state_delete() and xdo_dev_state_free()
+> >>> +		 */
+> >>>  		if (real_dev->xfrmdev_ops->xdo_dev_state_add(ipsec->xs, NULL)) {
+> >>>  			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
+> >>>  			ipsec->xs->xso.real_dev = NULL;
+> >> [snip]
+> >>
+> >> TBH, keeping buggy code with a comment doesn't sound good to me. I'd rather remove this
+> >> support than tell people "good luck, it might crash". It's better to be safe until a
+> >> correct design is in place which takes care of these issues.
+> > 
+> > I agree it's not a good experience to let users using an unstable feature.
+> > But this is a race condition, although we don't have a good fix yet.
+> > 
+> > On the other hand, I think we can't remove a feature people is using, can we?
+> > What I can do is try fix the issues as my best.
+> > 
 > 
-> That makes sense to me.
-> Would you agree?
+> I do appreciate the hard work you've been doing on this, don't get me wrong, but this is
 
-With dst_cache reset on float, yes. As long as we have that, the main
-behavior seems correct to me. (maybe some corner cases will not be
-handled optimally, but that can be improved later - which is most
-likely what I've been discussing in these emails :))
+I also appreciate your reviews. You helped find a lot of issues :)
 
-[this could be a useful counter to add in the future: number of floats
-and local address updates - so the user can check if that's increasing
-"too often", which would indicate something weird is happening]
+> not really uapi, it's an optimization. The path will become slower as it won't be offloaded,
+> but it will still work and will be stable until a proper fix or new design comes in.
 
--- 
-Sabrina
+I'm afraid it doesn't work correctly before this patch. The race condition
+here has a long time. What I do is fix part of the races. And leave
+bond_ipsec_add_sa() and bond_ipsec_add_sa_all() almost not changed.
+
+The comment in the code is just to notify others there is something wrong.
+Instead of just hide it there and only we know this.
+
+Do I miss something?
+
+Thanks
+hangbin
+
+> 
+> Are you suggesting to knowingly leave a race condition that might lead to a number
+> of problems in place with a comment?
+> IMO that is not ok, but ultimately it's up to the maintainers to decide if they can live
+> with it. :)
+> 
+> > By the way, I started this patch because my patch 2/3 is blocked by the
+> > selftest results from patch 3/3...
+> > 
+> > Thanks
+> > Hangbin
+> 
+> 
 
