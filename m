@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-28526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22572A574BA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 23:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C810EA574BD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 23:10:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05E243A9806
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 22:10:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F6E23AA1E1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 22:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA5B258CC6;
-	Fri,  7 Mar 2025 22:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1645E258CE9;
+	Fri,  7 Mar 2025 22:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6cqBQHq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1jvkDng"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F283A25743D;
-	Fri,  7 Mar 2025 22:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD452580F3;
+	Fri,  7 Mar 2025 22:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741385399; cv=none; b=Z1lRZHFNdZ/xkJFIOxVfBSAdvyxK5q0ISuu4OhbocJbiuZsPdiaRAB6DN9gggHCyYlkl8900lmQIZ12WfMTN838z3xKHqL2Sm0TdUcLWjNIPnerjF6ImnSYfSLGHWxo4Z2nwu9HUcoIsEuTjxnuUq1XqNm/GFbO0b3io8ZYvD+I=
+	t=1741385401; cv=none; b=nf50YZIcMIw+fcSwcXZQkfx6nEQslWAnwN+XAgWsMv0JpDa8/N5iN/zbyrzwsiZ75yeySwmXO1m54wjgWpb7nUkZAJ6PRVHZ6+/fLzmNtgj1OR3m89frdUzmfmUpeZb78ZhYjLWj8JuwoKqps0ZIizUgsIT/wQ5V9JwuFAnpNzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741385399; c=relaxed/simple;
-	bh=M3wAg3+5MvJfoV+l4lsNaePGk+NmNtQIPe6PRXqr6M0=;
+	s=arc-20240116; t=1741385401; c=relaxed/simple;
+	bh=iNTwRun+617rtdADiezsWnkqbbw8TpSDFmSzD2qs180=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nP0O0CYckyuWDk8geZ3Hoyb+3ITfwShtPblLE5oLH67OsS3B5PCMtXMCRfQ/uljXJlgeZhvnN/wYcApurPPmuTrATqoyDoVCmQCuA7roh5ieimuuq2iPmL98Q0pHbf7AE9YkPWoaY5hhEOvrHHhvyhNLtCzw8+1yIs3FcIVXJkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6cqBQHq; arc=none smtp.client-ip=209.85.222.174
+	 In-Reply-To:To:Cc; b=rTgv7euvxcRXysTXtqMyX3nhgvI7TnhzRhCFYV4mqtHLMiJo0AyNSrNAyq3EQqmFsLpX9VTZwBfYP4l8U8QDumEil+Qv9H5xHkIguTTuprqEb57MEjRc+WSXT8M+cRrGxG7iWV97760/0fK3V0cSb8CPCad1PclKtYPlG/pe/5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1jvkDng; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7c3d9cdb0ccso441700885a.3;
-        Fri, 07 Mar 2025 14:09:56 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7c3d9cdb0ccso441704885a.3;
+        Fri, 07 Mar 2025 14:09:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741385396; x=1741990196; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741385398; x=1741990198; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h6E8G/q+XWhgqyvvwEGEbO4UG5L3TfB6Px9lshJ+oCw=;
-        b=U6cqBQHquiepHeNIp/5sb67hDlr8PbzM83jTCny8WDV4Ybed1p2ySyAGmWa6RhomOT
-         psLyShA7v8QvRsR66DmrnIUTL5Az+qzoJHtfEeCbwdQ5bj83oRR0dhgJ3aiXrlNFqb08
-         6oThzGbuIsAkhBxwfqTAr324aXYumv208bwyXDDJ1/KbrPPRpjdleiAOvcmrxEn88umz
-         X5nAvZkIjNyzPjO6BsoR5VH8jqCkKtuUdj3gTXfHJoxV5unbh702HPK023bTHzry8II3
-         CjPymLvWWcaxExk4wbD9Wpb7UxnhMHEcw2gjsoJ9/wLoXhlYngzYWXijC32Ax6LxF4Rq
-         FzVw==
+        bh=Rq6rpvLxlaLKLeBagrOBjQrFrjHENkhMrqRVgxcl+Rg=;
+        b=N1jvkDngqY8Ci7GoG7w3u+S70qfwgbQDUIcE3aKpEvQllUIP3NK3ODYQxGAnNHr/sY
+         YqbXsAItsYne16chMNm0xyyT5SmEFRCJ7rMrtuXE9ceoy1qQU28j7qcztg9ke6o8soh4
+         cQ00HEqX4g5aFjogOtyjYwKRrGgndt/af9z2JeGPNq2m98jnY1iCRZEuHqw3nhKJiuZ7
+         S9UZcIATlpQPZqoxHo6QFk/DsvGWaB/qn5uB0GGjeFt+OiL+N00ZfrnFZLt7jdAyWMi4
+         uxdeRWTs6Q54yBhNM1cbv7CG9ZXf4Z/Wid8UzMNuVI6ExMXHm/WAywb7Bxrs5FkIXykg
+         gBPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741385396; x=1741990196;
+        d=1e100.net; s=20230601; t=1741385398; x=1741990198;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h6E8G/q+XWhgqyvvwEGEbO4UG5L3TfB6Px9lshJ+oCw=;
-        b=OYqwMUVxGrp7xEqKsOCQ2HII9m+aYbCI1g0DRsCDOb1jrW2NiZjQKfu6pMmYoofwHL
-         dVVBYcC3gSfKC3bmv2V1J3QL3VFJQtpHgiip76AZBfCeCAjPCbLnXhlsHxieOdKZMu+I
-         gbj+Ktq0L4FVqmYs9nuw6Nldz7rymkdowr6UR4FFieTZGIZgJuTCryNchXwGoP3vpNwL
-         oGHQO4Yeq3D7G181oZCOK5yQV2Ou0DycTso5TSq6mCxS1V54b9q4you9EzNlO6tqdW8w
-         Pu6K/z8R2KLNIo9PkzFJTE5/lw0xmWI1nmuvIti6XybBAkfBgCRdle3gNuOTWMEix2x4
-         MG7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVieLZ64gl35mf9Th4nUXHqXCUHFWWe1hOcd3337q04ghSlQYB7q66iFv0arafmQwaKb4Gq1EGIZuE=@vger.kernel.org, AJvYcCVqPbyy1iQkkB4bRuL9lTxcIrvoskZoY1HKDIt/vB8D5nLOdAH+QYrN2nmwPTMWiMTbP3UzfxcZzbUL@vger.kernel.org, AJvYcCW/RHeSvafO8oLk9cXkczhwB8R25L+lia0o7qHQo4tTbF25o0IorJCqjIkdnoIRgI8tv6Iix+BYtDLnriJV6aPH@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKEy1DQSoI+fgB3bY5hpbQu1AaebvT8wieMhULLWqGwzHQn81Z
-	v8IUKC1gwB+IvkkzhPASBNbUiXFLP2rzsOKudcCqaregxrLTg7qR
-X-Gm-Gg: ASbGncsJf+8tZqsaX69M2DbkfmRTBfR1uLgmcMhIaqQs4o6zciSge/s5lzU6WReij+6
-	65qCcAJBYO5tTtcFMnd3pVIvSfGSUmYqBdRji8yQZwSU0IzbCeIUxgNtjMkOLgfWd7s2FAz6+tX
-	yz0L8d0rM/NDVsmEjgTIN6vP4QxNDyODxynrB7QRj7ncdgROX1cvcCb656bEWqbY5HoHulgaSrD
-	GEY/pPuBeHXHsavoo/mDwalpUJzSjwaYoJ0gf9ZXIwEg4PaGqYraBwB0/W1In/GJYFDXQDaIJlz
-	6cnHdIM+hvOqpu7FJCys7hzSBw7EXoiYoFFgQ5uBiqWvDEYz5z9to/X3wOfUT/hrCBUMnSoxyg2
-	0
-X-Google-Smtp-Source: AGHT+IG21FifSeluENX6w7PZz9qhj0SVNdWcP5GsmIMBK8rwpr3/pPu76QomTT5nN+swCIjTMVxeBA==
-X-Received: by 2002:a05:620a:2619:b0:7c3:cde7:a685 with SMTP id af79cd13be357-7c4e1689a87mr842848485a.13.1741385395696;
-        Fri, 07 Mar 2025 14:09:55 -0800 (PST)
+        bh=Rq6rpvLxlaLKLeBagrOBjQrFrjHENkhMrqRVgxcl+Rg=;
+        b=O69kvZucOSUqVxF5fqQwJOrbnGbGoReFYu4LFENLce4OtkeihFfrvrXKd5JIoloyi7
+         /gWe8NradGYP4iRFnWgDRiyTnZL+lrf14dlFTvNmqy22iI5/Qbxm5q3r8tO3gtZey0iq
+         geGkjnnxAgMvi9bSebIdtEmnpV57zkj0vI3GPpU8RZ64Vlu1bq2zUYCevm4tDzU2Ke97
+         CRigx22W9tRziajrVHvVJezfQBR4C88X5zxFMUmDfI/fI99GwYNkmiOdX+kLA1nCxbRg
+         1jWpK9HRQOqe5L4hBIaE/k7eSjisSTvtkKu7lq81x0a7YTlbkzipGg5qUzZE+FkxChAQ
+         joiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUy401LqY8sV2+WtM28lQy8gdbGSMWyG407Z/tPGaeC+5p1dR4fMwnOmbsrlj4U9BEocvj91v8cuws=@vger.kernel.org, AJvYcCVRTeSBuM8TJX+kxPtwxIWiog3oZK1fG74K4FLEoB0LUv4XpnkFwUJXl7QJ9b5NAzURSJmoa0QgmnkRNeocTP8x@vger.kernel.org, AJvYcCXrvTupfKtofjLE7BJIyxd5mjcteH5Ocecah4I4SkUQI3hJy9Wof1uvlniUyzQYhUfkWQQhedzFqJMP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQs/tkD4071N++6J6URHdK8O3ubHvndB660F9y37h0JhZgDHWy
+	fpizpjFxw8fF4ikFv1BCL2PQRw41bmdsuDnKs3y5hjeSzX3Kg0jb
+X-Gm-Gg: ASbGnct5yIJBSqfwvf4pstKqpsFNFuN2EPoMrhY7fyaybho5Jh48neGIA4/XuCeUhCl
+	oNv9pFRujxkRXwUeGksvhljLWJIf/2K6tR1gsN13C6LIKwC4StIF3yX3N1IeUKXUEIvBWRDeOIp
+	AdvgD+HfFzS1CfCPufmxz87jmtXQtq99v5pjJdTznzegAIgqyn5tZ0O6qO3JqpT8fm+PFMHeJtd
+	jS9SouVkPGq5DnVzRBG8X1KEHd2PGvbXIXcOi7vXJRqaG1tLCfrd2Jvop6MpLmKvuolcQ4wDACz
+	Jq8Vz9+H81PbZ6PHw+pwPSFrccRFOHM0QMemCk6wSV/DdFg43iOcENBrKkb1YM32kzLccEcv0Ux
+	f
+X-Google-Smtp-Source: AGHT+IELzRk4FbPDhdtS3kkUosVsyCQrQZILa+SH/WlHt+UzdGQESwY1IsG2VWsr0M5LWrer0AhV1A==
+X-Received: by 2002:a05:620a:1463:b0:7c5:3e22:616f with SMTP id af79cd13be357-7c53e22627cmr60556785a.21.1741385397646;
+        Fri, 07 Mar 2025 14:09:57 -0800 (PST)
 Received: from 1.0.0.127.in-addr.arpa ([2600:4041:5be7:7c00:f0dd:49a0:8ab6:b3b6])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3e533a095sm295001385a.3.2025.03.07.14.09.54
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3e533a095sm295001385a.3.2025.03.07.14.09.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 14:09:55 -0800 (PST)
+        Fri, 07 Mar 2025 14:09:56 -0800 (PST)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 07 Mar 2025 17:08:56 -0500
-Subject: [PATCH v6 1/3] printf: convert self-test to KUnit
+Date: Fri, 07 Mar 2025 17:08:57 -0500
+Subject: [PATCH v6 2/3] printf: break kunit into test cases
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250307-printf-kunit-convert-v6-1-4d85c361c241@gmail.com>
+Message-Id: <20250307-printf-kunit-convert-v6-2-4d85c361c241@gmail.com>
 References: <20250307-printf-kunit-convert-v6-0-4d85c361c241@gmail.com>
 In-Reply-To: <20250307-printf-kunit-convert-v6-0-4d85c361c241@gmail.com>
 To: Arpitha Raghunandan <98.arpi@gmail.com>, 
@@ -106,750 +106,611 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-Convert the printf() self-test to a KUnit test.
+Move all tests into `printf_test_cases`. This gives us nicer output in
+the event of a failure.
 
-In the interest of keeping the patch reasonably-sized this doesn't
-refactor the tests into proper parameterized tests - it's all one big
-test case.
+Combine `plain_format` and `plain_hash` into `hash_pointer` since
+they're testing the same scenario.
 
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- Documentation/core-api/printk-formats.rst   |   4 +-
- Documentation/dev-tools/kselftest.rst       |   2 +-
- MAINTAINERS                                 |   2 +-
- lib/Kconfig.debug                           |  12 +-
- lib/Makefile                                |   1 -
- lib/tests/Makefile                          |   1 +
- lib/{test_printf.c => tests/printf_kunit.c} | 207 ++++++++++++++++------------
- tools/testing/selftests/kselftest/module.sh |   2 +-
- tools/testing/selftests/lib/Makefile        |   2 +-
- tools/testing/selftests/lib/config          |   1 -
- tools/testing/selftests/lib/printf.sh       |   4 -
- 11 files changed, 132 insertions(+), 106 deletions(-)
+ lib/tests/printf_kunit.c | 295 ++++++++++++++++-------------------------------
+ 1 file changed, 102 insertions(+), 193 deletions(-)
 
-diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
-index ecccc0473da9..4bdc394e86af 100644
---- a/Documentation/core-api/printk-formats.rst
-+++ b/Documentation/core-api/printk-formats.rst
-@@ -661,7 +661,7 @@ Do *not* use it from C.
- Thanks
- ======
- 
--If you add other %p extensions, please extend <lib/test_printf.c> with
--one or more test cases, if at all feasible.
-+If you add other %p extensions, please extend <lib/tests/printf_kunit.c>
-+with one or more test cases, if at all feasible.
- 
- Thank you for your cooperation and attention.
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index fdb1df86783a..18c2da67fae4 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -347,7 +347,7 @@ kselftest.  We use kselftests for lib/ as an example.
- 1. Create the test module
- 
- 2. Create the test script that will run (load/unload) the module
--   e.g. ``tools/testing/selftests/lib/printf.sh``
-+   e.g. ``tools/testing/selftests/lib/bitmap.sh``
- 
- 3. Add line to config file e.g. ``tools/testing/selftests/lib/config``
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4e9e0e52f92e..1633b62f48c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25599,8 +25599,8 @@ R:	Sergey Senozhatsky <senozhatsky@chromium.org>
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
- F:	Documentation/core-api/printk-formats.rst
--F:	lib/test_printf.c
- F:	lib/test_scanf.c
-+F:	lib/tests/printf_kunit.c
- F:	lib/vsprintf.c
- 
- VT1211 HARDWARE MONITOR DRIVER
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ebb5b190e9f9..3e594d3105f8 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2436,6 +2436,15 @@ config ASYNC_RAID6_TEST
- config TEST_HEXDUMP
- 	tristate "Test functions located in the hexdump module at runtime"
- 
-+config PRINTF_KUNIT_TEST
-+	tristate "KUnit test printf() family of functions at runtime" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Enable this option to test the printf functions at runtime.
-+
-+	  If unsure, say N.
-+
- config STRING_KUNIT_TEST
- 	tristate "KUnit test string functions at runtime" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-@@ -2449,9 +2458,6 @@ config STRING_HELPERS_KUNIT_TEST
- config TEST_KSTRTOX
- 	tristate "Test kstrto*() family of functions at runtime"
- 
--config TEST_PRINTF
--	tristate "Test printf() family of functions at runtime"
--
- config TEST_SCANF
- 	tristate "Test scanf() family of functions at runtime"
- 
-diff --git a/lib/Makefile b/lib/Makefile
-index 7bab71e59019..5531a2e727d1 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -77,7 +77,6 @@ obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
- obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
--obj-$(CONFIG_TEST_PRINTF) += test_printf.o
- obj-$(CONFIG_TEST_SCANF) += test_scanf.o
- 
- obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
-diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index 8961fbcff7a4..183c6a838a5d 100644
---- a/lib/tests/Makefile
-+++ b/lib/tests/Makefile
-@@ -30,6 +30,7 @@ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
- CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
- obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
-+obj-$(CONFIG_PRINTF_KUNIT_TEST) += printf_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
- obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
- obj-$(CONFIG_TEST_SORT) += test_sort.o
-diff --git a/lib/test_printf.c b/lib/tests/printf_kunit.c
-similarity index 85%
-rename from lib/test_printf.c
-rename to lib/tests/printf_kunit.c
-index 59dbe4f9a4cb..1f4096b015c6 100644
---- a/lib/test_printf.c
+diff --git a/lib/tests/printf_kunit.c b/lib/tests/printf_kunit.c
+index 1f4096b015c6..dd373cb9036a 100644
+--- a/lib/tests/printf_kunit.c
 +++ b/lib/tests/printf_kunit.c
-@@ -3,9 +3,7 @@
-  * Test cases for printf facility.
-  */
+@@ -38,10 +38,8 @@ static unsigned int total_tests;
+ static char *test_buffer;
+ static char *alloced_buffer;
  
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-static struct kunit *kunittest;
 -
--#include <linux/init.h>
-+#include <kunit/test.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/printk.h>
-@@ -25,8 +23,6 @@
- 
- #include <linux/property.h>
- 
--#include "../tools/testing/selftests/kselftest_module.h"
--
- #define BUF_SIZE 256
- #define PAD_SIZE 16
- #define FILL_CHAR '$'
-@@ -37,12 +33,14 @@
- 	block \
- 	__diag_pop();
- 
--KSTM_MODULE_GLOBALS();
-+static unsigned int total_tests;
- 
--static char *test_buffer __initdata;
--static char *alloced_buffer __initdata;
-+static char *test_buffer;
-+static char *alloced_buffer;
- 
--static int __printf(4, 0) __init
-+static struct kunit *kunittest;
-+
-+static void __printf(4, 0)
- do_test(int bufsize, const char *expect, int elen,
+-static void __printf(4, 0)
+-do_test(int bufsize, const char *expect, int elen,
++static void __printf(5, 0)
++do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
  	const char *fmt, va_list ap)
  {
-@@ -57,52 +55,54 @@ do_test(int bufsize, const char *expect, int elen,
- 	va_end(aq);
- 
- 	if (ret != elen) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
--			bufsize, fmt, ret, elen);
--		return 1;
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
-+			   bufsize, fmt, ret, elen);
-+		return;
+ 	va_list aq;
+@@ -102,8 +100,8 @@ do_test(int bufsize, const char *expect, int elen,
  	}
- 
- 	if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote before buffer\n", bufsize, fmt);
--		return 1;
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote before buffer\n",
-+			   bufsize, fmt);
-+		return;
- 	}
- 
- 	if (!bufsize) {
- 		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE)) {
--			pr_warn("vsnprintf(buf, 0, \"%s\", ...) wrote to buffer\n",
--				fmt);
--			return 1;
-+			KUNIT_FAIL(kunittest, "vsnprintf(buf, 0, \"%s\", ...) wrote to buffer\n", fmt);
- 		}
--		return 0;
-+		return;
- 	}
- 
- 	written = min(bufsize-1, elen);
- 	if (test_buffer[written]) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer\n",
--			bufsize, fmt);
--		return 1;
-+		KUNIT_FAIL(kunittest,
-+			   "vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer\n",
-+			   bufsize, fmt);
-+		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, bufsize - (written + 1))) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator\n",
--			bufsize, fmt);
--		return 1;
-+		KUNIT_FAIL(kunittest,
-+			   "vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator\n",
-+			   bufsize, fmt);
-+		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + bufsize, FILL_CHAR, BUF_SIZE + PAD_SIZE - bufsize)) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer\n", bufsize, fmt);
--		return 1;
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote beyond buffer\n",
-+			   bufsize, fmt);
-+		return;
- 	}
- 
- 	if (memcmp(test_buffer, expect, written)) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'\n",
--			bufsize, fmt, test_buffer, written, expect);
--		return 1;
-+		KUNIT_FAIL(kunittest,
-+			   "vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'\n",
-+			   bufsize, fmt, test_buffer, written, expect);
-+		return;
- 	}
--	return 0;
  }
  
--static void __printf(3, 4) __init
-+static void __printf(3, 4)
- __test(const char *expect, int elen, const char *fmt, ...)
+-static void __printf(3, 4)
+-__test(const char *expect, int elen, const char *fmt, ...)
++static void __printf(4, 5)
++__test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, ...)
  {
  	va_list ap;
-@@ -110,9 +110,9 @@ __test(const char *expect, int elen, const char *fmt, ...)
- 	char *p;
- 
- 	if (elen >= BUF_SIZE) {
--		pr_err("error in test suite: expected output length %d too long. Format was '%s'.\n",
--		       elen, fmt);
--		failed_tests++;
-+		KUNIT_FAIL(kunittest,
-+			   "error in test suite: expected length (%d) >= BUF_SIZE (%d). fmt=\"%s\"\n",
-+			   elen, BUF_SIZE, fmt);
- 		return;
- 	}
- 
-@@ -124,19 +124,19 @@ __test(const char *expect, int elen, const char *fmt, ...)
+ 	int rand;
+@@ -124,11 +122,11 @@ __test(const char *expect, int elen, const char *fmt, ...)
  	 * enough and 0), and then we also test that kvasprintf would
  	 * be able to print it as expected.
  	 */
--	failed_tests += do_test(BUF_SIZE, expect, elen, fmt, ap);
-+	do_test(BUF_SIZE, expect, elen, fmt, ap);
+-	do_test(BUF_SIZE, expect, elen, fmt, ap);
++	do_test(kunittest, BUF_SIZE, expect, elen, fmt, ap);
  	rand = get_random_u32_inclusive(1, elen + 1);
  	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
--	failed_tests += do_test(rand, expect, elen, fmt, ap);
--	failed_tests += do_test(0, expect, elen, fmt, ap);
-+	do_test(rand, expect, elen, fmt, ap);
-+	do_test(0, expect, elen, fmt, ap);
+-	do_test(rand, expect, elen, fmt, ap);
+-	do_test(0, expect, elen, fmt, ap);
++	do_test(kunittest, rand, expect, elen, fmt, ap);
++	do_test(kunittest, 0, expect, elen, fmt, ap);
  
  	p = kvasprintf(GFP_KERNEL, fmt, ap);
  	if (p) {
- 		total_tests++;
- 		if (memcmp(p, expect, elen+1)) {
--			pr_warn("kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'\n",
--				fmt, p, expect);
--			failed_tests++;
-+			KUNIT_FAIL(kunittest,
-+				   "kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'\n",
-+				   fmt, p, expect);
- 		}
- 		kfree(p);
- 	}
-@@ -146,7 +146,7 @@ __test(const char *expect, int elen, const char *fmt, ...)
- #define test(expect, fmt, ...)					\
- 	__test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+@@ -144,10 +142,10 @@ __test(const char *expect, int elen, const char *fmt, ...)
+ }
  
--static void __init
-+static void
- test_basic(void)
+ #define test(expect, fmt, ...)					\
+-	__test(expect, strlen(expect), fmt, ##__VA_ARGS__)
++	__test(kunittest, expect, strlen(expect), fmt, ##__VA_ARGS__)
+ 
+ static void
+-test_basic(void)
++test_basic(struct kunit *kunittest)
  {
  	/* Work around annoying "warning: zero-length gnu_printf format string". */
-@@ -158,7 +158,7 @@ test_basic(void)
- 	__test("xxx\0yyy", 7, "xxx%cyyy", '\0');
+ 	char nul = '\0';
+@@ -155,11 +153,11 @@ test_basic(void)
+ 	test("", &nul);
+ 	test("100%", "100%%");
+ 	test("xxx%yyy", "xxx%cyyy", '%');
+-	__test("xxx\0yyy", 7, "xxx%cyyy", '\0');
++	__test(kunittest, "xxx\0yyy", 7, "xxx%cyyy", '\0');
  }
  
--static void __init
-+static void
- test_number(void)
+ static void
+-test_number(void)
++test_number(struct kunit *kunittest)
  {
  	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
-@@ -180,7 +180,7 @@ test_number(void)
- 	test("00|0|0|0|0", "%.2d|%.1d|%.0d|%.*d|%1.0d", 0, 0, 0, 0, 0, 0);
+ 	test("  0x1234abcd", "%#12x", 0x1234abcd);
+@@ -181,7 +179,7 @@ test_number(void)
  }
  
--static void __init
-+static void
- test_string(void)
+ static void
+-test_string(void)
++test_string(struct kunit *kunittest)
  {
  	test("", "%s%.0s", "", "123");
-@@ -218,7 +218,7 @@ test_string(void)
+ 	test("ABCD|abc|123", "%s|%.3s|%.*s", "ABCD", "abcdef", 3, "123456");
+@@ -218,30 +216,6 @@ test_string(void)
  #define ZEROS "00000000"	/* hex 32 zero bits */
  #define ONES "ffffffff"		/* hex 32 one bits */
  
--static int __init
-+static int
- plain_format(void)
- {
- 	char buf[PLAIN_BUF_SIZE];
-@@ -230,8 +230,9 @@ plain_format(void)
- 		return -1;
+-static int
+-plain_format(void)
+-{
+-	char buf[PLAIN_BUF_SIZE];
+-	int nchars;
+-
+-	nchars = snprintf(buf, PLAIN_BUF_SIZE, "%p", PTR);
+-
+-	if (nchars != PTR_WIDTH)
+-		return -1;
+-
+-	if (strncmp(buf, PTR_VAL_NO_CRNG, PTR_WIDTH) == 0) {
+-		kunit_warn(kunittest,
+-			   "crng possibly not yet initialized. plain 'p' buffer contains \"%s\"\n",
+-			   PTR_VAL_NO_CRNG);
+-		return 0;
+-	}
+-
+-	if (strncmp(buf, ZEROS, strlen(ZEROS)) != 0)
+-		return -1;
+-
+-	return 0;
+-}
+-
+ #else
  
- 	if (strncmp(buf, PTR_VAL_NO_CRNG, PTR_WIDTH) == 0) {
--		pr_warn("crng possibly not yet initialized. plain 'p' buffer contains \"%s\"",
--			PTR_VAL_NO_CRNG);
-+		kunit_warn(kunittest,
-+			   "crng possibly not yet initialized. plain 'p' buffer contains \"%s\"\n",
-+			   PTR_VAL_NO_CRNG);
- 		return 0;
- 	}
- 
-@@ -250,7 +251,7 @@ plain_format(void)
+ #define PTR_WIDTH 8
+@@ -251,90 +225,47 @@ plain_format(void)
  #define ZEROS ""
  #define ONES ""
  
--static int __init
-+static int
- plain_format(void)
- {
- 	/* Format is implicitly tested for 32 bit machines by plain_hash() */
-@@ -259,7 +260,7 @@ plain_format(void)
- 
+-static int
+-plain_format(void)
+-{
+-	/* Format is implicitly tested for 32 bit machines by plain_hash() */
+-	return 0;
+-}
+-
  #endif	/* BITS_PER_LONG == 64 */
  
--static int __init
-+static int
- plain_hash_to_buffer(const void *p, char *buf, size_t len)
+-static int
+-plain_hash_to_buffer(const void *p, char *buf, size_t len)
++static void
++plain_hash_to_buffer(struct kunit *kunittest, const void *p, char *buf, size_t len)
  {
- 	int nchars;
-@@ -270,15 +271,16 @@ plain_hash_to_buffer(const void *p, char *buf, size_t len)
- 		return -1;
+-	int nchars;
+-
+-	nchars = snprintf(buf, len, "%p", p);
+-
+-	if (nchars != PTR_WIDTH)
+-		return -1;
++	KUNIT_ASSERT_EQ(kunittest, snprintf(buf, len, "%p", p), PTR_WIDTH);
  
  	if (strncmp(buf, PTR_VAL_NO_CRNG, PTR_WIDTH) == 0) {
--		pr_warn("crng possibly not yet initialized. plain 'p' buffer contains \"%s\"",
--			PTR_VAL_NO_CRNG);
-+		kunit_warn(kunittest,
-+			   "crng possibly not yet initialized. plain 'p' buffer contains \"%s\"\n",
-+			   PTR_VAL_NO_CRNG);
- 		return 0;
+-		kunit_warn(kunittest,
++		kunit_skip(kunittest,
+ 			   "crng possibly not yet initialized. plain 'p' buffer contains \"%s\"\n",
+ 			   PTR_VAL_NO_CRNG);
+-		return 0;
  	}
- 
- 	return 0;
+-
+-	return 0;
  }
  
--static int __init
-+static int
- plain_hash(void)
+-static int
+-plain_hash(void)
+-{
+-	char buf[PLAIN_BUF_SIZE];
+-	int ret;
+-
+-	ret = plain_hash_to_buffer(PTR, buf, PLAIN_BUF_SIZE);
+-	if (ret)
+-		return ret;
+-
+-	if (strncmp(buf, PTR_STR, PTR_WIDTH) == 0)
+-		return -1;
+-
+-	return 0;
+-}
+-
+-/*
+- * We can't use test() to test %p because we don't know what output to expect
+- * after an address is hashed.
+- */
+ static void
+-plain(void)
++hash_pointer(struct kunit *kunittest)
  {
- 	char buf[PLAIN_BUF_SIZE];
-@@ -298,32 +300,29 @@ plain_hash(void)
-  * We can't use test() to test %p because we don't know what output to expect
-  * after an address is hashed.
-  */
--static void __init
-+static void
- plain(void)
- {
- 	int err;
+-	int err;
++	if (no_hash_pointers)
++		kunit_skip(kunittest, "hash pointers disabled");
  
- 	if (no_hash_pointers) {
--		pr_warn("skipping plain 'p' tests");
--		skipped_tests += 2;
-+		kunit_warn(kunittest, "skipping plain 'p' tests");
- 		return;
- 	}
+-	if (no_hash_pointers) {
+-		kunit_warn(kunittest, "skipping plain 'p' tests");
+-		return;
+-	}
++	char buf[PLAIN_BUF_SIZE];
  
- 	err = plain_hash();
- 	if (err) {
--		pr_warn("plain 'p' does not appear to be hashed\n");
--		failed_tests++;
-+		KUNIT_FAIL(kunittest, "plain 'p' does not appear to be hashed\n");
- 		return;
- 	}
+-	err = plain_hash();
+-	if (err) {
+-		KUNIT_FAIL(kunittest, "plain 'p' does not appear to be hashed\n");
+-		return;
+-	}
++	plain_hash_to_buffer(kunittest, PTR, buf, PLAIN_BUF_SIZE);
  
- 	err = plain_format();
- 	if (err) {
--		pr_warn("hashing plain 'p' has unexpected format\n");
--		failed_tests++;
-+		KUNIT_FAIL(kunittest, "hashing plain 'p' has unexpected format\n");
- 	}
+-	err = plain_format();
+-	if (err) {
+-		KUNIT_FAIL(kunittest, "hashing plain 'p' has unexpected format\n");
+-	}
++	/*
++	 * The hash of %p is unpredictable, therefore test() cannot be used.
++	 *
++	 * Instead verify that the first 32 bits are zeros on a 64-bit system
++	 * and that the non-hashed value is not printed.
++	 */
++
++	KUNIT_EXPECT_MEMEQ(kunittest, buf, ZEROS, strlen(ZEROS));
++	KUNIT_EXPECT_MEMNEQ(kunittest, buf, PTR_STR, PTR_WIDTH);
  }
  
--static void __init
-+static void
- test_hashed(const char *fmt, const void *p)
+ static void
+-test_hashed(const char *fmt, const void *p)
++test_hashed(struct kunit *kunittest, const char *fmt, const void *p)
  {
  	char buf[PLAIN_BUF_SIZE];
-@@ -343,7 +342,7 @@ test_hashed(const char *fmt, const void *p)
- /*
+-	int ret;
+ 
+-	/*
+-	 * No need to increase failed test counter since this is assumed
+-	 * to be called after plain().
+-	 */
+-	ret = plain_hash_to_buffer(p, buf, PLAIN_BUF_SIZE);
+-	if (ret)
+-		return;
++	plain_hash_to_buffer(kunittest, p, buf, PLAIN_BUF_SIZE);
+ 
+ 	test(buf, fmt, p);
+ }
+@@ -343,7 +274,7 @@ test_hashed(const char *fmt, const void *p)
   * NULL pointers aren't hashed.
   */
--static void __init
-+static void
- null_pointer(void)
+ static void
+-null_pointer(void)
++null_pointer(struct kunit *kunittest)
  {
  	test(ZEROS "00000000", "%p", NULL);
-@@ -354,7 +353,7 @@ null_pointer(void)
- /*
+ 	test(ZEROS "00000000", "%px", NULL);
+@@ -354,7 +285,7 @@ null_pointer(void)
   * Error pointers aren't hashed.
   */
--static void __init
-+static void
- error_pointer(void)
+ static void
+-error_pointer(void)
++error_pointer(struct kunit *kunittest)
  {
  	test(ONES "fffffff5", "%p", ERR_PTR(-11));
-@@ -364,7 +363,7 @@ error_pointer(void)
- 
+ 	test(ONES "fffffff5", "%px", ERR_PTR(-11));
+@@ -364,26 +295,26 @@ error_pointer(void)
  #define PTR_INVALID ((void *)0x000000ab)
  
--static void __init
-+static void
- invalid_pointer(void)
+ static void
+-invalid_pointer(void)
++invalid_pointer(struct kunit *kunittest)
  {
- 	test_hashed("%p", PTR_INVALID);
-@@ -372,18 +371,18 @@ invalid_pointer(void)
+-	test_hashed("%p", PTR_INVALID);
++	test_hashed(kunittest, "%p", PTR_INVALID);
+ 	test(ZEROS "000000ab", "%px", PTR_INVALID);
  	test("(efault)", "%pE", PTR_INVALID);
  }
  
--static void __init
-+static void
- symbol_ptr(void)
+ static void
+-symbol_ptr(void)
++symbol_ptr(struct kunit *kunittest)
  {
  }
  
--static void __init
-+static void
- kernel_ptr(void)
+ static void
+-kernel_ptr(void)
++kernel_ptr(struct kunit *kunittest)
  {
  	/* We can't test this without access to kptr_restrict. */
  }
  
--static void __init
-+static void
- struct_resource(void)
+ static void
+-struct_resource(void)
++struct_resource(struct kunit *kunittest)
  {
  	struct resource test_resource = {
-@@ -432,7 +431,7 @@ struct_resource(void)
- 	     "%pR", &test_resource);
+ 		.start = 0xc0ffee00,
+@@ -432,7 +363,7 @@ struct_resource(void)
  }
  
--static void __init
-+static void
- struct_range(void)
+ static void
+-struct_range(void)
++struct_range(struct kunit *kunittest)
  {
  	struct range test_range = DEFINE_RANGE(0xc0ffee00ba5eba11,
-@@ -448,17 +447,17 @@ struct_range(void)
- 	     "%pra", &test_range);
+ 					       0xc0ffee00ba5eba11);
+@@ -448,17 +379,17 @@ struct_range(void)
  }
  
--static void __init
-+static void
- addr(void)
+ static void
+-addr(void)
++addr(struct kunit *kunittest)
  {
  }
  
--static void __init
-+static void
- escaped_str(void)
+ static void
+-escaped_str(void)
++escaped_str(struct kunit *kunittest)
  {
  }
  
--static void __init
-+static void
- hex_string(void)
+ static void
+-hex_string(void)
++hex_string(struct kunit *kunittest)
  {
  	const char buf[3] = {0xc0, 0xff, 0xee};
-@@ -469,7 +468,7 @@ hex_string(void)
- 	     "%*ph|%*phC|%*phD|%*phN", 3, buf, 3, buf, 3, buf, 3, buf);
+ 
+@@ -469,7 +400,7 @@ hex_string(void)
  }
  
--static void __init
-+static void
- mac(void)
+ static void
+-mac(void)
++mac(struct kunit *kunittest)
  {
  	const u8 addr[6] = {0x2d, 0x48, 0xd6, 0xfc, 0x7a, 0x05};
-@@ -481,7 +480,7 @@ mac(void)
- 	test("057afcd6482d", "%pmR", addr);
+ 
+@@ -481,7 +412,7 @@ mac(void)
  }
  
--static void __init
-+static void
- ip4(void)
+ static void
+-ip4(void)
++ip4(struct kunit *kunittest)
  {
  	struct sockaddr_in sa;
-@@ -496,19 +495,19 @@ ip4(void)
- 	test("001.002.003.004:12345|1.2.3.4:12345", "%piSp|%pISp", &sa, &sa);
+ 
+@@ -496,19 +427,12 @@ ip4(void)
  }
  
--static void __init
-+static void
- ip6(void)
+ static void
+-ip6(void)
+-{
+-}
+-
+-static void
+-ip(void)
++ip6(struct kunit *kunittest)
  {
+-	ip4();
+-	ip6();
  }
  
--static void __init
-+static void
- ip(void)
- {
- 	ip4();
- 	ip6();
- }
- 
--static void __init
-+static void
- uuid(void)
+ static void
+-uuid(void)
++uuid(struct kunit *kunittest)
  {
  	const char uuid[16] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
-@@ -520,7 +519,7 @@ uuid(void)
- 	test("03020100-0504-0706-0809-0A0B0C0D0E0F", "%pUL", uuid);
- }
- 
--static struct dentry test_dentry[4] __initdata = {
-+static struct dentry test_dentry[4] = {
- 	{ .d_parent = &test_dentry[0],
- 	  .d_name = QSTR_INIT(test_dentry[0].d_iname, 3),
- 	  .d_iname = "foo" },
-@@ -535,7 +534,7 @@ static struct dentry test_dentry[4] __initdata = {
- 	  .d_iname = "romeo" },
+ 			       0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+@@ -535,7 +459,7 @@ static struct dentry test_dentry[4] = {
  };
  
--static void __init
-+static void
- dentry(void)
+ static void
+-dentry(void)
++dentry(struct kunit *kunittest)
  {
  	test("foo", "%pd", &test_dentry[0]);
-@@ -556,12 +555,12 @@ dentry(void)
- 	test("  bravo/alfa|  bravo/alfa", "%12pd2|%*pd2", &test_dentry[2], 12, &test_dentry[2]);
+ 	test("foo", "%pd2", &test_dentry[0]);
+@@ -556,12 +480,12 @@ dentry(void)
  }
  
--static void __init
-+static void
- struct_va_format(void)
+ static void
+-struct_va_format(void)
++struct_va_format(struct kunit *kunittest)
  {
  }
  
--static void __init
-+static void
- time_and_date(void)
+ static void
+-time_and_date(void)
++time_and_date(struct kunit *kunittest)
  {
  	/* 1543210543 */
-@@ -595,12 +594,12 @@ time_and_date(void)
- 	test("15:32:23|0119-00-04", "%ptTtrs|%ptTdrs", &t, &t);
+ 	const struct rtc_time tm = {
+@@ -595,12 +519,12 @@ time_and_date(void)
  }
  
--static void __init
-+static void
- struct_clk(void)
+ static void
+-struct_clk(void)
++struct_clk(struct kunit *kunittest)
  {
  }
  
--static void __init
-+static void
- large_bitmap(void)
+ static void
+-large_bitmap(void)
++large_bitmap(struct kunit *kunittest)
  {
  	const int nbits = 1 << 16;
-@@ -614,7 +613,7 @@ large_bitmap(void)
- 	bitmap_free(bits);
+ 	unsigned long *bits = bitmap_zalloc(nbits, GFP_KERNEL);
+@@ -614,7 +538,7 @@ large_bitmap(void)
  }
  
--static void __init
-+static void
- bitmap(void)
+ static void
+-bitmap(void)
++bitmap(struct kunit *kunittest)
  {
  	DECLARE_BITMAP(bits, 20);
-@@ -637,7 +636,7 @@ bitmap(void)
- 	large_bitmap();
+ 	const int primes[] = {2,3,5,7,11,13,17,19};
+@@ -633,11 +557,11 @@ bitmap(void)
+ 	test("fffff|fffff", "%20pb|%*pb", bits, 20, bits);
+ 	test("0-19|0-19", "%20pbl|%*pbl", bits, 20, bits);
+ 
+-	large_bitmap();
++	large_bitmap(kunittest);
  }
  
--static void __init
-+static void
- netdev_features(void)
+ static void
+-netdev_features(void)
++netdev_features(struct kunit *kunittest)
  {
  }
-@@ -663,7 +662,7 @@ static const struct page_flags_test pft[] = {
- 	 "%#x", "kasantag"},
+ 
+@@ -663,8 +587,8 @@ static const struct page_flags_test pft[] = {
  };
  
--static void __init
-+static void
- page_flags_test(int section, int node, int zone, int last_cpupid,
- 		int kasan_tag, unsigned long flags, const char *name,
+ static void
+-page_flags_test(int section, int node, int zone, int last_cpupid,
+-		int kasan_tag, unsigned long flags, const char *name,
++page_flags_test(struct kunit *kunittest, int section, int node, int zone,
++		int last_cpupid, int kasan_tag, unsigned long flags, const char *name,
  		char *cmp_buf)
-@@ -701,7 +700,7 @@ page_flags_test(int section, int node, int zone, int last_cpupid,
- 	test(cmp_buf, "%pGp", &flags);
+ {
+ 	unsigned long values[] = {section, node, zone, last_cpupid, kasan_tag};
+@@ -701,25 +625,24 @@ page_flags_test(int section, int node, int zone, int last_cpupid,
  }
  
--static void __init
-+static void
- flags(void)
+ static void
+-flags(void)
++flags(struct kunit *kunittest)
  {
  	unsigned long flags;
-@@ -749,7 +748,7 @@ flags(void)
- 	kfree(cmp_buffer);
+ 	char *cmp_buffer;
+ 	gfp_t gfp;
+ 
+-	cmp_buffer = kmalloc(BUF_SIZE, GFP_KERNEL);
+-	if (!cmp_buffer)
+-		return;
++	cmp_buffer = kunit_kmalloc(kunittest, BUF_SIZE, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(kunittest, cmp_buffer);
+ 
+ 	flags = 0;
+-	page_flags_test(0, 0, 0, 0, 0, flags, "", cmp_buffer);
++	page_flags_test(kunittest, 0, 0, 0, 0, 0, flags, "", cmp_buffer);
+ 
+ 	flags = 1UL << NR_PAGEFLAGS;
+-	page_flags_test(0, 0, 0, 0, 0, flags, "", cmp_buffer);
++	page_flags_test(kunittest, 0, 0, 0, 0, 0, flags, "", cmp_buffer);
+ 
+ 	flags |= 1UL << PG_uptodate | 1UL << PG_dirty | 1UL << PG_lru
+ 		| 1UL << PG_active | 1UL << PG_swapbacked;
+-	page_flags_test(1, 1, 1, 0x1fffff, 1, flags,
++	page_flags_test(kunittest, 1, 1, 1, 0x1fffff, 1, flags,
+ 			"uptodate|dirty|lru|active|swapbacked",
+ 			cmp_buffer);
+ 
+@@ -744,11 +667,9 @@ flags(void)
+ 							(unsigned long) gfp);
+ 	gfp |= __GFP_HIGH;
+ 	test(cmp_buffer, "%pGg", &gfp);
+-
+-	kfree(cmp_buffer);
  }
  
--static void __init fwnode_pointer(void)
-+static void fwnode_pointer(void)
+-static void fwnode_pointer(void)
++static void fwnode_pointer(struct kunit *kunittest)
  {
  	const struct software_node first = { .name = "first" };
  	const struct software_node second = { .name = "second", .parent = &first };
-@@ -763,7 +762,7 @@ static void __init fwnode_pointer(void)
+@@ -762,8 +683,7 @@ static void fwnode_pointer(void)
  
  	rval = software_node_register_node_group(group);
  	if (rval) {
--		pr_warn("cannot register softnodes; rval %d\n", rval);
-+		kunit_warn(kunittest, "cannot register softnodes; rval %d\n", rval);
- 		return;
+-		kunit_warn(kunittest, "cannot register softnodes; rval %d\n", rval);
+-		return;
++		kunit_skip(kunittest, "cannot register softnodes; rval %d\n", rval);
  	}
  
-@@ -776,7 +775,7 @@ static void __init fwnode_pointer(void)
+ 	test(full_name_second, "%pfw", software_node_fwnode(&second));
+@@ -775,7 +695,7 @@ static void fwnode_pointer(void)
  	software_node_unregister_node_group(group);
  }
  
--static void __init fourcc_pointer(void)
-+static void fourcc_pointer(void)
+-static void fourcc_pointer(void)
++static void fourcc_pointer(struct kunit *kunittest)
  {
  	struct {
  		u32 code;
-@@ -793,7 +792,7 @@ static void __init fourcc_pointer(void)
- 		test(try[i].str, "%p4cc", &try[i].code);
+@@ -793,13 +713,13 @@ static void fourcc_pointer(void)
  }
  
--static void __init
-+static void
- errptr(void)
+ static void
+-errptr(void)
++errptr(struct kunit *kunittest)
  {
  	test("-1234", "%pe", ERR_PTR(-1234));
-@@ -813,7 +812,7 @@ errptr(void)
+ 
+ 	/* Check that %pe with a non-ERR_PTR gets treated as ordinary %p. */
+ 	BUILD_BUG_ON(IS_ERR(PTR));
+-	test_hashed("%pe", PTR);
++	test_hashed(kunittest, "%pe", PTR);
+ 
+ #ifdef CONFIG_SYMBOLIC_ERRNAME
+ 	test("(-ENOTSOCK)", "(%pe)", ERR_PTR(-ENOTSOCK));
+@@ -812,65 +732,54 @@ errptr(void)
  #endif
  }
  
--static void __init
-+static void
- test_pointer(void)
+-static void
+-test_pointer(void)
+-{
+-	plain();
+-	null_pointer();
+-	error_pointer();
+-	invalid_pointer();
+-	symbol_ptr();
+-	kernel_ptr();
+-	struct_resource();
+-	struct_range();
+-	addr();
+-	escaped_str();
+-	hex_string();
+-	mac();
+-	ip();
+-	uuid();
+-	dentry();
+-	struct_va_format();
+-	time_and_date();
+-	struct_clk();
+-	bitmap();
+-	netdev_features();
+-	flags();
+-	errptr();
+-	fwnode_pointer();
+-	fourcc_pointer();
+-}
+-
+-static void printf_test(struct kunit *test)
++static int printf_suite_init(struct kunit_suite *suite)
  {
- 	plain();
-@@ -842,13 +841,15 @@ test_pointer(void)
- 	fourcc_pointer();
- }
- 
--static void __init selftest(void)
-+static void printf_test(struct kunit *test)
- {
++	total_tests = 0;
++
  	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
  	if (!alloced_buffer)
- 		return;
+-		return;
++		return -ENOMEM;
  	test_buffer = alloced_buffer + PAD_SIZE;
  
-+	kunittest = test;
-+
- 	test_basic();
- 	test_number();
- 	test_string();
-@@ -857,7 +858,31 @@ static void __init selftest(void)
- 	kfree(alloced_buffer);
+-	kunittest = test;
+-
+-	test_basic();
+-	test_number();
+-	test_string();
+-	test_pointer();
+-
+-	kfree(alloced_buffer);
+-}
+-
+-static int printf_suite_init(struct kunit_suite *suite)
+-{
+-	total_tests = 0;
+ 	return 0;
  }
  
--KSTM_MODULE_LOADERS(test_printf);
-+static int printf_suite_init(struct kunit_suite *suite)
-+{
-+	total_tests = 0;
-+	return 0;
-+}
+ static void printf_suite_exit(struct kunit_suite *suite)
+ {
++	kfree(alloced_buffer);
 +
-+static void printf_suite_exit(struct kunit_suite *suite)
-+{
-+	kunit_info(suite, "ran %u tests\n", total_tests);
-+}
-+
-+static struct kunit_case printf_test_cases[] = {
-+	KUNIT_CASE(printf_test),
-+	{}
-+};
-+
-+static struct kunit_suite printf_test_suite = {
-+	.name = "printf",
-+	.suite_init = printf_suite_init,
-+	.suite_exit = printf_suite_exit,
-+	.test_cases = printf_test_cases,
-+};
-+
-+kunit_test_suite(printf_test_suite);
-+
- MODULE_AUTHOR("Rasmus Villemoes <linux@rasmusvillemoes.dk>");
- MODULE_DESCRIPTION("Test cases for printf facility");
- MODULE_LICENSE("GPL");
-diff --git a/tools/testing/selftests/kselftest/module.sh b/tools/testing/selftests/kselftest/module.sh
-index fb4733faff12..51fb65159932 100755
---- a/tools/testing/selftests/kselftest/module.sh
-+++ b/tools/testing/selftests/kselftest/module.sh
-@@ -11,7 +11,7 @@
- #   SPDX-License-Identifier: GPL-2.0+
- #   $(dirname $0)/../kselftest/module.sh "description" module_name
- #
--# Example: tools/testing/selftests/lib/printf.sh
-+# Example: tools/testing/selftests/lib/bitmap.sh
+ 	kunit_info(suite, "ran %u tests\n", total_tests);
+ }
  
- desc=""				# Output prefix.
- module=""			# Filename (without the .ko).
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index 66dcbe2e39fa..befc4ab2c671 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -4,5 +4,5 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
+ static struct kunit_case printf_test_cases[] = {
+-	KUNIT_CASE(printf_test),
++	KUNIT_CASE(test_basic),
++	KUNIT_CASE(test_number),
++	KUNIT_CASE(test_string),
++	KUNIT_CASE(hash_pointer),
++	KUNIT_CASE(null_pointer),
++	KUNIT_CASE(error_pointer),
++	KUNIT_CASE(invalid_pointer),
++	KUNIT_CASE(symbol_ptr),
++	KUNIT_CASE(kernel_ptr),
++	KUNIT_CASE(struct_resource),
++	KUNIT_CASE(struct_range),
++	KUNIT_CASE(addr),
++	KUNIT_CASE(escaped_str),
++	KUNIT_CASE(hex_string),
++	KUNIT_CASE(mac),
++	KUNIT_CASE(ip4),
++	KUNIT_CASE(ip6),
++	KUNIT_CASE(uuid),
++	KUNIT_CASE(dentry),
++	KUNIT_CASE(struct_va_format),
++	KUNIT_CASE(time_and_date),
++	KUNIT_CASE(struct_clk),
++	KUNIT_CASE(bitmap),
++	KUNIT_CASE(netdev_features),
++	KUNIT_CASE(flags),
++	KUNIT_CASE(errptr),
++	KUNIT_CASE(fwnode_pointer),
++	KUNIT_CASE(fourcc_pointer),
+ 	{}
+ };
  
--TEST_PROGS := printf.sh bitmap.sh scanf.sh
-+TEST_PROGS := bitmap.sh scanf.sh
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index 306a3d4dca98..f4b4b8822241 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -1,4 +1,3 @@
--CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
- CONFIG_TEST_BITMAP=m
- CONFIG_TEST_BITOPS=m
-diff --git a/tools/testing/selftests/lib/printf.sh b/tools/testing/selftests/lib/printf.sh
-deleted file mode 100755
-index 05f4544e87f9..000000000000
---- a/tools/testing/selftests/lib/printf.sh
-+++ /dev/null
-@@ -1,4 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# Tests the printf infrastructure using test_printf kernel module.
--$(dirname $0)/../kselftest/module.sh "printf" test_printf
 
 -- 
 2.48.1
