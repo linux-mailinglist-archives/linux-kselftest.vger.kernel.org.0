@@ -1,266 +1,258 @@
-Return-Path: <linux-kselftest+bounces-28472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4072A56564
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:32:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BF83A56609
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 12:01:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1545318998C2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 10:32:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7631C1897624
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Mar 2025 11:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21098212B0D;
-	Fri,  7 Mar 2025 10:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B39211A36;
+	Fri,  7 Mar 2025 11:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDBTqGfE"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="taNJNlDz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63724211A0A;
-	Fri,  7 Mar 2025 10:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D803A208990
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Mar 2025 11:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741343482; cv=none; b=gHa0SuDOvU1z+cOSsCE9kk8W6jiIuvvyxBSyJuB+0QpOMCtfpe/sBKHM/DxRVU+4UYLY91WYotpMhNl71RPAmOUI4rIIfEjUV7ehF23fMqMQDbPBw+QHQ6NCYBN3DcdKxRSvGOOuyq0nDozV4IP6+SOyrCG0VEtKLhX+30c0Fw4=
+	t=1741345296; cv=none; b=maDZhzyNvLbFYlAoMRoewWpXSaeBuH8j7TLwtnNGJAW7Mm/2gz2Z+cpRewhFtlflklNsbLas1rynYMleofBoCFk36pS5WICl0j6T4FJDswDTQlmkTSt7M0tDoVUwTJc9L8Sxo3xZDEbFJmy7/ccqoxyLM0hOQM4hGkS+lng6T4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741343482; c=relaxed/simple;
-	bh=xxkzx7ZQrcVJJTyEe9gXKoVs2uaL0Wfs92qWjEYjYsY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dHz3mN61/rsndIgasqoOzKtA5Xk/VIyuiykObQdo1tTjRRC5+O6qjDlUMqB1Xaog94Bxe21ALyLcbQWOwVaGuAxwqbxgUH1l4nqKdxKtOeJQ3sh+hrhlD07xNahejjBNZuuICzWHKva1B8Uu1ZCvu3cGgaj2HPuk0rGq0PXBAO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VDBTqGfE; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2235189adaeso27480615ad.0;
-        Fri, 07 Mar 2025 02:31:20 -0800 (PST)
+	s=arc-20240116; t=1741345296; c=relaxed/simple;
+	bh=/g1GkLCKmv9y6KA7+eQLnMk39ax2rDsN2Scy3l2VLdw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To; b=EnD61stB+gg4ENQW4Xoxdki1n/DUxk0nyXtpZpDHQbO24aQFu1kvz4D7QIDXmRBw7+QZrSNK/qEffFPnEDxz8FXmiWWCdr1gb9uXLjgz8AOFoA2fPS35ExuszoCEPV9ZmTB+6E4cjps71Tgiiji1gra7hihBO3xClPmsrETRS1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=taNJNlDz; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22355618fd9so30796195ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Mar 2025 03:01:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741343479; x=1741948279; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eqR/U3tGslJZPPUyjeJ8EJvxyW57iNVS/C65eSn9Z50=;
-        b=VDBTqGfEJIJixuqaIUFbHFwh3rzgj1dgsGQzcf2FQ0TfYjJdNpbflXLSjL9DaRHMcI
-         EoQIyOmbGpsDEeGcKuzs5dKnZhI03/6oJN3+98Oau5sWkEB1iO13G2SBIG9sE1r6G7qu
-         StJ8JnAgOZViWiABq1P5nqxCJ5gkLbcFWoBFnEzamOq4gvHq/q0qBbXqhWz7HwZSh22n
-         YUAGlieVYgVNd9dyAe+7sE2TfZaG2bYCiUVnN1BBf76GN2ang691cxhFx7RolRXNR2An
-         w/RfUe77olsy4Ry8tpULCqW+rJiOfB0Vh/Mig7ZYuT/sGbM2M/cZF+0qbk5FhVUWeO7Q
-         aqsA==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1741345293; x=1741950093; darn=vger.kernel.org;
+        h=to:content-transfer-encoding:mime-version:message-id:date:subject
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzMVlPOa3s/zB/a5VwTHDVG6oc6JLPQwIH8h0o1qpiY=;
+        b=taNJNlDzobekaGuJ8jefR1WgVul0nx6KSzIh4Gwe0wQh22fVJiVA2yqYK17y0b/1Kx
+         OyfmvV3Ao7eERMI39xIxi9wAA4fz3CiSmbgT/j9UzvNECDhSJ4KdLC47hU90OOqsxlHC
+         ZB9Z4NyVdPuxQu5NoDjbWDG4/U/mTFqoIhIUL4g8cdRexIbNtNzAT4V7Qgof98APcmLM
+         LOt+oHU7UIy8FdgzwIC67eCf9YLL8RmUOVcrN2mPoZY8mV6P+uQbMltzYizBBZ/otih3
+         3gIuhmiQ18K+1UpUYa/NayritsPiV14wgUiA4rtzVpZWPHFSbn1T1cExyUjLpjjm0TO3
+         rCfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741343479; x=1741948279;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eqR/U3tGslJZPPUyjeJ8EJvxyW57iNVS/C65eSn9Z50=;
-        b=PWVA2+ZPGqomApSPjKrWIBWLAHucvGJglKko4Dhby0kXsW5FxBvR2wDH7yvJE1m0Gj
-         67J+arILDEJfuH+0llacoc7y8trUXVk+qgZCYUxKZBVt6NljH7V+x6JHNIuL3sYNQVRZ
-         KYQj8+HOAErtPFONXfxnkYH9K04uliAyS6ws72d1Y9Md6xpuAzwDzgpFwbB2Z3OzRPEm
-         24NMXuXhipRzXOD+TGkj4p0HfmEHeFVb0Ma+npHZ/CCSl4ECofngS9V/mBhQvG0hQqzk
-         SuMz1w6+QWnz+ktr8S1j4FX41KtYqD6fat0Sh2864ofzGtcw7DUhbMDeLSmQ+NrwBm6o
-         ljsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUMQ/4ObO5ZCiqODfy0+nRQEn1aBpst+rNa1nZm/P/rBf3VVo7UtsBHKEZ7vjBb3jU5OwgiEJ+/zC5D+OCBvSfT@vger.kernel.org, AJvYcCXUy9cyOLeRuWkmOVWGh7gUO9oMk5flcUvnqal5bICte0dNP/FBjvn2Vm7cXb5QRS/fkoiN4zbqlk4nXKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGybHgWeZ6PqaBUBAFdp7aRRj8LXAqI8cvSf2Fka7FS9Csew0H
-	7YgtXxpASZfI/mmuI879oKubLVD4FWFE+sB/sxuLOZQg1y+f730c
-X-Gm-Gg: ASbGncuySeqBnjUh6a+boo467CYiaC2NFad/5lABlVdvIL+s+xBcfi9hSFZ6iBBRNbP
-	jmvsr363PffmUOOCgZxYFELlAlf9rNAJ9krJgq4L2sbDWM9KRLYCWUCi96y/qt35zg83wq9qLRP
-	e4pVufYjAEMMSpFIi0m/lFcfa8FAhUfxb59504/DbzkUP4kGUCmgiVFGiSFvkzBmitExmgX1PKD
-	rStjxWqCEbFpGAGBbhnfJItDXBz4rho/48c1y4928j5y/Bt7syr4ekiiljC7KNGd4orOPg7H9wZ
-	yWDuBg+c8bBvDBDWkL9A45ZosaLodbf54mfMmQDsqtk541XkeA==
-X-Google-Smtp-Source: AGHT+IEnR31Z8EtVjUQRHM9ZaAiIDKHmXCKpcH09SLEe6uV5R05/HdtuJ2qNJOpAt3eMhi13CBhUjQ==
-X-Received: by 2002:a17:902:cf0b:b0:223:3eed:f680 with SMTP id d9443c01a7336-22409477568mr105676185ad.18.1741343479448;
-        Fri, 07 Mar 2025 02:31:19 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a7fa24sm26764585ad.108.2025.03.07.02.31.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 02:31:18 -0800 (PST)
-Date: Fri, 7 Mar 2025 10:31:11 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
-	Jarod Wilson <jarod@redhat.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 net 1/3] bonding: fix calling sleeping function in spin
- lock and some race conditions
-Message-ID: <Z8rK7_qiIze88yGv@fedora>
-References: <20250307031903.223973-1-liuhangbin@gmail.com>
- <20250307031903.223973-2-liuhangbin@gmail.com>
- <6dd52efd-3367-4a77-8e7b-7f73096bcb3f@blackwall.org>
- <Z8qqS9IlRAMYIqXb@fedora>
- <9b0312c8-dc96-494e-86f9-69ee45369029@blackwall.org>
+        d=1e100.net; s=20230601; t=1741345293; x=1741950093;
+        h=to:content-transfer-encoding:mime-version:message-id:date:subject
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzMVlPOa3s/zB/a5VwTHDVG6oc6JLPQwIH8h0o1qpiY=;
+        b=wvKqLrBpnKcAUi0tsg9u5l/J6KPFzB+vecAbKmQsmenxCWClbqVWvfTyyPDicr43WT
+         0w4axinZF6nTKJwAuP085FpR3Q6XStL4D8/ekL8KWtb/T5MpqE07xVLXTpk6/KodJn0y
+         k/htERyPh4uwbwpYwU/v1/xAuNym/x8XFuxHyVsmDKTcBSj4zWZGoPfz0YlN2Q3w2pwt
+         07iSUgtpm4zh/+m2jC+DZaJWQ2w/ZxJWc69rpyV19DutDLQQAiRIpe0OuP+EHa1hGMQn
+         VZ+VRJHGq9MHCfJK/T6caRd/giLwEyz63qKf0nJg0icoO1WbfilO0B3xkNFLL8zNDz1M
+         ZMEw==
+X-Forwarded-Encrypted: i=1; AJvYcCXyPNMqUOfLG40MKNyN/hvd+z5uBi41VNd7LqSfUz7PJGNiGOj/rWsL5xXLeUbfqEuJBypRAnCGmOPA/0pDF2I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy77zSw8saHEAzX2NzKjntTdcn9aPKS5Ap/LPQZVufEGqiZCp0V
+	RLc4UgGKnw+npo5Wcd9O8Vfp0xfMfL8HHHb/n+j7a7aDDa/xtOQbVjx0W5d5I4c=
+X-Gm-Gg: ASbGncvVcSzre7zo7WDnHXpOy7pWeWx6SJWDrIveLom8mdy22ZqxkYBcRZ3u42pCQbR
+	e5zwx8mwK+gtm3N3xQscHNBTV4396i/9SO737iTEnUUhiMNqDt873IsBzbt6hwq+ZdSUMgUO/S/
+	NAllEXzlEvd2xX59qehlOHDolexHsuB3RVtd26rI666DcST3aY5Y8ZQIQbvGN+gZRk5dLtcRdQ8
+	TCspCFUPKNm3lcJO3sSRBPu6t9HryYRNcm0Ii5U9Lu2T5TjaYPmkE5yDT1YtNCFKevh3tjdBvNe
+	FOH9jOThsTKfxwpPVVl3r/7DZOb2KEZuJjkz2He1PDePz6I/
+X-Google-Smtp-Source: AGHT+IEWkspRFr7qHdskSRCnrxIpvvKyP779SqlsxZvyyYMDg2Rlwude0Tz7fnHYA8IOQruaEpUCgQ==
+X-Received: by 2002:a05:6a00:1887:b0:736:5e28:cfba with SMTP id d2e1a72fcca58-736aaae0343mr4694000b3a.18.1741345293154;
+        Fri, 07 Mar 2025 03:01:33 -0800 (PST)
+Received: from localhost ([157.82.205.237])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-73698206a8csm3054423b3a.19.2025.03.07.03.01.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Mar 2025 03:01:32 -0800 (PST)
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH net-next v9 0/6] tun: Introduce virtio-net hashing feature
+Date: Fri, 07 Mar 2025 20:01:16 +0900
+Message-Id: <20250307-rss-v9-0-df76624025eb@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b0312c8-dc96-494e-86f9-69ee45369029@blackwall.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPzRymcC/4XSzW7kIAwA4FcZ5VxGBoyBnPY9Vnvgt4OqJt0kM
+ 5qq6rvXTfozVQ69gfBnbNkv3VymVuauP7x0U7m0uY0DX/zdoUunMNwX0TLfOwUKAUGLaZ5Fsdp
+ m50sN1nYc+TSV2q5rlr/dUBYxlOvS/eOXU5uXcXpe01/k+s6ZtARwYJQEeZSIqJSQIjy0U3sYj
+ 2Pm058cnod2Pabxcc1zUTdWGomSEI+KgJB+tfrTInhp1g4uWoBIpIGT5QhO7RDeIIUbQkYOi9e
+ qJCiUdsh8ofcON2QYVZ0quVwBTN4h+kQGJPgNEaMok4eQLbhKO2S/kVIfP9m1PFRgUow575H7R
+ hpoQ46RDRGroVpR6R/odRvuVP6feTOWjwl/LUZ/WFtVGsRyHgRRkRDQR0i257Zud2gN5QYliXi
+ utUyz8ByOsfJIa+p5wBwew1wE//zYlv6Qs9PW2EqFHAUlnfPepmhcNN6aahFjtNYRl/n6BmFlA
+ ofIAgAA
+X-Change-ID: 20240403-rss-e737d89efa77
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, kvm@vger.kernel.org, 
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+ Yuri Benditovich <yuri.benditovich@daynix.com>, 
+ Andrew Melnychenko <andrew@daynix.com>, 
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
+ Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Akihiko Odaki <akihiko.odaki@daynix.com>
+X-Mailer: b4 0.14.2
 
-On Fri, Mar 07, 2025 at 10:33:57AM +0200, Nikolay Aleksandrov wrote:
-> On 3/7/25 10:11, Hangbin Liu wrote:
-> > Hi Nikolay,
-> > On Fri, Mar 07, 2025 at 09:42:49AM +0200, Nikolay Aleksandrov wrote:
-> >> On 3/7/25 05:19, Hangbin Liu wrote:
-> >>> The fixed commit placed mutex_lock() inside spin_lock_bh(), which triggers
-> >>> a warning:
-> >>>
-> >>>   BUG: sleeping function called from invalid context at...
-> >>>
-> >>> Fix this by moving the IPsec deletion operation to bond_ipsec_free_sa,
-> >>> which is not held by spin_lock_bh().
-> >>>
-> >>> Additionally, there are also some race conditions as bond_ipsec_del_sa_all()
-> >>> and __xfrm_state_delete could running in parallel without any lock.
-> >>> e.g.
-> >>>
-> >>>   bond_ipsec_del_sa_all()            __xfrm_state_delete()
-> >>>     - .xdo_dev_state_delete            - bond_ipsec_del_sa()
-> >>>     - .xdo_dev_state_free                - .xdo_dev_state_delete()
-> >>>                                        - bond_ipsec_free_sa()
-> >>>   bond active_slave changes              - .xdo_dev_state_free()
-> >>>
-> >>>   bond_ipsec_add_sa_all()
-> >>>     - ipsec->xs->xso.real_dev = real_dev;
-> >>>     - xdo_dev_state_add
-> >>>
-> >>> To fix this, let's add xs->lock during bond_ipsec_del_sa_all(), and delete
-> >>> the IPsec list when the XFRM state is DEAD, which could prevent
-> >>> xdo_dev_state_free() from being triggered again in bond_ipsec_free_sa().
-> >>>
-> >>> In bond_ipsec_add_sa(), if .xdo_dev_state_add() failed, the xso.real_dev
-> >>> is set without clean. Which will cause trouble if __xfrm_state_delete is
-> >>> called at the same time. Reset the xso.real_dev to NULL if state add failed.
-> >>>
-> >>> Despite the above fixes, there are still races in bond_ipsec_add_sa()
-> >>> and bond_ipsec_add_sa_all(). If __xfrm_state_delete() is called immediately
-> >>> after we set the xso.real_dev and before .xdo_dev_state_add() is finished,
-> >>> like
-> >>>
-> >>>   ipsec->xs->xso.real_dev = real_dev;
-> >>>                                        __xfrm_state_delete
-> >>>                                          - bond_ipsec_del_sa()
-> >>>                                            - .xdo_dev_state_delete()
-> >>>                                          - bond_ipsec_free_sa()
-> >>>                                            - .xdo_dev_state_free()
-> >>>   .xdo_dev_state_add()
-> >>>
-> >>> But there is no good solution yet. So I just added a FIXME note in here
-> >>> and hope we can fix it in future.
-> >>>
-> >>> Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
-> >>> Reported-by: Jakub Kicinski <kuba@kernel.org>
-> >>> Closes: https://lore.kernel.org/netdev/20241212062734.182a0164@kernel.org
-> >>> Suggested-by: Cosmin Ratiu <cratiu@nvidia.com>
-> >>> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> >>> ---
-> >>>  drivers/net/bonding/bond_main.c | 69 ++++++++++++++++++++++++---------
-> >>>  1 file changed, 51 insertions(+), 18 deletions(-)
-> >>>
-> >>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> >>> index e45bba240cbc..dd3d0d41d98f 100644
-> >>> --- a/drivers/net/bonding/bond_main.c
-> >>> +++ b/drivers/net/bonding/bond_main.c
-> >>> @@ -506,6 +506,7 @@ static int bond_ipsec_add_sa(struct xfrm_state *xs,
-> >>>  		list_add(&ipsec->list, &bond->ipsec_list);
-> >>>  		mutex_unlock(&bond->ipsec_lock);
-> >>>  	} else {
-> >>> +		xs->xso.real_dev = NULL;
-> >>>  		kfree(ipsec);
-> >>>  	}
-> >>>  out:
-> >>> @@ -541,7 +542,15 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
-> >>>  		if (ipsec->xs->xso.real_dev == real_dev)
-> >>>  			continue;
-> >>>  
-> >>> +		/* Skip dead xfrm states, they'll be freed later. */
-> >>> +		if (ipsec->xs->km.state == XFRM_STATE_DEAD)
-> >>> +			continue;
-> >>
-> >> As we commented earlier, reading this state without x->lock is wrong.
-> > 
-> > But even we add the lock, like
-> > 
-> > 		spin_lock_bh(&ipsec->xs->lock);
-> > 		if (ipsec->xs->km.state == XFRM_STATE_DEAD) {
-> > 			spin_unlock_bh(&ipsec->xs->lock);
-> > 			continue;
-> > 		}
-> > 
-> > We still may got the race condition. Like the following note said.
-> > So I just leave it as the current status. But I can add the spin lock
-> > if you insist.
-> > 
-> 
-> I don't insist at all, I just pointed out that this is buggy and the value doesn't
-> make sense used like that. Adding more bugs to the existing code wouldn't make it better.
+virtio-net have two usage of hashes: one is RSS and another is hash
+reporting. Conventionally the hash calculation was done by the VMM.
+However, computing the hash after the queue was chosen defeats the
+purpose of RSS.
 
-I'm a little lost here. Do you mean we should hold spin lock for all xs
-readings or just the km.state. The current bonding code didn't hold any
-xs lock for xs readings. And I saw in xfrm code it only hold rcu read lock
-when check the km.state.
+Another approach is to use eBPF steering program. This approach has
+another downside: it cannot report the calculated hash due to the
+restrictive nature of eBPF.
 
-> 
-> >>> +
-> >>>  		ipsec->xs->xso.real_dev = real_dev;
-> >>> +		/* FIXME: there is a race that before .xdo_dev_state_add()
-> >>> +		 * is called, the __xfrm_state_delete() is called in parallel,
-> >>> +		 * which will call .xdo_dev_state_delete() and xdo_dev_state_free()
-> >>> +		 */
-> >>>  		if (real_dev->xfrmdev_ops->xdo_dev_state_add(ipsec->xs, NULL)) {
-> >>>  			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
-> >>>  			ipsec->xs->xso.real_dev = NULL;
-> >> [snip]
-> >>
-> >> TBH, keeping buggy code with a comment doesn't sound good to me. I'd rather remove this
-> >> support than tell people "good luck, it might crash". It's better to be safe until a
-> >> correct design is in place which takes care of these issues.
-> > 
-> > I agree it's not a good experience to let users using an unstable feature.
-> > But this is a race condition, although we don't have a good fix yet.
-> > 
-> > On the other hand, I think we can't remove a feature people is using, can we?
-> > What I can do is try fix the issues as my best.
-> > 
-> 
-> I do appreciate the hard work you've been doing on this, don't get me wrong, but this is
+Introduce the code to compute hashes to the kernel in order to overcome
+thse challenges.
 
-I also appreciate your reviews. You helped find a lot of issues :)
+An alternative solution is to extend the eBPF steering program so that it
+will be able to report to the userspace, but it is based on context
+rewrites, which is in feature freeze. We can adopt kfuncs, but they will
+not be UAPIs. We opt to ioctl to align with other relevant UAPIs (KVM
+and vhost_net).
 
-> not really uapi, it's an optimization. The path will become slower as it won't be offloaded,
-> but it will still work and will be stable until a proper fix or new design comes in.
+The patches for QEMU to use this new feature was submitted as RFC and
+is available at:
+https://patchew.org/QEMU/20240915-hash-v3-0-79cb08d28647@daynix.com/
 
-I'm afraid it doesn't work correctly before this patch. The race condition
-here has a long time. What I do is fix part of the races. And leave
-bond_ipsec_add_sa() and bond_ipsec_add_sa_all() almost not changed.
+This work was presented at LPC 2024:
+https://lpc.events/event/18/contributions/1963/
 
-The comment in the code is just to notify others there is something wrong.
-Instead of just hide it there and only we know this.
+V1 -> V2:
+  Changed to introduce a new BPF program type.
 
-Do I miss something?
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+Changes in v9:
+- Added a missing return statement in patch
+  "tun: Introduce virtio-net hash feature".
+- Link to v8: https://lore.kernel.org/r/20250306-rss-v8-0-7ab4f56ff423@daynix.com
 
-Thanks
-hangbin
+Changes in v8:
+- Disabled IPv6 to eliminate noises in tests.
+- Added a branch in tap to avoid unnecessary dissection when hash
+  reporting is disabled.
+- Removed unnecessary rtnl_lock().
+- Extracted code to handle new ioctls into separate functions to avoid
+  adding extra NULL checks to the code handling other ioctls.
+- Introduced variable named "fd" to __tun_chr_ioctl().
+- s/-/=/g in a patch message to avoid confusing Git.
+- Link to v7: https://lore.kernel.org/r/20250228-rss-v7-0-844205cbbdd6@daynix.com
 
-> 
-> Are you suggesting to knowingly leave a race condition that might lead to a number
-> of problems in place with a comment?
-> IMO that is not ok, but ultimately it's up to the maintainers to decide if they can live
-> with it. :)
-> 
-> > By the way, I started this patch because my patch 2/3 is blocked by the
-> > selftest results from patch 3/3...
-> > 
-> > Thanks
-> > Hangbin
-> 
-> 
+Changes in v7:
+- Ensured to set hash_report to VIRTIO_NET_HASH_REPORT_NONE for
+  VHOST_NET_F_VIRTIO_NET_HDR.
+- s/4/sizeof(u32)/ in patch "virtio_net: Add functions for hashing".
+- Added tap_skb_cb type.
+- Rebased.
+- Link to v6: https://lore.kernel.org/r/20250109-rss-v6-0-b1c90ad708f6@daynix.com
+
+Changes in v6:
+- Extracted changes to fill vnet header holes into another series.
+- Squashed patches "skbuff: Introduce SKB_EXT_TUN_VNET_HASH", "tun:
+  Introduce virtio-net hash reporting feature", and "tun: Introduce
+  virtio-net RSS" into patch "tun: Introduce virtio-net hash feature".
+- Dropped the RFC tag.
+- Link to v5: https://lore.kernel.org/r/20241008-rss-v5-0-f3cf68df005d@daynix.com
+
+Changes in v5:
+- Fixed a compilation error with CONFIG_TUN_VNET_CROSS_LE.
+- Optimized the calculation of the hash value according to:
+  https://git.dpdk.org/dpdk/commit/?id=3fb1ea032bd6ff8317af5dac9af901f1f324cab4
+- Added patch "tun: Unify vnet implementation".
+- Dropped patch "tap: Pad virtio header with zero".
+- Added patch "selftest: tun: Test vnet ioctls without device".
+- Reworked selftests to skip for older kernels.
+- Documented the case when the underlying device is deleted and packets
+  have queue_mapping set by TC.
+- Reordered test harness arguments.
+- Added code to handle fragmented packets.
+- Link to v4: https://lore.kernel.org/r/20240924-rss-v4-0-84e932ec0e6c@daynix.com
+
+Changes in v4:
+- Moved tun_vnet_hash_ext to if_tun.h.
+- Renamed virtio_net_toeplitz() to virtio_net_toeplitz_calc().
+- Replaced htons() with cpu_to_be16().
+- Changed virtio_net_hash_rss() to return void.
+- Reordered variable declarations in virtio_net_hash_rss().
+- Removed virtio_net_hdr_v1_hash_from_skb().
+- Updated messages of "tap: Pad virtio header with zero" and
+  "tun: Pad virtio header with zero".
+- Fixed vnet_hash allocation size.
+- Ensured to free vnet_hash when destructing tun_struct.
+- Link to v3: https://lore.kernel.org/r/20240915-rss-v3-0-c630015db082@daynix.com
+
+Changes in v3:
+- Reverted back to add ioctl.
+- Split patch "tun: Introduce virtio-net hashing feature" into
+  "tun: Introduce virtio-net hash reporting feature" and
+  "tun: Introduce virtio-net RSS".
+- Changed to reuse hash values computed for automq instead of performing
+  RSS hashing when hash reporting is requested but RSS is not.
+- Extracted relevant data from struct tun_struct to keep it minimal.
+- Added kernel-doc.
+- Changed to allow calling TUNGETVNETHASHCAP before TUNSETIFF.
+- Initialized num_buffers with 1.
+- Added a test case for unclassified packets.
+- Fixed error handling in tests.
+- Changed tests to verify that the queue index will not overflow.
+- Rebased.
+- Link to v2: https://lore.kernel.org/r/20231015141644.260646-1-akihiko.odaki@daynix.com
+
+---
+Akihiko Odaki (6):
+      virtio_net: Add functions for hashing
+      net: flow_dissector: Export flow_keys_dissector_symmetric
+      tun: Introduce virtio-net hash feature
+      selftest: tun: Test vnet ioctls without device
+      selftest: tun: Add tests for virtio-net hashing
+      vhost/net: Support VIRTIO_NET_F_HASH_REPORT
+
+ Documentation/networking/tuntap.rst  |   7 +
+ drivers/net/Kconfig                  |   1 +
+ drivers/net/tap.c                    |  68 +++-
+ drivers/net/tun.c                    |  98 +++++-
+ drivers/net/tun_vnet.h               | 159 ++++++++-
+ drivers/vhost/net.c                  |  49 +--
+ include/linux/if_tap.h               |   2 +
+ include/linux/skbuff.h               |   3 +
+ include/linux/virtio_net.h           | 188 ++++++++++
+ include/net/flow_dissector.h         |   1 +
+ include/uapi/linux/if_tun.h          |  75 ++++
+ net/core/flow_dissector.c            |   3 +-
+ net/core/skbuff.c                    |   4 +
+ tools/testing/selftests/net/Makefile |   2 +-
+ tools/testing/selftests/net/tun.c    | 656 ++++++++++++++++++++++++++++++++++-
+ 15 files changed, 1255 insertions(+), 61 deletions(-)
+---
+base-commit: dd83757f6e686a2188997cb58b5975f744bb7786
+change-id: 20240403-rss-e737d89efa77
+prerequisite-change-id: 20241230-tun-66e10a49b0c7:v6
+prerequisite-patch-id: 871dc5f146fb6b0e3ec8612971a8e8190472c0fb
+prerequisite-patch-id: 2797ed249d32590321f088373d4055ff3f430a0e
+prerequisite-patch-id: ea3370c72d4904e2f0536ec76ba5d26784c0cede
+prerequisite-patch-id: 837e4cf5d6b451424f9b1639455e83a260c4440d
+prerequisite-patch-id: ea701076f57819e844f5a35efe5cbc5712d3080d
+prerequisite-patch-id: 701646fb43ad04cc64dd2bf13c150ccbe6f828ce
+prerequisite-patch-id: 53176dae0c003f5b6c114d43f936cf7140d31bb5
+prerequisite-change-id: 20250116-buffers-96e14bf023fc:v2
+prerequisite-patch-id: 25fd4f99d4236a05a5ef16ab79f3e85ee57e21cc
+
+Best regards,
+-- 
+Akihiko Odaki <akihiko.odaki@daynix.com>
+
 
