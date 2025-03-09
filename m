@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-28561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9FD5A5849A
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 14:43:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D276A5849B
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 14:44:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CC7D3AE586
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 13:43:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E6657A5089
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 13:42:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82B31DC98C;
-	Sun,  9 Mar 2025 13:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CBFA1DC04A;
+	Sun,  9 Mar 2025 13:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G/Y6BDCd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XlCOSR9q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FC61DB365;
-	Sun,  9 Mar 2025 13:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C122F15E5DC;
+	Sun,  9 Mar 2025 13:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741527826; cv=none; b=Ny8oxQfjIWklafmmM286Y4Z/J+XDeG7KB5aTu7WFre2W8NSLUJA+pCVdfzvOrpsL0Vwhb011N5GAL3cPQLyDCZcxjWzv8TZ1pvjD4ySM3MdrNkW19sWOZVpQcYdMkfLVX+H5A0bOd5A32+blBJTUGiW94YfPDuo04d+sKmFWwk0=
+	t=1741527834; cv=none; b=q6RF5vx/IviSJARJwxkr3I4rSihEmEPO77LziViQZaZtBGhFxzr6LA5BJ2RtkLWDnflbBBhpvkTMbuNTG6hmZqsnLFaNYdCEnVGgYdxspT3DRzPNLMjGLRf/4KtIcyw8UeBEDCYLo58/G9l7OLkjIV6S6rHrFxALTCxWqGxIJC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741527826; c=relaxed/simple;
-	bh=SPYXJYaDcfE/gDH/liXDdOSm+iSFNtvfwFEf1d1WtcU=;
+	s=arc-20240116; t=1741527834; c=relaxed/simple;
+	bh=lQ5S/kN0Y9lAPBWG/yhiZ9p9p0eQ1F0mtQlFxflp1OU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=frHccE1Hjopf2x0fdObzjhOca1EBC0uR//xuQ/K8UKwL7N28abv6DPjLiRTd6rYGvu/RzGJkBJaCbMLcsmkTQfL0yMQMnDZXLYpnnXXYF+Yf2hJalekXSS5Q/BjzopAB01l62+EubXrMI0cIqG6W7jkYS1Jo+dtzkgTCrreurKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G/Y6BDCd; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=dJR5G2AgbHJWAaU3URsVIHy/YRkVq3IaU35O6PFdpwTzHHr6J9vtwDpYb95+9ANHPsijr6rEIUCA9uE4aSJ4yEiLaJ9xg6rp0UxnWW76RCYhJ04do/vBkaMWiz4lWEFeMAUJtbaFEEuJjFQ1QA3osIC3RIMDUfNk0gjVj6897Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XlCOSR9q; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2239c066347so56565305ad.2;
-        Sun, 09 Mar 2025 06:43:45 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-224341bbc1dso29251835ad.3;
+        Sun, 09 Mar 2025 06:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741527824; x=1742132624; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741527832; x=1742132632; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EZmnphCh5t5ZmRNjQ/jjVilH899pEZQFMcfX0b+XOCk=;
-        b=G/Y6BDCd2bXUq3hNC35sXJrCwMQqA3ErZlmbo2z922v9xKCFb5XgwZmUW3c/7r40dK
-         2GpDKTBAGHVP9AMu5mohin55X7X2eUOMxrVnABPzVZXIyYgkvIxASR5mwd8L2ehKGusg
-         TjFRW6t2V0v+NuHVBIhBhj5hfyd78/wHkLgVwfGU5gkIoCXetCURyMOR5wd0KZBXPozG
-         9vqC1cd13yk7J7aMXOeUjf9WnLDvpJOOF/ncmoHWI5TcF37kfgxg6S5oQ5MwY0zwIVKh
-         qZbM+anFEqSeVVNnzlb1fc5iFJpe9tjJmZyR8gQMGT6ik642O4yYZ85lwaJlG2943b7d
-         XmCg==
+        bh=qU2SZskl0GXhd/8iJGI8QszFt2TGbZrtsEMkr1I4oGI=;
+        b=XlCOSR9qDB9FjXRQp3Mh1nqc+qJ5iRrfn0RQ6DQlQTtjBvl7b/2oKa/0yVoQOTYHyB
+         bzDNv9dg/hyx1N0WivWW0d9MDoqDGAAqvsDnXcpIkr98oW0f5UchhrCI6poQ7h+A+ama
+         O7pB9wLPjjM+mcVAq2J/rg+z7RB1M8WRd6FgUELRU7/pIDiKf2LvCQG7NvBGnr3sKyy7
+         p16hlfVm4OwSe8bGAngyl8ReU9lG5MWEf/Nh6XpaYed1aiYn+RNBpgTYaZieKCe+hT+Y
+         0cH9Uo9iStntU//HE+OwtJtmbAMyzgpTHJ0uiQ/hYvFv5WC37DdiM/X/tl72dfaiyL73
+         Xc0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741527824; x=1742132624;
+        d=1e100.net; s=20230601; t=1741527832; x=1742132632;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EZmnphCh5t5ZmRNjQ/jjVilH899pEZQFMcfX0b+XOCk=;
-        b=fKvlr9MhCi4fdlNtuzC+jM+gEdy9GJ1/Tl81ANIkcGCkpvzzF85rtPPFyAyR1spA0V
-         SaOArhdVd7vHwAAFuTTmTav2gC1hXnvRCavcwvurusxri1XM/uF5usX06ZbbYw6h/4Ia
-         sj7wJRFQrG5PwO/9UYeDNgskoNCElZZYIXHT8cUbtezN2+SbrxXFF0dn6bG0efKYL2u9
-         W8NAc7BrPeKSSFaekUMSeLw9jqFGM8tbyTyBKawloCmcY2SsgfzrgYTtY5s8QWWiE91+
-         fuuxFwbxH8bzspv0JpLuo5LwOJjKUiqwZstpr0935uXNPVYxbybVZHand9+e1en5Zc12
-         1gBw==
-X-Forwarded-Encrypted: i=1; AJvYcCV9yXb+cbuuvmqx6uK2THN0JW+bNP1giLUGagmdtvn7dGMeGIyRn7FyBIMOgurcveabnLL7Qj4G@vger.kernel.org, AJvYcCWRUWULjTmvNIV2/BE0SUxvlICk+wvNHRDfr9Q64Ql+DSqnhJj1FDo2FNTHYMn6c5s4Xknwr6DrJhbKeOhJ/L4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8czWG4LZSNyb1qUWJ9c5TNyFOASprVvwDbXze7XHKwc/GiE/9
-	l5iOVEcHM1lk7tomf9v7Rsc0xi9jQ9mEBOrPw2fIwcxjOoGI6QNr0bC/7Q==
-X-Gm-Gg: ASbGncuwD4LVGgSxkPeA2aae0I+0CT8k31MMnb1IAAlTG6efhunidIsgBiweCyYRmLx
-	yP+rsQVeR5V4F8JHCmjMj6OrX0Qi6fDTJ+HiGF/p3FFv0e8hWc4hF4sD4jxC2kV9yQaeXuM9fwt
-	uiV8xHqTO1L2WSTx1U5W+VUrZuZDUwR7QWmfU7t5afIJfGNDK1mzIzpD2w6rCD7js9jMkKJqXKP
-	mg/S+mvZ2uIxy1sjt1rcxenM2ebu2xn7D6s9yq8x5oaE4dCsfrx9pFm8/ETpM0FpnEX4/H6ckW9
-	Ek9LWjvIC5V9BSUlpAFqXzwoWX13vqNEjA==
-X-Google-Smtp-Source: AGHT+IHyM5RQmi/EN5Fxa1FlYPGzoqpy0+4i5nNLxytR2bQRBq5YHh5VtnGGzO5WGp8wpAY0nKlTsw==
-X-Received: by 2002:a05:6a00:218f:b0:736:62a8:e52d with SMTP id d2e1a72fcca58-736aaa1b77bmr13841332b3a.12.1741527824566;
-        Sun, 09 Mar 2025 06:43:44 -0700 (PDT)
+        bh=qU2SZskl0GXhd/8iJGI8QszFt2TGbZrtsEMkr1I4oGI=;
+        b=wByEmme6kdphdGua/bagqx/+W9/EiuVbb+JvyEjvfn9gQm6/USGJtp+sFo9w5rFFf+
+         ecJ6e88c/UOX8d5SAeg8fWsWfZGZbaI5XGDrfNycpPX5R4lybJgLD43RpK5p4UCQ/OvZ
+         dGCLLEuZsADDEndvfXx1W80R60TUEQZcOtn/cuX3PdZdDXuZlJN9xjWcbE0AfFAVHfEh
+         HArQvCWntPmvVkI4dR3bHSCdYsycivd1YFWmRyrPe7NK9PiEJlqh9k5aA+PyFeQ4Rx0f
+         tYOcaPKjqesfUwB5oXqCOIquZbdoT/ThJ1g8+EEwWC17HESyxuH/jzGs05Qep6k2lMWl
+         h8Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCUlwZ/6gHaNmuHs/cMy0gXyxBEwq0UHPjMsCKs/BOE6KlmAgur7/GLBUW+9ioWTiAdezE9dW+FQ@vger.kernel.org, AJvYcCWHoTupo04Gm4KwdvrZRCljGkt0/F4vM0MJpyRDoiBrHCoCIFggz8wveWedMw+0KBrCj0rBXv6aR5lob7Dyq3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwPnhq5b2hUNhAJmOOfssqp6LyOec65xvyn+n58/ed3A5afhvg
+	i7JYkTHgxHc3mwT/6VBiUr289cTEvKRc8vojj0wma/DPm7km0QMX
+X-Gm-Gg: ASbGncvWSUGttwRe9ARdmupfNSKbOghG9GS1xlKQ8YFw0K0cPaGNZhjedOoNdZFbAmj
+	fAUoM9EDFps2bYuQ5wOa4Ddk/EZDZyJgvwV4a/comWYHtbO8s2zkpL7jzY7no7toUKOox35zN1O
+	z5sGgpok4K/LIujTvRt/Jg20FbtuAzizO/Y/R6//BJbiWHWG4d2jZbi6nzBFDjSiuTC+Evyi46z
+	QiHAfDf0xqPHxbfcxPhPpAyOld4ppBJVgGBbN3yRLNvk8ud84FPbBQVLYCvPCRiBiMsAZ4kvFaP
+	V3qmcQ+FQO/GNtQoy4/cEky7Ss5YzVRlkw==
+X-Google-Smtp-Source: AGHT+IGnOC2yuJ6Fl659YA5Q65aYXCdzj2lJFnXehH21t3WzXdK8aw4qcSC78ND3kWQG/kGoU+IUVA==
+X-Received: by 2002:a05:6a00:1703:b0:730:9801:d3e2 with SMTP id d2e1a72fcca58-736aa9df8afmr16125103b3a.8.1741527831922;
+        Sun, 09 Mar 2025 06:43:51 -0700 (PDT)
 Received: from ap.. ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736c41dda7csm2296841b3a.85.2025.03.09.06.43.38
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736c41dda7csm2296841b3a.85.2025.03.09.06.43.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Mar 2025 06:43:43 -0700 (PDT)
+        Sun, 09 Mar 2025 06:43:50 -0700 (PDT)
 From: Taehee Yoo <ap420073@gmail.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -96,9 +96,9 @@ Cc: almasrymina@google.com,
 	amritha.nambiar@intel.com,
 	xuanzhuo@linux.alibaba.com,
 	ap420073@gmail.com
-Subject: [PATCH v3 net 5/8] eth: bnxt: fix kernel panic in the bnxt_get_queue_stats{rx | tx}
-Date: Sun,  9 Mar 2025 13:42:16 +0000
-Message-Id: <20250309134219.91670-6-ap420073@gmail.com>
+Subject: [PATCH v3 net 6/8] eth: bnxt: fix memory leak in queue reset
+Date: Sun,  9 Mar 2025 13:42:17 +0000
+Message-Id: <20250309134219.91670-7-ap420073@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250309134219.91670-1-ap420073@gmail.com>
 References: <20250309134219.91670-1-ap420073@gmail.com>
@@ -110,93 +110,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When qstats-get operation is executed, callbacks of netdev_stats_ops
-are called. The bnxt_get_queue_stats{rx | tx} collect per-queue stats
-from sw_stats in the rings.
-But {rx | tx | cp}_ring are allocated when the interface is up.
-So, these rings are not allocated when the interface is down.
+When the queue is reset, the bnxt_alloc_one_tpa_info() is called to
+allocate tpa_info for the new queue.
+And then the old queue's tpa_info should be removed by the
+bnxt_free_one_tpa_info(), but it is not called.
+So memory leak occurs.
+It adds the bnxt_free_one_tpa_info() in the bnxt_queue_mem_free().
 
-The qstats-get is allowed even if the interface is down. However,
-the bnxt_get_queue_stats{rx | tx}() accesses cp_ring and tx_ring
-without null check.
-So, it needs to avoid accessing rings if the interface is down.
+unreferenced object 0xffff888293cc0000 (size 16384):
+  comm "ncdevmem", pid 2076, jiffies 4296604081
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 40 75 78 93 82 88 ff ff  ........@ux.....
+    40 75 78 93 02 00 00 00 00 00 00 00 00 00 00 00  @ux.............
+  backtrace (crc 5d7d4798):
+    ___kmalloc_large_node+0x10d/0x1b0
+    __kmalloc_large_node_noprof+0x17/0x60
+    __kmalloc_noprof+0x3f6/0x520
+    bnxt_alloc_one_tpa_info+0x5f/0x300 [bnxt_en]
+    bnxt_queue_mem_alloc+0x8e8/0x14f0 [bnxt_en]
+    netdev_rx_queue_restart+0x233/0x620
+    net_devmem_bind_dmabuf_to_queue+0x2a3/0x600
+    netdev_nl_bind_rx_doit+0xc00/0x10a0
+    genl_family_rcv_msg_doit+0x1d4/0x2b0
+    genl_rcv_msg+0x3fb/0x6c0
+    netlink_rcv_skb+0x12c/0x360
+    genl_rcv+0x24/0x40
+    netlink_unicast+0x447/0x710
+    netlink_sendmsg+0x712/0xbc0
+    __sys_sendto+0x3fd/0x4d0
+    __x64_sys_sendto+0xdc/0x1b0
 
-Reproducer:
- ip link set $interface down
- ./cli.py --spec netdev.yaml --dump qstats-get
-OR
- ip link set $interface down
- python ./stats.py
-
-Splat looks like:
- BUG: kernel NULL pointer dereference, address: 0000000000000000
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 1680fa067 P4D 1680fa067 PUD 16be3b067 PMD 0
- Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 0 UID: 0 PID: 1495 Comm: python3 Not tainted 6.14.0-rc4+ #32 5cd0f999d5a15c574ac72b3e4b907341
- Hardware name: ASUS System Product Name/PRIME Z690-P D4, BIOS 0603 11/01/2021
- RIP: 0010:bnxt_get_queue_stats_rx+0xf/0x70 [bnxt_en]
- Code: c6 87 b5 18 00 00 02 eb a2 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 01
- RSP: 0018:ffffabef43cdb7e0 EFLAGS: 00010282
- RAX: 0000000000000000 RBX: ffffffffc04c8710 RCX: 0000000000000000
- RDX: ffffabef43cdb858 RSI: 0000000000000000 RDI: ffff8d504e850000
- RBP: ffff8d506c9f9c00 R08: 0000000000000004 R09: ffff8d506bcd901c
- R10: 0000000000000015 R11: ffff8d506bcd9000 R12: 0000000000000000
- R13: ffffabef43cdb8c0 R14: ffff8d504e850000 R15: 0000000000000000
- FS:  00007f2c5462b080(0000) GS:ffff8d575f600000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000000 CR3: 0000000167fd0000 CR4: 00000000007506f0
- PKRU: 55555554
- Call Trace:
-  <TASK>
-  ? __die+0x20/0x70
-  ? page_fault_oops+0x15a/0x460
-  ? sched_balance_find_src_group+0x58d/0xd10
-  ? exc_page_fault+0x6e/0x180
-  ? asm_exc_page_fault+0x22/0x30
-  ? bnxt_get_queue_stats_rx+0xf/0x70 [bnxt_en cdd546fd48563c280cfd30e9647efa420db07bf1]
-  netdev_nl_stats_by_netdev+0x2b1/0x4e0
-  ? xas_load+0x9/0xb0
-  ? xas_find+0x183/0x1d0
-  ? xa_find+0x8b/0xe0
-  netdev_nl_qstats_get_dumpit+0xbf/0x1e0
-  genl_dumpit+0x31/0x90
-  netlink_dump+0x1a8/0x360
-
-Fixes: af7b3b4adda5 ("eth: bnxt: support per-queue statistics")
+Fixes: 2d694c27d32e ("bnxt_en: implement netdev_queue_mgmt_ops")
 Signed-off-by: Taehee Yoo <ap420073@gmail.com>
 ---
 
 v3:
  - Patch added.
 
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 9afb2c5072b1..bee12d9b57ab 100644
+index bee12d9b57ab..55f553debd3b 100644
 --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
 +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -15384,6 +15384,9 @@ static void bnxt_get_queue_stats_rx(struct net_device *dev, int i,
- 	struct bnxt_cp_ring_info *cpr;
- 	u64 *sw;
+@@ -15539,6 +15539,7 @@ static void bnxt_queue_mem_free(struct net_device *dev, void *qmem)
+ 	struct bnxt_ring_struct *ring;
  
-+	if (!bp->bnapi)
-+		return;
-+
- 	cpr = &bp->bnapi[i]->cp_ring;
- 	sw = cpr->stats.sw_stats;
+ 	bnxt_free_one_rx_ring_skbs(bp, rxr);
++	bnxt_free_one_tpa_info(bp, rxr);
  
-@@ -15407,6 +15410,9 @@ static void bnxt_get_queue_stats_tx(struct net_device *dev, int i,
- 	struct bnxt_napi *bnapi;
- 	u64 *sw;
- 
-+	if (!bp->tx_ring)
-+		return;
-+
- 	bnapi = bp->tx_ring[bp->tx_ring_map[i]].bnapi;
- 	sw = bnapi->cp_ring.stats.sw_stats;
+ 	xdp_rxq_info_unreg(&rxr->xdp_rxq);
  
 -- 
 2.34.1
