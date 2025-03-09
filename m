@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-28557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF9FA58492
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 14:43:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DA43A58494
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 14:43:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C34D7188D55E
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 13:43:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D9D1188D54C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Mar 2025 13:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BB91D9A49;
-	Sun,  9 Mar 2025 13:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39B61DA2E5;
+	Sun,  9 Mar 2025 13:43:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fHEUaToV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFoyQc8p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD138BE7;
-	Sun,  9 Mar 2025 13:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E268BE7;
+	Sun,  9 Mar 2025 13:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741527801; cv=none; b=YUgz5QxrYnHmm7b15rYHB4EPIEo/vq339i52Sep3uxl2n8ZymvOyyGEBYdTJBSU5V3SqjEsywOfcDVK6o6FxcMLOlYq6cCsDj8LLLph2+0J4GBNLyVYRq9fAeRUTzXYuS8p1+E1vhvZxJQ+SOkkfqlyHC4XSYU5OFewtnQcmm8Q=
+	t=1741527807; cv=none; b=mP0Amhg5Y5xkdiN+nXlVzlOmFwPDhawMYvgt+MpTt5ywOD5kKt/sicpFGSmJcIvWAVfGlCljbTaFJkb9UgCMVaKub1kKgNo1VolGX/31denTVMviKXLAofAFfZczVvDxUY9kjPSyJTtx16SCWgiFY0xf66zdLCmqTIv7iy/Elxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741527801; c=relaxed/simple;
-	bh=dd9nUiJrwXMv99iv7txmQUTTNpeC1ohhXLb8ePqj/Jc=;
+	s=arc-20240116; t=1741527807; c=relaxed/simple;
+	bh=IiW1z7QIbJGiddiyv1XCRJoFgacKOPi9vD/2PdL89ik=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eoJwn6YPIuzL3n4sB7ln4Zu8DVvYgDBL01CXc7Zk0qYZU2cSgnezFSAw6FE6VipatEWx3LJ3aZ4i8TEqDneAD2wRZpKH2rC6IBowPWBFBOVEucePzRMas7EBT35eENeH2UbOnt1qrg/Qr9eUfMvyv6WjOw+JKDugnH4D6N22tY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fHEUaToV; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=gI4FnqzVWOR8CKhzOpp0V5PfRORPLTzjxyuaH51xB5RIz2OTW51zDao5TwQ0tIXBW2AMXeDLrsijsvoYFvD8J0wiKRHjsZQdzLYauZit1i9ALeiFFNPLjvsoEJTdYEillWtpDMx8kT9ks0GtJqIvkPHhLFQuENiL6Tmy7ztD7FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFoyQc8p; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22435603572so24714045ad.1;
-        Sun, 09 Mar 2025 06:43:19 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-225477548e1so14246125ad.0;
+        Sun, 09 Mar 2025 06:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741527799; x=1742132599; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741527805; x=1742132605; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S/ein0vWHrPHczNXpwPQ4iwCKQ6o7ZMTYQitBGnwAaU=;
-        b=fHEUaToVD7Fa4dr8cCQdMMAAjJ1b9yY8WBO8jTzd9pXaloqF2tghgorJdq+blnPKfg
-         nH/7eMipeeEc8csYZR7LD6HZQZheCPYjwlfcRGfaN1hUVgvwN4ExWWZwj0Uaf66P8hpP
-         FR5j7zA33fHdWhRO4EOZXYkv6gSMyKUJwAcYsHqVd9IA/2GNmoNjm1Md0ha5y/GWwstk
-         6DFHktFUeCepaLMwykaR1IlifexOMPkMUUtoHsTgWB3BwAGMEQJX/V1AA4K01alF1C96
-         tXo4AcghbrKeqG+jrA99fqLX1URRlAenViIMZoHfo2Xw0SrW4agrzEm4c13g5LL4rcjU
-         iQ+A==
+        bh=MwGeHRAjPCpS0+2BXKkB+qb7ndcH4Z9OT1hF9NTi3r0=;
+        b=FFoyQc8p3r2yl+6Dzdmrp/jcsDLzzqE3YTlxXSOSvN7YC5dRLzRcSDGqsScEGYLrou
+         rSdEfo7TKdzgJe9Du4myA0esFH9/seqG5+tmcZsN8U4F7kXVP40oIiZJac26wnOWUZxH
+         UmV7aXxWoRQCKmscNgZa48igPxztUPfmn6VxMKX8ofidATmplTwj8+piYViWaS9j6pCb
+         94b7ai7ZRalGuqvBP5vDs4BSCP9NQB2m+xOavVjrf25Z+9X9+c/Fquy5Vt7BwoMv8ZLQ
+         EpGQ4Cy+v6qt+M6i9P1VtqoXX9/q60SjiV3TRlRU0WN9pMogKaFvZNcTp/Y/jlVGWAUQ
+         56BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741527799; x=1742132599;
+        d=1e100.net; s=20230601; t=1741527805; x=1742132605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S/ein0vWHrPHczNXpwPQ4iwCKQ6o7ZMTYQitBGnwAaU=;
-        b=NL73XhlKKpK78pH8C+lhzeHMA50XxpfxqaxAkzx+3uAKRTlCSxmWjfivm/9xCWxO8P
-         aOc5HSbmcVSZY5M35BWLTlJYaTrongVOLYtutyAiVNhC91e69+fTMsri6obh24zTG6rI
-         j+69rvgh+7hIos/O4fIVPV9F8taRVB6BLHeGtAKDO6McMVR2KqYB2x63EVEj3CQbs2wH
-         TqILYio1ORmXYDJWe6QR7mMdLYeCBdFJLNYptF5OmF2ZexXzXc8lfz82amOc0KL2APc9
-         CFsA44uq8bi2an+H0Vgzoy/q7q+0YIjeBVMWxicPn/l9I7BxCkO3U5Tua6iSOkw5S5yP
-         hd5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUmetGDWr1uQxBhLMMn3QOOMVuTJJ1tcjre4uoZAFLtgmrQkinc2B0pMbmkuPU/HLvi6r2wAc1BYbtmQ3fBVJ0=@vger.kernel.org, AJvYcCWqoqoGRDOkwrAVfnnUjY4a1JTezcDVIpvYrOcYhGnWL+F4V17JdRkqJsZ6h/yAldEBhO4lKS0u@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8LgBRx7MrUxbOdDj4/kPM7k6Gg57VYa9gH/cWL2JYcWjVuCtJ
-	bEdLodgS9fjdwymIW2Uxr+OxSV7dAyq/N+JZHQXxDkwla/3ojJMQ
-X-Gm-Gg: ASbGncugRTgVwsmJZ7/tGVGXYXcXpSldfgyhdhG0NSrkBC8nniGJn1w/3p8lidx5+qz
-	V5krkuQTCb1WZR6U0oG/70IvcIqL/XJdCvfQEtJDPcDfBzjWE1pYmpDN2MjbqYtBZ7/itFAAfvw
-	/4gM5scVzEmhi6Wguzba5omFfs5y0LRlaMIO5UxvXqagY6kpS7QIwOz4LGQRMEz/JleOkvgBosK
-	f4IWBN057EX8mrEl1Xa9XMMmZrZwBDYbzO6B6ChScbzGo1kJoYO7Gr+o8gfQprseGThJXVyFHns
-	K7MEO4IzZQ8gdIR6BDdbQ01aj5D4tqOhmCRXEGXUuRDx
-X-Google-Smtp-Source: AGHT+IG7QqRURU9bDEzB+kPspIXQCilR/msM8OTfOJpOftnOhxGf0IF3faS9zYcBOYQ7GsgXfMtGOA==
-X-Received: by 2002:a05:6a00:4b4a:b0:736:6ac4:d1ff with SMTP id d2e1a72fcca58-736aa9e7154mr17732210b3a.3.1741527798829;
-        Sun, 09 Mar 2025 06:43:18 -0700 (PDT)
+        bh=MwGeHRAjPCpS0+2BXKkB+qb7ndcH4Z9OT1hF9NTi3r0=;
+        b=TC4N01+c0JvGwbJcr9Art3NXhvv1sJvpRbWSEL8aY3VIfI9NsBE1RPZvd/kRDLHhqt
+         Q7+QrZGsV+qdbBsW15vf1nfAiziBd+ff9qYJDk8qv6UtWeuSm0eH2iLm2uFCR2DVUnTU
+         pVZYPsy4LzkGDz3B/kM0gKAmyaT5Zn5LRG3Hdv3Zoz8wkBOSwpNMI44IOSJB5+oRqH4b
+         w+lqiLREgVJsfsBMvFLRB3QTO0/dO+MYoG5+3XqFTK3CRcXwVgvrP8rTVoJ+UgcEWEj7
+         JTaSUtH7RrIkNJwT+sRvgmAaQKwOf130vgOzhfKzTFEG9vk98iWStnbGIgN1EdlUmNZ3
+         7K0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWq4UeuRwCEqq7jKrvkykDH5yZR9KyQgd1AebSvnbWkqQCYQlwTkZ6wbhDRmk8HYbX7nkFShMq5bofvXUEh6Vo=@vger.kernel.org, AJvYcCX48SQNINumVXHMhXJXQtCI3oN4Q9SzMIHXyMX9a+L/R4J2lC++BghQNOXsJnLtu3P6bJj0oOu5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0DT2IGdGwZBmjW0YXYXuGiwxnQyUpKJ3KiKyYvSu3dMxu6o0K
+	D1nZFjaEwa/Cm+tsD5spfWjxHhk0Ol4YNQ2fAz6hAbRDJ+qVlum+
+X-Gm-Gg: ASbGncv535bMSQniLL5VoOV8Aawi0h2Osu/fEJen/kROkGsKZEaEctp6K/sd7USeVIl
+	nT3hdI1rX/lC4+z1vuLunZ2TIlz4/xz3xGf3aQiLQn/5SrfiKESrFPn85WrddZ9HPyooNUYK6sI
+	4MJkMsnisNjrlylo+RRjAl5M/ZzoKnpLO0iKUU0SrKkK3LDwFdM+m132JXX1vbBHikY012wF/Q0
+	29GCFWAyeS9509CWCeXB20dPmITl8JJ5vtfxR5D6CohvQZcZ51w6c+QwZamY31URiJ87UcUYzJT
+	8nsT8uflnJ+BFqwH9My9I15zqb+YzmA3kS38EjsJfWxY
+X-Google-Smtp-Source: AGHT+IH8pAQtlrAoAQZ36dI09v94pbr/gAMN2+yP7tYnyKFdRQNRkudn08eaHyFDBHixE8PbbiBZPQ==
+X-Received: by 2002:a05:6a20:2d24:b0:1f5:7007:9eb7 with SMTP id adf61e73a8af0-1f57008366dmr3561369637.37.1741527805362;
+        Sun, 09 Mar 2025 06:43:25 -0700 (PDT)
 Received: from ap.. ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736c41dda7csm2296841b3a.85.2025.03.09.06.43.12
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736c41dda7csm2296841b3a.85.2025.03.09.06.43.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Mar 2025 06:43:18 -0700 (PDT)
+        Sun, 09 Mar 2025 06:43:24 -0700 (PDT)
 From: Taehee Yoo <ap420073@gmail.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -96,9 +96,9 @@ Cc: almasrymina@google.com,
 	amritha.nambiar@intel.com,
 	xuanzhuo@linux.alibaba.com,
 	ap420073@gmail.com
-Subject: [PATCH v3 net 1/8] eth: bnxt: fix truesize for mb-xdp-pass case
-Date: Sun,  9 Mar 2025 13:42:12 +0000
-Message-Id: <20250309134219.91670-2-ap420073@gmail.com>
+Subject: [PATCH v3 net 2/8] eth: bnxt: return fail if interface is down in bnxt_queue_mem_alloc()
+Date: Sun,  9 Mar 2025 13:42:13 +0000
+Message-Id: <20250309134219.91670-3-ap420073@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250309134219.91670-1-ap420073@gmail.com>
 References: <20250309134219.91670-1-ap420073@gmail.com>
@@ -110,122 +110,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When mb-xdp is set and return is XDP_PASS, packet is converted from
-xdp_buff to sk_buff with xdp_update_skb_shared_info() in
-bnxt_xdp_build_skb().
-bnxt_xdp_build_skb() passes incorrect truesize argument to
-xdp_update_skb_shared_info().
-The truesize is calculated as BNXT_RX_PAGE_SIZE * sinfo->nr_frags but
-the skb_shared_info was wiped by napi_build_skb() before.
-So it stores sinfo->nr_frags before bnxt_xdp_build_skb() and use it
-instead of getting skb_shared_info from xdp_get_shared_info_from_buff().
+The bnxt_queue_mem_alloc() is called to allocate new queue memory when
+a queue is restarted.
+It internally accesses rx buffer descriptor corresponding to the index.
+The rx buffer descriptor is allocated and set when the interface is up
+and it's freed when the interface is down.
+So, if queue is restarted if interface is down, kernel panic occurs.
 
 Splat looks like:
- ------------[ cut here ]------------
- WARNING: CPU: 2 PID: 0 at net/core/skbuff.c:6072 skb_try_coalesce+0x504/0x590
- Modules linked in: xt_nat xt_tcpudp veth af_packet xt_conntrack nft_chain_nat xt_MASQUERADE nf_conntrack_netlink xfrm_user xt_addrtype nft_coms
- CPU: 2 UID: 0 PID: 0 Comm: swapper/2 Not tainted 6.14.0-rc2+ #3
- RIP: 0010:skb_try_coalesce+0x504/0x590
- Code: 4b fd ff ff 49 8b 34 24 40 80 e6 40 0f 84 3d fd ff ff 49 8b 74 24 48 40 f6 c6 01 0f 84 2e fd ff ff 48 8d 4e ff e9 25 fd ff ff <0f> 0b e99
- RSP: 0018:ffffb62c4120caa8 EFLAGS: 00010287
- RAX: 0000000000000003 RBX: ffffb62c4120cb14 RCX: 0000000000000ec0
- RDX: 0000000000001000 RSI: ffffa06e5d7dc000 RDI: 0000000000000003
- RBP: ffffa06e5d7ddec0 R08: ffffa06e6120a800 R09: ffffa06e7a119900
- R10: 0000000000002310 R11: ffffa06e5d7dcec0 R12: ffffe4360575f740
- R13: ffffe43600000000 R14: 0000000000000002 R15: 0000000000000002
- FS:  0000000000000000(0000) GS:ffffa0755f700000(0000) knlGS:0000000000000000
+ BUG: unable to handle page fault for address: 000000000000b240
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 3 UID: 0 PID: 1563 Comm: ncdevmem2 Not tainted 6.14.0-rc2+ #9 844ddba6e7c459cafd0bf4db9a3198e
+ Hardware name: ASUS System Product Name/PRIME Z690-P D4, BIOS 0603 11/01/2021
+ RIP: 0010:bnxt_queue_mem_alloc+0x3f/0x4e0 [bnxt_en]
+ Code: 41 54 4d 89 c4 4d 69 c0 c0 05 00 00 55 48 89 f5 53 48 89 fb 4c 8d b5 40 05 00 00 48 83 ec 15
+ RSP: 0018:ffff9dcc83fef9e8 EFLAGS: 00010202
+ RAX: ffffffffc0457720 RBX: ffff934ed8d40000 RCX: 0000000000000000
+ RDX: 000000000000001f RSI: ffff934ea508f800 RDI: ffff934ea508f808
+ RBP: ffff934ea508f800 R08: 000000000000b240 R09: ffff934e84f4b000
+ R10: ffff9dcc83fefa30 R11: ffff934e84f4b000 R12: 000000000000001f
+ R13: ffff934ed8d40ac0 R14: ffff934ea508fd40 R15: ffff934e84f4b000
+ FS:  00007fa73888c740(0000) GS:ffff93559f780000(0000) knlGS:0000000000000000
  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007f147b76b0f8 CR3: 00000001615d4000 CR4: 00000000007506f0
+ CR2: 000000000000b240 CR3: 0000000145a2e000 CR4: 00000000007506f0
  PKRU: 55555554
  Call Trace:
-  <IRQ>
-  ? __warn+0x84/0x130
-  ? skb_try_coalesce+0x504/0x590
-  ? report_bug+0x18a/0x1a0
-  ? handle_bug+0x53/0x90
-  ? exc_invalid_op+0x14/0x70
-  ? asm_exc_invalid_op+0x16/0x20
-  ? skb_try_coalesce+0x504/0x590
-  inet_frag_reasm_finish+0x11f/0x2e0
-  ip_defrag+0x37a/0x900
-  ip_local_deliver+0x51/0x120
-  ip_sublist_rcv_finish+0x64/0x70
-  ip_sublist_rcv+0x179/0x210
-  ip_list_rcv+0xf9/0x130
+  <TASK>
+  ? __die+0x20/0x70
+  ? page_fault_oops+0x15a/0x460
+  ? exc_page_fault+0x6e/0x180
+  ? asm_exc_page_fault+0x22/0x30
+  ? __pfx_bnxt_queue_mem_alloc+0x10/0x10 [bnxt_en 7f85e76f4d724ba07471d7e39d9e773aea6597b7]
+  ? bnxt_queue_mem_alloc+0x3f/0x4e0 [bnxt_en 7f85e76f4d724ba07471d7e39d9e773aea6597b7]
+  netdev_rx_queue_restart+0xc5/0x240
+  net_devmem_bind_dmabuf_to_queue+0xf8/0x200
+  netdev_nl_bind_rx_doit+0x3a7/0x450
+  genl_family_rcv_msg_doit+0xd9/0x130
+  genl_rcv_msg+0x184/0x2b0
+  ? __pfx_netdev_nl_bind_rx_doit+0x10/0x10
+  ? __pfx_genl_rcv_msg+0x10/0x10
+  netlink_rcv_skb+0x54/0x100
+  genl_rcv+0x24/0x40
+...
 
-How to reproduce:
-<Node A>
-ip link set $interface1 xdp obj xdp_pass.o
-ip link set $interface1 mtu 9000 up
-ip a a 10.0.0.1/24 dev $interface1
-<Node B>
-ip link set $interfac2 mtu 9000 up
-ip a a 10.0.0.2/24 dev $interface2
-ping 10.0.0.1 -s 65000
-
-Following ping.py patch adds xdp-mb-pass case. so ping.py is going to be
-able to reproduce this issue.
-
-Fixes: 1dc4c557bfed ("bnxt: adding bnxt_xdp_build_skb to build skb from multibuffer xdp_buff")
+Reviewed-by: Somnath Kotur <somnath.kotur@broadcom.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 2d694c27d32e ("bnxt_en: implement netdev_queue_mgmt_ops")
 Signed-off-by: Taehee Yoo <ap420073@gmail.com>
 ---
 
 v3:
- - Copy nr_frags instead of full copy.
+ - No changes.
 
 v2:
- - Do not use num_frags in the bnxt_xdp_build_skb().
+ - Add Review tags from Somnath and Jakub.
 
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 8 ++++++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 7b8b5b39c7bb..6b5fe4ee7a99 100644
+index 6b5fe4ee7a99..acb9500ef930 100644
 --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
 +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -2038,6 +2038,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
- 	struct rx_cmp_ext *rxcmp1;
- 	u32 tmp_raw_cons = *raw_cons;
- 	u16 cons, prod, cp_cons = RING_CMP(tmp_raw_cons);
-+	struct skb_shared_info *sinfo;
- 	struct bnxt_sw_rx_bd *rx_buf;
- 	unsigned int len;
- 	u8 *data_ptr, agg_bufs, cmp_type;
-@@ -2164,6 +2165,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
- 							     false);
- 			if (!frag_len)
- 				goto oom_next_rx;
-+
- 		}
- 		xdp_active = true;
- 	}
-@@ -2173,6 +2175,12 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
- 			rc = 1;
- 			goto next_rx;
- 		}
-+		if (xdp_buff_has_frags(&xdp)) {
-+			sinfo = xdp_get_shared_info_from_buff(&xdp);
-+			agg_bufs = sinfo->nr_frags;
-+		} else {
-+			agg_bufs = 0;
-+		}
- 	}
+@@ -15447,6 +15447,9 @@ static int bnxt_queue_mem_alloc(struct net_device *dev, void *qmem, int idx)
+ 	struct bnxt_ring_struct *ring;
+ 	int rc;
  
- 	if (len <= bp->rx_copybreak) {
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index e6c64e4bd66c..e9b49cb5b735 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -476,7 +476,7 @@ bnxt_xdp_build_skb(struct bnxt *bp, struct sk_buff *skb, u8 num_frags,
- 	}
- 	xdp_update_skb_shared_info(skb, num_frags,
- 				   sinfo->xdp_frags_size,
--				   BNXT_RX_PAGE_SIZE * sinfo->nr_frags,
-+				   BNXT_RX_PAGE_SIZE * num_frags,
- 				   xdp_buff_is_frag_pfmemalloc(xdp));
- 	return skb;
- }
++	if (!bp->rx_ring)
++		return -ENETDOWN;
++
+ 	rxr = &bp->rx_ring[idx];
+ 	clone = qmem;
+ 	memcpy(clone, rxr, sizeof(*rxr));
 -- 
 2.34.1
 
