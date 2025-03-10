@@ -1,302 +1,358 @@
-Return-Path: <linux-kselftest+bounces-28593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8CAA58EA6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 09:55:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15DEEA5909F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 11:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC59E188CB5E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 08:55:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6E533A8837
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 10:01:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429F822423C;
-	Mon, 10 Mar 2025 08:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8228922576A;
+	Mon, 10 Mar 2025 10:01:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z0OlKQ0G"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LDwPMxQS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89247223302
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 08:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37849225407
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 10:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741596922; cv=none; b=tLad0lqfa+xLI37DrRhJEA2Dmc8z7+4Ezuc142Cu0MezfyKONL0wAXCiiNB9RE2h6MC5Jrn8Q0eFepDPOzRUN3DcHto3XR4d9rWc+tHJXESK/4N0+JbvFBh+jyggkkeJI2PlL8fHx1TZhmS9qLUqKJOKzr9CYWqkdH1o9ojS5RQ=
+	t=1741600894; cv=none; b=KHN4fNtilMh6SJ018kmw5rT6Nf5RHwOHQB598G+CewqMAk5A+aL5nVRq0v1gc5kqrP5EyfLx3yL96yFDgOdxa2WxNwVwks1pBWp+abrSQxxyqkfAcnW7zsw+Uhh/fKhvaLP0M23GiybSxtWClmGUuFjhJEYhf1cQtqSzZdVP7ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741596922; c=relaxed/simple;
-	bh=+Gkinx5fiEq/vJwH/DFqcyN9jU8v6IMHL3kNlgCrDOk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=smJcoo60HeV3KJeUZpK45TlD1gT36fYbXbE/rezoUyY7APIbUlgdQ8w/hGkpgCxBGQ3fsVk+QTdqx63WdVXupYHQatRn9+ChKpanXB/dUkG0OqdFk4889ClWgeCy30wa6PQLw49GW9m27svz5OfVCLlQazTX4LkBpjfOLAokoXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z0OlKQ0G; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22337bc9ac3so73328115ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 01:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741596920; x=1742201720; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Tm2wvmlbOJnRRib3mELhH6TcvAZa/xniLi1Hhu2zvA=;
-        b=Z0OlKQ0GEtUOCAin9LZtiy0vV0nYqJA4wXoZ/KpH4wghVdNnn20+Kg9856C4AjsTjg
-         R3Ipiuqv7inKKQ3uSOboTuK//AEfQAIRXljc+iRtFwBrpW61+drqIpPgDlLJiF5kNi2O
-         tq+QFtDMiA7DhRqyYr+A8+Dr0Gb35h28cXr41pVc+/KKJVpH9uNqJ6S5eCYpByXhUdD4
-         3ATf0RWGZtKXONvdfcSzM4zkB+7zCh733KZyNmotfq14rj6MoI8CtjHFdOnO63tsivh8
-         EK13Jq9i/bZBXzPFT/rAJb+8TxWvYXpsC1kIWg0RXJbC8QCSdLNXfnpobGXbEbPK5Vwx
-         CwiQ==
+	s=arc-20240116; t=1741600894; c=relaxed/simple;
+	bh=kCptOO7WTS4D4pVelx8hJMiU7UV1dMk6cw8JtDE8HWE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZwTxikONruDb9ugh05jZH6VdVqFlb1JQWnYdOQHUTjjVNrn6qd6bax3cy1qbB33nCRSRejLda82Bog22cA4LUIrAMJ3VjF33b7+ZVuJBBteY+0R/zhX7n6TS5fIKz45PwG4+fASln4y+sbBFrG059oV+s4EKPRVtTCUyIkZmoVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LDwPMxQS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741600891;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xr9w71kjsM5Luuk2otd03enGGnFQEqtLlHU+jI22Q3c=;
+	b=LDwPMxQS0zhE7kHPIjaIHW0FtbYNgb/fT5sXZLYCuvKZ2An1Qn1iAxlDf7LURSz0pNmYyl
+	9Q1wp1ozKrH5nroi2Aya4A59Yf3dGgFvDrpq4CFcxaHHGnEOW8npJHSgBITBgpFnQp1tJ/
+	rh3hep9vHwHSXD+hOwjBrhDutImsdqY=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-661-dePIbCsrPCaDBzgyX2NHkw-1; Mon, 10 Mar 2025 06:01:29 -0400
+X-MC-Unique: dePIbCsrPCaDBzgyX2NHkw-1
+X-Mimecast-MFC-AGG-ID: dePIbCsrPCaDBzgyX2NHkw_1741600889
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ac24c6d360aso341124566b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 03:01:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741596920; x=1742201720;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Tm2wvmlbOJnRRib3mELhH6TcvAZa/xniLi1Hhu2zvA=;
-        b=rSDyES1VltHXNPUlAR4v4P82IkKqdXHSWbYkNei7XyByTWp7/CH5dzStzrhn/rsT9s
-         gGhSKxL1r7nf+9MsSB6nHeEA8ZNmSFwh9ZpzQ7B6VS1USlOOGab4W86N4Ut8cxRdRGrC
-         RLHTH5sV4/9FZGdKpJpyDUWr74FKvJl0f72mpS2sewmsL9gSjAU2gJkyRIts0Ei3ornG
-         QtgwL3v9JdnRi027TCquTUKYNzvy385w0vw0rqndjmUrpZSjrPEFY17U6PKXL1/xRvt1
-         uzhl4qc+TIdP7RVtf+1oZydxfwAhpRO4OVYPyBZeQVq9Y17fuZ2/TTP5l575JyOS5WkK
-         +rtg==
-X-Forwarded-Encrypted: i=1; AJvYcCX21OLIfhMUS9oAue8Djs+H5c+otI7sptiTNvqF2PemWgHftRErx8FGjEe5SX195DlGuhk5hKDqeOHLfaYCVIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+1O97aDmm+pAK1nCAM7ilYT/RhmEPZ3FIgWaGuUzweuivwdFz
-	lDw2OjSAV1ddQFAMgK1CsDSJnhxMu8sDIgJZdz8MnXW0olLl+Yf6oXdxSqIvgw==
-X-Gm-Gg: ASbGncvSU8OKViVaEwFky9NY7jxhMJeiiN9Gk2NIVHJekFUg7ye7FnYV1xxgpc1e5v8
-	DX8hLikcM4KH6O3Qqx50ljnoSTPiyoDQZo8yuzMIzypjuuH8bmVQpO7dkHQ2DyVBkbxoPM/xkCr
-	tkgCuiuMxts/FidNmFCVjOg/9QU+uiCiK4ZPxjiMsVpTgsMUbExbPbSf16nLZJsO4x6v/Gqe7KZ
-	StxcVc06o1LqS1t9/4bOHnw7JPAb1DI1LhLULLSbnTO75cM9KIQ6Td3YYTZZB3mHBvGnqzWwpzG
-	bLUL+ZBMvafbExvRUvMmuv2n+4iWHj5xV6lRrPxr9BcpO49PuWPzeNilugEK5xdj2GEEsqVCWdy
-	o7/uliwX4dO/342gEQKlVBI0Kd7DQ
-X-Google-Smtp-Source: AGHT+IGVsvgzAwUBvLy58/XpPXaFRBbWWGnJg8e5NysxhOMMoYZ6rY0jW9IEi729pGV2nyMk3NkzQw==
-X-Received: by 2002:a17:902:e802:b0:220:ff3f:6cc0 with SMTP id d9443c01a7336-22428ac9ca5mr222065895ad.38.1741596919463;
-        Mon, 10 Mar 2025 01:55:19 -0700 (PDT)
-Received: from darker.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410aa8ae4sm72469265ad.243.2025.03.10.01.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 01:55:18 -0700 (PDT)
-Date: Mon, 10 Mar 2025 01:54:23 -0700 (PDT)
-From: Hugh Dickins <hughd@google.com>
-To: Zi Yan <ziy@nvidia.com>
-cc: Hugh Dickins <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-    linux-mm@kvack.org, 
-    "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, 
-    "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-    Ryan Roberts <ryan.roberts@arm.com>, David Hildenbrand <david@redhat.com>, 
-    Yang Shi <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>, 
-    Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>, 
-    John Hubbard <jhubbard@nvidia.com>, 
-    Baolin Wang <baolin.wang@linux.alibaba.com>, 
-    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    Kairui Song <kasong@tencent.com>, Liu Shixin <liushixin2@huawei.com>
-Subject: Re: [PATCH v9 2/8] mm/huge_memory: add two new (not yet used)
- functions for folio_split()
-In-Reply-To: <D45D4F01-E5A5-47E6-8724-01610CC192CC@nvidia.com>
-Message-ID: <fcbadb7f-dd3e-21df-f9a7-2853b53183c4@google.com>
-References: <20250226210032.2044041-1-ziy@nvidia.com> <20250226210032.2044041-3-ziy@nvidia.com> <2fae27fe-6e2e-3587-4b68-072118d80cf8@google.com> <408B0C17-E144-4729-9461-80E8B5D1360C@nvidia.com> <0582f898-bd35-15cc-6b4d-0a3ad9c2a1a4@google.com>
- <2D7DFB2E-DB80-4F6C-A580-DEBC70318364@nvidia.com> <176731de-6a3b-270b-6b5d-dfce124c8789@google.com> <D45D4F01-E5A5-47E6-8724-01610CC192CC@nvidia.com>
+        d=1e100.net; s=20230601; t=1741600889; x=1742205689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xr9w71kjsM5Luuk2otd03enGGnFQEqtLlHU+jI22Q3c=;
+        b=EdmlwZEnysk60/rRbMgtPh2xMpp1/KiPMWsaXuvMNOXw70ITe8GbsVAgummKRLlzH+
+         8u2MN4uYjqzxNbRW38u1SAam2aP2+vdkaJenIZL0ssAdDjl2ARR1wtBLGgmfMdxaYCQU
+         khbJ61LOY9x3r5O70niGgM94fB4uxuSwDIbKmzBNs77nlN4Rvb9Gy/h6mUJShDE0nPAJ
+         oZ9NBuWff/eodOCWJ7cve2RoL5YsCUNXjntUQfjhF4WjRfaVTeArvQ+t3cK8Kh3IlJR7
+         xR8eCeK3HbleKcHYxNLvL50iGdoT8DhBjUGc3hs2lCTcwKCzFNanJkTMBU6okeMwcMVN
+         B67g==
+X-Forwarded-Encrypted: i=1; AJvYcCUxDuhWcnNQpJb7wwf7ZUnSabbAA/1Ycj65j01GoRAnes8cl3WRgdGtsaiyATXeXfxFJnSq/ZnFFSW8n+3QecA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypE7F05mciGocaDJY+8Cc5HhW/lHwdo2UKPtaJpRA+XVvVsPGs
+	NFndvXMBgUsPQnxlohWnUNeJ6DIQLFyH9/qcuUX7kg3ExiQLhkYq57p7ZZeIf+XG5xcTXba2NBw
+	cY1qVn0X7PTsI8wwqvEpi1IbM6SMa+cUpd9ehNR10BBpkV6ZYLJuKWKvJ0tUM+zqp9sIRFGGs3S
+	wn45e4qmtOqcxZeKFCUQmQ6T4c4efxjr1vajbGNR9X
+X-Gm-Gg: ASbGncsnwUBmIf1CiubN1c4Els35VVErmigFLK0nkURfA00Nms8P9+Xx1dIgs2uBHUl
+	Hrg9ocYO5H/8DFs7cT2pRN7wtjnJ3ShelJ7EE5Aeki1KiHQAJOL0VEToNomgk1dTv0mL9KL+1sA
+	==
+X-Received: by 2002:a17:907:a181:b0:ac2:7a3b:31ef with SMTP id a640c23a62f3a-ac27a3b4268mr710422766b.41.1741600888488;
+        Mon, 10 Mar 2025 03:01:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHuFnN7zPHPASajv3LwDLTFnpfckkATF6JYZEpa9/avX3UmTJtekiKHKEC/uww5oRaTbOZUYx11vHikxYga8mM=
+X-Received: by 2002:a17:907:a181:b0:ac2:7a3b:31ef with SMTP id
+ a640c23a62f3a-ac27a3b4268mr710417566b.41.1741600887976; Mon, 10 Mar 2025
+ 03:01:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463770367-310574914-1741596918=:2706"
+References: <20250308214045.1160445-1-almasrymina@google.com>
+In-Reply-To: <20250308214045.1160445-1-almasrymina@google.com>
+From: Lei Yang <leiyang@redhat.com>
+Date: Mon, 10 Mar 2025 18:00:51 +0800
+X-Gm-Features: AQ5f1Jrkwm3AKULNqsZpquHRLDhQkbFM4PkLqf-j-uACY2HaSQ5keeelX2KkkPY
+Message-ID: <CAPpAL=yPwCXONQfO4cZYt_j1CEt1=Yq6jDzqnc6udCTStM8exQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 0/9] Device memory TCP TX
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Jeroen de Borst <jeroendb@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, 
+	Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>, 
+	Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, sdf@fomichev.me, asml.silence@gmail.com, dw@davidwei.uk, 
+	Jamal Hadi Salim <jhs@mojatatu.com>, Victor Nogueira <victor@mojatatu.com>, 
+	Pedro Tammela <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+QE tested this series with virtio-net regression tests, everything works fi=
+ne.
 
----1463770367-310574914-1741596918=:2706
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Tested-by: Lei Yang <leiyang@redhat.com>
 
-On Thu, 6 Mar 2025, Zi Yan wrote:
-> On 5 Mar 2025, at 17:38, Hugh Dickins wrote:
-> > On Wed, 5 Mar 2025, Zi Yan wrote:
-> >> On 5 Mar 2025, at 16:03, Hugh Dickins wrote:
-> >>>
-> >>> Beyond checking that, I didn't have time yesterday to investigate
-> >>> further, but I'll try again today (still using last weekend's mm.git)=
-=2E
-> >>
-> >> I am trying to replicate your runs locally. Can you clarify your steps
-> >> of =E2=80=9Ckernel builds on huge tmpfs while swapping to SSD=E2=80=9D=
-? Do you impose
-> >> a memory limit so that anonymous memory is swapped to SSD or make tmpf=
-s
-> >> swap to SSD?
-> >
-> > Yeah, my heart sank a bit when I saw Andrew (with good intention) askin=
-g
-> > you to repeat my testing.
-> >
-> > We could spend weeks going back and forth on that, and neither of us ha=
-s
-> > weeks to spare.
-> >
-> > "To fulfil contractual obligations" I'll mail you the tarfile I send
-> > out each time I'm asked for this; but I haven't updated that tarfile
-> > in four years, whereas I'm frequently tweaking things to match what's
-> > needed (most recently and relevantly, I guess enabling 64kB hugepages
-> > for anon and shmem in addition to the PMD-sized).
-> >
-> > Please don't waste much of your time over trying to replicate what
-> > I'm doing: just give the scripts a glance, as a source for "oh,
-> > I could exercise something like that in my testing too" ideas.
-> >
-> > Yes, I limit physical memory by booting with mem=3D1G, and also apply
-> > lower memcg v1 limits.
-> >
-> > I made a point of saying "SSD" there because I'm not testing zram or
-> > zswap at all, whereas many others are testing those rather than disk.
-> >
-> > swapoff, and ext4 on loop0 on tmpfs, feature in what I exercise, but ar=
-e
-> > NOT relevant to the corruption I'm seeing here - that can occur before
-> > any swapoff, and it's always on the kernel build in tmpfs: the parallel
-> > build in ext4 on loop0 on tmpfs completes successfully.
->=20
-> Thanks for the scripts. I kinda replicate your setup as follows:
->=20
-> 1. boot a VM with 1GB memory and 8 cores;
-> 2. mount a tmpfs with huge=3Dalways and 200GB;
-> 3. clone the mainline kernel and use x86_64 defconfig (my gcc 14 gives
->    errors during the old kernel builds), this takes about 2GB space,
->    so some of tmpfs is already swapped to SSD;
-> 4. create a new cgroupv2 and set memory.high to 700MB to induce memory
->    swap during kernel compilation;
-> 5. run =E2=80=9Cwhile true; do echo 1 | sudo tee /proc/sys/vm/compact_mem=
-ory >/dev/null; done=E2=80=9D to trigger compaction all the time;
-> 6. build the kernel with make -j20.
->=20
-> I ran the above on mm-everything-2025-03-05-03-54 plus the xarray fix v3,
-> folio_split() with your fixes, and Minimize xa_node allocation during
-> xarry split patches. The repo is at: https://github.com/x-y-z/linux-dev/t=
-ree/shmem_fix-mm-everything-2025-03-05-03-54.
->=20
-> It has ran over night for 30 kernel builds and no crash happened so far.
-> I wonder if you can give my repo a shot.
+On Sun, Mar 9, 2025 at 5:41=E2=80=AFAM Mina Almasry <almasrymina@google.com=
+> wrote:
+>
+> v7: https://lore.kernel.org/netdev/20250227041209.2031104-1-almasrymina@g=
+oogle.com/
+> =3D=3D=3D
+>
+> Changelog:
+> - Check the dmabuf net_iov binding belongs to the device the TX is going
+>   out on. (Jakub)
+> - Provide detailed inspection of callsites of
+>   __skb_frag_ref/skb_page_unref in patch 2's changelog (Jakub)
+>
+> v6: https://lore.kernel.org/netdev/20250222191517.743530-1-almasrymina@go=
+ogle.com/
+> =3D=3D=3D
+>
+> v6 has no major changes. Addressed a few issues from Paolo and David,
+> and collected Acks from Stan. Thank you everyone for the review!
+>
+> Changes:
+> - retain behavior to process MSG_FASTOPEN even if the provided cmsg is
+>   invalid (Paolo).
+> - Rework the freeing of tx_vec slightly (it now has its own err label).
+>   (Paolo).
+> - Squash the commit that makes dmabuf unbinding scheduled work into the
+>   same one which implements the TX path so we don't run into future
+>   errors on bisecting (Paolo).
+> - Fix/add comments to explain how dmabuf binding refcounting works
+>   (David).
+>
+> v5: https://lore.kernel.org/netdev/20250220020914.895431-1-almasrymina@go=
+ogle.com/
+> =3D=3D=3D
+>
+> v5 has no major changes; it clears up the relatively minor issues
+> pointed out to in v4, and rebases the series on top of net-next to
+> resolve the conflict with a patch that raced to the tree. It also
+> collects the review tags from v4.
+>
+> Changes:
+> - Rebase to net-next
+> - Fix issues in selftest (Stan).
+> - Address comments in the devmem and netmem driver docs (Stan and Bagas)
+> - Fix zerocopy_fill_skb_from_devmem return error code (Stan).
+>
+> v4: https://lore.kernel.org/netdev/20250203223916.1064540-1-almasrymina@g=
+oogle.com/
+> =3D=3D=3D
+>
+> v4 mainly addresses the critical driver support issue surfaced in v3 by
+> Paolo and Stan. Drivers aiming to support netmem_tx should make sure not
+> to pass the netmem dma-addrs to the dma-mapping APIs, as these dma-addrs
+> may come from dma-bufs.
+>
+> Additionally other feedback from v3 is addressed.
+>
+> Major changes:
+> - Add helpers to handle netmem dma-addrs. Add GVE support for
+>   netmem_tx.
+> - Fix binding->tx_vec not being freed on error paths during the
+>   tx binding.
+> - Add a minimal devmem_tx test to devmem.py.
+> - Clean up everything obsolete from the cover letter (Paolo).
+>
+> v3: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D929401&=
+state=3D*
+> =3D=3D=3D
+>
+> Address minor comments from RFCv2 and fix a few build warnings and
+> ynl-regen issues. No major changes.
+>
+> RFC v2: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D920=
+056&state=3D*
+> =3D=3D=3D=3D=3D=3D=3D
+>
+> RFC v2 addresses much of the feedback from RFC v1. I plan on sending
+> something close to this as net-next  reopens, sending it slightly early
+> to get feedback if any.
+>
+> Major changes:
+> --------------
+>
+> - much improved UAPI as suggested by Stan. We now interpret the iov_base
+>   of the passed in iov from userspace as the offset into the dmabuf to
+>   send from. This removes the need to set iov.iov_base =3D NULL which may
+>   be confusing to users, and enables us to send multiple iovs in the
+>   same sendmsg() call. ncdevmem and the docs show a sample use of that.
+>
+> - Removed the duplicate dmabuf iov_iter in binding->iov_iter. I think
+>   this is good improvment as it was confusing to keep track of
+>   2 iterators for the same sendmsg, and mistracking both iterators
+>   caused a couple of bugs reported in the last iteration that are now
+>   resolved with this streamlining.
+>
+> - Improved test coverage in ncdevmem. Now multiple sendmsg() are tested,
+>   and sending multiple iovs in the same sendmsg() is tested.
+>
+> - Fixed issue where dmabuf unmapping was happening in invalid context
+>   (Stan).
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> The TX path had been dropped from the Device Memory TCP patch series
+> post RFCv1 [1], to make that series slightly easier to review. This
+> series rebases the implementation of the TX path on top of the
+> net_iov/netmem framework agreed upon and merged. The motivation for
+> the feature is thoroughly described in the docs & cover letter of the
+> original proposal, so I don't repeat the lengthy descriptions here, but
+> they are available in [1].
+>
+> Full outline on usage of the TX path is detailed in the documentation
+> included with this series.
+>
+> Test example is available via the kselftest included in the series as wel=
+l.
+>
+> The series is relatively small, as the TX path for this feature largely
+> piggybacks on the existing MSG_ZEROCOPY implementation.
+>
+> Patch Overview:
+> ---------------
+>
+> 1. Documentation & tests to give high level overview of the feature
+>    being added.
+>
+> 1. Add netmem refcounting needed for the TX path.
+>
+> 2. Devmem TX netlink API.
+>
+> 3. Devmem TX net stack implementation.
+>
+> 4. Make dma-buf unbinding scheduled work to handle TX cases where it gets
+>    freed from contexts where we can't sleep.
+>
+> 5. Add devmem TX documentation.
+>
+> 6. Add scaffolding enabling driver support for netmem_tx. Add helpers, dr=
+iver
+> feature flag, and docs to enable drivers to declare netmem_tx support.
+>
+> 7. Guard netmem_tx against being enabled against drivers that don't
+>    support it.
+>
+> 8. Add devmem_tx selftests. Add TX path to ncdevmem and add a test to
+>    devmem.py.
+>
+> Testing:
+> --------
+>
+> Testing is very similar to devmem TCP RX path. The ncdevmem test used
+> for the RX path is now augemented with client functionality to test TX
+> path.
+>
+> * Test Setup:
+>
+> Kernel: net-next with this RFC and memory provider API cherry-picked
+> locally.
+>
+> Hardware: Google Cloud A3 VMs.
+>
+> NIC: GVE with header split & RSS & flow steering support.
+>
+> Performance results are not included with this version, unfortunately.
+> I'm having issues running the dma-buf exporter driver against the
+> upstream kernel on my test setup. The issues are specific to that
+> dma-buf exporter and do not affect this patch series. I plan to follow
+> up this series with perf fixes if the tests point to issues once they're
+> up and running.
+>
+> Special thanks to Stan who took a stab at rebasing the TX implementation
+> on top of the netmem/net_iov framework merged. Parts of his proposal [2]
+> that are reused as-is are forked off into their own patches to give full
+> credit.
+>
+> [1] https://lore.kernel.org/netdev/20240909054318.1809580-1-almasrymina@g=
+oogle.com/
+> [2] https://lore.kernel.org/netdev/20240913150913.1280238-2-sdf@fomichev.=
+me/T/#m066dd407fbed108828e2c40ae50e3f4376ef57fd
+>
+> Cc: sdf@fomichev.me
+> Cc: asml.silence@gmail.com
+> Cc: dw@davidwei.uk
+> Cc: Jamal Hadi Salim <jhs@mojatatu.com>
+> Cc: Victor Nogueira <victor@mojatatu.com>
+> Cc: Pedro Tammela <pctammela@mojatatu.com>
+> Cc: Samiullah Khawaja <skhawaja@google.com>
+>
+>
+> Mina Almasry (8):
+>   netmem: add niov->type attribute to distinguish different net_iov
+>     types
+>   net: add get_netmem/put_netmem support
+>   net: devmem: Implement TX path
+>   net: add devmem TCP TX documentation
+>   net: enable driver support for netmem TX
+>   gve: add netmem TX support to GVE DQO-RDA mode
+>   net: check for driver support in netmem TX
+>   selftests: ncdevmem: Implement devmem TCP TX
+>
+> Stanislav Fomichev (1):
+>   net: devmem: TCP tx netlink api
+>
+>  Documentation/netlink/specs/netdev.yaml       |  12 +
+>  Documentation/networking/devmem.rst           | 150 ++++++++-
+>  .../networking/net_cachelines/net_device.rst  |   1 +
+>  Documentation/networking/netdev-features.rst  |   5 +
+>  Documentation/networking/netmem.rst           |  23 +-
+>  drivers/net/ethernet/google/gve/gve_main.c    |   4 +
+>  drivers/net/ethernet/google/gve/gve_tx_dqo.c  |   8 +-
+>  include/linux/netdevice.h                     |   2 +
+>  include/linux/skbuff.h                        |  17 +-
+>  include/linux/skbuff_ref.h                    |   4 +-
+>  include/net/netmem.h                          |  38 ++-
+>  include/net/sock.h                            |   1 +
+>  include/uapi/linux/netdev.h                   |   1 +
+>  net/core/datagram.c                           |  48 ++-
+>  net/core/dev.c                                |  33 ++
+>  net/core/devmem.c                             | 118 ++++++-
+>  net/core/devmem.h                             |  83 ++++-
+>  net/core/netdev-genl-gen.c                    |  13 +
+>  net/core/netdev-genl-gen.h                    |   1 +
+>  net/core/netdev-genl.c                        |  73 ++++-
+>  net/core/skbuff.c                             |  48 ++-
+>  net/core/sock.c                               |   6 +
+>  net/ipv4/ip_output.c                          |   3 +-
+>  net/ipv4/tcp.c                                |  50 ++-
+>  net/ipv6/ip6_output.c                         |   3 +-
+>  net/vmw_vsock/virtio_transport_common.c       |   5 +-
+>  tools/include/uapi/linux/netdev.h             |   1 +
+>  .../selftests/drivers/net/hw/devmem.py        |  26 +-
+>  .../selftests/drivers/net/hw/ncdevmem.c       | 300 +++++++++++++++++-
+>  29 files changed, 1002 insertions(+), 75 deletions(-)
+>
+>
+> base-commit: 8ef890df4031121a94407c84659125cbccd3fdbe
+> --
+> 2.49.0.rc0.332.g42c0ae87b1-goog
+>
+>
 
-Thanks for trying, I hope you didn't waste too much time on it,
-I was not optimistic that it could be adapted easily.
-
-You appeared to be suggesting above that I try your setup, which did
-not reproduce the corruption, instead of mine which did.  And later you
-appeared to conclude that all is good because you saw no corruption.
-
-No. I continued with my setup (working on mm-everything-2025-03-08-00-43),
-have now root-caused the corruption, and have the fix: as so often,
-it is obvious in retrospect.
-
-After looking at enough of the fixdep failures and their .o.d files,
-I found them consistent with seeing the head page of a large folio
-in place of its first tail (presumably while racing a split).
-
-And the debug patch to filemap_get_entry() below (not something we want
-to go into the tree, but good for confirmation - maybe it will even
-show warnings on your setup) confirmed that - well, head in place of
-first tail was the majority of cases, but head in place of any tail
-in general.
-
-There's a race between RCU lookup of the xarray and your splitting.
-That's something that normally the xas_reload(&xas) check guards
-against, but it was not effective.
-
-I wasted a day getting it exactly back to front: I thought the problem
-was that __split_unmap_folio() needed to __xa_store the former tail
-before unfreezing it; but the patch reversing that ordering still
-issued some warnings.
-
-No, it's that __split_unmap_folio() must not unfreeze the original
-head until all the xa slots which used to point to it have been
-updated with their new contents (as __split_huge_page() always did).
-
-I've taken the liberty of simplifying the unfreeze calculaton in terms
-of mapping and swap_cache, as we did elsewhere (and after fiddling
-around with the comment above it, just dropped it as adding nothing
-beyond what the code already does).
-
-And there's one other, unrelated change in there: I've changed the
-folio_put() after __filemap_remove_folio() to folio_put_refs().
-I believe that is what's correct there, but please check carefully:
-I'm a little worried that my testing (which I expect to be exercising
-that "beyond EOF" case plenty) has run well both before and after that
-change, whereas I thought there should be a noticeable leak of memory
-while it was just folio_put().
-
-Or maybe my testing is barely exercising anything more than uniform
-splits to 0-order, in which case there's no difference: I imagine
-your selftests (I've not tried them) will do much better on that.
-
-Please fold in the mm/huge_memory.c mods if you are in agreement.
-
-Signed-off-by: Hugh Dickins <<hughd@google.com>
-
-diff --git a/mm/filemap.c b/mm/filemap.c
-index f7281ad22743..34b4fdafec40 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1871,6 +1871,15 @@ void *filemap_get_entry(struct address_space *mappin=
-g, pgoff_t index)
- =09=09folio_put(folio);
- =09=09goto repeat;
- =09}
-+
-+=09if (mapping->host /* filter out swap cache */ &&
-+=09    /* !folio_contains(folio, index), but that requires lock */
-+=09    WARN_ON(index - folio->index >=3D folio_nr_pages(folio))) {
-+=09=09pr_warn("Mismatched index:%#lx\n", index);
-+=09=09dump_page(&folio->page, NULL);
-+=09=09folio_put(folio);
-+=09=09goto repeat;
-+=09}
- out:
- =09rcu_read_unlock();
-=20
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 3e05e62fdccb..be0c9873019c 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3787,18 +3787,13 @@ static int __split_unmapped_folio(struct folio *fol=
-io, int new_order,
- =09=09=09=09=09=09MTHP_STAT_NR_ANON, 1);
- =09=09=09}
-=20
--=09=09=09/*
--=09=09=09 * Unfreeze refcount first. Additional reference from
--=09=09=09 * page cache.
--=09=09=09 */
--=09=09=09folio_ref_unfreeze(release,
--=09=09=09=091 + ((!folio_test_anon(origin_folio) ||
--=09=09=09=09     folio_test_swapcache(origin_folio)) ?
--=09=09=09=09=09     folio_nr_pages(release) : 0));
--
- =09=09=09if (release =3D=3D origin_folio)
- =09=09=09=09continue;
-=20
-+=09=09=09folio_ref_unfreeze(release, 1 +
-+=09=09=09=09=09((mapping || swap_cache) ?
-+=09=09=09=09=09=09folio_nr_pages(release) : 0));
-+
- =09=09=09lru_add_page_tail(origin_folio, &release->page,
- =09=09=09=09=09=09lruvec, list);
-=20
-@@ -3810,7 +3805,7 @@ static int __split_unmapped_folio(struct folio *folio=
-, int new_order,
- =09=09=09=09=09folio_account_cleaned(release,
- =09=09=09=09=09=09inode_to_wb(mapping->host));
- =09=09=09=09__filemap_remove_folio(release, NULL);
--=09=09=09=09folio_put(release);
-+=09=09=09=09folio_put_refs(release, folio_nr_pages(release));
- =09=09=09} else if (mapping) {
- =09=09=09=09__xa_store(&mapping->i_pages,
- =09=09=09=09=09=09release->index, release, 0);
-@@ -3822,6 +3817,9 @@ static int __split_unmapped_folio(struct folio *folio=
-, int new_order,
- =09=09}
- =09}
-=20
-+=09folio_ref_unfreeze(origin_folio, 1 +
-+=09=09((mapping || swap_cache) ?  folio_nr_pages(origin_folio) : 0));
-+
- =09unlock_page_lruvec(lruvec);
-=20
- =09if (swap_cache)
----1463770367-310574914-1741596918=:2706--
 
