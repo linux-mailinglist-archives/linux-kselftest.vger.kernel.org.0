@@ -1,130 +1,134 @@
-Return-Path: <linux-kselftest+bounces-28648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B701A599BD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 16:20:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12129A599B8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 16:20:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D0643AC05E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 15:18:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D589216EA6E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 15:18:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32BC22F15B;
-	Mon, 10 Mar 2025 15:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4E422DFB4;
+	Mon, 10 Mar 2025 15:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="w8lH1Kbv"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="r5qPsxO7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B577227EA0
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 15:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89801A5B9F
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 15:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741619881; cv=none; b=H5Xgb+h03AT+yj5jqpmLGZfVaMGpYGBuK15o/yyHmIR9kpO9LSyqb14fKz8zZB43oKba0jmmfe2wz8PrNCh+4iKvGsLqP3zgbf2XXHuW+vFBZ/UhwB370r57ZMpezhYsxIgRObRcC1ccgOV6RsNsBHZ5MI+wNOFcgS6Kq7DpJv0=
+	t=1741619884; cv=none; b=mdMCraGWrONCdaUw0B2K8v52N7Ed10V7baluTG9unpcm7+OmVR6sGpmdZRccM4EAyuYX3grH4dvGUy8oVdonIEv+J7moJmcDS3t9+Qol3kyTG5brmRGxfymcg+RBcTFgnN2oVWuYe0t96m+oaRCDl+1KJl5bH+JrXfQc2GsfI68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741619881; c=relaxed/simple;
-	bh=x7cI/8nUBvDIXlw67CxmYU0KDbq1pXrHOJpQbPVzGZs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UW4Q+JNftDSqW6aQk5+Qhz37KHU2sr5TJmNy4y2IqefhwTpkxTKgyEoHaC1ZvVG5Nz8KUfAPcY94c3jW7+TxSeimh2Wh18OtX7H2js4liUHeLD4hnX4s4M60hqr6HbRWluXtOaxifN823jG26WAh1y9ymTmEKURNbs09ppoh+eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=w8lH1Kbv; arc=none smtp.client-ip=209.85.166.175
+	s=arc-20240116; t=1741619884; c=relaxed/simple;
+	bh=bPylOSDwS97iSZCV+IEqBXVcR6T1dmvHZUxK1IgpS9E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=si3zYqaTl4+z80tQ49x2sPkFjNvEat8jXcniaKRvaczjJjz3uvMZ2QsXsjweqszMeM4D073ir1Of/0YEGjPAqThPBd/KHgHnD/SkX93wJd9orrsMio5S8fzqtlC3YVvpEtO4cpqwaN7HEX8kY+Qis4aVxYdQMjrp9KThEVy8KG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=r5qPsxO7; arc=none smtp.client-ip=209.85.166.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3d4496a34cdso5549475ab.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 08:17:57 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3cf82bd380bso36530595ab.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 08:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1741619877; x=1742224677; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iFI5CNZ7ypkf6nzIklavj71fRclQxpBXGT5mnCzliiA=;
-        b=w8lH1Kbve4aFuEHGM6lz195sAuOqeeug608K0UiT5mpHLJgNqZfM4v5Fl9Ihwi8azA
-         oR1kRAJLZ5o9pd3JlrEW/TJ7pbq9vIG64zhLQ+1RYsQQJUzfaESiKTpOaCn3e3azlQF/
-         PAPAeRWX8l0Ez1MeztNBKvciLVOzdmovGo0ASLHQ0BXmWNhmbZ3KcZI0E0a4P+YZ4wDb
-         2QyW+rFwbGZCG8MZFFQQLWbedx03QKqnPh9cV4yvu3G0L3matrFhPfyxm9t/FDF2KJZW
-         c2RpwMhFU5BLg/P3+i0GZ6M2X32qWFHBvDLw+MHqfZys/ZgK92xXnyAUXbKgpZyDZ9UO
-         XvSA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1741619882; x=1742224682; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sJONlHZ+GagU256YR9i4k/iT8kbk8lsmHf8ZZIFoi8U=;
+        b=r5qPsxO7zJjb+EM2lDGjAycLC07ZTQ3KOufDZU5/3eB465ILeo7DWNujMbDJhvQQ6n
+         jhzTe9FXDgfwQQ3pxtyFRDpzOFDOz8Axs8aOD0rQ92E/VSLJ0MswlVCNFfmVpnkCoy6r
+         FyoGUy/rTJGsytx/Yb0R8ccWKR8rwATbZ0ocqSE8aHz37TKA71Gm019PsHJUzW0wRnHE
+         vZn/VhmfKAg7o34DaHTtansori9mttCQHRrP1vzJ1Fh7aMiynUqdcCSnEN34rA8tEbJc
+         IeK+FIDO3Bz99UP3i1l7LYl6/ZNC39sj7/l0j6CMW6v20wcO+bVxonG+cTjPpboQ9wen
+         24pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741619877; x=1742224677;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iFI5CNZ7ypkf6nzIklavj71fRclQxpBXGT5mnCzliiA=;
-        b=EZIagCyccxanxP56qQ6RrdlXG13g7Bbyb2e2nDvUAnEE9Av0VgUUkM6btxbAT2kIp6
-         XKDANrl8LUgQYKGrvrcC60ExPO2Rmho6VqvREld8IzxxLg/XZ2ZDxbKZv0VYZhlOV0qh
-         k/e3yS6/RIE/2Nmx8WjzWnWFf+Y1eEqPdcwV3JupfuSUDqdvyXRLXqde82N1shyXJxC9
-         fX6slyPjJDGDDwtPvHtaNE5xqwnL7TKttk5u0MYeDy7jjo2OV1KMMlpv7/1dEl3e11nP
-         FyBhrtDoI3XSKcnBcK4+R4wieGkXkNJ2ieEw1fOdbKWSqj30SvT52pUSFstwTGNUVHO+
-         1hXA==
-X-Gm-Message-State: AOJu0YzSE+VssbeANLQCVB6pu2vt+yGy9D3CtJEq+9HQ/jy+EH3xBbh4
-	nb9q5NQmJPvgO/Lz/NST7yuIss5SKbENfZMMOlSQWAZedjHjaSkjSyf99EwvvME=
-X-Gm-Gg: ASbGncsdEBZ6LEpd6ra9GUlnI9GqCNvQZPyLTnQNQyvkYlOHyxIbmWmLRRjkJ+A1mWu
-	tzqGO10ILjghMautf8eLJIfMSAiJ1wpFHwxJHUzOKuCU25M4Kcmwwptgwf43uieVMwlT8nMrCQo
-	JsQPyv7u5kQqM2dDS+FKwMQPD0m0xxEFLRH3kjuV/KnwfGh8f4p2pXcD0axfWP7jV2HHSaioV/e
-	rIYG0h1Y8/XR0pcFRIYS+VuPdfB842is61Dz1M5pjOqzk/sLo91+WobytlI45uL0UrA2ZTc5klV
-	YolytIiI3kKTUPjGUXi9DfhFFzLDFZu52RxcJ9e7joBDVc8FzMI=
-X-Google-Smtp-Source: AGHT+IG8WEiNmKZXmzNssBoH4GEX3aThQEM0prs5cfp8Q/hzNRnZCn6/+Ek9xAgb+mAsNHaVEYgWVQ==
-X-Received: by 2002:a05:6e02:3f89:b0:3d3:e284:afbb with SMTP id e9e14a558f8ab-3d441992552mr154286055ab.11.1741619877221;
-        Mon, 10 Mar 2025 08:17:57 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f22e050697sm1041501173.78.2025.03.10.08.17.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Mar 2025 08:17:56 -0700 (PDT)
-Message-ID: <95955f2d-6bcd-492b-9057-37363168bdf5@kernel.dk>
-Date: Mon, 10 Mar 2025 09:17:56 -0600
+        d=1e100.net; s=20230601; t=1741619882; x=1742224682;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sJONlHZ+GagU256YR9i4k/iT8kbk8lsmHf8ZZIFoi8U=;
+        b=BC3pDdEObpsIzxyPdFFrg+yESbNwC81vKck8ZDZvI6lA4uT/iAdvVtCFClc00W35FC
+         pq/rznV31P+4Rvd51ToiaQE59k8kOcwUviNJ10o69LWdkWb9NhWXRxWY5JQi7yC+3jlY
+         3YkecFXKVrWkDbniveUgnjNqPMzkjDkNIZWI5mR4SNjS7x1y6ca1sD7SrPMaImT/JZYU
+         e3iZjt5aBRlkvZoHPioAkQgXOXI0c0PH0k6ZY9cGIRa/WFYE4zxBkOAnuHZE2gCufISm
+         cJzYmXrn3luwEA5EVJ2ZsS0wWs/4hqEcMiCvAoz8eCTY+kMn4izWrNGEHZtlGcIolw3t
+         2/1g==
+X-Gm-Message-State: AOJu0YzSTUMG3sJ4do9cAq2sfdsHSaX3xH5OofQ3LFcsJGKbgYQ1sD0M
+	lAtDQdzlg+bx/as5QY8T4k2Dkw7CDAjJAxHqtPLM2ngr/5zQAi6rAbD76baAuYQ=
+X-Gm-Gg: ASbGncuFlb02GVxWOFDNUskZldAxAu8ieorbptHnbxYHTzqCcnmCGr2+AU9zmuSsM9P
+	NO5Yv2XURjUxH7z5pWy6XYAe9SvsR0kCoQYO0j57uLVv4LmxxActMVPuyDJQs4xNQLj7gwjwDJa
+	9wRvWpLEIezPCHblYMrpDy18hyhT5Yza4cxi8GZvo1oGICyjM3S3fVH6YgeFTlcUh03mHaB/i9P
+	RC/YBXliBAxBr2dpaYy80enCyCqMbUS7oit1aNCX4my09n2lXbPqqWa7/6FRAsWJ9LJp6cUIKIo
+	oC26/7e3axURYusHLaYDfkYzkCyFUtljpXk=
+X-Google-Smtp-Source: AGHT+IHv9VsH6yBvvTt1jAq7zvObqCkXqipABSruyTT1k4fmXx9mvK0swA53Jk2vVY8Ndp7VAb1ADg==
+X-Received: by 2002:a05:6e02:1b0a:b0:3d0:4a82:3f43 with SMTP id e9e14a558f8ab-3d46890d179mr1277075ab.5.1741619881935;
+        Mon, 10 Mar 2025 08:18:01 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d459e2377asm6121355ab.31.2025.03.10.08.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 08:18:01 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: linux-block@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
+Cc: linux-kselftest@vger.kernel.org
+In-Reply-To: <20250303124324.3563605-1-ming.lei@redhat.com>
+References: <20250303124324.3563605-1-ming.lei@redhat.com>
+Subject: Re: [PATCH 00/11] selftests: ublk: bug fixes & consolidation
+Message-Id: <174161988103.195912.1952372188242377031.b4-ty@kernel.dk>
+Date: Mon, 10 Mar 2025 09:18:01 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/11] selftests: ublk: bug fixes & consolidation
-To: Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-References: <20250303124324.3563605-1-ming.lei@redhat.com>
- <CAFj5m9+25+zUjUun12YvEzcH7NZ4eeJrq=p+7DYZ7kuasiDoqw@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAFj5m9+25+zUjUun12YvEzcH7NZ4eeJrq=p+7DYZ7kuasiDoqw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-7b9b9
 
-On 3/10/25 9:09 AM, Ming Lei wrote:
-> On Mon, Mar 3, 2025 at 8:43?PM Ming Lei <ming.lei@redhat.com> wrote:
->>
->> Hello Jens and guys,
->>
->> This patchset fixes several issues(1, 2, 4) and consolidate & improve
->> the tests in the following ways:
->>
->> - support shellcheck and fixes all warning
->>
->> - misc cleanup
->>
->> - improve cleanup code path(module load/unload, cleanup temp files)
->>
->> - help to reuse the same test source code and scripts for other
->>   projects(liburing[1], blktest, ...)
->>
->> - add two stress tests for covering IO workloads vs. removing device &
->> killing ublk server, given buffer lifetime is one big thing for ublk-zc
->>
->>
->> [1] https://github.com/ming1/liburing/commits/ublk-zc
->>
->> - just need one line change for overriding skip_code, libring uses 77 and
->>   kselftests takes 4
+
+On Mon, 03 Mar 2025 20:43:10 +0800, Ming Lei wrote:
+> This patchset fixes several issues(1, 2, 4) and consolidate & improve
+> the tests in the following ways:
 > 
-> Hi Jens,
+> - support shellcheck and fixes all warning
 > 
-> Can you merge this patchset if you are fine?
+> - misc cleanup
+> 
+> [...]
 
-Yep sorry, was pondering how best to get it staged. Should go into
-block, but depends on the other bits that I staged for io_uring. So I'll
-just put it there, not a big deal.
+Applied, thanks!
 
+[01/11] selftests: ublk: make ublk_stop_io_daemon() more reliable
+        commit: 9894e0eaae980df1ed3f2e86a487fe4c8ef1ab46
+[02/11] selftests: ublk: fix build failure
+        commit: 9d80f48c5e08b2e003e506c6e5326a35a652ea2f
+[03/11] selftests: ublk: add --foreground command line
+        commit: 2ecdcdfee58c028c15ed00b691104249370db075
+[04/11] selftests: ublk: fix parsing '-a' argument
+        commit: cf2132935639813a0b88e55074e6e52a4b82f26a
+[05/11] selftests: ublk: support shellcheck and fix all warning
+        commit: 30aab83035048c70e09ff058a73e8428de9bd103
+[06/11] selftests: ublk: don't pass ${dev_id} to _cleanup_test()
+        commit: 8da9f88fee59fe5aa99014a2621b07347edd5780
+[07/11] selftests: ublk: move zero copy feature check into _add_ublk_dev()
+        commit: b95b47eaa8d7c8b595d93397d1b85f1559c2d220
+[08/11] selftests: ublk: load/unload ublk_drv when preparing & cleaning up tests
+        commit: 9e71305495d1b79f96729b8d77d4d823a6bd998a
+[09/11] selftests: ublk: add one stress test for covering IO vs. removing device
+        commit: 6f3004e78b59e98a903e20e2240ae77e76dfde77
+[10/11] selftests: ublk: add stress test for covering IO vs. killing ublk server
+        commit: 4fcd5b5a6dff71cf82212dd208dc1765ca8a8088
+[11/11] selftests: ublk: improve test usability
+        commit: 22c880f446a149f5ee11260690a34d4b3f95c221
+
+Best regards,
 -- 
 Jens Axboe
+
+
+
 
