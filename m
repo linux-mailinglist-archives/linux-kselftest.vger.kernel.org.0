@@ -1,132 +1,159 @@
-Return-Path: <linux-kselftest+bounces-28598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1200A5959E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 14:09:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD05BA596E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 15:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39978188F7EA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 13:09:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E94B27A5F80
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 13:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F9AE22A4E9;
-	Mon, 10 Mar 2025 13:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1500022C32D;
+	Mon, 10 Mar 2025 14:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="A8BFc6kb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9ZeIEGE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1570022576C;
-	Mon, 10 Mar 2025 13:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32AC22AE75;
+	Mon, 10 Mar 2025 14:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741612128; cv=none; b=hIirzFdTdKnW4nESTe8u1fqLr0RU+fCyIW/cEM3QedI+9iiqKwXG6gLVwG2JyM2EICBM8MBhC4esv0Fm9LyD+y8xCv3l3S6ty+wN5FFnjZ2wmDkL2bDZ/eovdXAybur8KpstUjrOtPNi2UFymHMcWO5YQyY31I1li4sB10E06aU=
+	t=1741615204; cv=none; b=l75vNyvfo4isDohRkQuZmBu1GDDsAOvFWfu7w6Sz17fbr+3uMZWxT2uYnCCrLSK2DnORLRD762uaKBDeIePXjUcwcRKULiT36vpLk1wQuxG7pQ/Tq3QFv4LFH6HITSdwTTELy+vVMFURaQ6o0hhMqL8ODmpQQaLgXiBOk1+Z3+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741612128; c=relaxed/simple;
-	bh=rdAP5tZXO/e6X0g9/aj7v6Q8fYYTM/HQGTEow6hWTxU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CF5/1JXXEQXRdxOIoDLkEDIa4pMPxBP94/vvqP+nEcDc+Qzci4/+nSrMkDj0xcUrNTqkhHmkSOOpojhvcHcqouT5fxODaRzCw6SQtYRY8zgdRIrB2w2MPReqFAHv43omfKOw81wD3zKRexB6HfF87RhusUxdk/rrUGNj+d5yH0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=A8BFc6kb; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1trcrp-00Brbe-7O; Mon, 10 Mar 2025 14:08:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=YMtG22Pqun0Tp+q9j4j91l8TFa4W5ET+k4wRnt7+fP0=; b=A8BFc6kbFm87pNoML1HwqDmRTf
-	UJA/GzevYwKdN5F5BZrgi//pgOyudJoiTj1cK1jqvTlnhZursG3xtzsBooyMMx4vLOx+Py6kxhz8u
-	hIEVjCM4oc8/5KNIerC9JWvKACQGvBa3WFWLxq6inZH8tyNEnNemy3BsVbvmoAWRn+/snlLvSHaXk
-	ddO8bi7iUrcF5CFLUzM58GA01OsGXH138lYeRHo1EjItfLMyknx62msIBc85WDunVEuay4pTlM87c
-	oHaOor4nkaHnadScKgfH3p4cxyNGqYOaGlUCpKQVr2CTHSgJL4J7b442qLYS5+VhMNWyP9iroaqxJ
-	2zf7qkeA==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1trcrc-0006oZ-M9; Mon, 10 Mar 2025 14:08:13 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1trcrZ-007B3j-Vc; Mon, 10 Mar 2025 14:08:10 +0100
-Message-ID: <d2d3eff9-23df-4098-87cc-d0ad5fde6e1e@rbox.co>
-Date: Mon, 10 Mar 2025 14:08:07 +0100
+	s=arc-20240116; t=1741615204; c=relaxed/simple;
+	bh=gSYZwMocisBf6GSf/MbV+duRQDs+uqL+YJ+GA5Dtolw=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=he3bq1G2Fo3znCDbk+iWDMa0Mj6vAMmVjVPznhiHtRNrpAoniCArpcpS1Ts9Zwp7rnq395NrtB0BryeWNkefiAvHeFEUGqv6uBgjPZpbNxt6ECMF7v5M/YJYtfZtrknyKfJG0LGlkRoP/ciaDEsP3OfNPqj8WmcGbgqUStf9zfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9ZeIEGE; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7c547932d2eso97045985a.0;
+        Mon, 10 Mar 2025 07:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741615200; x=1742220000; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lp0UIX9QunfnkdCGehvBsQtkasKoKtHRouU8cbcHLEg=;
+        b=F9ZeIEGEdDBvpisow1OOdQqUY9KaC44buEjn7+vx0smFMy5q4RBbIm94a0kL7x2FAx
+         yb1sJFOC2lNRxlZLKyRmko8leFVG1Bg0l6nqtX1LiU9MrSfVKWbC6stndsoyVsnQ77Cw
+         s4Tm0ijU8L6aK4xZ7qaBIGQHUuu426YaOMDXeMe3IC2X7FRK29nXfzAV6C7x9jlcj5p7
+         DoBx3Z+/lsA1Reml2mGjd1jDNRgQtfdYm51eGq9DaQOch0pVYY/TwI4k9/iJtkpO7kGw
+         +/V/ZakNiVozhddezl+NpAZngB7xCnNSQrVHFiPcnqwxUUNslZK1zuDUX4/uadqlyUGD
+         QEHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741615200; x=1742220000;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Lp0UIX9QunfnkdCGehvBsQtkasKoKtHRouU8cbcHLEg=;
+        b=RYinOxLaqDcBjPI+YdBSq6iQUqjzkk8i1W82p7AoHFGJoKy9EFomfozdgcWk7PVGkT
+         a8igwcIoWnJMptW5nM7jdkLI+IpjPvhi2Dat16l/TIQx+4F8D+SPjzkF5lmt/y5uVYJL
+         u3uddfumKqc2WU7OmCPRceJKnVCUDOhM7HOxidLKSOasP0LDJd+MsKgF7xwFLsioFF14
+         FSaBATL+ZkKS5JTgiBiqrfwJfyuei4baQ69nePN83kk9qMTNboVyJdLVR88oEc7rlcPB
+         u0eEg4s7NMQovN6g//i/0p/zRGSOp5ee0xKHIW6iQM0bixmiSfG1jraZJustyk5NDAhQ
+         DPAA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8Pew2CJYolwtKqXnQbRmNYMs8RoOhXKk1eveNGbRPi+ph+hVQA+X+Eo7r8PVIshHK0Mgjs5Ob@vger.kernel.org, AJvYcCVJ21b300k8YCymeg+EpiuZf9EpvKizWfA9TpDHwLq2ufrHDSMwTjUJMpirNbpCWOn3HKma8+0P@vger.kernel.org, AJvYcCX3q8q6K5gN5UROTTLnKbqmUN2uwzp6gxKZ9neH34HWtplAc4ZFP9otloPcl4jlYgH+popnTOvsNqTS88ea@vger.kernel.org, AJvYcCXObE6o9xLDuD0Ka17CPLKiZ1+ih9DZqCXYY5/ANnYxH/tnqeKYAvVqQjvk90yLdmxRjQhuCmSo8G7xz6QlZgiS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzv3AD0uqlZt5/WIy39qtdrWdpncYxX+0Lg21k7wo3G/7tYqSrH
+	Y+skZN6y6eAjeAI3afJDiyoGEepWCGERARgEkI/1z24A9TBTtuCn
+X-Gm-Gg: ASbGncsk1oOMlI2ExprfbmFvifqEtgQr6viLR/H4qZuoyNV2L7b4JbpsgcuYpcQR4wf
+	SkoTNayPr+mzPuCNqviWJXLwCvo/B6R0sAuX0OWkoOukIrZfG7BWR2hMDf7eniBpbxjvJpfw//2
+	kMvD76FE/oDaRPCl7P03OMo8i/cib+GI8NVZXq5LLA1VlLi9mlmJ91Bbbj6eLRYbreTMb8MnD+V
+	sRvxKQbGBszk1dNrcGPG1LcO8KTz62dsNoYhItGEh52fOFOT+sGbLGEvpIRbg2j3mXpSM5M4d8/
+	pGlVcZHTudiUqqPzM9OQF4DuwNOzlGHj0n6VyO+671tyyofOKcBVi8p4kMsRYbWIMQL1nML5cTF
+	NyPmO0uYNVmpNgY3BnXh3kw==
+X-Google-Smtp-Source: AGHT+IE04BxMTl/bSEdx8th/M++89nsJWl68HA1eP2iCKz4Yd9WxUR09v/+TtJRwQhum3K/hAKLuOw==
+X-Received: by 2002:a05:620a:4386:b0:7c5:5791:1228 with SMTP id af79cd13be357-7c557911359mr308841385a.45.1741615199663;
+        Mon, 10 Mar 2025 06:59:59 -0700 (PDT)
+Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c54984fb6bsm296003285a.67.2025.03.10.06.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 06:59:58 -0700 (PDT)
+Date: Mon, 10 Mar 2025 09:59:58 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>, 
+ kuniyu@amazon.com
+Cc: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ cgroups@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Leon Romanovsky <leon@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Lennart Poettering <mzxreary@0pointer.de>, 
+ Luca Boccassi <bluca@debian.org>, 
+ Tejun Heo <tj@kernel.org>, 
+ Johannes Weiner <hannes@cmpxchg.org>, 
+ =?UTF-8?B?TWljaGFsIEtvdXRuw70=?= <mkoutny@suse.com>, 
+ Shuah Khan <shuah@kernel.org>
+Message-ID: <67cef05e7f9c4_2462652947e@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250309132821.103046-5-aleksandr.mikhalitsyn@canonical.com>
+References: <20250309132821.103046-1-aleksandr.mikhalitsyn@canonical.com>
+ <20250309132821.103046-5-aleksandr.mikhalitsyn@canonical.com>
+Subject: Re: [PATCH net-next 4/4] tools/testing/selftests/cgroup: add test for
+ SO_PEERCGROUPID
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/3] bpf, sockmap: avoid using sk_socket after
- free
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, xiyou.wangcong@gmail.com,
- john.fastabend@gmail.com, jakub@cloudflare.com, martin.lau@linux.dev
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, sgarzare@redhat.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mrpre@163.com, cong.wang@bytedance.com,
- syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com
-References: <20250228055106.58071-1-jiayuan.chen@linux.dev>
- <20250228055106.58071-2-jiayuan.chen@linux.dev>
- <baeca627-e6f1-4d0a-aea5-fa31689edc4d@rbox.co>
- <78ee737400721758fa67b4f285e8ba61dc6b893b@linux.dev>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <78ee737400721758fa67b4f285e8ba61dc6b893b@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 3/10/25 12:36, Jiayuan Chen wrote:
-> March 7, 2025 at 5:45 PM, "Michal Luczaj" <mhal@rbox.co> wrote:
-> ...
->> BTW, lockdep (CONFIG_LOCKDEP=y) complains about calling AF_UNIX's
->> read_skb() under RCU read lock.
->>
-> My environment also has LOCKDEP enabled, but I didn't see similar
-> warnings.
-> Moreover, RCU assertions are typically written as:
-> 
-> WARN_ON_ONCE(!rcu_read_lock_held())
-> 
-> And when LOCKDEP is not enabled, rcu_read_lock_held() defaults to
-> returning 1. So, it's unlikely to trigger a warning due to an RCU lock
-> being held.
-> 
-> Could you provide more of the call stack?
+Alexander Mikhalitsyn wrote:
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: cgroups@vger.kernel.org
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Willem de Bruijn <willemb@google.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: Luca Boccassi <bluca@debian.org>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: "Michal Koutn=C3=BD" <mkoutny@suse.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> ---
+>  tools/testing/selftests/cgroup/Makefile       |   2 +
+>  .../selftests/cgroup/test_so_peercgroupid.c   | 308 ++++++++++++++++++=
 
-Sure, bpf-next with this series applied, test_progs -t sockmap_basic:
+>  2 files changed, 310 insertions(+)
+>  create mode 100644 tools/testing/selftests/cgroup/test_so_peercgroupid=
+.c
+> =
 
-=============================
-[ BUG: Invalid wait context ]
-6.14.0-rc3+ #111 Tainted: G           OE
------------------------------
-test_progs/37755 is trying to lock:
-ffff88810d9bc3c0 (&u->iolock){+.+.}-{4:4}, at: unix_stream_read_skb+0x30/0x120
-other info that might help us debug this:
-context-{5:5}
-1 lock held by test_progs/37755:
- #0: ffffffff833700e0 (rcu_read_lock){....}-{1:3}, at: sk_psock_verdict_data_ready+0x3e/0x2a0
-stack backtrace:
-CPU: 13 UID: 0 PID: 37755 Comm: test_progs Tainted: G           OE      6.14.0-rc3+ #111
-Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
-Call Trace:
- dump_stack_lvl+0x68/0x90
- lock_acquire+0xcf/0x2e0
- __mutex_lock+0x9c/0xcc0
- unix_stream_read_skb+0x30/0x120
- sk_psock_verdict_data_ready+0x8d/0x2a0
- unix_stream_sendmsg+0x232/0x640
- __sys_sendto+0x1cd/0x1e0
- __x64_sys_sendto+0x20/0x30
- do_syscall_64+0x93/0x180
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/se=
+lftests/cgroup/Makefile
+> index 1b897152bab6..a932ff068081 100644
+> --- a/tools/testing/selftests/cgroup/Makefile
+> +++ b/tools/testing/selftests/cgroup/Makefile
+> @@ -16,6 +16,7 @@ TEST_GEN_PROGS +=3D test_kill
+>  TEST_GEN_PROGS +=3D test_kmem
+>  TEST_GEN_PROGS +=3D test_memcontrol
+>  TEST_GEN_PROGS +=3D test_pids
+> +TEST_GEN_PROGS +=3D test_so_peercgroupid
+>  TEST_GEN_PROGS +=3D test_zswap
 
+need to add to .gitignore
 
