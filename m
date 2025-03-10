@@ -1,93 +1,93 @@
-Return-Path: <linux-kselftest+bounces-28580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28581-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 428ADA58B0A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 05:04:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1354AA58B40
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 05:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 723E9169C17
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 04:04:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE6003A96E8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 04:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197DA1C173C;
-	Mon, 10 Mar 2025 04:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FAA71C4A24;
+	Mon, 10 Mar 2025 04:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DfTTKFVa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hBmctgN5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AF31401B
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 04:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D202AE93
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 04:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741579434; cv=none; b=eqW/lyN1g4snu3KFBMEqilGKljR7DayC4dWAz4Soo2cRtCYtbZ5ACKtpFfnZ2Txuy62SjCxeYcaG6t3NI0O2Za+5T0I7uLwPrtFWMdGb105EptRj9rwxeWW5PVBhGgOAGjRmBGXO5AkHBfEdPchpHIfX3jenoS/zXklYc9nVZYk=
+	t=1741581848; cv=none; b=G9/eUy0zL0kLJyBmeFeIR5YtlzspknjP8XlxHXb58xiZN01tDGzuBGjwqdGO7HVWsdxqQuRCdltOC3odPDMk5bsL7eO2xJv79uHuwG+agOwRx9OwaTZmHCQiBnUp/kp6p4TsVuReIQwwruX+D4iEzOvDmCgz5CR9c7Voc0JB9xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741579434; c=relaxed/simple;
-	bh=aHOy1ecN9jlAaMS2M7dcU9gCxoht3SCiGLgSPyDZ63k=;
+	s=arc-20240116; t=1741581848; c=relaxed/simple;
+	bh=pnQvGp7bnGzzq9tz0+YpYB/XyZel5rpIl6e/BWSRiQc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OceDH23kavwl5YmgZxISCxmjf018/l0IILoIg3E4B0pOMX0gzZYS4t8ep8cUDgcpCjX/GQP97TlNERO2avunGLA3IN8sByITUj67A7wFf5ansv1FGP3VoKd1YUESnsaikY/ehkRtdvq2o1ucogkyZ//jA/mWjGNUHVNWutYnh+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DfTTKFVa; arc=none smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=ohjRCZAZMFVs6ru/XIxUm4vEMUr+FEFMEE1WJnVaE9lsn4m/QoWYE70G9VpGb6fV8Lykrm8Lc945zOzMd9/8Bjz/9VtaLW7lVdPrUvzZE5vdJXXk1JkzqTwcUxqSMnyddstzoXfth68mLRyd1RWNxH03BgTtkEqdMyaC+RETx2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hBmctgN5; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741579430;
+	s=mimecast20190719; t=1741581844;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=KgUpYDCvfAICXWh2Ym5jayuE/HfSSdl1/NY4QdmfsrM=;
-	b=DfTTKFVaMfNTYVEolhXdbmgRd0nuBNKM2JGmJ1imuxeflvIeF1VeEjL2heSYuZWo5Ym4k+
-	ifOknskryfB6hA34Q4fo2tsy2yWfIOb34GcG72bwUwaCzg1dnhs1NV56C87OtA2dKX96DT
-	KoAGp1ddatvrElDmTrM+M7sz3+TNIig=
-Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
- [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Nev8trpbSnvGVyf58rmxXxAuQy7W5eOvjY/xcGE3UB8=;
+	b=hBmctgN503UD5JwobuU4xHYpGL99V8vjdPKysJ344HE0jI0LbsbsebUrzGN4gICF9ou06c
+	pnbOR4iDSQb+DdvPwMOw+KaY8tvEGKH+1X9HiOifmSlpOb++uVkELP0+pwevcabKpgTmdM
+	HcBxaTXPaIFsPlI+BAKDQwQIclvSirM=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-maPmvfEoP8Suv5ZLLe8G8Q-1; Mon, 10 Mar 2025 00:03:48 -0400
-X-MC-Unique: maPmvfEoP8Suv5ZLLe8G8Q-1
-X-Mimecast-MFC-AGG-ID: maPmvfEoP8Suv5ZLLe8G8Q_1741579428
-Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-523c33cfea8so4944675e0c.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 09 Mar 2025 21:03:48 -0700 (PDT)
+ us-mta-70-ZaJQZrxNP-WwjLUvgOzz-Q-1; Mon, 10 Mar 2025 00:44:02 -0400
+X-MC-Unique: ZaJQZrxNP-WwjLUvgOzz-Q-1
+X-Mimecast-MFC-AGG-ID: ZaJQZrxNP-WwjLUvgOzz-Q_1741581842
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2ff8a2c7912so3178044a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 09 Mar 2025 21:44:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741579428; x=1742184228;
+        d=1e100.net; s=20230601; t=1741581842; x=1742186642;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KgUpYDCvfAICXWh2Ym5jayuE/HfSSdl1/NY4QdmfsrM=;
-        b=Z2G3mZFK593VlqHk80rlFx8k+Or0mOA6PYt6M6/TIcogtNrkTMwQNA+UQw5mrv4OF9
-         VfBBS3CyMD2BJ9jKBweljhNyT/D6Ft6kQx8n/MQskOln1RsoJi8F0UkIh1dVQqDauclf
-         8IiyYTy+SkKbixn8Mot71jbKiYEnNxsgsOc3lhMvfEKk3pzk1Ti0b/HajgAfp45HvyyA
-         GX8brQefBPi0gG9RogW5MqY+O2kP7xqMkmrEudavfENIl7bIvqvc5KbIoRct0kypF1p6
-         2IVjSrQMleqZ551vtbygRPLXvAILzLG9O/AckzLlGway1EdxptjHjLdRxkaJZRoY391T
-         X+HA==
-X-Forwarded-Encrypted: i=1; AJvYcCV49ErEKjglGqttCR8zfSVwSEclPFGeqzCNivuNVjLUvZN6YSSABifCuesk1WbsHn1DEvLXYo18OW3yBNRDdFw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6gYSZE5nRid4ALVkjNiEJGcB9J8eUQHpQW/D/elvTDy2ZfoHH
-	bkGe4k1hq+ExREmqGldh0y1U9UvRNun1fZTj/c6gXCeXMbr0MLPdAnb1J3qV27dwKhGlypFw72H
-	gikYtA+xcTmofhk8BE5sL4eYZtuSMlAD3o00GYpgbMwSZjL8+A2UCPToT3wV5VmtrPnY0BIs4qX
-	EAHx6qrTMlnaSqPhEsSLaLkGky2p6oyDTBT4Pq5lLn
-X-Gm-Gg: ASbGncsjlnfkG4IWTuAh2p/rTdABa6NAp+nrdQyGwRoQ0l1KeT/qcMOy3IM5+i5DGHS
-	wKxOlFiIfUEgH9xXH9Ve8/YhMtceou//vXC3DhSIN5XcI5Loa61t7pjFK8S6DHcDGlCCH/gdZRw
+        bh=Nev8trpbSnvGVyf58rmxXxAuQy7W5eOvjY/xcGE3UB8=;
+        b=JteFMv2MrodpXP0nPnG79RB0BQD1Ait+3GECoPY5cj3iOvDtoJEmPx3yxi6FpEB47q
+         x91c2MjRkGdeZ//0ladSXVDpx5uZ1Cav0TP27ahWQa2R1w/XxVF6ahoXqOEZuPmhlm1t
+         asr2LzH1fiI2vr+QGgs8HirAACoE4c7Tn16Tvu53HlSUiztym85TQJ+e7kdrI53wQ1QP
+         cFfhI8itFO7Ap1VSDcKZZhuYMJV4H26Lt4N0DZDUWb/18fDCAyBbLzF/APaXxv238vv5
+         3CcfZX5EDec3oz5qL2D3I/hvfiKSJ3/eJ/Vwyqtr4s5k7Eao0RXUXCTl7Dc34jcuKULs
+         3lOA==
+X-Forwarded-Encrypted: i=1; AJvYcCW4XllzA+ewLyHaObE7YyB90dQv2u+UWGVZQeynJz08hjNsRHe1rVLTG94SjJ4sPp/DNVOu85cQdKYK9CJyOk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzVjS4SdH6TN3+8EOH6owSHbYfSw4yUFYFTieCQBMzixR0843W
+	fhuoCqt7Xn6Mz5Qh8nzUUsGKq/IWy5MoALTeeIp6XOBqWt9BPdq2nLesfwpiG8V8NvKXmR6Dbyc
+	iuEL6VLL0x0iscdqhoPQ/e2VIpyHj7dQR58sEoH2Kt/7Dn1m4PdMkyZegVLnMfRgNMQx89517T9
+	mMCRoGBnXnkrFayAe6MEc1B+5rxONb9uSD1mqDIK5E
+X-Gm-Gg: ASbGncuO23e6W/LEIzv1KLEJWTyPOjfziPvqhd0svoA7CKUjTShe72+Me3hitGQynCd
+	EueIvnmdEvATdl5NwM57uxGi7BdmleJKOEHe7lpSrr9ONLWCBzKCNRGsrSSqK/ybgZLo/KV3dhw
 	==
-X-Received: by 2002:a05:6102:1625:b0:4bb:c24b:b658 with SMTP id ada2fe7eead31-4c30a6ce291mr6889408137.18.1741579428328;
-        Sun, 09 Mar 2025 21:03:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEWEExs57zlYjvHiKjt0sJdXJFbwo2Zs0LPOPlolmp1grxhBOdO/jBTdI674OxaLt6FioYXJto0Ve0T2qHTIms=
-X-Received: by 2002:a05:6102:1625:b0:4bb:c24b:b658 with SMTP id
- ada2fe7eead31-4c30a6ce291mr6889393137.18.1741579427853; Sun, 09 Mar 2025
- 21:03:47 -0700 (PDT)
+X-Received: by 2002:a17:90b:3942:b0:2fa:17e4:b1cf with SMTP id 98e67ed59e1d1-2ffbc1478f7mr13296285a91.2.1741581841790;
+        Sun, 09 Mar 2025 21:44:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG8596SYY1uEmihx+dPY4+l8IPJzpuHXJkSLoctuIwB7FVBBOLd5nfEBl/a/ZkxNYUOiGzN8PvHZYIw/V0LgT0=
+X-Received: by 2002:a17:90b:3942:b0:2fa:17e4:b1cf with SMTP id
+ 98e67ed59e1d1-2ffbc1478f7mr13296259a91.2.1741581841334; Sun, 09 Mar 2025
+ 21:44:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250307-rss-v9-0-df76624025eb@daynix.com> <20250307-rss-v9-5-df76624025eb@daynix.com>
-In-Reply-To: <20250307-rss-v9-5-df76624025eb@daynix.com>
+References: <20250307-rss-v9-0-df76624025eb@daynix.com> <20250307-rss-v9-6-df76624025eb@daynix.com>
+In-Reply-To: <20250307-rss-v9-6-df76624025eb@daynix.com>
 From: Jason Wang <jasowang@redhat.com>
-Date: Mon, 10 Mar 2025 12:03:35 +0800
-X-Gm-Features: AQ5f1JpUIYkO2z7JqKfhDMFz04EDw9VRlQFOeI99RHje5MrLTIGs-yAN3N8PypE
-Message-ID: <CACGkMEuTwd4+DP1Cb+ZgJtxTiJj4N_NMPHiKusd8a4Tn3+B_3A@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 5/6] selftest: tun: Add tests for virtio-net hashing
+Date: Mon, 10 Mar 2025 12:43:50 +0800
+X-Gm-Features: AQ5f1JphlQ4HfYrWzbh5cl4IywdRmeziUaHOc-Ga-IvwGUrEMgYGcXCVclvp0A0
+Message-ID: <CACGkMEuccQ6ah-aZ3tcW1VRuetEoPA_NaLxLT+9fb0uAab8Agg@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 6/6] vhost/net: Support VIRTIO_NET_F_HASH_REPORT
 To: Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -105,113 +105,79 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Mar 7, 2025 at 7:02=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix.=
 com> wrote:
 >
-> The added tests confirm tun can perform RSS and hash reporting, and
-> reject invalid configurations for them.
-
-Let's be more verbose here. E.g what's the network topology used here.
-
+> VIRTIO_NET_F_HASH_REPORT allows to report hash values calculated on the
+> host. When VHOST_NET_F_VIRTIO_NET_HDR is employed, it will report no
+> hash values (i.e., the hash_report member is always set to
+> VIRTIO_NET_HASH_REPORT_NONE). Otherwise, the values reported by the
+> underlying socket will be reported.
+>
+> VIRTIO_NET_F_HASH_REPORT requires VIRTIO_F_VERSION_1.
 >
 > Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 > Tested-by: Lei Yang <leiyang@redhat.com>
 > ---
->  tools/testing/selftests/net/Makefile |   2 +-
->  tools/testing/selftests/net/tun.c    | 584 +++++++++++++++++++++++++++++=
-+++++-
->  2 files changed, 576 insertions(+), 10 deletions(-)
+>  drivers/vhost/net.c | 49 +++++++++++++++++++++++++++++------------------=
+--
+>  1 file changed, 29 insertions(+), 20 deletions(-)
 >
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
-ts/net/Makefile
-> index 73ee88d6b043004be23b444de667a1d99a6045de..9772f691a9a011d99212df324=
-63cdb930cf0a1a0 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -123,6 +123,6 @@ $(OUTPUT)/reuseport_bpf_numa: LDLIBS +=3D -lnuma
->  $(OUTPUT)/tcp_mmap: LDLIBS +=3D -lpthread -lcrypto
->  $(OUTPUT)/tcp_inq: LDLIBS +=3D -lpthread
->  $(OUTPUT)/bind_bhash: LDLIBS +=3D -lpthread
-> -$(OUTPUT)/io_uring_zerocopy_tx: CFLAGS +=3D -I../../../include/
-> +$(OUTPUT)/io_uring_zerocopy_tx $(OUTPUT)/tun: CFLAGS +=3D -I../../../inc=
-lude/
+> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> index b9b9e9d40951856d881d77ac74331d914473cd56..16b241b44f89820a42c302f35=
+86ea6bb5e0d4289 100644
+> --- a/drivers/vhost/net.c
+> +++ b/drivers/vhost/net.c
+> @@ -73,6 +73,7 @@ enum {
+>         VHOST_NET_FEATURES =3D VHOST_FEATURES |
+>                          (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
+>                          (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
+> +                        (1ULL << VIRTIO_NET_F_HASH_REPORT) |
+>                          (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
+>                          (1ULL << VIRTIO_F_RING_RESET)
+>  };
+> @@ -1097,9 +1098,11 @@ static void handle_rx(struct vhost_net *net)
+>                 .msg_controllen =3D 0,
+>                 .msg_flags =3D MSG_DONTWAIT,
+>         };
+> -       struct virtio_net_hdr hdr =3D {
+> -               .flags =3D 0,
+> -               .gso_type =3D VIRTIO_NET_HDR_GSO_NONE
+> +       struct virtio_net_hdr_v1_hash hdr =3D {
+> +               .hdr =3D {
+> +                       .flags =3D 0,
+> +                       .gso_type =3D VIRTIO_NET_HDR_GSO_NONE
+> +               }
+>         };
+>         size_t total_len =3D 0;
+>         int err, mergeable;
+> @@ -1110,7 +1113,6 @@ static void handle_rx(struct vhost_net *net)
+>         bool set_num_buffers;
+>         struct socket *sock;
+>         struct iov_iter fixup;
+> -       __virtio16 num_buffers;
+>         int recv_pkts =3D 0;
 >
->  include bpf.mk
-> diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/=
-net/tun.c
-> index 463dd98f2b80b1bdcb398cee43c834e7dc5cf784..acadeea7194eaea9416a605b4=
-7f99f7a5f1f80cd 100644
-> --- a/tools/testing/selftests/net/tun.c
-> +++ b/tools/testing/selftests/net/tun.c
-> @@ -2,21 +2,38 @@
->
->  #define _GNU_SOURCE
->
-> +#include <endian.h>
->  #include <errno.h>
->  #include <fcntl.h>
-> +#include <sched.h>
+>         mutex_lock_nested(&vq->mutex, VHOST_NET_VQ_RX);
+> @@ -1191,30 +1193,30 @@ static void handle_rx(struct vhost_net *net)
+>                         vhost_discard_vq_desc(vq, headcount);
+>                         continue;
+>                 }
+> +               hdr.hdr.num_buffers =3D cpu_to_vhost16(vq, headcount);
+>                 /* Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET_HDR */
+>                 if (unlikely(vhost_hlen)) {
+> -                       if (copy_to_iter(&hdr, sizeof(hdr),
+> -                                        &fixup) !=3D sizeof(hdr)) {
+> +                       if (copy_to_iter(&hdr, vhost_hlen,
+> +                                        &fixup) !=3D vhost_hlen) {
+>                                 vq_err(vq, "Unable to write vnet_hdr "
+>                                        "at addr %p\n", vq->iov->iov_base)=
+;
+>                                 goto out;
 
-Is this needed?
+Is this an "issue" specific to RSS/HASH? If it's not, we need a separate pa=
+tch.
 
-> +#include <stddef.h>
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <unistd.h>
-> -#include <linux/if.h>
-> +#include <net/if.h>
-> +#include <netinet/ip.h>
-> +#include <sys/ioctl.h>
-> +#include <sys/socket.h>
-> +#include <linux/compiler.h>
-> +#include <linux/icmp.h>
-> +#include <linux/if_arp.h>
->  #include <linux/if_tun.h>
-> +#include <linux/ipv6.h>
->  #include <linux/netlink.h>
->  #include <linux/rtnetlink.h>
-> -#include <sys/ioctl.h>
-> -#include <sys/socket.h>
-> +#include <linux/sockios.h>
-> +#include <linux/tcp.h>
-> +#include <linux/udp.h>
-> +#include <linux/virtio_net.h>
->
->  #include "../kselftest_harness.h"
->
-> +#define TUN_HWADDR_SOURCE { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 }
-> +#define TUN_HWADDR_DEST { 0x02, 0x00, 0x00, 0x00, 0x00, 0x01 }
-> +#define TUN_IPADDR_SOURCE htonl((172 << 24) | (17 << 16) | 0)
-> +#define TUN_IPADDR_DEST htonl((172 << 24) | (17 << 16) | 1)
-> +
->  static int tun_attach(int fd, char *dev)
->  {
->         struct ifreq ifr;
-> @@ -39,7 +56,7 @@ static int tun_detach(int fd, char *dev)
->         return ioctl(fd, TUNSETQUEUE, (void *) &ifr);
->  }
->
-> -static int tun_alloc(char *dev)
-> +static int tun_alloc(char *dev, short flags)
->  {
->         struct ifreq ifr;
->         int fd, err;
-> @@ -52,7 +69,8 @@ static int tun_alloc(char *dev)
->
->         memset(&ifr, 0, sizeof(ifr));
->         strcpy(ifr.ifr_name, dev);
-> -       ifr.ifr_flags =3D IFF_TAP | IFF_NAPI | IFF_MULTI_QUEUE;
-> +       ifr.ifr_flags =3D flags | IFF_TAP | IFF_NAPI | IFF_NO_PI |
-> +                       IFF_MULTI_QUEUE;
->
->         err =3D ioctl(fd, TUNSETIFF, (void *) &ifr);
->         if (err < 0) {
-> @@ -64,6 +82,40 @@ static int tun_alloc(char *dev)
->         return fd;
->  }
->
-> +static bool tun_add_to_bridge(int local_fd, const char *name)
-> +{
+Honestly, I'm not sure if it's too late to fix this.
 
-I wonder if a packet socket is more convenient here.
+Others look fine.
 
 Thanks
 
