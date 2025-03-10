@@ -1,204 +1,108 @@
-Return-Path: <linux-kselftest+bounces-28659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94BE7A59DB5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 18:24:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2483A59E1B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 18:28:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7ED53A7C00
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 17:23:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D10316FE4C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 17:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F24233D65;
-	Mon, 10 Mar 2025 17:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 407CE235BEE;
+	Mon, 10 Mar 2025 17:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TpdKT4ht"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PnH5bdnO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF7823372A;
-	Mon, 10 Mar 2025 17:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A149A231A3F
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 17:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741627408; cv=none; b=Ix/eyLIsg7yrri33+8vK/H3xbjdPQm8XH0heA6poaFjbrA+AsIqf3929HVeq19a/IqvNgrsSPJMUN6OAdgoS8LBsSLGFANSxhk0cwVfZrbpieelZ7YD+Uzvzsq4Ef0tSkW0gQI8Ti6c+CLtxbuF6/Y2fFzAcNky+V87D+b9U9JY=
+	t=1741627607; cv=none; b=eRtsdGBN8ULVQiSjE8yi4MwP6lpwDPu5Ki1RYfOqfO+Jy6+10OZmLkiaNMXPaI7WTMl1Xc80lmFRWA7l9NttA5yl3reirzaMqp9DcrCLZHuu52SmmK8NlF45qJQ0yu31Wb4I3//1LE2VR9dkw80i97BCyDaMIzJIVmbqtIW+9N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741627408; c=relaxed/simple;
-	bh=Nc9jtCn/YKhYhG6Cz7q/EcH50HSJxU2Q7dJfnYVLYIQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s0lgGd6eKFkw8Bzvxr53AFpv/nuvrU8+SOecNwHu+DcNRpWbOr3jFFzNHfYBkOsZzzmMFcQY5UYiaYLB0swW2MkR2Pzuvy6NXkUaxbBQ92pCwLIbhpMRUBPVjN/ueXsUIuX6d7mctcOixU11AMOJrvHrJ9LiCQ7YfBn0uEgq0Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpdKT4ht; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6450AC4CEF3;
-	Mon, 10 Mar 2025 17:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741627408;
-	bh=Nc9jtCn/YKhYhG6Cz7q/EcH50HSJxU2Q7dJfnYVLYIQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TpdKT4ht7bz3sPycMxo9XFhdBZOJ4FkXWqWs1eHqjhM6VH7gqYQer02grJXlF6Dhk
-	 Ca+RfR9kz1DuX/h62eCoLtUM0K1KDoXtNa78Nd2AKzhntKopCbf2Hvr0d6r5baNaKF
-	 HnxT0EgaWlPBQNtcJl3LqeugYsT1BvFSvy1wDQxbIYH4r6kx8e8xu8+msAmr1hdsVo
-	 0cjIJHUZ1jZl1qssl1AP2A0y2l3HL5k9C56mIBe0l/eVf0llLyA5lSwSvML6By6NIk
-	 8Dxnb2OdguBcyiCV4hqK7ICT8noOVARG8/sdv1x9bBNHsQlbDVYW/xteBcahA6IH4s
-	 VbTwdKmTtxtXg==
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3d45f230480so8821575ab.3;
-        Mon, 10 Mar 2025 10:23:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU8FqyW7Wf+ska+OoGlBsentbBmWzedappW64Q1YMBm1bQNvLbGtYEQ2vFdjMYEqhwCLLNvj0CS28FheqASZAfa@vger.kernel.org, AJvYcCVmGcItS1JnDIxKobv57R4u8mNatYiv6gH1ooIWbC82ILJlOXlJZVQ1rfQ6hLMMboK11UDac20UGw==@vger.kernel.org, AJvYcCW1Iof0Mz8wDTczJcsPDxdjbORGAnZNz/6WZ8rEdylWNsGBAwPsezAh90Bm36p9lZX6U4Q=@vger.kernel.org, AJvYcCWJEsv6Ik2YNCgiw5kd+H1ML7ubjklDm++NolvM4ZhBOZjuUl8+nqTbDO27alI4YXsUVygjsyomRO1zDuT9@vger.kernel.org, AJvYcCX42FFF1qmyS2XzU2bs5OABg6oyuLnAFDuevTozoRi6AQbZeLruOV4KnMV/Y392BaYdY+Au+V68YeyZmuARYn0WumRozGnh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQzMzeFzaCw9qoZJLVpEJOTvu4UBhWLcYrT4xkxohocozzWKnM
-	n0ehx8VAIWuu7wD4vVvRYQunrR3UMaEfGj/2qht2idJaO8XCk8BYVX/m+0GHCOI7/bU1FPXFy6k
-	bmKItABy7ZliQzXhuAzTZmtg9O60=
-X-Google-Smtp-Source: AGHT+IFnItE4PtwiTY4fcGc8/A6323DJfi363ghdhDxwpcFG8ZbQN2v7hctOcw6Sgjnitz+bwt19rSoUfMOediG8kw8=
-X-Received: by 2002:a05:6e02:12e8:b0:3d4:3fbf:966e with SMTP id
- e9e14a558f8ab-3d44192a9famr145403815ab.14.1741627407796; Mon, 10 Mar 2025
- 10:23:27 -0700 (PDT)
+	s=arc-20240116; t=1741627607; c=relaxed/simple;
+	bh=Ec4E/QJuP431GXmsZlvrj2L4OEgsl7A8yGGvRFhwKHo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m1mw+3vn9QWpPD747MJhIkH9Ska4AoEM1Qdac3TLaWZD/LW1E/pxW6xk84qxMnpm5lHwXiyK9iGaHfZ38rqv1zAIc/wj2aXSLOa0q1RRNshI/0lwhszqSoTFzG7o8HEaYkQ9RbPM8Q6K3n07puXWen1HPCjSoKan77LyClRIVwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PnH5bdnO; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ff80290e44so6815883a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 10:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741627604; x=1742232404; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ec4E/QJuP431GXmsZlvrj2L4OEgsl7A8yGGvRFhwKHo=;
+        b=PnH5bdnOL/idqUVRhs/h+yWF63ULjbsaXh0q+tz3x1o1/cJJkABCp4yq+XDQahkeLL
+         N++MQiVa3gUX6Rcc/L38RyZDM3oe5E41q5VKllE7x8Wxs8/eEZVQG9hCtLNftL3jza4M
+         YLuAq/3EZ/AvvOFXQfuW3XELFDWMlrP/tuCxsZiirLyzgeyjoAjfOsBXCxsA5Zl3gKpk
+         hZrR1shXSIEPL5cQMvgUe23uXg2l9fXCTiuvkkd5IqGS7geP2HKlqEowxe6Gskb6nqBN
+         GkgX635uPz3R1vXZBNIpmxbn4GuZ9WNiO76VnB0qrd/+hnHXXQH7U5rBR7TV95lElpRo
+         4usA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741627604; x=1742232404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ec4E/QJuP431GXmsZlvrj2L4OEgsl7A8yGGvRFhwKHo=;
+        b=TseWlexRO3d1fQ/tiycgh1oKLQjR01idgIOdCgBVnSGkiiOx44qj4XSAMP7azjA9PG
+         OGL2/EpInRW1Ig072hlRt7wrO2ssL5WWuvQriHiviSkM9dulaUGnlkfRS3125lWfvkTO
+         9GeZoGOvS8JttaK7gslB0sDnSRuBk3dHEfr6Rms6WjFy02IpHN9tGUXiwLGz0HhM+IeB
+         ogHr4p+Ge1JvcrhboxIIPzJKr1DsOMaFV7jYOwCVpB+LKIv+Y2dZlmY4gsuXtmKNEaVE
+         CrIQReg1qtt+XQYY6Ji0k8eLohl7G+RTCH92x9k3PIxZHTRSckYuGsvysBFk18yymD7a
+         Eqjg==
+X-Forwarded-Encrypted: i=1; AJvYcCXhMnM3kHjmbhnDXsDvt9SPzQLutEq+8wDFh7ykoa44qANMA4i/RuEl5ibjj7T9Ss8QQKLRMVsF5Hht9lzzZ/U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVa83xKDwyAQrRkNwoJ75m7+xabLOEfFnpNRb6s9mQRvMLhBic
+	TeITlusxQpcj0gYXecW/2RUgUQprI0OY90owoh4QuTlfm4lWyqi/1XPM6XhM
+X-Gm-Gg: ASbGncvXMd8IF00YIB5uUfUHrvYRcDMVaYYyoi6VQwxzBkwaRf4uU3y2pV+l2pdxymv
+	UunXj/3HiDt9PemN22DGw+26SfnlucgERreiv6AagILuoi8NuU+NdBYqIECGJ3p16My/x+TZgnr
+	u+oNmHqQi0TKtdhAx4MsS0yobhW/wsTfvZP/+OfZeka1KPXhWq6WjJhYUbbe++kNaKwozrmAYt5
+	Xi2a2YSh9r2a5yyAD15na4U6rz4fy2/lIC/+qEvKPp32gMu029E18mvUFbwI2InE88rrr7l6+ti
+	zoPsfy92QbbTkO4/z+IiZRVF+x0H9KE9VeiSZsMGK2GjPwDn9rjf4tnMgeol8sClZmGAOMCkwT4
+	DpLtWtSrH2w==
+X-Google-Smtp-Source: AGHT+IEziMDJVDiQvtqgzEc+KLO4eMrbIFTCpQOcF3ArJZUKi7gj38VxTkGoyYwHCvmhQOF349IBAw==
+X-Received: by 2002:a17:90b:2883:b0:2ff:52e1:c4a1 with SMTP id 98e67ed59e1d1-2ff7cf128acmr23054358a91.24.1741627603670;
+        Mon, 10 Mar 2025 10:26:43 -0700 (PDT)
+Received: from google.com ([2a00:79e0:2e52:7:4eb:6cd2:52ef:6beb])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff72593715sm7627806a91.44.2025.03.10.10.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 10:26:43 -0700 (PDT)
+Date: Mon, 10 Mar 2025 10:26:37 -0700
+From: Kevin Krakauer <krakauer@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	willemb@google.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: bump GRO timeout for
+ gro/setup_veth
+Message-ID: <Z88gzcGu5_WX3je0@google.com>
+References: <20250310110821.385621-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250308013314.719150-1-bboscaccy@linux.microsoft.com> <20250308013314.719150-3-bboscaccy@linux.microsoft.com>
-In-Reply-To: <20250308013314.719150-3-bboscaccy@linux.microsoft.com>
-From: Song Liu <song@kernel.org>
-Date: Mon, 10 Mar 2025 10:23:16 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6-XmcFLT0xkMJJVEu4hSKQ1efEGdnogCuazBOctNTtfw@mail.gmail.com>
-X-Gm-Features: AQ5f1Jo3hqYv29oNUeWZRZdEoRAKqfJQkOSTgnrUhD_eWnsXfFJpbyYPAeAlpyg
-Message-ID: <CAPhsuW6-XmcFLT0xkMJJVEu4hSKQ1efEGdnogCuazBOctNTtfw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 2/2] selftests/bpf: Add a kernel flag test for
- LSM bpf hook
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Xu Kuohai <xukuohai@huawei.com>, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250310110821.385621-1-kuba@kernel.org>
 
-On Fri, Mar 7, 2025 at 5:33=E2=80=AFPM Blaise Boscaccy
-<bboscaccy@linux.microsoft.com> wrote:
->
-> This test exercises the kernel flag added to security_bpf by
-> effectively blocking light-skeletons from loading while allowing
-> normal skeletons to function as-is. Since this should work with any
-> arbitrary BPF program, an existing program from LSKELS_EXTRA was
-> used as a test payload.
->
-> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> ---
->  .../selftests/bpf/prog_tests/kernel_flag.c    | 43 +++++++++++++++++++
->  .../selftests/bpf/progs/test_kernel_flag.c    | 28 ++++++++++++
->  2 files changed, 71 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/kernel_flag.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_kernel_flag.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kernel_flag.c b/tools=
-/testing/selftests/bpf/prog_tests/kernel_flag.c
-> new file mode 100644
-> index 0000000000000..479ad5de3737e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Microsoft */
-> +#include <test_progs.h>
-> +#include "kfunc_call_test.skel.h"
-> +#include "kfunc_call_test.lskel.h"
-> +#include "test_kernel_flag.skel.h"
-> +
-> +void test_kernel_flag(void)
-> +{
-> +       struct test_kernel_flag *lsm_skel;
-> +       struct kfunc_call_test *skel =3D NULL;
-> +       struct kfunc_call_test_lskel *lskel =3D NULL;
-> +       int ret;
-> +
-> +       lsm_skel =3D test_kernel_flag__open_and_load();
-> +       if (!ASSERT_OK_PTR(lsm_skel, "lsm_skel"))
-> +               return;
-> +
-> +       ret =3D test_kernel_flag__attach(lsm_skel);
-> +       if (!ASSERT_OK(ret, "test_kernel_flag__attach"))
-> +               goto close_prog;
-> +
-> +       lsm_skel->bss->monitored_pid =3D getpid();
+On Mon, Mar 10, 2025 at 12:08:21PM +0100, Jakub Kicinski wrote:
+> Commit 51bef03e1a71 ("selftests/net: deflake GRO tests") recently
+> switched to NAPI suspension, and lowered the timeout from 1ms to 100us.
+> This started causing flakes in netdev-run CI. Let's bump it to 200us.
+> In a quick test of a debug kernel I see failures with 100us, with 200us
+> in 5 runs I see 2 completely clean runs and 3 with a single retry
+> (GRO test will retry up to 5 times).
 
-We usually set monitored_pid before attaching the program.
+Thanks for finding and fixing this. And now I know there's CI that can
+be checked!
 
-> +
-> +       /* Test with skel. This should pass the gatekeeper */
-> +       skel =3D kfunc_call_test__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel"))
-> +               goto close_prog;
-> +
-> +       /* Test with lskel. This should fail due to blocking kernel-based=
- bpf() invocations */
-> +       lskel =3D kfunc_call_test_lskel__open_and_load();
-> +       if (!ASSERT_ERR_PTR(lskel, "lskel"))
-> +               goto close_prog;
-> +
-> +close_prog:
-> +       if (skel)
-> +               kfunc_call_test__destroy(skel);
-> +       if (lskel)
-> +               kfunc_call_test_lskel__destroy(lskel);
-> +
-> +       lsm_skel->bss->monitored_pid =3D 0;
-> +       test_kernel_flag__destroy(lsm_skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_kernel_flag.c b/tools=
-/testing/selftests/bpf/progs/test_kernel_flag.c
-> new file mode 100644
-> index 0000000000000..9ca01aadb6656
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_kernel_flag.c
-> @@ -0,0 +1,28 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (C) 2025 Microsoft Corporation
-> + *
-> + * Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> + */
-> +
-> +#include "vmlinux.h"
-> +#include <errno.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +__u32 monitored_pid;
-> +
-> +SEC("lsm.s/bpf")
-> +int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size, bool=
- kernel)
-> +{
-> +       __u32 pid;
-> +
-> +       pid =3D bpf_get_current_pid_tgid() >> 32;
-> +       if (!kernel || pid !=3D monitored_pid)
-> +               return 0;
-
-We are blocking lskel load for the pid. This could make
-parallel testing (test_progs -j) flaky. We should probably
-change the logic to filtering on monitored_tiid.
-
-Thanks,
-Song
-
-> +       else
-> +               return -EINVAL;
-> +}
-> --
-> 2.48.1
->
->
+Reviewed-by: Kevin Krakauer <krakauer@google.com>
 
