@@ -1,191 +1,109 @@
-Return-Path: <linux-kselftest+bounces-28667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D0FA5A1BA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 19:12:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBADAA5A27B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 19:20:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 909CF188DEF5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 18:12:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 569AA7A681C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 18:19:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10092234966;
-	Mon, 10 Mar 2025 18:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 628F722F3BD;
+	Mon, 10 Mar 2025 18:20:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Ntwx2Uyu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7jkPBPt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1284B233725;
-	Mon, 10 Mar 2025 18:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1D31CAA6C;
+	Mon, 10 Mar 2025 18:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741630352; cv=none; b=YB1cMGFlSYw7FK7JcbRoM9zRqnGt0WgmhctiYVbe+1IgaQ18vMRIDZHw8RmmQKNaHCd64riQpw1H904hhhHq9km+j2YQCy1Deoa4J9pmixh1l6K9PTpeU7/LNBfL9fI3qcdEXwshxajlpwb8RqbE6wDfLbFAx4ycrRfw7OSLYTo=
+	t=1741630834; cv=none; b=uks7oyHimBxbo1wwj/yYcRILSR+qQSJ7o4Sa/wd7qvmqr7jxqqVEHGds5z1vidsPdFTEtHITFMSQRKy0AgfsWIsp3X11KHVDoB1G4uSRORb9+HwQWIo1f4gKeAnjJeHNtMTIxSjHGALjXQUixAgMA/bg5ueiGBd09RjKgIZOttM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741630352; c=relaxed/simple;
-	bh=HG/W4n5uZlKY6cxWkKtd3p2/Kd4jfK+Mk8Uxv4orh/M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Ql5BMjqAJbOHwuNZyjWJsRnZB/LehRN5Vi7LEICAixKRm5tU9uhc/j/uW7MA1oV1stMZVCQL6IqehiArTnNzwNXm8PA/q38qQwOn4d8IbWgq4zy+TWzXPGgraRsy2XInmIfrElP+xscKST/ZjDQ7cdQPUaAn4mIOgrprowDIuIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Ntwx2Uyu; arc=none smtp.client-ip=52.119.213.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1741630351; x=1773166351;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=AJNzET63DVGR7tJQ8b5ZW+nPqzzSSt+0wH0JG0KxXMQ=;
-  b=Ntwx2Uyu3x33GAf7fzYGVLxmIbFhej99vgmteWkYBNzqLRgg9breUu7v
-   RS/98kS+foQ5MCCOrVk7xuB2NdOOKWkMQQSIMdPnvKGbG/Mia7UcNYqjl
-   mY+uwxwnlKnj2dg/KWDW5uCx38+L0nfQXMQ6PD8IQxO34/qWXbOmLehxM
-   E=;
-X-IronPort-AV: E=Sophos;i="6.14,236,1736812800"; 
-   d="scan'208";a="278114488"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.2])
-  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 18:12:26 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [10.0.17.79:59359]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.34.60:2525] with esmtp (Farcaster)
- id c3925b25-0958-4048-85a6-faf49dbd70a0; Mon, 10 Mar 2025 18:12:24 +0000 (UTC)
-X-Farcaster-Flow-ID: c3925b25-0958-4048-85a6-faf49dbd70a0
-Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Mon, 10 Mar 2025 18:12:24 +0000
-Received: from [192.168.30.50] (10.106.82.18) by EX19D022EUC002.ant.amazon.com
- (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14; Mon, 10 Mar 2025
- 18:12:23 +0000
-Message-ID: <fdae95e3-962b-4eaf-9ae7-c6bd1062c518@amazon.com>
-Date: Mon, 10 Mar 2025 18:12:22 +0000
+	s=arc-20240116; t=1741630834; c=relaxed/simple;
+	bh=nLQE7s9TKJC/g8NOA5MA1/4Vivx2KbgoqvORMloIWC4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aHLNosyEli+VUSnankKE3lSIC9nau+GT18VOUq3d6AGNHsfmyugrb18jPXbIn4Ly6B/Aod3C15j5Ao7TASZoDomqhzGt2V4w/modgdvSUDwwZTxrkie+E/WtwzTQO7zQPrUi3jUKXmKp0fteFBS4XcYXm7Nn1jgpkWXnK5d1ZQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7jkPBPt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06E0C4CEF7;
+	Mon, 10 Mar 2025 18:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741630833;
+	bh=nLQE7s9TKJC/g8NOA5MA1/4Vivx2KbgoqvORMloIWC4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=b7jkPBPt6iu6pDdmGfDQB7Wo6/Xp2gwVrN/g4Ow2MF8iojwGIpD/vUlnjuSAtqxKt
+	 ahptvs3cqcGrR1iL8I2t4F5eZ5dtfv095RBUr35PTgi/PdUd2oloRdh3HFWsrCgpAb
+	 PlTBAwrCS5N5sIu/mCd0K0jfVZA4nTL0BaFTjzgvJBmkW2P8VtKP2ZdzMLenDpJ66i
+	 L3OIu9xKOIFDMwvcmAtD8iOYD1qXHDNdiLAAmj4kwiV8paEhjruVail5E7GERnVcKA
+	 353ne1DDJdR2zH+kVEyWfX5+bEF+7+Q9pP4Owem+jlxdKrNsXGAWgRkroMtQcW7txf
+	 Gibz+/2bcaVqQ==
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3d44e0a5c07so4417775ab.2;
+        Mon, 10 Mar 2025 11:20:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVaK6aXaOW3rhR6LNcBSjXmUEH6x+G7TvE1+I5+8y0gaSVNtKgLxfNRdWRZ/QEceZulc4qPfiXIhs396RV9l1Di@vger.kernel.org, AJvYcCVygJnaxYh3ky1APjmfziJXMEktppDwlHdeauVrIVWzz2OdZtBhjFHbUGDb5BT/qJ/oj6O4RZqiaGD5M0lM@vger.kernel.org, AJvYcCW0QN8q5hS3QpYVVCWdjPX0vFvZdfNhAedST1hDAPqpVGRZeLL9KUKEbk6dEIScc0Kck2Vdpe48+w==@vger.kernel.org, AJvYcCWbwXjuD06Y4SBPF7uZX3Rzt3ZnIuCK9Df7tC1FAU4rDQBqjWy0NZPhe8gIgbLKF37rWBzmTQgwo1uPDmixC6P1VxPWUTHz@vger.kernel.org, AJvYcCXqGxAaeUVh3PagHx1A1WLLWXUcJwE34DKVZLfvZTo7+MaWLThj2QVUZFS2xioRPOaB3c4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLWLC31BO7fcCMkDJOC0cdxhg9su5chbTDVMABxhBFYM4LCTXc
+	IWuHgBHebYy+/5uM60kkE5ZAr+CJ+nzGo4KGsZ4qxprwykn5JGsIVdaFfJoIeCKaHk8AEXQnD1a
+	ucFMFE8Ns+woYL8vut/sC7Of2gXo=
+X-Google-Smtp-Source: AGHT+IGMhjAefS9MRtpucYcfJaRq9JkgzJYdAIKNU80R4u6+/tFuHxXxnuio2dnSaR3fNmXgevOCqMDbXexbP1x3IRs=
+X-Received: by 2002:a05:6e02:1749:b0:3d1:968a:6d46 with SMTP id
+ e9e14a558f8ab-3d44196905fmr141448625ab.6.1741630833195; Mon, 10 Mar 2025
+ 11:20:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
-To: Peter Xu <peterx@redhat.com>, James Houghton <jthoughton@google.com>
-CC: <akpm@linux-foundation.org>, <pbonzini@redhat.com>, <shuah@kernel.org>,
-	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<lorenzo.stoakes@oracle.com>, <david@redhat.com>, <ryan.roberts@arm.com>,
-	<quic_eberman@quicinc.com>, <graf@amazon.de>, <jgowans@amazon.com>,
-	<roypat@amazon.co.uk>, <derekmn@amazon.com>, <nsaenz@amazon.es>,
-	<xmarcalx@amazon.com>
-References: <20250303133011.44095-1-kalyazin@amazon.com>
- <Z8YfOVYvbwlZST0J@x1.local>
- <CADrL8HXOQ=RuhjTEmMBJrWYkcBaGrqtXmhzPDAo1BE3EWaBk4g@mail.gmail.com>
- <Z8i0HXen8gzVdgnh@x1.local>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <Z8i0HXen8gzVdgnh@x1.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D004EUC004.ant.amazon.com (10.252.51.191) To
- EX19D022EUC002.ant.amazon.com (10.252.51.137)
+References: <20250308013314.719150-1-bboscaccy@linux.microsoft.com>
+ <20250308013314.719150-3-bboscaccy@linux.microsoft.com> <CAPhsuW6-XmcFLT0xkMJJVEu4hSKQ1efEGdnogCuazBOctNTtfw@mail.gmail.com>
+ <87v7sgye6h.fsf@microsoft.com> <CAPhsuW41zvcSK8exRT6Ui1jyQ=OhD8BAdV6bU4nhGQGfV14+Cw@mail.gmail.com>
+ <87senkycvf.fsf@microsoft.com>
+In-Reply-To: <87senkycvf.fsf@microsoft.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 10 Mar 2025 11:20:22 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5UuaFoSu+bOKmrbk9pAr9TsLu_mtpZqsYx-g_MNefCyA@mail.gmail.com>
+X-Gm-Features: AQ5f1JoVPe5C1Qzcx5JK98PrZBlmBi5hYlTkS9d4QazqaCd27qGZ7JeWVXtjs7M
+Message-ID: <CAPhsuW5UuaFoSu+bOKmrbk9pAr9TsLu_mtpZqsYx-g_MNefCyA@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 2/2] selftests/bpf: Add a kernel flag test for
+ LSM bpf hook
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Xu Kuohai <xukuohai@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Mar 10, 2025 at 11:11=E2=80=AFAM Blaise Boscaccy
+<bboscaccy@linux.microsoft.com> wrote:
+[...]
+> >
+> > We are blindly blocking all security_bpf() with kernel=3Dtrue here, so
+> > any lskel load in parallel with this test may fail. On the other hand,
+> > existing tests only block some operations under certain conditions.
+> > For example, test_cgroup1_hierarchy.c only blocks operations for
+> > target_ancestor_cgid.
+> >
+> > Does this make sense?
+> >
+>
+> Not quite. This is only blocking security_bpf where kernel=3Dtrue and
+> pid=3Dmonitored_pid.
 
+"test_progs -j" runs multiple threads within the process, so all the
+threads are within monotored_pid.
 
-On 05/03/2025 20:29, Peter Xu wrote:
-> On Wed, Mar 05, 2025 at 11:35:27AM -0800, James Houghton wrote:
->> I think it might be useful to implement an fs-generic MINOR mode. The
->> fault handler is already easy enough to do generically (though it
->> would become more difficult to determine if the "MINOR" fault is
->> actually a MISSING fault, but at least for my userspace, the
->> distinction isn't important. :)) So the question becomes: what should
->> UFFDIO_CONTINUE look like?
->>
->> And I think it would be nice if UFFDIO_CONTINUE just called
->> vm_ops->fault() to get the page we want to map and then mapped it,
->> instead of having shmem-specific and hugetlb-specific versions (though
->> maybe we need to keep the hugetlb specialization...). That would avoid
->> putting kvm/gmem/etc. symbols in mm/userfaultfd code.
->>
->> I've actually wanted to do this for a while but haven't had a good
->> reason to pursue it. I wonder if it can be done in a
->> backwards-compatible fashion...
-> 
-> Yes I also thought about that. :)
-
-Hi Peter, hi James.  Thanks for pointing at the race condition!
-
-I did some experimentation and it indeed looks possible to call 
-vm_ops->fault() from userfault_continue() to make it generic and 
-decouple from KVM, at least for non-hugetlb cases.  One thing is we'd 
-need to prevent a recursive handle_userfault() invocation, which I 
-believe can be solved by adding a new VMF flag to ignore the userfault 
-path when the fault handler is called from userfault_continue().  I'm 
-open to a more elegant solution though.
-
-Regarding usage of the MINOR notification, in what case do you recommend 
-sending it?  If following the logic implemented in shmem and hugetlb, ie 
-if the page is _present_ in the pagecache, I can't see how it is going 
-to work with the write syscall, as we'd like to know when the page is 
-_missing_ in order to respond with the population via the write.  If 
-going against shmem/hugetlb logic, and sending the MINOR event when the 
-page is missing from the pagecache, how would it solve the race 
-condition problem?
-
-Also, where would the check for the folio_test_uptodate() mentioned by 
-James fit into here?  Would it only be used for fortifying the MINOR 
-(present) against the race?
-
-> When Axel added minor fault, it's not a major concern as it's the only fs
-> that will consume the feature anyway in the do_fault() path - hugetlbfs has
-> its own path to take care of.. even until now.
-> 
-> And there's some valid points too if someone would argue to put it there
-> especially on folio lock - do that in shmem.c can avoid taking folio lock
-> when generating minor fault message.  It might make some difference when
-> the faults are heavy and when folio lock is frequently taken elsewhere too.
-
-Peter, could you expand on this?  Are you referring to the following 
-(shmem_get_folio_gfp)?
-
-	if (folio) {
-		folio_lock(folio);
-
-		/* Has the folio been truncated or swapped out? */
-		if (unlikely(folio->mapping != inode->i_mapping)) {
-			folio_unlock(folio);
-			folio_put(folio);
-			goto repeat;
-		}
-		if (sgp == SGP_WRITE)
-			folio_mark_accessed(folio);
-		if (folio_test_uptodate(folio))
-			goto out;
-		/* fallocated folio */
-		if (sgp != SGP_READ)
-			goto clear;
-		folio_unlock(folio);
-		folio_put(folio);
-	}
-
-Could you explain in what case the lock can be avoided?  AFAIC, the 
-function is called by both the shmem fault handler and userfault_continue().
-
-> It might boil down to how many more FSes would support minor fault, and
-> whether we would care about such difference at last to shmem users. If gmem
-> is the only one after existing ones, IIUC there's still option we implement
-> it in gmem code.  After all, I expect the change should be very under
-> control (<20 LOCs?)..
-> 
-> --
-> Peter Xu
-> 
-
+Thanks,
+Song
 
