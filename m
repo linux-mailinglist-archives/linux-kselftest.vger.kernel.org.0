@@ -1,224 +1,191 @@
-Return-Path: <linux-kselftest+bounces-28666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18B6AA5A1B4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 19:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16D0FA5A1BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 19:12:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93806188DE0C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 18:11:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 909CF188DEF5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Mar 2025 18:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8610023236F;
-	Mon, 10 Mar 2025 18:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10092234966;
+	Mon, 10 Mar 2025 18:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="niqcbDyx"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Ntwx2Uyu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE73E2206BD;
-	Mon, 10 Mar 2025 18:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1284B233725;
+	Mon, 10 Mar 2025 18:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741630303; cv=none; b=CyLP1WCK0soZm3sdoZZ8ykAAjMZglxkmRYeAgRbsku3QA6Pkz5JtqGI3eWqQ7VNfsJ2NaJDzPLhSn/E8k5VEtNhzzPbwO6ElcoSiZWII7WLRDnFnXC+07ZvggFziOAXo0VoJ+fq0xUDMaHEAIwfUl4goIAs0S5EeFM6keugWzfc=
+	t=1741630352; cv=none; b=YB1cMGFlSYw7FK7JcbRoM9zRqnGt0WgmhctiYVbe+1IgaQ18vMRIDZHw8RmmQKNaHCd64riQpw1H904hhhHq9km+j2YQCy1Deoa4J9pmixh1l6K9PTpeU7/LNBfL9fI3qcdEXwshxajlpwb8RqbE6wDfLbFAx4ycrRfw7OSLYTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741630303; c=relaxed/simple;
-	bh=3OxdgUDWK+uFLVvzr/y6KkONgmK1n3ccKZ3Of6DC9m0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hd39uvzUUl4JDdMRJ2LhhhTRbADTtEKyiIOG/gHw50L1T7OSL2gznYw1nrHbV9A4n+rg4I9yO4ZUcfV6nxKWb96RlDMhpPvclCDFvq9IBb91Vy62ZBQec+aqZZtuWtkHvIfozvlj1gSnr5NLXui9RBgIYTUsyFvolcYNhglI3Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=niqcbDyx; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from narnia (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 190DE2038F4A;
-	Mon, 10 Mar 2025 11:11:34 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 190DE2038F4A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741630301;
-	bh=AObcEA8sw67rEti9TZTsNnLV8M/alL5bqjj3P/yE9RI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=niqcbDyxUZZ/tP9cDiXJs0XJDKX5e26H6fSyRgd4xDz4LhAu/nCfDMmMrGrtdhpD0
-	 3HyvjFSfj4oA8UjFbzHxQYph+SQ2wATqpqEdGi/FQA40wlk4ZfT6KCcfxqMDYfenz1
-	 7hlBqekKb40V6BRdyHMtCijhgfJBuZLX6pLApyeM=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Song Liu <song@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri
- Olsa <jolsa@kernel.org>, Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Matt Bobrowski <mattbobrowski@google.com>, Xu Kuohai
- <xukuohai@huawei.com>, linux-kernel@vger.kernel.org,
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 bpf-next 2/2] selftests/bpf: Add a kernel flag test
- for LSM bpf hook
-In-Reply-To: <CAPhsuW41zvcSK8exRT6Ui1jyQ=OhD8BAdV6bU4nhGQGfV14+Cw@mail.gmail.com>
-References: <20250308013314.719150-1-bboscaccy@linux.microsoft.com>
- <20250308013314.719150-3-bboscaccy@linux.microsoft.com>
- <CAPhsuW6-XmcFLT0xkMJJVEu4hSKQ1efEGdnogCuazBOctNTtfw@mail.gmail.com>
- <87v7sgye6h.fsf@microsoft.com>
- <CAPhsuW41zvcSK8exRT6Ui1jyQ=OhD8BAdV6bU4nhGQGfV14+Cw@mail.gmail.com>
-Date: Mon, 10 Mar 2025 11:11:32 -0700
-Message-ID: <87senkycvf.fsf@microsoft.com>
+	s=arc-20240116; t=1741630352; c=relaxed/simple;
+	bh=HG/W4n5uZlKY6cxWkKtd3p2/Kd4jfK+Mk8Uxv4orh/M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Ql5BMjqAJbOHwuNZyjWJsRnZB/LehRN5Vi7LEICAixKRm5tU9uhc/j/uW7MA1oV1stMZVCQL6IqehiArTnNzwNXm8PA/q38qQwOn4d8IbWgq4zy+TWzXPGgraRsy2XInmIfrElP+xscKST/ZjDQ7cdQPUaAn4mIOgrprowDIuIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Ntwx2Uyu; arc=none smtp.client-ip=52.119.213.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1741630351; x=1773166351;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=AJNzET63DVGR7tJQ8b5ZW+nPqzzSSt+0wH0JG0KxXMQ=;
+  b=Ntwx2Uyu3x33GAf7fzYGVLxmIbFhej99vgmteWkYBNzqLRgg9breUu7v
+   RS/98kS+foQ5MCCOrVk7xuB2NdOOKWkMQQSIMdPnvKGbG/Mia7UcNYqjl
+   mY+uwxwnlKnj2dg/KWDW5uCx38+L0nfQXMQ6PD8IQxO34/qWXbOmLehxM
+   E=;
+X-IronPort-AV: E=Sophos;i="6.14,236,1736812800"; 
+   d="scan'208";a="278114488"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 18:12:26 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [10.0.17.79:59359]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.34.60:2525] with esmtp (Farcaster)
+ id c3925b25-0958-4048-85a6-faf49dbd70a0; Mon, 10 Mar 2025 18:12:24 +0000 (UTC)
+X-Farcaster-Flow-ID: c3925b25-0958-4048-85a6-faf49dbd70a0
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Mon, 10 Mar 2025 18:12:24 +0000
+Received: from [192.168.30.50] (10.106.82.18) by EX19D022EUC002.ant.amazon.com
+ (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14; Mon, 10 Mar 2025
+ 18:12:23 +0000
+Message-ID: <fdae95e3-962b-4eaf-9ae7-c6bd1062c518@amazon.com>
+Date: Mon, 10 Mar 2025 18:12:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Song Liu <song@kernel.org> writes:
-
-> On Mon, Mar 10, 2025 at 10:43=E2=80=AFAM Blaise Boscaccy
-> <bboscaccy@linux.microsoft.com> wrote:
->>
->> Song Liu <song@kernel.org> writes:
->>
->> > On Fri, Mar 7, 2025 at 5:33=E2=80=AFPM Blaise Boscaccy
->> > <bboscaccy@linux.microsoft.com> wrote:
->> >>
->> >> This test exercises the kernel flag added to security_bpf by
->> >> effectively blocking light-skeletons from loading while allowing
->> >> normal skeletons to function as-is. Since this should work with any
->> >> arbitrary BPF program, an existing program from LSKELS_EXTRA was
->> >> used as a test payload.
->> >>
->> >> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
->> >> ---
->> >>  .../selftests/bpf/prog_tests/kernel_flag.c    | 43 +++++++++++++++++=
-++
->> >>  .../selftests/bpf/progs/test_kernel_flag.c    | 28 ++++++++++++
->> >>  2 files changed, 71 insertions(+)
->> >>  create mode 100644 tools/testing/selftests/bpf/prog_tests/kernel_fla=
-g.c
->> >>  create mode 100644 tools/testing/selftests/bpf/progs/test_kernel_fla=
-g.c
->> >>
->> >> diff --git a/tools/testing/selftests/bpf/prog_tests/kernel_flag.c b/t=
-ools/testing/selftests/bpf/prog_tests/kernel_flag.c
->> >> new file mode 100644
->> >> index 0000000000000..479ad5de3737e
->> >> --- /dev/null
->> >> +++ b/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
->> >> @@ -0,0 +1,43 @@
->> >> +// SPDX-License-Identifier: GPL-2.0
->> >> +/* Copyright (c) 2025 Microsoft */
->> >> +#include <test_progs.h>
->> >> +#include "kfunc_call_test.skel.h"
->> >> +#include "kfunc_call_test.lskel.h"
->> >> +#include "test_kernel_flag.skel.h"
->> >> +
->> >> +void test_kernel_flag(void)
->> >> +{
->> >> +       struct test_kernel_flag *lsm_skel;
->> >> +       struct kfunc_call_test *skel =3D NULL;
->> >> +       struct kfunc_call_test_lskel *lskel =3D NULL;
->> >> +       int ret;
->> >> +
->> >> +       lsm_skel =3D test_kernel_flag__open_and_load();
->> >> +       if (!ASSERT_OK_PTR(lsm_skel, "lsm_skel"))
->> >> +               return;
->> >> +
->> >> +       ret =3D test_kernel_flag__attach(lsm_skel);
->> >> +       if (!ASSERT_OK(ret, "test_kernel_flag__attach"))
->> >> +               goto close_prog;
->> >> +
->> >> +       lsm_skel->bss->monitored_pid =3D getpid();
->> >
->> > We usually set monitored_pid before attaching the program.
->> >
->>
->> Okay, copy that.
->>
->> >> +
->> >> +       /* Test with skel. This should pass the gatekeeper */
->> >> +       skel =3D kfunc_call_test__open_and_load();
->> >> +       if (!ASSERT_OK_PTR(skel, "skel"))
->> >> +               goto close_prog;
->> >> +
->> >> +       /* Test with lskel. This should fail due to blocking kernel-b=
-ased bpf() invocations */
->> >> +       lskel =3D kfunc_call_test_lskel__open_and_load();
->> >> +       if (!ASSERT_ERR_PTR(lskel, "lskel"))
->> >> +               goto close_prog;
->> >> +
->> >> +close_prog:
->> >> +       if (skel)
->> >> +               kfunc_call_test__destroy(skel);
->> >> +       if (lskel)
->> >> +               kfunc_call_test_lskel__destroy(lskel);
->> >> +
->> >> +       lsm_skel->bss->monitored_pid =3D 0;
->> >> +       test_kernel_flag__destroy(lsm_skel);
->> >> +}
->> >> diff --git a/tools/testing/selftests/bpf/progs/test_kernel_flag.c b/t=
-ools/testing/selftests/bpf/progs/test_kernel_flag.c
->> >> new file mode 100644
->> >> index 0000000000000..9ca01aadb6656
->> >> --- /dev/null
->> >> +++ b/tools/testing/selftests/bpf/progs/test_kernel_flag.c
->> >> @@ -0,0 +1,28 @@
->> >> +// SPDX-License-Identifier: GPL-2.0
->> >> +
->> >> +/*
->> >> + * Copyright (C) 2025 Microsoft Corporation
->> >> + *
->> >> + * Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
->> >> + */
->> >> +
->> >> +#include "vmlinux.h"
->> >> +#include <errno.h>
->> >> +#include <bpf/bpf_helpers.h>
->> >> +#include <bpf/bpf_tracing.h>
->> >> +
->> >> +char _license[] SEC("license") =3D "GPL";
->> >> +
->> >> +__u32 monitored_pid;
->> >> +
->> >> +SEC("lsm.s/bpf")
->> >> +int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size, =
-bool kernel)
->> >> +{
->> >> +       __u32 pid;
->> >> +
->> >> +       pid =3D bpf_get_current_pid_tgid() >> 32;
->> >> +       if (!kernel || pid !=3D monitored_pid)
->> >> +               return 0;
->> >
->> > We are blocking lskel load for the pid. This could make
->> > parallel testing (test_progs -j) flaky. We should probably
->> > change the logic to filtering on monitored_tiid.
->> >
->>
->> Curious on this for my own edification. The
->>
->> pid =3D bpf_get_current_pid_tgid() >> 32;
->>
->> is used extensively in the current test suite in a bunch of other
->> tests. Why does that not cause an issue with the other tests during
->> parallel testing?
->
-> We are blindly blocking all security_bpf() with kernel=3Dtrue here, so
-> any lskel load in parallel with this test may fail. On the other hand,
-> existing tests only block some operations under certain conditions.
-> For example, test_cgroup1_hierarchy.c only blocks operations for
-> target_ancestor_cgid.
->
-> Does this make sense?
->
-
-Not quite. This is only blocking security_bpf where kernel=3Dtrue and
-pid=3Dmonitored_pid.=20
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
+To: Peter Xu <peterx@redhat.com>, James Houghton <jthoughton@google.com>
+CC: <akpm@linux-foundation.org>, <pbonzini@redhat.com>, <shuah@kernel.org>,
+	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+	<lorenzo.stoakes@oracle.com>, <david@redhat.com>, <ryan.roberts@arm.com>,
+	<quic_eberman@quicinc.com>, <graf@amazon.de>, <jgowans@amazon.com>,
+	<roypat@amazon.co.uk>, <derekmn@amazon.com>, <nsaenz@amazon.es>,
+	<xmarcalx@amazon.com>
+References: <20250303133011.44095-1-kalyazin@amazon.com>
+ <Z8YfOVYvbwlZST0J@x1.local>
+ <CADrL8HXOQ=RuhjTEmMBJrWYkcBaGrqtXmhzPDAo1BE3EWaBk4g@mail.gmail.com>
+ <Z8i0HXen8gzVdgnh@x1.local>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <Z8i0HXen8gzVdgnh@x1.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D004EUC004.ant.amazon.com (10.252.51.191) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
 
-> Thanks,
-> Song
+
+On 05/03/2025 20:29, Peter Xu wrote:
+> On Wed, Mar 05, 2025 at 11:35:27AM -0800, James Houghton wrote:
+>> I think it might be useful to implement an fs-generic MINOR mode. The
+>> fault handler is already easy enough to do generically (though it
+>> would become more difficult to determine if the "MINOR" fault is
+>> actually a MISSING fault, but at least for my userspace, the
+>> distinction isn't important. :)) So the question becomes: what should
+>> UFFDIO_CONTINUE look like?
+>>
+>> And I think it would be nice if UFFDIO_CONTINUE just called
+>> vm_ops->fault() to get the page we want to map and then mapped it,
+>> instead of having shmem-specific and hugetlb-specific versions (though
+>> maybe we need to keep the hugetlb specialization...). That would avoid
+>> putting kvm/gmem/etc. symbols in mm/userfaultfd code.
+>>
+>> I've actually wanted to do this for a while but haven't had a good
+>> reason to pursue it. I wonder if it can be done in a
+>> backwards-compatible fashion...
+> 
+> Yes I also thought about that. :)
+
+Hi Peter, hi James.  Thanks for pointing at the race condition!
+
+I did some experimentation and it indeed looks possible to call 
+vm_ops->fault() from userfault_continue() to make it generic and 
+decouple from KVM, at least for non-hugetlb cases.  One thing is we'd 
+need to prevent a recursive handle_userfault() invocation, which I 
+believe can be solved by adding a new VMF flag to ignore the userfault 
+path when the fault handler is called from userfault_continue().  I'm 
+open to a more elegant solution though.
+
+Regarding usage of the MINOR notification, in what case do you recommend 
+sending it?  If following the logic implemented in shmem and hugetlb, ie 
+if the page is _present_ in the pagecache, I can't see how it is going 
+to work with the write syscall, as we'd like to know when the page is 
+_missing_ in order to respond with the population via the write.  If 
+going against shmem/hugetlb logic, and sending the MINOR event when the 
+page is missing from the pagecache, how would it solve the race 
+condition problem?
+
+Also, where would the check for the folio_test_uptodate() mentioned by 
+James fit into here?  Would it only be used for fortifying the MINOR 
+(present) against the race?
+
+> When Axel added minor fault, it's not a major concern as it's the only fs
+> that will consume the feature anyway in the do_fault() path - hugetlbfs has
+> its own path to take care of.. even until now.
+> 
+> And there's some valid points too if someone would argue to put it there
+> especially on folio lock - do that in shmem.c can avoid taking folio lock
+> when generating minor fault message.  It might make some difference when
+> the faults are heavy and when folio lock is frequently taken elsewhere too.
+
+Peter, could you expand on this?  Are you referring to the following 
+(shmem_get_folio_gfp)?
+
+	if (folio) {
+		folio_lock(folio);
+
+		/* Has the folio been truncated or swapped out? */
+		if (unlikely(folio->mapping != inode->i_mapping)) {
+			folio_unlock(folio);
+			folio_put(folio);
+			goto repeat;
+		}
+		if (sgp == SGP_WRITE)
+			folio_mark_accessed(folio);
+		if (folio_test_uptodate(folio))
+			goto out;
+		/* fallocated folio */
+		if (sgp != SGP_READ)
+			goto clear;
+		folio_unlock(folio);
+		folio_put(folio);
+	}
+
+Could you explain in what case the lock can be avoided?  AFAIC, the 
+function is called by both the shmem fault handler and userfault_continue().
+
+> It might boil down to how many more FSes would support minor fault, and
+> whether we would care about such difference at last to shmem users. If gmem
+> is the only one after existing ones, IIUC there's still option we implement
+> it in gmem code.  After all, I expect the change should be very under
+> control (<20 LOCs?)..
+> 
+> --
+> Peter Xu
+> 
+
 
