@@ -1,138 +1,133 @@
-Return-Path: <linux-kselftest+bounces-28762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAC14A5CF34
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 20:22:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA73A5CF38
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 20:23:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F5EF3B096E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 19:22:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE546189A33C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 19:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0919263C61;
-	Tue, 11 Mar 2025 19:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4B0263F4E;
+	Tue, 11 Mar 2025 19:22:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="wPwTR1Um"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P1vFLHq4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C8F26389C;
-	Tue, 11 Mar 2025 19:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.69.130.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41540263C88;
+	Tue, 11 Mar 2025 19:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741720959; cv=none; b=el9UkBPZax2ooiRwikhx09EqUFlH6qgOCnjzT92iq6v5xO9pql8lT8/8OX3P5xtaKOR+JF4NKYfug6/MypSjHGbfwZqv6XVmwpoqbeFYFtwYaX+SBPTfFYJ7ymzuss3I/QbiknzRGfmNbMypStJnTuzUpjYymdTiKLQzoAvhc+w=
+	t=1741720977; cv=none; b=ff7qcIlit3KsgxGuqFiinpu3LKWmx8dZK6GV8FYVGAQVcoq7uREgcwVFiCnJJR2PnACiZ1QR0UAdWpIEG3PyD0hNu0HYSjvTLP1Rbfx2U1B3fH9e10O85+IMK6FycsJ6XQusIoaWc1nEGZoam/RDGb+4wxxye+ZD4X9ddF/AG0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741720959; c=relaxed/simple;
-	bh=w+JhsikmwiG9BJHG0zBvlbeA61nZNgJQLsM1kzPmrJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tjrZ8R4tS3aCZycnnYl0k0IHrgjfVTTQB+vw8WsEuLhhp/W1/ZH+QPRT+wYmK501UOCWAY9zCJFqS6NaDwpJZ5ZAn3vPWClXBD4rZ2HVQzbzcWcJPzeTxI/6BFO/3R5zmLpBVI7GoAN77NzFw/nYhl0v4WltghjD75A+GEZkbMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=wPwTR1Um; arc=none smtp.client-ip=158.69.130.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1741720951;
-	bh=w+JhsikmwiG9BJHG0zBvlbeA61nZNgJQLsM1kzPmrJY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=wPwTR1UmGZknpyzwjGHYZDzMyH1IAmHfksvo12ZQPoLaw3Zvui1ptjgukg6GuPNTr
-	 RH1j9LCHGgKjSwh/cMGaWxehBYSqfjMZvMsc0D7WAaqpjuUyR7Cy60MgGMRgBv7AML
-	 n+UXLpcMrDgxdx4O90G4n/N2Kvr7z+F+SDxa1vaKXKxtw7eh9tQDzwYjX5LmWwkG57
-	 A3QTj0Kdx/Ojegd4qmQSjaCq5qdq0r12S8VIb4xqoC1S8Dnhz+n+t0+b6xmqsBNsvt
-	 sT1jsM0avymVj8RMe3hJUuCbwD2GjsKKQ9Qpw63DP51Z8vGyzO1BmBFeLSDkhcBoCP
-	 epX/eZIWejtPw==
-Received: from laptop-mjeanson.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4ZC3Yg0YZgz1Jlh;
-	Tue, 11 Mar 2025 15:22:31 -0400 (EDT)
-From: Michael Jeanson <mjeanson@efficios.com>
-To: linux-kernel@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>,
-	Michael Jeanson <mjeanson@efficios.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] rseq/selftests: ensure the rseq abi TLS is actually 1024 bytes
-Date: Tue, 11 Mar 2025 15:21:45 -0400
-Message-ID: <20250311192222.323453-1-mjeanson@efficios.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1741720977; c=relaxed/simple;
+	bh=5BQSyaBQxUFZeErA3U7SLVLmiRtJYGd9Vyqr3I7dCeE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rHCVk2dag3JlkbIiRuWu0OsmtL3YUji8T8JcedvY5dR3xPGCcp75L3D3vMB7pVtxr/GtxmVC1/8EKXXRXybulEnz+DuTdHndbIHiD32IUslFujaAoHtvhsJfYX8cMwRitb/0z2mtRYTHQX41BL1nPi6Me6eYR/jM9Q8qrG8TYF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P1vFLHq4; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741720976; x=1773256976;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5BQSyaBQxUFZeErA3U7SLVLmiRtJYGd9Vyqr3I7dCeE=;
+  b=P1vFLHq44APE7p052VDH4TvOR3gYwmVmcM23o0rOaYG4EqF+/7wj/XHh
+   NatotfSapM6rr9N4hHfYvNzI1DY1DNZfRPWHNxaGV1WL6JuGX0DWELAcG
+   tgteJyczSp8gp+E/77fXNCBAriWE8hMwwxwc8W3I99uK4fbza6U1dMzqL
+   F/qh4H7kO4OL6db89KnkAJmnExmN3SX41TU2hNpGvRLRcl3IFaSYE+/Ix
+   1uXJTjWCTT2ZPit1QWxpLaH+MWFUvsNQgnf0dt2ejD3LTseJS2ENsAW5u
+   sVB0OTBpxlvVPfqexEpJ0/W4oy7F6TBLypIGKPyjMTeNwn+y/REwf1I8w
+   w==;
+X-CSE-ConnectionGUID: jcbTnxD2TfGl3Xm6pRhF2g==
+X-CSE-MsgGUID: Gex8OomZQAmIKWSI248Muw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="68140538"
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="68140538"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 12:22:55 -0700
+X-CSE-ConnectionGUID: NenFRhsnSMyQfY/xGuDGFQ==
+X-CSE-MsgGUID: YFmv9pF4TY2TRKohK66sOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="120913249"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 11 Mar 2025 12:22:49 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ts5Bf-0007m8-0w;
+	Tue, 11 Mar 2025 19:22:47 +0000
+Date: Wed, 12 Mar 2025 03:22:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tamir Duberstein <tamird@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-pci@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
+Subject: Re: [PATCH] rust: enable `clippy::ptr_as_ptr` lint
+Message-ID: <202503120332.YTCpFEvv-lkp@intel.com>
+References: <20250307-ptr-as-ptr-v1-1-582d06514c98@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250307-ptr-as-ptr-v1-1-582d06514c98@gmail.com>
 
-Adding the aligned(1024) attribute to the definition of __rseq_abi did
-not increase its size to 1024, for this attribute to impact the size of
-__rseq_abi it would need to be added to the declaration of 'struct
-rseq_abi'. We only want to increase the size of the TLS allocation to
-ensure registration will succeed with future extended ABI. Use a union
-with a dummy member to ensure we allocate 1024 bytes.
+Hi Tamir,
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- tools/testing/selftests/rseq/rseq.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index f6156790c3b4..aa9ae866bc1a 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -71,9 +71,20 @@ static int rseq_ownership;
- /* Original struct rseq allocation size is 32 bytes. */
- #define ORIG_RSEQ_ALLOC_SIZE		32
- 
-+/*
-+ * Use a union to ensure we allocate a TLS area of 1024 bytes to accomodate an
-+ * rseq registration that is larger than the current rseq ABI.
-+ */
-+union rseq {
-+	struct rseq_abi abi;
-+	char dummy[RSEQ_THREAD_AREA_ALLOC_SIZE];
-+};
-+
- static
--__thread struct rseq_abi __rseq_abi __attribute__((tls_model("initial-exec"), aligned(RSEQ_THREAD_AREA_ALLOC_SIZE))) = {
--	.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
-+__thread union rseq __rseq __attribute__((tls_model("initial-exec"))) = {
-+	.abi = {
-+		.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
-+	},
- };
- 
- static int sys_rseq(struct rseq_abi *rseq_abi, uint32_t rseq_len,
-@@ -149,7 +160,7 @@ int rseq_register_current_thread(void)
- 		/* Treat libc's ownership as a successful registration. */
- 		return 0;
- 	}
--	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), 0, RSEQ_SIG);
-+	rc = sys_rseq(&__rseq.abi, get_rseq_min_alloc_size(), 0, RSEQ_SIG);
- 	if (rc) {
- 		/*
- 		 * After at least one thread has registered successfully
-@@ -183,7 +194,7 @@ int rseq_unregister_current_thread(void)
- 		/* Treat libc's ownership as a successful unregistration. */
- 		return 0;
- 	}
--	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
-+	rc = sys_rseq(&__rseq.abi, get_rseq_min_alloc_size(), RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
- 	if (rc)
- 		return -1;
- 	return 0;
-@@ -249,7 +260,7 @@ void rseq_init(void)
- 	rseq_ownership = 1;
- 
- 	/* Calculate the offset of the rseq area from the thread pointer. */
--	rseq_offset = (void *)&__rseq_abi - rseq_thread_pointer();
-+	rseq_offset = (void *)&__rseq.abi - rseq_thread_pointer();
- 
- 	/* rseq flags are deprecated, always set to 0. */
- 	rseq_flags = 0;
+[auto build test WARNING on ff64846bee0e7e3e7bc9363ebad3bab42dd27e24]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/rust-enable-clippy-ptr_as_ptr-lint/20250308-004557
+base:   ff64846bee0e7e3e7bc9363ebad3bab42dd27e24
+patch link:    https://lore.kernel.org/r/20250307-ptr-as-ptr-v1-1-582d06514c98%40gmail.com
+patch subject: [PATCH] rust: enable `clippy::ptr_as_ptr` lint
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250312/202503120332.YTCpFEvv-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120332.YTCpFEvv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503120332.YTCpFEvv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> warning: `as` casting between raw pointers without changing its mutability
+   --> rust/kernel/firmware.rs:64:35
+   |
+   64 |         let ret = unsafe { func.0(pfw as _, name.as_char_ptr(), dev.as_raw()) };
+   |                                   ^^^^^^^^ help: try `pointer::cast`, a safer alternative: `pfw.cast()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#ptr_as_ptr
+   = note: requested on the command line with `-W clippy::ptr-as-ptr`
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
