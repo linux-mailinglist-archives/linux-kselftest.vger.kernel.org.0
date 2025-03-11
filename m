@@ -1,120 +1,194 @@
-Return-Path: <linux-kselftest+bounces-28735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29774A5C1F4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:08:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28485A5C240
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A9547A89D9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:07:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 299883B201C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7058450FE;
-	Tue, 11 Mar 2025 13:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA436192D96;
+	Tue, 11 Mar 2025 13:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="bvmEz73A"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jbdTYZc9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563C235973;
-	Tue, 11 Mar 2025 13:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079C1156C62
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 13:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741698514; cv=none; b=IqYSN81AqRcOpCoN1K0P9MPtwevJFyC0AHlwl9iiwqPou6A1wuLSSdgihbtR660tQaMRtnan/G0s874GR3ZouaBb0iTglXbFT0XIIDeahVyDdNKgM8jrvm3sJYL32bbt3oFdVwMeE/h7Dlrql9GpNlELfbdngCaxDS6wQex3Z5I=
+	t=1741699101; cv=none; b=ZBGiZWssxQlrm/S1akw4nALgN2FfHw4y4kmT+ShioLaeXVNqrBfWHIgrOL+aUnD11C2wPcYSzFe48Bgl2cn8BJQM4z8qf+4WGe/tYlI0F69y6RhvKVJ08RWze79D9zrHc4NTzDY8ihhZ/1s2NK2X4V+0jcD2FvZziRsUkAxLIKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741698514; c=relaxed/simple;
-	bh=ck/zlJNE5eU83nztFEGSZ4ENuEUd6qotY8RuqJUlojk=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ROVZHjYgvqHZUCtrETjKhlMeYQY9owEuEN2AHy5uBqnoPizmMRHu3OGTBW9++50FiyH77bLEXIMtyN/bzgifF43sEaOq5yEBE5Eca7S5FiGm4LYDssBuzxByDao1S8iEGD3bYN9frw1x/uBEOq2EOR5b0FEMgn9NYU1I7iFJscY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=bvmEz73A; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1741698503; x=1741957703;
-	bh=blWTqaPziEQ/pUrrx4UHOMKEPZD4HIZJgcQ2dw8xfZQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=bvmEz73A4uNLFvcDdB/Xf4bNFipqifYoxkaBO4jTO0Rjf2gt2XI4K/I/VBbtCF/wn
-	 6NYcVbYN4scD5WY6kOtA7/yH8rXx8eOdp9Hi7YEM5xlr59G/WzD8TYjP9KIzvfZqY5
-	 XbqxJh0HAY/WO4FgWAEA4pzxaqkuyHilWZVtq4JXbQ5hLx2JzKlLyRrWuS4jrRcIHP
-	 cFAFO5+RuGuD5AU7qMXjbNLLZ84AurNtodZBRfJyc0BFb/LhaJuLeUGvSh06F6ER9T
-	 6KXp/xSboTLqtaLLIgyRsMtZ1vCQW1JhTTW21PYUgj/VeVyLUWSljxepU0qGmhFf67
-	 /TKIb21Xfj/dQ==
-Date: Tue, 11 Mar 2025 13:08:19 +0000
-To: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] rust: enable `clippy::as_ptr_cast_mut` lint
-Message-ID: <D8DGL6WY04GZ.207MFVQMKY35G@proton.me>
-In-Reply-To: <20250309-ptr-as-ptr-v2-4-25d60ad922b7@gmail.com>
-References: <20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com> <20250309-ptr-as-ptr-v2-4-25d60ad922b7@gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: f8bf13b601952848b958efec8bb21301139d199a
+	s=arc-20240116; t=1741699101; c=relaxed/simple;
+	bh=kZWbCuYaORPFU8w7lpayL1MqlPThbNYBuwG+AoUzEec=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=CxxM8HVUSI9KCpeJa8x02dXxqtpVw1Y6ZTzjUrHR0hf7A7D6/wGCZBSk5viIq7CkR957gXuN+LsSdD99oyyUY9qwciNc07AQzR3v7O/qvtsStX/HkwdoXSfL56Hg5kIhIFW/hvTnbd2bPXFI0WI8UuKhwx0lt3uviKM2c6F9v2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jbdTYZc9; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43bd0586a73so46270805e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 06:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741699098; x=1742303898; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Y/V3ij2YZYBELRjrNa6UOH2HSQ/70gTUpUW2w6XjdEU=;
+        b=jbdTYZc9CYChxKxJeexq7ATKWviMtjKR0YazIXTyIcyXSuNwiIekpv9z47JO3epmuP
+         6r0liaKd+1FcZKYjBz4YPqdrVg2BfuZIu4Z5+xn6FUWtjsPZOUJP2n34WrcabNHcwlOt
+         a+KLNHEs2UYePwttoIpa+Srn70sUgvZb2aFg92nPyU1pdUkjlkCLj46omV44lHTCE2sl
+         OAZiDFC06857mmnRinRlbqEaooJlTEYlVscWhPiBSwI8r82vY4MF6EOSgqWOL4s4UK8u
+         Dnd5e04lNHcG71AGfqetPppeo+wyWabc1Xg/yi57tKHyZydpFVBBNTWt+xxSBa6uuwz5
+         wbkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741699098; x=1742303898;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y/V3ij2YZYBELRjrNa6UOH2HSQ/70gTUpUW2w6XjdEU=;
+        b=vx2vyxfZmp87krNgs9C1dvh1lknjJz61f10l6xLLp0G6JM5KvAGv9Ue1OuPxC/ZOQZ
+         CGVigVTY49ZTzgMZj6tiYz7MUONgSCC0E7RanI9tol+hhsAqfL/816LrG4Z3LDmhkpDs
+         7gwNxwzk2kZGCh+6QnyvgrIjj94HlSvfjNOXVrfrngW8oqdGbDnGhIcaFmlGiDO+GNAj
+         4+284+kd5lecDawr4axJayRq/qNaBSbJDOc6QaW/Rmecg6nKmvwXrHHJs2DAAJiZebNS
+         iLOR3Dr0AvGbJ/ip8sJ/zWv5F5t3zdGhm+R3hl46wZyg4Vpj3QSzBwjow4o3++ni1v3o
+         QtZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXn0eAPgzmtTnj5LQ4hXxV3Sl1/Y2g1aJHVvUUAayhnSHVbaReBcis7BVepp6bWLLvfoFABwq8HEWPA9aplFHg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws4UbknJLyyPFlanDEkLTqZuAF2GFK5yXhnmdbhCS06ADh9PV4
+	sxVbL/DBQpsdZOh1K/4uBZdvGj8zuWTSEYzDy2QGuNnRmP8pHnlGgKL0MWIT7ZIPUZP1QRxY8Za
+	cUwvPk23aFA==
+X-Google-Smtp-Source: AGHT+IEdpBmFLHqg0EwNWaYJjDN9PewywJgWEJo/obnFlbCutpR2jQdlCSgkfmSa3XZZhJ1mYrZR1WEEKTY4zw==
+X-Received: from wmqc17.prod.google.com ([2002:a05:600c:a51:b0:43c:f5b8:aad0])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1d1a:b0:43d:3df:42d8 with SMTP id 5b1f17b1804b1-43d03df4496mr34621635e9.6.1741699098504;
+ Tue, 11 Mar 2025 06:18:18 -0700 (PDT)
+Date: Tue, 11 Mar 2025 13:18:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIABQ40GcC/3XNTQ6CMBCG4auQrq0p0x/QlfcwLqCdQhOgpiVEQ
+ 7i7hRViXH6TPO/MJGJwGMk1m0nAyUXnhzTEKSO6rYYGqTNpE2AgGQCjfU8jdnbEOEYKpjBMCrC
+ VRpLIM6B1ry13f6Tdujj68N7qU75e/4SmnDJ6qWsrC6OEUPzWeN90eNa+J2tpgr3ODxqShlILo xQvuZY/mu91edB8/S1L5LWyDNj372VZPqv0VHIlAQAA
+X-Change-Id: 20250220-mm-selftests-2d7d0542face
+X-Mailer: b4 0.14.2
+Message-ID: <20250311-mm-selftests-v4-0-dec210a658f5@google.com>
+Subject: [PATCH v4 00/12] selftests/mm: Some cleanups from trying to run them
+From: Brendan Jackman <jackmanb@google.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>, 
+	Mateusz Guzik <mjguzik@gmail.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Sun Mar 9, 2025 at 5:00 PM CET, Tamir Duberstein wrote:
-> In Rust 1.66.0, Clippy introduced the `as_ptr_cast_mut` lint [1]:
->
->> Since `as_ptr` takes a `&self`, the pointer won=E2=80=99t have write
->> permissions unless interior mutability is used, making it unlikely
->> that having it as a mutable pointer is correct.
->
-> There is only one affected callsite, and the change amounts to replacing
-> `as _` with `.cast_mut().cast()`. This doesn't change the semantics, but
-> is more descriptive of what's going on.
->
-> Apply this change and enable the lint -- no functional change intended.
->
-> Link: https://rust-lang.github.io/rust-clippy/master/index.html#as_ptr_ca=
-st_mut [1]
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+I never had much luck running mm selftests so I spent a few hours
+digging into why.
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Looks like most of the reason is missing SKIP checks, so this series is
+just adding a bunch of those that I found. I did not do anything like
+all of them, just the ones I spotted in gup_longterm, gup_test, mmap,
+userfaultfd and memfd_secret.
+
+It's a bit unfortunate to have to skip those tests when ftruncate()
+fails, but I don't have time to dig deep enough into it to actually make
+them pass. I have observed the issue on 9pfs and heard rumours that NFS
+has a similar problem.
+
+I'm now able to run these test groups successfully:
+
+- mmap
+- gup_test
+- compaction
+- migration
+- page_frag
+- userfaultfd
+- mlock
+
+I've never gone past "Waiting for hugetlb memory to get depleted", in
+the hugetlb tests. I don't know if they are stuck or if they would
+eventually work if I was patient enough (testing on a 1G machine). I
+have not investigated further.
+
+I had some issues with mlock tests failing due to -ENOSRCH from
+mlock2(), I can no longer reproduce that though, things work OK now.
+
+Of the remaining tests there may be others that work fine, but there's
+no convenient way to survey the whole output of run_vmtests.sh so I'm
+just going test by test here.
+
+In my spare moments I am slowly chipping away at a setup to run these
+tests continuously in a reasonably hermetic QEMU environment via
+virtme-ng:
+
+https://github.com/bjackman/linux/blob/5fad4b9c592290f38e0f8bc73c9abb9c99d8787c/README.md
+
+Hopefully that will eventually offer a way to provide a "canned"
+environment where the tests are known to work, which can be fairly
+easily reproduced by any developer.
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+Changes in v4:
+- NOT ADDRESSED: still using errno==ENOENT as a hacky way to detect
+  buggy filesystems:
+  https://lore.kernel.org/all/CA+i-1C3srkh44tN8dMQ5aD-jhoksUkdEpa+mMfdDtDrPAUv7gQ@mail.gmail.com/
+- Added some incomplete cleanups for the mlock tests.
+- Fixed divide-by-zero error when running uffd-stress on <32cpu systems.
+- Fixed misnamed nr_threads variable (now nr_parallel).
+- Fixed reporting io_uring errors (retval instead of errno).
+- Link to v3: https://lore.kernel.org/r/20250228-mm-selftests-v3-0-958e3b6f0203@google.com
+
+Changes in v3:
+- Added fix for userfaultfd tests.
+- Dropped attempts to use sudo.
+- Fixed garbage printf in uffd-stress.
+  (Added EXTRA_CFLAGS=-Werror FORCE_TARGETS=1 to my scripts to prevent
+   such errors happening again).
+- Fixed missing newlines in ksft_test_result_skip() calls.
+- Link to v2: https://lore.kernel.org/r/20250221-mm-selftests-v2-0-28c4d66383c5@google.com
+
+Changes in v2 (Thanks to Dev for the reviews):
+- Improve and cleanup some error messages
+- Add some extra SKIPs
+- Fix misnaming of nr_cpus variable in uffd tests
+- Link to v1: https://lore.kernel.org/r/20250220-mm-selftests-v1-0-9bbf57d64463@google.com
 
 ---
-Cheers,
-Benno
+Brendan Jackman (12):
+      selftests/mm: Report errno when things fail in gup_longterm
+      selftests/mm: Skip uffd-stress if userfaultfd not available
+      selftests/mm: Skip uffd-wp-mremap if userfaultfd not available
+      selftests/mm/uffd: Rename nr_cpus -> nr_parallel
+      selftests/mm: Print some details when uffd-stress gets bad params
+      selftests/mm: Don't fail uffd-stress if too many CPUs
+      selftests/mm: Skip map_populate on weird filesystems
+      selftests/mm: Skip gup_longterm tests on weird filesystems
+      selftests/mm: Drop unnecessary sudo usage
+      selftests/mm: Ensure uffd-wp-mremap gets pages of each size
+      selftests/mm: Skip mlock tests if nobody user can't read it
+      selftests/mm/mlock: Print error on failure
 
-> ---
->  Makefile              | 1 +
->  rust/kernel/devres.rs | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index c62bae2b107b..bb15b86182a3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -477,6 +477,7 @@ export rust_common_flags :=3D --edition=3D2021 \
->  =09=09=09    -Wrust_2018_idioms \
->  =09=09=09    -Wunreachable_pub \
->  =09=09=09    -Wclippy::all \
-> +=09=09=09    -Wclippy::as_ptr_cast_mut \
->  =09=09=09    -Wclippy::ignored_unit_patterns \
->  =09=09=09    -Wclippy::mut_mut \
->  =09=09=09    -Wclippy::needless_bitwise_bool \
-> diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
-> index 3a9d998ec371..598001157293 100644
-> --- a/rust/kernel/devres.rs
-> +++ b/rust/kernel/devres.rs
-> @@ -143,7 +143,7 @@ fn remove_action(this: &Arc<Self>) {
->              bindings::devm_remove_action_nowarn(
->                  this.dev.as_raw(),
->                  Some(this.callback),
-> -                this.as_ptr() as _,
-> +                this.as_ptr().cast_mut().cast(),
->              )
->          };
-> =20
+ tools/testing/selftests/mm/gup_longterm.c      | 45 +++++++++++++++++---------
+ tools/testing/selftests/mm/map_populate.c      |  7 ++++
+ tools/testing/selftests/mm/mlock-random-test.c |  4 +--
+ tools/testing/selftests/mm/mlock2.h            |  8 ++++-
+ tools/testing/selftests/mm/run_vmtests.sh      | 27 ++++++++++++++--
+ tools/testing/selftests/mm/uffd-common.c       |  8 ++---
+ tools/testing/selftests/mm/uffd-common.h       |  2 +-
+ tools/testing/selftests/mm/uffd-stress.c       | 42 +++++++++++++++---------
+ tools/testing/selftests/mm/uffd-unit-tests.c   |  2 +-
+ tools/testing/selftests/mm/uffd-wp-mremap.c    |  5 ++-
+ 10 files changed, 105 insertions(+), 45 deletions(-)
+---
+base-commit: dcb38e6757f1b7944af9347ce6b54263d3666478
+change-id: 20250220-mm-selftests-2d7d0542face
 
+Best regards,
+-- 
+Brendan Jackman <jackmanb@google.com>
 
 
