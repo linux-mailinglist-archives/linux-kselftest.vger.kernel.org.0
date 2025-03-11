@@ -1,96 +1,141 @@
-Return-Path: <linux-kselftest+bounces-28733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73664A5C13E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:33:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57C8BA5C1C1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:00:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D14D5169511
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 12:30:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EED6B3ACD2D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9DED2566EE;
-	Tue, 11 Mar 2025 12:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0021EEC0;
+	Tue, 11 Mar 2025 13:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHlviE+2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3cqm1M5K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B2225487A;
-	Tue, 11 Mar 2025 12:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192C279C2
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 13:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741696198; cv=none; b=Ctwgge7iz+cyCC2e4wI+1xvn/LJLyelHmnIDvp1RTLThtZWz0ZDO24fnVu5KwZ+xC6cFFumIHNRejyt5wq33RTvQsXQhpym1EU0Crx+G1FiZRajfYEiix66cFc8v4FoD3tsBw10if49oG2O+MMLm5z6AQpUKpu43+J5CaSOQ/0o=
+	t=1741698038; cv=none; b=tMU+aGG4YZu9Xz2jsF1yFZA83MNLkuYumPrtfAvop0Wgm3LVzsKpAXNHGjPQZfe9RqvgHGmhqbZwgmtBty/2eWs/yUWk1xntxB0oW+xhtVQ6FzvPzPcoP6+5L07fZLAdllSScqkArdK7uZ6+TWkI0btvnTFhMS7+YCAH2s/HC24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741696198; c=relaxed/simple;
-	bh=QtZXEnAsq+kpo0B3XWYCNv9iskcf8SuO6bT85S2GaiA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PVbK9WAVu9JfQ+P41Y58ktaHrQTAz1YA7sBHhVe7r2QE2CR14fhuGgP3Hjhumbr8L5VLgVU8Jlkj2XvMj49dBu9l3ZBxU+aQETb4y3Tt2MuZINPvKngDvbXl5d4Fbo8YkK4ksdFr2Gt1q5we+Vu7drc/SJDbjdCshjpbuwVuKLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHlviE+2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112C7C4CEE9;
-	Tue, 11 Mar 2025 12:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741696198;
-	bh=QtZXEnAsq+kpo0B3XWYCNv9iskcf8SuO6bT85S2GaiA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=VHlviE+2/1h3kZo6MwoozbySOwHSmNTBqo9W6wPc9xI93K7Hlh1G56SpYUa1VJmdu
-	 U5PtWGkAOdMyUX6Ma81gm+vn3Sb8Bbny0zjVHwDOKGP7W5qk1okmgar+YP/Ysx7QLk
-	 u5GXz2t05m9rUzWKhuvckLDx84YroqLQTvXSfNovjNFXN4LesY1gbya98enSy6QGex
-	 AvHY3cCWOBgjtwsIO1DXHpRf60I4AvtZismEj3I4X4qsC2CGth0/2VMJw8YZQrvBOL
-	 2MDCcPW1JUW8Tdvr/DM9fLT3spewWApZo4x5oOs89n5G6OXpP7Dh8kjEGhrJE8bz5t
-	 VwXAk2Dgf+2vQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7123C380AC1C;
-	Tue, 11 Mar 2025 12:30:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741698038; c=relaxed/simple;
+	bh=yIpxJDcYAls4A+23wuwEwSo9LSvMNE6FKOtlsMqjj84=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ufI+o91SKOpMEYXQsWHyT0k+sPPK2xshbqaDTaTN6Sxt0ZQjYQBPx2J9MkRpHzj2SKWpqDEFyUpFvtyjrk4z3ku4z1RQHtCL8yzaj9WWJVwQLNqylMCKnzcTOGI22b41dUnair2vBZ27HSmJhbhF9oC2fL7PxQGJ1GWKiuA9oyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3cqm1M5K; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-476693c2cc2so247121cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 06:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741698036; x=1742302836; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4VHQhu5V4TeRvh0NUCJQSxM18BZB2qvN8uXFXJh7n+Y=;
+        b=3cqm1M5K55z681zzj9d60o9NM5Z7GNg4QcLyrAQczVswM3xpNoeuSvRYWzAGCx6Ql2
+         9QbrWpmpDCuCrL4VPJ3b5b30rZ/nJfZV6DeCH5VCtGE+Fq8SR9tyZZH/Ajsobv41qsvX
+         DXlfI3fLNReDQilS0zdvvffVZW6O+LBok89io0GAtbhQklV148SDSWB04YWTfhJGpGXC
+         8dKqjfcEOddUDnOMdNUOr0NpGzoAeJ/7AykruON3WjBu/v+nfL+TXKZDBDENZnKjKRsi
+         xlzi6hXT1FLr1juLXMsuaN6kf1j8j0f7RFYgvsyIaLyqjhMzUcGa/4NO/M1vuWDyv+OR
+         J6HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741698036; x=1742302836;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4VHQhu5V4TeRvh0NUCJQSxM18BZB2qvN8uXFXJh7n+Y=;
+        b=vavy1gpQw+d7yqdVGtvzobTGihVpafGIjxUnmpDM1ai+V2sef7Y6aT6r6hN/lUvNuz
+         jZ5gKYafgNjKZOEnJL9b7nbKa2Z3K7N+VbJ1J6ke73sSXWoaWq+2xCWOsbVvcr9ZQ78/
+         UC4IdzyTJk8L+8lPISIXEJ6RBPHYsQzaCh9HcX1UqO/p7QQm3XcLXKz4dFiz650utkp0
+         lq7fCh+pIR0kkMR6mCIJwkj09AZ65hCHekjymB9NImOsdC3L3fFPCGF9X9HDwjJeKjAv
+         gUELmcjJM3QErgSd7gsdLTzzBYLQZtkNvu7q8SG2O9V8L1oAswBg25A975JRRPdARdEa
+         /UDA==
+X-Forwarded-Encrypted: i=1; AJvYcCX16jDI45HNBelmZsTupsv1X7f4ZTgwfp0Og4MzuQRwyPSekbHOo5NEgTDBemwnZFyaXVOBLMnE97N5urvdYLQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpQ3rWOPR757kvP/4kjkdtaNHEWKvdNTYyocAlK5AUFIHg4+i7
+	BUkvzKcZ0cpWdyiQBa3dVjiqGMR0BvdIfhWGPVDOVhjsQUpQURni/3MFcJxdYoOrl1nd6M5geTO
+	oLzstgESz60ZGSA1TPU5szRPOAF6HER4wYIKe
+X-Gm-Gg: ASbGnctufIgANEsj2kZvDi5x+wjwr2rOP0u2PfZly8E6QS8EuFRRPVPnRx1CeqxP0sH
+	aSpSrdjjVEXXjhuftqe7l4zfsUzP8S3qASKkSrsF+I6n4/OEvgJKbnfA7qUDMk8azkZnBkSmubx
+	85FAj5pqCRpuYGcRRmA/4pu6Kbhoox7aCyYEff9NRsdlUU2hQebKfwD6Zw
+X-Google-Smtp-Source: AGHT+IHjbvoyGhYxZy+5DnhAXj+weZD+odUEYuzByCq9hSqciyG94OAwXLnaCEx0Sp1sFSDatHVUQxyRQdN8oDCn60M=
+X-Received: by 2002:a05:622a:53cd:b0:474:b44f:bb88 with SMTP id
+ d75a77b69052e-47668af5d7cmr11461811cf.27.1741698035462; Tue, 11 Mar 2025
+ 06:00:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv4 net 0/2] bonding: fix incorrect mac address setting
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174169623226.66274.17244628271427546125.git-patchwork-notify@kernel.org>
-Date: Tue, 11 Mar 2025 12:30:32 +0000
-References: <20250306023923.38777-1-liuhangbin@gmail.com>
-In-Reply-To: <20250306023923.38777-1-liuhangbin@gmail.com>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, jv@jvosburgh.net, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- razor@blackwall.org, horms@kernel.org, shuah@kernel.org, cratiu@nvidia.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
+ <20250228-mm-selftests-v3-8-958e3b6f0203@google.com> <08023d47-dcf4-4efb-bf13-5aef3c6dca14@redhat.com>
+ <Z8mYG8eQnMsOA4c1@google.com> <16023193-6cb4-46d1-91c4-43342e7e6d30@redhat.com>
+In-Reply-To: <16023193-6cb4-46d1-91c4-43342e7e6d30@redhat.com>
+From: Brendan Jackman <jackmanb@google.com>
+Date: Tue, 11 Mar 2025 14:00:24 +0100
+X-Gm-Features: AQ5f1JqAOw6spu6AMy4R-fMyLCvyaVsj-m1jqaL8Pde_lEnMc-b72Se9VM50FPs
+Message-ID: <CA+i-1C3srkh44tN8dMQ5aD-jhoksUkdEpa+mMfdDtDrPAUv7gQ@mail.gmail.com>
+Subject: Re: [PATCH v3 08/10] selftests/mm: Skip gup_longerm tests on weird filesystems
+To: David Hildenbrand <david@redhat.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Thu, 6 Mar 2025 at 15:40, David Hildenbrand <david@redhat.com> wrote:
+> Yes, just skip 9pfs early, and mention in the commit message that 9pfs
+> has a history of being probematic with "use-after-unlink", maybe
+> mentioning the discussion I linked above.
+>
+> Maybe something like this would work?
+>
+> diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+> index 9423ad439a614..349e40d3979f2 100644
+> --- a/tools/testing/selftests/mm/gup_longterm.c
+> +++ b/tools/testing/selftests/mm/gup_longterm.c
+> @@ -47,6 +47,16 @@ static __fsword_t get_fs_type(int fd)
+>          return ret ? 0 : fs.f_type;q
+>   }
+>
+> +static bool fs_is_problematic(__fsword_t fs_type)
+> +{
+> +       switch (fs_type) {
+> +       case V9FS_MAGIC:
+> +               return false;
+> +       default:
+> +               return true;
+> +       }
+> +}
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Ugh, some fun discoveries.
 
-On Thu,  6 Mar 2025 02:39:21 +0000 you wrote:
-> The mac address on backup slave should be convert from Solicited-Node
-> Multicast address, not from bonding unicast target address.
-> 
-> v4: no change, just repost.
-> v3: also fix the mac setting for slave_set_ns_maddr. (Jay)
->     Add function description for slave_set_ns_maddr/slave_set_ns_maddrs (Jay)
-> v2: fix patch 01's subject
-> 
-> [...]
+1. fstatfs() seems to have the same bug as ftruncate() i.e. it doesn't
+work on unlinked files on 9pfs. This can be worked around by calling
+it on the parent directory, but...
 
-Here is the summary with links:
-  - [PATCHv4,net,1/2] bonding: fix incorrect MAC address setting to receive NS messages
-    https://git.kernel.org/netdev/net/c/0c5e145a350d
-  - [PATCHv4,net,2/2] selftests: bonding: fix incorrect mac address
-    https://git.kernel.org/netdev/net/c/9318dc2357b6
+2. 9pfs seems to pass the f_type through from the host. So you can't
+detect it this way anyway.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[3. I guess overlayfs & friends would also be an issue here although
+that doesn't affect my usecase.]
 
+Anyway, I think we would have to scrape /proc/mounts to do this :(
 
+I think the proper way to deal with this is something like what I've
+described here[0]. I.e. have a central facility as part of kselftest
+to detect relevant characteristics of the platform. This logic could
+be written in a proper programming language or in Bash, then the
+relevant info could be passed in via the environment or whatever (e.g.
+export KSFT_SYSENV_cwd_ftruncate_unlinked_works=1).
+
+[0] https://lore.kernel.org/all/Z8WJEsEAwUPeMkqy@google.com/
+
+But, to find an immediate way to get these tests working, I think we
+are stuck with just peeking at errno and guessing for the time being.
 
