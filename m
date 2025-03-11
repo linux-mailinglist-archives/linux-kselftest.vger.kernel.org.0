@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-28741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 489EBA5C24B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15CF3A5C24F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B295A188188E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:19:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515771887527
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175471D54C2;
-	Tue, 11 Mar 2025 13:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4FF1D7E26;
+	Tue, 11 Mar 2025 13:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGHkQ7zB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wJkL+yO3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1B01BD01F
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 13:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8442C1D5ABA
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 13:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741699111; cv=none; b=Mr9NvTwXDiloc21vU0fftRlf2xnMYeZDRGixfuo1EMZOomKZT8j+6d6QRtQShX1Anlma1kAH8dCzMjbU318++SbLyjHz2588xlvWTCGGBJBL7L72NXGL2x3eDE5zkK9YZ8yrI/dMz7c1dn9aQWawgUBa9eo0G22ZhL9zzZbx59s=
+	t=1741699113; cv=none; b=uFLOkfl2qF9j0UfcHs9B5y7T8mRIlbX/trE6mgn+XMPOjvUzkzkejlL8gzAvqxjEgewOyU2dYvmBr2NhDQH2qV+Ljwc8TBoNWFGmyXQdupkt8D91VsqxWobtiM1qoE5PI0UNo0yXPc50MkM92u/DxSfQqwoJglTxhQdcoV2AUcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741699111; c=relaxed/simple;
-	bh=ZAXSMCvr+IvZnGOVJS0yA66QSG3JhZXcjwBrekeGfBs=;
+	s=arc-20240116; t=1741699113; c=relaxed/simple;
+	bh=WQLjLeaas6WAwWHU6F3llD+u+5uqTYbAeh753X/DebM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HaMIoQBNnBEn+N/LnDn1eefrT6IGInb/qa9iqparaKEIUWVq2ZAdvoAwJlYaAbdfpBDfeUbc8XmWSl/jOamt6gNP/bge4ENfGlYhENeYFmjya287pHJIF7tfXdg2D6wTGK0JjYJxiDzlKlROD0emtsfE0GXNZw22yFHi+FYMqeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGHkQ7zB; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=KSmJh8ykMwAx3VJraBD91NOh7nzHMjfPrBI7h28zNJKBCd9Qw6ayjZlyIlHI1CojoaWGay/nXVwzX+5B2JvjwZ2UNsdoK8x3AVbjqQ6FzvlU8aQOTdWpg/GTGPkvxKrIwgtzce5Nh4Y/vHn40nzG7SZSUFbfX6n/dGuWmDyMnBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wJkL+yO3; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43cf327e9a2so18475365e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 06:18:29 -0700 (PDT)
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4394c489babso27387615e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 06:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741699108; x=1742303908; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1741699110; x=1742303910; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LGBb/Y6S3RxkI/6vwf1UwhFj4ViFPcNM6Jmgh/1tpM4=;
-        b=nGHkQ7zBfBAh0E2oqdVC8DoeXRBzDb5o6fd/qxgNVftEh5BfS8V8XMefPQupXWT6Cw
-         OoQww4SZpH+2vtD0gKBju3YWOhP/JOvNWxnjtmAX5s+LhY3ahfCfVTWaSFD+yjeyK9lF
-         ADOR8NupGkadboMHeDH0b4p0zjHiLs06Z4MNs4l9kHO0Ko6F01ojAkRgm4xdYJWq1M6K
-         6ORviiK+WXuyCoAXtM06rvSCk66nKR7C++Xlk5Ct5ruvb8JE8RGCaP1ehJ6fteyireFt
-         gqsgKZcmBi23+CC4RMepurGCXka1zQ3mGBvEO2HUgqiN53E/O4MNM6yn3WgURyFj0DzD
-         V4Kw==
+        bh=E6JjfJOQBkddVu8mbUCQ3JSQzc9s8ZEC60spagx9Tws=;
+        b=wJkL+yO3fIf93hkxRU4CwbWrCDY5tFDTWFNH6DBMUqPtX7rKwvOgdqCAngYBtCNlng
+         //5MUduIipEG+b2DFVYOxnw0VBrABqm6/i3pe3da5sSdbssLKWKHedQ2GLcwyAznD1Lw
+         LOjkPWj0d+EpmzVC4bSoEuA/xMzAQQ2K95WADFDbFIPQ+YFIH/guvc5vQvhrHSGhx5Dv
+         efLIy4K0NukjDKXvA4nEKXGhd/Sbe5mDJQ6BFJzkuqVUtNB4Pnz3D4L/s4li+YHCMUhq
+         bqSzsW7qQNSLlzkqf5AZO6j/VJCoCMvAyUJavYLrR3ZvTC7T8YuO9WyJFziS5jUa3Wgu
+         s6/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741699108; x=1742303908;
+        d=1e100.net; s=20230601; t=1741699110; x=1742303910;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LGBb/Y6S3RxkI/6vwf1UwhFj4ViFPcNM6Jmgh/1tpM4=;
-        b=kc6g8WlWPznBCcwrW6PJAsDUCqWj/yaeOlTJhHtsGQYRvqFCx3RtFd8zODCPXRsGTR
-         UALjOEafVxw/vcywGc3YEQlYqRW8JsdAxCt3teN68NWPJW9CY64gUnUifngnTVqPjb9Y
-         k9itTBzKbD1rLhwZvN9zwLsQn0nQGknnRrE1x7Kf/jVuhmph1lmP/MQs1X/K97nwZucq
-         Zw3Fp+F/f5774IqgexL6QLOG/4XWEH4iu59rfy1TZ6bCR+ecFy6tkj1VAXWSr1xgZXst
-         O9C8luthWlmPiWnnGgOkvprr3AYMpHQV6p2u8IAItErKEZutbIUq5gEwZccwqaEZhcXB
-         1H5A==
-X-Forwarded-Encrypted: i=1; AJvYcCXDdSfQC08oQYdo0SHOZpzTZBr5GjbCyWs08J5Iged1jIAym33w9Pu4dBd3B9qYT+P/viY5jSrI6RdjseBhhCs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzaC8YiWxoB9wvSSeDROSWhyIhhNLpYNcrpI9UxjASvWEs88zj
-	es6Mh3nbFs8zvue1uQGTEf7BTyfyvFPufvkw6lVX33YeioBqYuNfQMMckPX7FwhFAiJov0h5kX3
-	DYmF1hdknAA==
-X-Google-Smtp-Source: AGHT+IEB4Ugao+9oG4PoYlVLqRx0MnCh6L1DYai8LwtyRUN8s3dqA+kO7+QszcVXjAFc8ZgqGgWa+WHaCnWckQ==
-X-Received: from wmbhc25.prod.google.com ([2002:a05:600c:8719:b0:43c:fce2:1db2])
+        bh=E6JjfJOQBkddVu8mbUCQ3JSQzc9s8ZEC60spagx9Tws=;
+        b=FZ8SbKi94oRiTx8EWUuaJ2Hn4ZmAlPb6xja52CIuvAPrh/NUUvT3XFDXgs86M+PCKb
+         nOIQ9lFROIiiXEoCb++GqMJCp/4gUBVvHow+INnBvlfycuaKhsL3o5lI2iFeNV4UCA9Q
+         2+shDZE/EIw1pvZGKKDg5bNI9wF1/J9rkT1Q6m7NEkiXBBj6YTCqaEIh8xgTybjcnt4c
+         dGXP4Ah4Btj0/v9cBawlmBDRR0PPu76kaJhi/KEY3VYPsCtjq3lXVKtRIHVy7uz1n7qo
+         iUqAuvXd3+RudqXLBP8P8ABmAdYAnYU/ErqxzltUPDoVJ6qFI/fZkEYwoyg+e0s0lLgp
+         d6Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGSoDxLGby5a7/pV0DEX0wu6fzt+GKmME62mZRoUmWJUKNvoRM1I5caqDTSwC+KUkAu9/vmdhUxJ251wm2Rbo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+U3fjyRclZV6ySH1CInnSKgb32YdFGbCPQ3e5/sBkDfvlPa6e
+	LcaDyki4xhRgNjiUOKeG/Duugs7WhQgTNfCFdu/lwKXDmaSU7lYu1hQkGFD0CVgorDCYakgReo1
+	IfoWNfH8aNA==
+X-Google-Smtp-Source: AGHT+IEIWvgrPAdW1aYeAn80KnMmveyrFiqXf2KEYlIp8fmgFPw+5h8vHeMIpGYZnJb/sky5I2oxhtfkiMAT0Q==
+X-Received: from wmbbe8.prod.google.com ([2002:a05:600c:1e88:b0:43c:faa1:bb58])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4e8f:b0:43c:f184:2e16 with SMTP id 5b1f17b1804b1-43d01bd2167mr54372315e9.5.1741699108122;
- Tue, 11 Mar 2025 06:18:28 -0700 (PDT)
-Date: Tue, 11 Mar 2025 13:18:16 +0000
+ 2002:a05:600c:4316:b0:43c:e70d:44f9 with SMTP id 5b1f17b1804b1-43ce70d46f4mr104149745e9.18.1741699110016;
+ Tue, 11 Mar 2025 06:18:30 -0700 (PDT)
+Date: Tue, 11 Mar 2025 13:18:17 +0000
 In-Reply-To: <20250311-mm-selftests-v4-0-dec210a658f5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,37 +74,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250311-mm-selftests-v4-0-dec210a658f5@google.com>
 X-Mailer: b4 0.14.2
-Message-ID: <20250311-mm-selftests-v4-5-dec210a658f5@google.com>
-Subject: [PATCH v4 05/12] selftests/mm: Print some details when uffd-stress
- gets bad params
+Message-ID: <20250311-mm-selftests-v4-6-dec210a658f5@google.com>
+Subject: [PATCH v4 06/12] selftests/mm: Don't fail uffd-stress if too many CPUs
 From: Brendan Jackman <jackmanb@google.com>
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Shuah Khan <shuah@kernel.org>
 Cc: Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>, 
+	Mateusz Guzik <mjguzik@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 
-So this can be debugged more easily.
+This calculation divides a fixed parameter by an environment-dependent
+parameter i.e. the number of CPUs.
 
+The simple way to avoid machine-specific failures here is to just put a
+cap on the max value of the latter.
+
+Suggested-by: Mateusz Guzik <mjguzik@gmail.com>
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- tools/testing/selftests/mm/uffd-stress.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/uffd-stress.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index d6b57e5a2e1d7611aa1588ee41601ce16117a574..4ba5bf13a0108435ce8b53340b9e17ccd47e859e 100644
+index 4ba5bf13a0108435ce8b53340b9e17ccd47e859e..40af7f67c4074d901be6608e5d64bd0490026dae 100644
 --- a/tools/testing/selftests/mm/uffd-stress.c
 +++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -457,7 +457,8 @@ int main(int argc, char **argv)
+@@ -435,6 +435,7 @@ static void sigalrm(int sig)
+ 
+ int main(int argc, char **argv)
+ {
++	unsigned long nr_cpus;
+ 	size_t bytes;
+ 
+ 	if (argc < 4)
+@@ -453,7 +454,15 @@ int main(int argc, char **argv)
+ 		return KSFT_SKIP;
+ 	}
+ 
+-	nr_parallel = sysconf(_SC_NPROCESSORS_ONLN);
++	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
++	if (nr_cpus > 32) {
++		/* Don't let calculation below go to zero. */
++		ksft_print_msg("_SC_NPROCESSORS_ONLN (%lu) too large, capping nr_threads to 32\n",
++			       nr_cpus);
++		nr_parallel = 32;
++	} else {
++		nr_parallel = nr_cpus;
++	}
  
  	nr_pages_per_cpu = bytes / page_size / nr_parallel;
  	if (!nr_pages_per_cpu) {
--		_err("invalid MiB");
-+		_err("pages_per_cpu = 0, cannot test (%lu / %lu / %lu)",
-+			bytes, page_size, nr_parallel);
- 		usage();
- 	}
- 
 
 -- 
 2.49.0.rc0.332.g42c0ae87b1-goog
