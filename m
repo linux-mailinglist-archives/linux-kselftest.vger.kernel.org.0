@@ -1,126 +1,193 @@
-Return-Path: <linux-kselftest+bounces-28689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28690-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CA65A5B6D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 03:38:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC12FA5B800
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 05:32:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D9907A8798
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 02:37:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF3EA171391
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 04:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D201E7C2F;
-	Tue, 11 Mar 2025 02:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9429A1E9B35;
+	Tue, 11 Mar 2025 04:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="JMhGny2o"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HFhrsUql"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060561E5219
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 02:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B2B1DEFF3;
+	Tue, 11 Mar 2025 04:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741660673; cv=none; b=rAIoPAPlBAPJHfHbrfc6g7dcSv2f0C9W+qnViYSdI6IKLnchAXWfjO32qAj7jxnFOlcVwEzh71JwgyVfjDuMWrmv23aBV4IO1VyrkbuU6fxuzzzuxNH+dc+Ta84N9wK9GatCzXAww0AbS4zTxsDhZyWhS69RIX9d0MFwrSq4Jv4=
+	t=1741667569; cv=none; b=ACN8Yz1oWbiPRbyHg9WuLTFPBxWmShmjc9Co1uflnZMhvjz5GJV1He4V/wZifHwc9LPGNt9YUJ5zBBNKpl+fZpYOpPFjyrAZIDuCyYyZ6KF/IkcldQFsf9FMz+JSeW0a1AJ3AT94PC8i09wbwgxs7iH+kcxzlf7LPLIKAtJlkIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741660673; c=relaxed/simple;
-	bh=hh7QDsywcXB+6disdfK5pr9T8ubWm1fW4QiNis++4VA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ok+wffP9t7yt5yvvM/2EPtKHje+UodUOMBwaHxz5asXyAz1j4DqmGA42OVMTvijxXY6R3vyLtNMsJ+ojoySPKloZSnEilDfBUz6/4WPEdvc35tDml2xnMu20hEmPGE6nE2n+5A40YQUF7V+lvmTElqaInWDuygzujORBJmxUf4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=JMhGny2o; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2234e4b079cso88530875ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Mar 2025 19:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1741660670; x=1742265470; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1EJIiSH26iW36iQ0AY70VtFe7J14wVFHIbN5UzXmWNM=;
-        b=JMhGny2ohaL4dT2gQ+rZcQbfAnckNl3h8rXMQpctLvpJmwhA2GT/aWwrfFAh2BUvf5
-         7qyUkrPEiin91wP/MrOrL78HqgGvfPH3PMcdE+ynYSc5XXBmi0K8FTGZ7S6rL0m9oV5/
-         4F9IARyhLjC6KzQguBRKZ0tSSc7nNff0oX/X3faMMwtan0p+g53A10olLu8tEcOoRasr
-         I46J5Y4A/1TR1irDJsmhXws7KZVvhxL9Scf1eY2CQ82N45KJeiul2Fqw4dfV1ujkZpwy
-         RNlhZoCZvuGZ17sLdFve3qT07JfAxerTvTjDFuvi2nj7JdiqzJIL/DWqjCwSh7RHZyRq
-         khjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741660670; x=1742265470;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1EJIiSH26iW36iQ0AY70VtFe7J14wVFHIbN5UzXmWNM=;
-        b=tuFZciGMtvaS+6WY2a0b6vXnCLT23H+GmI/SpkvnFeyZuVbP2dJkRMCfaso4/7zaWH
-         GGgdJWhe0PRUjsEPqEea1jpQD3V0uptnGstxHRycB2h6CplmNFN3Gck2ri58OvqTO/0g
-         6fpm7mtA3PFCtOEMhgyXaZ55/s1zSkiF8seG+kSIIZ+PYXFk3z+3/cL4iC11Lu1wPHlC
-         8Nmz9PHlrQxOn4bPqKiS6uwJZaALruqYO5ISmMEQ5Co0bOtEXoKp/QQuf0V5iqv9NQA9
-         Y/LKUMKoNhD/rH0qiM01t2Jk7tBY98v8ZHpwPSDYizIEmM7i3iGIpxsogXsDpVPRN15n
-         vFwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqVwxdbXB9Tad9DvbT8Z4kbO+q/4ZpI3qosufLQfsHmaOs7XxpZF8TFsh7GFkUyjTuhuJ2gjUcVeB4Fjxi1yI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDwllJto8g6V+ZqvH4GhEt3SSsGdmWQqDxPqtzXIdW2kBeCllP
-	5sL8GR/1kRX7D1ewjmTEJxeot67ufCH9eA/+kMDYuz3Udik5YHgNHbX8rlUghko=
-X-Gm-Gg: ASbGncuEpKqPv+jf2vorA0I5W7JdAN3Bl+r73gi9o8J7mJMp/50hwSaszMb8UQjstnd
-	zQjKE0vVJ7hSWfnY8JjNWBI1c/Gc+NkfQTq9sLUoHsL0bs0Ki7QvAxMIu/aWBCF5E0L/ww+xuoQ
-	Gju8xJPpmTn4USYHpAfPy2EVP9kyqQvpVXsxZeZB3yjPHGQ+jnf4q8cv85JDqRLoJyBF/gTWCcv
-	s7PFn20/De0yetAVZaMd/uKAFNAlFRGZzM3jlgOwR5pYiynN6zkwe3s/n2hIBZzU18zGKQY2tMN
-	PnQdhyd+iGPoOVjdc52IA5kRWSRFtce/Wy/y1JGpr44niRAb0CluREyTjH28rEFjwYkw9bJ7+Ng
-	/cDC7
-X-Google-Smtp-Source: AGHT+IGqOQCr1tOk5CkVd1S+i7SxypBwbxwvlNPK+GIp3D5+3dsq4NswgC6lEGNZin82dMDVWEMT1Q==
-X-Received: by 2002:a17:902:e88d:b0:21f:768:cced with SMTP id d9443c01a7336-22428886828mr219614335ad.8.1741660670288;
-        Mon, 10 Mar 2025 19:37:50 -0700 (PDT)
-Received: from cyan-mbp.internal.sifive.com ([136.226.240.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410aa4a79sm85850615ad.214.2025.03.10.19.37.48
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 10 Mar 2025 19:37:49 -0700 (PDT)
-From: Cyan Yang <cyan.yang@sifive.com>
-To: akpm@linux-foundation.org,
-	shuah@kernel.org,
-	david@redhat.com
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cyan Yang <cyan.yang@sifive.com>
-Subject: [PATCH] selftests/mm/cow: Fix the incorrect error handling
-Date: Tue, 11 Mar 2025 10:37:30 +0800
-Message-Id: <20250311023730.56658-1-cyan.yang@sifive.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1741667569; c=relaxed/simple;
+	bh=37ux8iyEWWB9ed6gLYmpWbgzzlUkyqEkrpow+L4VVQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mtPx2ClX+4ZOalS3v0f2jpw0HupkGMLnwPMq6IZxNhsN7QXTkyN4Xr8p49Dw+MRjVrvX/gZaPG8LV/caLWjvVSqLrMlz7wr3HQ3iQ5lHawO/mzcgY5L8KIoL4uR0IOmPv/sO/4JUalGMfNeMjYRftSrCh29ZZSpizZP01rPBsj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HFhrsUql; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52AKFaEB028830;
+	Tue, 11 Mar 2025 04:32:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=emHXY3
+	4nUGK7e99fHYDPih2r00/7gj841rkTYUwHmc0=; b=HFhrsUqlKASIBzfR98U2pz
+	9h3spfbcyOmbxfj9N4DD1QRAf/6PKEcdrRhWV8b0XWhdycRF0/1oXMg0BqxWImUz
+	5R/gxcRNNvi67ppfL5GPGiufC64CEKYJRKZi3gnO01Wws5/ndgri+qKILRiA6DaO
+	pBECF7o1yz6Dhq+D5hck7pBLiown1EqP/YLMCnNCmTMPgyo5H85gfjo+2G9HWpzi
+	cgatCBFr/HW5FG4docnfbng4z+CnFQrk69kGNHbmrFDP139SMXSZ/NyX/sM5Fqfj
+	UrQs09hqrJfZS0GT4ccOUKrE5z039H2h4VphUMXkulNSOvPpIBEFEtU/s/jOiG0Q
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45a042v50a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 04:32:19 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52B4WIpx007482;
+	Tue, 11 Mar 2025 04:32:18 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45a042v508-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 04:32:18 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52B3cXtr014011;
+	Tue, 11 Mar 2025 04:32:17 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4592x1ssxg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 04:32:17 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52B4WEJA32309962
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Mar 2025 04:32:14 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0FFF02004D;
+	Tue, 11 Mar 2025 04:32:14 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6922920040;
+	Tue, 11 Mar 2025 04:32:09 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.43.112.86])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue, 11 Mar 2025 04:32:09 +0000 (GMT)
+Date: Tue, 11 Mar 2025 10:02:06 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
+        aleksander.lobakin@intel.com, daniel@iogearbox.net,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org
+Subject: Re: [PATCH v2 0/2] Fix xdp_adjust_frags_tail_grow selftest on powerpc
+Message-ID: <Z8+8xoSUri3u6+JB@linux.ibm.com>
+References: <cover.1741188826.git.skb99@linux.ibm.com>
+ <96a959ec-c6a6-4740-a560-34134b2af7f7@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <96a959ec-c6a6-4740-a560-34134b2af7f7@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RrOflTFapXc75UGxugEjNKdeRMx0mkUY
+X-Proofpoint-ORIG-GUID: ruWdKrsRvtewFmhtIVZw3sPmfHZ_XvBl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-11_01,2025-03-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ impostorscore=0 clxscore=1015 mlxscore=0 priorityscore=1501 spamscore=0
+ adultscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503110028
 
-There are two error handlings did not check the correct return value.
-This patch will fix them.
+On Fri, Mar 07, 2025 at 08:54:00PM +0530, Venkat Rao Bagalkote wrote:
+> 
+> On 05/03/25 10:43 pm, Saket Kumar Bhaskar wrote:
+> > For platforms on powerpc architecture with a default page size greater
+> > than 4096, there was an inconsistency in fragment size calculation.
+> > This caused the BPF selftest xdp_adjust_tail/xdp_adjust_frags_tail_grow
+> > to fail on powerpc.
+> > 
+> > The issue occurred because the fragment buffer size in
+> > bpf_prog_test_run_xdp() was set to 4096, while the actual data size in
+> > the fragment within the shared skb was checked against PAGE_SIZE
+> > (65536 on powerpc) in min_t, causing it to exceed 4096 and be set
+> > accordingly. This discrepancy led to an overflow when
+> > bpf_xdp_frags_increase_tail() checked for tailroom, as skb_frag_size(frag)
+> > could be greater than rxq->frag_size (when PAGE_SIZE > 4096).
+> > 
+> > This change fixes:
+> > 
+> > 1. test_run by getting the correct arch dependent PAGE_SIZE.
+> > 2. selftest by caculating tailroom and getting correct PAGE_SIZE.
+> > 
+> > Changes:
+> > v1 -> v2:
+> >     * Address comments from Alexander
+> >        * Use dynamic page size, cacheline size and size of
+> >          struct skb_shared_info to calculate parameters.
+> >        * Fixed both test_run and selftest.
+> > 
+> > v1: https://lore.kernel.org/all/20250122183720.1411176-1-skb99@linux.ibm.com/
+> > 
+> > Saket Kumar Bhaskar (2):
+> >    bpf, test_run: Replace hardcoded page size with dynamic PAGE_SIZE in
+> >      test_run
+> >    selftests/bpf: Refactor xdp_adjust_tail selftest with dynamic sizing
+> > 
+> >   .../bpf/prog_tests/xdp_adjust_tail.c          | 160 +++++++++++++-----
+> >   .../bpf/progs/test_xdp_adjust_tail_grow.c     |  41 +++--
+> >   2 files changed, 149 insertions(+), 52 deletions(-)
+> > 
+> Applied the patch series on the bpf-next and patch works as expected.
+> 
+> 
+> With Out the Patch:
+> 
+> test_xdp_adjust_frags_tail_grow:PASS:9Kb+10b 0 nsec
+> test_xdp_adjust_frags_tail_grow:FAIL:9Kb+10b retval unexpected 9Kb+10b
+> retval: actual 3 != expected 1
+> test_xdp_adjust_frags_tail_grow:FAIL:9Kb+10b size unexpected 9Kb+10b size:
+> actual 13097 != expected 9001
+> #583/5   xdp_adjust_tail/xdp_adjust_frags_tail_grow:FAIL
+> #583     xdp_adjust_tail:FAIL
+> Summary: 0/4 PASSED, 0 SKIPPED, 1 FAILED
+> 
+> 
+> With Patch:
+> 
+> # ./test_progs -t xdp_adjust_tail
+> #583/1   xdp_adjust_tail/xdp_adjust_tail_shrink:OK
+> #583/2   xdp_adjust_tail/xdp_adjust_tail_grow:OK
+> #583/3   xdp_adjust_tail/xdp_adjust_tail_grow2:OK
+> #583/4   xdp_adjust_tail/xdp_adjust_frags_tail_shrink:OK
+> #583/5   xdp_adjust_tail/xdp_adjust_frags_tail_grow:OK
+> #583     xdp_adjust_tail:OK
+> Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> 
+> Please add below tag to all the patches in series.
+> 
+> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> 
+> 
+> Regards,
+> 
+> Venkat.
+> 
+Thanks for testing this Venkat.
 
-Fixes: f4b5fd6946e244cdedc3bbb9a1f24c8133b2077a ("selftests/vm: anon_cow: THP tests")
-Signed-off-by: Cyan Yang <cyan.yang@sifive.com>
----
- tools/testing/selftests/mm/cow.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index 9446673645eb..16fcadc090a4 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -876,13 +876,13 @@ static void do_run_with_thp(test_fn fn, enum thp_run thp_run, size_t thpsize)
- 		mremap_size = thpsize / 2;
- 		mremap_mem = mmap(NULL, mremap_size, PROT_NONE,
- 				  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
--		if (mem == MAP_FAILED) {
-+		if (mremap_mem == MAP_FAILED) {
- 			ksft_test_result_fail("mmap() failed\n");
- 			goto munmap;
- 		}
- 		tmp = mremap(mem + mremap_size, mremap_size, mremap_size,
- 			     MREMAP_MAYMOVE | MREMAP_FIXED, mremap_mem);
--		if (tmp != mremap_mem) {
-+		if (tmp == MAP_FAILED) {
- 			ksft_test_result_fail("mremap() failed\n");
- 			goto munmap;
- 		}
--- 
-2.39.5 (Apple Git-154)
-
+Regards,
+Saket
 
