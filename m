@@ -1,133 +1,317 @@
-Return-Path: <linux-kselftest+bounces-28763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AA73A5CF38
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 20:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98A47A5CFAE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 20:45:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE546189A33C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 19:23:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E9C3189D787
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 19:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4B0263F4E;
-	Tue, 11 Mar 2025 19:22:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C11F263F39;
+	Tue, 11 Mar 2025 19:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P1vFLHq4"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ueMu1GLc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41540263C88;
-	Tue, 11 Mar 2025 19:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741720977; cv=none; b=ff7qcIlit3KsgxGuqFiinpu3LKWmx8dZK6GV8FYVGAQVcoq7uREgcwVFiCnJJR2PnACiZ1QR0UAdWpIEG3PyD0hNu0HYSjvTLP1Rbfx2U1B3fH9e10O85+IMK6FycsJ6XQusIoaWc1nEGZoam/RDGb+4wxxye+ZD4X9ddF/AG0c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741720977; c=relaxed/simple;
-	bh=5BQSyaBQxUFZeErA3U7SLVLmiRtJYGd9Vyqr3I7dCeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHCVk2dag3JlkbIiRuWu0OsmtL3YUji8T8JcedvY5dR3xPGCcp75L3D3vMB7pVtxr/GtxmVC1/8EKXXRXybulEnz+DuTdHndbIHiD32IUslFujaAoHtvhsJfYX8cMwRitb/0z2mtRYTHQX41BL1nPi6Me6eYR/jM9Q8qrG8TYF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P1vFLHq4; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741720976; x=1773256976;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5BQSyaBQxUFZeErA3U7SLVLmiRtJYGd9Vyqr3I7dCeE=;
-  b=P1vFLHq44APE7p052VDH4TvOR3gYwmVmcM23o0rOaYG4EqF+/7wj/XHh
-   NatotfSapM6rr9N4hHfYvNzI1DY1DNZfRPWHNxaGV1WL6JuGX0DWELAcG
-   tgteJyczSp8gp+E/77fXNCBAriWE8hMwwxwc8W3I99uK4fbza6U1dMzqL
-   F/qh4H7kO4OL6db89KnkAJmnExmN3SX41TU2hNpGvRLRcl3IFaSYE+/Ix
-   1uXJTjWCTT2ZPit1QWxpLaH+MWFUvsNQgnf0dt2ejD3LTseJS2ENsAW5u
-   sVB0OTBpxlvVPfqexEpJ0/W4oy7F6TBLypIGKPyjMTeNwn+y/REwf1I8w
-   w==;
-X-CSE-ConnectionGUID: jcbTnxD2TfGl3Xm6pRhF2g==
-X-CSE-MsgGUID: Gex8OomZQAmIKWSI248Muw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="68140538"
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="68140538"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 12:22:55 -0700
-X-CSE-ConnectionGUID: NenFRhsnSMyQfY/xGuDGFQ==
-X-CSE-MsgGUID: YFmv9pF4TY2TRKohK66sOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="120913249"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 11 Mar 2025 12:22:49 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ts5Bf-0007m8-0w;
-	Tue, 11 Mar 2025 19:22:47 +0000
-Date: Wed, 12 Mar 2025 03:22:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tamir Duberstein <tamird@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-pci@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH] rust: enable `clippy::ptr_as_ptr` lint
-Message-ID: <202503120332.YTCpFEvv-lkp@intel.com>
-References: <20250307-ptr-as-ptr-v1-1-582d06514c98@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C355211C;
+	Tue, 11 Mar 2025 19:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741722332; cv=fail; b=kRDAD1fytvr0ltTcSzgvWvCfqyiJLNRp0/2k847R1r0W3oak2vxWb2Kuj6bNo9hcPuJX4JZYWC74HOkEXm8xqXBRsDwrABkLeE53eFzin19INurFGILNTNgvP38pKen8zVNu9gS8LpCXlOQkwK/2vR6uiG6caJ3zYp8HHx0C0go=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741722332; c=relaxed/simple;
+	bh=vyiUz/bVDcVp+jEOcxNoAlFz8GrWYkqWUZqd6sAlZRs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FXUvm02n09wL+XBftV2M+6+aTXN/Hl9aGiV9fTb0+MUNDaxZZeC/2L0a+nNV22KRCwID9QJw2D+LHp5Uj/Piv6ry7kUNibbkEJVZUeW2aCjF5Nh7i0WvwenNOmortdkCJxNG7Hjx5alf0jgeTrQUBhZXc41G70qYQXjfMUI4P24=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ueMu1GLc; arc=fail smtp.client-ip=40.107.94.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jOb8rpQfOnl4iEoNWkZbe4+szI4ubdwl/yYWmgLDgWlniGDKkwC5ldAS+lN//nA7qHGwoOM1Yv+vUOJweAH3+UKytWewUJe9pezY5nVvOC4rT6OYQvIatZ6xyNUUdTYnTWAcsAN96Eag1JuOLcc6XDY9pVUu7GbfLynZs57d/6ye/LFZbDTokjc7QJj+3B0bhIs4gkMmFG8hG54lrOiNtjM8za733MDk0vgzZGKUZoTCD2aZGQyrj7rnSDbkuEqRr2gN8W7bkW9IT5NuHFqSuwfntQQfWmPDyRC6WDhxEoFHwisAKUkVLNYgRp2xlwIGiOic66Eeb/0/+6GQUGXf6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TFgeupadb0WB4uGvGjV6daltoC/nGGEiYRixPCXRx/g=;
+ b=j+HfUCi2AeX/yYOJ+buOCw00Odezt/XQ3EuGXHcJgC6waLB6Vip4Yif/fc4LMwd1K/hMtjATRlfXJyhVMaWGaSxnhJENtw4f5/ztEowJS8MX2/izjvjFTBuxZe5qMgHtdsUTxMbCrsA1wvbGyjUwmMSxw78ij14ehDQqN7EsoS6mBK5XlA0TOnI0o4Up/qxKDtjYAU8kPwMfAzdJm7oHzJstkQ0lgHzTSeXzSiD35KRl0pzQPRRkyD4u/qLPE5iLIg31GT28QSWNoIpYuWDslENTcAtYkL0D7ZSN91F5ID/68Rmdo36ZgVFofhaLxO05Y/8pdc3YTgJI+mC+TsQyJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TFgeupadb0WB4uGvGjV6daltoC/nGGEiYRixPCXRx/g=;
+ b=ueMu1GLcURzb6jsQCnlOVwENQPQYKN9YyRxgfYkZWw3O+kJDlMOUBQyMTGq0DBoJELT9FkJyxXfW5QyuDalYEw+51kDbOPVbligEkfzQH18UwbnVaKrTtc4L5l85sdp3EXiEjc+IdBVVMFHvRrWjTGBft5wrFXqye8FWNv1dhzAUTErD1B/gz6hmBxt0LW4gOzb/RBd2AUF73AOoSCarO89q0iixZtEWSUmO/c5Zo6umtmXQmtqbK5H08W+iLzMpAprdBNToLTgO0VYDWDumUNJmQ6nUXB9BKL526vACQCGo4p5cwr2aNVw30polU8OtQcKxMS0BVc1n/Er+Kb/YKA==
+Received: from MW4PR03CA0072.namprd03.prod.outlook.com (2603:10b6:303:b6::17)
+ by SJ0PR12MB5636.namprd12.prod.outlook.com (2603:10b6:a03:42b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Tue, 11 Mar
+ 2025 19:45:22 +0000
+Received: from SJ1PEPF00001CE2.namprd05.prod.outlook.com
+ (2603:10b6:303:b6:cafe::dc) by MW4PR03CA0072.outlook.office365.com
+ (2603:10b6:303:b6::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8511.26 via Frontend Transport; Tue,
+ 11 Mar 2025 19:45:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ SJ1PEPF00001CE2.mail.protection.outlook.com (10.167.242.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8534.20 via Frontend Transport; Tue, 11 Mar 2025 19:45:21 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 11 Mar
+ 2025 12:45:06 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Tue, 11 Mar 2025 12:45:06 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Tue, 11 Mar 2025 12:45:04 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <joro@8bytes.org>,
+	<suravee.suthikulpanit@amd.com>, <will@kernel.org>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <praan@google.com>,
+	<patches@lists.linux.dev>
+Subject: [PATCH v9 00/14] iommufd: Add vIOMMU infrastructure (Part-3: vEVENTQ)
+Date: Tue, 11 Mar 2025 12:44:18 -0700
+Message-ID: <cover.1741719725.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250307-ptr-as-ptr-v1-1-582d06514c98@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE2:EE_|SJ0PR12MB5636:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9bdcc08c-d024-4745-4158-08dd60d54288
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700013|1800799024|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?huJ5or4Tiym/yQjziATCPL93WjRJ34Pvdf5U/6vL2SPbpWO4L+JmaumBjb+4?=
+ =?us-ascii?Q?8QCH+stpjB5gZn2e9vwLtZZj59hynto/ibWkmDWEh5xIkK9F/QyknDDZVKMo?=
+ =?us-ascii?Q?Zc80hILEoKsKZDubbczxnPi2K0mgolWn9WAuA2AtgxboqMygRnw6XaHN+nuY?=
+ =?us-ascii?Q?dLsYvHrXw3gINcBYt72kSIuBeMorb3CEI4bbGwTYee4Zz0yZ9SNBQga1azLs?=
+ =?us-ascii?Q?W8HkFW3KySnESJWBcUnzxgdNuS9+jKX4LiqO87y+UwPya4SXfg0JzKsCSGEr?=
+ =?us-ascii?Q?qWA0tXZtzYxJA2CAz5grF67+k70Vf6GgXRh47gkJ5vmwPDjYvw8te757EMQ6?=
+ =?us-ascii?Q?PnPBknK1SdAW9u0usu2xjbZ1yYam4rmp4rhsKnFfda9ozDvBxO3gUbtrqS1W?=
+ =?us-ascii?Q?tKvOSjxeyWmpJs2oZmvhmiHSp5Z5OhTFx8UgTJcZKZ/UfwmXdorq6N0EpmJq?=
+ =?us-ascii?Q?QVKFNOuHuoBaJe2NOPe1lQWxKIpY8eJTEOkK5zjhDmq4EQWlSv1GipJclWl0?=
+ =?us-ascii?Q?y77OIA59rRsuvfzev5ysoY0VzHweXQjJjYcEVVUZKls1eXZF1cd/nGbbohty?=
+ =?us-ascii?Q?OQT4GJsJgoEVy1xAWvO0mhS4PTZaLOS0VCPmlRjGOu+D2raXJg7LYPUB6KGs?=
+ =?us-ascii?Q?iexFSkkZxorJiGapl3kexZc/E8OLQgBg5ngakUHRkvRIWIIAxN3OcLpkLXoV?=
+ =?us-ascii?Q?LNalhzVZupkr+5Pavg2wKpLD9uYhBasynBz9ww2X6EQplDqm11P7licrwXWn?=
+ =?us-ascii?Q?jALeZMNgTWP4D7utWiml+szc449bJySAgaurVOvlMCa5wBFp6MDE7Alxl8d2?=
+ =?us-ascii?Q?2exZdN+TTigB6OSNMV6yWD+OuDq1mgOZMLV6VX0cFHzfAudrYY39ONsjRlXb?=
+ =?us-ascii?Q?YwgCfeHwJUrAEEIZUsTWsKdxm+s4sHkG6MbtaWlXf5tKGqmpUXTkBY6adLuf?=
+ =?us-ascii?Q?znQEmHkw33SjKbkoA8oHvX4FVf+w8MDyx101g/REU2mkM0bX83k+Q2JO83XY?=
+ =?us-ascii?Q?qMxJX6FUdMIia1XeLzMzbvFlOw7C4EfATfmqC30GN7M1dsKgkW8rXD3qx3lg?=
+ =?us-ascii?Q?HXTwNMAy1Hq7u1sY0gXB9EjIXHE25IEQ8HNPeol8JVy4hpyV9navbwNG229w?=
+ =?us-ascii?Q?bz2aKDOgdAK5FiQ4xDRFftR4UeuQ7j9w2THQCdttX+Z5BWVaHwCtzP++5ozG?=
+ =?us-ascii?Q?avbKwRvqfr6eSrmLRBqSIWtD638s5kcs4kk9FJX5rJMWg1iAP+yIkPTWxI6K?=
+ =?us-ascii?Q?27O8yCW3OeH8K47BeGQe6poyfyO92K3AZ5dzS9WEjJSUe0vmWtGdOd6F2wu7?=
+ =?us-ascii?Q?5c5ddAE9oC16/WLBLom+KsASLhyuqAqg8V+vRJsy08kR4ZlRBEgGn+04LAo1?=
+ =?us-ascii?Q?i8f2zLWfE5cu83m92Bo4FmI9inpFj0wzvOpJlBco1cJI8UIdoxSsIg7WrMcZ?=
+ =?us-ascii?Q?yoRCaX/UI+j/gxPqbvWmRfYfqLJBs7Fvh0mdwyx4FaNZT8Q5QgqBVJEuxoRY?=
+ =?us-ascii?Q?hFz8V8CIHEuwiWQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700013)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2025 19:45:21.6848
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bdcc08c-d024-4745-4158-08dd60d54288
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE2.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5636
 
-Hi Tamir,
+As the vIOMMU infrastructure series part-3, this introduces a new vEVENTQ
+object. The existing FAULT object provides a nice notification pathway to
+the user space with a queue already, so let vEVENTQ reuse that.
 
-kernel test robot noticed the following build warnings:
+Mimicing the HWPT structure, add a common EVENTQ structure to support its
+derivatives: IOMMUFD_OBJ_FAULT (existing) and IOMMUFD_OBJ_VEVENTQ (new).
 
-[auto build test WARNING on ff64846bee0e7e3e7bc9363ebad3bab42dd27e24]
+An IOMMUFD_CMD_VEVENTQ_ALLOC is introduced to allocate vEVENTQ object for
+vIOMMUs. One vIOMMU can have multiple vEVENTQs in different types but can
+not support multiple vEVENTQs in the same type.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/rust-enable-clippy-ptr_as_ptr-lint/20250308-004557
-base:   ff64846bee0e7e3e7bc9363ebad3bab42dd27e24
-patch link:    https://lore.kernel.org/r/20250307-ptr-as-ptr-v1-1-582d06514c98%40gmail.com
-patch subject: [PATCH] rust: enable `clippy::ptr_as_ptr` lint
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250312/202503120332.YTCpFEvv-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120332.YTCpFEvv-lkp@intel.com/reproduce)
+The forwarding part is fairly simple but might need to replace a physical
+device ID with a virtual device ID in a driver-level event data structure.
+So, this also adds some helpers for drivers to use.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503120332.YTCpFEvv-lkp@intel.com/
+As usual, this series comes with the selftest coverage for this new ioctl
+and with a real world use case in the ARM SMMUv3 driver.
 
-All warnings (new ones prefixed by >>):
+This is on Github:
+https://github.com/nicolinc/iommufd/commits/iommufd_veventq-v9
+Paring QEMU branch for testing:
+https://github.com/nicolinc/qemu/commits/wip/for_iommufd_veventq-v9
 
->> warning: `as` casting between raw pointers without changing its mutability
-   --> rust/kernel/firmware.rs:64:35
-   |
-   64 |         let ret = unsafe { func.0(pfw as _, name.as_char_ptr(), dev.as_raw()) };
-   |                                   ^^^^^^^^ help: try `pointer::cast`, a safer alternative: `pfw.cast()`
-   |
-   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#ptr_as_ptr
-   = note: requested on the command line with `-W clippy::ptr-as-ptr`
+Changelog
+v9
+ * Add Acked-by from Will
+ * Fix typo in commit logs and reviewer name
+ * Allow invaid nested STE for C_BAD_STE report
+ * Drop extra indentation in arm_smmu_handle_event()
+ * Drop comments in arm_smmu_attach_prepare_vmaster()
+v8
+ https://lore.kernel.org/all/cover.1740504232.git.nicolinc@nvidia.com/
+ * Add Reviewed-by from Jason and Pranjal
+ * Fix errno returned in arm_smmu_handle_event()
+ * Validate domain->type outside of arm_smmu_attach_prepare_vmaster()
+ * Drop unnecessary vmaster comparison in arm_smmu_attach_commit_vmaster()
+v7
+ https://lore.kernel.org/all/cover.1740238876.git.nicolinc@nvidia.com/
+ * Rebase on Jason's for-next tree for latest fault.c
+ * Add Reviewed-by
+ * Update commit logs
+ * Add __reserved field sanity
+ * Skip kfree() on the static header
+ * Replace "bool on_list" with list_is_last()
+ * Use u32 for flags in iommufd_vevent_header
+ * Drop casting in iommufd_viommu_get_vdev_id()
+ * Update the bounding logic to veventq->sequence
+ * Add missing cpu_to_le64() around STRTAB_STE_1_MEV
+ * Reuse veventq->common.lock to fence sequence and num_events
+ * Rename overflow to lost_events and log it in upon kmalloc failure
+ * Correct the error handling part in iommufd_veventq_deliver_fetch()
+ * Add an arm_smmu_clear_vmaster() to simplify identity/blocked domain
+   attach ops
+ * Add additional four event records to forward to user space VM, and
+   update the uAPI doc
+ * Reuse the existing smmu->streams_mutex lock to fence master->vmaster
+   pointer, instead of adding a new rwsem
+v6
+ https://lore.kernel.org/all/cover.1737754129.git.nicolinc@nvidia.com/
+ * Drop supports_veventq viommu op
+ * Split bug/cosmetics fixes out of the series
+ * Drop the blocking mutex around copy_to_user()
+ * Add veventq_depth in uAPI to limit vEVENTQ size
+ * Revise the documentation for a clear description
+ * Fix sparse warnings in arm_vmaster_report_event()
+ * Rework iommufd_viommu_get_vdev_id() to return -ENOENT v.s. 0
+ * Allow Abort/Bypass STEs to allocate vEVENTQ and set STE.MEV for DoS
+   mitigations
+v5
+ https://lore.kernel.org/all/cover.1736237481.git.nicolinc@nvidia.com/
+ * Add Reviewed-by from Baolu
+ * Reorder the OBJ list as well
+ * Fix alphabetical order after renaming in v4
+ * Add supports_veventq viommu op for vEVENTQ type validation
+v4
+ https://lore.kernel.org/all/cover.1735933254.git.nicolinc@nvidia.com/
+ * Rename "vIRQ" to "vEVENTQ"
+ * Use flexible array in struct iommufd_vevent
+ * Add the new ioctl command to union ucmd_buffer
+ * Fix the alphabetical order in union ucmd_buffer too
+ * Rename _TYPE_NONE to _TYPE_DEFAULT aligning with vIOMMU naming
+v3
+ https://lore.kernel.org/all/cover.1734477608.git.nicolinc@nvidia.com/
+ * Rebase on Will's for-joerg/arm-smmu/updates for arm_smmu_event series
+ * Add "Reviewed-by" lines from Kevin
+ * Fix typos in comments, kdocs, and jump tags
+ * Add a patch to sort struct iommufd_ioctl_op
+ * Update iommufd's userpsace-api documentation
+ * Update uAPI kdoc to quote SMMUv3 offical spec
+ * Drop the unused workqueue in struct iommufd_virq
+ * Drop might_sleep() in iommufd_viommu_report_irq() helper
+ * Add missing "break" in iommufd_viommu_get_vdev_id() helper
+ * Shrink the scope of the vmaster's read lock in SMMUv3 driver
+ * Pass in two arguments to iommufd_eventq_virq_handler() helper
+ * Move "!ops || !ops->read" validation into iommufd_eventq_init()
+ * Move "fault->ictx = ictx" closer to iommufd_ctx_get(fault->ictx)
+ * Update commit message for arm_smmu_attach_prepare/commit_vmaster()
+ * Keep "iommufd_fault" as-is and rename "iommufd_eventq_virq" to just
+   "iommufd_virq"
+v2
+ https://lore.kernel.org/all/cover.1733263737.git.nicolinc@nvidia.com/
+ * Rebase on v6.13-rc1
+ * Add IOPF and vIRQ in iommufd.rst (userspace-api)
+ * Add a proper locking in iommufd_event_virq_destroy
+ * Add iommufd_event_virq_abort with a lockdep_assert_held
+ * Rename "EVENT_*" to "EVENTQ_*" to describe the objects better
+ * Reorganize flows in iommufd_eventq_virq_alloc for abort() to work
+ * Adde struct arm_smmu_vmaster to store vSID upon attaching to a nested
+   domain, calling a newly added iommufd_viommu_get_vdev_id helper
+ * Adde an arm_vmaster_report_event helper in arm-smmu-v3-iommufd file
+   to simplify the routine in arm_smmu_handle_evt() of the main driver
+v1
+ https://lore.kernel.org/all/cover.1724777091.git.nicolinc@nvidia.com/
 
+Thanks!
+Nicolin
+
+Nicolin Chen (14):
+  iommufd/fault: Move two fault functions out of the header
+  iommufd/fault: Add an iommufd_fault_init() helper
+  iommufd: Abstract an iommufd_eventq from iommufd_fault
+  iommufd: Rename fault.c to eventq.c
+  iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_ALLOC
+  iommufd/viommu: Add iommufd_viommu_get_vdev_id helper
+  iommufd/viommu: Add iommufd_viommu_report_event helper
+  iommufd/selftest: Require vdev_id when attaching to a nested domain
+  iommufd/selftest: Add IOMMU_TEST_OP_TRIGGER_VEVENT for vEVENTQ
+    coverage
+  iommufd/selftest: Add IOMMU_VEVENTQ_ALLOC test coverage
+  Documentation: userspace-api: iommufd: Update FAULT and VEVENTQ
+  iommu/arm-smmu-v3: Introduce struct arm_smmu_vmaster
+  iommu/arm-smmu-v3: Report events that belong to devices attached to
+    vIOMMU
+  iommu/arm-smmu-v3: Set MEV bit in nested STE for DoS mitigations
+
+ drivers/iommu/iommufd/Makefile                |   2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  36 ++
+ drivers/iommu/iommufd/iommufd_private.h       | 135 +++-
+ drivers/iommu/iommufd/iommufd_test.h          |  10 +
+ include/linux/iommufd.h                       |  23 +
+ include/uapi/linux/iommufd.h                  | 105 +++
+ tools/testing/selftests/iommu/iommufd_utils.h | 115 ++++
+ .../arm/arm-smmu-v3/arm-smmu-v3-iommufd.c     |  60 ++
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  80 ++-
+ drivers/iommu/iommufd/driver.c                |  72 +++
+ drivers/iommu/iommufd/eventq.c                | 597 ++++++++++++++++++
+ drivers/iommu/iommufd/fault.c                 | 342 ----------
+ drivers/iommu/iommufd/hw_pagetable.c          |   6 +-
+ drivers/iommu/iommufd/main.c                  |   7 +
+ drivers/iommu/iommufd/selftest.c              |  54 ++
+ drivers/iommu/iommufd/viommu.c                |   2 +
+ tools/testing/selftests/iommu/iommufd.c       |  36 ++
+ .../selftests/iommu/iommufd_fail_nth.c        |   7 +
+ Documentation/userspace-api/iommufd.rst       |  17 +
+ 19 files changed, 1298 insertions(+), 408 deletions(-)
+ create mode 100644 drivers/iommu/iommufd/eventq.c
+ delete mode 100644 drivers/iommu/iommufd/fault.c
+
+
+base-commit: a05df03a88bc1088be8e9d958f208d6484691e43
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
