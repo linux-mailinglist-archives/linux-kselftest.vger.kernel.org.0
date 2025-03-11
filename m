@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-28742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15CF3A5C24F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:20:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56CBCA5C24E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 14:19:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515771887527
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:19:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B97B16E8D4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 13:19:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4FF1D7E26;
-	Tue, 11 Mar 2025 13:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540201E571A;
+	Tue, 11 Mar 2025 13:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wJkL+yO3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k2yLkTxQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8442C1D5ABA
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 13:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835471D9688
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 13:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741699113; cv=none; b=uFLOkfl2qF9j0UfcHs9B5y7T8mRIlbX/trE6mgn+XMPOjvUzkzkejlL8gzAvqxjEgewOyU2dYvmBr2NhDQH2qV+Ljwc8TBoNWFGmyXQdupkt8D91VsqxWobtiM1qoE5PI0UNo0yXPc50MkM92u/DxSfQqwoJglTxhQdcoV2AUcc=
+	t=1741699115; cv=none; b=QBVQjQkmv/lv5S1/7iUJQ4cqOnxEvU9hzs/bs9RMX4+6Oz1M2aqvWesP68MTvZ1d1fK9t1L3Rp3xfELulKIW9w2EYphOaJ4y+ZQR0nwtdhph26oHqpSSf/tiMRj77Oa4PA6V8Z6Hh4zaQ96BIZgEXV+pevM3fpDyhDObX3wZm2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741699113; c=relaxed/simple;
-	bh=WQLjLeaas6WAwWHU6F3llD+u+5uqTYbAeh753X/DebM=;
+	s=arc-20240116; t=1741699115; c=relaxed/simple;
+	bh=oSXuPp+IUOl5G2aP9gTCdmTe3j7rVMOxHg2aJoo6Efg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KSmJh8ykMwAx3VJraBD91NOh7nzHMjfPrBI7h28zNJKBCd9Qw6ayjZlyIlHI1CojoaWGay/nXVwzX+5B2JvjwZ2UNsdoK8x3AVbjqQ6FzvlU8aQOTdWpg/GTGPkvxKrIwgtzce5Nh4Y/vHn40nzG7SZSUFbfX6n/dGuWmDyMnBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wJkL+yO3; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=a2YC6HhZxZ3FXYSmYb/pkDLvhPcsfhAh7PY1vJ2FpCBQqZPS+GPHo5CT5nUayxzs+YbABsymZAHst9R9NYNGytBaQ5CGcUZuyf3O79rA46CbMjqvKWhPE9jFEabvpTG50GxaS9T6DaIQt9Oc2I49PWrU2976gpsYDXOdthFvrLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k2yLkTxQ; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4394c489babso27387615e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 06:18:31 -0700 (PDT)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43941ad86d4so26659495e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 06:18:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741699110; x=1742303910; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1741699112; x=1742303912; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6JjfJOQBkddVu8mbUCQ3JSQzc9s8ZEC60spagx9Tws=;
-        b=wJkL+yO3fIf93hkxRU4CwbWrCDY5tFDTWFNH6DBMUqPtX7rKwvOgdqCAngYBtCNlng
-         //5MUduIipEG+b2DFVYOxnw0VBrABqm6/i3pe3da5sSdbssLKWKHedQ2GLcwyAznD1Lw
-         LOjkPWj0d+EpmzVC4bSoEuA/xMzAQQ2K95WADFDbFIPQ+YFIH/guvc5vQvhrHSGhx5Dv
-         efLIy4K0NukjDKXvA4nEKXGhd/Sbe5mDJQ6BFJzkuqVUtNB4Pnz3D4L/s4li+YHCMUhq
-         bqSzsW7qQNSLlzkqf5AZO6j/VJCoCMvAyUJavYLrR3ZvTC7T8YuO9WyJFziS5jUa3Wgu
-         s6/w==
+        bh=Vce7eh8mPMitMWqdtTQW3Xgxbt0OG8W7iuQCUiRo4Hc=;
+        b=k2yLkTxQ2K7t2n59+V3hFbYpdZD6A/EB8ugtx/QgGx4dtG91o0lsNwbTBFftlyrDcG
+         ePsgnqUCvkeAkHYrhj6BwgbSa1fWnDN+qRvKnxU9L6jlBvk3otMVj1HvPhoXhtWyXQ2i
+         VnNoWZWUXpyDWrhcPhsM7OZgIqBeGCdoRw6VENCQQ+HI2VtPi8iGMoaeHQQxj1iSlLDS
+         DlyBQHd70iZw9jkzdb4vocACpbwwOi1JEoZl5ogskJJeLzl5L4ANuY7D/R5CreBMEvnl
+         GeuBxaep58xgXsyCeYvf+UsrFyfl8qKBcDJDNLNEn9iJQQw6u45ttvXHX9FzaUvz7aOB
+         lXRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741699110; x=1742303910;
+        d=1e100.net; s=20230601; t=1741699112; x=1742303912;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6JjfJOQBkddVu8mbUCQ3JSQzc9s8ZEC60spagx9Tws=;
-        b=FZ8SbKi94oRiTx8EWUuaJ2Hn4ZmAlPb6xja52CIuvAPrh/NUUvT3XFDXgs86M+PCKb
-         nOIQ9lFROIiiXEoCb++GqMJCp/4gUBVvHow+INnBvlfycuaKhsL3o5lI2iFeNV4UCA9Q
-         2+shDZE/EIw1pvZGKKDg5bNI9wF1/J9rkT1Q6m7NEkiXBBj6YTCqaEIh8xgTybjcnt4c
-         dGXP4Ah4Btj0/v9cBawlmBDRR0PPu76kaJhi/KEY3VYPsCtjq3lXVKtRIHVy7uz1n7qo
-         iUqAuvXd3+RudqXLBP8P8ABmAdYAnYU/ErqxzltUPDoVJ6qFI/fZkEYwoyg+e0s0lLgp
-         d6Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGSoDxLGby5a7/pV0DEX0wu6fzt+GKmME62mZRoUmWJUKNvoRM1I5caqDTSwC+KUkAu9/vmdhUxJ251wm2Rbo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+U3fjyRclZV6ySH1CInnSKgb32YdFGbCPQ3e5/sBkDfvlPa6e
-	LcaDyki4xhRgNjiUOKeG/Duugs7WhQgTNfCFdu/lwKXDmaSU7lYu1hQkGFD0CVgorDCYakgReo1
-	IfoWNfH8aNA==
-X-Google-Smtp-Source: AGHT+IEIWvgrPAdW1aYeAn80KnMmveyrFiqXf2KEYlIp8fmgFPw+5h8vHeMIpGYZnJb/sky5I2oxhtfkiMAT0Q==
-X-Received: from wmbbe8.prod.google.com ([2002:a05:600c:1e88:b0:43c:faa1:bb58])
+        bh=Vce7eh8mPMitMWqdtTQW3Xgxbt0OG8W7iuQCUiRo4Hc=;
+        b=Lm0mMTVOCowIvfXiqZTuxZKe7cZMHNyWmg7SOjGE70s7r5404qGC+UftZpyyXnAhvN
+         V+79N4tXNUTvht6fC3TNPGWTNCs5TJdaWrvuYeDGxK6kEmYS0rbvQlMXelWX2XB5IT5y
+         L3FdexeK9Gy9DEhUDylS5vwc3xz9j9/mdtv7PaH4rO6CUYtySrmnWT2JmIjRerdmOp5l
+         ZJLPFpxqxZD5/r9pKbbZ+hQje/ONDPzUU6evupfDrUn17IABh0y4RxdxFn0CNO5fkcC7
+         YWDUckgCgtnjQBtFL25OPF52j+xzcCXfv8z9CroC4tvIIj0Zp9TxR0IUahK6PKKA+HyL
+         DC3w==
+X-Forwarded-Encrypted: i=1; AJvYcCW7OsNKf8jmUHMJ72clMscPkOEvVyMXBpik9jyJAi0L2ePizCYUafrgFWGDVL+OW7uyyBkY9oQBjF69QhtxtzY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj/rPsb1yZ6AIPHpeiOEJRpU5nkSMgaZC320crfFFFhKOTH+KQ
+	NBP9poYBNkl8NSP42sc9HOJ64JbJzE1Eb2d5wIiirnzeph4tcGmL8A9SvXVp3wCqV3+SNLEtjIL
+	XXEvceNRhBw==
+X-Google-Smtp-Source: AGHT+IH0f6ArUDAT+Z1aqU0gEtWgWP4WVJVxUFx2+ko5jUv3CK2PIBB6GlZGbkJUJj1SHrJwdvtnC7ZX3WPGDQ==
+X-Received: from wmbbi10.prod.google.com ([2002:a05:600c:3d8a:b0:43d:7e5:30f0])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4316:b0:43c:e70d:44f9 with SMTP id 5b1f17b1804b1-43ce70d46f4mr104149745e9.18.1741699110016;
- Tue, 11 Mar 2025 06:18:30 -0700 (PDT)
-Date: Tue, 11 Mar 2025 13:18:17 +0000
+ 2002:a05:600c:45c6:b0:43c:e7ae:4bcf with SMTP id 5b1f17b1804b1-43ce7ae4f6cmr119062035e9.0.1741699112009;
+ Tue, 11 Mar 2025 06:18:32 -0700 (PDT)
+Date: Tue, 11 Mar 2025 13:18:18 +0000
 In-Reply-To: <20250311-mm-selftests-v4-0-dec210a658f5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,57 +74,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250311-mm-selftests-v4-0-dec210a658f5@google.com>
 X-Mailer: b4 0.14.2
-Message-ID: <20250311-mm-selftests-v4-6-dec210a658f5@google.com>
-Subject: [PATCH v4 06/12] selftests/mm: Don't fail uffd-stress if too many CPUs
+Message-ID: <20250311-mm-selftests-v4-7-dec210a658f5@google.com>
+Subject: [PATCH v4 07/12] selftests/mm: Skip map_populate on weird filesystems
 From: Brendan Jackman <jackmanb@google.com>
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Shuah Khan <shuah@kernel.org>
 Cc: Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>, 
-	Mateusz Guzik <mjguzik@gmail.com>
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-This calculation divides a fixed parameter by an environment-dependent
-parameter i.e. the number of CPUs.
+It seems that 9pfs does not allow truncating unlinked files, Mark Brown
+has noted that NFS may also behave this way.
 
-The simple way to avoid machine-specific failures here is to just put a
-cap on the max value of the latter.
+It doesn't seem quite right to call this a "bug" but it's probably a
+special enough case that it makes sense for the test to just SKIP if it
+happens.
 
-Suggested-by: Mateusz Guzik <mjguzik@gmail.com>
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- tools/testing/selftests/mm/uffd-stress.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/map_populate.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index 4ba5bf13a0108435ce8b53340b9e17ccd47e859e..40af7f67c4074d901be6608e5d64bd0490026dae 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -435,6 +435,7 @@ static void sigalrm(int sig)
+diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
+index 5c8a53869b1bd287b09a250edf628a66c25c2439..433e54fb634f793f2eb4c53ba6b791045c9f4986 100644
+--- a/tools/testing/selftests/mm/map_populate.c
++++ b/tools/testing/selftests/mm/map_populate.c
+@@ -87,6 +87,13 @@ int main(int argc, char **argv)
+ 	BUG_ON(!ftmp, "tmpfile()");
  
- int main(int argc, char **argv)
- {
-+	unsigned long nr_cpus;
- 	size_t bytes;
- 
- 	if (argc < 4)
-@@ -453,7 +454,15 @@ int main(int argc, char **argv)
- 		return KSFT_SKIP;
- 	}
- 
--	nr_parallel = sysconf(_SC_NPROCESSORS_ONLN);
-+	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-+	if (nr_cpus > 32) {
-+		/* Don't let calculation below go to zero. */
-+		ksft_print_msg("_SC_NPROCESSORS_ONLN (%lu) too large, capping nr_threads to 32\n",
-+			       nr_cpus);
-+		nr_parallel = 32;
-+	} else {
-+		nr_parallel = nr_cpus;
+ 	ret = ftruncate(fileno(ftmp), MMAP_SZ);
++	if (ret < 0 && errno == ENOENT) {
++		/*
++		 * This probably means tmpfile() made a file on a filesystem
++		 * that doesn't handle temporary files the way we want.
++		 */
++		ksft_exit_skip("ftruncate(fileno(tmpfile())) gave ENOENT, weird filesystem?\n");
 +	}
+ 	BUG_ON(ret, "ftruncate()");
  
- 	nr_pages_per_cpu = bytes / page_size / nr_parallel;
- 	if (!nr_pages_per_cpu) {
+ 	smap = mmap(0, MMAP_SZ, PROT_READ | PROT_WRITE,
 
 -- 
 2.49.0.rc0.332.g42c0ae87b1-goog
