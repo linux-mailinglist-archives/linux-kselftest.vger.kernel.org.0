@@ -1,263 +1,124 @@
-Return-Path: <linux-kselftest+bounces-28699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA518A5BA5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 09:02:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAD7FA5BABE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 09:22:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2E65167881
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 08:02:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACF5C189630D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 08:22:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6AF02222CE;
-	Tue, 11 Mar 2025 08:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57BE9222569;
+	Tue, 11 Mar 2025 08:22:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="QQmUUnGw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mpPO/8x2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D4B1EA7FD;
-	Tue, 11 Mar 2025 08:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.21.196.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543461DE894;
+	Tue, 11 Mar 2025 08:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741680175; cv=none; b=s/bUKdnPYWfeKIIXqKpC5N6MUIAL0l0/Tq0W8e0F9iUzD04uRlldvnsvihaEb3zSFFPglUh53OcN7aQc8KSVlIIzqRvamzwKEnv0cf3r28IDtdBHt9o8dt3bGHk9sInAVyhuVmUfhpwNXKJaDzjT4086rKtorGFYkeOXb8oofbg=
+	t=1741681343; cv=none; b=V+L1OCUoK6DJijFmMYE5VIOFBmcQF+EuC9sYbGdRx7CkNFCV95HHy+vrq8aWR2CB3vd0nA9xumzWsbF5Y163hd8P/3M9QMHntXvni833JT7RuEKiY1/FOfmInPLRk4nDQEoH4nPhMpqDWNw1Q3VJhP1bZgLSyvKWbKnYssOaAuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741680175; c=relaxed/simple;
-	bh=LSjdvaAkpe0Pmc07F6X/Q7yeIReLFdX+62wcHomTM84=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U8gUWWmAwCq7mFgIFFfAwR0fBjVEIQSHLlzPFhxP1oauwk9VpIPucz1QEDNZ1krOoA7NMzmnjMmN1KcQ5gUw5tFXq52XSkNQWzg4+r4UBdRZJnT/6JTOMXCwPOqurkkNXGzHn706hhsIBJBqNNp+k8HvLWSM4LXhIwX9U2KPow4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=QQmUUnGw; arc=none smtp.client-ip=72.21.196.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1741680174; x=1773216174;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dUt3LEoSvOjSrsb26MD+fECZCawYRKXBOLzP/h4uqJU=;
-  b=QQmUUnGwVpUki+9/ShMCMX7HSkiV460YicdjobNiT7gUL+CzV94T9MJ2
-   dm5aUUXt0w+MPe24AyI7x8UVG1groxn2hEoG9M32VGq5j1uisTDWQTNe8
-   Ysq7qLsOpM4exJTYbUoKoXwAwtu9NUbM2VD4YCe7PUxG3ZSaGs7ADXBx8
-   w=;
-X-IronPort-AV: E=Sophos;i="6.14,238,1736812800"; 
-   d="scan'208";a="473988847"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:02:47 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.7.35:22259]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.52.235:2525] with esmtp (Farcaster)
- id 316f76c8-51bd-48b1-bb20-93ea36c10044; Tue, 11 Mar 2025 08:02:45 +0000 (UTC)
-X-Farcaster-Flow-ID: 316f76c8-51bd-48b1-bb20-93ea36c10044
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 11 Mar 2025 08:02:45 +0000
-Received: from 6c7e67bfbae3.amazon.com (10.88.128.133) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Tue, 11 Mar 2025 08:02:41 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <aleksandr.mikhalitsyn@canonical.com>
-CC: <arnd@arndb.de>, <bluca@debian.org>, <brauner@kernel.org>,
-	<cgroups@vger.kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-	<hannes@cmpxchg.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-	<leon@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <mkoutny@suse.com>,
-	<mzxreary@0pointer.de>, <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-	<shuah@kernel.org>, <tj@kernel.org>, <willemb@google.com>
-Subject: Re: [PATCH net-next 4/4] tools/testing/selftests/cgroup: add test for SO_PEERCGROUPID
-Date: Tue, 11 Mar 2025 01:02:32 -0700
-Message-ID: <20250311080233.11136-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250309132821.103046-5-aleksandr.mikhalitsyn@canonical.com>
-References: <20250309132821.103046-5-aleksandr.mikhalitsyn@canonical.com>
+	s=arc-20240116; t=1741681343; c=relaxed/simple;
+	bh=oDgMFfKoOYNvurMdYjsKlHk+6v4ec6TZPOD47GjfsLU=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=XtbOlbUp5eejAMaEJ5HNXgRA5K5mhkuD5AwlHAGWgOpIKthINwI3KQZD67HbEsiN86WaB+aS/t8jB2pto6Nv2nopoiadbqwTXgS9WE0VYb+UrbDqRvkp0bt+ew1U0x590lLLFH62vc9V+XVItVUj559zRq/WUHchcp7+QkaFL54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mpPO/8x2; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741681341; x=1773217341;
+  h=from:to:cc:subject:date:message-id;
+  bh=oDgMFfKoOYNvurMdYjsKlHk+6v4ec6TZPOD47GjfsLU=;
+  b=mpPO/8x2coacSu2P6qOwudWw3oJw5YOmR3EwMrkwbvyv+t0Om0tnR/1y
+   TMtderfvUGd4lLzVHmSOEdY66A0LedP100aP/BA/aTTCBSmY0/avxGHK6
+   gsNL+V7hzuNTdEYuL90+c8DZEg0ybzoWchx04xktKPXwaiJXifTUMZ/33
+   mkslmY+Hghzh8OdWWQpWyqWYXLa/9nUTfiUqTTwbmcs9PGF33uQ6VWXof
+   SbbKThVb1h8PnmaWd9iJigCIOA9c5V4NzXNKO92AttoAiqPbzOsDcoAR4
+   FpWeDtgIN5lw4oW4O8EmwwTq5um6mnJ79mtJYeD7AsEUlGGmUN+dRe6eZ
+   Q==;
+X-CSE-ConnectionGUID: zmLL13wlRQ2QxC+ML4WhHA==
+X-CSE-MsgGUID: KDIhl/GdQ92p7mjDBIuO7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="68067096"
+X-IronPort-AV: E=Sophos;i="6.14,238,1736841600"; 
+   d="scan'208";a="68067096"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 01:22:21 -0700
+X-CSE-ConnectionGUID: wBS/iF1eQN+yUTCZnNwSiA==
+X-CSE-MsgGUID: aj6FqxiVRdSzGBOjGhIA0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,238,1736841600"; 
+   d="scan'208";a="120202946"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 01:22:19 -0700
+From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	qiuxu.zhuo@intel.com,
+	yi1.lai@intel.com
+Subject: [PATCH 1/1] selftests/mincore: Allow read-ahead pages to reach the end of the file
+Date: Tue, 11 Mar 2025 16:09:40 +0800
+Message-Id: <20250311080940.21413-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D037UWB004.ant.amazon.com (10.13.138.84) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date: Sun,  9 Mar 2025 14:28:15 +0100
-> +static void client(FIXTURE_DATA(so_peercgroupid) *self,
-> +		   const FIXTURE_VARIANT(so_peercgroupid) *variant)
-> +{
-> +	int cfd, err;
-> +	socklen_t len;
-> +	uint64_t peer_cgroup_id = 0, test_cgroup1_id = 0, test_cgroup2_id = 0;
-> +	char state;
-> +
-> +	cfd = socket(AF_UNIX, variant->type, 0);
-> +	if (cfd < 0) {
-> +		log_err("socket");
-> +		child_die();
-> +	}
-> +
-> +	if (variant->type == SOCK_DGRAM) {
-> +		fill_sockaddr(self->client_addr, variant->abstract);
-> +
-> +		if (bind(cfd, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen)) {
-> +			log_err("bind");
-> +			child_die();
-> +		}
-> +	}
-> +
-> +	/* negative testcase: no peer for socket yet */
-> +	len = sizeof(peer_cgroup_id);
-> +	err = getsockopt(cfd, SOL_SOCKET, SO_PEERCGROUPID, &peer_cgroup_id, &len);
-> +	if (!err || (errno != ENODATA)) {
-> +		log_err("getsockopt must fail with errno == ENODATA when socket has no peer");
-> +		child_die();
-> +	}
-> +
-> +	if (connect(cfd, (struct sockaddr *)&self->server_addr.listen_addr,
-> +		    self->server_addr.addrlen) != 0) {
-> +		log_err("connect");
-> +		child_die();
-> +	}
-> +
-> +	state = 'R';
-> +	write(self->sync_sk[1], &state, sizeof(state));
+When running the mincore_selftest on a system with an XFS file system, it
+failed the "check_file_mmap" test case due to the read-ahead pages reaching
+the end of the file. The failure log is as below:
 
-nit: This looks unnecessary ?
+   RUN           global.check_file_mmap ...
+  mincore_selftest.c:264:check_file_mmap:Expected i (1024) < vec_size (1024)
+  mincore_selftest.c:265:check_file_mmap:Read-ahead pages reached the end of the file
+  check_file_mmap: Test failed
+           FAIL  global.check_file_mmap
 
+This is because the read-ahead window size of the XFS file system on this
+machine is 4 MB, which is larger than the size from the #PF address to the
+end of the file. As a result, all the pages for this file are populated.
 
-> +
-> +	read(self->sync_sk[1], &test_cgroup1_id, sizeof(uint64_t));
-> +	read(self->sync_sk[1], &test_cgroup2_id, sizeof(uint64_t));
-> +
-> +	len = sizeof(peer_cgroup_id);
-> +	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCGROUPID, &peer_cgroup_id, &len)) {
-> +		log_err("Failed to get SO_PEERCGROUPID");
-> +		child_die();
-> +	}
-> +
-> +	/*
-> +	 * There is a difference between connection-oriented sockets
-> +	 * and connectionless ones from the perspective of SO_PEERCGROUPID.
-> +	 *
-> +	 * sk->sk_cgrp_data is getting filled when we allocate struct sock (see call to cgroup_sk_alloc()).
-> +	 * For DGRAM socket, self->server socket is our peer and by the time when we allocate it,
-> +	 * parent process sits in a test_cgroup1. Then it changes cgroup to test_cgroup2, but it does not
-> +	 * affect anything.
-> +	 * For STREAM/SEQPACKET socket, self->server is not our peer, but that one we get from accept()
-> +	 * syscall. And by the time when we call accept(), parent process sits in test_cgroup2.
-> +	 *
-> +	 * Let's ensure that it works like that and if it get changed then we should detect it
-> +	 * as it's a clear UAPI change.
-> +	 */
-> +	if (variant->type == SOCK_DGRAM) {
-> +		/* cgroup id from SO_PEERCGROUPID should be equal to the test_cgroup1_id */
-> +		if (peer_cgroup_id != test_cgroup1_id) {
-> +			log_err("peer_cgroup_id != test_cgroup1_id: %" PRId64 " != %" PRId64, peer_cgroup_id, test_cgroup1_id);
-> +			child_die();
-> +		}
-> +	} else {
-> +		/* cgroup id from SO_PEERCGROUPID should be equal to the test_cgroup2_id */
-> +		if (peer_cgroup_id != test_cgroup2_id) {
-> +			log_err("peer_cgroup_id != test_cgroup2_id: %" PRId64 " != %" PRId64, peer_cgroup_id, test_cgroup2_id);
-> +			child_die();
-> +		}
-> +	}
-> +}
-> +
-> +TEST_F(so_peercgroupid, test)
-> +{
-> +	uint64_t test_cgroup1_id, test_cgroup2_id;
-> +	int err;
-> +	int pfd;
-> +	char state;
-> +	int child_status = 0;
-> +
-> +	if (cg_find_unified_root(self->cgroup_root, sizeof(self->cgroup_root), NULL))
-> +		ksft_exit_skip("cgroup v2 isn't mounted\n");
-> +
-> +	self->test_cgroup1 = cg_name(self->cgroup_root, "so_peercgroupid_cg1");
-> +	ASSERT_NE(NULL, self->test_cgroup1);
-> +
-> +	self->test_cgroup2 = cg_name(self->cgroup_root, "so_peercgroupid_cg2");
-> +	ASSERT_NE(NULL, self->test_cgroup2);
-> +
-> +	err = cg_create(self->test_cgroup1);
-> +	ASSERT_EQ(0, err);
-> +
-> +	err = cg_create(self->test_cgroup2);
-> +	ASSERT_EQ(0, err);
-> +
-> +	test_cgroup1_id = cg_get_id(self->test_cgroup1);
-> +	ASSERT_LT(0, test_cgroup1_id);
-> +
-> +	test_cgroup2_id = cg_get_id(self->test_cgroup2);
-> +	ASSERT_LT(0, test_cgroup2_id);
-> +
-> +	/* enter test_cgroup1 before allocating a socket */
-> +	err = cg_enter_current(self->test_cgroup1);
-> +	ASSERT_EQ(0, err);
-> +
-> +	self->server = socket(AF_UNIX, variant->type, 0);
-> +	ASSERT_NE(-1, self->server);
-> +
-> +	/* enter test_cgroup2 after allocating a socket */
-> +	err = cg_enter_current(self->test_cgroup2);
-> +	ASSERT_EQ(0, err);
-> +
-> +	fill_sockaddr(&self->server_addr, variant->abstract);
-> +
-> +	err = bind(self->server, (struct sockaddr *)&self->server_addr.listen_addr, self->server_addr.addrlen);
-> +	ASSERT_EQ(0, err);
-> +
-> +	if (variant->type != SOCK_DGRAM) {
-> +		err = listen(self->server, 1);
-> +		ASSERT_EQ(0, err);
-> +	}
-> +
-> +	err = socketpair(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0, self->sync_sk);
-> +	EXPECT_EQ(err, 0);
-> +
-> +	self->client_pid = fork();
-> +	ASSERT_NE(-1, self->client_pid);
-> +	if (self->client_pid == 0) {
-> +		close(self->server);
-> +		close(self->sync_sk[0]);
-> +		client(self, variant);
-> +		exit(0);
-> +	}
-> +	close(self->sync_sk[1]);
-> +
-> +	if (variant->type != SOCK_DGRAM) {
-> +		pfd = accept(self->server, NULL, NULL);
-> +		ASSERT_NE(-1, pfd);
+  blockdev --getra /dev/nvme0n1p5
+    8192
+  blockdev --getbsz /dev/nvme0n1p5
+    512
 
-nit: close(self->server) here ?
+This issue can be fixed by extending the current FILE_SIZE 4MB to a larger
+number, but it will still fail if the read-ahead window size of the file
+system is larger enough. Additionally, in the real world, read-ahead pages
+reaching the end of the file can happen and is an expected behavior.
+Therefore, allowing read-ahead pages to reach the end of the file is a
+better choice for the "check_file_mmap" test case.
 
-It's close()d anyway when the process exits.
+Reported-by: Yi Lai <yi1.lai@intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ tools/testing/selftests/mincore/mincore_selftest.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
+diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
+index e949a43a6145..efabfcbe0b49 100644
+--- a/tools/testing/selftests/mincore/mincore_selftest.c
++++ b/tools/testing/selftests/mincore/mincore_selftest.c
+@@ -261,9 +261,6 @@ TEST(check_file_mmap)
+ 		TH_LOG("No read-ahead pages found in memory");
+ 	}
+ 
+-	EXPECT_LT(i, vec_size) {
+-		TH_LOG("Read-ahead pages reached the end of the file");
+-	}
+ 	/*
+ 	 * End of the readahead window. The rest of the pages shouldn't
+ 	 * be in memory.
+-- 
+2.17.1
 
-> +	} else {
-> +		pfd = self->server;
-> +	}
-> +
-> +	/* wait until the child arrives at checkpoint */
-> +	read(self->sync_sk[0], &state, sizeof(state));
-> +	ASSERT_EQ(state, 'R');
-
-The client will wait two write()s without this synchronisation.
-
-
-> +
-> +	write(self->sync_sk[0], &test_cgroup1_id, sizeof(uint64_t));
-> +	write(self->sync_sk[0], &test_cgroup2_id, sizeof(uint64_t));
-> +
-> +	close(pfd);
-> +	waitpid(self->client_pid, &child_status, 0);
-> +	ASSERT_EQ(0, WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
-> +}
-> +
-> +TEST_HARNESS_MAIN
 
