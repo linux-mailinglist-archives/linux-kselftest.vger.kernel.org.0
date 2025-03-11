@@ -1,202 +1,275 @@
-Return-Path: <linux-kselftest+bounces-28758-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EB5AA5CAC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 17:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD813A5CB67
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 17:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40E42178168
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 16:27:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04C3F17BF29
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 16:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F4EB260370;
-	Tue, 11 Mar 2025 16:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5BF260A58;
+	Tue, 11 Mar 2025 16:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qpajQCdl"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="lbjV6Vna"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC23325F96B;
-	Tue, 11 Mar 2025 16:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741710442; cv=fail; b=SJuS4jfw4LghJxNXykMUaGh8iKF/UINx0p8j7D6MWgJEx7ZbFkyHdeP5/zpTHJkhe8jgAPyYib2pOKIrKRSRor2NAl/m5V6ksTLboRmrabdDW2MD9n9hKwmW50EzLrBIJiLPwSm7shbo+60vSHVC8N7sxNCser5LlpalnbTRnLo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741710442; c=relaxed/simple;
-	bh=7HddlVWRnRfrcGuYnjLXJdSWyqW3AcAOOF5MdxXUFd8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D2rjto5smP30a6tyEkphB9Z8IqeZThHoCV4gmfQILS5tIOt0jSvFaNl1R/FWK18mop5XSPGNJBKin82fwXWN93iKw7ljc1i5vkPy1jA7FAzt7wWEaZvrZAvv/S/Ui/6z1cRcQxlmuH2PGgzg7ZAm7xXy6OU0eK43rUIsTXzLcjs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qpajQCdl; arc=fail smtp.client-ip=40.107.237.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SwxPuZEvjsEI7qJpEKyTiBojCCXRtEJ1FlcycEnnxaEQYDy+Y39hqfbBJmYWCIT/A0dKLxQTHxViED4ijV/1hKOKQmckIt70K7UZan4vAAduUfA0qn3b8DxzV5tCwQ6rJap0v3MpxFIvHl+Eos9kbOqO6AbBTqfwxY4blTAl1EUqhlzAywaE4XdxqZC0kZkMP6CKf7tExfCpe2pULwrFXIOnUQUyjsgoDI2P7Ir2lCfEWIIL1jjyt+0WJ/0lKt4X8fsLWbJM1+Cwr/cBykVENH9KPkHc6xpIHeemRj5eHU6AtonE8uIyEVDYg6cqncBTpne/0mGMvrhkoyEZat8VKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r8BeUv4Pov969PJQN0kZUlpld4OjQ0/3bHLnGNMoO8M=;
- b=FJx5+SHN7BFZqjdcQuW0CvX/6k0yCfjkAvTaI3U5qeQtEk2Eg/FKJmvv/cw2QoPRtqPRX1bbUciWIhJciA44Ou/KzeiuHSgH79pT1PsV4oOc2EGiTIHho9bdktIVkD7lgvjNR4RFnWANSAkS+zzVs4RHGZRPRkK6KesdOfx3Hn8nfMsAOzaod4+Nx+hfHIWYOqY8N+i7oeDdFqAmkQOloHC41os7oR0XF9JoeRbTz7x+evBDeqK0FCbgmuQUqDdHLJ95LN+jVK3DwMTQYeztH3wRllfAH+Ta/4PM7aA51fvqXTHwS2rNCSaS3xDtloS24/qHqAsiLsXpO2H1A2o5Sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r8BeUv4Pov969PJQN0kZUlpld4OjQ0/3bHLnGNMoO8M=;
- b=qpajQCdlp8HPzM8n4GW0RQWNAsmfcwTsM/J8FQeyxoAe5WS1d7IS+pGyLZBXRm6fLVBK5ViXGwM2f3rAuQ9kfZX7fyxQRn+aWCZMlZd4kGZe7p4Vil8+iC6s6+KowhRrjrhryyKIv1eJlyLk8UptaQBhT+PDzdqxHVktr7akpWER8F9W4qutn+65tODjmZ9F0Qy7T3NvWO7bJed5wHvMuoBOs35tgrr/Dk6pTybtAf5zzqOdjuBNcV+0O8LmfuxUYPg5C+48o5p+P8YTKmrB0rT347vsZy4wZmxcykh4liKqwvOmhPejbxJWBB838379i0vleJZvsitMR9oErysNpw==
-Received: from MN2PR07CA0017.namprd07.prod.outlook.com (2603:10b6:208:1a0::27)
- by BY5PR12MB4305.namprd12.prod.outlook.com (2603:10b6:a03:213::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Tue, 11 Mar
- 2025 16:27:15 +0000
-Received: from BL6PEPF00020E5F.namprd04.prod.outlook.com
- (2603:10b6:208:1a0:cafe::77) by MN2PR07CA0017.outlook.office365.com
- (2603:10b6:208:1a0::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8511.26 via Frontend Transport; Tue,
- 11 Mar 2025 16:27:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL6PEPF00020E5F.mail.protection.outlook.com (10.167.249.20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8534.20 via Frontend Transport; Tue, 11 Mar 2025 16:27:14 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 11 Mar
- 2025 09:26:54 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 11 Mar
- 2025 09:26:54 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14 via Frontend
- Transport; Tue, 11 Mar 2025 09:26:52 -0700
-Date: Tue, 11 Mar 2025 09:26:50 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Will Deacon <will@kernel.org>
-CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <praan@google.com>,
-	<patches@lists.linux.dev>
-Subject: Re: [PATCH v8 13/14] iommu/arm-smmu-v3: Report events that belong to
- devices attached to vIOMMU
-Message-ID: <Z9BkSq6nLhzsMguU@Asurada-Nvidia>
-References: <cover.1740504232.git.nicolinc@nvidia.com>
- <7f6813dc2b62f5f396ac3172dc2a7d9bf3b47536.1740504232.git.nicolinc@nvidia.com>
- <20250311155637.GB5138@willie-the-truck>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C953184F;
+	Tue, 11 Mar 2025 16:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.218
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741712220; cv=none; b=IkloNwa0A3QujEplnpPJk+PZH54gMMm4b+Qpq5lKmOer4hO88nANbFuQIyVSspSbkb+btRL0ZZrzmIiQeM0RWY2725oVii7FuqPvMZGfjtuYhtjE0gU0AB/zALFmk8T13bX2Q8nY4DL3/hDznYThvabti2FUuPzEqIRqur0XEpQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741712220; c=relaxed/simple;
+	bh=nDMt8eiwz7+zam9WwPXd2KG0XnvM1fHkqQ7RgCtM+vA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ZNST/oMdN0+akNSbFu7MfKLU8PoTxJqokakPIPwJ0TBUaRRfv7hMjyz1RK5bFu2FfFDLYoEElbhrQNwL0QJwBF/OiRrHq8vJvftCk6bNDanhlNeGIu/ooBZW+Xaujfm6U0gMvWdiED6R/fqiT7KoQM5CleJ7zIofLhdCpIH/LVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=lbjV6Vna; arc=none smtp.client-ip=99.78.197.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1741712219; x=1773248219;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=tlV9Mo9aek/qm0du1iKz9kkFBfH6SyE9Qgk2PjqxtjE=;
+  b=lbjV6VnaIXFhjHX8QYJsT9wL0C7i3XdJzLBucFTccLiaqePr6YNfELW+
+   vKhWBa0V5M2L39XbwgJc9gqU+3P8MGbY1gTJxdQsnIIYA26ri5r9cRAnS
+   IbnDJqKAAVcZ/0ZPhUwMob0ebmjzq3sUBsbb+MRzvFwyGfkLFtMYR5SrV
+   E=;
+X-IronPort-AV: E=Sophos;i="6.14,239,1736812800"; 
+   d="scan'208";a="385729533"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 16:56:50 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [10.0.17.79:6023]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.26.251:2525] with esmtp (Farcaster)
+ id f548cd40-c792-49af-ad1d-1f5d23f80cf5; Tue, 11 Mar 2025 16:56:49 +0000 (UTC)
+X-Farcaster-Flow-ID: f548cd40-c792-49af-ad1d-1f5d23f80cf5
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUA002.ant.amazon.com (10.252.50.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Tue, 11 Mar 2025 16:56:49 +0000
+Received: from [10.95.111.253] (10.95.111.253) by
+ EX19D022EUC002.ant.amazon.com (10.252.51.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Tue, 11 Mar 2025 16:56:48 +0000
+Message-ID: <9e7536cc-211d-40ca-b458-66d3d8b94b4d@amazon.com>
+Date: Tue, 11 Mar 2025 16:56:47 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250311155637.GB5138@willie-the-truck>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF00020E5F:EE_|BY5PR12MB4305:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c55c2a3-f7de-4c38-382f-08dd60b9951f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?yt4p0/ZF/4sPyezB+rXAWu6fZg5zDk/H3ekyIny+YddgShQHi4iRA29AH4rS?=
- =?us-ascii?Q?gObpE/4yBvpUZrB3evkEHbubs7UX2eVNvUBnNnCc2dP+/uFfUzSZZOBgYogs?=
- =?us-ascii?Q?LWn/1O32s5QXynmefayCKVIQYSJIlY7QXzuEG8bWe5zJFYLRn5MKqoVWKHJp?=
- =?us-ascii?Q?0a/fDog/vMWMrrmVK4aeRXd/Elpc2XRmXU3+RbOtMHlngRB2+ig+PA/SbMzn?=
- =?us-ascii?Q?muVgu+v6Zp7J/3aEQQ3xw5j9WYcUErvgsANZTKDZQCmFczg9PcrS0aJIcVl8?=
- =?us-ascii?Q?6TysYLaxwY2b7e7V8Y38qiMpFyqnT4N3RuidoCMokxzZcor2EmCRN64KCrCE?=
- =?us-ascii?Q?a18cGcRuw7QO8ExsEM2f6WNENqNtv52kb61MfpM5IS+ke/GB5INHUDx91pMl?=
- =?us-ascii?Q?fwK9vNoN2mIO2+a+cn56COXc5hvyZlclgWvEabmNy2/1mjo4oj/Lam5p8Wcq?=
- =?us-ascii?Q?AAMGrXND2P1GeqGp9MF0kE7sdyoPVmLpZHPkl5a6gtCpQ5RiTgl6V2+ArjFj?=
- =?us-ascii?Q?YS1aamsv9ZRBzZXpP5PJM+Nv+aCFdKPlx3/lmBxIt2clwzVFcRM4g2Wq0EIy?=
- =?us-ascii?Q?S0/c7tuPQqelSmonFOoYjxOEBTSxV5ufEkRNHV5FBBBTYToIERlaYkUp6uR6?=
- =?us-ascii?Q?ulZLRBDWgY6TmN0bZHrTCSGNIcULN+hMw692NMoL9TC7Wsj3DIpe23Y5mZ4x?=
- =?us-ascii?Q?t/84Q7CQCDecfNF9frQoOpcVq+W4iRXmiLABGvoRzBDqL7feBMYao+KPLklm?=
- =?us-ascii?Q?IFAn0TsRJ6zfD/YpE2nE5zCb7XtbEptYhNTLxRFYKPhqN2JMqsG5MmaKwjI7?=
- =?us-ascii?Q?1ojds/Mhtk4ZbaSnhXO7OxXHpKL+pFCswrYP451yoK/xpQCjuRBa+tYv5t/W?=
- =?us-ascii?Q?CF0GZtuFVrK0IGGo2f6RiodU8B1FwOkGwRAF/Nib6tVzpdir5ng7YlqgnP5P?=
- =?us-ascii?Q?yS8G+dQ7BJ/m7ULPnwEDS3cQzbLGemqpgQTFhwnEpYORPhtRuQvWp3ErWAV3?=
- =?us-ascii?Q?K4Hvh6icwdcYFq6vEe0XUkmafPAxhNCjVJjyIaO3Xtpf5IdpEGnVdScP1gR6?=
- =?us-ascii?Q?XzfFGVbDr1e1lQgozm9DtPF0bd/b+lcqfW92rIN3uPeS0z64hlaoDV14ghz2?=
- =?us-ascii?Q?RXk/S1fwrLXepB1WftejyP1DJz6GHZ+qFSYlL27SHWCx5S3YQUsdlC3KtUZL?=
- =?us-ascii?Q?xig8XfOftrbgypxIPluyWbwpB3nFeLwH4/aPmMM1X43Kt6UPjTde63ke75Xs?=
- =?us-ascii?Q?AbGtErX63o/BMfCFddSIqrP0p9f8WEjfgJ4zm4Ryt53Rr8N/+fVaJ0ZFXPxn?=
- =?us-ascii?Q?oQcpzjf7nGKojb5oyiy5NFI2nECqImL1uUjSswQYRjjBkBiWm6vHmtB7YXOo?=
- =?us-ascii?Q?h+ul92Z8ua0A/FdlaRRHywogIR3sU/TOxYP7viG1R17YjmYquGUiJjUYapW0?=
- =?us-ascii?Q?3/brw/v7k1+ILvLiNM8hQvZAcNgQ2YUega/iMnbYOlvULSnbm94wRIE8U2dK?=
- =?us-ascii?Q?oIEnvUOJznUfX/g=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2025 16:27:14.1514
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c55c2a3-f7de-4c38-382f-08dd60b9951f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF00020E5F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4305
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
+To: Peter Xu <peterx@redhat.com>
+CC: James Houghton <jthoughton@google.com>, <akpm@linux-foundation.org>,
+	<pbonzini@redhat.com>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <lorenzo.stoakes@oracle.com>, <david@redhat.com>,
+	<ryan.roberts@arm.com>, <quic_eberman@quicinc.com>, <graf@amazon.de>,
+	<jgowans@amazon.com>, <roypat@amazon.co.uk>, <derekmn@amazon.com>,
+	<nsaenz@amazon.es>, <xmarcalx@amazon.com>
+References: <20250303133011.44095-1-kalyazin@amazon.com>
+ <Z8YfOVYvbwlZST0J@x1.local>
+ <CADrL8HXOQ=RuhjTEmMBJrWYkcBaGrqtXmhzPDAo1BE3EWaBk4g@mail.gmail.com>
+ <Z8i0HXen8gzVdgnh@x1.local> <fdae95e3-962b-4eaf-9ae7-c6bd1062c518@amazon.com>
+ <Z89EFbT_DKqyJUxr@x1.local>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <Z89EFbT_DKqyJUxr@x1.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D010EUA004.ant.amazon.com (10.252.50.94) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-On Tue, Mar 11, 2025 at 03:56:38PM +0000, Will Deacon wrote:
-> On Tue, Feb 25, 2025 at 09:25:41AM -0800, Nicolin Chen wrote:
-> > @@ -1866,7 +1869,14 @@ static int arm_smmu_handle_event(struct arm_smmu_device *smmu,
-> >  		goto out_unlock;
-> >  	}
-> >  
-> > -	ret = iommu_report_device_fault(master->dev, &fault_evt);
-> > +	if (event->stall) {
-> > +		ret = iommu_report_device_fault(master->dev, &fault_evt);
-> > +	} else {
-> > +		if (master->vmaster && !event->s2)
-> > +			ret = arm_vmaster_report_event(master->vmaster, evt);
-> > +		else
-> > +			ret = -EOPNOTSUPP; /* Unhandled events should be pinned */
-> > +	}
+
+
+On 10/03/2025 19:57, Peter Xu wrote:
+> On Mon, Mar 10, 2025 at 06:12:22PM +0000, Nikita Kalyazin wrote:
+>>
+>>
+>> On 05/03/2025 20:29, Peter Xu wrote:
+>>> On Wed, Mar 05, 2025 at 11:35:27AM -0800, James Houghton wrote:
+>>>> I think it might be useful to implement an fs-generic MINOR mode. The
+>>>> fault handler is already easy enough to do generically (though it
+>>>> would become more difficult to determine if the "MINOR" fault is
+>>>> actually a MISSING fault, but at least for my userspace, the
+>>>> distinction isn't important. :)) So the question becomes: what should
+>>>> UFFDIO_CONTINUE look like?
+>>>>
+>>>> And I think it would be nice if UFFDIO_CONTINUE just called
+>>>> vm_ops->fault() to get the page we want to map and then mapped it,
+>>>> instead of having shmem-specific and hugetlb-specific versions (though
+>>>> maybe we need to keep the hugetlb specialization...). That would avoid
+>>>> putting kvm/gmem/etc. symbols in mm/userfaultfd code.
+>>>>
+>>>> I've actually wanted to do this for a while but haven't had a good
+>>>> reason to pursue it. I wonder if it can be done in a
+>>>> backwards-compatible fashion...
+>>>
+>>> Yes I also thought about that. :)
+>>
+>> Hi Peter, hi James.  Thanks for pointing at the race condition!
+>>
+>> I did some experimentation and it indeed looks possible to call
+>> vm_ops->fault() from userfault_continue() to make it generic and decouple
+>> from KVM, at least for non-hugetlb cases.  One thing is we'd need to prevent
+>> a recursive handle_userfault() invocation, which I believe can be solved by
+>> adding a new VMF flag to ignore the userfault path when the fault handler is
+>> called from userfault_continue().  I'm open to a more elegant solution
+>> though.
 > 
-> nit: You don't need this extra indentation.
+> It sounds working to me.  Adding fault flag can also be seen as part of
+> extension of vm_operations_struct ops.  So we could consider reusing
+> fault() API indeed.
 
-Yea, there was an extra lock in the previous version.
+Great!
 
-Fixed with:
--       if (event->stall) {
-+       if (event->stall)
-                ret = iommu_report_device_fault(master->dev, &fault_evt);
--       } else {
--               if (master->vmaster && !event->s2)
--                       ret = arm_vmaster_report_event(master->vmaster, evt);
--               else
--                       ret = -EOPNOTSUPP; /* Unhandled events should be pinned */
--       }
-+       else    if (master->vmaster && !event->s2)
-+               ret = arm_vmaster_report_event(master->vmaster, evt);
-+       else
-+               ret = -EOPNOTSUPP; /* Unhandled events should be pinned */
-
-> Patch looks fine:
+>>
+>> Regarding usage of the MINOR notification, in what case do you recommend
+>> sending it?  If following the logic implemented in shmem and hugetlb, ie if
+>> the page is _present_ in the pagecache, I can't see how it is going to work
 > 
-> Acked-by: Will Deacon <will@kernel.org>
+> It could be confusing when reading that chunk of code, because it looks
+> like it notifies minor fault when cache hit. But the critical part here is
+> that we rely on the pgtable missing causing the fault() to trigger first.
+> So it's more like "cache hit && pgtable missing" for minor fault.
 
-Thanks!
+Right, but the cache hit still looks like a precondition for the minor 
+fault event?
 
-Nicolin
+>> with the write syscall, as we'd like to know when the page is _missing_ in
+>> order to respond with the population via the write.  If going against
+>> shmem/hugetlb logic, and sending the MINOR event when the page is missing
+>> from the pagecache, how would it solve the race condition problem?
+> 
+> Should be easier we stick with mmap() rather than write().  E.g. for shmem
+> case of current code base:
+> 
+>          if (folio && vma && userfaultfd_minor(vma)) {
+>                  if (!xa_is_value(folio))
+>                          folio_put(folio);
+>                  *fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
+>                  return 0;
+>          }
+> 
+> vma is only availble if vmf!=NULL, aka in fault context.  With that, in
+> write() to shmem inodes, nothing will generate a message, because minor
+> fault so far is only about pgtable missing.  It needs to be mmap()ed first,
+> and has nothing yet to do with write() syscalls.
+
+Yes, that's true that write() itself isn't going to generate a message. 
+My idea was to _respond_ to a message generated by the fault handler 
+(vmf != NULL) with a write().  I didn't mean to generate it from write().
+
+What I wanted to achieve was send a message on fault + cache miss and 
+respond to the message with a write() to fill the cache followed by a 
+UFFDIO_CONTINUE to set up pagetables.  I understand that a MINOR trap 
+(MINOR + UFFDIO_CONTINUE) is preferable, but how does it fit into this 
+model?  What/how will guarantee a cache hit that would trigger the MINOR 
+message?
+
+To clarify, I would like to be able to populate pages _on-demand_, not 
+only proactively (like in the original UFFDIO_CONTINUE cover letter 
+[1]).  Do you think the MINOR trap could still be applicable or would it 
+necessarily require the MISSING trap?
+
+[1] 
+https://lore.kernel.org/linux-fsdevel/20210301222728.176417-1-axelrasmussen@google.com/T/
+
+>>
+>> Also, where would the check for the folio_test_uptodate() mentioned by James
+>> fit into here?  Would it only be used for fortifying the MINOR (present)
+>> against the race?
+>>
+>>> When Axel added minor fault, it's not a major concern as it's the only fs
+>>> that will consume the feature anyway in the do_fault() path - hugetlbfs has
+>>> its own path to take care of.. even until now.
+>>>
+>>> And there's some valid points too if someone would argue to put it there
+>>> especially on folio lock - do that in shmem.c can avoid taking folio lock
+>>> when generating minor fault message.  It might make some difference when
+>>> the faults are heavy and when folio lock is frequently taken elsewhere too.
+>>
+>> Peter, could you expand on this?  Are you referring to the following
+>> (shmem_get_folio_gfp)?
+>>
+>>        if (folio) {
+>>                folio_lock(folio);
+>>
+>>                /* Has the folio been truncated or swapped out? */
+>>                if (unlikely(folio->mapping != inode->i_mapping)) {
+>>                        folio_unlock(folio);
+>>                        folio_put(folio);
+>>                        goto repeat;
+>>                }
+>>                if (sgp == SGP_WRITE)
+>>                        folio_mark_accessed(folio);
+>>                if (folio_test_uptodate(folio))
+>>                        goto out;
+>>                /* fallocated folio */
+>>                if (sgp != SGP_READ)
+>>                        goto clear;
+>>                folio_unlock(folio);
+>>                folio_put(folio);
+>>        }
+>>
+>> Could you explain in what case the lock can be avoided?  AFAIC, the function
+>> is called by both the shmem fault handler and userfault_continue().
+> 
+> I think you meant the UFFDIO_CONTINUE side of things.  I agree with you, we
+> always need the folio lock.
+> 
+> What I was saying is the trapping side, where the minor fault message can
+> be generated without the folio lock now in case of shmem.  It's about
+> whether we could generalize the trapping side, so handle_mm_fault() can
+> generate the minor fault message instead of by shmem.c.
+> 
+> If the only concern is "referring to a module symbol from core mm", then
+> indeed the trapping side should be less of a concern anyway, because the
+> trapping side (when in the module codes) should always be able to reference
+> mm functions.
+> 
+> Actually.. if we have a fault() flag introduced above, maybe we can
+> generalize the trap side altogether without the folio lock overhead.  When
+> the flag set, if we can always return the folio unlocked (as long as
+> refcount held), then in UFFDIO_CONTINUE ioctl we can lock it.
+
+Where does this locking happen exactly during trapping?  I was thinking 
+it was only done when the page was allocated.  The trapping part (quoted 
+by you above) only looks up the page in the cache and calls 
+handle_userfault().  Am I missing something?
+
+>>
+>>> It might boil down to how many more FSes would support minor fault, and
+>>> whether we would care about such difference at last to shmem users. If gmem
+>>> is the only one after existing ones, IIUC there's still option we implement
+>>> it in gmem code.  After all, I expect the change should be very under
+>>> control (<20 LOCs?)..
+>>>
+>>> --
+>>> Peter Xu
+>>>
+>>
+> 
+> --
+> Peter Xu
+> 
+
 
