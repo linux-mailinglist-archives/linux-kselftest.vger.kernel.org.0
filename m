@@ -1,124 +1,94 @@
-Return-Path: <linux-kselftest+bounces-28691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2689EA5B805
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 05:35:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F34D0A5B81C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 05:53:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDD161891A74
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 04:35:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A94AA3B015F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Mar 2025 04:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DD81EB19F;
-	Tue, 11 Mar 2025 04:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I122Az41"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0291EB5C9;
+	Tue, 11 Mar 2025 04:53:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7671DEFF3
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 04:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF6E1DFE22;
+	Tue, 11 Mar 2025 04:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741667742; cv=none; b=avqLDEi3M4UI7Jzv65triSqlDPwLr7u/HAM1Q8BYULW9qQuGnISH5n39lz9gXmOQCP6FGGRXSn9SnZw+1bBfLCyfULQfXO+IftYuqZ1obhggCmrFd+ixkmMO0Tjr6M75D/DWKzi7qTG2vux5Oua/Qn6ykYuKJsKe5IgzbIRHCKY=
+	t=1741668828; cv=none; b=Kw769KH1mWKLbdozIQ3oRMAF94cuqvV1wISKzXLPHTv6UqE2W3P6/vRRv1wQgLJae5zbox9q6igapQwTDMHTu6DVaM0r+sQlbZO838uivi2JssvTt8zpOM1FozLjt0jDbAXk1qPSBwLnYuh8IqdDUARZIharDVcAv9YyqDFjoNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741667742; c=relaxed/simple;
-	bh=+bFQW08Y5h5rVZvOgGOk26oDuZlw1eFCGBNkRGg2Cvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KC57yxZ+6Dl8mLixxj0ctdKAUIzRIkhIc2L0dSNPz765ykMvqq0KmZSZm5RlMf2zXUodnepc+L7vgBlBZtSQz07dFlClD4hEDRJPaD4RInUghsn23RcrM6HNgeei7WRfBybbAfch1ao/CM4b5e5UVdWTOL9sQ62jvo4Vdg+k7b0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I122Az41; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741667739;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RydWn+mrgbEDJyv29iV6STruNKsJ8UhnPiCwUX9hAMc=;
-	b=I122Az41G6fckN61UVN9LKwMrVs8kHQjRnBPCoFuKJWitIy++mWeES1KRjeqTYk386p80E
-	wP60fD6FdSasKUy6CKtBSwdq+KooXb/fIo93bYYuXw8wGjHBeaiaZH7a52WJibxUoWmrZe
-	rGD46Hyl0U/mribD/xh3IcBRLe+Jw5Q=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-306-WrS50hfXNaWUDGekfwC0yA-1; Tue,
- 11 Mar 2025 00:35:36 -0400
-X-MC-Unique: WrS50hfXNaWUDGekfwC0yA-1
-X-Mimecast-MFC-AGG-ID: WrS50hfXNaWUDGekfwC0yA_1741667735
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 22A8A195608A;
-	Tue, 11 Mar 2025 04:35:35 +0000 (UTC)
-Received: from fedora (unknown [10.72.120.11])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1A5471955BCB;
-	Tue, 11 Mar 2025 04:35:31 +0000 (UTC)
-Date: Tue, 11 Mar 2025 12:35:26 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/11] selftests: ublk: bug fixes & consolidation
-Message-ID: <Z8-9jmZ4jiA7C9gI@fedora>
-References: <20250303124324.3563605-1-ming.lei@redhat.com>
- <CAFj5m9+25+zUjUun12YvEzcH7NZ4eeJrq=p+7DYZ7kuasiDoqw@mail.gmail.com>
- <95955f2d-6bcd-492b-9057-37363168bdf5@kernel.dk>
+	s=arc-20240116; t=1741668828; c=relaxed/simple;
+	bh=oR7WyXSXrXzDskpI6SIUSj6ACdxCa+8Rzj5ezUgeZDE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gXBEcocwL6pQS0Bdapa5HXF6PFDq0URmIaxov3UyFtVWfZgQkSHALdt2bfbDR69dqFBpW0pSaZr2bAMCmSIJ04PNMdMHCrJlg08dMQDTqmEFjg2kDyPQ1jTyAxMDD3uEQRf6hFlNiAa9CS5B1kHvh032wkXqSIDHesXsdXDUF7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F5861516;
+	Mon, 10 Mar 2025 21:53:51 -0700 (PDT)
+Received: from [10.174.36.193] (unknown [10.174.36.193])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C0813F694;
+	Mon, 10 Mar 2025 21:53:37 -0700 (PDT)
+Message-ID: <f3c0e925-4f71-4051-9f13-57169f1be960@arm.com>
+Date: Tue, 11 Mar 2025 10:23:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <95955f2d-6bcd-492b-9057-37363168bdf5@kernel.dk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm/cow: Fix the incorrect error handling
+To: Cyan Yang <cyan.yang@sifive.com>, akpm@linux-foundation.org,
+ shuah@kernel.org, david@redhat.com
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250311023730.56658-1-cyan.yang@sifive.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <20250311023730.56658-1-cyan.yang@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 10, 2025 at 09:17:56AM -0600, Jens Axboe wrote:
-> On 3/10/25 9:09 AM, Ming Lei wrote:
-> > On Mon, Mar 3, 2025 at 8:43?PM Ming Lei <ming.lei@redhat.com> wrote:
-> >>
-> >> Hello Jens and guys,
-> >>
-> >> This patchset fixes several issues(1, 2, 4) and consolidate & improve
-> >> the tests in the following ways:
-> >>
-> >> - support shellcheck and fixes all warning
-> >>
-> >> - misc cleanup
-> >>
-> >> - improve cleanup code path(module load/unload, cleanup temp files)
-> >>
-> >> - help to reuse the same test source code and scripts for other
-> >>   projects(liburing[1], blktest, ...)
-> >>
-> >> - add two stress tests for covering IO workloads vs. removing device &
-> >> killing ublk server, given buffer lifetime is one big thing for ublk-zc
-> >>
-> >>
-> >> [1] https://github.com/ming1/liburing/commits/ublk-zc
-> >>
-> >> - just need one line change for overriding skip_code, libring uses 77 and
-> >>   kselftests takes 4
-> > 
-> > Hi Jens,
-> > 
-> > Can you merge this patchset if you are fine?
+
+
+On 11/03/25 8:07 am, Cyan Yang wrote:
+> There are two error handlings did not check the correct return value.
+> This patch will fix them.
 > 
-> Yep sorry, was pondering how best to get it staged. Should go into
-> block, but depends on the other bits that I staged for io_uring. So I'll
-> just put it there, not a big deal.
+> Fixes: f4b5fd6946e244cdedc3bbb9a1f24c8133b2077a ("selftests/vm: anon_cow: THP tests")
+> Signed-off-by: Cyan Yang <cyan.yang@sifive.com>
+> ---
+>   tools/testing/selftests/mm/cow.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index 9446673645eb..16fcadc090a4 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -876,13 +876,13 @@ static void do_run_with_thp(test_fn fn, enum thp_run thp_run, size_t thpsize)
+>   		mremap_size = thpsize / 2;
+>   		mremap_mem = mmap(NULL, mremap_size, PROT_NONE,
+>   				  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> -		if (mem == MAP_FAILED) {
+> +		if (mremap_mem == MAP_FAILED) {
+>   			ksft_test_result_fail("mmap() failed\n");
+>   			goto munmap;
+>   		}
+>   		tmp = mremap(mem + mremap_size, mremap_size, mremap_size,
+>   			     MREMAP_MAYMOVE | MREMAP_FIXED, mremap_mem);
+> -		if (tmp != mremap_mem) {
 
-Thanks for pulling it in!
+This is fine. We are checking whether we were able to mremap tmp to 
+mremap_mem.
 
-BTW, the test behavior depends on block too, otherwise it may fail because
-ublk zc actually depends on the fix of "ublk: complete command synchronously on error".
-
-So if anyone wants to try the test, please do it against next tree.
-
-Thanks,
-Ming
+> +		if (tmp == MAP_FAILED) {
+>   			ksft_test_result_fail("mremap() failed\n");
+>   			goto munmap;
+>   		}
 
 
