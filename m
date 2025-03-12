@@ -1,95 +1,95 @@
-Return-Path: <linux-kselftest+bounces-28790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AC64A5D490
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 04:00:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CF76A5D4C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 04:36:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE5EB189C0FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 03:00:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 569707AA03F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 03:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF60E1C174A;
-	Wed, 12 Mar 2025 03:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3B1198E8C;
+	Wed, 12 Mar 2025 03:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h59bIInK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O/xddV6t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A3E19ADA4
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Mar 2025 03:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3FE1487ED
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Mar 2025 03:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741748414; cv=none; b=AHooy5dR1Ir5pYgqBakOrMHK7+PwwtxNOhLm5MY5oN/z5wIDlvmxPWm8f0SKx7g17OeK53VRkVpj4ZwLxQJXwaoGjDTwUXCxNp/DZTCfBefCzDM4xZPcVrS4P0zH2kJH/vmJG3cK9gZvSLnD1THrKaYmt3hxvv31EjO55N8VhBw=
+	t=1741750590; cv=none; b=Y+FSmnCDUkyJcJrqL9giqjQUbjXZevruBpvEgPcGkL3mc3q65bKsaWwRqToR6nUVHeebpCM+rDVlzvOOfQD/4nUbr83nPc0UXxGbLPBMvoeHfbALSva2j46iSbI8H9V/5UVPjNNJCs/x1xWVrn+ILAMfacOkPiWed948qDLSius=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741748414; c=relaxed/simple;
-	bh=uh729120lBrgt14eq8/qws4JD1PfEtETFf5h4dUiehI=;
+	s=arc-20240116; t=1741750590; c=relaxed/simple;
+	bh=Dyw0HFF2I3UqKNeJMJWrFl+V1/u9vlMYXlU1qdh2Fs0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u05jH7HJBTNgPAnicY2WoHk7dstYASQdCFEJTDK0lYst4mrV2RCKfOOcY8WXPtuMztCV4rzbCNsgoZejAsBWA2+ipPc6Q3hxQOGyUFchNuhnJ6bGO4MqfQRiofglxujVlIlDr4DY8QI5X2BvHi+rh839cD3ULaI+mB8Pnf4anDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h59bIInK; arc=none smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=ObS+9yHq6SnaMNr/24D1dbwD9Y8367hp0GnfkJrix73/zZzpFRH2Rq67isrDYNE3/sb7Ndf+Rp9RwCk3WZqv6UBmU+GtqBCP89sDmOy4Z+aBZVMU0KQzKAL0Xl5eVLgZHbphVPNHnzYd7FyUPQT29Em5hYnh0qCxWW6UxUokx54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O/xddV6t; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741748411;
+	s=mimecast20190719; t=1741750587;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FPO7R0eIW5tnFxhT73UA9jvPdIiqGpsDvnFvTsNRiiU=;
-	b=h59bIInKX/zDJrLwzc+2eWVQ+h7s+/XjvSzqtQcAj4IyzbX9vy4RmIIjecMQ3eagJ5DAqy
-	nv6X66jqWfV15xtWbYOgRbfjXWu3DhxiieKYCvahHjmf0q4sPr2fDi/m6QbQOYKgC9y/QA
-	MJ86+0f6/zOAm/lRvEFCutQq6mGzQ5o=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=FZpwUgpQlsRSqyhUJVMbAHrvSDusnw6V0w+ye5eNYLw=;
+	b=O/xddV6tAvttgmf0NkPoR3aYCt99nHAK+qRJv0OTAuO3EWmYT487HWCM8V0RzVU/VtRp3y
+	bmVcEck8VNLtGROvu/lpEkT+bIeBaPIuVKWTBBPjUMX4mIN0nr1YnYo1RQ27lr6KFMUVW/
+	oGMqbD1WdE4zt8Wj53ZELtjIjxPuZ7Q=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-46--ikJukCDODGIgJ9aTRZLoQ-1; Tue, 11 Mar 2025 23:00:08 -0400
-X-MC-Unique: -ikJukCDODGIgJ9aTRZLoQ-1
-X-Mimecast-MFC-AGG-ID: -ikJukCDODGIgJ9aTRZLoQ_1741748407
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2ff7f9a0b9bso7855517a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 20:00:08 -0700 (PDT)
+ us-mta-663-ITRdtOOSPSGt1SkqvCYIqg-1; Tue, 11 Mar 2025 23:36:26 -0400
+X-MC-Unique: ITRdtOOSPSGt1SkqvCYIqg-1
+X-Mimecast-MFC-AGG-ID: ITRdtOOSPSGt1SkqvCYIqg_1741750585
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-224192ff68bso95616705ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 20:36:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741748407; x=1742353207;
+        d=1e100.net; s=20230601; t=1741750585; x=1742355385;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FPO7R0eIW5tnFxhT73UA9jvPdIiqGpsDvnFvTsNRiiU=;
-        b=n6avG/WLl1ijgQHJBGEr7y+CAWO21Gsm+afu1iZ6R1Gp8bvmkyQAc07uAngd7x+ncU
-         4sqTWKjH/IDwySI7+CpGKd4/SLgU7qy0HmPxVT5g4ph/4CcJw0psO2LTtZSMPHLTnUP4
-         2tMGQKpCHoRkeye/LZmuKPA4E+prkMD6sfYSU9Sn3OeGtBIWvWoa9yWtTV/nv13r3mao
-         XnhFhfX6pCOP9PRl1xi/zvc34kW7dsDtpgRB4EQia3jDUsvnJiXz/nNfvgzhe0Lf7F1F
-         PoBuKJ2FZA8yQCRoCTgUephrjD677bT42DoRlHEIPLl75yB40nyQD1lRP3Uc/hGxCC9v
-         KiMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUD83KDZdyJrMt7I7PX/PkMt5hsEtu8KQhUqLhJ96U2fv98XdcCE/bLtbwbkTvPCSU7dLhVe+luIQZQ2yixhJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxT4DYsVTmT6hKTlhPUDghai47X3hRJ6xxjYSI7078NmH4LDx/
-	Gjb405Be/g0MI45ZgA5FNiyjhUQUZhyshS62koejoJrVD7FHSGgzavRaljAm/eFklxcXY3GFhvY
-	Xigz1YrH8KsWvdlrYZTEG5Na16Hr55F1pSlkRgeAxaV2vrMiBKucbrqVa77YbIhSXPEgf9STvOk
-	gAASwlu6bs4L2y0xUrH8uT7DRKBwkycSeIEGM9045y
-X-Gm-Gg: ASbGnctfsqCW2bLg8W0IB8H15IbExN0vCim31WKs5saTtWO3eHWPw0LQgDBtKngi671
-	iSpbAoYRubWLXRoxC2tTizECp0VHivxB0W3mSezFkLNT5/awXGhYLicY/FsVTxl5KmZLOVA==
-X-Received: by 2002:a17:90b:35c6:b0:2ff:4bac:6fa2 with SMTP id 98e67ed59e1d1-300ff100782mr8803712a91.16.1741748407261;
-        Tue, 11 Mar 2025 20:00:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IET6lsV/yTA4z+MP1noXOIunYsp3qN8L1Z8eiyVimjBwI0oZIPPsINtQsWF9heOMDn6TbEv142XFxBfq24rdok=
-X-Received: by 2002:a17:90b:35c6:b0:2ff:4bac:6fa2 with SMTP id
- 98e67ed59e1d1-300ff100782mr8803670a91.16.1741748406897; Tue, 11 Mar 2025
- 20:00:06 -0700 (PDT)
+        bh=FZpwUgpQlsRSqyhUJVMbAHrvSDusnw6V0w+ye5eNYLw=;
+        b=NKmj8jCl2DC7bJGcz5gIEcHviYrnR76dVIZo6KRcrOiqqJhw8ngmwuATFy+PQRJVui
+         +WdrfTHwIhKcR0mLfDH0xBWqZcHh8jL8PvvJjNaq+n2RgBMEgY4n0CyIVym0OjSHp06i
+         pcG1Py0xr0aAS/q+oWX5506IIy21DNQUjCP8h1rbD1LWZ7gxKmI5RgMLaNkkBIDBJ/4J
+         xFigs9LJVQcbxZe+FY2SBUah5QClMc49Bkki8YtPXiEX4sXW/OpRcWXGA2gJgQWjeHQC
+         7zxlq66NTAuktNn32l1xE/alSUUrNUn1by+nLjY7ToSis1NvFu4Bsg6EHxribshncoBM
+         uQaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqDoV/LssRoNZbt/NZdWiUhfGSDhlApZpf1hXdFB+XFPdXuflEn6sGzlN+dGP7u+6OAlUNhWaLf3e2a1SqIwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5QJaituqhZcerFmJzL24/ZpzA9ULQmvN7Cwj2v4BlH7jt8Ber
+	iYmvQDKw1Vik8b3OR+m4nhTPsWjyARpPX3aqrhc0oKOF4loqHsAk66WkD1MKxyb3eRTJJsZjAxf
+	HRCmFTHzHdkmLd+3vUa33iM7XrMALz0fbgK2TVE/gphITiQxkMCL81FGRJF3y3O1Xt7ZIY/tghe
+	lrJLQhdBaf53mPN1Fu1Zkj7ObyRwp913QDzUER1Mh9qV9785QifOmx7oas
+X-Gm-Gg: ASbGncusXoic9CMiTePGpffHfcQtwqktk10mKIg/sRhoZutbB63CcmeJxhVwC4SU687
+	RmyNjsNoxAN98Ob/q2PUBYFAc5Sneo0NtcaN6fZ13P/K+dTbChbSMofo3CkZmBd0zXS2mbA==
+X-Received: by 2002:a05:6a00:238d:b0:736:d6da:8f9e with SMTP id d2e1a72fcca58-736eb667a71mr7986964b3a.0.1741750584738;
+        Tue, 11 Mar 2025 20:36:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEMmxpIAevVVywh2O0MaRFt52q3IQdqP0x11H7Tx5Em3ifIbgwiYbMghj8Z7Q/WU0TpCaMabTo/4ereJNFvbKw=
+X-Received: by 2002:a05:6a00:238d:b0:736:d6da:8f9e with SMTP id
+ d2e1a72fcca58-736eb667a71mr7986941b3a.0.1741750584315; Tue, 11 Mar 2025
+ 20:36:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250307-rss-v9-0-df76624025eb@daynix.com> <20250307-rss-v9-3-df76624025eb@daynix.com>
- <CACGkMEsNHba=PY5UQoH1zdGQRiHC8FugMG1nkXqOj1TBdOQrww@mail.gmail.com>
- <7978dfd5-8499-44f3-9c30-e53a01449281@daynix.com> <CACGkMEsR4_RreDbYQSEk5Cr29_26WNUYheWCQBjyMNUn=1eS2Q@mail.gmail.com>
- <5e67a0a6-f613-4b0a-b64e-67f649e45c3e@daynix.com>
-In-Reply-To: <5e67a0a6-f613-4b0a-b64e-67f649e45c3e@daynix.com>
+References: <20250307-rss-v9-0-df76624025eb@daynix.com> <20250307-rss-v9-6-df76624025eb@daynix.com>
+ <CACGkMEuccQ6ah-aZ3tcW1VRuetEoPA_NaLxLT+9fb0uAab8Agg@mail.gmail.com>
+ <2e550452-a716-4c3f-9d5a-3882d2c9912a@daynix.com> <CACGkMEu9tynRgTh__3p_vSqOekSirbVgS90rd5dUiJru9oV1eg@mail.gmail.com>
+ <1dd2417a-3246-44b0-b4ba-feadfd6f794e@daynix.com>
+In-Reply-To: <1dd2417a-3246-44b0-b4ba-feadfd6f794e@daynix.com>
 From: Jason Wang <jasowang@redhat.com>
-Date: Wed, 12 Mar 2025 10:59:51 +0800
-X-Gm-Features: AQ5f1JqQKEMLpBM7U-YYsZ15IkMLY-FYatkHcqLxAc5jqhv4juthUfs4s77Xshk
-Message-ID: <CACGkMEv83iR0vU00XGOGonL1fkd=K1b-shCcNb1K8yJ9O+0BDQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 3/6] tun: Introduce virtio-net hash feature
+Date: Wed, 12 Mar 2025 11:36:11 +0800
+X-Gm-Features: AQ5f1JrxpKp6znsUaqgeF38Q8NdhxxsJo9tfhGhP07-EGgT1K5NsmabBVB2dyas
+Message-ID: <CACGkMEthfj0KJvOHhnc_ww7iqtmhHUy9f9EGOoR-n0OwHOBrvQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 6/6] vhost/net: Support VIRTIO_NET_F_HASH_REPORT
 To: Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -104,109 +104,156 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gm
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 11, 2025 at 2:17=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
+On Tue, Mar 11, 2025 at 2:24=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
 .com> wrote:
 >
-> On 2025/03/11 9:38, Jason Wang wrote:
-> > On Mon, Mar 10, 2025 at 3:45=E2=80=AFPM Akihiko Odaki <akihiko.odaki@da=
+> On 2025/03/11 9:42, Jason Wang wrote:
+> > On Mon, Mar 10, 2025 at 3:04=E2=80=AFPM Akihiko Odaki <akihiko.odaki@da=
 ynix.com> wrote:
 > >>
-> >> On 2025/03/10 12:55, Jason Wang wrote:
-> >>> On Fri, Mar 7, 2025 at 7:01=E2=80=AFPM Akihiko Odaki <akihiko.odaki@d=
+> >> On 2025/03/10 13:43, Jason Wang wrote:
+> >>> On Fri, Mar 7, 2025 at 7:02=E2=80=AFPM Akihiko Odaki <akihiko.odaki@d=
 aynix.com> wrote:
 > >>>>
-> >>>> Hash reporting
-> >>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>>> VIRTIO_NET_F_HASH_REPORT allows to report hash values calculated on =
+the
+> >>>> host. When VHOST_NET_F_VIRTIO_NET_HDR is employed, it will report no
+> >>>> hash values (i.e., the hash_report member is always set to
+> >>>> VIRTIO_NET_HASH_REPORT_NONE). Otherwise, the values reported by the
+> >>>> underlying socket will be reported.
 > >>>>
-> >>>> Allow the guest to reuse the hash value to make receive steering
-> >>>> consistent between the host and guest, and to save hash computation.
-> >>>>
-> >>>> RSS
-> >>>> =3D=3D=3D
-> >>>>
-> >>>> RSS is a receive steering algorithm that can be negotiated to use wi=
-th
-> >>>> virtio_net. Conventionally the hash calculation was done by the VMM.
-> >>>> However, computing the hash after the queue was chosen defeats the
-> >>>> purpose of RSS.
-> >>>>
-> >>>> Another approach is to use eBPF steering program. This approach has
-> >>>> another downside: it cannot report the calculated hash due to the
-> >>>> restrictive nature of eBPF steering program.
-> >>>>
-> >>>> Introduce the code to perform RSS to the kernel in order to overcome
-> >>>> thse challenges. An alternative solution is to extend the eBPF steer=
-ing
-> >>>> program so that it will be able to report to the userspace, but I di=
-dn't
-> >>>> opt for it because extending the current mechanism of eBPF steering
-> >>>> program as is because it relies on legacy context rewriting, and
-> >>>> introducing kfunc-based eBPF will result in non-UAPI dependency whil=
-e
-> >>>> the other relevant virtualization APIs such as KVM and vhost_net are
-> >>>> UAPIs.
+> >>>> VIRTIO_NET_F_HASH_REPORT requires VIRTIO_F_VERSION_1.
 > >>>>
 > >>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 > >>>> Tested-by: Lei Yang <leiyang@redhat.com>
 > >>>> ---
-> >>>>    Documentation/networking/tuntap.rst |   7 ++
-> >>>>    drivers/net/Kconfig                 |   1 +
-> >>>>    drivers/net/tap.c                   |  68 ++++++++++++++-
-> >>>>    drivers/net/tun.c                   |  98 +++++++++++++++++-----
-> >>>>    drivers/net/tun_vnet.h              | 159 +++++++++++++++++++++++=
-+++++++++++--
-> >>>>    include/linux/if_tap.h              |   2 +
-> >>>>    include/linux/skbuff.h              |   3 +
-> >>>>    include/uapi/linux/if_tun.h         |  75 +++++++++++++++++
-> >>>>    net/core/skbuff.c                   |   4 +
-> >>>>    9 files changed, 386 insertions(+), 31 deletions(-)
+> >>>>    drivers/vhost/net.c | 49 +++++++++++++++++++++++++++++-----------=
+---------
+> >>>>    1 file changed, 29 insertions(+), 20 deletions(-)
 > >>>>
-
-[...]
-
-> >>> Let's has a consistent name for this and the uapi to be consistent
-> >>> with TUNSETIFF/TUNGETIFF. Probably TUNSETVNETHASH and
-> >>> tun_vnet_ioctl_gethash().
+> >>>> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> >>>> index b9b9e9d40951856d881d77ac74331d914473cd56..16b241b44f89820a42c3=
+02f3586ea6bb5e0d4289 100644
+> >>>> --- a/drivers/vhost/net.c
+> >>>> +++ b/drivers/vhost/net.c
+> >>>> @@ -73,6 +73,7 @@ enum {
+> >>>>           VHOST_NET_FEATURES =3D VHOST_FEATURES |
+> >>>>                            (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
+> >>>>                            (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
+> >>>> +                        (1ULL << VIRTIO_NET_F_HASH_REPORT) |
+> >>>>                            (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
+> >>>>                            (1ULL << VIRTIO_F_RING_RESET)
+> >>>>    };
+> >>>> @@ -1097,9 +1098,11 @@ static void handle_rx(struct vhost_net *net)
+> >>>>                   .msg_controllen =3D 0,
+> >>>>                   .msg_flags =3D MSG_DONTWAIT,
+> >>>>           };
+> >>>> -       struct virtio_net_hdr hdr =3D {
+> >>>> -               .flags =3D 0,
+> >>>> -               .gso_type =3D VIRTIO_NET_HDR_GSO_NONE
+> >>>> +       struct virtio_net_hdr_v1_hash hdr =3D {
+> >>>> +               .hdr =3D {
+> >>>> +                       .flags =3D 0,
+> >>>> +                       .gso_type =3D VIRTIO_NET_HDR_GSO_NONE
+> >>>> +               }
+> >>>>           };
+> >>>>           size_t total_len =3D 0;
+> >>>>           int err, mergeable;
+> >>>> @@ -1110,7 +1113,6 @@ static void handle_rx(struct vhost_net *net)
+> >>>>           bool set_num_buffers;
+> >>>>           struct socket *sock;
+> >>>>           struct iov_iter fixup;
+> >>>> -       __virtio16 num_buffers;
+> >>>>           int recv_pkts =3D 0;
+> >>>>
+> >>>>           mutex_lock_nested(&vq->mutex, VHOST_NET_VQ_RX);
+> >>>> @@ -1191,30 +1193,30 @@ static void handle_rx(struct vhost_net *net)
+> >>>>                           vhost_discard_vq_desc(vq, headcount);
+> >>>>                           continue;
+> >>>>                   }
+> >>>> +               hdr.hdr.num_buffers =3D cpu_to_vhost16(vq, headcount=
+);
+> >>>>                   /* Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET=
+_HDR */
+> >>>>                   if (unlikely(vhost_hlen)) {
+> >>>> -                       if (copy_to_iter(&hdr, sizeof(hdr),
+> >>>> -                                        &fixup) !=3D sizeof(hdr)) {
+> >>>> +                       if (copy_to_iter(&hdr, vhost_hlen,
+> >>>> +                                        &fixup) !=3D vhost_hlen) {
+> >>>>                                   vq_err(vq, "Unable to write vnet_h=
+dr "
+> >>>>                                          "at addr %p\n", vq->iov->io=
+v_base);
+> >>>>                                   goto out;
+> >>>
+> >>> Is this an "issue" specific to RSS/HASH? If it's not, we need a separ=
+ate patch.
+> >>>
+> >>> Honestly, I'm not sure if it's too late to fix this.
 > >>
-> >> They have different semantics so they should have different names.
-> >> TUNGETIFF reports the value currently set while TUNGETVNETHASHCAP
-> >> reports the value that can be set later.
+> >> There is nothing wrong with the current implementation.
 > >
-> > I'm not sure I will get here. I meant a symmetric name
+> > Note that I meant the vhost_hlen part, and the current code is tricky.
 > >
-> > TUNSETVNETHASH and TUNVETVNETHASH.
+> > The comment said:
+> >
+> > """
+> > /* Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET_HDR */
+> > """
+> >
+> > So it tries to only offer virtio_net_hdr even if vhost_hlen is the set
+> > to mrg_rxbuf len.
+> >
+> > And this patch changes this behaviour.
 >
-> TUNGETVNETHASHCAP does not correspond to TUNGETIFF. The correspondence
-> of ioctl names is as follows:
-> TUNGETFEATURES - TUNGETVNETHASHCAP
+> mrg_rxbuf only adds the num_buffers field, which is always set for
+> mrg_rxbuf.
+>
+> The num_buffers was not set for VIRTIO_F_VERSION_1 in the past, but this
+> was also fixed with commit a3b9c053d82a ("vhost/net: Set num_buffers for
+> virtio 1.0")
+>
+> So there is no behavioral change for existing features with this patch.
 
-TUNGETFEATURES returns the value set from TUNSETIFF. This differs from
-TUNGETVNETHASHCAP semantic which just return the capabilities.
+I meant this part.
 
-+static inline long tun_vnet_ioctl_gethashcap(void __user *argp)
-+{
-+       static const struct tun_vnet_hash cap =3D {
-+               .flags =3D TUN_VNET_HASH_REPORT | TUN_VNET_HASH_RSS,
-+               .types =3D VIRTIO_NET_SUPPORTED_HASH_TYPES
-+       };
-+
-+       return copy_to_user(argp, &cap, sizeof(cap)) ? -EFAULT : 0;
-+}
+>>>> +                       if (copy_to_iter(&hdr, vhost_hlen,
+>>>> +                                        &fixup) !=3D vhost_hlen) {
 
-TUNGETFEATURES doesn't' help too much for non-persist TAP as userspace
-knows what value it set before.
+We should copy only sizeof(hdr) instead of vhost_hlen.
 
-> TUNSETIFF - TUNSETVNETHASH
-> TUNGETIFF - no corresponding ioctl for the virtio-net hash features
+Anything I miss?
 
-And this sounds odd and a hint for a incomplete uAPI as userspace
-needs to know knowing what can set before doing TUNSETVNETHASH.
+Thanks
 
 >
 > Regards,
 > Akihiko Odaki
 >
-
-Thanks
+> >
+> > Thanks
+> >
+> >> The current
+> >> implementation fills the header with zero except num_buffers, which it
+> >> fills some real value. This functionality is working fine with
+> >> VIRTIO_NET_F_MRG_RXBUF and VIRTIO_F_VERSION_1, which change the header=
+ size.
+> >>
+> >> Now I'm adding VIRTIO_NET_F_HASH_REPORT and it adds the hash_report
+> >> field, which also needs to be initialized with zero, so I'm making sur=
+e
+> >> vhost_net will also initialize it.
+> >>
+> >> Regards,
+> >> Akihiko Odaki
+> >>
+> >>>
+> >>> Others look fine.
+> >>>
+> >>> Thanks
+> >>>
+> >>
+> >
+>
 
 
