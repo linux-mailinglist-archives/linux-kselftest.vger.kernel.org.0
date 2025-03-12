@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-28811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1835A5DED3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 15:23:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7902A5DF37
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 15:42:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00D5E17A718
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 14:23:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A5937ADD03
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 14:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0164424E019;
-	Wed, 12 Mar 2025 14:22:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807562505CA;
+	Wed, 12 Mar 2025 14:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="AELYw4fM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="igs2XxEz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF74024A062;
-	Wed, 12 Mar 2025 14:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853DF242927;
+	Wed, 12 Mar 2025 14:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741789370; cv=none; b=JbSxd1u7G2/7na9VXoTl26AtgtUsj/Gr5LLePhDwRgWhuaPLVNxzmiVezESZiAnEgiGqtPxeZj5XRxJAB6r79ZCAWud5smWWhbxzP9fscFLwlKe6bVaHAxEX/B65CzCO7IlaqTdcioiQKPtHMobCagmgzfBhVWbPMGtahrghFjY=
+	t=1741790411; cv=none; b=Wlms2/3Av3pKTtalxry4a5d64ap6SBnvk3ZkMTfv65qpykAH5PhPB84RMTeJoVKqZj5Aul9WtgSb8jsrvK5oluRHE6cRgC1XPhOJK9WEC3end/wbWZ8kE983IQWM6G/PbiSm6rhsIdjfxA1LzzkULlEcQBMmSjSyaFKW8k1b+rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741789370; c=relaxed/simple;
-	bh=5zIB9aP4MjZVZbVwkvtMy8bZT0SBYH8T7xQXJLwcGRk=;
+	s=arc-20240116; t=1741790411; c=relaxed/simple;
+	bh=Fi/xls1kSt18tedNUCc6ZZh7/Q3+KsdT4mWnx7Ose1s=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SIufARffDV5POpuvfWywAMBk7krPz2hp1LGa9hghTh6ImfMIReQIX1mvVHVn3y12lX4Nk0Ed5c7LwZC/pgvXS/fbkIaFspl/7Bbimj7ueFAnya9RloKzzYF4Z2kUAzCFymOKG94UgCPgFLlo5iD1WgMlkxXEET/Hd9nBPFkJnAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=AELYw4fM; arc=none smtp.client-ip=185.70.43.16
+	 MIME-Version:Content-Type; b=nLR4oW8tAqM9V1+zvaXOzg0Rb1Kit1QD+JpJ2WV0+qViBi99N5FsHJd6+koGtbUgHPTE3jXEqUUqrUfBsJJYatC6jPNAC5JZqXtbzLIKcq1RCyvwZcJbKlEvK0UM6K/Ncnd1aohIg4TMPAP1f0LJ1Op4bfPFZGBoE0w4TLK+KsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=igs2XxEz; arc=none smtp.client-ip=185.70.43.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=bqwn6hkv25epfihij5ctljfsnu.protonmail; t=1741789360; x=1742048560;
-	bh=lpMoYYhCby2+h930TAwepOJMN45pAXmhdXKYFNY3rBs=;
+	s=protonmail; t=1741790406; x=1742049606;
+	bh=ln7+3zkl6JCWdcMdIgyVOnjSeIR+wlhx+5g0dVF9NAs=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=AELYw4fMwrmf0lwSNSt1YDmhebSHR9WcORDIYt0JUDXOt4hlNwtokvjC+7uebmJ34
-	 i9XkNLKy2r83wsepgZTQ3Mhy88Ptt9tWqegrUtliRiz4vFOaqH3rtlEcIrPUXxOjG3
-	 BTvPbiX9AT31ZUqxdc6KQJx+hCinuSSFlwVc6Ui5p3hGnKsw2/EfF/O6xwVCPm9KD+
-	 YiWEHOkwRt88tMvA3ksF3WfXM31SqGUcdqWnnxv8hAdQcRXlYA3DJKfOPkVC4GQSeZ
-	 1cY1Vhd1HXWvQyUoCM++3MlIe6eM57VYkXZbVGxAle5cIo37MNE2bYw65EBh6Xknyn
-	 jLIB5LpcyZ+/A==
-Date: Wed, 12 Mar 2025 14:22:31 +0000
+	b=igs2XxEzdhhAm6M2XBHYRc+ZpZhhqIJ8cnmEd9XPVyUS6FPIBc0clFccpxH1jnbjB
+	 Zvgd0MqYs+Vatdh9rW5h0bdJBJZLiz4NQYRnbYHQOR2QKnnVIB29kohar1RmRFshCN
+	 Wgnmm2Tdz08mHYdI0hLq7B1CDFt82uNlE76P51c3qeb/2e5trtutknGowYz+uIyAvL
+	 2xgwfyMPNgGu0hljClBe2qdCMKqmpiew5GX1T2uocwd/+KJ1LVnm86GLYm4RQRU1aW
+	 LxSl+DhoPfxI4XJgp7Yz8vZEVR47xLCAeeR+MGxVAaW+c49n8eqo04Sti1OimU3Fa9
+	 AbU5MaXucOkQQ==
+Date: Wed, 12 Mar 2025 14:39:59 +0000
 To: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>
 From: Benno Lossin <benno.lossin@proton.me>
 Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] rust: retain pointer mut-ness in `container_of!`
-Message-ID: <D8ECSHQTFGM5.E4N1XJBDTJUY@proton.me>
-In-Reply-To: <20250309-ptr-as-ptr-v2-1-25d60ad922b7@gmail.com>
-References: <20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com> <20250309-ptr-as-ptr-v2-1-25d60ad922b7@gmail.com>
+Subject: Re: [PATCH v2 2/5] rust: enable `clippy::ptr_as_ptr` lint
+Message-ID: <D8ED5UWKL2N1.2JPWVV0297BJ0@proton.me>
+In-Reply-To: <20250309-ptr-as-ptr-v2-2-25d60ad922b7@gmail.com>
+References: <20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com> <20250309-ptr-as-ptr-v2-2-25d60ad922b7@gmail.com>
 Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: da106fb69e93b9a459d540ee0cf6831ad932bfee
+X-Pm-Message-ID: cfdcac70a4dffef0ce337ad830841016c81e6356
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,47 +63,61 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 On Sun Mar 9, 2025 at 5:00 PM CET, Tamir Duberstein wrote:
-> Avoid casting the input pointer to `*const _`, allowing the output
-> pointer to be `*mut` if the input is `*mut`. This allows a number of
-> `*const` to `*mut` conversions to be removed at the cost of slightly
-> worse ergonomics when the macro is used with a reference rather than a
-> pointer; the only example of this was in the macro's own doctest.
+> In Rust 1.51.0, Clippy introduced the `ptr_as_ptr` lint [1]:
 >
+>> Though `as` casts between raw pointers are not terrible,
+>> `pointer::cast` is safer because it cannot accidentally change the
+>> pointer's mutability, nor cast the pointer to other types like `usize`.
+>
+> There are a few classes of changes required:
+> - Modules generated by bindgen are marked
+>   `#[allow(clippy::ptr_as_ptr)]`.
+> - Inferred casts (` as _`) are replaced with `.cast()`.
+> - Ascribed casts (` as *... T`) are replaced with `.cast::<T>()`.
+> - Multistep casts from references (` as *const _ as *const T`) are
+>   replaced with `let x: *const _ =3D &x;` and `.cast()` or `.cast::<T>()`
+
+Similarly to the other patch, this could be `let x =3D &raw x;`. (but it's
+fine to leave it as-is for now, we can also make that a
+good-first-issue.)
+
+>   according to the previous rules. The intermediate `let` binding is
+>   required because `(x as *const _).cast::<T>()` results in inference
+>   failure.
+> - Native literal C strings are replaced with `c_str!().as_char_ptr()`.
+>
+> Apply these changes and enable the lint -- no functional change
+> intended.
+>
+> Link: https://rust-lang.github.io/rust-clippy/master/index.html#ptr_as_pt=
+r [1]
 > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-One tiny nit below, but even without that:
-
 Reviewed-by: Benno Lossin <benno.lossin@proton.me>
-
-> ---
->  rust/kernel/lib.rs      |  5 ++---
->  rust/kernel/pci.rs      |  2 +-
->  rust/kernel/platform.rs |  2 +-
->  rust/kernel/rbtree.rs   | 23 ++++++++++-------------
->  4 files changed, 14 insertions(+), 18 deletions(-)
->
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 7697c60b2d1a..9cd6b6864739 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -187,7 +187,7 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
->  /// }
->  ///
->  /// let test =3D Test { a: 10, b: 20 };
-> -/// let b_ptr =3D &test.b;
-> +/// let b_ptr: *const _ =3D &test.b;
-
-You could also use `&raw test.b` to get a pointer instead of relying on
-the pointer coercion. That syntax is stable since 1.82.0, so older
-compilers would need to enable the `raw_ref_op` feature.
-
-I created an orthogonal good-first-issue for changing uses of
-`addr_of[_mut]!` to `&raw [mut]`, so maybe that can also be done there:
-
-    https://github.com/Rust-for-Linux/linux/issues/1148
 
 ---
 Cheers,
 Benno
+
+> ---
+>  Makefile                               |  1 +
+>  rust/bindings/lib.rs                   |  1 +
+>  rust/kernel/alloc/allocator_test.rs    |  2 +-
+>  rust/kernel/alloc/kvec.rs              |  4 ++--
+>  rust/kernel/device.rs                  |  5 +++--
+>  rust/kernel/devres.rs                  |  2 +-
+>  rust/kernel/error.rs                   |  2 +-
+>  rust/kernel/fs/file.rs                 |  2 +-
+>  rust/kernel/kunit.rs                   | 15 +++++++--------
+>  rust/kernel/list/impl_list_item_mod.rs |  2 +-
+>  rust/kernel/pci.rs                     |  2 +-
+>  rust/kernel/platform.rs                |  4 +++-
+>  rust/kernel/print.rs                   | 11 +++++------
+>  rust/kernel/seq_file.rs                |  3 ++-
+>  rust/kernel/str.rs                     |  2 +-
+>  rust/kernel/sync/poll.rs               |  2 +-
+>  rust/kernel/workqueue.rs               | 10 +++++-----
+>  rust/uapi/lib.rs                       |  1 +
+>  18 files changed, 38 insertions(+), 33 deletions(-)
 
 
