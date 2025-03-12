@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-28802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77381A5D8E9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 10:11:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FEB2A5D8EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 10:11:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAC041779A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 09:11:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A75F3189C477
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 09:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 319D3238D57;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50717239082;
 	Wed, 12 Mar 2025 09:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TboSritL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Smpk0arl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F97238D33;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FF9238D34;
 	Wed, 12 Mar 2025 09:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741770688; cv=none; b=kb7AXju/H5iGq9JD4l47ZcRek1iFXAfLS7qWIjoqgiJpZH9w1cVvrT5OD7ciFj4XVIND8pQt+H8Pgcb9QpedXMmCKAl4eq0h0MkMj177WcxaZqRQ3DjNKaYu6G8cM2sFSJGT308hllfI0vnqeHU5M1JsSwoxXDNJrMoQjzbaoTY=
+	t=1741770688; cv=none; b=kbo0z8P4my8oK+r1lyh/Onixs28kIkPtDRfTsQhfBMBtz5evI0tzdc+4Ee830zU06lGDdDQXStoOZsGQNlqLv7Daol35Zns7uwQF0JFu6Je1G2hyjKQ2M6PZkaGzJQEPxWyf9buEGPz0+3nbcPegr1yf1x2BX4f/6uW4TjXOaec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741770688; c=relaxed/simple;
-	bh=hPSTfb9hK5artlzSLHGsH/c3sy2ku9iSlzjEcPKrk+Y=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Sy3DhHr4qL+rICoKy0e0yDmXEZzeqNybikf88BJIYvr8gdcoKVik/YC8azRlj7ONSuoJ01Cwx/fRWOWiBBnPe8InBGOpVIn1WUWsveBZK+S00J7eHbO1oMlJ+2/6TdEn1Vt1JrgeLu54iyfXTBYXVIznyYlxQXUsvSLulqeHTRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TboSritL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B56FC4CEE3;
+	bh=yM4mhVvJmZfLeISwx/iN5lE/1L/nC+VHGrVR2s+Sbz4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=k3SllNrbcPfaUnsM2bvA5SdMMTQ3BQKtOC4+Pc25A9PjV/Q1gsLj8tWl0Mq4Hpf122MvvnXXAAvqv0pVXnUu2zWUpxqJ4kEbITMgfYd8OfZwqHqN6UmNTUX8WtjsAJMjQ+wnNveMGk8ZgB6KpHygV3EvlQa8seCFb5epGCpgsk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Smpk0arl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8F742C4CEED;
 	Wed, 12 Mar 2025 09:11:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1741770687;
-	bh=hPSTfb9hK5artlzSLHGsH/c3sy2ku9iSlzjEcPKrk+Y=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=TboSritLTtkdH6BhWQ1xaiZO2JE/Rb3rLrxsq4EevnPv3Etg+/niyK2gNIkjstfcj
-	 PFReCprT2IhUf59vzR9uRWt5/Lx8/6gezfnfmDIT0wUvai85D1/v2TqSbvE5dfLjzP
-	 rz9glKSnJwstLywWnLLu8LBdL3hMIKDw26ZCHByli7jMRiSnTNKrQr96/rGp3YTwUV
-	 QCN01IMut+cDILnIMfPMHkaNTakYvP4YWkghMbdCG+L0U2uGFjjdGo3cvNz1hfCtg5
-	 7XsqDqTOGi++9dUjF+hNftyLfU0xMYcpAkxMBcBG019osRCi55bc/pPzKj1fte9cuc
-	 77OtBJgUo84pQ==
+	bh=yM4mhVvJmZfLeISwx/iN5lE/1L/nC+VHGrVR2s+Sbz4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Smpk0arlXQaGP8VufJdHYsVu1AgM9GIqemw/cA/R1uOVE99SXZMQfmj/sqfPec2g7
+	 yo3CuyB5au2/ouduOTvVnmyXbi1BB7QLlUoKLdNm2b1RWXq88x/hqtWrNj6737aHkr
+	 8KK8lMgIZz8XI2OD5g2zJ8T0Nb4zHz+Agk/1GXQ0D/nGbWYP1B/YnqiSdKpZ75CVyT
+	 rHEX17D4Bv9WnqL9KYI3KeOtN2SkB3by0DiUSRi5KzNqBeUfJNBp4b1d0ROhFGPf/a
+	 8VL59E31NOw9jSrvHPLH5RsoXuB0xvP+vcB6iT5jSxbIMEqfDKyHgoBDRfJRV4JL1W
+	 fZq2X5RLDbAHA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DBAC28B28;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80050C2BA1B;
 	Wed, 12 Mar 2025 09:11:27 +0000 (UTC)
 From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Subject: [PATCH net 0/7] selftests/net: Mixed select()+polling mode for
- TCP-AO tests
-Date: Wed, 12 Mar 2025 09:10:54 +0000
-Message-Id: <20250312-tcp-ao-selftests-polling-v1-0-72a642b855d5@gmail.com>
+Date: Wed, 12 Mar 2025 09:10:55 +0000
+Subject: [PATCH net 1/7] selftests/net: Print TCP flags in more common
+ format
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,10 +56,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJ5P0WcC/x2MQQrDIBAAvxL23IVoaQL9SunBNWuyYFVcKYWQv
- 9fkOAMzOyhXYYXnsEPlr6jk1MHcBvCbSyujLJ3BjvYx3o3F5gu6jMoxNNamWHKMkla0hiaiJcw
- zTdDzUjnI71q/IHGDd5fklJGqS347rx+njSscxx8JUWgHiAAAAA==
-X-Change-ID: 20250312-tcp-ao-selftests-polling-21b6bbdf77b6
+Message-Id: <20250312-tcp-ao-selftests-polling-v1-1-72a642b855d5@gmail.com>
+References: <20250312-tcp-ao-selftests-polling-v1-0-72a642b855d5@gmail.com>
+In-Reply-To: <20250312-tcp-ao-selftests-polling-v1-0-72a642b855d5@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -67,11 +66,11 @@ To: "David S. Miller" <davem@davemloft.net>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741770685; l=1696;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741770685; l=1922;
  i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=hPSTfb9hK5artlzSLHGsH/c3sy2ku9iSlzjEcPKrk+Y=;
- b=goNN8v5fCXHA4SzoupYXXme+VIQSH5K1KWQaq37LtGpwmpDDksGy/vCmDRxAh+jCypEWNBzOs
- u+9v/IIbeWcBZXIuqGSjYII8dZOkTLIfBt7CrZQEuIePtMj+AJrRiaw
+ bh=iOlW43ng3yBwP5kn3YXXAavX+5ElU/Vcbzg1cmgHkUw=;
+ b=FRPYyXOZbPmuvlev/hXq5yK0EP/muv/GXE5XFTI7TWoxOGPHCPluY1ZFLWSzx1ENxaQnfI27T
+ 36POI+xOkYeAJtRkMfYqimUBakKGcb4MHTQxtZ/Qx6eYiOLpB6zuVrA
 X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
  pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
 X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
@@ -79,41 +78,45 @@ X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
 X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
 Reply-To: 0x7f454c46@gmail.com
 
-Should fix flaky tcp-ao/connect-deny-ipv6 test.
-Begging pardon for the delay since the report and for sending it this
-late in the release cycle.
+From: Dmitry Safonov <0x7f454c46@gmail.com>
+
+Before:
+># 13145[lib/ftrace-tcp.c:427] trace event filter tcp_ao_key_not_found [2001:db8:1::1:-1 => 2001:db8:254::1:7010, L3index 0, flags: !FS!R!P!., keyid: 100, rnext: 100, maclen: -1, sne: -1] = 1
+
+After:
+># 13487[lib/ftrace-tcp.c:427] trace event filter tcp_ao_key_not_found [2001:db8:1::1:-1 => 2001:db8:254::1:7010, L3index 0, flags: S, keyid: 100, rnext: 100, maclen: -1, sne: -1] = 1
+
+For the history, I think the initial format was to emphasize the absence
+of flags as well as their presence (!R meant no RST flag). But looking
+again, it's just unreadable and hard to understand.
+Make it the standard/expected one.
 
 Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 ---
-Dmitry Safonov (7):
-      selftests/net: Print TCP flags in more common format
-      selftests/net: Provide tcp-ao counters comparison helper
-      selftests/net: Fetch and check TCP-MD5 counters
-      selftests/net: Add mixed select()+polling mode to TCP-AO tests
-      selftests/net: Print the testing side in unsigned-md5
-      selftests/net: Delete timeout from test_connect_socket()
-      selftests/net: Drop timeout argument from test_client_verify()
+ tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
- tools/testing/selftests/net/tcp_ao/connect-deny.c  |  58 ++--
- tools/testing/selftests/net/tcp_ao/connect.c       |  22 +-
- tools/testing/selftests/net/tcp_ao/icmps-discard.c |  17 +-
- .../testing/selftests/net/tcp_ao/key-management.c  |  76 ++---
- tools/testing/selftests/net/tcp_ao/lib/aolib.h     | 114 ++++++--
- .../testing/selftests/net/tcp_ao/lib/ftrace-tcp.c  |   7 +-
- tools/testing/selftests/net/tcp_ao/lib/sock.c      | 315 +++++++++++++++------
- tools/testing/selftests/net/tcp_ao/restore.c       |  75 +++--
- tools/testing/selftests/net/tcp_ao/rst.c           |  47 ++-
- tools/testing/selftests/net/tcp_ao/self-connect.c  |  18 +-
- tools/testing/selftests/net/tcp_ao/seq-ext.c       |  30 +-
- tools/testing/selftests/net/tcp_ao/unsigned-md5.c  | 118 ++++----
- 12 files changed, 552 insertions(+), 345 deletions(-)
----
-base-commit: 0fed89a961ea851945d23cc35beb59d6e56c0964
-change-id: 20250312-tcp-ao-selftests-polling-21b6bbdf77b6
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+index 24380c68fec6b7613c363cdee68d13293e593aeb..27403f875054706718256e0007a4db77f82e60c8 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
++++ b/tools/testing/selftests/net/tcp_ao/lib/ftrace-tcp.c
+@@ -427,11 +427,8 @@ static void dump_trace_event(struct expected_trace_point *e)
+ 	test_print("trace event filter %s [%s:%d => %s:%d, L3index %d, flags: %s%s%s%s%s, keyid: %d, rnext: %d, maclen: %d, sne: %d] = %zu",
+ 		   trace_event_names[e->type],
+ 		   src, e->src_port, dst, e->dst_port, e->L3index,
+-		   (e->fin > 0) ? "F" : (e->fin == 0) ? "!F" : "",
+-		   (e->syn > 0) ? "S" : (e->syn == 0) ? "!S" : "",
+-		   (e->rst > 0) ? "R" : (e->rst == 0) ? "!R" : "",
+-		   (e->psh > 0) ? "P" : (e->psh == 0) ? "!P" : "",
+-		   (e->ack > 0) ? "." : (e->ack == 0) ? "!." : "",
++		   e->fin ? "F" : "", e->syn ? "S" : "", e->rst ? "R" : "",
++		   e->psh ? "P" : "", e->ack ? "." : "",
+ 		   e->keyid, e->rnext, e->maclen, e->sne, e->matched);
+ }
+ 
 
-Best regards,
 -- 
-Dmitry Safonov <0x7f454c46@gmail.com>
+2.42.2
 
 
 
