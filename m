@@ -1,286 +1,333 @@
-Return-Path: <linux-kselftest+bounces-28830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28831-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 045D5A5E22F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 18:05:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08C6FA5E240
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 18:07:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40DE916BEF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 17:05:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D1D416D470
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 17:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BA81E8325;
-	Wed, 12 Mar 2025 17:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4250924EF69;
+	Wed, 12 Mar 2025 17:07:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="b2jziJiR"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="mcmh12e1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02F4282F1;
-	Wed, 12 Mar 2025 17:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325871E8325;
+	Wed, 12 Mar 2025 17:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.184.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741799153; cv=none; b=STqJ7f6pSVfR/2gXooTzjalv7cvy5YKNV/rhAvC5MEgK9izNTuqUGSimSe1JyAUjqqeKTgisEdXBm1f+nR/8b5zexfwWwpueLMRdsSywlNo0A0r8GO8zS8QvgDpvguDH3EjkeuAykuvMFqrYEZrVKiS18n2te8oFWWq6qcrIkOc=
+	t=1741799261; cv=none; b=V1lhe5Eun40m59FeTiIS8XWCzbuSfz9B/WUU/5IjC9/28yCnMhoNKQdlbCtXAZ0ZF4+IylYmakWlv7woRVvUZNh1aG6hbEnnpyiNg5OJmaoN4k70E7xWRfL6Ih/AiHtAj3S558+Q+MxUwGJI2Me9Fgrb2NAF+YZBtyCu84lPlNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741799153; c=relaxed/simple;
-	bh=AP2DarFxP1kHmbc1UQ9k/cTreCsRImTcUA6mVTmVGkY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C++DcwqaEl5Z0oUpJPDZ3ehSJO4jjCzvww1oywZ4bQnMZT3bYe4C6KeIuIC6gW9jFpO/6hsJ3UaYS6XzapTsC3xfJNErjfoV/hxkQarxV7DnSFCyt+cDxEpeiRCoo2ueqchlIGQRtbFL5QvQSnAKFU4eCQMcZBxwgQ9wzjDupds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=b2jziJiR; arc=none smtp.client-ip=185.70.40.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1741799147; x=1742058347;
-	bh=H5vl6p6VvHTW8KbGWXzE7B7/l993EE1hKM2A3P0sLhk=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=b2jziJiRFsmsGXaAH/pfzEpF6rybEcf/p6HsH/3iuVY6V8RgfKPuIaPsdUqv/kk38
-	 jDaRI6UihnNYvD9eCeTozR9RJm6VOcspVF7Jv3U9v1rrWLyyvpcfbQajG+eAw/pa3+
-	 Qnkxgek2raHEZB6LkzhlfCmAp+aN5AQDN5bwptySMixAf84ZVG6nWirq03aKZDNfRO
-	 +A4MLcTa9PYJd8Whi1yfBdZ6is1iQMDwpkkuKIhIDmz5YHnpT4B+5qs4BHxSccRrkr
-	 TrSccll+fzpnzBOsr/6GIy/APpeqhW+YhhSRzBlglgXWLsVyStn9PTuqzMbg7s/56n
-	 MshHrVkdfD/hA==
-Date: Wed, 12 Mar 2025 17:05:42 +0000
-To: Tamir Duberstein <tamird@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] rust: enable `clippy::as_underscore` lint
-Message-ID: <D8EG9EM9UU0B.2GLHXRU2XROZ3@proton.me>
-In-Reply-To: <CAJ-ks9=K06OT6cutUABj2QDHJHJ70719c-eJ=F3n-_bhkYbZ3w@mail.gmail.com>
-References: <20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com> <20250309-ptr-as-ptr-v2-5-25d60ad922b7@gmail.com> <D8EDP4SMQG2M.3HUNZGX8X0IL7@proton.me> <CAJ-ks9=K06OT6cutUABj2QDHJHJ70719c-eJ=F3n-_bhkYbZ3w@mail.gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: e4ddaa38df8cc192110bac9445ef586b5ce36b87
+	s=arc-20240116; t=1741799261; c=relaxed/simple;
+	bh=KU7bGNRw2hBaSyT62WP4JVFfzQvFDs5cUht4as8wkXc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WXwn4LvfkWHhQvEn9GGHRRgFUUhwSV/LmandohwvKABd89vV8oR0bBAXA0tL/B+875jLq8AJVysOxTBbQszDscnWXLTWasEmCpyat8wZ0cdD2Vtk4BJoFVw+4RnC3kxXuC+6BwjXUU0HYn1bDBhf3y6XDUNQefBl6/d4uGs6jD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=mcmh12e1; arc=none smtp.client-ip=207.171.184.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1741799260; x=1773335260;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=Ztr9ORXkov81qwN/P6uR4+lCpsF81OEkGCUkEXKxRVc=;
+  b=mcmh12e1kxKuUf2nVo/+VAzNDZBBDRObNRDf/nsTJ8kIVi6C5hCkwqPs
+   50nKP/Q4g1cm/775xUrpHelqwlB8W3FnUt7JgcRIjptTwpTlyRHTBhDC2
+   GigZ8cNvP93bV2F+U5+7T+vTCr7vLqSK6RtlRZQ2hwQwNdczL7c/X1l9l
+   E=;
+X-IronPort-AV: E=Sophos;i="6.14,242,1736812800"; 
+   d="scan'208";a="502264995"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:07:30 +0000
+Received: from EX19MTAEUB002.ant.amazon.com [10.0.10.100:18743]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.21.188:2525] with esmtp (Farcaster)
+ id fea2e4eb-aa2a-4b2c-8892-6f264c44f4da; Wed, 12 Mar 2025 17:07:28 +0000 (UTC)
+X-Farcaster-Flow-ID: fea2e4eb-aa2a-4b2c-8892-6f264c44f4da
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Wed, 12 Mar 2025 17:07:28 +0000
+Received: from [10.95.97.242] (10.95.97.242) by EX19D022EUC002.ant.amazon.com
+ (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14; Wed, 12 Mar 2025
+ 17:07:27 +0000
+Message-ID: <7c304c72-1f9c-4a5a-910b-02d0f1514b01@amazon.com>
+Date: Wed, 12 Mar 2025 17:07:25 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
+To: Peter Xu <peterx@redhat.com>
+CC: James Houghton <jthoughton@google.com>, <akpm@linux-foundation.org>,
+	<pbonzini@redhat.com>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <lorenzo.stoakes@oracle.com>, <david@redhat.com>,
+	<ryan.roberts@arm.com>, <quic_eberman@quicinc.com>, <graf@amazon.de>,
+	<jgowans@amazon.com>, <roypat@amazon.co.uk>, <derekmn@amazon.com>,
+	<nsaenz@amazon.es>, <xmarcalx@amazon.com>
+References: <20250303133011.44095-1-kalyazin@amazon.com>
+ <Z8YfOVYvbwlZST0J@x1.local>
+ <CADrL8HXOQ=RuhjTEmMBJrWYkcBaGrqtXmhzPDAo1BE3EWaBk4g@mail.gmail.com>
+ <Z8i0HXen8gzVdgnh@x1.local> <fdae95e3-962b-4eaf-9ae7-c6bd1062c518@amazon.com>
+ <Z89EFbT_DKqyJUxr@x1.local> <9e7536cc-211d-40ca-b458-66d3d8b94b4d@amazon.com>
+ <Z9GsIDVYWoV8d8-C@x1.local>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <Z9GsIDVYWoV8d8-C@x1.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D007EUB003.ant.amazon.com (10.252.51.43) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-On Wed Mar 12, 2025 at 4:35 PM CET, Tamir Duberstein wrote:
-> On Wed, Mar 12, 2025 at 11:05=E2=80=AFAM Benno Lossin <benno.lossin@proto=
-n.me> wrote:
->>
->> On Sun Mar 9, 2025 at 5:00 PM CET, Tamir Duberstein wrote:
->> > diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
->> > index 598001157293..20159b7c9293 100644
->> > --- a/rust/kernel/devres.rs
->> > +++ b/rust/kernel/devres.rs
->> > @@ -45,7 +45,7 @@ struct DevresInner<T> {
->> >  /// # Example
->> >  ///
->> >  /// ```no_run
->> > -/// # use kernel::{bindings, c_str, device::Device, devres::Devres, i=
-o::{Io, IoRaw}};
->> > +/// # use kernel::{bindings, c_str, device::Device, devres::Devres, f=
-fi::c_void, io::{Io, IoRaw}};
->> >  /// # use core::ops::Deref;
->> >  ///
->> >  /// // See also [`pci::Bar`] for a real example.
->> > @@ -59,19 +59,19 @@ struct DevresInner<T> {
->> >  ///     unsafe fn new(paddr: usize) -> Result<Self>{
->> >  ///         // SAFETY: By the safety requirements of this function [`=
-paddr`, `paddr` + `SIZE`) is
->> >  ///         // valid for `ioremap`.
->> > -///         let addr =3D unsafe { bindings::ioremap(paddr as _, SIZE =
-as _) };
->> > +///         let addr =3D unsafe { bindings::ioremap(paddr as u64, SIZ=
-E) };
->>
->> The argument of `ioremap` is defined as `resource_size_t` which
->> ultimately maps to `u64` on 64 bit systems and `u32` on 32 bit ones. I
->> don't think that we should have code like this... Is there another
->> option?
->>
->> Maybe Gary knows something here, do we have a type that represents that
->> better?
->
-> Ah yeah the problem is that this type is an alias rather than a
-> newtype. How do you feel about `as bindings::phys_addr_t`?
 
-Yeah that's better.
 
->> >  ///         if addr.is_null() {
->> >  ///             return Err(ENOMEM);
->> >  ///         }
->> >  ///
->> > -///         Ok(IoMem(IoRaw::new(addr as _, SIZE)?))
->> > +///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
+On 12/03/2025 15:45, Peter Xu wrote:
+> On Tue, Mar 11, 2025 at 04:56:47PM +0000, Nikita Kalyazin wrote:
 >>
->> This should be `addr.addr()` (requires `strict_provenance` on Rust 1.83
->> & before).
 >>
->> (I am assuming that we're never casting the usize back to a pointer,
->> since otherwise this change would introduce UB)
->
-> Yeah, we don't have strict provenance APIs (and we can't introduce
-> them without compiler tooling or bumping MSRV). I'm not sure if we are
-> casting back to a pointer, but either way this change doesn't change
-> the semantics - it is only spelling out the type.
+>> On 10/03/2025 19:57, Peter Xu wrote:
+>>> On Mon, Mar 10, 2025 at 06:12:22PM +0000, Nikita Kalyazin wrote:
+>>>>
+>>>>
+>>>> On 05/03/2025 20:29, Peter Xu wrote:
+>>>>> On Wed, Mar 05, 2025 at 11:35:27AM -0800, James Houghton wrote:
+>>>>>> I think it might be useful to implement an fs-generic MINOR mode. The
+>>>>>> fault handler is already easy enough to do generically (though it
+>>>>>> would become more difficult to determine if the "MINOR" fault is
+>>>>>> actually a MISSING fault, but at least for my userspace, the
+>>>>>> distinction isn't important. :)) So the question becomes: what should
+>>>>>> UFFDIO_CONTINUE look like?
+>>>>>>
+>>>>>> And I think it would be nice if UFFDIO_CONTINUE just called
+>>>>>> vm_ops->fault() to get the page we want to map and then mapped it,
+>>>>>> instead of having shmem-specific and hugetlb-specific versions (though
+>>>>>> maybe we need to keep the hugetlb specialization...). That would avoid
+>>>>>> putting kvm/gmem/etc. symbols in mm/userfaultfd code.
+>>>>>>
+>>>>>> I've actually wanted to do this for a while but haven't had a good
+>>>>>> reason to pursue it. I wonder if it can be done in a
+>>>>>> backwards-compatible fashion...
+>>>>>
+>>>>> Yes I also thought about that. :)
+>>>>
+>>>> Hi Peter, hi James.  Thanks for pointing at the race condition!
+>>>>
+>>>> I did some experimentation and it indeed looks possible to call
+>>>> vm_ops->fault() from userfault_continue() to make it generic and decouple
+>>>> from KVM, at least for non-hugetlb cases.  One thing is we'd need to prevent
+>>>> a recursive handle_userfault() invocation, which I believe can be solved by
+>>>> adding a new VMF flag to ignore the userfault path when the fault handler is
+>>>> called from userfault_continue().  I'm open to a more elegant solution
+>>>> though.
+>>>
+>>> It sounds working to me.  Adding fault flag can also be seen as part of
+>>> extension of vm_operations_struct ops.  So we could consider reusing
+>>> fault() API indeed.
+>>
+>> Great!
+>>
+>>>>
+>>>> Regarding usage of the MINOR notification, in what case do you recommend
+>>>> sending it?  If following the logic implemented in shmem and hugetlb, ie if
+>>>> the page is _present_ in the pagecache, I can't see how it is going to work
+>>>
+>>> It could be confusing when reading that chunk of code, because it looks
+>>> like it notifies minor fault when cache hit. But the critical part here is
+>>> that we rely on the pgtable missing causing the fault() to trigger first.
+>>> So it's more like "cache hit && pgtable missing" for minor fault.
+>>
+>> Right, but the cache hit still looks like a precondition for the minor fault
+>> event?
+> 
+> Yes.
+> 
+>>
+>>>> with the write syscall, as we'd like to know when the page is _missing_ in
+>>>> order to respond with the population via the write.  If going against
+>>>> shmem/hugetlb logic, and sending the MINOR event when the page is missing
+>>>> from the pagecache, how would it solve the race condition problem?
+>>>
+>>> Should be easier we stick with mmap() rather than write().  E.g. for shmem
+>>> case of current code base:
+>>>
+>>>           if (folio && vma && userfaultfd_minor(vma)) {
+>>>                   if (!xa_is_value(folio))
+>>>                           folio_put(folio);
+>>>                   *fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
+>>>                   return 0;
+>>>           }
+>>>
+>>> vma is only availble if vmf!=NULL, aka in fault context.  With that, in
+>>> write() to shmem inodes, nothing will generate a message, because minor
+>>> fault so far is only about pgtable missing.  It needs to be mmap()ed first,
+>>> and has nothing yet to do with write() syscalls.
+>>
+>> Yes, that's true that write() itself isn't going to generate a message. My
+>> idea was to _respond_ to a message generated by the fault handler (vmf !=
+>> NULL) with a write().  I didn't mean to generate it from write().
+>>
+>> What I wanted to achieve was send a message on fault + cache miss and
+>> respond to the message with a write() to fill the cache followed by a
+>> UFFDIO_CONTINUE to set up pagetables.  I understand that a MINOR trap (MINOR
+>> + UFFDIO_CONTINUE) is preferable, but how does it fit into this model?
+>> What/how will guarantee a cache hit that would trigger the MINOR message?
+>>
+>> To clarify, I would like to be able to populate pages _on-demand_, not only
+>> proactively (like in the original UFFDIO_CONTINUE cover letter [1]).  Do you
+>> think the MINOR trap could still be applicable or would it necessarily
+>> require the MISSING trap?
+> 
+> I think MINOR can also achieve similar things.  MINOR traps the pgtable
+> missing event (let's imagine page cache is already populated, or at least
+> when MISSING mode not registered, it'll auto-populate on 1st access).  So
 
-It's fine to enable the feature, since it's stable in a newer version of
-the compiler.
+However if MISSING is not registered, the kernel will auto-populate with 
+a clear page, ie there is no way to inject custom content from 
+userspace.  To explain my use case a bit more, the population thread 
+will be trying to copy all guest memory proactively, but there will 
+inevitably be cases where a page is accessed through pgtables _before_ 
+it gets populated.  It is not desirable for such access to result in a 
+clear page provided by the kernel.
 
->> >  ///     }
->> >  /// }
->> >  ///
->> >  /// impl<const SIZE: usize> Drop for IoMem<SIZE> {
->> >  ///     fn drop(&mut self) {
->> >  ///         // SAFETY: `self.0.addr()` is guaranteed to be properly m=
-apped by `Self::new`.
->> > -///         unsafe { bindings::iounmap(self.0.addr() as _); };
->> > +///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void);=
- };
->>
->> Can't this be a `.cast::<c_void>()`?
->
-> This is an integer-to-pointer cast. `addr` returns `usize`:
+> as long as the content can only be accessed from the pgtable (either via
+> mmap() or GUP on top of it), then afaiu it could work similarly like
+> MISSING faults, because anything trying to access it will be trapped.
+> 
+> Said that, we can also choose to implement MISSING first.  In that case
+> write() is definitely not enough, because MISSING is at least so far based
+> on top of whether the page cache present, and write() won't be atomic on
+> update a page.  We need to implement UFFDIO_COPY for gmemfd MISSING.
+> 
+> Either way looks ok to me.
 
-Oh I missed the `*mut`... In that case, we can't use the `addr`
-suggestion that I made above, instead we should use `expose_provenance`
-above and `with_exposed_provenance` here.
+Yes, I understand that write() doesn't provide an atomic way of alloc + 
+add + install PTE.  Supporting UFFDIO_COPY is much more involved as it 
+currently provides implementations specific to anonymous and shared 
+memory, and adding guest_memfd to it brings the problem of the 
+dependency on KVM back.  I suppose it's possible to abstract those by 
+introducing extra callbacks in vm_ops somehow and make the code generic, 
+but it would be a significant change.  If this is the only right way to 
+address my use case, I will work on it.
 
-> impl<const SIZE: usize> IoRaw<SIZE> {
->     [...]
->
->     /// Returns the base address of the MMIO region.
->     #[inline]
->     pub fn addr(&self) -> usize {
->         self.addr
->     }
->
->     [...]
-> }
->
 >>
->> >  ///     }
->> >  /// }
->> >  ///
+>> [1] https://lore.kernel.org/linux-fsdevel/20210301222728.176417-1-axelrasmussen@google.com/T/
 >>
->> > diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
->> > index 8654d52b0bb9..eb8fa52f08ba 100644
->> > --- a/rust/kernel/error.rs
->> > +++ b/rust/kernel/error.rs
->> > @@ -152,7 +152,7 @@ pub(crate) fn to_blk_status(self) -> bindings::blk=
-_status_t {
->> >      /// Returns the error encoded as a pointer.
->> >      pub fn to_ptr<T>(self) -> *mut T {
->> >          // SAFETY: `self.0` is a valid error due to its invariant.
->> > -        unsafe { bindings::ERR_PTR(self.0.get() as _).cast() }
->> > +        unsafe { bindings::ERR_PTR(self.0.get() as isize).cast() }
+>>>>
+>>>> Also, where would the check for the folio_test_uptodate() mentioned by James
+>>>> fit into here?  Would it only be used for fortifying the MINOR (present)
+>>>> against the race?
+>>>>
+>>>>> When Axel added minor fault, it's not a major concern as it's the only fs
+>>>>> that will consume the feature anyway in the do_fault() path - hugetlbfs has
+>>>>> its own path to take care of.. even until now.
+>>>>>
+>>>>> And there's some valid points too if someone would argue to put it there
+>>>>> especially on folio lock - do that in shmem.c can avoid taking folio lock
+>>>>> when generating minor fault message.  It might make some difference when
+>>>>> the faults are heavy and when folio lock is frequently taken elsewhere too.
+>>>>
+>>>> Peter, could you expand on this?  Are you referring to the following
+>>>> (shmem_get_folio_gfp)?
+>>>>
+>>>>         if (folio) {
+>>>>                 folio_lock(folio);
+>>>>
+>>>>                 /* Has the folio been truncated or swapped out? */
+>>>>                 if (unlikely(folio->mapping != inode->i_mapping)) {
+>>>>                         folio_unlock(folio);
+>>>>                         folio_put(folio);
+>>>>                         goto repeat;
+>>>>                 }
+>>>>                 if (sgp == SGP_WRITE)
+>>>>                         folio_mark_accessed(folio);
+>>>>                 if (folio_test_uptodate(folio))
+>>>>                         goto out;
+>>>>                 /* fallocated folio */
+>>>>                 if (sgp != SGP_READ)
+>>>>                         goto clear;
+>>>>                 folio_unlock(folio);
+>>>>                 folio_put(folio);
+>>>>         }
+> 
+> [1]
+> 
+>>>>
+>>>> Could you explain in what case the lock can be avoided?  AFAIC, the function
+>>>> is called by both the shmem fault handler and userfault_continue().
+>>>
+>>> I think you meant the UFFDIO_CONTINUE side of things.  I agree with you, we
+>>> always need the folio lock.
+>>>
+>>> What I was saying is the trapping side, where the minor fault message can
+>>> be generated without the folio lock now in case of shmem.  It's about
+>>> whether we could generalize the trapping side, so handle_mm_fault() can
+>>> generate the minor fault message instead of by shmem.c.
+>>>
+>>> If the only concern is "referring to a module symbol from core mm", then
+>>> indeed the trapping side should be less of a concern anyway, because the
+>>> trapping side (when in the module codes) should always be able to reference
+>>> mm functions.
+>>>
+>>> Actually.. if we have a fault() flag introduced above, maybe we can
+>>> generalize the trap side altogether without the folio lock overhead.  When
+>>> the flag set, if we can always return the folio unlocked (as long as
+>>> refcount held), then in UFFDIO_CONTINUE ioctl we can lock it.
 >>
->> Can't this be a `.into()`?
->
-> error[E0277]: the trait bound `isize: core::convert::From<i32>` is not sa=
-tisfied
->    --> ../rust/kernel/error.rs:155:49
->     |
-> 155 |         unsafe { bindings::ERR_PTR(self.0.get().into()).cast() }
->     |                                                 ^^^^ the trait
-> `core::convert::From<i32>` is not implemented for `isize`
+>> Where does this locking happen exactly during trapping?  I was thinking it
+>> was only done when the page was allocated.  The trapping part (quoted by you
+>> above) only looks up the page in the cache and calls handle_userfault().  Am
+>> I missing something?
+> 
+> That's only what I worry if we want to reuse fault() to generalize the trap
+> code in core mm, because fault() by default takes the folio lock at least
+> for shmem.  I agree the folio doesn't need locking when trapping the fault
+> and sending the message.
 
-That's a bummer... I wonder why that doesn't exist.
+Ok, I think I understand what you mean now.  Thanks for explaining that.
 
->> >      }
->> >
->> >      /// Returns a string representing the error, if one exists.
+> 
+> Thanks,
+> 
 >>
->> > @@ -119,7 +119,7 @@ pub fn $name(&self, offset: usize) -> $type_name {
->> >              let addr =3D self.io_addr_assert::<$type_name>(offset);
->> >
->> >              // SAFETY: By the type invariant `addr` is a valid addres=
-s for MMIO operations.
->> > -            unsafe { bindings::$name(addr as _) }
->> > +            unsafe { bindings::$name(addr as *const c_void) }
+>>>>
+>>>>> It might boil down to how many more FSes would support minor fault, and
+>>>>> whether we would care about such difference at last to shmem users. If gmem
+>>>>> is the only one after existing ones, IIUC there's still option we implement
+>>>>> it in gmem code.  After all, I expect the change should be very under
+>>>>> control (<20 LOCs?)..
+>>>>>
+>>>>> --
+>>>>> Peter Xu
+>>>>>
+>>>>
+>>>
+>>> --
+>>> Peter Xu
+>>>
 >>
->> Also here, is `.cast::<c_void>()` enough? (and below)
->
-> It's an integer-to-pointer cast. In the same `impl<const SIZE: usize>
-> IoRaw<SIZE>` as above:
->
->     fn io_addr_assert<U>(&self, offset: usize) -> usize {
->         build_assert!(Self::offset_valid::<U>(offset, SIZE));
->
->         self.addr() + offset
->     }
-
-I would prefer we use the strict_provenance API.
-
->> >          }
->> >
->> >          /// Read IO data from a given offset.
->>
->> > diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
->> > index 04f2d8ef29cb..40d1bd13682c 100644
->> > --- a/rust/kernel/of.rs
->> > +++ b/rust/kernel/of.rs
->> > @@ -22,7 +22,7 @@ unsafe impl RawDeviceId for DeviceId {
->> >      const DRIVER_DATA_OFFSET: usize =3D core::mem::offset_of!(binding=
-s::of_device_id, data);
->> >
->> >      fn index(&self) -> usize {
->> > -        self.0.data as _
->> > +        self.0.data as usize
->>
->> This should also be `self.0.data.addr()`.
->
-> Can't do it without strict_provenance.
->
->>
->> >      }
->> >  }
->> >
->> > @@ -34,10 +34,10 @@ pub const fn new(compatible: &'static CStr) -> Sel=
-f {
->> >          // SAFETY: FFI type is valid to be zero-initialized.
->> >          let mut of: bindings::of_device_id =3D unsafe { core::mem::ze=
-roed() };
->> >
->> > -        // TODO: Use `clone_from_slice` once the corresponding types =
-do match.
->> > +        // TODO: Use `copy_from_slice` once stabilized for `const`.
->>
->> This feature has just been stabilized (5 days ago!):
->>
->>     https://github.com/rust-lang/rust/issues/131415
->
-> Yep! I know :)
->
->> @Miguel: Do we already have a target Rust version for dropping the
->> `RUSTC_BOOTSTRAP=3D1`? If not, then I think we should use this feature
->> now, since it will be stable by the time we bump the minimum version.
->> (not in this patch [series] though)
->>
->> >          let mut i =3D 0;
->> >          while i < src.len() {
->> > -            of.compatible[i] =3D src[i] as _;
->> > +            of.compatible[i] =3D src[i];
->> >              i +=3D 1;
->> >          }
->>
->> > @@ -317,7 +320,7 @@ unsafe fn do_release(pdev: &Device, ioptr: usize, =
-num: i32) {
->> >          // `ioptr` is valid by the safety requirements.
->> >          // `num` is valid by the safety requirements.
->> >          unsafe {
->> > -            bindings::pci_iounmap(pdev.as_raw(), ioptr as _);
->> > +            bindings::pci_iounmap(pdev.as_raw(), ioptr as *mut kernel=
-::ffi::c_void);
->>
->> Again, probably castable.
->
-> How? `ioptr` is a `usize` (you can see the prototype).
-
-Sorry, I missed all the `*mut`/`*const` prefixes here.
-
----
-Cheers,
-Benno
+> 
+> --
+> Peter Xu
+> 
 
 
