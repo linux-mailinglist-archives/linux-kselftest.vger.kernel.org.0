@@ -1,204 +1,286 @@
-Return-Path: <linux-kselftest+bounces-28829-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E85AEA5E20F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 17:53:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 045D5A5E22F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 18:05:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 228351624BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 16:53:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40DE916BEF3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 17:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CC72451C3;
-	Wed, 12 Mar 2025 16:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BA81E8325;
+	Wed, 12 Mar 2025 17:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bNyzO1jj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="b2jziJiR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0A623C8D8;
-	Wed, 12 Mar 2025 16:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02F4282F1;
+	Wed, 12 Mar 2025 17:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741798391; cv=none; b=M91By3FJ/2bLszQd0+HDz6yESU+2+72OPFF/OoKOrc/vTb9bZuXVUomq7xnE8qNF/PFkVEYSG9d21mSl/5wvWyFA4z5ekUT11/z0dhJW3R7GKaC6KCZe/+ymQ1t/q4bbxKAz2edBjKr0e1z7le+rHy/fukNe11r97GU4qKognMs=
+	t=1741799153; cv=none; b=STqJ7f6pSVfR/2gXooTzjalv7cvy5YKNV/rhAvC5MEgK9izNTuqUGSimSe1JyAUjqqeKTgisEdXBm1f+nR/8b5zexfwWwpueLMRdsSywlNo0A0r8GO8zS8QvgDpvguDH3EjkeuAykuvMFqrYEZrVKiS18n2te8oFWWq6qcrIkOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741798391; c=relaxed/simple;
-	bh=Rafds1S3QkKEajqTbOL/+tj3SV1csF1Cnk6XrXNWmtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvEOuBREwxUF0MAU4bChVyWK8/aQ+QcluQf77x4JGuIpfBBPGFpNG/zk+1z0nfLc790LssjJG/JtkTJtt5I/jo+3tCwt0uB83eJ9Au1zJZvQyPzg3THIq+qwLxylXiMKMXOw9RUqe4gQjB6Gwyq2I1YYswgxRhROyRXwfwnixjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bNyzO1jj; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741798390; x=1773334390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rafds1S3QkKEajqTbOL/+tj3SV1csF1Cnk6XrXNWmtQ=;
-  b=bNyzO1jjvvdcJcK6nYlQkNkMwTR9if/0CbZvorv11UhoBVXn35Q8EigJ
-   MXDd3ziY7logt3oaU8wzwavhyrIU0inFAJymjOlfNAOq7gYYSMYzW2X6s
-   Vta9tEpDYzcV5OFLNIb1Vin/nOritDwf+ts30IizAtZRuRHP8fzK9zcTD
-   fsBc1rekwm81J9BjvkjreL8rZL1ZM+GqyjEjmryxHH60ppfkL7x2oMGRp
-   +xIrCshettJfyFcfwKQjHMgUlga7S2VtQeY66Sti5K/zh1dvQ1lJ6G/Od
-   9BIsN5xJ9fNA4+hGL2ske+MXB99Z40Qs9E6xLaWMBsm70+hCObJxrl6RK
-   w==;
-X-CSE-ConnectionGUID: IT/6gMzOQmGDBmJxgAslgA==
-X-CSE-MsgGUID: nOwV3z93SomUhrEBmonY+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="45665239"
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="45665239"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 09:53:09 -0700
-X-CSE-ConnectionGUID: zyxy6B8hTM+qrbY2kgBgsQ==
-X-CSE-MsgGUID: HFOG3QH1QfmjPMWslolYtg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="125756446"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 12 Mar 2025 09:53:05 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsPKI-0008jw-30;
-	Wed, 12 Mar 2025 16:53:02 +0000
-Date: Thu, 13 Mar 2025 00:52:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, sd@queasysnail.net,
-	ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v22 18/23] ovpn: implement peer
- add/get/dump/delete via netlink
-Message-ID: <202503130050.cIMoMcyw-lkp@intel.com>
-References: <20250311-b4-ovpn-v22-18-2b7b02155412@openvpn.net>
+	s=arc-20240116; t=1741799153; c=relaxed/simple;
+	bh=AP2DarFxP1kHmbc1UQ9k/cTreCsRImTcUA6mVTmVGkY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C++DcwqaEl5Z0oUpJPDZ3ehSJO4jjCzvww1oywZ4bQnMZT3bYe4C6KeIuIC6gW9jFpO/6hsJ3UaYS6XzapTsC3xfJNErjfoV/hxkQarxV7DnSFCyt+cDxEpeiRCoo2ueqchlIGQRtbFL5QvQSnAKFU4eCQMcZBxwgQ9wzjDupds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=b2jziJiR; arc=none smtp.client-ip=185.70.40.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1741799147; x=1742058347;
+	bh=H5vl6p6VvHTW8KbGWXzE7B7/l993EE1hKM2A3P0sLhk=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=b2jziJiRFsmsGXaAH/pfzEpF6rybEcf/p6HsH/3iuVY6V8RgfKPuIaPsdUqv/kk38
+	 jDaRI6UihnNYvD9eCeTozR9RJm6VOcspVF7Jv3U9v1rrWLyyvpcfbQajG+eAw/pa3+
+	 Qnkxgek2raHEZB6LkzhlfCmAp+aN5AQDN5bwptySMixAf84ZVG6nWirq03aKZDNfRO
+	 +A4MLcTa9PYJd8Whi1yfBdZ6is1iQMDwpkkuKIhIDmz5YHnpT4B+5qs4BHxSccRrkr
+	 TrSccll+fzpnzBOsr/6GIy/APpeqhW+YhhSRzBlglgXWLsVyStn9PTuqzMbg7s/56n
+	 MshHrVkdfD/hA==
+Date: Wed, 12 Mar 2025 17:05:42 +0000
+To: Tamir Duberstein <tamird@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] rust: enable `clippy::as_underscore` lint
+Message-ID: <D8EG9EM9UU0B.2GLHXRU2XROZ3@proton.me>
+In-Reply-To: <CAJ-ks9=K06OT6cutUABj2QDHJHJ70719c-eJ=F3n-_bhkYbZ3w@mail.gmail.com>
+References: <20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com> <20250309-ptr-as-ptr-v2-5-25d60ad922b7@gmail.com> <D8EDP4SMQG2M.3HUNZGX8X0IL7@proton.me> <CAJ-ks9=K06OT6cutUABj2QDHJHJ70719c-eJ=F3n-_bhkYbZ3w@mail.gmail.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: e4ddaa38df8cc192110bac9445ef586b5ce36b87
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311-b4-ovpn-v22-18-2b7b02155412@openvpn.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Antonio,
+On Wed Mar 12, 2025 at 4:35 PM CET, Tamir Duberstein wrote:
+> On Wed, Mar 12, 2025 at 11:05=E2=80=AFAM Benno Lossin <benno.lossin@proto=
+n.me> wrote:
+>>
+>> On Sun Mar 9, 2025 at 5:00 PM CET, Tamir Duberstein wrote:
+>> > diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
+>> > index 598001157293..20159b7c9293 100644
+>> > --- a/rust/kernel/devres.rs
+>> > +++ b/rust/kernel/devres.rs
+>> > @@ -45,7 +45,7 @@ struct DevresInner<T> {
+>> >  /// # Example
+>> >  ///
+>> >  /// ```no_run
+>> > -/// # use kernel::{bindings, c_str, device::Device, devres::Devres, i=
+o::{Io, IoRaw}};
+>> > +/// # use kernel::{bindings, c_str, device::Device, devres::Devres, f=
+fi::c_void, io::{Io, IoRaw}};
+>> >  /// # use core::ops::Deref;
+>> >  ///
+>> >  /// // See also [`pci::Bar`] for a real example.
+>> > @@ -59,19 +59,19 @@ struct DevresInner<T> {
+>> >  ///     unsafe fn new(paddr: usize) -> Result<Self>{
+>> >  ///         // SAFETY: By the safety requirements of this function [`=
+paddr`, `paddr` + `SIZE`) is
+>> >  ///         // valid for `ioremap`.
+>> > -///         let addr =3D unsafe { bindings::ioremap(paddr as _, SIZE =
+as _) };
+>> > +///         let addr =3D unsafe { bindings::ioremap(paddr as u64, SIZ=
+E) };
+>>
+>> The argument of `ioremap` is defined as `resource_size_t` which
+>> ultimately maps to `u64` on 64 bit systems and `u32` on 32 bit ones. I
+>> don't think that we should have code like this... Is there another
+>> option?
+>>
+>> Maybe Gary knows something here, do we have a type that represents that
+>> better?
+>
+> Ah yeah the problem is that this type is an alias rather than a
+> newtype. How do you feel about `as bindings::phys_addr_t`?
 
-kernel test robot noticed the following build warnings:
+Yeah that's better.
 
-[auto build test WARNING on 40587f749df216889163dd6e02d88ad53e759e66]
+>> >  ///         if addr.is_null() {
+>> >  ///             return Err(ENOMEM);
+>> >  ///         }
+>> >  ///
+>> > -///         Ok(IoMem(IoRaw::new(addr as _, SIZE)?))
+>> > +///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
+>>
+>> This should be `addr.addr()` (requires `strict_provenance` on Rust 1.83
+>> & before).
+>>
+>> (I am assuming that we're never casting the usize back to a pointer,
+>> since otherwise this change would introduce UB)
+>
+> Yeah, we don't have strict provenance APIs (and we can't introduce
+> them without compiler tooling or bumping MSRV). I'm not sure if we are
+> casting back to a pointer, but either way this change doesn't change
+> the semantics - it is only spelling out the type.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Antonio-Quartulli/net-introduce-OpenVPN-Data-Channel-Offload-ovpn/20250311-202334
-base:   40587f749df216889163dd6e02d88ad53e759e66
-patch link:    https://lore.kernel.org/r/20250311-b4-ovpn-v22-18-2b7b02155412%40openvpn.net
-patch subject: [PATCH net-next v22 18/23] ovpn: implement peer add/get/dump/delete via netlink
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250313/202503130050.cIMoMcyw-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130050.cIMoMcyw-lkp@intel.com/reproduce)
+It's fine to enable the feature, since it's stable in a newer version of
+the compiler.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130050.cIMoMcyw-lkp@intel.com/
+>> >  ///     }
+>> >  /// }
+>> >  ///
+>> >  /// impl<const SIZE: usize> Drop for IoMem<SIZE> {
+>> >  ///     fn drop(&mut self) {
+>> >  ///         // SAFETY: `self.0.addr()` is guaranteed to be properly m=
+apped by `Self::new`.
+>> > -///         unsafe { bindings::iounmap(self.0.addr() as _); };
+>> > +///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void);=
+ };
+>>
+>> Can't this be a `.cast::<c_void>()`?
+>
+> This is an integer-to-pointer cast. `addr` returns `usize`:
 
-All warnings (new ones prefixed by >>):
+Oh I missed the `*mut`... In that case, we can't use the `addr`
+suggestion that I made above, instead we should use `expose_provenance`
+above and `with_exposed_provenance` here.
 
-   In file included from drivers/net/ovpn/peer.c:10:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ovpn/peer.c:152:6: warning: variable 'ip_len' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     152 |         if (local_ip) {
-         |             ^~~~~~~~
-   drivers/net/ovpn/peer.c:166:33: note: uninitialized use occurs here
-     166 |         memcpy(&bind->local, local_ip, ip_len);
-         |                                        ^~~~~~
-   include/linux/fortify-string.h:690:53: note: expanded from macro 'memcpy'
-     690 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-         |                                                     ^
-   include/linux/fortify-string.h:627:41: note: expanded from macro '__fortify_memcpy_chk'
-     627 |         const size_t __fortify_size = (size_t)(size);                   \
-         |                                                ^~~~
-   drivers/net/ovpn/peer.c:152:2: note: remove the 'if' if its condition is always true
-     152 |         if (local_ip) {
-         |         ^~~~~~~~~~~~~
-   drivers/net/ovpn/peer.c:143:15: note: initialize the variable 'ip_len' to silence this warning
-     143 |         size_t ip_len;
-         |                      ^
-         |                       = 0
-   4 warnings generated.
+> impl<const SIZE: usize> IoRaw<SIZE> {
+>     [...]
+>
+>     /// Returns the base address of the MMIO region.
+>     #[inline]
+>     pub fn addr(&self) -> usize {
+>         self.addr
+>     }
+>
+>     [...]
+> }
+>
+>>
+>> >  ///     }
+>> >  /// }
+>> >  ///
+>>
+>> > diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+>> > index 8654d52b0bb9..eb8fa52f08ba 100644
+>> > --- a/rust/kernel/error.rs
+>> > +++ b/rust/kernel/error.rs
+>> > @@ -152,7 +152,7 @@ pub(crate) fn to_blk_status(self) -> bindings::blk=
+_status_t {
+>> >      /// Returns the error encoded as a pointer.
+>> >      pub fn to_ptr<T>(self) -> *mut T {
+>> >          // SAFETY: `self.0` is a valid error due to its invariant.
+>> > -        unsafe { bindings::ERR_PTR(self.0.get() as _).cast() }
+>> > +        unsafe { bindings::ERR_PTR(self.0.get() as isize).cast() }
+>>
+>> Can't this be a `.into()`?
+>
+> error[E0277]: the trait bound `isize: core::convert::From<i32>` is not sa=
+tisfied
+>    --> ../rust/kernel/error.rs:155:49
+>     |
+> 155 |         unsafe { bindings::ERR_PTR(self.0.get().into()).cast() }
+>     |                                                 ^^^^ the trait
+> `core::convert::From<i32>` is not implemented for `isize`
 
+That's a bummer... I wonder why that doesn't exist.
 
-vim +152 drivers/net/ovpn/peer.c
+>> >      }
+>> >
+>> >      /// Returns a string representing the error, if one exists.
+>>
+>> > @@ -119,7 +119,7 @@ pub fn $name(&self, offset: usize) -> $type_name {
+>> >              let addr =3D self.io_addr_assert::<$type_name>(offset);
+>> >
+>> >              // SAFETY: By the type invariant `addr` is a valid addres=
+s for MMIO operations.
+>> > -            unsafe { bindings::$name(addr as _) }
+>> > +            unsafe { bindings::$name(addr as *const c_void) }
+>>
+>> Also here, is `.cast::<c_void>()` enough? (and below)
+>
+> It's an integer-to-pointer cast. In the same `impl<const SIZE: usize>
+> IoRaw<SIZE>` as above:
+>
+>     fn io_addr_assert<U>(&self, offset: usize) -> usize {
+>         build_assert!(Self::offset_valid::<U>(offset, SIZE));
+>
+>         self.addr() + offset
+>     }
 
-   129	
-   130	/**
-   131	 * ovpn_peer_reset_sockaddr - recreate binding for peer
-   132	 * @peer: peer to recreate the binding for
-   133	 * @ss: sockaddr to use as remote endpoint for the binding
-   134	 * @local_ip: local IP for the binding
-   135	 *
-   136	 * Return: 0 on success or a negative error code otherwise
-   137	 */
-   138	int ovpn_peer_reset_sockaddr(struct ovpn_peer *peer,
-   139				     const struct sockaddr_storage *ss,
-   140				     const void *local_ip)
-   141	{
-   142		struct ovpn_bind *bind;
-   143		size_t ip_len;
-   144	
-   145		lockdep_assert_held(&peer->lock);
-   146	
-   147		/* create new ovpn_bind object */
-   148		bind = ovpn_bind_from_sockaddr(ss);
-   149		if (IS_ERR(bind))
-   150			return PTR_ERR(bind);
-   151	
- > 152		if (local_ip) {
-   153			if (ss->ss_family == AF_INET) {
-   154				ip_len = sizeof(struct in_addr);
-   155			} else if (ss->ss_family == AF_INET6) {
-   156				ip_len = sizeof(struct in6_addr);
-   157			} else {
-   158				net_dbg_ratelimited("%s: invalid family %u for remote endpoint for peer %u\n",
-   159						    netdev_name(peer->ovpn->dev),
-   160						    ss->ss_family, peer->id);
-   161				kfree(bind);
-   162				return -EINVAL;
-   163			}
-   164		}
-   165	
-   166		memcpy(&bind->local, local_ip, ip_len);
-   167	
-   168		/* set binding */
-   169		ovpn_bind_reset(peer, bind);
-   170	
-   171		return 0;
-   172	}
-   173	
+I would prefer we use the strict_provenance API.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>> >          }
+>> >
+>> >          /// Read IO data from a given offset.
+>>
+>> > diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
+>> > index 04f2d8ef29cb..40d1bd13682c 100644
+>> > --- a/rust/kernel/of.rs
+>> > +++ b/rust/kernel/of.rs
+>> > @@ -22,7 +22,7 @@ unsafe impl RawDeviceId for DeviceId {
+>> >      const DRIVER_DATA_OFFSET: usize =3D core::mem::offset_of!(binding=
+s::of_device_id, data);
+>> >
+>> >      fn index(&self) -> usize {
+>> > -        self.0.data as _
+>> > +        self.0.data as usize
+>>
+>> This should also be `self.0.data.addr()`.
+>
+> Can't do it without strict_provenance.
+>
+>>
+>> >      }
+>> >  }
+>> >
+>> > @@ -34,10 +34,10 @@ pub const fn new(compatible: &'static CStr) -> Sel=
+f {
+>> >          // SAFETY: FFI type is valid to be zero-initialized.
+>> >          let mut of: bindings::of_device_id =3D unsafe { core::mem::ze=
+roed() };
+>> >
+>> > -        // TODO: Use `clone_from_slice` once the corresponding types =
+do match.
+>> > +        // TODO: Use `copy_from_slice` once stabilized for `const`.
+>>
+>> This feature has just been stabilized (5 days ago!):
+>>
+>>     https://github.com/rust-lang/rust/issues/131415
+>
+> Yep! I know :)
+>
+>> @Miguel: Do we already have a target Rust version for dropping the
+>> `RUSTC_BOOTSTRAP=3D1`? If not, then I think we should use this feature
+>> now, since it will be stable by the time we bump the minimum version.
+>> (not in this patch [series] though)
+>>
+>> >          let mut i =3D 0;
+>> >          while i < src.len() {
+>> > -            of.compatible[i] =3D src[i] as _;
+>> > +            of.compatible[i] =3D src[i];
+>> >              i +=3D 1;
+>> >          }
+>>
+>> > @@ -317,7 +320,7 @@ unsafe fn do_release(pdev: &Device, ioptr: usize, =
+num: i32) {
+>> >          // `ioptr` is valid by the safety requirements.
+>> >          // `num` is valid by the safety requirements.
+>> >          unsafe {
+>> > -            bindings::pci_iounmap(pdev.as_raw(), ioptr as _);
+>> > +            bindings::pci_iounmap(pdev.as_raw(), ioptr as *mut kernel=
+::ffi::c_void);
+>>
+>> Again, probably castable.
+>
+> How? `ioptr` is a `usize` (you can see the prototype).
+
+Sorry, I missed all the `*mut`/`*const` prefixes here.
+
+---
+Cheers,
+Benno
+
 
