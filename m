@@ -1,146 +1,142 @@
-Return-Path: <linux-kselftest+bounces-28787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6C9EA5D3D0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 02:04:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3EFAA5D43B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 02:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB47717A006
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 01:04:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C879189C686
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Mar 2025 01:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F82B78F30;
-	Wed, 12 Mar 2025 01:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F26C14037F;
+	Wed, 12 Mar 2025 01:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SVr2wYhm"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b9QHqrJ1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F902F24;
-	Wed, 12 Mar 2025 01:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5346A5684
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Mar 2025 01:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741741467; cv=none; b=u3aZ6TZf4OIsCqhRhktXkCmmHMvt5ivXRd4lWUejjSpS62FR0dZLdy8NgNFdPQe9DFP9ftKV7V22FkbOck09X3dP3zd2l7G4cqBPXWHJU+pj5Kjp/arn805EApfBUbhcyXJcR2JCHKyITVrjb7NcBVeeJtRmLJbh4UO78IfmOFY=
+	t=1741744399; cv=none; b=P3I/3rWl0HlPRS+6SsTp0zi5h7rjdUmhJJf4Jly9wL+15jR+ghQ24syKi/qaOU4ttqRU+jqx8+z05EXwTpkidSwoLBuCL4YyUqGMYVVEjEdMAW/1Xkb/H4EGeFULlOI4qUBIBIjkqD8PyzxWHncrTfqrdd6FHuq7wPPlqR2RaWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741741467; c=relaxed/simple;
-	bh=1kKnkGREHcj/YlzyO4TXZambyMWYhbOKL8BgFZPHe20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=akBM2MmMmQEZAFtsfM/bUQ9WaWYTGB5u3+ta4PHhaY92F89/j8YoQIpBkrrC4G28aaPrH/pYIjnz4DfzWfYH0W2tTfo31/P0DWu+/VWbnmVZm6Nv0OiueHmyrVu/cWvp+WNx4Xh/2iuDVPSBi7H/TzPslypCGW7g7EflJ4+3XvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SVr2wYhm; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-223f4c06e9fso6056305ad.1;
-        Tue, 11 Mar 2025 18:04:25 -0700 (PDT)
+	s=arc-20240116; t=1741744399; c=relaxed/simple;
+	bh=VYGt35qTVOsA6c9AnrReg4RiVqScLvZKoC54q0LPeag=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ISidLOzW6rmQrLAfW1zT9z7prWxvd2ghnZjkMKNx/mk2ZAemVxuLiTewsU8SzVmZBv6p4FQbsuShcNK1N4AVvvDOzgRqsj/BOhkDkIschUQA7Gft7DcyLbMV92dZqsPyDZY7Jgc44viFhXoQT3hxouIRrt7sAohTHgMHDyMgAq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b9QHqrJ1; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38f2f391864so3188819f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Mar 2025 18:53:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741741465; x=1742346265; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzfocc3RPo7bjnq9D/qpKgbdz16XHJa3U+9D/ia1Ywo=;
-        b=SVr2wYhmaRbVRyxPmnkWahGbu/JtEL+nI94CYQ500GpyFHTb3GrZcLINkOznoBT6kV
-         tnC4CkpvZs+aMS1zNkQr6uPnwjsGE85GEOS2JLwH/J1f2hipjew8QfoE4JRmsCrjlpmD
-         pDWPhHW2durpDc6VFdewEo5JWEuQxQN3lcW6sg09a66N3ABvlVIn+nVu9XckP/jXAC9H
-         0VAN9+KVhd3odoxgCiK35vkEq4pe9Ep6cpQZgDTGd3M9IuuKPhzURXRoJhAirGQdZKQg
-         UlHk+clyJrSvI+7wFkHdpwgrS/MTBeCVcrJARXERzTUldgtMSwsgM1aBRzC6+tkV1nvx
-         Wk1g==
+        d=suse.com; s=google; t=1741744395; x=1742349195; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VYGt35qTVOsA6c9AnrReg4RiVqScLvZKoC54q0LPeag=;
+        b=b9QHqrJ1rYoFNf+Pef18yOp6P3vh2yrj8jXuDgaEZzu5ZuQzgz2SnxjXDBrDX55wJT
+         fW8qVh3meR36RrnANxUTC/o+eAbvOMar35AgZlLz5EfmBPmUuwabeD1xwzl5mltgh0LX
+         Dqqrgm5qnfqTPo6gTW+wI682V7VMtsCR10HAJfSpdbm3CXKObU1Csj1SBnLixalNC0V7
+         dUpXO2ToInrOIeMaP2KIIhKd1RD44Gj8cKRzNIJOKs4ogqbj6mO3Ga7a8ufjrCvjjrrS
+         jm+emfxi2zV2qe0NHfvpXsKRdDK/tyIU4vH3hewF2QE4wAZQkisJ375b8gljg0ONtcVR
+         tOpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741741465; x=1742346265;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bzfocc3RPo7bjnq9D/qpKgbdz16XHJa3U+9D/ia1Ywo=;
-        b=gGGPchKEdfj95pPoQE86caKpEFxICVmR3pLCsnGAtiEq46Z56OPnalBsdfW+UsXmWm
-         pmmHWGt/eHM0UjnbI9ReqBOfoX/aITmA0+dh2c6KXWnGLfU88vGgp0BljZNUyN7RLaLK
-         j8AA02mtlrWMNIqInvPoRpEzNeHKDlEIhp2lmFBbgECSsbuUyokereakra8R7Bml/Uqj
-         FxeAlKT0EJwoEPQG/Uj/3DOXGF8zg8nPamQCAYsQzYxQPOue57DiPsz+ylqbmQsK4aQQ
-         nrxNjswzSKIHQLGZargyj9+3jf/8x9Gr+Xc9tVVK2YMBspIdS5jTn9t26rDLktdyI7tq
-         qArA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCLkP+l0HhB81+mQJjiuFEt/MHgpSTEHz5Y4GNSqntbyU85KXCVdy54zDZux/i7Lv0zUa9wJsChABg+bFyJcCB@vger.kernel.org, AJvYcCUrhkpA3yD31huqwT3gOgIJlSErapBoCOxukAD4mrXX9U2owy0VVxTlY2aIeO6ERYYda3mLnrjP46+Zwhg=@vger.kernel.org, AJvYcCUw3D0D90D4eOGSBA3szzbt+P5d2D6ZFGsdjjOe7RjWXMbD4PKwnVBd0KNW7wvqd3D14DlSecT2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+q8YBFMLqjX7fzfDj2WIUsvHkJThrLAoZ4oEZrIH65ABK3z7m
-	013yuP+yZyr4gOTjebBrcHbiVaHS2pvqkd+gH5uS0ezSPXKSCbk8
-X-Gm-Gg: ASbGncvnSTNzDKVFZ2NdBouXx182X+/AgwiSqVCob0eF2FBHJGeYaLrOX0vdzBI2CqA
-	YrXIaS3JSpqL4JduKawXpD2PG5xBmTcUQIC10okCh1ze9II1CqQBP/AWwch67DJDjF1ogbp0AjZ
-	TkNqjXVKrgi+tzBUfWkBIkKmBU649+bKfu94JJ71r0VTFse7czs6kBQrFNqhOtDuiQkTwBYRBgt
-	BvwU2IEsB1jWsMdkA1HvofLcUFEyTuVw6GtuLJIaatPleJ76W7DFeb5NyRVZw68+Oi5g8u4C1iJ
-	wmHP16NzESF3aT1Xj1oGtdxneo5VYlbjVZdlG1TM5C+JuS7tpSYigEvRm12p
-X-Google-Smtp-Source: AGHT+IFmbvXOyKZxvGVWBUvMerzCbdiytV10bYYgq4q50QFZJONo5YaTltevwglQioZNDUWeKGKeOA==
-X-Received: by 2002:a17:902:ced1:b0:223:4d5e:7592 with SMTP id d9443c01a7336-22593dde38bmr74884605ad.21.1741741464747;
-        Tue, 11 Mar 2025 18:04:24 -0700 (PDT)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a7f700sm104965995ad.144.2025.03.11.18.04.17
+        d=1e100.net; s=20230601; t=1741744395; x=1742349195;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VYGt35qTVOsA6c9AnrReg4RiVqScLvZKoC54q0LPeag=;
+        b=TeO7iG/ekWk4FmGiJaMmxYHa0yl1iAdzpDkI7/J3MicFBBKy37VmU+uupwdYMOmgJR
+         kjhB/SZmEpyiUrZN5RJhhgK9J2Bzv9Y8R4TX+jrlzwbE4q0thIzx3WkoQrNLi5ga3UNU
+         empIMHhK+iLxLN72spo6e/uAFL5M4oygjfFtefGQfXfxO231zPTRUW2H9Vtq1wAdkefP
+         7ZYzS6wbGkmjYWaQOrD8CyRV8nJWq5IqXMgPiLZAqT2nFBEIuv+yD76HceUa9gRafhI8
+         Rw545/qbqEypJKnAn11/aP0G47IaWbb3gLagmzLWdpZqQJiMla2n+VGvlHr9Lelx/SW5
+         MccA==
+X-Forwarded-Encrypted: i=1; AJvYcCUsoZo5luI9epBdtD3N9usUL1k9pit69tn5g8VMDnqq/sqUe6uJZRwcQMFITUHOEkeTvGlbKa7pxHxPwnWRnPg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziVDVHkbr3jKAaEv20eoD4Jdy+tUNRNX12bYlrAII+72hKEBQA
+	XUzJUN93B96EnBsGHK5v6MSTl4PU1SHFk4YQ1M4iLumOENMBK8Fx8uYjJLCovvw=
+X-Gm-Gg: ASbGncuDJaR1y8rNcNKbrq8oWXYYk09PRcTGcKoczshT7JfPVGQ7E8B/OsNYJPYDXSL
+	mxYYwkJEYGAUgjg+uvzXEM5edOtpwWbMv8ruhLFUUPd5+prnbVNqlHUHE3LF7R1uFhUOnUl8Ir8
+	ILaeTmJxN4KadnpaWP3MSaVlxILy/zySXjFfgw7qoTNH1mWLY8U3d9iXuOaX69qKgBenGIMNMi+
+	kCdfdEVCFHO8ngSW6ysCQlX5NsCPtr72t70T8zfyNWQnf7dVFw/oLHNaQ6dTYK+lFLnHjbSsGuL
+	tdm1OV1SeWkC8ltv4rPmCZ2I8KNuDsrcnUdQNcs23v4HvBxokCtlraN99722vu1AHrpKmQh1T5j
+	b8V9dICU=
+X-Google-Smtp-Source: AGHT+IG88cW0bSsvG/lLs3Zu0XcM2ByGWX+m4X6L8KGTkFm3WjWL58mXweufMtUVmgd7CjozBN1Kaw==
+X-Received: by 2002:a5d:6d8c:0:b0:391:275a:273f with SMTP id ffacd0b85a97d-39132d062ffmr12511792f8f.4.1741744395630;
+        Tue, 11 Mar 2025 18:53:15 -0700 (PDT)
+Received: from ?IPv6:2804:5078:802:e100:58f2:fc97:371f:2? ([2804:5078:802:e100:58f2:fc97:371f:2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410abc694sm104552195ad.257.2025.03.11.18.53.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Mar 2025 18:04:23 -0700 (PDT)
-Date: Wed, 12 Mar 2025 01:04:14 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: "kuba@kernel.org" <kuba@kernel.org>,
-	"razor@blackwall.org" <razor@blackwall.org>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"jarod@redhat.com" <jarod@redhat.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	Tariq Toukan <tariqt@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
-	"jv@jvosburgh.net" <jv@jvosburgh.net>,
-	"pabeni@redhat.com" <pabeni@redhat.com>,
-	"horms@kernel.org" <horms@kernel.org>,
-	"edumazet@google.com" <edumazet@google.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Jianbo Liu <jianbol@nvidia.com>
-Subject: Re: [PATCHv5 net 1/3] bonding: fix calling sleeping function in spin
- lock and some race conditions
-Message-ID: <Z9Ddjgrxv5wQM-wV@fedora>
-References: <20250307031903.223973-1-liuhangbin@gmail.com>
- <20250307031903.223973-2-liuhangbin@gmail.com>
- <6dd52efd-3367-4a77-8e7b-7f73096bcb3f@blackwall.org>
- <20250307090332.5b556ebb@kernel.org>
- <f9b85a06113e2c9a7a91f3486efc06edbce4e461.camel@nvidia.com>
+        Tue, 11 Mar 2025 18:53:15 -0700 (PDT)
+Message-ID: <fe554a6efe55d7a9fda58c3aebb56322f742b12d.camel@suse.com>
+Subject: Re: [PATCH 0/2] selftests: livepatch: test if ftrace can trace a
+ livepatched function
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Filipe Xavier <felipeaggger@gmail.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,  Jiri Kosina <jikos@kernel.org>, Miroslav Benes
+ <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
+ <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, felipe_life@live.com
+Date: Tue, 11 Mar 2025 22:53:10 -0300
+In-Reply-To: <20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com>
+References: <20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9b85a06113e2c9a7a91f3486efc06edbce4e461.camel@nvidia.com>
 
-On Tue, Mar 11, 2025 at 09:08:49PM +0000, Cosmin Ratiu wrote:
-> On Fri, 2025-03-07 at 09:03 -0800, Jakub Kicinski wrote:
-> > On Fri, 7 Mar 2025 09:42:49 +0200 Nikolay Aleksandrov wrote:
-> > > TBH, keeping buggy code with a comment doesn't sound good to me.
-> > > I'd rather remove this
-> > > support than tell people "good luck, it might crash". It's better
-> > > to be safe until a
-> > > correct design is in place which takes care of these issues.
-> > 
-> > That's my feeling too, FWIW. I think we knew about this issue
-> > for a while now, the longer we wait the more users we may disrupt
-> > with the revert.
-> 
-> These are preexisting races between the bond link failover and the user
-> removing the xfrm states. Unless the user wants to intentionally
-> trigger these bugs, chances are nobody has ever encountered them in the
-> wild in normal operation. In steady state, bond link failover works,
-> and adding/removing states works. It's the combination of the two
-> control plane events that may have a chance to double free or leak
-> states.
-> 
-> I would not pull everything out just yet.
-> 
-> Today, I managed to find a solution for these races (I think), based on
-> a patch series I am preparing against ipsec-next with other changes
-> related to real_dev.
-> 
-> Hangbin, do you mind if I take over fixing the locking issue as part of
-> my series? I plan to send it upstream the following days.
+On Thu, 2025-03-06 at 18:51 -0300, Filipe Xavier wrote:
+> This patchset add ftrace helpers functions and
+> add a new test makes sure that ftrace can trace
+> a function that was introduced by a livepatch.
+>=20
+> Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
+> ---
+> Filipe Xavier (2):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: add new ftrace helpe=
+rs functions
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: test if ftrace can t=
+race a livepatched
+> function
+>=20
+> =C2=A0tools/testing/selftests/livepatch/functions.sh=C2=A0=C2=A0 | 45
+> ++++++++++++++++++++++++
+> =C2=A0tools/testing/selftests/livepatch/test-ftrace.sh | 35
+> ++++++++++++++++++
+> =C2=A02 files changed, 80 insertions(+)
+>=20
 
-No, I don't mind. Please go ahead to fixing the locking issue. And thanks
-a lot for your reviewing.
+Thanks for sending this new version! One interesting thing is that you
+created a new patchset, instead of iterating on the same one, and this
+triggered a bug on b4[1]!
 
-Regards
-Hangbin
+You also missed the changelog since v2, but AFAICS you addressed all
+comments from me, Joe and Petr, per [2].
+
+For the two patches:
+
+Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+
+[1]: https://github.com/mricon/b4/issues/58
+[2]:
+https://lore.kernel.org/live-patching/b2637bad-9022-496a-9b83-0d348a6350b4@=
+gmail.com/T/#m14bc5c118490c1b17e782a0f0173c1fb70d187c7
+
+> ---
+> base-commit: 848e076317446f9c663771ddec142d7c2eb4cb43
+> change-id: 20250306-ftrace-sftest-livepatch-60d9dc472235
+>=20
+> Best regards,
+
 
