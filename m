@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-28903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28904-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63C30A5F0B0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:25:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C70A5F0BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:26:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97AFF1711F6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:25:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18B33BCB2B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41D8F266F1F;
-	Thu, 13 Mar 2025 10:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9820A265CA7;
+	Thu, 13 Mar 2025 10:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZ+gaHgI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnmz/Ive"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1163726560E;
-	Thu, 13 Mar 2025 10:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673B4264F90;
+	Thu, 13 Mar 2025 10:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741861409; cv=none; b=OUkuuv3Q7rPnUJQ054/gHQPsSq/jc/uAh/pqrxq7nbyIhxEXS3QmjE7Fr3bwVZ9zJV92XHS+/37UAmYFvDfVvaM3ThO2fAayS0wBVbNet3C0ru/Igh1794scECRaUUJvPGRb3dcHUqJIu3bsLUPdMKUzRHxK45f6/oY4ZF7uVKA=
+	t=1741861420; cv=none; b=fmuj7WADfgisvEa8FJQiiYJiHKaHeB0evISfjIdKxDNXON8zAo33gLiCkdY3oRA74uNN8T0NCQ127DiXfM3qBLT6BW3vZX6p+wh7bs3xHclJzA3YjYlj6bPpAeBL1HoRSl9VOaiBc0GA7CBplIvX/W6sj8q2Ug6VRoqIT7ZsgnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741861409; c=relaxed/simple;
-	bh=GPnAgI9t4e294JRUYRTZXCYkVhHLkTaZDQSLIZ/7h2U=;
+	s=arc-20240116; t=1741861420; c=relaxed/simple;
+	bh=3F984dgkxbY6fPkXv+6fJCMjPaWNvKS7SFLAjQ5BVr4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=irbRxqaWuT7PqxeQUbsgcOV/AyPQdKF5BkVFECpnjIWTXkIzy9HViQlaXPCs3jXuHZtGOCenZfepbs/bzjcaJsZcWLbzqLQgGFFhBPVNrdDQ1d9+0eXoy12GctjPSQuiPkYBp4TPxo5qcfGd4QOVck7n1F2TrkgtZKT7163X9f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZ+gaHgI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A177C4CEDD;
-	Thu, 13 Mar 2025 10:23:22 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Ad105awX4dWhv+fE91musVaqga7Mu2SRXc/AJPW/wFvspvE+R6WL+R1YuemNru+S0y79VgaWxZ0zb5gHl1Sgq+mWefpSd5I4E2XKg9qEpsl2gctJEmv1icYi9O8vNyM/fAt7hKB8/qHcJUah9sxs3EVd7f+YJwvCJpmjnO9oAcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnmz/Ive; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DFCC4CEE3;
+	Thu, 13 Mar 2025 10:23:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741861408;
-	bh=GPnAgI9t4e294JRUYRTZXCYkVhHLkTaZDQSLIZ/7h2U=;
+	s=k20201202; t=1741861419;
+	bh=3F984dgkxbY6fPkXv+6fJCMjPaWNvKS7SFLAjQ5BVr4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kZ+gaHgI0xN7BrDYwZpgSS9cRUIfku0k5vlJnuCTtWZYkYcqSd0PtV9Filo/yeBP1
-	 qggPaWImKIuXlHg2m+lT26n2B30Y4dg5vKR5zyGCNDE0CgzSrx8uiFcvkFd4i7rNWi
-	 bUhQbs0RgIV7StHNTrGmwBbzKVqzvhW/vburAfZpmmXfNFjSrmy1uRv1oN1wAuOpgu
-	 LsivyMFU+b94S0RGFTEn2dalC4RcLxsFlXnlr7pE09fc6poCD/4mpPHWyWzCLtRDCf
-	 D/0hg7U7+7SFpsxQQUgswCsPwGjJ21hvSjCWsxfBktCbUd+OMtHGbcBX4+9SFjdTJC
-	 N7iKYZugZSRzg==
+	b=fnmz/IvenKzyDaTbcaqWf4f8uu+jh6px4VUuCIEptlCm2OeaDysjT3zmIb3b0Z3wE
+	 1yu5TRA8yMXGqQkPLEvs2P74ul2Fu83l5BJ0Ty4PnLaXPCAWpoUbJF/M6E7N2U+egd
+	 LByaippAqOHi7557T4pj1nemmRTCWQ9IU1LmAKEup2myWtHfFFv6JXMu6E5gR+eT2f
+	 w3TeteCXXOyxAZcwS4fYZuORHmVibqCeqsnjLtWJKu6QY4hAVbE3PqhLINxtI8pE/M
+	 9MYdmR4OYJxJd8LgX0TalbgG6rTQR+qAzIKIExva5vqsi8Tt62+x2SJNbaqopUHErn
+	 87OMlU4OsUzcg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 13 Mar 2025 11:21:00 +0100
-Subject: [PATCH net-next 11/12] mptcp: sysctl: add available_path_managers
+Date: Thu, 13 Mar 2025 11:21:01 +0100
+Subject: [PATCH net-next 12/12] selftests: mptcp: add pm sysctl mapping
+ tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-net-next-mptcp-pm-ops-intro-v1-11-f4e4a88efc50@kernel.org>
+Message-Id: <20250313-net-next-mptcp-pm-ops-intro-v1-12-f4e4a88efc50@kernel.org>
 References: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
 In-Reply-To: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -65,155 +66,83 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4929; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=oytQPOm4JRXyC5Ocyqq1dePLR/pEKe/9a1tbEdlpJ8c=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn0rGbJUKvFCM8/WG+7IqDRzRnRe4wDDTXr3ZWh
- Alv0K1nFSKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ9KxmwAKCRD2t4JPQmmg
- cw+YEADVd6HMwgNtqbBVrBfDLgNWsOwXQGj6d9Wq416lQA4ygn6oPLCHTjPsZqPe427DHppYH48
- a6YluKg33GSN4OTK2WipWlN4WBvVAzeaQXpxPAIdPmJ11rgf9c5dP07Dm2mEfu/oSMTwtvQ3kmt
- 6gEBTn5vzLbKkyUW5lHlCKQpAquBJPNwXQXwzLJUqevEQN5xkM06GfGo6mKPJNxUTHj90TM6PuE
- 2RxZwm8lEhHNWxS30lIeIRiNXSfZEfFA/ZYa9mBLVO2bRVaqUl8PuEbaIz0DvAU9hedonZoZdLb
- Ez9KIfHbDIXuIpcUpbYiGESdCdWBc7eADNPCAOXeQzystz0brAjzZTgmyiuSq/rzUrWpFMKzp7a
- AEIAq2C/qvVI8zl8DVwnL3EuRSzEmH+5TftkR/OvS3e7JdNrE+RQ5zbeltrHTbR2R/wVNm+i29G
- WGZN8g2vVnaczRQp9oQKKQf5kTak0vOhOVBPFPXRJkJ3w707tlLKWEmFbu33B/DSQO+2p5LyCSJ
- Pn8SIA9hmyzHc3ljwFp4PAk8+sA5vN+3XbOmZVGx0LvDiMHSfoslLv5hlXdsErN8rbAF+nlC5tn
- Wjo306WbhiN/sIx8gDK5sS8FFPT1na9xO3V2/Rnzgyvd90vaYSrcY49b+r1GHfyUSWcLCs7LJwv
- v7s9nrFLFMHCfvA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2235; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=Tc4PpQ+Y/jnprgu+15f2z73L06rmBn9s1LlWpDmpj4I=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn0rGbRH937aT7yKRBus6q5SgVNpqGBqg2hpW9t
+ CbZC9NalcCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ9KxmwAKCRD2t4JPQmmg
+ c5SUD/9Sy+sMpYkhdzaJ4ijw9HCSPkKvL7xPzQB1qvLOh0PkXQlZf2gBvQ8KXhqOJg2P9TtUkJm
+ xVW37RogFdsV3ByxlQD0Bib9rUGWIFIj6C8LXi1MBglQdo5xPlYkZzhcWWyXSOMGDANfEKzw4DZ
+ j8R4N2rlwwzmbuFNBxR87Nk+Tet4kvHHL6YMG/ts3voh1PT1QyR7se27NrMAIFaqdWVbqAXLZsX
+ yF4SlNVYo7Oz7+bZTWywLpT9dZbGkMHV+x0YC8+C1bh/sLT0jtF/tCxUkZLXIjcVNdeg5JRuHq8
+ +Yz/5L+XqeocpGfhjp+df4ZGgujez+IlcnlT3YBg00s0Opi/HGY5ELlXYyYKZkJhiNjj7NdVgNW
+ f2ARUlaFf1x/yYoLwyR7GzOIfnVhzKiGtmn3c42+iOicAgf311JfFdodVCaPbtrazNTjQTtEiSr
+ qZREkGGiOaBcEoA3Z+Wk1TZokBdvtdGHx70LLvspqKZqjzS7QARsc+BAbLqbin/lV9+zGZafmvQ
+ /0Ujw1PTSqbNJHWgpWXlGrpO+lFXg9xwOn4/4gpdqxVw9y7+6v5+A+ildw0nSfzpgRsfHekyoUj
+ HNLLx9jwaEEARmKat34yC+0/B7TlcAlVsZFWK/PB8IOv6xtJrJs3K1RDJSvtFQ2WTijat9K5jzp
+ KkS9TRXHDUJTB8w==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Similarly to net.mptcp.available_schedulers, this patch adds a new one
-net.mptcp.available_path_managers to list the available path managers.
+This patch checks if the newly added net.mptcp.path_manager is mapped
+successfully from or to the old net.mptcp.pm_type in userspace_pm.sh.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- Documentation/networking/mptcp-sysctl.rst |  4 ++++
- include/net/mptcp.h                       |  2 ++
- net/mptcp/ctrl.c                          | 25 +++++++++++++++++++++++++
- net/mptcp/pm.c                            | 19 +++++++++++++++++++
- net/mptcp/protocol.h                      |  1 +
- 5 files changed, 51 insertions(+)
+ tools/testing/selftests/net/mptcp/userspace_pm.sh | 30 ++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/networking/mptcp-sysctl.rst b/Documentation/networking/mptcp-sysctl.rst
-index b78a2254d4523e0c0fa09338d4b676da18f82d97..5bfab01eff5a9db89e1484787953241c16e147cf 100644
---- a/Documentation/networking/mptcp-sysctl.rst
-+++ b/Documentation/networking/mptcp-sysctl.rst
-@@ -30,6 +30,10 @@ allow_join_initial_addr_port - BOOLEAN
+diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+index 3651f73451cf8b07d4492c60da45e88aabc44b7a..333064b0b5ac03ae003417d2070f3c08f94743ed 100755
+--- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
++++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+@@ -117,7 +117,36 @@ cleanup()
+ trap cleanup EXIT
  
- 	Default: 1
+ # Create and configure network namespaces for testing
++print_title "Init"
+ mptcp_lib_ns_init ns1 ns2
++
++# check path_manager and pm_type sysctl mapping
++if [ -f /proc/sys/net/mptcp/path_manager ]; then
++	ip netns exec "$ns1" sysctl -q net.mptcp.path_manager=userspace
++	pm_type="$(ip netns exec "$ns1" sysctl -n net.mptcp.pm_type)"
++	if [ "${pm_type}" != "1" ]; then
++		test_fail "unexpected pm_type: ${pm_type}"
++		mptcp_lib_result_print_all_tap
++		exit ${KSFT_FAIL}
++	fi
++
++	ip netns exec "$ns1" sysctl -q net.mptcp.path_manager=error 2>/dev/null
++	pm_type="$(ip netns exec "$ns1" sysctl -n net.mptcp.pm_type)"
++	if [ "${pm_type}" != "1" ]; then
++		test_fail "unexpected pm_type after error: ${pm_type}"
++		mptcp_lib_result_print_all_tap
++		exit ${KSFT_FAIL}
++	fi
++
++	ip netns exec "$ns1" sysctl -q net.mptcp.pm_type=0
++	pm_name="$(ip netns exec "$ns1" sysctl -n net.mptcp.path_manager)"
++	if [ "${pm_name}" != "kernel" ]; then
++		test_fail "unexpected path-manager: ${pm_name}"
++		mptcp_lib_result_print_all_tap
++		exit ${KSFT_FAIL}
++	fi
++fi
++
+ for i in "$ns1" "$ns2" ;do
+ 	ip netns exec "$i" sysctl -q net.mptcp.pm_type=1
+ done
+@@ -152,7 +181,6 @@ mptcp_lib_events "${ns1}" "${server_evts}" server_evts_pid
+ sleep 0.5
+ mptcp_lib_subtests_last_ts_reset
  
-+available_path_managers - STRING
-+	Shows the available path managers choices that are registered. More
-+	path managers may be available, but not loaded.
-+
- available_schedulers - STRING
- 	Shows the available schedulers choices that are registered. More packet
- 	schedulers may be available, but not loaded.
-diff --git a/include/net/mptcp.h b/include/net/mptcp.h
-index 645d15695e3f5ec4b945bb543630f3dcc54453f2..bfbad695951cf664af4d05390104883268b6bcd2 100644
---- a/include/net/mptcp.h
-+++ b/include/net/mptcp.h
-@@ -123,6 +123,8 @@ struct mptcp_sched_ops {
- } ____cacheline_aligned_in_smp;
- 
- #define MPTCP_PM_NAME_MAX	16
-+#define MPTCP_PM_MAX		128
-+#define MPTCP_PM_BUF_MAX	(MPTCP_PM_NAME_MAX * MPTCP_PM_MAX)
- 
- struct mptcp_pm_ops {
- 	char			name[MPTCP_PM_NAME_MAX];
-diff --git a/net/mptcp/ctrl.c b/net/mptcp/ctrl.c
-index 4d8b31f32eb50347d10db792f084e43c93f687c6..d9290c5bb6c7956ca98319259f92b812680f74f7 100644
---- a/net/mptcp/ctrl.c
-+++ b/net/mptcp/ctrl.c
-@@ -253,6 +253,24 @@ static int proc_pm_type(const struct ctl_table *ctl, int write,
- 	return ret;
- }
- 
-+static int proc_available_path_managers(const struct ctl_table *ctl,
-+					int write, void *buffer,
-+					size_t *lenp, loff_t *ppos)
-+{
-+	struct ctl_table tbl = { .maxlen = MPTCP_PM_BUF_MAX, };
-+	int ret;
-+
-+	tbl.data = kmalloc(tbl.maxlen, GFP_USER);
-+	if (!tbl.data)
-+		return -ENOMEM;
-+
-+	mptcp_pm_get_available(tbl.data, MPTCP_PM_BUF_MAX);
-+	ret = proc_dostring(&tbl, write, buffer, lenp, ppos);
-+	kfree(tbl.data);
-+
-+	return ret;
-+}
-+
- static struct ctl_table mptcp_sysctl_table[] = {
- 	{
- 		.procname = "enabled",
-@@ -338,6 +356,12 @@ static struct ctl_table mptcp_sysctl_table[] = {
- 		.mode = 0644,
- 		.proc_handler = proc_path_manager,
- 	},
-+	{
-+		.procname = "available_path_managers",
-+		.maxlen	= MPTCP_PM_BUF_MAX,
-+		.mode = 0444,
-+		.proc_handler = proc_available_path_managers,
-+	},
- };
- 
- static int mptcp_pernet_new_table(struct net *net, struct mptcp_pernet *pernet)
-@@ -364,6 +388,7 @@ static int mptcp_pernet_new_table(struct net *net, struct mptcp_pernet *pernet)
- 	table[9].data = &pernet->blackhole_timeout;
- 	table[10].data = &pernet->syn_retrans_before_tcp_fallback;
- 	table[11].data = &pernet->path_manager;
-+	/* table[12] is for available_path_managers which is read-only info */
- 
- 	hdr = register_net_sysctl_sz(net, MPTCP_SYSCTL_PATH, table,
- 				     ARRAY_SIZE(mptcp_sysctl_table));
-diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index 3896f21a46bd7f6912d2ffe22a3984ba97923021..18b19dbccbba72916b2f666600a2bc8993ebd1df 100644
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -1070,3 +1070,22 @@ void mptcp_pm_unregister(struct mptcp_pm_ops *pm_ops)
- 	list_del_rcu(&pm_ops->list);
- 	spin_unlock(&mptcp_pm_list_lock);
- }
-+
-+/* Build string with list of available path manager values.
-+ * Similar to tcp_get_available_congestion_control()
-+ */
-+void mptcp_pm_get_available(char *buf, size_t maxlen)
-+{
-+	struct mptcp_pm_ops *pm_ops;
-+	size_t offs = 0;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(pm_ops, &mptcp_pm_list, list) {
-+		offs += snprintf(buf + offs, maxlen - offs, "%s%s",
-+				 offs == 0 ? "" : " ", pm_ops->name);
-+
-+		if (WARN_ON_ONCE(offs >= maxlen))
-+			break;
-+	}
-+	rcu_read_unlock();
-+}
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 818c2c648677c255a00d668ab9b7406f0731fcf8..d409586b5977f93bff14fffd83b1d3020d57353b 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -1058,6 +1058,7 @@ struct mptcp_pm_ops *mptcp_pm_find(const char *name);
- int mptcp_pm_register(struct mptcp_pm_ops *pm_ops);
- void mptcp_pm_unregister(struct mptcp_pm_ops *pm_ops);
- int mptcp_pm_validate(struct mptcp_pm_ops *pm_ops);
-+void mptcp_pm_get_available(char *buf, size_t maxlen);
- 
- void mptcp_userspace_pm_free_local_addr_list(struct mptcp_sock *msk);
+-print_title "Init"
+ print_test "Created network namespaces ns1, ns2"
+ test_pass
  
 
 -- 
