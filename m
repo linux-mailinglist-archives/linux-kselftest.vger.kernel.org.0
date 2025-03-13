@@ -1,54 +1,53 @@
-Return-Path: <linux-kselftest+bounces-28907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD07DA5F142
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C81A5F15A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:50:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF37D7A6BD3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:47:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20B3E7AC91D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C14265610;
-	Thu, 13 Mar 2025 10:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C84A266EE6;
+	Thu, 13 Mar 2025 10:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YjttR443"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mUhcr7a7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C201EE013;
-	Thu, 13 Mar 2025 10:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AAA13C689;
+	Thu, 13 Mar 2025 10:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741862896; cv=none; b=rUI/u0LFgrCMbiSGgkyVqjLp6Nr97MuNtvMWVaQHwsTVeBh+XqSWknOH4Yp1QWMSxFyNyQUY9I6q0uKAKstOrLcxq5HHOZroUwo6GAY4SvcX12vLN52OLPX7FmmSaF/rxOYQaLGBG//c6j99SVgKziF/iiU2X5QvNRDTEqIZfp0=
+	t=1741862898; cv=none; b=q1GTdkmxR4KZALPj2kRFwV51x/1TqlsbmzRBVQJciuHEYTUmcntLcHhORgeVre/hbvlCY+XOVlQZ7Gg9Mw9XHrtnY/GtuVtJH/7ZDlC+fYOTi8s5xOM9qsmc3tKYx+BhXrgDBLfjcHMZ3r9cLM8o2GArb7kKhwyDFmGtvHeHI8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741862896; c=relaxed/simple;
-	bh=jIrgB+Of8GjIDCFndWRj81685Oli/mbEm6qoFYFa2yY=;
+	s=arc-20240116; t=1741862898; c=relaxed/simple;
+	bh=jGkhlWk2tTegMQiLWtrHHSTp67ji5KdWHFJVe5+xJHU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CRkr5mfRQ6s7EYnIbO3jXynRyRTleBXFEK9s9AMWLg9WyKd+FwwY/YggDtCRZyZOfI9pBySd3MAHQw4pFAO1Bk14KkqWEyJ2+eMmuKPWyv0+jGvOLcyLrLbaZXOwKk3DK4ujG5vssMyVRHkmI4WLpY1or5hU9Jl7CIc7uegqjho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YjttR443; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=UzM/i8VlcTMlpxUQZr1Q4qsSQMUfUvuwdpn9sK3NFbNkpZZUSFKVQBmjUx5TKS7xZGE9bpMab0R9X4FzTg2lw1XV63TlS7cKmzTTHW95fmp948tJbU5l0V+6JVVL/izeYzE3AH4NuNwChHvAU/nDuhSjpB5ZW5VRWiBc2/sR5ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mUhcr7a7; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BDA6C43C67;
-	Thu, 13 Mar 2025 10:48:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FB01431BA;
+	Thu, 13 Mar 2025 10:48:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741862886;
+	t=1741862887;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rmVbak8eK+3pmfHwySA9orkO+49ATky8BJ/0nzXmFQg=;
-	b=YjttR4436+6VI8Zi9jf0L/AYsu6A5MtafcwfFwiThEihasOzpr7+dn8Oq/xtsgBguiGEZb
-	fEz6DTM7ts/VAp94pwUcLCfkTDUyVqcTzjVZ5CKXAWB7a4J4HGYmh4rpdERmindLqcm0+s
-	O3y2cReKQqBRsM2esGD1SwzK31WP3n9rkO74qOBheWUXkjxrzW/fRv9hrz8t+Qn3DOh9Hi
-	vnirruk7cN11aPwvG9UblAzMmHG2jEMXdcat3966q/P9fN8kOqsH3XBOH4P0pra9nQlePw
-	+9i4/2EIOhv3S0f0HO5IrihSlvfWcPSfek6AxEexiCXnP94oOLgDunZI1CxsIA==
+	bh=H45c4NzZhV5gYbfD8p5CMhpXXGWiV6YgeCu5YDP+XW4=;
+	b=mUhcr7a7R/Grp7JlmYSr3Lk9L79pj4AWSftq0bN46L5EIZxe2YwDCRvUn9QB/sSFVf4ruG
+	iMsnrD6V7xD2K1QKX2m9EaFMsJXDTLTVKU79LcV9AWsqu9TscpRf6axzaPEijqzCQoUGJi
+	DrzPWtFuwys4yqrC0joonYcGIZC3SHjgtGS0hlzbPVFVOkpeSscgT+H36pPl19zYGf7VrB
+	HSJwg0ym3h9v/aABkO74Icxqjq0hUeCWGbqGOMmzB9wfELrfmtICLv6X56pqADesJFiOlg
+	MY3+rdThgF4e1mNMMEbfERj1ydQ9W1/L2wYUO/jGURkxuh5VaFCNBG6yEj46Xw==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Thu, 13 Mar 2025 11:47:59 +0100
-Subject: [PATCH 01/13] selftests/bpf: test_xsk: Initialize bitmap before
- use
+Date: Thu, 13 Mar 2025 11:48:00 +0100
+Subject: [PATCH 02/13] selftests/bpf: test_xsk: Fix memory leaks
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +56,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-xsk-v1-1-7374729a93b9@bootlin.com>
+Message-Id: <20250313-xsk-v1-2-7374729a93b9@bootlin.com>
 References: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
 In-Reply-To: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -86,37 +85,94 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdejjeehucetufdoteggode
  hhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhihkhholhgrlhesfhgsrdgtohhmpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopehmrghgnhhushdrkhgrrhhlshhsohhnsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomh
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-bitmap is used before being initialized.
+Some tests introduce memory leaks by not freeing all the pkt_stream
+objects they're creating.
 
-Initialize it to zero before using it.
+Fix these memory leaks.
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/bpf/xskxceiver.c | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 11f047b8af75262b4bd5490ccedda00db4a639d2..3585c5afe9842b59fbd50256e5bc83a58a0ee38f 100644
+index 3585c5afe9842b59fbd50256e5bc83a58a0ee38f..f43a6ab524f4758d0e155c254af3838b4079df13 100644
 --- a/tools/testing/selftests/bpf/xskxceiver.c
 +++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1265,6 +1265,8 @@ static int receive_pkts(struct test_spec *test)
- 	u32 sock_num = 0;
- 	int res, ret;
+@@ -791,6 +791,13 @@ static void pkt_stream_receive_half(struct test_spec *test)
+ 	struct pkt_stream *pkt_stream = test->ifobj_tx->xsk->pkt_stream;
+ 	u32 i;
  
-+	bitmap_zero(bitmap, test->nb_sockets);
++	if (test->ifobj_rx->xsk->pkt_stream != test->rx_pkt_stream_default)
++		/* Packet stream has already been replaced so we have to release this one.
++		 * The newly created one will be freed by the restore_default() at the
++		 * end of the test
++		 */
++		pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
 +
- 	ret = gettimeofday(&tv_now, NULL);
- 	if (ret)
- 		exit_with_error(errno);
-@@ -1455,6 +1457,8 @@ static int send_pkts(struct test_spec *test, struct ifobject *ifobject)
- 	DECLARE_BITMAP(bitmap, test->nb_sockets);
- 	u32 i, ret;
+ 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(pkt_stream->nb_pkts,
+ 							      pkt_stream->pkts[0].len);
+ 	pkt_stream = test->ifobj_rx->xsk->pkt_stream;
+@@ -818,6 +825,22 @@ static void pkt_stream_even_odd_sequence(struct test_spec *test)
+ 	}
+ }
  
-+	bitmap_zero(bitmap, test->nb_sockets);
++static void release_even_odd_sequence(struct test_spec *test)
++{
++	struct pkt_stream *later_free_tx = test->ifobj_tx->xsk->pkt_stream;
++	struct pkt_stream *later_free_rx = test->ifobj_rx->xsk->pkt_stream;
++	int i;
 +
- 	while (!(all_packets_sent(test, bitmap))) {
- 		for (i = 0; i < test->nb_sockets; i++) {
- 			struct pkt_stream *pkt_stream;
++	for (i = 0; i < test->nb_sockets; i++) {
++		/* later_free_{rx/tx} will be freed by restore_default() */
++		if (test->ifobj_tx->xsk_arr[i].pkt_stream != later_free_tx)
++			pkt_stream_delete(test->ifobj_tx->xsk_arr[i].pkt_stream);
++		if (test->ifobj_rx->xsk_arr[i].pkt_stream != later_free_rx)
++			pkt_stream_delete(test->ifobj_rx->xsk_arr[i].pkt_stream);
++	}
++
++}
++
+ static u64 pkt_get_addr(struct pkt *pkt, struct xsk_umem_info *umem)
+ {
+ 	if (!pkt->valid)
+@@ -2057,6 +2080,7 @@ static int testapp_stats_tx_invalid_descs(struct test_spec *test)
+ static int testapp_stats_rx_full(struct test_spec *test)
+ {
+ 	pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE);
++	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
+ 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(DEFAULT_UMEM_BUFFERS, MIN_PKT_SIZE);
+ 
+ 	test->ifobj_rx->xsk->rxqsize = DEFAULT_UMEM_BUFFERS;
+@@ -2068,6 +2092,7 @@ static int testapp_stats_rx_full(struct test_spec *test)
+ static int testapp_stats_fill_empty(struct test_spec *test)
+ {
+ 	pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE);
++	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
+ 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(DEFAULT_UMEM_BUFFERS, MIN_PKT_SIZE);
+ 
+ 	test->ifobj_rx->use_fill_ring = false;
+@@ -2238,6 +2263,7 @@ static int testapp_xdp_shared_umem(struct test_spec *test)
+ {
+ 	struct xsk_xdp_progs *skel_rx = test->ifobj_rx->xdp_progs;
+ 	struct xsk_xdp_progs *skel_tx = test->ifobj_tx->xdp_progs;
++	int ret;
+ 
+ 	test->total_steps = 1;
+ 	test->nb_sockets = 2;
+@@ -2248,7 +2274,11 @@ static int testapp_xdp_shared_umem(struct test_spec *test)
+ 
+ 	pkt_stream_even_odd_sequence(test);
+ 
+-	return testapp_validate_traffic(test);
++	ret = testapp_validate_traffic(test);
++
++	release_even_odd_sequence(test);
++
++	return ret;
+ }
+ 
+ static int testapp_poll_txq_tmout(struct test_spec *test)
 
 -- 
 2.48.1
