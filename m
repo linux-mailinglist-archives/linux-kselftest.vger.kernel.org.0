@@ -1,234 +1,272 @@
-Return-Path: <linux-kselftest+bounces-28876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DA15A5E908
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 01:41:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B826BA5E948
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 02:17:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFC80189CA21
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 00:42:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2C0E189D336
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 01:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832D4C2D1;
-	Thu, 13 Mar 2025 00:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC2013C918;
+	Thu, 13 Mar 2025 01:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kz78qPAY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MOZvcPWq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDC62E3395;
-	Thu, 13 Mar 2025 00:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741826512; cv=fail; b=NEFQ6ghu3L3WNIjGOT7lhsd14NkGg4kvUO5BLK8RsnS5DB3cvb3eYRLm9QlIHg9hg3HHDQMayWSFB9NE0ZL10Mhnp7X0mZqv924TyWoAij74wxn/y2fjxfRqBPUixaM8JFzngrdV25v9l1vDvGcp1QfjH2WV23BVqcdO9iMsAkE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741826512; c=relaxed/simple;
-	bh=T8/fATchDl9gZgddICmqgZ6MSpaXo/05Ad+nXyX4fZ0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=nLkYBz60Tco4iJO48Ijq3iq7H/2wyh3XCggITYkxO2ICouzIDg9P4KF8joLUHAUIsM6TEJ2QTvrA4NwSlpArOjHeKeNiokDvsMNMJFVBvAx4xwSM7lceGDVlneMLoX/ZXWmv9yd1/6FvZ5XJ6UGUA6+jgxl7xU1ojMUmewfj6pw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kz78qPAY; arc=fail smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741826511; x=1773362511;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=T8/fATchDl9gZgddICmqgZ6MSpaXo/05Ad+nXyX4fZ0=;
-  b=kz78qPAYxNCmvyDMFjwyRUSnJ8FHYDXRgYLbGqFxqGFV5MaFUGpP4lxV
-   81VUk3vKurMum5SshdwFNiIbY0uM957JMSFPuaREqRIHkwFRfKFoOvuLJ
-   UiTlbORqc0s54/0nfy0xVFZJBsh5LwTxY+6IPosXeQwUnh4s4F/agcDo0
-   crGz4eBZkEzUYR8ZeAv1FGhm0C3MNzMDveqxntVrWnWSRPU9TGqd9e9nX
-   x0eB9tm1YzyQG4UdPQgatrqSpqwx1IHvpE/7wGAlzpsSzdxqjSarW7zAZ
-   1DExObOavRWPmz5dFgY2ys+Qu7VhKIz7XGK67GO4wHUBVbzQEUF4EG7gI
-   Q==;
-X-CSE-ConnectionGUID: h41XPe0oQWeX7KqBYa2b5w==
-X-CSE-MsgGUID: 67gagb6tQk2ys/W1kQSZGQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42837213"
-X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="42837213"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:41:50 -0700
-X-CSE-ConnectionGUID: mwpE2CtbShWIC5E0UOAXlw==
-X-CSE-MsgGUID: O8JdwxHdTm+ShEffu2ZllQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="120756368"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:41:50 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 12 Mar 2025 17:41:49 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14 via Frontend Transport; Wed, 12 Mar 2025 17:41:49 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.49) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Wed, 12 Mar 2025 17:41:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RNZpTOSucmp3n00Wm+A3RMD6WzAnvfv3Cv6feWl1RMsX3aXZB5Jv/NrHjpOjeRsAVvkKUjlpir2UcXH71+yLR6pSjT8UQuDe+BYMuyZRqQEPQX8d5SDLVgFM9JoHLJLwa/o5IjU0pncLXKKfJnZoFpgdRqF7ExGqzBjogWyj/75v3fMdIyFLrHVRdwB5D/lQir83jyiNTk8kYboxgWC9cOdKprDJYBGNDeKc8dNAhd/MTjd4zFdIMZEqc6EGeRIbrWFj1UhZFRTJcIjsayZJcUmWTXmMt3EWahwkQbIU43lOwOoXmZ8JAsSOZNIfVxtTO7sRvw68kLqHKPw9gO/EMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2dMIzgWgzrCGMipIaidTn9MJCiDppqxcdacIooIBtrc=;
- b=mzAnobnhi8hrt7bs0fB2Bk2tD9YkQS54Wy9f/vSLp0FzmamWQ8pBvhwkUHLOB7oVclYsQzcvO087h+20v6apC09ofHVKcGnl4MzcG8p9RIvoKBOc9adYQljnyPHQugk09Edh/Jc9KpjbfJ3PutyqmJCFtOD6J1L2HLHXukexis6fQxjJt+OLk6phm7JJ5d+POz98MiYaaEG67pndke84eY2axwNFPFj8d9nfrNY6fxv4wNnYXQJBqUPCUv7M9ptoTIRGUdXvXDGwAJOhVr5SKqI6Mh/gLJK4UvtUymHknc0lNQ2o/uywjo5HDut82qQG9rutjolMsIINkQo0mM9qIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
- by DM6PR11MB4625.namprd11.prod.outlook.com (2603:10b6:5:2a8::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Thu, 13 Mar
- 2025 00:41:05 +0000
-Received: from DM4PR11MB5423.namprd11.prod.outlook.com
- ([fe80::dffa:e0c8:dbf1:c82e]) by DM4PR11MB5423.namprd11.prod.outlook.com
- ([fe80::dffa:e0c8:dbf1:c82e%6]) with mapi id 15.20.8511.026; Thu, 13 Mar 2025
- 00:41:05 +0000
-Date: Thu, 13 Mar 2025 08:40:50 +0800
-From: Philip Li <philip.li@intel.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: Tamir Duberstein <tamird@gmail.com>, kernel test robot <lkp@intel.com>,
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda
-	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng
-	<boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	"=?iso-8859-1?Q?Bj=F6rn?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin
-	<benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, Alice
- Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo
- Krummrich <dakr@kernel.org>, "Greg Kroah-Hartman"
-	<gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>, Bjorn Helgaas <helgaas@kernel.org>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-kbuild@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-	<linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] rust: enable `clippy::ptr_as_ptr` lint
-Message-ID: <Z9Ipko8DBD2cz1nF@rli9-mobl>
-References: <20250307-ptr-as-ptr-v1-1-582d06514c98@gmail.com>
- <202503120332.YTCpFEvv-lkp@intel.com>
- <CAJ-ks9mkbs9KG5D5yETvOJfeqyzTts1gVZyNAogbxjXbwOreZg@mail.gmail.com>
- <CANiq72n2cYvAWkz+QwG9++NknaN-A2g=N4AeatADwRZ1pWtk0A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72n2cYvAWkz+QwG9++NknaN-A2g=N4AeatADwRZ1pWtk0A@mail.gmail.com>
-X-ClientProxiedBy: SG2PR04CA0165.apcprd04.prod.outlook.com (2603:1096:4::27)
- To DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5111C27466
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 01:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741828580; cv=none; b=njpK4mCovw/exji3v4xMfe0WjmZDaCe+YNFLHt2FTH3P7F127B5a0ef2wZ4zvqVW/AJ/GFMH4X8raEh7RkwhIMzIzBxWOtXaGu5a3i+ybXco8QN7JRCQU+6hIIfGhCVMCwyYqGmfs4yJr8P9tO+lXdeO2y2uUr1FYDR2IvxmvRc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741828580; c=relaxed/simple;
+	bh=721uMLq5LFnuXA+9nIjHO+clfJHeej0JcN7/Aa5K9B4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PSTTEJIoUOEmtc3qZYpzujoyrNvwi+UbkplhLow/ECzGD4UaKKeTcCf+GPWY4HRh1+QUleG6p1eogoFWB2sJ7NzvR4vEARudOX14RkzQjm+5iXx26EdXXukhj8YhVQeq2IpicS0OKxQ4C4fzuP39kvMl3MweuJECwJRAHVruGus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MOZvcPWq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741828576;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AogDjbH4EuWFnB9nW79HasahXRM+mCBIQhmErtsSbO8=;
+	b=MOZvcPWqp0YVsx6usrPOlpXqK0Nh3E4zM/0kPocbo0eCzHN0co+PCrNyQQqc7BHgqYJ0i/
+	yNhzajENNEjZCZS1A3waDL8P+XtMATQK37IXvRSjY3asKbDR4fZCIHj4VA0Jjhd9P2gQTY
+	z0NVxVXj7D4fcoLf6IcNFrTo6pXXl68=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-379--18_BWj_P3mevjH4luh9EA-1; Wed, 12 Mar 2025 21:16:14 -0400
+X-MC-Unique: -18_BWj_P3mevjH4luh9EA-1
+X-Mimecast-MFC-AGG-ID: -18_BWj_P3mevjH4luh9EA_1741828573
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5e5edf8a509so316936a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Mar 2025 18:16:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741828573; x=1742433373;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AogDjbH4EuWFnB9nW79HasahXRM+mCBIQhmErtsSbO8=;
+        b=H6etnDhYG0eMjj8B7fx3bvVbg9kTwYOIfLw5nOMIQW63/K5gN9fMmMqR6BVdAHoFyQ
+         W8a+2nI09EPdB2LZ7n8fmLEBFURcCGCTKBU/GRUYG5Pvn58EBvpWJ6tTakeKSbQXJaKQ
+         25wfMwtQ3kOXwVj44QhapctpQRVDJObzX30BPTOTxIR1qrNMmV7+Xv8VPW79m+uyNafW
+         sAEi9O2p9DVmJztesXQ5G4iaehr8EL5nX0fZ5zFiw0bvAtrAy2KR7IpT0OpWk1nWfAtl
+         tJz7L1cjiyWRG5VAABpJsKNmf3FkD8Ueu67CJb07y22mTQsKSxJlTsH3FcffjAw1g3+d
+         n2sw==
+X-Forwarded-Encrypted: i=1; AJvYcCVNeSI6Jom9PnAlQdlOs7ZUDzf2UaS4XleonvnMGctBABrIJu9UK6ao2/ZfuSutHyfn4UiIRRpz64fL3C21JIE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRVihjgbIUlPvWp29OFhTHDUoH5UqxrVQrXajdDntZ0Ug12dvH
+	j+mXy5Jr9SL+vJEPlOmxiscCabKsNzTMAW+fKV7S9/8MTE72oDskxwaIqLXYGe1ZIE1pWvXBO9C
+	P9LUbNHhKUhIuSQNxmkPK9k4PP9hyOO574r7sVh3hT+ZTS/I2DQHZ4b6BgU4qXNxxnC+SypBE3e
+	iXrDBofA2HFztLEzZ1Oy5YkY81RU0oBzNXl0fOcniJ
+X-Gm-Gg: ASbGncuIglo6wozZaJn6D2f2Pn2fX4r0y8DDtdBTQ2rKDY6JISwTYjXz+fdo0pb0QoC
+	I3eN2sv+RfEoKRVkswHQbE5gVrHAfqFCrGh/oAk8yFho9DSgJxU4lcm+4pvfEhnJL+zZYbkFxBQ
+	==
+X-Received: by 2002:a05:6402:26d2:b0:5e7:c408:7b02 with SMTP id 4fb4d7f45d1cf-5e7c4087bb4mr4445096a12.24.1741828573081;
+        Wed, 12 Mar 2025 18:16:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFsqrjx1jU33odwiOgIHpXyVpWnebktUx1CiaLawfB32JjJhcFs07A39GAWg4iQJxP627Dr4vKNGHjojQEG5uo=
+X-Received: by 2002:a05:6402:26d2:b0:5e7:c408:7b02 with SMTP id
+ 4fb4d7f45d1cf-5e7c4087bb4mr4445075a12.24.1741828572706; Wed, 12 Mar 2025
+ 18:16:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5423:EE_|DM6PR11MB4625:EE_
-X-MS-Office365-Filtering-Correlation-Id: d529451e-818b-486e-cd7e-08dd61c7bccc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?aGhlNVlZRC9IY1ZMR01iTE8rMlFPcEV0YURoQUpZS1daQVRRVi9ERGY0NENZ?=
- =?utf-8?B?bXRERFJGVTFvb1BVOWJWV25ia3RwU2g2eSsvRVF0REluNURTUWtzeUdhSCs4?=
- =?utf-8?B?MVZxQWE0bFY1NW5JR3paVm5aSWhyZzhoYlNPNEVUK2gycytJZzhVZUJmcEJm?=
- =?utf-8?B?OUNKdVQ2dEhXanNqamI4eXlmb3ZOc3JlWWhRNkpGODNhZWVnd3dsSGFKVURN?=
- =?utf-8?B?ZFh6QlBrRzRBYVJHV2dmS1lIT3p4ZCtWTnhiczZvK3o2VVFpSEtaZlpMTmVj?=
- =?utf-8?B?Z2UxSGJZWTdxN0czVGY0WllROEd1Wjd6SUkzMnptMTNFQ2dUY3o2RUZ3WXVV?=
- =?utf-8?B?a0lGUjZ4SitCMVU4c3BreHpQcUcvUTVmYVByQWk0eVF6YngydEN5TkRjUm0z?=
- =?utf-8?B?Ri9NdmtaS1JEVGh1MGFuUWdCRHhRUkJqWUpEUENrRU1ubUZDUWhiNEJRb3FM?=
- =?utf-8?B?Umd0MFU1WUdvemU1UHN2by9USlV4ZUZrMU9ZU2R4ZU9VTDhCYjFXU2hMK0ov?=
- =?utf-8?B?MThDK2RPeG1ON3hrbm8xNGIvcjd0NDd1ZFJJYTE5UG5uWEJaQkRiUitRbTFG?=
- =?utf-8?B?QzBnWUFWcEx2Q3VSNEpNUTlyVEcwYWxZY2Zlc3JFOUhHcjloSVB4NmI3b0lx?=
- =?utf-8?B?TUpmU0JrUUc1dWhRWnVyYzVXZEpWQmpDM0hLNS9ZQURZNkZIem8xMFRybWRa?=
- =?utf-8?B?UWgxTzhXRzJmcmxCSithdEl4VWZsaGRETzNib3gwODV4OEk0WlRuMTk5YlVl?=
- =?utf-8?B?L0lBNGVLZmRrU1VadGhyOFpQM2ZBUFVRRVg2dnlFZTZ2L1VRb2l2L3l3UVEx?=
- =?utf-8?B?bDBZT0t1QnkvS1FHcEUxSEJ6b0J1bmRXMHZacWo0OTZxZFAxdTdwL3lWR3ZV?=
- =?utf-8?B?Tm5OMWVGQnpDN3hJY21KT25pbXQvMVpSdzA5eXAwN2l0aEpXT1drQWlNOGtv?=
- =?utf-8?B?dzNWQm45ZDhWSVlKOWJLa3prK20yR0VVd3AzMndUMEJmS1duVzBQN2VsVUdF?=
- =?utf-8?B?MDA5ZTBJQ2tXVEFKUEpKRkQyY3dOd0lkV1E1OXJwMVE2UVFYTlJsMTJxelR5?=
- =?utf-8?B?QkJmbWZtZnJZS2NkbS81K3dZWnVOazRMTmtVK3luR0NsRDh2SC9kdlQvQzlC?=
- =?utf-8?B?YkFFblc3azRnQTQ3UEY5YUdYckFLR0hYQ1FPaDFJVjRFUGhpOERCbW1sblUy?=
- =?utf-8?B?NUlzMkpuVjErTGpoTHFYODdDcllzSVlyN0thSHpqVzdnc2gxZ3JTeU1yYW4z?=
- =?utf-8?B?MEhOY2xPRTdrODlSS1JFcFVNTlEwOEVmOWlCWXFmdDUvZHRUVk9jcUxsamtL?=
- =?utf-8?B?S0FSNGRrN1UwZEsyMzR1UytOYUo5N3pnODJpQ3djU0l2OExLcFV5aFhLbDJr?=
- =?utf-8?B?R05OVG03TFhhVWVqMElidHZrZ2M5K0VSUThlZ0hKYzcwbjAyNVRxWHpXSHhv?=
- =?utf-8?B?T2FnUkxiUDNDcVFFOEUxLzJaZHNLaFpzVFBLVFkxdERMZldiVUEwOHhDUzlV?=
- =?utf-8?B?NmZYRTIzbHJ3MUFySitPT0lEOSswQStLNFovOWV0U2loOUtTV3ViMmo0aSsw?=
- =?utf-8?B?QlhjSFNWMVZYbXdrcG5ZcGdHZ2lBcGpYUE4xTzhiaTlIN2NxSkpBcC9lTC9Y?=
- =?utf-8?B?dGYxTW81K05DbzVudzlUTnM0TjdmS3NtNXBLMlVVOEI2TlZzTHNmSlVlbFA3?=
- =?utf-8?B?bFR3TjF2UG41cDJ6eUFWd1hLWHV5bG0rY0htU1JXekF3YklIZWxvYi9DbG02?=
- =?utf-8?B?MUY2Nm5MMTIyZFNQdFh5ZURNcXdvOTlUNzhlMG45MlhNZXp1UnJWbjVlazlP?=
- =?utf-8?B?dXNKeFBMQS8xUjVOeUZpUlIvU2lVUXE4TkdxSW9QN2ZydTRJSWJlWjF5SC93?=
- =?utf-8?Q?IBxNWhVamSIv3?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5423.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UU92Z1d3NFNGWkNlTjlNaXl4ZHBOZmplaXZMOXRHMiszdHM4ck5EMThFSGlC?=
- =?utf-8?B?WkVBY04yZnBJYlpuUXdSSk5UMDE3OHZBeEhqeWo4TlB6aEp5NmdWL2hJNHNj?=
- =?utf-8?B?d1ZGZGRsTzJLNkVGdk11VFdxSFovK3ZheXhpalRvYVh0eVQwNmt5SHBrUW5T?=
- =?utf-8?B?Sythbk12RjlKNkh3WDVBOTNHbDhYVUNIUEJrZXc1VEhOY0lnWkxIRDNoTytP?=
- =?utf-8?B?cjlXaVBQNk9WS3M4c0JPb3FvR3YxNENORSt5UGRTYVNHZjNqNkVKTHYzSnBU?=
- =?utf-8?B?R1crclo0TGdIWERyc0FUU041bU5lZTYxNm0wWWJJSHpIVW5HVm5nZTFiVXlp?=
- =?utf-8?B?T01rdXZUU1hucWxveE9CK2ZDaXMxL2J6K2NUcm00aWtwTmwzWUZLanFVbXk4?=
- =?utf-8?B?bEJGTXdjL1BIY2QxeHljUUdSZW9sOUl3Tms1anRCSk1sZWxNUXFEM1pnb3R5?=
- =?utf-8?B?Q3NuZFd4cDVuVEhLTzBwMDNEVERnY01LY2ZKZjdSUVUvM3lhdURRQTNtWmdi?=
- =?utf-8?B?L29YQzd2MTBScHdMUUFocmNGOFZBYTNBYmM3c1lveXQvS2U4QzhHUHRVWE9E?=
- =?utf-8?B?Mk4rMmwyUkN1bHlqaEgweHdhWFE5NExKQ3dyOHdleVlpZHNzQTRqcnNIVCth?=
- =?utf-8?B?aE4rL2M4MFphMENEMFFUdlhaZ2J5eWRLZzV6dzZ1QVZGK2dnU20yMmVLMCtm?=
- =?utf-8?B?VlFMZTAyVXVsVzV3TUhBaFJhVkd6R1o0N3BRVFlXZ2p2aVQvQW5icDllMkxG?=
- =?utf-8?B?dTdFSzVmR0syckp1RWdIZENPOFBCeTFDd3Q1L1NyS0o5UGNJcGNraFo4aVZo?=
- =?utf-8?B?azUwcWNPd0ViUnB1RHR1VlBoZEZnNnhNQU05WFI0OE1FOU15R2Y1RGI0ekJJ?=
- =?utf-8?B?RVJmamdZbk96cGFWaUFwZ2ZQRVVzc2pkdWNXQ3dQdHBmR3Z4ZTArV1Q5T29s?=
- =?utf-8?B?Wi9PQ0tNUUVIRmNJY0pRdVFEbzBkWHE5N21EdzBLSDVjZzZobWtvQ3M0MGNY?=
- =?utf-8?B?QjltQkJOQ0FwUkJzbHBtSzk0RG84NS92SHFxdlRteWdhQXJjUVorRytkMEo0?=
- =?utf-8?B?cFJIV2JQNWJHcDlLemtsWDFjSC8ydVRQYUREYldZQjNzdzA3MjNlYVZaNWlK?=
- =?utf-8?B?T21TVi9PbVEzcFZYRkpXT2ZPZlBnUXpLVXVjYzJRZ3I3bUE3c1JVMVBTUmJa?=
- =?utf-8?B?bi9SS2FlTGRFRTBsQ1Q5YlBpWlprWThwdVpmZ3Y4aVFFSXB2ZkNKRHdxbUZ1?=
- =?utf-8?B?SkZwUUtaU1gwZ0NocFNtVStXWGpielY2M0lrbzJaRzFnblBnd3FzN2grRTB1?=
- =?utf-8?B?UGNrcjE0eGYzSUhIb1VHTVYyZURnMFU0THNWaGhwaHdITGdhQWgwaXBpbXM5?=
- =?utf-8?B?TFFWUzErRFQ3RWdiN2RMN0w1UTJhMkUvd1JmWmR4S1FicnhaVU0reU9nSFA5?=
- =?utf-8?B?ZFpjbk1RTFJDay9LeXBxUm1kaTVzZG9kSHp2aVdSTlptRGh1RlgvRlF2UjN5?=
- =?utf-8?B?amViM0VlNTlFWFhOcnlhbjgvL3VwM2M0K29LQ2sweCsxYzNkUzJsQng3U3FV?=
- =?utf-8?B?S2RoTE91YU9YYWpLakUxck1kT3k1bUtTNzEzQlpMYXJqdUJuYWl6MGZzaTQv?=
- =?utf-8?B?L0FyRS9Vbzk2ZEJpc1BwNWhCSWVwbEFyNEZkUDBNd0FoNjJieDZLd3ZEQmtB?=
- =?utf-8?B?SWJsZ1hkTUVRSngydDdNcGdqZkJhUlZGYnZWZzB4aFlIRVM2dlEvb204UHIv?=
- =?utf-8?B?RTJQNTk1TkNSTS9FZTFKZUFtZGx6c1RMTklHQUlMbHNKSElMOWFNZW5naTB5?=
- =?utf-8?B?QnRVRW5yWTNwM09JM0dPSkJsSHppdTcxeElDc2VPbHQ0c0NiclhVZVZveVZM?=
- =?utf-8?B?VmxoM3FiRlV2SUpRY2xqbUljVmZ3WG1WS0FBVWxnS1pGcm5VSk5FdVRKRVNU?=
- =?utf-8?B?bnhyWXBRR21kOXBCbVlTcTFSMlNkZ3VrTXFMQ2FvVXJ1NFBTUjgyYXZPYklk?=
- =?utf-8?B?UTlzNi9vdDZ0QkNURHVKOG1qT0RLZ1pNUjVTNXpmbGptN2M3cHpXdk9IbDNt?=
- =?utf-8?B?NmcxRWVVYnNLYTlaVWtsUkJ2WUlFaVFESmZvR2F2d2ZXQ05MSjhFdks0WG03?=
- =?utf-8?Q?oxWqV/UazH36kOq7MFi4LtNsM?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d529451e-818b-486e-cd7e-08dd61c7bccc
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5423.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2025 00:41:05.3457
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aNXRWf7PKQZIPVrsC354c32MBYnhmVt8W4qkZQdIFlV2FUn5Jui67xr+Y9mxpcErZqK+fc05MBVLBYkDjT9X5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4625
-X-OriginatorOrg: intel.com
+References: <20250307-rss-v9-0-df76624025eb@daynix.com>
+In-Reply-To: <20250307-rss-v9-0-df76624025eb@daynix.com>
+From: Lei Yang <leiyang@redhat.com>
+Date: Thu, 13 Mar 2025 09:15:36 +0800
+X-Gm-Features: AQ5f1JplCJM-om_OaGqMtL3AEdit82ixIY48vsrcWfisxBqhfRPtd2ySurX_Fnw
+Message-ID: <CAPpAL=yQAqo=8xC2-HwnSK0MhmBiDoAKUYYKieQYjpAV=DLpng@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 0/6] tun: Introduce virtio-net hashing feature
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
+	Simon Horman <horms@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 11, 2025 at 09:49:56PM +0100, Miguel Ojeda wrote:
-> On Tue, Mar 11, 2025 at 9:44 PM Tamir Duberstein <tamird@gmail.com> wrote:
-> >
-> > By the way, it would be great if the email also included the rustc version used.
-> 
-> Yeah, I think I may have mentioned it at some point... For the moment,
+QE tested this series of patches's v9 with virtio-net regression
+tests, everything works fine.
 
-Sorry about this, I will implement this to make it clear asap.
+Tested-by: Lei Yang <leiyang@redhat.com>
 
-> one can look for it manually in the linked config (i.e.
-> `CONFIG_RUSTC_VERSION_TEXT`).
-> 
-> Cheers,
-> Miguel
-> 
+On Fri, Mar 7, 2025 at 7:01=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix.=
+com> wrote:
+>
+> virtio-net have two usage of hashes: one is RSS and another is hash
+> reporting. Conventionally the hash calculation was done by the VMM.
+> However, computing the hash after the queue was chosen defeats the
+> purpose of RSS.
+>
+> Another approach is to use eBPF steering program. This approach has
+> another downside: it cannot report the calculated hash due to the
+> restrictive nature of eBPF.
+>
+> Introduce the code to compute hashes to the kernel in order to overcome
+> thse challenges.
+>
+> An alternative solution is to extend the eBPF steering program so that it
+> will be able to report to the userspace, but it is based on context
+> rewrites, which is in feature freeze. We can adopt kfuncs, but they will
+> not be UAPIs. We opt to ioctl to align with other relevant UAPIs (KVM
+> and vhost_net).
+>
+> The patches for QEMU to use this new feature was submitted as RFC and
+> is available at:
+> https://patchew.org/QEMU/20240915-hash-v3-0-79cb08d28647@daynix.com/
+>
+> This work was presented at LPC 2024:
+> https://lpc.events/event/18/contributions/1963/
+>
+> V1 -> V2:
+>   Changed to introduce a new BPF program type.
+>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+> Changes in v9:
+> - Added a missing return statement in patch
+>   "tun: Introduce virtio-net hash feature".
+> - Link to v8: https://lore.kernel.org/r/20250306-rss-v8-0-7ab4f56ff423@da=
+ynix.com
+>
+> Changes in v8:
+> - Disabled IPv6 to eliminate noises in tests.
+> - Added a branch in tap to avoid unnecessary dissection when hash
+>   reporting is disabled.
+> - Removed unnecessary rtnl_lock().
+> - Extracted code to handle new ioctls into separate functions to avoid
+>   adding extra NULL checks to the code handling other ioctls.
+> - Introduced variable named "fd" to __tun_chr_ioctl().
+> - s/-/=3D/g in a patch message to avoid confusing Git.
+> - Link to v7: https://lore.kernel.org/r/20250228-rss-v7-0-844205cbbdd6@da=
+ynix.com
+>
+> Changes in v7:
+> - Ensured to set hash_report to VIRTIO_NET_HASH_REPORT_NONE for
+>   VHOST_NET_F_VIRTIO_NET_HDR.
+> - s/4/sizeof(u32)/ in patch "virtio_net: Add functions for hashing".
+> - Added tap_skb_cb type.
+> - Rebased.
+> - Link to v6: https://lore.kernel.org/r/20250109-rss-v6-0-b1c90ad708f6@da=
+ynix.com
+>
+> Changes in v6:
+> - Extracted changes to fill vnet header holes into another series.
+> - Squashed patches "skbuff: Introduce SKB_EXT_TUN_VNET_HASH", "tun:
+>   Introduce virtio-net hash reporting feature", and "tun: Introduce
+>   virtio-net RSS" into patch "tun: Introduce virtio-net hash feature".
+> - Dropped the RFC tag.
+> - Link to v5: https://lore.kernel.org/r/20241008-rss-v5-0-f3cf68df005d@da=
+ynix.com
+>
+> Changes in v5:
+> - Fixed a compilation error with CONFIG_TUN_VNET_CROSS_LE.
+> - Optimized the calculation of the hash value according to:
+>   https://git.dpdk.org/dpdk/commit/?id=3D3fb1ea032bd6ff8317af5dac9af901f1=
+f324cab4
+> - Added patch "tun: Unify vnet implementation".
+> - Dropped patch "tap: Pad virtio header with zero".
+> - Added patch "selftest: tun: Test vnet ioctls without device".
+> - Reworked selftests to skip for older kernels.
+> - Documented the case when the underlying device is deleted and packets
+>   have queue_mapping set by TC.
+> - Reordered test harness arguments.
+> - Added code to handle fragmented packets.
+> - Link to v4: https://lore.kernel.org/r/20240924-rss-v4-0-84e932ec0e6c@da=
+ynix.com
+>
+> Changes in v4:
+> - Moved tun_vnet_hash_ext to if_tun.h.
+> - Renamed virtio_net_toeplitz() to virtio_net_toeplitz_calc().
+> - Replaced htons() with cpu_to_be16().
+> - Changed virtio_net_hash_rss() to return void.
+> - Reordered variable declarations in virtio_net_hash_rss().
+> - Removed virtio_net_hdr_v1_hash_from_skb().
+> - Updated messages of "tap: Pad virtio header with zero" and
+>   "tun: Pad virtio header with zero".
+> - Fixed vnet_hash allocation size.
+> - Ensured to free vnet_hash when destructing tun_struct.
+> - Link to v3: https://lore.kernel.org/r/20240915-rss-v3-0-c630015db082@da=
+ynix.com
+>
+> Changes in v3:
+> - Reverted back to add ioctl.
+> - Split patch "tun: Introduce virtio-net hashing feature" into
+>   "tun: Introduce virtio-net hash reporting feature" and
+>   "tun: Introduce virtio-net RSS".
+> - Changed to reuse hash values computed for automq instead of performing
+>   RSS hashing when hash reporting is requested but RSS is not.
+> - Extracted relevant data from struct tun_struct to keep it minimal.
+> - Added kernel-doc.
+> - Changed to allow calling TUNGETVNETHASHCAP before TUNSETIFF.
+> - Initialized num_buffers with 1.
+> - Added a test case for unclassified packets.
+> - Fixed error handling in tests.
+> - Changed tests to verify that the queue index will not overflow.
+> - Rebased.
+> - Link to v2: https://lore.kernel.org/r/20231015141644.260646-1-akihiko.o=
+daki@daynix.com
+>
+> ---
+> Akihiko Odaki (6):
+>       virtio_net: Add functions for hashing
+>       net: flow_dissector: Export flow_keys_dissector_symmetric
+>       tun: Introduce virtio-net hash feature
+>       selftest: tun: Test vnet ioctls without device
+>       selftest: tun: Add tests for virtio-net hashing
+>       vhost/net: Support VIRTIO_NET_F_HASH_REPORT
+>
+>  Documentation/networking/tuntap.rst  |   7 +
+>  drivers/net/Kconfig                  |   1 +
+>  drivers/net/tap.c                    |  68 +++-
+>  drivers/net/tun.c                    |  98 +++++-
+>  drivers/net/tun_vnet.h               | 159 ++++++++-
+>  drivers/vhost/net.c                  |  49 +--
+>  include/linux/if_tap.h               |   2 +
+>  include/linux/skbuff.h               |   3 +
+>  include/linux/virtio_net.h           | 188 ++++++++++
+>  include/net/flow_dissector.h         |   1 +
+>  include/uapi/linux/if_tun.h          |  75 ++++
+>  net/core/flow_dissector.c            |   3 +-
+>  net/core/skbuff.c                    |   4 +
+>  tools/testing/selftests/net/Makefile |   2 +-
+>  tools/testing/selftests/net/tun.c    | 656 +++++++++++++++++++++++++++++=
++++++-
+>  15 files changed, 1255 insertions(+), 61 deletions(-)
+> ---
+> base-commit: dd83757f6e686a2188997cb58b5975f744bb7786
+> change-id: 20240403-rss-e737d89efa77
+> prerequisite-change-id: 20241230-tun-66e10a49b0c7:v6
+> prerequisite-patch-id: 871dc5f146fb6b0e3ec8612971a8e8190472c0fb
+> prerequisite-patch-id: 2797ed249d32590321f088373d4055ff3f430a0e
+> prerequisite-patch-id: ea3370c72d4904e2f0536ec76ba5d26784c0cede
+> prerequisite-patch-id: 837e4cf5d6b451424f9b1639455e83a260c4440d
+> prerequisite-patch-id: ea701076f57819e844f5a35efe5cbc5712d3080d
+> prerequisite-patch-id: 701646fb43ad04cc64dd2bf13c150ccbe6f828ce
+> prerequisite-patch-id: 53176dae0c003f5b6c114d43f936cf7140d31bb5
+> prerequisite-change-id: 20250116-buffers-96e14bf023fc:v2
+> prerequisite-patch-id: 25fd4f99d4236a05a5ef16ab79f3e85ee57e21cc
+>
+> Best regards,
+> --
+> Akihiko Odaki <akihiko.odaki@daynix.com>
+>
+
 
