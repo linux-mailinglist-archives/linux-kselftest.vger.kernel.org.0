@@ -1,95 +1,101 @@
-Return-Path: <linux-kselftest+bounces-28986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 406A1A60368
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 22:30:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5A7A603E4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 23:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90E8E88096F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 21:29:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79F0B19C54D3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 22:05:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DD11F4E48;
-	Thu, 13 Mar 2025 21:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6874D1F63CD;
+	Thu, 13 Mar 2025 22:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsWMGa4g"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="vNslcPvd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2745E1F4C9F;
-	Thu, 13 Mar 2025 21:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABD41F461C;
+	Thu, 13 Mar 2025 22:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741901401; cv=none; b=WxlqbUuhl5aUsykO9xMohiU/8tiha5xJoYHjJUqESwGaU+Nf0aurm0U3yLgvjQpq3Stjyx/242z3VBbhlpYAzoIhWn54brF7XoXKGt+0szTY4Ap7O7klNvptJPceG1m+CHRmaqeXaCSxVBQRkPmnT8oapcjrTOouy5VP2qNM78c=
+	t=1741903507; cv=none; b=ncaL53BSyPj3adE7I3N0RsDA23UNBeWRjb4XthZpJJqyQHaJfdDe1I7gwT8mW0EI9RB3pQzcQ9zjQKxePULdDVMZNfbPmL5dqRpQI5OPj+GZ4kLmIEX+idLGPTgTs7bwcC56GcsXKaI5HCx8GBVLENf/nZeKgua0AyLwrILVdos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741901401; c=relaxed/simple;
-	bh=+VKA+VjweHOiiA6Qwmrm0Tjgy2mkHOEccZA2UFvXomM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oWf1J50vgHFDJhnXuqu51u6iP1Hxk+jk7CI8XN47NOe0SkQ3ouxmKsHlQ3CD/LqmYT112SyNhXnw10WcrGWXZmelotnjr5JI8FOf96JVgXfCgifVZiIILAfIct2/Vf89AjQqqiYcJ5wYITKHjHRj9iYLtWsCboe1MlH4WB7J8qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsWMGa4g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ED7C4CEDD;
-	Thu, 13 Mar 2025 21:30:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741901400;
-	bh=+VKA+VjweHOiiA6Qwmrm0Tjgy2mkHOEccZA2UFvXomM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=EsWMGa4gDQP8aDS5prx1nSrIXBYfhq8f8OjAJoWOJ0vbYVCW60ondN7l5hKVjyDwO
-	 8pvo/RH5phfy4O6e6aysTT4OiPY1GmEKfkrWYHLwJmfTHFiBsnazwazZXF1MxdEpb5
-	 ySzBZZhz8eUmHwE8+kCE7Gv3sapFhYjAisoxnqQU681JuDN88ZMZrBPhasyydwovGc
-	 m9kv2cJc5ODSu526ekCVZppshCx8JSyZLDCFGQF26N3qeAv/sYzAIsbQU3QHRppng/
-	 //X6V5jpvmUiYLo55dEcJeRpBak13ScJLnUGDpkyDJCJRXNWkEfrrf2rfBqIdHin66
-	 RGUcK9X55utjg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DAD3806651;
-	Thu, 13 Mar 2025 21:30:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741903507; c=relaxed/simple;
+	bh=GxNzFgXlCVEFcpDf3VLptEglWoUTczleCr4VuzyQIr4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=bM6b1vDwiwZCyuulZaq9A3/GVreeojBgyeGdU3lhESOmjWp57ZfnL6/C9N0J2hvd3q6ar9I0EDctkbMkFdPntl7rNUtLkENKiY//qb69xdws1tgM7QGQafGP5WM1eOuXSA3GlvlG50nt6Rgv4fXiC14j2WCMHL1hoSbsZ+uQee8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=vNslcPvd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6615C4CEE5;
+	Thu, 13 Mar 2025 22:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1741903506;
+	bh=GxNzFgXlCVEFcpDf3VLptEglWoUTczleCr4VuzyQIr4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vNslcPvdVPNB7E9fplso2uwQWydxF0LuafyC8Ekj6LJ17WeoKPzAu1lWUeLyq4wyx
+	 YSG2VtnirdV4PAoDW58QNKBURHFBXAkymAmOjx0cdlO9qH75IKZQbVpmmhcAjZ7EP7
+	 0n/ABlCGS0sNpOunuAQvLiC/vVhLZ4IVMsVmABVs=
+Date: Thu, 13 Mar 2025 15:05:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Maxime Ripard <mripard@kernel.org>, Kees Cook <kees@kernel.org>,
+ Alessandro Carminati <acarmina@redhat.com>,
+ linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, Arnd
+ Bergmann <arnd@arndb.de>, =?ISO-8859-1?Q?Ma=EDra?= Canal
+ <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, Daniel Diaz
+ <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>, Arthur Grillo
+ <arthurgrillo@riseup.net>, Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Ville =?ISO-8859-1?Q?Syrj=E4l=E4?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>, Thomas
+ Zimmermann <tzimmermann@suse.de>, Alessandro Carminati
+ <alessandro.carminati@gmail.com>, Jani Nikula <jani.nikula@intel.com>,
+ dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
+Message-Id: <20250313150505.cf1568bf7197a52a8ab302e6@linux-foundation.org>
+In-Reply-To: <c8287bde-fa1c-4113-af22-4701d40d386e@roeck-us.net>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+	<202503131016.5DCEAEC945@keescook>
+	<20250313-abiding-vivid-robin-159dfa@houat>
+	<c8287bde-fa1c-4113-af22-4701d40d386e@roeck-us.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/bpf: Fix sockopt selftest failure on powerpc
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174190143525.1668543.13643963297500248879.git-patchwork-notify@kernel.org>
-Date: Thu, 13 Mar 2025 21:30:35 +0000
-References: <20250311084647.3686544-1-skb99@linux.ibm.com>
-In-Reply-To: <20250311084647.3686544-1-skb99@linux.ibm.com>
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, ast@kernel.org, hbathini@linux.ibm.com,
- andrii@kernel.org, daniel@iogearbox.net, mykolal@fb.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, miaxu@meta.com
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Thu, 13 Mar 2025 11:31:12 -0700 Guenter Roeck <linux@roeck-us.net> wrote:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue, 11 Mar 2025 14:16:47 +0530 you wrote:
-> The SO_RCVLOWAT option is defined as 18 in the selftest header,
-> which matches the generic definition. However, on powerpc,
-> SO_RCVLOWAT is defined as 16. This discrepancy causes
-> sol_socket_sockopt() to fail with the default switch case on powerpc.
+> On Thu, Mar 13, 2025 at 06:24:25PM +0100, Maxime Ripard wrote:
+> > > 
+> > > Yeah, as with my prior review, I'm a fan of this. It makes a bunch of my
+> > > very noisy tests much easier to deal with.
+> > 
+> > And for the record, we're also affected by this in DRM and would very
+> > much like to get it merged in one shape or another.
+> > 
 > 
-> This commit fixes by defining SO_RCVLOWAT as 16 for powerpc.
-> 
-> [...]
+> I was unable to get maintainers of major architectures interested enough
+> to provide feedback, and did not see a path forward. Maybe Alessandro
+> has more success than me.
 
-Here is the summary with links:
-  - selftests/bpf: Fix sockopt selftest failure on powerpc
-    https://git.kernel.org/bpf/bpf-next/c/2d7597d67e3c
+I'll put them into mm.git, to advance things a bit.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If someone wants to merge via a different tree, please speak up.
 
+Hopefully the various arch maintainers will review at least their parts
+of the series.
 
 
