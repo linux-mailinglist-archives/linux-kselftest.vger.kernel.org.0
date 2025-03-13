@@ -1,202 +1,104 @@
-Return-Path: <linux-kselftest+bounces-28963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2516FA5FCE3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 18:02:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB886A5FD8D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 18:20:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93A0517085D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 17:01:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0003D1896751
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 17:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F6F26A0E5;
-	Thu, 13 Mar 2025 17:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335921C84C4;
+	Thu, 13 Mar 2025 17:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QMx8oSY3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhTFLr4N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B5A63B9
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 17:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2A51C84B6;
+	Thu, 13 Mar 2025 17:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741885267; cv=none; b=LoR0rrjAE1dK/WWLlLJtfpD0mZG0lhy7sTdAbVhnafHatY/BRKP5XlQSTRKcvlWyAZTGXQwW56msqlVkpPdD03bv6XS8+bw2noC44cNqzWUZxS4uNZaEr1DC/qSYmYiE3JLKuECUAcwQse3dosW3cJNo0GiEDKDU+3xITq8IZYw=
+	t=1741886274; cv=none; b=fKJSZ6/2AVafjsbjyfFzHUIiXnT3vGUgJxdkhxmZoikwgcNmOefpGCYi9HmzbAi+e1hozIB6fe5YDE0+U3Rt2qJ8EgtJlmo0XdW+Tm/9fNngVjxFIM56ifRRPfDrAys7E8l1w0rRi31f5Zt+VeZcCtqP7ftCSBEA+fy12OTz3kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741885267; c=relaxed/simple;
-	bh=VHxiw1iOPaehIdCmiB9jD7hA9jp4hpkFvH2VdqlEv7w=;
+	s=arc-20240116; t=1741886274; c=relaxed/simple;
+	bh=x0LfkQleJqSHMA533kQRyLGRE1i8J4My1tYGLUMBafM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bd0M1MiHW0X7cKi8YiNi2RAWpoqkM7HhS+U+R5+DIr8MVM3oAoQUVyYArpxk/thrt49vn/2iUj9kpihrTx5qTNnDyCcKL2ZB0fYTq77mosFUOuDFHFRAejVALGNzia9QZ+JOpXUjCUCMf/Z7YXnnwT1zIzMueE+kgmeUl9PWaSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QMx8oSY3; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-223594b3c6dso24510935ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 10:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741885265; x=1742490065; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ENSH6oEAjz00ZnZknt14hjq4bTe+aXnnbXc59If/D0s=;
-        b=QMx8oSY3t0s4thGL2cm25475tnOfDx/tj4RMrib71I0TkO1jqotrZVoiv5b2o783Db
-         ZCTVGj1O8DGt2XHVf29NbbuXAYqc2JCKsqWL5ztBm/R6dxaT4nlakWdxtDmtPYeE8QPg
-         OZlEvt32gymuXeLYDvIx+UYSnEOf5HA0KTTpmNH77ErvOwTey54v4F/bfj0OiSYggdSv
-         8M40WN/tVTifSnZQbrB7yfkrxHTkWYVPAJATwJge2UKOytRF8izPZPkGM3GJW06upIGr
-         yHseYivuB/6jNUUAmQ3YXBQCGp/YLXT/wJWVPUFFwGX7PknPVhN0wlRN5aQNyVx0OcTW
-         UqEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741885265; x=1742490065;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ENSH6oEAjz00ZnZknt14hjq4bTe+aXnnbXc59If/D0s=;
-        b=AB3aiewr1RgxKFXeMiZmS+khFJ/+Wb1EmUj4KvT5A6b0nUT3w62qmuZEZWfTOTRtYT
-         7tcWQcorZhGKzOlMLGW70r8C0dFJ5nz0Ov1vdZQGAN6UjF3dhLCPmHm5pWTIwK7vkKF0
-         sQGRiWSCww0FkkfInIHYXDXEnu6ZtdHUvgtUdDFWsxhDa3vSmLtdhj5bo7SyMB2pbUOu
-         9LOXh6XoHrsrcGfk8Cxz7WJQDevVdNUDncMNIY3EWnRoOCad88sSMIraLQM0CwPG5OU+
-         /uFXmhkX3ONkj2H440go8fydNmkHfswtbkCZMpSVX7GPOPODot5eokuLV2DeCniOKYPv
-         7LPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWUOXqPA+PhiaovYnGOxMOVO7vP7dlY5I1PFwIVL8Uuj7v4UneCTx64x5G6EN54oWZFJqP0Y15owUDkHaqWfeg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIAVO0/6/6/TkIgx8bVEbVKKodvlik/gMYkjGUkJVHO2Cm0hgY
-	kBvJgWVLdGaQ2gIUtGvyfPU1meQBEVIGLsFLdBpJrOcI2K93CSAeNMOnvjkrfQIcP0OVQ40H/s4
-	=
-X-Gm-Gg: ASbGncvklN53+8+gNazdlQmmseX9VzqYyjIYWOPKmJ54ml3GELhJmnP7E5tagn2DJaW
-	cBzj8hNd8yuMIZRYBA508CHCPHy1JzxOy0VoB6HJvsLNXfDk7rxumWIsCvfjkx9ePmz6mJ3V95I
-	3pz8R2MPZHemICn8VNK7AQCVA0vU+QXDq71payt9cskXTZ5oiEbEBzYvP59Sk+Hq8uNnwDvURin
-	RPS2Cdlc88TfdXX8WxnkLFQnb03815707W+apKGdsdgpzAzmT8vU+WyLdbvw9XgVVqbU1R+yp9R
-	gLU11QQuiCWxncruPeGrPW58IDmFjpSgpLqLSIczE62+cDmZFgdG0A==
-X-Google-Smtp-Source: AGHT+IHQMTcJPPra4QR4Z982bc4UAA16JNaqY6kNLE7y6s4ubR1yWd0wLKsyohPsCDtXtyVOiDNePg==
-X-Received: by 2002:a17:903:2347:b0:21f:988d:5756 with SMTP id d9443c01a7336-225dd8cb8ffmr2797435ad.42.1741885265127;
-        Thu, 13 Mar 2025 10:01:05 -0700 (PDT)
-Received: from thinkpad ([120.60.60.84])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7371167def8sm1616117b3a.90.2025.03.13.10.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Mar 2025 10:01:04 -0700 (PDT)
-Date: Thu, 13 Mar 2025 22:30:58 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc: Krzysztof Wilczynski <kw@linux.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=s46NQJmBUJrAoCHH8uN9dQC5Aj3SY7nvK9A9Jc+LN8Qw8oeQdkHQLqdQRMgUEN3dw3KYOVcsLJBi26nhVgIkGfD5A3Ah29BxwB9/4kWABBVWwrg47ExqorbsABA/96Mw+qEbVltMVCvIT+4zKxnTPjw4kAZ1pJsniws+QgNRDLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhTFLr4N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52B49C4CEDD;
+	Thu, 13 Mar 2025 17:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741886273;
+	bh=x0LfkQleJqSHMA533kQRyLGRE1i8J4My1tYGLUMBafM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JhTFLr4Ne31b8oAE7DB2okHcYLVlBcnDz2KSrPKq1bfOx08KKvfQUKkz2kqBNLt+0
+	 xw3//f+ZmNusDqD2VQBDKVCc3lyNPNEs5As0GOPaIVU1Ah/TZxqftpzBqyXiJ6mGWw
+	 VFhByLIf+c59MrlA490XOy0OsI/yo4JLrbIlzCMsFpZ3TCBbX5gDNiLYFncPtZpG3t
+	 3Qe9HprMHPXdSpkXMgzk+Q/NGNhxWaNpEmnncCuhAvrKLixU6mFCOyI8uraA/Ad1zg
+	 iQv5JxHRFlgGk3ftlAa2yRpOZzP3Ki0G1sjN+LwlMaOTOFRw8vBx25mR/0rs8VIY8+
+	 nJFrVge5guncg==
+Date: Thu, 13 Mar 2025 10:17:49 -0700
+From: Kees Cook <kees@kernel.org>
+To: Alessandro Carminati <acarmina@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Shuah Khan <shuah@kernel.org>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Niklas Cassel <cassel@kernel.org>
-Subject: Re: [PATCH v4 5/6] misc: pci_endpoint_test: Remove global 'irq_type'
- and 'no_msi'
-Message-ID: <20250313170058.ncixyafsse5ry7xh@thinkpad>
-References: <20250225110252.28866-1-hayashi.kunihiko@socionext.com>
- <20250225110252.28866-6-hayashi.kunihiko@socionext.com>
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
+Message-ID: <202503131016.5DCEAEC945@keescook>
+References: <20250313114329.284104-1-acarmina@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250225110252.28866-6-hayashi.kunihiko@socionext.com>
+In-Reply-To: <20250313114329.284104-1-acarmina@redhat.com>
 
-On Tue, Feb 25, 2025 at 08:02:51PM +0900, Kunihiko Hayashi wrote:
-> The global variable "irq_type" preserves the current value of
-> ioctl(GET_IRQTYPE).
-> 
-> However, all tests that use interrupts first call ioctl(SET_IRQTYPE)
-> to set test->irq_type, then write the value of test->irq_type into the
-> register pointed by test_reg_bar, and request the interrupt to the
-> endpoint. The endpoint function driver, pci-epf-test, refers to the
-> register, and determine which type of interrupt to raise.
-> 
-> The global variable "irq_type" is never used in the actual test,
-> so remove the variable and replace it with test->irq_type.
-> 
-> And also for the same reason, the variable "no_msi" can be removed.
-> 
-> Initially, test->irq_type has IRQ_TYPE_UNDEFINED, and the
-> ioctl(GET_IRQTYPE) before calling ioctl(SET_IRQTYPE) will return an error.
-> 
-> Suggested-by: Niklas Cassel <cassel@kernel.org>
-> Suggested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+On Thu, Mar 13, 2025 at 11:43:15AM +0000, Alessandro Carminati wrote:
+> Some unit tests intentionally trigger warning backtraces by passing bad
+> parameters to kernel API functions. Such unit tests typically check the
+> return value from such calls, not the existence of the warning backtrace.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Thanks for picking this series back up! I honestly thought this had
+already landed. :)
 
-- Mani
+> With CONFIG_KUNIT enabled, image size increase with this series applied is
+> approximately 1%. The image size increase (and with it the functionality
+> introduced by this series) can be avoided by disabling
+> CONFIG_KUNIT_SUPPRESS_BACKTRACE.
 
-> ---
->  drivers/misc/pci_endpoint_test.c | 18 +++---------------
->  1 file changed, 3 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-> index 896392c428de..326e8e467c42 100644
-> --- a/drivers/misc/pci_endpoint_test.c
-> +++ b/drivers/misc/pci_endpoint_test.c
-> @@ -96,14 +96,6 @@ static DEFINE_IDA(pci_endpoint_test_ida);
->  #define to_endpoint_test(priv) container_of((priv), struct pci_endpoint_test, \
->  					    miscdev)
->  
-> -static bool no_msi;
-> -module_param(no_msi, bool, 0444);
-> -MODULE_PARM_DESC(no_msi, "Disable MSI interrupt in pci_endpoint_test");
-> -
-> -static int irq_type = IRQ_TYPE_MSI;
-> -module_param(irq_type, int, 0444);
-> -MODULE_PARM_DESC(irq_type, "IRQ mode selection in pci_endpoint_test (0 - Legacy, 1 - MSI, 2 - MSI-X)");
-> -
->  enum pci_barno {
->  	BAR_0,
->  	BAR_1,
-> @@ -833,7 +825,6 @@ static int pci_endpoint_test_set_irq(struct pci_endpoint_test *test,
->  		return ret;
->  	}
->  
-> -	irq_type = test->irq_type;
->  	return 0;
->  }
->  
-> @@ -882,7 +873,7 @@ static long pci_endpoint_test_ioctl(struct file *file, unsigned int cmd,
->  		ret = pci_endpoint_test_set_irq(test, arg);
->  		break;
->  	case PCITEST_GET_IRQTYPE:
-> -		ret = irq_type;
-> +		ret = test->irq_type;
->  		break;
->  	case PCITEST_CLEAR_IRQ:
->  		ret = pci_endpoint_test_clear_irq(test);
-> @@ -939,15 +930,12 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
->  	test->pdev = pdev;
->  	test->irq_type = IRQ_TYPE_UNDEFINED;
->  
-> -	if (no_msi)
-> -		irq_type = IRQ_TYPE_INTX;
-> -
->  	data = (struct pci_endpoint_test_data *)ent->driver_data;
->  	if (data) {
->  		test_reg_bar = data->test_reg_bar;
->  		test->test_reg_bar = test_reg_bar;
->  		test->alignment = data->alignment;
-> -		irq_type = data->irq_type;
-> +		test->irq_type = data->irq_type;
->  	}
->  
->  	init_completion(&test->irq_raised);
-> @@ -969,7 +957,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
->  
->  	pci_set_master(pdev);
->  
-> -	ret = pci_endpoint_test_alloc_irq_vectors(test, irq_type);
-> +	ret = pci_endpoint_test_alloc_irq_vectors(test, test->irq_type);
->  	if (ret)
->  		goto err_disable_irq;
->  
-> -- 
-> 2.25.1
-> 
+Yeah, as with my prior review, I'm a fan of this. It makes a bunch of my
+very noisy tests much easier to deal with.
+
+-Kees
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Kees Cook
 
