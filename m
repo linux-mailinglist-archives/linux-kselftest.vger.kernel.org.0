@@ -1,131 +1,213 @@
-Return-Path: <linux-kselftest+bounces-28981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 072EDA5FF43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 19:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9260AA600B6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 20:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE0F1188240F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 18:31:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D107189E3E2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 19:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24FE51EE7B1;
-	Thu, 13 Mar 2025 18:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B16C1F12E8;
+	Thu, 13 Mar 2025 19:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dff/ayra"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sa7H0qjO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F0618952C;
-	Thu, 13 Mar 2025 18:31:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D286A1F0E40
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 19:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741890676; cv=none; b=gHJBT816EVEx71dcW0OOvCdiwmD8akBAnBcdBHthaMLCgT0TeFwm0euGe24QoISo+vK3en+oAtxiPJhjk1WPpDpCT9L5Fm5qeB0R+MnG6C45IFtfwci0bt5LeZ3bv721G7UHGjNC2GV7+pR2OKHbHqZ1oux1zlN+vqhfitVQuUM=
+	t=1741893140; cv=none; b=pNxdp6E/YtS/i+pzOU5AHpHnxxjz92+GMOfY+qNp9d7TGCB5X4P1eEvKZOZkgnp/aYg7yyxpw14zy/m/FIvjSzkfVOUlpqL2IzSxZqj8Frwr7bXzDoQT8q6RPky8MuVR/UEHuKHgOJKgk87NWFLPzX7AI/M1S4DS9X7E1R4jZ7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741890676; c=relaxed/simple;
-	bh=R7IKmWAfEV6dguBunqVGGqHpFRfFDM8SuXUyyQU9jxc=;
+	s=arc-20240116; t=1741893140; c=relaxed/simple;
+	bh=jagCpUiEiGHEWFubbh7emapvGjhnMLj+b75pACy+vZE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sGlOWe324XwVpGMBJ6QFPV52UW2QfT7liW2i03E35dmYoDPRWY7X20f6GVSJ52DeggmO8muwDFHfvzIF+0Dy69vtLnVZTHmJ4AJQekAsJZg6Cec2tg14sWOEH2oWtxmRC+4qtbRSKwBrFyY9EmPqbGLqbSb5Dmwmcyn8Y7V5kjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dff/ayra; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22403cbb47fso27007075ad.0;
-        Thu, 13 Mar 2025 11:31:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741890674; x=1742495474; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jt5WSssG+OEvsuPkFz6BZY4vYElG8JeyaALVDa3jMX0=;
-        b=dff/ayraWXwHg6p5rLQCltUtU/IfTflDLBIUaXJyRSlk57Wm1AbrhmRr0PVMVHsAha
-         F6DE+WtNPHZmlLvyW4UBTt/OwjTVRTfc/qfQYrMa7G1j0bqwKSDr3Oe9tqpQnc8kxwvM
-         4waY2BbSmxWMxRnCIoQ3z0ivEWTaflEeTCFelcpGiABIgRN9AkhJX/eCCu7iqQaXX6AG
-         kdCqkplArE49svpeJReu9Lu4ZU+K6CSisnnSPrGDq8yjSqlGpV23bLX5dW4rE2NWRtD+
-         n1FEjfguBv2IfUfnNJRXg90J5c0bUlpJagZPXeMCJM2b5DqEgRgRyuG0My9KSX3VeeWc
-         UiDQ==
+	 Content-Type:Content-Disposition:In-Reply-To; b=rfw5JTNml0TnP+YJHL/377qqy/iKkBYTSx9zrm/MLaCuY20vzQ2PGuH0ZpjNpCKplQFDYBGiu+Y8P2YGZoqfXAfJYElb68HZqKDbzpc2eNcDXnHkbWmdJs7P2RkCxcsO1ImlTe+91MZa18c6XPYy3/XpWGT2rcLUFjVa13p56tU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sa7H0qjO; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741893137;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eu8Zt5JHKLInYlZV//fPfzrbXAHVXgUz1d/jNhTgXBA=;
+	b=Sa7H0qjOTXP+In0oYuh9aTl+/aGQoPsttMrDXBfMjMyIVcVAragm5qSsf1PGT45uaHj3Z0
+	lW4lB+SyHGQCQ4pUKSw0/SVHxsIUftBZYLd8RnkFm4Y6e1Y657Qdk9q2Ety2wy07I1g+0L
+	+vPvNAimCaFtBpxrCaAj908vxIMSkGQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-465-9DYvR3c3M-CDJSSjE35Usw-1; Thu, 13 Mar 2025 15:12:16 -0400
+X-MC-Unique: 9DYvR3c3M-CDJSSjE35Usw-1
+X-Mimecast-MFC-AGG-ID: 9DYvR3c3M-CDJSSjE35Usw_1741893136
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c0a89afcaaso258831685a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 12:12:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741890674; x=1742495474;
+        d=1e100.net; s=20230601; t=1741893136; x=1742497936;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jt5WSssG+OEvsuPkFz6BZY4vYElG8JeyaALVDa3jMX0=;
-        b=rsowbsunLTIiH0jbdGJXsmR/MM5Q/AVzeCSpdSh4/jpGrN8GRTxFVh+WgqOXk8Q780
-         rwfWNto0HMK75bRWaUx7bw6nmsUJVJ5rNFW7X2UckrYHuquVEyMuzgsk0ehDKgaBWiF6
-         HpBAm1zwErZcI+XRRDLFeb5oRaMdQAvDS+nWteQv+yj1njzTYd5DmMrdqB25UF6Qs6wz
-         rPKTBktnSzRi6HcKDw+D4I7XVCqnZWE07orBi5U/lKn1VBkr8Ga4DQTjOelziiPo146j
-         eDN0/u+v6h/eYrSygHGFW83V2Rq1J1JWmhtXeUxGN5rEt9BB+bDgTfufpYkgI//uinBh
-         3fqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUImNb7MkHMTBjXdvHNY0EXGH9BMGNHprXVAMf+gT/2CH2YmVyk7FfvloHZUPGZB8xslh/HvxTPBVQlThiLEGMg@vger.kernel.org, AJvYcCUrGnr29cMpHGmhE0ycHOK8AsKpsPiND074iCE3BEwyonEYY13ZiwONAiRaJj4f5nIuSNrYREuz5Z8=@vger.kernel.org, AJvYcCVR6mFPW43MtfhW4JyPt6klpjBFx4r87d7kUw/h/UeJ+uSFcNQagVWrDrvzGjqZfIOvQsTUABNtwMsTQxJU@vger.kernel.org, AJvYcCWVJvpdi+eLgH1Ofo9X62XKzUdfpnNPawnw1HQLvDeyGpQy1qpSNzX1ERvuqT8GXziKNq7b5WZptF2d@vger.kernel.org, AJvYcCXIj2oyBIvf4gWeufYtUtkRY3rJYeHDLGbq5dhA4GYi0U4Wme7Rj0pTuk7IcdmPHB5SVO/7NWS4HKOz1Q==@vger.kernel.org, AJvYcCXZdAn4kbT6LtpspRLSWF5Cwp9+T2p+5Nnh+wGKuCtAvrWqtQW0WluD1qNyhPsZx6m0LD4OG24uSljh0fT8@vger.kernel.org, AJvYcCXn6PaI1SVup/bV48s5z7r5XVsONOs76go4Ay35TXDZ6lQVm//S4M6GV03JOCv+3YtOZF+BZHhzmWHm@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbWnl5NeA0GSRt7wB2hnzRQn8F9Zr7+ZOw2Jgs/n2JC0Pit5wy
-	l1sVjprXJFVcVKbhe3rVo75iV1qiIx/6AQrrmwcW/yf2dS9RN7TJ
-X-Gm-Gg: ASbGncuu5XTUUEkl3CP5/txGMxGJs6XxxLXABNaLqRFgw0sZVZcxq2Lz6rmEIlTQ2Q+
-	/st1MO6SuW59FwxeRWSgpWcJeqoQqS//Zl6+kaR2Uy998yUXV2cmvgWFUEfuxvsGQp0ovCcDv5f
-	t+nAok/Vk9NKIlIaos+0bL51SNlEiyu30FGlCl1HFDv+jqtgg7Qvh2tucIz8r8qCAZvmol+y+NB
-	/DodUZ82F36+9nPPeboERoRE5yZ85eXBEDfpD+QmeMzvXE5xtwfL/vsQc6uF53nbZsjIUS9Nvyw
-	Az2k56nCjzOT+/Y3Po1Ct6uBxqT9RDj+QkG4nJWgw5m8wBH1g+fD+Kw5qA==
-X-Google-Smtp-Source: AGHT+IHUyL3JZBiKaHL1hLSTeQrgywlLwwEUN5of1N0Gy8TC0X3IRTq509SX5+fcaAZt7Xsc6jRvwQ==
-X-Received: by 2002:a17:902:d48f:b0:220:fb23:48df with SMTP id d9443c01a7336-225dd8ed442mr5472005ad.36.1741890673680;
-        Thu, 13 Mar 2025 11:31:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3011926599csm4185647a91.35.2025.03.13.11.31.12
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eu8Zt5JHKLInYlZV//fPfzrbXAHVXgUz1d/jNhTgXBA=;
+        b=lsZ45EPLhNKm2mjqYlMs3Cf09q6c1FO9Rn6wjTNxeZ7ZwNbNr98YbBixJVIZKVrzvv
+         aWeM6tpuV7aE427n3b2DPzUAKjsc+3KV/5gSr60058NwMGR9hrMjekskx0AU60h8/biW
+         OQZTMpSyrY35cWde40uYZi4sWM+jk9GSS1yJPVVSB7FzGKc//sAW2swNUY5RRSxYNx4w
+         /waROndMh4WDsMcXEEK3Kb4jnn/16CQrqmw6sXcINycytJhe7nPdf/ZYV82lR4kZoJ8R
+         xAtZLND0Y53HVMeMP/LmF2VbUTnse2H+HJsKobTFDWWDntSp4CeVaw9ZIb7MJ+QCStzg
+         k4Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSV/yJ7xf7+bEB9Tkiz30plNDCyzVQmR3L48Zg2xmfKOz4bkxpzel4HGT8qowDymnmU2mhvgw9XqghOT+obkQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yynmrxa3FNhGPpSMJFEkADj6LCNK11X3+qJ9N/LQyJ8pgJhknvu
+	tYS2pjH3yGY243D37CxRF6rCbhF6dxZ9n48rJdoPL/Iz4oxPW6/evsL8UOWllFkbJONllKEtISH
+	4C40vXosCpbpUQmM84Q8bZyOlb9AQRuwPC8bmFhRatz8ReI/oMKY5lQlpN2NfUn6D2Q==
+X-Gm-Gg: ASbGncs8DIFJYDvjUZKpKkJdBE5SBKxNCufT+KBeTBtrR+XFRU7XDY+ai8C2lorl7EJ
+	svcou/xQiIelPSoyDReZ+/E46rK8CcOXe8/ziN4l0OauHeIxxC3C5NJ99GBcgBFjMjynxEsUQw7
+	hqnTN8IBH+4lXz/nCq3HWH6OiIQo9QhiyqAcf+4cwyybkbhMnTPRowvplfLodSNjNfumGls/fuq
+	W2eFBd0AgFiGW1eNs7X4ZBR6LJSvQt75/ZTdPfuQ+Bq5vWP+gRmmbZ3eBHr46oEl3bHsFejIwnr
+	PWVPqxA=
+X-Received: by 2002:a05:620a:838f:b0:7c3:c13f:5744 with SMTP id af79cd13be357-7c573713527mr744171685a.3.1741893135764;
+        Thu, 13 Mar 2025 12:12:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFmL8wnHI3XvOc6TmOoi5mIyx1LyijkYTY/k9F1G3PKJ/9z/mlexd/aqNP663C+GN+ActHxCA==
+X-Received: by 2002:a05:620a:838f:b0:7c3:c13f:5744 with SMTP id af79cd13be357-7c573713527mr744166785a.3.1741893135438;
+        Thu, 13 Mar 2025 12:12:15 -0700 (PDT)
+Received: from x1.local ([85.131.185.92])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c573d89ad6sm130678585a.102.2025.03.13.12.12.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Mar 2025 11:31:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 13 Mar 2025 11:31:12 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Alessandro Carminati <acarmina@redhat.com>,
-	linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alessandro Carminati <alessandro.carminati@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
-Message-ID: <c8287bde-fa1c-4113-af22-4701d40d386e@roeck-us.net>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <202503131016.5DCEAEC945@keescook>
- <20250313-abiding-vivid-robin-159dfa@houat>
+        Thu, 13 Mar 2025 12:12:14 -0700 (PDT)
+Date: Thu, 13 Mar 2025 15:12:11 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Nikita Kalyazin <kalyazin@amazon.com>
+Cc: James Houghton <jthoughton@google.com>, akpm@linux-foundation.org,
+	pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, lorenzo.stoakes@oracle.com, david@redhat.com,
+	ryan.roberts@arm.com, quic_eberman@quicinc.com, graf@amazon.de,
+	jgowans@amazon.com, roypat@amazon.co.uk, derekmn@amazon.com,
+	nsaenz@amazon.es, xmarcalx@amazon.com
+Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
+Message-ID: <Z9MuC5NCFUpCZ9l8@x1.local>
+References: <Z8YfOVYvbwlZST0J@x1.local>
+ <CADrL8HXOQ=RuhjTEmMBJrWYkcBaGrqtXmhzPDAo1BE3EWaBk4g@mail.gmail.com>
+ <Z8i0HXen8gzVdgnh@x1.local>
+ <fdae95e3-962b-4eaf-9ae7-c6bd1062c518@amazon.com>
+ <Z89EFbT_DKqyJUxr@x1.local>
+ <9e7536cc-211d-40ca-b458-66d3d8b94b4d@amazon.com>
+ <Z9GsIDVYWoV8d8-C@x1.local>
+ <7c304c72-1f9c-4a5a-910b-02d0f1514b01@amazon.com>
+ <Z9HhTjEWtM58Zfxf@x1.local>
+ <69dc324f-99fb-44ec-8501-086fe7af9d0d@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250313-abiding-vivid-robin-159dfa@houat>
+In-Reply-To: <69dc324f-99fb-44ec-8501-086fe7af9d0d@amazon.com>
 
-On Thu, Mar 13, 2025 at 06:24:25PM +0100, Maxime Ripard wrote:
+On Thu, Mar 13, 2025 at 03:25:16PM +0000, Nikita Kalyazin wrote:
+> 
+> 
+> On 12/03/2025 19:32, Peter Xu wrote:
+> > On Wed, Mar 12, 2025 at 05:07:25PM +0000, Nikita Kalyazin wrote:
+> > > However if MISSING is not registered, the kernel will auto-populate with a
+> > > clear page, ie there is no way to inject custom content from userspace.  To
+> > > explain my use case a bit more, the population thread will be trying to copy
+> > > all guest memory proactively, but there will inevitably be cases where a
+> > > page is accessed through pgtables _before_ it gets populated.  It is not
+> > > desirable for such access to result in a clear page provided by the kernel.
 > > 
-> > Yeah, as with my prior review, I'm a fan of this. It makes a bunch of my
-> > very noisy tests much easier to deal with.
+> > IMHO populating with a zero page in the page cache is fine. It needs to
+> > make sure all accesses will go via the pgtable, as discussed below in my
+> > previous email [1], then nobody will be able to see the zero page, not
+> > until someone updates the content then follow up with a CONTINUE to install
+> > the pgtable entry.
+> > 
+> > If there is any way that the page can be accessed without the pgtable
+> > installation, minor faults won't work indeed.
 > 
-> And for the record, we're also affected by this in DRM and would very
-> much like to get it merged in one shape or another.
+> I think I see what you mean now.  I agree, it isn't the end of the world if
+> the kernel clears the page and then userspace overwrites it.
+> 
+> The way I see it is:
+> 
+> @@ -400,20 +401,26 @@ static vm_fault_t kvm_gmem_fault(struct vm_fault *vmf)
+>         if (WARN_ON_ONCE(folio_test_large(folio))) {
+>                 ret = VM_FAULT_SIGBUS;
+>                 goto out_folio;
+>         }
+> 
+>         if (!folio_test_uptodate(folio)) {
+>                 clear_highpage(folio_page(folio, 0));
+>                 kvm_gmem_mark_prepared(folio);
+>         }
+> 
+> +       if (userfaultfd_minor(vmf->vma)) {
+> +               folio_unlock(folio);
+> +               filemap_invalidate_unlock_shared(inode->i_mapping);
+> +               return handle_userfault(vmf, VM_UFFD_MISSING);
+> +       }
+
+I suppose you meant s/MISSING/MINOR/.
+
+> +
+>         vmf->page = folio_file_page(folio, vmf->pgoff);
+> 
+>  out_folio:
+>         if (ret != VM_FAULT_LOCKED) {
+>                 folio_unlock(folio);
+>                 folio_put(folio);
+>         }
+> 
+> On the first fault (cache miss), the kernel will allocate/add/clear the page
+> (as there is no MISSING trap now), and once the page is in the cache, a
+> MINOR event will be sent for userspace to copy its content. Please let me
+> know if this is an acceptable semantics.
+> 
+> Since userspace is getting notified after KVM calls
+> kvm_gmem_mark_prepared(), which removes the page from the direct map [1],
+> userspace can't use write() to populate the content because write() relies
+> on direct map [2].  However userspace can do a plain memcpy that would use
+> user pagetables instead.  This forces userspace to respond to stage-2 and
+> VMA faults in guest_memfd differently, via write() and memcpy respectively.
+> It doesn't seem like a significant problem though.
+
+It looks ok in general, but could you remind me why you need to stick with
+write() syscall?
+
+IOW, if gmemfd will always need mmap() and it's fully accessible from
+userspace in your use case, wouldn't mmap()+memcpy() always work already,
+and always better than write()?
+
+Thanks,
+
+> 
+> I believe, with this approach the original race condition is gone because
+> UFFD messages are only sent on cache hit and it is up to userspace to
+> serialise writes.  Please correct me if I'm wrong here.
+> 
+> [1] https://lore.kernel.org/kvm/20250221160728.1584559-1-roypat@amazon.co.uk/T/#mdf41fe2dc33332e9c500febd47e14ae91ad99724
+> [2] https://lore.kernel.org/kvm/20241129123929.64790-1-kalyazin@amazon.com/T/#mf5d794aa31d753cbc73e193628f31e418051983d
+> 
+> > > 
+> > > > as long as the content can only be accessed from the pgtable (either via
+> > > > mmap() or GUP on top of it), then afaiu it could work similarly like
+> > > > MISSING faults, because anything trying to access it will be trapped.
+> > 
+> > [1]
+> > 
+> > --
+> > Peter Xu
+> > 
+> 
 > 
 
-I was unable to get maintainers of major architectures interested enough
-to provide feedback, and did not see a path forward. Maybe Alessandro
-has more success than me.
+-- 
+Peter Xu
 
-Guenter
 
