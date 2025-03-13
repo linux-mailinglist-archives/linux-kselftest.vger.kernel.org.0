@@ -1,52 +1,86 @@
-Return-Path: <linux-kselftest+bounces-28921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28922-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDB50A5F18F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:55:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D1B5A5F1CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 12:04:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50D613B3B78
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:54:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1ACDD7ADC4F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B886266B5B;
-	Thu, 13 Mar 2025 10:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E55926560B;
+	Thu, 13 Mar 2025 10:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HvyPucYT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iVLZfptD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD53E266195;
-	Thu, 13 Mar 2025 10:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EB61EE028
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 10:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741863052; cv=none; b=mxpsD/4BF9Wt1d3+0bvbZoEgn5AyjIgric4Si/en1Iyr3mEe64D/2QVlZwQA3ToReIeoT4N6K2dG+Cvr0nIQudC8zcZ8aV8VTSDcGCVmiNPywyzi6rYgumxMK/6TCJUONVgVCk+sl1wZc7daZ5ozfMWXf6/coN7RtnQyLXlSsSQ=
+	t=1741863544; cv=none; b=NNcKq5zWKD8EnC6os4JtDkuImyvxJ7rYnHqIyz7mdBEqY1rkX6k7tHc5IEwnTqUO1f28p0lwyoLGl8L9GB2hUNFII/2EVbLUTHpv2ypOxJQUw3xSqT7iFS0FLQlLDBqapdydR9XXTSR+MiV2cVnaePjDbhRXkD+xotVXvU4JCjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741863052; c=relaxed/simple;
-	bh=oVy0cVKR3jnRQR9b9LzES7dRLuOGWGub+pL1XJgxRbs=;
+	s=arc-20240116; t=1741863544; c=relaxed/simple;
+	bh=37LJNif6aGyyhlJh5h8ixFPgluvePWafJrCynYtE1IE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NKA5nlaRA23TXI8uBD6l17IGPceUg3LC9r4r2v4scL83hTNDynPJBOzYFwmO0wFSwFpTk0vY7hTeKv6TqhTM+4F9Bu0nJRXcpdKP+kM5fMRrTvuHdggpR2EKLJ/fI+/YvEBjztiBqhF6diLPwO0xImlXNABmv5IpnGDGaaMRqRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HvyPucYT; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 82D6B20580;
-	Thu, 13 Mar 2025 10:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741863048;
+	 In-Reply-To:Content-Type; b=DU+jtQuPRhTCZ17YDXaRrkh1c2UiEp5ML2XFXeiGiH+KUzb8KtGLzygPHcq6WvaVgtaSLjNm0Yt0zT1sfeBxXd4Ijej71Y3jEj8unYCp++AGyYopDKyysARQQrYNjyVntahoXtVcAsQHKuufYDnl6Fj7D5B/NT1hNH3ofq8yV3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iVLZfptD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741863541;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uOITDFtnC2am2jE/8iAJD13cqPTCzjCXOB1nvGVtI4A=;
-	b=HvyPucYT83b6tgQG02b7bNj2fOg0O2TSp+HByuTY/T8NsCw8gXsCz/Bd96NpnpIQAY8i3H
-	mtb86/ccunJmwMuWwixE40oNzOGzoZnxnORyLrRlQgapDpETNo4ZQhE1PYYm2vs6T2fi0M
-	5ihWS/fc7THU+3HPs9jgG8FD+XRbGvjzOFCAxY6IjLKtToduxCvmvmZ31+Aun2KISAe1h2
-	wc0h/yZVxJaAwqk+xE4sra8ERUD3BYIGCDytAQpDKjea+NBUymI1wLatMP2EPkm2u6Iy72
-	QHs79baxwFpdbpUmA0BBvCF/Kj4qzRE3mdTxMvm1bb70BiT0boEFvPWXEpoS/g==
-Message-ID: <b763537b-669e-4027-98fc-64ba39314949@bootlin.com>
-Date: Thu, 13 Mar 2025 11:50:45 +0100
+	bh=I8+KGKdJ4EK24n18Z2V3Wf8YYaN68pwFttwmHD5FeXs=;
+	b=iVLZfptD+pn64iyDSyI9HvKJqVIM7VARZHxcm78tK7bXK16d5pvAEVqfSAZ+i/8WL45NFP
+	aPWFUwTjTeAcgfyqPAK6tfAFSlncRiHt6fnRxCRDA0tfz23QQmF7w305BVYFt5RPOx90Nj
+	Aay6tMPBv48kV7h3ux+IRm/SmWV6868=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-DPMu0T6fMEGXivj6XcD0pA-1; Thu, 13 Mar 2025 06:59:00 -0400
+X-MC-Unique: DPMu0T6fMEGXivj6XcD0pA-1
+X-Mimecast-MFC-AGG-ID: DPMu0T6fMEGXivj6XcD0pA_1741863539
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43ce8f82e66so3983735e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 03:58:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741863539; x=1742468339;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I8+KGKdJ4EK24n18Z2V3Wf8YYaN68pwFttwmHD5FeXs=;
+        b=MG3UjARt/h5Xnud8WWkTBhagoeyUYqZBAEeU/i5uC3KLdoEktRSfAOGoOvc8V6ZIOj
+         FSLAfjLzXtsrnpcVintNwuDq9yP94kwZkNKD7UuWFTBJpjrHcapcywi6X42PITX0Q/nT
+         wtwFSSMoWwbwwqij7teFijQYxPy056hLjfEL4UyaPzyQXTcCBXXgtqFo8wBI5kLh3jSv
+         695OlXboBiCiM2j7hwuXwT7/EL8UapiYT//wKMrNSivlt8c+PIbavBAwWlxQVKSS0yeC
+         kINi0wrGOUAXoYot4YRoARB3MbNwDb6lxU7CS+TKg2mCtYIkF3oIthnCa+d5fgKR1nEj
+         lc2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWz0neXeZSscyF2vNYl0hyL2q0h34x53jfEHQsN4rvEhZ/V2/8dSM40R5/rlc0bQgAaMViElc9BXA7SWJXrsQ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEDnrNLGXsXKXBzRdXcLI01XS9xVezJqpfLJaz9BAgVjGqnBLT
+	lKERkEhWWFRl2wbulKMGDicx++m4kHDwMfzjl/m+Al8J7tQTgWEB1cPMm5pFOqh8ut6FLWobVug
+	iPjiGNuWsuol5sFdgzKVvjXnGJ9BAN3Kx6JNoXTMqlnulCiLp4Nmq8qr3gV4zJIROGA==
+X-Gm-Gg: ASbGncsvdlxBA/1NIgoJ61xDz1ehj4aNs/gDaSmHdXBo+LZd1yvcZ2eQWmLr+dwGKpt
+	WhvRPaQuBvIayMIGIt6KM+4bovJexPyowx5h7N2chAplAeVx8vzmKKgBaiROp30LysnvdmiSByV
+	eeoFV0KQUIt/NSzjio9YPnk78ZhYlvgpqFnlPGVBXuefmaCKnVYQuArMTjtiuXZS2bQdsJblsaT
+	C8V50dXSCya+zPbr9B1CnM6sxdhwwtKKnZqG3TIRrr/CPTeihFbrn4NUtQ9+9td2DtJCxeAgUza
+	A0WmlWGd+7cAAGMpRTqgPxreTf0aT+t7/CeomTkq
+X-Received: by 2002:a05:6000:1aca:b0:390:f738:246b with SMTP id ffacd0b85a97d-39132d1cc3fmr19536600f8f.15.1741863538707;
+        Thu, 13 Mar 2025 03:58:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFl5a/zzB4j/bQzrh0zOYukq0rCxpL/1iN9vmTUtNgl3blwOPgCRfDtKqTKHkVbblM4clhX9A==
+X-Received: by 2002:a05:6000:1aca:b0:390:f738:246b with SMTP id ffacd0b85a97d-39132d1cc3fmr19536568f8f.15.1741863538262;
+        Thu, 13 Mar 2025 03:58:58 -0700 (PDT)
+Received: from [192.168.88.253] (146-241-6-87.dyn.eolo.it. [146.241.6.87])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d0a7582absm49566905e9.17.2025.03.13.03.58.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Mar 2025 03:58:57 -0700 (PDT)
+Message-ID: <b62ea2ac-aff3-4a00-bc3a-960c28bc5522@redhat.com>
+Date: Thu, 13 Mar 2025 11:58:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,97 +88,89 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/13] selftests/bpf: Integrate test_xsk.c to test_progs
- framework
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
+Subject: Re: [PATCH net-next v7 8/9] net: check for driver support in netmem
+ TX
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Willem de Bruijn
+ <willemb@google.com>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>, Stefan Hajnoczi <stefanha@redhat.com>,
+ Stefano Garzarella <sgarzare@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, Shuah Khan <shuah@kernel.org>, sdf@fomichev.me,
+ asml.silence@gmail.com, dw@davidwei.uk, Jamal Hadi Salim <jhs@mojatatu.com>,
+ Victor Nogueira <victor@mojatatu.com>, Pedro Tammela
+ <pctammela@mojatatu.com>, Samiullah Khawaja <skhawaja@google.com>
+References: <20250308214045.1160445-1-almasrymina@google.com>
+ <20250308214045.1160445-9-almasrymina@google.com>
 Content-Language: en-US
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-In-Reply-To: <20250313-xsk-v1-0-7374729a93b9@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250308214045.1160445-9-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdejjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomhepuegrshhtihgvnhcuvehurhhuthgthhgvthcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhheeggfetffekheevuedvkedvvdeufeegjeevgfelveevveetffevfefgheeijeenucfkphepvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekvdehfeemugdutddtmehflegvudemfegtjedumeejiedttgemudgtsggrpdhhvghloheplgfkrfggieemvdgrtddumegtsgduleemkedvheefmeguuddttdemfhelvgdumeeftgejudemjeeitdgtmedutggsrggnpdhmrghilhhfrhhomhepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdejpdhrtghpthhtohepsghjohhrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrghhnuhhsrdhkrghrlhhsshhonhesi
- hhnthgvlhdrtghomhdprhgtphhtthhopehmrggtihgvjhdrfhhijhgrlhhkohifshhkihesihhnthgvlhdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhdrlhgvmhhonhesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghv
-X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Hi all,
-
-On 3/13/25 11:47 AM, Bastien Curutchet (eBPF Foundation) wrote:
-> Hi all,
+On 3/8/25 10:40 PM, Mina Almasry wrote:
+> We should not enable netmem TX for drivers that don't declare support.
 > 
-> This patch series continues the work to migrate the script tests into
-> prog_tests.
+> Check for driver netmem TX support during devmem TX binding and fail if
+> the driver does not have the functionality.
 > 
-> The test_xsk.sh script tests lots of AF_XDP use cases. The tests it uses
-> are defined in xksxceiver.c. As this script is used to test real
-> hardware, the goal here is to keep it as is and only integrate the
-> tests on veth peers into the test_progs framework.
-> Three tests are flaky on s390 so they won't be integrated to test_progs
-> yet (I'm currently trying to make them more robust).
+> Check for driver support in validate_xmit_skb as well.
 > 
-> PATCH 1 & 2 fix some small issues xskxceiver.c
-> PATCH 3 to 9 rework the xskxceiver to ease the integration in the
-> test_progs framework. Two main points are addressed in them :
->   - wrap kselftest calls behind macros to ease their replacement later
->   - handle all errors to release resources instead of calling exit() when
->     any error occurs.
-> PATCH 10 extracts test_xsk[.c/.h] from xskxceiver[.c/.h] to make the
-> tests available to test_progs
-> PATCH 11 enables kselftest de-activation
-> PATCH 12 isolates the flaky tests
-> PATCH 13 integrate the non-flaky tests to the test_progs framework
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 > 
-> Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 > ---
-> Bastien Curutchet (eBPF Foundation) (13):
->        selftests/bpf: test_xsk: Initialize bitmap before use
->        selftests/bpf: test_xsk: Fix memory leaks
->        selftests/bpf: test_xsk: Wrap ksft_*() behind macros
->        selftests/bpf: test_xsk: Add return value to init_iface()
->        selftests/bpf: test_xsk: Don't exit immediately when xsk_attach fails
->        selftests/bpf: test_xsk: Don't exit immediately when gettimeofday fails
->        selftests/bpf: test_xsk: Don't exit immediately when workers fail
->        selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails
->        selftests/bpf: test_xsk: Don't exit immediately on allocation failures
->        selftests/bpf: test_xsk: Split xskxceiver
->        selftests/bpf: test_xsk: Make kselftest dependency optional
->        selftests/bpf: test_xsk: Isolate flaky tests
->        selftests/bpf: test_xsk: Integrate test_xsk.c to test_progs framework
 > 
->   tools/testing/selftests/bpf/Makefile              |   13 +-
->   tools/testing/selftests/bpf/prog_tests/test_xsk.c | 2416 ++++++++++++++++++++
->   tools/testing/selftests/bpf/prog_tests/test_xsk.h |  299 +++
->   tools/testing/selftests/bpf/prog_tests/xsk.c      |  178 ++
->   tools/testing/selftests/bpf/xskxceiver.c          | 2543 +--------------------
->   tools/testing/selftests/bpf/xskxceiver.h          |  153 --
->   6 files changed, 3021 insertions(+), 2581 deletions(-)
+> v5: https://lore.kernel.org/netdev/20250227041209.2031104-8-almasrymina@google.com/
+> - Check that the dmabuf mappings belongs to the specific device the TX
+>   is being sent from (Jakub)
+> 
+> v4:
+> - New patch
+> 
 > ---
-> base-commit: 720c696b16a1b1680f64cac9b3bb9e312a23ac47
-> change-id: 20250218-xsk-0cf90e975d14
+>  net/core/dev.c         | 33 +++++++++++++++++++++++++++++++++
+>  net/core/devmem.h      |  6 ++++++
+>  net/core/netdev-genl.c |  7 +++++++
+>  3 files changed, 46 insertions(+)
+> 
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 1cb134ff7327..5553947123a0 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3868,10 +3868,43 @@ int skb_csum_hwoffload_help(struct sk_buff *skb,
+>  }
+>  EXPORT_SYMBOL(skb_csum_hwoffload_help);
+>  
+> +static struct sk_buff *validate_xmit_unreadable_skb(struct sk_buff *skb,
+> +						    struct net_device *dev)
+> +{
+> +	struct skb_shared_info *shinfo;
+> +	struct net_iov *niov;
+> +
+> +	if (likely(skb_frags_readable(skb)))
+> +		goto out;
+> +
+> +	if (likely(!dev->netmem_tx))
 
-I realize that I forgot to mention 'bpf-next', sorry about that.
-This work is based on the bpf-next_base branch.
+Minor nit: I think the above is actually unlikely. The skb is
+unreadable: is supposed to be transmitted on a device supporting
+netmem_tx, otherwise we are in exceptional/error path.
 
-Best regards,
-Bastien
+No need to repost just for this.
 
+Thanks,
+
+Paolo
 
 
