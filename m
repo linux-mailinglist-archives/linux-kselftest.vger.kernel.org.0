@@ -1,279 +1,390 @@
-Return-Path: <linux-kselftest+bounces-28951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D194A5F740
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 15:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6558EA5F757
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 15:11:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DA991645BF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 14:08:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB833167219
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 14:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9935B26770E;
-	Thu, 13 Mar 2025 14:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F1A267B7E;
+	Thu, 13 Mar 2025 14:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cye+1ye3"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="DoZM/Utw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2063.outbound.protection.outlook.com [40.107.243.63])
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC3335944;
-	Thu, 13 Mar 2025 14:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741874903; cv=fail; b=h/X9eMFb+V3rMtqR20QtL/wLSTOn/zRjdsbNK6+8Jn9sin3IpLEJ4CGZ8Jkl3aIoMZ7wjFS0qrBBX5XSk4sBoYH8tXEOuMGm5doUaVoJ9UhzxLJYYceDJ83mxydfE6dGv6HSBOsuAYETQ+koeXHOqamkpwkwhfaT7RdychuBnDs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741874903; c=relaxed/simple;
-	bh=u6tbt6LtsdBkHpLypp3h1zIEvaE3Do1fx4dz6h0k8S0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PLcSJjXFC3iscugrXLOQb7y458dxJAl3gpf3yrAPdiZ3Z9oxsFEiJknD/ngRVH67kaorV1EYPuaz7GpOYx+YiMZkAs0/JdpkxRXe3+VmIUaKtQ8MLkoe9T2HqmogzlwnkGmG5TJ269ID9ioeSx03MnO87X85lcsrjBQ2oS/xwsw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cye+1ye3; arc=fail smtp.client-ip=40.107.243.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CCcSrwxmwnD68kElO0kg8ATAPXpbSw5sbRoOAst8/b56jrzbiXDxcBeIhGah61I2GYk8HncC3XeB36GfnSHWMgjodRvHdQHjKZ5/58EAwpTaf+VCe/BUIX/mgdwuG00PlnCLCmFxB8Kg2SYZP/5pmOLgKxfJSJNM21ZlP3tEvkD0BW4gHHfy5WZ6gLakzh3BrhBIMoPxCaGNZmEcpGr8wjCvHrftEuv45fr846w2zlNzF1ZUhnYZrsOKgICN9+C9j0xRTTjL6IEgDLzdZ0Z23V0rlE3q/JPnSFkl5kQUF27K0F01Dx4K/V74Mg4kok2fODXLZRwQPAnPzxRbNd7L7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vj0b8aQSNrCdCETOfMLVEnaDw7hniceA4d5vzoCU/pQ=;
- b=ixx2682SX0oAqvpw1Cf+Z1DRzTTFiHyfO4n2EgdyM/D4jqwpD8rkkm8JaYI/+DhybqY3BKIwWNlk/r6Ztme/6NqcE0ewEVGaQvs9Hy8/TqXm0n3tVq8bBEG5AkfzG7043mMmrX4JR3JVz7MSUzCxhUoQIibj9QZiIqS2eb+jd5jXUeChCjrFo9VMffRpXofM9Ipu1L/3U9kH28F79FQDj39G3yiWpTwv2ikk5tOleNnJElurwlo6QCKpivTnz906LWXyYTBcva0KVqjyol5qXmwVI5q7AWcr54dtDxiNbYss+nOkWBog2XPFjsDE3ZvxOCHLBLMutxi9qkr8fxbudg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vj0b8aQSNrCdCETOfMLVEnaDw7hniceA4d5vzoCU/pQ=;
- b=cye+1ye321MzkRMFf345QJYTdgR88Q7vXITZj8FGnA+vEAIgsomuzGSP8DmI5LNzCGXUKZ1AiQ97EVJoeWfXNbdroLuPxg90UCx8tPvmyoQ8CfLtj6TvdTUE84S7k7I9YXRk98CBawGqiZg/dHucMMJGW7qMWT5ffPukacpGONtOVtjEP/FFGLPUgvTRcldjWRtQZIu6hmd9LSW4tE24l7fbAtMs7mTfGbCgsYIC/5LgLyLK4GJlA+gEtB7+gGnnUIIFbPCa93dXZpjG22Hnkb5RDgrCYEJLy5DEc2o9jmJ3p/4vtCt7tNt/EGJhMS6Ablik9bpLidX3I6KeprJEoA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- DM4PR12MB6568.namprd12.prod.outlook.com (2603:10b6:8:8f::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8511.28; Thu, 13 Mar 2025 14:08:17 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%5]) with mapi id 15.20.8534.027; Thu, 13 Mar 2025
- 14:08:16 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Hugh Dickins <hughd@google.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org,
- Ryan Roberts <ryan.roberts@arm.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- David Hildenbrand <david@redhat.com>, Yang Shi <yang@os.amperecomputing.com>,
- Miaohe Lin <linmiaohe@huawei.com>, Kefeng Wang <wangkefeng.wang@huawei.com>,
- Yu Zhao <yuzhao@google.com>, John Hubbard <jhubbard@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
- Kairui Song <kasong@tencent.com>
-Subject: Re: [PATCH v10 2/8] mm/huge_memory: add two new (not yet used)
- functions for folio_split()
-Date: Thu, 13 Mar 2025 10:08:11 -0400
-X-Mailer: MailMate (2.0r6233)
-Message-ID: <1E11B9DD-3A87-4C9C-8FB4-E1324FB6A21A@nvidia.com>
-In-Reply-To: <0F15DA7F-1977-412F-9A3E-F06B515D4BD2@nvidia.com>
-References: <20250307174001.242794-1-ziy@nvidia.com>
- <20250307174001.242794-3-ziy@nvidia.com>
- <71414652-95AC-40C6-87BB-2B3B2E680C58@nvidia.com>
- <0F15DA7F-1977-412F-9A3E-F06B515D4BD2@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: SJ0PR03CA0333.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::8) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867F0267B04;
+	Thu, 13 Mar 2025 14:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741875079; cv=none; b=o4f2hJUDCGqwKb4SanUzDFxwbZOdyjADA4MX0id8sTM8gGbpP/EtuQVFaaHMMjIZzAODD9Z5jiiLtsEF7yHELb2XShyQewRWQo/auJla/0Ia+qpbRQYgKJ9PZsITMua+x6IgUkFz5Jq+ZaKrUteYGMXkUy8K+a9XLgUHArDaNKQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741875079; c=relaxed/simple;
+	bh=IGqisGwCAtyYbOb7OLJfY7Fx7hmscguuf7cCiQCAFiM=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rUZOnKojdYYX8HXrumEX2mNJxXlyE51JK4P90Y+QMRs1aD+qwzYNlMkKS5gS6ediYcblqevCxPiOdneOQY+3n6rooI043tQwhdmX56egLzq4Hy88pb17MVPgxOTJ9Ibiu+r1VPX9UwOKMNWQZZMU1mDAnMTMB+cZblzrFNvYyeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=DoZM/Utw; arc=none smtp.client-ip=185.70.40.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1741875073; x=1742134273;
+	bh=Wwjd3F8ZVcLlKooopouWDqOPW0C84gclDWUIL90/JTg=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=DoZM/UtwzAz3l+BUaRdDMTlZjnm54wefuEZ9fvJS15jUhGlM4gjWCHQaSCnr+22vu
+	 GAQ3M1/icunF7pBqlZ5NJr+nZu+Ui1lLY9jPcsAXadhrgcVDrgzkPwIGUzmBAIj9fk
+	 xL81b9dlal8eotSV+Vh3HpqG9ZdhQ2ngsUQKK3/UFevwh8mnzfez//1z0xkq3TfHGR
+	 hd20iI8Cb/DMA5BvLx9p5QTXFB/AqVNwTp57TfcELUROxM34vLHNt+78so2hAVyX4z
+	 yjwY4+7OZavEatCLcw8qEu50XDdqo1auGRnKnV0ya/pJhwrQ9zTKkSYXH7JpW8tskF
+	 zfhw3+LTi9GOg==
+Date: Thu, 13 Mar 2025 14:11:06 +0000
+To: Tamir Duberstein <tamird@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] rust: enable `clippy::as_underscore` lint
+Message-ID: <D8F76A4JSEXO.2OKKJLAU5OZN@proton.me>
+In-Reply-To: <CAJ-ks9mJ=2hFxfWEkq+9b=atE89sHXa5NBcdVNRd3az6MSv0pA@mail.gmail.com>
+References: <20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com> <CAJ-ks9kCgATKDE2qAuO3XpQfjVO2jGyq3D4sbUcVKyW6G1vuuQ@mail.gmail.com> <D8EL9QFS1XNT.JBSMRXD4D7GT@proton.me> <CAJ-ks9=TRDg3g=NG7k97P_5jXpZ4K4v0DxrmJFR+uF0-3zJkXw@mail.gmail.com> <CAJ-ks9=hAwOGtVv0zh9CcH7XOxjGnizvK1QOMAi8nKStocKr2Q@mail.gmail.com> <D8ELW7X9796K.2ZGJS34LDTHOP@proton.me> <CAJ-ks9k1gZ=tLSe6OjuKFgg6=QE5R_Ajo0ZJwZJp08_1LMiODw@mail.gmail.com> <D8ENBWTC8UPH.LLEGZ2D4U7KQ@proton.me> <CAJ-ks9mJ=2hFxfWEkq+9b=atE89sHXa5NBcdVNRd3az6MSv0pA@mail.gmail.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 0d8c6066aa79effc9e6ffd556187124ab8df8180
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DM4PR12MB6568:EE_
-X-MS-Office365-Filtering-Correlation-Id: d218c692-90ae-484e-e5e9-08dd6238801a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?b1laWExyWmZuVnNEUnlqRkpMNEZ6NXMrUXdDSFQySUpYUWY5Wmw2d1RNWnA2?=
- =?utf-8?B?SHBTVjdpZkI2ckdpaExjUGUrYnhNM2dGTS9BL0hjeklGSDY5QzRUYmNBeEIv?=
- =?utf-8?B?YlZLT0ZTRERrWGsxaDFjU1BUTkNrVUNTWmFvdmFnMExDK1dkZCtobmgwVUR5?=
- =?utf-8?B?Q2RtOVdnUFF0cEExZTZRTmtJNnl5R1JObi8zellWaWxzM0NodFdFd1pQN3k2?=
- =?utf-8?B?U2NhY1FrRnp6NjY2bGw3MHBwRHV0cWRuaXFTL3NxZUlmeFJURGFsM1dmbUxs?=
- =?utf-8?B?YVlFTVJ0VFpXekxpTXBWaUxqSjhnTUw0R3RZL1VFZ1NUWTI5ZEJYWmh3S0xX?=
- =?utf-8?B?Zy9NYjc0UUJaOUpPTGZlZFJWVkhxUHoxL0RXNWtaSjZDUUxZSGpMQ2hVQkV2?=
- =?utf-8?B?UnJRK3Zwc1c4WmVCazE0cGdEMUduaUtZZC8yMnB5M0g4UUI2TGZrc1hlTzc2?=
- =?utf-8?B?cWlGN3ZLNjR6Y245SGRyMmdZYnhMZzd0c0JMbzhlcFRBbkNQMjNETDVZZ09x?=
- =?utf-8?B?Z1lLYzJCZERJd1NNWGZ1WG1vem1PbkhPR2x0ellZR0NBV2tIUmU5aG5wTjl0?=
- =?utf-8?B?RUs3citrR0h6VUZ0Z2JHOHFHTnQ3MFFxbDRITS9aVW40djJ6UFN2ZVJHZzVS?=
- =?utf-8?B?SGFhRkFHOHpuUVN6bURKTnRKWStNQjBJNXptczFPRFd5MGRxcmZnUEkzeUtD?=
- =?utf-8?B?cUYzNXJtOEtCMlhJbFAyeERqMm1rMktnZW5hRVNLekZJQmsxbW5scURXdngy?=
- =?utf-8?B?VHRVMFo0cU5qanh3UGIxU0E2ZG1rQlRLMmJhK3QrU1FGTGIzOE9STU1uNEZl?=
- =?utf-8?B?dnU4RDR4WHA4Vk9ZUkZEM2lJQlRsdUdlUzZtY2VwVzd3Y1l1M1FvNXBpV1VW?=
- =?utf-8?B?QTl2SUhZWGYyTlVXcERtUTZEekxBeTk2TDAvSnFYT0loQjJLck00Qkw5cTJr?=
- =?utf-8?B?d2pPc3RUelBZUUJrQjhsMjNsTkZIWldaV2o5QnQ4VjR2akZ4dHZqSVd0alZT?=
- =?utf-8?B?NDhWT2VlSHFib2VFeHlVQ3laU0RYU2ZicnAxVTI3VUpTWlJnZUNVZGM3dHQr?=
- =?utf-8?B?dTVCSHgwWXZHdzR4bXdYR0l5YnV1cDViMjZOWDdRQ08wQlJ2SVZORkxqOFZu?=
- =?utf-8?B?QkZxR3kvYTFQaGJHK3NVQXZ1NVhQbXBvdk1VWHlLMUtFWkpYTUpCNWU0VVg3?=
- =?utf-8?B?S2JiMjRKNHR4QldKbFloM1VkV2RhakpQYWhXanhyTzB3UkNvTUc4ZmFDenRT?=
- =?utf-8?B?V3ZUVStFa2p6K1k0b1JjRWJwWGVtRmFabFdVTEhMMC9xNTkrMVF5Y3VscXox?=
- =?utf-8?B?UkN5ZXhRbkE5L2RKQ0hBTEpOREdFOW01VkFXdlRsUElEYjRQNHZuT0ZLVFBz?=
- =?utf-8?B?TFpHbFVlclNSaVRHTzBOY2RWZFBZeXNJeDA5ZzNDL0dmakNWTHQ4Z2M4RlBH?=
- =?utf-8?B?OWVlUjlJTy9ZcDJxeXM0ZDdUaWZqN2pES0JET2RmRVQ5WTUwR3VYSldLRmZ2?=
- =?utf-8?B?bFcyZUJKejJqWVpUN2NVSkQyTTh3YlV0bVdMRE9sd2VGcmRuSFBlTUt0L2Fj?=
- =?utf-8?B?Y3p3SXQ5YXUrajFTdFZrZzhweGtYRXRGb0JCZ3JQdnF3Z1dzSkZxMmNjdkhV?=
- =?utf-8?B?dE95bXczd0tyd25QZkZ5NUYwVlRRL3crZlpHdm9uRUZIM0FDM2F3ZGpNM0s2?=
- =?utf-8?B?Q1JGOWFsM1Y3VENYVE5MNkJYODhCdnBkS0FTaWFza3JFVSs2bm5MQUh2K2NQ?=
- =?utf-8?B?WXhVM2t3TS9SemovVXV3MjEvZlFVZkp5YXZlOFowYUkvOENvQ0FUeDA1dWU5?=
- =?utf-8?B?RUszMW53a3BDdkpEL2RkTHpIRURtdXYvbm1XeVlSbk15bjhMeUVJQUplSGFl?=
- =?utf-8?Q?YB1SUCn2Rskj4?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WWxkdkZpYy9nR0N2Q0RzYkVuOGdFYlk3VWFZaWdYWlBYMUNuOFRRREtzOVhU?=
- =?utf-8?B?c2Z4T2hhRjhWMVFvY3lZYS94MDBwMXc2WkpYQzBOWkJrSTMyTjFIUFBNRzVH?=
- =?utf-8?B?WUx3REgwd3JBZjlwalNNZFVlNW5LKzdGbjVtT3hjTWQ1RmxZOGpPVUVCdlBC?=
- =?utf-8?B?bm1XS2NJY3Q5ZG1sZkNldENZb1c4emVBQjlVVUlTRXlCRzFiRHpleEJJa0dO?=
- =?utf-8?B?WTNNOU51WVJSQ1d3NStvOXYzWW1GTDNCcUM3MWtBMWtENFRUYW45TnFtUlRR?=
- =?utf-8?B?YUJ6eUZ3REJ0bStUcTFLUUhzRlhJcFBSM3Vmc3ZlUVdTWmlrRHBoa0N0RDVB?=
- =?utf-8?B?aUFLenhMQTdOUi94WTlWMXRESTJPemtla00wUEN5Rm51b0J5VEhxVENjcVhh?=
- =?utf-8?B?Q1NnWTJ2eXNMTEN0d0xnQ20xN1YyanVWWG5HalRMWHU0MHFWcTBPbGNuN24v?=
- =?utf-8?B?MkJsaTZ2Mmd3WDRYSTl1Z0ZvZzJoZ0RvN3dhS3RCSHNqQzVoNkpjMjgvRFVJ?=
- =?utf-8?B?WjRNOUorVEhrYVFYaVQrak1qSUg0czZhSmp1MU5LUisxSzE1NkF4UVVEWVl2?=
- =?utf-8?B?M3Z2R1Rkdm5sZzRvblpsNEZSdUxCOGxmS2QzRWsrbHVpcWZoeklZZCtTZWFw?=
- =?utf-8?B?Y2ZPak5XSGFxWXFnN2ZFRzAvSFc3L1ZVVjFkTDFDNWEvaWQ1OUZXNkF4Y2pE?=
- =?utf-8?B?VllqM1VTTGxCSWZTQU8vekM3TFhFZXd3MU9kenNCLzdPS2VXZUhqWGFNZmRo?=
- =?utf-8?B?YkptQ2J0aDE3a3ZOblcybWhjbDh3eGZjaXgrOU9YSGFYMGN0RFNIQW1pTklP?=
- =?utf-8?B?UDVZT1pISTQvWG9vbnVvUmZUcFRRMDdZM0Y1dGlyQUQrMVBKMnJlUHNhTkw0?=
- =?utf-8?B?N1Y3dVJrL2ROS2tmWnNFTzVQZXFYbGtRRHExQUVXaGd3VDJlc09CTTRNVUlR?=
- =?utf-8?B?dFVoNFNUWStiM2NpNWlMSjlBOXdNT3pxTVI3SUM4QTdrdk9RVm01M0JlRkRN?=
- =?utf-8?B?V0kwa3lIRlh1MEljcTVMZTNyWDJZT2U0UU1xSXplck1RamdFUTVkTTBJSkc3?=
- =?utf-8?B?eGVkYnFNL0d4eENQam80NGtWSENZRmI3RWppUjduVGJDS0l0ZnlXVi8vS1Fn?=
- =?utf-8?B?Z3g2cGZjRUl2M25SR09NdHczSzdhVmpNeDAzVm5zaG9rZ1VuQ081WG9uaW1l?=
- =?utf-8?B?QVo0dERZTng2MURuRWVUajl5eW5NZll0UnE5c2FwZ0VSeDRDQjMvdVZWcDlU?=
- =?utf-8?B?cElzQVFJWkZGSm8rdy9jdUx0NUJYQzI2Rk9CVTArZER6SXBJZE81K1FkaU9S?=
- =?utf-8?B?WHdmc3hBZUk5VDNpRzJZV2NmNHEzNytIN29BbThQK3JBK3dmeitxbXhkTnJi?=
- =?utf-8?B?QmRCOE1LYm53K3pQaE5wMXl0R3hCOTllQmhQTlBwU3JYUEQ0UlB5L2RsTC9j?=
- =?utf-8?B?M1pNMCtoNkFjbUxYaFM2LzFuMzdpaVIzeWRTcjJDSUVqOWRQWDVwWW9YUVM4?=
- =?utf-8?B?V0UySU82enczY3RMVVFqZ2s0YlJDTTA2bmJyaEo3elZQbEZIeGZaR0tSa2dq?=
- =?utf-8?B?MHE5dXV0L2hmeVpiVVQzWmpGUGhxWTl3cDZrOEZlU3ZEQllwK0VhWGdMSnR6?=
- =?utf-8?B?cWxpRVJ0cjhyTjhLaG9maGxVY2ZXN21VQjVuTWNlNVFNZGdJYkNlY0NXc09Y?=
- =?utf-8?B?KzNLcEVSSFlZNWFVeit2RzFpbDJ3MTlrSW1PeWVQblFrWms2L045dUdHK25p?=
- =?utf-8?B?amtTYU8vcjl3Q3dMMnJOeTVnN2JJdHY1OERlNENhVU1janlja2xqY1BEaGp6?=
- =?utf-8?B?cEpUWllpbHZzQ0ZMWDI3RzVRZnJHL3E5bHEvYWtFVHg5VE4rNXBYWHVZNTV0?=
- =?utf-8?B?dmdOaTVkREVzUDlYNkloQzY5ekZGUUlON0N1VjJsdE01SGY4TlB0L2tWNDRs?=
- =?utf-8?B?YXVCZWQ4NGlMMXp2Smwva1NVenM3dStIek5LY00vSXJzQ0lBR0gwdDkyZzND?=
- =?utf-8?B?KzFYMjR0ZEQ5bEdQQ2pwRldqcGZabStEQ2JUTXJLcVVIc2phcDlTeUNIaGgz?=
- =?utf-8?B?Vm81N0FsbWV4TFpKNUdZbUFqOTc3MXkzZmYya1NJTnRVT3NEL2YrS0haVHln?=
- =?utf-8?Q?2hfA=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d218c692-90ae-484e-e5e9-08dd6238801a
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2025 14:08:16.4790
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cJj5IQi1b2gEQJe8BfrLAflOP2NMBqH+p3fcE8Z/6Op+I284MD/tgSqkJHIhA1/q
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6568
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 10 Mar 2025, at 13:32, Zi Yan wrote:
-
-> On 10 Mar 2025, at 12:14, Zi Yan wrote:
->
->> On 7 Mar 2025, at 12:39, Zi Yan wrote:
+On Thu Mar 13, 2025 at 11:47 AM CET, Tamir Duberstein wrote:
+> On Wed, Mar 12, 2025 at 6:38=E2=80=AFPM Benno Lossin <benno.lossin@proton=
+.me> wrote:
 >>
->>> This is a preparation patch, both added functions are not used yet.
->>>
->>> The added __split_unmapped_folio() is able to split a folio with its
->>> mapping removed in two manners: 1) uniform split (the existing way), an=
-d
->>> 2) buddy allocator like (or non-uniform) split.
->>>
->>> The added __split_folio_to_order() can split a folio into any lower ord=
-er.
->>> For uniform split, __split_unmapped_folio() calls it once to split the
->>> given folio to the new order. For buddy allocator like (non-uniform)
->>> split, __split_unmapped_folio() calls it (folio_order - new_order) time=
-s
->>> and each time splits the folio containing the given page to one lower
->>> order.
->>>
->>> Signed-off-by: Zi Yan <ziy@nvidia.com>
->>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
->>> Cc: David Hildenbrand <david@redhat.com>
->>> Cc: Hugh Dickins <hughd@google.com>
->>> Cc: John Hubbard <jhubbard@nvidia.com>
->>> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
->>> Cc: Kirill A. Shuemov <kirill.shutemov@linux.intel.com>
->>> Cc: Matthew Wilcox <willy@infradead.org>
->>> Cc: Miaohe Lin <linmiaohe@huawei.com>
->>> Cc: Ryan Roberts <ryan.roberts@arm.com>
->>> Cc: Yang Shi <yang@os.amperecomputing.com>
->>> Cc: Yu Zhao <yuzhao@google.com>
->>> Cc: Kairui Song <kasong@tencent.com>
->>> ---
->>>  mm/huge_memory.c | 348 ++++++++++++++++++++++++++++++++++++++++++++++-
->>>  1 file changed, 347 insertions(+), 1 deletion(-)
+>> On Wed Mar 12, 2025 at 11:24 PM CET, Tamir Duberstein wrote:
+>> > On Wed, Mar 12, 2025 at 5:30=E2=80=AFPM Benno Lossin <benno.lossin@pro=
+ton.me> wrote:
+>> >>
+>> >> On Wed Mar 12, 2025 at 10:10 PM CET, Tamir Duberstein wrote:
+>> >> > On Wed, Mar 12, 2025 at 5:04=E2=80=AFPM Tamir Duberstein <tamird@gm=
+ail.com> wrote:
+>> >> >>
+>> >> >> On Wed, Mar 12, 2025 at 5:01=E2=80=AFPM Benno Lossin <benno.lossin=
+@proton.me> wrote:
+>> >> >> > Always enable the features, we have `allow(stable_features)` for=
+ this
+>> >> >> > reason (then you don't have to do this dance with checking if it=
+'s
+>> >> >> > already stable or not :)
+>> >> >>
+>> >> >> It's not so simple. In rustc < 1.84.0 the lints *and* the strict
+>> >> >> provenance APIs are behind `feature(strict_provenance)`. In rustc =
+>=3D
+>> >> >> 1.84.0 the lints are behind `feature(strict_provenance_lints)`. So=
+ you
+>> >> >> need to read the config to learn that you need to enable
+>> >> >> `feature(strict_provenance_lints)`.
+>> >>
+>> >> I see... And `strict_provenance_lints` doesn't exist in <1.84? That's=
+ a
+>> >> bit of a bummer...
+>> >>
+>> >> But I guess we could have this config option (in `init/Kconfig`):
+>> >>
+>> >>     config RUSTC_HAS_STRICT_PROVENANCE
+>> >>             def_bool RUSTC_VERSION >=3D 108400
+>> >>
+>> >> and then do this in `lib.rs`:
+>> >>
+>> >>     #![cfg_attr(CONFIG_RUSTC_HAS_STRICT_PROVENANCE, feature(strict_pr=
+ovenance_lints))]
+>> >
+>> > Yep! That's exactly what I did, but as I mentioned up-thread, the
+>> > result is that we only cover the `kernel` crate.
 >>
->> Hi Andrew,
->>
->> The patch below should fix the issues discovered by Hugh. Please fold
->> it into this patch. Thank you for all the help.
->>
+>> Ah I see, can't we just have the above line in the other crate roots?
 >
-> Hi Andrew,
+> The most difficult case is doctests. You'd have to add this to every
+> example AFAICT.
 >
-> This is the updated version including:
-> 1. Hugh=E2=80=99s fix on unfreezing head folio correctly,
-> 2. Hugh=E2=80=99s fix on drop the right number of refs on tail folio,
-> 3. Matthew=E2=80=99s suggestion on using new_folio instead of new_head an=
-d
-> using i instead of index.
+>> >> > Actually this isn't even the only problem. It seems that
+>> >> > `-Astable_features` doesn't affect features enabled on the command
+>> >> > line at all:
+>> >> >
+>> >> > error[E0725]: the feature `strict_provenance` is not in the list of
+>> >> > allowed features
+>> >> >  --> <crate attribute>:1:9
+>> >> >   |
+>> >> > 1 | feature(strict_provenance)
+>> >> >   |         ^^^^^^^^^^^^^^^^^
+>> >>
+>> >> That's because you need to append the feature to `rust_allowed_featur=
+es`
+>> >> in `scripts/Makefile.build` (AFAIK).
+>> >
+>> > Thanks, that's a helpful pointer, and it solves some problems but not
+>> > all. The root Makefile contains this bit:
+>> >
+>> >> KBUILD_HOSTRUSTFLAGS :=3D $(rust_common_flags) -O -Cstrip=3Ddebuginfo=
+ \
+>> >> -Zallow-features=3D $(HOSTRUSTFLAGS)
+>> >
+>> > which means we can't use the provenance lints against these host
+>> > targets (including e.g. `rustdoc_test_gen`). We can't remove this
+>> > -Zallow-features=3D either because then core fails to compile.
+>> >
+>> > I'm at the point where I think I need more involved help. Want to take
+>> > a look at my attempt? It's here:
+>> > https://github.com/tamird/linux/tree/b4/ptr-as-ptr.
+
+With doing `allow(clippy::incompatible_msrv)`, I meant doing that
+globally, not having a module to re-export the functions :)
+
+>> I'll take a look tomorrow, you're testing my knowledge of the build
+>> system a lot here :)
 >
+> We're guaranteed to learn something :)
 
-Hi Andrew,
+Yep! I managed to get it working, but it is rather janky and
+experimental. I don't think you should use this in your patch series
+unless Miguel has commented on it.
 
-The fixup below should get rid of the sparse warning.
+Notable things in the diff below:
+* the hostrustflags don't get the *provenance_casts lints (which is
+  correct, I think, but probably not the way I did it with filter-out)
+* the crates compiler_builtins, bindings, uapi, build_error, libmacros,
+  ffi, etc do get them, but probably shouldn't?
 
-From 83472fe89330a262facba427051426e8cd13e218 Mon Sep 17 00:00:00 2001
-From: Zi Yan <ziy@nvidia.com>
-Date: Thu, 13 Mar 2025 10:04:20 -0400
-Subject: [PATCH] mm/huge_memory: use NULL instead of 0 for folio->private
- assignment.
-
-It makes sparse happy.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202503131109.s7iuWfGq-lkp@int=
-el.com/
-Signed-off-by: Zi Yan <ziy@nvidia.com>
 ---
- mm/huge_memory.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cheers,
+Benno
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 14b1963898a7..e3ed8e9523f5 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3369,7 +3369,7 @@ static void __split_folio_to_order(struct folio *foli=
-o, int old_order,
- 		 */
- 		if (unlikely(new_folio->private)) {
- 			VM_WARN_ON_ONCE_PAGE(true, new_head);
--			new_folio->private =3D 0;
-+			new_folio->private =3D NULL;
- 		}
+diff --git a/Makefile b/Makefile
+index 70bdbf2218fc..38a79337cd7b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -473,6 +473,8 @@ export rust_common_flags :=3D --edition=3D2021 \
+ =09=09=09    -Astable_features \
+ =09=09=09    -Dnon_ascii_idents \
+ =09=09=09    -Dunsafe_op_in_unsafe_fn \
++=09=09=09    -Wfuzzy_provenance_casts \
++=09=09=09    -Wlossy_provenance_casts \
+ =09=09=09    -Wmissing_docs \
+ =09=09=09    -Wrust_2018_idioms \
+ =09=09=09    -Wunreachable_pub \
+@@ -493,7 +495,7 @@ KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERHOSTCFLAGS) $(HOS=
+T_LFS_CFLAGS) \
+ =09=09       $(HOSTCFLAGS) -I $(srctree)/scripts/include
+ KBUILD_HOSTCXXFLAGS :=3D -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS) \
+ =09=09       -I $(srctree)/scripts/include
+-KBUILD_HOSTRUSTFLAGS :=3D $(rust_common_flags) -O -Cstrip=3Ddebuginfo \
++KBUILD_HOSTRUSTFLAGS :=3D $(filter-out -Wfuzzy_provenance_casts -Wlossy_pr=
+ovenance_casts,$(rust_common_flags)) -O -Cstrip=3Ddebuginfo \
+ =09=09=09-Zallow-features=3D $(HOSTRUSTFLAGS)
+ KBUILD_HOSTLDFLAGS  :=3D $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
+ KBUILD_HOSTLDLIBS   :=3D $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+diff --git a/init/Kconfig b/init/Kconfig
+index d0d021b3fa3b..82e28d6f7c3f 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -132,6 +132,9 @@ config CC_HAS_COUNTED_BY
+ config RUSTC_HAS_COERCE_POINTEE
+ =09def_bool RUSTC_VERSION >=3D 108400
+=20
++config RUSTC_HAS_STABLE_STRICT_PROVENANCE
++=09def_bool RUSTC_VERSION >=3D 108400
++
+ config PAHOLE_VERSION
+ =09int
+ =09default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
+diff --git a/rust/Makefile b/rust/Makefile
+index ea3849eb78f6..998b57c6e5f7 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -436,7 +436,8 @@ $(obj)/helpers/helpers.o: $(src)/helpers/helpers.c $(re=
+cordmcount_source) FORCE
+ $(obj)/exports.o: private skip_gendwarfksyms =3D 1
+=20
+ $(obj)/core.o: private skip_clippy =3D 1
+-$(obj)/core.o: private skip_flags =3D -Wunreachable_pub
++$(obj)/core.o: private skip_flags =3D -Wunreachable_pub \
++    -Wfuzzy_provenance_casts -Wlossy_provenance_casts
+ $(obj)/core.o: private rustc_objcopy =3D $(foreach sym,$(redirect-intrinsi=
+cs),--redefine-sym $(sym)=3D__rust$(sym))
+ $(obj)/core.o: private rustc_target_flags =3D $(core-cfgs)
+ $(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs \
+diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
+index 014af0d1fc70..185bf29e44d9 100644
+--- a/rust/bindings/lib.rs
++++ b/rust/bindings/lib.rs
+@@ -9,6 +9,14 @@
+ //! using this crate.
+=20
+ #![no_std]
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
+ // See <https://github.com/rust-lang/rust-bindgen/issues/1651>.
+ #![cfg_attr(test, allow(deref_nullptr))]
+ #![cfg_attr(test, allow(unaligned_references))]
+diff --git a/rust/build_error.rs b/rust/build_error.rs
+index fa24eeef9929..84e24598857f 100644
+--- a/rust/build_error.rs
++++ b/rust/build_error.rs
+@@ -18,6 +18,14 @@
+ //! [const-context]: https://doc.rust-lang.org/reference/const_eval.html#c=
+onst-context
+=20
+ #![no_std]
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
+=20
+ /// Panics if executed in [const context][const-context], or triggers a bu=
+ild error if not.
+ ///
+diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
+index f14b8d7caf89..0dcb25a644f6 100644
+--- a/rust/compiler_builtins.rs
++++ b/rust/compiler_builtins.rs
+@@ -21,6 +21,14 @@
+=20
+ #![allow(internal_features)]
+ #![feature(compiler_builtins)]
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
+ #![compiler_builtins]
+ #![no_builtins]
+ #![no_std]
+diff --git a/rust/ffi.rs b/rust/ffi.rs
+index 584f75b49862..28a5e9a09b70 100644
+--- a/rust/ffi.rs
++++ b/rust/ffi.rs
+@@ -8,6 +8,14 @@
+ //! C ABI. The kernel does not use [`core::ffi`], so it can customise the =
+mapping that deviates from
+ //! the platform default.
+=20
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
+ #![no_std]
+=20
+ macro_rules! alias {
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 398242f92a96..6fd4fb2176aa 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -13,6 +13,14 @@
+=20
+ #![no_std]
+ #![feature(arbitrary_self_types)]
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
+ #![cfg_attr(CONFIG_RUSTC_HAS_COERCE_POINTEE, feature(derive_coerce_pointee=
+))]
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(coerce_unsized))=
+]
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(dispatch_from_dy=
+n))]
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index 8c7b786377ee..91450de998d3 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -2,6 +2,15 @@
+=20
+ //! Crate for all kernel procedural macros.
+=20
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
++
+ // When fixdep scans this, it will find this string `CONFIG_RUSTC_VERSION_=
+TEXT`
+ // and thus add a dependency on `include/config/RUSTC_VERSION_TEXT`, which=
+ is
+ // touched by Kconfig when the version string from the compiler changes.
+diff --git a/rust/uapi/lib.rs b/rust/uapi/lib.rs
+index 13495910271f..84ef3828e0d4 100644
+--- a/rust/uapi/lib.rs
++++ b/rust/uapi/lib.rs
+@@ -8,6 +8,14 @@
+ //! userspace APIs.
+=20
+ #![no_std]
++#![cfg_attr(
++    not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),
++    feature(strict_provenance)
++)]
++#![cfg_attr(
++    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
++    feature(strict_provenance_lints)
++)]
+ // See <https://github.com/rust-lang/rust-bindgen/issues/1651>.
+ #![cfg_attr(test, allow(deref_nullptr))]
+ #![cfg_attr(test, allow(unaligned_references))]
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 993708d11874..021ee36ae8f2 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -226,7 +226,10 @@ $(obj)/%.lst: $(obj)/%.c FORCE
+ # Compile Rust sources (.rs)
+ # ------------------------------------------------------------------------=
+---
+=20
+-rust_allowed_features :=3D asm_const,asm_goto,arbitrary_self_types,lint_re=
+asons
++# Lints were moved to `strict_provenance_lints` when `strict_provenance` w=
+as stabilized.
++#
++# See https://github.com/rust-lang/rust/commit/56ee492a6e7a917b2b3f888e33d=
+d52a13d3ecb64.
++rust_allowed_features :=3D asm_const,asm_goto,arbitrary_self_types,lint_re=
+asons,$(if $(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE),strict_provenance_l=
+ints,strict_provenance)
+=20
+ # `--out-dir` is required to avoid temporaries being created by `rustc` in=
+ the
+ # current working directory, which may be not accessible in the out-of-tre=
+e
 
- 		if (folio_test_swapcache(folio))
---=20
-2.47.2
 
-
-
-Best Regards,
-Yan, Zi
 
