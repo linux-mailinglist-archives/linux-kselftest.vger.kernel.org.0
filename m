@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-28886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53816A5EC5F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 08:06:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56053A5EC5C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 08:06:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72A281882AE1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 07:06:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47D0B17B0DD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 07:06:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A497202972;
-	Thu, 13 Mar 2025 07:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89058202C38;
+	Thu, 13 Mar 2025 07:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="dqDAFYC3"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="F/CrAVk8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C3920127C
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 07:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63301FDE01
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 07:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741849318; cv=none; b=Y1lEDfRVkwwoU+9nZJkYWhu948QSrPyLCaud8CDUsPLmQkZVaT8XIFo2OZN/8S8hdNw1GYsBZ1Zjbn/K0znmdD/UX8mO7B6+0P8ObFcGfWR0UkdQAKeuys/ELTW/07gl/V/w2Fq7JYVJt0qitixnQSPY7avV9IuWKnVb/1R9JS0=
+	t=1741849324; cv=none; b=BZGMzbdjrIf4Ht5dKJdUIoNIt+n0+VXHdROY+ROqtgKY3TdFcjabS9sgf/kOs2Hq0R6GOi3ykLXwvaNPN7TPlvBvF7qmICF0Pd1bdZBkp5RIP6DK5mwC6VkCR5JLhSDaWErU8idbsOqSbtbWScUKfJTeBRIymXTJYhD/bU7OPAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741849318; c=relaxed/simple;
-	bh=fAsNygmBH4vEFfwnr1O256Ehqy/tj24JUzQEngxqzTs=;
+	s=arc-20240116; t=1741849324; c=relaxed/simple;
+	bh=HCjJw4xyhEzQ6zT8qCsmgUzt1olFBpZX2ZwL4amUYp0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To; b=QsWDtTZSYJvO5qCc4kwZwvdfYPD/mcHOkULZ7NdgmmeqpRthzKnaCDaTyB8MF3rZAzv6pI0KiVCcHCszQ3Wkrk3I1MV6X4fgijr59U+TvkWvxII624olp3+f/A0gN7RuBuS9byaCIMFM931k4BHNok+UCHTR2A9vG9fL/EiVuro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=dqDAFYC3; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:To; b=EEENYOfqiiL4l6HsNlzZKdx9yR9h2/olkK3i/L+kov6jg+uM7pASCbwuf9o/qk1/RpjSMo1pCZl5o7NhQ9q/eL10Q3nV1QKOFQViWemlwU8XFnWWnt0vnoPeOGU9WeM//IrrrBsfmXhH/TVNdMmSWa0Q6wrUtqzNG2JsXjM3ssI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=F/CrAVk8; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22398e09e39so11158575ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 00:01:56 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2fec13a4067so1113941a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 00:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1741849315; x=1742454115; darn=vger.kernel.org;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1741849322; x=1742454122; darn=vger.kernel.org;
         h=to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iEx1oB+WR7O6v2TIINfyTS8xxjNqfeRuV0OaAnQT/3s=;
-        b=dqDAFYC3FI27Lq8swyujI9KWapP3mNM9Cr3I7YN7BsWKhW48xN+3OivsqDxl4heFio
-         Jjhypw1gSs9gti7hTe1932GkVEpc4/u+FHtNpDevJpMm259CCoWH3TIxNp1JGN3yleTe
-         MxVHlJP2kaKv3u6cxuoX4kghqDXzW7kXwuZgdAV/g8At4+PR/gsnE84t+fYX1iftslBt
-         JkVbW+NUHDnB9r5tr2rGMC9n01cHBue3rHtJJJsLloMyy0X9kCK+XL65fPa4I9KRt8Kf
-         j6cgMwVS8EvK+6rzO6WyICX3BDgXJSZvNLKJgQJ39AMWF4MvY9bTl2Vw6IYl3TMDHoa7
-         ompQ==
+        bh=UkGikd/Ad/tPfmKfWOKmNpfe6xZfSLW8Y3eIuF8D5nY=;
+        b=F/CrAVk8xN1b3CJ5BbtJjJjQzf3qL7RZFEAOgHE/oeNDFmHTkBAgzgjNq66Lc2ipyo
+         96xPRPjxeNqbMs38Cv/Ej96T9Hd6j9GaZnyhfYqTvorYdTDlhGVdaLg20ei7gMAZULOM
+         b4aMpNDDSnrJTk9CfFHEqhDCVeoxKczcCX5oqZcClXKr3V+eHEzvYSrPYGCYMFvj3Tf+
+         EyXgxBslmcdTn8cbfFyjAW5GkkwgWyfNK3CP7fhkKBkCFx0n45OA6MeLYtSXZ+Uy9Hwc
+         4H9U7tWy24yClf5VxOyxDKW/sJW61jN6BD8gtKe3XGTjtd7nEARaSX+SY9+By/fHdbSY
+         2FnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741849315; x=1742454115;
+        d=1e100.net; s=20230601; t=1741849322; x=1742454122;
         h=to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iEx1oB+WR7O6v2TIINfyTS8xxjNqfeRuV0OaAnQT/3s=;
-        b=kxajPuwYabH2mqztOJ/gPOAiDAXhLVV40LJgfJ6z4xuE8+CXUXiiizKAbkh7SmTngH
-         WE3cA5tM97Yz/DS69Sjjl0gAXRcvtIkwiuiTe7hOH506TK2vtysLF2GQ/LUSlAKhO/Zk
-         Z3caTmgyz0AZNHrJVzm+7Duyimh2N0UfZj3aJEC61ZzEVohYcr6yNA51erO8k9z1gtUq
-         UK5IozX9WRriGO21RtncA2E2dLUSNc5daupUFyQWJIfBS7AMrOt+ykfWUrYktOvUzVAd
-         LvV0o2C7NpPtL07INolJo7GYzM0Nh+Co74HCPZgSd9HjOkDnjH8Zi0n0wd9qKWd/ktru
-         myPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJdaAAOcIsaITxTtcIO9N4vVNAl5k9o1WpqhQ2WFz4glWUkuZUCc7pI37HR7nGLkdIa/pXFTptZjn4B3yqOEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0tkaHLqhilwuKJYbmglbb0MZ/Oj1NLK2Zc16CoJUbf03dCEdR
-	cZFOf1PCRM0LKPKVeamJzJpUDueIB7oCf+Ys9gSp2xBqFshm/gbonLAEOtmtF+w=
-X-Gm-Gg: ASbGncvZ8MfLzzKUMfiMdjO8zl2UgfXR8Un7Qunb3VH64JpAvxeLZhTFYmgfiPN23pW
-	PhNUmTY99ZBwbpHN3l6SA1Ib4XfyX2U8oBp/FqUuLG/DNEDzY0+KVh9k1QECnLYc8gSVwGUBZVL
-	56BuL647sj5KhAkNBMg2VbO7n8C3VPSgWJhms+8HFrMlVa6z7Kx5VFpmdDoHlPYRdT42bCr8uzB
-	bAxbG1UqVDXqV86lu5XCJ+8/ZDU3o9l5wwGnGT61eqBXX3nZFt3MP89mGADVqOCfNiaWFbpisv5
-	rjuUO4zNLe/9ZpBuT00a6asGGSViikN5ZZyx8wB+HbW8SUj7miT5vlQNoC0=
-X-Google-Smtp-Source: AGHT+IFxYhCxmO0r82s2kBmNT4izOERTLgrLPNuxMZ4nqqb1ELCFYiVGwW2lZs8BLOwjEz2BJgVjGw==
-X-Received: by 2002:a17:902:d50e:b0:223:4d7e:e523 with SMTP id d9443c01a7336-22428c24321mr304711965ad.50.1741849315481;
-        Thu, 13 Mar 2025 00:01:55 -0700 (PDT)
+        bh=UkGikd/Ad/tPfmKfWOKmNpfe6xZfSLW8Y3eIuF8D5nY=;
+        b=gQKDCuEEkHavY5KOPDpoaDnEPfIJKYKM/42Mf5KnqEIxVfjoGQTTdC9JL4inuDKnl6
+         YivrgtscQN87RoNXA5nWHYczL457QYsMnuUdwzS1gMfMfXUrj28lsGMuVDx4FUaU7mK/
+         PplwmX4/Nqs6OwN91UZPthPud04zIAgP95mzSZe+ULjyaIwDKWO8VItOoKuq6Z1rPp8x
+         gsIdo4Atf1oFzo1E1VUosm3KHoJYqGySXgj5elPevT3i7KwCF1E7PTzJ3u1NyGw2ZSgI
+         2KlO/qQKV3eWx7Nx3iM/xaIeIYCQrjy6QyKh7A4heLVMqxKkX+9o6gl6dEkDIyYWJa95
+         RbMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUX/Am10OHt6UFlhhJu2uPeIREepHnUn4JErJpKa4IzZTM9YxJaBaFffX+pRZmaSVOr0oA701kb7dNVpHHWRAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqa1EvLpzxf7bEJ/M8DQbVI035hflv3/KRB+pAtMlunFbZ9wBH
+	b2VL8LxFZf8+t6OYeBOGePr55a4ak7CUVD0Cek7iEx0Zkf5IFWpp3N2iREwB7m4=
+X-Gm-Gg: ASbGncvABhK2OIlXscX59tP+qViKEqaYsRp385ebEcIaepECVvO3Vy16EuBsTcznvJp
+	J9xnCGAUoQCKN8SvI0eORtGSZ9gC4FBDvxayaKzVlGeoDB4+tSYRnWbSdhQh0y37tgLgEEgndS3
+	T/t+8QOgDJrb6AQby9LPok9ROITwruwrO03/pu3mTWKzJ3gfACxVr3OTQxNhuLEUOApz+5jbMp1
+	vkNgM/XAby6lrU8CN76M2bPZY115eu155eHu0zq2lHuPPbmde8hAU5C44ZYrShVo8I1LiKauybJ
+	UDVvzFeSJD41QCi4Vhuy8WK6NGqiaeX2gYW7xeRKaxTjjAyk
+X-Google-Smtp-Source: AGHT+IHTpYDPSLT5yc7d72SDsCx1rUk7tGT6u0RLi/zmklDJcrhUC3W1KPTvb1y0wV1IhmZnoguH1A==
+X-Received: by 2002:a17:90b:1c83:b0:2fe:a77b:d97e with SMTP id 98e67ed59e1d1-300ff0cadb2mr14806388a91.11.1741849321996;
+        Thu, 13 Mar 2025 00:02:01 -0700 (PDT)
 Received: from localhost ([157.82.205.237])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-225c6ba6c8dsm6485835ad.156.2025.03.13.00.01.51
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-3010342f135sm3173081a91.1.2025.03.13.00.01.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Mar 2025 00:01:55 -0700 (PDT)
+        Thu, 13 Mar 2025 00:02:01 -0700 (PDT)
 From: Akihiko Odaki <akihiko.odaki@daynix.com>
-Date: Thu, 13 Mar 2025 16:01:08 +0900
-Subject: [PATCH net-next v10 05/10] tun: Introduce virtio-net hash feature
+Date: Thu, 13 Mar 2025 16:01:09 +0900
+Subject: [PATCH net-next v10 06/10] tap: Introduce virtio-net hash feature
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-rss-v10-5-3185d73a9af0@daynix.com>
+Message-Id: <20250313-rss-v10-6-3185d73a9af0@daynix.com>
 References: <20250313-rss-v10-0-3185d73a9af0@daynix.com>
 In-Reply-To: <20250313-rss-v10-0-3185d73a9af0@daynix.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -102,193 +102,145 @@ To: Jonathan Corbet <corbet@lwn.net>,
  Akihiko Odaki <akihiko.odaki@daynix.com>
 X-Mailer: b4 0.15-dev-edae6
 
-Add ioctls and storage required for the virtio-net hash feature to TUN.
+Add ioctls and storage required for the virtio-net hash feature to TAP.
 
 Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 ---
- drivers/net/Kconfig    |  1 +
- drivers/net/tun.c      | 54 ++++++++++++++++++++++++++++++++++++++++++--------
- include/linux/skbuff.h |  3 +++
- net/core/skbuff.c      |  4 ++++
- 4 files changed, 54 insertions(+), 8 deletions(-)
+ drivers/net/tap.c      | 60 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ include/linux/if_tap.h |  2 ++
+ 2 files changed, 60 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index 1fd5acdc73c6..aecfd244dd83 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -395,6 +395,7 @@ config TUN
- 	tristate "Universal TUN/TAP device driver support"
- 	depends on INET
- 	select CRC32
-+	select SKB_EXTENSIONS
- 	help
- 	  TUN/TAP provides packet reception and transmission for user space
- 	  programs.  It can be viewed as a simple Point-to-Point or Ethernet
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 03d47799e9bd..b2d74e0ec932 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -209,6 +209,7 @@ struct tun_struct {
- 	struct bpf_prog __rcu *xdp_prog;
- 	struct tun_prog __rcu *steering_prog;
- 	struct tun_prog __rcu *filter_prog;
-+	struct tun_vnet_hash_container __rcu *vnet_hash;
- 	struct ethtool_link_ksettings link_ksettings;
- 	/* init args */
- 	struct file *file;
-@@ -451,9 +452,14 @@ static inline void tun_flow_save_rps_rxhash(struct tun_flow_entry *e, u32 hash)
- 		e->rps_rxhash = hash;
+diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+index 25c60ff2d3f2..86b5e7b88614 100644
+--- a/drivers/net/tap.c
++++ b/drivers/net/tap.c
+@@ -49,6 +49,10 @@ struct major_info {
+ 	struct list_head next;
+ };
+ 
++struct tap_skb_cb {
++	struct virtio_net_hash hash;
++};
++
+ #define GOODCOPY_LEN 128
+ 
+ static const struct proto_ops tap_socket_ops;
+@@ -179,9 +183,20 @@ static void tap_put_queue(struct tap_queue *q)
+ 	sock_put(&q->sk);
  }
  
-+static struct virtio_net_hash *tun_add_hash(struct sk_buff *skb)
++static struct tap_skb_cb *tap_skb_cb(const struct sk_buff *skb)
 +{
-+	return skb_ext_add(skb, SKB_EXT_TUN_VNET_HASH);
++	BUILD_BUG_ON(sizeof(skb->cb) < sizeof(struct tap_skb_cb));
++	return (struct tap_skb_cb *)skb->cb;
 +}
 +
- static const struct virtio_net_hash *tun_find_hash(const struct sk_buff *skb)
++static struct virtio_net_hash *tap_add_hash(struct sk_buff *skb)
++{
++	return &tap_skb_cb(skb)->hash;
++}
++
+ static const struct virtio_net_hash *tap_find_hash(const struct sk_buff *skb)
  {
 -	return NULL;
-+	return skb_ext_find(skb, SKB_EXT_TUN_VNET_HASH);
++	return &tap_skb_cb(skb)->hash;
  }
  
- /* We try to identify a flow through its rxhash. The reason that
-@@ -462,14 +468,21 @@ static const struct virtio_net_hash *tun_find_hash(const struct sk_buff *skb)
-  * the userspace application move between processors, we may get a
-  * different rxq no. here.
-  */
--static u16 tun_automq_select_queue(struct tun_struct *tun, struct sk_buff *skb)
-+static u16 tun_automq_select_queue(struct tun_struct *tun,
-+				   const struct tun_vnet_hash_container *vnet_hash,
-+				   struct sk_buff *skb)
+ /*
+@@ -194,6 +209,7 @@ static const struct virtio_net_hash *tap_find_hash(const struct sk_buff *skb)
+ static struct tap_queue *tap_get_queue(struct tap_dev *tap,
+ 				       struct sk_buff *skb)
  {
-+	struct flow_keys keys;
 +	struct flow_keys_basic keys_basic;
- 	struct tun_flow_entry *e;
- 	u32 txq, numqueues;
+ 	struct tap_queue *queue = NULL;
+ 	/* Access to taps array is protected by rcu, but access to numvtaps
+ 	 * isn't. Below we use it to lookup a queue, but treat it as a hint
+@@ -201,17 +217,47 @@ static struct tap_queue *tap_get_queue(struct tap_dev *tap,
+ 	 * racing against queue removal.
+ 	 */
+ 	int numvtaps = READ_ONCE(tap->numvtaps);
++	struct tun_vnet_hash_container *vnet_hash = rcu_dereference(tap->vnet_hash);
+ 	__u32 rxq;
  
- 	numqueues = READ_ONCE(tun->numqueues);
- 
--	txq = __skb_get_hash_symmetric(skb);
-+	memset(&keys, 0, sizeof(keys));
-+	skb_flow_dissect(skb, &flow_keys_dissector_symmetric, &keys, 0);
-+
-+	txq = flow_hash_from_keys(&keys);
- 	e = tun_flow_find(&tun->flows[tun_hashfn(txq)], txq);
- 	if (e) {
- 		tun_flow_save_rps_rxhash(e, txq);
-@@ -478,6 +491,13 @@ static u16 tun_automq_select_queue(struct tun_struct *tun, struct sk_buff *skb)
- 		txq = reciprocal_scale(txq, numqueues);
- 	}
- 
-+	keys_basic = (struct flow_keys_basic) {
-+		.control = keys.control,
-+		.basic = keys.basic
++	*tap_skb_cb(skb) = (struct tap_skb_cb) {
++		.hash = { .report = VIRTIO_NET_HASH_REPORT_NONE }
 +	};
-+	tun_vnet_hash_report(vnet_hash, skb, &keys_basic, skb->l4_hash ? skb->hash : txq,
-+			     tun_add_hash);
 +
- 	return txq;
- }
+ 	if (!numvtaps)
+ 		goto out;
  
-@@ -513,8 +533,15 @@ static u16 tun_select_queue(struct net_device *dev, struct sk_buff *skb,
- 	u16 ret;
+ 	if (numvtaps == 1)
+ 		goto single;
  
- 	rcu_read_lock();
--	if (!tun_ebpf_select_queue(tun, skb, &ret))
--		ret = tun_automq_select_queue(tun, skb);
-+	if (!tun_ebpf_select_queue(tun, skb, &ret)) {
-+		struct tun_vnet_hash_container *vnet_hash = rcu_dereference(tun->vnet_hash);
++	if (vnet_hash) {
++		if ((vnet_hash->common.flags & TUN_VNET_HASH_RSS)) {
++			rxq = tun_vnet_rss_select_queue(numvtaps, vnet_hash, skb, tap_add_hash);
++			queue = rcu_dereference(tap->taps[rxq]);
++			goto out;
++		}
 +
-+		if (vnet_hash && (vnet_hash->common.flags & TUN_VNET_HASH_RSS))
-+			ret = tun_vnet_rss_select_queue(READ_ONCE(tun->numqueues), vnet_hash,
-+							skb, tun_add_hash);
-+		else
-+			ret = tun_automq_select_queue(tun, vnet_hash, skb);
++		if (!skb->l4_hash && !skb->sw_hash) {
++			struct flow_keys keys;
++
++			skb_flow_dissect_flow_keys(skb, &keys, FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL);
++			rxq = flow_hash_from_keys(&keys);
++			keys_basic = (struct flow_keys_basic) {
++				.control = keys.control,
++				.basic = keys.basic
++			};
++		} else {
++			skb_flow_dissect_flow_keys_basic(NULL, skb, &keys_basic, NULL, 0, 0, 0,
++							 FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL);
++			rxq = skb->hash;
++		}
++	} else {
++		rxq = skb_get_hash(skb);
 +	}
- 	rcu_read_unlock();
- 
- 	return ret;
-@@ -2235,6 +2262,7 @@ static void tun_free_netdev(struct net_device *dev)
- 	security_tun_dev_free_security(tun->security);
- 	__tun_set_ebpf(tun, &tun->steering_prog, NULL);
- 	__tun_set_ebpf(tun, &tun->filter_prog, NULL);
-+	kfree_rcu_mightsleep(rcu_access_pointer(tun->vnet_hash));
- }
- 
- static void tun_setup(struct net_device *dev)
-@@ -3014,16 +3042,22 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
- 	} else {
- 		memset(&ifr, 0, sizeof(ifr));
++
+ 	/* Check if we can use flow to select a queue */
+-	rxq = skb_get_hash(skb);
+ 	if (rxq) {
++		tun_vnet_hash_report(vnet_hash, skb, &keys_basic, rxq, tap_add_hash);
+ 		queue = rcu_dereference(tap->taps[rxq % numvtaps]);
+ 		goto out;
  	}
--	if (cmd == TUNGETFEATURES) {
-+	switch (cmd) {
-+	case TUNGETFEATURES:
- 		/* Currently this just means: "what IFF flags are valid?".
- 		 * This is needed because we never checked for invalid flags on
- 		 * TUNSETIFF.
- 		 */
- 		return put_user(IFF_TUN | IFF_TAP | IFF_NO_CARRIER |
- 				TUN_FEATURES, (unsigned int __user*)argp);
--	} else if (cmd == TUNSETQUEUE) {
-+
-+	case TUNSETQUEUE:
- 		return tun_set_queue(file, &ifr);
--	} else if (cmd == SIOCGSKNS) {
-+
+@@ -998,6 +1044,16 @@ static long tap_ioctl(struct file *file, unsigned int cmd,
+ 		rtnl_unlock();
+ 		return ret;
+ 
 +	case TUNGETVNETHASHCAP:
 +		return tun_vnet_ioctl_gethashcap(argp);
 +
-+	case SIOCGSKNS:
- 		if (!ns_capable(net->user_ns, CAP_NET_ADMIN))
- 			return -EPERM;
- 		return open_related_ns(&net->ns, get_net_ns);
-@@ -3264,6 +3298,10 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
- 		ret = open_related_ns(&net->ns, get_net_ns);
- 		break;
- 
 +	case TUNSETVNETHASH:
-+		ret = tun_vnet_ioctl_sethash(&tun->vnet_hash, argp);
-+		break;
++		rtnl_lock();
++		tap = rtnl_dereference(q->tap);
++		ret = tap ? tun_vnet_ioctl_sethash(&tap->vnet_hash, argp) : -EBADFD;
++		rtnl_unlock();
++		return ret;
 +
- 	default:
- 		ret = tun_vnet_ioctl(&tun->vnet_hdr_sz, &tun->flags, cmd, argp);
- 		break;
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index bb2b751d274a..cdd793f1c360 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4842,6 +4842,9 @@ enum skb_ext_id {
- #endif
- #if IS_ENABLED(CONFIG_MCTP_FLOWS)
- 	SKB_EXT_MCTP,
-+#endif
-+#if IS_ENABLED(CONFIG_TUN)
-+	SKB_EXT_TUN_VNET_HASH,
- #endif
- 	SKB_EXT_NUM, /* must be last */
- };
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 7b03b64fdcb2..aa2a091b649f 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -64,6 +64,7 @@
- #include <linux/mpls.h>
- #include <linux/kcov.h>
- #include <linux/iov_iter.h>
-+#include <linux/virtio_net.h>
+ 	case SIOCGIFHWADDR:
+ 		rtnl_lock();
+ 		tap = tap_get_tap_dev(q);
+diff --git a/include/linux/if_tap.h b/include/linux/if_tap.h
+index 553552fa635c..7334c46a3f10 100644
+--- a/include/linux/if_tap.h
++++ b/include/linux/if_tap.h
+@@ -31,6 +31,7 @@ static inline struct ptr_ring *tap_get_ptr_ring(struct file *f)
+ #define MAX_TAP_QUEUES 256
  
- #include <net/protocol.h>
- #include <net/dst.h>
-@@ -4969,6 +4970,9 @@ static const u8 skb_ext_type_len[] = {
- #if IS_ENABLED(CONFIG_MCTP_FLOWS)
- 	[SKB_EXT_MCTP] = SKB_EXT_CHUNKSIZEOF(struct mctp_flow),
- #endif
-+#if IS_ENABLED(CONFIG_TUN)
-+	[SKB_EXT_TUN_VNET_HASH] = SKB_EXT_CHUNKSIZEOF(struct virtio_net_hash),
-+#endif
- };
+ struct tap_queue;
++struct tun_vnet_hash_container;
  
- static __always_inline unsigned int skb_ext_total_length(void)
+ struct tap_dev {
+ 	struct net_device	*dev;
+@@ -43,6 +44,7 @@ struct tap_dev {
+ 	int			numqueues;
+ 	netdev_features_t	tap_features;
+ 	int			minor;
++	struct tun_vnet_hash_container __rcu *vnet_hash;
+ 
+ 	void (*update_features)(struct tap_dev *tap, netdev_features_t features);
+ 	void (*count_tx_dropped)(struct tap_dev *tap);
 
 -- 
 2.48.1
