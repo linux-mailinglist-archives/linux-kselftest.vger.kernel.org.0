@@ -1,122 +1,109 @@
-Return-Path: <linux-kselftest+bounces-28967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F38FEA5FDB2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 18:24:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E539A5FDC4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 18:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC8BA19C4306
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 17:24:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355ED880122
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 17:28:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE41C187554;
-	Thu, 13 Mar 2025 17:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E1616F8E9;
+	Thu, 13 Mar 2025 17:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvyGRkVE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WsiJ1vS4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8E01624CC;
-	Thu, 13 Mar 2025 17:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AFD12CD88;
+	Thu, 13 Mar 2025 17:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741886668; cv=none; b=WNc+IoCdOzosNRJayJMsc9XdNeCgF2T86fZjMMz6S09/WYA+mec5CJxV/V5FiY+gmRr9hXKLsR052zCRTVhu1EcT8JGAj1KWSLKZBMD7BSjRSeQW/jawNZBJsFdWRpcdDhROR2SuuDG9G+iCJKbcsQQGrVw/WZ8spOZRFY+saCA=
+	t=1741886939; cv=none; b=akdWVFGE36tFFRXuGjDQz9nobRABRxkOSX2rTwVTY+mvkQ9WaHOTsWxJisoTZRc5OsYbDPEYI0Zjk1H8dgk/J60sc7PqW2PpOhGQuvShPCOahALKUK3rWGTj/hcD9tpLtQn0uoWG6aNqWjqqxPyP36WE2eBykQjuz+pfXeLzBtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741886668; c=relaxed/simple;
-	bh=9/zmAAvs9NnopuZELdGFf5m30SQkrIgaibjOTSU2/4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oF1MsDHDAL/hhXmpVhA3tZ1FD19XShI3STC8Qg7JFRNLi4tQzkfXHtHcqmtxku/05GNebJwR/0owXclIHMMaELLn5AlcOl74H9is2vR9WFrsDK7FIdgtR8Y22uHyBmiHWK/+LNUfQ0VRKiTsL5N+nuBZLbHHHNQXd8/6TbmiLFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvyGRkVE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C81C4CEDD;
-	Thu, 13 Mar 2025 17:24:27 +0000 (UTC)
+	s=arc-20240116; t=1741886939; c=relaxed/simple;
+	bh=pCKx8h4RdPEXnrliEof7w9TGctCJ+lkyJAvPxZvj8as=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=liW8s5H1NxzBeCRiIcQJdhCxAjugRR2ma55gP5ZLu5BPx0W8jO47KebiC4Lh6Yn9BaMynJtavHE6ut1qHkym9j1Le3oUD8+W4h+ZYOvnHcZwq6iMyHJNI1laGUP9pqVJPm2xvuS9L8S9eJIVSt78TzFoob3/E3VwT54e7pBdYZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WsiJ1vS4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78296C4CEDD;
+	Thu, 13 Mar 2025 17:28:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741886668;
-	bh=9/zmAAvs9NnopuZELdGFf5m30SQkrIgaibjOTSU2/4g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LvyGRkVE67SzBgb1QxytGP4oCaiDm1tJxrYa6S762f1uCVELy9kUizXLZYLA53dFI
-	 LKB6AnaccFkz/obvqyj95f4NBc0qIbgjsCSr6injy9nOKRnZ631Nz5jY6vtJhqfK9W
-	 lfOaWqXafcfENzy2fADO6wmw4xv83Pcbrnp64dabwgF4V67YDxdHN3robsRH2ge3my
-	 yyXxef+KA/0d2CifdqcRiTFlknqGJdXOg+TWR6xgA6Yw9w3MkQfmaKGP78AmYUgaDq
-	 AxdUBErN29IHX2+C/CRP8J164+HWq5+oXjim9xRBBRx3EWs4UmnF9OTuMnKZeD2CHi
-	 43mLTvGtWzx2g==
-Date: Thu, 13 Mar 2025 18:24:25 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Alessandro Carminati <acarmina@redhat.com>, 
-	linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>, 
-	Arthur Grillo <arthurgrillo@riseup.net>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Naresh Kamboju <naresh.kamboju@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Guenter Roeck <linux@roeck-us.net>, Alessandro Carminati <alessandro.carminati@gmail.com>, 
-	Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	loongarch@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
-Message-ID: <20250313-abiding-vivid-robin-159dfa@houat>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <202503131016.5DCEAEC945@keescook>
+	s=k20201202; t=1741886938;
+	bh=pCKx8h4RdPEXnrliEof7w9TGctCJ+lkyJAvPxZvj8as=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WsiJ1vS4VkmRkEQ91gUkBcXJpHCkjiQdXuKiOQrrIiFFBXTiyzWC1lNxpbasmhUpq
+	 3JfyOHYn+nAM5kLaFI7eKKMk0HVf0PYt9MfKkoBJ8D20YQKw1ngGTv9SXVphquEE2h
+	 5FlTV4pustJ2ITwpRF1Mfnt55HA7MhFAT/DH8k8bfDg8uSfYhcoZzDsRwQ4++FKCuA
+	 ot/lfD8WMiYADiTKuF+3761zflCg4viKvvK9vcUUI5qt7A6AsUxSPP/q9N2rzjlyFr
+	 zE/pTffZvM1VqP7YEYZUp20FKgVv5uizsSJhZI1T/0EIjucCggWl2hxTSmb3uw6p4S
+	 9WKQ0vOSUIRTA==
+From: Kees Cook <kees@kernel.org>
+To: Arpitha Raghunandan <98.arpi@gmail.com>,
+	David Gow <davidgow@google.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Tamir Duberstein <tamird@gmail.com>
+Cc: Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linuxppc-dev@lists.ozlabs.org,
+	workflows@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] printf: convert self-test to KUnit
+Date: Thu, 13 Mar 2025 10:28:50 -0700
+Message-Id: <174188692856.3317505.16138391415680640168.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250307-printf-kunit-convert-v6-0-4d85c361c241@gmail.com>
+References: <20250307-printf-kunit-convert-v6-0-4d85c361c241@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="te6o3coodwf7546n"
-Content-Disposition: inline
-In-Reply-To: <202503131016.5DCEAEC945@keescook>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
+On Fri, 07 Mar 2025 17:08:55 -0500, Tamir Duberstein wrote:
+> This is one of just 3 remaining "Test Module" kselftests (the others
+> being bitmap and scanf), the rest having been converted to KUnit.
+> 
+> I tested this using:
+> 
+> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 printf
+> 
+> [...]
 
---te6o3coodwf7546n
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
-MIME-Version: 1.0
+Applied to for-next/move-kunit-tests, thanks!
 
-Hi,
+[1/3] printf: convert self-test to KUnit
+      https://git.kernel.org/kees/c/7a79e7daa84e
+[2/3] printf: break kunit into test cases
+      https://git.kernel.org/kees/c/81a03aa9b88c
+[3/3] printf: implicate test line in failure messages
+      https://git.kernel.org/kees/c/034bee685fd4
 
-On Thu, Mar 13, 2025 at 10:17:49AM -0700, Kees Cook wrote:
-> On Thu, Mar 13, 2025 at 11:43:15AM +0000, Alessandro Carminati wrote:
-> > Some unit tests intentionally trigger warning backtraces by passing bad
-> > parameters to kernel API functions. Such unit tests typically check the
-> > return value from such calls, not the existence of the warning backtrac=
-e.
->=20
-> Thanks for picking this series back up! I honestly thought this had
-> already landed. :)
->=20
-> > With CONFIG_KUNIT enabled, image size increase with this series applied=
- is
-> > approximately 1%. The image size increase (and with it the functionality
-> > introduced by this series) can be avoided by disabling
-> > CONFIG_KUNIT_SUPPRESS_BACKTRACE.
->=20
-> Yeah, as with my prior review, I'm a fan of this. It makes a bunch of my
-> very noisy tests much easier to deal with.
+Take care,
 
-And for the record, we're also affected by this in DRM and would very
-much like to get it merged in one shape or another.
+-- 
+Kees Cook
 
-Maxime
-
---te6o3coodwf7546n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZ9MUyAAKCRDj7w1vZxhR
-xdXjAQCCwQNRXUI4bvpTeTrsH0SDbsLYjlm1aQi9V/DpasrOoQD/cFET4LceVGmh
-WT9gLea6FEbCN1GQ2T9KOoLGuMrzTAw=
-=uGit
------END PGP SIGNATURE-----
-
---te6o3coodwf7546n--
 
