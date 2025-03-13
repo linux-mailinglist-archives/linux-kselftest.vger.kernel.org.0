@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-28897-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4285EA5F09B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E2E0A5F09E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 11:23:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66526171E7A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:23:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F191173396
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Mar 2025 10:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B81B26563E;
-	Thu, 13 Mar 2025 10:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC6C265CB2;
+	Thu, 13 Mar 2025 10:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5Fu3M+2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lumSFRBx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEF126462C;
-	Thu, 13 Mar 2025 10:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282C3261583;
+	Thu, 13 Mar 2025 10:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741861340; cv=none; b=tQ6sKywQRxts/pbkJe6Kd/vXSdGmllkQ4vhHSbO8SWjqU3f6ohrX83tAwETkKVoj+6ot8E95DVdN7ACmyjlWyyJafl3/87qwhcErpy6Lcto2LNcfrZH7w9acFqfeWSepIlUAZBS6jQ7acQePy/oSA3CZZrN5Gzci8+r+63EZubo=
+	t=1741861354; cv=none; b=TzuWT+rFhfHKUxS2zfhjRAa+oK69KpwHVAmtXeBR91YVyE/I8wD4O6i6qa3eeReVK7w61AD13EC8Xqwp9aMt+tIeF0tbZRWng4AoXil1ORX3Uvb+RfK1TAFHNGg90aBZlqGnQCGgWFGIsspDkjn6gw3rZcE/zkk2VEuBaqZYv2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741861340; c=relaxed/simple;
-	bh=iCXqiyNgaUufJYNxltgPY1kZh2aAyu/eXYIN8V+MMqk=;
+	s=arc-20240116; t=1741861354; c=relaxed/simple;
+	bh=dpw9fVHupVdv7LX0zuifR7cy5kgztBnsRocr7lox/WI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=S018VDcuC3KXfXG0cpCsVC6Z90yqvmMFSQ1CsEVqBaJXzKGwhcw5mbM4YhPeRRS2C/zmXHHOH0p09ZpAKVtOrSXjOQh7n17Ug5yVeSK3i8f6WwzqRi19w3+8iFFH3+olqdsr4jVpObEyTMfs6bzUF08gMpzyMjEBkwJoYfLHvnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5Fu3M+2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB60C4CEEA;
-	Thu, 13 Mar 2025 10:22:07 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=pfhDdHRAJq5kdBA2mojJkOHvi1ac/SChQZCWfTSaGHvE7rInp1ks2pS5jGpehykthtXHkETQk5XwwyuMN5EMuhap3Q0cnp1QjxrNAyYnphVuxqgBuahVNK+CjXstRR4+1vAuLKJ7q4F0e2IzM3wuM8GXHQdR6iwjs7XbLJhx8wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lumSFRBx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89817C4CEF1;
+	Thu, 13 Mar 2025 10:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741861339;
-	bh=iCXqiyNgaUufJYNxltgPY1kZh2aAyu/eXYIN8V+MMqk=;
+	s=k20201202; t=1741861353;
+	bh=dpw9fVHupVdv7LX0zuifR7cy5kgztBnsRocr7lox/WI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=G5Fu3M+28HWi3jJfavHCxdiV1kYDvopnJj6S7CfBcA+c7saMxE5zvkoGvBeO52S25
-	 QHG0owG46revXunV/CbSdG395tXauJ8U49BMvOxgs1AE3wklOP/uVBL7ifoNE+mMMk
-	 77EQYEUyzl+rebvpnBhJIbhe4B2vA5Rf+SOXchv1N9agKrkq6aq6aR2dnrtVn7gr0W
-	 9pG8yA/z3tyFsrQnZN5+37Jnwlzn1/4KmJi5zB45Rte7TjYWoNYVlBlGB7XO6KAeLh
-	 9f/UtSnDStjvLFXAQ8viZA3EpG5NJ17CoxlOFa6hOVmmF8LpKg6ttlKGu6VR4Ztc3U
-	 6tTIaIzgkrrig==
+	b=lumSFRBxiOhLgpjZq9Pz7lvTatX2PelR792XbAHvJZ7W9GORd5pqkTsc7lAiQ0swD
+	 kenaoLD3DSJezH71UY8tzMYuU4ortVRFgUq9A6B/UccRr//QBvXf5XNmPti7RS7Aoy
+	 yRKnjSQlV2K8Km02TWNys7GDDOkxGUrKt4M6QdTlXbroomqsIPpWfSq8OT9J5eaMpc
+	 sQoLeGwQMcIkwYO2tqqvcHmAGuDb76Jc3An6hlbwRILHCZlWmvJt2ljHsPUWM904MO
+	 beZWXm6o4m85VDRu0V46dKewc7tgPkOBWbLb+AmdbKyTG9EW/wPd8vHlsOkuQBNX/H
+	 EoYFk0GyxwkBQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 13 Mar 2025 11:20:54 +0100
-Subject: [PATCH net-next 05/12] mptcp: pm: add struct_group in
- mptcp_pm_data
+Date: Thu, 13 Mar 2025 11:20:55 +0100
+Subject: [PATCH net-next 06/12] mptcp: pm: define struct mptcp_pm_ops
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250313-net-next-mptcp-pm-ops-intro-v1-5-f4e4a88efc50@kernel.org>
+Message-Id: <20250313-net-next-mptcp-pm-ops-intro-v1-6-f4e4a88efc50@kernel.org>
 References: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
 In-Reply-To: <20250313-net-next-mptcp-pm-ops-intro-v1-0-f4e4a88efc50@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -66,92 +65,169 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2239; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=RZVcVWy0Z+SJTFF/HiVwvvq0OGDhr5NaFWk5fqBDblE=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn0rGaxOeGXTUAfKEuYiyC3sR3tDcl/eCK4QAiy
- WFJ9AyljJ+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ9KxmgAKCRD2t4JPQmmg
- c4C0D/9iEZ8nbakxrYbCT2eqZMujSZDyZ+JRtQBZP69joT7rtV3gaqYNclBxrksLRJM9Sld5PFx
- 72ygNrlsp9irqVuEFpRs60E939Uy/6b7q7IwBl/ht1HIf7CzaQFWCjv9BnTWBeGfwmA0J0UlsAa
- jb1ZkA4nVo/82vYoHyAbgKtt3kwTIQS2EJH0xtcp+JFFdMb2b/c/yRvrWAUIBY4vyvR61O92KqQ
- C2xsuS8itHMt7/6Puftxzjcn5lyVWwDg8xvJ+ZyYWtuJVGkaWbusY+dW0KY3/RdXyNjt7ODSV/P
- SUwo5nq6omgbPfIU4S5moRQE7UWs9+Ohz/N1aX/LM6ZuvIx5ix/nPFBaSW0ewD41HviYJGz8VNx
- iTsIjRSQ807HvsucUD54bZbCOSV9tklzAS5xVLVSjJikGItEsCTmGbw5EP63zqt/SJyQrc29mb2
- dOpTb6obBchoOk4wEMbQDjtn00RFo77PD93wN7DpQ6LxPg0u9/OL1W3shbKjj+1U48ykF5pQqbd
- iHwU5SpTj/Bn5v0t5lQmY7/0s1GlLSiG7tX7Zn1mZ/rIfde4HZlVv8oATPcyIFYzs9QjdhMAPIL
- A9lqxZUvYkiHkRaB+ddJ/1C0TsUfGQs0FcUhQCwESGForMVvLIbGo+l3lYGiici+nXKMLkRiJaF
- TLh4Imo1oLxaudg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4518; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=FGNzRWS1hbYhpaLxqjQs0t93G2xcjg3oMS6W4kp09/k=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn0rGb2opmR2ZGBa80BlplBbjzpCYfk3ZInqCKp
+ FdHCaA2sTuJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ9KxmwAKCRD2t4JPQmmg
+ c803EADH/C8cKWC1/0VICk4wqzBvM1r1HE7GScVbRqA2H+AINkhd+UR8SrJx359fBj53eEM4K+V
+ dvvliLltIuPCTZEa+Ca4kJuFwOCJM0IoC6qSKG9TK7pGVooZF4aBlOVwsEZ5S4ViErj75SEJQwY
+ eJc/NVARB3+hFh7qbeN7wnUzQvkWQQIJDyoUq9lh4c1xSs9waF8jTo2eubaVy0GSbQs/M10O1EH
+ adp4tfPFQ1rnb/MQ5NqN97LW3dijX84ayfnUnjgIYnBgJ1vkxGy0zKzbYP0IZ0U4gyaDTe9Qtas
+ v4bQ0HFKmirkhCqJD/Jn1IXFavjI4hBBWUzy35nDKDFhGq3Qn2KR8PmVPeD4Gh6m1G/UktW9nco
+ I0Elc2jEe4s0bHTR1MT2ULOaEKGnq/UIS0B1GD+9kUAIxS2JtPDtnri4EIh3K+GRYcFJh/rvFTi
+ RVMi4ThkVqZU4f9IbxBMoGb1nOwt2+Z/9RcsWWSzJGfLXFRkTxxEi8WEvQ9IRUmlveFXb98nPzU
+ tIIABp3ceD/znLw98084/mWv9WIgUhypufsEnCcijiuK2FiA3L5sDAhllrCpwMI1UlwdUvVKNaB
+ Z0NaD6u13AlTEthWp2m6EDNLxIemABQpga8NMaYR/KB87MWOeC5o6JTjq18qYJB/44o8AJC3383
+ /n1Berk+8VSIqLA==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-This patch adds a "struct_group(reset, ...)" in struct mptcp_pm_data to
-simplify the reset, and make sure we don't miss any.
+In order to allow users to develop their own BPF-based path manager,
+this patch defines a struct ops "mptcp_pm_ops" for an MPTCP path
+manager, which contains a set of interfaces. Currently only init()
+and release() interfaces are included, subsequent patches will add
+others step by step.
 
-Suggested-by: Matthieu Baerts <matttbe@kernel.org>
+Add a set of functions to register, unregister, find and validate a
+given path manager struct ops.
+
+"list" is used to add this path manager to mptcp_pm_list list when
+it is registered. "name" is used to identify this path manager.
+mptcp_pm_find() uses "name" to find a path manager on the list.
+
+mptcp_pm_unregister is not used in this set, but will be invoked in
+.unreg of struct bpf_struct_ops. mptcp_pm_validate() will be invoked
+in .validate of struct bpf_struct_ops. That's why they are exported.
+
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm.c       | 13 +------------
+ include/net/mptcp.h  | 12 ++++++++++++
+ net/mptcp/pm.c       | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
  net/mptcp/protocol.h |  5 +++++
- 2 files changed, 6 insertions(+), 12 deletions(-)
+ 3 files changed, 67 insertions(+)
 
+diff --git a/include/net/mptcp.h b/include/net/mptcp.h
+index 2c85ca92bb1c39989ae08a74ff4ef9b42099e60d..645d15695e3f5ec4b945bb543630f3dcc54453f2 100644
+--- a/include/net/mptcp.h
++++ b/include/net/mptcp.h
+@@ -14,6 +14,7 @@
+ 
+ struct mptcp_info;
+ struct mptcp_sock;
++struct mptcp_pm_addr_entry;
+ struct seq_file;
+ 
+ /* MPTCP sk_buff extension data */
+@@ -121,6 +122,17 @@ struct mptcp_sched_ops {
+ 	void (*release)(struct mptcp_sock *msk);
+ } ____cacheline_aligned_in_smp;
+ 
++#define MPTCP_PM_NAME_MAX	16
++
++struct mptcp_pm_ops {
++	char			name[MPTCP_PM_NAME_MAX];
++	struct module		*owner;
++	struct list_head	list;
++
++	void (*init)(struct mptcp_sock *msk);
++	void (*release)(struct mptcp_sock *msk);
++} ____cacheline_aligned_in_smp;
++
+ #ifdef CONFIG_MPTCP
+ void mptcp_init(void);
+ 
 diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index af009661477b1743b11221c0d59b53cd89e6e791..85ee999729a1c37f42bb21490d7f68d186e6734f 100644
+index 85ee999729a1c37f42bb21490d7f68d186e6734f..f4948a2cf9be078043bd237f56a57c27804ef4db 100644
 --- a/net/mptcp/pm.c
 +++ b/net/mptcp/pm.c
-@@ -978,10 +978,7 @@ void mptcp_pm_data_reset(struct mptcp_sock *msk)
- 	u8 pm_type = mptcp_get_pm_type(sock_net((struct sock *)msk));
- 	struct mptcp_pm_data *pm = &msk->pm;
+@@ -5,6 +5,8 @@
+  */
+ #define pr_fmt(fmt) "MPTCP: " fmt
  
--	pm->add_addr_signaled = 0;
--	pm->add_addr_accepted = 0;
--	pm->local_addr_used = 0;
--	pm->subflows = 0;
-+	memset(&pm->reset, 0, sizeof(pm->reset));
- 	pm->rm_list_tx.nr = 0;
- 	pm->rm_list_rx.nr = 0;
- 	WRITE_ONCE(pm->pm_type, pm_type);
-@@ -1002,15 +999,7 @@ void mptcp_pm_data_reset(struct mptcp_sock *msk)
- 		WRITE_ONCE(pm->accept_subflow, subflows_allowed);
++#include <linux/rculist.h>
++#include <linux/spinlock.h>
+ #include "protocol.h"
+ #include "mib.h"
  
- 		bitmap_fill(pm->id_avail_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
--	} else {
--		WRITE_ONCE(pm->work_pending, 0);
--		WRITE_ONCE(pm->accept_addr, 0);
--		WRITE_ONCE(pm->accept_subflow, 0);
- 	}
--
--	WRITE_ONCE(pm->addr_signal, 0);
--	WRITE_ONCE(pm->remote_deny_join_id0, false);
--	pm->status = 0;
+@@ -18,6 +20,9 @@ struct mptcp_pm_add_entry {
+ 	struct mptcp_sock	*sock;
+ };
+ 
++static DEFINE_SPINLOCK(mptcp_pm_list_lock);
++static LIST_HEAD(mptcp_pm_list);
++
+ /* path manager helpers */
+ 
+ /* if sk is ipv4 or ipv6_only allows only same-family local and remote addresses,
+@@ -1015,3 +1020,48 @@ void __init mptcp_pm_init(void)
+ 	mptcp_pm_kernel_register();
+ 	mptcp_pm_nl_init();
  }
- 
- void mptcp_pm_data_init(struct mptcp_sock *msk)
++
++/* Must be called with rcu read lock held */
++struct mptcp_pm_ops *mptcp_pm_find(const char *name)
++{
++	struct mptcp_pm_ops *pm_ops;
++
++	list_for_each_entry_rcu(pm_ops, &mptcp_pm_list, list) {
++		if (!strcmp(pm_ops->name, name))
++			return pm_ops;
++	}
++
++	return NULL;
++}
++
++int mptcp_pm_validate(struct mptcp_pm_ops *pm_ops)
++{
++	return 0;
++}
++
++int mptcp_pm_register(struct mptcp_pm_ops *pm_ops)
++{
++	int ret;
++
++	ret = mptcp_pm_validate(pm_ops);
++	if (ret)
++		return ret;
++
++	spin_lock(&mptcp_pm_list_lock);
++	if (mptcp_pm_find(pm_ops->name)) {
++		spin_unlock(&mptcp_pm_list_lock);
++		return -EEXIST;
++	}
++	list_add_tail_rcu(&pm_ops->list, &mptcp_pm_list);
++	spin_unlock(&mptcp_pm_list_lock);
++
++	pr_debug("%s registered\n", pm_ops->name);
++	return 0;
++}
++
++void mptcp_pm_unregister(struct mptcp_pm_ops *pm_ops)
++{
++	spin_lock(&mptcp_pm_list_lock);
++	list_del_rcu(&pm_ops->list);
++	spin_unlock(&mptcp_pm_list_lock);
++}
 diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index ffb70fe08181815c23629354f78e3bdbe599e703..15e2a03025ecb4cae44ccb700fcbbdd06ab806d1 100644
+index 15e2a03025ecb4cae44ccb700fcbbdd06ab806d1..ac8a178426e4ef495d7c5b5b9bd4c8b8835d71e4 100644
 --- a/net/mptcp/protocol.h
 +++ b/net/mptcp/protocol.h
-@@ -223,6 +223,8 @@ struct mptcp_pm_data {
+@@ -1050,6 +1050,11 @@ int mptcp_pm_remove_addr(struct mptcp_sock *msk, const struct mptcp_rm_list *rm_
+ void mptcp_pm_remove_addr_entry(struct mptcp_sock *msk,
+ 				struct mptcp_pm_addr_entry *entry);
  
- 	spinlock_t	lock;		/*protects the whole PM data */
++struct mptcp_pm_ops *mptcp_pm_find(const char *name);
++int mptcp_pm_register(struct mptcp_pm_ops *pm_ops);
++void mptcp_pm_unregister(struct mptcp_pm_ops *pm_ops);
++int mptcp_pm_validate(struct mptcp_pm_ops *pm_ops);
++
+ void mptcp_userspace_pm_free_local_addr_list(struct mptcp_sock *msk);
  
-+	struct_group(reset,
-+
- 	u8		addr_signal;
- 	bool		server_side;
- 	bool		work_pending;
-@@ -235,6 +237,9 @@ struct mptcp_pm_data {
- 	u8		pm_type;
- 	u8		subflows;
- 	u8		status;
-+
-+	);
-+
- 	DECLARE_BITMAP(id_avail_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
- 	struct mptcp_rm_list rm_list_tx;
- 	struct mptcp_rm_list rm_list_rx;
+ void mptcp_event(enum mptcp_event_type type, const struct mptcp_sock *msk,
 
 -- 
 2.48.1
