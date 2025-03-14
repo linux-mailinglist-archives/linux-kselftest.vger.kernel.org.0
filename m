@@ -1,130 +1,147 @@
-Return-Path: <linux-kselftest+bounces-29043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F25B9A611F5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 14:04:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03ACA61253
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 14:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DEF17AC03A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:03:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 847BF1B62BC8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEC11FF1A4;
-	Fri, 14 Mar 2025 13:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC27202C2A;
+	Fri, 14 Mar 2025 13:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FVC0cYeu"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="n/IyhA90";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="046hKvlz";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="n/IyhA90";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="046hKvlz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD482E3398
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 13:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3135620299D
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 13:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741957474; cv=none; b=Bs8KYiNIm+bZjABlr7p/zkIIGuOW6IBB72Sw7DlmfATuQLts5ShAhmkOQwePHnWKKi25cI7bkFLS/LfjBOdl6Lwvn3BZUPI7839j467IUGZCI8Zw2GaOeGWP1bp+z6E0nxEDrzOKYVKTxy4TiY8bb71pH1/z8qNzb7IcJWUVXwA=
+	t=1741958090; cv=none; b=kgGlBCHl2eXdN0CfeFy2cvxtzTjmf+W/JUXuktJoT4nfj1qmyJf9iyADJD2riJB7BNKImlxG9ZuORZVJ1V+WyOSRG/dfD63UqGoy2kRameEty6/LcFGB1zNitLWYsDT5E9lo7NkyCk0ZN0Kl1ISeDC4CL8Zl3XoMM1hd2uO7aVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741957474; c=relaxed/simple;
-	bh=YrtvhfhP/Znn3fNZU4UiIYAYE8ptrotjbF/EGYUxQK0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gw5BdgP6s4kvXAoI+0l891bOKJ5SjZvKvpH7cD1XbeGwGoD/M6/joyHbTMv5XWnXAsdTomWnctIKLB4GBWpY/etCMXUldDx5yVD5s4TKXG1MKikW6Pc2ANto3Cf6HgoHiyyFWxqkkQcGxm9Z2TkkOVaUWvv2kUlv3MEMZYM84CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FVC0cYeu; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43d0618746bso14268905e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 06:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741957470; x=1742562270; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RXEAhjO+FZzhjAKSipo0fbPH75GS1MBoxQtrIWgvBF8=;
-        b=FVC0cYeuzs7pNCqvicGAQv1g5hluybS2mHAoYAfP8+fJkhAEl4aS3EE0v69oB0agcE
-         sahcxak3kFs4otGN7ipVLs0mriF+NknzUr3rwMInepXp2fJuk74f7XngBuY0iGC7qyoQ
-         ZntLWyuWR9zeRCQp9ugBIDfPcM6pPdi0QZ17McEb2HsWBBlpnmIv8rL/QtdgW8jRER1X
-         gtbNsy+cG5PualPgGUSIutNm1seLKBgq4ah7NgQNm14sUWlagQ4V7n6MQsjPKoF2WfMb
-         3nndap5ssyZmceFZ/3K1V1UFknitgeNwfSXW7LiLs2koC/tEQC76l8v2APMxV8zYtlLR
-         z5fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741957470; x=1742562270;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RXEAhjO+FZzhjAKSipo0fbPH75GS1MBoxQtrIWgvBF8=;
-        b=ZV4uJpIZvKpzHCK3k0eG7kRIiVGWjUeXJCSZzcO3JWGbiievsepT8WFxwvUuhWAQXi
-         yVt99Fr/PoR5KjoPAMhX1JJpCxOj3FuEC3OoXjwrqJSEBBWVfmMZzym8jyytK+t374Nt
-         q1AJwauVEc14acTFWIdL2Xn274/GmogQP1d4r60GG9Z3Gb2P6hUuWP3UYz5fQeskw5qT
-         GU1BaJDQaUFembaKDF8Oj9mmYMtB9QcT6KCbk3gv0xAp2swpftGsM7sepqOOkiLVWVFO
-         0sZsNXTIaeGcowhjVTApmalrHbPR+3WYiw8zM/Tt3WlWVcnSB8jmLUB2R/J/BTtKHwoE
-         WTDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUURdXfva1wHE7qkcsGEtXsftKkoGe+vxPEJWus3+RdjZDmlWcZE64aC89w9K5GRJw2ltHnhImIWkd2b0Jbhyw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya2gwYmPx6gdDasR3XMH8FxF+a9g4Ks+O2FG9JuVDp8TcL0Rvb
-	eXLS93TYDcP2Q5gw55Ws1+V6WnV42Twcu3Y0T8sNnl9k+Y61cv8dTKj3+oUBkzk=
-X-Gm-Gg: ASbGncs8SeZA1iyTAW4H4gxYFhdge/eIHZgZhqmL4oIAL8HjhJgflU5aADXg/13yOAc
-	THlskFDkyE1Lmxm2sd+jaVvoGlnR09Boyxxyi5cT82boA0MYZNQfXDqayl4naV6/gkv74c9/ehk
-	POXshLsxXNGsK00VN80EnLNqrWeOClvHEIH0d1K7jFIPA+h/eLCyxj5JWO8hxlh/3Zbqf3OjhIm
-	8bCqZXjhlMpMUdUeyUZnLLnUJ5vkpvPVOhrv+/UsXzLlbXvu78XnW+J144SJPZTDuUa8+oklreb
-	5LmBgqM2sBrrHdZ24CuSSy1+Hkxy4L7odHgvte1oJd4wW/w=
-X-Google-Smtp-Source: AGHT+IHX8lnwJXQp9lmsaTQS54crU+G64pDcAvklWf9R0V2hsgHpJVwfSwI5w9rxAsR7GygmwCqXlA==
-X-Received: by 2002:a05:600c:1c29:b0:43d:ce4:ef3f with SMTP id 5b1f17b1804b1-43d1ecbc1damr30518925e9.12.1741957469797;
-        Fri, 14 Mar 2025 06:04:29 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffc4173sm16908685e9.20.2025.03.14.06.04.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 06:04:29 -0700 (PDT)
-Date: Fri, 14 Mar 2025 14:04:27 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v9 5/6] scanf: tidy header `#include`s
-Message-ID: <Z9QpWwlJn1U3tTjP@pathway.suse.cz>
-References: <20250307-scanf-kunit-convert-v9-0-b98820fa39ff@gmail.com>
- <20250307-scanf-kunit-convert-v9-5-b98820fa39ff@gmail.com>
+	s=arc-20240116; t=1741958090; c=relaxed/simple;
+	bh=i5pgVOZlVnq0y47YV+bp584paVxAqR35NM0VmcVJbdg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=kLxHp2MdT95IPeeJuEdNiIrQfunj1PcOch+LtIIOWruyaHo473w87Vdd/BfqMXbYUYbnCDBGkgUWxRYygIV5XfFxk2ncjNBDQkcudssx428WTM5wCLgMVO+93VVdtgsLheClRlRxxAQ75knNDh5c+Za9sRRzQD/H497SPY207mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=n/IyhA90; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=046hKvlz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=n/IyhA90; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=046hKvlz; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from pobox.suse.cz (unknown [10.100.2.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 452362116E;
+	Fri, 14 Mar 2025 13:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741958087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1avXQwhwgX4XEF1ZEtVMSZaAo6rnSr1qiGZubxC19HI=;
+	b=n/IyhA90i67l1TV9Wmw/AAAoC09i6VEIyW3oqYoz/ufMi8M80UMHynYNPrdr9T1l3aJkuU
+	mSKm4UlMNAKUUATOhTWzp6fIBkMwGiuBLWZdRKQiVgwkOztvbVBAkd1qrPIMZeCdTWEkkH
+	ObDqUvKR/S2trp9DThBQrQ+yGdUEAdw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741958087;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1avXQwhwgX4XEF1ZEtVMSZaAo6rnSr1qiGZubxC19HI=;
+	b=046hKvlzpKzF6HYX5VwZ4n+XsiebxqUX0uiwyuiUvUAS7p/JSfP+xbtLXKuurjfxiedIKo
+	msUURfaBIYr1AaCA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741958087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1avXQwhwgX4XEF1ZEtVMSZaAo6rnSr1qiGZubxC19HI=;
+	b=n/IyhA90i67l1TV9Wmw/AAAoC09i6VEIyW3oqYoz/ufMi8M80UMHynYNPrdr9T1l3aJkuU
+	mSKm4UlMNAKUUATOhTWzp6fIBkMwGiuBLWZdRKQiVgwkOztvbVBAkd1qrPIMZeCdTWEkkH
+	ObDqUvKR/S2trp9DThBQrQ+yGdUEAdw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741958087;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1avXQwhwgX4XEF1ZEtVMSZaAo6rnSr1qiGZubxC19HI=;
+	b=046hKvlzpKzF6HYX5VwZ4n+XsiebxqUX0uiwyuiUvUAS7p/JSfP+xbtLXKuurjfxiedIKo
+	msUURfaBIYr1AaCA==
+Date: Fri, 14 Mar 2025 14:14:47 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Filipe Xavier <felipeaggger@gmail.com>
+cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+    Shuah Khan <shuah@kernel.org>, Marcos Paulo de Souza <mpdesouza@suse.com>, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, felipe_life@live.com
+Subject: Re: [PATCH PATCH 2/2] selftests: livepatch: test if ftrace can trace
+ a livepatched function
+In-Reply-To: <20250306-ftrace-sftest-livepatch-v1-2-a6f1dfc30e17@gmail.com>
+Message-ID: <alpine.LSU.2.21.2503141411010.4442@pobox.suse.cz>
+References: <20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com> <20250306-ftrace-sftest-livepatch-v1-2-a6f1dfc30e17@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250307-scanf-kunit-convert-v9-5-b98820fa39ff@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.29 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.19)[-0.973];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	ARC_NA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,live.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,suse.com,redhat.com,vger.kernel.org,live.com];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Spam-Score: -4.29
+X-Spam-Flag: NO
 
-On Fri 2025-03-07 06:27:38, Tamir Duberstein wrote:
-> Remove the unused `kernel.h`. Replace `string.h` with `sprintf.h` as the
-> former doesn't seem to be used directly.
+Hi,
 
-> --- a/lib/tests/scanf_kunit.c
-> +++ b/lib/tests/scanf_kunit.c
-> @@ -5,12 +5,11 @@
->  
->  #include <kunit/test.h>
->  #include <linux/bitops.h>
-> -#include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/overflow.h>
->  #include <linux/prandom.h>
->  #include <linux/slab.h>
-> -#include <linux/string.h>
-> +#include <linux/sprintf.h>
->  
->  #define BUF_SIZE 1024
->  
+> +start_test "trace livepatched function and check that the live patch remains in effect"
+> +
+> +FUNCTION_NAME="livepatch_cmdline_proc_show"
+> +
+> +load_lp $MOD_LIVEPATCH
+> +trace_function "$FUNCTION_NAME"
 
+trace_funtion() calls cleanup_ftrace() to prepare the test. Ok.
 
-The change makes sense and looks good to me. I would go with it.
+> +if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+> +	log "livepatch: ok"
+> +fi
+> +
+> +check_traced_function "$FUNCTION_NAME"
+> +
+> +cleanup_tracing
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
+Here, I suppose, cleanup_tracing() is called to clean up after the check 
+above so that nothing stays and more tests can be added later. Right? 
+Would it make sense then to call cleanup_tracing() in 
+check_traced_function()? I think it would less error prone. 
+If needed, check_traced_function() can always be upgraded so that it 
+checks for more traced functions.
 
-Further improvements might be done later in a separate patchset...
-
-Best Regards,
-Petr
+Miroslav
 
