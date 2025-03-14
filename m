@@ -1,89 +1,88 @@
-Return-Path: <linux-kselftest+bounces-29031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFF3CA610A8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:10:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48F04A610B7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:17:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3096F3B911D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:10:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B79319C27B6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC851FDE29;
-	Fri, 14 Mar 2025 12:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A581FCFE3;
+	Fri, 14 Mar 2025 12:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dFReOsjM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NijUSqYU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC842AA6
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 12:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A281CBE8C
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 12:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741954255; cv=none; b=tsMpvIK/nbZCFIG7kruoF+7PtaT+1poOQTcZb7FBNjhsXcRJxAHvphO0UvZatWwYcYUAskV8LMprl7qDjFLedwsTFkehtTES3hQIaG/V+c4I4dtMw9PzNsFu7/191TzwumY2rUmwG7q+pz2HFpmSgXQ6Q9P3oxJ7aDuOzlbEeLo=
+	t=1741954632; cv=none; b=PyNv3uyek8p/TQ1T73aKWlotGJxkL+iuvcpo8xtRsCCe973R0Q284qqRf4SGRPHlrqX5VrI7RfhL/dZgrepPTlfytW8oAlEJh1ImHfbGpib9Mf/1/GLu+K4VtQWyDC5VK6Eu09Kk4CwqnG8ThXfbLbIyqjijkxrEIVnjxMT/DwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741954255; c=relaxed/simple;
-	bh=XbIiHJcoZC9B43KXCo0L2pc6+TBkTn1NwxGG5MpFWXA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dORZ07jcQKw4YLRCpMhp/UyY9etGsiYhe4KjVhBL9JgNpKigsBKdwQ0PfgEMRIRNmt+vHN7rHgVKcM1v9HzpImHMpV0bS/QrlZrvNNz6opvXyK4mHimeB3tSAIORUeNvi7/I88hfsdNvAcT+veUoQ1G2YO+lGLPmr0n+/2gjkcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dFReOsjM; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1741954632; c=relaxed/simple;
+	bh=MiSPP/QvIcTVTmZ0qIzcXfbATwLB4cCe1NpvHpBe0N8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=W6IGUlp4K6vkujVJ8tfuan+HcQ5pKPfrbjhVd59SVjPXGAhy4XVZ/QkVhk52augTuIsC4ZnjwFvJqD1zeWMSk7dSY63kaFM086wbMUuLcjw0rMU3602cedfcP0JjO78YoVQEuRj3fYxt+pBsjniscfIWrMURv0IMcAH6+DA9xL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NijUSqYU; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741954253;
+	s=mimecast20190719; t=1741954629;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=N+W7JLYSi3FHd5wiExWEG1bnYG61jBb9yzI4idWzEYc=;
-	b=dFReOsjMg+u2A6l7GBU1B/9dwPWO9g8hSpbWsBokKYdvjHBF0DjrtW69UMo7j0Jo09/LS0
-	5AHxTk0/3fVOSm9v3obab5qz1KJDE5xlDtSQYgk5KbuxJBRGS72K4dqWWiXpJBi71gpLSH
-	FU9p6/bX/H4vuHchcyXW9qj2AK2n8Z8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Uk+PE6keSszFMK/H4FlxtGAYCBN+w4Mxmc2pqfulugg=;
+	b=NijUSqYUqnW/Ba517KFDfeL/tZ2PmTEDATXOjNd06gaItUgv2e4f7KBhFu1ll8yY8p+b5A
+	tBY/T7j/z2cClz1XBaDt1ix33h/j1Sf5ayNj5pDRVG5fCIYpBQ5ZfGHGo7GUtYe2ztgqYv
+	wT7NxwPCuKH76txpFdsDyHlW3rvfJxc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-127-Bft7BHhEO_qZkPGK9Y1i8A-1; Fri, 14 Mar 2025 08:10:51 -0400
-X-MC-Unique: Bft7BHhEO_qZkPGK9Y1i8A-1
-X-Mimecast-MFC-AGG-ID: Bft7BHhEO_qZkPGK9Y1i8A_1741954250
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43ab5baf62cso16071035e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:10:51 -0700 (PDT)
+ us-mta-202-oNSInZhCNJqjNK85SYX5FA-1; Fri, 14 Mar 2025 08:17:08 -0400
+X-MC-Unique: oNSInZhCNJqjNK85SYX5FA-1
+X-Mimecast-MFC-AGG-ID: oNSInZhCNJqjNK85SYX5FA_1741954627
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43cf44b66f7so12172365e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:17:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741954250; x=1742559050;
+        d=1e100.net; s=20230601; t=1741954627; x=1742559427;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=N+W7JLYSi3FHd5wiExWEG1bnYG61jBb9yzI4idWzEYc=;
-        b=BybkpdFKlgJxQsvx8+Mfla0e81WOZNTcFYN0+LuPj6navLqpnyjLmYye0M4yM29iEU
-         8kzjRmkTU+cYgh/+tAMY7zll3p8X7oxFdUCR8vNY8miZIaBHQs/7XofHW9uoQTIcx34t
-         GwNSQHth3cevdUOBCf3bv5u9q3laj0ELvMJK9vLEI1sclrOEBGxPOrcdoruvQjTrLvDo
-         aIlfjqWdsYyw5GGK0g5EdndPOrUo68JBQWwgcvvjr3/Oj6Z0MZfpvdGBbEy2ytEUZjt2
-         qDbUNrpXnlINNfYuSwaxloNMY6r/OwbRTGR8FilyBCyreZ89CtRFT0kXF8FEspyn55D8
-         +kjg==
-X-Forwarded-Encrypted: i=1; AJvYcCUrIw/9eIWJ2vZPqQcFL2SOTUyEGlAAZCGxh97rd7ykk9bdNPYtzNf4zSa8RNKMmTh6/y/La+vikjfF+dHdzXs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhUBYI8BRfpdN2SaHHuZ/dYnLo43+6xP6XAh2ZSnFGCXS3tm6B
-	tpGk75xs9CtHSazDJzsuMXKk4bYcuRjWzQaXYvTMTeXLJ1fEII+g+/NopwjegNexflwofRefx0/
-	qD8OXDtpQ9Frpoeu5lqx+aorGCLV2kBpa5BSWPOR1sHXYn6vT2s1j+XFP6VuTPCSfEPCHSC78PU
-	4E
-X-Gm-Gg: ASbGncsSHfLB+H5LJGks3wxTTqCHCgC1WV2E2nqWXX+ok4gOUuhifhq3BoLBjDQhPm4
-	RbmrHs8Ql1+Osoj47IOIU7irBcSbMa1fxA24S5xZkI8JgXQU/w5jq3ocQUOvIh/DaRh3GxRhpBl
-	kMFOODF9g7iPBSmnoXcTGhvVm0U73PueZimaDiPrW1+OFHWU8wcIfsEDb1zljXSxiLPIMMHjQs4
-	B4CwxA/vkL3Vjl0MSHWJodAjFD26OGA4wnOWQrclXyMF/cFS/j/+ARSBAjTArP6+9wGMns/BCyY
-	0V4RtRsdlmFZs6hQPOVJ/lvXHwBAAJRjwp82epsnpPuiAH+gfkBQ2yQwXmPIXrXJoGZBlZuJVrc
-	OgPGk2Y6CnpOmCNxUjFKT7h1k79B2pYlzkPUdFhwrmGI=
-X-Received: by 2002:a05:600c:1908:b0:43c:ee3f:2c3 with SMTP id 5b1f17b1804b1-43d1ec80980mr31107565e9.7.1741954250529;
-        Fri, 14 Mar 2025 05:10:50 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHoxby3mE34K41WTlTk/z5r+dIaWHqYottBOdqY1VDqMeig1kOOVvVsfUN57fluTQqQAxwE/g==
-X-Received: by 2002:a05:600c:1908:b0:43c:ee3f:2c3 with SMTP id 5b1f17b1804b1-43d1ec80980mr31107225e9.7.1741954250152;
-        Fri, 14 Mar 2025 05:10:50 -0700 (PDT)
+        bh=Uk+PE6keSszFMK/H4FlxtGAYCBN+w4Mxmc2pqfulugg=;
+        b=KU3tb1P4JcpAVegRk1DoBFiMD91H8DEcnF/23nELb9qOsOGpj6Szp6WioKdl4BaE2s
+         cBz2RAw1UPnfo1mnT4gYTsjL5uwwG8+f108H0E7YGiivN9gGSs5jGkQ/yiKIhibPoSwF
+         EEZGDmmUPgnbtqjndDvya80ddasb5DJjbnMra6g258qH525b3arpoEFdzIus6IxPI+3r
+         waeI6FRL2BPlrFjGI4MR50dVfVUpqS/VaC42MTOjZrFpOyW0Q6bSo2G3XOBlJs5SEogz
+         QYsQFBu6/yeCW97yNna1YMhDDJH6N9AOjAVCSU5q9a2VO5WmvLYmq0VKp5icaB4qTptk
+         lZhw==
+X-Forwarded-Encrypted: i=1; AJvYcCWOzW8iBFLtH8oQVXYh81cGgypIq9d096JAahEw/pH8khvdWn8zrtgLXFmCPG2ZFl0Nt8hDZ8MU9sCsJmSbgBI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy94RGL49oaCUOxkvcgFloQsB7Gam/ouOlYmeLI24qfLA9sDX55
+	RdJMAbJW/sFAjTzUMS3LUTEJReimvkL7cdOSVz287YOkw8aI2FAD16++aU/YhHP/KGMqWqcFnCQ
+	1kOQJWucjLjP0MFfycFsnV8XwKmismgiEsuhGN895YJJdWMJ1tEUZUjBD1Gig6/Fvaw==
+X-Gm-Gg: ASbGncs5bovEzE5lwpWbMHA40F4TQD32P3cpTnC8hGAQV3Yfid7yxbjMBsI7aj2PQ/I
+	T8CWIaR3lNsf1HIDeTKJ06orBmPqw7W1aQc1ClNtvwpicyRMTMahBL+rxIEEYPIy9roL1x4X9uw
+	hy7sUql5EyN31Q9uwqTEGmYSugnL1IFDb3ZevDN7Lo9Ut4vlPykHwVt/u7ya6njWObSo7mSRQ9H
+	A/QfbtebdZLtaP2URgpxUCLQKj7x1/ox+Zwh9i3QxXVjLGmJQG5U1WMhjFaWSpILZSMtSYpmooq
+	btSKIGrHlGDTwzi8yIhLdKG35XtNZF1+YNG7Psj0DBAVPAnrMNgSVmUz2vWuyyEZAing/hPJkp/
+	ICyj7UAv5o6DnN/wp6mIjsOF3xVsjuTQsTdWEQiRp1IA=
+X-Received: by 2002:a05:600c:19cd:b0:43c:ea40:ae4a with SMTP id 5b1f17b1804b1-43d1ecd932fmr30117645e9.31.1741954626821;
+        Fri, 14 Mar 2025 05:17:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEDrbvz2tRgrie1qCZ5FL011ovoI1nQAi6sQgjyv7izS0Ueu8VEX/n5R7v+XPE4e+CWYxc4NA==
+X-Received: by 2002:a05:600c:19cd:b0:43c:ea40:ae4a with SMTP id 5b1f17b1804b1-43d1ecd932fmr30117275e9.31.1741954626472;
+        Fri, 14 Mar 2025 05:17:06 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c745:2000:5e9f:9789:2c3b:8b3d? (p200300cbc74520005e9f97892c3b8b3d.dip0.t-ipconnect.de. [2003:cb:c745:2000:5e9f:9789:2c3b:8b3d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffbcfbcsm15437505e9.11.2025.03.14.05.10.49
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1fe065b0sm15827845e9.14.2025.03.14.05.17.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 05:10:49 -0700 (PDT)
-Message-ID: <15cc0c1d-2b02-41de-bf48-3c57cee97c53@redhat.com>
-Date: Fri, 14 Mar 2025 13:10:48 +0100
+        Fri, 14 Mar 2025 05:17:06 -0700 (PDT)
+Message-ID: <95a15856-5c47-4040-9291-5b972786efeb@redhat.com>
+Date: Fri, 14 Mar 2025 13:17:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,6 +92,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 08/10] selftests/mm: Skip gup_longerm tests on weird
  filesystems
+From: David Hildenbrand <david@redhat.com>
 To: Brendan Jackman <jackmanb@google.com>
 Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
@@ -106,7 +106,7 @@ References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
  <CA+i-1C3srkh44tN8dMQ5aD-jhoksUkdEpa+mMfdDtDrPAUv7gQ@mail.gmail.com>
  <41923b80-55f4-44b6-bc59-60327e5308f4@redhat.com>
  <Z9FHEdZoYbCMoj64@google.com>
-From: David Hildenbrand <david@redhat.com>
+ <15cc0c1d-2b02-41de-bf48-3c57cee97c53@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -153,62 +153,75 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <Z9FHEdZoYbCMoj64@google.com>
+In-Reply-To: <15cc0c1d-2b02-41de-bf48-3c57cee97c53@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12.03.25 09:34, Brendan Jackman wrote:
-> On Tue, Mar 11, 2025 at 08:53:02PM +0100, David Hildenbrand wrote:
->>> 2. 9pfs seems to pass the f_type through from the host. So you can't
->>> detect it this way anyway.
+On 14.03.25 13:10, David Hildenbrand wrote:
+> On 12.03.25 09:34, Brendan Jackman wrote:
+>> On Tue, Mar 11, 2025 at 08:53:02PM +0100, David Hildenbrand wrote:
+>>>> 2. 9pfs seems to pass the f_type through from the host. So you can't
+>>>> detect it this way anyway.
+>>>>
+>>>> [3. I guess overlayfs & friends would also be an issue here although
+>>>> that doesn't affect my usecase.]
+>>>>
+>>>> Anyway, I think we would have to scrape /proc/mounts to do this :(
+>>>>
 >>>
->>> [3. I guess overlayfs & friends would also be an issue here although
->>> that doesn't affect my usecase.]
+>>> The question I am asking myself: is this a 9pfs design bug or is it a 9pfs
+>>> hypervisor bug. Because we shouldn't try too hard to work around hypervisor
+>>> bugs.
 >>>
->>> Anyway, I think we would have to scrape /proc/mounts to do this :(
->>>
+>>> Which 9pfs implementation are you using in the hypervisor?
 >>
->> The question I am asking myself: is this a 9pfs design bug or is it a 9pfs
->> hypervisor bug. Because we shouldn't try too hard to work around hypervisor
->> bugs.
+>> I'm using QEMU via virtme-ng. IIUC virtme-ng knows how to use viortfs
+>> for the rootfs, but for individually-mounted directories with
+>> --rwdir/--rodir it uses 9pfs unconditionally.
+> 
+> Ah okay, that makes sense.
+> 
 >>
->> Which 9pfs implementation are you using in the hypervisor?
+>> Even if it's a bug in QEMU, I think it is worth working around this
+>> one way or another. QEMU by far the most practical way to run these
+>> tests, and virtme-ng is probably the most popular/practical way to do
+>> that.
 > 
-> I'm using QEMU via virtme-ng. IIUC virtme-ng knows how to use viortfs
-> for the rootfs, but for individually-mounted directories with
-> --rwdir/--rodir it uses 9pfs unconditionally.
-
-Ah okay, that makes sense.
-
+> I'm afraid yes. Although allocating temp files form 9pfs is rather ...
+> weird. :) One would assume that /tmp is usually backed by tmpfs. But
+> well, a disto can do what it wants.
 > 
-> Even if it's a bug in QEMU, I think it is worth working around this
-> one way or another. QEMU by far the most practical way to run these
-> tests, and virtme-ng is probably the most popular/practical way to do
-> that.
-
-I'm afraid yes. Although allocating temp files form 9pfs is rather ... 
-weird. :) One would assume that /tmp is usually backed by tmpfs. But 
-well, a disto can do what it wants.
-
-> I think even if we are confident it's just a bunch of broken
-> code that isn't even in Linux, it's pragmatic to spend a certain
-> amount of energy on having green tests there.
+>> I think even if we are confident it's just a bunch of broken
+>> code that isn't even in Linux, it's pragmatic to spend a certain
+>> amount of energy on having green tests there.
+>>
 > 
+> Yeah, we're trying ...
+> 
+>> (Also, this f_type thing might be totally intentional specified
+>> filesystem behaviour, I don't know).
+> 
+> I assume it's broken in various ways to mimic that you are a file system
+> which you are not.
+> 
+> Your approach is likely the easiest approach to deal with this 9pfs crap.
+> 
+> Can you document in the code+description better what we learned, and why
+> we cannot even trust f_type with crappy 9pfs?
 
-Yeah, we're trying ...
+Staring a bit at that code, it's mostly 9p specific I think.
 
-> (Also, this f_type thing might be totally intentional specified
-> filesystem behaviour, I don't know).
+t14s: ~/git/linux s390x-file-thp2 $ git grep "= NFS_SUPER_MAGIC"
+fs/nfs/super.c: buf->f_type = NFS_SUPER_MAGIC;
+fs/nfs/super.c: sb->s_magic = NFS_SUPER_MAGIC;
 
-I assume it's broken in various ways to mimic that you are a file system 
-which you are not.
+t14s: ~/git/linux s390x-file-thp2 $ git grep "= V9FS_MAGIC"
+fs/9p/vfs_super.c:      sb->s_magic = V9FS_MAGIC;
+  $ git grep "f_type" | grep 9p
+fs/9p/vfs_super.c:                      buf->f_type = rs.type;
 
-Your approach is likely the easiest approach to deal with this 9pfs crap.
 
-Can you document in the code+description better what we learned, and why 
-we cannot even trust f_type with crappy 9pfs?
-
----
+-- 
 Cheers,
 
 David / dhildenb
