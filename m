@@ -1,257 +1,216 @@
-Return-Path: <linux-kselftest+bounces-29030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B76A2A61095
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:03:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF3CA610A8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:10:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A51A463382
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:02:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3096F3B911D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F9891FECBD;
-	Fri, 14 Mar 2025 12:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC851FDE29;
+	Fri, 14 Mar 2025 12:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="OxKgb/MP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dFReOsjM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8727C192D6B
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 12:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC842AA6
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 12:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741953740; cv=none; b=VLtnxftARH6HwuLU3Hon//ZDmdUcSiomgz4psdzNcM8Gre7fw/FUbJL5n4ZfXOXEuK3kj2sEZUYWxzkL1lJ8JM8/SAbch0UrFEmX87REhQkr14wNoZBF6WTf+YdlB1uIyd3QcOMTsv1QRCMUf+jL083n/EQmBK+n/n0jA7eJjuA=
+	t=1741954255; cv=none; b=tsMpvIK/nbZCFIG7kruoF+7PtaT+1poOQTcZb7FBNjhsXcRJxAHvphO0UvZatWwYcYUAskV8LMprl7qDjFLedwsTFkehtTES3hQIaG/V+c4I4dtMw9PzNsFu7/191TzwumY2rUmwG7q+pz2HFpmSgXQ6Q9P3oxJ7aDuOzlbEeLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741953740; c=relaxed/simple;
-	bh=CE1LfODofEga2dWCiWcV704lH/vvDsp8M/xAH9bl1Vs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XXs96Aq89FlijcRrRt0GWHwXNscqe1WgC/puirkA2kulBocOKmmNf3Yryyb0sq6T/xKxNKhpJi+rS7f0zESf2Oxak+eXdILl6ObT6TWqm+6o6zIH6d1NWLxkfl5lZbiCVv2rSkQUGjcXpPyWqNFeK4pkv+cRcwmXhKbg2YCG3+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=OxKgb/MP; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-39133f709f5so1223587f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1741953737; x=1742558537; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KiKvhRrb/Taq72fdOcKbw7HOX5fTF1yEq4aGHxD5ojg=;
-        b=OxKgb/MP+0ItAL8rFE3rMqXpJ8+nw6ZEj+m25AOoBHMR3Zh4pM0kLArot0s2zpoVm8
-         NeBMXbSbz3oBxepACdaVaSetE4q6YW9vowds6bShlo/abuxyV61EucixSLJ2Om6Wy9Jy
-         nMlc/ESew/hkhaUevNQwkJJwJAPXOZtkHBo/ZwrN1FR4GyNtc37lHZjhGKl4Tjk85hIf
-         7pOgDlZ/4joEiG+3cukUfXysi4dCL31a9U2bfhbfRwr93VIGJeGtRJ0XPJqnICE2LIve
-         q3BEeF9zF4dpshhrOcbnRmdbeWRYFalptX218U9g74kLXmzbl9F2gum78uh0jtPZ7Gk/
-         DHWQ==
+	s=arc-20240116; t=1741954255; c=relaxed/simple;
+	bh=XbIiHJcoZC9B43KXCo0L2pc6+TBkTn1NwxGG5MpFWXA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dORZ07jcQKw4YLRCpMhp/UyY9etGsiYhe4KjVhBL9JgNpKigsBKdwQ0PfgEMRIRNmt+vHN7rHgVKcM1v9HzpImHMpV0bS/QrlZrvNNz6opvXyK4mHimeB3tSAIORUeNvi7/I88hfsdNvAcT+veUoQ1G2YO+lGLPmr0n+/2gjkcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dFReOsjM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741954253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=N+W7JLYSi3FHd5wiExWEG1bnYG61jBb9yzI4idWzEYc=;
+	b=dFReOsjMg+u2A6l7GBU1B/9dwPWO9g8hSpbWsBokKYdvjHBF0DjrtW69UMo7j0Jo09/LS0
+	5AHxTk0/3fVOSm9v3obab5qz1KJDE5xlDtSQYgk5KbuxJBRGS72K4dqWWiXpJBi71gpLSH
+	FU9p6/bX/H4vuHchcyXW9qj2AK2n8Z8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-127-Bft7BHhEO_qZkPGK9Y1i8A-1; Fri, 14 Mar 2025 08:10:51 -0400
+X-MC-Unique: Bft7BHhEO_qZkPGK9Y1i8A-1
+X-Mimecast-MFC-AGG-ID: Bft7BHhEO_qZkPGK9Y1i8A_1741954250
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43ab5baf62cso16071035e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:10:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741953737; x=1742558537;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KiKvhRrb/Taq72fdOcKbw7HOX5fTF1yEq4aGHxD5ojg=;
-        b=cdesLEc4nWYa7MuIGRguJT2GGLUeemJBtWaRDhKBUenJmVtYZlY8U6FK642EwIi0O/
-         TepmAZb7hInK9NgRv8wjpk1OLN0pcW+nwOef02TrBc6SWpOXm/iKtXtfujO3ArgbnwSQ
-         BmYq274YX0796W7qadA7jd56NpNXyL1eqc+7nuPmtBq5CArvcNrZOAqbLW+0FTdNm3zy
-         RR32+ijiO8DcVNprK1bh2Dy5O1+ebnBvDVHl0aTyf2fKgH6yawm5AXc3lauAvyTKeGf1
-         SFMQIzugsaumX08fUIC/tA9S8eLXGwqIF5nVt7o2dZOcJjEcsqrc+9VwK7qKnnkgF+bT
-         KjXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIhqjeveKVw1v2ejZBLo8lxBH0IDyVEI/2zUUQxUToZeD6gNzlNDtAIJnp3Iwf/LPV7HiEybSAYrnT/6o/1XM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWA8Q2eKRw861dWukw3gStVehzYgU2EpHZQfK8pzjI8vQjQ0cC
-	EOWCHWLdXOpo+xV9gndF/X4jTx4Hu2pNH4heWkk4lg3hYfPMZm+iT2uIbZ8/L74=
-X-Gm-Gg: ASbGncvZ7xYJBTTBicIFXjIz3OmwAx/NNcY5M+RstVLgPQTaDh5ecn6AvfSayStVZ1x
-	UgK7Mow1vDF0X+u9VsCSO6s+CpkI6w8NA3mbC0G9S8169bU0b3bqwqjGQPZotDPAy1gWAW6yqon
-	THfCNgKvMjj5Utq0QSdDfyPSl227MW8r7nO9V/WqjO14MaOvcvwSaIt696WUrCh5JWMhsjy71KW
-	zpR6zDPsSkrK0p0IlGWKC026BhP/AoxtQU6IQC8C55k/ehNXAl7EpFP/BdhzVzDGosn3JEpgOqM
-	JWBCkqLRiyps+gR6I6VuTWdIsak5vawZ
-X-Google-Smtp-Source: AGHT+IGDT22UVNAcE40RgfSq2VmR6JimLpd4/ZEJSqqFul3nbrXtD+Up4CuV3WGzrZnYVB9JFFtoWA==
-X-Received: by 2002:a05:6000:2ac:b0:390:e853:85bd with SMTP id ffacd0b85a97d-3971ffb22c0mr3063778f8f.48.1741953736471;
-        Fri, 14 Mar 2025 05:02:16 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200::59a5])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb7ec14bsm5302335f8f.100.2025.03.14.05.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 05:02:16 -0700 (PDT)
-Date: Fri, 14 Mar 2025 13:02:15 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: Re: [PATCH v3 02/17] riscv: sbi: add FWFT extension interface
-Message-ID: <20250314-10d8d58329aceac21e727ebe@orel>
-References: <20250310151229.2365992-1-cleger@rivosinc.com>
- <20250310151229.2365992-3-cleger@rivosinc.com>
- <20250313-5c22df0c08337905367fa125@orel>
- <dad465de-e5da-4ebb-8395-ea9e181a6f57@rivosinc.com>
+        d=1e100.net; s=20230601; t=1741954250; x=1742559050;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=N+W7JLYSi3FHd5wiExWEG1bnYG61jBb9yzI4idWzEYc=;
+        b=BybkpdFKlgJxQsvx8+Mfla0e81WOZNTcFYN0+LuPj6navLqpnyjLmYye0M4yM29iEU
+         8kzjRmkTU+cYgh/+tAMY7zll3p8X7oxFdUCR8vNY8miZIaBHQs/7XofHW9uoQTIcx34t
+         GwNSQHth3cevdUOBCf3bv5u9q3laj0ELvMJK9vLEI1sclrOEBGxPOrcdoruvQjTrLvDo
+         aIlfjqWdsYyw5GGK0g5EdndPOrUo68JBQWwgcvvjr3/Oj6Z0MZfpvdGBbEy2ytEUZjt2
+         qDbUNrpXnlINNfYuSwaxloNMY6r/OwbRTGR8FilyBCyreZ89CtRFT0kXF8FEspyn55D8
+         +kjg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrIw/9eIWJ2vZPqQcFL2SOTUyEGlAAZCGxh97rd7ykk9bdNPYtzNf4zSa8RNKMmTh6/y/La+vikjfF+dHdzXs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhUBYI8BRfpdN2SaHHuZ/dYnLo43+6xP6XAh2ZSnFGCXS3tm6B
+	tpGk75xs9CtHSazDJzsuMXKk4bYcuRjWzQaXYvTMTeXLJ1fEII+g+/NopwjegNexflwofRefx0/
+	qD8OXDtpQ9Frpoeu5lqx+aorGCLV2kBpa5BSWPOR1sHXYn6vT2s1j+XFP6VuTPCSfEPCHSC78PU
+	4E
+X-Gm-Gg: ASbGncsSHfLB+H5LJGks3wxTTqCHCgC1WV2E2nqWXX+ok4gOUuhifhq3BoLBjDQhPm4
+	RbmrHs8Ql1+Osoj47IOIU7irBcSbMa1fxA24S5xZkI8JgXQU/w5jq3ocQUOvIh/DaRh3GxRhpBl
+	kMFOODF9g7iPBSmnoXcTGhvVm0U73PueZimaDiPrW1+OFHWU8wcIfsEDb1zljXSxiLPIMMHjQs4
+	B4CwxA/vkL3Vjl0MSHWJodAjFD26OGA4wnOWQrclXyMF/cFS/j/+ARSBAjTArP6+9wGMns/BCyY
+	0V4RtRsdlmFZs6hQPOVJ/lvXHwBAAJRjwp82epsnpPuiAH+gfkBQ2yQwXmPIXrXJoGZBlZuJVrc
+	OgPGk2Y6CnpOmCNxUjFKT7h1k79B2pYlzkPUdFhwrmGI=
+X-Received: by 2002:a05:600c:1908:b0:43c:ee3f:2c3 with SMTP id 5b1f17b1804b1-43d1ec80980mr31107565e9.7.1741954250529;
+        Fri, 14 Mar 2025 05:10:50 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHoxby3mE34K41WTlTk/z5r+dIaWHqYottBOdqY1VDqMeig1kOOVvVsfUN57fluTQqQAxwE/g==
+X-Received: by 2002:a05:600c:1908:b0:43c:ee3f:2c3 with SMTP id 5b1f17b1804b1-43d1ec80980mr31107225e9.7.1741954250152;
+        Fri, 14 Mar 2025 05:10:50 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c745:2000:5e9f:9789:2c3b:8b3d? (p200300cbc74520005e9f97892c3b8b3d.dip0.t-ipconnect.de. [2003:cb:c745:2000:5e9f:9789:2c3b:8b3d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffbcfbcsm15437505e9.11.2025.03.14.05.10.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Mar 2025 05:10:49 -0700 (PDT)
+Message-ID: <15cc0c1d-2b02-41de-bf48-3c57cee97c53@redhat.com>
+Date: Fri, 14 Mar 2025 13:10:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dad465de-e5da-4ebb-8395-ea9e181a6f57@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/10] selftests/mm: Skip gup_longerm tests on weird
+ filesystems
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
+ <20250228-mm-selftests-v3-8-958e3b6f0203@google.com>
+ <08023d47-dcf4-4efb-bf13-5aef3c6dca14@redhat.com>
+ <Z8mYG8eQnMsOA4c1@google.com>
+ <16023193-6cb4-46d1-91c4-43342e7e6d30@redhat.com>
+ <CA+i-1C3srkh44tN8dMQ5aD-jhoksUkdEpa+mMfdDtDrPAUv7gQ@mail.gmail.com>
+ <41923b80-55f4-44b6-bc59-60327e5308f4@redhat.com>
+ <Z9FHEdZoYbCMoj64@google.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <Z9FHEdZoYbCMoj64@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 14, 2025 at 12:33:55PM +0100, Clément Léger wrote:
+On 12.03.25 09:34, Brendan Jackman wrote:
+> On Tue, Mar 11, 2025 at 08:53:02PM +0100, David Hildenbrand wrote:
+>>> 2. 9pfs seems to pass the f_type through from the host. So you can't
+>>> detect it this way anyway.
+>>>
+>>> [3. I guess overlayfs & friends would also be an issue here although
+>>> that doesn't affect my usecase.]
+>>>
+>>> Anyway, I think we would have to scrape /proc/mounts to do this :(
+>>>
+>>
+>> The question I am asking myself: is this a 9pfs design bug or is it a 9pfs
+>> hypervisor bug. Because we shouldn't try too hard to work around hypervisor
+>> bugs.
+>>
+>> Which 9pfs implementation are you using in the hypervisor?
 > 
-> 
-> On 13/03/2025 13:39, Andrew Jones wrote:
-> > On Mon, Mar 10, 2025 at 04:12:09PM +0100, Clément Léger wrote:
-> >> This SBI extensions enables supervisor mode to control feature that are
-> >> under M-mode control (For instance, Svadu menvcfg ADUE bit, Ssdbltrp
-> >> DTE, etc).
-> >>
-> >> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> >> ---
-> >>  arch/riscv/include/asm/sbi.h |  5 ++
-> >>  arch/riscv/kernel/sbi.c      | 97 ++++++++++++++++++++++++++++++++++++
-> >>  2 files changed, 102 insertions(+)
-> >>
-> >> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> >> index bb077d0c912f..fc87c609c11a 100644
-> >> --- a/arch/riscv/include/asm/sbi.h
-> >> +++ b/arch/riscv/include/asm/sbi.h
-> >> @@ -503,6 +503,11 @@ int sbi_remote_hfence_vvma_asid(const struct cpumask *cpu_mask,
-> >>  				unsigned long asid);
-> >>  long sbi_probe_extension(int ext);
-> >>  
-> >> +int sbi_fwft_all_cpus_set(u32 feature, unsigned long value, unsigned long flags,
-> >> +			  bool revert_on_failure);
-> >> +int sbi_fwft_get(u32 feature, unsigned long *value);
-> >> +int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags);
-> >> +
-> >>  /* Check if current SBI specification version is 0.1 or not */
-> >>  static inline int sbi_spec_is_0_1(void)
-> >>  {
-> >> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> >> index 1989b8cade1b..256910db1307 100644
-> >> --- a/arch/riscv/kernel/sbi.c
-> >> +++ b/arch/riscv/kernel/sbi.c
-> >> @@ -299,6 +299,103 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
-> >>  	return 0;
-> >>  }
-> >>  
-> >> +int sbi_fwft_get(u32 feature, unsigned long *value)
-> >> +{
-> >> +	return -EOPNOTSUPP;
-> >> +}
-> >> +
-> >> +/**
-> >> + * sbi_fwft_set() - Set a feature on all online cpus
-> > 
-> > copy+paste of description from sbi_fwft_all_cpus_set(). This function
-> > only sets the feature on the calling hart.
-> > 
-> >> + * @feature: The feature to be set
-> >> + * @value: The feature value to be set
-> >> + * @flags: FWFT feature set flags
-> >> + *
-> >> + * Return: 0 on success, appropriate linux error code otherwise.
-> >> + */
-> >> +int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags)
-> >> +{
-> >> +	return -EOPNOTSUPP;
-> >> +}
-> >> +
-> >> +struct fwft_set_req {
-> >> +	u32 feature;
-> >> +	unsigned long value;
-> >> +	unsigned long flags;
-> >> +	cpumask_t mask;
-> >> +};
-> >> +
-> >> +static void cpu_sbi_fwft_set(void *arg)
-> >> +{
-> >> +	struct fwft_set_req *req = arg;
-> >> +
-> >> +	if (sbi_fwft_set(req->feature, req->value, req->flags))
-> >> +		cpumask_clear_cpu(smp_processor_id(), &req->mask);
-> >> +}
-> >> +
-> >> +static int sbi_fwft_feature_local_set(u32 feature, unsigned long value,
-> >> +				      unsigned long flags,
-> >> +				      bool revert_on_fail)
-> >> +{
-> >> +	int ret;
-> >> +	unsigned long prev_value;
-> >> +	cpumask_t tmp;
-> >> +	struct fwft_set_req req = {
-> >> +		.feature = feature,
-> >> +		.value = value,
-> >> +		.flags = flags,
-> >> +	};
-> >> +
-> >> +	cpumask_copy(&req.mask, cpu_online_mask);
-> >> +
-> >> +	/* We can not revert if features are locked */
-> >> +	if (revert_on_fail && flags & SBI_FWFT_SET_FLAG_LOCK)
-> > 
-> > Should use () around the flags &. I thought checkpatch complained about
-> > that?
-> > 
-> >> +		return -EINVAL;
-> >> +
-> >> +	/* Reset value is the same for all cpus, read it once. */
-> > 
-> > How do we know we're reading the reset value? sbi_fwft_all_cpus_set() may
-> > be called multiple times on the same feature. And harts may have had
-> > sbi_fwft_set() called on them independently. I think we should drop the
-> > whole prev_value optimization.
-> 
-> That's actually used for revert_on_failure as well not only the
-> optimization.
+> I'm using QEMU via virtme-ng. IIUC virtme-ng knows how to use viortfs
+> for the rootfs, but for individually-mounted directories with
+> --rwdir/--rodir it uses 9pfs unconditionally.
 
-At least the comment should drop the word 'Reset' and if there's a chance
-that not all harts having the same value then we should call get on all
-of them. (We'll probably want SBI FWFT functions which operate on
-hartmasks eventually.)
+Ah okay, that makes sense.
 
 > 
-> > 
-> >> +	ret = sbi_fwft_get(feature, &prev_value);
-> >> +	if (ret)
-> >> +		return ret;
-> >> +
-> >> +	/* Feature might already be set to the value we want */
-> >> +	if (prev_value == value)
-> >> +		return 0;
-> >> +
-> >> +	on_each_cpu_mask(&req.mask, cpu_sbi_fwft_set, &req, 1);
-> >> +	if (cpumask_equal(&req.mask, cpu_online_mask))
-> >> +		return 0;
-> >> +
-> >> +	pr_err("Failed to set feature %x for all online cpus, reverting\n",
-> >> +	       feature);
-> > 
-> > nit: I'd let the above line stick out. We have 100 chars.
-> > 
-> >> +
-> >> +	req.value = prev_value;
-> >> +	cpumask_copy(&tmp, &req.mask);
-> >> +	on_each_cpu_mask(&req.mask, cpu_sbi_fwft_set, &req, 1);
-> >> +	if (cpumask_equal(&req.mask, &tmp))
-> >> +		return 0;
-> > 
-> > I'm not sure we want the revert_on_fail support either. What happens when
-> > the revert fails and we return -EINVAL below? Also returning zero when
-> > revert succeeds means the caller won't know if we successfully set what
-> > we wanted or just successfully reverted.
+> Even if it's a bug in QEMU, I think it is worth working around this
+> one way or another. QEMU by far the most practical way to run these
+> tests, and virtme-ng is probably the most popular/practical way to do
+> that.
+
+I'm afraid yes. Although allocating temp files form 9pfs is rather ... 
+weird. :) One would assume that /tmp is usually backed by tmpfs. But 
+well, a disto can do what it wants.
+
+> I think even if we are confident it's just a bunch of broken
+> code that isn't even in Linux, it's pragmatic to spend a certain
+> amount of energy on having green tests there.
 > 
-> So that might actually be needed for features that needs to be enabled
-> on all hart or not enabled at all. If we fail to enable all of them,
-> them the hart will be in some non coherent state between the harts.
-> The returned error code though is wrong and I'm not sure we would have a
-> way to gracefully handle revertion failure (except maybe panicking ?).
 
-How about offlining all harts which don't have the desired state, along
-with complaining loudly to the boot log.
+Yeah, we're trying ...
 
-Thanks,
-drew
+> (Also, this f_type thing might be totally intentional specified
+> filesystem behaviour, I don't know).
+
+I assume it's broken in various ways to mimic that you are a file system 
+which you are not.
+
+Your approach is likely the easiest approach to deal with this 9pfs crap.
+
+Can you document in the code+description better what we learned, and why 
+we cannot even trust f_type with crappy 9pfs?
+
+---
+Cheers,
+
+David / dhildenb
+
 
