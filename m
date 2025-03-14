@@ -1,198 +1,380 @@
-Return-Path: <linux-kselftest+bounces-29028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1305A61069
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:49:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24141A6108F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:02:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42772884460
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 11:49:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD274462B8A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 951001FDE24;
-	Fri, 14 Mar 2025 11:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88591FF1A4;
+	Fri, 14 Mar 2025 12:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kFbnH+qA"
+	dkim=pass (2048-bit key) header.d=uliege.be header.i=@uliege.be header.b="o96fyVHg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from serv108.segi.ulg.ac.be (serv108.segi.ulg.ac.be [139.165.32.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8DC1FDE1B
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 11:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FB01FECC7;
+	Fri, 14 Mar 2025 12:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.165.32.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741952967; cv=none; b=IgjsInWryVvstbBIxGcTorCWFrwR5vSGyThYaWHb0ee1mV8CwD1O2xJMYm3rfLLejhkHb8fghMETitdQNkspvYPdgLC1mKElsgZ7Zjdp3lxK8bcH6b1M5P5RDnov/wsvHNmSXGy3Q4HpZuP+SkRc6YkzaTJ1/ATPIeke9ohMZzE=
+	t=1741953674; cv=none; b=qfhq7UzV5lewfWA7do6thaWQT+sV7geenbit+A0SzNDfmKeJq6ODAv2dezJyzn7CYMD9U09x2g0TLz1p0+yRPZP5+wsJCjlJy/kJo+kNe6BFJHDxGKJ2WpxBc8Jvdc+0e9oMPguxOb7I/SWFhCZGY9QDb5qPGQZvdSaTHd+wc5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741952967; c=relaxed/simple;
-	bh=aamCCkAiQoyGFWFnn+8tRK/vXlHXvoWzeYY4i496NBo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E58t/CsMJvCFHxHUzKnzbbVFc300F2r54U2TycfmkHCokSn08cYXPyULrqfpX3O2s16Gh05xiO+vvTVVFlaQyPC8kvxcm/H9lAHLLDJmZCbMrBVUFmbTkf9a+urhLw5xq9F5LRapAiDX3IjnwdxK/uDdlrC6ixiGU7tDN2nPbiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kFbnH+qA; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cfa7e7f54so13252245e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 04:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741952964; x=1742557764; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MnZSC151vp8qwLt12oXOY4820tmPnxSjOaRjWV8Cing=;
-        b=kFbnH+qA0gx7QtfcD2ZjmMe3oO+chE9EhFCrdWUZhxnqKv19/bCQFaep9wbXgWz4vt
-         lfEDCu/W3hrE7xk7dqrA8M0eBGj6J9U9MmwYqBDJFtpxmp0I3TRJDm3+3BqSom7UBKtV
-         MjLeekpd8Azqu/ZBN60HUiVvIdSSABejskk6batE3j3aezELD2pc0E29XiKQAg/JfmzM
-         9S4A0Ezy5ryco3WV6r/cDFB7iq9qwcSHiDPUVDQjmz5d5gsflcfam4//Oz4y4iB0UkdZ
-         DL40QvVEyqNtI6rpydYmd0JK5hdYYBdEwveHgk3XfymZRcYo21tfcb2yCbr/W2SDahtU
-         7HCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741952964; x=1742557764;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MnZSC151vp8qwLt12oXOY4820tmPnxSjOaRjWV8Cing=;
-        b=jR1WOqV/aV7KP1bwKRteQMxp2OYMzZsRNhU2MpRQ5QE4OyBGi/NiD0UZArfQBQq/aw
-         szwcJYUjsL6I2qiFYoQSayFSqofHKFyrJa5ukYrFrsUkZJJvIvmsbS8VSwBkIAoPrZPj
-         twIHUcppufsiii8kiw8MFvGzftoNH7mPTEXLDmvsksMn9zPfeNkWaMxbfrUuLd8ENThM
-         TdtDGRxs92yGfU1A8SCJmZne2yTy0273Gt/LC3xQYWLYmQ5FH86f33eAWg6cczVNQMi3
-         zmuVKj5XuUclvOVhWkxooOUS2od8JisXCcfqIpvb2FOdQXS5kK2l4dAHrjhEgYHif8Ap
-         9nrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnPSCKDlqE5c/w8Vv8wyugyUGtDfgCHdoyZoRueQYWA6gaNQducFiVPztVppdbUKMJTCUWL+2bd+KRTlBeQLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxghBWhOpfYPOxXdOgPwo3t1lXjkYwZzPZjzsXSmRhPb+1G7Obh
-	+zdd3zekLImdkYkyc9OV2/Yv6shkT81lsymLspdlxC/g7nYRr6poyQfVWRkxpvM=
-X-Gm-Gg: ASbGncugvaFjfI/WaLUYmWWvPgohn2F835c0b188/0lhqvGM+X3TxAbhyxEmrMlzvaS
-	SDHpvWWh3htwFK76bLwNcVieTpX0skuudB7v+62/+B7kEB9lfkGK5EVjbkEdYdEYXwerkQaVMXa
-	kFWscfJ6NEpB5FmuAWQtuVjams4rkBiL+cQTozFbj26SUQqutQnjXH4g6ULtVaEWKvAUPmTlwFO
-	DyiAMxcB4TJ/2wYDTt+1OOiWSRWeDczdutUG+HQaOg9G00QLoxqTLNm1kg0fQxlxGHxtnzb4dJQ
-	dWPqG7bmfPx47MyvUzQsWgB+oCwvVrY5EbT13MbKMoyUR+mj5pNwmUDHz9HUSXFF1rrNFkBfOSe
-	3bRBZgFzFf0Hvog==
-X-Google-Smtp-Source: AGHT+IFooexJGdlE71HjFHejmIN5yPGDOB48jansbCISOaAARNem81Cu631A445Q7st6CHhGvoNF9A==
-X-Received: by 2002:a05:600c:5105:b0:439:8e95:796a with SMTP id 5b1f17b1804b1-43d225b23e7mr10331325e9.13.1741952963792;
-        Fri, 14 Mar 2025 04:49:23 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb7eb92csm5408510f8f.91.2025.03.14.04.49.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 04:49:23 -0700 (PDT)
-Message-ID: <7073c4de-4735-429b-b520-f18c33ecaab7@rivosinc.com>
-Date: Fri, 14 Mar 2025 12:49:22 +0100
+	s=arc-20240116; t=1741953674; c=relaxed/simple;
+	bh=EcdpGU5FxlaWS6d9iI7cWLgWYWu4/QCymNmb+Yx4WP0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iz+Uf16CFBgfLloyZiMJQutB6ECWmoCCKT4Pvg5+xdUkSWvOIf9AR8zwENZsA5bBpqv1VifAVpdQpaxtKk59nan+gxOjxmlxA4RRHkogdso0n3g5O94RS9LXnTX+yhxbvi09/kWQRzgGGjCZ5y5nkod5Ur3taMjB73ityK6+I04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uliege.be; spf=pass smtp.mailfrom=uliege.be; dkim=pass (2048-bit key) header.d=uliege.be header.i=@uliege.be header.b=o96fyVHg; arc=none smtp.client-ip=139.165.32.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uliege.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uliege.be
+Received: from localhost.localdomain (rtr-guestwired.meeting.ietf.org [31.133.144.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by serv108.segi.ulg.ac.be (Postfix) with ESMTPSA id 2643C200DB90;
+	Fri, 14 Mar 2025 13:01:07 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 serv108.segi.ulg.ac.be 2643C200DB90
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uliege.be;
+	s=ulg20190529; t=1741953670;
+	bh=/B/95IoqLt9izs3y4P7LuUMjIPSoaMDnGELMDZlxTZA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=o96fyVHgOCKNn0gExnABwcsCXIqc7YRmg8o8kYFkZU4DC+vE4kS6GMtzmkcAS6oE4
+	 l+umqGyg6Oj5siFwJpX3u8zc2idGZKqNy8yWHMU+PwQ2Us6wT20p5MMMiuKmsnIUGc
+	 feFAbg5XXujUCrTzFwxCFyCiAvVPWyj7b1lK+/YJ4cXDGuJr41NKgI8Wlqa5v1yvU6
+	 hOUlHxbDciqFGi0dm4b+u9wk0ngawBShHnD/nJwe9hDULhLzVwwnKJ4TSIMx++ViWz
+	 OL0kRUcobxm3b2SiIFPwvSPGr4/qwnxMj//kaFuPSvmNhDBxWcKM1VmeGsLplj74Cc
+	 7LbnR+itzf1jg==
+From: Justin Iurman <justin.iurman@uliege.be>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	dsahern@kernel.org,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	justin.iurman@uliege.be,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 3/3] selftests: net: test for lwtunnel dst ref loops
+Date: Fri, 14 Mar 2025 13:00:48 +0100
+Message-Id: <20250314120048.12569-4-justin.iurman@uliege.be>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250314120048.12569-1-justin.iurman@uliege.be>
+References: <20250314120048.12569-1-justin.iurman@uliege.be>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/17] riscv: misaligned: add a function to check
- misalign trap delegability
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>
-References: <20250310151229.2365992-1-cleger@rivosinc.com>
- <20250310151229.2365992-9-cleger@rivosinc.com>
- <20250313-4bea400c5770a5a5d3d70b38@orel>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20250313-4bea400c5770a5a5d3d70b38@orel>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+As recently specified by commit 0ea09cbf8350 ("docs: netdev: add a note
+on selftest posting") in net-next, the selftest is therefore shipped in
+this series. However, this selftest does not really test this series. It
+needs this series to avoid crashing the kernel. What it really tests,
+thanks to kmemleak, is what was fixed by the following commits:
+- commit c71a192976de ("net: ipv6: fix dst refleaks in rpl, seg6 and
+ioam6 lwtunnels")
+- commit 92191dd10730 ("net: ipv6: fix dst ref loops in rpl, seg6 and
+ioam6 lwtunnels")
+- commit c64a0727f9b1 ("net: ipv6: fix dst ref loop on input in seg6
+lwt")
+- commit 13e55fbaec17 ("net: ipv6: fix dst ref loop on input in rpl
+lwt")
+- commit 0e7633d7b95b ("net: ipv6: fix dst ref loop in ila lwtunnel")
+- commit 5da15a9c11c1 ("net: ipv6: fix missing dst ref drop in ila
+lwtunnel")
 
+Signed-off-by: Justin Iurman <justin.iurman@uliege.be>
+---
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   2 +
+ .../selftests/net/lwt_dst_cache_ref_loop.sh   | 246 ++++++++++++++++++
+ 3 files changed, 249 insertions(+)
+ create mode 100755 tools/testing/selftests/net/lwt_dst_cache_ref_loop.sh
 
-On 13/03/2025 14:19, Andrew Jones wrote:
-> On Mon, Mar 10, 2025 at 04:12:15PM +0100, Clément Léger wrote:
->> Checking for the delegability of the misaligned access trap is needed
->> for the KVM FWFT extension implementation. Add a function to get the
->> delegability of the misaligned trap exception.
->>
->> Signed-off-by: Clément Léger <cleger@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/cpufeature.h  |  5 +++++
->>  arch/riscv/kernel/traps_misaligned.c | 17 +++++++++++++++--
->>  2 files changed, 20 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
->> index ad7d26788e6a..8b97cba99fc3 100644
->> --- a/arch/riscv/include/asm/cpufeature.h
->> +++ b/arch/riscv/include/asm/cpufeature.h
->> @@ -69,12 +69,17 @@ int cpu_online_unaligned_access_init(unsigned int cpu);
->>  #if defined(CONFIG_RISCV_SCALAR_MISALIGNED)
->>  void unaligned_emulation_finish(void);
->>  bool unaligned_ctl_available(void);
->> +bool misaligned_traps_can_delegate(void);
->>  DECLARE_PER_CPU(long, misaligned_access_speed);
->>  #else
->>  static inline bool unaligned_ctl_available(void)
->>  {
->>  	return false;
->>  }
->> +static inline bool misaligned_traps_can_delegate(void)
->> +{
->> +	return false;
->> +}
->>  #endif
->>  
->>  bool check_vector_unaligned_access_emulated_all_cpus(void);
->> diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
->> index db31966a834e..a67a6e709a06 100644
->> --- a/arch/riscv/kernel/traps_misaligned.c
->> +++ b/arch/riscv/kernel/traps_misaligned.c
->> @@ -716,10 +716,10 @@ static int cpu_online_check_unaligned_access_emulated(unsigned int cpu)
->>  }
->>  #endif
->>  
->> -#ifdef CONFIG_RISCV_SBI
->> -
->>  static bool misaligned_traps_delegated;
->>  
->> +#ifdef CONFIG_RISCV_SBI
->> +
->>  static int cpu_online_sbi_unaligned_setup(unsigned int cpu)
->>  {
->>  	if (sbi_fwft_set(SBI_FWFT_MISALIGNED_EXC_DELEG, 1, 0) &&
->> @@ -761,6 +761,7 @@ static int cpu_online_sbi_unaligned_setup(unsigned int cpu __always_unused)
->>  {
->>  	return 0;
->>  }
->> +
->>  #endif
->>  
->>  int cpu_online_unaligned_access_init(unsigned int cpu)
->> @@ -773,3 +774,15 @@ int cpu_online_unaligned_access_init(unsigned int cpu)
->>  
->>  	return cpu_online_check_unaligned_access_emulated(cpu);
->>  }
->> +
->> +bool misaligned_traps_can_delegate(void)
->> +{
->> +	/*
->> +	 * Either we successfully requested misaligned traps delegation for all
->> +	 * CPUS or the SBI does not implemented FWFT extension but delegated the
->> +	 * exception by default.
->> +	 */
->> +	return misaligned_traps_delegated ||
->> +	       all_cpus_unaligned_scalar_access_emulated();
->> +}
->> +EXPORT_SYMBOL_GPL(misaligned_traps_can_delegate);
->> \ No newline at end of file
-> 
-> Check your editor settings.
-
-I just enabled EditorConfig as well as clang-format so hopefully that
-will be ok in the next series.
-
-Thanks,
-
-Clément
-
-> 
->> -- 
->> 2.47.2
-> 
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 5916f3b81c39..843ab747645d 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -101,6 +101,7 @@ TEST_PROGS += vlan_bridge_binding.sh
+ TEST_PROGS += bpf_offload.py
+ TEST_PROGS += ipv6_route_update_soft_lockup.sh
+ TEST_PROGS += busy_poll_test.sh
++TEST_PROGS += lwt_dst_cache_ref_loop.sh
+ 
+ # YNL files, must be before "include ..lib.mk"
+ YNL_GEN_FILES := busy_poller netlink-dumps
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 5b9baf708950..61e5116987f3 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -107,3 +107,5 @@ CONFIG_XFRM_INTERFACE=m
+ CONFIG_XFRM_USER=m
+ CONFIG_IP_NF_MATCH_RPFILTER=m
+ CONFIG_IP6_NF_MATCH_RPFILTER=m
++CONFIG_IPV6_ILA=m
++CONFIG_IPV6_RPL_LWTUNNEL=y
+diff --git a/tools/testing/selftests/net/lwt_dst_cache_ref_loop.sh b/tools/testing/selftests/net/lwt_dst_cache_ref_loop.sh
+new file mode 100755
+index 000000000000..881eb399798f
+--- /dev/null
++++ b/tools/testing/selftests/net/lwt_dst_cache_ref_loop.sh
+@@ -0,0 +1,246 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Author: Justin Iurman <justin.iurman@uliege.be>
++#
++# WARNING
++# -------
++# This is just a dummy script that triggers encap cases with possible dst cache
++# reference loops in affected lwt users (see list below). Some cases are
++# pathological configurations for simplicity, others are valid. Overall, we
++# don't want this issue to happen, no matter what. In order to catch any
++# reference loops, kmemleak MUST be used. The results alone are always blindly
++# successful, don't rely on them. Note that the following tests may crash the
++# kernel if the fix to prevent lwtunnel_{input|output|xmit}() reentry loops is
++# not present.
++#
++# Affected lwt users so far (please update accordingly if needed):
++#  - ila_lwt (output only)
++#  - ioam6_iptunnel (output only)
++#  - rpl_iptunnel (both input and output)
++#  - seg6_iptunnel (both input and output)
++
++source lib.sh
++
++check_compatibility()
++{
++	setup_ns tmp_node &>/dev/null
++	if [ $? != 0 ]; then
++		echo "SKIP: Cannot create netns."
++		exit $ksft_skip
++	fi
++
++	ip link add name veth0 netns $tmp_node type veth \
++		peer name veth1 netns $tmp_node &>/dev/null
++	local ret=$?
++
++	ip -netns $tmp_node link set veth0 up &>/dev/null
++	ret=$((ret + $?))
++
++	ip -netns $tmp_node link set veth1 up &>/dev/null
++	ret=$((ret + $?))
++
++	if [ $ret != 0 ]; then
++		echo "SKIP: Cannot configure links."
++		cleanup_ns $tmp_node
++		exit $ksft_skip
++	fi
++
++	lsmod 2>/dev/null | grep -q "ila"
++	ila_lsmod=$?
++	[ $ila_lsmod != 0 ] && modprobe ila &>/dev/null
++
++	ip -netns $tmp_node route add 2001:db8:1::/64 \
++		encap ila 1:2:3:4 csum-mode no-action ident-type luid \
++			hook-type output \
++		dev veth0 &>/dev/null
++
++	ip -netns $tmp_node route add 2001:db8:2::/64 \
++		encap ioam6 trace prealloc type 0x800000 ns 0 size 4 \
++		dev veth0 &>/dev/null
++
++	ip -netns $tmp_node route add 2001:db8:3::/64 \
++		encap rpl segs 2001:db8:3::1 dev veth0 &>/dev/null
++
++	ip -netns $tmp_node route add 2001:db8:4::/64 \
++		encap seg6 mode inline segs 2001:db8:4::1 dev veth0 &>/dev/null
++
++	ip -netns $tmp_node -6 route 2>/dev/null | grep -q "encap ila"
++	skip_ila=$?
++
++	ip -netns $tmp_node -6 route 2>/dev/null | grep -q "encap ioam6"
++	skip_ioam6=$?
++
++	ip -netns $tmp_node -6 route 2>/dev/null | grep -q "encap rpl"
++	skip_rpl=$?
++
++	ip -netns $tmp_node -6 route 2>/dev/null | grep -q "encap seg6"
++	skip_seg6=$?
++
++	cleanup_ns $tmp_node
++}
++
++setup()
++{
++	setup_ns alpha beta gamma &>/dev/null
++
++	ip link add name veth-alpha netns $alpha type veth \
++		peer name veth-betaL netns $beta &>/dev/null
++
++	ip link add name veth-betaR netns $beta type veth \
++		peer name veth-gamma netns $gamma &>/dev/null
++
++	ip -netns $alpha link set veth-alpha name veth0 &>/dev/null
++	ip -netns $beta link set veth-betaL name veth0 &>/dev/null
++	ip -netns $beta link set veth-betaR name veth1 &>/dev/null
++	ip -netns $gamma link set veth-gamma name veth0 &>/dev/null
++
++	ip -netns $alpha addr add 2001:db8:1::2/64 dev veth0 &>/dev/null
++	ip -netns $alpha link set veth0 up &>/dev/null
++	ip -netns $alpha link set lo up &>/dev/null
++	ip -netns $alpha route add 2001:db8:2::/64 \
++		via 2001:db8:1::1 dev veth0 &>/dev/null
++
++	ip -netns $beta addr add 2001:db8:1::1/64 dev veth0 &>/dev/null
++	ip -netns $beta addr add 2001:db8:2::1/64 dev veth1 &>/dev/null
++	ip -netns $beta link set veth0 up &>/dev/null
++	ip -netns $beta link set veth1 up &>/dev/null
++	ip -netns $beta link set lo up &>/dev/null
++	ip -netns $beta route del 2001:db8:2::/64
++	ip -netns $beta route add 2001:db8:2::/64 dev veth1
++	ip netns exec $beta \
++		sysctl -wq net.ipv6.conf.all.forwarding=1 &>/dev/null
++
++	ip -netns $gamma addr add 2001:db8:2::2/64 dev veth0 &>/dev/null
++	ip -netns $gamma link set veth0 up &>/dev/null
++	ip -netns $gamma link set lo up &>/dev/null
++	ip -netns $gamma route add 2001:db8:1::/64 \
++		via 2001:db8:2::1 dev veth0 &>/dev/null
++
++	sleep 1
++
++	ip netns exec $alpha ping6 -c 5 -W 1 2001:db8:2::2 &>/dev/null
++	if [ $? != 0 ]; then
++		echo "SKIP: Setup failed."
++		exit $ksft_skip
++	fi
++
++	sleep 1
++}
++
++cleanup()
++{
++	cleanup_ns $alpha $beta $gamma
++	[ $ila_lsmod != 0 ] && modprobe -r ila &>/dev/null
++}
++
++run_ila()
++{
++	if [ $skip_ila != 0 ]; then
++		echo "SKIP: ila (output)"
++		return
++	fi
++
++	ip -netns $beta route del 2001:db8:2::/64
++	ip -netns $beta route add 2001:db8:2:0:0:0:0:2/128 \
++		encap ila 2001:db8:2:0 csum-mode no-action ident-type luid \
++			hook-type output \
++		dev veth1 &>/dev/null
++	sleep 1
++
++	echo "TEST: ila (output)"
++	ip netns exec $beta ping6 -c 2 -W 1 2001:db8:2::2 &>/dev/null
++	sleep 1
++
++	ip -netns $beta route del 2001:db8:2:0:0:0:0:2/128
++	ip -netns $beta route add 2001:db8:2::/64 dev veth1
++	sleep 1
++}
++
++run_ioam6()
++{
++	if [ $skip_ioam6 != 0 ]; then
++		echo "SKIP: ioam6 (output)"
++		return
++	fi
++
++	ip -netns $beta route change 2001:db8:2::/64 \
++		encap ioam6 trace prealloc type 0x800000 ns 1 size 4 \
++		dev veth1 &>/dev/null
++	sleep 1
++
++	echo "TEST: ioam6 (output)"
++	ip netns exec $beta ping6 -c 2 -W 1 2001:db8:2::2 &>/dev/null
++	sleep 1
++}
++
++run_rpl()
++{
++	if [ $skip_rpl != 0 ]; then
++		echo "SKIP: rpl (input)"
++		echo "SKIP: rpl (output)"
++		return
++	fi
++
++	ip -netns $beta route change 2001:db8:2::/64 \
++		encap rpl segs 2001:db8:2::2 \
++		dev veth1 &>/dev/null
++	sleep 1
++
++	echo "TEST: rpl (input)"
++	ip netns exec $alpha ping6 -c 2 -W 1 2001:db8:2::2 &>/dev/null
++	sleep 1
++
++	echo "TEST: rpl (output)"
++	ip netns exec $beta ping6 -c 2 -W 1 2001:db8:2::2 &>/dev/null
++	sleep 1
++}
++
++run_seg6()
++{
++	if [ $skip_seg6 != 0 ]; then
++		echo "SKIP: seg6 (input)"
++		echo "SKIP: seg6 (output)"
++		return
++	fi
++
++	ip -netns $beta route change 2001:db8:2::/64 \
++		encap seg6 mode inline segs 2001:db8:2::2 \
++		dev veth1 &>/dev/null
++	sleep 1
++
++	echo "TEST: seg6 (input)"
++	ip netns exec $alpha ping6 -c 2 -W 1 2001:db8:2::2 &>/dev/null
++	sleep 1
++
++	echo "TEST: seg6 (output)"
++	ip netns exec $beta ping6 -c 2 -W 1 2001:db8:2::2 &>/dev/null
++	sleep 1
++}
++
++run()
++{
++	run_ila
++	run_ioam6
++	run_rpl
++	run_seg6
++}
++
++if [ "$(id -u)" -ne 0 ]; then
++	echo "SKIP: Need root privileges."
++	exit $ksft_skip
++fi
++
++if [ ! -x "$(command -v ip)" ]; then
++	echo "SKIP: Could not run test without ip tool."
++	exit $ksft_skip
++fi
++
++check_compatibility
++
++trap cleanup EXIT
++
++setup
++run
++
++exit $ksft_pass
+-- 
+2.34.1
 
 
