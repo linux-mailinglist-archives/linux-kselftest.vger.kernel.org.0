@@ -1,126 +1,137 @@
-Return-Path: <linux-kselftest+bounces-29066-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29067-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65722A6196E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 19:32:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F33A3A619F6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 20:00:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0202D17F3DC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 18:32:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC598462A36
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 19:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93EF1F3BAE;
-	Fri, 14 Mar 2025 18:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2655E2046AA;
+	Fri, 14 Mar 2025 19:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JYh2TXlx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GieJe+56"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0C413B58C
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 18:32:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E222AEE1;
+	Fri, 14 Mar 2025 19:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741977134; cv=none; b=lIeIOP0ukXJNKFnzHKmBTiXNLx7H4AGkar3J9XS0XTFZ1Vq9rtsG2BGvzv0mGJzsRKMFs9flXYL+9MKkO1/UjJo1a2MeTqOvzU86FlsP37regNkqA/+X80B+SgPuW0amZXmRvX9PMBvidEnR4poCvmnJw+H7Z6XHm+F1YFw13Go=
+	t=1741978826; cv=none; b=PYMa0GKqtofFh7qCwNaKmKNV8h5Z5jq2l/iQ/eOrIW3gptciSche+2CvZVrgQxyR4dalaA7yKJ90nWrIViBVee4w9yokqAmXo3NA3g5psl9M5W2UV1/C0fWO0Sq8J8WfjstbQXs99fKRYNATZTGAXzOOl5DfWldpxsWCpmNeh6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741977134; c=relaxed/simple;
-	bh=ZAlDB8f3z/UtpU4Kr17RyxB+EhhNFrQC+QXpc8vm7rU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fw9og99VJ09W10cVthvLvMlU0VO/Q6JB1nhbrJ/uC7EE83immsm4DbRzr8U9Y2+VJ7owe7UhEg4hS3oyx4ZOPrkYMdO120CO31DgrCKteXgWN+aGNkhTgDLWvdD8O4qWHs5njvqkrkD1jcS420f/jROSw1GcsWAo5yVaL9KCe3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JYh2TXlx; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741977132;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cMyLUb8LhPfp38YWXS83SjE2dBcmOEXzjF8frO+TYyk=;
-	b=JYh2TXlxNz37zVjmlu8Fn4heKQB73AHBypNicBPR5Xt5n0YYTa10JMrlXmw4M5G5SuA5Ug
-	Vpx9cb40exLP3VLZphUnLbGjkCmWQsPaXwI9M2SMGDWh8Siz+37sfmVNBAfC3PVI3xA9T0
-	RpuAHawm84dKmsFHjk1dw6Ncdp7Ihzg=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-231-lXny_JXXMG66aCKKQmp83g-1; Fri, 14 Mar 2025 14:32:10 -0400
-X-MC-Unique: lXny_JXXMG66aCKKQmp83g-1
-X-Mimecast-MFC-AGG-ID: lXny_JXXMG66aCKKQmp83g_1741977130
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6e9083404b7so50706466d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 11:32:10 -0700 (PDT)
+	s=arc-20240116; t=1741978826; c=relaxed/simple;
+	bh=D0QlhNXbW/xyzK2YRcvVYmbstyauIMT/uvZG4gqT/LY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rm0gORj7Ksbg+UPUCgu+b6tRhWFAzbS/1I5rtTkH+Mduqi/vppP77CRyFHUsmu7VhxAzPBjbq2LUSbt5oFVw5V5P261CAkifComTPcodvZQ61IX2UBFSKWxkXwIE/iD85KFsQc+RZ5ooKZsj+HfNBo42D7uajMI248CIbUDq1Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GieJe+56; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-224171d6826so61123705ad.3;
+        Fri, 14 Mar 2025 12:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741978824; x=1742583624; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6TttbHfEDzusPiqbLfENwtPHN2UcwDBYMxJRLAbcwVE=;
+        b=GieJe+56p1TdTk8rdtLatYPLudjGkELdS8msA90p76Hw/Bs3UWB004c0qLgTAAU9Dv
+         jilMvC097mKeZNBP6Y7Z2QHDy4joNcBpE6JlIx6S5kp74HIeyOJbWVo7GiMbIRyzUUN7
+         53JkjH+OnVKeAtbKrumGFYtpIay4uMu4ek0fGEBQJc3g2s0SHhgzsX0/Hei60+zIk01V
+         BL1bwNUL1wb+Bs/2XmCoM45ViIU3sSNJB++Y7akLva1//SUnEb3YqLWbYMU+i0mTeRA3
+         fs44rhvcuY1ZHB4G4EI7IIpOyiB+Fdt/RTAPAdogDv7tMXVv2M93B8lZ5sOyaLzwlMAn
+         rKuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741977130; x=1742581930;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cMyLUb8LhPfp38YWXS83SjE2dBcmOEXzjF8frO+TYyk=;
-        b=ujgjciipCdvFQ3RgAZsI+Ravux8phgrqOUk84zDvavxQoTRWZFfLxVflrAHC3wZL1c
-         dtXzcuOxzukB8Qk72T1kx33POFrRqBs1A776V5P36OUX1q2pzTZizkmRczyehEFrnDXV
-         uXQ4dyEQs1Dc6qNhEHtZIujKRgdY9ryVU6vZ/L4Uuao4wH12IW86INfEzS+tcE2CoRtE
-         ObD5YdE98FhxqLmy49GMf6iK353g7tH+/hXFwLwelwq2/QQyl5oh3UqILvX/WTIXrlKQ
-         3MO8ipKT+VzWIpVK7RoUjf2Lnsfj9WM+aAvvbx9DWzUggv3SdYfJOZ4j5clF9imxXGno
-         96Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCUfOM4P8jLFE0xaWFsROLfkZhPwP/h3dppzkTBCH5kvnHBB6h9CVrqsZcb2nNy/wcjIkqD9SpvU+AUuXW5aOjc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4j/TXyWWdjRHJzDP1cZp0PnasEfIMxPrz8VmmTFITTE0Lmrdy
-	olPYK6+UlziJXtFSigeF8WhQ1Rbsg+bdT7rCt5L8bShDcfUsbJ2nnKGzHJAf7wYNMQBvvUYMVci
-	PCvB7hqGLYUvnnYTTKFAbaHsgs0IXm8KdpA5UQ0omJEUJMW94T1Dwb+LiA0jvwfI1EQ==
-X-Gm-Gg: ASbGncuUhCvFl9mEUZyRpEWSXVcGX5lB7y6BIMEAlWUOpEjScHoeEAhIy5AM4lDWylm
-	JOyuEVdPgRn69y35bRdszzA3TiDfHTj9c6w2rilcexNq/hkX7sn3vNNb3G7gT/jNUAlvKeLuoYd
-	kcIZmYwkd7DeyMuZnp52vn0prvNzduiUbb8tRfiYQasLMB1BvI8DzxJQNGyxV3hCybxpT0P4+VM
-	WbMGFNT09eUb3ODAriRORmwoCLymvmJecZZoLtrDBtKlUAe7ITQTIBVHJwR1A2kRQMfQNdQ2nYk
-	KFyM/DI=
-X-Received: by 2002:a05:6214:29ed:b0:6e8:feb2:bad9 with SMTP id 6a1803df08f44-6eaeaaac26fmr45881406d6.30.1741977130133;
-        Fri, 14 Mar 2025 11:32:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHscSVLDkbW24B9zbK0LGwRDEEXA7mFC28oFGsGZvhR+c2wtyNhUM9wN90pI1MPGQwzkAu4dQ==
-X-Received: by 2002:a05:6214:29ed:b0:6e8:feb2:bad9 with SMTP id 6a1803df08f44-6eaeaaac26fmr45881066d6.30.1741977129812;
-        Fri, 14 Mar 2025 11:32:09 -0700 (PDT)
-Received: from x1.local ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eade231261sm26870036d6.30.2025.03.14.11.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 11:32:08 -0700 (PDT)
-Date: Fri, 14 Mar 2025 14:32:05 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Nikita Kalyazin <kalyazin@amazon.com>
-Cc: James Houghton <jthoughton@google.com>, akpm@linux-foundation.org,
-	pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, lorenzo.stoakes@oracle.com, david@redhat.com,
-	ryan.roberts@arm.com, quic_eberman@quicinc.com, graf@amazon.de,
-	jgowans@amazon.com, roypat@amazon.co.uk, derekmn@amazon.com,
-	nsaenz@amazon.es, xmarcalx@amazon.com
-Subject: Re: [RFC PATCH 0/5] KVM: guest_memfd: support for uffd missing
-Message-ID: <Z9R2JapHdhR2Xhp_@x1.local>
-References: <Z89EFbT_DKqyJUxr@x1.local>
- <9e7536cc-211d-40ca-b458-66d3d8b94b4d@amazon.com>
- <Z9GsIDVYWoV8d8-C@x1.local>
- <7c304c72-1f9c-4a5a-910b-02d0f1514b01@amazon.com>
- <Z9HhTjEWtM58Zfxf@x1.local>
- <69dc324f-99fb-44ec-8501-086fe7af9d0d@amazon.com>
- <Z9MuC5NCFUpCZ9l8@x1.local>
- <507e6ad7-2e28-4199-948a-4001e0d6f421@amazon.com>
- <Z9NeTQsn4xwTtU06@x1.local>
- <24528be7-8f7a-4928-8bca-5869cf14eace@amazon.com>
+        d=1e100.net; s=20230601; t=1741978824; x=1742583624;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TttbHfEDzusPiqbLfENwtPHN2UcwDBYMxJRLAbcwVE=;
+        b=P5q1h7rd564pbKRnsK6yrRj0AJV1oYB0C0J2JZhj230EZblPzWlAysFgheQbU2Li91
+         Zd4i6LfaAufS92AghVbFvNRi6E58qePEUgnMafja2v7QjY3xlVfn41rIlE1GtX+CCVCv
+         cJX4gvOev1g1uWZx+4EXD8R4IrDS8ageZZxJAKRbxsCkauLfZNQm8bFTaznTsDtKKfyy
+         8APy34Xh1hW2uE50hKai5PY9l6mAjEuSOTcSbadQte1Ck5LXSFJdZLMYM093PIk9uKP3
+         dmxBOY80PtpJnB29a1I+mZz2bfJa8OrNmdmEa9GUp4bTA4Jxs+lvT05bgNw4yR/bc1ZW
+         ZxsA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGaGX6/vaD6CuzJx3QF57gs6SEhaU+MIIWR1XYLOjxoqIC7tm4qZrUtQubL49MwUXWUpVJ97XPmO3B+fAcBMF4@vger.kernel.org, AJvYcCVYsbFznJjYvb59+21KZa4F5ZvowPyQ/BG3euEX7Vyc88g45DLUae9LEyvO8SrIlHj79gRqHDWIKPesywZjRA==@vger.kernel.org, AJvYcCX8DhkxiKKZ3rf3MNdmcuFFwbTTn47pJz/rGVKeIa9GBCVj++Q4b9stzEwKKxciRyudljQpS8K7PjIANOg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeNSXXMyFYUtcmG4upX/WFBsSz8iy7zP5+JjDZ3k7lxJH4h86X
+	1IWBDlP3e/IwpzkSGZ3at8smtm+OKzqY/0/fHFfPRZhUFOOLYaJRvT9d64Iu
+X-Gm-Gg: ASbGncvlqdINc9JtCR4cJMDnv1qMHZgqm3p5bkrD1a/AGvZGZ5O6YY4b15mmaMSnKj8
+	3GQoS1wsHeKn8iH9nTDq/UlMwr12ctavrW4C5JdLglw0LeZKJqhVjL3zHYF/gwcr6LiZTuhjDuw
+	aV3nGCWNCxF7SHjmL2F1vbxeaOGrKTAoSvf/TrUhELDfRNpffXJz7UlwPF5C6z82un39TB82aPR
+	/4bhGIl6tOazvVDCUFMMRTs2RQ0Gh6JGsDSsIIFd1EOu2LYKU4yE2tVf8+QZSKMWc/14RAIY/bq
+	GhsSYIo3BHq886MumAukzblmf8e52ElUMKpJBTv80uP3efSZ5Y2H+bKazL2XoH3BtXGKkFrzJFw
+	Js79O79hbM3mGx+n88vTF
+X-Google-Smtp-Source: AGHT+IHNCKUEoQeU5JuTLB28zDQI1qq1nJ7mhk9VQYn/ahnO4Z55+xZYRRq0I3bKdFHKwOs72+RMXQ==
+X-Received: by 2002:a17:902:e78b:b0:220:e1e6:4472 with SMTP id d9443c01a7336-225e0a82ca7mr38015695ad.13.1741978823899;
+        Fri, 14 Mar 2025 12:00:23 -0700 (PDT)
+Received: from ?IPV6:2804:d57:4e50:a700:f33d:65d1:e22e:109b? ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bbe8f9sm31682105ad.175.2025.03.14.12.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Mar 2025 12:00:23 -0700 (PDT)
+Message-ID: <6d9b9394-690b-49a3-b8df-7ef510c96c00@gmail.com>
+Date: Fri, 14 Mar 2025 16:00:19 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <24528be7-8f7a-4928-8bca-5869cf14eace@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH PATCH 2/2] selftests: livepatch: test if ftrace can trace
+ a livepatched function
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Marcos Paulo de Souza <mpdesouza@suse.com>,
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, felipe_life@live.com
+References: <20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com>
+ <20250306-ftrace-sftest-livepatch-v1-2-a6f1dfc30e17@gmail.com>
+ <alpine.LSU.2.21.2503141411010.4442@pobox.suse.cz>
+Content-Language: en-US
+From: Filipe Xavier <felipeaggger@gmail.com>
+In-Reply-To: <alpine.LSU.2.21.2503141411010.4442@pobox.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Mar 14, 2025 at 05:12:35PM +0000, Nikita Kalyazin wrote:
-> Yes, I was thinking about MADV_POPULATE_WRITE as well, but AFAIK it isn't
-> available in guest_memfd, at least with direct map removed due to [1] being
-> updated in [2]:
+On 3/14/25 10:14 AM, Miroslav Benes wrote:
 
-I see, so GUP is no-go.  IIUC the userapp can also prefault by writing
-zeros in a loop after mmap().
+> Hi,
+>
+>> +start_test "trace livepatched function and check that the live patch remains in effect"
+>> +
+>> +FUNCTION_NAME="livepatch_cmdline_proc_show"
+>> +
+>> +load_lp $MOD_LIVEPATCH
+>> +trace_function "$FUNCTION_NAME"
+> trace_funtion() calls cleanup_ftrace() to prepare the test. Ok.
+>
+>> +if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+>> +	log "livepatch: ok"
+>> +fi
+>> +
+>> +check_traced_function "$FUNCTION_NAME"
+>> +
+>> +cleanup_tracing
+> Here, I suppose, cleanup_tracing() is called to clean up after the check
+> above so that nothing stays and more tests can be added later. Right?
+> Would it make sense then to call cleanup_tracing() in
+> check_traced_function()? I think it would less error prone.
+> If needed, check_traced_function() can always be upgraded so that it
+> checks for more traced functions.
 
-Thanks,
+In cases where we need to check two or more functions with 
+check_traced_function,
 
--- 
-Peter Xu
+if there is cleanup_tracing, it will not be possible, make sense?
 
+e.g: function1 call -> function2 call -> function3.
+
+>
+> Miroslav
 
