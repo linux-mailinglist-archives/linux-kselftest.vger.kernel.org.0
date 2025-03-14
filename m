@@ -1,88 +1,81 @@
-Return-Path: <linux-kselftest+bounces-29032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48F04A610B7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:17:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC3BDA610FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 13:26:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B79319C27B6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:17:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39F863BFD79
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 12:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A581FCFE3;
-	Fri, 14 Mar 2025 12:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CB21FF1B0;
+	Fri, 14 Mar 2025 12:23:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NijUSqYU"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="P17ff/7r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A281CBE8C
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 12:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125E31FDE35
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 12:23:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741954632; cv=none; b=PyNv3uyek8p/TQ1T73aKWlotGJxkL+iuvcpo8xtRsCCe973R0Q284qqRf4SGRPHlrqX5VrI7RfhL/dZgrepPTlfytW8oAlEJh1ImHfbGpib9Mf/1/GLu+K4VtQWyDC5VK6Eu09Kk4CwqnG8ThXfbLbIyqjijkxrEIVnjxMT/DwU=
+	t=1741955012; cv=none; b=PgcMP7OkMQ9ehhJ1ZD0qVQfxnvEFiRe0QC6rfYXa50cRmHziZAya9z3Vvig2h+gpR6UlzaBzRDs5DLIN27MDCidaaGsXscx9YRux3r1ALnzBrz4l5gtMhiUYl/GMkP/Zbz48Qtu2fBGoim+yOQysGynb7yiBPUgg0Vmf+aYvBQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741954632; c=relaxed/simple;
-	bh=MiSPP/QvIcTVTmZ0qIzcXfbATwLB4cCe1NpvHpBe0N8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=W6IGUlp4K6vkujVJ8tfuan+HcQ5pKPfrbjhVd59SVjPXGAhy4XVZ/QkVhk52augTuIsC4ZnjwFvJqD1zeWMSk7dSY63kaFM086wbMUuLcjw0rMU3602cedfcP0JjO78YoVQEuRj3fYxt+pBsjniscfIWrMURv0IMcAH6+DA9xL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NijUSqYU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741954629;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Uk+PE6keSszFMK/H4FlxtGAYCBN+w4Mxmc2pqfulugg=;
-	b=NijUSqYUqnW/Ba517KFDfeL/tZ2PmTEDATXOjNd06gaItUgv2e4f7KBhFu1ll8yY8p+b5A
-	tBY/T7j/z2cClz1XBaDt1ix33h/j1Sf5ayNj5pDRVG5fCIYpBQ5ZfGHGo7GUtYe2ztgqYv
-	wT7NxwPCuKH76txpFdsDyHlW3rvfJxc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-202-oNSInZhCNJqjNK85SYX5FA-1; Fri, 14 Mar 2025 08:17:08 -0400
-X-MC-Unique: oNSInZhCNJqjNK85SYX5FA-1
-X-Mimecast-MFC-AGG-ID: oNSInZhCNJqjNK85SYX5FA_1741954627
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43cf44b66f7so12172365e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:17:07 -0700 (PDT)
+	s=arc-20240116; t=1741955012; c=relaxed/simple;
+	bh=Z4JyRsmuxnQvtktNf2axg7S3KaoJGRJjY+RY2W7OhWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FeiwdFaure8DcyNXqu1ClWH0+Tsalw1lHb9pTtKlfeRgl/8JR9h6b7O7PuoGA/fDRk9Y5RECvf1lxCL9Fqfj2iTEhURNcLV77kj6Xa3iLUhcrQngVN2ecGGQ+evfrZGXwmlQR9NsIXqu/GjKtKy14JUKV+XixLLmKlVBgaWmn60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=P17ff/7r; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43d0c18e84eso13530565e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:23:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741955007; x=1742559807; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WP6+QPN2p5r500R0hJqs0tnx9bBYWE9RADg1EjXw61M=;
+        b=P17ff/7rLjYg3VQS3PnSPOjdSu6M9PbqVWP9jTBGw9XcGuDWxxI4qX4+zr37W7yQdN
+         2dVDeo6ZorgilJRDKJD6Gvg0s7ojVibSd46EyfhLh/eUD7lJQlTzSFnxAGVi5fzKLUN9
+         B596u5M2QfccI3cdDJtVrk0QZelF3eIuZpWGT2YvpRhnwcT9UT0qIgISRxck/VC6/8RP
+         PrcsgNDQhyRkcmDwJfDLO9n9xPzFDrSLVCegf7f2/SQ5IQdYhzeMLchA9FZq/0sl9qdr
+         +D4Y4BpU7qHRqO2TB622VbnNtN0/35wMbEIfnv0brivHUcgUivYXxQVojbXfbQt0GSSc
+         iGDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741954627; x=1742559427;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Uk+PE6keSszFMK/H4FlxtGAYCBN+w4Mxmc2pqfulugg=;
-        b=KU3tb1P4JcpAVegRk1DoBFiMD91H8DEcnF/23nELb9qOsOGpj6Szp6WioKdl4BaE2s
-         cBz2RAw1UPnfo1mnT4gYTsjL5uwwG8+f108H0E7YGiivN9gGSs5jGkQ/yiKIhibPoSwF
-         EEZGDmmUPgnbtqjndDvya80ddasb5DJjbnMra6g258qH525b3arpoEFdzIus6IxPI+3r
-         waeI6FRL2BPlrFjGI4MR50dVfVUpqS/VaC42MTOjZrFpOyW0Q6bSo2G3XOBlJs5SEogz
-         QYsQFBu6/yeCW97yNna1YMhDDJH6N9AOjAVCSU5q9a2VO5WmvLYmq0VKp5icaB4qTptk
-         lZhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWOzW8iBFLtH8oQVXYh81cGgypIq9d096JAahEw/pH8khvdWn8zrtgLXFmCPG2ZFl0Nt8hDZ8MU9sCsJmSbgBI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy94RGL49oaCUOxkvcgFloQsB7Gam/ouOlYmeLI24qfLA9sDX55
-	RdJMAbJW/sFAjTzUMS3LUTEJReimvkL7cdOSVz287YOkw8aI2FAD16++aU/YhHP/KGMqWqcFnCQ
-	1kOQJWucjLjP0MFfycFsnV8XwKmismgiEsuhGN895YJJdWMJ1tEUZUjBD1Gig6/Fvaw==
-X-Gm-Gg: ASbGncs5bovEzE5lwpWbMHA40F4TQD32P3cpTnC8hGAQV3Yfid7yxbjMBsI7aj2PQ/I
-	T8CWIaR3lNsf1HIDeTKJ06orBmPqw7W1aQc1ClNtvwpicyRMTMahBL+rxIEEYPIy9roL1x4X9uw
-	hy7sUql5EyN31Q9uwqTEGmYSugnL1IFDb3ZevDN7Lo9Ut4vlPykHwVt/u7ya6njWObSo7mSRQ9H
-	A/QfbtebdZLtaP2URgpxUCLQKj7x1/ox+Zwh9i3QxXVjLGmJQG5U1WMhjFaWSpILZSMtSYpmooq
-	btSKIGrHlGDTwzi8yIhLdKG35XtNZF1+YNG7Psj0DBAVPAnrMNgSVmUz2vWuyyEZAing/hPJkp/
-	ICyj7UAv5o6DnN/wp6mIjsOF3xVsjuTQsTdWEQiRp1IA=
-X-Received: by 2002:a05:600c:19cd:b0:43c:ea40:ae4a with SMTP id 5b1f17b1804b1-43d1ecd932fmr30117645e9.31.1741954626821;
-        Fri, 14 Mar 2025 05:17:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEDrbvz2tRgrie1qCZ5FL011ovoI1nQAi6sQgjyv7izS0Ueu8VEX/n5R7v+XPE4e+CWYxc4NA==
-X-Received: by 2002:a05:600c:19cd:b0:43c:ea40:ae4a with SMTP id 5b1f17b1804b1-43d1ecd932fmr30117275e9.31.1741954626472;
-        Fri, 14 Mar 2025 05:17:06 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c745:2000:5e9f:9789:2c3b:8b3d? (p200300cbc74520005e9f97892c3b8b3d.dip0.t-ipconnect.de. [2003:cb:c745:2000:5e9f:9789:2c3b:8b3d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1fe065b0sm15827845e9.14.2025.03.14.05.17.05
+        d=1e100.net; s=20230601; t=1741955007; x=1742559807;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WP6+QPN2p5r500R0hJqs0tnx9bBYWE9RADg1EjXw61M=;
+        b=lzN670w2DrQ5XBfbcSsnZtA+nnsVy7NJIRtHQU19IK1LOqwLYv1IUPdSV1ocPovTfe
+         FsN2gWR94FIsNFHyuHcveU8Dtg5aRMk5gbveBq6Vx/YB7YqUfayLNkceSoHGFMxRP7wz
+         HoyEWZNvXcwq4TAQCa1cojuoxOOmP2KuIKB5wYkdRS6H2qxuIQqrXkohEy3h5q3l5Lmj
+         TMVVpAn+9WcnowEDNq2N8WzSqUtttoeD0QZs/XmGr4rFoYHF8YH8PpUqzc1L/sF9iRNI
+         tes4YlweBvEkppujcD2qvPzbdIqSn/e4PlHzkGApo4xukgv0JOUF+V0ZQBSWHJeZHRUK
+         40jA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgRm7HsloQTqcMvJla9FUt1kxvUbl/Sj7OLs8TkFrS+vV0GSsGxXgu3J+fai9tGoGXEdx4qXpshHFJcJ4mTiI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn5mLl14TUyhemdclTChyAhXo7q98kKicpU0ykHvNIdWQfvmvU
+	SEepc5NcFgDJqFOziVIh9T0PTKfF3NUwVnp7PLYnnKs/OR4H8VQ7wE5iA3Svg5kGavdICOjRVjw
+	EnSI=
+X-Gm-Gg: ASbGncskiRWSn+0ukK1h3wsDUB/FpUDByr/vsCzLTYxVUPF8z1YjogV8vGDkeNcLioO
+	4YG6qFodseB+yLKMza7kd77Kk3orFM9lxdDitfuQ65MF2KhxobiTpmnRzJxmXr8MqUfBtiEkN4t
+	PqjstGj1qy9xZmh+2SlKiTVQI5ubwT6qKVyO4g5vPKix/Fxo0/JaqGbfnt0RgZbXyh2rL1tf58n
+	m8KU+Fa4nGiYY6yDxKv0BxcYN9YTgLpLt8lXoi3G6T7dE9PLG5ppmdvW7VwV+9pbR08OSw/aXd5
+	DlnDohlM8gapLH60u4EN8VXX79l8aW3ztTpS5vShBpRfMJhcpbKVSomMp/GHsMeqaZVuqnfnByt
+	d8E3FynJ19EuO1g==
+X-Google-Smtp-Source: AGHT+IECzef4MEIZSEOP5RVqxJ+PV0zddyhXW52CcNjDzrN5wKIHRVBzHv0+gxm6G7pjP8xbxVlCBQ==
+X-Received: by 2002:a05:600c:218b:b0:43d:36c:f24 with SMTP id 5b1f17b1804b1-43d1ef4a5bbmr28499645e9.13.1741955007236;
+        Fri, 14 Mar 2025 05:23:27 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1fe60b46sm15737925e9.32.2025.03.14.05.23.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 05:17:06 -0700 (PDT)
-Message-ID: <95a15856-5c47-4040-9291-5b972786efeb@redhat.com>
-Date: Fri, 14 Mar 2025 13:17:05 +0100
+        Fri, 14 Mar 2025 05:23:26 -0700 (PDT)
+Message-ID: <8990d87e-b46e-4c1e-b337-a954563f6474@rivosinc.com>
+Date: Fri, 14 Mar 2025 13:23:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,140 +83,188 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/10] selftests/mm: Skip gup_longerm tests on weird
- filesystems
-From: David Hildenbrand <david@redhat.com>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Dev Jain <dev.jain@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250228-mm-selftests-v3-0-958e3b6f0203@google.com>
- <20250228-mm-selftests-v3-8-958e3b6f0203@google.com>
- <08023d47-dcf4-4efb-bf13-5aef3c6dca14@redhat.com>
- <Z8mYG8eQnMsOA4c1@google.com>
- <16023193-6cb4-46d1-91c4-43342e7e6d30@redhat.com>
- <CA+i-1C3srkh44tN8dMQ5aD-jhoksUkdEpa+mMfdDtDrPAUv7gQ@mail.gmail.com>
- <41923b80-55f4-44b6-bc59-60327e5308f4@redhat.com>
- <Z9FHEdZoYbCMoj64@google.com>
- <15cc0c1d-2b02-41de-bf48-3c57cee97c53@redhat.com>
+Subject: Re: [PATCH v3 02/17] riscv: sbi: add FWFT extension interface
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atishp@atishpatra.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>
+References: <20250310151229.2365992-1-cleger@rivosinc.com>
+ <20250310151229.2365992-3-cleger@rivosinc.com>
+ <20250313-5c22df0c08337905367fa125@orel>
+ <dad465de-e5da-4ebb-8395-ea9e181a6f57@rivosinc.com>
+ <20250314-10d8d58329aceac21e727ebe@orel>
 Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <15cc0c1d-2b02-41de-bf48-3c57cee97c53@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <20250314-10d8d58329aceac21e727ebe@orel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 14.03.25 13:10, David Hildenbrand wrote:
-> On 12.03.25 09:34, Brendan Jackman wrote:
->> On Tue, Mar 11, 2025 at 08:53:02PM +0100, David Hildenbrand wrote:
->>>> 2. 9pfs seems to pass the f_type through from the host. So you can't
->>>> detect it this way anyway.
+
+
+On 14/03/2025 13:02, Andrew Jones wrote:
+> On Fri, Mar 14, 2025 at 12:33:55PM +0100, Clément Léger wrote:
+>>
+>>
+>> On 13/03/2025 13:39, Andrew Jones wrote:
+>>> On Mon, Mar 10, 2025 at 04:12:09PM +0100, Clément Léger wrote:
+>>>> This SBI extensions enables supervisor mode to control feature that are
+>>>> under M-mode control (For instance, Svadu menvcfg ADUE bit, Ssdbltrp
+>>>> DTE, etc).
 >>>>
->>>> [3. I guess overlayfs & friends would also be an issue here although
->>>> that doesn't affect my usecase.]
+>>>> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+>>>> ---
+>>>>  arch/riscv/include/asm/sbi.h |  5 ++
+>>>>  arch/riscv/kernel/sbi.c      | 97 ++++++++++++++++++++++++++++++++++++
+>>>>  2 files changed, 102 insertions(+)
 >>>>
->>>> Anyway, I think we would have to scrape /proc/mounts to do this :(
->>>>
+>>>> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+>>>> index bb077d0c912f..fc87c609c11a 100644
+>>>> --- a/arch/riscv/include/asm/sbi.h
+>>>> +++ b/arch/riscv/include/asm/sbi.h
+>>>> @@ -503,6 +503,11 @@ int sbi_remote_hfence_vvma_asid(const struct cpumask *cpu_mask,
+>>>>  				unsigned long asid);
+>>>>  long sbi_probe_extension(int ext);
+>>>>  
+>>>> +int sbi_fwft_all_cpus_set(u32 feature, unsigned long value, unsigned long flags,
+>>>> +			  bool revert_on_failure);
+>>>> +int sbi_fwft_get(u32 feature, unsigned long *value);
+>>>> +int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags);
+>>>> +
+>>>>  /* Check if current SBI specification version is 0.1 or not */
+>>>>  static inline int sbi_spec_is_0_1(void)
+>>>>  {
+>>>> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+>>>> index 1989b8cade1b..256910db1307 100644
+>>>> --- a/arch/riscv/kernel/sbi.c
+>>>> +++ b/arch/riscv/kernel/sbi.c
+>>>> @@ -299,6 +299,103 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
+>>>>  	return 0;
+>>>>  }
+>>>>  
+>>>> +int sbi_fwft_get(u32 feature, unsigned long *value)
+>>>> +{
+>>>> +	return -EOPNOTSUPP;
+>>>> +}
+>>>> +
+>>>> +/**
+>>>> + * sbi_fwft_set() - Set a feature on all online cpus
 >>>
->>> The question I am asking myself: is this a 9pfs design bug or is it a 9pfs
->>> hypervisor bug. Because we shouldn't try too hard to work around hypervisor
->>> bugs.
+>>> copy+paste of description from sbi_fwft_all_cpus_set(). This function
+>>> only sets the feature on the calling hart.
 >>>
->>> Which 9pfs implementation are you using in the hypervisor?
+>>>> + * @feature: The feature to be set
+>>>> + * @value: The feature value to be set
+>>>> + * @flags: FWFT feature set flags
+>>>> + *
+>>>> + * Return: 0 on success, appropriate linux error code otherwise.
+>>>> + */
+>>>> +int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags)
+>>>> +{
+>>>> +	return -EOPNOTSUPP;
+>>>> +}
+>>>> +
+>>>> +struct fwft_set_req {
+>>>> +	u32 feature;
+>>>> +	unsigned long value;
+>>>> +	unsigned long flags;
+>>>> +	cpumask_t mask;
+>>>> +};
+>>>> +
+>>>> +static void cpu_sbi_fwft_set(void *arg)
+>>>> +{
+>>>> +	struct fwft_set_req *req = arg;
+>>>> +
+>>>> +	if (sbi_fwft_set(req->feature, req->value, req->flags))
+>>>> +		cpumask_clear_cpu(smp_processor_id(), &req->mask);
+>>>> +}
+>>>> +
+>>>> +static int sbi_fwft_feature_local_set(u32 feature, unsigned long value,
+>>>> +				      unsigned long flags,
+>>>> +				      bool revert_on_fail)
+>>>> +{
+>>>> +	int ret;
+>>>> +	unsigned long prev_value;
+>>>> +	cpumask_t tmp;
+>>>> +	struct fwft_set_req req = {
+>>>> +		.feature = feature,
+>>>> +		.value = value,
+>>>> +		.flags = flags,
+>>>> +	};
+>>>> +
+>>>> +	cpumask_copy(&req.mask, cpu_online_mask);
+>>>> +
+>>>> +	/* We can not revert if features are locked */
+>>>> +	if (revert_on_fail && flags & SBI_FWFT_SET_FLAG_LOCK)
+>>>
+>>> Should use () around the flags &. I thought checkpatch complained about
+>>> that?
+>>>
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	/* Reset value is the same for all cpus, read it once. */
+>>>
+>>> How do we know we're reading the reset value? sbi_fwft_all_cpus_set() may
+>>> be called multiple times on the same feature. And harts may have had
+>>> sbi_fwft_set() called on them independently. I think we should drop the
+>>> whole prev_value optimization.
 >>
->> I'm using QEMU via virtme-ng. IIUC virtme-ng knows how to use viortfs
->> for the rootfs, but for individually-mounted directories with
->> --rwdir/--rodir it uses 9pfs unconditionally.
+>> That's actually used for revert_on_failure as well not only the
+>> optimization.
 > 
-> Ah okay, that makes sense.
+> At least the comment should drop the word 'Reset' and if there's a chance
+> that not all harts having the same value then we should call get on all
+> of them. (We'll probably want SBI FWFT functions which operate on
+> hartmasks eventually.)
+
+Ok, then I can pass a cpu_mask as well so that caller just have to pass
+online_cpus() if they want it on all cpus.
+
 > 
 >>
->> Even if it's a bug in QEMU, I think it is worth working around this
->> one way or another. QEMU by far the most practical way to run these
->> tests, and virtme-ng is probably the most popular/practical way to do
->> that.
-> 
-> I'm afraid yes. Although allocating temp files form 9pfs is rather ...
-> weird. :) One would assume that /tmp is usually backed by tmpfs. But
-> well, a disto can do what it wants.
-> 
->> I think even if we are confident it's just a bunch of broken
->> code that isn't even in Linux, it's pragmatic to spend a certain
->> amount of energy on having green tests there.
+>>>
+>>>> +	ret = sbi_fwft_get(feature, &prev_value);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>> +
+>>>> +	/* Feature might already be set to the value we want */
+>>>> +	if (prev_value == value)
+>>>> +		return 0;
+>>>> +
+>>>> +	on_each_cpu_mask(&req.mask, cpu_sbi_fwft_set, &req, 1);
+>>>> +	if (cpumask_equal(&req.mask, cpu_online_mask))
+>>>> +		return 0;
+>>>> +
+>>>> +	pr_err("Failed to set feature %x for all online cpus, reverting\n",
+>>>> +	       feature);
+>>>
+>>> nit: I'd let the above line stick out. We have 100 chars.
+>>>
+>>>> +
+>>>> +	req.value = prev_value;
+>>>> +	cpumask_copy(&tmp, &req.mask);
+>>>> +	on_each_cpu_mask(&req.mask, cpu_sbi_fwft_set, &req, 1);
+>>>> +	if (cpumask_equal(&req.mask, &tmp))
+>>>> +		return 0;
+>>>
+>>> I'm not sure we want the revert_on_fail support either. What happens when
+>>> the revert fails and we return -EINVAL below? Also returning zero when
+>>> revert succeeds means the caller won't know if we successfully set what
+>>> we wanted or just successfully reverted.
 >>
+>> So that might actually be needed for features that needs to be enabled
+>> on all hart or not enabled at all. If we fail to enable all of them,
+>> them the hart will be in some non coherent state between the harts.
+>> The returned error code though is wrong and I'm not sure we would have a
+>> way to gracefully handle revertion failure (except maybe panicking ?).
 > 
-> Yeah, we're trying ...
+> How about offlining all harts which don't have the desired state, along
+> with complaining loudly to the boot log.
 > 
->> (Also, this f_type thing might be totally intentional specified
->> filesystem behaviour, I don't know).
-> 
-> I assume it's broken in various ways to mimic that you are a file system
-> which you are not.
-> 
-> Your approach is likely the easiest approach to deal with this 9pfs crap.
-> 
-> Can you document in the code+description better what we learned, and why
-> we cannot even trust f_type with crappy 9pfs?
-
-Staring a bit at that code, it's mostly 9p specific I think.
-
-t14s: ~/git/linux s390x-file-thp2 $ git grep "= NFS_SUPER_MAGIC"
-fs/nfs/super.c: buf->f_type = NFS_SUPER_MAGIC;
-fs/nfs/super.c: sb->s_magic = NFS_SUPER_MAGIC;
-
-t14s: ~/git/linux s390x-file-thp2 $ git grep "= V9FS_MAGIC"
-fs/9p/vfs_super.c:      sb->s_magic = V9FS_MAGIC;
-  $ git grep "f_type" | grep 9p
-fs/9p/vfs_super.c:                      buf->f_type = rs.type;
-
-
--- 
-Cheers,
-
-David / dhildenb
+> Thanks,
+> drew
 
 
