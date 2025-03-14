@@ -1,106 +1,103 @@
-Return-Path: <linux-kselftest+bounces-28992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-28993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F40A60857
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 06:37:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C01A60858
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 06:37:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A64B17E829
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 05:37:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03CB819C2336
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Mar 2025 05:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A131614F9FB;
-	Fri, 14 Mar 2025 05:37:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43CE15199B;
+	Fri, 14 Mar 2025 05:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qxZVq83T"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G2NIPMjL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B22922339
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C33014A09A
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 05:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741930640; cv=none; b=Qvqg2j+HcFc3q/tsX1Yv5rP/loROyb9SVgQApqR18+GG0HYcaKLOwGyBqVS9PGPn0tM7ymhSwO9smMgO6Xr/hG86nbJT9EfeCPpd2KRx4w/MocHYZjr3IlBfarpCBfDayp2gvZa3QqH/Vheg71WdLEX/iNV6ng+7u7BRY5rTV9A=
+	t=1741930641; cv=none; b=YOGSGN/YoQtaf1jZ+nkzxvQfYuO5VrlFAjRxofNu73ewhXvoljeOBbUC+PMf2KR5T3ouYtI3jRattuaovYPKU4LMHWQNkMRVp2EBxmLN4CLNvm3Bx8otZXD7lZRwPOJWqA9WLuFzJltyBev1P5b1xDWaIo9tHm4UPUT4AQTqyPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741930640; c=relaxed/simple;
-	bh=3aTgF9BIUq1vu3XTlWaex7qvMxUuDG1X946slas34rM=;
+	s=arc-20240116; t=1741930641; c=relaxed/simple;
+	bh=1Ktsgck0JwZx33i+7Lz1EKNgHv6MwYcIe8j7gKqVcLM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cioLP0oSPmynuvuNofzjL2y9urcmw7G8UrDGmx5RXiDl4qLmpGHA1wYcLnqW7BuXR3orB7BPeDQq5TyamS2HuYXokbbqn/7K9Qwqa2mG6SSGtZJA12qlKCeBj2Yz+G44i7quuu6VKq3Pp7FTcDK56ERnThQhNmNCYWglXaJ1jqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qxZVq83T; arc=none smtp.client-ip=209.85.219.48
+	 To:Cc:Content-Type; b=KL44GtvjRQyr1IB7b2oDR7GJzkbvhyvRQSNGrTa9ayN2C9OSGNQunCsYPLgdCQRWQy+dTtv/IODJTS2kBogQNw1uTbhDL1sZ2TOgDFJK8960PLeUy2zagfgnJlX3AaqKIHLEM3yT+24pNBSb5AxSARUdQHQiR7VkLRce8xh6Dnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G2NIPMjL; arc=none smtp.client-ip=209.85.219.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e86b92d3b0so15662246d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 22:37:17 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6e90b1b20c6so10712416d6.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Mar 2025 22:37:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741930637; x=1742535437; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1741930639; x=1742535439; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U71IunB+bqu6Gr+rpxmOLDjbLcSMkDlLACbAsCVEofQ=;
-        b=qxZVq83TNo3BpQ+LuuKOMR6vQ2rX0OMbjGDoS4flEYobBC6vz/qAut1dshu1gyhKEt
-         BrH05HnFhRU+tlgu2HDENJtRtMCT9ZaCoIQXTjzk5p6q+slHF5MmMgEGktKBXLzNW1+P
-         TZ6SCi7Ir5Tv2YpX/HYmZQPk/ZUFQW05C/aQJJYIbNolPVRDzFvgbfzE8vdJ7OgbmalD
-         mNrjDPqQ9WYCarYl/hhu6Zpx5Zc9SRpKoXm5fGN+AwmU8B1argOqjphwfBdrHJGXsJkV
-         DioAaLbAMKUTQP+cGQlibtfsJAtn7gJiwfVh7WMVENahmfnNigk9PYIpyY6wk+pI6pme
-         lTcw==
+        bh=NtiO4zoTwqeO2HTv6eS0tZPnKs4+DyA9YC8iDVcUbq4=;
+        b=G2NIPMjL+N9Ud6q5o03+6iKYeBUmcY0ZM6TRsJU2eSQuc661InyO14jpnZlJXKHgDU
+         SdOIjFfHthTOq/8oT6o5xtUqm5zcx9pgXquGeGFSsBBgrevYIJcnp7ilZxvVGpTor8JL
+         e49bX6n44vOxbGgxiAzCgX/bCe6yOn7MC/BuVu2EPwV2xfOB0h0XXdfU1aA8EsBSXgLS
+         Rma1c/A99L8kMtafDjxMNODUj93YGHCH3GGIm8RuGKocG6qdA+fI3fB17LVKdajQ8am1
+         PV9ZCmWU24BLkFBiXsB+izXQ6UMZjZ4sN6cqAq8DvgxIhPw78/dCg7Y86mYtQOM2QdpR
+         7wBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741930637; x=1742535437;
+        d=1e100.net; s=20230601; t=1741930639; x=1742535439;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=U71IunB+bqu6Gr+rpxmOLDjbLcSMkDlLACbAsCVEofQ=;
-        b=H8N5KjOWEJVLJL3vQVX4LcVgTcII+oCC2jvI0lBWWGPer2RKKMLKCPpWUBZILJeOis
-         M4Nw2rMfT2vWW3E2POMvJ7s5ypxRavD2vjiv/Xyvbf10HIJue3lDC9yXyZnM6unfVpea
-         dZSVPpjibTz4RwqtqCAvOkE9qCRqi2AkdvmVTK1pyHVO+BDGRyaZGgRLF1Npah39VG1+
-         gkcNh0pgLyvclob1YewScEcWhrTWS/pEdzbKojqz7bImrm/8RhYKbx5byY+J5sr83/Nb
-         xJZQB9cMthcWvkUhx52EsFK3Fw9GiVwYb9D7462Svi9n8UuESWhobzRvQ30/p8j8Bpyy
-         iVNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXlpiwFX/u6kiMnhM27kTTvhIErkKSF2XSR0cpIyuj8bmVV5rLtbRNh4Jm4qYECjYI63et5W327zDzB2/kU+vo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDCebb0CpyeXckK9WntlbRs6nvX/Mn9p1n5RB9EFAOCERA19Nw
-	FlthTCRbjhdYe9sRmqZbGX64hIkohErIeUy3kvN6R0JPBnrpekWErNbecGNIjzaOE7z2zFX1ljc
-	+V2yEknwiMCMtmE/wpad9uD/xiNB15MQE8eG6
-X-Gm-Gg: ASbGncsT4408g119ql67cQ3thzFn7w7I1oMb+14Yu6mR7H8Q1OohObpFfrfw9qhPuPN
-	pfsdOrSLy+PcDLbmqA4D74e2ghbKOAxl7P52IWDQO5AmveWYlhqPIAD0GLVZHjD1OlWfokRhZae
-	hM2r4pMUXgswgEZv4eC6L8hcq61Jk=
-X-Google-Smtp-Source: AGHT+IGNwtAzT61QdjPuCsLQKT5fQlpMprw9z+Fmjxlg2EzItV0gvF+IbDeRhOJ4r2mZjnNAGbqkhqEWLfV83Xx3VvI=
-X-Received: by 2002:a05:6214:21ed:b0:6e8:f945:ece with SMTP id
- 6a1803df08f44-6eaeaa07a1cmr15289706d6.11.1741930636704; Thu, 13 Mar 2025
- 22:37:16 -0700 (PDT)
+        bh=NtiO4zoTwqeO2HTv6eS0tZPnKs4+DyA9YC8iDVcUbq4=;
+        b=KFdJJgFttL9yJHrFB49CbapftOsz3OXBdyYuqA8lPRxW/J5ClxbMTkZHxoPbNpfLSZ
+         RjIXimlshRZ4FffwmTiEmBIU9u6wkvkyRiHQ9XPpsiEmkXTDbO6XBbAkIee2XdkHCWuA
+         f50XBRnwuObl5DM23MdfzAoTUWMFAqRjGe31+330P5XB+YQODdcZVq2T1fgvqGIx/ABs
+         E4ipeCKAoI0qY+2PoOZYWbqb847wzs4rSlj69H7IGjY8rnggATbGhrEEaBUzJ92ZaQIe
+         NQ+UauT+AL4vz0aN3ADN40gLWoOCdCmGoVcB1Bsiyb1hHomGR/l/2vPcHs1ufADcni1i
+         CyDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVbZE8B2wqnRlqnj/FE3odfVTiPr1uZWKTFM3GXzferaAcclgFWwQPLL2/qUWie0V/x0Orli2DusOMDREvvC4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjByTymdfTOjPgEWerMZrBPk7eTRE1GC5sMmqIdgfGsTwXEwHn
+	vBH9rTNcq1Z2LP6624pkP8C3I0CQiDrP8zjGe0faO0QJvmYif9mqzdWAYa47JVhDUBCzuWzCNpl
+	4NpwewDWT1eUZltoyTLCSLHDT3DFPCBkwXSSA
+X-Gm-Gg: ASbGncvQdA6D4623Hxqr28PoRmbL5i+fTUdYQF2Kxs+TTIPlHbJbM7i0uhCnZGZ8sdM
+	6jnLYpBPJtzv5FGakQ6nur6otFEynHU5q9rnuvWfV5Xsn0K9SaZWjo8MaWUfBfSUNtoKvTry3sv
+	ofFPXIXm4MJzeDQ9GKkrwrYHvKxl8=
+X-Google-Smtp-Source: AGHT+IG1lE7NJ9ixL0NSpXGZzxM/Rr2udQJyYRHB3WK23/hOUqWRx59zGO3kBCOnpFBRxDniWO8EqQCeo+rm3C1Gfcc=
+X-Received: by 2002:a05:6214:19ec:b0:6d8:9d81:2107 with SMTP id
+ 6a1803df08f44-6eaeaa52246mr16671626d6.20.1741930638898; Thu, 13 Mar 2025
+ 22:37:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250313192714.1380005-1-rmoar@google.com>
-In-Reply-To: <20250313192714.1380005-1-rmoar@google.com>
+References: <20250313192714.1380005-1-rmoar@google.com> <20250313192714.1380005-2-rmoar@google.com>
+In-Reply-To: <20250313192714.1380005-2-rmoar@google.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 14 Mar 2025 13:37:02 +0800
-X-Gm-Features: AQ5f1JpO2PChqDsAWpuEFGjR5niaCY4C4TwzsQ6aMSjL6douBeot-r7iMkJWHCk
-Message-ID: <CABVgOS=Pfp2_ZvCtxy6X_xoM6pGVgT6bD_4VxGVZ_SNWVgesGQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] kunit: tool: Fix bug in parsing test plan
+Date: Fri, 14 Mar 2025 13:37:04 +0800
+X-Gm-Features: AQ5f1JokiT6LzpO5mGI_9nwkYMiM2vW2YnC48zqTvMDwDIwLtPr0SN34uldq62k
+Message-ID: <CABVgOSm2gDNDFpMPf+7Sc1VGfV1A_G6_5aHYiYQcdcwbi26zLQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] kunit: tool: add test to check parsing late test plan
 To: Rae Moar <rmoar@google.com>
 Cc: shuah@kernel.org, jackmanb@google.com, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d96063063046d40b"
+	boundary="000000000000fa72ff063046d412"
 
---000000000000d96063063046d40b
+--000000000000fa72ff063046d412
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, 14 Mar 2025 at 03:27, Rae Moar <rmoar@google.com> wrote:
 >
-> A bug was identified where the KTAP below caused an infinite loop:
+> Add test to check for the infinite loop caused by the inability
+> to parse a late test plan.
 >
+> The test parses the following output:
 >  TAP version 13
->  ok 4 test_case
+>  ok 4 test4
 >  1..4
->
-> The infinite loop was caused by the parser not parsing a test plan
-> if following a test result line.
->
-> Fix this bug by parsing test plan line to avoid the infinite loop.
 >
 > Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
@@ -108,8 +105,9 @@ On Fri, 14 Mar 2025 at 03:27, Rae Moar <rmoar@google.com> wrote:
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
+-- David
 
---000000000000d96063063046d40b
+--000000000000fa72ff063046d412
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -199,14 +197,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgLOP4LXGiXNdQX5Kcr9xSgl2xEAC+
-+FBXG06pB4R84nIwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MzE0MDUzNzE3WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgRRW3ntIchpI+fDJq//hdZ8QzaJaf
+K59pl13ZRH5lnr4wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MzE0MDUzNzE5WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAK93xYARMDaRp+a9oLka//I6R19b3SSYgUuHYANhYhm9FffXjFW1ze/CnpKe8THNZ
-ob8CvhnK9n8dhQ312d9ZX3kIJ4bcySfoUyVwQ2hQTUX4A6GyIgNBdJ/XWPFAXuEAU8mv57zgRWQN
-1t/Cw9gtGXkvVusoV+PgNz31LZf6DMF02ntwsBAagtyy/aYn0Evm9bTM/PmtGKJvtItxSnBkWFw7
-OJ/DObIWzFlPD5f60NgzHNWnIwFEGMv1SHkhcXRS21ewAog+P+5E4WCU00c6GwjwatS/gQ6ib+JZ
-ANyEXHRzvmxVD2btIw43TZSFpoX2y8UyUKUkHESEPzwl9cQxDw==
---000000000000d96063063046d40b--
+AQEBBQAEggEAARxD+raVOFPgf43VWwo+8NaTshrcKBiXl3dFHTAwzXvEoRIWgcnPvTmMlTJ1OfJ2
+bw+tIxBdwQBTLWN2Su17CdMKdPWwyhyh6hvF5+tRNDxDGiFqwyoK9pJaLGblpHuFcYMCgYs105gD
+ivly69BmWiuOsjj+JlontJTnpGr9oUMONblsMiGXbh4upSaTt1e3oucmCM35lQUESBZow7WSy6Qx
+XcW1AuqsH86N+yu4+gPjuxvWnuiWDAcVnv+v34W4ZIq0xiHsIjRkRR5VtK+W6mSahc4elm17O3EY
+MPkGlKOdIC6h73pA5W3xcqyBH40GR815xbVbWq0nLPfBMnWUcA==
+--000000000000fa72ff063046d412--
 
