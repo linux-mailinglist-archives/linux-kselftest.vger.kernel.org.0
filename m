@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-29132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0404A62C82
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 13:19:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D835A62C86
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 13:19:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71BDD3B2A8E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 12:19:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFFE816BFA6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 12:19:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996E91FCFD2;
-	Sat, 15 Mar 2025 12:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F054C1FDA95;
+	Sat, 15 Mar 2025 12:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3sDP0jU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/aqbEwt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8AC1FCD18;
-	Sat, 15 Mar 2025 12:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04F11FCFF4;
+	Sat, 15 Mar 2025 12:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742041066; cv=none; b=aLEy3PVYEs+sgDE6nOK2QMkydgNGdyPBZLeZZtIFV+XR+R1+ynUbOB1QJ/B+9/cdRp7/vPjqIEBWyGWdZd1BohUbJoLfDfGNoC+FuIKVHtWW1D0BA3btRjIdhT3ATtSqIj5gxDpzx3W1o9AdK5kzBhbHH9KySka8pxCail59zTw=
+	t=1742041068; cv=none; b=jfmlGOOYVNU8jGUgjgljrJUgfCa9fycRBQbblsMWWqvBIeIQCQYsBdhvl4DiwXap1eM094CJBwRPiZlKEXXk5iWK8Tq6hJHu3c5Km7uzeZTvOg9xRXqhYdQ9iAzizxxrilm6fdRoknINV5h+3bNv6tBtNYqOghr4zHqzftuXzE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742041066; c=relaxed/simple;
-	bh=TF/8zGlMJ4E9NmH4cFcUtqgW2z0T3RSo4sDN1zkvRXA=;
+	s=arc-20240116; t=1742041068; c=relaxed/simple;
+	bh=yaR2RNMclDEe2oxhZxsOZJPcppVyJqpKplax5Sz5tfs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=I1Fit01245zatBRnofhI8Wye0fIwcgM+tMW9Mc9jcwSqm+cKe5xgC4WuP0BW2/sPMHLI2oVRyHB2LrKacczNOPQgDE6/xymj//GsZBSj2luLQvjOn1mUw/YvRBrCFiYfU0hbVZXkcIebUwdTjmYRzBXIndFWrvAYjHDyJLevSig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3sDP0jU; arc=none smtp.client-ip=209.85.222.169
+	 In-Reply-To:To:Cc; b=dzkeW3P+KCnbRXWcjpCKtA3YNfgDYzPIVwxU+W+J9aXdT1JQNM4Pce+3qF97vLOqBDhMe0Rg0xilH7c9dhqPhCQrGZDFCWpMR6xJvHf2JY/iYGWuzWf7Ls8UXMC72glL1KPD6Gi5Z7z4No/uB3Ecyagg9aceghUp4Aq1idoBPxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/aqbEwt; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c089b2e239so300878885a.0;
-        Sat, 15 Mar 2025 05:17:43 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c554d7dc2aso487107085a.3;
+        Sat, 15 Mar 2025 05:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742041063; x=1742645863; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742041066; x=1742645866; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7i7Dn1Qr2XJRZDCeVpIFYEbR3k/nukUqNxJLxugoZJ4=;
-        b=d3sDP0jUhtBF9O33vRyMMu2w3VieRvRtJznT+GxCv83liMsxGsB9ea9S8ePdqHgknW
-         JDkeItWygIiVaIxCxbqRR8pMkMT9H/hjV+EtTcg4wb6AawSBF2yemyQw1wMqsmtc7smI
-         6r+s8XTxmL9WWSLmS1XdSoimNhIpY11EQsdhEgig1B66szHt7/lHvxLOsO+4QL3lWpRV
-         ZoxCSwUTcyNO7v9mOah4y4di4a8E21pIbFLTdlO5Blg5oUa5OeWikFjAP0QOhLXzAx39
-         gSim1dFa2Kme0AvVf3pU9E4kkM1ubRoJGEtp92dVYaJzlJNcgkyq13E1C+gIn9O/k3H4
-         QEEQ==
+        bh=ZmDD127x0lAlRqKT+AD63PeS3MznGvR7OFvUC/Gs3yg=;
+        b=U/aqbEwt6mPV3SnG26pqGsNod7tgV1jcZ2j00y1sIQpcSPMX+PVLYPrQEBpXw25y66
+         /+Sxuxr42kziVcHRNuzqhU0p5OKIkv27TEislEqkcOfpP83NvUjwI9EbtLSG1G7y0cnB
+         NCFzu8xVOoBlwp61Efkl64p8f6pQ/6qEEn23qHpKSRuLviYc/Qsakof5q1tqaiGtIfFw
+         zrk42dhS3pnQm5rzamfKhG4OGEDt+DEv4E38h8TnhMcSMlQaTvCDOXek2WLcRqh7hFEx
+         XKgUjFph+/Laa2QyXr0wiXlz74kPzU3f6nmTmd8uvW1l1C6YRuo8O26dm7O2nYJ79QPZ
+         xjOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742041063; x=1742645863;
+        d=1e100.net; s=20230601; t=1742041066; x=1742645866;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7i7Dn1Qr2XJRZDCeVpIFYEbR3k/nukUqNxJLxugoZJ4=;
-        b=K4ZtM6W2L2P5IBFtHgwpbr3m9uEDevRw6oI4bUatC5PkCZ4NopB9yn5adni2Jni4y6
-         WX2g3Wi1mXz5YWDbmHhYP3mMhwUczD9sz1RT39tLzZLO81o4V5ThRfhIfyqGoSE/V3oa
-         pCu22BC0CN2lvuOi7w647cLSo1YqaouII/vCahncy/DpS+0msayySDMmmUXc5p+C2nWu
-         8FRpFOhv8QFQHQbdef9e7/FOU5qyVPFQNfA/yBnDxAN6hACOebNEZ5Xaf6kBsGGpUK87
-         Rr89c5kGVJ6w9G3GamVguq0UrXDcHxCly9niWMErwxdNuTvuX4gpieshJtglp6tO/JR1
-         s+GQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUKzLCdMTa29Rby0twwQphI4sLg4Ea4kuyn6aAe0QER7gW2S3Nq+FZUHf1uu6//cMDjIGFtvU+zYIo9ffv9TpU=@vger.kernel.org, AJvYcCUUkMD6O9mYxI0wcoQwleCU4EJC6b3nAVMODCkqkYP/5QsnuwFBQzw/F9M+pv6MO6SnLwggzKTmM/JAewpqhNis@vger.kernel.org, AJvYcCVJiMGiZ/rrGKPG0motmJCIoIV2kmD5JCeuVMjr0darORnus64TBcEXkhyFy47pT5UyaEcZFjFQ8KBL@vger.kernel.org, AJvYcCWlAtZCUf134jTc7pl0M64Y7i8Rtp+rJyKlcxEfkkG5PjMEN+OaNPYhjGTMwKtIXVRz+mh189moVC2VAMRc@vger.kernel.org, AJvYcCWr61XENmqMT3xPt1mpvSFp/B2cKwJVsXySfb42oq6DUDrkgLKYst88m+74/Iv13G1w9F647TLm6XytsDI=@vger.kernel.org, AJvYcCWsvq46iUEXSO8BgXjecG/oniN/CTyWG6PxDACL8LMWK63ypmGv0naEnzRKgVD04KacR1SEd0ISkBDA@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy95jyA9rXv1V0KHPPz5ah2cfbtfB5YJMZXm1s+8Dyljd57PHwj
-	jcXOD58YQJyJyDJaKaxuNKci7MT3gUJewM4KK4IfsbTGKrKGyOAl
-X-Gm-Gg: ASbGncsKiMoqjrnEzezO23j1W3Kkp7Ab111vp4fgIL18KH5guP8GZCIkVd0KpFsDTdj
-	tHO0zgcw1jtjR9l5b0NBoqXJYwEWBQGiOVEwfO9l4atMhQu33bBv5RhMebQlPJPWlLVzIvOpV9C
-	rXjrxVFsrmbC/HlO4tabSvICDiOx6PAKvHABlE0pn1rCjvTo4XYR2ckVRvZ5/DGohkk84bVlZUy
-	OuWFU+q23pCq0o2ovZSH55wIxpkf5WkJzSXdoa3zGrb5PwVwhGJ+BpuDeI88nj90tupBb5EL4Q4
-	1FxXU9Id70dXql5wO6CKgvJjCFRrvd3kirIRJS3l2/58tB3LOlNvBc1hwCbCRcq6x1xm2DFIPKu
-	ZWp8=
-X-Google-Smtp-Source: AGHT+IHfZphSyX36SKO3UZqD1UaHk6k8ejeOInrUYOxCmtd4tI+8CzVGoaMRdfpsUegQX1AZ3G7mng==
-X-Received: by 2002:a05:620a:2b82:b0:7c0:a260:ec1b with SMTP id af79cd13be357-7c57c6ea8cdmr723710685a.25.1742041062791;
-        Sat, 15 Mar 2025 05:17:42 -0700 (PDT)
+        bh=ZmDD127x0lAlRqKT+AD63PeS3MznGvR7OFvUC/Gs3yg=;
+        b=JQdlDjrzT7FW+5fGTCSZ6npKosG+617KtjloxZb0cyWdM4LBFV/P1IFLjHn8FtD1pk
+         zw7V5w3Q/5HfYHkL8hJRScooymmij6sXSlLz5V3vn/IAu/UleiXyZ4MU9cgX1VVwyyjc
+         bbVFhNK8a3kBVEUGb/24aqWvWY6MjavB4yWaAdC28RepOage0fT9ahMEOMbNPsPUUdBF
+         cE/10wWPUaLo5iMPUTTvXpvjiRoI55LGd1HCKjzi0gOdf4E7/a+xGdn8PpxTD7mnvnv4
+         8scSUsf4znhAzHM6BP9a4WfSuuzO30rw89Bj+kOqBMk+sqi2WDZ9Ba2/wjpd3g7jMolN
+         K9bA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHmcC3AVQnIwRbpBLGPtpuBe8YJAPtmp1F9OvJ0pTytn4H82QFOGyDxfxNDRtse/Fy04HiCRO4TUi5@vger.kernel.org, AJvYcCUShUbeG/+flbpEQOtwkmupmB5m7Tp/JJQGeVQKTj7be0dCPrzR3nrDWFAzRWDe849CKqNSCgkl4kfuj78jQml/@vger.kernel.org, AJvYcCVs9ZNBdVdYVSnNYwWL7TpnEePRhIugsBMM8dDmLgxWxled8FtqUH3DCsLefPzVPBUXll7lz6GVwoGDQ5E=@vger.kernel.org, AJvYcCW+b+apAB4PHBW5H7/1FfaAIDdaG7t8KtGLNLeE32FClcY+TTR3thbDAPYyXkKX1k8jFN/wOYcRNI4X@vger.kernel.org, AJvYcCWQAUdsbOeusL9rLrskBuTNVxwKWcAQsic0c/R3gabrhZivYAqI8is+13KqmIo2yunB8jxdvyiLifC/1EFK@vger.kernel.org, AJvYcCXJEkV44/dPtogrpFVQIquKv3DKkhYAY1Q7nmaWcZqdFHXDe9KogONoQVVCduUGxqSz6tOwSyx1v3q/z+twYcs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwClYAuAZ6jvkEdgcLAXpzuaZX1VWmbVRHop/ZGPWcTzxfT50X2
+	YBOeIDsHjXnHcjVo0OrTGzL0lezaVmUh5FiPc46Ki6l5XkcK3uxCfTWM12WAtlE=
+X-Gm-Gg: ASbGnctLs8zUUE2EWtLvYUIDsgryTe2GTjWB03YdwBGvUdf8M69wPRhsDJSrrd0xJ00
+	rqWBY8nGz6R2kasyoboYvsbGa5vGrn3jPSPxbI+3ciIAkMkINURXAKWYr6ZTI0zvvly6LDo6wVD
+	L61pMrepnF1ZVIleV//nqBzAg6Ql8pbfE7i/8aZ0XWfYXM2hyRmvng9pHSN2qMjtaePWzocljTF
+	u9AleuN0KAp872gX8/7Uc6GdwHI2cvYwxYBexlRX4Bo6uSTa9gh1ypH8FBZKtzlAvxUKQkvwTb2
+	UknJYq9S6Eg01gTaVds8JSRZoZb9S7r8qRRdmCYr8yL6i6b+WObx8/cZjqXF3iQHu3bWBlU8wl9
+	9tAY=
+X-Google-Smtp-Source: AGHT+IGFO2XaGxZWtn54X3IHTN4qcmkX7qVjMghQaQsBMMpKHMkUbNwx3po9zDfLeAVOTZ7QeVglQQ==
+X-Received: by 2002:a05:620a:1a88:b0:7c5:6375:1459 with SMTP id af79cd13be357-7c57c91a1c4mr1061297585a.55.1742041065538;
+        Sat, 15 Mar 2025 05:17:45 -0700 (PDT)
 Received: from tamird-mac.local ([2600:4041:5be7:7c00:cd19:6a0f:e1a6:e800])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c573c9be48sm371885185a.60.2025.03.15.05.17.40
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c573c9be48sm371885185a.60.2025.03.15.05.17.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Mar 2025 05:17:42 -0700 (PDT)
+        Sat, 15 Mar 2025 05:17:45 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 15 Mar 2025 08:17:29 -0400
-Subject: [PATCH v4 5/6] rust: enable `clippy::as_underscore` lint
+Date: Sat, 15 Mar 2025 08:17:30 -0400
+Subject: [PATCH v4 6/6] rust: use strict provenance APIs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250315-ptr-as-ptr-v4-5-b2d72c14dc26@gmail.com>
+Message-Id: <20250315-ptr-as-ptr-v4-6-b2d72c14dc26@gmail.com>
 References: <20250315-ptr-as-ptr-v4-0-b2d72c14dc26@gmail.com>
 In-Reply-To: <20250315-ptr-as-ptr-v4-0-b2d72c14dc26@gmail.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -109,208 +109,109 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-In Rust 1.63.0, Clippy introduced the `as_underscore` lint [1]:
+Throughout the tree, use the strict provenance APIs stabilized in Rust
+1.84.0[1]. Retain backwards-compatibility by introducing forwarding
+functions at the `kernel` crate root along with polyfills for rustc <
+1.84.0.
 
-> The conversion might include lossy conversion or a dangerous cast that
-> might go undetected due to the type being inferred.
->
-> The lint is allowed by default as using `_` is less wordy than always
-> specifying the type.
+Use `#[allow(clippy::incompatible_msrv)]` to avoid warnings on rustc <
+1.84.0 as our MSRV is 1.78.0.
 
-Always specifying the type is especially helpful in function call
-contexts where the inferred type may change at a distance. Specifying
-the type also allows Clippy to spot more cases of `useless_conversion`.
+In the `kernel` crate, enable the strict provenance lints on rustc >=
+1.84.0; do this in `lib.rs` rather than `Makefile` to avoid introducing
+compiler flags that are dependent on the rustc version in use.
 
-The primary downside is the need to specify the type in trivial getters.
-There are 4 such functions: 3 have become slightly less ergonomic, 1 was
-revealed to be a `useless_conversion`.
-
-While this doesn't eliminate unchecked `as` conversions, it makes such
-conversions easier to scrutinize.  It also has the slight benefit of
-removing a degree of freedom on which to bikeshed. Thus apply the
-changes and enable the lint -- no functional change intended.
-
-Link: https://rust-lang.github.io/rust-clippy/master/index.html#as_underscore [1]
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Link: https://blog.rust-lang.org/2025/01/09/Rust-1.84.0.html#strict-provenance-apis [1]
+Suggested-by: Benno Lossin <benno.lossin@proton.me>
+Link: https://lore.kernel.org/all/D8EIXDMRXMJP.36TFCGWZBRS3Y@proton.me/
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- Makefile                           |  1 +
- rust/kernel/block/mq/operations.rs |  2 +-
- rust/kernel/block/mq/request.rs    |  2 +-
- rust/kernel/device_id.rs           |  2 +-
- rust/kernel/devres.rs              | 15 ++++++++-------
- rust/kernel/error.rs               |  2 +-
- rust/kernel/io.rs                  | 18 +++++++++---------
- rust/kernel/miscdevice.rs          |  2 +-
- rust/kernel/of.rs                  |  6 +++---
- rust/kernel/pci.rs                 |  9 ++++++---
- rust/kernel/str.rs                 |  8 ++++----
- rust/kernel/workqueue.rs           |  2 +-
- 12 files changed, 37 insertions(+), 32 deletions(-)
+ init/Kconfig           |  3 +++
+ rust/kernel/alloc.rs   |  2 +-
+ rust/kernel/devres.rs  |  4 ++--
+ rust/kernel/io.rs      | 14 +++++++-------
+ rust/kernel/lib.rs     | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/of.rs      |  2 +-
+ rust/kernel/pci.rs     |  4 ++--
+ rust/kernel/str.rs     | 16 ++++++----------
+ rust/kernel/uaccess.rs | 12 ++++++++----
+ 9 files changed, 82 insertions(+), 27 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index bb15b86182a3..2af40bfed9ce 100644
---- a/Makefile
-+++ b/Makefile
-@@ -478,6 +478,7 @@ export rust_common_flags := --edition=2021 \
- 			    -Wunreachable_pub \
- 			    -Wclippy::all \
- 			    -Wclippy::as_ptr_cast_mut \
-+			    -Wclippy::as_underscore \
- 			    -Wclippy::ignored_unit_patterns \
- 			    -Wclippy::mut_mut \
- 			    -Wclippy::needless_bitwise_bool \
-diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/operations.rs
-index 864ff379dc91..d18ef55490da 100644
---- a/rust/kernel/block/mq/operations.rs
-+++ b/rust/kernel/block/mq/operations.rs
-@@ -101,7 +101,7 @@ impl<T: Operations> OperationsVTable<T> {
-         if let Err(e) = ret {
-             e.to_blk_status()
-         } else {
--            bindings::BLK_STS_OK as _
-+            bindings::BLK_STS_OK as u8
-         }
-     }
+diff --git a/init/Kconfig b/init/Kconfig
+index d0d021b3fa3b..82e28d6f7c3f 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -132,6 +132,9 @@ config CC_HAS_COUNTED_BY
+ config RUSTC_HAS_COERCE_POINTEE
+ 	def_bool RUSTC_VERSION >= 108400
  
-diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/request.rs
-index 10c6d69be7f3..bcf2b73d9189 100644
---- a/rust/kernel/block/mq/request.rs
-+++ b/rust/kernel/block/mq/request.rs
-@@ -125,7 +125,7 @@ pub fn end_ok(this: ARef<Self>) -> Result<(), ARef<Self>> {
-         // success of the call to `try_set_end` guarantees that there are no
-         // `ARef`s pointing to this request. Therefore it is safe to hand it
-         // back to the block layer.
--        unsafe { bindings::blk_mq_end_request(request_ptr, bindings::BLK_STS_OK as _) };
-+        unsafe { bindings::blk_mq_end_request(request_ptr, bindings::BLK_STS_OK as u8) };
++config RUSTC_HAS_STABLE_STRICT_PROVENANCE
++	def_bool RUSTC_VERSION >= 108400
++
+ config PAHOLE_VERSION
+ 	int
+ 	default $(shell,$(srctree)/scripts/pahole-version.sh $(PAHOLE))
+diff --git a/rust/kernel/alloc.rs b/rust/kernel/alloc.rs
+index fc9c9c41cd79..a1d282e48249 100644
+--- a/rust/kernel/alloc.rs
++++ b/rust/kernel/alloc.rs
+@@ -217,7 +217,7 @@ unsafe fn free(ptr: NonNull<u8>, layout: Layout) {
  
-         Ok(())
-     }
-diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
-index e5859217a579..4063f09d76d9 100644
---- a/rust/kernel/device_id.rs
-+++ b/rust/kernel/device_id.rs
-@@ -82,7 +82,7 @@ impl<T: RawDeviceId, U, const N: usize> IdArray<T, U, N> {
-             unsafe {
-                 raw_ids[i]
-                     .as_mut_ptr()
--                    .byte_offset(T::DRIVER_DATA_OFFSET as _)
-+                    .byte_add(T::DRIVER_DATA_OFFSET)
-                     .cast::<usize>()
-                     .write(i);
-             }
+ /// Returns a properly aligned dangling pointer from the given `layout`.
+ pub(crate) fn dangling_from_layout(layout: Layout) -> NonNull<u8> {
+-    let ptr = layout.align() as *mut u8;
++    let ptr = crate::without_provenance_mut(layout.align());
+ 
+     // SAFETY: `layout.align()` (and hence `ptr`) is guaranteed to be non-zero.
+     unsafe { NonNull::new_unchecked(ptr) }
 diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
-index 598001157293..34571f992f0d 100644
+index 34571f992f0d..e8232bb771b2 100644
 --- a/rust/kernel/devres.rs
 +++ b/rust/kernel/devres.rs
-@@ -45,7 +45,7 @@ struct DevresInner<T> {
- /// # Example
- ///
- /// ```no_run
--/// # use kernel::{bindings, c_str, device::Device, devres::Devres, io::{Io, IoRaw}};
-+/// # use kernel::{bindings, c_str, device::Device, devres::Devres, ffi::c_void, io::{Io, IoRaw}};
- /// # use core::ops::Deref;
- ///
- /// // See also [`pci::Bar`] for a real example.
-@@ -59,19 +59,19 @@ struct DevresInner<T> {
- ///     unsafe fn new(paddr: usize) -> Result<Self>{
- ///         // SAFETY: By the safety requirements of this function [`paddr`, `paddr` + `SIZE`) is
- ///         // valid for `ioremap`.
--///         let addr = unsafe { bindings::ioremap(paddr as _, SIZE as _) };
-+///         let addr = unsafe { bindings::ioremap(paddr as bindings::phys_addr_t, SIZE) };
- ///         if addr.is_null() {
+@@ -64,14 +64,14 @@ struct DevresInner<T> {
  ///             return Err(ENOMEM);
  ///         }
  ///
--///         Ok(IoMem(IoRaw::new(addr as _, SIZE)?))
-+///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
+-///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
++///         Ok(IoMem(IoRaw::new(kernel::expose_provenance(addr), SIZE)?))
  ///     }
  /// }
  ///
  /// impl<const SIZE: usize> Drop for IoMem<SIZE> {
  ///     fn drop(&mut self) {
  ///         // SAFETY: `self.0.addr()` is guaranteed to be properly mapped by `Self::new`.
--///         unsafe { bindings::iounmap(self.0.addr() as _); };
-+///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void); };
+-///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void); };
++///         unsafe { bindings::iounmap(kernel::with_exposed_provenance_mut(self.0.addr())); };
  ///     }
  /// }
  ///
-@@ -115,8 +115,9 @@ fn new(dev: &Device, data: T, flags: Flags) -> Result<Arc<DevresInner<T>>> {
- 
-         // SAFETY: `devm_add_action` guarantees to call `Self::devres_callback` once `dev` is
-         // detached.
--        let ret =
--            unsafe { bindings::devm_add_action(dev.as_raw(), Some(inner.callback), data as _) };
-+        let ret = unsafe {
-+            bindings::devm_add_action(dev.as_raw(), Some(inner.callback), data.cast_mut().cast())
-+        };
- 
-         if ret != 0 {
-             // SAFETY: We just created another reference to `inner` in order to pass it to
-@@ -130,7 +131,7 @@ fn new(dev: &Device, data: T, flags: Flags) -> Result<Arc<DevresInner<T>>> {
-     }
- 
-     fn as_ptr(&self) -> *const Self {
--        self as _
-+        self
-     }
- 
-     fn remove_action(this: &Arc<Self>) {
-diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-index 8654d52b0bb9..eb8fa52f08ba 100644
---- a/rust/kernel/error.rs
-+++ b/rust/kernel/error.rs
-@@ -152,7 +152,7 @@ pub(crate) fn to_blk_status(self) -> bindings::blk_status_t {
-     /// Returns the error encoded as a pointer.
-     pub fn to_ptr<T>(self) -> *mut T {
-         // SAFETY: `self.0` is a valid error due to its invariant.
--        unsafe { bindings::ERR_PTR(self.0.get() as _).cast() }
-+        unsafe { bindings::ERR_PTR(self.0.get() as isize).cast() }
-     }
- 
-     /// Returns a string representing the error, if one exists.
 diff --git a/rust/kernel/io.rs b/rust/kernel/io.rs
-index d4a73e52e3ee..9d2aadf40edf 100644
+index 9d2aadf40edf..0a018ad7478a 100644
 --- a/rust/kernel/io.rs
 +++ b/rust/kernel/io.rs
 @@ -5,7 +5,7 @@
  //! C header: [`include/asm-generic/io.h`](srctree/include/asm-generic/io.h)
  
  use crate::error::{code::EINVAL, Result};
--use crate::{bindings, build_assert};
-+use crate::{bindings, build_assert, ffi::c_void};
+-use crate::{bindings, build_assert, ffi::c_void};
++use crate::{bindings, build_assert};
  
  /// Raw representation of an MMIO region.
  ///
-@@ -56,7 +56,7 @@ pub fn maxsize(&self) -> usize {
- /// # Examples
- ///
- /// ```no_run
--/// # use kernel::{bindings, io::{Io, IoRaw}};
-+/// # use kernel::{bindings, ffi::c_void, io::{Io, IoRaw}};
- /// # use core::ops::Deref;
- ///
- /// // See also [`pci::Bar`] for a real example.
-@@ -70,19 +70,19 @@ pub fn maxsize(&self) -> usize {
- ///     unsafe fn new(paddr: usize) -> Result<Self>{
- ///         // SAFETY: By the safety requirements of this function [`paddr`, `paddr` + `SIZE`) is
- ///         // valid for `ioremap`.
--///         let addr = unsafe { bindings::ioremap(paddr as _, SIZE as _) };
-+///         let addr = unsafe { bindings::ioremap(paddr as bindings::phys_addr_t, SIZE) };
- ///         if addr.is_null() {
+@@ -75,14 +75,14 @@ pub fn maxsize(&self) -> usize {
  ///             return Err(ENOMEM);
  ///         }
  ///
--///         Ok(IoMem(IoRaw::new(addr as _, SIZE)?))
-+///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
+-///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
++///         Ok(IoMem(IoRaw::new(kernel::expose_provenance(addr), SIZE)?))
  ///     }
  /// }
  ///
  /// impl<const SIZE: usize> Drop for IoMem<SIZE> {
  ///     fn drop(&mut self) {
  ///         // SAFETY: `self.0.addr()` is guaranteed to be properly mapped by `Self::new`.
--///         unsafe { bindings::iounmap(self.0.addr() as _); };
-+///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void); };
+-///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void); };
++///         unsafe { bindings::iounmap(kernel::with_exposed_provenance_mut(self.0.addr())); };
  ///     }
  /// }
  ///
@@ -318,8 +219,8 @@ index d4a73e52e3ee..9d2aadf40edf 100644
              let addr = self.io_addr_assert::<$type_name>(offset);
  
              // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
--            unsafe { bindings::$name(addr as _) }
-+            unsafe { bindings::$name(addr as *const c_void) }
+-            unsafe { bindings::$name(addr as *const c_void) }
++            unsafe { bindings::$name(crate::with_exposed_provenance(addr)) }
          }
  
          /// Read IO data from a given offset.
@@ -327,8 +228,8 @@ index d4a73e52e3ee..9d2aadf40edf 100644
              let addr = self.io_addr::<$type_name>(offset)?;
  
              // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
--            Ok(unsafe { bindings::$name(addr as _) })
-+            Ok(unsafe { bindings::$name(addr as *const c_void) })
+-            Ok(unsafe { bindings::$name(addr as *const c_void) })
++            Ok(unsafe { bindings::$name(crate::with_exposed_provenance(addr)) })
          }
      };
  }
@@ -336,8 +237,8 @@ index d4a73e52e3ee..9d2aadf40edf 100644
              let addr = self.io_addr_assert::<$type_name>(offset);
  
              // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
--            unsafe { bindings::$name(value, addr as _, ) }
-+            unsafe { bindings::$name(value, addr as *mut c_void) }
+-            unsafe { bindings::$name(value, addr as *mut c_void) }
++            unsafe { bindings::$name(value, crate::with_exposed_provenance_mut(addr)) }
          }
  
          /// Write IO data from a given offset.
@@ -345,123 +246,208 @@ index d4a73e52e3ee..9d2aadf40edf 100644
              let addr = self.io_addr::<$type_name>(offset)?;
  
              // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
--            unsafe { bindings::$name(value, addr as _) }
-+            unsafe { bindings::$name(value, addr as *mut c_void) }
+-            unsafe { bindings::$name(value, addr as *mut c_void) }
++            unsafe { bindings::$name(value, crate::with_exposed_provenance_mut(addr)) }
              Ok(())
          }
      };
-diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
-index e14433b2ab9d..2c66e926bffb 100644
---- a/rust/kernel/miscdevice.rs
-+++ b/rust/kernel/miscdevice.rs
-@@ -33,7 +33,7 @@ impl MiscDeviceOptions {
-     pub const fn into_raw<T: MiscDevice>(self) -> bindings::miscdevice {
-         // SAFETY: All zeros is valid for this C type.
-         let mut result: bindings::miscdevice = unsafe { MaybeUninit::zeroed().assume_init() };
--        result.minor = bindings::MISC_DYNAMIC_MINOR as _;
-+        result.minor = bindings::MISC_DYNAMIC_MINOR as i32;
-         result.name = self.name.as_char_ptr();
-         result.fops = create_vtable::<T>();
-         result
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 486715528587..84eb2602e79e 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -17,6 +17,9 @@
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(coerce_unsized))]
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(dispatch_from_dyn))]
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(unsize))]
++#![cfg_attr(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE, feature(strict_provenance_lints))]
++#![cfg_attr(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE, deny(fuzzy_provenance_casts))]
++#![cfg_attr(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE, deny(lossy_provenance_casts))]
+ #![feature(inline_const)]
+ #![feature(lint_reasons)]
+ // Stable in Rust 1.83
+@@ -25,6 +28,55 @@
+ #![feature(const_ptr_write)]
+ #![feature(const_refs_to_cell)]
+ 
++#[cfg(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE)]
++#[allow(clippy::incompatible_msrv)]
++mod strict_provenance {
++    #[doc(hidden)]
++    pub fn expose_provenance<T>(addr: *const T) -> usize {
++        addr.expose_provenance()
++    }
++
++    #[doc(hidden)]
++    pub fn without_provenance_mut<T>(addr: usize) -> *mut T {
++        core::ptr::without_provenance_mut(addr)
++    }
++
++    #[doc(hidden)]
++    pub fn with_exposed_provenance<T>(addr: usize) -> *const T {
++        core::ptr::with_exposed_provenance(addr)
++    }
++
++    #[doc(hidden)]
++    pub fn with_exposed_provenance_mut<T>(addr: usize) -> *mut T {
++        core::ptr::with_exposed_provenance_mut(addr)
++    }
++}
++
++#[cfg(not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE))]
++mod strict_provenance {
++    #[doc(hidden)]
++    pub fn expose_provenance<T>(addr: *const T) -> usize {
++        addr.cast::<()>() as usize
++    }
++
++    #[doc(hidden)]
++    pub fn without_provenance_mut<T>(addr: usize) -> *mut T {
++        addr as *mut T
++    }
++
++    #[doc(hidden)]
++    pub fn with_exposed_provenance<T>(addr: usize) -> *const T {
++        addr as *const T
++    }
++
++    #[doc(hidden)]
++    pub fn with_exposed_provenance_mut<T>(addr: usize) -> *mut T {
++        addr as *mut T
++    }
++}
++
++pub use strict_provenance::*;
++
+ // Ensure conditional compilation based on the kernel configuration works;
+ // otherwise we may silently break things like initcall handling.
+ #[cfg(not(CONFIG_RUST))]
 diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
-index 04f2d8ef29cb..40d1bd13682c 100644
+index 40d1bd13682c..f9459694cbdc 100644
 --- a/rust/kernel/of.rs
 +++ b/rust/kernel/of.rs
 @@ -22,7 +22,7 @@ unsafe impl RawDeviceId for DeviceId {
      const DRIVER_DATA_OFFSET: usize = core::mem::offset_of!(bindings::of_device_id, data);
  
      fn index(&self) -> usize {
--        self.0.data as _
-+        self.0.data as usize
+-        self.0.data as usize
++        crate::expose_provenance(self.0.data)
      }
  }
- 
-@@ -34,10 +34,10 @@ pub const fn new(compatible: &'static CStr) -> Self {
-         // SAFETY: FFI type is valid to be zero-initialized.
-         let mut of: bindings::of_device_id = unsafe { core::mem::zeroed() };
- 
--        // TODO: Use `clone_from_slice` once the corresponding types do match.
-+        // TODO: Use `copy_from_slice` once stabilized for `const`.
-         let mut i = 0;
-         while i < src.len() {
--            of.compatible[i] = src[i] as _;
-+            of.compatible[i] = src[i];
-             i += 1;
-         }
  
 diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
-index 003c9aaafb24..a26f154ae1b9 100644
+index a26f154ae1b9..87c9f67b3f0f 100644
 --- a/rust/kernel/pci.rs
 +++ b/rust/kernel/pci.rs
-@@ -166,7 +166,7 @@ unsafe impl RawDeviceId for DeviceId {
-     const DRIVER_DATA_OFFSET: usize = core::mem::offset_of!(bindings::pci_device_id, driver_data);
- 
-     fn index(&self) -> usize {
--        self.0.driver_data as _
-+        self.0.driver_data
-     }
- }
- 
-@@ -201,7 +201,10 @@ macro_rules! pci_device_table {
- ///     MODULE_PCI_TABLE,
- ///     <MyDriver as pci::Driver>::IdInfo,
- ///     [
--///         (pci::DeviceId::from_id(bindings::PCI_VENDOR_ID_REDHAT, bindings::PCI_ANY_ID as _), ())
-+///         (
-+///             pci::DeviceId::from_id(bindings::PCI_VENDOR_ID_REDHAT, bindings::PCI_ANY_ID as u32),
-+///             (),
-+///         )
- ///     ]
- /// );
- ///
-@@ -317,7 +320,7 @@ unsafe fn do_release(pdev: &Device, ioptr: usize, num: i32) {
+@@ -287,7 +287,7 @@ fn new(pdev: Device, num: u32, name: &CStr) -> Result<Self> {
+         // `pdev` is valid by the invariants of `Device`.
+         // `num` is checked for validity by a previous call to `Device::resource_len`.
+         // `name` is always valid.
+-        let ioptr: usize = unsafe { bindings::pci_iomap(pdev.as_raw(), num, 0) } as usize;
++        let ioptr = crate::expose_provenance(unsafe { bindings::pci_iomap(pdev.as_raw(), num, 0) });
+         if ioptr == 0 {
+             // SAFETY:
+             // `pdev` valid by the invariants of `Device`.
+@@ -320,7 +320,7 @@ unsafe fn do_release(pdev: &Device, ioptr: usize, num: i32) {
          // `ioptr` is valid by the safety requirements.
          // `num` is valid by the safety requirements.
          unsafe {
--            bindings::pci_iounmap(pdev.as_raw(), ioptr as _);
-+            bindings::pci_iounmap(pdev.as_raw(), ioptr as *mut kernel::ffi::c_void);
+-            bindings::pci_iounmap(pdev.as_raw(), ioptr as *mut kernel::ffi::c_void);
++            bindings::pci_iounmap(pdev.as_raw(), crate::with_exposed_provenance_mut(ioptr));
              bindings::pci_release_region(pdev.as_raw(), num);
          }
      }
 diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index 6a1a982b946d..0b80a119d5f0 100644
+index 0b80a119d5f0..6bc6357293e4 100644
 --- a/rust/kernel/str.rs
 +++ b/rust/kernel/str.rs
 @@ -692,9 +692,9 @@ fn new() -> Self {
      pub(crate) unsafe fn from_ptrs(pos: *mut u8, end: *mut u8) -> Self {
          // INVARIANT: The safety requirements guarantee the type invariants.
          Self {
--            beg: pos as _,
--            pos: pos as _,
--            end: end as _,
-+            beg: pos as usize,
-+            pos: pos as usize,
-+            end: end as usize,
+-            beg: pos as usize,
+-            pos: pos as usize,
+-            end: end as usize,
++            beg: crate::expose_provenance(pos),
++            pos: crate::expose_provenance(pos),
++            end: crate::expose_provenance(end),
          }
      }
  
+@@ -705,7 +705,7 @@ pub(crate) unsafe fn from_ptrs(pos: *mut u8, end: *mut u8) -> Self {
+     /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+     /// for the lifetime of the returned [`RawFormatter`].
+     pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+-        let pos = buf as usize;
++        let pos = crate::expose_provenance(buf);
+         // INVARIANT: We ensure that `end` is never less then `buf`, and the safety requirements
+         // guarantees that the memory region is valid for writes.
+         Self {
 @@ -719,7 +719,7 @@ pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
      ///
      /// N.B. It may point to invalid memory.
      pub(crate) fn pos(&self) -> *mut u8 {
--        self.pos as _
-+        self.pos as *mut u8
+-        self.pos as *mut u8
++        crate::with_exposed_provenance_mut(self.pos)
      }
  
      /// Returns the number of bytes written to the formatter.
-diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-index 8ff54105be3f..d03f3440cb5a 100644
---- a/rust/kernel/workqueue.rs
-+++ b/rust/kernel/workqueue.rs
-@@ -198,7 +198,7 @@ pub fn enqueue<W, const ID: u64>(&self, w: W) -> W::EnqueueOutput
-         unsafe {
-             w.__enqueue(move |work_ptr| {
-                 bindings::queue_work_on(
--                    bindings::wq_misc_consts_WORK_CPU_UNBOUND as _,
-+                    bindings::wq_misc_consts_WORK_CPU_UNBOUND as i32,
-                     queue_ptr,
-                     work_ptr,
-                 )
+@@ -741,11 +741,7 @@ fn write_str(&mut self, s: &str) -> fmt::Result {
+             // SAFETY: If `len_to_copy` is non-zero, then we know `pos` has not gone past `end`
+             // yet, so it is valid for write per the type invariants.
+             unsafe {
+-                core::ptr::copy_nonoverlapping(
+-                    s.as_bytes().as_ptr(),
+-                    self.pos as *mut u8,
+-                    len_to_copy,
+-                )
++                core::ptr::copy_nonoverlapping(s.as_bytes().as_ptr(), self.pos(), len_to_copy)
+             };
+         }
+ 
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index 719b0a48ff55..96393bcf6bd7 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -226,7 +226,9 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+         }
+         // SAFETY: `out_ptr` points into a mutable slice of length `len`, so we may write
+         // that many bytes to it.
+-        let res = unsafe { bindings::copy_from_user(out_ptr, self.ptr as *const c_void, len) };
++        let res = unsafe {
++            bindings::copy_from_user(out_ptr, crate::with_exposed_provenance(self.ptr), len)
++        };
+         if res != 0 {
+             return Err(EFAULT);
+         }
+@@ -264,7 +266,7 @@ pub fn read<T: FromBytes>(&mut self) -> Result<T> {
+         let res = unsafe {
+             bindings::_copy_from_user(
+                 out.as_mut_ptr().cast::<c_void>(),
+-                self.ptr as *const c_void,
++                crate::with_exposed_provenance(self.ptr),
+                 len,
+             )
+         };
+@@ -330,7 +332,9 @@ pub fn write_slice(&mut self, data: &[u8]) -> Result {
+         }
+         // SAFETY: `data_ptr` points into an immutable slice of length `len`, so we may read
+         // that many bytes from it.
+-        let res = unsafe { bindings::copy_to_user(self.ptr as *mut c_void, data_ptr, len) };
++        let res = unsafe {
++            bindings::copy_to_user(crate::with_exposed_provenance_mut(self.ptr), data_ptr, len)
++        };
+         if res != 0 {
+             return Err(EFAULT);
+         }
+@@ -357,7 +361,7 @@ pub fn write<T: AsBytes>(&mut self, value: &T) -> Result {
+         // is a compile-time constant.
+         let res = unsafe {
+             bindings::_copy_to_user(
+-                self.ptr as *mut c_void,
++                crate::with_exposed_provenance_mut(self.ptr),
+                 (value as *const T).cast::<c_void>(),
+                 len,
+             )
 
 -- 
 2.48.1
