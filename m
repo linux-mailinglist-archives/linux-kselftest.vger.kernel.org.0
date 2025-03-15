@@ -1,444 +1,242 @@
-Return-Path: <linux-kselftest+bounces-29118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE79A6248F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 03:24:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02795A627F5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 08:17:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49981171E02
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 02:23:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36C7E16CB51
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 07:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707ED1917C2;
-	Sat, 15 Mar 2025 02:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351851DF98F;
+	Sat, 15 Mar 2025 07:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GujQswQY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PBwhn4uB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2052.outbound.protection.outlook.com [40.107.102.52])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5BD192D6B;
-	Sat, 15 Mar 2025 02:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742005359; cv=fail; b=OQOowQKH/D2bSZfwtEYDCKFatJ4P++Zst4TeR+DkVm6uarcafqTvnLniIuxFwl+qAl8DpOCVI5cAQXO+lnM8QE1o55nWOS8d9pQSNnxzSSeDOLJezrGK/KjFO22eOTY6zFti8FY5c+F5UvRsQj6aUQBD5szpYwjnwR8FjJHHSWE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742005359; c=relaxed/simple;
-	bh=SUCgDuWpq95usQF3Q6ew7c14zkaK27vi0F4WnOQCWFc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LGIRXte79Eh64SXdw4AYD4p8JkmcmgasMCnixZwOfMVQfHTcYv1TRXJUNBQkmWoKjbNelpN2+aYuS33+likWZ3tSoPohOy+uTQU8k6owcck0FBWmLvB+2nxwKri0C/c8zcY3Amk4TDBBKVcuIjxyyRvf752i209aTKrpjneUIkw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GujQswQY; arc=fail smtp.client-ip=40.107.102.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=h4i7LnZjLcAep9Wjnam0Efu0fanWeM6PXnF4NlxuM/xR9MboQusFtg9/09ByZSSpKxkLW/JzGaJY8Tdj14sgU9XoP/sFO31iUI2F2jUYb6VyjJ0DIV84QQP4fO8omFUbapr8Pg8u3m/go0rlY3ky9gYFuwz9J20+hSG17YwsfTN5gYkwXS6051kndpI4sM/JCoE6B/Jep6YT/WcNTXC6noRbcqIoD6NU7y8HC4F4a5+1UHqm7zUzw62Z1D00GlDn8YapKDpN5pe/Ye/lkBSFislmHhjutpFLxjNqK5IBPz6FTaWpFqHa6pMqZfxTpN1xXeQXQ/6e/mEHRIAFq54cBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ggr76cZVP4BWjXYUKwN+tIoGEGAAD6wecE9I538391s=;
- b=x/ZVFAkG75f2UFiwl6zwNvg5CFiweFARWlq1f/yUuu/AdYihZ5Qq+beUYeg9iLPfNtvR4TMmOqNYF2IRZbQtnCLhw1RP4czQVdu1KIXHWRQDjq4XuHV8jn0Up+QfAEqozS0yDcEZvC8Dizh9vyWe/EIjiI0ynYcSqSC5VV/eS/tHpaRYf69oHizMCTH+e4Ik+8vPwjgChunp0nKWr3aVyuKWFQpynLRen6jwqb38bB2AKNHXZpVTCaRY5VUjkUzLbC/+cte3ttsShKWrsOqtVtVEubq/QG4mCEda2fly0aLn27ZGpMapmdPy2A/4wo58Je5ngOdfkaU2l4uMJOqodQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ggr76cZVP4BWjXYUKwN+tIoGEGAAD6wecE9I538391s=;
- b=GujQswQYC0LYBnTxN/UeMgAhihvFpfU6yKHhBq+5tEP8DD4YrJ7Ct0hwYKC2kJtdaX6fsXZPIQtex1oYPO378nk2RxK8fV49Gc//9u4Wr2wf3v1Ya8bh8bqDM0OSPPp31Ka7Z1sGKhjvJ6BWjLamrtkFBrcTYgXey3PGAQElf/JzzsL6DAoBu2xmU0bFgc54B7YohE4MeRpewIqjtIW1tIyfNXNKEY6YUIdqV47zRewRp1XQHgcaEei6dE5QWEOlCcPldnGgyu9XCzF8HPiR05m2uRJB8Emnw2IwehjBmCwbozP5pft4k3WKE8WoVPYMbaxelZIVqjE2j68orGdk6w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
- by PH7PR12MB5997.namprd12.prod.outlook.com (2603:10b6:510:1d9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.28; Sat, 15 Mar
- 2025 02:22:28 +0000
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91%4]) with mapi id 15.20.8511.026; Sat, 15 Mar 2025
- 02:22:27 +0000
-From: Joel Fernandes <joelagnelf@nvidia.com>
-To: linux-kernel@vger.kernel.org,
-	Andrea Righi <arighi@nvidia.com>,
-	Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Luigi De Matteis <ldematteis123@gmail.com>,
-	paulmck@kernel.org,
-	boqun.feng@gmail.com,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH RFC 8/8] selftests/sched_ext: Add test for sched_ext dl_server
-Date: Fri, 14 Mar 2025 22:21:55 -0400
-Message-ID: <20250315022158.2354454-9-joelagnelf@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250315022158.2354454-1-joelagnelf@nvidia.com>
-References: <20250315022158.2354454-1-joelagnelf@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL0PR02CA0055.namprd02.prod.outlook.com
- (2603:10b6:207:3d::32) To SN7PR12MB8059.namprd12.prod.outlook.com
- (2603:10b6:806:32b::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F6B1DE2DB;
+	Sat, 15 Mar 2025 07:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742023053; cv=none; b=IdAJVFDoMTonoVPs9Fof1ZeGgL1aI+Dw+N2pg6Vfmm1EvKjX37fo2n9qRMOHoZBpcnALPcQsRdpHXQgwMSdx7AM29lLrpefhCtUZWc0jEIatgGO2QBgjwFTiewAgv9jMcI7opOfF8UDrKo01M7iecv/iOJitM/rZXNo+yLGGhDI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742023053; c=relaxed/simple;
+	bh=D6dyM5fcK5sfnzdnunmUBGtPiFQ2gHj2jDLotPVsetI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O1UJ9fDU4xwAgAyekV136GylZF7MHOxKo8iUZ7ntOeZMBQSx5y2ZwW3N5ekz0rCHkyrjUJy4McgAD6CdipcF5X0dGahx5DMIpZeOpzGxwP/8+SaU3E3IZMzvcprkkdCZsKbNEMN3vKSoNoDvZItfPSlrWbX/h6YkQeCOYGtBq/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PBwhn4uB; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742023051; x=1773559051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D6dyM5fcK5sfnzdnunmUBGtPiFQ2gHj2jDLotPVsetI=;
+  b=PBwhn4uBbLumsUFXXThK5dL5rz2PTmMmNzHUY0FIDNwL/yF9GSh1iooc
+   ZkOL/KqBoMA1yHhuUaJKy1MDg7R/ynEl4XXmpCho3IX2mTAgznebzN3Ez
+   tH5ilKB9FSvVn8NzyNeVWQEEcWN3QlJ/gVKpqgapAWJXR5CPmpdXgc37I
+   BJAj9uU/atupGJ/uF0qVWkLIcjojL+1DDBsoVcsBnP1HJUboiJS5ZXV4c
+   s8kSj6WYuRZudNHJ1gxAwwu0fRJXwVlxjPPtHe+0nqDRYE9i9g/5nHthQ
+   Dsc/AAjJ2bzrIKah7AyC4oecF6lmz3NGDFyldJmSx+qGwcbDvmkWN8Tw1
+   Q==;
+X-CSE-ConnectionGUID: 1qdPOMgASdy5BJ1+6Nx6Rw==
+X-CSE-MsgGUID: yAeKQXamRv+Ui08CRRk03Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="42427589"
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="42427589"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 00:17:31 -0700
+X-CSE-ConnectionGUID: mbIXekZnRfqWbHnE0G4Uaw==
+X-CSE-MsgGUID: FtpkTt5YQleFCTfAFY66RQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="125685350"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 15 Mar 2025 00:17:22 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttLln-000B7l-1S;
+	Sat, 15 Mar 2025 07:17:19 +0000
+Date: Sat, 15 Mar 2025 15:16:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tamir Duberstein <tamird@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
+	linux-block@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] rust: use strict provenance APIs
+Message-ID: <202503151519.6bGsjUd3-lkp@intel.com>
+References: <20250314-ptr-as-ptr-v3-6-e7ba61048f4a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|PH7PR12MB5997:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf6996d2-cb62-4d0a-b50e-08dd63683b28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?+sus0TqgEfz6xOc+DsUBlYUZ/CFewOrtNlbTSDlOPW0rJFbVU4H6P5wGiNNX?=
- =?us-ascii?Q?hNfYwBXkLB6EtrpDjbOoUlf/WaWuCo3AiRyoXGBlvKToIt/LQMdFsaDlFKk0?=
- =?us-ascii?Q?req/WbYx8lJuccrYH14ahITrD52cFxueTVcgeBGtNkF3K6K/F+LMXiBswkRb?=
- =?us-ascii?Q?dmT3cnN5gTdf3PKCnmojV7wds5IKTazhbMt4SAMMQOzCpvRDSsu7VuWrOhFR?=
- =?us-ascii?Q?NOx5mlFfuZr3O82gwNQYw2ToQVkx3tluT70IRdtWlOvBhciyIA6o1mbZAw5R?=
- =?us-ascii?Q?m68JtDk6z7LH/WKsQahdSzU4foQZWAYwDpjQPt7v2Y8Z3cvqodGXX60zEx9N?=
- =?us-ascii?Q?zmeJHQ2aJZpYH4x1FTU5VcQH0VInDJ/YIjI4Uqt5ZiIe1SykRx84d9TbhOoM?=
- =?us-ascii?Q?TZSc8pxC494PJ77Kn3JTNYcFKyfvPG6kj9cpmqfQNL51iY2d5w8nPqVnL3os?=
- =?us-ascii?Q?Hd/XHlTgFMutINH87BAqUyae4herIDnnFML/jpaFUW+05q+deEmAfHWllLTi?=
- =?us-ascii?Q?xAPzkYqeBLXwQJ1R5bSpe1U8s/sC7h8DkqUnzw8O/kR+xOBCz2CvfKg1/jG9?=
- =?us-ascii?Q?CLCLLtAwio3jFE9zQF1iuiOaVdvDOKdzRSzmh5PMXF6MDrpTKGqhHWZJYAA9?=
- =?us-ascii?Q?0xRcOQj80TYFxQfPBkGpA/Z3iqCDKCkyF8rhjD40rzt6PLA9RmTpgnaQCV6J?=
- =?us-ascii?Q?CDcC57cDbYl4OhUvByLU+JC37tePrJ8DVe6XB2dTRi+cHPfH1av9G9dP6VTL?=
- =?us-ascii?Q?FGPjyvyVUURwVTcgB9Ulv82RQiYVXQkHFY/AlcMiEB2LDC46xnsP84Z5Tedr?=
- =?us-ascii?Q?/DdmOLDXFcSJrsuDkuUiQ1w/lTiXGTom/ltnpwVeQvnww6radSu/SqYehXua?=
- =?us-ascii?Q?ZH6AAS53jKBQnlpwaaLR31hc3fHLA2YJsm66oS5xZs09sLUjtTJz36kQoo5F?=
- =?us-ascii?Q?TA4Y6a6xiuQiV0AzyVmj2scpXhH2NwPIXntT8HLHTV3yDaVC7nVhwAsOD5RD?=
- =?us-ascii?Q?TaLstpRMWR0FVTxfaPvDXXtzBy9NgNPPlquX3DJF7OrbUDQabq70Tleu/drb?=
- =?us-ascii?Q?haP7ZC1lqbnk8s0elfWaFjNbg25CEpzyv49Fl+wCh4eYb+lv7Xtq3yz3zDkb?=
- =?us-ascii?Q?zNmTmgXenB+AOwYi/alsrmyNCLoY+QFMYhUHO6TusszfGaR6typyjDnvHzkX?=
- =?us-ascii?Q?NgwY6jBs8W0dR/CiW8eHFjsCtCTYBhWPuyt4UHQvS3Psw0VJoadocqFPPDk7?=
- =?us-ascii?Q?FqxiriausaxY5yf7+K2C5hv4ox3VlfxbGY9WtC2NjgusgQ/bAJ148djkcfDs?=
- =?us-ascii?Q?Wh5ARF/gAf9/Fzk8ayFv31KhRIol+cV3WZ5lw/B8rI+/GifoDpAa0rm/6r8V?=
- =?us-ascii?Q?wJM5uwAtfIbneW1MmbcPO9cBKppz?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PUXU1RLTGxf4ALtLkvIMctMZ28sCWIPUsO279uDlQl6hTMcnQqXZKz9edhcc?=
- =?us-ascii?Q?P6tIBHUuixYO0vSaECXZIpX4a5N8r1LDYVznbr6KnLLxXy/qCLsKDYfo6a1B?=
- =?us-ascii?Q?dogIXds/f+NzKKurykZB9VN3LcLLWSPr4RW6/BKgAK6IYgJC4Lo3XBEjcITP?=
- =?us-ascii?Q?5NYVJ3zSTm4vCVmZomOSDrMgsXgFks6OGXxwHjGEcydo0C7/s0xm4cLFz0ds?=
- =?us-ascii?Q?UQCnSLlxyNHvXiPWl2mpiFaRaCVHGvuBarfJELP+vONzVc4X09h/6g5PS5uU?=
- =?us-ascii?Q?pPfFWM5BxTh6npV2TMhXJ+QFcdHtC6nbQZryNVhOpccvJms/oYfmbmrGjHEE?=
- =?us-ascii?Q?CTGeMndnAiVWrsy97XVS2NgXTjPVnAG10z6aV+e5HQ30A3wgQ/wggR0yO8iW?=
- =?us-ascii?Q?5qDFAJbf5xPdrDaeeiYFpW+Cm5nuBETqsmInM8UCP5rbc0YwHI2Q5opLRq/0?=
- =?us-ascii?Q?2EnZIFWPlcZ41+gblPjrXMQEqkkfrGmhxJL3upd16pt76GmSWz3f/z3X3q1y?=
- =?us-ascii?Q?h0tu8cPNxrb30WHAItO/fxRXZi5uSxh6iAgLYmcRkD0gl4+qcrDf0Xilmx0H?=
- =?us-ascii?Q?kbBmsZVrqXg741peF1ur+UEehJ95zAgDLw5iONAvkr6MQteA63GsqigJXs+B?=
- =?us-ascii?Q?msR6FpFNxQ1jA1PQ9fqE5lP3jPW5UweScssqNMm4VVrsl5rCM8l53YHqRJEN?=
- =?us-ascii?Q?nuP0sMW0tkkGMuuLA+CiqbncLrnpGJ0SuvrI5qkYl1PyQuiHB1gq4+l4wGSL?=
- =?us-ascii?Q?8N/xSx8pxOM3BA/1p1M8VdhGQuIEIBSO27mdvjUYjB8tLZaj/PGpQ+HOPkxG?=
- =?us-ascii?Q?tzfaLlMSyKEe6z4np1Ood1YMhO6xJCV88yZy+3+gl0+qd3BVba5LKJqWqIrD?=
- =?us-ascii?Q?tnrUa5y+tL6tSc+J9I2J3Hiu5sss06yLasJxA077Q6WxD9CdtTgoXgnztCDI?=
- =?us-ascii?Q?i+dOeqsgpE1KReNCI4l3hkTxcwe+/c/yF/TWUb0RtIig69c8pX+NAHmuPLGU?=
- =?us-ascii?Q?j8lb8EPWeKTuMtIyDb67oPzeanLWmvhviT7WJBcQ5UiHKLzcJ12JW4VhAL38?=
- =?us-ascii?Q?y5yfJdN9N0KBPZaYaEmspeA6e86gc9IRzZlqJbyrE2Q6Wv2N3rXAik0wHLng?=
- =?us-ascii?Q?RaKlvzvEUtgB8sbjt/+oGvo/km0+cIyBZhAiAA756IUWaCh9qlez8j+LkarW?=
- =?us-ascii?Q?Zoju7vThTMbQxByFCH1IWmyjQtqHbECRt6+9cKbikY8C0MGCWUB3utAhPDul?=
- =?us-ascii?Q?DWV/8XUO914+PIKZeY8nUfjPRv52ua6XhfF0oUKg03GpixYMQ6x2VwacdaYf?=
- =?us-ascii?Q?fhAlimgd8UxbwPlkTvNOXWg6tb74poQv11COd3c5/n6T6HB9hFX89h3603NH?=
- =?us-ascii?Q?ezuJH6gfdWUVPJtsQTed3g30lGZjfagISwwVml5ENlBH97K+KE2+9/Fw/Jrc?=
- =?us-ascii?Q?R8qhzLDrEHKzn3jYoet+mgqO7A75PwyiSMdJTno1YXUyDgKyej9UmeHLDrE7?=
- =?us-ascii?Q?h7YRixNbntgFxEvD1G5gvDsqKPTtIlW5p582du1DJlGRuwoyKHBRk3HXUdrY?=
- =?us-ascii?Q?5EIFXkhCzNJIoVkCPIKAbHMPsu07l4n2HnxgpipZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf6996d2-cb62-4d0a-b50e-08dd63683b28
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2025 02:22:27.8521
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6Wy7EX07vLZwR9MQLXBowRCJOpaL/gBJBaqBqdk7Pykajm6bi6pOL9+kZ7nJJrCCSBldq6XqZMJ2okrBX2HscQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5997
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250314-ptr-as-ptr-v3-6-e7ba61048f4a@gmail.com>
 
-From: Andrea Righi <arighi@nvidia.com>
+Hi Tamir,
 
-Add a selftest to validate the correct behavior of the deadline server
-for the ext_sched_class.
+kernel test robot noticed the following build errors:
 
-[ Joel: Replaced occurences of CFS in the test with EXT. ]
+[auto build test ERROR on a1eb95d6b5f4cf5cc7b081e85e374d1dd98a213b]
 
-Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
-Signed-off-by: Andrea Righi <arighi@nvidia.com>
----
- tools/testing/selftests/sched_ext/Makefile    |   1 +
- .../selftests/sched_ext/rt_stall.bpf.c        |  23 ++
- tools/testing/selftests/sched_ext/rt_stall.c  | 213 ++++++++++++++++++
- 3 files changed, 237 insertions(+)
- create mode 100644 tools/testing/selftests/sched_ext/rt_stall.bpf.c
- create mode 100644 tools/testing/selftests/sched_ext/rt_stall.c
+url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/rust-retain-pointer-mut-ness-in-container_of/20250315-003150
+base:   a1eb95d6b5f4cf5cc7b081e85e374d1dd98a213b
+patch link:    https://lore.kernel.org/r/20250314-ptr-as-ptr-v3-6-e7ba61048f4a%40gmail.com
+patch subject: [PATCH v3 6/6] rust: use strict provenance APIs
+config: x86_64-randconfig-002-20250315 (https://download.01.org/0day-ci/archive/20250315/202503151519.6bGsjUd3-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151519.6bGsjUd3-lkp@intel.com/reproduce)
 
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index 011762224600..802e3d8d038f 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -180,6 +180,7 @@ auto-test-targets :=			\
- 	select_cpu_dispatch_bad_dsq	\
- 	select_cpu_dispatch_dbl_dsp	\
- 	select_cpu_vtime		\
-+	rt_stall			\
- 	test_example			\
- 
- testcase-targets := $(addsuffix .o,$(addprefix $(SCXOBJ_DIR)/,$(auto-test-targets)))
-diff --git a/tools/testing/selftests/sched_ext/rt_stall.bpf.c b/tools/testing/selftests/sched_ext/rt_stall.bpf.c
-new file mode 100644
-index 000000000000..80086779dd1e
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/rt_stall.bpf.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A scheduler that verified if RT tasks can stall SCHED_EXT tasks.
-+ *
-+ * Copyright (c) 2025 NVIDIA Corporation.
-+ */
-+
-+#include <scx/common.bpf.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+UEI_DEFINE(uei);
-+
-+void BPF_STRUCT_OPS(rt_stall_exit, struct scx_exit_info *ei)
-+{
-+	UEI_RECORD(uei, ei);
-+}
-+
-+SEC(".struct_ops.link")
-+struct sched_ext_ops rt_stall_ops = {
-+	.exit			= (void *)rt_stall_exit,
-+	.name			= "rt_stall",
-+};
-diff --git a/tools/testing/selftests/sched_ext/rt_stall.c b/tools/testing/selftests/sched_ext/rt_stall.c
-new file mode 100644
-index 000000000000..d4cb545ebfd8
---- /dev/null
-+++ b/tools/testing/selftests/sched_ext/rt_stall.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2025 NVIDIA Corporation.
-+ */
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <sys/prctl.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <time.h>
-+#include <linux/sched.h>
-+#include <signal.h>
-+#include <bpf/bpf.h>
-+#include <scx/common.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include "rt_stall.bpf.skel.h"
-+#include "scx_test.h"
-+#include "../kselftest.h"
-+
-+#define CORE_ID		0	/* CPU to pin tasks to */
-+#define RUN_TIME        5	/* How long to run the test in seconds */
-+
-+/* Simple busy-wait function for test tasks */
-+static void process_func(void)
-+{
-+	while (1) {
-+		/* Busy wait */
-+		for (volatile unsigned long i = 0; i < 10000000UL; i++);
-+	}
-+}
-+
-+/* Set CPU affinity to a specific core */
-+static void set_affinity(int cpu)
-+{
-+	cpu_set_t mask;
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(cpu, &mask);
-+	if (sched_setaffinity(0, sizeof(mask), &mask) != 0) {
-+		perror("sched_setaffinity");
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
-+/* Set task scheduling policy and priority */
-+static void set_sched(int policy, int priority)
-+{
-+	struct sched_param param;
-+
-+	param.sched_priority = priority;
-+	if (sched_setscheduler(0, policy, &param) != 0) {
-+		perror("sched_setscheduler");
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
-+/* Get process runtime from /proc/<pid>/stat */
-+static float get_process_runtime(int pid)
-+{
-+	char path[256];
-+	FILE *file;
-+	long utime, stime;
-+	int fields;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/stat", pid);
-+	file = fopen(path, "r");
-+	if (file == NULL) {
-+		perror("Failed to open stat file");
-+		return -1;
-+	}
-+
-+	/* Skip the first 13 fields and read the 14th and 15th */
-+	fields = fscanf(file,
-+			"%*d %*s %*c %*d %*d %*d %*d %*d %*u %*u %*u %*u %*u %lu %lu",
-+			&utime, &stime);
-+	fclose(file);
-+
-+	if (fields != 2) {
-+		fprintf(stderr, "Failed to read stat file\n");
-+		return -1;
-+	}
-+
-+	/* Calculate the total time spent in the process */
-+	long total_time = utime + stime;
-+	long ticks_per_second = sysconf(_SC_CLK_TCK);
-+	float runtime_seconds = total_time * 1.0 / ticks_per_second;
-+
-+	return runtime_seconds;
-+}
-+
-+static enum scx_test_status setup(void **ctx)
-+{
-+	struct rt_stall *skel;
-+
-+	skel = rt_stall__open();
-+	SCX_FAIL_IF(!skel, "Failed to open");
-+	SCX_ENUM_INIT(skel);
-+	SCX_FAIL_IF(rt_stall__load(skel), "Failed to load skel");
-+
-+	*ctx = skel;
-+
-+	return SCX_TEST_PASS;
-+}
-+
-+static bool sched_stress_test(void)
-+{
-+	float cfs_runtime, rt_runtime;
-+	int cfs_pid, rt_pid;
-+	float expected_min_ratio = 0.04; /* 4% */
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	/* Create and set up a EXT task */
-+	cfs_pid = fork();
-+	if (cfs_pid == 0) {
-+		set_affinity(CORE_ID);
-+		process_func();
-+		exit(0);
-+	} else if (cfs_pid < 0) {
-+		perror("fork for EXT task");
-+		ksft_exit_fail();
-+	}
-+
-+	/* Create an RT task */
-+	rt_pid = fork();
-+	if (rt_pid == 0) {
-+		set_affinity(CORE_ID);
-+		set_sched(SCHED_FIFO, 50);
-+		process_func();
-+		exit(0);
-+	} else if (rt_pid < 0) {
-+		perror("fork for RT task");
-+		ksft_exit_fail();
-+	}
-+
-+	/* Let the processes run for the specified time */
-+	sleep(RUN_TIME);
-+
-+	/* Get runtime for the EXT task */
-+	cfs_runtime = get_process_runtime(cfs_pid);
-+	if (cfs_runtime != -1)
-+		ksft_print_msg("Runtime of EXT task (PID %d) is %f seconds\n", cfs_pid, cfs_runtime);
-+	else
-+		ksft_exit_fail_msg("Error getting runtime for EXT task (PID %d)\n", cfs_pid);
-+
-+	/* Get runtime for the RT task */
-+	rt_runtime = get_process_runtime(rt_pid);
-+	if (rt_runtime != -1)
-+		ksft_print_msg("Runtime of RT task (PID %d) is %f seconds\n", rt_pid, rt_runtime);
-+	else
-+		ksft_exit_fail_msg("Error getting runtime for RT task (PID %d)\n", rt_pid);
-+
-+	/* Kill the processes */
-+	kill(cfs_pid, SIGKILL);
-+	kill(rt_pid, SIGKILL);
-+	waitpid(cfs_pid, NULL, 0);
-+	waitpid(rt_pid, NULL, 0);
-+
-+	/* Verify that the scx task got enough runtime */
-+	float actual_ratio = cfs_runtime / (cfs_runtime + rt_runtime);
-+	ksft_print_msg("EXT task got %.2f%% of total runtime\n", actual_ratio * 100);
-+
-+	if (actual_ratio >= expected_min_ratio) {
-+		ksft_test_result_pass("PASS: EXT task got more than %.2f%% of runtime\n",
-+				      expected_min_ratio * 100);
-+		return true;
-+	} else {
-+		ksft_test_result_fail("FAIL: EXT task got less than %.2f%% of runtime\n",
-+				      expected_min_ratio * 100);
-+		return false;
-+	}
-+}
-+
-+static enum scx_test_status run(void *ctx)
-+{
-+	struct rt_stall *skel = ctx;
-+	struct bpf_link *link;
-+	bool res;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.rt_stall_ops);
-+	SCX_FAIL_IF(!link, "Failed to attach scheduler");
-+
-+	res = sched_stress_test();
-+
-+	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_NONE));
-+	bpf_link__destroy(link);
-+
-+	if (!res)
-+		ksft_exit_fail();
-+
-+	return SCX_TEST_PASS;
-+}
-+
-+static void cleanup(void *ctx)
-+{
-+	struct rt_stall *skel = ctx;
-+
-+	rt_stall__destroy(skel);
-+}
-+
-+struct scx_test rt_stall = {
-+	.name = "rt_stall",
-+	.description = "Verify that RT tasks cannot stall SCHED_EXT tasks",
-+	.setup = setup,
-+	.run = run,
-+	.cleanup = cleanup,
-+};
-+REGISTER_SCX_TEST(&rt_stall)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503151519.6bGsjUd3-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 19.1.7
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+   In file included from rust/helpers/helpers.c:10:
+   In file included from rust/helpers/blk.c:3:
+   In file included from include/linux/blk-mq.h:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>> error[E0425]: cannot find function `with_exposed_provenance` in module `core::ptr`
+   --> rust/kernel/lib.rs:37:20
+   |
+   37  |         core::ptr::with_exposed_provenance(addr)
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   ::: /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:593:1
+   |
+   593 | pub const fn without_provenance<T>(addr: usize) -> *const T {
+   | ----------------------------------------------------------- similarly named function `without_provenance` defined here
+   |
+   help: a function with a similar name exists
+   |
+   37  |         core::ptr::without_provenance(addr)
+   |                    ~~~~~~~~~~~~~~~~~~
+   help: consider importing this function through its public re-export
+   |
+   30  +     use crate::with_exposed_provenance;
+   |
+   help: if you import `with_exposed_provenance`, refer to it directly
+   |
+   37  -         core::ptr::with_exposed_provenance(addr)
+   37  +         with_exposed_provenance(addr)
+   |
+--
+>> error[E0425]: cannot find function `with_exposed_provenance_mut` in module `core::ptr`
+   --> rust/kernel/lib.rs:42:20
+   |
+   42  |         core::ptr::with_exposed_provenance_mut(addr)
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   ::: /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:637:1
+   |
+   637 | pub const fn without_provenance_mut<T>(addr: usize) -> *mut T {
+   | ------------------------------------------------------------- similarly named function `without_provenance_mut` defined here
+   |
+   help: a function with a similar name exists
+   |
+   42  |         core::ptr::without_provenance_mut(addr)
+   |                    ~~~~~~~~~~~~~~~~~~~~~~
+   help: consider importing this function through its public re-export
+   |
+   30  +     use crate::with_exposed_provenance_mut;
+   |
+   help: if you import `with_exposed_provenance_mut`, refer to it directly
+   |
+   42  -         core::ptr::with_exposed_provenance_mut(addr)
+   42  +         with_exposed_provenance_mut(addr)
+   |
+--
+>> error[E0599]: no method named `expose_provenance` found for raw pointer `*const T` in the current scope
+   --> rust/kernel/lib.rs:32:14
+   |
+   32 |         addr.expose_provenance()
+   |              ^^^^^^^^^^^^^^^^^ method not found in `*const T`
+   |
+   = note: try using `<*const T>::as_ref()` to get a reference to the type behind the pointer: https://doc.rust-lang.org/std/primitive.pointer.html#method.as_ref
+   = note: using `<*const T>::as_ref()` on a pointer which is unaligned or points to invalid or uninitialized memory is undefined behavior
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
