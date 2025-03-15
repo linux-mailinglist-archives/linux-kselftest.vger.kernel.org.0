@@ -1,177 +1,300 @@
-Return-Path: <linux-kselftest+bounces-29115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C2FA6230A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 01:23:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B6C1A62339
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 01:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AE6F162075
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 00:23:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A4BF3BF9D3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 00:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688374C8E;
-	Sat, 15 Mar 2025 00:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A43A4A1D;
+	Sat, 15 Mar 2025 00:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VqdMJYfg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GfLt5bwR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA4BC8E0;
-	Sat, 15 Mar 2025 00:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5732E338C
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Mar 2025 00:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741998220; cv=none; b=uP2k8+kPHdOnyaOUpTuLSs6TUHgr3CciN9T+TcO8QEGqmJw2xQEcR9tzBMUYL3gZKlpVIiyI7JuZMg8WU1m4L/yag0X+z2A79PBspDYZBQT+Tbc1wNuW+U1vtQRS+2t3w9bIccJJ4uHBWW8tVsobC0V7Me2CFG5LZux/6snyigw=
+	t=1741999094; cv=none; b=BHgDYCMe2aFLQ04VpF49aFCzFm0P5JiFnLQOu7luhWhKVN7wsi18sJfBLe/Cf9RI8fNUsWFTfoNEKRwjC3RX0q3x/lpSl+e/wgGAOzI+5YEGkYC7EKiGsHNZaa0yRUEsrM2VaQ6PFq+oxmr5A+1dltl78Yls8KOyEy6Kraj8Yso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741998220; c=relaxed/simple;
-	bh=4ikv9eyptdMwfYJR5gqj/ftAkhzmPPbyPxILpYgCsx8=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aaoBkEDB7xWTnT6iYlvw1H9mH4/p27/LWRaei1iunvfkj1t3E2mUu5q4dTg0UaUgdMEEZwO/EIWz2RXGTUWwio1TCBmXstFDqpKJo0LSdJxLK0k7KjCya4N16V483ES75RjI3RKD77Mg03xyHrmdjNo9H/44uZQuGp5T2IqJFvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VqdMJYfg; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c2303a56d6so295392485a.3;
-        Fri, 14 Mar 2025 17:23:38 -0700 (PDT)
+	s=arc-20240116; t=1741999094; c=relaxed/simple;
+	bh=yMmQ0fFi3IbgqATEYGssWRnBGKGBiiA+nNhLjqFPIRA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=s6xJYqfUZCCj4w6+BRYdoe7VXs9gs1tv9WpeoSLn+/vdw8sSlQT6rbiTXxN3FErYJQtwlFChPRUxuGf6AuLSfIlnFawI1kx4TJ41BaBkU6QXcoC76Wp/2hv+w4u2h6THotPZFTzygnxp/4EyIe7UcdZTL1fVmWm8oK4R69xT+jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GfLt5bwR; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-301192d5d75so783901a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Mar 2025 17:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741998217; x=1742603017; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:feedback-id:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KtGUbifaWdCRrexkDNtRNiLhnpL1kbPY2Ei7szaObU8=;
-        b=VqdMJYfgyoNWlaAptxKhuZaU1dzYmL0M5mPgJ0IhPEiTVCqLno/qu/PUaTgVf8ch/c
-         I0lehjQ2/pDhRISVCoKUen05uH7naDN5700IRsszLkfgdxdzp0rw4u3DTDSDcawTCkvm
-         OiblGuCBssmppJ1PJd3w3GnVEEOvQxA31AJMJTh6SF3L3MHMvzLnmvnk6fSWey/7rcut
-         lhUBKtpJYgRZu+9GslxpjZ7hdBsuV2PmVYvJv9oPhqBz4TRO8O/a8q+H7Hv6ANCdmzgn
-         vv6FI2hrcGzzVkLSgjGndvJNagXQdWec0w6RiJH2UPY7h6e4oQC0M2Qk3i7/YMz2Mjug
-         AP9A==
+        d=google.com; s=20230601; t=1741999091; x=1742603891; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JBBbvvIvDC/mHmEen0xNd6Oduzl1KFskcxJhYdjd5B8=;
+        b=GfLt5bwR90/mPNQlePdZPaQpbAaEv2D2UIxUkHFCA2OAXtz8r0nTe73VIuh1v6l7my
+         JFoiWoLu1r4xdIE5cxGzNhgh06VJNcwQHGBcPt+/7Q42F7vEh2VuGl4YsYSuasQanlhC
+         6leXoa8gZ33ssuLwKFWdAATTuu2HJq1yjpYqri/M6smUQq0bT/o3kvShQpv2/ZvBsnNE
+         bp66PwGhOtvNZ17ETsgSh5/TQw0Inuv0/JvVgzl8FhtmcJ0FEf2F0/qZY5gMIb6BvOpA
+         PDZuz305ggX1+S+PYCgCIkAExvwpk5D4xGV8lXh92+goHxOSIM4nLQNWUE3u2nHaIlkN
+         fSNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741998217; x=1742603017;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:feedback-id:message-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtGUbifaWdCRrexkDNtRNiLhnpL1kbPY2Ei7szaObU8=;
-        b=wU+3Iy77RORf0seBnMkZ3OHeK8RCBxF60za2D9hCpAhqF6oX/QYRdeDhx99yEaagWQ
-         bQosbxcy0VEm1VxbhNKqtBnpp5P1RsWSqUTX1WX4qm95U6AaaAE96xh/tSOF0B8/NdNf
-         7BSdMq9rRU6yQV1ATbDb6b2YyZb7zOIcFeD9MfhV3/LbGBtfbLvozEFpWTYtoiGN2B0k
-         MUX/HDGAnBXaV8fIO4Tm+ZKZ5rNnZopFhpRmDwXBXqBkqUS0DNuWhY/GSXlNT3t7Py0D
-         CgbAESajRUT0odpRZYW1stAUZcWnziK87SOlHhdYnzVYMQRuMJARTPzDYNUQX3JQ7GXP
-         M2cA==
-X-Forwarded-Encrypted: i=1; AJvYcCVc2cJf2/zG09BqdGDY+AIG8el4D8doi2HBHWY4yKGDWc63PAXZ6B6gUreRqWHRenIDQGZrY+psvwAIu+Yj1erl@vger.kernel.org, AJvYcCVdxXIuIpiSxw/Rp5xD61JhvykSQH2tqxeMQPVEmmP7yJMa/K2eluvZEysuiYlhEB4eS5cn7O0P@vger.kernel.org, AJvYcCWBpPCu8zbwZVVh9sFRyXA1CQfku82JB+UNKroXW4MjTero92k7Il3qeY3YDuNEY+jzX4ma7y3IU0W0mu7fS/0=@vger.kernel.org, AJvYcCWg0TiIPz2p7SWnMZIRR7AIcPADRG+ZzQj4S446h3V1dhmA1W13x3Bhj+crQbvUS/O1HPauBeqs70D2@vger.kernel.org, AJvYcCX/WrpPfPTEC/gi1cs9K7+K8xweMJjy/FbztkyUF/dCi+lexV334zWkhUooRZ1lfZvVa/sXbqP+1ANDIX0n@vger.kernel.org, AJvYcCXjVoR+VZMhSu5kkI/qsrU8b27pQCu/q5Xnpmt2IoXgnVJYuvnBqbSdnl2KV0aZFmOvQ25aIXPnGy4Ulw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz+Uki2BKgOwkxs6PXx2WsQk7Cj48Tu5lUlj3r1i07mNAGI/me
-	eVQw0XRKvByQ/YeaONmg7EDANYypxanEvro5Olqay8Z0hTpmGfWv
-X-Gm-Gg: ASbGncsKK7ZSA8xlEoyPDq9ObnnjykfSU+PRGLFWTI5pbImtH+gpXGPKM52XlraxIxP
-	bWbF6Nvd/SAIlj/jDhWmsMQWXlA+jjEaEypDTwq4p8WcNn4cS8c1z4o/HaJtaNVSHpA+1ST707R
-	Q/Lp4Q8RjrRqDMIZ0JFgC7UWK+p9Qv2LmjGtXTxtQmF6bSoG1YJ21x6mZzPvVthruv3c85HK7PA
-	wz1+bfcELV18TcbnQnP4XIe6YljBSwp6c5GySVb8cH9vjP0KtbUBLGE/pTIza3omE+JAA1aLTdb
-	MDiZJnC/ymd3R6TvKouw968fXiR9EFAiPESL2eVrz5X0Zb/1yBZPYYzqNLBGSAcrSHNX1Kfp2Q5
-	FXNcFfIu9fGG4TgImvlmXmheZKDmbhujXzI7ns0QXhbkcJw==
-X-Google-Smtp-Source: AGHT+IHMpER/JnbkGNCfSySjFX3UEHCHjaZZWgeAljh7oBmyDf8g26BQmTLLo5enSqswp/8nMLGTfg==
-X-Received: by 2002:a05:620a:2b96:b0:7c5:6299:3f4 with SMTP id af79cd13be357-7c57c8f03c6mr831634085a.49.1741998217413;
-        Fri, 14 Mar 2025 17:23:37 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c573c4dd9fsm321259185a.4.2025.03.14.17.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 17:23:37 -0700 (PDT)
-Message-ID: <67d4c889.050a0220.35d7ce.b4b0@mx.google.com>
-X-Google-Original-Message-ID: <Z9TIhZlMyLe4eFUJ@winterfell.>
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 664981200043;
-	Fri, 14 Mar 2025 20:23:36 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Fri, 14 Mar 2025 20:23:36 -0400
-X-ME-Sender: <xms:h8jUZ74e_UbzhWKyL0vR8GNjvb2XGrNAgk4_VgW40B01hoiXfJ7S3A>
-    <xme:h8jUZw7nggYlYki7_RHh6X1sPlXohGpse0pS_gMHYb534N0k0WOpJ1M4NmwnV44mS
-    NW7GqxwTS_bSV5lNw>
-X-ME-Received: <xmr:h8jUZydNm33FOpPngpMJqlp4sOQc8Bpq5AYx0H28DkOyrsYa1CAjuPPuB7U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufedvvdeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
-    hlrdgtohhmqeenucggtffrrghtthgvrhhnpeehudfgudffffetuedtvdehueevledvhfel
-    leeivedtgeeuhfegueevieduffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgr
-    lhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppe
-    hgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepvdehpdhm
-    ohguvgepshhmthhpohhuthdprhgtphhtthhopegtohhnthgrtghtsegrnhhtohhnihhohh
-    hitghkvgihrdgtohhmpdhrtghpthhtoheprgdrhhhinhgusghorhhgsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    grlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihsehg
-    rghrhihguhhordhnvghtpdhrtghpthhtohepsghjohhrnhefpghghhesphhrohhtohhnmh
-    grihhlrdgtohhmpdhrtghpthhtohepsggvnhhnohdrlhhoshhsihhnsehprhhothhonhdr
-    mhgvpdhrtghpthhtoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghpth
-    htohepthhmghhrohhsshesuhhmihgthhdrvgguuh
-X-ME-Proxy: <xmx:h8jUZ8JPSDkCkSkVt3RCB0Mk0E6jmS46WfWGUfUJeprU262aCCSJgw>
-    <xmx:h8jUZ_IFjlqJkRvidnGpq-HLbqiAU6cTlhXqLYie0rIDx4roP_n9yQ>
-    <xmx:h8jUZ1yQzv9jBdBC-yTOo02PuZnhEaLzwYnAKPlnZSUXkevoxOb8Nw>
-    <xmx:h8jUZ7KwE9A7UvQLx7IZJeY4skdT-pxzupkpiKa2zZZKJJw8pQCTTw>
-    <xmx:iMjUZ6b06pHFrdh8E5BfHZJQdSCferZ5En_EfIQWlF8tW8bvC1g5ZrXX>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Mar 2025 20:23:34 -0400 (EDT)
-Date: Fri, 14 Mar 2025 17:23:33 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Antonio Hickey <contact@antoniohickey.com>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-block@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] rust: replace `addr_of[_mut]!` with `&raw [mut]`
-References: <20250314234148.599196-1-contact@antoniohickey.com>
- <0100019597092d67-0da59c6d-9680-413f-bbce-109ef95724cc-000000@email.amazonses.com>
+        d=1e100.net; s=20230601; t=1741999091; x=1742603891;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JBBbvvIvDC/mHmEen0xNd6Oduzl1KFskcxJhYdjd5B8=;
+        b=d1s1MLWQF794hWMox3xQBzUlTKWP+qXO3AMCVRhGGCEVYFEXtVgeYdB5mzL1Ex/7qM
+         SCgDQl53TAdYjvkUPHUc8mHcG/50y90mYDaOSKVsGAJb4D2yjk7M2FrC6118K0eMIl58
+         fYWCpm6aBCMeNaCvjcTmVCzJQf9XaJ1jkcMsE2qzjuBOIAGu4h93wDD3eCgeLlde4yFF
+         5TyX58B+AGeVF1Hdm/ZdF8Dj+OPdEGbdXyiR6Ju3WzV0VsiBJA/3pxG0fVoGpRjkI1Vi
+         fUOfd9FKRLdSsw6/CiZ+XYDEqCBuG+FW7wnTKXEmkYPxW2cvOGwLibTOjZB2Cs05/oTU
+         4QTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWuxvxLSanG8Goc9sStC4XBFcxF8ta7hXV6lwQePKYF7OWMAB/FPzIsC3U3tjkLsE2OPP+hdsihGmt4YtHNMZY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPl26KwgCO3IG/uSOK73X77Dw40pjQ1gCnWqXHJRe9ClEaIXP+
+	ChHD8Y4lTjxZLh0EB231YREEwHU4x1xzVcziGNUtJI8hT2whbHpeYZDKE88CH5sRvyzu9VoFSTl
+	bvO0Z
+X-Google-Smtp-Source: AGHT+IG0APvZyb2F77PT2c/bLlGOMV+AySLZafrEoG5BY10GJjPWxGCDmuiKnBb39piS9qNWpRt4Q5zhiRaN
+X-Received: from pjbsg17.prod.google.com ([2002:a17:90b:5211:b0:2ef:973a:3caf])
+ (user=jstultz job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:fc4f:b0:2f2:a664:df20
+ with SMTP id 98e67ed59e1d1-30151c5f303mr5922074a91.7.1741999091663; Fri, 14
+ Mar 2025 17:38:11 -0700 (PDT)
+Date: Fri, 14 Mar 2025 17:37:41 -0700
+In-Reply-To: <CANDhNCoueki=keYNcNr4eXqgLFPh3VupDJC0hFqxm4FNKfGzYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0100019597092d67-0da59c6d-9680-413f-bbce-109ef95724cc-000000@email.amazonses.com>
+Mime-Version: 1.0
+References: <CANDhNCoueki=keYNcNr4eXqgLFPh3VupDJC0hFqxm4FNKfGzYg@mail.gmail.com>
+X-Mailer: git-send-email 2.49.0.rc1.451.g8f38331e32-goog
+Message-ID: <20250315003800.3054684-1-jstultz@google.com>
+Subject: [RFC PATCH 1/2] time/timekeeping: Fix possible inconsistencies in
+ _COARSE clockids
+From: John Stultz <jstultz@google.com>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Miroslav Lichvar <mlichvar@redhat.com>, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 14, 2025 at 11:41:55PM +0000, Antonio Hickey wrote:
-[...]
-> @@ -541,7 +541,7 @@ macro_rules! stack_try_pin_init {
->  ///
->  /// ```rust
->  /// # use kernel::{macros::{Zeroable, pin_data}, pin_init};
-> -/// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
-> +/// # use core::marker::PhantomPinned;
->  /// #[pin_data]
->  /// #[derive(Zeroable)]
->  /// struct Buf {
-> @@ -554,7 +554,7 @@ macro_rules! stack_try_pin_init {
->  /// pin_init!(&this in Buf {
->  ///     buf: [0; 64],
->  ///     // SAFETY: TODO.
-> -///     ptr: unsafe { addr_of_mut!((*this.as_ptr()).buf).cast() },
-> +///     ptr: unsafe { &raw mut (*this.as_ptr()).buf.cast() },
+Lei Chen raised an issue with CLOCK_MONOTONIC_COARSE seeing
+time inconsistencies.
 
-This should be:
+Lei tracked down that this was being caused by the adjustment
+  tk->tkr_mono.xtime_nsec -= offset;
 
+which is made to compensate for the unaccumulated cycles in
+offset when the mult value is adjusted forward, so that
+the non-_COARSE clockids don't see inconsistencies.
 
-///     ptr: unsafe { &raw mut ((*this.as_ptr()).buf).cast() },
+However, the _COARSE clockids don't use the mult*offset value
+in their calculations, so this subtraction can cause the
+_COARSE clock ids to jump back a bit.
 
-, right?
+Now, by design, this negative adjustment should be fine, because
+the logic run from timekeeping_adjust() is done after we
+accumulate approx mult*interval_cycles into xtime_nsec.
+The accumulated (mult*interval_cycles) will be larger then the
+(mult_adj*offset) value subtracted from xtime_nsec, and both
+operations are done together under the tk_core.lock, so the net
+change to xtime_nsec should always be positive.
 
-Regards,
-Boqun
+However, do_adjtimex() calls into timekeeping_advance() as well,
+since we want to apply the ntp freq adjustment immediately.
+In this case, we don't return early when the offset is smaller
+then interval_cycles, so we don't end up accumulating any time
+into xtime_nsec. But we do go on to call timekeeping_adjust(),
+which modifies the mult value, and subtracts from xtime_nsec
+to correct for the new mult value.
 
->  ///     pin: PhantomPinned,
->  /// });
->  /// pin_init!(Buf {
-[...]
+Here because we did not accumulate anything, we have a window
+where the _COARSE clockids that don't utilize the mult*offset
+value, can see an inconsistency.
+
+So to fix this, rework the timekeeping_advance() logic a bit
+so that when we are called from do_adjtimex() and the offset
+is smaller then cycle_interval, that we call
+timekeeping_forward(), to first accumulate the sub-interval
+time into xtime_nsec. Then with no unaccumulated cycles in
+offset, we can do the mult adjustment without worry of the
+subtraction having an impact.
+
+NOTE: This was implemented as a potential alternative to
+Thomas' approach here:
+   https://lore.kernel.org/lkml/87cyej5rid.ffs@tglx/
+
+And similarly, it needs some additional review and testing,
+as it was developed while packing for conference travel.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Miroslav Lichvar <mlichvar@redhat.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kernel-team@android.com
+Cc: Lei Chen <lei.chen@smartx.com>
+Fixes: da15cfdae033 ("time: Introduce CLOCK_REALTIME_COARSE")
+Reported-by: Lei Chen <lei.chen@smartx.com>
+Closes: https://lore.kernel.org/lkml/20250310030004.3705801-1-lei.chen@smartx.com/
+Diagnosed-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+ kernel/time/timekeeping.c | 87 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 62 insertions(+), 25 deletions(-)
+
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index 1e67d076f1955..6f3a145e7b113 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -682,18 +682,18 @@ static void timekeeping_update_from_shadow(struct tk_data *tkd, unsigned int act
+ }
+ 
+ /**
+- * timekeeping_forward_now - update clock to the current time
++ * timekeeping_forward - update clock to given cycle now value
+  * @tk:		Pointer to the timekeeper to update
++ * @cycle_now:  Current clocksource read value
+  *
+  * Forward the current clock to update its state since the last call to
+  * update_wall_time(). This is useful before significant clock changes,
+  * as it avoids having to deal with this time offset explicitly.
+  */
+-static void timekeeping_forward_now(struct timekeeper *tk)
++static void timekeeping_forward(struct timekeeper *tk, u64 cycle_now)
+ {
+-	u64 cycle_now, delta;
++	u64 delta;
+ 
+-	cycle_now = tk_clock_read(&tk->tkr_mono);
+ 	delta = clocksource_delta(cycle_now, tk->tkr_mono.cycle_last, tk->tkr_mono.mask,
+ 				  tk->tkr_mono.clock->max_raw_delta);
+ 	tk->tkr_mono.cycle_last = cycle_now;
+@@ -710,6 +710,21 @@ static void timekeeping_forward_now(struct timekeeper *tk)
+ 	}
+ }
+ 
++/**
++ * timekeeping_forward_now - update clock to the current time
++ * @tk:		Pointer to the timekeeper to update
++ *
++ * Forward the current clock to update its state since the last call to
++ * update_wall_time(). This is useful before significant clock changes,
++ * as it avoids having to deal with this time offset explicitly.
++ */
++static void timekeeping_forward_now(struct timekeeper *tk)
++{
++	u64 cycle_now = tk_clock_read(&tk->tkr_mono);
++
++	timekeeping_forward(tk, cycle_now);
++}
++
+ /**
+  * ktime_get_real_ts64 - Returns the time of day in a timespec64.
+  * @ts:		pointer to the timespec to be set
+@@ -2151,6 +2166,45 @@ static u64 logarithmic_accumulation(struct timekeeper *tk, u64 offset,
+ 	return offset;
+ }
+ 
++static u64 timekeeping_accumulate(struct timekeeper *tk, u64 now, u64 offset,
++				  unsigned int *clock_set)
++{
++	struct timekeeper *real_tk = &tk_core.timekeeper;
++	int shift = 0, maxshift;
++
++	/*
++	 * If we have a sub-cycle_interval offset, we
++	 * are likely doing a TK_FREQ_ADJ, so accumulate
++	 * everything so we don't have a remainder offset
++	 * when later adjusting the multiplier
++	 */
++	if (offset < real_tk->cycle_interval) {
++		timekeeping_forward(tk, now);
++		*clock_set = 1;
++		return 0;
++	}
++
++	/*
++	 * With NO_HZ we may have to accumulate many cycle_intervals
++	 * (think "ticks") worth of time at once. To do this efficiently,
++	 * we calculate the largest doubling multiple of cycle_intervals
++	 * that is smaller than the offset.  We then accumulate that
++	 * chunk in one go, and then try to consume the next smaller
++	 * doubled multiple.
++	 */
++	shift = ilog2(offset) - ilog2(tk->cycle_interval);
++	shift = max(0, shift);
++	/* Bound shift to one less than what overflows tick_length */
++	maxshift = (64 - (ilog2(ntp_tick_length()) + 1)) - 1;
++	shift = min(shift, maxshift);
++	while (offset >= tk->cycle_interval) {
++		offset = logarithmic_accumulation(tk, offset, shift, clock_set);
++		if (offset < tk->cycle_interval << shift)
++			shift--;
++	}
++	return offset;
++}
++
+ /*
+  * timekeeping_advance - Updates the timekeeper to the current time and
+  * current NTP tick length
+@@ -2160,8 +2214,7 @@ static bool timekeeping_advance(enum timekeeping_adv_mode mode)
+ 	struct timekeeper *tk = &tk_core.shadow_timekeeper;
+ 	struct timekeeper *real_tk = &tk_core.timekeeper;
+ 	unsigned int clock_set = 0;
+-	int shift = 0, maxshift;
+-	u64 offset;
++	u64 cycle_now, offset;
+ 
+ 	guard(raw_spinlock_irqsave)(&tk_core.lock);
+ 
+@@ -2169,7 +2222,8 @@ static bool timekeeping_advance(enum timekeeping_adv_mode mode)
+ 	if (unlikely(timekeeping_suspended))
+ 		return false;
+ 
+-	offset = clocksource_delta(tk_clock_read(&tk->tkr_mono),
++	cycle_now = tk_clock_read(&tk->tkr_mono);
++	offset = clocksource_delta(cycle_now,
+ 				   tk->tkr_mono.cycle_last, tk->tkr_mono.mask,
+ 				   tk->tkr_mono.clock->max_raw_delta);
+ 
+@@ -2177,24 +2231,7 @@ static bool timekeeping_advance(enum timekeeping_adv_mode mode)
+ 	if (offset < real_tk->cycle_interval && mode == TK_ADV_TICK)
+ 		return false;
+ 
+-	/*
+-	 * With NO_HZ we may have to accumulate many cycle_intervals
+-	 * (think "ticks") worth of time at once. To do this efficiently,
+-	 * we calculate the largest doubling multiple of cycle_intervals
+-	 * that is smaller than the offset.  We then accumulate that
+-	 * chunk in one go, and then try to consume the next smaller
+-	 * doubled multiple.
+-	 */
+-	shift = ilog2(offset) - ilog2(tk->cycle_interval);
+-	shift = max(0, shift);
+-	/* Bound shift to one less than what overflows tick_length */
+-	maxshift = (64 - (ilog2(ntp_tick_length())+1)) - 1;
+-	shift = min(shift, maxshift);
+-	while (offset >= tk->cycle_interval) {
+-		offset = logarithmic_accumulation(tk, offset, shift, &clock_set);
+-		if (offset < tk->cycle_interval<<shift)
+-			shift--;
+-	}
++	offset = timekeeping_accumulate(tk, cycle_now, offset, &clock_set);
+ 
+ 	/* Adjust the multiplier to correct NTP error */
+ 	timekeeping_adjust(tk, offset);
+-- 
+2.49.0.rc1.451.g8f38331e32-goog
+
 
