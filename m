@@ -1,141 +1,116 @@
-Return-Path: <linux-kselftest+bounces-29123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E11C9A62A4D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 10:39:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DB07A62A5D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 10:44:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CE573A9884
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 09:39:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB240189C0EF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 09:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494DB1F582F;
-	Sat, 15 Mar 2025 09:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C524A1F5837;
+	Sat, 15 Mar 2025 09:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I7WhZ8hX"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="RjD2trdW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-24417.protonmail.ch (mail-24417.protonmail.ch [109.224.244.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299C01D5ACF
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Mar 2025 09:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9C82AD25;
+	Sat, 15 Mar 2025 09:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742031594; cv=none; b=WkeSgfPnReOuNmk4bDbN7VARfK3plUmAwUVMv7CBIPJPlxkxnGvi0pB1yfaX+IECL/YIBWC+nsyc1IAKJP0yqaatz2HdEmKLtQC3Iy40FWEreiU2u5NwwZeC4WXyHWagsGpcVlRcA4uar/I4qLdZHymZVgY6S+UvxrwlCfYmwQs=
+	t=1742031881; cv=none; b=TxHGfA/4EE6jimkKMGi2Su5lFCQH3sh/z3clMBEpK6W6CxVdBazT9GM/IIFezkC/DekmN1utgOdOMskH2tQU8yOoDXvbUNrhhv61Obb/cB7e8cdJLRNuTveuzTDo2xYMf5TV/2UPh06PtK4gS7miiPFQ6QIafWGW2N/v5ACuULM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742031594; c=relaxed/simple;
-	bh=sq47Oh+DTt8mQvgg0HAPCaqwqq5A7Wu/avEExEqpCoI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u2U6Z+U7KciXbXGNxHGmQAehFFdVe2ByG6yACsbgmdBQT560ejEg4QluuXpXLPTzeLWGw0QLHGGM7dVJAdjXuYlcMSgPUCVI73tAYIOjpT69mJ+3+gegOaAYSKItG8rOVdIIuusZz5uE3pEibvczdYpQKdKEb10jnSo+Aj3djhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I7WhZ8hX; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43d0618746bso3268205e9.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Mar 2025 02:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742031590; x=1742636390; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MpprGEUK/a4fpAj/8Aqk/exRNk0cc1umgsVYwo9fvxM=;
-        b=I7WhZ8hXXiqD+MUPmqpTT4nqbja3m53jEhDWy/TUOr4nPcTaKpR6vb84Q21mRT8xot
-         7WPm9MYvqmv+AE3a3UbLdRC9IQdG8UOkZR1uFqXCZR0jHSExIhQf1qbKQKPmWhrkh0CJ
-         l9uN0gNRY3woedydz/t/MVNL5gztPNBTOfzPgmoI7dU32Mpitejv71t50DxQ+1sj7198
-         lFfeDTg+Hu9ALLHmvXozpY1AtZQUlW3gYUJW42A1b/xcNQpCWYvM/CdKRKxPdGS22dbD
-         7jx2LmYo0t13WaKoa8elQzyMDQ7uXB9zYzIWh+GGjFQG9Xsy6uHLwvRu6vUo9Y2YwfGZ
-         zyJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742031590; x=1742636390;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MpprGEUK/a4fpAj/8Aqk/exRNk0cc1umgsVYwo9fvxM=;
-        b=YIKsV3MlO1Y1t1WjbuKwpx4VJHYUZ+58Pa76jn+x2Wwr4fmZ1t3GCBt31rp+CsJmym
-         xMwX8SEeZ9U3GQKQwGVBZFk5TuOQPC34In8SGGIuxVRnIQLOpaGrnlaLko0R/tc0PLSS
-         Nzy6YuWBIVhUq/Ux51RyqVCLblIgofJAS8grQYeBJkd7ghCFvJEBKujBWckUV5WP+QL/
-         KNxvPfQcB35WlCbU4z3X1gQuzownbPT8DMhtyf79W9j6/dSISXVy2tro9h11EPVMlWuf
-         Qo7Xd4uJuFLg3YbAiJq9kQ375yGQd2AbzY77YR9d5z6gdIbyZCCQi6oN2xC0k1Bmf3JB
-         w/Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0ctS9wReB1dgvPk4oY2RUdq2do+3Nybxfc2qFUKGGUYbqFWQ/L+4QrolkRTNcKnj7caJJOwIoYJwOy6NRnPI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwposKWIVZJZ2YEORNXdy1rWFd8iV3a0XvmOYRb8xxGdFwDQizj
-	M6pR4BCb4aKWoCpXnt3AXf8xf3UJkeCqsewFWyCPULZIJCFDp931BizlZdXciw0=
-X-Gm-Gg: ASbGncujJk/kA0sM/M/OIdlbXj4ouYrn3aSTQCeHQkL7LRvpCMqLSfHyH1DQmDF1/Kx
-	tIkGLRzUXEZlGV5FWNyqW5uFzfYzDSw5P9DUCWKsbPSPc3Radl15IfXsZhFO1HAhtiJQmrQl7K+
-	Ptmua1c/qxLGh1ma38sr//RtNdlKyxIww2nO4qdAceiyWuCPLnd6xt2YJ4xmWzR14BjgCJbzlW5
-	/wK86K8EUzY5BnHYBTj+aAA05T6W3V0D1mtzj6lo05CVAzWTKj/WY3Mc3VEIoV8cG+S188F7wef
-	fOPBVWWRJvA7yAoy5EoIT9LRVYHbvuhL+XMkOy7RAHTGx0UDRw==
-X-Google-Smtp-Source: AGHT+IFWe+lGcd8hOfySiAmaHi5FuBTMwIsDk2czxA5eUnLjOHnRjuiXJKnQtaEEiRnhc7xs3djV9w==
-X-Received: by 2002:adf:a2ca:0:b0:391:23e7:968d with SMTP id ffacd0b85a97d-39720d47d2fmr5370083f8f.47.1742031590443;
-        Sat, 15 Mar 2025 02:39:50 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-395c7df3419sm8214531f8f.9.2025.03.15.02.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Mar 2025 02:39:50 -0700 (PDT)
-Date: Sat, 15 Mar 2025 12:39:46 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Elizabeth Figura <zfigura@codeweavers.com>
-Cc: Su Hui <suhui@nfschina.com>, shuah@kernel.org, wine-devel@winehq.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 1/4] selftests: ntsync: fix the wrong condition in
- wake_all
-Message-ID: <f86c7af5-9e7f-41a0-a357-6a356fdeb0b9@stanley.mountain>
-References: <00d17d6d-19c9-4431-a3ac-c0f767c533d4@nfschina.com>
- <2051560.PIDvDuAF1L@camazotz>
+	s=arc-20240116; t=1742031881; c=relaxed/simple;
+	bh=9o+XY6imgq6zaQDxE/bPz6kfIxurI0uiJIyhQ04e950=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iKbGy9pRWaTJnpTBBGBu9J6nx5m/N7MMEKf1ZY33x4Me+xYemk6KskfaNRPgZsYHeEwbDLD4VKAkjYX6Hi1+4zRq3UxdomIEcLnEG/rXReo4cGUzXXSWgePhDyyUD+e7GArnOhWahCL2nqYrdasf/CfJ1xJlnc2RWIFzuvKsMsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=RjD2trdW; arc=none smtp.client-ip=109.224.244.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=apypmejo2zdgdad4cw5ld4bjgu.protonmail; t=1742031877; x=1742291077;
+	bh=9o+XY6imgq6zaQDxE/bPz6kfIxurI0uiJIyhQ04e950=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=RjD2trdWilavDargEPJh31BaRD1d0iE94K1WTsJ/ad1+eb36FAPT3fUI7TMqp4+vp
+	 BRA4qDvo3Xlw2DAHsB34qIikjLUkuGU49IhcV0xUeYfrGe+MIGFT6dyGOlcXorpdI+
+	 13NdK8Gh63jNwYmwhfJges7p1LmFjkOzxniQnd7B3GsO+5ig20muHxlw1o4vm2pSyP
+	 hncsfKqglFrsdmvUhR9/jlpxZlSWpm3w+aRulnnpDSv1gLMX3icQ5oNoRII6ZsZnwY
+	 XOFgkjwdW0YJsEYhHa08PG3v8bxHheqxyMyHsixf+18F5nEKuGXSU12m23q8WB89W4
+	 sTQ7jsUBA5SUA==
+Date: Sat, 15 Mar 2025 09:44:33 +0000
+To: Tamir Duberstein <tamird@gmail.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] rust: use strict provenance APIs
+Message-ID: <D8GQRANRVU11.SI7SZ8RAXXF@proton.me>
+In-Reply-To: <CAJ-ks9=Ec0xLg81GUYJ07uDzwtwhFkoEdxaa3kNtV6xSjZ57MQ@mail.gmail.com>
+References: <20250314-ptr-as-ptr-v3-0-e7ba61048f4a@gmail.com> <20250314-ptr-as-ptr-v3-6-e7ba61048f4a@gmail.com> <D8G9LZCS7ETL.9UPPQ73CAUQM@proton.me> <CANiq72=JCgdmd+h4_2VguOO9kxdx3OuTqUmpLix3mTLLHLKbZw@mail.gmail.com> <CAJ-ks9=Ec0xLg81GUYJ07uDzwtwhFkoEdxaa3kNtV6xSjZ57MQ@mail.gmail.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 3cfde2319760f064666ce8d81b7235df8b240a00
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2051560.PIDvDuAF1L@camazotz>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 14, 2025 at 05:13:50PM -0500, Elizabeth Figura wrote:
-> On Friday, 14 March 2025 05:14:30 CDT Su Hui wrote:
-> > On 2025/3/14 17:21, Dan Carpenter wrote:
-> > > On Fri, Mar 14, 2025 at 03:14:51PM +0800, Su Hui wrote:
-> > >> When  'manual=false' and  'signaled=true', then expected value when using
-> > >> NTSYNC_IOC_CREATE_EVENT should be greater than zero. Fix this typo error.
-> > >>
-> > >> Signed-off-by: Su Hui<suhui@nfschina.com>
-> > >> ---
-> > >>   tools/testing/selftests/drivers/ntsync/ntsync.c | 2 +-
-> > >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
-> > >> index 3aad311574c4..bfb6fad653d0 100644
-> > >> --- a/tools/testing/selftests/drivers/ntsync/ntsync.c
-> > >> +++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
-> > >> @@ -968,7 +968,7 @@ TEST(wake_all)
-> > >>   	auto_event_args.manual = false;
-> > >>   	auto_event_args.signaled = true;
-> > >>   	objs[3] = ioctl(fd, NTSYNC_IOC_CREATE_EVENT, &auto_event_args);
-> > >> -	EXPECT_EQ(0, objs[3]);
-> > >> +	EXPECT_LE(0, objs[3]);
-> > > It's kind of weird how these macros put the constant on the left.
-> > > It returns an "fd" on success.  So this look reasonable.  It probably
-> > > won't return the zero fd so we could probably check EXPECT_LT()?
-> > Agreed, there are about 29 items that can be changed to EXPECT_LT().
-> > I can send a v2 patchset with this change if there is no more other
-> > suggestions.
-> 
-> I personally think it looks wrong to use EXPECT_LT(), but I'll certainly
-> defer to a higher maintainer on this point.
+On Fri Mar 14, 2025 at 11:20 PM CET, Tamir Duberstein wrote:
+> On Fri, Mar 14, 2025 at 6:00=E2=80=AFPM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+>>
+>> On Fri, Mar 14, 2025 at 9:18=E2=80=AFPM Benno Lossin <benno.lossin@proto=
+n.me> wrote:
+>> >
+>> > I don't know when we'll be bumping the minimum version. IIRC 1.85.0 is
+>> > going to be in debian trixie, so eventually we could bump it to that,
+>> > but I'm not sure what the time frame will be for that.
+>> >
+>> > Maybe we can salvage this effort by gating both the lint and the
+>> > unstable features on the versions where it works? @Miguel, what's your
+>> > opinion?
+>> >
+>> > We could even make it simple, requiring 1.84 and not bothering with th=
+e
+>> > older versions.
+>>
+>> Regarding Debian Trixie: unknown, since my understanding is that it
+>> does not have a release date yet, but apparently mid May is the Hard
+>> Freeze and then it may take e.g. a month or two to the release.
+>>
+>> And when it releases, we may want to wait a while before bumping it,
+>> depending on how much time has passed since Rust 1.85.0 and depending
+>> on whether we managed to get e.g. Ubuntu LTSs to provide a versioned
+>> package etc.
 
-I'm not sure I understand what you are saying.  Are you saying that we
-should allow zero as an expected file descriptor here?  I don't have
-strong feelings about that either way.
+Yeah that's what I thought, thanks for confirming.
 
-Putting variables on the right, Yoda speak is.  Unnatural is.
+>> If something simple works, then let's just go for that -- we do not
+>> care too much about older versions for linting purposes, since people
+>> should be testing with the latest stable too anyway.
+>
+> It's not going to be simple because `rust_common_flags` is defined
+> before the config is read, which means I'll have to sprinkle
+> conditional logic in even more places to enable the lints.
+>
+> The most minimal version of this patch would drop all the build system
+> changes and just have conditionally compiled polyfills for the strict
+> provenance APIs. Are folks OK with that?
 
-I did a git grep and the KUNIT_EXPECT_LT() just calls the parameters
-left and right instead of "expected" and "seen".  Expected is wrong
-for LT because we expect it to be != to the expected value.  It's
-the opposite.  We're expecting the unexpected!  It would be better
-to just call them left and right.
+So you'd not enable the lint, but fix all occurrences? I think we should
+still have the lint (if it's too cumbersome, then let's only enable it
+in the kernel crate).
 
-regards,
-dan carpenter
+---
+Cheers,
+Benno
+
 
