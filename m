@@ -1,131 +1,142 @@
-Return-Path: <linux-kselftest+bounces-29148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 528C6A6327A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 21:29:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 281ECA632EE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 00:22:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BAFC18912E6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 20:30:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B2A73AEF46
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Mar 2025 23:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E113A1A00F0;
-	Sat, 15 Mar 2025 20:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8221A5BB8;
+	Sat, 15 Mar 2025 23:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="mFXn99Ra"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EFVB5mBM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B7B199938;
-	Sat, 15 Mar 2025 20:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E260A1A3A8D
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Mar 2025 23:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742070587; cv=none; b=cfnbTiwvJh9kLk3zhNDG78xfeHEAF3drmMRCVahoH/0/FuLnpnL0iXAY7iHx3Tk1CUdmYfCegwyqm07RhIalSTxvbl8Fx68RGixFqk7dd/Y+VEmNM6zhhnwMtXMIw4rrlHbpbgRlva5ne27LgDNP0wCJvcgox9Fky+w/p/sCIJQ=
+	t=1742080968; cv=none; b=pL6PW/kfjyuG99Xkm+b3ZrxKi6JJ9y9/x1d8vPuI1GQhovVG+T7Oc5Q3OuIyxtrIMFir/T+8mkDbEr2GQFnTHB7XcgZs8IKw1k96sxhfHymzaIgZB1545B3LFxSn552Bu6fz6V5/e8cfDZFCcU2wO37xeCoosmhPVkGD7CZ2uY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742070587; c=relaxed/simple;
-	bh=bESWuJ+Itq4oJ3aJ397TS7MjXGGRBg/L2tRAqVurZDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RxB6hooOSISDUw0pL59WzWZYXgjGorGSNBRxAREDwW+K/Iskkh0p6mNgxnoDBlBE9T4BViYa+bp3Gut1qCj+NSwb636Q9A8wmT5LrhQqf+bae0Qa4GyH1akm6jIP6ycnvx+Qlpkix07/+azHLLSpyK9j5QIbgWRhSPtoAy/YLuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=mFXn99Ra; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Content-Type:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=mAKXnqJdcH8Ooug16GzPe92yZG0ErD4qlNwxhet2A7Y=; b=mFXn99RaEtHUudZVObKDbdlTmq
-	FBMJCw+/XUVWe7xPrLtGWFsAwhPIe60dqcnwi+EelHfoD77tnpxoeUymYy3VBZ7P1+FRNN2BhNb7F
-	CTWpTUoIGFSBoRA2B8lowtdw+Zqouw8+WVbz5Pp1q6/GHjFJ6/AUmWlBCwiWTzbavYBz2JybdFcc+
-	l9MKQNFyng6a5XVsnfqK2q8OOFkX31Eo8r9HytnlNaDGOmzYm35eJMC1UrAN8+Fbiow+P4EIvacDh
-	LeUY1lAAWkmNpXPJH+w0rhxk3wdmt6wMiFp+MFIjHXNvbL24jm1ojbn9CnGFF4ebP8a0hDj+S6YJ6
-	57ChAsKQ==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1ttY8d-00HXBc-0q;
-	Sat, 15 Mar 2025 15:29:43 -0500
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Su Hui <suhui@nfschina.com>, shuah@kernel.org, wine-devel@winehq.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-janitors@vger.kernel.org
-Subject:
- Re: [PATCH 1/4] selftests: ntsync: fix the wrong condition in wake_all
-Date: Sat, 15 Mar 2025 15:29:43 -0500
-Message-ID: <1961744.6tgchFWduM@camazotz>
-In-Reply-To: <f86c7af5-9e7f-41a0-a357-6a356fdeb0b9@stanley.mountain>
-References:
- <00d17d6d-19c9-4431-a3ac-c0f767c533d4@nfschina.com>
- <2051560.PIDvDuAF1L@camazotz>
- <f86c7af5-9e7f-41a0-a357-6a356fdeb0b9@stanley.mountain>
+	s=arc-20240116; t=1742080968; c=relaxed/simple;
+	bh=yNaoFHNvsRgrKLIIXbY1OLgrHQAve7Ng1Ej6GhX1j/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gqlMnn2K0NhpO7DABKv6Bjsn4xB8WJKhQq2eH3vJG0hC71+poGpoipO7n5SsaAyjkMscT7DiAs/3sA3o+zHvbhkY6WUrpb57R37IEuttg0lhA7VYHEy+SqxTHVIyk9zec819kvK0l/hK/htOfZ6NtTr7IPz86jYb1Ko8gsEqLWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EFVB5mBM; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54993c68ba0so3479493e87.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Mar 2025 16:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1742080965; x=1742685765; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EefKwIQk/c3BzKg46/rkLNUtfV5M7e4WxDiNJGdBaK4=;
+        b=EFVB5mBMqJtdcY+i2Xpu6vGS6nZNLKupBzMlN1wH5ASUYoFVv3FxHdyZSEUKWqpQfV
+         1aIbVUrym2YHK4nSwbES05CS4qxqDUTmI30D6Jy//m1j6Lrz+ma05l/bNdyeuZJhhArE
+         /wzH90Okn9rKuxfueMigMFctpv/T0biQUUjv83amYlIiJAGJh96VLhgEO9S1SQxvPwzp
+         iXxuOOPJtU8kIdJKyXisAZvnZxERWcMyaiDn5Dcylu0TifBz3zYROT/FZlCObR++FS9s
+         +zyKUGybzOD0USyAeGM7sr8RZJoq+GhASGUQUiYdPcfw1HTSODRdbwRhlp3n+n/P5VEK
+         LVJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742080965; x=1742685765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EefKwIQk/c3BzKg46/rkLNUtfV5M7e4WxDiNJGdBaK4=;
+        b=od8pVjoRSVJJVzWQtHt86x+yfkINrZxFwfwqK3zanhsZu43OooyEeZ84xIIdgGV2y8
+         IJDW7w0GPXIpla/apaPByWPQhrBpfbKzDR/+ITltz/FWuBbiDAnvZmnU4zj7FtfFBmQq
+         f3W9VWUcd/uDyAo2RO2tUAzonu7EMcHLZy81AGBCl0EuKn0KtZz+oUSjI0kdoZtouYa+
+         GRytOhBYGOEtPBhErvI0b0rMApoBkikQvJQACHTD6H9/5ey6v4stvvMbydmXma7pptRP
+         te9evnon5QN/EVoy0mjaz5nXqx7blERx3FV4EelK5n7TyMiq6Rhq8AZFzdL+FcShJ+UD
+         kVxw==
+X-Forwarded-Encrypted: i=1; AJvYcCVrw2DCm9/PSeTr3bTO8/Mltj00ajGeAH5Fi02+cSl3v8MAZ8MkyhGCxQ4dHTNix9VcKWodpyO48JBsRixx58o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/ZRYX2+fxfXh0zNYL+OFBGAeWn56tB+73fjONAokzaqSVhMWP
+	chGqYDmwykDaPZCpyGxddVu5e3LwpCQM8/DlLJ/n2Kt/0dN082s/WAD6YfErD6C4U3+tZ6GxqnQ
+	kqfgXxn/wT1EkvzT2j6/1xJJNQ2gCz6X9cLU=
+X-Gm-Gg: ASbGncv6Aci5V2ArOC1SgPgIGxQxz/IfpU+1hWPyrrK1+cSdaCGn1Gn4dhrDzienOGR
+	B1DqYc30qc352imtlpu0ZNO7J/dHYivses6FUhuXQGIY4M73vWACwXzCu4Ok6NIsbg4mH+k/L0j
+	+JDz8Fdsg9gvEmEiNSsvfpzLc=
+X-Google-Smtp-Source: AGHT+IFqXySBquMSOg3NeTSpFmh8r8wJRIdEXBekJ8c/KO3XV5blNMGC43iqUJn5zChXka+JzIh80b8UmBY8qMw2EuE=
+X-Received: by 2002:a05:6512:ac6:b0:545:225d:6463 with SMTP id
+ 2adb3069b0e04-549c3989a09mr2309850e87.42.1742080964693; Sat, 15 Mar 2025
+ 16:22:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+References: <CANDhNCoueki=keYNcNr4eXqgLFPh3VupDJC0hFqxm4FNKfGzYg@mail.gmail.com>
+ <20250315003800.3054684-1-jstultz@google.com> <877c4q5c9i.ffs@tglx>
+In-Reply-To: <877c4q5c9i.ffs@tglx>
+From: John Stultz <jstultz@google.com>
+Date: Sat, 15 Mar 2025 16:22:31 -0700
+X-Gm-Features: AQ5f1JqZOBd0eK-IeI1kmw23yAU3IShwRh1wrzTVoSYG74q1BSpXea1M-rNonf4
+Message-ID: <CANDhNCqzHYJfaap5-TYPmtbaPm6AkS85hKdeSnprhEqMCAYcPw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] time/timekeeping: Fix possible inconsistencies in
+ _COARSE clockids
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Miroslav Lichvar <mlichvar@redhat.com>, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Saturday, 15 March 2025 04:39:46 CDT Dan Carpenter wrote:
-> On Fri, Mar 14, 2025 at 05:13:50PM -0500, Elizabeth Figura wrote:
-> > On Friday, 14 March 2025 05:14:30 CDT Su Hui wrote:
-> > > On 2025/3/14 17:21, Dan Carpenter wrote:
-> > > > On Fri, Mar 14, 2025 at 03:14:51PM +0800, Su Hui wrote:
-> > > >> When  'manual=false' and  'signaled=true', then expected value when using
-> > > >> NTSYNC_IOC_CREATE_EVENT should be greater than zero. Fix this typo error.
-> > > >>
-> > > >> Signed-off-by: Su Hui<suhui@nfschina.com>
-> > > >> ---
-> > > >>   tools/testing/selftests/drivers/ntsync/ntsync.c | 2 +-
-> > > >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >>
-> > > >> diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
-> > > >> index 3aad311574c4..bfb6fad653d0 100644
-> > > >> --- a/tools/testing/selftests/drivers/ntsync/ntsync.c
-> > > >> +++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
-> > > >> @@ -968,7 +968,7 @@ TEST(wake_all)
-> > > >>   	auto_event_args.manual = false;
-> > > >>   	auto_event_args.signaled = true;
-> > > >>   	objs[3] = ioctl(fd, NTSYNC_IOC_CREATE_EVENT, &auto_event_args);
-> > > >> -	EXPECT_EQ(0, objs[3]);
-> > > >> +	EXPECT_LE(0, objs[3]);
-> > > > It's kind of weird how these macros put the constant on the left.
-> > > > It returns an "fd" on success.  So this look reasonable.  It probably
-> > > > won't return the zero fd so we could probably check EXPECT_LT()?
-> > > Agreed, there are about 29 items that can be changed to EXPECT_LT().
-> > > I can send a v2 patchset with this change if there is no more other
-> > > suggestions.
-> > 
-> > I personally think it looks wrong to use EXPECT_LT(), but I'll certainly
-> > defer to a higher maintainer on this point.
-> 
-> I'm not sure I understand what you are saying.  Are you saying that we
-> should allow zero as an expected file descriptor here?  I don't have
-> strong feelings about that either way.
+On Sat, Mar 15, 2025 at 12:23=E2=80=AFPM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+> On Fri, Mar 14 2025 at 17:37, John Stultz wrote:
+> > Here because we did not accumulate anything, we have a window
+> > where the _COARSE clockids that don't utilize the mult*offset
+> > value, can see an inconsistency.
+> >
+> > So to fix this, rework the timekeeping_advance() logic a bit
+> > so that when we are called from do_adjtimex() and the offset
+> > is smaller then cycle_interval, that we call
+> > timekeeping_forward(), to first accumulate the sub-interval
+> > time into xtime_nsec. Then with no unaccumulated cycles in
+> > offset, we can do the mult adjustment without worry of the
+> > subtraction having an impact.
+>
+> It's a smart solution. I briefly pondered something similar, but I'm not
+> really fond of the fact, that it causes a clock_was_set() event for no
+> good reason.
+>
+> clock_was_set() means that there is a time jump. But that's absolutely
+> not the case with do_adjtimex() changing the frequency for quick
+> adjustments. That does not affect continuity at all.
 
-Yes, my apologies for the ambiguous wording. That is, EXPECT_LE looks more correct to me than EXPECT_LT per se.
+Oh, good point.  I wasn't thinking clearly about the semantics, and
+was being a little paranoid there (as most calls to
+timekeeping_forward_now() have clock_was_set() calls that follow). I
+suspect I can do away with that bit and avoid it.  I'll respin later
+this week.
 
-> Putting variables on the right, Yoda speak is.  Unnatural is.
+> That event causes avoidable overhead in the kernel, but it's also
+> exposed to user space via timerfd TFD_TIMER_CANCEL_ON_SET.
+>
+> I have no really strong opinion about that, but the route through
+> clock_was_set() triggers my semantical mismatch sensors :)
 
-Yes, I certainly agree with this. I wrote it this way in the first place because I was following some other example, I forget which.
+Yeah, it's a fair point, thanks for raising it!
 
-> I did a git grep and the KUNIT_EXPECT_LT() just calls the parameters
-> left and right instead of "expected" and "seen".  Expected is wrong
-> for LT because we expect it to be != to the expected value.  It's
-> the opposite.  We're expecting the unexpected!  It would be better
-> to just call them left and right.
-> 
-> regards,
-> dan carpenter
-> 
+> > NOTE: This was implemented as a potential alternative to
+> > Thomas' approach here:
+> >    https://lore.kernel.org/lkml/87cyej5rid.ffs@tglx/
+> >
+> > And similarly, it needs some additional review and testing,
+> > as it was developed while packing for conference travel.
+>
+> We can debate that next week over your favourite beverage :)
 
-
-
-
+Looking forward to it :)
+-john
 
