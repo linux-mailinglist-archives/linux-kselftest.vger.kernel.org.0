@@ -1,144 +1,127 @@
-Return-Path: <linux-kselftest+bounces-29153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12B02A6343F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 07:21:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2811A635B0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 13:54:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 985757A8C22
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 06:20:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53BC6188F662
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 12:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D951922FA;
-	Sun, 16 Mar 2025 06:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67F31A83E2;
+	Sun, 16 Mar 2025 12:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b="Idlh1j9U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzJ1ozKn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF9C18FC8F
-	for <linux-kselftest@vger.kernel.org>; Sun, 16 Mar 2025 06:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A581A3166;
+	Sun, 16 Mar 2025 12:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742106042; cv=none; b=nkVeLx4mdKoW4Uw9jEUJrwmxTzIgWZLXG1jCYqw00eK6E241EYK0S+vutAytjUZbxIDfHr8WppUs8wIIfozULT3m8fhOILwkaCTnllru05gcCK3/RTXp8F/adaUiKKEYGQhddk5xPO1jCuukpQ4s7oIyJEdrPUs62P2rW8ZYNhE=
+	t=1742129687; cv=none; b=ZxuiMdypxbs/nQPX0Jxx4td7FWOyrZ+pdwMq+44cxnwVGJ8bRIaenTH2vJPDADjgjU4QnwonXO33StdQ/SzA8uPi11bJjkWz01rxp4Mdwk/qDiOzvxXTyc+4xgOtYbnW1ZfjYDgaa+V4TC0oGQiEMyiYUrcqJF7PGaJgJDDWRxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742106042; c=relaxed/simple;
-	bh=YC0aFKOl5srVCaDj9HbucZ/4B5f/InwUtG32FScc5k8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ihjjSRc2KbgBxpp7jjZ3KgFQrLBKTkR+FmmhFuVjaBK3OUuuFmUQU8ZV+6gpgjck6moCdbBRvpq0EiXtEfPqY92INxiNM/D8tLFFfCw/cFx+EK4/vJg8JYog2VqXXMWqM9wzryut66RF9in0x/XmaGgFfpol8xuh6sW145CjEY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=byte-forge.io; spf=pass smtp.mailfrom=byte-forge.io; dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b=Idlh1j9U; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=byte-forge.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=byte-forge.io
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e5372a2fbddso2595754276.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Mar 2025 23:20:40 -0700 (PDT)
+	s=arc-20240116; t=1742129687; c=relaxed/simple;
+	bh=la8iWv4aKLDOW0r7llYW7xIb+W8ddGrURAKkkeCgcDE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rBzYuUnF0zwciAfol2TuLr5ae7KTemmsk6LnurUkY0+jrGi2rYrbJ3DBYmCoawDkL0jHm5ecssn+7crO7UB4DcuSl5Au2E0AwuDJSPn8zNfO2WNljVhMVW1EdR3IXypm+A598d0bAWeA3I35jK5MUPdCaMKoYezzFEyGg50sofI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzJ1ozKn; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30bae572157so36825201fa.3;
+        Sun, 16 Mar 2025 05:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=byte-forge-io.20230601.gappssmtp.com; s=20230601; t=1742106040; x=1742710840; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1742129683; x=1742734483; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MI9KVcwdadVIoPwUOMUiJkuxM0R26yz4AdH6Inso0Ms=;
-        b=Idlh1j9UM2XFdknrrX9CJyCGNPmZDFjHoEvystlHzOJiE9N8vVqu9y1RQ+bgyWtYDE
-         h4O4KDp7ltAPDxN6GIzatSOppsK7q9SuURvzfrY8MOhjh3D8XCmRT5dBWlgkvHiYy1gm
-         4pjlyZMRfpvDZ08yNgZlIsqlNKboiOvEgFFG4UqLqK61AADtFQj7slzqCNWJWCVxO+ad
-         ko7sntgy5yjIKmWbusoGzC6eI8NfhOne3GBTp8oCsKaPAs6DrbQ8fVXahj0wCyrj7keB
-         WCC8KzAi7EkxH1VFhOsiAUvn7Ujm75w+2AwlQLOKnMUaOnjj6RxyYtj8MGinfvlWFjsy
-         2mpg==
+        bh=m72Ysl4ko4hY5HZYX4qrB+VwpHKR3dQw5Vbh4xYJNfA=;
+        b=LzJ1ozKnTBK3Nuks3YCvLJW7/Z/EgJgIT+3DVVjlxG0cEo3AjIIqyITHuNZcgCvdNG
+         ckvoPbVH7s4LIV+Eb8W42Y0RmHfkOOQrgDG7eH4m5REbTCfONTLexr77qTPXjBT0X2uK
+         C8tNEWxvNiWNIIsL1FYCr1FVPeTbabcOsEzbqkCe/KofTBJlpObvczW5n8gCbQAqbXYA
+         ni1gAVBY6EiwWvYD8SUTOyyUTfnLnUSb/4byMTJOl+yJKGzzbtD7G6yDHRKR3cbannAI
+         tYpMNrEyuHng7ezK4ZbMPndMnNYgKyY8D3dwdt2H7fe+zUTSCZTfLKTIGtg/6rrjXJ51
+         eXuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742106040; x=1742710840;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1742129683; x=1742734483;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MI9KVcwdadVIoPwUOMUiJkuxM0R26yz4AdH6Inso0Ms=;
-        b=WRPK90FrqyVih3EAETK32Yu4EdqtF3E7pdoHoP/+fP0IXExLeKKFts3I0kOnw9VMDs
-         /KwR/0QCU6Yhl7H+hshtpCXqiwCNnKCl7dGBXuT17ZFcf7lq19aj6p49lBE+2ylB+BKh
-         F0HUtMxYWXmqPngqUFhlnLlDc+MZOqX+DjS7ANhVgUQl1FmkYYyqrNUJ/PZCOlI1PLs6
-         89pmDRHzrzYY9FVcNScZAruwwE+3cYCpI2XvsPUNAoXseeSktpmDldKHE6fTWhiYa5sL
-         YXXy8ANrQf53CN2LDooTNpWh6o69JflVSoCVWFGaaCUwmy9fXeQgl0jlglgr3rBfmFQe
-         eCzA==
-X-Forwarded-Encrypted: i=1; AJvYcCXzAzPMM19gV5vld4qbSej9WSeJ9ZD4ezdUs+0WK5ziJzzXvcY7uuh4waePWEM0COXtwOxRDHoL1kQf47wYdDc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh18TeSmQJvCsdBRCLkypSkRvDUgQ/b4+upccrl6FDdRMADqjh
-	toE1NviRh9se1LyHmolKW7O150DiXh5hir2NnSdqROM/nTu8s+2Qj8FxWc472Gs9iRRW0iyB82/
-	gFMQKUA==
-X-Gm-Gg: ASbGncvasM7A0nCejt6j2tT6eBd9LXF+DyNFyQhrK2Lje8dnM8f+43qfNtBCcj/3Qy+
-	UUP9UO0So2A0ZIpI0t2wOzvARDovFVCCeCmAU55z+juwD8KgB3/YZ4n+20YpSx9vvSBuI7rCUND
-	xVMOKXBwADxUoLAaZu19RisX6p9O+z8AfZjffPmYjdj8HlXD+YERGnC2yBw32YSjMLLbpoeMfEp
-	s4mmj78ymisc/3jVbO3s1uhVeG71qI4pFAzMzR7GoXH6S8oi+qoyWkKLsDLCuxkCE9AspD8fbK7
-	U9jcIQXlRU7/pjDj8Gc0lkfB22ToRXB+Jv5wGcYsw+axe5/QS5mBZYEm4MY3Zs2V1Jc+a6Z7Vnp
-	tLNZ5q+vnDUGOfHaddbBdlU3xSZ9x0O16zpWk9M3h
-X-Google-Smtp-Source: AGHT+IFAFL4Jrh9Si4Gax3r4dtRoG0FBSmnCiBh0EFTCVqOTSuBu2GcZmIpzrGnEwTgp1XUPTU94PQ==
-X-Received: by 2002:a05:6902:2186:b0:e60:9b80:1f82 with SMTP id 3f1490d57ef6-e63f64d1799mr10862158276.8.1742106039894;
-        Sat, 15 Mar 2025 23:20:39 -0700 (PDT)
-Received: from Machine.lan (107-219-75-226.lightspeed.wepbfl.sbcglobal.net. [107.219.75.226])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e63e53fd277sm1618673276.11.2025.03.15.23.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Mar 2025 23:20:39 -0700 (PDT)
-From: Antonio Hickey <contact@byte-forge.io>
-X-Google-Original-From: Antonio Hickey <contact@antoniohickey.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Antonio Hickey <contact@antoniohickey.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 08/16] rust: kunit: refactor to use `&raw [const|mut]`
-Date: Sun, 16 Mar 2025 02:14:17 -0400
-Message-ID: <20250316061429.817126-9-contact@antoniohickey.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250316061429.817126-1-contact@antoniohickey.com>
-References: <20250316061429.817126-1-contact@antoniohickey.com>
+        bh=m72Ysl4ko4hY5HZYX4qrB+VwpHKR3dQw5Vbh4xYJNfA=;
+        b=gv99bfCGwAGJvDkbgP26SE+bgfjfIlIBiWAk4lA7pto2km5SXytDRbzz2cgvIWVZg3
+         mortDva990284TCukzWVZqbC6UA6J9eujJxQe4UUmamZ5T6c2DwL3X6s59MxmqpFnyCK
+         +5fFqA9U0rURglxrQyNnG22fLpMebPbqf1SxJtW7AQVMeV/7wyLh7iZeLlMD5muGFGwy
+         f68WXrtx0UMsC9/vB/+Q81RmrfR2WmVJq3+ZHI0JirmOEr4NQyf80gEqxwXregLK4uE4
+         VzOnFI2esBGU7/vfYlZsbzRhxkBBzVAhEqx9DOWiAN5l9tXIhQ5sp/yjFkCaDdjn2uDS
+         p6Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2dhLCV85wGtXu3yEePIZK4bNWZvQxnPh7dq8U/gHcndt/CliEvlUUjNCUhshx37/KElPv/pI/LA98Vi4=@vger.kernel.org, AJvYcCV/U53Oo/PSiZEmtbzR/nK5raK8kyocbCWtZjLSLRFjh51qO/FpKtRt2ZmXOZssHRlNKuOkBpzypY5G@vger.kernel.org, AJvYcCV6pxQlOQzoiEB53tuH+MlSNik8GKAQmhyjRYJnDyqOkvuia3x6olG6EpTNdm30Q0ee3Nx6fHYUborDlkb5GUeQ@vger.kernel.org, AJvYcCVID1K3veLYfT7XuVDwnywSuxbs3rcH4z59WP4InNShqnwi9Fg2O3XHhJtBNUchF5uGoOf7ueITjqjcpYNN@vger.kernel.org, AJvYcCXLk2pifFd39Im7duj+7xtz+Y30iLga6qVyU+OYs5aEZlbO8AuCofT+v+SwiEOy6UgwmUzcxf+2MVf4@vger.kernel.org, AJvYcCXVfAkKd75cOvtRCJPaW3d+dGAwIFhMTlnppWRoWZwGOHtgG0v+Hzrjan2AVHTyIz+Fl223DGJbtyQWPsIOBXo=@vger.kernel.org, AJvYcCXaS39X6QebQQr7K6IGzJgLEY6n6/ZkKygkXmym4LPwBtbV2WYxj6aPMrhbJNNRBf2I5n/JVgYfh0LM2Mi2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy521CC1DqjXoztkQSjYqGM8frgwcgske38ps3FBv1OsbgBDDo
+	T7mTmhYAov8aq0WlPE9/Xe9hrn0BSLQFJn6S/ESvA+xGflocp8PtkAhwWLslq7hmQ7tKbprg49t
+	0C0cx5qUEeJQ0r+6rzjOFr0jtOPI=
+X-Gm-Gg: ASbGnctES8i5UEnZ4poeOrMM8Kk7QcpYB3zmDMCjL63nAD7esNbwhzWMEM1xx2kMDjD
+	5sAOwTdW2jpQ6bPSTyFk87z/rp/1jR07aVq2PFWX9TJW2nzmQGV2VfZyupIcwIww3qT6BbXhrtz
+	EqhoI01rDkxNgc2dnBzLsB+fxtVZzPYaCuZGFci2KuwmNIihMex9HpyKpy+lmF
+X-Google-Smtp-Source: AGHT+IE6iBXWS50nKSAYwo5FCXBdnhbNHVXtxORgs/RwlrM4JXF7GGDHtXE0EnpBEkJ1e6Y0/wbpMEdDeSo/iTCQCcY=
+X-Received: by 2002:a2e:a98e:0:b0:30b:d17b:269a with SMTP id
+ 38308e7fff4ca-30c4a749070mr42282761fa.7.1742129682837; Sun, 16 Mar 2025
+ 05:54:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250315-ptr-as-ptr-v4-0-b2d72c14dc26@gmail.com>
+ <20250315-ptr-as-ptr-v4-6-b2d72c14dc26@gmail.com> <Z9ZbNY2XR10vt3Ro@Mac.home>
+In-Reply-To: <Z9ZbNY2XR10vt3Ro@Mac.home>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Sun, 16 Mar 2025 08:54:06 -0400
+X-Gm-Features: AQ5f1Jq4oEInzEsIP6AyCUxxntLRsaKIunWuOaZj1h8pyzZQkrJrV4gfLymNygE
+Message-ID: <CAJ-ks9ntUhnD2D1qUCosrKk2bEYHXFDLEanznpNn51d6CbD6aw@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] rust: use strict provenance APIs
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replacing all occurrences of `addr_of!(place)` and `addr_of_mut!(place)`
-with `&raw const place` and `&raw mut place` respectively.
+On Sun, Mar 16, 2025 at 1:01=E2=80=AFAM Boqun Feng <boqun.feng@gmail.com> w=
+rote:
+>
+> On Sat, Mar 15, 2025 at 08:17:30AM -0400, Tamir Duberstein wrote:
+> [...]
+> > diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
+> > index 40d1bd13682c..f9459694cbdc 100644
+> > --- a/rust/kernel/of.rs
+> > +++ b/rust/kernel/of.rs
+> > @@ -22,7 +22,7 @@ unsafe impl RawDeviceId for DeviceId {
+> >      const DRIVER_DATA_OFFSET: usize =3D core::mem::offset_of!(bindings=
+::of_device_id, data);
+> >
+> >      fn index(&self) -> usize {
+> > -        self.0.data as usize
+> > +        crate::expose_provenance(self.0.data)
+>
+> Even though of_device_id::data was defined as `void *`, but in Rust we
+> use it to store index, see kernel::device_id::{IdTable::info(),
+> IdArray::new()}. Hence we should use self.0.data.addr() here.
 
-This will allow us to reduce macro complexity, and improve consistency
-with existing reference syntax as `&raw const`, `&raw mut` are similar
-to `&`, `&mut` making it fit more naturally with other existing code.
-
-Suggested-by: Benno Lossin <benno.lossin@proton.me>
-Link: https://github.com/Rust-for-Linux/linux/issues/1148
-Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
----
- rust/kernel/kunit.rs | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 824da0e9738a..a17ef3b2e860 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -128,9 +128,9 @@ unsafe impl Sync for UnaryAssert {}
-             unsafe {
-                 $crate::bindings::__kunit_do_failed_assertion(
-                     kunit_test,
--                    core::ptr::addr_of!(LOCATION.0),
-+                    &raw const LOCATION.0,
-                     $crate::bindings::kunit_assert_type_KUNIT_ASSERTION,
--                    core::ptr::addr_of!(ASSERTION.0.assert),
-+                    &raw const ASSERTION.0.assert,
-                     Some($crate::bindings::kunit_unary_assert_format),
-                     core::ptr::null(),
-                 );
--- 
-2.48.1
-
+Good point, thanks.
 
