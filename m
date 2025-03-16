@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-29157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7CFDA6363E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 16:28:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE478A63640
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 16:29:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 288B5188903A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 15:29:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72CF97A2D52
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Mar 2025 15:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92CC1C84A2;
-	Sun, 16 Mar 2025 15:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9185C1C84BE;
+	Sun, 16 Mar 2025 15:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="eVbtqxxv"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="pVhHSZvS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2047.outbound.protection.outlook.com [40.107.22.47])
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2044.outbound.protection.outlook.com [40.107.241.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F000A4430;
-	Sun, 16 Mar 2025 15:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A331AB6F1;
+	Sun, 16 Mar 2025 15:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742138927; cv=fail; b=J3R1QrqSwpjutQjQUcpltpdLxLeG+rNbQ632SAyjG0d2yAaAM/gH1nokUAWUPtQXdo3hZWyQNCjRQfOHZhVDK99Vo1bMnRBYk+p5eE00QGjQ3O6rbCOOO+/gM/6st7YWjvA5CQwSqjbDr3rXRjs/tolYSeji+45r8O56La4UuAU=
+	t=1742138934; cv=fail; b=bwJxbzULx+ZRef/yTvkoLxja0pLi9vmRBNFsvlJuBo3I9skLk2fdm84f2UjKz+c5SVTHjzzJRKnFp6CQ11ezWD0ChQGROOV1cku3DKbtfOSObNc02h5uw0WRHXAooGE87iw5FrBlhKVETJdwna7gLoEn/r+ve0T+MpBAT6P2TMo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742138927; c=relaxed/simple;
-	bh=SLlQPPM9l4ELjeviRVeirRGq1RHs7hQgWbMdg2ytW0o=;
+	s=arc-20240116; t=1742138934; c=relaxed/simple;
+	bh=6NwKGOPJ8asxsqOZA0hgsCIQXbsdyUNcBRhPazaM7Fg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b0Rmo9wZdPSxEZO58xsyPQeNIPDkmDgxUsslSTaqfqChGQaJprrICPAmWkVWJ/2weeEHqtggCvDzyEnp9OVsGdXokZmzVanmPN96XlHRghaOJBYQy9BS3XkChm9S+LKtU2gnojP+q+uZ5BQHSO6MZP8LR7ko9xyWCH3/MQ6fqWs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=eVbtqxxv; arc=fail smtp.client-ip=40.107.22.47
+	 MIME-Version:Content-Type; b=hP1Ha5kL6smApBdr3p8SNzytSv1q8hPj0TGlUnwdKxV01ZVhXelLPBTKZU9mLJwNvdLz3lHlY8e/BtloLd+GBy/ErTBktY/zXRHhc7tBPXFSY8aGAtRep1DeisObdFo1gyX6yDA46jUmJuHfgqia4AvdV86M8/OCt51YXSbwrcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=pVhHSZvS; arc=fail smtp.client-ip=40.107.241.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TP3nH6I5z2Qa6y1rdLbXY9n+rFrH9UNN1PfFoS1zynDm2Jes0EFtjGF32PdIeXKTA/E4EKU5QG6xRgT9YQ3+I9ymAOccnk2xrhNVYwHDu+n7PRcQlLayOprHhcXW68AT8wiEQE9ABpP4vsilHhzMvCjmGMBW79+slWtalmQCE+qM2Afu+vyhMlz7bqduwwMKiaRK0IYlSHPlAiCEY5NPQbdqMEoNA48OED6QV8rauE9DXk8tuon2g0K3Vbqf3HK69KAjXk3pRUxf8FTdfgSNmfRy1s//l1vzKYlM8ZHedZqsBVlkYSglDHalNpntihDtGSkVtItRUur6Wp1K4qlrLA==
+ b=IBKQp+EF9eyc1/zdB00wLHEf6chvDMSUX3IV/wfLg1p7l3unii8Wsjirn5mi2vdePUg5TE3vKxgS4Ng/Owr/43hLk7oFGd/8kkr8GBLVVZ5CsO+koMBmrLnUKh9aFkVsXLAVkMgaZNOJNlgJkVs4UZHJiWCEIWWVRCCzgXk7T9oo7Xzrhr9T50dDzUuUQtCiMzBubCXKMPGtPMoVXkd+hvcmKIvkK2FCcgxYTUXAj1Gsh+XIpDMQr5YQP0nB7h99fDc4p1zXUIxHbh460lcCCaSuShe3qW+06+aW0ZWjqEjEYMuIinWhtqE+3a3wDVQ1IqF/+sAPAnDcSp+cnXYJew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fu1vNLJQ0IL12OXbhRVUKOTHsuAkzV/9kCvwSC71tpo=;
- b=U2tdK+MH2IUI7A1FgYo+2QnFouG/tCZiystrRaReXs1eF8RjPmhBSeoXUaqVs131WfwaVDna9F17uLjIZ25nfBCy4WfmK/9nIcNap1u0VDLwU98dgmg+lgzscdrPkaPBLuzy+DXNzWrTk1FtEIaRBxQWuoiTn6pfHYNDLLbfGffBlzw8S+DV9DPVYnJrqt2wBl617lFvhD4FwcQOR4sQK+J83p811YoCT5HATNJuG/CxCXTtgvHh9RkNoDtST+P269+YW+PRfGJrb++hj0hB7+3P8JiBbkCSZ7loBflMZTcLnxvNXDV6XvbZkmbAgOGbDRtvARdSnAQEAVw+waL3XQ==
+ bh=LmxEfDSqhYSMcPij2RNNEIX0ObyhqtzoghHADLcJBEU=;
+ b=y0BDsWrsQ7g+tPwdI3gtr9WfgZZ+gyPj5zJGOc/SHn1SMszMUNnKlDiUimJWccx/c42o8KtoWU8AVp77WnYykxwFFkfKO4r+TGNScVVr1WP6pNqwVbqx0LmMreVSMDJtEDxbuz4lLNQqcqxNOv7qfUP/5tRHdRM+1G1jO3ub8/l67SBr1hCtj0tvi4XYWbtEUGc6lxHrBBJK6i2Xn/ZswyteJnnT8pDo47FHcPtf5KmMrp9wY+kblPO/kCAoAqNMvxVHIZGtMxkYhIJF7+0YZZjE0s3CiTD4F0nVHj7gsgSQEFCnAiTI8aSNpmMhYVzYNABPU5IFULEgq9h+eoUhQw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.6.100) smtp.rcpttodomain=nokia-bell-labs.com
  smtp.mailfrom=nokia-bell-labs.com; dmarc=pass (p=reject sp=reject pct=100)
@@ -46,18 +46,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fu1vNLJQ0IL12OXbhRVUKOTHsuAkzV/9kCvwSC71tpo=;
- b=eVbtqxxv/N7TPaTkkoyCJctO8iWhml9uaPxl+JV0huzqvSnG57we0nTUCx0aG7KKvSsL0XOq8QNQCKMXu2hMYGChnNdDZRpWHRgQZ9G3ZgJ7e+ACbKnWX+m9IBwu6WOV7tR/yw1RXfNBO4rB9+0l4iY0RFUsYndnVHjNhTUFT3yjGfjKRIewGQ0uBF/uY9HHzjIf7FT55u6cmR2vB560dUkRfziMbSFOoN+QPc6gt7uyifFT+nRd0js6dnfOgNovWqshUu1T1YL6IXVsvHY1rVosIjqH6QqJXZVhiCmxigK3dKrIU7CMNe/uz706kBfyD6pxtI22c0qXPcoXjavJaA==
-Received: from DUZPR01CA0150.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4bd::7) by DB9PR07MB9888.eurprd07.prod.outlook.com
- (2603:10a6:10:4ca::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Sun, 16 Mar
- 2025 15:28:39 +0000
-Received: from DB1PEPF000509F6.eurprd02.prod.outlook.com
- (2603:10a6:10:4bd:cafe::c6) by DUZPR01CA0150.outlook.office365.com
- (2603:10a6:10:4bd::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8534.28 via Frontend Transport; Sun,
- 16 Mar 2025 15:28:39 +0000
+ bh=LmxEfDSqhYSMcPij2RNNEIX0ObyhqtzoghHADLcJBEU=;
+ b=pVhHSZvShJebrewOF6RvLy/D+XN0/4GQc4YllqboMKvOQ0gc/V3YS2fcID4bwE1Bbukcw3wG+Dx1zk05DJ7kamE+lS6WlFJI2R7YFt34Pd/ozh7UwjbW+aLmtGLUdBowXcwtMS9U/R/I2pL/g+TrquGETQi9rL/KsZVKpNwdPxN1jstbNASBEWDc+9NEhmE9jhuswJoj6r3VUuwBpl+CAT081NF8herg2pdPe+7Ha/pjax0mnamuLO3YSr1fay7fWdAEmTIdti1RIeZl0u9gQTHglbdRuP0uV3Leka2K0hKGv6I9NF/uZYNu1tnd2P9O+KPp17yPlsgPbLnIU8QiYA==
+Received: from AU1P273CA0007.AREP273.PROD.OUTLOOK.COM (2603:1086:200:64::7) by
+ DB9PR07MB8587.eurprd07.prod.outlook.com (2603:10a6:10:306::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8511.31; Sun, 16 Mar 2025 15:28:47 +0000
+Received: from AM4PEPF00027A66.eurprd04.prod.outlook.com
+ (2603:1086:200:64:cafe::84) by AU1P273CA0007.outlook.office365.com
+ (2603:1086:200:64::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8489.18 via Frontend Transport; Sun,
+ 16 Mar 2025 15:28:45 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
  smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
@@ -66,12 +65,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
  receiver=protection.outlook.com; client-ip=131.228.6.100;
  helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
 Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
- DB1PEPF000509F6.mail.protection.outlook.com (10.167.242.152) with Microsoft
+ AM4PEPF00027A66.mail.protection.outlook.com (10.167.16.91) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8534.20 via Frontend Transport; Sun, 16 Mar 2025 15:28:39 +0000
+ 15.20.8534.20 via Frontend Transport; Sun, 16 Mar 2025 15:28:44 +0000
 Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr711usmtp2.zeu.alcatel-lucent.com (GMO) with ESMTP id 52GFRT2t000613;
-	Sun, 16 Mar 2025 15:28:47 GMT
+	by fr711usmtp2.zeu.alcatel-lucent.com (GMO) with ESMTP id 52GFRT2u000613;
+	Sun, 16 Mar 2025 15:28:52 GMT
 From: chia-yu.chang@nokia-bell-labs.com
 To: netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
         jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org,
@@ -84,9 +83,9 @@ To: netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
         mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
         Jason_Livingood@comcast.com, vidhi_goel@apple.com
 Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v9 net-next 1/3] Documentation: netlink: specs: tc: Add DualPI2 specification
-Date: Sun, 16 Mar 2025 16:27:15 +0100
-Message-Id: <20250316152717.20848-2-chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v9 net-next 2/3] selftests/tc-testing: Add selftests for qdisc DualPI2
+Date: Sun, 16 Mar 2025 16:27:16 +0100
+Message-Id: <20250316152717.20848-3-chia-yu.chang@nokia-bell-labs.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250316152717.20848-1-chia-yu.chang@nokia-bell-labs.com>
 References: <20250316152717.20848-1-chia-yu.chang@nokia-bell-labs.com>
@@ -99,242 +98,252 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509F6:EE_|DB9PR07MB9888:EE_
+X-MS-TrafficTypeDiagnostic: AM4PEPF00027A66:EE_|DB9PR07MB8587:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 91572bfa-3b21-4b8e-dab4-08dd649f3a25
+X-MS-Office365-Filtering-Correlation-Id: 83472149-a17c-4f22-ac98-08dd649f3d99
 X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013|921020|13003099007;
+ BCL:0;ARA:13230040|376014|1800799024|36860700013|7416014|82310400026|921020;
 X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?ClfgQNY3yKf2iU9QqGwEWnnFpROpeVX1uO9SGbRclyb4ptyhmDNh2Xf+3pXR?=
- =?us-ascii?Q?UMqt8gb8K/38q7p9p/CEH03JasAgcQ4wWu3NqaC7mslkm3GwH4Ew3zHlF1k3?=
- =?us-ascii?Q?jFt+bS/SgOZYxQQs7fduvOPlsnELnZ9ssfcMA1XNQvZB7ubGQAqxJz2Vjgkn?=
- =?us-ascii?Q?Pu7lcAFNqEMULpD6uB+KpOwu7JYjQM1mui4XolE0gDpPvWq7R6ASCe/idlkU?=
- =?us-ascii?Q?b02jMMtI+YFJFUP9Xg4loyI6LAiNlQEZTtrxs3G0OK2HZLrmetkMGPYyY/41?=
- =?us-ascii?Q?Cef+C/HJ2q5CZnt/5tLnjUnZrzFUR5XVDYpVtOYjlQmL9NTVEpFUuMno6Hfh?=
- =?us-ascii?Q?eoWXZGsyyd6/yJqAtt1GmTrXTo4fGomaG0Ro3UBJhTXFsMDv1QT2Wc3my/Wb?=
- =?us-ascii?Q?MzaNrXOnLtNWhgI1OqiWF8uOQ5tPqgVVCFv1Y2DiDbYkohr1/q1+v+uMBItG?=
- =?us-ascii?Q?skZg6LUX4N3FhUAK7m+5iUKu4z0zKAsbGLfJt5sl0j3C1F0kgrkJ3qrXGn6V?=
- =?us-ascii?Q?TjyG5LCZpsOHbtwTahZDKv0jEDZHH3iQXWgTYq9hELkXR3hWzoc38hGdN2Kr?=
- =?us-ascii?Q?X3JjgfLmIpr2PdEvooyU/AbGiW9XIKI/i6smWRPjHzAQeSWdfNswizkykXmk?=
- =?us-ascii?Q?ffgosxn68TCEa5yTwAgwnLkuQQuX6MU51HCU2zRiLpjt54IygsJD2Nv5bmco?=
- =?us-ascii?Q?I9cN6/0nODJUk4NkzUAin9IueVZXKz56RhWJ+wCOTHl2y1E+tDPdlgJgT7bf?=
- =?us-ascii?Q?xqXex6vTERyFx2iuA8LEs6LtHbe09ZKRIgPO16aK3KhyhXI/03H22a3Rx1mx?=
- =?us-ascii?Q?s9OFjJty4OPCCmVzwL6YbulMydDX2cXfpy47R89BFE1eGOyqSEmCOngLjljR?=
- =?us-ascii?Q?WMth/n2exHbIgEmFOtrdlMKnOaHSm/pk7nQscYnhT9fz3WIjFw3txxxfR+R7?=
- =?us-ascii?Q?BRQoeCSmUhYOBM3vuzI9/E94jhQ1NrcNtowK3zHBsVAUDVf1KFI+A2ndXyu1?=
- =?us-ascii?Q?rNPxKY2W72kT+o2ieAmU0UkFubN4MPsxoeVWsndb0lZA1lbpLZ2paEmemw9q?=
- =?us-ascii?Q?udVhNwo98RsEXlnXpy6tGFJjx3q+Pic2I8Tlt+bGmfNkoHsYaqvy8D+YXesW?=
- =?us-ascii?Q?QBSS1rQsDlshetpj65TcQ551Uo4t23qMpnQGA5ZgfkY3gw9o0YJAtQL1TYZ7?=
- =?us-ascii?Q?rkxMYUqUXG+2tHMTl4sfYc+yWDWbE9eGESMMLAY7Y+9sfEF555JlNKVlmL4X?=
- =?us-ascii?Q?DS6GLVQhbTsL+iL+eNEo3/uNpvbAqG4S8opXHcPXkq+OBHg0QcFe2fvSH89G?=
- =?us-ascii?Q?LRK8feQx/ST2HFC7YU35PceDssuyRbpfL+AyoRknQJSrh3sfEEWM2iu3CrDW?=
- =?us-ascii?Q?aXOzKh7cQyACrfSqUcB2r2STCgpZn31VzCNHDtHWhJGQo4vgjlhL9KAZDnrw?=
- =?us-ascii?Q?qSm6AxejDmdBCmGHACSOOkYpeEQ4bBSiRKqw4M5hzbr3flW2CTJ0FDtwUL5I?=
- =?us-ascii?Q?+Bzdx66f8pzaQtUzMIMIn0Zngz9ObgG7Dxc/?=
+ =?us-ascii?Q?7At/xdX3JfQwR2n9zYDZm/uSJVPWwcmGQARIO99O0ZWIrWniKxoIQ+DfdsS7?=
+ =?us-ascii?Q?NEommQCHdtXgZzxuYmy0Cbk5ygmjtJgVoozYw0TxS7BZpIsj2sywiwzUxX8s?=
+ =?us-ascii?Q?bRwjTFoRaJ87oQls0sDKwxMz5EgClO70WibRAYfWGSjA9B0L0Sdd7sLQhm+s?=
+ =?us-ascii?Q?+A2qWiiwUW7kZvnACb2zahkxw5Xv2ZmX+MaGfvtxnDVtAuXM7uT/+/ddDGPP?=
+ =?us-ascii?Q?hdUIlqlhaOju1h9DgWNMb/P1P4S85OPCghmBBulu7HT6HZQkuEX94OltzNtm?=
+ =?us-ascii?Q?EaVd8WVR7Em1Rv/HyfBvBaXOmPipjpnOEra3RjlApI/d5c5imEkrIKvnacAz?=
+ =?us-ascii?Q?vzj+ykjos/kKcgYxGIHsb7XVv0kexdjJF7Nm3x+k1EgQ3bNDH7O6/iXzj3N/?=
+ =?us-ascii?Q?nVVmATrdPYEr7R1S3GMW4o1isDeyz5pqVoT9unOGEfojbo4Ov2S5ya2//ww6?=
+ =?us-ascii?Q?VJeeynCI/j1yMRphcuu72LMOz5Xd55tFbLcddBIZLlckHx69lpw/lUAwkafw?=
+ =?us-ascii?Q?cq60jtfYdF5q3M1y43RuDk86560MxbJP8xY9mRx5AC/RHaMyRLJy4EuHzOpQ?=
+ =?us-ascii?Q?4uh3LyfWdw/kbrsGTLipjLy+boUe+BhyVR8qvGc/SvI7hWQ6U34QhcnlS1WD?=
+ =?us-ascii?Q?Y4kf56eR3evFWLTWivUP2Bazb3o/t8Yiw/SCZNcb3ARC7dO774XQfouycTNl?=
+ =?us-ascii?Q?MdAOyH37L26tT9iOAdDr9gTGrAMZ3INaeI/ehdwlbavEu0q7RwS/swloe1OD?=
+ =?us-ascii?Q?C6t425xjQ60Krxk9jVW3gRofaz/zri7t8m1IVbCc/ZrhsJaW44PGxcATNu+y?=
+ =?us-ascii?Q?U1pQXJU1sTWX3KwnOvcf1XwYs/OxUQOsQwG/1g/q9bT4hGg83i7E8pmjH80a?=
+ =?us-ascii?Q?80wMOu0dFJuIslStYKgBuUW65YF7GwghZDV763/GHvMgeaBBs/AzUVIObbr5?=
+ =?us-ascii?Q?vKwYH1PiM7gUguPUFKYaLiH1gYa1VreIUfxOFObWYlc03gFmSaD6Lw/RDI4H?=
+ =?us-ascii?Q?yT6ZWhTpGcwycd2/gWAt/ybkbrS1+YeCL/AvNnUquLjSUhqUgf8HfZFku7GT?=
+ =?us-ascii?Q?x5Wy1waomIYty5h48tOuDyj4k/OIcZTghtY0MPEpu1NxrcJIs1ANGAjsJeYx?=
+ =?us-ascii?Q?MLdyXxSlUr8dBqm8ib7kcrlhAR22QM2LT4wN1h6dpHkVEA+u+Nirmk7Ia/dW?=
+ =?us-ascii?Q?zX/n39mP6qtXPmfceyeJo93UzICwR8m/gqocJWh6o04hpbFhvgTSZt4YHGeA?=
+ =?us-ascii?Q?vhmU5o7shpWTpkE+mlZoLkEKUfJfj64V5rXUJL03bcA3N0UdzSvrQtVw+HUE?=
+ =?us-ascii?Q?JHocyy4UYFrsLQBmG9VqqL8dIMgOV38H94G+BOQaPnueSfbqrjh2bzUlwHtN?=
+ =?us-ascii?Q?RhzJ0HHHy9mOcQ0QAJsMlcvGX0btOsVOcujzAWmuukbMgAQ8PDLFowbmbBaz?=
+ =?us-ascii?Q?LcgnrshnEx6BaLT6ARw78gjRkKXeKkTPNppYobPTmmqA5IUKIpsrBRQ18evz?=
+ =?us-ascii?Q?ga15dxiLgMHlIAY=3D?=
 X-Forefront-Antispam-Report:
- CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013)(921020)(13003099007);DIR:OUT;SFP:1101;
+ CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(7416014)(82310400026)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2025 15:28:39.3677
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2025 15:28:44.8162
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91572bfa-3b21-4b8e-dab4-08dd649f3a25
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83472149-a17c-4f22-ac98-08dd649f3d99
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB1PEPF000509F6.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: AM4PEPF00027A66.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB9888
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB8587
 
 From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Describe the specification of tc qdisc DualPI2 stats and attributes,
-which is the reference implementation of IETF RFC9332 DualQ Coupled AQM
-(https://datatracker.ietf.org/doc/html/rfc9332) to provide two queues
-called low latency and classic.
+Update configuration and preload DualPI2 module for self-tests, and
+add the folloiwng self-tests for DualPI2:
+
+  Test a4c7: Create DualPI2 with default setting
+  Test 2130: Create DualPI2 with typical_rtt and max_rtt
+  Test 90c1: Create DualPI2 with max_rtt
+  Test 7b3c: Create DualPI2 with any_ect option
+  Test 49a3: Create DualPI2 with overflow option
+  Test d0a1: Create DualPI2 with drop_enqueue option
+  Test f051: Create DualPI2 with no_split_gso option
 
 Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 ---
- Documentation/netlink/specs/tc.yaml | 144 ++++++++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
+ tools/testing/selftests/tc-testing/config     |   1 +
+ .../tc-testing/tc-tests/qdiscs/dualpi2.json   | 149 ++++++++++++++++++
+ tools/testing/selftests/tc-testing/tdc.sh     |   1 +
+ 3 files changed, 151 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dualpi2.json
 
-diff --git a/Documentation/netlink/specs/tc.yaml b/Documentation/netlink/specs/tc.yaml
-index aacccea5dfe4..0fb971935285 100644
---- a/Documentation/netlink/specs/tc.yaml
-+++ b/Documentation/netlink/specs/tc.yaml
-@@ -816,6 +816,58 @@ definitions:
-       -
-         name: drop-overmemory
-         type: u32
-+  -
-+    name: tc-dualpi2-xstats
-+    type: struct
-+    members:
-+      -
-+        name: prob
-+        type: u32
-+        doc: Current probability
-+      -
-+        name: delay_c
-+        type: u32
-+        doc: Current C-queue delay in microseconds
-+      -
-+        name: delay_l
-+        type: u32
-+        doc: Current L-queue delay in microseconds
-+      -
-+        name: pkts_in_c
-+        type: u32
-+        doc: Number of packets enqueued in the C-queue
-+      -
-+        name: pkts_in_l
-+        type: u32
-+        doc: Number of packets enqueued in the L-queue
-+      -
-+        name: maxq
-+        type: u32
-+        doc: Maximum number of packets seen by the DualPI2
-+      -
-+        name: ecn_mark
-+        type: u32
-+        doc: All packets marked with ecn
-+      -
-+        name: step_mark
-+        type: u32
-+        doc: Only packets marked with ecn due to L-queue step AQM
-+      -
-+        name: credit
-+        type: s32
-+        doc: Current credit value for WRR
-+      -
-+        name: memory_used
-+        type: u32
-+        doc: Memory used in bytes by the DualPI2
-+      -
-+        name: max_memory_used
-+        type: u32
-+        doc: Maximum memory used in bytes by the DualPI2
-+      -
-+        name: memory_limit
-+        type: u32
-+        doc: Memory limit in bytes
-   -
-     name: tc-fq-pie-xstats
-     type: struct
-@@ -2299,6 +2351,92 @@ attribute-sets:
-       -
-         name: quantum
-         type: u32
-+  -
-+    name: tc-dualpi2-attrs
-+    attributes:
-+      -
-+        name: limit
-+        type: u32
-+        doc: Limit of total number of packets in queue
-+      -
-+        name: memlimit
-+        type: u32
-+        doc: Memory limit of total number of packets in queue
-+      -
-+        name: target
-+        type: u32
-+        doc: Classic target delay in microseconds
-+      -
-+        name: tupdate
-+        type: u32
-+        doc: Drop probability update interval time in microseconds
-+      -
-+        name: alpha
-+        type: u32
-+        doc: Integral gain factor in Hz for PI controller
-+      -
-+        name: beta
-+        type: u32
-+        doc: Proportional gain factor in Hz for PI controller
-+      -
-+        name: step_thresh
-+        type: u32
-+        doc: L4S step marking threshold in microseconds or in packet (see step_packets)
-+      -
-+        name: step_packets
-+        type: flags
-+        doc: L4S Step marking threshold unit
-+        entries:
-+        - microseconds
-+        - packets
-+      -
-+        name: min_qlen_step
-+        type: u32
-+        doc: Pacekts enqueued to the L-queue can apply the step threshold when the queue length of L-queue is larger than this value. (0 is recommended)
-+      -
-+        name: coupling_factor
-+        type: u8
-+        doc: Probability coupling factor between Classic and L4S (2 is recommended)
-+      -
-+        name: drop_overload
-+        type: flags
-+        doc: Control the overload strategy (drop to preserve latency or let the queue overflow)
-+        entries:
-+        - drop_on_overload
-+        - overflow
-+      -
-+        name: drop_early
-+        type: flags
-+        doc: Decide where the Classic packets are PI-based dropped or marked
-+        entries:
-+        - drop_enqueue
-+        - drop_dequeue
-+      -
-+        name: classic_protection
-+        type: u8
-+        doc:  Classic WRR weight in percentage (from 0 to 100)
-+      -
-+        name: ecn_mask
-+        type: flags
-+        doc: Configure the L-queue ECN classifier
-+        entries:
-+        - l4s_ect
-+        - any_ect
-+      -
-+        name: gso_split
-+        type: flags
-+        doc: Split aggregated skb or not
-+        entries:
-+        - split_gso
-+        - no_split_gso
-+      -
-+        name: max_rtt
-+        type: u32
-+        doc: The maximum expected RTT of the traffic that is controlled by DualPI2 in usec
-+      -
-+        name: typical_rtt
-+        type: u32
-+        doc: The typical base RTT of the traffic that is controlled by DualPI2 in usec
-   -
-     name: tc-ematch-attrs
-     attributes:
-@@ -3679,6 +3817,9 @@ sub-messages:
-       -
-         value: drr
-         attribute-set: tc-drr-attrs
-+      -
-+        value: dualpi2
-+        attribute-set: tc-dualpi2-attrs
-       -
-         value: etf
-         attribute-set: tc-etf-attrs
-@@ -3846,6 +3987,9 @@ sub-messages:
-       -
-         value: codel
-         fixed-header: tc-codel-xstats
-+      -
-+        value: dualpi2
-+        fixed-header: tc-dualpi2-xstats
-       -
-         value: fq
-         fixed-header: tc-fq-qd-stats
+diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
+index db176fe7d0c3..72b5f36f6731 100644
+--- a/tools/testing/selftests/tc-testing/config
++++ b/tools/testing/selftests/tc-testing/config
+@@ -30,6 +30,7 @@ CONFIG_NET_SCH_CBS=m
+ CONFIG_NET_SCH_CHOKE=m
+ CONFIG_NET_SCH_CODEL=m
+ CONFIG_NET_SCH_DRR=m
++CONFIG_NET_SCH_DUALPI2=m
+ CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_FQ=m
+ CONFIG_NET_SCH_FQ_CODEL=m
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dualpi2.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dualpi2.json
+new file mode 100644
+index 000000000000..1080074f2650
+--- /dev/null
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dualpi2.json
+@@ -0,0 +1,149 @@
++[
++    {
++        "id": "a4c7",
++        "name": "Create DualPI2 with default setting",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p.* l4s_ect.* drop_on_overload.* drop_dequeue.* split_gso.*",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "2130",
++        "name": "Create DualPI2 with typical_rtt and max_rtt",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2 typical_rtt 20ms max_rtt 200ms",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p.* target 20ms tupdate 20ms alpha 0.042969 beta 1.496094",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "90c1",
++        "name": "Create DualPI2 with max_rtt",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2 max_rtt 300ms",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p.* target 50ms tupdate 50ms alpha 0.050781 beta 0.996094",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "7b3c",
++        "name": "Create DualPI2 with any_ect option",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2 any_ect",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p .* any_ect",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "49a3",
++        "name": "Create DualPI2 with overflow option",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2 overflow",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p.* overflow",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "d0a1",
++        "name": "Create DualPI2 with drop_enqueue option",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2 drop_enqueue",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p .* drop_enqueue",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    },
++    {
++        "id": "f051",
++        "name": "Create DualPI2 with no_split_gso option",
++        "category": [
++            "qdisc",
++            "dualpi2"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dualpi2 no_split_gso",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc dualpi2 1: root refcnt [0-9]+ limit 10000p .* no_split_gso",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root"
++        ]
++    }
++]
+diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
+index cddff1772e10..e64e8acb77ae 100755
+--- a/tools/testing/selftests/tc-testing/tdc.sh
++++ b/tools/testing/selftests/tc-testing/tdc.sh
+@@ -63,4 +63,5 @@ try_modprobe sch_hfsc
+ try_modprobe sch_hhf
+ try_modprobe sch_htb
+ try_modprobe sch_teql
++try_modprobe sch_dualpi2
+ ./tdc.py -J`nproc`
 -- 
 2.34.1
 
