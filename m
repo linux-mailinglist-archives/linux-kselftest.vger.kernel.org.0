@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-29221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99B43A6515A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 14:37:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 379A5A65180
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 14:41:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCB701883DF1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 13:36:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37E7316681E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 13:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B5C23BD0E;
-	Mon, 17 Mar 2025 13:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64FD323E344;
+	Mon, 17 Mar 2025 13:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="PZesGYZL"
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="l+N8vsSJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BEAEBE
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 13:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7921E098
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 13:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742218585; cv=none; b=MBfEurz+nlTxdCinSvbqWtlAyiZOkLdG/FhKPl4LjWbG6YlL/Zb3m2ibrD/Nkz6kt6QCV4hQaEhx47bVzbMBd0AJvSTc867uoJRUnwfwN27GWVgaOFJTKrOsNhyParoQ82EN0M9VOFSs3pmalj29uJBlffgvGMFeHJUsrN+3JBY=
+	t=1742218858; cv=none; b=G9Koln9V6wAxZ8mh8HBtF3zPVWuJIjbjIatLOEzH1pFt2OJ5I0MBZYrlm5HnPqizcQVT+/ldU92HamXi6pupZt3byuGPhVv/IFB0BisR1Z3k6Q4DqUVEzGs8J7g0vhZq00eN0dZ94ET6SizD0QnUQhGAnIPHOpbYzOvJ/gHIb10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742218585; c=relaxed/simple;
-	bh=Trb02ucwdNT7njn5fU7IQgeC1x6g8J7T0PM9NITVyU0=;
+	s=arc-20240116; t=1742218858; c=relaxed/simple;
+	bh=kLSXiwVSzmLJ0MkmFRsFE7u2Alq297XRhanMJ1TeTeE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vBz6qIb447WglyZHczwx4Ib1er4PjO97EJcyVgXEWvg8rzOEeyFkDdAijIKOVqDGzv7pfmysXLM1kJEPAX9dyXjQ4WOG70aka0XvUSkagIYNbKcL5Za9jAaebFBxYf97qrtJ+PL9V8Osdfm1N5t21iw+P+61hqy+N28pljjGvFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=PZesGYZL; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version:Content-Type; b=PJ1UMQTVATK5pvZ6EULqa7FlQhu2mSaX++xI8cWIsgrXQWChWdQIO1f9ik4s5P0rVu/s3XU+78OpYXkjVQKl9zG/+8DrDP096uZCYqrTvMjmIf/K26y/XQTA2AXi2HdJFT+me1VKjAvYi8y2pfHjGAoKPljQ7CgZTBqWyAAyYGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=l+N8vsSJ; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22548a28d0cso118087095ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 06:36:23 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-301918a4e1bso944698a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 06:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1742218583; x=1742823383; darn=vger.kernel.org;
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1742218856; x=1742823656; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+bM9J0DqT2fl7geMphRuEwoWQW8kW6asNpCDgXyvg7U=;
-        b=PZesGYZLWG6r3VpIBTT5XAiDbrq8yJUY+xEk3amSGxF+/SQZVpJOWSD9M47AWQ+OiP
-         hc+fjsKX//dy2eTAeRdw8RjAJFn8e7sPhGnyvks3YV+9Q3hSZSDUPiTboj1CP8aPiOy2
-         Uwn5vpD9/GlqNTvzs1xxSVTcNa/N/L7QWzR3GgnwDpSgfdtBD49SIijh0BBH6BYtk0d7
-         3ver5PaGwFjm5YZjtJe80ptV/J0QDwU6h5jlnCHVDytSqpIMSGZyqge8duarZbOa9DZK
-         muewJyx3AYQ56F/9ACT24yDHWEnTgJSHSwKsyf7MHztgMWpJDWphPti1Zo2hdFF0gkgp
-         hJSQ==
+        bh=mnsqm3xmIvcxIgATEk9k0TzoObowoxe3J0tHhRinQ2M=;
+        b=l+N8vsSJZ81ZyPCBFJnasj+AZl7OsIaShD4vGQXCwbsDyedWJWx8fz5xjaBQ5s7j/P
+         dw/i8awHhWoUIME0ifbvVKFvICS8PLO/Mx+oW1/NttWQjQ+7sGztMtqah99IBLGiDrwz
+         I7f/CX+TocbHaJxHWBEdBvXn2TCFi9Y/hhPOI55fZjlKlKxk3V/iUIp9jB3k23aUrjk5
+         aizezf7fOEkjCC0xKnrknkpEfcTqeYqGmlkdbcYxZe1ysQs9ZFu3E53T3UPPfmOti7Bz
+         iny0hqNEE7yAHSQWTL6RymZyQOlvfZhQ82+OiNrXVjPEiZ3IDh4j3hW1jBZ/fKe+Oh0u
+         w4ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742218583; x=1742823383;
+        d=1e100.net; s=20230601; t=1742218856; x=1742823656;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+bM9J0DqT2fl7geMphRuEwoWQW8kW6asNpCDgXyvg7U=;
-        b=t7zlIkdsG11b8dNgURzaKdGTPtzMo4f5FkGSABCdesDEjVmrlKwKoB1PnS1J76go6z
-         wkwLrG/n7A7Evs61S+aI4YZjVWm/1MhvV/OwyEjFT4btJdVNnjxzZCpE+f9CXzWdK5VD
-         QQgeoQ6z7CZnP+1cnt1/hYQYwm/9z+kQJ+k7DK42r8eERR2KyEBLpmwW54//UxJEvYQG
-         mj8sDVUBGkCVweWIoBnb+ikx1YiSCQT+Eo5OEAOno4eW560hB1oGlXZxM092cQME5B3T
-         US34hD62nNiqt9rdSj6uDU9BNrx/MFyHIBGdVPYFZXYWjVJHimKaIV+CBt972yE0xeHp
-         cITg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5Bjn59af9nsZVX0Uer0VyRir7SLgJrQHc/t915kJzDpdtQBsRZLZXV5qGMPGsedyfR4P/3e6ltkA7eaEJy3s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuNur3N1IXx9KMwPfsxjuOSWixPgmfI12lMxvOO/q7+G3ATVSy
-	i7ABP8sg0/97QVPCZTYs3k7nOj1By0hnT+wLr3WkLEaU+17/pvI/tJqRk4PGE3k=
-X-Gm-Gg: ASbGncsLpVeewxEu2McI09aS74TkHLaCkFPqFBlwY4YXzoCur6C6BX9yPgDP2/bLei7
-	kT7m27bh3HSkQZYryXAiVGG95LTxoW/SIEQ/EDH/DXx0L50i1KC1pisd3+WB8JgIWTls/nZmlU/
-	gZzgdrXx9zwLRt786hRuuaU+/0Icphz45U5DW9X16FjIhVg05Wylggibz5c8diWZMjvukWHQtLk
-	dVsSb2tz8sfxHiOzpoe3Fo/9O5DwbuaG0oHOx62p6Q9PKHio+fnw7Lgc/BoYE22I8BJlCXou1UK
-	dC6IjYSvHcm/djeg/9EPiLTW1jNNL2boHBzsPGJn/OElFe6cDE03Ouf92N8jyWG5Ntmjpo0jUQf
-	CWQBy5ZVODhZgBZJF2HzBOQ/5168OPcqv
-X-Google-Smtp-Source: AGHT+IEl6kJWDflT3Rn8WDp+ZhQkPU3xUJHHdwZaiwpfDRF2sCE9f35xMBvQNtn+dAgTXcRv+AElKw==
-X-Received: by 2002:a17:902:e74f:b0:223:26da:4b6f with SMTP id d9443c01a7336-225e0a369b5mr135088635ad.14.1742218583022;
-        Mon, 17 Mar 2025 06:36:23 -0700 (PDT)
+        bh=mnsqm3xmIvcxIgATEk9k0TzoObowoxe3J0tHhRinQ2M=;
+        b=TSlCV2LeemqdpjwyLRtRWULpELt3uwwI8I/IfDFDHFekWsWUDxexIvdFmTyUXUQ9AM
+         x5jBkGRhYRdo+AqGwj3MVkkdi3u+AmAUnrLPkuT5wA7r/SK+PJHsG7jbtR/O5wAIwmeY
+         D+LFmBo68Zx7XPTrhhYN1cx8+jYpuy7dJumYu9QJ++HnRJLXcTj2VZ6oVWXGR4QTqS3B
+         V8uSjA0JswQ9+wOPd3WTo5ZKMqZUYvBeslzN3NLQI33mO15NC3vRbyrVq3VYHOhObto4
+         XW7fFQNnZxgiIToCyDFlqi7MTJQRBtrAMwVAu92hhy038aMO8uvtyBeHgte3DzbbXkUl
+         K6Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9qEkgHpbKETdvXecGg+PZ9j0CB8ddOPRdl1uYr4KDKSHSc/nhdHif7LkYHThIliselJdohPqxkxGsmFoz0dI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlMpcAeslslhabF/01ichn4MKfJ3NEkvkdM+83mLdyoWaRTBVd
+	Hcy+0AHEs/OuV85I6MYphhrOr6dMbCrozOp5B08K/vMzTCNLnxkZchka1IUwj0I=
+X-Gm-Gg: ASbGnctGKX/Ug0LPMUrnlkKgLdJO+5BTmIHmXfJ1gLgUYUuyFFWSEWn3Uu++1/0g07g
+	JRH2RhQ3qiauzfm/KAQUbCGzu0N5l+0VBviF29BhFjVooSWUeagxQXNGrGDL3HuQiPei2+dIVn5
+	ZbyOIMqzPnY4FS1cNwLp3LiJhhGBC9GtNphFCdL9FlEcaUl46qihQAb0XyftgJAKWwMeoOJRVnx
+	UoameYmOdjhJOYCxV4ubmnZiga6bsj0vAN/TYp9PL3lGgiwsL51PrhDHvJLQJcJ8hjTzDwxuQ6J
+	n3kH2Bq8p+hA8z5knEYYKptwCfOy/wYY+SWPNB/y2BtQYklZnInNRZu4+i0TkbQI4oZTtwQD90n
+	PY2VW+zWWrjconMPiH9/nzw==
+X-Google-Smtp-Source: AGHT+IHcEtIj1ndlsH7GWBKxayrN3xYjDtV9idgB1vOjqL1ZjkCnhtkv9qTlL5li/uvQAhd8+4xc/A==
+X-Received: by 2002:a05:6a21:789a:b0:1f5:51d5:9ef3 with SMTP id adf61e73a8af0-1f5c127a618mr18056794637.20.1742218856070;
+        Mon, 17 Mar 2025 06:40:56 -0700 (PDT)
 Received: from hermes.local (204-195-96-226.wavecable.com. [204.195.96.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a403fsm74737375ad.61.2025.03.17.06.36.21
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af56ea9724esm7183138a12.74.2025.03.17.06.40.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 06:36:22 -0700 (PDT)
-Date: Mon, 17 Mar 2025 06:36:20 -0700
+        Mon, 17 Mar 2025 06:40:55 -0700 (PDT)
+Date: Mon, 17 Mar 2025 06:40:53 -0700
 From: Stephen Hemminger <stephen@networkplumber.org>
 To: chia-yu.chang@nokia-bell-labs.com
 Cc: netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
@@ -89,7 +89,7 @@ Cc: netdev@vger.kernel.org, dave.taht@gmail.com, pabeni@redhat.com,
  <olivier.tilmans@nokia.com>, Bob Briscoe <research@bobbriscoe.net>, Henrik
  Steen <henrist@henrist.net>
 Subject: Re: [PATCH v4 iproute2-next 1/1] tc: add dualpi2 scheduler module
-Message-ID: <20250317063620.30d24269@hermes.local>
+Message-ID: <20250317064053.4fe8425b@hermes.local>
 In-Reply-To: <20250316153917.21005-2-chia-yu.chang@nokia-bell-labs.com>
 References: <20250316153917.21005-1-chia-yu.chang@nokia-bell-labs.com>
 	<20250316153917.21005-2-chia-yu.chang@nokia-bell-labs.com>
@@ -105,28 +105,26 @@ Content-Transfer-Encoding: 7bit
 On Sun, 16 Mar 2025 16:39:17 +0100
 chia-yu.chang@nokia-bell-labs.com wrote:
 
-> +static int dualpi2_print_xstats(struct qdisc_util *qu, FILE *f,
-> +			    struct rtattr *xstats)
+> +static int try_get_percentage(int *val, const char *arg, int base)
 > +{
-> +	struct tc_dualpi2_xstats *st;
+> +	long res;
+> +	char *ptr;
 > +
-> +	if (xstats == NULL)
-> +		return 0;
-> +
-> +	if (RTA_PAYLOAD(xstats) < sizeof(*st))
+> +	if (!arg || !*arg)
+> +		return -1;
+> +	res = strtol(arg, &ptr, base);
+> +	if (!ptr || ptr == arg || (*ptr && strcmp(ptr, "%")))
+> +		return -1;
+> +	if (res == ULONG_MAX && errno == ERANGE)
+> +		return -1;
+> +	if (res < 0 || res > 100)
 > +		return -1;
 > +
-> +	st = RTA_DATA(xstats);
-> +	fprintf(f, "prob %f delay_c %uus delay_l %uus\n",
-> +		(double)st->prob / (double)MAX_PROB, st->delay_c, st->delay_l);
-> +	fprintf(f, "pkts_in_c %u pkts_in_l %u maxq %u\n",
-> +		st->packets_in_c, st->packets_in_l, st->maxq);
-> +	fprintf(f, "ecn_mark %u step_marks %u\n", st->ecn_mark, st->step_marks);
-> +	fprintf(f, "credit %d (%c)\n", st->credit, st->credit > 0 ? 'C' : 'L');
-> +	fprintf(f, "memory used %u (max %u) of memory limit %u\n",
-> +		st->memory_used, st->max_memory_used, st->memory_limit);
+> +	*val = res;
 > +	return 0;
+> +}
 > +
 
-You should support JSON for the stats as well.
+I wonder if dualpi2 and netem could share some code on handling
+scaled percentage values.
 
