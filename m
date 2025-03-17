@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-29190-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 671EBA6472F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:25:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EA94A64733
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:25:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 559ED188DE9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:24:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E29189558C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500232222B2;
-	Mon, 17 Mar 2025 09:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A7E22422E;
+	Mon, 17 Mar 2025 09:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kjeZM4wm"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RNA2CAAn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CF6221F17
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 09:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16BE22259D;
+	Mon, 17 Mar 2025 09:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742203412; cv=none; b=EnR89Vc4ClnacGGo80bqcSHFtderje7QxnFM/kYc5G7n2VeihzvQViX2XeL6ccVDP/Jm15H9GOczKQca53L2cwl2n89LNJw7J0DoIRttYV+GhWUCQZEgyqWvEeyfA+xKeBDa0OIX2ca4CahcuYAflPj8JCS/nud5hod6Qoy9FiA=
+	t=1742203423; cv=none; b=biZIsp/URFnalQ/glTyhT/VXiZDJ4FkAEjrC8xiGFU1vytMrpqKon+LsLZwMVxcG1pEQ3igzqbfLhxLU1RonjP+oWSXQ2c+zPSXwNy7Vww67bqwW7ObPJa/UDtPp70zRO5VZDPzKhh61b/xG/Ec05/xFk8HTJODmeBFN0Z71x/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742203412; c=relaxed/simple;
-	bh=ZIX3geUdBSeJYpNGzQADiA9T7cBZmrvzoLXT/2FyWtM=;
+	s=arc-20240116; t=1742203423; c=relaxed/simple;
+	bh=ZOHoR1DVLuoqBGux5wOEYgvMSK5hDjDDqM2npNWq+30=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fYpMw8EDaD0q2FlfdxlS8YoWYn7cz1YHHq3JY6yXwwG1z3FAg70JjX9d5I6B1cKNDmw3cOpI46pXlDpnqY0aJyDvQ3VC2nSL/eyeCTjmjy11GnNVYfgyE9/a2VNS1X408txwrVo1rp1/4jZv0ssOZpntuZZ56DPst8mtA3tHEaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kjeZM4wm; arc=none smtp.client-ip=95.215.58.172
+	 MIME-Version; b=IKwCFQFZznTZ8OF9g/FGNjYDaVwrD7oHCfiwFqgZyROUs4kVn1HGfmGWLbwGjXpm+WuxHpR5woaWoVTYJUpZQba6BSSqHs/W4R0jRk8zdSI/siUBPcSJeeG2UOMcniSyQqq/oNGEPK219Hjcz5PMUdC3ZbT8iajTzV/Ka+5TtI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RNA2CAAn; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1742203408;
+	t=1742203419;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jdwQIuLJzVvoXmm2B8tL+Siu69JpG95Yy4OLKWooBQA=;
-	b=kjeZM4wmaAXTcUfazsjza9u4rHM+R+vbSP+IntEAgmWUMWpxLnLT1Gb9BFg9iGW1tCV4AC
-	dMChDBqgXiaCabRuKNzN6muJoubLdZYMtSM1c4ezMPVXBFMYdVpppJqYQ4oq1URlQJUP0S
-	fkKQR2eOiJLoPwDXWoSgwwZ0bR3s0Dk=
+	bh=BLSYPFz/nwodbHpxtrd6necAV0xMxciGJi0Eu7RL7/E=;
+	b=RNA2CAAnuPOFBDghPRo59PAWyHNhb/EZS0Iojw2W4OL9J7bW9AOp3MYTnEYVcExyrnymyM
+	6xFpwefmKLIQY6JiKke1uaAlB764IntP1LH3Mq8LnS4puuSRhXKauBLXb9eyal2rJo3HeX
+	wdhm4ypkvHh6qn+dmKe8Jy3AUNt2yms=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: xiyou.wangcong@gmail.com,
 	john.fastabend@gmail.com,
@@ -70,11 +70,10 @@ Cc: davem@davemloft.net,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com
-Subject: [PATCH bpf-next v3 2/3] bpf, sockmap: avoid using sk_socket after free when reading
-Date: Mon, 17 Mar 2025 17:22:55 +0800
-Message-ID: <20250317092257.68760-3-jiayuan.chen@linux.dev>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add edge case tests for sockmap
+Date: Mon, 17 Mar 2025 17:22:56 +0800
+Message-ID: <20250317092257.68760-4-jiayuan.chen@linux.dev>
 In-Reply-To: <20250317092257.68760-1-jiayuan.chen@linux.dev>
 References: <20250317092257.68760-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -86,76 +85,118 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-There are potential concurrency issues, as shown below.
-'''
-CPU0                               CPU1
-sk_psock_verdict_data_ready:
-  socket *sock = sk->sk_socket
-  if (!sock) return
-                                   close(fd):
-                                     ...
-                                     ops->release()
-  if (!sock->ops) return
-                                     sock->ops = NULL
-                                     rcu_call(sock)
-                                     free(sock)
-  READ_ONCE(sock->ops)
-  ^
-  use 'sock' after free
-'''
+Add edge case tests for sockmap.
 
-RCU is not applicable to Unix sockets read path, because the Unix socket
-implementation itself assumes it's always in process context and heavily
-uses mutex_lock, so, we can't call read_skb within rcu lock.
-
-Incrementing the psock reference count would not help either, since
-sock_map_close() does not wait for data_ready() to complete its execution.
-
-While we don't utilize sk_socket here, implementing read_skb at the sock
-layer instead of socket layer might be architecturally preferable ?
-However, deferring this optimization as current fix adequately addresses
-the immediate issue.
-
-Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
-Reported-by: syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/6734c033.050a0220.2a2fcc.0015.GAE@google.com/
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/core/skmsg.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/socket_helpers.h | 13 +++-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 60 +++++++++++++++++++
+ 2 files changed, 72 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 6101c1bb279a..5e913b62929e 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1231,17 +1231,24 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+index 1bdfb79ef009..a805143dd84f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+@@ -313,11 +313,22 @@ static inline int recv_timeout(int fd, void *buf, size_t len, int flags,
  
- static void sk_psock_verdict_data_ready(struct sock *sk)
+ static inline int create_pair(int family, int sotype, int *p0, int *p1)
  {
--	struct socket *sock = sk->sk_socket;
-+	struct socket *sock;
- 	const struct proto_ops *ops;
- 	int copied;
+-	__close_fd int s, c = -1, p = -1;
++	__close_fd int s = -1, c = -1, p = -1;
+ 	struct sockaddr_storage addr;
+ 	socklen_t len = sizeof(addr);
+ 	int err;
  
- 	trace_sk_data_ready(sk);
++	if (family == AF_UNIX) {
++		int fds[2];
++
++		err = socketpair(family, sotype, 0, fds);
++		if (!err) {
++			*p0 = fds[0];
++			*p1 = fds[1];
++		}
++		return err;
++	}
++
+ 	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return s;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 1e3e4392dcca..c72357f41035 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -1042,6 +1042,59 @@ static void test_sockmap_vsock_unconnected(void)
+ 	xclose(map);
+ }
  
--	if (unlikely(!sock))
-+	rcu_read_lock();
-+	sock = sk->sk_socket;
-+	if (unlikely(!sock)) {
-+		rcu_read_unlock();
- 		return;
++void *close_thread(void *arg)
++{
++	int *fd = (int *)arg;
++
++	sleep(1);
++	close(*fd);
++	*fd = -1;
++	return NULL;
++}
++
++void test_sockmap_with_close_on_write(int family, int sotype)
++{
++	struct test_sockmap_pass_prog *skel;
++	int err, map, verdict;
++	pthread_t tid;
++	int zero = 0;
++	int c = -1, p = -1;
++
++	skel = test_sockmap_pass_prog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	map = bpf_map__fd(skel->maps.sock_map_rx);
++
++	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	err = create_pair(family, sotype, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto out;
++
++	err = bpf_map_update_elem(map, &zero, &p, BPF_ANY);
++	if (!ASSERT_OK(err, "bpf_map_update_elem"))
++		goto out;
++
++	err = pthread_create(&tid, 0, close_thread, &p);
++	if (!ASSERT_OK(err, "pthread_create"))
++		goto out;
++
++	while (p > 0)
++		send(c, "a", 1, MSG_NOSIGNAL);
++
++	pthread_join(tid, NULL);
++out:
++	if (c > 0)
++		close(c);
++	if (p > 0)
++		close(p);
++	test_sockmap_pass_prog__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -1108,4 +1161,11 @@ void test_sockmap_basic(void)
+ 		test_sockmap_skb_verdict_vsock_poll();
+ 	if (test__start_subtest("sockmap vsock unconnected"))
+ 		test_sockmap_vsock_unconnected();
++	if (test__start_subtest("sockmap with write on close")) {
++		test_sockmap_with_close_on_write(AF_UNIX, SOCK_STREAM);
++		test_sockmap_with_close_on_write(AF_UNIX, SOCK_DGRAM);
++		test_sockmap_with_close_on_write(AF_INET, SOCK_STREAM);
++		test_sockmap_with_close_on_write(AF_INET, SOCK_DGRAM);
++		test_sockmap_with_close_on_write(AF_VSOCK, SOCK_STREAM);
 +	}
- 	ops = READ_ONCE(sock->ops);
--	if (!ops || !ops->read_skb)
-+	if (!ops || !ops->read_skb) {
-+		rcu_read_unlock();
- 		return;
-+	}
-+	rcu_read_unlock();
- 	copied = ops->read_skb(sk, sk_psock_verdict_recv);
- 	if (copied >= 0) {
- 		struct sk_psock *psock;
+ }
 -- 
 2.47.1
 
