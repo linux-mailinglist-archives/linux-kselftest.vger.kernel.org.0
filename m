@@ -1,203 +1,177 @@
-Return-Path: <linux-kselftest+bounces-29274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18CCEA65D24
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 19:50:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1F46A65D41
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 19:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 917613B6463
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 18:49:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1F6E7AB5A6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 18:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BFAE1E5209;
-	Mon, 17 Mar 2025 18:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5061E1DE8;
+	Mon, 17 Mar 2025 18:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ta5GuCG3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QkGRkVNp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2471E1E0B;
-	Mon, 17 Mar 2025 18:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742237376; cv=fail; b=dFVvvODVTwp5uIPH0Qxp3nDNEU7ZAMFA9nMz7GGU27Ne+mcMGReyOvQ4Rn1PLv4yODQDy4cVAHV9B9i2Ip+100yD2KmfHGp3oeO5JO0bYNrwwcOOmzVKAHDVOaE4DMxHW9fjW5NmYpNz19P0+NMhbs0QLqDebMjohyZQXjXHhGQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742237376; c=relaxed/simple;
-	bh=7ciRmG86Kz+2ZX82GYtcjesbRuCbhfkyQi/IMmNRqqY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=QHljuKtOHkH2LH848dNQb3CcMgY3nWGo1JCkNF94JNUh55XuIMuu0EIh4cusOeIAT0sA9oCYorchplXaw0B1co3alw227RQTtK2K/atMzYvYzZNPClpjJ7eeJ+IWnGoFQy9bVzDWREwR/CT886ro1KwDYpMgBiYCyrGBBWhwLjs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ta5GuCG3; arc=fail smtp.client-ip=40.107.93.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wUSZfJJNsV1wfsTI1CBDGVotV8lAW/p0JySqHU5K9LPWSRmlgsy96HE2WliHbhEvuuCqfsKYR88qOgVVQ4ngzag+2/EYOrQpLtLzLODHudfWSby3jfFBXgjsfKnj+4fUtjRj6AW9tW5cuzQtg0A8J84huJgcIWvvxL74mKKGxwnVS06W5+BKOMOFFs1qpKWxtxdXjq43yfGxjkHNSwc4xDZY6hchsKuRRorCOB1zyl5LUZHZyr4s+V4WSViTKysNyZh51fvFPKLEBgh4u8OrAtgFIJ7NDMQR+XTcBuj5TqopYgoFcPQLw7IPcBKDaC+0fPxvX5QRhqD8lYBHsHeUbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QaDraG0VqnzTeusPbnlcILqKK+zWtIOw7ZP87wyWl1Y=;
- b=RLZjjPhOF1Fwu4X9zoqJf3u03fDemjkeYQIeaS4miN8FcmbiAeGCCpJIpWdvAeSy7mk45XxnmJR8ONS8SyL0NNWCVsxm/L0iYl+3woQJ4vcVYuBhZ1QWmtQ9vE39yAc32WqPuM8o5MwMHAvAbOBrFlmjrVUD6NIP2LweClPml1VdAGvSvIF603ivsT8FriVDhfgEvVgIHprauQ3UhT+s0f/LfaswV0DaBpAE2/Sf9P6pldvguMsz+YNrkG8YQ2DLNrqeMvh4wXDe+BZC2NcY3Kmcv36Vm40Xkw1Do+3W1X7LPNd9OxsN3XJpHTS+VSgtpb2E4fYMIzRUjU52SKfAWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QaDraG0VqnzTeusPbnlcILqKK+zWtIOw7ZP87wyWl1Y=;
- b=Ta5GuCG3BJxEtmGr2HTEdOEBIVUypqEGM1Pikg64YZNcTBncxDS80MkjXa1mn96zIC3SSdpNqYc0hSEgnNXOfZEtDj5VMPKiG8YO6zwPIQ7DXuZ8q10yYEQ1op+GVf0W2hMUDAgigYZj2AUkOoWKZidjQwKaXvqQHx6RP+2ymivo2dD/NT6I687hxQ6ywani6iLl0Z0BXWuQRgDD1jhzIAVL9FYV1vw6/DlRwxJJR4cbp3gS0+/JePDMgSk56e1QC0G0fWTdcHF9SdpphCGbSW7rwNOv1w4HM2QeFe+Vtot7CnwceIibC3WtfytF5+EoBoaFqJkyeLk4mN7HOo/E1Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by IA0PR12MB9012.namprd12.prod.outlook.com (2603:10b6:208:485::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Mon, 17 Mar
- 2025 18:49:31 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8534.031; Mon, 17 Mar 2025
- 18:49:31 +0000
-Date: Mon, 17 Mar 2025 15:49:30 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, corbet@lwn.net, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, will@kernel.org,
-	robin.murphy@arm.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
-	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
-	praan@google.com, patches@lists.linux.dev
-Subject: Re: [PATCH v9 00/14] iommufd: Add vIOMMU infrastructure (Part-3:
- vEVENTQ)
-Message-ID: <20250317184930.GQ9311@nvidia.com>
-References: <cover.1741719725.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1741719725.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: BN9PR03CA0034.namprd03.prod.outlook.com
- (2603:10b6:408:fb::9) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6095143748;
+	Mon, 17 Mar 2025 18:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742237446; cv=none; b=RbSJFLC8bKW1Tz7ehSzztQos0qiwo4LYaNnPG9CeT69WjX4FomXdgXxBJ8K/1xAtLjT+s1aygSUQR/lXv61f8WUo5PWdlsJvbqQC6hiHIFwS1vF6sdN7aKnOAvIoXRknvGCEDu1hL3Vmw0Fw8/gebB7BG58SSW2+t1lYtJr7eYk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742237446; c=relaxed/simple;
+	bh=PqQDfWDHqdxebzalktwINDV4sa1k08bacQNFgioeyPs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nxTM8Eo8sROG6DE8i19fmu/eZghIAKXQcLaYoiGNEE390TNjc8RiEf7tJCE/qTKwmppN/6mKt693kjS8eP3nK/tCs07Ka+aGlE1/fWc47ldEoQxHabbu7Cj7D/ca9SGI2yW8+m9P04QY9oPZUxl1BAnt5old/rWrN20jU7FBMyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QkGRkVNp; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-30762598511so50288081fa.0;
+        Mon, 17 Mar 2025 11:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742237443; x=1742842243; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mdsuVb+NO059jE7CUp+DstvEYjAUR4RmTp/HM/dio+s=;
+        b=QkGRkVNpf7ZtmidSdGOaAfZ2YH15hXHT4Lh4YglFo3VQJ772jkEr71Nfi88ftIqNUQ
+         XVRXF5EQ9o4yW95Q2IGvbzTOPoq7NppGMWqELizOhoM9CV9no29tCDVZZrLOQu1VmHRH
+         rsz05n1vIVTF03M3qRhrk+qSYn3v7kgHAcmTlI68chB78jAla90lCB7YMCgH203wdbBK
+         9W6z9RJ3maRXVRYigAOK5k02zr18+By5gswjxvigHH9xssqVbBNhrfTGMtEZLdgW9Nwy
+         5e4HlIezLNjdFffPrsb8zSm9APn6jklNBzZm0YqLsOWf4QKxWSVgksHuHulJ9EBl8G1B
+         Hx2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742237443; x=1742842243;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mdsuVb+NO059jE7CUp+DstvEYjAUR4RmTp/HM/dio+s=;
+        b=CpE9MVa1LXomMW617DiV7SmWPHzcmQFzn6ro4dre/TZj7TBWVDcOfqVmwGmA9FBAJh
+         PZGAup6aLn+7PFIuytkYOMzUh0Oj1zriJotND5EyVdY3hpnn+99oR7AMTNdxcRnfXskH
+         0sMgTjgh8fsu5E7u+X6h8cxY1uiIxH73mJhvuAujPI6+2hcSaFexSWLH1XoK7JrNvlxZ
+         HdexW3M1g/fQQk7JnSNUykB3nK0nj/mDMjyN0taOq93Gc2E0PJGMZczDt5vI6n9Yiz2G
+         UEsEn+I/t/eAkWus7oyHzh9CvcDao4mO2dGNeoqHhEd3iK2w5WNwbRAj6hMgbmTiRole
+         mBjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOF4fCCJBAmi3TNDo2zoq4OZ8793ll3F/XMdeR4T7Uwj5njNzzEBe9oVfqxlpi5S1tZfUI/d2rD+vlbURgeHA=@vger.kernel.org, AJvYcCVTdI87rbODNKEd2bc7La5FdI9OH8RXKZ5norPYYMprzUn6aXArf5QJyfU/9P0eBHhCNumLrZCO2kD7@vger.kernel.org, AJvYcCVzt78ACWJiJ7Y042dKPJsgjzw6+pggHljyCox7pFyRqFvoKgkJcbLej7VaE49vsFtv2Lw6cBRvh97G/wMJ@vger.kernel.org, AJvYcCWb9T4sfB4tJuWCUnY2GeFChmWF9Rc8siQFiQxn7tLXI6B9omuj55hsCaanPkwBd8vgjzolJKBjtraoY1bH@vger.kernel.org, AJvYcCXEbVj/kZRyPtY0qHwxTBnHVt1We/eJ/EwXB4W8r0/oS5uN5OAH9LNMm2TWsZBxWz/2Y/CE1AATgCCj@vger.kernel.org, AJvYcCXX5fzkq90lKS+0e6VN9mFLAffa4WcGjSNXAU4XLH9xUNj0GGe5oyHxycjp4cqTq4p2m1KZ4j+n3PYxo+q+FJZe@vger.kernel.org, AJvYcCXfvVdxV97gwwPBEhNjiMd+Mlm+fJls9Eez2uvf48au11YG06w7dlYlk2W0eM5zlIiqaUBOInxYIqGaQig=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxLRuuEiJOatQ7HWSMeun0TNzWKgY3Xda10HD7SFBMl52ee2ez
+	u3rzfMQqXwbNc2HbOlDPjmYUUk3HM1Sf82bYrH/bWMPW6/z2qxJ4yOQu7AbT2Tm3PdcdqXstOHP
+	nVphE+ksdoS8Xr8pN/IvtfGNV/cQ=
+X-Gm-Gg: ASbGnctJgjrqOpF8NAa9oO2Hh1CmCrjx31vPFuHQQHmEvg55M0zf7Chlz3FFWsGzsht
+	TCMwUg1/+ZqAsM1BYnpQPiDQ7Qb3E28KNJ6MHFnPQBUPm5PJdpiZO/RDsLMaRTuXipdE3VjySwA
+	gpqjngOyQz4/37yPYPvh7yWYU1KLouYRJi0Ah+2d7IztLX3ZBUP17BVCH3ao0=
+X-Google-Smtp-Source: AGHT+IEzp2oVvJ71QS1eAcjxHAeO5azoLiAY06CVQGLhW64REy+cGH7ce9uGBgUaWzXBdua6Xa8H3vynwoCxmiZ9VtA=
+X-Received: by 2002:a05:651c:a0b:b0:30b:b132:43e5 with SMTP id
+ 38308e7fff4ca-30c4a876b4fmr79062201fa.19.1742237442567; Mon, 17 Mar 2025
+ 11:50:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|IA0PR12MB9012:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58831bfb-e576-4608-2a1a-08dd65847414
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?i8s9jdC09kAfLyKk2bBiBKGUH+WruWX4n+7/6MNftr/mc4XBgHMDIIodzOMY?=
- =?us-ascii?Q?NVX5m+2HdHf9yW44IfhT/tobGgG/KESBI7+2Y/a2cdXjI8G3AtrtKMEkvq5X?=
- =?us-ascii?Q?ldQsBkhiC7pkQ3KHZWCVAW6Sby7NLsM2vewzcAcXsgpRSnVA1+NSVjuGdFh4?=
- =?us-ascii?Q?AiEPYDkff4IDbeWVsgHyTLbLiBsUrRGonBZ5mkMF4w8Db/SkST3Z3yRMMbuU?=
- =?us-ascii?Q?bkOuKAiDFRe4XkjurE/oulkroej3p7wPrmnrYIDEJ2+NeZ7MBMFQFPY9L4cm?=
- =?us-ascii?Q?3I7ie2s5PZxffolnLS8LDJh1g+WcFCC/EXyE6wVqmqD2X9c7hkWoQq3EXdAJ?=
- =?us-ascii?Q?MSkfvLp/j3tcFgEEASGuLyf3toFTPx6D+bFKzs9mStALXGoyhg2iBuW95Rww?=
- =?us-ascii?Q?DbYGr0tAc9Ehfo68THQI5M8xI12l6ulBkWf8LVTQ/y5u33Weq4MfTII5yNXf?=
- =?us-ascii?Q?peI322hrMDlP652z+6SG7VAqqdxv87eVeDecF3koYtWHnILI7uzHj6E2k/Mv?=
- =?us-ascii?Q?MxsM7jX9HjTA+mcG+IOV51okC312dGn5I+djx/5VvcgfbfbnLYMzic9REm/P?=
- =?us-ascii?Q?DtpDwI+j91qG/PumFkXPu2pZvteBRc1HI+UAQOOBC4QBZGlo499C6TaOmbXt?=
- =?us-ascii?Q?l2O8rnjO4CT/1ZtBuj69OdWl+hkLnnm4E66SjMtOHJezzdkpWkx5w+cWQllh?=
- =?us-ascii?Q?Nzw2LEnqRjBFpS0d8bX3bVNc9/yrqWPDSQD8oC8aO5e8YQOSbMxUaeFpSKT2?=
- =?us-ascii?Q?K4F3RyNjNY9gDY4v0fsEneEkuuYy0lWrRA1rruN/Ds/waRE6K/i2602tmSCZ?=
- =?us-ascii?Q?x9G4jMvCOJ2um8y/AquCnhIJYAa9WBgH/QwwrsDOrMcQzBY47wfE3A33RXoq?=
- =?us-ascii?Q?swsmx9hI3nFXs/ieUIyyPOXBPx9zbDm5bO4o3ZhVghm9R9okwbyfOC3P9wwD?=
- =?us-ascii?Q?B3+0g/aRQrop3imvJbuoLlafSqHkMXyyXsIf4SU6K3Bw+g0UeNubrVn6Luwm?=
- =?us-ascii?Q?so+wrCcdsAvqih6Fgq1k/fkTfPX7BJVvQpz12IUVinX3j/YkURtMXYjHqZZh?=
- =?us-ascii?Q?qeJNoWulDTqeKpxvdzbElCEbXOF4tM9Tyk5Xmfg1V8i8dhyzqNHRjoldQn50?=
- =?us-ascii?Q?KQNXk5Kl1ZfkpikPBaTo3aIDcxoc8HmijHqrHqafonccaKOvhb3niGGyHRYM?=
- =?us-ascii?Q?QYX0tZtK3w4gc2ziTfohZEBWkAzMxFvZj91GN/0iJETyJCcSnaxwPqhUud3/?=
- =?us-ascii?Q?CMAGKDcGOb/JUMR2FC7nnEeyLKSqVzWi6jR59xs0QjHx/kvnJUph6kyPYYti?=
- =?us-ascii?Q?Ju4MBSKObzjZtKbSuxcRhQfLgh+H+hUWg7rEWoI/6nRdTaSkR43qz7Y25zph?=
- =?us-ascii?Q?E2LC8MHcimai8/OrNRN5Y4K+MABp?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4svhi+vbEvVOv5bS8p0UG2YhQwMM2Lskxu+xEp7GeKAl1cwoVa87TqvXNdC1?=
- =?us-ascii?Q?rWRGb6QEiocTHYUyQkt5PFOhRBzuWTWHFftn2R1VTrJKr1vvTniVilgQWoK0?=
- =?us-ascii?Q?RJYOO2Iw6hupXZZS48R3ZRbYKSr8Ddp96HLWMrJszGzXK+hHIHdBndjg9FpR?=
- =?us-ascii?Q?h6rsUCNi0sdoEF6wpQa3/VcFb06ZVW2feqSSF0t3xwtpjE9MICVYcrepibUz?=
- =?us-ascii?Q?WMreaEm+h/p//n1Ew9eOOET4HC5/WSkmfeW523/Utf9sa+/ht5INZ/jVWZ9i?=
- =?us-ascii?Q?5c7S5AVL8cdFIeBTXO23TfO6kS95Ul5jXfHvef9GMlsPzMl2tKgqO8evf+Us?=
- =?us-ascii?Q?t8RNfzscapvgZcg4DsLByq78rnN7rf3RnQeXPKdw+mSiPBOB45zZSaqTBEQZ?=
- =?us-ascii?Q?EdfQe97KMVHDh9G62eb4h9NXEYzlsQF86ozBEjgp+9cih+lfCQVdmoKGg4db?=
- =?us-ascii?Q?vZwM+kA4Sx66MnAgvd7y+6qQDkm9in/xd3YQ9YaHmtNPmMRi6ujdWI9yUTm0?=
- =?us-ascii?Q?chGgN8ROyMr/q8V0UKXeXOH7hlsz/SlzmnoXTeyDkrpup8UWGTSxQy6HcFUH?=
- =?us-ascii?Q?x63VPwycfOhn/nv+Su32pODYc/eFu3v0G1rCggbx5c6/29xWHPaw0lrVSHQ6?=
- =?us-ascii?Q?LNP9a5D4rFzr5W2uHPG3/53mpWwXIW9dRoju75iY+XuBbfiG0Fu8ex0rEvhC?=
- =?us-ascii?Q?jJOXesB00VoTe6E+iQK4/ZZtbP59w+Ox6Qjzv2Oyta61VyEpvK5rfNfPx+kM?=
- =?us-ascii?Q?i55QL9uQtA7flLv+2dIj7eWlN2rk3RDbMLM0XSv1c60XZKnKVfVHxYIbxDVX?=
- =?us-ascii?Q?BKxOVOii/xt5oH5zMuLbtO/b/XqYlEtqT6rSrOMXM6jpbDULlusckIrbchcM?=
- =?us-ascii?Q?3IxJLYys7emyRdKjwgUNVwpVavzn4T3tja9MtknUyug2zY2WPgnyPOHR2EH+?=
- =?us-ascii?Q?tVD2oyg2M+9HsvA5M4OQK06WaJdS/LIssSzlU5ck2lsvfI9ih4wwee/mtvBt?=
- =?us-ascii?Q?Fjy6NIUKbs1aHzhsQAEPYoyUZ+qgy6PqNUErPKUSDb0XUklseaIOXss+GT+E?=
- =?us-ascii?Q?EQCOb1PA8MQaAwDTofDCsOvIRklUKr9bUzCWNOgM1VNRMArCs09wbIVark+0?=
- =?us-ascii?Q?Bzcp87jh1dlUhtS3niUMlSgMLeQ0JgcbHWDV+eRJojjVMVb7Afz39SZCUfZB?=
- =?us-ascii?Q?GyeExeiCdOzBfZ37WIbzxMItUu1XukKushqBNGDc4qWhk8nKfE4hz/2B+yr2?=
- =?us-ascii?Q?xe+vqddiLZoWKFn7OO925AxiGID+nHm0p3Ja1xKS6fx65/XUq6TUnrXc3rFV?=
- =?us-ascii?Q?FdThp/pLnJoVhyRK1dKePrpQHOeLCFPnS/Di0Sww/Sba+IZrqf+2sr1JKHx3?=
- =?us-ascii?Q?UpPY6FdbdM62J3c9XSXeQGyeiwO8JtkKbkSFjOLxrVx91oUvEmkUKJBnOlOS?=
- =?us-ascii?Q?wpIz9k2BGft1s2NIG63QvGASEo13oBxFLayOzErD9GvWase78Yj4JAeZLbnQ?=
- =?us-ascii?Q?DGNSIAJCVYK4FUJNR56rSvYNAQkvZICprhm7LTE2boF0kbm3zy7JTTcnytkt?=
- =?us-ascii?Q?wT7VoXhdGlK8x97ijxXpsHBwSOBcD+iSq59hvizx?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58831bfb-e576-4608-2a1a-08dd65847414
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2025 18:49:31.5884
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oJWMjKH5Y79IZ852FkDE8m783iSB9sMFaNN7GqDW3zMc2k+R2CEQzuYjdgSVBhyz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB9012
+References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
+ <20250317-ptr-as-ptr-v5-6-5b5f21fa230a@gmail.com> <67d85e51.050a0220.2a36b.58b3@mx.google.com>
+ <CAJ-ks9kBp8zPfaQuZRb0Unms1b13hDb5cRypceO8TWFR0Ty5Ww@mail.gmail.com>
+ <67d864b2.0c0a0220.39fb6f.4df4@mx.google.com> <CAJ-ks9n8mwt5q9unqfkfSHj9=ELJHtqsXM-xQ8jsbXeJX6Uyfg@mail.gmail.com>
+ <67d8671d.050a0220.3305ab.6372@mx.google.com>
+In-Reply-To: <67d8671d.050a0220.3305ab.6372@mx.google.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 17 Mar 2025 14:50:05 -0400
+X-Gm-Features: AQ5f1JpDW6g4t98rfmSJ41m0LaHQtaEbfDWcYhYq7ATuhgE6QuNUhsWrpqWF0G0
+Message-ID: <CAJ-ks9=uHjJrzM0ruvm4v4wr8LygRMP-1orWBy_9OiNNeQr0ow@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] rust: use strict provenance APIs
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 11, 2025 at 12:44:18PM -0700, Nicolin Chen wrote:
-> As the vIOMMU infrastructure series part-3, this introduces a new vEVENTQ
-> object. The existing FAULT object provides a nice notification pathway to
-> the user space with a queue already, so let vEVENTQ reuse that.
-> 
-> Mimicing the HWPT structure, add a common EVENTQ structure to support its
-> derivatives: IOMMUFD_OBJ_FAULT (existing) and IOMMUFD_OBJ_VEVENTQ (new).
-> 
-> An IOMMUFD_CMD_VEVENTQ_ALLOC is introduced to allocate vEVENTQ object for
-> vIOMMUs. One vIOMMU can have multiple vEVENTQs in different types but can
-> not support multiple vEVENTQs in the same type.
-> 
-> The forwarding part is fairly simple but might need to replace a physical
-> device ID with a virtual device ID in a driver-level event data structure.
-> So, this also adds some helpers for drivers to use.
-> 
-> As usual, this series comes with the selftest coverage for this new ioctl
-> and with a real world use case in the ARM SMMUv3 driver.
+On Mon, Mar 17, 2025 at 2:17=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
+rote:
+>
+> On Mon, Mar 17, 2025 at 02:10:42PM -0400, Tamir Duberstein wrote:
+> > On Mon, Mar 17, 2025 at 2:06=E2=80=AFPM Boqun Feng <boqun.feng@gmail.co=
+m> wrote:
+> > >
+> > > On Mon, Mar 17, 2025 at 02:04:34PM -0400, Tamir Duberstein wrote:
+> > > > On Mon, Mar 17, 2025 at 1:39=E2=80=AFPM Boqun Feng <boqun.feng@gmai=
+l.com> wrote:
+> > > > >
+> > > > > On Mon, Mar 17, 2025 at 10:23:56AM -0400, Tamir Duberstein wrote:
+> > > > > [...]
+> > > > > > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> > > > > > index fc6835cc36a3..c1b274c04a0f 100644
+> > > > > > --- a/rust/kernel/lib.rs
+> > > > > > +++ b/rust/kernel/lib.rs
+> > > > > > @@ -17,6 +17,11 @@
+> > > > > >  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(coer=
+ce_unsized))]
+> > > > > >  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(disp=
+atch_from_dyn))]
+> > > > > >  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(unsi=
+ze))]
+> > > > > > +#![cfg_attr(
+> > > > > > +    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
+> > > > > > +    feature(strict_provenance_lints),
+> > > > > > +    deny(fuzzy_provenance_casts, lossy_provenance_casts)
+> > > > > > +)]
+> > > > > >  #![feature(inline_const)]
+> > > > > >  #![feature(lint_reasons)]
+> > > > > >  // Stable in Rust 1.83
+> > > > > > @@ -25,6 +30,109 @@
+> > > > > >  #![feature(const_ptr_write)]
+> > > > > >  #![feature(const_refs_to_cell)]
+> > > > > >
+> > > > > > +#[cfg(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE)]
+> > > > > > +#[allow(clippy::incompatible_msrv)]
+> > > > > > +mod strict_provenance {
+> > > > > > +    /// Gets the "address" portion of the pointer.
+> > > > > > +    ///
+> > > > > > +    /// See https://doc.rust-lang.org/stable/core/primitive.po=
+inter.html#method.addr.
+> > > > > > +    #[inline]
+> > > > > > +    pub fn addr<T>(ptr: *const T) -> usize {
+> > > > > > +        ptr.addr()
+> > > > > > +    }
+> > > > > > +
+> > > > >
+> > > > > For addr(), I would just enable feature(strict_provenance) if
+> > > > > CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE=3Dn, because that featu=
+re is
+> > > > > available for 1.78. Plus we may need with_addr() or map_addr() in=
+ the
+> > > > > future.
+> > > >
+> > > > We still need these stubs to avoid `clippy::incompatible_msrv`, and
+> > > > we'll need those until MSRV is above 1.84.
+> > > >
+> > >
+> > > Hmm.. why? Clippy cannot work with unstable features?
+> >
+> > Yes, `clippy::incompatible_msrv` doesn't pay attention to enabled
+> > unstable features.
+>
+> Then we should fix clippy or how we set msrv rather adding the stub.
+> @Miguel?
 
-> Nicolin Chen (14):
->   iommufd/fault: Move two fault functions out of the header
->   iommufd/fault: Add an iommufd_fault_init() helper
->   iommufd: Abstract an iommufd_eventq from iommufd_fault
->   iommufd: Rename fault.c to eventq.c
->   iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_ALLOC
->   iommufd/viommu: Add iommufd_viommu_get_vdev_id helper
->   iommufd/viommu: Add iommufd_viommu_report_event helper
->   iommufd/selftest: Require vdev_id when attaching to a nested domain
->   iommufd/selftest: Add IOMMU_TEST_OP_TRIGGER_VEVENT for vEVENTQ
->     coverage
->   iommufd/selftest: Add IOMMU_VEVENTQ_ALLOC test coverage
->   Documentation: userspace-api: iommufd: Update FAULT and VEVENTQ
->   iommu/arm-smmu-v3: Introduce struct arm_smmu_vmaster
->   iommu/arm-smmu-v3: Report events that belong to devices attached to
->     vIOMMU
->   iommu/arm-smmu-v3: Set MEV bit in nested STE for DoS mitigations
-
-Applied, thanks
-
-Jason
+I filed https://github.com/rust-lang/rust-clippy/issues/14425.
 
