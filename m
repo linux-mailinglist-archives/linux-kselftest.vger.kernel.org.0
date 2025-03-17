@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-29234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29235-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85125A65592
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 16:30:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9258A655A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 16:30:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 698A33B8BDA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 15:30:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52C731897A13
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 15:30:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F3A2451F0;
-	Mon, 17 Mar 2025 15:30:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD1C24A04A;
+	Mon, 17 Mar 2025 15:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XvvTdAZh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bp/aNoCi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B556923FC48;
-	Mon, 17 Mar 2025 15:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081A82459DB;
+	Mon, 17 Mar 2025 15:30:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742225417; cv=none; b=r/fWUjitE599Mi5UWtXXsjRYBAY4uj42Xo06wmnusXqbrIankP+i63TfUQaWLCT7w/NlfooNa6A/tVp+/MLeEsG40ku7Hy0ZF0Jgqp5XJPRr+hSk1vQA4pxV55Mzj3VBSPbwVh+xT2j02eVIeCSF3ZY8/QGvcz0vB6Gj0V+m8jM=
+	t=1742225420; cv=none; b=FlSPvyZji2lfjRj962dX69w+TX1W2HxA+fiWV3itEldgw9LwF2qN0xshlXFKcm0P5i17nHpZ610k0o7zKnb4Gh31Mv9OXU7Crw7W0nEOzaVqTUhvZfMr9nO9tSS8H5e9N3aTjpJOdEElE9BDtA90bbVNsGi5qaLm9s1a3sh7tzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742225417; c=relaxed/simple;
-	bh=RmOfo764WtO4PPZFDYSz67TtQVy6busHNjQ/gySH6kk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AblNPq3xiWwTL62tJINd9fSLpw0U6oLibg1o5WQOB1KjY1f3Lqrzrv33E/mblor8z5E+axvRb2jCDPYn7esR1OiX8L7mVhNXxey2R9LamT7mWJXDijJhs5uzN74j5beB8YtIF5Dvg0PXSPaxAWP6Gihm5qBRgqE5si3dt1d8/Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XvvTdAZh; arc=none smtp.client-ip=209.85.219.45
+	s=arc-20240116; t=1742225420; c=relaxed/simple;
+	bh=1rkakKUwb36yHAuv3YCt5lG31RMltr4Nsg5Cun6at7k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Dt71GJf53Q6mIWfhJ3YF7JJ6/AkQ09HTf49xMF148OX4x7DY/z0qicIHAE24RfjcPKlHdFO1t2uvqNPa1DQ4eYQVeY1LrtMFYoKSMNJv2Ml05u9NOYwd2046fHRRm+HsIGRkoK1WqTzTKjH5lsBzYJGGYCMu9NMP7AmGOvnATJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bp/aNoCi; arc=none smtp.client-ip=209.85.219.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6dd01781b56so60681676d6.0;
-        Mon, 17 Mar 2025 08:30:15 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6e8f6970326so40459546d6.0;
+        Mon, 17 Mar 2025 08:30:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742225414; x=1742830214; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5VnHac+67NezyG9Z5kQPIahJscKgGgBzlwii56QtL5I=;
-        b=XvvTdAZhwUMK7rXQ1chgPmvFIuinlwTL3wCf8shnjHNq4Nd38CHWnewkoHjkmKzOjN
-         ZuAH3qQ+dBgVPeLVOE96yD/uLGPc0JDYxvSR+lDGu3aQEm9XrEqkhutotIiSoRy04hj1
-         IDPTunFXWOM+o9ll+9D13Hc9+MiMYrqRV4zEqM/6GTCgD0CjUiQyzc3qMDCBD91g8PX9
-         yJnpBWbpy0KNfPVq8uka2JVt8lgQvZ3Q9HKinPDBaLeElvMMNKe8todIvuu9agIwF9TR
-         s5GMTuB7kAIFDw9eaK6FJqqgHHm7MbgdzIsXr2m0tHx7gqpk9G3F7kVHj29BWZxITPQs
-         NHJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742225414; x=1742830214;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1742225417; x=1742830217; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5VnHac+67NezyG9Z5kQPIahJscKgGgBzlwii56QtL5I=;
-        b=TnXdrtYafWdlpFp9JbmNuaFRXj3haUVJYelAfHNUasCl0VW1c1hLHlds/V7JbmM15x
-         z6lFzy8Lp++651Hq7f7iKdD/GK32bpPvKsYM+Lj7tlPZpPTSP5oDaJlm1zpFrxR2LyFH
-         oms3yTzbgOfe8NTbBXIwFcNzSqsPy4kgWn66FYUF6NFmWTYZGqfSOIcXhwHH1y3Dgboh
-         bQNq+iFTU4NTicYPxsxDXxt0wnHGBJYpir11QZwcw1F8LEncJV8SQocsZOhfZ614ZyA+
-         kcq/xrXVOVhWIqJeTFljaP73V2Vecm6aO1rTbF128/HjH1HTmfC2edu1HYhV/f5s75Cs
-         bJVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHF88qIGlL5+T/9EvFTBgwd7DmYWCCDXRY0EJ1S8P2Yn7p2wqk20KjZecvrr6dr/YvESVUsn8cWaYEcidP@vger.kernel.org, AJvYcCVHJ21ESmI4OXDAMnRLid+YRfo+Dm205kX5TgcvVUDFHnpkX16bOfbPbHdQmH/c+u54tasOWbIy@vger.kernel.org, AJvYcCX6NpFS1JlCivjE/nFBWEaFibnVbq8cQUys6qVUHASFRx7vypz1emSs99Ns/Czy+prv3KDWEFUUURK1@vger.kernel.org, AJvYcCX6gjYIlnUtjCeQL9m8tczVzoxclWdlVovhQLETORhlaz4ntNTjYBPHa9/KpKX57M6QFWeMv1rQfnE1@vger.kernel.org, AJvYcCXzTyKvioKjnqS8yv4AcxyJkkOzbJ1HxTBNicErTlRf6XfOH7UoyP1ufL7nkHaLaJEyk373ftonLMqKjGSnrfyf@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDXJxWPdlbf22OzSxTRmaVenBumQzalRC45UvGFoC5LJevZJPr
-	SmsSieGq0h1kK85p3Lci+Ef8KcMXZXQviVOtzMBCZ6mRbjqeOqWs
-X-Gm-Gg: ASbGncsN8qfQMKCMsN3NT1YwBQzb5UgvQvq5wdd9A/4h7QrHP4hOT+ouhNmZAOGX3+v
-	RQqUpoerzBjnfHWt55odXuVsR0gf9Z0EGoXTpKgtXr6unK6kKt8PW9opaSUkgXprZE6qd7+GP1P
-	lOtFmowE4JyxGFvHWzvOZEjnFHd5cpmbAuNLnQT+jyQlpZu+CgLhWjDySLHamqOyk4NvcSbPwM6
-	aCqX0kf3EVD4u9wn1ERSXi1FP9ybPWS/oCB9f/hxvY+PA3sDboUKK+s7Qym2x6fKqPiZSzRwNDM
-	FYn/+GrLHI+s7AcP4SU+i3P+yweeJT51WIBQ0pgox0jKUg99xaarj2mOG2cl9M+bOBVY1Dg6Mjs
-	SXvN3RlpWR+UqEaSl
-X-Google-Smtp-Source: AGHT+IHNmtB9c12zhL5/E0oWznPUv4bUb/VjSZ9loMwleCwsOPZRUcNYkvDBkshuzLWydzExi8biFQ==
-X-Received: by 2002:ad4:5f46:0:b0:6d4:238e:35b0 with SMTP id 6a1803df08f44-6eaea9fac05mr181158406d6.17.1742225414336;
-        Mon, 17 Mar 2025 08:30:14 -0700 (PDT)
+        bh=GhDi7jicB3Gv5oqI3TBvIGb8fiLoyX3gf2bLY34vPcA=;
+        b=Bp/aNoCiZhrCxMhPN1mY6Ur7v87SYSL15uILvt12bfGkxvdymI2jJRwsTkv4xA3ogs
+         xR711+++vA3L6CsIqkK3LhEVuyjuX3J/g2V7jwKLsoxmwmHA8XN5f4nOWkqwKywnlm1N
+         Qnbyb+kR8TRydOzFlvCMkeUrUV5KpX+AJ3HJhs6YEtJvLd00yXpcMr2eicbpS6tAq9bj
+         geFeCGk1gET5CXIKDI6d2QNlDobiGhos4cKkNVT7EdXxVx5DfVSMk5I8tb/vbhUksnbQ
+         lmfVsPTJq/LQcKRU3yOuAbBhijnv7mkOdWKNWjkYtbrhdY/jEG80D637MLgXCvoioFmP
+         YYfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742225417; x=1742830217;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GhDi7jicB3Gv5oqI3TBvIGb8fiLoyX3gf2bLY34vPcA=;
+        b=XoOMwoQ7ldLWkxN1Sok3JbFJVeL577MXjR4gSdO1p1Tfs/92ut3LKhtmZahTgv3dj9
+         I3xu8w3IXa+piJMTeBzhYxa5A3YYO50WvqBQ0LE0w9jeoux8WKvKFimTPSXhBNmAUy59
+         gY0EVQ8bEcAq28nZWRoPjtf80y0M09/02bWTuQ1hKURz+tZ23O7Kz7sCcUTPqqVbQNc1
+         MfTVLKI+O4yCYnGHfFY8+CpXBcxk5XuHFSuA6tqD2S1qxg7sUsadk5bw03tpxCw1eXX8
+         bNPV83dc/dM1ysA53C8Yk5VMRP9+Sd0HyklWPME+e88pf9Dal0frUD+MsTBFN26U8ZeI
+         jBYg==
+X-Forwarded-Encrypted: i=1; AJvYcCW870YBF9keU9lPnz/Lgm82qr40RenBvCxaPIXQvEsT793SjUhPx0FxPY9sqqEnWW40RbEYN2lf@vger.kernel.org, AJvYcCX4HiQ5vsw25rF4tefPkhEt9VZ2eP1BT+6j382G0SSllGnFdvWh5ofXZcX+E4lcBFbeNg00zq5tAsFT@vger.kernel.org, AJvYcCXJ8HBuQuf+3XjYwuRsXzq0pvp8yAI0hCjEkylFACAikJNheJLrA6XpJvCX2t2Cdj39whnBrahMgjZNw9+t@vger.kernel.org, AJvYcCXiTsTFvH3rBdjyKnO/osebT8ElDDCBV2Fqkbo4Zfpxn5tZf2PMu8pOZG+Hz7xla0PRGdsAzq1LL3IP@vger.kernel.org, AJvYcCXwVEckleyqbIJKkTpMlAn2JM08z1FD4rBMFCI21t+N/JC7jsFORQa4RkTlI4S0IG7FYTTVdqQGU4U3ehlshqjq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5HwCsfC7LlfWg8Eiyca+OTrzHBk9E9eahAUAlt6vVPxcZni5t
+	wDVzN3/FWOB00ZQ9Ba0MBaOWcbeffBsaJg+v6kfmoOZei6L5a9u5
+X-Gm-Gg: ASbGncuvPOVXR4KMZMY0YvihZktwfudwiCzLcU5YN1mZpOMkL9XsrFaRrnn6u1LZQgY
+	Oo6XUKNH9gtGhE9VSBw0Vhhx5K/hC4jJVVEZkn9sw+XVVMdmOUydyVSPjWx/ojazNYa/Fw9Mag9
+	X1sgDgZQMRb7hOWf3DU2eP/KIM7JULfiFG1/soH97HYcl0TjgZqMsdXk6cnNzNkaUTIbdtSalz+
+	hmxC+KoJBFCHs4JuWS/EFM5WvFHOEIWm/7SHCYUc4EJAunIE8bGK4+mzxHS9Lv3LZAlkjJX17P4
+	Y4luC8pKjdlOdlktymt2Ai84sqedVVziD8UQhl21PyBil8cP8z+TGceMtvcbyGeu4Aua28D63Hb
+	a6YFPLA==
+X-Google-Smtp-Source: AGHT+IF6QKQ27zO/djSgLkh3SLlbu4CCHZ6bVaY3V5bdQy4+E/A82ztgFL3TtEYWb5+dRwVxvOIv5Q==
+X-Received: by 2002:a05:6214:c47:b0:6e6:5f08:e77d with SMTP id 6a1803df08f44-6eaeaa64726mr197312436d6.19.1742225416788;
+        Mon, 17 Mar 2025 08:30:16 -0700 (PDT)
 Received: from 1.0.0.127.in-addr.arpa ([2600:4041:5be7:7c00:6895:24c6:e898:e320])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eade34c51fsm55736766d6.109.2025.03.17.08.30.12
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eade34c51fsm55736766d6.109.2025.03.17.08.30.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 08:30:13 -0700 (PDT)
+        Mon, 17 Mar 2025 08:30:16 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Subject: [PATCH v9 0/4] rust: replace kernel::str::CStr w/ core::ffi::CStr
-Date: Mon, 17 Mar 2025 11:30:02 -0400
-Message-Id: <20250317-cstr-core-v9-0-51d6cc522f62@gmail.com>
+Date: Mon, 17 Mar 2025 11:30:03 -0400
+Subject: [PATCH v9 1/4] rust: move `CStr`'s `Display` to helper struct
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,13 +83,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPo/2GcC/3WOzWrDMBAGXyXoXAVJtternPIeJQdZP7FobYWVE
- Q3B7x45kGIKPX7szjAPlj1Fn9np8GDkS8wxzXXojwOzo5mvnkdXN1NCdUIJyW1eiNtEnrt20AN
- oqYQNrP7fyIf483J9XuoOlCa+jOTN29AKlFp2DXRwVIii54oX4xKlkr/u5xulJc2Tid9Hm6ZNO
- ca8JLq/6gps4neI2oUU4IJjC9o6cEoHd77+SraQ0v9L9pV0RmI9KdE2+JfEPdnsSaykHZqgwPc
- ICHtyXdcnyCWNaVkBAAA=
-X-Change-ID: 20250201-cstr-core-d4b9b69120cf
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250317-cstr-core-v9-1-51d6cc522f62@gmail.com>
+References: <20250317-cstr-core-v9-0-51d6cc522f62@gmail.com>
+In-Reply-To: <20250317-cstr-core-v9-0-51d6cc522f62@gmail.com>
 To: Michal Rostecki <vadorovsky@protonmail.com>, 
  Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
  Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
@@ -124,122 +122,154 @@ Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-This picks up from Michal Rostecki's work[0]. Per Michal's guidance I
-have omitted Co-authored tags, as the end result is quite different.
-
-Link: https://lore.kernel.org/rust-for-linux/20240819153656.28807-2-vadorovsky@protonmail.com/t/#u [0]
-Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+Remove `impl Display for CStr` in preparation for replacing `CStr` with
+`core::ffi::CStr` which doesn't impl `Display`. Add `CStr::display`
+returning a helper struct to replace the lost functionality; this
+matches the APIs exposed by `std::ffi::OSstr` and `std::path::Path` for
+printing non-Unicode data.
 
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
-Changes in v9:
-- Rebase on rust-next.
-- Restore `impl Display for BStr` which exists upstream[1].
-- Link: https://doc.rust-lang.org/nightly/std/bstr/struct.ByteStr.html#impl-Display-for-ByteStr [1]
-- Link to v8: https://lore.kernel.org/r/20250203-cstr-core-v8-0-cb3f26e78686@gmail.com
+ rust/kernel/kunit.rs |  9 +++++---
+ rust/kernel/str.rs   | 63 ++++++++++++++++++++++++++++++++++++++++++----------
+ 2 files changed, 57 insertions(+), 15 deletions(-)
 
-Changes in v8:
-- Move `{from,as}_char_ptr` back to `CStrExt`. This reduces the diff
-  some.
-- Restore `from_bytes_with_nul_unchecked_mut`, `to_cstring`.
-- Link to v7: https://lore.kernel.org/r/20250202-cstr-core-v7-0-da1802520438@gmail.com
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 824da0e9738a..630b947c708c 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -56,6 +56,7 @@ macro_rules! kunit_assert {
+                 break 'out;
+             }
+ 
++            static NAME: &'static $crate::str::CStr = $crate::c_str!($name);
+             static FILE: &'static $crate::str::CStr = $crate::c_str!($file);
+             static LINE: i32 = core::line!() as i32 - $diff;
+             static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+@@ -71,11 +72,13 @@ macro_rules! kunit_assert {
+                 //
+                 // This mimics KUnit's failed assertion format.
+                 $crate::kunit::err(format_args!(
+-                    "    # {}: ASSERTION FAILED at {FILE}:{LINE}\n",
+-                    $name
++                    "    # {NAME}: ASSERTION FAILED at {FILE}:{LINE}\n",
++                    NAME = NAME.display(),
++                    FILE = FILE.display(),
+                 ));
+                 $crate::kunit::err(format_args!(
+-                    "    Expected {CONDITION} to be true, but is false\n"
++                    "    Expected {CONDITION} to be true, but is false\n",
++                    CONDITION = CONDITION.display(),
+                 ));
+                 $crate::kunit::err(format_args!(
+                     "    Failure not reported to KUnit since this is a non-KUnit task\n"
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index 28e2201604d6..50eb4266047a 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -376,27 +376,66 @@ pub fn to_ascii_uppercase(&self) -> Result<CString, AllocError> {
+ 
+         Ok(s)
+     }
+-}
+ 
+-impl fmt::Display for CStr {
+-    /// Formats printable ASCII characters, escaping the rest.
++    /// Returns an object that implements [`Display`] for safely printing a [`CStr`] that may
++    /// contain non-Unicode data. If you would like an implementation which escapes the [`CStr`]
++    /// please use [`Debug`] instead.
++    ///
++    /// [`Display`]: fmt::Display
++    /// [`Debug`]: fmt::Debug
++    ///
++    /// # Examples
+     ///
+     /// ```
+     /// # use kernel::c_str;
+     /// # use kernel::fmt;
+-    /// # use kernel::str::CStr;
+     /// # use kernel::str::CString;
+     /// let penguin = c_str!("🐧");
+-    /// let s = CString::try_from_fmt(fmt!("{}", penguin))?;
++    /// let s = CString::try_from_fmt(fmt!("{}", penguin.display()))?;
+     /// assert_eq!(s.as_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_bytes());
+     ///
+     /// let ascii = c_str!("so \"cool\"");
+-    /// let s = CString::try_from_fmt(fmt!("{}", ascii))?;
++    /// let s = CString::try_from_fmt(fmt!("{}", ascii.display()))?;
+     /// assert_eq!(s.as_bytes_with_nul(), "so \"cool\"\0".as_bytes());
+     /// # Ok::<(), kernel::error::Error>(())
+     /// ```
++    #[inline]
++    pub fn display(&self) -> Display<'_> {
++        Display { inner: self }
++    }
++}
++
++/// Helper struct for safely printing a [`CStr`] with [`fmt!`] and `{}`.
++///
++/// A [`CStr`] might contain non-Unicode data. This `struct` implements the [`Display`] trait in a
++/// way that mitigates that. It is created by the [`display`](CStr::display) method on [`CStr`].
++///
++/// If you would like an implementation which escapes the string please use [`Debug`] instead.
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::{fmt, c_str, str::CString};
++/// let ascii = c_str!("Hello, CStr!");
++/// let s = CString::try_from_fmt(fmt!("{}", ascii.display()))?;
++/// assert_eq!(s.as_bytes(), "Hello, CStr!".as_bytes());
++///
++/// let non_ascii = c_str!("🦀");
++/// let s = CString::try_from_fmt(fmt!("{}", non_ascii.display()))?;
++/// assert_eq!(s.as_bytes(), "\\xf0\\x9f\\xa6\\x80".as_bytes());
++/// # Ok::<(), kernel::error::Error>(())
++/// ```
++///
++/// [`fmt!`]: crate::fmt
++/// [`Debug`]: fmt::Debug
++/// [`Display`]: fmt::Display
++pub struct Display<'a> {
++    inner: &'a CStr,
++}
++
++impl fmt::Display for Display<'_> {
+     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+-        for &c in self.as_bytes() {
++        for &c in self.inner.as_bytes() {
+             if (0x20..0x7f).contains(&c) {
+                 // Printable character.
+                 f.write_char(c as char)?;
+@@ -595,13 +634,13 @@ fn test_cstr_as_str_unchecked() {
+     #[test]
+     fn test_cstr_display() {
+         let hello_world = CStr::from_bytes_with_nul(b"hello, world!\0").unwrap();
+-        assert_eq!(format!("{}", hello_world), "hello, world!");
++        assert_eq!(format!("{}", hello_world.display()), "hello, world!");
+         let non_printables = CStr::from_bytes_with_nul(b"\x01\x09\x0a\0").unwrap();
+-        assert_eq!(format!("{}", non_printables), "\\x01\\x09\\x0a");
++        assert_eq!(format!("{}", non_printables.display()), "\\x01\\x09\\x0a");
+         let non_ascii = CStr::from_bytes_with_nul(b"d\xe9j\xe0 vu\0").unwrap();
+-        assert_eq!(format!("{}", non_ascii), "d\\xe9j\\xe0 vu");
++        assert_eq!(format!("{}", non_ascii.display()), "d\\xe9j\\xe0 vu");
+         let good_bytes = CStr::from_bytes_with_nul(b"\xf0\x9f\xa6\x80\0").unwrap();
+-        assert_eq!(format!("{}", good_bytes), "\\xf0\\x9f\\xa6\\x80");
++        assert_eq!(format!("{}", good_bytes.display()), "\\xf0\\x9f\\xa6\\x80");
+     }
+ 
+     #[test]
+@@ -612,7 +651,7 @@ fn test_cstr_display_all_bytes() {
+             bytes[i as usize] = i.wrapping_add(1);
+         }
+         let cstr = CStr::from_bytes_with_nul(&bytes).unwrap();
+-        assert_eq!(format!("{}", cstr), ALL_ASCII_CHARS);
++        assert_eq!(format!("{}", cstr.display()), ALL_ASCII_CHARS);
+     }
+ 
+     #[test]
 
-Changes in v7:
-- Rebased on mainline.
-- Restore functionality added in commit a321f3ad0a5d ("rust: str: add
-  {make,to}_{upper,lower}case() to CString").
-- Used `diff.algorithm patience` to improve diff readability.
-- Link to v6: https://lore.kernel.org/r/20250202-cstr-core-v6-0-8469cd6d29fd@gmail.com
-
-Changes in v6:
-- Split the work into several commits for ease of review.
-- Restore `{from,as}_char_ptr` to allow building on ARM (see commit
-  message).
-- Add `CStrExt` to `kernel::prelude`. (Alice Ryhl)
-- Remove `CStrExt::from_bytes_with_nul_unchecked_mut` and restore
-  `DerefMut for CString`. (Alice Ryhl)
-- Rename and hide `kernel::c_str!` to encourage use of C-String
-  literals.
-- Drop implementation and invocation changes in kunit.rs. (Trevor Gross)
-- Drop docs on `Display` impl. (Trevor Gross)
-- Rewrite docs in the style of the standard library.
-- Restore the `test_cstr_debug` unit tests to demonstrate that the
-  implementation has changed.
-
-Changes in v5:
-- Keep the `test_cstr_display*` unit tests.
-
-Changes in v4:
-- Provide the `CStrExt` trait with `display()` method, which returns a
-   `CStrDisplay` wrapper with `Display` implementation. This addresses
-   the lack of `Display` implementation for `core::ffi::CStr`.
-- Provide `from_bytes_with_nul_unchecked_mut()` method in `CStrExt`,
-   which might be useful and is going to prevent manual, unsafe casts.
-- Fix a typo (s/preffered/prefered/).
-
-Changes in v3:
-- Fix the commit message.
-- Remove redundant braces in `use`, when only one item is imported.
-
-Changes in v2:
-- Do not remove `c_str` macro. While it's preferred to use C-string
-   literals, there are two cases where `c_str` is helpful:
-   - When working with macros, which already return a Rust string literal
-     (e.g. `stringify!`).
-   - When building macros, where we want to take a Rust string literal as an
-     argument (for caller's convenience), but still use it as a C-string
-     internally.
-- Use Rust literals as arguments in macros (`new_mutex`, `new_condvar`,
-   `new_mutex`). Use the `c_str` macro to convert these literals to C-string
-   literals.
-- Use `c_str` in kunit.rs for converting the output of `stringify!` to a
-   `CStr`.
-- Remove `DerefMut` implementation for `CString`.
-
----
-Tamir Duberstein (4):
-      rust: move `CStr`'s `Display` to helper struct
-      rust: replace `CStr` with `core::ffi::CStr`
-      rust: replace `kernel::c_str!` with C-Strings
-      rust: remove core::ffi::CStr reexport
-
- drivers/gpu/drm/drm_panic_qr.rs      |   6 +-
- drivers/net/phy/ax88796b_rust.rs     |   8 +-
- drivers/net/phy/qt2025.rs            |   6 +-
- rust/kernel/device.rs                |   7 +-
- rust/kernel/devres.rs                |   2 +-
- rust/kernel/driver.rs                |   4 +-
- rust/kernel/error.rs                 |  10 +-
- rust/kernel/faux.rs                  |   5 +-
- rust/kernel/firmware.rs              |   8 +-
- rust/kernel/kunit.rs                 |  18 +-
- rust/kernel/lib.rs                   |   2 +-
- rust/kernel/miscdevice.rs            |   5 +-
- rust/kernel/net/phy.rs               |  12 +-
- rust/kernel/of.rs                    |   5 +-
- rust/kernel/pci.rs                   |   3 +-
- rust/kernel/platform.rs              |   7 +-
- rust/kernel/prelude.rs               |   2 +-
- rust/kernel/seq_file.rs              |   4 +-
- rust/kernel/str.rs                   | 499 +++++++++++++----------------------
- rust/kernel/sync.rs                  |   4 +-
- rust/kernel/sync/condvar.rs          |   3 +-
- rust/kernel/sync/lock.rs             |   4 +-
- rust/kernel/sync/lock/global.rs      |   6 +-
- rust/kernel/sync/poll.rs             |   1 +
- rust/kernel/workqueue.rs             |   1 +
- rust/macros/module.rs                |   2 +-
- samples/rust/rust_driver_faux.rs     |   4 +-
- samples/rust/rust_driver_pci.rs      |   4 +-
- samples/rust/rust_driver_platform.rs |   4 +-
- samples/rust/rust_misc_device.rs     |   3 +-
- 30 files changed, 256 insertions(+), 393 deletions(-)
----
-base-commit: 433b1bd6e0a98938105c43c0553f24e0747ef52c
-change-id: 20250201-cstr-core-d4b9b69120cf
-
-Best regards,
 -- 
-Tamir Duberstein <tamird@gmail.com>
+2.48.1
 
 
