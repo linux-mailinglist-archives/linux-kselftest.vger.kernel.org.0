@@ -1,242 +1,192 @@
-Return-Path: <linux-kselftest+bounces-29216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29217-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A52B1A64B87
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 12:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E260A64EE4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 13:32:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 233ED1735A9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 11:02:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64643170AFE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 12:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B397B24166F;
-	Mon, 17 Mar 2025 10:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A3C238D25;
+	Mon, 17 Mar 2025 12:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="LoD68JKl"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZWBcU47C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B9C241665
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 10:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742209152; cv=none; b=BweAtZj++2DREKNeCQFQOLM2cv+CUEFT8i1U4ot6TRGwDs6DTYeNvQRR+BCjkcKgTS3uoUeYIIgUmR9Nby86cD+KnbUCywQ6ELKVRIGaWLyRt7pueFCCgUU0PPL2XUkhYxhbiuQJq06g1cA6biOteX04xFZtSh+8Y/h7fcaEB+U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742209152; c=relaxed/simple;
-	bh=QysKwJMoIqaKFtrng8JoZjRW/Qn7QIvbuXMh0UY/638=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To; b=DHZ+HBOt6mlFXOz3eCLhwjLVb8WxWwL/5gUyv8OoLykh+1lHZkkFbxTzfl17UeoGoHk3s9yvX7iys2dwC5FKp0+8L8Q3MXg/bgYq5vdy8Dn+PDXsDevHYaAJOpR5DHMgAQsAP+BRzV9ol1C1075VX17A+P+Miwpkr7XD0AcFeY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=LoD68JKl; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2ff797f8f1bso2547138a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 03:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1742209150; x=1742813950; darn=vger.kernel.org;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jXhv781+liPB0AwwevhkbIFrQwob4kiywxMETbO/hoM=;
-        b=LoD68JKl8vo/f2E53adWY+nT0lJpYRv7solt6X2M90zVKUCGQ5miR5UzpTebBm96kW
-         juy3XY+96hrDCHov9P+9mXpeV5MU9KtxFtm73dHz9S0s9ZNCVJram1rWphZNkzP4psT0
-         XrGHY6zAL4xuapVEWyLA86OdW149Gs1foDmlREc3uuAxlcIX7JPGTScIiT6NSdZrKjfJ
-         NgYU1JlFtSU0jomtYVVN8BAqqZvJ16QQA4LiN0gBNYCnPfVJTIHMAXGwRPIA/n+jKYoW
-         X4yKAWamOIJY/xFuHZX/eUEFwM3ig8oS0zzaNveOrZJLpIPv+ID2kMEDPPQF/1j1wPW0
-         s8lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742209150; x=1742813950;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jXhv781+liPB0AwwevhkbIFrQwob4kiywxMETbO/hoM=;
-        b=FPRcfEyytV6YqaMsLnz2NkzdxUIEr0BhMloYnAWLXIdU6y8mrjgO5VxwX1o2OyGDyt
-         2Ecs81/sjeRSpTHYecB5RY+tEXtlcoeACjDFT9QTlfjsWyOPFPbQf/DWVcbfa0uwhbQk
-         BDMIFpRbd0fJZ7gAeCX5lXfMKUa5eGOloR9RyU1yneuWUojzpmv6G3Tq0k3B6L9QHfN0
-         k5EwNL5e15U/6I/B+RGIYhUGCQfqs0S8enGn7fLdXNv0h3E5wzI8jJt+8VWSQU2RTM9T
-         3bPhFbVQVDJZMbi0i0Ua0Ik/alLAtuoYAiAwVEjs2pOHDVGi6koYr6Zn5Hg472FEplN1
-         qCoA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+1JcYFqBgHEVeH59RcylSzcirfAvFMZT+jWdHsi7b8zNDcChX07X2S8HiG0nGrsxQNCzZ+Pb7oNINYYoetvo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpIf0pfClMJbG3ZxB04QcN86v7exZNBxedZawRheYOJzvYS7tr
-	2jdnNhvS/bBvSKMBjGh2UgaQPYuhMaGHs7PFYD1N+mu0VdbdP68L+yjdW4klNuE=
-X-Gm-Gg: ASbGncvEsY24gQunZprPBSvdoxuvkerHFqLujlhWCKC1T3P4h9rOWE2IxMk50dKao2F
-	TQ4ZSWrPJQNhb4koGxdk7IIdaBvyrcXCUZRkGg64yda8Josjq8ZzR3XgBLjob1oAyxtsksrlaiA
-	qtZNJJjox9NX4aLmHVww2znGXRuBDy2ahl72ajCf1qTy0a2CEKtnTk+RhlugyaDDkEkuAX5hCtQ
-	AdUVfPqnXkM76IE0T8AcfcZBMHgwURWvlzPKvLPZhPLp+JZF0lI6Sy66w6AB3QVeWvYB7zasAx9
-	cmUBKuFS2u1u8k8tfPZbrCZ0RjIdoteT+LkAenUNiItVNQll
-X-Google-Smtp-Source: AGHT+IFBTzBt4W91RO9hEmwf21fzT3s8Bp70zxhXco8GCOaNp4xUeMJNMRSu3auEGTPJcF2HKgGT2A==
-X-Received: by 2002:a17:90b:5347:b0:2ff:58c7:a71f with SMTP id 98e67ed59e1d1-30151dc7588mr13016176a91.32.1742209149802;
-        Mon, 17 Mar 2025 03:59:09 -0700 (PDT)
-Received: from localhost ([157.82.207.107])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-3015364ec6esm5760309a91.49.2025.03.17.03.59.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 03:59:09 -0700 (PDT)
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-Date: Mon, 17 Mar 2025 19:58:00 +0900
-Subject: [PATCH net-next v11 10/10] vhost/net: Support
- VIRTIO_NET_F_HASH_REPORT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCB8EBE;
+	Mon, 17 Mar 2025 12:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.85
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742214735; cv=fail; b=rgYVDP8NIKyaZiKd9XB3s0S5H4wQZqmVlvl1eKIXFFAtWU5mxelkP3M3q9mcYlq3v8kI+TkBF0eLUPwJRFp2AOVjoLHyKxqgMnDNhmDxz/Xh52Awhrt8tcVa6S55hF+Ltq2Ls0gyfFVnUJwkNc7YfRdTfQjUedJlKDoyz9iPh5Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742214735; c=relaxed/simple;
+	bh=JcylJ6pPCI+1mHDIpKBQeMbL91lODukuFPg7WYBbt78=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cwyH3SJGuFBzP7V1apmvxkMkOmMuSJ3SVgyedlfBKrJyvGkNzit5YHbPjnR0z9tiW/MogvgiuSYrTAcCan/8j/JWWO4CKuC7Pxbw1WzS/8TdQhZqs2Ulsz2vqU5X3RJuyZd3I7/btAIoqx8gr5GLI5JueZpTvg//PLODAXdL3RQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZWBcU47C; arc=fail smtp.client-ip=40.107.92.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hptkzYFEj8vJS20WR2zWhWJOH955/yrpVsd5Tlzucmf5i2fa93Isk7ayrmJ2xCWnAZz6zdY7AKTJed9s/tLPuTE34ItvpsmdTpkEjbW6o42yAx5N6QgHW3OYOnnJPkeiptNSkLqGMjKcWZoWC/tPzTWfgpMGgjCCJBbXu+35NVdx6FogXaXthlfVB3XHgkmySrpbTVgvIRNO23ZSTMEkdVIPKSKMautPzayJY5ISnFntLifa0io1uTNBfG6v/bz4kxg7WM1Icpw8rBUGCnTqCKz2HwZ1LSN8UHcO2HAUFjBqXxWi6317KjE7dE7fWwPKgkPYFKUGhwPYajKFBOo5Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V4p681lO7ReacbdjNLTMRMbFYYEcK7ZHFAijmPGdTEI=;
+ b=eaAOvzhZD0mgX8DivxvYg37/hraLwvtFz+sqVIZOjaWr9Yh9D+UP2klRSKeG8DRtQUfFJAtgSIGDri4bAROkLZ8tY9nbt35HoCFkwN5hHn1esmReunFE8xzY30zs4orDoGVl9M6QqiHrGpOr28FUQuzFepJy70cethZ/6nrQXehqEsfjJ5PV2kKm/m1cnJsFkQTQbNghF6Tw5QmZ6ZvGsMArXlGJ+jLGpAegtNi8eUZ7uLR4fBa2bzRkEBMwDGLj4Foj6APYZJ24r2NOnPOmAjE3fqtoIcFMbSippIV9X8J2ubt9YwnuSzQqQEwYk1tdoxo0j5HeaKwokfEqhDCEkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V4p681lO7ReacbdjNLTMRMbFYYEcK7ZHFAijmPGdTEI=;
+ b=ZWBcU47CmdW5dIqY7QmQaaSG4ftI+bzDuiPJQBYIorhpygV59fA7qLAR3mASzWywG7bbcddfIJTpkdXCEDLwX3xseeMBLTtov63YoiZiU2WvuyRXy2xomNQh9ooquHtoNB+bibZQ/JL8tUU/S7O6cyHpsnjyRBYh86DwvXPaMbNNISJXQXHNQ9siwMjzm15h0jfyYxi25LJGvyPlbAPk/z6EesXhBaowBw66RiB99T5jkIQPmUluFFu3yLiTVB85n6XuOATXCTrqkYjHyRSqfks1wAz6Ci/rg957OhD84vZFIRQMcyb/3xtS54fZYacR4LzQaPggcKiguMjrfbytqA==
+Received: from PH8PR07CA0036.namprd07.prod.outlook.com (2603:10b6:510:2cf::9)
+ by SJ2PR12MB8034.namprd12.prod.outlook.com (2603:10b6:a03:4cb::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Mon, 17 Mar
+ 2025 12:32:09 +0000
+Received: from SN1PEPF0002BA4B.namprd03.prod.outlook.com
+ (2603:10b6:510:2cf:cafe::14) by PH8PR07CA0036.outlook.office365.com
+ (2603:10b6:510:2cf::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8534.25 via Frontend Transport; Mon,
+ 17 Mar 2025 12:32:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ SN1PEPF0002BA4B.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8534.20 via Frontend Transport; Mon, 17 Mar 2025 12:32:08 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 17 Mar
+ 2025 05:31:58 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Mon, 17 Mar 2025 05:31:58 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.14 via Frontend
+ Transport; Mon, 17 Mar 2025 05:31:56 -0700
+From: Gal Pressman <gal@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	<netdev@vger.kernel.org>
+CC: Shuah Khan <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, "Gal
+ Pressman" <gal@nvidia.com>, Nimrod Oren <noren@nvidia.com>
+Subject: [PATCH net-next] selftests: drv-net: rss_input_xfrm: Check test prerequisites before running
+Date: Mon, 17 Mar 2025 14:31:49 +0200
+Message-ID: <20250317123149.364565-1-gal@nvidia.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250317-rss-v11-10-4cacca92f31f@daynix.com>
-References: <20250317-rss-v11-0-4cacca92f31f@daynix.com>
-In-Reply-To: <20250317-rss-v11-0-4cacca92f31f@daynix.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, kvm@vger.kernel.org, 
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
- Yuri Benditovich <yuri.benditovich@daynix.com>, 
- Andrew Melnychenko <andrew@daynix.com>, 
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
- Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>, 
- Akihiko Odaki <akihiko.odaki@daynix.com>
-X-Mailer: b4 0.15-dev-edae6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA4B:EE_|SJ2PR12MB8034:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f334b6f-a746-4e37-7578-08dd654fbc00
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?lSB6MO47BtOsDGVLR3eG44MvRIVwAQKTvPue+On8X92M1SkrjALOQ3qzz4o6?=
+ =?us-ascii?Q?e9bui1U64Aa3mFePMi+z66Y+CFQ6CLY2Rm66CM8QLXWH2CEVXVyBrk3l1vhW?=
+ =?us-ascii?Q?2xkQFAl6R6a3Dzl/WNKZTdI25PsBxguq7SvHFklVa2eXry8ai92wfXbUZ33t?=
+ =?us-ascii?Q?SykIPXmSRiTNS5Yjz13blx9UVO2IPmJxbhOZRYaGp8VTtAhUwlgrGFhE9Pp9?=
+ =?us-ascii?Q?6i9TcTxh+yrZrz2Wls1Xtv7FhurQi6p3Eoq7DP+EyMSmhbfcJwLRYJwAhgi8?=
+ =?us-ascii?Q?NX74sGXmWX8waNfGBpQIU2ZjL61M9ga/tfJs7J+Hyn0UJeetBzdIBFS4f5Th?=
+ =?us-ascii?Q?5JiC9r/GIQhyCs18SOruS7ztrZ56S/+KXLKycUCB/48xMU9uOzcOXGGyL8/E?=
+ =?us-ascii?Q?FTL5Iv/MfdFDdbA6ZZu3OXZfeEjd05GZ0vZgCuxr4h3EUUyiAqqkA6nfmQSP?=
+ =?us-ascii?Q?OPGUX9VqUFvA3FAgaySliwDldNqgLcXKctLUwvhyrFG+STnRDhEog1Oxr+Dq?=
+ =?us-ascii?Q?lqJMSEx4g5Y8wuJLvCbBrTT9MAM+SwIGPORaHVebW7truZOEA4+EmfmyOdqy?=
+ =?us-ascii?Q?ZOWReS4PoVoyetU+0t4ltZWGZK/xQAUPEUgXvkE82XTRuadtmZt+tAuwpZLT?=
+ =?us-ascii?Q?qK5kNl9lLTS52x/4kJ5bSoh9xkicwmAAzxVBc/p4lW8XH/wG/2dIupRdKtjc?=
+ =?us-ascii?Q?xEwkjbwqaIQKBrdh4dKlZoECqyZ/n6Dog6Vl6OKwg7ZiEPGxQXFtAjPGsCEd?=
+ =?us-ascii?Q?gLmDUQT8fqwAk4F0EHhfUJuSeUH7Z9G3Z2mBUo282sEIouwALNMKlBkpjCxG?=
+ =?us-ascii?Q?uVM3gngR95vT3L3Th/M15jCOTEvu/cju7becZe+2oXxt1QeVVsVXm6q8GSNa?=
+ =?us-ascii?Q?ZbPbH4YswzcgwdLcJGGbR8jAlBQasMB5PZLagf1UARSsOhvp9cmTVL/xf2Je?=
+ =?us-ascii?Q?Q8Oth4pK6CRXQEi7rU28wo8JCRWY8XfLU1cpF+Q8OypnV7Y70VDWWDOcgL8M?=
+ =?us-ascii?Q?eILxFJiPHqJP8h9CNo1aaAvcA93VJMyvpGDnzkQihaHjWR1eUTotoow6GczB?=
+ =?us-ascii?Q?qQX1I5HuPtthqUVOGTSd02puvxRMh+jCSGhQZwCiEFTJgKwycVrij7MdFCJP?=
+ =?us-ascii?Q?QzJcF4ftMpE8vKgpRQQd9nX8Tibt2TI+Ju3M/rTsL4OlYvW9e8X6BiEPD7UP?=
+ =?us-ascii?Q?uY+nYJYZJFxIKrJYGpV5EVubkNn39U2YTFkVtXBEhrfMgvlTpb+YBs0Szu1H?=
+ =?us-ascii?Q?Q4GXAO6Bu87Zqu+LnOmNm/iXI/5ud6H/AQAQvfu+ErRymkryKYWO7AaRcQEt?=
+ =?us-ascii?Q?7tfsP0OcfGN3XxcOoMnXtxcZ7XYu6yY20Frxburfwhj8MNNUt3f8SnZDiPBR?=
+ =?us-ascii?Q?BEFxYoCko4RR2vc1F1QLdhh7z/EUOTZIfenp598LdI753SjkDwdk7kOUGkMJ?=
+ =?us-ascii?Q?NGV5JEsjSAUXqcdhQIui5du3D3Be2Psj72aLEs7YQqgsu6FdvbG3GhVd1I5R?=
+ =?us-ascii?Q?8cdF6RFrJC6iRl4=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2025 12:32:08.6040
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f334b6f-a746-4e37-7578-08dd654fbc00
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8034
 
-VIRTIO_NET_F_HASH_REPORT allows to report hash values calculated on the
-host. When VHOST_NET_F_VIRTIO_NET_HDR is employed, it will report no
-hash values (i.e., the hash_report member is always set to
-VIRTIO_NET_HASH_REPORT_NONE). Otherwise, the values reported by the
-underlying socket will be reported.
+Ensure the following prerequisites before executing the test:
+1. 'socat' is installed on the remote host.
+2. Python version supports socket.SO_INCOMING_CPU (available since v3.11).
 
-VIRTIO_NET_F_HASH_REPORT requires VIRTIO_F_VERSION_1.
+Skip the test if either prerequisite is not met.
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-Tested-by: Lei Yang <leiyang@redhat.com>
+Reviewed-by: Nimrod Oren <noren@nvidia.com>
+Signed-off-by: Gal Pressman <gal@nvidia.com>
 ---
- drivers/vhost/net.c | 68 +++++++++++++++++++++++++++--------------------------
- 1 file changed, 35 insertions(+), 33 deletions(-)
+ .../testing/selftests/drivers/net/hw/rss_input_xfrm.py | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index b9b9e9d40951..fc5b43e43a06 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -73,6 +73,7 @@ enum {
- 	VHOST_NET_FEATURES = VHOST_FEATURES |
- 			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
- 			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			 (1ULL << VIRTIO_NET_F_HASH_REPORT) |
- 			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
- 			 (1ULL << VIRTIO_F_RING_RESET)
- };
-@@ -1097,10 +1098,6 @@ static void handle_rx(struct vhost_net *net)
- 		.msg_controllen = 0,
- 		.msg_flags = MSG_DONTWAIT,
- 	};
--	struct virtio_net_hdr hdr = {
--		.flags = 0,
--		.gso_type = VIRTIO_NET_HDR_GSO_NONE
--	};
- 	size_t total_len = 0;
- 	int err, mergeable;
- 	s16 headcount;
-@@ -1174,11 +1171,15 @@ static void handle_rx(struct vhost_net *net)
- 		/* We don't need to be notified again. */
- 		iov_iter_init(&msg.msg_iter, ITER_DEST, vq->iov, in, vhost_len);
- 		fixup = msg.msg_iter;
--		if (unlikely((vhost_hlen))) {
--			/* We will supply the header ourselves
--			 * TODO: support TSO.
--			 */
--			iov_iter_advance(&msg.msg_iter, vhost_hlen);
-+		/*
-+		 * Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET_HDR
-+		 * TODO: support TSO.
-+		 */
-+		if (unlikely(vhost_hlen) &&
-+		    iov_iter_zero(vhost_hlen, &msg.msg_iter) != vhost_hlen) {
-+			vq_err(vq, "Unable to write vnet_hdr at addr %p\n",
-+			       vq->iov->iov_base);
-+			goto out;
- 		}
- 		err = sock->ops->recvmsg(sock, &msg,
- 					 sock_len, MSG_DONTWAIT | MSG_TRUNC);
-@@ -1191,30 +1192,24 @@ static void handle_rx(struct vhost_net *net)
- 			vhost_discard_vq_desc(vq, headcount);
- 			continue;
- 		}
--		/* Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET_HDR */
--		if (unlikely(vhost_hlen)) {
--			if (copy_to_iter(&hdr, sizeof(hdr),
--					 &fixup) != sizeof(hdr)) {
--				vq_err(vq, "Unable to write vnet_hdr "
--				       "at addr %p\n", vq->iov->iov_base);
--				goto out;
--			}
--		} else {
--			/* Header came from socket; we'll need to patch
--			 * ->num_buffers over if VIRTIO_NET_F_MRG_RXBUF
--			 */
--			iov_iter_advance(&fixup, sizeof(hdr));
--		}
- 		/* TODO: Should check and handle checksum. */
+diff --git a/tools/testing/selftests/drivers/net/hw/rss_input_xfrm.py b/tools/testing/selftests/drivers/net/hw/rss_input_xfrm.py
+index 53bb08cc29ec..58d74ba6c343 100755
+--- a/tools/testing/selftests/drivers/net/hw/rss_input_xfrm.py
++++ b/tools/testing/selftests/drivers/net/hw/rss_input_xfrm.py
+@@ -7,7 +7,7 @@ from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, cmd, fd_read_timeout
+ from lib.py import NetDrvEpEnv
+ from lib.py import EthtoolFamily, NetdevFamily
+ from lib.py import KsftSkipEx, KsftFailEx
+-from lib.py import rand_port
++from lib.py import rand_port, CmdExitFailure
  
-+		/*
-+		 * We'll need to patch ->num_buffers over if
-+		 * VIRTIO_NET_F_MRG_RXBUF or VIRTIO_F_VERSION_1
-+		 */
- 		num_buffers = cpu_to_vhost16(vq, headcount);
--		if (likely(set_num_buffers) &&
--		    copy_to_iter(&num_buffers, sizeof num_buffers,
--				 &fixup) != sizeof num_buffers) {
--			vq_err(vq, "Failed num_buffers write");
--			vhost_discard_vq_desc(vq, headcount);
--			goto out;
-+		if (likely(set_num_buffers)) {
-+			iov_iter_advance(&fixup, offsetof(struct virtio_net_hdr_v1, num_buffers));
-+
-+			if (copy_to_iter(&num_buffers, sizeof(num_buffers),
-+					 &fixup) != sizeof(num_buffers)) {
-+				vq_err(vq, "Failed num_buffers write");
-+				vhost_discard_vq_desc(vq, headcount);
-+				goto out;
-+			}
- 		}
-+
- 		nvq->done_idx += headcount;
- 		if (nvq->done_idx > VHOST_NET_BATCH)
- 			vhost_net_signal_used(nvq);
-@@ -1607,10 +1602,13 @@ static int vhost_net_set_features(struct vhost_net *n, u64 features)
- 	size_t vhost_hlen, sock_hlen, hdr_len;
- 	int i;
  
--	hdr_len = (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
--			       (1ULL << VIRTIO_F_VERSION_1))) ?
--			sizeof(struct virtio_net_hdr_mrg_rxbuf) :
--			sizeof(struct virtio_net_hdr);
-+	if (features & (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+		hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-+	else if (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			     (1ULL << VIRTIO_F_VERSION_1)))
-+		hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
-+	else
-+		hdr_len = sizeof(struct virtio_net_hdr);
- 	if (features & (1 << VHOST_NET_F_VIRTIO_NET_HDR)) {
- 		/* vhost provides vnet_hdr */
- 		vhost_hlen = hdr_len;
-@@ -1691,6 +1689,10 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
- 			return -EFAULT;
- 		if (features & ~VHOST_NET_FEATURES)
- 			return -EOPNOTSUPP;
-+		if ((features & ((1ULL << VIRTIO_F_VERSION_1) |
-+				 (1ULL << VIRTIO_NET_F_HASH_REPORT))) ==
-+		    (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+			return -EINVAL;
- 		return vhost_net_set_features(n, features);
- 	case VHOST_GET_BACKEND_FEATURES:
- 		features = VHOST_NET_BACKEND_FEATURES;
-
+ def traffic(cfg, local_port, remote_port, ipver):
+@@ -32,6 +32,14 @@ def test_rss_input_xfrm(cfg, ipver):
+     if multiprocessing.cpu_count() < 2:
+         raise KsftSkipEx("Need at least two CPUs to test symmetric RSS hash")
+ 
++    try:
++        cmd("hash socat", host=cfg.remote)
++    except CmdExitFailure:
++        raise KsftSkipEx("socat not installed on remote")
++
++    if not hasattr(socket, "SO_INCOMING_CPU"):
++        raise KsftSkipEx("socket.SO_INCOMING_CPU was added in Python 3.11")
++
+     input_xfrm = cfg.ethnl.rss_get(
+         {'header': {'dev-name': cfg.ifname}}).get('input_xfrm')
+ 
 -- 
-2.48.1
+2.40.1
 
 
