@@ -1,162 +1,185 @@
-Return-Path: <linux-kselftest+bounces-29186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29187-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AECDA64699
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:08:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C407AA646E4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:19:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FB311893F66
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:08:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA15D3A5ABC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5382222B2;
-	Mon, 17 Mar 2025 09:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E6D21D3EA;
+	Mon, 17 Mar 2025 09:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mdmwEFVO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="34eQYoD0";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mdmwEFVO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="34eQYoD0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WV3auc4d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73447221F1B
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 09:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FA11758B;
+	Mon, 17 Mar 2025 09:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742202481; cv=none; b=bYCNETCEp/+wsQnO0GhDdDGfX73n1qiCnD4IwQYZUaq4GEzVjld/GD0RFljgzTnwAjloGDiibueTeHjS3snPrg2Ozj+5xW7IaZ2M+t2TtOtiZxKpU40GXQh/FmEOD9/T9H8cld0eEOPNaSUxynmEQTFI5Cfr3TbqRIdCsw+TnEE=
+	t=1742203155; cv=none; b=hIHrzXGOC8nOXtKxDLhiedxfOJZTkww/CTibRwKzZLrBhA9zkUpPUrTErlbmYVSpQzWztnZpkWeoTzsdO+4xr+ZMrVCmcCWrpV6kn4SVVZRSgjBzin5U3qDa1XpS+GrrCbM9ji6Vxlg0+9lAVFMHCyqWvCQNvTmis083PGSZ4v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742202481; c=relaxed/simple;
-	bh=UgPBZvjsFQmiYNA6znXuMhzjQ271ggAz4JFSOSvqvZ4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=T8mN6sSB6WpYLcuIbILpPLHEZvxQ8AnRZ35Gia/CtqmVYh9kxaQzkpYM3NY28Ezkm7MdH848QvH+Ou7g1eQ4dDfibLHwCBF26BT9OYupFm3E8eRoF7CzWMkZcakgkwJKMwwTGTZDFkuvnrCpvpVJeuJQBWXquPW0zPm2mkTMggU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mdmwEFVO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=34eQYoD0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mdmwEFVO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=34eQYoD0; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from pobox.suse.cz (unknown [10.100.2.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A9C0321D92;
-	Mon, 17 Mar 2025 09:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1742202478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
-	b=mdmwEFVOvZgIbkhQEoa9slH513xeG7AGOURUICIl1Jp1Fdeh6vi5MxfuQG/2/rlt5ZrG4/
-	Tf5ea1HCt/QclEZrMFSWgbmODsbF78/k2BaRnKOZCXfKo9EcPL3WpfEdj7aOUo2BODlNYq
-	7e1qO1IA46lUQlj+Yp1PiVTnVtzAJRA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1742202478;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
-	b=34eQYoD0Q40srGmeBJ5kuXok7ZTv2bSKWLuqtLeeouHNL9TsGu4KbnrWwBXioFteWi9ZfU
-	JNZ5yfK6tXPri+Ag==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1742202478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
-	b=mdmwEFVOvZgIbkhQEoa9slH513xeG7AGOURUICIl1Jp1Fdeh6vi5MxfuQG/2/rlt5ZrG4/
-	Tf5ea1HCt/QclEZrMFSWgbmODsbF78/k2BaRnKOZCXfKo9EcPL3WpfEdj7aOUo2BODlNYq
-	7e1qO1IA46lUQlj+Yp1PiVTnVtzAJRA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1742202478;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wnKFNLrLhAN97UeP+wzQU9edyI2DXXEOjOLsBP6B4eQ=;
-	b=34eQYoD0Q40srGmeBJ5kuXok7ZTv2bSKWLuqtLeeouHNL9TsGu4KbnrWwBXioFteWi9ZfU
-	JNZ5yfK6tXPri+Ag==
-Date: Mon, 17 Mar 2025 10:07:58 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Filipe Xavier <felipeaggger@gmail.com>
-cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-    Shuah Khan <shuah@kernel.org>, Marcos Paulo de Souza <mpdesouza@suse.com>, 
-    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, felipe_life@live.com
-Subject: Re: [PATCH PATCH 2/2] selftests: livepatch: test if ftrace can trace
- a livepatched function
-In-Reply-To: <6d9b9394-690b-49a3-b8df-7ef510c96c00@gmail.com>
-Message-ID: <alpine.LSU.2.21.2503171006260.4236@pobox.suse.cz>
-References: <20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com> <20250306-ftrace-sftest-livepatch-v1-2-a6f1dfc30e17@gmail.com> <alpine.LSU.2.21.2503141411010.4442@pobox.suse.cz> <6d9b9394-690b-49a3-b8df-7ef510c96c00@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	s=arc-20240116; t=1742203155; c=relaxed/simple;
+	bh=abhSV4oZla2hmjMZqJOBpvk7JGaPgKUD5B3Yerg3BxY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YBluz4T4Vxq98H9/8kEh7EfzMHKg/4T/OPi1ZJcpOxR5AIuijemwqJ6ANTDkOPly4dMmtJfyaSQq6XpXji83QraT8ZcipDfn9NI5YnTH8vChIjrivwr1hW6U1o78TrB44mFw/klKiWfx6epbSd/E0CM9QgWommE+KkxABuOFOQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WV3auc4d; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-225d66a4839so47741955ad.1;
+        Mon, 17 Mar 2025 02:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742203154; x=1742807954; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMORBukfDNOzWrCEQijjWj2H6MggMJxZRFJuSPvnV3s=;
+        b=WV3auc4dFxTsQQZJB6rEgKLXicouF6/JAn0MLYsSwns0BPRWhZJQf9vvu7IbbMJJ5b
+         iCCLxdeH0b79Bmdx+8F27Vm56GH0pmrH7Y5FaSMK+3YSF1Fxr6I/BACNoVwrqwqKZiXU
+         SmGR8yDFnUJA2tGDRS9P/v0jUdpEM/mS2QXCP7ZgcJ2SvWXcTxRFeJGAhs+yT2nSW9Iz
+         lOil0sPnD63hYj15VtWAASsm6ngqGxZ210y/Pvk/lMiK4OGU6nvPm9vgvAjNH22oxRIe
+         qy170sDBIyo25mqEdABXBO2QeVdMqe/G33gBw5qJiAr83RUm1BiyVk59lu6HX/rN9h6w
+         dsZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742203154; x=1742807954;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lMORBukfDNOzWrCEQijjWj2H6MggMJxZRFJuSPvnV3s=;
+        b=sqzq7J6FfSaAZIWlusLKzlSH6c84iPKdQysqgitCzEH21sM3MiYydBXwgWiIfUx7II
+         fceJKgHgACvb8TBiA+ciSrWW4juXMLUNdcgDlgORsX+OdoY7nueah54UIpnxbf5g41PD
+         IsskWgqrV8qIDKEoL5ypnatb0Iop/HUijU6UWY7+11wh5lLoBanm+H6t//b2BGh4O/6F
+         I8nJJFvlQLT/XB5S2PKM++WItPUhitIGeOVerRFp6NV+5vrMUCE1lu1c3v8Q0wIvXCp3
+         W95tUpgnZtVLE2zhCCNUZXokEhcdpavNUBZxoojjGmYa38QugKaBSa3moQ6X7y2UDvsR
+         bmGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZngtGIIwMgr5ecttfXAAfy0k38/OCKkoVloQ3SDIOHqVN1NF1cPcbhIbqQ1u3xZ+/mQc=@vger.kernel.org, AJvYcCUnSBUZ5DgPz8kqrugmrYXwmiLjtHesY2S9xrEcGY0oCYwQCuyx35pehk937JXKBwq6ovNJOyCyyiyfFE3G@vger.kernel.org, AJvYcCVHqbZAmIgeU1km7bdhrM5DBvXz+fQyHFZqWepWDpJdqaFWKuA+7Y4zLfN3PNZnBtDLRh1dE1XXi5CM90LmO70m@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaiPRbgqUX7yV9Vy91/DjaF1qFgXax9vHI/SZirwwBowH87G3P
+	sJATlF0DIPy8bZEU/tkf2zO/n1jEI2tmUwDgAPLnx1MLbJ9QsqVe
+X-Gm-Gg: ASbGncto3709iKm7WC61UkjL7+hATn9j34H9uvQO6oaJ8wTJppX0jikJ1tQH/TR0Gke
+	wkKWKttjA0hBe46kdgsN1CVhDrPtc6rxtnXv6m+6Kj/wtmSEbVszMkad4zsDSMHrVWuAW4CHbMF
+	4AXKIMV1rFJXy7/DrwNoGsptR7wlNXH/iqcp5JuwT9Zbbj5xQWqMjd77JWdeGX+Nj6uzPTabBuV
+	0IrBtgfNxEcpl+8338KpSd+AT8p3WCT1rf7NJnm/eBsZ1+ZA1VBUUBhbMVYsec5l3W12XK27+MB
+	zCMVh0LvxPCI2BIByVd0xRB7KJwhzWqPaVRgw5DWbbKhCAI7Mzk=
+X-Google-Smtp-Source: AGHT+IFQrLJwhlX7+RiGH3CxZ9FfxID5MIfJ1arkUBWGEnsa5Y9RjhdscgDV1ztpHSFUF5oJv7iB3A==
+X-Received: by 2002:a05:6a00:8306:b0:736:5813:8c46 with SMTP id d2e1a72fcca58-737107f9d11mr17429679b3a.8.1742203153453;
+        Mon, 17 Mar 2025 02:19:13 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-737115293f6sm7340451b3a.14.2025.03.17.02.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Mar 2025 02:19:12 -0700 (PDT)
+Message-ID: <9083b52fd4a2d7a5a0473e858042c277c883f8b0.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 09/11] bpf: Return PTR_ERR from push_stack()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Luis Gerhorst <luis.gerhorst@fau.de>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai
+ <xukuohai@huaweicloud.com>, Catalin Marinas	 <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Hari Bathini	 <hbathini@linux.ibm.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,  Naveen N Rao
+ <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
+ Ellerman	 <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Mykola
+ Lysenko	 <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Henriette Herzog	
+ <henriette.herzog@rub.de>, Cupertino Miranda
+ <cupertino.miranda@oracle.com>,  Matan Shachnai <m.shachnai@gmail.com>,
+ Dimitar Kanaliev <dimitar.kanaliev@siteground.com>, Shung-Hsi Yu	
+ <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, George Guo	
+ <guodongtai@kylinos.cn>, WANG Xuerui <git@xen0n.name>, Tiezhu Yang	
+ <yangtiezhu@loongson.cn>
+Cc: Maximilian Ott <ott@cs.fau.de>, Milan Stephan <milan.stephan@fau.de>
+Date: Mon, 17 Mar 2025 02:19:08 -0700
+In-Reply-To: <20250313174149.1113165-4-luis.gerhorst@fau.de>
+References: <20250313172127.1098195-1-luis.gerhorst@fau.de>
+	 <20250313174149.1113165-1-luis.gerhorst@fau.de>
+	 <20250313174149.1113165-4-luis.gerhorst@fau.de>
+Content-Type: multipart/mixed; boundary="=-pU3IArgK79wjJvjdvEwt"
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,live.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,suse.com,redhat.com,vger.kernel.org,live.com];
-	MIME_TRACE(0.00)[0:+];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
 
-On Fri, 14 Mar 2025, Filipe Xavier wrote:
+--=-pU3IArgK79wjJvjdvEwt
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On 3/14/25 10:14 AM, Miroslav Benes wrote:
-> 
-> > Hi,
-> >
-> >> +start_test "trace livepatched function and check that the live patch
-> >> remains in effect"
-> >> +
-> >> +FUNCTION_NAME="livepatch_cmdline_proc_show"
-> >> +
-> >> +load_lp $MOD_LIVEPATCH
-> >> +trace_function "$FUNCTION_NAME"
-> > trace_funtion() calls cleanup_ftrace() to prepare the test. Ok.
-> >
-> >> +if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live
-> >> patched" ]] ; then
-> >> +	log "livepatch: ok"
-> >> +fi
-> >> +
-> >> +check_traced_function "$FUNCTION_NAME"
-> >> +
-> >> +cleanup_tracing
-> > Here, I suppose, cleanup_tracing() is called to clean up after the check
-> > above so that nothing stays and more tests can be added later. Right?
-> > Would it make sense then to call cleanup_tracing() in
-> > check_traced_function()? I think it would less error prone.
-> > If needed, check_traced_function() can always be upgraded so that it
-> > checks for more traced functions.
-> 
-> In cases where we need to check two or more functions with
-> check_traced_function,
-> 
-> if there is cleanup_tracing, it will not be possible, make sense?
-> 
-> e.g: function1 call -> function2 call -> function3.
+On Thu, 2025-03-13 at 18:41 +0100, Luis Gerhorst wrote:
 
-I meant... check_traced_function() (or check_traced_functions() in this 
-case) can have multiple arguments. You would loop over them inside and 
-then clean up. Or did I misunderstood?
+[...]
 
-Miroslav
+> @@ -2011,8 +2011,10 @@ static struct bpf_verifier_state *push_stack(struc=
+t bpf_verifier_env *env,
+>  	int err;
+> =20
+>  	elem =3D kzalloc(sizeof(struct bpf_verifier_stack_elem), GFP_KERNEL);
+> -	if (!elem)
+> -		goto err;
+> +	if (!elem) {
+> +		err =3D -ENOMEM;
+> +		goto unrecoverable_err;
+> +	}
+
+Could you please point me to a location, where exact error code
+returned by updated push_stack() matters?
+I checked push_stack() callgraph (in the attachment), but can't find
+anything.
+
+> =20
+>  	elem->insn_idx =3D insn_idx;
+>  	elem->prev_insn_idx =3D prev_insn_idx;
+> @@ -2022,12 +2024,19 @@ static struct bpf_verifier_state *push_stack(stru=
+ct bpf_verifier_env *env,
+
+[...]
+
+
+--=-pU3IArgK79wjJvjdvEwt
+Content-Disposition: attachment; filename="push_stack.dot"
+Content-Transfer-Encoding: base64
+Content-Type: text/vnd.graphviz; name="push_stack.dot"; charset="UTF-8"
+
+ZGlncmFwaCBHIHsKTm9kZTB4NTVkZDRhOGQ0YjUwIFtsYWJlbD0ie2NoZWNrX2NvbmRfam1wX29w
+fSIsIHNoYXBlPXJlY29yZF07Ck5vZGUweDU1ZGQ0YWEwNjc5MCBbbGFiZWw9IntzYW5pdGl6ZV9z
+cGVjdWxhdGl2ZV9wYXRofSIsIHNoYXBlPXJlY29yZF07Ck5vZGUweDU1ZGQ0YThjYTU4MCBbbGFi
+ZWw9IntjaGVja19oZWxwZXJfY2FsbH0iLCBzaGFwZT1yZWNvcmRdOwpOb2RlMHg1NWRkNGE4Y2Yy
+NjAgW2xhYmVsPSJ7Y2hlY2tfa2Z1bmNfY2FsbH0iLCBzaGFwZT1yZWNvcmRdOwpOb2RlMHg1NWRk
+NGE4OGQ3ZDAgW2xhYmVsPSJ7ZG9fY2hlY2t9Iiwgc2hhcGU9cmVjb3JkXTsKTm9kZTB4NTVkZDRh
+YTNhMzYwIFtsYWJlbD0ie2FkanVzdF9wdHJfbWluX21heF92YWxzfSIsIHNoYXBlPXJlY29yZF07
+Ck5vZGUweDU1ZGQ0YTc2YzYyMCBbbGFiZWw9Intkb19jaGVja19jb21tb259Iiwgc2hhcGU9cmVj
+b3JkXTsKTm9kZTB4NTVkZDRhOGJhODUwIFtsYWJlbD0ie2FkanVzdF9yZWdfbWluX21heF92YWxz
+fSIsIHNoYXBlPXJlY29yZF07Ck5vZGUweDU1ZGQ0OTU5ZmU0MCBbbGFiZWw9Intwcm9jZXNzX2l0
+ZXJfbmV4dF9jYWxsfSIsIHNoYXBlPXJlY29yZF07Ck5vZGUweDU1ZGQ0YWE1YzFlMCBbbGFiZWw9
+IntzYW5pdGl6ZV9wdHJfYWx1fSIsIHNoYXBlPXJlY29yZF07Ck5vZGUweDU1ZGQ0YTlhM2FjMCBb
+bGFiZWw9IntwdXNoX2NhbGxiYWNrX2NhbGx9Iiwgc2hhcGU9cmVjb3JkXTsKTm9kZTB4NTVkZDRh
+OWZiOWQwIFtsYWJlbD0ie3B1c2hfc3RhY2t9Iiwgc2hhcGU9cmVjb3JkXTsKTm9kZTB4NTVkZDRh
+Nzc4ZGIwIFtsYWJlbD0ie2RvX2NoZWNrX3N1YnByb2dzfSIsIHNoYXBlPXJlY29yZF07Ck5vZGUw
+eDU1ZGQ0YTc0MTk5MCBbbGFiZWw9InticGZfY2hlY2t9Iiwgc2hhcGU9cmVjb3JkXTsKTm9kZTB4
+NTVkZDRhNzQxOTkwIC0+IE5vZGUweDU1ZGQ0YTc3OGRiMDsKTm9kZTB4NTVkZDRhNzQxOTkwIC0+
+IE5vZGUweDU1ZGQ0YTc2YzYyMDsKTm9kZTB4NTVkZDRhNzc4ZGIwIC0+IE5vZGUweDU1ZGQ0YTc2
+YzYyMDsKTm9kZTB4NTVkZDRhNzZjNjIwIC0+IE5vZGUweDU1ZGQ0YTg4ZDdkMDsKTm9kZTB4NTVk
+ZDRhODhkN2QwIC0+IE5vZGUweDU1ZGQ0YThkNGI1MDsKTm9kZTB4NTVkZDRhODhkN2QwIC0+IE5v
+ZGUweDU1ZGQ0YThjYTU4MDsKTm9kZTB4NTVkZDRhODhkN2QwIC0+IE5vZGUweDU1ZGQ0YThjZjI2
+MDsKTm9kZTB4NTVkZDRhODhkN2QwIC0+IE5vZGUweDU1ZGQ0YThiYTg1MDsKTm9kZTB4NTVkZDRh
+OGNmMjYwIC0+IE5vZGUweDU1ZGQ0OTU5ZmU0MDsKTm9kZTB4NTVkZDRhOGNmMjYwIC0+IE5vZGUw
+eDU1ZGQ0YTlhM2FjMDsKTm9kZTB4NTVkZDRhOGNhNTgwIC0+IE5vZGUweDU1ZGQ0YTlhM2FjMDsK
+Tm9kZTB4NTVkZDRhOGQ0YjUwIC0+IE5vZGUweDU1ZGQ0YTlmYjlkMDsKTm9kZTB4NTVkZDRhOGQ0
+YjUwIC0+IE5vZGUweDU1ZGQ0YWEwNjc5MDsKTm9kZTB4NTVkZDRhOGJhODUwIC0+IE5vZGUweDU1
+ZGQ0YWEzYTM2MDsKTm9kZTB4NTVkZDRhYTNhMzYwIC0+IE5vZGUweDU1ZGQ0YWE1YzFlMDsKTm9k
+ZTB4NTVkZDRhYTVjMWUwIC0+IE5vZGUweDU1ZGQ0YTlmYjlkMDsKTm9kZTB4NTVkZDRhYTA2Nzkw
+IC0+IE5vZGUweDU1ZGQ0YTlmYjlkMDsKTm9kZTB4NTVkZDRhOWEzYWMwIC0+IE5vZGUweDU1ZGQ0
+YTlmYjlkMDsKTm9kZTB4NTVkZDQ5NTlmZTQwIC0+IE5vZGUweDU1ZGQ0YTlmYjlkMDsKfQo=
+
+
+--=-pU3IArgK79wjJvjdvEwt--
 
