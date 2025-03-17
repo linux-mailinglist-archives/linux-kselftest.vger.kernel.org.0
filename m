@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-29227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB84A65344
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 15:26:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4BC5A6535C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 15:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52970189BE9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 14:25:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A8E717B114
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 14:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E3762475C3;
-	Mon, 17 Mar 2025 14:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5D8248884;
+	Mon, 17 Mar 2025 14:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="keyNMPyV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmrGf//d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5BB245026;
-	Mon, 17 Mar 2025 14:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C222459FC;
+	Mon, 17 Mar 2025 14:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742221442; cv=none; b=Vy+CqoFYYW4IevVR6tK7sbWlJB11oI0TGzQccXwZuy5DjZVWNbZrFzh5joCROGwJAOeOJGNR9grJ4IcscaRJV57ajO1PPo+GJdNNwDy2mTUYumbVYRL9q4UkIMzpyQxgP2LCvbksopuSD7sP5UMYhm7d4DAVBOCvq6wGWKCO+yg=
+	t=1742221443; cv=none; b=NN/2jWX+etER5VoyXMD2ao4ZCmUq63C1rqLy82EaCKMLAxM9xzA+DOX6cPLRw+hb6kSFOAKFcsmVNcvDthWDbh25vbY6Ftr2mEzOwxcWeDEm/O2nVR0OcJPH98FXB4newWeF5ngpFpxTLZqm08qGWgzqfi8yx98GmTxESE2SMnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742221442; c=relaxed/simple;
-	bh=/r0m5YzIWWRQazZFOJwTQSRLej9n6gB2sGQQ7S4a1Yg=;
+	s=arc-20240116; t=1742221443; c=relaxed/simple;
+	bh=eOC8GNYrVfiMmJjIlMnjsi5R6euOkfd+217Ym/0TGMU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ci92zCBLQ4/dbxZAFy8aveTqzYUXL/Xz17EPREKYcK6N/7qZ8hM/LCoQmElrii3lOHfOpoZd6LJHl6mm3HSJ9hfMrlJTjNwJ9p/MIE72JFxCkXejFmL2rXgmpLnNmvwmrZfytr/08AXbkJBSMU+FT5sdPpTrR4xc6qnWzdOcyRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=keyNMPyV; arc=none smtp.client-ip=209.85.160.179
+	 In-Reply-To:To:Cc; b=IoVyGyyyqVoBS3295NxdXNzTZdO1CISN3Fbaw+S1DA1kW/EtOxODYPLmgsoW0V6aup69FUMxEjU7b8PtIfzxpNbZTavmCH1Lr535vBCx051kZXmqYxlXHxTMO2UINILm/HsKyMJf8G2O1lOYspvqVwYzWtlZR1qeq0yszjVqp90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmrGf//d; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4766cb762b6so41789061cf.0;
-        Mon, 17 Mar 2025 07:23:59 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4766631a6a4so45528291cf.2;
+        Mon, 17 Mar 2025 07:24:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742221439; x=1742826239; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742221441; x=1742826241; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3pDD8iTOqsV2dG/t13s+olVTpQHy7nswKrZLCkN6NIk=;
-        b=keyNMPyVmv90F+WY2dK58NX1eF3UmlAOBoOzRZSANeWZUycu2nsiPo71SRqiGfgLz9
-         +z+7r/ciFj0FfuMcEhFYdrC8ESOSc7eagR6u9W+Wn+DJmUf24yiiJ7HNm3KsIRlwdFn5
-         yJ6io4/WUfHHVuL0vn1shCQkNoF4kSQtp2rkE2aiCJVCJ5VnUHKXbJRi/OrM+6wivW4B
-         CafkrymxuFsLYqqXExex49ZhK0PzB1dSnKMcXAIlopl8tklhHmGnJec6iRRswiG+WRZj
-         swhHLtGPoe/dgT9Bw3LVJEsVLQdinfhdphYL8vqzW5GKmW5SGt20sDE8uLPTFr5RE3H+
-         MB3A==
+        bh=0DKJLM7Z9Stu40Q/kKnTtPbAzpv2yQ1EFXVOPNeWeiM=;
+        b=SmrGf//dlRODNS3EFkIRINdwG8DOrAw57F9551SDb4NCdCXzNEGGxdnW+GL6q2OueE
+         7nX4W1mI1DU+RwOPUiL4nTGiEPuHItFdjwP8jE9I3xjvjj6aAmbDU3lpLGlrTIHvttWw
+         j65OOz9ZtA0gopYXdNWc+gqy6qHny+IxXk9avScdkFsFZfv+8v2w1KsvXB7MZO+MuAcI
+         ze/ckKEtZcNU/RrlT42eZILcNLqOoORhyXYZagifgwjUu5cMBLota0Ry4zI9/0370hsK
+         QDR4K9tvGH3ZWQO/XjDUphC9VFtAklaA3NHpitcVW3jpGkaVb8NwgPkVJ0OESgYUDe3e
+         +8MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742221439; x=1742826239;
+        d=1e100.net; s=20230601; t=1742221441; x=1742826241;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3pDD8iTOqsV2dG/t13s+olVTpQHy7nswKrZLCkN6NIk=;
-        b=TrcZdZof+HoO884Ns1rwdMYyVcapAA1sU3dNW5knR7eLOwYxhdwxespYhch1GVbyuu
-         9sicqa5ZRgNmS6LffRSkVbCRsw1TTQ2n+615sr27+4ReaJNkzgtsj+EOlXLQx6/0HXls
-         3AbZvlmvD5NSFbjcPpcWHWkjBJEh9fED/ksudv33Z4HS/Fmqq5f8NA6eVWP+CsFSdZPY
-         WWxb7go1x3AGNHkzKq/yrEVGl0tN2LvGFhlu0v+RvcdPj45nZfsRFuKngZOnsEEfInRh
-         zxQjhC2gg3ZgzoxOQ+ljBmobCkLXsH+H7tlJTIBoFfRXg2RsMn09o8Htkq+TnV++h+rI
-         4m7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCNKk1jHTu1GruWuyF3lPN2kiJn6UD7KTAF5eoQJIlP8B7kR4KO0Y/HII760l54jaqmx9aG9/nGrLm@vger.kernel.org, AJvYcCUQioMXBa8+Nfqtx4a1tQ7INY3z2aO2B8dlwIH7mdDOWfsLMzv6K12q4dPtwZkbxNoqPl61aznAKvzuI01M@vger.kernel.org, AJvYcCUU75vpHvsHcwvUc9j9HDIM1vaDJrhfsBv7DGnWTlH72CWm3Cb2+VNIGq92R7VRf/Km3YISe0cDTEohE8e9tT6/@vger.kernel.org, AJvYcCUirkVT44GznVLAkDAocpZTKA2YhSR7NS5GfulLhYR8pYAgPIzqPJincwqQ8rIt/ZBUkHxMSt22CDliz4Q=@vger.kernel.org, AJvYcCVGdtV5Rj/iMjf6XY7Oztz2FSTkud0D/geB5e/yNpeuCL7FcKkMnzkMkLRUTwBcbGD3SrsGuGHX+LsK+/9YdOM=@vger.kernel.org, AJvYcCWBWSqPphH47uKp/0swo3b316OGQXzZ60D3OpmGtFZDUXms55rjFqz2OUEf43dRoRnLLjx7JRZcurua@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGBq9xHzqOSZS8t6BkgDK0bKRhKyKM/pNOtLFGAqUDbERbU+dF
-	kxeF8kNSqxPIQr5LayDobHQM4a/ofbV/32syhZ6Vc79LL0o6i63t
-X-Gm-Gg: ASbGncsldHdHobFnJ92D2frseNM+hl4wRgnBWovtLrX6iY2feHipkO7+zWU33kpHtgS
-	DTdqSHZ/ZjDMrzeVi7ExDZvVUMUvCBZDdWyDDGoBPHhAYTdvPmbzkgtQtAxoxntJns2FrQkUD/D
-	xoIvD954+4VWeSVn8zO2+fz7SMiaTcJw/lclGbxs3WKZdpYirP0pjuUuA/7IgJcOX+mfC3W2hgp
-	/Iw+u0dOPNao5lK26udnczwzegV4JbN8awcG2oDhAGbrMzXJIsRN5v9P4RCkfSBsZVq+eOcbAfl
-	R9dqMNRTHe7Vjv2J2Jm02PYQ9MsvCuu/DHzIFpnNk7379UrJje9SKaMWGCgzaHIto+CIUJqQbw=
+        bh=0DKJLM7Z9Stu40Q/kKnTtPbAzpv2yQ1EFXVOPNeWeiM=;
+        b=FkPSBoZTPv6o46+UWLLqDKhJ1IRTRJpcGmoIYd8yBqYkJHrD3t86vUf5elac/o2PVG
+         MMDoiLCjPTQVqWPuQjRtujmellzU+sCHmeqksvfymaj2ofRYD5HHrnP45p6OKyB0q4fn
+         EeGoUnTt/KqXiMdK9JGdBiFty3YoCssvz5Uy1xTmRObQfezyZ7Uvr5iYTY0TetgpSKB0
+         Z9th8oE8ut+6rAZPUjJQNUOM2QEMiLLM5rdoRq3OYVZk6XjfnGKbHixbMwbfaIK9us/8
+         vS9CxF+2D4dxgQJubu9z5AK7FWgztKwFZiVqfCNpa86tiYMlFZB9YBIY1md3dCxtfrKr
+         dzhA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSp049ViGwcxu2vKZc4Hy4FtnHpwY60luFV8i3PN0ze0li0xCtQhexNp1dQDRg98/qlDQMvN9EmrfK@vger.kernel.org, AJvYcCWo0OF/VZmbQ8neKKexdGZuqOKiLkOgev1Kq2/Wnqk3uFZJrWQOrltnTjrUZbMxgGe/YrcPMw5wCOYNDNI=@vger.kernel.org, AJvYcCWsYJx7gJZfiK2CEdPWGFcgtd44QRi/2mhtjYOwTUN9A61IU4pES6lPA6yD3UTZwxD7ZlTnzDQ0U7mvTCBtsyQ=@vger.kernel.org, AJvYcCXTsvL1lqEzkd1H9wPyZPFRVu8tjhIl8BkgM5AzvyBUM3ltzdc8AYhyp1t0sI/TlcO77wUwSno15lY4m6np@vger.kernel.org, AJvYcCXc7fgww3diUp0HeraP3Nr7JYPfLbxLaH4J7CvHhjtz4iFbU8EZDECu9+QDTOvPByfdhgX63ED666PT@vger.kernel.org, AJvYcCXguZg9RS9PYj4zQrAhcPU94mDEXTVFIzk8OjB7mnT1DeTAC73yztOWK5gAiPvrwYccezVNOu91hRBC/VYisiZG@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTDsrFiBHAyeWWmUNv1rjf6mipM/f2INWRcaefJspkR1y/B+DF
+	XAjQSRio5Q0U8yL1IldwRnGQbTqo3J8wv37TXAB5a7+cGU448OxK70rxlO6DSog=
+X-Gm-Gg: ASbGncvmQ8Pat1Rw4MKL8HY6D2wsdv8MrufeX6j4+IJBDToIoJYsY+suW7fefkGIzr1
+	7LHXOzgf1z782BB6wYlU79MO3xBKAQWu3bk/XNLlGR7wkBEnOUZjVrB1FmkQuDsM+Sd12biddId
+	sNBKF2bnpiGeC+mrLceOTBpJVnKDpYwvE/nDRa7Yb+HbLclWdA/z8P5Sr/4tLAu6vznuQAzkN6D
+	enOgDzY3d4TqCUXtzyeVIy3HHiPzexfVYa+HlGqdZ0N9RQGmvu8jcoZvw7DseAkpJzGXW8YKQvE
+	uGX1fBIC5agQfyjLqH0pj3gcWRP8S7fm0IubuNoBONnWOutuamFi0lzxn2aFmGk2efw5PSvRPA=
 	=
-X-Google-Smtp-Source: AGHT+IFRlDG35n4MDH7v/SCuYgNy5RJhqN2IH/eGOc1MDtnnqVTwWyf0e4O3awIHjyo7Fk1WiLgD/Q==
-X-Received: by 2002:ac8:598c:0:b0:471:825d:aa52 with SMTP id d75a77b69052e-476c93243b8mr162288801cf.20.1742221439007;
-        Mon, 17 Mar 2025 07:23:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGW4rw89ZFFbVEcn+X1uJyv5hQbpNSEeeMe8/EJAtes1dgkOySMbKI6jcF0Eq27FoJF6gAMEg==
+X-Received: by 2002:a05:622a:4c8:b0:476:838c:b0ce with SMTP id d75a77b69052e-476c812caa7mr238396871cf.13.1742221440614;
+        Mon, 17 Mar 2025 07:24:00 -0700 (PDT)
 Received: from tamird-mac.local ([2600:4041:5be7:7c00:6895:24c6:e898:e320])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-476bb60b13esm54601011cf.6.2025.03.17.07.23.57
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-476bb60b13esm54601011cf.6.2025.03.17.07.23.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 07:23:58 -0700 (PDT)
+        Mon, 17 Mar 2025 07:24:00 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 17 Mar 2025 10:23:53 -0400
-Subject: [PATCH v5 3/6] rust: enable `clippy::ptr_cast_constness` lint
+Date: Mon, 17 Mar 2025 10:23:54 -0400
+Subject: [PATCH v5 4/6] rust: enable `clippy::as_ptr_cast_mut` lint
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250317-ptr-as-ptr-v5-3-5b5f21fa230a@gmail.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250317-ptr-as-ptr-v5-4-5b5f21fa230a@gmail.com>
 References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
 In-Reply-To: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -109,66 +109,50 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-In Rust 1.72.0, Clippy introduced the `ptr_cast_constness` lint [1]:
+In Rust 1.66.0, Clippy introduced the `as_ptr_cast_mut` lint [1]:
 
-> Though `as` casts between raw pointers are not terrible,
-> `pointer::cast_mut` and `pointer::cast_const` are safer because they
-> cannot accidentally cast the pointer to another type.
+> Since `as_ptr` takes a `&self`, the pointer won’t have write
+> permissions unless interior mutability is used, making it unlikely
+> that having it as a mutable pointer is correct.
 
-There are only 2 affected sites:
-- `*mut T as *const U as *mut U` becomes `(*mut T).cast()`
-- `&self as *const Self as *mut Self` becomes a reference-to-pointer
-  coercion + `(*const Self).cast()`.
+There is only one affected callsite, and the change amounts to replacing
+`as _` with `.cast_mut().cast()`. This doesn't change the semantics, but
+is more descriptive of what's going on.
 
-Apply these changes and enable the lint -- no functional change
-intended.
+Apply this change and enable the lint -- no functional change intended.
 
-Link: https://rust-lang.github.io/rust-clippy/master/index.html#ptr_cast_constness [1]
+Link: https://rust-lang.github.io/rust-clippy/master/index.html#as_ptr_cast_mut [1]
 Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- Makefile                        | 1 +
- rust/kernel/block/mq/request.rs | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Makefile              | 1 +
+ rust/kernel/devres.rs | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index ec8efc8e23ba..c62bae2b107b 100644
+index c62bae2b107b..bb15b86182a3 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -484,6 +484,7 @@ export rust_common_flags := --edition=2021 \
- 			    -Aclippy::needless_lifetimes \
- 			    -Wclippy::no_mangle_with_rust_abi \
- 			    -Wclippy::ptr_as_ptr \
-+			    -Wclippy::ptr_cast_constness \
- 			    -Wclippy::undocumented_unsafe_blocks \
- 			    -Wclippy::unnecessary_safety_comment \
- 			    -Wclippy::unnecessary_safety_doc \
-diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/request.rs
-index 7943f43b9575..10c6d69be7f3 100644
---- a/rust/kernel/block/mq/request.rs
-+++ b/rust/kernel/block/mq/request.rs
-@@ -69,7 +69,7 @@ pub(crate) unsafe fn aref_from_raw(ptr: *mut bindings::request) -> ARef<Self> {
-         // INVARIANT: By the safety requirements of this function, invariants are upheld.
-         // SAFETY: By the safety requirement of this function, we own a
-         // reference count that we can pass to `ARef`.
--        unsafe { ARef::from_raw(NonNull::new_unchecked(ptr as *const Self as *mut Self)) }
-+        unsafe { ARef::from_raw(NonNull::new_unchecked(ptr.cast())) }
-     }
- 
-     /// Notify the block layer that a request is going to be processed now.
-@@ -151,11 +151,12 @@ pub(crate) unsafe fn wrapper_ptr(this: *mut Self) -> NonNull<RequestDataWrapper>
-     /// Return a reference to the [`RequestDataWrapper`] stored in the private
-     /// area of the request structure.
-     pub(crate) fn wrapper_ref(&self) -> &RequestDataWrapper {
-+        let this: *const _ = self;
-         // SAFETY: By type invariant, `self.0` is a valid allocation. Further,
-         // the private data associated with this request is initialized and
-         // valid. The existence of `&self` guarantees that the private data is
-         // valid as a shared reference.
--        unsafe { Self::wrapper_ptr(self as *const Self as *mut Self).as_ref() }
-+        unsafe { Self::wrapper_ptr(this.cast_mut()).as_ref() }
-     }
- }
+@@ -477,6 +477,7 @@ export rust_common_flags := --edition=2021 \
+ 			    -Wrust_2018_idioms \
+ 			    -Wunreachable_pub \
+ 			    -Wclippy::all \
++			    -Wclippy::as_ptr_cast_mut \
+ 			    -Wclippy::ignored_unit_patterns \
+ 			    -Wclippy::mut_mut \
+ 			    -Wclippy::needless_bitwise_bool \
+diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
+index 3a9d998ec371..598001157293 100644
+--- a/rust/kernel/devres.rs
++++ b/rust/kernel/devres.rs
+@@ -143,7 +143,7 @@ fn remove_action(this: &Arc<Self>) {
+             bindings::devm_remove_action_nowarn(
+                 this.dev.as_raw(),
+                 Some(this.callback),
+-                this.as_ptr() as _,
++                this.as_ptr().cast_mut().cast(),
+             )
+         };
  
 
 -- 
