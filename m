@@ -1,168 +1,160 @@
-Return-Path: <linux-kselftest+bounces-29265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA5EA65B90
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 18:53:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84E98A65BDC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 19:05:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F7F18800A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 17:53:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCC0A178FD3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 18:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8CA1B653C;
-	Mon, 17 Mar 2025 17:53:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735FF1ACEDE;
+	Mon, 17 Mar 2025 18:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="o9nDdNqV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i0oftvuO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8B41AD403;
-	Mon, 17 Mar 2025 17:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9123FA47;
+	Mon, 17 Mar 2025 18:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742233982; cv=none; b=JAcTvAxct8SXp8PErAA3lJRxtkXHw4ueFvn282BeIHK58QphXd879l6Dxbn+QRow5fDHYfSFCbxLkZQqy3ohKnK2BwVl7ulMgc2n+GCqUcRDkntpoA/8g+DTToiW0Dy9qwufWKMHUQI6AusNjZRD+f8csiedA7+W3vyJN76pnZo=
+	t=1742234714; cv=none; b=o/Fd+KIjmg6WQpILIHukk9dDeL9AGLGwE7dpsm2zbPCWq0r28lUvb4Y56LRbhcptjXjSnOonIVpFgk2xawFGooZ1wi8qznhQ7/tS5Nrch83aMQS0UvjAvcO02iBuFeVKN4bZ7VaCqY3wbHPohzRrko8p6eUlUXNrSkNrvbbpDsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742233982; c=relaxed/simple;
-	bh=4dJ0fmNkACSMmu1twEj7eQKRG9KtvltlsmMTAr0hcBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gVmNG+RTKw1pwJOo6a26BnGgAXWadQjClNyXiSGIGxo3r5ty/1wB9UYclpp7GHG2Lg3a2z3wZ8/qZJXa3Om9hI9M2k9XDYZgGT+zPrtbfxiwJkE6jmguKIvqceBjmNJyLbwUJl8VZXcnLGDnp4gL6PYI702tOwUPmA0B1tgimEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=o9nDdNqV; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1742233977;
-	bh=4dJ0fmNkACSMmu1twEj7eQKRG9KtvltlsmMTAr0hcBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o9nDdNqV6djaM1zcFVz93LKIG/jE02ihIqCduJuPMAAj1mixVNXP5ZPHXRH/BZW9d
-	 DziCv6hmi+FoNOmwZozWDFQWsRFW4egp0R6suLNmYePSRZoSXVwPg2Gkndx6YAWYjI
-	 Fjl42Fx2ovN93XoMZo4K5+y6kYr6aWTLgyhVkZnM=
-Date: Mon, 17 Mar 2025 18:52:57 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	sparclinux@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: Add support for SPARC
-Message-ID: <dacaa712-08a8-4fd6-ad47-2226040f02aa@t-8ch.de>
-References: <20250316-nolibc-sparc-v1-1-2e97022d5e2c@weissschuh.net>
- <20250317073746.GB5114@1wt.eu>
+	s=arc-20240116; t=1742234714; c=relaxed/simple;
+	bh=yS19w8s2BxyjV6yv9nuygjxyYafL7takTriDGTwkTb0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DtBjBNEYWnOCEwRyQuHLqI8Sgrqhg/VHJqo758EPEcftTsSE7Pz0jzWXrpF01cnQl/8VmOBMlC2GPdWot4OIr/EvJ82jsJzWCEUplp/CBfft1XZatdWycncT7zvl/SplhXwCCwaidMbW0poBylSBwyE5RLTSFAd5wr+Yvo4ayaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i0oftvuO; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-30bf8632052so50771761fa.0;
+        Mon, 17 Mar 2025 11:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742234711; x=1742839511; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=frfHgQ+gFACrESJvw7LnNR39jC1AwPkl0OXU4bE+ZmE=;
+        b=i0oftvuO4eu0T62J1dW50/iMfanB5G7Cwm1GcbfC4HzL9OifdyBX1LD3dYrxElsCEo
+         ucgog4bH2bYNLXPduZ2/Kee/eogk7hyJ/3s0BysGpy0aFKvW3QaTr+CbcDWBVetTCORI
+         Ael8tPodEw+/1wvRgUdOVz6npAbxMmgcPqmz1HkGNzIufPCFXEdSai/PFk5NjMSzIWFI
+         HI5CAQEOpW9S9nmFI8G4bxiGBy45QToNxgHduC+Em9HF/qQdYbPE3GPEArBvnOTxHjE6
+         0IL7iIPjogfCBafbjaEcQqFetanDFSPHRYvACM8IcVI8EY5H+MwIpIxodk91/waQv+8r
+         tgqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742234711; x=1742839511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=frfHgQ+gFACrESJvw7LnNR39jC1AwPkl0OXU4bE+ZmE=;
+        b=Cy9Ay73zm5KAYYdua0OMBP+j4BbAU9Mg/gX/vq0yy5y44nT2PNsNyU9wvwNRCBBdw4
+         rSPv8rm5keD6EyG8QEH4gx1QMBt0HuBhjVtsQYOxb3/fDehfIjv9v1NMA25e2QvkURHC
+         raiBU0Ccs7RtU8vGzQnm6YDqylWKbC5LwwwN+k5I9AWYkMFyq75ed7esriJw48iT1OJg
+         yCDwSiLQO74HK5wrz0BJx8wKwPCTUCTmDM1pkjHb0U/L1wdGvbcnGlXRr2fAd3WDyYu4
+         AtGpctg7e35z1k5OG/LtVqJILJKaEoXz7+zLvgBxKU+BvL2hWhd211VB2GFrlTROGfjX
+         b4TQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7HwF+I1/0wx7pGNtpUsgwHeW/NlxtjJe5QdWOyOyhkiXW1nzGvdpME/0tzphqpdWUWaW97zHIN69qK8M=@vger.kernel.org, AJvYcCU8WiBR0AMU5foWY1OzMg0QMUE2pBRHjA5I8LCwwtMm58IN5vbnSf5qx7n2QDBBem6+IMi4UhUEulJQMlTkQccP@vger.kernel.org, AJvYcCUVJDor9zakiJQ7TizEqcR/SKWqpYm8UphnXbvmtQK9snF6bdwWuamUmY90gWvxhBO9PxpTXMmagC/nrtV9@vger.kernel.org, AJvYcCUY8rp2QVFNBGggPLpJJ7KHURrJsF/JGLyDjJgAmFXs2J7Q2igObZz+vUUks6gRA678+yo7G5GABlMx@vger.kernel.org, AJvYcCW8TRbQN0/SZMZHFG1CoahvOU0KcRPVMZjNd0slw7QEIK/0pD790Tjwvmy4y79PeVJDspoOcM6tIc9SIfs3SYo=@vger.kernel.org, AJvYcCXYy9PfxO1IVs3r88eLvtwe1IJmK9eIXZS5G47Gpt5rlym27I4DXoBiv8CWHH9kV9IepzcgC5pG9yrCmVUm@vger.kernel.org, AJvYcCXbTWObobo+/k6f0MVpMQoImzOIxzGa62uLzYPC4KhPORPALb4kwhvBElTTsnGcgN55AaiMpXxOj8l4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjcP5YzxeNd34fxxnDbNQl/gw4bkmH3sCqWrjyB5a7IEDp30Zd
+	cSR8axeXzYoQX3EV8porIvpe5YfbfK5sz686FBO03QnIgmf/bQCQpmwyeXbFl/oFQ7fqH1uWplW
+	es82UV1bYHnRvXel9Rl35sL0mbbw=
+X-Gm-Gg: ASbGnctNTFk0WpsiUbQC78Z6jjGiVuU4nomliunp1LpF4xlbW+8qBpO0WRV6VIson0x
+	gzEeQP9S7tKexweFzBviUDGZQtUpcy9ryW8E4IlvH65xThT8JBIn6Wbhk0te0MPxFQwsXeM0wju
+	VhJOY0M+CyVFJK3tt5LvBZsv/tp8jRSCNm2ez0101hWr6r1MemEhkSveNqrMGp
+X-Google-Smtp-Source: AGHT+IHEiCRYqo5kdtDzu9DwfXgz8qSQf+aHXpVibcrV/eXTAUt79P6itWOg5iJJ3B8dHvF9R2vfggvwUwXXMy4e4BQ=
+X-Received: by 2002:a05:6512:39ca:b0:549:4e78:9ed7 with SMTP id
+ 2adb3069b0e04-549c39afb93mr8766794e87.49.1742234710429; Mon, 17 Mar 2025
+ 11:05:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250317073746.GB5114@1wt.eu>
+References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
+ <20250317-ptr-as-ptr-v5-6-5b5f21fa230a@gmail.com> <67d85e51.050a0220.2a36b.58b3@mx.google.com>
+In-Reply-To: <67d85e51.050a0220.2a36b.58b3@mx.google.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 17 Mar 2025 14:04:34 -0400
+X-Gm-Features: AQ5f1Jo97QAJQPWntDNr9WhIHhk1SFsSEUSY6hlNcHKZZ-5cDJZTOBm_FAQM4OI
+Message-ID: <CAJ-ks9kBp8zPfaQuZRb0Unms1b13hDb5cRypceO8TWFR0Ty5Ww@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] rust: use strict provenance APIs
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-03-17 08:37:46+0100, Willy Tarreau wrote:
-> On Sun, Mar 16, 2025 at 02:55:02PM +0100, Thomas Weißschuh wrote:
-> > Add support for 32bit and 64bit SPARC to nolibc.
-> 
-> Oh nice!
-> 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> > This is only tested on QEMU.
-> > Any tests on real hardware would be very welcome.
-> 
-> I still have a working U60 here, but under solaris. Such machines are
-> not trivial to boot on alternate OSes (and when you find a working
-> image usually it's based on an old kernel).
-
-An old kernel should be perfectly fine, no?
-
-> But I've run it under
-> Linux 20 years ago, so I know it was supported. I may give it a try
-> when I find a moment, but let's not wait for this!
-
-Thanks!
-
-> A few comments below:
-> 
-> > diff --git a/tools/include/nolibc/arch-sparc.h b/tools/include/nolibc/arch-sparc.h
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..cb5543eca87bb4d52cfba4c0668e35cbbf6dd124
-> > --- /dev/null
-> > +++ b/tools/include/nolibc/arch-sparc.h
-> > @@ -0,0 +1,191 @@
-> > +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-> > +/*
-> > + * SPARC (32bit and 64bit) specific definitions for NOLIBC
-> > + * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
-> > + */
+On Mon, Mar 17, 2025 at 1:39=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
+rote:
+>
+> On Mon, Mar 17, 2025 at 10:23:56AM -0400, Tamir Duberstein wrote:
+> [...]
+> > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> > index fc6835cc36a3..c1b274c04a0f 100644
+> > --- a/rust/kernel/lib.rs
+> > +++ b/rust/kernel/lib.rs
+> > @@ -17,6 +17,11 @@
+> >  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(coerce_unsiz=
+ed))]
+> >  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(dispatch_fro=
+m_dyn))]
+> >  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(unsize))]
+> > +#![cfg_attr(
+> > +    CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE,
+> > +    feature(strict_provenance_lints),
+> > +    deny(fuzzy_provenance_casts, lossy_provenance_casts)
+> > +)]
+> >  #![feature(inline_const)]
+> >  #![feature(lint_reasons)]
+> >  // Stable in Rust 1.83
+> > @@ -25,6 +30,109 @@
+> >  #![feature(const_ptr_write)]
+> >  #![feature(const_refs_to_cell)]
+> >
+> > +#[cfg(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE)]
+> > +#[allow(clippy::incompatible_msrv)]
+> > +mod strict_provenance {
+> > +    /// Gets the "address" portion of the pointer.
+> > +    ///
+> > +    /// See https://doc.rust-lang.org/stable/core/primitive.pointer.ht=
+ml#method.addr.
+> > +    #[inline]
+> > +    pub fn addr<T>(ptr: *const T) -> usize {
+> > +        ptr.addr()
+> > +    }
 > > +
-> > +#ifndef _NOLIBC_ARCH_SPARC_H
-> > +#define _NOLIBC_ARCH_SPARC_H
-> > +
-> > +#include <linux/unistd.h>
-> > +
-> > +#include "compiler.h"
-> > +#include "crt.h"
-> > +
-> > +/*
-> > + * Syscalls for SPARC:
-> > + *   - registers are native word size
-> > + *   - syscall number is passed in g1
-> > + *   - arguments are in o0-o5
-> > + *   - the system call is performed by calling a trap instruction
-> > + *   - syscall return value is in 0a
->                                      ^^
-> What is "0a" here ? I suspect a typo and you meant "o0".
+>
+> For addr(), I would just enable feature(strict_provenance) if
+> CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE=3Dn, because that feature is
+> available for 1.78. Plus we may need with_addr() or map_addr() in the
+> future.
 
-Correct, will fix.
+We still need these stubs to avoid `clippy::incompatible_msrv`, and
+we'll need those until MSRV is above 1.84.
 
-> > +/* startup code */
-> > +void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector _start(void)
-> > +{
-> > +	__asm__ volatile (
-> > +		/*
-> > +		 * Save stack pointer to o0, as arg1 of _start_c.
-> > +		 * Account for window save area and stack bias.
-> > +		 */
-> > +#ifdef __arch64__
-> > +		"add %sp, 128 + 2047, %o0\n"
-> 
-> It's really unclear where this magical 2047 comes from, I think it must
-> be explained in the comment above so that someone disagreeing with it
-> later can figure whether it's right or wrong.
+>
+> It saves the cost of maintaining our own *addr() and removing it when
+> we bump to a strict_provenance stablized version as minimal verision in
+> the future. Thoughts?
+>
 
-128 is the context window and 2047 is the stack bias.
-I'll try to make it clearer.
-
-> 
-> > +#else
-> > +		"add %sp, 64, %o0\n"
-> > +#endif
-> 
-> Also, I could be wrong, but from my old memories of playing with the
-> stack on SPARC long ago, I seem to remember that the stack is growing
-> down. Thus I find these "add" suspicious or at least confusing. You
-> mention "window save area and stack bias" above, I'm not sure what it
-> refers to, but if we can safely erase parts of the stack because too
-> much was preserved, maybe some more explanation about the initial and
-> target layouts is deserved here.
-
-There is a graphic in the psABI [0] under "Process Stack and Registers".
-I'll write something based on that.
-
-> > +		"b,a _start_c\n"     /* transfer to c runtime */
-> 
-> OK great, the delayed slot is covered! (that type of thing can work
-> by pure luck in one test and fail in another one depending on what
-> bytes follow the jump).
-
-Yeah, it brings memories to the work on MIPS support.
-
-> Thanks!
-> 
-> Acked-by: Willy Tarreau <w@1wt.eu>
-
-Thanks!
-
-[0] https://uclibc.org/docs/psABI-sparc.pdf
+I can do this by making this particular stub unconditional. I'll do that.
 
