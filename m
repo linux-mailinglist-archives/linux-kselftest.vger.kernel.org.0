@@ -1,189 +1,195 @@
-Return-Path: <linux-kselftest+bounces-29201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D2AA64904
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 11:11:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7AC0A649BF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 11:27:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69B52188469B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:11:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCB5D1894D01
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:25:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799C8230BDB;
-	Mon, 17 Mar 2025 10:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC282238164;
+	Mon, 17 Mar 2025 10:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMZvZPEV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zaav33xT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D794D229B28;
-	Mon, 17 Mar 2025 10:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43D2221577
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 10:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742206259; cv=none; b=pyCmnq05l+YgjfIaC82tLuZuE6jSxDW5OX+QmEGGb9vPIJ+61qc5dr5FDCK8FY/Zr1LKLSqnEMCShXP0vfMzgabSNwb12Fbaz0rUshb0N/zn9SQnzxyZWURHK9efx/HZo2bNGv6B4l3PwoQV3HHjASRGFJWLbHMXYGdFn2e7VLg=
+	t=1742206852; cv=none; b=GHTVo0WgPprRpukCDBfqORzr3vU9+BZJ1OkUQqkG2SHa/8NsF7//0kg0uXpxJRM/lYkmOJUIU63VN1TknsRJ1mnnFmj21oPfsuQ+PQgZIAowfegqTB5MpdQkyqsKWKHXT6pBcB4OpLeNp0F6Wa4STYMlIm2a6pt0rdkP92Yzu3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742206259; c=relaxed/simple;
-	bh=Wxs+z1Wms/rz3FZCDLd8lPCpX3EWYhXBgRFH5+EsDvI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zg5O6WoDgP/io9Gf7KRvu2uhDtjC5aXYUDFqWjiBNjnO/3syCoKyOx+obTGWXBb+6Km0hmp95cbK/ca1C2r/wqhvUg/vabroFxxuST6AdhQO8ghzb0fJF9yZpacfixuXR0QYQsESKaU/gSTzZ/ij+McAHPDC46nREN0OmakPFS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMZvZPEV; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e573136107bso3864774276.3;
-        Mon, 17 Mar 2025 03:10:57 -0700 (PDT)
+	s=arc-20240116; t=1742206852; c=relaxed/simple;
+	bh=xK2ZBkUkyt1F/UpRmUx4V+BWA8zhSQC4XnXhnJZY+2Q=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WgOzpUH1geeayjbnhGSin7VIh5s1tToPX0Fu6fkcz8JoZtq8wQGeNKTvvdsN/cCUmu7RxG67Nz/jf6N8/6FIO57b5CZwdZ9kPIM43PTuzc1VOuY60PaWtUDibMpxJmIYLYlL/CG3FSJ2vPmp3vxFWgOGtS3wul7fopPXkIbeLj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zaav33xT; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43ce8f82e66so11333955e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 03:20:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742206257; x=1742811057; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=14ZjU9nXfljCfIeuLE7AsggRfd6lcojl1mTtLC8IsKk=;
-        b=FMZvZPEVl1B85+p0MGMQwQL3+E6s+OvtZ3cpqlAq+6lPZ+QqBs4/Bkn7+9LlB1bFTH
-         82G6UJd21KozlEbBQHRQi0VaDCV0zURxrVBA8AJl+6XDvAt+AKbys37pfx2g4EOaYtst
-         d6X/MeT/8k8dFvxr1VJOynAXBVnGMiB1Tt8nqBvyAxqpwTI94UVaqG/pDQOYpvW4xcsh
-         xzgnf/gNZDlGRpzzQdRhYhtXVPhekUCLL58tbBeePCjViHxWb7s2WQCm19s3hXnGt/0u
-         VtQX9QPb81eKL5su4bWhf5o880T2jAl02LQQMltsA2P4xa2LNgCsOaQQoaOmIl1njHHf
-         /HrA==
+        d=google.com; s=20230601; t=1742206849; x=1742811649; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kbZ86BA4kdFbqSY9+s8S+XusL7glxmlCPxfcM9oxYBA=;
+        b=zaav33xTjNFCDYSGQOjKZZ+at+Gp6OpDwFcCApT4dAEFRgl3bLNTVvNxzKjZOMclkq
+         mUsllDAvacdUuZIWs/UyVOMhElmf5FxemxfXiKtSvUjArM2AUrzfiFZnQCJNqj9+YKL3
+         2WN7yHOmezs3XvGaroUCYH8jNZWZFoUkp6pEUabdl42tqm+whyRxffPx6tRWdNZ2lMER
+         n77bASU2rsNkTew7Inx7dgAfrqFHieWNnZxtpQ9i3O97/60s1bhl5DVvDI5loWBh7tAI
+         njma+i5yf+TLeeeLh+Blfi69SVsAi4V0tssw/MBz9lF0nx5Zb9Qg+SPEjXFmT6PR6Kf0
+         M0kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742206257; x=1742811057;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=14ZjU9nXfljCfIeuLE7AsggRfd6lcojl1mTtLC8IsKk=;
-        b=ARF3fMsTkkWnKNMED2rocymHfHc0x19RJrv3hNayVXwj0qlv+zAdBwJ3ejv5z2On6A
-         g0nU3OLAmd5mohb+xEWykBX8NnXlZFLcQ0c7tYTkffFOGr3OpwveDvF5wdPGKFoljM/8
-         Rs9XqtrKPIjUYP1nHcdRh0yDW8jeeEUt6ooYbr1ZcgH2KzYpHai7f2oPq8GNQLPWhSp7
-         KCfjI4dR5mQLHfp8Wcj0a9IqoEmUcpJRgyFKb3UpP6KHRA8mX5XFXCJTYC8ZH8UpbAfY
-         6gmWq38ewUUxhCoCAs/XA8zsTqdPG+YdsGRqsFNoF4Rxa3IopwK9+I2t4yO6cINO+lT2
-         pvUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUY+3BQGkDF854s5ISwEq4FgnCfIIw1cWujEQZyQWPM8uPlzV6HbWDyPUFKIoJe3/mwaB2rbpdsnTq3ptiP/NXX@vger.kernel.org, AJvYcCUmFpjZuka3y4/glUNliHT4RALii7qiyXw/CHWK7XWiJ1nX0EDhbVwRYBdT7qZUfyf3/9wu2k4Z@vger.kernel.org, AJvYcCV8vL2RuG6ssWkYEAUEVq0/yHQBc+s52JzKcnlwmNbpUJ9fExW0huH39v26x52+Di3NEUwoQCJJLZ2bs3w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwklkZsw8UOLs0+WoLCi7Y/vGoLxT+oaYLik6SsYGkO1D4Usl3n
-	yJ9KeCB42SkEGX2KSryfSOGcJ9eMKDlnFlHNPo/vjnyVra4oGhaxfgH1N/eDkJQpxEAyYSuuwo7
-	E0LcVGdr18boCOdlVP1CmKn8BhGs=
-X-Gm-Gg: ASbGnct5h5QQhDKn9oTFX68O5o2YJVunOBdTQVLzyDziykII4eEcVRrpD7ExuYvlC8x
-	tQjvrNz/9cQJM38Ba9Tmkyq6I5mgBi7Pa9zTgeKWbCru3cBw/pkfs5ODYLO3FigTVkNM73lqKii
-	s8iHaPkJ0ZCDorhG+CAriMbmdiMwVWqAZomodCwkLJqg==
-X-Google-Smtp-Source: AGHT+IFeEwX2XBlKWWzrkEKnBTAYiIEeloN1LG9w0cpntS5lTgsKiw5wSHUPI3GA92GyKQZHSvhzhxajCnV/EuAnk2I=
-X-Received: by 2002:a05:6902:2747:b0:e5a:c5d6:3948 with SMTP id
- 3f1490d57ef6-e63f5cf0c16mr13681061276.0.1742206256657; Mon, 17 Mar 2025
- 03:10:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742206849; x=1742811649;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kbZ86BA4kdFbqSY9+s8S+XusL7glxmlCPxfcM9oxYBA=;
+        b=BrufbPLH89bryxLeuTaaODpIAw/0ZFUODPM1Ve3wy4vyxcaRBLgDHxh6Jw2SfHMDF3
+         3qzHEYO0hO9EiBQRjhvO55YhJpp72C/9K/w1/B+FnYeRp4aZcQ08guvcTmyvK4KhYhd6
+         9UsmmOTSVkCuqbyNV59xoM2bQbaGhstAbQyu4u1o2iA6sM3Hf1IsfS9kT0a5KgiycmMv
+         gZzGpWl+O1n45oDuKx5MBHry75aDcYnT/3jRR27WcQmtaTH7IWXucKczDeoHlkrltfoH
+         AQbr7Gzq0gWWidPUVRSK3N5nO4/vrTickhHy4KSACc3LAuscggZfYNBp45ESs8DjChoe
+         0dcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXKDIAmbomtl1ChoMRh3xCZM6u2OUFCp/vDmisWcyzhkpoagbQ3559Sw+PmoFgfFAP+QGxD09lK9uYOHeW+Chg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2SH4Lj+uas4hwZKGDJ7HQBckk55v3I7TrsiNnpnKmG1Ue5thl
+	tQEtyScJBJdu7Q6bIUdaI5g8IwLjHl0++y1orgaKbKI8b2h7Gi+LvtDAlq3pRY50ngpjouOORQH
+	NkeUxw93WuA==
+X-Google-Smtp-Source: AGHT+IEzYbPI9MyXHYu4Ac9ur08nSh+vGUDuVixK4h8Z9GABnEMfkvbGKDEW4lcqW9eMX+ON+NXpj/wTIp3w+Q==
+X-Received: from wmdd21.prod.google.com ([2002:a05:600c:a215:b0:43b:c914:a2d9])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:350a:b0:43c:f70a:2af0 with SMTP id 5b1f17b1804b1-43d1ec8643amr128960045e9.16.1742206849047;
+ Mon, 17 Mar 2025 03:20:49 -0700 (PDT)
+Date: Mon, 17 Mar 2025 10:20:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250312-b4-ovpn-v23-3-76066bc0a30c@openvpn.net>
- <20250317060947.2368390-1-dqfext@gmail.com> <f4c9a29f-a5c6-464a-a659-c7ffeaf123c1@openvpn.net>
- <CALW65jZe3JQGNcWsZtqU-B4-V-JZ6ocninxvoqMGeusMaU7C=A@mail.gmail.com> <0d8a8602-2db4-4c19-ab1c-51efef42cef6@openvpn.net>
-In-Reply-To: <0d8a8602-2db4-4c19-ab1c-51efef42cef6@openvpn.net>
-From: Qingfang Deng <dqfext@gmail.com>
-Date: Mon, 17 Mar 2025 18:10:46 +0800
-X-Gm-Features: AQ5f1JrZOv5SDMKrcUIEXFo9D0GgKi-eZeGIu0RavrSG4UmNhD3vkPc4aOtmKg8
-Message-ID: <CALW65jYaMBuMqzCFYwUJfLBg8+epQEjCg0MOpssGCwXqxbFP9w@mail.gmail.com>
-Subject: Re: [PATCH net-next v23 03/23] ovpn: add basic interface
- creation/destruction/management routines
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: andrew+netdev@lunn.ch, donald.hunter@gmail.com, edumazet@google.com, 
-	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	ryazanov.s.a@gmail.com, sd@queasysnail.net, shaw.leon@gmail.com, 
-	shuah@kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHH312cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDY0NzXcuCtGLd5Pzc3NS8kmJdI5Mks7REUxND8+QUJaCegqLUtMwKsHn RsbW1ALTkndhfAAAA
+X-Change-Id: 20250317-9pfs-comments-24b6fa5417cd
+X-Mailer: b4 0.14.2
+Message-ID: <20250317-9pfs-comments-v1-1-9ac96043e146@google.com>
+Subject: [PATCH] selftests/mm: Add commentary about 9pfs bugs
+From: Brendan Jackman <jackmanb@google.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>, 
+	David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Mar 17, 2025 at 6:00=E2=80=AFPM Antonio Quartulli <antonio@openvpn.=
-net> wrote:
->
-> On 17/03/2025 10:41, Qingfang Deng wrote:
-> > Hi Antonio,
-> >
-> > On Mon, Mar 17, 2025 at 5:23=E2=80=AFPM Antonio Quartulli <antonio@open=
-vpn.net> wrote:
-> >>>> +static void ovpn_setup(struct net_device *dev)
-> >>>> +{
-> >>>> +    netdev_features_t feat =3D NETIF_F_SG | NETIF_F_HW_CSUM | NETIF=
-_F_RXCSUM |
-> >>>
-> >>> Do not advertise NETIF_F_HW_CSUM or NETIF_F_RXCSUM, as TX/RX checksum=
- is
-> >>> not handled in hardware.
-> >>
-> >> The idea behind these flags was that the OpenVPN protocol will take ca=
-re
-> >> of authenticating packets, thus substituting what the CSUM would do he=
-re.
-> >> For this I wanted to avoid the stack to spend time computing the CSUM =
-in
-> >> software.
-> >
-> > For the RX part (NETIF_F_RXCSUM), you might be correct, but in patch
-> > 08 you wrote:
-> >> /* we can't guarantee the packet wasn't corrupted before entering the
-> >> * VPN, therefore we give other layers a chance to check that
-> >> */
-> >> skb->ip_summed =3D CHECKSUM_NONE;
->
-> Right. This was the result after a lengthy discussion with Sabrina.
-> Despite authenticating what enters the tunnel, we indeed concluded it is
-> better to let the stack verify that what entered was not corrupted.
->
-> >
-> > So NETIF_F_RXCSUM has no effect.
->
-> Does it mean I can drop NETIF_F_RXCSUM and also the line
->
-> skb->ip_summed =3D CHECKSUM_NONE;
->
-> at the same time?
+As discussed here:
 
-I don't think so. skb->ip_summed might have been set to
-CHECKSUM_UNNECESSARY on the lower layer with UDP/TCP RX checksum.
+https://lore.kernel.org/lkml/Z9RRkL1hom48z3Tt@google.com/
 
->
-> >
-> > For the TX part (NETIF_F_HW_CSUM) however, I believe wireguard made
-> > the same mistake.
-> > Your code both contains the pattern:
-> >
-> > if (skb->ip_summed =3D=3D CHECKSUM_PARTIAL && skb_checksum_help(skb)) /=
-/ ...
-> >
-> > NETIF_F_HW_CSUM causes the upper layers to send packets with
-> > CHECKSUM_PARTIAL, assuming hardware offload will complete the
-> > checksum, but if skb_checksum_help(skb) is invoked, the checksum is
-> > still computed in software. This means there's no real benefit unless
-> > there's an actual hardware offload mechanism.
->
-> Got it.
-> Then as per your suggestion I can drop both NETIF_F_HW_CSUM and the
-> if/call to skb_checksum_help().
->
-> Regards,
->
-> >
-> > +Cc: zx2c4
-> >
-> >>
-> >> I believe wireguard sets those flags for the same reason.
-> >>
-> >> Does it make sense to you?
-> >>
-> >>>
-> >>>> +                             NETIF_F_GSO | NETIF_F_GSO_SOFTWARE |
-> >>>> +                             NETIF_F_HIGHDMA;
-> >>
-> >>
-> >> Regards,
-> >>
-> >> --
-> >> Antonio Quartulli
-> >> OpenVPN Inc.
-> >>
->
-> --
-> Antonio Quartulli
-> OpenVPN Inc.
->
+This code could benefit from some more commentary.
+
+To avoid needing to comment the same thing in multiple places (I guess
+more of these SKIPs will need to be added over time, for now I am only
+like 20% of the way through Project Run run_vmtests.sh Successfully),
+add a dummy "skip tests for this specific reason" function that
+basically just serves as a hook to hang comments on.
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+To: David Hildenbrand <david@redhat.com>
+---
+ tools/testing/selftests/mm/gup_longterm.c |  6 +-----
+ tools/testing/selftests/mm/map_populate.c |  8 +++-----
+ tools/testing/selftests/mm/vm_util.h      | 18 ++++++++++++++++++
+ 3 files changed, 22 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 03271442aae5aed060fd44010df552a2eedcdafc..21595b20bbc391a0e5d0ab0563ac4ce5e1e0069f 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -97,11 +97,7 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
+ 
+ 	if (ftruncate(fd, size)) {
+ 		if (errno == ENOENT) {
+-			/*
+-			 * This can happen if the file has been unlinked and the
+-			 * filesystem doesn't support truncating unlinked files.
+-			 */
+-			ksft_test_result_skip("ftruncate() failed with ENOENT\n");
++			skip_test_dodgy_fs("ftruncate()");
+ 		} else {
+ 			ksft_test_result_fail("ftruncate() failed (%s)\n", strerror(errno));
+ 		}
+diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
+index 433e54fb634f793f2eb4c53ba6b791045c9f4986..9df2636c829bf34d6d0517e126b3deda1f3ba834 100644
+--- a/tools/testing/selftests/mm/map_populate.c
++++ b/tools/testing/selftests/mm/map_populate.c
+@@ -18,6 +18,8 @@
+ #include <unistd.h>
+ #include "../kselftest.h"
+ 
++#include "vm_util.h"
++
+ #define MMAP_SZ		4096
+ 
+ #define BUG_ON(condition, description)						\
+@@ -88,11 +90,7 @@ int main(int argc, char **argv)
+ 
+ 	ret = ftruncate(fileno(ftmp), MMAP_SZ);
+ 	if (ret < 0 && errno == ENOENT) {
+-		/*
+-		 * This probably means tmpfile() made a file on a filesystem
+-		 * that doesn't handle temporary files the way we want.
+-		 */
+-		ksft_exit_skip("ftruncate(fileno(tmpfile())) gave ENOENT, weird filesystem?\n");
++		skip_test_dodgy_fs("ftruncate()");
+ 	}
+ 	BUG_ON(ret, "ftruncate()");
+ 
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index 0e629586556b5aae580d8e4ce7491bc93adcc4d6..6effafdc4d8a23f91f0adcb9e43d6196d651ba88 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -5,6 +5,7 @@
+ #include <err.h>
+ #include <strings.h> /* ffsl() */
+ #include <unistd.h> /* _SC_PAGESIZE */
++#include "../kselftest.h"
+ 
+ #define BIT_ULL(nr)                   (1ULL << (nr))
+ #define PM_SOFT_DIRTY                 BIT_ULL(55)
+@@ -32,6 +33,23 @@ static inline unsigned int pshift(void)
+ 	return __page_shift;
+ }
+ 
++/*
++ * Plan 9 FS has bugs (at least on QEMU) where certain operations fail with
++ * ENOENT on unlinked files. See
++ * https://gitlab.com/qemu-project/qemu/-/issues/103 for some info about such
++ * bugs. There are rumours of NFS implementations with similar bugs.
++ *
++ * Ideally, tests should just detect filesystems known to have such issues and
++ * bail early. But 9pfs has the additional "feature" that it causes fstatfs to
++ * pass through the f_type field from the host filesystem. To avoid having to
++ * scrape /proc/mounts or some other hackery, tests can call this function when
++ * it seems such a bug might have been encountered.
++ */
++static inline void skip_test_dodgy_fs(const char *op_name)
++{
++	ksft_test_result_skip("%s failed with ENOENT. Filesystem might be buggy (9pfs?)\n", op_name);
++}
++
+ uint64_t pagemap_get_entry(int fd, char *start);
+ bool pagemap_is_softdirty(int fd, char *start);
+ bool pagemap_is_swapped(int fd, char *start);
+
+---
+base-commit: a91aaf8dd549dcee9caab227ecaa6cbc243bbc5a
+change-id: 20250317-9pfs-comments-24b6fa5417cd
+
+Best regards,
+-- 
+Brendan Jackman <jackmanb@google.com>
+
 
