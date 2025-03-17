@@ -1,739 +1,529 @@
-Return-Path: <linux-kselftest+bounces-29178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50FDBA64112
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 07:18:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 814EAA642CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 08:09:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E7F16EC91
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 06:18:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E7581892843
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 07:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D68221505B;
-	Mon, 17 Mar 2025 06:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C325321ADC9;
+	Mon, 17 Mar 2025 07:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePua7gUa"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="TZSLRTKq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8200C290F;
-	Mon, 17 Mar 2025 06:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE4219A93
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 07:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742192290; cv=none; b=S3p5oWPKUBocNjJ0LJK3RzmKfihJwrHu9FR9qkWzlcigOyiclfGproYTJzUaMxyeXCNgvovgnSzxUHHC0c4OgWDc4W+JjLiI22OeWFWJUTGglEdpeo8T/6xfRamTSsXYNTSS5mUTaOVQtZWnN6ehdsHaMh1Sk3/3A5tMI0dzL/8=
+	t=1742195219; cv=none; b=eVXiokDjuGyf7RXRo7bc1pqHAA36L9ItWNDPPxy5uHOCJXnhSdSY/1qcjCLgsCrDyU+wMUpeiMdaf7uesQ5Nr6YK1MztNKRBWv7XjeBNd3rNOcbORsNVqAd2T+dXlIh0KlFPlx4La73bCYpzyHu6fG5ybpG7TjhB/ogbmZV4B0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742192290; c=relaxed/simple;
-	bh=PrY/t7xC78LJc8T4QkWWW9a1s695m1FoLi5asAboAKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S+DwRFsbe9yhl6W8a2/AId74o8gZhsU41/Br0etqjpqRtNjgPQ788CSCOQ+zbd9F6mSFNYCo2Sp8hI4+mm8TdCVk8Qs0xEZIcDtwtMLxcm8h1d+nAaWToTVQ57cyPnIYiCJXHz/+Nq2v/eHJU3OH18SMJYxI5TETjQ/77ejXSjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePua7gUa; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2239c066347so78490785ad.2;
-        Sun, 16 Mar 2025 23:18:08 -0700 (PDT)
+	s=arc-20240116; t=1742195219; c=relaxed/simple;
+	bh=+6wGjtvWAnbFslZIopmwE3OjGQiz2zKkeuZX0rpkM7Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XRCW5JE1L8SP1MpVW1rqlqHaxK80K5Z89ifXR3Bc6KrePaHATOneHei7+TkIvr+qov5PCm8Vx4+CRXygk6DbRczOqeUuyXzbGdZLIyI7lzmDNHMcqs7iTk7EJSy3dcqt2/MerqthiZTvLy7dO+NmvYA5nMYSlNjD5bFHZ9TXVlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=TZSLRTKq; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3014ae35534so1951097a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 00:06:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742192288; x=1742797088; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jGeEqVSxi4DrPHArdWWnb6Imm5TWD81pPg5TzCxax7o=;
-        b=ePua7gUafV+DSlA7GDHkUq70vJMGJqiyR5NdnI0z1v0e57K8ZlF1VIe5icX/n7S6TR
-         a0b0GCNBARDlFdOJ7ofgh+83ajV0JHxDS3NGZI2UptA1N1DUFpb1Wp1C6e97MdK9Q0V5
-         iGv5YCT7AuJW2gDChRUNXwpAXELsGfe7qH23Hji2GS316/aspzlsAEuSZheqqzzCova4
-         grV6iqj5m6QvEIKRI8pA/QRjvOa7gJmOsCqTw/h4HMurJzGY5ZwZa5DUPjD6W1oOqB/E
-         m4d2RUkpCRAUW7yXC31SJtc8Y+sxo7hYkGCxZ01TUp20xSydwxVeNSC2ObK8+0maifE5
-         2GfQ==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1742195216; x=1742800016; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LlhDYNxQXaljro5xNb8yMyAUj7KHJvqFuDdC/trm+HE=;
+        b=TZSLRTKqj/HvyFhrD7/fd7Ey0x+O0Bq161pD5PLTJMuBTh4GJm+TeL0RuECDxRYPXg
+         EF/eAh94Mq/KpElKGudX25qVI4rUBa1TsqK3p55Z8crmV/MA+ANytuQJr6YvM2fyTV0s
+         81hpXj5KLgrF6XSLhd7dg0WzKI3dM7CZD10wg4BgcrL75Nbu56MfVbgeErIXe5EKOuc1
+         WAbpYMzHKDVbjnNq+AaigzUhrCpwBvgie/nCh16KXYf1lZe0X5neQqUm6dOJEt/h9XMh
+         BoiORdnH9bVABDJYv5ebbJCtenu/dQPUvYS26lcBzKkuBxDpd4JIGOwPnQeVXyd8VTQm
+         nYuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742192288; x=1742797088;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jGeEqVSxi4DrPHArdWWnb6Imm5TWD81pPg5TzCxax7o=;
-        b=B5uJUXgQ8iBuGo70rMB/tugzpWhe66CVEGtcwmOjeOfwUsjLpZnxgL3DSAppu95bo4
-         qYsSr9i6cD/r+Ja5pXCzWgjxZQuBIUJ8wNAqrrVvTB6xJeGPy/ybjqSu9WVwzVyKkTQ9
-         Ba8mOMM7CeLfeaLMTx8D4d73C8dJe7CJ16UuTjLHkh33sek7L7YVXA6uSe1wzH+pib96
-         se0zgOfiyz56QBkRmeL3NN0xzNEDcz5gF5xPSJJYCFQ7XwCL5OOUBXpgfglMwNSkchPf
-         g1IiL9PYDzkWNXR4KrZXTNBSvoZvKTLfomc2dcthhGGmZmoXEd1wVjIMPUExougA64Lh
-         YltQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUcNIAXiYZaW946IZ8Zcw7pKKz+b9tTLfWiHVd7XO/GMZxHhe9kXBMc4UCpDv92QX87SgZymro6kvE0BrE=@vger.kernel.org, AJvYcCViWXnohKFoezQgM8taCcdJij2QCxsycXF6tl7MWMZTKszu21G2GABunJ8BemEYKaDmn4U5mlXkNg69kigDcdnd@vger.kernel.org, AJvYcCXWMCFN3Suz2z8kn8z7A6VWwSnGwzVY7Dlw+JktS15fbeMs9iv6hIiEKprxYoXKa1ftMZJbWYcT@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsUyGSH3KTW/sMGF+DP/QhK1J1fGbOGB7rhSE4BFzoaoKxSLut
-	nBNGCajQqCYKpcnSyTA/11z2njqmp39gtSslmTk0TYGP8hfQ87hGGs25y/P1CVg=
-X-Gm-Gg: ASbGncssX1/oz5gPBs1dcPOd9D8tywKvLdiYU52CZbfl/vaO6x9zpRD81E2YgCOjJgh
-	b7V1FbND6FmyaMtR7JRvwONwro4Dv2n/CoJD3RNQjUqGGNgygX6Qzi6GcKNNb0zuj6qV2V78+NX
-	fRPeB8rhfcM+Hc0zpRPghQib6OLeKRtdbNFVMNP0f9BxAmkOvbrSwX3gkUaUNZngZrk/GSAHcvJ
-	enk/kG4i047rJHRDF+ASgcgXe9e4wLnc/XBV/4yhbYRamP2T2fnE9+Z13Hn+QlPlGvrgrIsWOrz
-	7wnau87bYuTbWQ8vfo2K7w+W4HwtgSaqFA==
-X-Google-Smtp-Source: AGHT+IHUGw19Ail/HD3Jj6BfHCp7cZyeAPHeBzPiEKG+J6O3vBWwBbj3XKFsYFHEo8Mwq/dMmxPuag==
-X-Received: by 2002:a17:902:cccf:b0:215:b473:1dc9 with SMTP id d9443c01a7336-225e0b11825mr139526595ad.46.1742192287492;
-        Sun, 16 Mar 2025 23:18:07 -0700 (PDT)
-Received: from gmail.com ([116.237.135.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c6bd4dd7sm67112135ad.223.2025.03.16.23.18.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Mar 2025 23:18:07 -0700 (PDT)
-From: Qingfang Deng <dqfext@gmail.com>
-To: antonio@openvpn.net
-Cc: andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	kuba@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	ryazanov.s.a@gmail.com,
-	sd@queasysnail.net,
-	shaw.leon@gmail.com,
-	shuah@kernel.org
-Subject: Re: [PATCH net-next v23 09/23] ovpn: implement packet processing
-Date: Mon, 17 Mar 2025 14:17:59 +0800
-Message-ID: <20250317061759.2368549-1-dqfext@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250312-b4-ovpn-v23-9-76066bc0a30c@openvpn.net>
-References: <20250312-b4-ovpn-v23-9-76066bc0a30c@openvpn.net>
+        d=1e100.net; s=20230601; t=1742195216; x=1742800016;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LlhDYNxQXaljro5xNb8yMyAUj7KHJvqFuDdC/trm+HE=;
+        b=EMJpc6tUzQBNJZeh0e7Jqv/j7MhDpq83PIE5REeYZaYS/Wx6vxK8jpnxnxllhd3/qJ
+         FFdi/xCOR//nNjJwj68tWnVP7t1YUnJCasIcl7bwx2t2j0QVtx/JbYxpj1AWfdH2f7OZ
+         GVwODaLQT4ToesUsLl09bCpjlkdm5XAtdhWs0oxlzUxvTDo7y8y8x25nupZNqfmVcDWd
+         xS90qGbPETdPX7BCVfBTEhicGUtw5pSq9I/AoJopKyRFgpSZYPCk2ONuzSzNXxpyc9N1
+         a5A2eXnuVoPP5eQ0cxlCI1+VkiKuypAdnhPf6Nbhy0wLwVwgeADFlLg1BxGL6bS/ngU6
+         KLyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7HeX6wg9CWvc95x9k5XFYXIij7cbUzNQLRvzwxDFNP755nka+wRIzlkvA7NgSnOpDm95RhvlZVt02AXeAOxg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL2TU60zC3p5ARHArP6bXjhfkL/vsYy+M122kN0SMzx1h3G5IC
+	E7C+ds0RD/UzDIIdM6CAApgV7xSHPyitfgxnMgbOH2b61CFG0DIFVlrJ196RtUE=
+X-Gm-Gg: ASbGnctg8oqDOONz/88SI11McoG++hhMXWx4ZD4tZNlPJnwSD5xypjr0YDlzGAjzonK
+	2sV4KR1d7bFhldYuMA/pXQ/KcHhiI/YPtjBexbphQ/vzVlJ1LhaDvaeJjOKp8IpeCyM+Ih++CbE
+	Vggxjgat+FqWXwDT6K+rayU51MrKpbhFJrCNF4eSe+pUqtU+WkBGtp5E55p3U91LgYKw3angbLf
+	kbHW+okJeMfCVxdBkQiTbvhNjPmadIknXik9K70EdQ2VmOHdW2xz2rQZrVFvDBNQslik7U5HCek
+	xYpUoIauKyOpHXXrkGaUjThbtnx2niDS0dVgvSiY1e+iTp1R6PgQ+rh12A==
+X-Google-Smtp-Source: AGHT+IHS6jihoL37OgI78P9zoqUhv0y/gBN3c29U4siSAX49VPXXMvTt2Or4ivkgi37sHpeBgS4rqQ==
+X-Received: by 2002:a17:90a:fd11:b0:2ff:702f:7172 with SMTP id 98e67ed59e1d1-30151d8174emr14785882a91.33.1742195216242;
+        Mon, 17 Mar 2025 00:06:56 -0700 (PDT)
+Received: from [157.82.207.107] ([157.82.207.107])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30153bc301esm5273746a91.49.2025.03.17.00.06.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Mar 2025 00:06:55 -0700 (PDT)
+Message-ID: <73250942-9ab9-4ee4-9bbe-e0a155a61f51@daynix.com>
+Date: Mon, 17 Mar 2025 16:06:50 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 3/6] tun: Introduce virtio-net hash feature
+To: Jason Wang <jasowang@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>,
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
+ Lei Yang <leiyang@redhat.com>, Simon Horman <horms@kernel.org>
+References: <20250307-rss-v9-0-df76624025eb@daynix.com>
+ <20250307-rss-v9-3-df76624025eb@daynix.com>
+ <CACGkMEsNHba=PY5UQoH1zdGQRiHC8FugMG1nkXqOj1TBdOQrww@mail.gmail.com>
+ <7978dfd5-8499-44f3-9c30-e53a01449281@daynix.com>
+ <CACGkMEsR4_RreDbYQSEk5Cr29_26WNUYheWCQBjyMNUn=1eS2Q@mail.gmail.com>
+ <edf41317-2191-458f-a315-87d5af42a264@daynix.com>
+ <CACGkMEta3k_JOhKv44XiBXZb=WuS=KbSeJNpYxCdeiAgRY2azg@mail.gmail.com>
+ <ff7916cf-8a9c-4c27-baaf-ca408817c063@daynix.com>
+ <CACGkMEsVgbJPhz2d2ATm5fr3M2uSEoSXWW7tXZ_FrkQtmmu1wA@mail.gmail.com>
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <CACGkMEsVgbJPhz2d2ATm5fr3M2uSEoSXWW7tXZ_FrkQtmmu1wA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Wed, 12 Mar 2025 21:54:18 +0100, Antonio Quartulli wrote:
-> --- a/drivers/net/ovpn/io.c
-> +++ b/drivers/net/ovpn/io.c
-> @@ -7,6 +7,7 @@
->   *		Antonio Quartulli <antonio@openvpn.net>
->   */
->  
-> +#include <crypto/aead.h>
->  #include <linux/netdevice.h>
->  #include <linux/skbuff.h>
->  #include <net/gro_cells.h>
-> @@ -15,6 +16,9 @@
->  #include "ovpnpriv.h"
->  #include "peer.h"
->  #include "io.h"
-> +#include "bind.h"
-> +#include "crypto.h"
-> +#include "crypto_aead.h"
->  #include "netlink.h"
->  #include "proto.h"
->  #include "udp.h"
-> @@ -44,7 +48,7 @@ static void ovpn_netdev_write(struct ovpn_peer *peer, struct sk_buff *skb)
->  	skb_set_queue_mapping(skb, 0);
->  	skb_scrub_packet(skb, true);
->  
-> -	skb_reset_network_header(skb);
-> +	/* network header reset in ovpn_decrypt_post() */
->  	skb_reset_transport_header(skb);
->  	skb_reset_inner_headers(skb);
->  
-> @@ -56,34 +60,147 @@ static void ovpn_netdev_write(struct ovpn_peer *peer, struct sk_buff *skb)
->  		dev_sw_netstats_rx_add(peer->ovpn->dev, pkt_len);
->  }
->  
-> -static void ovpn_decrypt_post(struct sk_buff *skb, int ret)
-> +void ovpn_decrypt_post(void *data, int ret)
->  {
-> -	struct ovpn_peer *peer = ovpn_skb_cb(skb)->peer;
-> +	struct ovpn_crypto_key_slot *ks;
-> +	unsigned int payload_offset = 0;
-> +	struct sk_buff *skb = data;
-> +	struct ovpn_peer *peer;
-> +	__be16 proto;
-> +	__be32 *pid;
-> +
-> +	/* crypto is happening asynchronously. this function will be called
-> +	 * again later by the crypto callback with a proper return code
-> +	 */
-> +	if (unlikely(ret == -EINPROGRESS))
-> +		return;
-> +
-> +	payload_offset = ovpn_skb_cb(skb)->payload_offset;
-> +	ks = ovpn_skb_cb(skb)->ks;
-> +	peer = ovpn_skb_cb(skb)->peer;
-> +
-> +	/* crypto is done, cleanup skb CB and its members */
-> +
-> +	if (likely(ovpn_skb_cb(skb)->iv))
-> +		kfree(ovpn_skb_cb(skb)->iv);
-> +
-> +	if (likely(ovpn_skb_cb(skb)->sg))
-> +		kfree(ovpn_skb_cb(skb)->sg);
-> +
-> +	if (likely(ovpn_skb_cb(skb)->req))
-> +		aead_request_free(ovpn_skb_cb(skb)->req);
->  
->  	if (unlikely(ret < 0))
->  		goto drop;
->  
-> +	/* PID sits after the op */
-> +	pid = (__force __be32 *)(skb->data + OVPN_OPCODE_SIZE);
-> +	ret = ovpn_pktid_recv(&ks->pid_recv, ntohl(*pid), 0);
-> +	if (unlikely(ret < 0)) {
-> +		net_err_ratelimited("%s: PKT ID RX error for peer %u: %d\n",
-> +				    netdev_name(peer->ovpn->dev), peer->id,
-> +				    ret);
-> +		goto drop;
-> +	}
-> +
-> +	/* point to encapsulated IP packet */
-> +	__skb_pull(skb, payload_offset);
-> +
-> +	/* check if this is a valid datapacket that has to be delivered to the
-> +	 * ovpn interface
-> +	 */
-> +	skb_reset_network_header(skb);
-> +	proto = ovpn_ip_check_protocol(skb);
-> +	if (unlikely(!proto)) {
-> +		/* check if null packet */
-> +		if (unlikely(!pskb_may_pull(skb, 1))) {
-> +			net_info_ratelimited("%s: NULL packet received from peer %u\n",
-> +					     netdev_name(peer->ovpn->dev),
-> +					     peer->id);
-> +			goto drop;
-> +		}
-> +
-> +		net_info_ratelimited("%s: unsupported protocol received from peer %u\n",
-> +				     netdev_name(peer->ovpn->dev), peer->id);
-> +		goto drop;
-> +	}
-> +	skb->protocol = proto;
-> +
-> +	/* perform Reverse Path Filtering (RPF) */
-> +	if (unlikely(!ovpn_peer_check_by_src(peer->ovpn, skb, peer))) {
-> +		if (skb->protocol == htons(ETH_P_IPV6))
-> +			net_dbg_ratelimited("%s: RPF dropped packet from peer %u, src: %pI6c\n",
-> +					    netdev_name(peer->ovpn->dev),
-> +					    peer->id, &ipv6_hdr(skb)->saddr);
-> +		else
-> +			net_dbg_ratelimited("%s: RPF dropped packet from peer %u, src: %pI4\n",
-> +					    netdev_name(peer->ovpn->dev),
-> +					    peer->id, &ip_hdr(skb)->saddr);
-> +		goto drop;
-> +	}
-> +
->  	ovpn_netdev_write(peer, skb);
->  	/* skb is passed to upper layer - don't free it */
->  	skb = NULL;
->  drop:
->  	if (unlikely(skb))
->  		dev_core_stats_rx_dropped_inc(peer->ovpn->dev);
-> -	ovpn_peer_put(peer);
-> +	if (likely(peer))
-> +		ovpn_peer_put(peer);
-> +	if (likely(ks))
-> +		ovpn_crypto_key_slot_put(ks);
->  	kfree_skb(skb);
->  }
->  
->  /* RX path entry point: decrypt packet and forward it to the device */
->  void ovpn_recv(struct ovpn_peer *peer, struct sk_buff *skb)
->  {
-> -	ovpn_skb_cb(skb)->peer = peer;
-> -	ovpn_decrypt_post(skb, 0);
-> +	struct ovpn_crypto_key_slot *ks;
-> +	u8 key_id;
-> +
-> +	/* get the key slot matching the key ID in the received packet */
-> +	key_id = ovpn_key_id_from_skb(skb);
-> +	ks = ovpn_crypto_key_id_to_slot(&peer->crypto, key_id);
-> +	if (unlikely(!ks)) {
-> +		net_info_ratelimited("%s: no available key for peer %u, key-id: %u\n",
-> +				     netdev_name(peer->ovpn->dev), peer->id,
-> +				     key_id);
-> +		dev_core_stats_rx_dropped_inc(peer->ovpn->dev);
-> +		kfree_skb(skb);
-> +		ovpn_peer_put(peer);
-> +		return;
-> +	}
-> +
-> +	memset(ovpn_skb_cb(skb), 0, sizeof(struct ovpn_cb));
-> +	ovpn_decrypt_post(skb, ovpn_aead_decrypt(peer, ks, skb));
->  }
->  
-> -static void ovpn_encrypt_post(struct sk_buff *skb, int ret)
-> +void ovpn_encrypt_post(void *data, int ret)
->  {
-> -	struct ovpn_peer *peer = ovpn_skb_cb(skb)->peer;
-> +	struct ovpn_crypto_key_slot *ks;
-> +	struct sk_buff *skb = data;
->  	struct ovpn_socket *sock;
-> +	struct ovpn_peer *peer;
-> +
-> +	/* encryption is happening asynchronously. This function will be
-> +	 * called later by the crypto callback with a proper return value
-> +	 */
-> +	if (unlikely(ret == -EINPROGRESS))
-> +		return;
-> +
-> +	ks = ovpn_skb_cb(skb)->ks;
-> +	peer = ovpn_skb_cb(skb)->peer;
-> +
-> +	/* crypto is done, cleanup skb CB and its members */
-> +
-> +	if (likely(ovpn_skb_cb(skb)->iv))
-> +		kfree(ovpn_skb_cb(skb)->iv);
-> +
-> +	if (likely(ovpn_skb_cb(skb)->sg))
-> +		kfree(ovpn_skb_cb(skb)->sg);
-> +
-> +	if (likely(ovpn_skb_cb(skb)->req))
-> +		aead_request_free(ovpn_skb_cb(skb)->req);
->  
->  	if (unlikely(ret < 0))
->  		goto err;
-> @@ -110,23 +227,40 @@ static void ovpn_encrypt_post(struct sk_buff *skb, int ret)
->  err:
->  	if (unlikely(skb))
->  		dev_core_stats_tx_dropped_inc(peer->ovpn->dev);
-> -	ovpn_peer_put(peer);
-> +	if (likely(peer))
-> +		ovpn_peer_put(peer);
-> +	if (likely(ks))
-> +		ovpn_crypto_key_slot_put(ks);
->  	kfree_skb(skb);
->  }
->  
->  static bool ovpn_encrypt_one(struct ovpn_peer *peer, struct sk_buff *skb)
->  {
-> -	ovpn_skb_cb(skb)->peer = peer;
-> +	struct ovpn_crypto_key_slot *ks;
-> +
-> +	if (unlikely(skb->ip_summed == CHECKSUM_PARTIAL &&
-
-This if statement is now not necessary as you do not advertise
-NETIF_F_HW_CSUM.
-
-> +		     skb_checksum_help(skb))) {
-> +		net_warn_ratelimited("%s: cannot compute checksum for outgoing packet for peer %u\n",
-> +				     netdev_name(peer->ovpn->dev), peer->id);
-> +		return false;
-> +	}
-> +
-> +	/* get primary key to be used for encrypting data */
-> +	ks = ovpn_crypto_key_slot_primary(&peer->crypto);
-> +	if (unlikely(!ks))
-> +		return false;
->  
->  	/* take a reference to the peer because the crypto code may run async.
->  	 * ovpn_encrypt_post() will release it upon completion
->  	 */
->  	if (unlikely(!ovpn_peer_hold(peer))) {
->  		DEBUG_NET_WARN_ON_ONCE(1);
-> +		ovpn_crypto_key_slot_put(ks);
->  		return false;
->  	}
->  
-> -	ovpn_encrypt_post(skb, 0);
-> +	memset(ovpn_skb_cb(skb), 0, sizeof(struct ovpn_cb));
-> +	ovpn_encrypt_post(skb, ovpn_aead_encrypt(peer, ks, skb));
->  	return true;
->  }
->  
-> diff --git a/drivers/net/ovpn/io.h b/drivers/net/ovpn/io.h
-> index 1cfa66873a2d4840ce57e337f8b4e8143e8b8e79..5143104b2c4b896a030ec4a8c8aea7015f40ef02 100644
-> --- a/drivers/net/ovpn/io.h
-> +++ b/drivers/net/ovpn/io.h
-> @@ -23,4 +23,7 @@ netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev);
->  
->  void ovpn_recv(struct ovpn_peer *peer, struct sk_buff *skb);
->  
-> +void ovpn_encrypt_post(void *data, int ret);
-> +void ovpn_decrypt_post(void *data, int ret);
-> +
->  #endif /* _NET_OVPN_OVPN_H_ */
-> diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
-> index 10eabd62ae7237162a36a333b41c748901a7d888..23eaab1b465b8b88a84cf9f1039621923b640b47 100644
-> --- a/drivers/net/ovpn/peer.c
-> +++ b/drivers/net/ovpn/peer.c
-> @@ -12,6 +12,8 @@
->  
->  #include "ovpnpriv.h"
->  #include "bind.h"
-> +#include "pktid.h"
-> +#include "crypto.h"
->  #include "io.h"
->  #include "main.h"
->  #include "netlink.h"
-> @@ -56,6 +58,7 @@ struct ovpn_peer *ovpn_peer_new(struct ovpn_priv *ovpn, u32 id)
->  	peer->vpn_addrs.ipv6 = in6addr_any;
->  
->  	RCU_INIT_POINTER(peer->bind, NULL);
-> +	ovpn_crypto_state_init(&peer->crypto);
->  	spin_lock_init(&peer->lock);
->  	kref_init(&peer->refcount);
->  
-> @@ -94,7 +97,10 @@ static void ovpn_peer_release_rcu(struct rcu_head *head)
->   */
->  static void ovpn_peer_release(struct ovpn_peer *peer)
->  {
-> +	ovpn_crypto_state_release(&peer->crypto);
-> +	spin_lock_bh(&peer->lock);
->  	ovpn_bind_reset(peer, NULL);
-> +	spin_unlock_bh(&peer->lock);
->  	call_rcu(&peer->rcu, ovpn_peer_release_rcu);
->  	netdev_put(peer->ovpn->dev, &peer->dev_tracker);
->  }
-> @@ -326,6 +332,29 @@ struct ovpn_peer *ovpn_peer_get_by_dst(struct ovpn_priv *ovpn,
->  	return peer;
->  }
->  
-> +/**
-> + * ovpn_peer_check_by_src - check that skb source is routed via peer
-> + * @ovpn: the openvpn instance to search
-> + * @skb: the packet to extract source address from
-> + * @peer: the peer to check against the source address
-> + *
-> + * Return: true if the peer is matching or false otherwise
-> + */
-> +bool ovpn_peer_check_by_src(struct ovpn_priv *ovpn, struct sk_buff *skb,
-> +			    struct ovpn_peer *peer)
-> +{
-> +	bool match = false;
-> +
-> +	if (ovpn->mode == OVPN_MODE_P2P) {
-> +		/* in P2P mode, no matter the destination, packets are always
-> +		 * sent to the single peer listening on the other side
-> +		 */
-> +		match = (peer == rcu_access_pointer(ovpn->peer));
-> +	}
-> +
-> +	return match;
-> +}
-> +
->  /**
->   * ovpn_peer_add_p2p - add peer to related tables in a P2P instance
->   * @ovpn: the instance to add the peer to
-> diff --git a/drivers/net/ovpn/peer.h b/drivers/net/ovpn/peer.h
-> index fef04311c1593db4ccfa3c417487b3d4faaae9d7..a9113a969f94d66fa17208d563d0bbd255c23fa9 100644
-> --- a/drivers/net/ovpn/peer.h
-> +++ b/drivers/net/ovpn/peer.h
-> @@ -12,6 +12,7 @@
->  
->  #include <net/dst_cache.h>
->  
-> +#include "crypto.h"
->  #include "socket.h"
->  
->  /**
-> @@ -23,6 +24,7 @@
->   * @vpn_addrs.ipv4: IPv4 assigned to peer on the tunnel
->   * @vpn_addrs.ipv6: IPv6 assigned to peer on the tunnel
->   * @sock: the socket being used to talk to this peer
-> + * @crypto: the crypto configuration (ciphers, keys, etc..)
->   * @dst_cache: cache for dst_entry used to send to peer
->   * @bind: remote peer binding
->   * @delete_reason: why peer was deleted (i.e. timeout, transport error, ..)
-> @@ -40,6 +42,7 @@ struct ovpn_peer {
->  		struct in6_addr ipv6;
->  	} vpn_addrs;
->  	struct ovpn_socket __rcu *sock;
-> +	struct ovpn_crypto_state crypto;
->  	struct dst_cache dst_cache;
->  	struct ovpn_bind __rcu *bind;
->  	enum ovpn_del_peer_reason delete_reason;
-> @@ -82,5 +85,7 @@ struct ovpn_peer *ovpn_peer_get_by_transp_addr(struct ovpn_priv *ovpn,
->  struct ovpn_peer *ovpn_peer_get_by_id(struct ovpn_priv *ovpn, u32 peer_id);
->  struct ovpn_peer *ovpn_peer_get_by_dst(struct ovpn_priv *ovpn,
->  				       struct sk_buff *skb);
-> +bool ovpn_peer_check_by_src(struct ovpn_priv *ovpn, struct sk_buff *skb,
-> +			    struct ovpn_peer *peer);
->  
->  #endif /* _NET_OVPN_OVPNPEER_H_ */
-> diff --git a/drivers/net/ovpn/pktid.c b/drivers/net/ovpn/pktid.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..2e73d1c1ec8b6c4fe2fc10ebc1a4f3008362df21
-> --- /dev/null
-> +++ b/drivers/net/ovpn/pktid.c
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*  OpenVPN data channel offload
-> + *
-> + *  Copyright (C) 2020-2025 OpenVPN, Inc.
-> + *
-> + *  Author:	Antonio Quartulli <antonio@openvpn.net>
-> + *		James Yonan <james@openvpn.net>
-> + */
-> +
-> +#include <linux/atomic.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/net.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/types.h>
-> +
-> +#include "ovpnpriv.h"
-> +#include "main.h"
-> +#include "pktid.h"
-> +
-> +void ovpn_pktid_xmit_init(struct ovpn_pktid_xmit *pid)
-> +{
-> +	atomic64_set(&pid->seq_num, 1);
-> +}
-> +
-> +void ovpn_pktid_recv_init(struct ovpn_pktid_recv *pr)
-> +{
-> +	memset(pr, 0, sizeof(*pr));
-> +	spin_lock_init(&pr->lock);
-> +}
-> +
-> +/* Packet replay detection.
-> + * Allows ID backtrack of up to REPLAY_WINDOW_SIZE - 1.
-> + */
-> +int ovpn_pktid_recv(struct ovpn_pktid_recv *pr, u32 pkt_id, u32 pkt_time)
-> +{
-> +	const unsigned long now = jiffies;
-> +	int ret;
-> +
-> +	/* ID must not be zero */
-> +	if (unlikely(pkt_id == 0))
-> +		return -EINVAL;
-> +
-> +	spin_lock_bh(&pr->lock);
-> +
-> +	/* expire backtracks at or below pr->id after PKTID_RECV_EXPIRE time */
-> +	if (unlikely(time_after_eq(now, pr->expire)))
-> +		pr->id_floor = pr->id;
-> +
-> +	/* time changed? */
-> +	if (unlikely(pkt_time != pr->time)) {
-> +		if (pkt_time > pr->time) {
-> +			/* time moved forward, accept */
-> +			pr->base = 0;
-> +			pr->extent = 0;
-> +			pr->id = 0;
-> +			pr->time = pkt_time;
-> +			pr->id_floor = 0;
-> +		} else {
-> +			/* time moved backward, reject */
-> +			ret = -ETIME;
-> +			goto out;
-> +		}
-> +	}
-> +
-> +	if (likely(pkt_id == pr->id + 1)) {
-> +		/* well-formed ID sequence (incremented by 1) */
-> +		pr->base = REPLAY_INDEX(pr->base, -1);
-> +		pr->history[pr->base / 8] |= (1 << (pr->base % 8));
-> +		if (pr->extent < REPLAY_WINDOW_SIZE)
-> +			++pr->extent;
-> +		pr->id = pkt_id;
-> +	} else if (pkt_id > pr->id) {
-> +		/* ID jumped forward by more than one */
-> +		const unsigned int delta = pkt_id - pr->id;
-> +
-> +		if (delta < REPLAY_WINDOW_SIZE) {
-> +			unsigned int i;
-> +
-> +			pr->base = REPLAY_INDEX(pr->base, -delta);
-> +			pr->history[pr->base / 8] |= (1 << (pr->base % 8));
-> +			pr->extent += delta;
-> +			if (pr->extent > REPLAY_WINDOW_SIZE)
-> +				pr->extent = REPLAY_WINDOW_SIZE;
-> +			for (i = 1; i < delta; ++i) {
-> +				unsigned int newb = REPLAY_INDEX(pr->base, i);
-> +
-> +				pr->history[newb / 8] &= ~BIT(newb % 8);
-> +			}
-> +		} else {
-> +			pr->base = 0;
-> +			pr->extent = REPLAY_WINDOW_SIZE;
-> +			memset(pr->history, 0, sizeof(pr->history));
-> +			pr->history[0] = 1;
-> +		}
-> +		pr->id = pkt_id;
-> +	} else {
-> +		/* ID backtrack */
-> +		const unsigned int delta = pr->id - pkt_id;
-> +
-> +		if (delta > pr->max_backtrack)
-> +			pr->max_backtrack = delta;
-> +		if (delta < pr->extent) {
-> +			if (pkt_id > pr->id_floor) {
-> +				const unsigned int ri = REPLAY_INDEX(pr->base,
-> +								     delta);
-> +				u8 *p = &pr->history[ri / 8];
-> +				const u8 mask = (1 << (ri % 8));
-> +
-> +				if (*p & mask) {
-> +					ret = -EINVAL;
-> +					goto out;
-> +				}
-> +				*p |= mask;
-> +			} else {
-> +				ret = -EINVAL;
-> +				goto out;
-> +			}
-> +		} else {
-> +			ret = -EINVAL;
-> +			goto out;
-> +		}
-> +	}
-> +
-> +	pr->expire = now + PKTID_RECV_EXPIRE;
-> +	ret = 0;
-> +out:
-> +	spin_unlock_bh(&pr->lock);
-> +	return ret;
-> +}
-> diff --git a/drivers/net/ovpn/pktid.h b/drivers/net/ovpn/pktid.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..0e5fd91d488359f675f500a7368027f7a148f5c6
-> --- /dev/null
-> +++ b/drivers/net/ovpn/pktid.h
-> @@ -0,0 +1,87 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*  OpenVPN data channel offload
-> + *
-> + *  Copyright (C) 2020-2025 OpenVPN, Inc.
-> + *
-> + *  Author:	Antonio Quartulli <antonio@openvpn.net>
-> + *		James Yonan <james@openvpn.net>
-> + */
-> +
-> +#ifndef _NET_OVPN_OVPNPKTID_H_
-> +#define _NET_OVPN_OVPNPKTID_H_
-> +
-> +#include "proto.h"
-> +
-> +/* If no packets received for this length of time, set a backtrack floor
-> + * at highest received packet ID thus far.
-> + */
-> +#define PKTID_RECV_EXPIRE (30 * HZ)
-> +
-> +/* Packet-ID state for transmitter */
-> +struct ovpn_pktid_xmit {
-> +	atomic64_t seq_num;
-> +};
-> +
-> +/* replay window sizing in bytes = 2^REPLAY_WINDOW_ORDER */
-> +#define REPLAY_WINDOW_ORDER 8
-> +
-> +#define REPLAY_WINDOW_BYTES BIT(REPLAY_WINDOW_ORDER)
-> +#define REPLAY_WINDOW_SIZE  (REPLAY_WINDOW_BYTES * 8)
-> +#define REPLAY_INDEX(base, i) (((base) + (i)) & (REPLAY_WINDOW_SIZE - 1))
-> +
-> +/* Packet-ID state for receiver.
-> + * Other than lock member, can be zeroed to initialize.
-> + */
-> +struct ovpn_pktid_recv {
-> +	/* "sliding window" bitmask of recent packet IDs received */
-> +	u8 history[REPLAY_WINDOW_BYTES];
-> +	/* bit position of deque base in history */
-> +	unsigned int base;
-> +	/* extent (in bits) of deque in history */
-> +	unsigned int extent;
-> +	/* expiration of history in jiffies */
-> +	unsigned long expire;
-> +	/* highest sequence number received */
-> +	u32 id;
-> +	/* highest time stamp received */
-> +	u32 time;
-> +	/* we will only accept backtrack IDs > id_floor */
-> +	u32 id_floor;
-> +	unsigned int max_backtrack;
-> +	/* protects entire pktd ID state */
-> +	spinlock_t lock;
-> +};
-> +
-> +/* Get the next packet ID for xmit */
-> +static inline int ovpn_pktid_xmit_next(struct ovpn_pktid_xmit *pid, u32 *pktid)
-> +{
-> +	const s64 seq_num = atomic64_fetch_add_unless(&pid->seq_num, 1,
-> +						      0x100000000LL);
-> +	/* when the 32bit space is over, we return an error because the packet
-> +	 * ID is used to create the cipher IV and we do not want to reuse the
-> +	 * same value more than once
-> +	 */
-> +	if (unlikely(seq_num == 0x100000000LL))
-> +		return -ERANGE;
-> +
-> +	*pktid = (u32)seq_num;
-> +
-> +	return 0;
-> +}
-> +
-> +/* Write 12-byte AEAD IV to dest */
-> +static inline void ovpn_pktid_aead_write(const u32 pktid,
-> +					 const u8 nt[],
-> +					 unsigned char *dest)
-> +{
-> +	*(__force __be32 *)(dest) = htonl(pktid);
-> +	BUILD_BUG_ON(4 + OVPN_NONCE_TAIL_SIZE != OVPN_NONCE_SIZE);
-> +	memcpy(dest + 4, nt, OVPN_NONCE_TAIL_SIZE);
-> +}
-> +
-> +void ovpn_pktid_xmit_init(struct ovpn_pktid_xmit *pid);
-> +void ovpn_pktid_recv_init(struct ovpn_pktid_recv *pr);
-> +
-> +int ovpn_pktid_recv(struct ovpn_pktid_recv *pr, u32 pkt_id, u32 pkt_time);
-> +
-> +#endif /* _NET_OVPN_OVPNPKTID_H_ */
-> diff --git a/drivers/net/ovpn/proto.h b/drivers/net/ovpn/proto.h
-> index 591b97a9925fd9b91f996d6d591fac41b1aa6148..b7322c7c515e5c0744719e11ca81fece3ca28569 100644
-> --- a/drivers/net/ovpn/proto.h
-> +++ b/drivers/net/ovpn/proto.h
-> @@ -83,4 +83,36 @@ static inline u32 ovpn_peer_id_from_skb(const struct sk_buff *skb, u16 offset)
->  	return FIELD_GET(OVPN_OPCODE_PEERID_MASK, opcode);
->  }
->  
-> +/**
-> + * ovpn_key_id_from_skb - extract key ID from the skb head
-> + * @skb: the packet to extract the key ID code from
-> + *
-> + * Note: this function assumes that the skb head was pulled enough
-> + * to access the first byte.
-> + *
-> + * Return: the key ID
-> + */
-> +static inline u8 ovpn_key_id_from_skb(const struct sk_buff *skb)
-> +{
-> +	u32 opcode = be32_to_cpu(*(__be32 *)skb->data);
-> +
-> +	return FIELD_GET(OVPN_OPCODE_KEYID_MASK, opcode);
-> +}
-> +
-> +/**
-> + * ovpn_opcode_compose - combine OP code, key ID and peer ID to wire format
-> + * @opcode: the OP code
-> + * @key_id: the key ID
-> + * @peer_id: the peer ID
-> + *
-> + * Return: a 4 bytes integer obtained combining all input values following the
-> + * OpenVPN wire format. This integer can then be written to the packet header.
-> + */
-> +static inline u32 ovpn_opcode_compose(u8 opcode, u8 key_id, u32 peer_id)
-> +{
-> +	return FIELD_PREP(OVPN_OPCODE_PKTTYPE_MASK, opcode) |
-> +	       FIELD_PREP(OVPN_OPCODE_KEYID_MASK, key_id) |
-> +	       FIELD_PREP(OVPN_OPCODE_PEERID_MASK, peer_id);
-> +}
-> +
->  #endif /* _NET_OVPN_OVPNPROTO_H_ */
-> diff --git a/drivers/net/ovpn/skb.h b/drivers/net/ovpn/skb.h
-> index 9db7a9adebdb4cc493f162f89fb2e9c6301fa213..bd3cbcfc770d2c28d234fcdd081b4d02e6496ea0 100644
-> --- a/drivers/net/ovpn/skb.h
-> +++ b/drivers/net/ovpn/skb.h
-> @@ -20,6 +20,11 @@
->  
->  struct ovpn_cb {
->  	struct ovpn_peer *peer;
-> +	struct ovpn_crypto_key_slot *ks;
-> +	struct aead_request *req;
-> +	struct scatterlist *sg;
-> +	u8 *iv;
-> +	unsigned int payload_offset;
->  };
->  
->  static inline struct ovpn_cb *ovpn_skb_cb(struct sk_buff *skb)
+On 2025/03/17 10:12, Jason Wang wrote:
+> On Wed, Mar 12, 2025 at 1:03 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>
+>> On 2025/03/12 11:35, Jason Wang wrote:
+>>> On Tue, Mar 11, 2025 at 2:11 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>
+>>>> On 2025/03/11 9:38, Jason Wang wrote:
+>>>>> On Mon, Mar 10, 2025 at 3:45 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>
+>>>>>> On 2025/03/10 12:55, Jason Wang wrote:
+>>>>>>> On Fri, Mar 7, 2025 at 7:01 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>>>
+>>>>>>>> Hash reporting
+>>>>>>>> ==============
+>>>>>>>>
+>>>>>>>> Allow the guest to reuse the hash value to make receive steering
+>>>>>>>> consistent between the host and guest, and to save hash computation.
+>>>>>>>>
+>>>>>>>> RSS
+>>>>>>>> ===
+>>>>>>>>
+>>>>>>>> RSS is a receive steering algorithm that can be negotiated to use with
+>>>>>>>> virtio_net. Conventionally the hash calculation was done by the VMM.
+>>>>>>>> However, computing the hash after the queue was chosen defeats the
+>>>>>>>> purpose of RSS.
+>>>>>>>>
+>>>>>>>> Another approach is to use eBPF steering program. This approach has
+>>>>>>>> another downside: it cannot report the calculated hash due to the
+>>>>>>>> restrictive nature of eBPF steering program.
+>>>>>>>>
+>>>>>>>> Introduce the code to perform RSS to the kernel in order to overcome
+>>>>>>>> thse challenges. An alternative solution is to extend the eBPF steering
+>>>>>>>> program so that it will be able to report to the userspace, but I didn't
+>>>>>>>> opt for it because extending the current mechanism of eBPF steering
+>>>>>>>> program as is because it relies on legacy context rewriting, and
+>>>>>>>> introducing kfunc-based eBPF will result in non-UAPI dependency while
+>>>>>>>> the other relevant virtualization APIs such as KVM and vhost_net are
+>>>>>>>> UAPIs.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>>>>>>>> Tested-by: Lei Yang <leiyang@redhat.com>
+>>>>>>>> ---
+>>>>>>>>      Documentation/networking/tuntap.rst |   7 ++
+>>>>>>>>      drivers/net/Kconfig                 |   1 +
+>>>>>>>>      drivers/net/tap.c                   |  68 ++++++++++++++-
+>>>>>>>>      drivers/net/tun.c                   |  98 +++++++++++++++++-----
+>>>>>>>>      drivers/net/tun_vnet.h              | 159 ++++++++++++++++++++++++++++++++++--
+>>>>>>>>      include/linux/if_tap.h              |   2 +
+>>>>>>>>      include/linux/skbuff.h              |   3 +
+>>>>>>>>      include/uapi/linux/if_tun.h         |  75 +++++++++++++++++
+>>>>>>>>      net/core/skbuff.c                   |   4 +
+>>>>>>>>      9 files changed, 386 insertions(+), 31 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/Documentation/networking/tuntap.rst b/Documentation/networking/tuntap.rst
+>>>>>>>> index 4d7087f727be5e37dfbf5066a9e9c872cc98898d..86b4ae8caa8ad062c1e558920be42ce0d4217465 100644
+>>>>>>>> --- a/Documentation/networking/tuntap.rst
+>>>>>>>> +++ b/Documentation/networking/tuntap.rst
+>>>>>>>> @@ -206,6 +206,13 @@ enable is true we enable it, otherwise we disable it::
+>>>>>>>>            return ioctl(fd, TUNSETQUEUE, (void *)&ifr);
+>>>>>>>>        }
+>>>>>>>>
+>>>
+>>> [...]
+>>>
+>>>>>>>> +static inline long tun_vnet_ioctl_sethash(struct tun_vnet_hash_container __rcu **hashp,
+>>>>>>>> +                                         bool can_rss, void __user *argp)
+>>>>>>>
+>>>>>>> So again, can_rss seems to be tricky. Looking at its caller, it tires
+>>>>>>> to make eBPF and RSS mutually exclusive. I still don't understand why
+>>>>>>> we need this. Allow eBPF program to override some of the path seems to
+>>>>>>> be common practice.
+>>>>>>>
+>>>>>>> What's more, we didn't try (or even can't) to make automq and eBPF to
+>>>>>>> be mutually exclusive. So I still didn't see what we gain from this
+>>>>>>> and it complicates the codes and may lead to ambiguous uAPI/behaviour.
+>>>>>>
+>>>>>> automq and eBPF are mutually exclusive; automq is disabled when an eBPF
+>>>>>> steering program is set so I followed the example here.
+>>>>>
+>>>>> I meant from the view of uAPI, the kernel doesn't or can't reject eBPF
+>>>>> while using automq.
+>>>>    > >>
+>>>>>> We don't even have an interface for eBPF to let it fall back to another
+>>>>>> alogirhtm.
+>>>>>
+>>>>> It doesn't even need this, e.g XDP overrides the default receiving path.
+>>>>>
+>>>>>> I could make it fall back to RSS if the eBPF steeering
+>>>>>> program is designed to fall back to automq when it returns e.g., -1. But
+>>>>>> such an interface is currently not defined and defining one is out of
+>>>>>> scope of this patch series.
+>>>>>
+>>>>> Just to make sure we are on the same page, I meant we just need to
+>>>>> make the behaviour consistent: allow eBPF to override the behaviour of
+>>>>> both automq and rss.
+>>>>
+>>>> That assumes eBPF takes precedence over RSS, which is not obvious to me.
+>>>
+>>> Well, it's kind of obvious. Not speaking the eBPF selector, we have
+>>> other eBPF stuffs like skbedit etc.
+>>>
+>>>>
+>>>> Let's add an interface for the eBPF steering program to fall back to
+>>>> another steering algorithm. I said it is out of scope before, but it
+>>>> makes clear that the eBPF steering program takes precedence over other
+>>>> algorithms and allows us to delete the code for the configuration
+>>>> validation in this patch.
+>>>
+>>> Fallback is out of scope but it's not what I meant.
+>>>
+>>> I meant in the current uAPI take eBPF precedence over automq. It's
+>>> much more simpler to stick this precedence unless we see obvious
+>>> advanatge.
+>>
+>> We still have three different design options that preserve the current
+>> precedence:
+>>
+>> 1) Precedence order: eBPF -> RSS -> automq
+>> 2) Precedence order: RSS -> eBPF -> automq
+>> 3) Precedence order: eBPF OR RSS -> automq where eBPF and RSS are
+>> mutually exclusive
+>>
+>> I think this is a unique situation for this steering program and I could
+>> not find another example in other eBPF stuffs.
 > 
-> -- 
-> 2.48.1
+> As described above, queue mapping could be overridden by tc-ebpf. So
+> there's no way to guarantee the RSS will work:
 > 
+> https://github.com/DPDK/dpdk/blob/main/drivers/net/tap/bpf/tap_rss.c#L262
+> 
+> Making eBPF first leaves a chance for the management layer to override
+> the choice of Qemu.
+
+I referred to the eBPF steering program instead of tc-ebpf. tc-ebpf is 
+nothing to do with the TUNSETSTEERINGEBPF ioctl, which this patch changes.
+
+> 
+>>
+>> The current version implements 3) because it is not obvious whether we
+>> should choose either 1) or 2).
+> 
+> But you didn't explain why you choose 3), and it leads to tricky code
+> (e.g the can_rss stuff etc).
+
+I wrote: "because it is not obvious whether we should choose either 1) 
+or 2)", but I think I can explain it better:
+
+When an eBPF steering program cannot implement a fallback, it means the 
+eBPF steering program requests the full control over the steering. On 
+the other hand, RSS also requests the same control. So these two will 
+conflict and the entity controlling the steering will be undefined when 
+both are enabled.
+
+3) eliminates the undefined semantics by rejecting to enable both. An 
+alternative approach is to allow eBPF steering programs to fall back. 
+When both the eBPF program and RSS are enabled, RSS will gain the 
+control of steering under the well-defined situation where the eBPF 
+steering program decides to fall back.
+
+> 
+>> But 1) will be the most capable option if
+>> eBPF has a fall-back feature.
+>>
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>>>
+>>>
+>>> [...]
+>>>
+>>>>>>> Is there a chance that we can reach here without TUN_VNET_HASH_REPORT?
+>>>>>>> If yes, it should be a bug.
+>>>>>>
+>>>>>> It is possible to use RSS without TUN_VNET_HASH_REPORT.
+>>>>>
+>>>>> Another call to separate the ioctls then.
+>>>>
+>>>> RSS and hash reporting are not completely independent though.
+>>>
+>>> Spec said:
+>>>
+>>> """
+>>> VIRTIO_NET_F_RSSRequires VIRTIO_NET_F_CTRL_VQ.
+>>> """
+>>
+>> I meant the features can be enabled independently, but they will share
+>> the hash type set when they are enabled at the same time.
+> 
+> Looking at the spec:
+> 
+> Hash repot uses:
+> 
+> """
+> struct virtio_net_hash_config {
+>      le32 hash_types;
+>      le16 reserved[4];
+>      u8 hash_key_length;
+>      u8 hash_key_data[hash_key_length];
+> };
+> """
+> 
+> RSS uses
+> 
+> """
+> struct rss_rq_id {
+>     le16 vq_index_1_16: 15; /* Bits 1 to 16 of the virtqueue index */
+>     le16 reserved: 1; /* Set to zero */
+> };
+> 
+> struct virtio_net_rss_config {
+>      le32 hash_types;
+>      le16 indirection_table_mask;
+>      struct rss_rq_id unclassified_queue;
+>      struct rss_rq_id indirection_table[indirection_table_length];
+>      le16 max_tx_vq;
+>      u8 hash_key_length;
+>      u8 hash_key_data[hash_key_length];
+> };
+> """
+> 
+> Instead of trying to figure out whether we can share some data
+> structures, why not simply start from what has been done in the spec?
+> This would ease the usersapce as well where it can simply do 1:1
+> mapping between ctrl vq command and tun uAPI.
+
+The spec also defines struct virtio_net_hash_config (which will be used 
+when RSS is disabled) and struct virtio_net_rss_config to match the 
+layout to share some fields. However, the UAPI does not follow the 
+interface design of virtio due to some problems with these structures.
+
+Below is the definition of struct virtio_net_hash_config:
+
+struct virtio_net_hash_config {
+     le32 hash_types;
+     le16 reserved[4];
+     u8 hash_key_length;
+     u8 hash_key_data[hash_key_length];
+};
+
+Here, hash_types, hash_key_length, and hash_key_data are shared with 
+struct virtio_net_rss_config.
+
+One problem is that struct virtio_net_rss_config has a flexible array 
+(indirection_table) between hash_types and hash_key_length. This is 
+something we cannot express with C.
+
+Another problem is that the semantics of the key in struct 
+virtio_net_hash_config is not defined in the spec.
+
+To solve these problems, I defined the UAPI structures that do not 
+include indiretion_table.
+
+> 
+>>
+>>>
+>>>>
+>>>> A plot twist is the "types" parameter; it is a parameter that is
+>>>> "common" for RSS and hash reporting.
+>>>
+>>> So we can share part of the structure through the uAPI.
+>>
+>> Isn't that what this patch does?
+> 
+> I didn't see, basically I see only one TUNSETVNETHASH that is used to
+> set both hash report and rss:
+
+The UAPI shares struct tun_vnet_hash for both hash report and rss.
+
+> 
+> """
+> +/**
+> + * define TUNSETVNETHASH - ioctl to configure virtio_net hashing
+> + *
+> + * The argument is a pointer to &struct tun_vnet_hash.
+> + *
+> + * The argument is a pointer to the compound of the following in order if
+> + * %TUN_VNET_HASH_RSS is set:
+> + *
+> + * 1. &struct tun_vnet_hash
+> + * 2. &struct tun_vnet_hash_rss
+> + * 3. Indirection table
+> + * 4. Key
+> + *
+> """
+> 
+> And it seems to lack parameters like max_tx_vq.
+
+max_tx_vq is not relevant with hashing.
+
+> 
+> What's more, we've already had virito-net uAPI. Why not simply reusing them?
+
+See the above.
+
+> 
+>>
+>>>
+>>>> RSS and hash reporting must share
+>>>> this parameter when both are enabled at the same time; otherwise RSS may
+>>>> compute hash values that are not suited for hash reporting.
+>>>
+>>> Is this mandated by the spec? If yes, we can add a check. If not,
+>>> userspace risk themselves as a mis-configuration which we don't need
+>>> to bother.
+>>
+>> Yes, it is mandated. 5.1.6.4.3 Hash calculation for incoming packets says:
+>>   > A device attempts to calculate a per-packet hash in the following
+>>   > cases:
+>>   >
+>>   >   - The feature VIRTIO_NET_F_RSS was negotiated. The device uses the
+>>   >     hash to determine the receive virtqueue to place incoming packets.
+>>   >   - The feature VIRTIO_NET_F_HASH_REPORT was negotiated. The device
+>>   >     reports the hash value and the hash type with the packet.
+>>   >
+>>   > If the feature VIRTIO_NET_F_RSS was negotiated:
+>>   >
+>>   >   - The device uses hash_types of the virtio_net_rss_config structure
+>>   >     as ’Enabled hash types’ bitmask.
+>>   >   - The device uses a key as defined in hash_key_data and
+>>         hash_key_length of the virtio_net_rss_config structure (see
+>>   >      5.1.6.5.7.1).
+>>   >
+>>   > If the feature VIRTIO_NET_F_RSS was not negotiated:
+>>   >
+>>   >   - The device uses hash_types of the virtio_net_hash_config structure
+>>   >     as ’Enabled hash types’ bitmask.
+>>   >   - The device uses a key as defined in hash_key_data and
+>>   >     hash_key_length of the virtio_net_hash_config structure (see
+>>   >      .1.6.5.6.4).
+>>
+>> So when both VIRTIO_NET_F_RSS and VIRTIO_NET_F_HASH_REPORT are
+>> negotiated, virtio_net_rss_config not only controls RSS but also the
+>> reported hash values and types. They cannot be divergent.
+>>
+>>>
+>>> Note that spec use different commands for hash_report and rss.
+>>
+>> TUNSETVNETHASH is different from these commands in terms that it also
+>> negotiates VIRTIO_NET_F_HASH_REPORT and VIRTIO_NET_F_RSS.
+>>
+> 
+> There Are different "issues" here:
+> 
+> 1) Whether or not we need to use a unified API for negotiating RSS and
+> HASH_REPORT features
+> 2) Whether or not we need to sue a unified API for setting RSS and
+> HASH_REPORT configuration
+> 
+> What I want to say is point 2. But what you raise is point 1.
+> 
+> For simplicity, it looks to me like it's a call for having separated
+> ioctls for feature negotiation (for example via TUNSETIFF). You may
+> argue that either RSS or HASH_REPORT requires configurations, we can
+> just follow what spec defines or not (e.g what happens if
+> RSS/HASH_REPORT were negotiated but no configurations were set).
+
+Unfortunately TUNSETIFF does not fit in this use case. The flags set 
+with TUNSETIFF are fixed, but the guest can request a different feature 
+set anytime by resetting the device.
+
+ > >> In the virtio-net specification, it is not defined what would 
+happen if
+>> these features are negotiated but the VIRTIO_NET_CTRL_MQ_RSS_CONFIG or
+>> VIRTIO_NET_CTRL_MQ_HASH_CONFIG commands are not sent. There is no such
+>> ambiguity with TUNSETVNETHASH.
+> 
+> So I don't see advantages of unifying hash reports and rss into a
+> single ioctl. Let's just follow what has been done in the spec that
+> uses separated commands. Tuntap is not a good place to debate whether
+> those commands could be unified or not. We need to move it to the spec
+> but assuming spec has been done, it might be too late or too few
+> advantages for having another design.
+
+It makes sense for the spec to reuse the generic feature negotiation 
+mechanism, but the situation is different for tuntap; we cannot use 
+TUNSETIFF and need to define another. Then why don't we exploit this 
+opportunity to have an interface with well-defined semantics? The virtio 
+spec does its best as an interface between the host and guest and tuntap 
+does its best as an UAPI.
+
+I don't think there is an advantage to split ioctls to follow the spec 
+after all. It makes sense if we can pass-through virtio commands to 
+tuntap, but it is not possible as ioctl operation codes are different 
+from virtio commands. The best possibility is to share structures, not 
+commands, and I don't think even sharing structures makes sense here 
+because of the reasons described above.
+
+Regards,
+Akihiko Odaki
+
+> 
+> Thanks
+> 
+>>
+>> Regards,
+>> Akihiko Odaki
+>>
+>>>
+>>>>
+>>>> The paramter will be duplicated if we have separate ioctls for RSS and
+>>>> hash reporting, and the kernel will have a chiken-egg problem when
+>>>> ensuring they are synchronized; when the ioctl for RSS is issued, should
+>>>> the kernel ensure the "types" parameter is identical with one specified
+>>>> for hash reporting? It will not work if the userspace may decide to
+>>>> configure hash reporting after RSS.
+>>>>
+>>>
+>>> See my reply above.
+>>>
+>>> Thanks
+>>>
+>>
 > 
 
--- Qingfang
 
