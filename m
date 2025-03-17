@@ -1,191 +1,153 @@
-Return-Path: <linux-kselftest+bounces-29193-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1321EA64783
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:34:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA0AEA647CC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:42:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C43A188C2D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:34:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5B137A70E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4AC221710;
-	Mon, 17 Mar 2025 09:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D003225A32;
+	Mon, 17 Mar 2025 09:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="O6yrVXnX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XF+IwOx/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B542F30;
-	Mon, 17 Mar 2025 09:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80922253E4;
+	Mon, 17 Mar 2025 09:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742204046; cv=none; b=M0/jU38aoJp3GgL01zfJ2wmXxduoFARbXIfwzdIvia2u619vUD7T37iMrcsCQFCwb1/7Ow6AaHzQ19g/3/9Ulndx/EstZrqB+b3rN2PVLv0vJOzxSEQ/G+xxu7fHTTuMSaHUtR4Hw5pgCebXZNufPRBKT0NP0goz0gOqaII0zeI=
+	t=1742204513; cv=none; b=IQXN186D4772MQ5R5KogOFTE0OQPjXMl3koHnC2Os5obh7sxz5eSi08rp0RLhf40TwCv2sa93GUGwSt6Z9AxA1Us7KwsFdzP7XfeIx1P+l0v49gZq8j1t+1NVCfmb+P+ECTP7mqykNIp7WFo/PlQczoDfesDQxlYXxljioA5D8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742204046; c=relaxed/simple;
-	bh=ELzfSEZuhr25sXbSFYa8Pvn+Hzk6Nq+k/X6C4475L78=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZEWrwwuRrheSUU3gLm9uzOLueiv1brgxRhRy31pZARYsOnHqre7Zm3Vh/0Xrcbb1stPx5z4Ov6kfVzRJSmihUFGwrfYRBa2JW0H8Mq7ROjjSA+SVREYUPRIh7cI2b8qp+LsOYff+toohRys9RlacdOErz1l5hl4IdOFRKp5eg2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=O6yrVXnX; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1742204040; x=1742463240;
-	bh=FMpu9u3oj6vcJmcZvMEZn/YisvXXjcOdgQLecCKsTSY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=O6yrVXnXOA3zGBPsi58FLNfuNpgVmzRiUQVSt6n2RvDFaScYeNrmXm3L1XRnQzrCB
-	 8YlXNeEvc40Q8ELt8iWYb+KxAyvWpjqulvZgkNYKWJO35Cij+vUrsQ0GE7dUOlk+Jc
-	 rzMvfujAWxXxusZkbpaGYypuRMbU0pOLD+IP4MHj08+imTci+wd6XeRMC5LuYndpni
-	 M9/0EHtFyD89TeUGfSMNoe5XXrjHoXufvS4DgXPkj63oNVXQntmnqx4q3dqLr5UZPP
-	 OuNLW59d65h/ntfWzcGZJHsxtH2V6/1dpPJRMXGxgh4h0t6z0VLLIpNrDRSFWnHQPf
-	 hwkSkhYH00J8Q==
-Date: Mon, 17 Mar 2025 09:33:52 +0000
-To: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 6/6] rust: use strict provenance APIs
-Message-ID: <D8IFS7175NNQ.3VAP8WA2QC8WF@proton.me>
-In-Reply-To: <20250315-ptr-as-ptr-v4-6-b2d72c14dc26@gmail.com>
-References: <20250315-ptr-as-ptr-v4-0-b2d72c14dc26@gmail.com> <20250315-ptr-as-ptr-v4-6-b2d72c14dc26@gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: ae828af5ffc8f596a802aaa8ecc51e4ae679d167
+	s=arc-20240116; t=1742204513; c=relaxed/simple;
+	bh=WgoXdLJiBNEJMMeoeNJzawp92D0dkUqgjc8b4u8OfM0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o9wxpiKsL29o361GBkg/2Yk2uPhWAjKE4Y+iZ+FIPwVZsQiYYZ6HPDQM15u3bNH1tQQEn0elqFQ5y3Vb3t+0uzntCnTA2MBAvCFnitpIq31IlcO0OmvQtLrO2M2yuv6gV5VejvFLMGNiqmAGF8O3s7OUln96JXUCc3EAtMcl4qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XF+IwOx/; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e53a91756e5so3793288276.1;
+        Mon, 17 Mar 2025 02:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742204510; x=1742809310; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4XfnRDuFPcGv3nyYq3wNZc9i5NYc3wanimznJNeWrG4=;
+        b=XF+IwOx/m2sYkrMeLquRAchocuwXUhK/YnCufhRuN2Z5tBC44LgtXd5E5gmywesk84
+         gF9alZEvXFBZThyntOxGsFcMY72ODlFXz61nEA0Dd+N7euDZw0saL9N5jHNqihoDXR4v
+         H6zpORRRaRZZ+Ic75MQAvAFjNWeelCRePck1wDeJYwAWwzPvkpCqUx+e16WI8pXLZk8K
+         hFr+2JgfopBDXSwPalDMK51Q+swkiszXwA3VSULycmlv/FwLILPWc8TS/xYsDRDBEiex
+         3iYA0C57rDhOg5z0Tkj8uHy06agdubDXO7iKnyGb8zlIrkeiocM41ERmozZ7Qr+3VkzH
+         Fupg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742204510; x=1742809310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4XfnRDuFPcGv3nyYq3wNZc9i5NYc3wanimznJNeWrG4=;
+        b=n71dItC+DjJpMZXYrgWr51m3x0kaclKXsOWa8dE1m109R025agttRjKoEIVoKBInhn
+         Zp+8uAzD9vvLcllAx/Fr2SaZonZ+7iVvFnZ9nC39RZPtIpcb7oxdXwLtAVeIcUfdPBkA
+         ORZTRKiv9g7OGZlt8ROqJxxksS9IpnR49R9+TC1ARl2DBDM/K0oOhA/VZCODG2jcGEzi
+         Ec6bCMKG3gk3dM+wTpaSW02/fDx6MLEOddZsxyQ4xFM8BVynJPC1I63bkffW7pdvzC5e
+         bJnZWmr4/4ZuptJAh6LBSBXrTF0DjRapB/Wv41PTEBF2dZGl7p77ozTNv3YALKsQ/rkA
+         seyg==
+X-Forwarded-Encrypted: i=1; AJvYcCV70dcVxXw+dMa9lL3m+Oxco1R4lQT00qAZjprT6fp34tzGSbyx9LPUjPrpERiWqrkRE9WOWVE2uIWDQibGhY51@vger.kernel.org, AJvYcCVSI6xtjPzzFeS8XDFW55h7qAjnXvH2eUrS2A7TGHOf678bDEOSrMYJaMckiq9Y0lx9XijMqowB@vger.kernel.org, AJvYcCXHieT9LkXcPWpH9OSKHN+ItOBIbeGMJSG7Swlblf6rtfI8TJGEZdNz5Kr/9ntxrZJZso4crVpRJo35Vqc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9I4j9S82V42rXFoK/lcGM3d5bsnDOPA5R1MpD0d20qC2wVTMG
+	WrEGfgaFoF2NPshssnPmNB6UFYa2H82A3+dU8wp6DuyOj2CdSb5UcSmgwEBwD/vk7foXwcmIvcz
+	dcCRa8R36jH4TF4rOzn91/BUgdBCrJKEaaWw7Dg==
+X-Gm-Gg: ASbGncsFMy2tDLIu14scUB/Km3pTK1lRSgsRvKUgrzywiYEq/Fl8koPmTGZvbxuu9zv
+	AzRpNnjD0n2f+8zyIaBvRh1Ax4q3QIpUvtt1pwyAuyJH01H2MTHCMTwEZsBTYWJm/mrk7FvxmOQ
+	RvvcczOQsNZoYEfkH7te5PF40aBfIFMqxqd03g+mQ2sw==
+X-Google-Smtp-Source: AGHT+IHecUoXKGAeLJ4sKHHMSQWvvRkqT9levx35XDLPlH6rsi48/CowlJANQ7a2C4L6J9CWmMAeDZfnMSiJVxYp+ig=
+X-Received: by 2002:a05:6902:208a:b0:e5b:3823:4176 with SMTP id
+ 3f1490d57ef6-e63f64f855amr14527392276.13.1742204510491; Mon, 17 Mar 2025
+ 02:41:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20250312-b4-ovpn-v23-3-76066bc0a30c@openvpn.net>
+ <20250317060947.2368390-1-dqfext@gmail.com> <f4c9a29f-a5c6-464a-a659-c7ffeaf123c1@openvpn.net>
+In-Reply-To: <f4c9a29f-a5c6-464a-a659-c7ffeaf123c1@openvpn.net>
+From: Qingfang Deng <dqfext@gmail.com>
+Date: Mon, 17 Mar 2025 17:41:39 +0800
+X-Gm-Features: AQ5f1JptaNz1J3kvfSOyKipGWiLpaJWangM2TfyyVpkqlY7egoQOh0qGwq6CYZQ
+Message-ID: <CALW65jZe3JQGNcWsZtqU-B4-V-JZ6ocninxvoqMGeusMaU7C=A@mail.gmail.com>
+Subject: Re: [PATCH net-next v23 03/23] ovpn: add basic interface
+ creation/destruction/management routines
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: andrew+netdev@lunn.ch, donald.hunter@gmail.com, edumazet@google.com, 
+	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	ryazanov.s.a@gmail.com, sd@queasysnail.net, shaw.leon@gmail.com, 
+	shuah@kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat Mar 15, 2025 at 1:17 PM CET, Tamir Duberstein wrote:
-> Throughout the tree, use the strict provenance APIs stabilized in Rust
-> 1.84.0[1]. Retain backwards-compatibility by introducing forwarding
-> functions at the `kernel` crate root along with polyfills for rustc <
-> 1.84.0.
+Hi Antonio,
+
+On Mon, Mar 17, 2025 at 5:23=E2=80=AFPM Antonio Quartulli <antonio@openvpn.=
+net> wrote:
+> >> +static void ovpn_setup(struct net_device *dev)
+> >> +{
+> >> +    netdev_features_t feat =3D NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F=
+_RXCSUM |
+> >
+> > Do not advertise NETIF_F_HW_CSUM or NETIF_F_RXCSUM, as TX/RX checksum i=
+s
+> > not handled in hardware.
 >
-> Use `#[allow(clippy::incompatible_msrv)]` to avoid warnings on rustc <
-> 1.84.0 as our MSRV is 1.78.0.
+> The idea behind these flags was that the OpenVPN protocol will take care
+> of authenticating packets, thus substituting what the CSUM would do here.
+> For this I wanted to avoid the stack to spend time computing the CSUM in
+> software.
 
-This isn't necessary, right?
+For the RX part (NETIF_F_RXCSUM), you might be correct, but in patch
+08 you wrote:
+> /* we can't guarantee the packet wasn't corrupted before entering the
+> * VPN, therefore we give other layers a chance to check that
+> */
+> skb->ip_summed =3D CHECKSUM_NONE;
 
-> In the `kernel` crate, enable the strict provenance lints on rustc >=3D
-> 1.84.0; do this in `lib.rs` rather than `Makefile` to avoid introducing
-> compiler flags that are dependent on the rustc version in use.
+So NETIF_F_RXCSUM has no effect.
 
-So it won't be enabled in the doctests, right?
+For the TX part (NETIF_F_HW_CSUM) however, I believe wireguard made
+the same mistake.
+Your code both contains the pattern:
 
-> Link: https://blog.rust-lang.org/2025/01/09/Rust-1.84.0.html#strict-prove=
-nance-apis [1]
-> Suggested-by: Benno Lossin <benno.lossin@proton.me>
-> Link: https://lore.kernel.org/all/D8EIXDMRXMJP.36TFCGWZBRS3Y@proton.me/
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
->  init/Kconfig           |  3 +++
->  rust/kernel/alloc.rs   |  2 +-
->  rust/kernel/devres.rs  |  4 ++--
->  rust/kernel/io.rs      | 14 +++++++-------
->  rust/kernel/lib.rs     | 52 ++++++++++++++++++++++++++++++++++++++++++++=
-++++++
->  rust/kernel/of.rs      |  2 +-
->  rust/kernel/pci.rs     |  4 ++--
->  rust/kernel/str.rs     | 16 ++++++----------
->  rust/kernel/uaccess.rs | 12 ++++++++----
->  9 files changed, 82 insertions(+), 27 deletions(-)
+if (skb->ip_summed =3D=3D CHECKSUM_PARTIAL && skb_checksum_help(skb)) // ..=
+.
 
+NETIF_F_HW_CSUM causes the upper layers to send packets with
+CHECKSUM_PARTIAL, assuming hardware offload will complete the
+checksum, but if skb_checksum_help(skb) is invoked, the checksum is
+still computed in software. This means there's no real benefit unless
+there's an actual hardware offload mechanism.
 
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 486715528587..84eb2602e79e 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -17,6 +17,9 @@
->  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(coerce_unsized=
-))]
->  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(dispatch_from_=
-dyn))]
->  #![cfg_attr(not(CONFIG_RUSTC_HAS_COERCE_POINTEE), feature(unsize))]
-> +#![cfg_attr(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE, feature(strict_pr=
-ovenance_lints))]
-> +#![cfg_attr(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE, deny(fuzzy_proven=
-ance_casts))]
-> +#![cfg_attr(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE, deny(lossy_proven=
-ance_casts))]
->  #![feature(inline_const)]
->  #![feature(lint_reasons)]
->  // Stable in Rust 1.83
-> @@ -25,6 +28,55 @@
->  #![feature(const_ptr_write)]
->  #![feature(const_refs_to_cell)]
-> =20
-> +#[cfg(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE)]
-> +#[allow(clippy::incompatible_msrv)]
++Cc: zx2c4
 
-Do we still need this allow?
-
-> +mod strict_provenance {
-> +    #[doc(hidden)]
-
-Why make them hidden in docs?
-
-> +    pub fn expose_provenance<T>(addr: *const T) -> usize {
-> +        addr.expose_provenance()
-
-Instead of having these stubs here, you can probably just do
-
-    pub use core::ptr::expose_provenance;
-
-> +    }
-> +
-> +    #[doc(hidden)]
-> +    pub fn without_provenance_mut<T>(addr: usize) -> *mut T {
-> +        core::ptr::without_provenance_mut(addr)
-> +    }
-> +
-> +    #[doc(hidden)]
-> +    pub fn with_exposed_provenance<T>(addr: usize) -> *const T {
-> +        core::ptr::with_exposed_provenance(addr)
-> +    }
-> +
-> +    #[doc(hidden)]
-> +    pub fn with_exposed_provenance_mut<T>(addr: usize) -> *mut T {
-> +        core::ptr::with_exposed_provenance_mut(addr)
-> +    }
-> +}
-> +
-> +#[cfg(not(CONFIG_RUSTC_HAS_STABLE_STRICT_PROVENANCE))]
-> +mod strict_provenance {
-> +    #[doc(hidden)]
-
-I think we should document these.
-
----
-Cheers,
-Benno
-
-> +    pub fn expose_provenance<T>(addr: *const T) -> usize {
-> +        addr.cast::<()>() as usize
-> +    }
-> +
-> +    #[doc(hidden)]
-> +    pub fn without_provenance_mut<T>(addr: usize) -> *mut T {
-> +        addr as *mut T
-> +    }
-> +
-> +    #[doc(hidden)]
-> +    pub fn with_exposed_provenance<T>(addr: usize) -> *const T {
-> +        addr as *const T
-> +    }
-> +
-> +    #[doc(hidden)]
-> +    pub fn with_exposed_provenance_mut<T>(addr: usize) -> *mut T {
-> +        addr as *mut T
-> +    }
-> +}
-> +
-> +pub use strict_provenance::*;
-
+>
+> I believe wireguard sets those flags for the same reason.
+>
+> Does it make sense to you?
+>
+> >
+> >> +                             NETIF_F_GSO | NETIF_F_GSO_SOFTWARE |
+> >> +                             NETIF_F_HIGHDMA;
+>
+>
+> Regards,
+>
+> --
+> Antonio Quartulli
+> OpenVPN Inc.
+>
 
