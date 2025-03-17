@@ -1,115 +1,161 @@
-Return-Path: <linux-kselftest+bounces-29240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC080A657B2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 17:16:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69FC3A65890
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 17:42:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D6DA161EBF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 16:13:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9975A189EFFC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 16:41:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22A7194C86;
-	Mon, 17 Mar 2025 16:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF381EB5EC;
+	Mon, 17 Mar 2025 16:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="244yvZmO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYFtTVPi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629AD17A2EF
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 16:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7681AB528;
+	Mon, 17 Mar 2025 16:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742228005; cv=none; b=dW4BNEbcsd1rdKCiBpjnDvnXcMOLyAvcJvWTi97RMDPlkfIqkJm5EQaDEwUv8LzaeV5baF3KirTfj83sP+qrJ0MTKqeCL6A5x9uWxGvNEhRly67P6xVr8y79ygMgxuM3hZYEH1ewu7E34wSDWNSMuyxwOEhN/5tY21JzKnRYM/E=
+	t=1742229494; cv=none; b=em/2XXSn7B3s61h7SMqh8e9dwx6LMi1Thu8qF+urGFHEpQnWbjb5PzcsVd/QqI46oI/tPV1A+2l8xA1a4RE5bzcpqXu4nDMtynfb3v6QvQviCfTtvZ9s04wDPOC19xKCwmaaTpcKDo17j4cT/6zFb/SjQZoVjDNBZ4ytGumIL3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742228005; c=relaxed/simple;
-	bh=Qtz7p+qAYY/3PwQbatf+dww5SC/v5fIM77DIa/Z35C4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L5nKIZF3GpL6wiC5ay7KHdwPhSQbblRrnWcmOQf8VwKn9oN1dAb/GZ8SN41UeJklFrv4LKDDWgV2qPW7mK+Uv5SUYdcUoPm3jVBvIt/lPwf+vkDWQKHrxzeX2Hia33U9gWw49FNr4zfqcSrYcuLX2p178OphJbUuKrCHOMfv8pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=244yvZmO; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-47666573242so107621cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 09:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742228003; x=1742832803; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUp3Sy0r3ex2clGVuTENijtSpkjkLtkEQ986ciUiGnE=;
-        b=244yvZmO1UdZ9IzqLTD2r3OKzynuX8pHzPZDOjyQJcuHKkNKpPovBwGieqaEOyNcel
-         SF8fG0djMEDPHe0o+ClynVvdghs2KFFNiQwTZyL+yOqOlFG3FtJh3BqMIF5xpT4ff6KF
-         bDex6XBMXnhPrbeV+pxljLJcwtF2V6/nEhZC6NVv+9IhOyySFzCXMIe6NYmXA6vM4lVU
-         ziI39lvP4X5KGNZSwPSiaDKVZa3ab8wFeMTjxaDZxcGVAA4ZM4khSCNcpWF5oRG7Gj1W
-         AF9UZ92i7Y5NmcsiDzB+PBla33szzHM826BwAD6AQIKYnuSmzKvV7Mk1/vOFBKtvY/3K
-         pO3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742228003; x=1742832803;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DUp3Sy0r3ex2clGVuTENijtSpkjkLtkEQ986ciUiGnE=;
-        b=OaAGuIHXdkbuDPeU81yniDkM6KSGEv8zCJm73ai9QWT4QP5ViM6I4RQmGqJOxOiStF
-         8BoCbLtf4ourWIhOB0+ywxzvf49unzMtuj/OxrS70nSLe8DXi00QnBm7rdnYcfBOtZEp
-         MT9WULi/Q2Bsg+2c1izjZc3GJIbDnqDBblbK0LixdH/5y/jnFCPX1jy2wgyG9zqnBqS9
-         aZrByOeixx1Ow0IWEqercj3OTfIxWdYPFiETzaNLg8IXZ5xxbu5+zNFBfY7KMuYLaLrz
-         WBrKBp4SEhu25PhY7+l9FO6VpqKKk5cg3VXm8slLGb5aDPQ/A66P9WpadGlBlOWoyX46
-         YkHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvmGN7dhvUEscoXrbAQg+SRKZE4bys/iiXCJLnmo2ZB6Vo8Ag2uIHK2i6cgepvpkw8dQo77oewdViA3dPqdXI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEC3U/t34Cyj14sQZia+EKopSk9rDjjb9XECsNZhxVEU38+8aY
-	c45nAUD65ZJ/hF0MNV3tZ7p5NhY8N5EIwDqBRemcpJNm2fJ7SLWyq/WFoyz+F3IzcpZtOR/Rq23
-	kP7yW6v6wCm9PvQAcloxRJiiFsWRmnHDDrqMF
-X-Gm-Gg: ASbGncvCa9EWrO/gQyIsCmzut9jlLmCgoLJivam5UaaMasPLrRbkRgezZacuWtveslV
-	ZEVIxAguO9fEGszrcP1UnOoa2UQA9XbZPjYiauCHDtMQn+mtnkbBzuZjecjxnPY4ur+eAGy+4nD
-	vjHoiwZqt4Dsvdb08qFTNHbReD5RuSMQjM18X2zy8gJc1A0emyCQkWplI5pdbZRVpXr8g=
-X-Google-Smtp-Source: AGHT+IGp5T+nbwvj2pnhzXY0OLK0W4OOqrMBHMsVJ2shuSCrVzln5u4AgmKzFlSy+b1LEmAE3f37cTri0Z6r5gpSokw=
-X-Received: by 2002:a05:622a:2303:b0:475:1410:2ca3 with SMTP id
- d75a77b69052e-476d6455973mr7438041cf.15.1742228003130; Mon, 17 Mar 2025
- 09:13:23 -0700 (PDT)
+	s=arc-20240116; t=1742229494; c=relaxed/simple;
+	bh=0dwYf5DKkHAA2EYSXFTq9qfix/WD/m/Hv9xSOVHciic=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=p34ER90DNQFWPLrnAjH34e+5UWkWcvu/WvWCeaZpShiOnHh3jZzoE9gXxiD4Fckohnrg41EDV/8r89rQK+T6ydRbK6A217Ft2xnvC/AqTAqiUvzt3DR4gFIwrRYgU8dTq71+hlL+K+UIndq9stwOktZFtODoP3uqynoroxqPA1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYFtTVPi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62365C4CEE3;
+	Mon, 17 Mar 2025 16:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742229494;
+	bh=0dwYf5DKkHAA2EYSXFTq9qfix/WD/m/Hv9xSOVHciic=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CYFtTVPiR0JffKP3olE9P5YoA9dtmy6CbTHp95r2NOgN0QtK+gOByTSCP8LECQ9hl
+	 Y6j0o0N0bYLRJP1/OSjSozE1qmcLiVCTSXe3ljkgtj6jWk/BzvmKw5XGhezwKmwmX2
+	 pkRhMZvH3e71FvlH/hvnd87lp7Vr3PZzqQVc37VqyvQ/Vn7/OKSJn2nSHk2gpi+7HK
+	 vMo8PQABDsP5zdhmhc02rT/YGfIqHnfpf6CeJMZOy/+/uw5IgUkLH2sS7HBP1arMUh
+	 j2tjHNf3SXhj8FhR6gXy2kCL0pkZZddIO2Eq7k7GqdZGOhq4AuNQCA+SJVGYCnqr6c
+	 qVgX/mKRW+SBw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Florian Westphal <fw@strlen.de>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Sasha Levin <sashal@kernel.org>,
+	kadlec@netfilter.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.13 15/16] selftests: netfilter: skip br_netfilter queue tests if kernel is tainted
+Date: Mon, 17 Mar 2025 12:37:24 -0400
+Message-Id: <20250317163725.1892824-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250317163725.1892824-1-sashal@kernel.org>
+References: <20250317163725.1892824-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250313192714.1380005-1-rmoar@google.com> <CABVgOS=Pfp2_ZvCtxy6X_xoM6pGVgT6bD_4VxGVZ_SNWVgesGQ@mail.gmail.com>
-In-Reply-To: <CABVgOS=Pfp2_ZvCtxy6X_xoM6pGVgT6bD_4VxGVZ_SNWVgesGQ@mail.gmail.com>
-From: Brendan Jackman <jackmanb@google.com>
-Date: Mon, 17 Mar 2025 17:13:11 +0100
-X-Gm-Features: AQ5f1Jop9b3Sam9E4Aqkea8e1CkU7NpyiiWCx4vud9QYvcgrDCB3PeJx7vj9eNc
-Message-ID: <CA+i-1C3ZORa0hFHz=d6F3ThVWUEFv8Qnyq-i6EFsrn843fSOtw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] kunit: tool: Fix bug in parsing test plan
-To: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13.7
+Content-Transfer-Encoding: 8bit
 
-On Fri, 14 Mar 2025 at 06:37, David Gow <davidgow@google.com> wrote:
->
-> On Fri, 14 Mar 2025 at 03:27, Rae Moar <rmoar@google.com> wrote:
-> >
-> > A bug was identified where the KTAP below caused an infinite loop:
-> >
-> >  TAP version 13
-> >  ok 4 test_case
-> >  1..4
-> >
-> > The infinite loop was caused by the parser not parsing a test plan
-> > if following a test result line.
-> >
-> > Fix this bug by parsing test plan line to avoid the infinite loop.
+From: Florian Westphal <fw@strlen.de>
 
-Hi Rae,
+[ Upstream commit c21b02fd9cbf15aed6e32c89e0fd70070281e3d1 ]
 
-With this change and this input:
+These scripts fail if the kernel is tainted which leads to wrong test
+failure reports in CI environments when an unrelated test triggers some
+splat.
 
-https://gist.githubusercontent.com/bjackman/220265699f346e16161c6534b115019b/raw/a2e0e1aa75c0d8ab9814708b028ec78810a0471b/run_vmtests.sh.tap
+Check taint state at start of script and SKIP if its already dodgy.
 
-The infinite loop is gone, but it's still hallucinating a [CRASHED] result:
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/net/netfilter/br_netfilter.sh      | 7 +++++++
+ .../testing/selftests/net/netfilter/br_netfilter_queue.sh  | 7 +++++++
+ tools/testing/selftests/net/netfilter/nft_queue.sh         | 1 +
+ 3 files changed, 15 insertions(+)
 
-[16:07:15] # SUMMARY: PASS=17 SKIP=0 FAIL=1
-[16:07:15] [CRASHED]
-...
-[16:07:15] Testing complete. Ran 19 tests: passed: 17, failed: 1, crashed: 1
+diff --git a/tools/testing/selftests/net/netfilter/br_netfilter.sh b/tools/testing/selftests/net/netfilter/br_netfilter.sh
+index c28379a965d83..1559ba275105e 100755
+--- a/tools/testing/selftests/net/netfilter/br_netfilter.sh
++++ b/tools/testing/selftests/net/netfilter/br_netfilter.sh
+@@ -13,6 +13,12 @@ source lib.sh
+ 
+ checktool "nft --version" "run test without nft tool"
+ 
++read t < /proc/sys/kernel/tainted
++if [ "$t" -ne 0 ];then
++	echo SKIP: kernel is tainted
++	exit $ksft_skip
++fi
++
+ cleanup() {
+ 	cleanup_all_ns
+ }
+@@ -165,6 +171,7 @@ if [ "$t" -eq 0 ];then
+ 	echo PASS: kernel not tainted
+ else
+ 	echo ERROR: kernel is tainted
++	dmesg
+ 	ret=1
+ fi
+ 
+diff --git a/tools/testing/selftests/net/netfilter/br_netfilter_queue.sh b/tools/testing/selftests/net/netfilter/br_netfilter_queue.sh
+index 6a764d70ab06f..4788641717d93 100755
+--- a/tools/testing/selftests/net/netfilter/br_netfilter_queue.sh
++++ b/tools/testing/selftests/net/netfilter/br_netfilter_queue.sh
+@@ -4,6 +4,12 @@ source lib.sh
+ 
+ checktool "nft --version" "run test without nft tool"
+ 
++read t < /proc/sys/kernel/tainted
++if [ "$t" -ne 0 ];then
++	echo SKIP: kernel is tainted
++	exit $ksft_skip
++fi
++
+ cleanup() {
+ 	cleanup_all_ns
+ }
+@@ -72,6 +78,7 @@ if [ "$t" -eq 0 ];then
+ 	echo PASS: kernel not tainted
+ else
+ 	echo ERROR: kernel is tainted
++	dmesg
+ 	exit 1
+ fi
+ 
+diff --git a/tools/testing/selftests/net/netfilter/nft_queue.sh b/tools/testing/selftests/net/netfilter/nft_queue.sh
+index 785e3875a6da4..784d1b46912b0 100755
+--- a/tools/testing/selftests/net/netfilter/nft_queue.sh
++++ b/tools/testing/selftests/net/netfilter/nft_queue.sh
+@@ -593,6 +593,7 @@ EOF
+ 		echo "PASS: queue program exiting while packets queued"
+ 	else
+ 		echo "TAINT: queue program exiting while packets queued"
++		dmesg
+ 		ret=1
+ 	fi
+ }
+-- 
+2.39.5
+
 
