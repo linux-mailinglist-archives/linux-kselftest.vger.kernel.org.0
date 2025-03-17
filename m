@@ -1,153 +1,122 @@
-Return-Path: <linux-kselftest+bounces-29194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA0AEA647CC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:42:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6371A64823
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 10:52:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5B137A70E1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:40:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9268A172322
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Mar 2025 09:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D003225A32;
-	Mon, 17 Mar 2025 09:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E791225A32;
+	Mon, 17 Mar 2025 09:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XF+IwOx/"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="LhbTY4eW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80922253E4;
-	Mon, 17 Mar 2025 09:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7E4222594;
+	Mon, 17 Mar 2025 09:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742204513; cv=none; b=IQXN186D4772MQ5R5KogOFTE0OQPjXMl3koHnC2Os5obh7sxz5eSi08rp0RLhf40TwCv2sa93GUGwSt6Z9AxA1Us7KwsFdzP7XfeIx1P+l0v49gZq8j1t+1NVCfmb+P+ECTP7mqykNIp7WFo/PlQczoDfesDQxlYXxljioA5D8I=
+	t=1742205125; cv=none; b=lRytR7bVgHAVhAdOrhIaGpOC8F8ps9WADi/F+5SS+AKE1BmgW4LmFtq13ZvPeBXd0Ji2UBP+FaFuEbjBnWglmnjEjVqL/4H27e8TDF/Rfk89tGfc4ULkpl3Q8R0FUdXZKMQ3mUyUewS/FiCNelSmr3yq8j7J2GwzAylZHkOGdNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742204513; c=relaxed/simple;
-	bh=WgoXdLJiBNEJMMeoeNJzawp92D0dkUqgjc8b4u8OfM0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o9wxpiKsL29o361GBkg/2Yk2uPhWAjKE4Y+iZ+FIPwVZsQiYYZ6HPDQM15u3bNH1tQQEn0elqFQ5y3Vb3t+0uzntCnTA2MBAvCFnitpIq31IlcO0OmvQtLrO2M2yuv6gV5VejvFLMGNiqmAGF8O3s7OUln96JXUCc3EAtMcl4qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XF+IwOx/; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e53a91756e5so3793288276.1;
-        Mon, 17 Mar 2025 02:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742204510; x=1742809310; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4XfnRDuFPcGv3nyYq3wNZc9i5NYc3wanimznJNeWrG4=;
-        b=XF+IwOx/m2sYkrMeLquRAchocuwXUhK/YnCufhRuN2Z5tBC44LgtXd5E5gmywesk84
-         gF9alZEvXFBZThyntOxGsFcMY72ODlFXz61nEA0Dd+N7euDZw0saL9N5jHNqihoDXR4v
-         H6zpORRRaRZZ+Ic75MQAvAFjNWeelCRePck1wDeJYwAWwzPvkpCqUx+e16WI8pXLZk8K
-         hFr+2JgfopBDXSwPalDMK51Q+swkiszXwA3VSULycmlv/FwLILPWc8TS/xYsDRDBEiex
-         3iYA0C57rDhOg5z0Tkj8uHy06agdubDXO7iKnyGb8zlIrkeiocM41ERmozZ7Qr+3VkzH
-         Fupg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742204510; x=1742809310;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4XfnRDuFPcGv3nyYq3wNZc9i5NYc3wanimznJNeWrG4=;
-        b=n71dItC+DjJpMZXYrgWr51m3x0kaclKXsOWa8dE1m109R025agttRjKoEIVoKBInhn
-         Zp+8uAzD9vvLcllAx/Fr2SaZonZ+7iVvFnZ9nC39RZPtIpcb7oxdXwLtAVeIcUfdPBkA
-         ORZTRKiv9g7OGZlt8ROqJxxksS9IpnR49R9+TC1ARl2DBDM/K0oOhA/VZCODG2jcGEzi
-         Ec6bCMKG3gk3dM+wTpaSW02/fDx6MLEOddZsxyQ4xFM8BVynJPC1I63bkffW7pdvzC5e
-         bJnZWmr4/4ZuptJAh6LBSBXrTF0DjRapB/Wv41PTEBF2dZGl7p77ozTNv3YALKsQ/rkA
-         seyg==
-X-Forwarded-Encrypted: i=1; AJvYcCV70dcVxXw+dMa9lL3m+Oxco1R4lQT00qAZjprT6fp34tzGSbyx9LPUjPrpERiWqrkRE9WOWVE2uIWDQibGhY51@vger.kernel.org, AJvYcCVSI6xtjPzzFeS8XDFW55h7qAjnXvH2eUrS2A7TGHOf678bDEOSrMYJaMckiq9Y0lx9XijMqowB@vger.kernel.org, AJvYcCXHieT9LkXcPWpH9OSKHN+ItOBIbeGMJSG7Swlblf6rtfI8TJGEZdNz5Kr/9ntxrZJZso4crVpRJo35Vqc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9I4j9S82V42rXFoK/lcGM3d5bsnDOPA5R1MpD0d20qC2wVTMG
-	WrEGfgaFoF2NPshssnPmNB6UFYa2H82A3+dU8wp6DuyOj2CdSb5UcSmgwEBwD/vk7foXwcmIvcz
-	dcCRa8R36jH4TF4rOzn91/BUgdBCrJKEaaWw7Dg==
-X-Gm-Gg: ASbGncsFMy2tDLIu14scUB/Km3pTK1lRSgsRvKUgrzywiYEq/Fl8koPmTGZvbxuu9zv
-	AzRpNnjD0n2f+8zyIaBvRh1Ax4q3QIpUvtt1pwyAuyJH01H2MTHCMTwEZsBTYWJm/mrk7FvxmOQ
-	RvvcczOQsNZoYEfkH7te5PF40aBfIFMqxqd03g+mQ2sw==
-X-Google-Smtp-Source: AGHT+IHecUoXKGAeLJ4sKHHMSQWvvRkqT9levx35XDLPlH6rsi48/CowlJANQ7a2C4L6J9CWmMAeDZfnMSiJVxYp+ig=
-X-Received: by 2002:a05:6902:208a:b0:e5b:3823:4176 with SMTP id
- 3f1490d57ef6-e63f64f855amr14527392276.13.1742204510491; Mon, 17 Mar 2025
- 02:41:50 -0700 (PDT)
+	s=arc-20240116; t=1742205125; c=relaxed/simple;
+	bh=RQlN4PHT9t/BaZ1ZSO4BH6eUUyXAz56KtVwjMkjqBWI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RiFQYxNl9MRv3g2LqN7yhkzE6aGEvFkhJFe3GjMNUj1yh18AIaCUKIe6GGoQzXLyzK9b2SpjmdoXRos7GkVNizszgwaw+yly5lxVdhYPICatxKWXQ3sx/LfhVfW/QKRTUJ5QDBtf+M055etI2fT61XXtznMo0PuWr1ysdJGneUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=LhbTY4eW; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1tu78P-00E8W6-A0; Mon, 17 Mar 2025 10:51:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=fVP4auPXeZ1wxgMxif41gK7AYDaPeOrAkaHk042YAE4=; b=LhbTY4eWbI+zGFZbmiLECfoOwY
+	vDpT1/PVIxRBFRTzkeix8eRzEWgT1kzSQfIQrdcEKpRH5Mqo22BL5oIDR8jqog5eJX9nJougQORCv
+	Xn7YlK2iEz8jldpNM9uywGbIkcKoT1eBEcQNIPIVzwxtZyfXB9QIETfvM02VKSX2Hi6njygAcr5y7
+	HLGyM8SRnAEptvT+4ureNLQvwCdWM6xs1ZRTi8h+EeWJ8PRMBKkxQ0Mf9u1HyiC5Dg29NReZgdk2X
+	D2HmZU25L5FK7fN2iXwlWy7u/v0DkKlEIHtv+zg3s2J6rgASlL37ap6FDhB+eoyArbkiEx8tZt2ae
+	MkFQejcg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1tu78N-0006il-JQ; Mon, 17 Mar 2025 10:51:47 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1tu78F-00DHyx-Ed; Mon, 17 Mar 2025 10:51:39 +0100
+Message-ID: <67a1ae27-84c1-4a5c-9178-a29276d6ab52@rbox.co>
+Date: Mon, 17 Mar 2025 10:51:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250312-b4-ovpn-v23-3-76066bc0a30c@openvpn.net>
- <20250317060947.2368390-1-dqfext@gmail.com> <f4c9a29f-a5c6-464a-a659-c7ffeaf123c1@openvpn.net>
-In-Reply-To: <f4c9a29f-a5c6-464a-a659-c7ffeaf123c1@openvpn.net>
-From: Qingfang Deng <dqfext@gmail.com>
-Date: Mon, 17 Mar 2025 17:41:39 +0800
-X-Gm-Features: AQ5f1JptaNz1J3kvfSOyKipGWiLpaJWangM2TfyyVpkqlY7egoQOh0qGwq6CYZQ
-Message-ID: <CALW65jZe3JQGNcWsZtqU-B4-V-JZ6ocninxvoqMGeusMaU7C=A@mail.gmail.com>
-Subject: Re: [PATCH net-next v23 03/23] ovpn: add basic interface
- creation/destruction/management routines
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: andrew+netdev@lunn.ch, donald.hunter@gmail.com, edumazet@google.com, 
-	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	ryazanov.s.a@gmail.com, sd@queasysnail.net, shaw.leon@gmail.com, 
-	shuah@kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v3 2/3] selftest/bpf: Add test for AF_VSOCK connect()
+ racing sockmap update
+To: Paolo Abeni <pabeni@redhat.com>, Stefano Garzarella
+ <sgarzare@redhat.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Bobby Eshleman <bobby.eshleman@bytedance.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20250316-vsock-trans-signal-race-v3-0-17a6862277c9@rbox.co>
+ <20250316-vsock-trans-signal-race-v3-2-17a6862277c9@rbox.co>
+ <981a871f-e0c0-4741-8e7e-4a4e5d93541d@redhat.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <981a871f-e0c0-4741-8e7e-4a4e5d93541d@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Antonio,
+On 3/17/25 09:23, Paolo Abeni wrote:
+> On 3/16/25 11:45 PM, Michal Luczaj wrote:
+>> Racing signal-interrupted connect() and sockmap update may result in an
+>> unconnected (and missing vsock transport) socket in a sockmap.
+>>
+>> Test spends 2 seconds attempting to reach WARN_ON_ONCE().
+>>
+>> connect
+>>   / state = SS_CONNECTED /
+>>                                 sock_map_update_elem
+>>   if signal_pending
+>>     state = SS_UNCONNECTED
+>>
+>> connect
+>>   transport = NULL
+>>                                 vsock_bpf_recvmsg
+>>                                   WARN_ON_ONCE(!vsk->transport)
+>>
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> 
+> This is apparently causing some bpf self-test failure. (Timeout? the
+> self-test failure output is not clear to me.)
+> 
+> Could you please have a look?
 
-On Mon, Mar 17, 2025 at 5:23=E2=80=AFPM Antonio Quartulli <antonio@openvpn.=
-net> wrote:
-> >> +static void ovpn_setup(struct net_device *dev)
-> >> +{
-> >> +    netdev_features_t feat =3D NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F=
-_RXCSUM |
-> >
-> > Do not advertise NETIF_F_HW_CSUM or NETIF_F_RXCSUM, as TX/RX checksum i=
-s
-> > not handled in hardware.
->
-> The idea behind these flags was that the OpenVPN protocol will take care
-> of authenticating packets, thus substituting what the CSUM would do here.
-> For this I wanted to avoid the stack to spend time computing the CSUM in
-> software.
+Sending signal to the whole process group probably isn't the best idea. Not
+sure how the previous version passed though.
+Sorry, v4 incoming.
 
-For the RX part (NETIF_F_RXCSUM), you might be correct, but in patch
-08 you wrote:
-> /* we can't guarantee the packet wasn't corrupted before entering the
-> * VPN, therefore we give other layers a chance to check that
-> */
-> skb->ip_summed =3D CHECKSUM_NONE;
+Michal
 
-So NETIF_F_RXCSUM has no effect.
-
-For the TX part (NETIF_F_HW_CSUM) however, I believe wireguard made
-the same mistake.
-Your code both contains the pattern:
-
-if (skb->ip_summed =3D=3D CHECKSUM_PARTIAL && skb_checksum_help(skb)) // ..=
-.
-
-NETIF_F_HW_CSUM causes the upper layers to send packets with
-CHECKSUM_PARTIAL, assuming hardware offload will complete the
-checksum, but if skb_checksum_help(skb) is invoked, the checksum is
-still computed in software. This means there's no real benefit unless
-there's an actual hardware offload mechanism.
-
-+Cc: zx2c4
-
->
-> I believe wireguard sets those flags for the same reason.
->
-> Does it make sense to you?
->
-> >
-> >> +                             NETIF_F_GSO | NETIF_F_GSO_SOFTWARE |
-> >> +                             NETIF_F_HIGHDMA;
->
->
-> Regards,
->
-> --
-> Antonio Quartulli
-> OpenVPN Inc.
->
 
