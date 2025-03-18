@@ -1,123 +1,153 @@
-Return-Path: <linux-kselftest+bounces-29360-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29361-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A1DBA67754
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 16:11:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2116A67897
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 17:00:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 547A33AFF38
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 15:11:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37D8A3A557B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 15:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 689AF20E021;
-	Tue, 18 Mar 2025 15:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE2320FA9E;
+	Tue, 18 Mar 2025 15:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lvp1rCis"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVHlHUak"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1FD28FD;
-	Tue, 18 Mar 2025 15:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C1C20E6FA;
+	Tue, 18 Mar 2025 15:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742310698; cv=none; b=XppWbDG6RtM7cNRt6wvfLLDtSpAYI8hDiopLX/NKgoIu4N/+fYxdxIABsYF6bvkAM3ZJf9mawlctF/5LjY42o6tuKJeQMuh5UO7zzPHBHARY+wbx8URsm6Eo4f36n4JD/sFc0xHIaxa9YI7nSvrcPKcQtSRIfdykc+2NAiA6yPc=
+	t=1742313596; cv=none; b=oeS/Mand7Jxau2tE7KN0QjTULTOje8cy4jkTkTRSbwgjXMdjJVRJDlyvyZ8ZWusVS7TC6ZSVEmjp1+X5iz0jwAHSlHIhO2/VGCTqLAAsOgtu/5gM9ugBowfPmutJb8Kk78yeT6njuLVdeE+rPl+aGm6/S9eE0qRs+9TlxBSLQp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742310698; c=relaxed/simple;
-	bh=KUkSvOZPi88r/XTZ0pYSCa0BreGnfE2/PMqS/RwsBWc=;
+	s=arc-20240116; t=1742313596; c=relaxed/simple;
+	bh=wnqlTyxAgZ8CuVhXT9duPOO4NgjQBjimZKlWtsOUGPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8PD9CaHepXilCWaPD6lgkNmA83/5QAsNXO7U+5H9ussI7exQeDjSmwZpnuhdrfa3HRzwpObGNk47qFKJHBJZm2s/28Naiatbx2pzjKmRBQett2wAJ/iyRTOtWUpZ9vUs+kMtf1Eod3w5V4hl5PS5Exnacf3hcJ0/LTg/uUSWcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lvp1rCis; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ECCFC4CEDD;
-	Tue, 18 Mar 2025 15:11:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rtNuxbEvsVojzW+7QvI93xBrqK3voNzfEGfkR3KtDUInYvUpBBq1aSF4wLJuRPQj0dePFNL+uDuqbEJwQso12VjNFc/tMypWHZORL2C34DxQBfoMRU4cECQo1rMSPOTt2wSTx13hsD6oQY2+NdGL24MCI4no+22mDotXMgSNrnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVHlHUak; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FD2C4CEDD;
+	Tue, 18 Mar 2025 15:59:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742310697;
-	bh=KUkSvOZPi88r/XTZ0pYSCa0BreGnfE2/PMqS/RwsBWc=;
+	s=k20201202; t=1742313596;
+	bh=wnqlTyxAgZ8CuVhXT9duPOO4NgjQBjimZKlWtsOUGPY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lvp1rCisGL3+VJsnjPSY68vrXDu8MEkC6MMXlw1DMYNJu1mIhbfj8RuL/t1z60f1O
-	 hSm0Uu0o4+0uaaQnd6WpUsgIJBVYjaCvSF22FvU/Lh7QsJ6FPx3xSnPZ3msaA1npOb
-	 U7QctlvQ4UpP37AX0E6ThxOVPDk1K146O/Csi4HXcgeOt0doflAOdW9zRoTF+VEX8K
-	 F5ajEZQdHbzEFJAoD9wubjsYz4zpUlwWh/7To9SFLVD5MBHZQWq9oGu8UibbJZJlgY
-	 IW/CHCFi1DPIradVuyje345SvEHPw2GcKaKG8V9WQV1dEbY/YVRG2RFkBvw8PU48Sb
-	 uOTIkGjWO+deQ==
-Date: Tue, 18 Mar 2025 15:11:32 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, Aishwarya.TCV@arm.com,
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH] rseq/selftests: ensure the rseq abi TLS is actually 1024
- bytes
-Message-ID: <85de6b23-5c15-4651-8604-75ce6473ff08@sirena.org.uk>
-References: <20250311192222.323453-1-mjeanson@efficios.com>
- <78518446-083c-4db1-8c96-61fd49eddd8e@sirena.org.uk>
- <f61ded41-b1b8-4d0b-aff0-df7e0f5bab0d@efficios.com>
+	b=WVHlHUakLlfN9xeuBYO1EJf+5CyU+WJKRkilNy467a1BnupPF2HSzG6De1fpXKFV+
+	 ix9jYHBoyySgyb6uel1Y6KTQEzU4+Rwm0HghzRyuSjF71hbCSnTEGnernC5xUEtu10
+	 +UeOIc/V5TKw7+jkC51H/NeBuaIOzIXiqjJlwYzUGV3n3dFHQ9MxYqNWDakJi0E6hg
+	 3eBuUyUh9Yz/C8EPNMpPnQhIe07ID+3WJ5N3wJyQiVpq4Skm6z+pxWjAjp5DobEjiB
+	 6Jrg3x/R+DiIvD5NG4zUjWrrB/2tNu1hT+SvmfpVy3qQGAt9drIa3KhZDqAUmDABl/
+	 j7eCAm37AJZIQ==
+Date: Tue, 18 Mar 2025 15:59:47 +0000
+From: Will Deacon <will@kernel.org>
+To: Alessandro Carminati <acarmina@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH v4 07/14] arm64: Add support for suppressing warning
+ backtraces
+Message-ID: <20250318155946.GC13829@willie-the-truck>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+ <20250313114329.284104-8-acarmina@redhat.com>
+ <20250313122503.GA7438@willie-the-truck>
+ <CAGegRW5r3V2-_44-X353vS-GZwDYG=SVwc6MzSGE8GdFQuFoKA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PL2XKkQY/yXWwUMt"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f61ded41-b1b8-4d0b-aff0-df7e0f5bab0d@efficios.com>
-X-Cookie: Swim at your own risk.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGegRW5r3V2-_44-X353vS-GZwDYG=SVwc6MzSGE8GdFQuFoKA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
+On Thu, Mar 13, 2025 at 05:40:59PM +0100, Alessandro Carminati wrote:
+> On Thu, Mar 13, 2025 at 1:25 PM Will Deacon <will@kernel.org> wrote:
+> >
+> > On Thu, Mar 13, 2025 at 11:43:22AM +0000, Alessandro Carminati wrote:
+> > > diff --git a/arch/arm64/include/asm/bug.h b/arch/arm64/include/asm/bug.h
+> > > index 28be048db3f6..044c5e24a17d 100644
+> > > --- a/arch/arm64/include/asm/bug.h
+> > > +++ b/arch/arm64/include/asm/bug.h
+> > > @@ -11,8 +11,14 @@
+> > >
+> > >  #include <asm/asm-bug.h>
+> > >
+> > > +#ifdef HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC  __func__
+> > > +#else
+> > > +# define __BUG_FUNC  NULL
+> > > +#endif
+> > > +
+> > >  #define __BUG_FLAGS(flags)                           \
+> > > -     asm volatile (__stringify(ASM_BUG_FLAGS(flags)));
+> > > +     asm volatile (__stringify(ASM_BUG_FLAGS(flags, %c0)) : : "i" (__BUG_FUNC));
+> >
+> > Why is 'i' the right asm constraint to use here? It seems a bit odd to
+> > use that for a pointer.
+> 
+> I received this code as legacy from a previous version.
+> In my review, I considered the case when HAVE_BUG_FUNCTION is defined:
+> Here, __BUG_FUNC is defined as __func__, which is the name of the
+> current function as a string literal.
+> Using the constraint "i" seems appropriate to me in this case.
+> 
+> However, when HAVE_BUG_FUNCTION is not defined:
+> __BUG_FUNC is defined as NULL. Initially, I considered it literal 0,
+> but after investigating your concern, I found:
+> 
+> ```
+> $ echo -E "#include <stdio.h>\n#include <stddef.h>\nint main()
+> {\nreturn 0;\n}" | aarch64-linux-gnu-gcc -E -dM - | grep NULL
+> #define NULL ((void *)0)
+> ```
+> 
+> I realized that NULL is actually a pointer that is not a link time
+> symbol, and using the "i" constraint with NULL may result in undefined
+> behavior.
+> 
+> Would the following alternative definition for __BUG_FUNC be more convincing?
+> 
+> ```
+> #ifdef HAVE_BUG_FUNCTION
+>     #define __BUG_FUNC __func__
+> #else
+>     #define __BUG_FUNC (uintptr_t)0
+> #endif
+> ```
+> Let me know your thoughts.
 
---PL2XKkQY/yXWwUMt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the analysis; I hadn't noticed this specific issue, it just
+smelled a bit fishy. Anyway, the diff above looks better, thanks.
 
-On Tue, Mar 18, 2025 at 10:50:58AM -0400, Michael Jeanson wrote:
-> On 2025-03-18 10:01, Mark Brown wrote:
-> > On Tue, Mar 11, 2025 at 03:21:45PM -0400, Michael Jeanson wrote:
-> >=20
-> > > Adding the aligned(1024) attribute to the definition of __rseq_abi did
-> > > not increase its size to 1024, for this attribute to impact the size =
-of
-> > > __rseq_abi it would need to be added to the declaration of 'struct
-> > > rseq_abi'. We only want to increase the size of the TLS allocation to
-> > > ensure registration will succeed with future extended ABI. Use a union
-> > > with a dummy member to ensure we allocate 1024 bytes.
-
-> > This is in today's -next and breaks the build of the KVM selftests:
-
-=2E..
-
-> > since unlike the rseq tests the KVM rseq test includes the UAPI header
-> > for rseq which the padded union conflicts with.
-
-> Oh, I missed that, we need a more unique name for the union.
-
-> I'm unfamiliar with the workflow of linux-next, should I send a V2 of the
-> current patch, or a new one that applies on top?
-
-It depends on the tree that the patch was applied to - -next merges the
-current stat of the maintainer trees daily rather than applying anything
-itself.  In this case that's -tip, I think incremental is good for them
-but ICBW?
-
---PL2XKkQY/yXWwUMt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfZjSMACgkQJNaLcl1U
-h9DPmgf+OZwGLMY89YPeWmlq5p/J3WEOBChjcahyQIpHAbOt8KQgRPF+DQmTn9H/
-N+iRyJg0GCUgBAb8R1QSLHNjK/dYCuNYHKSuVzj+PERiTmif2dqqS0I6qLVzR0nl
-qdAHS+aYWQ3HqKJTO6EQJqSLhWJduch73Uyc+D2APdcFJ4iawMwchUEA6tCMhTFa
-oHcQZ98BtPDfdx2Vo++3OG4ERD6fCO3aYMEw5K60vT1C8b1imwCWdprsqVBW3a6g
-J4Cr42LuXFqdqSByLgNNQpJmMQUGBpp59i1bwz2yM0Y7cTik3K7RjV8Dgm2mprUB
-xG/CwgJ0Q1Sgzyle7HLnwsD/p3/UjA==
-=i+sG
------END PGP SIGNATURE-----
-
---PL2XKkQY/yXWwUMt--
+Will
 
