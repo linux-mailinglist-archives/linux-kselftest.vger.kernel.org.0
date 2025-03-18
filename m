@@ -1,123 +1,128 @@
-Return-Path: <linux-kselftest+bounces-29381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B148DA67D67
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 20:55:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E08A67E8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 22:21:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 074A319C09D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 19:55:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D16E77A2712
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 21:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1861F09AD;
-	Tue, 18 Mar 2025 19:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F621F755E;
+	Tue, 18 Mar 2025 21:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qq26zGI7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f7QwMq8w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A2E1DE89D
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 19:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FC7DDAD;
+	Tue, 18 Mar 2025 21:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742327689; cv=none; b=p30yPHnuUViVIZMA1P2icBagRkC2s/Rv/N+5fGY6eBMuaO+4xuF9RGPZPkqJBOf/KtsoZ8Ltv688t9kb7QP7dURTQBYshU9YhYUczlX1wOu6E2ekSS8qW61lmGeLOiCjShf+y70T0NHAx69E90Kqq+ov19BNb/I7sdCLL/rQPpw=
+	t=1742332860; cv=none; b=PwJYO9pv8XOg7ieyK5lX5UykwTmsOGyITcKrBLTc4qXSjZLvXQEySvBJMg1GG7kGRtOKOaIBi+pI9dIom8b4tD3H8n9LMH0Q+PreySkWUXV5CRdhuXUhdlmA4Fppu4Ci6P0HHG3z4tppaj21j+4LzvKj5qRrIIuxjq09m6Bs1ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742327689; c=relaxed/simple;
-	bh=VrlJ3A/OO54Db8N4rdrzXfrOYZxuwLvtzEkpR1geLW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0wh/O76SMuL2bMxbR9g6HUoA49/jJ8B+zwtAsk8e0amNnWJiiTgeTtWs30f/btWSHqBs6S7wPrz924A33DsPYCLEKDn77HfeaYgHk9CEsaVjdyuUAJOcbhpKq6gL4Y2kl7LP6Z3GL9mhp4VpYuxvrpKpiaOqRBUobZXiib7FOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qq26zGI7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742327683;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Fx/udxou9t4pcLYg6KzQ6jS3G17qvHPgBox/VxbY1DM=;
-	b=Qq26zGI7iCJO5Rs1Yj90zW6f9KlaM5njTnBMcAvX3lZ1hVUhTe6UBlNJuY04YfX/BylXbc
-	2J6H43fxO3wZ5cQ+Tm3F7qrbPi6b9ZoXk/toJxqzFpxt+IOFLOpeTISFwoUD71Ami6PRm/
-	CooPJA8iHGPksVwEmdvQFTeIvDNUvPQ=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-30-XZRGaIhJMeKiF2rezq0P8Q-1; Tue, 18 Mar 2025 15:54:39 -0400
-X-MC-Unique: XZRGaIhJMeKiF2rezq0P8Q-1
-X-Mimecast-MFC-AGG-ID: XZRGaIhJMeKiF2rezq0P8Q_1742327679
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-476b2179079so120958841cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 12:54:39 -0700 (PDT)
+	s=arc-20240116; t=1742332860; c=relaxed/simple;
+	bh=WiRT9bHs0N/tkHiTl/aOimeK19vJh3RSlWvepRaoyiU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aOR8aSG1cwY7wj3eAjDakv0I8JonffVNyTmRFMGoqDE+/fn4za+8s0LrNBvNC/HdQnr6kMUyP0ZqcNyXujk4YqjOaFoUl4nsZ9vUxtFe9lzsyjKRnCQD8r10NueYLPqp6EQ7/slR3dlcJkmzvt7cSX6il5Fdl4d7iVM6hYuoVEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f7QwMq8w; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ff784dc055so6375989a91.1;
+        Tue, 18 Mar 2025 14:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742332858; x=1742937658; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ardKmeM3FvhOwNbF6mEr8AJRagvXxY7Hl+ibLRknpfU=;
+        b=f7QwMq8w3TmrH4zzlGpsorJOeKmMevCGQLktozgMUbJEB9umVW+K3QaxCW6VkwkHLp
+         SwqyzJ4KFVQQt59fztHZ8XGsBLOjS0Z6+/mL+mJphPij375FOMiR+svCmCEQJfHrnF2r
+         OMfVOHkNXpnu9boE1GwTrYGtK9wJa2sezw4KlzF3pKJh8uJSMHlwYq8i2gBQFIvB/93S
+         pLXKAkDAi7Bj3J/kf0p3UtjNsPLqQFvVwcXQ2avD+GzXUj1AwTS17Ty/ukvTe/xn1QJi
+         R6RwivQgdvdGEejBTUlzSNoU5jQ3qSsnaKbk2LgFLVsTjpU8ufFn7GaJ2C43nyCpSD/9
+         dD2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742327679; x=1742932479;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fx/udxou9t4pcLYg6KzQ6jS3G17qvHPgBox/VxbY1DM=;
-        b=njg0aQiuXwSAkF+lSv5WCYU9Ofdl0LzsD5sfNKg5vwprrl7KGxKW8H6lnZ/JtfGMdD
-         D/VdcKD5W1WU1cTBTyGjTNPa6saFn2hE1v4rsCyMyUB55cRK78c1g9L/VuSJQAeD2skW
-         +rMuWXdA8qaNfwlnTUM5CRNQi8VrUtGHeDIVkSWB4p/M5e3SBLPOvBqxmaYWJobEAcL5
-         +GWlehjY+3gGnIQ4eBcBOrKjs0YrnhnTapiRjPByBz/gsA5jhSBR9yU0wPq6SmHlDYgL
-         61ySu3oEe8MP4GAZofvr2tGlRxcO5jwpBmO2/CMoHedM+M1rJYHXaMwp+aNkLwrtekiA
-         +juw==
-X-Forwarded-Encrypted: i=1; AJvYcCWNrSjZRfk3mT5InHuop7dUuJKBgfD3WJXhi82V1Xom2QGg4KgxPSMgRIDc9HgzKHChkM6gIa0p+ZVaBer4+FY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPspQFyVKdExrAXk4eniiwaAniq4sOWDDylKN7Y8q+OBd2bNV8
-	3iDYyNE7UQ+/Q/V8LEB79zGcThd7mA4iVjijwn2ZG5kgR9Byr2stsy+e1Tt9wAM4DbBIV3CWknk
-	uY9Mik/LR5ph4/Sur0q+HrVhyCOufEkpQ+rxf307xfZx5eKVh0Gc+URB8DifpjtLxqw==
-X-Gm-Gg: ASbGncs9fk3hkBivojhFY/hMcMdhqjZVeyuwY5fJkKaKzZEvb7uF4bdRPqJDJsPnYdd
-	Kl5PJYWoTO6OeL7kUYIcAqIM0xWNCwicrBdNVng2nmEzeMY475+F0Sqb96hsTMN6rNst2+HLmvh
-	E6/ZGNuhzsmMdoxE+lONJLXAntAhgJoF18HYxBh9qAPqUbItplWAGwXU5lGxVnT0IPyMGO8Z7E2
-	a5WjFfGC1fUzLJdoe/Pu+a+egYKKw6NpU2rE6MTStZlms31nOa2QLcn7IMb6Alb4u8tI7rgoNDH
-	oacZ/jo=
-X-Received: by 2002:a05:622a:5e15:b0:476:afd2:5b5c with SMTP id d75a77b69052e-47708383ec9mr3437421cf.30.1742327679326;
-        Tue, 18 Mar 2025 12:54:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG9LWb1VzYkNj6s/jeDxGd0TKIru2xNP92VxrllNTEJD5uJF/UCPS2GEX9AjyO3i+Wo9EOo7Q==
-X-Received: by 2002:a05:622a:5e15:b0:476:afd2:5b5c with SMTP id d75a77b69052e-47708383ec9mr3437251cf.30.1742327679070;
-        Tue, 18 Mar 2025 12:54:39 -0700 (PDT)
-Received: from x1.local ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-476bb669f72sm72825171cf.42.2025.03.18.12.54.38
+        d=1e100.net; s=20230601; t=1742332858; x=1742937658;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ardKmeM3FvhOwNbF6mEr8AJRagvXxY7Hl+ibLRknpfU=;
+        b=vQhXqn/UgOI7FWoIR3dC89cN2gHw+vdV+3lfEe7Cd2vt3xLVQV/n/QtwTJNSMRp+if
+         DlfYLPR1wKQv7dOM2aX3IF2IX/ZOFv49fLQC8dl3wepXiVpyv0OgjPm9qJEN1vgtiAAo
+         SRlNoVzH4VnBIfMh/0lmEAsC+tPH8OiioZGd6y885a7OqNs2/a32eV6wPGQxo8/SWQjo
+         uJNQ3Znt8RWhWjGTmpFRa1qqZrABBXtUx7gXvCk3NXFntwbiiGAxj2I+a8grZq5LoUFE
+         JWKH0nO0EbWOXXVNhPr55prTvcSZufKbZXLvguIfvhqSBlgEt/l0h3sKC0UB8gd9bYv8
+         eppA==
+X-Forwarded-Encrypted: i=1; AJvYcCVauDEDzVMG5SrmivzGrZ2yl1PceuzdYTe5UodhsxgCBru6KgrVbRn8li7vi3mNj/pNpd+JQz4axZyTcuc=@vger.kernel.org, AJvYcCXPH3r9tInv/Em8f0gwipRT9pyKA+IXs8I55Swr2DaipuIhc2vq4dw+pa7IKcOp3eUjjDbCE/AWlArBT1AK8daz@vger.kernel.org
+X-Gm-Message-State: AOJu0YzskfwznIG8eFCzHuxQE/mkPa82acuyMz5IJifZhZ3yms2laj57
+	aniAJNGPEBLqPFoukbGSb54WERS9kOscc+5nC3ddhjdqEnL4IvNiS+YMo4807Gc=
+X-Gm-Gg: ASbGncvlfZXJM1z8MsgT0oiJSF6Mxbb51UtbPt3Q+12MDKqDSvRt/9/pG5O4KEch8L5
+	2qyYlc8ErAjjCZ96fck+cVELHfjq+q985yy0QnLwmG9QrVC1R1D83EKZU6Hyd7EdB5s/YRIXo6t
+	nGDk665rDRonYMYBe+Um7PUwh/oIoJq2ny3FOTuTUXSSPmubsX3ZFXUvKm1gLGGyiOVAMMYSHp1
+	PMDkGYy+Vrv13EYfn5AHRB6XEcEZVUPxlb4ENYd80zd9LoTgNpcNjac5otEjuil8k5LH4RMkG1H
+	dplPJiPERssV5sOgIqzK2AeMBLPVZk8hu6hf0ECyhqvj/ScRyGRv
+X-Google-Smtp-Source: AGHT+IG3Y3teF52oZyArtun7A7gMMONDj7HmQM4FW494dVh9pAErbe1aEiJVTuiPnP6t/fYPzeV0cw==
+X-Received: by 2002:a17:90b:2647:b0:2fa:157e:c790 with SMTP id 98e67ed59e1d1-301bde53851mr252773a91.5.1742332858535;
+        Tue, 18 Mar 2025 14:20:58 -0700 (PDT)
+Received: from fedora.local ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30153afe74asm8771777a91.24.2025.03.18.14.20.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 12:54:38 -0700 (PDT)
-Date: Tue, 18 Mar 2025 15:54:35 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] selftests/mm: Speed up split_huge_page_test
-Message-ID: <Z9nPe2DBWaxNyhI-@x1.local>
-References: <20250318174343.243631-1-ryan.roberts@arm.com>
- <20250318174343.243631-3-ryan.roberts@arm.com>
+        Tue, 18 Mar 2025 14:20:58 -0700 (PDT)
+From: Filipe Xavier <felipeaggger@gmail.com>
+Subject: [PATCH v2 0/2] selftests: livepatch: test if ftrace can trace a
+ livepatched function
+Date: Tue, 18 Mar 2025 18:20:34 -0300
+Message-Id: <20250318-ftrace-sftest-livepatch-v2-0-60cb0aa95cca@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250318174343.243631-3-ryan.roberts@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKLj2WcC/4WNywrCMBBFf6XM2pE8bIuu/A/pIiSTZqAvkhCU0
+ n839gdcngP33B0SRaYEj2aHSIUTr0sFdWnABrOMhOwqgxKqFVp06HM0ljD5TCnjxIU2k23ATri
+ 7s7deKd1CXW+RPL/P8muoHDjlNX7OoyJ/9n+zSBRoOi+dt1qQ7J/jbHi62nWG4TiOLyuiADy+A
+ AAA
+X-Change-ID: 20250306-ftrace-sftest-livepatch-60d9dc472235
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, felipe_life@live.com, 
+ Filipe Xavier <felipeaggger@gmail.com>
+X-Mailer: b4 0.14.2
 
-On Tue, Mar 18, 2025 at 05:43:41PM +0000, Ryan Roberts wrote:
-> create_pagecache_thp_and_fd() was previously writing a file sized at
-> twice the PMD size by making a per-byte write syscall. This was quite
-> slow when the PMD size is 4M, but completely intolerable for 32M (PMD
-> size for arm64's 16K page size), and 512M (PMD size for arm64's 64K page
-> size).
-> 
-> The byte pattern has a 256 byte period, so let's create a 1K buffer and
-> fill it with exactly 4 periods. Then we can write the buffer as many
-> times as is required to fill the file. This makes things much more
-> tolerable.
-> 
-> The test now passes for 16K page size. It still fails for 64K page size
-> because MAX_PAGECACHE_ORDER is too small for 512M folio size (I think).
-> 
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+This patchset add ftrace helpers functions and
+add a new test makes sure that ftrace can trace
+a function that was introduced by a livepatch.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
+Suggested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+---
+Changes in v2:
+- functions.sh: change check traced function to accept a list of functions.
+- Link to v1: https://lore.kernel.org/r/20250306-ftrace-sftest-livepatch-v1-0-a6f1dfc30e17@gmail.com
 
+---
+Filipe Xavier (2):
+      selftests: livepatch: add new ftrace helpers functions
+      selftests: livepatch: test if ftrace can trace a livepatched function
+
+ tools/testing/selftests/livepatch/functions.sh   | 49 ++++++++++++++++++++++++
+ tools/testing/selftests/livepatch/test-ftrace.sh | 34 ++++++++++++++++
+ 2 files changed, 83 insertions(+)
+---
+base-commit: 848e076317446f9c663771ddec142d7c2eb4cb43
+change-id: 20250306-ftrace-sftest-livepatch-60d9dc472235
+
+Best regards,
 -- 
-Peter Xu
+Filipe Xavier <felipeaggger@gmail.com>
 
 
