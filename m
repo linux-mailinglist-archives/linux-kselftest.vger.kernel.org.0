@@ -1,112 +1,157 @@
-Return-Path: <linux-kselftest+bounces-29389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8162BA68065
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 00:04:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB5B6A6806A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 00:05:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCCFE17E5C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 23:04:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BC983A9091
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 23:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094371EFFA8;
-	Tue, 18 Mar 2025 23:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E78206F12;
+	Tue, 18 Mar 2025 23:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eCJGVl+G"
+	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b="S3x53vau";
+	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b="wU2Vduk7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.190.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0FD1C173F;
-	Tue, 18 Mar 2025 23:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2192063FE;
+	Tue, 18 Mar 2025 23:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.190.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742339074; cv=none; b=KVlsovIJF0OX52RJpaQK9MWL1qoVANWSZotZCjeAhezuy3Wcp79tCfILo0ubmM5YoFGk0qg+k7TioT4tdaEQa2rlgJkK5ita+BQDECCKk8yGlGpcnSEMFvp5MDhWD4g6LOr1PHhIEJ8Z0lYdwPEoCEI2YKrU4O/4ZR6iXZhl4DU=
+	t=1742339113; cv=none; b=E/M0jeKeDZ6/nf9qLUJtmXm6ICQKMIZfqrfyibOCfgIfJ6XTpSOqtGpoHzxDVktBhj1NLTJ4CKF8jCnFgXXotwKoS+LbUYe/Q0l2+jYiLsGJou6pttRgh6IWXkwrkSxrfTOBZK5Bp9akxrPAkmGinTsvAwdlD6P8lmQtWY+Oki4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742339074; c=relaxed/simple;
-	bh=gmNZ6IPl9zXDBeh9ZjFNjg8N6dKW0ToBTEg5KCDWQGE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rnA69d2PNqIK4lpds2iuIH9Xv0L8+IjLRbiHKVd2jENGnKYFBbHvrzi3IUPI/x4WbSpHPPbCtC6ET+H3CQwzcpovw1pFeI9i/vzc6hI8jwTfwXe6TNko83gOnOTkv3/J6zBq0wCvjv2yu4la7aJ/x2y09AmzgqH6pBKDjw+EIt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eCJGVl+G; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ff65d88103so7799775a91.2;
-        Tue, 18 Mar 2025 16:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742339073; x=1742943873; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jILkdiZg4f6EaPJ9Z5bkECOAiyPcZ7OzGqb7BSQ0NhU=;
-        b=eCJGVl+GA5P+9qfQ6ek4v7hKo+ru+3T/iLnH6LHYoSi1oopNIh8CA5sowUsswK9PiM
-         H/NN8QnHLKF/zhesCNwGX39IlEBipH+fyJFn5txFHaoPwmFphnmIR1gT1MUzUTtUke6e
-         JgZ1yMyHL50D9nihrDBXIGAQSaYMEobx2mpbVF/6lgFTRksbaujqCgZcLMN1dDjEK3Vd
-         Q6vSG11p2rvGNb6tQu5mgDsPkGbRQreKvRtTLvK2qeE/r+gEZ3zztcB6TMiBRrzMr44D
-         cQH+QjtLuxLEJbXw7UkbSm3QnQfdnyZUNPMoNk7DgeT9wYzYEwW3QLrL/7MA4oVD2fBJ
-         JUOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742339073; x=1742943873;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jILkdiZg4f6EaPJ9Z5bkECOAiyPcZ7OzGqb7BSQ0NhU=;
-        b=PhsEQkC9UeqJI7rno8nULdb7+khJ9zDkCDhSnlghr+VzX7L+8L6GEDRj0hgVkEbeI/
-         yubmaQ0bgAA7qwtvhJLdpfLn/cMvTxz6wKMY4gWA5y6dP/ARcJGyU7lyJIiCUd4+8XA6
-         n9/UKnEcGCATkMgt6Oup2qdtLsefm9OpyLnzzVofWXe76p48PcCzG3BACp9X2hah3h2m
-         hOcNGyZEiD0vuziFy/W+8LhnKh1AAvjpM7s3p2oQiYEYo11q1o35Zp4b6d/5lyZRtdLV
-         uS+unwgGcOFu3rMZ5T5iKRD52EdwaF8oWre3bQAUFbbyO9ds8/LkwfFhPatFxdqGnXrX
-         yheA==
-X-Forwarded-Encrypted: i=1; AJvYcCWtt/bio6XvBi3lbbWVthI0+ocXiKwro4X4f/roqKcZTHzmvgVh17Zbm40hnd1OXGzZnd78fslgKlgSdL0=@vger.kernel.org, AJvYcCX1VmqA9zFcd9/TuotqGYjZnGrywZEEjWyDgUxEw41WCWIX8ToBVNg3lYWSqH4oHbDvrztmc7q+ZdhnT+pONVST@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNjoEqZfM4feR9DBAqh9ZfAoIEL3MVTkJPSjlCf+eWbwtZO2u/
-	hnA1SYvIuJ8n3WX7C6G1HLvTrEbSOhZ9KXqu1JclZHSbd03CPOKPKP0hhfQqaktRZrJfre5q6xh
-	sJcP9s/Khx16OHRmjTdecWB2ybyg=
-X-Gm-Gg: ASbGnct4l5k+0VuYuywpskLcr+45ZNQ1Le5pM6x0WMDT5wNW/7l6rK2W29yUVdMebm+
-	K/hiG4kpCS/SskRHPl+eqbKl+4DfMWVL4ww7IsJffqV0E4ptme7ZehKPGPf0jyMn0ZQEyQ8hE4v
-	qveuJ7fMCSSP5zPjRdzw76UdG3yA==
-X-Google-Smtp-Source: AGHT+IFYxDuGL8Xq1/MOJ5b4LHTsE+r4dGJ3RiHYiz2UP8tBekZEr4CQjSL/OMc+N5QXXhutH//VLbYe4MfNCQ+cDiM=
-X-Received: by 2002:a17:90b:4b89:b0:2ff:4e8f:b055 with SMTP id
- 98e67ed59e1d1-301be2341f8mr791291a91.35.1742339072815; Tue, 18 Mar 2025
- 16:04:32 -0700 (PDT)
+	s=arc-20240116; t=1742339113; c=relaxed/simple;
+	bh=piKS54+5UzAnMXeI5r0yvoazJQIW/IzuMm+Ja7K5FI8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ql9QaQKdZTH5V9ddynj3BLIeOQSTQzAdBxMfmnsuBUup74f7bW76E8vQocw7KDL1KMQVC0ioL4pvPNem6I+/hA1iL8l8mp8dPpmqSqo/skDxtKqnpr2mlxJ1gJp80AKM9BHP/oljKAI57K065fM1wVZ1LXITdp8bAdYTfhnlzCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=netfilter.org; dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b=S3x53vau; dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b=wU2Vduk7; arc=none smtp.client-ip=217.70.190.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
+Received: by mail.netfilter.org (Postfix, from userid 109)
+	id C8AD6605CE; Wed, 19 Mar 2025 00:05:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
+	s=2025; t=1742339102;
+	bh=lJQJWhbRVIBubIqYR0cZHIzLd9iGpITQsoCcBK4dLXE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S3x53vauv1shnJIaWaf6LgGXCGhAw5pmnzIPKigGdflACHkRuV5i1FOHnu+RBSCrL
+	 i9FuaOwz+hipBmtUqjdh3Hd+CGCrXDMWLIJu9yBqMfA66VpzOWCIcJ7i05E/UXG5UK
+	 plVpaTRru5JJpy7/YD6JoGvh5v71tX3/tqEwYweMzhtCPP3U7RQBcQtTTjbEvQ0VkT
+	 R2xDFSM8L8FxIp4d7ZO20rWzfa0ClOTmFy+8lFkUZNiNYOhqv0/A0Fl/wM/dVWLoPP
+	 NsKCKgi86YMNPN7OQ+rsoTsWtERMAG3KpWENfS8hb8ch0Kl/ZCmwWDJP4EAeGBv7Tk
+	 iH//AnrozzrpA==
+X-Spam-Level: 
+Received: from netfilter.org (mail-agni [217.70.190.124])
+	by mail.netfilter.org (Postfix) with ESMTPSA id C890B605AC;
+	Wed, 19 Mar 2025 00:04:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
+	s=2025; t=1742339099;
+	bh=lJQJWhbRVIBubIqYR0cZHIzLd9iGpITQsoCcBK4dLXE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wU2Vduk7YNQLGIEUrhrCN8P3Pq5S86ZrMIpJi/tKcBUK2KGH4pO4yYpkpy+sFDy+n
+	 kPrerKptDrD8Vz5IgrxyWMjWTlyW3l6snj/3BZnumxpz1hNQMxPL+mnYZ6QZ7pTSzL
+	 lk4c3igbmDeguw3pFb1l6vwWRYf178jI3yFgmCphE/MuKNXHNejCFVxeBPB/s5bhqo
+	 nOSrfnoI2vkDIxM9UnPXSzarlLD//GqegDUG2vgtDYc2S2wWHfHU2r8bzSD1RmA3A+
+	 LRN08nwFipOdLzz/RlhzRCehb3TPxqykXiq86FCe2OhHkHt+biodJ19xJY24FXtpeF
+	 IzRNjZaM0PVkA==
+Date: Wed, 19 Mar 2025 00:04:56 +0100
+From: Pablo Neira Ayuso <pablo@netfilter.org>
+To: Eric Woudstra <ericwouds@gmail.com>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Roopa Prabhu <roopa@nvidia.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netfilter-devel@vger.kernel.org, bridge@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v10 nf-next 2/3] netfilter: nft_chain_filter: Add bridge
+ double vlan and pppoe
+Message-ID: <Z9n8GHYfuhTFZB3p@calendula>
+References: <20250315200033.17820-1-ericwouds@gmail.com>
+ <20250315200033.17820-3-ericwouds@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250312-tcp-ao-selftests-polling-v1-0-72a642b855d5@gmail.com>
- <20250312-tcp-ao-selftests-polling-v1-4-72a642b855d5@gmail.com> <a360fcbc-19e5-4ee6-9b80-2621fefd9ad6@redhat.com>
-In-Reply-To: <a360fcbc-19e5-4ee6-9b80-2621fefd9ad6@redhat.com>
-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Date: Tue, 18 Mar 2025 23:04:21 +0000
-X-Gm-Features: AQ5f1JpIgHaJjfJ4-RofrI7tq5CHr1T5yKRwrlW_DVT5E6Q-iOZNnDL1famSOP4
-Message-ID: <CAJwJo6bh1SnSs7OTPZ8YDn5eCkNRwWXSx=ckwttUxcXyg4f8GA@mail.gmail.com>
-Subject: Re: [PATCH net 4/7] selftests/net: Add mixed select()+polling mode to
- TCP-AO tests
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250315200033.17820-3-ericwouds@gmail.com>
 
-Hi Paolo,
+Hi,
 
-On Tue, 18 Mar 2025 at 14:47, Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On 3/12/25 10:10 AM, Dmitry Safonov wrote:
-[..]
-> > Reported-by: Jakub Kicinski <kuba@kernel.org>
-> > Closes: https://lore.kernel.org/netdev/20241205070656.6ef344d7@kernel.org/
-> > Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
->
-> Could you please provide a suitable Fixes tag here?
->
-> Also given a good slices of the patches here are refactor, I think the
-> whole series could land on net-next - so that we avoid putting a bit of
-> stuff in the last 6.14-net PR - WDYT?
+On Sat, Mar 15, 2025 at 09:00:32PM +0100, Eric Woudstra wrote:
+> This adds the capability to evaluate 802.1ad, QinQ, PPPoE and PPPoE-in-Q
+> packets in the bridge filter chain.
+> 
+> Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+> Signed-off-by: Eric Woudstra <ericwouds@gmail.com>
+> ---
+>  net/netfilter/nft_chain_filter.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/netfilter/nft_chain_filter.c b/net/netfilter/nft_chain_filter.c
+> index 19a553550c76..7c7080c1a67d 100644
+> --- a/net/netfilter/nft_chain_filter.c
+> +++ b/net/netfilter/nft_chain_filter.c
+> @@ -232,11 +232,27 @@ nft_do_chain_bridge(void *priv,
+>  		    struct sk_buff *skb,
+>  		    const struct nf_hook_state *state)
+>  {
+> +	struct ethhdr *ethh = eth_hdr(skb);
+>  	struct nft_pktinfo pkt;
+> +	int thoff;
+>  
+>  	nft_set_pktinfo(&pkt, skb, state);
+>  
+> -	switch (eth_hdr(skb)->h_proto) {
+> +	switch (ethh->h_proto) {
+> +	case htons(ETH_P_PPP_SES):
+> +		thoff = PPPOE_SES_HLEN;
+> +		ethh += thoff;
 
-Fair enough, let me resend it for net-next and add a Fixes tag.
+This pointer arithmetics does not look correct, ethh is struct ethhdr,
+neither void nor char.
 
-Thanks for taking a look,
-             Dmitry
+> +		break;
+> +	case htons(ETH_P_8021Q):
+> +		thoff = VLAN_HLEN;
+> +		ethh += thoff;
+
+Same here.
+
+> +		break;
+> +	default:
+> +		thoff = 0;
+> +		break;
+> +	}
+> +
+> +	switch (ethh->h_proto) {
+
+This switch will match on the wrong offset.
+
+>  	case htons(ETH_P_IP):
+>  		nft_set_pktinfo_ipv4_validate(&pkt);
+>  		break;
+> @@ -248,6 +264,8 @@ nft_do_chain_bridge(void *priv,
+>  		break;
+>  	}
+>  
+> +	pkt.thoff += thoff;
+
+And only transport offset is adjusted here.
+
+>  	return nft_do_chain(&pkt, priv);
+>  }
+>  
+> -- 
+> 2.47.1
+> 
 
