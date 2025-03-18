@@ -1,168 +1,160 @@
-Return-Path: <linux-kselftest+bounces-29355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F02A67628
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 15:19:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B3C0A676C1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 15:49:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9F511888756
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 14:09:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CEEE3AE973
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 14:47:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656D720E03A;
-	Tue, 18 Mar 2025 14:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF3020E6FD;
+	Tue, 18 Mar 2025 14:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NsXGJRTZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KIvnBrBs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C1920DD5C;
-	Tue, 18 Mar 2025 14:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05B3204F61
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 14:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742306958; cv=none; b=QIaLGfggaD/iwpJOB5I0/hwtyi6/08d5ewoSxMCNbkInOYZIVB3+A3AQsbvSleas1B3Ga8/JfkWh5J/mreW/nflxOFtN779klEI5UYk5KSWKXN5toAtwlMa9RXp3zycrOk2QvGmgdr9GbVRz2vv4vI1B8fYbX0xFOeYkIn5B2wQ=
+	t=1742309245; cv=none; b=Vakm67JiNh+BGmjxYSXK77aDikFKJucOmwrqikNnjNTTVtSOsuqr/PD7hu80b5GDwdKH/bJWXop46d6RwsWSh8hLz5uXQLmv0u6zKzCnQ1TemnAK1l9OYWqev7y9eC9mhz+mJWSDIPfKLDl87Jw8SwE/Elejg6oxWgXaVSTLXG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742306958; c=relaxed/simple;
-	bh=FPLOeGmswPNA6gj/GxUZMLB4rXeT/EXYqMBZlMgddeM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SabyosLE6mcybPemIlFbzzW8sT3rFILodadHfqlOnktcTVawSlcR7Zg6Wvm5o5DiEWIiSrZAt+dTtAUgUzVVj+kp7SNzMPVCX1k82v277DsWFhi/4uTs0m13u0Rw8FhF377wsS2djYhxzphvY0kmtwMl/0fMLZjhEymXsZn/4/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NsXGJRTZ; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30beedb99c9so51477071fa.3;
-        Tue, 18 Mar 2025 07:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742306954; x=1742911754; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XR3QmdTlX82CLNbiCjBnydKIXsFQoeJ3c+u1awJ7NeY=;
-        b=NsXGJRTZGEg2AC/EzaTj9CA8WlTV1eDmbGE4dObHLPTKxcLmR7NAcy8pzuW2KE2xjv
-         GPdyEvHMKHFVrqYgFT2wMbjQyIeMC3+jeImh37NY16KDEUdYslnCEv3EYPHcBBrUZ5G8
-         X9L2OQCIjK6Blyov+YnutOuOjUjoZGGe1FVg2U6QcLEVe8peDBidLNq0lO9CVQ75iU6x
-         zjz4iYokGP6MrPxeSIUvo4YYNVlDqV1BXkwHz+6Fq+8NF+2t4J5tCczFUEV8V/2GgRQT
-         25q86K9ad6zhumVpZOaKZe5ePxyHgANHPHvyEDnbbHO76pxjq9CmmQvV3fkQAtCPnX7e
-         NQ0g==
+	s=arc-20240116; t=1742309245; c=relaxed/simple;
+	bh=2igutHsuDhyuqY+mS9Se6RVpng7XykRfcC0cv+45kv8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RhmnfeDeH6Hs/thEtUMrGfs4gVeam9xdhOHxEe+WJaq7k7SMp3nvsGqjenRJ8eAePJm+SYDjH+qkS9IbtgHob9KoGzNsyd2IkgpS/n+V0SoTw/QGvRCZ+xh9AcerQIPj0Y6oTvQkwxpkGNpdE9mj8dWNurZRI7fQR/9SY/c/KOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KIvnBrBs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742309238;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R7O+pdl8v8v7EK7Wkd4nKpzLh6vnro4c8ShYrpyfa7w=;
+	b=KIvnBrBsOAbY85vnZzsxPAezI8NCCiBDjU4rxP1OuvbYiuHHnbUHWZ6z/tims3QSQqTYs5
+	0ygjLle4BLLS75WhpabkFro5WI31LWgfD/5vw0PRFWSV2wZMJyQMOYwSaLn5dnzci7RZKG
+	sRl2a43yfny+nOywFvNv76/n4h/6qeg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-62-SgjSG_3GPJGbZVweybJgbQ-1; Tue, 18 Mar 2025 10:47:17 -0400
+X-MC-Unique: SgjSG_3GPJGbZVweybJgbQ-1
+X-Mimecast-MFC-AGG-ID: SgjSG_3GPJGbZVweybJgbQ_1742309236
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-39142ce2151so2658126f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 07:47:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742306954; x=1742911754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XR3QmdTlX82CLNbiCjBnydKIXsFQoeJ3c+u1awJ7NeY=;
-        b=hLScdTO7YEuJ0TjEdd84CQpOVuPJvObG9g1IDhrMVml2PElwcBClEeHB/31rGZaB9l
-         czh5WuSxTk5yVYbRH5LJtqNMf7TgDMa9zReIMVa8R/zHXcY79lFvDvcqW/d/gjp5lwni
-         JoRs5w8vDrM9tTC+fJg64T4LoIreC9ZN7bAztjtBF0KXKtZCxy1QU8erPGqdFu2yfJtO
-         8ofKXn7OBobWtBxG2HAb81N8dhrOje3yjenfKfgz+KVN+P1Gz/dQtPQoI7qW7RRD2UQS
-         z1S+11r0uHnTLUw8sdHZQ856r7tRFImADAkfjINOBsy91WF+VeGJxsyfHQptOpqC5dYr
-         AGGA==
-X-Forwarded-Encrypted: i=1; AJvYcCUB9LvThrVVfn4mPoVmvnOLeIPqDxKGPB/2pZesJwnckost+PGovH8CxJZaHRNWrN8G3d1bpBXM7Xh/QWJD@vger.kernel.org, AJvYcCUKQ+VMiNOltvB0v58jU8x0ZD+Bk7VR4lBQkgG6wRGmxtzuRD7moPyyAKsjiYbnkSOJiP7NtI/t/PuvbW8MJ1en@vger.kernel.org, AJvYcCUPpVKEjIIcl8+791LucEBdnVSPScZnGCd6y+H9rstFwUFrpvu7QzHhBHqhiZXBPpPqgnOeLeq3Ax6Y@vger.kernel.org, AJvYcCUXzSEaGpE7dsBHRlmDLvBMtIdNGOv5GuYyV21oOtju/tA49ppqGSlgUgUXdSFy1snZqiOcJ81EXdTP8oo=@vger.kernel.org, AJvYcCWz4g0l/YRc9QogetayS3RMaAB1xW3gfhG2FgxgYpXjlhD+i/K85pI5pYkHHOhy5nY/TbSox8zN7wxZoyIP@vger.kernel.org, AJvYcCX07O0yWFsq//bgpA1DezHsZLIWrq02qYIsH+gMCiWdGuQiEuRLD34lvzNa5Mh35BI+eUW8RelGkobL@vger.kernel.org, AJvYcCX6kD+rK23Gl4WOLRUsmvp5eyuO1Dh0SDOyHf1HcnkbmDfdNZbxa6yAzod4weKF1dXjDD/4GQkLo12Xye2Hfsk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC9ldYRsW83v3Y7OQAJyjPCqjeJL/yi0iiTxLkn3rJhOikWo2l
-	3BdaBpiOkcWUl15y3XWxCpARL5FQ2gMyk3CInlbFWE2afiNVrMprd07KkC+LLOyYUpNQRmVIlwg
-	8mGwWD3nuXe1Ql01ueTsYKlmZwW8=
-X-Gm-Gg: ASbGnctFV/jwijM7RM158Lit/ZX4wEn+1R5oN65cc0uzmXHm1PqKaYPRpjQR5cssEhe
-	SJg0Y24LMqgSTmrOCE0cwRiYI+5Aiw47464Z81XEMCr3BeH2WE2Ef6J0XoJlVw720VBeBCQbvt0
-	fgL5IttFxQdEaCw79F07+12vaU3oNQ01P1Acgm3u8EhA==
-X-Google-Smtp-Source: AGHT+IFxpjLk/MoadRODdmp6sMkrXqEk5zu/R6whmoxUeanggxj1j1wQ9JCQLIxNBupqBoSdrmyU8Q9aU/YaFrU7328=
-X-Received: by 2002:a2e:bd09:0:b0:30c:160b:c76c with SMTP id
- 38308e7fff4ca-30c9755de18mr33340731fa.17.1742306953725; Tue, 18 Mar 2025
- 07:09:13 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742309236; x=1742914036;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R7O+pdl8v8v7EK7Wkd4nKpzLh6vnro4c8ShYrpyfa7w=;
+        b=kBYHYwv82HAmNEl0WDw7aTIgRcKTWSz+DrLmLUS20zC7KHUmvhu2XRTyeSyx/mTFRz
+         +fh2TVyyH9DJiSIHmdo5k6a9gvhRcByTIbwc0fG4Mq9VWWbCth92Bn7Bn5YUUGiSzsY3
+         bRjC7/np3c5uq3k6ShaTiLXrqIbPNfIS57rk1oNKZiH3edKSD/EqbzRiiE1s+q3eZbTz
+         Yhu8sNitG/r0HlBh2JJSKCZIEH45wx+ZVsfauckWL4RkGxWJPFWr6FdnsqC5us2Y34Wu
+         nlQRhYWMc2Zw3+EQPLl4eeT6uFhmybkr+HZcSp8/dzE/0+ijYDmYEIa3E3Pv56H2GdIq
+         iAIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwm8xQo+/hPXC5rLg8FLnbVQ3ibaoY9aGtISjC9sUXk62iSFEQLz7BfP1q+gJc9q5hx6txKTuJiA3PdcpvMUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwPTZG4MPB9t+qlVK/t5jdL2985UedXWxBOBvYWaXGApvXerJy
+	HiigL6LnGE7cqdWslUkxGhWN7yZc1kPM5AI0FIkQRIwiVd6q2Tmp20XLefBfzyje4sxMSE3ueaw
+	AXa5ZaZhnzMXGb7y/G3o1uZjcFSo38d2DhyqAY+wBhX+7I/d2lnCr+NCZR0B96nuJCA==
+X-Gm-Gg: ASbGncsc6U9LZzVJFtoAsItVxQv0qKU+WPU7LvwDiJn7GTfDeaTafZKpYv6XccXTcEu
+	xY81Sj+J06feVaZZjBMcn59fWzQ91xx6pjUtHHLiQkmlUnBN9gwJIoqD9h/b1FLz099iYGtpaaV
+	46PJRX7l/E+o+md9i2KoFPMOG4whDxMyNuf7H+mKhC+4q9IsrARKdPfOOx18+3RMJ7PsM5e6pOB
+	kavofYCD5OehR7ql3a+vuH65Y0RXiZN6mLxe+Chpg+lu97UE+8p2zzRIaWcWbIz24MSXuDzbFa7
+	GwrTV9nZ3IXq8pm+EVi95sAsnou8pFQPL+i4DCRMOr8UsA==
+X-Received: by 2002:adf:a197:0:b0:390:f6cd:c89f with SMTP id ffacd0b85a97d-39720398c12mr13493715f8f.53.1742309236015;
+        Tue, 18 Mar 2025 07:47:16 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF1+6DV1Pcv1e0dGpotv5cbfi8peLombI/S233B67fHsuG9MRleiVbauAu9kTexCe5GwpJbpg==
+X-Received: by 2002:adf:a197:0:b0:390:f6cd:c89f with SMTP id ffacd0b85a97d-39720398c12mr13493607f8f.53.1742309234992;
+        Tue, 18 Mar 2025 07:47:14 -0700 (PDT)
+Received: from [192.168.88.253] (146-241-10-172.dyn.eolo.it. [146.241.10.172])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40fa30sm18491849f8f.68.2025.03.18.07.47.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Mar 2025 07:47:14 -0700 (PDT)
+Message-ID: <a360fcbc-19e5-4ee6-9b80-2621fefd9ad6@redhat.com>
+Date: Tue, 18 Mar 2025 15:47:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
- <20250317-ptr-as-ptr-v5-6-5b5f21fa230a@gmail.com> <Z9lnIJCcVSza6UVo@google.com>
-In-Reply-To: <Z9lnIJCcVSza6UVo@google.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 18 Mar 2025 10:08:37 -0400
-X-Gm-Features: AQ5f1JqOYVk7nD9z0cLpiPEdxTeWINnN4TjRzqE0nN_LBkIs9bu7CUDTA0sD4FE
-Message-ID: <CAJ-ks9k5XZUN_vuH648rr6-e+v0my_dR2zo+986rzx+A5ZLxng@mail.gmail.com>
-Subject: Re: [PATCH v5 6/6] rust: use strict provenance APIs
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 4/7] selftests/net: Add mixed select()+polling mode to
+ TCP-AO tests
+To: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20250312-tcp-ao-selftests-polling-v1-0-72a642b855d5@gmail.com>
+ <20250312-tcp-ao-selftests-polling-v1-4-72a642b855d5@gmail.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250312-tcp-ao-selftests-polling-v1-4-72a642b855d5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 18, 2025 at 8:29=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> w=
-rote:
->
-> On Mon, Mar 17, 2025 at 10:23:56AM -0400, Tamir Duberstein wrote:
-> > Throughout the tree, use the strict provenance APIs stabilized in Rust
-> > 1.84.0[1]. Retain backwards-compatibility by introducing forwarding
-> > functions at the `kernel` crate root along with polyfills for rustc <
-> > 1.84.0.
-> >
-> > Use `#[allow(clippy::incompatible_msrv)]` to avoid warnings on rustc <
-> > 1.84.0 as our MSRV is 1.78.0.
-> >
-> > In the `kernel` crate, enable the strict provenance lints on rustc >=3D
-> > 1.84.0; do this in `lib.rs` rather than `Makefile` to avoid introducing
-> > compiler flags that are dependent on the rustc version in use.
-> >
-> > Link: https://blog.rust-lang.org/2025/01/09/Rust-1.84.0.html#strict-pro=
-venance-apis [1]
-> > Suggested-by: Benno Lossin <benno.lossin@proton.me>
-> > Link: https://lore.kernel.org/all/D8EIXDMRXMJP.36TFCGWZBRS3Y@proton.me/
-> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
->
-> I'm not convinced that the pros of this change outweigh the cons. I
-> think this is going to be too confusing for the C developers who look at
-> this code.
->
-> > diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
-> > index 719b0a48ff55..96393bcf6bd7 100644
-> > --- a/rust/kernel/uaccess.rs
-> > +++ b/rust/kernel/uaccess.rs
-> > @@ -226,7 +226,9 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u=
-8>]) -> Result {
-> >          }
-> >          // SAFETY: `out_ptr` points into a mutable slice of length `le=
-n`, so we may write
-> >          // that many bytes to it.
-> > -        let res =3D unsafe { bindings::copy_from_user(out_ptr, self.pt=
-r as *const c_void, len) };
-> > +        let res =3D unsafe {
-> > +            bindings::copy_from_user(out_ptr, crate::with_exposed_prov=
-enance(self.ptr), len)
-> > +        };
-> >          if res !=3D 0 {
-> >              return Err(EFAULT);
-> >          }
-> > @@ -264,7 +266,7 @@ pub fn read<T: FromBytes>(&mut self) -> Result<T> {
-> >          let res =3D unsafe {
-> >              bindings::_copy_from_user(
-> >                  out.as_mut_ptr().cast::<c_void>(),
-> > -                self.ptr as *const c_void,
-> > +                crate::with_exposed_provenance(self.ptr),
-> >                  len,
-> >              )
-> >          };
->
-> That's especially true for cases like this. These are userspace pointers
-> that are never dereferenced. It's not useful to care about provenance
-> here.
->
-> Alice
+On 3/12/25 10:10 AM, Dmitry Safonov wrote:
+> Currently, tcp_ao tests have two timeouts: TEST_RETRANSMIT_SEC and
+> TEST_TIMEOUT_SEC [by default 1 and 5 seconds]. The first one,
+> TEST_RETRANSMIT_SEC is used for operations that are expected to succeed
+> in order for a test to pass. It is usually not consumed and exists only
+> to avoid indefinite test run if the operation didn't complete.
+> The second one, TEST_RETRANSMIT_SEC exists for the tests that checking
+> operations, that are expected to fail/timeout. It is shorter as it is
+> fully consumed, with an expectation that if operation didn't succeed
+> during that period, it will timeout. And the related test that expects
+> the timeout is passing. The actual operation failure is then
+> cross-verified by other means like counters checks.
+> 
+> The issue with TEST_RETRANSMIT_SEC timeout is that 1 second is the exact
+> initial TCP timeout. So, in case the initial segment gets lost (quite
+> unlikely on local veth interface between two net namespaces, yet happens
+> in slow VMs), the retransmission never happens and as a result, the test
+> is not actually testing the functionality. Which in the end fails
+> counters checks.
+> 
+> As I want tcp_ao selftests to be fast and finishing in a reasonable
+> amount of time on manual run, I didn't consider increasing
+> TEST_RETRANSMIT_SEC.
+> 
+> Rather, initially, BPF_SOCK_OPS_TIMEOUT_INIT looked promising as a lever
+> to make the initial TCP timeout shorter. But as it's not a socket bpf
+> attached thing, but sock_ops (attaches to cgroups), the selftests would
+> have to use libbpf, which I wanted to avoid if not absolutely required.
+> 
+> Instead, use a mixed select() and counters polling mode with the longer
+> TEST_TIMEOUT_SEC timeout to detect running-away failed tests. It
+> actually not only allows losing segments and succeeding after
+> the previous TEST_RETRANSMIT_SEC timeout was consumed, but makes
+> the tests expecting timeout/failure pass faster.
+> 
+> The only test case taking longer (TEST_TIMEOUT_SEC) now is connect-deny
+> "wrong snd id", which checks for no key on SYN-ACK for which there is no
+> counter in the kernel (see tcp_make_synack()). Yet it can be speed up
+> by poking skpair from the trace event (see trace_tcp_ao_synack_no_key).
+> 
+> Reported-by: Jakub Kicinski <kuba@kernel.org>
+> Closes: https://lore.kernel.org/netdev/20241205070656.6ef344d7@kernel.org/
+> Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 
-Let's just drop this last patch. It can be revisited later or not at
-all. Perhaps in the future I need to be more willing to say no to
-scope creep.
+Could you please provide a suitable Fixes tag here?
+
+Also given a good slices of the patches here are refactor, I think the
+whole series could land on net-next - so that we avoid putting a bit of
+stuff in the last 6.14-net PR - WDYT?
+
+Thanks,
+
+Paolo
+
 
