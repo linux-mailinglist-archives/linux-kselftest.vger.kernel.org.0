@@ -1,141 +1,161 @@
-Return-Path: <linux-kselftest+bounces-29330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40DD1A665CA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 02:58:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60AC5A66613
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 03:10:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8188218840AB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 01:57:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 455917A8ECF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 02:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0419146D65;
-	Tue, 18 Mar 2025 01:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62ED18CC15;
+	Tue, 18 Mar 2025 02:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6zQSoqR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OA7XBh+E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D00290F;
-	Tue, 18 Mar 2025 01:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22144157487
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 02:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742263036; cv=none; b=qntDjaJg/owG4w+hzsna/XoD/rhi5b9Mo1tcjKjm5V12rf+pNy9wot9CtF5Lle36ISHb6PiWiXzw1deqT9p1VaOaKG+tM+lKRza/JMM0+8NsmSKAULuC4gHAlSJzPSx69Fu+H3LNlfNZkCz+48YbyXnVIOwqMwflGWDWrUSIHs0=
+	t=1742263833; cv=none; b=Me+6mkWYffy7ESuKovRNIPU9c9J+xSp+xRpzfHRXPmg8/7bfK4Hlh4wOAXZhTu6RuzWYUaq07ZcduR8gX8bcUmcRIlsDTcONGXP2EU6F70jCfiKFxO0MzW/EIHRDmCq//LWsOnobsAfjrS/zM9VnZGZ95KXPinG7itPOs7/eAQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742263036; c=relaxed/simple;
-	bh=j08dy6Ls6K1QUKVpOOpSx9Ni12kdiHmtqn2Gz5Oybw0=;
+	s=arc-20240116; t=1742263833; c=relaxed/simple;
+	bh=QR2+CQhFtF3wiXNVfMMn04N/Zgc7E9vWUP/WZyEzsE4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mt2enkCK4KwSDMCl13uNzvMyLWHlclNid1il8ZNNXEIYSGnXKg4o4Lff4Tnwfyt6PRh7L/4oKtxp2Vk9wdcfnom8O/wnr6DZmw5dVRW9gSXhz6x0elgGn4of1qbZchATNOQcGtpcEi1xG7HsXFOA3xbguNathB7WmZAbmjWPqj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X6zQSoqR; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5499e3ec54dso5160747e87.0;
-        Mon, 17 Mar 2025 18:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742263033; x=1742867833; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eE7qX8FuCLcfXgHupd4BYIbEoHm+HsFfQFBSZENcXDM=;
-        b=X6zQSoqRpPeDFhRwtSmbCiUNo66lIh+hre0L/VEhBDKdfeJLhwTBpuZl/QWuonOpIb
-         9dQv57ptW8woWV+wzuKSELlXSB0Ks+pGZtJSTDhOe3IzaOUvURqmUU3N565jsABGAY4R
-         RoWHAh2XhajI/BuNgdpU2iBQ8dU94oltFYZAC+weQq2K/0LUCjw2NK4Fq9pYwvSWv/LJ
-         qyBTwLfisR4vODh/GV8mgnN69rKtX/dM2pSkQRCE8gmZtjSx6H4fXry6FyJkcyRRyAnN
-         8V0Y0bYu/2NJfLmXQUY4k+4iwP6eLn2mtJXG7WTWOCT4zfd0rPrUdDgLVwf4II99hh69
-         tmrw==
+	 To:Cc:Content-Type; b=SPt+4ZauJU0DQI4Rj0RW28k3cs0q+kwtK3QMzmZEuKiVfoxEYgMlDALEkYxeT3A5+9nrshdm5Z3U0GvjkgwW7rPibsZRlnq840ou5Pv+09V6jmxIP/G/yoOw/DpqXjgd1OYvh61fFIdVqJ+EdjgGjv1frzfSzY6SiIyBYwLoTcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OA7XBh+E; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742263831;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bocJ4xY+cvLvF8Z2x24tl3LRmmXAsvkZEGxfx5yQFuM=;
+	b=OA7XBh+EGBpYEVJpS5Cs6jMyEuq5xXd6e/u0I6B3baoOMmb5cs9KEnLdSyYhn7WCgZlqg4
+	HfvfqEorcwhQT42Vyo60TTHiVu2WxvSFAt8Gcl2DHJnKE9GZJijnuZEcPrfjTftAOXy02K
+	GxLZbbGC+Hd/rqBADyRFeLyUL776yMQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-228-rlnPdbfDPmKtmTiYSz_aag-1; Mon, 17 Mar 2025 22:10:28 -0400
+X-MC-Unique: rlnPdbfDPmKtmTiYSz_aag-1
+X-Mimecast-MFC-AGG-ID: rlnPdbfDPmKtmTiYSz_aag_1742263828
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5e5cc488f27so4280699a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Mar 2025 19:10:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742263033; x=1742867833;
+        d=1e100.net; s=20230601; t=1742263827; x=1742868627;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eE7qX8FuCLcfXgHupd4BYIbEoHm+HsFfQFBSZENcXDM=;
-        b=TS/d166gRG7XBvj7EIfeZDIiA+FmOlctKLh3qK6CLKF0Lhf1ppYcJ63IuI5pR0404g
-         FQTuLio2ChEAIAKeJBP0YliruBSjzrAmFlKfQkwnv/71INXhB/NPl9ZVYqF+bHHa92Wv
-         3Wfz14NbyMinSNhNvj1zwRxFP4M6DJu4fSicSJ722DtK4dU8j6teF6jbFIQlAxsS4Qax
-         f1yYB3pLqIxPc6kjCnJLPoFh0YZA17sSP+tZJAommcq/b5rH2RubT6CHDcQ0RY0n/Rbj
-         TtotmnJJ6mM707q4aj5uov4MPzbqETncxzpYTPSIePGGankYBBavEU0vw90pN/6eSDB+
-         XRSA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVRq1hq5P1Y+5eiO1RrO0nHD9KQemrHkjrscqalbDz9oCRR08yN5woNrP0yqG6r4n1J21QCjcqx2CVJ/U1Vy90@vger.kernel.org, AJvYcCWHApdHgLG3bcrAiyLno5aB4c5kPg/roLxjF6kxhqvBFV1AFKH02tj3GE3WROtwnr6lSiH9avE85ERWMQ==@vger.kernel.org, AJvYcCWQkCRbqjCaNHqaloENH/0RPB/Lqlq0RawDROJPv7fF3PN1zpXVwm9d0B6lUT+5xbB6T29qQnBFPaDtZwQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUJDY3YAhXS5v24/8LCaWeUUBsEmfIgomz+VS/I1xrtUdStKNl
-	vPMQSeEjh+KK8QVRCQ4HTLh3C9g+RCYoVSGkWx541e4JUt1MHFNjqN2AyJ9udKGNDZ82q+fbIY6
-	NA4DCLAGjrW5NOI37bSjWk904MFzK/g==
-X-Gm-Gg: ASbGncsqPncRCYUq6rkFzmnF5MDhU/RluicQYnLxzNxuB/bgm5CdwFQ5n6+7AANjuZX
-	aPdtwOFl+/LbUcNE2wHbMiylyyCd0zqHfkxcQRSlzx371HEX7C0SR3KTD2le4EKGdV+xg29qLor
-	uJxZ64gws7Z6LkAPCKK5x1A7ULrNs=
-X-Google-Smtp-Source: AGHT+IHV3VMsmkp5g1hvQ1dAI+2OHwFGehDZeJZWpaqHPHNWDue+oqFrkH836Z70y/AALTvehw/mpTpqODtk/ZbEa04=
-X-Received: by 2002:a05:6512:10d6:b0:549:b0f3:43a0 with SMTP id
- 2adb3069b0e04-549c391a806mr8314430e87.27.1742263032621; Mon, 17 Mar 2025
- 18:57:12 -0700 (PDT)
+        bh=bocJ4xY+cvLvF8Z2x24tl3LRmmXAsvkZEGxfx5yQFuM=;
+        b=sD9+RzUyN4CtKfZ9jmXOoevDtUHmYUHxEz3OjD0dSDRrFX/T6KS4EqjSjpAonPwXkl
+         +hE2yQS5ton/dmiEvfAIDPQDemL3jG82kBnPnLxQ4jcVZApRAxtsxOQc32u9vgo93eq+
+         eWQDedmSjkVlDEiQCVb9ZB9NDe9psassD/Tt8Jr5O5cDBz+pd/JKUSXr30XOPdIiFSUL
+         WX/3pWqQKSgBQ9FzZ951nHkfU1pGUF0aHcQ+KPynjIR5eyHzJUWMHgq4jZ0k5f5hapjn
+         jSNZfxD0ChMuCiYaSpZQyMYmsyOu0Z7qyMB3tLPH0mTj8IM6guvQB8xR9Fub9Rz0XhYE
+         h/ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRbrR7X6iV6C75s2SQiGoEpamupg0rwAoT1gib6G0eHMNI8cCeD2OnhtyZvfglybvre9vSXdynxq3SGPleLtQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJV8E2cGxo7FIazK2tkdKdVAHWhR0+RVmCy1dbbsWrCKJYrVGg
+	qThMeNgTekOuKnVDkovQxdh8CAyGyN/5/CNZCPJ1rqHZH66Bfsq2ScOhI183alRahthaK3k0tvX
+	8ovnLJ/uVZmUxPLn8g+25AQs5xfYyNTKj5AJzBlsgJvzZo4u61NToZUcfXnSA96uBKiLsSh7MFg
+	mP1p5U0elsTwlB9m6e2HGTncODqHBzmOFqtWkj+Xq7
+X-Gm-Gg: ASbGnct0bxYbc77EymUzNayV/MUmecHQhHyNFhwCsnsNvYD7Xr+tVNhfe4b/zsnOGze
+	/jIrYKcozE2lOQ2UPdhCwq3NuxuB22tVykgjjYwSd6KBDB2b66wY4L2h47/lY0/m6c3HcUQJATw
+	==
+X-Received: by 2002:a05:6402:348d:b0:5de:cbed:c955 with SMTP id 4fb4d7f45d1cf-5e89fa5252bmr15904552a12.17.1742263827517;
+        Mon, 17 Mar 2025 19:10:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHCvFJRxiUrK3Hl8RQJ4gACrb1PAEIxR0Zqht6rIjp/tdZBCVDepPjzyLxDhCMISfCanvYlkZjNzb4UQTjWFWQ=
+X-Received: by 2002:a05:6402:348d:b0:5de:cbed:c955 with SMTP id
+ 4fb4d7f45d1cf-5e89fa5252bmr15904525a12.17.1742263827103; Mon, 17 Mar 2025
+ 19:10:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250316-nolibc-sparc-v1-1-2e97022d5e2c@weissschuh.net>
- <20250317073746.GB5114@1wt.eu> <dacaa712-08a8-4fd6-ad47-2226040f02aa@t-8ch.de>
- <20250317181402.GB8377@1wt.eu>
-In-Reply-To: <20250317181402.GB8377@1wt.eu>
-From: Chris Torek <chris.torek@gmail.com>
-Date: Mon, 17 Mar 2025 18:57:01 -0700
-X-Gm-Features: AQ5f1Jo5OANH4Dh7e4judxh1shyUPCsyiAeZ8qg50Am6PaK9PjuWJk5A1PlnCDo
-Message-ID: <CAPx1Gvd5JHE6c_de+ZGY4BLPw25Rn1jTd-G9XMhK9xn+cAfbJA@mail.gmail.com>
-Subject: Re: [PATCH] tools/nolibc: Add support for SPARC
-To: Willy Tarreau <w@1wt.eu>
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org
+References: <20250317-rss-v11-0-4cacca92f31f@daynix.com> <CACGkMEu=pPTd-QHKRDw7noRCTu-18c7JLJNKZCEu5=BHAE0aJQ@mail.gmail.com>
+In-Reply-To: <CACGkMEu=pPTd-QHKRDw7noRCTu-18c7JLJNKZCEu5=BHAE0aJQ@mail.gmail.com>
+From: Lei Yang <leiyang@redhat.com>
+Date: Tue, 18 Mar 2025 10:09:50 +0800
+X-Gm-Features: AQ5f1Jpjunc8xib_cyTewZlm6iAFgRKVvfy1UVZQ0lyOQH2XWEffoxUQGNr9u5c
+Message-ID: <CAPpAL=yfgiuFA-SyrCe0Ud8Wm9tJMcMm9L4Q-AnnuRzN+Q9M=A@mail.gmail.com>
+Subject: Re: [PATCH net-next v11 00/10] tun: Introduce virtio-net hashing feature
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
+	Simon Horman <horms@kernel.org>, Jason Wang <jasowang@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 17, 2025 at 11:38=E2=80=AFAM Willy Tarreau <w@1wt.eu> wrote:
-> OK thanks, but that remains quite strange to me. How can we end up
-> here with such an unaligned stack ? At the very minimum I'd expect
-> all offsets to be multiple of 8.
+QE tested this series of patches v11 under linux-next repo with
+virtio-net regression tests, everything works fine.
 
-It's a peculiar feature of the version 9 SPARC architecture and runtime.
-This also ties into your window save area question.  Let's start with these=
-:
+Tested-by: Lei Yang <leiyang@redhat.com>
 
- * There are 16 save-able registers in a window.
- * Before V9, registers were 32 bits wide.
- * V9 and later, registers are 64 bits wide.
- * Each stack frame must provide an area for register data.
+On Tue, Mar 18, 2025 at 8:29=E2=80=AFAM Jason Wang <jasowang@redhat.com> wr=
+ote:
+>
+> On Mon, Mar 17, 2025 at 6:58=E2=80=AFPM Akihiko Odaki <akihiko.odaki@dayn=
+ix.com> wrote:
+> >
+> > virtio-net have two usage of hashes: one is RSS and another is hash
+> > reporting. Conventionally the hash calculation was done by the VMM.
+> > However, computing the hash after the queue was chosen defeats the
+> > purpose of RSS.
+> >
+> > Another approach is to use eBPF steering program. This approach has
+> > another downside: it cannot report the calculated hash due to the
+> > restrictive nature of eBPF.
+> >
+> > Introduce the code to compute hashes to the kernel in order to overcome
+> > thse challenges.
+> >
+> > An alternative solution is to extend the eBPF steering program so that =
+it
+> > will be able to report to the userspace, but it is based on context
+> > rewrites, which is in feature freeze. We can adopt kfuncs, but they wil=
+l
+> > not be UAPIs. We opt to ioctl to align with other relevant UAPIs (KVM
+> > and vhost_net).
+> >
+> > The patches for QEMU to use this new feature was submitted as RFC and
+> > is available at:
+> > https://patchew.org/QEMU/20250313-hash-v4-0-c75c494b495e@daynix.com/
+> >
+> > This work was presented at LPC 2024:
+> > https://lpc.events/event/18/contributions/1963/
+> >
+> > V1 -> V2:
+> >   Changed to introduce a new BPF program type.
+> >
+> > Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> > ---
+> > Changes in v11:
+> > - Added the missing code to free vnet_hash in patch
+> >   "tap: Introduce virtio-net hash feature".
+> > - Link to v10: https://lore.kernel.org/r/20250313-rss-v10-0-3185d73a9af=
+0@daynix.com
+> >
+>
+> We only have 2 or 3 points that need to be sorted out. Let's hold on
+> to the iteration until we had an agreement.
+>
+> Thanks
+>
 
-Now 32 bits =3D 4 bytes, times 16 regs =3D 64 bytes. So for V8 and lower, t=
-he
-register save area is  [%sp+0] through [%sp+63] inclusive.
-
-Now V9 comes along and we need 128 bytes. But we're going to
-run old V8 code in compatibility mode! How will we tell that some
-function f() is running in V8 mode instead of V9 mode? [footnote]
-
-Someone decided that the way to tell would be to use a deliberate
-weird alignment of the stack pointer. If the stack pointer was 7 mod 8,
-then we're in 64 bit V9 mode and [%sp+2047+0] through
-[%sp+2047+127] inclusive are the register save area. If not, it
-must be 0 mod 8 and we're in V8 mode and things are as before.
-
-Why 2047? Well, by observation, it's more common to need negative
-offsets from the stack pointer (for a large stack-area array for instance)
-than it is to need positive ones (register window save area and
-overflow function argument area beyond that). But the instruction
-set is more or less symmetric, with a 13-bit immediate constant
-offset of -4096 to +4095.  Solution: add some offset to the stack
-pointer so that function-stack memory is [%sp-4096] through [%sp+2046],
-a 6 kilobyte range instead of a 4k one.
-
-The stack offset therefore helps solve both problems: the offset
-indicates whether to use V8 or V9 register dump conventions
-and, at the same time, increases the amount of easily-accessed
-stack memory.
-
-[footnote] This provides the ability to dynamically link V8 and V9
-code together.  As far as I know this was never used, so that a per
-process mode bit suffices just as well. Still, the offset went in.
-
-Chris
 
