@@ -1,154 +1,140 @@
-Return-Path: <linux-kselftest+bounces-29384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F16A7A67E94
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 22:21:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34178A67F17
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 22:49:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DE5E42208B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 21:21:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFFF37A8066
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 21:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6804E2139B5;
-	Tue, 18 Mar 2025 21:21:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9AC205ACB;
+	Tue, 18 Mar 2025 21:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IMn9BBM5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Td/t7DpV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7D12135B0;
-	Tue, 18 Mar 2025 21:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607CF1EB5DB
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 21:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742332868; cv=none; b=Caa4p7Z4V4VjZZeNjBTNcfJBP5cJB5ncCW6hjOYWxeqL5/t3YiwW7ANiuNK65aLBE0MOgGHQu5RlN1M3kc011+TBodfTsXoK8sGVwZZvl50ylWFtHIKI2lCh9ZFvQ+yOKuq+blRJJ/9/tgmlIYlBXxaoKUJer7oFo76cJuXklFI=
+	t=1742334564; cv=none; b=ftohZeqAuN3b/tJsnx0MDYbU4BCycGFT/o5TG7tSi3xavoonvbZf14qrGcY4rZ/WDrTcu3DEB/NGLpzkXG9nMEpnyMTvbUMnJF8PXuhaRMwu3IZwAZxbbMUSZ9cwnc2/LK1Esw5Nou2+qK7YdAzIuFhxGExdER+3lN5K/1+0OjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742332868; c=relaxed/simple;
-	bh=GL4EtuyKf9kUHOkV7b4hHX4ryQgPIQE3G1XsfQEzaMs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dvIdOM4UAv9jrPMFUzKYOH1oLhGxhqLqszqE6ceBDQiiteatmzcaoHIMWKPZzPLaqyTd78RUh2MOQGgSNeS5vCJ3kJEBG/AlLNOwtsxUJ9rEKgcd2dTZBwIIuuU4frIy1VbxcpOmmVuHU4M27QtodE7q/7506m1HkVFbFGnAbsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IMn9BBM5; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-224171d6826so23680345ad.3;
-        Tue, 18 Mar 2025 14:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742332866; x=1742937666; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vcPVC3BuIieClRSBg7nnlgbieJqM/uBxuytiend4ClE=;
-        b=IMn9BBM5pGZtN/Ztzn0+ZXlzY6GQRDZUsCUO/1o4iNQ1sKVNvlwfXIPd+EjXhqV9dN
-         ZYGyHYQkIt3vZeSLcaKlw6i5qNLSVoyYk4qH8s/GGr8HHQUUycCmwxyPTL1b1gVPGY9T
-         KehRYUKOodux1J0zlWU85UrgT5rfIoDT9o8DMwtgLo0KywP85I1kf59fDo2RwZKjYqJ9
-         djmy1Sub6ny05kF76zH+K9VDAGYv3DGvVrwUm8V4rb1FVJLygPE4MwzBoB28kM5AycgH
-         vm+wZoXbvi5ktTNQva0Qs8E+iBqzgSgMeEDI7cBcMoRPbKghHy2sYh2Djy0tldotBSFZ
-         onrA==
+	s=arc-20240116; t=1742334564; c=relaxed/simple;
+	bh=BJ0aYn1aCvYp6Qb3daehFInPZDM5QJV3bUTsaLvpcGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ii5fGbSUJ+7VoDWA+3AkxgDpHDqTm1R/4SbcVM8k3QryXxpUf97pF6FWmqlw4pSHwUp6575j/CDq17aRcUNWAOE3hRyfFAZV2H2maJWFqR9i9TsIGHk1mEPGnhA+oO0rQl8YYk5HfM0TwrfnALoTfKGTG7bmshiXFPY5MxJxCOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Td/t7DpV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742334561;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=58J0WtzHN+XruwLvzjWC2+8B6ewmNYbb2pF2W6UzGCU=;
+	b=Td/t7DpVw+kT9FX3oKMt0K/EHsTikQu0WEfYW1MOg1kTKetkjw+2G3N6GZdzMOYrs6BGxT
+	/7W5BdYlpP8NlhETWg/tYgea+wpbjrH6643i49vjIODBUUsPSV1WcPDkgaODBZit80s4Aj
+	Ogk6zSBuf9CPvJEGDWEiiK8tJhVMI/o=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-588-zYso_lQBOmmmusCZZibeCw-1; Tue, 18 Mar 2025 17:49:19 -0400
+X-MC-Unique: zYso_lQBOmmmusCZZibeCw-1
+X-Mimecast-MFC-AGG-ID: zYso_lQBOmmmusCZZibeCw_1742334559
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4769273691dso129446501cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 14:49:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742332866; x=1742937666;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcPVC3BuIieClRSBg7nnlgbieJqM/uBxuytiend4ClE=;
-        b=VA6+sH20lTKTnPHqhqjtiJKtm3fvHkr24Xa/NM5B1q3zJS6Ga2F7GICBPH25ChFSIB
-         pOCMxzhac/pcwVF5toFEkL1oGVLDN8ntt6sHR2e4M3lcrGKm/CL8933w1FOfFhf1H1jO
-         SdwaD688/syNraEtItAj0MU63vyvQpH+3z3pw7X/zX1JdC1QgCJCuB4M+gtLuk+aI5mL
-         r5O3ZsG3Pg2pTe6v+9cO/RspjTLaFOifj2aDe1E33ywTqp9AXPTwSRsoliVoyd3Tfe6o
-         UMsztyY2Ezk37aiCGDW8PmlSckEhwLcKNZr2sNTCyeQtj2T2axekffAgBBKqOC0m+s8j
-         cXQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW5hquiWj/ik6pB68E5RrZY77Wb2ju5owezzlRp4RS4b5lJ/2xBu9yDMzQuqf+9ruhKg8Kq5rsL4ArBRw0=@vger.kernel.org, AJvYcCX9/y0OIQSHQzTxp/gri/koa7E8bxyl/BOz3SOtcddScbCV/EW1Y4pHbY30ltRfjlBcpzmAoP27jAvLaLdl1rbq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyomr7BfoJACHkZ62wL2TQYMXOD7hwHViKJ8nBRhrbrnQe34/xR
-	sF3iHrQ6PDG83aR+/SCupnDymorjQQH7q97rBnwFci4IXe2EQHRS
-X-Gm-Gg: ASbGncumwDluXVWYOLd3A9dECazBI3iCo8Cy/fg30jn/hsqUQvKZFAm8CqDl5+AJ0lF
-	CkWYPewtF6gaPXeMCWnq6QblojYztCYZCBZC/KECinIpwthNz88UOnnP5Be5xI+ZWHz96VPeO6o
-	d+ACy0sr1aI7y0ekCNkqMiLM+YTCRgk72Tt7gAzqIC9gGC51dU9A65U9BwXfD6qGMOjQB9c+1bs
-	pBaCNZ9in2kYXbCln7rmsBOLGqaB72NtpZ8a4OX9iVPgUHHY/N0dgPOBtyvIayon+hyXXcV0sJR
-	5qoDdDc2tcr93o/V0wFlgJiyO/L04gGzyCCjtoqbN2ZrxaxD6Cyx
-X-Google-Smtp-Source: AGHT+IHOuyvtgKXpgxIO0eGzpjjF1K4mPR3b3EWMIu0A4RfQpFi2svHXNP4J5NKiI+G0qp0wEa08tg==
-X-Received: by 2002:a17:90b:3b49:b0:2f5:88bb:12f with SMTP id 98e67ed59e1d1-301bdf94105mr209130a91.21.1742332866252;
-        Tue, 18 Mar 2025 14:21:06 -0700 (PDT)
-Received: from fedora.local ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30153afe74asm8771777a91.24.2025.03.18.14.21.02
+        d=1e100.net; s=20230601; t=1742334559; x=1742939359;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=58J0WtzHN+XruwLvzjWC2+8B6ewmNYbb2pF2W6UzGCU=;
+        b=iryYHPqm2E1UDPCWt4/5KDaLtAJ0CflbEsNOw+15vZ+w9BdTiImr2zHajNoJjN8qpg
+         aUaHHD6NFHKCIBiIHblO5CfQYHg0oS+SdzKoPgjwwIZcwaJ+biTCMBvQc4d/gIitcU2x
+         NJp8Fm5fL/13LoeMpC4C4FNubzNGc8Hm+HhHyyJknchFeNpbBZ41fcYxFL68htw7knh3
+         P78zRh0IAS/lVnthz8qs5G53bNW0ReXYKH1AzqoSMPtaC/t6dNOxv368dC1rSgW1KTNj
+         vpoWXPbLyu9rMVXjtPIZmzuglIzUT4XkiGCT+ajEHnaFKpHxgsGHwTOuCEwHkvBiJ7VN
+         ytPw==
+X-Forwarded-Encrypted: i=1; AJvYcCWlOJlRP4FT/3njW692C3XQA9HEDJAslcOZT7LJDArZZo4EUFfFinQwUY/NYkRgADw+RSzPBXGsU8uba4/tor8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypfGLtvA7hffqBgirQ9/gsFTvAsEmGTAWOH37wL2p/ytxLqzfT
+	e+4G02xZcuYrP/RFXO6JyCjeaaa6mFcR6QBKhoz/xH2+j2tg+/v3RW7XyO/HB+6N8W/15N81EUx
+	doxPQhLwFpBEydNTk3X6SdEds6pbLUWOVLzFK80Ua3HDWA2H8yjS0dsFmvRiy50yJaA==
+X-Gm-Gg: ASbGnctWo6RNClAW3ovzv3gBz0jyfs3sqMe28ThcjoZZWktPT4NwbyUPAfNQiMaaxTB
+	1IA0W3/4HO+JMQtrL0u4l2cNhnFsz84y53Gqi9FxxmpubqwUm8FtUsO+F6OqKlRGUhuieuCC9A6
+	/8FJVIsREqXDifJGovsVrw2SBAee3gI6G+qXCPCvE+pi5YGZ1+cJSBmrYP6flmNrQxmA11LD5zi
+	hEny7t3DQ+VXF/hVinK10Hqn4/qfRRaUCFjNeClCVg3lfnFfpTv67icJxA0TE0pQPtkk5u6KiYD
+	YKKEgwwIJxUIm2+YsujEbPX2NSjVhlOTIXrKy1zbRaSoTAU2bQXWyT7rmg==
+X-Received: by 2002:ac8:6906:0:b0:476:9e90:101d with SMTP id d75a77b69052e-477083742c0mr8342771cf.38.1742334559055;
+        Tue, 18 Mar 2025 14:49:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHP4jMLDMm4qeIr3gb+Qpzz/BJtD8FlAlNK9t+Fynuz9KAkWXXiz8RJxCEgXMubULSSCa7A0A==
+X-Received: by 2002:ac8:6906:0:b0:476:9e90:101d with SMTP id d75a77b69052e-477083742c0mr8342551cf.38.1742334558773;
+        Tue, 18 Mar 2025 14:49:18 -0700 (PDT)
+Received: from athena.aquini.home (c-76-23-219-111.hsd1.me.comcast.net. [76.23.219.111])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-476bb831e02sm71444371cf.73.2025.03.18.14.49.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 14:21:05 -0700 (PDT)
-From: Filipe Xavier <felipeaggger@gmail.com>
-Date: Tue, 18 Mar 2025 18:20:36 -0300
-Subject: [PATCH v2 2/2] selftests: livepatch: test if ftrace can trace a
- livepatched function
+        Tue, 18 Mar 2025 14:49:18 -0700 (PDT)
+Date: Tue, 18 Mar 2025 17:49:16 -0400
+From: Rafael Aquini <raquini@redhat.com>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] selftests/mm: Fix half_ufd_size_MB calculation
+Message-ID: <Z9nqXBd3OjbWZXej@athena.aquini.home>
+References: <20250318174343.243631-1-ryan.roberts@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250318-ftrace-sftest-livepatch-v2-2-60cb0aa95cca@gmail.com>
-References: <20250318-ftrace-sftest-livepatch-v2-0-60cb0aa95cca@gmail.com>
-In-Reply-To: <20250318-ftrace-sftest-livepatch-v2-0-60cb0aa95cca@gmail.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, felipe_life@live.com, 
- Filipe Xavier <felipeaggger@gmail.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250318174343.243631-1-ryan.roberts@arm.com>
 
-This new test makes sure that ftrace can trace a
-function that was introduced by a livepatch.
+On Tue, Mar 18, 2025 at 05:43:39PM +0000, Ryan Roberts wrote:
+> $half_ufd_size_MB is supposed to be half of the available hugetlb memory
+> expressed in MB. But previously it was calculated in pages since
+> $freepgs is the number of free pages.
+> 
+> When huge pages are 2M it doesn't make a whole lot of difference; the
+> number of pages that get used is just halved. But on arm64 with 16K or
+> 64K base pages, the PMD size (and default hugetlb size) is 32M and 512M
+> respectively. So in this case we end up passing a number of MB that is
+> smaller than a single hugetlb page and the test raises an error.
+> 
+> Fixes: 2e47a445d7b3 ("selftests/mm: run_vmtests.sh: fix hugetlb mem size calculation")
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  tools/testing/selftests/mm/run_vmtests.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index da7e26668103..14fa9d40d574 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -304,7 +304,7 @@ uffd_stress_bin=./uffd-stress
+>  CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon 20 16
+>  # Hugetlb tests require source and destination huge pages. Pass in half
+>  # the size of the free pages we have, which is used for *each*.
+> -half_ufd_size_MB=$((freepgs / 2))
+> +half_ufd_size_MB=$(((freepgs * hpgsize_KB / 2) / 1024))
+>  CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 32
+>  CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
+>  CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
+> --
+> 2.43.0
+> 
+> 
 
-Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
----
- tools/testing/selftests/livepatch/test-ftrace.sh | 34 ++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+this one is already fixed in linux-next, see commit
+67a2f86846f2 ("selftests/mm: run_vmtests.sh: fix half_ufd_size_MB calculation")
 
-diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-index fe14f248913acbec46fb6c0fec38a2fc84209d39..4937c74de0e4d34e4e692f20ee2bbe3cd6f5a232 100755
---- a/tools/testing/selftests/livepatch/test-ftrace.sh
-+++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-@@ -61,4 +61,38 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
-+# - verify livepatch can load
-+# - check if traces have a patched function
-+# - reset trace and unload livepatch
-+
-+start_test "trace livepatched function and check that the live patch remains in effect"
-+
-+FUNCTION_NAME="livepatch_cmdline_proc_show"
-+
-+load_lp $MOD_LIVEPATCH
-+trace_function "$FUNCTION_NAME"
-+
-+if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	log "livepatch: ok"
-+fi
-+
-+check_traced_functions "$FUNCTION_NAME"
-+
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+livepatch: ok
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH"
-+
- exit 0
-
--- 
-2.46.2
+-- Rafael
 
 
