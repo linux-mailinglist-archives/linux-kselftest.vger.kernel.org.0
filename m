@@ -1,120 +1,168 @@
-Return-Path: <linux-kselftest+bounces-29354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4DBFA675D7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 15:03:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1F02A67628
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 15:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 202B54226DC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 14:02:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9F511888756
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Mar 2025 14:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2882320DD71;
-	Tue, 18 Mar 2025 14:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656D720E03A;
+	Tue, 18 Mar 2025 14:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arIkXsvl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NsXGJRTZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22EF21364;
-	Tue, 18 Mar 2025 14:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C1920DD5C;
+	Tue, 18 Mar 2025 14:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742306513; cv=none; b=OVP1HssYiIQYltgpf426CaY9xnLkpUAzuvOVB3o1hm38XI6m+Vr3nLfmbUY5EijBQD4zOog01sx5DvgGCb4TKTWcvjB+5zModx7fm4I1rpMKHbvKRkLQj5vQsL9gIRPtrmT7+XPpkkF2dYuyq2dCnbLwoTQd675XGa4kG99Tt94=
+	t=1742306958; cv=none; b=QIaLGfggaD/iwpJOB5I0/hwtyi6/08d5ewoSxMCNbkInOYZIVB3+A3AQsbvSleas1B3Ga8/JfkWh5J/mreW/nflxOFtN779klEI5UYk5KSWKXN5toAtwlMa9RXp3zycrOk2QvGmgdr9GbVRz2vv4vI1B8fYbX0xFOeYkIn5B2wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742306513; c=relaxed/simple;
-	bh=qrsfuSTdWgHF4sFYhwU6FgFYYBFj8TCjyhoY/gUNj18=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UCKkeRQbCFiM0U0uqe5G5XLEE/fFTOecvgrpB8ngtbDR942T8gp4acFh6w9a+z5zOJidqrmqTRl+T8K7RrrSgUvd29MFhjixoJ8mUWr1nBas5rBFT5Kdc+auWtIDOWzLWugMclaOUbTZbu3FVUwthdFsLSBzUImPOvnM7RMHjyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arIkXsvl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6A6C4CEDD;
-	Tue, 18 Mar 2025 14:01:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742306512;
-	bh=qrsfuSTdWgHF4sFYhwU6FgFYYBFj8TCjyhoY/gUNj18=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=arIkXsvlpBIOPpzsVbVKH7cxUl3LLAXPTdus0y4tsVLS0P6YxWFBe3qWClegb9nWT
-	 TX4kFUrgGoJSKBeqqGGvkPg2W6Pewn2l2DKXOebBvJNv+fTBNCOpS2mRxxPMzZeoTH
-	 7ia/nP3/1GXK88vRga9w4lukKONJvPmAewTVh89VNBHtwEvWPYnNEb8aaaJsvOgG2v
-	 Ssx0TCmawTUUiP9fhPrEdfdwaI4IZIRf9vDhSfW4xY2boJHw9Qx1VWgRR5F8sFtF1v
-	 p0r1vYeVt6Tzmk1j8/gisPG4R5mFqW9AQVSf2tQ8h6hYOwOLU480l+c/wv1OGwNmlN
-	 hFyg4ZXKwcNDA==
-Date: Tue, 18 Mar 2025 14:01:47 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, Aishwarya.TCV@arm.com,
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH] rseq/selftests: ensure the rseq abi TLS is actually 1024
- bytes
-Message-ID: <78518446-083c-4db1-8c96-61fd49eddd8e@sirena.org.uk>
-References: <20250311192222.323453-1-mjeanson@efficios.com>
+	s=arc-20240116; t=1742306958; c=relaxed/simple;
+	bh=FPLOeGmswPNA6gj/GxUZMLB4rXeT/EXYqMBZlMgddeM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SabyosLE6mcybPemIlFbzzW8sT3rFILodadHfqlOnktcTVawSlcR7Zg6Wvm5o5DiEWIiSrZAt+dTtAUgUzVVj+kp7SNzMPVCX1k82v277DsWFhi/4uTs0m13u0Rw8FhF377wsS2djYhxzphvY0kmtwMl/0fMLZjhEymXsZn/4/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NsXGJRTZ; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30beedb99c9so51477071fa.3;
+        Tue, 18 Mar 2025 07:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742306954; x=1742911754; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XR3QmdTlX82CLNbiCjBnydKIXsFQoeJ3c+u1awJ7NeY=;
+        b=NsXGJRTZGEg2AC/EzaTj9CA8WlTV1eDmbGE4dObHLPTKxcLmR7NAcy8pzuW2KE2xjv
+         GPdyEvHMKHFVrqYgFT2wMbjQyIeMC3+jeImh37NY16KDEUdYslnCEv3EYPHcBBrUZ5G8
+         X9L2OQCIjK6Blyov+YnutOuOjUjoZGGe1FVg2U6QcLEVe8peDBidLNq0lO9CVQ75iU6x
+         zjz4iYokGP6MrPxeSIUvo4YYNVlDqV1BXkwHz+6Fq+8NF+2t4J5tCczFUEV8V/2GgRQT
+         25q86K9ad6zhumVpZOaKZe5ePxyHgANHPHvyEDnbbHO76pxjq9CmmQvV3fkQAtCPnX7e
+         NQ0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742306954; x=1742911754;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XR3QmdTlX82CLNbiCjBnydKIXsFQoeJ3c+u1awJ7NeY=;
+        b=hLScdTO7YEuJ0TjEdd84CQpOVuPJvObG9g1IDhrMVml2PElwcBClEeHB/31rGZaB9l
+         czh5WuSxTk5yVYbRH5LJtqNMf7TgDMa9zReIMVa8R/zHXcY79lFvDvcqW/d/gjp5lwni
+         JoRs5w8vDrM9tTC+fJg64T4LoIreC9ZN7bAztjtBF0KXKtZCxy1QU8erPGqdFu2yfJtO
+         8ofKXn7OBobWtBxG2HAb81N8dhrOje3yjenfKfgz+KVN+P1Gz/dQtPQoI7qW7RRD2UQS
+         z1S+11r0uHnTLUw8sdHZQ856r7tRFImADAkfjINOBsy91WF+VeGJxsyfHQptOpqC5dYr
+         AGGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUB9LvThrVVfn4mPoVmvnOLeIPqDxKGPB/2pZesJwnckost+PGovH8CxJZaHRNWrN8G3d1bpBXM7Xh/QWJD@vger.kernel.org, AJvYcCUKQ+VMiNOltvB0v58jU8x0ZD+Bk7VR4lBQkgG6wRGmxtzuRD7moPyyAKsjiYbnkSOJiP7NtI/t/PuvbW8MJ1en@vger.kernel.org, AJvYcCUPpVKEjIIcl8+791LucEBdnVSPScZnGCd6y+H9rstFwUFrpvu7QzHhBHqhiZXBPpPqgnOeLeq3Ax6Y@vger.kernel.org, AJvYcCUXzSEaGpE7dsBHRlmDLvBMtIdNGOv5GuYyV21oOtju/tA49ppqGSlgUgUXdSFy1snZqiOcJ81EXdTP8oo=@vger.kernel.org, AJvYcCWz4g0l/YRc9QogetayS3RMaAB1xW3gfhG2FgxgYpXjlhD+i/K85pI5pYkHHOhy5nY/TbSox8zN7wxZoyIP@vger.kernel.org, AJvYcCX07O0yWFsq//bgpA1DezHsZLIWrq02qYIsH+gMCiWdGuQiEuRLD34lvzNa5Mh35BI+eUW8RelGkobL@vger.kernel.org, AJvYcCX6kD+rK23Gl4WOLRUsmvp5eyuO1Dh0SDOyHf1HcnkbmDfdNZbxa6yAzod4weKF1dXjDD/4GQkLo12Xye2Hfsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC9ldYRsW83v3Y7OQAJyjPCqjeJL/yi0iiTxLkn3rJhOikWo2l
+	3BdaBpiOkcWUl15y3XWxCpARL5FQ2gMyk3CInlbFWE2afiNVrMprd07KkC+LLOyYUpNQRmVIlwg
+	8mGwWD3nuXe1Ql01ueTsYKlmZwW8=
+X-Gm-Gg: ASbGnctFV/jwijM7RM158Lit/ZX4wEn+1R5oN65cc0uzmXHm1PqKaYPRpjQR5cssEhe
+	SJg0Y24LMqgSTmrOCE0cwRiYI+5Aiw47464Z81XEMCr3BeH2WE2Ef6J0XoJlVw720VBeBCQbvt0
+	fgL5IttFxQdEaCw79F07+12vaU3oNQ01P1Acgm3u8EhA==
+X-Google-Smtp-Source: AGHT+IFxpjLk/MoadRODdmp6sMkrXqEk5zu/R6whmoxUeanggxj1j1wQ9JCQLIxNBupqBoSdrmyU8Q9aU/YaFrU7328=
+X-Received: by 2002:a2e:bd09:0:b0:30c:160b:c76c with SMTP id
+ 38308e7fff4ca-30c9755de18mr33340731fa.17.1742306953725; Tue, 18 Mar 2025
+ 07:09:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UttlkzIHsrVPa/RY"
-Content-Disposition: inline
-In-Reply-To: <20250311192222.323453-1-mjeanson@efficios.com>
-X-Cookie: I disagree with unanimity.
+References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
+ <20250317-ptr-as-ptr-v5-6-5b5f21fa230a@gmail.com> <Z9lnIJCcVSza6UVo@google.com>
+In-Reply-To: <Z9lnIJCcVSza6UVo@google.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Tue, 18 Mar 2025 10:08:37 -0400
+X-Gm-Features: AQ5f1JqOYVk7nD9z0cLpiPEdxTeWINnN4TjRzqE0nN_LBkIs9bu7CUDTA0sD4FE
+Message-ID: <CAJ-ks9k5XZUN_vuH648rr6-e+v0my_dR2zo+986rzx+A5ZLxng@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] rust: use strict provenance APIs
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Mar 18, 2025 at 8:29=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> On Mon, Mar 17, 2025 at 10:23:56AM -0400, Tamir Duberstein wrote:
+> > Throughout the tree, use the strict provenance APIs stabilized in Rust
+> > 1.84.0[1]. Retain backwards-compatibility by introducing forwarding
+> > functions at the `kernel` crate root along with polyfills for rustc <
+> > 1.84.0.
+> >
+> > Use `#[allow(clippy::incompatible_msrv)]` to avoid warnings on rustc <
+> > 1.84.0 as our MSRV is 1.78.0.
+> >
+> > In the `kernel` crate, enable the strict provenance lints on rustc >=3D
+> > 1.84.0; do this in `lib.rs` rather than `Makefile` to avoid introducing
+> > compiler flags that are dependent on the rustc version in use.
+> >
+> > Link: https://blog.rust-lang.org/2025/01/09/Rust-1.84.0.html#strict-pro=
+venance-apis [1]
+> > Suggested-by: Benno Lossin <benno.lossin@proton.me>
+> > Link: https://lore.kernel.org/all/D8EIXDMRXMJP.36TFCGWZBRS3Y@proton.me/
+> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+>
+> I'm not convinced that the pros of this change outweigh the cons. I
+> think this is going to be too confusing for the C developers who look at
+> this code.
+>
+> > diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+> > index 719b0a48ff55..96393bcf6bd7 100644
+> > --- a/rust/kernel/uaccess.rs
+> > +++ b/rust/kernel/uaccess.rs
+> > @@ -226,7 +226,9 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u=
+8>]) -> Result {
+> >          }
+> >          // SAFETY: `out_ptr` points into a mutable slice of length `le=
+n`, so we may write
+> >          // that many bytes to it.
+> > -        let res =3D unsafe { bindings::copy_from_user(out_ptr, self.pt=
+r as *const c_void, len) };
+> > +        let res =3D unsafe {
+> > +            bindings::copy_from_user(out_ptr, crate::with_exposed_prov=
+enance(self.ptr), len)
+> > +        };
+> >          if res !=3D 0 {
+> >              return Err(EFAULT);
+> >          }
+> > @@ -264,7 +266,7 @@ pub fn read<T: FromBytes>(&mut self) -> Result<T> {
+> >          let res =3D unsafe {
+> >              bindings::_copy_from_user(
+> >                  out.as_mut_ptr().cast::<c_void>(),
+> > -                self.ptr as *const c_void,
+> > +                crate::with_exposed_provenance(self.ptr),
+> >                  len,
+> >              )
+> >          };
+>
+> That's especially true for cases like this. These are userspace pointers
+> that are never dereferenced. It's not useful to care about provenance
+> here.
+>
+> Alice
 
---UttlkzIHsrVPa/RY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Mar 11, 2025 at 03:21:45PM -0400, Michael Jeanson wrote:
-
-> Adding the aligned(1024) attribute to the definition of __rseq_abi did
-> not increase its size to 1024, for this attribute to impact the size of
-> __rseq_abi it would need to be added to the declaration of 'struct
-> rseq_abi'. We only want to increase the size of the TLS allocation to
-> ensure registration will succeed with future extended ABI. Use a union
-> with a dummy member to ensure we allocate 1024 bytes.
-
-This is in today's -next and breaks the build of the KVM selftests:
-
-In file included from rseq_test.c:24:
-/home/broonie/git/bisect/usr/include/linux/rseq.h:62:1: error: use of 'rseq' with tag type that does not match previous declaration
-   62 | struct rseq {
-      | ^
-./../rseq/rseq.c:78:7: note: previous use is here
-   78 | union rseq {
-      |       ^
-In file included from rseq_test.c:24:
-/home/broonie/git/bisect/usr/include/linux/rseq.h:62:8: error: redefinition of 'rseq'
-   62 | struct rseq {
-      |        ^
-./../rseq/rseq.c:78:7: note: previous definition is here
-   78 | union rseq {
-      |       ^
-
-since unlike the rseq tests the KVM rseq test includes the UAPI header
-for rseq which the padded union conflicts with.
-
---UttlkzIHsrVPa/RY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfZfMoACgkQJNaLcl1U
-h9CbtQf/cN/+lBzMtmEisgCTECB8NE+CDl5aPxK9d5lYQf7mIwn+MZCeLl6WHIcA
-fBSjRXFwsPlUwhbOpYIv0KABI04QF778sWKbx206+YMawNT4tFMf1DCXztYunryQ
-Q+WNwAQr8KuodDVY8WyW2vXgN3gNNA2YRgGRjsDwBRvUoVUEalMm07o3dvCJJtqX
-5o8h5sdV1VwvYEfxjw2ULiMcQbCRDNDtmVzhX12BawGhMGwmVHjBFIF31pLuvRt3
-ARUEiZhv5H8K7e/iha5OmJOnwo9xsr0TRg93xrskKgc92YMEqQrM6r/OMPclwN+I
-sN/yG+PTblylmdSL2T86XxClXEYjZA==
-=0ixX
------END PGP SIGNATURE-----
-
---UttlkzIHsrVPa/RY--
+Let's just drop this last patch. It can be revisited later or not at
+all. Perhaps in the future I need to be more willing to say no to
+scope creep.
 
