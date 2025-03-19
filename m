@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-29398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9485A68144
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 01:17:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDC11A68154
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 01:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DFCA18970D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 00:17:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89F8A8839FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 00:17:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C1D81B5EB5;
-	Wed, 19 Mar 2025 00:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBE91C1F0F;
+	Wed, 19 Mar 2025 00:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="YMPzI8dC"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="LdwLkSF8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383331A9B5D
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 00:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE501B395F
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 00:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742343349; cv=none; b=rh8rbPW9oRmDtYgod8NUdjMh+ltxZBIKZOlFNstC2VCY0GGKJBTaznIQP+ilP5qrpLOO4Win3LDlaw1KVh84b0l4ib2oe6+TK5X6qgxbwn4ZJ/+1hhpNZEy8kGdktUiAONxPmwP6HPQ+qR0l80l73B2Td/QYHghJbdxrUtDOx00=
+	t=1742343350; cv=none; b=FpAZkjY38fMlGAchXeyUswF112Y5fSSD9T2tn8ZA38gt5PpUAv1QDWFIkkRkrVPvymBvhJFsVtLbNiK3wR2A3XwFeUTvlmTWr3Q+6Rj7NYFUTp6ZXFK044kymayCCWKLkHlAeAWiKqlNSO3dnnwSHG+Emr4u4R9QhkEMfyzmOYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742343349; c=relaxed/simple;
-	bh=5PCOzmacR5yYFup3o8g8dQwSPaboFM0aGB+HiTMI2DM=;
+	s=arc-20240116; t=1742343350; c=relaxed/simple;
+	bh=vqb5bSp3KtgrIHH2C10i+ZCVORS25O8aQdSoxaGrdX4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ltFGVxbIWloGTy6U2RXtu8OqQLOTWZFdf8YNVVRNWgUkc7mgf1WrVpvMBBrmulzO6zGBq2SAViDeh0+JXaWzkohc7LesqCG1NhZR3pGisJKd1B4eMmMTjpNlCVur0Q4Dk/w+fzY8cDSXwYTBnew3xtheEQON5usrx5WDBAgdGHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=YMPzI8dC; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=N+QhHAJMcaUN0aAjfEvATAN1HC+UNFS4di7zPbwOAIz0ESlTKt5ofm02RgUR/G8jzRmZdQbL/dhbx2bOmzsD6oI1lGGIlQYkNkFgTw9pzRnj0grIiFsoAVBmVpY6VkWfKdPMwnbQSV5kW+QT55YRGWSM7RfdL+CwnLQQeY5E6ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=LdwLkSF8; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-224341bbc1dso119939475ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 17:15:46 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22548a28d0cso18570605ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 17:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742343346; x=1742948146; darn=vger.kernel.org;
+        d=fastly.com; s=google; t=1742343348; x=1742948148; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A+Q0E5apPluO3qX6mmuEZ2SRhcKnzs7kllQ/gSC8Vl0=;
-        b=YMPzI8dCZhmG0Jgrf9/z4ds0YcgMu4ROkPE9Wwm8zEbNQbTxIZakULjVeXB/WrXl+f
-         m9Xf2ZWsM5ytUURf3JCxWr8GSMeMG9JXni/Zod7xJ40W92K1dPyhWLXmUAmwmAjY5WoO
-         rG7RgM+Qm5FLNMSZ3wgnazMpZRemKFcKlKPuc=
+        bh=2XqGZqCGsxMqM6QeHlFNqgLyn7L0jWSrp5tLsnvgx2I=;
+        b=LdwLkSF8TBzC36dt6CntOhHl+LeUMOlyXozok9/QMwsLzJCbZQtUiV5ZsMTPkYtqcJ
+         4vcWfNjrYyGyxoOe5/0cRUNiClXg+CCpU+5N+tyoxTI6DfO2pupR5WhY5mA3NEiF58ul
+         8MrOhgdbfV7a7Eii7fwAIIFWtUdit226D4msI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742343346; x=1742948146;
+        d=1e100.net; s=20230601; t=1742343348; x=1742948148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A+Q0E5apPluO3qX6mmuEZ2SRhcKnzs7kllQ/gSC8Vl0=;
-        b=FeyTIeDDlZgZBqb4uAnH5QKLQvADhluare/mbFDuDwG2AeF+f5smw2of+JisNJGI62
-         olc3ncDvpL85qaTKZNTY0HyTZkLEOVxrW2A/SBNRGmNXm0fN0BMy3yul8lCq+ZWBWVuB
-         P6mtDuJ9mTRbiKF0NmA9zdYJPFKdi9ZgiB1zJ2Qv8ug4iavuFPbQ97hWEw2m/k8QzcBe
-         p4+mc2vWCTkbIST12k6VyoNuhcznnmC1I6aiRMKRBxXfdJrI1F6Gd6TLPpl+HGYbhgam
-         A0E+Ul5A2/7VgPvpj2MlZJObUPr/K8joST14doGwPzDteQe6KhbatCVocWRDhSH/iIOi
-         aSUw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4mUkVei9t5+tAjrOm3ulacx51XkzeIT4nJteunnVrrCpd2cs+v92H4PmfudsvSsn1jT1vwVlZuUTySQMMJUY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRVuIxQAy7Hl/vSkhrvf1/8KV+1lKoRRxjmdnJRjy3cosHvuWI
-	5HEL40f4vcZZHNuuZAp1gyYTzp6toZjlOU8GQVfkxaUrBiDA7jJ1WrlDJt9QqZU=
-X-Gm-Gg: ASbGncv6DIEBOBDUASN2LdbAHgHoHTPgaP09m0EXyuiAICFOn7Ng/MYHyWAakDF8NsA
-	Re/7FNP4A4VejLa5ECL6hu/PegEyjkP8OWdgAJ3eqbyRMj15Ot3yzUFDqfGTa0xZYXvmgNW6ush
-	D5gzXLHuRC2ZOXXZtw2Qec27A2iNF3Pmw5jzPIKgauEL/vF6hFQVqUGakkMwDGHMVN7PXvisDfj
-	8wBSo+b/Of2Nl4m8scr6VKLUdDz7pQo2gfVIl/GrHTjh92rFktzO4cOC0gYNl4qJO6XxRcq0rgL
-	fI1rGDx/YD23SPpFK6EmKyxJU2ogOhHyNaJBOj64UDg6fdqxthKKRlKawZmR2fU=
-X-Google-Smtp-Source: AGHT+IEOR8SkYAUNB17u62ljjwaf2hFD6D0NrcmHhlERldyKjuA2Rr70AEoQme8oc1Ybx9thwa9WTg==
-X-Received: by 2002:a17:902:f646:b0:210:fce4:11ec with SMTP id d9443c01a7336-226497ffb08mr9977165ad.1.1742343346457;
-        Tue, 18 Mar 2025 17:15:46 -0700 (PDT)
+        bh=2XqGZqCGsxMqM6QeHlFNqgLyn7L0jWSrp5tLsnvgx2I=;
+        b=AF6acbT/6H29s6jNvGQ4jnYsgktoJBAurLBAkv2nMiwia3ooyNxxirGyHNz1icuPh1
+         IeemB8+L/n2HxxjIDoD6rsYKwHZiB2Cw6ItOx0hmPsNj1NjgSKLIthDAYaDP2KS7W8Fq
+         HX4nnjpDi36GCJZqH1vVn9t4D8YK6iN1O/JPajvYbmHwAC/cAIs0NiTMrlgEJNjtBCHX
+         pvrWsnsHkS8UJAfMHsv2rQcz+WIMkRxujj6gOOtLVgTBjqAuicVvQKBgb0smxnDGHvLF
+         JAbCaOssxuQCk9ZlI40ewjAEfrnulvUSD7ZRlMUVY7Jh8slB7p+BsRE1er1vhaDUkFh/
+         mLww==
+X-Forwarded-Encrypted: i=1; AJvYcCW98fZyzvNmPJE3BxUeZemoURwIawd6Zm75HTu2Is9TrTUzlHipATkmeN9xsM9L11TV8Gd5+ZOoa/FN5u7TYA8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx621w3fyx5Bt0nKA736h9sKQwuKm1tqr1vQotpAV/dV2kVKrUn
+	rhGqfTORczFtuIPnFhReUD6qWy9AsybA4JH1SP1gYcUDTmG0pa4G6iD3h9uv1Rs=
+X-Gm-Gg: ASbGncuJxSzjPKrJ+GXjozwudBPsl5TsfsqP7+MCYj5hJBfCqyzFL00h7lboJG9p+BL
+	LGVw7VN7QDVgBiDtDf5Ndfl944r9/FAwjrqVbFLSQCjYMc1D8+ZQtAWd0TW/5FMGeZlJ9Nazo65
+	+WQZsgMT0qUD0pUFG67LpKi8RjR8VA5cLzOa4x0sUKu5XlkP87Z0hJ0FAKjmcDbTNMGv5I/eJAY
+	6Mv8GXxMkTnFgqtYnj2x57xp3ZfrcmCZKK4Z0Jh+UxqxSD40LqrBkZXq8MTGXc2Yqv+isHIUv3M
+	Loek0VDd7Jb3/1qPTnYIYkZD2sJer2CFbp1KZj8EE7cB9W46JtXB
+X-Google-Smtp-Source: AGHT+IEmJYpbp+6vVhqsiGvsZq35cbhyVslRXzs04bm/SNmdXK2RzQx72NbvXgQ96Ga+Vw4Kk+NJMQ==
+X-Received: by 2002:a17:903:22cd:b0:223:58ea:6fdf with SMTP id d9443c01a7336-22649a3c6a7mr8745335ad.28.1742343348190;
+        Tue, 18 Mar 2025 17:15:48 -0700 (PDT)
 Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a4876sm101281375ad.70.2025.03.18.17.15.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a4876sm101281375ad.70.2025.03.18.17.15.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 17:15:46 -0700 (PDT)
+        Tue, 18 Mar 2025 17:15:47 -0700 (PDT)
 From: Joe Damato <jdamato@fastly.com>
 To: netdev@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -92,9 +92,9 @@ Cc: linux-kernel@vger.kernel.org,
 	jolsa@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Joe Damato <jdamato@fastly.com>
-Subject: [RFC -next 06/10] fs: Extend do_sendfile to take a flags argument
-Date: Wed, 19 Mar 2025 00:15:17 +0000
-Message-ID: <20250319001521.53249-7-jdamato@fastly.com>
+Subject: [RFC -next 07/10] fs: Add sendfile2 which accepts a flags argument
+Date: Wed, 19 Mar 2025 00:15:18 +0000
+Message-ID: <20250319001521.53249-8-jdamato@fastly.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250319001521.53249-1-jdamato@fastly.com>
 References: <20250319001521.53249-1-jdamato@fastly.com>
@@ -106,94 +106,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend the internal do_sendfile to take a flags argument, which will be
-used in future commits to signal that userland wants zerocopy
-notifications.
-
-This commit does not change anything about sendfile or sendfile64.
+Add sendfile2 which is similar to sendfile64, but takes a flags
+argument.
 
 Signed-off-by: Joe Damato <jdamato@fastly.com>
 ---
- fs/read_write.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ fs/read_write.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/fs/read_write.c b/fs/read_write.c
-index a6133241dfb8..03d2a93c3d1b 100644
+index 03d2a93c3d1b..057e5f37645d 100644
 --- a/fs/read_write.c
 +++ b/fs/read_write.c
-@@ -1293,7 +1293,7 @@ COMPAT_SYSCALL_DEFINE6(pwritev2, compat_ulong_t, fd,
- #endif /* CONFIG_COMPAT */
- 
- static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
--			   size_t count, loff_t max)
-+			   size_t count, loff_t max, int flags)
- {
- 	struct inode *in_inode, *out_inode;
- 	struct pipe_inode_info *opipe;
-@@ -1398,13 +1398,13 @@ SYSCALL_DEFINE4(sendfile, int, out_fd, int, in_fd, off_t __user *, offset, size_
- 		if (unlikely(get_user(off, offset)))
- 			return -EFAULT;
- 		pos = off;
--		ret = do_sendfile(out_fd, in_fd, &pos, count, MAX_NON_LFS);
-+		ret = do_sendfile(out_fd, in_fd, &pos, count, MAX_NON_LFS, 0);
- 		if (unlikely(put_user(pos, offset)))
- 			return -EFAULT;
- 		return ret;
- 	}
- 
--	return do_sendfile(out_fd, in_fd, NULL, count, 0);
-+	return do_sendfile(out_fd, in_fd, NULL, count, 0, 0);
+@@ -1424,6 +1424,23 @@ SYSCALL_DEFINE4(sendfile64, int, out_fd, int, in_fd, loff_t __user *, offset, si
+ 	return do_sendfile(out_fd, in_fd, NULL, count, 0, 0);
  }
  
- SYSCALL_DEFINE4(sendfile64, int, out_fd, int, in_fd, loff_t __user *, offset, size_t, count)
-@@ -1415,13 +1415,13 @@ SYSCALL_DEFINE4(sendfile64, int, out_fd, int, in_fd, loff_t __user *, offset, si
- 	if (offset) {
- 		if (unlikely(copy_from_user(&pos, offset, sizeof(loff_t))))
- 			return -EFAULT;
--		ret = do_sendfile(out_fd, in_fd, &pos, count, 0);
-+		ret = do_sendfile(out_fd, in_fd, &pos, count, 0, 0);
- 		if (unlikely(put_user(pos, offset)))
- 			return -EFAULT;
- 		return ret;
- 	}
- 
--	return do_sendfile(out_fd, in_fd, NULL, count, 0);
-+	return do_sendfile(out_fd, in_fd, NULL, count, 0, 0);
- }
- 
++SYSCALL_DEFINE5(sendfile2, int, out_fd, int, in_fd, loff_t __user *, offset, size_t, count, int, flags)
++{
++	loff_t pos;
++	ssize_t ret;
++
++	if (offset) {
++		if (unlikely(copy_from_user(&pos, offset, sizeof(loff_t))))
++			return -EFAULT;
++		ret = do_sendfile(out_fd, in_fd, &pos, count, 0, flags);
++		if (unlikely(put_user(pos, offset)))
++			return -EFAULT;
++		return ret;
++	}
++
++	return do_sendfile(out_fd, in_fd, NULL, count, 0, flags);
++}
++
  #ifdef CONFIG_COMPAT
-@@ -1436,13 +1436,13 @@ COMPAT_SYSCALL_DEFINE4(sendfile, int, out_fd, int, in_fd,
- 		if (unlikely(get_user(off, offset)))
- 			return -EFAULT;
- 		pos = off;
--		ret = do_sendfile(out_fd, in_fd, &pos, count, MAX_NON_LFS);
-+		ret = do_sendfile(out_fd, in_fd, &pos, count, MAX_NON_LFS, 0);
- 		if (unlikely(put_user(pos, offset)))
- 			return -EFAULT;
- 		return ret;
- 	}
- 
--	return do_sendfile(out_fd, in_fd, NULL, count, 0);
-+	return do_sendfile(out_fd, in_fd, NULL, count, 0, 0);
- }
- 
- COMPAT_SYSCALL_DEFINE4(sendfile64, int, out_fd, int, in_fd,
-@@ -1454,13 +1454,13 @@ COMPAT_SYSCALL_DEFINE4(sendfile64, int, out_fd, int, in_fd,
- 	if (offset) {
- 		if (unlikely(copy_from_user(&pos, offset, sizeof(loff_t))))
- 			return -EFAULT;
--		ret = do_sendfile(out_fd, in_fd, &pos, count, 0);
-+		ret = do_sendfile(out_fd, in_fd, &pos, count, 0, 0);
- 		if (unlikely(put_user(pos, offset)))
- 			return -EFAULT;
- 		return ret;
- 	}
- 
--	return do_sendfile(out_fd, in_fd, NULL, count, 0);
-+	return do_sendfile(out_fd, in_fd, NULL, count, 0, 0);
- }
- #endif
- 
+ COMPAT_SYSCALL_DEFINE4(sendfile, int, out_fd, int, in_fd,
+ 		compat_off_t __user *, offset, compat_size_t, count)
 -- 
 2.43.0
 
