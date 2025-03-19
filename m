@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-29443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8173AA6946C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 17:11:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76B40A6948F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 17:16:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46E593B41E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 16:11:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9ECD3463AA5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 16:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6280B1DE4C9;
-	Wed, 19 Mar 2025 16:11:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56D01DD0DC;
+	Wed, 19 Mar 2025 16:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CnCS2q8o"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Peq5GDrv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318512FC23;
-	Wed, 19 Mar 2025 16:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B4D14A09E;
+	Wed, 19 Mar 2025 16:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742400687; cv=none; b=usuVlxZGsSzqnENALmN0F/wzQIyzx9uCtssb89BnlDAg4lnOtOy79iX3tvbGLY/fIKMydvnmjzHyyldKrGDQ7RLRbXa3/wl5xAVdh2fBqPIh8WwxEcITEk5fsqnrvMao0nBaFuCSBqUBtaWffoyveZVnMVFexbVKhwICC6oe+gw=
+	t=1742400949; cv=none; b=JopeAyqWXFHrCViPOxnQjE6H77i9mf/I5RoCb8NR/pGDqNA+IPEMscDmQZ4UQCbJx70CYP69SnCAyzBT8xs+d23HlBq3Y0z5ERe42ctaW1n5f/w57B0TeFFUWWcbQvjpzrAEwxspYv6sTcZTvGC8h3fZz1xDgIzLSiHC+/O6bRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742400687; c=relaxed/simple;
-	bh=VDkBk/j04kXLeyvA6lN60b7KihgDdLwHGTgbU7i+46E=;
+	s=arc-20240116; t=1742400949; c=relaxed/simple;
+	bh=Tf1/4jcAAXic4Wmc2Mvv4rTmGh6E/30Wvsye7p69dtI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ARxCrcUrcl3cqP52ec6lTWubRkoYS/Z8KASR11ZFr3qso985pqjPvCwk8UDjMHjkiCHcdiuIEB1UByxdt7CJ4eE3sZRpYgoNRpXr1mSTK4QQJRspwDkPy2Zz9rXHekOKoduDMlgurWn4kwG9KXZPGv8jmfi1Yzm8XkkPhE8+Tss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=CnCS2q8o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 866AFC4CEE4;
-	Wed, 19 Mar 2025 16:11:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MbRE5WdUiJttVhBYaFKMy6C+3gjEN+FeEnJy/jq93eYipS1Kln2ZYc0TZjBQQBA2U8BeE9iTV4G4cY0GwOkk8T3v1HRS1FtlyPkMtGLy7ksf8KyWXL+f0aX6/Me/dgBD0ooUNwKZUQxxb1ldYM7Ra4KqgmVKgnoah/H8c2PhSdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Peq5GDrv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAFCBC4CEE4;
+	Wed, 19 Mar 2025 16:15:47 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CnCS2q8o"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Peq5GDrv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1742400684;
+	t=1742400946;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VDkBk/j04kXLeyvA6lN60b7KihgDdLwHGTgbU7i+46E=;
-	b=CnCS2q8o/i98SzZA+D8yIzi3hVmzwoySHEgmpMNVaOmlgs3gF6b7K5KkmMSQDbJq/ZZr/l
-	d6vuwH7JLEna8Jj2xN2VipgfhO02KCAg4cB0yF5uKlZA+XcDGwLk46Sgurd5fZaPCyGRwS
-	IuR0jCJYEbcCpWP4Vspy/venyTuNZ4s=
+	bh=2VI/j+LK4IyIwE+OVTjjCr+GSdAaazGSA6tl8MFmzFY=;
+	b=Peq5GDrvXDyXsqluuFRNiMS6x0ptJGsrdn/f/Q0RxgsBVPRnSqGcM3mY19Eg2LLgKfucFb
+	WP/fFZCvRJjjx2xnPDHZVFAYbygBZZ0MZfpluc/fpLN5J3ZMb+ox4mMn/Cf537bviI/Mc/
+	wcZRIUeC+YyDbHJQgBGem0DNPqNTKFM=
 Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0ee6c8fb (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Wed, 19 Mar 2025 16:11:22 +0000 (UTC)
-Date: Wed, 19 Mar 2025 17:11:15 +0100
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c2e07f44 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Wed, 19 Mar 2025 16:15:46 +0000 (UTC)
+Date: Wed, 19 Mar 2025 17:15:41 +0100
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 To: Hangbin Liu <liuhangbin@gmail.com>
 Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
@@ -56,11 +56,11 @@ Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
 	Yoann Congal <yoann.congal@smile.fr>, wireguard@lists.zx2c4.com,
 	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 RESEND net-next 0/2] selftests: wireguards: use
- nftables for testing
-Message-ID: <Z9rso2MXYBFGnJYl@zx2c4.com>
+Subject: Re: [PATCHv4 RESEND net-next 2/2] selftests: wireguard: update to
+ using nft for qemu test
+Message-ID: <Z9rtrVk-15Ts_BNp@zx2c4.com>
 References: <20250106081043.2073169-1-liuhangbin@gmail.com>
- <Z9lJ6PXHeL7tfhUf@fedora>
+ <20250106081043.2073169-3-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,15 +69,12 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z9lJ6PXHeL7tfhUf@fedora>
+In-Reply-To: <20250106081043.2073169-3-liuhangbin@gmail.com>
 
-On Tue, Mar 18, 2025 at 10:24:40AM +0000, Hangbin Liu wrote:
-> I saw the patch status[1] is still "Awaiting Upstream".
-> Is there anything I need to do?
+On Mon, Jan 06, 2025 at 08:10:43AM +0000, Hangbin Liu wrote:
+> +	echo "file /bin/nft $(NFTABLES_PATH)/src/nft 755 0 0" >> $@
+> +	echo "file /lib/libmnl.so.0 $(TOOLCHAIN_PATH)/lib/libmnl.so.0 755 0 0" >> $@
+> +	echo "file /lib/libnftnl.so.11 $(TOOLCHAIN_PATH)/lib/libnftnl.so.11 755 0 0" >> $@
 
-I'm looking at it now, but the subject line of your series says,
-"selftests: wireguards: " which is really not the same as all the other
-patches that touch these files.
-
-Jason
+Can't these be statically linked into the nft binary?
 
