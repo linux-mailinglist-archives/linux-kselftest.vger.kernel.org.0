@@ -1,291 +1,265 @@
-Return-Path: <linux-kselftest+bounces-29422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C21CA68775
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 10:07:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5454FA687B5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 10:17:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1F1F19C1384
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 09:07:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5A8317E6D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 09:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21732528F1;
-	Wed, 19 Mar 2025 09:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECCB251786;
+	Wed, 19 Mar 2025 09:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="lzSXVoxA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZoyM8FRV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874932512CF;
-	Wed, 19 Mar 2025 09:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9471DDC34
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 09:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742375205; cv=none; b=t/iexH1Yfwz+1z712H5iGAIvEqfUjBgclPDi+vsiAS8vVPoBPqdYy6GR5ZF7qc1qhjYnxhwuuQqHbCG7zo3ABV0APURnU06Eh0uIfwYZJn3SxEZvtlUadJB5HIAPpPIe9L57rlrvzKGLNV1iN6vk+ljIFv+0gR285fEcxYyVNH4=
+	t=1742375848; cv=none; b=W33zxy0t9W5yulqm0dVMhsnJ/MWXH9o/TxdMG4aEfvwqo/z/kQQpPy1mIz7ZLR/jImL/rA2XD0dY6gunPc7gyqzQA8dAbmWYfYTtXLXvz6WU7RVSbO0UJSDKicNLMfTIsAXQXcXn4mbUE5ebsOdoGTSOA808Hp6JKJLkoIIpIQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742375205; c=relaxed/simple;
-	bh=mOVj79GUbV+xSH8LY8TtXyIWEdLC30++NhbN9PTTN5U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PDb6uP3ZL1WeK1bubmz/cvfV99GfzLkIvSnLhsXHBnUjIRYTRgpDCpeWsjgrafKNvptFiezALF4mQiN1Ugzwv74TGM/qxgTY8CiJFKed9C+Hb+dNBI2HrXvxnB8Zu/qFeE7Mb4/BWAe4myXWRNLhVuUA+VPLps5T4XAQT/J3mrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=lzSXVoxA; arc=none smtp.client-ip=131.188.11.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1742375193; bh=/5goDERUrPXPyZzmCy7lw+XwkgPNVdvQxkY1QQaRiqA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
-	 Subject;
-	b=lzSXVoxAZAnJzDEK3eE3Aj534D+oBP149HbMd5Pg72Qe/WLAC3uoTnpjRsVzsIYox
-	 TnYOSHjKGuB3gHkkqfdQ1OTs1uRRT/tls2LiJQviOSpmAsToF0tuXQxoPh+Knvua7E
-	 mnx3iG4H8d2/gugEFKL5yNykGUx0uN36jMW5M6pViwJaZ6mLY7uXMFkK7fy8K2/NJ2
-	 HC8FUqCub2ttWnDa7p1wJy6j+33lnqdVUeBHkXu/261LFECZL0AkRC091jFVzXJD6m
-	 84+ErL1QGP+WFgpl2uMQHur82B8hea9fHUY3oayifgIcBEHmBmbvegaOhKfZ7ZLv/9
-	 IlIezQeTcmibw==
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ZHjWF1N6dzPkVl;
-	Wed, 19 Mar 2025 10:06:33 +0100 (CET)
-X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2a02:8071:7900:bc0:c583:a400:7f8d:5e80
-Received: from localhost (unknown [IPv6:2a02:8071:7900:bc0:c583:a400:7f8d:5e80])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX18CrB7ddj49FWVqrSeQ4eIWyZV3PfQwQ7Q=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ZHjW86Bk0zPjtK;
-	Wed, 19 Mar 2025 10:06:28 +0100 (CET)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao
- Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas
- <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao
- <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman
- <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah
- Khan <shuah@kernel.org>,
-	Henriette Herzog <henriette.herzog@rub.de>, Cupertino Miranda
- <cupertino.miranda@oracle.com>,
-	Matan Shachnai <m.shachnai@gmail.com>, Dimitar Kanaliev
- <dimitar.kanaliev@siteground.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf
- <bpf@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML
- <linux-kernel@vger.kernel.org>,
-	ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- George Guo <guodongtai@kylinos.cn>,
-	WANG Xuerui <git@xen0n.name>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Maximilian Ott <ott@cs.fau.de>,
-	Milan Stephan <milan.stephan@fau.de>
-Subject: Re: [PATCH bpf-next 11/11] bpf: Fall back to nospec for spec path
- verification
-In-Reply-To: <CAADnVQKL-NwxigMWM+U=n5ZXPG+xHYzSTEv0Rq8Y91m45eRJDw@mail.gmail.com>
-	(Alexei Starovoitov's message of "Tue, 18 Mar 2025 19:40:44 -0700")
-References: <20250313172127.1098195-1-luis.gerhorst@fau.de>
-	<20250313175312.1120183-1-luis.gerhorst@fau.de>
-	<20250313175312.1120183-2-luis.gerhorst@fau.de>
-	<CAADnVQKL-NwxigMWM+U=n5ZXPG+xHYzSTEv0Rq8Y91m45eRJDw@mail.gmail.com>
-User-Agent: mu4e 1.12.8; emacs 29.4
-Date: Wed, 19 Mar 2025 10:06:27 +0100
-Message-ID: <87cyedie3w.fsf@fau.de>
+	s=arc-20240116; t=1742375848; c=relaxed/simple;
+	bh=NzMd+cZZ4AuMOKsWgqjQ2wWoCskTOv5VZM4sRUzG9xY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rlHGRpB5q6dpG3waDeyI6KtuIhiAx038rnSDAyMOpGK36UM0Dzm4HLcnKC/QGXK4wob6cNBXRFOe5up9Qo9554+SXuC0HfyLGVhSR8/aZ4Fy14vFDUGY9Fd1cFZUKN1yPSfexYcngb2PX78c0Rjfm3O7FBIg1qqcwhUaeeGCYgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZoyM8FRV; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742375845;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GpuGE8jwydSTtf5vqaCaaq5V296av9hmHXy0jgwtvI0=;
+	b=ZoyM8FRVYuajEwEGxqEzAjZaodUVX/2ZT2baz2aTlp/DGwwjo4/B12SJUcXYevXjFOsFl+
+	ih9FJCsGhWXvMh/+WN/qjAGs7nkjgTPFYOcxF6A6MBKtOlwvnfk6pLd9VAmXaxyR/Nr9Fz
+	08VoNZtw9Qc8Nusq7m6kiJ88f+d20cs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-441-Wvvl8V4IN3-sdPSuGDCzRA-1; Wed, 19 Mar 2025 05:17:24 -0400
+X-MC-Unique: Wvvl8V4IN3-sdPSuGDCzRA-1
+X-Mimecast-MFC-AGG-ID: Wvvl8V4IN3-sdPSuGDCzRA_1742375843
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43d01024089so34245565e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 02:17:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742375843; x=1742980643;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GpuGE8jwydSTtf5vqaCaaq5V296av9hmHXy0jgwtvI0=;
+        b=pS+artDohmFkJokfhl+LbUszU/dYPVHZVghafjOPvQj6/TxktOPLluiVs0QAyrQFTq
+         fBwAA/73DYJELoSiSusfX75UBakI9F5PSxugbgPXHNkjly5GfG8aKhQNpjUuWu92JMcn
+         w1FzPcdxWiPXm05aRx8LBLuUkfUsezPHVRdIp2kmNykL8thNyDV9q/JKVG/UOem5wzAm
+         bFDgnO8KumiUcLr39YhWFVXA1gBGoiOlvUHeMeBgWC+LWr0Caw8CFuh38TN2xBhLLYAg
+         pxbzbEa0Tdip961xo9n/yAf+6avI5Nlvp2HkHsxJdfNUFGaPDI3hhHd+dkNRtsf6UJkK
+         fSYA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYJc0+s4U5SOy2OaiLSVtbof83PO16vRL+TnI8YOqGl9R2XT5Fk/3kHW25DkCFYkKPJRJzcpNhfIYd77yBLEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn99/KMhRaZhJRQGM2fsM6dxda8NFbtecT2Vl4YkaieQbKt6dY
+	zuc5D6x1MvnRIKF3wxAO4jNxMeuaEBlU2woALkUo/Mv+tUmYCB/1uCPMvhOsXJ4G0MRUCoY7seP
+	WneDFfEguRXieLhXLAzLjyGBQdgzFH0LIirbRV/0iXQYOZh972VPH5CF6W2nEYgGDzg==
+X-Gm-Gg: ASbGncupULpIUfY1V+XDhq9WnBamQsA7TUxNe4nxZor6WsVs+0YlepZKe8WeGdmdiHj
+	1wCmKEP4sEORCNZTuwR19SVtNrycTDxVRp9zBNStsR9aAIx3sqkxeM7HHBpqeO7Ds6Mp/cA3BOi
+	aKzqfePEJWep92wdS0H06qbAjf4n8ElTBH/dwFHompAagD+38OtLqA1J+rHliJuCyJTIKXX9oCK
+	j8fCFAK7GvFW5PtaGUhVdTPnpTubpYl3P96WyoTWBY+pVF8+rY2OI0JC3vKeyCqczfKTuLEyv2y
+	Gu7GWSjtTmyvcL3pAl95U5vDnr7NVIfFHfgjrDkMYxoQvUfawKYrz1YrKY06Ig==
+X-Received: by 2002:a05:600c:3845:b0:43c:f969:13c0 with SMTP id 5b1f17b1804b1-43d438a66afmr15766625e9.29.1742375843191;
+        Wed, 19 Mar 2025 02:17:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF4AK1/6C4o6ihOcsyzkBG0ZkSaNoGqJBe8vr/NeUglQARpjCQ9rSgLBRWhjQdmkOJ/XhVmJg==
+X-Received: by 2002:a05:600c:3845:b0:43c:f969:13c0 with SMTP id 5b1f17b1804b1-43d438a66afmr15766005e9.29.1742375842419;
+        Wed, 19 Mar 2025 02:17:22 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-53-30-53.retail.telecomitalia.it. [79.53.30.53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d4743dd13sm2275855e9.1.2025.03.19.02.17.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Mar 2025 02:17:21 -0700 (PDT)
+Date: Wed, 19 Mar 2025 10:17:18 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Bobby Eshleman <bobby.eshleman@bytedance.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v4 2/3] selftest/bpf: Add test for AF_VSOCK connect()
+ racing sockmap update
+Message-ID: <hlfjllms6ih53rdw45apgajek6fp4ljnfxlwkr2efyqcuf6fqo@rj6yjmj4fjem>
+References: <20250317-vsock-trans-signal-race-v4-0-fc8837f3f1d4@rbox.co>
+ <20250317-vsock-trans-signal-race-v4-2-fc8837f3f1d4@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20250317-vsock-trans-signal-race-v4-2-fc8837f3f1d4@rbox.co>
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> On Thu, Mar 13, 2025 at 10:57=E2=80=AFAM Luis Gerhorst <luis.gerhorst@fau=
-.de> wrote:
->> With increased limits this allows applying mitigations to large BPF
->> progs such as the Parca Continuous Profiler's prog. However, this
->> requires a jump-seq limit of 256k. In any case, the same principle
->> should apply to smaller programs therefore include it even if the limit
->> stays at 8k for now. Most programs in [1] only require a limit of 32k.
+On Mon, Mar 17, 2025 at 10:52:24AM +0100, Michal Luczaj wrote:
+>Racing signal-interrupted connect() and sockmap update may result in an
+>unconnected (and missing vsock transport) socket in a sockmap.
 >
-> Do you mean that without this change the verifier needs 256k
-> jmp limit to load Parca's prog as unpriv due to speculative
-> path exploration with push_stack ?
+>Test spends 2 seconds attempting to reach WARN_ON_ONCE().
 >
-
-Only with this change Parca is loadable when manually enabling Spectre
-defenses for privileged programs and setting the following limits:
-- BPF_COMPLEXITY_LIMIT_JMP_SEQ=3D256k
-- BPF_COMPLEXITY_LIMIT_SPEC_V1_VERIFICATION=3D128k
-- BPF_COMPLEXITY_LIMIT_INSNS=3D32M
-
+>connect
+>  / state = SS_CONNECTED /
+>                                sock_map_update_elem
+>  if signal_pending
+>    state = SS_UNCONNECTED
 >
-> And this change uses 4k as a trade-off between prog runtime
-> and verification time ?
+>connect
+>  transport = NULL
+>                                vsock_bpf_recvmsg
+>                                  WARN_ON_ONCE(!vsk->transport)
 >
+>Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>---
+> .../selftests/bpf/prog_tests/sockmap_basic.c       | 99 ++++++++++++++++++++++
+> 1 file changed, 99 insertions(+)
 
-Yes, this change uses 4k to limited nested speculative path exploration.
-At the top-level (i.e., on architectural paths), spawned speculative
-paths are still explored.
+LGTM for the vsock part!
+
+Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 
 >
-> But tracing progs use bpf_probe_read_kernel(), so they're never going
-> to be unpriv.
+>diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>index 1e3e4392dcca0e1722c1982ecc649a80c27443b2..2f8bba27866354848f1e30b5473cedb6a85244ff 100644
+>--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>@@ -3,6 +3,7 @@
+> #include <error.h>
+> #include <netinet/tcp.h>
+> #include <sys/epoll.h>
+>+#include <linux/time64.h>
+>
+> #include "test_progs.h"
+> #include "test_skmsg_load_helpers.skel.h"
+>@@ -1042,6 +1043,102 @@ static void test_sockmap_vsock_unconnected(void)
+> 	xclose(map);
+> }
+>
+>+#define CONNECT_SIGNAL_RACE_TIMEOUT 2 /* seconds */
+>+
+>+static void sig_handler(int signum)
+>+{
+>+	/* nop */
+>+}
+>+
+>+static void connect_signal_racer_cleanup(void *map)
+>+{
+>+	xclose(*(int *)map);
+>+}
+>+
+>+static void *connect_signal_racer(void *arg)
+>+{
+>+	pid_t pid;
+>+	int map;
+>+
+>+	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
+>+			     sizeof(int), 1, NULL);
+>+	if (!ASSERT_OK_FD(map, "bpf_map_create"))
+>+		return NULL;
+>+
+>+	pthread_cleanup_push(connect_signal_racer_cleanup, &map);
+>+	pid = getpid();
+>+
+>+	for (;;) {
+>+		int c = *(int *)arg;
+>+		int zero = 0;
+>+
+>+		(void)bpf_map_update_elem(map, &zero, &c, BPF_ANY);
+>+
+>+		if (kill(pid, SIGUSR1)) {
+>+			FAIL_ERRNO("kill");
+>+			break;
+>+		}
+>+
+>+		if ((recv(c, NULL, 0, MSG_DONTWAIT) < 0) && errno == ENODEV) {
+>+			FAIL_ERRNO("recv");
+>+			break;
+>+		}
+>+	}
+>+
+>+	pthread_cleanup_pop(1);
+>+
+>+	return NULL;
+>+}
+>+
+>+static void test_sockmap_vsock_connect_signal_race(void)
+>+{
+>+	struct sockaddr_vm addr, bad_addr;
+>+	socklen_t alen = sizeof(addr);
+>+	sighandler_t orig_handler;
+>+	pthread_t thread;
+>+	int s, c, p;
+>+	__u64 tout;
+>+
+>+	orig_handler = signal(SIGUSR1, sig_handler);
+>+	if (!ASSERT_NEQ(orig_handler, SIG_ERR, "signal handler setup"))
+>+		return;
+>+
+>+	s = socket_loopback(AF_VSOCK, SOCK_SEQPACKET | SOCK_NONBLOCK);
+>+	if (s < 0)
+>+		goto restore;
+>+
+>+	if (xgetsockname(s, (struct sockaddr *)&addr, &alen))
+>+		goto close;
+>+
+>+	bad_addr = addr;
+>+	bad_addr.svm_cid = 0x42424242; /* non-existing */
+>+
+>+	if (xpthread_create(&thread, 0, connect_signal_racer, &c))
+>+		goto close;
+>+
+>+	tout = get_time_ns() + CONNECT_SIGNAL_RACE_TIMEOUT * NSEC_PER_SEC;
+>+	do {
+>+		c = xsocket(AF_VSOCK, SOCK_SEQPACKET, 0);
+>+		if (c < 0)
+>+			break;
+>+
+>+		if (connect(c, (struct sockaddr *)&addr, alen) && errno == EINTR)
+>+			(void)connect(c, (struct sockaddr *)&bad_addr, alen);
+>+
+>+		xclose(c);
+>+		p = accept(s, NULL, NULL);
+>+		if (p >= 0)
+>+			xclose(p);
+>+	} while (get_time_ns() < tout);
+>+
+>+	ASSERT_OK(pthread_cancel(thread), "pthread_cancel");
+>+	xpthread_join(thread, NULL);
+>+close:
+>+	xclose(s);
+>+restore:
+>+	ASSERT_NEQ(signal(SIGUSR1, orig_handler), SIG_ERR, "handler restore");
+>+}
+>+
+> void test_sockmap_basic(void)
+> {
+> 	if (test__start_subtest("sockmap create_update_free"))
+>@@ -1108,4 +1205,6 @@ void test_sockmap_basic(void)
+> 		test_sockmap_skb_verdict_vsock_poll();
+> 	if (test__start_subtest("sockmap vsock unconnected"))
+> 		test_sockmap_vsock_unconnected();
+>+	if (test__start_subtest("sockmap vsock connect signal race"))
+>+		test_sockmap_vsock_connect_signal_race();
+> }
+>
+>-- 
+>2.48.1
 >
 
-I'm sorry this was not clear. Parca is only used as an example here
-to test whether this improves expressiveness in general.
-
-If you do not see this as a favorable tradeoff (because of the code
-complexity), I think it would be acceptable to drop the last patch for
-now. The biggest improvements is already achieved with the other patches
-as evident from the selftests. I can do a more exhaustive analysis on
-patch 11 later.
-
->
->> @@ -2010,6 +2011,19 @@ static struct bpf_verifier_state *push_stack(stru=
-ct bpf_verifier_env *env,
->>         struct bpf_verifier_stack_elem *elem;
->>         int err;
->>
->> +       if (!env->bypass_spec_v1 &&
->> +           cur->speculative &&
->
-> Should this be
-> (cur->speculative || speculative)
-> ?
-
-No, I think it will be unsafe to add `|| speculative` here. If we were
-to return -EINVAL from push_stack() when pushing a speculative path from
-a non-speculative path (e.g., in check_cond_jmp_op() through
-sanitize_speculative_path()), this will cause do_check() to add an
-lfence before the jump-op.
-
-Here's a minimal example program:
-
-	A =3D true
-	B =3D true
-	if A goto e
-	f()
-	if B goto e
-	unsafe()
-e:	exit
-
-There are the following speculative and non-speculative paths
-(`cur->speculative` and `speculative` referring to the value of the
-push_stack() parameters):
-
-- A =3D true
-- B =3D true
-- if A goto e
-  - A && !cur->speculative && !speculative
-    - exit
-  - !A && !cur->speculative && speculative
-    - f()
-    - if B goto e
-      - B && cur->speculative && !speculative
-        - exit
-      - !B && cur->speculative && speculative
-        - unsafe()
-
-`|| speculative` might cause us to only add an lfence before `if A goto
-e`, which would not be sufficient. Intel recommends adding the lfence
-after the jump [1].
-
->
-> In general I'm not convinced that the approach is safe.
->
-> This recoverable EINVAL means that exploration under speculation
-> stops early, but there could be more branches and they won't be
-> sanitized with extra lfence.
-> So speculative execution can still happen at later insns.
->
-
-`goto process_bpf_exit` only causes us to stop analyzing this particular
-path, not the rest of the program.
-
-This is based on the assumption, that the lfence stops the CPU from ever
-reaching those branches (if they are not reachable through other means).
-
->
-> Similar concern in patch 7:
-> + if (state->speculative && cur_aux(env)->nospec)
-> +   goto process_bpf_exit;
->
-> One lfence at this insn doesn't stop speculation until the program end.
-> Only at this insn. The rest of the code is free to speculate.
->
-
-Taking the program above as an example, this allows us to stop before
-f() if an lfence was inserted there.
-
-Fully patched program would be:
-
-	A =3D true
-	B =3D true
-	if A goto e
-	lfence
-	f()
-	if B goto e
-	unsafe()
-e:	exit
-
-In this example, all instructions after the lfence are dead code (and
-with the lfence they are also dead code speculatively).
-
-I believe this is in line with Intel's guidance [1]:
-
-	An LFENCE instruction or a serializing instruction will ensure that
-	no later instructions execute, even speculatively, until all prior
-	instructions complete locally. Developers might prefer LFENCE over a
-	serializing instruction because LFENCE may have lower latency.
-	Inserting an LFENCE instruction after a bounds check prevents later
-	operations from executing before the bound check completes.
-
-With regards to the example, this implies that `if B goto e` will not
-execute before `if A goto e` completes. Once `if A goto e` completes,
-the CPU should find that the speculation was wrong and continue with
-`exit`.
-
-If there is any other path that leads to `if B goto e` (and therefore
-`unsafe()`) without going through `if A goto e`, then an lfence might of
-course still be needed there. However, I assume this other path will be
-explored separately and therefore be discovered by the verifier even if
-the exploration discussed here stops at the lfence. If this assumption
-is wrong, please let me know.
-
->
-> The refactoring in patches 1-3 is nice.
-> Patches 4-5 are tricky and somewhat questionable, but make sense.
-> Patch 7 without early goto process_bpf_exit looks correct too,
-> Patch 8 is borderline. Feels like it's opening the door for
-> new vulnerabilities and space to explore for security researchers.
-> We disabled unpriv bpf by default and have no intentions to enable it.
-> Even if we land the whole thing the unpriv will stay disabled.
-> So trade offs don't appear favorable.
->
-
-Thank you very much for having a look. Let me know whether the above
-resolves your concern.
-
-In any case, should I separate patches 1-3 into another series?
-
-[1] https://www.intel.com/content/www/us/en/developer/articles/technical/so=
-ftware-security-guidance/technical-documentation/runtime-speculative-side-c=
-hannel-mitigations.html
-    ("Managed Runtime Speculative Execution Side Channel Mitigations")
 
