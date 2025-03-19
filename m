@@ -1,250 +1,246 @@
-Return-Path: <linux-kselftest+bounces-29448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8663AA696C9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 18:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C132AA697E8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 19:23:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20E3B19C3D3D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 17:45:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 026D51894EF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 18:23:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A842205E14;
-	Wed, 19 Mar 2025 17:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C1220AF7B;
+	Wed, 19 Mar 2025 18:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="biyyC0Ci"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VPQUjgJD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924B51E991B
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 17:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885591DF271;
+	Wed, 19 Mar 2025 18:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742406329; cv=none; b=j6Au2OqbZJMcrQOfa2qSbCNcz+EYbi/KpPbSGha9WsvB9JtGy5kySRnI4kN2Hde8otnzUVqj3K+7y97p1WzVJWidQQCC6Am3ozMD5PL0JqlP8Lfg2ysPNK4NthXym7qNe8o1iekNDfZIPa4E+qiRm3ulWjl9bFZzZZKyvEz3lWY=
+	t=1742408576; cv=none; b=PUoIdnr1v1Z1sj23j2SOULsb9IGZkgJrqv3nhMRbpQmn+ICMXmpsMlZ4/zlX3kDzALa33sQhngVCmrPx3pI/7Iq9rQ4AusveOKFBJXmQukq5mbN6KsJrqzs5q9sE5pHRb61c42bYfVqlDBIblbY+B5BdYtEQTED9m4eLm6SoIwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742406329; c=relaxed/simple;
-	bh=Mja/DsqMC96aBenZikHbYJ7mmYRS4Gju4qJTnOUreFE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CcrwU/os7vFf6oaj04oQzZHWKcTgkq2gQWLt34i8B5nyUXZbdAOpt7gUVRFxu2ewL9HDpy8zFa6klAj8n5/ByM+A8NQZ7h8qpSK71sgMMUcsXeVbkEQLwI0xHFnuHlN04UY9W1++a3X+oTAdjrTC8aJWb7MbxI0GhnpOMxN8E2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=biyyC0Ci; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2240b4de12bso53694395ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 10:45:27 -0700 (PDT)
+	s=arc-20240116; t=1742408576; c=relaxed/simple;
+	bh=EaxMpD9W8uZcvCwEnoAV9wzWk6ALOz5xdQZST97pXqc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NmhYk3mmvL+TG7iq//hZhM6KExVVP4RH5dj0X2CdeOsV4vQSvjtGU61Aena0n3r4mUWpUkAyju5AHGKvZ6qelk4AL1djrMfzUtHtkipQwi1R5b2z/9xnTKWYwRN5YxOFTn/W6ry6M9vDqYdKbFtHfAF2PrxzIzQ+MyrdreNtxHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VPQUjgJD; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30761be8fcfso74561fa.0;
+        Wed, 19 Mar 2025 11:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742406327; x=1743011127; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=88yW33TrWIk/+/WaI5H9h1QmYyDkMe4Hu9deS8t+58M=;
-        b=biyyC0CidajeDa7Wg0pt7wfyYZZOZLbjQReMFZW/rVpEewIuWNO8Ax1CIz6Cw/iE8F
-         SutXvBmY8l5JfvXre1l+/hxuFPtHvxtQ+qUj+6vuz8fCrloLxxu7eFqzJyOoNJBmkkR2
-         K757qV5PZ9fzsIOXsHG1NnJom0T7GfETHUvy0=
+        d=gmail.com; s=20230601; t=1742408573; x=1743013373; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VLkLWvkDX5FuoXTeYmRt1KErPEmtJ52plY5zQ5AVuCU=;
+        b=VPQUjgJDNvirToTFuvDYSKNkWlaaXWhRms8DP0ZPnIiRXml2HPp9ENEii9LEUNS5QO
+         ZGST7Va0W9+ZIIrqvS2pzNyw2ETMq4rmuoOjy6YrQ7cfCfpsWSgwEJZX71Y0o97/79LU
+         KcA1FHQo6hQrpcXnXJ3Tp7miEjZcm4cE+SWSyR5ZhBcgojaasjzPDSDTGwHkAM9BvkZz
+         17x0qM70/5B4KLxEZ2HiNBdLGqIsdTKVELGqEFUlZCsQ0VTfMRee+Mu9mmmLspiopuXS
+         VUucg6Wu64czmAfzQhYSGVanD9G3P3Fp5Zcjd0A+05zkV6TjrNp/QO31+U4tPkIiGCqD
+         kSMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742406327; x=1743011127;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=88yW33TrWIk/+/WaI5H9h1QmYyDkMe4Hu9deS8t+58M=;
-        b=FhzG14OSyVl/kdMSni2EDQajjOpJMTpzQXeRx+cW6wIzDJ8k0RSotmy13fcjyfko5o
-         PpQOwyAgxDybqJ9EdfuZR3phCtQkqGEO3u0q/P/Pkf4m9izYik4nnUICbdOi5th7BA7L
-         hyjcrQcecLd+xc2qWyo971eVHsKCrCXO+TJFK9tCfolV6FwQh5kKt9ANJg5xZ2Stuuj1
-         /3qO5/fne3PnaRsodQLYSU+dFRU50U6r015pewTGqzweICriNR92sbRFNQNw5iVspFnd
-         yh0u+pZZ5VwbSecn6s+JfZp+ZWWM1Of1gknpx5mjrQVZ6XdBgtde/45zC9T6pHxdbnb6
-         04DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQy/F+1mCGByePdif9659+PwP36V0PTRiVbWKd75V8YT29MCX1O7p90L13KI2dyBcYpOsew60N8d0LQf40cQU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycdHMHD4UEF5yKZ23YxeJ4fjflzyv/iG4mPESXDG+lNriZpsVd
-	eGFWn9FQwUzIM6ew3Os9IJySE354BnvvvwC3tj6QVj5jlxtKOTufPQ/4zPIBMz4=
-X-Gm-Gg: ASbGncvMCWMEtZpZAWTMnIIGxAcpncqKfe/R06T7xZqER07pcasjFbEHx5FQSSyzRRv
-	LzKXQP0exrrACSozj6/rWWlNIPcPqnk/lJLGKWGjX571jlgWxsBT6w3SVxNVlod418n0FnD0J+b
-	Bru+j8E8/JULODYd/lAW5SLWxLtzjff+sQXj9F41vnS+RFjEYM/EXODtBZiypZBbHQZAkxL88ut
-	J5g/BOOYCJjpdAv29LrxwZXMd6TRyRsILtzXJJmlzROohrcVw/SYfrfEPDgqOaa9Q6PIzfsYCZK
-	SmrBwxLHg0gNi3yP+LyxUA5APl22raPd8bODtwnS3tQGNOmrJYfx8zn3G5Iw9YiN8+IGrKDkt+1
-	Lb62UccQDP8H4O4fQ
-X-Google-Smtp-Source: AGHT+IERFHHbx0A4wA9qJdQkKklw0ufeU3XYHswtvVKJOCpGkGhgwLEpUnI6jmKEfZkWMIg4V+8Kpw==
-X-Received: by 2002:a17:903:1790:b0:224:283f:a9ef with SMTP id d9443c01a7336-2264981d654mr49179945ad.6.1742406326748;
-        Wed, 19 Mar 2025 10:45:26 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22634aa7462sm36188005ad.224.2025.03.19.10.45.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Mar 2025 10:45:26 -0700 (PDT)
-Date: Wed, 19 Mar 2025 10:45:22 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
-	linux-fsdevel@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me,
-	mingo@redhat.com, arnd@arndb.de, brauner@kernel.org,
-	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-Message-ID: <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@infradead.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	viro@zeniv.linux.org.uk, jack@suse.cz, kuba@kernel.org,
-	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
-	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
-	jolsa@kernel.org, linux-kselftest@vger.kernel.org
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org>
- <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
- <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
- <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
- <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
+        d=1e100.net; s=20230601; t=1742408573; x=1743013373;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VLkLWvkDX5FuoXTeYmRt1KErPEmtJ52plY5zQ5AVuCU=;
+        b=PZFVRdxDyCJNGRo1zmd5DFNyCUHShiCK9mESv1/yDztq+cGV3rejeM4nVcJpoE1lfx
+         M+OtOq6voSWJlsJu3Iyxxk46uEuqnqYnXy2s3eJbA4o/5NRhI8BX7Ie87Ylc8BfPqJ90
+         7iYwGTbqa/JoYdXjv0foyAFtQ024+fn4RlZxvkwXfQaDOLEJ+TzW+w7UfazZIvIQFqaW
+         FzbBgK35N6KghBOjkmCJMw0aVwxPq8nymjVRQvxq9gusykny0b38H0tgeLt5VWUAaeln
+         +o7/zx9xxj31iN86NcbzbXVqJi8Nxhs0fSaMbz/WXZfylZN9ZcxPTA5x6wQI/akLJzxV
+         EyHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpPHDMhFsrG2PUkfYnw+g3+2NAkPwtOCrJHl43NIbetSmW9YFhFDuyTDkw7c/vjH13mPEr6VQdFqh9PcLfB5ID@vger.kernel.org, AJvYcCV6GmPEbtB/b8OaHafHza0NSp087PGAAOPC7NjEIEpz+rjSWZR4zRzJWczDyPdX4eGVaiTZpVE31FN5eVrC7Q==@vger.kernel.org, AJvYcCWGQSW9m0HZ17vjm75ix2DvxIUreD91r+/vASi36pZ2ijrobifeocOTQeKfC8fs3egvk82KaFHXke94@vger.kernel.org, AJvYcCWdOE2CttomIWTKs+C5CIsRVB61nmhZEk3q1hUGzbrb3RwaAjcdLQcYCLuJkp9ANxEP+WEIKb4yXupscOlW@vger.kernel.org, AJvYcCXhp25JXvTXL2nAKaVV/SqnOr/k4tdLI+84l2YqiXwwJcL+7ICPz+ttVr6ZGgRjHAK3KqGufrcTP0A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/x4nfCeQYCy20LiYUoBdg/skKDCCzHsJ+men2vGpxDPZa9i9D
+	L7P1bn037LbasqBtOE+G035wOTO1u/tpOjwVtTTQiQpYdtV3DaJYfxb15Q9hJCCovYUv3HRHMl9
+	OXbnyKsJ+uWAu6mhHG/1idxyzNVQ=
+X-Gm-Gg: ASbGnct9C2+aDaZkQdw8nMiSItK50hoo8+4yB/0lHsp67d3ARS45gysDtckbyCJP3lI
+	RVi+oaoBe+cutA2vIwS4ecyM9CJwO6yt3jnIkTVKO25bhjwutnf5dPu9QHuyZFLM+CfJ+lTMH7R
+	r+JqV9l3MHW3ajiV974MlqFh7ia5s=
+X-Google-Smtp-Source: AGHT+IHrb+0+RW//aqL4hayGxKMukUv5CQcq0S1hKrCwbb+4QWIXnDL8Nl4vyyrv12iknXkUgnUUPfeHuJytfA0aC3k=
+X-Received: by 2002:a2e:8e86:0:b0:30b:f924:3554 with SMTP id
+ 38308e7fff4ca-30d6a40df68mr11816251fa.21.1742408572336; Wed, 19 Mar 2025
+ 11:22:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
+References: <cover.1740139449.git.lorenzo.stoakes@oracle.com>
+ <521d99c08b975fb06a1e7201e971cc24d68196d1.1740139449.git.lorenzo.stoakes@oracle.com>
+ <857b2c3f-7be7-44e8-a825-82a7353665fb@redhat.com> <cd57ed04-c6b1-4df3-a5cb-a33078a08e74@lucifer.local>
+ <09d7ca19-e6cc-4aa9-8474-8975373bdebd@redhat.com>
+In-Reply-To: <09d7ca19-e6cc-4aa9-8474-8975373bdebd@redhat.com>
+From: Andrei Vagin <avagin@gmail.com>
+Date: Wed, 19 Mar 2025 11:22:40 -0700
+X-Gm-Features: AQ5f1JruWAyKDTdp0dEzeU8snZGpGJb9hqdzmlckS-ryauSv8oXkKubpwnOYi4E
+Message-ID: <CANaxB-yMBSFeYcTr-PaevooSeHUkCN9GWTUkLZUNW2vxKzm0sg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fs/proc/task_mmu: add guard region bit to pagemap
+To: David Hildenbrand <david@redhat.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>, 
+	Juan Yescas <jyescas@google.com>, linux-mm@kvack.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org, 
+	criu@lists.linux.dev, 
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>, Pavel Tikhomirov <snorcht@gmail.com>, 
+	Mike Rapoport <mike.rapoport@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 19, 2025 at 11:20:50AM -0600, Jens Axboe wrote:
-> On 3/19/25 11:04 AM, Joe Damato wrote:
-> > On Wed, Mar 19, 2025 at 10:07:27AM -0600, Jens Axboe wrote:
-> >> On 3/19/25 9:32 AM, Joe Damato wrote:
-> >>> On Wed, Mar 19, 2025 at 01:04:48AM -0700, Christoph Hellwig wrote:
-> >>>> On Wed, Mar 19, 2025 at 12:15:11AM +0000, Joe Damato wrote:
-> >>>>> One way to fix this is to add zerocopy notifications to sendfile similar
-> >>>>> to how MSG_ZEROCOPY works with sendmsg. This is possible thanks to the
-> >>>>> extensive work done by Pavel [1].
-> >>>>
-> >>>> What is a "zerocopy notification" 
+On Mon, Feb 24, 2025 at 2:39=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> On 24.02.25 11:18, Lorenzo Stoakes wrote:
+> > On Mon, Feb 24, 2025 at 10:27:28AM +0100, David Hildenbrand wrote:
+> >> On 21.02.25 13:05, Lorenzo Stoakes wrote:
+> >>> Currently there is no means by which users can determine whether a gi=
+ven
+> >>> page in memory is in fact a guard region, that is having had the
+> >>> MADV_GUARD_INSTALL madvise() flag applied to it.
 > >>>
-> >>> See the docs on MSG_ZEROCOPY [1], but in short when a user app calls
-> >>> sendmsg and passes MSG_ZEROCOPY a completion notification is added
-> >>> to the error queue. The user app can poll for these to find out when
-> >>> the TX has completed and the buffer it passed to the kernel can be
-> >>> overwritten.
+> >>> This is intentional, as to provide this information in VMA metadata w=
+ould
+> >>> contradict the intent of the feature (providing a means to change fau=
+lt
+> >>> behaviour at a page table level rather than a VMA level), and would r=
+equire
+> >>> VMA metadata operations to scan page tables, which is unacceptable.
 > >>>
-> >>> My series provides the same functionality via splice and sendfile2.
+> >>> In many cases, users have no need to reflect and determine what regio=
+ns
+> >>> have been designated guard regions, as it is the user who has establi=
+shed
+> >>> them in the first place.
 > >>>
-> >>> [1]: https://www.kernel.org/doc/html/v6.13/networking/msg_zerocopy.html
+> >>> But in some instances, such as monitoring software, or software that =
+relies
+> >>> upon being able to ascertain the nature of mappings within a remote p=
+rocess
+> >>> for instance, it becomes useful to be able to determine which pages h=
+ave
+> >>> the guard region marker applied.
 > >>>
-> >>>> and why aren't you simply plugging this into io_uring and generate
-> >>>> a CQE so that it works like all other asynchronous operations?
+> >>> This patch makes use of an unused pagemap bit (58) to provide this
+> >>> information.
 > >>>
-> >>> I linked to the iouring work that Pavel did in the cover letter.
-> >>> Please take a look.
+> >>> This patch updates the documentation at the same time as making the c=
+hange
+> >>> such that the implementation of the feature and the documentation of =
+it are
+> >>> tied together.
 > >>>
-> >>> That work refactored the internals of how zerocopy completion
-> >>> notifications are wired up, allowing other pieces of code to use the
-> >>> same infrastructure and extend it, if needed.
-> >>>
-> >>> My series is using the same internals that iouring (and others) use
-> >>> to generate zerocopy completion notifications. Unlike iouring,
-> >>> though, I don't need a fully customized implementation with a new
-> >>> user API for harvesting completion events; I can use the existing
-> >>> mechanism already in the kernel that user apps already use for
-> >>> sendmsg (the error queue, as explained above and in the
-> >>> MSG_ZEROCOPY documentation).
+> >>> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> >>> ---
 > >>
-> >> The error queue is arguably a work-around for _not_ having a delivery
-> >> mechanism that works with a sync syscall in the first place. The main
-> >> question here imho would be "why add a whole new syscall etc when
-> >> there's already an existing way to do accomplish this, with
-> >> free-to-reuse notifications". If the answer is "because splice", then it
-> >> would seem saner to plumb up those bits only. Would be much simpler
-> >> too...
-> > 
-> > I may be misunderstanding your comment, but my response would be:
-> > 
-> >   There are existing apps which use sendfile today unsafely and
-> >   it would be very nice to have a safe sendfile equivalent. Converting
-> >   existing apps to using iouring (if I understood your suggestion?)
-> >   would be significantly more work compared to calling sendfile2 and
-> >   adding code to check the error queue.
-> 
-> It's really not, if you just want to use it as a sync kind of thing. If
-> you want to have multiple things in flight etc, yeah it could be more
-> work, you'd also get better performance that way. And you could use
-> things like registered buffers for either of them, which again would
-> likely make it more efficient.
+> >>
+> >> Acked-by: David Hildenbrand <david@redhat.com>
+> >
+> > Thanks! :)
+> >>
+> >> Something that might be interesting is also extending the PAGEMAP_SCAN
+> >> ioctl.
+> >
+> > Yeah, funny you should mention that, I did see that, but on reading the=
+ man
+> > page it struck me that it requires the region to be uffd afaict? All th=
+e
+> > tests seem to establish uffd, and the man page implies it:
+> >
+> >         To start tracking the written state (flag) of a page or range o=
+f
+> >         memory, the UFFD_FEATURE_WP_ASYNC must be enabled by UFFDIO_API
+> >         ioctl(2) on userfaultfd and memory range must be registered wit=
+h
+> >         UFFDIO_REGISTER ioctl(2) in UFFDIO_REGISTER_MODE_WP mode.
+> >
+> > It would be a bit of a weird edge case to add support there. I was exci=
+ted
+> > when I first saw this ioctl, then disappointed afterwards... but maybe =
+I
+> > got it wrong?
 
-I haven't argued that performance would be better using sendfile2
-compared to iouring, just that existing apps which already use
-sendfile (but do so unsafely) would probably be more likely to use a
-safe alternative with existing examples of how to harvest completion
-notifications vs something more complex, like wrapping iouring.
+> >
+>
+> I never managed to review that fully, but I thing that
+> UFFD_FEATURE_WP_ASYNC thingy is only required for PM_SCAN_CHECK_WPASYNC
+> and PM_SCAN_WP_MATCHING.
+>
+> See pagemap_scan_test_walk().
+>
+> I do recall that it works on any VMA.
+>
+> Ah yes, tools/testing/selftests/mm/vm_util.c ends up using it for
+> pagemap_is_swapped() and friends via page_entry_is() to sanity check
+> that what pagemap gives us is consistent with what pagemap_scan gives us.
+>
+> So it should work independent of the uffd magic.
+> I might be wrong, though ...
 
-> If you just use it as a sync thing, it'd be pretty trivial to just wrap
-> a my_sendfile_foo() in a submit_and_wait operation, which issues and
-> waits on the completion in a single syscall. And if you want to wait on
-> the notification too, you could even do that in the same syscall and
-> wait on 2 CQEs. That'd be a downright trivial way to provide a sync way
-> of doing the same thing.
 
-I don't disagree; I just don't know if app developers:
-  a.) know that this is possible to do, and
-  b.) know how to do it
+PAGEMAP_SCAN can work without the UFFD magic. CRIU utilizes PAGEMAP_SCAN
+as a more efficient alternative to /proc/pid/pagemap:
+https://github.com/checkpoint-restore/criu/blob/d18912fc88f3dc7bde5fdfa3575=
+691977eb21753/criu/pagemap-cache.c#L178
 
-In general: it does seem a bit odd to me that there isn't a safe
-sendfile syscall in Linux that uses existing completion notification
-mechanisms.
+For CRIU, obtaining information about guard regions is critical.
+Without this functionality in the kernel, CRIU is broken. We probably shoul=
+d
+consider backporting these changes to the 6.13 and 6.14 stable branches.
 
-> > I would also argue that there are likely user apps out there that
-> > use both sendmsg MSG_ZEROCOPY for certain writes (for data in
-> > memory) and also use sendfile (for data on disk). One example would
-> > be a reverse proxy that might write HTTP headers to clients via
-> > sendmsg but transmit the response body with sendfile.
-> > 
-> > For those apps, the code to check the error queue already exists for
-> > sendmsg + MSG_ZEROCOPY, so swapping in sendfile2 seems like an easy
-> > way to ensure safe sendfile usage.
-> 
-> Sure that is certainly possible. I didn't say that wasn't the case,
-> rather that the error queue approach is a work-around in the first place
-> for not having some kind of async notification mechanism for when it's
-> free to reuse.
+>
+> >>
+> >>
+> >> See do_pagemap_scan().
+> >>
+> >> The benefit here might be that one could effectively search/filter for=
+ guard
+> >> regions without copying 64bit per base-page to user space.
+> >>
+> >> But the idea would be to indicate something like PAGE_IS_GUARD_REGION =
+as a
+> >> category when we hit a guard region entry in pagemap_page_category().
+> >>
+> >> (the code is a bit complicated, and I am not sure why we indicate
+> >> PAGE_IS_SWAPPED for non-swap entries, likely wrong ...)
+> >
+> > Yeah, I could go on here about how much I hate how uffd does a 'paralle=
+l
+> > implementation' of a ton of stuff and then chucks in if (uffd) { go do
+> > something weird + wonderful } but I'll resist the urge :P :))
+> >
+> > Do you think, if it were uffd-specific, this would be useful?
+>
+> If it really is completely uffd-specific for now, I agree that we should
+> rather leave it alone.
+>
+> >
+> > At any rate, I'm not sure it's _hugely_ beneficial in this form as page=
+map
+> > is binary in any case so you're not having to deal with overhead of par=
+sing
+> > a text file at least!
+>
+> My thinking was, that if you have a large VMA, with ordinary pagemap you
+> have to copy 8byte per entry (and have room for that somewhere in user
+> space). In theory, with the scanning feature, you can leave that ...
+> scanning to the kernel and don't have to do any copying/allocate space
+> for it in user space etc.
 
-Of course, I certainly agree that the error queue is a work around.
-But it works, app use it, and its fairly well known. I don't see any
-reason, other than historical context, why sendmsg can use this
-mechanism, splice can, but sendfile shouldn't?
-
-> > As far as the bit about plumbing only the splice bits, sorry if I'm
-> > being dense here, do you mean plumbing the error queue through to
-> > splice only and dropping sendfile2?
-> > 
-> > That is an option. Then the apps currently using sendfile could use
-> > splice instead and get completion notifications on the error queue.
-> > That would probably work and be less work than rewriting to use
-> > iouring, but probably a bit more work than using a new syscall.
-> 
-> Yep
-
-I'm not opposed to dropping the sendfile2 part of the series for the
-official submission. I do think it is a bit odd to add the
-functionality to splice only, though, when probably many apps are
-using splice via calls to sendfile and there is no way to safely use
-sendfile.
-
-If you feel very strongly that this cannot be merged without
-dropping sendfile2 and only plumbing this through for splice, then
-I'll drop the sendfile2 syscall when I submit officially (probably
-next week?).
-
-I do feel pretty strongly that it's more likely apps would use
-sendfile2 and we'd have safer apps out in the wild. But, I could be
-wrong.
-
-That said: if the new syscsall is the blocker, I'll drop it and
-offer a change to the sendfile man page suggesting users swap it
-with calls to splice + error queue for safety.
-
-I greatly appreciate you taking a look and your feedback.
+PAGEMAP_SCAN doesn't have this issue and it was one of the reasons to
+implement it.
 
 Thanks,
-Joe
+Andrei
 
