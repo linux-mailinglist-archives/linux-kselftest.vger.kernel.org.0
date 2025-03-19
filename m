@@ -1,266 +1,148 @@
-Return-Path: <linux-kselftest+bounces-29402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD1BDA68158
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 01:20:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD54CA6816D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 01:24:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 129F51893A29
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 00:19:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FE7E3BD001
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 00:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6E11D6DBC;
-	Wed, 19 Mar 2025 00:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB17134B0;
+	Wed, 19 Mar 2025 00:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="vYT0YI/q"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="YEMEirML"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1621CEADB
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 00:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C885E17BA6;
+	Wed, 19 Mar 2025 00:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742343356; cv=none; b=l+zzAs+R1FMvMoqou8yNgEmZXzwjeUSIa38dL9ytfMOhCosXSDeX0uubK59q3nAR9dG4jLj6cZRkP0Y1RQAYZIGcTt3DM5ammYYK5FKDGo3V7Wn6VyYud6oA6w4V28AYf6J9/AbJZyWYWH6VRtHVCDhnWl+YCnsl+YBSOb3kcAg=
+	t=1742343839; cv=none; b=Tz1pu/yvHiJ/uQqcZohPyrSg+mxpuuxGeXEuYf1H3R8AyesVUlitFyOah/8h+nEWoCzx8kYC3T5B7iFT7LRDQ2eaaH4HpXxt0UHQEWEIfn0cyavpGJubF1Ee/aDh2Kf5pdsC5zpvs5mcWUqV0/qDZVy14Y08RSnmx524mmfagiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742343356; c=relaxed/simple;
-	bh=l6eI5FceV5Cykwuzpt3OkcP+LeKArrcDOklFOAM4Tzc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lq5jxK7V8TnxCqe+69FKOSxFfFELXPapYVIO4FCiljh8sNGBlRRVf0gIya1TNw1I8sWvD7R+I2Pgbu9o4CIEd7y3DoPv5oQvhSuI3bJxFmQN+UZBW6tjIlaEjfdm1G9LEeWnSQ19cSZrwC1Y16r3PWADpjP74e9pDLXBS5ntWZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=vYT0YI/q; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-224100e9a5cso121496755ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Mar 2025 17:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742343353; x=1742948153; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GCjuaqhwOiDHFc+loZsxbFlVswHaNNd+fRkOYDgDDk0=;
-        b=vYT0YI/qIAMQv3nwASjjKB0WzkosloZq27M6ZaOiU5+It2z5k7Ckq1fd8arWHQ05i3
-         wxR1l1GQrwWKjpIlNNTBNYB2rEzDuaQJgbUfW/2mHQsbksSmYmMTVPYFOmI7E5UQKA1C
-         xYAsqpUnAZ9BU3ZJQJTRdY0g5RYiuHIfb6Iqo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742343353; x=1742948153;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GCjuaqhwOiDHFc+loZsxbFlVswHaNNd+fRkOYDgDDk0=;
-        b=F6rnNbuCIGRFMzakejz3uDg/Lc8OWZGjz6tWQNQkUemYsnPYK+KHuX15XYObqcvRKc
-         uhiYBw1XZ59VwzHXkLMekHWCAwQBY9HmSvYSn43PewWj0BfH7lxDratZt1QBrC2JAYtY
-         VEy9UWEsVe3otmbDudn+JW82WOU5X79fR2HEeXTvfVrzyg2Y0mLotgWUrCOlzpCiIh9/
-         6yt1DTDRsQL9WPxk4MYwFgXCHtOIdzghMampgRVwowQM+VIS7UIKbOktDaiJNIOuIiCO
-         Ao+C3Q0yAmrT3/ghCP5FEc8mpcK9NkiODEoNpdI225qaQ1BTQDuy5BArmfg/ARPTAaSX
-         wQrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVGNgDNcMD/RIeDfEv0ZcL6NVMzJCtJvrl23khnNSMtBzabtYx7fT/24nsdnrSPXw4bOanHElVAPXThVvo2cKU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCdVTje4Lb09wbL4B7SGi2GDiInAF6Jcn4HqjUyKQGN3TgsvcV
-	kAAIoSkdtkS6rcCqu6owCGYvCchClBHS44zzGrVVM+4KHXNSaiWfryJEL1aZ844=
-X-Gm-Gg: ASbGncsaGNUUSSIe1a7rrxRo/fFdH02X4von+9tG75C7CYmnwXaVULAdWgsyUqCy135
-	sKtGfeLr6GDwiH1JXiejsUvPuA45iPwddNLMdqIqaQCkMoi3g6kPEFaGy066zsX5Fkts4vZup9z
-	ek9AfAmzDhdUMqGhPbV39js3IoDkkkCK0O37+SLfg5i9NxYr8y91WOOnHEjzmgagnpAc0qouMNu
-	jUKPaGGRUNjsLtztnxqcaMpHMCmAX+A0DeYk666Uzlay+gwNs0rpY1q9C1usaqKjz8VH4HsJaXm
-	rHS7cRXNTj7XLf2IAXMmL0hab707/0Hn6ZYyMIex2JuCz49Qxx60DxjPlb/vDaI=
-X-Google-Smtp-Source: AGHT+IGyJJUfiVi7domxxVJWnLd5oPGvI2NnmEftJelHGqwd1vZMeJiUnL793ZEEGGeMZjX9WP3DFw==
-X-Received: by 2002:a17:902:f60d:b0:223:3b76:4e22 with SMTP id d9443c01a7336-2264980c773mr9656025ad.6.1742343353358;
-        Tue, 18 Mar 2025 17:15:53 -0700 (PDT)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a4876sm101281375ad.70.2025.03.18.17.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 17:15:52 -0700 (PDT)
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	asml.silence@gmail.com,
-	linux-fsdevel@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	viro@zeniv.linux.org.uk,
-	jack@suse.cz,
-	kuba@kernel.org,
-	shuah@kernel.org,
-	sdf@fomichev.me,
-	mingo@redhat.com,
-	arnd@arndb.de,
-	brauner@kernel.org,
-	akpm@linux-foundation.org,
-	tglx@linutronix.de,
-	jolsa@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Joe Damato <jdamato@fastly.com>
-Subject: [RFC -next 10/10] selftests: Add sendfile zerocopy notification test
-Date: Wed, 19 Mar 2025 00:15:21 +0000
-Message-ID: <20250319001521.53249-11-jdamato@fastly.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250319001521.53249-1-jdamato@fastly.com>
-References: <20250319001521.53249-1-jdamato@fastly.com>
+	s=arc-20240116; t=1742343839; c=relaxed/simple;
+	bh=kpwPorho5RAIlOTKwDI1K7TbUtmkZgLv9uf70GDbAzs=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LhkQziEoLH76UfN267OGXzy3VcEhbKR/xgStTRUVn/OedUgjsF1EqtfyRJSBbzFrVI74/OPLvC316SG8xWsSHlSEdeH0OFNGvsRauMo7AmIsHfhdDy/lTbmnY/2JyLZEiBfwiBWjfELPA4m5yxwDAx2y5T+XM81rgqIL3cMaiNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=YEMEirML; arc=none smtp.client-ip=185.70.40.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1742343831; x=1742603031;
+	bh=wo8sG357bqPQGvo1ptE/J2DUrCHu4PLnYcZXmvZkOVg=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=YEMEirML/9gSZoY4uHrogBNTNvxEpxE0nxlVpywtlo14E0NRo4sgzUeJN1ICHW9iO
+	 Hs+62Ze9ETjQBTJTeuLI5K2hdmXC8SZpKd5BbjGLL6946MWSFePjzutamwGquo5qet
+	 kM5QtFDwNf4PGYH1yp70Gmcz0yrnE7oE2IfwKBlovHoFVkizndoKrRkJMIzZz08SKV
+	 6dV2+9PXQLkSRDJI7R1Td2XFN2wrvwQ1TY8VT+XnnuA+SE4kcXiQd9q9QSmfpA92bx
+	 Msx0AQFyXojGx3yE4tSzDjoUxLfRmylGQ7lyudT44w8+wb4hMqwdyzddxqNdSFsmxt
+	 HszvOGsn/Ha3Q==
+Date: Wed, 19 Mar 2025 00:23:44 +0000
+To: Alice Ryhl <aliceryhl@google.com>, Tamir Duberstein <tamird@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
+	linux-block@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 6/6] rust: use strict provenance APIs
+Message-ID: <D8JTC30W0NF6.17SR73Y9I99ZT@proton.me>
+In-Reply-To: <Z9lnIJCcVSza6UVo@google.com>
+References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com> <20250317-ptr-as-ptr-v5-6-5b5f21fa230a@gmail.com> <Z9lnIJCcVSza6UVo@google.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 3ec742d730499fbb39dfc15a00acc0e43da941a3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Extend the existing the msg_zerocopy test to allow testing sendfile to
-ensure that notifications are generated.
+On Tue Mar 18, 2025 at 1:29 PM CET, Alice Ryhl wrote:
+> On Mon, Mar 17, 2025 at 10:23:56AM -0400, Tamir Duberstein wrote:
+>> Throughout the tree, use the strict provenance APIs stabilized in Rust
+>> 1.84.0[1]. Retain backwards-compatibility by introducing forwarding
+>> functions at the `kernel` crate root along with polyfills for rustc <
+>> 1.84.0.
+>>=20
+>> Use `#[allow(clippy::incompatible_msrv)]` to avoid warnings on rustc <
+>> 1.84.0 as our MSRV is 1.78.0.
+>>=20
+>> In the `kernel` crate, enable the strict provenance lints on rustc >=3D
+>> 1.84.0; do this in `lib.rs` rather than `Makefile` to avoid introducing
+>> compiler flags that are dependent on the rustc version in use.
+>>=20
+>> Link: https://blog.rust-lang.org/2025/01/09/Rust-1.84.0.html#strict-prov=
+enance-apis [1]
+>> Suggested-by: Benno Lossin <benno.lossin@proton.me>
+>> Link: https://lore.kernel.org/all/D8EIXDMRXMJP.36TFCGWZBRS3Y@proton.me/
+>> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+>
+> I'm not convinced that the pros of this change outweigh the cons. I
+> think this is going to be too confusing for the C developers who look at
+> this code.
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
+1) I think we should eliminate all possible `as` conversions. They are
+   non-descriptive (since they can do may *very* different things) and
+   ptr2int conversions are part of that.
+2) At some point we will have to move to the provenance API, since
+   that's what Rust chose to do. I don't think that doing it at a later
+   point is doing anyone a favor.
+3) I don't understand the argument that this is confusing to C devs.
+   They are just normal functions that are well-documented (and if
+   that's not the case, we can just improve them upstream). And
+   functions are much easier to learn about than `as` casts (those are
+   IMO much more difficult to figure out than then strict provenance
+   functions).
+
+Thus I think we should keep this patch (with Boqun's improvement).
+
+>> diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+>> index 719b0a48ff55..96393bcf6bd7 100644
+>> --- a/rust/kernel/uaccess.rs
+>> +++ b/rust/kernel/uaccess.rs
+>> @@ -226,7 +226,9 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8=
+>]) -> Result {
+>>          }
+>>          // SAFETY: `out_ptr` points into a mutable slice of length `len=
+`, so we may write
+>>          // that many bytes to it.
+>> -        let res =3D unsafe { bindings::copy_from_user(out_ptr, self.ptr=
+ as *const c_void, len) };
+>> +        let res =3D unsafe {
+>> +            bindings::copy_from_user(out_ptr, crate::with_exposed_prove=
+nance(self.ptr), len)
+>> +        };
+>>          if res !=3D 0 {
+>>              return Err(EFAULT);
+>>          }
+>> @@ -264,7 +266,7 @@ pub fn read<T: FromBytes>(&mut self) -> Result<T> {
+>>          let res =3D unsafe {
+>>              bindings::_copy_from_user(
+>>                  out.as_mut_ptr().cast::<c_void>(),
+>> -                self.ptr as *const c_void,
+>> +                crate::with_exposed_provenance(self.ptr),
+>>                  len,
+>>              )
+>>          };
+>
+> That's especially true for cases like this. These are userspace pointers
+> that are never dereferenced. It's not useful to care about provenance
+> here.
+
+I agree for this case, but I think we shouldn't be using raw pointers
+for this to begin with. I'd think that a newtype wrapping `usize` is a
+much better fit. It can then also back the `IoRaw` type. AFAIU user
+space pointers don't have provenance, right? (if they do, then we should
+use this API :)
+
 ---
- tools/testing/selftests/net/msg_zerocopy.c  | 54 ++++++++++++++++++++-
- tools/testing/selftests/net/msg_zerocopy.sh |  5 ++
- 2 files changed, 58 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/msg_zerocopy.c b/tools/testing/selftests/net/msg_zerocopy.c
-index 7ea5fb28c93d..20e334b25fbd 100644
---- a/tools/testing/selftests/net/msg_zerocopy.c
-+++ b/tools/testing/selftests/net/msg_zerocopy.c
-@@ -30,6 +30,7 @@
- #include <arpa/inet.h>
- #include <error.h>
- #include <errno.h>
-+#include <fcntl.h>
- #include <limits.h>
- #include <linux/errqueue.h>
- #include <linux/if_packet.h>
-@@ -50,6 +51,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <sys/ioctl.h>
-+#include <sys/sendfile.h>
- #include <sys/socket.h>
- #include <sys/stat.h>
- #include <sys/time.h>
-@@ -74,6 +76,14 @@
- #define MSG_ZEROCOPY	0x4000000
- #endif
- 
-+#ifndef SENDFILE_ZC
-+#define SENDFILE_ZC (0x2)
-+#endif
-+
-+#ifndef __NR_sendfile2
-+#define __NR_sendfile2 467
-+#endif
-+
- static int  cfg_cork;
- static bool cfg_cork_mixed;
- static int  cfg_cpu		= -1;		/* default: pin to last cpu */
-@@ -87,6 +97,8 @@ static int  cfg_verbose;
- static int  cfg_waittime_ms	= 500;
- static int  cfg_notification_limit = 32;
- static bool cfg_zerocopy;
-+static bool cfg_sendfile;
-+static const char *cfg_sendfile_path;
- 
- static socklen_t cfg_alen;
- static struct sockaddr_storage cfg_dst_addr;
-@@ -182,6 +194,37 @@ static void add_zcopy_cookie(struct msghdr *msg, uint32_t cookie)
- 	memcpy(CMSG_DATA(cm), &cookie, sizeof(cookie));
- }
- 
-+static bool do_sendfile(int fd)
-+{
-+	int from_fd = open(cfg_sendfile_path, O_RDONLY, 0);
-+	struct stat buf;
-+	ssize_t total = 0;
-+	ssize_t ret = 0;
-+	off_t off = 0;
-+
-+	if (fd < 0)
-+		error(1, errno, "couldn't open sendfile path");
-+
-+	if (fstat(from_fd, &buf))
-+		error(1, errno, "couldn't fstat");
-+
-+	while (total < buf.st_size) {
-+		ret = syscall(__NR_sendfile2, fd, from_fd, &off, buf.st_size,
-+			      SENDFILE_ZC);
-+		if (ret < 0)
-+			error(1, errno, "unable to sendfile");
-+		total += ret;
-+		sends_since_notify++;
-+		bytes += ret;
-+		packets++;
-+		if (ret > 0)
-+			expected_completions++;
-+	}
-+
-+	close(from_fd);
-+	return total == buf.st_size;
-+}
-+
- static bool do_sendmsg(int fd, struct msghdr *msg, bool do_zerocopy, int domain)
- {
- 	int ret, len, i, flags;
-@@ -550,6 +593,8 @@ static void do_tx(int domain, int type, int protocol)
- 	do {
- 		if (cfg_cork)
- 			do_sendmsg_corked(fd, &msg);
-+		else if (cfg_sendfile)
-+			do_sendfile(fd);
- 		else
- 			do_sendmsg(fd, &msg, cfg_zerocopy, domain);
- 
-@@ -715,7 +760,7 @@ static void parse_opts(int argc, char **argv)
- 
- 	cfg_payload_len = max_payload_len;
- 
--	while ((c = getopt(argc, argv, "46c:C:D:i:l:mp:rs:S:t:vz")) != -1) {
-+	while ((c = getopt(argc, argv, "46c:C:D:i:l:mp:rs:S:t:vzf:w:")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -767,9 +812,16 @@ static void parse_opts(int argc, char **argv)
- 		case 'v':
- 			cfg_verbose++;
- 			break;
-+		case 'f':
-+			cfg_sendfile = true;
-+			cfg_sendfile_path = optarg;
-+			break;
- 		case 'z':
- 			cfg_zerocopy = true;
- 			break;
-+		case 'w':
-+			cfg_waittime_ms = 200 + strtoul(optarg, NULL, 10) * 1000;
-+			break;
- 		}
- 	}
- 
-diff --git a/tools/testing/selftests/net/msg_zerocopy.sh b/tools/testing/selftests/net/msg_zerocopy.sh
-index 89c22f5320e0..c735e4ab86b5 100755
---- a/tools/testing/selftests/net/msg_zerocopy.sh
-+++ b/tools/testing/selftests/net/msg_zerocopy.sh
-@@ -74,6 +74,7 @@ esac
- cleanup() {
- 	ip netns del "${NS2}"
- 	ip netns del "${NS1}"
-+	rm -f sendfile_data
- }
- 
- trap cleanup EXIT
-@@ -106,6 +107,9 @@ ip -netns "${NS2}" addr add       fd::2/64 dev "${DEV}" nodad
- # Optionally disable sg or csum offload to test edge cases
- # ip netns exec "${NS1}" ethtool -K "${DEV}" sg off
- 
-+# create sendfile test data
-+dd if=/dev/zero of=sendfile_data bs=1M count=8 2> /dev/null
-+
- do_test() {
- 	local readonly ARGS="$1"
- 
-@@ -118,4 +122,5 @@ do_test() {
- 
- do_test "${EXTRA_ARGS}"
- do_test "-z ${EXTRA_ARGS}"
-+do_test "-z -f sendfile_data ${EXTRA_ARGS}"
- echo ok
--- 
-2.43.0
+Cheers,
+Benno
 
 
