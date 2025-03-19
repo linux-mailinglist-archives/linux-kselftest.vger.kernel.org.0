@@ -1,167 +1,291 @@
-Return-Path: <linux-kselftest+bounces-29421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E3A5A68695
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 09:20:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C21CA68775
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 10:07:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8281216D079
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 08:20:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1F1F19C1384
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 09:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0DCE2512D5;
-	Wed, 19 Mar 2025 08:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21732528F1;
+	Wed, 19 Mar 2025 09:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="lzSXVoxA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A53C250BF6;
-	Wed, 19 Mar 2025 08:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874932512CF;
+	Wed, 19 Mar 2025 09:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742372406; cv=none; b=ny9fw6RmHy/pgwviwLs9LDxYKL8YYHB2XvZzOllM4ipdXUSw1UQGb7HaOcSEAefNCJMbR5HS0eLpi4vb1jyGRmJiyJGdP1hv3pRlmn+kJutOyU3XnFZFnrmMhn6igENy5KeCLNSihus0YpP0igameG5Fx4E9qi0iKYCMH/YKwCU=
+	t=1742375205; cv=none; b=t/iexH1Yfwz+1z712H5iGAIvEqfUjBgclPDi+vsiAS8vVPoBPqdYy6GR5ZF7qc1qhjYnxhwuuQqHbCG7zo3ABV0APURnU06Eh0uIfwYZJn3SxEZvtlUadJB5HIAPpPIe9L57rlrvzKGLNV1iN6vk+ljIFv+0gR285fEcxYyVNH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742372406; c=relaxed/simple;
-	bh=9OlvM4XUWWvrHJOd2iYbZSXPoeKrvur3cTL1QmV2LNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jGPJqRUmdTHdWfAUsr7ntxP/W8arq3G/Iffg08MrASUp/VinXPonljuAYzkK09NwFa5LW256RcQKiQlbpa3nO9gVg/akVdb+kbdE6zGg2iHxeMZU/vNdIWv3DZnmvfggYrbvm7+1mN8FpBwV1uXHo4CO0bx/W3CS98Eh0Msc7N8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4ZHh8p3p47z9sSY;
-	Wed, 19 Mar 2025 09:05:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Pdv_1f5SWZW; Wed, 19 Mar 2025 09:05:30 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4ZHh8p2Mb8z9sSX;
-	Wed, 19 Mar 2025 09:05:30 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 2617E8B78F;
-	Wed, 19 Mar 2025 09:05:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id K6S1MuFrSThd; Wed, 19 Mar 2025 09:05:30 +0100 (CET)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 585CB8B763;
-	Wed, 19 Mar 2025 09:05:28 +0100 (CET)
-Message-ID: <a64bf821-ea90-4fd9-92ec-13bf7b7a3067@csgroup.eu>
-Date: Wed, 19 Mar 2025 09:05:27 +0100
+	s=arc-20240116; t=1742375205; c=relaxed/simple;
+	bh=mOVj79GUbV+xSH8LY8TtXyIWEdLC30++NhbN9PTTN5U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PDb6uP3ZL1WeK1bubmz/cvfV99GfzLkIvSnLhsXHBnUjIRYTRgpDCpeWsjgrafKNvptFiezALF4mQiN1Ugzwv74TGM/qxgTY8CiJFKed9C+Hb+dNBI2HrXvxnB8Zu/qFeE7Mb4/BWAe4myXWRNLhVuUA+VPLps5T4XAQT/J3mrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=lzSXVoxA; arc=none smtp.client-ip=131.188.11.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1742375193; bh=/5goDERUrPXPyZzmCy7lw+XwkgPNVdvQxkY1QQaRiqA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From:To:CC:
+	 Subject;
+	b=lzSXVoxAZAnJzDEK3eE3Aj534D+oBP149HbMd5Pg72Qe/WLAC3uoTnpjRsVzsIYox
+	 TnYOSHjKGuB3gHkkqfdQ1OTs1uRRT/tls2LiJQviOSpmAsToF0tuXQxoPh+Knvua7E
+	 mnx3iG4H8d2/gugEFKL5yNykGUx0uN36jMW5M6pViwJaZ6mLY7uXMFkK7fy8K2/NJ2
+	 HC8FUqCub2ttWnDa7p1wJy6j+33lnqdVUeBHkXu/261LFECZL0AkRC091jFVzXJD6m
+	 84+ErL1QGP+WFgpl2uMQHur82B8hea9fHUY3oayifgIcBEHmBmbvegaOhKfZ7ZLv/9
+	 IlIezQeTcmibw==
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4ZHjWF1N6dzPkVl;
+	Wed, 19 Mar 2025 10:06:33 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2a02:8071:7900:bc0:c583:a400:7f8d:5e80
+Received: from localhost (unknown [IPv6:2a02:8071:7900:bc0:c583:a400:7f8d:5e80])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX18CrB7ddj49FWVqrSeQ4eIWyZV3PfQwQ7Q=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4ZHjW86Bk0zPjtK;
+	Wed, 19 Mar 2025 10:06:28 +0100 (CET)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao
+ Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas
+ <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao
+ <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman
+ <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Shuah
+ Khan <shuah@kernel.org>,
+	Henriette Herzog <henriette.herzog@rub.de>, Cupertino Miranda
+ <cupertino.miranda@oracle.com>,
+	Matan Shachnai <m.shachnai@gmail.com>, Dimitar Kanaliev
+ <dimitar.kanaliev@siteground.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>, Daniel Xu <dxu@dxuuu.xyz>, bpf
+ <bpf@vger.kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML
+ <linux-kernel@vger.kernel.org>,
+	ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ George Guo <guodongtai@kylinos.cn>,
+	WANG Xuerui <git@xen0n.name>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Maximilian Ott <ott@cs.fau.de>,
+	Milan Stephan <milan.stephan@fau.de>
+Subject: Re: [PATCH bpf-next 11/11] bpf: Fall back to nospec for spec path
+ verification
+In-Reply-To: <CAADnVQKL-NwxigMWM+U=n5ZXPG+xHYzSTEv0Rq8Y91m45eRJDw@mail.gmail.com>
+	(Alexei Starovoitov's message of "Tue, 18 Mar 2025 19:40:44 -0700")
+References: <20250313172127.1098195-1-luis.gerhorst@fau.de>
+	<20250313175312.1120183-1-luis.gerhorst@fau.de>
+	<20250313175312.1120183-2-luis.gerhorst@fau.de>
+	<CAADnVQKL-NwxigMWM+U=n5ZXPG+xHYzSTEv0Rq8Y91m45eRJDw@mail.gmail.com>
+User-Agent: mu4e 1.12.8; emacs 29.4
+Date: Wed, 19 Mar 2025 10:06:27 +0100
+Message-ID: <87cyedie3w.fsf@fau.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 07/14] arm64: Add support for suppressing warning
- backtraces
-To: Will Deacon <will@kernel.org>, Alessandro Carminati <acarmina@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
- <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>,
- Kees Cook <keescook@chromium.org>, Daniel Diaz <daniel.diaz@linaro.org>,
- David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>,
- Brendan Higgins <brendan.higgins@linux.dev>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
- <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
- <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
- Thomas Zimmermann <tzimmermann@suse.de>, Guenter Roeck <linux@roeck-us.net>,
- Alessandro Carminati <alessandro.carminati@gmail.com>,
- Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
- kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- loongarch@lists.linux.dev, x86@kernel.org,
- Linux Kernel Functional Testing <lkft@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <20250313114329.284104-8-acarmina@redhat.com>
- <20250313122503.GA7438@willie-the-truck>
- <CAGegRW5r3V2-_44-X353vS-GZwDYG=SVwc6MzSGE8GdFQuFoKA@mail.gmail.com>
- <20250318155946.GC13829@willie-the-truck>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250318155946.GC13829@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
+> On Thu, Mar 13, 2025 at 10:57=E2=80=AFAM Luis Gerhorst <luis.gerhorst@fau=
+.de> wrote:
+>> With increased limits this allows applying mitigations to large BPF
+>> progs such as the Parca Continuous Profiler's prog. However, this
+>> requires a jump-seq limit of 256k. In any case, the same principle
+>> should apply to smaller programs therefore include it even if the limit
+>> stays at 8k for now. Most programs in [1] only require a limit of 32k.
+>
+> Do you mean that without this change the verifier needs 256k
+> jmp limit to load Parca's prog as unpriv due to speculative
+> path exploration with push_stack ?
+>
 
-Le 18/03/2025 à 16:59, Will Deacon a écrit :
-> On Thu, Mar 13, 2025 at 05:40:59PM +0100, Alessandro Carminati wrote:
->> On Thu, Mar 13, 2025 at 1:25 PM Will Deacon <will@kernel.org> wrote:
->>>
->>> On Thu, Mar 13, 2025 at 11:43:22AM +0000, Alessandro Carminati wrote:
->>>> diff --git a/arch/arm64/include/asm/bug.h b/arch/arm64/include/asm/bug.h
->>>> index 28be048db3f6..044c5e24a17d 100644
->>>> --- a/arch/arm64/include/asm/bug.h
->>>> +++ b/arch/arm64/include/asm/bug.h
->>>> @@ -11,8 +11,14 @@
->>>>
->>>>   #include <asm/asm-bug.h>
->>>>
->>>> +#ifdef HAVE_BUG_FUNCTION
->>>> +# define __BUG_FUNC  __func__
->>>> +#else
->>>> +# define __BUG_FUNC  NULL
->>>> +#endif
->>>> +
->>>>   #define __BUG_FLAGS(flags)                           \
->>>> -     asm volatile (__stringify(ASM_BUG_FLAGS(flags)));
->>>> +     asm volatile (__stringify(ASM_BUG_FLAGS(flags, %c0)) : : "i" (__BUG_FUNC));
->>>
->>> Why is 'i' the right asm constraint to use here? It seems a bit odd to
->>> use that for a pointer.
+Only with this change Parca is loadable when manually enabling Spectre
+defenses for privileged programs and setting the following limits:
+- BPF_COMPLEXITY_LIMIT_JMP_SEQ=3D256k
+- BPF_COMPLEXITY_LIMIT_SPEC_V1_VERIFICATION=3D128k
+- BPF_COMPLEXITY_LIMIT_INSNS=3D32M
+
+>
+> And this change uses 4k as a trade-off between prog runtime
+> and verification time ?
+>
+
+Yes, this change uses 4k to limited nested speculative path exploration.
+At the top-level (i.e., on architectural paths), spawned speculative
+paths are still explored.
+
+>
+> But tracing progs use bpf_probe_read_kernel(), so they're never going
+> to be unpriv.
+>
+
+I'm sorry this was not clear. Parca is only used as an example here
+to test whether this improves expressiveness in general.
+
+If you do not see this as a favorable tradeoff (because of the code
+complexity), I think it would be acceptable to drop the last patch for
+now. The biggest improvements is already achieved with the other patches
+as evident from the selftests. I can do a more exhaustive analysis on
+patch 11 later.
+
+>
+>> @@ -2010,6 +2011,19 @@ static struct bpf_verifier_state *push_stack(stru=
+ct bpf_verifier_env *env,
+>>         struct bpf_verifier_stack_elem *elem;
+>>         int err;
 >>
->> I received this code as legacy from a previous version.
->> In my review, I considered the case when HAVE_BUG_FUNCTION is defined:
->> Here, __BUG_FUNC is defined as __func__, which is the name of the
->> current function as a string literal.
->> Using the constraint "i" seems appropriate to me in this case.
->>
->> However, when HAVE_BUG_FUNCTION is not defined:
->> __BUG_FUNC is defined as NULL. Initially, I considered it literal 0,
->> but after investigating your concern, I found:
->>
->> ```
->> $ echo -E "#include <stdio.h>\n#include <stddef.h>\nint main()
->> {\nreturn 0;\n}" | aarch64-linux-gnu-gcc -E -dM - | grep NULL
->> #define NULL ((void *)0)
->> ```
->>
->> I realized that NULL is actually a pointer that is not a link time
->> symbol, and using the "i" constraint with NULL may result in undefined
->> behavior.
->>
->> Would the following alternative definition for __BUG_FUNC be more convincing?
->>
->> ```
->> #ifdef HAVE_BUG_FUNCTION
->>      #define __BUG_FUNC __func__
->> #else
->>      #define __BUG_FUNC (uintptr_t)0
->> #endif
->> ```
->> Let me know your thoughts.
-> 
-> Thanks for the analysis; I hadn't noticed this specific issue, it just
-> smelled a bit fishy. Anyway, the diff above looks better, thanks.
+>> +       if (!env->bypass_spec_v1 &&
+>> +           cur->speculative &&
+>
+> Should this be
+> (cur->speculative || speculative)
+> ?
 
-That propably deserves a comment.
+No, I think it will be unsafe to add `|| speculative` here. If we were
+to return -EINVAL from push_stack() when pushing a speculative path from
+a non-speculative path (e.g., in check_cond_jmp_op() through
+sanitize_speculative_path()), this will cause do_check() to add an
+lfence before the jump-op.
 
-Doesn't sparse and/or checkpatch complain about 0 being used in lieu of 
-NULL ?
+Here's a minimal example program:
 
-By the way I had similar problem in the past with GCC not seeing NULL as 
-a __builtin_constant_p(), refer commit 1d8f739b07bd ("powerpc/kuap: Fix 
-set direction in allow/prevent_user_access()")
+	A =3D true
+	B =3D true
+	if A goto e
+	f()
+	if B goto e
+	unsafe()
+e:	exit
 
-Christophe
+There are the following speculative and non-speculative paths
+(`cur->speculative` and `speculative` referring to the value of the
+push_stack() parameters):
+
+- A =3D true
+- B =3D true
+- if A goto e
+  - A && !cur->speculative && !speculative
+    - exit
+  - !A && !cur->speculative && speculative
+    - f()
+    - if B goto e
+      - B && cur->speculative && !speculative
+        - exit
+      - !B && cur->speculative && speculative
+        - unsafe()
+
+`|| speculative` might cause us to only add an lfence before `if A goto
+e`, which would not be sufficient. Intel recommends adding the lfence
+after the jump [1].
+
+>
+> In general I'm not convinced that the approach is safe.
+>
+> This recoverable EINVAL means that exploration under speculation
+> stops early, but there could be more branches and they won't be
+> sanitized with extra lfence.
+> So speculative execution can still happen at later insns.
+>
+
+`goto process_bpf_exit` only causes us to stop analyzing this particular
+path, not the rest of the program.
+
+This is based on the assumption, that the lfence stops the CPU from ever
+reaching those branches (if they are not reachable through other means).
+
+>
+> Similar concern in patch 7:
+> + if (state->speculative && cur_aux(env)->nospec)
+> +   goto process_bpf_exit;
+>
+> One lfence at this insn doesn't stop speculation until the program end.
+> Only at this insn. The rest of the code is free to speculate.
+>
+
+Taking the program above as an example, this allows us to stop before
+f() if an lfence was inserted there.
+
+Fully patched program would be:
+
+	A =3D true
+	B =3D true
+	if A goto e
+	lfence
+	f()
+	if B goto e
+	unsafe()
+e:	exit
+
+In this example, all instructions after the lfence are dead code (and
+with the lfence they are also dead code speculatively).
+
+I believe this is in line with Intel's guidance [1]:
+
+	An LFENCE instruction or a serializing instruction will ensure that
+	no later instructions execute, even speculatively, until all prior
+	instructions complete locally. Developers might prefer LFENCE over a
+	serializing instruction because LFENCE may have lower latency.
+	Inserting an LFENCE instruction after a bounds check prevents later
+	operations from executing before the bound check completes.
+
+With regards to the example, this implies that `if B goto e` will not
+execute before `if A goto e` completes. Once `if A goto e` completes,
+the CPU should find that the speculation was wrong and continue with
+`exit`.
+
+If there is any other path that leads to `if B goto e` (and therefore
+`unsafe()`) without going through `if A goto e`, then an lfence might of
+course still be needed there. However, I assume this other path will be
+explored separately and therefore be discovered by the verifier even if
+the exploration discussed here stops at the lfence. If this assumption
+is wrong, please let me know.
+
+>
+> The refactoring in patches 1-3 is nice.
+> Patches 4-5 are tricky and somewhat questionable, but make sense.
+> Patch 7 without early goto process_bpf_exit looks correct too,
+> Patch 8 is borderline. Feels like it's opening the door for
+> new vulnerabilities and space to explore for security researchers.
+> We disabled unpriv bpf by default and have no intentions to enable it.
+> Even if we land the whole thing the unpriv will stay disabled.
+> So trade offs don't appear favorable.
+>
+
+Thank you very much for having a look. Let me know whether the above
+resolves your concern.
+
+In any case, should I separate patches 1-3 into another series?
+
+[1] https://www.intel.com/content/www/us/en/developer/articles/technical/so=
+ftware-security-guidance/technical-documentation/runtime-speculative-side-c=
+hannel-mitigations.html
+    ("Managed Runtime Speculative Execution Side Channel Mitigations")
 
