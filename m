@@ -1,241 +1,138 @@
-Return-Path: <linux-kselftest+bounces-29425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CCE7A68892
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 10:48:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15F40A6894F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 11:20:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C23483ADB9B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 09:43:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E55937A422D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 10:19:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C0E256C63;
-	Wed, 19 Mar 2025 09:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB413253F21;
+	Wed, 19 Mar 2025 10:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dFUgnhTA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Cqzk+EdP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA67D253350
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 09:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0067253B77
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 10:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742376893; cv=none; b=e3lIiTA6ReW03nrtnab75B1LuWA7WAuF3W2gxgxeHGgALbRDVqOvtq8G1vS6gvqSU9S6ronu6X/GHgv7+fnTCsMn5LpPnQ5mGJ/tRVmA72OTcK9KuvMmNXRW1w+46ah3wvqFBovGwIZylsZ9j5Ivb26PjRdXBPOucVnjg2o732Y=
+	t=1742379619; cv=none; b=Bdvwomf1zpTtpToY+Nurbjxu5nHlJ3K8ptXhOAMJ3PPLjl7YvrN5D0y7FIzUqc9OYNTWzmwB5evZMGrJk5RVT8E0EKi9GipJoXm0c20yruFxxFcuUy6vmygqY4GEHgk6akE9R+VBq9lKdmlpMkmQ1vSfTYkHXwQihEstPce6DLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742376893; c=relaxed/simple;
-	bh=C4DIv8oZS+qrJj6Zfs3h2Hvo2lW9ybZoY/34FlHHAto=;
+	s=arc-20240116; t=1742379619; c=relaxed/simple;
+	bh=tK60PvB18wBvxWYt9lvP7XZvyX62+1Eh/q18fiab6Dw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mBVIYgAKgFk+Teipud2ST1Aoz8msO5+vcaT+engXOsyO4F33itqwqw9DgGEStbBQPEp3Karxr1j2AElhz3OPONSpp5nEgMAs0uWdcijhqJtQFSp5NkKjlU32HFJJFs5sbYRDSeQeCaTZR6Sf5q0kDDELx246d5TSkPXzfj5lWTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dFUgnhTA; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742376889;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QVNxeHhRg1FvNFhNzTz9ZRh7kCSoT0iwStWzKcnXSNQ=;
-	b=dFUgnhTA5cAIQHkkUTAif1zPGymDTm0+C/ec7yjWzGCUMySEvqTGOPboNG2bUzKIBiA0yb
-	sVI4JGCudpj7WiyOi3/+tl5aaYFbZ+SIMovkhl36J3Z1otnupD2VuNgiZw4ZcZPYNCpmyK
-	OKrWrSJdeid/pXdzvIeSSK/67ZlNJvk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-218-dWpCz0cAM9Wo0ae8Zs2Rng-1; Wed, 19 Mar 2025 05:34:48 -0400
-X-MC-Unique: dWpCz0cAM9Wo0ae8Zs2Rng-1
-X-Mimecast-MFC-AGG-ID: dWpCz0cAM9Wo0ae8Zs2Rng_1742376887
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4394c747c72so21764025e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 02:34:47 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WsWkz+FhJYqGIW5KsH1IsYVXjOebR15cvMZDMpYE1mugLLmL+MdIyy4Jt2JOw58fT3F5CrHS57i1YTGoDsGmehFgNYYVD/6vauCEE83e5sGCv1Wm7DEZp4smWwQbSKt7X1WdeeHVytxccVn/XxBbdrFwdHSF2a9+iYZLuVwGDNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Cqzk+EdP; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-399676b7c41so1932179f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 03:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742379616; x=1742984416; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZWxtYxkS3ZmfTDBR3Ubow/eGPhpGRxs9B2tOpbPHly4=;
+        b=Cqzk+EdPpIhDnCwd4eZQhRJmj37M2X58h2HO5uNqgSIH22V9OW14Iab3Ju3v2/JBGK
+         FkBh+Vl+ywlPDXLek56OVX9eR8guijL21wCkGBOrgCBDqWVTlUyF3Y3fKKCO3l7SLWUk
+         jOEddmM13XNbr2OwEDURPTNxBfXb5OlBEi/oxCUifpl1mr3whqiOhSu0CRKjMMNuUjh9
+         9slN6j9TtWAO77QjCTesk6z9yRW7BBsUpTsypOZ+aWphqBGd+J7kGPNlXEE96Wdpk08M
+         GbHQt7vH+zR/MLbHBv0S8POfgt0v5joJzok+xCZjw6r4elUMOvJEV4DVk/8Cg1gP+Ack
+         KKOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742376887; x=1742981687;
+        d=1e100.net; s=20230601; t=1742379616; x=1742984416;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QVNxeHhRg1FvNFhNzTz9ZRh7kCSoT0iwStWzKcnXSNQ=;
-        b=wuibnubHOrODxvXgDY6Vm0Io3wjpFKjlAM7ESwLKSUqirWPAYNLRpbS0kglRxmbQ7P
-         5d4KiAt4guPHJwd+avBFxAoIXQGk7Eq6wRmeLAeEtrAa4yIBYxonySnoJaT0NY/uN/HZ
-         6dgJ7hhAdvFIPy9XX2F02wB9TEltTHmGK2JvFbAJzjKX/GdBCD7TeXVwuEm9LhAKp/gC
-         rzwGqpk7pExuu6uTr2wC3qkYTbyqOXL1MzNT4025EvaClIPF0DqPWVkIw4LehHlfYVOC
-         /mwbddQh57VDSgCelXmq0uBM22t9aNAVbjemDxKSuqFZChAmEzccr26SVfKMZtH3S9TO
-         tSBw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2ibJJQC3x6o44Ls5QU6AF2Ecr7ELXkZS0SmXL30QF+gptYRDBOiKLh8iBNE4YCDeJ9sadQQgT3Nty3wrd4ao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjSk55tnnwB5bORjWuadPZwu+jNCL4e7VuSXSR+p+LZGeaybL3
-	/aeohe4ruIk1bfDfxk4ZGCujP3/AM9KYJNNIrqS+LHl6r++zUzp+WR/TrlSb1Buva4GYkiYLKVK
-	SCv9OO9fZaZqyw+gClVtxeUsuXFdtXcJcEOpoTvjKZuvmtv7/Egw9GKYzU56ILtTNQA==
-X-Gm-Gg: ASbGncsTON23LYEKDxgk02ckXsjJouPAzq05TiKwh9mayqH2xgwG+Fi2Oi5JU7f7tL4
-	lckxbwm3Dz+wyAEqkn83XRQkKAb1vdqY4UAUzkN6tywZPMCM5nFXf7D5dM6v0pT9eM0/isBVCaY
-	hyw1BOaJSw1FNjrZCSeR9OAAcwAjkXBPJ6tPvTNBWQpV7aqtIm6Qom/LKBgl+0LpscaBbuIxNFW
-	hg3AQrZi+XAKhUsVrUIrr0sjIR7s05eO9+hRKuQTYVo9OJNwCyoEnPLOMqisLJmtoCbGFFBuOqk
-	dYMx8yEjqlmKMy2za0D4SnB++sor6hEptdeLoTsEy6qHhAqMVAlB80XVS3qJrQ==
-X-Received: by 2002:a05:600c:19d2:b0:43c:f050:fee8 with SMTP id 5b1f17b1804b1-43d437e1703mr13281695e9.20.1742376886678;
-        Wed, 19 Mar 2025 02:34:46 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHcyl7sGUVjNx0FRAWM2mYWonSXDfEE6kxjEilOIRFzREegrn0szutRfjLMxh2v3Cw/i/aPIQ==
-X-Received: by 2002:a05:600c:19d2:b0:43c:f050:fee8 with SMTP id 5b1f17b1804b1-43d437e1703mr13281295e9.20.1742376886002;
-        Wed, 19 Mar 2025 02:34:46 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-53-30-53.retail.telecomitalia.it. [79.53.30.53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43f5719dsm13432985e9.19.2025.03.19.02.34.44
+        bh=ZWxtYxkS3ZmfTDBR3Ubow/eGPhpGRxs9B2tOpbPHly4=;
+        b=YBtIU1lZH8Uf2HyMCwTDtmqMbirxEPH+Vs37v+3tlQjMiyHgkGBzhv5Hs7hjRwvaJw
+         N7ne/pHUGUTtLWukgKgxuRiVcjid21EG+GrCwXVYfNeaw44XqzGQ7HR/nUGUTvfc4vDH
+         B6xGiBFSlA7jCP3ZhOUw3CT7k2tATHKwnETB1xFQHSTWJIDZu8tIOGa05dYnTzbmrrGJ
+         Cftgaex7ilp8dZ4CmJlJpvT9mEe1a96BYh5UGKLLV/er3d5xHHD9QY85zzbTxbJK6U2B
+         +g/zre17mQvSCjUxbh8b+mIEmUZQMrUC+ecwyJ+rkoMoPtcO0DbpoIlzxAhO8KsRK9oS
+         MbkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWq5jyct2I3ThPGKbvGJPHXdeZ5TCgBbNOKNGNvK4eyRufI3Ha9/fSrbtFw1ZfCvNcdUrGWr39qdHkwRXtEsdY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCZY73edyBCLPtUTi14YRHTPjRW8qu4EVnkUcWYzV6gwEebLts
+	vBEaOdhH9JQwynWyr35BaHQtAbVkV6xiMhTE1Jp7yL4+5s8D7c/zxePn4KwVVn0=
+X-Gm-Gg: ASbGnctAor2ouKecd0aRtCqwabXcs/o2eP2RMT7Bsp1wsqHBZe240eqWN4rEqFE0XKn
+	epcbSrM88tETwNJQQj8vcNQ9i6SoPjC7VX5Eh7fmalk+9u+L5dk8+ODO9UpRAsoFYHsgln/VZDa
+	cR8Jdsd7GJLjwAlRUctnwBm4RK/65pk320d7NBK+J3sMl98/8tTjZ1qEZRSUbY9KO8yNXE3tjTM
+	+zzwtizkte43zscLu6zCfQAEdYzxCKVEvbWdo//BI/oWfR0quAJQCfCKHwXiRamzCQP4iBltju2
+	+Yh0evCLGClxbcsRWUPzxUY1ZQwPI+h5cZ13uSL+F5t3Wkug2g==
+X-Google-Smtp-Source: AGHT+IHjcG6/IeV2BOfDblPqcpvGjw3L7kajd7hg9EDti/4DwNoU0L0nZRG8X9Tat0FLH2nt55nwLg==
+X-Received: by 2002:a05:6000:1541:b0:390:e655:f998 with SMTP id ffacd0b85a97d-399739ca2a8mr1441536f8f.26.1742379615798;
+        Wed, 19 Mar 2025 03:20:15 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-395c7df3506sm21189338f8f.11.2025.03.19.03.20.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Mar 2025 02:34:45 -0700 (PDT)
-Date: Wed, 19 Mar 2025 10:34:39 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Bobby Eshleman <bobby.eshleman@bytedance.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v4 3/3] vsock/bpf: Fix bpf recvmsg() racing transport
- reassignment
-Message-ID: <c7nnbp3j57mnlcglvczyimdqpc2run5vqhtea4eesymv555du4@ekcyin54mcdn>
-References: <20250317-vsock-trans-signal-race-v4-0-fc8837f3f1d4@rbox.co>
- <20250317-vsock-trans-signal-race-v4-3-fc8837f3f1d4@rbox.co>
+        Wed, 19 Mar 2025 03:20:15 -0700 (PDT)
+Date: Wed, 19 Mar 2025 13:20:10 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Will Deacon <will@kernel.org>,
+	Alessandro Carminati <acarmina@redhat.com>,
+	linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH v4 07/14] arm64: Add support for suppressing warning
+ backtraces
+Message-ID: <fc197abf-e65a-439f-9d35-83f4665519f3@stanley.mountain>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+ <20250313114329.284104-8-acarmina@redhat.com>
+ <20250313122503.GA7438@willie-the-truck>
+ <CAGegRW5r3V2-_44-X353vS-GZwDYG=SVwc6MzSGE8GdFQuFoKA@mail.gmail.com>
+ <20250318155946.GC13829@willie-the-truck>
+ <a64bf821-ea90-4fd9-92ec-13bf7b7a3067@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250317-vsock-trans-signal-race-v4-3-fc8837f3f1d4@rbox.co>
+In-Reply-To: <a64bf821-ea90-4fd9-92ec-13bf7b7a3067@csgroup.eu>
 
-On Mon, Mar 17, 2025 at 10:52:25AM +0100, Michal Luczaj wrote:
->Signal delivery during connect() may lead to a disconnect of an already
->established socket. That involves removing socket from any sockmap and
->resetting state to SS_UNCONNECTED. While it correctly restores socket's
->proto, a call to vsock_bpf_recvmsg() might have been already under way in
->another thread. If the connect()ing thread reassigns the vsock transport to
->NULL, the recvmsg()ing thread may trigger a WARN_ON_ONCE.
->
->connect
->  / state = SS_CONNECTED /
->                                sock_map_update_elem
->                                vsock_bpf_recvmsg
->                                  psock = sk_psock_get()
->  lock sk
->  if signal_pending
->    unhash
->      sock_map_remove_links
->    state = SS_UNCONNECTED
->  release sk
->
->connect
->  transport = NULL
->                                  lock sk
->                                  WARN_ON_ONCE(!vsk->transport)
->
->Protect recvmsg() from racing against transport reassignment. Enforce the
->sockmap invariant that psock implies transport: lock socket before getting
->psock.
->
->WARNING: CPU: 9 PID: 1222 at net/vmw_vsock/vsock_bpf.c:92 vsock_bpf_recvmsg+0xb55/0xe00
->CPU: 9 UID: 0 PID: 1222 Comm: a.out Not tainted 6.14.0-rc5+
->RIP: 0010:vsock_bpf_recvmsg+0xb55/0xe00
-> sock_recvmsg+0x1b2/0x220
-> __sys_recvfrom+0x190/0x270
-> __x64_sys_recvfrom+0xdc/0x1b0
-> do_syscall_64+0x93/0x1b0
-> entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
->Fixes: 634f1a7110b4 ("vsock: support sockmap")
->Signed-off-by: Michal Luczaj <mhal@rbox.co>
->---
-> net/vmw_vsock/vsock_bpf.c | 23 +++++++++++++++--------
-> 1 file changed, 15 insertions(+), 8 deletions(-)
->
->diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
->index c68fdaf09046b68254dac3ea70ffbe73dfa45cef..5138195d91fb258d4bc09b48e80e13651d62863a 100644
->--- a/net/vmw_vsock/vsock_bpf.c
->+++ b/net/vmw_vsock/vsock_bpf.c
->@@ -73,28 +73,35 @@ static int __vsock_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int
-> 	return err;
-> }
->
->-static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
->-			     size_t len, int flags, int *addr_len)
->+static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
->+			     int flags, int *addr_len)
+On Wed, Mar 19, 2025 at 09:05:27AM +0100, Christophe Leroy wrote:
+> 
+> Doesn't sparse and/or checkpatch complain about 0 being used in lieu of NULL
+> ?
 
-I would avoid this change, especially in a patch with the Fixes tag then 
-to be backported.
+Sparse does have a "Using plain integer as NULL pointer" warning, yes.
 
-> {
-> 	struct sk_psock *psock;
-> 	struct vsock_sock *vsk;
-> 	int copied;
->
->+	/* Since signal delivery during connect() may reset the state of socket
->+	 * that's already in a sockmap, take the lock before checking on psock.
->+	 * This serializes a possible transport reassignment, protecting this
->+	 * function from running with NULL transport.
->+	 */
->+	lock_sock(sk);
->+
-> 	psock = sk_psock_get(sk);
->-	if (unlikely(!psock))
->+	if (unlikely(!psock)) {
->+		release_sock(sk);
-> 		return __vsock_recvmsg(sk, msg, len, flags);
->+	}
->
->-	lock_sock(sk);
-> 	vsk = vsock_sk(sk);
->-
-> 	if (WARN_ON_ONCE(!vsk->transport)) {
-> 		copied = -ENODEV;
-> 		goto out;
-> 	}
->
-> 	if (vsock_has_data(sk, psock) && sk_psock_queue_empty(psock)) {
->-		release_sock(sk);
-> 		sk_psock_put(sk, psock);
->+		release_sock(sk);
+I can't apply this patchset and I haven't been following the conversation
+closely (plus I'm pretty stupid as well) so I'm not sure if it will
+trigger here...
 
-But here we release it, so can still a reset happen at this point, 
-before calling __vsock_connectible_recvmsg().
-In there anyway we handle the case where transport is null, so there's 
-no problem, right?
-
-The rest LTGM.
-
-Thanks,
-Stefano
-
-> 		return __vsock_recvmsg(sk, msg, len, flags);
-> 	}
->
->@@ -108,8 +115,8 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
-> 		}
->
-> 		if (sk_psock_queue_empty(psock)) {
->-			release_sock(sk);
-> 			sk_psock_put(sk, psock);
->+			release_sock(sk);
-> 			return __vsock_recvmsg(sk, msg, len, flags);
-> 		}
->
->@@ -117,8 +124,8 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
-> 	}
->
-> out:
->-	release_sock(sk);
-> 	sk_psock_put(sk, psock);
->+	release_sock(sk);
->
-> 	return copied;
-> }
->
->-- 
->2.48.1
->
+regards,
+dan carpenter
 
 
