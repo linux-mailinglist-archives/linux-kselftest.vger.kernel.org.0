@@ -1,121 +1,135 @@
-Return-Path: <linux-kselftest+bounces-29406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF21A68360
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 04:00:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 449F3A68378
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 04:14:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81C787AB047
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 02:59:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6871519C30B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 03:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E85324E4B0;
-	Wed, 19 Mar 2025 03:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B118724EA90;
+	Wed, 19 Mar 2025 03:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Flbdykl6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYuv9qC+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882A24E4C3;
-	Wed, 19 Mar 2025 03:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807D724E4A8;
+	Wed, 19 Mar 2025 03:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742353209; cv=none; b=natrB8p4rFjAtK3m/IrSu4+r9wpx1BwkljEos8N5yisHRU38V2wSGC6HQcnGOb+4wRzmf9Wiu2f58Qc8YixbSozvFerJXT+w5RjP2eHbd5FwbzzcYkZoybIw5ElpfgsEPEaedcKMK/HaCb8NnLx9inNQe56NXrBJp1zhoPwUWk8=
+	t=1742354052; cv=none; b=FPsKcHaMFiBcDMATrBqGmXP7K4CKol0BSTc+8mr+07nYHQ8KrKhNqPDeABvqf541B9yKdyrzm7KzPX44b4NDkT9+s9P6Z0ywY2va/VhFyyWmRPcPBxPL+lVhSmVZj/0cDDmV/F4ozfOhA41vEx0Avrc4YtY6Z92Y/joQ1XNoXmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742353209; c=relaxed/simple;
-	bh=XmBYV97ddXCc98ClLrgIh2hgEfg+wCIW7Pq3F2K7xlc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p5+ZahB0DiyIIVjQbctOzmhOsLUlYfYQB85oFp5hFHyD40/Owd3zhvFYtNUhrrVVbFKaozbgWVBx1ohcDe0grv/JxJU7zn4MuoVgSI9xPfbmzexQBWJx0SnJWg1Hb9CORO1Oxi/VuYDxieuPfPhPy2nPsnVgRHxvqu24I1yW6/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Flbdykl6; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1742353201; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=dX+b5dkCzHI7qs9K1pxSG/IA6mix1y1/JgVcfCigZ/o=;
-	b=Flbdykl6JslvtwOJvj/78fil/uExxpeKXaFTo7R5/t6W6ERJVYNOxFLoFnQsYU9aoxdpwjM8jQpBFqdWT30YN/Pe8mBWmaeIFGm8I0D0PLqqgXyg3RdrOXPIZvLgETFJ/OQUlikFnv2BLhQPOt46M0OznAF6y8FSy2LTSj9O8WY=
-Received: from 30.246.160.93(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WRzjqK-_1742353198 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Mar 2025 10:59:59 +0800
-Message-ID: <0a70f4ab-cd83-434d-8dd2-486d58e5599a@linux.alibaba.com>
-Date: Wed, 19 Mar 2025 10:59:57 +0800
+	s=arc-20240116; t=1742354052; c=relaxed/simple;
+	bh=etgJBoDA0+o3M60VBpSmAHMAVpuV7zSfirQ+bKuKABs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qOZsltWvHM0CRsy/TpwNvkN5SiY6frah6vZ6XyU4yybyJtH7BTZq+6u+U05VSR6KPOBIyttIyXB4pQGLLaMF7zcn6VhORB0MaGhiYJVxAL2ofQTtZFFORkHk2rPCwtq5quZ267mCvwgvRR2S6Ah21UfYfVypGH6NEAfX+ewNNxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HYuv9qC+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E284FC4CEDD;
+	Wed, 19 Mar 2025 03:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742354052;
+	bh=etgJBoDA0+o3M60VBpSmAHMAVpuV7zSfirQ+bKuKABs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=HYuv9qC+Jicrgs0ibOc2DgFnjShRyLNPFyngY9CbPl+Ooe4MmTppF9Y5aY9t12DK7
+	 us8HD3WbB3RB36CU87qfsd4qPjW/Jk1vGSujYLSOzw65w4LR4nw8oj/Nhev5zh+7O3
+	 9Jzy4+6Gg/kM1eaCTOS1TwtkLRg+XtMsfPM/BqWuQ9x8jHjD9rL0NIZdj34Qqa7cT5
+	 Dor16FsgU7sLHQMcNQj4ZNVN7lbdV+61+p83lzLcd6LXJq24dmc76fWnZsZnl7rdAL
+	 0dBwMoqAm8zwYIcxIaD+DEjJj0yCxMagYno5rGPnBn56nz1VJkIph/QtERoQy5L2n5
+	 ILnpQmdH02avQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF7EAC28B2F;
+	Wed, 19 Mar 2025 03:14:11 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
+Subject: [PATCH net-next v2 0/7] selftests/net: Mixed select()+polling mode
+ for TCP-AO tests
+Date: Wed, 19 Mar 2025 03:13:33 +0000
+Message-Id: <20250319-tcp-ao-selftests-polling-v2-0-da48040153d1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/pidfd: align stack to fix SP alignment
- exception
-To: Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
- Catalin Marinas <catalin.marinas@arm.com>,
- Mark Rutland <mark.rutland@arm.com>
-Cc: baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com,
- brauner@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20250312061557.28532-1-xueshuai@linux.alibaba.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20250312061557.28532-1-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAF422mcC/4WOwQqDMBBEf6XsuduatNHSU/+jeEjiqgFNJBvEI
+ v57o9Bzj8Pw3swKTNERw/O0QqTZsQs+B3k+ge217whdkzPIQqriJiQmO6EOyDS0iTgxTmEYnO9
+ QClMa07RVZUrI+BSpdcuhfoOnhJ6WBHVujGZCE7W3/a7+dddRO7+TveMU4uf4NIuD/z8/Cyywk
+ rq8S/NQqlGvLvuGiw0j1Nu2fQHilFlT6gAAAA==
+X-Change-ID: 20250312-tcp-ao-selftests-polling-21b6bbdf77b6
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1742354050; l=2211;
+ i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
+ bh=etgJBoDA0+o3M60VBpSmAHMAVpuV7zSfirQ+bKuKABs=;
+ b=1I9QpOTeJb1TkomhompoA8/N2Kaaw0gS1HWvq/lyucF63bZKRXvykgBMV9jCQd8aKS3oHZ38P
+ toxxWCRZjYFAuJeLISBiXQjnqtzQ7QJ2dXVJrCMpAOnNX2QeqvnxTSm
+X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
+ pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
+X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
+ auth_id=152
+X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
+Reply-To: 0x7f454c46@gmail.com
 
-+ ARM maintainers for review.
+Should fix flaky tcp-ao/connect-deny-ipv6 test.
+Begging pardon for the delay since the report and for sending it this
+late in the release cycle.
 
-在 2025/3/12 14:15, Shuai Xue 写道:
-> The pidfd_test fails on the ARM64 platform with the following error:
-> 
->      Bail out! pidfd_poll check for premature notification on child thread exec test: Failed
-> 
-> When exception-trace is enabled, the kernel logs the details:
-> 
->      #echo 1 > /proc/sys/debug/exception-trace
->      #dmesg | tail -n 20
->      [48628.713023] pidfd_test[1082142]: unhandled exception: SP Alignment, ESR 0x000000009a000000, SP/PC alignment exception in pidfd_test[400000+4000]
->      [48628.713049] CPU: 21 PID: 1082142 Comm: pidfd_test Kdump: loaded Tainted: G        W   E      6.6.71-3_rc1.al8.aarch64 #1
->      [48628.713051] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-1UC1P-5B/AS1111MG1, BIOS 1.2.M1.AL.P.157.00 07/29/2023
->      [48628.713053] pstate: 60001800 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=-c)
->      [48628.713055] pc : 0000000000402100
->      [48628.713056] lr : 0000ffff98288f9c
->      [48628.713056] sp : 0000ffffde49daa8
->      [48628.713057] x29: 0000000000000000 x28: 0000000000000000 x27: 0000000000000000
->      [48628.713060] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
->      [48628.713062] x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000400e80
->      [48628.713065] x20: 0000000000000000 x19: 0000000000402650 x18: 0000000000000000
->      [48628.713067] x17: 00000000004200d8 x16: 0000ffff98288f40 x15: 0000ffffde49b92c
->      [48628.713070] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
->      [48628.713072] x11: 0000000000001011 x10: 0000000000402100 x9 : 0000000000000010
->      [48628.713074] x8 : 00000000000000dc x7 : 3861616239346564 x6 : 000000000000000a
->      [48628.713077] x5 : 0000ffffde49daa8 x4 : 000000000000000a x3 : 0000ffffde49daa8
->      [48628.713079] x2 : 0000ffffde49dadc x1 : 0000ffffde49daa8 x0 : 0000000000000000
-> 
-> According to ARM ARM D1.3.10.2 SP alignment checking:
-> 
->> When the SP is used as the base address of a calculation, regardless of
->> any offset applied by the instruction, if bits [3:0] of the SP are not
->> 0b0000, there is a misaligned SP.
-> 
-> To fix it, align the stack with 16 bytes.
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> ---
->   tools/testing/selftests/pidfd/pidfd_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index c081ae91313a..ec161a7c3ff9 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -33,7 +33,7 @@ static bool have_pidfd_send_signal;
->   static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
->   {
->   	size_t stack_size = 1024;
-> -	char *stack[1024] = { 0 };
-> +	char *stack[1024] __attribute__((aligned(16))) = {0};
->   
->   #ifdef __ia64__
->   	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+
+Changes in v2:
+- Base on net-next (Paolo)
+- Add a missing Fixes tag (Paolo)
+- Link to v1: https://lore.kernel.org/r/20250312-tcp-ao-selftests-polling-v1-0-72a642b855d5@gmail.com
+
+---
+Dmitry Safonov (7):
+      selftests/net: Print TCP flags in more common format
+      selftests/net: Provide tcp-ao counters comparison helper
+      selftests/net: Fetch and check TCP-MD5 counters
+      selftests/net: Add mixed select()+polling mode to TCP-AO tests
+      selftests/net: Print the testing side in unsigned-md5
+      selftests/net: Delete timeout from test_connect_socket()
+      selftests/net: Drop timeout argument from test_client_verify()
+
+ tools/testing/selftests/net/tcp_ao/connect-deny.c  |  58 ++--
+ tools/testing/selftests/net/tcp_ao/connect.c       |  22 +-
+ tools/testing/selftests/net/tcp_ao/icmps-discard.c |  17 +-
+ .../testing/selftests/net/tcp_ao/key-management.c  |  76 ++---
+ tools/testing/selftests/net/tcp_ao/lib/aolib.h     | 114 ++++++--
+ .../testing/selftests/net/tcp_ao/lib/ftrace-tcp.c  |   7 +-
+ tools/testing/selftests/net/tcp_ao/lib/sock.c      | 315 +++++++++++++++------
+ tools/testing/selftests/net/tcp_ao/restore.c       |  75 +++--
+ tools/testing/selftests/net/tcp_ao/rst.c           |  47 ++-
+ tools/testing/selftests/net/tcp_ao/self-connect.c  |  18 +-
+ tools/testing/selftests/net/tcp_ao/seq-ext.c       |  30 +-
+ tools/testing/selftests/net/tcp_ao/unsigned-md5.c  | 118 ++++----
+ 12 files changed, 552 insertions(+), 345 deletions(-)
+---
+base-commit: 23c9ff659140f97d44bf6fb59f89526a168f2b86
+change-id: 20250312-tcp-ao-selftests-polling-21b6bbdf77b6
+
+Best regards,
+-- 
+Dmitry Safonov <0x7f454c46@gmail.com>
+
 
 
