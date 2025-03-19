@@ -1,146 +1,136 @@
-Return-Path: <linux-kselftest+bounces-29464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48CA2A69BE8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 23:18:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40A7DA69C18
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 23:34:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07BC88867DC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 22:18:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ABE137A3128
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 22:33:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A20C21B9D5;
-	Wed, 19 Mar 2025 22:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1AE4216E01;
+	Wed, 19 Mar 2025 22:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lNvjWr52"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="klPZ2fpW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-qk1-f201.google.com (mail-qk1-f201.google.com [209.85.222.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E3D214A7A;
-	Wed, 19 Mar 2025 22:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492451DD889
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 22:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742422690; cv=none; b=GEA8/y9O4VuExFO2MulXTQOlXMohAt6Xwsz0LosJrx3EJjhv+1XBKodhYpEMuxmwTYIUKCB0U/MQWgevrogr+pN8Yn6Bbk/0528e4T/Zq6iTqxBLVj2xcoxk17RtRvZZsBCjw1DtvNhkI6JRv7ErIbltIcmitPcIcrMmsUJWzxs=
+	t=1742423638; cv=none; b=PKuGUdVL4UvM+xTx/twfzvOuguC1cn2e59ee3oIQMCsXas3TTs3PwYL+RrrTHfrw7Ysxh+bmCgaE4p/uAhhudJOZ5ibtSNrsNhBdpkGozUlFq1c0CZICeMqxnxlmxOVE1IjLlwjuGJNevMXeOmIvg5MtkkECiCrVoYa86EJs5Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742422690; c=relaxed/simple;
-	bh=YUognYdZVDVKoNWdTzYPY6W8ESehC/hs2B/Ek/cAyZo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rpvpQe1Xt2aDOWJy3tbCLn/wDEoreMBM7+dEz/2QSo05UKilO4cEFdV5TZoiokQYAsx1/J9Gkaxaj6LrfHImw068i4y7F/7zhi6VVTQJ7cnfJ53B7vLfGgwNxnIBzALylsXnxsiB9idczgW+FIGHHHCDP1ei/jIFA6w9VWIFyXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lNvjWr52; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-225df540edcso27453675ad.0;
-        Wed, 19 Mar 2025 15:18:08 -0700 (PDT)
+	s=arc-20240116; t=1742423638; c=relaxed/simple;
+	bh=mAw0ZqLyiCoZH8VesbHgz3Uo62i3I75t/54lqWtHLbI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JROIIXe2Czyhc9bd/OW17ESorEAtyfwaNw/h5/byqF0K8M2jACOXkkYfxmuJjs1nzGaBnY7bLlp4efgGA9Tmuh/O/2Qf+GnKs8dnVZfHkhG8piAdUBeVQpusVVHrXKb3BHFOXas6/ikRejphTyubS4OhdXZP9RMltXFcl5vBiqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=klPZ2fpW; arc=none smtp.client-ip=209.85.222.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
+Received: by mail-qk1-f201.google.com with SMTP id af79cd13be357-7c54e9f6e00so230529785a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Mar 2025 15:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742422688; x=1743027488; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u4D7n+2LppWRVXPYghpVBpyiFPmMtKDL9HM2hyc7IaU=;
-        b=lNvjWr52iUu+YVqNbXyW7i989idxLoKF4hGshp7mJhMCg7aaBtQ8fk1YI6dHrLT+JA
-         odyJUVSBuvH/AUs5t9w7QK3SQ1DgXo+yDlavkFun7Zaoinq4Y/2t1maa2aI/KJZE8BaO
-         yN5c/AY4hvyDTCb+D8rJkIsT/gaELi+EwKK3XxGDkEhoxiR8+quye87oq90c1uEJH4am
-         mbXs0kQ/GYjcg+b4Nk77KvYGpL40Iy6m3xgFHNuVka8rMogE8pNqg5WNEGDml0J3QF/7
-         l36fhfeD8j6cadKFZ+7Uj6nEYoFA/4BoLROISnk3LVTD+xXb8itIhct+uUjvBJrpBj0g
-         A05w==
+        d=google.com; s=20230601; t=1742423636; x=1743028436; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4C+KM7i+5msFmhxzSya6NuHf1KqUp3SPPWG0X4qbCm4=;
+        b=klPZ2fpWIThmuIg6fPnpK3HBw2Bde2ventAr1ty3vctNpCkZ+vzDD2BwZ3lDyIppBf
+         M7i8bgLWFq1q2VHwhKbdvatSefewcNuwSCU+dPIgSXIrHTI3T/duhl6YF3FYVJAR9Dzc
+         vpgWB2wicQQ7Ay22bdjHJ17qLZK7kZ3NTGohwqEBghQfQ36eoPTX8Z2zuTNRmWuFOvCQ
+         xEC6EMVCYNG5zCR42E8uYejeUgv1Mjrxltm7uAkC5vx3C0oyzB41mgXb30GfpSmuZvq3
+         EfNrd/fL1IPFUIadM7Z6evx9nSBYs/nsIBxcjj5pHcz6nBKcQ3P0j80nHWzF2WQvOfKS
+         W8Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742422688; x=1743027488;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u4D7n+2LppWRVXPYghpVBpyiFPmMtKDL9HM2hyc7IaU=;
-        b=w7s9NxB3cjtDrLwsOmfam3jHr9fQoQxunU0JldeVfWdNQM8ZFAvigvOLjYwgljExZw
-         ebxtU6KFBR73XHJNgINo6+dQZJpWhKr4PPUXcgZwGH2iL4Xb6Buo4PfoLKpNqVe/W/4J
-         xsM8zY/yujLQQ9giyWojI/byO/qP+6WDiPyOK9MvUwjzY0JO46u333VGRDOOQqtV2RCh
-         U2AqHQSWcMx1c+GCy2IzPWsUeAA4BPUWNDZ0Ln1yoY/jBokDkaUnjt8px2yyN7oUG0mL
-         coNt2ieID7iOr87nZNElXN8leu0LGVChBA4USiN46lUZ+rK0wnkcdxzCAXTm6R6qCkyy
-         YTKw==
-X-Forwarded-Encrypted: i=1; AJvYcCWSZGVYSrcJWtIPcIlpDYouM+It8qHEaZTZzXxtWAAhob26ZgKBCVkgBiGNXRBUOg2z9FU=@vger.kernel.org, AJvYcCWbyH5m6A9Bi1zeroFnUjqswwOLqBmxP4QlYYJJQ2dI5lxPXyw6TIeJQQR+aDMWaakzAUMStL9d@vger.kernel.org, AJvYcCXCHYFKfCCgnnDqOPNBbtU1b0IJwOrilfIyQFqC0rl5wfrMM1CCm0FYDH1cUlaNUBiPvj1T6K3Ywk/R9d6q@vger.kernel.org, AJvYcCXwbDd+cPIrHhpTau5unwna2V/vZq/5EGkyvjCE/eB+cqHqFYlPAen6ThVib39jlOYwYvXqsYWBbPTyL2x2O/TG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyatGyZjukWPhQCwKnKuAubc+qL+4fPIqM+Jtn42fml50X0K5id
-	qHK+lfZMjATzhhOPXodfzJriF8V9Urt1clRRESwuUwMrGWrVornO
-X-Gm-Gg: ASbGnctX9jxzC5j81beLdCsvUlexHomu2F+tuAqXiH35t+G7m5+NroFVD0zlNhUEMlj
-	9FPOAjehbIUU0PdsIqMsiQRzGFNrL1hcb0i3NUeGb3tXYeQjWIza144+nB6h/FvOFSqO1CF9hHM
-	I7Xm2HOUJ7ScxiCSB+1B/VhJr56vnBDzeAUEpM5XXFutk46RjrxtDL9+P2hpCdHiCN12pYyJ8l1
-	n+vjwowoLKtb30VAmn50y9U2ZqLR8MPnG4UmcelOFPtvPhTYQ7idmTY7JB7TS6zORbjPrcjYU2u
-	3j/lJ9q0qy1neWqdbDB4Ydp4sL9AVBECrvG1C9DjvTdnhkCI
-X-Google-Smtp-Source: AGHT+IGK0f2KkWnICFOc8q1r+oYDRZ2i3pe9qWJQ1JQu0L9prPZ3InQnyeIpr/0kzsZTnUAQx2nzGg==
-X-Received: by 2002:a05:6a00:1249:b0:736:5969:2b6f with SMTP id d2e1a72fcca58-7377a0d85e8mr1620793b3a.6.1742422687959;
-        Wed, 19 Mar 2025 15:18:07 -0700 (PDT)
-Received: from localhost ([129.210.115.104])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73711695ae4sm12671807b3a.145.2025.03.19.15.18.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Mar 2025 15:18:07 -0700 (PDT)
-Date: Wed, 19 Mar 2025 15:18:06 -0700
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Bobby Eshleman <bobby.eshleman@bytedance.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v4 3/3] vsock/bpf: Fix bpf recvmsg() racing transport
- reassignment
-Message-ID: <Z9tCnq0rBw+nETfW@pop-os.localdomain>
-References: <20250317-vsock-trans-signal-race-v4-0-fc8837f3f1d4@rbox.co>
- <20250317-vsock-trans-signal-race-v4-3-fc8837f3f1d4@rbox.co>
+        d=1e100.net; s=20230601; t=1742423636; x=1743028436;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4C+KM7i+5msFmhxzSya6NuHf1KqUp3SPPWG0X4qbCm4=;
+        b=Mdehvx6YDAWjHpd/QcZc4zDmnAtYZT5LS++UH7pRRPQ3nPuZbPOev2flHqXea8N7pq
+         jLgiv8IVxf700pjSnuPuOLQOTUX7+8UkfqPZF7n1BQzv/wLiUirs3e3jrD57NK9HjB4T
+         sWUQryEbU8FohbGMqnurXvE0b8sGR3jWhQxQHF08hLCldZLO08aBIyceWaU/qPYDlmbK
+         OODTT8Cvg5v1mL6u19XhFpZni6syiOMD92nu8ZzYMVPeOLmDg4uGHS/DNtPhnOwSF8Zv
+         nLXiDqY+pQGREfE+KiD10GUFjQ0qZ09Qpd02XV4DUC651ca4gGre9kmxEfz56YGtY0gc
+         +lcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWDxkpmj4sGhwKTw9Cb8pXNnpzCcNxfYj72yyJ/pZ9DY2FRkAz9L7qtiiSyrHUSnpDjUTxvngpjraYlPk3v7B4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAgGcNgVeTyE60OdZMIfNrM0X5y3patEOFyCEMqZ8f5MCLFgmy
+	efbCvIOgNSw03Ok0Svpbx70l/i1HDLP+dT5Wlsc4DlWCyOIrYyq68IPyMqm+v8nHqAV0df5Psw=
+	=
+X-Google-Smtp-Source: AGHT+IGgY6Pywck8gcnGUljLZeNyCEzuS5WpPE6KmbgsB+SQUpG+8SqJTA5d2qQJratKJKjIajld0MC0dw==
+X-Received: from qknrv15.prod.google.com ([2002:a05:620a:688f:b0:7c5:496d:d669])
+ (user=rmoar job=prod-delivery.src-stubby-dispatcher) by 2002:a05:620a:318b:b0:7c5:a20f:a091
+ with SMTP id af79cd13be357-7c5b04e1f5fmr202494385a.2.1742423636221; Wed, 19
+ Mar 2025 15:33:56 -0700 (PDT)
+Date: Wed, 19 Mar 2025 22:33:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250317-vsock-trans-signal-race-v4-3-fc8837f3f1d4@rbox.co>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.395.g12beb8f557-goog
+Message-ID: <20250319223351.1517262-1-rmoar@google.com>
+Subject: [PATCH] kunit: tool: fix count of tests if late test plan
+From: Rae Moar <rmoar@google.com>
+To: shuah@kernel.org, davidgow@google.com
+Cc: jackmanb@google.com, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 17, 2025 at 10:52:25AM +0100, Michal Luczaj wrote:
-> Signal delivery during connect() may lead to a disconnect of an already
-> established socket. That involves removing socket from any sockmap and
-> resetting state to SS_UNCONNECTED. While it correctly restores socket's
-> proto, a call to vsock_bpf_recvmsg() might have been already under way in
-> another thread. If the connect()ing thread reassigns the vsock transport to
-> NULL, the recvmsg()ing thread may trigger a WARN_ON_ONCE.
-> 
-> connect
->   / state = SS_CONNECTED /
->                                 sock_map_update_elem
->                                 vsock_bpf_recvmsg
->                                   psock = sk_psock_get()
->   lock sk
->   if signal_pending
->     unhash
->       sock_map_remove_links
+Fix test count with late test plan.
 
-So vsock's ->recvmsg() should be restored after this, right? Then how is
-vsock_bpf_recvmsg() called afterward?
+For example,
+  TAP version 13
+  ok 1 test1
+  1..4
 
->     state = SS_UNCONNECTED
->   release sk
-> 
-> connect
->   transport = NULL
->                                   lock sk
->                                   WARN_ON_ONCE(!vsk->transport)
-> 
+Returns a count of 1 passed, 1 crashed (because it expects tests after
+the test plan): returning the total count of 2 tests
 
-And I am wondering why we need to WARN here since we can handle this error
-case correctly?
+Change this to be 1 passed, 1 error: total count of 1 test
 
-Thanks.
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ tools/testing/kunit/kunit_parser.py    | 4 ++++
+ tools/testing/kunit/kunit_tool_test.py | 4 ++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index da53a709773a..c176487356e6 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -809,6 +809,10 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 		test.log.extend(parse_diagnostic(lines))
+ 		if test.name != "" and not peek_test_name_match(lines, test):
+ 			test.add_error(printer, 'missing subtest result line!')
++		elif not lines:
++			print_log(test.log, printer)
++			test.status = TestStatus.NO_TESTS
++			test.add_error(printer, 'No more test results!')
+ 		else:
+ 			parse_test_result(lines, test, expected_num, printer)
+ 
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 5ff4f6ffd873..bbba921e0eac 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -371,8 +371,8 @@ class KUnitParserTest(unittest.TestCase):
+ 		"""
+ 		result = kunit_parser.parse_run_tests(output.splitlines(), stdout)
+ 		# Missing test results after test plan should alert a suspected test crash.
+-		self.assertEqual(kunit_parser.TestStatus.TEST_CRASHED, result.status)
+-		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, crashed=1, errors=1))
++		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
++		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=2))
+ 
+ def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
+ 	return kunit_parser.LineStream(enumerate(strs, start=1))
+
+base-commit: 2e0cf2b32f72b20b0db5cc665cd8465d0f257278
+-- 
+2.49.0.395.g12beb8f557-goog
+
 
