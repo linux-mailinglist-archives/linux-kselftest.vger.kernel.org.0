@@ -1,127 +1,119 @@
-Return-Path: <linux-kselftest+bounces-29491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE476A6A4D4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 12:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB581A6A4DD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 12:24:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E45269822FA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 11:20:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67C283B0B87
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 11:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E80621CC68;
-	Thu, 20 Mar 2025 11:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="I9x3sfZW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A8821C9F5;
+	Thu, 20 Mar 2025 11:23:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C56721CA0A
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Mar 2025 11:20:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A8779C4;
+	Thu, 20 Mar 2025 11:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742469612; cv=none; b=e9vFJHsxOKc0GmxH37n9jV3q8GmIc1cABaExAPDGj/HyDA+aoamGZ96wa/1kTgA6lGA22PdUXTPXz5jbkoML630N7/mpe8VwSrltoOOXOlEoMAajyzRdg2YRMbqla553agC98zwtpq0z3TEmM/B75V8FkA/Y1DJBksIJ8KapWlo=
+	t=1742469801; cv=none; b=bM9LqwrQvFa7o8MWcLvEco4sZEcrTrk20AUbAA1V/OcxDfH+J7CTnvhkbO+7lqO8ebHq+xGKsIZh2RQsqhRpT8PmGv/Fr2QJH3gFcrkfa6XYdfNF4mSkL5+BUohpJmOie6hETsw2vFJxyDPcyEV+ZisP82Kg2T1QTRBRAYbLXeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742469612; c=relaxed/simple;
-	bh=c9in5ky7MSyDydh7HyOrlQT/pLw+J4dJ+b2Cx0Z3sSA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sfkFkDH1kjq8RvKt20UCSEXGUvGvY+/hDDPAcKiLXi1HNERrCufrpfqOrg1IaQkDS5UoXcMztU4C/Z6oW0/ozoke6QPZy+KVtZi6aA+JQuo6++rxU4NsR9XBL6ki/C1ltXsjHBeZ4ZpTdxwYrVJu6mbcVPFL7KaRD34keZcp0Vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=I9x3sfZW; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=iDIJ
-	IKhTKAN042Zme/lW/P7yyI4g/zIGmLhB5BgbU7A=; b=I9x3sfZWVcfaDg60Qu5u
-	K+4akm8iHKILDKI2rgKsIOMBITY2DkF6zJiJUV3X1A8K5RFP2I9lzuPBRhNpXVav
-	WlAnkQ1iBe8WNDiC5vYkgFlkHQTB4Ysg43HL/wNxmqDHU+SrPQYAs9v2HIpwjU0X
-	0Vgsq+5JzIaXSCU6kfNjuUTE534EmeGW0CZrjRFGXtDTNjvTDlo3gp9r2Q2A2hhY
-	38lTyAthYNwM753sjm0vtTePmDt7nGqaALRU5hLfQbKUxwD9tKruNPg7n6hxLKAv
-	ZDgqUm+qqNy8/f9DmWLwZSWXlu82ugnsSUyOVbBI5EEwOxQ6ZfNbjRPnqWlUY6Hq
-	Kw==
-Received: (qmail 629424 invoked from network); 20 Mar 2025 12:20:08 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Mar 2025 12:20:08 +0100
-X-UD-Smtp-Session: l3s3148p1@748AUsQwhM0gAwDPXyTHAJp038nK7dx+
-Date: Thu, 20 Mar 2025 12:20:07 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Shuah Khan <shuah@kernel.org>, linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH] rtc: remove 'setdate' test program
-Message-ID: <Z9v550Kbt8tjYst3@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-renesas-soc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Shuah Khan <shuah@kernel.org>, linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-References: <20250320103433.11673-1-wsa+renesas@sang-engineering.com>
- <CAMuHMdVwVyyZWfgFi12ujvSj8bVtDZyZvj+QMZ_iQbPbRDNHQQ@mail.gmail.com>
+	s=arc-20240116; t=1742469801; c=relaxed/simple;
+	bh=Cc5Im1GZrOSepMAgA4KpfZX3w/vPNrG+WuhFGNIa+uE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o4T9J4PjeUo56XKfPiUh4tikibA2pkKuFAJvM5aftG8RpKChGJG3b3mjFgM6J3vHmpJvfGnJXYBHSu9lWqdPXeMzQgxA2wM2NOwSX35Lx4JaTEVJimdvT1L5siYPKWSQRB74ft+YQzrQ06F6xTL/vp4Zw8Ua0+TTOY3649DRwRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-523dc190f95so354301e0c.1;
+        Thu, 20 Mar 2025 04:23:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742469797; x=1743074597;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pKHB50tWqEUG4/5rlUerqvsi2f4QoqE8Qg2V5ETBtaM=;
+        b=RDye+T/46igMoAaramdJWNWFaYQDexkR+wo7voNvo/loB9y55QwKGKrURojSBI4yaY
+         9PTV/4KRlLtZeNo6nVAaw672JdOIloM3GIUr+A9SaLcLl2exsPdEQa6WJkVmfgzEnuLF
+         alVfcpNoKXLDstdJCIRKYqmBVvsZu/yXyJSeH3xjhk2nXFugFn5KBRf5jtZ1FEnMaWl6
+         ZYaSGY8LG63CgWrojV3rG1BUO5QLQ+BgkJIYO5xH/6PoKDP95aP2RsnNSgFo/pC6ZvFA
+         YZWiWbF1eSPEvQibs4R93urdoEXwYtu3bAMkWYdaPKQKuw2is9wrqMEi2oyZhAPDjzCo
+         WBww==
+X-Forwarded-Encrypted: i=1; AJvYcCVkgjiP5NaL2uhDmk9Zl25zucP/5O7BvGyrUdlikYq8NJnl6L7gBnRw4jKXoHEbmX4n4hsnhUTi3burRxBV7b4=@vger.kernel.org, AJvYcCW/9s4Y0Uvmfdx4nhze62rVcLU+nssTQ5xuo6Q9cTrFlWdrJlQsnrfcAWsq1+Q8LFnZi+RoUK6ZYVVa@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmrjFlYxMnCrKSJpeJ96rfVclp9JnUiGb4M2f0zgxprckiylTC
+	jmSAJxX5sxT4+odsP/M/P1U6F8ks+17XuB9bAkWbCgSr+ZbTsza0VCSm8+i5
+X-Gm-Gg: ASbGncvkV0zItAhMtsu1ATuV9PerVekTqgzBpsPqNqlG91Rs1F38UxtYxakMaddDh3P
+	PRwlDetEpipXlYJ/GUsxeJNC/6ycYVhqpshVaL7o77YN3pW4hlD7rfUjYzW10vuipKBCqv29qdM
+	2Gb00pc3vfgMqaNP0cXdY7/GjIkpabhx4BWINojqlh74uSwvkuFotDYOU9j8d15pj3Kbkxc7kNV
+	THj1ZhJ457bcLiedJ5eHOmH5Ca90dNkEw0pAcZE3PeNVoFxQojcoxDgmRtPwcfC0TPRJXgW7lXq
+	8KcBmXMJ7AQHD/CiHxJtSqH46i9ziKuea56DX3o5DD/72BjK5X/hV7W3E8/psPTTuJ+GDz+JdkA
+	orhmcu8Q=
+X-Google-Smtp-Source: AGHT+IHs/D8HSYzRD0hCwabCBCI9q0lGeHq//gvGJ0OAnWY3k55IdAQTF7Nkh5tF7Yg0oR4ka9diwg==
+X-Received: by 2002:a05:6122:6081:b0:520:4539:4b4c with SMTP id 71dfb90a1353d-5258921466emr4976818e0c.9.1742469797264;
+        Thu, 20 Mar 2025 04:23:17 -0700 (PDT)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5243a6e5ecdsm2852438e0c.29.2025.03.20.04.23.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 04:23:16 -0700 (PDT)
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86d377306ddso270905241.2;
+        Thu, 20 Mar 2025 04:23:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVCLY/GewP6zAwY/ESZ9y14ofIh45q7tO9Apv4EsIlZkPEHzPf417glyiT4mKozqpD4SbrGapWqpR6v@vger.kernel.org, AJvYcCWiDXaqTSpAQxdwSqrnLxHJBVfeVey1mbjTQaxHW8DWE7I09NwJVUvzMl4XiNl6rZNpFBF7Rny0yK54PFjP0Fc=@vger.kernel.org
+X-Received: by 2002:a05:6102:3ed5:b0:4c1:a049:27c7 with SMTP id
+ ada2fe7eead31-4c4ec690714mr4879033137.13.1742469796680; Thu, 20 Mar 2025
+ 04:23:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VLk94VSnE6k0T/In"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVwVyyZWfgFi12ujvSj8bVtDZyZvj+QMZ_iQbPbRDNHQQ@mail.gmail.com>
+References: <20250320103433.11673-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVwVyyZWfgFi12ujvSj8bVtDZyZvj+QMZ_iQbPbRDNHQQ@mail.gmail.com> <Z9v550Kbt8tjYst3@shikoro>
+In-Reply-To: <Z9v550Kbt8tjYst3@shikoro>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 20 Mar 2025 12:23:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVwNE-o2_eq_Fu4FXiSnJn5rsg9P28PusYn3DKNdszOwA@mail.gmail.com>
+X-Gm-Features: AQ5f1JpfMMqlrEw5gHZ8B3A03RG-RhXs5S59xboLirW3IVJg8-z1l-7JcoPwReM
+Message-ID: <CAMuHMdVwNE-o2_eq_Fu4FXiSnJn5rsg9P28PusYn3DKNdszOwA@mail.gmail.com>
+Subject: Re: [RFC PATCH] rtc: remove 'setdate' test program
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Wolfram,
 
---VLk94VSnE6k0T/In
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, 20 Mar 2025 at 12:20, Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > Where can I find these "rtc-tools"? They don't seem to be carried
+>
+> On your favourite git server :)
+>
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
 
-Hi Geert,
+Oh well...
 
-> Where can I find these "rtc-tools"? They don't seem to be carried
+> > Iff this can be cross-compiled easily, it might be a better option
+> > than the rtc-tools I couldn't find...
+>
+> Did you find the 'setdate' utility? It is in 'testing/selftests/' not in
+> 'tools/'.
 
-On your favourite git server :)
+I found it, because you provided a link in the diffstat ;-)
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
+Gr{oetje,eeting}s,
 
-> by e.g. Ubuntu or Debian.
+                        Geert
 
-Well, buildroot has it.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Iff this can be cross-compiled easily, it might be a better option
-> than the rtc-tools I couldn't find...
-
-Did you find the 'setdate' utility? It is in 'testing/selftests/' not in
-'tools/'.
-
-But yeah, rtc-tools could get a wider audience. Packaging for Debian?
-Moving them into the kernel tree? Alexandre's call, I guess.
-
-Happy hacking,
-
-   Wolfram
-
-
---VLk94VSnE6k0T/In
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfb+ecACgkQFA3kzBSg
-Kbblfw/+NoIkmZgfRxhNzjeUAkHBcfE3lj+X2bqKCLQf22WYnWpImTJsZrtYf7qb
-PY2jjqcVXKjJimf/kvoDfJz5eD35lmeKb1YfMgsk+DGwCRcPGUFuyKYSXfnHb+G6
-b7zUIvg6EFp4ea/RHSUPOjP3ESqGhHA1P2coCeVQWNN/PFvJGuW9sUC8V2YoCNrm
-KbDYiHqsxoacnX5mZry188/VkdL9i5uxLdXFOFKtBYPGf9n9f2Z/SR8uuoehadJM
-6VfFt4GXEvCIzpV5LYuH4OOhsJpwFiW6YA6RdgMzp9GvF2EXth4V7RZ8/LTkahu3
-MqfjNkqC4Jz9yqgoj8WVSasRZ8xR4G5miEYfNGqNdM4C6kzZ8nr7DlA9MNaDRzlz
-CSbzEz6tl8DKl/fXvbisTdxcgShZuB2dLc6XvhFyoKP2pvVXWqvWhvpnc+ak4xrZ
-pay8y0aoOf7Gc1E3X1Dtpt+WZJXUvjh50rAQNWQ3DAWi07llbqsl29g+6cVYERm7
-9aEGKFahA70SvxJEu5YyclwYxUHXlAotahPi9xV+1EMai80varxxdEwl/DTPzlkp
-eN513/VYguJrztr2Rf9ydHuGaViYH2Kp9I0bZ0e/NiMhuD+H6oiqn0GUaK9uMlKR
-XSfMGqAREVCCekpfffh/KYc/58FC35Ap+SUdNBlL4xdM4REau6I=
-=1dX0
------END PGP SIGNATURE-----
-
---VLk94VSnE6k0T/In--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
