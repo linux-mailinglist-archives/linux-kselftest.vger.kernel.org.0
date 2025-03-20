@@ -1,165 +1,141 @@
-Return-Path: <linux-kselftest+bounces-29532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 915C8A6B126
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 23:43:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01ACFA6B13A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 23:50:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B5E0886BE1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 22:43:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BAC5188DCE4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 22:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F5A22A818;
-	Thu, 20 Mar 2025 22:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8237221B9D5;
+	Thu, 20 Mar 2025 22:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="VoOM3OEI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JaRfZqOV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAB022A7EA
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Mar 2025 22:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599AD1B4138;
+	Thu, 20 Mar 2025 22:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742510581; cv=none; b=OJNML9VmZj8oi71H6bIiXv2hjZZ4an06IB5LG/fQVmGK5TPKT7AJd6o07Q7eIMKrtRoIDF2yeIolUJ/yyKEafRq3CjqSyOEEYyOt3nuKwj5DymV6K0BjbtG0qdP+A4egnytPV3vD+SsLi16OAK5QXWwJg3Oy0gN8ENWB29e47OE=
+	t=1742510942; cv=none; b=VuelaXZM5qT0xfm3SQ1RLuf7k3lKmf8d7FoRMaLYgpXpgZrxMKimgcLyETw/85DOZdApTCwuSM4sS5PzD1TaRaLBqVPOsIov0oqki7ejHaEnkZy/vFHnekVF1ze0U9ViPldR1ASGoaeidLNVBU8OuHB8xSw3n7xdg/g8SFDx0bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742510581; c=relaxed/simple;
-	bh=jHUyecYfqBSkuj/RyiebN9WzmLHzCNiNfUukvDXyi9M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S3xIBMfZDGGyvswIm6i9qHVJ1SA5c9CWzb/6UUEyNT8re35jyhlzKsvt/M7O+4neiUGKxmFYx3uCLPUkOnIR/tRP1KnSdJBn8CC3nRYIrnyGIBbmm6pGEBBIcjPW7MbVqcYuG8AbJ1dGsndy8IOkOABhbomPiE+7eFvoHnri2CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=VoOM3OEI; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6f7031ea11cso15100227b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Mar 2025 15:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1742510578; x=1743115378; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qn+4G/BZfte1kQZajpdgC3z6H+wA6NVBYYf22eoImB8=;
-        b=VoOM3OEIlvD+S6M3S0KQmAPSCcZez/wVYCZrtShBQa7ZLMuzjPOjNkbvdO7RILoAbc
-         D1FRkGbtJ1Us224W+vCenCJHZJyKifdtRRQBJ2Z9K6Il8SIqiOQWZ/znECJKKNXALsVS
-         TtRrUng1d6ZAj+NkDUav9LhvupLpk8VdX2UjzvTLkcoYav5uHKObhQHiOv2k/AYDQ2Dn
-         4bnX6j+rhk2fDd1QvC1kLtqSUL6vCMmUZhVucILCxSWWMj1g4QjCOT9cMQdn3DjLKELe
-         leYH56s3W8QGPzGxOu4z4jG9kDXCtRpZiJTlb427FuJ5htQGGRX+ZPvRfJqcCGGTPVe8
-         bCfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742510578; x=1743115378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qn+4G/BZfte1kQZajpdgC3z6H+wA6NVBYYf22eoImB8=;
-        b=BOFJksMeTn6Df/JcIz/+B4D2sN1b82s8yjhrVDuNtfuVRr/byTlWeOkA/OpWpw+jXx
-         eymVnD5WjnO/EGbkaxiGn8S8/yR8oVFSNntuEzIucrTvexKTdkoWxxNTQ/ZeKSoEdYie
-         tx9eseBYl3pyFebGs/yLOb/mHoEcAixdU5WFPWd6AThN5iSemoP7bL5EjGNrJDkcLJ8K
-         svXzbvuqtj7mdXITwt4jwIPHTtJG+UphZhW7Jo8+LxB7LAHUnyz/+qVuvoBzoCKX1395
-         hd/mfU/Ttrlzd/XEj3sTndkYAJNcWy/SUbhTOp6eFEuxMq7kNDDlpzrBgODl0TQ4lfdU
-         /GJg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ2510CMSuASpaW/J4eg1gjBvy7evPTzkGzIoJB/dWYwxNjMCZ/xed55Re3ZV2gOrgZ3mLqK1naASznYO9V4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZdi58bMKTTiQ+UNSeX4QBZIMd7SyHVIKZODjj+GXQYZvQX6ia
-	o6C3AGqiYyfAld3sDwYyhRwyOAx8/TICrg2hM/NkJG3KqbJe4TE6hAvqo9rARjngyzIMLcfRC2y
-	+O7+jpQPZ/o/jZhXkO3nH6oI53iEDL5Dt3aDuCg==
-X-Gm-Gg: ASbGncs5GjG/SDN/iWJ9qvyYORThNEhrxJnEiASK9PU6OkTayxV+qR93ZEqLV2haYfh
-	B90cb+0PkMfFwig+toWJcU7efHKHt4hvhqD2jqi8Y4VUot7ZoSRu4lGp95TbgFhxFRMAoxWXTx2
-	LsQQfM32wGaNdp8nNmw8XSMsUfyak=
-X-Google-Smtp-Source: AGHT+IGmYWppAb1TiIqTjy/w+R69Tu+tZXikOvPPA4dXCqNye2klzCsCnnoPJTKEOwtSTNPJ9gWuo2HlZH9leRcscHA=
-X-Received: by 2002:a05:690c:64c8:b0:6f4:8207:c68d with SMTP id
- 00721157ae682-700babfd564mr17209397b3.3.1742510578457; Thu, 20 Mar 2025
- 15:42:58 -0700 (PDT)
+	s=arc-20240116; t=1742510942; c=relaxed/simple;
+	bh=mOksHU5qf4Adi6HtLZv4BnIl+JJRYljJuuqvM4c8BAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kep1sX0sPmmGmj0FMe/Ey7FQUfniINLrQ1YI05BAvcNolpcSBoQeKr6P69KUbd/dRfrn1BDRY9c0SujzpSizd7yTD+SOhpqGS6udjGPuV4B6urXaOLg8dToNi+1eE63W8zBIv96hMCLkW92D6sd4iJOYuUWhDCg7PDFWrCVEoWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JaRfZqOV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3512DC4CEDD;
+	Thu, 20 Mar 2025 22:48:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742510941;
+	bh=mOksHU5qf4Adi6HtLZv4BnIl+JJRYljJuuqvM4c8BAo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JaRfZqOVIR58sZKmuHYI6UKg+1VjaCB3F5GOWLViBwLMRFhwdjZRXlAbugCN0hbmV
+	 ENvtEUrHQ07Kj3fcCeu1euZ1RpHDl0+ZNJVpdOAwTyH2EKGHsKwVWRq7knxU1iLY8T
+	 VfjOGPHsAjJtwHKEoa34Til1iETexXzYOF7tfDd/FMaRFH+xLEn2t4oBEd2KnjDwst
+	 XK2sCJV+lkKuZ13h0hf4IgD2YL2LwZzIe9rSidPFGpCa5kH114rpE992D+VkA1+q+j
+	 AamZaDHsyGCwhCHNYg2xo6jtUJCagR8KRByOG5OjLYq1BK9gGoGbKyHc55dhfP3RFS
+	 SxhCUvvsQEGxQ==
+Date: Thu, 20 Mar 2025 22:48:56 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Nico Pache <npache@redhat.com>
+Cc: rf@opensource.cirrus.com, patches@opensource.cirrus.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, simont@opensource.cirrus.com,
+	ckeepax@opensource.cirrus.com, brendan.higgins@linux.dev,
+	davidgow@google.com, rmoar@google.com, johannes.berg@intel.com,
+	sj@kernel.org
+Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling
+ it
+Message-ID: <a0fdd818-a4be-446e-b18e-0c655bc94c9a@sirena.org.uk>
+References: <20250319230539.140869-1-npache@redhat.com>
+ <618b8578-1897-45e4-83eb-b725102ab27d@sirena.org.uk>
+ <CAA1CXcD4dOUWOXp0ODSEo4+g9_QQkJe1tmX3bVdcs3N_PPdSHQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-22-e51202b53138@rivosinc.com> <D8LFQYX4EHF8.2AJ01XL34WK0W@ventanamicro.com>
-In-Reply-To: <D8LFQYX4EHF8.2AJ01XL34WK0W@ventanamicro.com>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 20 Mar 2025 15:42:44 -0700
-X-Gm-Features: AQ5f1Jo-nHEMu5qFdaTum9uSomYqo-G7mLCiMbL1c8nby8c7DsEke_Gukp9eNFU
-Message-ID: <CAKC1njTyiaBkmHvAM8VT_MG4Cdch=H9P8r3C-m-=QQEuzyrRNA@mail.gmail.com>
-Subject: Re: [PATCH v12 22/28] riscv: enable kernel access to shadow stack
- memory via FWFT sbi call
-To: =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	Zong Li <zong.li@sifive.com>, linux-riscv <linux-riscv-bounces@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lvX71JSmq6TgqUlb"
+Content-Disposition: inline
+In-Reply-To: <CAA1CXcD4dOUWOXp0ODSEo4+g9_QQkJe1tmX3bVdcs3N_PPdSHQ@mail.gmail.com>
+X-Cookie: Do not fold, spindle or mutilate.
+
+
+--lvX71JSmq6TgqUlb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 20, 2025 at 3:10=E2=80=AFPM Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrcma=
-r@ventanamicro.com> wrote:
->
-> 2025-03-14T14:39:41-07:00, Deepak Gupta <debug@rivosinc.com>:
-> > Kernel will have to perform shadow stack operations on user shadow stac=
-k.
-> > Like during signal delivery and sigreturn, shadow stack token must be
-> > created and validated respectively. Thus shadow stack access for kernel
-> > must be enabled.
->
-> Why can't kernel access the user shadow stack through an aliased WR
-> mapping?
+On Thu, Mar 20, 2025 at 04:21:16PM -0600, Nico Pache wrote:
+> On Thu, Mar 20, 2025 at 1:14=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+> > On Wed, Mar 19, 2025 at 05:05:39PM -0600, Nico Pache wrote:
 
-It can, although that opens up a can of worms. If this alternating
-mapping is user mode
-then ensuring that another threat in userspace can't write to this
-address in this window
-of signal handling. A kernel alternate mapping can be created, but
-that can lead to all
-sorts of requirements of ensuring the page is pinned down. IIRC, It
-has been debated
-on x86 shadow stack merge time as well on how a flaky alias mapping approac=
-h can
-become and weaken the threat model it is supposed to protect against.
+> > >  config FW_CS_DSP_KUNIT_TEST
+> > >       tristate "KUnit tests for Cirrus Logic cs_dsp" if !KUNIT_ALL_TE=
+STS
+> > > -     depends on KUNIT && REGMAP
+> > > +     depends on KUNIT && REGMAP && FW_CS_DSP
+> > >       default KUNIT_ALL_TESTS
+> > > -     select FW_CS_DSP
 
-Simply using `ssamoswap` is simple and serves the purpose. Enabling shadow =
-stack
-access for the kernel doesn't have any adverse effect on the kernel.
+> > This makes no sense to me, the select statement is forcing on the code
+> > it's testing which is a library and so is selected by it's users, this
 
->
-> > In future when kernel shadow stacks are enabled for linux kernel, it mu=
-st
-> > be enabled as early as possible for better coverage and prevent imbalan=
-ce
-> > between regular stack and shadow stack. After `relocate_enable_mmu` has
-> > been done, this is as early as possible it can enabled.
-> >
-> > Reviewed-by: Zong Li <zong.li@sifive.com>
-> > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> > ---
-> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > @@ -320,6 +326,12 @@ SYM_CODE_START(_start_kernel)
-> >       la tp, init_task
-> >       la sp, init_thread_union + THREAD_SIZE
-> >       addi sp, sp, -PT_SIZE_ON_STACK
-> > +     li a7, SBI_EXT_FWFT
-> > +     li a6, SBI_EXT_FWFT_SET
-> > +     li a0, SBI_FWFT_SHADOW_STACK
-> > +     li a1, 1 /* enable supervisor to access shadow stack access */
-> > +     li a2, SBI_FWFT_SET_FLAG_LOCK
-> > +     ecall
->
-> I think the ecall can fail even on machines that have Zicfiss, so it
-> would be good to disable user shadow stack if that happens.
+> Similarly to eb5c79828cfa ("firmware: cs_dsp: FW_CS_DSP_KUNIT_TEST
+> should not select REGMAP"), We shouldnt force a feature on when using
+> KUNIT_ALL_TESTS.
+
+This feature is not user selectable, at an absolute minimum you would
+need to make the library available in KUnit test builds.
+
+> > change will just stop the tests being run unless someone does the dance
+> > to enable a driver which relies on the library.  That is something that
+
+> My config also sets the UML wrapper to enable this FW_CS_DSP config so
+> it will continue to work in that environment.
+
+Simply adding it to the all_tests.config will just result in it getting
+turned off by Kconfig during the build since it's not a visible option
+so that's not accomplishing anything.  all_tests.config is not UML
+specific, it's for enabling all the KUnit tests that could run in UML no
+matter how you're running them.
+
+> > seems unlikely to change the outcome of the tests when run from KUnit
+> > which is independent of any hardware.
+
+> KUNIT is supported outside the UML environment, and some distros (like
+> fedora, and downstream flavors), use KUNIT as modules, with
+> KUNIT_ALL_TESTS=3Dm. We only want the tests that are supported by our
+> config to be available, we dont want KUNIT going and enabling other
+> features so the test works.
+
+The point is not that KUnit is frequently run in UML (personally I
+mostly run it with emulated hardware instead) but rather that this is a
+library which can be tested independently of having a relevant DSP.
+
+--lvX71JSmq6TgqUlb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfcm1cACgkQJNaLcl1U
+h9BSyggAgOtuJ1v1/Q/s4ZEvVO91zrjG9GfdNmdYBv9p2+e8fKXDGPhvUx6x93l6
+W5EvzGvJvjPS78WG5AxHNAzpePofF+Otl18WYv1yssm5RlgBxE7U+/b/wixLAyy3
+veZH6iFjT6bJPfN9iL6y7Hrg30YKsRv7/mM0Eg3utQEiT2FQFIGsOlPIwTMrXRrT
+5wWfy4OZMlhWeBB39TdheXOC7q2zAQCReFaxbWR8XQpNcX+7XoF4omVkSVUf7li9
+PR5SQPNGyto6USKmY8wpL5odAwqZ3BAm9xpqfZNs6TcqYQT0cV5TjI+WUuEtS1Lo
+JDqkvn8GtxUccXG55P+4TPYdARuP1A==
+=i1OI
+-----END PGP SIGNATURE-----
+
+--lvX71JSmq6TgqUlb--
 
