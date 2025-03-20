@@ -1,65 +1,59 @@
-Return-Path: <linux-kselftest+bounces-29498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29499-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1404A6A623
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 13:21:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B04EA6A64E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 13:33:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 301A816FC27
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 12:21:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99BD518945EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 12:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2189221D9A;
-	Thu, 20 Mar 2025 12:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CEF617993;
+	Thu, 20 Mar 2025 12:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="BxGBJrtk"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="IYJDlksZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6E217A31A;
-	Thu, 20 Mar 2025 12:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD46139E;
+	Thu, 20 Mar 2025 12:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742473259; cv=none; b=swaz7+VwEqPPldh0bxg3ARCfi/en4mBSDw1bPkfnkvBCoBKfm+zp5zM+7Y38VBCFVQHd+3Uu9CroKWFs1kwKoiVtnx64oXSc4VKELpa7UD+Y5nReJeINvKzPA+VEwYvy5RnF0mgO9T10JikfAVVWlNjQsC9FmvEbH5mwDujSB7Y=
+	t=1742474016; cv=none; b=EZAxwajng6bOgyWkNURPBCV0kMKWclUfjI7W4QMnQv0r7ERgfDv/70D6PkCvhxWwKOGwBU/jOUn2Ye9S3iCWwikzs1B9RySRwNOWYUQjhOfiIn8QCkj/bsOSqvZHxzPMESa9MYdmfmxq6G4vpy+EzYZn4IHVvq7yatvbHabOZCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742473259; c=relaxed/simple;
-	bh=ObbmHjbc8zZC963JR2zDwtsuXqPwG1o6MCnmRa4zEeg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=r5+nLW0dfMnjeVoZq9ViysQU5/2bfKM/3h0l2Blk1VZIbqxe2AwUUzqHrd53xtwWI+VZn77Nafre7HWMLY6Kenf3FssRK1QrKPEhw/2j12lEu/gmPWDZYhhAcjiHkCanJsl5N/aFVn3DmI7rOzBqd9HeBsk2ez4AEuBXWSFkh9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=BxGBJrtk; arc=none smtp.client-ip=67.231.149.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52K59d8q031203;
-	Thu, 20 Mar 2025 07:20:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	PODMain02222019; bh=3tLRhB83LvBqQnQvwrt/Ef3YOjAwm3tOEBLod32rvM4=; b=
-	BxGBJrtkgP8YYuiB4+Wg7NP5ioeHhSU8EZU7WuQ5x/1OyoIxsrkC+0RI+C6iCZq9
-	IQido1gKVEryspyyY63qJ3bSqFo+8J9dr0O5Vr5U+blE3GCFDSl4TeaK2BaNmV64
-	jA3vI7+KlbZGFFmw6K7A9XtUdRECz1liZ6DNjMW5lwlNXfjUxH4/1T6AgO2BkQOv
-	1wySWpw4nvngZNIhq8jSiI8oDbY8tuzlVdD7GiKhCSEVBZxa1BkZFNoYRoNPx/17
-	+ya/OEAbygOxVmtJE47bfzxgxdE33xaj+EdeQZmzKTIvL0ySU4KWzOi0wkElh2pp
-	hxc/pqJu340Awj1dpBHcKg==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 45g9p6s0by-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Mar 2025 07:20:38 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Thu, 20 Mar
- 2025 12:20:36 +0000
-Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
- 15.2.1544.14 via Frontend Transport; Thu, 20 Mar 2025 12:20:36 +0000
-Received: from [198.61.68.186] (EDIN4L06LR3.ad.cirrus.com [198.61.68.186])
-	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 0FB9282255A;
-	Thu, 20 Mar 2025 12:20:35 +0000 (UTC)
-Message-ID: <d8fc1f66-f220-42fb-b58f-f5f9c7d30100@opensource.cirrus.com>
-Date: Thu, 20 Mar 2025 12:20:34 +0000
+	s=arc-20240116; t=1742474016; c=relaxed/simple;
+	bh=m9r0AbXxI3hD3b/IDRiy8UewvP2qrBQybEza6MCZe80=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XLTvdxmj1US6bJ5b4keQlQkCAUyFgG5DeNNkGCA32Gqy5klS2/7yG9Gdv1ETRhvI4K8k5C86/hEWwfaeGms2IzfqGgmwMy5tXNNiJitH4AEaMNjUtauK3jgKqHj44oahW+KlWGfkKmyekp5cE9Wo+pt1Pq54UsTIEycC1If7UVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=IYJDlksZ; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1tvF5N-006bbm-Ui; Thu, 20 Mar 2025 13:33:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=yXhMsCE0agUhqpYyGmOJUSGwpFIxlvTbhSiqHGBblFw=; b=IYJDlksZnXDwSzUWEpVLM0T2xz
+	amE/duVv1f4Vdb5t54txFNX9uGSb7XxG1cWw/Xiqe+t3pxffQ0gJJm/sfgdA661+bbSYqEhAR5SWh
+	jvL1xOqNj2zQIYacwkqUW+V6FpkeDqWrKoyChxTMgfX7QnEuHOzKmWWQXffZ1XcpqSESraZyBVq0x
+	8ygPZSFYH7BPHUuoO4PhoU51X6nH2Q8QhLT+ySJb/5VZk/x3fpq20gKnLRbt8CJ237TuK83U5IvUQ
+	FRT2uV2689hYsvXt94TQ47rulbG2nABYpf9QmW4DYAjmBAktoCjOoqB4jhV5fZvFlG2ga74lO3LPf
+	YRfAXJkQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1tvF5H-0006Hf-NK; Thu, 20 Mar 2025 13:33:15 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1tvF4x-00HH1a-O0; Thu, 20 Mar 2025 13:32:55 +0100
+Message-ID: <1e8c8e7a-23d9-4ed3-902a-8a4ba06f1f69@rbox.co>
+Date: Thu, 20 Mar 2025 13:32:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,89 +61,86 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling
- it
-To: Nico Pache <npache@redhat.com>, <broonie@kernel.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
-CC: <simont@opensource.cirrus.com>, <ckeepax@opensource.cirrus.com>,
-        <brendan.higgins@linux.dev>, <davidgow@google.com>, <rmoar@google.com>,
-        <johannes.berg@intel.com>, <sj@kernel.org>
-References: <20250319230539.140869-1-npache@redhat.com>
- <CAA1CXcD2g=sRRwgLSudiOAqWXq3sCj+NPuE1ju7B2gFXXefjXA@mail.gmail.com>
-Content-Language: en-US
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <CAA1CXcD2g=sRRwgLSudiOAqWXq3sCj+NPuE1ju7B2gFXXefjXA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=Vcz3PEp9 c=1 sm=1 tr=0 ts=67dc0816 cx=c_pps a=uGhh+3tQvKmCLpEUO+DX4w==:117 a=uGhh+3tQvKmCLpEUO+DX4w==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=20KFwNOVAAAA:8 a=2PFKkWWLCDjf3SO0miIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: cagRjpx59etYv9AJ4wAhWJHlCdStqxuh
-X-Proofpoint-ORIG-GUID: cagRjpx59etYv9AJ4wAhWJHlCdStqxuh
-X-Proofpoint-Spam-Reason: safe
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, sockmap: avoid using sk_socket after
+ free when sending
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, xiyou.wangcong@gmail.com,
+ john.fastabend@gmail.com, jakub@cloudflare.com
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+ mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ sgarzare@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250317092257.68760-1-jiayuan.chen@linux.dev>
+ <20250317092257.68760-2-jiayuan.chen@linux.dev>
+From: Michal Luczaj <mhal@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <20250317092257.68760-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 19/3/25 23:11, Nico Pache wrote:
-> On Wed, Mar 19, 2025 at 5:05 PM Nico Pache <npache@redhat.com> wrote:
->>
->> FW_CS_DSP gets enabled if KUNIT is enabled. The test should rather
->> depend on if the feature is enabled. Fix this by moving FW_CS_DSP to the
->> depends on clause, and set CONFIG_FW_CS_DSP=y in the kunit tooling.
-> 
-> A further note here:
-> 
-> This test is failing and panicing across multiple arches, and
-> triggering kasan slats on debug kernels. I think this test needs more
-> testing ;P
->
+On 3/17/25 10:22, Jiayuan Chen wrote:
+> The sk->sk_socket is not locked or referenced, and during the call to
+> skb_send_sock(), there is a race condition with the release of sk_socket.
+> All types of sockets(tcp/udp/unix/vsock) will be affected.
+> ...
+> Some approach I tried
+> ...
+> 2. Increased the reference of sk_socket->file:
+>    - If the user calls close(fd), we will do nothing because the reference
+>      count is not set to 0. It's unexpected.
 
-Please supply details of failures or links to bug reports.
-"is failing" and "panicing" doesn't tell me enough to fix anything.
-Failing how? Panicking how? On what architectures?
-I tested it on the architectures I have available, and the kunit um
-architecture. Unfortunately not everyone has hardware for every
-architecture supported by Linux so we have to trust somewhat that
-other architectures don't do anything unexpectedly different from
-what we _can_ test it on.
+Have you considered bumping file's refcnt only for the time of
+send/callback? Along the lines of:
 
-Also, are any of these failures the unterminated string bug that someone
-fixed recently?
+static struct file *sock_get_file(struct sock *sk)
+{
+	struct file *file = NULL;
+	struct socket *sock;
 
->>
->> Fixes: dd0b6b1f29b9 ("firmware: cs_dsp: Add KUnit testing of bin file download")
->> Signed-off-by: Nico Pache <npache@redhat.com>
->> ---
->>   drivers/firmware/cirrus/Kconfig              | 3 +--
->>   tools/testing/kunit/configs/all_tests.config | 2 ++
->>   2 files changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/firmware/cirrus/Kconfig b/drivers/firmware/cirrus/Kconfig
->> index 0a883091259a..989568ab5712 100644
->> --- a/drivers/firmware/cirrus/Kconfig
->> +++ b/drivers/firmware/cirrus/Kconfig
->> @@ -11,9 +11,8 @@ config FW_CS_DSP_KUNIT_TEST_UTILS
->>
->>   config FW_CS_DSP_KUNIT_TEST
->>          tristate "KUnit tests for Cirrus Logic cs_dsp" if !KUNIT_ALL_TESTS
->> -       depends on KUNIT && REGMAP
->> +       depends on KUNIT && REGMAP && FW_CS_DSP
->>          default KUNIT_ALL_TESTS
->> -       select FW_CS_DSP
->>          select FW_CS_DSP_KUNIT_TEST_UTILS
->>          help
->>            This builds KUnit tests for cs_dsp.
->> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
->> index b0049be00c70..96c6b4aca87d 100644
->> --- a/tools/testing/kunit/configs/all_tests.config
->> +++ b/tools/testing/kunit/configs/all_tests.config
->> @@ -49,3 +49,5 @@ CONFIG_SOUND=y
->>   CONFIG_SND=y
->>   CONFIG_SND_SOC=y
->>   CONFIG_SND_SOC_TOPOLOGY_BUILD=y
->> +
->> +CONFIG_FW_CS_DSP=y
->> \ No newline at end of file
->> --
->> 2.48.1
->>
-> 
+	rcu_read_lock();
+	sock = sk->sk_socket;
+	if (sock)
+		file = get_file_active(&sock->file);
+	rcu_read_unlock();
+
+	return file;
+}
+
+static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
+			       u32 off, u32 len, bool ingress)
+{
+	int err;
+
+	if (!ingress) {
+		struct sock *sk = psock->sk;
+		struct file *file;
+		...
+
+		file = sock_get_file(sk);
+		if (!file)
+			return -EIO;
+
+		err = skb_send_sock(sk, skb, off, len);
+		fput(file);
+		return err;
+	}
+	...
+}
+
+static void sk_psock_verdict_data_ready(struct sock *sk)
+{
+	struct file *file;
+	...
+
+	file = sock_get_file(sk);
+	if (!file)
+		return;
+
+	copied = sk->sk_socket->ops->read_skb(sk, sk_psock_verdict_recv);
+	fput(file);
+	...
+}
 
 
