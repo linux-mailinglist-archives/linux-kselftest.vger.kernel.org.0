@@ -1,251 +1,216 @@
-Return-Path: <linux-kselftest+bounces-29506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 143B4A6AB57
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 17:46:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2444FA6AC1D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 18:34:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1CBF98030E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 16:46:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AAC87AD8BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 17:33:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A728821D3E2;
-	Thu, 20 Mar 2025 16:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38502253EC;
+	Thu, 20 Mar 2025 17:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/79YFaH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xy+OOc46"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E19E1EB5E0;
-	Thu, 20 Mar 2025 16:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4C6224236
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Mar 2025 17:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742489197; cv=none; b=WvTXgjZv9J59DCBBLyB81hVZ6HgZE52vYco/76dbUvVsheeQnbnKewI2nOE9U7Q+zyEFgBrPTv3onwe647eErTNG2wwxrSru2+J2UmD0qLKy9IH40h0GM3WbZDDv7osUNA6811mbm5LZSfu4FgUBCXih+X6JICI/g1qlYu8R4ao=
+	t=1742492070; cv=none; b=sfli32mOfo3cU0bBzjOwemKzJtyfcFJexWpjQr+QJ5jG/PII4Bwf3QyzchK3f03/6QV7RdIK9nkihKofuTOSIh0LccgiTO0tfhZg0mzi3peBxKtbUOl3rMgG1kdSRYew3ZyjGKtZTi8x176YOg2welfMZVOXEJG0nhanwGXwsKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742489197; c=relaxed/simple;
-	bh=lXinkjipf1en7622TJq1al7bKgl10Rm49aHznKd8Phw=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=FyUpzQ+cLrisbFDvzO0yWqru2zZ1okpMG9eyTZtC9xxHj853+UzV2VDSiaJdSgn5O6HpvzndUC5iZHXEK0ZdUxUmxcwsVA1hnQW2w0SVVCg07Lv+TCuPiwXHA4TUdzHBY8D+NHyH+0/CJeTT4V0PA/ruffYXnod4jiV8sEQ3XOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/79YFaH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0C0C4CEDD;
-	Thu, 20 Mar 2025 16:46:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742489196;
-	bh=lXinkjipf1en7622TJq1al7bKgl10Rm49aHznKd8Phw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G/79YFaHCpNer9yH9sjA//ici6kmkfbzVBJZ9Sv0lTT9sW3dAknaA7xwTpEZT9dV3
-	 mSmbYJza3s+sv4Ky7kDrKMiMGAYF0VYx1l+71rNtsxkkl+sQtJKtajowLEEvTqgaam
-	 lu2rKHDyDFw4DlOD1a4L/g6Pe2gJyJxeZ7cZuJbAwsBdc8+0V5rHOVuX0PMoL4aLpk
-	 76UuqPBARI+wROhJyIVEluN7oaUyFk/K48lq5Puw0sxSWpyybqrAH1dXEOLfOnAe4e
-	 50rk/9oscVKAB3DXtiBKIuSzoBZosk62J/nkv9hd/J19eyTq87/65SbpuRAtmqxNmu
-	 8CIoaxHvYdcCQ==
-Content-Type: multipart/mixed; boundary="------------df9TvLEoGeNXbwgvcfLcFC5D"
-Message-ID: <7ba23e8b-d103-4788-9b9c-2d5521ac07b6@kernel.org>
-Date: Thu, 20 Mar 2025 17:46:31 +0100
+	s=arc-20240116; t=1742492070; c=relaxed/simple;
+	bh=ya3r5Y6SCRZPS6zantYDYhM3T+z2E2D+0eUveodGqwg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RaNJhpPswlCQc/NOcgY3taoWySIQvHhGHzHitgXSs77VCyvZIzB2XAc1wLa+GGHo9k7g6h4PvvpwoNGbQjEybv5mlx441gqjHcvH6fCi2zaueSszvtsWsaGCkxl0GjTvk02iaTRmENjMEw0TVYZCJ3BJJGVnJCXq5B61A2YCU8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Xy+OOc46; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742492066;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vYX2M6/2zKOpQJ6SwtSXKJMLCmPtRFZ3mltXSXoF2CU=;
+	b=Xy+OOc46ISgrQjHOYtlRoX4IrLkoEREe50EJSftMiiv5oChMfW1ujj6R042Gz0JCjnMOWB
+	NFSYrjgMDIYAXVOOvQVkoeQk4mYZxdEZX+MAUkNxf16P+nafa7MsBzj7d1g2a6ijX8CSDE
+	8fzsEJ4ex9HECIyk+k4Br1sAGquNUPQ=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-211-nrrpx9WpPluP4lCNmVLIuA-1; Thu, 20 Mar 2025 13:34:25 -0400
+X-MC-Unique: nrrpx9WpPluP4lCNmVLIuA-1
+X-Mimecast-MFC-AGG-ID: nrrpx9WpPluP4lCNmVLIuA_1742492065
+Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-e6372bafb96so1319363276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Mar 2025 10:34:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742492064; x=1743096864;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vYX2M6/2zKOpQJ6SwtSXKJMLCmPtRFZ3mltXSXoF2CU=;
+        b=kewHFWUGYf2NIGXQl97g6V6Tii3g/76xwIM6K/HktUtHe1AuEWfLzA3PWbYJzDZdXF
+         06uAJTNzGoI1jdBVMaYfYt/3jGMODvj2nvh6EzRUXW0kyueUhuEG1185cseTwwm9JSpp
+         BUOxmrqc9kDQoMqZwK2fU5MTpuyTOHZnIm0jm2EKa17iQFipwPbGQK4v3ddJ1VQAmF40
+         DuZUS22lcClOTphBhSM016/TlgD4KzdYIH0jHOBqaHTmhzCQtvkHM7fS0aH5y5nvp6IA
+         +kSJrhgmiBRrFO0FSTqPULvObIe+6Hv8ShS4E/DCIQKsDqjWDzq1vMWWnHJImJxqGJjD
+         qbJg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzjjsyMqRh6K4VCP0CMFvWrSNKfhKYCHECWN9rk9dLwnAUdSLjuVXIHeBL1GSE8xwfsEL3OplrGvZA0olH5XM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywbyxa/TPu2iaY9155xtmS6tQZKwJKzxKn9+zUDBp/to6qdJiNH
+	aYMki5oSFn3mAWeednvCzQOg1ygQtUq76hzUJBDW3cuqCjAVzrNrAyU/ElKCg1hZzhJP9Kgc1ev
+	Xg0/gLYsgDi8y84OoGYPpbGWaEnR/A7kkOgk4YdF324RDHDY2c2juEBdPAu/OzQ6e9sldVcFJvS
+	WukAKkkDnvIMn+4u3jLHadkyk7ygId3eLJ3RcQYjuy
+X-Gm-Gg: ASbGnct4oOD91JimMAgSjZQjxpxAUz306VG6f6d1qj5SZ7hYlT4TqYAYVtMK7KTsF9j
+	A40/nF8HA1oIoMideKX6bN3rrc2uXb8W0kuNRYwaCZaCwNtnatDBBNJ+SO27LevABw29iZlp3re
+	jWKEFV9EE2ijU=
+X-Received: by 2002:a05:6902:2004:b0:e64:4082:85fd with SMTP id 3f1490d57ef6-e6691fcbe0dmr5244697276.7.1742492063546;
+        Thu, 20 Mar 2025 10:34:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG1kwV9KUIkDrSfNgg0aIxmfOfiVAxVKdNTNJaQSadYwEDJirpIaPlQrsdWB2Zg0Z1ERJqJTCIhPZiXTCBsUzQ=
+X-Received: by 2002:a05:6902:2004:b0:e64:4082:85fd with SMTP id
+ 3f1490d57ef6-e6691fcbe0dmr5244645276.7.1742492063069; Thu, 20 Mar 2025
+ 10:34:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v2 3/3] selftests: net: test for lwtunnel dst ref
- loops: manual merge
-Content-Language: en-GB, fr-BE
-To: Justin Iurman <justin.iurman@uliege.be>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20250314120048.12569-1-justin.iurman@uliege.be>
- <20250314120048.12569-4-justin.iurman@uliege.be>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20250314120048.12569-4-justin.iurman@uliege.be>
+References: <20250319230539.140869-1-npache@redhat.com> <CAA1CXcD2g=sRRwgLSudiOAqWXq3sCj+NPuE1ju7B2gFXXefjXA@mail.gmail.com>
+ <d8fc1f66-f220-42fb-b58f-f5f9c7d30100@opensource.cirrus.com>
+In-Reply-To: <d8fc1f66-f220-42fb-b58f-f5f9c7d30100@opensource.cirrus.com>
+From: Nico Pache <npache@redhat.com>
+Date: Thu, 20 Mar 2025 11:33:54 -0600
+X-Gm-Features: AQ5f1Jp06BXpfspSGNPLI-SadeSrcVhX--job0ADTdJn-pHdUw3d6mGqkxkKb3A
+Message-ID: <CAA1CXcA460xfy48JMNeX5rNTfUqsahER8SDF6tWu82V35ripLg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling it
+To: Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc: broonie@kernel.org, patches@opensource.cirrus.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, simont@opensource.cirrus.com, 
+	ckeepax@opensource.cirrus.com, brendan.higgins@linux.dev, davidgow@google.com, 
+	rmoar@google.com, johannes.berg@intel.com, sj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is a multi-part message in MIME format.
---------------df9TvLEoGeNXbwgvcfLcFC5D
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Thu, Mar 20, 2025 at 6:21=E2=80=AFAM Richard Fitzgerald
+<rf@opensource.cirrus.com> wrote:
+>
+> On 19/3/25 23:11, Nico Pache wrote:
+> > On Wed, Mar 19, 2025 at 5:05=E2=80=AFPM Nico Pache <npache@redhat.com> =
+wrote:
+> >>
+> >> FW_CS_DSP gets enabled if KUNIT is enabled. The test should rather
+> >> depend on if the feature is enabled. Fix this by moving FW_CS_DSP to t=
+he
+> >> depends on clause, and set CONFIG_FW_CS_DSP=3Dy in the kunit tooling.
+> >
+> > A further note here:
+> >
+> > This test is failing and panicing across multiple arches, and
+> > triggering kasan slats on debug kernels. I think this test needs more
+> > testing ;P
+> >
+>
+> Please supply details of failures or links to bug reports.
+> "is failing" and "panicing" doesn't tell me enough to fix anything.
+> Failing how? Panicking how? On what architectures?
+> I tested it on the architectures I have available, and the kunit um
+> architecture. Unfortunately not everyone has hardware for every
+> architecture supported by Linux so we have to trust somewhat that
+> other architectures don't do anything unexpectedly different from
+> what we _can_ test it on.
 
-Hi Justin,
+Some of the runs return not ok on a bunch of tests, debug kernels
+print splats, and some seem to brick the system, leading to a reboot.
+Below are all the failures per arch/variant.
 
-On 14/03/2025 13:00, Justin Iurman wrote:
-> As recently specified by commit 0ea09cbf8350 ("docs: netdev: add a note
-> on selftest posting") in net-next, the selftest is therefore shipped in
-> this series. However, this selftest does not really test this series. It
-> needs this series to avoid crashing the kernel. What it really tests,
-> thanks to kmemleak, is what was fixed by the following commits:
-> - commit c71a192976de ("net: ipv6: fix dst refleaks in rpl, seg6 and
-> ioam6 lwtunnels")
-> - commit 92191dd10730 ("net: ipv6: fix dst ref loops in rpl, seg6 and
-> ioam6 lwtunnels")
-> - commit c64a0727f9b1 ("net: ipv6: fix dst ref loop on input in seg6
-> lwt")
-> - commit 13e55fbaec17 ("net: ipv6: fix dst ref loop on input in rpl
-> lwt")
-> - commit 0e7633d7b95b ("net: ipv6: fix dst ref loop in ila lwtunnel")
-> - commit 5da15a9c11c1 ("net: ipv6: fix missing dst ref drop in ila
-> lwtunnel")
-> 
-> Signed-off-by: Justin Iurman <justin.iurman@uliege.be>
-> ---
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  tools/testing/selftests/net/config            |   2 +
->  .../selftests/net/lwt_dst_cache_ref_loop.sh   | 246 ++++++++++++++++++
->  3 files changed, 249 insertions(+)
->  create mode 100755 tools/testing/selftests/net/lwt_dst_cache_ref_loop.sh
-> 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 5916f3b81c39..843ab747645d 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -101,6 +101,7 @@ TEST_PROGS += vlan_bridge_binding.sh
->  TEST_PROGS += bpf_offload.py
->  TEST_PROGS += ipv6_route_update_soft_lockup.sh
->  TEST_PROGS += busy_poll_test.sh
-> +TEST_PROGS += lwt_dst_cache_ref_loop.sh
->  
->  # YNL files, must be before "include ..lib.mk"
->  YNL_GEN_FILES := busy_poller netlink-dumps
-> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-> index 5b9baf708950..61e5116987f3 100644
-> --- a/tools/testing/selftests/net/config
-> +++ b/tools/testing/selftests/net/config
-> @@ -107,3 +107,5 @@ CONFIG_XFRM_INTERFACE=m
->  CONFIG_XFRM_USER=m
->  CONFIG_IP_NF_MATCH_RPFILTER=m
->  CONFIG_IP6_NF_MATCH_RPFILTER=m
-> +CONFIG_IPV6_ILA=m
-> +CONFIG_IPV6_RPL_LWTUNNEL=y
+Failing on
+---------------------
+X86_64 : https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-ar=
+tifacts/1723153780/test_x86_64/9451298630/artifacts/run.done.01/job.01/reci=
+pes/18353773/tasks/7/results/1742341634/logs/resultoutputfile.log
+X86_64 (debug) :
+https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/1=
+717840829/test_x86_64/9419724200/artifacts/run.done.01/results_0001/console=
+.log
 
-FYI, we got a small conflict when merging 'net' in 'net-next' in the
-MPTCP tree due to this patch applied in 'net':
+aarch64 : https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-a=
+rtifacts/1723153780/test_aarch64/9451298664/artifacts/run.done.01/job.01/re=
+cipes/18352965/tasks/7/results/1742330044/logs/resultoutputfile.log
+aarch64(debug):
+https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/1=
+717840829/test_aarch64/9419724214/artifacts/run.done.01/results_0001/consol=
+e.log
+aarch64-64kpagesize:
+https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/1=
+723154540/test_aarch64/9451303359/artifacts/run.done.01/job.01/recipes/1835=
+2963/tasks/7/results/1742331192/logs/resultoutputfile.log
+aarch64-64kpagesize (debug):
+https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/1=
+723154644/test_aarch64/9451304808/artifacts/run.done.01/job.01/recipes/1835=
+4911/tasks/6/results/1742356729/logs/resultoutputfile.log
 
- 3ed61b8938c6 ("selftests: net: test for lwtunnel dst ref loops")
+ppc64le: https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-ar=
+tifacts/1723153780/test_ppc64le/9451298644/artifacts/run.done.01/results_00=
+01/console.log
+ppc64le(debug):
+https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/1=
+717840829/test_ppc64le/9419724210/artifacts/run.done.01/results_0001/consol=
+e.log
 
-and these ones from 'net-next':
+>
+> Also, are any of these failures the unterminated string bug that someone
+> fixed recently?
+Not sure. That fix doesn't seem to have been merged yet.
+>
+> >>
+> >> Fixes: dd0b6b1f29b9 ("firmware: cs_dsp: Add KUnit testing of bin file =
+download")
+> >> Signed-off-by: Nico Pache <npache@redhat.com>
+> >> ---
+> >>   drivers/firmware/cirrus/Kconfig              | 3 +--
+> >>   tools/testing/kunit/configs/all_tests.config | 2 ++
+> >>   2 files changed, 3 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/firmware/cirrus/Kconfig b/drivers/firmware/cirrus=
+/Kconfig
+> >> index 0a883091259a..989568ab5712 100644
+> >> --- a/drivers/firmware/cirrus/Kconfig
+> >> +++ b/drivers/firmware/cirrus/Kconfig
+> >> @@ -11,9 +11,8 @@ config FW_CS_DSP_KUNIT_TEST_UTILS
+> >>
+> >>   config FW_CS_DSP_KUNIT_TEST
+> >>          tristate "KUnit tests for Cirrus Logic cs_dsp" if !KUNIT_ALL_=
+TESTS
+> >> -       depends on KUNIT && REGMAP
+> >> +       depends on KUNIT && REGMAP && FW_CS_DSP
+> >>          default KUNIT_ALL_TESTS
+> >> -       select FW_CS_DSP
+> >>          select FW_CS_DSP_KUNIT_TEST_UTILS
+> >>          help
+> >>            This builds KUnit tests for cs_dsp.
+> >> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/test=
+ing/kunit/configs/all_tests.config
+> >> index b0049be00c70..96c6b4aca87d 100644
+> >> --- a/tools/testing/kunit/configs/all_tests.config
+> >> +++ b/tools/testing/kunit/configs/all_tests.config
+> >> @@ -49,3 +49,5 @@ CONFIG_SOUND=3Dy
+> >>   CONFIG_SND=3Dy
+> >>   CONFIG_SND_SOC=3Dy
+> >>   CONFIG_SND_SOC_TOPOLOGY_BUILD=3Dy
+> >> +
+> >> +CONFIG_FW_CS_DSP=3Dy
+> >> \ No newline at end of file
+> >> --
+> >> 2.48.1
+> >>
+> >
+>
 
- 03544faad761 ("selftest: net: add proc_net_pktgen")
- 85cb3711acb8 ("selftests: net: Add test cases for link and peer netns")
-
------ Generic Message -----
-The best is to avoid conflicts between 'net' and 'net-next' trees but if
-they cannot be avoided when preparing patches, a note about how to fix
-them is much appreciated.
-
-The conflict has been resolved on our side[1] and the resolution we
-suggest is attached to this email. Please report any issues linked to
-this conflict resolution as it might be used by others. If you worked on
-the mentioned patches, don't hesitate to ACK this conflict resolution.
----------------------------
-
-Regarding these conflicts, that's because the new test and configs have
-been added at the end. It is usually recommended to avoid that for long
-list, e.g. inserting new entries at the right place if the list is
-sorted by alphabetical order (not the case here), grouping by theme, or
-keeping the same order as in the .config, etc. For the resolutions here,
-I simply kept the new tests and configs from both sides at the same
-place, adding the new ones from net at the end.
-
-Rerere cache is available in [2].
-
-Cheers,
-Matt
-
-[1] https://github.com/multipath-tcp/mptcp_net-next/commit/89220b9164c7
-[2] https://github.com/multipath-tcp/mptcp-upstream-rr-cache/commit/d240
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
---------------df9TvLEoGeNXbwgvcfLcFC5D
-Content-Type: text/x-patch; charset=UTF-8;
- name="89220b9164c70f7aa2d3fafab261bb196f8f3335.patch"
-Content-Disposition: attachment;
- filename="89220b9164c70f7aa2d3fafab261bb196f8f3335.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWNjIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9NYWtlZmlsZQppbmRleCBm
-MDNhMDM5OWU3YTMsOGYzMmI0ZjAxYWVlLi42ZDcxOGI0NzhlZDgKLS0tIGEvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvbmV0L01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
-c3RzL25ldC9NYWtlZmlsZQpAQEAgLTMxLDE1IC0zMSwxMSArMzEsMTQgQEBAIFRFU1RfUFJP
-R1MgKz0gdmV0aC5zCiAgVEVTVF9QUk9HUyArPSBpb2FtNi5zaAogIFRFU1RfUFJPR1MgKz0g
-Z3JvLnNoCiAgVEVTVF9QUk9HUyArPSBncmVfZ3NvLnNoCi0gVEVTVF9QUk9HUyArPSBncmVf
-aXB2Nl9sbGFkZHIuc2gKICBURVNUX1BST0dTICs9IGNtc2dfc29fbWFyay5zaAogIFRFU1Rf
-UFJPR1MgKz0gY21zZ19zb19wcmlvcml0eS5zaAogLVRFU1RfUFJPR1MgKz0gY21zZ190aW1l
-LnNoIGNtc2dfaXB2Ni5zaAogK1RFU1RfUFJPR1MgKz0gdGVzdF9zb19yY3Yuc2gKICtURVNU
-X1BST0dTICs9IGNtc2dfdGltZS5zaCBjbXNnX2lwLnNoCiAgVEVTVF9QUk9HUyArPSBuZXRu
-cy1uYW1lLnNoCiArVEVTVF9QUk9HUyArPSBsaW5rX25ldG5zLnB5CiAgVEVTVF9QUk9HUyAr
-PSBubF9uZXRkZXYucHkKICtURVNUX1BST0dTICs9IHJ0bmV0bGluay5weQogIFRFU1RfUFJP
-R1MgKz0gc3J2Nl9lbmRfZHQ0Nl9sM3Zwbl90ZXN0LnNoCiAgVEVTVF9QUk9HUyArPSBzcnY2
-X2VuZF9kdDRfbDN2cG5fdGVzdC5zaAogIFRFU1RfUFJPR1MgKz0gc3J2Nl9lbmRfZHQ2X2wz
-dnBuX3Rlc3Quc2gKQEBAIC0xMDUsNyAtMTAwLDcgKzEwNCw4IEBAQCBURVNUX1BST0dTICs9
-IHZsYW5fYnJpZGdlX2JpbmRpbmcucwogIFRFU1RfUFJPR1MgKz0gYnBmX29mZmxvYWQucHkK
-ICBURVNUX1BST0dTICs9IGlwdjZfcm91dGVfdXBkYXRlX3NvZnRfbG9ja3VwLnNoCiAgVEVT
-VF9QUk9HUyArPSBidXN5X3BvbGxfdGVzdC5zaAogK1RFU1RfR0VOX1BST0dTICs9IHByb2Nf
-bmV0X3BrdGdlbgorIFRFU1RfUFJPR1MgKz0gbHd0X2RzdF9jYWNoZV9yZWZfbG9vcC5zaAog
-IAogICMgWU5MIGZpbGVzLCBtdXN0IGJlIGJlZm9yZSAiaW5jbHVkZSAuLmxpYi5tayIKICBZ
-TkxfR0VOX0ZJTEVTIDo9IGJ1c3lfcG9sbGVyIG5ldGxpbmstZHVtcHMKZGlmZiAtLWNjIHRv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC9jb25maWcKaW5kZXggYjBkMGVkYTgyOWQwLDYx
-ZTUxMTY5ODdmMy4uMTMwZDUzMmI3ZTY3Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L25ldC9jb25maWcKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbmV0L2NvbmZpZwpA
-QEAgLTEwOSw5IC0xMDcsNSArMTA5LDExIEBAQCBDT05GSUdfWEZSTV9JTlRFUkZBQ0U9CiAg
-Q09ORklHX1hGUk1fVVNFUj1tCiAgQ09ORklHX0lQX05GX01BVENIX1JQRklMVEVSPW0KICBD
-T05GSUdfSVA2X05GX01BVENIX1JQRklMVEVSPW0KICtDT05GSUdfSVBWTEFOPW0KICtDT05G
-SUdfQ0FOPW0KICtDT05GSUdfQ0FOX0RFVj1tCiArQ09ORklHX0NBTl9WWENBTj1tCiArQ09O
-RklHX05FVEtJVD15CiArQ09ORklHX05FVF9QS1RHRU49bQorIENPTkZJR19JUFY2X0lMQT1t
-CisgQ09ORklHX0lQVjZfUlBMX0xXVFVOTkVMPXkK
-
---------------df9TvLEoGeNXbwgvcfLcFC5D--
 
