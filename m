@@ -1,146 +1,195 @@
-Return-Path: <linux-kselftest+bounces-29473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B05C2A69D05
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 01:06:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B444FA69D3E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 01:27:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6792F888841
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 00:06:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D80846224F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 00:27:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF81EC5;
-	Thu, 20 Mar 2025 00:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1813EA83;
+	Thu, 20 Mar 2025 00:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLlYOU9J"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tA8adVxN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EFA191;
-	Thu, 20 Mar 2025 00:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B6D339A1;
+	Thu, 20 Mar 2025 00:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742429180; cv=none; b=As0M1LQktixPzZWB2f0OkFRmKqpFLQkjCUlIyoRMerY8fQH/4qHqiTCJcXGLiGNG3R9Oobi5U6Jx076Yu56JZFscZ4GQZDNvPa8TmfqjbXtp8M8kl28F9LSiluESVyGLjmC0GlKcYjw1niEaZzbn9BvgXj7awj8GCBczwmiqgSA=
+	t=1742430447; cv=none; b=G281yvNBPybPie/dF8Z7U98ZKQfKqKsBaUmHuiefESBAZdeXFlamFk25NAWKBoepUMjyxBJN1G10g8DkxM0staznMKQUcelbZl3k4xpATVMP1HUKGOio3Le0xprfmjlH0H+VjWtKsY+nQ8VgmuzzO0TH5oMyZcxcNiVBAese44o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742429180; c=relaxed/simple;
-	bh=BO+//tcXorx2kbUfYowaXvsu4SDU++zC1eH8TyB6buM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IgRnSsi8OGfyNWYKFn42dyYGJWb5cuoIAM8DJDtzndW+DUH9HJbAfR82AD6Qa8bp+p0kV8jOCrJBy9/cEehRMtxdYCJp+OD0nKRe1136bfRdVB/QFamLIl4ySd8fRb3ZGMrOMO+HqoDUVmQzlwzmEPbWf9+iIQwLwwPaQSo7PTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLlYOU9J; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2255003f4c6so2025525ad.0;
-        Wed, 19 Mar 2025 17:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742429178; x=1743033978; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i67nHSXMn9wyesYVZ73ubzS5KypW1HRAz0KQwH13Rm0=;
-        b=OLlYOU9J9XriKEAb1kXq3MV7uemWz44X/P+d9MS2IVNeu3mTTzbDC5DxeGgvc1CbfS
-         UhEGJIkDFcfYdmjhTI/59VphgHxxU1J8v760LtT2VQh6PTRzJg82sJm789uMXn+sJozY
-         v7/0vd0Om7JPKIruiC9gngCQsGWL3n01BowLhewtKFZ6ZjlNKDhgH586q9zsKTyiFn8s
-         rjvI6etZ7NTZJbUs7Fh8cPWJgxuKpvqomWcoBmI+Je0W6fHOeVd5DNWv1I8tL4t4NhmV
-         WYjzzQis3azkHLpQOKBDLiiEgDXOvFWI0H5HTOAORXrXDteAB5NR6+yy05Hed8hzWwOD
-         wg5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742429178; x=1743033978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i67nHSXMn9wyesYVZ73ubzS5KypW1HRAz0KQwH13Rm0=;
-        b=VXyC4sYrV9WWNa5ssHdv2kPoyUcrq4DOh+P5loHB8LeMfmGoo60vp9ZKjYzj8DYPEF
-         o5CCCnpEtr3/JNQvAvw+YNeI7pps1IIoD9lazx2gcsXRpcvyKWwrPWLfwbhLWnl5teL0
-         NC8nz4Qb1vaDn51DR7Ruu0zhDFFwYubuEF+0XSD3MDR70F4KgNZbURLVR3sKppqraakG
-         ImjFRSZDc0e/koEo5CtjZECAHXn9zUuwVgI2XJssltIlBNl9JliF+oluUFFVnJ3/TcfZ
-         IO2WQGSo5rxBj9shvwDox8CRDkYxpDAuxb+9umKJyJKSz9N/BLB1boWAqlBnSIjZ1Ghd
-         bCyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUt1J/48KIrDNIICEE2MI3AxPmrczFBKlE9FHVJIY78LgqxJXQSgfw8jOjrXpMgQV8APCG63ElL@vger.kernel.org, AJvYcCVKJJH4E8m+6GHLF/eySqM3NuiCfJVjI51gIcMwwvC4PqGmoR09MMoZFg4oZobFMI4fYkeyJBS6SRgbo+cPqnTG@vger.kernel.org, AJvYcCVPlcDHX2rYnfPbljLZEfyVzjyqPtrGovB26bPefpouBtjPrRyxxMPVvmAFw6oZ/pmMl3vrP1+SdYYGYfYT@vger.kernel.org, AJvYcCW0pae/rLXPU1tHlSyZWiWl5H+K/mM3urzT3TmUPyYTgMplunVNzdjNlxqc0e+sbEPUZug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkqiUXQZOoPRL/OZIo9KcimFPRr13fBCHiiismBrymRi5lcwzz
-	baucdXxi8A1g9kk+6uMXHjZN6dQGWqUkYEJrP+BMx0hZrEubI6OU
-X-Gm-Gg: ASbGncumkx3om8W2gFUjnINjyTZ+bnhLTSViqgKt+B3+cfGcFWLh3gTA73fm79FYqJF
-	3Qww3O6YeysU5MVApkl35JyR9IVyfeSvEhg3ysOEgE+7LD0qyiu1d1ChSTPmK4eep+EN/Dvc7b5
-	yzwduKULeCcbYv1fwkvRTaSxbufrtEctwN+ONv5mAC/HxzYKDqhzCg/eXiTwE4ycRnCWeoQWoOJ
-	M82fwlvCchgGHxyoiyQ+2Qu/44wMsxR4e/QCOsCCfu1Os/Z848ulF4I+KWg1/jsEDW9vX/ytikj
-	kwigckVBXbo7CZmrdUrskrsleosZ6cHSZ1qHtqRjnPgvzJuk
-X-Google-Smtp-Source: AGHT+IEqQiEdBN18NzeCzATzPCdMYX7OSqKrz7WWXs+VpGIlSI/RD/m5riIAffmbr4BZka1MHDXYYw==
-X-Received: by 2002:a05:6a21:3a4a:b0:1ee:dcd3:80d7 with SMTP id adf61e73a8af0-1fbe862d8ddmr9179408637.0.1742429178363;
-        Wed, 19 Mar 2025 17:06:18 -0700 (PDT)
-Received: from localhost ([129.210.115.104])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af56e9e2f45sm11619719a12.29.2025.03.19.17.06.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Mar 2025 17:06:17 -0700 (PDT)
-Date: Wed, 19 Mar 2025 17:06:17 -0700
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
-	mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, shuah@kernel.org, mhal@rbox.co,
-	sgarzare@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/3] bpf, sockmap: avoid using sk_socket
- after free when sending
-Message-ID: <Z9tb+Y+w/gcqSnCo@pop-os.localdomain>
-References: <20250317092257.68760-1-jiayuan.chen@linux.dev>
- <20250317092257.68760-2-jiayuan.chen@linux.dev>
- <Z9tNAhMV1Y5znONo@pop-os.localdomain>
- <48068a86ea99dffe1e7849fb544eac1746364afb@linux.dev>
+	s=arc-20240116; t=1742430447; c=relaxed/simple;
+	bh=dBFihtx+aUosS11KVtMSGBCfwqH+7BZSM3YMPE3xRcc=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=VXE6JndBOo6P7shF7Jt6LTO9okaRe0ATiJTMNBny8VPYBMKfh5/ASSxZObdn6HUkW2kKHp5P3Tpv5Ndw2ysUqjYpiWTXMI85K9AlGjc2OL29w+8EHYxQ2fMyRB4zfiO7kwVLt88n6YYrU9is6ac/8nhj7KWCAc/1tUCdGRlypnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tA8adVxN; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48068a86ea99dffe1e7849fb544eac1746364afb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1742430442;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YrzwlcOYjgAKtwASEPU+B3fs6Fqo8r091yuueSJ3aqU=;
+	b=tA8adVxNRTq5KjV/4GxyipP/cqREMQ43TJ0WeVQeM+7CCy7ReVlPboTAeNGTSdY/10Ud1I
+	lSIMEq80JvnyRjeWeCHMvU5XMY2dfS1F1zTwK3J4FUil0iJ2grL2xu3awqrlEZjarb1gMM
+	zR0FjFhJVU8+8A94dbz7NI3kXWhwsYU=
+Date: Thu, 20 Mar 2025 00:27:16 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <635aadb281fa68964c943026096610501434f674@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, sockmap: avoid using sk_socket
+ after free when sending
+To: "Cong Wang" <xiyou.wangcong@gmail.com>
+Cc: john.fastabend@gmail.com, jakub@cloudflare.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+ ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ mhal@rbox.co, sgarzare@redhat.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+In-Reply-To: <Z9tb+Y+w/gcqSnCo@pop-os.localdomain>
+References: <20250317092257.68760-1-jiayuan.chen@linux.dev>
+ <20250317092257.68760-2-jiayuan.chen@linux.dev>
+ <Z9tNAhMV1Y5znONo@pop-os.localdomain>
+ <48068a86ea99dffe1e7849fb544eac1746364afb@linux.dev>
+ <Z9tb+Y+w/gcqSnCo@pop-os.localdomain>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Mar 19, 2025 at 11:36:13PM +0000, Jiayuan Chen wrote:
-> 2025/3/20 07:02, "Cong Wang" <xiyou.wangcong@gmail.com> wrote:
-> 
-> > 
-> > On Mon, Mar 17, 2025 at 05:22:54PM +0800, Jiayuan Chen wrote:
-> > 
-> > > 
-> > > The sk->sk_socket is not locked or referenced, and during the call to
-> > > 
-> > 
-> > Hm? We should have a reference in socket map, whether directly or
-> > 
-> > indirectly, right? When we add a socket to a socket map, we do call
-> > 
-> > sock_map_psock_get_checked() to obtain a reference.
-> > 
-> 
-> Yes, but we remove psock from sockmap when sock_map_close() was called
-> '''
-> sock_map_close
-> 	lock_sock(sk);
-> 	rcu_read_lock();
-> 	psock = sk_psock(sk);
->         // here we remove psock and the reference of psock become 0
-> 	sock_map_remove_links(sk, psock)
+March 20, 2025 at 08:06, "Cong Wang" <xiyou.wangcong@gmail.com> wrote:
 
-sk_psock_drop() also calls cancel_delayed_work_sync(&psock->work),
-althrough in yet another work. Is this also a contribution to this bug?
+>=20
+>=20On Wed, Mar 19, 2025 at 11:36:13PM +0000, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> 2025/3/20 07:02, "Cong Wang" <xiyou.wangcong@gmail.com> wrote:
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>=20=20
+>=20>=20
+>=20>  On Mon, Mar 17, 2025 at 05:22:54PM +0800, Jiayuan Chen wrote:
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  >=20
+>=20>=20
+>=20>  > The sk->sk_socket is not locked or referenced, and during the ca=
+ll to
+> >=20
+>=20>  >=20
+>=20>=20
+>=20>=20=20
+>=20>=20
+>=20>  Hm? We should have a reference in socket map, whether directly or
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  indirectly, right? When we add a socket to a socket map, we do cal=
+l
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  sock_map_psock_get_checked() to obtain a reference.
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>=20=20
+>=20>=20
+>=20>  Yes, but we remove psock from sockmap when sock_map_close() was ca=
+lled
+> >=20
+>=20>  '''
+> >=20
+>=20>  sock_map_close
+> >=20
+>=20>  lock_sock(sk);
+> >=20
+>=20>  rcu_read_lock();
+> >=20
+>=20>  psock =3D sk_psock(sk);
+> >=20
+>=20>  // here we remove psock and the reference of psock become 0
+> >=20
+>=20>  sock_map_remove_links(sk, psock)
+> >=20
+>=20
+> sk_psock_drop() also calls cancel_delayed_work_sync(&psock->work),
+>=20
+>=20althrough in yet another work. Is this also a contribution to this bu=
+g?
+>
 
->         psock = sk_psock_get(sk);
->         if (unlikely(!psock))
->             goto no_psock;     <=== jmp to no_psock
->         rcu_read_unlock();
->         release_sock(sk);
->         cancel_delayed_work_sync(&psock->work); <== no chance to run cancel
-> '''
-> 
+Maybe it's related. Calling cancel_delayed_work_sync() in sk_psock_drop()
+is too late for our scenario.
 
-I have to say sock_map_close() becomes harder and harder to understand
-now. And I am feeling we may have more bugs since we have two flying
-work's here: psock->rwork and psock->work.
+To be more precise, the core goal of this patch is to prevent sock_map_cl=
+ose()
+from executing until the backlog work completes. This is because sock_map=
+_close()
+resides in the close(fd) path, once it finishes, subsequent steps will re=
+lease
+the sk_socket. Therefore, performing cancellation in sk_psock_drop() is t=
+oo late.
+
+Upon reviewing historical commits, I found that the backlog work original=
+ly held
+lock_sk, which naturally synchronized with lock_sk in sock_map_close. How=
+ever,
+when the backlog work later removed lock_sk, an alternative synchronizati=
+on
+mechanism(just hold psock reference like this patch) became necessary.
+> >=20
+>=20> psock =3D sk_psock_get(sk);
+> >=20
+>=20>  if (unlikely(!psock))
+> >=20
+>=20>  goto no_psock; <=3D=3D=3D jmp to no_psock
+> >=20
+>=20>  rcu_read_unlock();
+> >=20
+>=20>  release_sock(sk);
+> >=20
+>=20>  cancel_delayed_work_sync(&psock->work); <=3D=3D no chance to run c=
+ancel
+> >=20
+>=20>  '''
+> >=20
+>=20
+> I have to say sock_map_close() becomes harder and harder to understand
+>=20
+>=20now. And I am feeling we may have more bugs since we have two flying
+>=20
+>=20work's here: psock->rwork and psock->work.
+>=20
+>=20Thanks.
+
+Yes, this patch prevent sock_map_close() from executing
+until the backlog work completes. This likely makes the
+cancel_delayed_work in sk_psock_destroy redundant.
+
+The code has undergone too many iterations. While sk_psock_destroy certai=
+nly
+contains redundant operations, we should retain it for now. There may be
+hidden dependencies we haven't fully untangled.
 
 Thanks.
 
