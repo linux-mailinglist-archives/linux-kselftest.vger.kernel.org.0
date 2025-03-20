@@ -1,116 +1,109 @@
-Return-Path: <linux-kselftest+bounces-29493-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13301A6A4E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 12:24:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A583FA6A4F1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 12:28:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BC8B1889BBB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 11:24:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 369D67A4C83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 11:27:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A35021CA04;
-	Thu, 20 Mar 2025 11:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD07A21CFF7;
+	Thu, 20 Mar 2025 11:28:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VpAZ/rya"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="UFEH0HG2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2661E3DFA;
-	Thu, 20 Mar 2025 11:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40BE121CA10
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Mar 2025 11:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742469873; cv=none; b=ltytqPU+jnYUXBHJ+Nawttot+0jzkhu7YUyD6A1IZiUjgTGIaijdpoql4eCSOVe+UwybdBn/ak2DCiHY4Xbw6zINzoDtNOjxNibEn7BsDf/m9VDhdS8bEWM4hDYhLJ2p49lVF9mfHB5/kuunG5uBMrdkGinTX9jt2gFX0zhvKoM=
+	t=1742470112; cv=none; b=EbfxBxQ5vZ4N1dA5cWbp3iS71pJC+ywvKLHjmFe76okayQi+9zfmlDzHXVLLUskIpTcDQYsPgfYg01IL8FAqqQlJq1B2V6pgBqqKpbpEJW3oy4mY/PGycAXv5AmzV2xHF0jat0IM+Vx3A/rUsyKZ+G5qc2SguKP/fnesSkyj6HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742469873; c=relaxed/simple;
-	bh=2AYPkrULStSTDiH6cCL/KT8b8UMZFP1C1MQK7v3jJU8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uOWqMT0q9jx1j2Vks1A+Xs1O4uGFnLff4yYlGyB85Xmzys2PxVK5AgtscZqoMzXFFPSkY/LKfcQhyY6vc1AjNbTukW+2nTPWacxI0V2ykInlGRBt4XPwcCyVLagHsF2iIZcepXgY4rntsNlmufWaGbttb8PDrSvQhM1NLnuRjjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VpAZ/rya; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ff5544af03so177758a91.1;
-        Thu, 20 Mar 2025 04:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742469871; x=1743074671; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QXxS2+1nlduyvT5jAyz8owwLa0xh/ALxgXkKxE0OOXI=;
-        b=VpAZ/rya6sCYjDAN69qgBRaFvV/gLxT3FWWvSZPy7KQI0LJSo8yq7Z0aMnYNpkYLaD
-         FDWefMmgmplolN0UVVXJPta1bKmyipSqUC7VRzUmMtXCqnnDBeBWUH+p1tBTXSbL8mzm
-         co9UZuzwIN4cxvGepRhYuah5R3y00EepvPCEz0UnORxzGc1bcXe0laSXqszom3k6prV5
-         fWiqHZxalC3vNFbwBycUbLpVwYwNlwrliLd1bb1EmihMsfYl9Zhq/9JFQ39VOCX9O2LX
-         FUjujJBMINkGVv4SZet44Fr3c0JUWDZ2NQ/8WmVl00yMWINjvywOpG/iZdDyxCvfkBvF
-         TxhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742469871; x=1743074671;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QXxS2+1nlduyvT5jAyz8owwLa0xh/ALxgXkKxE0OOXI=;
-        b=eoyp2QtBuNjYHgpjAYx95DBaX4FEoj7zBRyfeCJKjpTBigMfuAPFV5mRzh0wOJ6p1k
-         A7khFZjbLTweJY5yUsfFPFhTCQXCQXDz/duEiv/Db+nhZTHXvF8vwyOucZPZejeXV1G1
-         q5S4FVv4hENCd2gA0gmlS7UgPFd5zcotxa7UAoomR56nLunTy5aw+z9dCAQRKpX4qBtd
-         vZpdBTU8imuPqiT5RN3p5iq8NeUEmyfx3IVua9L+x6aG0+69O28G/k+2laLYMdpA8l4D
-         Lr1zusEbmoeeqjgeScvpDSMkz6ecvqQuw9b24uJyUdQ8Xdi1P8cMnbKu8fRuyHpj54AF
-         5ANg==
-X-Forwarded-Encrypted: i=1; AJvYcCViFRuUak8U3GYC8jtgPnZDq5GyMPWAMb3GblBg2uXO63gtGVDaI3315FYnwNfjnQJ8DrAdRBqbgELC/Uo=@vger.kernel.org, AJvYcCW7mQmZwqR9mEOF/MNsie4e6v7bjHYP8A+Yg7ywHcft7FJJb3LUeDIKhOjulfdul3t7F9EpajFLEYioqvNxeXJp@vger.kernel.org, AJvYcCXhDVhXgS4kj3yUphmtvED1VbIxFXG5OaHxsN8gK8ltuSW26jSNablxAsmk05CuYV4B93wrNbkY91M5300qHMM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN1CW/2+nZHEJdhTKTS90/qo53/5ojQi8BD/uXqV1vMlDt4Fom
-	Y0IxZdgp1pruaQuTKixSiVVMBJ/leYxE80IObHHkkMoyPLU0yEuShQRWpYKddWvXZeru4g27K3y
-	GzuhM4dOtiOpW5G8mVYZ8iSW7Jjk=
-X-Gm-Gg: ASbGncvBM0ETvbNIon+CerxVmLSCVfabr5NTZuxfHZBbnnLM1nhviCQ4YzhXe9M9R4B
-	tBxed5dVe5GwE6Si/LuAZIJDgANT8fPlYVU51ErJwTuo83NtFj7Ij/dghyCUlGwiVSusfwaeS36
-	SgubruOtZAGwZYNbGBj8CDlNjlVg==
-X-Google-Smtp-Source: AGHT+IE3PLLJa59vfwqCcty3muPU9qlVHzuR9C3fnY4SjCyrJ87bygLZoiZUS/M5wRxig0JVExRf8MshAPDjoMcLnNs=
-X-Received: by 2002:a17:90b:2246:b0:301:1c11:aa7a with SMTP id
- 98e67ed59e1d1-301bfc749d3mr3350274a91.3.1742469870835; Thu, 20 Mar 2025
- 04:24:30 -0700 (PDT)
+	s=arc-20240116; t=1742470112; c=relaxed/simple;
+	bh=xaKR6n1k4bb0jvx4wjBIdk7JBCxnAZee/O2iM7onpgU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lKMcvj92KMgmTcRv7NDF7ip6nHE/F1qtPYGMRBiGpGdMwdrwo0h94cix8iICYpsb0941Uudk95CCwP2s4HjHOG4nG0XcbYiiHP3+saHQg3q0ElINAlu4j1i9pI5+VeR8qs2pwaBrN5O8s+qFWSppa3RNZS1Pd7u67IEyuIO6GZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UFEH0HG2; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=xaKR
+	6n1k4bb0jvx4wjBIdk7JBCxnAZee/O2iM7onpgU=; b=UFEH0HG24zqrI/R7b6L7
+	AdaKKBNtrdAnNnZFvUAQF/Ld6O/H6x9Cv0yKCtai1Z98wh/7yflf4meS7AyOSV8n
+	LFlYODzcbUn65r2Jeg8SGqOIjp25gzDGfj+9X42LYHyho7cY6owRgB+fHO+alMdL
+	8cegg6nGzN7uNSCLGhSlA72IdrTEii6X9M5stsiTc9zoKPh3Lq/ddfWLcez1MS6e
+	OILdd6SI3IqeQmqEvW4OdyKUAkvExRQAafVeMyxJv6OcGpz2tYShmhVwBRkGgQCg
+	JXtXutlULU4j51hgG7hTykB+/gL70TLagI81PYRr+UI3p01eBTIDkCwMFYGEdba4
+	mg==
+Received: (qmail 632991 invoked from network); 20 Mar 2025 12:28:28 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Mar 2025 12:28:28 +0100
+X-UD-Smtp-Session: l3s3148p1@8gTQb8QwoowgAwDPXyTHAJp038nK7dx+
+Date: Thu, 20 Mar 2025 12:28:27 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Shuah Khan <shuah@kernel.org>, linux-rtc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH] rtc: remove 'setdate' test program
+Message-ID: <Z9v720fSbvKN_0ii@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Shuah Khan <shuah@kernel.org>, linux-rtc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+References: <20250320103433.11673-1-wsa+renesas@sang-engineering.com>
+ <CAMuHMdVwVyyZWfgFi12ujvSj8bVtDZyZvj+QMZ_iQbPbRDNHQQ@mail.gmail.com>
+ <Z9v550Kbt8tjYst3@shikoro>
+ <CAMuHMdVwNE-o2_eq_Fu4FXiSnJn5rsg9P28PusYn3DKNdszOwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250307090103.918788-1-davidgow@google.com>
-In-Reply-To: <20250307090103.918788-1-davidgow@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 20 Mar 2025 12:24:18 +0100
-X-Gm-Features: AQ5f1JqSXM9f71q8LskxtSEECf3N33mqq0DT2VzoMLMfgEbbELpw1_0lPJRaXYA
-Message-ID: <CANiq72mi_9fJ2S=hoJnKSOvMkiuqX7J5Xx__Nn1nh9Rt=qVPBQ@mail.gmail.com>
-Subject: Re: [PATCH v8 0/3] rust: kunit: Support KUnit tests with a user-space
- like syntax
-To: David Gow <davidgow@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
-	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Benno Lossin <benno.lossin@proton.me>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Matt Gilbride <mattgilbride@google.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Tamir Duberstein <tamird@gmail.com>, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="U2qfeExht+Dr295e"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVwNE-o2_eq_Fu4FXiSnJn5rsg9P28PusYn3DKNdszOwA@mail.gmail.com>
 
-On Fri, Mar 7, 2025 at 10:01=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
->
-> This is v8 of the Rust/KUnit integration patch. I think all of the
-> suggestions have at least been responded to (even if there are a few I'm
-> leaving as either future projects or matters of taste). Hopefully this
-> is good-to-go for 6.15, so we can start using it concurrently with
-> making any additional improvements we may wish.
 
-Applied to `rust-next` -- thanks everyone!
+--U2qfeExht+Dr295e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-    [ Applied Markdown in comment. - Miguel ]
 
-    [ Removed spurious (in rendered form) newline in docs. - Miguel ]
+> I found it, because you provided a link in the diffstat ;-)
 
-(finally! Special thanks to David here.)
+Which is basically the only way to find it IMHO. No loss if it is gone.
 
-Cheers,
-Miguel
+
+--U2qfeExht+Dr295e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfb+9gACgkQFA3kzBSg
+KbYr1Q//Z3VNzKgLCnjfHQMZvS9TweYESWgLfHJroRTcoV8yUiW+LG4+T3xIoIm9
+cKh2WMFlp3FnhRyRXIXNyR+wEJL2P0PHtlvApjKCTpYRs2IVW8E92ai/ovbaZYSF
+sjZGR1R3BpHzX5m5QcSipyrtmDMHNK98yoUNnPh8ht227v2ju7uPoo1FGkQk3E7s
+rpudh/4PR0IcExNgexjYg6jJrPVeVoUSJzC4qeTN2MFi/ymXNcBPZGRasrHYFa1p
+l7mtqICL36Q1d3DiiwXW5a8qmhobAcr/4tVP+IbWvZpL78+/lAMVB8oYLWFK/50D
+SiMYP16MPnUd/T8s1r/yEn9l2oajQwh98D8lKEGo6Kc3c3ZnKZBX7bHd6xsVGuUq
+tMzSxtdOfkHFq5w4iR92cuhgfKyt6AuhlHSpqtEyrSZfQ9WbFQIL/Rr9N/0P2yUB
+tlItMFYyJJugKQBqR8nyKKt/Ukk+uAt9KLVOOPQAW7mw8ywRZcq20zig6wogMJGz
+22GCYrn4Ip7nQKWojNfDihh57CGIIx00j0axX5edrusgvxA3MGQa0wqfAP2iGbd1
+6DRUrF/b7MuzZbxNvYDa48q6ZV111DC7/eIkWShbQGjQAT8XHKJeYb235X7sqJ/a
+4LJsyBQrYWtLQnT20NAqMJTPV2w4rzNguj4vSR9M7LiPzgTPjjc=
+=mPk4
+-----END PGP SIGNATURE-----
+
+--U2qfeExht+Dr295e--
 
