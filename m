@@ -1,156 +1,146 @@
-Return-Path: <linux-kselftest+bounces-29472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4CC8A69CFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 00:58:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B05C2A69D05
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 01:06:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 036581645B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Mar 2025 23:58:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6792F888841
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Mar 2025 00:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF4122488E;
-	Wed, 19 Mar 2025 23:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF81EC5;
+	Thu, 20 Mar 2025 00:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="q+zJaD5Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLlYOU9J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0222D1DE3A9;
-	Wed, 19 Mar 2025 23:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EFA191;
+	Thu, 20 Mar 2025 00:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742428702; cv=none; b=RXJm0eYgEzTrzNxukvGjmWFame/uNzATeuuEp03JZkYfGq4B//dMqhC1AprfNf6ZzycTeS+UK10qis6se0jHDw1u7j/AqlyMvTOC7E4MAlZrKI1joWYEVQaASzsHPP1hykc+7uQnxPppSLimGIJ0YVAXnJ105AeJxiwJLxo8k18=
+	t=1742429180; cv=none; b=As0M1LQktixPzZWB2f0OkFRmKqpFLQkjCUlIyoRMerY8fQH/4qHqiTCJcXGLiGNG3R9Oobi5U6Jx076Yu56JZFscZ4GQZDNvPa8TmfqjbXtp8M8kl28F9LSiluESVyGLjmC0GlKcYjw1niEaZzbn9BvgXj7awj8GCBczwmiqgSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742428702; c=relaxed/simple;
-	bh=rSoECxcX9b+KRE1xg6jEVohUbJ3UCjA1B7aestxTcxw=;
+	s=arc-20240116; t=1742429180; c=relaxed/simple;
+	bh=BO+//tcXorx2kbUfYowaXvsu4SDU++zC1eH8TyB6buM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ltAe43yX/MwUjLmIJ+JOay2wecmLGS7IKurla7Gg2l5jwDf8PD7h5QZbX+0j0eDJRCuQbcHC7jOBxPLJSGDNoDD3dFpda0/wAl9j8bUeGuB6t0/set5DbxlE8ZA+n8A8jdHulQTDpIpOUTaPKp3ID2+oTWkuuRDL4yK2uFa9IFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=q+zJaD5Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDC3C4CEE4;
-	Wed, 19 Mar 2025 23:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742428701;
-	bh=rSoECxcX9b+KRE1xg6jEVohUbJ3UCjA1B7aestxTcxw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q+zJaD5ZkbHyP65BU62zb0Z09w1g8gdTKWaro2JmheI6rghm/wSVjxss59SjF+HkY
-	 ghX1cHNnun2clJl+F8/XZIGBHM8Shbn5pDWMl5zoX/DWIMP6mbWkDdI+KYvtYL60o5
-	 exXZV9mru0SWOyahtPKOPl1WAimpdJ/TO0RkkxfE=
-Date: Wed, 19 Mar 2025 16:57:02 -0700
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrei Vagin <avagin@gmail.com>, David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Jann Horn <jannh@google.com>, Juan Yescas <jyescas@google.com>,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	criu@lists.linux.dev,
-	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-	Pavel Tikhomirov <snorcht@gmail.com>,
-	Mike Rapoport <mike.rapoport@gmail.com>
-Subject: Re: [PATCH 1/2] fs/proc/task_mmu: add guard region bit to pagemap
-Message-ID: <2025031926-engraved-footer-3e9b@gregkh>
-References: <cover.1740139449.git.lorenzo.stoakes@oracle.com>
- <521d99c08b975fb06a1e7201e971cc24d68196d1.1740139449.git.lorenzo.stoakes@oracle.com>
- <857b2c3f-7be7-44e8-a825-82a7353665fb@redhat.com>
- <cd57ed04-c6b1-4df3-a5cb-a33078a08e74@lucifer.local>
- <09d7ca19-e6cc-4aa9-8474-8975373bdebd@redhat.com>
- <CANaxB-yMBSFeYcTr-PaevooSeHUkCN9GWTUkLZUNW2vxKzm0sg@mail.gmail.com>
- <10c3e304-1a6d-45ac-a3ad-7c0c8d00e03f@lucifer.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IgRnSsi8OGfyNWYKFn42dyYGJWb5cuoIAM8DJDtzndW+DUH9HJbAfR82AD6Qa8bp+p0kV8jOCrJBy9/cEehRMtxdYCJp+OD0nKRe1136bfRdVB/QFamLIl4ySd8fRb3ZGMrOMO+HqoDUVmQzlwzmEPbWf9+iIQwLwwPaQSo7PTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLlYOU9J; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2255003f4c6so2025525ad.0;
+        Wed, 19 Mar 2025 17:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742429178; x=1743033978; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i67nHSXMn9wyesYVZ73ubzS5KypW1HRAz0KQwH13Rm0=;
+        b=OLlYOU9J9XriKEAb1kXq3MV7uemWz44X/P+d9MS2IVNeu3mTTzbDC5DxeGgvc1CbfS
+         UhEGJIkDFcfYdmjhTI/59VphgHxxU1J8v760LtT2VQh6PTRzJg82sJm789uMXn+sJozY
+         v7/0vd0Om7JPKIruiC9gngCQsGWL3n01BowLhewtKFZ6ZjlNKDhgH586q9zsKTyiFn8s
+         rjvI6etZ7NTZJbUs7Fh8cPWJgxuKpvqomWcoBmI+Je0W6fHOeVd5DNWv1I8tL4t4NhmV
+         WYjzzQis3azkHLpQOKBDLiiEgDXOvFWI0H5HTOAORXrXDteAB5NR6+yy05Hed8hzWwOD
+         wg5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742429178; x=1743033978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i67nHSXMn9wyesYVZ73ubzS5KypW1HRAz0KQwH13Rm0=;
+        b=VXyC4sYrV9WWNa5ssHdv2kPoyUcrq4DOh+P5loHB8LeMfmGoo60vp9ZKjYzj8DYPEF
+         o5CCCnpEtr3/JNQvAvw+YNeI7pps1IIoD9lazx2gcsXRpcvyKWwrPWLfwbhLWnl5teL0
+         NC8nz4Qb1vaDn51DR7Ruu0zhDFFwYubuEF+0XSD3MDR70F4KgNZbURLVR3sKppqraakG
+         ImjFRSZDc0e/koEo5CtjZECAHXn9zUuwVgI2XJssltIlBNl9JliF+oluUFFVnJ3/TcfZ
+         IO2WQGSo5rxBj9shvwDox8CRDkYxpDAuxb+9umKJyJKSz9N/BLB1boWAqlBnSIjZ1Ghd
+         bCyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUt1J/48KIrDNIICEE2MI3AxPmrczFBKlE9FHVJIY78LgqxJXQSgfw8jOjrXpMgQV8APCG63ElL@vger.kernel.org, AJvYcCVKJJH4E8m+6GHLF/eySqM3NuiCfJVjI51gIcMwwvC4PqGmoR09MMoZFg4oZobFMI4fYkeyJBS6SRgbo+cPqnTG@vger.kernel.org, AJvYcCVPlcDHX2rYnfPbljLZEfyVzjyqPtrGovB26bPefpouBtjPrRyxxMPVvmAFw6oZ/pmMl3vrP1+SdYYGYfYT@vger.kernel.org, AJvYcCW0pae/rLXPU1tHlSyZWiWl5H+K/mM3urzT3TmUPyYTgMplunVNzdjNlxqc0e+sbEPUZug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkqiUXQZOoPRL/OZIo9KcimFPRr13fBCHiiismBrymRi5lcwzz
+	baucdXxi8A1g9kk+6uMXHjZN6dQGWqUkYEJrP+BMx0hZrEubI6OU
+X-Gm-Gg: ASbGncumkx3om8W2gFUjnINjyTZ+bnhLTSViqgKt+B3+cfGcFWLh3gTA73fm79FYqJF
+	3Qww3O6YeysU5MVApkl35JyR9IVyfeSvEhg3ysOEgE+7LD0qyiu1d1ChSTPmK4eep+EN/Dvc7b5
+	yzwduKULeCcbYv1fwkvRTaSxbufrtEctwN+ONv5mAC/HxzYKDqhzCg/eXiTwE4ycRnCWeoQWoOJ
+	M82fwlvCchgGHxyoiyQ+2Qu/44wMsxR4e/QCOsCCfu1Os/Z848ulF4I+KWg1/jsEDW9vX/ytikj
+	kwigckVBXbo7CZmrdUrskrsleosZ6cHSZ1qHtqRjnPgvzJuk
+X-Google-Smtp-Source: AGHT+IEqQiEdBN18NzeCzATzPCdMYX7OSqKrz7WWXs+VpGIlSI/RD/m5riIAffmbr4BZka1MHDXYYw==
+X-Received: by 2002:a05:6a21:3a4a:b0:1ee:dcd3:80d7 with SMTP id adf61e73a8af0-1fbe862d8ddmr9179408637.0.1742429178363;
+        Wed, 19 Mar 2025 17:06:18 -0700 (PDT)
+Received: from localhost ([129.210.115.104])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af56e9e2f45sm11619719a12.29.2025.03.19.17.06.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Mar 2025 17:06:17 -0700 (PDT)
+Date: Wed, 19 Mar 2025 17:06:17 -0700
+From: Cong Wang <xiyou.wangcong@gmail.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: john.fastabend@gmail.com, jakub@cloudflare.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+	mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org, shuah@kernel.org, mhal@rbox.co,
+	sgarzare@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, sockmap: avoid using sk_socket
+ after free when sending
+Message-ID: <Z9tb+Y+w/gcqSnCo@pop-os.localdomain>
+References: <20250317092257.68760-1-jiayuan.chen@linux.dev>
+ <20250317092257.68760-2-jiayuan.chen@linux.dev>
+ <Z9tNAhMV1Y5znONo@pop-os.localdomain>
+ <48068a86ea99dffe1e7849fb544eac1746364afb@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <10c3e304-1a6d-45ac-a3ad-7c0c8d00e03f@lucifer.local>
+In-Reply-To: <48068a86ea99dffe1e7849fb544eac1746364afb@linux.dev>
 
-On Wed, Mar 19, 2025 at 07:12:45PM +0000, Lorenzo Stoakes wrote:
-> +cc Greg for stable question
+On Wed, Mar 19, 2025 at 11:36:13PM +0000, Jiayuan Chen wrote:
+> 2025/3/20 07:02, "Cong Wang" <xiyou.wangcong@gmail.com> wrote:
 > 
-> On Wed, Mar 19, 2025 at 11:22:40AM -0700, Andrei Vagin wrote:
-> > On Mon, Feb 24, 2025 at 2:39 AM David Hildenbrand <david@redhat.com> wrote:
-> > >
-> > > On 24.02.25 11:18, Lorenzo Stoakes wrote:
+> > 
+> > On Mon, Mar 17, 2025 at 05:22:54PM +0800, Jiayuan Chen wrote:
+> > 
+> > > 
+> > > The sk->sk_socket is not locked or referenced, and during the call to
+> > > 
+> > 
+> > Hm? We should have a reference in socket map, whether directly or
+> > 
+> > indirectly, right? When we add a socket to a socket map, we do call
+> > 
+> > sock_map_psock_get_checked() to obtain a reference.
+> > 
 > 
-> [snip]
-> > > >>
-> > > >> Acked-by: David Hildenbrand <david@redhat.com>
-> > > >
-> > > > Thanks! :)
-> > > >>
-> > > >> Something that might be interesting is also extending the PAGEMAP_SCAN
-> > > >> ioctl.
-> > > >
-> > > > Yeah, funny you should mention that, I did see that, but on reading the man
-> > > > page it struck me that it requires the region to be uffd afaict? All the
-> > > > tests seem to establish uffd, and the man page implies it:
-> > > >
-> > > >         To start tracking the written state (flag) of a page or range of
-> > > >         memory, the UFFD_FEATURE_WP_ASYNC must be enabled by UFFDIO_API
-> > > >         ioctl(2) on userfaultfd and memory range must be registered with
-> > > >         UFFDIO_REGISTER ioctl(2) in UFFDIO_REGISTER_MODE_WP mode.
-> > > >
-> > > > It would be a bit of a weird edge case to add support there. I was excited
-> > > > when I first saw this ioctl, then disappointed afterwards... but maybe I
-> > > > got it wrong?
-> >
-> > > >
-> > >
-> > > I never managed to review that fully, but I thing that
-> > > UFFD_FEATURE_WP_ASYNC thingy is only required for PM_SCAN_CHECK_WPASYNC
-> > > and PM_SCAN_WP_MATCHING.
-> > >
-> > > See pagemap_scan_test_walk().
-> > >
-> > > I do recall that it works on any VMA.
-> > >
-> > > Ah yes, tools/testing/selftests/mm/vm_util.c ends up using it for
-> > > pagemap_is_swapped() and friends via page_entry_is() to sanity check
-> > > that what pagemap gives us is consistent with what pagemap_scan gives us.
-> > >
-> > > So it should work independent of the uffd magic.
-> > > I might be wrong, though ...
-> >
-> >
-> > PAGEMAP_SCAN can work without the UFFD magic. CRIU utilizes PAGEMAP_SCAN
-> > as a more efficient alternative to /proc/pid/pagemap:
-> > https://github.com/checkpoint-restore/criu/blob/d18912fc88f3dc7bde5fdfa3575691977eb21753/criu/pagemap-cache.c#L178
-> >
+> Yes, but we remove psock from sockmap when sock_map_close() was called
+> '''
+> sock_map_close
+> 	lock_sock(sk);
+> 	rcu_read_lock();
+> 	psock = sk_psock(sk);
+>         // here we remove psock and the reference of psock become 0
+> 	sock_map_remove_links(sk, psock)
+
+sk_psock_drop() also calls cancel_delayed_work_sync(&psock->work),
+althrough in yet another work. Is this also a contribution to this bug?
+
+>         psock = sk_psock_get(sk);
+>         if (unlikely(!psock))
+>             goto no_psock;     <=== jmp to no_psock
+>         rcu_read_unlock();
+>         release_sock(sk);
+>         cancel_delayed_work_sync(&psock->work); <== no chance to run cancel
+> '''
 > 
-> Yeah we ascertained that - is on my list, LSF coming up next week means we
-> aren't great on timing here, but I'll prioritise this. When I'm back.
-> 
-> > For CRIU, obtaining information about guard regions is critical.
-> > Without this functionality in the kernel, CRIU is broken. We probably should
-> > consider backporting these changes to the 6.13 and 6.14 stable branches.
-> >
-> 
-> I'm not sure on precedent for backporting a feature like this - Greg? Am
-> happy to do it though.
 
-If it's a regression, sure, we can take it for stable.
+I have to say sock_map_close() becomes harder and harder to understand
+now. And I am feeling we may have more bugs since we have two flying
+work's here: psock->rwork and psock->work.
 
-> As a stop gap we can backport the pagemap feature if Greg feels this is
-> appropriate?
-
-Which do the maintainers of the code feel is appropriate?  I'll defer to
-them for making that call :)
-
-thanks,
-
-greg k-h
+Thanks.
 
