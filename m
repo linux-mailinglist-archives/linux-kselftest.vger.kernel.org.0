@@ -1,160 +1,142 @@
-Return-Path: <linux-kselftest+bounces-29582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA4EA6C26C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 19:33:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA109A6C2EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 20:01:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39F6E17CB34
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 18:33:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E3F73B1CDC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 19:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE8F22F389;
-	Fri, 21 Mar 2025 18:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 638BF22CBE8;
+	Fri, 21 Mar 2025 19:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGv/cfXz"
+	dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b="eLv4wdMf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A808122F15E;
-	Fri, 21 Mar 2025 18:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BD41EB1A1
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 19:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742581981; cv=none; b=GsKSLDqR1LdJeKJ92ryanVUXpWbN5LJAn2Jm3hhdWUv4NPGAJFJIqxpXyvM76SKMP/2SXUvVX8FtVmJDhs8lUh5JiBHiXFh7lddNfQmXZrk5HWL2iAEsnAw1egzlpX9R7Fc8tFaJV+5V7PjKSI9wySVEGE0q8t64hj895M8PNj8=
+	t=1742583680; cv=none; b=HnrGZcBQexRGdcDVoRLd2LH/RdtCrMhwGii+zshP4V0wuVfElauH/81gMofQ05s7nKOw4WJa99Wkp/mkCgxCiupygVyUFZMEj4qTWBN04SsieefTKKGlmOuc6M6IwH++EjdnO+XQbBO6b45CxoowtdW83qxY5/YJj+RM+5voa5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742581981; c=relaxed/simple;
-	bh=xK61NJ5AcpPTkZxqeIXw3ikD2Gq+iucUtG013FT56sI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQsLgfUgUtkGbWpUtYhAPS1m0KbJaFlols2rOfSyfxt9HH1ArQrqWAxxvgU4RtonsGGjoK/cxINyiCb8rnRmD3fzxUfby9j8ijJ1onyTpGo6RbVX0zdVXmBL0ZLY4SLVGJ5EtFLfK95dqI2goRg6Gpt5tr16lWYVxCwYpR20mBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CGv/cfXz; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2239c066347so55985715ad.2;
-        Fri, 21 Mar 2025 11:32:59 -0700 (PDT)
+	s=arc-20240116; t=1742583680; c=relaxed/simple;
+	bh=Bd3W8zmoA56286TIT/M27tLloKuTGWvB4Py7sj3zCIY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KsAktpb3j8QKyBGKc+HrDY9SWh2ijph4jPoQQV0GICPl+C+EtzJ6qEo0uQaD9h0cflum+0XogfK98xb4DHt9mQXSVsb3TbggkIhR3Uml5fLXvgg4JrOBHB+HPZknfMsVm4ikR/xyjlWGcR2FxNwoahoz1bvm0jVIsBR9XuKvT9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=byte-forge.io; dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b=eLv4wdMf; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=byte-forge.io
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6feb229b716so22292177b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 12:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742581979; x=1743186779; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HYYSOKUxEGqctY3EfhN9A2yhuGU3c7aUKlXkZitVseM=;
-        b=CGv/cfXz6h16+MYAEWgGHaE6luKawPtlwm/UyZrmG9n5SxPdWQHMT34son5uRzKqKU
-         pQH5juq///ouih+AT4duyeFz0Q1766OeEQc+hBMFxIjZBPIyTuvU+369ITzGCkWbBUI4
-         c/SwIbLtKAr1wRa17cxIsLvjMHYyUgG9ahk9FhcLiJgxBKM99DpiC9RMNXf+0d2PpeFu
-         +dhSOaWyAbczYDIMFMpqe9jD1fel0n7jPlkGCNeasQtI9OUGITbDL0x9m6OBms2MKBqo
-         KjScHQ4i1R2yNrOfqTLysiNJuPAIaSEZNCaGt9/r8LJ/9JXwWdGTMgDYTkGCxcaF7fur
-         rcXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742581979; x=1743186779;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=byte-forge-io.20230601.gappssmtp.com; s=20230601; t=1742583677; x=1743188477; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HYYSOKUxEGqctY3EfhN9A2yhuGU3c7aUKlXkZitVseM=;
-        b=NnBIDpWHrW8quC/4IuU0i5J37cAfjU7VdBCFhZ8FnAgcKrN4U2KziQDB8+QpRMVQNJ
-         9orYBVi1hHnz6Rb2D/o1CO5xiJ4RRRh5ijD1ngCht3JQZGat26e593+e/N42hKhoxrlh
-         sjgUOI6eIZIxmWZsM3PDKOr7Keiqfz5KZqaGE16Lixm/ogQARQS86vov8e9lVRysU1rM
-         QE0Zan0DH5w1RSCSyiKn34dWdzZjBIpSx3fYEe8LK2WeTU0nbvmPsr0v6gEYERHAmJzC
-         oNWGmKZea5qomNbnp3QNPufh2gh1FaFTIViTkfDQaJ5je6LceVCLV6H8KZbdbPLO+m1z
-         4Hyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGS4txXeToTt13ar+OqW4hCcLSfAdPgEQooBIkRIIhgW2W7NqIucaKOEOBS/xfzYtbipT5+Jjsira/KY8=@vger.kernel.org, AJvYcCVfZQ7gYMkgeDhgZkQ0YezJQmTIx45pr4t6/ddl/Nf+Veql2THJ5BLSYGe6BZdFkE0SfXrBxzuCQnfoLP8DMX/e@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMn6ZzrVjYzzJkPcTgr+T8BLtnl7EN8ENL41fwAaD/1dAbvlPB
-	Ipi2sTZLiHWBgGTbBcFWdZOM7Bmht+xGtov9ka9s/pZvOIhBewZXWMNnQw==
-X-Gm-Gg: ASbGncsDEneln+317cVuwqVSKI0QxgPRdk5NY4izN1ltgVrtD6UQscyXzQXuBlUI+gA
-	RceZl8GwKinaDncqCwFErYLG8TqS2lvkbli+37QNsi40eaYcIYD9NA2g6W7Bzc0EPaA7P64EfBD
-	rHZcGlkGQpWQjEV3l/etZsvtWecZD7Y/ke846K5giIH4JFa0uWBrztLszn5E0aLMpfNgimNzuMp
-	Tp+LXyos9lK9wCdbZUGulxyU38BSGr0tb9JcOu1zo7l/bZABULzIeuKDMDZZoSGS8cJp5Ybg0KH
-	Kb9BrEtiAqYsc4j8ksrkNUtikaNoPBCd5sCk87SwRlR3
-X-Google-Smtp-Source: AGHT+IG4Y4KdKGYoy70io/r8gYLZiFwsgOksUI+QUCeOo40CKssKjfePE5RVgUBb4ckPKQzflnN8DQ==
-X-Received: by 2002:a05:6a21:394b:b0:1f5:769a:a4be with SMTP id adf61e73a8af0-1fe4347101emr8883211637.36.1742581978798;
-        Fri, 21 Mar 2025 11:32:58 -0700 (PDT)
-Received: from localhost ([216.228.125.130])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73906123ea2sm2382632b3a.108.2025.03.21.11.32.57
+        bh=nR4lHmAwKxP9HyGmUTHKde+Eo7V+LJcGUFHENv86AZM=;
+        b=eLv4wdMfCHT/qkHUpHNYlTw9jw8y4tRKA50OqcnETlj1Xw8TQg3iHhWwCPGUObTfCW
+         r5Q6cglKfIQ72iTFTlc2BVA+AvqPUg8k6lriJTrNxpAtslDQCZyqDSeJP+RrX7xdtSOH
+         Ro1oQGndRZX/yrNrJADmrglm2vvjyifldVsYCICkoJ/fRnqg+dKSCIOMoV1U/vPS52rE
+         ODrZKcHsTd/Abj05vJn0ZUe7/gzwMRti3hWdSv92WFYeeto84MhcytkbZd43dFEmUGwT
+         8ZzcD+bgu2Oa9g4aVYOdt42b/2W5rj/lzHglevYdrsrhCKQU1HUQXrEwIpzObVmrtzQw
+         izhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742583677; x=1743188477;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nR4lHmAwKxP9HyGmUTHKde+Eo7V+LJcGUFHENv86AZM=;
+        b=s6+8eSrcVzaFeeL1rLcsC1XLbQObf59Uu4+7OAF3vm+tCTX9iLfySEN93hkWt+Fh26
+         nO1BeTZua3JFkPO3Zkbpu/UFwUXJeWK47dl55i36TzE7v+OGJVqqaG03/3CJfTkMle4F
+         cRW97wJURrA6gf0DzfBcuU4BFm5whWwDmOP7zoTJnIjHr/xkNxUnFQXGJd3a1cb/VFS5
+         wejsNsOz+4yaVjRNqvu0FiWABwozvI1jUOogrcLCYzCZf5COH+SnT6SE/CuVlg957eUT
+         9JAlMvRYl0Y5HDexNFYhHeYcWTI1I4lFE7eK7BWxBmnesHiLK97BtLMr1xoCNeOg/8yn
+         fQdA==
+X-Forwarded-Encrypted: i=1; AJvYcCVwc4fJgWg8fQdFOQziA2cjD5Uuz7L8drD1tsZbVzZlsqt83jnM6ivJylOoL9y40AAE3zw6vFS/7gF00/eCMTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyR45zn7DkLqFWKHnvfW4Aa3nSsNwIFT7gJqdKwd0OuU+X0ygf
+	8nObZkCb1O9+eACbFmwZ++kr77Kh7nk4dmkJH99QJFqGfP3gwAVwZG1hGfniVmZUxb8uOSR4GDd
+	9U+o=
+X-Gm-Gg: ASbGnct9pN9TDSjTW3wpm7mm7f8W074Z9YFBwFq4tEGNoiYkRhl1bclj7hjgtrCwPBl
+	29VNBXU0hJKiSb0xbBIoxgdgQIKj9F3VwhO16APafNULLYnMpuhAvExNfWv8rKEyIl4vHRLbzKx
+	16w3UxSr+CQ66ucogHjdqZIHAHBst/TLy4QrbwMoiHafAT84e0k7IzfumjYM1QVchhPgCcJDM9f
+	/3ymVygQEN8tqa/uqwEdX5Zl1GDnlBPfBhq70/5XOgS7EMoEKFsp6STu1l5oK9Kk53SLUWlPfg4
+	TQ546NknX7gQ8Rmny+kxNw2p+XNWoHTEWwYBDSd9FvSRvmKktA7CrHi5QvICOC/a7RUGGt9DnKg
+	RP4a37opEhwGbStzrm2bN5Z6lPVXLHg==
+X-Google-Smtp-Source: AGHT+IFCFymzOe+88jvBtqQf3WoNAsE5w0tNrMWd418HpWND6k2Tz7c1vpjL/c8frjfQ1C9HkTGr4Q==
+X-Received: by 2002:a05:690c:3391:b0:6ef:7dde:bdef with SMTP id 00721157ae682-700bacd6b69mr56614167b3.23.1742583677457;
+        Fri, 21 Mar 2025 12:01:17 -0700 (PDT)
+Received: from Machine.lan (107-219-75-226.lightspeed.wepbfl.sbcglobal.net. [107.219.75.226])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-700ba73b9adsm4773737b3.20.2025.03.21.12.01.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 11:32:58 -0700 (PDT)
-Date: Fri, 21 Mar 2025 14:32:55 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	Brad Figg <bfigg@nvidia.com>, David Hildenbrand <david@redhat.com>,
-	Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: distro support for CONFIG_KUNIT: [PATCH 0/3] bitmap: convert
- self-test to KUnit
-Message-ID: <Z92w13L8v1MvPC8_@thinkpad>
-References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
- <Z6eaDuXnT_rjVSNS@thinkpad>
- <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
- <bd71c705-5f57-4067-b200-fd80b98ddbc9@nvidia.com>
- <Z6pfomw-3LuWoQQo@thinkpad>
- <CABVgOS=KZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQADrW+sJg@mail.gmail.com>
- <CAJ-ks9mevv68v1Mh0GdGd9Y2EEp3_kdV6FygOiAenYG0=e4=Tw@mail.gmail.com>
+        Fri, 21 Mar 2025 12:01:17 -0700 (PDT)
+From: Antonio Hickey <contact@antoniohickey.com>
+To: miguel.ojeda.sandonis@gmail.com
+Cc: a.hindborg@kernel.org,
+	alex.gaynor@gmail.com,
+	aliceryhl@google.com,
+	benno.lossin@proton.me,
+	bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com,
+	brendan.higgins@linux.dev,
+	contact@antoniohickey.com,
+	contact@byte-forge.io,
+	dakr@kernel.org,
+	davidgow@google.com,
+	gary@garyguo.net,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ojeda@kernel.org,
+	rmoar@google.com,
+	rust-for-linux@vger.kernel.org,
+	tmgross@umich.edu
+Subject: Re: [PATCH v4 08/16] rust: kunit: refactor to use `&raw [const|mut]`
+Date: Fri, 21 Mar 2025 15:01:03 -0400
+Message-ID: <20250321190103.1778248-1-contact@antoniohickey.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <CANiq72=jXTpoPAHhFC=T2SCyz3195=pG5h+-yohCCxdds-2hHg@mail.gmail.com>
+References: <CANiq72=jXTpoPAHhFC=T2SCyz3195=pG5h+-yohCCxdds-2hHg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ-ks9mevv68v1Mh0GdGd9Y2EEp3_kdV6FygOiAenYG0=e4=Tw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 21, 2025 at 12:53:36PM -0400, Tamir Duberstein wrote:
-> Hi all, now that the printf and scanf series have been taken via kees'
-> tree[0] and sent in for v6.15-rc1[1], I wonder if we'd like to revisit
-> this discussion.
+On Fri, Mar 21, 2025 at 10:06:03AM -0700, Boqun Feng wrote:
+> On Fri, Mar 21, 2025 at 10:28:06AM +0800, David Gow wrote:
+> [...]
+> > > Anyway, KUnit `#[test]`s are in -- I was not planning to merge this
+> > > now anyway, it should be reviewed a bit more.
+> > 
 > 
-> As I understand it, the primary objections to moving bitmap to KUnit were:
-> - Unclear benefits.
-> - Source churn.
-> - Extra dependencies for benchmarks.
-> 
-> Hopefully David's enumeration of the benefits of KUnit was compelling.
-> Regarding source churn: it is inevitable, but I did pay attention to
-> this and minimized the diff where possible.
-> 
-> The last point is trickiest, because KUnit doesn't have first-class
-> benchmark support, but nor is there a blessed benchmark facility in
-> the kernel generally. I'd prefer not to tie this series to distros
-> enabling KUNIT_CONFIG by default, which will take $time.
-> 
-> I think the most sensible thing we can do - if we accept that KUnit
-> has benefits to offer - is to split test_bitmap.c into
-> benchmark_bitmap.c and bitmap_kunit.c.
-> 
-> Please let me know your thoughts.
+> I agree this whole series should wait a bit, but do we want to merge
+> patch #1 as early as possible (maybe right after v6.15-rc1), so that new
+> code can switch to &raw since that's the direction anyway?
 
-Sure, no problem.
-
-I asked you to answer to 4 very simple and specific questions. You
-didn't answer any of them. David sent a lengthy email that doesn't
-address them, either.
-
-None of you guys submitted anything to bitmaps - neither in library,
-nor in tests. Your opinion about what is good for bitmap development
-and what's not is purely theoretical.
-
-Real contributors never concerned about current testing model.
-
-I think that you don't care about bitmaps. If bitmaps testing will get
-broken one day, or more complicated, you will not come to help. If I'm
-wrong and you are willing to contribute, you're warmly welcome! I always
-encourage people to increase testing coverage.
-
-If you'd like to add new cases to existing tests - I'll be happy. If
-you'd like to add completely new tests based on KUNITs or whatever
-else - I'll be happy just as well.
+This would make the most sense to me, it would keep things clippy clean
+while also allowing new patches to use the feature. This would also
+potentially help reduce the amount of refactoring my patch series will 
+have to do as it's delayed. 
 
 Thanks,
-Yury
+Antonio
+
+> 
+> Regards,
+> Boqun
+> 
+> > Excellent! I'll make sure to review the new version of the patch when
+> > it's rebased.
+> > 
+> > Cheers,
+> > -- David
+> 
+>
 
