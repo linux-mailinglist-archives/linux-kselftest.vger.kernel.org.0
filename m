@@ -1,126 +1,142 @@
-Return-Path: <linux-kselftest+bounces-29575-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 030C0A6C0B0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:56:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9160A6C0CA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 18:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65702173985
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 16:54:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5798E3B383F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A8822D7BA;
-	Fri, 21 Mar 2025 16:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9FF229B26;
+	Fri, 21 Mar 2025 17:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JOBvVxl6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r8gXM74F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0410522D7A3;
-	Fri, 21 Mar 2025 16:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB821D5ADC;
+	Fri, 21 Mar 2025 17:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742576056; cv=none; b=Tav6eigutfMppbmedTwKpVi9S0jNOHUrECWBNWvPYAj8AyCrH9/crDo4kLuSI2XSo/CX5s4DxpK1eo32WPZ4JI4KDMCenAB5ghN/Y1P1113gd8Djdm+riHqBvO/gv+MzRdzprOunmANCEq8y4N2CxER25/vmPdcwAesyVRXOZWc=
+	t=1742576674; cv=none; b=IT32SJBGTEBonZYzEmCJi6QJQzGPedqXi0Vv8CxI9fHB0eRchP0XoVA8wquTLGEHnDHi9l8Byb9WJgQJ12QcRHR66RjVMHXdW5eNWRENzaISsA2a5qzgzQHCGhTcf+58gCWopWDau6AhMWVdwoaLbPLXmmADSfoGaQnXFy9JvI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742576056; c=relaxed/simple;
-	bh=UOuUAOdU6fzwILEwoTUwQrZ3IxBywdm7PqAVnZyzNrk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jrgj8FyaS1jnSyBPGdoXMGFqk4Jvos1TJP7YvvxSp1e0tWIG2qFwWlufhunVed36qUE9b9ahJ+CU0V1QLRXQaTc79fo5aSvltx/cnJldLJGBoNjzOfs1lUO/2JxDbvQb2V2BWoFIB7g6iKWJKM736uHE3WA2UVzPnWBqW7KPk6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JOBvVxl6; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30613802a04so23839261fa.2;
-        Fri, 21 Mar 2025 09:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742576053; x=1743180853; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UOuUAOdU6fzwILEwoTUwQrZ3IxBywdm7PqAVnZyzNrk=;
-        b=JOBvVxl6Vde0N4Bm2kv6VGe/Xk+jPiCbd1TAvk0jtQy+FufC706GIjMSgYf9FRPMsp
-         JjW2Ce7FWtr36shqr+Do1faBLRJX1CCUO37qXQ4YXFqfNmoor1Tc60OWuZitXODCQP/r
-         t/azjwCZrznsBgCGBIFt5YVhhGuJnES0hz80mPvkvhr0i8Z8iYxPI5bwHu95czw2Sb9C
-         DhZoC3n6/1XeG/R7yGV1i12HteQ45v1tQcuAVp1AvN2oXRvNFVHn+Ldp/jrzUC2WupsB
-         vmo7OHHfcjjtwQomaGUf6NzA6nggiINNjJATlU7y1/GkkEDag/k86Wodt0S98Dx4433d
-         hRgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742576053; x=1743180853;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UOuUAOdU6fzwILEwoTUwQrZ3IxBywdm7PqAVnZyzNrk=;
-        b=MQ7HYHz+WQvtUe2g12RRHmujzot4iRF6t3e8mo3Diuey3z1YSHwiQYz7+l4sqgz2Qb
-         5W5slYwykM0QmgHTW7KK4kSvKvebDmx06CwBSa31q2GolkhhUr/GgeuXZXF+VRPP0VN0
-         gUPERUOK/em/yUuRGoNDP1tXUDbhHyhGiuL8/0Amb7hiT8vvosxleiF+mR5sWddlDiFT
-         ctJQ8jq/D+zM3SvpphdbvmkIgdOOiFG2SPSO2vTShcIJAHDEVwJA6W2r/1Tx+bKbyqlX
-         GQslty6P5fKrVJD3WVqwcF0qYhWFV37xV98FgM2C7YWrf1XMrXHyvsZxP0FZgKH6qDEq
-         yy1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCtszRXmBpmUem8C3aBGC23JnWh/DC2RGUWCafACiGuIPYtjjM7avhlnsD++xNGemfe9WjXr/Jb1eVjDk=@vger.kernel.org, AJvYcCUEqyaHypGHOIAJgkhjKnpEyKzQbGhB9IvzHd6oszyZpB6RxDF5YS+eTUhsLWBrK57gGLHvA7lYmBzEBm6d/40t@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+1NKyFQzVJ2FHvKuYX4LyLl2eMZj4bILvKwFhFF6OYEJBIlFe
-	Jc3qJ6HMuDbpFBPozMg04Eh97bsz/lbqhGcaIH0HyCJWyuR68B9Hvjrm2HWWkAsnUJBGRIvBFma
-	gZn2Kp1r4i+1xtyC09FVx/AYkBEs=
-X-Gm-Gg: ASbGncurLdftT1XxI2ZCsQNMbm0vQcC8NVOmmgkpo6YxddUe5tz9akY/CyXdfPxYAXy
-	h7vtfIi9vy1E7ywPxjvRl56FQTn5kbTifrGyL/Z9Ra3mEFKDl3gRPqFq2KQhF+WOCTbOv9okUP5
-	ulq1caLe9Cz6QBD5bF6qn1fkmUalKGVx332Wa0RmqMGw==
-X-Google-Smtp-Source: AGHT+IG4olNJH+a7c6RlZFJF8zMksT58/wvmA/7TP25sQDIbCAdnPDYZgYQ8vKGk1x10x0tRVyTKoEGU45fo+N4bqok=
-X-Received: by 2002:a2e:8e73:0:b0:30b:b7c3:949a with SMTP id
- 38308e7fff4ca-30d7e2383b9mr16939331fa.18.1742576052901; Fri, 21 Mar 2025
- 09:54:12 -0700 (PDT)
+	s=arc-20240116; t=1742576674; c=relaxed/simple;
+	bh=4BIhvc3+qX0OSvURR+5GbIbaBgN0H4vLEDwiLUkmYk0=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EFqHb+Ag8sl6+ZU2tZWO/aaM3NdBL4bSC1ugsiUfUw1MVWCfsmDfkC1KqJyUlvFo/Y5d3kcOfpwHMEURML5K9QiXPSYR9T5cBTqfFYY/payoQz+VuFlnl3l/iGPVuxvpgC8Lg6AxH7SzA7hCfEIuWMCqJxyq9kD4jaNk/EtMpwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r8gXM74F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D58BC4CEE3;
+	Fri, 21 Mar 2025 17:04:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742576674;
+	bh=4BIhvc3+qX0OSvURR+5GbIbaBgN0H4vLEDwiLUkmYk0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=r8gXM74F/+FGR0yRaBVaczuaUVE0HAnVuuKBIGwW1wkvw57XgJlAzu5Txf+qOg1yU
+	 Pm1KKfAGtuXFjrY2VX+79XtObxfKBwV/wCQDl5/J/oiNix0bXDH6oll9RRVBVYK3zk
+	 Wlb6hHOE8FhyDF/V4ggnKrje+iy/YKeb8AVrdDl2JnFBEFIPpYAAWgaRZpHay70pRo
+	 u0noL0xozzR6HommJQd7dnQKAQOhT30qDW891zYRxQPM2tZvNAb+mWzqeJvf2mYBn+
+	 wNmpsGilzTsHBW7YEyPi79Z7T/Bjh+n4vYrQEnNDCzZvGvd+4nzwyGipOFSEKg0MDL
+	 cutBPKbjuLuIg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1tvfnL-00Frrz-HD;
+	Fri, 21 Mar 2025 17:04:31 +0000
+Date: Fri, 21 Mar 2025 17:04:22 +0000
+Message-ID: <87cyeaqprd.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Ricardo Koller <ricarkol@google.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Jones <drjones@redhat.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Fix a couple "prio" signedness bugs
+In-Reply-To: <ca579322-dc9d-4300-bd74-7e9240e930c7@stanley.mountain>
+References: <ca579322-dc9d-4300-bd74-7e9240e930c7@stanley.mountain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
- <Z6eaDuXnT_rjVSNS@thinkpad> <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
- <bd71c705-5f57-4067-b200-fd80b98ddbc9@nvidia.com> <Z6pfomw-3LuWoQQo@thinkpad> <CABVgOS=KZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQADrW+sJg@mail.gmail.com>
-In-Reply-To: <CABVgOS=KZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQADrW+sJg@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 21 Mar 2025 12:53:36 -0400
-X-Gm-Features: AQ5f1JocXlnKOaYntHf6DffQI-TKvt-QvytM7DCEc6s7gdq0Tj17rR69Ljw6v-g
-Message-ID: <CAJ-ks9mevv68v1Mh0GdGd9Y2EEp3_kdV6FygOiAenYG0=e4=Tw@mail.gmail.com>
-Subject: Re: distro support for CONFIG_KUNIT: [PATCH 0/3] bitmap: convert
- self-test to KUnit
-To: David Gow <davidgow@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>, John Hubbard <jhubbard@nvidia.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-kselftest@vger.kernel.org, Brad Figg <bfigg@nvidia.com>, 
-	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: dan.carpenter@linaro.org, ricarkol@google.com, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, drjones@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi all, now that the printf and scanf series have been taken via kees'
-tree[0] and sent in for v6.15-rc1[1], I wonder if we'd like to revisit
-this discussion.
+Hey Dan,
 
-As I understand it, the primary objections to moving bitmap to KUnit were:
-- Unclear benefits.
-- Source churn.
-- Extra dependencies for benchmarks.
+On Fri, 21 Mar 2025 14:32:53 +0000,
+Dan Carpenter <dan.carpenter@linaro.org> wrote:
+> 
+> There is an assert which relies on "prio" to be signed.
+> 
+> 	GUEST_ASSERT(prio >= 0);
+> 
+> Change the type from uint32_t to int.
+> 
+> Fixes: 728fcc46d2c2 ("KVM: selftests: aarch64: Add test for restoring active IRQs")
+> Fixes: 0ad3ff4a6adc ("KVM: selftests: aarch64: Add preemption tests in vgic_irq")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+> ---
+>  tools/testing/selftests/kvm/arm64/vgic_irq.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/arm64/vgic_irq.c b/tools/testing/selftests/kvm/arm64/vgic_irq.c
+> index f4ac28d53747..e89c0fc5eef3 100644
+> --- a/tools/testing/selftests/kvm/arm64/vgic_irq.c
+> +++ b/tools/testing/selftests/kvm/arm64/vgic_irq.c
+> @@ -294,7 +294,8 @@ static void guest_restore_active(struct test_args *args,
+>  		uint32_t first_intid, uint32_t num,
+>  		kvm_inject_cmd cmd)
+>  {
+> -	uint32_t prio, intid, ap1r;
+> +	uint32_t intid, ap1r;
+> +	int prio;
+>  	int i;
+>  
+>  	/*
+> @@ -362,7 +363,8 @@ static void test_inject_preemption(struct test_args *args,
+>  		uint32_t first_intid, int num,
+>  		kvm_inject_cmd cmd)
+>  {
+> -	uint32_t intid, prio, step = KVM_PRIO_STEPS;
+> +	uint32_t intid, step = KVM_PRIO_STEPS;
+> +	int prio;
+>  	int i;
+>  
+>  	/* Set the priorities of the first (KVM_NUM_PRIOS - 1) IRQs
 
-Hopefully David's enumeration of the benefits of KUnit was compelling.
-Regarding source churn: it is inevitable, but I did pay attention to
-this and minimized the diff where possible.
+I think this is going in the wrong direction. A GIC priority is an
+unsigned 8bit value as per the architecture definition.
 
-The last point is trickiest, because KUnit doesn't have first-class
-benchmark support, but nor is there a blessed benchmark facility in
-the kernel generally. I'd prefer not to tie this series to distros
-enabling KUNIT_CONFIG by default, which will take $time.
+So the type used by the test the first place looks wrong (it is too
+wide), and the assertion is pointless.
 
-I think the most sensible thing we can do - if we accept that KUnit
-has benefits to offer - is to split test_bitmap.c into
-benchmark_bitmap.c and bitmap_kunit.c.
+Thanks,
 
-Please let me know your thoughts.
-Tamir
+	M.
 
-[0] https://web.git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=move-lib-kunit-v6.15-rc1
-[1] https://lore.kernel.org/all/202503170842.FFEE75351@keescook/
+-- 
+Without deviation from the norm, progress is not possible.
 
