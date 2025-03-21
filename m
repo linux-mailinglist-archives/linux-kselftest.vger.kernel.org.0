@@ -1,161 +1,104 @@
-Return-Path: <linux-kselftest+bounces-29580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29581-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E400A6C19A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 18:33:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A4DEA6C222
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 19:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BFF24614C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:33:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7E40189CD2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 18:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFAF22CBF6;
-	Fri, 21 Mar 2025 17:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C89222E414;
+	Fri, 21 Mar 2025 18:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="DLLkrbjx";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ui4Dx6rw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qeEZ7KDc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEA678F52;
-	Fri, 21 Mar 2025 17:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8721D5AC0;
+	Fri, 21 Mar 2025 18:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742578426; cv=none; b=l/A27Zqh3lo4dTbMzOCqbYN5XGIM7NFQLcZNGDGx3+3Ez9U0O8VW2pCxI1cAIMXcy+s/vloIgvXaw4rr0WnqC2SsvMgPkX4QkUSfk38z+fosNVp4N2WuG+mj42oJ2aHhyBD8JrDlGBuuaBLJYMAPEMOmIXECriG5KWqxbi3REpI=
+	t=1742580598; cv=none; b=PbLFPenHg263HS62ctkUtO8TuDf7CRrtDbtwCwXlRA2NjyCfq/pFb3PoXy1TG4lV9TFc2qpoYJDRq45gThr9VDm10mz4pxFyvzBhPE7x5KpE6Wua3/Uj68aMy14acLxzw4Qvso7epmOt5Lciul1RaZEJ7+I16uat5NB6h+xgjuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742578426; c=relaxed/simple;
-	bh=GoduICvSWMNnvmCK1a97gNxQC7pQOAUrZGAEO6pXgYg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=UUxU4koMJZ7bXdsYbVfBvTk6h+/q5ZrF2g6DS9T4eDeZumoSgx4kuvOIiEc5Mhg/wSZBbotGwminlChDK6U9ZxKpJIJGnm/UQohNVZGgT0E/NnBqzGzb9zeJbFG1EIOUKCvN10h8HSYX4nmet0LxGWHTDCl1Zu3cFgInmD6XJpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=DLLkrbjx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ui4Dx6rw; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailflow.phl.internal (Postfix) with ESMTP id F0255202146;
-	Fri, 21 Mar 2025 13:33:42 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Fri, 21 Mar 2025 13:33:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742578422;
-	 x=1742585622; bh=jcHwQGpQOx6GZtNDddAxOwDOWSoyBujaJTuqoyGqXDA=; b=
-	DLLkrbjxdeZ5VZIGvPAZd4NM/kpOB5yjaRA2bvhlRZZqiAajItla9WOumvbn54t1
-	awAa2WdDiftQwM9VUrrdOy2B8L6rbJZP1L2CHyFMjUo2bYV5jiVdUCBJ+txYzcyX
-	YfNdALHqJ8vA1g0fKqj/rYooeIPG8pW0+DKZ5pjBDdQ/ov2TUOQvQoS7XX0pmiXf
-	E0jtTwHqb2w3VcZDUJJbENArof3r2e/WJIEaKvPw8kCHgD/xH5vt/Oaa41CisOOt
-	aLby2QkmaE23J33Sau22v+uw207knEJBvxfygvvXmXMkokkBEsxQ+juulQzszHxF
-	prI/sAddxyIp9Iv/S2/Rhw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742578422; x=
-	1742585622; bh=jcHwQGpQOx6GZtNDddAxOwDOWSoyBujaJTuqoyGqXDA=; b=U
-	i4Dx6rw8n6KelCD0qaTj5zmZdQsre1O+uqLIzcbok/RNBBKaWZy4PEX4GXch+Jbj
-	lGeF4rm/KmmivV4flBuVWpy9M3ugVKbWVfcXdHTDAu4/CJgKdGaPnkWToVcfc1Hw
-	pGV6HAeXLkOX5OanKtfkRnUF8XHkfi0qbIavNs+iHqhH4TTY1MrqulMRfI/e6DwS
-	PJXbL6UQXAhfw+r1cX0pjR9yekCg707nyiuGR2GY3F0MLay1n+DxG8jMS6OyEQen
-	5c7eHiflpY3UpwHTif8k8jnnl5jgO/iJjoATUB+TYxcGJdukz4ej7g5g44pnW5D5
-	wL+dD+0XGM01ti8O6vuyQ==
-X-ME-Sender: <xms:9aLdZ1FWQqOziPqqoohR2Ek7ZIBNYbxHCOcRkjf-xbQHxvCD9abBXw>
-    <xme:9aLdZ6WibTWFxk_WdQPYzwJQ8ENd3FCvBOXO81gFbAz0-NmJ4fiVzoewL77Jow-f_
-    b8Bs0S4SK0muK6g9C8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduhedujedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    feejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehkvggvshgtohhokhestghhrh
-    homhhiuhhmrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehffhiflhhlrdgthhdprhgt
-    phhtthhopegrihhrlhhivggusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlvghssh
-    grnhgurhhordgtrghrmhhinhgrthhisehgmhgrihhlrdgtohhmpdhrtghpthhtohepuggr
-    vhhiughgohifsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhhnihhtqdguvghvse
-    hgohhoghhlvghgrhhouhhpshdrtghomhdprhgtphhtthhopehmtggrnhgrlhesihhgrghl
-    ihgrrdgtohhmpdhrtghpthhtohepjhgrnhhirdhnihhkuhhlrgesihhnthgvlhdrtghomh
-    dprhgtphhtthhopehmrhhiphgrrhgusehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:9aLdZ3LWSj3ee0DpgDBVQgR9N6em0f5-W_bT607OLi8J56P-PHjwdg>
-    <xmx:9aLdZ7EmgyfsMK79595Ji4fqyaEgzpUx28qERgbScF30VauOkMTTZA>
-    <xmx:9aLdZ7VDCg0me11XgjTCMnOtsbEkwp9VdJtw9WRuZpovB9sSdPMWvQ>
-    <xmx:9aLdZ2MO9qdvK_ExIyuwHK5jCpMbl8MVknK5QRVW7ddiQcxb6VhGrQ>
-    <xmx:9qLdZ7URYi_A7oI0zqTv7Ebk9x9UFrrUdpb50OelwEli-e3q19QxBoz_>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1F6E52220072; Fri, 21 Mar 2025 13:33:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1742580598; c=relaxed/simple;
+	bh=oVWIbWQyeO1eYdPOvb4GZar6A1uAB/ChS30Nh+3NuNA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Lxe245WFCuu/8/aZhWsH6JJrqqVGbnWIpXHBrztQViTTbebZytC6+VHFIwldSzRm1kk1a7lF87hW4jq2JqTXhxypCshh1em0nst8Zyly9s+79OZ6yW/zCHs8hW4zfy5DxA4VSN4jCX2zV/zfNwy+cIZ5pzB4SsAGDYZu15zdI9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qeEZ7KDc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A63EC4CEE3;
+	Fri, 21 Mar 2025 18:09:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742580597;
+	bh=oVWIbWQyeO1eYdPOvb4GZar6A1uAB/ChS30Nh+3NuNA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=qeEZ7KDcHzenjrGx3duY7KlkgqpU6/bL75ws1KAkL13dkefppg+FsH94Jr9l/ZiP8
+	 U4y6gHeyCFH7cVhnP67VhQ5x11+gdYwnP4Tca8FoIAMpPDY4d5HpmfpJcQy0f6UfXh
+	 mLjUiUQzRk9MYcud+VW9wnZW1+su8AC8Mtm35iGAlGUJKJL6cANwJ5VnrG5wkOHoik
+	 7Ke+zLJODQljSJKX4z/enzUfuIP0bkOc1tF9HUCzhCYuzpUbvVlMFj1UHL17uK5BqU
+	 qHqeeObsqxQ9am/gN1Lxcxai32G84zBVPtrRoyaGEPslRjm0IIxN+SKS5xY/UVH2sL
+	 4NVSEZ2EV1/qA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE15F3806659;
+	Fri, 21 Mar 2025 18:10:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T46bf3c12e1d9de2d
-Date: Fri, 21 Mar 2025 18:33:19 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Guenter Roeck" <linux@roeck-us.net>,
- "Alessandro Carminati" <acarmina@redhat.com>, linux-kselftest@vger.kernel.org
-Cc: "Dave Airlie" <airlied@gmail.com>,
- =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
- "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Kees Cook" <keescook@chromium.org>,
- =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>,
- "David Gow" <davidgow@google.com>,
- "Arthur Grillo" <arthurgrillo@riseup.net>,
- "Brendan Higgins" <brendan.higgins@linux.dev>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>,
- "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Maxime Ripard" <mripard@kernel.org>,
- =?UTF-8?Q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
- "Daniel Vetter" <daniel@ffwll.ch>,
- "Thomas Zimmermann" <tzimmermann@suse.de>,
- "Alessandro Carminati" <alessandro.carminati@gmail.com>,
- "Jani Nikula" <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
- kunit-dev@googlegroups.com, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- loongarch@lists.linux.dev, x86@kernel.org,
- "Linaro Kernel Functional Testing" <lkft@linaro.org>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>
-Message-Id: <a6f90bdb-8459-4d33-8874-7e724bd22d9f@app.fastmail.com>
-In-Reply-To: <b6bb68f0-7e93-4db2-9fe6-f615f06ddeb1@roeck-us.net>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <20250313114329.284104-11-acarmina@redhat.com>
- <b6bb68f0-7e93-4db2-9fe6-f615f06ddeb1@roeck-us.net>
-Subject: Re: [PATCH v4 10/14] s390: Add support for suppressing warning backtraces
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/6] netconsole: Add support for userdata release
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174258063351.2577757.7447290178394801231.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Mar 2025 18:10:33 +0000
+References: <20250314-netcons_release-v1-0-07979c4b86af@debian.org>
+In-Reply-To: <20250314-netcons_release-v1-0-07979c4b86af@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
+ corbet@lwn.net, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ chantr4@gmail.com, kernel-team@meta.com
 
-On Fri, Mar 21, 2025, at 18:05, Guenter Roeck wrote:
-> On 3/13/25 04:43, Alessandro Carminati wrote:
->
-> gcc 10.3.0 and later do not have this problem. I also tried s390 builds 
-> with gcc 9.4
-> and 9.5 but they both crash for unrelated reasons.
->
-> If this is a concern, the best idea I have is to make KUNIT_SUPPRESS_BACKTRACE
-> depend on, say,
-> 	depends on CC_IS_CLANG || (CC_IS_GCC && GCC_VERSION >= 100300)
->
-> A more complex solution might be to define an architecture flag such
-> as HAVE_SUPPRESS_BACKTRACE, make that conditional on the gcc version
-> for s390 only, and make KUNIT_SUPPRESS_BACKTRACE depend on it.
+Hello:
 
-That is probably fine, there are very few users on s390 that build
-their own kernels, and they likely all have modern compilers anyway.
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-I should still send a patch to raise the minimum compiler version to
-gcc-8.1, but unfortunately that is not enough here.
+On Fri, 14 Mar 2025 10:58:44 -0700 you wrote:
+> I am submitting a series of patches that introduce a new feature for the
+> netconsole subsystem, specifically the addition of the 'release' field
+> to the sysdata structure. This feature allows the kernel release/version
+> to be appended to the userdata dictionary in every message sent,
+> enhancing the information available for debugging and monitoring
+> purposes.
+> 
+> [...]
 
-     Arnd
+Here is the summary with links:
+  - [net-next,1/6] netconsole: introduce 'release' as a new sysdata field
+    https://git.kernel.org/netdev/net-next/c/42211e310781
+  - [net-next,2/6] netconsole: implement configfs for release_enabled
+    https://git.kernel.org/netdev/net-next/c/343f90227070
+  - [net-next,3/6] netconsole: add 'sysdata' suffix to related functions
+    https://git.kernel.org/netdev/net-next/c/b92c6fc43f4e
+  - [net-next,4/6] netconsole: append release to sysdata
+    https://git.kernel.org/netdev/net-next/c/cfcc9239e78a
+  - [net-next,5/6] selftests: netconsole: Add tests for 'release' feature in sysdata
+    https://git.kernel.org/netdev/net-next/c/4b73dc83ed96
+  - [net-next,6/6] docs: netconsole: document release feature
+    https://git.kernel.org/netdev/net-next/c/56ad890de2cd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
