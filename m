@@ -1,139 +1,124 @@
-Return-Path: <linux-kselftest+bounces-29554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824A9A6BAFE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 13:45:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31098A6BB09
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 13:48:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 314B319C15AC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 12:45:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A213348403D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 12:48:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA098226D13;
-	Fri, 21 Mar 2025 12:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50F4227EB6;
+	Fri, 21 Mar 2025 12:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XOYvqTnE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNZpIWs1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0EBCA5A;
-	Fri, 21 Mar 2025 12:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FEC1EA7D3;
+	Fri, 21 Mar 2025 12:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742561127; cv=none; b=b7ylh6ePwPBW5ix9RBRUQscVcmv8GqXlH6ecm7iJ5iGepdnrF+BYnlo7llWuuTTUnAW9jvLqgQsm2jnC2smGu8vQpeRNZDQsNMFdyAI0HE+mnXML/BsHAKJsroOntkOzkfyZMpOFCB63fqAAl0BQVSaJk7FogvT+qUeN8+C3jBc=
+	t=1742561291; cv=none; b=gC3t+1seZb6/XPsS5z+6rGG/USxoXKVTT76Gq9tudEx7zvc87V/rnngFz2sxLKSNq7jgLHv2oodfsCV6lqkA/KZG4CrSrCeS6c3qRjDtfrVxz7NWHIXgF0XppBodc+m6BriT4BoYlwXAQiVgwjfcJx0Mzb80allMOQ47Kzwa95Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742561127; c=relaxed/simple;
-	bh=owd4qIVO9vgaRMbapG447WdJfLBcEtmkQ1F85L/faoc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3xDQL5tIhMA/flghCJCoGz17U30/0BSoBJRCnITXY6F+pWj3uJgdQ1NdtV1rkkHJOeNs4WSE6NRKJbIUG80QKYcosF1MMzQiK0k1NCgzV8KEcQoUP8AejgntmQdSf4ARqj+o2pWkgQRsTfKkwAuAdSXq8teCrHWDY6chBK08Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XOYvqTnE; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-225b5448519so36244105ad.0;
-        Fri, 21 Mar 2025 05:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742561125; x=1743165925; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ri8DrHl9V+VnfdvMXOIXJllITyYvJjqgNAio1XrDnKs=;
-        b=XOYvqTnEjp0Stkk3i4LDMpRrzIE2yepkbbVyg5Ktzag2pw8NnWwYVtIqRzWxPVX6+M
-         gU0EbXf8u1b9lKhRRR7MoRlw67HLmdnFQhYjj6V87LeDF0LvEmt7on0H5wx0mN7KF16D
-         1ZDgb6mkV8sFb4zqtGHiTMjOfZHqQHziSDhglTMArNVceKBbj9LYDkD2XNJpfO6pUZnv
-         jfVZpmHMa6cfwDlwJ9/pIpCOx5XMF02pqmnQWFscFKm7TJGpW+df+ceXatiG89yz7D5U
-         sm10kZlPE7yycxrp9BgYrG4RRRXdB/xaS1UFwbigsd/lBkHBTGYxGyZJqIi4cT5d2O2J
-         h2vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742561125; x=1743165925;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ri8DrHl9V+VnfdvMXOIXJllITyYvJjqgNAio1XrDnKs=;
-        b=RqkvNxS1DuppDO3XLrctclqu1YE80K86xjdsNYOZxXmH8Qk9C/9io9xzRPg5AtHDy7
-         b1w3BidQqg6qtybuKSZwS7mrTpTRbdGi3dOFfLOWzZ7pRvYbDExjasiOrKP7QVB8bjwA
-         wA9LwNNCKFhvBdUisyFWPJYrogbaebqJLf2K/7o0JIPLGb0+r9SaYhCuoI5UVdUJ1zkb
-         Oxv6KanaSEF4w4CeXdWDVzPsgcJFIgWuQhsAu0dnAf3U5UYc3cFTpqKdGrwrqzoq4oyX
-         tCgzMe+Lc4/uE+qSf8mQMqlceY5/GKnM7axkrUT+NTGYSRdVW5KvYuIqkfoG8Pu3j+lk
-         oFeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUP047vsNyz+TJxofNFpgsv2pAUzZM/VmsRi7qUI9P+buU3nXu7bW4gEBvce7Auc56ZAv0=@vger.kernel.org, AJvYcCVvSY+fWBYQ5j0GBjIJ7jrAkIFo84704Ko5ZYzxG+An1FwUXG7rdkETMKwLtfkVqlMu7oGxB+b8FWvSAiZu@vger.kernel.org, AJvYcCX4393e417JSqnO29WmOaWXNONpEqJLGHESPMzGTsNlILGirGhLvVg098k+hoVj6nHUjnLr1dqMUOCkYV+HtJPD@vger.kernel.org, AJvYcCXCeG5XKV/8vTTBI31vf5BuFJI9avoYcvVbZ7KvDJMbjLhySDrOUdyRc3WtRquvtUL8GiwHVZJ0@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNuIA1/oafZoK5XgmmPJAUMJS4q/eAvacw31f31ciWxkK1YcM+
-	3AxewEN44gloRJlroH5dl2s5Wei2mJpgqFgSKexkDuRJLR+fOhtq
-X-Gm-Gg: ASbGncva8VQ9aPmMrqvxvm2auKXMP6Ank7sPBtKzpNqUG9EbUvA+Cty2HX1WWywczyU
-	AOV5qeAj34Nfe5VPpGOMYp/bzV4sYAwOlwjexs+QJfi0053d7J1sHM6Hiyz5UJZ9ORR8M4GdZ6U
-	zRqQ9kJLW426qBXB5RXBNm2dy+nsyXemcCxSpF1KKAupJj988RFrmYyvJFuLQtWikSHEx66B+Hb
-	vUdI3vcqBdCplIaWYMLm8+Q2V081YvBDWhYemYEQvRw1TPSVdTDdNP4y2ts3BZ7Pp48S9KoBnfE
-	JT6kAOBzL2l2bXvdmhauDoYGZx9aSI7f1bqsHA40BVRGvGEVZQ==
-X-Google-Smtp-Source: AGHT+IELvK3I72iTUDDcO1O4UKhcvpwpm33sVFuK5wBfJpG1DU5drkzjkeA85Qr9LNOrEFCR0OcThg==
-X-Received: by 2002:a17:902:c411:b0:224:1780:c1ec with SMTP id d9443c01a7336-22780e07b2dmr52456085ad.35.1742561125406;
-        Fri, 21 Mar 2025 05:45:25 -0700 (PDT)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811d9f0dsm15294545ad.165.2025.03.21.05.45.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 05:45:24 -0700 (PDT)
-Date: Fri, 21 Mar 2025 12:45:17 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Phil Sutter <phil@nwl.cc>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>,
-	Petr Mladek <pmladek@suse.com>,
-	Yoann Congal <yoann.congal@smile.fr>, wireguard@lists.zx2c4.com,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 RESEND net-next 2/2] selftests: wireguard: update to
- using nft for qemu test
-Message-ID: <Z91fXURX3BQFDaq9@fedora>
-References: <20250106081043.2073169-1-liuhangbin@gmail.com>
- <20250106081043.2073169-3-liuhangbin@gmail.com>
- <Z9rtrVk-15Ts_BNp@zx2c4.com>
- <Z91CGRP9QLdZONiZ@fedora>
- <Z91QshzKRlmPdpv7@orbyte.nwl.cc>
+	s=arc-20240116; t=1742561291; c=relaxed/simple;
+	bh=V1kuVirUzH2nkyWLPiJEMJZeSr0lXGHfzJy65bU2PIU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MhLdhNDzqvyMm1gQ4/qG5bbBW8v5lezvEuRvaGIyuYOercORDzquCX64usjm+Eibmf5exIlKM4UF+4RnKwHrB8RujcQpwRj0Ucym6+Ld7fOZXQghBz8Mh2XbNq3SGZv5ybLpdHuzvBW9ePEq7dG6yjrcaVJfGoNO1Qngj5kOwKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNZpIWs1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F30A0C4CEE3;
+	Fri, 21 Mar 2025 12:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742561291;
+	bh=V1kuVirUzH2nkyWLPiJEMJZeSr0lXGHfzJy65bU2PIU=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hNZpIWs1lA6keN30ewySL8adHm7ZIpM8aKj5tYVOJRtShEVz6ByogEDtCnBhqHDXE
+	 pr4y6prFc8BZZYNWse2lLSOdDralKYImrtkVruGUYr6r0cJ/TNimMpgo5exS/lk21T
+	 PwRieMsIG8fpJWJJDKoRFUyhf3prfkRf8TLKvGAUeonSOwEHlrRav/JNucEgFf70mn
+	 x7t7eLQeb2m5mPZ/uAjyvi/mO1tPG/EoATmlM+THhgmodBkOcgydAK9cjxLIUDGn4f
+	 FVWilkONl4b3zivoRQi/qFqXJVwsajXtYmuulunRlwsHteGGXdE/EA8x0/rreVIRFs
+	 CBpcPvBszS9Hg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E06BEC36000;
+	Fri, 21 Mar 2025 12:48:10 +0000 (UTC)
+From: Joel Granados <joel.granados@kernel.org>
+Subject: [PATCH 0/4] sysctl: Move the u8 range check test to
+ lib/test_sysctl.c
+Date: Fri, 21 Mar 2025 13:47:23 +0100
+Message-Id: <20250321-jag-test_extra_val-v1-0-a01b3b17dc66@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z91QshzKRlmPdpv7@orbyte.nwl.cc>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANtf3WcC/x3MQQqAIBBA0avErBNG06CuEhFDjTURFSoRRHdPW
+ r7F/w9EDsIR2uKBwJdEOfYMXRYwLrTPrGTKBoPGYWW0WmlWiWMa+E6Bhos2ZbFxFh2S9jXk8Az
+ s5f6nXf++H9WjZ5NkAAAA
+X-Change-ID: 20250321-jag-test_extra_val-40954050a1f6
+To: Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, John Sperbeck <jsperbeck@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Joel Granados <joel.granados@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1500;
+ i=joel.granados@kernel.org; h=from:subject:message-id;
+ bh=V1kuVirUzH2nkyWLPiJEMJZeSr0lXGHfzJy65bU2PIU=;
+ b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGfdX/FPFhpvFqkJqN3iGTeATAeIgw8EUpiWc
+ uFR+zMa2BVTtIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJn3V/xAAoJELqXzVK3
+ lkFPfJAL/RJDhNqBvDB4ZlliaKap+XBFny/pRlk5qJ+dvQS8sW+vmNPIciZJhg7giKcagOrfAAh
+ GMnQ83x0sa2307sdt7pzOHKT0hHi0PxoJ+ifjT9fmNtZEgGixSV+ItF9woYnx8a4AZ3qs5ETsQZ
+ EXPvLXPrt6RGQX2VtaietDAxKOmFQ7fj9KnXr5BS3rK4r5e12YJKo5yGs5kOa8fbrOXvIDKUcVN
+ QHdq1YKZ8zfDE4UjxqScbUIQyWaxadehog7Jc3DPdB7WucQU8YyHCGTNp8CN82hBEYxvu3SRbYP
+ x80/TXzWSa9Pf0nIMJnYGITm7im/p8GkA+Cbho+8JYyTUWj19/iTExtm8UGPwyV4vqpFX3ZcX5w
+ UJxfpY8xqyjV2oJebrbraipCqvn5D3Ihk7naw9csbEeXAUTinsQl1cyLY4QspSxz8VHASkXqU9y
+ bT6KSeP76eys4dqOsZB8/wCmPdMfYr7n4Eime7Kg6wLzprrzn9DxSqX077D1n+7/JjlYcXQ6AH5
+ o0=
+X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
+ fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
+X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
+ auth_id=239
 
-On Fri, Mar 21, 2025 at 12:42:42PM +0100, Phil Sutter wrote:
-> Hi Hangbin,
-> 
-> On Fri, Mar 21, 2025 at 10:40:25AM +0000, Hangbin Liu wrote:
-> > Hi Jason, Phil,
-> > On Wed, Mar 19, 2025 at 05:15:41PM +0100, Jason A. Donenfeld wrote:
-> > > On Mon, Jan 06, 2025 at 08:10:43AM +0000, Hangbin Liu wrote:
-> > > > +	echo "file /bin/nft $(NFTABLES_PATH)/src/nft 755 0 0" >> $@
-> > > > +	echo "file /lib/libmnl.so.0 $(TOOLCHAIN_PATH)/lib/libmnl.so.0 755 0 0" >> $@
-> > > > +	echo "file /lib/libnftnl.so.11 $(TOOLCHAIN_PATH)/lib/libnftnl.so.11 755 0 0" >> $@
-> > > 
-> > > Can't these be statically linked into the nft binary?
-> > 
-> > If I omit these, I will got error like
-> > 
-> > mnl_attr_put: symbol not found
-> > 
-> > Even though I set `--enable-static` in nft build.
-> > 
-> > Do you know what's the reason?
-> 
-> I was able to have nft linked statically against built libmnl and
-> libnftnl by passing '--disable-shared --enable-static' to configure
-> calls of all three build systems. With --enable-shared in library
-> configure calls, nftables build preferred to link against the DSOs and I
-> did not find a way to change this.
+Originally introduced to sysctl-test.c by commit b5ffbd139688 ("sysctl:
+move the extra1/2 boundary check of u8 to sysctl_check_table_array"), it
+has been shown to lead to a panic under certain conditions related to a
+dangling registration.
 
-The patch is using
-"./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static \
---disable-shared --disable-debug --disable-man-doc --with-mini-gmp --without-cli"
-to build nft.
+This series moves the u8 test to lib/test_sysctl.c where the
+registration calls are kept and correctly removed on module exit. An
+additional 0012 test is added to selftests/sysctl/sysctl.sh in order to
+visualize the registration calls done in test_sysctl.c.
 
-I don't know why it's not linked static.
+Very much related to adding tests to sysctl, the last two patches of
+this series reduce the places that need to be changed when tests are
+added by managing the initialization and closing of sysctl tables with a
+for loop.
 
-Thanks
-Hangbin
+Comments are greatly appreciated
+
+Signed-off-by: Joel Granados <joel.granados@kernel.org>
+---
+Joel Granados (4):
+      sysctl: move u8 register test to lib/test_sysctl.c
+      sysctl: Add 0012 to test the u8 range check
+      sysctl: call sysctl tests with a for loop
+      sysctl: Close test ctl_headers with a for loop
+
+ kernel/sysctl-test.c                     |  49 ------------
+ lib/test_sysctl.c                        | 133 +++++++++++++++++++++----------
+ tools/testing/selftests/sysctl/sysctl.sh |  30 +++++++
+ 3 files changed, 122 insertions(+), 90 deletions(-)
+---
+base-commit: 7eb172143d5508b4da468ed59ee857c6e5e01da6
+change-id: 20250321-jag-test_extra_val-40954050a1f6
+
+Best regards,
+-- 
+Joel Granados <joel.granados@kernel.org>
+
+
 
