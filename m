@@ -1,181 +1,142 @@
-Return-Path: <linux-kselftest+bounces-29569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C55FA6C054
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:46:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B47E5A6C071
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:48:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5605D189203F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 16:44:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ECCD48109F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 16:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687A122CBE3;
-	Fri, 21 Mar 2025 16:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6429022D4D6;
+	Fri, 21 Mar 2025 16:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="HZyv9eYa"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GKkM3tBV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C4A22B8D2
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 16:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71F813635C;
+	Fri, 21 Mar 2025 16:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575459; cv=none; b=GcmsAJAloE8aOoCciWD0T4YZFLwuaSaRE05hTuhDjICmvg92rXJORXbFvhXjQt//wQdM+wEkBvGZpFPLzrIt/HRSo6czdI+2XrnNOu49/BvDZO+e43O6yVGlKd8ql/JFEZ0V79QvSZcshDWhx+gWju/nkJ0zgHVUjOq5WDnv/hw=
+	t=1742575560; cv=none; b=CQiYNNYfYoGUjXfB/ifdTkxchuKu/cEvw696RXpS3YXf0O7Hr082b6FIMN2AMItCyrSpl2NqpiDtStJmmmh1hfAc38MToiDrKII1j0szVjOKhBR7CIEV1M2/Q/07oTJGeRLjjhR1vZD9E0eGHXWtoPerjKh4zHHFplYWb48vpuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575459; c=relaxed/simple;
-	bh=IMeArOMSvV+SAUlYdgzoqB6lsnXPfljvOmj84MN0ick=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXtAGLgS0s0vkWzBRt5wK8i9Jxr4pOz3OHUEhsTLViVgt0MTCNGLoyrT+MjzIHzHA6YNEm1AMc7ycrF6vWbnyzPw8vczOjosEsGHPxUQ+SIU3Utx5t1PMevPM4SKL+IZ/nEv44oTlUiws6PatQAj2jLSJTLoV+gkDVWSj7v+8rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=HZyv9eYa; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-225a28a511eso49907415ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 09:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742575457; x=1743180257; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mdus/fJVv5Uld6yn8oFMkQzJNe6dHC2w9XvJ773goNA=;
-        b=HZyv9eYaGfAfS5TzyiAfne7e+Cj6w6knyN1bsuK0l23BH6/C2KhX2L3GiLz0dennJB
-         kK9slfnRaJ27l+T8IPNdM9DXo4h6Vj3Dth4GDHOzj+mBDaBhwYD0bkt3x8Lk51JO66uA
-         pgCNI/yZ0ZQ4pfX/PqXQ5YgmYZvQHpiDE/zXA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742575457; x=1743180257;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdus/fJVv5Uld6yn8oFMkQzJNe6dHC2w9XvJ773goNA=;
-        b=KuSk37LMHb4gunVc0htk3abBKiMbv7zg40YxLkkg6SejMLmLYzz2QOcDlowVa1mRfK
-         hEeaf6GZU31PbwyMdUB/15lz+wLUBu2VChNwP6aES4WYnLyUnmbawGw/wh//juiT1oaB
-         mUBfsnhXDyg7BkK2HtsBHb5ulglNoIRev/JcpFrRoyWMfUbyJnU7p9D4IscOz0MFbTGW
-         5iWZPTAzKVsL2ibyXShiiTYCoNvZ1ewuDe1AkOIIVIzMuluqP8uYKp6OjAPtx0ZVeWxF
-         cKjRx3TY3AlzItTNxAhVC8yZg3FKoKGxHUBeQhWXvvH7LyrniraLp6jhrtU70RyxkmCV
-         kI0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVvZ1a+EPhyaqLMSxOJOEhywU82+vHe4+dkp2EoG5y/0fzPX+Y+zyC0sHadVchRjLsNbwCFJGc+aXHrBazIlCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxywTRsjrWewYJ/7ZliroNIdTR4lu1boYNVQ9sogJZCb0z7+glV
-	TFWwVjRJLWMQDtn3PS82xTgJNFbiJFsIQuNUsoTicTHA7GAnYzDUgmhNn13MNUc=
-X-Gm-Gg: ASbGncsGdlZ7XPrKCRXHHbPA/+2WV1AhFZCwiBi76Ts9X1jy+972XyTWTeiejLm/S9s
-	5bXZqpnkgst2E57/kwfjBUW2tbgKe6gRwqJbHvGdwPf341IIAwuiEqNDMjFWPJrdpwvwQ8N2B7C
-	795DPYGE+I+wnmwxG20dbypbOfZZenrmS7xXEoBUf46YvyTTQpbO2sN2aCRVlsji7wEvi2za5mB
-	T18zawuYLul7ZIkVMpt3+fP+89opHpFaxSJ/lJwl+8qkbXH3O3R8OawrQm7d4fMx1gRw9ASi5K4
-	DfLuib0zZfVN5TtA5CybWUuSxEXFyS3twCSfstQGsB8QVzuQEir956ESuLnUmg6PWmz80XDA2KA
-	UkDgfEUvwnIjOcqub
-X-Google-Smtp-Source: AGHT+IHNkHo8pQiFISfzkg8EmthIVkGNH6DyH204b4LoCrS28DjOE/rXN+w3HTspHp5hcO8dxdqoWw==
-X-Received: by 2002:a05:6a21:998b:b0:1f5:839e:ece8 with SMTP id adf61e73a8af0-1fe42f090e7mr7044509637.2.1742575456784;
-        Fri, 21 Mar 2025 09:44:16 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a2843af9sm1984943a12.38.2025.03.21.09.44.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 09:44:16 -0700 (PDT)
-Date: Fri, 21 Mar 2025 09:44:12 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
-	linux-fsdevel@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me,
-	mingo@redhat.com, arnd@arndb.de, brauner@kernel.org,
-	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-Message-ID: <Z92XXFDVz_5fU2YQ@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	viro@zeniv.linux.org.uk, jack@suse.cz, kuba@kernel.org,
-	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
-	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
-	jolsa@kernel.org, linux-kselftest@vger.kernel.org
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org>
- <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
- <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
- <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
- <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
- <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
- <Z9uuSQ7SrigAsLmt@infradead.org>
- <Z9xdPVQeLBrB-Anu@LQ3V64L9R2>
- <Z9z_f-kR0lBx8P_9@infradead.org>
+	s=arc-20240116; t=1742575560; c=relaxed/simple;
+	bh=KCrW6VdjTBGcG5xVhzV8cvLuTrSb7ci7ktDtNKfOARw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=DVNUBfhdO9UfMcsgbO0OI9SSFkZkMvRKgmG5agZrI9oDh/oXeNTyPodYbL2dxGzpRUxjDjMEyRdaOXrV1bjPffw++R7U7m3nGuI6E/rIrOSaJ8BVMVU6R05PikuEQUu+dfu6s+rf2RO/Bb51j7RtbPR3w1f1PVRz5MvN/YNb/48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GKkM3tBV; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from narnia.corp.microsoft.com (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id A89482025381;
+	Fri, 21 Mar 2025 09:45:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A89482025381
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1742575558;
+	bh=UursI/xvhQ5hRWoBdi4h81h10JoUmiA8ppPrOg9d7nE=;
+	h=From:To:Subject:Date:From;
+	b=GKkM3tBVsycOdf6jHb5dpcy8KLpft53f4wjA2IPZJzp33BrUowjyMuBeab4vDu0ei
+	 82qdEixW+e5Amvm2gEbC6NhFou3VSE3zIY1L/Lzr7CL3FGMXOjnV+Bk1Pg4Hmm8AH6
+	 gI2yt5r0LevO0Sq1ppiQz8TgrD/HYS/E2VnbSVBc=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jan Stancek <jstancek@redhat.com>,
+	Neal Gompa <neal@gompa.dev>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nkapron@google.com,
+	teknoraver@meta.com,
+	roberto.sassu@huawei.com,
+	xiyou.wangcong@gmail.com
+Subject: [RFC PATCH security-next 0/4] Introducing Hornet LSM
+Date: Fri, 21 Mar 2025 09:45:02 -0700
+Message-ID: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9z_f-kR0lBx8P_9@infradead.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 20, 2025 at 10:56:15PM -0700, Christoph Hellwig wrote:
-> On Thu, Mar 20, 2025 at 11:23:57AM -0700, Joe Damato wrote:
-> > In my other message to Jens I proposed:
-> >   - SPLICE_F_ZC for splice to generate zc completion notifications
-> >     to the error queue
-> >   - Modifying sendfile so that if SO_ZEROCOPY (which already exists)
-> >     is set on a network socket, zc completion notifications are
-> >     generated.
-> > 
-> > In both cases no new system call is needed and both splice and
-> > sendfile become safer to use. 
-> > 
-> > At some point in the future a mechanism built on top of iouring
-> > introduced as new system calls (sendmsg2, sendfile2, splice2, etc)
-> > can be built.
-> 
-> I strongly disagree with this.  This is spreading the broken
-> SO_ZEROCOPY to futher places outside the pure networking realm.  Don't
-> do that.
+This patch series introduces the Hornet LSM.
 
-OK. I won't proceed down that path. Thank you for the feedback.
- 
-> > > Because sendmsg should never have done that it certainly should not
-> > > spread beyond purely socket specific syscalls.
-> > 
-> > I don't know the entire historical context, but I presume sendmsg
-> > did that because there was no other mechanism at the time.
-> 
-> At least aio had been around for about 15 years at the point, but
-> networking folks tend to be pretty insular and reinvent things.
+Hornet takes a simple approach to light-skeleton-based eBPF signature
+verification. Signature data can be easily generated for the binary
+data that is generated via bpftool gen -L. This signature can be
+appended to a skeleton executable via scripts/sign-ebpf. Hornet checks
+the signature against a binary buffer containing the lskel
+instructions that the loader maps use. Maps are frozen to prevent
+TOCTOU bugs where a sufficiently privileged user could rewrite map
+data between the calls to BPF_PROG_LOAD and
+BPF_PROG_RUN. Additionally, both sparse-array-based and
+fd_array_cnt-based map fd arrays are supported for signature
+verification.
 
-Sorry, but whatever issue there is between networking and other
-folks is well beyond my understanding and historical context. I'm
-not a reviewer or maintainer or anything like that; I'm just a
-developer who saw a problem and wanted a solution.
 
-I've read your message loud and clear, though, and I won't proceed
-down the path I've proposed.
+Blaise Boscaccy (4):
+  security: Hornet LSM
+  hornet: Introduce sign-ebpf
+  hornet: Add an example lskel data extactor script
+  selftests/hornet: Add a selftest for the hornet LSM
 
-I appreciate your feedback; this is precisely why I sent the RFC -
-to get comments - so thank you for taking a look and letting me
-know.
+ Documentation/admin-guide/LSM/Hornet.rst     |  51 +++
+ crypto/asymmetric_keys/pkcs7_verify.c        |  10 +
+ include/linux/kernel_read_file.h             |   1 +
+ include/linux/verification.h                 |   1 +
+ include/uapi/linux/lsm.h                     |   1 +
+ scripts/Makefile                             |   1 +
+ scripts/hornet/Makefile                      |   5 +
+ scripts/hornet/extract-skel.sh               |  29 ++
+ scripts/hornet/sign-ebpf.c                   | 420 +++++++++++++++++++
+ security/Kconfig                             |   3 +-
+ security/Makefile                            |   1 +
+ security/hornet/Kconfig                      |  11 +
+ security/hornet/Makefile                     |   4 +
+ security/hornet/hornet_lsm.c                 | 239 +++++++++++
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/hornet/Makefile      |  51 +++
+ tools/testing/selftests/hornet/loader.c      |  21 +
+ tools/testing/selftests/hornet/trivial.bpf.c |  33 ++
+ 18 files changed, 882 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+ create mode 100644 scripts/hornet/Makefile
+ create mode 100755 scripts/hornet/extract-skel.sh
+ create mode 100644 scripts/hornet/sign-ebpf.c
+ create mode 100644 security/hornet/Kconfig
+ create mode 100644 security/hornet/Makefile
+ create mode 100644 security/hornet/hornet_lsm.c
+ create mode 100644 tools/testing/selftests/hornet/Makefile
+ create mode 100644 tools/testing/selftests/hornet/loader.c
+ create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
 
-> > As mentioned above and in other messages, it seems like it is
-> > possible to improve the networking parts of splice (and therefore
-> > sendfile) to make them safer to use without introducing a new system
-> > call.
-> > 
-> > Are you saying that you are against doing that, even if the code is
-> > network specific (but lives in fs/)?
-> 
-> Yes.
-> 
-> Please take the work and integrate it with the kiocb-based system
-> we use for all other in-kernel I/O that needs completion notifications
-> and which makes it trivial to integate with io_uring instead of
-> spreading an imcompatible and inferior event system.
+-- 
+2.48.1
 
-If you have any suggestions or pointers to code I should look at for
-inspiration I would very much appreciate the guidance.
-
-Thanks for your time and energy in reviewing my RFC and responding.
-
-- Joe
 
