@@ -1,227 +1,114 @@
-Return-Path: <linux-kselftest+bounces-29559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A9A4A6BB0D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 13:48:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08761A6BB23
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 13:51:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EEA2162A18
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 12:48:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E364E3AFE72
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 12:51:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15DC22A4DA;
-	Fri, 21 Mar 2025 12:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3649229B28;
+	Fri, 21 Mar 2025 12:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgSIn16C"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SfQ4S5k0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F575225387;
-	Fri, 21 Mar 2025 12:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9325A226D04;
+	Fri, 21 Mar 2025 12:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742561291; cv=none; b=nuKxhVgqb6FUiTZVNv+P/sVmwPHRNTdXL63JJDHh4TWiWP/YT5Tea3To3OVDCaZjr2kF4A1LGLO1gpQoarMS4O9r/sR7I5D3ngqW8UIQxBABoPEkZ3+J4Gb/cUtQG3XPveOeQ3ZK54kM4jEeEahptoiovMfcw7mMSmywUTqAQEc=
+	t=1742561469; cv=none; b=crmXpWI7DbFkIMK5iGUAisds312iYRi5VElz9/fQvVnvhtM+yQ4QwInSPaNxVqMJBbhCxGCa5ip6ygzECAnLLeCFnDC7Z8/CY+Ivs+RaGBAY0uNU4nr/QHhXP883dZr0oPD49LLgtDuFvb5Qu4qmAB8RSPloksV+nFhy9XrrhXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742561291; c=relaxed/simple;
-	bh=tPclanPxc2LJNZ+LffzKz/MsVwoWY65M+jCqO4MmhRM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JbUsgzwTsqfy4whqVCi937E3G+FUaANqSJ2Tm9cjoN9sE7a71H8qxsCFrphkS9rwKnxiPfClM/UwFFvkK9CNJ6+urw/I/jbjOyVwdxC5gDckhaiVSnqrItOqPuHc6CBYbiICq71awYiljVPIiAoi4ZimVcaMmCuORm8XCyOsA64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgSIn16C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FC72C4CEF1;
-	Fri, 21 Mar 2025 12:48:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742561291;
-	bh=tPclanPxc2LJNZ+LffzKz/MsVwoWY65M+jCqO4MmhRM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=dgSIn16C83G2CD1JFSlDVbxLgm4ekt4AFNJC+XqxoV64Hgo+xIpgWWvguEtK0kpEH
-	 FcaIwbXrNUrQR1D/vSeMk9bVg+rxuFuCNN4kxTVY96mhjy3G1X3Pdm80AJfz/yQGVt
-	 CvEyyc5Hb+8zTKnsqKG1rPyruahgvhFucLpEO4+vtQhKGEBIIda8ZYyNY/nmrNnTVE
-	 sd43kgNchtIvJ+Z7Ewt+P87j8VIKZXCy8wxnpNyu+rvmCU4oL9Y5IWQYv8UEES7MfS
-	 pTRcuvPmCW5oS2+0guIx1G2kWJhJw13dgYfOyJkNnl1HwBtz1J4z23d0UA7HXmGHno
-	 GF5VKZeaIfgxw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 320A5C3600A;
-	Fri, 21 Mar 2025 12:48:11 +0000 (UTC)
-From: Joel Granados <joel.granados@kernel.org>
-Date: Fri, 21 Mar 2025 13:47:27 +0100
-Subject: [PATCH 4/4] sysctl: Close test ctl_headers with a for loop
+	s=arc-20240116; t=1742561469; c=relaxed/simple;
+	bh=frb61xLTauRJ1oYAsBn7KGB1v01AGxe7+8/rQqlvlJo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rkS+0dxAv9bggULVrH/I+VvxYHauZFYwA2WXfbHpcOwAC0/TD1cJ99n0d8gyjEBxOtT/lQ5n6Xor3Dh9Dk1CkLgqmmokAjXDFAekQ+Kty04fJp3yk/mFsZRMGCBRdEFXCbY/ArxK9dUg9NK7HxnsMCAIskk7a2WFz3qApr0to1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=SfQ4S5k0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DDAC4CEE3;
+	Fri, 21 Mar 2025 12:51:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SfQ4S5k0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1742561466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1dUf+NuD25WdVcY/g4ihIatL9n9p+d1MPap8zY1l6+Y=;
+	b=SfQ4S5k0pTvKrxFXVspBerla/SbUp0Opfi1U//bwYh9m4JHnvyn19VfONZNdUhstjg+pCk
+	zg1c+e0ozExXfzaWwUGKFmjtnLhvIiLoFhAPuffwWmgYwiRkQbcVkRsehvpqwa9xn16W7I
+	ZSnCZbZpUksmk6EnYC1HPvZ+Gfcqo5Y=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4f1bf067 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 21 Mar 2025 12:51:05 +0000 (UTC)
+Date: Fri, 21 Mar 2025 13:51:02 +0100
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: Phil Sutter <phil@nwl.cc>, netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>,
+	Petr Mladek <pmladek@suse.com>,
+	Yoann Congal <yoann.congal@smile.fr>, wireguard@lists.zx2c4.com,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 RESEND net-next 2/2] selftests: wireguard: update to
+ using nft for qemu test
+Message-ID: <Z91gtk_5nA76iYGw@zx2c4.com>
+References: <20250106081043.2073169-1-liuhangbin@gmail.com>
+ <20250106081043.2073169-3-liuhangbin@gmail.com>
+ <Z9rtrVk-15Ts_BNp@zx2c4.com>
+ <Z91CGRP9QLdZONiZ@fedora>
+ <Z91QshzKRlmPdpv7@orbyte.nwl.cc>
+ <Z91fXURX3BQFDaq9@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250321-jag-test_extra_val-v1-4-a01b3b17dc66@kernel.org>
-References: <20250321-jag-test_extra_val-v1-0-a01b3b17dc66@kernel.org>
-In-Reply-To: <20250321-jag-test_extra_val-v1-0-a01b3b17dc66@kernel.org>
-To: Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
- Shuah Khan <shuah@kernel.org>, John Sperbeck <jsperbeck@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Joel Granados <joel.granados@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4809;
- i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=tPclanPxc2LJNZ+LffzKz/MsVwoWY65M+jCqO4MmhRM=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGfdYAmcBP428RNEZK9+DxFx/XWo1HWrXCkYx
- 1mIYMzHtpVKg4kBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJn3WAJAAoJELqXzVK3
- lkFPldcL/3Q+mTYV2tiKx/akRMoNAII46ZkMXn0pX8wC33X6kFjgRHi2H99XUdtueb4itHmdcQR
- g0zo+z8PyAqv+1XfJOsCEy4ilUP106towob7bUHVLBVhiPGiw0XCTmEjne92Wfgk8lh2O25n7dX
- bgIJEKP1pb+aNPkCPJwcx9/Px8W98BcD+Az0yqO52SnPjInsjDJ8xfgS6GpotB4PIRCnLyiB8jW
- qBBsIjnTs9mPToF8e0qevpvgXGboSlWYmb/ELe7dQz4xlPdra+OI8CH+3aC9UrYyy2mzkOWItnp
- rV+Bek/HYMFWGXZpgG/ZR74kPDv4avI0Q1xlJl7y8AWeXbaor6BwN0NUBFgxZeqMlb3YLqCF7XX
- +m4peyWpyZp/NqtKfh9/G0IWxdhdQPh/G6FP8wdTD42t6WSad5o0dC8zoFrp/k1dFAsSlFU8A/H
- 2qjI62P+1Ef35Esy4U3d5qk0pgr+l/C0E5Sni69ArHnLxPcyEJX53aXB7pQ1HqWupHfZbpSlM38
- kE=
-X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
- auth_id=239
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Z91fXURX3BQFDaq9@fedora>
 
-As more tests are added, the exit function gets longer than it should
-be. Condense the un-register calls into a for loop to make it easier to
-add/remove tests.
+On Fri, Mar 21, 2025 at 12:45:17PM +0000, Hangbin Liu wrote:
+> On Fri, Mar 21, 2025 at 12:42:42PM +0100, Phil Sutter wrote:
+> > Hi Hangbin,
+> > 
+> > On Fri, Mar 21, 2025 at 10:40:25AM +0000, Hangbin Liu wrote:
+> > > Hi Jason, Phil,
+> > > On Wed, Mar 19, 2025 at 05:15:41PM +0100, Jason A. Donenfeld wrote:
+> > > > On Mon, Jan 06, 2025 at 08:10:43AM +0000, Hangbin Liu wrote:
+> > > > > +	echo "file /bin/nft $(NFTABLES_PATH)/src/nft 755 0 0" >> $@
+> > > > > +	echo "file /lib/libmnl.so.0 $(TOOLCHAIN_PATH)/lib/libmnl.so.0 755 0 0" >> $@
+> > > > > +	echo "file /lib/libnftnl.so.11 $(TOOLCHAIN_PATH)/lib/libnftnl.so.11 755 0 0" >> $@
+> > > > 
+> > > > Can't these be statically linked into the nft binary?
+> > > 
+> > > If I omit these, I will got error like
+> > > 
+> > > mnl_attr_put: symbol not found
+> > > 
+> > > Even though I set `--enable-static` in nft build.
+> > > 
+> > > Do you know what's the reason?
+> > 
+> > I was able to have nft linked statically against built libmnl and
+> > libnftnl by passing '--disable-shared --enable-static' to configure
+> > calls of all three build systems. With --enable-shared in library
+> > configure calls, nftables build preferred to link against the DSOs and I
+> > did not find a way to change this.
+> 
+> The patch is using
+> "./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static \
+> --disable-shared --disable-debug --disable-man-doc --with-mini-gmp --without-cli"
+> to build nft.
+> 
+> I don't know why it's not linked static.
 
-Signed-off-by: Joel Granados <joel.granados@kernel.org>
----
- lib/test_sysctl.c | 65 +++++++++++++++++++++++++------------------------------
- 1 file changed, 29 insertions(+), 36 deletions(-)
-
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 4b3d56de6269b93220ecbeb3d3d4e42944b0ca78..c02aa9c868f2117606b24f114326bf1c396cd584 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -30,16 +30,17 @@ static int i_zero;
- static int i_one_hundred = 100;
- static int match_int_ok = 1;
- 
-+enum {
-+	TEST_H_SETUP_NODE,
-+	TEST_H_MNT,
-+	TEST_H_MNTERROR,
-+	TEST_H_EMPTY_ADD,
-+	TEST_H_EMPTY,
-+	TEST_H_U8,
-+	TEST_H_SIZE /* Always at the end */
-+};
- 
--static struct {
--	struct ctl_table_header *test_h_setup_node;
--	struct ctl_table_header *test_h_mnt;
--	struct ctl_table_header *test_h_mnterror;
--	struct ctl_table_header *empty_add;
--	struct ctl_table_header *empty;
--	struct ctl_table_header *test_u8;
--} sysctl_test_headers;
--
-+static struct ctl_table_header *ctl_headers[TEST_H_SIZE] = {};
- struct test_sysctl_data {
- 	int int_0001;
- 	int int_0002;
-@@ -168,8 +169,8 @@ static int test_sysctl_setup_node_tests(void)
- 	test_data.bitmap_0001 = kzalloc(SYSCTL_TEST_BITMAP_SIZE/8, GFP_KERNEL);
- 	if (!test_data.bitmap_0001)
- 		return -ENOMEM;
--	sysctl_test_headers.test_h_setup_node = register_sysctl("debug/test_sysctl", test_table);
--	if (!sysctl_test_headers.test_h_setup_node) {
-+	ctl_headers[TEST_H_SETUP_NODE] = register_sysctl("debug/test_sysctl", test_table);
-+	if (!ctl_headers[TEST_H_SETUP_NODE]) {
- 		kfree(test_data.bitmap_0001);
- 		return -ENOMEM;
- 	}
-@@ -203,12 +204,12 @@ static int test_sysctl_run_unregister_nested(void)
- 
- static int test_sysctl_run_register_mount_point(void)
- {
--	sysctl_test_headers.test_h_mnt
-+	ctl_headers[TEST_H_MNT]
- 		= register_sysctl_mount_point("debug/test_sysctl/mnt");
--	if (!sysctl_test_headers.test_h_mnt)
-+	if (!ctl_headers[TEST_H_MNT])
- 		return -ENOMEM;
- 
--	sysctl_test_headers.test_h_mnterror
-+	ctl_headers[TEST_H_MNTERROR]
- 		= register_sysctl("debug/test_sysctl/mnt/mnt_error",
- 				  test_table_unregister);
- 	/*
-@@ -226,15 +227,15 @@ static const struct ctl_table test_table_empty[] = { };
- static int test_sysctl_run_register_empty(void)
- {
- 	/* Tets that an empty dir can be created */
--	sysctl_test_headers.empty_add
-+	ctl_headers[TEST_H_EMPTY_ADD]
- 		= register_sysctl("debug/test_sysctl/empty_add", test_table_empty);
--	if (!sysctl_test_headers.empty_add)
-+	if (!ctl_headers[TEST_H_EMPTY_ADD])
- 		return -ENOMEM;
- 
- 	/* Test that register on top of an empty dir works */
--	sysctl_test_headers.empty
-+	ctl_headers[TEST_H_EMPTY]
- 		= register_sysctl("debug/test_sysctl/empty_add/empty", test_table_empty);
--	if (!sysctl_test_headers.empty)
-+	if (!ctl_headers[TEST_H_EMPTY])
- 		return -ENOMEM;
- 
- 	return 0;
-@@ -279,21 +280,21 @@ static const struct ctl_table table_u8_valid[] = {
- static int test_sysctl_register_u8_extra(void)
- {
- 	/* should fail because it's over */
--	sysctl_test_headers.test_u8
-+	ctl_headers[TEST_H_U8]
- 		= register_sysctl("debug/test_sysctl", table_u8_over);
--	if (sysctl_test_headers.test_u8)
-+	if (ctl_headers[TEST_H_U8])
- 		return -ENOMEM;
- 
- 	/* should fail because it's under */
--	sysctl_test_headers.test_u8
-+	ctl_headers[TEST_H_U8]
- 		= register_sysctl("debug/test_sysctl", table_u8_under);
--	if (sysctl_test_headers.test_u8)
-+	if (ctl_headers[TEST_H_U8])
- 		return -ENOMEM;
- 
- 	/* should not fail because it's valid */
--	sysctl_test_headers.test_u8
-+	ctl_headers[TEST_H_U8]
- 		= register_sysctl("debug/test_sysctl", table_u8_valid);
--	if (!sysctl_test_headers.test_u8)
-+	if (!ctl_headers[TEST_H_U8])
- 		return -ENOMEM;
- 
- 	return 0;
-@@ -321,18 +322,10 @@ module_init(test_sysctl_init);
- static void __exit test_sysctl_exit(void)
- {
- 	kfree(test_data.bitmap_0001);
--	if (sysctl_test_headers.test_h_setup_node)
--		unregister_sysctl_table(sysctl_test_headers.test_h_setup_node);
--	if (sysctl_test_headers.test_h_mnt)
--		unregister_sysctl_table(sysctl_test_headers.test_h_mnt);
--	if (sysctl_test_headers.test_h_mnterror)
--		unregister_sysctl_table(sysctl_test_headers.test_h_mnterror);
--	if (sysctl_test_headers.empty)
--		unregister_sysctl_table(sysctl_test_headers.empty);
--	if (sysctl_test_headers.empty_add)
--		unregister_sysctl_table(sysctl_test_headers.empty_add);
--	if (sysctl_test_headers.test_u8)
--		unregister_sysctl_table(sysctl_test_headers.test_u8);
-+	for (int i = 0; i < TEST_H_SIZE; i++) {
-+		if (ctl_headers[i])
-+			unregister_sysctl_table(ctl_headers[i]);
-+	}
- }
- 
- module_exit(test_sysctl_exit);
-
--- 
-2.47.2
-
-
+All three DSOs...
 
