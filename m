@@ -1,142 +1,164 @@
-Return-Path: <linux-kselftest+bounces-29551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60523A6B9A7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 12:15:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78423A6B9FE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 12:38:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAC953B483E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 11:14:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8CA01688B1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 11:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6A02222C3;
-	Fri, 21 Mar 2025 11:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9029F224AFE;
+	Fri, 21 Mar 2025 11:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Iw2c3QWk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zyix/Twz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC078221DB5
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 11:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E005E22371B
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 11:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742555704; cv=none; b=FNE7Rzi1vZalknUgZcf/NVzdBuUYsczOcXjoiYaJlgD8wVkqBsJNd8tq/gSU7/SjhINYCfPhwib9LG1yNSmQLgC9wPXtrbdwmpjWW8NfjA94T0fJnV/EGqE5I+7D/IMgWsLdLdQ/dR02S5M3A9Q69BaJwn9Sdfyep58C1fPoLTw=
+	t=1742557101; cv=none; b=aGVYgwlLae4cQx+s6nQgMo6QyzSoIy/EvCiFmmTlOFyy2O8N/axhoxmDNsiWpQB+afbCiwEzye32X9Aocs5RK8H9Kekz/8E2skiu64PEO6xi6f7Pygyzmc4fbSFdYF8E/44H7CAmeEHD98E8GpcMYPoXlxHwpM9PO5e0/xyi+dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742555704; c=relaxed/simple;
-	bh=8R6APMOXHnSGsHWxrl6UGLerFw6XUN3eqFRa7zAvg/g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CIi2K1CpKDdbDVnqi/YV6rPFSSXZP/q/cFbUEOn6cseE1DiAkaiF/O2VhJxOyZU5YC0LUWpNxcpT02hZhwLSTBRu8DVGrtYH+lgqbpJuR3OabGQr46tSAxClfJCLKfPw66AtP3YLCh81C4HHBx+STJHXqAFcubjZIJcRnEr3ZK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Iw2c3QWk; arc=none smtp.client-ip=209.85.166.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-85db3475637so96400539f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 04:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742555702; x=1743160502; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kliUjv4+TXv1KW6sNWVHyeHcHrrjshrv681ijKNdLOI=;
-        b=Iw2c3QWka8kkhnOcLtELQiQELaeqZuUMgS7kb4ZffDPthFqQU3UQDlpY8iqcb3lUCO
-         GKiU26FrybIvWhJize1sjzcoBt/fFZ4EI5gmL1eYbygmKOOFOV3S05G6BqWzpEtclq3Q
-         wwqF55+fYuET9ydA9yszlebqAhBovv4pEK6oIuWjAVkuhBFiY8+vzz+0u+3duQajcyTH
-         vbXNd04PuBX2JNOWy0rOfPXwBbC9kqEnBufORUw/mt2FQa8SsEGFIN3268uERLv7P6wB
-         Xa2DU71NwH/dwcyCjpPH7E35IEo13ZQNAAzp9urqcv+H8JoTQ3YUonE/S4YI1eXC9Xcg
-         zbBg==
+	s=arc-20240116; t=1742557101; c=relaxed/simple;
+	bh=7RyCmasSsEfxACG5VwHAY4+UkBtXil0L7+AhGUqIQPM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i6dbtyUAaN/zm+1Mq5/DY30/YEWxAOQh9Ng13Bd1+82f4FM6EJXSdePeBycNjCJ8fv3BcWcdvaLU2Ie74fWwFdX9r2mPloJ3uF5mH20P/N8HbAPnmoGH+4kngjzrOyPzM62xOCVG4l0FsOkoa+/6Jo3LxM8LzjMDIPGQ7zTreNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Zyix/Twz; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742557099;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wt+BFS9gqKRMofPgohFZmNx1aIY6jgeF2NC1PQqZP6c=;
+	b=Zyix/Twzc0fbVG8+qqtXaEMV3LGBtQjH5OysR9SMhwgApPUxLSltEZ/hmAzJshxsGpuxAM
+	s5K1+xj0cznppAjGpqEixwhI+kXcTFYHS3XldxCOb5mkBERtWJAzMRaWGvFvvZSI8JbUEs
+	KubTdA09S3udAxJjKY6GdxTABfsyRS0=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-677-sNyaWRl5PAuu4seZP9C0MA-1; Fri, 21 Mar 2025 07:38:17 -0400
+X-MC-Unique: sNyaWRl5PAuu4seZP9C0MA-1
+X-Mimecast-MFC-AGG-ID: sNyaWRl5PAuu4seZP9C0MA_1742557097
+Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-e5798866415so2863937276.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 04:38:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742555702; x=1743160502;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kliUjv4+TXv1KW6sNWVHyeHcHrrjshrv681ijKNdLOI=;
-        b=wXfy/VHMy1g2m4DLCgmUS2AOQ009FvNXNMk6/WTu0maaxNmmhGbaM/1PaZ0ggxUPJF
-         vlQOcrx05G7bSfWL4z6cwxJGI4ITEjfxXYi2Gd0BlqMC39w2CJkbqcLBJ+rlh5dRp1ms
-         bgLHyoAsfF3ecu0NeLVQ+YWFf2bPhxDU1qHHxYgOioc5CMTG8MM/+r5EHnwrPjJaHGm7
-         Hp47UY7p/uYkP4LWTwbIB9OpXzx3GGrWtlZKxPcjGWZzUhD9sHc6voCkVpMF250w4qcO
-         uh4Ti0ZHROh0Rhz7dSlEsyXhjLsMmxDyP1WgWPpmwcErBZEztzTx0P9fDD53w1efsb0+
-         z2GA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZEhV4wKoqllZJOzYJs1iptpvhLyChQaYaPUYCOrJD37dHELO/k0K00iUDtWp9kvKYj+l/KiwgHu6Q6x+JQPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywaklpo74TPhGE+royHanhcpXoI7ECUrWF3FlnaQx32LO7RUJ2s
-	ktnnSa93UeYAWsjzoseo3N2QuFWBahr3G3WAGcAam8vCPrmV5N3/+rT+aGD3Uww=
-X-Gm-Gg: ASbGncvydPQGzAjdOcyAVH5p5Ktg0MHtYhpvTC9uPEKFOjI0qVXB3j63a/2rnpoO1BH
-	CPYM5ZSYxiM0wIDobDKjOHePRnl0bRd/arPAxnCNbxRKIC4iC50Ra+dxoclJnmpQWLr6xXNLYjP
-	6FIu2S3/yQoDE8c9k3bU0CxfT359igsiIjHe8eo0fHFRxhkYX8iRrBQ/UlScMQBtUKpuHSi/6SV
-	9w/F9I3FI2/sUXMrSEneO+sV7DWlXJwdYuTRMcYx8pJL7G4iMj4RT/M6vZ5Pz2jWkdqXqeXPZpJ
-	ly6VTATaVSTx+Sb0Bue3KnShlGIzD8Zc5kJk+aqOdQ==
-X-Google-Smtp-Source: AGHT+IGFd8BrZDNuk5Q4tM4bK6u6ZIejPv4ztHl8dw4HSNWePmW9h5bgFFsMA3e+W8P/94Uoju3uaw==
-X-Received: by 2002:a05:6602:3991:b0:85b:5869:b5f with SMTP id ca18e2360f4ac-85e2beed32fmr322406139f.5.1742555701856;
-        Fri, 21 Mar 2025 04:15:01 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85e2bdb5495sm33739439f.46.2025.03.21.04.15.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Mar 2025 04:15:01 -0700 (PDT)
-Message-ID: <ca1fbeba-b749-4c34-b4be-c80056eccc3a@kernel.dk>
-Date: Fri, 21 Mar 2025 05:14:59 -0600
+        d=1e100.net; s=20230601; t=1742557097; x=1743161897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wt+BFS9gqKRMofPgohFZmNx1aIY6jgeF2NC1PQqZP6c=;
+        b=pQ666d7yRoiWv8IhBd11m1nyxJUToo83qdpANXH8esWwfWQGalmWAIdB+tO+BZcMWX
+         yHNC29LmRw0oTaQU8HRrjirobVMHgHnYqOuIjQNxQLA1zrhrizzcSvv8NN6f3SRQFISa
+         4mng01V+/WLTJLF7e4v8VSq/dKCD4Gl9k/99f7f/jplydjdtGrhmwsc/LfjfLZWgCufC
+         ImXlNsCTYUBVjnGgmAJAhHA2p69dAKz0O+1zP9b4VWzJcpwYXsPUxCRRdNaTVILm0IQa
+         ztk3igVXHiNKBLAeN5/NmFGlJb0GwGjOhmsCNwvYIcOPeeSZDR1wws+dZTWr0arxH6o4
+         F3Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWObSSMoHuWtLFYy0GK2SBhieNVkLU+S80xLp2EGZ+/KbRJEg1PNNzcUZ07EGacHPbRW9raEnrndhxyj4dHjTM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaLtEgyqhup9St3ofjHHwqpPH1GMNG79UwfuwsPLuKYPg8+hbi
+	wP7JePiV+g1AUUKoPHQuCETUfY1khE4JQF+qKex759mzOQIGYjUFYzgVTk5IMtayrqPeJyjaxbw
+	CssTNR+Ue+qkH9mMYhcxITxmlRwOrIZRDoShKE1+t8vBwUio9srEeoqsaFcpwLg6HwqjxAV/6hi
+	LQborEs7nTB2Sseo/q/WdHb/Bg3qqckf5JMQ+lJXhv
+X-Gm-Gg: ASbGncvS45nW1B471K82cPg03pdhOlTKoAWFtuzGkSk+vtET60kmDhSNza655gQWkq2
+	kGqL/uHUcyS9JxcNxtontpERYE2OvkNcG6oKe/eNALXYScWqDolhorRAqROBfDW8gQBS1WUEL9z
+	rfW9M2+nx0zqQ=
+X-Received: by 2002:a05:6902:2013:b0:e3c:9fb5:837a with SMTP id 3f1490d57ef6-e66a4fcae48mr3166474276.41.1742557097029;
+        Fri, 21 Mar 2025 04:38:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFG6ZiAbkH7cFfSc8gVNrbKtRo6NKlFgdvH5Ol4kuCTC3rTj0valzGa4Wsrdj/QIGQSqGGUHuir5bsGwTvBtKM=
+X-Received: by 2002:a05:6902:2013:b0:e3c:9fb5:837a with SMTP id
+ 3f1490d57ef6-e66a4fcae48mr3166428276.41.1742557096515; Fri, 21 Mar 2025
+ 04:38:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-To: Christoph Hellwig <hch@infradead.org>, Joe Damato <jdamato@fastly.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- asml.silence@gmail.com, linux-fsdevel@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
- linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
- kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com,
- arnd@arndb.de, brauner@kernel.org, akpm@linux-foundation.org,
- tglx@linutronix.de, jolsa@kernel.org, linux-kselftest@vger.kernel.org
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org> <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
- <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
- <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
- <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
- <Z9sCsooW7OSTgyAk@LQ3V64L9R2> <Z9uuSQ7SrigAsLmt@infradead.org>
- <Z9xdPVQeLBrB-Anu@LQ3V64L9R2> <Z9z_f-kR0lBx8P_9@infradead.org>
-From: Jens Axboe <axboe@kernel.dk>
-Content-Language: en-US
-In-Reply-To: <Z9z_f-kR0lBx8P_9@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250319230539.140869-1-npache@redhat.com> <618b8578-1897-45e4-83eb-b725102ab27d@sirena.org.uk>
+ <CAA1CXcD4dOUWOXp0ODSEo4+g9_QQkJe1tmX3bVdcs3N_PPdSHQ@mail.gmail.com> <a0fdd818-a4be-446e-b18e-0c655bc94c9a@sirena.org.uk>
+In-Reply-To: <a0fdd818-a4be-446e-b18e-0c655bc94c9a@sirena.org.uk>
+From: Nico Pache <npache@redhat.com>
+Date: Fri, 21 Mar 2025 05:37:50 -0600
+X-Gm-Features: AQ5f1JpD38GF9Tuch-Icv4bAHf1Dxvy4GK2x83iHqPk_98ExGn4SB-B1ZnKh-SU
+Message-ID: <CAA1CXcDPg7Na9biCMOx4i_xwXZ5Y_qq-7SiYEU82v2a6TFpMJA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling it
+To: Mark Brown <broonie@kernel.org>
+Cc: rf@opensource.cirrus.com, patches@opensource.cirrus.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, simont@opensource.cirrus.com, 
+	ckeepax@opensource.cirrus.com, brendan.higgins@linux.dev, davidgow@google.com, 
+	rmoar@google.com, johannes.berg@intel.com, sj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/20/25 11:56 PM, Christoph Hellwig wrote:
->> I don't know the entire historical context, but I presume sendmsg
->> did that because there was no other mechanism at the time.
-> 
-> At least aio had been around for about 15 years at the point, but
-> networking folks tend to be pretty insular and reinvent things.
+On Thu, Mar 20, 2025 at 4:49=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Thu, Mar 20, 2025 at 04:21:16PM -0600, Nico Pache wrote:
+> > On Thu, Mar 20, 2025 at 1:14=E2=80=AFPM Mark Brown <broonie@kernel.org>=
+ wrote:
+> > > On Wed, Mar 19, 2025 at 05:05:39PM -0600, Nico Pache wrote:
+>
+> > > >  config FW_CS_DSP_KUNIT_TEST
+> > > >       tristate "KUnit tests for Cirrus Logic cs_dsp" if !KUNIT_ALL_=
+TESTS
+> > > > -     depends on KUNIT && REGMAP
+> > > > +     depends on KUNIT && REGMAP && FW_CS_DSP
+> > > >       default KUNIT_ALL_TESTS
+> > > > -     select FW_CS_DSP
+>
+> > > This makes no sense to me, the select statement is forcing on the cod=
+e
+> > > it's testing which is a library and so is selected by it's users, thi=
+s
+>
+> > Similarly to eb5c79828cfa ("firmware: cs_dsp: FW_CS_DSP_KUNIT_TEST
+> > should not select REGMAP"), We shouldnt force a feature on when using
+> > KUNIT_ALL_TESTS.
+>
+> This feature is not user selectable, at an absolute minimum you would
+> need to make the library available in KUnit test builds.
+>
+> > > change will just stop the tests being run unless someone does the dan=
+ce
+> > > to enable a driver which relies on the library.  That is something th=
+at
+>
+> > My config also sets the UML wrapper to enable this FW_CS_DSP config so
+> > it will continue to work in that environment.
+>
+> Simply adding it to the all_tests.config will just result in it getting
+> turned off by Kconfig during the build since it's not a visible option
+> so that's not accomplishing anything.  all_tests.config is not UML
+> specific, it's for enabling all the KUnit tests that could run in UML no
+> matter how you're running them.
+>
+> > > seems unlikely to change the outcome of the tests when run from KUnit
+> > > which is independent of any hardware.
+>
+> > KUNIT is supported outside the UML environment, and some distros (like
+> > fedora, and downstream flavors), use KUNIT as modules, with
+> > KUNIT_ALL_TESTS=3Dm. We only want the tests that are supported by our
+> > config to be available, we dont want KUNIT going and enabling other
+> > features so the test works.
+>
+> The point is not that KUnit is frequently run in UML (personally I
+> mostly run it with emulated hardware instead) but rather that this is a
+> library which can be tested independently of having a relevant DSP.
 
-Yep...
+Ok, thank you for the carifying message!
 
->> It seems like Jens suggested that plumbing this through for splice
->> was a possibility, but sounds like you disagree.
-> 
-> Yes, very strongly.
+So would the correct approach be allowing users to select FW_CS_DSP,
+then apply these changes?
 
-And that is very much not what I suggested, fwiw.
+It also looks like FW_CS_DSP_KUNIT_TEST_UTILS and FW_CS_DSP_KUNIT_TEST
+are redundant.
 
->> As mentioned above and in other messages, it seems like it is
->> possible to improve the networking parts of splice (and therefore
->> sendfile) to make them safer to use without introducing a new system
->> call.
->>
->> Are you saying that you are against doing that, even if the code is
->> network specific (but lives in fs/)?
-> 
-> Yes.
-> 
-> Please take the work and integrate it with the kiocb-based system
-> we use for all other in-kernel I/O that needs completion notifications
-> and which makes it trivial to integate with io_uring instead of
-> spreading an imcompatible and inferior event system.
-
-Exactly, this is how we do async IO elsewhere, not sure why networking
-needs to be special here, and definitely not special in a good way.
-
--- 
-Jens Axboe
 
