@@ -1,246 +1,126 @@
-Return-Path: <linux-kselftest+bounces-29574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29575-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3072AA6C07C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:48:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 030C0A6C0B0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 17:56:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4880518870AD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 16:47:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65702173985
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 16:54:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EBC18A6CF;
-	Fri, 21 Mar 2025 16:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A8822D7BA;
+	Fri, 21 Mar 2025 16:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="f7FyeNFg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JOBvVxl6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC7522D4F1;
-	Fri, 21 Mar 2025 16:46:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0410522D7A3;
+	Fri, 21 Mar 2025 16:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575597; cv=none; b=D/w1VOVVET8NSIfUsJ052taIY2xov3U52caVgBNNwNlr+ZrBx1/L4MqUNX0/FreuDZFguOBEpKvSjor3yQjucUUgmDGBPiHwmsvp/wOa2nUt3dCcikHNpz53bS1HP95pl6Q619LMknSd1APIWKMxDsc4Ds3ggXMioYTzLe6hcZE=
+	t=1742576056; cv=none; b=Tav6eigutfMppbmedTwKpVi9S0jNOHUrECWBNWvPYAj8AyCrH9/crDo4kLuSI2XSo/CX5s4DxpK1eo32WPZ4JI4KDMCenAB5ghN/Y1P1113gd8Djdm+riHqBvO/gv+MzRdzprOunmANCEq8y4N2CxER25/vmPdcwAesyVRXOZWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575597; c=relaxed/simple;
-	bh=xPu6bWbiDSkAMwrWg2n9WeSm35U8Pgyygg+KOPt0bbU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cxuv8xlwZGxbFcjVtCQfh+PAZsFVVPZ5oYca8nPGrRqseM/jKaH5w1rlE+gOtG+VSNtyK1IW/42yfeGC4ip6w4M68j/xTWOKHjGKqa1HAYYTQwMnUVe3FeMaynvx3L5b/vIPKw9J7Ne2u4d43W77TJzersoxHgCBpBU/Itk7eL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=f7FyeNFg; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from narnia.corp.microsoft.com (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 82BC72025389;
-	Fri, 21 Mar 2025 09:46:26 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 82BC72025389
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1742575594;
-	bh=jCQG/f9mso2uZ0UQYO3u+rgplW0McG0EQhJ+HbLrs+k=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=f7FyeNFg+XQdXM8uWdkpzsBDBJHkhAWjDy9MIEDbBem62if8Qj94fO1tOF/hXDYNx
-	 fW2+7L/T22bWmKF1eKkUWiBQcj0/hYQB6CVsq0Rnu1oCrW6xpQSc9PNo5YJ59BGYmQ
-	 bmRYnpS1aXA3AunaJAsUYoGkXPnJajvRNlThDLqY=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Jonathan Corbet <corbet@lwn.net>,
-	David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jan Stancek <jstancek@redhat.com>,
-	Neal Gompa <neal@gompa.dev>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	nkapron@google.com,
-	teknoraver@meta.com,
-	roberto.sassu@huawei.com,
-	xiyou.wangcong@gmail.com
-Subject: [RFC PATCH security-next 4/4] selftests/hornet: Add a selftest for the hornet LSM
-Date: Fri, 21 Mar 2025 09:45:06 -0700
-Message-ID: <20250321164537.16719-5-bboscaccy@linux.microsoft.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
-References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+	s=arc-20240116; t=1742576056; c=relaxed/simple;
+	bh=UOuUAOdU6fzwILEwoTUwQrZ3IxBywdm7PqAVnZyzNrk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jrgj8FyaS1jnSyBPGdoXMGFqk4Jvos1TJP7YvvxSp1e0tWIG2qFwWlufhunVed36qUE9b9ahJ+CU0V1QLRXQaTc79fo5aSvltx/cnJldLJGBoNjzOfs1lUO/2JxDbvQb2V2BWoFIB7g6iKWJKM736uHE3WA2UVzPnWBqW7KPk6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JOBvVxl6; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30613802a04so23839261fa.2;
+        Fri, 21 Mar 2025 09:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742576053; x=1743180853; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UOuUAOdU6fzwILEwoTUwQrZ3IxBywdm7PqAVnZyzNrk=;
+        b=JOBvVxl6Vde0N4Bm2kv6VGe/Xk+jPiCbd1TAvk0jtQy+FufC706GIjMSgYf9FRPMsp
+         JjW2Ce7FWtr36shqr+Do1faBLRJX1CCUO37qXQ4YXFqfNmoor1Tc60OWuZitXODCQP/r
+         t/azjwCZrznsBgCGBIFt5YVhhGuJnES0hz80mPvkvhr0i8Z8iYxPI5bwHu95czw2Sb9C
+         DhZoC3n6/1XeG/R7yGV1i12HteQ45v1tQcuAVp1AvN2oXRvNFVHn+Ldp/jrzUC2WupsB
+         vmo7OHHfcjjtwQomaGUf6NzA6nggiINNjJATlU7y1/GkkEDag/k86Wodt0S98Dx4433d
+         hRgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742576053; x=1743180853;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UOuUAOdU6fzwILEwoTUwQrZ3IxBywdm7PqAVnZyzNrk=;
+        b=MQ7HYHz+WQvtUe2g12RRHmujzot4iRF6t3e8mo3Diuey3z1YSHwiQYz7+l4sqgz2Qb
+         5W5slYwykM0QmgHTW7KK4kSvKvebDmx06CwBSa31q2GolkhhUr/GgeuXZXF+VRPP0VN0
+         gUPERUOK/em/yUuRGoNDP1tXUDbhHyhGiuL8/0Amb7hiT8vvosxleiF+mR5sWddlDiFT
+         ctJQ8jq/D+zM3SvpphdbvmkIgdOOiFG2SPSO2vTShcIJAHDEVwJA6W2r/1Tx+bKbyqlX
+         GQslty6P5fKrVJD3WVqwcF0qYhWFV37xV98FgM2C7YWrf1XMrXHyvsZxP0FZgKH6qDEq
+         yy1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUCtszRXmBpmUem8C3aBGC23JnWh/DC2RGUWCafACiGuIPYtjjM7avhlnsD++xNGemfe9WjXr/Jb1eVjDk=@vger.kernel.org, AJvYcCUEqyaHypGHOIAJgkhjKnpEyKzQbGhB9IvzHd6oszyZpB6RxDF5YS+eTUhsLWBrK57gGLHvA7lYmBzEBm6d/40t@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+1NKyFQzVJ2FHvKuYX4LyLl2eMZj4bILvKwFhFF6OYEJBIlFe
+	Jc3qJ6HMuDbpFBPozMg04Eh97bsz/lbqhGcaIH0HyCJWyuR68B9Hvjrm2HWWkAsnUJBGRIvBFma
+	gZn2Kp1r4i+1xtyC09FVx/AYkBEs=
+X-Gm-Gg: ASbGncurLdftT1XxI2ZCsQNMbm0vQcC8NVOmmgkpo6YxddUe5tz9akY/CyXdfPxYAXy
+	h7vtfIi9vy1E7ywPxjvRl56FQTn5kbTifrGyL/Z9Ra3mEFKDl3gRPqFq2KQhF+WOCTbOv9okUP5
+	ulq1caLe9Cz6QBD5bF6qn1fkmUalKGVx332Wa0RmqMGw==
+X-Google-Smtp-Source: AGHT+IG4olNJH+a7c6RlZFJF8zMksT58/wvmA/7TP25sQDIbCAdnPDYZgYQ8vKGk1x10x0tRVyTKoEGU45fo+N4bqok=
+X-Received: by 2002:a2e:8e73:0:b0:30b:b7c3:949a with SMTP id
+ 38308e7fff4ca-30d7e2383b9mr16939331fa.18.1742576052901; Fri, 21 Mar 2025
+ 09:54:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250207-bitmap-kunit-convert-v1-0-c520675343b6@gmail.com>
+ <Z6eaDuXnT_rjVSNS@thinkpad> <CAMuHMdUsq_39kgBa8oanXeTzv44HuhS1e5MK7K2jxkVXQ7uWdw@mail.gmail.com>
+ <bd71c705-5f57-4067-b200-fd80b98ddbc9@nvidia.com> <Z6pfomw-3LuWoQQo@thinkpad> <CABVgOS=KZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQADrW+sJg@mail.gmail.com>
+In-Reply-To: <CABVgOS=KZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQADrW+sJg@mail.gmail.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 21 Mar 2025 12:53:36 -0400
+X-Gm-Features: AQ5f1JocXlnKOaYntHf6DffQI-TKvt-QvytM7DCEc6s7gdq0Tj17rR69Ljw6v-g
+Message-ID: <CAJ-ks9mevv68v1Mh0GdGd9Y2EEp3_kdV6FygOiAenYG0=e4=Tw@mail.gmail.com>
+Subject: Re: distro support for CONFIG_KUNIT: [PATCH 0/3] bitmap: convert
+ self-test to KUnit
+To: David Gow <davidgow@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>, John Hubbard <jhubbard@nvidia.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-kselftest@vger.kernel.org, Brad Figg <bfigg@nvidia.com>, 
+	David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 
-This selftest tests contains a simple testcase that utilizes an lskel
-loader. One version of the lskel is signed with the autogenerated
-module signing key, another is not. A test driver attempts to load the
-lskels. With hornet enabled, the signed version should successfully be
-loaded, and the unsigned version should fail.
+Hi all, now that the printf and scanf series have been taken via kees'
+tree[0] and sent in for v6.15-rc1[1], I wonder if we'd like to revisit
+this discussion.
 
-Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
----
- tools/testing/selftests/Makefile             |  1 +
- tools/testing/selftests/hornet/Makefile      | 51 ++++++++++++++++++++
- tools/testing/selftests/hornet/loader.c      | 21 ++++++++
- tools/testing/selftests/hornet/trivial.bpf.c | 33 +++++++++++++
- 4 files changed, 106 insertions(+)
- create mode 100644 tools/testing/selftests/hornet/Makefile
- create mode 100644 tools/testing/selftests/hornet/loader.c
- create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+As I understand it, the primary objections to moving bitmap to KUnit were:
+- Unclear benefits.
+- Source churn.
+- Extra dependencies for benchmarks.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8daac70c2f9d2..fce32ee4de328 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -41,6 +41,7 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
-+TARGETS += hornet
- TARGETS += intel_pstate
- TARGETS += iommu
- TARGETS += ipc
-diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/selftests/hornet/Makefile
-new file mode 100644
-index 0000000000000..93da70f41d40c
---- /dev/null
-+++ b/tools/testing/selftests/hornet/Makefile
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../../../build/Build.include
-+include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
-+
-+CLANG ?= clang
-+CFLAGS := -g -O2 -Wall
-+BPFTOOL ?= bpftool
-+SCRIPTSDIR := $(abspath ../../../../scripts/hornet)
-+TOOLSDIR := $(abspath ../../..)
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+APIDIR := $(TOOLSINCDIR)/uapi
-+CERTDIR := $(abspath ../../../../certs)
-+
-+TEST_GEN_PROGS_EXTENDED := loader
-+TEST_GEN_PROGS := signed_loader
-+TEST_PROGS := fail_loader
-+TEST_GEN_FILES := vmlinux.h loader.h trivial.bin trivial.bpf.o
-+$(TEST_GEN_PROGS): LDLIBS += -lbpf
-+$(TEST_GEN_PROGS): $(TEST_GEN_FILES)
-+
-+include ../lib.mk
-+
-+BPF_CFLAGS := -target bpf \
-+              -D__TARGET_ARCH_$(ARCH) \
-+              -I/usr/include/$(shell uname -m)-linux-gnu \
-+               $(KHDR_INCLUDES)
-+vmlinux.h:
-+	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
-+
-+trivial.bpf.o: trivial.bpf.c vmlinux.h
-+	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
-+
-+loader.h: trivial.bpf.o
-+	$(BPFTOOL) gen skeleton -L $< name trivial > $@
-+
-+trivial.bin: loader.h
-+	$(SCRIPTSDIR)/extract-skel.sh $< $@
-+
-+loader: loader.c loader.h
-+	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
-+
-+fail_loader: fail_loader.c loader.h
-+	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
-+
-+signed_loader: trivial.bin loader fail_loader
-+	$(SCRIPTSDIR)/sign-ebpf sha256 $(CERTDIR)/signing_key.pem  $(CERTDIR)/signing_key.x509 \
-+		trivial.bin loader signed_loader
-+	chmod u+x $@
-diff --git a/tools/testing/selftests/hornet/loader.c b/tools/testing/selftests/hornet/loader.c
-new file mode 100644
-index 0000000000000..9a43bb012d1b2
---- /dev/null
-+++ b/tools/testing/selftests/hornet/loader.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stddef.h>
-+#include <sys/resource.h>
-+#include <bpf/libbpf.h>
-+#include <errno.h>
-+#include  "loader.h"
-+
-+int main(int argc, char **argv)
-+{
-+	struct trivial *skel;
-+
-+	skel = trivial__open_and_load();
-+	if (!skel)
-+		return -1;
-+
-+	trivial__destroy(skel);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing/selftests/hornet/trivial.bpf.c
-new file mode 100644
-index 0000000000000..d38c5b53ff932
---- /dev/null
-+++ b/tools/testing/selftests/hornet/trivial.bpf.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+int monitored_pid = 0;
-+
-+SEC("tracepoint/syscalls/sys_enter_unlinkat")
-+int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
-+{
-+	char filename[128] = { 0 };
-+	struct task_struct *task;
-+	unsigned long start_time = 0;
-+	int pid = bpf_get_current_pid_tgid() >> 32;
-+	char *pathname_ptr = (char *) BPF_CORE_READ(ctx, args[1]);
-+
-+	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
-+	task = (struct task_struct *)bpf_get_current_task();
-+	start_time = BPF_CORE_READ(task, start_time);
-+
-+	bpf_printk("BPF triggered unlinkat by PID: %d, start_time %ld. pathname = %s",
-+		   pid, start_time, filename);
-+
-+	if (monitored_pid == pid)
-+		bpf_printk("target pid found");
-+
-+	return 0;
-+}
--- 
-2.48.1
+Hopefully David's enumeration of the benefits of KUnit was compelling.
+Regarding source churn: it is inevitable, but I did pay attention to
+this and minimized the diff where possible.
 
+The last point is trickiest, because KUnit doesn't have first-class
+benchmark support, but nor is there a blessed benchmark facility in
+the kernel generally. I'd prefer not to tie this series to distros
+enabling KUNIT_CONFIG by default, which will take $time.
+
+I think the most sensible thing we can do - if we accept that KUnit
+has benefits to offer - is to split test_bitmap.c into
+benchmark_bitmap.c and bitmap_kunit.c.
+
+Please let me know your thoughts.
+Tamir
+
+[0] https://web.git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=move-lib-kunit-v6.15-rc1
+[1] https://lore.kernel.org/all/202503170842.FFEE75351@keescook/
 
