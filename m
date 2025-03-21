@@ -1,128 +1,118 @@
-Return-Path: <linux-kselftest+bounces-29563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 725B0A6BD68
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 15:45:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6932A6BD9A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 15:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C00333B32A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 14:41:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E8C9160567
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 14:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E9E21C9F0;
-	Fri, 21 Mar 2025 14:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B1011D54D1;
+	Fri, 21 Mar 2025 14:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b="j53Ogs/H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NrkoEdc5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from orbyte.nwl.cc (orbyte.nwl.cc [151.80.46.58])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70DB1D514B;
-	Fri, 21 Mar 2025 14:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=151.80.46.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605E3154426;
+	Fri, 21 Mar 2025 14:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742568032; cv=none; b=MheTAQocF/zCgmGWIBsLWePFq8JdfeaoXJv7wi4Ht337lnG6+TbBVLYatwPwPokvU4Rne4Pe+2QLFPpR1YeeYzZR3YZxn2eWTSHFL1cSGVELSuW7hqu+TKn+v8WijAShtcGBzTC9dQfeIPa/o7ZQwVp1zy+tf7IARF0TB3Ts8bE=
+	t=1742568703; cv=none; b=cCO18ga1Hw5DKIT/P9F6B9R4m4yMUCpeBCZdzOrlpylQUusTzjSCt76rfdE5uralL17ZljMwlR5yfQ4XRzukg+HV/5JMLmWbWiypwErF0da/e9kKEQ5SoeaylJum6sldYrNd0MdU2iNAscjy6+4/h8PEyFuWWtOCLap6EeGw0rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742568032; c=relaxed/simple;
-	bh=E2+FqgznUEnyWr4r8jGmtnjZVC3ujDGJrrzUcsUPLY8=;
+	s=arc-20240116; t=1742568703; c=relaxed/simple;
+	bh=PhuVuMchyJ3HJTMtCg1H6MJB1Gn7Kg0keWLQLs0iu9k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZdUCq0xBAn1JXam7xjkUm9ckWypN27/sO+QTAkzelvxn1neVBMKvwF85u5+l2m7cHAlgkcWNk6sboJA8KQd4/UrFmHoVYwvaoEARRWe/oCZoGdXhXQ8QQI1BCxR0qFfQuDJaN3Yaw7wh9vbNtC+E2AnZ8uQuPtDFnY/O0tEMrwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc; spf=pass smtp.mailfrom=nwl.cc; dkim=pass (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b=j53Ogs/H; arc=none smtp.client-ip=151.80.46.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nwl.cc
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nwl.cc;
-	s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=273ZrHicthe524y60l8YzXOeWySzybOyGBG8piPpQfM=; b=j53Ogs/HYM8gv6m80/LKlzzCWv
-	MiPX9TVIujy06m/jUc4kRBI7ZCTIUceHk9yMjF3Hp+no9GfrpbnFo0CEq2KEsqZNdFXSn5y+JFIvq
-	/I/+Gx5cwLKNuryJ22XFwuTmOF+SuHJdvtgA3m9AmakvAxjlP3DC0/J5k0OMHEzJqQkkzAHWSIoU9
-	1HUGg0gcgoQqWfz2L3zF5JMyb/iPV/o+4jLaGqr4j01cvf4GG0aoWIbRnwkkeW+VJVxMGM2R7a64N
-	POFqrbfsNw5DZ0H38sqRzPt6AIFm3/+h1Xm8BB9yKOZIVJZe+56Ka9z3fud+2Kj2zXXS9cjfrMozZ
-	kyd+MZZQ==;
-Received: from n0-1 by orbyte.nwl.cc with local (Exim 4.97.1)
-	(envelope-from <phil@nwl.cc>)
-	id 1tvdXo-000000003pz-1Qsu;
-	Fri, 21 Mar 2025 15:40:20 +0100
-Date: Fri, 21 Mar 2025 15:40:20 +0100
-From: Phil Sutter <phil@nwl.cc>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>,
-	Petr Mladek <pmladek@suse.com>,
-	Yoann Congal <yoann.congal@smile.fr>, wireguard@lists.zx2c4.com,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 RESEND net-next 2/2] selftests: wireguard: update to
- using nft for qemu test
-Message-ID: <Z916VMSCEtinZl54@orbyte.nwl.cc>
-Mail-Followup-To: Phil Sutter <phil@nwl.cc>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>,
-	Petr Mladek <pmladek@suse.com>,
-	Yoann Congal <yoann.congal@smile.fr>, wireguard@lists.zx2c4.com,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-References: <20250106081043.2073169-1-liuhangbin@gmail.com>
- <20250106081043.2073169-3-liuhangbin@gmail.com>
- <Z9rtrVk-15Ts_BNp@zx2c4.com>
- <Z91CGRP9QLdZONiZ@fedora>
- <Z91QshzKRlmPdpv7@orbyte.nwl.cc>
- <Z91fXURX3BQFDaq9@fedora>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q2T9o/AnHtyu+UvNvirJU0HFAjSLxfxEoKu75CsQgjaHqc//ie5HHsnT9DNXj0u/TBBa+hZBnTkdnVSy343BFKP2NcXkr08oD2dp8bMhPcrRgwXdpoelvL2pPWm2zFJh5Ca76Bwq39R8hC7wRhx0lYPv8Q5yJs1pBh5O3BWvQjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NrkoEdc5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45722C4CEE3;
+	Fri, 21 Mar 2025 14:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742568702;
+	bh=PhuVuMchyJ3HJTMtCg1H6MJB1Gn7Kg0keWLQLs0iu9k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NrkoEdc5u2lqcHeV05xrtf40mrquBkRW9n/fzn4LZGdFNHSQ8gmOE0cie+9+qOZFb
+	 px/pwhq+h+SQuXUmMJkVUCfO9IXqdLBiSFMCyLg2brK2YdcJF3xKsh3cuFV9IzbMw6
+	 8NNvCtAdpWvucPoPz/2RenkeGryO/Arw460MehktKmJkdDngHzGVo0InxYOfMvGg3A
+	 +ouSKWParfQld/grByeo1gPBIIuO9DUs9ztvOJGhP6jo4R/zNW5Iklk4De5J5JQ6kf
+	 cdZD2b15GbiVlW7px4k7YJ8fsNcQZ+jrFqmB1YX3ydldNZU3SncODZCXCp8WYzU/IT
+	 Gscc5KYbfqdbQ==
+Date: Fri, 21 Mar 2025 14:51:39 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Nico Pache <npache@redhat.com>
+Cc: rf@opensource.cirrus.com, patches@opensource.cirrus.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, simont@opensource.cirrus.com,
+	ckeepax@opensource.cirrus.com, brendan.higgins@linux.dev,
+	davidgow@google.com, rmoar@google.com, johannes.berg@intel.com,
+	sj@kernel.org
+Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling
+ it
+Message-ID: <Z918-4psPV3j9c-d@finisterre.sirena.org.uk>
+References: <20250319230539.140869-1-npache@redhat.com>
+ <618b8578-1897-45e4-83eb-b725102ab27d@sirena.org.uk>
+ <CAA1CXcD4dOUWOXp0ODSEo4+g9_QQkJe1tmX3bVdcs3N_PPdSHQ@mail.gmail.com>
+ <a0fdd818-a4be-446e-b18e-0c655bc94c9a@sirena.org.uk>
+ <CAA1CXcDPg7Na9biCMOx4i_xwXZ5Y_qq-7SiYEU82v2a6TFpMJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="44Vt4as3XnXLhDhy"
 Content-Disposition: inline
-In-Reply-To: <Z91fXURX3BQFDaq9@fedora>
+In-Reply-To: <CAA1CXcDPg7Na9biCMOx4i_xwXZ5Y_qq-7SiYEU82v2a6TFpMJA@mail.gmail.com>
+X-Cookie: Well begun is half done.
 
-On Fri, Mar 21, 2025 at 12:45:17PM +0000, Hangbin Liu wrote:
-> On Fri, Mar 21, 2025 at 12:42:42PM +0100, Phil Sutter wrote:
-> > Hi Hangbin,
-> > 
-> > On Fri, Mar 21, 2025 at 10:40:25AM +0000, Hangbin Liu wrote:
-> > > Hi Jason, Phil,
-> > > On Wed, Mar 19, 2025 at 05:15:41PM +0100, Jason A. Donenfeld wrote:
-> > > > On Mon, Jan 06, 2025 at 08:10:43AM +0000, Hangbin Liu wrote:
-> > > > > +	echo "file /bin/nft $(NFTABLES_PATH)/src/nft 755 0 0" >> $@
-> > > > > +	echo "file /lib/libmnl.so.0 $(TOOLCHAIN_PATH)/lib/libmnl.so.0 755 0 0" >> $@
-> > > > > +	echo "file /lib/libnftnl.so.11 $(TOOLCHAIN_PATH)/lib/libnftnl.so.11 755 0 0" >> $@
-> > > > 
-> > > > Can't these be statically linked into the nft binary?
-> > > 
-> > > If I omit these, I will got error like
-> > > 
-> > > mnl_attr_put: symbol not found
-> > > 
-> > > Even though I set `--enable-static` in nft build.
-> > > 
-> > > Do you know what's the reason?
-> > 
-> > I was able to have nft linked statically against built libmnl and
-> > libnftnl by passing '--disable-shared --enable-static' to configure
-> > calls of all three build systems. With --enable-shared in library
-> > configure calls, nftables build preferred to link against the DSOs and I
-> > did not find a way to change this.
-> 
-> The patch is using
-> "./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static \
-> --disable-shared --disable-debug --disable-man-doc --with-mini-gmp --without-cli"
-> to build nft.
 
-Do you pass that to the configure calls for libnftnl and libmnl, too? I
-didn't find a way to force static linking in nftables build system, so I
-disabled building of shared libmnl/libnftnl libraries.
+--44Vt4as3XnXLhDhy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cheers, Phil
+On Fri, Mar 21, 2025 at 05:37:50AM -0600, Nico Pache wrote:
+> On Thu, Mar 20, 2025 at 4:49=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+
+> > Simply adding it to the all_tests.config will just result in it getting
+> > turned off by Kconfig during the build since it's not a visible option
+> > so that's not accomplishing anything.  all_tests.config is not UML
+> > specific, it's for enabling all the KUnit tests that could run in UML no
+> > matter how you're running them.
+
+> So would the correct approach be allowing users to select FW_CS_DSP,
+> then apply these changes?
+
+That user select should only be visible if KUnit is enabled though,
+it really is library code so shouldn't actually be user selectable.  I'm
+not sure if there's some other strategy other KUnit tests for libraries
+use.
+
+> It also looks like FW_CS_DSP_KUNIT_TEST_UTILS and FW_CS_DSP_KUNIT_TEST
+> are redundant.
+
+Possibly there's more tests to come that'll use them?
+
+--44Vt4as3XnXLhDhy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfdfPoACgkQJNaLcl1U
+h9D9wwgAggSj6DC9vV8bIsmlbXcAIQQ+ae2h9tlW7pLq+3MPqtKUcsHOpNZp0cfR
+EyOVUIOnhovRvqBu/q4PEfqdlNBArIlOZT9rI8YsJspAviayPPSw+XCRtPucpU4/
+11mzcrDAg4LxhIUg2Gj/Pj0iuUDfEHgH4kuNUM0gX/SJzvQfEYxYrwSWylh1907X
+gNq3d1S/4H0FQ8Im81I5bPlhkgLRFcYNNtSTFFHnKE+rmvLT8wn1+ryUlNFwYtSX
+scihIsl9KMz8lWEhuLXM84YD9FUc9vYjZy4Wa7qZYEo0XOqlZslZiBU7G8CQ8S38
+gCJYp7V0if04dtb5Vh6EmGH0G06A1Q==
+=EvbZ
+-----END PGP SIGNATURE-----
+
+--44Vt4as3XnXLhDhy--
 
