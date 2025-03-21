@@ -1,172 +1,189 @@
-Return-Path: <linux-kselftest+bounces-29591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A69F7A6C4D7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 22:08:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15146A6C527
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 22:28:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 090DC169FF8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 21:08:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9339189E260
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 21:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1930922E414;
-	Fri, 21 Mar 2025 21:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27142327AE;
+	Fri, 21 Mar 2025 21:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZVRI8Gc"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="rFDwWK0a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7459522CBF8
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 21:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F60A231A3F
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 21:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742591305; cv=none; b=CKOtcBydDEWSraGhFRIXCCG0LiH0Y9eT8feJ2gZfPCpBpGUwSlUx0dLKYH5/omO/0nD+4lDZ/MQTsYvniHJnCt546j1sjObrIsGu3mQfAHsSslOsTF32eanzWjs28XCgjH6Y6QRI+vR09JpypkLWrrrIVh7J2zRkD9NSZMr1CGY=
+	t=1742592502; cv=none; b=BjhkQW73tCJYPEzBAHVUglzxg4xQ+Ejq8C7z/ELvWb4PoyT0PWfD4r7GFQmGVZSOWQyhiB9ODfqa93WZ06xUGI0wOMvPj9vbf3rq0BmYwRJqj8mHBTIoPNC9M0MIJEggiNT/MTd3bD5hGGfglTjqvIWhmcyyaMXbMXifS6yaZkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742591305; c=relaxed/simple;
-	bh=OByW12Ve0fpZVXNs6aQ0h4RP1YKFcy4WV8juU5zXTxs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cYXLm3tdITR0zR88CSaVDQnAuAZaLRr4gYSFa2QiCE+r8BS/fs4ITIdOtbGiiXcGtHChm12YZOINUyYLmb7WOAyIFsU0gqwbwalo1NTg9cMHDpe38HrOp6gfXmjehWRD8TQ2Pr7HO+G+28ru7IoB9z3kVgF9IhhGYR5+QkCREAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZVRI8Gc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742591302;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RgltGrzJqg2st6HJvgrt1xVAH1sJSHek/6ESfVQKA7M=;
-	b=DZVRI8Gcrlu0FkK401bcP4iAZifTorvtmchbFW4FuTokz7d9kDuuQHdeHS/TyCrwW0LMfM
-	QaMYjFbTRCo3cxKShrD6mdiaHX98PmK+3Zhk6mQx1sSA02UXbXw0f5YQNRaFpH9dFoMLRX
-	vQLV0wEdHH93SUbxNVBRa8BOs255KK0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-581-16Eu0lDGPlOL96QKha3Z_w-1; Fri, 21 Mar 2025 17:08:19 -0400
-X-MC-Unique: 16Eu0lDGPlOL96QKha3Z_w-1
-X-Mimecast-MFC-AGG-ID: 16Eu0lDGPlOL96QKha3Z_w_1742591297
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3912fc9861cso1064158f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 14:08:18 -0700 (PDT)
+	s=arc-20240116; t=1742592502; c=relaxed/simple;
+	bh=qXj971FSFP/wOZUPcfSsBiuTp/DvOZnX2IFBROliFJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pvWKgg5yi5UVvdIqYyYV/0hK4Vpq8HYyAwurVO7RdIDkTfxbN7LxSVfoAuxTv6qTNrNSeveCrtEfnZI24iAl5MNucsaWRuDOh+hrzteq8hkfT2rGjP8PUfrnCu0VDBos3ea+KFuZ5cweJkk5N+N5/UxRuropE3iLMoOWe3A/x10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=rFDwWK0a; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2255003f4c6so50295545ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 14:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1742592499; x=1743197299; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qXTCW1lYI/NO5ybgxR6jIW3fidKxOfziUSy+malvYvc=;
+        b=rFDwWK0avfNl2NXF/Sm0Tagbux0abRnzSNOxgj+WraKAiZfbGSb4JJVF5QP7dqmZat
+         /g/aOJHETXEcyx+Vh4kNiV5hNc9m4Fxxh42XDwIKQPrFvrLCyHwXRQblSjNucTbQRnw6
+         f08J7WmZ1APGQii0GT/oLDh/wAlOlP+Jz2E7s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742591297; x=1743196097;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1742592499; x=1743197299;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgltGrzJqg2st6HJvgrt1xVAH1sJSHek/6ESfVQKA7M=;
-        b=o7jv+wA/qxBeAJigqD9V5iOWvJivRe2wQMqPHkaoiqzKHDBYC8sr/+zxY1wa6Q0J5c
-         pB7tSiMiP7KrLqzfARh2RqBOXzCPIsvsPTicbRemuDloWTsIFgZgZEWBh1b2Kwq/D6y3
-         e3ASu1G91VXXKbMnrSG5GaYlahr9As+X9PjnAZ6YI2vYdllxpFTHoWQxE2e2Duhf2NfD
-         8Wci8+tL4bJUl9Tn9Ad9N3AkNjZctqtCvJfK8sfrvak3Ntbl0tNvIKnAdSshqSevmzvu
-         kbxkxA9honaTOl+VtAVAnBsNiOtow0CfARz5hO04up2FIsr6pT2MLuTuZAnvVZiPWNxh
-         kdEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWKI7ih2AVtX+t6erXic/pcI5viVCH7yCg8kz3o+9ognF6muyo8Nu0v6FSFHFoYgwY5Frn0jEpcFQvTHcDl2F0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww2jvaBxFfrZC9weq4rKAJ1Sqh1B9cv1CExsuuyO/D8PregocT
-	/pVeSFKzxWbQowX4dx4hR2IZ8y2lanBzlq8lP0Cxp/w2Gy95aeeBQUpBIzTnXPmH5BGLsIayiqQ
-	70wD4GUIVQBcoDUAZVBNFVC6Z5+o5I/amfPvrdKbfXtQrfD6ufjGHTkiaEgOerZQWhQ==
-X-Gm-Gg: ASbGnctFimQp1zFynF7mVjRxajUiwuiWBuyIsKnUfTxJ1b+RrtfQoqSmkpizFvAWbGx
-	IazSxjn4ZigLTLVvoeGoFm4E+6ugvsDdX28eQIlTH9E4Bl28xekzDf11AJhtsqGm2cwSaEekT4v
-	EVbx24L7lx/ADvSmSU+bT2r5yqm/HjKCu5+9ytwR7PNkeQJKovkWnMP4DFT6/vM/k5ajxsI/wTr
-	QpSYYQAVfyLbEDdSOU8RwvYz5gQ2tbw+pFNcZzijBH3hLlGWCCtMbe8QobCSS3qsOCeP2zp1ICZ
-	ZefgZc1jsb3jLHUuaSEQW3oM6JupIIrCA0MpmFR8EMSWAg==
-X-Received: by 2002:a5d:59ad:0:b0:391:3cb7:d441 with SMTP id ffacd0b85a97d-3997f90d30fmr4908506f8f.25.1742591297049;
-        Fri, 21 Mar 2025 14:08:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IERkSaLPvjOg3of5q9RHcYoHxuYgujb3iqhlb7BNZGhZ8idpUjjKHfSk0mQf0ZrvJlxGHEdlA==
-X-Received: by 2002:a5d:59ad:0:b0:391:3cb7:d441 with SMTP id ffacd0b85a97d-3997f90d30fmr4908486f8f.25.1742591296572;
-        Fri, 21 Mar 2025 14:08:16 -0700 (PDT)
-Received: from [192.168.88.253] (146-241-77-210.dyn.eolo.it. [146.241.77.210])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9a31a7sm3335236f8f.23.2025.03.21.14.08.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Mar 2025 14:08:16 -0700 (PDT)
-Message-ID: <26f2f366-aa14-4879-978a-58d46f9d83a4@redhat.com>
-Date: Fri, 21 Mar 2025 22:08:13 +0100
+        bh=qXTCW1lYI/NO5ybgxR6jIW3fidKxOfziUSy+malvYvc=;
+        b=kT77gFz8P6p14YpODBA3/vYff9bcrkDgYAZEiEi+oF7BABm0W4/dHi/ipDYVCHdd3Z
+         mrTPo/DZfWBPL9/CFL6Vc8lraOArFedxyms+0pSqCWpiEg2aA+orvsY38iDRubPEohxF
+         nUImEyYvpEy5W/pAp48BOJ8D1PVkgFlD90BN0gVkjdDh9Pks5kq1eorf2X0xS0FV/FB4
+         UQrlBqiQGMtr13SP1ve8gPZ7dn/ifq8LCqNsBFHOZ4/g7I9hnhwA9APVXpmAbnLHalS8
+         diz1Oj7l9H3LcKM5jwFQVVnHdLei49ttEy6cgvxOjP0pANIHv6ur00477Zy16A4YQNJp
+         WzDw==
+X-Forwarded-Encrypted: i=1; AJvYcCWdmhbm68ZBsghjS5NvvTqKmK4c3Qc45PMtl2nIOH3Je4fsp1NMqNHs/GjkMZx9Saimqr5/ebYMaMQPGVaiMcc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJZqhG55GUx3/Vollj+HXC7EZ156MlqIh+D22Qld2mtnUEd9nU
+	doe1igtadKk59kyTIlyo7MNEUDhKq4uWPVFQ3QwYPnsZQO8rUoRwrpaS4GiLOEE=
+X-Gm-Gg: ASbGncuptNgCVqKYZgn46SwiRu0b9JHQKR1SyFStZhDPECJkvSwC7PQbM3aSi72khsY
+	mz1V+UDNE72bW5cgkcIKE+A/67GW593CPC5juy0jFKkRugLFy3j1j7jWoOxYc+kwIa5pbB78JKM
+	DvB+rYDZNtjpx8WlqcHOnPd5oL3Zj6F31mw43rF42BRzWKTZfgsoOLlsSafRa5cNMkOLB1/jMJw
+	y7ilO0JaWifcUEOaSviK0DnIM5F4ZImfAtdnxbXaxYTRoDtuQZgqEMjSYByynx8OXLsrK97qfUr
+	ImwhJYJeTGftAEaMYZ34fpvzw0/N5lmwQNp/YPwnj99JSYZ1WZR+ZQzyEVOB3bBBfYBEzg5xufw
+	WTuMACMPcXmDir1u5m2C2G2rScfk=
+X-Google-Smtp-Source: AGHT+IFQHiH1Q74zGSjuGJPSwRB6B0nITzjFmSBxRdVQxaFhw5xJuOEQUfZo/n55kU3kKM/0M7AFag==
+X-Received: by 2002:a17:903:2cb:b0:221:78a1:27fb with SMTP id d9443c01a7336-22780c50872mr79615365ad.11.1742592499418;
+        Fri, 21 Mar 2025 14:28:19 -0700 (PDT)
+Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2278120a552sm22391275ad.256.2025.03.21.14.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Mar 2025 14:28:18 -0700 (PDT)
+Date: Fri, 21 Mar 2025 14:28:15 -0700
+From: Joe Damato <jdamato@fastly.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
+	linux-fsdevel@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
+	kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me,
+	mingo@redhat.com, arnd@arndb.de, brauner@kernel.org,
+	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
+Message-ID: <Z93Z73vG9NYUNQtE@LQ3V64L9R2>
+Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
+	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@infradead.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
+	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	viro@zeniv.linux.org.uk, jack@suse.cz, kuba@kernel.org,
+	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
+	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
+	jolsa@kernel.org, linux-kselftest@vger.kernel.org
+References: <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
+ <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
+ <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
+ <Z9uuSQ7SrigAsLmt@infradead.org>
+ <Z9xdPVQeLBrB-Anu@LQ3V64L9R2>
+ <Z9z_f-kR0lBx8P_9@infradead.org>
+ <ca1fbeba-b749-4c34-b4be-c80056eccc3a@kernel.dk>
+ <Z92VkgwS1SAaad2Q@LQ3V64L9R2>
+ <Z93Mc27xaz5sAo5m@LQ3V64L9R2>
+ <67a82595-0e2a-4218-92d4-a704ccb57125@kernel.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 net-next 3/3] sched: Add dualpi2 qdisc
-To: chia-yu.chang@nokia-bell-labs.com, netdev@vger.kernel.org,
- dave.taht@gmail.com, jhs@mojatatu.com, kuba@kernel.org,
- stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, horms@kernel.org,
- andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net,
- liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Cc: Olga Albisser <olga@albisser.org>,
- Olivier Tilmans <olivier.tilmans@nokia.com>,
- Henrik Steen <henrist@henrist.net>, Bob Briscoe <research@bobbriscoe.net>
-References: <20250316152717.20848-1-chia-yu.chang@nokia-bell-labs.com>
- <20250316152717.20848-4-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20250316152717.20848-4-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67a82595-0e2a-4218-92d4-a704ccb57125@kernel.dk>
 
-On 3/16/25 4:27 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 0dbfe069a6e3..987686e91919 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -30,6 +30,7 @@
->  #include <asm/byteorder.h>
->  #include <asm/local.h>
->  
-> +#include <linux/netdev_features.h>
->  #include <linux/percpu.h>
->  #include <linux/rculist.h>
->  #include <linux/workqueue.h>
+On Fri, Mar 21, 2025 at 02:33:16PM -0600, Jens Axboe wrote:
+> On 3/21/25 2:30 PM, Joe Damato wrote:
+> > On Fri, Mar 21, 2025 at 09:36:34AM -0700, Joe Damato wrote:
+> >> On Fri, Mar 21, 2025 at 05:14:59AM -0600, Jens Axboe wrote:
+> >>> On 3/20/25 11:56 PM, Christoph Hellwig wrote:
+> >>>>> I don't know the entire historical context, but I presume sendmsg
+> >>>>> did that because there was no other mechanism at the time.
+> >>>>
+> >>>> At least aio had been around for about 15 years at the point, but
+> >>>> networking folks tend to be pretty insular and reinvent things.
+> >>>
+> >>> Yep...
+> >>>
+> >>>>> It seems like Jens suggested that plumbing this through for splice
+> >>>>> was a possibility, but sounds like you disagree.
+> >>>>
+> >>>> Yes, very strongly.
+> >>>
+> >>> And that is very much not what I suggested, fwiw.
+> >>
+> >> Your earlier message said:
+> >>
+> >>   If the answer is "because splice", then it would seem saner to
+> >>   plumb up those bits only. Would be much simpler too...
+> >>
+> >> wherein I interpreted "plumb those bits" to mean plumbing the error
+> >> queue notifications on TX completions.
+> >>
+> >> My sincere apologies that I misunderstood your prior message and/or
+> >> misconstrued what you said -- it was not clear to me what you meant.
+> > 
+> > I think what added to my confusion here was this bit, Jens:
+> > 
+> >   > > As far as the bit about plumbing only the splice bits, sorry if I'm
+> >   > > being dense here, do you mean plumbing the error queue through to
+> >   > > splice only and dropping sendfile2?
+> >   > >
+> >   > > That is an option. Then the apps currently using sendfile could use
+> >   > > splice instead and get completion notifications on the error queue.
+> >   > > That would probably work and be less work than rewriting to use
+> >   > > iouring, but probably a bit more work than using a new syscall.
+> >   > 
+> >   > Yep
+> > 
+> > I thought I was explicitly asking if adding SPLICE_F_ZC and plumbing
+> > through the error queue notifications was OK and your response here
+> > ("Yep") suggested to me that it would be a suitable path to
+> > consider.
+> > 
+> > I take it from your other responses, though, that I was mistaken.
+> 
+> I guess I missed your error queue thing here, I was definitely pretty
+> clear in other ones that I consider that part a hack and something that
+> only exists because networking never looked into doing a proper async
+> API for anything.
 
-I guess this chunck is a left-over... in any case it should be dropped.
+OK, so then I have no idea what you meant in your earlier response
+with "Yep" :)
 
-[...]
-> +struct dualpi2_sched_data {
-> +	struct Qdisc *l_queue;	/* The L4S Low latency queue (L-queue) */
-> +	struct Qdisc *sch;	/* The Classic queue (C-queue) */
-> +
-> +	/* Registered tc filters */
-> +	struct {
-> +		struct tcf_proto __rcu *filters;
-> +		struct tcf_block *block;
-> +	} tcf;
+Combing everything said amongst a set of emails it sounds like the
+summary is something like:
 
-This usage of anonimous struct is quite unconventional, the preferred
-way of scoping fields is to add apprepriate prefix to the field name.
+    A safe, synchronous sendfile can be implemented in userland
+    using iouring, so there is no need to do anything in the kernel
+    at all. At most, some documentation or examples are needed
+    somewhere so people who want a safe version of sendfile know
+    what to do instead.
 
-[...]
-> +static bool must_drop(struct Qdisc *sch, struct dualpi2_sched_data *q,
-> +		      struct sk_buff *skb)
-> +{
-> +	u64 local_l_prob;
-> +	u32 prob;
-> +	bool overload;
+Is that right?
 
-Please respect the reverse christmas tree order in variable declaration
-(many other occurrences below).
-
-[...]
-> +static void drop_and_retry(struct dualpi2_sched_data *q, struct sk_buff *skb,
-> +			   struct Qdisc *sch)
-> +{
-> +	++q->deferred_drops.cnt;
-> +	q->deferred_drops.len += qdisc_pkt_len(skb);
-> +	consume_skb(skb);
-
-Possibly you want to use kfree_skb_reason() here.
-
-I think this patch is still too huge to get a reasonable review. You
-should try to split it further, e.g.  struct definition and parsing in
-pX, dump in pX+1, enqueue related ops in p+2, ...
-
-Thanks,
-
-Paolo
-
+If so, then great, I guess there is nothing for me to do except
+figure out what documentation or man pages to update.
 
