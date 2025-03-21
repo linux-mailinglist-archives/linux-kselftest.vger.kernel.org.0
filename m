@@ -1,142 +1,111 @@
-Return-Path: <linux-kselftest+bounces-29583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA109A6C2EC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 20:01:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3793FA6C2F0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 20:05:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E3F73B1CDC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 19:01:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A37CD46180E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Mar 2025 19:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 638BF22CBE8;
-	Fri, 21 Mar 2025 19:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147E11EB1A1;
+	Fri, 21 Mar 2025 19:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b="eLv4wdMf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WEiQ4Sf6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BD41EB1A1
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 19:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F9D154426;
+	Fri, 21 Mar 2025 19:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742583680; cv=none; b=HnrGZcBQexRGdcDVoRLd2LH/RdtCrMhwGii+zshP4V0wuVfElauH/81gMofQ05s7nKOw4WJa99Wkp/mkCgxCiupygVyUFZMEj4qTWBN04SsieefTKKGlmOuc6M6IwH++EjdnO+XQbBO6b45CxoowtdW83qxY5/YJj+RM+5voa5w=
+	t=1742583905; cv=none; b=EWkt5zPQff2dufCs1m2LUrtHCVvyjAwVONQIV4E8vCAbMg/bpJbHa/3evu4uTZ0EKm5RSpH8P+XKTrtIyEvsAhQFY+FRTPaBsAJdZQfO2WPL4d508BLytBIpri7v5PuBvbwISzYRdruQIQ+JhBc1FhYUAxE0/vhQJbHd1bevVQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742583680; c=relaxed/simple;
-	bh=Bd3W8zmoA56286TIT/M27tLloKuTGWvB4Py7sj3zCIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KsAktpb3j8QKyBGKc+HrDY9SWh2ijph4jPoQQV0GICPl+C+EtzJ6qEo0uQaD9h0cflum+0XogfK98xb4DHt9mQXSVsb3TbggkIhR3Uml5fLXvgg4JrOBHB+HPZknfMsVm4ikR/xyjlWGcR2FxNwoahoz1bvm0jVIsBR9XuKvT9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=byte-forge.io; dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b=eLv4wdMf; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=byte-forge.io
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6feb229b716so22292177b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Mar 2025 12:01:18 -0700 (PDT)
+	s=arc-20240116; t=1742583905; c=relaxed/simple;
+	bh=jKbpIna3dbFZRR/fucLtB7Q4uGgsuLmcIOJYUwilYQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QzJ7twrdLOmt5kOQ4TUKfwOHPxxLLQ0iuXWUanTAM65PzdoiDWocNQfG6IuDGYrszm6GZMoT+PveAjuTFmgQrYSMxsC1YlJQ9lC56kVsAgQQX5X13MacY3v0kpJxeWGg6tQt5gd8DifhQaXVm9zbHJBvW+YABKYrcL0xZ+95kng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WEiQ4Sf6; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22792ef6215so1653085ad.2;
+        Fri, 21 Mar 2025 12:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=byte-forge-io.20230601.gappssmtp.com; s=20230601; t=1742583677; x=1743188477; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1742583903; x=1743188703; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nR4lHmAwKxP9HyGmUTHKde+Eo7V+LJcGUFHENv86AZM=;
-        b=eLv4wdMfCHT/qkHUpHNYlTw9jw8y4tRKA50OqcnETlj1Xw8TQg3iHhWwCPGUObTfCW
-         r5Q6cglKfIQ72iTFTlc2BVA+AvqPUg8k6lriJTrNxpAtslDQCZyqDSeJP+RrX7xdtSOH
-         Ro1oQGndRZX/yrNrJADmrglm2vvjyifldVsYCICkoJ/fRnqg+dKSCIOMoV1U/vPS52rE
-         ODrZKcHsTd/Abj05vJn0ZUe7/gzwMRti3hWdSv92WFYeeto84MhcytkbZd43dFEmUGwT
-         8ZzcD+bgu2Oa9g4aVYOdt42b/2W5rj/lzHglevYdrsrhCKQU1HUQXrEwIpzObVmrtzQw
-         izhg==
+        bh=jKbpIna3dbFZRR/fucLtB7Q4uGgsuLmcIOJYUwilYQw=;
+        b=WEiQ4Sf6QgmSD5YK+kRSNcJ04w2Eb9ZK3YhVJIypMw73i9zu3Rk8cgZcc1B47Wvfxq
+         CZxObsAvmBl29wUtgDW3QNC31uxuD1HhqAoGD96Vnxmkd0uhfuKSyx+qT/gvlg+iaxUp
+         MJyPeDd7OsQGLKtb7GhrlXZ7PAMsPVb5SdJCr2765/2BYq1v4ddT4+PS81F32a8qgFEn
+         di6zOcwPQ614Gi3UJPUZiOKotLMYl2M1z3QV5RBrpa8zgNYFzVbrI8vVcY+hkFEu5O5V
+         QE7grmpHoCRu72he+QPQW/nnvgNgfzMWjWq/mc2XfmcwFMcReIXScjxaPV10KfJhU82P
+         39SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742583677; x=1743188477;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1742583903; x=1743188703;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nR4lHmAwKxP9HyGmUTHKde+Eo7V+LJcGUFHENv86AZM=;
-        b=s6+8eSrcVzaFeeL1rLcsC1XLbQObf59Uu4+7OAF3vm+tCTX9iLfySEN93hkWt+Fh26
-         nO1BeTZua3JFkPO3Zkbpu/UFwUXJeWK47dl55i36TzE7v+OGJVqqaG03/3CJfTkMle4F
-         cRW97wJURrA6gf0DzfBcuU4BFm5whWwDmOP7zoTJnIjHr/xkNxUnFQXGJd3a1cb/VFS5
-         wejsNsOz+4yaVjRNqvu0FiWABwozvI1jUOogrcLCYzCZf5COH+SnT6SE/CuVlg957eUT
-         9JAlMvRYl0Y5HDexNFYhHeYcWTI1I4lFE7eK7BWxBmnesHiLK97BtLMr1xoCNeOg/8yn
-         fQdA==
-X-Forwarded-Encrypted: i=1; AJvYcCVwc4fJgWg8fQdFOQziA2cjD5Uuz7L8drD1tsZbVzZlsqt83jnM6ivJylOoL9y40AAE3zw6vFS/7gF00/eCMTs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyR45zn7DkLqFWKHnvfW4Aa3nSsNwIFT7gJqdKwd0OuU+X0ygf
-	8nObZkCb1O9+eACbFmwZ++kr77Kh7nk4dmkJH99QJFqGfP3gwAVwZG1hGfniVmZUxb8uOSR4GDd
-	9U+o=
-X-Gm-Gg: ASbGnct9pN9TDSjTW3wpm7mm7f8W074Z9YFBwFq4tEGNoiYkRhl1bclj7hjgtrCwPBl
-	29VNBXU0hJKiSb0xbBIoxgdgQIKj9F3VwhO16APafNULLYnMpuhAvExNfWv8rKEyIl4vHRLbzKx
-	16w3UxSr+CQ66ucogHjdqZIHAHBst/TLy4QrbwMoiHafAT84e0k7IzfumjYM1QVchhPgCcJDM9f
-	/3ymVygQEN8tqa/uqwEdX5Zl1GDnlBPfBhq70/5XOgS7EMoEKFsp6STu1l5oK9Kk53SLUWlPfg4
-	TQ546NknX7gQ8Rmny+kxNw2p+XNWoHTEWwYBDSd9FvSRvmKktA7CrHi5QvICOC/a7RUGGt9DnKg
-	RP4a37opEhwGbStzrm2bN5Z6lPVXLHg==
-X-Google-Smtp-Source: AGHT+IFCFymzOe+88jvBtqQf3WoNAsE5w0tNrMWd418HpWND6k2Tz7c1vpjL/c8frjfQ1C9HkTGr4Q==
-X-Received: by 2002:a05:690c:3391:b0:6ef:7dde:bdef with SMTP id 00721157ae682-700bacd6b69mr56614167b3.23.1742583677457;
-        Fri, 21 Mar 2025 12:01:17 -0700 (PDT)
-Received: from Machine.lan (107-219-75-226.lightspeed.wepbfl.sbcglobal.net. [107.219.75.226])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-700ba73b9adsm4773737b3.20.2025.03.21.12.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 12:01:17 -0700 (PDT)
-From: Antonio Hickey <contact@antoniohickey.com>
-To: miguel.ojeda.sandonis@gmail.com
-Cc: a.hindborg@kernel.org,
-	alex.gaynor@gmail.com,
-	aliceryhl@google.com,
-	benno.lossin@proton.me,
-	bjorn3_gh@protonmail.com,
-	boqun.feng@gmail.com,
-	brendan.higgins@linux.dev,
-	contact@antoniohickey.com,
-	contact@byte-forge.io,
-	dakr@kernel.org,
-	davidgow@google.com,
-	gary@garyguo.net,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ojeda@kernel.org,
-	rmoar@google.com,
-	rust-for-linux@vger.kernel.org,
-	tmgross@umich.edu
-Subject: Re: [PATCH v4 08/16] rust: kunit: refactor to use `&raw [const|mut]`
-Date: Fri, 21 Mar 2025 15:01:03 -0400
-Message-ID: <20250321190103.1778248-1-contact@antoniohickey.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <CANiq72=jXTpoPAHhFC=T2SCyz3195=pG5h+-yohCCxdds-2hHg@mail.gmail.com>
-References: <CANiq72=jXTpoPAHhFC=T2SCyz3195=pG5h+-yohCCxdds-2hHg@mail.gmail.com>
+        bh=jKbpIna3dbFZRR/fucLtB7Q4uGgsuLmcIOJYUwilYQw=;
+        b=GUPyrdTC/CMy7aTsy7LCGss9nAXkP/cxsX11Z1IHJjEUjzy2dEzN8ycZmaV2BsE6Ha
+         yWMhjEdZ/6xxFcAgIqen25RinShASQUPSFvKMda/vcfMLxET3DA7SRUm4RXq1EVv1uQp
+         6e4clbLaVEzjUI01HMJS/10Ep7wOBtFd9+j+pm5yPgvmvAReshcDFXYJ59Kw5npoqK/c
+         L0QD/wm36blW4ZLQgPtd56fE95L5ofAmmB0B70/o372UB/6NgcqoXNNsfYp5h6qIU+W1
+         3rks8lJ5HIFWbEYv05cnfL7KxEFa9bCt7hli/ZMH+hUd1qF0g79TjT63uL83BNrPKbKE
+         7hiA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRDg2iGo3q/Mapa/GPa3Jw5AsDr9tGZ0MlohxK1730+r9//IDwHlzFeUIpYgQS0OpFHm+fbnnaWPKlUOAUq+TU@vger.kernel.org, AJvYcCW8CbSyM84BsjnMT77CITUGoo3DwI2pg6v7M3Y9U+UJJ8uR8+mZOvcEzvKNJ7Q+uUrDNEmky8ESrmLf1UU=@vger.kernel.org, AJvYcCWnhy5HHrYyM2CSL6WUij1BF6u0Txy9TH1PrQXr7dFG8fGmF0TPqN8vqTcIJx7w37MhGhzI0WXT9R7r3GS+98k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymEYVVylxQPOiaD3/kSi1AysI45I4C0eXI8v3ZErwe5rq/Ekgo
+	5JTVIzAi4LyWfTRqrYma9oPyJHCtjYwxmVZokaIR3BMaSw8ShuCS5hbtIxp5L7rnQQyraO4GfmQ
+	LQ7SdLDIANnCsJ4wv2+TzbEaI5M8=
+X-Gm-Gg: ASbGncuGWKKbFo0DaU4dVqrZ3l+vaKrXQ5omWf3D7AP0h1ga2CbqnHbOiP/eeEcigiP
+	Z9DQHaZ/KWapiwJDViw1fIbnIo5zYVg3tu6s41csyPjLpUVBjBDAc7m61M3Fkm7Lh3BQFZCVJdS
+	gQFJQAdCdon1/WgcjkuhWxJPEdfw==
+X-Google-Smtp-Source: AGHT+IFfF0WPiynY7L/JMlKt3aOD+drhtkQpAHg8KRXBtOzwTJ2kdZ/CImypmGLptIC1aJB6bgaJlhn7NWrtUmFYLik=
+X-Received: by 2002:a17:902:ea07:b0:224:1579:b347 with SMTP id
+ d9443c01a7336-22780d82835mr25006905ad.7.1742583902713; Fri, 21 Mar 2025
+ 12:05:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250316061429.817126-1-contact@antoniohickey.com>
+ <20250316061429.817126-9-contact@antoniohickey.com> <CABVgOSkKD2Z60_+MoP_nu3YCUocvxJaohMBZpXy=_aavUZ99XA@mail.gmail.com>
+ <CANiq72=jXTpoPAHhFC=T2SCyz3195=pG5h+-yohCCxdds-2hHg@mail.gmail.com>
+ <CABVgOSmhMP4F74GuwRG3bWyumgF19WxmC=ymbehuWVD==OxdnQ@mail.gmail.com> <67dd9c7d.c80a0220.2d0437.7969@mx.google.com>
+In-Reply-To: <67dd9c7d.c80a0220.2d0437.7969@mx.google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 21 Mar 2025 20:04:50 +0100
+X-Gm-Features: AQ5f1Jpvyxmt1d9L20jGnAvbXaB55k7MlP28iVo1DJSdd1UYYF2ozSi8aGPpqI4
+Message-ID: <CANiq72ngWXcPnn60JFzqfY7pd+1UFmt+CAmg1q67VxfUnuiJfg@mail.gmail.com>
+Subject: Re: [PATCH v4 08/16] rust: kunit: refactor to use `&raw [const|mut]`
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: David Gow <davidgow@google.com>, Antonio Hickey <contact@byte-forge.io>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Antonio Hickey <contact@antoniohickey.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 21, 2025 at 10:06:03AM -0700, Boqun Feng wrote:
-> On Fri, Mar 21, 2025 at 10:28:06AM +0800, David Gow wrote:
-> [...]
-> > > Anyway, KUnit `#[test]`s are in -- I was not planning to merge this
-> > > now anyway, it should be reviewed a bit more.
-> > 
-> 
+On Fri, Mar 21, 2025 at 6:06=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
+rote:
+>
 > I agree this whole series should wait a bit, but do we want to merge
 > patch #1 as early as possible (maybe right after v6.15-rc1), so that new
 > code can switch to &raw since that's the direction anyway?
 
-This would make the most sense to me, it would keep things clippy clean
-while also allowing new patches to use the feature. This would also
-potentially help reduce the amount of refactoring my patch series will 
-have to do as it's delayed. 
+Sounds like a good idea to me.
 
-Thanks,
-Antonio
-
-> 
-> Regards,
-> Boqun
-> 
-> > Excellent! I'll make sure to review the new version of the patch when
-> > it's rebased.
-> > 
-> > Cheers,
-> > -- David
-> 
->
+Cheers,
+Miguel
 
