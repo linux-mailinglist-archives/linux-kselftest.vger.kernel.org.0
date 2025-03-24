@@ -1,109 +1,164 @@
-Return-Path: <linux-kselftest+bounces-29630-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 220C6A6D84D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 11:31:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F23CA6D89A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 11:48:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C91207A5D0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 10:30:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 357351894730
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 10:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E18A25DAE9;
-	Mon, 24 Mar 2025 10:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8896A25D558;
+	Mon, 24 Mar 2025 10:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o3Oh38jK"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DqSoWvn2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F8814386D;
-	Mon, 24 Mar 2025 10:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0066122339;
+	Mon, 24 Mar 2025 10:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742812301; cv=none; b=V29mWiU0I3wfODOdrM7n5aTJxcWaVE+d7oLqfyjr2PIcBcNpvlVjcNTRah8MPOgoNq2hZtYapTfmFR0iiWbnFZy7/2MmZhclI7xaSneUW5EBq3+Xw3l2xnC/E3OkJoka9JhzsDxOk1Z4BObpMgNrqNxsAq3srFPnVSfSj6apAgM=
+	t=1742813299; cv=none; b=K938wWY4WcZ4k36GtCuJijgWnIWMIuU80hnsjweqryP62qO+JQYYCSF1b6GnqMLgWwyDsBpS/6xbM9/YzkiLRILUELjUn079p5gZ2lpHhqK3WCQIznWM5BvxY9nXm0gY7Q8lHNY/wMrolkfFCHgeZomNXrtaatJf1MlSxBV+jT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742812301; c=relaxed/simple;
-	bh=7GAZFJZl+eKu5P9ihY2WmQuvZGa6gA3gVGjHE+fPDMo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Yuwy2ty9+Q0069q16rkraxy6G3wWTDigQzkwqWNWBYeeDt7AG2O/nwYyHtTxE0W90lBkqJC253qou5Ac44wdPYZ6fG7qHvf6ljQTmTPpH2c9ufWHmbBOqUE47uR9cV6qlE7FvpRXbqVzkAHVHGtGVXA08XFP5hTDWJ5129p3SZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o3Oh38jK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F69C4CEDD;
-	Mon, 24 Mar 2025 10:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742812300;
-	bh=7GAZFJZl+eKu5P9ihY2WmQuvZGa6gA3gVGjHE+fPDMo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=o3Oh38jKmLbmx2Hy9PuIK6O8ifW4Y0N/uz0RAy/iM6IehElvV79s5T/S0HnlpjEbj
-	 CmquiYEvuA9O2qYRu6Jy3udMGB+/ImugKje5kRLPpU0rGJgmmjwa92rnD5SIW2gtjh
-	 I/RCkgdLwrK0tz1nXth2eJCD9l0DW53CiFJqn2aStOg9EERHD7wXDs9LEm5Ex4BfjK
-	 7z1UkMS6uNVFLXJPXYTp5FlDOo2f/q+SPd5xsISTmMbHr+F9LwH6HclxFneC3VUO4W
-	 muKE/QeNmJJhfayAnei1uqT+8MbSJMn9ChCu6fHf62r9NERRKh1i1EGMqY4hVuIdBK
-	 2nFLB2fDdo/Xw==
-Date: Mon, 24 Mar 2025 03:31:29 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>, Jason Wang <jasowang@redhat.com>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko
- <andrew@daynix.com>, Stephen Hemminger <stephen@networkplumber.org>,
- gur.stavi@huawei.com, Lei Yang <leiyang@redhat.com>, Simon Horman
- <horms@kernel.org>
-Subject: Re: [PATCH net-next v11 09/10] selftest: tap: Add tests for
- virtio-net ioctls
-Message-ID: <20250324033129.0016abc9@kernel.org>
-In-Reply-To: <20250317-rss-v11-9-4cacca92f31f@daynix.com>
-References: <20250317-rss-v11-0-4cacca92f31f@daynix.com>
-	<20250317-rss-v11-9-4cacca92f31f@daynix.com>
+	s=arc-20240116; t=1742813299; c=relaxed/simple;
+	bh=KKpN7ifW0FwxjJpOhtFmsCId4QhbQ/vnhrEMIbMuqjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N/M583F3bFLBRbgvNC6CsoWSCzPDFJSzTP7SQG5SN9QyCW7SfRpH1nNs4vNWEIPxwze2XaBc9g6gZBdpEIA/jwcQXC5mD4MSmRQPlIqs426tsjOk2rjlEd3VVQjNNP4NObmAvwoP916Am3ZHl+aYqkvOwqfkxo6v0MRf0yUt7Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DqSoWvn2; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52O9ptko016767;
+	Mon, 24 Mar 2025 10:47:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=VIga+xvQk4RxwLl37s8roD8US+RxZH
+	6wgAnN7cz6dUM=; b=DqSoWvn2hNYTALQxMlD7ZFoi+4zq0N1yWuxe53qPbwlofS
+	11EDXetv8BM4utLmdlLw0MYgxwUAi5gSGHNoREjNHy90tDmAWBicdY3u5OsLqFNm
+	FswP8lh4U8KL0Z+kmbDMnrfazqs0pMLjoe8sYQPDDhg+bESIKfnjQkeT2J5kZ8gZ
+	uTpBQo4JY573uCvrEvB6/7EY+71e5v7MwS2GmtATqmPLrQY+OFUtee+p4N29MFed
+	yMLrXbyFZsn7mGVDVNB3gW9NBCAPa3n7ktStYlAB993VUD+ET9ZqifqLhNy/ADTm
+	3QJgYd+LcjsIPnDPueY9NsSPBS5ASB0qja99r70Q==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45jkqp44qf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Mar 2025 10:47:11 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52OAlA92022659;
+	Mon, 24 Mar 2025 10:47:10 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45jkqp44qc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Mar 2025 10:47:10 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52O77iAg025489;
+	Mon, 24 Mar 2025 10:47:09 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45j7wywy1a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Mar 2025 10:47:09 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52OAl5LT16187800
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 24 Mar 2025 10:47:05 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 694862004B;
+	Mon, 24 Mar 2025 10:47:05 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CD8DB20040;
+	Mon, 24 Mar 2025 10:47:03 +0000 (GMT)
+Received: from osiris (unknown [9.179.14.66])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 24 Mar 2025 10:47:03 +0000 (GMT)
+Date: Mon, 24 Mar 2025 11:47:02 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Alessandro Carminati <acarmina@redhat.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-kselftest@vger.kernel.org,
+        David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
+        Arthur Grillo <arthurgrillo@riseup.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alessandro Carminati <alessandro.carminati@gmail.com>,
+        Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        loongarch@lists.linux.dev, x86@kernel.org,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: Re: [PATCH v4 10/14] s390: Add support for suppressing warning
+ backtraces
+Message-ID: <20250324104702.12139E73-hca@linux.ibm.com>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+ <20250313114329.284104-11-acarmina@redhat.com>
+ <b6bb68f0-7e93-4db2-9fe6-f615f06ddeb1@roeck-us.net>
+ <CAGegRW4GinPmsav5=VBfjXBKy4cUEs5FWv-ixXODk7ajZ69vYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGegRW4GinPmsav5=VBfjXBKy4cUEs5FWv-ixXODk7ajZ69vYg@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -BXK6qMXWLef6jiJ2R9hHCsaI_IjDOmx
+X-Proofpoint-ORIG-GUID: 40o9NRITvQhnDK-iPsw_sUFfSwFPyp4T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-24_04,2025-03-21_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 spamscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=810 clxscore=1011 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503240076
 
-On Mon, 17 Mar 2025 19:57:59 +0900 Akihiko Odaki wrote:
-> +TEST_F(tap, test_vnetbe)
-> +{
-> +	int be = 1;
-> +	int ret;
-> +
-> +	ASSERT_FALSE(dev_delete(param_dev_tap_name));
-> +	self->deleted = true;
-> +
-> +	ret = ioctl(self->fd, TUNSETVNETBE, &be);
-> +	if (ret == -1 && errno == EINVAL)
-> +		SKIP(return, "TUNSETVNETBE not supported");
-> +
-> +	ASSERT_FALSE(ret);
-> +	be = 0;
-> +	ASSERT_FALSE(ioctl(self->fd, TUNGETVNETBE, &be));
-> +	EXPECT_EQ(1, be);
+On Fri, Mar 21, 2025 at 10:05:42PM +0100, Alessandro Carminati wrote:
+> > > +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
+> > > +# define HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC_PTR      "       .long   %0-.\n"
+> > > +# define __BUG_FUNC  __func__
+> >
+> > gcc 7.5.0 on s390 barfs; it doesn't like the use of "__func__" with "%0-."
 
-The config options needed by selftests should be listed in the relevant
-config file, I think you need this snippet:
+...
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 130d532b7e67..9b6aa8c4e6d8 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -101,6 +101,7 @@ CONFIG_IPV6_IOAM6_LWTUNNEL=y
- CONFIG_CRYPTO_SM4_GENERIC=y
- CONFIG_AMT=m
- CONFIG_TUN=y
-+CONFIG_TUN_VNET_CROSS_LE=y
- CONFIG_VXLAN=m
- CONFIG_IP_SCTP=m
- CONFIG_NETFILTER_XT_MATCH_POLICY=m
--- 
-pw-bot: cr
+> GCC makes significant efforts to handle this, and for several
+> architectures, it manages to solve the problem.
+> However, this is not universally the case.
+> Additionally, -fPIC is not widely used in kernel code... I have only
+> seen it used for VDSO, the x86 boot piggyback decompressor, PowerPC
+> boot, and the s390x architecture.
+> 
+> That said, GCC has been mitigating this issue, allowing us to treat a
+> non-compile-time constant as if it were one.
+> A proof of this is that, at least since GCC 11, the s390x version of
+> GCC is able to build this code.
+> Before that... certainly in GCC 7.5 it couldn't.
+> 
+> A simple fix would be to restrict usage to GCC versions greater than
+> 11 for s390.
+
+But please add that dependency only for this new feature for the time
+being. Right now I would not like to see that s390 is the only architecture
+(besides parisc) which requires a much higher minimum gcc level than every
+other architecture. Unless there are specific reasons.
 
