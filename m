@@ -1,229 +1,144 @@
-Return-Path: <linux-kselftest+bounces-29717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA482A6E650
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 23:06:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCB67A6E6D5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 23:50:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B681D16E6F3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 22:04:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 383053A4821
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 22:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB53F1F462F;
-	Mon, 24 Mar 2025 22:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A2AA1EF0AD;
+	Mon, 24 Mar 2025 22:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HB6riEto"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BozUFF6l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C0C1F1927;
-	Mon, 24 Mar 2025 22:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC61189520;
+	Mon, 24 Mar 2025 22:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742853717; cv=none; b=Fam8M1TzcxR+YYcZjSptkT2noYM98DCDVtr4gV6jxAEUz5uwO8ZWtDo/qIam3i4lXj3moFrq9GeaBgqpeFBxhbyDTRd3ia9UeBfmS3HkAaTjfvn9wP9y3tTOhZiLQN3400dL4zk+VL54KzGQthVqCw9xKfjrOMSCx2Y/r3Y3oVI=
+	t=1742856599; cv=none; b=ts+msUaOaQnZ2YkMxEPDh3tKu6BpK1Ho3eZbOxn0yKt6djhh+ezWc59SvLrHLUTk/tOsfueFFYuvqK/VSKWfucWNA+okM+ulP/hNDTc8wAlADkrBcKemmtC88M4X1E0PK3dkmucmWknFkHV/wCCmlmBsyX/OouI1HXSAibkRaQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742853717; c=relaxed/simple;
-	bh=msdLEXr/9qeuW34/7CWTD5wgn+JSkfbwHI2pYO6sLxI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MoftDPr8f+8pxB6jzMlhqqZerOPFSpzWLQC16dzvbRxW/80OgrR0IxgpvGNFW+9G7FSgYFwmzW9z1Ji+LwtmPhOxGnV0AuKlgUs99z4YmGYO6az54khv1+eMM7uck7tjhweQpGJT2cfp5cnvtTnG7yyTdG17TPgEvkMlLpdUoJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HB6riEto; arc=none smtp.client-ip=209.85.160.179
+	s=arc-20240116; t=1742856599; c=relaxed/simple;
+	bh=NkWtHQZowQTL7Jol5zWrb9SwiFcWoVIVhxmr/IcG3Ms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WdWFyB+IzMZjcUyYJsqjRiiu4n8kYEWKBWQU7eyO5wQh+uUT+yZXzqpYqIjKWSd5oNFgj1IsX0osUJjIBxbnCAn1ILs3ygnFQksgxoyilYWGJs0ZvsZIotr0suPdZPaoFOBUl/8VRKNN1V87oiwgnUKtf6DXmobLWOvbKZdmxXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BozUFF6l; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4769f3e19a9so31657781cf.0;
-        Mon, 24 Mar 2025 15:01:54 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-301302a328bso9398022a91.2;
+        Mon, 24 Mar 2025 15:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742853714; x=1743458514; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Okf71mJ2fjHM6RavOTp6+N0Ztqg8E8Xvt1yqhkIK7vU=;
-        b=HB6riEto2LdZZ+bPam1xbeRiUzWsRmfgoi1uDRcxzWDnS3WRRhIeXuuzXvOOjoclLR
-         LCiu5ElCuYFhMeMbJ8xyMbSVwomxeK0k74KhU0H4V8OvzDx1TJz3vc5lzdJbOulc5Yse
-         0PsS7qWRJo0/P5vf58PIsQ5HQucb5MeJGqAw/M3cZaH/do9db7JNCs2ulNMpG28KkTfc
-         tU9TLGjDhG4oZk0KC31NBPrFh+49qf5pAGuFLHUIKbR4Mx9/i8aBCAq13bBuzMrKLLY4
-         wgIXJF+zLs+2KGbgfwB79ms58T91vIM7sOd2LkS7hXiD9dWNGDRTRtRMeVohmfHuARA4
-         /Y3A==
+        d=gmail.com; s=20230601; t=1742856597; x=1743461397; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pnVKKXArtsJAYtZYqgbhwKX6/KL/EYF8EfA1x2Ala1g=;
+        b=BozUFF6lF/LGAFBi7cU3p6fu7arU2mQovC98mBpOh8by4MZMTzwNLKC2DH2xhqTLCN
+         JobO6BTsir1LaPQCriO/uEX45R2H4/X7yZ925R/431LPVRKTZfpLjkawjMhbJN7JWtCu
+         RtXIff8B7nI4E8szThOOUBmlukv30EEMUjLP3aaapUfF9X7HStx01CGdbLQPDDc/5hon
+         H8TzQ1eMqRjtfaymdsLlIoMIkUpoJuGGf7gCM+idxnBi2KkS49lYT41lLJKm+APBKG8T
+         YJqv0b50CeZgo+P401TC04Jo5v92S1TcbFv6vTDB7IFRSvnjU2dAD7qH+wDcl5VDP7st
+         p6lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742853714; x=1743458514;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Okf71mJ2fjHM6RavOTp6+N0Ztqg8E8Xvt1yqhkIK7vU=;
-        b=K3xI9uN6nPPqdvPOppiMWgmwF8MsijzcVZIANbc3Z0JlnOFA1AMa9wKm15ga9xq1XO
-         eyeug6pPDjrUZhPAPAsbrxvtPNMYm4k+tD1daaTraIOM7PS1gLLWzaTIjbGaVB+Kh3t8
-         XwoRzOKrDQHhlXi7Zbz4kXt1+1Ty2gwTSkbXQUOhfdeGsP9STCphwuMdORyZSpGUHDil
-         KUJ25UQWv/Bev1nnFFKas9ucA2RYXd+Vb3cUKo0dnZbJ153tuUd7BhDSpxjTWKeV06M/
-         Pxyy5yIpOH3YFNRiLxGhTckfOOklmI6lFLSC/NP1MF7HwgNGjXDfltBWO3GuC/iWzqzf
-         m8/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUZxw8E4S5wMxA9UhAB9sSO8IatVSDSHY0qOyACamf3apMka2Mt+yrSuM591YBfAAihdr5hBRrIFzJZRGU=@vger.kernel.org, AJvYcCUv1JvrRdfWXTJYgpeK0iYHLQGUHYRUlFjvkqX2puPdatvOPk1FR5rxaw9silJITKZ+APTzDo2acKVObxOJ@vger.kernel.org, AJvYcCVlTXxlcReMd7Wy+HqLaQ+OLazUT89RQdJUAcKn+WdSRLpBMRp726VHPGGgl/pYy+OIVwigWXXNDLSL@vger.kernel.org, AJvYcCVohrwxgpHds6Pq+vwEg/zQEbwP0i0oSTX/SdGZY7dLSs3t6ZfPi6T8NR+9tHFdnyZTJcPifC8M@vger.kernel.org, AJvYcCVx8fcHCVLspgXYHErE/GoOAFol708TUiO/E13RyFrJgrs7ySeifMU7wbTmiWebV2k8gTW+0NE5Dk8opoS2u3uu@vger.kernel.org, AJvYcCXPyx/hWTzthizzqhvE1yVtmJvU+gb7c/ul0sFZ0PQaNZzr/8iiOCR+oMFmcyB9CoqjMcxF6fP+3TOl@vger.kernel.org, AJvYcCXv7OYhKyQFDzCuIOXpn9VC1Dd3K72wM4TY8F9S+a7qaBjp36LCk3ITNYC2s1avKi/WwIqa3ZaMVyDWgQqJMgk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpetyXUIzO/h/UqpW8YCErZWcyxpQrdnUhs+oVwL2opVyBg5Rg
-	D/2+7u2rr4BLdG4EHydUJ2+z+TbRedl4enRfgyb/sqTcaDHfy1hD
-X-Gm-Gg: ASbGncvJqqIjU2jsisvrW+IXJD930ZrEWE8jcO3brMmCi3jwppikLKQQYkYICDjOufj
-	N+xN9dr/GP0DPtqEYCW9nDWuPfKiMu/RFHkFTDYmJpQwYnkvo1WmTJJYg+iaayHwNnTQnyQnFGk
-	JZ8ud0jURqo8AEdROqEd6X1t6CqTAOke57cTs9aDRt9lBOIPLZaeZUibpZBkwTr1hQP2JPYmZ4H
-	KYTL+s+CUKE+o2gKn7BXP/izX87D462yEwvBWiWZtysLgF0KiENqdEVUDQ5/zz+FSiTICgWiXAF
-	E4LwSrspK8292rnRLy0+aYMEKKPWeQbi0fJMhH3/lHhNX9nPQyCYowY02x36Zf3DFu8zE6J10gt
-	7r6LKhCQr/NnzZheFr7bBO7r3Qn2/IEXvGD0oG3qfQjrw8OFuGhxwDHtdjWgca+xG
-X-Google-Smtp-Source: AGHT+IGiTpxJOfUP6yEDw+BZ5IoEtfpjeRAnSg8Fp13Y/l+nete8QxRyDKUWgvo+a1iooMF3ftJdsw==
-X-Received: by 2002:a05:622a:1805:b0:477:1e1f:8a0a with SMTP id d75a77b69052e-4771e1f928bmr226073741cf.0.1742853713644;
-        Mon, 24 Mar 2025 15:01:53 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:43c7])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4771d0ad87esm52129541cf.0.2025.03.24.15.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 15:01:53 -0700 (PDT)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 24 Mar 2025 18:01:35 -0400
-Subject: [PATCH v6 6/6] rust: enable `clippy::cast_lossless` lint
+        d=1e100.net; s=20230601; t=1742856597; x=1743461397;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pnVKKXArtsJAYtZYqgbhwKX6/KL/EYF8EfA1x2Ala1g=;
+        b=dEuEZIYyAtTGDXStx7LX5GCoMWzWL95i2R8EgygJ9OqJXiVoBEgl2lxEkmkaIcOZwy
+         xv8wSgEtb+o+X29hc0mAOxDRYDp63zklf/mLXRIpEKDUIKAyvpxCeJvcfBlrvYkpq33E
+         a2mSjhCRi/R2thpqOnQVYcZvllshOULrTXaUAtnkXSavfEOxDAum3XYr2eskJkx29fr9
+         tCnCRCghAICf8Sq2c8Lp8RZNcZBL5/aDNStsR/9hi6NILthIgJSrd+FGa0CCy0XN1M/X
+         BTG8lGdfI866nJkzjQSUc/IoRLC+HVhXgDfXyi6/nHNCT8QomgIHInTWd3CPbqRm3YWL
+         9vfg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8f8SakkFy4lXN5PtkC0QJWrz4Wj8qlJpcbBEkLnLMCwJaoiS7t8XHUFPavAuMtQCILEg/Xavzw8CgHge9Fg==@vger.kernel.org, AJvYcCWF8d3nUqHrixO8ABC+wVahYuRQNAEARfXSHZQxaYoWH2DiZAxsv781gRnf0eiyllc5ajFzvXWb6L+DFKo/+j4P@vger.kernel.org, AJvYcCXOBciiFe7cttsn2/l1gZ5gp4WuBpa9xttvzGLkbTxiXl5dUBmrnS5+Eesd2cYufpvFZHT0UUxaoPzEhVI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+0qaXMkLURT6KHu4bItadtYW/gnMhmew+1SZXmRwKo+Si+1zI
+	fIV9iyDqQN37YzButuoiPFAXZtotPGhVjAjWux/vSqRhKFdgWReR
+X-Gm-Gg: ASbGnctct279o1aU0YPcK7Il+PXSM5vNzM101cxwFzoVtvWCfcKHtOvNV8URh1acV9K
+	x18VUFFoGDPrK+9vcH75RCrOIVkwgsStSKGSt5ON4+4fdFn4YQ7yhYW5AS0rg0x/TemJupBHf8B
+	Kk5/rD0hUyd47npYHsKrQ94yK7KhMQEVrJcW41/UtQHb6bapHWmBQRL2PcW1fJrfG0ihBinJZHq
+	d+q+MhssOGi3/qCEQYBWP6wquf340zHvEe7FrsnZmdHYjQQIpAb3IqYgC9M3ytGbISYHAdnQaMb
+	aW1WJr9nunTwgvph8yZiNfOR11+m8dfUaGVp9UqpCAbRtY+glZvxa9/OIt6dHQveqYPA0gqIEdT
+	fUyp8QoFUECODeI/APDOg
+X-Google-Smtp-Source: AGHT+IG/E3HxCR8DB9j70Xj+kKpNSWoN0BEqeQL1R9dn0EUzNvVnDIR9zmF/TOag2aAJqylX8FSIGQ==
+X-Received: by 2002:a17:90b:28c8:b0:2fe:b8ba:62de with SMTP id 98e67ed59e1d1-3030fee95efmr23243993a91.25.1742856596817;
+        Mon, 24 Mar 2025 15:49:56 -0700 (PDT)
+Received: from ?IPV6:2804:d57:4e50:a700:f33d:65d1:e22e:109b? ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3030f807533sm8763746a91.49.2025.03.24.15.49.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Mar 2025 15:49:56 -0700 (PDT)
+Message-ID: <135e8686-1eaf-44d7-a547-1c9611f7f180@gmail.com>
+Date: Mon, 24 Mar 2025 19:49:50 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250324-ptr-as-ptr-v6-6-49d1b7fd4290@gmail.com>
-References: <20250324-ptr-as-ptr-v6-0-49d1b7fd4290@gmail.com>
-In-Reply-To: <20250324-ptr-as-ptr-v6-0-49d1b7fd4290@gmail.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
- Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
- Saravana Kannan <saravanak@google.com>, 
- Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Robin Murphy <robin.murphy@arm.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, 
- linux-block@vger.kernel.org, devicetree@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
- Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] selftests: livepatch: add new ftrace helpers
+ functions
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Marcos Paulo de Souza <mpdesouza@suse.com>,
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, felipe_life@live.com
+References: <20250318-ftrace-sftest-livepatch-v2-0-60cb0aa95cca@gmail.com>
+ <20250318-ftrace-sftest-livepatch-v2-1-60cb0aa95cca@gmail.com>
+ <Z+GmGfcdEceUzTQc@redhat.com>
+Content-Language: en-US
+From: Filipe Xavier <felipeaggger@gmail.com>
+In-Reply-To: <Z+GmGfcdEceUzTQc@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Before Rust 1.29.0, Clippy introduced the `cast_lossless` lint [1]:
+On 3/24/25 3:36 PM, Joe Lawrence wrote:
 
-> Rust’s `as` keyword will perform many kinds of conversions, including
-> silently lossy conversions. Conversion functions such as `i32::from`
-> will only perform lossless conversions. Using the conversion functions
-> prevents conversions from becoming silently lossy if the input types
-> ever change, and makes it clear for people reading the code that the
-> conversion is lossless.
+> On Tue, Mar 18, 2025 at 06:20:35PM -0300, Filipe Xavier wrote:
+>> [ ... snip ... ]
+>>
+>> +	if [[ -n "$FTRACE_FILTER" ]]; then
+>> +		echo "$FTRACE_FILTER" \
+>> +			| sed -e "/#### all functions enabled ####/d"
+>> +			> "$SYSFS_TRACING_DIR/set_ftrace_filter"
+>> +	fi
+>    
+> Also, this may be more stylistic than a functional nit (I don't know for
+> sure), but shellcheck [1] seemed confused about these lines:
+>
+>     In tools/testing/selftests/livepatch/functions.sh line 90:
+>                            > "$SYSFS_TRACING_DIR/set_ftrace_filter"
+>                            ^-- SC2188 (warning): This redirection doesn't have a command. Move to its command (or use 'true' as no-op).
+>
+> I wasn't going to comment on these until I saw shellcheck note them, but
+> I thought shell script convention was typically to end the line with the
+> redirection/pipe then escape the end of line like:
+>
+>    commands | commands > \
+>        tee output.txt
+>
+> There are a few existing examples of this pattern if you grep the
+> functions.sh file for '\\$'.
+>
+> That said, I'm far from certain whether which order is better than the
+> other.  The only reason for bringing it up is that shellcheck warns on
+> this patch's usage.
+>
+> [1] https://www.shellcheck.net/
+>
+> -- Joe
 
-While this doesn't eliminate unchecked `as` conversions, it makes such
-conversions easier to scrutinize.  It also has the slight benefit of
-removing a degree of freedom on which to bikeshed. Thus apply the
-changes and enable the lint -- no functional change intended.
+Thanks for review Joe, I'm sending a new version with all the fixes.
 
-Link: https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless [1]
-Suggested-by: Benno Lossin <benno.lossin@proton.me>
-Link: https://lore.kernel.org/all/D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me/
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- Makefile                        |  1 +
- drivers/gpu/drm/drm_panic_qr.rs | 10 +++++-----
- rust/bindings/lib.rs            |  2 +-
- rust/kernel/net/phy.rs          |  4 ++--
- 4 files changed, 9 insertions(+), 8 deletions(-)
+Cheers
 
-diff --git a/Makefile b/Makefile
-index 2af40bfed9ce..2e9eca8b7671 100644
---- a/Makefile
-+++ b/Makefile
-@@ -479,6 +479,7 @@ export rust_common_flags := --edition=2021 \
- 			    -Wclippy::all \
- 			    -Wclippy::as_ptr_cast_mut \
- 			    -Wclippy::as_underscore \
-+			    -Wclippy::cast_lossless \
- 			    -Wclippy::ignored_unit_patterns \
- 			    -Wclippy::mut_mut \
- 			    -Wclippy::needless_bitwise_bool \
-diff --git a/drivers/gpu/drm/drm_panic_qr.rs b/drivers/gpu/drm/drm_panic_qr.rs
-index ecd87e8ffe05..01337ce896df 100644
---- a/drivers/gpu/drm/drm_panic_qr.rs
-+++ b/drivers/gpu/drm/drm_panic_qr.rs
-@@ -305,15 +305,15 @@ fn get_next_13b(data: &[u8], offset: usize) -> Option<(u16, usize)> {
-         // `b` is 20 at max (`bit_off` <= 7 and `size` <= 13).
-         let b = (bit_off + size) as u16;
- 
--        let first_byte = (data[byte_off] << bit_off >> bit_off) as u16;
-+        let first_byte = u16::from(data[byte_off] << bit_off >> bit_off);
- 
-         let number = match b {
-             0..=8 => first_byte >> (8 - b),
--            9..=16 => (first_byte << (b - 8)) + (data[byte_off + 1] >> (16 - b)) as u16,
-+            9..=16 => (first_byte << (b - 8)) + u16::from(data[byte_off + 1] >> (16 - b)),
-             _ => {
-                 (first_byte << (b - 8))
--                    + ((data[byte_off + 1] as u16) << (b - 16))
--                    + (data[byte_off + 2] >> (24 - b)) as u16
-+                    + u16::from(data[byte_off + 1] << (b - 16))
-+                    + u16::from(data[byte_off + 2] >> (24 - b))
-             }
-         };
-         Some((number, size))
-@@ -414,7 +414,7 @@ fn next(&mut self) -> Option<Self::Item> {
-         match self.segment {
-             Segment::Binary(data) => {
-                 if self.offset < data.len() {
--                    let byte = data[self.offset] as u16;
-+                    let byte = data[self.offset].into();
-                     self.offset += 1;
-                     Some((byte, 8))
-                 } else {
-diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
-index 0486a32ed314..591e4ca9bc54 100644
---- a/rust/bindings/lib.rs
-+++ b/rust/bindings/lib.rs
-@@ -25,7 +25,7 @@
- )]
- 
- #[allow(dead_code)]
--#[allow(clippy::ptr_as_ptr)]
-+#[allow(clippy::cast_lossless, clippy::ptr_as_ptr)]
- #[allow(clippy::undocumented_unsafe_blocks)]
- mod bindings_raw {
-     // Manual definition for blocklisted types.
-diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
-index a59469c785e3..abc58b4d1bf4 100644
---- a/rust/kernel/net/phy.rs
-+++ b/rust/kernel/net/phy.rs
-@@ -142,7 +142,7 @@ pub fn is_autoneg_enabled(&self) -> bool {
-         // SAFETY: The struct invariant ensures that we may access
-         // this field without additional synchronization.
-         let bit_field = unsafe { &(*self.0.get())._bitfield_1 };
--        bit_field.get(13, 1) == bindings::AUTONEG_ENABLE as u64
-+        bit_field.get(13, 1) == bindings::AUTONEG_ENABLE.into()
-     }
- 
-     /// Gets the current auto-negotiation state.
-@@ -426,7 +426,7 @@ impl<T: Driver> Adapter<T> {
-         // where we hold `phy_device->lock`, so the accessors on
-         // `Device` are okay to call.
-         let dev = unsafe { Device::from_raw(phydev) };
--        T::match_phy_device(dev) as i32
-+        T::match_phy_device(dev).into()
-     }
- 
-     /// # Safety
-
--- 
-2.48.1
+Filipe
 
 
