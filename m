@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-29626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB8DA6D628
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 09:30:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10241A6D649
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 09:37:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1857D188C315
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 08:30:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81DA316B1C7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 08:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E1625C6FE;
-	Mon, 24 Mar 2025 08:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C61725D213;
+	Mon, 24 Mar 2025 08:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="gMsoovib"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="oPyNA8TW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4698A25D209
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 08:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439832D7BF
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 08:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742804989; cv=none; b=ciQb9FitnVbVlAlzNCerQ7hoJZ8bqiwkMru1vyK/uyEhitAfAkDCRe7Fs9CiSITq9/3lj/gvXMMniN59dywLTja0YPLXKKtjn7WHpCLy394iegYoQhJMpf/CAKaa8agf7uiQQtMu1VEs7N/IUls4r41XIUzMn1pnYe+tcB4VMnY=
+	t=1742805452; cv=none; b=kxdpqpDITA1E7bw9QlW4fA/EJIP/is48ZnhcDFlFUaGyPIShPRqkXq23UQGIFXvJMkDblWBDfaaFQtdrqqyKJNf7AcMZwA7wMQe3T484Wd8plUfXLjBN8CDVQKckZw9EH6PgM67OiwbuS8OCwrRL1gSqUxPOeJI5/mEoIJxvlwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742804989; c=relaxed/simple;
-	bh=NzJP8TqEb08WGj9kYfvDbx+CpZLoCO3wvBykc6g+6mo=;
+	s=arc-20240116; t=1742805452; c=relaxed/simple;
+	bh=x7M8kfO9ZWk0O+/183B2qw+TXk5OXy89eMjQrV+Shxo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dvQ8laPlv0W1GB+DnoBKOxwqdTCfrD6COtY4pnuazvsFgG9Ar+xxrpPdhTtkJ82af46jMF6neh5gwQs+ksLqSccX+DI8LwK5tcZtAvO+d0lbrd8UkxwPg5A5PDtZO5eATOwYem0xtZSSjP5g9FVbUuxuWd9mzw1Rb/hiEh944Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=gMsoovib; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=TPbOLSRZDrxTlJm1bUoFepAqkuW8TVSvhpcLWt8XM7c1spbSSKE1/OhSkiFvp6IDFRZQMSO3Gl3Y5pkz98B/Ewl3EkIrByZdEflKNp1tMsIf7AOxFMI/ueCYiFvp1FNfUhAVGxmmrOIdlvfvk/5rzY4PhCyXoR6WEqydquzB9/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=oPyNA8TW; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22435603572so69527045ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 01:29:46 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-224100e9a5cso75017855ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 01:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1742804986; x=1743409786; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1742805449; x=1743410249; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2qMUlDAaek7Ax30c0AGSTiyhNrDt/tYOpdl5MsMoLow=;
-        b=gMsoovibKmSv81FaIAbJ9TjBXOxhesE6qDSuZej0OaUgJK9k9PZ43q2GBOsJ50HJSo
-         BYlXxmAt2EBq60V91lo6qmWoOn0u4ZqDiCk75leuCFnH0zqpcKfhaAHbs9By3tswSTN8
-         FPNGMuA6ndcnQkQ9JbLkSMR3WHZ2q4aQFQ02bLbfmTt2bIb2a9+UY2bLUjQ+75Socqol
-         VuiT85EyHZ0AN1NHVNdSSDxBm9sJGn8UAK6tGtMGXqI4BR+2AMb9sMTBqaYAsugBxydW
-         e1pTLS7nN4aKWsSUWv5d9DOYThG+qTy11Fi6a4Q2eZngH2BeEVLNl2Noq+E3cVZ11Rdm
-         KA/A==
+        bh=2s6YbLy4nW+jYW+2j4zgOCotGnhPTE4p9OSJFGAI4n8=;
+        b=oPyNA8TWKv6xm6QyLf3mPW4Mxt1v/RPJkmw2/tmVb7N2R06hjGGe2EppOnZyYCXfhT
+         U1hbNkT2wUBkLhsl9TEsauXfycQlY2lOF1lkVIyT4UjDSsG7svLISKgENLquakFbrR95
+         dWt08uF4THhTYe5kS5saq8poS1qU2LQR9khNBIXTMIrmdHSW/ZYmfcE4qyB6oxSPgSmY
+         EX5QQQi0G1F/k4emeNDAgkbFu87gUYVVsNoRPo+6SYtWh8kuvnlMG6DXr8CuzbCmKuFM
+         T8UHtkxG0xY6tcK/3HcBZK0WBM5Rl0V/g4sGd7cVR4CwfI3JtLU+G/4K3AiUSBfDvLMV
+         qC+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742804986; x=1743409786;
+        d=1e100.net; s=20230601; t=1742805449; x=1743410249;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2qMUlDAaek7Ax30c0AGSTiyhNrDt/tYOpdl5MsMoLow=;
-        b=V0axGXAtd5JWcw6UOwsSBc/pRp99AN/vsRmMi2TGjB1E+xqQD67H4ZdzlFgEi7OhK4
-         P4WmbSxIGPCbgnKP2skFybDm1oUcSjEErN8V4Xwk+fD5lbzr5zEcv9UxARWAEZIVzTBN
-         CVlAeEGF6Qv/oc5BcZ8ROK7je3KyZdrOx5EAPpCXjXK6yxMzAfLitnKqJwdhHyg5cEuT
-         Ykmd15i26HOEg92HH916srhl1w08DznvK3HJXCwE90apr2SXpnTqOe3EtKITcNdzXyTV
-         nIyNV+teLzImpv7P7ChBSljFMcNR60jV3htg7uDjRuNWkQ55A75GgaAarEqFFhjEatp7
-         UDIA==
-X-Forwarded-Encrypted: i=1; AJvYcCWA9/k3Ri3VuFpWCsARkyWuvZL/mGGbltRUra2YUlL2xftw69vR0ZJkVvnPgX6mr6b7b5irf58DLQwWoU62fgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz87eiA1BaiSX/9jfdh6BhGXO8Ot9A7GMaBqRv5Q8fcnt0I6Ipy
-	yKJWejljVRVZkTV3fSPny4PDkAuSTb8soMdxGSkeoWVLrXEQJe0p+1MN6Noj9R0=
-X-Gm-Gg: ASbGnctJJTs5XGmPJrwXarS1hdiAt8bt5LftNqsd1OzskSJb8G0nWjV7AS12C2HzmUe
-	TVqvSIz30hrs2Ow3ApdxLq/YGFQZDSpfQhDpGcshrwS7k8YIGR5zQOBWk+S94eZP5Gf2A0Az9W8
-	GeAFZTYLbjKQSJ6viz/FLHayO3HLc7T/xpNNFvXzz7gpcv1nNQxMZITP2Weu487RRekKS8HWgGr
-	Au4t3WnuO7TMn5Tt1D5B4wZQcS5AcjPAs9tCmBo4HKiiF6ucvpIR1Q6D4F8+6n1HkH1CLtSh7JH
-	R2hGdRHgff7omQmjhZ4vXbSbsEz5glLLL7ihVuT6wrXv60B+v9gjoZoadBmj4AwSbhdBEM2PLJY
-	1jOvt/q78p3rMiA==
-X-Google-Smtp-Source: AGHT+IE/svKRMr10qo5TWA29tMIKA3okBWKKu6uK4vQbAlDiEPBzS0bf2OPavcRs7sE+zsZm2iXV3g==
-X-Received: by 2002:a05:6a20:a109:b0:1f5:7007:9eb7 with SMTP id adf61e73a8af0-1fe433193c6mr24677051637.37.1742804986196;
-        Mon, 24 Mar 2025 01:29:46 -0700 (PDT)
+        bh=2s6YbLy4nW+jYW+2j4zgOCotGnhPTE4p9OSJFGAI4n8=;
+        b=pgVGc7Ie0/pxgUSr3RBXFEwZAAd3an4SRKJUrFQjHRMVjwYCzNcSq2UD33ydTvNuym
+         fCnJa2Ud0ASKjlWnsbeZfxCGqzwCar76AHvAffZaqDSS9f/f7c4DEFA0wDg+BRwfZPhu
+         ofZZwjX2FLIJqLdFNo/ZXPiIn9PaoY88o4jWF7LLviDDa12n/u374IaNLSq1nUyAbazO
+         +5b6PiUPzVjG/gM8wEwCm9fXDbQDBhSC4tGHx88uKAKf4qmbxVusUysx/s9PBdjc4cUJ
+         OrG0Jz3/IEYUayKKcX4bz1RuDPXJyt9Fs9XVvUCXOvi5DflKNO1pGbzMCEuxnn/oWTWY
+         pY5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUUymfXiGkGQBxb8RGSXswjDSyP8nmoAwpGIFcwXujnJc/T2s01OwUMr67/wX2qVESuynA9z72gRUZ1fPlDKgI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwunJx+VK4NsldX8cjf9d3iAiHE9d5zWfyjSlUc1x1MK2Jki6ad
+	paWZMuChvIZPGfdsUFURjrv9Ap7i1VeQmRlvBdDjDo4DSya90MEd2NM0J5e7Vf4=
+X-Gm-Gg: ASbGncuhQI0qqidlkAUrhaNNN8ISmFyoUvLqIAEODtNmH6MUu4EtJFZhxxERFGH10PC
+	Jh833GVxVRQYJoh2MzCVdOmp3L8NT2jVfCB7YS5zCdVu9ClY9hdlkxP8wh4Bvw3NwXXtTaV7JbQ
+	AMjRh6FL8kg85pnyuGOis3Umf/qpAOC5aAEYnaAWxyhJrhiNICcVkRAxTIJLaSTSM3TVI33J415
+	9KqHaS23CWlOA1ugIsRKcLFKgFFnTF9tYD0CGE2F6dxuZhx04FGUTuH8TB/Rh4tAKyJS5bCe3Ni
+	Z7HAOgL5u4IeUhIONoyn2+yGt6L4dLCZuQSk7R/r7INyF8zORNER5UuO1Oy2wKGwK+LKMiYrdAM
+	NTsmFQahKVga/lw==
+X-Google-Smtp-Source: AGHT+IGyDIlFsMFtDafxJbgUfgP/qTb6rCAL5yHNPveThhrNUx+dqUwr1+vxGkhJvulgvlhTLqQIxQ==
+X-Received: by 2002:a05:6a21:7a90:b0:1f5:902e:1e97 with SMTP id adf61e73a8af0-1fe4331934bmr20590058637.41.1742805449356;
+        Mon, 24 Mar 2025 01:37:29 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a2a4747bsm6509935a12.68.2025.03.24.01.29.38
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73905fa980asm7587742b3a.11.2025.03.24.01.37.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Mar 2025 01:29:45 -0700 (PDT)
-Message-ID: <779c137d-5030-4212-b957-3d2620448ea9@rivosinc.com>
-Date: Mon, 24 Mar 2025 09:29:33 +0100
+        Mon, 24 Mar 2025 01:37:28 -0700 (PDT)
+Message-ID: <ea14978a-f29f-45a2-acff-5585c81f4ca6@rivosinc.com>
+Date: Mon, 24 Mar 2025 09:37:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 02/18] riscv: sbi: add new SBI error mappings
+Subject: Re: [PATCH v4 04/18] riscv: sbi: add SBI FWFT extension calls
 To: Andrew Jones <ajones@ventanamicro.com>
 Cc: Paul Walmsley <paul.walmsley@sifive.com>,
  Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>,
@@ -92,69 +92,114 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>,
  kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
  linux-kselftest@vger.kernel.org, Samuel Holland <samuel.holland@sifive.com>
 References: <20250317170625.1142870-1-cleger@rivosinc.com>
- <20250317170625.1142870-3-cleger@rivosinc.com>
- <20250322-cce038c88db88dd119a49846@orel>
+ <20250317170625.1142870-5-cleger@rivosinc.com>
+ <20250322-62ad16eaf41abd98170fa6bb@orel>
 Content-Language: en-US
 From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20250322-cce038c88db88dd119a49846@orel>
+In-Reply-To: <20250322-62ad16eaf41abd98170fa6bb@orel>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
-On 22/03/2025 13:06, Andrew Jones wrote:
-> On Mon, Mar 17, 2025 at 06:06:08PM +0100, Clément Léger wrote:
->> A few new errors have been added with SBI V3.0, maps them as close as
->> possible to errno values.
+On 22/03/2025 13:14, Andrew Jones wrote:
+> On Mon, Mar 17, 2025 at 06:06:10PM +0100, Clément Léger wrote:
+>> Add FWFT extension calls. This will be ratified in SBI V3.0 hence, it is
+>> provided as a separate commit that can be left out if needed.
 >>
 >> Signed-off-by: Clément Léger <cleger@rivosinc.com>
 >> ---
->>  arch/riscv/include/asm/sbi.h | 9 +++++++++
->>  1 file changed, 9 insertions(+)
+>>  arch/riscv/kernel/sbi.c | 30 ++++++++++++++++++++++++++++--
+>>  1 file changed, 28 insertions(+), 2 deletions(-)
 >>
->> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
->> index bb077d0c912f..d11d22717b49 100644
->> --- a/arch/riscv/include/asm/sbi.h
->> +++ b/arch/riscv/include/asm/sbi.h
->> @@ -536,11 +536,20 @@ static inline int sbi_err_map_linux_errno(int err)
->>  	case SBI_SUCCESS:
->>  		return 0;
->>  	case SBI_ERR_DENIED:
->> +	case SBI_ERR_DENIED_LOCKED:
->>  		return -EPERM;
->>  	case SBI_ERR_INVALID_PARAM:
->> +	case SBI_ERR_INVALID_STATE:
->> +	case SBI_ERR_BAD_RANGE:
->>  		return -EINVAL;
->>  	case SBI_ERR_INVALID_ADDRESS:
->>  		return -EFAULT;
->> +	case SBI_ERR_NO_SHMEM:
->> +		return -ENOMEM;
->> +	case SBI_ERR_TIMEOUT:
->> +		return -ETIME;
->> +	case SBI_ERR_IO:
->> +		return -EIO;
->>  	case SBI_ERR_NOT_SUPPORTED:
->>  	case SBI_ERR_FAILURE:
->>  	default:
->> -- 
->> 2.47.2
->>
+>> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+>> index d41a5642be24..54d9ceb7b723 100644
+>> --- a/arch/riscv/kernel/sbi.c
+>> +++ b/arch/riscv/kernel/sbi.c
+>> @@ -299,6 +299,8 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
+>>  	return 0;
+>>  }
+>>  
+>> +static bool sbi_fwft_supported;
+>> +
+>>  /**
+>>   * sbi_fwft_get() - Get a feature for the local hart
+>>   * @feature: The feature ID to be set
+>> @@ -308,7 +310,15 @@ static int __sbi_rfence_v02(int fid, const struct cpumask *cpu_mask,
+>>   */
+>>  int sbi_fwft_get(u32 feature, unsigned long *value)
+>>  {
+>> -	return -EOPNOTSUPP;
+>> +	struct sbiret ret;
+>> +
+>> +	if (!sbi_fwft_supported)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	ret = sbi_ecall(SBI_EXT_FWFT, SBI_EXT_FWFT_GET,
+>> +			feature, 0, 0, 0, 0, 0);
 > 
-> I'm not a huge fan sbi_err_map_linux_errno() since the mappings seem a bit
-> arbitrary, but if we're going to do it, then these look pretty good to me.
-> Only other thought I had was E2BIG for bad-range, but nah...
+> We're missing the
+> 
+>  if (!ret)
+>     *value = ret.value;
+> 
+> part.
 
-Yeah I also think some mappings are a bit odd even though I skimmed
-through the whole errno list to find the best possible mappings. I'd be
-happy to find something better though.
+Damn, and even worse it isn't used at all. I'll probably remove it
+entirely and keep the strict minimum for this series.
 
 Thanks,
 
 Clément
 
 > 
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>> +
+>> +	return sbi_err_map_linux_errno(ret.error);
+>>  }
+>>  
+>>  /**
+>> @@ -321,7 +331,15 @@ int sbi_fwft_get(u32 feature, unsigned long *value)
+>>   */
+>>  int sbi_fwft_set(u32 feature, unsigned long value, unsigned long flags)
+>>  {
+>> -	return -EOPNOTSUPP;
+>> +	struct sbiret ret;
+>> +
+>> +	if (!sbi_fwft_supported)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	ret = sbi_ecall(SBI_EXT_FWFT, SBI_EXT_FWFT_SET,
+>> +			feature, value, flags, 0, 0, 0);
+>> +
+>> +	return sbi_err_map_linux_errno(ret.error);
+>>  }
+>>  
+>>  struct fwft_set_req {
+>> @@ -360,6 +378,9 @@ int sbi_fwft_local_set_cpumask(const cpumask_t *mask, u32 feature,
+>>  		.error = ATOMIC_INIT(0),
+>>  	};
+>>  
+>> +	if (!sbi_fwft_supported)
+>> +		return -EOPNOTSUPP;
+>> +
+>>  	if (feature & SBI_FWFT_GLOBAL_FEATURE_BIT)
+>>  		return -EINVAL;
+>>  
+>> @@ -691,6 +712,11 @@ void __init sbi_init(void)
+>>  			pr_info("SBI DBCN extension detected\n");
+>>  			sbi_debug_console_available = true;
+>>  		}
+>> +		if ((sbi_spec_version >= sbi_mk_version(3, 0)) &&
+>> +		    (sbi_probe_extension(SBI_EXT_FWFT) > 0)) {
+>> +			pr_info("SBI FWFT extension detected\n");
+>> +			sbi_fwft_supported = true;
+>> +		}
+>>  	} else {
+>>  		__sbi_set_timer = __sbi_set_timer_v01;
+>>  		__sbi_send_ipi	= __sbi_send_ipi_v01;
+>> -- 
+>> 2.47.2
+>>
 > 
 > Thanks,
 > drew
