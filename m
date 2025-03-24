@@ -1,169 +1,186 @@
-Return-Path: <linux-kselftest+bounces-29701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8BDA6E3FE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 21:16:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F58AA6E4B8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 21:53:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C61816FA94
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 20:16:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4B0017042D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 20:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990B01A0BED;
-	Mon, 24 Mar 2025 20:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5FB41DDA33;
+	Mon, 24 Mar 2025 20:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="TI71ew07"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="HGQYR5in"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2B02A1CA;
-	Mon, 24 Mar 2025 20:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4121C7015
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 20:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742847389; cv=none; b=RVR+gtI5s5cV7VaQwXkYZFkDm1XnvQv32njsqqlqNoZvI/bXEObcmc1NV6BK5H1A2PxBCBxEKulY91HmpNWmtWH7N7hTNl94jnJpgiZYQpG5PHIX/Iz5N0tlDGxogrCtF0ZAHjfS/pIgpicoE8INkxJdF2sNDKZOHS0dzsXTHp8=
+	t=1742849587; cv=none; b=moVQo90MQ0LyeCZuaFUj/6OVygxyfn6cI4t9/lgSPkTIu+Ht3wxLNLQEvC3qXdoQhhOrDgNP/U3u0FN26gKuWVXbYDUmTsn8lSlIt8kfdxBPm9n187zpzy6ni+UjLojobwuDtQCnRSq4qwFo9MySVbGpuDEOg9kBmMRsuFrK4kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742847389; c=relaxed/simple;
-	bh=pi/J5f+zxa5+vr4I4x8F+Q+w3M7QcKQqlVHWcxr7Mbc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Af/gdKfaKjNWLPBtosrAWc8Q9R2wZsAre+yKCKhwKn+abUFub7GzYkveaTP4TA4i4MPcbSV7TCDLhuZyo0O08TOY2sWjSwDcmvZnlmwV3uiGGN/4yJc72UsLFMY7cVq1r/cGIkZMaJWsWiWYYZgJ2bLd9pyh1k+gatIaqtjZbgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=TI71ew07; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1742847380; x=1743106580;
-	bh=5zkri0TfwaVQ5Do9MmCdBt/y8+WtBGC8HaDSalWQ/b8=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=TI71ew073ff2IQeYGaFDBN5e4BpGTt+SQkDr3Gkx+pNBx1wepjbufC3naVIb0fTMo
-	 J2yr7/mP9FptcD9UZh5KkLdy+CarcuEfod41sZ3T24kmeQSSMoeWGVSmafgHR/6KBJ
-	 J29pRX64HDAQU0ukZj2mUOBhTIO8UNETpQgZs/eGfIS4WLTI8KO8Lw0tooKRx+TDdE
-	 ZLlUBETcRMBO7pIfsQc0d+rlN/I9yBKB0Vom9Rl01ucsiWJhLsG1GCy3nMuXHvBInX
-	 dRHApYxwuXhZH/un8+cFYrQfOFEOtO5JPJH/8s50xSt9+q4265ZNup+5zk0vSxihPO
-	 KYVjDrnsAN9dQ==
-Date: Mon, 24 Mar 2025 20:16:15 +0000
-To: Tamir Duberstein <tamird@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] rust: reduce pointer casts, enable related lints
-Message-ID: <D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me>
-In-Reply-To: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
-References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 389621328b72d358f474de1a56bb51cdd22e9db2
+	s=arc-20240116; t=1742849587; c=relaxed/simple;
+	bh=i8aZYde1B3RChKKVLyzjLczhEobtRPovvSD01gK4Tbc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bBhKRN1Y8+HHhh8JeDHgsiofKJZrKejTeyblxmG0HfYzcvXk3NMWyYb6GQLFHFdF3DoyCSHlCLv7RnP1+6wq7JUdv43ec4vC9LFZG+lx4lfiBOjCZ8jkooeXbgnjzJiMzgnfLXfSZoHcIf8BZdQZrr2PUlgOlinbql8AsttLXLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=HGQYR5in; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac2963dc379so828037666b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 13:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1742849584; x=1743454384; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=I38U0FrU7lXZPgGiiC6xH++pECXJ1njDUw5kOS4q8JU=;
+        b=HGQYR5inf2Plw68ViKAxuDQZZoQiC6rCKf2opcf+B1LCjUujDSG/XGQU2H21epneqA
+         QRIG94oanorKWwh32ppV0BGRYdWhDPDyVaV6CmSe+rxoaal7tzbold7iamDO0aMFwnlA
+         l5tgkzpwV1GIHx8+5wpvUvj6ivZlCH4oKc+Z7zz6qxlmzffi6WB1kyFp/UC1uGMduxvr
+         /1HWnrJiDSWHWpGA45QpDltoD0hRk3xIJwl3MMd4oqRbc9xhWWQitsM5YdHO9MKDnnYw
+         xRq3RxaPxHka788hotCFht1wHmKV4VJYJHDK67BFu7FvM/Pmb/ZsPIrsjyeRV9TEzb0F
+         7XVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742849584; x=1743454384;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I38U0FrU7lXZPgGiiC6xH++pECXJ1njDUw5kOS4q8JU=;
+        b=Jq+mAMRMxl63PlG263jp+bFpzAU9+SrQoq3wr2l8ZSUKNNNm5pmqPK+kh8MMm1A7w5
+         0TShogvLTYZyQXnmFgF2meX0qBckqoDOMH1n2rL/eeJrXCQDqhHanKfqMlCSMnB6a7jk
+         U8wxaDU3fPOgFN411ouaBFaFYF/mhEdwGp/EkDoNFzQlJepmWa57A3CL7qdp1dTFOIGM
+         8xop6kUAAVXDyM9S3Oj425pnUeePenI0Ah4uEbedl5Y+Sjog9YLb2vtmd8xakvLRrL1O
+         flWR3cIBPGZ+DZHjSU6I7Qn4iOaD3TaFM6k8rqPFkoE6He6ZMOivHiEM4MijrCKnl5JH
+         a+Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCWBSncIehROkXp/FiqSC/MHHPJYAfPeVm47rCvJIDzrluRi2jJ9eK0Di3RsIfQcTDOoKWJFwyqwHW3J97el6Ac=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvm10R7FuavREwwhP9wSVAUAczi0MltILUvAjHiv1SX1H971IX
+	X23T5uv4kwSf8R42774DnSA8ARyYbzUhYHDwYNqwT1jA+bqBTNLqp3dthROay1vwM1r7G8HYBBP
+	6jhddvR/YwLgcdpf1S4VT6zIQPUq1Nlfe6RkZiW0WP+8ZXexCmFv8RWTND08=
+X-Gm-Gg: ASbGnct6KIK/mUFpoI0IYSB2nsS3g+YcEUDt2xZufs6KipOl8eZjNDEja28gG5HxaiR
+	kdhHYKAplkL7vG0LNekgV0btHHBycnUaAYJchMJjpsMnRHH2HH7sdDKP5Yr4lV2kzkB0OXxFYth
+	kMzkqJcI748MYZ7OuW+n2jAC9QqY+pjW8npzWz5kYpygJw83lcCuLaOsbLH5VpK4VqN32IjkTn7
+	nxkTLf/0HJKPxd3B6gWcrqsztsvv43NOcyH9SSbP1Wqh0f7W6qJxSZXRsC09NHrM49LcTTQWSUF
+	EJ01ObSMpOmThN7EejgCt9jea6C/PRkWfa+XY8Dg0vI0jPPFrap1CfvyIMSfWTQYp6TKlwxwDbx
+	qiDqmgMlbs8Jcw4sbQQ==
+X-Google-Smtp-Source: AGHT+IFstL4cl4J1iYAxXwRy6hoDu2dOycCyl006ObbtprBV0TprEgXJ2rIAwgqdRUKc9/q3kDAang==
+X-Received: by 2002:a17:907:8686:b0:abe:f48c:bcd with SMTP id a640c23a62f3a-ac3f27fd5fbmr1662647866b.50.1742849583835;
+        Mon, 24 Mar 2025 13:53:03 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:4ced:7dc0:1dc5:471a? ([2001:67c:2fbc:1:4ced:7dc0:1dc5:471a])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3efd3b34fsm733226466b.157.2025.03.24.13.53.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Mar 2025 13:53:03 -0700 (PDT)
+Message-ID: <ae9f3c18-7b03-4a49-83a4-a3e7d8c52a3e@openvpn.net>
+Date: Mon, 24 Mar 2025 21:53:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v24 09/23] ovpn: implement packet processing
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+References: <20250318-b4-ovpn-v24-0-3ec4ab5c4a77@openvpn.net>
+ <20250318-b4-ovpn-v24-9-3ec4ab5c4a77@openvpn.net> <Z-E70n1tkzKdepTo@krikkit>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <Z-E70n1tkzKdepTo@krikkit>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon Mar 17, 2025 at 3:23 PM CET, Tamir Duberstein wrote:
-> This started with a patch that enabled `clippy::ptr_as_ptr`. Benno
-> Lossin suggested I also look into `clippy::ptr_cast_constness` and I
-> discovered `clippy::as_ptr_cast_mut`. This series now enables all 3
-> lints. It also enables `clippy::as_underscore` which ensures other
-> pointer casts weren't missed. The first commit reduces the need for
-> pointer casts and is shared with another series[1].
->
-> The final patch also enables pointer provenance lints and fixes
-> violations. See that commit message for details. The build system
-> portion of that commit is pretty messy but I couldn't find a better way
-> to convincingly ensure that these lints were applied globally.
-> Suggestions would be very welcome.
+On 24/03/2025 12:02, Sabrina Dubroca wrote:
+> 2025-03-18, 02:40:44 +0100, Antonio Quartulli wrote:
+>> +int ovpn_crypto_state_reset(struct ovpn_crypto_state *cs,
+>> +			    const struct ovpn_peer_key_reset *pkr)
+>> +{
+>> +	struct ovpn_crypto_key_slot *old = NULL, *new;
+>> +	u8 idx;
+>> +
+>> +	if (pkr->slot != OVPN_KEY_SLOT_PRIMARY &&
+>> +	    pkr->slot != OVPN_KEY_SLOT_SECONDARY)
+>> +		return -EINVAL;
+>> +
+>> +	new = ovpn_aead_crypto_key_slot_new(&pkr->key);
+>> +	if (IS_ERR(new))
+>> +		return PTR_ERR(new);
+>> +
+>> +	spin_lock_bh(&cs->lock);
+> 
+> At this point, should there be a check that we're not installing 2
+> keys with the same key_id at the same time? I expect a well-behaved
+> userspace never does that, but it would confuse
+> ovpn_crypto_key_id_to_slot if it ever happened.
+> 
+> ["well, then the tunnel is broken. if userspace sets up a broken
+> config that's not the kernel's problem." is an acceptable answer]
+> 
 
-I applied the patches to v6.14-rc7 and did a quick pass with
+The behaviour of ovpn_crypto_key_id_to_slot() is still "deterministic" 
+as we will first lookup the primary key.
 
-    rg -nC 3 -t rust ' as ' | bat -l rust
+Therefore we will simply always use the primary key and never the other, 
+which is what we should expect in this situation from the code.
 
-to see if there are any cases left that we could fix and I found a
-couple:
+I'd say this is just an ill-formed configuration, yet not invalid.
+As per your statement, I'd say it's userspace's problem.
 
-* there are several cases of `number as int_type` (like `num as c_int`
-  or `my_u32 as usize` etc.) not sure what we can do about these, some
-  are probably unavoidable, but since the kernel doesn't support 16 bit
-  systems (that is true, right?), we *could* have a `From<u32> for
-  usize` impl...
-* some instances of `'|' as u32` (samples/rust/rust_misc_device.rs:112).
-  There is a `From<char> for u32` impl, so this can just be replaced
-  with `.into()` (or maybe by using a byte literal `b'|'`?).
-* `shared_ref as *const _` (for example in rust/kernel/uaccess.rs:247,
-  rust/kernel/str.rs:32 and rust/kernel/fs/file.rs:367), these we can
-  replace with `let ptr: *const ... =3D shared_ref;`. Don't know if there
-  is a clippy lint for this.
-* some pointer casts in rust/kernel/list/impl_list_item_mod.rs:{253,254}
-  not sure if they can be converted though (maybe they are unsizing the
-  pointer?)
-  Another pointer cast in rust/kernel/driver.rs:81 (I'm pretty sure this
-  one can be replaced by a `.cast()`)
-
-Some clippy lints that we could also enable that share the spirit of
-this series:
-
-* `char_lit_as_u8` (maybe that also covers the `'|' as u32` case from
-  above?)
-* `cast_lossless` (maybe this catches some of the `num as int_type`
-  conversions I mentioned above)
-
-I'll leave it up to you what you want to do with this: add it to this
-series, make a new one, or let someone else handle it. If you don't want
-to handle it, let me know, then I'll create a good-first-issue :)
-
-> ---
-> Tamir Duberstein (6):
->       rust: retain pointer mut-ness in `container_of!`
->       rust: enable `clippy::ptr_as_ptr` lint
->       rust: enable `clippy::ptr_cast_constness` lint
->       rust: enable `clippy::as_ptr_cast_mut` lint
->       rust: enable `clippy::as_underscore` lint
->       rust: use strict provenance APIs
->
->  Makefile                               |   4 ++
->  init/Kconfig                           |   3 +
->  rust/bindings/lib.rs                   |   1 +
->  rust/kernel/alloc.rs                   |   2 +-
->  rust/kernel/alloc/allocator_test.rs    |   2 +-
->  rust/kernel/alloc/kvec.rs              |   4 +-
->  rust/kernel/block/mq/operations.rs     |   2 +-
->  rust/kernel/block/mq/request.rs        |   7 +-
->  rust/kernel/device.rs                  |   5 +-
->  rust/kernel/device_id.rs               |   2 +-
->  rust/kernel/devres.rs                  |  19 +++---
->  rust/kernel/error.rs                   |   2 +-
->  rust/kernel/firmware.rs                |   3 +-
->  rust/kernel/fs/file.rs                 |   2 +-
->  rust/kernel/io.rs                      |  16 ++---
->  rust/kernel/kunit.rs                   |  15 ++---
->  rust/kernel/lib.rs                     | 113 +++++++++++++++++++++++++++=
-+++++-
->  rust/kernel/list/impl_list_item_mod.rs |   2 +-
->  rust/kernel/miscdevice.rs              |   2 +-
->  rust/kernel/of.rs                      |   6 +-
->  rust/kernel/pci.rs                     |  15 +++--
->  rust/kernel/platform.rs                |   6 +-
->  rust/kernel/print.rs                   |  11 ++--
->  rust/kernel/rbtree.rs                  |  23 +++----
->  rust/kernel/seq_file.rs                |   3 +-
->  rust/kernel/str.rs                     |  18 ++----
->  rust/kernel/sync/poll.rs               |   2 +-
->  rust/kernel/uaccess.rs                 |  12 ++--
->  rust/kernel/workqueue.rs               |  12 ++--
->  rust/uapi/lib.rs                       |   1 +
->  30 files changed, 218 insertions(+), 97 deletions(-)
-> ---
-> base-commit: 498f7ee4773f22924f00630136da8575f38954e8
-
-Btw I didn't find this commit anywhere I usually check, where is it
-from?
-
----
 Cheers,
-Benno
 
-> change-id: 20250307-ptr-as-ptr-21b1867fc4d4
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
 
