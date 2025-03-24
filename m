@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-29698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57457A6E352
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 20:22:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7902BA6E38F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 20:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CF991895EAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 19:20:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99AC43AD358
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 19:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3224A19D88F;
-	Mon, 24 Mar 2025 19:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BDE1A83ED;
+	Mon, 24 Mar 2025 19:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ezBXWM2G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilZ8o2cv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0651619CCEA;
-	Mon, 24 Mar 2025 19:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B43A1A5B8B;
+	Mon, 24 Mar 2025 19:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742844002; cv=none; b=OeDzRjeq85h61TBGxi2NQggBsC6X7hoHf7n5sDbzjg9nPsu7IG7dSxPhp501TThGSVm/g+/H1GYcI/qhvy8szVwzDK0qROi9O5mB/J1PHtbIpgjWI/hq/Zhk9jgEERq2jQJgzvicYmlnU/UppzM2ui/Gl1Tt3Hqj5vDcZ9r95Zg=
+	t=1742844602; cv=none; b=PzKyWBXG5NZmce/cQwfPaz5hXqIILKBK8BSdxREViEnSHaVjW+kkMnEDRuC36KIA5jAF30usd3lMNEUwPhyNAqce2XAPuhOmkV26X8eadwBvOz1eld4vSNikcJHKw8Jle7u1jw9cS4Vir4ncrEou2Flcd8l9QBpORZm7A9WjDjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742844002; c=relaxed/simple;
-	bh=cGarqQM7eN/YzTgeHfhkcgOUGMSBEhE4Iw6fsmgMAOE=;
+	s=arc-20240116; t=1742844602; c=relaxed/simple;
+	bh=TbSqYbCYGbS4Mj9Mnrm/o9gdU4W3fvZqouwvEPGgNZ4=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GY3eILdsRnpRrERKvOszCuQzurJZtYdCrunqooG+KqB3BJN9BXYos549fJJs9X6qKkirIMZNB2rn6G1pjwOy1t4LfAAmjw5dil3ZbOV1x+4jVQXEyIylAkVQI6XW7RM35+Wm78Xjof9qjiBwcoAVEW3orqgusxpOA+L8ZyHSb/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ezBXWM2G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40220C4CEED;
-	Mon, 24 Mar 2025 19:20:01 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=R5gYa0k95SyfgTCdoTpEa6bUA7oOMR/Vmn5VNBjUk3FW3bMbquMXfFjS5J6At3qZSJwwf8GudxJ2VTZz3yDUwyDkY0HaZuNJsZwHnBxnaYhTco5OLuQNAXNyR3K9gZXYq5DRxMgM/X4WjN9cV+e+HnaUGNmhPUvvyA6a6FqXJLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilZ8o2cv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81147C4CEDD;
+	Mon, 24 Mar 2025 19:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742844001;
-	bh=cGarqQM7eN/YzTgeHfhkcgOUGMSBEhE4Iw6fsmgMAOE=;
+	s=k20201202; t=1742844601;
+	bh=TbSqYbCYGbS4Mj9Mnrm/o9gdU4W3fvZqouwvEPGgNZ4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ezBXWM2GuM2Ver1fZfrxZh/EgtY57ROZcahDj4MYr9fXMKLIqXLxDma4CCE9LAkiR
-	 mvJWlfP8bNdl8MafiVOTkRCpG36K0kg52scPowN7W7AUjUq9O5uDeFIgd19Hf+cxte
-	 tzACTJzQMrZFXO3B2qYJvnZ+b7hb55ToaHqg69gvLahxVwpRoVPiWTZJ21Ljk3J0TZ
-	 j14+zDliruG145yuPZlYY4HvfDNstuuzDXxEimhTMtCuJYu2r+9yIa/l7+ybVfdKlL
-	 lKtbBKFW1e5UgrWICMI7H3NOHp0R3KNd3rav4aadQ1898LVdWePe7XcuD+QtHl40Zl
-	 CZL5MGQrNRktA==
+	b=ilZ8o2cv4ov5XDEhv8P27LSkg5BWPM+PlfUmjXB1UEhK/tUqNGKH5vk7BvnxsWWOb
+	 58Q7c45LIWfFKL/gYnNvILwKWQZA2c/zL7Mj0YNRzROg9x5s0wKHSLgwIEmTzQZMxo
+	 94/aNAysNXn52HC4nf1fV/wIYpr1jumX9sqUWQJ+WD+68VHoVqhnbXvtWsOiIgpGI3
+	 qDhyg5se43eypB66X+5QBhhpTR7HqvYHmDzshFeluLJYzxea5oeTLX5LcCNCNHa5Pv
+	 dYZB8xxQBdV6Kwypf3gmVEbPk9p8ti1Jr0sX/aFKjrI3vXCXkoy0nzIbCfnr0hfAeu
+	 RgLI3SOTX4HAw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70B7D380664D;
-	Mon, 24 Mar 2025 19:20:38 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAF0D380664D;
+	Mon, 24 Mar 2025 19:30:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,43 +52,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1 1/2] net: pktgen: add strict buffer parsing index
- check
+Subject: Re: [PATCH net-next] selftests: drv-net: rss_ctx: Don't assume
+ indirection table is present
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <174284403701.4140851.5482210239740401759.git-patchwork-notify@kernel.org>
-Date: Mon, 24 Mar 2025 19:20:37 +0000
-References: <20250317090401.1240704-1-ps.report@gmx.net>
-In-Reply-To: <20250317090401.1240704-1-ps.report@gmx.net>
-To: Peter Seiderer <ps.report@gmx.net>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, dan.carpenter@linaro.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org
+ <174284463777.4144910.15829984579184745582.git-patchwork-notify@kernel.org>
+Date: Mon, 24 Mar 2025 19:30:37 +0000
+References: <20250318112426.386651-1-gal@nvidia.com>
+In-Reply-To: <20250318112426.386651-1-gal@nvidia.com>
+To: Gal Pressman <gal@nvidia.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, netdev@vger.kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, noren@nvidia.com
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 17 Mar 2025 10:04:00 +0100 you wrote:
-> Add strict buffer parsing index check to avoid the following Smatch
-> warning:
+On Tue, 18 Mar 2025 13:24:26 +0200 you wrote:
+> The test_rss_context_dump() test assumes the indirection table is always
+> supported, which is not true for all drivers, e.g., virtio_net when
+> VIRTIO_NET_F_RSS is disabled.
 > 
->   net/core/pktgen.c:877 get_imix_entries()
->   warn: check that incremented offset 'i' is capped
+> Skip the check if 'indir' is not present.
 > 
-> Checking the buffer index i after every get_user/i++ step and returning
-> with error code immediately avoids the current indirect (but correct)
-> error handling.
+> Reviewed-by: Nimrod Oren <noren@nvidia.com>
+> Signed-off-by: Gal Pressman <gal@nvidia.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v1,1/2] net: pktgen: add strict buffer parsing index check
-    https://git.kernel.org/netdev/net-next/c/7151062c297c
-  - [net-next,v1,2/2] selftest: net: update proc_net_pktgen (add more imix_weights test cases)
-    https://git.kernel.org/netdev/net-next/c/3099f9e156b3
+  - [net-next] selftests: drv-net: rss_ctx: Don't assume indirection table is present
+    https://git.kernel.org/netdev/net-next/c/c61209eeb0b3
 
 You are awesome, thank you!
 -- 
