@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-29720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB99A6E6DB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 23:51:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7725AA6E6DD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 23:51:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C4EB1895054
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 22:51:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AE121742D8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Mar 2025 22:51:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B304E1F0E5C;
-	Mon, 24 Mar 2025 22:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2766F1F0E2A;
+	Mon, 24 Mar 2025 22:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCSA81k3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EaQUCsLI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF451F03DA;
-	Mon, 24 Mar 2025 22:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFB31F0980;
+	Mon, 24 Mar 2025 22:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742856652; cv=none; b=qmSAS9lXNQY1FTAi0x2uB+oq+W/VJYZXpSTQ43GA65HRQGh78PhNsKjuzyOzXotmtIAomLT57Nl5KQaymnIfIawLxxuHwC3HQ8zK354UmObrov7Gn4ndly8QSflhn/AHOMTwSDoS/i0LE6lW8odNda1ChqYU01dknoeUIXrZSoI=
+	t=1742856658; cv=none; b=RYDCYFUWcqyX8+dgdwl9QtL/kaDRHdTlmpx/eSnlf/X7d1Mxk6vhAK1G+M4DOtJkcMbdvLDDMxk2P6u6PTK6u3MPvJ70VJET6gJosgxzkuNef4KZekCs82CKwNg9UZAM6+IMEeUSZgkqGzJ9s+HzkI8jU8ETACuk6bSziGxmndk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742856652; c=relaxed/simple;
-	bh=nyvrbNgCdVC75BFn1aJkMtslxrzManeApmITngvXPQs=;
+	s=arc-20240116; t=1742856658; c=relaxed/simple;
+	bh=OFnfZFOvRFjLF8yLMJ78CR39P8ues9cZwGeS5uxP9jQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=b4Gdu8C3toKy0Rk1SpwTWx9cfnk+zk0RYyh205Qfd4QtvhYtmApTf9h7fDWRbGWBXjLmO5sb3kKzpXZwTgKDQmMe/jBlSnVIw5EHBw7mpwOtdfogwYTrKNUEw9B+na3OfucbA+aUy4nUdJx6xjcjj1m7Ix4RsCr5KH+oO6XYZT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OCSA81k3; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:To:Cc; b=FvWDrJxvjzpa9IswbC3L7gw6n83pgZNm8Yt2BJpXsRfoQauDjFSpIJxjpTUp3Q3nSzHcnXFqaprtDbsCOdAOOrmESqhV28XNE8M86DygwqQO6WStqkjtVU/wLnJ2fKKh0itjmKXgJkfYZhVKsXcZFAX1FKhP8obhX4AFKCzVH3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EaQUCsLI; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2264aefc45dso82994325ad.0;
-        Mon, 24 Mar 2025 15:50:50 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-301c4850194so7212147a91.2;
+        Mon, 24 Mar 2025 15:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742856650; x=1743461450; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742856655; x=1743461455; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IO0/8MpeEUMa2+c8CKNOtHcsRnk9ft2IM2tQGzIvsHg=;
-        b=OCSA81k3qGj1sVp/U7u+zrc1YW6Rgovv/M4bXbwSU1ecxGEPj4J3NWCfWfYOTV8l15
-         ETIcPsB9ui2+mr1q8ltdafI5bD8/hEL8dQh3Wix4WCKew1VsdJ06e6wdtTD9gUc3EgdB
-         jrN46cQ8oex96h/YVHZCuq+B1d2CohI6a+HkL5wRk8T7fHoHruLT/HXygsOoPUq7t2qn
-         QpaqXosKm6l50CiQQySSS7icBuhO+K3tiFM2Ehfq19HmFehtQsbFngL7Wbzfqt2sRgA6
-         0XEK4ES+SqHRuJrQFnk/iYttiEziO/MZjsej0Sd7skfzqPVvWAGBMF8B5DhU5PVe3wXO
-         NhsA==
+        bh=HIcZnMnjQF2uW7JNXrODHoycRkxw07WZdEbj6dXyb74=;
+        b=EaQUCsLIlGpzPM02p9D+12RTz63/NRMxzrmGRxiXB2IgzC5rtBTRZGRl/Kc8v9Xbrp
+         ejuoDBQfZSwg6UnT74RHfE038RsonG6x/I66WIALx45NV/QVyZlF4+EZqmRstVUrR7Dk
+         3YJ8YbpRcm/g2NcX016DpvFEXigrb3ur/lVv0l/D0cUlO5fXfOx+p66pHLchPDSt0FVT
+         pb6G/fL3waeBxrJ05d8J5aIy676Pzp/ihZeeJ7Zuh/wM3fAI1uHEbscWuXVbTCXqJiG7
+         4SJOvQ1cPOOIQJbcHQIQJY9I2P9Ow5DgM7pz0PCef4d4wZnoUgrwTAJi569SdUWGnAyS
+         NZUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742856650; x=1743461450;
+        d=1e100.net; s=20230601; t=1742856655; x=1743461455;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IO0/8MpeEUMa2+c8CKNOtHcsRnk9ft2IM2tQGzIvsHg=;
-        b=hrgYnDzQm5clLfPL45oOxY+74e8NCk/w8tYZTk0Y7H117YmeydyazRfg6wnUGqlEwb
-         g9XDF6KVwlWRaXr8YZZDQZDgw4ss7iHVx+SdzCsX5fmta+Pb4ORkrAHdzExPrLypyWFA
-         USrcelHMy3hGoqJvB0LulqIIIWlYFZKHVcld2wq/M9by2+aHf9xs1KTVGLD8K1CV5SKN
-         Zk7424V7+j4oTdHRpC4JP8FpeMGdlxAP85FEnEcAqGT0iB3Ffrd5BOEWjsNAw47BxAPM
-         ZYaMoKSYQikOfGl6xp028H4/h5aTIpt841iTMQktaq73HuoceT0RTY8IYQZIYSLQPLlT
-         H7Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCVr5iUQ2LZHNXkr6mzHGEnXapksgkucsx8yHTdviExambyExe/NTENH3+dmn/zJ6AdYCN+KSDBSCbE33aE=@vger.kernel.org, AJvYcCXguF/A14izmZrwghrKxYZzMKpgfU0kdEuc3keXeFYdrlJbNAIqAygfJ2/q+tAV0TaqkKLcXTR8aBICwMME5sBX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwH+FdvhAX3uFtqEbhjkDq9lVwyK8tXG++fNwn8njFTw5Ny2dNC
-	ARaFBU2KXQQ6404MtLuFf7pSezhcJgBHjT1XEtTr3NTu35CnlBRH
-X-Gm-Gg: ASbGnctzV8MgO7sW2JOgNpULFdvI+5Pvm0DJ7OxHAMPyWq9KokFyVuOMdr3/UmO0n9a
-	n4nI2ANX1SBkaIiO9EnsqrwghGFhomFLKKVqTbwbRvL6pSnBmvHHZSEiHf0sFBiLwdgy1S4+9CQ
-	+G0qE5MkbdPEZfD29RaEHOEjsnFC4EhZo/9BygAAcdUWkoqzIrXm/H2cdpYfrnnOu5YpAihdmgN
-	b94im0+moNk8Zq6FgiLn/nXzO+sydfQaCDYYSoLCzf4b855eW+ZLKsQttKW/7N7MKs7bDoWlqfV
-	r12zQjdYsEqVODE/sYg7MRniLDSpk7jQoYTEkhXOeoGKI98ydYaB
-X-Google-Smtp-Source: AGHT+IFfUoDqYHSJpUAkSRhqvcQr4nVoDR7pn+09FRRq0qH5RxzPUbiVy3QxVHIk+syBZCoyfAPGHg==
-X-Received: by 2002:a17:90b:1802:b0:2ef:2f49:7d7f with SMTP id 98e67ed59e1d1-3030fe9fee8mr23494705a91.18.1742856650152;
-        Mon, 24 Mar 2025 15:50:50 -0700 (PDT)
+        bh=HIcZnMnjQF2uW7JNXrODHoycRkxw07WZdEbj6dXyb74=;
+        b=dvnQwMN3c+eoEkgbWGcs5HQs5dLlwdMdJN7/w45ggZoUwTo4urPcu3+HYE3knGxZ7A
+         HaHekuiiJLNEMkEPj8mjjug8KGhklSHMkNBbQ+2CVzvI2PIWhE9aIwErS1HURWwhYLmz
+         RIrtHQK/GMxWKAdbphFl89DMp2a2qoSU2tXkGzY7OjM0tR/E17Tk8fR5hx3ROnaLKiYi
+         sVeYjqXNDaaWsVbqFJ6zRWTWkanmNTXxVwhFwmJHrV84lstVhCn6RH2JYQ6+dGa5sVBP
+         3fe4QbqjuVjLLIaQqgTrg2JmMJPbWKUP+sjy3UCSGpL7+qxSpTpUX6fCdQwjZ4YzM7VM
+         56Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5VMbZ/7bcmCDRKgy7/ZvVVfibPKREqqz8tWf/PRX8Wv2WGgrRzxBBK2pP+QFQDEwh68IZM7IDpbndxwzyzlCa@vger.kernel.org, AJvYcCWCvTkjxmG9ufsIdtEEnC2GGtDSg8AX6LC47+hYz4KQuVurDsyVL1LChIhT8SP26IEVndpdsKFqGAKldvA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8C+vAU6x8bGke/bFMHnwPDPNJnroKPCxu6MaY0r1NZOsTX/bp
+	dbpEmZGxzknujU/LpF0MVuQt6DBF4qY5BS6Bw2NQQIVgh0o+1+Dd
+X-Gm-Gg: ASbGncu30gb+Fp3qXzcO1HV8NeKA/AyVi/xhWxhtsuLjbrsrjmE+Tzb1zP1SiC7wewH
+	LfeFEUEqW3eVkrky+tOSTI7jp68ISfUuJF9o9fifpi+15sX/0tbunEXoco0xklOBzXhoNgdLFOM
+	JYbbyE9vXy6yN1qUeF7Mdk/SVhuoxApQ31T3KWS8D2ZkTZu39e/BXbMS19wH3R6IuJmC3+wE6NG
+	h9abfUhAT6DDpvi+MwzUKFft5yPFx0AqOP/g3aG4FgJMHtmmDbYPqQOvYUu9kzOxipAvVfFWeqr
+	Qi6OdXqssFpKvt69TFmY7IpR5/MrbqP2Lkqcp+xCxgyhVMWs3Vom
+X-Google-Smtp-Source: AGHT+IF8iWTONHUd8aV2dDQzwo6/Z6bKjkb4Rz6knucNIpNah98QGJl0Hvie4EV6FW8ZoGTIxMbdqA==
+X-Received: by 2002:a17:90b:2e83:b0:2fa:1a23:c01d with SMTP id 98e67ed59e1d1-3030fec62damr21880841a91.21.1742856654672;
+        Mon, 24 Mar 2025 15:50:54 -0700 (PDT)
 Received: from fedora.local ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3030f5b7823sm8801477a91.10.2025.03.24.15.50.46
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3030f5b7823sm8801477a91.10.2025.03.24.15.50.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 15:50:49 -0700 (PDT)
+        Mon, 24 Mar 2025 15:50:54 -0700 (PDT)
 From: Filipe Xavier <felipeaggger@gmail.com>
-Date: Mon, 24 Mar 2025 19:50:18 -0300
-Subject: [PATCH v3 1/2] selftests: livepatch: add new ftrace helpers
- functions
+Date: Mon, 24 Mar 2025 19:50:19 -0300
+Subject: [PATCH v3 2/2] selftests: livepatch: test if ftrace can trace a
+ livepatched function
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250324-ftrace-sftest-livepatch-v3-1-d9d7cc386c75@gmail.com>
+Message-Id: <20250324-ftrace-sftest-livepatch-v3-2-d9d7cc386c75@gmail.com>
 References: <20250324-ftrace-sftest-livepatch-v3-0-d9d7cc386c75@gmail.com>
 In-Reply-To: <20250324-ftrace-sftest-livepatch-v3-0-d9d7cc386c75@gmail.com>
 To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
@@ -96,92 +96,57 @@ Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Filipe Xavier <felipeaggger@gmail.com>
 X-Mailer: b4 0.14.2
 
-Add new ftrace helpers functions cleanup_tracing, trace_function and
-check_traced_functions.
+This new test makes sure that ftrace can trace a
+function that was introduced by a livepatch.
 
 Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
 ---
- tools/testing/selftests/livepatch/functions.sh | 49 ++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ tools/testing/selftests/livepatch/test-ftrace.sh | 34 ++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 15601402dee6567837c2c49ba342eb357e410d18..46991a029f7c64ace3945727b3540521ffe2e529 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -10,6 +10,7 @@ SYSFS_KERNEL_DIR="/sys/kernel"
- SYSFS_KLP_DIR="$SYSFS_KERNEL_DIR/livepatch"
- SYSFS_DEBUG_DIR="$SYSFS_KERNEL_DIR/debug"
- SYSFS_KPROBES_DIR="$SYSFS_DEBUG_DIR/kprobes"
-+SYSFS_TRACING_DIR="$SYSFS_DEBUG_DIR/tracing"
+diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+index fe14f248913acbec46fb6c0fec38a2fc84209d39..094176f1a46aee8cf08667ae9e31ae8720bc1ae1 100755
+--- a/tools/testing/selftests/livepatch/test-ftrace.sh
++++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+@@ -61,4 +61,38 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
  
- # Kselftest framework requirement - SKIP code is 4
- ksft_skip=4
-@@ -62,6 +63,9 @@ function push_config() {
- 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
- 	FTRACE_ENABLED=$(sysctl --values kernel.ftrace_enabled)
- 	KPROBE_ENABLED=$(cat "$SYSFS_KPROBES_DIR/enabled")
-+	TRACING_ON=$(cat "$SYSFS_TRACING_DIR/tracing_on")
-+	CURRENT_TRACER=$(cat "$SYSFS_TRACING_DIR/current_tracer")
-+	FTRACE_FILTER=$(cat "$SYSFS_TRACING_DIR/set_ftrace_filter")
- }
  
- function pop_config() {
-@@ -74,6 +78,17 @@ function pop_config() {
- 	if [[ -n "$KPROBE_ENABLED" ]]; then
- 		echo "$KPROBE_ENABLED" > "$SYSFS_KPROBES_DIR/enabled"
- 	fi
-+	if [[ -n "$TRACING_ON" ]]; then
-+		echo "$TRACING_ON" > "$SYSFS_TRACING_DIR/tracing_on"
-+	fi
-+	if [[ -n "$CURRENT_TRACER" ]]; then
-+		echo "$CURRENT_TRACER" > "$SYSFS_TRACING_DIR/current_tracer"
-+	fi
-+	if [[ -n "$FTRACE_FILTER" ]]; then
-+		echo "$FTRACE_FILTER" \
-+			| sed -e "/#### all functions enabled ####/d" \
-+			> "$SYSFS_TRACING_DIR/set_ftrace_filter"
-+	fi
- }
- 
- function set_dynamic_debug() {
-@@ -352,3 +367,37 @@ function check_sysfs_value() {
- 		die "Unexpected value in $path: $expected_value vs. $value"
- 	fi
- }
++# - verify livepatch can load
++# - check if traces have a patched function
++# - reset trace and unload livepatch
 +
-+# cleanup_tracing() - stop and clean up function tracing
-+function cleanup_tracing() {
-+	echo 0 > "$SYSFS_TRACING_DIR/tracing_on"
-+	echo "" > "$SYSFS_TRACING_DIR/set_ftrace_filter"
-+	echo "nop" > "$SYSFS_TRACING_DIR/current_tracer"
-+	echo "" > "$SYSFS_TRACING_DIR/trace"
-+}
++start_test "trace livepatched function and check that the live patch remains in effect"
 +
-+# trace_function(function) - start tracing of a function
-+#	function - to be traced function
-+function trace_function() {
-+	local function="$1"; shift
++FUNCTION_NAME="livepatch_cmdline_proc_show"
 +
-+	cleanup_tracing
++load_lp $MOD_LIVEPATCH
++trace_function "$FUNCTION_NAME"
 +
-+	echo "function" > "$SYSFS_TRACING_DIR/current_tracer"
-+	echo "$function" > "$SYSFS_TRACING_DIR/set_ftrace_filter"
-+	echo 1 > "$SYSFS_TRACING_DIR/tracing_on"
-+}
++if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
++	log "livepatch: ok"
++fi
 +
-+# check_traced_functions(functions...) - check whether each function appeared in the trace log
-+#	functions - list of functions to be checked
-+function check_traced_functions() {
-+	local function
++check_traced_functions "$FUNCTION_NAME"
 +
-+	for function in "$@"; do
-+		if ! grep -Fwq "$function" "$SYSFS_TRACING_DIR/trace" ; then
-+			die "Function ($function) did not appear in the trace"
-+		fi
-+	done
++disable_lp $MOD_LIVEPATCH
++unload_lp $MOD_LIVEPATCH
 +
-+	cleanup_tracing
-+}
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++livepatch: '$MOD_LIVEPATCH': starting patching transition
++livepatch: '$MOD_LIVEPATCH': completing patching transition
++livepatch: '$MOD_LIVEPATCH': patching complete
++livepatch: ok
++% echo 0 > $SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled
++livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++livepatch: '$MOD_LIVEPATCH': starting unpatching transition
++livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++livepatch: '$MOD_LIVEPATCH': unpatching complete
++% rmmod $MOD_LIVEPATCH"
++
+ exit 0
 
 -- 
 2.46.2
