@@ -1,115 +1,154 @@
-Return-Path: <linux-kselftest+bounces-29764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CE72A70520
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 16:34:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D355A70531
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 16:36:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0E761885446
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 15:34:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4E52168096
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 15:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685771A3AB8;
-	Tue, 25 Mar 2025 15:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="ISiwgb3d"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5026C1A3AB8;
+	Tue, 25 Mar 2025 15:36:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603CB1922C6;
-	Tue, 25 Mar 2025 15:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC84D8635E;
+	Tue, 25 Mar 2025 15:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742916837; cv=none; b=jovMdZQUIF2wdtYB7X1r2BH/pzzN/W7cP4aqRdW7/mZPgTW68YIWOClhbPVzrjal5U+XSWW3WvudbgrXAraA7xFRzsdPM8Tf/DEpMVmyA1IRQOJqQpnc97K27W0ny4B2dHPWrw2fGpD2hNzBmn/Y5PE50KrzsIcADNNSP7cUzMw=
+	t=1742917001; cv=none; b=DchVrM9l6tOft0aRexf7a/HkI77KiWFSannPhrbB/22mcRTSVWh0fKuiy9kIDqKtVZSXebcUpx6nJ8OM82x9fWHXlCxMya5Y8EWD9vBOUZhiGWs+mWmRh/k5RmQueOsHTq57+Cu7zdQ9xMIzFJdZnTQDmTz2csS8Kcn9HiOAs08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742916837; c=relaxed/simple;
-	bh=NXENBimpOC5uHN+lh1DBMOj1AqfWo8oTaujcGaqeYX0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AyRSIE9NXr4splYnvNZ4eRjuA3ZIIfmOOt4UsuS6Y0ldet3oHmziYXiCC8XIM0SowyD9x9/EPbKc9bk9KnH+T7eK5h4M+ilAAySVCbxa73nUctXmeL4uCKzXJJqsqTHoprOnnzbMFr27WnbT3RMizJxWZ0luzGbdC2bOPO5Xa34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=ISiwgb3d; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1742916833; x=1743176033;
-	bh=ArxhSHha9/Qen+fEGX8KXzYMZVlNdNjiofaeqo+ocNc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=ISiwgb3dN7ivBGn7nO/A2OWlnhdY09jCcWA/b4wE6o4d/sbcYc3R+0up4nGe3q1/3
-	 VhvRSQ+1cnPhWkOqdbexwdMVcO8A1gi6kMRvn7Uwd7bVT+sRnTbcHBMTxIAYxkDcdL
-	 5bMGYocJQw7kHwd4EBeMwNhYWVV6+QrcBs9qJkLPCdctXK98aXZNAL82EMcXN5b+t9
-	 ONuM5Cvl97DtnOEyAjiZDBBh3T3Pd6fagLxKj4+AAe8Hk2plvNT21y4PIINN04gy+A
-	 1RsB68RcqOldfq+ycAwEBB6YCupgqaUvbHRFxoA35XTTZ3A/p7t4SHJ+UZ0G5GxpGb
-	 5pjISaWiRHH9w==
-Date: Tue, 25 Mar 2025 15:33:48 +0000
-To: Tamir Duberstein <tamird@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] rust: reduce pointer casts, enable related lints
-Message-ID: <D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me>
-In-Reply-To: <CAJ-ks9kuG8SyybioKQ0+bYwjnCQFMhip+4A1WnMhsdgnNZGiZQ@mail.gmail.com>
-References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com> <D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me> <CAJ-ks9n-z0SETz+zBfJmda6Q_vJDeM2jmDXx48xX9qpMmR-mdQ@mail.gmail.com> <D8OTXLDQCOKI.34R1U5R0JSB8H@proton.me> <CAJ-ks9nc0ptzfh+tHj47aTCMqoaKB0SnGpZOLQ06upt7x8EBMQ@mail.gmail.com> <D8PAQXHJDVQE.36QKQGBVVL4QU@proton.me> <CAJ-ks9kuG8SyybioKQ0+bYwjnCQFMhip+4A1WnMhsdgnNZGiZQ@mail.gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: cf56dbe605b88fc3577b2bf3f99caf40cad5d047
+	s=arc-20240116; t=1742917001; c=relaxed/simple;
+	bh=lQGhDpTA02pg2SXSqztof85HVwIN4KdjwfWy9lQVkTI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ncUqwnBPKxQjvM+k378FPvDCnP8zBZheu6ZBrWaqI7Dh6gevnBmvbi2BLfuu4lDrSi6QsP5vEs9OJ/2UwgJ31LH8AseEM3PaAqoJw2phZaA3LeK9qD/IuIAsUJy3pfPabCamA7mrM8qat9TQfDEHPUk9p82xlKkNL+uDcdHNtdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-523edc385caso2301108e0c.3;
+        Tue, 25 Mar 2025 08:36:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742916998; x=1743521798;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rg9s2GhxzbMU0JYpYKXzsavBxYRuo5kJ2cdSM+OjLA0=;
+        b=WR3MtpB7tyQWT0DiK0WR8FgGqmeW3iU0+6xATHg83RkIAZyUO4QptRTJ9/u3GNAofO
+         INhYYT/3P8TQUpn/vryXOrNgUTwrFQznjeH8y7gOkK1fJj20I96O93gVA3qfkaigYcUH
+         c22DD8D3EZEvLqhkQKcUo2916nk7wzwqxTFwukpfj5Wxo6+7OERMGc39QE1sLbBWPNts
+         qFg3cFahrGMpD8sUSvZo/ffWELsVKKx1TSiEvseV0FACsceRp2SQvBuL34S6Is6Usi5r
+         IJBaIIM/SUJ3Dn5GLX3KdbsR7GePh9g5aLDaQqfkrSnwoP7DodV2nADpNy2PAfNb0qer
+         QSlA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXD+SZMC2ZmAAwOj/IcAJIFg14GFTBSBOTuD5105ot4NTwkQ3kh8Q5D6ShLn7D2+6bORT98yVSxtRo1Bu/nG2WK20i@vger.kernel.org, AJvYcCUnTF42ZmJI9ZSwGD9wmDq3f8E+ijKxVmpiAdj6yRR2WOOdFnqWWmDD06RGbo0OKHzjklLyAv7brkI=@vger.kernel.org, AJvYcCV9zfqBc2VAX+Lj0T6UG24i3tGU0VjgNcAbwLiwS0Vt3QXyeIJmR2Www2aMFBaX5f5lf/Pfxcr0fXebx3rabX/C@vger.kernel.org, AJvYcCVfRewQc8VwD8OChtnlORSrYB6Ye1vR7UOS4cdyMlIpvF+FeA/PyjKPRCNvJn8jC1NtdkGC@vger.kernel.org, AJvYcCXEHvCp5akvBmBqf9JS1G5mHjLomgAMlJLlna5xTi12+o+NT7dd9oDQhDd99z+8NlAV1+a0IJeCkjZ7cMfz@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtFa+U1mVUXj1z2aeFYzpCtUUKmO+qtwq3ZJYRCtah9o/t1EWa
+	s6CExzQt8qPJRMnpq7ZDIRaCcZ4Afk1/3aQIdrF5hvRu0oGMUhM+ilbbocfj5nI=
+X-Gm-Gg: ASbGncs+8q1uPeXl6tpKPvUAYj79sMCxIbVUeizfHlGQPIa88/R1qHnw4b5B1DaJV4y
+	9g3QYyzbqaAhvEpDZAG7pel5nsBEKI70eccUyQnn3dO2A3wp9U2LzhM1hDtckwPew9u424TmofB
+	m1yYA57w2icD6hg4iMOTllComn4q99LqlS2x6lobduXHzt4tXcHjon9qjkGRPydlpfpKJzj38WH
+	N3uG4CByF0+loSJvojGO7dBOC6Ww27SgAFYbq3zo4uYkv6SvIB8hkpTeuWDqrDzoT+R8oknZIN2
+	8s02hYioTfjzkAfpx2GofD7F6kb4EF/F/iYIyC5xFgxdhzKMjacBpoWuRkM2CyhJljS04Bjv9Ap
+	eXVx9PYwPNl1f9sPs4A==
+X-Google-Smtp-Source: AGHT+IFBNoQDtRZGqjnnu3M3m2DBMWZp4QMOg2nQtXviEZdBxZFbnw3mVIQmVQTtI+CJ7vju/lUJDw==
+X-Received: by 2002:a05:6122:4312:b0:518:865e:d177 with SMTP id 71dfb90a1353d-525a8560bc1mr12001534e0c.9.1742916998084;
+        Tue, 25 Mar 2025 08:36:38 -0700 (PDT)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-86f9f3a3f6esm2078313241.11.2025.03.25.08.36.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Mar 2025 08:36:37 -0700 (PDT)
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-86d69774081so2483414241.0;
+        Tue, 25 Mar 2025 08:36:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV1bnQctZBes+NBe5tPxOM2lFpWn803hpO7YTvTfza93Kr7xOXn1+8uY7UUxnzStpYiySUeyWt4OspLhJdFJ1OefSbP@vger.kernel.org, AJvYcCWA/TdUOkW34smvSDRSjL4Ju+Py+VDFy27OeApRSoKH+5Oizqn0axTDHI5qcSZevAmIHmk/yBTX+zV+FYTx@vger.kernel.org, AJvYcCWC86aiWICremCZBZzzZcvQC0uWR7PKx4KyK/XZuEq1kyLNgDn7kuBCN2Mm8mut3Jb6lmLK@vger.kernel.org, AJvYcCXJkMQp4Qi+wAVcMGhlqkOEOatJAb7NXIhkWqpocdy7AibPojLNTV74CwVrheKuS623e+VTRn+wrbqMSHID3WIE@vger.kernel.org, AJvYcCXoIx7MVLNavdI6D1MF2Me53j7n/PUIhequvaOcXSILl99nj1Dfj2goOhVDO2OOBQ5Yux6rvsfDWs8=@vger.kernel.org
+X-Received: by 2002:a05:6102:c92:b0:4c1:9439:f70 with SMTP id
+ ada2fe7eead31-4c50d4b8f63mr12298813137.6.1742916997318; Tue, 25 Mar 2025
+ 08:36:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20250219153938.24966-1-boqun.feng@gmail.com> <20250219153938.24966-11-boqun.feng@gmail.com>
+ <CAMuHMdX6dy9_tmpLkpcnGzxyRbe6qSWYukcPp=H1GzZdyd3qBQ@mail.gmail.com>
+ <5bf94fdb-7556-4b34-ba21-389dfa1df4f7@paulmck-laptop> <CAMuHMdVVQWZCUFT2uF+QSQz-GzOz2PvugkeatA6bDQeNHU9PSA@mail.gmail.com>
+ <b4ac95ce-7cfd-4d31-aa7d-54ef04f4ae24@paulmck-laptop>
+In-Reply-To: <b4ac95ce-7cfd-4d31-aa7d-54ef04f4ae24@paulmck-laptop>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 25 Mar 2025 16:36:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXsuKMLrg5qmS3oTAWfv3Ph34Hq5jeid974+RoTAR2Rkw@mail.gmail.com>
+X-Gm-Features: AQ5f1JrYtc3XhYgX4YuVml3CpXoCyQpmzApZic48oP74LpqYdOUZOpuYsHWB5oU
+Message-ID: <CAMuHMdXsuKMLrg5qmS3oTAWfv3Ph34Hq5jeid974+RoTAR2Rkw@mail.gmail.com>
+Subject: Re: [PATCH rcu 10/11] srcu: Add FORCE_NEED_SRCU_NMI_SAFE Kconfig for testing
+To: paulmck@kernel.org
+Cc: Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org, 
+	Jonathan Corbet <corbet@lwn.net>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Joel Fernandes <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Zqiang <qiang.zhang1211@gmail.com>, Davidlohr Bueso <dave@stgolabs.net>, 
+	Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Huth <thuth@redhat.com>, "Borislav Petkov (AMD)" <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Yury Norov <yury.norov@gmail.com>, Valentin Schneider <vschneid@redhat.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue Mar 25, 2025 at 2:34 PM CET, Tamir Duberstein wrote:
-> On Tue, Mar 25, 2025 at 7:05=E2=80=AFAM Benno Lossin <benno.lossin@proton=
-.me> wrote:
->> On Mon Mar 24, 2025 at 10:59 PM CET, Tamir Duberstein wrote:
->> > On Mon, Mar 24, 2025 at 5:55=E2=80=AFPM Benno Lossin <benno.lossin@pro=
-ton.me> wrote:
->> >> On Mon Mar 24, 2025 at 9:55 PM CET, Tamir Duberstein wrote:
->> >> > On Mon, Mar 24, 2025 at 4:16=E2=80=AFPM Benno Lossin <benno.lossin@=
-proton.me> wrote:
->> >> >> I'll leave it up to you what you want to do with this: add it to t=
-his
->> >> >> series, make a new one, or let someone else handle it. If you don'=
-t want
->> >> >> to handle it, let me know, then I'll create a good-first-issue :)
->> >> >
->> >> > I'll add a patch for `cast_lossless` -- the rest should probably go
->> >> > into an issue.
->> >>
->> >> Do you mind filing the issue? Then you can decide yourself what you w=
-ant
->> >> to do yourself vs what you want to leave for others. Feel free to cop=
-y
->> >> from my mail summary.
->> >
->> > Well, I don't really know what's left to do. We're pretty close at
->> > this point to having enabled everything but the nukes. Then there's
->> > the strict provenance thing, which I suppose we can write down.
->>
->> Yes, but there are also these from my original mail:
->> * `shared_ref as *const _` (for example in rust/kernel/uaccess.rs:247,
->>   rust/kernel/str.rs:32 and rust/kernel/fs/file.rs:367), these we can
->>   replace with `let ptr: *const ... =3D shared_ref;`. Don't know if ther=
-e
->>   is a clippy lint for this.
+Hi Paul,
+
+On Tue, 25 Mar 2025 at 16:08, Paul E. McKenney <paulmck@kernel.org> wrote:
+> commit 2245ef8605a80726548253d885b4cadd97f69f3b
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Tue Mar 25 07:31:45 2025 -0700
 >
-> I don't think we should go fixing things for which we don't have a
-> clippy lint. That way lies madness, particularly as patches begin to
-> be carried by other trees.
+>     srcu: Make FORCE_NEED_SRCU_NMI_SAFE depend on RCU_EXPERT
+>
+>     The FORCE_NEED_SRCU_NMI_SAFE is useful only for those wishing to test
+>     the SRCU code paths that accommodate architectures that do not have
+>     NMI-safe per-CPU operations, that is, those architectures that do not
+>     select the ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.  As such, this
+>     is a specialized Kconfig option that is not intended for casual users.
+>
+>     This commit therefore hides it behind the RCU_EXPERT Kconfig option.
+>     Given that this new FORCE_NEED_SRCU_NMI_SAFE Kconfig option has no effect
+>     unless the ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option is also selected,
+>     it also depends on this Kconfig option.
+>
+>     [ paulmck: Apply Geert Uytterhoeven feedback. ]
+>
+>     Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>     Closes: https://lore.kernel.org/all/CAMuHMdX6dy9_tmpLkpcnGzxyRbe6qSWYukcPp=H1GzZdyd3qBQ@mail.gmail.com/
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>
+> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> index b3f985d41717a..ceaf6594f634c 100644
+> --- a/kernel/rcu/Kconfig
+> +++ b/kernel/rcu/Kconfig
+> @@ -68,6 +68,8 @@ config TREE_SRCU
+>  config FORCE_NEED_SRCU_NMI_SAFE
+>         bool "Force selection of NEED_SRCU_NMI_SAFE"
+>         depends on !TINY_SRCU
+> +       depends on RCU_EXPERT
+> +       depends on ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>         select NEED_SRCU_NMI_SAFE
+>         default n
+>         help
 
-There already exists a lint for that: `clippy::ref_as_ptr` (almost
-created an issue asking for one :)
+LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Here is another lint that we probably want to enable (after the `&raw
-{const,mut}` series lands): `clippy::borrow_as_ptr`.
+Gr{oetje,eeting}s,
 
----
-Cheers,
-Benno
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
