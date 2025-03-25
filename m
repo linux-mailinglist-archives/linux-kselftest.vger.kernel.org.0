@@ -1,177 +1,111 @@
-Return-Path: <linux-kselftest+bounces-29746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29747-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C790AA70261
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 14:43:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34300A70288
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 14:47:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE14519A0ED2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 13:32:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 117FC842340
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 13:33:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BCF25F978;
-	Tue, 25 Mar 2025 13:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9992561D7;
+	Tue, 25 Mar 2025 13:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C58oSnDm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P/J7G9+e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F158925E812;
-	Tue, 25 Mar 2025 13:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E2A1A08DF
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Mar 2025 13:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742909190; cv=none; b=mu3dGuR/XHbQFS/CfkIymP9ETh1a1qaTYmEJFqHqevBSMhQaWgi4YmqUmMXpw7DW3J5b+5i0ohGXJ5usIMzDsrLbcBT0dvB3tKpZjF3vYatyFMphdSNK/aNqElbKlS0dbgl4CUfGfpuJ6G7SmCm4A77kaTAEWF/ybNn995Dxe+I=
+	t=1742909386; cv=none; b=JFeWbkYCzGEPB0Wv0mwATeNIedcczaBSXde59D76VG978A24rDVO/e9KGqLfgZBuOy02EMehGW+sNI4owQpeXm4VsGjcvOF5N6XHsvYjDelCMG+FiBq6x+eGy39quJ3+x5vI/Wm0ZdcQZGlPE+mdj3uhIvi26eKyKhF0G4Gr06M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742909190; c=relaxed/simple;
-	bh=iUg6P/TqqtETbhidVxOSK0TI1+y+OTQyMRT6s+ZmIbE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T45kYtjHfdZX6P/0ipIogZMUYFNPKLfNtqtfuO47Q9rOrJDuMv3k8wF6BbbM5a4yLkEVIpDyAhVKPi9tPDTwvCzBEaP21uVTuFwRtU10HI36MgopsziPLOZRRy7kdWFYGCw4ULPM4IsybVXNurEWos7VQDjsqPZXsG5xeK8hiuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C58oSnDm; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22403cbb47fso107229985ad.0;
-        Tue, 25 Mar 2025 06:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742909188; x=1743513988; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ab6PpOwe2kPxwEEnYbmnpRkst1cOo0s43ySwaMSzdfE=;
-        b=C58oSnDmyjaiSpKAtkzaaPn6TacAd1fMb6oQACTgXDDgCEVdwcSGy9SOc6srqcCT3T
-         VKZ7imOMadIhv2y6R8TUVd0Q2Yj+Kx2Hq5Jd2CBkH8/jO3JcJ/6M50WPN/EqcRRfqdGO
-         0i/l025pnd604Bh50ICuAnYLfK4enG02i3Clw9/dFHZOy+NTpRyn1r0C/Q9Fiuie94GK
-         8GxcR2E8KnXRr7wDF/EB+beGcQ4x71Jsm39BsA7YXMSwmwUy6WbhjhZLQ8ohMtISGPbN
-         3Mv+idXv4KpRTLdd/my69hMSTroQwWqqvaU6fX4fparjSViKjFgph3P4k6eNPpcgQwBE
-         6J4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742909188; x=1743513988;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ab6PpOwe2kPxwEEnYbmnpRkst1cOo0s43ySwaMSzdfE=;
-        b=ccTycmCoiCDQgRA182DPy9eDn2Rv0M9DVDTEdMXWHcaT+1QAS8Lpy4JtALCERsT3Fn
-         8GrALsrlSVlocBf63UfA0WVBom8/6t7FopQ+YnoMTuDd9qldkxLVK+E6QxbZDtP26huG
-         K73cETlWGElcv15ulJg+MKiV+X/U9sqSvxew31nkFxPGdxwTDNhskK2TjqxVd2Mg3DHs
-         BU7dOa2zE9zSLbhytS0LgzkVEDgbEUN/BwNiPBHQYP7hqFKxSE5jwurvDkDlHuq/g2u1
-         53WYaJnfed98YEboJN7DfW1R5gM/RVc4/mRNTEZqlP3/jW3hy2VKy5K8yzVE4Sgn82ku
-         0U+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUEZBdcdcnNSYWrqB8If5tT8YvRkQWkVRTKGKGsuysRJvSbJPqaK7mUzHKBKVx/pfdraI6e+EGeUUvliWs=@vger.kernel.org, AJvYcCUcZ8QVENzCzoD4zZ5ENXKjCDYk99OKgdn3yr0NvWVLS9uEsLF5MIYkPLSz4qRQTuHjt29VypdQnt/X05FMwGnx@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmfGtGlWKXQs6zXUb9idLt5yfOGSDwBkf7Vm52dHQRuq/BNGq3
-	9TNjNh6VeLwH1OdOtJ3NhXIiO8MhVKYl0TbTJjCE50FtkqHqMUUZm2cxoZ8ykUk=
-X-Gm-Gg: ASbGnctHF9gUuxjR4ECKksl1ck2y7kyWzcM5WHq/za3gHAbo4mj8BjcMEN3q2oVORBJ
-	eRhXmArZMn0sqyyUfOLJZH9AAb7nCHA3InqnFBPy54b0V+pHMr59lxMBv+WTjlP1dJVGVxx6chu
-	WwbmJ8OUYrx06bmreXcptkpLIJxZfBVFv7G/3NkYwWX8FSigRTFhdbfZRJhIuKkz9AVOY8auAUN
-	vw+XBNt6whSNTUxIG7kLx6LYRfq0t2kBbUY5GMF7L9owYtpFwbnhib5GD3fVnCU0vxSQAJhsfgT
-	ZQHZy2gHGKP/hHv3YXlvf1xaDjHwZONnu3ZpTq0RfURWRdRBwbBbJMZEpE/4Yxulr9jhf+Ds0Rm
-	XjEnzPFbWFcZhSN39qJczLhZLLh8=
-X-Google-Smtp-Source: AGHT+IHaKWMAJywuqpiu/ZTgxI4HUPATRBE9RZK/2F2hNLdtPn6H5jQSklYdYhW4Yfdj572f1yIbdA==
-X-Received: by 2002:a17:902:ccca:b0:223:fbc7:25f4 with SMTP id d9443c01a7336-22780c7b68amr325047355ad.14.1742909187891;
-        Tue, 25 Mar 2025 06:26:27 -0700 (PDT)
-Received: from malayaVM.mrout-thinkpadp16vgen1.punetw6.csb ([103.133.229.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-227811e3127sm89299625ad.197.2025.03.25.06.26.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 06:26:27 -0700 (PDT)
-From: Malaya Kumar Rout <malayarout91@gmail.com>
-To: peterz@infradead.org
-Cc: Malaya Kumar Rout <malayarout91@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
+	s=arc-20240116; t=1742909386; c=relaxed/simple;
+	bh=TOHFq6nszgjgqXAKFFee9XkUWNIwrevRzCQ3tYpRlQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n3o2hwsY5YMdlayhZUx7K4hTrLowhEwqPjCFlL/4N/cX1LJr7EwGoJsWxYu9PrX5D3rKILWbaruzg3ZofC0vMLKYGAVev/tdh53YCURKKarRqq4YEhClmPR3JhP/zwiE6zTA2+mBTXZJwR4EFDW3AXZepKWXfmgRbLtDg4t4BfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P/J7G9+e; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742909383;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+yXZH92AxwNSXO0lIlMyMaSgqAJeUyhq9X6U1qTQXDo=;
+	b=P/J7G9+ekO/bUOmFs5JEVxkgSj9WWpxEoqXqWLVMzv0l3BmPAsjx9Y5HE0ziL3za7e0c6W
+	jPk+bwwdRCQdzgZHaCk78TMewE2Xn3EKotqyUhv3gDrcLoyDtM45DefswNEk6cf1qP1E5D
+	cfgmsXTGWU1S6bqAAWf8Llfss1FRvNQ=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-363-cTqhb3OZMJegVeMbgr8dDg-1; Tue,
+ 25 Mar 2025 09:29:37 -0400
+X-MC-Unique: cTqhb3OZMJegVeMbgr8dDg-1
+X-Mimecast-MFC-AGG-ID: cTqhb3OZMJegVeMbgr8dDg_1742909376
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09C3D180AF5E;
+	Tue, 25 Mar 2025 13:29:36 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.81.75])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 078171801751;
+	Tue, 25 Mar 2025 13:29:33 +0000 (UTC)
+Date: Tue, 25 Mar 2025 09:29:31 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Filipe Xavier <felipeaggger@gmail.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject:  
-Date: Tue, 25 Mar 2025 18:55:51 +0530
-Message-ID: <20250325132617.13045-1-malayarout91@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAE2+fR_kG1SpE3DZ6cbZL+J8HT25RcaGxYrZP-H+rDFSJG6sdQ@mail.gmail.com>
-References: <CAE2+fR_kG1SpE3DZ6cbZL+J8HT25RcaGxYrZP-H+rDFSJG6sdQ@mail.gmail.com>
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, felipe_life@live.com
+Subject: Re: [PATCH v3 0/2] selftests: livepatch: test if ftrace can trace a
+ livepatched function
+Message-ID: <Z+Kvu14BseUfbYK/@redhat.com>
+References: <20250324-ftrace-sftest-livepatch-v3-0-d9d7cc386c75@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250324-ftrace-sftest-livepatch-v3-0-d9d7cc386c75@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
+On Mon, Mar 24, 2025 at 07:50:17PM -0300, Filipe Xavier wrote:
+> This patchset add ftrace helpers functions and
+> add a new test makes sure that ftrace can trace
+> a function that was introduced by a livepatch.
+> 
+> Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
+> Suggested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
+> ---
+> Changes in v3:
+> - functions.sh: fixed sed to remove warning from shellcheck and add grep -Fw params.
 
+Oh, now I see what shellcheck was complaining about.  I missed that
+there was no '\' line continuation char at the end of the sed line.  I
+thought it was complaining about starting the subsequent lines with the
+'|' and '>' redirection chars.  Good eye on catching that :)
 
+> - test-ftrace.sh: change constant to use common SYSFS_KLP_DIR.
+> - Link to v2: https://lore.kernel.org/r/20250318-ftrace-sftest-livepatch-v2-0-60cb0aa95cca@gmail.com
+> 
 
+For both patches:
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-
-
-From 92c5ac2ffa37f6e4fe0cfa49a20857432bc67718 Mon Sep 17 00:00:00 2001
-From: Malaya Kumar Rout <malayarout91@gmail.com>
-Date: Tue, 25 Mar 2025 18:42:33 +0530
-Subject: [PATCH v2] selftests/x86/lam: fix resource leak in do_uring() and allocate_dsa_pasid()
-
-Exception branch returns without closing 
-the file descriptors 'file_fd' and 'fd'
-
-Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
----
- tools/testing/selftests/x86/lam.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 18d736640ece..eaba0a921322 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -682,7 +682,7 @@ int do_uring(unsigned long lam)
- 		return 1;
- 
- 	if (fstat(file_fd, &st) < 0)
--		return 1;
-+		goto cleanup;
- 
- 	off_t file_sz = st.st_size;
- 
-@@ -690,7 +690,7 @@ int do_uring(unsigned long lam)
- 
- 	fi = malloc(sizeof(*fi) + sizeof(struct iovec) * blocks);
- 	if (!fi)
--		return 1;
-+		goto cleanup;
- 
- 	fi->file_sz = file_sz;
- 	fi->file_fd = file_fd;
-@@ -698,7 +698,7 @@ int do_uring(unsigned long lam)
- 	ring = malloc(sizeof(*ring));
- 	if (!ring) {
- 		free(fi);
--		return 1;
-+		goto cleanup;
- 	}
- 
- 	memset(ring, 0, sizeof(struct io_ring));
-@@ -730,6 +730,9 @@ int do_uring(unsigned long lam)
- 
- 	free(fi);
- 
-+cleanup:
-+	close(file_fd);
-+
- 	return ret;
- }
- 
-@@ -1189,8 +1192,10 @@ void *allocate_dsa_pasid(void)
- 
- 	wq = mmap(NULL, 0x1000, PROT_WRITE,
- 			   MAP_SHARED | MAP_POPULATE, fd, 0);
--	if (wq == MAP_FAILED)
-+	if (wq == MAP_FAILED) {
-+		close(fd);
- 		perror("mmap");
-+	}
- 
- 	return wq;
- }
--- 
-2.43.0
+Thanks,
+-- Joe
 
 
