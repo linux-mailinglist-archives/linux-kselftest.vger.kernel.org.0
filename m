@@ -1,290 +1,114 @@
-Return-Path: <linux-kselftest+bounces-29726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E8E8A6E7AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 01:41:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28A49A6E825
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 02:58:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 846013B7DFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 00:41:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D877F1896C8E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 01:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8131862BB;
-	Tue, 25 Mar 2025 00:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D7516A395;
+	Tue, 25 Mar 2025 01:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="i934I2iE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dAFzAi5K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61711494D8
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Mar 2025 00:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C1B1547C3
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Mar 2025 01:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742863248; cv=none; b=C78JN3d18yzRrn+Wi5eQQACoGOXDD0zyUfB5v1FroRURBKV3X51dFf7eArpx8FmPz6S0H7MqCc6ZiojT8Njkut8fg6QzvtNyDx2DtS0efAFPjDp2FxIzPpJIxcXqybEsemo4eX5cXbA8tPd2Tts1EQO3htfZyn4a2ODfINXPDaM=
+	t=1742867874; cv=none; b=fKoJ2Soy5ay2JfcXCsoVoxm1R+R7sVVA4+30BO5G392Mbb4BKyGrwncdh9ffH6KeW1g6IffIt5kC4pu8++TKFumYxoFf//V2c/7bKNwpElyQne6HpXdg1Vk9cpwtHIQEHRAebH7qUE3DjxE1G41ph3ufAOnXhxjjxlW5gBXCBR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742863248; c=relaxed/simple;
-	bh=qRWvFNmtF//vHxX52E+O6O7fduE/eyyjc2L4rSswFs4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ckQu9Pc45Aeih1d51UytuebMSMnckAJGh0wZEmM0WsKn6s9ItAi8KpMXoPhDCq2+PhOjMwK5c0jctCnztydQGtcOloueS84LnYbUh/Bb7FxObLqDDDhTVfe7orKFjlo+CeCpu/Zx/NxL1/PZPfOulht3pGfmpn8fcR9Hj0zDtm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=i934I2iE; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-223a7065ff8so26448005ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Mar 2025 17:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1742863246; x=1743468046; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=itl/W4XiPHQgafNA6elnqIZsMFzXb5vTM+wl8RewrvY=;
-        b=i934I2iEwTP/NysO1QuVEsoVlLLPMjwKHz/H+LpVuuNba5P6DE2z34s9K8CUBaXzPu
-         F0LhPM1rf3T5/3+g4CHn+eyl9Zilqcr3aWsOAi7wfvfLdYUA+iJ1F+UWTsSn37NVD5V4
-         NA8CLfuJuzvG2ZLY5L1EsX4KQbrxlhMZWTb4norNuyjEasxf6KwQP2WkL+R9YvQDwiob
-         wcqZ0TKiiXzEX+ZHOXM/UvObq2Hi9Yho6EYMNUE6eUYAe4YSfVHh0yh0Nm+KPvE0M7fz
-         63HR+InKy4Zmnef0aOsYAwcum6DJfHeWcwuOEtPINn4s9zM7shNkmM9EFMj7Nx0KQgKS
-         J1ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742863246; x=1743468046;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=itl/W4XiPHQgafNA6elnqIZsMFzXb5vTM+wl8RewrvY=;
-        b=ECQyaquhLfqqJDKmdTv8+OPzo3fMbxCf376VXWnlh/pVBJNp5v4QN4AddeRkGoQLmv
-         rSLIaX+EBNXKmJCWauAyVp8rOsGB8ZPQ2benDeqBP5+YtGLEP7CFnsFbpQo3Lpfw5xuV
-         8PmnjJii39YNyiBfu3q/UQepHR3xkmNSjQtYr2z5JR7GPT9ypgWW8FQ/QBEcad+kbWVo
-         3nKy6zxO38SSI3R2K95qX4mWON6YHhk/rcQY/chxM42tsEOrheC9qtPo0TjVRgwpl8WS
-         qBXYaSy7clsOlsgdtrji1grtXN8zHTfSgBSpZ+tCFRMegXU0v/gVciry3BbFQU9k3bZL
-         anGg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHK7aw7Bop0SeSpOctCueASZWTQl1su8Z4psyrbdOTw+q1mthEJJ8nGwdvHhO9bNrXA3Nq00kcIQpxCVf+tFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyL1S42sdBCiMKlOuJY4k7Oh5AM0WfL1aGC6EiuExYcxkz8cqIR
-	Dc1cT8UNNWvCytCk5c/DVHBpczFAet5DOdonpFoa1/y24JfJ6Ffz23HL7uO18TY=
-X-Gm-Gg: ASbGncsjcp/POvs0hloSQKhlaxgDkzo6kv/4mCKnrkyDl1a0OLLvZNP0VmHeBe61S6L
-	G+ETSFvsWZZZSAEhgws2+ucPQop44P4ZwEnvRs1hSIqkN6CWvC282xe+nnuDTt6hqlCUN7xNxqB
-	wp3PArFx2/uzOR7+zCwCKVR4+pW8OwyneFDKTrXcF6jTx9mw9ddXVS6bR8AF6O7qDIyuQ6w38po
-	AkQqwkuYAKmveEBWpxbR/kozzYP43W4rPNr252xuQ0hYVPBG/ODAouvY8qBMZ8v83UOI+xuzirY
-	encUF4Cv1rqyelmTNaG+r4zWWy995YhSxK2EwijFprscjrQokWb5vu90kA==
-X-Google-Smtp-Source: AGHT+IFGW52sOnfDnF40+MnlNb+49O0NM6Hh5OhPgbLG38/LdNTWeRaD7LR3pQqJksaPXkInel2pCQ==
-X-Received: by 2002:a05:6a00:4648:b0:736:a973:748 with SMTP id d2e1a72fcca58-73905a2515emr21659592b3a.22.1742863245956;
-        Mon, 24 Mar 2025 17:40:45 -0700 (PDT)
-Received: from atishp.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7390600a501sm8705513b3a.79.2025.03.24.17.40.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Mar 2025 17:40:45 -0700 (PDT)
-From: Atish Patra <atishp@rivosinc.com>
-Date: Mon, 24 Mar 2025 17:40:31 -0700
-Subject: [PATCH 3/3] KVM: riscv: selftests: Add vector extension tests
+	s=arc-20240116; t=1742867874; c=relaxed/simple;
+	bh=Ij/UC/V3EoUszJukWy9se9p2Z5SkuuZcxQy6mcDyK18=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=q44UEapgIrRFtSCUoMCKTDBgdoJ5g9ABoBclOPvl4bOsMMLEPgoQmdkvAIpXEfgfjDhIJrBgfX50HXtqaWBWWrl7JrTQBjUS/dY+HbynOzcwsa76IsV0UyOk0yh8Kqx0yfmFKGQ/0QubTf4yny7QFeAiXuBzjf7E8keflmRf1h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dAFzAi5K; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742867871;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HnkkWB/IJYXgybfVM3A/a6LLwZkE9IPLdJKeFGOk9uQ=;
+	b=dAFzAi5K/2qBVMsfgFV2Bp3lw4O51wajirt7MB7foLpgKiTbnBs1/DxVUu/6d4WSZqOPeK
+	dNOWqg8AcZLNPUY1yG0GrBjKr01r89/HsDm/I0Zx7sT3KTvEH6O0Jy0McNj4RPVo1e3sSO
+	yEzPAGPp4hKNRuliJg14FbIWSnPewmY=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-54-3i8avJ-0NuqAhShzKFiqwg-1; Mon,
+ 24 Mar 2025 21:57:47 -0400
+X-MC-Unique: 3i8avJ-0NuqAhShzKFiqwg-1
+X-Mimecast-MFC-AGG-ID: 3i8avJ-0NuqAhShzKFiqwg_1742867865
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 20F03196D2CD;
+	Tue, 25 Mar 2025 01:57:45 +0000 (UTC)
+Received: from starship.lan (unknown [10.22.65.191])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 89B551800268;
+	Tue, 25 Mar 2025 01:57:42 +0000 (UTC)
+From: Maxim Levitsky <mlevitsk@redhat.com>
+To: kvm@vger.kernel.org
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	linux-kernel@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	Maxim Levitsky <mlevitsk@redhat.com>,
+	James Houghton <jthoughton@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	linux-kselftest@vger.kernel.org,
+	Anup Patel <anup@brainfault.org>
+Subject: [PATCH v2 0/2] KVM: selftests: access_tracking_perf_test: skip the test when NUMA balancing is active
+Date: Mon, 24 Mar 2025 21:57:39 -0400
+Message-Id: <20250325015741.2478906-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250324-kvm_selftest_improve-v1-3-583620219d4f@rivosinc.com>
-References: <20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com>
-In-Reply-To: <20250324-kvm_selftest_improve-v1-0-583620219d4f@rivosinc.com>
-To: Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
- linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Atish Patra <atishp@rivosinc.com>
-X-Mailer: b4 0.15-dev-42535
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Add vector related tests with the ISA extension standard template.
-However, the vector registers are bit tricky as the register length is
-variable based on vlenb value of the system. That's why the macros are
-defined with a default and overidden with actual value at runtime.
-
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 111 ++++++++++++++++++++++-
- 1 file changed, 110 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 8515921dfdbf..576ab8eb7368 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -145,7 +145,9 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- {
- 	unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] = { 0 };
- 	struct vcpu_reg_sublist *s;
--	uint64_t feature;
-+	uint64_t feature = 0;
-+	u64 reg, size;
-+	unsigned long vlenb_reg;
- 	int rc;
- 
- 	for (int i = 0; i < KVM_RISCV_ISA_EXT_MAX; i++)
-@@ -173,6 +175,23 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- 		switch (s->feature_type) {
- 		case VCPU_FEATURE_ISA_EXT:
- 			feature = RISCV_ISA_EXT_REG(s->feature);
-+			if (s->feature == KVM_RISCV_ISA_EXT_V) {
-+				/* Enable V extension so that we can get the vlenb register */
-+				__vcpu_set_reg(vcpu, feature, 1);
-+				/* Compute the correct vector register size */
-+				rc = __vcpu_get_reg(vcpu, s->regs[4], &vlenb_reg);
-+				if (rc < 0)
-+				/* The vector test may fail if the default reg size doesn't match */
-+					break;
-+				size = __builtin_ctzl(vlenb_reg);
-+				size <<= KVM_REG_SIZE_SHIFT;
-+				for (int i = 0; i < 32; i++) {
-+					reg = KVM_REG_RISCV | KVM_REG_RISCV_VECTOR | size |
-+					      KVM_REG_RISCV_VECTOR_REG(i);
-+					s->regs[5 + i] = reg;
-+				}
-+				__vcpu_set_reg(vcpu, feature, 0);
-+			}
- 			break;
- 		case VCPU_FEATURE_SBI_EXT:
- 			feature = RISCV_SBI_EXT_REG(s->feature);
-@@ -408,6 +427,35 @@ static const char *fp_d_id_to_str(const char *prefix, __u64 id)
- 	return strdup_printf("%lld /* UNKNOWN */", reg_off);
- }
- 
-+static const char *vector_id_to_str(const char *prefix, __u64 id)
-+{
-+	/* reg_off is the offset into struct __riscv_v_ext_state */
-+	__u64 reg_off = id & ~(REG_MASK | KVM_REG_RISCV_VECTOR);
-+	int reg_index = 0;
-+
-+	assert((id & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_VECTOR);
-+
-+	if (reg_off >= KVM_REG_RISCV_VECTOR_REG(0))
-+		reg_index = reg_off -  KVM_REG_RISCV_VECTOR_REG(0);
-+	switch (reg_off) {
-+	case KVM_REG_RISCV_VECTOR_REG(0) ...
-+	     KVM_REG_RISCV_VECTOR_REG(31):
-+		return strdup_printf("KVM_REG_RISCV_VECTOR_REG(%d)", reg_index);
-+	case KVM_REG_RISCV_VECTOR_CSR_REG(vstart):
-+		return "KVM_REG_RISCV_VECTOR_CSR_REG(vstart)";
-+	case KVM_REG_RISCV_VECTOR_CSR_REG(vl):
-+		return "KVM_REG_RISCV_VECTOR_CSR_REG(vl)";
-+	case KVM_REG_RISCV_VECTOR_CSR_REG(vtype):
-+		return "KVM_REG_RISCV_VECTOR_CSR_REG(vtype)";
-+	case KVM_REG_RISCV_VECTOR_CSR_REG(vcsr):
-+		return "KVM_RISCV_VCPU_VECTOR_CSR_REG(vcsr)";
-+	case KVM_REG_RISCV_VECTOR_CSR_REG(vlenb):
-+		return "KVM_REG_RISCV_VECTOR_CSR_REG(vlenb)";
-+	}
-+
-+	return strdup_printf("%lld /* UNKNOWN */", reg_off);
-+}
-+
- #define KVM_ISA_EXT_ARR(ext)		\
- [KVM_RISCV_ISA_EXT_##ext] = "KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_" #ext
- 
-@@ -635,6 +683,9 @@ void print_reg(const char *prefix, __u64 id)
- 	case KVM_REG_SIZE_U128:
- 		reg_size = "KVM_REG_SIZE_U128";
- 		break;
-+	case KVM_REG_SIZE_U256:
-+		reg_size = "KVM_REG_SIZE_U256";
-+		break;
- 	default:
- 		printf("\tKVM_REG_RISCV | (%lld << KVM_REG_SIZE_SHIFT) | 0x%llx /* UNKNOWN */,\n",
- 		       (id & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT, id & ~REG_MASK);
-@@ -666,6 +717,10 @@ void print_reg(const char *prefix, __u64 id)
- 		printf("\tKVM_REG_RISCV | %s | KVM_REG_RISCV_FP_D | %s,\n",
- 				reg_size, fp_d_id_to_str(prefix, id));
- 		break;
-+	case KVM_REG_RISCV_VECTOR:
-+		printf("\tKVM_REG_RISCV | %s | KVM_REG_RISCV_VECTOR | %s,\n",
-+		       reg_size, vector_id_to_str(prefix, id));
-+		break;
- 	case KVM_REG_RISCV_ISA_EXT:
- 		printf("\tKVM_REG_RISCV | %s | KVM_REG_RISCV_ISA_EXT | %s,\n",
- 				reg_size, isa_ext_id_to_str(prefix, id));
-@@ -870,6 +925,54 @@ static __u64 fp_d_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_D,
- };
- 
-+/* Define a default vector registers with length. This will be overwritten at runtime */
-+static __u64 vector_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
-+	KVM_REG_RISCV_VECTOR_CSR_REG(vstart),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
-+	KVM_REG_RISCV_VECTOR_CSR_REG(vl),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
-+	KVM_REG_RISCV_VECTOR_CSR_REG(vtype),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
-+	KVM_REG_RISCV_VECTOR_CSR_REG(vcsr),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_VECTOR |
-+	KVM_REG_RISCV_VECTOR_CSR_REG(vlenb),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(0),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(1),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(2),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(3),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(4),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(5),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(6),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(7),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(8),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(9),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(10),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(11),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(12),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(13),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(14),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(15),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(16),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(17),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(18),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(19),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(20),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(21),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(22),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(23),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(24),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(25),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(26),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(27),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(28),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(29),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(30),
-+	KVM_REG_RISCV | KVM_REG_SIZE_U128 | KVM_REG_RISCV_VECTOR | KVM_REG_RISCV_VECTOR_REG(31),
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE |
-+	KVM_RISCV_ISA_EXT_V,
-+};
-+
- #define SUBLIST_BASE \
- 	{"base", .regs = base_regs, .regs_n = ARRAY_SIZE(base_regs), \
- 	 .skips_set = base_skips_set, .skips_set_n = ARRAY_SIZE(base_skips_set),}
-@@ -894,6 +997,10 @@ static __u64 fp_d_regs[] = {
- 	{"fp_d", .feature = KVM_RISCV_ISA_EXT_D, .regs = fp_d_regs, \
- 		.regs_n = ARRAY_SIZE(fp_d_regs),}
- 
-+#define SUBLIST_V \
-+	{"v", .feature = KVM_RISCV_ISA_EXT_V, .regs = vector_regs, \
-+		.regs_n = ARRAY_SIZE(vector_regs),}
-+
- #define KVM_ISA_EXT_SIMPLE_CONFIG(ext, extu)			\
- static __u64 regs_##ext[] = {					\
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG |			\
-@@ -962,6 +1069,7 @@ KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
- KVM_ISA_EXT_SUBLIST_CONFIG(aia, AIA);
- KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, FP_F);
- KVM_ISA_EXT_SUBLIST_CONFIG(fp_d, FP_D);
-+KVM_ISA_EXT_SUBLIST_CONFIG(v, V);
- KVM_ISA_EXT_SIMPLE_CONFIG(h, H);
- KVM_ISA_EXT_SIMPLE_CONFIG(smnpm, SMNPM);
- KVM_ISA_EXT_SUBLIST_CONFIG(smstateen, SMSTATEEN);
-@@ -1034,6 +1142,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_fp_f,
- 	&config_fp_d,
- 	&config_h,
-+	&config_v,
- 	&config_smnpm,
- 	&config_smstateen,
- 	&config_sscofpmf,
-
--- 
-2.43.0
+Due to several issues which are unlikely to be fixed in the near future,=0D
+the access_tracking_perf_test sanity check for how many pages are still cle=
+an=0D
+after an iteration is not reliable when NUMA balancing is active.=0D
+=0D
+This patch series refactors this test to skip this check by default automat=
+ically.=0D
+=0D
+V2: adopted Sean's suggestions.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (1):=0D
+  KVM: selftests: access_tracking_perf_test: add option to skip the=0D
+    sanity check=0D
+=0D
+Sean Christopherson (1):=0D
+  KVM: selftests: Extract guts of THP accessor to standalone sysfs=0D
+    helpers=0D
+=0D
+ .../selftests/kvm/access_tracking_perf_test.c | 33 +++++++++++++--=0D
+ .../testing/selftests/kvm/include/test_util.h |  1 +=0D
+ tools/testing/selftests/kvm/lib/test_util.c   | 42 ++++++++++++++-----=0D
+ 3 files changed, 61 insertions(+), 15 deletions(-)=0D
+=0D
+-- =0D
+2.26.3=0D
+=0D
 
 
