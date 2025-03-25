@@ -1,199 +1,115 @@
-Return-Path: <linux-kselftest+bounces-29763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF3DBA70497
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 16:08:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CE72A70520
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 16:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48B66166925
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 15:08:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0E761885446
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 15:34:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5D1E25BACB;
-	Tue, 25 Mar 2025 15:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685771A3AB8;
+	Tue, 25 Mar 2025 15:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQXjsABG"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="ISiwgb3d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924DE25A33A;
-	Tue, 25 Mar 2025 15:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603CB1922C6;
+	Tue, 25 Mar 2025 15:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742915280; cv=none; b=eZok98O4FBoI35DcP0X2fRod4UMB1FhPKzdN82ucxURQ7MsJ7NmYqOfL0nNBs2yD1oRrgA+nuSGi54zsFP4wcdwIWrcfvzDONm2YzUhFLWxbrf8I2hnzt37wP2EAMgMGU30g3QBgZ2Hln8SAMyY91FzKJjceWIljJ7eDKFCHKdQ=
+	t=1742916837; cv=none; b=jovMdZQUIF2wdtYB7X1r2BH/pzzN/W7cP4aqRdW7/mZPgTW68YIWOClhbPVzrjal5U+XSWW3WvudbgrXAraA7xFRzsdPM8Tf/DEpMVmyA1IRQOJqQpnc97K27W0ny4B2dHPWrw2fGpD2hNzBmn/Y5PE50KrzsIcADNNSP7cUzMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742915280; c=relaxed/simple;
-	bh=FVtW+znZpqIiN9CqfSZ9CbuEpNile4mPRx1yMLXOKBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WA3JT730T8iE0xEXlcUzCxiugGQM4MNzLfEv+nxkDwhWoGsdKZ/4JruZ+gBaKUbLLJS+5rpdATEkgyIWKoIbp4BZn5IHlzbPDq2b3n2cIxgxu451E3Kr+P+8thOWYf00n9XrasFjUnldd8561XD/iwf0trBj1O6h5t4A7f1QcX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQXjsABG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6207BC4CEE4;
-	Tue, 25 Mar 2025 15:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742915280;
-	bh=FVtW+znZpqIiN9CqfSZ9CbuEpNile4mPRx1yMLXOKBA=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=kQXjsABGJFG7H/SydkIhmI9ti6PbsbLSitopLcSKhCyb1xZYJ6DV2oNA5jYmwCjDq
-	 ptq13iaxKhRsr61P2b28vGBE6y2eZRw4fjPkxRQrQ2Ah0+B+oXNgnV0gARBcI1S895
-	 Lz2/P3cqM5Zq/PM3V0PMmfehqubuW/CqtULK0AUUgMFW//grEiSliEshbBgXOfqZlY
-	 V9MsXfmbI+6OQly3Iuss1wPBKwEhGGVcA0xTD2VCtSMKNnPKecQZ+tWOceb637oNRp
-	 UeMJdM6uid8QWyAJehuJT6XUKFfNjpfF8S25s2iTgYxkFg/uc9tVIbt7lKZ6j9GCio
-	 Wd7nmM+860+8w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id F1C1CCE0843; Tue, 25 Mar 2025 08:07:59 -0700 (PDT)
-Date: Tue, 25 Mar 2025 08:07:59 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Davidlohr Bueso <dave@stgolabs.net>, Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Thomas Huth <thuth@redhat.com>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Valentin Schneider <vschneid@redhat.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH rcu 10/11] srcu: Add FORCE_NEED_SRCU_NMI_SAFE Kconfig for
- testing
-Message-ID: <b4ac95ce-7cfd-4d31-aa7d-54ef04f4ae24@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250219153938.24966-1-boqun.feng@gmail.com>
- <20250219153938.24966-11-boqun.feng@gmail.com>
- <CAMuHMdX6dy9_tmpLkpcnGzxyRbe6qSWYukcPp=H1GzZdyd3qBQ@mail.gmail.com>
- <5bf94fdb-7556-4b34-ba21-389dfa1df4f7@paulmck-laptop>
- <CAMuHMdVVQWZCUFT2uF+QSQz-GzOz2PvugkeatA6bDQeNHU9PSA@mail.gmail.com>
+	s=arc-20240116; t=1742916837; c=relaxed/simple;
+	bh=NXENBimpOC5uHN+lh1DBMOj1AqfWo8oTaujcGaqeYX0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AyRSIE9NXr4splYnvNZ4eRjuA3ZIIfmOOt4UsuS6Y0ldet3oHmziYXiCC8XIM0SowyD9x9/EPbKc9bk9KnH+T7eK5h4M+ilAAySVCbxa73nUctXmeL4uCKzXJJqsqTHoprOnnzbMFr27WnbT3RMizJxWZ0luzGbdC2bOPO5Xa34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=ISiwgb3d; arc=none smtp.client-ip=185.70.43.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1742916833; x=1743176033;
+	bh=ArxhSHha9/Qen+fEGX8KXzYMZVlNdNjiofaeqo+ocNc=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=ISiwgb3dN7ivBGn7nO/A2OWlnhdY09jCcWA/b4wE6o4d/sbcYc3R+0up4nGe3q1/3
+	 VhvRSQ+1cnPhWkOqdbexwdMVcO8A1gi6kMRvn7Uwd7bVT+sRnTbcHBMTxIAYxkDcdL
+	 5bMGYocJQw7kHwd4EBeMwNhYWVV6+QrcBs9qJkLPCdctXK98aXZNAL82EMcXN5b+t9
+	 ONuM5Cvl97DtnOEyAjiZDBBh3T3Pd6fagLxKj4+AAe8Hk2plvNT21y4PIINN04gy+A
+	 1RsB68RcqOldfq+ycAwEBB6YCupgqaUvbHRFxoA35XTTZ3A/p7t4SHJ+UZ0G5GxpGb
+	 5pjISaWiRHH9w==
+Date: Tue, 25 Mar 2025 15:33:48 +0000
+To: Tamir Duberstein <tamird@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 0/6] rust: reduce pointer casts, enable related lints
+Message-ID: <D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me>
+In-Reply-To: <CAJ-ks9kuG8SyybioKQ0+bYwjnCQFMhip+4A1WnMhsdgnNZGiZQ@mail.gmail.com>
+References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com> <D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me> <CAJ-ks9n-z0SETz+zBfJmda6Q_vJDeM2jmDXx48xX9qpMmR-mdQ@mail.gmail.com> <D8OTXLDQCOKI.34R1U5R0JSB8H@proton.me> <CAJ-ks9nc0ptzfh+tHj47aTCMqoaKB0SnGpZOLQ06upt7x8EBMQ@mail.gmail.com> <D8PAQXHJDVQE.36QKQGBVVL4QU@proton.me> <CAJ-ks9kuG8SyybioKQ0+bYwjnCQFMhip+4A1WnMhsdgnNZGiZQ@mail.gmail.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: cf56dbe605b88fc3577b2bf3f99caf40cad5d047
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVVQWZCUFT2uF+QSQz-GzOz2PvugkeatA6bDQeNHU9PSA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 25, 2025 at 03:57:43PM +0100, Geert Uytterhoeven wrote:
-> Hi Paul,
-> 
-> On Tue, 25 Mar 2025 at 15:36, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > On Tue, Mar 25, 2025 at 09:04:31AM +0100, Geert Uytterhoeven wrote:
-> > > On Wed, 19 Feb 2025 at 16:44, Boqun Feng <boqun.feng@gmail.com> wrote:
-> > > > From: "Paul E. McKenney" <paulmck@kernel.org>
-> > > >
-> > > > The srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe() functions
-> > > > map to __srcu_read_lock() and __srcu_read_unlock() on systems like x86
-> > > > that have NMI-safe this_cpu_inc() operations.  This makes the underlying
-> > > > __srcu_read_lock_nmisafe() and __srcu_read_unlock_nmisafe() functions
-> > > > difficult to test on (for example) x86 systems, allowing bugs to creep in.
-> > > >
-> > > > This commit therefore creates a FORCE_NEED_SRCU_NMI_SAFE Kconfig that
-> > > > forces those underlying functions to be used even on systems where they
-> > > > are not needed, thus providing better testing coverage.
-> > > >
-> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > >
-> > > Thanks for your patch, which is now commit 536e8b9b80bc7a0a ("srcu:
-> > > Add FORCE_NEED_SRCU_NMI_SAFE Kconfig for testing") in linus/master
-> > >
-> > > > --- a/kernel/rcu/Kconfig
-> > > > +++ b/kernel/rcu/Kconfig
-> > > > @@ -65,6 +65,17 @@ config TREE_SRCU
-> > > >         help
-> > > >           This option selects the full-fledged version of SRCU.
-> > > >
-> > > > +config FORCE_NEED_SRCU_NMI_SAFE
-> > > > +       bool "Force selection of NEED_SRCU_NMI_SAFE"
-> > >
-> > > What am I supposed to answer here? "n" I guess.
-> > > What about distro and allmodconfig kernels?
-> >
-> > Yes, you should select "n" unless ...
-> >
-> > > > +       depends on !TINY_SRCU
-> > > > +       select NEED_SRCU_NMI_SAFE
-> > > > +       default n
-> > > > +       help
-> > > > +         This option forces selection of the NEED_SRCU_NMI_SAFE
-> > > > +         Kconfig option, allowing testing of srcu_read_lock_nmisafe()
-> > > > +         and srcu_read_unlock_nmisafe() on architectures (like x86)
-> > > > +         that select the ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.
-> > >
-> > > Perhaps this should depend on ARCH_HAS_NMI_SAFE_THIS_CPU_OPS?
-> >
-> > ... you are on a system selecting ARCH_HAS_NMI_SAFE_THIS_CPU_OPS and
-> 
-> So a dependency on ARCH_HAS_NMI_SAFE_THIS_CPU_OPS does make sense,
-> doesn't it?
+On Tue Mar 25, 2025 at 2:34 PM CET, Tamir Duberstein wrote:
+> On Tue, Mar 25, 2025 at 7:05=E2=80=AFAM Benno Lossin <benno.lossin@proton=
+.me> wrote:
+>> On Mon Mar 24, 2025 at 10:59 PM CET, Tamir Duberstein wrote:
+>> > On Mon, Mar 24, 2025 at 5:55=E2=80=AFPM Benno Lossin <benno.lossin@pro=
+ton.me> wrote:
+>> >> On Mon Mar 24, 2025 at 9:55 PM CET, Tamir Duberstein wrote:
+>> >> > On Mon, Mar 24, 2025 at 4:16=E2=80=AFPM Benno Lossin <benno.lossin@=
+proton.me> wrote:
+>> >> >> I'll leave it up to you what you want to do with this: add it to t=
+his
+>> >> >> series, make a new one, or let someone else handle it. If you don'=
+t want
+>> >> >> to handle it, let me know, then I'll create a good-first-issue :)
+>> >> >
+>> >> > I'll add a patch for `cast_lossless` -- the rest should probably go
+>> >> > into an issue.
+>> >>
+>> >> Do you mind filing the issue? Then you can decide yourself what you w=
+ant
+>> >> to do yourself vs what you want to leave for others. Feel free to cop=
+y
+>> >> from my mail summary.
+>> >
+>> > Well, I don't really know what's left to do. We're pretty close at
+>> > this point to having enabled everything but the nukes. Then there's
+>> > the strict provenance thing, which I suppose we can write down.
+>>
+>> Yes, but there are also these from my original mail:
+>> * `shared_ref as *const _` (for example in rust/kernel/uaccess.rs:247,
+>>   rust/kernel/str.rs:32 and rust/kernel/fs/file.rs:367), these we can
+>>   replace with `let ptr: *const ... =3D shared_ref;`. Don't know if ther=
+e
+>>   is a clippy lint for this.
+>
+> I don't think we should go fixing things for which we don't have a
+> clippy lint. That way lies madness, particularly as patches begin to
+> be carried by other trees.
 
-The FORCE_NEED_SRCU_NMI_SAFE has no effect otherwise, so it cannot
-hurt.  Again, please see below.
+There already exists a lint for that: `clippy::ref_as_ptr` (almost
+created an issue asking for one :)
 
-							Thanx, Paul
+Here is another lint that we probably want to enable (after the `&raw
+{const,mut}` series lands): `clippy::borrow_as_ptr`.
 
-> > you would like to test the SRCU setup that needed only by systems that
-> > do not select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS.
-> >
-> > Ah.  I forgot to add "depends on RCU_EXPERT".
-> 
-> Yes, that makes sense.
-> 
-> > Apologies, I will fix this.  Does the patch show below do the trick?
-> >
-> >                                                         Thanx, Paul
+---
+Cheers,
+Benno
 
------------------------------------------------------------------------
-
-commit 2245ef8605a80726548253d885b4cadd97f69f3b
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Tue Mar 25 07:31:45 2025 -0700
-
-    srcu: Make FORCE_NEED_SRCU_NMI_SAFE depend on RCU_EXPERT
-    
-    The FORCE_NEED_SRCU_NMI_SAFE is useful only for those wishing to test
-    the SRCU code paths that accommodate architectures that do not have
-    NMI-safe per-CPU operations, that is, those architectures that do not
-    select the ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option.  As such, this
-    is a specialized Kconfig option that is not intended for casual users.
-    
-    This commit therefore hides it behind the RCU_EXPERT Kconfig option.
-    Given that this new FORCE_NEED_SRCU_NMI_SAFE Kconfig option has no effect
-    unless the ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option is also selected,
-    it also depends on this Kconfig option.
-    
-    [ paulmck: Apply Geert Uytterhoeven feedback. ]
-    
-    Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-    Closes: https://lore.kernel.org/all/CAMuHMdX6dy9_tmpLkpcnGzxyRbe6qSWYukcPp=H1GzZdyd3qBQ@mail.gmail.com/
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index b3f985d41717a..ceaf6594f634c 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -68,6 +68,8 @@ config TREE_SRCU
- config FORCE_NEED_SRCU_NMI_SAFE
- 	bool "Force selection of NEED_SRCU_NMI_SAFE"
- 	depends on !TINY_SRCU
-+	depends on RCU_EXPERT
-+	depends on ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
- 	select NEED_SRCU_NMI_SAFE
- 	default n
- 	help
 
