@@ -1,104 +1,107 @@
-Return-Path: <linux-kselftest+bounces-29767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A287A7058F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 16:52:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A5FA707C8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 18:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6F743A7587
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 15:51:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A57DB7A4D27
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 17:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7912561DF;
-	Tue, 25 Mar 2025 15:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191CA25F98B;
+	Tue, 25 Mar 2025 17:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J0m1A4SS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AveRPtLW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33E81FAC34;
-	Tue, 25 Mar 2025 15:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29B31A0BFE;
+	Tue, 25 Mar 2025 17:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742917871; cv=none; b=AweQScqiZRSTY6J2KtoSLxncSoVA0IdUWRI5Sk2bOyb6bxRfUg2L9RGoUx8cPEIq456MVYYUG35cAMHrqL6A6cMKhFyDyd/sOD5NbT8zDp5tNGeMb/VqqC7VcXq570rCvyaT5ZwEpg9heZr5c+xPU+eAYCCWL2Sy5Bt533IMEzo=
+	t=1742922655; cv=none; b=jyMr0pZmRf0AvtPILznZJXE3liW8HKgXC8MyiTdkqqsGxn5ACG71lEPB5IEYCXH6h9EQxkTjSLrib62gLJLSc3Gl1+pqmwd+uAyflzj4KX5muP+/ZJ/yd5tMysQZCErCAMJE3F+LStA2MUsEvDx/wnromAsBj5EZQZIL/tN2nU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742917871; c=relaxed/simple;
-	bh=T0A9JesaY6l1nc8qgwaVPd5jDDCHVENKy2TJK3KE8Ic=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=JHvz5Fe8TIhrdDG2ytH9AgbhVHwPTTAdZ+ySNJETkBQOJ2b3BpxBT23OpeuQBuu5gyylaD14u1ui6L147Wu6YomkMXo63vvJMdCrEsAHGc9SjUA+A20ap755gCdiEO40uYC9c8q32SS+BRuqYXO3h4VSwjhxuNMI23V1qX0QYPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J0m1A4SS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 961EBC4CEE4;
-	Tue, 25 Mar 2025 15:51:09 +0000 (UTC)
+	s=arc-20240116; t=1742922655; c=relaxed/simple;
+	bh=GNqENFQaTr7pvnN27Xev/R/FfH7qw+nT7Ttp27/8aIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rW7Qdbeo5r3CGzIdTi6nhhC1Z7Djen5RAvhr5W071ebpTdYFNmwHZGZCPmYvFmOwGeIyVuJPKTyLK3zl6r5g05JhJ1Ou6XxVjjekLu3cw1tS2YFUUI6psyaNAHbj1ChV+aSy6HhsEaxXsxto40MvvyWrwxwuE7wVm8sy2784Als=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AveRPtLW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B43C4CEE4;
+	Tue, 25 Mar 2025 17:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742917870;
-	bh=T0A9JesaY6l1nc8qgwaVPd5jDDCHVENKy2TJK3KE8Ic=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=J0m1A4SS8Y/jTwu+azp24fmehuM8FykEVtUiPLA7S5R8SMU1abSUcP2421pLIzsdW
-	 XdSu98FaoQBFQhFO8FXPQGl9d1MpxFaDkjX/Bj3mKNp6r0ISahhy/hdI++Nn9hqfR/
-	 qsIWZzwUFoQsRIb7sOJGaiFdKBtlDGtRHtL8OyM7mAt/U08fptEcusEG69IOmI1/Uj
-	 bwQXnmSOxvFcg8zACs7b71ky+Q6f938xaqpn9aIRDA5EoGrc957DPNGk0tN32zhZDw
-	 3hbAMaKr+c6m+5cDEDVwzUUQYQhWYHXQH0MP27RvUQVu9l+xUPFvuHzQcvQJ88kttU
-	 oLbtRDdQz5z/Q==
+	s=k20201202; t=1742922654;
+	bh=GNqENFQaTr7pvnN27Xev/R/FfH7qw+nT7Ttp27/8aIc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AveRPtLW8iwTMOgYDEmSrCG4Kr9UFnf9W4EpzpxIWsxlTEYpZr1GoX9Iy/x4bSGy4
+	 CgQK5G21DwIr4dGGS33VmnA4nBYAiJmxZyUjVON8wuC6vfCT95a/NY2JX2hxUmrP1Y
+	 M1N5MrmtOXAU5pmZFGwsGRK+1hUNuxqnjMUOjeKdrnmDQk/tJVlLjGUmec1eXeButL
+	 4C3pMWzW9/Ab6vswbh5qK0UgGYlclj+6YJqQOY5PcWjFMc3FTBTOk+TG9cNvUqMt7f
+	 I31n7BigTqc9bCDJbltm4d5rHpzrmR0hT/RNqLgXBAkSMSEQF99JYkJb8MmkQR/WQ+
+	 aVnQjSXgEbjbw==
+Date: Tue, 25 Mar 2025 17:10:48 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: npache@redhat.com, linux-sound@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- patches@opensource.cirrus.com
-In-Reply-To: <20250323170529.197205-1-rf@opensource.cirrus.com>
-References: <20250323170529.197205-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH] firmware: cs_dsp: Ensure cs_dsp_load[_coeff]() returns
- 0 on success
-Message-Id: <174291786934.56229.8841259212687977896.b4-ty@kernel.org>
-Date: Tue, 25 Mar 2025 15:51:09 +0000
+Cc: Nico Pache <npache@redhat.com>, patches@opensource.cirrus.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, simont@opensource.cirrus.com,
+	ckeepax@opensource.cirrus.com, brendan.higgins@linux.dev,
+	davidgow@google.com, rmoar@google.com, johannes.berg@intel.com,
+	sj@kernel.org
+Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling
+ it
+Message-ID: <67e46328-3a8a-4fc9-8ec3-6c7bc224d6da@sirena.org.uk>
+References: <20250319230539.140869-1-npache@redhat.com>
+ <CAA1CXcD2g=sRRwgLSudiOAqWXq3sCj+NPuE1ju7B2gFXXefjXA@mail.gmail.com>
+ <d8fc1f66-f220-42fb-b58f-f5f9c7d30100@opensource.cirrus.com>
+ <CAA1CXcA460xfy48JMNeX5rNTfUqsahER8SDF6tWu82V35ripLg@mail.gmail.com>
+ <CAA1CXcD2RF6aXNH0ix=GN1+LTR9+dV7yRz-HGKZfUbSu+8ZM_w@mail.gmail.com>
+ <4cc16ecf-d498-44a6-99b2-eee840cff63d@opensource.cirrus.com>
+ <9d6831c7-053e-4414-ba9f-f5e71c690588@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HPN+G74z3uWNF37H"
+Content-Disposition: inline
+In-Reply-To: <9d6831c7-053e-4414-ba9f-f5e71c690588@opensource.cirrus.com>
+X-Cookie: Visit beautiful Vergas, Minnesota.
 
-On Sun, 23 Mar 2025 17:05:29 +0000, Richard Fitzgerald wrote:
-> Set ret = 0 on successful completion of the processing loop in
-> cs_dsp_load() and cs_dsp_load_coeff() to ensure that the function
-> returns 0 on success.
-> 
-> All normal firmware files will have at least one data block, and
-> processing this block will set ret == 0, from the result of either
-> regmap_raw_write() or cs_dsp_parse_coeff().
-> 
-> [...]
 
-Applied to
+--HPN+G74z3uWNF37H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+On Sat, Mar 22, 2025 at 07:02:26PM +0000, Richard Fitzgerald wrote:
+> On 22/3/25 10:11, Richard Fitzgerald wrote:
 
-Thanks!
+> > I got lucky on all the UM, X86 and ARM builds I tested.
 
-[1/1] firmware: cs_dsp: Ensure cs_dsp_load[_coeff]() returns 0 on success
-      commit: 2593f7e0dc93a898a84220b3fb180d86f1ca8c60
+> It looks like that bugfix has got lost.
+> Mark sent an email on 20 Feb to say it has been merged into his
+> sound tree. But that patch isn't in torvalds/master.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+It was queued for -next rather than as a fix.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--HPN+G74z3uWNF37H
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfi45gACgkQJNaLcl1U
+h9DlAgf+NxfHOGfvo+VFOD75XLJkVKcL8K0dfEtpMMxBuzGtTAC5v6V8zk4PYCmN
+kv/Xs0jLwZCSoIKjbNFOOEZHqWwjXlGz4b8FB+1BnhFaF5T0A6c+cLSC3ieFX40r
+2d7N2Cgt7R7F1Bq9LbQbRFtt0tkEw9JW76tL9sanG60DdLwmw++nLiD3PM9Rq3Mn
+XZRFmRko/V1Wsyc3JrKCHGIaotgWtee7ESYzWQb7Y6MHcltAAHh4R8yg3VdMukUk
+wNnVfcpDF8wlUKOh175JUanvCPJi3n5RP6oV+0EWpmN2zUyVfGVzD8Cj6p9L2Qoj
+scQsC00CLr9fi3kqVuAyO+EHFl8hCQ==
+=uve9
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
-
+--HPN+G74z3uWNF37H--
 
