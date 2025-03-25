@@ -1,158 +1,138 @@
-Return-Path: <linux-kselftest+bounces-29735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BEFEA6ECE2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 10:45:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE97A6ED1B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 10:57:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6124B3A8109
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 09:42:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 449831891F01
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 09:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3878C253B64;
-	Tue, 25 Mar 2025 09:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F401DE8A0;
+	Tue, 25 Mar 2025 09:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="XtLZHqs9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AujYp9nI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFVgd+d3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53031FAC3D;
-	Tue, 25 Mar 2025 09:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0C0199FAB;
+	Tue, 25 Mar 2025 09:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742895642; cv=none; b=Cpk9lDrgZwjWhAbjVgBtxdEi/e6VKTg1MbopVmbAwCb/HAbJhXuzxM/GS0rhbwA38nh2vNUTFeKh3nQR1usjU/IkYhPYkHYI3jhacfeiaRlaw5KozCI3N8n2KqjEMHecIOWbGFlW0M9ogjU2CGWW05inFAhxfV76Jyn1rvV1xEQ=
+	t=1742896635; cv=none; b=VQlqX4rwlmAT02dFOB7MGU5mgUoEeKUyLXCkTcJeeKkLgK4xGvYV/PMqmvFBjTLwDjSGFxokk+OvEyxjOFOCcKxJxY6G4On29YUDHwkT/PoRapTZnXZHPL68rdIKsCGHYP3YUzJ+Ra6NrPtac47V3N7wzStXIyBrC26iJ3ae4WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742895642; c=relaxed/simple;
-	bh=eud//FrrPTn/NL9oNFt/scdtsVUNC3WUkl6HvB+h21I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hDiqjFJ+1Q7PVu1aEmVqeukrp5Olq6gr6jGuWC6smP58C9OQoljhM7JixslgVJGp+ptoi8i0UKL+2UYjHTibQ7KIiI9EepmTT+wPinA3c1soF5hco3dLdbaBYLgwE4vpVxjeTnz9whZ5XKJPVQO/mLI9N7MgJXgYRxNSgLSJohY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=XtLZHqs9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AujYp9nI; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id B3DBE11402AF;
-	Tue, 25 Mar 2025 05:40:37 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Tue, 25 Mar 2025 05:40:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1742895637; x=
-	1742982037; bh=jJPAD2UcHldTjErdg3Kf7WH+pXGiXV6MKPRaF1AAmD8=; b=X
-	tLZHqs9AgHLr1kLcEAoRmL+WNrUdMjZNi/wlElR9ByrLL5zn6m/GxaiQKnHivG06
-	WvVjui0aG24m6qEh4cE7A6tAR46pGZpwfO1uCiI8Y8cDHwHJQD92VMG6meBQJojk
-	7+Cdps11bKHRiIlrBi/ar2kspXrT/SOqTMeJ4ZwFMko5ecbnzmNkUcnSzKebS1tm
-	QsMowBqYXF9tWW3FwhbiyKtH3iNtgf7lB+qgPtCH2HWMDZWm5uk2FiQ7kIVSniS6
-	NwCl0L26eA0T587BZ987x60v5s9uh3O9p7u2VrQWUK1ejNP08GD3CxGFdRDyp6Nk
-	MNkPGods9D2TxlrEAd6Ew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1742895637; x=1742982037; bh=jJPAD2UcHldTjErdg3Kf7WH+pXGiXV6MKPR
-	aF1AAmD8=; b=AujYp9nITJlK//rS43Gr10ZLd+shKs1Og20Pb1uMq2JQ+HQN/M3
-	DEpErdnCWySL/BQhwE/Hks0OvlDsnCeklzWd+WkhHg48bq3ru+Ji1ItnBh8NDwDJ
-	jSpot9UVM7fRgJK4nQUOiZqUyQUA3mXTHRK0grTwyo/j1W2H4gAmDSudcscKx45E
-	k0e29rJ31hhqasNWsJAV5L0eeqoGH362N7UTYOqhTSxaJUFwAyhWy4M/RqSSbkvs
-	msnvuiawgrvJWrCcxcVc6QqUl+hL1wni4R25uZYuEGL8rOYFMEY2sEgQl+mXe9mx
-	py5yMwYMDYHmQkPq/2KCPmdpq4ShPIfisTA==
-X-ME-Sender: <xms:FXriZ8uJQWN9AMjb-7FeO80wRmTJN7u8IUt_VZfLzGje0zs8_zsJUA>
-    <xme:FXriZ5cpzn2OT48ugIRXwZHGUQOVBl6dVjQja735_6jPcx9YxGQbsEZ1PGvbwCdvc
-    hUaUFezBqVS9n9ilik>
-X-ME-Received: <xmr:FXriZ3y3uQpydWUEkAuBq5qDvag92B_B0djhDbD_fasn2Oi1wZjKxdMUix2T>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduiedvfeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
-    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdef
-    hfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
-    sggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnth
-    honhhiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrd
-    gtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehp
-    rggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnth
-    gvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtph
-    htthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:FXriZ_PzH1_2lmZRkmn8CYwcJqsqWo5i11g3ExFDqlzZW_5gm0OsVQ>
-    <xmx:FXriZ8_0DhBEqBhNrtDZ4b4QqaY3DkqPeXOjLLOUB1cuCmj4ze_I8A>
-    <xmx:FXriZ3XSCvioqBjHsh6m5MECSV_YYZ96ZhSOlUNusU_JOo3lqkjIOQ>
-    <xmx:FXriZ1dLKkIaPeuoheJeWz35FqaXM-hAr39j2AsDghQ9iIDaO6khBg>
-    <xmx:FXriZ2fuh1nrrdKCKQIBvDjIIdQQYbDBH3vcpDnpmDzTeYBj1sPFtKAZ>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 25 Mar 2025 05:40:36 -0400 (EDT)
-Date: Tue, 25 Mar 2025 10:40:34 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v24 09/23] ovpn: implement packet processing
-Message-ID: <Z-J6EmX-wZRUYt4f@krikkit>
-References: <20250318-b4-ovpn-v24-0-3ec4ab5c4a77@openvpn.net>
- <20250318-b4-ovpn-v24-9-3ec4ab5c4a77@openvpn.net>
- <Z-E70n1tkzKdepTo@krikkit>
- <ae9f3c18-7b03-4a49-83a4-a3e7d8c52a3e@openvpn.net>
+	s=arc-20240116; t=1742896635; c=relaxed/simple;
+	bh=BvDDzlzdOcqf4BHdU6qJ8FawDbknKtetT8elHms5Yd8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hxSVxcTnC/WXz3G29AFpRyYqYEkPy2UPYvbYuOkRp9eIIUHkyUJZGffNckPCXN9W/Qzg/V4RabguOjAb9HllXaNlUjcLAaUdqOMBaPl6JZs9OupXNxNFWv7jn4L794Kv2Ir1mivmipsW1hHkoDxKb1T8WS6LXwtaQxkgHvPedB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JFVgd+d3; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ac345bd8e13so956524566b.0;
+        Tue, 25 Mar 2025 02:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742896632; x=1743501432; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DEgV7dXBWUHlWp9THDdIl69Z+M8XTdqmdjv6ciiL/v0=;
+        b=JFVgd+d3101AiHcDUppGvTfflvkX7b1q0nfiii+tjQjFzqrSakMowxratyEC1kJ8vN
+         dzqgRBiv6xUDAQN3BsXiREIl7e59olEOEBtPLLyv4i4dfB76AvmMsugaLBLJXNahdk4k
+         Ih/uM7kzNuQuR5HDnVLN3jaYcI6R/wGWryvl2muMkqYBztVrs1YBhvq0HV+Hg9+KRJyx
+         QE/6enD8gU14OX+B0XILPAQVtwkY0DJnpnsHBHjkksuv3MwdcLuPwt3AZcKwC2Y8N1gO
+         x8ducReZwuwrEpg+T9aR1+gNvBFfA1OuPwv7WBpc8f1qFNU9m8aPditkdS9GIm99Qapz
+         D5vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742896632; x=1743501432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DEgV7dXBWUHlWp9THDdIl69Z+M8XTdqmdjv6ciiL/v0=;
+        b=Izldsdbt73h0rqwEwU/JB+2qqfVX4wCnM730/6H8+Vy2kqjH3Eey4cHlO0WKGfTH+I
+         fCQcH3ruj4z8DTzeZVLWvxh46ol9bV/wM4fDzXCC8fEJSNjaAV8gVu8LXgIc2j17DcGN
+         PeD/FD2oaMUuqub1HXQsxZvICgSIzQbaKeLb+5OjgFWRj9Vb+Fo3EjQhzaIknzaehS7C
+         75HrXqjcc9Yzt1fOjztKzECxvwtvn2xYW8TB8jYieTT7vkUkQ8CQWy7tV+TFl9vHye7a
+         B2CzC4UOfSEJWrJiGq3+uehlkbjHm8uVJprzS5AhqmPivmB2plE8IZQYFSxKTFYDmA1n
+         /cZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpUAMCAv2kHhjMLTtf8UAMz718xuaWsTtYTOyu8jx5NsU+my5CQJBCOSDQf6zFTcxCkTK34Y+lZ6+hBuQ=@vger.kernel.org, AJvYcCVULTpm/+1NHpwIBpFvU7xRLwF0b4lL0I6KCqm8+YS4NER+5UTFQbCaothC7dsA/g7eCRIcbWqIRfzneW7B4Mma@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkfBuMuCNQDGp+3+LNyLCtbrs5PNvh/qFKc6tIt9C+dzfFljYR
+	VJiFtjylTJhD8qYx8jQN9Xtm8atM/DBUbGxmNBigd+eINY1zP0Uc5wAtCJxXPG5Uojc5ba4R0dv
+	zWHFOjSgrcBUQCD2CBUT75WVGH5s=
+X-Gm-Gg: ASbGncuOzRjPvAjwR/MO8rR5qL24qVr0jVccdw1rwwJzGVBDjU97dgFTLEnTzcRdP06
+	xqISzQ6uTuY7GltSkqwtT7G3lJZ3ZMh2wgcgwvPU+t+6FzTHZMQ/uZs0SUEiBpvAWaWAsg57CjL
+	5gJL1/AyZoZIK3GLzY8gBglmp+FkU7
+X-Google-Smtp-Source: AGHT+IGsybLlk6Gei/O6isFxKvdtM4iz5ryq2uJLMcJrXSpZT1dQ7GSgHEo9pIWxQarGx/awZwvUr8q/dPIStNwB2FM=
+X-Received: by 2002:a17:907:da0c:b0:ac3:f683:c842 with SMTP id
+ a640c23a62f3a-ac3f683c845mr1688462366b.42.1742896631914; Tue, 25 Mar 2025
+ 02:57:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ae9f3c18-7b03-4a49-83a4-a3e7d8c52a3e@openvpn.net>
+References: <malayarout91@gmail.com> <20250324124810.883767-1-malayarout91@gmail.com>
+ <20250324125108.GH14944@noisy.programming.kicks-ass.net> <Z-J3jlYcocf_w4M_@gmail.com>
+In-Reply-To: <Z-J3jlYcocf_w4M_@gmail.com>
+From: malaya kumar rout <malayarout91@gmail.com>
+Date: Tue, 25 Mar 2025 15:26:58 +0530
+X-Gm-Features: AQ5f1JrI8xAwzMwi4u1x_sk952eG-lUxVvQamrG1sXprgY3Bm-WPSFDn1iveu5o
+Message-ID: <CAE2+fR_kG1SpE3DZ6cbZL+J8HT25RcaGxYrZP-H+rDFSJG6sdQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/x86/lam: fix memory leak and resource leak in lam.c
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-2025-03-24, 21:53:02 +0100, Antonio Quartulli wrote:
-> On 24/03/2025 12:02, Sabrina Dubroca wrote:
-> > 2025-03-18, 02:40:44 +0100, Antonio Quartulli wrote:
-> > > +int ovpn_crypto_state_reset(struct ovpn_crypto_state *cs,
-> > > +			    const struct ovpn_peer_key_reset *pkr)
-> > > +{
-> > > +	struct ovpn_crypto_key_slot *old = NULL, *new;
-> > > +	u8 idx;
-> > > +
-> > > +	if (pkr->slot != OVPN_KEY_SLOT_PRIMARY &&
-> > > +	    pkr->slot != OVPN_KEY_SLOT_SECONDARY)
-> > > +		return -EINVAL;
-> > > +
-> > > +	new = ovpn_aead_crypto_key_slot_new(&pkr->key);
-> > > +	if (IS_ERR(new))
-> > > +		return PTR_ERR(new);
-> > > +
-> > > +	spin_lock_bh(&cs->lock);
-> > 
-> > At this point, should there be a check that we're not installing 2
-> > keys with the same key_id at the same time? I expect a well-behaved
-> > userspace never does that, but it would confuse
-> > ovpn_crypto_key_id_to_slot if it ever happened.
-> > 
-> > ["well, then the tunnel is broken. if userspace sets up a broken
-> > config that's not the kernel's problem." is an acceptable answer]
-> > 
-> 
-> The behaviour of ovpn_crypto_key_id_to_slot() is still "deterministic" as we
-> will first lookup the primary key.
-> 
-> Therefore we will simply always use the primary key and never the other,
-> which is what we should expect in this situation from the code.
-> 
-> I'd say this is just an ill-formed configuration, yet not invalid.
-> As per your statement, I'd say it's userspace's problem.
+I appreciate all the feedback and recommendations provided. We will
+incorporate the same.
 
-Ok, sounds good, thanks.
+Thanks & Regards,
+Malaya Kumar Rout
 
--- 
-Sabrina
+On Tue, Mar 25, 2025 at 2:59=E2=80=AFPM Ingo Molnar <mingo@kernel.org> wrot=
+e:
+>
+>
+> * Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> > On Mon, Mar 24, 2025 at 06:17:50PM +0530, Malaya Kumar Rout wrote:
+> > > Static Analyis for bench_htab_mem.c with cppcheck:error
+> > > tools/testing/selftests/x86/lam.c:585:3:
+> > > error: Resource leak: file_fd [resourceLeak]
+> > > tools/testing/selftests/x86/lam.c:593:3:
+> > > error: Resource leak: file_fd [resourceLeak]
+> > > tools/testing/selftests/x86/lam.c:600:3:
+> > > error: Memory leak: fi [memleak]
+> > > tools/testing/selftests/x86/lam.c:1066:2:
+> > > error: Resource leak: fd [resourceLeak]
+> > >
+> > > fix the issue by closing the file descriptors and
+> > > releasing the allocated memory.
+> > >
+> >
+> > But but but, doesn't the program just exit on any of those 'errors'
+> > anyway?
+> >
+> > That is, iirc this is a single shot program.
+>
+> While that's true, still proper cleanup of resources is a good practice
+> - and in more complicated tools it's useful to fix even these
+> semi-false-positives, to make sure other warnings don't get missed.
+>
+> Having said that, the error/cleanup control flow here doesn't look
+> overly clean here to begin with, so I'd suggest fixing that (with goto
+> labels or such) - which would fix the file_fd 'leak' as a happy side
+> effect.
+>
+> Thanks,
+>
+>         Ingo
 
