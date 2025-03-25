@@ -1,160 +1,194 @@
-Return-Path: <linux-kselftest+bounces-29769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE354A707DE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 18:17:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B384BA70896
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 18:55:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40EF916C265
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 17:17:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B97CA3B8818
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 17:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BB025C716;
-	Tue, 25 Mar 2025 17:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B51264A84;
+	Tue, 25 Mar 2025 17:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chE8zGi4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FlyWvwms"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5201E5B9E;
-	Tue, 25 Mar 2025 17:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B49226159A
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Mar 2025 17:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742923070; cv=none; b=rtKNfm1I6LROd8L73C2QXjvpjIGog0wjfxaP6sYEV8C5wq8gFnjqFAaN3OeXxJDdHJm4SlV8oFHaGU8PNQYSKpRodGazUxkiQJzZzTl7QsLBcOngsGtaCH5/DHbtSbw7Y4+H4JbMpO5Rg7JY8wgItpTc0dzZc2DbNknefG0yeVU=
+	t=1742925166; cv=none; b=ARrydFGn6LCsH5o+N7O/2qoDpb/Y9AVBMxu3Q8FgZHuU1pXAItmNkTRrOB74313RZyXTnkUmXKGTzmtYKu6fKYo4TBN2EjsMV4CJ+wWY21XdoahD3kxBmkNhTHHK86iFKyKWOp/dxPXdbUePUdBN0pHMK784xJ+MwRYIrpga+6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742923070; c=relaxed/simple;
-	bh=b6MGlnUVaFKBQ+2xHwkDeovJSJdklX90bjhSIP8Uqkc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lbx6HuIATkn/hOjfCdr9qmroOaXsCpLhDcss4qLE2PHLPpdPHvuvRF7z5aSLGNCB2oStADd0PIXfXZLfSSpWQ5uT+ZNoOSOZay92/SBvaHwTuXBZKAOQsy8AB1HyBorJo5eQvmP7Xb+vlN4z08g6djbXWJwPrkodbk3/DGA+Iww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chE8zGi4; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30bfd4d4c63so60157881fa.2;
-        Tue, 25 Mar 2025 10:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742923067; x=1743527867; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ncjZuqLz4pCC4vphDuKl5ZPEUefScVXYO+j+PxLNSXk=;
-        b=chE8zGi4XqIqrv5sB9O5OWgRv3IWYGWbTNPTrgIkCSnLu4mpaEtpyDqCBx+FQUmXyQ
-         Fl0fEWKOuVdo6AfvbQ6lQDmBN9O/Sq6oTvCdPt8sprjVhCs388SMlux64f6Z1/1i8k2Z
-         0Q5qiJlSR5E5hJkgwGFiDyEcAEOryMlE/1Xa9dg9PjSGwJ5JLOLArHWD8ESltnQ5mF9K
-         JxwK3UostqofxMdAlH5vUE/Y9vbVO9M/2uJLwYTIQgBZcxjRSBIM1mB9FUhOV+uyGe0/
-         mC27Q43oCbD1yxSQJ6qDqzrJG7AU3zi81frK6Ov510F+JDT4o8IYg3+VNUFXEM8UHHdW
-         FLQw==
+	s=arc-20240116; t=1742925166; c=relaxed/simple;
+	bh=rqgWaiOeIHt4zG94xEwnMSEUgdwajlC/lHAStnrVhlo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qzyFbdgPhCtrIhEUjfNYQtgCBpIu04K+ivHO/PZVMYt1S10XZF1kGcghNIQ6UcaNCJ4IruRPGnk5LsVVy68UC00CzDLdymhAgjopf714iQFMh2ZRrQalVRLk0ocWmC26Tgz1u3Zzwc2BPLa0j3tIZSTVSmpYVuB2xu9MLuIuX9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FlyWvwms; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742925163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=58+r+FAQ5TTby/P3+2e15XArHywgR9oB31F4zzKw58o=;
+	b=FlyWvwms8jEK4yfeTFExpmTUsBLH32kH6zlnmijgm8EA/S/ygS7Bg5W3fm/N+RnzunZcsX
+	aRW1tW2sqzMMfaxEbuaduE6L9pQBf8ysaRxmnMGvTHX7VeySk6UwKitsAoIdE5vR5wHSZ2
+	eVh+M26df6RadvJ13Yw33fSErcKWBjM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-172--Mf_jYzMN9y3b1n1g1Ey6Q-1; Tue, 25 Mar 2025 13:52:42 -0400
+X-MC-Unique: -Mf_jYzMN9y3b1n1g1Ey6Q-1
+X-Mimecast-MFC-AGG-ID: -Mf_jYzMN9y3b1n1g1Ey6Q_1742925159
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43935e09897so37573425e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Mar 2025 10:52:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742923067; x=1743527867;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ncjZuqLz4pCC4vphDuKl5ZPEUefScVXYO+j+PxLNSXk=;
-        b=O+H1NCc5ZiihLR5VaslFJQpKUYAfg1qk0tvveRfuUHfh2wleQWDC/PyCkxMX9pk8zY
-         iuG9Wv4BXpqqcNe5Mb8b2GsAUazGb7wliHVuykQjbrTy0vDRcN1MgPLchfSQC4cCDPUi
-         oAIZurjwqkYk0fEma+LGODLLJjzqQ8Su8KjsBU18r/PC/9QEGPobvVRgAsnCX7aI+t+u
-         xuruTm9NY+t6qEduNYg+hBAa/aeDh0g2WWCSbhjM6UD5TkeS1RWBYpVmP5RMCqx+jXLW
-         dcylwhx1iLvxs8r6iRHFHwmhTLQsx9lKuEMlLzAy5oIlPmQpcpi36AYUpH6YPUNgF27i
-         bXEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCURQcgI4KfD9HA1UuB3yE7JQHkLKIXGzot2H6ncwW9+tLYmsIi+XEGWdeAhiYHV4rmG9LJtpK060V/8i8D+@vger.kernel.org, AJvYcCUxmyZFjf9+7SEpHAPU5LNoQd74T1rHzsPYSR8WHIvpiSDll3ObszKlGqLiolNkttJxbFxEYGIrEQj5LK0=@vger.kernel.org, AJvYcCVDOXk5CSSltCXMusu/YaW3+X00KSJQ/xKdRe6fBRUjJicizZj0CKXT3vaPxXZ0jIMAXdBHMCWNnncazolQM9yu@vger.kernel.org, AJvYcCVS0KJoxxoEgD93+bzub5IDrTyw464yCiOq2rRdVGQ0Uu4w6gVG2h48/XxakYHG2kAIZ+7DCzAuj11f@vger.kernel.org, AJvYcCVjzI95P2wI0ISTP1RWMTbvvqagt369jA2C/hhQ+6MvHDRDWiJjJzE0Gonaft4++NGn3mQ/tVihcvgu@vger.kernel.org, AJvYcCXEyOGWpjSMEEIVKumtMEgtOGqqLIxrp1X0ew5fb/f30mZ9YxDV3coijqcckpwJG4zmnQjPZ4ut8Klp9567@vger.kernel.org, AJvYcCXROI1TbrYkYL66KTXX9gLdNMgNA1aGQ8jhF8OcSVuUksf8BhK3wxP7W8Fr4m7vh9vfHt2/s9qKx5DfzO/jCx8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPDqaRApEYYME2dVxALU485X8l9+W/1PbBahFmupYkf3VoWWt/
-	45DCVo4wUhHYg/lDrKsDJgVLjEJcfKnwaIbZUpHDnzrN21/90LUrSZJZS26J4d8upAdyBZLetay
-	sonJpnpj7kdgE1uqDPzRRJjj0HfA=
-X-Gm-Gg: ASbGncutG8fUCQatClst2ow8OXecMPw+wcjbWH16j++a87li5srjRO6Tss6+SSiKFPs
-	xrrFA58c35/K3TUhB724FfrhZ92qzNa4RZUrR9iR9kWUq51XWzbndqb4E41/4AQKeAmP6Wx5Yjn
-	iwupgEJ8yUKYVpGX3bkBTssYDVRVeCSHZ854xmz4671A==
-X-Google-Smtp-Source: AGHT+IEho6TRTFYibffTOcXg2imxNyfO/NDJlMfW4YuFXt5pXTh3sRV4mlcchTRWE3KKFuAFKeLrQV8vCY3tNcZg+Mc=
-X-Received: by 2002:a2e:88cb:0:b0:30c:177c:9e64 with SMTP id
- 38308e7fff4ca-30d7e2bce01mr65584441fa.35.1742923066511; Tue, 25 Mar 2025
- 10:17:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742925159; x=1743529959;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=58+r+FAQ5TTby/P3+2e15XArHywgR9oB31F4zzKw58o=;
+        b=usOFrv24d7MJVOok2hEM4sLfmkLeqJNhY/dWA41IWZO2vMxEancL632FdF1vGrXhQj
+         DsQOh4rKUXudU4/cZAj8MOSTkAXoyC3I5NNR+Dr0CQqubEJeuT+RqBsnXxbHoRdZL6Sx
+         Vgf6RAO8/zgiR6jWX4nSVWLV2SPJ5DICRdDL5wPNpxOBn45jy0xz4EKEC/EpcAju0idv
+         +5QboJu7J7q+aZp0CyC4Xf8mKcpuQerH7tSfLhoMKqggkrQsVvyp/6SOb0HKxiYKCXgb
+         0qJzsqmeMyD+MnjHw9sCPv8wf5ZDLj0JEHIBqJuYwZexS+dbrPBUpE0GASjnncn3OerM
+         IbMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVc5XNzLU++ze7VojSpO63nTid72QAqddY10idUgCbpSPZCY1CM0XB0mdWKPo+pB79pfjJq1/rIxqWvci5SmB8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLPfjGtnra7OdyG3o5UnCe/uOBgTwV4qiCGuS7mg5gt8Cr7cMK
+	ZwWPLDbfnp9GqnPUVwpAKN4qBPrCTnGR3qSwVfvWFTIyJt3fXnHBan0xgRfgT/SznD+uQIKhp3q
+	BBqh1MsJuyvsQ+pG2tFGwZbKZshPZzF9b+PNtQ1NoP1DFdXx7yFqaBp9D1HfYZXC0GA==
+X-Gm-Gg: ASbGncug3b9F1kyK6s+2xpbA/20dSyUyOLEhWj6JlwgrmcPh7ojGHAXvOnN6iqOeGnm
+	HmHU3ipRWpFODELJdnImNDOEAYXGG1QSZa+W3KQK7uwtnbj2fYNRkcoFzd6Sqs9ihY58r8nVWDD
+	dDUfL8EeLejlArvOB/WY0JStzQi9d9QNBS3l+UZ1DOXIAwZI3oOqts2xdtf39tNONeBiZxbFjAo
+	vwnKBibQO3xR9hOE0fJhN8ncaOKK8Vnvc/qIFId9ri4Jt4LyqgiTtsSbUIV4sgFt/VdsHsac852
+	GWT863HgPifeEpbTj6HwTB3LhkK7+J1wV3oO1QUKRQlLc572IIJSmIPSgXOkcb6jm1W+AXolz3L
+	Q
+X-Received: by 2002:a05:600c:4584:b0:43c:fe85:e4ba with SMTP id 5b1f17b1804b1-43d509f4b25mr191666625e9.15.1742925159180;
+        Tue, 25 Mar 2025 10:52:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFE+waNkOHjpFuU78xXxVfBVrthL7+/n2itqapsAHnKkAlkbjOyC6OGUhEtlUEcPF/6kvS3dA==
+X-Received: by 2002:a05:600c:4584:b0:43c:fe85:e4ba with SMTP id 5b1f17b1804b1-43d509f4b25mr191665765e9.15.1742925158655;
+        Tue, 25 Mar 2025 10:52:38 -0700 (PDT)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9b409fsm14543767f8f.50.2025.03.25.10.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Mar 2025 10:52:37 -0700 (PDT)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+In-Reply-To: <408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+ <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
+ <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
+ <xhsmhjz9mj2qo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <d0450bc8-6585-49ca-9cad-49e65934bd5c@intel.com>
+ <xhsmhh64qhssj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <eef09bdc-7546-462b-9ac0-661a44d2ceae@intel.com>
+ <xhsmhfrk84k5k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com>
+Date: Tue, 25 Mar 2025 18:52:34 +0100
+Message-ID: <xhsmhy0wtngkd.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com>
- <D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me> <CAJ-ks9n-z0SETz+zBfJmda6Q_vJDeM2jmDXx48xX9qpMmR-mdQ@mail.gmail.com>
- <D8OTXLDQCOKI.34R1U5R0JSB8H@proton.me> <CAJ-ks9nc0ptzfh+tHj47aTCMqoaKB0SnGpZOLQ06upt7x8EBMQ@mail.gmail.com>
- <D8PAQXHJDVQE.36QKQGBVVL4QU@proton.me> <CAJ-ks9kuG8SyybioKQ0+bYwjnCQFMhip+4A1WnMhsdgnNZGiZQ@mail.gmail.com>
- <D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me>
-In-Reply-To: <D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 25 Mar 2025 13:17:10 -0400
-X-Gm-Features: AQ5f1Jo-XOMVt3AtJU0OfhrKyPKg6t27WTK1AODdNRJ_VnhlwpYHl6kJ4WNIc0w
-Message-ID: <CAJ-ks9mMVzm4m20AxiZ53DyAmSEaEh9veMoVB5XRxmTQP_H_ZQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] rust: reduce pointer casts, enable related lints
-To: Benno Lossin <benno.lossin@proton.me>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-pci@vger.kernel.org, linux-block@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Mar 25, 2025 at 11:33=E2=80=AFAM Benno Lossin <benno.lossin@proton.=
-me> wrote:
->
-> On Tue Mar 25, 2025 at 2:34 PM CET, Tamir Duberstein wrote:
-> > On Tue, Mar 25, 2025 at 7:05=E2=80=AFAM Benno Lossin <benno.lossin@prot=
-on.me> wrote:
-> >> On Mon Mar 24, 2025 at 10:59 PM CET, Tamir Duberstein wrote:
-> >> > On Mon, Mar 24, 2025 at 5:55=E2=80=AFPM Benno Lossin <benno.lossin@p=
-roton.me> wrote:
-> >> >> On Mon Mar 24, 2025 at 9:55 PM CET, Tamir Duberstein wrote:
-> >> >> > On Mon, Mar 24, 2025 at 4:16=E2=80=AFPM Benno Lossin <benno.lossi=
-n@proton.me> wrote:
-> >> >> >> I'll leave it up to you what you want to do with this: add it to=
- this
-> >> >> >> series, make a new one, or let someone else handle it. If you do=
-n't want
-> >> >> >> to handle it, let me know, then I'll create a good-first-issue :=
-)
-> >> >> >
-> >> >> > I'll add a patch for `cast_lossless` -- the rest should probably =
-go
-> >> >> > into an issue.
-> >> >>
-> >> >> Do you mind filing the issue? Then you can decide yourself what you=
- want
-> >> >> to do yourself vs what you want to leave for others. Feel free to c=
-opy
-> >> >> from my mail summary.
-> >> >
-> >> > Well, I don't really know what's left to do. We're pretty close at
-> >> > this point to having enabled everything but the nukes. Then there's
-> >> > the strict provenance thing, which I suppose we can write down.
-> >>
-> >> Yes, but there are also these from my original mail:
-> >> * `shared_ref as *const _` (for example in rust/kernel/uaccess.rs:247,
-> >>   rust/kernel/str.rs:32 and rust/kernel/fs/file.rs:367), these we can
-> >>   replace with `let ptr: *const ... =3D shared_ref;`. Don't know if th=
-ere
-> >>   is a clippy lint for this.
-> >
-> > I don't think we should go fixing things for which we don't have a
-> > clippy lint. That way lies madness, particularly as patches begin to
-> > be carried by other trees.
->
-> There already exists a lint for that: `clippy::ref_as_ptr` (almost
-> created an issue asking for one :)
+On 20/02/25 09:38, Dave Hansen wrote:
+> But, honestly, I'm still not sure this is worth all the trouble. If
+> folks want to avoid IPIs for TLB flushes, there are hardware features
+> that *DO* that. Just get new hardware instead of adding this complicated
+> pile of software that we have to maintain forever. In 10 years, we'll
+> still have this software *and* 95% of our hardware has the hardware
+> feature too.
 
-=F0=9F=AB=A1 picked this one up as well.
+Sorry, you're going to have to deal with my ignorance a little bit longer...
 
-> Here is another lint that we probably want to enable (after the `&raw
-> {const,mut}` series lands): `clippy::borrow_as_ptr`.
+Were you thinking x86 hardware specifically, or something else?
+AIUI things like arm64's TLBIVMALLE1IS can do what is required without any
+IPI:
 
-This sounds like a good one to file.
+C5.5.78
+"""
+The invalidation applies to all PEs in the same Inner Shareable shareability domain as the PE that
+executes this System instruction.
+"""
+
+But for (at least) these architectures:
+
+  alpha
+  x86
+  loongarch
+  mips
+  (non-freescale 8xx) powerpc
+  riscv
+  xtensa
+
+flush_tlb_kernel_range() has a path with a hardcoded use of on_each_cpu(),
+so AFAICT for these the IPIs will be sent no matter the hardware.
+
+
 
