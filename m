@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-29781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16683A70B3F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 21:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4275DA70B46
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 21:15:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3628C7A975E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 20:11:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 376907A38F6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Mar 2025 20:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77E52690D4;
-	Tue, 25 Mar 2025 20:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30FE826983E;
+	Tue, 25 Mar 2025 20:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nqz51FUO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WVaI3nzQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB888268C70;
-	Tue, 25 Mar 2025 20:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79F1268FFA;
+	Tue, 25 Mar 2025 20:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742933278; cv=none; b=IoDbHjsyY+afPDJvwwgkkubqe4jNkxT66gDPrg8J2ZibbisJmowzTVC1/2X2hXu6ddFv4iwyvujONSDZi9vwKGnJ+Sy+fIG7S+L2/w7TRj+HT+zo6mGSXlcpy7lN76VYJX5iARdh2Kgv6fd7x9bNCDYO4cKzBwSDREjEbOFpEtA=
+	t=1742933281; cv=none; b=D4xO+2iak0IyO3sbc5QaI+uTjoqevVwpu5HyS3fDS7voPRyL9zJIZYsWCBa8ItiJ3QE0JK3+BJMX4CnLon1msrMFpkXDtOATBdD/lBVjD4027COKQkeX2C/owGWIp9b7lZRWa+FN0n1EWBbsoNbSnqi6K8eMHnLkFD30j53DdmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742933278; c=relaxed/simple;
-	bh=ARhxNI1wWiplxkPdk6FMVE4T9Y4lrgoeC4uNkwKSjKU=;
+	s=arc-20240116; t=1742933281; c=relaxed/simple;
+	bh=coPB0YWiFAsmMpUoqm0aOxwsqE4IF5IAmaNDjWVROmA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qRqywYSi5DEe71rgNUHV6TneKZMssiV3TjHDMVzYpSc/lEDf7D32jjwm5gdu9+2Q25oa8RZIlVKnBEXqJxv6EtpS0v3VMOC1fMiAM4GpHZ3lzVDAPjWNtM5IzgTIZeUmgV/Ej9gB+oDYyjTkUihBy5UOFJ81GGwUnxA6BhQGT5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nqz51FUO; arc=none smtp.client-ip=209.85.219.50
+	 In-Reply-To:To:Cc; b=pjRP9lIYO+YNWzaxcySbQvfoWGOjOogVecSaTAyREXnlNDz+ushqp7k76N6jojbNmQXuXS5nG6RbmPfV9tSpMRXnLFVwsFFWr0bVbaX7MYHGwOi+nI0ySDiuTBRBpSL92CC3jzclOw40UwFxdsTVdfU4IUOnO5GQ+gEzSzdeoZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WVaI3nzQ; arc=none smtp.client-ip=209.85.219.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6e89a2501a0so57057906d6.1;
-        Tue, 25 Mar 2025 13:07:56 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6e8ec399427so47546176d6.2;
+        Tue, 25 Mar 2025 13:07:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742933276; x=1743538076; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742933277; x=1743538077; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=V8afu+918+Q54xyruc7w9BxMECWF2zkytyg4bSZWLnw=;
-        b=Nqz51FUOroXH0Nux+3ah/lqVKdgIddkzLj1ioT054tBjwEaAYyvnDRPOsPphsDwcpR
-         tmwg5+hMeFjoTs+2HWnlHdZXX75qzz84Z8O+MTEiWjaeAjr6G+/EwZKOFJjNN580oKLo
-         0poX3vqlAkvdxKD8T5KNfLBV8C7DSPOoLA6G4Swzd3rz8rUgEE0K4JuMtvwsVad/SVC0
-         cGnmXEeiLuIYG4wdNgIUmEiddaJ8mOBPolE8pI8NNdBQGsX0aMuX6gOnojlsUqhtlctb
-         +av+wwSDSYA1C/v16LhhK56XWuj7LFnnFvqyx+snG0a1I3PJ9kge8HaZq2zDjSPv5XcP
-         /lwQ==
+        bh=F5uIEKx3rY1SAZshU7eTI3oeeRLlCQ0XHxliBguWMoA=;
+        b=WVaI3nzQTqpfTJCL92cptFJQsSbwhi55TDdnS+pO8BfFguEd1tUb4WK2VsQe5VuzRI
+         +UPygdnOLhoVO9UBbzj34HL2nzHQKSKtpAr+Y8/4uU5SXS0q/Ye8Va2yi/mpuqTou3Kh
+         KqymZk/Y3rdQw10pzcvu7kOZC4d+12/4kb8gz24iRwQ0qB/+228u0VG/hSdWSxaJIuZp
+         Ok3W+nJLdJlMxqtNZik5UAWsdLNUbVN4k8TG5TeMk8yxZfaYvQVwaYhI4jqcedlMPxhP
+         p37J1TqwLPUCkKdGmbUoEd31PTR2MEtZzL/GYNuVxelKdL+2ecIPSDplFpTW5DD0V+ou
+         ibcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742933276; x=1743538076;
+        d=1e100.net; s=20230601; t=1742933277; x=1743538077;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V8afu+918+Q54xyruc7w9BxMECWF2zkytyg4bSZWLnw=;
-        b=UW0R0xePP7nI/k+gL/U7e8VDLJUESnjREPq//bLDxsnwXy4ZFyBzRJ5MRRWi7hxL/4
-         n9UM2C1H0EIHWXaBskNdzowR7xznRW9WLzdQlL7bQSrm62QKgNl/qcSDVR9wc8axTSRg
-         +sO4DX9ac1+y4VLFD21v/VPtJOkGDbQaLm+K3Y6Ihrsxv26SkQ5q3ElRj9G5mVhkNi4X
-         jA3Kaf8eJltBY3m8SeCeu+Q2WSSdOHTNdr28enuEVIBcIgsWdK94XTb2Z1d3HhmhaDuE
-         r7MmCfgdj/5+0JynrpP4Ymg+HUuO5JHkYTzDzgiEyZPDAO9UCfek1Wgb3DfAN/LmeHGP
-         WFNw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9uauPegzxxAgxlysIelSb+L+AK5OyYMPf+cj7lArXLduSB8yaiRIXxT65AgRFWqucS0DQ3CSNzrSgMJW8@vger.kernel.org, AJvYcCULruIjVTk4U5n1PionM8R3GlGQsNd5UnlVgTW/382rhQwsYZu7qUi1oeW4rmcIn83jiKC/yn4lcp1KA/o=@vger.kernel.org, AJvYcCUl+uZz3/qCl91f3cjIZUoNxV1wyctlVN6xiZ0No2DHqd4sMhIqxkz068wl18QCWg6hu5NkJgwmkcAbhbY1tziF@vger.kernel.org, AJvYcCUq8hPBsZN9uPdueEI3OevYNv9/kjhAZgi+UcEJtrR0DdT9bNUm0eLTV4I0DngWvcVTKfLvcCHnMaCk@vger.kernel.org, AJvYcCVGnFM4fIYhDMHiQapiBk33cL4qD8dX5YVaif8WPpP7yjsqG2MgIuyxMvuqG+JLt5g46hRGAxDi@vger.kernel.org, AJvYcCWCUmnDPhjEIG6iT0V7Y6oJ6JcDS9giNLy3axKQK9R/gh9npmvPxTi9XeZKgE3DcjZWf0eMZ03PosPtVXCg3QY=@vger.kernel.org, AJvYcCXJOXAa4VGWRNYm44S4Pyt6LixKJz6cKQabIsgOG+77yXAnP7ljUV61grgwE1LFInUpjAwIJ6Aula86@vger.kernel.org
-X-Gm-Message-State: AOJu0YzY0z1yNUZ2huSpDhkuKR49ERdj/VP78Axfn6AhZoV/JHymKBuK
-	YNZJidezj1K9O+M78YHj4/vPX1/vawtX2IMC9ZKO4SxuaSCUOqHl
-X-Gm-Gg: ASbGncvgTbMipqSWT7TH1GnvRfGq6moon4hLKh6VweTkNKcxtMgvchraI28NSKWmuSL
-	7+vEgrQdYwBLePul6eS4lMCvYnPaftjlWRqY7xGl+RoVuN3eZaQFoDU7wCDqqWBDfJls5xd2gI6
-	5/9Bvv17fRa+Qm1CZNQkUJD6WGdUY4QhsSd4aD1kMiU/U7hcMZWLTAnF09WiRdcT8rxPN952ILC
-	I03VO6V+6ejHw+sL1WADp1qmQ9WgbpJfeY29pyncMl5KQE7Vni7bpkl6zFx2jl/sB/zVUdcybPZ
-	CDJsMWRiTHOqS7b3Bc/JdBvuk9x37/JXCK7KxH/E4lpd02/PeepaWMg6wtVzW8n3ITnfTuu0nyv
-	xcAda5TuW6vW3fq45qsxGFh8y0n40P6lliuWny4/NMPMp0PnRibXzukw5aCjUNR8k
-X-Google-Smtp-Source: AGHT+IH5ctNWjC54Y7j3zCNpairalLYRZF34BaBc3KtOMVr913E6IQjPSqy4tjWyjdEoDRDpScx/lQ==
-X-Received: by 2002:a05:6214:1d04:b0:6e6:6c7c:984a with SMTP id 6a1803df08f44-6eb3f33c8b6mr233174246d6.29.1742933275610;
-        Tue, 25 Mar 2025 13:07:55 -0700 (PDT)
+        bh=F5uIEKx3rY1SAZshU7eTI3oeeRLlCQ0XHxliBguWMoA=;
+        b=k67P86E6Rb1/H3nK5zKP5UiG3TI5A937iSAps7ixi6HgiV9LKbi8XvjflvzlIFDofU
+         9e8iQRBsZPctpHLR5fK6SetZbOZ76/Vcai7MPx7pMoZw+ZmdIntCQ6WArjh/mc0c1URZ
+         1C9ZPjISw5QcUkU7pqBEfGxDj/F7svjBjIUOcQsYct2vvl793sfFYsyzOwBXMOK/l+Ky
+         iKcwi5+6Oa9LGzvNLc2qVtQNTrD9MprgczbshNB9x33Ll3eHwN2QE1yw7o7uSFu8O/I/
+         V3F8bKFDUio7I9zlscRgY5YEI+6IdSXLQib/jpNMGQoBLFUDTQQAz0Os00cpPGnZp0OR
+         EMYA==
+X-Forwarded-Encrypted: i=1; AJvYcCUeCfgvH1vYh/4nS8YBkn6TNiOId5aAR0PU3L7VoOE3s4lyDd3b87FVltjD6gh7ZhSFwd1S/KCkBO9P@vger.kernel.org, AJvYcCV6u3vgHdzc0F2QljFF+sulLn+JwynHUtYvv12BXKGkmmCBl3Az8k0uySGjCnkh2et8v8MpPjsmlWHp@vger.kernel.org, AJvYcCVPETtJnye5dwT5DhNMrsIgeh0eSfQJfilqQzpgPMxgQIH5XJjeuJDQDYQUSqsQ4nVg3IbqiBhgUJ5Ob6Ap@vger.kernel.org, AJvYcCVzv+ztSGSkEBRs4zengdMQiFfkEUWu08PAj5gllzXKpDo+flHqJSy9wdkeaU7Tm9J/3KMbOEAO@vger.kernel.org, AJvYcCWw7U28mF/USkb9gU7OVpemiRT09UBjP5NZiJ8RBOu878lJYIvihGAnIrj8KzZRenPfzvk/O4HtbQZsD+1CJyQ=@vger.kernel.org, AJvYcCXLqU/c6dtFOhbM28G6gKu1X0rqLV5KCLl3hGSanF865OBM82HavWh14jLx0wsrdmYj7LwyAinTP+EAuuc=@vger.kernel.org, AJvYcCXiumzQ+TiyFtQdwJ+T+hjsbAopwB8E0C461CKgoMKT9nFthkNA6sfUft7N7RRbZzmp07kE+B3GgxCXcZopCYM6@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/BtXIaIGvwzwhXeIjuJi3rKrU/pMPLQDelIbbXCxTkduFqlRg
+	UGUMIIaPp78xj6NNAK3F6uuP3HV3oHJCxPd3+0nwXdeqeZutCoxlhgsZdY8Rsss=
+X-Gm-Gg: ASbGnctNUM3DvUTetLtNfnaykGzHfUzMV+CbMOY4rLrUx6K4QUwnDrDfvT06hR5uVTj
+	EXbHWOfOAmswv1MSvWOXcvpqciIBkUrqrnJWh6nmpBlw4FI80kvGbAgzfB8NcbcxzeBdJahnFxi
+	rnq0tQo0h37oURKtDBJpJIa/nvnPOxhbVNJ1xCCI1iwKcImaE6fjEsuniQ+hf8p2oLgB64bOGhm
+	FjFySNVw0ftY3+mFnInZKsgc3moP3VBnHH7SscI1FQG4b0W3Nj4LPEhdAlQgba2Ykqwy0NGYkuI
+	0CEzpzzKtTwSI7yo0qopyzVdwMBa083S9vbfQRJUuuou7bhxwL5WA4vGSTLPfCOPxoErVfVZGr+
+	SNulQpwpl1HAIC82tT/7ga1wBZ4qttfOXqZtWwyyv6v7V9ZM6sa9/sw==
+X-Google-Smtp-Source: AGHT+IHVk/ZIyPMFpk1go5Fgiyttcwouqh0xXQNG6Z5872sKosvNEbYZTt92WTg+ezz0vhDOajIg2Q==
+X-Received: by 2002:ad4:5aa5:0:b0:6ea:d604:9e59 with SMTP id 6a1803df08f44-6eb3f294df4mr323175396d6.9.1742933277214;
+        Tue, 25 Mar 2025 13:07:57 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:38f6])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3ef31810sm59790316d6.64.2025.03.25.13.07.54
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3ef31810sm59790316d6.64.2025.03.25.13.07.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 13:07:55 -0700 (PDT)
+        Tue, 25 Mar 2025 13:07:56 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 25 Mar 2025 16:07:44 -0400
-Subject: [PATCH v7 4/7] rust: enable `clippy::as_ptr_cast_mut` lint
+Date: Tue, 25 Mar 2025 16:07:45 -0400
+Subject: [PATCH v7 5/7] rust: enable `clippy::as_underscore` lint
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250325-ptr-as-ptr-v7-4-87ab452147b9@gmail.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250325-ptr-as-ptr-v7-5-87ab452147b9@gmail.com>
 References: <20250325-ptr-as-ptr-v7-0-87ab452147b9@gmail.com>
 In-Reply-To: <20250325-ptr-as-ptr-v7-0-87ab452147b9@gmail.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -117,51 +117,373 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-In Rust 1.66.0, Clippy introduced the `as_ptr_cast_mut` lint [1]:
+In Rust 1.63.0, Clippy introduced the `as_underscore` lint [1]:
 
-> Since `as_ptr` takes a `&self`, the pointer won’t have write
-> permissions unless interior mutability is used, making it unlikely
-> that having it as a mutable pointer is correct.
+> The conversion might include lossy conversion or a dangerous cast that
+> might go undetected due to the type being inferred.
+>
+> The lint is allowed by default as using `_` is less wordy than always
+> specifying the type.
 
-There is only one affected callsite, and the change amounts to replacing
-`as _` with `.cast_mut().cast()`. This doesn't change the semantics, but
-is more descriptive of what's going on.
+Always specifying the type is especially helpful in function call
+contexts where the inferred type may change at a distance. Specifying
+the type also allows Clippy to spot more cases of `useless_conversion`.
 
-Apply this change and enable the lint -- no functional change intended.
+The primary downside is the need to specify the type in trivial getters.
+There are 4 such functions: 3 have become slightly less ergonomic, 1 was
+revealed to be a `useless_conversion`.
 
-Link: https://rust-lang.github.io/rust-clippy/master/index.html#as_ptr_cast_mut [1]
+While this doesn't eliminate unchecked `as` conversions, it makes such
+conversions easier to scrutinize.  It also has the slight benefit of
+removing a degree of freedom on which to bikeshed. Thus apply the
+changes and enable the lint -- no functional change intended.
+
+Link: https://rust-lang.github.io/rust-clippy/master/index.html#as_underscore [1]
 Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- Makefile              | 1 +
- rust/kernel/devres.rs | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ Makefile                           |  1 +
+ rust/kernel/block/mq/operations.rs |  2 +-
+ rust/kernel/block/mq/request.rs    |  2 +-
+ rust/kernel/device_id.rs           |  2 +-
+ rust/kernel/devres.rs              | 15 ++++++++-------
+ rust/kernel/dma.rs                 |  2 +-
+ rust/kernel/error.rs               |  2 +-
+ rust/kernel/io.rs                  | 18 +++++++++---------
+ rust/kernel/miscdevice.rs          |  2 +-
+ rust/kernel/of.rs                  |  6 +++---
+ rust/kernel/pci.rs                 |  9 ++++++---
+ rust/kernel/str.rs                 |  8 ++++----
+ rust/kernel/workqueue.rs           |  2 +-
+ 13 files changed, 38 insertions(+), 33 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index c62bae2b107b..bb15b86182a3 100644
+index bb15b86182a3..2af40bfed9ce 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -477,6 +477,7 @@ export rust_common_flags := --edition=2021 \
- 			    -Wrust_2018_idioms \
+@@ -478,6 +478,7 @@ export rust_common_flags := --edition=2021 \
  			    -Wunreachable_pub \
  			    -Wclippy::all \
-+			    -Wclippy::as_ptr_cast_mut \
+ 			    -Wclippy::as_ptr_cast_mut \
++			    -Wclippy::as_underscore \
  			    -Wclippy::ignored_unit_patterns \
  			    -Wclippy::mut_mut \
  			    -Wclippy::needless_bitwise_bool \
+diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/operations.rs
+index 864ff379dc91..d18ef55490da 100644
+--- a/rust/kernel/block/mq/operations.rs
++++ b/rust/kernel/block/mq/operations.rs
+@@ -101,7 +101,7 @@ impl<T: Operations> OperationsVTable<T> {
+         if let Err(e) = ret {
+             e.to_blk_status()
+         } else {
+-            bindings::BLK_STS_OK as _
++            bindings::BLK_STS_OK as u8
+         }
+     }
+ 
+diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/request.rs
+index c9f8046af65c..807a72de6455 100644
+--- a/rust/kernel/block/mq/request.rs
++++ b/rust/kernel/block/mq/request.rs
+@@ -125,7 +125,7 @@ pub fn end_ok(this: ARef<Self>) -> Result<(), ARef<Self>> {
+         // success of the call to `try_set_end` guarantees that there are no
+         // `ARef`s pointing to this request. Therefore it is safe to hand it
+         // back to the block layer.
+-        unsafe { bindings::blk_mq_end_request(request_ptr, bindings::BLK_STS_OK as _) };
++        unsafe { bindings::blk_mq_end_request(request_ptr, bindings::BLK_STS_OK as u8) };
+ 
+         Ok(())
+     }
+diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
+index e5859217a579..4063f09d76d9 100644
+--- a/rust/kernel/device_id.rs
++++ b/rust/kernel/device_id.rs
+@@ -82,7 +82,7 @@ impl<T: RawDeviceId, U, const N: usize> IdArray<T, U, N> {
+             unsafe {
+                 raw_ids[i]
+                     .as_mut_ptr()
+-                    .byte_offset(T::DRIVER_DATA_OFFSET as _)
++                    .byte_add(T::DRIVER_DATA_OFFSET)
+                     .cast::<usize>()
+                     .write(i);
+             }
 diff --git a/rust/kernel/devres.rs b/rust/kernel/devres.rs
-index 3a9d998ec371..598001157293 100644
+index 598001157293..34571f992f0d 100644
 --- a/rust/kernel/devres.rs
 +++ b/rust/kernel/devres.rs
-@@ -143,7 +143,7 @@ fn remove_action(this: &Arc<Self>) {
-             bindings::devm_remove_action_nowarn(
-                 this.dev.as_raw(),
-                 Some(this.callback),
--                this.as_ptr() as _,
-+                this.as_ptr().cast_mut().cast(),
-             )
-         };
+@@ -45,7 +45,7 @@ struct DevresInner<T> {
+ /// # Example
+ ///
+ /// ```no_run
+-/// # use kernel::{bindings, c_str, device::Device, devres::Devres, io::{Io, IoRaw}};
++/// # use kernel::{bindings, c_str, device::Device, devres::Devres, ffi::c_void, io::{Io, IoRaw}};
+ /// # use core::ops::Deref;
+ ///
+ /// // See also [`pci::Bar`] for a real example.
+@@ -59,19 +59,19 @@ struct DevresInner<T> {
+ ///     unsafe fn new(paddr: usize) -> Result<Self>{
+ ///         // SAFETY: By the safety requirements of this function [`paddr`, `paddr` + `SIZE`) is
+ ///         // valid for `ioremap`.
+-///         let addr = unsafe { bindings::ioremap(paddr as _, SIZE as _) };
++///         let addr = unsafe { bindings::ioremap(paddr as bindings::phys_addr_t, SIZE) };
+ ///         if addr.is_null() {
+ ///             return Err(ENOMEM);
+ ///         }
+ ///
+-///         Ok(IoMem(IoRaw::new(addr as _, SIZE)?))
++///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
+ ///     }
+ /// }
+ ///
+ /// impl<const SIZE: usize> Drop for IoMem<SIZE> {
+ ///     fn drop(&mut self) {
+ ///         // SAFETY: `self.0.addr()` is guaranteed to be properly mapped by `Self::new`.
+-///         unsafe { bindings::iounmap(self.0.addr() as _); };
++///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void); };
+ ///     }
+ /// }
+ ///
+@@ -115,8 +115,9 @@ fn new(dev: &Device, data: T, flags: Flags) -> Result<Arc<DevresInner<T>>> {
  
+         // SAFETY: `devm_add_action` guarantees to call `Self::devres_callback` once `dev` is
+         // detached.
+-        let ret =
+-            unsafe { bindings::devm_add_action(dev.as_raw(), Some(inner.callback), data as _) };
++        let ret = unsafe {
++            bindings::devm_add_action(dev.as_raw(), Some(inner.callback), data.cast_mut().cast())
++        };
+ 
+         if ret != 0 {
+             // SAFETY: We just created another reference to `inner` in order to pass it to
+@@ -130,7 +131,7 @@ fn new(dev: &Device, data: T, flags: Flags) -> Result<Arc<DevresInner<T>>> {
+     }
+ 
+     fn as_ptr(&self) -> *const Self {
+-        self as _
++        self
+     }
+ 
+     fn remove_action(this: &Arc<Self>) {
+diff --git a/rust/kernel/dma.rs b/rust/kernel/dma.rs
+index 43ecf3c2e860..851a6339aa90 100644
+--- a/rust/kernel/dma.rs
++++ b/rust/kernel/dma.rs
+@@ -38,7 +38,7 @@
+ impl Attrs {
+     /// Get the raw representation of this attribute.
+     pub(crate) fn as_raw(self) -> crate::ffi::c_ulong {
+-        self.0 as _
++        self.0 as crate::ffi::c_ulong
+     }
+ 
+     /// Check whether `flags` is contained in `self`.
+diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+index b0e3d1bc0449..cff84d427627 100644
+--- a/rust/kernel/error.rs
++++ b/rust/kernel/error.rs
+@@ -153,7 +153,7 @@ pub(crate) fn to_blk_status(self) -> bindings::blk_status_t {
+     /// Returns the error encoded as a pointer.
+     pub fn to_ptr<T>(self) -> *mut T {
+         // SAFETY: `self.0` is a valid error due to its invariant.
+-        unsafe { bindings::ERR_PTR(self.0.get() as _).cast() }
++        unsafe { bindings::ERR_PTR(self.0.get() as isize).cast() }
+     }
+ 
+     /// Returns a string representing the error, if one exists.
+diff --git a/rust/kernel/io.rs b/rust/kernel/io.rs
+index d4a73e52e3ee..9d2aadf40edf 100644
+--- a/rust/kernel/io.rs
++++ b/rust/kernel/io.rs
+@@ -5,7 +5,7 @@
+ //! C header: [`include/asm-generic/io.h`](srctree/include/asm-generic/io.h)
+ 
+ use crate::error::{code::EINVAL, Result};
+-use crate::{bindings, build_assert};
++use crate::{bindings, build_assert, ffi::c_void};
+ 
+ /// Raw representation of an MMIO region.
+ ///
+@@ -56,7 +56,7 @@ pub fn maxsize(&self) -> usize {
+ /// # Examples
+ ///
+ /// ```no_run
+-/// # use kernel::{bindings, io::{Io, IoRaw}};
++/// # use kernel::{bindings, ffi::c_void, io::{Io, IoRaw}};
+ /// # use core::ops::Deref;
+ ///
+ /// // See also [`pci::Bar`] for a real example.
+@@ -70,19 +70,19 @@ pub fn maxsize(&self) -> usize {
+ ///     unsafe fn new(paddr: usize) -> Result<Self>{
+ ///         // SAFETY: By the safety requirements of this function [`paddr`, `paddr` + `SIZE`) is
+ ///         // valid for `ioremap`.
+-///         let addr = unsafe { bindings::ioremap(paddr as _, SIZE as _) };
++///         let addr = unsafe { bindings::ioremap(paddr as bindings::phys_addr_t, SIZE) };
+ ///         if addr.is_null() {
+ ///             return Err(ENOMEM);
+ ///         }
+ ///
+-///         Ok(IoMem(IoRaw::new(addr as _, SIZE)?))
++///         Ok(IoMem(IoRaw::new(addr as usize, SIZE)?))
+ ///     }
+ /// }
+ ///
+ /// impl<const SIZE: usize> Drop for IoMem<SIZE> {
+ ///     fn drop(&mut self) {
+ ///         // SAFETY: `self.0.addr()` is guaranteed to be properly mapped by `Self::new`.
+-///         unsafe { bindings::iounmap(self.0.addr() as _); };
++///         unsafe { bindings::iounmap(self.0.addr() as *mut c_void); };
+ ///     }
+ /// }
+ ///
+@@ -119,7 +119,7 @@ pub fn $name(&self, offset: usize) -> $type_name {
+             let addr = self.io_addr_assert::<$type_name>(offset);
+ 
+             // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
+-            unsafe { bindings::$name(addr as _) }
++            unsafe { bindings::$name(addr as *const c_void) }
+         }
+ 
+         /// Read IO data from a given offset.
+@@ -131,7 +131,7 @@ pub fn $try_name(&self, offset: usize) -> Result<$type_name> {
+             let addr = self.io_addr::<$type_name>(offset)?;
+ 
+             // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
+-            Ok(unsafe { bindings::$name(addr as _) })
++            Ok(unsafe { bindings::$name(addr as *const c_void) })
+         }
+     };
+ }
+@@ -148,7 +148,7 @@ pub fn $name(&self, value: $type_name, offset: usize) {
+             let addr = self.io_addr_assert::<$type_name>(offset);
+ 
+             // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
+-            unsafe { bindings::$name(value, addr as _, ) }
++            unsafe { bindings::$name(value, addr as *mut c_void) }
+         }
+ 
+         /// Write IO data from a given offset.
+@@ -160,7 +160,7 @@ pub fn $try_name(&self, value: $type_name, offset: usize) -> Result {
+             let addr = self.io_addr::<$type_name>(offset)?;
+ 
+             // SAFETY: By the type invariant `addr` is a valid address for MMIO operations.
+-            unsafe { bindings::$name(value, addr as _) }
++            unsafe { bindings::$name(value, addr as *mut c_void) }
+             Ok(())
+         }
+     };
+diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
+index e14433b2ab9d..2c66e926bffb 100644
+--- a/rust/kernel/miscdevice.rs
++++ b/rust/kernel/miscdevice.rs
+@@ -33,7 +33,7 @@ impl MiscDeviceOptions {
+     pub const fn into_raw<T: MiscDevice>(self) -> bindings::miscdevice {
+         // SAFETY: All zeros is valid for this C type.
+         let mut result: bindings::miscdevice = unsafe { MaybeUninit::zeroed().assume_init() };
+-        result.minor = bindings::MISC_DYNAMIC_MINOR as _;
++        result.minor = bindings::MISC_DYNAMIC_MINOR as i32;
+         result.name = self.name.as_char_ptr();
+         result.fops = create_vtable::<T>();
+         result
+diff --git a/rust/kernel/of.rs b/rust/kernel/of.rs
+index 04f2d8ef29cb..40d1bd13682c 100644
+--- a/rust/kernel/of.rs
++++ b/rust/kernel/of.rs
+@@ -22,7 +22,7 @@ unsafe impl RawDeviceId for DeviceId {
+     const DRIVER_DATA_OFFSET: usize = core::mem::offset_of!(bindings::of_device_id, data);
+ 
+     fn index(&self) -> usize {
+-        self.0.data as _
++        self.0.data as usize
+     }
+ }
+ 
+@@ -34,10 +34,10 @@ pub const fn new(compatible: &'static CStr) -> Self {
+         // SAFETY: FFI type is valid to be zero-initialized.
+         let mut of: bindings::of_device_id = unsafe { core::mem::zeroed() };
+ 
+-        // TODO: Use `clone_from_slice` once the corresponding types do match.
++        // TODO: Use `copy_from_slice` once stabilized for `const`.
+         let mut i = 0;
+         while i < src.len() {
+-            of.compatible[i] = src[i] as _;
++            of.compatible[i] = src[i];
+             i += 1;
+         }
+ 
+diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+index 003c9aaafb24..a26f154ae1b9 100644
+--- a/rust/kernel/pci.rs
++++ b/rust/kernel/pci.rs
+@@ -166,7 +166,7 @@ unsafe impl RawDeviceId for DeviceId {
+     const DRIVER_DATA_OFFSET: usize = core::mem::offset_of!(bindings::pci_device_id, driver_data);
+ 
+     fn index(&self) -> usize {
+-        self.0.driver_data as _
++        self.0.driver_data
+     }
+ }
+ 
+@@ -201,7 +201,10 @@ macro_rules! pci_device_table {
+ ///     MODULE_PCI_TABLE,
+ ///     <MyDriver as pci::Driver>::IdInfo,
+ ///     [
+-///         (pci::DeviceId::from_id(bindings::PCI_VENDOR_ID_REDHAT, bindings::PCI_ANY_ID as _), ())
++///         (
++///             pci::DeviceId::from_id(bindings::PCI_VENDOR_ID_REDHAT, bindings::PCI_ANY_ID as u32),
++///             (),
++///         )
+ ///     ]
+ /// );
+ ///
+@@ -317,7 +320,7 @@ unsafe fn do_release(pdev: &Device, ioptr: usize, num: i32) {
+         // `ioptr` is valid by the safety requirements.
+         // `num` is valid by the safety requirements.
+         unsafe {
+-            bindings::pci_iounmap(pdev.as_raw(), ioptr as _);
++            bindings::pci_iounmap(pdev.as_raw(), ioptr as *mut kernel::ffi::c_void);
+             bindings::pci_release_region(pdev.as_raw(), num);
+         }
+     }
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index 02863c40c21b..40034f77fc2f 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -738,9 +738,9 @@ fn new() -> Self {
+     pub(crate) unsafe fn from_ptrs(pos: *mut u8, end: *mut u8) -> Self {
+         // INVARIANT: The safety requirements guarantee the type invariants.
+         Self {
+-            beg: pos as _,
+-            pos: pos as _,
+-            end: end as _,
++            beg: pos as usize,
++            pos: pos as usize,
++            end: end as usize,
+         }
+     }
+ 
+@@ -765,7 +765,7 @@ pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+     ///
+     /// N.B. It may point to invalid memory.
+     pub(crate) fn pos(&self) -> *mut u8 {
+-        self.pos as _
++        self.pos as *mut u8
+     }
+ 
+     /// Returns the number of bytes written to the formatter.
+diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
+index 8ff54105be3f..d03f3440cb5a 100644
+--- a/rust/kernel/workqueue.rs
++++ b/rust/kernel/workqueue.rs
+@@ -198,7 +198,7 @@ pub fn enqueue<W, const ID: u64>(&self, w: W) -> W::EnqueueOutput
+         unsafe {
+             w.__enqueue(move |work_ptr| {
+                 bindings::queue_work_on(
+-                    bindings::wq_misc_consts_WORK_CPU_UNBOUND as _,
++                    bindings::wq_misc_consts_WORK_CPU_UNBOUND as i32,
+                     queue_ptr,
+                     work_ptr,
+                 )
 
 -- 
 2.49.0
