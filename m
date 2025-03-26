@@ -1,184 +1,150 @@
-Return-Path: <linux-kselftest+bounces-29817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3CBAA71A4A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Mar 2025 16:30:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58526A71C1E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Mar 2025 17:44:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC9B37A4CD6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Mar 2025 15:28:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3273018861CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Mar 2025 16:44:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CDF11F30D1;
-	Wed, 26 Mar 2025 15:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A791F8670;
+	Wed, 26 Mar 2025 16:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kDkwiMaw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0AJ4PUxT"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=proton.me header.i=@proton.me header.b="iWbHoKQ3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE491EFF98;
-	Wed, 26 Mar 2025 15:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A583D1BC9E2;
+	Wed, 26 Mar 2025 16:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743002990; cv=none; b=E7oR46vZmbJej1eri1ghX4U1kkiji6z4IrpLnEQrDPMWWGBgxmCYw0NW7MlwdaAui/VKaV2Pe+2sS8Gz0gkPBfQSO/5LqjOIYV1awZGqaOJenrMoPWfP/CZ8RcDNdDQI7gjVCutyrG5919lCDINMR+JoxKKJNp498tdcaRrASIA=
+	t=1743007420; cv=none; b=gVovTZlkj8MnuWu8EXs6inv4wy4wIBtX+egKuYVydL7z6tRAvOLvDAAq1Rde2uMyJ9GL7xdAVrDPch22CP/xxpfKyZWrUS9g1E1vC4fYDmkRISEDbZ5SkdUfZm3ztO6tSwL244twes9LGr3GgWH6aUDAxUmqHS/7rvnYB2Jz9+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743002990; c=relaxed/simple;
-	bh=MLbtTzBQx5OdjYKpjtxDUn5tdndb/5oZLxSoLHDizus=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZZ0S7H7EDRW/tNZn6oYEi4AKATI3FppDKXW97D7sO1H6AGUykZSHRu1yqZVyvE1KqGsBX52eBap/cyzrWBAIS4TV3NteAkzXLe7mO4A/zr3q5WhtHxhmbAcSXdmrto0WmBCufLI+EnzZYEjjJGWCC5nX4gyouLwtSQmH+D4912k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kDkwiMaw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0AJ4PUxT; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1743002986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J0vOEbKpHri4No3U/KbtJIopKffmnQhIcO+bSOOwA4o=;
-	b=kDkwiMawiepgnOm4Vg/HlKXvCau0DfkUpx+oIf1XFEmKWrPCtEr67QMFtZigsM/qliOqSl
-	yyvpS+fRYRfQBN/KE7snujbvotsmZjKEV6r0UHyho8T2N1TaG/evF9W/MI57H3SL+S7QqG
-	+11YoF4H8pgVW7yEa7iJG4/Mg3D1iHheYuN7/Y2BTUwm7skFZj2zMkWt2vSKj+6ozu/UM5
-	glwNOJqrG6spmeIibX8fGbdcefg816nsJRjDXGsqmGVi3BpTWWRmnujDUrFm2C2KigZqsu
-	Dsrnxm6MR7kk1kNXCVXorLmaULvt7SEF4LJWGTRnSz98WDWX2yNskNGYrCpu8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1743002986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J0vOEbKpHri4No3U/KbtJIopKffmnQhIcO+bSOOwA4o=;
-	b=0AJ4PUxT+Nfk/Y+4ySXxphPll7KEhFXTCylNQX9V5KR32FldtaEuByyHY2m8fYVUDtUMgB
-	oNoOE7e0hOnknNBQ==
-Date: Wed, 26 Mar 2025 16:29:42 +0100
-Subject: [PATCH] selftests: vDSO: vdso_standalone_test_x86: Replace source
- file with symlink
+	s=arc-20240116; t=1743007420; c=relaxed/simple;
+	bh=dRoILmxBCmB+LmPipcAncHBrEibSROR5ByjhNIYvaEk=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FFVuXq8WsAWrkYcX9onnH7swgHbGtKbL0Rv7GsHOu4ofXx3fUGbtFh3RKLktKnYsLArKfL/YXITtaFCFZC6A+UCSOZUM7dqGR5jdVB1YBIdSxN6vhGlX/h9skPBBL3YS/ze+Dymcxv4EWDTam+1BT1wsLCd0f2bPPUcY62sAUOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=iWbHoKQ3; arc=none smtp.client-ip=185.70.43.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1743007415; x=1743266615;
+	bh=SBA0lIVlYigqsD6gj5BKr4rg3daBl3KuUvd0a5qoKyQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=iWbHoKQ3q//lzkeLnbXrpD/K0JBHRvanSfajOeHLvf/ABisj8J8MxZ+5Szf6IAVwz
+	 cm6CROl1XHcgLoi0c8f8WF2vZ4BIPsM5D4ffwPzx2P24j7XXDs8bhVLjBqCUUQbi4S
+	 LLTPIrty/DypE1RsJLAmhmdT++IBIwQDPOF6RiBEJViq1/YyFB1nebuFXfgkcSS3rv
+	 RnwsOHDfYpSHbih8pB5hshb/Yg11MvlDP7va/eqAPI5HhqXjCSJl0zPxG6x0qK8mjB
+	 Q4UuBTuuBwVXZquozIs6zNsdDgjSmdtxqbPbriXVgWN6nYRPn8UKI/p8DYLWx1pKoP
+	 XcdjKJZB0215Q==
+Date: Wed, 26 Mar 2025 16:43:29 +0000
+To: Tamir Duberstein <tamird@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Abdiel Janulgue <abdiel.janulgue@gmail.com>, Daniel Almeida <daniel.almeida@collabora.com>, Robin Murphy <robin.murphy@arm.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, FUJITA Tomonori <fujita.tomonori@gmail.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v7 7/7] rust: enable `clippy::ref_as_ptr` lint
+Message-ID: <D8QCK3CQES3Y.3LTZ4MVO5B3KT@proton.me>
+In-Reply-To: <CAJ-ks9nHKpQPuSBypXTSATYhbAFkQTJzUq8jN0nu4t=Kw+0xxg@mail.gmail.com>
+References: <20250325-ptr-as-ptr-v7-0-87ab452147b9@gmail.com> <20250325-ptr-as-ptr-v7-7-87ab452147b9@gmail.com> <D8POWLFKWABG.37BVXN2QCL8MP@proton.me> <CAJ-ks9mUYw4FEJQfmDrHHt0oMy256jhp7qZ-CHp6R5c_sOCD4w@mail.gmail.com> <D8PPIYIJCNX8.13VPQULEI0ALN@proton.me> <CAJ-ks9k6220j6CQSOF4TDrgY9qq4PfV9uaMXz1Qk4m=eeSr5Ag@mail.gmail.com> <D8Q4MSXXZ7OI.1NC226MO02VSN@proton.me> <CAJ-ks9nHKpQPuSBypXTSATYhbAFkQTJzUq8jN0nu4t=Kw+0xxg@mail.gmail.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 56fa6bd54add0cb38181c1a80c576e471517373d
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250326-vdso-selftests-fix-vdso_standalone_test_x86-v1-1-682ad396e15e@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAGUd5GcC/x2NUQqEMAxEryL53oBb0cpeRZZS26gBaaUpIoh3t
- /r5Zh4zJwglJoFfdUKinYVjKPD9VOAWG2ZC9oVB1aqtG9Xh7iWi0Dplkiw48fFGRrIN3q4xkHk
- ac/QdusZqPbbaudFDWdwSFf99G/7XdQN8ZJ/rfQAAAA==
-X-Change-ID: 20250326-vdso-selftests-fix-vdso_standalone_test_x86-c3a77b57ccbd
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1743002982; l=3432;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=MLbtTzBQx5OdjYKpjtxDUn5tdndb/5oZLxSoLHDizus=;
- b=K6heyjHjn4vhme5rCfYK1EbZyEbEBMJjhJqNRhuPIaogV3PJ5SK+xfasOXNm4Vdik5YnudZ1Y
- Wfwk5K0gPoDCaK6kY37bitdp/DciB0cR1J+K/Zra7GHNVW1O4UfzyJF
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-With the switch over to nolibc the source file vdso_standalone_test_x86.c
-was intended to be replaced with a symlink to vdso_test_gettimeofday.c.
-This was the patch that was submitted to LKML, but during application the
-symlink was replaced by a textual copy of the linked-to file.
+On Wed Mar 26, 2025 at 11:35 AM CET, Tamir Duberstein wrote:
+> On Wed, Mar 26, 2025 at 6:31=E2=80=AFAM Benno Lossin <benno.lossin@proton=
+.me> wrote:
+>> On Wed Mar 26, 2025 at 12:54 AM CET, Tamir Duberstein wrote:
+>> > On Tue, Mar 25, 2025 at 6:40=E2=80=AFPM Benno Lossin <benno.lossin@pro=
+ton.me> wrote:
+>> >> On Tue Mar 25, 2025 at 11:33 PM CET, Tamir Duberstein wrote:
+>> >> > On Tue, Mar 25, 2025 at 6:11=E2=80=AFPM Benno Lossin <benno.lossin@=
+proton.me> wrote:
+>> >> >> On Tue Mar 25, 2025 at 9:07 PM CET, Tamir Duberstein wrote:
+>> >> >> > diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+>> >> >> > index 40034f77fc2f..6233af50bab7 100644
+>> >> >> > --- a/rust/kernel/str.rs
+>> >> >> > +++ b/rust/kernel/str.rs
+>> >> >> > @@ -29,7 +29,7 @@ pub const fn is_empty(&self) -> bool {
+>> >> >> >      #[inline]
+>> >> >> >      pub const fn from_bytes(bytes: &[u8]) -> &Self {
+>> >> >> >          // SAFETY: `BStr` is transparent to `[u8]`.
+>> >> >> > -        unsafe { &*(bytes as *const [u8] as *const BStr) }
+>> >> >> > +        unsafe { &*(core::mem::transmute::<*const [u8], *const =
+Self>(bytes)) }
+>> >> >>
+>> >> >> Hmm I'm not sure about using `transmute` here. Yes the types are
+>> >> >> transparent, but I don't think that we should use it here.
+>> >> >
+>> >> > What's your suggestion? I initially tried
+>> >> >
+>> >> > let bytes: *const [u8] =3D bytes;
+>> >> > unsafe { &*bytes.cast() }
+>> >> >
+>> >> > but that doesn't compile because of the implicit Sized bound on poi=
+nter::cast.
+>> >>
+>> >> This is AFAIK one of the only places where we cannot get rid of the `=
+as`
+>> >> cast. So:
+>> >>
+>> >>     let bytes: *const [u8] =3D bytes;
+>> >>     // CAST: `BStr` transparently wraps `[u8]`.
+>> >>     let bytes =3D bytes as *const BStr;
+>> >>     // SAFETY: `bytes` is derived from a reference.
+>> >>     unsafe { &*bytes }
+>> >>
+>> >> IMO a `transmute` is worse than an `as` cast :)
+>> >
+>> > Hmm, looking at this again we can just transmute ref-to-ref and avoid
+>> > pointers entirely. We're already doing that in
+>> > `CStr::from_bytes_with_nul_unchecked`
+>> >
+>> > Why is transmute worse than an `as` cast?
+>>
+>> It's right in the docs: "`transmute` should be the absolute last
+>> resort." [1]. IIRC, Gary was a bit more lenient in its use, but I think
+>> we should avoid it as much as possible such that people copying code or
+>> taking inspiration also don't use it.
+>>
+>> So for both cases I'd prefer an `as` cast.
+>>
+>> [1]: https://doc.rust-lang.org/std/mem/fn.transmute.html
+>
+> I don't follow the logic. The trouble with `as` casts is that they are
+> very lenient in what they allow, and to do these conversions with `as`
+> casts requires ref -> pointer -> pointer -> pointer deref versus a
+> single transmute. The safety comment perfectly describes why it's OK
+> to do: the types are transparent. So why is `as` casting pointers
+> better? It's just as unchecked as transmuting, and worse, it requires
+> a raw pointer dereference.
 
-Having two copies introduces the possibility of divergence and increases
-maintenance burden, switch back to a symlink.
+Note that you're not transmuting `[u8]` to `BStr`, but `*const [u8]` to
+`*const BStr`. Those pointers have provenance and I'm not sure if
+transmuting them preserves it.
 
-Link: https://lore.kernel.org/lkml/20250226-parse_vdso-nolibc-v2-16-28e14e031ed8@linutronix.de/
-Fixes: 8770a9183fe1 ("selftests: vDSO: vdso_standalone_test_x86: Switch to nolibc")
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
-If symlinks are problematic an #include shim would also work.
-These are not handled really well by the kselftests build system though,
-as #include dependencies are not tracked by it.
----
- .../selftests/vDSO/vdso_standalone_test_x86.c      | 59 +---------------------
- 1 file changed, 1 insertion(+), 58 deletions(-)
+I tried to find some existing issues about the topic and found that
+there exists a clippy lint `transmute_ptr_to_ptr`. There is an issue
+asking for a better justification [1] and it seems like nobody provided
+one there. Maybe we should ask the opsem team what happens to provenance
+when transmuting?
 
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-deleted file mode 100644
-index 9ce795b806f0992b83cef78c7e16fac0e54750da..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ /dev/null
-@@ -1,58 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * vdso_test_gettimeofday.c: Sample code to test parse_vdso.c and
-- *                           vDSO gettimeofday()
-- * Copyright (c) 2014 Andy Lutomirski
-- *
-- * Compile with:
-- * gcc -std=gnu99 vdso_test_gettimeofday.c parse_vdso_gettimeofday.c
-- *
-- * Tested on x86, 32-bit and 64-bit.  It may work on other architectures, too.
-- */
--
--#include <stdio.h>
--#ifndef NOLIBC
--#include <sys/auxv.h>
--#include <sys/time.h>
--#endif
--
--#include "../kselftest.h"
--#include "parse_vdso.h"
--#include "vdso_config.h"
--#include "vdso_call.h"
--
--int main(int argc, char **argv)
--{
--	const char *version = versions[VDSO_VERSION];
--	const char **name = (const char **)&names[VDSO_NAMES];
--
--	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
--	if (!sysinfo_ehdr) {
--		printf("AT_SYSINFO_EHDR is not present!\n");
--		return KSFT_SKIP;
--	}
--
--	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
--
--	/* Find gettimeofday. */
--	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
--
--	if (!gtod) {
--		printf("Could not find %s\n", name[0]);
--		return KSFT_SKIP;
--	}
--
--	struct timeval tv;
--	long ret = VDSO_CALL(gtod, 2, &tv, 0);
--
--	if (ret == 0) {
--		printf("The time is %lld.%06lld\n",
--		       (long long)tv.tv_sec, (long long)tv.tv_usec);
--	} else {
--		printf("%s failed\n", name[0]);
--		return KSFT_FAIL;
--	}
--
--	return 0;
--}
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-new file mode 120000
-index 0000000000000000000000000000000000000000..4d3d96f1e440c965474681a6f35375a60b3921be
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -0,0 +1 @@
-+vdso_test_gettimeofday.c
-\ No newline at end of file
+[1]: https://github.com/rust-lang/rust-clippy/issues/6372
 
 ---
-base-commit: 1e26c5e28ca5821a824e90dd359556f5e9e7b89f
-change-id: 20250326-vdso-selftests-fix-vdso_standalone_test_x86-c3a77b57ccbd
-
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Cheers,
+Benno
 
 
