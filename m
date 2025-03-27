@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-29857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71010A72C65
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 10:30:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 120B0A72C6F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 10:31:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2DDB3B929A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 09:30:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4E60179E47
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 09:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A66E920D4E1;
-	Thu, 27 Mar 2025 09:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2175420D4EF;
+	Thu, 27 Mar 2025 09:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="hCHq2mCr"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="UrpvigLh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from HK3PR03CU002.outbound.protection.outlook.com (mail-eastasiaazon11011015.outbound.protection.outlook.com [52.101.129.15])
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013003.outbound.protection.outlook.com [40.107.44.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51DA20D4E3;
-	Thu, 27 Mar 2025 09:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.129.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1AA20D513;
+	Thu, 27 Mar 2025 09:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.3
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743067803; cv=fail; b=kzHak3ZPdQvA/aWZPfQF8801qTMtMQHac30i3rTVG68LLuFmCnRg+zYQNfOcOaiOCujqwksilGq6LdXG9Rt979p/YInlJhXUwT4CP+J6INUZXPczhc7pwq3Psh+fI6ycuLtDJZqp433Ms45Oo/axFvdKRjeTpLITJ6KWlD/6Gxs=
+	t=1743067812; cv=fail; b=B9Z55Flqja/W9NvglNKmqGMGQsArTJCaDtn0m7pzFX9RcjWWAEgHQseAK6a9zikMA3aa7fOZy3/N73kzgPCFV+V/ehgoxJx4hzcQAFg9eHeqQMv8MMJfz40eaKTJ/XRLbEckLLZ/5EbB0ObIE8nGM9Afndpj1S+luUN4mzXSpVY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743067803; c=relaxed/simple;
-	bh=ys+xteQV3Naj2P+OufJfKvELyTzJWe0Rlc//ydd1lVI=;
+	s=arc-20240116; t=1743067812; c=relaxed/simple;
+	bh=/1zxbQI0kw6O3FP5f7KE50rZwXkijnZ7y9MpHl7Beak=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JOlI7kayfSOKItEG98ebMzE9K+7+Q5lHyXhwyqH6XcJDzVoh0KFHJ0omQNDz62dFzlmMbOHPQ9f0UDbjYT4iiV0acUONHTP4AOJgVTm4bFB7nPQDNPaaaCc0HyiNLb6DV6VWwPna+MbGKjvPg65nzoOBTozIIGKd7LwQnI3Bf/A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=hCHq2mCr; arc=fail smtp.client-ip=52.101.129.15
+	 Content-Type:MIME-Version; b=AcyY+IOdHFMG65GvyUQvVZAgIsW5/wALAHYm1fvvLLEJQ2PuEE3YB43Vf9qMd0ysH1ZyYFVscRLpPVy5H4e86bGr0gluy/bgiUgnr07LCLSbXeJlekF/kfIHtTsBEOz7R29xj0DF1bgRYjAe+7Gwl/8uUm8Wg9X4OXMK5iKRldw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=UrpvigLh; arc=fail smtp.client-ip=40.107.44.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Tfo35pDeEKGnZkHdM+D11T3KUNUDzr5IThu9OWNYrNbr+ujQz4ENnche16XNnZMyCG4DLgdnycsTWfgn3L9pUMUIMzkiCoegAwywuwxR1JFabFY4bNfsGbTPaaaQtAbQTAAFJEdvl7Hs+vYaO3SlTEF3zTuCT8zyYS5H4ui0Q88KAyaomMFwEJJP2RZ2xrhqmiExfzgEDqN4TQN507oAsQnb9MaCzfqVV+Gtqzt6J2mF81ta3BdXuU/GV3umE4iW/tfcKhy1f/FoQOjnnMBtudjIhX+l8hnU7wf60ufNuuZdVtdIDpHTIqjl5NZj0ppLMYKKeuDJJCNjFl+/8lv4jw==
+ b=vIior6L+wAVDMQzmojRkGmmgg5mRSMM/tpZ6mkT/NmGA7/fGILK80PDcKQCGYWv26A2TcOZI2CkuYaTNkUm6HfNs2Tf1eIOgCeJVp5+Ca/sS3iR3Mb5deiqsm3eamdYX0RdR7xKqANawiC2Ht1uSADwbNsu16pcMb2NJvyCLa5rHQiiGAL5evlTeb35rjhEH8GeFUnMJ738YHbWoDOJdujbtLmKxr8+xYGP32tG2T+hPoGJYlaTCPPltwzO5SWnvHWlboEXfBW/ayFEqJ9g5hoYljMUhmSCdNj6cWAGZcUdY2a9ahYnzpAU6VI7o7fbDeGGFRgnpAVDy68M7ULkDfA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4UKPkJkXQcpTYFRYJI8oQc3rq8StnSPcEHSqw78HvWw=;
- b=q0ZQyl+KrxfZH8f5FmMxzsGNEhMSP/t+TWP/tgfOZJJrUNFmkpFjTvcTGZah4zq08NPv6GOGkWj0DU9Ql4G1Wfc/o8AUWesd6MWIri9pbIag+mVDhC9HIf3Mm6CahDSgWNiLWXRXV2E7w0Qd48Ra2bsU2YCSgEJsvu/3J/gmAbEUuA3DWDQuxHMSZ3d0jsg/8gq6kGyZppMh1WU44HjVgeKbpsZPETzPIPnXqeZLPfMgUNrco71+bdxEf7a1ROFiw+7O9gVnKoowZdLGl3iNZ34gDsEPJqIuCfe/6+vI4++hpI926ZWGo8xNdZP4+e6VlSJBRi7LMmnyfH2GdThECA==
+ bh=fOOnb9+cfRDqAWJwz7ieRVU48ffQ9jXJPy1HhLdXnDA=;
+ b=hXY5cO4kLJt4M7MsCM0qt/MjWhH4w/NvQwknG93n92lLHOZNC6sf3IqU9i0WzW/QmOclSAdt3vOUeqCvembBZItcFkf9NgOmmHflILfB8yS++H42iKR+hoLZ2FS61ATfvJoU+HHku0RfvN87dE8TWFLyTcXkxiSzCnTOj/u6p/ptO/Bqn/p5r6JjkgEBCF42n40BVQW7/U+jkLX3KPwU00EPznFER8TrmDIkx422C4mGeM1iI8x+GYTz/dC7KhEzLH9tnsxzDU4wEa9nvsFQJyNSSYxkTmDFZv5NUQDw+1uTOc2v15n6HjPskR7zo63GfifEOFRRoSC8Ow0pyZ6iJw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4UKPkJkXQcpTYFRYJI8oQc3rq8StnSPcEHSqw78HvWw=;
- b=hCHq2mCr7QKrrJYH1wN3kgeH6M1JN+wqFzPahFy/kZukdFJdRwLDSd7pr3YMLQhYhMFHhFaiEsN3KsN0UK30GIpk1hWL2ZgWyG1KV438BJjnfD3sgPWA+OywTOaKDXsU9iWKyerIT+TUBdv07K4urqHg4BEAUTcszFW6Gb4WpjzcsYw4CFe2Yd1Nfe+N6FgrzWCbBTIAKbVCNYy7xMfbgjqCRQUuPK/c71eixQVteVtpM3s+yCwsU4adH2rJzDQ0BQ2cU+Siry0/CnJyu95oe18A2peTjfBSxdWkepz37hqkusVqnwv9ar7riPxYBN9EBrhOO2zZka7LxF/OImAhiw==
+ bh=fOOnb9+cfRDqAWJwz7ieRVU48ffQ9jXJPy1HhLdXnDA=;
+ b=UrpvigLhqzOlQ62pwM3JlsUWYW+PFyQawKmArcmpFQ31+lZh64vuNvHObd2KSmQwtBHMwR+JacbmOOSnZ1CyYF9KHZ0h//xFGy3dBAmS96uouBY5gj1Q0norn1vamGGwc0dZB8L14SS1i89ofLNxNZe/UXpPi5MohLavA3Jaub7l0bxCiUmZzLeLen62B95C/Da6b1YuTT+LbC3fLICPoW6lxC8jdNutblabG9u4xMwR8ieNICxEOxjrDr1C9XSfbb1Cx7TI5RmC7g6pg6NGea1tlvfc09U88nASWwg76Ct0wJ4aUQqg3gUrqV5Zed1Lc+7P8HfqXpPip65n+NexBQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB5676.apcprd06.prod.outlook.com (2603:1096:301:f8::10)
  by SEZPR06MB7238.apcprd06.prod.outlook.com (2603:1096:101:226::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.44; Thu, 27 Mar
- 2025 09:29:58 +0000
+ 2025 09:30:07 +0000
 Received: from PUZPR06MB5676.apcprd06.prod.outlook.com
  ([fe80::a00b:f422:ac44:636f]) by PUZPR06MB5676.apcprd06.prod.outlook.com
  ([fe80::a00b:f422:ac44:636f%3]) with mapi id 15.20.8534.043; Thu, 27 Mar 2025
- 09:29:58 +0000
+ 09:30:07 +0000
 From: Huan Yang <link@vivo.com>
 To: bingbu.cao@linux.intel.com,
 	Matthew Wilcox <willy@infradead.org>,
@@ -75,9 +75,9 @@ To: bingbu.cao@linux.intel.com,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
 Cc: opensource.kernel@vivo.com
-Subject: [RFC PATCH 1/6] udmabuf: try fix udmabuf vmap
-Date: Thu, 27 Mar 2025 17:28:28 +0800
-Message-ID: <20250327092922.536-2-link@vivo.com>
+Subject: [RFC PATCH 2/6] udmabuf: try udmabuf vmap test
+Date: Thu, 27 Mar 2025 17:28:29 +0800
+Message-ID: <20250327092922.536-3-link@vivo.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250327092922.536-1-link@vivo.com>
 References: <20250327092922.536-1-link@vivo.com>
@@ -94,167 +94,384 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|SEZPR06MB7238:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03ab361d-f090-4e61-fc2f-08dd6d11f12e
+X-MS-Office365-Filtering-Correlation-Id: d0ecb72e-7c0c-41ce-dfed-08dd6d11f63f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|52116014|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uICxjpcRpGGmBCQyl4t3TIAEH4EwqwE+luzLAg9hJn+ArXhvnKrLCmBujgAf?=
- =?us-ascii?Q?7m1AwF5pv+QTel/eLVp/ZekMvkFJgPfF6OV/rswByj+M9PuBDOmLEnEnS/FW?=
- =?us-ascii?Q?B4nppNNS4gww1640SBRf/7ulXPYbuprbli4CAcrC1Wv5hq8PZkwCidKd7WzK?=
- =?us-ascii?Q?KNLrr88N21xYgkVt1Xc9ZOof/gFONcMYqLL7cgrOWoHMIA/EmODt+QkeJiuh?=
- =?us-ascii?Q?Yosxg6r7BtO6ILw+FVuJXiMr/zCHABOSf+IO9Vvgb2bXpy+wki2PT9eh/CNk?=
- =?us-ascii?Q?EHNie8ZlVzWT8j+Q2nJ4YjZyZuN4T7KZqvLN0Ib5oaBgXr7O4gEFDTuzJzTE?=
- =?us-ascii?Q?WmMCWD2NrwYErNi7d8Dz2S6bBYocqqDLR34pGUX8N1WlZDM0I086dw58+S4t?=
- =?us-ascii?Q?bicZXHR08ndkY7tOxpCr3X1TfOlslxMUedMM9v+oJ1xh1Q5ACS6uSjFIK4F1?=
- =?us-ascii?Q?GHn94DgQtwShy5+4cpXGVJoCWUEsOhttttomJownt2ITNq/SLnS1zqsT/bdq?=
- =?us-ascii?Q?n+LjUT1+7Hux6PHshn0g1cF6PFAmDkrbwIiyqoPnhDQGOGdQdjmIIOf+4ZfM?=
- =?us-ascii?Q?hIwSXU5gKGVE79VjuTZRIMkKW5wbQe3pqQaW9wcwSjf4YuCkLr8D76gsw3zw?=
- =?us-ascii?Q?rPG9uNBXXbAzkHoI6LOH3dueeTbPhXc0sxweo5ZaCElxn1gFLslg/FArNasA?=
- =?us-ascii?Q?y78DOSxWEIsA0L1rFd5rSw28Ur8H8RoZpGEtnTcv9HZtrR8PIxS3L3FwJ6UK?=
- =?us-ascii?Q?lqff8HolaNSjW/FtImBJ9OvOP3cbAM+Zq0XDTltA+iySepWHYcgjY3g1thaR?=
- =?us-ascii?Q?LsIcvc3rbCSMkNvtMx2UxJkDYT2L2HQNrlbw4JeTn2mN8R6yOu688DEA2YzP?=
- =?us-ascii?Q?d+pltpgJNsvh6WvGPeYUYMd49knawoxWHMaNySqOZ+GXEMfToznOxRtHbKbw?=
- =?us-ascii?Q?kalMfXZs5oHAaJHRttKiQOP85DLSuwdb0SDSVNjroLyFuyV976ZBRKJrvqXa?=
- =?us-ascii?Q?L06253Ikl6QvF6oi5tzUKRznJfDPZCvQhkTtB0eAx0X1zzHQFndyX7lrw9Mm?=
- =?us-ascii?Q?5VX2ybh2lbF+e6sJ5Uk4vCtuj12583VHclMQmhVrT+demCU3EDu7rdbHpOyf?=
- =?us-ascii?Q?RYK2iZzhaX04D8baP/82WarPq8dLPnM1QdhVtSNMmkrFKPI+PpFh2ExlTp0P?=
- =?us-ascii?Q?1bz8BTE9z9qUfGPuGhkoAMXFQIK3buQhUAp/SNcG+rjvLI0pg1ee8Ibce5jI?=
- =?us-ascii?Q?WnRNsWCLYYOD4vgyPYYRaVT9FSVSZVCF2L3GVAi9uldyF3i5W33qXOAvNPiy?=
- =?us-ascii?Q?hfHJJbPx8Z1fzn6lzkn6iqS1bLdmiWkFGMgxiBHBDVvj5W8dY1zxF+DaStKL?=
- =?us-ascii?Q?4Og2DCzt65ldOL5dfsZ3yui1ax8AnTqYQdEJGXiA5cl/fL6bO7QflM/Wv6mH?=
- =?us-ascii?Q?0Y6OGL+HYd4N0Zh20qiW82ISBjDvqklm6usrpK48X/OtUUOrC39UWQ=3D=3D?=
+	=?us-ascii?Q?Co+QWTzzwfKg2zYA4uptF4A7R7XbC/mMb5CkrSPlpeagVFtLLT+J8HhuTXhJ?=
+ =?us-ascii?Q?a6OC/R5SG3m3w9FJAByLYKoBBGYD4ewyAgTpLIj7MTJlR6RkMGskn4NhkK+j?=
+ =?us-ascii?Q?GE0iYj16Cp+zIGnZJ8qrFneglfkfyr9bvXE947JOUj1MbnP3FKYwk4t+Nk++?=
+ =?us-ascii?Q?gORg0FKafNkGhdivt1Be7br+INeGZvjIlRW4rgquy4NiY2hBr5476S9kqBd4?=
+ =?us-ascii?Q?0TF5L3rQl36xpDdf4L9VY32Gp7j/1HDtpI4NzBoaZ2S8TAjKOEwwyWKsAqsw?=
+ =?us-ascii?Q?xDb35CPRiPUpnE1lxneVU3rDBmNz8jktsfk6E1Jhy+JqiqTkMw8iBYjc0Lxf?=
+ =?us-ascii?Q?7/iri+XQC674eCumL/JhbGLzM7Of+Hhk/nn0q/vclfDv5SGMjzjiSZoBYFgD?=
+ =?us-ascii?Q?4V1pngEBn2T5Eq7dZ0WCyUc+Hj6aJ4nxRzOVd+ajk+J+VlAb43yBX4FSdKqc?=
+ =?us-ascii?Q?gHmrYgzkUsjyZGuqbNhtB2q7CZLnyHnhrWQtVosiakoL7Qq2o5a/j9QVUCGO?=
+ =?us-ascii?Q?98HMC4U86JFNQGmVH+6agDaJxHuRE/8voPpe4VQq4IJe2yxiBOIz+0ODt0cc?=
+ =?us-ascii?Q?ADLQVE3FEoTOZfLZbHFcJIzzDBfFTM/6tiNppy/pGtTjgHnW4pmX4rSEhVwV?=
+ =?us-ascii?Q?4xJ04ub2IxgJLokgNJBXpGaIN8gMdqx8prbKpBL7iz6ij7096Gq4+KQ25D1i?=
+ =?us-ascii?Q?mFENKPH/LRsc1qEsD/SCcUXrSOeu3rPpNfh8wdhKVYxfEUzD1YocZIrFB+08?=
+ =?us-ascii?Q?+eCTPQyfq9LcoAgkQU6krmOa6Pn3YCbqZjwpIEkvLUFe+EZxyopHOxfhLFEi?=
+ =?us-ascii?Q?8KMlIQNPZOdLDKFffRV0P+5K1D2UgblJ7+KAnLUzqJ7ScJmo9cavvOSb2BaB?=
+ =?us-ascii?Q?EhRDeD0PR7fdG2jdfZl6kf92lZcuESHjyVP7qTXH7A8lzqiJnuMkC4Q2k+Gi?=
+ =?us-ascii?Q?bUHcH+MsY16w/2tBUeQSA409zZUdHCtW53ETRDRCKOE6mtrXGGoaZvQnljy+?=
+ =?us-ascii?Q?pqCAt8Y9kf0dPiLgQZNJEsq4Ajs+cv8h0/aCu0GaeKbmK2wKAnwjW6RLMVud?=
+ =?us-ascii?Q?FWGl3X3n0/p7SZbIYWsAbTBA8nhr+www6sn56sR1+2kIlKD8H4j24I+jkOFR?=
+ =?us-ascii?Q?nJ0dgRSg1mV/z5djpe0H5hTBVh+xt+yUiYy7jQYANdJEHzpkQSqGYKdQ+JTW?=
+ =?us-ascii?Q?JSWVHIV7SaudImmK9ew/1QcmEcdTff9SpMRdKFJ7cRUg/Gt6GU/gYE4imMpQ?=
+ =?us-ascii?Q?c2nLRtha/bwafceze4uhxkkYIszPyzD0qsONfhQjeK7PGOAdM9v3ivVua4FQ?=
+ =?us-ascii?Q?HLM4in8HtOYbdttmSzAotpQRX+RDGttToJyVbKDAAI8lYpUljoXHgo9hNtiD?=
+ =?us-ascii?Q?6LWSSUPXQoLjooqdZD6dAsqJ13Wf9lWZi+d1rXzslgQjiLBQf0FzO6uvnPK6?=
+ =?us-ascii?Q?E8OZ53kgZyJFDRhuv3UrbeugfoChas33ABTi71pGPDFRLN+mfIh45g=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2kXJHhKbG/nL+hPM9quvjchCwbBQS/llE5B2oAZTthwFLnAKlE7y+Fh7Bt7X?=
- =?us-ascii?Q?tCqwG+UApkWHWbEys1etXgjlvB2L7VWqq6Srg1kT53YHOojE26Jy0SipcYus?=
- =?us-ascii?Q?I5rWdwgdqqX0AgRqk9aUia7fv62gOqoFwE4l/IXiUzr9vseFbadfrmMeCQ3u?=
- =?us-ascii?Q?0Y1hD8YGFDw+k81cgdlKJ+nvU3btdP763+ywGurXin2mxzWTqbxzCu7FbdgR?=
- =?us-ascii?Q?7kkoxmWa1rgr47dV7qyCG7AlH2LoLZbIgZH20vPtITDd/WxClECSDo52Ie27?=
- =?us-ascii?Q?X76tTs2IYVQDM4p9/BY5BhxWlX6Uf+QcOobGZSJszm7Ts65E/BTw9TV9DACT?=
- =?us-ascii?Q?ShcZRqf+aXEA71BcMsWIKqT42RIzhtRZrWNDDF5g6VzDYhbtSBDq2sdzasTq?=
- =?us-ascii?Q?fty0z9DI1+a5Y4knHpObY/FMyj0M0mp3y0LsMkzudy5E8QVKpP32rI/GEq+f?=
- =?us-ascii?Q?SJ+2pYh5bHwg7B80FIg8Q7vjnQg5Gi1liR6dsLw3HEbolGvG5GVhaxJw93GB?=
- =?us-ascii?Q?emuDeCoBCH70kwBJKCTkJ+rN8Bm350lpT0PW7ndDFLsPK7caSl51InPnEba6?=
- =?us-ascii?Q?4gPSAQUxqo8udUGe0meubbeLSDUoFzRq29yGKDiwS8scK8HdfMQq1sopUKED?=
- =?us-ascii?Q?yUSvURb2i/a6W551nO/f+IECKJbnRQ+SoNVG/mMLcMY1KVGmwebx6UArCaN9?=
- =?us-ascii?Q?PbXWmYLZxzX2HBSgl1OFA+OOtdutxf7Y4964T6VS2VptwZR4HzKBzgXZi2cn?=
- =?us-ascii?Q?vof0Feeh/VJcALp+9xLLAtC18XTLqzpcsjyvw+5dwFbtB2qBJzWfKPfE+Qhj?=
- =?us-ascii?Q?2siYmcoprk5uUgV9SgPTKvFf9DX8atkVXo+BBb3MPTmkYedZzexv/ilq/Ob6?=
- =?us-ascii?Q?B70vLU/yNKfJDdO1R5D92QRTdaaV7HjZFYah1JWwMIpXr3UqdZmW1QY0FeiJ?=
- =?us-ascii?Q?xgLl2ZvAjY/Y+b2QHOVgTNXLEib8a2jVTPxWthmpqwGdB4ZDbyZZLV1PZv+w?=
- =?us-ascii?Q?e4jLtq/D5CdFT7Z0l+yVLDX0o4oqkbbJbdvZI0UGzWwoeSKP/f+tGz4PSFKm?=
- =?us-ascii?Q?1XwXBDER9PtrM2yNdS2ozS2DlshUrMP7Gfip8sp6ncOnceC/Bkngy6Zyx5cA?=
- =?us-ascii?Q?YnOnm6bHfgcs/H46TDiiTCX6MvpJ6FMR845wOyyF82LwOkydD1QoOjshCIhg?=
- =?us-ascii?Q?IPTbz+ir0Wmung07r8mGdOj20IGURmeU4idcxe1JjFLAKl85I3gqA4RS36wx?=
- =?us-ascii?Q?p2FIydxx/gH8I9aOH/wgQg6l6OE68wh182foo5X9N9HK46MTfEtsoyt6VFud?=
- =?us-ascii?Q?klJxtkK9x1/BdvqYyxWbwIsuFpfmHb8F33w1v8ajZRyoWRboTFqj6FaucDEV?=
- =?us-ascii?Q?k972dZZL5aKHN7Il0Bj1zJZTJZWbXB12x3uJJ1dPWQj3E28BoRVaQayCipr+?=
- =?us-ascii?Q?egzDxU6w/Xab899r99/r7KSkFQirTN7bWGbiJp0Rao/w75Stb7ynCS4xhAXi?=
- =?us-ascii?Q?HDRJJ8EJOK5xAAhpTaY6seIzgi2f8n75owboaPF639scUhcCZBZi/y3qiTzr?=
- =?us-ascii?Q?W9eS+wwM5guY+3xBfJhbw2Pl8/VZRy+F+CdRVCyd?=
+	=?us-ascii?Q?Yj3wbmj8a7axBoU6jt6StdXq3ohbSyIhEOsBU7YoFPL3z07K0PnZlGD3vdpA?=
+ =?us-ascii?Q?05lxJ9pA0vyFkMb/xkFMKF2YPEGBdqnqjf8gafpY8oQdMHOq6aFemuxk4o6t?=
+ =?us-ascii?Q?qX28KAPcvpiwOjJ5vlcPA9rGax1WgBBSRSelBuBghttyi/kDojh8REgqyCfC?=
+ =?us-ascii?Q?pjMpGnADhVxX3lWvsVmnOquWLFBnXMfjvGJn09JOpDUribOAMWsEkjCnYrY6?=
+ =?us-ascii?Q?YFOiohj2AUxxJUyS3Cz36WlgF3cVB99Q+dNu/YsSHjyojxrzktdQH7LUTRgs?=
+ =?us-ascii?Q?tP114Gj8tSVMHrnNxqX6VHxTCnoDDAP0EACclrIlt90sZvWouroHD17FKmUZ?=
+ =?us-ascii?Q?Jdv8miPA0qIE8BMtbuLK0oT/UH9EdTeHqSvXg5iDgozx3ILTUPnrsqqA8628?=
+ =?us-ascii?Q?ZVPig/vvEXeduO/E1+J8k8xm6hTlHTB/nfywcjDAMINQKT5XP+xG+IBEFJwM?=
+ =?us-ascii?Q?graS/2VXUHqnZnat3yeFHkqF88vjqzJ5hwm1YSii60+xiZTAKZ2bowBa0ZkH?=
+ =?us-ascii?Q?fajP9DCfxwNcZ05AF98M5dHC3+8PkCxWYV9yd3CSxzjaHOWjLpYZuaUTM1pG?=
+ =?us-ascii?Q?64NKMTyA9UcF59oAmQSJ4FXI523Z+ZzFXhfKRG1G8CWF1zXK8paXMxeZSrr3?=
+ =?us-ascii?Q?RhvII51SbDDRfaW1xom6xFEFueM0eZa0O/3l5PrNKA9dfZX5wXweXQp3ra9/?=
+ =?us-ascii?Q?YSjtUBIzuLEX5Yierx4GmfK5DraWEimVBdggX33M76QyKv9Jp/b6pTNx5sUy?=
+ =?us-ascii?Q?kEC7daDWXwcaMEfEEHorIRCJsEurDw1bsRI5WdmBf7+M4nm9gD2X8vSvUHDh?=
+ =?us-ascii?Q?FAOx2ZcHIbPTahgFsZhXGQ32vHSw8mdtDLOsaVT5HfTqHOKiFev5vt4Tkp8w?=
+ =?us-ascii?Q?sCOjgPJpMYWTwyNnT+ol8VGJx6ncV2C+vuogKWrwzamazjiK3G49kp+0lpHM?=
+ =?us-ascii?Q?ZR/9eA7Ky3o4bcWL9QCGxwftftDA7XBEGrvoVyzG4Xh9Mt0kDDt1K3Uk5K0n?=
+ =?us-ascii?Q?h7XKNVtCfObeKhavQ28XI3KJlDshJbakA/w4Awlem5i4zOfWNWqCdC+pSDik?=
+ =?us-ascii?Q?xMIF0mb4efNrJpCm3Kz0D0wri82lp6XBpF74URjY1tv3c9oqO8bByD+8lDSO?=
+ =?us-ascii?Q?wdVjtvzMT73PuTR8soPAEiugZGQo1k2oOZ5weLX+ZtjTNRx83jPaDBzYnkhX?=
+ =?us-ascii?Q?qA0a0yNNH+ISRGAI8HnUowWhRlpPDTdOWZ0eUTiVhtPte8ULVmEJwYPDOd1R?=
+ =?us-ascii?Q?HcafXOdiH9iIJ6E+PM+fqlZjC0Gigk0P2UE/dkmrEaPUjsSFptD6oeBRBfsH?=
+ =?us-ascii?Q?LdH0OmVfH20D69Ig1se19BlBOiXhFx7Pi7aZAn2rxs5DPm3ZEO+ZLH+ufwqB?=
+ =?us-ascii?Q?ZeOhhdmQYs0ltZquLlaoO+4F40J+6qifXXt9n04cRQkY9mQhy4KingVapBsa?=
+ =?us-ascii?Q?mRO3Fqn1pYio6cnWXW8G8D6lSiPRAkZZ1zC07jwFc1dpPCxZpnb/EmQR4Lml?=
+ =?us-ascii?Q?EszFr3aaf790HU1rANbZ1tKHmMQnMta/2Sj5w9bEc4Bz84AhZ2XeXj6v60UM?=
+ =?us-ascii?Q?s/G/IcquIlf75HxcIiVvjMqsk12VkxuHCMGUx904?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03ab361d-f090-4e61-fc2f-08dd6d11f12e
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0ecb72e-7c0c-41ce-dfed-08dd6d11f63f
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5676.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2025 09:29:58.7636
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2025 09:30:07.2246
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uKmYFyDrV+V4sLIocOHpikwZQaZ6p//m1+wbrnIBK1MKEmC+iqUUDUth6FGMaPJb7tCkt9hsfG58XfGn0J9hDg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4I5hybCGsaJoB2o72MFFiW8TytJE+8kzwT5gaYEA0XbGMQGR3ipZfJK5bNxcKeL1xChI7sfkZX+yXJ8PjbQIiQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB7238
 
-vmap_pfn design to only allow none page based pfn map.
+This patch add a test ioctl in udmabuf to show vmap can work.
+by compare pfn vmap and pages vmap.
 
-This patch try simple copy pfn vmap code to fix it.
-
-Fix vunmap_udmabuf fix match with vmap_udmabuf, use vunmap.
+But this skip HVO folio compare due to can't use pages vmap.
 
 Signed-off-by: Huan Yang <link@vivo.com>
 ---
- drivers/dma-buf/udmabuf.c | 49 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 45 insertions(+), 4 deletions(-)
+ drivers/dma-buf/udmabuf.c                     |  71 ++++++++
+ include/uapi/linux/udmabuf.h                  |   5 +
+ .../selftests/drivers/dma-buf/Makefile        |   1 +
+ .../selftests/drivers/dma-buf/udmabuf_vmap.c  | 166 ++++++++++++++++++
+ 4 files changed, 243 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/dma-buf/udmabuf_vmap.c
 
 diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index cc7398cc17d6..2dfe639230dc 100644
+index 2dfe639230dc..fbe4b59b4c97 100644
 --- a/drivers/dma-buf/udmabuf.c
 +++ b/drivers/dma-buf/udmabuf.c
-@@ -106,6 +106,49 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
- 	return 0;
+@@ -557,6 +557,74 @@ static long udmabuf_ioctl_create_list(struct file *filp, unsigned long arg)
+ 	return ret;
  }
  
-+struct udmabuf_pfn_data {
-+	unsigned long *pfns;
-+	pgprot_t prot;
-+	unsigned int idx;
-+};
-+
-+static int udmabuf_vmap_pfn_apply(pte_t *pte, unsigned long addr, void *private)
++static long udmabuf_vmap_test(struct file *filp, unsigned long arg)
 +{
-+	struct udmabuf_pfn_data *data = private;
-+	pte_t ptent;
++	struct udmabuf_vmap uv;
++	struct dma_buf *dmabuf;
++	bool can_page = true;
++	struct iosys_map map;
++	struct udmabuf *ubuf;
++	struct page **pages;
++	void *vaddr, *pvaddr;
++	struct file *file;
++	int ret = 0, i;
 +
-+	ptent = pte_mkspecial(pfn_pte(data->pfns[data->idx], data->prot));
-+	set_pte_at(&init_mm, addr, pte, ptent);
++	if (copy_from_user(&uv, (void __user *)arg, sizeof(uv)))
++		return -EFAULT;
++	file = fget(uv.dma_buf_fd);
++	if (!file)
++		return -EINVAL;
 +
-+	data->idx++;
-+	return 0;
-+}
++	dmabuf = file->private_data;
++	ret = dma_buf_vmap(dmabuf, &map);
++	if (ret)
++		goto out;
++	vaddr = map.vaddr;
 +
-+static void *udmabuf_vmap_pfn(unsigned long *pfns, unsigned int count,
-+			      pgprot_t prot)
-+{
-+	struct udmabuf_pfn_data data = { .pfns = pfns,
-+					 .prot = pgprot_nx(prot) };
-+	struct vm_struct *area;
++	ubuf = dmabuf->priv;
++	for (i = 0; i < ubuf->pagecount; ++i) {
++		struct folio *folio = ubuf->folios[i];
 +
-+	area = get_vm_area_caller(count * PAGE_SIZE, 0,
-+				  __builtin_return_address(0));
-+	if (!area)
-+		return NULL;
-+
-+	if (apply_to_page_range(&init_mm, (unsigned long)area->addr,
-+				count * PAGE_SIZE, udmabuf_vmap_pfn_apply,
-+				&data)) {
-+		free_vm_area(area);
-+		return NULL;
++		if (folio_test_hugetlb_vmemmap_optimized(folio)) {
++			can_page = false;
++			break;
++		}
 +	}
 +
-+	flush_cache_vmap((unsigned long)area->addr,
-+			 (unsigned long)area->addr + count * PAGE_SIZE);
++	if (!can_page)
++		goto out_vaddr;
 +
-+	return area->addr;
++	pages = kvmalloc_array(ubuf->pagecount, sizeof(*pages), GFP_KERNEL);
++	if (WARN_ON(!pages)) {
++		ret = -ENOMEM;
++		goto out_vaddr;
++	}
++
++	for (i = 0; i < ubuf->pagecount; ++i)
++		pages[i] = folio_page(ubuf->folios[i],
++				      ubuf->offsets[i] >> PAGE_SHIFT);
++
++	pvaddr = vmap(pages, ubuf->pagecount, 0, PAGE_KERNEL);
++	if (WARN_ON(!pvaddr)) {
++		ret = -ENOMEM;
++		goto out_pages;
++	}
++
++	// compare if pages and pfns is same?
++	if (WARN_ON(memcmp(vaddr, pvaddr, ubuf->pagecount * PAGE_SIZE) != 0))
++		ret = -EINVAL;
++
++	vunmap(pvaddr);
++out_pages:
++	kvfree(pages);
++out_vaddr:
++	dma_buf_vunmap(dmabuf, &map);
++out:
++	fput(file);
++
++	return ret;
 +}
 +
- static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
+ static long udmabuf_ioctl(struct file *filp, unsigned int ioctl,
+ 			  unsigned long arg)
  {
- 	struct udmabuf *ubuf = buf->priv;
-@@ -130,7 +173,7 @@ static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
- 		pfns[pg] = pfn;
- 	}
+@@ -569,6 +637,9 @@ static long udmabuf_ioctl(struct file *filp, unsigned int ioctl,
+ 	case UDMABUF_CREATE_LIST:
+ 		ret = udmabuf_ioctl_create_list(filp, arg);
+ 		break;
++	case UDMABUF_VMAP:
++		ret = udmabuf_vmap_test(filp, arg);
++		break;
+ 	default:
+ 		ret = -ENOTTY;
+ 		break;
+diff --git a/include/uapi/linux/udmabuf.h b/include/uapi/linux/udmabuf.h
+index 46b6532ed855..88f5e5516286 100644
+--- a/include/uapi/linux/udmabuf.h
++++ b/include/uapi/linux/udmabuf.h
+@@ -27,7 +27,12 @@ struct udmabuf_create_list {
+ 	struct udmabuf_create_item list[];
+ };
  
--	vaddr = vmap_pfn(pfns, ubuf->pagecount, PAGE_KERNEL);
-+	vaddr = udmabuf_vmap_pfn(pfns, ubuf->pagecount, PAGE_KERNEL);
- 	kvfree(pfns);
- 	if (!vaddr)
- 		return -EINVAL;
-@@ -141,11 +184,9 @@ static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
++struct udmabuf_vmap {
++	int dma_buf_fd;
++};
++
+ #define UDMABUF_CREATE       _IOW('u', 0x42, struct udmabuf_create)
+ #define UDMABUF_CREATE_LIST  _IOW('u', 0x43, struct udmabuf_create_list)
++#define UDMABUF_VMAP  _IOW('u', 0x44, struct udmabuf_vmap)
  
- static void vunmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
- {
--	struct udmabuf *ubuf = buf->priv;
--
- 	dma_resv_assert_held(buf->resv);
+ #endif /* _UAPI_LINUX_UDMABUF_H */
+diff --git a/tools/testing/selftests/drivers/dma-buf/Makefile b/tools/testing/selftests/drivers/dma-buf/Makefile
+index 441407bb0e80..e5b131dcc2c3 100644
+--- a/tools/testing/selftests/drivers/dma-buf/Makefile
++++ b/tools/testing/selftests/drivers/dma-buf/Makefile
+@@ -2,6 +2,7 @@
+ CFLAGS += $(KHDR_INCLUDES)
  
--	vm_unmap_ram(map->vaddr, ubuf->pagecount);
-+	vunmap(map->vaddr);
- }
+ TEST_GEN_PROGS := udmabuf
++TEST_GEN_PROGS := udmabuf_vmap
  
- static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
+ top_srcdir ?=../../../../..
+ 
+diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf_vmap.c b/tools/testing/selftests/drivers/dma-buf/udmabuf_vmap.c
+new file mode 100644
+index 000000000000..7bd46c909bdf
+--- /dev/null
++++ b/tools/testing/selftests/drivers/dma-buf/udmabuf_vmap.c
+@@ -0,0 +1,166 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#define __EXPORTED_HEADERS__
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <malloc.h>
++#include <stdbool.h>
++
++#include <sys/ioctl.h>
++#include <sys/syscall.h>
++#include <sys/mman.h>
++#include <linux/memfd.h>
++#include <linux/udmabuf.h>
++#include "../../kselftest.h"
++
++#define TEST_PREFIX "drivers/dma-buf/udmabuf"
++#define NUM_PAGES 4
++#define NUM_ENTRIES 4
++#define MEMFD_SIZE 1024 /* in pages */
++
++static unsigned int page_size;
++
++static int create_memfd_with_seals(off64_t size, bool hpage)
++{
++	int memfd, ret;
++	unsigned int flags = MFD_ALLOW_SEALING;
++
++	if (hpage)
++		flags |= MFD_HUGETLB;
++
++	memfd = memfd_create("udmabuf-test", flags);
++	if (memfd < 0) {
++		ksft_print_msg("%s: [skip,no-memfd]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
++	if (ret < 0) {
++		ksft_print_msg("%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	ret = ftruncate(memfd, size);
++	if (ret == -1) {
++		ksft_print_msg("%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return memfd;
++}
++
++static int create_udmabuf_list(int devfd, int memfd, off64_t memfd_size)
++{
++	struct udmabuf_create_list *list;
++	int ubuf_fd, i;
++
++	list = malloc(sizeof(struct udmabuf_create_list) +
++		      sizeof(struct udmabuf_create_item) * NUM_ENTRIES);
++	if (!list) {
++		ksft_print_msg("%s: [FAIL, udmabuf-malloc]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	for (i = 0; i < NUM_ENTRIES; i++) {
++		list->list[i].memfd = memfd;
++		list->list[i].offset = i * (memfd_size / NUM_ENTRIES);
++		list->list[i].size = memfd_size / NUM_ENTRIES;
++	}
++
++	list->count = NUM_ENTRIES;
++	list->flags = UDMABUF_FLAGS_CLOEXEC;
++	ubuf_fd = ioctl(devfd, UDMABUF_CREATE_LIST, list);
++	free(list);
++	if (ubuf_fd < 0) {
++		ksft_print_msg("%s: [FAIL, udmabuf-create]\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return ubuf_fd;
++}
++
++static void *mmap_fd(int fd, off64_t size)
++{
++	void *addr;
++
++	addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	if (addr == MAP_FAILED) {
++		ksft_print_msg("%s: ubuf_fd mmap fail\n", TEST_PREFIX);
++		exit(KSFT_FAIL);
++	}
++
++	return addr;
++}
++
++int main(int argc, char *argv[])
++{
++	struct udmabuf_create create;
++	int devfd, memfd, buf, ret;
++	struct udmabuf_vmap vm;
++	unsigned long *vaddr;
++	off64_t size;
++	int i;
++
++	ksft_print_header();
++	ksft_set_plan(2);
++
++	devfd = open("/dev/udmabuf", O_RDWR);
++	if (devfd < 0) {
++		ksft_print_msg(
++			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
++			TEST_PREFIX);
++		exit(KSFT_SKIP);
++	}
++
++	/**
++	 * Normal test
++	 */
++	size = getpagesize() * 512 + getpagesize() * 256;
++	memfd = create_memfd_with_seals(size, false);
++	buf = create_udmabuf_list(devfd, memfd, size);
++	vaddr = (unsigned long *)mmap_fd(buf, size);
++	for (i = 0; i < size / sizeof(unsigned long); i++)
++		vaddr[i] = random();
++
++	vm.dma_buf_fd = buf;
++
++	ret = ioctl(devfd, UDMABUF_VMAP, &vm);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL, normal test]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS, normal test]\n", TEST_PREFIX);
++	munmap(vaddr, size);
++	close(buf);
++	close(memfd);
++
++	/**
++	 * Hugetlb test, 2MB
++	 */
++	size = getpagesize() * 512;
++	memfd = create_memfd_with_seals(size, true);
++	buf = create_udmabuf_list(devfd, memfd, size);
++	vaddr = (unsigned long *)mmap_fd(buf, size);
++	for (i = 0; i < size / sizeof(unsigned long); i++)
++		vaddr[i] = random();
++
++	vm.dma_buf_fd = buf;
++
++	ret = ioctl(devfd, UDMABUF_VMAP, &vm);
++	if (ret < 0)
++		ksft_test_result_fail("%s: [FAIL, huge test]\n", TEST_PREFIX);
++	else
++		ksft_test_result_pass("%s: [PASS, huge test]\n", TEST_PREFIX);
++	munmap(vaddr, size);
++	close(buf);
++	close(memfd);
++
++	ksft_print_msg("%s: ok\n", TEST_PREFIX);
++	ksft_print_cnts();
++
++	return 0;
++}
 -- 
 2.48.1
 
