@@ -1,172 +1,103 @@
-Return-Path: <linux-kselftest+bounces-29870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29871-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BD42A73657
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 17:07:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 974E0A73A7C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 18:32:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1124A188D8AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 16:07:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EC907A3E25
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Mar 2025 17:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273EB1A3A8A;
-	Thu, 27 Mar 2025 16:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6DD35977;
+	Thu, 27 Mar 2025 17:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nxD4MqK2";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wAe4owd+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A141946C8
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Mar 2025 16:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5184CDDD3;
+	Thu, 27 Mar 2025 17:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743091648; cv=none; b=Vz6zMsiNwkhYq3Rs4YmvRmUPdbOVCApXWVP8++q6UmPtPMW+/hNJSZRdJwJDpiiiAInhbIxyqb6nmoDBhFTutSVyE7djP4588I0apw2S1f1Sm6M+NYFJD5mTadq0ujK7eHbz3QuAMPSm+vtGSQkN8zMe+qrXACk80amOCboFwEg=
+	t=1743096753; cv=none; b=KILB/b6WTaOHhK9REXT/Eo044NwJAr/FIxwRppPwL5mhebtxuZKo+/upCtshS69Jod+eI3Jdr4iv0slo/5Zxkna2ze3Yh2LwcygqLtWTnkT3jmlE+npXCnl56Uf7GHcKXIcEgA69wonaDsf2T8oB6hV6vNXQ9zEQ4fNrdklMCUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743091648; c=relaxed/simple;
-	bh=3NHdB2+UGT7HfIY9ccBV/ZQxF/lf50lsjoSnnFB4jIQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TNnE9hxD27YNV9K3eESGhDR+Q3MwxIiSQepPYJcZn98dqVtITmItKUgFgNNfmV2oV4IzKt3U1o0PWqamKOAL4Ejll/pH03Y8WQTrQ49e0MB45Wtz+MKLPq493ys1kcneGBSL4s/6uJI9GC5TPl8Z+kloJGp/I3iwIbPwPb0H9Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:b1ef:107c:7814:6642])
-	by michel.telenet-ops.be with cmsmtp
-	id Vs7G2E0095Szt1p06s7Gzd; Thu, 27 Mar 2025 17:07:16 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1txplD-0000000FsoA-3a7N;
-	Thu, 27 Mar 2025 17:07:16 +0100
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1txplE-00000006E5W-1V1l;
-	Thu, 27 Mar 2025 17:07:16 +0100
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH/RFC] kunit/rtc: Add real support for very slow tests
-Date: Thu, 27 Mar 2025 17:07:15 +0100
-Message-ID: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1743096753; c=relaxed/simple;
+	bh=bruqDQ91bY1u8bLhPN8dGiaW/bKoNawVJ7r8njBA4og=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LMDgj1eJa7XjCsFR+5LeO11WQ4rBp0+xTiV9JwtVeUzdhSK0sW1SKf+7YLqxixZwDXZFL/UxNpAsh4CFh7QXIGrB+F3kyFap4pMHDH+vsZR9vEcRm0Mkjzy+INSNbTtNKIvJo2Mzdfgs4ZtDgvmtc9g90Q5RQ3kafUH4pH+6lsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nxD4MqK2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wAe4owd+; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1743096750;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aCF9YAPPTg0G/VZvO7ssO5AXFYNHvZkHK2oCBQEtTkM=;
+	b=nxD4MqK2VDREo0N1JVC753CtIZgVemErx9ye5ZEyWDo1uV3/Tk9tgAs+nYO4Bx6xzlJJtQ
+	15hCVyBPCibfJmNzFzn8NKgp1qn8gYnBN7zNcDbfQbU2TTPacjyA2JUHa4QOBDd6ytivoq
+	Dzl8lvu806v/VVv55c/BKgizp7I9XjtGfEhUhUlwflnP1KCmn1GhR5gvzcX0tRgwQkaNsO
+	u9A0xpYODd3MzlQWZYm5NgCL1DAIn5ukhx1UanJE3gxZ6oJ/Qv6h6DFbfRO97dXVUAMlxO
+	CCU/G0uMkGwWAvAX9HjCdK/5mwIpq2TfPV7Fj4Rp9Oj8b3C0p74OqJNlCCbYCQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1743096750;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aCF9YAPPTg0G/VZvO7ssO5AXFYNHvZkHK2oCBQEtTkM=;
+	b=wAe4owd+VWF/06neZgD1upVu7sJIWSdeh3kry8gAqWupOkT7Uu8qaDVw/Ttj2CfeNte2Qa
+	x1NWhxoCUVpHQyBw==
+To: Miroslav Lichvar <mlichvar@redhat.com>
+Cc: John Stultz <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>,
+ Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
+Subject: Re: [PATCH v2 1/2] time/timekeeping: Fix possible inconsistencies
+ in _COARSE clockids
+In-Reply-To: <Z-Vx8kV4M3khPknC@localhost>
+References: <20250320200306.1712599-1-jstultz@google.com>
+ <Z-KURRE_Gr72Xv_n@localhost> <874izezv3c.ffs@tglx>
+ <Z-Vx8kV4M3khPknC@localhost>
+Date: Thu, 27 Mar 2025 18:32:27 +0100
+Message-ID: <87bjtmxtuc.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-When running rtc_lib_test ("lib_test" before my "[PATCH] rtc: Rename
-lib_test to rtc_lib_test") on m68k/ARAnyM:
+On Thu, Mar 27 2025 at 16:42, Miroslav Lichvar wrote:
+> On Thu, Mar 27, 2025 at 10:22:31AM +0100, Thomas Gleixner wrote:
+>> The original implementation respected this base period, but John's
+>> approach of forwarding, which cures the coarse time getter issue,
+>> violates it. As a consequence the previous error accumulation is not
+>> longer based on the base period because the period has been reset to the
+>> random point in time when adjtimex() was invoked, which makes the error
+>> accumulation a random number.
+>
+> I see, so that value of the NTP error is already wrong at that point
+> where it's reset to 0.
+>
+> To clearly see the difference with the new code, I made an attempt
+> to update the old linux-tktest simulation that was used back when the
+> multiplier adjustment was reworked, but there are too many missing
+> things now and I gave up.
 
-    KTAP version 1
-    1..1
-	KTAP version 1
-	# Subtest: rtc_lib_test_cases
-	# module: rtc_lib_test
-	1..2
-	# rtc_time64_to_tm_test_date_range_1000: Test should be marked slow (runtime: 3.222371420s)
-	ok 1 rtc_time64_to_tm_test_date_range_1000
-	# rtc_time64_to_tm_test_date_range_160000: try timed out
-	# rtc_time64_to_tm_test_date_range_160000: test case timed out
-	# rtc_time64_to_tm_test_date_range_160000.speed: slow
-	not ok 2 rtc_time64_to_tm_test_date_range_160000
-    # rtc_lib_test_cases: pass:1 fail:1 skip:0 total:2
-    # Totals: pass:1 fail:1 skip:0 total:2
-    not ok 1 rtc_lib_test_cases
+Can you point me to that code?
 
-Commit 02c2d0c2a84172c3 ("kunit: Add speed attribute") added the notion
-of "very slow" tests, but this is further unused and unhandled.
+It would be probably useful to create a test mechanism which allows to
+exercise all of this in a simulated way so we actually don't have to
+wonder every time we change a bit what the consequences are.
 
-Hence:
-  1. Introduce KUNIT_CASE_VERY_SLOW(),
-  2. Increase timeout by ten; ideally this should only be done for very
-     slow tests, but I couldn't find how to access kunit_case.attr.case
-     from kunit_try_catch_run(),
-  3. Mark rtc_time64_to_tm_test_date_range_1000 slow,
-  4. Mark rtc_time64_to_tm_test_date_range_160000 very slow.
+Thanks,
 
-Afterwards:
-
-    KTAP version 1
-    1..1
-	KTAP version 1
-	# Subtest: rtc_lib_test_cases
-	# module: rtc_lib_test
-	1..2
-	# rtc_time64_to_tm_test_date_range_1000.speed: slow
-	ok 1 rtc_time64_to_tm_test_date_range_1000
-	# rtc_time64_to_tm_test_date_range_160000.speed: very_slow
-	ok 2 rtc_time64_to_tm_test_date_range_160000
-    # rtc_lib_test_cases: pass:2 fail:0 skip:0 total:2
-    # Totals: pass:2 fail:0 skip:0 total:2
-    ok 1 rtc_lib_test_cases
-
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- drivers/rtc/rtc_lib_test.c |  4 ++--
- include/kunit/test.h       | 11 +++++++++++
- lib/kunit/try-catch.c      |  3 ++-
- 3 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/rtc/rtc_lib_test.c b/drivers/rtc/rtc_lib_test.c
-index c30c759662e39b48..fd3210e39d37dbc6 100644
---- a/drivers/rtc/rtc_lib_test.c
-+++ b/drivers/rtc/rtc_lib_test.c
-@@ -85,8 +85,8 @@ static void rtc_time64_to_tm_test_date_range_1000(struct kunit *test)
- }
- 
- static struct kunit_case rtc_lib_test_cases[] = {
--	KUNIT_CASE(rtc_time64_to_tm_test_date_range_1000),
--	KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_160000),
-+	KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_1000),
-+	KUNIT_CASE_VERY_SLOW(rtc_time64_to_tm_test_date_range_160000),
- 	{}
- };
- 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 9b773406e01f3c43..4e3c1cae5b41466e 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -183,6 +183,17 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
- 		{ .run_case = test_name, .name = #test_name,	\
- 		  .attr.speed = KUNIT_SPEED_SLOW, .module_name = KBUILD_MODNAME}
- 
-+/**
-+ * KUNIT_CASE_VERY_SLOW - A helper for creating a &struct kunit_case
-+ * with the very slow attribute
-+ *
-+ * @test_name: a reference to a test case function.
-+ */
-+
-+#define KUNIT_CASE_VERY_SLOW(test_name)			\
-+		{ .run_case = test_name, .name = #test_name,	\
-+		  .attr.speed = KUNIT_SPEED_VERY_SLOW, .module_name = KBUILD_MODNAME}
-+
- /**
-  * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_case
-  *
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 6bbe0025b0790bd2..92099c67bb21d0a4 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -56,7 +56,8 @@ static unsigned long kunit_test_timeout(void)
- 	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
- 	 * the task will be killed and an oops generated.
- 	 */
--	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-+	// FIXME times ten for KUNIT_SPEED_VERY_SLOW?
-+	return 10 * 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
- }
- 
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
--- 
-2.43.0
-
+        tglx
 
