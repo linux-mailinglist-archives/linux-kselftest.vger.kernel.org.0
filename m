@@ -1,464 +1,274 @@
-Return-Path: <linux-kselftest+bounces-29877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45AB2A74501
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 09:07:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 067CEA7461F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 10:14:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2026E189C70F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 08:07:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FB3617142C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 09:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8EB212F83;
-	Fri, 28 Mar 2025 08:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7BC12139D8;
+	Fri, 28 Mar 2025 09:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JCd2a/4K"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Z19ALIlH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB4A211706
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 08:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8040212D67
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 09:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743149229; cv=none; b=c/qZA45uspLU6J6HzoLj36xItSskJ52O5sC+IaHH8v62lkHWbwASjf6Z03Z/OEvxCX/3/pdUskUeI/wjkiSzNuYFZpgvQTfmRY8iRNKAi6mWYbmOVf/esERssu5+R9ALJxRWQNlAD4gjn1js8wsXVtyQyzbWMrdzEdy/PQ1ffYE=
+	t=1743153274; cv=none; b=Cb5OU6iJyUlusdBLZGXkpizxomVeL5b5wUs0ZoWdZ4jcH2qPeG16VI1LXsqburWPBniWsyY3VhVUEpi7SkvNPu/EbwVHK9OjkDEooH9LNKDogTuqnbj66ifYeQsfAztZU8DXGg2dVTy0TCvGwAroN4ywa7QAj4xa6NOl3L6Rqt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743149229; c=relaxed/simple;
-	bh=tNMF3zrqLTbFUR+yWnQKYfUFroHVNsAfscGsVGDoOmk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=INsDWYrL8sGjYGxbUGq7/PytkotcPUYbrfSOtQfO4XjCwiypaBgq3Nv2epZVtMNn31tKtbst7wf7qXUHt6cIB/v532h9ZB7JxICJtX4F0fMG6VCy4pSfMjUMKcQxVVHLsMuF+SErGRyxJZN5+albCFBQKecXDSQ57bKPA/hVd+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JCd2a/4K; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6e8f6970326so16355896d6.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 01:07:07 -0700 (PDT)
+	s=arc-20240116; t=1743153274; c=relaxed/simple;
+	bh=JoQi418hmHY6np0+AenBuJ2TaOQXQpRfmFfdTYa3hxQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZPhY8n2YZJq2bSuoKxLuj/veaRIfw8SCja56zg4Q55AkUetymR5LkW5pgZteNsLaCf5wcotxCcQhxaLXRgl5rkBLjuLUbdi1i7qmqSfOUF1vzn6UUjyFaEibP2DnndgzX1AKmNZJ0QbK/3nvt/I4dKmc1AreFipYBivMUYJqlbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Z19ALIlH; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5bc066283so3035669a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 02:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743149226; x=1743754026; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LyDg7tL+z3VRYNcM0J68Wwi8K9zl0Qcxm1t8RUqdRXA=;
-        b=JCd2a/4KmQi/u24/CtwKX8pg1eJGOxeKALSlPTiaj1dJUDPam+DYp3owRWjpTHl3aJ
-         itJjQsmwmb10MmvQYVwR/qhvYXzJ+Z2+2dUxiyEdzjN3cHLzCcdpnZ2SlsgPPv5ii8xH
-         PPe3wZiH/d+2LbuPeeRcuPQ97bVO760yIr6WL0zm8PJP1pmfQAyqHxn2eLLqZuP5QLFM
-         knoIhNTiFswU+qeL8iiGc2VJMxBAJP4s9g2nc9m9SAUNWdllYSQkcc2D6ILbOKNHNXQm
-         Xj2ZF/WM7IjvDJ1dEdonnFt51oJ7IhEM0hEPuHY/X7e8nRpFuwZ7FcFb2YAgEfNR4JWD
-         d3TQ==
+        d=openvpn.net; s=google; t=1743153270; x=1743758070; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=emxB1Yn6xd6pBE8Dk41E9yyEUu6tgPtAHSipWJoa4xc=;
+        b=Z19ALIlHqjcFReYfjf9byhON3jJiZ4UworI2LgjxctD4GllX7lmQHzacOY+4XiXb0O
+         JwQqZfV57I1WqZtwEYPgMEKNk2MPnGqfFojFsEQWZIr4unc5d4EgQqLFsTvXagYmRsKu
+         T9bdzX2XwEJWK3OgoC1I9uiGCXupPKz7bnRoWijbZB9hxRiqXYPtYYxlQMBmgUWeotzk
+         7IOeJlSZSIRboyr5YWC02ezNyvS8P0dmcA+0uhMA5eHoU32GbSBSgnteURFRJNqeemp2
+         DIU2I8wNTcZTMOp/3ePEu16LKYNfGBdDylq3PFc4YuzQD9vdjJ+k3nXo76uT4ZJBh2D5
+         m82Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743149226; x=1743754026;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LyDg7tL+z3VRYNcM0J68Wwi8K9zl0Qcxm1t8RUqdRXA=;
-        b=AxC/ls1vnPGWhYvSjY2vOqpgjn3SLquwojR7g2jVQ3saLfFVaRmXKt0dTXzw5XFsDH
-         IsQuPD/x9pxuoIdUAZNi1XVZIn8Nhrcx0sxXEF3wRi/g9+hyxKni69t65XMEfmWGRAn1
-         UwWfpXaPNWXk4+kpky+OYHNC4Ae4V0jNs88ZQuCWzg8U3pHA+bl00BfhjIGOmVi13er2
-         cwjS2nuNZpbCH7hvSjxbMxinEFEJExrej57p9UbpWqCF3n/b+AsSHyAMaKp5qRkcGyVm
-         NXgDQEYFevt0UgKTDueJX1355hFZs6LfRo/8zKhoEIeVzYAgNgbvdsjTbrkzs7IGEMHK
-         3qhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXBTUxKOfFL5SxrSVDLQQUYIlZx3F4dRHLAdEw2XZ4/i3HjM+xR5M7ZPSwZWe5G2l/IHfJVIJUfXniyPGYtzMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxl5Ie4QPrjrepOV+QRHXTs+pzwB2YEVe0sRPLxHUgJgUun1PZA
-	+AWDCAk8pD/C/nbqHGwhdCH8gP/+fwhWhy05zmVAmn7OTMgnkorHGWl4U2gZFX8bF4Qf51HWjAR
-	vq0eElrK38Rgh4y29BwjNd6atny0ylcU3bGotznvpMkxt6Cgt/XFz
-X-Gm-Gg: ASbGnctjAzibCFXIQu+muzkyfmUixL2gCNf3GbN/ZEh4iGwe7lYVpjxtA8NLsKFNjV/
-	AlCjiQ9uDTFEGVUkkAxhSXrBqRSupSUt43sO/8rJ3t8wlkaU2kAXcW2A3XEPNO4+De6ZkTpJIsz
-	yKByLZc+S5Sal5yO0glltzhxEOEts+1/aJxcsGLg==
-X-Google-Smtp-Source: AGHT+IGzUIk/v4ngoHdg/Z6l+1SFfpDik4JMUXQN0rKpviOsqy0lYMG15bjYEY2aKIZJgqol2xEiIx8lx2010LrD9QA=
-X-Received: by 2002:a05:6214:c63:b0:6e8:f464:c9a0 with SMTP id
- 6a1803df08f44-6ed238a860emr95218916d6.13.1743149225867; Fri, 28 Mar 2025
- 01:07:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743153270; x=1743758070;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=emxB1Yn6xd6pBE8Dk41E9yyEUu6tgPtAHSipWJoa4xc=;
+        b=O7UfsRdHHw3nP+4SOTea+05dyKYa3uwXPlbdCvYpmjsicBKWZVZg0G7ATMCYDuSeAm
+         hfKbLmTnmhQiwdhasF2XxbHqOuUUJmieinAsKCS/CGfy98ZpqbuZ47kwNcXZr6t80U4X
+         0tZ6taLIzNcJw4L7AM0zm43/fdvq7MX66XsKefo8zTIzzL1yLLzet+FqHbPajk3++TVm
+         f2LercsvqRyHLc7Im1ZXbD09hnv1WoxSx9OiLVhKxxJgvdIzHxkPTj5ufivTTSXght5G
+         zGu14IceJreopV9/yuEN+vyD1/pwjOUgWhQHX1aDl0JEPvoIK3KpqaJ2xij5faFl68kA
+         QRDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmuu/itR4wEOisateiUEipaxAr0ZiC5MbK6RQ2elAMOU3xf3tJyaZhB1A7rynYQCAuggx8o5BL8YcQYj7lroU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynKIY3YlAMDaYl7Qz5dBf5j6NjOl6BH4OcVrPXB2J7wMY8DLOY
+	x4POTmEU5WrpF2QfQaaActaCcNPQJ1A8PeNxghCLZkNze8LlxO3vXj8wV5D1j4IlTjCYAjGXCtc
+	Gcvl/gZqj7d+zhT4tuL36Lwpgpxiqhbqu94hwOkcNBWRevjv2kVJU9BHglJk=
+X-Gm-Gg: ASbGnctifDgDJm6iLo5ZnhO5ECAcIKj6rqoR/vsKCXWzaAYuywDprdkXN52Urb+OziQ
+	yN2fx5Zn7Wvg+1X4vx0rOYez2Avmo0EYw/8H3jx9V20YoXVPovdpHbEkZVCeQ78gexATCfUXljV
+	Z8jhn7I70SkU4mbK5+T4wYhYo0eExjETj0IvSNJdUA1Kpz3FopXW/pqesGDYNQc8A3Rt+GMJ6Gl
+	wpLpsd1vTxmzNxTsa33mTxJocfn7JBHH+J81uqOl3r6YbJEae5EQenNQRE9Nl6k0Ixj0tRUd7gY
+	RUjCLT5+aq6pXpsgyyTxlw15kYcsvHQr/s0h6cr/E4L9hkLabloRCKeWyuBVOQPhYvzr6jKdLWI
+	tN7amlTYsX3Zth4Hq+g==
+X-Google-Smtp-Source: AGHT+IERjDP5f/ByG8r5QnWZeRW5+0Zg3vsWTTcLWgXyDl5HKthquWqKirIqIDesQWBn+oXleB9ezg==
+X-Received: by 2002:a05:6402:3589:b0:5e7:88d8:30a6 with SMTP id 4fb4d7f45d1cf-5ed8eb14179mr4887213a12.20.1743153269762;
+        Fri, 28 Mar 2025 02:14:29 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:1eeb:6cb4:2632:336a? ([2001:67c:2fbc:1:1eeb:6cb4:2632:336a])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc16ef7b2sm1130181a12.40.2025.03.28.02.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Mar 2025 02:14:29 -0700 (PDT)
+Message-ID: <8e64c910-ee4d-4875-8034-927e1073ae4b@openvpn.net>
+Date: Fri, 28 Mar 2025 10:14:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
-In-Reply-To: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
-From: David Gow <davidgow@google.com>
-Date: Fri, 28 Mar 2025 16:06:52 +0800
-X-Gm-Features: AQ5f1Jr3hZn89B9ROY2nPLdEcgv9EW_VI3KKZ2dFFxe1Po-FS7WLFRntzSls0Z4
-Message-ID: <CABVgOSmxsXEyLVyhhffhXUXf3-QnGmZurXaRhpiK8w894mrwzg@mail.gmail.com>
-Subject: Re: [PATCH/RFC] kunit/rtc: Add real support for very slow tests
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-rtc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000710de00631628ece"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v24 00/23] Introducing OpenVPN Data Channel
+ Offload
+To: sd@queasysnail.net
+Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+ steffen.klassert@secunet.com, antony.antony@secunet.com,
+ willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>,
+ netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>
+References: <20250318-b4-ovpn-v24-0-3ec4ab5c4a77@openvpn.net>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <20250318-b4-ovpn-v24-0-3ec4ab5c4a77@openvpn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---000000000000710de00631628ece
-Content-Type: text/plain; charset="UTF-8"
+Hi Sabrina,
 
-Hi Geert,
+do you plan to drop more comments at the patchset at this point?
 
-Thanks for sending this out: I think this raises some good questions
-about exactly how to handle long running tests (particularly on
-older/slower hardware).
+I have gone through all requested changes and I'll just get the patches 
+ready for submission once net-next is open again.
 
-I've put a few notes below, but, tl;dr: I think these are all good
-changes, even if there's more we can do to better scale to slower
-hardware.
-
-On Fri, 28 Mar 2025 at 00:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> When running rtc_lib_test ("lib_test" before my "[PATCH] rtc: Rename
-> lib_test to rtc_lib_test") on m68k/ARAnyM:
->
->     KTAP version 1
->     1..1
->         KTAP version 1
->         # Subtest: rtc_lib_test_cases
->         # module: rtc_lib_test
->         1..2
->         # rtc_time64_to_tm_test_date_range_1000: Test should be marked slow (runtime: 3.222371420s)
->         ok 1 rtc_time64_to_tm_test_date_range_1000
->         # rtc_time64_to_tm_test_date_range_160000: try timed out
->         # rtc_time64_to_tm_test_date_range_160000: test case timed out
->         # rtc_time64_to_tm_test_date_range_160000.speed: slow
->         not ok 2 rtc_time64_to_tm_test_date_range_160000
->     # rtc_lib_test_cases: pass:1 fail:1 skip:0 total:2
->     # Totals: pass:1 fail:1 skip:0 total:2
->     not ok 1 rtc_lib_test_cases
->
-> Commit 02c2d0c2a84172c3 ("kunit: Add speed attribute") added the notion
-> of "very slow" tests, but this is further unused and unhandled.
->
-> Hence:
->   1. Introduce KUNIT_CASE_VERY_SLOW(),
-
-Thanks -- I think we want this regardless.
-
->   2. Increase timeout by ten; ideally this should only be done for very
->      slow tests, but I couldn't find how to access kunit_case.attr.case
->      from kunit_try_catch_run(),
-
-
-My feeling for tests generally is:
-- Normal: effectively instant on modern hardware, O(seconds) on
-ancient hardware.
-- Slow: takes O(seconds) to run on modern hardware, O(minutes)..O(10s
-of minutes) on ancient hardware.
-- Very slow: O(minutes) or higher on modern hardware, infeasible on
-ancient hardware.
-
-Obviously the definition of "modern" and "ancient" hardware here is
-pretty arbitrary: I'm using "modern, high-end x86" ~4GHz as my
-"modern" example, and "66MHz 486" as my "ancient" one, but things like
-emulation or embedded systems fit in-between.
-
-Ultimately, I think the timeout probably needs to be configurable on a
-per-machine basis more than a per-test one, but having a 10x
-multiplier (or even a 100x multiplier) for very slow tests would also
-work for me.
-
-I quickly tried hacking together something to pass through the
-attribute and implement this. Diff (probably mangled by gmail) below:
----
-diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
-index 7c966a1adbd3..24a29622068b 100644
---- a/include/kunit/try-catch.h
-+++ b/include/kunit/try-catch.h
-@@ -50,6 +50,13 @@ struct kunit_try_catch {
-       void *context;
-};
-
-+struct kunit_try_catch_context {
-+       struct kunit *test;
-+       struct kunit_suite *suite;
-+       struct kunit_case *test_case;
-+};
-+
-+
-void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
-
-void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 146d1b48a096..79d12c0c2d25 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -420,12 +420,6 @@ static void kunit_run_case_cleanup(struct kunit *test,
-       kunit_case_internal_cleanup(test);
-}
-
--struct kunit_try_catch_context {
--       struct kunit *test;
--       struct kunit_suite *suite;
--       struct kunit_case *test_case;
--};
--
-static void kunit_try_run_case(void *data)
-{
-       struct kunit_try_catch_context *ctx = data;
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 92099c67bb21..5f62e393d422 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -34,30 +34,15 @@ static int kunit_generic_run_threadfn_adapter(void *data)
-       return 0;
-}
-
--static unsigned long kunit_test_timeout(void)
-+static unsigned long kunit_test_timeout(struct kunit_try_catch *try_catch)
-{
--       /*
--        * TODO(brendanhiggins@google.com): We should probably have some type of
--        * variable timeout here. The only question is what that timeout value
--        * should be.
--        *
--        * The intention has always been, at some point, to be able to label
--        * tests with some type of size bucket (unit/small, integration/medium,
--        * large/system/end-to-end, etc), where each size bucket would get a
--        * default timeout value kind of like what Bazel does:
--        * https://docs.bazel.build/versions/master/be/common-definitions.html#test.size
--        * There is still some debate to be had on exactly how we do this. (For
--        * one, we probably want to have some sort of test runner level
--        * timeout.)
--        *
--        * For more background on this topic, see:
--        * https://mike-bland.com/2011/11/01/small-medium-large.html
--        *
--        * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
--        * the task will be killed and an oops generated.
--        */
--       // FIXME times ten for KUNIT_SPEED_VERY_SLOW?
--       return 10 * 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-+       struct kunit_try_catch_context *ctx = (struct
-kunit_try_catch_context *)try_catch->context;
-+       struct kunit_case *test_case = ctx->test_case;
-+       unsigned long base_timeout = 300 *
-msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-+       /* VERY_SLOW tests get 10 times the time to execute (50 minutes). */
-+       unsigned long multiplier = (test_case->attr.speed ==
-KUNIT_SPEED_VERY_SLOW) ? 10 : 1;
-+
-+       return multiplier * base_timeout;
-}
-
-void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-@@ -87,7 +72,7 @@ void kunit_try_catch_run(struct kunit_try_catch
-*try_catch, void *context)
-       wake_up_process(task_struct);
-
-       time_remaining = wait_for_completion_timeout(task_done,
--                                                    kunit_test_timeout());
-+
-kunit_test_timeout(try_catch));
-       if (time_remaining == 0) {
-               try_catch->try_result = -ETIMEDOUT;
-               kthread_stop(task_struct);
-
----
-
-I'll get around to extending this to allow the "base timeout" to be
-configurable as a command-line option, too, if this seems like a good
-way to go.
-
->   3. Mark rtc_time64_to_tm_test_date_range_1000 slow,
->   4. Mark rtc_time64_to_tm_test_date_range_160000 very slow.
-
-Hmm... these are definitely fast enough on my "modern" machine that
-they probably only warrant "slow", not "very slow". But given they're
-definitely causing problems on older machines, I'm happy to go with
-marking the large ones very slow. (I've been waiting for them for
-about 45 minutes so far on my 486.)
-
-Do the time tests in kernel/time/time_test.c also need to be marked
-very slow, or does that run much faster on your setup?
-
-
->
-> Afterwards:
->
->     KTAP version 1
->     1..1
->         KTAP version 1
->         # Subtest: rtc_lib_test_cases
->         # module: rtc_lib_test
->         1..2
->         # rtc_time64_to_tm_test_date_range_1000.speed: slow
->         ok 1 rtc_time64_to_tm_test_date_range_1000
->         # rtc_time64_to_tm_test_date_range_160000.speed: very_slow
->         ok 2 rtc_time64_to_tm_test_date_range_160000
->     # rtc_lib_test_cases: pass:2 fail:0 skip:0 total:2
->     # Totals: pass:2 fail:0 skip:0 total:2
->     ok 1 rtc_lib_test_cases
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-
-Is this causing you enough strife that you want it in as-is, straight
-away, or would you be happy with it being split up and polished a bit
-first -- particularly around supporting the more configurable timeout,
-and shifting the test changes into separate patches? (I'm happy to do
-that for you if you don't want to dig around in the somewhat messy
-KUnit try-catch stuff any further.)
-
-Does anyone else (particularly anyone involved with the rtc tests)
-have thoughts?
+Thanks a lot!
 
 Cheers,
--- David
 
->  drivers/rtc/rtc_lib_test.c |  4 ++--
->  include/kunit/test.h       | 11 +++++++++++
->  lib/kunit/try-catch.c      |  3 ++-
->  3 files changed, 15 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/rtc/rtc_lib_test.c b/drivers/rtc/rtc_lib_test.c
-> index c30c759662e39b48..fd3210e39d37dbc6 100644
-> --- a/drivers/rtc/rtc_lib_test.c
-> +++ b/drivers/rtc/rtc_lib_test.c
-> @@ -85,8 +85,8 @@ static void rtc_time64_to_tm_test_date_range_1000(struct kunit *test)
->  }
->
->  static struct kunit_case rtc_lib_test_cases[] = {
-> -       KUNIT_CASE(rtc_time64_to_tm_test_date_range_1000),
-> -       KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_160000),
-> +       KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_1000),
-> +       KUNIT_CASE_VERY_SLOW(rtc_time64_to_tm_test_date_range_160000),
->         {}
->  };
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 9b773406e01f3c43..4e3c1cae5b41466e 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -183,6 +183,17 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
->                 { .run_case = test_name, .name = #test_name,    \
->                   .attr.speed = KUNIT_SPEED_SLOW, .module_name = KBUILD_MODNAME}
->
-> +/**
-> + * KUNIT_CASE_VERY_SLOW - A helper for creating a &struct kunit_case
-> + * with the very slow attribute
-> + *
-> + * @test_name: a reference to a test case function.
-> + */
-> +
-> +#define KUNIT_CASE_VERY_SLOW(test_name)                        \
-> +               { .run_case = test_name, .name = #test_name,    \
-> +                 .attr.speed = KUNIT_SPEED_VERY_SLOW, .module_name = KBUILD_MODNAME}
-> +
->  /**
->   * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_case
->   *
-> diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-> index 6bbe0025b0790bd2..92099c67bb21d0a4 100644
-> --- a/lib/kunit/try-catch.c
-> +++ b/lib/kunit/try-catch.c
-> @@ -56,7 +56,8 @@ static unsigned long kunit_test_timeout(void)
->          * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
->          * the task will be killed and an oops generated.
->          */
-> -       return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-> +       // FIXME times ten for KUNIT_SPEED_VERY_SLOW?
-> +       return 10 * 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
->  }
->
->  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-> --
-> 2.43.0
->
+On 18/03/2025 02:40, Antonio Quartulli wrote:
+> Notable changes since v23:
+> * dropped call to netif_tx_start/stop_all_queues()
+> * dropped NETIF_F_HW_CSUM and NETIF_F_RXCSUM dev flags
+> * dropped conditional call to skb_checksum_help() due to the point above
+> * added call to dst_cache_reset() in nl_peer_modify()
+> * dropped obsolete comment in ovpn_peer_keepalive_work()
+> * reversed scheduling delay computation in ovpn_peer_keepalive_work()
+> 
+> Please note that some patches were already reviewed/tested by a few
+> people. These patches have retained the tags as they have hardly been
+> touched.
+> 
+> The latest code can also be found at:
+> 
+> https://github.com/OpenVPN/ovpn-net-next
+> 
+> Thanks a lot!
+> Best Regards,
+> 
+> Antonio Quartulli
+> OpenVPN Inc.
+> 
+> ---
+> Antonio Quartulli (23):
+>        net: introduce OpenVPN Data Channel Offload (ovpn)
+>        ovpn: add basic netlink support
+>        ovpn: add basic interface creation/destruction/management routines
+>        ovpn: keep carrier always on for MP interfaces
+>        ovpn: introduce the ovpn_peer object
+>        ovpn: introduce the ovpn_socket object
+>        ovpn: implement basic TX path (UDP)
+>        ovpn: implement basic RX path (UDP)
+>        ovpn: implement packet processing
+>        ovpn: store tunnel and transport statistics
+>        ovpn: implement TCP transport
+>        skb: implement skb_send_sock_locked_with_flags()
+>        ovpn: add support for MSG_NOSIGNAL in tcp_sendmsg
+>        ovpn: implement multi-peer support
+>        ovpn: implement peer lookup logic
+>        ovpn: implement keepalive mechanism
+>        ovpn: add support for updating local or remote UDP endpoint
+>        ovpn: implement peer add/get/dump/delete via netlink
+>        ovpn: implement key add/get/del/swap via netlink
+>        ovpn: kill key and notify userspace in case of IV exhaustion
+>        ovpn: notify userspace when a peer is deleted
+>        ovpn: add basic ethtool support
+>        testing/selftests: add test tool and scripts for ovpn module
+> 
+>   Documentation/netlink/specs/ovpn.yaml              |  367 +++
+>   Documentation/netlink/specs/rt_link.yaml           |   16 +
+>   MAINTAINERS                                        |   11 +
+>   drivers/net/Kconfig                                |   15 +
+>   drivers/net/Makefile                               |    1 +
+>   drivers/net/ovpn/Makefile                          |   22 +
+>   drivers/net/ovpn/bind.c                            |   55 +
+>   drivers/net/ovpn/bind.h                            |  101 +
+>   drivers/net/ovpn/crypto.c                          |  211 ++
+>   drivers/net/ovpn/crypto.h                          |  145 ++
+>   drivers/net/ovpn/crypto_aead.c                     |  409 ++++
+>   drivers/net/ovpn/crypto_aead.h                     |   29 +
+>   drivers/net/ovpn/io.c                              |  455 ++++
+>   drivers/net/ovpn/io.h                              |   34 +
+>   drivers/net/ovpn/main.c                            |  330 +++
+>   drivers/net/ovpn/main.h                            |   14 +
+>   drivers/net/ovpn/netlink-gen.c                     |  213 ++
+>   drivers/net/ovpn/netlink-gen.h                     |   41 +
+>   drivers/net/ovpn/netlink.c                         | 1250 ++++++++++
+>   drivers/net/ovpn/netlink.h                         |   18 +
+>   drivers/net/ovpn/ovpnpriv.h                        |   57 +
+>   drivers/net/ovpn/peer.c                            | 1364 +++++++++++
+>   drivers/net/ovpn/peer.h                            |  163 ++
+>   drivers/net/ovpn/pktid.c                           |  129 ++
+>   drivers/net/ovpn/pktid.h                           |   87 +
+>   drivers/net/ovpn/proto.h                           |  118 +
+>   drivers/net/ovpn/skb.h                             |   61 +
+>   drivers/net/ovpn/socket.c                          |  244 ++
+>   drivers/net/ovpn/socket.h                          |   49 +
+>   drivers/net/ovpn/stats.c                           |   21 +
+>   drivers/net/ovpn/stats.h                           |   47 +
+>   drivers/net/ovpn/tcp.c                             |  592 +++++
+>   drivers/net/ovpn/tcp.h                             |   36 +
+>   drivers/net/ovpn/udp.c                             |  442 ++++
+>   drivers/net/ovpn/udp.h                             |   25 +
+>   include/linux/skbuff.h                             |    2 +
+>   include/uapi/linux/if_link.h                       |   15 +
+>   include/uapi/linux/ovpn.h                          |  109 +
+>   include/uapi/linux/udp.h                           |    1 +
+>   net/core/skbuff.c                                  |   18 +-
+>   net/ipv6/af_inet6.c                                |    1 +
+>   net/ipv6/udp.c                                     |    1 +
+>   tools/testing/selftests/Makefile                   |    1 +
+>   tools/testing/selftests/net/ovpn/.gitignore        |    2 +
+>   tools/testing/selftests/net/ovpn/Makefile          |   31 +
+>   tools/testing/selftests/net/ovpn/common.sh         |   92 +
+>   tools/testing/selftests/net/ovpn/config            |   10 +
+>   tools/testing/selftests/net/ovpn/data64.key        |    5 +
+>   tools/testing/selftests/net/ovpn/ovpn-cli.c        | 2395 ++++++++++++++++++++
+>   tools/testing/selftests/net/ovpn/tcp_peers.txt     |    5 +
+>   .../testing/selftests/net/ovpn/test-chachapoly.sh  |    9 +
+>   .../selftests/net/ovpn/test-close-socket-tcp.sh    |    9 +
+>   .../selftests/net/ovpn/test-close-socket.sh        |   45 +
+>   tools/testing/selftests/net/ovpn/test-float.sh     |    9 +
+>   tools/testing/selftests/net/ovpn/test-tcp.sh       |    9 +
+>   tools/testing/selftests/net/ovpn/test.sh           |  113 +
+>   tools/testing/selftests/net/ovpn/udp_peers.txt     |    5 +
+>   57 files changed, 10054 insertions(+), 5 deletions(-)
+> ---
+> base-commit: 702e3fa16cd42ba712825e8d6171ea4755bc0491
+> change-id: 20241002-b4-ovpn-eeee35c694a2
+> 
+> Best regards,
 
---000000000000710de00631628ece
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
-N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
-exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
-+ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
-XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
-QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
-TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
-oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
-cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
-uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
-PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgzByQRcYnaQenoVp6PPSPaSERQfUC
-Y2kvpHb3/e42Fq0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MzI4MDgwNzA2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAENVM3tz7uK7WnnOPenb8ndbSNXfYUw+dlmCZg0o588AL5TItjC8+DQOpjjc3Ffkd
-p6Ru68g15xjTr8fM+MDpPmeTApSBiIAVb8tCUtRBEZTvfbceKhwK8zKZtfW0/RV6CeCxgA9s5GM/
-HUce3WieuT88uVbtGuKvw+ifmBf7OhDfjfCeF+0ZIxyTHE7Ti+qDMAZxr+B4Z8GCpGITuhsYAkbm
-+GEfhMp40fWsm7+e5QReajIccOXJCP1K98KQbrDWdyTSveoE/xQ10SIn/UJrkav5zNTP1/0mMGT4
-qjyYKXqkCGIakGinJYdVAymM8UVD13SAcpQQv0gEfuwRdBfaPg==
---000000000000710de00631628ece--
 
