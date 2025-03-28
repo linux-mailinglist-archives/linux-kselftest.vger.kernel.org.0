@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-29886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55E3DA74CB4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 15:32:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3169EA74CA1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 15:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA0101722DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 14:29:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD3E37A3A28
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 14:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEA921C9FF;
-	Fri, 28 Mar 2025 14:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF84C21D3D0;
+	Fri, 28 Mar 2025 14:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XOgJHHmH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyzKF0JW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAA921C9EA;
-	Fri, 28 Mar 2025 14:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5391B4F15;
+	Fri, 28 Mar 2025 14:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743172098; cv=none; b=RFZt5AYi1jHSwBOi9HkRAgughSigZmPlepUa0wHAY+rM+wQnWaeNX8/xwQUDLQt0PC93EjtqppGtE/tLmBtcdOjzBd7zhh00bD3ovogkt2W6Gqt7QS9V2Wm+ggDd8qSQRJrc8pmz3AhGNw92ZKvLSOpBnlw3NFA9+dGx2Mqg3yY=
+	t=1743172101; cv=none; b=MQiGUKdMprmTIKAhjO7pFMM8nAtbk/eQV6Tz810jiqX/Un3yKgA2D2EsDrz7Kp8blQUPPFemzzwRqplWd5HCGWUXU8rRPGeZ8p93+h/6anCqxwvIRlWNApz3SpoKE7Kw7eAvHIfKlTSnOGqzPIBzeQFr0uBB1KGzxEN9bYvvcTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743172098; c=relaxed/simple;
-	bh=pR7ZsBtXGnaffvDzR3G0f+xtFYL/1NJWJsq/1XvaP14=;
+	s=arc-20240116; t=1743172101; c=relaxed/simple;
+	bh=huDQ4vgkjBwI5c/TpdXiJlPetTIhi7oSTen6uASUw+U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TttubRbLtcu7W9CKcrWHZLUxqC4stBw9M969mdqCFvT4fhGAZny4ykPsflGF43SMxOLGAx6Elu4nz0Arx5H4vOH5SV4DgGOOMNCSVBcaqqK6OFXqt5jHCY02F9VLqTusSxtJAeGgtLpJ3LoMMBGEXwxScRIDDXKEjWEIBEN4xuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XOgJHHmH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32AACC4CEEA;
-	Fri, 28 Mar 2025 14:28:14 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=KG1hPLDCnOu/maB5FuV7SWZjP5krDDYtgyg5AuQilmB4KK1jz3NsC4IYAmSLuyZaVzEglJH5IeE116sNkNo/iEvoiRTncBE4vYLxKrz2MRCOuGlYXfmuL7kUgL0am4qMtZXoHkikVIoX3vBJwg7Pt1JHlI5GkF4+cY1EvrDNueA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyzKF0JW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E21C4CEE4;
+	Fri, 28 Mar 2025 14:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743172097;
-	bh=pR7ZsBtXGnaffvDzR3G0f+xtFYL/1NJWJsq/1XvaP14=;
+	s=k20201202; t=1743172101;
+	bh=huDQ4vgkjBwI5c/TpdXiJlPetTIhi7oSTen6uASUw+U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=XOgJHHmHqS7/tfLxYg9SAp5uZMO2fkVPNFIBycOsswwoXPofe46AwJaWteldjBC0f
-	 KDpr5xj2PKw25vGwOH5445L7xWUi5c9PAKFN+7XnL7rzkQa0+hcphN36Xr7NsVN6ir
-	 L8f3N6G0+5zKJVGfinLdfszK/55goH+bAfOZ4T/1bF2YjVgTp0E3Vg//p3X8TYHmqn
-	 H1Wpfa1Ldfy4/ho5E6QgeVawjRmnAjQcRywlrgdCKfW0HZQW3QpUtnZp6E2vUa6QDo
-	 wXMD+ccmebSgJPgNR3RbZaSR1VS14Y7xCwLi6lG2QxKRmkJYWghooy+dj0oHmLg3DB
-	 VowqV7jyxk+YQ==
+	b=dyzKF0JWikCnB7HKrZmFCk8Lt8Xl5jWowejSsDXyvTQY20oDL5WTHBrdr6Sft3Nce
+	 vJQ8XqJgTXlavz8pvc66yAv+1WcvrDPpYoFUuGETOCi9PFX19Z8oACMvCaqSup3bEl
+	 m1JTyXzxPybWHqGp3EABD2QOSGzb1m5IkhnqYLX2hv3wjz2K0XLAWKPcuxH5WKy4XZ
+	 ZGMpAVk6zSEc8fHzSZzygxipCE1N0/e7bym5RGsD0ZYvUCtu6k6R0ZXdWA5ef7tBf7
+	 kazpM5gowIeu6p79ZEheauedQjC5tKfFXbLLbx9yZ+p/MHTO0J08XqaBZ997eTSgZE
+	 Phed4UQc3x9aA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 28 Mar 2025 15:27:18 +0100
-Subject: [PATCH net 3/4] selftests: mptcp: close fd_in before returning in
- main_loop
+Date: Fri, 28 Mar 2025 15:27:19 +0100
+Subject: [PATCH net 4/4] selftests: mptcp: ignore mptcp_diag binary
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250328-net-mptcp-misc-fixes-6-15-v1-3-34161a482a7f@kernel.org>
+Message-Id: <20250328-net-mptcp-misc-fixes-6-15-v1-4-34161a482a7f@kernel.org>
 References: <20250328-net-mptcp-misc-fixes-6-15-v1-0-34161a482a7f@kernel.org>
 In-Reply-To: <20250328-net-mptcp-misc-fixes-6-15-v1-0-34161a482a7f@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,67 +63,48 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Dmytro Shytyi <dmytro@shytyi.net>, Gang Yan <yangang@kylinos.cn>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
- Cong Liu <liucong2@kylinos.cn>, Geliang Tang <geliang@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1319; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=BATmZiZuy/W/ffocjWue1jFUcQe06Xg/5usGzRn674w=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn5rHsARxaxO00MS0AB6QHgVg6IwYBz4m0aRpHO
- vWjhh3OHcKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ+ax7AAKCRD2t4JPQmmg
- c9cKD/0RWsgah9b5ObqcTpttQVC8TRcZlz5IQMiEyoH25Ki7UTrez92SHxAgw4L5axK6J4R5YlZ
- kr5TnM5j3iqMmXc+mGRkSPJlkM8k4wCzdGuUX/kw8wkQ9y5kz7XNCGRj84P6rrmP5A2hpcSHNM/
- ygZjtap6mSsBhIih8Apl0/KASYihnzBuqtpHpJIYS6Q7+wczHvpHx3KLYRo3UR/Hsq1GqzuPAKO
- RAVU0gIQZUBcWPGmVTgE7HvzV5kPkSeFQk9sS1TVLWaepESnrg4V0/BUKeCevKUE86uwg0vVNdh
- P0jd0L55nrCBrOSQeizvkrQKLUrlhlboJ9PglWCFhIEhxtSkfP38EfGE3u0Fp9fpaJUjJZIyR2r
- +Fv8EW32R4esU8srm++oqjR0MfP+X15tZdMM0FTCw7C8hhtpWTzofjrB/dHdya3vrJfj8FDDhDr
- 54QGX2mU9vwsUMj36syTUZNUGEWjFaxkTpic2TUmU3cdghVULjPP1Ubp2lxPts/PYTH1H4TxTn4
- jYKkr4TohX8ZtfzdHYyuS6eAYzBBbogjaoNrgOW2Yr9O9BnuRdBiqtPN9pDoYLdhT3UDPiox5ns
- u9hiDhchLlF8jFdeK68K8Sfs0utVcFjulpDsl6leG4yFLpDc1An0vgoBdRtEdT6glHKRG5V7HKb
- 8yPlYVO/iXSpihw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=917; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=huDQ4vgkjBwI5c/TpdXiJlPetTIhi7oSTen6uASUw+U=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBn5rHsXJqxAQ434DU1KAL3sueAHT0ICgCs3bYA3
+ 4HFIxsYT2iJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ+ax7AAKCRD2t4JPQmmg
+ c+dSD/sFlsNkJp+W+2zDwXFLCWl+ajZ0L4vgRRzfGH2xBdnYTk5wYHDKGPwKDgiIDQRtIzoqL69
+ cGJ6JAvyP27k5jQYPaqfUEULi94nLo1blElJ9O7DWdS3AN4I75VpnHQmjOBb37v4hIms9cswdoo
+ Hj9mAtFZULR3xvit5tnogDmyV+XJmNA6J0JKjgum1vMyfoBp2VzP2CXZ0U/0HNZb3+hOYui+7Kc
+ mZJkzAyja8QN1BEW/xaq1Mc1GkDqy1qPQjRl4LD4SnD3FEXcD+6DHekcNwAOX/R9ypfYAiVPcyy
+ sV8cvcEWYurC8BJb1LEXd3tCEWPgCaVDpYx/qfLF824v1K2CqspFHnNkHLMazGjNH7Laaa7P+aF
+ /YcCotYwoBECyxZpMfFxzWfw2FddEyyzkLidgk82ApL12fdH9gvTqGugW+LFtUprQKhZ6Snaar7
+ rWgXeLhARzFW0B/sNKVr4fHQpLa6ntBQByS+3oIb4C31mJMi5Seu0E7RPiOReLSWDAUkc+M/guC
+ dZpLz3fqFj84NbWg2bYkBsHmKA/cIenDiogJsFfnPYOCp8+GQnRweM8YsJ8S6LSRziNAIqD7rca
+ FDgvd0FbrnIIBb/idFzImFsRGiIbS/juo2E/DJogiMHPtcNu4kcF1Ed31rBSyQqlRBRl4Hnlcad
+ UwdOHwvmVmAkBCQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+A new binary is now generated by the MPTCP selftests: mptcp_diag.
 
-The file descriptor 'fd_in' is opened when cfg_input is configured, but
-not closed in main_loop(), this patch fixes it.
+Like the other binaries from this directory, there is no need to track
+this in Git, it should then be ignored.
 
-Fixes: 05be5e273c84 ("selftests: mptcp: add disconnect tests")
-Cc: stable@vger.kernel.org
-Co-developed-by: Cong Liu <liucong2@kylinos.cn>
-Signed-off-by: Cong Liu <liucong2@kylinos.cn>
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Fixes: 00f5e338cf7e ("selftests: mptcp: Add a tool to get specific msk_info")
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_connect.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/mptcp/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-index 893dc36b12f607bec56a41c9961eff272a7837c7..c83a8b47bbdfa5fcf1462e2b2949b41fd32c9b14 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-@@ -1299,7 +1299,7 @@ int main_loop(void)
- 
- 	ret = copyfd_io(fd_in, fd, 1, 0, &winfo);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	if (cfg_truncate > 0) {
- 		shutdown(fd, SHUT_WR);
-@@ -1320,7 +1320,10 @@ int main_loop(void)
- 		close(fd);
- 	}
- 
--	return 0;
-+out:
-+	if (cfg_input)
-+		close(fd_in);
-+	return ret;
- }
- 
- int parse_proto(const char *proto)
+diff --git a/tools/testing/selftests/net/mptcp/.gitignore b/tools/testing/selftests/net/mptcp/.gitignore
+index 49daae73c41e6f86c6f0e47aa42426e5ad5c17e6..833279fb34e2dd74a27f16c26e44108029dd45e1 100644
+--- a/tools/testing/selftests/net/mptcp/.gitignore
++++ b/tools/testing/selftests/net/mptcp/.gitignore
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ mptcp_connect
++mptcp_diag
+ mptcp_inq
+ mptcp_sockopt
+ pm_nl_ctl
 
 -- 
 2.48.1
