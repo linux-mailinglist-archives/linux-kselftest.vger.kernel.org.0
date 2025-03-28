@@ -1,163 +1,132 @@
-Return-Path: <linux-kselftest+bounces-29891-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF0BA750FB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 20:43:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5CDFA75137
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 21:06:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C61C87A71AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 19:42:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24A2A7A326A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Mar 2025 20:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4441E5710;
-	Fri, 28 Mar 2025 19:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDDD1E51F0;
+	Fri, 28 Mar 2025 20:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="XyjY05Iw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ViI7O1Dn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f100.google.com (mail-qv1-f100.google.com [209.85.219.100])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9873E1E2821
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 19:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AF31DEFCD
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 20:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743190994; cv=none; b=SRH21aOUcDxHeF4C94wWsQ8bI5Y9dNyzvktzY5i4G6U3pUPPDuBQ2lz/GwKO/QuVbc8g442kEtEwpdon1bZ1Ka46m1PqSxq7+qzzLqjUJQROIU24nk5DC16gkb7pYJA+zHPCJrd+hpKG1oGTGZU8uZMSw5rPeaGq4PWfc1hjurc=
+	t=1743192349; cv=none; b=NY2GhWE5mK1LH0lAV/etkpuBYaGDVkx3vaQtaUxmiahDFEK9r+B8h1zLlohs9kPqOpL+dUqUJvRX2pfqxvhmjNTsLyUYWz6NXOjb74bH8w593SgMdxaJR42wYRtBEP7/28rc1yopghxPFo6xef+mBySOjz4wrSKJEKrZ6MtYqwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743190994; c=relaxed/simple;
-	bh=flOtsZf7EBjh13FNyMsTD/5FQtLGeN9iZpmU8bbk1i0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kc1KsTBp5XbG1vozqPsBPwXIFxWNaHoaRIgI8eo6IMtksd8LPRFMJteva9EWaIEVt8sV9cp6hRPWBvdW1dksx64EmUDqL/H3atbqLqh8/4MdtlqagPxu9fMMHzWpeNK/x69FVXZeEUuFdlP4mxjtxwX7OqiMkvJn66GLk8w2jAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=XyjY05Iw; arc=none smtp.client-ip=209.85.219.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-qv1-f100.google.com with SMTP id 6a1803df08f44-6e8fa2d467fso3630346d6.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 12:43:12 -0700 (PDT)
+	s=arc-20240116; t=1743192349; c=relaxed/simple;
+	bh=d+ng6SS3DMpFYw0JXF3SZ+iri7iewWW6WjynoYKoTGY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dGSnda36DksD8WFkTDtTGmPy7FSFHDjUkam59qrGaTWYs+o9DUvEZzfGdjILB6fhns6sktW1ixF+rgPOvK8ZItRvo/MfpThSFayMMLjWL7GE8TFk4gsv83YZ/kVy6+udoZjMLVgF1MeNGcx/LDhqpnxGYeWBdUUmSiSR44QwLMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ViI7O1Dn; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-85b5e49615aso220568939f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Mar 2025 13:05:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1743190991; x=1743795791; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mx6Kws4EehWQnJaxPytGf8blP84+Tos6v3LWW/hBgTg=;
-        b=XyjY05IwJf4CtrRETT91urQ3w1rKNhpRDzT57zdo7OEYwR3ZDB64EyuaT2BxVCt4+s
-         jZzpIxPNXfOBGdkbagHa+PPIMyZ0+FV1LJAcHr8C3jEP6+eFilqmlkapncB8zJbQQVWr
-         qfx5Q8sWGqkidWiXE6lGInnI/xPnWTSz/5mEd+JLAlC0bKQnTLsp2UgT+RWjsMkAgTuK
-         jylwsyFtAexyLd30ltuA04rsZbdK4u7H70y3uiCjeTiFrII9pyyNyytxd89zkhYugIRW
-         oiCJ+MlBOnku7vM0Z3Uvzfm9Q028K61jHBqFVvmwtC7zhVfh9oi3mMm2GWvPO+jG1JqH
-         HxRw==
+        d=linuxfoundation.org; s=google; t=1743192346; x=1743797146; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E8Atfv4IVEOUanvfYjqZzwOBPOlf/x7n/JGPGqoqy0w=;
+        b=ViI7O1DnHo551fHNMN4ch4TnhhR+EskCsirGJ/22ZOZ2AXEqV89hnyUVMmtiNSj+QO
+         iil9qZ6/HScPgZA2L0kPgCiDzMtQ+/PD7R132Rh0EgSD0yf6cXMqp8YhWt8hj7X1aGlC
+         zZ7o6s5Zo9TW8vP9jrgg4Ye0qeoCJS3EC9Ofs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743190991; x=1743795791;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mx6Kws4EehWQnJaxPytGf8blP84+Tos6v3LWW/hBgTg=;
-        b=oR6Kt/syJxFU3UAQ68H+hL9zJ6aSbj+E4fMEelehqsjzHBUKdgLaAoc6KCXGs8CGEG
-         A49gXpvOCbYzs5cLa4UpgkmSqhBCP/evD/YS5E+x/1z4CL5xbCSizTNodaLTgvt76hgC
-         jRVzrKDi+579BiDebDjvDRYTVLupnu6AIEolMjzUt18j2BqEwsBzIuViXOeaelrBqnuN
-         Htl2gLgN/xMiWyBim6IfeAKUXQj104hRL3TDpq2QE9FsjtAZlFVeVPc/gPXY6+ciD1Ii
-         UrWhlwTeBrWN9hm1nxD6LwPTWnyC5WN9YoZ6WjekGmUeDGOmLKpERpAyxiOQ1FEHqeGq
-         Sfuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIU5Pb0h3aXaqEQoeu66WbPF94AvQN8vaQja7Hjpnhbvl3UyavNGeS0khQtkyyQ4Udz3mQ7TWT+Vj7Jno16rs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWcpYg1mv36mD187xthlSQjLq0RCxq62n9l2Zs0z1IrI6vx+4y
-	Pj3+k/6h12xWApxznjz9Nwe6enUOiFdIr4o3kE25Wssc9gMN+xtDAX7eV7hkO3YpgTNsqW4LZjK
-	8dmtj9C7y5RnZWTQZjPzUe3pCVugAPHfu
-X-Gm-Gg: ASbGncuDNGi/9KaFS5Nm9QQiV70M87VSiC5/4oDGRNSr05jx5Go+DDq57IwSfdW9Vzy
-	JmZxXRl24hVCAi7GaP2kONPcAZoGxcJdLyiukQBHER4zn5tDn+PkITNqw3V2tWqjfkQ6Npp9fwm
-	T2GCLFyJO8LgKw3mVq1zDvaEGOlXY8v32LBu/gBmnzPQ0pVKStKCXkiOsRaRnrQq925ofcPdaW/
-	wYHhwyje6g2lEe/Xm36HU1HbVPudGJHiI5DkBwoIOrnbMIswRDJ4b0L8nE5F/5KZKnm8T+3UW2j
-	dnJQwHgLxBMhZ2lg9OW9vCjV4VrmluLICLLXmeyP376B5FAe
-X-Google-Smtp-Source: AGHT+IFQh9Pcs5CAbScmakAUo+ucuKKnoyChirklEpCbSZtv64yiMBBKapJk+vPUTDfe74Ad8xyLWKkPfmB2
-X-Received: by 2002:ad4:596f:0:b0:6e8:9ed4:140c with SMTP id 6a1803df08f44-6eed61f0b0bmr1762166d6.7.1743190991334;
-        Fri, 28 Mar 2025 12:43:11 -0700 (PDT)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-6eec963b60bsm2865306d6.17.2025.03.28.12.43.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Mar 2025 12:43:11 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 479CE3402DD;
-	Fri, 28 Mar 2025 13:43:10 -0600 (MDT)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 3CDC7E40DF3; Fri, 28 Mar 2025 13:42:40 -0600 (MDT)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 2/2] selftests: ublk: specify io_cmd_buf pointer type
-Date: Fri, 28 Mar 2025 13:42:30 -0600
-Message-ID: <20250328194230.2726862-3-csander@purestorage.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250328194230.2726862-1-csander@purestorage.com>
-References: <20250328194230.2726862-1-csander@purestorage.com>
+        d=1e100.net; s=20230601; t=1743192346; x=1743797146;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E8Atfv4IVEOUanvfYjqZzwOBPOlf/x7n/JGPGqoqy0w=;
+        b=roPJYbTUBRzcLXDmiI43ydBqVx1h2uI8tIydnI3GHQuIiMG9V5eoi9epmQ4QDAkNri
+         QlXl0UjHuMYCoT4WPqKt86jH9XRz0b1VfKB/qzbbZf+v5JIM/ORWDHWSED5iZm2AQpr9
+         5Bz7RS+dTEoTeqtheIkuv9AN4h7Y+oamije3FaEVQcXHXYQx5xCAPicEKJ0I8Gvmn88I
+         XqncUAHH00/V195YPuMM1QeL/Orr2jURnwbIR3IoPM2WoJF/pfba1J2OLyfoo+7cP5ui
+         UL+6rWTwLqXyq8I83HFRb2nPcnYOvBgkH9s8G0plJnVH21Gmfe9YxjDl7JZGl7t+ukkJ
+         Vzbw==
+X-Gm-Message-State: AOJu0YzMczyvghd4gMle6QbpNtdF+Y/bCJ9wcdnpEG5phYBdbEjkI1vv
+	OrYsUBLuOUcPJEp5OPN9lO7bS3rDhGe3l5yAagYwrgHaC1jcmh7kTQ93Ha4kMJg=
+X-Gm-Gg: ASbGncsT0LhTeirNqKFtaEFili4y1Dz6aQKx628QrIfljGKAywmYouDKWc8dZL5jNkv
+	/4oupbpf2IBcUx8u25mEzymHoG8LkBNsy3C0uNWCSEwIjmgo9ZbjM59utFdwizrh2Cgkfrmpe40
+	cqklPY/wf+AqAi10YatPzPInynzkV59S4tCaHH9dQ5PY8H7wh0Y3+ztQNBD2G0Gqj+63mi6kuFz
+	RAWl+gCIQszZFJZze5sfZNOodrAXVwdRsWtg3BoXx7QeLcawHmLwnDrSst9Pa8vhcrWDtHUHUf/
+	iuw3/nMaQp4+KglaJ7/oOy8w5yDtN/7WEUeZ70EWfg40Oj5DfPreyFU=
+X-Google-Smtp-Source: AGHT+IFFxZyiA9Ag1U7uneUhl0+Bjjfwis0cJdT3pe/r/icCiPwaGKDp4+SCqYja3aaGf4HhiwadPw==
+X-Received: by 2002:a05:6602:c81:b0:85b:4154:7906 with SMTP id ca18e2360f4ac-85e9e86455dmr88526239f.5.1743192345833;
+        Fri, 28 Mar 2025 13:05:45 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f464751f0csm595377173.54.2025.03.28.13.05.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Mar 2025 13:05:45 -0700 (PDT)
+Message-ID: <4424b86b-b80d-4fdc-ba56-5cea5dc0b9a4@linuxfoundation.org>
+Date: Fri, 28 Mar 2025 14:05:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/run_kselftest.sh: Use readlink if realpath is
+ not available
+To: Yosry Ahmed <yosry.ahmed@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250318160510.3441646-1-yosry.ahmed@linux.dev>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250318160510.3441646-1-yosry.ahmed@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Matching the ublk driver, change the type of io_cmd_buf from char * to
-struct ublksrv_io_desc *.
+On 3/18/25 10:05, Yosry Ahmed wrote:
+> 'realpath' is not always available,  fallback to 'readlink -f' if is not
+> available. They seem to work equally well in this context.
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
----
- tools/testing/selftests/ublk/kublk.c | 2 +-
- tools/testing/selftests/ublk/kublk.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Can you add more specifics on "realpath" is not always available,"
 
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index 05147b53c361..83756f97c26e 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -320,11 +320,11 @@ static int ublk_queue_init(struct ublk_queue *q)
- 		q->state |= UBLKSRV_ZC;
- 	}
- 
- 	cmd_buf_size = ublk_queue_cmd_buf_sz(q);
- 	off = UBLKSRV_CMD_BUF_OFFSET + q->q_id * ublk_queue_max_cmd_buf_sz();
--	q->io_cmd_buf = (char *)mmap(0, cmd_buf_size, PROT_READ,
-+	q->io_cmd_buf = mmap(0, cmd_buf_size, PROT_READ,
- 			MAP_SHARED | MAP_POPULATE, dev->fds[0], off);
- 	if (q->io_cmd_buf == MAP_FAILED) {
- 		ublk_err("ublk dev %d queue %d map io_cmd_buf failed %m\n",
- 				q->dev->dev_info.dev_id, q->q_id);
- 		goto fail;
-diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
-index f31a5c4d4143..760ff8ffb810 100644
---- a/tools/testing/selftests/ublk/kublk.h
-+++ b/tools/testing/selftests/ublk/kublk.h
-@@ -126,11 +126,11 @@ struct ublk_queue {
- 	int q_depth;
- 	unsigned int cmd_inflight;
- 	unsigned int io_inflight;
- 	struct ublk_dev *dev;
- 	const struct ublk_tgt_ops *tgt_ops;
--	char *io_cmd_buf;
-+	struct ublksrv_io_desc *io_cmd_buf;
- 	struct io_uring ring;
- 	struct ublk_io ios[UBLK_QUEUE_DEPTH];
- #define UBLKSRV_QUEUE_STOPPING	(1U << 0)
- #define UBLKSRV_QUEUE_IDLE	(1U << 1)
- #define UBLKSRV_NO_BUF		(1U << 2)
-@@ -300,11 +300,11 @@ static inline void ublk_mark_io_done(struct ublk_io *io, int res)
- 	io->result = res;
- }
- 
- static inline const struct ublksrv_io_desc *ublk_get_iod(const struct ublk_queue *q, int tag)
- {
--	return (struct ublksrv_io_desc *)&(q->io_cmd_buf[tag * sizeof(struct ublksrv_io_desc)]);
-+	return &q->io_cmd_buf[tag];
- }
- 
- static inline void ublk_set_sqe_cmd_op(struct io_uring_sqe *sqe, __u32 cmd_op)
- {
- 	__u32 *addr = (__u32 *)&sqe->off;
--- 
-2.45.2
+No issues with the patch itself. I would like to know the cases
+where "realpath" command is missing.
+
+
+> 
+> Signed-off-by: Yosry Ahmed <yosry.ahmed@linux.dev>
+> ---
+>   tools/testing/selftests/run_kselftest.sh | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+> index 50e03eefe7ac7..0443beacf3621 100755
+> --- a/tools/testing/selftests/run_kselftest.sh
+> +++ b/tools/testing/selftests/run_kselftest.sh
+> @@ -3,7 +3,14 @@
+>   #
+>   # Run installed kselftest tests.
+>   #
+> -BASE_DIR=$(realpath $(dirname $0))
+> +
+> +# Fallback to readlink if realpath is not available
+> +if which realpath > /dev/null; then
+> +        BASE_DIR=$(realpath $(dirname $0))
+> +else
+> +        BASE_DIR=$(readlink -f $(dirname $0))
+> +fi
+> +
+>   cd $BASE_DIR
+>   TESTS="$BASE_DIR"/kselftest-list.txt
+>   if [ ! -r "$TESTS" ] ; then
+
+thanks,
+-- Shuah
 
 
