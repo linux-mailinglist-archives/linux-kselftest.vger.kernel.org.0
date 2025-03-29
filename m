@@ -1,116 +1,128 @@
-Return-Path: <linux-kselftest+bounces-29919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29920-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E168EA757BA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Mar 2025 20:49:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF87BA757F4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Mar 2025 23:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DF64188B44E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Mar 2025 19:49:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D8F63AC3B7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Mar 2025 22:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5791C6F55;
-	Sat, 29 Mar 2025 19:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938611DED5B;
+	Sat, 29 Mar 2025 22:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oQb4YGbw"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LPcheZpm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8413C1DF27D
-	for <linux-kselftest@vger.kernel.org>; Sat, 29 Mar 2025 19:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A6718BBA8;
+	Sat, 29 Mar 2025 22:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743277739; cv=none; b=NYSPTNMRjnnOUXPTHbtnzN9VHhN1HVJCSZD46ji5+RYW/jecx5G5qba0KOmj9MiltA+OQ6XLimXy+yhGz8MQz8KDJ9gYM8GFVsdUxE64DStJvuGPCVjcYz+h+jTWvKXPxXDPhFXyJTC0LSgV1sF7f1cUJH2TBykDhKFRuBkGrVI=
+	t=1743286200; cv=none; b=gugblCd59AV0bJuleKcHbCpsgzRj54UFQ8a1NvZK+TFOYx3Ag5ZbPuqbqB+61MWXbeM17nVmktUOgrLwKKkTJgHE2g0a4FfjDznfVmRnxyp0nV5tKseAIqXhx4Ev8pQ9OAkAj1eFXoLtEjeq17QK4BnOKb3u+/Da4Pi70hZyg7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743277739; c=relaxed/simple;
-	bh=S2ETKIN3HmHFqIShbmrAWQBXkDhzl2QluIFt7rG1VLE=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=LujWE+C0K4XQvkqrWWGwEmyyhper+np4s5lZHHr4e55YfiQN31MAdWUec2w5bnm/vSMj4ZvJqSgXy8QX+2grEhkKDZ4ibXrirwZ8yvtmVQ2+m9xEdpy1chgsfh6hoLiPdb5BYj+0WXOX1wWOXcawRIl4OBoLRcFRBcN6lMFKaGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oQb4YGbw; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1743286200; c=relaxed/simple;
+	bh=sGUeygAZUCaVivsjULZD/E86y2O37vmLM5Cqp7eRfCM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=I2rUKWZ8oNJwEbuJzdT2yX6g49NgXi17Shczgbc8Sj110OAI+SJK/9/IdpkPpu3nsjoheiNxv6x60XV4SsfyQGuIG1iXRYWsY4c+BTcr/7+c+V2hWFlRarFmMLSC37dpdsw3LYQgeU3rMIb8dNBVMwbPq6LUsOuVXcQaihyGHp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LPcheZpm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1743286193;
+	bh=TSrXCN10LxvinHZFJvppglU0ohO08fr4kTSwHDOmZg8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LPcheZpmeUhF/uz3TQCswx3B8fIRGuKJYz4+bqGflUWCl7tqjCfvADH+Ef9cpM1Iq
+	 b8MsCKIOjdVkvy188j96AIn3coeq/xKJejv5EXrqAg+rTZowELbVV+UqfjvB8jJVEB
+	 eJ+5I4eEcUJCXfw13QLLey25dakM7prh0DYlj+FyM3J9jjZVHqad8YdF1QbR9dYMXd
+	 5ok11OYGMq8LrBDVeBHbnq1U240Y4HxWYEC4j1CJOYSecxgni1uxm+MZXp8p6bYI5o
+	 E914X3DDOaTZt1FHfWN+aJTs2iORAENixiIdcijngEw8bFJosfRHdfAP+VN4vdUU01
+	 eyh4wlMEw6OTw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZQBQP2N6vz4wcD;
+	Sun, 30 Mar 2025 09:09:49 +1100 (AEDT)
+Date: Sun, 30 Mar 2025 09:09:46 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alessandro Carminati <acarmina@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, Dan Carpenter
+ <dan.carpenter@linaro.org>, Daniel Diaz <daniel.diaz@linaro.org>, David Gow
+ <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>, Brendan
+ Higgins <brendan.higgins@linux.dev>, Naresh Kamboju
+ <naresh.kamboju@linaro.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Maxime Ripard <mripard@kernel.org>, Ville Syrjala
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>, Guenter
+ Roeck <linux@roeck-us.net>, Alessandro Carminati
+ <alessandro.carminati@gmail.com>, Jani Nikula <jani.nikula@intel.com>,
+ Shuah Khan <skhan@linuxfoundation.org>, Mickael Salaun <mic@digikod.net>,
+ Kees Cook <kees@kernel.org>, dri-devel@lists.freedesktop.org,
+ kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-next@vger.kernel.org
+Subject: Re: [PATCH] kunit: fixes Compilation error on s390
+Message-ID: <20250330090946.3f7d0c00@canb.auug.org.au>
+In-Reply-To: <20250329150320.331018-1-acarmina@redhat.com>
+References: <20250329150320.331018-1-acarmina@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1743277734;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8NrzsJEiSUtPBug58DYaBN5O7dfjQmdHlytyRfQtgL8=;
-	b=oQb4YGbw8Y1wluPqYukbBkLBulwPbI4/P9Qiw12J4E5vQgg02ymJG/yoqXitiUgl+SocUx
-	Ok4EWe/gNuYNS3fpEuuAZJrPkGxoB82V4QDQ5JHr/yjlYQv1FhSeBKJq4e5YUHeydH8xPN
-	GwhIt/l9sKPt39DauEll12A5me7nkQU=
-Date: Sat, 29 Mar 2025 19:48:52 +0000
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; boundary="Sig_/WIRnLKoDx7qC7ang90AEz=l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/WIRnLKoDx7qC7ang90AEz=l
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yosry Ahmed" <yosry.ahmed@linux.dev>
-Message-ID: <42f679b4fac5f6425232e4873acb00d50a5fb8e3@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH] selftests/run_kselftest.sh: Use readlink if realpath is
- not available
-To: "Shuah Khan" <skhan@linuxfoundation.org>, "Shuah Khan" <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, "Shuah
- Khan" <skhan@linuxfoundation.org>
-In-Reply-To: <4424b86b-b80d-4fdc-ba56-5cea5dc0b9a4@linuxfoundation.org>
-References: <20250318160510.3441646-1-yosry.ahmed@linux.dev>
- <4424b86b-b80d-4fdc-ba56-5cea5dc0b9a4@linuxfoundation.org>
-X-Migadu-Flow: FLOW_OUT
 
-March 28, 2025 at 10:05 PM, "Shuah Khan" <skhan@linuxfoundation.org> wrot=
-e:
->=20
->=20On 3/18/25 10:05, Yosry Ahmed wrote:
->=20
->=20> 'realpath' is not always available, fallback to 'readlink -f' if is=
- not
-> >  available. They seem to work equally well in this context.
->=20
->=20Can you add more specifics on "realpath" is not always available,"
-> No issues with the patch itself. I would like to know the cases
-> where "realpath" command is missing.
+Hi Alessandro,
 
-Not all distros have realpath. In my case, it was an internal distro we u=
-se on some test machines, so I can't really share much details about it.
-
-Thanks.
-
-> >=20
->=20> Signed-off-by: Yosry Ahmed <yosry.ahmed@linux.dev>
-> >  ---
-> >  tools/testing/selftests/run_kselftest.sh | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >  diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testin=
-g/selftests/run_kselftest.sh
-> >  index 50e03eefe7ac7..0443beacf3621 100755
-> >  --- a/tools/testing/selftests/run_kselftest.sh
-> >  +++ b/tools/testing/selftests/run_kselftest.sh
-> >  @@ -3,7 +3,14 @@
-> >  #
-> >  # Run installed kselftest tests.
-> >  #
-> >  -BASE_DIR=3D$(realpath $(dirname $0))
-> >  +
-> >  +# Fallback to readlink if realpath is not available
-> >  +if which realpath > /dev/null; then
-> >  + BASE_DIR=3D$(realpath $(dirname $0))
-> >  +else
-> >  + BASE_DIR=3D$(readlink -f $(dirname $0))
-> >  +fi
-> >  +
-> >  cd $BASE_DIR
-> >  TESTS=3D"$BASE_DIR"/kselftest-list.txt
-> >  if [ ! -r "$TESTS" ] ; then
->=20
->=20thanks,
->=20
->=20-- Shuah
+On Sat, 29 Mar 2025 15:03:20 +0000 Alessandro Carminati <acarmina@redhat.co=
+m> wrote:
 >
+> The current implementation of suppressing warning backtraces uses __func_=
+_,
+> which is a compile-time constant only for non -fPIC compilation.
+> GCC's support for this situation in position-independent code varies acro=
+ss
+> versions and architectures.
+>=20
+> On the s390 architecture, -fPIC is required for compilation, and support
+> for this scenario is available in GCC 11 and later.
+>=20
+> Fixes:  d8b14a2 ("bug/kunit: core support for suppressing warning backtra=
+ces")
+>=20
+> Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+
+Please keep all the commit message tags together at the end of the
+commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/WIRnLKoDx7qC7ang90AEz=l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfob6oACgkQAVBC80lX
+0GybxAf9H9ESwyhD70HQ69NJ+Nl9QTfMPqlHp3iI7S5xCMmQYhxEubw9tN0gwuqm
+XPhDsYd5E+HWmFto3OHhhb/j1RIISTphA3Q4b3k2wJEfQIhZBxr0c/TKGksx2/4s
+Dyi6/ZeLGYdsreC2DI4x+SiUUYKWXawMmKcXolS3uQgLwv/QLPtY7U6RoLbYSXTC
+AznTMEPBDyUJqzbITKGSQBQ3YpvfVSj2tbPIxckLHWD7QLQ6HZf3RRSDwtMYoSEs
+U3U9jr4uOlSWsfJkMRpaUBS9v1EZtTWxp22eBZCjOdBDzA+kTiP7CcpgJziILKQY
++SGFpT9uoGyFrJOiQMWK8lVoYFRdUg==
+=AsrT
+-----END PGP SIGNATURE-----
+
+--Sig_/WIRnLKoDx7qC7ang90AEz=l--
 
