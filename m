@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-29935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29937-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCCC3A75CEB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 23:56:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5686A75CEF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 23:56:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6FFE188A8F7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 21:56:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0F39188AD0B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 21:56:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD4C1E520E;
-	Sun, 30 Mar 2025 21:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98CC1E5B66;
+	Sun, 30 Mar 2025 21:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yh/owj/o"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FUh1arbT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4EC1E47A3
-	for <linux-kselftest@vger.kernel.org>; Sun, 30 Mar 2025 21:54:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F521E521F
+	for <linux-kselftest@vger.kernel.org>; Sun, 30 Mar 2025 21:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743371647; cv=none; b=cbSljWgx3ljaqqps54A+Zb8KTOeuwpwfSliG6rwuq5i5s3b05iFvUdvK+cU0/o7yNnx3Bki3MLR+I4qgGDz88mzhtN5C/JRFx/Oe8/65Pk12poePDo78cOy42etMed2ZX3myZJbw4v22QaccDLA/0tZn8ZzsQ6upHgqgVcJqVvA=
+	t=1743371649; cv=none; b=f81HxswEYX3ghB1OdX5FEISZkejBiDsW4d0rCEs4rZz8oG2iIPcoAxqfC1VTfnteA2AhBn5kTFcxPgdwRgSVr7GlGToomas7i6vFw4dk2HgINtj6A6BowDCaftnbWb9rTmNSi9HWrBehWDM9G4RYKVPrvCTK3PKPOXq9qDFdhaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743371647; c=relaxed/simple;
-	bh=X6qEyyM62Rhm4nq9aLITTboCNm1IH474NxPhm04k+04=;
+	s=arc-20240116; t=1743371649; c=relaxed/simple;
+	bh=kctpo9J9KWhQO+Td/9xcOa96QG1Xvi2mfONXtYgkJZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i2TMbEm+E+LfmpIWYk86UpxmzUSdoIY4vyQZ0G/Gj9CAX9dsK/zSa58gHZemJyDh9waAfgB10UMUfidZU8NapHO987lnf0wsHNk8VbWiYivZWNX5j1ySu0hP0geOpxMjXv92nws4jCf1CYa6YdV5ftzmvGh5gGT/2PMb3dXXTLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yh/owj/o; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=fNcE01aFW7DFa3R2vOwV9fZVoaz/DeTNlqIbYEkdR1Z4hdKl6AB5nUyd+p7x4yf2YSEgZqzgwqU1EjJ8uVSttKeuIGj/tyYfBl9IuR3VHwJsSqCEcONfdR126TNVv6TqMzk+lNHOFuZ9xGdM99/EnH4sg2yJ+KNhrOlXUzlgjbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FUh1arbT; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743371644;
+	s=mimecast20190719; t=1743371646;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=mrQjpFlShLNKMETTxcA/lOqCZh7cDFYxhNQyMaFasXA=;
-	b=Yh/owj/ormtaihsgBMI24GUTrNfkQ8VRsEWLzJcxSKbrG21dfdaT/hPAf2jeaNocqe1Zu2
-	PBq4nmahLxd3skWqig46u0ybopB0zdKcab95cNxnihJXhkhtLU6D9YVnVkavsAJEn6Bhz4
-	hL4wKLdA9Fkdx4REmGqhxkJ2CoiRg/M=
+	bh=d/gln7HjCzS4EQxgvfxBgXSkSYvBREZLHgr/rHkeCk0=;
+	b=FUh1arbT175MBSx6Xr8Vc6mrnrEmuJjPuMPsGv+Po3Ial3rJOcJccKzA+Hu/kqKa0HF6MK
+	8c0xS6mwr7k9x3xsMXJUwRVoJvzi//vXmttV27IBcxQZFSOngcQsvB/7EM21TzCEk5CKmk
+	hz4fd9oKSVsgosm8wzmFsC41HbNdIlo=
 Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-177-Oxe5lqeuP3G8J4XLRwopuw-1; Sun,
- 30 Mar 2025 17:54:00 -0400
-X-MC-Unique: Oxe5lqeuP3G8J4XLRwopuw-1
-X-Mimecast-MFC-AGG-ID: Oxe5lqeuP3G8J4XLRwopuw_1743371639
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-315-lKli_u7eMzuI_oQrxX44Cw-1; Sun,
+ 30 Mar 2025 17:54:02 -0400
+X-MC-Unique: lKli_u7eMzuI_oQrxX44Cw-1
+X-Mimecast-MFC-AGG-ID: lKli_u7eMzuI_oQrxX44Cw_1743371641
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3BAE018EBE8A;
-	Sun, 30 Mar 2025 21:53:59 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E1AF118EBE88;
+	Sun, 30 Mar 2025 21:54:00 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.64.34])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 913071801750;
-	Sun, 30 Mar 2025 21:53:57 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 60C0C1801750;
+	Sun, 30 Mar 2025 21:53:59 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -66,9 +66,9 @@ Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH 09/10] selftest/cgroup: Clean up and restructure test_cpuset_prs.sh
-Date: Sun, 30 Mar 2025 17:52:47 -0400
-Message-ID: <20250330215248.3620801-10-longman@redhat.com>
+Subject: [PATCH 10/10] selftest/cgroup: Add a remote partition transition test to test_cpuset_prs.sh
+Date: Sun, 30 Mar 2025 17:52:48 -0400
+Message-ID: <20250330215248.3620801-11-longman@redhat.com>
 In-Reply-To: <20250330215248.3620801-1-longman@redhat.com>
 References: <20250330215248.3620801-1-longman@redhat.com>
 Precedence: bulk
@@ -80,461 +80,276 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Cleaning up the test_cpuset_prs.sh script and restructure some of the
-functions so that a new test matrix with a different cgroup directory
-structure can be added in the next patch.
+The current cgroup directory layout for running the partition state
+transition tests is mainly suitable for testing local partitions as
+well as with a mix of local and remote partitions. It is not that
+suitable for doing extensive remote partition and nested remote/local
+partition testing.
+
+Add a new set of remote partition tests REMOTE_TEST_MATRIX with another
+cgroup directory structure more tailored for remote partition testing
+to provide better code coverage.
+
+Also add a few new test cases as well as adjusting existig ones for
+the original TEST_MATRIX.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- .../selftests/cgroup/test_cpuset_prs.sh       | 257 +++++++++++-------
- 1 file changed, 156 insertions(+), 101 deletions(-)
+ .../selftests/cgroup/test_cpuset_prs.sh       | 154 ++++++++++++++++--
+ 1 file changed, 143 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index f11f347129d8..d99412e7d196 100755
+index d99412e7d196..a17256d9f88a 100755
 --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
 +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -88,22 +88,30 @@ echo "" > test/cpuset.cpus
- # If isolated CPUs have been reserved at boot time (as shown in
- # cpuset.cpus.isolated), these isolated CPUs should be outside of CPUs 0-8
- # that will be used by this script for testing purpose. If not, some of
--# the tests may fail incorrectly. These pre-isolated CPUs should stay in
--# an isolated state throughout the testing process for now.
-+# the tests may fail incorrectly. Wait a bit and retry again just in case
-+# these isolated CPUs are leftover from previous run and have just been
-+# cleaned up earlier in this script.
-+#
-+# These pre-isolated CPUs should stay in an isolated state throughout the
-+# testing process for now.
- #
- BOOT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
-+[[ -n "$BOOT_ISOLCPUS" ]] && {
-+	sleep 0.5
-+	BOOT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
-+}
- if [[ -n "$BOOT_ISOLCPUS" ]]
- then
- 	[[ $(echo $BOOT_ISOLCPUS | sed -e "s/[,-].*//") -le 8 ]] &&
- 		skip_test "Pre-isolated CPUs ($BOOT_ISOLCPUS) overlap CPUs to be tested"
- 	echo "Pre-isolated CPUs: $BOOT_ISOLCPUS"
- fi
-+
- cleanup()
- {
+@@ -112,6 +112,8 @@ cleanup()
  	online_cpus
  	cd $CGROUP2
--	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
--	rmdir test > /dev/null 2>&1
-+	rmdir A1/A2/A3 A1/A2 A1 B1 test/A1 test/B1 test > /dev/null 2>&1
+ 	rmdir A1/A2/A3 A1/A2 A1 B1 test/A1 test/B1 test > /dev/null 2>&1
++	rmdir rtest/p1/c11 rtest/p1/c12 rtest/p2/c21 \
++	      rtest/p2/c22 rtest/p1 rtest/p2 rtest > /dev/null 2>&1
  	[[ -n "$SCHED_DEBUG" ]] &&
  		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
  }
-@@ -173,14 +181,22 @@ test_add_proc()
- #
- # Cgroup test hierarchy
- #
--# root -- A1 -- A2 -- A3
--#      +- B1
+@@ -223,9 +225,9 @@ TEST_MATRIX=(
+ 	"  C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
+ 	"   C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
+ 	"   C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
+-	"C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1|A2:2-3"
+-	"C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1|A2:2-3"
+-	"C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:|A2:3 A1:P1|A2:P1"
++	"C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1|A2:2-3|XA2:2-3"
++	"C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1|A2:2-3|XA2:2-3"
++	"C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:|A2:3|XA2:3 A1:P1|A2:P1"
+ 	"C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3|A2:3 A1:P1|A2:P0"
+ 	"C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4|A2:2"
+ 	"C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:|B1:0-2 A1:P1|A2:P1"
+@@ -291,7 +293,7 @@ TEST_MATRIX=(
+ 								       A1:P0|A2:P2|A3:P1 2"
+ 	" C0-4:X2-4:S+ C1-4:X2-4:S+:P2 C2-4:X4:P1 \
+ 				   .      .      X5      .      .    0 A1:0-4|A2:1-4|A3:2-4 \
+-								       A1:P0|A2:P-2|A3:P-1"
++								       A1:P0|A2:P-2|A3:P-1 ."
+ 	" C0-4:X2-4:S+ C1-4:X2-4:S+:P2 C2-4:X4:P1 \
+ 				   .      .      .      X1      .    0 A1:0-1|A2:2-4|A3:2-4 \
+ 								       A1:P0|A2:P2|A3:P-1 2-4"
+@@ -303,13 +305,13 @@ TEST_MATRIX=(
+ 	" C0-3:S+ C1-3:S+  C3      .    X2-3   X2-3   T:P2:O3=0  .   0 A1:0-2|A2:1-2|A3:1-2 A1:P0|A3:P-2 3|"
+ 
+ 	# An invalidated remote partition cannot self-recover from hotplug
+-	" C0-3:S+ C1-3:S+  C2      .    X2-3   X2-3   T:P2:O2=0 O2=1 0 A1:0-3|A2:1-3|A3:2 A1:P0|A3:P-2"
++	" C0-3:S+ C1-3:S+  C2      .    X2-3   X2-3   T:P2:O2=0 O2=1 0 A1:0-3|A2:1-3|A3:2 A1:P0|A3:P-2 ."
+ 
+ 	# cpus.exclusive.effective clearing test
+ 	" C0-3:S+ C1-3:S+  C2      .   X2-3:X    .      .      .     0 A1:0-3|A2:1-3|A3:2|XA1:"
+ 
+ 	# Invalid to valid remote partition transition test
+-	" C0-3:S+   C1-3    .      .      .    X3:P2    .      .     0 A1:0-3|A2:1-3|XA2: A2:P-2"
++	" C0-3:S+   C1-3    .      .      .    X3:P2    .      .     0 A1:0-3|A2:1-3|XA2: A2:P-2 ."
+ 	" C0-3:S+ C1-3:X3:P2
+ 			    .      .    X2-3    P2      .      .     0 A1:0-2|A2:3|XA2:3 A2:P2 3"
+ 
+@@ -318,7 +320,6 @@ TEST_MATRIX=(
+ 	" C1-3:S+:P2 X4:P2  .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
+ 	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:4-6 A1:P-2|B1:P0"
+ 	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
+-	"  C0-3:P2   .      .  C3-5:C4-5  .      .      .      .     0 A1:0-3|B1:4-5 A1:P2|B1:P0 0-3"
+ 
+ 	# Local partition invalidation tests
+ 	" C0-3:X1-3:S+:P2 C1-3:X2-3:S+:P2 C2-3:X3:P2 \
+@@ -334,10 +335,10 @@ TEST_MATRIX=(
+ 	# cpus_allowed/exclusive_cpus update tests
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .    X:C4     .      P2     .     0 A1:4|A2:4|XA2:|XA3:|A3:4 \
+-								       A1:P0|A3:P-2"
++								       A1:P0|A3:P-2 ."
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .     X1      .      P2     .     0 A1:0-3|A2:1-3|XA1:1|XA2:|XA3:|A3:2-3 \
+-								       A1:P0|A3:P-2"
++								       A1:P0|A3:P-2 ."
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .      .     X3      P2     .     0 A1:0-2|A2:1-2|XA2:3|XA3:3|A3:3 \
+ 								       A1:P0|A3:P2 3"
+@@ -385,7 +386,7 @@ TEST_MATRIX=(
+ 	# A partition root with non-partition root parent is invalid| but it
+ 	# can be made valid if its parent becomes a partition root too.
+ 	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
+-	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2"
++	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
+ 
+ 	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
+ 	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
+@@ -405,6 +406,17 @@ TEST_MATRIX=(
+ 	# affect cpuset.cpus.exclusive.effective.
+ 	" C1-4:X3:S+ C1:X3  .      .       .     C      .      .     0 A2:1-4|XA2:3"
+ 
++	# cpuset.cpus can contain CPUs that overlap a sibling cpuset with cpus.exclusive
++	# but creating a local partition out of it is not allowed. Similarly and change
++	# in cpuset.cpus of a local partition that overlaps sibling exclusive CPUs will
++	# invalidate it.
++	" CX1-4:S+ CX2-4:P2 .    C5-6      .     .      .      P1    0 A1:1|A2:2-4|B1:5-6|XB1:5-6 \
++								       A1:P0|A2:P2:B1:P1 2-4"
++	" CX1-4:S+ CX2-4:P2 .    C3-6      .     .      .      P1    0 A1:1|A2:2-4|B1:5-6 \
++								       A1:P0|A2:P2:B1:P-1 2-4"
++	" CX1-4:S+ CX2-4:P2 .    C5-6      .     .      .   P1:C3-6  0 A1:1|A2:2-4|B1:5-6 \
++								       A1:P0|A2:P2:B1:P-1 2-4"
++
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+ 	# Failure cases:
+@@ -419,6 +431,54 @@ TEST_MATRIX=(
+ 	"   C0-3     .      .    C4-5   X3-5     .      .      .     1 A1:0-3|B1:4-5"
+ )
+ 
++#
++# Cpuset controller remote partition test matrix.
++#
++# Cgroup test hierarchy
++#
 +#	      root
++#	        |
++#	      rtest (cpuset.cpus.exclusive=1-7)
 +#	        |
 +#	 +------+------+
 +#	 |             |
-+#	 A1            B1
-+#	 |
-+#	 A2
-+#	 |
-+#	 A3
- #
- #  P<v> = set cpus.partition (0:member, 1:root, 2:isolated)
- #  C<l> = add cpu-list to cpuset.cpus
- #  X<l> = add cpu-list to cpuset.cpus.exclusive
- #  S<p> = use prefix in subtree_control
- #  T    = put a task into cgroup
-+#  CX<l> = add cpu-list to both cpuset.cpus and cpuset.cpus.exclusive
- #  O<c>=<v> = Write <v> to CPU online file of <c>
- #
- # ECPUs    - effective CPUs of cpusets
-@@ -453,25 +469,26 @@ set_ctrl_state()
- 		PFILE=$CGRP/cpuset.cpus.partition
- 		CFILE=$CGRP/cpuset.cpus
- 		XFILE=$CGRP/cpuset.cpus.exclusive
--		S=$(expr substr $CMD 1 1)
--		if [[ $S = S ]]
--		then
--			PREFIX=${CMD#?}
-+		case $CMD in
-+		    S*) PREFIX=${CMD#?}
- 			COMM="echo ${PREFIX}${CTRL} > $SFILE"
- 			eval $COMM $REDIRECT
--		elif [[ $S = X ]]
--		then
-+			;;
-+		    X*)
- 			CPUS=${CMD#?}
- 			COMM="echo $CPUS > $XFILE"
- 			eval $COMM $REDIRECT
--		elif [[ $S = C ]]
--		then
--			CPUS=${CMD#?}
-+			;;
-+		    CX*)
-+			CPUS=${CMD#??}
-+			COMM="echo $CPUS > $CFILE; echo $CPUS > $XFILE"
-+			eval $COMM $REDIRECT
-+			;;
-+		    C*) CPUS=${CMD#?}
- 			COMM="echo $CPUS > $CFILE"
- 			eval $COMM $REDIRECT
--		elif [[ $S = P ]]
--		then
--			VAL=${CMD#?}
-+			;;
-+		    P*) VAL=${CMD#?}
- 			case $VAL in
- 			0)  VAL=member
- 			    ;;
-@@ -486,15 +503,17 @@ set_ctrl_state()
- 			esac
- 			COMM="echo $VAL > $PFILE"
- 			eval $COMM $REDIRECT
--		elif [[ $S = O ]]
--		then
--			VAL=${CMD#?}
-+			;;
-+		    O*) VAL=${CMD#?}
- 			write_cpu_online $VAL
--		elif [[ $S = T ]]
--		then
--			COMM="echo 0 > $TFILE"
-+			;;
-+		    T*) COMM="echo 0 > $TFILE"
- 			eval $COMM $REDIRECT
--		fi
-+			;;
-+		    *)  echo "Unknown command: $CMD"
-+		        exit 1
-+			;;
-+		esac
- 		RET=$?
- 		[[ $RET -ne 0 ]] && {
- 			[[ -n "$SHOWERR" ]] && {
-@@ -532,21 +551,18 @@ online_cpus()
- }
- 
- #
--# Return 1 if the list of effective cpus isn't the same as the initial list.
-+# Remove all the test cgroup directories
- #
- reset_cgroup_states()
- {
- 	echo 0 > $CGROUP2/cgroup.procs
- 	online_cpus
--	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
--	pause 0.02
--	set_ctrl_state . R-
--	pause 0.01
-+	rmdir $RESET_LIST > /dev/null 2>&1
- }
- 
- dump_states()
- {
--	for DIR in . A1 A1/A2 A1/A2/A3 B1
-+	for DIR in $CGROUP_LIST
- 	do
- 		CPUS=$DIR/cpuset.cpus
- 		ECPUS=$DIR/cpuset.cpus.effective
-@@ -565,6 +581,21 @@ dump_states()
- 	done
- }
- 
++#	 p1            p2
++#     +--+--+       +--+--+
++#     |     |       |     |
++#    c11   c12     c21   c22
 +#
-+# Set the actual cgroup directory into $CGRP_DIR
-+# $1 - cgroup name
++# REMOTE_TEST_MATRIX uses the same notational convention as TEST_MATRIX.
++# Only CPUs 1-7 should be used.
 +#
-+set_cgroup_dir()
-+{
-+	CGRP_DIR=$1
-+	[[ $CGRP_DIR = A2  ]] && CGRP_DIR=A1/A2
-+	[[ $CGRP_DIR = A3  ]] && CGRP_DIR=A1/A2/A3
-+	[[ $CGRP_DIR = c11 ]] && CGRP_DIR=p1/c11
-+	[[ $CGRP_DIR = c12 ]] && CGRP_DIR=p1/c12
-+	[[ $CGRP_DIR = c21 ]] && CGRP_DIR=p2/c21
-+	[[ $CGRP_DIR = c22 ]] && CGRP_DIR=p2/c22
-+}
++REMOTE_TEST_MATRIX=(
++	#  old-p1 old-p2 old-c11 old-c12 old-c21 old-c22
++	#  new-p1 new-p2 new-c11 new-c12 new-c21 new-c22 ECPUs Pstate ISOLCPUS
++	#  ------ ------ ------- ------- ------- ------- ----- ------ --------
++	" X1-3:S+ X4-6:S+ X1-2     X3     X4-5     X6 \
++	      .      .     P2      P2      P2      P2    c11:1-2|c12:3|c21:4-5|c22:6 \
++							 c11:P2|c12:P2|c21:P2|c22:P2 1-6"
++	" CX1-4:S+   .   X1-2:P2   C3      .       .  \
++	      .      .     .      C3-4     .       .     p1:3-4|c11:1-2|c12:3-4 \
++							 p1:P0|c11:P2|c12:P0 1-2"
++	" CX1-4:S+   .   X1-2:P2   .       .       .  \
++	    X2-4     .     .       .       .       .     p1:1,3-4|c11:2 \
++							 p1:P0|c11:P2 2"
++	" CX1-5:S+   .   X1-2:P2 X3-5:P1   .       .  \
++	    X2-4     .     .       .       .       .     p1:1,5|c11:2|c12:3-4 \
++							 p1:P0|c11:P2|c12:P1 2"
++	" CX1-4:S+   .   X1-2:P2 X3-4:P1   .       .  \
++	      .      .     X2      .       .       .     p1:1|c11:2|c12:3-4 \
++							 p1:P0|c11:P2|c12:P1 2"
++	# p1 as member, will get its effective CPUs from its parent rtest
++	" CX1-4:S+   .   X1-2:P2 X3-4:P1   .       .  \
++	      .      .     X1     CX2-4    .       .     p1:5-7|c11:1|c12:2-4 \
++							 p1:P0|c11:P2|c12:P1 1"
++	" CX1-4:S+ X5-6:P1:S+ .    .       .       .  \
++	      .      .   X1-2:P2  X4-5:P1  .     X1-7:P2 p1:3|c11:1-2|c12:4:c22:5-6 \
++							 p1:P0|p2:P1|c11:P2|c12:P1|c22:P2 \
++							 1-2,4-6|1-2,5-6"
++)
 +
  #
- # Check effective cpus
- # $1 - check string, format: <cgroup>:<cpu-list>[|<cgroup>:<cpu-list>]*
-@@ -576,7 +607,8 @@ check_effective_cpus()
- 	do
- 		set -- $(echo $CHK | sed -e "s/:/ /g")
- 		CGRP=$1
--		CPUS=$2
-+		EXPECTED_CPUS=$2
-+		ACTUAL_CPUS=
- 		if [[ $CGRP = X* ]]
- 		then
- 			CGRP=${CGRP#X}
-@@ -584,10 +616,10 @@ check_effective_cpus()
- 		else
- 			FILE=cpuset.cpus.effective
- 		fi
--		[[ $CGRP = A2 ]] && CGRP=A1/A2
--		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
--		[[ -e $CGRP/$FILE ]] || return 1
--		[[ $CPUS = $(cat $CGRP/$FILE) ]] || return 1
-+		set_cgroup_dir $CGRP
-+		[[ -e $CGRP_DIR/$FILE ]] || return 1
-+		ACTUAL_CPUS=$(cat $CGRP_DIR/$FILE)
-+		[[ $EXPECTED_CPUS = $ACTUAL_CPUS ]] || return 1
- 	done
- }
+ # Write to the cpu online file
+ #  $1 - <c>=<v> where <c> = cpu number, <v> value to be written
+@@ -902,10 +962,11 @@ run_state_test()
+ 		STATES=${11}
+ 		ICPUS=${12}
  
-@@ -602,23 +634,21 @@ check_cgroup_states()
- 	do
- 		set -- $(echo $CHK | sed -e "s/:/ /g")
- 		CGRP=$1
--		CGRP_DIR=$CGRP
--		STATE=$2
-+		EXPECTED_STATE=$2
- 		FILE=
--		EVAL=$(expr substr $STATE 2 2)
--		[[ $CGRP = A2 ]] && CGRP_DIR=A1/A2
--		[[ $CGRP = A3 ]] && CGRP_DIR=A1/A2/A3
-+		EVAL=$(expr substr $EXPECTED_STATE 2 2)
- 
--		case $STATE in
-+		set_cgroup_dir $CGRP
-+		case $EXPECTED_STATE in
- 			P*) FILE=$CGRP_DIR/cpuset.cpus.partition
- 			    ;;
--			*)  echo "Unknown state: $STATE!"
-+			*)  echo "Unknown state: $EXPECTED_STATE!"
- 			    exit 1
- 			    ;;
- 		esac
--		VAL=$(cat $FILE)
-+		ACTUAL_STATE=$(cat $FILE)
- 
--		case "$VAL" in
-+		case "$ACTUAL_STATE" in
- 			member) VAL=0
- 				;;
- 			root)	VAL=1
-@@ -642,7 +672,7 @@ check_cgroup_states()
- 		[[ $VAL -eq 1 && $VERBOSE -gt 0 ]] && {
- 			DOMS=$(cat $CGRP_DIR/cpuset.cpus.effective)
- 			[[ -n "$DOMS" ]] &&
--				echo " [$CGRP] sched-domain: $DOMS" > $CONSOLE
-+				echo " [$CGRP_DIR] sched-domain: $DOMS" > $CONSOLE
- 		}
- 	done
- 	return 0
-@@ -665,22 +695,22 @@ check_cgroup_states()
- #
- check_isolcpus()
- {
--	EXPECT_VAL=$1
--	ISOLCPUS=
-+	EXPECTED_ISOLCPUS=$1
-+	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
-+	ISOLCPUS=$(cat $ISCPUS)
- 	LASTISOLCPU=
- 	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
--	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
--	if [[ $EXPECT_VAL = . ]]
-+	if [[ $EXPECTED_ISOLCPUS = . ]]
- 	then
--		EXPECT_VAL=
--		EXPECT_VAL2=
--	elif [[ $(expr $EXPECT_VAL : ".*|.*") > 0 ]]
-+		EXPECTED_ISOLCPUS=
-+		EXPECTED_SDOMAIN=
-+	elif [[ $(expr $EXPECTED_ISOLCPUS : ".*|.*") > 0 ]]
- 	then
--		set -- $(echo $EXPECT_VAL | sed -e "s/|/ /g")
--		EXPECT_VAL=$1
--		EXPECT_VAL2=$2
-+		set -- $(echo $EXPECTED_ISOLCPUS | sed -e "s/|/ /g")
-+		EXPECTED_ISOLCPUS=$2
-+		EXPECTED_SDOMAIN=$1
- 	else
--		EXPECT_VAL2=$EXPECT_VAL
-+		EXPECTED_SDOMAIN=$EXPECTED_ISOLCPUS
- 	fi
- 
- 	#
-@@ -689,20 +719,21 @@ check_isolcpus()
- 	# to make appending those CPUs easier.
- 	#
- 	[[ -n "$BOOT_ISOLCPUS" ]] && {
--		EXPECT_VAL=${EXPECT_VAL:+${EXPECT_VAL},}${BOOT_ISOLCPUS}
--		EXPECT_VAL2=${EXPECT_VAL2:+${EXPECT_VAL2},}${BOOT_ISOLCPUS}
-+		EXPECTED_ISOLCPUS=${EXPECTED_ISOLCPUS:+${EXPECTED_ISOLCPUS},}${BOOT_ISOLCPUS}
-+		EXPECTED_SDOMAIN=${EXPECTED_SDOMAIN:+${EXPECTED_SDOMAIN},}${BOOT_ISOLCPUS}
- 	}
- 
- 	#
- 	# Check cpuset.cpus.isolated cpumask
- 	#
--	[[ "$EXPECT_VAL2" != "$ISOLCPUS" ]] && {
-+	[[ "$EXPECTED_ISOLCPUS" != "$ISOLCPUS" ]] && {
- 		# Take a 50ms pause and try again
- 		pause 0.05
- 		ISOLCPUS=$(cat $ISCPUS)
- 	}
--	[[ "$EXPECT_VAL2" != "$ISOLCPUS" ]] && return 1
-+	[[ "$EXPECTED_ISOLCPUS" != "$ISOLCPUS" ]] && return 1
- 	ISOLCPUS=
-+	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
- 
- 	#
- 	# Use the sched domain in debugfs to check isolated CPUs, if available
-@@ -736,7 +767,7 @@ check_isolcpus()
- 	done
- 	[[ "$ISOLCPUS" = *- ]] && ISOLCPUS=${ISOLCPUS}$LASTISOLCPU
- 
--	[[ "$EXPECT_VAL" = "$ISOLCPUS" ]]
-+	[[ "$EXPECTED_SDOMAIN" = "$ISOLCPUS" ]]
- }
- 
- test_fail()
-@@ -773,6 +804,63 @@ null_isolcpus_check()
- 	exit 1
- }
- 
-+#
-+# Check state transition test result
-+#  $1 - Test number
-+#  $2 - Expected effective CPU values
-+#  $3 - Expected partition states
-+#  $4 - Expected isolated CPUs
-+#
-+check_test_results()
-+{
-+	_NR=$1
-+	_ECPUS="$2"
-+	_PSTATES="$3"
-+	_ISOLCPUS="$4"
+-		set_ctrl_state_noerr B1       $OLD_B1
+ 		set_ctrl_state_noerr A1       $OLD_A1
+ 		set_ctrl_state_noerr A1/A2    $OLD_A2
+ 		set_ctrl_state_noerr A1/A2/A3 $OLD_A3
++		set_ctrl_state_noerr B1       $OLD_B1
 +
-+	[[ -n "$_ECPUS" && "$_ECPUS" != . ]] && {
-+		check_effective_cpus $_ECPUS
-+		[[ $? -ne 0 ]] && test_fail $_NR "effective CPU" \
-+			 "Cgroup $CGRP: expected $EXPECTED_CPUS, got $ACTUAL_CPUS"
-+	}
-+
-+	[[ -n "$_PSTATES" && "$_PSTATES" != . ]] && {
-+		check_cgroup_states $_PSTATES
-+		[[ $? -ne 0 ]] && test_fail $_NR states \
-+			"Cgroup $CGRP: expected $EXPECTED_STATE, got $ACTUAL_STATE"
-+	}
-+
-+	# Compare the expected isolated CPUs with the actual ones,
-+	# if available
-+	[[ -n "$_ISOLCPUS" ]] && {
-+		check_isolcpus $_ISOLCPUS
-+		[[ $? -ne 0 ]] && {
-+			[[ -n "$BOOT_ISOLCPUS" ]] && _ISOLCPUS=${_ISOLCPUS},${BOOT_ISOLCPUS}
-+			test_fail $_NR "isolated CPU" \
-+				"Expect $_ISOLCPUS, get $ISOLCPUS instead"
-+		}
-+	}
-+	reset_cgroup_states
-+	#
-+	# Check to see if effective cpu list changes
-+	#
-+	_NEWLIST=$(cat $CGROUP2/cpuset.cpus.effective)
-+	RETRY=0
-+	while [[ $_NEWLIST != $CPULIST && $RETRY -lt 8 ]]
-+	do
-+		# Wait a bit longer & recheck a few times
-+		pause 0.02
-+		((RETRY++))
-+		_NEWLIST=$(cat $CGROUP2/cpuset.cpus.effective)
-+	done
-+	[[ $_NEWLIST != $CPULIST ]] && {
-+		echo "Effective cpus changed to $_NEWLIST after test $_NR!"
-+		exit 1
-+	}
-+	null_isolcpus_check
-+	[[ $VERBOSE -gt 0 ]] && echo "Test $I done."
-+}
-+
- #
- # Run cpuset state transition test
- #  $1 - test matrix name
-@@ -785,6 +873,8 @@ run_state_test()
- {
- 	TEST=$1
- 	CONTROLLER=cpuset
-+	CGROUP_LIST=". A1 A1/A2 A1/A2/A3 B1"
-+	RESET_LIST="A1/A2/A3 A1/A2 A1 B1"
- 	I=0
- 	eval CNT="\${#$TEST[@]}"
- 
-@@ -824,45 +914,7 @@ run_state_test()
- 
- 		[[ $RETVAL -ne $RESULT ]] && test_fail $I result
- 
--		[[ -n "$ECPUS" && "$ECPUS" != . ]] && {
--			check_effective_cpus $ECPUS
--			[[ $? -ne 0 ]] && test_fail $I "effective CPU"
--		}
--
--		[[ -n "$STATES" && "$STATES" != . ]] && {
--			check_cgroup_states $STATES
--			[[ $? -ne 0 ]] && test_fail $I states
--		}
--
--		# Compare the expected isolated CPUs with the actual ones,
--		# if available
--		[[ -n "$ICPUS" ]] && {
--			check_isolcpus $ICPUS
--			[[ $? -ne 0 ]] && {
--				[[ -n "$BOOT_ISOLCPUS" ]] && ICPUS=${ICPUS},${BOOT_ISOLCPUS}
--				test_fail $I "isolated CPU" \
--					"Expect $ICPUS, get $ISOLCPUS instead"
--			}
--		}
--		reset_cgroup_states
--		#
--		# Check to see if effective cpu list changes
--		#
--		NEWLIST=$(cat cpuset.cpus.effective)
--		RETRY=0
--		while [[ $NEWLIST != $CPULIST && $RETRY -lt 8 ]]
--		do
--			# Wait a bit longer & recheck a few times
--			pause 0.02
--			((RETRY++))
--			NEWLIST=$(cat cpuset.cpus.effective)
--		done
--		[[ $NEWLIST != $CPULIST ]] && {
--			echo "Effective cpus changed to $NEWLIST after test $I!"
--			exit 1
--		}
--		null_isolcpus_check
--		[[ $VERBOSE -gt 0 ]] && echo "Test $I done."
-+		check_test_results $I "$ECPUS" "$STATES" "$ICPUS"
- 		((I++))
- 	done
+ 		RETVAL=0
+ 		set_ctrl_state A1       $NEW_A1; ((RETVAL += $?))
+ 		set_ctrl_state A1/A2    $NEW_A2; ((RETVAL += $?))
+@@ -920,6 +981,76 @@ run_state_test()
  	echo "All $I tests of $TEST PASSED."
-@@ -932,6 +984,7 @@ test_isolated()
- 	echo $$ > $CGROUP2/cgroup.procs
- 	[[ -d A1 ]] && rmdir A1
- 	null_isolcpus_check
-+	pause 0.05
  }
  
++#
++# Run cpuset remote partition state transition test
++#  $1 - test matrix name
++#
++run_remote_state_test()
++{
++	TEST=$1
++	CONTROLLER=cpuset
++	[[ -d rtest ]] || mkdir rtest
++	cd rtest
++	echo +cpuset > cgroup.subtree_control
++	echo "1-7" > cpuset.cpus
++	echo "1-7" > cpuset.cpus.exclusive
++	CGROUP_LIST=".. . p1 p2 p1/c11 p1/c12 p2/c21 p2/c22"
++	RESET_LIST="p1/c11 p1/c12 p2/c21 p2/c22 p1 p2"
++	I=0
++	eval CNT="\${#$TEST[@]}"
++
++	reset_cgroup_states
++	console_msg "Running remote partition state transition test ..."
++
++	while [[ $I -lt $CNT ]]
++	do
++		echo "Running test $I ..." > $CONSOLE
++		[[ $VERBOSE -gt 1 ]] && {
++			echo ""
++			eval echo \${$TEST[$I]}
++		}
++		eval set -- "\${$TEST[$I]}"
++		OLD_p1=$1
++		OLD_p2=$2
++		OLD_c11=$3
++		OLD_c12=$4
++		OLD_c21=$5
++		OLD_c22=$6
++		NEW_p1=$7
++		NEW_p2=$8
++		NEW_c11=$9
++		NEW_c12=${10}
++		NEW_c21=${11}
++		NEW_c22=${12}
++		ECPUS=${13}
++		STATES=${14}
++		ICPUS=${15}
++
++		set_ctrl_state_noerr p1     $OLD_p1
++		set_ctrl_state_noerr p2     $OLD_p2
++		set_ctrl_state_noerr p1/c11 $OLD_c11
++		set_ctrl_state_noerr p1/c12 $OLD_c12
++		set_ctrl_state_noerr p2/c21 $OLD_c21
++		set_ctrl_state_noerr p2/c22 $OLD_c22
++
++		RETVAL=0
++		set_ctrl_state p1     $NEW_p1 ; ((RETVAL += $?))
++		set_ctrl_state p2     $NEW_p2 ; ((RETVAL += $?))
++		set_ctrl_state p1/c11 $NEW_c11; ((RETVAL += $?))
++		set_ctrl_state p1/c12 $NEW_c12; ((RETVAL += $?))
++		set_ctrl_state p2/c21 $NEW_c21; ((RETVAL += $?))
++		set_ctrl_state p2/c22 $NEW_c22; ((RETVAL += $?))
++
++		[[ $RETVAL -ne 0 ]] && test_fail $I result
++
++		check_test_results $I "$ECPUS" "$STATES" "$ICPUS"
++		((I++))
++	done
++	cd ..
++	rmdir rtest
++	echo "All $I tests of $TEST PASSED."
++}
++
  #
-@@ -997,6 +1050,8 @@ test_inotify()
- 	else
- 		echo "Inotify test PASSED"
- 	fi
-+	echo member > cpuset.cpus.partition
-+	echo "" > cpuset.cpus
- }
+ # Testing the new "isolated" partition root type
+ #
+@@ -1056,6 +1187,7 @@ test_inotify()
  
  trap cleanup 0 2 3 6
+ run_state_test TEST_MATRIX
++run_remote_state_test REMOTE_TEST_MATRIX
+ test_isolated
+ test_inotify
+ echo "All tests PASSED."
 -- 
 2.48.1
 
