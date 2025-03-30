@@ -1,151 +1,70 @@
-Return-Path: <linux-kselftest+bounces-29925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FACFA75AAC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 17:36:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D9BCA75BE2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 21:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 144BB166520
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 15:36:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 956FA1888CAF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Mar 2025 19:19:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AED91D798E;
-	Sun, 30 Mar 2025 15:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4A71CDA3F;
+	Sun, 30 Mar 2025 19:19:45 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BA835973;
-	Sun, 30 Mar 2025 15:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE42C80C02;
+	Sun, 30 Mar 2025 19:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743349015; cv=none; b=FENz5a3pwicfTPeLavfWgDJvVpsoQScKbXKa9Ily5Y3LvSqJvlnY8AW/hzr4fdxTl5hlKXnnUhFy2TxmiSisNUue2nnoTPoCso2NNUzOoAACxBNj62wLNpM9//QzKzj6vb8G2S0tWSRNNNcGTHa2uROpzEOppHjhyAwAYPIO+JY=
+	t=1743362385; cv=none; b=B7aBtwn8ZK49nuNSEj02oEBrtkkiJ3/jgs9q4rAgncFdozfem0LNLQKaCO0UCHh5RHrC1oOrP8U0R3UPHjwHCtLpsQ3z9vGcLkZh3WJHEg8Nt+ZoSRG4U1mYDrg3vyeqiWOqHLaMjKpe9i5GwulEXZ4D+mz0dXbjLztN5yEEc94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743349015; c=relaxed/simple;
-	bh=XweAKWXxUC23DUIurG+R29h2z/MkdSB1+ji3iZkr25E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=spLNMSwS3LLFznkrcVGxuxOl4SY7Ul8pNzZ9Ei1hegmbCak35zA/yqSVm7sGw8wiC6/W+GvMTB9icuO+U9Ibyq7tCoE5E6+MWzTrq3URPmsfHLHZCkJDUbbK7D22wRk/QZsScUIS6kQjW68cX0TaQbQMxSlJLeCU/974UumJ/iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 41912441CD;
-	Sun, 30 Mar 2025 15:36:50 +0000 (UTC)
-Message-ID: <7c3b13e1-425d-4471-91fd-7156c4758719@ghiti.fr>
-Date: Sun, 30 Mar 2025 17:36:49 +0200
+	s=arc-20240116; t=1743362385; c=relaxed/simple;
+	bh=NK8A9IK2TwM8Rn4visRZVeXeLeV20HHbC0t4xC+R9nU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g/GtFfywF6R9R4EN46vQ+zxzpfhOS/wa920chguFPCV+Z4neH7z4T6MWpB8xkSKiP3MsSa4RMV0qLlfQt7jkQaZNId3yj7tjqO3RXs2KXmUy67RXD8RNEZDG2He5gWB8dXpoqDqHxrZPNTWL9NAFflPAcT9kwGNqQuckXquJTBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=breakpoint.cc; spf=pass smtp.mailfrom=breakpoint.cc; arc=none smtp.client-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=breakpoint.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=breakpoint.cc
+Received: from bigeasy by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+	(envelope-from <sebastian@breakpoint.cc>)
+	id 1tyyBn-0005fB-7s; Sun, 30 Mar 2025 21:19:23 +0200
+Date: Sun, 30 Mar 2025 21:19:23 +0200
+From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] tools/nolibc: MIPS: entrypoint cleanups and
+ N32/N64 ABIs
+Message-ID: <20250330191923.M_4QMXqa@breakpoint.cc>
+References: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
+ <20250326205434.bPx_kVUx@breakpoint.cc>
+ <60e78caf-49e5-42ad-900c-9813518d838b@t-8ch.de>
+ <20250326220430._IkF6-zy@breakpoint.cc>
+ <7fef431b-1b68-4967-8f8a-d2b49e403578@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: riscv: fix v_exec_initval_nolibc.c
-Content-Language: en-US
-To: Ignacio Encinas Rubio <ignacio@iencinas.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>
-Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
- linux-kernel-mentees@lists.linux.dev
-References: <20250306-fix-v_exec_initval_nolibc-v2-1-97f9dc8a7faf@iencinas.com>
- <14e0cc95-95d7-4e7d-949b-d944366510a3@iencinas.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <14e0cc95-95d7-4e7d-949b-d944366510a3@iencinas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeejgeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpeejkeeugfdthefhveelffdvgeetgeelteeijeekheehfeevtdduvdfgteevgfehffenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhinhhfrhgruggvrggurdhorhhgnecukfhppedvtddtudemkeeiudemfeefkedvmegvfheltdemiegrjeelmeejkedutgemhegsvggsmeelleelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvtddtudemkeeiudemfeefkedvmegvfheltdemiegrjeelmeejkedutgemhegsvggsmeelleelhedphhgvlhhopeglkffrggeimedvtddtudemkeeiudemfeefkedvmegvfheltdemiegrjeelmeejkedutgemhegsvggsmeelleelhegnpdhmrghilhhfrhhomheprghlvgigsehghhhithhirdhfrhdpnhgspghrtghpthhtohepkedprhgtphhtthhopehighhnrggtihhosehivghntghinhgrshdrtghomhdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehsihhfi
- hhvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomhdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehskhhhrghnsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlqdhmvghnthgvvghssehlihhsthhsrdhlihhnuhigrdguvghv
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <7fef431b-1b68-4967-8f8a-d2b49e403578@t-8ch.de>
 
-Hi ignacio,
+On 2025-03-29 10:51:47 [+0100], Thomas Wei=C3=9Fschuh wrote:
+>=20
+> Does the following work for you when running kust "make nolibc-test"?
 
-On 30/03/2025 13:12, Ignacio Encinas Rubio wrote:
-> Gentle ping :)
+I had to manually apply this on top of b4/nolibc-mips-n32. The resulting
+make produced the native 64bit binary.
 
-
-No worries, it's either being merged in 6.15-rc1 or rc2!
-
-Thanks,
-
-Alex
-
-
->
-> On 6/3/25 20:49, Ignacio Encinas wrote:
->> Vector registers are zero initialized by the kernel. Stop accepting
->> "all ones" as a clean value.
->>
->> Note that this was not working as expected given that
->> 	value == 0xff
->> can be assumed to be always false by the compiler as value's range is
->> [-128, 127]. Both GCC (-Wtype-limits) and clang
->> (-Wtautological-constant-out-of-range-compare) warn about this.
->>
->> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
->> Tested-by: Charlie Jenkins <charlie@rivosinc.com>
->> Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
->> ---
->> Changes in v2:
->>
->> Remove code that becomes useless now that the only "clean" value for
->> vector registers is 0.
->>
->> - Link to v1: https://lore.kernel.org/r/20250305-fix-v_exec_initval_nolibc-v1-1-b87b60e43002@iencinas.com
->> ---
->>   tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c | 10 +++-------
->>   1 file changed, 3 insertions(+), 7 deletions(-)
->>
->> diff --git a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
->> index 35c0812e32de0c82a54f84bd52c4272507121e35..4dde05e45a04122b566cedc36d20b072413b00e2 100644
->> --- a/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
->> +++ b/tools/testing/selftests/riscv/vector/v_exec_initval_nolibc.c
->> @@ -6,7 +6,7 @@
->>    * the values. To further ensure consistency, this file is compiled without
->>    * libc and without auto-vectorization.
->>    *
->> - * To be "clean" all values must be either all ones or all zeroes.
->> + * To be "clean" all values must be all zeroes.
->>    */
->>   
->>   #define __stringify_1(x...)	#x
->> @@ -14,9 +14,8 @@
->>   
->>   int main(int argc, char **argv)
->>   {
->> -	char prev_value = 0, value;
->> +	char value = 0;
->>   	unsigned long vl;
->> -	int first = 1;
->>   
->>   	if (argc > 2 && strcmp(argv[2], "x"))
->>   		asm volatile (
->> @@ -44,14 +43,11 @@ int main(int argc, char **argv)
->>   			"vsrl.vi " __stringify(register) ", " __stringify(register) ", 8\n\t" \
->>   			".option pop\n\t"					\
->>   			: "=r" (value));					\
->> -		if (first) {							\
->> -			first = 0;						\
->> -		} else if (value != prev_value || !(value == 0x00 || value == 0xff)) { \
->> +		if (value != 0x00) {						\
->>   			printf("Register " __stringify(register)		\
->>   				" values not clean! value: %u\n", value);	\
->>   			exit(-1);						\
->>   		}								\
->> -		prev_value = value;						\
->>   	}									\
->>   })
->>   
->>
->> ---
->> base-commit: 03d38806a902b36bf364cae8de6f1183c0a35a67
->> change-id: 20250301-fix-v_exec_initval_nolibc-498d976c372d
->>
->> Best regards,
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Sebastian
 
