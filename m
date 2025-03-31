@@ -1,254 +1,172 @@
-Return-Path: <linux-kselftest+bounces-29958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA7B5A76CF6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Mar 2025 20:32:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DB96A76DCA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Mar 2025 21:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4E62188CE09
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Mar 2025 18:32:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF24F16A0FC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Mar 2025 19:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A39E2147F3;
-	Mon, 31 Mar 2025 18:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B3CA219A86;
+	Mon, 31 Mar 2025 19:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="i0GOUGAA";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="X1d6dPsT";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="i0GOUGAA";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="X1d6dPsT"
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="wQfNtAoa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD6D1DE3A5
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Mar 2025 18:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C048221772B
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Mar 2025 19:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743445953; cv=none; b=V+MkUsa/7j4Nf9L1L989AEsNgCfmJic09gVDxKnmefzMxRyuaNA6/Tz3icWhafjGhKehlu9BsVi7JVXpiI2Niz8f/mHMxMU/Xh1FICt/c28cBBKS91gzC7CdNqlh38Vb7SnUvA8u2QtwF2hvU6ZaVBUOH+wSVsJDuJqVnfEZVfU=
+	t=1743451005; cv=none; b=EljV063R/SbGP+alKQsx8HEeTIxVXvofqqxXwAU6su38+yIJceg8VpjkuP4REIUzMvxL86CPgWzaz7/Lo9NO0UNwoqMhRU74lc5jGXBq24+FB/XQXCnLKkmcIxtexeejD+XLK+t7O/HzPzqC/KrL3qGkf+UjWyGWFOFlFg/M3mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743445953; c=relaxed/simple;
-	bh=BJkQvthlNtH6auAfO4lCrhO/pF8mIIMYSy9yIE1FvhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AvjTIeAle3kNez79hWa88lt9aIYYiPHME6kmB+1QpBwxpk4eeZxM+oMEdI5MXSP6fxVgYdKuWW+UFb1TWPUxlLpkcLGuZoUChRoNO4SOQrLkvyDliODTwVwYe7PICLQ9UvY/10O0Kce99FLIAx8CbMEYVQmBbxNYzyM7+PmW+e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=i0GOUGAA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=X1d6dPsT; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=i0GOUGAA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=X1d6dPsT; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 247FC211E5;
-	Mon, 31 Mar 2025 18:32:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1743445949;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wv4Lmp/QdqT0c2+FR1HowIaSrO31qTK8wTqkhmeumIM=;
-	b=i0GOUGAANFCukQk7qUtG8rRgjDslM1onbc4kxUYe/+TzRx7kDpG+mekMyDWQIr0wSeald4
-	nmgVakNm2GqL2ZZ7KsmJkqwT+815zoAx9S9Kc9RvBnq/4eeK7BoeaCFL6sS14vN4bHjbv4
-	ky2kQ3P1MGetLjxxeV1WgfgF7q2jL3M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1743445949;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wv4Lmp/QdqT0c2+FR1HowIaSrO31qTK8wTqkhmeumIM=;
-	b=X1d6dPsT3JjGcL6NA2t05gmqWKWpTJR9ZrJIAlIR8fmw1ockgY8pne3WpIAnrFUVUdlCqG
-	kXAOWb/l1njC+KBQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=i0GOUGAA;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=X1d6dPsT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1743445949;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wv4Lmp/QdqT0c2+FR1HowIaSrO31qTK8wTqkhmeumIM=;
-	b=i0GOUGAANFCukQk7qUtG8rRgjDslM1onbc4kxUYe/+TzRx7kDpG+mekMyDWQIr0wSeald4
-	nmgVakNm2GqL2ZZ7KsmJkqwT+815zoAx9S9Kc9RvBnq/4eeK7BoeaCFL6sS14vN4bHjbv4
-	ky2kQ3P1MGetLjxxeV1WgfgF7q2jL3M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1743445949;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wv4Lmp/QdqT0c2+FR1HowIaSrO31qTK8wTqkhmeumIM=;
-	b=X1d6dPsT3JjGcL6NA2t05gmqWKWpTJR9ZrJIAlIR8fmw1ockgY8pne3WpIAnrFUVUdlCqG
-	kXAOWb/l1njC+KBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F0E64139A1;
-	Mon, 31 Mar 2025 18:32:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id OCvpOLzf6meXBAAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Mon, 31 Mar 2025 18:32:28 +0000
-Date: Mon, 31 Mar 2025 20:32:27 +0200
-From: Petr Vorel <pvorel@suse.cz>
-To: lufei <lufei@uniontech.com>
-Cc: linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH] unshare_test: set nr_open using soft limit
-Message-ID: <20250331183227.GA279891@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20250328144717.108054-1-lufei@uniontech.com>
+	s=arc-20240116; t=1743451005; c=relaxed/simple;
+	bh=vAxCqO8D+zzqb/qZNB5/FCTsdHivJpMM4FMnnmj32U8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2l7Z0GCQT1S/fVfDKemburq6uyszUKBX6cIARXkV+LaNTxvHBIxNYFkLXz87c8Lr9QbUCwZFJE+loL1UlyFs5bwxsORhO/KeAoqODIzKo/Lz2O/rb6wQl4v6it0s1IUaIrzHdq/+Z8H3V3KJGpQIPKvWaaroaslWN98n/+8CiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=wQfNtAoa; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-224191d92e4so88650935ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Mar 2025 12:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1743451003; x=1744055803; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AzqSa6qdLoYyh4MHGFR7tGBhWMYj3VcZWbyxOBNFEgk=;
+        b=wQfNtAoaOTDHACeqKolF4hex7jcF2MtR0IXe8aOTrPmPKl+i4PZsYiY5ZiBCyPe0O8
+         biyyGGStZ7YLhpArvX7dAPP2s6Vw4ol4yjVoBLmLMy8ZNBGcSje55I0ZYxJ0ADUBv/CR
+         QZAkPBy2ZrSvZgIjMsRSW5CVFAONkd66D/U5/EKvVsju/36x2IXaD46GraGR+/HS3aKV
+         2glsO1EFZo4uFjS4X41oq5uvivVRGxQ0LXiprr6I+3NwWtGdWMlyG5IyNV2pOOaTczj5
+         ODs6Y+OXVosnLKksBj3XZNceha19Wr12Y8fZWp8XmIOA4IqdIoSw5MVaIiGwPdJlERqz
+         JWvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743451003; x=1744055803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AzqSa6qdLoYyh4MHGFR7tGBhWMYj3VcZWbyxOBNFEgk=;
+        b=pmP8vJCRdLBD8xf+MQxdEnynuOwxsgyWe/hL3jpDgMSuj49bCTU11pAA1UDKN8nzFZ
+         Mqy6HPHaaaJ4nV/DRNza5bhDUiEtDf6VenLSk3kD2phGbDBRrK7PjM4R9SbbSmK8GpWz
+         nRkz/62zgu/HLyw62Vn9rHKlVNGaCZZzVNggdOKD3XRK7mCTjhY3fdHvKXQA+THFYfhk
+         sCSsuU5KkSxMUidbQfCi5Y3qihqXg5+V7sLklreaEWBk9jpZQ7GOz7IG9ppTtkhzfwNj
+         lfvGx9dBvMvmzlyStoFKTvk4DIWeb0qCDHIdSlvUEe6+0YKLTo2eml604bWzJ7UY+et/
+         c7aA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMo+/FFfB8j2+JUQdRSdbCFrPQxFkCJHwGSMmEBkPSyAuxxbjAQ53rLouf+adiIZKxrAElGzLCmstNAGQoNSM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIqFTnP74uPV0eplJkfrqvloSrhiCYgJuyDJ73lLgdS1ADeIFZ
+	elxql/ffvvcgh41BNZn+abY+E2uRypO1CmU9MCZJNCGwfVA20hKh9x5ovSLmkg==
+X-Gm-Gg: ASbGnct+I63BpuWktU0O8cqQcLLq2sOtusOJ1lTo9JBz7nkkCf2AlXREDu5wLTGXf/B
+	5ubeolIeCcS8xPeEVbXf+r0bLOENq3BR//eu4dnflmmQs/uF+b/OnzFr1wKfy8faA186U78qclz
+	MXZNd03AsiwHXfmV11/76WCzqQxDTt9590orTTBzEq+V0pygSKDQVl7VWolr1eTY5iZVJPYFNrK
+	FqB/94BzjI1WRr1yDQg70fB02AWp5osBs0xO1thT/MTqjfzP/ZqTgXK8QPOfG7qAZhjjSmirEXO
+	HWj1qEXcBHVDNd89qVB9FMTsUZT0w7dSJJHTPXwBRx4mH5rya2gi8b9TU0cTSbJNU3FV
+X-Google-Smtp-Source: AGHT+IEpEnY4rZKG+/LUO41TSZFdr+jiBWbL1y7GD4aLnGkKhbPHZ+UMnU43ZPvQuWmZC/hfP1zMgw==
+X-Received: by 2002:a05:6a00:3901:b0:736:54c9:df2c with SMTP id d2e1a72fcca58-73980415eafmr12174016b3a.15.1743451002841;
+        Mon, 31 Mar 2025 12:56:42 -0700 (PDT)
+Received: from rogue-one.tail33bf8.ts.net ([179.218.14.134])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73970deee97sm7313082b3a.25.2025.03.31.12.56.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Mar 2025 12:56:42 -0700 (PDT)
+From: Pedro Tammela <pctammela@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	shuah@kernel.org,
+	pctammela@mojatatu.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] selftests: tc-testing: fix nat regex matching
+Date: Mon, 31 Mar 2025 16:56:18 -0300
+Message-ID: <20250331195618.535992-1-pctammela@mojatatu.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250328144717.108054-1-lufei@uniontech.com>
-X-Rspamd-Queue-Id: 247FC211E5
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.71 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:replyto,suse.cz:dkim,suse.cz:email];
-	ARC_NA(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.71
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+In iproute 6.14, the nat ip mask logic was fixed to remove a undefined
+behaviour. So now instead of reporting '0.0.0.0/32' on x86 and potentially
+'0.0.0.0/0' in other platforms, it reports '0.0.0.0/0' in all platforms.
 
-> Set maximum file descriptor number limit by rlimit.rlim_max than
-> nr_open(hard limit). Hard limit may cause dup2 fail.
+Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+---
+ .../selftests/tc-testing/tc-tests/actions/nat.json | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-It actually changes from failure:
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json b/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
+index ee2792998c89..4f21aeb8a3fb 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
+@@ -305,7 +305,7 @@
+         "cmdUnderTest": "$TC actions add action nat ingress default 10.10.10.1 index 12",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 12",
+-        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/32 10.10.10.1 pass.*index 12 ref",
++        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/0 10.10.10.1 pass.*index 12 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+@@ -332,7 +332,7 @@
+         "cmdUnderTest": "$TC actions add action nat ingress any 10.10.10.1 index 12",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 12",
+-        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/32 10.10.10.1 pass.*index 12 ref",
++        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/0 10.10.10.1 pass.*index 12 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+@@ -359,7 +359,7 @@
+         "cmdUnderTest": "$TC actions add action nat ingress all 10.10.10.1 index 12",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 12",
+-        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/32 10.10.10.1 pass.*index 12 ref",
++        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/0 10.10.10.1 pass.*index 12 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+@@ -548,7 +548,7 @@
+         "cmdUnderTest": "$TC actions add action nat egress default 20.20.20.1 pipe index 10",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 10",
+-        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref",
++        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+@@ -575,7 +575,7 @@
+         "cmdUnderTest": "$TC actions add action nat egress any 20.20.20.1 pipe index 10",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 10",
+-        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref",
++        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+@@ -602,7 +602,7 @@
+         "cmdUnderTest": "$TC actions add action nat egress all 20.20.20.1 pipe index 10",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 10",
+-        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref",
++        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+@@ -629,7 +629,7 @@
+         "cmdUnderTest": "$TC actions add action nat egress all 20.20.20.1 pipe index 10 cookie aa1bc2d3eeff112233445566778800a1",
+         "expExitCode": "0",
+         "verifyCmd": "$TC actions get action nat index 10",
+-        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref.*cookie aa1bc2d3eeff112233445566778800a1",
++        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref.*cookie aa1bc2d3eeff112233445566778800a1",
+         "matchCount": "1",
+         "teardown": [
+             "$TC actions flush action nat"
+-- 
+2.43.0
 
-# ./unshare_test 
-TAP version 13
-1..1
-# Starting 1 tests from 1 test cases.
-#  RUN           global.unshare_EMFILE ...
-# unshare_test.c:60:unshare_EMFILE:Expected dup2(2, nr_open + 64) (-1) >= 0 (0)
-# unshare_EMFILE: Test failed
-#          FAIL  global.unshare_EMFILE
-not ok 1 global.unshare_EMFILE
-# FAILED: 0 / 1 tests passed.
-# Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
-
-to pass:
-
-TAP version 13
-1..1
-# Starting 1 tests from 1 test cases.
-#  RUN           global.unshare_EMFILE ...
-#            OK  global.unshare_EMFILE
-ok 1 global.unshare_EMFILE
-# PASSED: 1 / 1 tests passed.
-# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-> Signed-off-by: lufei <lufei@uniontech.com>
-> ---
->  tools/testing/selftests/core/unshare_test.c | 28 +++++++++++++--------
->  1 file changed, 18 insertions(+), 10 deletions(-)
-
-> diff --git a/tools/testing/selftests/core/unshare_test.c b/tools/testing/selftests/core/unshare_test.c
-> index 7fec9dfb1b0e..2c4e7104b0d9 100644
-> --- a/tools/testing/selftests/core/unshare_test.c
-> +++ b/tools/testing/selftests/core/unshare_test.c
-> @@ -26,10 +26,11 @@ TEST(unshare_EMFILE)
->  		.exit_signal = SIGCHLD,
->  	};
->  	int fd;
-> -	ssize_t n, n2;
-> -	static char buf[512], buf2[512];
-> +	ssize_t n, n2, n3;
-> +	static char buf[512], buf2[512], buf3[512];
->  	struct rlimit rlimit;
->  	int nr_open;
-> +	int rlimit_max;
-
->  	fd = open("/proc/sys/fs/nr_open", O_RDWR);
->  	ASSERT_GE(fd, 0);
-> @@ -42,22 +43,24 @@ TEST(unshare_EMFILE)
-
->  	ASSERT_EQ(0, getrlimit(RLIMIT_NOFILE, &rlimit));
-
-> -	/* bump fs.nr_open */
-> -	n2 = sprintf(buf2, "%d\n", nr_open + 1024);
-> +	rlimit_max = rlimit.rlim_max;
-> +
-> +	/* bump rlimit.rlim_max */
-> +	n2 = sprintf(buf2, "%d\n", rlimit_max + 1024);
->  	lseek(fd, 0, SEEK_SET);
->  	write(fd, buf2, n2);
-
->  	/* bump ulimit -n */
-> -	rlimit.rlim_cur = nr_open + 1024;
-> -	rlimit.rlim_max = nr_open + 1024;
-> +	rlimit.rlim_cur = rlimit_max + 1024;
-> +	rlimit.rlim_max = rlimit_max + 1024;
->  	EXPECT_EQ(0, setrlimit(RLIMIT_NOFILE, &rlimit)) {
->  		lseek(fd, 0, SEEK_SET);
->  		write(fd, buf, n);
->  		exit(EXIT_FAILURE);
->  	}
-
-> -	/* get a descriptor past the old fs.nr_open */
-> -	EXPECT_GE(dup2(2, nr_open + 64), 0) {
-> +	/* get a descriptor past the old rlimit.rlim_max */
-> +	EXPECT_GE(dup2(2, rlimit_max + 64), 0) {
->  		lseek(fd, 0, SEEK_SET);
->  		write(fd, buf, n);
->  		exit(EXIT_FAILURE);
-> @@ -74,15 +77,20 @@ TEST(unshare_EMFILE)
->  	if (pid == 0) {
->  		int err;
-
-> -		/* restore fs.nr_open */
-> +		n3 = sprintf(buf3, "%d\n", rlimit_max);
->  		lseek(fd, 0, SEEK_SET);
-> -		write(fd, buf, n);
-> +		write(fd, buf3, n3);
-nit: do we really need buf3? Can't we reuse buf2?
-Or do I miss something obvious?
-
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-
-Kind regards,
-Petr
-
-> +
->  		/* ... and now unshare(CLONE_FILES) must fail with EMFILE */
->  		err = unshare(CLONE_FILES);
->  		EXPECT_EQ(err, -1)
->  			exit(EXIT_FAILURE);
->  		EXPECT_EQ(errno, EMFILE)
->  			exit(EXIT_FAILURE);
-> +
-> +		/* restore fs.nr_open */
-> +		lseek(fd, 0, SEEK_SET);
-> +		write(fd, buf, n);
->  		exit(EXIT_SUCCESS);
->  	}
 
