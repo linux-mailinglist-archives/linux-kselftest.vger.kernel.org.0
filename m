@@ -1,99 +1,106 @@
-Return-Path: <linux-kselftest+bounces-29998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9361AA78303
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 21:59:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC183A78308
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 22:01:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 871C57A3769
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 19:58:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 207DB1891199
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 20:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2791EE00F;
-	Tue,  1 Apr 2025 19:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E942045A3;
+	Tue,  1 Apr 2025 20:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nhDoIu3t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sj0UIMgJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EEF149C7D;
-	Tue,  1 Apr 2025 19:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CC717C211;
+	Tue,  1 Apr 2025 20:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743537580; cv=none; b=dKzF7q1jLNNtZQbemTrWOls63w3jo+srIK7dvQS5Es8DSe20o4nd8XunQr1+gTNqNwccETOw02v6b14pEEvMBZWe0317ZR94svTG4IkQzN8RJZrsux3geyrOOHOQ7YeDxTTSNvWiuJRLfNmZldfhcG3C5HeBdd7M5aEjIJlI6BM=
+	t=1743537660; cv=none; b=cJxvxjfqgGpKoRl3sO+NzDIEonM/J0I2Fu44Uu9iF0V334M07S6wtqfds4TCxq8BqlRZCyoIFqyKhc/rf+eUkgqDpP8fj34CCLCxunndADIiVjPaFUEcyAJuBI2hxpxspRl+dXlOVm5FDuRLo9Qx0L5rXBglo0BU3YHk9B80BKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743537580; c=relaxed/simple;
-	bh=tncNSm+UNYU1jooNfPV27W/DH7UbX3ICgX+sPHAz5jw=;
+	s=arc-20240116; t=1743537660; c=relaxed/simple;
+	bh=SsEtymDjFxM1dLd88DEPk7b/DPbXgQcSJ+nDYJthskA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hIRJ8b9u1TsFf7fkBbB0Elv70y9jN2zdPV89IcgWjeuRNbkf0ZUK3vvE0w61DnZH51G2ZTXnD8/8FaQoYswRZtoESIlIkFS1pgdq1d/00xPJkngMq9H7OW9rzKGJ8S3T6yiSH58+ptJuwdXy+0BBVrCzweNpElZeWUAViloy7Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nhDoIu3t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9A9C4CEE5;
-	Tue,  1 Apr 2025 19:59:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y78rRU+QtdRyCDqIaLlBhyfPGUrq9lZvlIdcgtPJM+04/fzsjcJiNcs74qJ+vTDZXBSYDUmft1u//CgRRzmK43wWMu80Md5b82+Mecb4uu84xmF6Cl8X8uA+ueJzPVhU5bQdbCsvim/a9abbfGMPYysq1/s6h3whZt/byuEeFX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sj0UIMgJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EB7BC4CEE4;
+	Tue,  1 Apr 2025 20:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743537579;
-	bh=tncNSm+UNYU1jooNfPV27W/DH7UbX3ICgX+sPHAz5jw=;
+	s=k20201202; t=1743537659;
+	bh=SsEtymDjFxM1dLd88DEPk7b/DPbXgQcSJ+nDYJthskA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nhDoIu3tP7Yb5bpoY/L4pQIzGPL14n46v3UDUR6FYHFCEbccIrMCOKs5u6C6yDfhm
-	 Jmyhumxp2Kdg4O0pebV7ZYayJJvzP2zITFiLhuA/cEfGMA16l9rl60mrTqb8rP5ydY
-	 iDNnYD0Fb4qMWd0iNh9BO7dNNHgReM06pGUpKItYh0LgDckIK9LPI0GswdPdoCoULP
-	 zwAiGN0KP6vNJUw+Tvv0ZF6czCpGn07Uo+tpkri38GRiDTLqsok3JhVr+paCDCVwNY
-	 fxAH2sQkqKQM/ov/8W/7IKmZWEWTxFvtT/pZal9tIpGdV+Y48PTMaGHqQlCWAFd14r
-	 xRbARAOfAwMSA==
-Date: Tue, 1 Apr 2025 09:59:38 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Waiman Long <llong@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 01/10] cgroup/cpuset: Fix race between newly created
- partition and dying one
-Message-ID: <Z-xFqkBsh640l5j0@mtj.duckdns.org>
-References: <20250330215248.3620801-1-longman@redhat.com>
- <20250330215248.3620801-2-longman@redhat.com>
- <Z-shjD2OwHJPI0vG@slm.duckdns.org>
- <915d1261-ee9f-4080-a338-775982e1c48d@redhat.com>
+	b=Sj0UIMgJB3BhWg6Q5hThirUmVNapBvLUCssaM9xJhq4z8rINztn8U2a8VU7uKVvO+
+	 KNTKB8yFVEH/6P0aJxnzC8ql/cEZBktK2XjcFkIJonPY+vNiktGaEJh1pu3KP86pOZ
+	 0Z/JDChHvvi4fQgWwY2pv315OrvtUWanr7oVb/zq3/xkPyam7hR1FljADmz/mdjKmW
+	 3KeD4+Bq0JfzX1PdRiolOCzdjflmaIQN6ONyog6XNtxrNEObEDL4X29f59mJiYMhry
+	 cfSVpBrf0Tf8VE+sJ34qXMxAOHcRzpXoXlXhcPxZlM+YajKX9z4ArQ7bi8GhCQGACf
+	 ReX1Z2plvjm5Q==
+Date: Tue, 1 Apr 2025 13:00:55 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Peter Zijlstra <peterz@infradead.org>, 
+	Alessandro Carminati <acarmina@redhat.com>, linux-kselftest@vger.kernel.org, 
+	David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Kees Cook <keescook@chromium.org>, Daniel Diaz <daniel.diaz@linaro.org>, 
+	David Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Maxime Ripard <mripard@kernel.org>, Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Alessandro Carminati <alessandro.carminati@gmail.com>, Jani Nikula <jani.nikula@intel.com>, 
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, loongarch@lists.linux.dev, 
+	x86@kernel.org, Linux Kernel Functional Testing <lkft@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v4 06/14] x86: Add support for suppressing warning
+ backtraces
+Message-ID: <rkuxvq6pkha6pixz5rtu327ujt7ism5f4wgrak7egcecuxwe42@qkn5ewdzwhvo>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+ <20250313114329.284104-7-acarmina@redhat.com>
+ <20250401170829.GO5880@noisy.programming.kicks-ass.net>
+ <ddc7939f-fb98-43af-aed1-0bc0594ecc41@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <915d1261-ee9f-4080-a338-775982e1c48d@redhat.com>
+In-Reply-To: <ddc7939f-fb98-43af-aed1-0bc0594ecc41@roeck-us.net>
 
-Hello, Waiman.
-
-On Mon, Mar 31, 2025 at 11:12:06PM -0400, Waiman Long wrote:
-> The problem is the RCU delay between the time a cgroup is killed and is in a
-> dying state and when the partition is deactivated when cpuset_css_offline()
-> is called. That delay can be rather lengthy depending on the current
-> workload.
-
-If we don't have to do it too often, synchronize_rcu_expedited() may be
-workable too. What do you think?
-
-> Another alternative that I can think of is to scan the remote partition list
-> for remote partition and sibling cpusets for local partition whenever some
-> kind of conflicts are detected when enabling a partition. When a dying
-> cpuset partition is detected, deactivate it immediately to resolve the
-> conflict. Otherwise, the dying partition will still be deactivated at
-> cpuset_css_offline() time.
+On Tue, Apr 01, 2025 at 10:53:46AM -0700, Guenter Roeck wrote:
+> On 4/1/25 10:08, Peter Zijlstra wrote:
+> > > +	if (!KUNIT_IS_SUPPRESSED_WARNING(__func__))			\
+> > > +		_BUG_FLAGS(ASM_UD2, __flags, ANNOTATE_REACHABLE(1b));	\
+> > >   	instrumentation_end();					\
+> > >   } while (0)
+> > 
+> > NAK, this grows the BUG site for now appreciable reason.
 > 
-> That will be a bit more complex and I think can still get the problem solved
-> without adding a new method. What do you think? If you are OK with that, I
-> will send out a new patch later this week.
+> Only if CONFIG_KUNIT_SUPPRESS_BACKTRACE is enabled. Why does that
+> warrant a NACK ?
 
-If synchronize_rcu_expedited() won't do, let's go with the original patch.
-The operation does make general sense in that it's for a distinctive step in
-the destruction process although I'm a bit curious why it's called before
-DYING is set.
+I agree with Peter, this bloats the code around thousands of UD2 sites.
 
-Thanks.
+It would be much better to do the checking after the exception.  In fact
+it looks like you're already doing that in report_bug()?
+
+	if (warning && KUNIT_IS_SUPPRESSED_WARNING(function))
+		return BUG_TRAP_TYPE_WARN;
+
+Why check it twice?
 
 -- 
-tejun
+Josh
 
