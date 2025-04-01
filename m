@@ -1,178 +1,173 @@
-Return-Path: <linux-kselftest+bounces-29989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A026A77E2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 16:49:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4224EA77F7E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 17:51:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6885D3A72E3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 14:49:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61E1D162D7F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 15:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E8B204851;
-	Tue,  1 Apr 2025 14:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D1D20C486;
+	Tue,  1 Apr 2025 15:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="geUaY8gt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pg9hd6bO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B56202F71
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Apr 2025 14:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A745020C01C;
+	Tue,  1 Apr 2025 15:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743518962; cv=none; b=IKkPyEG0prfwDGeJFBrlTyCA/65vcMds7gM5Ob2Iqbwau4NT/IvELjyDAnm/Jiy5mJDISf+6q1BgxoDTm+4A9U59atH6Rlj+PL7PDaJGFSNVMDsCm3OoqZMXDqDIAcxRIntoC6NJJe3CWf7RapY807HOu5AiQquqzsYSCEXlBLg=
+	t=1743522607; cv=none; b=SJCENRdJmh35YbAPUHqn2FjecI2WbLEYj8DaZMZGv+PdRclomPnuPPYbWlPSkiOVqrqCfCWJjkyqtVCJspZyb/GxjdwCfow4XpL+0Xg7fkinRJ8eSDTX/XJLKaLcraC6TJb+J+moD0AFdjSDoV1kovnIyY+Cl6CH5rGlSgMh3DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743518962; c=relaxed/simple;
-	bh=zfvY5ilblRz1ZETzZCRpmPJmoOETggjCXhq2caObBnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qQurHZS2Ob+9NZKx6EWPFutG0U6ynlJtWzLhdIs5PoRCNzY29zTuNoTJQY8KQKzmzT8KIEnyhYa9vyKOp7eEdflVTDxdiqZfew+SN/t4wYhXJ+k6/YqM/y78qyn5AHkxzyDZmU5TC8W0qEuoTjjw1BkJLL1R2SgqB0UFAAcZPQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=geUaY8gt; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-224171d6826so84508865ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Apr 2025 07:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1743518960; x=1744123760; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nvvg2/Gk/l5x3IN/jgeamuut3HGiVttHMqWOPVL9kGk=;
-        b=geUaY8gtEfkK8vIofpS8xtOziY1xAGnsN0IAXQXhP0gfytWpdaM5uFUPWvlpyeQmza
-         wSsYGM/ag72ngXM2UmJc1mMLXOWotA/+snZ+SzhSJNti8aq/nSH6LaV+7+EI0KsbvDxj
-         OFF/ySyfLkNfYbe5rQewNsffdiKFo3CNUQDCUnedsmvtc1Tin0KaPSMEOaOLjPnyUhVZ
-         5qdRgrEHk1FIOubQ1pEThLjwMI9Rbsy6cbGiy9eCoYDql790JpkJWnFHbz4TMJei325t
-         Twc6moafz7GnSf4ph3zKbMjZknB73uzb4eoFGUXOmDHU1PRW27cGPHUkiDkD/F2gkAEv
-         CcqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743518960; x=1744123760;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nvvg2/Gk/l5x3IN/jgeamuut3HGiVttHMqWOPVL9kGk=;
-        b=QsScwT86Od1SPPWr24OMhHUu0PnbD2OsNx3Yu1X0rW5DYitjHhSN0C+dzY/TrmdGPH
-         CcW1zRXcOfmjn60NsDzj9IFUT6smnzUlG5w+M062r4XodSs3dbv0tUDEEPVeMOdB5kd6
-         Wmf54g1dzFB1kyAFAVS3l0eFk6ls2tXMGw2s9Xw1fP3cpHuCkNFtSYbr0bMfGqs7Nx0D
-         nFg8nEZgeEJ1SO4xHK5eiUVGP/BUKDIdDjzYuQ0VOhX74c4OQpJgJ4PEgGc5etzvXMGU
-         9rvLYMZ1N33OIDmjHtufz6ybcm4abXdSFI5kEDbWHR7g4S9oSEbdDWTrR/aKTZWKG4kH
-         RvzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX4NUFcu1A+PtMVM9Oc/lixEsEDvbF1rVbTcPeCml5ZxJeIQIZRu2++jWW4EbCfY6ytad85Q9yC0erQB35ZFzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoJieIY74oKt6EPKXtt0FocQG/1+wc5kTdqUi/PQiMC6iy3+OZ
-	s7dhVAganBbnN3tfLMU7GNBXqAgFTahyxUn7VV6oaEgkajSwLAX1MtcDG0ER3Q==
-X-Gm-Gg: ASbGncuisVfw3CsKWEg8hSbMjCqvximJPsOd9TQdJ/4YHgDRcU7MJKu67NFTnT4Hfg2
-	elERTdLsAzNMhj5WENgbA80I7PO4qRNTuqtNmqeARrzj0GLwmtKQQNd7nyPj3ct5Lrrx6/dMdLI
-	6WxnyT+HAvvZOq8QPWpAIEENN8Dxkv9twT5Cq7JLfAZVtjBzbtLgx0q8tacgk2QZTsCwsQOHDAu
-	OHMb4a30KNGtnYZDLxusFHlc3Yyp5nAvqK8B1hLnxBqwG2smSwd0nSj844SN8vbOFnSxQjvvHQv
-	930rVmenuZr4Uv2CpdKD/VJgUKxzH0VUeXYL2vspnVuxpO+CY0B6rbY/le1Hg9xsSagT
-X-Google-Smtp-Source: AGHT+IFRoyfRjpj2ypIJeacRkpuzmigIRbGGpUfFVuVkeHHePN1/B92eV2AUslffLwHY+8sbiTcM0A==
-X-Received: by 2002:a05:6a00:4b0d:b0:736:31cf:2590 with SMTP id d2e1a72fcca58-7398041fd44mr20622359b3a.16.1743518960182;
-        Tue, 01 Apr 2025 07:49:20 -0700 (PDT)
-Received: from rogue-one.tail33bf8.ts.net ([179.218.14.134])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739710d6a08sm9270954b3a.170.2025.04.01.07.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Apr 2025 07:49:19 -0700 (PDT)
-From: Pedro Tammela <pctammela@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	shuah@kernel.org,
-	pctammela@mojatatu.com,
-	linux-kselftest@vger.kernel.org,
-	Simon Horman <horms@kernel.org>
-Subject: [PATCH net v2] selftests: tc-testing: fix nat regex matching
-Date: Tue,  1 Apr 2025 11:49:08 -0300
-Message-ID: <20250401144908.568140-1-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1743522607; c=relaxed/simple;
+	bh=1hkJIObXU6D6g/m6PDf5eOhm8XieoCe72AgLZFtJ1tY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pQkjyyS2S9n3iHrYGp2lXYTjJfEwowWt+DXuiLuJQOKDcVr3A6oemgHOIZimLciIotYhoIIA68ZiCM4cHv1e4eJlQytsGmUCETsz/MPHPxlgTGOuZ7DoVLXzKLoZ3cn2wTVVlZNa4OMhkr09yn7bWTcNWqErJDWlcAq7FdQ/ajA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pg9hd6bO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CFFEC4CEE4;
+	Tue,  1 Apr 2025 15:50:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743522607;
+	bh=1hkJIObXU6D6g/m6PDf5eOhm8XieoCe72AgLZFtJ1tY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pg9hd6bOaGA/LYOFZN8mY4c003tZBqGisSy1eGSSPOnbpvECWNvOgduhC3WV48xYp
+	 mzn/SLSFf8UozljIiONEJAh1yqrMkNGkPlDuXflY8TprZ3FeTfabYNro4cwehZWBhx
+	 aaaOauK6U+4vud+mQfyTDqL8OIyJEW5/FuhabMNYjH98UkDm01FORoRs7vcZzJZVrH
+	 Pi/ff8O/1EUuU1AOzgdLPQfUj/EfCSei+ij4B8QYBY58MsTjdmaSkG4UiH3GHWb/T0
+	 ORw0oMtC/KKdafl0LcV6605G+s7nkKpYuhXOo6JyRvCEki5c5wdOYjX36z5Wp3UHkh
+	 B59gg6SPSZewg==
+Date: Tue, 1 Apr 2025 18:50:02 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, nkapron@google.com, teknoraver@meta.com,
+	roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [RFC PATCH security-next 0/4] Introducing Hornet LSM
+Message-ID: <Z-wLKhlfJ5EQqvJC@kernel.org>
+References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+ <Z97xvUul1ObkmulE@kernel.org>
+ <871puc7wb8.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871puc7wb8.fsf@microsoft.com>
 
-In iproute 6.14, the nat ip mask logic was fixed to remove an undefined
-behaviour[1]. So now instead of reporting '0.0.0.0/32' on x86 and potentially
-'0.0.0.0/0' in other platforms, it reports '0.0.0.0/0' in all platforms.
+On Mon, Mar 31, 2025 at 01:57:15PM -0700, Blaise Boscaccy wrote:
+> There are two flavors of skeletons, normal skeletons, and light
+> skeletons. Normal skeletons utilize relocation logic that lives in
+> libbpf, and the relocations/instruction rewriting happen in userspace.
+> The second flavor, light skeletons, uses a small eBPF program that
+> contains the relocation lookup logic. As it's running in in the kernel,
+> it unpacks the target program, peforms the instruction rewriting, and
+> loads the target program. Light skeletons are currently utilized for
+> some drivers, and BPF_PRELOAD functionionality since they can operate
+> without userspace.
+> 
+> Light skeletons were recommended on various mailing list discussions as
+> the preffered path to performing signature verification. There are some
+> PoCs floating around that used light-skeletons in concert with
+> fs-verity/IMA and eBPF LSMs. We took a slightly different approach to
+> Hornet, by utilizing the existing PCKS#7 signing scheme that is used for
+> kernel modules.
 
-[1] https://lore.kernel.org/netdev/20250306112520.188728-1-torben.nielsen@prevas.dk/
+Right, because in the normal skeletons relocation logic remains
+unsigned?
 
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
-v2: Add reference to iproute2 commit and collect Simon's reviewed-by
----
- .../selftests/tc-testing/tc-tests/actions/nat.json | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+I have to admit I don't fully cope how the relocation process translates
+into eBPF program but I do get how it is better for signatures if it
+does :-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json b/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
-index ee2792998c89..4f21aeb8a3fb 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/nat.json
-@@ -305,7 +305,7 @@
-         "cmdUnderTest": "$TC actions add action nat ingress default 10.10.10.1 index 12",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 12",
--        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/32 10.10.10.1 pass.*index 12 ref",
-+        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/0 10.10.10.1 pass.*index 12 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
-@@ -332,7 +332,7 @@
-         "cmdUnderTest": "$TC actions add action nat ingress any 10.10.10.1 index 12",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 12",
--        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/32 10.10.10.1 pass.*index 12 ref",
-+        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/0 10.10.10.1 pass.*index 12 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
-@@ -359,7 +359,7 @@
-         "cmdUnderTest": "$TC actions add action nat ingress all 10.10.10.1 index 12",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 12",
--        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/32 10.10.10.1 pass.*index 12 ref",
-+        "matchPattern": "action order [0-9]+:  nat ingress 0.0.0.0/0 10.10.10.1 pass.*index 12 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
-@@ -548,7 +548,7 @@
-         "cmdUnderTest": "$TC actions add action nat egress default 20.20.20.1 pipe index 10",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 10",
--        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref",
-+        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
-@@ -575,7 +575,7 @@
-         "cmdUnderTest": "$TC actions add action nat egress any 20.20.20.1 pipe index 10",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 10",
--        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref",
-+        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
-@@ -602,7 +602,7 @@
-         "cmdUnderTest": "$TC actions add action nat egress all 20.20.20.1 pipe index 10",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 10",
--        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref",
-+        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
-@@ -629,7 +629,7 @@
-         "cmdUnderTest": "$TC actions add action nat egress all 20.20.20.1 pipe index 10 cookie aa1bc2d3eeff112233445566778800a1",
-         "expExitCode": "0",
-         "verifyCmd": "$TC actions get action nat index 10",
--        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/32 20.20.20.1 pipe.*index 10 ref.*cookie aa1bc2d3eeff112233445566778800a1",
-+        "matchPattern": "action order [0-9]+:  nat egress 0.0.0.0/0 20.20.20.1 pipe.*index 10 ref.*cookie aa1bc2d3eeff112233445566778800a1",
-         "matchCount": "1",
-         "teardown": [
-             "$TC actions flush action nat"
--- 
-2.43.0
+> 
+> >> verification. Signature data can be easily generated for the binary
+> >
+> > s/easily//
+> >
+> > Useless word having no measure.
+> >
+> 
+> Ack, thanks.
+> 
+> 
+> >> data that is generated via bpftool gen -L. This signature can be
+> >
+> > I have no idea what that command does.
+> >
+> > "Signature data can be generated for the binary data as follows:
+> >
+> > bpftool gen -L
+> >
+> > <explanation>"
+> >
+> > Here you'd need to answer to couple of unknowns:
+> >
+> > 1. What is in exact terms "signature data"?
+> 
+> That is a PKCS#7 signature of a data buffer containing the raw
+> instructions of an eBPF program, followed by the initial values of any
+> maps used by the program. 
 
+Got it, thanks. This motivates to refine my TPM2 asymmetric keys
+series so that TPM2 could anchor these :-)
+
+https://lore.kernel.org/linux-integrity/20240528210823.28798-1-jarkko@kernel.org/
+
+
+> 
+> > 2. What does "bpftool gen -L" do?
+> >
+> 
+> eBPF programs often have 2 parts. An orchestrator/loader program that
+> provides load -> attach/run -> i/o -> teardown logic and the in-kernel
+> program.
+> 
+> That command is used to generate a skeleton which can be used by the
+> orchestrator prgoram. Skeletons get generated as a C header file, that
+> contains various autogenerated functions that open and load bpf programs
+> as decribed above. That header file ends up being included in a
+> userspace orchestrator program or possibly a kernel module.
+
+I did read the man page now too, but thanks for the commentary!
+
+> 
+> > This feedback maps to other examples too in the cover letter.
+> >
+> > BR, Jarkko
+> 
+> 
+> I'll rework this with some definitions of the eBPF subsystem jargon
+> along with your suggestions.
+
+Yeah, you should be able to put the gist a factor better to nutshell :-)
+
+> 
+> -blaise
+
+BR, Jarkko
 
