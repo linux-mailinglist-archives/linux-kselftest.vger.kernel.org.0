@@ -1,72 +1,71 @@
-Return-Path: <linux-kselftest+bounces-29996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06C03A78250
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 20:37:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56474A78286
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 20:58:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BF9216F427
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 18:35:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C0311886AB7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 18:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0EE214213;
-	Tue,  1 Apr 2025 18:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440EE211282;
+	Tue,  1 Apr 2025 18:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1VrT/DzH";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ecyu4SU7"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QapRp3OK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BB12046B7;
-	Tue,  1 Apr 2025 18:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920F51F09B8;
+	Tue,  1 Apr 2025 18:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743532168; cv=none; b=QmyOKFYj8Ul69eY50ZU+d9bKZ2hLaVJ/xtwTGxwHqpDWxvUXfP7fqryw+lM7Rdke1doEhsJuIZZfXZ/js1caez+m6dAu0Ar7O0ipX9+6UKLoTkFnOQvDnADF1NPDgglaglvORsz1cmHGpJletpct3UMDGJyTAzkvO2qgbm1Lrms=
+	t=1743533812; cv=none; b=ri6zdFOCHpaGek3SCddGsZNG+a2z73I2YAqhS7AsBSZfZx4rF2pcdtSPTCkc4iPfuIa2hi5+eUWCNvk+hjrOyyJ5x4fQO02TY5XVUA4zPmNTKPLp3MS7QRqYnOEzPNL69NveDvFrGSSL6mzy4uZi0UhIuHTJCCbpMv7PskZ/6Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743532168; c=relaxed/simple;
-	bh=EgujnoBa6nsQn/IScrPesH7m6vJv4iil5agGF+4pITE=;
+	s=arc-20240116; t=1743533812; c=relaxed/simple;
+	bh=bzA5yQlxM5CYAzByNShEGHGrcQhOK5tsk1smItcbPvw=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=r8bCJwja7khFzxVpL7c6wlSrKqeNgcX/iiFGJP6iysUUdRV54KQNnhNbZcZHSGNRAukoItCqXjErZHU8eT6pNo/jkhKadU+sdUsqa4vXKZOPVOCe3p68QBIZ8dctCM0IBMB7iFP3zTbFXnwKu1w8JMQcwsduuBQD0LLTSrTWPqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1VrT/DzH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ecyu4SU7; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1743532164;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EC8HRbYeaxQQI/c2Wi7DJaUcBUlB78Fi/nftbP8XnOA=;
-	b=1VrT/DzHHtWIvDT6smt6Puda/Vy7c3CqdO9HPPnc4j/tx980L2VAFIwpikeoNggcmj3CU0
-	3GI/kpG/05m3LTfF6tOdZFywYoJe4uqZhubl8oWtMZGuMpVKj4h+8vaIkUtuKGW3J0BLUb
-	DnPuWWKGb4KSYuh+lxejnqMROUc8nl4L9R3tbuC5R/L02ei+Wx1vUUmLPm2ei5oNtSYM8k
-	me9UjCKX94BK6fdmJSOChh7dda2Y1cOQ6enlBgaDfkvZexQSsJydyDSbRByP8Goql9r1f/
-	2WkGn15eGNwjgEhuOu9ojWtPYPx9gHGAuwL9+nn71w9y58DwJcp+N4AXZwV3ww==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1743532164;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EC8HRbYeaxQQI/c2Wi7DJaUcBUlB78Fi/nftbP8XnOA=;
-	b=Ecyu4SU7W9TUXybzWfiVhalIa61i57CvwYdgrPo28ong7wYB6z6wLQc2KLmCGCyFiJoM93
-	3CkM3Cjf19FtWBAw==
-To: Miroslav Lichvar <mlichvar@redhat.com>
-Cc: John Stultz <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>,
- Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen
- <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
-Subject: Re: [PATCH v2 1/2] time/timekeeping: Fix possible inconsistencies
- in _COARSE clockids
-In-Reply-To: <Z-vL3cVZuQ8XQXhG@localhost>
-References: <20250320200306.1712599-1-jstultz@google.com>
- <Z-KURRE_Gr72Xv_n@localhost> <874izezv3c.ffs@tglx>
- <Z-Vx8kV4M3khPknC@localhost> <Z-qsg6iDGlcIJulJ@localhost>
- <87o6xgwftc.ffs@tglx> <Z-vL3cVZuQ8XQXhG@localhost>
-Date: Tue, 01 Apr 2025 20:29:23 +0200
-Message-ID: <87iknnwxa4.ffs@tglx>
+	 MIME-Version:Content-Type; b=dRbhQBPZItq3GylKxd8EgGzKQD3OzKY/Fcui8lYvjJuiju3N/RLPacnpOAdnsTfdICJFCI1yNGvEA4byZBlVRYpYU6+IuRVbQvQswQl8oDz2OHvq/LZPs/9BsOaXaiyMlJWJSPiu3abQLir5Yy1o1tXKConZbAx1YoRJpGq6SLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QapRp3OK; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id DE23920412F8;
+	Tue,  1 Apr 2025 11:56:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DE23920412F8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1743533810;
+	bh=nghUxCgd3Rj3zORPScI3SKHVRg60ZkC2fKZvDytP/2E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=QapRp3OKW3zygfnH/WRQRfu0u/vCRTJXMpGbSZvyiA818p11IAQoJN61iog+1P/sm
+	 gCtLH8qYoJ9tTiU7yIgFxpeZVYM05PLTHgDXbzkOmyZI4Tp/r5hR1VF4NeerLlWozD
+	 qUVTlal3A+XPQ8mlFolSwwPpKu7U/qXbdRRRDGhs=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jan Stancek <jstancek@redhat.com>,
+ Neal Gompa <neal@gompa.dev>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, nkapron@google.com,
+ teknoraver@meta.com, roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [RFC PATCH security-next 0/4] Introducing Hornet LSM
+In-Reply-To: <Z-wLKhlfJ5EQqvJC@kernel.org>
+References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+ <Z97xvUul1ObkmulE@kernel.org> <871puc7wb8.fsf@microsoft.com>
+ <Z-wLKhlfJ5EQqvJC@kernel.org>
+Date: Tue, 01 Apr 2025 11:56:40 -0700
+Message-ID: <87friru2vr.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,312 +74,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Tue, Apr 01 2025 at 13:19, Miroslav Lichvar wrote:
-> On Tue, Apr 01, 2025 at 08:34:23AM +0200, Thomas Gleixner wrote:
->> On Mon, Mar 31 2025 at 16:53, Miroslav Lichvar wrote:
->> > Mult reduction	Updates/sec	Skew before	Skew after
->> > 16		4		0.004		0.009
->> > 16		16		0.011		0.069
->> > 16		64		0.020		0.117
->> > 64		4		0.013		0.012
->> > 64		16		0.030		0.107
->> > 64		64		0.058		0.879
+Jarkko Sakkinen <jarkko@kernel.org> writes:
+
+> On Mon, Mar 31, 2025 at 01:57:15PM -0700, Blaise Boscaccy wrote:
+>> There are two flavors of skeletons, normal skeletons, and light
+>> skeletons. Normal skeletons utilize relocation logic that lives in
+>> libbpf, and the relocations/instruction rewriting happen in userspace.
+>> The second flavor, light skeletons, uses a small eBPF program that
+>> contains the relocation lookup logic. As it's running in in the kernel,
+>> it unpacks the target program, peforms the instruction rewriting, and
+>> loads the target program. Light skeletons are currently utilized for
+>> some drivers, and BPF_PRELOAD functionionality since they can operate
+>> without userspace.
 >> 
->> Hrm.
+>> Light skeletons were recommended on various mailing list discussions as
+>> the preffered path to performing signature verification. There are some
+>> PoCs floating around that used light-skeletons in concert with
+>> fs-verity/IMA and eBPF LSMs. We took a slightly different approach to
+>> Hornet, by utilizing the existing PCKS#7 signing scheme that is used for
+>> kernel modules.
+>
+> Right, because in the normal skeletons relocation logic remains
+> unsigned?
+>
+
+Yup, Exactly. 
+
+> I have to admit I don't fully cope how the relocation process translates
+> into eBPF program but I do get how it is better for signatures if it
+> does :-)
+>
 >> 
->> Can you try the delta patch below?
+>> >> verification. Signature data can be easily generated for the binary
+>> >
+>> > s/easily//
+>> >
+>> > Useless word having no measure.
+>> >
+>> 
+>> Ack, thanks.
+>> 
+>> 
+>> >> data that is generated via bpftool gen -L. This signature can be
+>> >
+>> > I have no idea what that command does.
+>> >
+>> > "Signature data can be generated for the binary data as follows:
+>> >
+>> > bpftool gen -L
+>> >
+>> > <explanation>"
+>> >
+>> > Here you'd need to answer to couple of unknowns:
+>> >
+>> > 1. What is in exact terms "signature data"?
+>> 
+>> That is a PKCS#7 signature of a data buffer containing the raw
+>> instructions of an eBPF program, followed by the initial values of any
+>> maps used by the program. 
 >
-> It seems to improve the worst cases, but overall it's still
-> a regression.
+> Got it, thanks. This motivates to refine my TPM2 asymmetric keys
+> series so that TPM2 could anchor these :-)
 >
-> Mult reduction	Updates/sec	Skew
-> 16		4		0.012
-> 16		16		0.014
-> 16		64	        0.033
-> 64		4		0.012
-> 64		16		0.105
-> 64		64		0.138
+> https://lore.kernel.org/linux-integrity/20240528210823.28798-1-jarkko@kernel.org/
+>
+>
 
-That's weird as it only delays the update to the next tick. My original
-approach of maintaining seperate state for the coarse time keeper is
-preserving the existing NTP behaviour.
+Oooh. That would be very nice :) 
 
-Patch applies after reverting 757b000f7b93 ("timekeeping: Fix possible
-inconsistencies in _COARSE clockids").
-
-Thanks,
-
-        tglx
----
---- a/include/linux/timekeeper_internal.h
-+++ b/include/linux/timekeeper_internal.h
-@@ -51,7 +51,7 @@ struct tk_read_base {
-  * @offs_real:			Offset clock monotonic -> clock realtime
-  * @offs_boot:			Offset clock monotonic -> clock boottime
-  * @offs_tai:			Offset clock monotonic -> clock tai
-- * @tai_offset:			The current UTC to TAI offset in seconds
-+ * @coarse_nsec:		The nanoseconds part for coarse time getters
-  * @tkr_raw:			The readout base structure for CLOCK_MONOTONIC_RAW
-  * @raw_sec:			CLOCK_MONOTONIC_RAW  time in seconds
-  * @clock_was_set_seq:		The sequence number of clock was set events
-@@ -76,6 +76,7 @@ struct tk_read_base {
-  *				ntp shifted nano seconds.
-  * @ntp_err_mult:		Multiplication factor for scaled math conversion
-  * @skip_second_overflow:	Flag used to avoid updating NTP twice with same second
-+ * @tai_offset:			The current UTC to TAI offset in seconds
-  *
-  * Note: For timespec(64) based interfaces wall_to_monotonic is what
-  * we need to add to xtime (or xtime corrected for sub jiffy times)
-@@ -100,7 +101,7 @@ struct tk_read_base {
-  * which results in the following cacheline layout:
-  *
-  * 0:	seqcount, tkr_mono
-- * 1:	xtime_sec ... tai_offset
-+ * 1:	xtime_sec ... coarse_nsec
-  * 2:	tkr_raw, raw_sec
-  * 3,4: Internal variables
-  *
-@@ -121,7 +122,7 @@ struct timekeeper {
- 	ktime_t			offs_real;
- 	ktime_t			offs_boot;
- 	ktime_t			offs_tai;
--	s32			tai_offset;
-+	u32			coarse_nsec;
- 
- 	/* Cacheline 2: */
- 	struct tk_read_base	tkr_raw;
-@@ -144,6 +145,7 @@ struct timekeeper {
- 	u32			ntp_error_shift;
- 	u32			ntp_err_mult;
- 	u32			skip_second_overflow;
-+	s32			tai_offset;
- };
- 
- #ifdef CONFIG_GENERIC_TIME_VSYSCALL
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -31,6 +31,7 @@
- 
- #define TK_CLEAR_NTP		(1 << 0)
- #define TK_CLOCK_WAS_SET	(1 << 1)
-+#define TK_RETAIN_COARSE	(1 << 2)
- 
- #define TK_UPDATE_ALL		(TK_CLEAR_NTP | TK_CLOCK_WAS_SET)
- 
-@@ -164,6 +165,15 @@ static inline struct timespec64 tk_xtime
- 	return ts;
- }
- 
-+static inline struct timespec64 tk_xtime_coarse(const struct timekeeper *tk)
-+{
-+	struct timespec64 ts;
-+
-+	ts.tv_sec = tk->xtime_sec;
-+	ts.tv_nsec = tk->coarse_nsec;
-+	return ts;
-+}
-+
- static void tk_set_xtime(struct timekeeper *tk, const struct timespec64 *ts)
- {
- 	tk->xtime_sec = ts->tv_sec;
-@@ -636,7 +646,34 @@ static void timekeeping_restore_shadow(s
- 	memcpy(&tkd->shadow_timekeeper, &tkd->timekeeper, sizeof(tkd->timekeeper));
- }
- 
--static void timekeeping_update_from_shadow(struct tk_data *tkd, unsigned int action)
-+/*
-+ * Update the nanoseconds part for the coarse time keepers. They can't rely
-+ * on xtime_nsec because xtime_nsec is adjusted when the multiplication
-+ * factor of the clock is adjusted. See timekeeping_apply_adjustment().
-+ *
-+ * This is required because tk_read::cycle_last must be advanced by
-+ * timekeeper::cycle_interval so that the accumulation happens with a
-+ * periodic reference.
-+ *
-+ * But that adjustment of xtime_nsec can make it go backward to compensate
-+ * for a larger multiplicator.
-+ *
-+ * @offset contains the leftover cycles which were not accumulated.
-+ * Therefore the nanoseconds portion of the time when the clocksource was
-+ * read in timekeeping_advance() is:
-+ *
-+ *	nsec = (xtime_nsec + offset * mult) >> shift;
-+ *
-+ * Calculate that value and store it in timekeeper::coarse_nsec, from where
-+ * the coarse time getters consume it.
-+ */
-+static inline void tk_update_coarse_nsecs(struct timekeeper *tk, u64 offset)
-+{
-+	offset *= tk->tkr_mono.mult;
-+	tk->coarse_nsec = (tk->tkr_mono.xtime_nsec + offset) >> tk->tkr_mono.shift;
-+}
-+
-+static void timekeeping_update_from_shadow(struct tk_data *tkd, unsigned int action, u64 offset)
- {
- 	struct timekeeper *tk = &tk_core.shadow_timekeeper;
- 
-@@ -659,6 +696,9 @@ static void timekeeping_update_from_shad
- 	tk_update_leap_state(tk);
- 	tk_update_ktime_data(tk);
- 
-+	if (!(action & TK_RETAIN_COARSE))
-+		tk_update_coarse_nsecs(tk, offset);
-+
- 	update_vsyscall(tk);
- 	update_pvclock_gtod(tk, action & TK_CLOCK_WAS_SET);
- 
-@@ -804,8 +844,8 @@ EXPORT_SYMBOL_GPL(ktime_get_with_offset)
- ktime_t ktime_get_coarse_with_offset(enum tk_offsets offs)
- {
- 	struct timekeeper *tk = &tk_core.timekeeper;
--	unsigned int seq;
- 	ktime_t base, *offset = offsets[offs];
-+	unsigned int seq;
- 	u64 nsecs;
- 
- 	WARN_ON(timekeeping_suspended);
-@@ -813,7 +853,7 @@ ktime_t ktime_get_coarse_with_offset(enu
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
- 		base = ktime_add(tk->tkr_mono.base, *offset);
--		nsecs = tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+		nsecs = tk->coarse_nsec;
- 
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- 
-@@ -1374,7 +1414,7 @@ int do_settimeofday64(const struct times
- 
- 		tk_set_wall_to_mono(tks, timespec64_sub(tks->wall_to_monotonic, ts_delta));
- 		tk_set_xtime(tks, ts);
--		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL);
-+		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL, 0);
- 	}
- 
- 	/* Signal hrtimers about time change */
-@@ -1413,7 +1453,7 @@ static int timekeeping_inject_offset(con
- 
- 		tk_xtime_add(tks, ts);
- 		tk_set_wall_to_mono(tks, timespec64_sub(tks->wall_to_monotonic, *ts));
--		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL);
-+		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL, 0);
- 	}
- 
- 	/* Signal hrtimers about time change */
-@@ -1493,7 +1533,7 @@ static int change_clocksource(void *data
- 		timekeeping_forward_now(tks);
- 		old = tks->tkr_mono.clock;
- 		tk_setup_internals(tks, new);
--		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL);
-+		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL, 0);
- 	}
- 
- 	if (old) {
-@@ -1690,7 +1730,7 @@ void __init timekeeping_init(void)
- 
- 	tk_set_wall_to_mono(tks, wall_to_mono);
- 
--	timekeeping_update_from_shadow(&tk_core, TK_CLOCK_WAS_SET);
-+	timekeeping_update_from_shadow(&tk_core, TK_CLOCK_WAS_SET, 0);
- }
- 
- /* time in seconds when suspend began for persistent clock */
-@@ -1774,7 +1814,7 @@ void timekeeping_inject_sleeptime64(cons
- 		suspend_timing_needed = false;
- 		timekeeping_forward_now(tks);
- 		__timekeeping_inject_sleeptime(tks, delta);
--		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL);
-+		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL, 0);
- 	}
- 
- 	/* Signal hrtimers about time change */
-@@ -1834,7 +1874,7 @@ void timekeeping_resume(void)
- 
- 	tks->ntp_error = 0;
- 	timekeeping_suspended = 0;
--	timekeeping_update_from_shadow(&tk_core, TK_CLOCK_WAS_SET);
-+	timekeeping_update_from_shadow(&tk_core, TK_CLOCK_WAS_SET, 0);
- 	raw_spin_unlock_irqrestore(&tk_core.lock, flags);
- 
- 	touch_softlockup_watchdog();
-@@ -1901,7 +1941,7 @@ int timekeeping_suspend(void)
- 		}
- 	}
- 
--	timekeeping_update_from_shadow(&tk_core, 0);
-+	timekeeping_update_from_shadow(&tk_core, 0, 0);
- 	halt_fast_timekeeper(tks);
- 	raw_spin_unlock_irqrestore(&tk_core.lock, flags);
- 
-@@ -2205,7 +2245,7 @@ static bool timekeeping_advance(enum tim
- 	 */
- 	clock_set |= accumulate_nsecs_to_secs(tk);
- 
--	timekeeping_update_from_shadow(&tk_core, clock_set);
-+	timekeeping_update_from_shadow(&tk_core, clock_set, offset);
- 
- 	return !!clock_set;
- }
-@@ -2248,7 +2288,7 @@ void ktime_get_coarse_real_ts64(struct t
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
- 
--		*ts = tk_xtime(tk);
-+		*ts = tk_xtime_coarse(tk);
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- }
- EXPORT_SYMBOL(ktime_get_coarse_real_ts64);
-@@ -2271,7 +2311,7 @@ void ktime_get_coarse_real_ts64_mg(struc
- 
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
--		*ts = tk_xtime(tk);
-+		*ts = tk_xtime_coarse(tk);
- 		offset = tk_core.timekeeper.offs_real;
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- 
-@@ -2350,12 +2390,12 @@ void ktime_get_coarse_ts64(struct timesp
- 	do {
- 		seq = read_seqcount_begin(&tk_core.seq);
- 
--		now = tk_xtime(tk);
-+		now = tk_xtime_coarse(tk);
- 		mono = tk->wall_to_monotonic;
- 	} while (read_seqcount_retry(&tk_core.seq, seq));
- 
- 	set_normalized_timespec64(ts, now.tv_sec + mono.tv_sec,
--				now.tv_nsec + mono.tv_nsec);
-+				  now.tv_nsec + mono.tv_nsec);
- }
- EXPORT_SYMBOL(ktime_get_coarse_ts64);
- 
-@@ -2539,7 +2579,8 @@ int do_adjtimex(struct __kernel_timex *t
- 
- 		if (tai != orig_tai) {
- 			__timekeeping_set_tai_offset(tks, tai);
--			timekeeping_update_from_shadow(&tk_core, TK_CLOCK_WAS_SET);
-+			timekeeping_update_from_shadow(&tk_core, TK_CLOCK_WAS_SET |
-+						       TK_RETAIN_COARSE, 0);
- 			clock_set = true;
- 		} else {
- 			tk_update_leap_state_all(&tk_core);
---- a/kernel/time/vsyscall.c
-+++ b/kernel/time/vsyscall.c
-@@ -98,12 +98,12 @@ void update_vsyscall(struct timekeeper *
- 	/* CLOCK_REALTIME_COARSE */
- 	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_REALTIME_COARSE];
- 	vdso_ts->sec	= tk->xtime_sec;
--	vdso_ts->nsec	= tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+	vdso_ts->nsec	= tk->coarse_nsec;
- 
- 	/* CLOCK_MONOTONIC_COARSE */
- 	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_MONOTONIC_COARSE];
- 	vdso_ts->sec	= tk->xtime_sec + tk->wall_to_monotonic.tv_sec;
--	nsec		= tk->tkr_mono.xtime_nsec >> tk->tkr_mono.shift;
-+	nsec		= tk->coarse_nsec;
- 	nsec		= nsec + tk->wall_to_monotonic.tv_nsec;
- 	vdso_ts->sec	+= __iter_div_u64_rem(nsec, NSEC_PER_SEC, &vdso_ts->nsec);
- 
-
-
-
+>> 
+>> > 2. What does "bpftool gen -L" do?
+>> >
+>> 
+>> eBPF programs often have 2 parts. An orchestrator/loader program that
+>> provides load -> attach/run -> i/o -> teardown logic and the in-kernel
+>> program.
+>> 
+>> That command is used to generate a skeleton which can be used by the
+>> orchestrator prgoram. Skeletons get generated as a C header file, that
+>> contains various autogenerated functions that open and load bpf programs
+>> as decribed above. That header file ends up being included in a
+>> userspace orchestrator program or possibly a kernel module.
+>
+> I did read the man page now too, but thanks for the commentary!
+>
+>> 
+>> > This feedback maps to other examples too in the cover letter.
+>> >
+>> > BR, Jarkko
+>> 
+>> 
+>> I'll rework this with some definitions of the eBPF subsystem jargon
+>> along with your suggestions.
+>
+> Yeah, you should be able to put the gist a factor better to nutshell :-)
+>
+>> 
+>> -blaise
+>
+> BR, Jarkko
 
