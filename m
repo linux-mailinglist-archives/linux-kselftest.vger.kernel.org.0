@@ -1,177 +1,124 @@
-Return-Path: <linux-kselftest+bounces-29987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 781B2A77CA8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 15:50:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A85A77DC1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 16:30:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4CCB77A2E4E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 13:49:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27DE21890A56
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 14:30:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7DD120459B;
-	Tue,  1 Apr 2025 13:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0E0204C20;
+	Tue,  1 Apr 2025 14:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="PR1Tl/t6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kOKRpO0q"
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="zpLBVqoX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46DB20371A;
-	Tue,  1 Apr 2025 13:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF859204C1D
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Apr 2025 14:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743515379; cv=none; b=AAbtxdV5cnTmjcmLz/iih7/rZXusUnco1frQElN4udh9YbMffeWtWKie9mbUawqYbbpRfszHILZE+FUtRx/qj55drkLFjhvbIVlrwAMLtAAFX0RsLEltYC+SxH1GWqz0dcIUmcQuuKTyEFlo92yf9YY0fGW4suMhnq8PCD9Hga8=
+	t=1743517762; cv=none; b=isJs9FI/6DpgGdMB1nDDbBU5pdao02k3P1VFoA8hfQ07AQCTIz/HaHVRSbI/9hzu4P2Xf76XnXHqNnzS6n5+tBI2zvY1eAJpwKo64hqkK8IN7jSEmQcjNdnk2MXw/DTqFblu3LtVpPOmL/qgUlGAW63zQ1kx2solnVO4n6yl330=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743515379; c=relaxed/simple;
-	bh=jeth/bwBzY8doEtYBJgsfD1LAAzvW37CgYN819KxCvk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FBakuPcwBBZV5wWqBlQpNLh+lhwlp6Ed0coXl/UmTATNo+tFLnrc0l/ntdGnIXWx/ui3G8bEaXeKcKRbaKgmqIXywmeaPEgWLO8qmaTcOiWKxtsdDIUCQBRX/qSuNks0hyhnE+D4121VMVpiHLn3MVDkdsE4L2o9LeiIWp/qdBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=PR1Tl/t6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kOKRpO0q; arc=none smtp.client-ip=202.12.124.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 369042540230;
-	Tue,  1 Apr 2025 09:49:35 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Tue, 01 Apr 2025 09:49:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1743515375; x=
-	1743601775; bh=IDNWLnNGgo+VaA1pzStaigL03Xw+iXfe/8+bV3Foqqc=; b=P
-	R1Tl/t6/ah/BbDH+eD5qFwGmTVrTWzOeEJW75feD8gMY9DX3W2M7hbS4uywyiBM8
-	aWqlVACXcI2pgSo4oojXTk4nV9Q8mH8kW3K9cUFwRLTkFXhIq4D8tn9gGC5l1W5a
-	uDh+KbIVbFXqCu/k3r6xewe/rFwp6mvwR7rRyCIdu3XZlOLuveHS33kd1eurjgQT
-	Jzhm3uGlfC7lqYgBJNXal/C8C/gXSdesOshDbOLfXw8oMtvosIOhDqu2cPIt/rgt
-	JLbV6Ffa4wyFgEV88ldrbXWmS+3i/4s+bSM/5Uy6+LppQUNEowuKkLr3lZDM9c38
-	1ydaM7WY+G6QQKDkGK3Hg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1743515375; x=1743601775; bh=IDNWLnNGgo+VaA1pzStaigL03Xw+iXfe/8+
-	bV3Foqqc=; b=kOKRpO0qLT+7631+t61z+Wr+8D17CtFfuHnpdjh09HfyxemYmbG
-	dSEkZ8vHgxmQx1PQgQyqPEoCa0EGJpbSSV5fL5IBI4r1jb6ALYGO+pRssn5q4rLE
-	wek3cNXA4JuSTM60Y/spxuUgQB7UgnDbe+SmUM3mY/ged1g5G402HAeSktgwlSGw
-	sTzFpqRd23WW8i2A70t719e2wfGV8YxL+AzIk/GG3SHw/TdRQumo/hwNC3Mk3OKW
-	kNdaQps10Zr2ALgQhMMDmOu5+Fsw91y3uAvcoYxJbNYN1lDMXDpkKSst6todeTHC
-	LB4UPM5SI3bZzEdmSrXGVP83QANvaEpMlUA==
-X-ME-Sender: <xms:7u7rZ-LoFvBMA0vs6fHYu_oxudWyGWLFEPi6-8uMS4wiJftyHd-J3g>
-    <xme:7u7rZ2JQSsPfjdQmPKYY23A_DcFEwBoD1ReBD8ua17mwSOvYDHP2nzIsnZmNlnqxD
-    yaHaDzhpBJBhDdvLCU>
-X-ME-Received: <xmr:7u7rZ-udlPgakiG0OXQhgLfO5sOjCkZYtw8P3y-aIyzT1FqKXHGyQO5ZcH8K>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedvleegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
-    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdef
-    hfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
-    sggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnth
-    honhhiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrd
-    gtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehp
-    rggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnth
-    gvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtph
-    htthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:7u7rZzbLrwCcsT5I9vIn31J0oy8TjzAo_ovB6in--X9f9jSPC1ussg>
-    <xmx:7u7rZ1bOd6FCYmP1T4bNqnmi57ysuAFMVv86kSaLqPr1G5JJsQFJKw>
-    <xmx:7u7rZ_C6kq-zuSM8-5Sld5m-RQFuQXodfDddLNOdBoo0QuBWhMoSeQ>
-    <xmx:7u7rZ7bJSn3cc8s11fkAq70yaIL98plcGTWHkFPVNGIzNM7T9C1AOQ>
-    <xmx:7-7rZ5oZsvBW3JPT5lM_WhxSmj9l9vkOGcpf1VH3L5aSm8_rrQ8EgU6G>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Apr 2025 09:49:34 -0400 (EDT)
-Date: Tue, 1 Apr 2025 15:49:32 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v24 07/23] ovpn: implement basic TX path (UDP)
-Message-ID: <Z-vu7AWTwWE2D_df@krikkit>
-References: <20250318-b4-ovpn-v24-0-3ec4ab5c4a77@openvpn.net>
- <20250318-b4-ovpn-v24-7-3ec4ab5c4a77@openvpn.net>
+	s=arc-20240116; t=1743517762; c=relaxed/simple;
+	bh=XX6oOUemsawBL+SQdwNjm1O0/5SaihaOSkbclmz4J4c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Py+0gAzIQCvL1dEjBMr2/HSMyf4/TBMNkEbttIUUMKxDNC24bM3O5zp5xQxNWTYm4FiukwrmdFi6Tr22bWn5UgdXPE5DUmslQQHhyAgkVFi5S+pJbQ0o+9WGT2c6YFpMscaUX/NMgLTJNXCDPpjQMWRo0L2iUjbuBYGK6Nfq2Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=zpLBVqoX; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-227b650504fso112338735ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Apr 2025 07:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1743517760; x=1744122560; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n6BkKDZgFevCmNfmsTeyIWH988WzbqqfzHgPc2ecmlM=;
+        b=zpLBVqoXsnYHhlLLSwIo8MwhAY7HXcLKKEDtBpTCECwck663RV9JC3A6pKTTgUKE/V
+         YxrzvNHJ3cj0vEGHMsXKf++Z2lV0gzc6kWJpHwe8Emdxf8GdZTZp89mTxn3fwqm68tNd
+         DQ5nBpDMYKhMuGdt+OHq4kTFQExBJ3UfM7g+xGMqUAGPMk+gnO6IyW4MoHRJWKkPGwsc
+         ZYyDrnfqgklpQbCLjwT708X6pvp67ggKlAe0FhEof97asm50/FZHUcaTet7DOM11js0V
+         KH7DRJqQGaixFCnN2KkkOkQYQVfjl+IZI9lcJ0qRaU6IKpcmufPCanWMVeEVB0IOm77m
+         aBBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743517760; x=1744122560;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n6BkKDZgFevCmNfmsTeyIWH988WzbqqfzHgPc2ecmlM=;
+        b=nNqstqvduzFAjNRLLphQ43YqOZjz4R15lFtasBUuw8Go5Ab9WoC4PmGS8uiYJhjx4+
+         +gsadHCywdRG6Yt+xUMCcicjjtCZtEKwmr/WvVRABt5qt9I+9E+E06K0e5htSa3x2eNd
+         iO4I2TPj+VzFtgGmDIrlBXHzpZYGS4hWrUNbzGr/BkCC77HB3CINtWDr9VKQQnmaGZUi
+         vFtSr4lcDMUfAy2XFhq+8xQNPUsBdAWKINnpUNVWzCS2RYWhhWKhAi96A9keIkjvDVJm
+         7sJrY7EVOL18rWOzNsskwADtUYHBIkHX5irlSi+U7vFDse7KcwJMb7ROQM1DnMkRA5xT
+         knRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0uKjUTKAwSxAJbgIvq+4OMSoe3XmMav36ySmjr6b5wnvsv9hTdCGuj4vWvFyUapYEa/ybFTWW9hjtRxTctx8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1CZr98ITtwCgRMYmgq60CKRsYH6iiMOo1QiAcA14Wgs8ACWcb
+	Nac0IZgs4EDY9JGCUa5g2lCBe/8QFMcI3QMcw4fkOWb+F3dgm9AIjDcuf89KxA==
+X-Gm-Gg: ASbGncsFytM0YAouXBolalxH0lCp3EUrKfzEE6ACU5ArMlwNxY+wgs+CeEShSl1nBkA
+	DbPETPPsr0mGjcJ4HK9tUsH+5R4wM5qBBUY7RNp/0eoDhLuJ8yrNtN1n4ryYid5/4raj2Z9YLWy
+	LbNM9J1whpxM3SKgrA5Tjhb8HvAJZMUocvb3uTl7g1+J24SWYDsJaOheC+3RHObMG5ElTaPKEjL
+	B/98WDK/YucWrhZh62Svog7ek9YDf10r/LKmb7wlbwgBlXrtr27iqMs+9AZcz38szCFRHR3GpDN
+	qECe/g+DIBmGptsl0rkoUcnR6e0mm7Pmr8EhOeksouzE4+gWm9qZbmZs199/7ric
+X-Google-Smtp-Source: AGHT+IFpBZsmg7PjdBnd0C9b5R1nD+BfWySEnglDXheprt5qViicZNJCWLtqLXYmefKJWINu74z1aA==
+X-Received: by 2002:a05:6a00:3927:b0:736:6ac4:d204 with SMTP id d2e1a72fcca58-739803a62dfmr18569914b3a.11.1743517759743;
+        Tue, 01 Apr 2025 07:29:19 -0700 (PDT)
+Received: from [192.168.50.25] ([179.218.14.134])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73970def16esm8949518b3a.5.2025.04.01.07.29.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Apr 2025 07:29:19 -0700 (PDT)
+Message-ID: <a32b8916-616f-4e50-848f-c657bb7494b4@mojatatu.com>
+Date: Tue, 1 Apr 2025 11:29:15 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250318-b4-ovpn-v24-7-3ec4ab5c4a77@openvpn.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests: tc-testing: fix nat regex matching
+To: Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20250331195618.535992-1-pctammela@mojatatu.com>
+ <20250401095349.GC214849@horms.kernel.org>
+Content-Language: en-US
+From: Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20250401095349.GC214849@horms.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-2025-03-18, 02:40:42 +0100, Antonio Quartulli wrote:
-> +static int ovpn_udp_output(struct ovpn_peer *peer, struct dst_cache *cache,
-> +			   struct sock *sk, struct sk_buff *skb)
-> +{
-> +	struct ovpn_bind *bind;
-> +	int ret;
-> +
-> +	/* set sk to null if skb is already orphaned */
-> +	if (!skb->destructor)
-> +		skb->sk = NULL;
-> +
-> +	/* always permit openvpn-created packets to be (outside) fragmented */
-> +	skb->ignore_df = 1;
+On 01/04/2025 06:53, Simon Horman wrote:
+> On Mon, Mar 31, 2025 at 04:56:18PM -0300, Pedro Tammela wrote:
+>> In iproute 6.14, the nat ip mask logic was fixed to remove a undefined
+>> behaviour. So now instead of reporting '0.0.0.0/32' on x86 and potentially
+>> '0.0.0.0/0' in other platforms, it reports '0.0.0.0/0' in all platforms.
+>>
+> 
+> Hi Pedro,
+> 
+> As a fix for 'net' usually a Fixes tag would go here.
+> But perhaps that isn't appropriate in this case for some reason?
+> 
+>> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
+> 
+> I am assuming that you are referring to this fix:
+> 
+> - [PATCH iproute2-next] tc: nat: Fix mask calculation
+>    https://lore.kernel.org/netdev/20250306112520.188728-1-torben.nielsen@prevas.dk/
+> 
+> If so, it might be nice to include a reference to it in the commit message.
 
-Have you tested this with IPv4 encap? AFAICT it doesn't have any
-effect because of the call chain:
+Will do, thanks!
 
-ovpn_udp4_output -> udp_tunnel_xmit_skb -> iptunnel_xmit -> skb_scrub_packet
+> 
+> And also, if so, this change looks good to me:
+> 
+> Reviewed-by: Simon Horman <horms@kernel.org>
 
-which does
-
-    skb->ignore_df = 0;
-
-
-But since you pass df = 0 to udp_tunnel_xmit_skb, I suspect it works
-as intended despite skb_scrub_packet.
-
-
-[note: that was the last comment I wanted to send, I have a few more
-suggestions that don't need to be addressed at this time]
-
-> +
-> +	rcu_read_lock();
-> +	bind = rcu_dereference(peer->bind);
-> +	if (unlikely(!bind)) {
-> +		net_warn_ratelimited("%s: no bind for remote peer %u\n",
-> +				     netdev_name(peer->ovpn->dev), peer->id);
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
-> +	switch (bind->remote.in4.sin_family) {
-> +	case AF_INET:
-> +		ret = ovpn_udp4_output(peer, bind, cache, sk, skb);
-> +		break;
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +	case AF_INET6:
-> +		ret = ovpn_udp6_output(peer, bind, cache, sk, skb);
-> +		break;
-> +#endif
-> +	default:
-> +		ret = -EAFNOSUPPORT;
-> +		break;
-> +	}
-> +
-> +out:
-> +	rcu_read_unlock();
-> +	return ret;
-> +}
-
--- 
-Sabrina
 
