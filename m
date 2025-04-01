@@ -1,143 +1,131 @@
-Return-Path: <linux-kselftest+bounces-29974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54726A774B4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 08:46:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AC59A775BE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 09:57:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A04F7188DC51
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 06:46:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 964173A8DDB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 07:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390B21DF73A;
-	Tue,  1 Apr 2025 06:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C5D1E7C11;
+	Tue,  1 Apr 2025 07:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qhPQTNJ0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zUrGU8g+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698801C3C08;
-	Tue,  1 Apr 2025 06:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABED1078F;
+	Tue,  1 Apr 2025 07:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743489980; cv=none; b=Z/+PbLApmz4XM/8iVV+u2uVMEPixfb9SgQz9AsQ2G8sVB9HM4HO8u6xwN9OTtB6GDyv7f/KSR3kRn6tTFZY8DyafFbufxKyoXMRfkV3cVJ4toFuI4x+uVUVeIleTBvtlChVw7Jt1dIxLnECPi82tXMUIekQioAMdu9Aw0e1oBko=
+	t=1743494222; cv=none; b=UgHTjilOAj2AvR4pXs2bYBUQQtgsv/Hm2WG/mginBur5F+movs3Xc6RMFL3nOSo/ULKBEiyPArgVCzs10uqJurWLNvmZBk1U61019euD4mS/viTAw3bForQGztLHm7pyaxs4aCbSxH8JT/W/037CSKjCHHpGxXx6lQIwFICW74I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743489980; c=relaxed/simple;
-	bh=W9rSmiwKduxUWi49l8wNtNetlF5W1ByAEmk9M9wIH9Y=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=IqImrX33umqACpTGRBavH43d7sv2p0Kxn09M9wXK5j0WMNTA+9kvLDskkjWwV26ilQ0w6GiTg8oSpBV9oY6NA7jn6pLTwNmiKXCsT2OfqpqbybiTOXmQbpbXKT5HeGH2Oqgl5yNO5JyjTOmPm6/Lbst4Y+duEZU9jCCEWGaBG90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4ZRdmr5nmYz4f3jJH;
-	Tue,  1 Apr 2025 14:45:48 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id EC88C1A10CD;
-	Tue,  1 Apr 2025 14:46:11 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP2 (Coremail) with SMTP id Syh0CgB3gmWvi+tnaud_IA--.20876S2;
-	Tue, 01 Apr 2025 14:46:11 +0800 (CST)
-Subject: Re: [PATCH] selftests/bpf: close the file descriptor to avoid
- resource leaks
-To: Malaya Kumar Rout <malayarout91@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Geliang Tang <geliang@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <malayarout91@gmail.com>
- <20250324064234.853591-1-malayarout91@gmail.com>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <fd481035-5608-6c8e-eb72-65b4ad320d4d@huaweicloud.com>
-Date: Tue, 1 Apr 2025 14:46:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1743494222; c=relaxed/simple;
+	bh=qNX3h8e3ZikgfkMzqr+0T/Vi5N/3/tWNAwMgnRCpSII=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Wg+zTkDSl3YxV4Bmu+VWpbXxQg+v9DFYeZaSXJgQTFT/AjCt0kWl11ErKQte61AZYOTQRlrAayHjDGQe6WsOpXtQB3mcql4qrRL74nihRBM9Y69nBbmKG/rczoWRjB6WrT20SU+onVX4hGZAs61aPYnP379O9ie7i963Yd/sTU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qhPQTNJ0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zUrGU8g+; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1743494219;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i/B1pxpgVYUmmB5x73U3iOsGDOYkcEFgBX4uiIbpfXs=;
+	b=qhPQTNJ0Tg+xtYxIaAlTRGTFVPR7m7rdQpc7MjbbY0EOsZoTxeW+SF46QPX1rWQCEVGr5P
+	JMjmcb+88aVz3K2EXoiQ66maSP+lE6zvF509HV4o+fh2/XU6BsHN0P7KZp+VXLq+HSHTf3
+	VxFfPPLovvtvrvo1tBmhIWTbvB/GxY9tGuFh+atDCX8B7HOaMv46yHqbvQqR8J/xFW2+Sn
+	N1A98MuqW9i84YeA3wMgl/no3nRWeq41uU1iMA7PR8rbeHI9mBWLTP1MqK8WJzaJL5iL2W
+	nadPkqqjMa06kD2AT12M3f+ICjLqM+dhurY8R4TY0PrTfxaWTkRIt1yqfJkNcA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1743494219;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i/B1pxpgVYUmmB5x73U3iOsGDOYkcEFgBX4uiIbpfXs=;
+	b=zUrGU8g+iLh6KBA8ZM8XYmifnxEkmUQ8O3ZR+6qgypiWsGiN1BnBU+dtmBFSoE+rRQ9d6m
+	yzGyC64vFlb7m0Bw==
+To: Nam Cao <namcao@linutronix.de>, Christian Brauner <brauner@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Nam Cao <namcao@linutronix.de>
+Subject: Re: [PATCH 1/3] selftests: coredump: Properly initialize pointer
+In-Reply-To: <b595166b7ece013b371c2bac1098533f1ffa12d0.1743438749.git.namcao@linutronix.de>
+References: <cover.1743438749.git.namcao@linutronix.de>
+ <b595166b7ece013b371c2bac1098533f1ffa12d0.1743438749.git.namcao@linutronix.de>
+Date: Tue, 01 Apr 2025 10:02:58 +0206
+Message-ID: <8434esmi0l.fsf@jogness.linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20250324064234.853591-1-malayarout91@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID:Syh0CgB3gmWvi+tnaud_IA--.20876S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFW7Xw48AF48ArW8JF1fZwb_yoW8urWfpa
-	4xGa4YkFySyF1FyF17CF4YqFWfurn7Xr45AF4rJr1UuF1xJFWIqr1xKayFqan8C34Fqrs5
-	Z3WIgF9xZw48Jw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-	07AlzVAYIcxG8wCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
-	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-	MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
-	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJb
-	IYCTnIWIevJa73UjIFyTuYvjxUIa0PDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+Content-Type: text/plain
 
+On 2025-03-31, Nam Cao <namcao@linutronix.de> wrote:
+> The buffer pointer "line" is not initialized. This pointer is passed to
+> getline().
 
+Ouch.
 
-On 3/24/2025 2:42 PM, Malaya Kumar Rout wrote:
-> Static Analyis for bench_htab_mem.c with cppcheck:error
-> tools/testing/selftests/bpf/benchs/bench_htab_mem.c:284:3:
-> error: Resource leak: fd [resourceLeak]
-> tools/testing/selftests/bpf/prog_tests/sk_assign.c:41:3:
-> error: Resource leak: tc [resourceLeak]
+> It can still work if the stack is zero-initialized, because getline() can
+> work with a NULL pointer as buffer.
 >
-> fix the issue  by closing the file descriptor (fd & tc) when
-> read & fgets operation fails.
+> But this is obviously broken. This bug shows up while running the test on a
+> riscv64 machine.
 >
-> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
-
-Acked-by: Hou Tao <houtao1@huawei.com>
-
-The right subject prefix for the patch should be "[PATCH bpf-next]",
-however, it seems there is no need or no reason to respin the patch.
+> Fix it by properly initializing the pointer.
+>
+> Fixes: 15858da53542 ("selftests: coredump: Add stackdump test")
+> Signed-off-by: Nam Cao <namcao@linutronix.de>
 > ---
->  tools/testing/selftests/bpf/benchs/bench_htab_mem.c | 1 +
->  tools/testing/selftests/bpf/prog_tests/sk_assign.c  | 4 +++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/coredump/stackdump_test.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-> index 926ee822143e..59746fd2c23a 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-> @@ -281,6 +281,7 @@ static void htab_mem_read_mem_cgrp_file(const char *name, unsigned long *value)
->  	got = read(fd, buf, sizeof(buf) - 1);
->  	if (got <= 0) {
->  		*value = 0;
-> +		close(fd);
->  		return;
->  	}
->  	buf[got] = 0;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-> index 0b9bd1d6f7cc..10a0ab954b8a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-> @@ -37,8 +37,10 @@ configure_stack(void)
->  	tc = popen("tc -V", "r");
->  	if (CHECK_FAIL(!tc))
->  		return false;
-> -	if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc)))
-> +	if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc))) {
-> +		pclose(tc);
->  		return false;
-> +	}
->  	if (strstr(tc_version, ", libbpf "))
->  		prog = "test_sk_assign_libbpf.bpf.o";
->  	else
+> diff --git a/tools/testing/selftests/coredump/stackdump_test.c b/tools/testing/selftests/coredump/stackdump_test.c
+> index 137b2364a082..1dc54e128586 100644
+> --- a/tools/testing/selftests/coredump/stackdump_test.c
+> +++ b/tools/testing/selftests/coredump/stackdump_test.c
+> @@ -100,6 +100,8 @@ TEST_F(coredump, stackdump)
+>  	FILE *file;
+>  	pid_t pid;
+>  
+> +	line = NULL;
 
+The syntax of getline(3) is quite interesting, since it
+allocates/reallocates/uses the lineptr as needed and possibly requires
+the application to free the data. I recommend moving the initialization
+down to the getline() call and also add the corresponding free().
+
+Something like this:
+
+diff --git a/tools/testing/selftests/coredump/stackdump_test.c b/tools/testing/selftests/coredump/stackdump_test.c
+index 137b2364a082..c23cf95c3f6d 100644
+--- a/tools/testing/selftests/coredump/stackdump_test.c
++++ b/tools/testing/selftests/coredump/stackdump_test.c
+@@ -138,10 +138,12 @@ TEST_F(coredump, stackdump)
+ 	ASSERT_NE(file, NULL);
+ 
+ 	/* Step 4: Make sure all stack pointer values are non-zero */
++	line = NULL;
+ 	for (i = 0; -1 != getline(&line, &line_length, file); ++i) {
+ 		stack = strtoull(line, NULL, 10);
+ 		ASSERT_NE(stack, 0);
+ 	}
++	free(line);
+ 
+ 	ASSERT_EQ(i, 1 + NUM_THREAD_SPAWN);
+ 
+Because of how getline() works, technically your patch is good
+enough. But we should probably excercise more precision in the use of
+getline() so as to set a good example.
+
+John Ogness
 
