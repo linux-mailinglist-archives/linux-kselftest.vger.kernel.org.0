@@ -1,162 +1,123 @@
-Return-Path: <linux-kselftest+bounces-30000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 653F5A78364
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 22:42:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13A7FA7838F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 22:51:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 125D6166211
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 20:42:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6D5316D923
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 20:51:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020D020FA97;
-	Tue,  1 Apr 2025 20:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5762163B9;
+	Tue,  1 Apr 2025 20:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lsu7KDG0"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="eOe4Qc5Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f230.google.com (mail-pl1-f230.google.com [209.85.214.230])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8C13594F
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Apr 2025 20:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94560215045
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Apr 2025 20:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.230
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743540121; cv=none; b=R9jpRxex6beSTYj1vZBgh0jszXKo1pzPdO5knsrHXbxZyItvrJiGDY9DRGU+z4syULwbq/CaqHmB9YReoFDM6+OsbaRHdPXj6+pwVnpn6Q50KObRHH1SKebmH/dBYgoOP4mwRvt8EKqGxHODGKfFQhXnvMiGIRpfu5ARB8Q2jZ0=
+	t=1743540560; cv=none; b=i+h97q3VJqb/Dqg9Owz2xbGAPvXxEgXyrrCXiGAGvWL/iNpZ/IQax/tKmcwjeQpjfBFeC301+rR92UqCY+B5GMnmjRPPtPqmtrNteVX2KR8WXX4eV3fXrblTiwDK7Fzj6llLEQxk2h7Uz1mxkDPPGDTqspzmHodzyOw+FQI/0zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743540121; c=relaxed/simple;
-	bh=DQqNytcES03RM+rHoX7X/MIHXjVFtwm514rcdrui4L4=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JAATqfvQhmQ6Tn58rhX4uVA7aXJxDgwq6cDkPYkKpsUan3dgz1MHuaQpcEqQpHzw+pMCBZpfaemdeq5tp6QFAGgTGpXEGmQ1m6jOU7QmtiLSjWiqOKiv0ME8DgXMQOGdSS0OZ7skYwHCrTi/DZqzyOD8fo4baSnQIFQUAMh2490=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lsu7KDG0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743540119;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Owge253k5OvzgMZCm8XexlvQc59vpIkP2hnOZmugbZE=;
-	b=Lsu7KDG0vojX0X6JvuUL++YH87iEifs40pVXgX7Woh+2NKKWVolgam0i1tn0aT3uOolsZ9
-	wai9cipoubhL2kbgspjqrogwSC6pMel4JFmSImZyvzUxhh/e1n81uX8zKEiweLJqLjtCZX
-	Hl/NTa27M+EAWxl7EsiXC8tP1UeN4Ac=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-683-cu0JzUPtNVegtjoSl0GHqw-1; Tue, 01 Apr 2025 16:41:58 -0400
-X-MC-Unique: cu0JzUPtNVegtjoSl0GHqw-1
-X-Mimecast-MFC-AGG-ID: cu0JzUPtNVegtjoSl0GHqw_1743540117
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c57f80d258so775823585a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Apr 2025 13:41:58 -0700 (PDT)
+	s=arc-20240116; t=1743540560; c=relaxed/simple;
+	bh=30PV2+70FCQMUCz+gunbFAvwdSKP+yMM0OGPlJ/I0uY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F9SoCX/MkqrmWttBzSZ59IcyBt7JztePYw9LEOPMmJnqttQLQR6ySrvyiHWLxmgDr16LJZlYf7Rqeh/wU751KaobAxhlot9A8hNTiAXcBQPBKGOvYSx3UOphlYxn82O99Q649jeA3FL62tcWZdNKgRGhFO8W64qyopjA7N+no7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=eOe4Qc5Z; arc=none smtp.client-ip=209.85.214.230
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Received: by mail-pl1-f230.google.com with SMTP id d9443c01a7336-2240b4de12bso99427175ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Apr 2025 13:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1743540557; x=1744145357; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mstT9j25mjz8aUy9IpCZAB9h1zoQsbNBC0c7IzzYKmM=;
+        b=eOe4Qc5ZL6PxBdceX4WZA0jY4bi3HOOTm0/symgIiB4WNyTjHs3G47jdkpEJZ4bZ/E
+         Mq1sg2WjUcPDnuGgHYCiviD2KBTt6RG+8SEqUlKlyq7Sn22CbkFRJkb26Nn5aeIYCCtw
+         txeJg+gN+1U70zPMXe2vLzJGsjybG0V3lJB6uKE5/nwpv2FZrZl7u6tNswAt2Sa38ter
+         +4wkb89FRx/+L4vqAC+Xcm/a44TyjUjRfsDwFhs4yiLNvcvXU9NTE0qJ4dkqXUkLcYzG
+         Vn+1OdI+dZ5NLL6LkwzX+N/VjVy94zX1GknIiLYko4Nkm4Bh3N+xiXOhG2zUAZK2tRUM
+         eRaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743540117; x=1744144917;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Owge253k5OvzgMZCm8XexlvQc59vpIkP2hnOZmugbZE=;
-        b=txA9IUa1hIgMO4Ppllk7qRB9yCADSia4I1pQs/HnqIdsJrS2yJOW+FQxsA5Kj/v37l
-         yufEXzaOiNbt6sAXfEmM/IZbYHxOevjE6f4RKHbKNBTtAVgAC9proNnxhxjxuTjMCuHt
-         ip9pkdpeeM2cbamIwVCPgHRZnZqElYe2EmMRtewEbi9qxiSYT2E8dizSVl0KbkSbQdYZ
-         lm7KJDs8YzRobsK4sLvm9JvgQXjCCy5qAAA8CNeYy0HPjk2q8G1gKxwrM3rw7x7l01Lb
-         O0sDSShxNFLz0ijeMcyFKMjCKfIp3PiekPlnS6cpwACLSJ6s4Y0hRV3K3fkCnjx+p4Or
-         kORQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbrolW7xJew+Q6qFim4g66RZAYC5xrzuLHitrVlUScKWHawwsS5XMlZbazd1Fro7Ig0ONbeHGwfSiWIMiyHgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfaAbjJonbkKEQehw+gqTRwI2/l+AFhwh3iZ0Z+YIrrU+uEFAU
-	U6SOcKlymCQHUjjrnzyaUODlgwrM7BgWurMvktp6ZZthOxq1gG8JwsbB2iEByrjiwt7lAMoXgn2
-	4Rh2IYBcDYEe+jS+BAZKaDG5iX8EjvmiQZH5fa+XK9MQPazGUiYmY5jARYLkPXIClAw==
-X-Gm-Gg: ASbGnctxOOcAARBqB+2plJqK/0suaRXFc3Bq8oRI9z/rfSykBDMpHwZtmC6/r54Wylv
-	VtF0u7coOi+iJTTbQfHm8y1C0g1GHek9Jp/RxR3XP7O8N7cfnMx8jAt8bs+j5Qkim2fcgdGTNiK
-	S4sMAxYO5KFzHN18XnI99iRmQS+zcpJQddbgITt5WP9lafJ4UAdo8uvUdbwRDpHa4bjq/UeNRLL
-	HaqPlAsqeyMwjBQXzk/ZiDCFIV7SY3lfaLwxAfJBi88FPnYGnmgZCEehHndOJ4PrRfT+YlJZ4LI
-	wb5lF8W2ghlTYNgppHWbzYNsPqUNE8MdZ/sZI45bIP1cgcIZK/0g9zxOSeptIA==
-X-Received: by 2002:a05:620a:4013:b0:7c5:5276:1db7 with SMTP id af79cd13be357-7c6908974d4mr2076453885a.52.1743540117630;
-        Tue, 01 Apr 2025 13:41:57 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH27u1JuY0yEa8uyZ7v4MsZRRq+k/qsw1NKT26VcX+0iVdXSIzNmBeyfSP31h9rLTX0UGAbFQ==
-X-Received: by 2002:a05:620a:4013:b0:7c5:5276:1db7 with SMTP id af79cd13be357-7c6908974d4mr2076451385a.52.1743540117322;
-        Tue, 01 Apr 2025 13:41:57 -0700 (PDT)
-Received: from ?IPV6:2601:188:c100:5710:315f:57b3:b997:5fca? ([2601:188:c100:5710:315f:57b3:b997:5fca])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f768b70esm699208885a.43.2025.04.01.13.41.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Apr 2025 13:41:56 -0700 (PDT)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <d9c96490-98bf-406b-8324-6cf86a536433@redhat.com>
-Date: Tue, 1 Apr 2025 16:41:55 -0400
+        d=1e100.net; s=20230601; t=1743540557; x=1744145357;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mstT9j25mjz8aUy9IpCZAB9h1zoQsbNBC0c7IzzYKmM=;
+        b=qb3MGj80+TpcyoGCym1mE7rY/tGHlAKdlOgFJfJhQWgZ75ke73TMra6WJmRyOmQTAe
+         XfO3LtFdzhRl2y9kwrUpHQzjM5+oF19EeI/neVwgvjtlnuNaeQS6EqndQa+9oXG6uXvK
+         WGljHcmi3j3szkEMFOvoP/O2jvtZ19KUlFUZ7KnFYEpSKLiTRiMGrbqKGZDSlcEuYTch
+         WL2djvDsrUUIUswSNhd7/0Rx2z9XR4TITM9g0ZyIxP31JTZLll0CGD52+flmJYOxnYzA
+         haAVPx/yG9b+bOtLc1E3ItH1ZMrtF+zRXfvh/hlXZgcMh+jItFN+bJRZ348rWHpai6Hi
+         k8VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVX2EhO7CeethF4vbglzdgSf/MzYm0V/Vj3D1uBvjq4VTVTuas4xm72300hJI9mtg1QXknNpuHh6BlhjAB2qYQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhXldv5Tx61XRr+nlzAarMxBvWc57eGmP55Jwa9VdNz4PQ5pYW
+	kvgbNLZWTOx+4Qe8vvd6aOUx/MXPNlhmd5oQQCfxHN5nKk2pWL39zNUPOBVCdW7thSbw/tVMMXN
+	YfL4n4nduvmrzOUr5juWv7w4m6088bG1p6j0lR2HSyWz/4VOY
+X-Gm-Gg: ASbGnctXlCKCB+f6lNS/GKtQQZQxc95NSbQm09SAksaehaMWRQU3NEtWUBN+BKgTVyK
+	M9TdzmzOKdcIb01OXvBCLVnWAGoNSmIXcczVA3a0q9duuM1SH6Tj+5jl6qfxSUzKrxAN4I4dexV
+	4aIQMx+7ojbaCHeFT/awOMQBo65o9Op7IllIlSr6X92c1QBrWNpRV7u1DfnDMypjyEZUUWGIAgE
+	oIymFUXUw5fpK52k87Ao/WhtxKlG8ZgBDVUeaXceJcyb0nBMeqVXvRhfszJPkD0yXj2HfC+JOzR
+	tx3sNFgHDQatbVO8SREEFgAyltRsHbENzWQ=
+X-Google-Smtp-Source: AGHT+IGs2poYi76n3mLJWXhUA0XPnz0aQSm3PIe6uqP21P4f4eb9jq7kzrwsD2tGzgMq7M/2nrRv9Bzd3IVu
+X-Received: by 2002:a05:6a00:3a1d:b0:736:3d7c:236c with SMTP id d2e1a72fcca58-739803990admr19199141b3a.14.1743540556836;
+        Tue, 01 Apr 2025 13:49:16 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id d2e1a72fcca58-739710cb596sm757975b3a.20.2025.04.01.13.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 13:49:16 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [10.7.70.36])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 104C43400D7;
+	Tue,  1 Apr 2025 14:49:16 -0600 (MDT)
+Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
+	id 038EAE4034D; Tue,  1 Apr 2025 14:49:15 -0600 (MDT)
+From: Uday Shankar <ushankar@purestorage.com>
+Subject: [PATCH 0/2] ublk: fixes for selftests
+Date: Tue, 01 Apr 2025 14:49:07 -0600
+Message-Id: <20250401-ublk_selftests-v1-0-98129c9bc8bb@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/10] cgroup/cpuset: Fix race between newly created
- partition and dying one
-To: Tejun Heo <tj@kernel.org>, Waiman Long <llong@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250330215248.3620801-1-longman@redhat.com>
- <20250330215248.3620801-2-longman@redhat.com>
- <Z-shjD2OwHJPI0vG@slm.duckdns.org>
- <915d1261-ee9f-4080-a338-775982e1c48d@redhat.com>
- <Z-xFqkBsh640l5j0@mtj.duckdns.org>
-Content-Language: en-US
-In-Reply-To: <Z-xFqkBsh640l5j0@mtj.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAENR7GcC/x3MQQqAIBBA0avErBPMmBZdJSIyxxoSC6ciiO6et
+ HyL/x8QSkwCbfFAoouFt5hRlQVMyxhnUuyywWiDujaoThvWQSj4g+QQ1Ywa0Xk7IVrI0Z7I8/0
+ Pu/59P8Y+ip1gAAAA
+X-Change-ID: 20250325-ublk_selftests-6a055dfbc55b
+To: Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Uday Shankar <ushankar@purestorage.com>
+X-Mailer: b4 0.14.2
 
+Fix a couple of issues I saw when developing selftests for ublk. These
+patches are split out from the following series:
 
-On 4/1/25 3:59 PM, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Mon, Mar 31, 2025 at 11:12:06PM -0400, Waiman Long wrote:
->> The problem is the RCU delay between the time a cgroup is killed and is in a
->> dying state and when the partition is deactivated when cpuset_css_offline()
->> is called. That delay can be rather lengthy depending on the current
->> workload.
-> If we don't have to do it too often, synchronize_rcu_expedited() may be
-> workable too. What do you think?
+https://lore.kernel.org/linux-block/20250325-ublk_timeout-v1-0-262f0121a7bd@purestorage.com/T/#t
 
-I don't think we ever call synchronize_rcu() in the cgroup code except 
-for rstat flush. In fact, we didn't use to have an easy way to know if 
-there were dying cpusets hanging around. Now we can probably use the 
-root cgroup's nr_dying_subsys[cpuset_cgrp_id] to know if we need to use 
-synchronize_rcu*() call to wait for it. However, I still need to check 
-if there is any racing window that will cause us to miss it.
+Signed-off-by: Uday Shankar <ushankar@purestorage.com>
+---
+Uday Shankar (2):
+      selftests: ublk: kublk: use ioctl-encoded opcodes
+      selftests: ublk: kublk: fix an error log line
 
->
->> Another alternative that I can think of is to scan the remote partition list
->> for remote partition and sibling cpusets for local partition whenever some
->> kind of conflicts are detected when enabling a partition. When a dying
->> cpuset partition is detected, deactivate it immediately to resolve the
->> conflict. Otherwise, the dying partition will still be deactivated at
->> cpuset_css_offline() time.
->>
->> That will be a bit more complex and I think can still get the problem solved
->> without adding a new method. What do you think? If you are OK with that, I
->> will send out a new patch later this week.
-> If synchronize_rcu_expedited() won't do, let's go with the original patch.
-> The operation does make general sense in that it's for a distinctive step in
-> the destruction process although I'm a bit curious why it's called before
-> DYING is set.
+ tools/testing/selftests/ublk/kublk.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: 4cfcc398357b0fb3d4c97d47d4a9e3c0653b7903
+change-id: 20250325-ublk_selftests-6a055dfbc55b
 
-Again, we have to synchronize between the css_is_dying() call in 
-is_cpuset_online() which is used by cpuset_for_each_child() against the 
-calling of cpuset_css_killed(). Since setting of the CSS_DYING flag is 
-protected by cgroup_mutex() while most of the cpuset code is protected 
-by cpuset_mutex. The two operations can be asynchronous with each other. 
-So I have to make sure that by the time CSS_DYING is set, the 
-cpuset_css_killed() call has been invoked. I need to do similar check if 
-we decide to use synchronize_rcu*() to wait for the completion of 
-cpuset_css_offline() call.
-
-As I am also dealing with a lot of locking related issues, I am more 
-attuned to this kind of racing conditions to make sure nothing bad will 
-happen.
-
-Cheers,
-Longman
-
+Best regards,
+-- 
+Uday Shankar <ushankar@purestorage.com>
 
 
