@@ -1,154 +1,142 @@
-Return-Path: <linux-kselftest+bounces-29981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-29982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FA99A77A64
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 14:08:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E23FA77B00
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 14:29:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4209F1683ED
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 12:08:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D03A83A8C5D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 12:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E19E5202C21;
-	Tue,  1 Apr 2025 12:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93177202F90;
+	Tue,  1 Apr 2025 12:29:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Kj9wvZ4c";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lO5tqnet"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1WHpXJe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA41202961;
-	Tue,  1 Apr 2025 12:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC9C20126C;
+	Tue,  1 Apr 2025 12:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743509314; cv=none; b=My219LKvzSxlN6oPJmv5Xok8hcaI71lSgBvrK0SzPSmR/qdwLCinVgVQXUbQPR94Fj65j849gC802Qq1UtFGI9ANdgkXlzLGyPJeG2LoLsNWSWCYXQtQBxXxRagPKY/QZM8uaNuHwRf5cNnbFKsen5nGVZHzHWCdLmOe+D3h8SU=
+	t=1743510580; cv=none; b=JNjQ9hENYqvKy04sZejwzsgE1erXWHF6a5g7sGT7TOhaJYRfHvBq9cES3lOWrmuMoy2SMQtUIfOsnviyyZ+DNfMS6DpqPqGwsB4h34qswwNh01955k5uT/7kw0unMRrVLt8ZmSfQIH+1Y/8cIaqfaeWnIXAZPLAcPbOH5Hnne74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743509314; c=relaxed/simple;
-	bh=zcdbLSKxqwAC91pmORRiZQDeYHoqRz2r4XU1RKPiQCU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=XvEjGFyJBE66wPIzbbKrbeD+kE1zA6qD9kX5AWNdI+ivdsr32dKOVwlUSK1R3T9sS80v9J9Vn22L9prw2fsGH7Z5QBSBuJJLgdqYtmIfJCJKY6ed5wdCxU10ojeIB3bkGL9/JXBshqPxmo+Du82Xm3qUTAKlY8hD0l+aJYSdt9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Kj9wvZ4c; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lO5tqnet; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1743509309;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5TwBHgWSiVPHJ8DK8kHjiBrFuEFpcmevr8jPemaQHCQ=;
-	b=Kj9wvZ4cYIbFLrZUIcUQjVI15e6PcNV+c6WA+ZExl3Obqp2khG9z849aoXCmzrah9vYwg1
-	b5ssJv1utmLzliTLqOoUP2CVQJDT4sn1LI6EZyYKzeuQBgE1k81oAIPRaPX0PWTXNDVUJe
-	O1+xe5TR4jP/nHdenVrXyW4g08SKrfdpwdQDgVI0M4maR3cDo0FeebvTdZ602GIjCnQEYW
-	Yq/yz9VFezAo0/d8fPBAY2HsY1O9wMdMfI8WEYQrrzSfzfvDJlxQ2xXyVRa+msPHFX2Rbq
-	wjLnELwZRczarV2yh4bh7gyfy8hT6HkOeYJTaQy8MjD7hTqyws963no/VzbxhA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1743509309;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5TwBHgWSiVPHJ8DK8kHjiBrFuEFpcmevr8jPemaQHCQ=;
-	b=lO5tqnetVw0Pa1Bj0rcsPDTBHe0Zi5vY7rXmbTLHUBtyUK8WTwh6uC/y5CWhzSq8i30FGP
-	HgEWThdIFWmdx6AA==
-To: Nam Cao <namcao@linutronix.de>, Christian Brauner <brauner@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Nam Cao <namcao@linutronix.de>
-Subject: Re: [PATCH 2/3] selftests: coredump: Use waitpid() instead of
- busy-wait
-In-Reply-To: <133d0dc62cebb6fde2764af384b0166d98755a3c.1743438749.git.namcao@linutronix.de>
-References: <cover.1743438749.git.namcao@linutronix.de>
- <133d0dc62cebb6fde2764af384b0166d98755a3c.1743438749.git.namcao@linutronix.de>
-Date: Tue, 01 Apr 2025 14:14:28 +0206
-Message-ID: <84y0wkkrsz.fsf@jogness.linutronix.de>
+	s=arc-20240116; t=1743510580; c=relaxed/simple;
+	bh=c19//HNrqEQBqZ67n+APOuFQ7dukVDXVxLfv/BFk4EU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gnWCOwySlYVK+NZx65v5kVlMMI96eOwPZObZVr+SIRHTEc3hiaPqbrCg7OGdIw1dWFQdjgkgr2F+tgzFIHnqG+xty9kvQEwWpPU1UwRVBrRh2E5LhXqSdJSx5n0wwMZ8iO/d5lyB8qbBCgT0MGDDze9nlbuIhJ3V/RscdvEteKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F1WHpXJe; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c5a88b34a6so529775885a.3;
+        Tue, 01 Apr 2025 05:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743510578; x=1744115378; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OWng5/2s6GWs8zHreVaEDSeKr8dlawpVVjY3ffnQIK0=;
+        b=F1WHpXJeKGZU8gVdrX7VenIraLa3c/4HaUZ40bnWHWnLWken5sVvLcQw8ETuV507Sn
+         HWNns6FgRHGTbGK4BUyNd9cg+VILGb6j3D+Fn0g+MFzOU/t7qMfIJ/efBRIAM9JoMRbn
+         mP31jK7U1sm4exRJY7rZ7eVp8PwlECAPyE+eKGDaE6ndGgGG+r0IQG6EyVS9RUNxpXDH
+         cnDOOUs6bqYjz03F6lgrxiBCeSnr57kMZhsd2gnX9F3Ep3jL5w7qTN35kpnSOazdNN3g
+         Tet3ME1IeSMBinkQn8mBZMEPuRdSSF5rmsfO/D7FKPYDmjtAqoiYuHoV2kVJ7j4MBhrB
+         LkCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743510578; x=1744115378;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OWng5/2s6GWs8zHreVaEDSeKr8dlawpVVjY3ffnQIK0=;
+        b=al2F1s1BBC4u8H9sMJItz1KA8JLsedpc0h3hZgArySGhaapreUO1fo8oqK4UlooC9C
+         1wQ1eDtIVFx0KVoCREU+OQ8zt6iKu+cnuIb/mtLWNtQIvfuWM9iE4Cx+yZEiUPJD8KHs
+         3beGjLV40Tk+NtmeDixGdI9i2yMJXzvUd/ysn/iA5TXWjIjukEuQ6fT8/65XvP4dc/mD
+         nFis2a9sV3Ctdr1uwOvUqrTcpTat/9vcdN+mOh3w2klu2RVPOnFy2N1FK7VCtNAxynNT
+         pzWTEXSYYCGU3pU3ulS4BhBWqDWZastAVP30fkEAGIm5i8WY2ab6Z0UlDPOnxuHaLH/1
+         +cug==
+X-Forwarded-Encrypted: i=1; AJvYcCUvqLXe3M+JH7KwsR7tLJq4SG9A9k+kQ1hgyTm0jO6FRwcVJ5GDrKyZwPlskbEPyt/6ooWQCTRzoic5vXh+lCw3@vger.kernel.org, AJvYcCWscFSewkUPYZhnsGP1KxxLKGBHZYXHzC91lEkPNgI95990MVN4Z2k9t7RgkAZZdnrKnCChwcH6iLsljqs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUzA9A07ibNRTxIhD7g96K+1E41WwOP5i9VFJmFblzRuDi+3Mo
+	oaSfqZkcSkdKvimiVnfurDL4wYMIGWZVbXUGIcieTFk8FaUO72OP
+X-Gm-Gg: ASbGnct8drkiS51g10Icc4FIfY2uWKT08JbVNq7NdJaU8VQlF9p2+LPs5eLr2mp4Z25
+	U66c/BO9qp/km+vQxLFTR2jn2nObWBM3Pq5jujfkoUdvVRH4XfHABIxP5CHFC/PDiwB5P7NwSAQ
+	yLBopOFa6F0IEhTdI/gjmRqu1uihWHDBnLco9drKPvJK+nnwVIfVW6zVblgepLTIUEhrYHmNYVX
+	bQ3w3PmO3yyCop6iNjx0t5YtRDrsQ/JM2YyovmxiKfoIFGfxxINVJWg4wGZplbHrznSIWddS4ms
+	j0JDKqMifjIvfDB1YBOYiCLHQN5xsZ4qGbp7jqTKYoAVdjLoBb/Iuf/l
+X-Google-Smtp-Source: AGHT+IHO67d4bD9vKGuF4OOCneEyWlZIzB22Vg0XjvWyrehUow9WWekmGrZtRTC/IR+uMs+D7SKBeg==
+X-Received: by 2002:a05:620a:2405:b0:7c5:65ab:4ff2 with SMTP id af79cd13be357-7c69087cef7mr1548316185a.46.1743510577694;
+        Tue, 01 Apr 2025 05:29:37 -0700 (PDT)
+Received: from ownia.localdomain ([156.226.172.226])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f7764c7fsm648646385a.84.2025.04.01.05.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 05:29:37 -0700 (PDT)
+From: Weizhao Ouyang <o451686892@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-rtc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Weizhao Ouyang <o451686892@gmail.com>
+Subject: [PATCH] selftest: rtc: skip alarm test if RTC is minute resolution
+Date: Tue,  1 Apr 2025 20:29:23 +0800
+Message-ID: <20250401122923.10848-1-o451686892@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On 2025-03-31, Nam Cao <namcao@linutronix.de> wrote:
-> The test waits for coredump to finish by busy-waiting for the
-> stackdump_values file to be created. The maximum wait time is 10 seconds.
->
-> This doesn't work for slow machine (qemu-system-riscv64), because coredump
-> takes longer.
->
-> Switch to use waitpid().
+Skip second resolution alarm test if RTC is minute resolution.
 
-Note that you are now assuming that returning from waitpid() means that:
+Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+---
+ tools/testing/selftests/rtc/rtctest.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-1. the coredumping has completed
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index e103097d0b5b..b8d196f1c5f6 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -28,6 +28,7 @@ static char *rtc_file = "/dev/rtc0";
+ enum rtc_alarm_state {
+ 	RTC_ALARM_UNKNOWN,
+ 	RTC_ALARM_ENABLED,
++	RTC_ALARM_MINUTE,
+ 	RTC_ALARM_DISABLED,
+ };
+ 
+@@ -100,6 +101,9 @@ static enum rtc_alarm_state get_rtc_alarm_state(int fd)
+ 	if (rc < 0)
+ 		return RTC_ALARM_UNKNOWN;
+ 
++	if (param.uvalue & _BITUL(RTC_FEATURE_ALARM_RES_MINUTE))
++		return RTC_ALARM_MINUTE;
++
+ 	if ((param.uvalue & _BITUL(RTC_FEATURE_ALARM)) == 0)
+ 		return RTC_ALARM_DISABLED;
+ 
+@@ -230,6 +234,8 @@ TEST_F(rtc, alarm_alm_set) {
+ 	alarm_state = get_rtc_alarm_state(self->fd);
+ 	if (alarm_state == RTC_ALARM_DISABLED)
+ 		SKIP(return, "Skipping test since alarms are not supported.");
++	if (alarm_state == RTC_ALARM_MINUTE)
++		SKIP(return, "Skipping test since alarms have minute resolution.");
+ 
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+ 	ASSERT_NE(-1, rc);
+@@ -298,6 +304,8 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 	alarm_state = get_rtc_alarm_state(self->fd);
+ 	if (alarm_state == RTC_ALARM_DISABLED)
+ 		SKIP(return, "Skipping test since alarms are not supported.");
++	if (alarm_state == RTC_ALARM_MINUTE)
++		SKIP(return, "Skipping test since alarms have minute resolution.");
+ 
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+ 	ASSERT_NE(-1, rc);
+-- 
+2.45.2
 
-and
-
-2. the STACKDUMP_FILE with all its contents are visible to the parent
-process
-
-> With this, the stack_values file doesn't need to be atomically written by
-> coredump anymore, therefore simplify the stackdump script.
->
-> Fixes: 15858da53542 ("selftests: coredump: Add stackdump test")
-> Signed-off-by: Nam Cao <namcao@linutronix.de>
-> ---
->  tools/testing/selftests/coredump/stackdump        |  6 +-----
->  tools/testing/selftests/coredump/stackdump_test.c | 13 ++++++-------
->  2 files changed, 7 insertions(+), 12 deletions(-)
->
-> diff --git a/tools/testing/selftests/coredump/stackdump b/tools/testing/selftests/coredump/stackdump
-> index 96714ce42d12..ad487fd5ff15 100755
-> --- a/tools/testing/selftests/coredump/stackdump
-> +++ b/tools/testing/selftests/coredump/stackdump
-> @@ -4,11 +4,7 @@
->  CRASH_PROGRAM_ID=$1
->  STACKDUMP_FILE=$2
->  
-> -TMP=$(mktemp)
-> -
->  for t in /proc/$CRASH_PROGRAM_ID/task/*; do
->  	tid=$(basename $t)
-> -	cat /proc/$tid/stat | awk '{print $29}' >> $TMP
-> +	cat /proc/$tid/stat | awk '{print $29}' >> $STACKDUMP_FILE
->  done
-> -
-> -mv $TMP $STACKDUMP_FILE
-
-I would leave this as it was. Then the availability of STACKDUMP_FILE
-means the full contents are available.
-
-> diff --git a/tools/testing/selftests/coredump/stackdump_test.c b/tools/testing/selftests/coredump/stackdump_test.c
-> index 1dc54e128586..733feaa0f895 100644
-> --- a/tools/testing/selftests/coredump/stackdump_test.c
-> +++ b/tools/testing/selftests/coredump/stackdump_test.c
-> @@ -96,7 +96,7 @@ TEST_F(coredump, stackdump)
->  	char *test_dir, *line;
->  	size_t line_length;
->  	char buf[PATH_MAX];
-> -	int ret, i;
-> +	int ret, i, status;
->  	FILE *file;
->  	pid_t pid;
->  
-> @@ -131,12 +131,11 @@ TEST_F(coredump, stackdump)
->  	/*
->  	 * Step 3: Wait for the stackdump script to write the stack pointers to the stackdump file
->  	 */
-> -	for (i = 0; i < 10; ++i) {
-> -		file = fopen(STACKDUMP_FILE, "r");
-> -		if (file)
-> -			break;
-> -		sleep(1);
-> -	}
-> +	waitpid(pid, &status, 0);
-> +	ASSERT_TRUE(WIFSIGNALED(status));
-> +	ASSERT_TRUE(WCOREDUMP(status));
-
-Why not just put these 3 lines above the for-loop? So you would wait for
-the process to end, then go into the 20-second timeout loop waiting for
-STACKDUMP_FILE to show up.
-
-John Ogness
 
