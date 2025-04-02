@@ -1,91 +1,58 @@
-Return-Path: <linux-kselftest+bounces-30010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CFA9A78913
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 09:46:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3A80A78925
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 09:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADAB93A72A1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 07:45:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 299587A57E3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 07:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0101E5B69;
-	Wed,  2 Apr 2025 07:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE1B2327A7;
+	Wed,  2 Apr 2025 07:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K19W1GmQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2rCDwF9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D9F1362;
-	Wed,  2 Apr 2025 07:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C222220E6E3;
+	Wed,  2 Apr 2025 07:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743579963; cv=none; b=huiAg6AEoawfsESFx4CqSwNaq2AAeaMcigFS6Kskot+mVceWQnfITwXupgDfxJf1uW9e0QdQWSHT2cw++4d0bnyQPBCxJ6KCbaSUx9nBT12hmOIbssSSXUdacHeh9zuUf1n2+579KmWriPIRru/nXoXXMw4v77g/1QKS+ihIT9M=
+	t=1743580186; cv=none; b=H31MWcIzoerWRBy+tqrxce9uTwQr7pN7pS9+zj3Oi+WayZgXC+krrMbqBc0d0XAyWjwfo1oIiZP8IQS1/Do424n6d18QSnbzL9W9ckkyb6KV0kapmqDST6RT5XreGaf7vxlR33ZrMwKVoWWXM2vQzEhDkCWNeQdWYhDx9EGcjPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743579963; c=relaxed/simple;
-	bh=ebl2bB+TRFblGvdRbreoVEWpvVOOvApz34KbpVlc440=;
+	s=arc-20240116; t=1743580186; c=relaxed/simple;
+	bh=u9HKDWdKPmOemTxsFQ9btUD3Wrgam41mvMrBts7MGXY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e52R3ZJxBh19De5hXX5G4L+ISzcRL1URx/4qDgdSNG5Pt3oioZe7uS9ggHn4tKLAGnW0Wi1HAIT8O+ov+bcgatHhnCw6Hjk31+eROB08ZVC6zwZGh/I8WFkOka/h46wc3V4uvXv7+azl0qQSdYoXyE71ZNc37L4513mL7+aoh+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K19W1GmQ; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uIzWjvfJbyS7n54sJ+5shgly3p7L+Bq4hAOWNvm3+QQ=; b=K19W1GmQJKHEi4CglJlEuX8NWi
-	LthI2Z1LT4kdChvQwI3VZxL8k5hQ8dfV9NdzrOUMMX5Pj6OAhhEMS8GDkCXS2YpBQcPOH/Ls8WWAg
-	vt0plzI5MTrstT6vVlp7xwsZ0RSoiIMGP/bQXVfBeMRFvz9Ykq9JPtPXarpYwYT/LMNYgK0a0CjKi
-	kJJEWZJJLww9Gks/HsTl8JvWnlqFdUJ6xwagZ6hon/A/xb2B/diil2B0kL2IZ7+7EZgbibHMjzb7w
-	/qUr5UiptHJqHeN9jIzxomcDYiKG84dHAl9weULxWpIBCV33DZruujj7uy0w4xbjRcWo4+Gbycyy+
-	hIRGELoQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1tzsnH-00000006zJG-0AVp;
-	Wed, 02 Apr 2025 07:45:51 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 95EEB30049D; Wed,  2 Apr 2025 09:45:50 +0200 (CEST)
-Date: Wed, 2 Apr 2025 09:45:50 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Alessandro Carminati <acarmina@redhat.com>,
-	linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alessandro Carminati <alessandro.carminati@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v4 06/14] x86: Add support for suppressing warning
- backtraces
-Message-ID: <20250402074550.GQ5880@noisy.programming.kicks-ass.net>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <20250313114329.284104-7-acarmina@redhat.com>
- <20250401170829.GO5880@noisy.programming.kicks-ass.net>
- <ddc7939f-fb98-43af-aed1-0bc0594ecc41@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lJBUZ4LOzodBZLKJXfp0VCT5ZeYKu/OLZaG2tAQn2s6ZT3lqwbUy4nSJquizN/mQHT2nFItUzO+S6F+RtKHNIhSOx9uIOe0hVQ+Um4K2dLIZFKaCYfWWmLlvH+H7w66o3cVRnOm9tAOKCWt8Uul2mpONf8Iu/yJnr5AHCkRUReI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2rCDwF9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA5DC4CEDD;
+	Wed,  2 Apr 2025 07:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743580186;
+	bh=u9HKDWdKPmOemTxsFQ9btUD3Wrgam41mvMrBts7MGXY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y2rCDwF9vyCniKjVEcF0QNuoverj/TfxcghMBkvVZiWJKP5tK3+gura3RUUBTQOee
+	 EmrxGaNKUmeRExXfDqYNKPvxhgu4j1QxrrxEw/cj1RBvjX9oXWJgGjFrY7sO0vas6W
+	 qYj52AzSI4bpJ1SDH2zliaJpPyP5lM5EFQXFTZa0Mlm2K1zoi+t5qCq8+yRiyRkfOU
+	 ZoZcyk3Mt5JUl3xlDxCxdXixxiNtops9gbSOgIaahAf9Ri3FWo0XEvbtJ35LDiwybB
+	 yfllzsRs/jqfeNAGSP6FpucqFMCKOuloqCFRptqfug5ufC6Y+RExwenJmJj1ONs7eL
+	 AWgA/w/ThZBVQ==
+Date: Tue, 1 Apr 2025 21:49:45 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 01/10] cgroup/cpuset: Fix race between newly created
+ partition and dying one
+Message-ID: <Z-zsGazxeHK9uaA6@slm.duckdns.org>
+References: <20250330215248.3620801-1-longman@redhat.com>
+ <20250330215248.3620801-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,34 +61,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ddc7939f-fb98-43af-aed1-0bc0594ecc41@roeck-us.net>
+In-Reply-To: <20250330215248.3620801-2-longman@redhat.com>
 
-On Tue, Apr 01, 2025 at 10:53:46AM -0700, Guenter Roeck wrote:
+On Sun, Mar 30, 2025 at 05:52:39PM -0400, Waiman Long wrote:
+> There is a possible race between removing a cgroup diectory that is
+> a partition root and the creation of a new partition.  The partition
+> to be removed can be dying but still online, it doesn't not currently
+> participate in checking for exclusive CPUs conflict, but the exclusive
+> CPUs are still there in subpartitions_cpus and isolated_cpus. These
+> two cpumasks are global states that affect the operation of cpuset
+> partitions. The exclusive CPUs in dying cpusets will only be removed
+> when cpuset_css_offline() function is called after an RCU delay.
+> 
+> As a result, it is possible that a new partition can be created with
+> exclusive CPUs that overlap with those of a dying one. When that dying
+> partition is finally offlined, it removes those overlapping exclusive
+> CPUs from subpartitions_cpus and maybe isolated_cpus resulting in an
+> incorrect CPU configuration.
+> 
+> This bug was found when a warning was triggered in
+> remote_partition_disable() during testing because the subpartitions_cpus
+> mask was empty.
+> 
+> One possible way to fix this is to iterate the dying cpusets as well and
+> avoid using the exclusive CPUs in those dying cpusets. However, this
+> can still cause random partition creation failures or other anomalies
+> due to racing. A better way to fix this race is to reset the partition
+> state at the moment when a cpuset is being killed.
+> 
+> Introduce a new css_killed() CSS function pointer and call it, if
+> defined, before setting CSS_DYING flag in kill_css(). Also update the
+> css_is_dying() helper to use the CSS_DYING flag introduced by commit
+> 33c35aa48178 ("cgroup: Prevent kill_css() from being called more than
+> once") for proper synchronization.
+> 
+> Add a new cpuset_css_killed() function to reset the partition state of
+> a valid partition root if it is being killed.
+> 
+> Fixes: ee8dde0cd2ce ("cpuset: Add new v2 cpuset.sched.partition flag")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-> > >   #define _BUG_FLAGS(ins, flags, extra)					\
-> > >   do {									\
-> > >   	asm_inline volatile("1:\t" ins "\n"				\
-> > >   		     ".pushsection __bug_table,\"aw\"\n"		\
-> > >   		     "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"	\
-> > >   		     "\t"  __BUG_REL(%c0) "\t# bug_entry::file\n"	\
-> > > -		     "\t.word %c1"        "\t# bug_entry::line\n"	\
-> > > -		     "\t.word %c2"        "\t# bug_entry::flags\n"	\
-> > > -		     "\t.org 2b+%c3\n"					\
-> > > +		     "\t"  __BUG_FUNC_PTR "\t# bug_entry::function\n"	\
-> > > +		     "\t.word %c2"        "\t# bug_entry::line\n"	\
-> > > +		     "\t.word %c3"        "\t# bug_entry::flags\n"	\
-> > > +		     "\t.org 2b+%c4\n"					\
-> > >   		     ".popsection\n"					\
-> > >   		     extra						\
-> > > -		     : : "i" (__FILE__), "i" (__LINE__),		\
-> > > +		     : : "i" (__FILE__), "i" (__BUG_FUNC), "i" (__LINE__),\
-> > >   			 "i" (flags),					\
-> > >   			 "i" (sizeof(struct bug_entry)));		\
-> > >   } while (0)
+Applied to cgroup/for-6.15-fixes.
 
-Also this, why do you need this extra function in the bug entry? Isn't
-that trivial from the trap site itself? symbol information should be
-able to get you the function from the trap ip.
+Thanks.
 
-None of this makes any sense.
+-- 
+tejun
 
