@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-30013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55271A78DD2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 14:06:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AED5A78DDE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 14:09:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F07B03B2A31
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 12:04:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AE033B021D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 12:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A30238143;
-	Wed,  2 Apr 2025 12:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884A5238176;
+	Wed,  2 Apr 2025 12:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="SPhxsz0m"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="fW/lYQdO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216C6238166
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Apr 2025 12:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648B9238166
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Apr 2025 12:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743595458; cv=none; b=ZscE7WGr1DwHyC4LTRMhxs0nmtUeQN+lbt36BQyFhp4L8NootHS5XfPPzLbli8z75203ADxzChSUjgiMqAueMU/kazkzTOZI8jWj6Llab01D/I3xcvONqhgibH9cdf1KkMirImqkWC7IefWuUkYNoiyKf9Oi1/qAtFYpyMKMh9g=
+	t=1743595704; cv=none; b=OseJ774HDX4r9U4tYENLcAT4q3oYoYVGSMCOwUuqE3KTvNvZyjDFsvXtvvgDVajueaFUls5SabhxnxtGkKxRlYfpvaz6jkdXfy9K3ZWALShQyDRnQpLhBZVThNmRQOmRAxnG/luWB/5w8zj78oyk4C2AX1KWR2FMngHLOVQAcjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743595458; c=relaxed/simple;
-	bh=lpW/o2RA5tgkWP0FqFy/0nwz89bljtXDM1MP0hykgC8=;
+	s=arc-20240116; t=1743595704; c=relaxed/simple;
+	bh=0cyQ8kfbsOP5CL/OayFEvuviX2pQwjWQA09VE+ucdsw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b/cLKFu1Nf1Uu/rJ7Qi6liZvFxpYMO9ZNjr7hGwX86FyZ3TlDHtbmHJ7R3Fz+yqB6Ea6rifbbAbUU0b5UVs07ffJoV1cr2vZ8YMMuRcF18IR5mds4DMxLpQ+cye+kgXJA8Nd2h8B+YLSarf4BGhpzkmxy4gabThB74v+CeNWbKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=SPhxsz0m; arc=none smtp.client-ip=209.85.218.49
+	 In-Reply-To:Content-Type; b=lNcl1SxHI15EW1embkbgXEeHqh5fWFBzUVDoPBgu6Vib7Ju7As6ff6D6Gj+BbikdP2XraHyeSCXVc2DJYxXrFjgk4iDAzyFAOAHlXqNQjF6L2Q24bhw1GVrLTnu23BXSE/AAow1oXFL21DKfHGDSiSNZTi37VGJbwzeIXchLp1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=fW/lYQdO; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac2ab99e16eso220748266b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Apr 2025 05:04:15 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43d07ca6a80so35219665e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Apr 2025 05:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1743595454; x=1744200254; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1743595701; x=1744200501; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mBYrvzIL73mZMnAvFss/1pIbuShofo0k+zpJBk1+x0Y=;
-        b=SPhxsz0mP9ZMm31nLvRUZxoj2z9V77zJ3Fl+u9ScmhdboA8SdUYL0d4ygqwSH+3DNV
-         /ZB0I4GWkK0VmU2OyNiYP5BEiLoLB05AeTtYXNAYQ8tfIXM2MSOTcsP00eHGf2NvAqqJ
-         FU127bwW62pKYhgDSr47/Ozn6aX674BP158U1WUy8QRHx7H6+OgpZWs/9SZfs0s9KgOU
-         1iX03SozPyT0VBRNtGJgrFyDlni7wYaRcy+hv25VGhYdudN92Z8tnfLTOdM/c3FZ/Wur
-         OCRfNBLiyXjHOJgZow1GfJzmvAIQMXoW3Oo9YOaGmo/oGgnUEho4G9J+7z+m9hRR/hNd
-         tw6w==
+        bh=j5Jfe36OUwvVyT9LS7eCwDhDtrMpAORzy0WnLrxsyVY=;
+        b=fW/lYQdOMx3ShdTtWtuKZ5d+28JswJ8BaFOm1WGuv/4f1OD982+RdjTFucLBEyIeQ3
+         RWk1CPytGQVcqwKH/bvu7bH1gBwAHxI4miaFtmaPrLJZnf/swb840NBNAYmEZqco350/
+         idi8zBo9gcGD8R7dymMV5P2MrRaXC1AX3cGaYi1AMu88rd/dLmvJgHHebajBXvDj9Lep
+         HP9HP3smrNFjx9kYtzr86iK1sZnCPsltQ6aCwCPN3fLx33E4QojpvA00064hJHmr4Uga
+         zIsc9yj2v9F8jKS1EOH/5SHwLMSjfdV2NM84L8IWMswqqI8vvTMu2OZo734qkdOpxrwP
+         vtgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743595454; x=1744200254;
+        d=1e100.net; s=20230601; t=1743595701; x=1744200501;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mBYrvzIL73mZMnAvFss/1pIbuShofo0k+zpJBk1+x0Y=;
-        b=dm04T+xzlElVC/d2qQ6c8uKLZiu2b+O8+y3ieryKX+ReEr0OcyY5rSm+2TusY2oz/l
-         RSD8x2Zvhh3CU1eqkXMxMZ0In4ZyhS8xLgrdZMELMrKY0zHEUtPyWgl9nJq0GBlhBctf
-         +tzG6oODvPw1Z17BNRrZ+bMFJ3PaTANd58bf8YOvkgB74KCNIBfRTUG9GKQqPCCmPcZq
-         hCwcdcl9/yxq0nfTrVAQwW723WLL75CHcBDf+GbJA8GwJH0m/v35YWaiE0G8fqw6G/np
-         KUQ+Mwba8VNTuNXMTZsvBOk2cVtDbslRNzz0WUS6xB6mY3apI+rS7r5crNX1R3yj+wLd
-         LkGA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9XsBTml4ys5v0fexfLT/qhX+UIOX9V6aoSUkXmQMK6l4ApG5Tcpb+ptE3T1ht3wF0q2hlSeWKEPQ7ya7OXGk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoROHDolPH8O1t1aouRuVqBCvRyuP2I4v7SNRethGJH4V3Z7bj
-	N8PvqYXWnkV2Q7s1mZVS6jg1/z2Dfpu2U/ogXnUbUWxfQ16sdEFew+pO62z9PV+7izRtvT091cr
-	ENBHFE+z9LcRywwffv82c0RtakXTB0cRlsKVuenC++ZE9i6lNfL47jQG8O2A=
-X-Gm-Gg: ASbGncuwwAqfuFboY3WpsQSuwo5hGoJgr5jPEjpg9/8JBKjnSMfuWlv7Nt0C/iu5m5e
-	OBO4yJ2LbSTtAqYm6eoOWZMIGJ/kHMr4GBskAVFyofMO7M/ykm6A/QY79xi9+Lfev7ERiM+Hy9z
-	i6tZ7BvriMrZ4k/zql35N5wMh/Y7FeuJV7H7SypLQWrdT1aGa00nae0pP1wKoLepLsJeM6Me4Qj
-	QzTT7+JloNPKaNRI9h+qnWdIgA0/W8H1Iw5FUPxnT+qD690CqSuKaBQkrThCZIvPU0kXiWx8NUV
-	bSwpdo5mYBh91CWH5bHBYXkWydw4L/EYgX3XRMDYt0AkRyJADc2YnN5CEVsCpx7s1dHiOIBwp9s
-	9XAMJLq4=
-X-Google-Smtp-Source: AGHT+IGYQ7kJJcuc8T9fvq2VTLjEsxmhNZWdeJxeOjlwY3o7lDQ6wZyc5AdoMU86aeVCa3KRFhv3uA==
-X-Received: by 2002:a17:906:5908:b0:ac7:3a23:569c with SMTP id a640c23a62f3a-ac73a235730mr1305943866b.1.1743595454094;
-        Wed, 02 Apr 2025 05:04:14 -0700 (PDT)
+        bh=j5Jfe36OUwvVyT9LS7eCwDhDtrMpAORzy0WnLrxsyVY=;
+        b=fD7SYWVhTcFOUNkeD8BRiNyrMQF3ppjv+/cygpi7Xw90lfDEy6qIjoqYVRz8NTk8GM
+         oxtxfj+QSrH03aaddH9+UQOR6OTKcpX/aMjWC6HK+Ro7R9PxyH6Re8GZ4iRQ/DQq5vwf
+         Nf7QwhtEBBN9LugBAblz69I2bwNO3ENquE6Za4YhcirvamkYvSlYDjb9xhKvrfrHI++I
+         nSz6npUDZiV193o884T+4Otldg+YJlQlq6THYBhYMEYSd085w3sCkw6HO35t1Um8CPCJ
+         MUSDHTbAnr+W4iNGvYFSA7GTOlf2gOvYzjEwemqqYxRMvPnGFSVRi5TNOJiC9FIAyTyp
+         NIGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXuQmFi9cvKImi50E8jC+jRs5EspJ/0lwWEbfvipvobQfIqGI+2V42B8rJrnrJ8Ewr3rEgIcEPhZY57UqAg9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8ELOo6PVZszDubeHxPZPqPosVFnA3q8k3E/cyEZRMT883x4Zq
+	wIy/rA5vu6NNZWP9MbVVbAtssygJuFoDC0JoBhOs+HzPOGMPysjrbXaW6z6JDVDS5uWrP8XR/CO
+	EcaHo+25R66WgYsvjKRWQGB4H6D3kLorTynixhXkXZJoHdgpj4t6TW9CbLBk=
+X-Gm-Gg: ASbGncuNs8YXDMFpqOkEjkVRrsv1Ex1Mu4LA49t4NggpaT0tMerdqJJxWkL+707vokd
+	gvlMbPmMemr0M49VRyjPvgD8SpH35ZewkbCeGRzcVUhal2XXWSLdGYZgdcyQ2QCW/5J7WK+sEK3
+	7tCkeOJ5nd1jm1PQk3GlNxtWpIZHM/lM2UK/xJiYHdtPVv4+t9yre5mchYgOYmbk6cqGaRoSJTp
+	o+fdFWpZ7dSbrPO1OFLTfS1jTWR5k/ySo9OVWEGjqNU2TOPz3vtK8goqFgX1wm2JQu49ef3F8iX
+	cHizndS4fldB04mGgA/Mi9fg2iie4VTqgkg/XOmVeALYY47mA8kGVe8tog6MgVoXg+5jtgBEul7
+	u3HAxA/E=
+X-Google-Smtp-Source: AGHT+IG3b1s4SCLE8l25O6MvYbGYEYTk0hwlT/ofXoHltCEE2yp+1M9ogrjFly9DqCR7bodW1lSJ6w==
+X-Received: by 2002:a05:6000:40e0:b0:39a:ca0c:fb0c with SMTP id ffacd0b85a97d-39c120e3590mr13131376f8f.28.1743595700585;
+        Wed, 02 Apr 2025 05:08:20 -0700 (PDT)
 Received: from ?IPV6:2001:67c:2fbc:1:9a9c:dc9e:39c6:2380? ([2001:67c:2fbc:1:9a9c:dc9e:39c6:2380])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac71922cc94sm907520266b.28.2025.04.02.05.04.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c0b79e304sm16841996f8f.73.2025.04.02.05.08.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Apr 2025 05:04:13 -0700 (PDT)
-Message-ID: <82ed4c04-d143-42a8-88a6-6dceea2518cc@openvpn.net>
-Date: Wed, 2 Apr 2025 14:04:12 +0200
+        Wed, 02 Apr 2025 05:08:19 -0700 (PDT)
+Message-ID: <cd992750-2b8b-4793-8575-89d69ff3624c@openvpn.net>
+Date: Wed, 2 Apr 2025 14:08:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v24 08/23] ovpn: implement basic RX path (UDP)
+Subject: Re: [PATCH net-next v24 09/23] ovpn: implement packet processing
 To: Sabrina Dubroca <sd@queasysnail.net>
 Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -93,7 +93,7 @@ Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
  Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
 References: <20250318-b4-ovpn-v24-0-3ec4ab5c4a77@openvpn.net>
- <20250318-b4-ovpn-v24-8-3ec4ab5c4a77@openvpn.net> <Z-u2NqykODnOrEgl@krikkit>
+ <20250318-b4-ovpn-v24-9-3ec4ab5c4a77@openvpn.net> <Z-u46_82tkR8TsOa@krikkit>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -136,27 +136,103 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <Z-u2NqykODnOrEgl@krikkit>
+In-Reply-To: <Z-u46_82tkR8TsOa@krikkit>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 01/04/2025 11:47, Sabrina Dubroca wrote:
-> 2025-03-18, 02:40:43 +0100, Antonio Quartulli wrote:
->> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
->> index 024458ef163c9e24dfb37aea2690b2030f6a0fbc..b30175e34230d3dbf5d253838df894f0625c705c 100644
->> --- a/net/ipv6/udp.c
->> +++ b/net/ipv6/udp.c
->> @@ -1933,6 +1933,7 @@ struct proto udpv6_prot = {
->>   	.h.udp_table		= NULL,
->>   	.diag_destroy		= udp_abort,
->>   };
->> +EXPORT_SYMBOL_GPL(udpv6_prot);
+On 01/04/2025 11:59, Sabrina Dubroca wrote:
+> 2025-03-18, 02:40:44 +0100, Antonio Quartulli wrote:
+>> +/* this swap is not atomic, but there will be a very short time frame where the
+>> + * old_secondary key won't be available. This should not be a big deal as most
+>> + * likely both peers are already using the new primary at this point.
+>> + */
 > 
-> This is not needed anymore.
+> This is not the case anymore.
+
+Oh right - this comment can go.
+
+> 
+>> +void ovpn_crypto_key_slots_swap(struct ovpn_crypto_state *cs)
+>> +{
+>> +	const struct ovpn_crypto_key_slot *old_primary, *old_secondary;
+>> +	u8 idx;
+>> +
+>> +	spin_lock_bh(&cs->lock);
+>> +	idx = cs->primary_idx;
+>> +	old_primary = rcu_dereference_protected(cs->slots[idx],
+>> +						lockdep_is_held(&cs->lock));
+>> +	old_secondary = rcu_dereference_protected(cs->slots[!idx],
+>> +						  lockdep_is_held(&cs->lock));
+>> +	/* perform real swap by switching the index of the primary key */
+>> +	WRITE_ONCE(cs->primary_idx, !cs->primary_idx);
+>> +
+>> +	pr_debug("key swapped: (old primary) %d <-> (new primary) %d\n",
+>> +		 old_primary ? old_primary->key_id : -1,
+>> +		 old_secondary ? old_secondary->key_id : -1);
+>> +
+>> +	spin_unlock_bh(&cs->lock);
+>> +}
+> 
+> [...]
+>> +int ovpn_aead_encrypt(struct ovpn_peer *peer, struct ovpn_crypto_key_slot *ks,
+>> +		      struct sk_buff *skb)
+>> +{
+> [...]
+>> +	/* encrypt it */
+>> +	return crypto_aead_encrypt(req);
+>> +free_iv:
+>> +	kfree(ovpn_skb_cb(skb)->iv);
+>> +	ovpn_skb_cb(skb)->iv = NULL;
+>> +free_sg:
+>> +	kfree(ovpn_skb_cb(skb)->sg);
+>> +	ovpn_skb_cb(skb)->sg = NULL;
+> 
+> nit: Those shouldn't really be needed, since we'll call
+> ovpn_encrypt_post that will take care of iv/sg/req. But it's fine if
+> you leave them.
+
+Right!
+This code flow was re-arranged a couple of times, and I have missed that 
+we now always hit those free()s in post().
+
+I prefer to drop them and put a comment indicating that cleanup happens 
+in post().
+
+> 
+> (same thing on the decrypt side)
+
+Yep
+
+> 
+>> +	return ret;
+>> +}
+> 
+> 
+> [...]
+>> +/**
+>> + * ovpn_key_id_from_skb - extract key ID from the skb head
+>> + * @skb: the packet to extract the key ID code from
+>> + *
+>> + * Note: this function assumes that the skb head was pulled enough
+>> + * to access the first byte.
+> 
+> nit: another "first byte" that I missed previously :(
+
+ACK!
+
+> 
+>> + *
+>> + * Return: the key ID
+>> + */
+>> +static inline u8 ovpn_key_id_from_skb(const struct sk_buff *skb)
+>> +{
+>> +	u32 opcode = be32_to_cpu(*(__be32 *)skb->data);
+>> +
+>> +	return FIELD_GET(OVPN_OPCODE_KEYID_MASK, opcode);
+>> +}
 > 
 
-ACK
-
+Regards,
 
 -- 
 Antonio Quartulli
