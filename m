@@ -1,172 +1,148 @@
-Return-Path: <linux-kselftest+bounces-30004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCF2BA783B4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 22:56:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50F22A785F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 03:00:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16C233AD62F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Apr 2025 20:56:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 055ED16DA06
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 01:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D25212FA7;
-	Tue,  1 Apr 2025 20:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6776B67F;
+	Wed,  2 Apr 2025 01:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gWvVeGqj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZU8QSn5D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492121E9B0E
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Apr 2025 20:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7688F8837;
+	Wed,  2 Apr 2025 01:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743541006; cv=none; b=PueVxfUbEfKW2OAWW2P2vHE9EdiU/4iGCO1969UVdADiBJALS6zVCUDN9jfJaJvm69ArypxtllIEVyyC3MLrqmgcOgAtw1ZjG5CtpnDipH/ABoQIYei2PjNfa/fnED3Cc+VpiyHOds6JzHGEd5dbCYgQCgxssB4rIifFwG/+1os=
+	t=1743555612; cv=none; b=s+s4WNOuLh9LzU5McgKUpP7A7kZJWiDICH1pB4y3rg99pUaAUhK0Gp+h8JjDpV51MzBqGULZiQtkmZSE4yHJBtJmIrUN5I95X2q5M76XgHG97Kvhf5MRuZ0D0KcDrGwCA7klKvOjjylcfzFVAXIydVTJlkl6ogi83BbUBR27i40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743541006; c=relaxed/simple;
-	bh=v56HhO7BnNvgOsrqPYPyyvBFZCpogEYgRZeTU4L4oNw=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=AaSVNJ7vWgYYXGiYvPEYnYbpy6QV9myw30WDERszvW8Hlr9mvwcPniJHiM2/nds8WZCHquZMlSa7LzkCEtcU90BxuUBDUpHd350CEZN/9VTsbqXYJaYeCgUYrmKgS9UClQFZm6MhFb55zLvIM/OOGjev2M+1dmaTEykgdxVpQEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gWvVeGqj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743541004;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PHHA8OPc+IFjSo96+/YuwMdjMD429Mu9O83tqhpNzsg=;
-	b=gWvVeGqjHdf69v03xz1LgpPVLyfuFpJa0yWq+IXf+Dy4nl3cvj67Se2+ROCihzmIlp9itP
-	ODlfnxdxpxVz6lc4clsotVlabtfaH7V5R2/IAlXUXBvGvkHouCVR1PJv2gy0yEbCSQ+z6y
-	JTL4KLMF35dEsg04ArADvxqksmmaD20=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-618-IyPdZlBVNDSr5k-50vtBuQ-1; Tue, 01 Apr 2025 16:56:43 -0400
-X-MC-Unique: IyPdZlBVNDSr5k-50vtBuQ-1
-X-Mimecast-MFC-AGG-ID: IyPdZlBVNDSr5k-50vtBuQ_1743541003
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c54e9f6e00so41376085a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Apr 2025 13:56:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743541002; x=1744145802;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PHHA8OPc+IFjSo96+/YuwMdjMD429Mu9O83tqhpNzsg=;
-        b=vzFywCeO8fZXjS28hDdF8lvp+EQXKix7MSenQoV4aBYSjp+FZ5EWySpQ+4nq1RMcZq
-         mfPwxsUJKG7ypQlpOgrtFbg0xeFMqa1Wa3YdUOy+y5DdwsLY/EO6HLOm9QEPgOawHoof
-         tT1qQFiDdOO1E2mn+fAtPx5F6wXybQeJSNwFvUAzE1diNXDRkGQqAdy2AIXuzT4RfuaF
-         SAayGANF8PF2YjHvojXk4IHTJI7Kh+sAQRKWckWyZR9s36mslcUVUSKb5dpNjGqHUU54
-         aZAoy8+1yBX+G7vOmDlgsss37z4srN4aK9u63/Tp2EnwrjXHZrLDwwnTQ3H0tuopQtEE
-         Y9DQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKIYdjwXPWTMlnPbRlFWR9m6udXWnORSG4nOcLdmEZkSGFs0KdYSuneNadEy/2LpL5lMyqOJwDmnuyZiqFHRM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcE+ujhcnP4mN7wmykxwY1P9uPRr1HDMc+CQWZ/IY97JqWCtXe
-	EHhHHr43CjIsNXo1/QVQNuJxCp4IKhuOAfnAuS4WfYKhAAllsOh691pI9Xxl2Pz71s4fVYRCeZA
-	WyYlo1P0sQSI6iB4IVwtZQxGNXo2XV3RIPt0BIHWvJvyyPtKELBWz/SZ9HRH6JwlEdw==
-X-Gm-Gg: ASbGncsZrtvBK7OTZUHKxX98VHo4NFkX2HYMtg0ShVGDlSsVnXmO+sNwkdm403l23jc
-	uI+af7Cef4ZdLJu/ayqbbQz4gBbI7eJpk2b4Imbps7vB90eRO9LNgrXUqRNW9A+J1HpVLZjwDw+
-	kat1IGtcEkxJ5DpJR9DjBYi11VsTdjpYI35CRzTDGJWzZM8Hrtu27wEaXaD0Gl5RgdpjGCPz/Zy
-	V/FzQ9J75z+tueXweYGLXjcyLHUJ4K44W3U4FqscVkkC8WEUWaN33eEl1k8xBrO8sLU+Eplikuj
-	826NySPCbpFmNWFU8Hb2NbHrewmBWWU7hwrr7nysk7PNIXtCEoJ88cAEFCL4jA==
-X-Received: by 2002:a05:620a:1794:b0:7b6:d273:9b4f with SMTP id af79cd13be357-7c7629b4f65mr246979785a.11.1743541002712;
-        Tue, 01 Apr 2025 13:56:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGcWWJmpseCDQqpeazL0dYAKCMUkDVUD6rJ+imI807rIIXOntpqMKpKESFZbFQCT/dHY6xXdA==
-X-Received: by 2002:a05:620a:1794:b0:7b6:d273:9b4f with SMTP id af79cd13be357-7c7629b4f65mr246976685a.11.1743541002366;
-        Tue, 01 Apr 2025 13:56:42 -0700 (PDT)
-Received: from ?IPV6:2601:188:c100:5710:315f:57b3:b997:5fca? ([2601:188:c100:5710:315f:57b3:b997:5fca])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f76b2650sm703707885a.62.2025.04.01.13.56.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Apr 2025 13:56:41 -0700 (PDT)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <d8d7c633-a9e3-4990-8904-4c7710894789@redhat.com>
-Date: Tue, 1 Apr 2025 16:56:40 -0400
+	s=arc-20240116; t=1743555612; c=relaxed/simple;
+	bh=/ACN9qX6EOkrFeO0FdXlvcbraUtdbf8Oecbf6xTmBUc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KonBvE/RstdRsAcQmJQdmORL2evKjnS3A7b7Cob7G9hxUxoIMo/4uGlTZjvabFPwN6owh6QgUrBPFQ5WLzLbZ1VqsxR+0+6wBmeygF2mRyvxTqU7gSj00aeI1vvnNrK4pCABWRC1HvT28v/yLnSeT83cXCB40/vp6baM1g/ONjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZU8QSn5D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C44A4C4CEE4;
+	Wed,  2 Apr 2025 01:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743555611;
+	bh=/ACN9qX6EOkrFeO0FdXlvcbraUtdbf8Oecbf6xTmBUc=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=ZU8QSn5DbNG2E0S85Y2UCrLS1bRLLU2RSpMbDLuiDhm4MIiKn95CFWGQuzgKJJa6z
+	 r5EXDT2B5otmGCd+lGyoXkW/5X3sGLNeCR1+sfGgENESbngWN3bqejq+k54p+ZxHFZ
+	 ZUxtgv6kztuCAiZd+Mmr4geXm7kWgqC+PL0Sbfs3szxcXs0Tar/SY0AtpYmvOPBrIa
+	 0hikOoklT5bVc9Q3QMA9Kam/tlu3SrMiHyGeGt98DvjCgjP3z/3T2x3QznGXSk2XJg
+	 2jiGH/ZJvAAofAfjU8re5i1d7WmzTUMmD17i8uIklsbTLr0n0c7IGNImnilJS+RUOT
+	 PaPIZoBHoeh+g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A57C36010;
+	Wed,  2 Apr 2025 01:00:11 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
+Date: Wed, 02 Apr 2025 01:59:31 +0100
+Subject: [PATCH net-next] net/selftests: Add loopback link local route for
+ self-connect
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/10] cgroup/cpuset: Fix race between newly created
- partition and dying one
-To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250330215248.3620801-1-longman@redhat.com>
- <20250330215248.3620801-2-longman@redhat.com>
- <Z-shjD2OwHJPI0vG@slm.duckdns.org>
- <915d1261-ee9f-4080-a338-775982e1c48d@redhat.com>
- <Z-xFqkBsh640l5j0@mtj.duckdns.org>
- <d9c96490-98bf-406b-8324-6cf86a536433@redhat.com>
-Content-Language: en-US
-In-Reply-To: <d9c96490-98bf-406b-8324-6cf86a536433@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250402-tcp-ao-selfconnect-flake-v1-1-8388d629ef3d@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAPKL7GcC/zWMywrCQAwAf6XkbDCuL/BXxEM2Zm2wpmV3kULpv
+ 7sKHodhZoGi2bTApVsg69uKjd5gt+lAevaHot0bQ6BwpAMFrDIhj1h0SDK6q1RMAz8VlZij0F7
+ ofIKWT1mTzb/1FVwrus4Vbs1ELooxs0v/Xf/d9sXmsK4fxrqPW5QAAAA=
+X-Change-ID: 20250402-tcp-ao-selfconnect-flake-e0aabc03c076
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1743555610; l=2603;
+ i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
+ bh=VxuHQuF+lHn7Z66dGwiCR30NCU5Nd0bRf7ml37EyIQ0=;
+ b=3aqwhOYRQXABmt30DhIo05TJTESR3xflbbuTR3dBAmI3yMdgAoZyxUVPrqaM+Ncc8k/aXIzyA
+ mxoO5rvkEHQC0Jz5Odvs0oX666np6SxSESKORHPedn8ROHccfn/nftx
+X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
+ pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
+X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
+ auth_id=152
+X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
+Reply-To: 0x7f454c46@gmail.com
 
+From: Dmitry Safonov <0x7f454c46@gmail.com>
 
-On 4/1/25 4:41 PM, Waiman Long wrote:
->
-> On 4/1/25 3:59 PM, Tejun Heo wrote:
->> Hello, Waiman.
->>
->> On Mon, Mar 31, 2025 at 11:12:06PM -0400, Waiman Long wrote:
->>> The problem is the RCU delay between the time a cgroup is killed and 
->>> is in a
->>> dying state and when the partition is deactivated when 
->>> cpuset_css_offline()
->>> is called. That delay can be rather lengthy depending on the current
->>> workload.
->> If we don't have to do it too often, synchronize_rcu_expedited() may be
->> workable too. What do you think?
->
-> I don't think we ever call synchronize_rcu() in the cgroup code except 
-> for rstat flush. In fact, we didn't use to have an easy way to know if 
-> there were dying cpusets hanging around. Now we can probably use the 
-> root cgroup's nr_dying_subsys[cpuset_cgrp_id] to know if we need to 
-> use synchronize_rcu*() call to wait for it. However, I still need to 
-> check if there is any racing window that will cause us to miss it.
+self-connect-ipv6 got slightly flaky on netdev:
+> # timeout set to 120
+> # selftests: net/tcp_ao: self-connect_ipv6
+> # 1..5
+> # # 708[lib/setup.c:250] rand seed 1742872572
+> # TAP version 13
+> # # 708[lib/proc.c:213]    Snmp6            Ip6OutNoRoutes: 0 => 1
+> # not ok 1 # error 708[self-connect.c:70] failed to connect()
+> # ok 2 No unexpected trace events during the test run
+> # # Planned tests != run tests (5 != 2)
+> # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:1
+> ok 1 selftests: net/tcp_ao: self-connect_ipv6
 
-Sorry, I don't think I can use synchronize_rcu_expedited() as the use 
-cases that I am seeing most often is the creation of isolated partitions 
-running latency sensitive applications like DPDK. Using 
-synchronize_rcu_expedited() will send IPIs to all the CPUs which may 
-break the required latency guarantee for those applications. Just using 
-synchronize_rcu(), however, will have unpredictable latency impacting 
-user experience.
+I can not reproduce it on my machines, but judging by "Ip6OutNoRoutes"
+there is no route to the local_addr (::1).
 
->
->>
->>> Another alternative that I can think of is to scan the remote 
->>> partition list
->>> for remote partition and sibling cpusets for local partition 
->>> whenever some
->>> kind of conflicts are detected when enabling a partition. When a dying
->>> cpuset partition is detected, deactivate it immediately to resolve the
->>> conflict. Otherwise, the dying partition will still be deactivated at
->>> cpuset_css_offline() time.
->>>
->>> That will be a bit more complex and I think can still get the 
->>> problem solved
->>> without adding a new method. What do you think? If you are OK with 
->>> that, I
->>> will send out a new patch later this week.
->> If synchronize_rcu_expedited() won't do, let's go with the original 
->> patch.
->> The operation does make general sense in that it's for a distinctive 
->> step in
->> the destruction process although I'm a bit curious why it's called 
->> before
->> DYING is set.
->
-Because of the above, I still prefer either using the original patch or 
-scanning for dying cpuset partitions in case a conflict is detected. 
-Please let me know what you think about it.
+Looking at the kernel code, I see that kernel does add link-local
+address automatically in init_loopback(), but that is called from
+ipv6 notifier block. So, in turn the userspace that brought up
+the loopback interface may see rtnetlink ACK earlier than
+addrconf_notify() does it's job (at least, on a slow VM such as netdev).
+Probably, for ipv4 it's the same, judging by inetdev_event().
 
-Thanks,
-Longman
+The fix is quite simple: set the link-local route straight after
+bringing the loopback interface. That will make it synchronous.
+
+Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+---
+Sorry to send this during the merge window, it's a test stability fix.
+It seems that netdev build bot has hit the issue a couple of times, but
+seems not hitting it constantly at this moment:
+
+https://netdev.bots.linux.dev/flakes.html?br-cnt=150&tn-needle=tcp-ao
+
+I'm marking it net-next, so that build bot carries it until the merge
+closes. If it's not fine, I can re-send it after the merge window.
+---
+ tools/testing/selftests/net/tcp_ao/self-connect.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/net/tcp_ao/self-connect.c b/tools/testing/selftests/net/tcp_ao/self-connect.c
+index 73b2f2276f3f5410aaa74bede7f366f81761bd6e..2c73bea698a677f9aedd7bec28f6e7fee7845d2e 100644
+--- a/tools/testing/selftests/net/tcp_ao/self-connect.c
++++ b/tools/testing/selftests/net/tcp_ao/self-connect.c
+@@ -16,6 +16,9 @@ static void __setup_lo_intf(const char *lo_intf,
+ 
+ 	if (link_set_up(lo_intf))
+ 		test_error("Failed to bring %s up", lo_intf);
++
++	if (ip_route_add(lo_intf, TEST_FAMILY, local_addr, local_addr))
++		test_error("Failed to add a local route %s", lo_intf);
+ }
+ 
+ static void setup_lo_intf(const char *lo_intf)
+
+---
+base-commit: 1a9239bb4253f9076b5b4b2a1a4e8d7defd77a95
+change-id: 20250402-tcp-ao-selfconnect-flake-e0aabc03c076
+
+Best regards,
+-- 
+Dmitry Safonov <0x7f454c46@gmail.com>
+
 
 
