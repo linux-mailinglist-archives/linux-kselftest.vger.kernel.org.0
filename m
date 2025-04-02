@@ -1,94 +1,127 @@
-Return-Path: <linux-kselftest+bounces-30038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA30DA7990F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 01:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5D56A7991D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 01:50:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2452172356
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 23:40:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9709916DD81
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 23:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AF361F8EEC;
-	Wed,  2 Apr 2025 23:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655791F460A;
+	Wed,  2 Apr 2025 23:50:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGoVU0Fs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="am3VYutG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2133D1F8BCC;
-	Wed,  2 Apr 2025 23:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E510626AFB;
+	Wed,  2 Apr 2025 23:49:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743637201; cv=none; b=gDTd2vbxCOxyZ9VK3Onq6MpxuXENoHSLCENnmA7pFwXYv6+lVi9CTQS5QhmQs3LkyVPLEMCEpmron3J38/dbl+Zej2lYH2DNHPifn9uSY/TyVMUsKP5ldWOwqRV+09FbAn6yQ60hAoJirG6DKRfk5JQtWYBG5m5yaldnar0UTAs=
+	t=1743637801; cv=none; b=BsNG9Jsn6ptdZKJROfFRp1kAQ0xDK2JcaH8Csi58LaoHUFbVvylHJIp6gyDl0xN12x9V9DfhvlWoRt4P/DnxyotrhQPN5eE6cbqQDzdp4N64bbO7N9L0F56LpVh/f2RcHex+uRku2/0dFMBG0EJHrXMy96h/Wck8k4Pn2mJJ3KA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743637201; c=relaxed/simple;
-	bh=zm4Rc4GCeKZtCxD8lh7jO+Cixg48kBq8dl95C4HpKZ4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=U7su7pw+NHbDDEijtM16rCUvSpYNUvcuJC17j+Hvi7tiMO5nVX9RheOS3QZ85WG8mDaAMhLJn0s4eXc4V9EuHMUlGk8ZeI179Lb689NLkXwY+K2+avygGlGXYl+0TV4O5AkzZvJZIbOPzw2mx6aXYlrHKRprm36E2mZxUJmPX3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGoVU0Fs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 966BAC4CEE7;
-	Wed,  2 Apr 2025 23:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743637200;
-	bh=zm4Rc4GCeKZtCxD8lh7jO+Cixg48kBq8dl95C4HpKZ4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bGoVU0FsSU6GDWCo3pnbqXK3+BFJmOOHV3EqsemhTdl9X+/LYRzg+tMrdKTSEzyBQ
-	 Az15YlPEdBu55OxBulcqrfJDbQLYQgMASyEN569S5T0GC0usjvLFAsHRIMVR3hr5h5
-	 6jirO612BJ4IUHlzxSBUBs7g2FQNP9HBdw6UstIcOJp2qMm3dJvMfflIYcZT8HjH/N
-	 ZGLrwOspbPX6/IDw2kWQNvEaaAy/zgbUBBxb9wna2PPjcKm/KcJUH/zR2AwAqAKVo0
-	 n+Y6QH5Ek/FFAOADhXD7FWctsxtpK+spHahl7WrrnZNJd7JxuHmNHf2dxFWmvi2kvR
-	 mAHd/i+yxx7Cg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE5FB380CEE3;
-	Wed,  2 Apr 2025 23:40:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1743637801; c=relaxed/simple;
+	bh=pRKN4RJ+ClNeiAeT+SXblO6J0J5VOZahako4m+scu+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q5JlNtjtgSd1oBB7rqRAPlME/AdoQgQy4XJg9Vu0hy4vzKDMRBE+qGim+y+9xIlTLrTVzBCu3Bt2wGeIgBEQZkrXYz6DPn0w9g+pfZlzW1S3cdyD8KwMp2ycT4nXlqsO8T9K0aaPzb3qV7XtfeOi8lokKM7xTc7J+tRSiWLKBk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=am3VYutG; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-225477548e1so3826725ad.0;
+        Wed, 02 Apr 2025 16:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743637799; x=1744242599; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgDfFzvRu4V5qJwEASsCRfXCYgidop5Mrs7vCCMeeOw=;
+        b=am3VYutG590jeXDKQZxfouIN8kF1Yu1tvCNiYa6HstsJxyzFcO4p9zGWaHIj+hcmpD
+         r7Sp2iOycVYvyfbptg10JuDkSkcPKxytM8RUxXY4njW2F1Fnnb6G3peLJiSWwFa6hfpC
+         gBPIBDJ/OnesNlSUN3Nc8nYp95a62T+Q+G+lbaqWbkUc9ePm4d4WailaOcCKBQOI0Eyf
+         qzCeZILWf7osAx8Yx7AzrgsJtsOxPsVjFy0EsEIczdeWxnlcg9rZva5Wng4KaKjUF4nD
+         tWYfzr9cKDcdUAVlbXXMcduOJM4g1qydzJB8Jd+gkuUckchNZYgGOHQEJliMXXAeFPPP
+         DhiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743637799; x=1744242599;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wgDfFzvRu4V5qJwEASsCRfXCYgidop5Mrs7vCCMeeOw=;
+        b=JORO9Nf/WyFx8B+0jGt1jSHy56XXtvjnCty6DMpKPxdg+J5AQNfwN49w1KIkCFJiq6
+         usQNewOe9TlwlFJ5kFLETlzu1DVMaLdWKBUZRjP4LrFN+0N2kob36oJF1tloLkKwxJqo
+         PN2xWQGB5qdTUF7V0stX3Kmh2w8sVo4XBkHoKLaMnm7+13CwtiOXjLpXt+YH+lYKN7yX
+         lkZ32Nn8v8L8riJxMlg1rvc4PvoZbWycJN/n3nhtAaQ2DmpRK4PqolSaCdV0hPLGH5Kr
+         DKndich/XJw0U/emFMcwFsJDOCo6ZuQ336/060wDccn17YW9xR2BTdZwAT89aMXTsrDo
+         mIlw==
+X-Forwarded-Encrypted: i=1; AJvYcCVX5kOHVLApP7u1ejaLpZ3deIW5wsg2WinOXUMBZNJPZCsgxgryxROG+sqVJbrMX+AHk6e0csz3@vger.kernel.org, AJvYcCXA6Li23beWHx7Y1mdca/mYsfPT7XpPQPEEMij/i8w7y1V/2WvAkAXRClJapvoO+jQzFGUFbi7/3f5AX95dGGM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQvDQga9GFzBcPzIURiZwDzks9EqwAEH92/K/3c0hvxMBbhQMh
+	woBUyGcNTx/uehAEnNCh05TyiWlxjwEd/2zgZybQ7WZ5ho0rlJcS
+X-Gm-Gg: ASbGncvMERkxEleei3P+2OPZ0P3XbXIDZtE/ZsmmeG+YmtHh73pfrU8HRuR1jN01ytI
+	jvizM/Le0XxecgkR6/L+wQj6uQFWqyrkiGqITz3gQdumK/5COSshaRgD8mpIPTDFQCIA7IA6pNy
+	PNBQXLpiSqX9geWG706ESzYG+GYdQpS8WQ/mMZB9ASIlZoIqm1S0vUfC+pGsyWlQcI/4hZ/iPLw
+	zutTgyYxu7/QXOv1uTEaAmPAbhGPKiHuUyt5nLeGvA2yzXF/39tUDEgWE+cdMXKcJG0/5bwNYp0
+	yy2M4QVuf72Y+eDhS4ACg6WaoUHFkYLTJJ12jOPACr8v
+X-Google-Smtp-Source: AGHT+IHyThICtb76IOv96dPuhTPs2KE1alV+KAitw929VSlGUdv/BrbieypehUVZ+QpDDz5ApozEuQ==
+X-Received: by 2002:a17:903:19ef:b0:223:33cb:335f with SMTP id d9443c01a7336-2292f9493e3mr292458145ad.3.1743637799009;
+        Wed, 02 Apr 2025 16:49:59 -0700 (PDT)
+Received: from gmail.com ([98.97.40.51])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22978772ee4sm1543075ad.233.2025.04.02.16.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Apr 2025 16:49:58 -0700 (PDT)
+Date: Wed, 2 Apr 2025 16:49:37 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, borisp@nvidia.com, kuba@kernel.org,
+	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+	mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk,
+	mrpre@163.com
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add ktls selftest
+Message-ID: <20250402234937.riknwzpwdmly4byl@gmail.com>
+References: <20250219052015.274405-1-jiayuan.chen@linux.dev>
+ <20250219052015.274405-3-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] selftests: tc-testing: fix nat regex matching
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174363723725.1716091.11846384965576414092.git-patchwork-notify@kernel.org>
-Date: Wed, 02 Apr 2025 23:40:37 +0000
-References: <20250401144908.568140-1-pctammela@mojatatu.com>
-In-Reply-To: <20250401144908.568140-1-pctammela@mojatatu.com>
-To: Pedro Tammela <pctammela@mojatatu.com>
-Cc: netdev@vger.kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250219052015.274405-3-jiayuan.chen@linux.dev>
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue,  1 Apr 2025 11:49:08 -0300 you wrote:
-> In iproute 6.14, the nat ip mask logic was fixed to remove an undefined
-> behaviour[1]. So now instead of reporting '0.0.0.0/32' on x86 and potentially
-> '0.0.0.0/0' in other platforms, it reports '0.0.0.0/0' in all platforms.
+On 2025-02-19 13:20:15, Jiayuan Chen wrote:
+> add ktls selftest for sockmap
 > 
-> [1] https://lore.kernel.org/netdev/20250306112520.188728-1-torben.nielsen@prevas.dk/
+> Test results:
+> sockmap_ktls/sockmap_ktls disconnect_after_delete IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls update_fails_when_sock_has_ulp IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls disconnect_after_delete IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls update_fails_when_sock_has_ulp IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls disconnect_after_delete IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls update_fails_when_sock_has_ulp IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls disconnect_after_delete IPv4 SOCKMAP:OK
+> sockmap_ktls/sockmap_ktls update_fails_when_sock_has_ulp IPv4 SOCKMAP:OK
+> sockmap_ktls/tls simple offload:OK
+> sockmap_ktls/tls tx cork:OK
+> sockmap_ktls/tls tx cork with push:OK
+> sockmap_ktls/tls simple offload:OK
+> sockmap_ktls/tls tx cork:OK
+> sockmap_ktls/tls tx cork with push:OK
+> sockmap_ktls:OK
 > 
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-> 
-> [...]
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
 
-Here is the summary with links:
-  - [net,v2] selftests: tc-testing: fix nat regex matching
-    https://git.kernel.org/netdev/net/c/ca9e5d3d9a4d
+Thanks Jiayuan sorry for the _very_ long delay this fell of my list
+and I missed it. Thanks again!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 
