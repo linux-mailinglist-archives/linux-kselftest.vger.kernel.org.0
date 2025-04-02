@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-30031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6AAA7974D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 23:11:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DFA5A797A8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 23:26:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC3497A4ADA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 21:10:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93DE51886AB7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Apr 2025 21:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E711F3BAB;
-	Wed,  2 Apr 2025 21:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEADE1F418E;
+	Wed,  2 Apr 2025 21:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AZWQK9Vr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lBixc8EO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7090D1F09B8
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Apr 2025 21:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE0715DBC1
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Apr 2025 21:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743628262; cv=none; b=IDrpTWVuVK5Dsj5iDHK6BgsTw04BUWjK7plOoiuRtDw7ckkkn2+Q4BoLMQxbLUsdFEW+rfWfGFqs92N8sOaN3GFX70LIhF5AJwnzgCEqJLe7ryks9czMt5mOIwEYAQRQe9ifLNY4AvV5FYval133MvaXePitSwUBBRoCpFwBnNU=
+	t=1743629183; cv=none; b=fkY2NxOPIaLjxHvD2iDPWCCP8fs0BQ+bE0qrvH98MLDGCHnwoIn6MYbZ1CQCLLPdDmRmp8OnDajtybzVO7jd2EI6Jm/83NSM7ig8t4TPbC/OGujiNFEpbfqo3xTSLeKCOtnWwdavzsLDQTlilITsogZ2FbWtNopQ3utClr6n2gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743628262; c=relaxed/simple;
-	bh=ETyIlupNzGiV9Nk5VRviQjoACogh2cw1bNs1XxsoM3U=;
+	s=arc-20240116; t=1743629183; c=relaxed/simple;
+	bh=WrSAroPteEkIfTPk5VG63Y9jqJZdMnOd06w/KS/3d54=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KkCZ56Ygibuj4G6RoRRzIHrzIy9GWAySlicp9fJBTxG7dynZGmGUT0ptDzZxFU46k0/HGbfAF1dja2mFlEkmzR778W/aK29KzcHsyMETOSDFuuIimTBNDCk3wYUNEKJ5y8aFI60q+F9drao3E3qeCtkbWyKXHmjhO6F6i2Spcms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AZWQK9Vr; arc=none smtp.client-ip=209.85.219.176
+	 To:Cc:Content-Type; b=sIVlqBbA5PuevivnIgtPxtIwGwSldJDrUT4lvyzFKbR9NRKOPgedLI+m0MU/OSmbHuIODQmTwzEq16WUhjDbLYpzcyRyWWzdqpOnnT2nAgbXKzb2QRfNhgOtUnlXId7PqP4C8wPC1TJrQmF/578tzeESYVKAvfjGxbPjaRgoBsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lBixc8EO; arc=none smtp.client-ip=209.85.128.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e53a91756e5so214779276.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Apr 2025 14:11:00 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6f74b78df93so4029727b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Apr 2025 14:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743628259; x=1744233059; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1743629181; x=1744233981; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZHlEMV0U9vFR86q2j1+99Qrtz2VZz1COboeDVfMSzm4=;
-        b=AZWQK9Vr8cHjaZjBVv6z/Neunk0VsvAerRNka10/JCgvrvVGYMWqESegqKGePOV/DG
-         U5ZfAu5O+NfgNI1cLOoMIcZEKpklsS9dsg0Q0X87v30BBNsrOrE/JfmfsNQzkCV2a4eQ
-         9GNEY7GRrkNzG/zugB7D/iJA049WiaPDesf8WS6lFdlAWGZ6/JF/bxM4PGtOKDF0rveS
-         rK8oIYG6WFSQSO7JiQ7w/flj+xRoBJOZVymi9tNtlZAagNis86ZjgFC3OSFIBJ+h5z/y
-         Hnll7VU7nMofC5VBvdIAfHICO7a4v1znP5PH+ycwEsIkOCeNsVR/i+ByHRU+G5Mz0M3C
-         QqlQ==
+        bh=jkq7RDB6qUQkjmvNPDbUzRwwtYEXsO/0AHJxtOGmBfQ=;
+        b=lBixc8EOGwUTg4GDYqiHmVzQuXDlNaL2SywjcPQ8PVeIRUjyhhVcsIJJTlCTprQ0x0
+         6P/Vt780rkXLxz97gNQnIdxuYHtPQTHV7op4zV8snJM2x1J4D2K3lutYQFsXly9xDVTY
+         OIwvr6+i1EPES1C+xokEVx3o4oEfR/DsXZNEDp27vz7Z/Bsxl9PCWLiJFsRILsAdxRCP
+         Uz7zOhjLq0E4Nf5Hm1XVdkxYFtMn57HVQY6mXDD/1R5w3Q/jLQLLRjRDYWEJFZdgsSXM
+         ot+Dd5OC8f+uwlArRxr3t5BexD1F4RJosqKlZgrV5cZ+unuCcQYgvjBWz5RlpgnB9Su3
+         yx4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743628259; x=1744233059;
+        d=1e100.net; s=20230601; t=1743629181; x=1744233981;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZHlEMV0U9vFR86q2j1+99Qrtz2VZz1COboeDVfMSzm4=;
-        b=nTNpVC/9/GhPbPSdXG/VXAjHXgD5rA1YQrzAzDHhLnEK9JZHluY0uTmTSOCkEFSwmJ
-         LuJ+Je1+DTI7tYZa0vDUkO5l6H5hxJSwFHbQ0O3I7gu+bIol8atC3kedSY6sj6Kk2pnE
-         ishsI00cfWF83WNKYJMPqWT1KMovflW9YxX4g/qN68qiSxR61inGhFzMLw8rFu4eqbAS
-         icRRBCAjlMisfpwUfFBGq6ikPB6UYhiqPoogVTbfhGi7CAOdr6k4DJhovBdvMUPNAlal
-         tIiiFIDkiBZQvuk2C1dP/B0+FX4QgHB81Ur6C9CRXDimCX+6g4D91dBcN583HndZ6gbo
-         sx0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ4ofLV3P/wwx5qRW5ppnDLRJmb4jJE9YunTniawwcc5r2KPrpwpStKfqad9d8MRoUw41qjqte2na836aUjtc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxPQbD8oI7ID0fvplHtuMKqobZjNT4xp8+4ZbnMCGl3DePlDa4
-	75qqd8u4xDcCFy597pS8orl37ixVbwEw511UNMMbqppu3hp/pZrnHEh8bvUYfcdeDH+aFSpjjGd
-	13SNbMPA0+NdYpE/jD+75nuwvBr3i3P1Zgf9R
-X-Gm-Gg: ASbGncsQgIGjHrBV1rzZkifTU9j737nqUjo6AnWBN3h9/Tu2qDjvsptg280Q4SuCjoH
-	ENk5Hn3H3SDCPVKf6CNOUHdX872GvHHRRxLyHMS70CIbg68ZGracrlGS1T0P48eJhc5857LSc4/
-	5KXOggYHerzyvLvH99p99iurXWNFOb7BuYJVaIDOSJs5+KAECQLrIMamhpZzBUuypCVQ==
-X-Google-Smtp-Source: AGHT+IErG7MiwhU3qRRn1slMSsE9CshkjX1Paa6gShbPemf8jIhSuKCfwVzgM+xEObkQjSGtzZ8Yb+0m8SB916dMXqc=
-X-Received: by 2002:a05:690c:6a07:b0:702:591a:6958 with SMTP id
- 00721157ae682-703a3ef8605mr132532867b3.22.1743628259110; Wed, 02 Apr 2025
- 14:10:59 -0700 (PDT)
+        bh=jkq7RDB6qUQkjmvNPDbUzRwwtYEXsO/0AHJxtOGmBfQ=;
+        b=tTS+inV/7lia3wPm1BTcCALNp+iEUEMiwVUKZZRa1PP6pPS+YOF3r2cx4sykmr5+GX
+         GQaDGGs+oCDPmCG72MwzqSnAzGiJTB+A33DRUy9mQHWuM3GAcJ3VVvfjJI7vvddq4yBO
+         RsE8Rhkaz6UMszz6sX3uNBGpInNV/Bm/3pWbGOHnc78cVjhRwmKqtwpLeK8lATyvLgwU
+         UlRByEWlDmQFupPBHvy3if3obKsLmfmOYpQItFvaAF75dq3WhXrz4yt3p3KFGJ7KgKMi
+         wXVGy5aVPn0rMm/0zdRNT0pXrCuYUozuusIpQquH4dgtQTk+R/B+XTsHq0ROW/Zd4Efg
+         7pJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVrMSdpWkwOaZ98wUFNohrLhMmX+NpC2M8Ro0/6A1gThbAxVWOklwKxs+MpNKubyEIBXNOU/5tnQV3NWeLwN/U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeM5VZ2wREGo/DThJ1mk6aVEHzfRlZFevXEhnEh+RDBFv3JEI1
+	fMWt1hLNwjh0VMQyDDQe613xjrPc0AoCl1jlDkstekwZ3Bga07ibFFssKyKJl57XqYIIDzElFhe
+	7c9dXdxPhFk89AuTgT0L9S+pFPzqJHBeC3AWWqIi/i00jyQI/cw==
+X-Gm-Gg: ASbGncves/8Qtb/8BB2kTc8DG6nztl008puExhcnJjDP6DKXJpVRrVSakfRVPWeFYgI
+	wNoSLZx/PMnJ4O8c03KodaYkemrHgwHzaYvPxL6+3gLs27vDN5JPUZ0GnusJcJL9VTgM9GQzosn
+	Y2Cxy9VBek9CRPhp60KqLdr5NEx9RA+wlldplbBAuFV7BXErHtg7UXLYQ=
+X-Google-Smtp-Source: AGHT+IHC9iQyimPIf9LK2ZxOiOmyeaERAe030mPiaTlyv077TSi4Ij2X2Zh68MYzFPFo7mJNC8RXC973zmIYLF4HpwM=
+X-Received: by 2002:a05:690c:f0a:b0:702:d54:5794 with SMTP id
+ 00721157ae682-702573625aemr252565667b3.31.1743629180815; Wed, 02 Apr 2025
+ 14:26:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250402160721.97596-1-kalyazin@amazon.com> <20250402160721.97596-6-kalyazin@amazon.com>
-In-Reply-To: <20250402160721.97596-6-kalyazin@amazon.com>
+References: <20250402160721.97596-1-kalyazin@amazon.com> <20250402160721.97596-4-kalyazin@amazon.com>
+In-Reply-To: <20250402160721.97596-4-kalyazin@amazon.com>
 From: James Houghton <jthoughton@google.com>
-Date: Wed, 2 Apr 2025 14:10:23 -0700
-X-Gm-Features: AQ5f1Jo-fVQJh8iuxBPV3y8brIkvlN4bXw45TOiqX1XQbY00SvkGkBQRYA970fY
-Message-ID: <CADrL8HXm_UDKvrsNe6Guvo_pPvCN9ZJBKe=p0HM-iYZWufbEfA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] KVM: selftests: test userfaultfd minor for guest_memfd
+Date: Wed, 2 Apr 2025 14:25:45 -0700
+X-Gm-Features: AQ5f1JpgHKJ4oBuxUfdSQZzG2qvYTZmYOUmQV1t1d9CLWvy8fODsNbzGuiQPDsA
+Message-ID: <CADrL8HVADXDKUu4mn-dHb9ih=ZnuMWtKfqL2xFxKf2yff7RJvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] mm: userfaultfd: allow to register continue for guest_memfd
 To: Nikita Kalyazin <kalyazin@amazon.com>
 Cc: akpm@linux-foundation.org, pbonzini@redhat.com, shuah@kernel.org, 
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -94,176 +94,65 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Apr 2, 2025 at 9:08=E2=80=AFAM Nikita Kalyazin <kalyazin@amazon.com=
 > wrote:
 >
-> The test demonstrates that a minor userfaultfd event in guest_memfd can
-> be resolved via a memcpy followed by a UFFDIO_CONTINUE ioctl.
->
 > Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
 > ---
->  .../testing/selftests/kvm/guest_memfd_test.c  | 94 +++++++++++++++++++
->  1 file changed, 94 insertions(+)
+>  include/linux/userfaultfd_k.h | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testi=
-ng/selftests/kvm/guest_memfd_test.c
-> index 38c501e49e0e..9b47b796f3aa 100644
-> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
-> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-> @@ -10,12 +10,16 @@
->  #include <errno.h>
->  #include <stdio.h>
->  #include <fcntl.h>
-> +#include <pthread.h>
->
->  #include <linux/bitmap.h>
->  #include <linux/falloc.h>
-> +#include <linux/userfaultfd.h>
->  #include <sys/mman.h>
->  #include <sys/types.h>
->  #include <sys/stat.h>
-> +#include <sys/syscall.h>
-> +#include <sys/ioctl.h>
->
->  #include "kvm_util.h"
->  #include "test_util.h"
-> @@ -206,6 +210,93 @@ static void test_create_guest_memfd_multiple(struct =
-kvm_vm *vm)
->         close(fd1);
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.=
+h
+> index 75342022d144..bc184edfbb85 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -212,6 +212,10 @@ static inline bool userfaultfd_armed(struct vm_area_=
+struct *vma)
+>         return vma->vm_flags & __VM_UFFD_FLAGS;
 >  }
 >
-> +struct fault_args {
-> +       char *addr;
-> +       volatile char value;
-
-I think you should/must put volatile on `addr` and not on `value`.
-
-> +};
+> +#ifdef CONFIG_KVM_PRIVATE_MEM
+> +bool kvm_gmem_vma_is_gmem(struct vm_area_struct *vma);
+> +#endif
 > +
-> +static void *fault_thread_fn(void *arg)
-> +{
-> +       struct fault_args *args =3D arg;
-> +
-> +       /* Trigger page fault */
-> +       args->value =3D *args->addr;
-> +       return NULL;
-> +}
-> +
-> +static void test_uffd_missing(int fd, size_t page_size, size_t total_siz=
-e)
-
-test_uffd_minor? :)
-
-> +{
-> +       struct uffdio_register uffd_reg;
-> +       struct uffdio_continue uffd_cont;
-> +       struct uffd_msg msg;
-> +       struct fault_args args;
-> +       pthread_t fault_thread;
-> +       void *mem, *mem_nofault, *buf =3D NULL;
-> +       int uffd, ret;
-> +       off_t offset =3D page_size;
-> +       void *fault_addr;
-> +
-> +       ret =3D posix_memalign(&buf, page_size, total_size);
-> +       TEST_ASSERT_EQ(ret, 0);
-> +
-> +       uffd =3D syscall(__NR_userfaultfd, O_CLOEXEC);
-> +       TEST_ASSERT(uffd !=3D -1, "userfaultfd creation should succeed");
-> +
-> +       struct uffdio_api uffdio_api =3D {
-> +               .api =3D UFFD_API,
-> +               .features =3D UFFD_FEATURE_MISSING_SHMEM,
-
-I think you mean UFFD_FEATURE_MINOR_SHMEM...?
-
-And I'm trying to think through what feature we should expose for
-guest_memfd; UFFD_FEATURE_MINOR_SHMEM already indicates support for
-shmem.
-
-We could have UFFD_FEATURE_MINOR_GUESTMEMFD, perhaps that's enough.
-
-Or we could have UFFD_FEATURE_MINOR_GENERIC (or nothing at all!). Some
-VMAs might not support the minor mode, and the user will figure that
-out when UFFDIO_REGISTER fails.
-
-> +       };
-> +       ret =3D ioctl(uffd, UFFDIO_API, &uffdio_api);
-> +       TEST_ASSERT(ret !=3D -1, "ioctl(UFFDIO_API) should succeed");
-> +
-> +       mem =3D mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED=
-, fd, 0);
-> +       TEST_ASSERT(mem !=3D MAP_FAILED, "mmap should succeed");
-> +
-> +       mem_nofault =3D mmap(NULL, total_size, PROT_READ | PROT_WRITE, MA=
-P_SHARED, fd, 0);
-> +       TEST_ASSERT(mem_nofault !=3D MAP_FAILED, "mmap should succeed");
-> +
-> +       uffd_reg.range.start =3D (unsigned long)mem;
-> +       uffd_reg.range.len =3D total_size;
-> +       uffd_reg.mode =3D UFFDIO_REGISTER_MODE_MINOR;
-> +       ret =3D ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
-> +       TEST_ASSERT(ret !=3D -1, "ioctl(UFFDIO_REGISTER) should succeed")=
-;
-> +
-> +       ret =3D fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
-> +                       offset, page_size);
-> +       TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-> +
-> +       fault_addr =3D mem + offset;
-> +       args.addr =3D fault_addr;
-> +
-> +       ret =3D pthread_create(&fault_thread, NULL, fault_thread_fn, &arg=
-s);
-> +       TEST_ASSERT(ret =3D=3D 0, "pthread_create should succeed");
-> +
-> +       ret =3D read(uffd, &msg, sizeof(msg));
-> +       TEST_ASSERT(ret !=3D -1, "read from userfaultfd should succeed");
-> +       TEST_ASSERT(msg.event =3D=3D UFFD_EVENT_PAGEFAULT, "event type sh=
-ould be pagefault");
-> +       TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)=
-) =3D=3D fault_addr,
-> +                   "pagefault should occur at expected address");
-> +
-> +       memcpy(mem_nofault + offset, buf + offset, page_size);
-> +
-> +       uffd_cont.range.start =3D (unsigned long)fault_addr;
-> +       uffd_cont.range.len =3D page_size;
-> +       uffd_cont.mode =3D 0;
-> +       ret =3D ioctl(uffd, UFFDIO_CONTINUE, &uffd_cont);
-> +       TEST_ASSERT(ret !=3D -1, "ioctl(UFFDIO_CONTINUE) should succeed")=
-;
-> +
-> +       ret =3D pthread_join(fault_thread, NULL);
-> +       TEST_ASSERT(ret =3D=3D 0, "pthread_join should succeed");
-
-And maybe also:
-
-/* Right value? */
-TEST_ASSERT(args.value =3D=3D *(char *)mem_nofault));
-/* No second fault? */
-TEST_ASSERT(args.value =3D=3D *(char *)mem);
-
-> +
-> +       ret =3D munmap(mem_nofault, total_size);
-> +       TEST_ASSERT(!ret, "munmap should succeed");
-> +
-> +       ret =3D munmap(mem, total_size);
-> +       TEST_ASSERT(!ret, "munmap should succeed");
-> +       free(buf);
-> +       close(uffd);
-> +}
-> +
->  unsigned long get_shared_type(void)
->  {
->  #ifdef __x86_64__
-> @@ -244,6 +335,9 @@ void test_vm_type(unsigned long type, bool is_shared)
->         test_fallocate(fd, page_size, total_size);
->         test_invalid_punch_hole(fd, page_size, total_size);
+>  static inline bool vma_can_userfault(struct vm_area_struct *vma,
+>                                      unsigned long vm_flags,
+>                                      bool wp_async)
+> @@ -222,7 +226,11 @@ static inline bool vma_can_userfault(struct vm_area_=
+struct *vma,
+>                 return false;
 >
-> +       if (is_shared)
-> +               test_uffd_missing(fd, page_size, total_size);
-> +
->         close(fd);
->         kvm_vm_release(vm);
+>         if ((vm_flags & VM_UFFD_MINOR) &&
+> -           (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
+> +           (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma))
+> +#ifdef CONFIG_KVM_PRIVATE_MEM
+> +            && !kvm_gmem_vma_is_gmem(vma)
+> +#endif
+
+Maybe a better way to do this is to add a vm_ops->can_userfault() or
+something, so we could write something like this:
+
+if (vma->vm_ops && !vma->vm_ops->can_userfault)
+  return false;
+if (vma->vm_ops && !vma->vm_ops->can_userfault(vm_flags))
+  return false;
+
+And shmem/hugetlbfs can advertise support for everything they already
+support that way.
+
+> +           )
+>                 return false;
+>
+>         /*
+> @@ -244,6 +252,9 @@ static inline bool vma_can_userfault(struct vm_area_s=
+truct *vma,
+>
+>         /* By default, allow any of anon|shmem|hugetlb */
+>         return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
+> +#ifdef CONFIG_KVM_PRIVATE_MEM
+> +           kvm_gmem_vma_is_gmem(vma) ||
+> +#endif
+>             vma_is_shmem(vma);
 >  }
+>
 > --
 > 2.47.1
 >
