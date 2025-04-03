@@ -1,135 +1,174 @@
-Return-Path: <linux-kselftest+bounces-30053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0603A7A02A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 11:37:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E6D0A7A0BA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 12:14:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DBB416654B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 09:37:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9ED503B5808
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 10:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D28B24634F;
-	Thu,  3 Apr 2025 09:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD142248891;
+	Thu,  3 Apr 2025 10:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ig+s+hYa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pls1+a9f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495FD248868;
-	Thu,  3 Apr 2025 09:37:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A2224BBE1;
+	Thu,  3 Apr 2025 10:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743673049; cv=none; b=nKtltPSprvliOdX2RYkMFG/jA+5A7GV1FJq3b4AQGJ0t8uzz+8GsVdZt1FvcHbCqc2RG7bo7mN0mmsQyjrnu+FHNL/l4nWRo8SCD2sTZjBtES7f6z9MXg5z+RHooiBCtkSz5QEJjdkqLtQzrNbELVSyM/vlttY3Xti7U3x5M+bw=
+	t=1743675241; cv=none; b=dHqWphYNvX2IOUcgFcixg392MA9m1u0SmJVSwBL7v1hKI1N/WlYjykVVcVeBN47EjIdpUUGlBdlqikgG8XskS86m0C5FAom4RFSNBXaOGusNEeHY15LEWtTXAmtrjnu8rm0Ib4lnAqNSOgIJIEH7Eb69ZHUsLWaePauV+yAa9hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743673049; c=relaxed/simple;
-	bh=Coan5fmk6E+RdsNlnuGPbdLAJylFKtntjKLClwzjJaM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dzi1PXCwaV3gXAw88T6tFy7BknM1j0pihjDnZfbbiSSYMAwergX2vqUvHwpl3GhwczX7C8f+432rBAz/2p2d+DkAFWE37BcZgx2DRwIzdgzDxVNQrramaH5Y5+gzsbpUdN59vADeHtOX2NLLUOPO7oDd6UwZuaZreI+EE2TNIJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ig+s+hYa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BCFC4CEE3;
-	Thu,  3 Apr 2025 09:37:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743673048;
-	bh=Coan5fmk6E+RdsNlnuGPbdLAJylFKtntjKLClwzjJaM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ig+s+hYaQHzELTAg91ITV3teiTpfEPSBqrj1zwv+43dLClfpkRJkweKQjDhZi5/DD
-	 60T+pB1Vsw8mwP1oep0aPlOJB3J1sbGZD7lp7GYk6YOedMHnmUAQRf0zVwyIoRUDsq
-	 JQjwivrt7PURqX7GDdNgCHbrHqJQlKZsTlKbRmHVATsX7EOD8Wo1dAZVyp9S4z9JzS
-	 q0B+Xx8rUulz4PdpXr+1A5LEZS/AERYSxxHDdJT9A0NtWH17lr3ClT3RPpzmty4d4o
-	 MziNvs8DbfXpSbqeH4MLoUf+23Pamfd4fXKme6Rp4ccnEZv+rBVl5CT1SPb16UNyjm
-	 C0mrk8uMmXKlg==
-Message-ID: <78b2d2ad-4e0e-41b7-95b4-b7fe945dfe13@kernel.org>
-Date: Thu, 3 Apr 2025 11:37:19 +0200
+	s=arc-20240116; t=1743675241; c=relaxed/simple;
+	bh=SoPWAEpaQZ+eWbfdqHjnaQXDxz5IohZvVnzt47Mtqjk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=epOZphWLuA6/R/xS7EufWsMOkTvfXp2E/vLdzrlkrW2KLnh9azQ5+oXjAKIZxH4iyj0Zf0y/ZdvdWwbGGWI0duWsaE4PnoGf97auRPgciaNVIR2keLirakR3E2+6/Jzgp7bzTAkM7dZ8E08neEtSge3QxhKicl1KbgV4OoJUWE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pls1+a9f; arc=none smtp.client-ip=209.85.214.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2240b4de12bso10138605ad.2;
+        Thu, 03 Apr 2025 03:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743675239; x=1744280039; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1jcYIDsgwV0QbwwcIaFrUZpYunSVhU3f2VZkEk3KyA=;
+        b=Pls1+a9fs0SkgYIL5rh05WaSa9DZIBNikALB4fnJHOLeNRpK9Dtu9p5Y/qjVuWV6Fi
+         7uWWJ/wXSS5APXi4efLlS4FdFBWxNgxRekTyF3t1wznloe+CAo3qt+Ez9Q6a+ECs6WWf
+         Stq5dj37FhztEt40nVidHZFFtjLfiFK8l6jLA46tZq5FBqZir7sZXOK8OvnRYCkL54HE
+         GPMy+FByzCTCtVhQNRdSJdEy9L6GEJyitOK8huWdTFz1hNKe/4rG+I7wl168Nw2fKNY8
+         xQtgLHEWawqb8QL7u1ThX32HPRWhn8FNR+O0rzt4nTMLeeZcly0oVpIrPqo+iRXvc/mz
+         eYOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743675239; x=1744280039;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i1jcYIDsgwV0QbwwcIaFrUZpYunSVhU3f2VZkEk3KyA=;
+        b=BEzDL8NGkKw4UlBNCNIw/Iq9yMj9qd48KCqrN12L9GzXT92k/avnp1CVQohRpBEVmh
+         MUJQB09O+eP03UIyzkdkoQTdpeRP2MqdF9ReVzqNuA5BKUi6eUua2iVxNFa7762i4o5l
+         pwpaP7syYacE8iiQT+f6kenwaO1npdwSZT73PezASvWqZXcUWqTgL8slutYOXNfJoJHc
+         fRWOKSGBe1KlK7ff20IOHtvAyldqU+3o9YQLytW+Z5Rlq0geF2nfQPfqNAXQPJtWnUI9
+         JTa3RtqoKzw/1jaiLZTx3Mwzr0V3pDA4wsYlJJtekFSSxtChdyR8cGcfi9bzLzH4hEzB
+         +FWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUN6lrMudWbzO5D0pnRFkNixvwLO3EFCMeIlfYNiEKdiWLIuNNaNmECInPZswk11sJ7TcrXj09UamR23WI=@vger.kernel.org, AJvYcCVPWcQLS9HNTiuG7GmF80koQuwVmIt+z+7oJUZlntrex9/jpN75CtR93m1ZF5jrDkGuHw7lb++uu2OQ4wVfBVDE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZNT0yyla3Wyi2JtP82FH4aKz4d/2MIE0wM17h8IidkmhYFqiL
+	nZy3Ed1veuMynPjFQU6hCsOagS7TLeIIIRmZe8wjLX7NtD5gfQKU
+X-Gm-Gg: ASbGnctmnnSh3UB5i2jtvuJQyuek3+5RHAYX38VRw2xdq108UEFtPdV6Iwg7aEYTgTy
+	Ncc62yQSIBcvdt1wquRZk6uAXDAxYwuWWB39yM+4FjpXhY8E3fgxqy4lJtAocO5eX622fvg36WQ
+	rIBVA4EOwOUCP7Wy8f0vNVv5l5NZtdrn6DhBKHMETmEb00cvaNgMVqKoYtMc78mGe9ri7C+9VIK
+	kK69+M7dSTnexzOlhoJ/ThZPKmhE/5xj07jUtfJ+ogMf28LFb5Rx1vPFZfpQbtMYwlSPt0SJNL1
+	HDwnNdNTzTaRWN0NQppBoFHFTEOXbXrz3I4DB0adhbeb2qvEByQ0sKRALT+Xv3gfc/w=
+X-Google-Smtp-Source: AGHT+IHBEgySem7ZYEyvmalH7tBoil+1mmF1NNG09oSI2oZk3fzOSaRWrhjHXMxCEepBrEitJNny1g==
+X-Received: by 2002:a17:902:ebc3:b0:224:1579:5e91 with SMTP id d9443c01a7336-22977dfe34dmr28809205ad.47.1743675239264;
+        Thu, 03 Apr 2025 03:13:59 -0700 (PDT)
+Received: from sid-Inspiron-15-3525.. ([2401:4900:5084:2815:d682:e65a:7ee2:33e1])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30562c6d29dsm2773042a91.2.2025.04.03.03.13.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Apr 2025 03:13:58 -0700 (PDT)
+From: Siddarth G <siddarthsgml@gmail.com>
+To: shuah@kernel.org
+Cc: akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	Siddarth G <siddarthsgml@gmail.com>,
+	David Binderman <dcb314@hotmail.com>
+Subject: [PATCH v3] selftests/mm: Convert page_size to unsigned long
+Date: Thu,  3 Apr 2025 15:43:45 +0530
+Message-ID: <20250403101345.29226-1-siddarthsgml@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: add perf test for
- adjust_{head,meta}
-To: Jakub Kicinski <kuba@kernel.org>, Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, mrpre@163.com, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>,
- Jason Xing <kerneljasonxing@gmail.com>,
- Anton Protopopov <aspsk@isovalent.com>,
- Abhishek Chauhan <quic_abchauha@quicinc.com>,
- Jordan Rome <linux@jordanrome.com>,
- Martin Kelly <martin.kelly@crowdstrike.com>,
- David Lechner <dlechner@baylibre.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team <kernel-team@cloudflare.com>
-References: <20250331032354.75808-1-jiayuan.chen@linux.dev>
- <20250331032354.75808-3-jiayuan.chen@linux.dev>
- <20250402172447.75ed447f@kernel.org>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20250402172447.75ed447f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Cppcheck warning:
+int result is assigned to long long variable. If the variable is long long
+to avoid loss of information, then you have loss of information.
 
+This patch changes the type of page_size from 'unsigned int' to
+'unsigned long' instead of using ULL suffixes. Changing hpage_size to
+'unsigned long' was considered, but since gethugepage() expects an int,
+this change was avoided.
 
-On 03/04/2025 02.24, Jakub Kicinski wrote:
-> On Mon, 31 Mar 2025 11:23:45 +0800 Jiayuan Chen wrote:
->> which is negligible for the net stack.
->>
->> Before memset
->> ./test_progs -a xdp_adjust_head_perf -v
->> run adjust head with size 6 cost 56 ns
->> run adjust head with size 20 cost 56 ns
->> run adjust head with size 40 cost 56 ns
->> run adjust head with size 200 cost 56 ns
->>
->> After memset
->> ./test_progs -a xdp_adjust_head_perf -v
->> run adjust head with size 6 cost 58 ns
->> run adjust head with size 20 cost 58 ns
->> run adjust head with size 40 cost 58 ns
->> run adjust head with size 200 cost 66 ns
-> 
-> FWIW I'm not sure if this is "negligible" for XDP like you say,
-> but I defer to Jesper :)
+Reported-by: David Binderman <dcb314@hotmail.com>
+Closes: https://lore.kernel.org/all/AS8PR02MB10217315060BBFDB21F19643E9CA62@AS8PR02MB10217.eurprd02.prod.outlook.com/
 
-It would be too much for the XDP_DROP use-case, e.g. DDoS protection and
-driver hardware eval. But this is changing a BPF-helper, which means it
-is opt-in by the BPF-programmer.  Thus, we can accept larger perf
-overhead here.
+Signed-off-by: Siddarth G <siddarthsgml@gmail.com>
+---
+Changes since v2:
+- v2 had conflict with current mainline, so this is a fresh patch
 
-I suspect your 2 nanosec overhead primarily comes from the function call
-overhead.  On my AMD production system with SRSO mitigation enabled I
-expect to see around 6 ns overhead (5.699 ns), which is sad.
+ tools/testing/selftests/mm/pagemap_ioctl.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-I've done a lot of benchmarking of memset (see [1]). One take-away is
-that memset with small const values will get compiled into very fast
-code that avoids the function call (basically QWORD MOVs).  E.g. memset
-with const 32 is extremely fast[2], on my system it takes 0.673 ns (and
-0.562 ns comes from for-loop overhead).  Thus, it is possible to do
-something faster, as we are clearing very small values. I.e. using a
-duff's device construct like I did for remainder in [2].
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 57b4bba2b45f..fe5ae8b25ff6 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -34,7 +34,7 @@
+ #define PAGEMAP "/proc/self/pagemap"
+ int pagemap_fd;
+ int uffd;
+-unsigned int page_size;
++unsigned long page_size;
+ unsigned int hpage_size;
+ const char *progname;
+ 
+@@ -184,7 +184,7 @@ void *gethugetlb_mem(int size, int *shmid)
+ 
+ int userfaultfd_tests(void)
+ {
+-	int mem_size, vec_size, written, num_pages = 16;
++	long mem_size, vec_size, written, num_pages = 16;
+ 	char *mem, *vec;
+ 
+ 	mem_size = num_pages * page_size;
+@@ -213,7 +213,7 @@ int userfaultfd_tests(void)
+ 	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
+ 				vec_size - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
+ 	if (written < 0)
+-		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
++		ksft_exit_fail_msg("error %ld %d %s\n", written, errno, strerror(errno));
+ 
+ 	ksft_test_result(written == 0, "%s all new pages must not be written (dirty)\n", __func__);
+ 
+@@ -995,7 +995,7 @@ int unmapped_region_tests(void)
+ {
+ 	void *start = (void *)0x10000000;
+ 	int written, len = 0x00040000;
+-	int vec_size = len / page_size;
++	long vec_size = len / page_size;
+ 	struct page_region *vec = malloc(sizeof(struct page_region) * vec_size);
+ 
+ 	/* 1. Get written pages */
+@@ -1051,7 +1051,7 @@ static void test_simple(void)
+ int sanity_tests(void)
+ {
+ 	unsigned long long mem_size, vec_size;
+-	int ret, fd, i, buf_size;
++	long ret, fd, i, buf_size;
+ 	struct page_region *vec;
+ 	char *mem, *fmem;
+ 	struct stat sbuf;
+@@ -1160,7 +1160,7 @@ int sanity_tests(void)
+ 
+ 	ret = stat(progname, &sbuf);
+ 	if (ret < 0)
+-		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
++		ksft_exit_fail_msg("error %ld %d %s\n", ret, errno, strerror(errno));
+ 
+ 	fmem = mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+ 	if (fmem == MAP_FAILED)
+-- 
+2.43.0
 
-In this case, as this is a BPF-helper, I am uncertain if it is worth the
-complexity to add such optimizations... I guess not.
-This turned into a long way of saying, I'm okay with this change.
-
-[1] 
-https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib/time_bench_memset.c
-
-[2] 
-https://github.com/netoptimizer/prototype-kernel/blob/35b1716d0c300e7fa2c8b6d8cfed2ec81df8f3a4/kernel/lib/time_bench_memset.c#L520-L521
-
---Jesper
 
