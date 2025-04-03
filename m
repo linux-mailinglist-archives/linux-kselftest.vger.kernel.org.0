@@ -1,174 +1,178 @@
-Return-Path: <linux-kselftest+bounces-30054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E6D0A7A0BA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 12:14:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED4CBA7A0FB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 12:29:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9ED503B5808
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 10:14:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D75D1733BA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 10:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD142248891;
-	Thu,  3 Apr 2025 10:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 411502475CB;
+	Thu,  3 Apr 2025 10:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pls1+a9f"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="BL1hUM+w";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="umQ/pjeZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A2224BBE1;
-	Thu,  3 Apr 2025 10:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AB9161320;
+	Thu,  3 Apr 2025 10:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743675241; cv=none; b=dHqWphYNvX2IOUcgFcixg392MA9m1u0SmJVSwBL7v1hKI1N/WlYjykVVcVeBN47EjIdpUUGlBdlqikgG8XskS86m0C5FAom4RFSNBXaOGusNEeHY15LEWtTXAmtrjnu8rm0Ib4lnAqNSOgIJIEH7Eb69ZHUsLWaePauV+yAa9hk=
+	t=1743676142; cv=none; b=a+7ZmIU+TTRyZnNdeX1LBn4LrdaWhelZ6gIKf+1tsy5dsXG/DtxGQ5lIKI3LLv0mLEInlxDQzWWFnBuHa4JvILMHLijcv0KHCdRnbxxgl6mGyYnDZBXNVFqap2ol09iQCuw2Qmydb6GoG8pDu8v5EQezcxy/g8KOdVIYg1beHIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743675241; c=relaxed/simple;
-	bh=SoPWAEpaQZ+eWbfdqHjnaQXDxz5IohZvVnzt47Mtqjk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=epOZphWLuA6/R/xS7EufWsMOkTvfXp2E/vLdzrlkrW2KLnh9azQ5+oXjAKIZxH4iyj0Zf0y/ZdvdWwbGGWI0duWsaE4PnoGf97auRPgciaNVIR2keLirakR3E2+6/Jzgp7bzTAkM7dZ8E08neEtSge3QxhKicl1KbgV4OoJUWE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pls1+a9f; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2240b4de12bso10138605ad.2;
-        Thu, 03 Apr 2025 03:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743675239; x=1744280039; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i1jcYIDsgwV0QbwwcIaFrUZpYunSVhU3f2VZkEk3KyA=;
-        b=Pls1+a9fs0SkgYIL5rh05WaSa9DZIBNikALB4fnJHOLeNRpK9Dtu9p5Y/qjVuWV6Fi
-         7uWWJ/wXSS5APXi4efLlS4FdFBWxNgxRekTyF3t1wznloe+CAo3qt+Ez9Q6a+ECs6WWf
-         Stq5dj37FhztEt40nVidHZFFtjLfiFK8l6jLA46tZq5FBqZir7sZXOK8OvnRYCkL54HE
-         GPMy+FByzCTCtVhQNRdSJdEy9L6GEJyitOK8huWdTFz1hNKe/4rG+I7wl168Nw2fKNY8
-         xQtgLHEWawqb8QL7u1ThX32HPRWhn8FNR+O0rzt4nTMLeeZcly0oVpIrPqo+iRXvc/mz
-         eYOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743675239; x=1744280039;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i1jcYIDsgwV0QbwwcIaFrUZpYunSVhU3f2VZkEk3KyA=;
-        b=BEzDL8NGkKw4UlBNCNIw/Iq9yMj9qd48KCqrN12L9GzXT92k/avnp1CVQohRpBEVmh
-         MUJQB09O+eP03UIyzkdkoQTdpeRP2MqdF9ReVzqNuA5BKUi6eUua2iVxNFa7762i4o5l
-         pwpaP7syYacE8iiQT+f6kenwaO1npdwSZT73PezASvWqZXcUWqTgL8slutYOXNfJoJHc
-         fRWOKSGBe1KlK7ff20IOHtvAyldqU+3o9YQLytW+Z5Rlq0geF2nfQPfqNAXQPJtWnUI9
-         JTa3RtqoKzw/1jaiLZTx3Mwzr0V3pDA4wsYlJJtekFSSxtChdyR8cGcfi9bzLzH4hEzB
-         +FWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUN6lrMudWbzO5D0pnRFkNixvwLO3EFCMeIlfYNiEKdiWLIuNNaNmECInPZswk11sJ7TcrXj09UamR23WI=@vger.kernel.org, AJvYcCVPWcQLS9HNTiuG7GmF80koQuwVmIt+z+7oJUZlntrex9/jpN75CtR93m1ZF5jrDkGuHw7lb++uu2OQ4wVfBVDE@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZNT0yyla3Wyi2JtP82FH4aKz4d/2MIE0wM17h8IidkmhYFqiL
-	nZy3Ed1veuMynPjFQU6hCsOagS7TLeIIIRmZe8wjLX7NtD5gfQKU
-X-Gm-Gg: ASbGnctmnnSh3UB5i2jtvuJQyuek3+5RHAYX38VRw2xdq108UEFtPdV6Iwg7aEYTgTy
-	Ncc62yQSIBcvdt1wquRZk6uAXDAxYwuWWB39yM+4FjpXhY8E3fgxqy4lJtAocO5eX622fvg36WQ
-	rIBVA4EOwOUCP7Wy8f0vNVv5l5NZtdrn6DhBKHMETmEb00cvaNgMVqKoYtMc78mGe9ri7C+9VIK
-	kK69+M7dSTnexzOlhoJ/ThZPKmhE/5xj07jUtfJ+ogMf28LFb5Rx1vPFZfpQbtMYwlSPt0SJNL1
-	HDwnNdNTzTaRWN0NQppBoFHFTEOXbXrz3I4DB0adhbeb2qvEByQ0sKRALT+Xv3gfc/w=
-X-Google-Smtp-Source: AGHT+IHBEgySem7ZYEyvmalH7tBoil+1mmF1NNG09oSI2oZk3fzOSaRWrhjHXMxCEepBrEitJNny1g==
-X-Received: by 2002:a17:902:ebc3:b0:224:1579:5e91 with SMTP id d9443c01a7336-22977dfe34dmr28809205ad.47.1743675239264;
-        Thu, 03 Apr 2025 03:13:59 -0700 (PDT)
-Received: from sid-Inspiron-15-3525.. ([2401:4900:5084:2815:d682:e65a:7ee2:33e1])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30562c6d29dsm2773042a91.2.2025.04.03.03.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Apr 2025 03:13:58 -0700 (PDT)
-From: Siddarth G <siddarthsgml@gmail.com>
-To: shuah@kernel.org
-Cc: akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	Siddarth G <siddarthsgml@gmail.com>,
-	David Binderman <dcb314@hotmail.com>
-Subject: [PATCH v3] selftests/mm: Convert page_size to unsigned long
-Date: Thu,  3 Apr 2025 15:43:45 +0530
-Message-ID: <20250403101345.29226-1-siddarthsgml@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1743676142; c=relaxed/simple;
+	bh=dSF/aEX68vuzGeThjYeo1cpD+4IU5IGww9tyfUfsONM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lkk+8mjBiDmh/JGje01GDpBzX02zDq9D5h86ziJxMSJa349+3G7aSb/DpGvznW9dsrneWlnOVKRNMcYu4rwK4lUPquuzZ8xncyfmAuphaLFIVnzfPNutLe/QJBU6kFwKP0CMHVfc+qc96mAtf730Ak46p7yU0GK42oX4fHMURgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=BL1hUM+w; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=umQ/pjeZ; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 5BD8D1140191;
+	Thu,  3 Apr 2025 06:28:57 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Thu, 03 Apr 2025 06:28:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1743676137; x=
+	1743762537; bh=9eS8zf1c2sh6XxZbfPo1lRB/F6Yx563j0n/tE8GwJV8=; b=B
+	L1hUM+wl5huEtZ5zjWrChkA96ajf1EBJoDnu98E1tWmdhxp3Qac6+Oc7pD08AFDE
+	i+6i1HX4pOlEmYMKhUNstcAcoquMK5kfwnaD/qzoKgb+7sSkl5j9w6AZufVFKd7b
+	ei/q99roZcU+h1nbQ8cCoxQpFt+J5eY0DqEBR3HsdKkUgfesXzUG0eRJ99rlrFGZ
+	pj13TsZc6ahya8wobI6zn0GGHW/9M40Ipf3S17LfyqgfNYZAKO3DB1z/Ncyy43Sx
+	GytRyHyFR+xFOpsI0LXi769dUITZnlqNa9+wafCYP/xneqX9+3F9kzE0FSTdUQbF
+	wmAatTm6+kqrZsgswr78g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1743676137; x=1743762537; bh=9eS8zf1c2sh6XxZbfPo1lRB/F6Yx563j0n/
+	tE8GwJV8=; b=umQ/pjeZEguT9efjgGYHkLOf+FV3/XAqVdDWTScNQFBK/LW/8T1
+	746Dkzpgd4vzIxXfsmsOTNmA/KDX/85X/721lKWKu8GDuP9D7QEPf06U8FG+IZZl
+	PRsOa+N/RaGV6CCxG+HgVHXPOVD2lI5dGpbdO35EkPqikqalUY4ZAhn4XG5yW9t6
+	xWvlGod78tAXpRkZX6huIeWtNALwSzmih83l/IMGLR3hl0iWSeofTUa6UrFbLxrX
+	roZkR2xxKBJkSrU1quZEgRw5xSX0EfgPno5fnMonnsq+M+Kd1htodlZwJXPz0SWU
+	95mYkJyviGpPToow7YVLx3ZbzlF1McAusQA==
+X-ME-Sender: <xms:6GLuZzaI8u1YS6lGepNy2-uoOk0uibOJfsbw7js9ZlIBTbzdxwp3ow>
+    <xme:6GLuZyafYuQCls5-9Cuj63b70sm9LE6tio9kG05dlgzqiS2rj0BqZ5KM8OztNKYRx
+    oxeTS7GLMvxXLJvj_w>
+X-ME-Received: <xmr:6GLuZ18_YnvmTn4MPo1q7j1RmnKZ_M8KJiE3FktvyQl9g677Ijdtw70kEDxH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeekfeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
+    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdef
+    hfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhn
+    sggprhgtphhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhiuh
+    hhrghnghgsihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgifodhnvghtuggvvheslh
+    hunhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhr
+    tghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuh
+    gsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdr
+    tghomhdprhgtphhtthhopehhohhrmhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hshhhurghhsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:6GLuZ5rBO-D58IJZVnEPHDZwCI9qYDO8hgdheII9DE8RJXpeXNbRlg>
+    <xmx:6GLuZ-qOnWuydf0bGgWcywmy4ySMIURBjXUjsH7cahqWUMhY9Tpo6Q>
+    <xmx:6GLuZ_SxGo13c4GlfYEiDZhdWsB4xXTQ_QqRPemLIiTj5GrPK4TnPQ>
+    <xmx:6GLuZ2qOzCdtuyeQt23DQddRVDPjAG0PTKlItIAk8FO6D7evZWv37w>
+    <xmx:6WLuZyPRBfYlQy088CtY7M4H8_GEvl3GqBBimBaDZjNRlsareqa56UYa>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Apr 2025 06:28:55 -0400 (EDT)
+Date: Thu, 3 Apr 2025 12:28:54 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Xiao Liang <shaw.leon@gmail.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Venkat Venkatsubra <venkat.x.venkatsubra@oracle.com>,
+	Etienne Champetier <champetier.etienne@gmail.com>,
+	Di Zhu <zhudi21@huawei.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Travis Brown <travisb@arista.com>,
+	Suresh Krishnan <skrishnan@arista.com>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 1/3] ipvlan: fix NETDEV_UP/NETDEV_DOWN event handling
+Message-ID: <Z-5i5rsrIyE0fM-V@krikkit>
+References: <20250403085857.17868-1-liuhangbin@gmail.com>
+ <20250403085857.17868-2-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250403085857.17868-2-liuhangbin@gmail.com>
 
-Cppcheck warning:
-int result is assigned to long long variable. If the variable is long long
-to avoid loss of information, then you have loss of information.
+Hello Hangbin,
 
-This patch changes the type of page_size from 'unsigned int' to
-'unsigned long' instead of using ULL suffixes. Changing hpage_size to
-'unsigned long' was considered, but since gethugepage() expects an int,
-this change was avoided.
+2025-04-03, 08:58:55 +0000, Hangbin Liu wrote:
+> When setting the lower-layer link up/down, the ipvlan device synchronizes
+> its state via netif_stacked_transfer_operstate(), which only checks the
+> carrier state. However, setting the link down does not necessarily change
+> the carrier state for virtual interfaces like bonding. This causes the
+> ipvlan state to become out of sync with the lower-layer link state.
+> 
+> If the lower link and ipvlan are in the same namespace, this issue is
+> hidden because ip link show checks the link state in IFLA_LINK and has
+> a m_flag to control the state, displaying M-DOWN in the flags. However,
+> if the ipvlan and the lower link are in different namespaces, this
+> information is not available, and the ipvlan link state remains unchanged.
 
-Reported-by: David Binderman <dcb314@hotmail.com>
-Closes: https://lore.kernel.org/all/AS8PR02MB10217315060BBFDB21F19643E9CA62@AS8PR02MB10217.eurprd02.prod.outlook.com/
+Is the issue with the actual behavior (sending/receiving packets,
+etc), or just in how it's displayed by iproute?
 
-Signed-off-by: Siddarth G <siddarthsgml@gmail.com>
----
-Changes since v2:
-- v2 had conflict with current mainline, so this is a fresh patch
+> For example:
+> 
+>   1. Add an ipvlan over bond0.
+>   2. Move the ipvlan to a separate namespace and bring it up.
+>   3. Set bond0 link down.
+>   4. The ipvlan remains up.
+> 
+> This issue affects containers and pods, causing them to display an
+> incorrect link state for ipvlan. Fix this by explicitly changing the
+> IFF_UP flag, similar to how VLAN handles it.
 
- tools/testing/selftests/mm/pagemap_ioctl.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+I'm not sure this change of behavior can be done anymore. And I'm not
+convinced vlan's behavior is better (commit 5e7565930524 ("vlan:
+support "loose binding" to the underlying network device") describes
+why it's not always wanted). IMO it makes sense to have admin state
+separate from link state.
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index 57b4bba2b45f..fe5ae8b25ff6 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -34,7 +34,7 @@
- #define PAGEMAP "/proc/self/pagemap"
- int pagemap_fd;
- int uffd;
--unsigned int page_size;
-+unsigned long page_size;
- unsigned int hpage_size;
- const char *progname;
- 
-@@ -184,7 +184,7 @@ void *gethugetlb_mem(int size, int *shmid)
- 
- int userfaultfd_tests(void)
- {
--	int mem_size, vec_size, written, num_pages = 16;
-+	long mem_size, vec_size, written, num_pages = 16;
- 	char *mem, *vec;
- 
- 	mem_size = num_pages * page_size;
-@@ -213,7 +213,7 @@ int userfaultfd_tests(void)
- 	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
- 				vec_size - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
- 	if (written < 0)
--		ksft_exit_fail_msg("error %d %d %s\n", written, errno, strerror(errno));
-+		ksft_exit_fail_msg("error %ld %d %s\n", written, errno, strerror(errno));
- 
- 	ksft_test_result(written == 0, "%s all new pages must not be written (dirty)\n", __func__);
- 
-@@ -995,7 +995,7 @@ int unmapped_region_tests(void)
- {
- 	void *start = (void *)0x10000000;
- 	int written, len = 0x00040000;
--	int vec_size = len / page_size;
-+	long vec_size = len / page_size;
- 	struct page_region *vec = malloc(sizeof(struct page_region) * vec_size);
- 
- 	/* 1. Get written pages */
-@@ -1051,7 +1051,7 @@ static void test_simple(void)
- int sanity_tests(void)
- {
- 	unsigned long long mem_size, vec_size;
--	int ret, fd, i, buf_size;
-+	long ret, fd, i, buf_size;
- 	struct page_region *vec;
- 	char *mem, *fmem;
- 	struct stat sbuf;
-@@ -1160,7 +1160,7 @@ int sanity_tests(void)
- 
- 	ret = stat(progname, &sbuf);
- 	if (ret < 0)
--		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+		ksft_exit_fail_msg("error %ld %d %s\n", ret, errno, strerror(errno));
- 
- 	fmem = mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
- 	if (fmem == MAP_FAILED)
+If you want a consistent behavior, the admin should also not be
+allowed to set the link UP again while its lower device is not, like
+VLAN does:
+
+static int vlan_dev_open(struct net_device *dev)
+{
+	struct vlan_dev_priv *vlan = vlan_dev_priv(dev);
+	struct net_device *real_dev = vlan->real_dev;
+	int err;
+
+	if (!(real_dev->flags & IFF_UP) &&
+	    !(vlan->flags & VLAN_FLAG_LOOSE_BINDING))
+		return -ENETDOWN;
+
+
+(but that would almost certainly break someone's scripts)
+
 -- 
-2.43.0
-
+Sabrina
 
