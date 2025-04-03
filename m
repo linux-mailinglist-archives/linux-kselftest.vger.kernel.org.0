@@ -1,132 +1,131 @@
-Return-Path: <linux-kselftest+bounces-30063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD80EA7A3E8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 15:38:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9779FA7A450
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 15:50:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C926188825D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 13:37:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2B04174B6B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 13:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E22E24EF67;
-	Thu,  3 Apr 2025 13:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82ED924CED6;
+	Thu,  3 Apr 2025 13:48:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Me140abe"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cvS3dYfD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B0824EF63
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Apr 2025 13:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFF9199FC9
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Apr 2025 13:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743687251; cv=none; b=UsVAMdPQ7dMWJvI2YpUEX9tl8Spcol1KHtKjK4cMJ9ou73tiOBjVpSw1HUr9AtsrDZAvRvyE5T7Is3n8afHC9X56/wWoAoZzediWcfJlSgJCVr0OQ9iCtosAa8yj3SKc/ePbI/na+ANBeV1kNXpsdHc00SmFArtLGClg8AZoEJ8=
+	t=1743688131; cv=none; b=lHGeCV5LA5coCNVFroUi8q3Du/9IThwTgbt5wVSXEfOLaKuV/TCbytnDFBPIH2rRks9GGV4VHlWpIVXO5kOIKy5nN+r3m9Kol00WmNDxGgIaKz8WHgS0bmzlTleDyiQ4FTh/B1xqoCKBJGg/2t2H3jGJBgbWPTyLcjUS+4XoWd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743687251; c=relaxed/simple;
-	bh=xiOlszo95RrZ3LIb1/U+HCnGNexFRuJJsuvLKrx+d6w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rwlNc/TQv3a9BITW3IK/3I+IvcEYLDCuRlZqb2/0hjVBsxwWYJEkTkjMy/U+KMY88Dmcuw+lfrNqsDDqBQiCtqEFS07ffwtt63wZMNHuwGtdS3ielbjZojE2u4k4HJYD5VDW/x+oyo+wBOwyGzGLUBA6zxObwIyLxIMPQ0DZ5wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Me140abe; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43690d4605dso6266575e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Apr 2025 06:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1743687247; x=1744292047; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xiOlszo95RrZ3LIb1/U+HCnGNexFRuJJsuvLKrx+d6w=;
-        b=Me140abeGqz+krODLLr2VPPxSqzreDTcOK6fbCInh9C9gS1jrylRb1GKX/TzI1kguq
-         P7o1bEIRm8l95dmdr/VzopwtIA+dFnWG3gRABWKeHfNboEq3+Gtbz5hfe3o5LkHUbVa2
-         LCiVUpUtNJFqfyTUX18/MC1wM84x43w0LCMCVBFr+vEnUWspAhGmCpmFf69SfMPjApCN
-         VUSKe06cGX94zv3Vkg9vdtfIpAVqea7yD4OXYLjkg6ak3EKkbT9CbRh4R/nl4sIUUU90
-         PsPmO1++sHH57//E+SkXMcN4u0Wh9TOpWSXRoolphHoIqtUTYT6sGeHdAT77S71Ss9Eu
-         EINA==
+	s=arc-20240116; t=1743688131; c=relaxed/simple;
+	bh=X8K2hZQqJMCGMpB1ml3pgOIG+WSAB71YixBcihVOC/4=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=dwO3cLiUyfamlCWndx2Bcq38higojSNLM1Q7k95/iLj6Ou0Ot0NX7g5TQKK5SLLdeZvwVXLLrVfVZa4+2js21Q4K5z+AMKlggclcWcKs5Ff8gYEP0PIFLVtPC1fu+xQ723GFYrgOsDhi9/RhL7ybVVIP8NTBqRSWrWD6j/NNRHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cvS3dYfD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743688128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9lyWZ8gblDVHe120rUXUjARVSAokRrQ5lvfAATMT9n4=;
+	b=cvS3dYfDK0c42IgU3FMXxTaMak5EGaz9n+qv45xMK4XS3fHcGeyonQnJujlEdLaxIMNoBa
+	8eE5JVnhrStOYD3PwsizbNBIp2zJaeGX/YB/5sI6udX/npk7I/XzFxzXwqNEvuQ5vwNdt9
+	CoES3tcZ882cyghTUfUdiXBFHTijM18=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-594-O38bYrXfNnSgGhr3WB1DDQ-1; Thu, 03 Apr 2025 09:48:47 -0400
+X-MC-Unique: O38bYrXfNnSgGhr3WB1DDQ-1
+X-Mimecast-MFC-AGG-ID: O38bYrXfNnSgGhr3WB1DDQ_1743688126
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4767db0bae2so14685351cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Apr 2025 06:48:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743687247; x=1744292047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xiOlszo95RrZ3LIb1/U+HCnGNexFRuJJsuvLKrx+d6w=;
-        b=YFccd6cRWLa60w3f7J5g4crKeL05FMPvxJCQteeFb5sQi2QogFLGAgca//x9MzjNzs
-         d4MAqS7qABsegCwT5p5RqhC08bUZzaKO1NzDZUa7Pu1a9hY2mMJuCfnOw+HxNP2N1YMS
-         TApBkSMWO2gBPDGXxdkekUs3Hc9Aav/yILUM+Rt2xHDo1yXiEesNv8S69wVG2uuDYues
-         8x/TEe1XKrHPtbUfyJzUhwbSqzaMM4XIZJDVXjBu2mG3KdFWSVFUWf+BX/ufZQDPCmtJ
-         rZtIVFxDNeIx7PD9iKSIaLveK7QmSbaaBoLAoCEk1IrlkEDQ/4rzxc6OPUj3F+v5NjEU
-         +z6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXTjIP5nOgSqPWAsfwoeMzX+4g7AqekXaArwDkai/h2G6OnHKE9J9WGGQl2a0Yyhre6pThr+B0Q7+xluTKGKoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxb7A6OoBlbXtMXtSZzjNmH5tEsXPbHGh0FRdTL6uCve+uZ/gsp
-	S17KRjwxxTip2tN1aQ0M0RlLmjITgVKiZcf7F1fjYBB3OkLgz8HcsmdqNuhAuxI=
-X-Gm-Gg: ASbGnct+kdxqU78cj0eiuYPdjCWCt+wOXiae2Qre0oLSZu+IrhDvytVfl4nKUrfz0TS
-	xB2We3JCVkt6ZrM3lWnnngReDa0co4l2AzBVqTUYI3GZCPZiDZYX+YDxCRJ0+/NsyGizYnvTCW7
-	w/G2e89cDESbHLJXezGLz3N+KPLNdBdpRcZtENtGF8zKEnaBMbOl7TNb77+q/cH95j18y1wKVMd
-	Dfxac1RCMHangnkPz81JFHZpQK3EIN9QWhuKt3YDxhfpgzL2iV4wu4QiwhFGwXl/2gHWANA4fG1
-	jlEfY9uSWKqpokVesjYPwZw7VvpK9wpWQCfSVmtZKRf1ipU=
-X-Google-Smtp-Source: AGHT+IGP0oRY34V+cSf6iFZovfs1LwN6DYRliDiIlWREW6dwmZHpdy7zI1duz9gTK1+/IwIvLvwRsQ==
-X-Received: by 2002:a05:600c:b89:b0:43d:fa5d:9314 with SMTP id 5b1f17b1804b1-43ec153677cmr30397905e9.32.1743687247482;
-        Thu, 03 Apr 2025 06:34:07 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec364a0c7sm18497875e9.29.2025.04.03.06.34.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Apr 2025 06:34:07 -0700 (PDT)
-Date: Thu, 3 Apr 2025 15:34:05 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 01/10] cgroup/cpuset: Fix race between newly created
- partition and dying one
-Message-ID: <hsbn4pcb6gpipjfacn7tbutheolot6rfia2j6nyit3bpf4adys@mpaop37aps55>
-References: <20250330215248.3620801-1-longman@redhat.com>
- <20250330215248.3620801-2-longman@redhat.com>
- <Z-zsGazxeHK9uaA6@slm.duckdns.org>
+        d=1e100.net; s=20230601; t=1743688126; x=1744292926;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9lyWZ8gblDVHe120rUXUjARVSAokRrQ5lvfAATMT9n4=;
+        b=cuV1AWXyhPk+O5BMP2yxs5FIh50KDrPpnzaRPvY9HzvtfD5MLXnN1k+SF0jrKE2x8S
+         /xQ/9SYSh47CGOKfL/YfIcEvJBuEY/RhL+jfaURwOjJylkRnmgDV0YnF2tlxrq0y1Ttr
+         OcooFx0XNWZI9ndp1EX8FUY3E9mqIlRnbEDBhEO2fCqdqKwo4gAiavWqqtCcg2aeIuFx
+         0b8Iq//d6BrcZSRThW+Max+NJeYf670OPFnPkrNc1XaBc1vM7Ps/aa9bazf2UlQaN0k6
+         nhZWGQc6JbEWgDr5c67+2E84wMTnzm7i7ONzrAniX5n/BmqhWH3jLXDOBUIO9d4sbcJh
+         EWmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZq+6GPAJCNv9Ys0jE2ypTgSZgIU3UNoafpYlfI7/1OwBu2cbcKoUQba/vW4bCoxdS7ywh+JrmtaJzZN46fe0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUwhBYd2byWgqYbORSr9YyWyrRcIlsB9uCD0bXxGXKqPi5tKmm
+	O2ZMcqxv4YiPFPVS5cqYELNtUfEu4OVtwGjNYPxcUsx1ETfBwxDziIWNBIC79kMWAaHHjbAa4AU
+	MdMUIT9iTDZvZ1hs08u3G3dneX+I/Bgzae9WyPHEsQYJCBTmHKOC1cIfUaENvGTAoag==
+X-Gm-Gg: ASbGncsYZn2lr2rKg+ZaE58bZ+t2swLQMCuFE/NArjRszQGvZteM0Pq997muHFCsTDU
+	ERci8sgkvCAt8OY1lHygTtJtcqaQBfNqjpAlGJu/aVd/khEW5cmv7aAg09IeXNiTejgSks2sBpc
+	a8tLJ3VFQSgFb9bCAzkzNTeuIEOOS54xrBbpwG7rTGIBnWLLezLLnxoleLICiCKvBkIrTnPdit7
+	VMRzuYmuiiqj1X9W0cTS1vDLYL9d3eYvGcl7KiL0mP9BazYm5XQXfRFXNY/6kYXBIR12Pfn4Iz6
+	as4/aoOUjCLgnvbPgTCL8Rk+uH/FxfflhRhABwJCniDHM4AZB5hIN+WT83rlIw==
+X-Received: by 2002:ac8:7d84:0:b0:476:98d6:141c with SMTP id d75a77b69052e-477e4b66bedmr383982051cf.18.1743688126645;
+        Thu, 03 Apr 2025 06:48:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHo7x51vzTVDAQ2P95L9od9uzm0Cwj9FDry+VsenXXfp21aleo/hYZIXBJiuOhWfUblZcxwtQ==
+X-Received: by 2002:ac8:7d84:0:b0:476:98d6:141c with SMTP id d75a77b69052e-477e4b66bedmr383981751cf.18.1743688126419;
+        Thu, 03 Apr 2025 06:48:46 -0700 (PDT)
+Received: from ?IPV6:2601:188:c100:5710:315f:57b3:b997:5fca? ([2601:188:c100:5710:315f:57b3:b997:5fca])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4791b088346sm7967391cf.41.2025.04.03.06.48.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Apr 2025 06:48:45 -0700 (PDT)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <2d1b9c9e-a63b-4385-b706-0eee73688343@redhat.com>
+Date: Thu, 3 Apr 2025 09:48:44 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t4fu4hgrvs64iwmt"
-Content-Disposition: inline
-In-Reply-To: <Z-zsGazxeHK9uaA6@slm.duckdns.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 05/10] cgroup/cpuset: Don't allow creation of local
+ partition over a remote one
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250330215248.3620801-1-longman@redhat.com>
+ <20250330215248.3620801-6-longman@redhat.com>
+ <c5akoqcuatispflklzykfwjn65zk7y22pq6q6ejseo35dw5nh2@yvm7pbhh5bi4>
+Content-Language: en-US
+In-Reply-To: <c5akoqcuatispflklzykfwjn65zk7y22pq6q6ejseo35dw5nh2@yvm7pbhh5bi4>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 4/3/25 9:33 AM, Michal Koutný wrote:
+> On Sun, Mar 30, 2025 at 05:52:43PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> Currently, we don't allow the creation of a remote partition underneath
+>> another local or remote partition. However, it is currently possible to
+>> create a new local partition with an existing remote partition underneath
+>> it if top_cpuset is the parent. However, the current cpuset code does
+>> not set the effective exclusive CPUs correctly to account for those
+>> that are taken by the remote partition.
+> That sounds like
+> Fixes: 181c8e091aae1 ("cgroup/cpuset: Introduce remote partition")
+>
+> (but it's merge, so next time :-)
+
+Commit ee8dde0cd2ce ("cpuset: Add new v2 cpuset.sched.partition flag") 
+is actually the first commit that introduces the concept of cpuset 
+partition which is basically the local partition that I am referring to 
+now. It is that commit that did the  partition cleanup in 
+cpuset_css_offline() which is now being moved to the new 
+cpuset_css_killed() callback function.
+
+Thanks,
+Longman
 
 
---t4fu4hgrvs64iwmt
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 01/10] cgroup/cpuset: Fix race between newly created
- partition and dying one
-MIME-Version: 1.0
-
-On Tue, Apr 01, 2025 at 09:49:45PM -1000, Tejun Heo <tj@kernel.org> wrote:
-> On Sun, Mar 30, 2025 at 05:52:39PM -0400, Waiman Long wrote:
-=2E..
-> > Add a new cpuset_css_killed() function to reset the partition state of
-> > a valid partition root if it is being killed.
-=2E..
->=20
-> Applied to cgroup/for-6.15-fixes.
-
-To be on the same page -- Tejun, this is a mistaken message, right?
-css_killed callback is unoptimal way to go.
-
-Michal
-
---t4fu4hgrvs64iwmt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTd6mfF2PbEZnpdoAkt3Wney77BSQUCZ+6OSwAKCRAt3Wney77B
-SSclAP4gqtAuLackFi5Nlj57z7Muu5PrIFLfK4zkKKF/gZ5yYQEA/gVGnVQa8Dcq
-dIb6mJ6FOINsexbxmLhptB0vDt+lFAQ=
-=eHQo
------END PGP SIGNATURE-----
-
---t4fu4hgrvs64iwmt--
 
