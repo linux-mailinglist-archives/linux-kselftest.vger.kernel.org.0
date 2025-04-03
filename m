@@ -1,100 +1,116 @@
-Return-Path: <linux-kselftest+bounces-30056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F0EBA7A1DE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 13:29:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C3B7A7A226
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 13:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DC267A4554
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 11:28:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FBE83ADA12
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 11:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C97241689;
-	Thu,  3 Apr 2025 11:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E2124293D;
+	Thu,  3 Apr 2025 11:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sQE8DGal";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="td2iEtUv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0m3c5Q2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCDC746E;
-	Thu,  3 Apr 2025 11:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCE114C5B0
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Apr 2025 11:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743679775; cv=none; b=lzE1o4zQgid8ZWBTPIR21ebGSzNQqc4lfFpDyQNqSIbFxXr3LyTU/wVMiCXqRrCS8gSJpKhF9s2rt9AJKYoPT90C9k4N2AUEVM17zyYP6FZHOboEPJOwmmyESpIBP5+aWOLumeb5ZIWLXYTZFUONCx/CZ+vTBjtipVx1qyvzsq4=
+	t=1743680972; cv=none; b=Mt+O08zoXrykpMqvLD5ROAGuyNiFnu4W1caY4bxJxXJn3N5o16TwUT6jRb23yNqMshaymP2255Q9mL1fxJOzQsqjVs9h36TzKQc7m1un0nAZfA+FLU7FUC+GPyOrzmxu90rCTUDxcHCADjH/vm5VsFFuQf0fUNxLfvZR/Y/ha5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743679775; c=relaxed/simple;
-	bh=5KsUfJCRg0Fk/4yM4/GbtR8fkLfnX/M6ZgFZZ4qIp+w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=S0gYxo9+p2BAPGZGGQfvizQWfbeQ7GMaNV1mhGZbMcUpYlV1FKOAnPH58mcccXb3/N5GfKc8wSye9qQMTYBy9enKJq0xBiC725IMTF7TNZgPjlzBBeLVx3lanH0SMcpj0HYIKUcDL6TWgVuDVBByU42RJkOrU89TCSuMVhZ8l84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sQE8DGal; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=td2iEtUv; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1743679771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mCQZFIU3aQA8UI8RgbhFajYkKtNNKh+uMd0lvANG1Q4=;
-	b=sQE8DGalZObUjmBaKP4ABnp4h1A5JPfIX/gc+9P0d8wQfuSIcZjr++2oxF/57GMoH/WBMG
-	QRXlAIRxWlGr0aewpopP7EpDLzZg1lW6h5GA222TPQZZh8+rZpizm22OZlA8DkcKAfd6tQ
-	817qerM6E8Q3t41+andndj5W/Ywf8p/m8x13TrMPYXfJMQHMb6v68oa/6L+y9/q4E9MqXE
-	wc3h6s0H5wXfEnNHV3N1gyW+SiIX3aD/WOPOb1AZtW01oPmwxmElI7LELc1rRW84qL0pLW
-	AB+ByPmEFJ8MV3n/h13TWrK5JINPE9sfBimz4W+BnIUfwuAux5ymu1SQbiftZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1743679771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mCQZFIU3aQA8UI8RgbhFajYkKtNNKh+uMd0lvANG1Q4=;
-	b=td2iEtUvROtFzoz4lOGQeRRlRv/wau1YT9t0eTFL38D+YO/pVKhB/qyzoPvnUybLz/M3uZ
-	tj+434/XhRFEs5Bw==
-To: Miroslav Lichvar <mlichvar@redhat.com>
-Cc: John Stultz <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>,
- Stephen Boyd <sboyd@kernel.org>, Anna-Maria Behnsen
- <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
-Subject: Re: [PATCH v2 1/2] time/timekeeping: Fix possible inconsistencies
- in _COARSE clockids
-In-Reply-To: <Z-5HlSUEh1xgCi4f@localhost>
-References: <20250320200306.1712599-1-jstultz@google.com>
- <Z-KURRE_Gr72Xv_n@localhost> <874izezv3c.ffs@tglx>
- <Z-Vx8kV4M3khPknC@localhost> <Z-qsg6iDGlcIJulJ@localhost>
- <87o6xgwftc.ffs@tglx> <Z-vL3cVZuQ8XQXhG@localhost> <87iknnwxa4.ffs@tglx>
- <Z-5HlSUEh1xgCi4f@localhost>
-Date: Thu, 03 Apr 2025 13:29:31 +0200
-Message-ID: <877c41wkis.ffs@tglx>
+	s=arc-20240116; t=1743680972; c=relaxed/simple;
+	bh=/hr0Gpj9fiNlcXJIG5LJxg5hRVj4WPbA4PRO2gcmDh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QLvcUStjd30au8hniP3fgBPQYMgw6R6f+vgLB3odmja6koOYsxLn0jNODnKcW+mh+5Yp5hUACNewokps28R4GJJgbzQZC8GAZMwI/3qtTffbEk6H+7Nzr1HSvNmZCLpDR7z4gWtCUbcWwENflXuFGKjX9iZ7eDkbqf9eYUG6kTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0m3c5Q2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A18C4CEE3;
+	Thu,  3 Apr 2025 11:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743680972;
+	bh=/hr0Gpj9fiNlcXJIG5LJxg5hRVj4WPbA4PRO2gcmDh4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V0m3c5Q2lBkFKKy1vFdA+/ghfO2N+6BHwd1CX2Mrd33fgF2/A81Xyx7EqaIPUa4Uj
+	 QhP2ryxk6mZDTyCzv4vzXDXL8w8dvpmhhIHP0n/B7IlzkZRvqArEJu314YznNN2dR/
+	 X9J3RLrIs+G64zAs3QvfX9i4deJO5B3qqrPxNmmnSiQ6h6g83XDfBFaurfzWVrH4/C
+	 Lo5CsfVX7l2YJ7EHbwJZLdoz8Nrlagxt5EpTKVIueKRKTVxCwSoxaMQStw6rIbGuyj
+	 zBVARGn4qEgIqwm9KPqwrpWo5HYBhzhi7mm49pTFJVIpif2tIaUdaWrz5TdfPdoAix
+	 j9LW6RColo4Bw==
+Date: Thu, 3 Apr 2025 12:49:27 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>,
+	patches@opensource.cirrus.com, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org
+Subject: Re: Exclude cirrus FW tests from KUNIT_ALL_TESTS
+Message-ID: <a4bf28ec-b3f5-4d9f-a042-ada584d0f63c@sirena.org.uk>
+References: <20250402103655.3e0c62d7@kernel.org>
+ <a91811dd-6f86-4af1-8d91-02b990ef2fe3@sirena.org.uk>
+ <20250402155644.67b2cb3c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fKSrcYGid2z0Iz17"
+Content-Disposition: inline
+In-Reply-To: <20250402155644.67b2cb3c@kernel.org>
+X-Cookie: Logic is the chastity belt of the mind!
 
-On Thu, Apr 03 2025 at 10:32, Miroslav Lichvar wrote:
-> On Tue, Apr 01, 2025 at 08:29:23PM +0200, Thomas Gleixner wrote:
->> > 64		64		0.138
->> 
->> That's weird as it only delays the update to the next tick.
->
-> Ok, so it's not an instability of the clock, but rather an instability
-> of the chronyd synchronization loop, which since kernel 4.19 expects
-> the frequency to be applied as soon as the adjtimex call is finished.
 
-Interesting.
+--fKSrcYGid2z0Iz17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> Patch applies after reverting 757b000f7b93 ("timekeeping: Fix possible
->> inconsistencies in _COARSE clockids").
->
-> I ran multiple longer tests to be able to compare the small values in
-> the noise and yes, from the adjtimex point of view this seems to work
-> as well as before the first COARSE fix. I didn't run any tests of the
-> COARSE clock.
+On Wed, Apr 02, 2025 at 03:56:44PM -0700, Jakub Kicinski wrote:
+> On Wed, 2 Apr 2025 18:55:29 +0100 Mark Brown wrote:
 
-I did run those, but did not run the adjtimex() muck :)
+> > > It seems like new cases continue to appear and we have to keep adding
+> > > them to the local ignored list. Is it possible to get these fixed or
+> > > can we exclude the cirrus tests from KUNIT_ALL_TESTS? =20
+
+> > This is the first report I've seen from you...
+
+> More of a test balloon that a real report as you alluded to.
+> I was wondering if it's just me, and from your response it seems=20
+> to be just me.
+
+There were some reports of things but not ongoing ones - that's where
+the fix that was queued came from.
+
+> And the problem reproduces on recent compilers, too. Which leads me
+> to thinking that the tests are broken but stack init covers it up.. ?
+> Strangely tho
+
+> 	make W=3D1 LLVM=3D1 ...
+
+> doesn't report any uninitialized variable warnings.
+
+I think there's parameter passing by pointer which manages to confuse
+matters.
+
+--fKSrcYGid2z0Iz17
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfudccACgkQJNaLcl1U
+h9Achgf9FLSRqm4e4nKyunvWq++Wzi1oh4xXkPzIV2JmgtKgWm1TuigyuSTMx1nZ
+uiNIoGT4f3sd/0Fr/OfC7GB4L/2kDcAAwi6EuW2pgSAnZlWh46TvsGocvg5rGaKA
+wNPJiY1GYuC4kFc8y7OqYRkPIZHi9mO2E2uqlhWEikx+L0e0mWNAt6kUl+RH6yuI
+7+P462MwaBKVEwkAHSRUndQMVKZzWf8CG4OcF5UQb8f4bZN/duWNTrUlEFxsiRYT
+hbk4uBiYc1zJdIx22AGhOHdASWnoIi1TkJw5rnjKGEJkFxTOX2WzleQA4TDRmhtU
+Pgw3wDardWQmmA/mme6TenYq74R19A==
+=KLQ7
+-----END PGP SIGNATURE-----
+
+--fKSrcYGid2z0Iz17--
 
