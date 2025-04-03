@@ -1,130 +1,139 @@
-Return-Path: <linux-kselftest+bounces-30047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D92D4A79E36
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 10:32:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0D69A79F4D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 11:02:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 571001895364
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 08:32:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B95D18947F0
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Apr 2025 09:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB1E1EF0BA;
-	Thu,  3 Apr 2025 08:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6AE24889A;
+	Thu,  3 Apr 2025 08:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vi8pjbUB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDpAu/RW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9591A01B0
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Apr 2025 08:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC32A24C068;
+	Thu,  3 Apr 2025 08:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743669157; cv=none; b=jtwseFypko7vjk5NcBCvf2qq1f+OrmJNkvIp9kpJ3y9LUDlTj7PzIVV5grhfbE0XjFJOJ3PgqDzURM9H043RLUA4zReK2FVvfJoJ68RmDBtiem3Ny8VCx5OaipdEmKyVuGOG8IZyAG/mvYn7Qxm0G9s4HOI805c/8rywap01KOE=
+	t=1743670767; cv=none; b=uHl98DXK7QNxHV2IMkLwHm+bkJ4jylpQ6/CjYzlcKziwXBAffMFpWW3dMpF9UK+ppF/CLUSP9NoJ2tifuwhrY65LvJUGmc7y4z/GJ/1zeO3T5DzfRF2Z6dnAhlmC65IKlcgXtgVDsLtx25TsyvtkZ81eXHw2u3UfSIYN8rads+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743669157; c=relaxed/simple;
-	bh=bP9BTqO6uOeKb9OB+ydFZqLPOoJTDBOLELlzwI0vg6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OyA0Qz2nM8bPzoQ5IGcHoBoN6GsAa8klkbOdMUMUX10aymoGhDgw3o7PeqCbigNsOYeoEdXeg4n0+aObdGDNuLIDOCk1JX+0sBJJh9NAHxBi7rxG4oKnS02GqkaOD9PSWhUIM+peHwmuHlEn1uUTZ6owClztyUsw9fxvcWP9q88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vi8pjbUB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743669155;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/o3+FKdxD4NW/8hxmNNkTDl22sR+l8JS5qoSmV4kVXg=;
-	b=Vi8pjbUBkTXbhaSirnMrFJX+IaDq7TeLmEeFAZfr+lp8v88Mm7lmW3l08MJjqiEjMWhGEk
-	5BfrZ1U9xtH+tNjfSa3y25GXrdQ3UPurqSLXXEi24DH2LsVmGadLB5vilW3+3CUS3uCfiU
-	rn7AFJ6lIQKh6iTDY+kAqCBpBoFf4Jc=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-333-50448r1bNvKzx8pPmhx0yg-1; Thu,
- 03 Apr 2025 04:32:29 -0400
-X-MC-Unique: 50448r1bNvKzx8pPmhx0yg-1
-X-Mimecast-MFC-AGG-ID: 50448r1bNvKzx8pPmhx0yg_1743669147
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6591619560B8;
-	Thu,  3 Apr 2025 08:32:27 +0000 (UTC)
-Received: from localhost (unknown [10.43.135.229])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 525CC19560AD;
-	Thu,  3 Apr 2025 08:32:24 +0000 (UTC)
-Date: Thu, 3 Apr 2025 10:32:21 +0200
-From: Miroslav Lichvar <mlichvar@redhat.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: John Stultz <jstultz@google.com>, LKML <linux-kernel@vger.kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	kernel-team@android.com, Lei Chen <lei.chen@smartx.com>
-Subject: Re: [PATCH v2 1/2] time/timekeeping: Fix possible inconsistencies in
- _COARSE clockids
-Message-ID: <Z-5HlSUEh1xgCi4f@localhost>
-References: <20250320200306.1712599-1-jstultz@google.com>
- <Z-KURRE_Gr72Xv_n@localhost>
- <874izezv3c.ffs@tglx>
- <Z-Vx8kV4M3khPknC@localhost>
- <Z-qsg6iDGlcIJulJ@localhost>
- <87o6xgwftc.ffs@tglx>
- <Z-vL3cVZuQ8XQXhG@localhost>
- <87iknnwxa4.ffs@tglx>
+	s=arc-20240116; t=1743670767; c=relaxed/simple;
+	bh=7OBjvtHyUhTF6MNy6mRvRdm9dkZZOWdlgICQgFQOr6I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aqvmSWX7pJBFgUEVa4Ye8Ci9z7p4X9wSWdCVry914X5JQ1UuP5WT6JtywHhookY18jFPnouE0PRkc3IcJHzOwYr5XFf62pLKEpuEZlc9HWppemkbtP4lVJy9s6H0Kz0iM8Fqh1q16FoR2pa0dpaps6QWsPnvO9oZ5gQYAzGsgrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDpAu/RW; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-301e05b90caso640428a91.2;
+        Thu, 03 Apr 2025 01:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743670755; x=1744275555; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xpa71uhLpTbv8JgRd8W4cBk6pMnjix5xeb4Ai3Fe4o=;
+        b=TDpAu/RWFK8BR35eP0q0fBLdD4ewxYx5sAmZcO2RJJebyxlYpoNWYuOFrzuwM4EI11
+         RLzJoQ1ZfuktZy1IiioFq/y67UhNsv1RLcdA2TsXmWwSkxX+oi3F6XSSIOjzjrmT+wwQ
+         OlCFV46/QHLzPnX1lMxjVwSwxPyHaGhf5brl+Dbrc49CUi5Sp+LFcwGE4J5hItl4OjNO
+         gyAH2YpP4NwxyJ5c6FVbesdNGeB9iZp22rR6C6HeL4b5VOrnxfcI53SZX3I7X9ZfOL+h
+         /N6SjlUKES0/FLNI7qva/SoFvUz0dJj8GEsGQj2yryHbrqNyl/r1GBgm+ORYO12O//0G
+         HzzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743670755; x=1744275555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5xpa71uhLpTbv8JgRd8W4cBk6pMnjix5xeb4Ai3Fe4o=;
+        b=I9B7Yw77poR+TrZ7e9Hq6MpzJeGvtrOWGIIoDmwd86HlP27G6kdi9lkKy028c9FBFu
+         bOVqewMBhXW9P9OTK/6DTQKSt0Ch2YWFsX9Sybx9+0kwKW2sWqKuw5xVHny2XdPnc7sW
+         IUTJiqe64w+1OYiAI+6FPcehy80ap9HPYaa3p4AxJP1nAin4ExtVbDJQliNA5wdODanA
+         1xnoUQGu0HDgLt8R46T7mIFj8KdaTvc6WBvgafx6v44BmHvgnQD0PFNgSUkxc+wD8e5Q
+         ysmE8i24OEUu2xHXnefsXu8ljHr66YOC9+VoyPePVZhbgsIT5aYZepWIfep+MRVSp+E4
+         uyEA==
+X-Forwarded-Encrypted: i=1; AJvYcCXjorFdATL1t2ey18XlcZnX6tfizUWCpdIEZyUZlg7HtB4NNYBNk65MAzJcgL3rF/7MTscQX7zonpo304Ij+64=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfVwqmYmniQuhlC5Ry+nJ4s817xrNDOuivwnO903TeUKFi7vq1
+	qYBkWWH2zLd8DPjjncgywnuwMuZno7vXtHT36PXVISzSHSmWj6XOZaKXgxmwmwo=
+X-Gm-Gg: ASbGnctWKuGMl6rB5oJPtiPc/BalzDj4oQGgu60xO5WBpMcrrqhv2IaoLorZ30Jz5s+
+	fMJiHaCisRjG1TOdLS3fBl9pWOBYC9Qqvaghv5JdVuja2RnzSK/JwASxS9k7/zGhgRO+zi3orYI
+	rKOBDx+BQKV3ILNOYhU6v/qxkCbKWUhDQPUfv8m2D/kiWQIPhoh2Hxz1N3no1GKFIhz31jraJZP
+	FCgDHbVlpepldTxDgDmTb1T+Yz/GHRhEqsXAD+0+Q2AqDGiZCjjTLZ7JtDxs3fqoZQ9prIJWKCV
+	Yp7mj4asJ2kmoYIX5NfESyXG/xs98s2s0T/Q1AECqvEFXev53o0RYatoG0CbA8iw
+X-Google-Smtp-Source: AGHT+IF4He6+/mC53LDltPVr7ux8SpfkYJcDIWJ7DoV51cEB8SAglYMSICJI8h1IZfryRzg8E5e1Yg==
+X-Received: by 2002:a17:90b:37cd:b0:2ee:ad18:b309 with SMTP id 98e67ed59e1d1-3057caef387mr2511599a91.3.1743670755303;
+        Thu, 03 Apr 2025 01:59:15 -0700 (PDT)
+Received: from fedora.dns.podman ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305827d710csm937620a91.10.2025.04.03.01.59.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Apr 2025 01:59:14 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Xiao Liang <shaw.leon@gmail.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Venkat Venkatsubra <venkat.x.venkatsubra@oracle.com>,
+	Etienne Champetier <champetier.etienne@gmail.com>,
+	Di Zhu <zhudi21@huawei.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Travis Brown <travisb@arista.com>,
+	Suresh Krishnan <skrishnan@arista.com>,
+	linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net 0/3] fix ipvlan/macvlan link event handing
+Date: Thu,  3 Apr 2025 08:58:54 +0000
+Message-ID: <20250403085857.17868-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87iknnwxa4.ffs@tglx>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 01, 2025 at 08:29:23PM +0200, Thomas Gleixner wrote:
-> On Tue, Apr 01 2025 at 13:19, Miroslav Lichvar wrote:
-> > It seems to improve the worst cases, but overall it's still
-> > a regression.
-> >
-> > Mult reduction	Updates/sec	Skew
-> > 16		4		0.012
-> > 16		16		0.014
-> > 16		64	        0.033
-> > 64		4		0.012
-> > 64		16		0.105
-> > 64		64		0.138
-> 
-> That's weird as it only delays the update to the next tick.
+When setting the lower-layer link up/down, the ipvlan/macvlan device
+synchronizes its state via netif_stacked_transfer_operstate(), which
+only checks the carrier state. However, setting the link down does not
+necessarily change the carrier state for virtual interfaces like bonding.
+This causes the ipvlan/macvlan state to become out of sync with the
+lower-layer link state. Fix this by explicitly changing the IFF_UP flag,
+similar to how VLAN handles it.
 
-Ok, so it's not an instability of the clock, but rather an instability
-of the chronyd synchronization loop, which since kernel 4.19 expects
-the frequency to be applied as soon as the adjtimex call is finished.
-To confirm that, I tried a different test with chronyd configured to
-only monitor the clock without making any adjustments (-x option) and
-another process repeatedly setting the same frequency. The one-line
-patch does fix that test.
+Before the patch:
+  # ./rtnetlink.sh -t "kci_test_vlan kci_test_ipvlan kci_test_macvlan"
+  PASS: vlan link state correct
+  FAIL: ipvlan link state incorrect
+  FAIL: macvlan link state incorrect
 
-> My original
-> approach of maintaining seperate state for the coarse time keeper is
-> preserving the existing NTP behaviour.
-> 
-> Patch applies after reverting 757b000f7b93 ("timekeeping: Fix possible
-> inconsistencies in _COARSE clockids").
+After the patch set:
+  # ./rtnetlink.sh -t "kci_test_vlan kci_test_ipvlan kci_test_macvlan"
+  PASS: vlan link state correct
+  PASS: ipvlan link state correct
+  PASS: macvlan link state correct
 
-I ran multiple longer tests to be able to compare the small values in
-the noise and yes, from the adjtimex point of view this seems to work
-as well as before the first COARSE fix. I didn't run any tests of the
-COARSE clock.
+Hangbin Liu (3):
+  ipvlan: fix NETDEV_UP/NETDEV_DOWN event handling
+  macvlan: fix NETDEV_UP/NETDEV_DOWN event handling
+  selftests/rtnetlink.sh: add vlan/ipvlan/macvlan link state test
 
-Thanks,
+ drivers/net/ipvlan/ipvlan_main.c         | 20 +++++++-
+ drivers/net/macvlan.c                    | 20 ++++++++
+ tools/testing/selftests/net/rtnetlink.sh | 64 ++++++++++++++++++++++++
+ 3 files changed, 103 insertions(+), 1 deletion(-)
 
 -- 
-Miroslav Lichvar
+2.46.0
 
 
