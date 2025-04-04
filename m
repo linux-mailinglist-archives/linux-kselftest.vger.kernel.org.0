@@ -1,235 +1,158 @@
-Return-Path: <linux-kselftest+bounces-30114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D95DA7C0E3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 17:46:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0742EA7C0FF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 17:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C87E7A72AF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 15:45:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA56E189773B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 15:52:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF291F5839;
-	Fri,  4 Apr 2025 15:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAD81F582D;
+	Fri,  4 Apr 2025 15:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="cn5LQ44B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WCnPm6lT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BCB7E110;
-	Fri,  4 Apr 2025 15:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45371F5408;
+	Fri,  4 Apr 2025 15:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743781527; cv=none; b=mQGWgxWnJm+rNvgPV82L0c8WwBz7/JYeH8Q1duXaKgGpX0vA3b2unRCvnysGs/YuAwnCvqzIPKoHkUuNxp5bJDavEuQJSC7+wAap8UabNxHULXVlWeWGddxfuwUmjj/nAItzbqVczGAQOD2tbiu7nfdIjlyQsrCFB+JTUfFl4Cc=
+	t=1743781948; cv=none; b=FWlK6Qz1MZwDrk/fmUm6Jnmnp2F2WugVejCaOf1eqpPl0H8VIEx5P5s7sg1APIyOXeNjKGfDxK4O3GvYfg/Uqbcz9laLpIi/3bKKTuTGw6vd5EHJLgvpOcMq3jGdw0MnHYHbb2UQl7/tJs9jV481RyxtsWLZVEdfgcDA46Qzf0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743781527; c=relaxed/simple;
-	bh=ihDN7/DxACvpk0yyZBzdmxHvkWRzBDnaG9K8bSUk2mQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rgVFBEpwVJee2DQQMIG1iWI1XvuTReHsRKAKIRODSFMVj5GjGw8SWnehkuDcAWv5Wh06uj31z3/xdpFoy7F+aHnSEWJ+NyIg/gb/f9v122c1B7q/nZonfR+ubKw6yJoznOBoNUU/Y3y5HbBJXSLLWdI7D0Y2hpMCgvPUgXCNqio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=cn5LQ44B; arc=none smtp.client-ip=99.78.197.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1743781948; c=relaxed/simple;
+	bh=m9gKAxEv8+1se/VyAuR+Yuv/+qsz90ObqP12AabUSZI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b6jQ8zonFpjGJ2VW9+vlmuVzrNsD8gCVmWQATTTxerc0Njb5JnD4SZNAOGxKXT691qWLdV5A2/74sUzOSy73ssvKXaedftqLTbW35jJbDAd0TzNUAO4dL5bOJvOlhWsIXmbBEAhZ+EXxxZ3TZV/NVrJJtVn4k29polCZtOy11fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WCnPm6lT; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-73712952e1cso2122153b3a.1;
+        Fri, 04 Apr 2025 08:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1743781526; x=1775317526;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yc6GH0/dKmQ7WSv9wb3vUThoZ6MNVvGsszSJT/iNJmY=;
-  b=cn5LQ44BUJS+sYWWoYKtainZBWpBWaMBtYp4cSPIDLC6Hh6MZWzdLma7
-   0fQ6nn9WdGSwRtarmJHWCBQY1OND6Z6xnl77ulnn1NCxPe+FjmLcvO7qP
-   R9m6nIIglBeVum0m8MrHot7WJRWQs9nydDtjETLeH/fSP+JV13dZ7PKSD
-   Y=;
-X-IronPort-AV: E=Sophos;i="6.15,188,1739836800"; 
-   d="scan'208";a="37863645"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 15:45:22 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [10.0.43.254:25779]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.18.64:2525] with esmtp (Farcaster)
- id bc1466b6-dabf-4c34-ba00-853571b00927; Fri, 4 Apr 2025 15:45:20 +0000 (UTC)
-X-Farcaster-Flow-ID: bc1466b6-dabf-4c34-ba00-853571b00927
-Received: from EX19D030EUB002.ant.amazon.com (10.252.61.16) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Fri, 4 Apr 2025 15:45:16 +0000
-Received: from EX19MTAUEA002.ant.amazon.com (10.252.134.9) by
- EX19D030EUB002.ant.amazon.com (10.252.61.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Fri, 4 Apr 2025 15:45:16 +0000
-Received: from email-imr-corp-prod-pdx-all-2b-dbd438cc.us-west-2.amazon.com
- (10.43.8.2) by mail-relay.amazon.com (10.252.134.34) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1544.14 via Frontend Transport; Fri, 4 Apr 2025 15:45:15 +0000
-Received: from dev-dsk-kalyazin-1a-a12e27e2.eu-west-1.amazon.com (dev-dsk-kalyazin-1a-a12e27e2.eu-west-1.amazon.com [172.19.103.116])
-	by email-imr-corp-prod-pdx-all-2b-dbd438cc.us-west-2.amazon.com (Postfix) with ESMTPS id CCF7BA047C;
-	Fri,  4 Apr 2025 15:45:11 +0000 (UTC)
-From: Nikita Kalyazin <kalyazin@amazon.com>
-To: <akpm@linux-foundation.org>, <pbonzini@redhat.com>, <shuah@kernel.org>,
-	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <muchun.song@linux.dev>,
-	<hughd@google.com>
-CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-fsdevel@vger.kernel.org>, <jack@suse.cz>,
-	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@Oracle.com>, <jannh@google.com>,
-	<ryan.roberts@arm.com>, <david@redhat.com>, <jthoughton@google.com>,
-	<peterx@redhat.com>, <graf@amazon.de>, <jgowans@amazon.com>,
-	<roypat@amazon.co.uk>, <derekmn@amazon.com>, <nsaenz@amazon.es>,
-	<xmarcalx@amazon.com>, <kalyazin@amazon.com>
-Subject: [PATCH v3 6/6] KVM: selftests: test userfaultfd minor for guest_memfd
-Date: Fri, 4 Apr 2025 15:43:52 +0000
-Message-ID: <20250404154352.23078-7-kalyazin@amazon.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250404154352.23078-1-kalyazin@amazon.com>
-References: <20250404154352.23078-1-kalyazin@amazon.com>
+        d=gmail.com; s=20230601; t=1743781946; x=1744386746; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4aWTDe+rTzrD+6R9DmIQBtw8FiB3Cn3PFxzKkYh4A0s=;
+        b=WCnPm6lTmO/uCyoLABLaMItvwEXWro5Co+kC19ldt7Uh+Q9qrANFwW/y8pxn1NP9jN
+         UNT/L3wlolMVFGecSyV6XMq66xWz5L5ok2h0BbGG/VJHLr2TCVC7JiEg7BCYLBABHCLL
+         kZJgrGYy6FAq37w3V70i8sx317eP4AWUpGQSxPY/3bEAeBRTJE7skEIV9hLeuEAl1iKv
+         tIh4jguRk10+3zZeNRHt1obHhx+5mSfXRjvgwUcIQAPOoaxJrrjoK+P0o2Jk3hB6X67a
+         j6ET1xjTAedRfpCgZgp2auKdQ4VqGS6g6OgymS7xsE77/vUa0KXgGjkoXn8wg0VUOAL8
+         iFZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743781946; x=1744386746;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4aWTDe+rTzrD+6R9DmIQBtw8FiB3Cn3PFxzKkYh4A0s=;
+        b=RcHacwshefqemq7k7v9cTbedBNRiGEcEc9L5QqUlL5L+8L5eeTktqmA57lXFPhoqDy
+         FFiVb2VfFWfzczBChGjzgmirllDkghyF+2ESvlX1+nWE+RDRc0Rdjb7lL/ouGz82PQ1Y
+         XtJ7ZS2q3LYr8d4VdWJQUT6xGHA9yuwOtnOrcyJ0CR8uhOjmTweMFZIPbIbYeUFFKgxS
+         IXtXAK0YERiJStC8rUdY72NQVovoq44zX7hGHnBRCB7FtNcOn+Ibaj+oCTSBQ3klOZoj
+         6fdBb6xZ5N7yNmIXRNhdxLI6esGqc3AIJDwN9X8VvtkdjFJqJ1Uq0STj6yyeFOl6GzNB
+         UBGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUCifk668A+VLDuAV/FUutZ2ojv2r4UdndHjEvDpsybDm4vvf9lnCjeBrbacsflKYJKSMszAbxEdcbtSPY@vger.kernel.org, AJvYcCVmTCI2U/J9yoW+qe3Qsfe+P3pifpcv0a3Vag90f7TaI2IY8odsZBLYdoAKpAVZUm8ob4GKRW+oudp/pxeoch6c@vger.kernel.org, AJvYcCWft+TcLlV1AbKmGHoqKQ1v76h/UDg3dtv13C/GjKAIvodU3IKUviSc2SqEMc832Xf+L+k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEc0Qqp8Iblrrw/v/lujQ9Cwy//sf638MbPudS7rprjA2+V+Ee
+	nB14z3rIB/VyVjVdzldMtAAru/dYv4iiD35C/KdPLnlIa1iy7GUbhpEv0K+E7ZRZ5/DcLP/O/Xo
+	XMba/CLdB/8IW3KEjqh8lUcNGgKY=
+X-Gm-Gg: ASbGnctAIiWum94cJUGX8lULwKfcsMUIyA61LvPJuJzvte4cEJIAeiY3M4ntskVjCGy
+	xAqkaImEAn51K8VVW3Z1OaY+dr2QBCuoKUaJT742Ui++jdKBtBdtKmgcGp589B4LVPPtOm00a9l
+	EgpwGucrbXTp2cTgAx0YwsTAjMjubocUltMSVCsp0FO3ncxQG4qmY8
+X-Google-Smtp-Source: AGHT+IEvIVeQZa5TCXYa49bWJYhlsbglGPFTWlTmzAYUiGUKqdhgB3iFQEsIbHaggKb+5mNlOlhexiQxMWXg/N6NSUo=
+X-Received: by 2002:a05:6a00:2292:b0:736:57cb:f2b6 with SMTP id
+ d2e1a72fcca58-739e4855de2mr5463254b3a.12.1743781945762; Fri, 04 Apr 2025
+ 08:52:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
+References: <malayarout91@gmail.com> <20250324064234.853591-1-malayarout91@gmail.com>
+In-Reply-To: <20250324064234.853591-1-malayarout91@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 4 Apr 2025 08:52:13 -0700
+X-Gm-Features: AQ5f1Jr6dpg1vkl2088UME8oWw4P2Av0jpCylRO5ZZVK_oKaO02pvSj060D0bCc
+Message-ID: <CAEf4BzagSxO-fNeeWfFPu2vpnbEUBnS7Y2P=ODGks_zVEg1mkg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: close the file descriptor to avoid
+ resource leaks
+To: Malaya Kumar Rout <malayarout91@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The test demonstrates that a minor userfaultfd event in guest_memfd can
-be resolved via a memcpy followed by a UFFDIO_CONTINUE ioctl.
+On Sun, Mar 23, 2025 at 11:43=E2=80=AFPM Malaya Kumar Rout
+<malayarout91@gmail.com> wrote:
+>
+> Static Analyis for bench_htab_mem.c with cppcheck:error
+> tools/testing/selftests/bpf/benchs/bench_htab_mem.c:284:3:
+> error: Resource leak: fd [resourceLeak]
+> tools/testing/selftests/bpf/prog_tests/sk_assign.c:41:3:
+> error: Resource leak: tc [resourceLeak]
+>
+> fix the issue  by closing the file descriptor (fd & tc) when
+> read & fgets operation fails.
+>
+> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/benchs/bench_htab_mem.c | 1 +
+>  tools/testing/selftests/bpf/prog_tests/sk_assign.c  | 4 +++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/tools/=
+testing/selftests/bpf/benchs/bench_htab_mem.c
+> index 926ee822143e..59746fd2c23a 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> @@ -281,6 +281,7 @@ static void htab_mem_read_mem_cgrp_file(const char *n=
+ame, unsigned long *value)
+>         got =3D read(fd, buf, sizeof(buf) - 1);
 
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 99 +++++++++++++++++++
- 1 file changed, 99 insertions(+)
+It could be a bit cleaner to add close(fd) here and drop the one we
+have at the end of the function.
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 38c501e49e0e..9a06c2486218 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -10,12 +10,16 @@
- #include <errno.h>
- #include <stdio.h>
- #include <fcntl.h>
-+#include <pthread.h>
- 
- #include <linux/bitmap.h>
- #include <linux/falloc.h>
-+#include <linux/userfaultfd.h>
- #include <sys/mman.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/ioctl.h>
- 
- #include "kvm_util.h"
- #include "test_util.h"
-@@ -206,6 +210,98 @@ static void test_create_guest_memfd_multiple(struct kvm_vm *vm)
- 	close(fd1);
- }
- 
-+struct fault_args {
-+	char *addr;
-+	volatile char value;
-+};
-+
-+static void *fault_thread_fn(void *arg)
-+{
-+	struct fault_args *args = arg;
-+
-+	/* Trigger page fault */
-+	args->value = *args->addr;
-+	return NULL;
-+}
-+
-+static void test_uffd_minor(int fd, size_t page_size, size_t total_size)
-+{
-+	struct uffdio_register uffd_reg;
-+	struct uffdio_continue uffd_cont;
-+	struct uffd_msg msg;
-+	struct fault_args args;
-+	pthread_t fault_thread;
-+	void *mem, *mem_nofault, *buf = NULL;
-+	int uffd, ret;
-+	off_t offset = page_size;
-+	void *fault_addr;
-+
-+	ret = posix_memalign(&buf, page_size, total_size);
-+	TEST_ASSERT_EQ(ret, 0);
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
-+	TEST_ASSERT(uffd != -1, "userfaultfd creation should succeed");
-+
-+	struct uffdio_api uffdio_api = {
-+		.api = UFFD_API,
-+		.features = UFFD_FEATURE_MINOR_GUEST_MEMFD,
-+	};
-+	ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_API) should succeed");
-+
-+	mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap should succeed");
-+
-+	mem_nofault = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem_nofault != MAP_FAILED, "mmap should succeed");
-+
-+	uffd_reg.range.start = (unsigned long)mem;
-+	uffd_reg.range.len = total_size;
-+	uffd_reg.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	ret = ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_REGISTER) should succeed");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
-+			offset, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	fault_addr = mem + offset;
-+	args.addr = fault_addr;
-+
-+	ret = pthread_create(&fault_thread, NULL, fault_thread_fn, &args);
-+	TEST_ASSERT(ret == 0, "pthread_create should succeed");
-+
-+	ret = read(uffd, &msg, sizeof(msg));
-+	TEST_ASSERT(ret != -1, "read from userfaultfd should succeed");
-+	TEST_ASSERT(msg.event == UFFD_EVENT_PAGEFAULT, "event type should be pagefault");
-+	TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)) == fault_addr,
-+		    "pagefault should occur at expected address");
-+
-+	memcpy(mem_nofault + offset, buf + offset, page_size);
-+
-+	uffd_cont.range.start = (unsigned long)fault_addr;
-+	uffd_cont.range.len = page_size;
-+	uffd_cont.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_CONTINUE, &uffd_cont);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_CONTINUE) should succeed");
-+
-+	TEST_ASSERT(args.value == *(char *)(mem_nofault + offset),
-+		    "memory should contain the value that was copied");
-+	TEST_ASSERT(args.value == *(char *)(mem + offset),
-+		    "no further fault is expected");
-+
-+	ret = pthread_join(fault_thread, NULL);
-+	TEST_ASSERT(ret == 0, "pthread_join should succeed");
-+
-+	ret = munmap(mem_nofault, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+
-+	ret = munmap(mem, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+	free(buf);
-+	close(uffd);
-+}
-+
- unsigned long get_shared_type(void)
- {
- #ifdef __x86_64__
-@@ -244,6 +340,9 @@ void test_vm_type(unsigned long type, bool is_shared)
- 	test_fallocate(fd, page_size, total_size);
- 	test_invalid_punch_hole(fd, page_size, total_size);
- 
-+	if (is_shared)
-+		test_uffd_minor(fd, page_size, total_size);
-+
- 	close(fd);
- 	kvm_vm_release(vm);
- }
--- 
-2.47.1
+pw-bot: cr
 
+>         if (got <=3D 0) {
+>                 *value =3D 0;
+> +               close(fd);
+>                 return;
+>         }
+>         buf[got] =3D 0;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/t=
+esting/selftests/bpf/prog_tests/sk_assign.c
+> index 0b9bd1d6f7cc..10a0ab954b8a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> @@ -37,8 +37,10 @@ configure_stack(void)
+>         tc =3D popen("tc -V", "r");
+>         if (CHECK_FAIL(!tc))
+>                 return false;
+> -       if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc)))
+> +       if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc))) {
+> +               pclose(tc);
+
+this one looks good
+
+>                 return false;
+> +       }
+>         if (strstr(tc_version, ", libbpf "))
+>                 prog =3D "test_sk_assign_libbpf.bpf.o";
+>         else
+> --
+> 2.43.0
+>
 
