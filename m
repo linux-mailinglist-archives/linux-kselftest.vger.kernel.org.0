@@ -1,120 +1,183 @@
-Return-Path: <linux-kselftest+bounces-30147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D515A7C5CB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 23:52:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21F63A7C5D4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 23:55:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE186189F1A6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 21:52:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD206177AB1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 21:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C721A4F2D;
-	Fri,  4 Apr 2025 21:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 389CA1A9B39;
+	Fri,  4 Apr 2025 21:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJLbDe1U"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="djoVFmCJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4766B182BC;
-	Fri,  4 Apr 2025 21:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7407619DF4F;
+	Fri,  4 Apr 2025 21:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743803565; cv=none; b=M2GfQ6Gu0VI8xZdoo8Yl0lCs9XWjBjA9FYUEU0XCRmTjlo6PtVJv2UHMaFBVAscJChqdoK/ZKJzGpt6vCqEe06Ik6q3N+pf8sly22wIr8d0z+2z/1/m719TQjForpqERI5p6nzxn+whMGvck4nt+YFN6lAmIJnynbaGgoPw97Gc=
+	t=1743803747; cv=none; b=BuFj7e6pKqH/sETRAsdm3lhBoS8BGJgpXWhUfU2w/yAEe01qB1Z0KxF/PDXYGdMo/yVvo2RK7slGM0vlyIud3geiA3VxSyxeAgouHA8r04G0JnKDjLAPBANucNUaPYufpq/j9XhmgZ9FGXi8Yx69EzqpYAFiacRKQCBVJP28TZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743803565; c=relaxed/simple;
-	bh=zfKuyAqEThSpITUsQxukfzwj1EOtZMLMZc21pVrK58U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f0UbaV2cq9eZCGbKqzsV3+FD/xqfwMZAPHI5xgetSCqnHog2C2oNGb2gCUiFiryp/RbVX7zVPq9M20xjL7xx3FVYkcv5t3938bFTUvSbHMkYxZcxdwyoI6sNloU/LQXMeALJWUcWNxLWKoqb0jUZQvml3q2/bRLzLdDX/qHcTwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJLbDe1U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 572D5C4CEDD;
-	Fri,  4 Apr 2025 21:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743803564;
-	bh=zfKuyAqEThSpITUsQxukfzwj1EOtZMLMZc21pVrK58U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UJLbDe1UWCik0+X07dueePSGryP67mZMHCTK2OzoZPKRioPAbyPo+4gCEfNLSf/eJ
-	 6Qp/fWuBKrJZcXMd9IBvlrMC7FDFLvFwYuHitO3LfWNKxm4RJBKVnp7hMAQE+tzITt
-	 69k+1zH8kTEd28hZmQfjiOn9K8j6bLQE+0Uvbs0+QcmhRs1SR11IH9Hmv0VB3QH/uW
-	 FiuzBA7y52ebnEEM/TyOrp7u58pqPS7CqUwVi0vd5I9IXodxKzKb6QlvgMe121GNPr
-	 j4sgKOfZ5dHAnqMYTvJHCltafWgeDABxruiSkEoUaAizrenp3zqr0t2kNnm9w/nyQ1
-	 qeQkrB9FIcjRg==
-Date: Fri, 4 Apr 2025 16:52:43 -0500
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Anup Patel <apatel@ventanamicro.com>, Marc Zyngier <maz@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org,
-	jdmason@kudzu.us, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, imx@lists.linux.dev,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v16 04/15] dt-bindings: pci: pci-msi: Add support for PCI
- Endpoint msi-map
-Message-ID: <20250404215243.GA412761-robh@kernel.org>
-References: <20250404-ep-msi-v16-0-d4919d68c0d0@nxp.com>
- <20250404-ep-msi-v16-4-d4919d68c0d0@nxp.com>
- <20250404201140.GA236599-robh@kernel.org>
- <Z/BB/Maq4253H7N2@lizhi-Precision-Tower-5810>
+	s=arc-20240116; t=1743803747; c=relaxed/simple;
+	bh=J78We6J2HcLadsfXet7EQXvV5nbB4sqDTC5iteeMCc8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=gyV2eTLOPbzFRpkJsiRdSMZJ/XF7I357AF9+57mWObHMDJlRYFj512r5NhSfK+DKMhaR3oDUc2BpapGhS5OJn/0hXz3mc9y5d1WX3lG7Jd4NHuyUrwIUrvchjzH+j3f0aMropiSQkFcy2lAdYt7krpn6ODs+2R4ywCyPJ9hj5w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=djoVFmCJ; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from narnia.corp.microsoft.com (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id F10C32025659;
+	Fri,  4 Apr 2025 14:55:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F10C32025659
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1743803744;
+	bh=FeA9Cf0c1PZ+ws0Z5CDTTAR7q+ny173QHBHM7KBUgtI=;
+	h=From:To:Subject:Date:From;
+	b=djoVFmCJ6IiEUFCgcnHVMYL2uhJrxONZOMEeqCPPJZ29Mlkcp78CX0ZSdnxS/9o9l
+	 /fEb2VwO218boC8jjcffL5aTL62YId6BQ+gtUABHGlFJVKoARLb7cmHkfO5z3oAVzy
+	 cYOkLZolxJNlLg45S5YOiA9ok749zp8yA2qASojw=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Shuah Khan <shuah@kernel.org>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jan Stancek <jstancek@redhat.com>,
+	Neal Gompa <neal@gompa.dev>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	nkapron@google.com,
+	teknoraver@meta.com,
+	roberto.sassu@huawei.com,
+	xiyou.wangcong@gmail.com
+Subject: [PATCH v2 security-next 0/4] Introducing Hornet LSM
+Date: Fri,  4 Apr 2025 14:54:49 -0700
+Message-ID: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z/BB/Maq4253H7N2@lizhi-Precision-Tower-5810>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 04, 2025 at 04:33:00PM -0400, Frank Li wrote:
-> On Fri, Apr 04, 2025 at 03:11:40PM -0500, Rob Herring wrote:
-> > On Fri, Apr 04, 2025 at 03:01:05PM -0400, Frank Li wrote:
-> > > Document the use of msi-map for PCI Endpoint (EP) controllers, which can
-> > > use MSI as a doorbell mechanism. Each EP controller can support up to 8
-> > > physical functions and 65,536 virtual functions.
-> > >
-> > > Define how to construct device IDs using function bits [2:0] and virtual
-> > > function index bits [31:3], enabling msi-map to associate each child device
-> > > with a specific msi-specifier.
-> > >
-> > > Include a device tree example illustrating this configuration.
-> > >
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
-> > > change from v15 to v16
-> > > - new patch
-> > > ---
-> > >  Documentation/devicetree/bindings/pci/pci-msi.txt | 51 +++++++++++++++++++++++
-> > >  1 file changed, 51 insertions(+)
-> >
-> > Please don't add to .txt files.
-> 
-> where should put?
+This patch series introduces the Hornet LSM. The goal of Hornet is to
+provide a signature verification mechanism for eBPF programs.
 
-Where ever you are putting the schema for msi-map for endpoints... Looks 
-like that's nowhere currently. The endpoint side is documented in 
-pci-ep.yaml, so there I suppose.
+eBPF has similar requirements to that of modules when it comes to
+loading: find symbol addresses, fix up ELF relocations, some struct
+field offset handling stuff called CO-RE (compile-once run-anywhere),
+and some other miscellaneous bookkeeping. During eBPF program
+compilation, pseudo-values get written to the immediate operands of
+instructions. During loading, those pseudo-values get rewritten with
+concrete addresses or data applicable to the currently running system,
+e.g., a kallsyms address or an fd for a map. This needs to happen
+before the instructions for a bpf program are loaded into the kernel
+via the bpf() syscall. Unlike modules, an in-kernel loader
+unfortunately doesn't exist. Typically, the instruction rewriting is
+done dynamically in userspace via libbpf. Since the relocations and
+instruction modifications are happening in userspace, and their values
+may change depending upon the running system, this breaks known
+signature verification mechanisms.
 
-What's in pci-msi.txt already has mostly moved to dtschema 
-dtschema/schemas/pci/pci-host-bridge.yaml. 
+Light skeleton programs were introduced in order to support early
+loading of eBPF programs along with user-mode drivers. They utilize a
+separate eBPF program that can load a target eBPF program and perform
+all necessary relocations in-kernel without needing a working
+userspace. Light skeletons were mentioned as a possible path forward
+for signature verification.
 
-Rob
+Hornet takes a simple approach to light-skeleton-based eBPF signature
+verification. A PKCS#7 signature of a data buffer containing the raw
+instructions of an eBPF program, followed by the initial values of any
+maps used by the program is used. A utility script is provided to
+parse and extract the contents of autogenerated header files created
+via bpftool. That payload can then be signed and appended to the light
+skeleton executable.
+
+Maps are frozen to prevent TOCTOU bugs where a sufficiently privileged
+user could rewrite map data between the calls to BPF_PROG_LOAD and
+BPF_PROG_RUN. Additionally, both sparse-array-based and
+fd_array_cnt-based map fd arrays are supported for signature
+verification.
+
+
+References:
+  [1] https://lore.kernel.org/bpf/20220209054315.73833-1-alexei.starovoitov@gmail.com/
+  [2] https://lore.kernel.org/bpf/CAADnVQ+wPK1KKZhCgb-Nnf0Xfjk8M1UpX5fnXC=cBzdEYbv_kg@mail.gmail.com/
+
+Change list:
+- v1 -> v2
+  - Jargon clarification, maintainer entry and a few cosmetic fixes
+
+Revisions:
+- v1
+  https://lore.kernel.org/bpf/20250321164537.16719-1-bboscaccy@linux.microsoft.com
+
+
+Blaise Boscaccy (4):
+  security: Hornet LSM
+  hornet: Introduce sign-ebpf
+  hornet: Add a light-skeleton data extactor script
+  selftests/hornet: Add a selftest for the Hornet LSM
+
+ Documentation/admin-guide/LSM/Hornet.rst     |  53 +++
+ Documentation/admin-guide/LSM/index.rst      |   1 +
+ MAINTAINERS                                  |   9 +
+ crypto/asymmetric_keys/pkcs7_verify.c        |  10 +
+ include/linux/kernel_read_file.h             |   1 +
+ include/linux/verification.h                 |   1 +
+ include/uapi/linux/lsm.h                     |   1 +
+ scripts/Makefile                             |   1 +
+ scripts/hornet/Makefile                      |   5 +
+ scripts/hornet/extract-skel.sh               |  29 ++
+ scripts/hornet/sign-ebpf.c                   | 411 +++++++++++++++++++
+ security/Kconfig                             |   3 +-
+ security/Makefile                            |   1 +
+ security/hornet/Kconfig                      |  11 +
+ security/hornet/Makefile                     |   4 +
+ security/hornet/hornet_lsm.c                 | 239 +++++++++++
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/hornet/Makefile      |  51 +++
+ tools/testing/selftests/hornet/loader.c      |  21 +
+ tools/testing/selftests/hornet/trivial.bpf.c |  33 ++
+ 20 files changed, 885 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+ create mode 100644 scripts/hornet/Makefile
+ create mode 100755 scripts/hornet/extract-skel.sh
+ create mode 100644 scripts/hornet/sign-ebpf.c
+ create mode 100644 security/hornet/Kconfig
+ create mode 100644 security/hornet/Makefile
+ create mode 100644 security/hornet/hornet_lsm.c
+ create mode 100644 tools/testing/selftests/hornet/Makefile
+ create mode 100644 tools/testing/selftests/hornet/loader.c
+ create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+
+-- 
+2.48.1
+
 
