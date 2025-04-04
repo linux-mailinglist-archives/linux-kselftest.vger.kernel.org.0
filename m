@@ -1,263 +1,169 @@
-Return-Path: <linux-kselftest+bounces-30090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 388FFA7B52E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 02:50:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E6D4A7B56D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 03:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7E821766B2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 00:48:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87E6D3B40F1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 01:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E9212080FE;
-	Fri,  4 Apr 2025 00:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D78D517;
+	Fri,  4 Apr 2025 01:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aC/pEh39"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NjVHg9ZX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736BC481B1;
-	Fri,  4 Apr 2025 00:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9643433A8
+	for <linux-kselftest@vger.kernel.org>; Fri,  4 Apr 2025 01:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743726580; cv=none; b=Umocuex+nAWbs8YcR3DZFImGFdBFYT2h0pfnum5MgJEKge4LA/wiIsiWYURAm1B7XSmlgN+2j3bUxnhyq0MTWomdT4woik7WNcgIlXw/3jPygl8p222F8zwbID8oGXdSx6/DoBf6R1JJtaW8WHnZaUFVAxNsRP8o5dtlahkXeiM=
+	t=1743729909; cv=none; b=mTgtYQYqixrX5IVi9uO+gDolEc6CTSolJfp4aNdP3az9yvDzWWbEdeXR8FPksCVMO3xeCTa5evgtg4PjQD3XwzXmhCgEzCxJSQGJahrW5wir3smfTEq1s7Bstj8OwrSz4fA3aSBaprUu/siCz7BjRWY7SRMyGXI4sf1wCyptN18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743726580; c=relaxed/simple;
-	bh=St89Kwzj3JRQR9Jf8LzwrVl8hl+hk+d3qKXySXoa7Oc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fXF+toz8rB0aWu8Y2J0l5cdYqF2Sgi1EzwgPUefnQua0EHW7uvXlyNLj6SPSl/hD1x/hzXZ8OLvXJL/l/9gyhkHIT6BUnieFtk1TaPv7AjlGUjR/WlQkBYKNqRvHbaG0DGZYfFZu7FF24zxkgZkx/0hwmCRyYRdx9MVU67536rM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aC/pEh39; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf0d787eeso14448155e9.3;
-        Thu, 03 Apr 2025 17:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743726577; x=1744331377; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tBiB0ezIz2JVyD/2wk2RTNMgtZ0w5Sl/SCYeQbZaMbY=;
-        b=aC/pEh39yCrXQQvpOVWvHLphULrtLIZ/7aaxOxwD8loXJjFZeMwXV+wuMq5ZoSPFWT
-         uGnKLXhWSjdDfulFLPgZVAHUfG1/p3xcbv7EOpDxxAY1j9ds/UnXJYUysOs+k0cC+jcG
-         Ke4Jz9UQkWLwcsbqnx2TmrO1bd39V30GEIyAuBq0otmPOQ3gUks8ZDNR7BWSx7OPe8Yj
-         mYtZYtRe+UqhN2yVghadGweT29weuc/G7q+IH2F38h8zK3pWjo6/fk/+aPBmdANmo24m
-         Ysv4R78TQ9bO1+8khcAFozzOu2mf1QVPIqQepC2uqfVEkaDpsHK645E3aPiKpIrJF7Vo
-         Bgfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743726577; x=1744331377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tBiB0ezIz2JVyD/2wk2RTNMgtZ0w5Sl/SCYeQbZaMbY=;
-        b=EKG0xSjNDLbveqY9oX18//IMGQq7kjJAC6i2NcA7UkKvtTlifoQlIh3xQQ/UYE8PzR
-         ZXL9s0bRL0XmpQDrhlsyWpSDMX4ef+4V+Sf4n7eGw/BaMuI4JQy9HtOyRL7D93BMEPeQ
-         jA6ZBaaWRdGgf+r/ygQwzkBlBwkiej5GKtUg4PxrhN0aD4N6nOUXbNuUYj1q/yR6UIks
-         VFmImNlU29rjXR7eGtK3V61BPsyu+s9c+zOskCY1Z5XAzZJ8JhtRC+Wun0tAYW9Pt0lz
-         J9P75FjpCwzZdG0tMENngAAcinmitDWT0MRJ1F2mc7ClZFdYDXMF5CArD50ogmDeZzvE
-         eF6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVPlzBtGR3r60aPQ2Y7MUS++u+ZzFY1ae+F85sncZv19WCiCx9qHgtNk7AbvNjdnLdM8V3oeMvS@vger.kernel.org, AJvYcCVgpZBBw2Os5Uxie7uFElPaMAXNwwiQniFRh7DIpp7CwNihViD8K9LPjxFaErxeJNBpl5stksCDQiGMBEc=@vger.kernel.org, AJvYcCVsbRXkt8+eJLOoM+qt5JfHEcOTdyxxkJe/l2ZcyU+gTsT37INd5LSYGHf8D7Pg/fVLZiQ9mgDlQ6BdkjhPrYof@vger.kernel.org
-X-Gm-Message-State: AOJu0YywqQStL/KvlJedp29rTGUMcnJY9MyKfgu18SF3pkPpyUZi+391
-	XTdlkijxr6eUPMmlLSrpc6geTMY/3lB0Ktoa0qO8TMrm+fA3eXZKSCY2o2sFgztK7XapvXtnxc3
-	eXACOxuogeNUoiQ4Z9/Bg8T28oeI=
-X-Gm-Gg: ASbGnctTNFeydLFNJEiB56J6U+A+vTrDZgwBD0MxyOAuen2oiFx7GSl2p0KFS8s+iZj
-	lBN98DC82ozBus2ZR4TkAQ0SqLVz7cBS7X7LgaX+spwXT6k1P9GTiv4J1e309BfTm8RP5UyqJEL
-	WS2DevcejhTKs1T9f6w86u/TCKTCU75lqjGihp2DH5Ow==
-X-Google-Smtp-Source: AGHT+IH0WO7alMHnSQ600cGoJ30v59cQ6Hcw8+PewC6V/UOaegICbs42GgT4rYHeJpAu+a4G5NWUjAj8q4o9+SjW5AM=
-X-Received: by 2002:a5d:59a8:0:b0:391:ba6:c069 with SMTP id
- ffacd0b85a97d-39d0de67a70mr494591f8f.44.1743726576607; Thu, 03 Apr 2025
- 17:29:36 -0700 (PDT)
+	s=arc-20240116; t=1743729909; c=relaxed/simple;
+	bh=LpA9FyU6S3VEfDl9/LNHrnpW1DCPvRJq3D3FwBIgIGY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Oqp5OftGMJmy9PZbFJK2Oceunyz2Nl21CRrXGXKNf5lLQHkmHWriaB98+CSG4Pmw1lvxhwI6BDZu0fat+LCh3R1Yz8fc+BNJTF4REc2VQrhe8jlwAn2Od8Yu1BLviC5WrdRYZy9OWcOfcNVW0sOmGmdNmt+tLBRmzLTXYLPce0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NjVHg9ZX; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743729906;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eeDF4dFIWOS0DFmcqcZYB3wJsohtT8Hr0IIadggs/8c=;
+	b=NjVHg9ZXQTMi8LxUoRcgtbJQWMRdeDKZdf1VXuvHiH1WSTS6oD73QpVLLwX2G88hx6FvdY
+	ndL/dr6SrulxjH1OdTOFdSYhVDvqrgaJchYV8GkgvdwN7Rj6AudDih2AdIE1csDI53Kggr
+	SJFM3HYNteUQeS2tezdJ4V97RoVVXNk=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-360-qnvY40IQO2C4Esh2un-iuA-1; Thu,
+ 03 Apr 2025 21:25:00 -0400
+X-MC-Unique: qnvY40IQO2C4Esh2un-iuA-1
+X-Mimecast-MFC-AGG-ID: qnvY40IQO2C4Esh2un-iuA_1743729898
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BCD5C1956089;
+	Fri,  4 Apr 2025 01:24:57 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.89.4])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5B1B3180B489;
+	Fri,  4 Apr 2025 01:24:54 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 1/2] memcg: Don't generate low/min events if either low/min or elow/emin is 0
+Date: Thu,  3 Apr 2025 21:24:34 -0400
+Message-ID: <20250404012435.656045-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250331032354.75808-1-jiayuan.chen@linux.dev>
- <20250331032354.75808-2-jiayuan.chen@linux.dev> <CAADnVQJ6NPGuY=c8kbpX_nLYq4oOxOBAxbDPFLuw+yr4WrQQOQ@mail.gmail.com>
- <ce4a0aacecb2db7d232e94a324150dc5936c803a@linux.dev>
-In-Reply-To: <ce4a0aacecb2db7d232e94a324150dc5936c803a@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 3 Apr 2025 17:29:24 -0700
-X-Gm-Features: ATxdqUFDcIjakGnOj7Wmbqm9yQCN56zvn2RS53u99WJJDy-qNI3FZqsVdqVbQ_E
-Message-ID: <CAADnVQLH5d7-=8HLL1c+SZ-drgGf2X0aAGSoK-c7=9G-_Dy6+g@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf, xdp: clean head/meta when expanding it
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Jiayuan Chen <mrpre@163.com>, 
-	syzbot+0e6ddb1ef80986bdfe64@syzkaller.appspotmail.com, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Anton Protopopov <aspsk@isovalent.com>, 
-	Abhishek Chauhan <quic_abchauha@quicinc.com>, Jordan Rome <linux@jordanrome.com>, 
-	Martin Kelly <martin.kelly@crowdstrike.com>, David Lechner <dlechner@baylibre.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Thu, Apr 3, 2025 at 5:27=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
-> April 3, 2025 at 22:24, "Alexei Starovoitov" <alexei.starovoitov@gmail.co=
-m> wrote:
->
->
->
-> >
-> > On Sun, Mar 30, 2025 at 8:27 PM Jiayuan Chen <jiayuan.chen@linux.dev> w=
-rote:
-> >
-> > >
-> > > The device allocates an skb, it additionally allocates a prepad size
-> > >
-> > >  (usually equal to NET_SKB_PAD or XDP_PACKET_HEADROOM) but leaves it
-> > >
-> > >  uninitialized.
-> > >
-> > >  The bpf_xdp_adjust_head function moves skb->data forward, which allo=
-ws
-> > >
-> > >  users to access data belonging to other programs, posing a security =
-risk.
-> > >
-> > >  Reported-by: syzbot+0e6ddb1ef80986bdfe64@syzkaller.appspotmail.com
-> > >
-> > >  Closes: https://lore.kernel.org/all/00000000000067f65105edbd295d@goo=
-gle.com/T/
-> > >
-> > >  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> > >
-> > >  ---
-> > >
-> > >  include/uapi/linux/bpf.h | 8 +++++---
-> > >
-> > >  net/core/filter.c | 5 ++++-
-> > >
-> > >  tools/include/uapi/linux/bpf.h | 6 ++++--
-> > >
-> > >  3 files changed, 13 insertions(+), 6 deletions(-)
-> > >
-> > >  diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > >
-> > >  index defa5bb881f4..be01a848cbbf 100644
-> > >
-> > >  --- a/include/uapi/linux/bpf.h
-> > >
-> > >  +++ b/include/uapi/linux/bpf.h
-> > >
-> > >  @@ -2760,8 +2760,9 @@ union bpf_attr {
-> > >
-> > >  *
-> > >
-> > >  * long bpf_xdp_adjust_head(struct xdp_buff *xdp_md, int delta)
-> > >
-> > >  * Description
-> > >
-> > >  - * Adjust (move) *xdp_md*\ **->data** by *delta* bytes. Note that
-> > >
-> > >  - * it is possible to use a negative value for *delta*. This helper
-> > >
-> > >  + * Adjust (move) *xdp_md*\ **->data** by *delta* bytes. Note that
-> > >
-> > >  + * it is possible to use a negative value for *delta*. If *delta*
-> > >
-> > >  + * is negative, the new header will be memset to zero. This helper
-> > >
-> > >  * can be used to prepare the packet for pushing or popping
-> > >
-> > >  * headers.
-> > >
-> > >  *
-> > >
-> > >  @@ -2989,7 +2990,8 @@ union bpf_attr {
-> > >
-> > >  * long bpf_xdp_adjust_meta(struct xdp_buff *xdp_md, int delta)
-> > >
-> > >  * Description
-> > >
-> > >  * Adjust the address pointed by *xdp_md*\ **->data_meta** by
-> > >
-> > >  - * *delta* (which can be positive or negative). Note that this
-> > >
-> > >  + * *delta* (which can be positive or negative). If *delta* is
-> > >
-> > >  + * negative, the new meta will be memset to zero. Note that this
-> > >
-> > >  * operation modifies the address stored in *xdp_md*\ **->data**,
-> > >
-> > >  * so the latter must be loaded only after the helper has been
-> > >
-> > >  * called.
-> > >
-> > >  diff --git a/net/core/filter.c b/net/core/filter.c
-> > >
-> > >  index 46ae8eb7a03c..5f01d373b719 100644
-> > >
-> > >  --- a/net/core/filter.c
-> > >
-> > >  +++ b/net/core/filter.c
-> > >
-> > >  @@ -3947,6 +3947,8 @@ BPF_CALL_2(bpf_xdp_adjust_head, struct xdp_buf=
-f *, xdp, int, offset)
-> > >
-> > >  if (metalen)
-> > >
-> > >  memmove(xdp->data_meta + offset,
-> > >
-> > >  xdp->data_meta, metalen);
-> > >
-> > >  + if (offset < 0)
-> > >
-> > >  + memset(data, 0, -offset);
-> > >
-> > >  xdp->data_meta +=3D offset;
-> > >
-> > >  xdp->data =3D data;
-> > >
-> > >  @@ -4239,7 +4241,8 @@ BPF_CALL_2(bpf_xdp_adjust_meta, struct xdp_buf=
-f *, xdp, int, offset)
-> > >
-> > >  return -EINVAL;
-> > >
-> > >  if (unlikely(xdp_metalen_invalid(metalen)))
-> > >
-> > >  return -EACCES;
-> > >
-> > >  -
-> > >
-> > >  + if (offset < 0)
-> > >
-> > >  + memset(meta, 0, -offset);
-> > >
-> >
-> > Let's make everyone pay a performance penalty to silence
-> > KMSAN warning?
-> > I don't think it's a good trade off.
-> > Soft nack.
-> >
->
-> It's not just about simply suppressing KMSAN warnings, but for security
-> considerations.
->
-> So I'd like to confirm: currently, loading an XDP program only requires
-> CAP_NET_ADMIN and CAP_BPF permissions. If we consider this as a super
-> privilege, then even if uninitialized memory is exposed, I think it's oka=
-y,
-> as it's the developer's responsibility, for example, like the CVE in meta
-> https://vuldb.com/?id.246309.
+The test_memcontrol selftest consistently fails its test_memcg_low
+sub-test due to the fact that two of its test child cgroups which
+have a memmory.low of 0 or an effective memory.low of 0 still have low
+events generated for them since mem_cgroup_below_low() use the ">="
+operator when comparing to elow.
 
-And we fixed Katran. not the kernel.
+The two failed use cases are as follows:
 
-> Or I'm thinking, can we rely on the verifier to force the initialization
-> of the newly added packet boundary behavior, specifically for this specia=
-l
-> case (although it won't be easy to implement).
+1) memory.low is set to 0, but low events can still be triggered and
+   so the cgroup may have a non-zero low event count. I doubt users are
+   looking for that as they didn't set memory.low at all.
+
+2) memory.low is set to a non-zero value but the cgroup has no task in
+   it so that it has an effective low value of 0. Again it may have a
+   non-zero low event count if memory reclaim happens. This is probably
+   not a result expected by the users and it is really doubtful that
+   users will check an empty cgroup with no task in it and expecting
+   some non-zero event counts.
+
+The simple and naive fix of changing the operator to ">", however,
+changes the memory reclaim behavior which can lead to other failures
+as low events are needed to facilitate memory reclaim.  So we can't do
+that without some relatively riskier changes in memory reclaim.
+
+Another simpler alternative is to avoid reporting below_low failure
+if either memory.low or its effective equivalent is 0 which is done
+by this patch specifically for the two failed use cases above.
+
+With this patch applied, the test_memcg_low sub-test finishes
+successfully without failure in most cases. Though both test_memcg_low
+and test_memcg_min sub-tests may still fail occasionally if the
+memory.current values fall outside of the expected ranges.
+
+To be consistent, similar change is appled to mem_cgroup_below_min()
+as to avoid the two failed use cases above with low replaced by min.
+
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/memcontrol.h | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 53364526d877..4d4a1f159eaa 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -601,21 +601,31 @@ static inline bool mem_cgroup_unprotected(struct mem_cgroup *target,
+ static inline bool mem_cgroup_below_low(struct mem_cgroup *target,
+ 					struct mem_cgroup *memcg)
+ {
++	unsigned long elow;
++
+ 	if (mem_cgroup_unprotected(target, memcg))
+ 		return false;
+ 
+-	return READ_ONCE(memcg->memory.elow) >=
+-		page_counter_read(&memcg->memory);
++	elow = READ_ONCE(memcg->memory.elow);
++	if (!elow || !READ_ONCE(memcg->memory.low))
++		return false;
++
++	return page_counter_read(&memcg->memory) <= elow;
+ }
+ 
+ static inline bool mem_cgroup_below_min(struct mem_cgroup *target,
+ 					struct mem_cgroup *memcg)
+ {
++	unsigned long emin;
++
+ 	if (mem_cgroup_unprotected(target, memcg))
+ 		return false;
+ 
+-	return READ_ONCE(memcg->memory.emin) >=
+-		page_counter_read(&memcg->memory);
++	emin = READ_ONCE(memcg->memory.emin);
++	if (!emin || !READ_ONCE(memcg->memory.min))
++		return false;
++
++	return page_counter_read(&memcg->memory) <= emin;
+ }
+ 
+ int __mem_cgroup_charge(struct folio *folio, struct mm_struct *mm, gfp_t gfp);
+-- 
+2.48.1
+
 
