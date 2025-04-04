@@ -1,67 +1,65 @@
-Return-Path: <linux-kselftest+bounces-30083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9065A7B2FF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 02:08:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD54AA7B32F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 02:12:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 644CE16BE63
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 00:08:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E0567A77FD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 00:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83ABF19D8BC;
-	Fri,  4 Apr 2025 00:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B501AB6DE;
+	Fri,  4 Apr 2025 00:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rAhiFx1/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQok2Jav"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D5F2940B;
-	Fri,  4 Apr 2025 00:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768421AA79C;
+	Fri,  4 Apr 2025 00:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743725083; cv=none; b=sJ0aMq7W4caMDVN2r0hjf98d5GlT62o2+28vUO3dokQjrWNokKoPcw53T97eKRKQuWE/xKO+zqSSxklPRBn7wnkTzYTbLC8nA5aOxGHiOjcTiWt6MPKmidNmsMHHOWFBaIOYYs7Z2+mwmJzNothQCW5UhJuHJTnvqCYgXOT9tiM=
+	t=1743725100; cv=none; b=ggnDfQd8Izh+QWfORsvOYAJBp5eOYf3eqV8/Avkl/Wq6GN0dQxk9LCSW4aN0j/mpLeU5bL5fGBeNE1kWx5LN034Nuc2DVSd9tTLcMzVhp77wdN+4y30GxpZm7gUjKqxayHN2scULSkPsZfsKgrsH1bSlojcwPKzBJH+5YQ6SjRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743725083; c=relaxed/simple;
-	bh=awjZr6NTMo+s+Qeaj5IMg/E2SFIzCDw9wazYVH0o1aY=;
+	s=arc-20240116; t=1743725100; c=relaxed/simple;
+	bh=OEphS++aiw5Zon+jzaEsnLlRZocxSiGBmdEBgLHZP4M=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dyE5IhjTZnmd7uPKp5LGqZgN+0fxwLneRvV9YW2hE74JLNIMGnxVjTLmU3jmo03vKElWoTEtBXcpHkrp4cECyEYa9SIECNS6Bv5ejmkW2wVL0+nsvD8mx5Hd0nag91cSikfLGl1nBe1h9TDiJQKdxX8I4ajJB+tq1HO/SAlNjKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rAhiFx1/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D21C4CEE3;
-	Fri,  4 Apr 2025 00:04:40 +0000 (UTC)
+	 MIME-Version; b=fW89I/klTjDaedy/qxiLcD+YruI3u2N7YpDMIIac997Kw/D7TY3zI283xqWqkkKlDX3VPMAZHv0Q/l5r9vjVrvEgglAofx2I3wYlsHwRJiu7JTCQqQU8xssReMg1mCWmiYWi8iGkZvzsxaEnHr0II8f/xKrIQgsKd0pYdOMPaCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQok2Jav; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112B3C4CEE5;
+	Fri,  4 Apr 2025 00:04:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743725081;
-	bh=awjZr6NTMo+s+Qeaj5IMg/E2SFIzCDw9wazYVH0o1aY=;
+	s=k20201202; t=1743725100;
+	bh=OEphS++aiw5Zon+jzaEsnLlRZocxSiGBmdEBgLHZP4M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rAhiFx1/j/q/8+Y6BQB2und5e9l2nZ1yXmLeZ8k+69ztCkQ+wXIqHTn/yN8o6Ssvq
-	 KDmifGq/rFbBJShZdjZlobrX6SbZbfM7Sq/qVQ8UDdVqWzClxQAc01xG895bpVkVIp
-	 3kYGkjY+UYYm2BrbUuwYan+RiWtJNQx/vtcW71cLDWzVLwjsi7XbgBgURGbSXreSnX
-	 FD6A92Bej7h87x2izuDdqKU+Mfl0T6aRHcjE1v/789UXxgpMj1La5AqO76THPIXxEf
-	 2dTeFAYX2V+uYR3R/bPrA3te09ConjhxgniBNuAPvAikoSMoRKMuAtrnlgX+bBDZIs
-	 30QdM82fiyqLg==
+	b=sQok2Javbq5NSTMcVpir2cudNdP3veTtL6dJ+6Klx5nChzXvWTYpM6oNRjXFPm2lB
+	 W1/bY3OfAmUYmlwbnS0jiwJOyILj5FEc+DAPNVatZBKfdl03OsW5Svzt56OstJkRv9
+	 AQkaWPblZ0iuxxegAtWgUIZspeuY569jQtsNYfZZHgS23zOElgZGMUkRAS2kppGQIy
+	 QedQ58yAPohLKBPk/nxxNnF3q/3OXT8g94D4xqj/+07QCQwImqY6CH2EssCnn5uTrE
+	 QxXcelGrSdAT2Z4WRccaAYRxrrlTRtOHG7e0qIiJ6HxfEYtUp/QZY5C1a2HoxQA3Lh
+	 QeV9J8WKhM80Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Feng Yang <yangfeng@kylinos.cn>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Amery Hung <ameryhung@gmail.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
 	daniel@iogearbox.net,
 	shuah@kernel.org,
-	yonghong.song@linux.dev,
-	mattbobrowski@google.com,
-	yepeilin@google.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 17/23] selftests/bpf: Fix cap_enable_effective() return code
-Date: Thu,  3 Apr 2025 20:03:54 -0400
-Message-Id: <20250404000402.2688049-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.13 02/22] selftests/bpf: Fix stdout race condition in traffic monitor
+Date: Thu,  3 Apr 2025 20:04:31 -0400
+Message-Id: <20250404000453.2688371-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250404000402.2688049-1-sashal@kernel.org>
-References: <20250404000402.2688049-1-sashal@kernel.org>
+In-Reply-To: <20250404000453.2688371-1-sashal@kernel.org>
+References: <20250404000453.2688371-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,140 +68,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14
+X-stable-base: Linux 6.13.9
 Content-Transfer-Encoding: 8bit
 
-From: Feng Yang <yangfeng@kylinos.cn>
+From: Amery Hung <ameryhung@gmail.com>
 
-[ Upstream commit 339c1f8ea11cc042c30c315c1a8f61e4b8a90117 ]
+[ Upstream commit b99f27e90268b1a814c13f8bd72ea1db448ea257 ]
 
-The caller of cap_enable_effective() expects negative error code.
-Fix it.
+Fix a race condition between the main test_progs thread and the traffic
+monitoring thread. The traffic monitor thread tries to print a line
+using multiple printf and use flockfile() to prevent the line from being
+torn apart. Meanwhile, the main thread doing io redirection can reassign
+or close stdout when going through tests. A deadlock as shown below can
+happen.
 
-Before:
-  failed to restore CAP_SYS_ADMIN: -1, Unknown error -1
+       main                      traffic_monitor_thread
+       ====                      ======================
+                                 show_transport()
+                                 -> flockfile(stdout)
 
-After:
-  failed to restore CAP_SYS_ADMIN: -3, No such process
-  failed to restore CAP_SYS_ADMIN: -22, Invalid argument
+stdio_hijack_init()
+-> stdout = open_memstream(log_buf, log_cnt);
+   ...
+   env.subtest_state->stdout_saved = stdout;
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20250305022234.44932-1-yangfeng59949@163.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+                                    ...
+                                    funlockfile(stdout)
+stdio_restore_cleanup()
+-> fclose(env.subtest_state->stdout_saved);
+
+After the traffic monitor thread lock stdout, A new memstream can be
+assigned to stdout by the main thread. Therefore, the traffic monitor
+thread later will not be able to unlock the original stdout. As the
+main thread tries to access the old stdout, it will hang indefinitely
+as it is still locked by the traffic monitor thread.
+
+The deadlock can be reproduced by running test_progs repeatedly with
+traffic monitor enabled:
+
+for ((i=1;i<=100;i++)); do
+  ./test_progs -a flow_dissector_skb* -m '*'
+done
+
+Fix this by only calling printf once and remove flockfile()/funlockfile().
+
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Link: https://patch.msgid.link/20250213233217.553258-1-ameryhung@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/cap_helpers.c         | 8 ++++----
- tools/testing/selftests/bpf/cap_helpers.h         | 1 +
- tools/testing/selftests/bpf/prog_tests/verifier.c | 4 ++--
- tools/testing/selftests/bpf/test_loader.c         | 6 +++---
- 4 files changed, 10 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 33 ++++++++-----------
+ 1 file changed, 13 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/cap_helpers.c b/tools/testing/selftests/bpf/cap_helpers.c
-index d5ac507401d7c..98f840c3a38f7 100644
---- a/tools/testing/selftests/bpf/cap_helpers.c
-+++ b/tools/testing/selftests/bpf/cap_helpers.c
-@@ -19,7 +19,7 @@ int cap_enable_effective(__u64 caps, __u64 *old_caps)
- 
- 	err = capget(&hdr, data);
- 	if (err)
--		return err;
-+		return -errno;
- 
- 	if (old_caps)
- 		*old_caps = (__u64)(data[1].effective) << 32 | data[0].effective;
-@@ -32,7 +32,7 @@ int cap_enable_effective(__u64 caps, __u64 *old_caps)
- 	data[1].effective |= cap1;
- 	err = capset(&hdr, data);
- 	if (err)
--		return err;
-+		return -errno;
- 
- 	return 0;
- }
-@@ -49,7 +49,7 @@ int cap_disable_effective(__u64 caps, __u64 *old_caps)
- 
- 	err = capget(&hdr, data);
- 	if (err)
--		return err;
-+		return -errno;
- 
- 	if (old_caps)
- 		*old_caps = (__u64)(data[1].effective) << 32 | data[0].effective;
-@@ -61,7 +61,7 @@ int cap_disable_effective(__u64 caps, __u64 *old_caps)
- 	data[1].effective &= ~cap1;
- 	err = capset(&hdr, data);
- 	if (err)
--		return err;
-+		return -errno;
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/cap_helpers.h b/tools/testing/selftests/bpf/cap_helpers.h
-index 6d163530cb0fd..8dcb28557f762 100644
---- a/tools/testing/selftests/bpf/cap_helpers.h
-+++ b/tools/testing/selftests/bpf/cap_helpers.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/types.h>
- #include <linux/capability.h>
-+#include <errno.h>
- 
- #ifndef CAP_PERFMON
- #define CAP_PERFMON		38
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8a0e1ff8a2dc6..ecc320e045513 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -121,7 +121,7 @@ static void run_tests_aux(const char *skel_name,
- 	/* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same here */
- 	err = cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
- 	if (err) {
--		PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(err));
-+		PRINT_FAIL("failed to drop CAP_SYS_ADMIN: %i, %s\n", err, strerror(-err));
- 		return;
- 	}
- 
-@@ -131,7 +131,7 @@ static void run_tests_aux(const char *skel_name,
- 
- 	err = cap_enable_effective(old_caps, NULL);
- 	if (err)
--		PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror(err));
-+		PRINT_FAIL("failed to restore CAP_SYS_ADMIN: %i, %s\n", err, strerror(-err));
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 27784946b01b8..af0ee70a53f9f 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -771,12 +771,13 @@ static const char *pkt_type_str(u16 pkt_type)
+ 	return "Unknown";
  }
  
- #define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL)
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 53b06647cf57d..8a403e5aa3145 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -773,7 +773,7 @@ static int drop_capabilities(struct cap_state *caps)
++#define MAX_FLAGS_STRLEN 21
+ /* Show the information of the transport layer in the packet */
+ static void show_transport(const u_char *packet, u16 len, u32 ifindex,
+ 			   const char *src_addr, const char *dst_addr,
+ 			   u16 proto, bool ipv6, u8 pkt_type)
+ {
+-	char *ifname, _ifname[IF_NAMESIZE];
++	char *ifname, _ifname[IF_NAMESIZE], flags[MAX_FLAGS_STRLEN] = "";
+ 	const char *transport_str;
+ 	u16 src_port, dst_port;
+ 	struct udphdr *udp;
+@@ -817,29 +818,21 @@ static void show_transport(const u_char *packet, u16 len, u32 ifindex,
  
- 	err = cap_disable_effective(caps_to_drop, &caps->old_caps);
- 	if (err) {
--		PRINT_FAIL("failed to drop capabilities: %i, %s\n", err, strerror(err));
-+		PRINT_FAIL("failed to drop capabilities: %i, %s\n", err, strerror(-err));
- 		return err;
- 	}
+ 	/* TCP or UDP*/
  
-@@ -790,7 +790,7 @@ static int restore_capabilities(struct cap_state *caps)
- 
- 	err = cap_enable_effective(caps->old_caps, NULL);
- 	if (err)
--		PRINT_FAIL("failed to restore capabilities: %i, %s\n", err, strerror(err));
-+		PRINT_FAIL("failed to restore capabilities: %i, %s\n", err, strerror(-err));
- 	caps->initialized = false;
- 	return err;
+-	flockfile(stdout);
++	if (proto == IPPROTO_TCP)
++		snprintf(flags, MAX_FLAGS_STRLEN, "%s%s%s%s",
++			 tcp->fin ? ", FIN" : "",
++			 tcp->syn ? ", SYN" : "",
++			 tcp->rst ? ", RST" : "",
++			 tcp->ack ? ", ACK" : "");
++
+ 	if (ipv6)
+-		printf("%-7s %-3s IPv6 %s.%d > %s.%d: %s, length %d",
++		printf("%-7s %-3s IPv6 %s.%d > %s.%d: %s, length %d%s\n",
+ 		       ifname, pkt_type_str(pkt_type), src_addr, src_port,
+-		       dst_addr, dst_port, transport_str, len);
++		       dst_addr, dst_port, transport_str, len, flags);
+ 	else
+-		printf("%-7s %-3s IPv4 %s:%d > %s:%d: %s, length %d",
++		printf("%-7s %-3s IPv4 %s:%d > %s:%d: %s, length %d%s\n",
+ 		       ifname, pkt_type_str(pkt_type), src_addr, src_port,
+-		       dst_addr, dst_port, transport_str, len);
+-
+-	if (proto == IPPROTO_TCP) {
+-		if (tcp->fin)
+-			printf(", FIN");
+-		if (tcp->syn)
+-			printf(", SYN");
+-		if (tcp->rst)
+-			printf(", RST");
+-		if (tcp->ack)
+-			printf(", ACK");
+-	}
+-
+-	printf("\n");
+-	funlockfile(stdout);
++		       dst_addr, dst_port, transport_str, len, flags);
  }
-@@ -959,7 +959,7 @@ void run_subtest(struct test_loader *tester,
- 		if (subspec->caps) {
- 			err = cap_enable_effective(subspec->caps, NULL);
- 			if (err) {
--				PRINT_FAIL("failed to set capabilities: %i, %s\n", err, strerror(err));
-+				PRINT_FAIL("failed to set capabilities: %i, %s\n", err, strerror(-err));
- 				goto subtest_cleanup;
- 			}
- 		}
+ 
+ static void show_ipv6_packet(const u_char *packet, u32 ifindex, u8 pkt_type)
 -- 
 2.39.5
 
