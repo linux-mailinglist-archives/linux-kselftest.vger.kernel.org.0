@@ -1,147 +1,175 @@
-Return-Path: <linux-kselftest+bounces-30118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CD0DA7C1AB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 18:43:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A95F9A7C1ED
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 18:58:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3A003B8F5E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 16:42:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8790E189FE12
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Apr 2025 16:57:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4912D20E007;
-	Fri,  4 Apr 2025 16:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952B120A5E1;
+	Fri,  4 Apr 2025 16:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eh1y12kG"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="fZGJyujM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9C1208978;
-	Fri,  4 Apr 2025 16:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7716B1F181F;
+	Fri,  4 Apr 2025 16:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.21.196.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743784978; cv=none; b=EnWubmWZEn1AO6236kiuJhNnf+IV/8N6iWgcIb1neQ/pMIx3ALbBf/Q30kj0nmRwUzGYoTGkKOx7ebmYO377rfH53uXsv7NFmvn4Edva83Dhe2J3RXnY5d5E8NRIJdco7mNHtj/j4TPJP8zMY9q8SfNp+pCnFe9jSso25Zk0UYg=
+	t=1743785832; cv=none; b=HLgqO0w27OXKKRotEpyrT7s7t0XYN0qD+h+MECLBohwdUcQuuWhiBx0hv5HtjqJKkQZkNxvsqzO9z+bohWt6avbWhEvXrSKV2T3jH8ki/FfuLDSQ+Qy08AYnCVKCM49HlRs1ly9XYqjkuf/+Q2Vc1VWpPV3esmEyFrHx7J775Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743784978; c=relaxed/simple;
-	bh=TNi4PEbptWpWAlp9afnYThvYme8MQTL7nzY/LKJbojI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tMHV1MmasrgVj+Z5/KbYTeRKahhMe2ZbAkgiy+2Yq6JXlywxeKI9kakLgz/g0SagXh4T928dMX4g0gA+uB3fV12L9/i0Jb/wsiG7Rg5mBgNkktv6j+1ZXt1tRjevbYhnLxLYSSFf4dIyT0XEIWMAXuOCogJ8VEis//ewwfFrYXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eh1y12kG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE18AC4CEDD;
-	Fri,  4 Apr 2025 16:42:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743784977;
-	bh=TNi4PEbptWpWAlp9afnYThvYme8MQTL7nzY/LKJbojI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Eh1y12kGzKjDxw0EkmsgbNYFzE08H2x4rsUZnyy8S71w9uTKa/P+KY4QRolfBjrK7
-	 bcqayUG+NPAWRgE5EhqkVH9so4ME2yldi2gyQodwOKfTPIZF1C96uVuSMrcyIo7q/h
-	 IgCm+Ph3l4MEDTZoPC9FfEOti2DqnyS0/WVOBR/Vh/jferLLYJFM+nRYiUwGklMgud
-	 V52sIpivx3bqzfFDO56QTCeUXmcBHXkpQ1ePsESZD+uo/XwihiAwNDBsKDC3USEyWn
-	 eRueNckknRYgNzNckqGo8fhodTsHIY6dVQT2G2BC3aituW3xEWwu0TlocAS9MXt+px
-	 7U9L1NTKv0nfA==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 04 Apr 2025 17:42:32 +0100
-Subject: [PATCH] selftests/mm: Generate a temporary mountpoint for cgroup
- filesystem
+	s=arc-20240116; t=1743785832; c=relaxed/simple;
+	bh=BLiYuymZw8Lyw8StYwch70EbD2w6gZ46m2fiklLEE/I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=vC5QRtBRJ4CWdmRCcGW0hyyuPPzxp5nmTGjE64aKHAEf+wR6FL6+j+ETe19i83CMIzIMm+pdhVREiUaTMeK5lFmIKQtnB2mTG9shk3aydMS7mfx8BB8XsUtMIeOHfGlFgu3YvIvqXAi6lUPP8x+YGtoZj0g4c9VJIkNNDrAN1sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=fZGJyujM; arc=none smtp.client-ip=72.21.196.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1743785830; x=1775321830;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=9rUrMyu/a+RU240va8IIR8/YaSk2+sCGn0wmfW0D9/A=;
+  b=fZGJyujMkk4R6jMNUiB52NaNqo6aWGym3Hp6x+Ttcz8UnUbt8Fxnk3QN
+   DjFrs1RnfQsf5FJ8DJkl2v1Jwo8hPNuQRcltSlqFsbWaqD3D4r6I+WY8K
+   UcfNSTL/fGbbuelXugtoALjSxOGryIJSAY/N/zIghpkXbRJXBvkMr+2UJ
+   4=;
+X-IronPort-AV: E=Sophos;i="6.15,188,1739836800"; 
+   d="scan'208";a="480444447"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 16:57:06 +0000
+Received: from EX19MTAEUB001.ant.amazon.com [10.0.10.100:35113]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.46.175:2525] with esmtp (Farcaster)
+ id 249756d1-c399-4b2b-a390-7506b932c09d; Fri, 4 Apr 2025 16:57:04 +0000 (UTC)
+X-Farcaster-Flow-ID: 249756d1-c399-4b2b-a390-7506b932c09d
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Fri, 4 Apr 2025 16:57:04 +0000
+Received: from [192.168.0.47] (10.106.83.30) by EX19D022EUC002.ant.amazon.com
+ (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14; Fri, 4 Apr 2025
+ 16:57:03 +0000
+Message-ID: <7b8d9aa6-99ff-4986-bd16-664de63ecb58@amazon.com>
+Date: Fri, 4 Apr 2025 17:56:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v3 0/6] KVM: guest_memfd: support for uffd minor
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+CC: <akpm@linux-foundation.org>, <pbonzini@redhat.com>, <shuah@kernel.org>,
+	<viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <muchun.song@linux.dev>,
+	<hughd@google.com>, <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-fsdevel@vger.kernel.org>, <jack@suse.cz>, <Liam.Howlett@oracle.com>,
+	<jannh@google.com>, <ryan.roberts@arm.com>, <david@redhat.com>,
+	<jthoughton@google.com>, <peterx@redhat.com>, <graf@amazon.de>,
+	<jgowans@amazon.com>, <roypat@amazon.co.uk>, <derekmn@amazon.com>,
+	<nsaenz@amazon.es>, <xmarcalx@amazon.com>
+References: <20250404154352.23078-1-kalyazin@amazon.com>
+ <dc4c72a2-41c1-4548-a6ee-5a17895e4940@lucifer.local>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <dc4c72a2-41c1-4548-a6ee-5a17895e4940@lucifer.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250404-kselftest-mm-cgroup2-detection-v1-1-3dba6d32ba8c@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPgL8GcC/x2NzQ6CMBAGX4Xs2U3KIhh9FcMB26+4UX7SLcaE8
- O42HucwMzsZksLoVu2U8FHTZS5Qnyryz2EewRoKkzhp3dk1/DK8Y4Zlnib2Y1q2VTggw+ei8uP
- S1TFII/EaqETWhKjf/+DeH8cPJ76eMnAAAAA=
-X-Change-ID: 20250403-kselftest-mm-cgroup2-detection-b761fd232f9d
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Shuah Khan <shuah@kernel.org>, Mina Almasry <almasrymina@google.com>, 
- Waiman Long <longman@redhat.com>
-Cc: Aishwarya TCV <Aishwarya.TCV@arm.com>, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-c25d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2925; i=broonie@kernel.org;
- h=from:subject:message-id; bh=TNi4PEbptWpWAlp9afnYThvYme8MQTL7nzY/LKJbojI=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBn8AwOxx3xtn4/NlyZcqctIQ64Hba9efHA8DBEgtnn
- T/6cCqyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ/AMDgAKCRAk1otyXVSH0J5LB/
- 9A9GmrE3YSF6/3xP/0Z3gw87wadfRJCRggdPL5wF887+qubzuV6aHED/VV4NVO32LZv6DB6QsxNC+/
- 0t/csSQoNgDoM+IAObBxovJSpAIXBQ0aGGoFtbuMfH2oi49ZiFv+grQg42IPIRm5JkzxbycX4fJqxs
- KrueY1X8axR9rMR1BplRj2KLrlUGDerPLqCaaiFRWJ/9VsJbtMH8XJK+7ay7PwyQziELA5xVLwKK4i
- vJ0mep9INEG0252n+hnbJX7G2RxzuZlXYqQcV/35IEF155DvZqHMMc97rQBytHewE3VgYCXo2vx6Z4
- +lWd1TsINKu0ItLq2wPwf8xp9X4/Nu
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-ClientProxiedBy: EX19D005EUA002.ant.amazon.com (10.252.50.11) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-Currently if the filesystem for the cgroups version it wants to use is
-not mounted charge_reserved_hugetlb.sh and hugetlb_reparenting_test.sh
-tests will attempt to mount it on the hard coded path
-/dev/cgroup/memory, deleting that directory when the test finishes. This
-will fail if there is not a preexisting directory at that path, and
-since the directory is deleted subsequent runs of the test will fail.
-Instead of relying on this hard coded directory name use mktemp to
-generate a temporary directory to use as a mountpoint, fixing both the
-assumption and the disruption caused by deleting a preexisting
-directory.
 
-This means that if the relevant cgroup filesystem is not already mounted
-then we rely on having coreutils (which provides mktemp) installed. I
-suspect that many current users are relying on having things automounted
-by default, and given that the script relies on bash it's probably not
-an unreasonable requirement.
 
-Fixes: 209376ed2a84 ("selftests/vm: make charge_reserved_hugetlb.sh work with existing cgroup setting")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/mm/charge_reserved_hugetlb.sh  | 4 ++--
- tools/testing/selftests/mm/hugetlb_reparenting_test.sh | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 04/04/2025 17:33, Lorenzo Stoakes wrote:
+> On Fri, Apr 04, 2025 at 03:43:46PM +0000, Nikita Kalyazin wrote:
+>> This series is built on top of the Fuad's v7 "mapping guest_memfd backed
+>> memory at the host" [1].
+> 
+> Hm if this is based on an unmerged series this seems quite speculative and
+> should maybe be an RFC? I mean that series at least still seems quite under
+> discussion/experiencing issues?
+> 
+> Maybe worth RFC'ing until that one settles down first to avoid complexity
+> in review/application to tree?
 
-diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-index 67df7b47087f..e1fe16bcbbe8 100755
---- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-+++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-@@ -29,7 +29,7 @@ fi
- if [[ $cgroup2 ]]; then
-   cgroup_path=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-   if [[ -z "$cgroup_path" ]]; then
--    cgroup_path=/dev/cgroup/memory
-+    cgroup_path=$(mktemp -d)
-     mount -t cgroup2 none $cgroup_path
-     do_umount=1
-   fi
-@@ -37,7 +37,7 @@ if [[ $cgroup2 ]]; then
- else
-   cgroup_path=$(mount -t cgroup | grep ",hugetlb" | awk '{print $3}')
-   if [[ -z "$cgroup_path" ]]; then
--    cgroup_path=/dev/cgroup/memory
-+    cgroup_path=$(mktemp -d)
-     mount -t cgroup memory,hugetlb $cgroup_path
-     do_umount=1
-   fi
-diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-index 11f9bbe7dc22..0b0d4ba1af27 100755
---- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-+++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-@@ -23,7 +23,7 @@ fi
- if [[ $cgroup2 ]]; then
-   CGROUP_ROOT=$(mount -t cgroup2 | head -1 | awk '{print $3}')
-   if [[ -z "$CGROUP_ROOT" ]]; then
--    CGROUP_ROOT=/dev/cgroup/memory
-+    CGROUP_ROOT=$(mktemp -d)
-     mount -t cgroup2 none $CGROUP_ROOT
-     do_umount=1
-   fi
+Hi,
 
----
-base-commit: a4cda136f021ad44b8b52286aafd613030a6db5f
-change-id: 20250403-kselftest-mm-cgroup2-detection-b761fd232f9d
+I dropped the RFC tag because I saw similar examples before, but I'm 
+happy to bring it back next time if the dependency is not merged until then.
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+> 
+> Thanks!
+
+Thanks!
+
+> 
+>>
+>> With James's KVM userfault [2], it is possible to handle stage-2 faults
+>> in guest_memfd in userspace.  However, KVM itself also triggers faults
+>> in guest_memfd in some cases, for example: PV interfaces like kvmclock,
+>> PV EOI and page table walking code when fetching the MMIO instruction on
+>> x86.  It was agreed in the guest_memfd upstream call on 23 Jan 2025 [3]
+>> that KVM would be accessing those pages via userspace page tables.  In
+>> order for such faults to be handled in userspace, guest_memfd needs to
+>> support userfaultfd.
+>>
+>> Changes since v2 [4]:
+>>   - James: Fix sgp type when calling shmem_get_folio_gfp
+>>   - James: Improved vm_ops->fault() error handling
+>>   - James: Add and make use of the can_userfault() VMA operation
+>>   - James: Add UFFD_FEATURE_MINOR_GUEST_MEMFD feature flag
+>>   - James: Fix typos and add more checks in the test
+>>
+>> Nikita
+>>
+>> [1] https://lore.kernel.org/kvm/20250318161823.4005529-1-tabba@google.com/T/
+>> [2] https://lore.kernel.org/kvm/20250109204929.1106563-1-jthoughton@google.com/T/
+>> [3] https://docs.google.com/document/d/1M6766BzdY1Lhk7LiR5IqVR8B8mG3cr-cxTxOrAosPOk/edit?tab=t.0#heading=h.w1126rgli5e3
+>> [4] https://lore.kernel.org/kvm/20250402160721.97596-1-kalyazin@amazon.com/T/
+>>
+>> Nikita Kalyazin (6):
+>>    mm: userfaultfd: generic continue for non hugetlbfs
+>>    mm: provide can_userfault vma operation
+>>    mm: userfaultfd: use can_userfault vma operation
+>>    KVM: guest_memfd: add support for userfaultfd minor
+>>    mm: userfaultfd: add UFFD_FEATURE_MINOR_GUEST_MEMFD
+>>    KVM: selftests: test userfaultfd minor for guest_memfd
+>>
+>>   fs/userfaultfd.c                              |  3 +-
+>>   include/linux/mm.h                            |  5 +
+>>   include/linux/mm_types.h                      |  4 +
+>>   include/linux/userfaultfd_k.h                 | 10 +-
+>>   include/uapi/linux/userfaultfd.h              |  8 +-
+>>   mm/hugetlb.c                                  |  9 +-
+>>   mm/shmem.c                                    | 17 +++-
+>>   mm/userfaultfd.c                              | 47 ++++++---
+>>   .../testing/selftests/kvm/guest_memfd_test.c  | 99 +++++++++++++++++++
+>>   virt/kvm/guest_memfd.c                        | 10 ++
+>>   10 files changed, 188 insertions(+), 24 deletions(-)
+>>
+>>
+>> base-commit: 3cc51efc17a2c41a480eed36b31c1773936717e0
+>> --
+>> 2.47.1
+>>
 
 
