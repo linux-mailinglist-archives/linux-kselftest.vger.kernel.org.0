@@ -1,85 +1,63 @@
-Return-Path: <linux-kselftest+bounces-30157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C090A7C87F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Apr 2025 11:25:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C120AA7C8BF
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Apr 2025 12:25:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B7A2188F9AE
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Apr 2025 09:25:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46F637A8F01
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Apr 2025 10:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4878B1D9A50;
-	Sat,  5 Apr 2025 09:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB3BD1DEFF4;
+	Sat,  5 Apr 2025 10:25:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I0fqSA6s"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D9x15F/T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80EB1C861A;
-	Sat,  5 Apr 2025 09:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680B4182BC;
+	Sat,  5 Apr 2025 10:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743845099; cv=none; b=o/Z/iwMBtI6y0+feY22eaEwP8yPqnaG0BmbUux0Tpui8nh8KAr8nUw8ZlgutV6GonbZwCAS3NZEYH2WmnP8llinl4b/icuPCzCT4uCqWzhG7vQGKGCd/VR/0J8womtSLXh3uzkitB5XnSLC+3ywfE2RpIt7og1KKylnijfeLsCI=
+	t=1743848742; cv=none; b=sg56/QEMH1kxEwgNYoZJBzF3JCD1kepd+l/JxEZ2/FNIM4UDmBb8gnxXx6u+4n7Nm6vtuqhmazrSHHqCfaaLp/YQdYrUDYEccKr6CurEpfLGRHnwsR4SoTdYQXozl6y1EPeCvUlgX8jaLpvOJ2l4P9HQUW9HpZnQ+gzugjTt2xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743845099; c=relaxed/simple;
-	bh=CYC+j8DE1LKhEPIIAtWsmhv3JgdGMKg+YUwLj9onV54=;
+	s=arc-20240116; t=1743848742; c=relaxed/simple;
+	bh=vE5HlGqFMPRiEApGfruZPXTVG1TFF/lORB022UJd2+o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G9Mn2XeqzU7iwFz3dATtqVw1GjDCkj+/bHX/ZxvXywWuAz6kgTQLpfWUu+Jsl+fp1sUvVzDJIJ88YNz2buhRB/Qf/MDZkShy5LUvL43P91h07D2vec46wIkJ6sDKUAEmuU3dgDvtJQcVRMAXbRyc9htxof1UN+z6HTp+9NP5H6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I0fqSA6s; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7399838db7fso2562106b3a.0;
-        Sat, 05 Apr 2025 02:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743845097; x=1744449897; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dEK0W0QpAa1ZezYhp/Ge5p3VJ+97NZtwm+z2v9PIHNw=;
-        b=I0fqSA6sQj/0zzw30vfPDTIc2k4qiKmNNjjulS5lwaBtXAQnnpWUlORXP1SXp3ZDsO
-         wotSjHUGfgn8Y4Jl7RHh4m2nPqxrglhB9uXCdVPf9JUhKs6+9HMge9VoIaWTidYQE0Uv
-         qXwpGHheTNhhG4WJDDoUUo9Z5oSsOpROGxeGgV6SnnnQpex28dOx/gwcNty3ERptjMYC
-         lKkMc323bkjMALVwI1zqHOIkc3/b+PNvMzn/71BaQoAP6IbKn6+bi/zjsDsfP+62Famy
-         vFTWq+V0wSxP2n3Nq4FA4XvKodzhYUB8V8s/hPEXtKbp5yJ65FeHHhMbckh6s8DAI3a8
-         C3OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743845097; x=1744449897;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dEK0W0QpAa1ZezYhp/Ge5p3VJ+97NZtwm+z2v9PIHNw=;
-        b=d9KMjNfSeJCXsGLuw8HbINSbQMtmYnfPQvok1wmPUtm/aYZ5VyTcLLvnPnBBwyAQBb
-         zulxaexJhQ1rOdbSSoWKctJnV9SLo9unAAc+rOgoBHLz5x4aNU6MhlEIfSrvWwm9CY+9
-         ssKneTAq56r0LzrbrM6wnCs+ND4ut8DwWHzs/yMjFiikTbKXC+846ufovLWnrX7H7U2E
-         Tqzv193U5jMAqd+dceJ0doONsTEwI6AmhSVUVXjuE5txl21UwZUdsCUugZGjP46yQubB
-         usH6tmfK98pc7kjAYuAep7lEay5+wX1+eiVcy8gtDPnj/Jz8AVv98iAUVgMQbjVUXZaw
-         VwyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUy/h47WIg/i5XCwrI3KDNp7IyYszm0mWTS11zk1h7MxBT3iESpZ3qrIKYcIFC2aKNQRZYmdqQHkiMXgyViRGex@vger.kernel.org, AJvYcCVde5KqDiNwsTL+YAHNU307Ug+C0zEDKeGenXxWW47622aEuP+ElGuMwjxwpkIPiKXZHtBoXvfmQO8ro5o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQlCfLnhEtJ05U0CMKDUiSyDj4kojUCU3AmC1m5XB6c7tTtXvg
-	M3n1mGThn0jU0w9xXnDY5pJfCAqUYmDf8qOWFD7Gtu9G1CrQ49yo
-X-Gm-Gg: ASbGncvadCrwTditiZ99JQvVq7LBSYGIGDxTlbCHSmGFnq3wcQMXEnDj0BpiXTfKrA9
-	drG7VYvfrHNEgCVncpV9PPzgwapE1KTI8NPNvhKl/nB4PBPRNtQ2T+M93ncjOVhXomNBhQ6FtB+
-	OlqFBAqBGhEQzu1ZcWsokvTaulV/GqwC+30c0uj1FYpuJh5jPAJtDovAmdprIOoEwhe4NbMwJoY
-	8jO7APYgNsI1Lfx7558cz3Kga/8sNSrKtVmHXM/W8m1/Q3KXZcsRNzUdpj957eX/EX27AZUuc0w
-	CPqJg2IyhIb3yMO/K+Xe4gyylKAQj7fa3G7cBlnZ85mWhkaUxBPXsU1KsGW13Q==
-X-Google-Smtp-Source: AGHT+IHSH7e84O9pcdFgnOtCs0i95OtpNIn1swFj4yYiGDsyPfoRCp6D/9QBy7kZxrLD01zIqjbo+A==
-X-Received: by 2002:a05:6a00:c92:b0:736:4d05:2e35 with SMTP id d2e1a72fcca58-739e590a313mr8719587b3a.3.1743845096937;
-        Sat, 05 Apr 2025 02:24:56 -0700 (PDT)
-Received: from vaxr-BM6660-BM6360 ([2001:288:7001:2703:fb4b:850a:b504:c8c8])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d97effb7sm5017104b3a.60.2025.04.05.02.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Apr 2025 02:24:56 -0700 (PDT)
-Date: Sat, 5 Apr 2025 17:24:52 +0800
-From: I Hsin Cheng <richard120310@gmail.com>
-To: akpm@linux-foundation.org
-Cc: shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests/mm: Add missing gitignore file
-Message-ID: <Z_D25JBTUcZia2GW@vaxr-BM6660-BM6360>
-References: <20250405091913.520889-1-richard120310@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mSjobpu6ulbzo/y/7cOFTX6RdMR9QHPexfEl0xls9HKe3lnbwJm/b9MXk2gyDpFpvvGXIK55isoGSXrVVx0tp71iYgcMcGq5jHnd9J5ssBAsqJPW3tjy8J2Z+ffbSFadGtBd0g+/3r+1rXKP3XLdtMQgcSxHVkuELFAmL9kQSfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D9x15F/T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F18C4CEE4;
+	Sat,  5 Apr 2025 10:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1743848741;
+	bh=vE5HlGqFMPRiEApGfruZPXTVG1TFF/lORB022UJd2+o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D9x15F/TYNWiEI75UcJrX8YPtugDm+WaUhtn6Lb0l0B9RjaeEzQa8gSaTqN9JOLPw
+	 N9U9Q8OLIV5X9gX4sY7uzAYJCqW7r+muYhi1Vs9VdHxlnWEKXEKpsOxYSR1R1Uc55V
+	 S2IdIaNAnTVyE8Ef2zAU0NCEK5fGUZ4aKB2jYZoI=
+Date: Sat, 5 Apr 2025 11:24:13 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+	jonathanh@nvidia.com, f.fainelli@gmail.com,
+	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+	conor@kernel.org, hargar@microsoft.com, broonie@kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 6.13 00/23] 6.13.10-rc1 review
+Message-ID: <2025040527-harmonics-bath-946e@gregkh>
+References: <20250403151622.273788569@linuxfoundation.org>
+ <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,32 +66,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250405091913.520889-1-richard120310@gmail.com>
+In-Reply-To: <CA+G9fYvPdt8CETb7cDmraiZPpG3YX83en8SKO4ac+-83TQY_pQ@mail.gmail.com>
 
-On Sat, Apr 05, 2025 at 05:19:13PM +0800, I Hsin Cheng wrote:
-> Add "guard-pages" binary file into .gitignore.
+On Sat, Apr 05, 2025 at 11:50:59AM +0530, Naresh Kamboju wrote:
+> On Thu, 3 Apr 2025 at 20:56, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 6.13.10 release.
+> > There are 23 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Sat, 05 Apr 2025 15:16:11 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.13.10-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.13.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
-> ---
->  tools/testing/selftests/mm/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-> index c5241b193db8..c9fd69ece95c 100644
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -58,3 +58,4 @@ hugetlb_dio
->  pkey_sighandler_tests_32
->  pkey_sighandler_tests_64
->  guard-regions
-> +guard-pages
-> -- 
-> 2.43.0
->
+> Regressions on arm, arm64 and x86_64.
+> 
+> 1)
+> The selftests rseq failed across the boards and virtual environments.
+> These test failures were also noticed on Linux mainline and next.
+> 
+> We will bisect these lists of regressions and get back to you.
 
-Sorry, please ignore this. I overlook it's being renamed to
-"guard-regions".
+Thanks, this I'll care about, but:
 
-Best regards,
-I Hsin Cheng
+> * kselftest-rseq
+>   - rseq_basic_percpu_ops_mm_cid_test
+>   - rseq_basic_percpu_ops_test
+>   - rseq_basic_test
+>   - rseq_param_test
+>   - rseq_param_test_benchmark
+>   - rseq_param_test_compare_twice
+>   - rseq_param_test_mm_cid
+>   - rseq_param_test_mm_cid_benchmark
+>   - rseq_param_test_mm_cid_compare_twice
+> 
+> 2)
+>  The clang-nightly build issues reported on mainline and next.
+> 
+> * S390, powerpc, build
+>   - clang-nightly-defconfig
+>   - clang-nightly-lkftconfig-hardening
+>   - clang-nightly-lkftconfig-lto-full
+>   - clang-nightly-lkftconfig-lto-thing
+> 
+>  clang-nightly: ERROR: modpost: "wcslen" [fs/smb/client/cifs.ko] undefined!
+>   - https://lore.kernel.org/all/CA+G9fYuQHeGicnEx1d=XBC0p1LCsndi5q0p86V7pCZ02d8Fv_w@mail.gmail.com/
+> 
+> 3)
+>  The clang-nightly boot regressions with no console output have been
+>  reported on mainline and next.
+
+These 2 I don't, as that's a mainline issue first.
+
+thanks,
+
+greg k-h
 
