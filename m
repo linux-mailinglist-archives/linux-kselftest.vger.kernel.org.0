@@ -1,218 +1,217 @@
-Return-Path: <linux-kselftest+bounces-30168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92967A7CCD5
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Apr 2025 07:09:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7013FA7CDC1
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Apr 2025 13:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EACE3B42CF
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Apr 2025 05:09:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35F5D16C165
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Apr 2025 11:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2331D14D2A0;
-	Sun,  6 Apr 2025 05:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37262201116;
+	Sun,  6 Apr 2025 11:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N3xz6tdg"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="CvU4EqZO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED2914A82;
-	Sun,  6 Apr 2025 05:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F75E20125B;
+	Sun,  6 Apr 2025 11:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743916184; cv=none; b=PegYMD3Hvw5YyeP+ELlvIWYeCOZeqllAkiXWhksE7mlhRusA3XebSVi401fSj7Qpfl5XPpVl22ousNAJZjj7iGfwkiJ9e8+kq7xAIfyRD04dtMFr/gB03CTfGmustsCLAp6gKw045WvbKVRbZdERhwK8w8aStD8DDMj5BA8u/YI=
+	t=1743940670; cv=none; b=jdvcsno46/Fb4lbmbX6tjhTBmGwP+g40gefhjpCR5tZOhukG9AR0gkjZJdikh2c1RWV/doQ1gHnUFSDBbHsmhgv1p+m8p6sY3E+qGjhWgRh9z/rw5LrUq5V1/xy30Xzkayi5zb/j3Io+tq+KnUOC+NCuXJyQdRAqNX9UWw1Gfws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743916184; c=relaxed/simple;
-	bh=2Vv16BmJQGGt1ruqb/MSgE5G4w4jvnFeftNhxmRK96Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F8WrHohwSrVM+sJKYAztF/8tfyLXcZPIijNuYPmMFICuZ/T3ZbasaOxFaCXpzrUK8kc3aj2/Bp0HGzL68h6gNBT6Kifdg923xsEMkgtsgEgyvFXUmhbAlMkcON0fBblCxgSbMpIYvWotmJsWZAahqCSf0IWMHUs5Vv2BFJPdqYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N3xz6tdg; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743916182; x=1775452182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2Vv16BmJQGGt1ruqb/MSgE5G4w4jvnFeftNhxmRK96Q=;
-  b=N3xz6tdgDYyZjg8+6OHAxIbGh+a5pEfwi+leZFRYrl2gwD18LxCvv+iE
-   aI8wC27VtTqNMtZgrjbZkSS0mr8cC/M2wYNttd3QR1W1TgaucjrJADBSt
-   jHxeOhRYN6TGpVkP1O/xUq0/iJCE4/+IqE5uMPgCwd8+DvpHj4sCqDeKi
-   06Dd9M1AN2f2D9fAvyz4+uXwAGQ+varb0UDeJXfyzFGcc25K+csoJCjKD
-   JhCPrbpSNADdIEjDhxGjA0hQjWy4BKG7CuxCgXnaeBtU2dha7KGS1CZNo
-   6Hx/Vhs8NRMLtfUDWFMU/NZzaE5VIwRKl6FLS83khG6KstfXr9XRVpBNd
-   Q==;
-X-CSE-ConnectionGUID: 0C93XjmsQq2xv24+xl7wtw==
-X-CSE-MsgGUID: CyRoFPaERWagfF2d6RPlEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11395"; a="32920992"
-X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
-   d="scan'208";a="32920992"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2025 22:09:38 -0700
-X-CSE-ConnectionGUID: 9Z3oBZg/R0ipWzs40aYBCA==
-X-CSE-MsgGUID: BNJayHtETV6W0UmceMgCLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,192,1739865600"; 
-   d="scan'208";a="128141955"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 05 Apr 2025 22:09:35 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u1IGC-0002Rz-22;
-	Sun, 06 Apr 2025 05:09:32 +0000
-Date: Sun, 6 Apr 2025 13:08:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3 1/2] mm/vmscan: Skip memcg with !usage in
- shrink_node_memcgs()
-Message-ID: <202504061254.DqfqHfM7-lkp@intel.com>
-References: <20250406024010.1177927-2-longman@redhat.com>
+	s=arc-20240116; t=1743940670; c=relaxed/simple;
+	bh=1qiIa1unk46NH8WusRPlYYJAwpi0rLRqMqi2/0K5qQI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fbIAxeoig5WMFgsCwSlGJe8NRdyZ6g5zeCUIxbueCCEC9fksjby/PZ4EyV6B5Kbiiz1wfPzrkdrabpZy7gvOw3jZz6S1CibyjQnb43l8I9RGmlSrQtvLeH8gIdxB2Q3YKjzy+ZA5JHY3oW/wGRIMvikJOdE2xLlj1Xw0euEKxuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=CvU4EqZO; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1743940656; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=qqH4N2+CHgOqU/M5fIoD1f1hycV5QL3eTccuZsOVm14=;
+	b=CvU4EqZOm2Xzl6z3KyI/ngPYwUG0M6Hr0Pw3DfmJ3TCZIAecijcrAfjuRtAsCQmrj/BJrJ7E/CPc3+1p50NfaWl3gFUasK5bq/o7Q/dRKLVlrvxtryf2mou/XI+oBC0oiaHgC89FhsUXkrl0ZpKAwoPE3jYjEfNAYZ3pOljIY7U=
+Received: from 30.246.160.68(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0WVZ69Fk_1743940654 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sun, 06 Apr 2025 19:57:35 +0800
+Message-ID: <3af36c30-48e9-4182-ad09-bd28d3e4acb4@linux.alibaba.com>
+Date: Sun, 6 Apr 2025 19:57:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250406024010.1177927-2-longman@redhat.com>
-
-Hi Waiman,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tj-cgroup/for-next]
-[also build test ERROR on akpm-mm/mm-everything linus/master v6.14 next-20250404]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/mm-vmscan-Skip-memcg-with-usage-in-shrink_node_memcgs/20250406-104208
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-next
-patch link:    https://lore.kernel.org/r/20250406024010.1177927-2-longman%40redhat.com
-patch subject: [PATCH v3 1/2] mm/vmscan: Skip memcg with !usage in shrink_node_memcgs()
-config: arm-randconfig-001-20250406 (https://download.01.org/0day-ci/archive/20250406/202504061254.DqfqHfM7-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 92c93f5286b9ff33f27ff694d2dc33da1c07afdd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250406/202504061254.DqfqHfM7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504061254.DqfqHfM7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/vmscan.c:5929:32: error: incomplete definition of type 'struct mem_cgroup'
-    5929 |                 if (!page_counter_read(&memcg->memory))
-         |                                         ~~~~~^
-   include/linux/mm_types.h:33:8: note: forward declaration of 'struct mem_cgroup'
-      33 | struct mem_cgroup;
-         |        ^
-   1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/pidfd: align stack to fix SP alignment
+ exception
+To: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>, baolin.wang@linux.alibaba.com,
+ tianruidong@linux.alibaba.com, brauner@kernel.org, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250312061557.28532-1-xueshuai@linux.alibaba.com>
+ <0a70f4ab-cd83-434d-8dd2-486d58e5599a@linux.alibaba.com>
+ <20250404121759.GA28692@willie-the-truck>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20250404121759.GA28692@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +5929 mm/vmscan.c
 
-  5890	
-  5891	static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
-  5892	{
-  5893		struct mem_cgroup *target_memcg = sc->target_mem_cgroup;
-  5894		struct mem_cgroup_reclaim_cookie reclaim = {
-  5895			.pgdat = pgdat,
-  5896		};
-  5897		struct mem_cgroup_reclaim_cookie *partial = &reclaim;
-  5898		struct mem_cgroup *memcg;
-  5899	
-  5900		/*
-  5901		 * In most cases, direct reclaimers can do partial walks
-  5902		 * through the cgroup tree, using an iterator state that
-  5903		 * persists across invocations. This strikes a balance between
-  5904		 * fairness and allocation latency.
-  5905		 *
-  5906		 * For kswapd, reliable forward progress is more important
-  5907		 * than a quick return to idle. Always do full walks.
-  5908		 */
-  5909		if (current_is_kswapd() || sc->memcg_full_walk)
-  5910			partial = NULL;
-  5911	
-  5912		memcg = mem_cgroup_iter(target_memcg, NULL, partial);
-  5913		do {
-  5914			struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
-  5915			unsigned long reclaimed;
-  5916			unsigned long scanned;
-  5917	
-  5918			/*
-  5919			 * This loop can become CPU-bound when target memcgs
-  5920			 * aren't eligible for reclaim - either because they
-  5921			 * don't have any reclaimable pages, or because their
-  5922			 * memory is explicitly protected. Avoid soft lockups.
-  5923			 */
-  5924			cond_resched();
-  5925	
-  5926			mem_cgroup_calculate_protection(target_memcg, memcg);
-  5927	
-  5928			/* Skip memcg with no usage */
-> 5929			if (!page_counter_read(&memcg->memory))
-  5930				continue;
-  5931	
-  5932			if (mem_cgroup_below_min(target_memcg, memcg)) {
-  5933				/*
-  5934				 * Hard protection.
-  5935				 * If there is no reclaimable memory, OOM.
-  5936				 */
-  5937				continue;
-  5938			} else if (mem_cgroup_below_low(target_memcg, memcg)) {
-  5939				/*
-  5940				 * Soft protection.
-  5941				 * Respect the protection only as long as
-  5942				 * there is an unprotected supply
-  5943				 * of reclaimable memory from other cgroups.
-  5944				 */
-  5945				if (!sc->memcg_low_reclaim) {
-  5946					sc->memcg_low_skipped = 1;
-  5947					continue;
-  5948				}
-  5949				memcg_memory_event(memcg, MEMCG_LOW);
-  5950			}
-  5951	
-  5952			reclaimed = sc->nr_reclaimed;
-  5953			scanned = sc->nr_scanned;
-  5954	
-  5955			shrink_lruvec(lruvec, sc);
-  5956	
-  5957			shrink_slab(sc->gfp_mask, pgdat->node_id, memcg,
-  5958				    sc->priority);
-  5959	
-  5960			/* Record the group's reclaim efficiency */
-  5961			if (!sc->proactive)
-  5962				vmpressure(sc->gfp_mask, memcg, false,
-  5963					   sc->nr_scanned - scanned,
-  5964					   sc->nr_reclaimed - reclaimed);
-  5965	
-  5966			/* If partial walks are allowed, bail once goal is reached */
-  5967			if (partial && sc->nr_reclaimed >= sc->nr_to_reclaim) {
-  5968				mem_cgroup_iter_break(target_memcg, memcg);
-  5969				break;
-  5970			}
-  5971		} while ((memcg = mem_cgroup_iter(target_memcg, memcg, partial)));
-  5972	}
-  5973	
+在 2025/4/4 20:18, Will Deacon 写道:
+> On Wed, Mar 19, 2025 at 10:59:57AM +0800, Shuai Xue wrote:
+>> + ARM maintainers for review.
+>>
+>> 在 2025/3/12 14:15, Shuai Xue 写道:
+>>> The pidfd_test fails on the ARM64 platform with the following error:
+>>>
+>>>       Bail out! pidfd_poll check for premature notification on child thread exec test: Failed
+>>>
+>>> When exception-trace is enabled, the kernel logs the details:
+>>>
+>>>       #echo 1 > /proc/sys/debug/exception-trace
+>>>       #dmesg | tail -n 20
+>>>       [48628.713023] pidfd_test[1082142]: unhandled exception: SP Alignment, ESR 0x000000009a000000, SP/PC alignment exception in pidfd_test[400000+4000]
+>>>       [48628.713049] CPU: 21 PID: 1082142 Comm: pidfd_test Kdump: loaded Tainted: G        W   E      6.6.71-3_rc1.al8.aarch64 #1
+>>>       [48628.713051] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-1UC1P-5B/AS1111MG1, BIOS 1.2.M1.AL.P.157.00 07/29/2023
+>>>       [48628.713053] pstate: 60001800 (nZCv daif -PAN -UAO -TCO -DIT +SSBS BTYPE=-c)
+>>>       [48628.713055] pc : 0000000000402100
+>>>       [48628.713056] lr : 0000ffff98288f9c
+>>>       [48628.713056] sp : 0000ffffde49daa8
+>>>       [48628.713057] x29: 0000000000000000 x28: 0000000000000000 x27: 0000000000000000
+>>>       [48628.713060] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+>>>       [48628.713062] x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000400e80
+>>>       [48628.713065] x20: 0000000000000000 x19: 0000000000402650 x18: 0000000000000000
+>>>       [48628.713067] x17: 00000000004200d8 x16: 0000ffff98288f40 x15: 0000ffffde49b92c
+>>>       [48628.713070] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+>>>       [48628.713072] x11: 0000000000001011 x10: 0000000000402100 x9 : 0000000000000010
+>>>       [48628.713074] x8 : 00000000000000dc x7 : 3861616239346564 x6 : 000000000000000a
+>>>       [48628.713077] x5 : 0000ffffde49daa8 x4 : 000000000000000a x3 : 0000ffffde49daa8
+>>>       [48628.713079] x2 : 0000ffffde49dadc x1 : 0000ffffde49daa8 x0 : 0000000000000000
+>>>
+>>> According to ARM ARM D1.3.10.2 SP alignment checking:
+>>>
+>>>> When the SP is used as the base address of a calculation, regardless of
+>>>> any offset applied by the instruction, if bits [3:0] of the SP are not
+>>>> 0b0000, there is a misaligned SP.
+>>>
+>>> To fix it, align the stack with 16 bytes.
+>>>
+>>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>>> ---
+>>>    tools/testing/selftests/pidfd/pidfd_test.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+>>> index c081ae91313a..ec161a7c3ff9 100644
+>>> --- a/tools/testing/selftests/pidfd/pidfd_test.c
+>>> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+>>> @@ -33,7 +33,7 @@ static bool have_pidfd_send_signal;
+>>>    static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+>>>    {
+>>>    	size_t stack_size = 1024;
+>>> -	char *stack[1024] = { 0 };
+>>> +	char *stack[1024] __attribute__((aligned(16))) = {0};
+>>>    #ifdef __ia64__
+>>>    	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
+> 
+> The arm64 alignment requirement is correct, but I don't really grok what
+> this code is trying to do. If it's not using CLONE_VM, why bother passing
+> a separate stack? If it _is_ using CLONE_VM, then surely the stack needs
+> to be allocated somewhere other than the caller stack?
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Hi, Will,
+
+Thank for you reply.
+
+> https://man7.org/linux/man-pages/man2/clone3.2.html
+clone3()
+        The stack for the child process is specified via cl_args.stack,
+        which points to the lowest byte of the stack area, and
+        cl_args.stack_size, which specifies the size of the stack in
+        bytes.  In the case where the CLONE_VM flag (see below) is
+        specified, a stack must be explicitly allocated and specified.
+        * Otherwise, these two fields can be specified as NULL and 0 *, which
+        causes the child to use the same stack area as the parent (in the
+        child's own virtual address space).
+
+ From man-pages for clone3, I think you are right.
+As you pointed out, without CLONE_VM, the stack can indeed be set to NULL.
+However, when running the pidfd_test, issues arise:
+
+#./pidfd_test
+TAP version 13
+1..8
+# Parent: pid: 125004
+Bail out! pidfd_poll check for premature notification on child thread exec test: pidfd_clone failed (ret -1, errno 22)
+# Planned tests != run tests (8 != 0)
+# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+
+Upon examining the git diff:
+
+#git diff
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index 9a2d64901d59..c5991c0712c8 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -32,13 +32,10 @@ static bool have_pidfd_send_signal;
+
+  static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+  {
+-       size_t stack_size = 1024;
+-       char *stack[1024] = { 0 };
+-
+  #ifdef __ia64__
+         return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
+  #else
+-       return clone(fn, stack + stack_size, flags | SIGCHLD, NULL, pidfd);
++       return clone(fn, NULL, flags | SIGCHLD, NULL, pidfd);
+  #endif
+  }
+
+
+Also from man-pages of clone3, https://man7.org/linux/man-pages/man2/clone3.2.html
+
+    The clone() wrapper function
+
+        The stack argument specifies the location of the stack used by the
+        child process.  Since the child and calling process may share
+        memory, it is not possible for the child process to execute in the
+        same stack as the calling process.  *The calling process must
+        therefore set up memory space for the child stack and pass a
+        pointer to this space to clone()*.  Stacks grow downward on all
+        processors that run Linux (except the HP PA processors), so stack
+        usually points to the topmost address of the memory space set up
+        for the child stack.  Note that clone() does not provide a means
+        whereby the caller can inform the kernel of the size of the stack
+        area.
+
+Now, I am confused about the rules :(
+
+Upon reviewing the glibc code for handling this:
+https://elixir.bootlin.com/glibc/glibc-2.41.9000/source/sysdeps/unix/sysv/linux/aarch64/clone.S#L52
+
+It's evident that when the stack pointer is set to NULL, the aligned stack
+pointer remains zero, leading __clone to perform a syscall error,
+returning -EINVAL due to an invalid argument.
+
+In summary, memory space for the child's stack must be explicitly allocated,
+and a valid pointer must be passed to clone() regardless of the use of
+CLONE_VM.
+
+> Will
+
+Thanks.
+Shuai
+
 
