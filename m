@@ -1,265 +1,197 @@
-Return-Path: <linux-kselftest+bounces-30178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0AACA7D287
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 05:38:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3037CA7D28B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 05:40:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEFEA16845F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 03:38:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD6BA3ADCAF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 03:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 264252144B8;
-	Mon,  7 Apr 2025 03:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BCF217F2E;
+	Mon,  7 Apr 2025 03:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PSH08hLe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0/xjha2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7458F214239
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Apr 2025 03:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ED9217F27;
+	Mon,  7 Apr 2025 03:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743997125; cv=none; b=nhuGvZBPNLNNmEGZjPBtZvLHQgKCIjPlQqS8zhby4jZPE0188XbMY8wF0Ao1f+2aizBI4Z3JB7svq5jBleZheGPrQei6rHkUF+hpoiPJnso6aQnQ1B0jZgegfmFVXaJJ8GwRqml9MDcD6nVoclPkj9ThAQePrQ8F+J4iHPY7cCY=
+	t=1743997233; cv=none; b=I/M2hmmGgaJ/whDjl4N0w0/yhHOipoyAMaQx7m1QH8YIIDK88T9CVCR1RXQmVQX+ruSxsGpPahVFXE6rK8K2KstOXkPpM1OSph8Kf9gpjTyBi2+NAa71/RXWWIWB+zeBB/n//dIehxM+3pCAekOi2ViMLs/vX3+/euAPFB4QR88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743997125; c=relaxed/simple;
-	bh=jZgaX4jmVsHYBspYE/CHJXeQ6ix47dfRPbg7bvlz8mc=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=piUBb659nY3j60NpBUNUYFbZDsiD+j6CpXI3E1sOVExUlhk3xgePZfGx4Jbu97OgkdLmodnpQUOw7QYPVCuEUqo+/3QmjbB9dakNQ2ftlF5m2cqG8bh79WVge7Oxa7cTt/hkmy3feK271U1txsnZZh8CfZJNWV3xI1pH+yzuycQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PSH08hLe; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1743997119;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TLwyuuy4aI3x0fwEsZllh/AdDqppEyi7Fwatm110DFQ=;
-	b=PSH08hLemfgJhQFFxmJBpvROYAqZI7MpC0rqfgqbjIl/TN2RjSOOeCFfB3+Dj9AxbpiuFz
-	NStsFT5lv9y3NH8iMn4jclT9WIIvS++m29FPMag/+cSWo4E4waLDoaP40Pj9R54ZF8/++d
-	YhT2CFggqgP3BzLRBbwh/UR46tcv7kU=
+	s=arc-20240116; t=1743997233; c=relaxed/simple;
+	bh=SdoG5YNAjCxpTafOFN7GwWzMdHLTICWuHEusYEHOpb8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pr/DS0DmuRAq8/XYJrxvJeYrU6+w5LpJWqaFwOR6izYXo7jS3mXruZk/R23639VZE+iHMcJaCvEsEslR54v4UBcRVJF7AmvDASh05lVZOj2n+Kjqj55LX2FpZnH7JvubsCE/+YamRqJMiZVN5OQO9/AAROQMIO84uDWKpN96Dm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0/xjha2; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e5e0caa151so7016384a12.0;
+        Sun, 06 Apr 2025 20:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743997230; x=1744602030; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PWCbdplBrRTzOviOYcUnPBAjZP7jVF7GFhY7bPt8iew=;
+        b=Q0/xjha2oZtBKGYxu8PXxQUIDm7aT8J3B6B00KPuy/GeOCOvild29Pdg0egN/5RX2W
+         F3HW+ZRM7zSCrlc0FEyNWleisB8ohyMGrK4gSiKxUpz+tTo19Lv8SMmSyDCatNe5H8l5
+         76ssPRBsVi0E6rVwOh107hRzG4HDcuU5b9DDt92fUIkv0a72a0yS+QbOGR1UAW+5smHD
+         UMMilZDcssbVLWj9b7ljM2RNWlJQQ685y+EW1Bof1eg2hHPQcXU9MMzD3dn93QDt9mwP
+         mOYckhTBrONov1DKJ6jqWLDmU4Qj6VfKuNa+UFfO4zJo6wTKaDY0HDkU7RbqZR+8UX8B
+         UvLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743997230; x=1744602030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PWCbdplBrRTzOviOYcUnPBAjZP7jVF7GFhY7bPt8iew=;
+        b=VsbhDqz6RlLo+KKimU6YJb7y3NjdNZUtiDPPdo7qGf8d/IQlmdVY1abP+ehPzXgmnA
+         IQORmK1VYHr+rotSF76WxBs0dJen6uk/L17KXkhKUWm5isqksUGgp6YWED3mUUVQjZqG
+         AUk6Z5VT79qROImCpL/6jL2kCvedN1vtG6GkJs+iBVv+ccGAfupXR4PG+l3f6+kOLPOR
+         JY6T/L9ueBPEvciBEuVoZTGjI/zTH9bNCWZmpvX70XWhxxfATfTk95/+KpH77GISi/AU
+         isLx2FAG08CQd1hhwUkLd2b7BllPJQa//yTJcw+jrJDG7ZO3UC5X9n5gfKmG+s1ou0MX
+         g8vA==
+X-Forwarded-Encrypted: i=1; AJvYcCWC32clL62KmPwN4j2dWSxMeweKz7qUJSxcbsYpG60kuE7TDLLuv0FqrN1EkRjoVLEuRMA=@vger.kernel.org, AJvYcCWiNpnHNiGKOo7ydCc7HmOpEQOzJ5XZz8iUdQzIWnwb/boAlur3B4OKM5jsi0coE3xQHts5R2vdQ3YcJxWUDA7b@vger.kernel.org, AJvYcCX/mj67HG7ikKA6P+k+wdBvJs+kq6qWuHvjpfrvbwvVhH95i31Kv4yHfYfX7j8L8vhGJf1loUVruSmMZIAJ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsu2dxXXfDfHfu8jV6dBNx4W/zglA6b5wUalJpBvASvLzk8ucD
+	w4R6E5/oEnr6xj6D0TR+uJBl6eSycmE7liqi+6P4I5r08N6DdwKTtRD4TE3J3tKUf6jZMzrcWj4
+	LgRyFyMP3MkbXN+ak0lYIUy7FL0Q=
+X-Gm-Gg: ASbGncv9AZ3SxUnJ6lGee8hy6kfOHd75jBlI7+a9tsHFqxLlCeF0JfDeStDPDkH+cgR
+	jVILElTdfkH9KUpEbb7lWBibGuQMeG7xkjo1GlFyldnKB5Ahdp5Oss1RQomaR4lEXiK8eVB9GtX
+	rzq68oW19lS7hd/36Y0nYkKJ3tekvy
+X-Google-Smtp-Source: AGHT+IEEPNITxLvpL2EswjSjCquWWq6DhRueSEwahn5r7wFxZUYdPPng1ePscZSaHs0ndW/XkopHICpYNo5ccc1LV/E=
+X-Received: by 2002:a17:907:a05:b0:ac7:322d:779c with SMTP id
+ a640c23a62f3a-ac7d6ec2f2cmr844094266b.50.1743997229691; Sun, 06 Apr 2025
+ 20:40:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.400.131.1.6\))
-Subject: Re: CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP is broken, was Re: [RFC
- PATCH 0/6] Deep talk about folio vmap
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <6f76a497-248b-4f92-9448-755006c732c8@vivo.com>
-Date: Mon, 7 Apr 2025 11:37:56 +0800
-Cc: bingbu.cao@linux.intel.com,
- Christoph Hellwig <hch@lst.de>,
- Matthew Wilcox <willy@infradead.org>,
- Gerd Hoffmann <kraxel@redhat.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org,
- linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org,
- opensource.kernel@vivo.com
+MIME-Version: 1.0
+References: <malayarout91@gmail.com> <20250324064234.853591-1-malayarout91@gmail.com>
+ <CAEf4BzagSxO-fNeeWfFPu2vpnbEUBnS7Y2P=ODGks_zVEg1mkg@mail.gmail.com>
+ <CAE2+fR83Y8ZKk8fqM0WgZeK4Zm4PZjBzoPMyMptVHfk81eXEtw@mail.gmail.com> <e255897a-30d8-5745-b89b-eb801e0864a9@huaweicloud.com>
+In-Reply-To: <e255897a-30d8-5745-b89b-eb801e0864a9@huaweicloud.com>
+From: malaya kumar rout <malayarout91@gmail.com>
+Date: Mon, 7 Apr 2025 09:10:18 +0530
+X-Gm-Features: ATxdqUGULLoheNb0ptDa_1GMfr9lfLGY3rLDLZqgYYn38THywJlix-OS_VKP5z0
+Message-ID: <CAE2+fR992BprqDXkZTqi3Mgtq9WErSFvOtxvc16ZT9ufiBLNNQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: close the file descriptor to avoid
+ resource leaks
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <FDB7F930-8537-4B79-BAA6-AA782B39943A@linux.dev>
-References: <20250327092922.536-1-link@vivo.com>
- <20250404090111.GB11105@lst.de>
- <9A899641-BDED-4773-B349-56AF1DD58B21@linux.dev>
- <43DD699A-5C5D-429B-A2B5-61FBEAE2E252@linux.dev>
- <e9f44d16-fd9a-4d82-b40e-c173d068676a@vivo.com>
- <E4D6E02F-BC82-4630-8CB8-CD1A0163ABCF@linux.dev>
- <6f76a497-248b-4f92-9448-755006c732c8@vivo.com>
-To: Huan Yang <link@vivo.com>
-X-Migadu-Flow: FLOW_OUT
 
-
-
-> On Apr 7, 2025, at 11:21, Huan Yang <link@vivo.com> wrote:
->=20
->=20
-> =E5=9C=A8 2025/4/7 10:57, Muchun Song =E5=86=99=E9=81=93:
->>=20
->>> On Apr 7, 2025, at 09:59, Huan Yang <link@vivo.com> wrote:
->>>=20
->>>=20
->>> =E5=9C=A8 2025/4/4 18:07, Muchun Song =E5=86=99=E9=81=93:
->>>>> On Apr 4, 2025, at 17:38, Muchun Song <muchun.song@linux.dev> =
-wrote:
->>>>>=20
->>>>>=20
->>>>>=20
->>>>>> On Apr 4, 2025, at 17:01, Christoph Hellwig <hch@lst.de> wrote:
->>>>>>=20
->>>>>> After the btrfs compressed bio discussion I think the hugetlb =
-changes that
->>>>>> skip the tail pages are fundamentally unsafe in the current =
-kernel.
->>>>>>=20
->>>>>> That is because the bio_vec representation assumes tail pages do =
-exist, so
->>>>>> as soon as you are doing direct I/O that generates a bvec =
-starting beyond
->>>>>> the present head page things will blow up.  Other users of =
-bio_vecs might
->>>>>> do the same, but the way the block bio_vecs are generated are =
-very suspect
->>>>>> to that.  So we'll first need to sort that out and a few other =
-things
->>>>>> before we can even think of enabling such a feature.
->>>>>>=20
->>>>> I would like to express my gratitude to Christoph for including me =
-in the
->>>>> thread. I have carefully read the cover letter in [1], which =
-indicates
->>>>> that an issue has arisen due to the improper use of `vmap_pfn()`. =
-I'm
->>>>> wondering if we could consider using `vmap()` instead. In the HVO =
-scenario,
->>>>> the tail struct pages do **exist**, but they are read-only. I've =
-examined
->>>>> the code of `vmap()`, and it appears that it only reads the struct =
-page.
->>>>> Therefore, it seems feasible for us to use `vmap()` (I am not a =
-expert in
->>>>> udmabuf.). Right?
->>>> I believe my stance is correct. I've also reviewed another thread =
-in [2].
->>>> Allow me to clarify and correct the viewpoints you presented. You =
-stated:
->>>>   "
->>>>    So by HVO, it also not backed by pages, only contains folio =
-head, each
->>>>    tail pfn's page struct go away.
->>>>   "
->>>> This statement is entirely inaccurate. The tail pages do not cease =
-to exist;
->>>> rather, they are read-only. For your specific use-case, please use =
-`vmap()`
->>>> to resolve the issue at hand. If you wish to gain a comprehensive =
-understanding
->>> I see the document give a simple graph to point:
->>>=20
->>>  +-----------+ ---virt_to_page---> +-----------+   mapping to   =
-+-----------+
->>>  |           |                                     |     0     | =
--------------> |     0     |
->>>  |           | +-----------+                +-----------+
->>>  |           |                                      |     1     | =
--------------> |     1     |
->>>  |           | +-----------+                +-----------+
->>>  |           |                                      |     2     | =
-----------------^ ^ ^ ^ ^ ^
->>>  |           | +-----------+                      | | | | |
->>>  |           |                                      |     3     | =
-------------------+ | | | |
->>>  |           | +-----------+                        | | | |
->>>  |           |                                      |     4     | =
---------------------+ | | |
->>>  |    PMD    | +-----------+                          | | |
->>>  |   level   |                                   |     5     | =
-----------------------+ | |
->>>  |  mapping  | +-----------+                             | |
->>>  |           |                                     |     6     | =
-------------------------+ |
->>>  |           | +-----------+                              |
->>>  |           |                                     |     7     | =
---------------------------+
->>>  |           |                                    +-----------+
->>>  |           |
->>>  |           |
->>>  |           |
->>>  +-----------+
->>>=20
->>> If I understand correct, each 2-7 tail's page struct is freed, so if =
-I just need map page 2-7, can we use vmap do
->>>=20
->>> something correctly?
->> The answer is you can. It is essential to distinguish between virtual
->=20
-> Thanks for your reply, but I still can't understand it. For example, I =
-need vmap a hugetlb HVO folio's
->=20
-> 2-7 page:
->=20
-> struct page **pages =3D kvmalloc(sizeof(*pages), 6, GFP_KENREL);
->=20
-> for (i =3D 2; i < 8; ++i)
->=20
->     pages[i] =3D folio_page(folio, i);    //set 2-7 range page into =
-pages,
->=20
-> void *vaddr =3D vmap(pages, 6, 0, PAGE_KERNEL);
->=20
-> For no HVO pages, this can work. If HVO enabled, do "pages[i] =3D =
-folio_page(folio, i);" just
->=20
-> got the head page? and how vmap can correctly map each page?
-
-Why do you think folio_page(folio, i) (i =E2=89=A0 0) returns the head =
-page?
-Is it speculation or tested? Please base it on the actual situation
-instead of indulging in wild thoughts.
-
-Thanks,
-Muchun.
-
->=20
-> Please correct me. :)
->=20
-> Thanks,
->=20
-> Huan Yang
->=20
->> address (VA) and physical address (PA). The VAs of tail struct pages
->> aren't freed but remapped to the physical page mapped by the VA of =
-the
->> head struct page (since contents of those tail physical pages are the
->> same). Thus, the freed pages are the physical pages mapped by =
-original
->> tail struct pages, not their virtual addresses. Moreover, while it
->> is possible to read the virtual addresses of these tail struct pages,
->> any write operations are prohibited since it is within the realm of
->> acceptability that the kernel is expected to perform write operations
->> solely on the head struct page of a compound head and conduct read
->> operations only on the tail struct pages. BTW, folio infrastructure
->> is also based on this assumption.
->>=20
->> Thanks,
->> Muchun.
->>=20
->>> Or something I still misunderstand, please correct me.
->>>=20
->>> Thanks,
->>>=20
->>> Huan Yang
->>>=20
->>>> of the fundamentals of HVO, I kindly suggest a thorough review of =
-the document
->>>> in [3].
->>>>=20
->>>> [2] =
-https://lore.kernel.org/lkml/5229b24f-1984-4225-ae03-8b952de56e3b@vivo.com=
-/#t
->>>> [3] Documentation/mm/vmemmap_dedup.rst
->>>>=20
->>>>> [1] =
-https://lore.kernel.org/linux-mm/20250327092922.536-1-link@vivo.com/T/#m05=
-5b34978cf882fd44d2d08d929b50292d8502b4
->>>>>=20
->>>>> Thanks,
->>>>> Muchun.
-
-
+On Mon, Apr 7, 2025 at 7:07=E2=80=AFAM Hou Tao <houtao@huaweicloud.com> wro=
+te:
+>
+> Hi,
+>
+> On 4/5/2025 1:59 PM, malaya kumar rout wrote:
+> > On Fri, Apr 4, 2025 at 9:22=E2=80=AFPM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> >> On Sun, Mar 23, 2025 at 11:43=E2=80=AFPM Malaya Kumar Rout
+> >> <malayarout91@gmail.com> wrote:
+> >>> Static Analyis for bench_htab_mem.c with cppcheck:error
+> >>> tools/testing/selftests/bpf/benchs/bench_htab_mem.c:284:3:
+> >>> error: Resource leak: fd [resourceLeak]
+> >>> tools/testing/selftests/bpf/prog_tests/sk_assign.c:41:3:
+> >>> error: Resource leak: tc [resourceLeak]
+> >>>
+> >>> fix the issue  by closing the file descriptor (fd & tc) when
+> >>> read & fgets operation fails.
+> >>>
+> >>> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
+> >>> ---
+> >>>  tools/testing/selftests/bpf/benchs/bench_htab_mem.c | 1 +
+> >>>  tools/testing/selftests/bpf/prog_tests/sk_assign.c  | 4 +++-
+> >>>  2 files changed, 4 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/to=
+ols/testing/selftests/bpf/benchs/bench_htab_mem.c
+> >>> index 926ee822143e..59746fd2c23a 100644
+> >>> --- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> >>> +++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+> >>> @@ -281,6 +281,7 @@ static void htab_mem_read_mem_cgrp_file(const cha=
+r *name, unsigned long *value)
+> >>>         got =3D read(fd, buf, sizeof(buf) - 1);
+> >> It could be a bit cleaner to add close(fd) here and drop the one we
+> >> have at the end of the function.
+> >>
+> > Here, close(fd)  is now positioned within the error handling block,
+> > guaranteeing that
+> > the file descriptor will be closed prior to returning from the
+> > function in the event of a read error.
+> > Meanwhile, the final close(fd) at the end of the function is retained
+> > for successful execution,
+> > thereby avoiding any potential resource leaks.
+> > Hence, It is essential to add the close(fd) in both locations to
+> > prevent resource leakage.
+>
+> I think Andrii was proposing the following solution:
+>
+> {
+>         /* ...... */
+>         got =3D read(fd, buf, sizeof(buf) - 1);
+>         close(fd);
+>         if (got <=3D 0) {
+>                 *value =3D 0;
+>                 return;
+>         }
+>         buf[got] =3D 0;
+>
+>         *value =3D strtoull(buf, NULL, 0);
+> }
+>
+> It only invokes close(fd) once to handle both the failed case and the
+> successful case.
+> >
+I greatly appreciate your insightful feedback on the review.
+I will proceed to share the updated patch that includes the modifications.
+> >> pw-bot: cr
+> >>
+> >>>         if (got <=3D 0) {
+> >>>                 *value =3D 0;
+> >>> +               close(fd);
+> >>>                 return;
+> >>>         }
+> >>>         buf[got] =3D 0;
+> >>> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/too=
+ls/testing/selftests/bpf/prog_tests/sk_assign.c
+> >>> index 0b9bd1d6f7cc..10a0ab954b8a 100644
+> >>> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> >>> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> >>> @@ -37,8 +37,10 @@ configure_stack(void)
+> >>>         tc =3D popen("tc -V", "r");
+> >>>         if (CHECK_FAIL(!tc))
+> >>>                 return false;
+> >>> -       if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc)))
+> >>> +       if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc))) {
+> >>> +               pclose(tc);
+> >> this one looks good
+> >>
+> >>>                 return false;
+> >>> +       }
+> >>>         if (strstr(tc_version, ", libbpf "))
+> >>>                 prog =3D "test_sk_assign_libbpf.bpf.o";
+> >>>         else
+> >>> --
+> >>> 2.43.0
+> >>>
+> > .
+>
 
