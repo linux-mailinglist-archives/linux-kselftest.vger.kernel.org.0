@@ -1,74 +1,70 @@
-Return-Path: <linux-kselftest+bounces-30304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73708A7EE04
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 21:56:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB7CAA7EE3C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 22:02:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AB0F1895917
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 19:55:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C12C17681C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 19:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0847229B0F;
-	Mon,  7 Apr 2025 19:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A80A22D796;
+	Mon,  7 Apr 2025 19:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Qddqj0p4"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="U+3C8QAO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2075.outbound.protection.outlook.com [40.107.20.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4622221703;
-	Mon,  7 Apr 2025 19:51:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD31822A1E9;
+	Mon,  7 Apr 2025 19:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.75
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744055479; cv=fail; b=RQZRKN8yBqb76JLuoRMcVfP9eKdGyWntAFkf/puFVcIYjip0fvKGPULwIJBbmuYRdW2xEPEuNKuQk1QwS/tN2PtSoHnyCK4lUxkJ6/p81DeEduKbgRHmk2Lm0IQ/z37kXc//D+dP3/Oa/UkGOtY9SzwsoP93rrDhnZ4FmfsJLn4=
+	t=1744055481; cv=fail; b=trHywaVhCm6nzGHguSFdewEhZZ0PCjvP0A9BQ7joiNEkClOixBgihV1pUa4Fnwg6jiEIxQepfNP/TCEN0wpSirf1Nif/UcjOVxmooMYSvxTLKk6/QVNTcXMFOzy0SzIGSRBxDUEuB9OWhW1I863lNxI2MqiWL2t9oKVVK9QCEUk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744055479; c=relaxed/simple;
-	bh=cwQwazNGt5TAURYXzEY8PQG1xR+n8Mcap5euP4EFG4Q=;
-	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=CpJkRgFD8AJRSyG+46kTFZSUE87ak7wW2nhVVXnt5Y/1hRNE+ACNslHKG4qIuA9hd1m7E0z64v7lYVovMjOiNscfR1Ps8aR/bRY2y766IMCTUknqqSy3isOfoRa4nOidtrURcrt7+mTBApmXqSb2njzUEbgFLxg2+gePuqzXLmE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Qddqj0p4; arc=fail smtp.client-ip=40.107.20.75
+	s=arc-20240116; t=1744055481; c=relaxed/simple;
+	bh=ThyZOhwaDsp4V1j223U0prTZIbMrn8Rf6YEorwRizOA=;
+	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
+	 To:Cc:MIME-Version; b=o5i1o23kM+z9cIwGD2S03EEgRn3bRB0VHnADO4WLtQUB20UdkTfOCehUn/X9dlQXDUGMUAWkrqE1eiFnBUYY56WsAHi0oHRbTFNJ4KS+yFHIaHW66qZ5m5AKwyAXk38yqHr+Lz3JyOY48F8fct/05HjkjTLf2M3oSn5b7st8Z1g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=U+3C8QAO; arc=fail smtp.client-ip=40.107.20.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vN085f8X/Y9t4l4XZl40pyrdg1o+X499UQkV+a60tKann0GNwN3qmgmYY8Aqi5KPxW+Xim+Xf2b3mUsobk9psU/RCK3K1oAP9KEA8WGQd+O05I8qnnjnQB7fAOKcGXOMKvU/pb8p4/+CHeXct5YTXU46oPHqj0eWxWhcon7OZ0pSJZAgWR3WZtA3VGaIOZKgYnBKVsYNNddiuZWt6Jn68BvHMSnjnUY+gPMLYGX0DFTzVpo09IBJGZLPIyX6MP26AfDXlW47gbKXf+UwSkUZy/Oim/20dwvJYE5qolJ9cMBxzH9TClTr6FmSx9nFt+lsSocEWxw62nmvAGOhYYogBA==
+ b=suynrumez5XVDqD4MTEk4qTYwNZUr+tJa8sZG1WD2orJg/Ya9cHOn+/qN00jcUNHUKgbh1aEF9m8pugNTR4V6agHEr4farz2mF0mYEN2HZvOVCc1OrNMdWVJdjukzMF6D83wkljtlAOvPE+4BZTeXytjffGx3jZE36/Tw12jPRNWEDaBOE9KR9K9Wj2wA16+5Tz7IcGXkxiaiJoEJx1Kl61QhAyEjmvtE7E8eeW/yP0YJUpVaWjpQfWH7GxzZU7IMIFyHEMqfc3jb+Cj4VGzOpAksxlfSEgypBDQFXqANriUK20LskkOsoV5j2pgcW/3jucrSbB4iUKKOnRmRjwJcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NMOS/SW/9rBYs1OSR7NMZ+/rhzaPcgwqfagWFIa9oA0=;
- b=Vb6Mha4F0rkAtRQtRonCOQVCgDUwVCJeGhS/B+SLGshT8OfH1S5PxuCyD2Q/H04Ddksc5o2OWTgfCh4lJMwldlt3hvFO9IFqonlLsPzD6FcPrTESR5rkD/nLbjfEJF0+sd2L+YfK4Cv5Sq3NoaXmjqPirruoOP1MEr4EKQ/Lku785P2b8aI3+MRJQRKqnUXIQ9GRYMqANnxxnTyS7Q/hDawr9vo47E+DDapfTe0xnW0d4GSlWavxIXmfSYnY+HaBtVcTH+ouuA04hlMgdFPpXGdfp9lBokoPKlpXVewHugOHDtYjjPlzYdsG9Aeo2h1DfTNyJyYHMGm1oG133PkuQw==
+ bh=fBhEmQ+5keqgx7M1lTMSB3Zen5LLbLZOcXbwQxpRbuU=;
+ b=gJMs0Tyfc5PuYpDbyI0hyuKyWPm97c4+CgQFwtELEBJdz9COzlFnLQtEXJtxqWvYwM0qiAvVTcnGuneD5CoBtitU1c2XqUi7oPiJ4PYgRqBeRNiF+VleLPuGri3DUJ8t2OIx/ydMf4h626f3FmCQAveRRSRg8F8i9R1RDfjJNnm8FvATWu3B0rKQADetAHuJ53JGquoE/q+cz718KCA3OSSRg6r/upOipYyaany6ruOhmwDWLyNdJyDLPVAGrr/7E7AWqKQNrbttcdz3kInwilY+HKA/UQWJkFqgT9PqiYmfzy+NAC0eYl8abUzb8m5ii6fykNrJx1xaK64QeKCDaw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NMOS/SW/9rBYs1OSR7NMZ+/rhzaPcgwqfagWFIa9oA0=;
- b=Qddqj0p4qKLumgz63lZ4YDuBAu5CYMC/juZeYZBzBxzAhWbmtmvPgpssqLSnCHI0NT+AgEYKrF0Cm+kVATSBiMDz6WWgbFwzQnpBu0UCEzkdR1tODkGRJB8k00j+Qb3aeckdvjcojQk/3VuK/BHIwi6YObuo1onTgP1BbftYAl8LU1PS4jt8VwlS20PETF9ukg5dHQwEoQgldw0g25vbHFFv+cSwP9PCz249d2BpulH3dFJxPOzVYBGq18Kz5T96ZrAhIas319gTqdjG+0Pc39T3QcYY+EA+1cb3vB3YyK8IfQw7jrcwE3phv3gKlAzcOHH9zKaF8rRbr2Yl34St7g==
+ bh=fBhEmQ+5keqgx7M1lTMSB3Zen5LLbLZOcXbwQxpRbuU=;
+ b=U+3C8QAOF9zkv0IUDe7h1pa5BPlZf3eTodVFeFCBZyyKoj0j4K8WlDn371kvQ0W7Sg0E92o5rXOcrk2gCVJf4usa1AoTJLXx7uYsOZpTbu/F1aCAoiFflQnoMlfrI16EXsfUmr1sJehNdwkcv66JPO3FsOi9CxZ8QyZED8yJYSgSqqHCIaL5aWEOHvrSwCR67eX1GUlU+DfZsJnwAca+5bkivSQOFEP9Z4jSGImDTrSCfudSTRs1+ezrs0djfancbm+fH/M0hC/b08/+LrPEloOg7pt1M7ZbJoCkunmrsLnz2VL3N+3oqzw8/KHI38Inq6w6mnaq2zoC1LInE2KhBg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
  by PR3PR04MB7452.eurprd04.prod.outlook.com (2603:10a6:102:80::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.34; Mon, 7 Apr
- 2025 19:51:13 +0000
+ 2025 19:51:18 +0000
 Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
  ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.8606.029; Mon, 7 Apr 2025
- 19:51:13 +0000
+ 19:51:18 +0000
 From: Frank Li <Frank.Li@nxp.com>
-Subject: [PATCH v17 00/15] PCI: EP: Add RC-to-EP doorbell with platform MSI
- controller
-Date: Mon, 07 Apr 2025 15:50:50 -0400
-Message-Id: <20250407-ep-msi-v17-0-633ab45a31d0@nxp.com>
+Date: Mon, 07 Apr 2025 15:50:51 -0400
+Subject: [PATCH v17 01/15] platform-msi: Add msi_remove_device_irq_domain()
+ in platform_device_msi_free_irqs_all()
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAJss9GcC/13SSW7DMAwF0KsEXlcFSc1d9R5FFxobLzLALowUQ
- e5eKUAs2UsJegRF/vswp2lM8/BxuA9TWsZ5vJzLAfXbYQhHd/5JbIzlYiAggYDA0pWd5pEZL4L
- znHv0aSiPr1PK4+1Z6eu7nI/j/HuZ/p6FF15vXyXkq8TCGbCQYjDWoQroPs+363u4nIZaYBEd4
- rgiUZBGHR1Faz2ZLZINIZgVyYIcCisxQATQW6Q6hLQiVZCQ2WqixAPt2tM9EivSBUXhgnYu+0h
- hi0yP1IpMQSpjVibniN5vkW2IgK/I1j8piD7wjDLGLULoVeuvbBCY0YFrU2RUe4Y9s41hHbvgI
- jvDrfZ7Rh3DtqwyTWCcRyE5ZScJdoz3rK0LazKUUInQUgwkdmyNhgQC3VjNhlUaPXKVye+ygbJ
- jfZM1HT64ELAgdHbHVGOin6R6rtqijcrUWDX2eDz+AYnuzzZaAwAA
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250407-ep-msi-v17-1-633ab45a31d0@nxp.com>
+References: <20250407-ep-msi-v17-0-633ab45a31d0@nxp.com>
+In-Reply-To: <20250407-ep-msi-v17-0-633ab45a31d0@nxp.com>
 To: Kishon Vijay Abraham I <kishon@kernel.org>, 
  "Rafael J. Wysocki" <rafael@kernel.org>, 
  Thomas Gleixner <tglx@linutronix.de>, Anup Patel <apatel@ventanamicro.com>, 
@@ -93,11 +89,11 @@ Cc: Niklas Cassel <cassel@kernel.org>, dlemoal@kernel.org, jdmason@kudzu.us,
  imx@lists.linux.dev, devicetree@vger.kernel.org, 
  Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.13-dev-e586c
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744055467; l=12269;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744055467; l=1529;
  i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=cwQwazNGt5TAURYXzEY8PQG1xR+n8Mcap5euP4EFG4Q=;
- b=FVDv0mFu0riL7i0ttQr8RopM9jkuabNA2lsougCWYrhnq7vB8TFAn8LNLI2Fgeu9IVWdvNFSW
- 1lUj1w27FJ6DPuT5xnGZUKqWcTUtblRTBIkDyQdHfVULP5oBKh0YoXs
+ bh=ThyZOhwaDsp4V1j223U0prTZIbMrn8Rf6YEorwRizOA=;
+ b=o1HYfMoY917YNLPLCMC0xmqaTJLB7tkp+9gfD4zitOgYHeNgY5jDb9S4aRR4yVfoZWdB7p04V
+ jm05nDxbmuGBzq9qWDFiyr4WgDlK13UJF39OZnkUfzcBivybgc1Uja1
 X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
  pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
 X-ClientProxiedBy: AS4P189CA0041.EURP189.PROD.OUTLOOK.COM
@@ -111,348 +107,143 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PR3PR04MB7452:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd9e6115-31a5-4f72-4eec-08dd760d8d43
+X-MS-Office365-Filtering-Correlation-Id: 389e9db2-7142-4a95-13e0-08dd760d9066
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|7416014|52116014|366016|1800799024|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MWthaUxwUjA4Z1Q4bmR1cXA4SmlZZ3pDM0JoazVSb09YZkhWeExCelFpVTJj?=
- =?utf-8?B?SUNsS2lISkdPdk9iOE1yVk42eDZnekFhMmt3TDdHOGhZaHFFVnhaNUhacnNW?=
- =?utf-8?B?djFXeE1ycVFBRy9vWTd0LzFVN1BZOGNIVGpLZDR3QXdsTm1hU2ZKM0dYRzBX?=
- =?utf-8?B?U3Jubm5FR2ZBcTc2RVVneDlXcENGSzJCN0JPYmNoZVNwa28vOXh4Uis1eG5L?=
- =?utf-8?B?NWErYnlKN3Jqd3NNK081UTBXTlJabFAwUHFJelZTTnU4ZzRvQy93M3Zjb2RG?=
- =?utf-8?B?OExvMlowRHpNNzZqYzZQSGZSLzAvekttWlR4WTZJOFpUTXFuQ2VnWnZGTS90?=
- =?utf-8?B?d25OYlo4cFZNY3RQZS9qTDRuQ0V5OERMeWprY1FnL1EvTUJoQjVmVktmdUNa?=
- =?utf-8?B?MjV6L2VabitLdGFuZWV2V0kvZmNVb00rcXEwZ3Q2elZyRUJHeVhRNDR4czVu?=
- =?utf-8?B?NzJVb3NpRFgvL1VJY2x6SjhqbVFoaFRaUEtpUjFON3pHRUVQc0VFenowWDh0?=
- =?utf-8?B?clI5SlZaL2syS3FYT1kvczNValVlTW9FclZvZkE3TkxuV2ZXcm5vZnpBdmJE?=
- =?utf-8?B?aFIySGhrNnkwOVBjd3hyQmM5bXNKMkZoZWU4Rkh4RTlpa0NvdVBtclhXQ2Ja?=
- =?utf-8?B?anREcU05NmlsN1NJMVVETWFUMjBTS24rU1FPT3hTdXJPMzBYRkxGVk55RzR2?=
- =?utf-8?B?d1NwVG9meHlaeTdmZ0lvMWwxTW5sODRYZko4eGJvUlIwQlNteno0S0o4cnNt?=
- =?utf-8?B?YXloemk2TVhQandVdnBSbDRoTEhPM0hZY3phVWlYTEtjZFlMRWNEWXZuSi9q?=
- =?utf-8?B?REJ2WTVEYjdQSjE3dklBVzNOUXYzUWx0TE9FdlloSmRjenZZbGVrWThvUUJE?=
- =?utf-8?B?dkFoNkZnL1lhVFVmazdUUStGZ1FQbGk3ZE16VXZyRGFqVkRoYm51aXhzVVAy?=
- =?utf-8?B?aUZudFJYR0hRM0ZGbXZZTnUwZnBwamI5ek9LRVBBTDcyTHU2Rjh6RlQwZ3hq?=
- =?utf-8?B?Q3NFUHV2TUc5TGdPVllGSk1YMjF1OFlBZ2hOaWhid2VVTjRSL2QyL1NQanZ4?=
- =?utf-8?B?YjMvaHI1ZzFIdUdnV2txdkxPRzVZeU9mV3g4RjE3SVNuQzRPQkZmdStodU5B?=
- =?utf-8?B?U0V0T0ZINUd6UDlWWGVORE0wUkZvZjhLNmFmYkk4US9oalRhVEllQjY2Y3Er?=
- =?utf-8?B?YXFxeTdUM3FXaWJpaUovbEdJUVVmVHh1MnlJZ1hlK3Ixd2FGOXk3NFh0THdm?=
- =?utf-8?B?S3FWWmJQTHNDWFZXdGVPdyszd21aRUw3TG1uR3pmYzAxSGFRN0lxektYdmxO?=
- =?utf-8?B?aHl1YWFTbkJzcmVSd01jRHdnSkxrNTZhcGxLVUlmKzFaYm40elByZ0JtVy9D?=
- =?utf-8?B?cHAxc1lSalA2V3N4V0FJMElEeXhDd3p5VHVsUkpUUWRMVzRnbGJrSmJZeWdr?=
- =?utf-8?B?NysrVmtsL1B2Y2pocjczdGtpSTV3cE5XNU95T1ByejVpQVIwaVhmV2VFRXIr?=
- =?utf-8?B?U3NXemJFM0ZRR0JwSUludmVObWloakZKYmxweDRTbGhtODRZZzlnRzc1UVJW?=
- =?utf-8?B?dThnSC9UOVV1Y215aVJSZkpCOEZMWGNHRzNDUmlHT3FUVFMwNUNobWhVVFpP?=
- =?utf-8?B?aG1yMUF0OUdVa0lNQXhJSnJaQ2kwcm9FSzEwNGhEU3NPNUgyT3BzRUYwbXVn?=
- =?utf-8?B?R0l0YlBFNDlNaWdyN0FvdEp1YWhBeE5yVkF4RzhwVHI4bWtFYUpTQ1plbVlW?=
- =?utf-8?B?MUJybWJjUzJvZUNIaEFiTnlwVXN5YlJFbU1mVVh2RHkwd1hZUFUrQ1JGWjE0?=
- =?utf-8?B?M0YwdWFWQ1NDRWlkS2ticnV0VlNYeE4vSmRpRVpZeEV1aTVCc3BMcVFKYm1G?=
- =?utf-8?B?VEZDT29TdnoyME9adldvME1PK2JmWW9udEdrRkZnY2N0Z01VVXZjbFVUeGhO?=
- =?utf-8?B?c0IvODBYdnpuaE5reGo3ZlR6azduK0pCa3hQREk3NWIvZTNOSE1OaG5qL1kv?=
- =?utf-8?B?dGFNZ3pJNHlBPT0=?=
+	=?utf-8?B?N1RnN1Rqbmx6Q2I1Z25sUG9kYVJwdnExYko2OWtNNnFNQXFCdzlCNWgxQ2ZR?=
+ =?utf-8?B?YXo5VkV6dTdtYzlickV4V016clE4enJ4MjVBVE10MWhkcEJGQ3F1NHNHMjQv?=
+ =?utf-8?B?V2V4ZCtmYU9LUGR3OU9hRko0QmhRQm8yQ3R1ZGNpS3NlY2ZkdnVvem5QdTQ3?=
+ =?utf-8?B?TUwwNlhaTTJNS2hicytLemZxSkhvZC90ZHFMMXRmWG9WcU9XYkU2amVIY1Y0?=
+ =?utf-8?B?cjVmNVlYSnN5UmZiNkxFaXJvcFJib2kwcHNUQnhJWmU2bTNkLzRUZGNSd0V4?=
+ =?utf-8?B?RkVvUXdWWFAzSzNDeXRlWkQ2VFFPdkRrNlpreTJCKzBkeXB3V2dwbWxDTHhY?=
+ =?utf-8?B?cnRjMmxadHZpTUJFck9QV1NLN2V2RTVhb1EvdU4wb1I2SzJyVG5mSFRobEZP?=
+ =?utf-8?B?ZUJqNGdZdkRqMG1uOGZrSTZUR09wclRWZGVPTEZ1eURYZ20wK2hEU3duVXRX?=
+ =?utf-8?B?c3hwbnMyWE9TbERNQ28yQmpLTVp0dlcxT1ErOXorY0M0dTk3eDhyRU1CRmJj?=
+ =?utf-8?B?elJuRTg5NEJUM2ZPMVF4MkU2K2xReXZZenJOVjdlUnl1U3hrWlllUi84NlVx?=
+ =?utf-8?B?UjFWeFowNnl5Yk04VENhZHNBWHBMWEVBNCtJZXlJU0JMN3hLMUVMVGduSmJC?=
+ =?utf-8?B?SkhCcnd2M3hPWWZST0NzdnE3bFQ2Wjk3TTlZU3dQMlY2RHhIeXFub2QzSmtU?=
+ =?utf-8?B?a1huMkExbm9LT3dPT2VxVlFjNUlmem4rY1JFU1R0RlZDUTNsZTdZZXMxendn?=
+ =?utf-8?B?UDBmeDBCT2xCUDdQci9EUlFqbGtrN0o5MlFyOHpaZ3c1YTU5aGc5VnZLcTRx?=
+ =?utf-8?B?VnJYeWxFY0NNbmI3YTFESWQ0NWNpNTErQnBraUZPa29LR0ZyS2xPQ2Uxb3Ar?=
+ =?utf-8?B?K01zSFBkRGs5SzhCWGtBRGZLRm5nODhhSDM5L1drVm1HSk1KZW5UVUU5NnBU?=
+ =?utf-8?B?d2hUNE5HNExRbkx1WW5ET1hlVithd2t3NzYxSEh3VWl5R3hNbFA3UmdpdmZ0?=
+ =?utf-8?B?c1k3QzdHNGpmeGEzSGRhR1pEYklrL2VTY0txYmgwdytoZ1J1ajFlWCswUGNZ?=
+ =?utf-8?B?RG1RZE9MNk5MVUh6Uld3aFNQWWpRVGhsVm1vbHFvckNYMHpVcHJTSXpmdDh3?=
+ =?utf-8?B?Q1RjbmRBZVdrcU4xd3k4bFg0MEc0UG1WTnRBYU9US2ppNytab0Z3UWxrOEFz?=
+ =?utf-8?B?dWkxaDZ0N1FIcEtaU1FhWlN2QXlhWHQvNHlOZGc5Rm1vSTNwM2NtVVA4YmJa?=
+ =?utf-8?B?UTZ2TnVxb3dUYTJSekhRZktOU1VTMTQ2TGp5VDN4Y3VtUXBSeFR6WU5VVTVH?=
+ =?utf-8?B?NUZtemlJR1ZMb0srSXk3OG8zZWRvOHhoZGZ6UjhjejBWNUNKVC9vY0RSbWFE?=
+ =?utf-8?B?TGdFNkdyTVI4YlRhNE1PVXJtZktsV0lFcU9tQkxTVzJWSHFnU3dEOFFWNWw4?=
+ =?utf-8?B?L05XM2J6dm43Rmkyaklia1FzSnV4ejZmT1FBYUt2bUdrNzlCVTdNeVdwSWEz?=
+ =?utf-8?B?RXp1c3NITDFkbHVqYVl3eW9hZDZjMndEVUtnOEIrbTFNZlR3d3lHN1dJcE8y?=
+ =?utf-8?B?cW5QdmZTVDdzU0I0UlZYTC9BdHl3cldYV1dQVVNVdkJrcGpGTUN0M3ZCMm1C?=
+ =?utf-8?B?Z1c1N0JOcWFGOTdFQk9uUGsweXdpS2tSQjVhVU9DY1M2dk9yTVdNNXNJSUZG?=
+ =?utf-8?B?SEpjNzhFNk5XeVlnWVoxMnRURTVVZHZab0dDUVNmam5hdGdiWW00cjNRSzAv?=
+ =?utf-8?B?SlU0cXNuL2s0WHdCL0paRUZ2dmVOWWVtS0J2NFZRWnpGU3ZWTXlBSlFMZVhO?=
+ =?utf-8?B?VlVLOXAvd3BTUDZsa0FLaGU5eXZySEp1YTFFYXJVMmZHVWNQbkZCZFlzMjVR?=
+ =?utf-8?B?UmJNRXh6SS9HZ1VKM05IUTVLMFlXME1HVUNEUUtqQnI0aUpKRndWZnF6U1V1?=
+ =?utf-8?B?NEJVcHU0NUZraUpLSE1GNEw3d3ZsSGRsSWoyZ2pheXI1b2ZUbVljSiswSklR?=
+ =?utf-8?B?VzU0ZXBaa1JBPT0=?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(366016)(1800799024)(38350700014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?d0ZXTFlQLzJuU0VDRjJCVzB4dS81T0w3VXU1K2FpTzkxSlk4Y0RTd2RXNTNK?=
- =?utf-8?B?Y0haYndjV25DUXdZYm5HZjZKSlBaWm10VXVFQ3ZHMXpzbzh5enFLU040Y29G?=
- =?utf-8?B?Z2FrMVFFa0FaMm1qU3lLT1ArWVBEbEVROEsrcGpyK2cxcHNuZDhmMmg3Wloz?=
- =?utf-8?B?VFFGby9XcDA2THg3SUZkeUhxNDY5L0Jzci9Sd0pCY05LYVFjSEJELzJyT1lZ?=
- =?utf-8?B?aWUrSFp1NDB4MnpMUmNvTmp3Z3FzZ2hxanVaQXk0ZFBBVHZyWm1qQVpUZVlw?=
- =?utf-8?B?SkRRNERBS1VIbU4rT0ZpUS9zeHBrUHdEekQ3ZmNrRjRERFZ4Q1RwYnAvRmI0?=
- =?utf-8?B?S1BKdFZ3YUhJU2RRZzZQTEo0dmtDem1yZGJxSVhRSnJmOXdweWQvb0c4OE5t?=
- =?utf-8?B?bENGbFhHWFBSU1YzZm5EUjFoSDNUUHRtN2VLMEptQ2xRRi90VTJsbE0ranZk?=
- =?utf-8?B?SklqYUI1MTJWbkV4Nk9qaU90VWxmVDc2Z0tqVnRybVloQ2dEZG5MbmdNbTA4?=
- =?utf-8?B?K2c3YysrOGRnemRPcy9rZWhyT29YMHJrSXNYU0YvQXEzWlhsR1kwb3k3bE5X?=
- =?utf-8?B?aG5oWGwya1pQdWx5Q01VaEtJbytJcllGTTR5ekdUN2NQcmR6ZmxWZEJsZXVl?=
- =?utf-8?B?NUV1cjVzand3TXRsWk9UMk5IazV0TGF0d09OcTA2a2xHQTMxRXJlcDFFcm5m?=
- =?utf-8?B?QkxJeG9KYjVCSTlYRWw1NGNzTCtxUmV1LzhENC8yc2dka3ZCdzdCRW5kNjZG?=
- =?utf-8?B?OVFJTFZhSWc5TitLUXZZZU5uWER4OFd0SE53bFp6b3BwZWZMRVZNbmdkTUJI?=
- =?utf-8?B?S1RXTFZZZXd3OGFGaURFdDlLVDdnR1djbFExcDhybERXbktTZXVHVUlYU1Rs?=
- =?utf-8?B?ams0NjVUMlFFOGo4Mk10bnpNR3ZxTmk5aFRiSGRkcERuNUlMMTdZc0Nzb29B?=
- =?utf-8?B?TjBVSEpINGprb2I0elZtVWhtWnJZeXZ0QWo2UXpRUHJ0YlhKSXdqZEtwbkNK?=
- =?utf-8?B?RTJyRmJWbzVsR08zK09LRkFWdklxTWcyYmREaVFSU2ZpeWs5TXYraVhNaFMv?=
- =?utf-8?B?M2I3TFBoNjlrL1YyR3d2bjBoWmduaEc5Qk9XM1NLKzM0dXNabDNhYWk5N2xN?=
- =?utf-8?B?TTQ1UEZXbGxLWkJrck5oeGVQUkhYVVR4amhQdTRpZEF2MDVTRUNNeUF5alhz?=
- =?utf-8?B?S0NTTXhXRWtPZndsdjJmYkN6eXZDZjhkYnRiaVdmNW1xQ2hNRGRNVTBwN0hs?=
- =?utf-8?B?eTl5SkZjL3lndHFaMEk3ckRoUFd1UXByUWFGK2VjbWRHUFo4VGpnNG04MkhT?=
- =?utf-8?B?aGUrTzBUWjJHQ1QxSDRFWkZCektFbnhOWE1WYUN4cmNRWUtjc0ZaVFd5UW0z?=
- =?utf-8?B?L3pmWkJwNDJaRGZiZTNFcGZidTRzaThpMVY1NEZOVGRlalpWVHp0NllXbTY4?=
- =?utf-8?B?Zm5rdTVtSXVzeGhzTE0xZ3E4YzVxa2JBdlRlQWtJRGpob0lmcC9tV3NBUHFX?=
- =?utf-8?B?R1J0VTZBWTJEdTU3Q1I2VUpERU1LcTUvSks3WmFkTUZVcEMrZ3dqTkYzWGky?=
- =?utf-8?B?Nnh6L0dEOFg2cHdEMEgycnNsMzhNS0swVEoyUUlEazFaOW1udVJybE9KcVJ0?=
- =?utf-8?B?QVVnRVRyVk82Q3JIOGgwS1ZhUFhtV0pTY0ZkRzdwMkNDUkRPWGdlYVYweXJK?=
- =?utf-8?B?aXJiclFhd0NxdldqTDBFSjh1OTVKeTFvVU1sMmZPaUVlbDV2dEhpdmdjdUE1?=
- =?utf-8?B?aG9LVFB2ZFFUbW0vVkM4aGIxYWQ1ZWE3SjZoZm96empXSnhEUHFwaDNZWWRa?=
- =?utf-8?B?VEt5WVZHVzFacG5LZnZrY3RFekY3eDIrSHBmczcvZndkQUNoMTlNNUhZbUN3?=
- =?utf-8?B?azZDY0UyTklRRG5yZFk0M0t1YjE4REM5SnhVZUVUTzJCWjVpbi9mejhUUDEz?=
- =?utf-8?B?WjhZc0lub1FoMkdvVEM0NDhucUtxVytONC9GdmZGZVQwdHNMWlllZDhrMzBv?=
- =?utf-8?B?QU9UdFNNT0VvR1lHRHAxOU5MVXFXU1dwRDJ2amNnenJVaUZQenB2UTEwdTQx?=
- =?utf-8?B?OFdQVmdOMnJCMUFIbG53MWFseDFEMXNSNUoySXA5em1nbGlzdTdEWWJmQWl6?=
- =?utf-8?Q?MsuvU0jHpD1bYOeXYPZtfFSJy?=
+	=?utf-8?B?QU1RNWpPckpkaFFvRUdRc0F3RmdOdGlVLzhud1RabTM4ZU9Rdlc3N0NKb0pV?=
+ =?utf-8?B?NVFlekNSeEpEWWpWM255THFpZDROMi9zZDdLT3h2QTg4aGlmQjU0TElRcEJK?=
+ =?utf-8?B?Nkk0QVg0MDNkNmlzdk5xeXdnWXZnRWN6UVQ2VU13K1crNDNjV3BFR0xmR2V5?=
+ =?utf-8?B?a3RJdk1WYllqVnB6NnE0MlRGdExBeVYrMm0rOHppVXdrQ0dZUzlTM3FEQTRG?=
+ =?utf-8?B?NHBqK0RMZ2JJTjRtWHJZRTl4SVprYWNsVWI1QSsxN2pVdkNDZ0JRUS8rODRB?=
+ =?utf-8?B?YThaRWk3SGFDMjU0NDZSK2lJYThic3VLTkV6MUZUWGVYMXNHUk1Ia2YyTHRZ?=
+ =?utf-8?B?Q21WN054YzhMaFZWWXB4SjYyRFBYZkRQdVVNYWM3bjlVY0IvTjZEdW1WTzVS?=
+ =?utf-8?B?Z2dLc0JqTTMvM09HeTJxZ1RmSnZ1cldjMTlMVGx6M0Y0c3d4M2RQTkJjSzRG?=
+ =?utf-8?B?ZFE1SHZxOVRmSFBEdXpZRHY1eXEvU1ZNeEc5alZ2QmNiRVFLeEYwSFRpYVdt?=
+ =?utf-8?B?NnFDeXhKdWJKRGZhWjZyS1pBVWlERERxRGdEZjl5RnI3M3FFSkgyVGZiUGlH?=
+ =?utf-8?B?UStGUEFkTExsM0lJeDZwZXJUYVpGeGZBRS9WMHl5bXFpUWxNMS9sN1lZNGs0?=
+ =?utf-8?B?MHphYWVhR3RzREEvMHorTnZ2WGlvZS92TmhyUXpOV3VkekVvU0dFV1RteXg5?=
+ =?utf-8?B?Z2hCWDVsd1FhTTVnTlRpaDlKZllka0FJUnp2RUIxZkNJSUR6VjJHTkplLzJF?=
+ =?utf-8?B?YWVxQytXK05NK2xXc0JwNjJzb2pvNEt5ZkxqbzBsaTdyNUNXYUk2eVdwMTlS?=
+ =?utf-8?B?L0ZYYjNGdmxmZitWUTNLeEcwaWJKblF4SFBKMjNjUU1lTmRKb3k3Y1R6REZC?=
+ =?utf-8?B?QWZ6b05NZzNDV3E4MzNrcWdlakNyME43bGlvRGwybkg5UFZJWFlhUWdTdHVZ?=
+ =?utf-8?B?MGZIcWxQRjM5L3FJaUpXQ3ZydHEwbWxGRlhBOGNNNG9iM2dwNnlySTd0OC9q?=
+ =?utf-8?B?QkZPR0lXaHZTUTlLbnBSTGc1RWNERmk0dzhiWHFhNkhuQU1HNlFLMCtzTEp3?=
+ =?utf-8?B?YTBtQ0ovSU1wK1hKeUZIcGM2cW1QZjhqM2pvYVFVd1ZMdDMvUVJ4bmgxak9O?=
+ =?utf-8?B?bFFrU1RlSmdieXhqekZNNWdMcGE4WHQzUW9pR0VUUE9zNUJLRGZiZGk3VUQ2?=
+ =?utf-8?B?Mm9qbGZHMDlsdjR4OWN3L0JPKysxSXlMeWFvcGJTOFo5bVNsUDdJamhoZTFE?=
+ =?utf-8?B?NElvNUQ2MXlyYzc0NmlqR2pYeWJsZHdoMWNxaURpMnVIOUhCOWNGQ0RGTWg4?=
+ =?utf-8?B?MC9JKy80bk11cEVSYmtsYXZseHJybmg0SFpXeGVsSlFPRC9pRUdVNFpoUkpu?=
+ =?utf-8?B?Zyt0SWxlL2FadVhURjJOVGkxT0YxMGVjQ0VvaTFVeXNnUVhNV095WmFXRnpW?=
+ =?utf-8?B?bC9FcHFremxoVjRiMEowb2ttTnU1NHN6ZFBVeVBiUXlVRzk2U0hkM3hsZllm?=
+ =?utf-8?B?bXZYN3U2NUtDRkJWMkZTR09WMGd5TGhlYVdLVU41YUh3cEV6dHBUWkErazlR?=
+ =?utf-8?B?UGlPRWYzZG1RY3NseG9tMjB2R1RlUzlxb2dGS2Fldm9FcEp5MmNhZGZuVzF6?=
+ =?utf-8?B?WjZCSnpoZjBuaGJXc2tUU1RtSkxNNFliRmpGU1FUS1JKY2M3M1NGVHJEejYv?=
+ =?utf-8?B?UzYxcXcrd2t1ajBNWlNSZStMZ09UQlBJaVVOUkI5Wlo4cUJqTU50U1lHMEh2?=
+ =?utf-8?B?UUQxbEZGV2w0SU5JNVBIYll1SENnM0s3a08xM3U0UHpFWkdUZnpMVDhadXVR?=
+ =?utf-8?B?WTJhdTJwUHFucmwxZENuMlFxN1p0OHUyVFo1QjZLUkVQYWVEcnRqR1NRQUw5?=
+ =?utf-8?B?T2R4K1NDdUxlKzE0bm9oTEpiNTNHcWI0SkllWmJJbS9ySkRaSUJKenY0VFFk?=
+ =?utf-8?B?K1R0cklqVWRDUWE5bk50dGE3aWZUazB4RFY2S1U2ZGNrbG1ra3A5USt4cHVs?=
+ =?utf-8?B?V090dEw4T1pjZzlMaWFsdlRQVEtmZDJkVjhBbXJNczJLUEVBaGNCMldVNkhi?=
+ =?utf-8?B?VE5iS3h4SG5tKys4bytOOVluSEd4T2IzQjN4NTJCUk5Yd2R0NFV1WjJSVitp?=
+ =?utf-8?Q?HNzkwl42JR0ojbDx5+Tb5vsIz?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd9e6115-31a5-4f72-4eec-08dd760d8d43
+X-MS-Exchange-CrossTenant-Network-Message-Id: 389e9db2-7142-4a95-13e0-08dd760d9066
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2025 19:51:13.4514
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2025 19:51:18.7027
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OA9QIL+DatIH17WQhgV+MEgeaErIVSS4hBrmiLwrohiRybrrd0owfcu/+hr4+P2PGQo7RmRJf7Uq256+gRv1AA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: EIXUtUqKHbQOvvBoGjip4EgMQnizhjgZh7Lt3wd0QrxCtA+1NWHhWB3ZXgIE+4MQRLPQIszUb/MXw4Zi/K/apw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7452
 
-┌────────────┐   ┌───────────────────────────────────┐   ┌────────────────┐
-│            │   │                                   │   │                │
-│            │   │ PCI Endpoint                      │   │ PCI Host       │
-│            │   │                                   │   │                │
-│            │◄──┤ 1.platform_msi_domain_alloc_irqs()│   │                │
-│            │   │                                   │   │                │
-│ MSI        ├──►│ 2.write_msi_msg()                 ├──►├─BAR<n>         │
-│ Controller │   │   update doorbell register address│   │                │
-│            │   │   for BAR                         │   │                │
-│            │   │                                   │   │ 3. Write BAR<n>│
-│            │◄──┼───────────────────────────────────┼───┤                │
-│            │   │                                   │   │                │
-│            ├──►│ 4.Irq Handle                      │   │                │
-│            │   │                                   │   │                │
-│            │   │                                   │   │                │
-└────────────┘   └───────────────────────────────────┘   └────────────────┘
+platform_device_msi_init_and_alloc_irqs() performs two tasks: allocating
+the MSI domain for a platform device, and allocate a number of MSIs in that
+domain.
 
-This patches based on old https://lore.kernel.org/imx/20221124055036.1630573-1-Frank.Li@nxp.com/
+platform_device_msi_free_irqs_all() only frees the MSIs, and leaves the MSI
+domain alive.
 
-Original patch only target to vntb driver. But actually it is common
-method.
+Given that platform_device_msi_init_and_alloc_irqs() is the sole tool a
+platform device has to allocate platform MSIs, it would make sense for
+platform_device_msi_free_irqs_all() to teardown the MSI domain at the same
+time as the MSIs.
 
-This patches add new API to pci-epf-core, so any EP driver can use it.
+This also avoids warnings and unexpected behaviours when a driver
+repeatedly allocates and frees MSIs.
 
-Previous v2 discussion here.
-https://lore.kernel.org/imx/20230911220920.1817033-1-Frank.Li@nxp.com/
-
-Changes in v17:
-- move document part to pci-ep.yaml
-- Link to v16: https://lore.kernel.org/r/20250404-ep-msi-v16-0-d4919d68c0d0@nxp.com
-
-Changes in v16:
-- remove arm64: dts: imx95-19x19-evk: Add PCIe1 endpoint function overlay file
-because there are better patches, which under review.
-- Add document for pcie-ep msi-map usage
-- other change to see each patch's change log
-About IMMUTABLE (No change for this part, tglx provide feedback)
-> - This IMMUTABLE thing serves no purpose, because you don't randomly
->   plug this end-point block on any MSI controller. They come as part
->   of an SoC.
-
-"Yes and no. The problem is that the EP implementation is meant to be a
-generic library and while GIC-ITS guarantees immutability of the
-address/data pair after setup, there are architectures (x86, loongson,
-riscv) where the base MSI controller does not and immutability is only
-achieved when interrupt remapping is enabled. The latter can be disabled
-at boot-time and then the EP implementation becomes a lottery across
-affinity changes.
-
-That was my concern about this library implementation and that's why I
-asked for a mechanism to ensure that the underlying irqdomain provides a
-immutable address/data pair.
-
-So it does not matter for GIC-ITS, but in the larger picture it matters.
-
-Thanks,
-
-        tglx
-"
-
-So it does not matter for GIC-ITS, but in the larger picture it matters.
-
-- Link to v15: https://lore.kernel.org/r/20250211-ep-msi-v15-0-bcacc1f2b1a9@nxp.com
-
-Changes in v15:
-- rebase to v6.14-rc1
-- fix build issue find by kernel test robot
-- Link to v14: https://lore.kernel.org/r/20250207-ep-msi-v14-0-9671b136f2b8@nxp.com
-
-Changes in v14:
-Marc Zyngier raised concerns about adding DOMAIN_BUS_DEVICE_PCI_EP_MSI. As
-a result, the approach has been reverted to the v9 method. However, there
-are several improvements:
-
-MSI now supports msi-map in addition to msi-parent.
-  - The struct device: id is used as the endpoint function (EPF) device
-identity to map to the stream ID (sideband information).
-  - The EPC device tree source (DTS) utilizes msi-map to provide such
-information.
-  - The EPF device's of_node is set to the EPC controller’s node. This
-approach is commonly used for multi-function device (MFD) platform child
-devices, allowing them to inherit properties from the MFD device’s DTS,
-such as reset-cells and gpio-cells. This method is well-suited for the
-current case, as the EPF is inherently created/binded to the EPC and
-should inherit the EPC’s DTS node properties.
-
-Additionally:
-
-Since the basic IMX95 LUT support has already been merged into the
-mainline, a DTS and driver increment patch is added to complete the
-solution. The patch is rebased onto the latest linux-next tree and
-aligned with the new pcitest framework.
-
-- Link to v13: https://lore.kernel.org/r/20241218-ep-msi-v13-0-646e2192dc24@nxp.com
-
-Changes in v13:
-- Change to use DOMAIN_BUS_PCI_DEVICE_EP_MSI
-- Change request id as  func | vfunc << 3
-- Remove IRQ_DOMAIN_MSI_IMMUTABLE
-
-Thomas Gleixner:
-
-I hope capture all your points in review comments. If missed, let me know.
-
-- Link to v12: https://lore.kernel.org/r/20241211-ep-msi-v12-0-33d4532fa520@nxp.com
-
-Changes in v12:
-- Change to use IRQ_DOMAIN_MSI_IMMUTABLE and add help function
-irq_domain_msi_is_immuatble().
-- split PCI: endpoint: pci-ep-msi: Add MSI address/data pair mutable check to 3 patches
-- Link to v11: https://lore.kernel.org/r/20241209-ep-msi-v11-0-7434fa8397bd@nxp.com
-
-Changes in v11:
-- Change to use MSI_FLAG_MSG_IMMUTABLE
-- Link to v10: https://lore.kernel.org/r/20241204-ep-msi-v10-0-87c378dbcd6d@nxp.com
-
-Changes in v10:
-
-Thomas Gleixner:
-	There are big change in pci-ep-msi.c. I am sure if go on the
-corrent path. The key improvement is remove only 1 function devices's
-limitation.
-
-	I use new patch for imutable check, which relative additional
-feature compared to base enablement patch.
-
-- Remove patch Add msi_remove_device_irq_domain() in platform_device_msi_free_irqs_all()
-- Add new patch irqchip/gic-v3-its: Avoid overwriting msi_prepare callback if provided by msi_domain_info
-- Remove only support 1 endpoint function limiation.
-- Create one MSI domain for each endpoint function devices.
-- Use "msi-map" in pci ep controler node, instead of of msi-parent. first
-argument is
-	(func_no << 8 | vfunc_no)
-
-- Link to v9: https://lore.kernel.org/r/20241203-ep-msi-v9-0-a60dbc3f15dd@nxp.com
-
-Changes in v9
-- Add patch platform-msi: Add msi_remove_device_irq_domain() in platform_device_msi_free_irqs_all()
-- Remove patch PCI: endpoint: Add pci_epc_get_fn() API for customizable filtering
-- Remove API pci_epf_align_inbound_addr_lo_hi
-- Move doorbell_alloc in to doorbell_enable function.
-- Link to v8: https://lore.kernel.org/r/20241116-ep-msi-v8-0-6f1f68ffd1bb@nxp.com
-
-Changes in v8:
-- update helper function name to pci_epf_align_inbound_addr()
-- Link to v7: https://lore.kernel.org/r/20241114-ep-msi-v7-0-d4ac7aafbd2c@nxp.com
-
-Changes in v7:
-- Add helper function pci_epf_align_addr();
-- Link to v6: https://lore.kernel.org/r/20241112-ep-msi-v6-0-45f9722e3c2a@nxp.com
-
-Changes in v6:
-- change doorbell_addr to doorbell_offset
-- use round_down()
-- add Niklas's test by tag
-- rebase to pci/endpoint
-- Link to v5: https://lore.kernel.org/r/20241108-ep-msi-v5-0-a14951c0d007@nxp.com
-
-Changes in v5:
-- Move request_irq to epf test function driver for more flexiable user case
-- Add fixed size bar handler
-- Some minor improvememtn to see each patches's changelog.
-- Link to v4: https://lore.kernel.org/r/20241031-ep-msi-v4-0-717da2d99b28@nxp.com
-
-Changes in v4:
-- Remove patch genirq/msi: Add cleanup guard define for msi_lock_descs()/msi_unlock_descs()
-- Use new method to avoid compatible problem.
-  Add new command DOORBELL_ENABLE and DOORBELL_DISABLE.
-  pcitest -B send DOORBELL_ENABLE first, EP test function driver try to
-remap one of BAR_N (except test register bar) to ITS MSI MMIO space. Old
-driver don't support new command, so failure return, not side effect.
-  After test, DOORBELL_DISABLE command send out to recover original map, so
-pcitest bar test can pass as normal.
-- Other detail change see each patches's change log
-- Link to v3: https://lore.kernel.org/r/20241015-ep-msi-v3-0-cedc89a16c1a@nxp.com
-
-Change from v2 to v3
-- Fixed manivannan's comments
-- Move common part to pci-ep-msi.c and pci-ep-msi.h
-- rebase to 6.12-rc1
-- use RevID to distingiush old version
-
-mkdir /sys/kernel/config/pci_ep/functions/pci_epf_test/func1
-echo 16 > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/msi_interrupts
-echo 0x080c > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/deviceid
-echo 0x1957 > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/vendorid
-echo 1 > /sys/kernel/config/pci_ep/functions/pci_epf_test/func1/revid
-^^^^^^ to enable platform msi support.
-ln -s /sys/kernel/config/pci_ep/functions/pci_epf_test/func1 /sys/kernel/config/pci_ep/controllers/4c380000.pcie-ep
-
-- use new device ID, which identify support doorbell to avoid broken
-compatility.
-
-    Enable doorbell support only for PCI_DEVICE_ID_IMX8_DB, while other devices
-    keep the same behavior as before.
-
-           EP side             RC with old driver      RC with new driver
-    PCI_DEVICE_ID_IMX8_DB          no probe              doorbell enabled
-    Other device ID             doorbell disabled*       doorbell disabled*
-
-    * Behavior remains unchanged.
-
-Change from v1 to v2
-- Add missed patch for endpont/pci-epf-test.c
-- Move alloc and free to epc driver from epf.
-- Provide general help function for EPC driver to alloc platform msi irq.
-- Fixed manivannan's comments.
-
+Acked-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
-Frank Li (15):
-      platform-msi: Add msi_remove_device_irq_domain() in platform_device_msi_free_irqs_all()
-      irqdomain: Add IRQ_DOMAIN_FLAG_MSI_IMMUTABLE and irq_domain_is_msi_immutable()
-      irqchip/gic-v3-its: Set IRQ_DOMAIN_FLAG_MSI_IMMUTABLE for ITS
-      dt-bindings: PCI: pci-ep: Add support for iommu-map and msi-map
-      irqchip/gic-v3-its: Add support for device tree msi-map and msi-mask
-      PCI: endpoint: Set ID and of_node for function driver
-      PCI: endpoint: Add RC-to-EP doorbell support using platform MSI controller
-      PCI: endpoint: pci-ep-msi: Add MSI address/data pair mutable check
-      PCI: endpoint: Add pci_epf_align_inbound_addr() helper for address alignment
-      PCI: endpoint: pci-epf-test: Add doorbell test support
-      misc: pci_endpoint_test: Add doorbell test case
-      selftests: pci_endpoint: Add doorbell test case
-      pci: imx6: Add helper function imx_pcie_add_lut_by_rid()
-      pci: imx6: Add LUT setting for MSI/IOMMU in Endpoint mode
-      arm64: dts: imx95: Add msi-map for pci-ep device
+Change from v14 to v16
+- use Marc Zyngier's suggested commit message
+- Add Marc Zyngier's ack tag
 
- Documentation/devicetree/bindings/pci/pci-ep.yaml  |  67 ++++++++++
- arch/arm64/boot/dts/freescale/imx95.dtsi           |   1 +
- drivers/base/platform-msi.c                        |   1 +
- drivers/irqchip/irq-gic-v3-its-msi-parent.c        |   8 ++
- drivers/irqchip/irq-gic-v3-its.c                   |   2 +-
- drivers/misc/pci_endpoint_test.c                   |  82 ++++++++++++
- drivers/pci/controller/dwc/pci-imx6.c              |  25 ++--
- drivers/pci/endpoint/Makefile                      |   1 +
- drivers/pci/endpoint/functions/pci-epf-test.c      | 142 +++++++++++++++++++++
- drivers/pci/endpoint/pci-ep-msi.c                  |  90 +++++++++++++
- drivers/pci/endpoint/pci-epf-core.c                |  48 +++++++
- include/linux/irqdomain.h                          |   7 +
- include/linux/pci-ep-msi.h                         |  28 ++++
- include/linux/pci-epf.h                            |  21 +++
- include/uapi/linux/pcitest.h                       |   1 +
- .../selftests/pci_endpoint/pci_endpoint_test.c     |  28 ++++
- 16 files changed, 543 insertions(+), 9 deletions(-)
----
-base-commit: a4949bd40778aa9beac77c89e4c6a1da52875c8b
-change-id: 20241010-ep-msi-8b4cab33b1be
+change from v14 to v15
+- none
 
-Best regards,
+change from v13 to v14
+- bring back from v9 and remove fixup and cc stable before it is new use
+case.
 ---
-Frank Li <Frank.Li@nxp.com>
+ drivers/base/platform-msi.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/base/platform-msi.c b/drivers/base/platform-msi.c
+index 0e60dd650b5e0..70db08f3ac6fa 100644
+--- a/drivers/base/platform-msi.c
++++ b/drivers/base/platform-msi.c
+@@ -95,5 +95,6 @@ EXPORT_SYMBOL_GPL(platform_device_msi_init_and_alloc_irqs);
+ void platform_device_msi_free_irqs_all(struct device *dev)
+ {
+ 	msi_domain_free_irqs_all(dev, MSI_DEFAULT_DOMAIN);
++	msi_remove_device_irq_domain(dev, MSI_DEFAULT_DOMAIN);
+ }
+ EXPORT_SYMBOL_GPL(platform_device_msi_free_irqs_all);
+
+-- 
+2.34.1
 
 
