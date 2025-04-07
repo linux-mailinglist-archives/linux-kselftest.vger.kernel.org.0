@@ -1,225 +1,140 @@
-Return-Path: <linux-kselftest+bounces-30243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06107A7DBD0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 13:05:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02B82A7DD35
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 14:09:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 634403AF5FB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 11:04:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C20F91890F05
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 12:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365FB23A98D;
-	Mon,  7 Apr 2025 11:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137A92459DF;
+	Mon,  7 Apr 2025 12:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="pW79+9FK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O1QJa5vY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1FC22B8C3;
-	Mon,  7 Apr 2025 11:04:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.95.48.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3726A244EAB
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Apr 2025 12:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744023877; cv=none; b=SHaItzAMLb0KxMHIbYVPS+PiD7DVjUNyjhQJx1h8Rd4XLUFERgauh/bgsvFIdgKWxtg2k1Fs998HVsXtysBYEwBASr25pwr8m4tmjeUN/VNvkPVK+IbhzbqgSA2PBIUr8gz2M75qFYV6nc3iUTYFv4S9ROJam6cb0vckEX6Unhw=
+	t=1744027754; cv=none; b=BvP9D5ExzU0VWi8BPIvZ+7pInuE6KaaEM8xZQ1Y60x5Ur3UojyWFWWOPxN96kaj1EnEq2uKeiU7DQrZtJHSUs1+ypnUjDuTVDnd63hYfzdwIjI2Jzun6di0HWngMl8mUyo9RYm26plvG1tvnQgLshAxAW/A707qwWGSa+K2cnzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744023877; c=relaxed/simple;
-	bh=qVVkFfVrP9/MjErGai73dJ7oVrtY/oNm438X3fdHpF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=gwoLnJvvb1hyCTP8zjtnKBYP68lL9onZkw2t5YJbpG6rVJQU9rhYJx48wF27ZVMKLUJJyCf0bH1Texavbj1pNrGxE+8YQUl0qRJyZLM+cLdNYvhUfcrbS3dGGl/eHPmVTdNstSTHjctSzYpXjxv4Uu2sX1XsI1ekJGz6A4mO9qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=pW79+9FK; arc=none smtp.client-ip=52.95.48.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1744027754; c=relaxed/simple;
+	bh=sBCQHBDcAUpG17ddyItmIuUCIWSKR3D3zFJjSYLtoVo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GbXz6uF3GJMnXoftM6XZ4tbyGkJKqUCSDNx7+KJVOpMfE8e5dYSjYuk+xovtfardRRbBGya4im7s0DYFxIlPcdwKUE144upvS7DWqe5R8dDcRck7F+fcqOS1TywSqxIBDxItesy4OtUVQsSuzAOmbodrFHpwlXl9scsjeundI4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=O1QJa5vY; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-30bfc8faef9so41102371fa.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Apr 2025 05:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1744023875; x=1775559875;
-  h=message-id:date:mime-version:reply-to:subject:to:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=ZjRA+PTfzs7vIA+H3U+wmpf+wbxMWwp7rlbhH+fAXlM=;
-  b=pW79+9FKDLMj8MRdRhImqGcxfHO1NHgKr9Np3Fk3KhjNrfKBc/h6piz2
-   b4KntKsdmZzpjbvT/T0yotu4Ej8lCCrflO9+H2E9QOfL1YEtFSKmr1jTF
-   Ova2hqPVfC+In9QeJ8O4ZdqByT1DWearDbxfF+I1NnTzVc5/Hrxhrj6nn
-   g=;
-X-IronPort-AV: E=Sophos;i="6.15,194,1739836800"; 
-   d="scan'208";a="478128755"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 11:04:31 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [10.0.10.100:44174]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.10.171:2525] with esmtp (Farcaster)
- id 6feef606-9eb5-46eb-875a-5973d50aa482; Mon, 7 Apr 2025 11:04:30 +0000 (UTC)
-X-Farcaster-Flow-ID: 6feef606-9eb5-46eb-875a-5973d50aa482
-Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Mon, 7 Apr 2025 11:04:30 +0000
-Received: from [192.168.3.31] (10.106.83.24) by EX19D022EUC002.ant.amazon.com
- (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14; Mon, 7 Apr 2025
- 11:04:29 +0000
-Message-ID: <e8abe599-f48f-4203-8c60-9ee776aa4a24@amazon.com>
-Date: Mon, 7 Apr 2025 12:04:28 +0100
+        d=linaro.org; s=google; t=1744027749; x=1744632549; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m/LHFPsYBw0bwDf6dVcpDSJnHybANIimgmPtryFgNPA=;
+        b=O1QJa5vY6mTfmLs4ycXkNd6aOG9TDOigmEPs4fGrs6HMlbtovJIojTYeLGjotYTCEi
+         Nu6iahUJ6uSbz3VOCihPxCibWBcX53WqJWABSHx51ja9uZWjhVGK6+c2s0Xf84/jo0TL
+         sIeRlZwEVDfcRnGsdTgXbAu5wIYRW02VQofWNVlYgUYF6FGFvJhvX+ny1je2EkvMmMDK
+         3k3b7uqj4/3izloAXQNSCGOrJnl5C3ximExbC/8fyjr8Nqn5qhZWy6YgwdiPPH4QXdRB
+         NbqhoiRDg1WssFrf8I/vOaF897YXt9zSMnkgOYRqlCGfaF2uukSl0YqXO1xA2WFFmNgR
+         v+oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744027749; x=1744632549;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m/LHFPsYBw0bwDf6dVcpDSJnHybANIimgmPtryFgNPA=;
+        b=v16Ea4qCInxprEy1dyFAmcDvIpnXpYkxPIdY3tf3ruoT5fS/y2Z9Dg8beh1yYn4UBm
+         J6EZ+aEZCuqUnx0Q/5uYjS0V4OvrAmbBvl9aOVm+zbsF04ZC/VFqwDr2WAIrF2SXRCy5
+         jJTT5JPBNh3tiruKLqjETERPqWrNnoRXku6Ovv85nFNf/q6l9Q/H3WuVm+ZR01dIojiK
+         t+9WjdddxSNBkZZng98G7//aknqjibAkO2U3RpH5pQvKgPXcvfzOyn99TN96RL58xSAm
+         xAk63oG2XkS2RUHpYsmcD9PbgGO8WgQtszamaZnxRtGHgLOpPzjaAzCuw3yq63LCoeeF
+         rfVA==
+X-Forwarded-Encrypted: i=1; AJvYcCVccDWAf+JlgHqYmGE1QFHtRKiWMrviyTfRws11jAk+O6uIrD2JvOWmxoVvYpXa1yLXXCptwolLohXVTq9nx44=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn1IfGQhx4dYPBYg0ZtP1AaN6EP5gPdwShOsjeY6XVn6ytqPmZ
+	l2sGIp75v+/KSRorb06hoo//gu9ZT2zDLi5omYsmpRd6L8t6/FsWMjH3dhWzG1fL9YSh+tZU78R
+	bj6Qd0W5Z27nkVYAOQ8R93RvVBv8Z1u3iJ9j+WQ==
+X-Gm-Gg: ASbGnct+TXLHKFXMyCpzYdW7j4UYm0Oar7j+Ogt5xj3uLwIkmH+DSRF2nB2FZSCN8R3
+	0C7lb5A4c6bFF8WdWzsThUdtehUDN24G3S7aUqnf0sdvWaeqLZWV/JoxMRs9xvtTk9dmnH8xxpc
+	XHV/rtzcGlZeuNT3Fd8ddPYtvJxmajI8zAgDInupgG7g==
+X-Google-Smtp-Source: AGHT+IE7avfocEmD5lqNIyS63JcSTkkwf3BvTJpAGhR9l+oQoFSuLjrFiN2oMnoA2mOmJOAmlfiARgKB+FZMo6LuuCU=
+X-Received: by 2002:a2e:bc1b:0:b0:308:f580:729e with SMTP id
+ 38308e7fff4ca-30f0a180dd0mr35506541fa.27.1744027749231; Mon, 07 Apr 2025
+ 05:09:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v3 0/6] KVM: guest_memfd: support for uffd minor
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Ackerley Tng
-	<ackerleytng@google.com>, Vishal Annapurve <vannapurve@google.com>, "Fuad
- Tabba" <tabba@google.com>, <akpm@linux-foundation.org>,
-	<pbonzini@redhat.com>, <shuah@kernel.org>, <viro@zeniv.linux.org.uk>,
-	<brauner@kernel.org>, <muchun.song@linux.dev>, <hughd@google.com>,
-	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-fsdevel@vger.kernel.org>, <jack@suse.cz>,
-	<lorenzo.stoakes@oracle.com>, <jannh@google.com>, <ryan.roberts@arm.com>,
-	<david@redhat.com>, <jthoughton@google.com>, <peterx@redhat.com>,
-	<graf@amazon.de>, <jgowans@amazon.com>, <roypat@amazon.co.uk>,
-	<derekmn@amazon.com>, <nsaenz@amazon.es>, <xmarcalx@amazon.com>
-References: <20250404154352.23078-1-kalyazin@amazon.com>
- <2iggdfimgfke5saxs74zmfrswgrxmmsyxzphq4mdfpj54wu4pl@5uiia4pzkxem>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <2iggdfimgfke5saxs74zmfrswgrxmmsyxzphq4mdfpj54wu4pl@5uiia4pzkxem>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D010EUC002.ant.amazon.com (10.252.51.160) To
- EX19D022EUC002.ant.amazon.com (10.252.51.137)
+References: <cover.1740504232.git.nicolinc@nvidia.com> <f205a4e2f5971cd4b1033d7cac41683e10ebabfb.1740504232.git.nicolinc@nvidia.com>
+In-Reply-To: <f205a4e2f5971cd4b1033d7cac41683e10ebabfb.1740504232.git.nicolinc@nvidia.com>
+From: Zhangfei Gao <zhangfei.gao@linaro.org>
+Date: Mon, 7 Apr 2025 20:08:57 +0800
+X-Gm-Features: ATxdqUE-WE2mGG2qPqESoLiVUp7LnTlD7II4G1YhfYdYp1Eq06d5HdYvjf8h2-k
+Message-ID: <CABQgh9Fuh2HdBH7pyAteawZBpa55ZzfR9dv2K4RF=Ps4yhREbw@mail.gmail.com>
+Subject: Re: [PATCH v8 12/14] iommu/arm-smmu-v3: Introduce struct arm_smmu_vmaster
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, corbet@lwn.net, will@kernel.org, 
+	joro@8bytes.org, suravee.suthikulpanit@amd.com, robin.murphy@arm.com, 
+	dwmw2@infradead.org, baolu.lu@linux.intel.com, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org, 
+	mshavit@google.com, shameerali.kolothum.thodi@huawei.com, smostafa@google.com, 
+	ddutile@redhat.com, yi.l.liu@intel.com, praan@google.com, 
+	patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+Hi, Nico
 
+On Wed, 26 Feb 2025 at 01:35, Nicolin Chen <nicolinc@nvidia.com> wrote:
+>
+> Use it to store all vSMMU-related data. The vsid (Virtual Stream ID) will
+> be the first use case. Since the vsid reader will be the eventq handler
+> that already holds a streams_mutex, reuse that to fenche the vmaster too.
+>
+> Also add a pair of arm_smmu_attach_prepare/commit_vmaster helpers to set
+> or unset the master->vmaster point. Put these helpers inside the existing
+> arm_smmu_attach_prepare/commit().
+>
+> For identity/blocked ops that don't call arm_smmu_attach_prepare/commit(),
+> add a simpler arm_smmu_master_clear_vmaster helper to unset the vmaster.
+>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Pranjal Shrivastavat <praan@google.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
 
-On 04/04/2025 18:12, Liam R. Howlett wrote:
-> +To authors of v7 series referenced in [1]
-> 
-> * Nikita Kalyazin <kalyazin@amazon.com> [250404 11:44]:
->> This series is built on top of the Fuad's v7 "mapping guest_memfd backed
->> memory at the host" [1].
-> 
-> I didn't see their addresses in the to/cc, so I added them to my
-> response as I reference the v7 patch set below.
+>
+> +int arm_smmu_attach_prepare_vmaster(struct arm_smmu_attach_state *state,
+> +                                   struct arm_smmu_nested_domain *nested_domain)
+> +{
+> +       struct arm_smmu_vmaster *vmaster;
+> +       unsigned long vsid;
+> +       int ret;
+> +
+> +       iommu_group_mutex_assert(state->master->dev);
+> +
+> +       /* Skip invalid vSTE */
+> +       if (!(nested_domain->ste[0] & cpu_to_le64(STRTAB_STE_0_V)))
+> +               return 0;
 
-Hi Liam,
+Why this is removed in v9 and 6.15-rc1?
 
-Thanks for the feedback and for extending the list.
+I tested 6.15-rc1 the qemu failed to boot with qemu branch:
+for_iommufd_veventq-v8
+"failed to attach the bypass pagetable"
 
-> 
->>
->> With James's KVM userfault [2], it is possible to handle stage-2 faults
->> in guest_memfd in userspace.  However, KVM itself also triggers faults
->> in guest_memfd in some cases, for example: PV interfaces like kvmclock,
->> PV EOI and page table walking code when fetching the MMIO instruction on
->> x86.  It was agreed in the guest_memfd upstream call on 23 Jan 2025 [3]
->> that KVM would be accessing those pages via userspace page tables.
-> 
-> Thanks for being open about the technical call, but it would be better
-> to capture the reasons and not the call date.  I explain why in the
-> linking section as well.
+After adding this "skip check" back, the qemu works again.
 
-Thanks for bringing that up.  The document mostly contains the decision 
-itself.  The main alternative considered previously was a temporary 
-reintroduction of the pages to the direct map whenever a KVM-internal 
-access is required.  It was coming with a significant complexity of 
-guaranteeing correctness in all cases [1].  Since the memslot structure 
-already contains a guest memory pointer supplied by the userspace, KVM 
-can use it directly when in the VMM or vCPU context.  I will add this in 
-the cover for the next version.
+Do we need to add this back?
 
-[1] 
-https://lore.kernel.org/kvm/20240709132041.3625501-1-roypat@amazon.co.uk/T/#m4f367c52bbad0f0ba7fb07ca347c7b37258a73e5
-
-> 
->> In
->> order for such faults to be handled in userspace, guest_memfd needs to
->> support userfaultfd.
->>
->> Changes since v2 [4]:
->>   - James: Fix sgp type when calling shmem_get_folio_gfp
->>   - James: Improved vm_ops->fault() error handling
->>   - James: Add and make use of the can_userfault() VMA operation
->>   - James: Add UFFD_FEATURE_MINOR_GUEST_MEMFD feature flag
->>   - James: Fix typos and add more checks in the test
->>
->> Nikita
-> 
-> Please slow down...
-> 
-> This patch is at v3, the v7 patch that you are building off has lockdep
-> issues [1] reported by one of the authors, and (sorry for sounding harsh
-> about the v7 of that patch) the cover letter reads a bit more like an
-> RFC than a set ready to go into linux-mm.
-
-AFAIK the lockdep issue was reported on a v7 of a different change.
-I'm basing my series on [2] ("KVM: Mapping guest_memfd backed memory at 
-the host for software protected VMs"), while the issue was reported on 
-[2] ("KVM: Restricted mapping of guest_memfd at the host and arm64 
-support"), which is also built on top of [2].  Please correct me if I'm 
-missing something.
-
-The key feature that is required by my series is the ability to mmap 
-guest_memfd when the VM type allows.  My understanding is no-one is 
-opposed to that as of now, that's why I assumed it's safe to build on 
-top of that.
-
-[2] https://lore.kernel.org/kvm/20250318161823.4005529-1-tabba@google.com/T/
-[3] 
-https://lore.kernel.org/all/diqz1puanquh.fsf@ackerleytng-ctop.c.googlers.com/T/
-
-> 
-> Maybe the lockdep issue is just a patch ordering thing or removed in a
-> later patch set, but that's not mentioned in the discovery email?
-> 
-> What exactly is the goal here and the path forward for the rest of us
-> trying to build on this once it's in mm-new/mm-unstable?
-> 
-> Note that mm-unstable is shared with a lot of other people through
-> linux-next, and we are really trying to stop breaking stuff on them.
-> 
-> Obviously v7 cannot go in until it works with lockdep - otherwise none
-> of us can use lockdep which is not okay.
-> 
-> Also, I am concerned about the amount of testing in the v7 and v3 patch
-> sets that did not bring up a lockdep issue..
-> 
->>
->> [1] https://lore.kernel.org/kvm/20250318161823.4005529-1-tabba@google.com/T/
->> [2] https://lore.kernel.org/kvm/20250109204929.1106563-1-jthoughton@google.com/T/
->> [3] https://docs.google.com/document/d/1M6766BzdY1Lhk7LiR5IqVR8B8mG3cr-cxTxOrAosPOk/edit?tab=t.0#heading=h.w1126rgli5e3
-> 
-> If there is anything we need to know about the decisions in the call and
-> that document, can you please pull it into this change log?
-> 
-> I don't think anyone can ensure google will not rename docs to some
-> other office theme tomorrow - as they famously ditch basically every
-> name and application.
-> 
-> Also, most of the community does not want to go to a 17 page (and
-> growing) spreadsheet to hunt down the facts when there is an acceptable
-> and ideal place to document them in git.  It's another barrier of entry
-> on reviewing your code as well.
-> 
-> But please, don't take this suggestion as carte blanche for copying a
-> conversation from the doc, just give us the technical reasons for your
-> decisions as briefly as possible.
-> 
-> 
->> [4] https://lore.kernel.org/kvm/20250402160721.97596-1-kalyazin@amazon.com/T/
-> 
-> [1]. https://lore.kernel.org/all/diqz1puanquh.fsf@ackerleytng-ctop.c.googlers.com/
-> 
-> Thanks,
-> Liam
-
+Thanks
 
