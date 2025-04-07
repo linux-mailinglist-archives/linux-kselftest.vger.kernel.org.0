@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-30227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2780EA7D68D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 09:46:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06A86A7D668
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 09:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78132188A098
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 07:44:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8BC07A7823
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 07:42:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECDD9229B2C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842C5228C9D;
 	Mon,  7 Apr 2025 07:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zSYBkLrD";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WZOQ0mlm"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lAw70X/q";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ts6H7wde"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A50810FD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20BA226D16;
 	Mon,  7 Apr 2025 07:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744011784; cv=none; b=c7MYMUJW+lhVaL9DAnulh03kfj+Y7jbjR5lk483l9nT78w/VOQZVnzNHz4CvJ35IMfxP8h7TZtzWlgeAoBy1FJ2JXveIvWGuXKux2oYylD8i9Q6KPE9Rt4Y9NLxVYOcvPRkSR2g4JBdiezyURodRGI7oyAAfm/OY13fQB6pJbjk=
+	t=1744011784; cv=none; b=YxIN+5m03+eKcLWXoCnv75fOO8dC5ecMXPBTf8dpUYZbx1GYSj15gvl3HG/UmsiFDPkWDU0I1HD2kn/9q7RqCO07HX1/+/QUhsgfZP3jWvxUOgvAncPmfztvovv0QRCl717Nct5EhBr45xitSwE7KXPk4y3TEiSkO1cm8lva7ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744011784; c=relaxed/simple;
-	bh=pF2fDE3eDjUHyRwGflmFqBi7GrGzIztIWG8dRzLuGZg=;
+	bh=3IB7VI+L3TgsvP1jwdWMbiCaiRt4l4gNK7FQAsl37ak=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SCqJ713dTIWynzIEucBM+Pj4NftwBbaNgZxf+JWi8qbuOJnBOKjVn00UNtXCEC6/zpoxfPRV6ZhfsnjCdlKUTjVspQYm4slOheXQPR3qCDcev5Xzz1ZJ3g2u4vZad+ADcwazFBv5WNmUEAKp3g3wIOPnw+GtNalwnODTgdTu7pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zSYBkLrD; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WZOQ0mlm; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=LIocDjoXYl0un4QWsddowceecdT1FUspONlpYhYLPph8ZzKaa2VVHm1ebvFZRvtq4AIy5kw05yPFQa3AsE5PCaXOg1JSXHfXfyRL1NhRVt2gpYQHvM32hhQ4tdPCau1XzMFTjwNnu7FXKjqtUMAsr6kalp0uwBrfkTDIEcogqWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lAw70X/q; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ts6H7wde; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,24 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FY6zZZGHsbSSDkMNrLVAeMvYjekKEzJp+iUZSDSo7UU=;
-	b=zSYBkLrDhpLu6S1Yu/Lk7b0eLUlw0UYedHqwyrk4IBGBO7Sf+dkvwj91TyKmN4udtvV/K0
-	7kCvXWGd1PIYCsL08cFFtX08FV0sUoxEQLgsTV2KiitG5Bk1XVx3vNEul3rjXaZfn8sYc+
-	VGOYwDR/Y9xhxYvSUB87xGiT2+nNBMqFkJC6S7ghBvAIkRWh+BhaMaelQ0/WXxsCX7z+b8
-	IV0WHs+mgN4mjR7L1N2eAVoOudx2djv9/20WbdZL27Hf3Py9ByD+X+qJvnW/mE+fIYGOer
-	HL6gjLkRJNikfmMynk7txY9S6sg876X88OMhx835XByf1MOgQqLV973ZlpoeFw==
+	bh=al7zHswypumXIW9i3yKUwj+oxduEQ9DVcaHemgzr5gY=;
+	b=lAw70X/q7ujZz/WDtwJTfmmmxibi7z2bpRmganrjZ6IQabUgJlw+6Vl4G1kI5won4HJXgs
+	sNWDcY6qDA+ak0o5oMxaknW/qh2kMlVltwLYoeJPheDIyQgw9eXDhK52LbNiE7r4rwdiag
+	W/o5Y08MCCnilgXn+A/3ZSuhrFFzwfoO/Uo58BG+3SsAvzYEgpSZGh0mNkBXd9C2mEZv6c
+	hBZE5Uj5dRdyERZIs/pzSnDBqmORPqVw2f5a/1GfVQORKuyH6FkW02W0tFl/myNcwj5iYT
+	PaJMw6hRI85V3h3aJJWVzwy1MhOhUyIIlNqf0k19FMJJ0TGIS3TTx8M9SqzBmQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1744011780;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FY6zZZGHsbSSDkMNrLVAeMvYjekKEzJp+iUZSDSo7UU=;
-	b=WZOQ0mlmDB1FTVBOZK+LUUvT1r9k/uIkPKVAKtAxIoaK/8G41eyGJZpa/U3pnreF4bGvkp
-	/wX+0F3FzaHieiDg==
-Date: Mon, 07 Apr 2025 09:42:42 +0200
-Subject: [PATCH v2 05/11] kunit: tool: Add test for nested test result
- reporting
+	bh=al7zHswypumXIW9i3yKUwj+oxduEQ9DVcaHemgzr5gY=;
+	b=Ts6H7wdej6bfnCZeF3OLCeG5AACfWppqTlMwW84lKXSoAn2BYa6k6I0ce8xzkF0iH6Lqu+
+	KVIyDExQXeLCAUAQ==
+Date: Mon, 07 Apr 2025 09:42:43 +0200
+Subject: [PATCH v2 06/11] kunit: tool: Don't overwrite test status based on
+ subtest counts
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250407-kunit-kselftests-v2-5-454114e287fd@linutronix.de>
+Message-Id: <20250407-kunit-kselftests-v2-6-454114e287fd@linutronix.de>
 References: <20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de>
 In-Reply-To: <20250407-kunit-kselftests-v2-0-454114e287fd@linutronix.de>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -81,57 +81,70 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
  linux-doc@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744011776; l=2070;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744011776; l=2733;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=pF2fDE3eDjUHyRwGflmFqBi7GrGzIztIWG8dRzLuGZg=;
- b=8mMXqdsPB4G8FLjMfuB3yG4/1+sTGCM4KvV7meAHqGYhGaK38Y2QZzC7F8cmsgGfGNo6qganY
- mE7KAefMyf/BGYFAccL4ETd8apFSp1evlnjKBw5opzltxXQ7lTCfvk1
+ bh=3IB7VI+L3TgsvP1jwdWMbiCaiRt4l4gNK7FQAsl37ak=;
+ b=iVXjhmHBMWkFjHbit/Hw9b4XCX48EMklfbgbfc5sofkXa7jjiRZPFa/KOSHJwV3sGdbb+/4vF
+ eXam23foLunAwIQ5hCviSrYNBdaUInktQjt21VcmULRBIk9hYpzne88
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Currently there is no test validating the result reporting from nested
-tests. Add one, it will also be used to validate upcoming changes to the
-nested test parsing.
+If a subtest itself reports success, but the outer testcase fails,
+the whole testcase should be reported as a failure.
+However the status is recalculated based on the test counts,
+overwriting the outer test result.
+Synthesize a failed test in this case to make sure the failure is not
+swallowed.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/kunit/kunit_tool_test.py                           | 9 +++++++++
- .../kunit/test_data/test_is_test_passed-failure-nested.log       | 7 +++++++
- 2 files changed, 16 insertions(+)
+ tools/testing/kunit/kunit_parser.py                                  | 5 +++++
+ tools/testing/kunit/kunit_tool_test.py                               | 2 +-
+ tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log | 3 +++
+ 3 files changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index da53a709773a23252703b74109142294899b1bbb..b4a695ed7d2c88120b35b617f0ff2f1cb2be60fb 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -686,6 +686,11 @@ def bubble_up_test_results(test: Test) -> None:
+ 		counts.add_status(status)
+ 	elif test.counts.get_status() == TestStatus.TEST_CRASHED:
+ 		test.status = TestStatus.TEST_CRASHED
++	if not test.ok_status():
++		for t in subtests:
++			if not t.ok_status():
++				counts.add_status(t.status)
++				break
+ 
+ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest: bool, printer: Printer) -> Test:
+ 	"""
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 5ff4f6ffd8736de3fca17dd9fcceabd7a68f9f98..755dc24350a76306a5b76998646e56fb3e386232 100755
+index 755dc24350a76306a5b76998646e56fb3e386232..946a68eca16467d9a4bae50f5d50985d9765ed54 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -165,6 +165,15 @@ class KUnitParserTest(unittest.TestCase):
+@@ -170,7 +170,7 @@ class KUnitParserTest(unittest.TestCase):
+ 		with open(nested_log) as file:
+ 			result = kunit_parser.parse_run_tests(file.readlines(), stdout)
  		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
- 		self.assertEqual(result.counts.errors, 0)
+-		self.assertEqual(result.counts.failed, 2)
++		self.assertEqual(result.counts.failed, 3)
+ 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[0].status)
+ 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[1].status)
  
-+	def test_parse_failed_nested_tests_log(self):
-+		nested_log = test_data_path('test_is_test_passed-failure-nested.log')
-+		with open(nested_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines(), stdout)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts.failed, 2)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[0].status)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[1].status)
-+
- 	def test_no_header(self):
- 		empty_log = test_data_path('test_is_test_passed-no_tests_run_no_header.log')
- 		with open(empty_log) as file:
 diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log
-new file mode 100644
-index 0000000000000000000000000000000000000000..835816e0a07715a514f5f5afab1b6250037feaf4
---- /dev/null
+index 835816e0a07715a514f5f5afab1b6250037feaf4..cd9033c464792e6294905a5676346684182874ad 100644
+--- a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log
 +++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log
-@@ -0,0 +1,7 @@
-+KTAP version 1
-+1..2
-+not ok 1 subtest 1
+@@ -1,5 +1,8 @@
+ KTAP version 1
+ 1..2
 +    KTAP version 1
 +    1..1
-+        not ok 1 test 1
-+not ok 2 subtest 2
++        ok 1 test 1
+ not ok 1 subtest 1
+     KTAP version 1
+     1..1
 
 -- 
 2.49.0
