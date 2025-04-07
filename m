@@ -1,316 +1,317 @@
-Return-Path: <linux-kselftest+bounces-30251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3467A7DFAC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 15:42:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB34A7DFCD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 15:45:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAF963AB726
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 13:37:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E10BF1687D0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 13:42:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE27A1A3152;
-	Mon,  7 Apr 2025 13:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D456919B59C;
+	Mon,  7 Apr 2025 13:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Z6EpuZ8x"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bB3m+bEm";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="HFrkEPZQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AB4199237;
-	Mon,  7 Apr 2025 13:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E077318BBA8;
+	Mon,  7 Apr 2025 13:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744033032; cv=fail; b=MAGoyffF7W2Gnud3mtdppCHU8n+1G1Qj5oU+YRTpOmvlF/sSRoaR6L5gZXj8O1tE152hyEZBuFsOXyyjlz3vIbTZb9SSZ/kqAqr4xO46pOtVA0Bg1CijrGMdxd+Qd5hfG7hptMzZP4zNaUtomoO3deXF4f7TZ1+hRr10knYgm0A=
+	t=1744033286; cv=fail; b=tzEVA0GIvAXHChDedABNlzmUgHbET7wR2ahvLM3DL/gqMvh6MTaNImvYZvnLQFKh5MsvbUUOX78slR12lzfApkvqMXNzJvEGqF1gnenHEFcIKod3GOfVWh3Tw2gC45K0Ko2ytIG1d75LvUnooWfklYuXp3W4MGgReFMkdd1lWqA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744033032; c=relaxed/simple;
-	bh=767+pZCH2FeIooJR7ehBqlVw22vnxEs1Pbm/ffTPnyg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VyLLTNSruVISsuEAN745qtGd644SEsfdmACDBUjNESDllaQqkI0TI0cTlr10dZ59fx54AZH00kir27SWXDTFJR08/4VehkBcPkctI8JWD5nUGPe4WIb6is8IXbGRa8bWwedIGDrezEt+ucyKTiAXEyzuwv5DK+uIP2RggHlJIKg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Z6EpuZ8x; arc=fail smtp.client-ip=40.107.92.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1744033286; c=relaxed/simple;
+	bh=N26JwSPyRo3exnvGkAnP5eORxXZWR3yd6vH5iC5XU5A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rWxvE24IVrZtgGFMD4x1Y1Up7BZqxhRZyoDR1BxxDVbuRxK+xSKitvJYcfiziHlpJbrFqDeW8JTCja9CUjOQz5naJ/9Z9IzVreKZwf4yEOjvomf4eN/+MU4cKXdyZy3u+BeL2YpkK4PczXXuBv3K4uUfHP0pGpoFItWiCQSh+mE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bB3m+bEm; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=HFrkEPZQ; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 537DGwFh017921;
+	Mon, 7 Apr 2025 13:41:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=NYxbchvmXcCWsYfxm0
+	0aB1se7WL5XVV2SahuG+t+O7o=; b=bB3m+bEms0NIlbq4LQrOYa4W/oPF+V+xJ6
+	eINUBjEK6sV4fsk7l5qN80Wvb0Q+OBqVWn/qGIDqBhYs04/Qiv/683mJBiMGYj5J
+	IduK5xYCtpSN+iUEZkDqz83nE3EsmJdsCdiw2ztCuJD2poKntTIrS84ux0xojSBF
+	65hA4LuPjHKTEvmNQN7+oHbhGc0/H/R48Zf24Gb6iEdnzyItAsg8t2TtjQmRL5Kt
+	5IDQiwXORc2ZVfNQF6VcB8qg1CyJ0Pq03or97ce/NX5vp6dqL7yiHIwPqT+F/k7h
+	axEIStSP+mniaHUd148sQ+nkqTQisjB40xwuITV/ypaiYBiVI+LQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45ttxctmkt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 07 Apr 2025 13:40:59 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 537DWuBo023777;
+	Mon, 7 Apr 2025 13:40:59 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2043.outbound.protection.outlook.com [104.47.74.43])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 45ttye27h4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 07 Apr 2025 13:40:58 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sUivQt23Ys9joIXcmvf982HDep6z3PH+q/C8UU5vwGxvXtsRnq5fJvoBiM4rqpj8HdIkRZnujD6KEC/2N6CuDc94MGqbA6ui6UFih3eqtaou95iq6EwN91M2JTBlYPs+sVvkuE8Rfrx540YR5oBIu9gvqLs0QbXSz0P5RQT0rUQ2iGlCTLOBCelPiae+BbGHjtEIaK3v0w8NXAD6CdprUq03NtJdIwSP4ZDzAxDH/H1yO59VVZjZBqOg2ydJ8PGolb0mTENXoVFbmCMpLZrLakt85lpUMae/T3536kkJtePreXRlBjtKCd8r2pYZvVs+TOewOcBC14GDa33fQkbg6A==
+ b=y6Qh/bU/dsfIpPdgxMmf+Z6mzoYc0I9eCx/2ud5hQkFuItOA1CUugJNn3ndnTJpQxaS0MaiB7tgQINHNV435z/5ZahAfCEM0MUSjFB8dFkELicMor22wS0akiCXyV5cq1ib6ZZ6U2Bh/s/o5fdgTYDaVovgI6dtVpauXoNW+uy2jqyhcXd44kenG9t+0/GfIJNrakRTJShNB5n3A3omXfUqhNdrx4ps6wihazMH7KAYqUVz6gTFk6CPg0hJ0XETT0t/Tzvs1TH1kXoEn58qYOUiU4YQQPgmQXKaBbqqba1W7Yg8ukMxRg9CNc3s90dBFZqNEuV4z30JK1gCoBkVTRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tg0KpUxXaSu0HOzgUHKE+5dBSddTbIdvDHzkcyTZcn4=;
- b=fTnOfT3GonE79DagDn3fcjrF1NMz7sGC1tKpuFXEfcQhms7crewlkQtNET4NBGuhWQLjZKBksgEeFq07S6iWD6qtO5C2V4WoTHqtTZjrkJsdJhZNo8IXkMvjvEs8JaaKtXMH8KZJUXe1VAiz2m2X24RQqxJUQIn1hWHwA7GEnuIibYh7mxZuEMhfhiaL7nHumCG5s1kPAZENEtl41RR76GHrxzDFARHlaQfkDNvowVnU3hI9eoQ6vXkceHhdAHaNSPTLyux9q4FIFwrG9F+sRwCMxr1T2N8N8Ddyx/QgWfR6ZrHuNUspl2CrWPOWc3ursawQjatt50a1f2gf1+6NZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=NYxbchvmXcCWsYfxm00aB1se7WL5XVV2SahuG+t+O7o=;
+ b=hZ0zCPUFducT+LJwEM4PWBvXcLb//k/HwxEvkGnnJmMGCY3heKJ2ERzG5wyDw/jz+GzWem5LPFLVi5J5nI/IIEjwps7UwXHet/7Bu6Y6iAbszqf+pNuYQKt1XI+fjQh2uyo2EbbToUxKJFUAHtM3g0K2t7WqfZN6sFnBVr/b3AWeIDVS2v0NSrcDVILtU2xwCGnTzKVodXL2UyEdaSb0WHvekLn3hYXfajTVUH+xWeR2ki/Xs3QmnHxp+5fJxBGnuCfjqp2taHrqxVHWOXfur29NCN1ruMNojFKljwiTDUhCQ5cndF1dWCjhNc+SQZWk6TiO/q6jfsAb0zGLmE04ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tg0KpUxXaSu0HOzgUHKE+5dBSddTbIdvDHzkcyTZcn4=;
- b=Z6EpuZ8xTUAdCnM1REiFQWFkq0Y24KDhYZaWIRaDysILZRtfJeBsv1j9Otntv20XKA/i4uQYrP3sKXmiJfURKIHdi5GqR9Gk3dnb/wxmLDW7NQ1JR4VoiiFCwCmYSk0GLZtdqnhaBpiNZqHg8apm9z7Tpo74123DDhK+YxUiEjg0zzJafF2xeCCF6AkAHG93Hd1sE56lnVmzJMAiT4ocYL1iFbq1dQPUjLQGiFnSSy1RkALgIx6tpNHkmGVZGneqtwj0YDbJsc87D32RKc1qCVBkNgpN69Ze1La1f/4UBF4szDls3Kfeq54KH3LLaJUud0nP6O39BmhjJQcH9OuIVg==
-Received: from PH0PR07CA0032.namprd07.prod.outlook.com (2603:10b6:510:e::7) by
- PH7PR12MB6977.namprd12.prod.outlook.com (2603:10b6:510:1b7::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8606.34; Mon, 7 Apr 2025 13:37:03 +0000
-Received: from CO1PEPF000044F8.namprd21.prod.outlook.com
- (2603:10b6:510:e:cafe::5d) by PH0PR07CA0032.outlook.office365.com
- (2603:10b6:510:e::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.33 via Frontend Transport; Mon,
- 7 Apr 2025 13:37:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1PEPF000044F8.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.0 via Frontend Transport; Mon, 7 Apr 2025 13:37:03 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 7 Apr 2025
- 06:36:45 -0700
-Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Mon, 7 Apr 2025 06:36:39 -0700
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
-CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
-	<razor@blackwall.org>, Simon Horman <horms@kernel.org>, Saeed Mahameed
-	<saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu
-	<jianbol@nvidia.com>, Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>, Ayush Sawal
-	<ayush.sawal@chelsio.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, "Przemek
- Kitszel" <przemyslaw.kitszel@intel.com>, Sunil Goutham
-	<sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>, Subbaraya
- Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat
- Bhushan <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>,
-	"Leon Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next 6/6] bonding: Fix multiple long standing offload races
-Date: Mon, 7 Apr 2025 16:35:42 +0300
-Message-ID: <20250407133542.2668491-7-cratiu@nvidia.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20250407133542.2668491-1-cratiu@nvidia.com>
-References: <20250407133542.2668491-1-cratiu@nvidia.com>
+ bh=NYxbchvmXcCWsYfxm00aB1se7WL5XVV2SahuG+t+O7o=;
+ b=HFrkEPZQMbBR/t6Iczt29FY+7tBU4AbgaZuus8+fMrShFWt6HOWEfFiXU/ujDdPy1k6Ujm1VuNHtsOgkI3yXV7L9RI+LFBBhR3ICSsxCv/KSQXQ+33JP6SpgyMrepVr7YDb08GuyPOn2EKw4jP8XDFbDHR+ycDyUwey+dYnP0pw=
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
+ by IA4PR10MB8567.namprd10.prod.outlook.com (2603:10b6:208:566::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.32; Mon, 7 Apr
+ 2025 13:40:56 +0000
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c%7]) with mapi id 15.20.8606.029; Mon, 7 Apr 2025
+ 13:40:56 +0000
+Date: Mon, 7 Apr 2025 09:40:51 -0400
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Nikita Kalyazin <kalyazin@amazon.com>
+Cc: Ackerley Tng <ackerleytng@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Fuad Tabba <tabba@google.com>, akpm@linux-foundation.org,
+        pbonzini@redhat.com, shuah@kernel.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, muchun.song@linux.dev, hughd@google.com,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, jack@suse.cz,
+        lorenzo.stoakes@oracle.com, jannh@google.com, ryan.roberts@arm.com,
+        david@redhat.com, jthoughton@google.com, peterx@redhat.com,
+        graf@amazon.de, jgowans@amazon.com, roypat@amazon.co.uk,
+        derekmn@amazon.com, nsaenz@amazon.es, xmarcalx@amazon.com
+Subject: Re: [PATCH v3 0/6] KVM: guest_memfd: support for uffd minor
+Message-ID: <63j2cdjh6oxzb5ehtetiaolobp6zzev7emgqvvfkf5tuwlnspx@7h5u4nrqwvsc>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Nikita Kalyazin <kalyazin@amazon.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Fuad Tabba <tabba@google.com>, akpm@linux-foundation.org, 
+	pbonzini@redhat.com, shuah@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	muchun.song@linux.dev, hughd@google.com, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, jack@suse.cz, lorenzo.stoakes@oracle.com, jannh@google.com, 
+	ryan.roberts@arm.com, david@redhat.com, jthoughton@google.com, peterx@redhat.com, 
+	graf@amazon.de, jgowans@amazon.com, roypat@amazon.co.uk, derekmn@amazon.com, 
+	nsaenz@amazon.es, xmarcalx@amazon.com
+References: <20250404154352.23078-1-kalyazin@amazon.com>
+ <2iggdfimgfke5saxs74zmfrswgrxmmsyxzphq4mdfpj54wu4pl@5uiia4pzkxem>
+ <e8abe599-f48f-4203-8c60-9ee776aa4a24@amazon.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8abe599-f48f-4203-8c60-9ee776aa4a24@amazon.com>
+User-Agent: NeoMutt/20240425
+X-ClientProxiedBy: YT4PR01CA0009.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d1::21) To PH0PR10MB5777.namprd10.prod.outlook.com
+ (2603:10b6:510:128::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F8:EE_|PH7PR12MB6977:EE_
-X-MS-Office365-Filtering-Correlation-Id: d530af1c-de6f-4e1c-7969-08dd75d94836
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|IA4PR10MB8567:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13ee2f25-88a4-4565-7514-08dd75d9d2d7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|7416014;
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uX5RhoiE8qGhPS8BRC1c117nU3pewOlpXHBTQ1DAsNfeS9YFDW8JB9n0TXrO?=
- =?us-ascii?Q?EswQVYvgoDZznvlHG7izGy70wACaqK2MySxWtWZqOP0ev7/MPIgdj/ShBkPC?=
- =?us-ascii?Q?VQdVC9VrI+XEbMmXylpjYoUicdSAb1X/ChqWa8lUK6rSZeJV2oLf/biT3OIN?=
- =?us-ascii?Q?1bqplk6/Ha1+uM0nriqavWnnunCK8zJPjg5/fLDQdNd/lkDqL33x5CMnF9rn?=
- =?us-ascii?Q?UtqmfbHdBbW5u3mJUU/qJjT0frIHT3df2QwJ1RSs+260ktXWeqDksA60ozID?=
- =?us-ascii?Q?yiN1UNnoRhOIUnz3gpSWVq1qDUdnLh5UJ4VaoEkd3gIH9lz/dowtzNfR4Qzn?=
- =?us-ascii?Q?ZmxAebFxAwPlgMPZ1oK/I4RXw6gx727J7+HxR9hQYp1L4hcx5ZHXSsGtaJAQ?=
- =?us-ascii?Q?bLR4pyKr61C7qFQDNsq+KLrBp1aVnFJRsYMmjjAGsu2udQ+L16DnRyvhqeaI?=
- =?us-ascii?Q?FiqDdImk2nAdi2n+ZuQTnHMnANOLAkxHws2Lgw/xlENehNAvWKKqjUlFRgty?=
- =?us-ascii?Q?tsjeTcIb5a1D9PP4gJQUc8oMEHY9BISUAF0Q7s44mOJ68gXcIZJdRjhiz+3q?=
- =?us-ascii?Q?qLf1cM8UO9mLLEyNulnMT2UEkRdXyk+22+/Eus3TjgOWubkvDxl/Yiat0pyZ?=
- =?us-ascii?Q?zNrFdaXz9b/8dPAgo8GumbgWco7V8iDFFidn8ug82cgglGDsud7RrvIwdEBm?=
- =?us-ascii?Q?l9pLMBECiLWZlfpJymoKY7PyfWV356S4u7MzKsXESH4z1GeaabZHqFtS1Ywn?=
- =?us-ascii?Q?aBve3UmZFxP4rzhaZYNYE3ynlw57NZDZzPRdbbUzP8H0rFRWykzW0ILEkZEm?=
- =?us-ascii?Q?I6AZ7HoYtyeU8lrpKeIAeuQYA5ZZniWPVCn+DiEFZl6pDee9KlhNaGjDpNSj?=
- =?us-ascii?Q?3K/AesoS1brFGy8NLzN8akOXLgoaQAGI/qRWomxFCb6vcSUDNtPyJBzVyvjD?=
- =?us-ascii?Q?h28VUjRz6grUUP5P4+F7rB1h5ZFLSGehUzsyUTLyZoqWyKuX/ETfmgTsQ1OC?=
- =?us-ascii?Q?KRcXKMOKHXHjrp9r1lnylB+R5cSM+HFAIzumExj6mb54W+NN9cvH9E2VQSy4?=
- =?us-ascii?Q?COKu5qs2DyUxHewHqS6UEhD6KnR/vLBTBH6VCxAV3dnl95wTHxt/dZJKktyp?=
- =?us-ascii?Q?67h6t+tonWZ8ckkAarlwjuEB5sjr+eDxMyxguLtOjBd9DVjDb04jlPNHu/LA?=
- =?us-ascii?Q?HP7KH/AKSLWfwk7O4Y7MbYM0AL3Lu9QgIyxTEh0s9HCVO4yk8ozdcT++H28Y?=
- =?us-ascii?Q?l4SwLYd78Liws0vORGpcv9sXZEblm4YYRIY6vW06959KhwmztHtzr+BIlxlf?=
- =?us-ascii?Q?cIfa0VhfYBmjoRclNiq/UxjzpLD8u9BP2nIgshN7E5XKEX1N2rTINrAJdtmo?=
- =?us-ascii?Q?7QzRsvrY9M8CjkEKaLTwBlc0I8NL03yHcEc8Yk8LGXPQFnL2PtPBVZE/dIPZ?=
- =?us-ascii?Q?uqJhBDNhAuk+K1bokBTDmbWzMUgEsz0Mj/td31eEhTZeerde18Ag3Q=3D=3D?=
+	=?us-ascii?Q?U0xNlX1495MQK+JwLU2C5y+05g9SxJG3vyxi07Np4Co60GRAp5zOTGRtmUeY?=
+ =?us-ascii?Q?Vi8B4YqAoQ9eIu5Q8+8ufy2VSwtI/a204xI8Ob8guJpwap4T60YY39iWxuT7?=
+ =?us-ascii?Q?ytC50U1JpEgahxsCMmibEh0v4Is5sPkJlJQMMJI95W0n1JYhDibXSvldZUcA?=
+ =?us-ascii?Q?aLvebx8JA4LWKB4N5JfgisiE9PXdL5Ns4dRkEUYa06O+uRb8Z3O+8+9fR776?=
+ =?us-ascii?Q?taRxvqXZySfv0rFK3u2F7cC0VhMWGng00hM/Dlmy6SipDgcxwYdHubSmqIbS?=
+ =?us-ascii?Q?ewArkLCH/F1AHPWjdXgHyK1hPgCcU2XWB9fNSGk9gLTZlnv69aSZWmTZcdY4?=
+ =?us-ascii?Q?pJ/ZTMjM0+a45PHcQNb+n83vwkXdwf5T3IJjiesbup8QPRqIE2dg18f5SDRL?=
+ =?us-ascii?Q?raxY0ncM6xbHAfrcgXKEtq/ZXmHvbfFBFt6NO/JzUjrJRlcBvn/2xraMQuz8?=
+ =?us-ascii?Q?RppvPw991F6fSCaE/LarLT5n+7aeB5KY/kdo2OoZhbknkpvdlduNL4IxWojt?=
+ =?us-ascii?Q?3gywobNLbmlU8MqYAp00oO5UWgsjTmOcPHQJEu3ezHztsFoHWNW1w6ZuDqgl?=
+ =?us-ascii?Q?CcFv7sM6HOEbssoqfTQApW0LVvBDvAof/IFYJbfMrHWi/IiLYzC0Zm05xykc?=
+ =?us-ascii?Q?t2AUAOfLqEsG9OBEZmKm0OAuEohZpYfSmsHH16QqH5xxXJKqGEU9/LPQINjn?=
+ =?us-ascii?Q?0MH9TYxyXsMVFpFRcmmy/m7B9JGXtCcLRzTwjZQnrzoceLUCSp2qQtDEKs00?=
+ =?us-ascii?Q?pb/dDAIGhnf/x/Evj7tT56zh331K7pGhyvfz2AGvWaBYwZhWzjuFVOgeWFy1?=
+ =?us-ascii?Q?agbK5LGOkRQGiD7MZAAaF5Mg2QGdaX+0+4JHy8LhvHeiOQHKEA3ZADhlKPNa?=
+ =?us-ascii?Q?5istO2NIzSdvHBvRS7puex+1lzA86eDUHZ65i3pZ/PqCBVts4lX08UvVBq3E?=
+ =?us-ascii?Q?RdSewpQBJ9qEScXdxfP4ktXtyXeDh6b0gaHBNO1FUW406oYjmxQK9V6PyWU8?=
+ =?us-ascii?Q?tT58Pjt3alZJL0du7jgtTdNu+FfwgUSDcpyx+yJDR/iiQthdVnRMzwhzznSM?=
+ =?us-ascii?Q?hnd7Q5HC/r6IB9xnXELAaUzLgLyWZXV6FxK68/QOo5tmpCcW04ZyN9drk3wS?=
+ =?us-ascii?Q?Ef9PY8iGarGnjPHLFdYimHlW8sVI7YPktc009PEpS3KGiwaBl0QMFyYy1HuK?=
+ =?us-ascii?Q?k83QvqAV0P3/yKY1FhlGKK/MdGzhqnvFZZGhgvkMZd0puWX8zJdoL+j/ones?=
+ =?us-ascii?Q?YGQUhnmhMfAy13EoYj9QZxPwefyEPXRrqtlHycXZWXTdkxFpHBOYNryN9kE1?=
+ =?us-ascii?Q?6nurgEqv9KWcVKsMWq/1JolohH6NiSV8lyiy/Qrt9o+YUg=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2025 13:37:03.5411
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?gi/apUE3QahVq0octWq0rO8ShLrrDanmtj/amKb6MLVZG5ck0IS9vxIsU9kF?=
+ =?us-ascii?Q?DWY8xtSpBKIYLOsSjV7D6Pu/HxJo9+Fne18lVpjWFyvjbdifoIt3ELuDiCXW?=
+ =?us-ascii?Q?qsy6GmbkGb4unRlAASySovugSAMZyhaMZHxW300EHN/vJPb2derGeg381zi9?=
+ =?us-ascii?Q?S0dceXJ18uTOEfEftjrj7yqbEqJbD3tJWaSQfWGJ5x5vcSc7w2YpB/eEtCNs?=
+ =?us-ascii?Q?BzxMJvLad36GUUsxypijK+NdgbR5HpvA6auT6MyQZ6rwMKhse5ZbPPSjxGsl?=
+ =?us-ascii?Q?0d5S/5OFHJmFAaH3Y/DtmuuJRXvocIXMQ3iDUlFrET4luQjaPrObu8PjbG5b?=
+ =?us-ascii?Q?icCDRRu21TxkIwJnQpfMBm21VTAq4KSamuFDV4Q8e2EPXa5WjphMHxzUzyv0?=
+ =?us-ascii?Q?oTSro9jAGnjTepboHN9n98IiLlolW2I9r5VQGcNiOOcYFpWQN3Zda8q7TPiB?=
+ =?us-ascii?Q?sMgZmOvgRlBWnhGZgkeq0CzTSWZWTgVYfQh4Ng0KrqFPLwj+ibSYb5ESb2Qr?=
+ =?us-ascii?Q?wBNic1/nw86Q/qTVSkLn5e/XyRQUxeP6xwm8lq3yebagYWTt0bLf2rmDpevC?=
+ =?us-ascii?Q?MxkYU4jZSx+kr5U9sHDx7hLO70Wubbo41zhnIh+t8bCYpm2P8Usmz8hGtwiv?=
+ =?us-ascii?Q?7BrG+7yAWQ4M81eKERjYKw6GHLJczBQjdQ9tiS6Hed8bp6LKP7Cpf29OVyA8?=
+ =?us-ascii?Q?ms20uahpA9j1OYpXnXKt64gtn4kHnoCCFILvwG19H4ExnuG6bsnjsjiUBoAu?=
+ =?us-ascii?Q?DQn5VE5zUTOSRkHSV+BCQccU5BEzMv9k64XrNGSttD/33YxKZaxQD5Xmle0T?=
+ =?us-ascii?Q?+tMGiPIFL7qU5BDTkh28AgXbvh2XO4wUoGlZmiVSXSllGPd+aU55uhBrIssl?=
+ =?us-ascii?Q?yoNKmxAnVZDk5VIL86oB/eHjZDAMcWHanAKhYDb9Hb0qw8cW7ym4HS5K7+u/?=
+ =?us-ascii?Q?UQ0JSwZENc38jHZSSAG1WiRltDiA2QiLtj178HjgpQo1Ftnuf0Of9LTnGloG?=
+ =?us-ascii?Q?TqvU/cJWNqRAxUFvOKSniJtXxWkpN/8o7mfmgkpr/CqWyxQAsmY8+Ph0zoNv?=
+ =?us-ascii?Q?ByUZ6Z/INGhCkGPf3cTxnslFtIpPMSU24JSs1yKPrrWH9d9Tatb2+WCW01Al?=
+ =?us-ascii?Q?fkNFcxI49SxRtWZvEVCfmMh9j4vT4RvHJXcxYmaq6xlmlI5JIoTKZWBsDOzL?=
+ =?us-ascii?Q?BULN9Wdp4yYU4hbW1lA8mPwZAVcrEIXq/l1w/yu1Q//djcW3/tTieKFjlCul?=
+ =?us-ascii?Q?FNPvXeJhqeULz+VwCWjSahRlxgBS5x1G7N3ufgGZxQaSD9ljcWsLuO317nD7?=
+ =?us-ascii?Q?Ne1eqX9Gkh6yFr0wgLTBSkLFIM7dWXwP2gl0IKpU16dXUp1c2KNw5j3LmyVv?=
+ =?us-ascii?Q?bf/ofwb+6W8L4ObkN5et6zn9tH1aFQzxxgVLj8mfT4712of1ouQsA/cUFEbH?=
+ =?us-ascii?Q?gd0sCPEDc4IMviTSqPpmIoFCdNzGIsI1b5uU2VEJDFld4J/Qi+SIIclB5by4?=
+ =?us-ascii?Q?FAIXc1CDqhvqqz3mPjostcs9wLYEYuVgYdOaxHhEhISCcKyHC7ZB6g0wmBI1?=
+ =?us-ascii?Q?CI3TV8/cwV0SGd7eo16VySiyeM/IB7IaLm4SufiT?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Zdf40WLelaB+a9L3W6ii5vPbXWeW5B200yDptsCGRaa0ARJmfDG6setvB2zhvRSJNPqwiaEy6AYVSorxE5QeJ9VehfRDwqXY1rWKxlxBSX3HmQwFGBk/rdNNd0Dy3WtfwcHJgAtQUREkCF9rRcAbHV+SXLBgpaxfCBK9fRhPlyQoLk/okm+SwXolbHL/1OESQZreEhWUsfMrnsBWInmEu4xF7mFqMvZyNUW1eRNbMfR57DPPE2NKudmTPF+Qv87fMOm9/YHV/wbuFlINWPjQfx3yU4LNoI/59CwhIsnfKPy5xaYszJm+mb33yyDZN2OlfRqfgYhjcWz5QtZ1IoggaKbPNePANa9NPcS0RWB/kEDaDFAiRM3Q0adWthF5JX/eDYhruX/G53bbhTtC3ZMHJ/CxaunSh84i529ayiWdBW1TrPa39am/tEy0879ToiEdR2YEongGCBw/K+glXfCZFD07qpGvUfjtwtOpJHrRyx7avTSL09A2I3t0n91Q/HlRC3nZApfxQxfF2RRDUaQo3BDY8H2PHptO/bAPUiGXY7Zyy7MJziICjQJ+d4qj59A8QPfivAvSv3nrXka2fdJmhfFTcvflNrW9dRJ9xO7fE+k=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13ee2f25-88a4-4565-7514-08dd75d9d2d7
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2025 13:40:56.4402
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d530af1c-de6f-4e1c-7969-08dd75d94836
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044F8.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6977
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +YEzlx/eHqdUm0nMTSS+OYrKTGhgjRQqasls2Nq2GneqhzabnBQbLbV2M+EXNPTyGxDQ77qEHQall0pcT+OOVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR10MB8567
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-07_04,2025-04-03_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502280000
+ definitions=main-2504070096
+X-Proofpoint-GUID: 5f6Qd0kkScLmZK1wjL087jElsCItVJN6
+X-Proofpoint-ORIG-GUID: 5f6Qd0kkScLmZK1wjL087jElsCItVJN6
 
-Refactor the bonding ipsec offload operations to fix a number of
-long-standing control plane races between state migration and user
-deletion and a few other issues.
+* Nikita Kalyazin <kalyazin@amazon.com> [250407 07:04]:
+> 
+> 
+> On 04/04/2025 18:12, Liam R. Howlett wrote:
+> > +To authors of v7 series referenced in [1]
+> > 
+> > * Nikita Kalyazin <kalyazin@amazon.com> [250404 11:44]:
+> > > This series is built on top of the Fuad's v7 "mapping guest_memfd backed
+> > > memory at the host" [1].
+> > 
+> > I didn't see their addresses in the to/cc, so I added them to my
+> > response as I reference the v7 patch set below.
+> 
+> Hi Liam,
+> 
+> Thanks for the feedback and for extending the list.
+> 
+> > 
+> > > 
+> > > With James's KVM userfault [2], it is possible to handle stage-2 faults
+> > > in guest_memfd in userspace.  However, KVM itself also triggers faults
+> > > in guest_memfd in some cases, for example: PV interfaces like kvmclock,
+> > > PV EOI and page table walking code when fetching the MMIO instruction on
+> > > x86.  It was agreed in the guest_memfd upstream call on 23 Jan 2025 [3]
+> > > that KVM would be accessing those pages via userspace page tables.
+> > 
+> > Thanks for being open about the technical call, but it would be better
+> > to capture the reasons and not the call date.  I explain why in the
+> > linking section as well.
+> 
+> Thanks for bringing that up.  The document mostly contains the decision
+> itself.  The main alternative considered previously was a temporary
+> reintroduction of the pages to the direct map whenever a KVM-internal access
+> is required.  It was coming with a significant complexity of guaranteeing
+> correctness in all cases [1].  Since the memslot structure already contains
+> a guest memory pointer supplied by the userspace, KVM can use it directly
+> when in the VMM or vCPU context.  I will add this in the cover for the next
+> version.
 
-xfrm state deletion can happen concurrently with
-bond_change_active_slave() operation. This manifests itself as a
-bond_ipsec_del_sa() call with x->lock held, followed by a
-bond_ipsec_free_sa() a bit later from a wq. The alternate path of
-these calls coming from xfrm_dev_state_flush() can't happen, as that
-needs the RTNL lock and bond_change_active_slave() already holds it.
+Thank you.
 
-1. bond_ipsec_del_sa_all() might call xdo_dev_state_delete() a second
-   time on an xfrm state that was concurrently killed. This is bad.
-2. bond_ipsec_add_sa_all() can add a state on the new device, but
-   pending bond_ipsec_free_sa() calls from the old device will then hit
-   the WARN_ON() and then, worse, call xdo_dev_state_free() on the new
-   device without a corresponding xdo_dev_state_delete().
-3. Resolve a sleeping in atomic context introduced by the mentioned
-   "Fixes" commit.
+> 
+> [1] https://lore.kernel.org/kvm/20240709132041.3625501-1-roypat@amazon.co.uk/T/#m4f367c52bbad0f0ba7fb07ca347c7b37258a73e5
+> 
+> > 
+> > > In
+> > > order for such faults to be handled in userspace, guest_memfd needs to
+> > > support userfaultfd.
+> > > 
+> > > Changes since v2 [4]:
+> > >   - James: Fix sgp type when calling shmem_get_folio_gfp
+> > >   - James: Improved vm_ops->fault() error handling
+> > >   - James: Add and make use of the can_userfault() VMA operation
+> > >   - James: Add UFFD_FEATURE_MINOR_GUEST_MEMFD feature flag
+> > >   - James: Fix typos and add more checks in the test
+> > > 
+> > > Nikita
+> > 
+> > Please slow down...
+> > 
+> > This patch is at v3, the v7 patch that you are building off has lockdep
+> > issues [1] reported by one of the authors, and (sorry for sounding harsh
+> > about the v7 of that patch) the cover letter reads a bit more like an
+> > RFC than a set ready to go into linux-mm.
+> 
+> AFAIK the lockdep issue was reported on a v7 of a different change.
+> I'm basing my series on [2] ("KVM: Mapping guest_memfd backed memory at the
+> host for software protected VMs"), while the issue was reported on [2]
+> ("KVM: Restricted mapping of guest_memfd at the host and arm64 support"),
+> which is also built on top of [2].  Please correct me if I'm missing
+> something.
 
-bond_ipsec_del_sa_all() and bond_ipsec_add_sa_all() now acquire x->lock
-and check for x->km.state to help with problems 1 and 2. And since
-xso.real_dev is now a private pointer managed by the bonding driver in
-xfrm state, make better use of it to fully fix problems 1 and 2. In
-bond_ipsec_del_sa_all(), set xso.real_dev to NULL while holding both the
-mutex and x->lock, which makes sure that neither bond_ipsec_del_sa() nor
-bond_ipsec_free_sa() could run concurrently.
+I think you messed up the numbering in your statement above.
 
-Fix problem 3 by moving the list cleanup (which requires the mutex) from
-bond_ipsec_del_sa() (called from atomic context) to bond_ipsec_free_sa()
+I believe you are making the point that I messed up which patches depend
+on what and your code does not depend on faulty locking, which appears
+to be the case.
 
-Finally, simplify bond_ipsec_free_sa() by not using current_active_slave
-at all, because now that xso.real_dev is protected by locks it can be
-trusted to always reflect the offload device.
+There are a few issues with the required patch set?
 
-Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/net/bonding/bond_main.c | 58 +++++++++++++++++++--------------
- 1 file changed, 33 insertions(+), 25 deletions(-)
+> 
+> The key feature that is required by my series is the ability to mmap
+> guest_memfd when the VM type allows.  My understanding is no-one is opposed
+> to that as of now, that's why I assumed it's safe to build on top of that.
+> 
+> [2] https://lore.kernel.org/kvm/20250318161823.4005529-1-tabba@google.com/T/
+> [3] https://lore.kernel.org/all/diqz1puanquh.fsf@ackerleytng-ctop.c.googlers.com/T/
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 443624504767..ede3287318f8 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -544,7 +544,20 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
- 			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
- 			continue;
- 		}
-+
-+		spin_lock_bh(&ipsec->xs->lock);
-+		/* xs might have been killed by the user during the migration
-+		 * to the new dev, but bond_ipsec_del_sa() should have done
-+		 * nothing, as xso.real_dev is NULL.
-+		 * Delete it from the device we just added it to. The pending
-+		 * bond_ipsec_free_sa() call will do the rest of the cleanup.
-+		 */
-+		if (ipsec->xs->km.state == XFRM_STATE_DEAD &&
-+		    real_dev->xfrmdev_ops->xdo_dev_state_delete)
-+			real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
-+								    ipsec->xs);
- 		ipsec->xs->xso.real_dev = real_dev;
-+		spin_unlock_bh(&ipsec->xs->lock);
- 	}
- out:
- 	mutex_unlock(&bond->ipsec_lock);
-@@ -559,7 +572,6 @@ static void bond_ipsec_del_sa(struct net_device *bond_dev,
- {
- 	struct net_device *real_dev;
- 	netdevice_tracker tracker;
--	struct bond_ipsec *ipsec;
- 	struct bonding *bond;
- 	struct slave *slave;
- 
-@@ -591,15 +603,6 @@ static void bond_ipsec_del_sa(struct net_device *bond_dev,
- 	real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev, xs);
- out:
- 	netdev_put(real_dev, &tracker);
--	mutex_lock(&bond->ipsec_lock);
--	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
--		if (ipsec->xs == xs) {
--			list_del(&ipsec->list);
--			kfree(ipsec);
--			break;
--		}
--	}
--	mutex_unlock(&bond->ipsec_lock);
- }
- 
- static void bond_ipsec_del_sa_all(struct bonding *bond)
-@@ -627,9 +630,15 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
- 				   __func__);
- 			continue;
- 		}
-+
-+		spin_lock_bh(&ipsec->xs->lock);
- 		ipsec->xs->xso.real_dev = NULL;
--		real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
--							    ipsec->xs);
-+		/* Don't double delete states killed by the user. */
-+		if (ipsec->xs->km.state != XFRM_STATE_DEAD)
-+			real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
-+								    ipsec->xs);
-+		spin_unlock_bh(&ipsec->xs->lock);
-+
- 		if (real_dev->xfrmdev_ops->xdo_dev_state_free)
- 			real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev,
- 								  ipsec->xs);
-@@ -641,34 +650,33 @@ static void bond_ipsec_free_sa(struct net_device *bond_dev,
- 			       struct xfrm_state *xs)
- {
- 	struct net_device *real_dev;
--	netdevice_tracker tracker;
-+	struct bond_ipsec *ipsec;
- 	struct bonding *bond;
--	struct slave *slave;
- 
- 	if (!bond_dev)
- 		return;
- 
--	rcu_read_lock();
- 	bond = netdev_priv(bond_dev);
--	slave = rcu_dereference(bond->curr_active_slave);
--	real_dev = slave ? slave->dev : NULL;
--	netdev_hold(real_dev, &tracker, GFP_ATOMIC);
--	rcu_read_unlock();
--
--	if (!slave)
--		goto out;
- 
-+	mutex_lock(&bond->ipsec_lock);
- 	if (!xs->xso.real_dev)
- 		goto out;
- 
--	WARN_ON(xs->xso.real_dev != real_dev);
-+	real_dev = xs->xso.real_dev;
- 
- 	xs->xso.real_dev = NULL;
--	if (real_dev && real_dev->xfrmdev_ops &&
-+	if (real_dev->xfrmdev_ops &&
- 	    real_dev->xfrmdev_ops->xdo_dev_state_free)
- 		real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev, xs);
- out:
--	netdev_put(real_dev, &tracker);
-+	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
-+		if (ipsec->xs == xs) {
-+			list_del(&ipsec->list);
-+			kfree(ipsec);
-+			break;
-+		}
-+	}
-+	mutex_unlock(&bond->ipsec_lock);
- }
- 
- /**
--- 
-2.45.0
+All of this is extremely confusing because the onus of figuring out what
+the final code will look like is put on the reviewer.  As it is, we have
+issues with people not doing enough review of the code (due to limited
+time).  One way to get reviews is to make the barrier of entry as low as
+possible.
+
+I spent Friday going down a rabbit hole of patches referring to each
+other as dependencies and I gave up.  It looks like I mistook one set of
+patches as required vs them requiring the same in-flight ones as your
+patches.
+
+I am struggling to see how we can adequately support all of you given
+the way the patches are sent out in batches with dependencies - it is
+just too time consuming to sort out.
+
+Thank you,
+Liam
 
 
