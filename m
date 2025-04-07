@@ -1,62 +1,61 @@
-Return-Path: <linux-kselftest+bounces-30201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFCDCA7D4A8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 08:56:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85265A7D4A1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 08:55:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02740169CC1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 06:55:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46E86188E654
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 06:55:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120A322A7E4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD9A22A7FD;
 	Mon,  7 Apr 2025 06:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Gf/C9680";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qUhP7tUO"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AuV7VeIK";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/Rmtk9ol"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44935229B18;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDA722A1CF;
 	Mon,  7 Apr 2025 06:53:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744008790; cv=none; b=Pzemy+yQZzogL68PEqhTPladzlU4sdvirQKtU+1j0TwcXLxbCK9n4HtXCymgFrh1gqo6EPLOYpJancYiglie5iBZPn5Y3JeZFuQaic6qUriBcraZ2gTrcAVK4fhZ6do5E7NmTVrXJs2kZ15dOEMuQMGmy+T45lYRf2pf5MlchbM=
+	t=1744008791; cv=none; b=cICR82jFNqdUMqs8zEJP6Ii0dDGlQzhhg3iFc4dSPM04TFd2hTyKlr6MoMakUjPmEfOB8xV5QfSkNec0cHbYPmlohZMgVIPLqcdiSemw1oKW2FZ/YxC+hXEkt1COZt2qWh9Afb7/nviaMKc/ENxIMZ413e2VZgh/llAEzp4ppQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744008790; c=relaxed/simple;
-	bh=yiN7932Hjz9o4Z41OyO0HMGRnPv3dGLSS2woL8P+hvA=;
+	s=arc-20240116; t=1744008791; c=relaxed/simple;
+	bh=dNb0DycZOXECXF1uglDgQ5OZ5A0IF51QyPd7mDkmpqQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NdYM8VtO6c7LgQaYcsLdq1iddtYHFK0kPX7PbGYPzlrs4bOCjPVg6R5iq2rxRvYgPRYJK01c5wh5Hmjel1q3la48iMePdmi/zZSies6yR21l3vAKzMrW57kX6KQcnSSwSwNRLc5T6/LlwP0OqV+Ncy9+0p1gzOKH+WDHggXkPAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Gf/C9680; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qUhP7tUO; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=cNvWWd8v3NOZ/gtQJuRKSEWEb5VxuM0A9RkAwGJvJgR3IvYjr1pf4Vi6iNGXuWEX148DyRbk8oT6TXPSzTIlju4lz18HJWhOr9xeJgMtZ599xw+8rJipJlcOCi4gQ2ZUt+qqAv7Oif3BN96KHpzul1euMEXB02JZJIxfNysPauY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AuV7VeIK; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/Rmtk9ol; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1744008787;
+	s=2020; t=1744008788;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=icAotOumz5oayfyIPCgSJr46gLVPYeiQGTGFCJGRKFI=;
-	b=Gf/C9680+OH6UUbiuug16VtZiq6GQp+SjWCxR+Eo2N3/+4VptCPTJYHLoLk6+jf6EKP5WG
-	thRF1TeuqygXwK5PwN1tuCvAI6lr5Ta7RigYTMFqlQZ+5APVXXL/0jxZ9izlC2YS2gmD/C
-	IEHtPTthEJHCStZ/fK+7CBwFLoC9euaUy6UDvcWqvj5X+NEf6WEM6dK36p6h+kjv1+o7KT
-	5VpGn9YizJ97a5C5XdefRzMaspDqhh8wYhpqEvZh81qEb4clKX6yVnAlaeEdHMbRD2ykeS
-	9ySEe7hYHA++LG3jPPWHu8q95BkSCL1oQPH5Volr3e1RKJYO0GfaaRLWn03WVg==
+	bh=OqWg6AnaVdBpGZDz7vvxu+fK6BxS8YBbe1FDLG4qoKs=;
+	b=AuV7VeIKFvSThJ7EWy87hBfCFAkZovM2BHm4BmW4NksqewRssXoFsOyalOZ+bvtLQwzfSb
+	8xnII1bk82ItJsF1x1ZJkvOrnBaPeGZ1iDbl/9gCbPfTx5iKTtNcMGABUbf23Ydgkd54iO
+	wPkgT7R9gTP0XNojLI7KzFmzfjngwZktPJI0FDMcpLkPVX8gPIzC+Gl9wN9geH7FZHZAMb
+	WVZuGkgItSbB8hfl2bX8xZQfxBYplpSswqmekVasv1/J0lvtRspHOjXwtA/gDYXd72qa6m
+	/GBzr+gnAtFmQ3ZaBM0uxMP4ivAQ3iQy1DwTUclYlTwh/LhgffG/5mDgypzlOg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1744008787;
+	s=2020e; t=1744008788;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=icAotOumz5oayfyIPCgSJr46gLVPYeiQGTGFCJGRKFI=;
-	b=qUhP7tUOiQ/khFF6BIuKaGoliXb2X79spYpjZ0sBTiQaDKxyfLfD8OjQfaskN8nQtBBCEr
-	JZpWHqFp4BRmpRBg==
-Date: Mon, 07 Apr 2025 08:52:38 +0200
-Subject: [PATCH v2 15/32] tools/nolibc: use intmax definitions from
- compiler
+	bh=OqWg6AnaVdBpGZDz7vvxu+fK6BxS8YBbe1FDLG4qoKs=;
+	b=/Rmtk9olDLwqysVfhC0010MzBRqZihjOB1K/49cFiFxgHE3kXC6PhQ7BBU9YQIBKNA4SAv
+	sMG6hIkgIcn0qQAQ==
+Date: Mon, 07 Apr 2025 08:52:39 +0200
+Subject: [PATCH v2 16/32] tools/nolibc: use pselect6_time64 if available
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250407-nolibc-kselftest-harness-v2-15-f8812f76e930@linutronix.de>
+Message-Id: <20250407-nolibc-kselftest-harness-v2-16-f8812f76e930@linutronix.de>
 References: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
 In-Reply-To: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
 To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -73,44 +72,43 @@ To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744008776; l=1199;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744008776; l=1164;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=yiN7932Hjz9o4Z41OyO0HMGRnPv3dGLSS2woL8P+hvA=;
- b=rpojShlHV8Dp4sPfS0nEziqyHJYVCwc431dd4fc38z7bQoVqiY8T7FrHXslSuYvslrFStPIeK
- fD9kWXIiY1YDMCM3oIBX+IPIpHO/1v+fFLzMUE5LEbZ2D75AyER5sbz
+ bh=dNb0DycZOXECXF1uglDgQ5OZ5A0IF51QyPd7mDkmpqQ=;
+ b=siPCZeEZrV81W2zDYwybgE5DfL0UzV+ZLqYHz0S1WQYvHegTpeuCeaS8TysTwlFbkU12VoSuz
+ Gp/8JSEJdpVDMgj+B24dodjAsdXzD3K7nMhwZwJ9XgK70mp8ajZWdhA
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The printf format checking in the compiler uses the intmax types from
-the compiler, not libc. This can lead to compiler errors.
-
-Instead use the types already provided by the compiler.
-
-Example issue with clang 19 for arm64:
-
-nolibc-test.c:30:2: error: format specifies type 'uintmax_t' (aka 'unsigned long') but the argument has type 'uintmax_t' (aka 'unsigned long long') [-Werror,-Wformat]
+riscv32 does not have any of the older select systemcalls.
+Use pselect6_time64 instead.
+poll() is also used to implement sleep().
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Acked-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/stdint.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/include/nolibc/sys.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-index cd79ddd6170e05b19945e66151bcbcf840028d32..b052ad6303c38f09685b645268dad1fa8848370d 100644
---- a/tools/include/nolibc/stdint.h
-+++ b/tools/include/nolibc/stdint.h
-@@ -39,8 +39,8 @@ typedef   size_t      uint_fast32_t;
- typedef  int64_t       int_fast64_t;
- typedef uint64_t      uint_fast64_t;
- 
--typedef  int64_t           intmax_t;
--typedef uint64_t          uintmax_t;
-+typedef __INTMAX_TYPE__    intmax_t;
-+typedef __UINTMAX_TYPE__  uintmax_t;
- 
- /* limits of integral types */
- 
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 08c1c074bec89a27e53e5d461a3ebbf71ec323d1..a5decdba402236fa0935207f9207c771ac2700bf 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -1023,6 +1023,14 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
+ 		t.tv_nsec = timeout->tv_usec * 1000;
+ 	}
+ 	return my_syscall6(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
++#elif defined(__NR_pselect6_time64)
++	struct __kernel_timespec t;
++
++	if (timeout) {
++		t.tv_sec  = timeout->tv_sec;
++		t.tv_nsec = timeout->tv_usec * 1000;
++	}
++	return my_syscall6(__NR_pselect6_time64, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+ #else
+ 	return __nolibc_enosys(__func__, nfds, rfds, wfds, efds, timeout);
+ #endif
 
 -- 
 2.49.0
