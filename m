@@ -1,126 +1,136 @@
-Return-Path: <linux-kselftest+bounces-30320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B17A7EFFE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 23:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 156F1A7F091
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 01:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70903167653
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 21:57:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFBD11694DB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 23:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D77C21C173;
-	Mon,  7 Apr 2025 21:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6925222538F;
+	Mon,  7 Apr 2025 22:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="eh9ot0F3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tsEbvlNy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8671EF39B
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Apr 2025 21:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E547922488E
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Apr 2025 22:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744063026; cv=none; b=REns6SICDsXMmZ0yYv7truQoBhDbuME67GXMAJhcheLH9EobnastMAX+6fZuV7+bUMW/8XacB0Y93TRAlDTDO//G0cFXF3M81achpgXzO0R4l26s50EBJAmcwXdkiPZg76vdXxhNVpvdsslkFa75laH0URXfh1Gs+k61TVgZg98=
+	t=1744066798; cv=none; b=AxVVzOyAjU0y8TSjDiS/D4JEt25HF2dwqVaoPPnHGFMylXkKhltRv3GQWimFBJ1ovHTOVDcvjxeuuCD+D5niKPzxYjMcM4wdVMVli5Fz/LX6rR5xgbegavwa5znsbdMi0qOuRGmQ+fj/InJn2H3kJdVylf26e2XZY0gKUAGjgOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744063026; c=relaxed/simple;
-	bh=AtkF0ZBc+Z05dbI8kojFijCH1tuLsLtL+wuYx+B6p7Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tzdPQ/yU7Dmpu1arZC0v83lSYb6B+VqKNb1+/jPejI57JCnVOB6fPG2a63ISNkdxoRc7nvvewL0i4+9ETeYUfxGfQq3IZGARSG6rfM1tHfHdCGObeyDWPk4FQiJkHifAuvAB5mwIvyzd/Nl34MmLRkxDwv0132GkhHuYTq6uKss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=eh9ot0F3; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7398d65476eso3778108b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Apr 2025 14:57:04 -0700 (PDT)
+	s=arc-20240116; t=1744066798; c=relaxed/simple;
+	bh=5LbPyCNLLcTj5RpphsHDzbLID3Tqav0FNxp4F98aH8g=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DtZBFchYHIV8ty87cMIPZO3nnvw4ZOHL3+IbRUYEXclILny5M8vIwxbAGyBwWjwkKMnP7CtosAOs7WJCBPu/EvdbAkigsv/Y+3x4g9Mz6qrsyzqqPpc5n6Z1pGDi9halYwMKIi7DpQ6uJsBEkdJhMlJQAA3HarCMTsd7gV8Wvlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tsEbvlNy; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-225429696a9so70164895ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Apr 2025 15:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1744063024; x=1744667824; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OjONuyVEBabQma13n193abZmpu8eJbu2Vov0N/Hvhgk=;
-        b=eh9ot0F3jiq8LhMaZ6ne8MoT+yarneDrai1k/0P/nhKsF+rhPTQBfJQZaVLGm+HL8g
-         xysK7datB6tVZsQtYjYZkh10/E8UqASto0uwq/ZR+jhwhgmsf7doks/QfS1c0ObX9b2s
-         1YlKVlBDcFkUwAKOLtVbj3y5og4nFr90UX+x3+oT+wu6yx1Mg7qIxx/7u3MHiZqrvGPy
-         2amQQKE6/YA/6PucttDhz2cs2MA8XSOY9BKgb89hW9e/GsPJzAOaARvjvRE9QUnFkRwr
-         KEXQFkMWS1H7GKor7FA9RIbiGm3Gnx0/jSpwezycUeQs9vr8XUR9aZTptdlpY7VUxZoY
-         kcpw==
+        d=google.com; s=20230601; t=1744066796; x=1744671596; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tmFTd+75mDki530ZTm5rh5SILZIWEG1jv3Vb3IWwElo=;
+        b=tsEbvlNyehmbqFR4/suebCqNArg3BU9GTqqBnvYKnkF3RtVx0gkeCGzc5QtIKQdbCT
+         IxyiyWrcZ7jlNnWqysXej/+JE1DHCDLwk4nrtQ3GL7Ca4OIi8bPhzkD4CB0txJec78Y1
+         +6AFNEn9zBn4Y5ZfWsgmcutMUosASvXBzf46J8JknADoDshrgwqrxLObzHQ3ud2Pn+zx
+         CKwIPe+/dUHhhQKdQZiDRm9PyJfhJuedllMctpUL28VjDBUy/Pb3gip9CLgFHmbnt623
+         ndaP0FGTsXCaVKveD7oTXOKSmEixvjDt/AUQh3EFbEPuYxow3nonJV855qp7TQcp2u5q
+         UXaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744063024; x=1744667824;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OjONuyVEBabQma13n193abZmpu8eJbu2Vov0N/Hvhgk=;
-        b=ppypxeqGxVgJxgef2V8zMHpwoy92p75SP76AaBl/iPxXlpwARcj6Ubv0tSsLmUPa9K
-         gkNzOyHkYMcIxmFteuWqYdr1zw60iScAudUUqwnX5RQs426ltruOvwf+5qgYnglUWb8l
-         AWK0OuSpmN1OD+114gThFOwAQSfa+UC8ILhzK704P1na3rMsidP+PnxqPvTe8CkNOfwC
-         bkF8k+O8wZRvLU7PKZ69ZzdWRylCaOFfH257BDq75S7x66b3PBqQ+ooJ/cm2o5+429gg
-         k3KznlgxEzlPm6aEMjMdq0MSAiLvHGhGFf7gAUwfhLmov/sTl92712S9oSVDvUXmUoFw
-         Yzow==
-X-Forwarded-Encrypted: i=1; AJvYcCXxHqHeaqzrnNRCbLdFqhdEgjFLojkFZ55wIhYYadwfJogmK+rdD1OQr/qLS1UEnVdg17XgZx5GkYVPH/XNtFM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBYKPPbqXLQsZdIF1qIxfC4h65NnDH+6lIGEdCvqJcyT89xPcO
-	UulGbPegU/0Nv2hOCWiREfVM5y0wH544xLG7sX+w5LVwXveRhzZV5YAwtVUZhQ==
-X-Gm-Gg: ASbGncsNTpuk+YnulfTCEcYWBjaS9DKnyshG6S+7fi56LOqYItsS3S0QrQ6FvER5/+h
-	ax/0JnjjCVrxwjTH9XjA7pssXQtr3leDaTCj/YQm/a8RWISgbGja7wHgKDmWSNGntfd+yJJIIBK
-	YCFXpue2Dc9VvbNNrW7di0ONnjt9RO9Kz0b+KGp10rUNrxhmI6HyQFXjMhDPvpcbm6vaIFXQv7S
-	/+Ni77a3XKGcGTnXrdPRvcWklMyzX0CDM4px++lOBw2+eYeBi4q54YljWruY7d/XEJpu6sz2+mH
-	aS1CXRUPOvFh8MctSrCC0qr9H4idtpeCPGg+1YYXhEWBsRAUxtX9WkCf+ishJWWZxVeOr+OGzto
-	7Q3I=
-X-Google-Smtp-Source: AGHT+IG5lEHLJyzIz19sfe8HcprikkgM32nxxTCAttYwDTJ3p2LAnqTiHsS4v+jrL5vhkcABNLAkmg==
-X-Received: by 2002:a05:6a00:949c:b0:736:5813:8c46 with SMTP id d2e1a72fcca58-73b9d3d3187mr1735267b3a.8.1744063023748;
-        Mon, 07 Apr 2025 14:57:03 -0700 (PDT)
-Received: from exu-caveira.tail33bf8.ts.net ([2804:7f1:e2c3:b109:bcd7:b61f:e265:af16])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-739d97d19b9sm9016047b3a.23.2025.04.07.14.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 14:57:03 -0700 (PDT)
-From: Victor Nogueira <victor@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	shuah@kernel.org,
-	pctammela@mojatatu.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: tc-testing: Pre-load IFE action and its submodules
-Date: Mon,  7 Apr 2025 18:56:56 -0300
-Message-ID: <20250407215656.2535990-1-victor@mojatatu.com>
-X-Mailer: git-send-email 2.49.0
+        d=1e100.net; s=20230601; t=1744066796; x=1744671596;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tmFTd+75mDki530ZTm5rh5SILZIWEG1jv3Vb3IWwElo=;
+        b=s47M3bLzpDZ/GqoVHrpvPq5ttVlvuWMculHRU/enHhRtYYPs32e1MdpJm5dsb8Jjf/
+         d0FrOX4rTg7YNMQI/SnpE3061U+2dBS+ODLPcoBBfzuG/W7DgQTZHCZlMGhMVTs24zrA
+         1CaSO4QIG5wQJKM2TPKxVIffkjzav6uQnRfLIl5C0L0qwOaY9DE34Y9xs9MVw+zSElWe
+         sIN/b2gVrmDqwPrhTJuXic+wqr+lucrOtL6NxP5V6N24QrZceO/b3ncRDG+xwQP24Vjr
+         cUCvTRpmRxU7lNWGZD/zsuvyaa3Vq0KD9+Q4zpyqv5l7QqSUz73XdjPewBceg0aBLUb3
+         3+2g==
+X-Forwarded-Encrypted: i=1; AJvYcCU/fxRjasXLub5qxd3QQ8P6tkphmQz7Ula4mY9cqNdxYeEbtQ7lx35XSvkG5QoKfUGsBwO6qxPj5kGO8vvqgD0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJpgQWtX/xgI3mTGaTbpiTJdmtAT1Y+rk0M76iKq8CzPzIKaC5
+	OLbmCdL0n6sWxo+lhqNgfUMTUqoN1U3+IddeEDiXq2mnXlIW0VqCSGp8QVnkpFb0XM4hXEQ6vKF
+	YZdmLQJ8QKj+rvw==
+X-Google-Smtp-Source: AGHT+IFskHOxsSaypr7Z498msZSpofqWjjn89muNo0ISrDKVaEqeO6DZKPcTGrC/EZ6umNznNFtR46hyuWZumVA=
+X-Received: from pfgs3.prod.google.com ([2002:a05:6a00:1783:b0:736:6fb6:7fc])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:32c1:b0:227:e74a:a063 with SMTP id d9443c01a7336-22a8a0a3a2dmr182684035ad.37.1744066796203;
+ Mon, 07 Apr 2025 15:59:56 -0700 (PDT)
+Date: Mon,  7 Apr 2025 22:59:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
+Message-ID: <20250407225953.1540476-1-tjmercier@google.com>
+Subject: [PATCH] tests/pid_namespace: Add missing sys/mount.h
+From: "T.J. Mercier" <tjmercier@google.com>
+To: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Cc: "T.J. Mercier" <tjmercier@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Recently we had some issues in parallel TDC where some of IFE tests are
-failing due to some of IFE's submodules (like act_meta_skbtcindex and
-act_meta_skbprio) taking too long to load [1]. To avoid that issue,
-pre-load IFE and all its submodules before running any of the tests in
-tdc.sh
+pid_max.c: In function =E2=80=98pid_max_cb=E2=80=99:
+pid_max.c:42:15: error: implicit declaration of function =E2=80=98mount=E2=
+=80=99
+                                       [-Wimplicit-function-declaration]
+   42 |         ret =3D mount("", "/", NULL, MS_PRIVATE | MS_REC, 0);
+      |               ^~~~~
+pid_max.c:42:36: error: =E2=80=98MS_PRIVATE=E2=80=99 undeclared (first use =
+in this
+                                  function); did you mean =E2=80=98MAP_PRIV=
+ATE=E2=80=99?
+   42 |         ret =3D mount("", "/", NULL, MS_PRIVATE | MS_REC, 0);
+      |                                    ^~~~~~~~~~
+      |                                    MAP_PRIVATE
+pid_max.c:42:49: error: =E2=80=98MS_REC=E2=80=99 undeclared (first use in t=
+his function)
+   42 |         ret =3D mount("", "/", NULL, MS_PRIVATE | MS_REC, 0);
+      |                                                 ^~~~~~
+pid_max.c:48:9: error: implicit declaration of function =E2=80=98umount2=E2=
+=80=99; did
+               you mean =E2=80=98SYS_umount2=E2=80=99? [-Wimplicit-function=
+-declaration]
+   48 |         umount2("/proc", MNT_DETACH);
+      |         ^~~~~~~
+      |         SYS_umount2
+pid_max.c:48:26: error: =E2=80=98MNT_DETACH=E2=80=99 undeclared (first use =
+in this
+                                                               function)
+   48 |         umount2("/proc", MNT_DETACH);
 
-[1] https://lore.kernel.org/netdev/e909b2a0-244e-4141-9fa9-1b7d96ab7d71@mojatatu.com/T/#u
-
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
+Fixes: 615ab43b838b ("tests/pid_namespace: add pid_max tests")
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
- tools/testing/selftests/tc-testing/tdc.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/pid_namespace/pid_max.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-index cddff1772e10..589b18ed758a 100755
---- a/tools/testing/selftests/tc-testing/tdc.sh
-+++ b/tools/testing/selftests/tc-testing/tdc.sh
-@@ -31,6 +31,10 @@ try_modprobe act_skbedit
- try_modprobe act_skbmod
- try_modprobe act_tunnel_key
- try_modprobe act_vlan
-+try_modprobe act_ife
-+try_modprobe act_meta_mark
-+try_modprobe act_meta_skbtcindex
-+try_modprobe act_meta_skbprio
- try_modprobe cls_basic
- try_modprobe cls_bpf
- try_modprobe cls_cgroup
--- 
-2.49.0
+diff --git a/tools/testing/selftests/pid_namespace/pid_max.c b/tools/testin=
+g/selftests/pid_namespace/pid_max.c
+index 51c414faabb0..96f274f0582b 100644
+--- a/tools/testing/selftests/pid_namespace/pid_max.c
++++ b/tools/testing/selftests/pid_namespace/pid_max.c
+@@ -10,6 +10,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <syscall.h>
++#include <sys/mount.h>
+ #include <sys/wait.h>
+=20
+ #include "../kselftest_harness.h"
+--=20
+2.49.0.504.g3bcea36a83-goog
 
 
