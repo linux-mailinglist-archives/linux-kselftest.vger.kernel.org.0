@@ -1,197 +1,129 @@
-Return-Path: <linux-kselftest+bounces-30179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3037CA7D28B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 05:40:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A823EA7D2AC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 05:51:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD6BA3ADCAF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 03:40:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10742162CED
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 03:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BCF217F2E;
-	Mon,  7 Apr 2025 03:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0/xjha2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25326212B10;
+	Mon,  7 Apr 2025 03:50:52 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ED9217F27;
-	Mon,  7 Apr 2025 03:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169B718DB0C;
+	Mon,  7 Apr 2025 03:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743997233; cv=none; b=I/M2hmmGgaJ/whDjl4N0w0/yhHOipoyAMaQx7m1QH8YIIDK88T9CVCR1RXQmVQX+ruSxsGpPahVFXE6rK8K2KstOXkPpM1OSph8Kf9gpjTyBi2+NAa71/RXWWIWB+zeBB/n//dIehxM+3pCAekOi2ViMLs/vX3+/euAPFB4QR88=
+	t=1743997852; cv=none; b=kDOaE+8YvSUeVAU4GK7N7ZDufodjHFtFZBw4NZf4yQDhSkyau+Qm06QIAVVD0zx5G9R7LqRnWhZFLBKBWlRjl/Gj4SkFEZkRT+mTWBaGY1CDI9z6bV197SrcLzv1A/X8BeXHP8QDLHBkIovujkdUMp7Pv6OQDNTwL9as4FelGMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743997233; c=relaxed/simple;
-	bh=SdoG5YNAjCxpTafOFN7GwWzMdHLTICWuHEusYEHOpb8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pr/DS0DmuRAq8/XYJrxvJeYrU6+w5LpJWqaFwOR6izYXo7jS3mXruZk/R23639VZE+iHMcJaCvEsEslR54v4UBcRVJF7AmvDASh05lVZOj2n+Kjqj55LX2FpZnH7JvubsCE/+YamRqJMiZVN5OQO9/AAROQMIO84uDWKpN96Dm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0/xjha2; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e5e0caa151so7016384a12.0;
-        Sun, 06 Apr 2025 20:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743997230; x=1744602030; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PWCbdplBrRTzOviOYcUnPBAjZP7jVF7GFhY7bPt8iew=;
-        b=Q0/xjha2oZtBKGYxu8PXxQUIDm7aT8J3B6B00KPuy/GeOCOvild29Pdg0egN/5RX2W
-         F3HW+ZRM7zSCrlc0FEyNWleisB8ohyMGrK4gSiKxUpz+tTo19Lv8SMmSyDCatNe5H8l5
-         76ssPRBsVi0E6rVwOh107hRzG4HDcuU5b9DDt92fUIkv0a72a0yS+QbOGR1UAW+5smHD
-         UMMilZDcssbVLWj9b7ljM2RNWlJQQ685y+EW1Bof1eg2hHPQcXU9MMzD3dn93QDt9mwP
-         mOYckhTBrONov1DKJ6jqWLDmU4Qj6VfKuNa+UFfO4zJo6wTKaDY0HDkU7RbqZR+8UX8B
-         UvLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743997230; x=1744602030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PWCbdplBrRTzOviOYcUnPBAjZP7jVF7GFhY7bPt8iew=;
-        b=VsbhDqz6RlLo+KKimU6YJb7y3NjdNZUtiDPPdo7qGf8d/IQlmdVY1abP+ehPzXgmnA
-         IQORmK1VYHr+rotSF76WxBs0dJen6uk/L17KXkhKUWm5isqksUGgp6YWED3mUUVQjZqG
-         AUk6Z5VT79qROImCpL/6jL2kCvedN1vtG6GkJs+iBVv+ccGAfupXR4PG+l3f6+kOLPOR
-         JY6T/L9ueBPEvciBEuVoZTGjI/zTH9bNCWZmpvX70XWhxxfATfTk95/+KpH77GISi/AU
-         isLx2FAG08CQd1hhwUkLd2b7BllPJQa//yTJcw+jrJDG7ZO3UC5X9n5gfKmG+s1ou0MX
-         g8vA==
-X-Forwarded-Encrypted: i=1; AJvYcCWC32clL62KmPwN4j2dWSxMeweKz7qUJSxcbsYpG60kuE7TDLLuv0FqrN1EkRjoVLEuRMA=@vger.kernel.org, AJvYcCWiNpnHNiGKOo7ydCc7HmOpEQOzJ5XZz8iUdQzIWnwb/boAlur3B4OKM5jsi0coE3xQHts5R2vdQ3YcJxWUDA7b@vger.kernel.org, AJvYcCX/mj67HG7ikKA6P+k+wdBvJs+kq6qWuHvjpfrvbwvVhH95i31Kv4yHfYfX7j8L8vhGJf1loUVruSmMZIAJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsu2dxXXfDfHfu8jV6dBNx4W/zglA6b5wUalJpBvASvLzk8ucD
-	w4R6E5/oEnr6xj6D0TR+uJBl6eSycmE7liqi+6P4I5r08N6DdwKTtRD4TE3J3tKUf6jZMzrcWj4
-	LgRyFyMP3MkbXN+ak0lYIUy7FL0Q=
-X-Gm-Gg: ASbGncv9AZ3SxUnJ6lGee8hy6kfOHd75jBlI7+a9tsHFqxLlCeF0JfDeStDPDkH+cgR
-	jVILElTdfkH9KUpEbb7lWBibGuQMeG7xkjo1GlFyldnKB5Ahdp5Oss1RQomaR4lEXiK8eVB9GtX
-	rzq68oW19lS7hd/36Y0nYkKJ3tekvy
-X-Google-Smtp-Source: AGHT+IEEPNITxLvpL2EswjSjCquWWq6DhRueSEwahn5r7wFxZUYdPPng1ePscZSaHs0ndW/XkopHICpYNo5ccc1LV/E=
-X-Received: by 2002:a17:907:a05:b0:ac7:322d:779c with SMTP id
- a640c23a62f3a-ac7d6ec2f2cmr844094266b.50.1743997229691; Sun, 06 Apr 2025
- 20:40:29 -0700 (PDT)
+	s=arc-20240116; t=1743997852; c=relaxed/simple;
+	bh=zHT7be0Dz4631czeIb9rNYZtOo5wX0cfX0fmMjWkffY=;
+	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Alnc0pjLkFEDYJ0lswLxS57p45hVaBv4IfbaBAyUsWZr2XleE5kgi9Olo4kDyjgTNQ0W3aG3SNC5kiPzvcEgKZCFXTGyL6Am3m0fr1WxH9Qh4OKy/J3boCfC/BWwltv7H574mDv4kg4Aeb4wHgfCZMhaSVj8UV7TT9XvIDJjjXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ZWFWq1h70zCsQL;
+	Mon,  7 Apr 2025 11:47:03 +0800 (CST)
+Received: from kwepemd200014.china.huawei.com (unknown [7.221.188.8])
+	by mail.maildlp.com (Postfix) with ESMTPS id 58CA4180103;
+	Mon,  7 Apr 2025 11:50:47 +0800 (CST)
+Received: from [10.67.121.177] (10.67.121.177) by
+ kwepemd200014.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Mon, 7 Apr 2025 11:50:46 +0800
+CC: <catalin.marinas@arm.com>, <will@kernel.org>, <maz@kernel.org>,
+	<oliver.upton@linux.dev>, <corbet@lwn.net>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<yangyicong@hisilicon.com>, <joey.gouly@arm.com>, <yuzenghui@huawei.com>,
+	<shuah@kernel.org>, <jonathan.cameron@huawei.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <tangchengchang@huawei.com>
+Subject: Re: [PATCH v2 1/6] arm64: Provide basic EL2 setup for FEAT_{LS64,
+ LS64_V} usage at EL0/1
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+References: <20250331094320.35226-1-yangyicong@huawei.com>
+ <20250331094320.35226-2-yangyicong@huawei.com>
+ <957ccba4-2ae1-4358-b62d-3b5c44d7f1ca@arm.com>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <a520bb9c-839d-fd96-7ecf-365371e65e44@huawei.com>
+Date: Mon, 7 Apr 2025 11:50:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <malayarout91@gmail.com> <20250324064234.853591-1-malayarout91@gmail.com>
- <CAEf4BzagSxO-fNeeWfFPu2vpnbEUBnS7Y2P=ODGks_zVEg1mkg@mail.gmail.com>
- <CAE2+fR83Y8ZKk8fqM0WgZeK4Zm4PZjBzoPMyMptVHfk81eXEtw@mail.gmail.com> <e255897a-30d8-5745-b89b-eb801e0864a9@huaweicloud.com>
-In-Reply-To: <e255897a-30d8-5745-b89b-eb801e0864a9@huaweicloud.com>
-From: malaya kumar rout <malayarout91@gmail.com>
-Date: Mon, 7 Apr 2025 09:10:18 +0530
-X-Gm-Features: ATxdqUGULLoheNb0ptDa_1GMfr9lfLGY3rLDLZqgYYn38THywJlix-OS_VKP5z0
-Message-ID: <CAE2+fR992BprqDXkZTqi3Mgtq9WErSFvOtxvc16ZT9ufiBLNNQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: close the file descriptor to avoid
- resource leaks
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <957ccba4-2ae1-4358-b62d-3b5c44d7f1ca@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemd200014.china.huawei.com (7.221.188.8)
 
-On Mon, Apr 7, 2025 at 7:07=E2=80=AFAM Hou Tao <houtao@huaweicloud.com> wro=
-te:
->
-> Hi,
->
-> On 4/5/2025 1:59 PM, malaya kumar rout wrote:
-> > On Fri, Apr 4, 2025 at 9:22=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> >> On Sun, Mar 23, 2025 at 11:43=E2=80=AFPM Malaya Kumar Rout
-> >> <malayarout91@gmail.com> wrote:
-> >>> Static Analyis for bench_htab_mem.c with cppcheck:error
-> >>> tools/testing/selftests/bpf/benchs/bench_htab_mem.c:284:3:
-> >>> error: Resource leak: fd [resourceLeak]
-> >>> tools/testing/selftests/bpf/prog_tests/sk_assign.c:41:3:
-> >>> error: Resource leak: tc [resourceLeak]
-> >>>
-> >>> fix the issue  by closing the file descriptor (fd & tc) when
-> >>> read & fgets operation fails.
-> >>>
-> >>> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
-> >>> ---
-> >>>  tools/testing/selftests/bpf/benchs/bench_htab_mem.c | 1 +
-> >>>  tools/testing/selftests/bpf/prog_tests/sk_assign.c  | 4 +++-
-> >>>  2 files changed, 4 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/to=
-ols/testing/selftests/bpf/benchs/bench_htab_mem.c
-> >>> index 926ee822143e..59746fd2c23a 100644
-> >>> --- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-> >>> +++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
-> >>> @@ -281,6 +281,7 @@ static void htab_mem_read_mem_cgrp_file(const cha=
-r *name, unsigned long *value)
-> >>>         got =3D read(fd, buf, sizeof(buf) - 1);
-> >> It could be a bit cleaner to add close(fd) here and drop the one we
-> >> have at the end of the function.
-> >>
-> > Here, close(fd)  is now positioned within the error handling block,
-> > guaranteeing that
-> > the file descriptor will be closed prior to returning from the
-> > function in the event of a read error.
-> > Meanwhile, the final close(fd) at the end of the function is retained
-> > for successful execution,
-> > thereby avoiding any potential resource leaks.
-> > Hence, It is essential to add the close(fd) in both locations to
-> > prevent resource leakage.
->
-> I think Andrii was proposing the following solution:
->
-> {
->         /* ...... */
->         got =3D read(fd, buf, sizeof(buf) - 1);
->         close(fd);
->         if (got <=3D 0) {
->                 *value =3D 0;
->                 return;
->         }
->         buf[got] =3D 0;
->
->         *value =3D strtoull(buf, NULL, 0);
-> }
->
-> It only invokes close(fd) once to handle both the failed case and the
-> successful case.
-> >
-I greatly appreciate your insightful feedback on the review.
-I will proceed to share the updated patch that includes the modifications.
-> >> pw-bot: cr
-> >>
-> >>>         if (got <=3D 0) {
-> >>>                 *value =3D 0;
-> >>> +               close(fd);
-> >>>                 return;
-> >>>         }
-> >>>         buf[got] =3D 0;
-> >>> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/too=
-ls/testing/selftests/bpf/prog_tests/sk_assign.c
-> >>> index 0b9bd1d6f7cc..10a0ab954b8a 100644
-> >>> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-> >>> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
-> >>> @@ -37,8 +37,10 @@ configure_stack(void)
-> >>>         tc =3D popen("tc -V", "r");
-> >>>         if (CHECK_FAIL(!tc))
-> >>>                 return false;
-> >>> -       if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc)))
-> >>> +       if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc))) {
-> >>> +               pclose(tc);
-> >> this one looks good
-> >>
-> >>>                 return false;
-> >>> +       }
-> >>>         if (strstr(tc_version, ", libbpf "))
-> >>>                 prog =3D "test_sk_assign_libbpf.bpf.o";
-> >>>         else
-> >>> --
-> >>> 2.43.0
-> >>>
-> > .
->
+On 2025/4/3 17:04, Suzuki K Poulose wrote:
+> On 31/03/2025 10:43, Yicong Yang wrote:
+>> From: Yicong Yang <yangyicong@hisilicon.com>
+>>
+>> Instructions introduced by FEAT_{LS64, LS64_V} is controlled by
+>> HCRX_EL2.{EnALS, EnASR}. Configure all of these to allow usage
+>> at EL0/1.
+>>
+>> This doesn't mean these instructions are always available in
+>> EL0/1 if provided. The hypervisor still have the control at
+>> runtime.
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> ---
+>>   arch/arm64/include/asm/el2_setup.h | 12 +++++++++++-
+>>   1 file changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+>> index ebceaae3c749..0259941602c4 100644
+>> --- a/arch/arm64/include/asm/el2_setup.h
+>> +++ b/arch/arm64/include/asm/el2_setup.h
+>> @@ -57,9 +57,19 @@
+>>           /* Enable GCS if supported */
+>>       mrs_s    x1, SYS_ID_AA64PFR1_EL1
+>>       ubfx    x1, x1, #ID_AA64PFR1_EL1_GCS_SHIFT, #4
+>> -    cbz    x1, .Lset_hcrx_\@
+>> +    cbz    x1, .Lskip_gcs_hcrx_\@
+>>       orr    x0, x0, #HCRX_EL2_GCSEn
+>>   +.Lskip_gcs_hcrx_\@:
+> 
+> minor nit: For consistency, could we rename this "set_ls64", similar to "set_hcrx" ?
+> 
+
+IIUC, set_xxx really touches the registers and skip_xxx should just check and prepare
+the feature bits. so here using .Lskip_gcs_hrcx_\@ should be more proper and consistent
+with other places in el2_setup.h, like __init_el2_debug/__init_el2_fgt which also use
+.Lskip_xxx for skipping an unsupported feature?
+
+Thanks.
+
+>> +    /* Enable LS64, LS64_V if supported */
+>> +    mrs_s    x1, SYS_ID_AA64ISAR1_EL1
+>> +    ubfx    x1, x1, #ID_AA64ISAR1_EL1_LS64_SHIFT, #4
+>> +    cbz    x1, .Lset_hcrx_\@
+>> +    orr    x0, x0, #HCRX_EL2_EnALS
+>> +    cmp    x1, #ID_AA64ISAR1_EL1_LS64_LS64_V
+>> +    b.lt    .Lset_hcrx_\@
+>> +    orr    x0, x0, #HCRX_EL2_EnASR
+>> +
+>>   .Lset_hcrx_\@:
+>>       msr_s    SYS_HCRX_EL2, x0
+>>   .Lskip_hcrx_\@:
+> 
+> Suzuki
+> 
+> .
 
