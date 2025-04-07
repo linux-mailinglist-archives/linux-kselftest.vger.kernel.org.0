@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-30269-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22D9CA7E69A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 18:33:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00752A7E6A2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 18:34:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B85C4190239F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 16:26:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 449A8189FBBF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Apr 2025 16:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7508120CCD7;
-	Mon,  7 Apr 2025 16:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AF9620CCFD;
+	Mon,  7 Apr 2025 16:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QWIxqUmC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h2kPnIr8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9654020ADD1
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Apr 2025 16:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7987F20B7E7
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Apr 2025 16:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744043016; cv=none; b=VUUqfUjwzvzUv2nrZggZbM/XkZv0yqDdY9Bd7zduSMIRimcIKygyO4Ey1LCPF+6sjN1umtE6ClMsEz8ZS/S9/q6vOyogSWW+Ae+Jd1Hr47gcP8bY/VC2dBNkMwUD9cYQHOWV3NK14u0aTGpfiZ3lrlRKZHUgPNTn1fnLfTAf72A=
+	t=1744043017; cv=none; b=YzyFh8vlXysY7/2yMC+s6jZTqaAPvT/YV64b2cG6XpLtS3hznfYSJq0d3Q9+mqdLCA4GhIFfJSAWMcLmndoLVUjS3XgfvxFOWj8gBVHukLlX8s38grSSaaSbqLCOHdZVLHGsTRCOhKLU6wzBMXKJYgLKw/TSAiHJ81/tOMnFv74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744043016; c=relaxed/simple;
-	bh=RDeIZ0q0s888flIemxEC1CYHX2UAYYqbLWN93lX96wE=;
+	s=arc-20240116; t=1744043017; c=relaxed/simple;
+	bh=63QI201sgY1M7r1SkLAM/+CFB5wB+4V9arwwKPcMgHw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oGkpS+jdhKLn+ukv/x3IzGm6wWef0j3efKQhaIh6XzU0OReX27iwiiES2/spAmNHucm0fB/7uzrXR5BncyTGBHlTyUbyyxHbFZlPfNGs0eKkvpxo0pLXUYKEnlvUewL8lBxVPfBy/UKj15Wh9bePGM1LcyNA0REj2SRmPV2YvRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QWIxqUmC; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=srr9rrUG9b281kkUpTQNKHKpWGA7J4NBjwLT8JgmfEkVSvOb+gi0FIr4FgIttAFUi6t/qjEiCjjKFMDqoDQJjllBZ8/8hoJM4klVRgWYIWvaKBDbKBQ4mGMYXEpNCKCZzoYvMhQCOWzWmgKno6J4tfsiCiNZ94DdFf74iPJyDcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h2kPnIr8; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744043013;
+	s=mimecast20190719; t=1744043014;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lLtmJlR3fS3DdZp/Q3s6yFi3BlMKYo7kUkQZSLL1Fs4=;
-	b=QWIxqUmCILOf87j93Nuz6i1AG7P1QbA7JxIIqDzXch+Z8Pewmuvrx8a5jeeyV1g8cAr3vA
-	jQi/e9JgO7swcaUbDb8X6DZJ+3v0M5L48wehiQBJHPBi6ZS+H8/jp0AYxthGml5d3jAQIv
-	vSoavf4XXpZ7CRccplNJLzr7z/UkgWc=
+	bh=0rjm7dsKH5H2OCApAESFBB2zqcpPfQudn9jh6O3bk7c=;
+	b=h2kPnIr847qORpALLG58emruYhm2X0f04sM3yTDXzjKkpW70V7q0gHXT9T1P1wl6UYYX3k
+	ZnY6dQScSy5PI+v4uIpTFA+hg9dzVPNFfXC5ISJsEUxprdkowb0jn3qmhto4+QZgH+3BCf
+	FuaSBMpqFVRKu/gFaPd0gAZ/xUEfkdw=
 Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-261-5qWxmOqxPxisjpqR1bBKLA-1; Mon,
- 07 Apr 2025 12:23:30 -0400
-X-MC-Unique: 5qWxmOqxPxisjpqR1bBKLA-1
-X-Mimecast-MFC-AGG-ID: 5qWxmOqxPxisjpqR1bBKLA_1744043008
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-138-aooWGusKMHuvWSRo4ffd6w-1; Mon,
+ 07 Apr 2025 12:23:33 -0400
+X-MC-Unique: aooWGusKMHuvWSRo4ffd6w-1
+X-Mimecast-MFC-AGG-ID: aooWGusKMHuvWSRo4ffd6w_1744043011
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0AB6E180025F;
-	Mon,  7 Apr 2025 16:23:28 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E9F5D18001F6;
+	Mon,  7 Apr 2025 16:23:30 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.98])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3C9591809B63;
-	Mon,  7 Apr 2025 16:23:24 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 806B4180175B;
+	Mon,  7 Apr 2025 16:23:28 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Johannes Weiner <hannes@cmpxchg.org>,
 	Michal Hocko <mhocko@kernel.org>,
@@ -72,9 +72,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 1/2] mm/vmscan: Skip memcg with !usage in shrink_node_memcgs()
-Date: Mon,  7 Apr 2025 12:23:15 -0400
-Message-ID: <20250407162316.1434714-2-longman@redhat.com>
+Subject: [PATCH v5 2/2] selftests: memcg: Increase error tolerance of child memory.current check in test_memcg_protection()
+Date: Mon,  7 Apr 2025 12:23:16 -0400
+Message-ID: <20250407162316.1434714-3-longman@redhat.com>
 In-Reply-To: <20250407162316.1434714-1-longman@redhat.com>
 References: <20250407162316.1434714-1-longman@redhat.com>
 Precedence: bulk
@@ -86,117 +86,82 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-The test_memcontrol selftest consistently fails its test_memcg_low
-sub-test due to the fact that two of its test child cgroups which
-have a memmory.low of 0 or an effective memory.low of 0 still have low
-events generated for them since mem_cgroup_below_low() use the ">="
-operator when comparing to elow.
+The test_memcg_protection() function is used for the test_memcg_min and
+test_memcg_low sub-tests. This function generates a set of parent/child
+cgroups like:
 
-The two failed use cases are as follows:
+  parent:  memory.min/low = 50M
+  child 0: memory.min/low = 75M,  memory.current = 50M
+  child 1: memory.min/low = 25M,  memory.current = 50M
+  child 2: memory.min/low = 0,    memory.current = 50M
 
-1) memory.low is set to 0, but low events can still be triggered and
-   so the cgroup may have a non-zero low event count. I doubt users are
-   looking for that as they didn't set memory.low at all.
+After applying memory pressure, the function expects the following
+actual memory usages.
 
-2) memory.low is set to a non-zero value but the cgroup has no task in
-   it so that it has an effective low value of 0. Again it may have a
-   non-zero low event count if memory reclaim happens. This is probably
-   not a result expected by the users and it is really doubtful that
-   users will check an empty cgroup with no task in it and expecting
-   some non-zero event counts.
+  parent:  memory.current ~= 50M
+  child 0: memory.current ~= 29M
+  child 1: memory.current ~= 21M
+  child 2: memory.current ~= 0
 
-In the first case, even though memory.low isn't set, it may still have
-some low protection if memory.low is set in the parent. So low event may
-still be recorded. The test_memcontrol.c test has to be modified to
-account for that.
+In reality, the actual memory usages can differ quite a bit from the
+expected values. It uses an error tolerance of 10% with the values_close()
+helper.
 
-For the second case, it really doesn't make sense to have non-zero low
-event if the cgroup has 0 usage. So we need to skip this corner case
-in shrink_node_memcgs() using mem_cgroup_usage(). The mem_cgroup_usage()
-function declaration is moved from mm/memcontrol-v1.h to mm/internal.h
-with the !CONFIG_MEMCG case defined as always true.
+Both the test_memcg_min and test_memcg_low sub-tests can fail
+sporadically because the actual memory usage exceeds the 10% error
+tolerance. Below are a sample of the usage data of the tests runs
+that fail.
 
-With this patch applied, the test_memcg_low sub-test finishes
-successfully without failure in most cases. Though both test_memcg_low
-and test_memcg_min sub-tests may still fail occasionally if the
-memory.current values fall outside of the expected ranges.
+  Child   Actual usage    Expected usage    %err
+  -----   ------------    --------------    ----
+    1       16990208         22020096      -12.9%
+    1       17252352         22020096      -12.1%
+    0       37699584         30408704      +10.7%
+    1       14368768         22020096      -21.0%
+    1       16871424         22020096      -13.2%
 
-Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+The current 10% error tolerenace might be right at the time
+test_memcontrol.c was first introduced in v4.18 kernel, but memory
+reclaim have certainly evolved quite a bit since then which may result
+in a bit more run-to-run variation than previously expected.
+
+Increase the error tolerance to 15% for child 0 and 20% for child 1 to
+minimize the chance of this type of failure. The tolerance is bigger
+for child 1 because an upswing in child 0 corresponds to a smaller
+%err than a similar downswing in child 1 due to the way %err is used
+in values_close().
+
+Before this patch, a 100 test runs of test_memcontrol produced the
+following results:
+
+     17 not ok 1 test_memcg_min
+     22 not ok 2 test_memcg_low
+
+After applying this patch, there were no test failure for test_memcg_min
+and test_memcg_low in 100 test runs.
+
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- mm/internal.h                                    | 9 +++++++++
- mm/memcontrol-v1.h                               | 2 --
- mm/vmscan.c                                      | 4 ++++
- tools/testing/selftests/cgroup/test_memcontrol.c | 7 ++++++-
- 4 files changed, 19 insertions(+), 3 deletions(-)
+ tools/testing/selftests/cgroup/test_memcontrol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 50c2f590b2d0..c06fb0e8d75c 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -1535,6 +1535,15 @@ void __meminit __init_page_from_nid(unsigned long pfn, int nid);
- unsigned long shrink_slab(gfp_t gfp_mask, int nid, struct mem_cgroup *memcg,
- 			  int priority);
- 
-+#ifdef CONFIG_MEMCG
-+unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap);
-+#else
-+static inline unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap)
-+{
-+	return 1UL;
-+}
-+#endif
-+
- #ifdef CONFIG_SHRINKER_DEBUG
- static inline __printf(2, 0) int shrinker_debugfs_name_alloc(
- 			struct shrinker *shrinker, const char *fmt, va_list ap)
-diff --git a/mm/memcontrol-v1.h b/mm/memcontrol-v1.h
-index 6358464bb416..e92b21af92b1 100644
---- a/mm/memcontrol-v1.h
-+++ b/mm/memcontrol-v1.h
-@@ -22,8 +22,6 @@
- 	     iter != NULL;				\
- 	     iter = mem_cgroup_iter(NULL, iter, NULL))
- 
--unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap);
--
- void drain_all_stock(struct mem_cgroup *root_memcg);
- 
- unsigned long memcg_events(struct mem_cgroup *memcg, int event);
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index b620d74b0f66..a771a0145a12 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -5963,6 +5963,10 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
- 
- 		mem_cgroup_calculate_protection(target_memcg, memcg);
- 
-+		/* Skip memcg with no usage */
-+		if (!mem_cgroup_usage(memcg, false))
-+			continue;
-+
- 		if (mem_cgroup_below_min(target_memcg, memcg)) {
- 			/*
- 			 * Hard protection.
 diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 16f5d74ae762..bab826b6b7b0 100644
+index bab826b6b7b0..8f4f2479650e 100644
 --- a/tools/testing/selftests/cgroup/test_memcontrol.c
 +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -525,8 +525,13 @@ static int test_memcg_protection(const char *root, bool min)
+@@ -495,10 +495,10 @@ static int test_memcg_protection(const char *root, bool min)
+ 	for (i = 0; i < ARRAY_SIZE(children); i++)
+ 		c[i] = cg_read_long(children[i], "memory.current");
+ 
+-	if (!values_close(c[0], MB(29), 10))
++	if (!values_close(c[0], MB(29), 15))
  		goto cleanup;
- 	}
  
-+	/*
-+	 * Child 2 has memory.low=0, but some low protection is still being
-+	 * distributed down from its parent with memory.low=50M. So the low
-+	 * event count will be non-zero.
-+	 */
- 	for (i = 0; i < ARRAY_SIZE(children); i++) {
--		int no_low_events_index = 1;
-+		int no_low_events_index = 2;
- 		long low, oom;
+-	if (!values_close(c[1], MB(21), 10))
++	if (!values_close(c[1], MB(21), 20))
+ 		goto cleanup;
  
- 		oom = cg_read_key_long(children[i], "memory.events", "oom ");
+ 	if (c[3] != 0)
 -- 
 2.48.1
 
