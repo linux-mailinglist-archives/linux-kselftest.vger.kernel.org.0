@@ -1,138 +1,166 @@
-Return-Path: <linux-kselftest+bounces-30367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91BD7A8133A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 19:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D0AA814AC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 20:33:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1FDE8A0880
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 17:06:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8AD88863DE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 18:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E873822D4FF;
-	Tue,  8 Apr 2025 17:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E3A23E338;
+	Tue,  8 Apr 2025 18:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L/1JgHNx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dzK+xfLR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36439191F79;
-	Tue,  8 Apr 2025 17:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75F8235374;
+	Tue,  8 Apr 2025 18:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744131977; cv=none; b=TxrbAbRfgMi0ikMsxheqnc/JrCTBIA/EYFFGntGHAVJ17mUDoyOnN6GVysYlwMoU+l2zWz10dmQTAX2vcISysSloNG5au8F9NJ9uF+eJWWV1YF10AOfXJSM4fewxMBHIf6MJttkVSnJ2s4HsMdoN3XoPKjFrbZyO8yjNcwDTEdw=
+	t=1744137180; cv=none; b=ZwbIsc3wSPQgGyEV0cgClwLiHIniFWJoNfnUmgOG6THLIL3ay29ELvYTX5z20A4q8cRyLTn5lvwWu8S3E0OPducV+j4Uk8Ak+14vJHyRDu2snQcXq4yfnj8yT5BCbnC4MNgvyvrP4wJJTDv4XBL3rTDZYBchNMHM/yhXXLujSXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744131977; c=relaxed/simple;
-	bh=yg8Q+fEiwdUlvQz508ND+obDpVahFI5i6bIssELHUWk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GX2S3IwnkmJCSosRb9BrSKD7avw+/FUQxe1gsBsQiqw1qmEJ7noxhe2TTT6ynKLD8zRum0g9pK9ORyErz58L0db0Opgq95fCzat2V1kO6dXEDW7C4X5Ba4ImTzGH7wB+EoYijmeAi46DTjnyRbTB5rEpC80Z8cO82zFIPDYh258=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L/1JgHNx; arc=none smtp.client-ip=209.85.221.42
+	s=arc-20240116; t=1744137180; c=relaxed/simple;
+	bh=cz0sFymjpfC/h77fzceNQsL/NvczhkEObHLXu7XO1kY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bDNPqP3A92YuXn3w/2sIjHJSgxleSJOYjxxVd+jOYb3NFYMRN0TJpuQir7vIv28uCsLoksrKt5ndP8aMn5cOHbLAVj0aShxjDcSgaBpkenPMUPFtop5RkFJ78oKeFl21Yd6rGMn8+nCNjDJmPiooyRRYsKVQD9rxZwciomQuJn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dzK+xfLR; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39c0e0bc733so5003773f8f.1;
-        Tue, 08 Apr 2025 10:06:15 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2295d78b433so59274235ad.2;
+        Tue, 08 Apr 2025 11:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744131974; x=1744736774; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sVSW1j9sW9KcetgerHbKmVEbcFODFc+WKhghSHuNKnA=;
-        b=L/1JgHNxN+AG0GJY/If+024P7B68PU1XQq0qeyhg0ttP6uu5/v0vImS+jmRycK+iao
-         VSC4SK21AS7GSo0J30LEdPZB9VvqERdnhmJs745QG8XOZbMgtgTBts/8HlPyqEGZQj7+
-         PDLZMA8bQ9uzZE4YhzA1Q0pIBGqwv8GU0S7N9UuR0zyLeB04ZFgWWfqjsUXktDrjhF+M
-         OPhDn6kRyEAj2TaP/4y4ggyq4pume/zQBymExgS4lJZfA3xwL+01yaD33+uMo7QsPc3m
-         2NmbgUrxNfC/aNtg+8d2mzcdDYNL2W0P8Gvu6gdC7IQI6N/3WJWGeqKbCmS1FrXw/LQp
-         hGig==
+        d=gmail.com; s=20230601; t=1744137178; x=1744741978; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CsXm6MV5K5BRVbJnpoBwjC4UXp/lFGi2onPtWmwIMd4=;
+        b=dzK+xfLRa7wxYJ0LfdmytMFM4VZ3X28FogVVWRspPQitkXLPa1llfD5Dkwgf/l1rji
+         bPCOc/YDkBxjnIyj30wj/SWovLmvelD79r1E3Zdlb0/FWYD7hRn3GrABNaqzdbBfRJe3
+         GGh3tL9In8pFty7AET0TTcapswFSS4Er+Q4C7oxQ1GZLeq1ZCR0quBkzhZVupur1YfhX
+         xdw1koCnSXSiftqcl1q7ltHHyjrqBeyk4Arn3z13ALt4IdMda1v6fHD2qOLx15SriZHL
+         vm6MlU2oDApzWXcDD4TIFH9NTAcChZpbim7cfK029+/0V9s0FlynIdMNMQWfP6tqbzyX
+         DD+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744131974; x=1744736774;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sVSW1j9sW9KcetgerHbKmVEbcFODFc+WKhghSHuNKnA=;
-        b=iBMqRakFsML2E1eriw5y/B+z5raPayxR9NXaje/xClh0u7dPPMtSqq8JJRBrQDopO2
-         9zn2z37HQ7CZUG0/11SHr6Fk5X3jYO0FYZa9sqY2+Xt4LwAV9hflqauSGllMWyRvzIzV
-         s+9K0kg1inqbwc6hJC50WKMnX5abnmVX3yUmUUjOmxqK9QzNy1i8Hd0DVFcUvz4QvsIx
-         OYi5RL5OT6lM29ky65u9x+71Q5uSISztY0h9N9AVjANCozhngnZ8gd9oHd0bzqy/5i12
-         93c8p4Kn+fzuTm7Pu0Uk3RvLrkYsKDbPq7enJ25tY49ghJPPPPXcDMwN+BqDouWybRIt
-         PxzA==
-X-Forwarded-Encrypted: i=1; AJvYcCXbFoHBMpR9JgM+YfxM/lCzAX7ZnA+wRTFRANvEEtp1gLC/sKXLtplm1zNihWEsZ7BCT41xCpr2PoCSbFbbDgM=@vger.kernel.org, AJvYcCXtOZt6q3oZf7yd701/KrGFe7/LYIrAaFxoXAXJuY3lXsI0HfHUhkCE14e4MPm21xk1zYNpMN+t@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/fMRXwvJCxW527adls21S4vSfQPgU9oG3E/8ksZrA8srZfxov
-	wvOzA1wBZqbYqZ35tyWworJGDj8a07WmLM9uPdyYPCRX7DmG5arXXbKWfQ==
-X-Gm-Gg: ASbGncvCXUkgtRY7CfJ7ctc3gJbld3pkRNvJKP2JKPhExJp4SL440ExOPFYWSIO3Web
-	lis+u14B4TL0bBi5c9XD34QOwuKUqm29wSzawuPnMlv6ZVQHMFkmtfvL8ZPub5s4XXhvws3nZI7
-	Qq5QhtuMQFACVQIQ6GQKPYlQhTjZYDS9WLzlkNz0f2hF3WMbu0Rai7TxUchrwVLmz/UHZIAGusL
-	jNoGAlDEjqixhWiyFqaiAzvAHNI6M/aJw0fih0QM3AbL+vCmADFuIzWjG8QaDLbOVXN0CzZbNA0
-	VVhPhyNxiJ0cawS1vBJJ+HOy88meUoqE1rexd5AHmWxJcqiQH+hYJ0+iLDzs0zyx
-X-Google-Smtp-Source: AGHT+IHIATDhMUQX/Pg95o2L3J7jOrSGkWtrg9ahAB0g3lLYbWvYXwbyI8C5zr/IZSnKeRXWF65znw==
-X-Received: by 2002:a05:6000:178b:b0:39c:2678:302e with SMTP id ffacd0b85a97d-39cba98288fmr15120629f8f.45.1744131974074;
-        Tue, 08 Apr 2025 10:06:14 -0700 (PDT)
-Received: from [172.27.62.62] ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c3020d943sm15664627f8f.74.2025.04.08.10.06.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Apr 2025 10:06:13 -0700 (PDT)
-Message-ID: <bdd16b2e-13eb-46de-99bf-68a500c960c0@gmail.com>
-Date: Tue, 8 Apr 2025 20:06:08 +0300
+        d=1e100.net; s=20230601; t=1744137178; x=1744741978;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CsXm6MV5K5BRVbJnpoBwjC4UXp/lFGi2onPtWmwIMd4=;
+        b=YrtRcqUZGWmytxZvdVA8DZk98ph4SLtX0p+McpA44G70OlGdbyOsxVMlFhAl+3QIte
+         Fw8uEU0Q4LVQ7/h2yKwEfz1YbTz5RkYMZ0v+jNOUMgHzzsL61EckDRxuocqewDo4LMVV
+         Kl/r/+V0LdxKIE6D0YObI0kPG51CW6Yw1TgfkKzeE7gVZkXUu2fCsDqJ4vFToZ9R6HAd
+         dHs2fTbT6cq/vpRBhbLEjHiQpi9HVBVVdn6Rajz37w8wrYUSL4riWkj/Mwqybyf6xF8s
+         2VoAS6DLFhE/jlXc/OpZ6Uy6S1icPfvJYoS415wQrYksXlZKkBbbHBxfPJlW0uJ0PiNR
+         Y7Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ31foE3Kpasz0wVc7wum5YiGJjm+qpcIilWaeza7ny1j67c9YalvyvyojCOEEg7cLeKg=@vger.kernel.org, AJvYcCVY60Z5xYY031PRv1UPjlPeS5sax/J6jm5PV4fVUbR5pWK2Zja+sEN9qQFgUCVvc4zbVm/PrxPccEFtkDS5NPB1@vger.kernel.org, AJvYcCWwaIPwPB3Q0bMme7LL2g8qkg2IF2qP00rVqu0z4qPghs8GPgoaaIVuIT1x7+vwPQHf9HL9azY4OAQiUvFw@vger.kernel.org
+X-Gm-Message-State: AOJu0YzygH8xQAPSC2GDYgmJw/NQ6zlGxoCrRyZAECsmqnRovwNKxadl
+	ysuPdb7IVustweK4MnyexgfYTYn++fA3niOB8hSUJWzhyISe+T1s
+X-Gm-Gg: ASbGncs/L8B1XhhFBIw8IEt0U9vaPYKme92CRthTWpOt3LAiMcnCXfX0kA0p2ZhLCEn
+	X+anCRgpIrIyJlHTzMxnfQyYta+HZz2GgexzSdvGOHpE9dCXMCJ08wNG2x/XaJfT6ieDgbUg6D1
+	j3HdUFFUMl4dn75+9P7/HAZhX8A/vZzWwu6tG/pbhK9umnwHmow0TwXhpfwen5uDAa98y2+LNLf
+	9/e4qlhuKVSVoGdwyWOuYgOJtPcDsc/PBbZBTWtQgAGlmm6Ykd2DPEhwO9PU25d1zHwRVOm4PWB
+	j08U+sx33VoKQweHi1c595flQ+Z4+GjZbBknXdeGyYB06w6tqSoU3XLJCgG2dLOqK259hw/kUWP
+	wqOnEHlsvCBV3r6At
+X-Google-Smtp-Source: AGHT+IFFgN7WMzBD5HsfPDqJ2wUPAWRl9kp6owNScncUOYS4nasPvN1eVgLjKMFFQTsakeZjjrHQxg==
+X-Received: by 2002:a17:902:f686:b0:223:faf5:c82 with SMTP id d9443c01a7336-22ac295cfe8mr2454945ad.8.1744137177911;
+        Tue, 08 Apr 2025 11:32:57 -0700 (PDT)
+Received: from malayaVM.mrout-thinkpadp16vgen1.punetw6.csb ([103.133.229.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2297865fa98sm103806325ad.140.2025.04.08.11.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Apr 2025 11:32:57 -0700 (PDT)
+From: Malaya Kumar Rout <malayarout91@gmail.com>
+To: houtao@huaweicloud.com
+Cc: Malaya Kumar Rout <malayarout91@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re:[PATCH RESEND bpf-next v2] selftests/bpf: close the file descriptor to avoid resource leaks
+Date: Wed,  9 Apr 2025 00:01:40 +0530
+Message-ID: <20250408183214.6437-1-malayarout91@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <92596c82-4a12-3afc-6cb2-21a11bef3739@huaweicloud.com>
+References: <92596c82-4a12-3afc-6cb2-21a11bef3739@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/6] net/mlx5: Avoid using xso.real_dev
- unnecessarily
-To: Cosmin Ratiu <cratiu@nvidia.com>, netdev@vger.kernel.org
-Cc: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Nikolay Aleksandrov <razor@blackwall.org>, Simon Horman <horms@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Jianbo Liu <jianbol@nvidia.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Ayush Sawal <ayush.sawal@chelsio.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>,
- Subbaraya Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>,
- Bharat Bhushan <bbhushan2@marvell.com>,
- Louis Peens <louis.peens@corigine.com>, Leon Romanovsky <leonro@nvidia.com>,
- linux-kselftest@vger.kernel.org
-References: <20250407133542.2668491-1-cratiu@nvidia.com>
- <20250407133542.2668491-2-cratiu@nvidia.com>
-Content-Language: en-US
-From: Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20250407133542.2668491-2-cratiu@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Static Analyis for bench_htab_mem.c with cppcheck:error
+tools/testing/selftests/bpf/benchs/bench_htab_mem.c:284:3:
+error: Resource leak: fd [resourceLeak]
+tools/testing/selftests/bpf/prog_tests/sk_assign.c:41:3:
+error: Resource leak: tc [resourceLeak]
 
+fix the issue  by closing the file descriptor (fd & tc) when
+read & fgets operation fails.
 
-On 07/04/2025 16:35, Cosmin Ratiu wrote:
-> xso.real_dev is the active device of an offloaded xfrm state and is
-> managed by bonding. As such, it's subject to change when states are
-> migrated to a new device. Using it in places other than
-> offloading/unoffloading the states is risky.
-> 
-> This commit saves the device into the driver-specific struct
-> mlx5e_ipsec_sa_entry and switches mlx5e_ipsec_init_macs() and
-> mlx5e_ipsec_netevent_event() to make use of it.
-> 
-> Additionally, mlx5e_xfrm_update_stats() used xso.real_dev to validate
-> that correct net locks are held. But in a bonding config, the net of the
-> master device is the same as the underlying devices, and the net is
-> already a local var, so use that instead.
-> 
-> The only remaining references to xso.real_dev are now in the
-> .xdo_dev_state_add() / .xdo_dev_state_delete() path.
-> 
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
+---
+ tools/testing/selftests/bpf/benchs/bench_htab_mem.c | 3 +--
+ tools/testing/selftests/bpf/prog_tests/sk_assign.c  | 4 +++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Acked-by: Tariq Toukan <tariqt@nvidia.com>
+diff --git a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+index 926ee822143e..297e32390cd1 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
++++ b/tools/testing/selftests/bpf/benchs/bench_htab_mem.c
+@@ -279,6 +279,7 @@ static void htab_mem_read_mem_cgrp_file(const char *name, unsigned long *value)
+ 	}
+ 
+ 	got = read(fd, buf, sizeof(buf) - 1);
++	close(fd);
+ 	if (got <= 0) {
+ 		*value = 0;
+ 		return;
+@@ -286,8 +287,6 @@ static void htab_mem_read_mem_cgrp_file(const char *name, unsigned long *value)
+ 	buf[got] = 0;
+ 
+ 	*value = strtoull(buf, NULL, 0);
+-
+-	close(fd);
+ }
+ 
+ static void htab_mem_measure(struct bench_res *res)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+index 0b9bd1d6f7cc..10a0ab954b8a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+@@ -37,8 +37,10 @@ configure_stack(void)
+ 	tc = popen("tc -V", "r");
+ 	if (CHECK_FAIL(!tc))
+ 		return false;
+-	if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc)))
++	if (CHECK_FAIL(!fgets(tc_version, sizeof(tc_version), tc))) {
++		pclose(tc);
+ 		return false;
++	}
+ 	if (strstr(tc_version, ", libbpf "))
+ 		prog = "test_sk_assign_libbpf.bpf.o";
+ 	else
+-- 
+2.43.0
 
-Thanks.
 
