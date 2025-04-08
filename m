@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-30339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB514A7F79C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:19:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEEE8A7F79D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:19:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30B221897500
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:18:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16ABE7A75F7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10E6E264610;
-	Tue,  8 Apr 2025 08:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85639264A77;
+	Tue,  8 Apr 2025 08:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mG6qFarC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f4nGXKP4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64732641E9;
-	Tue,  8 Apr 2025 08:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB072264629;
+	Tue,  8 Apr 2025 08:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744100243; cv=none; b=H0y4KEwLTEQtJt1MlntBMqvgAVNnF4vHYjeI2/DcXUxPdO8OH7ZVtmVH0ZSFbiUI8jSvWClJvj6RoDOi2oSXv1jomFcHzdHcKr0pGhnuDIFxjfrR6+Pdj04AD7uC3Ra5egq1l/OoRDIB0KMl7Z+f8y48fIyl73Hw/856ib1zUMM=
+	t=1744100248; cv=none; b=pE6DBK4CbjCfzTCAp7YSluEN4uPRfyvnpAi0vmbsJ8I+69+UeK94Lh4CC482O92cUlQlkxs+MJMYJQH8mmlUsmmFGeiwlk9U3YVsYTrv4sPmPxTK39N6DyqmNMdEDv1AlnjjDb1MdqtgNjOZZ4OZZrtZWmHsfWgUPL/vmN9T/BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744100243; c=relaxed/simple;
-	bh=2csU+79UdMjWyhK9Iv2wecuNUMlZMFfRyVTWj9zto78=;
+	s=arc-20240116; t=1744100248; c=relaxed/simple;
+	bh=25kfwZWrJCdg3wZt8cA0jm1AToacY98iZoqDX4a/Ij0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cOPQUkgYb5kt8kq4dSIUEKB1Lh9OIcNmvhkAHVObR/gByRIl7zusvaVXLxrOAW44xwWuLwUisXN/1yiOwlhAK9nA2zNmoTyHfbyRws3akuQMy1vM0wTX1nXV1GBJr8uvBCB574KP2ZSjeZN0cNZ3EoLidkb0OOQGYe3ke/6hktY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mG6qFarC; arc=none smtp.client-ip=209.85.214.173
+	 MIME-Version; b=LzjWAPV0rcp8u5WDh5ctoSLNKdsYo9V9bjdlc6DA4oppB5C4y8o0VG5Ca3zTxuqQ68dh+fy5zjr2LO++XsuAiQR0ow41jyREObd8E1ABXW0mTnzJYQFza1suHTDd0G5xYoRcJan9AWuYSifanjrLlTUsUT/T54saph5Y2Pp5Xls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f4nGXKP4; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-225477548e1so48765295ad.0;
-        Tue, 08 Apr 2025 01:17:17 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22548a28d0cso73204075ad.3;
+        Tue, 08 Apr 2025 01:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744100237; x=1744705037; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744100243; x=1744705043; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v7d+kcHAwN3g2veRIP35/Cx+qKGOfglBxZ9UJox5e0Y=;
-        b=mG6qFarCOby/Zj+J+e5XgFHNyPJZoueeXj8uEHLsp8vZkgXf+YzGFegrVFwAL5/oJK
-         LJj2se3lFy1OyfeV824Qjti6ls/Nj/enXpYLa3grxS3K7XN9Pg0jJiRmoDaWPF/f0Lsk
-         AiNGCBBQCNVqPV9BhSwTeh6HvMHlGFLmN5s9h1ca34Y9YHAWXsd18c0eTTj/ZEC9hRvp
-         kKk6BRQnx3GnF1iboDV5U6cxyH/5IubbEdGcUiRfAcbNW2NIWcvO6YP1EHtODROMWPhq
-         QRCrl343NIy3MNUJlc/5JtrmNQlJbIAj5Bl1ILKKu4TKIY8VT24a2+9AvW10bbcKyB4v
-         nSxg==
+        bh=0d3Ceii2JHd7DdtO/Jyc5PB50s2tl91HKnoWaWMWAkc=;
+        b=f4nGXKP4uvDf74hZ9mop8Nv2QjK9VVbAQxOUfH4Lg7NkDp4/jEmqtn6OvMC5mFEWdp
+         YvdRlT7Qxo++UD4Sknb9FlqL6Rhw1FQGhW7wRtBGfo5tyuSWdW0eeiGcTqNbs3ku6wSf
+         eCDo5i6kmyIiPs0cY4omXWzzrIOU//4ZTUA5exyD3koXM5OIQNf98LGQwLlts/WsRBLE
+         XdvVLeKNQROeesF5ldfck/igzHkxhdyQyTBjbEq81dnKmyyfhs8vATMCYdDtZU05m+x5
+         fvB3wO/w/YkIEnxdAh9sizYP3Rx8ZTgNrvc2p2ONbTu57BmYd+A9nDOxJPRcKyndmYBx
+         uFzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744100237; x=1744705037;
+        d=1e100.net; s=20230601; t=1744100243; x=1744705043;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v7d+kcHAwN3g2veRIP35/Cx+qKGOfglBxZ9UJox5e0Y=;
-        b=NHq9+ZVNObiPn1y/O4g3Pg0KubRGAZWkAypQfqUJ2JOeyIkcwmCk/sYKmvjMRaWXpT
-         A6xUVKU4GVfLo74ROKI5RHFe48DVyeFzArg3vcJo6m7Rp6gCOgbz+qC38z31FL9ImMdS
-         a0p29t6rUQa/MTEXRDEgXywnYvpgZZN/MceyioJrwbmyoKjFRGcSnoftKAEQ6BjvwuG1
-         EcYJBb1kdiB9On7Q2UaI4LaKaaoB6BVqSc3sgjmPYa7sX/fhB4WOMe3okvjwSd/ctfQy
-         bXCffFLsQnkxpy7DvCh3E9BXXS17kHYC2kI2mNr6DRxFb8fOQ3KMp1gITCnKUik34YPG
-         zhZA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEpGHCgxnXyhTNFquFuvFMMiIcz2eQe7GtgrXumGE8nl74wWPFCGP9ahNi1Qp7GtqTEbx7UlWMPRX49T8=@vger.kernel.org, AJvYcCUzjE0PzSh083jxWfRDLIRdE5LCLWIrSDoDHo7jrcM5uBrrqX2/HzMco+K19hb5oSkq0VCFi9YfrovERlvOkV9i@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtsCvq+ckAv4PL+Qzbn0ms607Te6HdLvXwiJI3zZV6AEMjW7WU
-	wnORMTEJ7qjW4ECahc3UFwNR+g3lYUkuvI3x9dmMBEFjKufE+DBdZSNTockqml8=
-X-Gm-Gg: ASbGncuwHT9TMcoAc+FY1D8KV4AeuiSBO06/AVMCS1nHxxNXdnW1BLqukV0UkoQKN4v
-	nNfs9mm21luBUVWB3yVB8QhlIQFisybjnzJ8nOIhPsZachYxgwK3Mx9qB9+YRt0bc5fwDGj241i
-	lFhEXSc0N1Dz5bm+mgFdxBJ0qU34Bbv+Kdt47zkewNNmzbRuI7ljXlZxEKS2t5Jf7VwyQgz05oz
-	VwrDNl3QtNP4amIFl3vdT65nYRqZaNkIG8PYXx0l/HziWpCoBWImsIeB+Dnle2iBHWncnHTmH1g
-	KsuGLpXuERtdilEP3921IIDn85EvGv1AUOJF3fjFrMlyDkeZZqpwy6sxu6YwKReH26yNMA==
-X-Google-Smtp-Source: AGHT+IFhbmP2Y/X1Y+SFXIUub7l0AG/Zk7maUw6wnkw48Kd+ctJdyuBAxMTAkuTD1VllYRNhyEWJ+A==
-X-Received: by 2002:a17:902:e809:b0:220:cb1a:da5 with SMTP id d9443c01a7336-22a8a8cec34mr230595595ad.40.1744100236572;
-        Tue, 08 Apr 2025 01:17:16 -0700 (PDT)
+        bh=0d3Ceii2JHd7DdtO/Jyc5PB50s2tl91HKnoWaWMWAkc=;
+        b=DijtQkkz+S0p2ND1e8AGKZfoI0L9kP2ZjZvi7txWEuu6XpE/G2GyZQ7xLf+SmqB9r2
+         +w0Gb7o0Yuzc+XVLMqpbPoQwbsDv8QKSDxM79XjRQTJSUzFoiZrrzQ+0Y0OQOjLvQMyI
+         omawTgg1nkyQ2augV5jko3qzgH3kNEu+3+e9JrmT0y1Ms8HbSvmeiSCnV+8/W1wwGIXF
+         w9PhWSnDTFnFTxJ/yLl/s+GRd6SSQWs2qUu3L11e1WHLXhrX0S0Vd+ITWJmsRQ7JEAX4
+         pZHmNvVkFlwBh900FE+6tkjMODgGr9OfvV861XvQurK5zkmeISLcDu1jdYPMe4e0+zDE
+         ijGw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+b8Oa7BuhTIYv0JXLJCFAa75+9vd/SOZVqVmP2KC6nc7r6Sdi7aVvsINaco/o3RX75vs7HL7ZEsBF2L04zFZD@vger.kernel.org, AJvYcCXQLMPLY4aIY4TQ+URav9YUyJfLyw4uUTfn3gVBLpkKoBLNx9Ybl9qBhJbmU81OEjSAd3CqpFIxkPyUKyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzoqNZpUKtGqTmzJmB4Qm9bpXn8o9xKKw+5r/xcNsNqOhKVJHD
+	V9k9l8NCxTmz/TWF5dIj4zIsFaOj7uQTYgwjBGAt2nhMRagA04AuMQUv1zaaXbg=
+X-Gm-Gg: ASbGncucikPo1yID3UDcxYz6ZqoHP7OuX2KpbolYuje4+jTEltfRTmSfjgtH2LuPYes
+	kbiey0Oo/0n6QMgVeqDck4ZRulQOj86ect3tAHuj3ME1SVTN/vCkfXa4npvZBp7OPMe7wb/g0RH
+	zWse9gXj0AvN4htgmJvQgCa4+AcacWF5r/MVLuSoPWxOKSVCee7tsEKFbDZkY8xJqJuLWHG+GDz
+	VFdRcyF1NzWbeiJvBlirO8ZGlWWPbGmXK6OQDMIfot+uWgfhqeIZ9lmpC57hwvUdTgmfE2doJpJ
+	1W7fY8tWYrI9g/27QhwKxoMsxaOzy1v9WNzteXsR5+5zOqyy+75o0v5d+mzH6+uDWl1mxg==
+X-Google-Smtp-Source: AGHT+IGi1HhT35CGTn4OHIXajxXrLV4KFaDuVWc5PJ3Zmw4syv6sGb4JtQdYhMc/JNW13o1mWUN14g==
+X-Received: by 2002:a17:902:e552:b0:220:e5be:29c7 with SMTP id d9443c01a7336-22a8a8b833emr206228755ad.39.1744100242645;
+        Tue, 08 Apr 2025 01:17:22 -0700 (PDT)
 Received: from fedora.dns.podman ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-229785ada20sm94319535ad.46.2025.04.08.01.17.09
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-229785ada20sm94319535ad.46.2025.04.08.01.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 01:17:16 -0700 (PDT)
+        Tue, 08 Apr 2025 01:17:21 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
@@ -87,9 +87,9 @@ Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv6 net-next 1/2] wireguard: selftests: convert iptables to nft
-Date: Tue,  8 Apr 2025 08:16:51 +0000
-Message-ID: <20250408081652.1330-2-liuhangbin@gmail.com>
+Subject: [PATCHv6 net-next 2/2] wireguard: selftests: update to using nft for qemu test
+Date: Tue,  8 Apr 2025 08:16:52 +0000
+Message-ID: <20250408081652.1330-3-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20250408081652.1330-1-liuhangbin@gmail.com>
 References: <20250408081652.1330-1-liuhangbin@gmail.com>
@@ -101,94 +101,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert the selftest to nft as it is the replacement for iptables, which
-is used by default in most releases.
+Since we will replace iptables with nft for wireguard netns testing,
+let's also convert the qemu test to use nft at the same time.
 
+Co-developed-by: Phil Sutter <phil@nwl.cc>
+Signed-off-by: Phil Sutter <phil@nwl.cc>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/wireguard/netns.sh | 29 ++++++++++++++--------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ .../testing/selftests/wireguard/qemu/Makefile | 36 ++++++++++++++-----
+ .../selftests/wireguard/qemu/kernel.config    |  7 ++--
+ 2 files changed, 30 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/wireguard/netns.sh b/tools/testing/selftests/wireguard/netns.sh
-index 55500f901fbc..8b840fef90af 100755
---- a/tools/testing/selftests/wireguard/netns.sh
-+++ b/tools/testing/selftests/wireguard/netns.sh
-@@ -75,6 +75,11 @@ pp ip netns add $netns1
- pp ip netns add $netns2
- ip0 link set up dev lo
+diff --git a/tools/testing/selftests/wireguard/qemu/Makefile b/tools/testing/selftests/wireguard/qemu/Makefile
+index 35856b11c143..2442ae99f007 100644
+--- a/tools/testing/selftests/wireguard/qemu/Makefile
++++ b/tools/testing/selftests/wireguard/qemu/Makefile
+@@ -40,7 +40,9 @@ endef
+ $(eval $(call tar_download,IPERF,iperf,3.11,.tar.gz,https://downloads.es.net/pub/iperf/,de8cb409fad61a0574f4cb07eb19ce1159707403ac2dc01b5d175e91240b7e5f))
+ $(eval $(call tar_download,BASH,bash,5.1.16,.tar.gz,https://ftp.gnu.org/gnu/bash/,5bac17218d3911834520dad13cd1f85ab944e1c09ae1aba55906be1f8192f558))
+ $(eval $(call tar_download,IPROUTE2,iproute2,5.17.0,.tar.gz,https://www.kernel.org/pub/linux/utils/net/iproute2/,bda331d5c4606138892f23a565d78fca18919b4d508a0b7ca8391c2da2db68b9))
+-$(eval $(call tar_download,IPTABLES,iptables,1.8.7,.tar.bz2,https://www.netfilter.org/projects/iptables/files/,c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0))
++$(eval $(call tar_download,LIBMNL,libmnl,1.0.5,.tar.bz2,https://www.netfilter.org/projects/libmnl/files/,274b9b919ef3152bfb3da3a13c950dd60d6e2bcd54230ffeca298d03b40d0525))
++$(eval $(call tar_download,LIBNFTNL,libnftnl,1.2.8,.tar.xz,https://www.netfilter.org/projects/libnftnl/files/,37fea5d6b5c9b08de7920d298de3cdc942e7ae64b1a3e8b880b2d390ae67ad95))
++$(eval $(call tar_download,NFTABLES,nftables,1.1.1,.tar.xz,https://www.netfilter.org/projects/nftables/files/,6358830f3a64f31e39b0ad421d7dadcd240b72343ded48d8ef13b8faf204865a))
+ $(eval $(call tar_download,NMAP,nmap,7.92,.tgz,https://nmap.org/dist/,064183ea642dc4c12b1ab3b5358ce1cef7d2e7e11ffa2849f16d339f5b717117))
+ $(eval $(call tar_download,IPUTILS,iputils,s20190709,.tar.gz,https://github.com/iputils/iputils/archive/s20190709.tar.gz/#,a15720dd741d7538dd2645f9f516d193636ae4300ff7dbc8bfca757bf166490a))
+ $(eval $(call tar_download,WIREGUARD_TOOLS,wireguard-tools,1.0.20210914,.tar.xz,https://git.zx2c4.com/wireguard-tools/snapshot/,97ff31489217bb265b7ae850d3d0f335ab07d2652ba1feec88b734bc96bd05ac))
+@@ -322,8 +324,7 @@ $(BUILD_PATH)/init-cpio-spec.txt: $(TOOLCHAIN_PATH)/.installed $(BUILD_PATH)/ini
+ 	echo "file /bin/ss $(IPROUTE2_PATH)/misc/ss 755 0 0" >> $@
+ 	echo "file /bin/ping $(IPUTILS_PATH)/ping 755 0 0" >> $@
+ 	echo "file /bin/ncat $(NMAP_PATH)/ncat/ncat 755 0 0" >> $@
+-	echo "file /bin/xtables-legacy-multi $(IPTABLES_PATH)/iptables/xtables-legacy-multi 755 0 0" >> $@
+-	echo "slink /bin/iptables xtables-legacy-multi 777 0 0" >> $@
++	echo "file /bin/nft $(NFTABLES_PATH)/src/nft 755 0 0" >> $@
+ 	echo "slink /bin/ping6 ping 777 0 0" >> $@
+ 	echo "dir /lib 755 0 0" >> $@
+ 	echo "file /lib/libc.so $(TOOLCHAIN_PATH)/$(CHOST)/lib/libc.so 755 0 0" >> $@
+@@ -338,7 +339,7 @@ $(KERNEL_BUILD_PATH)/.config: $(TOOLCHAIN_PATH)/.installed kernel.config arch/$(
+ 	cd $(KERNEL_BUILD_PATH) && ARCH=$(KERNEL_ARCH) $(KERNEL_PATH)/scripts/kconfig/merge_config.sh -n $(KERNEL_BUILD_PATH)/.config $(KERNEL_BUILD_PATH)/minimal.config
+ 	$(if $(findstring yes,$(DEBUG_KERNEL)),cp debug.config $(KERNEL_BUILD_PATH) && cd $(KERNEL_BUILD_PATH) && ARCH=$(KERNEL_ARCH) $(KERNEL_PATH)/scripts/kconfig/merge_config.sh -n $(KERNEL_BUILD_PATH)/.config debug.config,)
  
-+# init nft tables
-+n0 nft add table ip wgtest
-+n1 nft add table ip wgtest
-+n2 nft add table ip wgtest
+-$(KERNEL_BZIMAGE): $(TOOLCHAIN_PATH)/.installed $(KERNEL_BUILD_PATH)/.config $(BUILD_PATH)/init-cpio-spec.txt $(IPERF_PATH)/src/iperf3 $(IPUTILS_PATH)/ping $(BASH_PATH)/bash $(IPROUTE2_PATH)/misc/ss $(IPROUTE2_PATH)/ip/ip $(IPTABLES_PATH)/iptables/xtables-legacy-multi $(NMAP_PATH)/ncat/ncat $(WIREGUARD_TOOLS_PATH)/src/wg $(BUILD_PATH)/init
++$(KERNEL_BZIMAGE): $(TOOLCHAIN_PATH)/.installed $(KERNEL_BUILD_PATH)/.config $(BUILD_PATH)/init-cpio-spec.txt $(IPERF_PATH)/src/iperf3 $(IPUTILS_PATH)/ping $(BASH_PATH)/bash $(IPROUTE2_PATH)/misc/ss $(IPROUTE2_PATH)/ip/ip $(LIBMNL_PATH)/libmnl $(LIBNFTNL_PATH)/libnftnl $(NFTABLES_PATH)/src/nft $(NMAP_PATH)/ncat/ncat $(WIREGUARD_TOOLS_PATH)/src/wg $(BUILD_PATH)/init
+ 	$(MAKE) -C $(KERNEL_PATH) O=$(KERNEL_BUILD_PATH) ARCH=$(KERNEL_ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
+ .PHONY: $(KERNEL_BZIMAGE)
+ 
+@@ -421,15 +422,32 @@ $(IPROUTE2_PATH)/misc/ss: | $(IPROUTE2_PATH)/.installed $(USERSPACE_DEPS)
+ 	$(MAKE) -C $(IPROUTE2_PATH) PREFIX=/ misc/ss
+ 	$(STRIP) -s $@
+ 
+-$(IPTABLES_PATH)/.installed: $(IPTABLES_TAR)
++$(LIBMNL_PATH)/.installed: $(LIBMNL_TAR)
+ 	mkdir -p $(BUILD_PATH)
+ 	flock -s $<.lock tar -C $(BUILD_PATH) -xf $<
+-	sed -i -e "/nfnetlink=[01]/s:=[01]:=0:" -e "/nfconntrack=[01]/s:=[01]:=0:" $(IPTABLES_PATH)/configure
+ 	touch $@
+ 
+-$(IPTABLES_PATH)/iptables/xtables-legacy-multi: | $(IPTABLES_PATH)/.installed $(USERSPACE_DEPS)
+-	cd $(IPTABLES_PATH) && ./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static --disable-shared --disable-nftables --disable-bpf-compiler --disable-nfsynproxy --disable-libipq --disable-connlabel --with-kernel=$(BUILD_PATH)/include
+-	$(MAKE) -C $(IPTABLES_PATH)
++$(LIBMNL_PATH)/libmnl: | $(LIBMNL_PATH)/.installed $(USERSPACE_DEPS)
++	cd $(LIBMNL_PATH) && ./configure --prefix=$(TOOLCHAIN_PATH) $(CROSS_COMPILE_FLAG) --enable-static --disable-shared
++	$(MAKE) -C $(LIBMNL_PATH) install
 +
- ip0 link add dev wg0 type wireguard
- ip0 link set wg0 netns $netns1
- ip0 link add dev wg0 type wireguard
-@@ -196,13 +201,14 @@ ip1 link set wg0 mtu 1300
- ip2 link set wg0 mtu 1300
- n1 wg set wg0 peer "$pub2" endpoint 127.0.0.1:2
- n2 wg set wg0 peer "$pub1" endpoint 127.0.0.1:1
--n0 iptables -A INPUT -m length --length 1360 -j DROP
-+n0 nft add chain ip wgtest INPUT { type filter hook input priority filter \; policy accept \; }
-+n0 nft add rule ip wgtest INPUT meta length 1360 drop
- n1 ip route add 192.168.241.2/32 dev wg0 mtu 1299
- n2 ip route add 192.168.241.1/32 dev wg0 mtu 1299
- n2 ping -c 1 -W 1 -s 1269 192.168.241.1
- n2 ip route delete 192.168.241.1/32 dev wg0 mtu 1299
- n1 ip route delete 192.168.241.2/32 dev wg0 mtu 1299
--n0 iptables -F INPUT
-+n0 nft flush table ip wgtest
++$(LIBNFTNL_PATH)/.installed: $(LIBNFTNL_TAR)
++	mkdir -p $(BUILD_PATH)
++	flock -s $<.lock tar -C $(BUILD_PATH) -xf $<
++	touch $@
++
++$(LIBNFTNL_PATH)/libnftnl: | $(LIBNFTNL_PATH)/.installed $(USERSPACE_DEPS)
++	cd $(LIBNFTNL_PATH) && PKG_CONFIG_PATH="$(TOOLCHAIN_PATH)/lib/pkgconfig" ./configure --prefix=$(TOOLCHAIN_PATH) $(CROSS_COMPILE_FLAG) --enable-static --disable-shared
++	$(MAKE) -C $(LIBNFTNL_PATH) install
++
++$(NFTABLES_PATH)/.installed: $(NFTABLES_TAR)
++	mkdir -p $(BUILD_PATH)
++	flock -s $<.lock tar -C $(BUILD_PATH) -xf $<
++	touch $@
++
++$(NFTABLES_PATH)/src/nft: | $(NFTABLES_PATH)/.installed $(USERSPACE_DEPS)
++	cd $(NFTABLES_PATH) && PKG_CONFIG_PATH="$(TOOLCHAIN_PATH)/lib/pkgconfig" ./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static --disable-shared --disable-debug --disable-man-doc --with-mini-gmp --without-cli
++	$(MAKE) -C $(NFTABLES_PATH) PREFIX=/
+ 	$(STRIP) -s $@
  
- ip1 link set wg0 mtu $orig_mtu
- ip2 link set wg0 mtu $orig_mtu
-@@ -335,7 +341,8 @@ n0 bash -c 'printf 1 > /proc/sys/net/ipv4/ip_forward'
- [[ -e /proc/sys/net/netfilter/nf_conntrack_udp_timeout ]] || modprobe nf_conntrack
- n0 bash -c 'printf 2 > /proc/sys/net/netfilter/nf_conntrack_udp_timeout'
- n0 bash -c 'printf 2 > /proc/sys/net/netfilter/nf_conntrack_udp_timeout_stream'
--n0 iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -d 10.0.0.0/24 -j SNAT --to 10.0.0.1
-+n0 nft add chain ip wgtest POSTROUTING { type nat hook postrouting priority srcnat\; policy accept \; }
-+n0 nft add rule ip wgtest POSTROUTING ip saddr 192.168.1.0/24 ip daddr 10.0.0.0/24 snat to 10.0.0.1
- 
- n1 wg set wg0 peer "$pub2" endpoint 10.0.0.100:2 persistent-keepalive 1
- n1 ping -W 1 -c 1 192.168.241.2
-@@ -349,10 +356,11 @@ n1 wg set wg0 peer "$pub2" persistent-keepalive 0
- # Test that sk_bound_dev_if works
- n1 ping -I wg0 -c 1 -W 1 192.168.241.2
- # What about when the mark changes and the packet must be rerouted?
--n1 iptables -t mangle -I OUTPUT -j MARK --set-xmark 1
-+n1 nft add chain ip wgtest OUTPUT { type route hook output priority mangle\; policy accept \; }
-+n1 nft add rule ip wgtest OUTPUT meta mark set 0x1
- n1 ping -c 1 -W 1 192.168.241.2 # First the boring case
- n1 ping -I wg0 -c 1 -W 1 192.168.241.2 # Then the sk_bound_dev_if case
--n1 iptables -t mangle -D OUTPUT -j MARK --set-xmark 1
-+n1 nft flush table ip wgtest
- 
- # Test that onion routing works, even when it loops
- n1 wg set wg0 peer "$pub3" allowed-ips 192.168.242.2/32 endpoint 192.168.241.2:5
-@@ -386,16 +394,17 @@ n1 ping -W 1 -c 100 -f 192.168.99.7
- n1 ping -W 1 -c 100 -f abab::1111
- 
- # Have ns2 NAT into wg0 packets from ns0, but return an icmp error along the right route.
--n2 iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -d 192.168.241.0/24 -j SNAT --to 192.168.241.2
--n0 iptables -t filter -A INPUT \! -s 10.0.0.0/24 -i vethrs -j DROP # Manual rpfilter just to be explicit.
-+n2 nft add chain ip wgtest POSTROUTING { type nat hook postrouting priority srcnat\; policy accept \; }
-+n2 nft add rule ip wgtest POSTROUTING ip saddr 10.0.0.0/24 ip daddr 192.168.241.0/24 snat to 192.168.241.2
-+n0 nft add chain ip wgtest INPUT { type filter hook input priority filter \; policy accept \; }
-+n0 nft add rule ip wgtest INPUT iifname "vethrs" ip saddr != 10.0.0.0/24 drop
- n2 bash -c 'printf 1 > /proc/sys/net/ipv4/ip_forward'
- ip0 -4 route add 192.168.241.1 via 10.0.0.100
- n2 wg set wg0 peer "$pub1" remove
- [[ $(! n0 ping -W 1 -c 1 192.168.241.1 || false) == *"From 10.0.0.100 icmp_seq=1 Destination Host Unreachable"* ]]
- 
--n0 iptables -t nat -F
--n0 iptables -t filter -F
--n2 iptables -t nat -F
-+n0 nft flush table ip wgtest
-+n2 nft flush table ip wgtest
- ip0 link del vethrc
- ip0 link del vethrs
- ip1 link del wg0
+ $(NMAP_PATH)/.installed: $(NMAP_TAR)
+diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+index f314d3789f17..9930116ecd81 100644
+--- a/tools/testing/selftests/wireguard/qemu/kernel.config
++++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+@@ -19,10 +19,9 @@ CONFIG_NETFILTER_XTABLES=y
+ CONFIG_NETFILTER_XT_NAT=y
+ CONFIG_NETFILTER_XT_MATCH_LENGTH=y
+ CONFIG_NETFILTER_XT_MARK=y
+-CONFIG_IP_NF_IPTABLES=y
+-CONFIG_IP_NF_FILTER=y
+-CONFIG_IP_NF_MANGLE=y
+-CONFIG_IP_NF_NAT=y
++CONFIG_NF_TABLES=m
++CONFIG_NF_TABLES_INET=y
++CONFIG_NFT_NAT=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MULTIPLE_TABLES=y
+ CONFIG_IPV6_MULTIPLE_TABLES=y
 -- 
 2.46.0
 
