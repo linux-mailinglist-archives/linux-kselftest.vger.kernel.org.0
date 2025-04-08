@@ -1,208 +1,144 @@
-Return-Path: <linux-kselftest+bounces-30340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30341-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEEE8A7F79D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:19:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DADBA7F7B5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:23:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16ABE7A75F7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:17:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00A093ACEE6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85639264A77;
-	Tue,  8 Apr 2025 08:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7C623E22B;
+	Tue,  8 Apr 2025 08:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f4nGXKP4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYcXVTGl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB072264629;
-	Tue,  8 Apr 2025 08:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC2E212B1E;
+	Tue,  8 Apr 2025 08:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744100248; cv=none; b=pE6DBK4CbjCfzTCAp7YSluEN4uPRfyvnpAi0vmbsJ8I+69+UeK94Lh4CC482O92cUlQlkxs+MJMYJQH8mmlUsmmFGeiwlk9U3YVsYTrv4sPmPxTK39N6DyqmNMdEDv1AlnjjDb1MdqtgNjOZZ4OZZrtZWmHsfWgUPL/vmN9T/BQ=
+	t=1744100432; cv=none; b=VBBZWIav06GdMXQrbk4BnZOCX1rjIcmxtSTxNBTZQ7ZC7VrJTagL/q6i0+qbDe8z8VzbkAq0yKtlsrwMZcbBqN/9PkNDGaIh0CZIOdzbCQpVqRedhsfU8jmx7k1I+6WHKJlh1lwWS0c4Q5xvysFyrhyRipGuT5/lcruYjXykdI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744100248; c=relaxed/simple;
-	bh=25kfwZWrJCdg3wZt8cA0jm1AToacY98iZoqDX4a/Ij0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LzjWAPV0rcp8u5WDh5ctoSLNKdsYo9V9bjdlc6DA4oppB5C4y8o0VG5Ca3zTxuqQ68dh+fy5zjr2LO++XsuAiQR0ow41jyREObd8E1ABXW0mTnzJYQFza1suHTDd0G5xYoRcJan9AWuYSifanjrLlTUsUT/T54saph5Y2Pp5Xls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f4nGXKP4; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-22548a28d0cso73204075ad.3;
-        Tue, 08 Apr 2025 01:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744100243; x=1744705043; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0d3Ceii2JHd7DdtO/Jyc5PB50s2tl91HKnoWaWMWAkc=;
-        b=f4nGXKP4uvDf74hZ9mop8Nv2QjK9VVbAQxOUfH4Lg7NkDp4/jEmqtn6OvMC5mFEWdp
-         YvdRlT7Qxo++UD4Sknb9FlqL6Rhw1FQGhW7wRtBGfo5tyuSWdW0eeiGcTqNbs3ku6wSf
-         eCDo5i6kmyIiPs0cY4omXWzzrIOU//4ZTUA5exyD3koXM5OIQNf98LGQwLlts/WsRBLE
-         XdvVLeKNQROeesF5ldfck/igzHkxhdyQyTBjbEq81dnKmyyfhs8vATMCYdDtZU05m+x5
-         fvB3wO/w/YkIEnxdAh9sizYP3Rx8ZTgNrvc2p2ONbTu57BmYd+A9nDOxJPRcKyndmYBx
-         uFzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744100243; x=1744705043;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0d3Ceii2JHd7DdtO/Jyc5PB50s2tl91HKnoWaWMWAkc=;
-        b=DijtQkkz+S0p2ND1e8AGKZfoI0L9kP2ZjZvi7txWEuu6XpE/G2GyZQ7xLf+SmqB9r2
-         +w0Gb7o0Yuzc+XVLMqpbPoQwbsDv8QKSDxM79XjRQTJSUzFoiZrrzQ+0Y0OQOjLvQMyI
-         omawTgg1nkyQ2augV5jko3qzgH3kNEu+3+e9JrmT0y1Ms8HbSvmeiSCnV+8/W1wwGIXF
-         w9PhWSnDTFnFTxJ/yLl/s+GRd6SSQWs2qUu3L11e1WHLXhrX0S0Vd+ITWJmsRQ7JEAX4
-         pZHmNvVkFlwBh900FE+6tkjMODgGr9OfvV861XvQurK5zkmeISLcDu1jdYPMe4e0+zDE
-         ijGw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+b8Oa7BuhTIYv0JXLJCFAa75+9vd/SOZVqVmP2KC6nc7r6Sdi7aVvsINaco/o3RX75vs7HL7ZEsBF2L04zFZD@vger.kernel.org, AJvYcCXQLMPLY4aIY4TQ+URav9YUyJfLyw4uUTfn3gVBLpkKoBLNx9Ybl9qBhJbmU81OEjSAd3CqpFIxkPyUKyE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzoqNZpUKtGqTmzJmB4Qm9bpXn8o9xKKw+5r/xcNsNqOhKVJHD
-	V9k9l8NCxTmz/TWF5dIj4zIsFaOj7uQTYgwjBGAt2nhMRagA04AuMQUv1zaaXbg=
-X-Gm-Gg: ASbGncucikPo1yID3UDcxYz6ZqoHP7OuX2KpbolYuje4+jTEltfRTmSfjgtH2LuPYes
-	kbiey0Oo/0n6QMgVeqDck4ZRulQOj86ect3tAHuj3ME1SVTN/vCkfXa4npvZBp7OPMe7wb/g0RH
-	zWse9gXj0AvN4htgmJvQgCa4+AcacWF5r/MVLuSoPWxOKSVCee7tsEKFbDZkY8xJqJuLWHG+GDz
-	VFdRcyF1NzWbeiJvBlirO8ZGlWWPbGmXK6OQDMIfot+uWgfhqeIZ9lmpC57hwvUdTgmfE2doJpJ
-	1W7fY8tWYrI9g/27QhwKxoMsxaOzy1v9WNzteXsR5+5zOqyy+75o0v5d+mzH6+uDWl1mxg==
-X-Google-Smtp-Source: AGHT+IGi1HhT35CGTn4OHIXajxXrLV4KFaDuVWc5PJ3Zmw4syv6sGb4JtQdYhMc/JNW13o1mWUN14g==
-X-Received: by 2002:a17:902:e552:b0:220:e5be:29c7 with SMTP id d9443c01a7336-22a8a8b833emr206228755ad.39.1744100242645;
-        Tue, 08 Apr 2025 01:17:22 -0700 (PDT)
-Received: from fedora.dns.podman ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-229785ada20sm94319535ad.46.2025.04.08.01.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 01:17:21 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>,
-	Phil Sutter <phil@nwl.cc>,
-	Florian Westphal <fw@strlen.de>,
-	Petr Mladek <pmladek@suse.com>,
-	Yoann Congal <yoann.congal@smile.fr>,
-	wireguard@lists.zx2c4.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv6 net-next 2/2] wireguard: selftests: update to using nft for qemu test
-Date: Tue,  8 Apr 2025 08:16:52 +0000
-Message-ID: <20250408081652.1330-3-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250408081652.1330-1-liuhangbin@gmail.com>
-References: <20250408081652.1330-1-liuhangbin@gmail.com>
+	s=arc-20240116; t=1744100432; c=relaxed/simple;
+	bh=Gl8aKp8YPTXV6vYNBx5WZb1Y3vIRz7X/10qClRoa1ho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FN22RNCNg+P9jkxCiJQP7OZzbaqrvTzhu3FitDf/H/SgPq+14f7DJK34vaNfRgrbZAAKMWpmnsGHRdDeXdSKO1R71iu3CHBRKC43TCRubA0qIp7aJvVBSv8PLGlhF48NtFjsLWC9yflOmf7iiM60FKZkxfV6+mVE8+805/PDl8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYcXVTGl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA34C4CEE5;
+	Tue,  8 Apr 2025 08:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744100431;
+	bh=Gl8aKp8YPTXV6vYNBx5WZb1Y3vIRz7X/10qClRoa1ho=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FYcXVTGlrj2UFsKmrHbtAvoofgPMX1u0d6/CD4+V20TsvQnKdJo/EEAz0ikU+VAr1
+	 7r52Uw+Gu45agIKqKyDefSxnQzdeQn6Fd9/5cJaiURAE8N+Kr0ovvZ0yBQrJLmkzV6
+	 WHbbu8ECVse8tCKEnlhAaJ4Fsbz252zkvHUSpotiA+g2jHUikFrKCxnNxPgm39PkMx
+	 9PtG3+DrijSJRsOvkYrvMni0IomOKoe39NtmUlTTzItNtIBqj9UJ1VY4l2hbvitIqa
+	 Y73UdqZhs1k9+w24iUFvuIEvpottq85HsCI2Qw2/DlHbCd0G0+rBI47iHbPwmZI2gz
+	 c6D121dAJJPgw==
+Date: Tue, 8 Apr 2025 10:20:22 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Nikita Kalyazin <kalyazin@amazon.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Fuad Tabba <tabba@google.com>, akpm@linux-foundation.org, 
+	pbonzini@redhat.com, shuah@kernel.org, viro@zeniv.linux.org.uk, muchun.song@linux.dev, 
+	hughd@google.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, jack@suse.cz, 
+	lorenzo.stoakes@oracle.com, jannh@google.com, ryan.roberts@arm.com, jthoughton@google.com, 
+	peterx@redhat.com, graf@amazon.de, jgowans@amazon.com, roypat@amazon.co.uk, 
+	derekmn@amazon.com, nsaenz@amazon.es, xmarcalx@amazon.com
+Subject: Re: [PATCH v3 0/6] KVM: guest_memfd: support for uffd minor
+Message-ID: <20250408-wegrand-eifrig-355127b5d3a3@brauner>
+References: <20250404154352.23078-1-kalyazin@amazon.com>
+ <2iggdfimgfke5saxs74zmfrswgrxmmsyxzphq4mdfpj54wu4pl@5uiia4pzkxem>
+ <e8abe599-f48f-4203-8c60-9ee776aa4a24@amazon.com>
+ <63j2cdjh6oxzb5ehtetiaolobp6zzev7emgqvvfkf5tuwlnspx@7h5u4nrqwvsc>
+ <ba93b9c1-cb2b-442f-a4c4-b5530e94f88a@amazon.com>
+ <2bohfxnbthvf3w4kz5u72wj5uxh5sb5s3mbhdk5eg2ingkpkqg@ylykphugpydy>
+ <9326367c-977d-4d55-80bd-f1ad3673f375@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9326367c-977d-4d55-80bd-f1ad3673f375@redhat.com>
 
-Since we will replace iptables with nft for wireguard netns testing,
-let's also convert the qemu test to use nft at the same time.
+On Mon, Apr 07, 2025 at 04:46:48PM +0200, David Hildenbrand wrote:
+> On 07.04.25 16:24, Liam R. Howlett wrote:
+> > * Nikita Kalyazin <kalyazin@amazon.com> [250407 10:05]:
+> > > 
+> > 
+> > ...
+> > 
+> > > > 
+> > > > All of this is extremely confusing because the onus of figuring out what
+> > > > the final code will look like is put on the reviewer.  As it is, we have
+> > > > issues with people not doing enough review of the code (due to limited
+> > > > time).  One way to get reviews is to make the barrier of entry as low as
+> > > > possible.
+> > > > 
+> > > > I spent Friday going down a rabbit hole of patches referring to each
+> > > > other as dependencies and I gave up.  It looks like I mistook one set of
+> > > > patches as required vs them requiring the same in-flight ones as your
+> > > > patches.
+> > > > 
+> > > > I am struggling to see how we can adequately support all of you given
+> > > > the way the patches are sent out in batches with dependencies - it is
+> > > > just too time consuming to sort out.
+> > > 
+> > > I'm happy to do whatever I can to make the review easier.  I suppose the
+> > > extreme case is to wait for the dependencies to get accepted, effectively
+> > > serialising submissions, but that slows the process down significantly.  For
+> > > example, I received very good feedback on v1 and v2 of this series and was
+> > > able to address it instead of waiting for the dependency.  Would including
+> > > the required patches directly in the series help?  My only concern is in
+> > > that case the same patch will be submitted multiple times (as a part of
+> > > every depending series), but if it's better, I'll be doing that instead.
+> > 
+> > Don't resend patches that someone else is upstreaming, that'll cause
+> > other problems.
+> > 
+> > Three methods come to mind:
+> > 
+> > 1. As you stated, wait for the dependencies to land.  This is will mean
+> > what you are working against is well tested and won't change (and you
+> > won't have to re-spin due to an unstable base).
+> > 
+> > 2. Combine them into a bigger patch set.  I can then pull one patch set
+> > and look at the parts of interest to the mm side.
+> > 
+> > 3. Provide a git repo with the necessary changes together.
+> > 
+> > I think 2 and 3 together should be used for the guest_memfd patches.
+> > Someone needs to be managing these to send upstream.  See the discussion
+> > in another patch set on guest_memfd here [1].
+> 
+> The issue is that most extensions are fairly independent from each other,
+> except that they built up on Fuad's mmap support,
+> 
+> Sending all together as one thing might not be the best option.
+> 
+> Once basic mmap support is upstream, some of the extensions (e.g., directmap
+> removal) can go in next.
+> 
+> So until that is upstream, I agree that tagging the stuff that builds up on
+> that is the right thing to do, and providing git trees is another very good
+> idea.
+> 
+> I'll prioritize getting Fuad's mmap stuff reviewed. (I keep saying that, I
+> know)
 
-Co-developed-by: Phil Sutter <phil@nwl.cc>
-Signed-off-by: Phil Sutter <phil@nwl.cc>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../testing/selftests/wireguard/qemu/Makefile | 36 ++++++++++++++-----
- .../selftests/wireguard/qemu/kernel.config    |  7 ++--
- 2 files changed, 30 insertions(+), 13 deletions(-)
+Fwiw, b4 allows to specify dependencies so you can b4 shazam/am and it
+will pull in all prerequisite patches:
 
-diff --git a/tools/testing/selftests/wireguard/qemu/Makefile b/tools/testing/selftests/wireguard/qemu/Makefile
-index 35856b11c143..2442ae99f007 100644
---- a/tools/testing/selftests/wireguard/qemu/Makefile
-+++ b/tools/testing/selftests/wireguard/qemu/Makefile
-@@ -40,7 +40,9 @@ endef
- $(eval $(call tar_download,IPERF,iperf,3.11,.tar.gz,https://downloads.es.net/pub/iperf/,de8cb409fad61a0574f4cb07eb19ce1159707403ac2dc01b5d175e91240b7e5f))
- $(eval $(call tar_download,BASH,bash,5.1.16,.tar.gz,https://ftp.gnu.org/gnu/bash/,5bac17218d3911834520dad13cd1f85ab944e1c09ae1aba55906be1f8192f558))
- $(eval $(call tar_download,IPROUTE2,iproute2,5.17.0,.tar.gz,https://www.kernel.org/pub/linux/utils/net/iproute2/,bda331d5c4606138892f23a565d78fca18919b4d508a0b7ca8391c2da2db68b9))
--$(eval $(call tar_download,IPTABLES,iptables,1.8.7,.tar.bz2,https://www.netfilter.org/projects/iptables/files/,c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0))
-+$(eval $(call tar_download,LIBMNL,libmnl,1.0.5,.tar.bz2,https://www.netfilter.org/projects/libmnl/files/,274b9b919ef3152bfb3da3a13c950dd60d6e2bcd54230ffeca298d03b40d0525))
-+$(eval $(call tar_download,LIBNFTNL,libnftnl,1.2.8,.tar.xz,https://www.netfilter.org/projects/libnftnl/files/,37fea5d6b5c9b08de7920d298de3cdc942e7ae64b1a3e8b880b2d390ae67ad95))
-+$(eval $(call tar_download,NFTABLES,nftables,1.1.1,.tar.xz,https://www.netfilter.org/projects/nftables/files/,6358830f3a64f31e39b0ad421d7dadcd240b72343ded48d8ef13b8faf204865a))
- $(eval $(call tar_download,NMAP,nmap,7.92,.tgz,https://nmap.org/dist/,064183ea642dc4c12b1ab3b5358ce1cef7d2e7e11ffa2849f16d339f5b717117))
- $(eval $(call tar_download,IPUTILS,iputils,s20190709,.tar.gz,https://github.com/iputils/iputils/archive/s20190709.tar.gz/#,a15720dd741d7538dd2645f9f516d193636ae4300ff7dbc8bfca757bf166490a))
- $(eval $(call tar_download,WIREGUARD_TOOLS,wireguard-tools,1.0.20210914,.tar.xz,https://git.zx2c4.com/wireguard-tools/snapshot/,97ff31489217bb265b7ae850d3d0f335ab07d2652ba1feec88b734bc96bd05ac))
-@@ -322,8 +324,7 @@ $(BUILD_PATH)/init-cpio-spec.txt: $(TOOLCHAIN_PATH)/.installed $(BUILD_PATH)/ini
- 	echo "file /bin/ss $(IPROUTE2_PATH)/misc/ss 755 0 0" >> $@
- 	echo "file /bin/ping $(IPUTILS_PATH)/ping 755 0 0" >> $@
- 	echo "file /bin/ncat $(NMAP_PATH)/ncat/ncat 755 0 0" >> $@
--	echo "file /bin/xtables-legacy-multi $(IPTABLES_PATH)/iptables/xtables-legacy-multi 755 0 0" >> $@
--	echo "slink /bin/iptables xtables-legacy-multi 777 0 0" >> $@
-+	echo "file /bin/nft $(NFTABLES_PATH)/src/nft 755 0 0" >> $@
- 	echo "slink /bin/ping6 ping 777 0 0" >> $@
- 	echo "dir /lib 755 0 0" >> $@
- 	echo "file /lib/libc.so $(TOOLCHAIN_PATH)/$(CHOST)/lib/libc.so 755 0 0" >> $@
-@@ -338,7 +339,7 @@ $(KERNEL_BUILD_PATH)/.config: $(TOOLCHAIN_PATH)/.installed kernel.config arch/$(
- 	cd $(KERNEL_BUILD_PATH) && ARCH=$(KERNEL_ARCH) $(KERNEL_PATH)/scripts/kconfig/merge_config.sh -n $(KERNEL_BUILD_PATH)/.config $(KERNEL_BUILD_PATH)/minimal.config
- 	$(if $(findstring yes,$(DEBUG_KERNEL)),cp debug.config $(KERNEL_BUILD_PATH) && cd $(KERNEL_BUILD_PATH) && ARCH=$(KERNEL_ARCH) $(KERNEL_PATH)/scripts/kconfig/merge_config.sh -n $(KERNEL_BUILD_PATH)/.config debug.config,)
- 
--$(KERNEL_BZIMAGE): $(TOOLCHAIN_PATH)/.installed $(KERNEL_BUILD_PATH)/.config $(BUILD_PATH)/init-cpio-spec.txt $(IPERF_PATH)/src/iperf3 $(IPUTILS_PATH)/ping $(BASH_PATH)/bash $(IPROUTE2_PATH)/misc/ss $(IPROUTE2_PATH)/ip/ip $(IPTABLES_PATH)/iptables/xtables-legacy-multi $(NMAP_PATH)/ncat/ncat $(WIREGUARD_TOOLS_PATH)/src/wg $(BUILD_PATH)/init
-+$(KERNEL_BZIMAGE): $(TOOLCHAIN_PATH)/.installed $(KERNEL_BUILD_PATH)/.config $(BUILD_PATH)/init-cpio-spec.txt $(IPERF_PATH)/src/iperf3 $(IPUTILS_PATH)/ping $(BASH_PATH)/bash $(IPROUTE2_PATH)/misc/ss $(IPROUTE2_PATH)/ip/ip $(LIBMNL_PATH)/libmnl $(LIBNFTNL_PATH)/libnftnl $(NFTABLES_PATH)/src/nft $(NMAP_PATH)/ncat/ncat $(WIREGUARD_TOOLS_PATH)/src/wg $(BUILD_PATH)/init
- 	$(MAKE) -C $(KERNEL_PATH) O=$(KERNEL_BUILD_PATH) ARCH=$(KERNEL_ARCH) CROSS_COMPILE=$(CROSS_COMPILE)
- .PHONY: $(KERNEL_BZIMAGE)
- 
-@@ -421,15 +422,32 @@ $(IPROUTE2_PATH)/misc/ss: | $(IPROUTE2_PATH)/.installed $(USERSPACE_DEPS)
- 	$(MAKE) -C $(IPROUTE2_PATH) PREFIX=/ misc/ss
- 	$(STRIP) -s $@
- 
--$(IPTABLES_PATH)/.installed: $(IPTABLES_TAR)
-+$(LIBMNL_PATH)/.installed: $(LIBMNL_TAR)
- 	mkdir -p $(BUILD_PATH)
- 	flock -s $<.lock tar -C $(BUILD_PATH) -xf $<
--	sed -i -e "/nfnetlink=[01]/s:=[01]:=0:" -e "/nfconntrack=[01]/s:=[01]:=0:" $(IPTABLES_PATH)/configure
- 	touch $@
- 
--$(IPTABLES_PATH)/iptables/xtables-legacy-multi: | $(IPTABLES_PATH)/.installed $(USERSPACE_DEPS)
--	cd $(IPTABLES_PATH) && ./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static --disable-shared --disable-nftables --disable-bpf-compiler --disable-nfsynproxy --disable-libipq --disable-connlabel --with-kernel=$(BUILD_PATH)/include
--	$(MAKE) -C $(IPTABLES_PATH)
-+$(LIBMNL_PATH)/libmnl: | $(LIBMNL_PATH)/.installed $(USERSPACE_DEPS)
-+	cd $(LIBMNL_PATH) && ./configure --prefix=$(TOOLCHAIN_PATH) $(CROSS_COMPILE_FLAG) --enable-static --disable-shared
-+	$(MAKE) -C $(LIBMNL_PATH) install
-+
-+$(LIBNFTNL_PATH)/.installed: $(LIBNFTNL_TAR)
-+	mkdir -p $(BUILD_PATH)
-+	flock -s $<.lock tar -C $(BUILD_PATH) -xf $<
-+	touch $@
-+
-+$(LIBNFTNL_PATH)/libnftnl: | $(LIBNFTNL_PATH)/.installed $(USERSPACE_DEPS)
-+	cd $(LIBNFTNL_PATH) && PKG_CONFIG_PATH="$(TOOLCHAIN_PATH)/lib/pkgconfig" ./configure --prefix=$(TOOLCHAIN_PATH) $(CROSS_COMPILE_FLAG) --enable-static --disable-shared
-+	$(MAKE) -C $(LIBNFTNL_PATH) install
-+
-+$(NFTABLES_PATH)/.installed: $(NFTABLES_TAR)
-+	mkdir -p $(BUILD_PATH)
-+	flock -s $<.lock tar -C $(BUILD_PATH) -xf $<
-+	touch $@
-+
-+$(NFTABLES_PATH)/src/nft: | $(NFTABLES_PATH)/.installed $(USERSPACE_DEPS)
-+	cd $(NFTABLES_PATH) && PKG_CONFIG_PATH="$(TOOLCHAIN_PATH)/lib/pkgconfig" ./configure --prefix=/ $(CROSS_COMPILE_FLAG) --enable-static --disable-shared --disable-debug --disable-man-doc --with-mini-gmp --without-cli
-+	$(MAKE) -C $(NFTABLES_PATH) PREFIX=/
- 	$(STRIP) -s $@
- 
- $(NMAP_PATH)/.installed: $(NMAP_TAR)
-diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
-index f314d3789f17..9930116ecd81 100644
---- a/tools/testing/selftests/wireguard/qemu/kernel.config
-+++ b/tools/testing/selftests/wireguard/qemu/kernel.config
-@@ -19,10 +19,9 @@ CONFIG_NETFILTER_XTABLES=y
- CONFIG_NETFILTER_XT_NAT=y
- CONFIG_NETFILTER_XT_MATCH_LENGTH=y
- CONFIG_NETFILTER_XT_MARK=y
--CONFIG_IP_NF_IPTABLES=y
--CONFIG_IP_NF_FILTER=y
--CONFIG_IP_NF_MANGLE=y
--CONFIG_IP_NF_NAT=y
-+CONFIG_NF_TABLES=m
-+CONFIG_NF_TABLES_INET=y
-+CONFIG_NFT_NAT=y
- CONFIG_IP_ADVANCED_ROUTER=y
- CONFIG_IP_MULTIPLE_TABLES=y
- CONFIG_IPV6_MULTIPLE_TABLES=y
--- 
-2.46.0
-
+b4 prep --edit-deps           Edit the series dependencies in your defined $EDITOR (or core.editor)
 
