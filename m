@@ -1,162 +1,122 @@
-Return-Path: <linux-kselftest+bounces-30337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 704C1A7F760
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:12:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C97A7F78F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 488AA3B44DB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:11:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1A02179D24
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1CD263F4B;
-	Tue,  8 Apr 2025 08:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E1B263F47;
+	Tue,  8 Apr 2025 08:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ImvzWnUB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EE5263F42;
-	Tue,  8 Apr 2025 08:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20C2263F3D;
+	Tue,  8 Apr 2025 08:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744099907; cv=none; b=Khp8TzK6OYh7uvANO2ZuvjtKqsR/g4IGhTeC43jmX++TNGNhVwdZGW/dgzaJbhJd4YPDHr40WfCcG/ncfyBhjQ+GgIupxajnlt388IAaFGu8wmaCPghhzmJqj0a9LEOYjXdh+GBf67JM+kGDBIztEDl1LVgFNQfDZyLk+XR0ocg=
+	t=1744100231; cv=none; b=kfidjKClmjf/soFVgkaaqKDvzHEDT0BYYL0u4KjKGUQcNDZ3NvMFtiIqFwlkIqqOEvfGYNVdfAkXjqynhoZzEzKpEd4W4yK+l1kGoIUpjSFhPk9WFYFe+L9AJ7chOI6ho2ZN7NqZRpSdjq6A+veEU9IiFcPnKsneQ1JEggK0bE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744099907; c=relaxed/simple;
-	bh=FxYoGDCd/cHFcZ2fsubOHjOGdK9XfaWuBq2wby33psQ=;
-	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=tvC/jTNA+EixeZjDcJ3XtomOu2tDbgfddiOiigTngeUirExKcTAnGLrKQpZomveQuEGNjcQdgEtNByec6lU5PjjnNH2Rbj8abo+Ry9lA4Xjl64IdWff3jOfOI/dEEV4CiDtzGAxPbSu/mgNkS5JAXX4klJpeQTxTIcHNxpRKZk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZWzKq25m1z13LWd;
-	Tue,  8 Apr 2025 16:10:55 +0800 (CST)
-Received: from kwepemd200014.china.huawei.com (unknown [7.221.188.8])
-	by mail.maildlp.com (Postfix) with ESMTPS id C0DD51800E4;
-	Tue,  8 Apr 2025 16:11:34 +0800 (CST)
-Received: from [10.67.121.177] (10.67.121.177) by
- kwepemd200014.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Tue, 8 Apr 2025 16:11:33 +0800
-CC: <yangyicong@hisilicon.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
-	<maz@kernel.org>, <corbet@lwn.net>, <linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
-	<yuzenghui@huawei.com>, <shuah@kernel.org>, <jonathan.cameron@huawei.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
-	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <tangchengchang@huawei.com>
-Subject: Re: [PATCH v2 6/6] KVM: arm64: Handle DABT caused by LS64*
- instructions on unsupported memory
-To: Oliver Upton <oliver.upton@linux.dev>
-References: <20250331094320.35226-1-yangyicong@huawei.com>
- <20250331094320.35226-7-yangyicong@huawei.com> <Z-wQuJAefT3xNipl@linux.dev>
- <e9674079-9a22-c3cd-3b00-5989f6926303@huawei.com>
- <Z_NkHWStDJLo0cmY@linux.dev>
-From: Yicong Yang <yangyicong@huawei.com>
-Message-ID: <3355f89a-aecf-6ec7-b8ee-6faf6f1f7106@huawei.com>
-Date: Tue, 8 Apr 2025 16:11:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+	s=arc-20240116; t=1744100231; c=relaxed/simple;
+	bh=JgO+hdA1GrGHKIDKAAW3feS3nYjo8Wjp/HZ6RcxjzVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lomYZ7MnuLB5/42Fvi2L7LmPIVW8EGt0IIM4fIm8LJholE0mXcJzVEfkS5ezIAWNDeWPJykLZz+amxEGjNdiXlqzCQSLSJe9ARZEn0s7HeOI1dYo9igqbOcX8INmXFT1TcfQeRNZymTBPIA6U1jvlI1CfJdfzqpHChpQxvjmSCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ImvzWnUB; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2295d78b45cso67837275ad.0;
+        Tue, 08 Apr 2025 01:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744100229; x=1744705029; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fdElPioRI0btoB9YLHJoXBq7OTonUhGxAaIJ5PdYa8=;
+        b=ImvzWnUBHuI5M1leANHgvRUynZGTMzUmeT55+o3jXbh/KQXBLSv8pkgE2zzfso4kM4
+         qbhjAxi9ZACxKTTS9UPJFHHTzZWQo6agttQDi4IA0r8tVhgNGehTRfzSumnOOCTskIu7
+         2Mg9lrkYYsbMtOsabyjcKDCE/If38ud4xn0xDdw2lzVqi8q7aGdWNexFI9qr0l0gnTcO
+         hrecwGl9BrNYR3pWfoGjNTjdYwSBMNsfsQ3xk4tOFwofsS1eUeJcLSCu6973HVqRr21a
+         8e/DQ9nf6akxLec67B8Nq0YnAl7ZK3t8TMxe+aze1U0GzL+iP0kJ87zqRiRlAt0D9VQc
+         Ki0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744100229; x=1744705029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9fdElPioRI0btoB9YLHJoXBq7OTonUhGxAaIJ5PdYa8=;
+        b=fBDujllPxnKW2NaWtk14I7TfUujS4oNi9yZ8zraCOr+oK9A3okwXI/SycIxNNZhrKx
+         V9gaycKFxzaLgYlAACIGR+9K6uwh12uyyeULywORR1bjR5udmGNaJUaEwf5K6NyF2AOS
+         tdG7Uqi0BYa4bCklSGizgbdyzIJR1+cGEfYLpLpRhRnIomnV4IKg1WpzFw9XaIZKHeBX
+         zBOyF0FhosfwoyzvEzYRhBhIN5JWVQD7gup0hT+PNB+Y3LhQNLyD2WID2TLFvOhRqT8u
+         vew9NEgMpjY7lePlBNRi2nhbwxozjSrn4wob/NLWjNHscdGGNjp5KhcQTPQBGMkOtkNs
+         cxJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIYa+1O3QddGcG5E5Kagix9nr1SZH2PCBBdolADHBOkpKE2FuzQGKmIIVeqcDwQzvkK5L/sCMqhn9AoAU=@vger.kernel.org, AJvYcCXhl/SHJ1Z+AurtuzoPFM28zLQW2dAr6MUle5ws6YkfOQ7bKbf5hDUKMohBpXlCiQr9w96ePMIihikSFOolNFvY@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL+LtQ3+HbagA5g9lGkGIteHo4sskZcz3VMEHtdSDj0X+FX0z2
+	+I1lD3o42dTeRIs+GM+qDmY96jIeQiPFu6y/1Qv7RWbm5eAdBc5dwHIdQTmsAOw=
+X-Gm-Gg: ASbGncudRTNzs+B5LyL2L23m53UXLhT3x0O3g3bpsv5zJ8bibX35+HJbEy3uEVfsPBG
+	CdfCLR8thOUO5R3mY4AKtTD+QPQoaL1+t7LOM/d7p5kOOsRXcOGBaGD8ypkydDbGV3k0WJdhG/H
+	9EaCGjnSZKHGXG/Kmb4iZoRwilY/iniOwfZ01QNBT0gWJUs2m/5UYrWJbMMguafxWwXvHygSnru
+	0buxQyAO+FcfI5OocB0BfoQ47zKoUQTLZngjeJqhRslwo123mHLHIKh9rgyQFeiVW0WGQBVY1o/
+	9a9yZuaNUVeoTXfdJU4DIL+j4whX0hBkL8SgUrEiE5D3IE5Z0CtMh25nF63PidwcFXTt6g==
+X-Google-Smtp-Source: AGHT+IFe2CIssHzOnft5L6j+qBASQd7ICbxBKBKnPXX2l9y7vhFe+KHnO6lG9nf9EBuFFYKULvvZfQ==
+X-Received: by 2002:a17:903:1b25:b0:220:e1e6:4472 with SMTP id d9443c01a7336-22a8a0545f9mr208034285ad.13.1744100228937;
+        Tue, 08 Apr 2025 01:17:08 -0700 (PDT)
+Received: from fedora.dns.podman ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-229785ada20sm94319535ad.46.2025.04.08.01.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Apr 2025 01:17:08 -0700 (PDT)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>,
+	Phil Sutter <phil@nwl.cc>,
+	Florian Westphal <fw@strlen.de>,
+	Petr Mladek <pmladek@suse.com>,
+	Yoann Congal <yoann.congal@smile.fr>,
+	wireguard@lists.zx2c4.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv6 net-next 0/2] wireguard: selftests: use nftables for testing
+Date: Tue,  8 Apr 2025 08:16:50 +0000
+Message-ID: <20250408081652.1330-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Z_NkHWStDJLo0cmY@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemd200014.china.huawei.com (7.221.188.8)
+Content-Transfer-Encoding: 8bit
 
-On 2025/4/7 13:35, Oliver Upton wrote:
-> On Mon, Apr 07, 2025 at 11:33:01AM +0800, Yicong Yang wrote:
->> On 2025/4/2 0:13, Oliver Upton wrote:
->>> On Mon, Mar 31, 2025 at 05:43:20PM +0800, Yicong Yang wrote:
->>>> @@ -1658,6 +1658,25 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
->>> Keep in mind that data aborts with DFSC == 0x35 can happen for a lot
->>> more than LS64 instructions, e.g. an atomic on a Device-* mapping.
->>>
->>
->> got it. 0x35 should be caused by LS64* or IMPLEMENTATION DEFINED fault, but no
->> further hint to distinguish between these two faults. hope it's also the right
->> behaviour to inject a DABT back for the latter case.
-> 
-> There isn't exactly a 'right' behavior here. The abort could either be
-> due to a bug in the guest (doing an access on something knows it can't)
-> or the VMM creating / describing the IPA memory map incorrectly.
-> 
-> Since KVM can't really work out who's to blame in this situation we should
-> probably exit to userspace + provide a way to reinject the abort.
-> 
+This patch set convert the wireguard selftest to nftables, as iptables is
+deparated and nftables is the default framework of most releases.
 
-as mentioned below, maybe the proper way is to handle it like KVM_EXIT_ARM_NISV. In this
-case exit to userspace with KVM_EXIT_ARM_LDST64B, if it's due to the wrong mapping of the
-guestOS then reinject the DABT back to the guest, otherwise the userspace need to check
-whether it's reporting the memory region correctly and handle in its own way.
+v6: fix typo in patch 1/2. Update the description (Phil Sutter)
+v5: remove the counter in nft rules and link nft statically (Jason A. Donenfeld)
+v4: no update, just re-send
+v3: drop iptables directly (Jason A. Donenfeld)
+    Also convert to using nft for qemu testing (Jason A. Donenfeld)
+v2: use one nft table for testing (Phil Sutter)
 
->>>> @@ -1919,6 +1939,21 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
->>>>  			goto out_unlock;
->>>>  		}
->>>>  
->>>> +		/*
->>>> +		 * If instructions of FEAT_{LS64, LS64_V} operated on
->>>> +		 * unsupported memory regions, a DABT for unsupported
->>>> +		 * Exclusive or atomic access is generated. It's
->>>> +		 * implementation defined whether the exception will
->>>> +		 * be taken to, a stage-1 DABT or the final enabled
->>>> +		 * stage of translation (stage-2 in this case as we
->>>> +		 * hit here). Inject a DABT to the guest to handle it
->>>> +		 * if it's implemented as a stage-2 DABT.
->>>> +		 */
->>>> +		if (esr_fsc_is_excl_atomic_fault(esr)) {
->>>> +			kvm_inject_dabt_excl_atomic(vcpu, kvm_vcpu_get_hfar(vcpu));
->>>> +			return 1;
->>>> +		}
->>>> +
->>>
->>> A precondition of taking such a data abort is having a valid mapping at
->>> stage-2. If KVM can't resolve the HVA of the fault then there couldn't
->>> have been a stage-2 mapping.
->>>
->>
->> Here's handling the case for emulated mmio, I thought there's no valid stage-2 mapping
->> for the emulated MMIO? so this check is put just before entering io_mem_abort(). should
->> it be put into io_mem_abort() or we just don't handle the emulated case?
-> 
-> Right -- there's no valid stage-2 translation for _most_ MMIO. If KVM
-> cannot find an HVA for the fault (look at the condition that gets us
-> here) then we know there isn't a stage-2 mapping. How would we know what
-> to map?
-> 
-> In that case I would expect to take a Translation fault with instruction
-> syndrome that can can be used to construct an exit to the VMM.
+Hangbin Liu (2):
+  wireguard: selftests: convert iptables to nft
+  wireguard: selftests: update to using nft for qemu test
 
-you're right, I misunderstand here. If there's no stage-2 mapping we'll have
-a translation fault here rather than an unsupported exclusive or atomic access
-fault. So no need to check and handle it here since we won't have such a fault
-in this case.
+ tools/testing/selftests/wireguard/netns.sh    | 29 +++++++++------
+ .../testing/selftests/wireguard/qemu/Makefile | 36 ++++++++++++++-----
+ .../selftests/wireguard/qemu/kernel.config    |  7 ++--
+ 3 files changed, 49 insertions(+), 23 deletions(-)
 
-> Marc had
-> some patches on list to do exactly that [*].
-> 
-> However, after reading this again there's a rather ugly catch. The KVM
-> ABI has it that writes to a RO memlot generate an MMIO exit, so it *is*
-> possible to get here w/ a stage-2 mapping. Unfortunately there's no
-> instruction syndrome with DFSC = 0x35 so no way to decode the access.
-> 
-> This is starting to sound similar an nISV MMIO abort...
-> 
-
-yes similiar to nISV MMIO and no ISV as well. Per-spec DABT caused by LS64* has ISV==1
-if it's a Translation fault, Access flag fault, or Permission fault, but not for
-unsupported exclusive or atomic access fault..
-
-> [*]: https://lore.kernel.org/kvmarm/20240815125959.2097734-1-maz@kernel.org/
-> 
-
-Thanks.
-
+-- 
+2.46.0
 
 
