@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-30330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64B4DA7F645
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 09:31:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBCA5A7F652
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 09:32:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6F097A841A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 07:30:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 895691709C3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 07:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BD092192F4;
-	Tue,  8 Apr 2025 07:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD6825F965;
+	Tue,  8 Apr 2025 07:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bTqX62Yx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BChAh6Kl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BD52638A2
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Apr 2025 07:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1722214A68
+	for <linux-kselftest@vger.kernel.org>; Tue,  8 Apr 2025 07:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744097486; cv=none; b=Q0kNMTswdk3cjZii8lyyyQ00OSKm6Lu/KuLV1QPQzubio2d8Huyo85l7VHnwnem6YPMlPOKFVtc0snjHnHmYxdYGjg7qxc8zJek7cid3Vuu40uQjgNhVmFkg+XMO2814cKXGIarVwFqxLA7PjNd8cY64WU3IPgY1x22B7/YA16E=
+	t=1744097504; cv=none; b=ncnyPNQ/vz024UWrGiHfFWumLO27zU+IeRp6Q4Rw41eqgg396DhpQVI1gk0FBjxRR0/xZkDHgpA2WrOlGzQVzeZrxCUU9gPZwbGRUnLm0xTPJY4j6x3PtMyKrccj+ExgVI3rqFIl8YRa56DVem8nCH39iSQo/wA0cCtM6cUsyoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744097486; c=relaxed/simple;
-	bh=ijOx4M5TmyRB1moGMwzS48Der8uYaupF40vI8HiMIZY=;
+	s=arc-20240116; t=1744097504; c=relaxed/simple;
+	bh=ZIX3geUdBSeJYpNGzQADiA9T7cBZmrvzoLXT/2FyWtM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X9vAhIABM8XWZTUrOCK878LPZeORn0PQvpl4Xc2Lj3TxvK1r4uAmvwKrI8m5Fow2slB1Mksgh1RCXaX0wKasegK+WAX9nA2ulsnKiFj0yyGPYcrZH2l6uC2dMxfEFZrMaflUo0vBk7M4d8joTjNGHlHHCbKUFnCCa8R2W54VNTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bTqX62Yx; arc=none smtp.client-ip=95.215.58.170
+	 MIME-Version; b=aMaxr6zyXYosdATn54R+9VuasyiAv6MEXwl1+q9rT3BO9F0g/++50WIytpxJQo0zMpDlXtPACWKIr5W9OWtcB3ToyXE4QzSTQQAnynGGLrcZ3Oudo7FuFdCoJRXlRKuP6sF9rvgMP1hkYlZEUzF3hWbEan1DWpu5GTWu/rKyVNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BChAh6Kl; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1744097482;
+	t=1744097500;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qRfu4euMTOXxd7QFCTCSmTUaNtflTP+Y23DjhJpsX6c=;
-	b=bTqX62YxdxwAt6H4QmRrP5USg335ZC6ynbKbiM9fkOJgFymIYhrNvt+r3wE7XBj8RnEOi8
-	17NfSqg3NlEaOrqcFKbUcaB0+jqVK2js+Ojm+fj6eu/66jfJgaWkKCUwnnOger6tOCHkR7
-	vsDU0lX+Wf4aFtV67DYqKV0PclTC848=
+	bh=jdwQIuLJzVvoXmm2B8tL+Siu69JpG95Yy4OLKWooBQA=;
+	b=BChAh6Kl34/4AXehpPA3AmNsjaB/FBFmGKaplmmnvWwlFN2jsl3j/rkVb0h5QlHKaJ+8ty
+	h+sAZv8gNmVb6OBln/ejuLA4lsfobOvGobz3TN6ISaF5Xyi161gxjF8OzWxXL/x8wdJ+XE
+	yUKgFm71SthKI1CWAaDPvhOduIgmOTw=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: mrpre@163.com,
 	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Michal Luczaj <mhal@rbox.co>,
+	syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com,
 	John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -67,14 +67,14 @@ Cc: mrpre@163.com,
 	Jiri Olsa <jolsa@kernel.org>,
 	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>,
+	Michal Luczaj <mhal@rbox.co>,
 	Cong Wang <cong.wang@bytedance.com>,
-	Stefano Garzarella <sgarzare@redhat.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 1/3] bpf, sockmap: avoid using sk_socket after free when sending
-Date: Tue,  8 Apr 2025 15:29:52 +0800
-Message-ID: <20250408073033.60377-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v4 2/3] bpf, sockmap: avoid using sk_socket after free when reading
+Date: Tue,  8 Apr 2025 15:29:53 +0800
+Message-ID: <20250408073033.60377-3-jiayuan.chen@linux.dev>
 In-Reply-To: <20250408073033.60377-1-jiayuan.chen@linux.dev>
 References: <20250408073033.60377-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -86,133 +86,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The sk->sk_socket is not locked or referenced, and during the call to
-skb_send_sock(), there is a race condition with the release of sk_socket.
-All types of sockets(tcp/udp/unix/vsock) will be affected.
-
-Race conditions:
+There are potential concurrency issues, as shown below.
 '''
 CPU0                               CPU1
-skb_send_sock
-  sendmsg_unlocked
-    sock_sendmsg
-      sock_sendmsg_nosec
+sk_psock_verdict_data_ready:
+  socket *sock = sk->sk_socket
+  if (!sock) return
                                    close(fd):
                                      ...
-                                   ops->release()
-                                     sock_map_close()
-                                   sk_socket->ops = NULL
-                                   free(socket)
-      sock->ops->sendmsg
-            ^
-            panic here
+                                     ops->release()
+  if (!sock->ops) return
+                                     sock->ops = NULL
+                                     rcu_call(sock)
+                                     free(sock)
+  READ_ONCE(sock->ops)
+  ^
+  use 'sock' after free
 '''
 
-The ref of psock become 0 after sock_map_close() executed.
-'''
-void sock_map_close()
-{
-    ...
-    if (likely(psock)) {
-    ...
-    // !!here we remove psock and the ref of psock become 0
-    sock_map_remove_links(sk, psock)
-    psock = sk_psock_get(sk);
-    if (unlikely(!psock))
-        goto no_psock; <=== Control jumps here via goto
-        ...
-        cancel_delayed_work_sync(&psock->work); <=== not executed
-        sk_psock_put(sk, psock);
-        ...
-}
-'''
+RCU is not applicable to Unix sockets read path, because the Unix socket
+implementation itself assumes it's always in process context and heavily
+uses mutex_lock, so, we can't call read_skb within rcu lock.
 
-Based on the fact that we already wait for the workqueue to finish in
-sock_map_close() if psock is held, we simply increase the psock
-reference count to avoid race conditions.
+Incrementing the psock reference count would not help either, since
+sock_map_close() does not wait for data_ready() to complete its execution.
 
-With this patch, if the backlog thread is running, sock_map_close() will
-wait for the backlog thread to complete and cancel all pending work.
-Any pending work that hasn't started by then will fail when invoked by
-sk_psock_get(), as the psock reference count have been zeroed, and
-sk_psock_drop() will cancel all jobs via cancel_delayed_work_sync.
+While we don't utilize sk_socket here, implementing read_skb at the sock
+layer instead of socket layer might be architecturally preferable ?
+However, deferring this optimization as current fix adequately addresses
+the immediate issue.
 
-In summary, we require synchronization to coordinate the backlog thread
-and close() thread.
-
-The panic I catched:
-'''
-Workqueue: events sk_psock_backlog
-RIP: 0010:sock_sendmsg+0x21d/0x440
-RAX: 0000000000000000 RBX: ffffc9000521fad8 RCX: 0000000000000001
-...
-Call Trace:
- <TASK>
- ? die_addr+0x40/0xa0
- ? exc_general_protection+0x14c/0x230
- ? asm_exc_general_protection+0x26/0x30
- ? sock_sendmsg+0x21d/0x440
- ? sock_sendmsg+0x3e0/0x440
- ? __pfx_sock_sendmsg+0x10/0x10
- __skb_send_sock+0x543/0xb70
- sk_psock_backlog+0x247/0xb80
-...
-'''
-
-Reported-by: Michal Luczaj <mhal@rbox.co>
-Fixes: 799aa7f98d53 ("skmsg: Avoid lock_sock() in sk_psock_backlog()")
+Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
+Reported-by: syzbot+dd90a702f518e0eac072@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/bpf/6734c033.050a0220.2a2fcc.0015.GAE@google.com/
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
 ---
-Some approach I tried
-1. add rcu:
-   - RCU conflicts with mutex_lock in Unix socket send path.
-   - Race conditions still exist when reading sk->sk_socket->ops for in
-     current sock_sendmsg implementation.
-
-2. Increased the reference of sk_socket->file:
-   - If the user calls close(fd), we will do nothing because the reference
-     count is not set to 0. It's unexpected.
-   - prev discussion:
-     https://lore.kernel.org/all/f2bd7e45b327d7b190edef4916d5b9e6dc83e87a@linux.dev/
-
-3. Use sock_lock when calling skb_send_sock:
-   - skb_send_sock itself already do the locking.
-   - If we call skb_send_sock_locked instead, we have to implement
-     sendmsg_locked for each protocol, which is not easy for UDP or Unix,
-     as the sending process involves frequent locking and unlocking, which
-     makes it challenging to isolate the locking logic.
----
- net/core/skmsg.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/core/skmsg.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 0ddc4c718833..6101c1bb279a 100644
+index 6101c1bb279a..5e913b62929e 100644
 --- a/net/core/skmsg.c
 +++ b/net/core/skmsg.c
-@@ -655,6 +655,14 @@ static void sk_psock_backlog(struct work_struct *work)
- 	bool ingress;
- 	int ret;
+@@ -1231,17 +1231,24 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
  
-+	/* Increment the psock refcnt to synchronize with close(fd) path in
-+	 * sock_map_close(), ensuring we wait for backlog thread completion
-+	 * before sk_socket freed. If refcnt increment fails, it indicates
-+	 * sock_map_close() completed with sk_socket potentially already freed.
-+	 */
-+	if (!sk_psock_get(psock->sk))
-+		return;
-+
- 	mutex_lock(&psock->work_mutex);
- 	if (unlikely(state->len)) {
- 		len = state->len;
-@@ -702,6 +710,7 @@ static void sk_psock_backlog(struct work_struct *work)
- 	}
- end:
- 	mutex_unlock(&psock->work_mutex);
-+	sk_psock_put(psock->sk, psock);
- }
+ static void sk_psock_verdict_data_ready(struct sock *sk)
+ {
+-	struct socket *sock = sk->sk_socket;
++	struct socket *sock;
+ 	const struct proto_ops *ops;
+ 	int copied;
  
- struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 	trace_sk_data_ready(sk);
+ 
+-	if (unlikely(!sock))
++	rcu_read_lock();
++	sock = sk->sk_socket;
++	if (unlikely(!sock)) {
++		rcu_read_unlock();
+ 		return;
++	}
+ 	ops = READ_ONCE(sock->ops);
+-	if (!ops || !ops->read_skb)
++	if (!ops || !ops->read_skb) {
++		rcu_read_unlock();
+ 		return;
++	}
++	rcu_read_unlock();
+ 	copied = ops->read_skb(sk, sk_psock_verdict_recv);
+ 	if (copied >= 0) {
+ 		struct sk_psock *psock;
 -- 
 2.47.1
 
