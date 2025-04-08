@@ -1,333 +1,84 @@
-Return-Path: <linux-kselftest+bounces-30343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECA4FA7F884
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:54:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88F6FA7F8D7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 11:02:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BEE2189F2AA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:50:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 212DA189C538
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 09:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA1D264A72;
-	Tue,  8 Apr 2025 08:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B337522257F;
+	Tue,  8 Apr 2025 09:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FLTcbOre";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RAAYx+1g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF6A218587;
-	Tue,  8 Apr 2025 08:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30828206F31;
+	Tue,  8 Apr 2025 09:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744102108; cv=none; b=D9KcebeZMJKXYaohr9wvfGRuYqCHdcZYW0sgtaM5Ph9zxjtu5/kN+rpRQkrNVq7pUEv5lLW/yTKcEbFfQyNB4dJFLeHvopzRMnbCfXXC4RkTno7WzjNrWHZYh4d5TbEwTRjXwvg+hypMpYidPUjCME4d1JsF+NNSg65Tz+fQ/gE=
+	t=1744102854; cv=none; b=FmLuMw9FV2VTnPdcWBX/6/lNIXKmTmXSSp4JWc+EzFUXTAq95m1G7QlAniLwxQ+LG0aSc+5PI1VTqbGfC/W34UL+bNzgX63Z3s++UAqnW7Kno2zjrdD2js+WT37Drwif1r49NB8ZLpQwloteptj0iZ9x8twvqWC4vH7mwIGmob0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744102108; c=relaxed/simple;
-	bh=EKRfp60XCNJ7rg/cJg3WFzBihjWnzQtJhPEvpaboi2g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XXNDnGWcF1gHZwCkROlS98SjmGi1KS9ORJS2eJvzg4nvvkomDAuVB3Qz4V0w/92G1btExwb3xjd+uGV85kiCHIh/7wGOhgubJJ7cPtPRgOyPlzpBMwMYQU4hFqv3E7te35oSdURV5QUVU0wmvFT33SJvqdCDIPK5kcfeVFX70E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 40BFF43409;
-	Tue,  8 Apr 2025 08:48:09 +0000 (UTC)
-Message-ID: <2a24cc43-4150-4a56-ba09-0d136dde893f@ghiti.fr>
-Date: Tue, 8 Apr 2025 10:48:08 +0200
+	s=arc-20240116; t=1744102854; c=relaxed/simple;
+	bh=Z/pcvKfgNqZVt5kg+UI9M+1DEbsC3c9S7vBAF3ADiIM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=USbycY9t66Jl03CvVVEuJQ1VDVxQpa7ZmgvIP0oDgoQ/XEqRENU3jDS9iYLczn6SfHe85eGgVBhgEU7CmFCIHPoTHupnJpUmiotkDbB8et5Pb//dD1zwVmzo1mKXec3sleSYwWYc8+GLPnKQ84QSHDx7sc6xO7ZWqd9SA+tD0C8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FLTcbOre; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RAAYx+1g; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1744102851;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z/pcvKfgNqZVt5kg+UI9M+1DEbsC3c9S7vBAF3ADiIM=;
+	b=FLTcbOrekMjaZiOAywyNvzZAWxshyzHJMfAuKxuvSgOQQxrTv3pGJSv5wXNlH7AznJ/Bxj
+	BzB7j6vBE/VsSyPfgr48tMz+VU6RbZO9E3TmpGeaNGVHthaZ82XU1S2vJV8cvLO3CcZ7r0
+	VYxpaACs/+forcgxrjUfhDmNO24pH+LaBdMftEOtzuftXWGq2pFE4LAc7lbrDea5EYTSL1
+	N4NPQqkvEt/Nl198DNKzORZloyygiBTntm+vnV3Be+saXmLjYOzJJVv1O+RkcZOe0eZUyq
+	pEGWEi4cuvLsM+Qo82AN8kCDk/jDI0FgMZLtvq2npvtUfSC8JNYKsIwtA7ugcw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1744102851;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z/pcvKfgNqZVt5kg+UI9M+1DEbsC3c9S7vBAF3ADiIM=;
+	b=RAAYx+1g87X/fuPtv+7fUKIjVyB4ca7ZsoUSkjyxj1pLcsu3OBj+BqWcPw91uI7t2JiPLK
+	J4AZewqWuWcEPiBg==
+To: Edward Liaw <edliaw@google.com>, linux-kselftest@vger.kernel.org, Ingo
+ Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Darren
+ Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
+ =?utf-8?Q?Andr=C3=A9?=
+ Almeida <andrealmeid@igalia.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, kernel-team@android.com, Edward Liaw
+ <edliaw@google.com>
+Subject: Re: [PATCH] selftests/futex: futex_waitv wouldblock test should fail
+In-Reply-To: <20250404221225.1596324-1-edliaw@google.com>
+References: <20250404221225.1596324-1-edliaw@google.com>
+Date: Tue, 08 Apr 2025 11:00:50 +0200
+Message-ID: <87ldsbuiwt.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 27/28] riscv: Documentation for shadow stack on riscv
-Content-Language: en-US
-To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Christian Brauner <brauner@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
- rick.p.edgecombe@intel.com, Zong Li <zong.li@sifive.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-27-e51202b53138@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250314-v5_user_cfi_series-v12-27-e51202b53138@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddvieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpedthfelfeejgeehveegleejleelgfevhfekieffkeeujeetfedvvefhledvgeegieenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmeehsgegieemkeeludekmegtledujeemjeekjedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmeehsgegieemkeeludekmegtledujeemjeekjedvpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmeehsgegieemkeeludekmegtledujeemjeekjedvngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeegledprhgtphhtthhopeguvggsuhhgsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehmihhnghhosehrvgguhhgrthdrtghomhdprhgtphhtthhopegsp
- hesrghlihgvnhekrdguvgdprhgtphhtthhopegurghvvgdrhhgrnhhsvghnsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepgiekieeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhprgesiiihthhorhdrtghomhdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain
 
+On Fri, Apr 04 2025 at 22:12, Edward Liaw wrote:
 
-On 14/03/2025 22:39, Deepak Gupta wrote:
-> Adding documentation on shadow stack for user mode on riscv and kernel
-> interfaces exposed so that user tasks can enable it.
+> Testcase should fail if -EWOULDBLOCK is not returned when expected value
+> differs from actual value from the waiter.
 >
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->   Documentation/arch/riscv/index.rst   |   1 +
->   Documentation/arch/riscv/zicfiss.rst | 176 +++++++++++++++++++++++++++++++++++
->   2 files changed, 177 insertions(+)
->
-> diff --git a/Documentation/arch/riscv/index.rst b/Documentation/arch/riscv/index.rst
-> index be7237b69682..e240eb0ceb70 100644
-> --- a/Documentation/arch/riscv/index.rst
-> +++ b/Documentation/arch/riscv/index.rst
-> @@ -15,6 +15,7 @@ RISC-V architecture
->       vector
->       cmodx
->       zicfilp
-> +    zicfiss
->   
->       features
->   
-> diff --git a/Documentation/arch/riscv/zicfiss.rst b/Documentation/arch/riscv/zicfiss.rst
-> new file mode 100644
-> index 000000000000..5ba389f15b3f
-> --- /dev/null
-> +++ b/Documentation/arch/riscv/zicfiss.rst
-> @@ -0,0 +1,176 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +:Author: Deepak Gupta <debug@rivosinc.com>
-> +:Date:   12 January 2024
-> +
-> +=========================================================
-> +Shadow stack to protect function returns on RISC-V Linux
-> +=========================================================
-> +
-> +This document briefly describes the interface provided to userspace by Linux
-> +to enable shadow stack for user mode applications on RISV-V
+> Fixes: 9d57f7c79748920636f8293d2f01192d702fe390 ("selftests: futex: Test sys_futex_waitv() wouldblock")
+> Signed-off-by: Edward Liaw <edliaw@google.com>
 
-
-s/RISV-V/RISC-V and the final dot
-
-
-> +
-> +1. Feature Overview
-> +--------------------
-> +
-> +Memory corruption issues usually result in to crashes, however when in hands of
-
-
-s/in to/into
-
-
-> +an adversary and if used creatively can result into variety security issues.
-
-
-"into a variety of"
-
-
-> +
-> +One of those security issues can be code re-use attacks on program where
-> +adversary can use corrupt return addresses present on stack and chain them
-> +together to perform return oriented programming (ROP) and thus compromising
-> +control flow integrity (CFI) of the program.
-> +
-> +Return addresses live on stack and thus in read-write memory and thus are
-> +susceptible to corruption and allows an adversary to reach any program counter
-
-
-s/and allows/which allows
-
-
-> +(PC) in address space. On RISC-V ``zicfiss`` extension provides an alternate
-> +stack termed as shadow stack on which return addresses can be safely placed in
-> +prolog of the function and retrieved in epilog. ``zicfiss`` extension makes
-> +following changes:
-> +
-> +- PTE encodings for shadow stack virtual memory
-> +  An earlier reserved encoding in first stage translation i.e.
-> +  PTE.R=0, PTE.W=1, PTE.X=0  becomes PTE encoding for shadow stack pages.
-> +
-> +- ``sspush x1/x5`` instruction pushes (stores) ``x1/x5`` to shadow stack.
-> +
-> +- ``sspopchk x1/x5`` instruction pops (loads) from shadow stack and compares
-> +  with ``x1/x5`` and if un-equal, CPU raises ``software check exception`` with
-> +  ``*tval = 3``
-> +
-> +Compiler toolchain makes sure that function prologue have ``sspush x1/x5`` to
-> +save return address on shadow stack in addition to regular stack. Similarly
-> +function epilogs have ``ld x5, offset(x2)`` followed by ``sspopchk x5`` to
-> +ensure that popped value from regular stack matches with popped value from
-> +shadow stack.
-> +
-> +2. Shadow stack protections and linux memory manager
-> +-----------------------------------------------------
-> +
-> +As mentioned earlier, shadow stack get new page table encodings and thus have
-
-
-s/shadow stack/shadow stacks
-
-
-> +some special properties assigned to them and instructions that operate on them
-> +as below:
-> +
-> +- Regular stores to shadow stack memory raises access store faults. This way
-> +  shadow stack memory is protected from stray inadvertant writes.
-
-
-s/inadvertant/inadvertent
-
-
-> +
-> +- Regular loads to shadow stack memory are allowed. This allows stack trace
-> +  utilities or backtrace functions to read true callstack (not tampered).
-> +
-> +- Only shadow stack instructions can generate shadow stack load or shadow stack
-> +  store.
-> +
-> +- Shadow stack load / shadow stack store on read-only memory raises AMO/store
-> +  page fault. Thus both ``sspush x1/x5`` and ``sspopchk x1/x5`` will raise AMO/
-> +  store page fault. This simplies COW handling in kernel During fork, kernel
-
-
-s/During/during
-
-
-> +  can convert shadow stack pages into read-only memory (as it does for regular
-> +  read-write memory) and as soon as subsequent ``sspush`` or ``sspopchk`` in
-> +  userspace is encountered, then kernel can perform COW.
-> +
-> +- Shadow stack load / shadow stack store on read-write, read-write-execute
-> +  memory raises an access fault. This is a fatal condition because shadow stack
-> +  should never be operating on read-write, read-write-execute memory.
-> +
-> +3. ELF and psABI
-> +-----------------
-> +
-> +Toolchain sets up :c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_BCFI` for property
-> +:c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_AND` in notes section of the object file.
-> +
-> +4. Linux enabling
-> +------------------
-> +
-> +User space programs can have multiple shared objects loaded in its address space
-> +and it's a difficult task to make sure all the dependencies have been compiled
-> +with support of shadow stack. Thus it's left to dynamic loader to enable
-> +shadow stack for the program.
-> +
-> +5. prctl() enabling
-> +--------------------
-> +
-> +:c:macro:`PR_SET_SHADOW_STACK_STATUS` / :c:macro:`PR_GET_SHADOW_STACK_STATUS` /
-> +:c:macro:`PR_LOCK_SHADOW_STACK_STATUS` are three prctls added to manage shadow
-> +stack enabling for tasks. prctls are arch agnostic and returns -EINVAL on other
-> +arches.
-> +
-> +* prctl(PR_SET_SHADOW_STACK_STATUS, unsigned long arg)
-> +
-> +If arg1 :c:macro:`PR_SHADOW_STACK_ENABLE` and if CPU supports ``zicfiss`` then
-> +kernel will enable shadow stack for the task. Dynamic loader can issue this
-> +:c:macro:`prctl` once it has determined that all the objects loaded in address
-> +space have support for shadow stack. Additionally if there is a
-> +:c:macro:`dlopen` to an object which wasn't compiled with ``zicfiss``, dynamic
-> +loader can issue this prctl with arg1 set to 0 (i.e.
-> +:c:macro:`PR_SHADOW_STACK_ENABLE` being clear)
-> +
-> +* prctl(PR_GET_SHADOW_STACK_STATUS, unsigned long *arg)
-> +
-> +Returns current status of indirect branch tracking. If enabled it'll return
-> +:c:macro:`PR_SHADOW_STACK_ENABLE`.
-> +
-> +* prctl(PR_LOCK_SHADOW_STACK_STATUS, unsigned long arg)
-> +
-> +Locks current status of shadow stack enabling on the task. User space may want
-> +to run with strict security posture and wouldn't want loading of objects
-> +without ``zicfiss`` support in it and thus would want to disallow disabling of
-> +shadow stack on current task. In that case user space can use this prctl to
-> +lock current settings.
-> +
-> +5. violations related to returns with shadow stack enabled
-> +-----------------------------------------------------------
-> +
-> +Pertaining to shadow stack, CPU raises software check exception in following
-> +condition:
-> +
-> +- On execution of ``sspopchk x1/x5``, ``x1/x5`` didn't match top of shadow
-> +  stack. If mismatch happens then cpu does ``*tval = 3`` and raise software
-> +  check exception.
-> +
-> +Linux kernel will treat this as :c:macro:`SIGSEV`` with code =
-> +:c:macro:`SEGV_CPERR` and follow normal course of signal delivery.
-> +
-> +6. Shadow stack tokens
-> +-----------------------
-> +Regular stores on shadow stacks are not allowed and thus can't be tampered
-> +with via arbitrary stray writes due to bugs. Method of pivoting / switching to
-> +shadow stack is simply writing to csr ``CSR_SSP`` changes active shadow stack.
-
-
-I don't understand the end of this sentence.
-
-
-> +This can be problematic because usually value to be written to ``CSR_SSP`` will
-> +be loaded somewhere in writeable memory and thus allows an adversary to
-> +corruption bug in software to pivot to an any address in shadow stack range.
-
-
-Remove "an"
-
-
-> +Shadow stack tokens can help mitigate this problem by making sure that:
-> +
-> +- When software is switching away from a shadow stack, shadow stack pointer
-> +  should be saved on shadow stack itself and call it ``shadow stack token``
-> +
-> +- When software is switching to a shadow stack, it should read the
-> +  ``shadow stack token`` from shadow stack pointer and verify that
-> +  ``shadow stack token`` itself is pointer to shadow stack itself.
-> +
-> +- Once the token verification is done, software can perform the write to
-> +  ``CSR_SSP`` to switch shadow stack.
-> +
-> +Here software can be user mode task runtime itself which is managing various
-> +contexts as part of single thread. Software can be kernel as well when kernel
-> +has to deliver a signal to user task and must save shadow stack pointer. Kernel
-> +can perform similar procedure by saving a token on user shadow stack itself.
-> +This way whenever :c:macro:`sigreturn` happens, kernel can read the token and
-> +verify the token and then switch to shadow stack. Using this mechanism, kernel
-> +helps user task so that any corruption issue in user task is not exploited by
-> +adversary by arbitrarily using :c:macro:`sigreturn`. Adversary will have to
-> +make sure that there is a ``shadow stack token`` in addition to invoking
-> +:c:macro:`sigreturn`
-> +
-> +7. Signal shadow stack
-> +-----------------------
-> +Following structure has been added to sigcontext for RISC-V::
-> +
-> +    struct __sc_riscv_cfi_state {
-> +        unsigned long ss_ptr;
-> +    };
-> +
-> +As part of signal delivery, shadow stack token is saved on current shadow stack
-> +itself and updated pointer is saved away in :c:macro:`ss_ptr` field in
-> +:c:macro:`__sc_riscv_cfi_state` under :c:macro:`sigcontext`. Existing shadow
-> +stack allocation is used for signal delivery. During :c:macro:`sigreturn`,
-> +kernel will obtain :c:macro:`ss_ptr` from :c:macro:`sigcontext` and verify the
-> +saved token on shadow stack itself and switch shadow stack.
->
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
