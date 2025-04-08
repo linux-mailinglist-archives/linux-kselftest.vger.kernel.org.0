@@ -1,138 +1,162 @@
-Return-Path: <linux-kselftest+bounces-30336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5665EA7F753
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:10:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 704C1A7F760
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 10:12:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FABD1892975
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:10:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 488AA3B44DB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 08:11:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35F942638B8;
-	Tue,  8 Apr 2025 08:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SQoqcgoS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1CD263F4B;
+	Tue,  8 Apr 2025 08:11:47 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADF220459F;
-	Tue,  8 Apr 2025 08:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EE5263F42;
+	Tue,  8 Apr 2025 08:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744099805; cv=none; b=hZqtBqnGg+9i6ReaWQDgqQBRT9YidN3N+Q6t8POSm8/PuWsNggq3Y8wBTyKQA12fZMTBYWOZMh1kcnxQgtn3teNqRQOqALRs3GhoOLul5zQG4jhz3YmYdg/3+7NRFdciUOL7y4zJpA4HeH+fmLefcQUaxJHJR4Vr0jlkkIbUSUA=
+	t=1744099907; cv=none; b=Khp8TzK6OYh7uvANO2ZuvjtKqsR/g4IGhTeC43jmX++TNGNhVwdZGW/dgzaJbhJd4YPDHr40WfCcG/ncfyBhjQ+GgIupxajnlt388IAaFGu8wmaCPghhzmJqj0a9LEOYjXdh+GBf67JM+kGDBIztEDl1LVgFNQfDZyLk+XR0ocg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744099805; c=relaxed/simple;
-	bh=KuTOWjeh1mKtEtTStWh2LsIuxKIuB+Nc0WiTwPf/dYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HQ62gqob5b47MywqSmx+b2dyej2C5Moe746JuzNLVr3s9ga8bL7rh8pcY/T5ccdTKqcOYZilM06mI/4QilwAeEksph39fB3xyg684FcLyomdlOBsYhA4ExR+4p/rweMW5+EicPrWIvQ2Xzb/AMn/po1nPSeUgV93vVeLUcp1aUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SQoqcgoS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271AAC4CEE5;
-	Tue,  8 Apr 2025 08:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744099804;
-	bh=KuTOWjeh1mKtEtTStWh2LsIuxKIuB+Nc0WiTwPf/dYo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SQoqcgoSrZuDSLOM4aBawP4yEXKXh1leZyLF2XgXF7P/P7wvzSU8Dwecwfen73Pgy
-	 GC3RsB/XhCizUx+AcG5ydDy4drxJqwE04ocNLxscB8cgyIahM9nab2jXD3V9zsHbkL
-	 8EGtu4H5gc2KHE1lo4DvPaxYswmtRhYq/PMxl1p89yVP3tBE5FlDoDixDUeD3vyZiv
-	 Ew6KqSp4CkM8gJYPjq+VKOyVYiq8yLlIFHAFcas3F40N6p5UnIRkVamFmeE77MX8CT
-	 GDzNt+E7w3dFZdLC5IqTVKpMrTslDPIsY/kp98mZ0t9wsqh64L+foU+hGB8JMwQ0Eb
-	 e/lI6rkaQSNiA==
-Date: Tue, 8 Apr 2025 10:09:59 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Malaya Kumar Rout <malayarout91@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/x86/lam: fix resource leak in do_uring()
- and allocate_dsa_pasid()
-Message-ID: <Z_TZ138UxQ_uZzys@gmail.com>
-References: <Z_QXURMplbCtx-YB@gmail.com>
- <20250407193449.461948-1-malayarout91@gmail.com>
+	s=arc-20240116; t=1744099907; c=relaxed/simple;
+	bh=FxYoGDCd/cHFcZ2fsubOHjOGdK9XfaWuBq2wby33psQ=;
+	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=tvC/jTNA+EixeZjDcJ3XtomOu2tDbgfddiOiigTngeUirExKcTAnGLrKQpZomveQuEGNjcQdgEtNByec6lU5PjjnNH2Rbj8abo+Ry9lA4Xjl64IdWff3jOfOI/dEEV4CiDtzGAxPbSu/mgNkS5JAXX4klJpeQTxTIcHNxpRKZk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ZWzKq25m1z13LWd;
+	Tue,  8 Apr 2025 16:10:55 +0800 (CST)
+Received: from kwepemd200014.china.huawei.com (unknown [7.221.188.8])
+	by mail.maildlp.com (Postfix) with ESMTPS id C0DD51800E4;
+	Tue,  8 Apr 2025 16:11:34 +0800 (CST)
+Received: from [10.67.121.177] (10.67.121.177) by
+ kwepemd200014.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Tue, 8 Apr 2025 16:11:33 +0800
+CC: <yangyicong@hisilicon.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+	<maz@kernel.org>, <corbet@lwn.net>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
+	<yuzenghui@huawei.com>, <shuah@kernel.org>, <jonathan.cameron@huawei.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <tangchengchang@huawei.com>
+Subject: Re: [PATCH v2 6/6] KVM: arm64: Handle DABT caused by LS64*
+ instructions on unsupported memory
+To: Oliver Upton <oliver.upton@linux.dev>
+References: <20250331094320.35226-1-yangyicong@huawei.com>
+ <20250331094320.35226-7-yangyicong@huawei.com> <Z-wQuJAefT3xNipl@linux.dev>
+ <e9674079-9a22-c3cd-3b00-5989f6926303@huawei.com>
+ <Z_NkHWStDJLo0cmY@linux.dev>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <3355f89a-aecf-6ec7-b8ee-6faf6f1f7106@huawei.com>
+Date: Tue, 8 Apr 2025 16:11:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250407193449.461948-1-malayarout91@gmail.com>
+In-Reply-To: <Z_NkHWStDJLo0cmY@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemd200014.china.huawei.com (7.221.188.8)
 
-
-* Malaya Kumar Rout <malayarout91@gmail.com> wrote:
-
-> Exception branch returns without closing
-> the file descriptors 'file_fd' and 'fd'
+On 2025/4/7 13:35, Oliver Upton wrote:
+> On Mon, Apr 07, 2025 at 11:33:01AM +0800, Yicong Yang wrote:
+>> On 2025/4/2 0:13, Oliver Upton wrote:
+>>> On Mon, Mar 31, 2025 at 05:43:20PM +0800, Yicong Yang wrote:
+>>>> @@ -1658,6 +1658,25 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>>> Keep in mind that data aborts with DFSC == 0x35 can happen for a lot
+>>> more than LS64 instructions, e.g. an atomic on a Device-* mapping.
+>>>
+>>
+>> got it. 0x35 should be caused by LS64* or IMPLEMENTATION DEFINED fault, but no
+>> further hint to distinguish between these two faults. hope it's also the right
+>> behaviour to inject a DABT back for the latter case.
 > 
-> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
-> ---
->  tools/testing/selftests/x86/lam.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> There isn't exactly a 'right' behavior here. The abort could either be
+> due to a bug in the guest (doing an access on something knows it can't)
+> or the VMM creating / describing the IPA memory map incorrectly.
 > 
-> diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-> index 18d736640ece..88482d8112de 100644
-> --- a/tools/testing/selftests/x86/lam.c
-> +++ b/tools/testing/selftests/x86/lam.c
-> @@ -682,7 +682,7 @@ int do_uring(unsigned long lam)
->  		return 1;
->  
->  	if (fstat(file_fd, &st) < 0)
-> -		return 1;
-> +		goto cleanup;
->  
->  	off_t file_sz = st.st_size;
->  
-> @@ -690,7 +690,7 @@ int do_uring(unsigned long lam)
->  
->  	fi = malloc(sizeof(*fi) + sizeof(struct iovec) * blocks);
->  	if (!fi)
-> -		return 1;
-> +		goto cleanup;
->  
->  	fi->file_sz = file_sz;
->  	fi->file_fd = file_fd;
-> @@ -698,7 +698,7 @@ int do_uring(unsigned long lam)
->  	ring = malloc(sizeof(*ring));
->  	if (!ring) {
->  		free(fi);
-> -		return 1;
-> +		goto cleanup;
->  	}
->  
->  	memset(ring, 0, sizeof(struct io_ring));
-> @@ -729,6 +729,8 @@ int do_uring(unsigned long lam)
->  	}
->  
->  	free(fi);
-> +cleanup:
-> +	close(file_fd);
->  
->  	return ret;
->  }
-> @@ -1192,6 +1194,7 @@ void *allocate_dsa_pasid(void)
->  	if (wq == MAP_FAILED)
->  		perror("mmap");
->  
-> +	close(fd);
->  	return wq;
+> Since KVM can't really work out who's to blame in this situation we should
+> probably exit to userspace + provide a way to reinject the abort.
+> 
 
-So in your previous patch you closed the file before the perror(), 
-presumably so that file-leak detection in Valgrind or whatever tool you 
-are using doesn't trigger.
+as mentioned below, maybe the proper way is to handle it like KVM_EXIT_ARM_NISV. In this
+case exit to userspace with KVM_EXIT_ARM_LDST64B, if it's due to the wrong mapping of the
+guestOS then reinject the DABT back to the guest, otherwise the userspace need to check
+whether it's reporting the memory region correctly and handle in its own way.
 
-But here it's done after the perror() call, why? It's perfectly fine to 
-close the mapping fd straight after an mmap() call.
+>>>> @@ -1919,6 +1939,21 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
+>>>>  			goto out_unlock;
+>>>>  		}
+>>>>  
+>>>> +		/*
+>>>> +		 * If instructions of FEAT_{LS64, LS64_V} operated on
+>>>> +		 * unsupported memory regions, a DABT for unsupported
+>>>> +		 * Exclusive or atomic access is generated. It's
+>>>> +		 * implementation defined whether the exception will
+>>>> +		 * be taken to, a stage-1 DABT or the final enabled
+>>>> +		 * stage of translation (stage-2 in this case as we
+>>>> +		 * hit here). Inject a DABT to the guest to handle it
+>>>> +		 * if it's implemented as a stage-2 DABT.
+>>>> +		 */
+>>>> +		if (esr_fsc_is_excl_atomic_fault(esr)) {
+>>>> +			kvm_inject_dabt_excl_atomic(vcpu, kvm_vcpu_get_hfar(vcpu));
+>>>> +			return 1;
+>>>> +		}
+>>>> +
+>>>
+>>> A precondition of taking such a data abort is having a valid mapping at
+>>> stage-2. If KVM can't resolve the HVA of the fault then there couldn't
+>>> have been a stage-2 mapping.
+>>>
+>>
+>> Here's handling the case for emulated mmio, I thought there's no valid stage-2 mapping
+>> for the emulated MMIO? so this check is put just before entering io_mem_abort(). should
+>> it be put into io_mem_abort() or we just don't handle the emulated case?
+> 
+> Right -- there's no valid stage-2 translation for _most_ MMIO. If KVM
+> cannot find an HVA for the fault (look at the condition that gets us
+> here) then we know there isn't a stage-2 mapping. How would we know what
+> to map?
+> 
+> In that case I would expect to take a Translation fault with instruction
+> syndrome that can can be used to construct an exit to the VMM.
 
-Finally, it would be nice to quote the before/after output of the leak 
-detection tool you are using.
+you're right, I misunderstand here. If there's no stage-2 mapping we'll have
+a translation fault here rather than an unsupported exclusive or atomic access
+fault. So no need to check and handle it here since we won't have such a fault
+in this case.
 
-Thanks,
+> Marc had
+> some patches on list to do exactly that [*].
+> 
+> However, after reading this again there's a rather ugly catch. The KVM
+> ABI has it that writes to a RO memlot generate an MMIO exit, so it *is*
+> possible to get here w/ a stage-2 mapping. Unfortunately there's no
+> instruction syndrome with DFSC = 0x35 so no way to decode the access.
+> 
+> This is starting to sound similar an nISV MMIO abort...
+> 
 
-	Ingo
+yes similiar to nISV MMIO and no ISV as well. Per-spec DABT caused by LS64* has ISV==1
+if it's a Translation fault, Access flag fault, or Permission fault, but not for
+unsupported exclusive or atomic access fault..
+
+> [*]: https://lore.kernel.org/kvmarm/20240815125959.2097734-1-maz@kernel.org/
+> 
+
+Thanks.
+
+
 
