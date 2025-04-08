@@ -1,89 +1,98 @@
-Return-Path: <linux-kselftest+bounces-30388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68BCFA8193E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 01:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 084AFA81947
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 01:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B54F1BA28FD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 23:21:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED7D81BA36B2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Apr 2025 23:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADACB255E2F;
-	Tue,  8 Apr 2025 23:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA3D2561BA;
+	Tue,  8 Apr 2025 23:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ax8+5rrI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+kaFXg2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EE123FC4B;
-	Tue,  8 Apr 2025 23:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77F325291E;
+	Tue,  8 Apr 2025 23:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744154460; cv=none; b=bVWR7NUDDkDas0QLPIFO2u4k8WfaEYCjnzRDc+tp/zu2aQ+l0xp2XPvh5Fi1QsDA/S74RKpdOmgiyIElr0rCwnGuhs+L5eFfvbu1rBdkLx1uKJLAd+ySU6Sh+9y76v6uCJmXBJytvrfmHB7wezEc7VsGtvg+Lq5GaVZcOF4Qzsg=
+	t=1744154647; cv=none; b=ad4EjgeGfLAY5Oj1USVE9RE6eyqK7MJq3QCDgHCAnk0VlHsZ2EdRl/8fL6uRcq/0Uq+M87nF77+BiYjZYc5ld0kHMuu2gISQrNU0Z7Sro770ROfwtDL4PkqT09QG+5xEB+no4qjw/4WvRuhueYVdhb2CBsxzJAfGGJyxc6nMP4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744154460; c=relaxed/simple;
-	bh=vWGLK4hJ97VHXRESfYlQmWSZONEI9Yy7VflJj/ld8go=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tDs/Kg6KLggCo2w2x4cQBusqQePfxY/c1MnuLNLlBm1BoZn9/Xw6Y7bMUrBvlZePwCrrA46WRKamWboSs35jqDYVTi5FQ2z3B/mYEIHaRPzy4KwEVmWMtwuzVKvLVvNbqEr0qSQdXeuIPZd/o9Xm7dSx0BdAhaeCGHirDV45bDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ax8+5rrI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7E1C4CEE5;
-	Tue,  8 Apr 2025 23:20:58 +0000 (UTC)
+	s=arc-20240116; t=1744154647; c=relaxed/simple;
+	bh=U9/4pX8gjaVefgBjkJMyyJo+1elvwruooJ7f0S6DECU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kJlx65CKCarrTtd0Udt+lsPK+LrLez+Lu29bjQ/jaOEglSLLYSHWNJn9IBCKXOJS9U4d3mRQXjEFwgo0Il4Pb4kiHxp5k2URJFc3EX0Khi/h5qBNvqFJcpFMsqAW6kvN0h82PCkJD4vDcWWpWGsIwpEBxoK/iwqVjarfFxdXx/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+kaFXg2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA15C4CEE5;
+	Tue,  8 Apr 2025 23:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744154460;
-	bh=vWGLK4hJ97VHXRESfYlQmWSZONEI9Yy7VflJj/ld8go=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ax8+5rrIuTA3+fEgyYs8DnFMpJrqLoJBjDLz+FlGqCTw4lV6sCTPQ30B5pSEaDqnn
-	 vYgscZOvgv2UHmLiB1NIhktAsVOBJl08iwwXiwVx2nTKYsmdcAbuUMYcsQeK5WQSAz
-	 +B7Lb5NzciL7izP57sYzwbZA6mjDVc4jEZaVa7sjjhxvi1YzMp/F+QmN87wne2+Al1
-	 OrF2S7RI0r6XtDcfTkopRBQG3J/9Z8kG9m9rUaQ23pv0bSspFDdoWX2TVmfVbXNi44
-	 WAZF4sr8DCz80/pwEuTSC9PwrBtPlef1Gfx5GtCrxrxM1qr5UrYKypRpIPRNDCzNxr
-	 /QuiJHgtjb2ag==
-Date: Tue, 8 Apr 2025 16:20:58 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: <netdev@vger.kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, Jay
- Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S
- . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Nikolay Aleksandrov <razor@blackwall.org>, Simon
- Horman <horms@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan
- <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- Ayush Sawal <ayush.sawal@chelsio.com>, Tony Nguyen
- <anthony.l.nguyen@intel.com>, "Przemek Kitszel"
- <przemyslaw.kitszel@intel.com>, Sunil Goutham <sgoutham@marvell.com>,
- Geetha sowjanya <gakula@marvell.com>, Subbaraya Sundeep
- <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat Bhushan
- <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>, "Leon
- Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next 4/6] xfrm: Add explicit dev to
- .xdo_dev_state_{add,delete,free}
-Message-ID: <20250408162058.36a44055@kernel.org>
-In-Reply-To: <20250407133542.2668491-5-cratiu@nvidia.com>
-References: <20250407133542.2668491-1-cratiu@nvidia.com>
-	<20250407133542.2668491-5-cratiu@nvidia.com>
+	s=k20201202; t=1744154646;
+	bh=U9/4pX8gjaVefgBjkJMyyJo+1elvwruooJ7f0S6DECU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=I+kaFXg2zedpmDg6A/e085iRbxoT84isQv/DiEfTWSeZaqdhCCSxthTiOZMq4hOJD
+	 tM8Nyl/5XQ/q32nsgpw3DAn2lysOscHu/6u7KygV13Itl0DUXIp8UqssOyu8pwKvDX
+	 zN/ntxawR642mex45T8JwC/YvMHAKnreeL+w6EGQBDpX7L/Q6296FDsMOk0wnRXdKW
+	 1ud7craxXJBZuGLKL/cRKR3HK2n1/TLM8v1oAF4MEVgSQhKTD/t3xtD0i73w+f5+0i
+	 HVtt7Z9wrf6uqtVA5I+vwls15cL6jRtb/XNYKgxEXOWaMG+BBdcU2kbYNUKcr8WkI8
+	 HYC/NLpHfDR0g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB34B38111D4;
+	Tue,  8 Apr 2025 23:24:44 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] mptcp: only inc MPJoinAckHMacFailure for HMAC
+ failures
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <174415468377.2216423.2812266376332216363.git-patchwork-notify@kernel.org>
+Date: Tue, 08 Apr 2025 23:24:43 +0000
+References: <20250407-net-mptcp-hmac-failure-mib-v1-0-3c9ecd0a3a50@kernel.org>
+In-Reply-To: <20250407-net-mptcp-hmac-failure-mib-v1-0-3c9ecd0a3a50@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org
 
-On Mon, 7 Apr 2025 16:35:40 +0300 Cosmin Ratiu wrote:
-> @@ -424,10 +424,10 @@ static struct xfrm_state *ixgbe_ipsec_find_rx_state(struct ixgbe_ipsec *ipsec,
->   * This copies the protocol keys and salt to our own data tables.  The
->   * 82599 family only supports the one algorithm.
->   **/
-> -static int ixgbe_ipsec_parse_proto_keys(struct xfrm_state *xs,
-> +static int ixgbe_ipsec_parse_proto_keys(struct net_device *dev,
-> +					struct xfrm_state *xs,
->  					u32 *mykey, u32 *mysalt)
+Hello:
 
-nit: you missed a few kdoc changes in this patch
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 07 Apr 2025 20:26:31 +0200 you wrote:
+> Recently, during a debugging session using local MPTCP connections, I
+> noticed MPJoinAckHMacFailure was strangely not zero on the server side.
+> 
+> The first patch fixes this issue -- present since v5.9 -- and the second
+> one validates it in the selftests.
+> 
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/2] mptcp: only inc MPJoinAckHMacFailure for HMAC failures
+    https://git.kernel.org/netdev/net/c/21c02e8272bc
+  - [net,2/2] selftests: mptcp: validate MPJoin HMacFailure counters
+    https://git.kernel.org/netdev/net/c/6767698cf9c1
+
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
