@@ -1,142 +1,130 @@
-Return-Path: <linux-kselftest+bounces-30448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC2FFA831CC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 22:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30FADA83361
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 23:30:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02EDE16FD95
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 20:19:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3F11441777
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 21:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D917620897E;
-	Wed,  9 Apr 2025 20:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C48FA1E0DE3;
+	Wed,  9 Apr 2025 21:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Wn+nA0JZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="W4QKUg6A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1019520298E
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Apr 2025 20:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A9B19ADA4
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Apr 2025 21:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744229984; cv=none; b=DcEonAhohBN6wTaJ6oOep1ZRn2udpYe5tTkIBmM8Qrs69z8GL29ZikGMeoWaUiWhNAXUOciMod01U3wTzg/HBJpb2CRDtJ0lpj76QIrFWbgrcx5TDCGuehk44JMejBbA2mmL/9nyNFLpHyKoxV1sMmqm3eocy58Yo93tTe6mhlU=
+	t=1744234236; cv=none; b=BCnc9a26rqxMTDV0H9Bb7oadskEjrgrZBS3Jy/cwAzyj5WCp2m8krNeiUQSFRQeRexfO9Z8orLkzDLxQxgNpcts40fOE/s3IJVrbt0m3EqyH9aPuCNnZBXSoDHtJhQzLKClT0m1Z+QnDbLZeXfDRfxSdbt2uPEn5l3nz1qNjQhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744229984; c=relaxed/simple;
-	bh=vFYL2A2m4BVqGIUPwG+SJe8Wi/rBo/+xMXvF158DHXI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZyR5s2rnpNkERR/DyGuFHx1+Tyi0IO/3DcL9Upts1JTGw0FV2i2z+0SL90V1MHsnzExAWC289uT+Yw9trwcFR1Bwf8kHKZUVn3BcYSCKGMozaMlHi1TeUEuGrlqN9GruruPXxLNhEDfY+AsTybUrHNmbZrask1uynz7hdfsIBNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Wn+nA0JZ; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e60b75f87aaso49276276.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Apr 2025 13:19:42 -0700 (PDT)
+	s=arc-20240116; t=1744234236; c=relaxed/simple;
+	bh=Fmtm2BL8xq34y8tCWa96ME/YvgDGyr8oDQVrhOOZ00M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u810GuJQlAwgWOczeri1EpV4HAFhlI1RoOCOz1XxVYRKjlNXotuexTDK1kDkoYUJvXiASDuTI0czL7kAgj8hOCPdPl0iBTIDxuSMLXgqw/3ij64CiS+usuePUJFGtF7yc7OWL8PS+oEEz1LpVk1Qqbz6fF2BAAPO//C/VJ9WspM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=W4QKUg6A; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-85b40c7d608so17341439f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Apr 2025 14:30:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1744229982; x=1744834782; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VsHh17W+bDIV1e4xVUO/JwjeRPH7cOalB9Js2vjnhrU=;
-        b=Wn+nA0JZQAGWXBbLIKOsOUEp6QNQFXHFfl8D9NHSUQH82ABaXlAr50iV+7HSk/LZ5q
-         qx83eELju83YbCI2XWoyLlB3SZVZaRWjw7YEbQZvdLPyWG9MCMlD6X6v+VCg+pKiPCte
-         kUtBSXZZ2Qo+odi9Y5zgSmAy3ErlpXgwOmQ9U3Q5ixc9brwQnG+lulMQO98V0WBFWMsJ
-         +fGiXrx641WxrozoR1GTYX+VQbUBJPGqYtgyHbMIDVOcR/PIYFLtUkmWwz/UvLzO1AA7
-         WV+ouudBXgaa3eo00UmsD2TVEcyoT8t+QffxgHPg06ODRAFr2u/5dz69btPw7PUcr7gY
-         Q3NQ==
+        d=linuxfoundation.org; s=google; t=1744234233; x=1744839033; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q/gU15risBbNmAj/+m5gUGnJ/w3Eauv7mZMDjtsuTms=;
+        b=W4QKUg6AxCDtVSG7HEUMrWKXTDywvhaxvI+MyuZ9JNLcEj6clGMLgR+Wp5ktS+AtX2
+         ZrOVHvOFOmgD/9qBV31sHAd57/UQZabufzXql/AHeTqbUBjiHzN9yzGO8wxm4oI+fsFb
+         LFXho2AfbD9ky8fiV7ZvmLBXgns4lL8PGwfHo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744229982; x=1744834782;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VsHh17W+bDIV1e4xVUO/JwjeRPH7cOalB9Js2vjnhrU=;
-        b=VX9gR1ecNcXcx3nicBHEjyFwl7Y4z+86Oo216Z08IpiM7lD4mZP97CKG3pYWhG+bTf
-         waXPkVe2EgAmms1ThPD1PXhqmx6gUdMzA6Z0Dlz1P3jZro1Ax34diZa8J0n74rsYu59g
-         g4kMTbGvzRtT/tkvadaZLWmIZTSX72Yta6UdNKIzvySv7fCR89zgBdtFhDyh82lZh/cS
-         ybhB+2SXHF/n1LmF4NrrypXMHmMqE8MJSBtHDd+DxyEm9tftkBJwkP+4bw6uFo2+iPh9
-         bDmnvHWf15ZhbzwWub/S6FnX6xLNiyrt/KPLN4qaqjtfIh8Iwiuj2/MfT7xrBAztyur2
-         atpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWlDnILLUC/6nDHUI65Zce067TFQrPS8bfWGGv5v/1Xb6Z3P9F0byBpFfy3ELRqNtTIoeCiOEUnIfsLF2iHP0I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5ayBQ+pzgudfwC1aWCfWkaPoGgnj3evaXqpi4I4wVr+1oxk0x
-	2udaD+QpvRjNq46Hc8XVWzA45hpyL5ioex33R3oz8WqgcgWqe+/IQ08QDB/M/jTaNLlJ2pqZjYG
-	PyeWnomXTWHsSDg2V56WTz4E25Kb5Aynnj5aR
-X-Gm-Gg: ASbGnctJGdXlGOw6AdSBYF6IqqOdVgSsY6A6fCBloSJlu424eOK7Ulcxo3awywRWUnn
-	nJnyvMJQWbioIgWXOEVKov5xb2Af2AN0nemIZxbIboiOlJX2u/TmXeXLFCKpdyk0awT0/qBVHB4
-	ZZ3Vm9RBEY3v9vwO0lKjV6rQ==
-X-Google-Smtp-Source: AGHT+IEGCJR9IA5jDMT2Of/TaTFQ6Kl+jhMbbHqtWzPYG+QuFj2lKMDW1yD44Tl3NdNB6jTiuM59Ql0Ux2XWfYO9+PU=
-X-Received: by 2002:a05:6902:1b90:b0:e6d:f3ca:3e15 with SMTP id
- 3f1490d57ef6-e703e0ecf38mr658467276.3.1744229981817; Wed, 09 Apr 2025
- 13:19:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744234233; x=1744839033;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q/gU15risBbNmAj/+m5gUGnJ/w3Eauv7mZMDjtsuTms=;
+        b=t0TAzyR81pEX27ODzFTE33ceylQeCsOwInJxU8vTslf77kShsHCRtDaB/Uvva61aLM
+         svSIRMhnBKHNWq6hKDo8Ygplj9O6uHzrq6pD8Z4rffsYTlsftrdHWkQiWHzuUF2My31Q
+         a5eeqNqXaTw7MCdYQCt8O0VEBI1cc4VX/Br00pESnubksSStykN0rNpZjxecJxUOGcsd
+         H8PdhRxBfPEu5qqMRZMyqfhnIQRPenqiV21A2Br2H0xLR7R5UOzF4bpSk7srTXEHoIDP
+         jP9hf0hJzgy+2LbBp2sv8tEMmNcoMKaRbM6DWKCHwWBz/QpkrrVW4kLt2T9GC9oDiAvN
+         BcgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXnCcmzB0vchwKQI/RtJgmzJmoMKcT5jYFMd0lr1xtXB5NlTj8bvddDmsVsJIpizMA9KDK/kts3vfjiUALKdpE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaLyDU51cOoa2CcPfSLamNAeITGIM29q/fvkS45Pz8zBdHg9JK
+	D4xcFF+LNRW6yu7+DnwYVx+PaU+vNpHLxZ/BS7l61Jc6mAzlnxt4Vh+4IY3RsawWdF6tjSys9+Y
+	L
+X-Gm-Gg: ASbGncvUzCZd4v5MnBkWIGNDLsYVBF5K822x3Wc7PY02VQ0LiVfHHf9o/taqlCXvmr7
+	dsDcAsscIjMjyjREJRoGwwIsrzbsez71aKV+A7glrEA2uNLgmq7ugETKLBtVpeHHcYH4Az0OupQ
+	cETIjoTwOEob0j4e4qJRicr3OTKMnwyhP/xCrDFIQXNjDz8PWtAcw1AbH5W55Wm3aWYwQZ0Oh+h
+	D5ZDtBq1g+pU3W/uHtmfHq3wHjGgacOOdF2VYY8MNPS0FqiSDNwCrj9siB5g0XMqO/NIipIuhZm
+	JyHnCsjCA46Rzr8YKMWgq4k2mcYXc1UG65ieiOviaQGSosYqoYk=
+X-Google-Smtp-Source: AGHT+IGEPcb/ixlDoZaXn0uu0NvXiB9ysyL04Z/cY/mfCxM2BzLOYvyJoBHhlF5u2mWhoOymh0mv1g==
+X-Received: by 2002:a05:6e02:18c8:b0:3cf:fe21:af8 with SMTP id e9e14a558f8ab-3d7e46e40f8mr8602595ab.4.1744234233489;
+        Wed, 09 Apr 2025 14:30:33 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505cf8386sm432776173.7.2025.04.09.14.30.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Apr 2025 14:30:32 -0700 (PDT)
+Message-ID: <87e72133-03f0-48fe-ac0d-3f2ac278357a@linuxfoundation.org>
+Date: Wed, 9 Apr 2025 15:30:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250408112402.181574-1-shivankg@amd.com> <20250408112402.181574-4-shivankg@amd.com>
-In-Reply-To: <20250408112402.181574-4-shivankg@amd.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 9 Apr 2025 16:19:31 -0400
-X-Gm-Features: ATxdqUEUOdbJE1FR-JWrcEMUFKxoL7rqK5e8WWf2cXUgc2Yd72xDgueuEkSahFw
-Message-ID: <CAHC9VhRFBOC=cZB+Dm00cshwBSBaK6amv+=XFLPF0Bub0gHN+Q@mail.gmail.com>
-Subject: Re: [PATCH RFC v7 3/8] security: Export security_inode_init_security_anon
- for KVM guest_memfd
-To: Shivank Garg <shivankg@amd.com>
-Cc: seanjc@google.com, david@redhat.com, vbabka@suse.cz, willy@infradead.org, 
-	akpm@linux-foundation.org, shuah@kernel.org, pbonzini@redhat.com, 
-	ackerleytng@google.com, jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz, 
-	bfoster@redhat.com, tabba@google.com, vannapurve@google.com, 
-	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, michael.day@amd.com, 
-	yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com, 
-	michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, kalyazin@amazon.com, 
-	peterx@redhat.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] unshare_test: set nr_open using soft limit
+To: Petr Vorel <pvorel@suse.cz>, lufei <lufei@uniontech.com>
+Cc: viro@zeniv.linux.org.uk, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250401015557.113872-1-lufei@uniontech.com>
+ <8aa78b76-b9f9-4d23-a009-97b26aefcf33@linuxfoundation.org>
+ <20250409055656.GA231133@pevik>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250409055656.GA231133@pevik>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 8, 2025 at 7:25=E2=80=AFAM Shivank Garg <shivankg@amd.com> wrot=
-e:
->
-> KVM guest_memfd is implementing its own inodes to store metadata for
-> backing memory using a custom filesystem. This requires the ability to
-> initialize anonymous inode using security_inode_init_security_anon().
->
-> As guest_memfd currently resides in the KVM module, we need to export thi=
-s
-> symbol for use outside the core kernel. In the future, guest_memfd might =
-be
-> moved to core-mm, at which point the symbols no longer would have to be
-> exported. When/if that happens is still unclear.
+On 4/8/25 23:56, Petr Vorel wrote:
+>> On 3/31/25 19:55, lufei wrote:
+>>> Set maximum file descriptor number limit by rlimit.rlim_max than
+>>> nr_open(hard limit). Hard limit may cause dup2 fail.
+> 
+>>> Signed-off-by: lufei <lufei@uniontech.com>
+> 
+>> Petr, Al,
+> 
+>> Okay to take this patch?
+> 
+> LGTM, hopefully I haven't overlook anything.
+> 
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> 
+> FYI Cyril Hrubis suggested a different approach (for LTP tests which is based on
+> this Al's test):
+> 
+> https://lore.kernel.org/ltp/Z-u7yYJpTBG8Hi6A@yuki.lan/
+> https://lore.kernel.org/ltp/Z-vwYZxLms8juTjX@yuki.lan/
+> 
+> 	filedescriptor that is >= 64 and set the nr_open to 64.
+> 
+> That would help to avoid using /proc/sys/fs/nr_open.
+> 
 
-Can you help me understand the timing just a bit more ... do you
-expect the move to the core MM code to happen during the lifetime of
-this patchset, or is it just some hand-wavy "future date"?  No worries
-either way, just trying to understand things a bit better.
+Thank you for this suggestion.
 
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
-> ---
->  security/security.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/security/security.c b/security/security.c
-> index fb57e8fddd91..097283bb06a5 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1877,6 +1877,7 @@ int security_inode_init_security_anon(struct inode =
-*inode,
->         return call_int_hook(inode_init_security_anon, inode, name,
->                              context_inode);
->  }
-> +EXPORT_SYMBOL(security_inode_init_security_anon);
->
->  #ifdef CONFIG_SECURITY_PATH
->  /**
-> --
-> 2.34.1
+lufei, Can you look into this as a solution? Also the short log
+should include the subsystem: e.:
 
---=20
-paul-moore.com
+selftests:core: unshare_test: -----
+
+thanks,
+-- Shuah
 
