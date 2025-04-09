@@ -1,345 +1,244 @@
-Return-Path: <linux-kselftest+bounces-30428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F75A8289B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:48:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB016A828B9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:52:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 786113B52A5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:42:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAB5518930A1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B3832620CA;
-	Wed,  9 Apr 2025 14:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321F526B082;
+	Wed,  9 Apr 2025 14:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="V+kpGxpT"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Rv1Tpnnf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D203595C;
-	Wed,  9 Apr 2025 14:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744209774; cv=fail; b=GLxY2coXQEKBaNqs74GpMW4Q1UcUOzaFm7E1l2MqGvFHl51JCsvvo7f2+UO5UApJUd+n1akqemy7r9OXBkVJO0SHkJC1Bt+PGRoaZwxLls2k/PhA1IY87YCiB9+QoGKNgquo/wAYBBnF+u2Bf98KU2nVb9GVW7AASL0r70WhBgE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744209774; c=relaxed/simple;
-	bh=XA50F9kdZqWA0zEegRaUGvUlcWGWZ7Pr6YOrSThbLfU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=smWjJCFYvhd4PJVLbbibNNBnNGg2tpb/sWTmwR17Gk54b3/s3p0f+4Q99zmnGRyktHLvaPyr74rh55oORip1dGdL0Nc3QUCvsuNKfz1UTvPn9vS+0Wm0THUyuX94xPYm4xsJtEL1BNCeuL6c8SkJm2lb/4sQn+EzmPLwLSLc6yk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=V+kpGxpT; arc=fail smtp.client-ip=40.107.94.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AlJ+zfqo4QMtYwbz5ctrGFRNzn//JmAn/iyGZpGIg3PIiStPnwzfiZI95YkjtdRKjs13UR77y+6ufnY8Jp4fxI2R8u2j89pYLRY7fmOUrS/HbJ9ZqsAk0mMgu4eYEbdYybwjKCVmOviG8ZlLj/geWOCsqlNYCNHQSmZxNTNvBPw0Cj97M33Um14hnoYONRwWa7g97aSr8SWPNHTYcGYu7wy9df18Z+OORez5g4nu4WU1Q12oKiY56d7+OkXjpbpjHxz+Iz5UpJbflXAqkSNtRexkEhiLA8Cekrmyfp5sAYjZbMUfbjO7wjJZdPxfvCYXFzt6ugEUinI2Ke22uHN4Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vEivdLeKR1r4QovkPXdsPMCbCTwvDwdTA4idnSvG+Vw=;
- b=zN6+bce5yb4OrLlsLMPK45c6VuOaoJgC01Bh0Eqz4kHLeY/Ac7IldSedodwcThgRYiTu7tBac2Lpg76ZgabH6793bLL7oviEGC56IGQMS7YD7d0+cW0Edr5ys+8ldH5O4n29qXvvDG7eMfIQb+e722zxGOOK5IZqWJ5GM/zL38DV/0q0iPEopAV5PMDUviaMcqlHuq65ryuZ904QLUOAcBRbn/0fgHURYyfdj5pLqd3IW7RnBBgCwqn5ldVQCwubo2qSvfaiR6/fHsracSuddb+AuqIYhLWNYMXjMQVsete+5sqNZBQyS9BkXUCp0HsaZygW0zW7nkJRpjNzz5X8Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vEivdLeKR1r4QovkPXdsPMCbCTwvDwdTA4idnSvG+Vw=;
- b=V+kpGxpTKTa7V717UtwRu4YqdSYQugf3+xw1/4GJQ/Hnyq4/VSExuzzdHMFAU3gQWC0Y3AAWlma4Xdkeb3iOitGqLFt8emFdv1L48f0X1K1ZFpDBPt/hPj9+BUZm4ucdsNf6EUxFisQdmAiBKkr0KhyRnoRuw5hKuMLRMR4WqyqrSOdXgMx/59qsOFIExBWWPA+UZnRBFHjsQ9aHh48hyNVs9twr+qE9HfGDf8ry08CuYm61hATxErY0MpGpkmBeUUujERxdXG6VnK0ncUsUFd1VNH1gNgjsPr8upcZno6R9UxH4owjwCvxVdIJDtyqf8PuoA4I5pvyhXFugOfUWEg==
-Received: from CH0PR03CA0217.namprd03.prod.outlook.com (2603:10b6:610:e7::12)
- by PH7PR12MB5619.namprd12.prod.outlook.com (2603:10b6:510:136::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.31; Wed, 9 Apr
- 2025 14:42:49 +0000
-Received: from CH3PEPF00000010.namprd04.prod.outlook.com
- (2603:10b6:610:e7:cafe::9e) by CH0PR03CA0217.outlook.office365.com
- (2603:10b6:610:e7::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.23 via Frontend Transport; Wed,
- 9 Apr 2025 14:42:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF00000010.mail.protection.outlook.com (10.167.244.41) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8606.22 via Frontend Transport; Wed, 9 Apr 2025 14:42:48 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Apr 2025
- 07:42:32 -0700
-Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 9 Apr 2025 07:42:25 -0700
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
-CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
-	<razor@blackwall.org>, Simon Horman <horms@kernel.org>, Saeed Mahameed
-	<saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu
-	<jianbol@nvidia.com>, Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>, Ayush Sawal
-	<ayush.sawal@chelsio.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, "Przemek
- Kitszel" <przemyslaw.kitszel@intel.com>, Sunil Goutham
-	<sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>, Subbaraya
- Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat
- Bhushan <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>,
-	"Leon Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 6/6] bonding: Fix multiple long standing offload races
-Date: Wed, 9 Apr 2025 17:41:33 +0300
-Message-ID: <20250409144133.2833606-7-cratiu@nvidia.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20250409144133.2833606-1-cratiu@nvidia.com>
-References: <20250409144133.2833606-1-cratiu@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3B8267700
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Apr 2025 14:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744209831; cv=none; b=sfK1eka7p1vUO8wafShXIGKQN8bzDGcx67OsrD0wSj8Dzl2GalTCZMjGgKXamXXdjhIPBR2bQQBmsIIa0Ajw5N8qGQTx9gezGhBAKAZXhuXhvTYcI53uQufita8DJC85BbQvi8t96EURHIHtBBy0XBOFi0kxvUs/8RW+VbRNMRE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744209831; c=relaxed/simple;
+	bh=7Qyl/KGbNgAjKHzOstykL1b1PVeFC9C9SmfU8PxYhlc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G7L7gzFC1sb5KbysagPIsB7yV5pdACd5LAeKbrRLoEe/0y01k9bO5ioPKyEKBPxmm+gtTnoKq1aVIbHOyPVImtyM+3nMMzm0y3mGsLeqlIHfnKrpniin9NcS8PvmCF6cSSykS9xuD9IphBBmJ/AWp3BM9NOmR+E0MbDpkpJEhYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Rv1Tpnnf; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-224019ad9edso89526135ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Apr 2025 07:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744209827; x=1744814627; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ow5mA7lTDwDJ/M6E3XEwhzsM01atmOj/MJRSg0pfs/U=;
+        b=Rv1TpnnfCAYDUJmZsb8GSLvbfAR41yOxgzPfzDczY7jUA9EHzFeKfw8JMydztCGYmZ
+         EjkDW3U9IbEbUtWHMuA7Ei3zh3fO1csXbPVFVIW4Lk95SfxgnBXXrgS+h1ORV6U+k9rK
+         0q3vzGjvCCjgiP9ttTvVkciqE0XaJPSBdZR16s8pDn7OLYvGm5g+2E0VHGt2MX9y6x9h
+         MUF7ZnNirkUdAMreh7a4kyTkdeG9ovH0ptoLzHh8IZi9NhzWmPlJFGGHjxCbG5LBLWF0
+         6k8csHj2KmrgIgaOfbscu3VA6rKihvw7Im13SXTB/DAuk8xbv597NB3r5s2ufihZAbqu
+         pHgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744209827; x=1744814627;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ow5mA7lTDwDJ/M6E3XEwhzsM01atmOj/MJRSg0pfs/U=;
+        b=XJvQCxLahVFCt8QPn21aB19a3rVbKfGU4TaV1kbOp//duh6Rs5V+WMwJeVglC8rc0B
+         7wkyxpz6V9i6hP5/93gzRfHYU1oUJoFuT9Wtt6pS9m4ottHcLlfTBktZ4Pzq3xOJDSvx
+         6dcj1DjME3uQ9yxGdssG8MHe+rHoGiY0d0EVXNmsjsLnRGQhenIoZdkFoNHT5ceqIjAC
+         lDXKy/+EOjsi0ZJlKtm+MP77BREXHw8ValI73lXRFRzs2pRp7LTghvKoD1GenfLqE7hm
+         DrBRwPicd8FQl9EeJtIB6LL9BQBWkaY8bbRpx/6HGbyzLZW2nUmyX1mkmm5fAsNI+0m/
+         w2bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2RA4q5G7pd5+Rc3Jkn0rVcltgXMpGzwNaJZVo/qRaflygYl29r4gdxcny6msBMZOnz2zE1o39h68mbVVS3bc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMyF8BMc7yUs0hr+eRLDiQDHuukqQthovJD8w/U3mdL8LOh6xh
+	mpS4kWOjJaBwskmOSa/34F8wSB+0CmN5ZCcciSiK7RA99g2/38FUHqugcAJzBuw=
+X-Gm-Gg: ASbGncsrLXoutJA1gNPqgYcMfvXgPWHLtHlEvIfctNs5XtkXLvalh3XajaD9fujzCxo
+	yYH1F8vNbePenbROrv6lEeMrX2wMZYf41ZsgRLYZpHBdRll9sSRS7X1ZXBfsfhMTAlyj9Vn7DDc
+	Q39m64+VKFZMpaAI/w/GXnYYocHzW/HsFHKKdcLoLW2U8eNukAeVw6eEHBN+5GrzJ6FmcbC7CYR
+	F1h0PnPa7ChfVJ5bX2fZ0NiwPtJt47ASutG6zgMSyCXXjgTYnZaVsHAYcBtOml7FSWBWox+YWXO
+	r1GC6zm4/2mfvLTnGZr/1LwwCg2bRLOHefBtv3nEqE5gZA483ao=
+X-Google-Smtp-Source: AGHT+IEgaCnvV5qiE5FYgc0Ujjm72QHq4NY5rpvgBrpJwRVGqGD1OFM7I6sIlnm2n2XAV9/GUpCxyg==
+X-Received: by 2002:a17:903:32cb:b0:220:c164:6ee1 with SMTP id d9443c01a7336-22ac2a1df5cmr51260355ad.32.1744209826897;
+        Wed, 09 Apr 2025 07:43:46 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cb538csm12708815ad.176.2025.04.09.07.43.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 07:43:46 -0700 (PDT)
+Date: Wed, 9 Apr 2025 07:43:42 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Alexandre Ghiti <alex@ghiti.fr>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v12 03/28] riscv: zicfiss / zicfilp enumeration
+Message-ID: <Z_aHnj2-8OlcRuHd@debug.ba.rivosinc.com>
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-3-e51202b53138@rivosinc.com>
+ <cc314da6-8755-4037-846b-01a20b3c68e1@ghiti.fr>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000010:EE_|PH7PR12MB5619:EE_
-X-MS-Office365-Filtering-Correlation-Id: f315ddcf-5b72-41a9-4a76-08dd7774ccbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?MVPVb601NDBacU122iYozPOSAx6wPSKKcnjnNqXRlbE6WnMbpi6Sb2dJx3DS?=
- =?us-ascii?Q?BMxvExklK1qkyZNTj/ijn8n/6qEC1VAIi7OPwEYtr4YKQxK86XgheZ99Wrwd?=
- =?us-ascii?Q?SdzxXDH7H4AQgdPU+3PvEhjKIB4CcvhS11dxJraSupBueU5ICn/RayFSKvL7?=
- =?us-ascii?Q?/HNomfvu1s4ZUj+r8HPmmDzn9eeR/HfCYUghyoeIz9g2V0pNtbI0g0ueW4fL?=
- =?us-ascii?Q?nlVqMxHh1a8GxRQvljxPRpBWyZJxArPehDeqcKM1GHN9v3E2JEHHKvcpaVMf?=
- =?us-ascii?Q?0aPGcfRli1fKCVj7HZ4gt8KplRPanDGoZKVLEBLbr/WcBl8vDPw+GIlPW59x?=
- =?us-ascii?Q?rZ5D2saI/D41P+ZFwLK+XsCIl6QIhN0bPUx7+84sDnaxqim0HB5paV8Gm7dg?=
- =?us-ascii?Q?jQ4pxhOsNYjxLQCV26jxzR4nTrqP3iMo/7Iq429lIOaUpvwKyp6pviDNCHd/?=
- =?us-ascii?Q?yzBe1Ya/MLO/23pKSFzEgqPzGn+MoDppJRNtv2dgGDvktg1ONNj6VyL7Cic+?=
- =?us-ascii?Q?QqCvGeNMxP1eW5PYDAhmzlNfmOpNWmRT5shI8wsrHbjnWk0C5/EjQz7s3Zff?=
- =?us-ascii?Q?yMLl8H5vg11OhWwnAL1iUiOeatIyrPG074DPZrVO+XCbCVzaKaQtkBXUcR6S?=
- =?us-ascii?Q?+Sx0Ar8rpSSBEtGm4dxPCthA/kBpJ3b7mPlQIgaNhAeTnVS1b620CGZeN3fe?=
- =?us-ascii?Q?Sw41BaEAbGeTXyOVjngAjVnZMSj1HJa9nEvvMNRFFcPmgxApheYYyDa+sj/d?=
- =?us-ascii?Q?2cr1stjCXO3eLptqsuRCNO4B5Lkkx8fWsiT0F7NcdYlTBPbvXqsx8jkZoXew?=
- =?us-ascii?Q?BTVZDO8M3q3MzLT6wAPNsBMGINYxNUE+wiBKwo9AdrdmOaCEYKLGncHCz1+u?=
- =?us-ascii?Q?Oru+5UJyftfM/nmG9NrJ6tVYJgcI5Km3bE3SAt5UgBrm35GnvG2ih9aXPtxk?=
- =?us-ascii?Q?3nH6cGzDjIySq3bcXYRVYTltAdV6VnxVVlWUz6wtLgbY617piFzX9vn8+n7/?=
- =?us-ascii?Q?WuQ11BNnaepFY3w83dspiQXQBt0+oZW4qIh1+Dp4uI8W6VXM5T/Zi4vRwdDT?=
- =?us-ascii?Q?NElT41B4SiO0BYwWWa24aPevkqVTibtqXeP+Kj7I0bpawAunnanwe0LE7I3J?=
- =?us-ascii?Q?+UdBSIA98+Dmg67Z+7EA6GQEg3PF1/QH+E8CYw2oIXFn+GevtZ/Jxk8RMOKr?=
- =?us-ascii?Q?rG8vVE+qJUlz+lrwqQmj/oZ4665cz2n2RWgfuHPDB5h5u/ktWcymqMYqDdc1?=
- =?us-ascii?Q?NZNvbuEwDsIbAHXTFYF+bMoQHagGlAe8abmQ1vTd0MV7bJgM0vAswcZw5yUu?=
- =?us-ascii?Q?GE5EKBz1uUd0qknP3wOEpXfV/DzzNVTNO+HI47MzldZXNJAnXN0noladYjlA?=
- =?us-ascii?Q?vX/kpPDHJ5tx9Qm9nvAEBPuPSxbexOgvgON13rLOHz4PdLha+RwfxxUb/k4M?=
- =?us-ascii?Q?wFlyiI55G6Zqkzc+2y2WXTtHWIND9yhiHMfzE5Y7TsojAh6Hil7t0Q=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:48.9850
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f315ddcf-5b72-41a9-4a76-08dd7774ccbe
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF00000010.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5619
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <cc314da6-8755-4037-846b-01a20b3c68e1@ghiti.fr>
 
-Refactor the bonding ipsec offload operations to fix a number of
-long-standing control plane races between state migration and user
-deletion and a few other issues.
+On Mon, Apr 07, 2025 at 05:48:27PM +0200, Alexandre Ghiti wrote:
+>
+>On 14/03/2025 22:39, Deepak Gupta wrote:
+>>This patch adds support for detecting zicfiss and zicfilp. zicfiss and
+>>zicfilp stands for unprivleged integer spec extension for shadow stack
+>>and branch tracking on indirect branches, respectively.
+>>
+>>This patch looks for zicfiss and zicfilp in device tree and accordinlgy
+>>lights up bit in cpu feature bitmap. Furthermore this patch adds detection
+>>utility functions to return whether shadow stack or landing pads are
+>>supported by cpu.
+>>
+>>Reviewed-by: Zong Li <zong.li@sifive.com>
+>>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>>---
+>>  arch/riscv/include/asm/cpufeature.h | 13 +++++++++++++
+>>  arch/riscv/include/asm/hwcap.h      |  2 ++
+>>  arch/riscv/include/asm/processor.h  |  1 +
+>>  arch/riscv/kernel/cpufeature.c      | 13 +++++++++++++
+>>  4 files changed, 29 insertions(+)
+>>
+>>diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
+>>index 569140d6e639..69007b8100ca 100644
+>>--- a/arch/riscv/include/asm/cpufeature.h
+>>+++ b/arch/riscv/include/asm/cpufeature.h
+>>@@ -12,6 +12,7 @@
+>>  #include <linux/kconfig.h>
+>>  #include <linux/percpu-defs.h>
+>>  #include <linux/threads.h>
+>>+#include <linux/smp.h>
+>>  #include <asm/hwcap.h>
+>>  #include <asm/cpufeature-macros.h>
+>>@@ -137,4 +138,16 @@ static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, const unsi
+>>  	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+>>  }
+>>+static inline bool cpu_supports_shadow_stack(void)
+>>+{
+>>+	return (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
+>>+		riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICFISS));
+>
+>
+>I would use riscv_has_extension_unlikely() instead of the cpu specific 
+>variant, that would remove the need for #include <linux/smp.h>. Unless 
+>you have a good reason to do that?
 
-xfrm state deletion can happen concurrently with
-bond_change_active_slave() operation. This manifests itself as a
-bond_ipsec_del_sa() call with x->lock held, followed by a
-bond_ipsec_free_sa() a bit later from a wq. The alternate path of
-these calls coming from xfrm_dev_state_flush() can't happen, as that
-needs the RTNL lock and bond_change_active_slave() already holds it.
 
-1. bond_ipsec_del_sa_all() might call xdo_dev_state_delete() a second
-   time on an xfrm state that was concurrently killed. This is bad.
-2. bond_ipsec_add_sa_all() can add a state on the new device, but
-   pending bond_ipsec_free_sa() calls from the old device will then hit
-   the WARN_ON() and then, worse, call xdo_dev_state_free() on the new
-   device without a corresponding xdo_dev_state_delete().
-3. Resolve a sleeping in atomic context introduced by the mentioned
-   "Fixes" commit.
+No I dont remember the reason. I'll fix it.
+When I am fixing it, and happpen to remember the reason.
+I'll post it.
 
-bond_ipsec_del_sa_all() and bond_ipsec_add_sa_all() now acquire x->lock
-and check for x->km.state to help with problems 1 and 2. And since
-xso.real_dev is now a private pointer managed by the bonding driver in
-xfrm state, make better use of it to fully fix problems 1 and 2. In
-bond_ipsec_del_sa_all(), set xso.real_dev to NULL while holding both the
-mutex and x->lock, which makes sure that neither bond_ipsec_del_sa() nor
-bond_ipsec_free_sa() could run concurrently.
-
-Fix problem 3 by moving the list cleanup (which requires the mutex) from
-bond_ipsec_del_sa() (called from atomic context) to bond_ipsec_free_sa()
-
-Finally, simplify bond_ipsec_del_sa() and bond_ipsec_free_sa() by using
-xso->real_dev directly, since it's now protected by locks and can be
-trusted to always reflect the offload device.
-
-Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/net/bonding/bond_main.c | 76 ++++++++++++++++-----------------
- 1 file changed, 36 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 14f7c9712ad4..78e1d5274a45 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -545,7 +545,20 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
- 			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
- 			continue;
- 		}
-+
-+		spin_lock_bh(&ipsec->xs->lock);
-+		/* xs might have been killed by the user during the migration
-+		 * to the new dev, but bond_ipsec_del_sa() should have done
-+		 * nothing, as xso.real_dev is NULL.
-+		 * Delete it from the device we just added it to. The pending
-+		 * bond_ipsec_free_sa() call will do the rest of the cleanup.
-+		 */
-+		if (ipsec->xs->km.state == XFRM_STATE_DEAD &&
-+		    real_dev->xfrmdev_ops->xdo_dev_state_delete)
-+			real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
-+								    ipsec->xs);
- 		ipsec->xs->xso.real_dev = real_dev;
-+		spin_unlock_bh(&ipsec->xs->lock);
- 	}
- out:
- 	mutex_unlock(&bond->ipsec_lock);
-@@ -560,48 +573,26 @@ static void bond_ipsec_del_sa(struct net_device *bond_dev,
- 			      struct xfrm_state *xs)
- {
- 	struct net_device *real_dev;
--	netdevice_tracker tracker;
--	struct bond_ipsec *ipsec;
- 	struct bonding *bond;
--	struct slave *slave;
- 
- 	if (!bond_dev)
- 		return;
- 
--	rcu_read_lock();
- 	bond = netdev_priv(bond_dev);
--	slave = rcu_dereference(bond->curr_active_slave);
--	real_dev = slave ? slave->dev : NULL;
--	netdev_hold(real_dev, &tracker, GFP_ATOMIC);
--	rcu_read_unlock();
--
--	if (!slave)
--		goto out;
- 
- 	if (!xs->xso.real_dev)
--		goto out;
-+		return;
- 
--	WARN_ON(xs->xso.real_dev != real_dev);
-+	real_dev = xs->xso.real_dev;
- 
- 	if (!real_dev->xfrmdev_ops ||
- 	    !real_dev->xfrmdev_ops->xdo_dev_state_delete ||
- 	    netif_is_bond_master(real_dev)) {
- 		slave_warn(bond_dev, real_dev, "%s: no slave xdo_dev_state_delete\n", __func__);
--		goto out;
-+		return;
- 	}
- 
- 	real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev, xs);
--out:
--	netdev_put(real_dev, &tracker);
--	mutex_lock(&bond->ipsec_lock);
--	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
--		if (ipsec->xs == xs) {
--			list_del(&ipsec->list);
--			kfree(ipsec);
--			break;
--		}
--	}
--	mutex_unlock(&bond->ipsec_lock);
- }
- 
- static void bond_ipsec_del_sa_all(struct bonding *bond)
-@@ -629,9 +620,15 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
- 				   __func__);
- 			continue;
- 		}
-+
-+		spin_lock_bh(&ipsec->xs->lock);
- 		ipsec->xs->xso.real_dev = NULL;
--		real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
--							    ipsec->xs);
-+		/* Don't double delete states killed by the user. */
-+		if (ipsec->xs->km.state != XFRM_STATE_DEAD)
-+			real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
-+								    ipsec->xs);
-+		spin_unlock_bh(&ipsec->xs->lock);
-+
- 		if (real_dev->xfrmdev_ops->xdo_dev_state_free)
- 			real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev,
- 								  ipsec->xs);
-@@ -643,34 +640,33 @@ static void bond_ipsec_free_sa(struct net_device *bond_dev,
- 			       struct xfrm_state *xs)
- {
- 	struct net_device *real_dev;
--	netdevice_tracker tracker;
-+	struct bond_ipsec *ipsec;
- 	struct bonding *bond;
--	struct slave *slave;
- 
- 	if (!bond_dev)
- 		return;
- 
--	rcu_read_lock();
- 	bond = netdev_priv(bond_dev);
--	slave = rcu_dereference(bond->curr_active_slave);
--	real_dev = slave ? slave->dev : NULL;
--	netdev_hold(real_dev, &tracker, GFP_ATOMIC);
--	rcu_read_unlock();
--
--	if (!slave)
--		goto out;
- 
-+	mutex_lock(&bond->ipsec_lock);
- 	if (!xs->xso.real_dev)
- 		goto out;
- 
--	WARN_ON(xs->xso.real_dev != real_dev);
-+	real_dev = xs->xso.real_dev;
- 
- 	xs->xso.real_dev = NULL;
--	if (real_dev && real_dev->xfrmdev_ops &&
-+	if (real_dev->xfrmdev_ops &&
- 	    real_dev->xfrmdev_ops->xdo_dev_state_free)
- 		real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev, xs);
- out:
--	netdev_put(real_dev, &tracker);
-+	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
-+		if (ipsec->xs == xs) {
-+			list_del(&ipsec->list);
-+			kfree(ipsec);
-+			break;
-+		}
-+	}
-+	mutex_unlock(&bond->ipsec_lock);
- }
- 
- /**
--- 
-2.45.0
-
+>
+>
+>>+}
+>>+
+>>+static inline bool cpu_supports_indirect_br_lp_instr(void)
+>>+{
+>>+	return (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
+>>+		riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICFILP));
+>>+}
+>>+
+>>  #endif
+>>diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+>>index 869da082252a..2dc4232bdb3e 100644
+>>--- a/arch/riscv/include/asm/hwcap.h
+>>+++ b/arch/riscv/include/asm/hwcap.h
+>>@@ -100,6 +100,8 @@
+>>  #define RISCV_ISA_EXT_ZICCRSE		91
+>>  #define RISCV_ISA_EXT_SVADE		92
+>>  #define RISCV_ISA_EXT_SVADU		93
+>>+#define RISCV_ISA_EXT_ZICFILP		94
+>>+#define RISCV_ISA_EXT_ZICFISS		95
+>>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
+>>diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+>>index 5f56eb9d114a..e3aba3336e63 100644
+>>--- a/arch/riscv/include/asm/processor.h
+>>+++ b/arch/riscv/include/asm/processor.h
+>>@@ -13,6 +13,7 @@
+>>  #include <vdso/processor.h>
+>>  #include <asm/ptrace.h>
+>>+#include <asm/hwcap.h>
+>>  #define arch_get_mmap_end(addr, len, flags)			\
+>>  ({								\
+>>diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+>>index c6ba750536c3..82065cc55822 100644
+>>--- a/arch/riscv/kernel/cpufeature.c
+>>+++ b/arch/riscv/kernel/cpufeature.c
+>>@@ -150,6 +150,15 @@ static int riscv_ext_svadu_validate(const struct riscv_isa_ext_data *data,
+>>  	return 0;
+>>  }
+>>+static int riscv_cfi_validate(const struct riscv_isa_ext_data *data,
+>>+			      const unsigned long *isa_bitmap)
+>>+{
+>>+	if (!IS_ENABLED(CONFIG_RISCV_USER_CFI))
+>>+		return -EINVAL;
+>>+
+>>+	return 0;
+>>+}
+>>+
+>>  static const unsigned int riscv_zk_bundled_exts[] = {
+>>  	RISCV_ISA_EXT_ZBKB,
+>>  	RISCV_ISA_EXT_ZBKC,
+>>@@ -333,6 +342,10 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>>  	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicboz, RISCV_ISA_EXT_ZICBOZ, riscv_xlinuxenvcfg_exts,
+>>  					  riscv_ext_zicboz_validate),
+>>  	__RISCV_ISA_EXT_DATA(ziccrse, RISCV_ISA_EXT_ZICCRSE),
+>>+	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfilp, RISCV_ISA_EXT_ZICFILP, riscv_xlinuxenvcfg_exts,
+>>+					  riscv_cfi_validate),
+>>+	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfiss, RISCV_ISA_EXT_ZICFISS, riscv_xlinuxenvcfg_exts,
+>>+					  riscv_cfi_validate),
+>>  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+>>  	__RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
+>>  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+>>
+>
+>With the above comment fixed, you can add:
+>
+>Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>
+>Thanks,
+>
+>Alex
+>
 
