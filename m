@@ -1,202 +1,326 @@
-Return-Path: <linux-kselftest+bounces-30414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABCDEA82738
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:10:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA7CA82796
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:20:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A46E3BC956
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:08:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70DDA188E289
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC5F25B66B;
-	Wed,  9 Apr 2025 14:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F3D26656D;
+	Wed,  9 Apr 2025 14:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mfck8g5V"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hBqsiEd6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D802192F5;
-	Wed,  9 Apr 2025 14:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744207691; cv=fail; b=inJXcOZ+p3V7wxHXqLd1OmklIVeQoPihkO5gDgav+pH4oeRPTUxfPZjFm5TFEV+CH9MMbAsqlPi9XkU9P5fE8munr1ow2bddXq/bHYsv3rEdzKYyVKzJ5rlUYtv+WTbced+CfurFUioCzOKsACUHyuwbWGb9ld7HsT0iBmVGCvA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744207691; c=relaxed/simple;
-	bh=XhT82ssLFVnG55gEHCQKnroXNdcKrbPQrYCdXUHk0Gs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=knrlBJdK3O2vTZQ3bUQnn96R4rq5o/jYZxiynL0BuRAOl+uE9uKpuoEXo4JBBF+ClAjEUGmumWz3Ybbt90/dSSjVRC0pcjt2+ap52exu7MEQV0U6aB6LhnsIoRZiyTiE5escf3gmjSUWqOtfMhcR6hDpMLoT5Eocy9HgzSDy1BE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mfck8g5V; arc=fail smtp.client-ip=40.107.93.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rvx5p0t4W7IjJAb3qEj3mbGUbQovIhVDboliXbw308QS9MtD/m4+weJ/OX5qsk6Ab398GKq3+M0jFzzSb0bHWww0XSNxqylza6/oUA61zBMtiryXF2NSICHNsu5/A2PBkuwI55U/qC0T3stuHO0WFXkOagmP6071mGac9p3cWLTE57v1j+uss1MbcPpCYsqSnhWLRdPHcIpWzX4MjKZ9hHIBXTzKAkqNswoLupvG9dDcTNzlzcjWNS07wei3TcXz7yCt4N9Tf7jWxHJ8TosXg8F5mGLI7Th0E3HZlqZdUQhOZ4RzUdXomTBLJoLHZ/Ydj/I62/2MSVrpUOT0iqwauw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XhT82ssLFVnG55gEHCQKnroXNdcKrbPQrYCdXUHk0Gs=;
- b=YdyOFmFWc14wmcyHpJYXcPcFAEE9xcCUMFiZmiXspDPiRE0JbGrVnRHJNO/BBu6LbMS9LqXqVYB0MBTPemmjvE+3zdsdMVOukhlcx/43tbua5CGZ6sr2FqcAjNhEmSGD4ZI3rOlHGsl6XTRIFAMCDTqbEWWmRXfkaBo+IqZ1koQDkzZ5CUUqKM95wyQ21NPE2fAQ8s49DsT3mD5Fsrzky0HGcgmMOplhjv4ATHDY7ztMMJaReXRbmkiQgY9jP/iw9HpywkbWrSJl1WpmAGo1p/Y3jwobidC/rjgDojAW8QEwcZSV48COLq8iylWdHhigw6acjyxO1nj3Kkeml4Stsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XhT82ssLFVnG55gEHCQKnroXNdcKrbPQrYCdXUHk0Gs=;
- b=mfck8g5VGtBIKOQXsIqM4dk61I4A6ZZDoUdbyNPcIc3xLil/oZ5VgArS8SefJQXNtdnRAZubbEF97Y0p5StlaZENW59uUvdSOKnUB19L0Tj6jwgM+I74boqSTwyBarEYIk9qKC+bH+2PCNE9GOiVuCU/cGNWR7WKaspe325HqRR95DU9SSYh7B1+wMlkkTyyoo39XjkxH/GZ70lrJaKQoTMKZ51jSFbplOYwpff/g59r4oqFCZHl4rFjFMSPvtyFIy4jNleqqOlqxZ6tgPbW03/qKgpEsVpiLambTuT9WM8nKiMxsCfAti6NPPk+fNPmnzKv8i4R9NuYz179gZ3J5g==
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com (2603:10b6:8:d0::22) by
- DM4PR12MB5722.namprd12.prod.outlook.com (2603:10b6:8:5d::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8606.32; Wed, 9 Apr 2025 14:08:07 +0000
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af]) by DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af%2]) with mapi id 15.20.8606.029; Wed, 9 Apr 2025
- 14:08:06 +0000
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: "kuba@kernel.org" <kuba@kernel.org>
-CC: "anthony.l.nguyen@intel.com" <anthony.l.nguyen@intel.com>,
-	"bbhushan2@marvell.com" <bbhushan2@marvell.com>, "andrew+netdev@lunn.ch"
-	<andrew+netdev@lunn.ch>, "hkelam@marvell.com" <hkelam@marvell.com>,
-	"davem@davemloft.net" <davem@davemloft.net>, "jv@jvosburgh.net"
-	<jv@jvosburgh.net>, "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-	"razor@blackwall.org" <razor@blackwall.org>, "pabeni@redhat.com"
-	<pabeni@redhat.com>, "edumazet@google.com" <edumazet@google.com>, Leon
- Romanovsky <leonro@nvidia.com>, "herbert@gondor.apana.org.au"
-	<herbert@gondor.apana.org.au>, "ayush.sawal@chelsio.com"
-	<ayush.sawal@chelsio.com>, Jianbo Liu <jianbol@nvidia.com>,
-	"sbhatta@marvell.com" <sbhatta@marvell.com>, "horms@kernel.org"
-	<horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Saeed Mahameed
-	<saeedm@nvidia.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
-	"gakula@marvell.com" <gakula@marvell.com>, "przemyslaw.kitszel@intel.com"
-	<przemyslaw.kitszel@intel.com>, "louis.peens@corigine.com"
-	<louis.peens@corigine.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "sgoutham@marvell.com"
-	<sgoutham@marvell.com>
-Subject: Re: [PATCH net-next 4/6] xfrm: Add explicit dev to
- .xdo_dev_state_{add,delete,free}
-Thread-Topic: [PATCH net-next 4/6] xfrm: Add explicit dev to
- .xdo_dev_state_{add,delete,free}
-Thread-Index: AQHbp8ImMva/0ZVCKU2LL1YZnGGyLrOaakAAgAD31QA=
-Date: Wed, 9 Apr 2025 14:08:06 +0000
-Message-ID: <27d4f2c097419656dafd02b8e36c9ab2d4ccc3d7.camel@nvidia.com>
-References: <20250407133542.2668491-1-cratiu@nvidia.com>
-	 <20250407133542.2668491-5-cratiu@nvidia.com>
-	 <20250408162058.36a44055@kernel.org>
-In-Reply-To: <20250408162058.36a44055@kernel.org>
-Reply-To: Cosmin Ratiu <cratiu@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR12MB6560:EE_|DM4PR12MB5722:EE_
-x-ms-office365-filtering-correlation-id: 2705fc7e-4eeb-4a0b-bf7c-08dd776ff331
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|7416014|376014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?QlpFSkxwTG43bEJRb1BGTEZzVXpjZFhJNzVTbHNNOWlhQWZNNSs5cjlFUW1z?=
- =?utf-8?B?SFNHSGtLK08yMUZqSjljNTcvbHo2Z05ESnorOFB4UElHeGgyMTlPRmM1QzV6?=
- =?utf-8?B?NjRGN3Q3MjcwbEZCVURvS3BzOXpjekRkRm1QOEsrVG9tdFIzZnFvMnZxS3c0?=
- =?utf-8?B?Y1ExQ01ITGRmMDZKd3VZZXM0OW1VNHJjUGJwdEdLSnYxUDJCb3Z0K1BjNTVa?=
- =?utf-8?B?VFczVUJxNGRweDRPZWtpa25HYy9tRnJKSHdaNWxaSis5OE8rMytsL0RaNDJW?=
- =?utf-8?B?ZlgrY2h1RTZ0Q1NYRnVZSTZPN2wxWFlqMGl4dFAwL2VvMGJxMCtHeFN0Vk1S?=
- =?utf-8?B?bkpXdFVLVmRGakRaRUtIZXJ4V0p0UG9uT3NvcUtYaXkya0Z5RXVydjB5YnhT?=
- =?utf-8?B?RjVXYVArazlJbjlFYVE1NHVxa1J4aU5tcWNGcVo3Kzcvdm1ZQjNFdUFaeDMw?=
- =?utf-8?B?SmsvSkJxSnNKV3BSdlhCUUpPL09kUWZUN002Y2dOL3Z3Y0J6TVdUSnBBa3E0?=
- =?utf-8?B?ZlVKZUc1NndCOWd3c3lJdjdvRmg2dG9yQURSL1c3STg5NTJGS3FvV0NRVWZl?=
- =?utf-8?B?N2JjWUxTd0F6bzlIRUxnOTFrcVg2VEVSQkY5bTFQVnY2YnBTaUZGWlZxVC85?=
- =?utf-8?B?WTFhZ09mL3hmMXdEWVFXeEk4M0pFRU5BV2x0U2M0S1V3ckxGSnhZL2NodEoz?=
- =?utf-8?B?RDVWUGo3cXpFb3JibFBoWEFnSXRoWURXNEgzVnJTL2lYMHhMSEYvM1hIVE9S?=
- =?utf-8?B?Qy84T3VJV2xhbC9NVGlFdXFDVDRZSGhON09RQkhac05ndmhPT0ZyNzBwenY4?=
- =?utf-8?B?ekV6ZXBPTzQ0QWM1aHJkbUpPdHN4dWhMTk1XMldyQUJyVmZuQTlSZ085REg0?=
- =?utf-8?B?VG5DK1hRWEFzRkNxMDhpYWdiOHd4STNjOVNXVXhnV0l2YU1rSzR5a2dTWHRH?=
- =?utf-8?B?d3JrSWpxVlZ6aGhaaHc3UWdQTFN6bDgvbnlIRUJNazRpSmRuZExDL1d2RGJG?=
- =?utf-8?B?cXJQbHlIbkpKNDBlcEJoc1JYcGFFQ1BkRDJZS2Q3d2loM2FhV0dnbEdsNERl?=
- =?utf-8?B?ZzA1SFc1NWw4c1Fqc1ZnMjNHaXFncmEwWGpwdmpWYnZOdWpWcEp5TFhFWmh1?=
- =?utf-8?B?OUQ5RTgxRFZpN3FWbWk4WkhJT0JzcTd5WlZhd2pEOGs5MFVFOUVPVzFPMWdR?=
- =?utf-8?B?WURCQXQvNlBFU1crWmpDWDI2N0xmNDhvMWRNWjRNTUpOYU5yRDBNcjR0allV?=
- =?utf-8?B?cEhIcUJac0ZVM1ZXTHFiWjF3dlBSLzhndjNmNTFQb1lRMGVoeDlBR2ZIU24w?=
- =?utf-8?B?azRvQXFndk5GbWFSV1c1dXp1QVh5NjRobjhjcXJTc1JGMjVMWE03ZTZ6SmdK?=
- =?utf-8?B?dVUwS2VPdklKaThFK3FoaFZFVndaTkZSTmZDQVYyRWJ3em9ZRzU5TktTUVhR?=
- =?utf-8?B?Y3JpdG1aam5XRUVTa1gxdmFWcWo4TVZzZVZFdThsL3loYXplVkZEMDlYSGNj?=
- =?utf-8?B?MXltYnY4S0RsRk1pMldxdndIZzFFSzM2bXpsK25EK20rVG9xdG1odEhOdFVG?=
- =?utf-8?B?RWliQU5GZTlkRjA1NlkrZURQRlQwd0NKYlFiY0dlcE01ZnJRWmRPYW9LbHo0?=
- =?utf-8?B?dXFxbTVvODg0TjR3OEVrdEd5SzUvcm5QS0pEdTNyTXlwbUJWeVhpcDUyY0xO?=
- =?utf-8?B?SFJFdXlheEtBdzZGaHBicEwvMnFFRnBMcTJZc2FMWDBVbkJaKy81VWUrbFhB?=
- =?utf-8?B?RUxPY2xuTVdZdThMbjBoVUp6WEQ4TnNmQmNTMVRnUjZjUmR3VTlkTmloOTBo?=
- =?utf-8?B?TVN2am01NUxmMEQ0anQrdDhrMG5lWlFyNEh3NmtmMnhXUjlMWGRaM2ZBSlZy?=
- =?utf-8?B?VFJyZ3JlWWtSdS8wVmdUMDd4ekQ2bEszcnBHeVpSM2RId05ONGcxQkRIVjRU?=
- =?utf-8?B?d01BMVhDZ3padUlIN2lDcUU4ZG42NkVsd0dDTTFJTVIxd2w5Nks3WHk1cUVJ?=
- =?utf-8?B?SFM2ZU1hUjRRPT0=?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6560.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?WVcrOGxEWXBWb3dNNEpCVi9xQU9NZTZQWGpjUllSUDRTUEhuWjJYUFduUk1Y?=
- =?utf-8?B?R1lvYXFubU9NbFNtd2d1bzhjM2FVUlJhS3RDN3g2ejRUdnp2YzNldzdxOG1Z?=
- =?utf-8?B?YTRJek55WVRyTmhVRjlIcCtDVXhFRnFLWWhGR3VyVnNuN1ZpQXlTSE5zWUhL?=
- =?utf-8?B?UWI5MDRXY1pOa21XU0U1VERMZE94Mjh0V2hiR2JaaksrU2xucUxWcjEvTlA5?=
- =?utf-8?B?QXlLNUNYM3M1QWF4MzEyTVJvSE1aaWVhMDR4L0hERTh6R0sxeXVpc0c5Mk5l?=
- =?utf-8?B?ODVEZ2pKSmtLcjV0aEFYZ0pBam5BUys5VnZTK0xQQ3Q2MnI2ODVyc1pxL2R2?=
- =?utf-8?B?MjhRRks5dkp2Z2p1V0Y4Nm93MHBxb1dHZ083Yk1qKzZFcWlPak13SmpWbGRw?=
- =?utf-8?B?ZDcwczdhYWhCUzE2L3BoUWhGT01LTXkySHB2RXlBbERla0VCUzYvV0FSdHU5?=
- =?utf-8?B?d1dRUDUxTU9nVng3am5tWDNRNnNtdjZNaFBnMXdtUm9Ydys4RmZBWnNXbXVY?=
- =?utf-8?B?NUxjeXhEQlZlb3QzZFFvYmtkdHg5d1lzd2RKTk5nWXJRS1U2U01PY3dxZVJU?=
- =?utf-8?B?aGdTSFNablkxL3hDV1lrUDlaMFI0ZG9pUFFyUndwaGFuNVMwQUI1UDAyVlc3?=
- =?utf-8?B?VXpQanlUM3kyUEptcXkvZkNlbHlCTitrZEE1cjBWeUdXUWVCcVdJdDFxaDRy?=
- =?utf-8?B?NTU1VGtPS2FNOWg2YTRGaFk4RFMvRWx4L0xMdG10UnczRlNGdzREL2RUV3FX?=
- =?utf-8?B?WmhWZGJIcTlBQnpaQ3ZIQmtUNmJBOHVMQkZCSXFsUkNMcHhEK3dZT1d2QUVy?=
- =?utf-8?B?d1FsN0Vjdm0vcDN2eGRNaVRGWEo0OFlVbXJ5dlBNb2g4R2k0WFFRQ0ZPRklU?=
- =?utf-8?B?bkRpNVBmUWZ0bkJFZ2RHS0IzSnBSN3IzTEpIVlVvekwrRXFEQitBVGhxVTFS?=
- =?utf-8?B?NUlxWE1lM0RVcUVoaWhMNXdYQWZiSnZXTFZmRXJ5MTEwQjN0cEh5NXJrcE94?=
- =?utf-8?B?TlRKZHhVQVNsbkxGNk5wYncvZUtoUlg3STJyS1FWNk1nZWtWVUd4V3NPN0xI?=
- =?utf-8?B?VVdrdFdyaExCODhVd1VFc0JYMWhnNENQYUJYWkwyelpBYW8vSGxlYjFCRVJX?=
- =?utf-8?B?aGI2ZUIwU1hxL0YrRWk2bUg4M2VrVEVyRkUzQWdnNkdlYTlNMTdmdlBCU25v?=
- =?utf-8?B?bm9WQit5dG45NmwydU1MZ0FVNUlWMGNIUzlWOUtsanIxa3VEaVJLYndDbzlm?=
- =?utf-8?B?VzdqWFNib1ovWW42cm9YKy95YmtYbm5KMWJaaHBHYzBBa0V6dTJnSWVORG1P?=
- =?utf-8?B?dU56SjVIOWM2OTIzWjhTL1N5Q0V4eEgwaVNjWDJrM0V0ZFdLcVhQbGkzODdu?=
- =?utf-8?B?VnFyZGJIN3drWVJ3Wkpmd25qN1dRUGRMdWQ4QW1iUGRWZ3JQbHdwWk5jMkdy?=
- =?utf-8?B?aWhWbWp5L0dpM0JJUlVFbjRETWxBQXRGeWMyb2RjckdMZGZOdzF6YXUrbjlZ?=
- =?utf-8?B?UXVadkZCZ1VxWEZXZjlOWkRtUGhlNGovK1lNeVNreTBwMDVaRi9MNjFzWjBE?=
- =?utf-8?B?Wm1NcGQ1ZFVjdkk2UDJGVE1tWHRRZWd6YzdYMjJ5bzFBdk94ejZRcVh3QW1G?=
- =?utf-8?B?QXpXWURGSE1lQVMzYnc0U0h5UkJvYy9DengxaFZ2QWh0aG56bjJTZ3pTMzI5?=
- =?utf-8?B?cUxRSnBlTmZWRzdCNzJxNTQ4ckU1ay9pODhQWW9RemVreGVHZ3NWUXc1TWV3?=
- =?utf-8?B?S2pIQndNT3JQVk1jSU00QWY2TldhL0wwVGc0a1BXS2hIeFhUclR0NVo3UGVR?=
- =?utf-8?B?Mk5nblFXRGk5QlMxcU9qelAvZWtyUkZab3FFY0c1UmdpV0FLSXZBMEJWbXc1?=
- =?utf-8?B?WnkvcDRDWFRCQksyM2RzUGZzSnhNZmNjS2ZWcm5pbG9mdnVzYnBOZGEyaVVh?=
- =?utf-8?B?ckx4M3RleWpzeDJLUlF5MDZ4ekRwWVRsdGMveG0reC8vTDBPUnRVSmxadXgx?=
- =?utf-8?B?Z09aUnQwWllXVy9lTmZwNUdPQldOZVZUeG5NUXdvVUQ0QXk5OTBlaTBaa2wv?=
- =?utf-8?B?WUZSWUt1MEFhYXRrSGtvWGdzWkxoRFEza01YWE12K2d3U3llalNVYnUxSlVP?=
- =?utf-8?Q?SIxcfcqgiYH1X+2GufmTwWIQB?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7ADBE766C2FF9D46AC5C20712B6188A6@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270FA265CDD
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Apr 2025 14:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744208376; cv=none; b=Oef4Q4tmAuPErsGi/10jdRATNEyGDhIuK4QurrdAxKxOzzjMCu47Bah7paYekhjDUP55+c+LE3PCDEXGzi0ncH9jpWCWeyLdJbwV0LXEvuAmKmJFd2zkyHYd+LYKGXrctn9COJjHELF4n0c0wwgDL0iHC5H4g35DW/2msjNKCI0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744208376; c=relaxed/simple;
+	bh=OOjJOvnWzYhl5ueHhGfrtSt26gt/470fHuPjWSU/0Ok=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rAHFC3btAcbiLJIxJvRSgwJAniNlRRZ12FDpZIQ+4jdKt2IwKqmJqi5HpIDczD70+FCOgTVtCqko3rh7YKrmviU5CwQSXaWJ7wPU2c7QSYj0A0qcru+uu2IO7H5D+dtqrIsD3njcPJo0oshFbCalp+H2qRn6rJXXIhYzUSPvdVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hBqsiEd6; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-227cf12df27so7194865ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Apr 2025 07:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744208372; x=1744813172; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oOgTt3TJCCtZC0mLU59SS0hlKxJUYGJ18JNxrJvKvcQ=;
+        b=hBqsiEd6SoXe8PkOCerS5pqc/AVlx/Dh87oGF7jZnFAoNhMxOGPYCu88LoezMoVqGQ
+         UQbwbrh54R3Gay9oGopM3IutE5OGcDx/LzRPxZ293p3rwOtTb0dZx8wDW34uYt/c807s
+         JabfoJNq6JlxpteaJM/TvaDJ7ofWVeSVXx+lNK+TV0edvdvkWHklkxKkcWH0nDauEinE
+         VURbnCyFGRFPiswvTFVBBAC48qHWkO6xkb5Jmt+ayw2GWxF9mvKbn8c73EIQXfKer67x
+         IebGxmtKEQHW3bVVzvjNTSUNQhbjQYoLDRgPE61YJJb2rWfejsPCV0w7yuG1B8Zu2hWX
+         nHPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744208372; x=1744813172;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOgTt3TJCCtZC0mLU59SS0hlKxJUYGJ18JNxrJvKvcQ=;
+        b=FBFL4QD6VfqWkQAzyl5qQbXgkdhO3vyLpm7jg12AD1F76mXL32mha/arBR/iBkD97r
+         DGOqIzQUEdyS7zQktLUbm+7RNUfkJVHIz8fFJVDjgQHhl3cMMnmcmuslYp9P6cJrDFZf
+         fpTcdtnl1AIxHlIx1r5NoRc/LckX1wj5hkj41zYyVKWvbJcQCeurHumoSEhLpzrrT0F6
+         6WzgriZZz4+h0gN7YlTUaYBBPl895vTeoKVK7qL250nuGfZDewItVppssmOJwpOxhu9/
+         NHnMwpXpK+mTSYK0w11verPSDjrhYqcIM2s7se0P45B/YQo6dewA6bELuZZsVXa4ycTl
+         C+mA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZp0/Wj5AycBesBcT5r15a9y7twwyclW+Q9xWiO3yO2KPIIa+9VyQYNKK8+zzZQyxVphSWutoV0XQjbjmhkhc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjObtwVCt79JyuEDMR1QJ3+RhrhfP4PUYbAoAtFdE4iXSZRCbn
+	VOpYR/IiY1S/DPJYDUcUrTonI1S8GOEBhikGs2Y64MmZBEKFwHdgZFpGVnbyncQ=
+X-Gm-Gg: ASbGncukMgrG6pBDEcfJetkkYRvIXO8KL4OL52c2AFybvwEArX0yR+4oq5d9NFvSMBN
+	WattzTWwp/5lYOHSlRk0EYDuUbAEwIDBDnnHGnayQEgECt+D2TSWpDjPCgRWvre4+qGS7a8z7GV
+	VKWpQc81K4wQBMCoj9NRp4rgoPFeMskygDfLol2q0PQb6sUHsNJjk0m3bqHjqzR2VXvD2SPZs9W
+	INBrF7KW/n8Op6txgTQEyUJeTJLmwbv7F6Sc4Zlgv4nkXQ085pGyozWrvYbH2UotFmoEvS4EMVu
+	TRpv0qNTsjrAj8B7FLSIvIm5nalxEPNwuf/TPtl0oAkog4iFvLc=
+X-Google-Smtp-Source: AGHT+IEahP8JSiSgxvTh2n1gKbLAyTu8vcSecPJE9+mInATF99BTGal5h90YFsqI5Wz0yhAcDuqM7w==
+X-Received: by 2002:a17:902:cec5:b0:215:a2f4:d4ab with SMTP id d9443c01a7336-22ac324879cmr39874945ad.7.1744208372199;
+        Wed, 09 Apr 2025 07:19:32 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7c97a1bsm12321045ad.148.2025.04.09.07.19.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 07:19:31 -0700 (PDT)
+Date: Wed, 9 Apr 2025 07:19:28 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Zong Li <zong.li@sifive.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v12 10/28] riscv/mm: Implement map_shadow_stack() syscall
+Message-ID: <Z_aB8EoaqccRz8tn@debug.ba.rivosinc.com>
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-10-e51202b53138@rivosinc.com>
+ <CANXhq0rpHMWvJhWNUKuiMvJZoqN5iTz7USmZYHff=se-+-H+3w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6560.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2705fc7e-4eeb-4a0b-bf7c-08dd776ff331
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2025 14:08:06.1115
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lhj1Vm8QMoSyj/flEYe73bY4/Buk9HdUKPhO/vYwsrlCbDIcUIcdT5ohmzfIuI/b+4A7K3tWDqe3IJoDEzhzbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5722
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANXhq0rpHMWvJhWNUKuiMvJZoqN5iTz7USmZYHff=se-+-H+3w@mail.gmail.com>
 
-T24gVHVlLCAyMDI1LTA0LTA4IGF0IDE2OjIwIC0wNzAwLCBKYWt1YiBLaWNpbnNraSB3cm90ZToN
-Cj4gbml0OiB5b3UgbWlzc2VkIGEgZmV3IGtkb2MgY2hhbmdlcyBpbiB0aGlzIHBhdGNoDQoNCkdv
-dCBpdCwgd2lsbCBhZGRyZXNzIGluIFYyLg0KDQpDb3NtaW4uDQo=
+On Mon, Apr 07, 2025 at 12:50:35PM +0800, Zong Li wrote:
+>On Sat, Mar 15, 2025 at 5:39 AM Deepak Gupta <debug@rivosinc.com> wrote:
+>>
+>> As discussed extensively in the changelog for the addition of this
+>> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
+>> existing mmap() and madvise() syscalls do not map entirely well onto the
+>> security requirements for shadow stack memory since they lead to windows
+>> where memory is allocated but not yet protected or stacks which are not
+>> properly and safely initialised. Instead a new syscall map_shadow_stack()
+>> has been defined which allocates and initialises a shadow stack page.
+>>
+>> This patch implements this syscall for riscv. riscv doesn't require token
+>> to be setup by kernel because user mode can do that by itself. However to
+>> provide compatibility and portability with other architectues, user mode
+>> can specify token set flag.
+>>
+>> Reviewed-by: Zong Li <zong.li@sifive.com>
+>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> ---
+>>  arch/riscv/kernel/Makefile  |   1 +
+>>  arch/riscv/kernel/usercfi.c | 144 ++++++++++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 145 insertions(+)
+>>
+>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+>> index 8d186bfced45..3a861d320654 100644
+>> --- a/arch/riscv/kernel/Makefile
+>> +++ b/arch/riscv/kernel/Makefile
+>> @@ -125,3 +125,4 @@ obj-$(CONFIG_ACPI)          += acpi.o
+>>  obj-$(CONFIG_ACPI_NUMA)        += acpi_numa.o
+>>
+>>  obj-$(CONFIG_GENERIC_CPU_VULNERABILITIES) += bugs.o
+>> +obj-$(CONFIG_RISCV_USER_CFI) += usercfi.o
+>> diff --git a/arch/riscv/kernel/usercfi.c b/arch/riscv/kernel/usercfi.c
+>> new file mode 100644
+>> index 000000000000..24022809a7b5
+>> --- /dev/null
+>> +++ b/arch/riscv/kernel/usercfi.c
+>> @@ -0,0 +1,144 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2024 Rivos, Inc.
+>> + * Deepak Gupta <debug@rivosinc.com>
+>> + */
+>> +
+>> +#include <linux/sched.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/types.h>
+>> +#include <linux/mm.h>
+>> +#include <linux/mman.h>
+>> +#include <linux/uaccess.h>
+>> +#include <linux/sizes.h>
+>> +#include <linux/user.h>
+>> +#include <linux/syscalls.h>
+>> +#include <linux/prctl.h>
+>> +#include <asm/csr.h>
+>> +#include <asm/usercfi.h>
+>> +
+>> +#define SHSTK_ENTRY_SIZE sizeof(void *)
+>> +
+>> +/*
+>> + * Writes on shadow stack can either be `sspush` or `ssamoswap`. `sspush` can happen
+>> + * implicitly on current shadow stack pointed to by CSR_SSP. `ssamoswap` takes pointer to
+>> + * shadow stack. To keep it simple, we plan to use `ssamoswap` to perform writes on shadow
+>> + * stack.
+>> + */
+>> +static noinline unsigned long amo_user_shstk(unsigned long *addr, unsigned long val)
+>> +{
+>> +       /*
+>> +        * Never expect -1 on shadow stack. Expect return addresses and zero
+>> +        */
+>> +       unsigned long swap = -1;
+>> +
+>> +       __enable_user_access();
+>> +       asm goto(
+>> +               ".option push\n"
+>> +               ".option arch, +zicfiss\n"
+>> +               "1: ssamoswap.d %[swap], %[val], %[addr]\n"
+>
+>Hi Deepak,
+>It just came to my mind, do we need to ensure that menvcfg.SSE is not
+>zero before executing the ssamoswap instruction? Since ssamoswap is
+>not encoded using MOP, I’m wondering if we should make sure that
+>executing ssamoswap won’t accidentally trigger an illegal instruction
+>exception. Thanks.
+
+FWFT patches turn SSE during early boot. There is a bug there though,
+I need to check if those FWFT SBI call succeeded or not. If it failed
+then itshould set a global variable indicating shadow stack can't be
+turned on. And in that case this flow wouldn't be reachable. Soon I
+will post v13 with these changes.
+
+Thanks for noticing.
+>
+>> +               _ASM_EXTABLE(1b, %l[fault])
+>> +               RISCV_ACQUIRE_BARRIER
+>> +               ".option pop\n"
+>> +               : [swap] "=r" (swap), [addr] "+A" (*addr)
+>> +               : [val] "r" (val)
+>> +               : "memory"
+>> +               : fault
+>> +               );
+>> +       __disable_user_access();
+>> +       return swap;
+>> +fault:
+>> +       __disable_user_access();
+>> +       return -1;
+>> +}
+>> +
+>> +/*
+>> + * Create a restore token on the shadow stack.  A token is always XLEN wide
+>> + * and aligned to XLEN.
+>> + */
+>> +static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
+>> +{
+>> +       unsigned long addr;
+>> +
+>> +       /* Token must be aligned */
+>> +       if (!IS_ALIGNED(ssp, SHSTK_ENTRY_SIZE))
+>> +               return -EINVAL;
+>> +
+>> +       /* On RISC-V we're constructing token to be function of address itself */
+>> +       addr = ssp - SHSTK_ENTRY_SIZE;
+>> +
+>> +       if (amo_user_shstk((unsigned long __user *)addr, (unsigned long)ssp) == -1)
+>> +               return -EFAULT;
+>> +
+>> +       if (token_addr)
+>> +               *token_addr = addr;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static unsigned long allocate_shadow_stack(unsigned long addr, unsigned long size,
+>> +                                          unsigned long token_offset, bool set_tok)
+>> +{
+>> +       int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+>> +       struct mm_struct *mm = current->mm;
+>> +       unsigned long populate, tok_loc = 0;
+>> +
+>> +       if (addr)
+>> +               flags |= MAP_FIXED_NOREPLACE;
+>> +
+>> +       mmap_write_lock(mm);
+>> +       addr = do_mmap(NULL, addr, size, PROT_READ, flags,
+>> +                      VM_SHADOW_STACK | VM_WRITE, 0, &populate, NULL);
+>> +       mmap_write_unlock(mm);
+>> +
+>> +       if (!set_tok || IS_ERR_VALUE(addr))
+>> +               goto out;
+>> +
+>> +       if (create_rstor_token(addr + token_offset, &tok_loc)) {
+>> +               vm_munmap(addr, size);
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       addr = tok_loc;
+>> +
+>> +out:
+>> +       return addr;
+>> +}
+>> +
+>> +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
+>> +{
+>> +       bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
+>> +       unsigned long aligned_size = 0;
+>> +
+>> +       if (!cpu_supports_shadow_stack())
+>> +               return -EOPNOTSUPP;
+>> +
+>> +       /* Anything other than set token should result in invalid param */
+>> +       if (flags & ~SHADOW_STACK_SET_TOKEN)
+>> +               return -EINVAL;
+>> +
+>> +       /*
+>> +        * Unlike other architectures, on RISC-V, SSP pointer is held in CSR_SSP and is available
+>> +        * CSR in all modes. CSR accesses are performed using 12bit index programmed in instruction
+>> +        * itself. This provides static property on register programming and writes to CSR can't
+>> +        * be unintentional from programmer's perspective. As long as programmer has guarded areas
+>> +        * which perform writes to CSR_SSP properly, shadow stack pivoting is not possible. Since
+>> +        * CSR_SSP is writeable by user mode, it itself can setup a shadow stack token subsequent
+>> +        * to allocation. Although in order to provide portablity with other architecture (because
+>> +        * `map_shadow_stack` is arch agnostic syscall), RISC-V will follow expectation of a token
+>> +        * flag in flags and if provided in flags, setup a token at the base.
+>> +        */
+>> +
+>> +       /* If there isn't space for a token */
+>> +       if (set_tok && size < SHSTK_ENTRY_SIZE)
+>> +               return -ENOSPC;
+>> +
+>> +       if (addr && (addr & (PAGE_SIZE - 1)))
+>> +               return -EINVAL;
+>> +
+>> +       aligned_size = PAGE_ALIGN(size);
+>> +       if (aligned_size < size)
+>> +               return -EOVERFLOW;
+>> +
+>> +       return allocate_shadow_stack(addr, aligned_size, size, set_tok);
+>> +}
+>>
+>> --
+>> 2.34.1
+>>
 
