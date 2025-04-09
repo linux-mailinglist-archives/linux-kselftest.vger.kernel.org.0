@@ -1,244 +1,241 @@
-Return-Path: <linux-kselftest+bounces-30429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB016A828B9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E20BAA828D3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:54:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAB5518930A1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29A2A1B63950
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:50:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321F526B082;
-	Wed,  9 Apr 2025 14:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19DD0267F49;
+	Wed,  9 Apr 2025 14:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Rv1Tpnnf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TedrXKak"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3B8267700
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Apr 2025 14:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FAA267722;
+	Wed,  9 Apr 2025 14:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744209831; cv=none; b=sfK1eka7p1vUO8wafShXIGKQN8bzDGcx67OsrD0wSj8Dzl2GalTCZMjGgKXamXXdjhIPBR2bQQBmsIIa0Ajw5N8qGQTx9gezGhBAKAZXhuXhvTYcI53uQufita8DJC85BbQvi8t96EURHIHtBBy0XBOFi0kxvUs/8RW+VbRNMRE=
+	t=1744210048; cv=none; b=D2+z8/6YQkdco9ZqyZ+46QWPKik3ypZwGKytUuNMgL6tUq6giKiNaq8tbscp9yovEOICnAGWVrHYgvpJm29HVcY15tiP76YKyRvkxZhGBEtcgMrrrdNC3AZmhqy0ZaxilFwC+7ZKiwt+PFG4aMvRBdI4U4pO5eIiUSfrisX21EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744209831; c=relaxed/simple;
-	bh=7Qyl/KGbNgAjKHzOstykL1b1PVeFC9C9SmfU8PxYhlc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G7L7gzFC1sb5KbysagPIsB7yV5pdACd5LAeKbrRLoEe/0y01k9bO5ioPKyEKBPxmm+gtTnoKq1aVIbHOyPVImtyM+3nMMzm0y3mGsLeqlIHfnKrpniin9NcS8PvmCF6cSSykS9xuD9IphBBmJ/AWp3BM9NOmR+E0MbDpkpJEhYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Rv1Tpnnf; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-224019ad9edso89526135ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Apr 2025 07:43:47 -0700 (PDT)
+	s=arc-20240116; t=1744210048; c=relaxed/simple;
+	bh=IEYQQtqwTGpjsv67MQqn5440WRD9SC6i5iV5BTOjp00=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nuMfMkahH8GcfRkda7LNMldjrz+71rgNywi+T13OznQ68vrOcyJVujhI8eRHQRd4rjVxVofRwByntsSX6i3XdaUQ4D9DcmUIbno6nC/820EhEknFXIXw3hty7jCOEZtM5oCBosMvUyLMZ9tKzMjPJSXbaAKoGWk+Y/Nh+gZuVVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TedrXKak; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-476f4e9cf92so51111601cf.3;
+        Wed, 09 Apr 2025 07:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744209827; x=1744814627; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ow5mA7lTDwDJ/M6E3XEwhzsM01atmOj/MJRSg0pfs/U=;
-        b=Rv1TpnnfCAYDUJmZsb8GSLvbfAR41yOxgzPfzDczY7jUA9EHzFeKfw8JMydztCGYmZ
-         EjkDW3U9IbEbUtWHMuA7Ei3zh3fO1csXbPVFVIW4Lk95SfxgnBXXrgS+h1ORV6U+k9rK
-         0q3vzGjvCCjgiP9ttTvVkciqE0XaJPSBdZR16s8pDn7OLYvGm5g+2E0VHGt2MX9y6x9h
-         MUF7ZnNirkUdAMreh7a4kyTkdeG9ovH0ptoLzHh8IZi9NhzWmPlJFGGHjxCbG5LBLWF0
-         6k8csHj2KmrgIgaOfbscu3VA6rKihvw7Im13SXTB/DAuk8xbv597NB3r5s2ufihZAbqu
-         pHgg==
+        d=gmail.com; s=20230601; t=1744210045; x=1744814845; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OxSVY9bn2Vv0A1oBrQZzgAHvFFWvWIBKi/nsXjN5Jm0=;
+        b=TedrXKakMD5m6rmmZlVnRHECDOh5bY4Dv5N1CrA0CCVF9fQi7VCWeli++xOK/3PCyg
+         dx6bXRMgRnv5ulKsDTrcmfoj/xFzeVixtaAHlzA5B3EF3oeQtj+uyhvsXm2eKi1n70ge
+         Z6rAXtS7mU7WAS+YfpJub45KXWGfOeOn+JQMFx9OJThvZf7oB6E9z+3PCw1xbuyx7klo
+         /R9O3ySupGBWBdwJqGHWwiv8an6Cany0Chm+nfGDTZ7wAYZC2RrUpz6nQPcoDcomXwCe
+         sAZdz00NnntgVLQMg8mYeZfx8q9qw2kZRnVQGZZ7nozFFTnHur4u9BU8q54jG/xBWTmy
+         LKkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744209827; x=1744814627;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ow5mA7lTDwDJ/M6E3XEwhzsM01atmOj/MJRSg0pfs/U=;
-        b=XJvQCxLahVFCt8QPn21aB19a3rVbKfGU4TaV1kbOp//duh6Rs5V+WMwJeVglC8rc0B
-         7wkyxpz6V9i6hP5/93gzRfHYU1oUJoFuT9Wtt6pS9m4ottHcLlfTBktZ4Pzq3xOJDSvx
-         6dcj1DjME3uQ9yxGdssG8MHe+rHoGiY0d0EVXNmsjsLnRGQhenIoZdkFoNHT5ceqIjAC
-         lDXKy/+EOjsi0ZJlKtm+MP77BREXHw8ValI73lXRFRzs2pRp7LTghvKoD1GenfLqE7hm
-         DrBRwPicd8FQl9EeJtIB6LL9BQBWkaY8bbRpx/6HGbyzLZW2nUmyX1mkmm5fAsNI+0m/
-         w2bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2RA4q5G7pd5+Rc3Jkn0rVcltgXMpGzwNaJZVo/qRaflygYl29r4gdxcny6msBMZOnz2zE1o39h68mbVVS3bc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMyF8BMc7yUs0hr+eRLDiQDHuukqQthovJD8w/U3mdL8LOh6xh
-	mpS4kWOjJaBwskmOSa/34F8wSB+0CmN5ZCcciSiK7RA99g2/38FUHqugcAJzBuw=
-X-Gm-Gg: ASbGncsrLXoutJA1gNPqgYcMfvXgPWHLtHlEvIfctNs5XtkXLvalh3XajaD9fujzCxo
-	yYH1F8vNbePenbROrv6lEeMrX2wMZYf41ZsgRLYZpHBdRll9sSRS7X1ZXBfsfhMTAlyj9Vn7DDc
-	Q39m64+VKFZMpaAI/w/GXnYYocHzW/HsFHKKdcLoLW2U8eNukAeVw6eEHBN+5GrzJ6FmcbC7CYR
-	F1h0PnPa7ChfVJ5bX2fZ0NiwPtJt47ASutG6zgMSyCXXjgTYnZaVsHAYcBtOml7FSWBWox+YWXO
-	r1GC6zm4/2mfvLTnGZr/1LwwCg2bRLOHefBtv3nEqE5gZA483ao=
-X-Google-Smtp-Source: AGHT+IEgaCnvV5qiE5FYgc0Ujjm72QHq4NY5rpvgBrpJwRVGqGD1OFM7I6sIlnm2n2XAV9/GUpCxyg==
-X-Received: by 2002:a17:903:32cb:b0:220:c164:6ee1 with SMTP id d9443c01a7336-22ac2a1df5cmr51260355ad.32.1744209826897;
-        Wed, 09 Apr 2025 07:43:46 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cb538csm12708815ad.176.2025.04.09.07.43.44
+        d=1e100.net; s=20230601; t=1744210045; x=1744814845;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OxSVY9bn2Vv0A1oBrQZzgAHvFFWvWIBKi/nsXjN5Jm0=;
+        b=tH9YUI7CsfbkZansvQRfxU0lMz4U6iUdxAjBLCTY9Mox9XXKcWBbJYvZQI1vSDM2Mr
+         U+gPmLR6+NRCPAuTq0qTf2AI68L1cmcMiQYyxnpvppcFwmIRdUqwGiVVNLxAQ/Zbm4Pj
+         SHqZZXCQOe5FrCU+1qO33U0NXsfLeoHQQjuuUjslwo9jyZDAYVyxW0DbajnLYVC5unD3
+         7DKbSlvDg8Kjg7PT8BbmsMCs2I4qTlJGn/mnuB9kT9Wo9cXckExL4233zIVcSDTv236v
+         m3GwLR+c7WjsNE0d5nBiNX+NEBphpHpVMZNRbSZ4+drg9lOMakeYglGiwZWQqd6oKzOj
+         2TTA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSDAY/540xrTSBOAC1CrWd7JmFCo/AgoOYk+Ztciyf9QEoTEC0DrlUgws/NdfEaE9IsElREmJUXMJT30Zo@vger.kernel.org, AJvYcCUo5hNmT7fnoHAYlhaXy72UJgJQGfL8Voviq72Lqr3qmDhUD+vwcTAbt5JM1yejl0LBl7AzgYGs@vger.kernel.org, AJvYcCUu25oqDPF+mHHUWCtf3StE+WdhdV8UtTxYoJ5QVv9mdJuLSf1liwDDvMvn5sL3ejaeTKrVNRMe+emA@vger.kernel.org, AJvYcCWAawaYlKwyatUC6CqB7Tbm+mhiuHC+Wvt0sm2fUHHbyliQmroXsAqVV9v1uDcbJJocO6hvR6bTV/rF@vger.kernel.org, AJvYcCWR6ERp31hCrBc90I1/q5P51XDHt0zduqEOITsE/oW0a0Pry/4OB5BT9Lp2dNAxpOZtf/0IHU/4XVoh1x2ZGko=@vger.kernel.org, AJvYcCXEgoDsQxp6e3HPBfa2TIPLFoH34x2MGquJiLCDcn7sNiuWTAalWb2YEPRTTGRFsJjAu80yyjmLBLOsvew=@vger.kernel.org, AJvYcCXICduj/O6fu1eaSpmifBKrx1gjramaHlxPuwNNnHXMLwytJOfGq4r0w1iQZpzA+jIrp8YnC7oRgYt2P+LrZ3L8@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0GFU1u/a6k58cT2rhJ/9/Aj+zZZ8YnFQgUu2rtpc+jSvfcK6l
+	MnN+8ukARAKSxMxz0my3XvTl9BaRT8cWrBiLmUcCqeOQ2k+Awtlp
+X-Gm-Gg: ASbGncscHcSVGKoeB407DVmT5rEb0bo7GhyDVxyB2v0+lyRdWbhNrP5yyBqMUcpS7Zr
+	nj8+e5uCq2L7KpQ0tzJ9DEEs+eTsirM095JYeO532jkk72QwB6GgKEae0+VEhnB0zXspBnQgEwE
+	QI65A0d0Q+BXf1CkofxOQD8+o71chwIAaiqVyyQrkjxE8FblbsT6hd0XbbNvijAp0f5QJ5usZy8
+	hW95vWxq8jhsyeMTC0bj7AQW5zkmVM5xFDuSigXYpCtKA8XIpZRL8nfQWjP/DMFAGh1a8cb+bdL
+	ijbPbUoZEND3lLIz0K7RLF9fNXpJ7SG4B9474YAAgHvxRcUerGgPKcKBF0f8juUR5VSj663xZ8u
+	f9tR4haxXgozHqxxeCaPlrusLEwrBviy54itqsmVoTAoNPxBRYz2sXPM=
+X-Google-Smtp-Source: AGHT+IGVBcgvUoAJ+mvBt4f2jO2Qo+1VcYhXU6dhpdk7BxROicttj+bkxTItoDRACLAwYujqEqGZ6g==
+X-Received: by 2002:a05:622a:1895:b0:477:548:849e with SMTP id d75a77b69052e-4795f2cd4ffmr40751411cf.15.1744210044680;
+        Wed, 09 Apr 2025 07:47:24 -0700 (PDT)
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:3298])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47964eb9a8fsm8024461cf.49.2025.04.09.07.47.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 07:43:46 -0700 (PDT)
-Date: Wed, 9 Apr 2025 07:43:42 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v12 03/28] riscv: zicfiss / zicfilp enumeration
-Message-ID: <Z_aHnj2-8OlcRuHd@debug.ba.rivosinc.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-3-e51202b53138@rivosinc.com>
- <cc314da6-8755-4037-846b-01a20b3c68e1@ghiti.fr>
+        Wed, 09 Apr 2025 07:47:24 -0700 (PDT)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH v8 0/6] rust: reduce `as` casts, enable related lints
+Date: Wed, 09 Apr 2025 10:47:17 -0400
+Message-Id: <20250409-ptr-as-ptr-v8-0-3738061534ef@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <cc314da6-8755-4037-846b-01a20b3c68e1@ghiti.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHWI9mcC/23SzW7DIAwA4FeJOI8JO/wlp73H1AO/HdKSdCGNN
+ lV999H0QrKdkEGfMdg3ksOcQiZ9cyNzWFNO01gC/dIQ92HGc6DJl5ggQ8FapuhlmanJ24JgQUs
+ VHfecFHCZQ0zfW7L3U4k/Ul6m+WfLvcJj9980K1CgQqNnUgB3nX47DyZ9vrppII80K9a021Gkj
+ KLwkhnfIVp1pG1Fge9oW2hQ1khgXEdujpTXVOwoL9SiV+iAe4fySEVN928VhQorIkI02LI/t8q
+ K4r5gWSjvPFgVPceOHamq6b5gVahWxnKBwJXtanp/dm4OX9fS/eXZPmJNDrScD2npG2YiRmkDW
+ I4aWi2sBO2sluXXuQw+eKY74zSpp6ZvtlJ46ZibxsWkMcx0inS4LmPImVoQrS8ltVr7vozH6X7
+ /BYkxGT6OAgAA
+X-Change-ID: 20250307-ptr-as-ptr-21b1867fc4d4
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+ Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>, 
+ Saravana Kannan <saravanak@google.com>, 
+ Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Robin Murphy <robin.murphy@arm.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Frederic Weisbecker <frederic@kernel.org>, Lyude Paul <lyude@redhat.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, linux-pci@vger.kernel.org, 
+ linux-block@vger.kernel.org, devicetree@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-On Mon, Apr 07, 2025 at 05:48:27PM +0200, Alexandre Ghiti wrote:
->
->On 14/03/2025 22:39, Deepak Gupta wrote:
->>This patch adds support for detecting zicfiss and zicfilp. zicfiss and
->>zicfilp stands for unprivleged integer spec extension for shadow stack
->>and branch tracking on indirect branches, respectively.
->>
->>This patch looks for zicfiss and zicfilp in device tree and accordinlgy
->>lights up bit in cpu feature bitmap. Furthermore this patch adds detection
->>utility functions to return whether shadow stack or landing pads are
->>supported by cpu.
->>
->>Reviewed-by: Zong Li <zong.li@sifive.com>
->>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->>---
->>  arch/riscv/include/asm/cpufeature.h | 13 +++++++++++++
->>  arch/riscv/include/asm/hwcap.h      |  2 ++
->>  arch/riscv/include/asm/processor.h  |  1 +
->>  arch/riscv/kernel/cpufeature.c      | 13 +++++++++++++
->>  4 files changed, 29 insertions(+)
->>
->>diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
->>index 569140d6e639..69007b8100ca 100644
->>--- a/arch/riscv/include/asm/cpufeature.h
->>+++ b/arch/riscv/include/asm/cpufeature.h
->>@@ -12,6 +12,7 @@
->>  #include <linux/kconfig.h>
->>  #include <linux/percpu-defs.h>
->>  #include <linux/threads.h>
->>+#include <linux/smp.h>
->>  #include <asm/hwcap.h>
->>  #include <asm/cpufeature-macros.h>
->>@@ -137,4 +138,16 @@ static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, const unsi
->>  	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
->>  }
->>+static inline bool cpu_supports_shadow_stack(void)
->>+{
->>+	return (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
->>+		riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICFISS));
->
->
->I would use riscv_has_extension_unlikely() instead of the cpu specific 
->variant, that would remove the need for #include <linux/smp.h>. Unless 
->you have a good reason to do that?
+This started with a patch that enabled `clippy::ptr_as_ptr`. Benno
+Lossin suggested I also look into `clippy::ptr_cast_constness` and I
+discovered `clippy::as_ptr_cast_mut`. This series now enables all 3
+lints. It also enables `clippy::as_underscore` which ensures other
+pointer casts weren't missed. The first commit reduces the need for
+pointer casts and is shared with another series[1].
 
+As a later addition, `clippy::cast_lossless` and `clippy::ref_as_ptr`
+are also enabled.
 
-No I dont remember the reason. I'll fix it.
-When I am fixing it, and happpen to remember the reason.
-I'll post it.
+Link: https://lore.kernel.org/all/20250307-no-offset-v1-0-0c728f63b69c@gmail.com/ [1]
 
->
->
->>+}
->>+
->>+static inline bool cpu_supports_indirect_br_lp_instr(void)
->>+{
->>+	return (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
->>+		riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICFILP));
->>+}
->>+
->>  #endif
->>diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
->>index 869da082252a..2dc4232bdb3e 100644
->>--- a/arch/riscv/include/asm/hwcap.h
->>+++ b/arch/riscv/include/asm/hwcap.h
->>@@ -100,6 +100,8 @@
->>  #define RISCV_ISA_EXT_ZICCRSE		91
->>  #define RISCV_ISA_EXT_SVADE		92
->>  #define RISCV_ISA_EXT_SVADU		93
->>+#define RISCV_ISA_EXT_ZICFILP		94
->>+#define RISCV_ISA_EXT_ZICFISS		95
->>  #define RISCV_ISA_EXT_XLINUXENVCFG	127
->>diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
->>index 5f56eb9d114a..e3aba3336e63 100644
->>--- a/arch/riscv/include/asm/processor.h
->>+++ b/arch/riscv/include/asm/processor.h
->>@@ -13,6 +13,7 @@
->>  #include <vdso/processor.h>
->>  #include <asm/ptrace.h>
->>+#include <asm/hwcap.h>
->>  #define arch_get_mmap_end(addr, len, flags)			\
->>  ({								\
->>diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
->>index c6ba750536c3..82065cc55822 100644
->>--- a/arch/riscv/kernel/cpufeature.c
->>+++ b/arch/riscv/kernel/cpufeature.c
->>@@ -150,6 +150,15 @@ static int riscv_ext_svadu_validate(const struct riscv_isa_ext_data *data,
->>  	return 0;
->>  }
->>+static int riscv_cfi_validate(const struct riscv_isa_ext_data *data,
->>+			      const unsigned long *isa_bitmap)
->>+{
->>+	if (!IS_ENABLED(CONFIG_RISCV_USER_CFI))
->>+		return -EINVAL;
->>+
->>+	return 0;
->>+}
->>+
->>  static const unsigned int riscv_zk_bundled_exts[] = {
->>  	RISCV_ISA_EXT_ZBKB,
->>  	RISCV_ISA_EXT_ZBKC,
->>@@ -333,6 +342,10 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>  	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicboz, RISCV_ISA_EXT_ZICBOZ, riscv_xlinuxenvcfg_exts,
->>  					  riscv_ext_zicboz_validate),
->>  	__RISCV_ISA_EXT_DATA(ziccrse, RISCV_ISA_EXT_ZICCRSE),
->>+	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfilp, RISCV_ISA_EXT_ZICFILP, riscv_xlinuxenvcfg_exts,
->>+					  riscv_cfi_validate),
->>+	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfiss, RISCV_ISA_EXT_ZICFISS, riscv_xlinuxenvcfg_exts,
->>+					  riscv_cfi_validate),
->>  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
->>  	__RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
->>  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
->>
->
->With the above comment fixed, you can add:
->
->Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
->Thanks,
->
->Alex
->
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Changes in v8:
+- Use coercion to go ref -> ptr.
+- rustfmt.
+- Rebase on v6.15-rc1.
+- Extract first commit to its own series as it is shared with other
+  series.
+- Link to v7: https://lore.kernel.org/r/20250325-ptr-as-ptr-v7-0-87ab452147b9@gmail.com
+
+Changes in v7:
+- Add patch to enable `clippy::ref_as_ptr`.
+- Link to v6: https://lore.kernel.org/r/20250324-ptr-as-ptr-v6-0-49d1b7fd4290@gmail.com
+
+Changes in v6:
+- Drop strict provenance patch.
+- Fix URLs in doc comments.
+- Add patch to enable `clippy::cast_lossless`.
+- Rebase on rust-next.
+- Link to v5: https://lore.kernel.org/r/20250317-ptr-as-ptr-v5-0-5b5f21fa230a@gmail.com
+
+Changes in v5:
+- Use `pointer::addr` in OF. (Boqun Feng)
+- Add documentation on stubs. (Benno Lossin)
+- Mark stubs `#[inline]`.
+- Pick up Alice's RB on a shared commit from
+  https://lore.kernel.org/all/Z9f-3Aj3_FWBZRrm@google.com/.
+- Link to v4: https://lore.kernel.org/r/20250315-ptr-as-ptr-v4-0-b2d72c14dc26@gmail.com
+
+Changes in v4:
+- Add missing SoB. (Benno Lossin)
+- Use `without_provenance_mut` in alloc. (Boqun Feng)
+- Limit strict provenance lints to the `kernel` crate to avoid complex
+  logic in the build system. This can be revisited on MSRV >= 1.84.0.
+- Rebase on rust-next.
+- Link to v3: https://lore.kernel.org/r/20250314-ptr-as-ptr-v3-0-e7ba61048f4a@gmail.com
+
+Changes in v3:
+- Fixed clippy warning in rust/kernel/firmware.rs. (kernel test robot)
+  Link: https://lore.kernel.org/all/202503120332.YTCpFEvv-lkp@intel.com/
+- s/as u64/as bindings::phys_addr_t/g. (Benno Lossin)
+- Use strict provenance APIs and enable lints. (Benno Lossin)
+- Link to v2: https://lore.kernel.org/r/20250309-ptr-as-ptr-v2-0-25d60ad922b7@gmail.com
+
+Changes in v2:
+- Fixed typo in first commit message.
+- Added additional patches, converted to series.
+- Link to v1: https://lore.kernel.org/r/20250307-ptr-as-ptr-v1-1-582d06514c98@gmail.com
+
+---
+Tamir Duberstein (6):
+      rust: enable `clippy::ptr_as_ptr` lint
+      rust: enable `clippy::ptr_cast_constness` lint
+      rust: enable `clippy::as_ptr_cast_mut` lint
+      rust: enable `clippy::as_underscore` lint
+      rust: enable `clippy::cast_lossless` lint
+      rust: enable `clippy::ref_as_ptr` lint
+
+ Makefile                               |  6 ++++++
+ drivers/gpu/drm/drm_panic_qr.rs        |  2 +-
+ rust/bindings/lib.rs                   |  3 +++
+ rust/kernel/alloc/allocator_test.rs    |  2 +-
+ rust/kernel/alloc/kvec.rs              |  4 ++--
+ rust/kernel/block/mq/operations.rs     |  2 +-
+ rust/kernel/block/mq/request.rs        |  7 ++++---
+ rust/kernel/device.rs                  |  5 +++--
+ rust/kernel/device_id.rs               |  5 +++--
+ rust/kernel/devres.rs                  | 19 ++++++++++---------
+ rust/kernel/dma.rs                     |  6 +++---
+ rust/kernel/error.rs                   |  2 +-
+ rust/kernel/firmware.rs                |  3 ++-
+ rust/kernel/fs/file.rs                 |  3 ++-
+ rust/kernel/io.rs                      | 18 +++++++++---------
+ rust/kernel/kunit.rs                   | 15 +++++++--------
+ rust/kernel/list/impl_list_item_mod.rs |  2 +-
+ rust/kernel/miscdevice.rs              |  2 +-
+ rust/kernel/net/phy.rs                 |  4 ++--
+ rust/kernel/of.rs                      |  6 +++---
+ rust/kernel/pci.rs                     | 11 +++++++----
+ rust/kernel/platform.rs                |  4 +++-
+ rust/kernel/print.rs                   | 11 +++++------
+ rust/kernel/seq_file.rs                |  3 ++-
+ rust/kernel/str.rs                     | 16 +++++++++-------
+ rust/kernel/sync/poll.rs               |  2 +-
+ rust/kernel/time/hrtimer/pin.rs        |  2 +-
+ rust/kernel/time/hrtimer/pin_mut.rs    |  2 +-
+ rust/kernel/uaccess.rs                 | 10 ++++------
+ rust/kernel/workqueue.rs               | 12 ++++++------
+ rust/uapi/lib.rs                       |  3 +++
+ 31 files changed, 107 insertions(+), 85 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250307-ptr-as-ptr-21b1867fc4d4
+prerequisite-change-id: 20250409-container-of-mutness-b153dab4388d:v1
+prerequisite-patch-id: 53d5889db599267f87642bb0ae3063c29bc24863
+
+Best regards,
+-- 
+Tamir Duberstein <tamird@gmail.com>
+
 
