@@ -1,256 +1,164 @@
-Return-Path: <linux-kselftest+bounces-30410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2797BA8226B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 12:38:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D14EFA82411
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 13:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 038F77B8B83
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 10:36:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6C744A21DC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 11:58:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15B325DB0C;
-	Wed,  9 Apr 2025 10:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDAD25E455;
+	Wed,  9 Apr 2025 11:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a0LGhCPa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUk1Lwcm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20B325DCEC
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Apr 2025 10:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA4F2253E4;
+	Wed,  9 Apr 2025 11:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744195016; cv=none; b=N1KofuzTpjWJqjd9uZZP3BR3ZmVC0gyvknpv6cEB+2OfO5B8Fu49LaxG/Z10Z+iViSuP+VCccO0gfGhUBmPEMaezYLaulJAEFGr0VGVZN39V1hb9an4tktn0c31Q/wpZy77ujTQK4vkzK+XVR0tOAGUuYZ6eo9kqDe738ABR+wg=
+	t=1744199900; cv=none; b=g6JgcSiI/KLnBeC4bdERyh9lVUhWRGH9RlXoRMj3zXas46buwXxLR3kFK1kS0lGP8a23E4eNEKObQAdsnCP8fbhFLmEz+pc4xz++qdzh+NAtAmCM1jYwZvQkMXX3FtM4VV27jYGruDd/5kLnilipPXAhOuxviYHAuDLuTMQu5MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744195016; c=relaxed/simple;
-	bh=jyJ4Z/IlFLRs+4DntoBjZkrWZe7SiOeDD2XXY6KcWC0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=A2goEH6cMIcwMbT4OhMDvG3rMLQjzwO2cHZv8LPHTUTXY9kE1uIRAYNLbNdDNQQh0d/Bvfukdq1C6Jz3qAEEjZT3I0t5HOdKgjL88kSlqsIGk7e8ZwXE2ed1EkJ1LIg2ZI/YtvESGAVjnJl2O410pslrkZqeXe7/wTIhqf6TtdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a0LGhCPa; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744195014;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bm0KmfVshZ84rFFrWi2kzHytBadlup8ePtDcFyWEy+E=;
-	b=a0LGhCParWBccMn+ZNp4Hn9E7TCFbAt4VXQAIH6qlNZ4o2HNOZYuASkc0rkHbXcxLm1nhg
-	d4KSgLmXWicthkzEEBrubNa0VB06orrUG3CDoNm/UAFHFH0wr4tgTO+MBAbwqIJyV3nsdg
-	d53EAD5johnVwJswT5J8XA9qPfNaTsw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-641-8mxeXdzZPoOYY0k3tHTk5Q-1; Wed, 09 Apr 2025 06:36:52 -0400
-X-MC-Unique: 8mxeXdzZPoOYY0k3tHTk5Q-1
-X-Mimecast-MFC-AGG-ID: 8mxeXdzZPoOYY0k3tHTk5Q_1744195012
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3912d9848a7so318047f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Apr 2025 03:36:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744195012; x=1744799812;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bm0KmfVshZ84rFFrWi2kzHytBadlup8ePtDcFyWEy+E=;
-        b=RLOsD2CryPo/qDtMNUj7TT4Dn9NfRr5F6Ca44x1RFPIuT7qT/JO1lvl+oS69JaoMbm
-         pAbQMDkmAWHOsGlpNdzHyD6Baoo72xb62X8MORVnBPvNNRGAmkuP/6rk/VuGOMrFIp3+
-         paJVuDcvbP5i2PGpnXuxu6C44BCEw0e5aTyjZDKkbGgcWSqSEepqqIIyT2ohxynN+C65
-         GysAYwNGVo/ep8E7GFT1gIW339sOIGmQ3aVRPnI68qIX3VstPICuMd7Usc+djXlGbNv5
-         +ION0XLslKiQaDQi09n/yVSqujmDhNDLa/d3PXMp4Z4JPlwu7pAn+SwNy3icRfxMjf5i
-         TauQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPByERQafj1fRjzMp/xoRRo3eBV5PRpC1SkIOiEg+/jBkdIOdEJOL9dvIXyV51c1ytV0Ypmd3wmQl+27wvX6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTwVyowk0ABNSrPg3QuuMIfh2CtsSQKe2TASPjPmvl4qNi9yJs
-	CdM7+YPK6GvlbDj0S1LPie4uR9O13jZYnlHDtc/j5CLsgYQ2+D3HCLzNhAiO46acAxOr/rLeAyA
-	OQ2Zr2XBfXBoG/xr0roZhm6RwgwQsiR/gJ7Okm5dl9/VGlYd4mulGImLsYvs2YbYrpQ==
-X-Gm-Gg: ASbGncvPOT6dmPNO18x5tkOs3LyyGGTfKFl0dIQuMbvp2Ahw6dHEavAhBWyoBuibilb
-	l+RbNSoqXGvwNCX19uTqY/YCFPyPR/DlvzGfViDrDtrx4PJf3GXC+gds/b43H5IIdgBxvmVKI5x
-	jqVkoUHlqIz4kAJs+q3OFfgbfUnrUWJMhl+GUlk0YlZPBlosbWUDK0J+1JJyMlHdzWJT4eQBqU8
-	jN/AfJLBwKX0O8yC1X06U0eYhga1KoDyb0Gyavs0TVbFDv1o8W7QCPzOWorV2XJpNxTmIKnRVLv
-	BItqRWu9ArtloJejTykfdUedb8Y+Z8htnTgndzFqtNhFcTDJq2VYTZP+QtUvMp0EytrhfnEEiQX
-	XmwIN1JL4n32WFTHH23fqVPTcX9yeUKJltg==
-X-Received: by 2002:a05:6000:1acb:b0:38f:3224:65e5 with SMTP id ffacd0b85a97d-39d87f981bfmr1955374f8f.12.1744195011677;
-        Wed, 09 Apr 2025 03:36:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF4llxNGDaKHDTh6KqZrU8zE9ytmQQ3M+r2SECdzguqf3ZKmEkJaGGjBFsaiXsR0NmagXNFTg==
-X-Received: by 2002:a05:6000:1acb:b0:38f:3224:65e5 with SMTP id ffacd0b85a97d-39d87f981bfmr1955337f8f.12.1744195011192;
-        Wed, 09 Apr 2025 03:36:51 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70d:8400:ed9b:a3a:88e5:c6a? (p200300cbc70d8400ed9b0a3a88e50c6a.dip0.t-ipconnect.de. [2003:cb:c70d:8400:ed9b:a3a:88e5:c6a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d89377785sm1224279f8f.28.2025.04.09.03.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Apr 2025 03:36:50 -0700 (PDT)
-Message-ID: <12ac3d80-5d12-49f2-9a13-633fec78ad98@redhat.com>
-Date: Wed, 9 Apr 2025 12:36:49 +0200
+	s=arc-20240116; t=1744199900; c=relaxed/simple;
+	bh=ZX4KLllHvrC+KNh1vzkMFKHrJdydGv84kvvGARc574E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PMRhBxzSJaT75S5/38bQAz5PtQdU7cAkK4Mo12c14wPusZlPRnAkfG0IoByX/vFqvermAnmA2a9KKjNhD2Z3XJEnaK51BJPzpP20MBWe7UGbPXh7Ve4bcOm/u+vFzt2im2Imv20iZPpfEU/yThH5AfDvle/CNNyiN/2oyiFNK0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUk1Lwcm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89605C4CEE3;
+	Wed,  9 Apr 2025 11:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744199900;
+	bh=ZX4KLllHvrC+KNh1vzkMFKHrJdydGv84kvvGARc574E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eUk1LwcmKFC5Vyp3+gKwd4wLpNeVG5Vz1JsnIBWTAj4wwTt/4Ylj0K2WQV3iDPAr0
+	 6nd7C17YYgw7Mw3v5EgEijXqU4Sz6w/ut09bvqEDqr2E5ozWgoTm5MLOazTQOyjU+r
+	 Ptua9ArLRrweafBoyIY3AA90pKlqxiYYBvFj4OiPRpSoUngzjz7OPJwYyW4NeWH3i4
+	 fni/jvLeA5IjdgCcjdYtfBM2oKh5kvJJT4g9AQs8TmOAhO0lJkobF+2NoPWqLZII4b
+	 eJEWW4SFSzLjwSgkaxEyq12p2By8dcitzN5nI7XMb38P6IYuFcroiYFA5wvmUniEoi
+	 jWFA80yqi98Zg==
+Message-ID: <3f5ff26b-9904-462e-ac22-84b5d212e9ff@kernel.org>
+Date: Wed, 9 Apr 2025 13:58:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Fix compiler -Wmaybe-uninitialized warning
-From: David Hildenbrand <david@redhat.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250409095006.1422620-1-anshuman.khandual@arm.com>
- <9da46633-e9c1-42a7-b52b-16cf89836abc@redhat.com>
- <0ec536d2-4b82-4e97-9985-15cd431059ba@arm.com>
- <dcf585d8-8293-42ea-9d31-23825cc2f658@redhat.com>
- <5c37c129-a8cb-4f17-8af1-059450083c73@arm.com>
- <e40651de-3666-4ea7-9bd3-0369f07c979d@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <e40651de-3666-4ea7-9bd3-0369f07c979d@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next] configs/debug: run and debug PREEMPT
+Content-Language: en-GB, fr-BE
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ paulmck@kernel.org, joel@joelfernandes.org, steven.price@arm.com,
+ akpm@linux-foundation.org, anshuman.khandual@arm.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250402172305.1775226-1-sdf@fomichev.me>
+ <df253016-81df-4cc9-8a8c-f92fd1cb8aea@kernel.org>
+ <20250408120318.65125876@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20250408120318.65125876@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 09.04.25 12:31, David Hildenbrand wrote:
-> On 09.04.25 12:25, Anshuman Khandual wrote:
+Hi Jakub,
+
+On 08/04/2025 21:03, Jakub Kicinski wrote:
+> On Tue, 8 Apr 2025 20:18:26 +0200 Matthieu Baerts wrote:
+>> On 02/04/2025 19:23, Stanislav Fomichev wrote:
+>>> Recent change [0] resulted in a "BUG: using __this_cpu_read() in
+>>> preemptible" splat [1]. PREEMPT kernels have additional requirements
+>>> on what can and can not run with/without preemption enabled.
+>>> Expose those constrains in the debug kernels.  
 >>
+>> Good idea to suggest this to find more bugs!
 >>
->> On 4/9/25 15:51, David Hildenbrand wrote:
->>> On 09.04.25 12:09, Anshuman Khandual wrote:
->>>>
->>>>
->>>> On 4/9/25 15:27, David Hildenbrand wrote:
->>>>> On 09.04.25 11:50, Anshuman Khandual wrote:
->>>>>> Following build warning comes up for cow test as 'transferred' variable has
->>>>>> not been initialized. Fix the warning via zero init for the variable.
->>>>>>
->>>>>>       CC       cow
->>>>>> cow.c: In function ‘do_test_vmsplice_in_parent’:
->>>>>> cow.c:365:61: warning: ‘transferred’ may be used uninitialized [-Wmaybe-uninitialized]
->>>>>>       365 |                 cur = read(fds[0], new + total, transferred - total);
->>>>>>           |                                                 ~~~~~~~~~~~~^~~~~~~
->>>>>> cow.c:296:29: note: ‘transferred’ was declared here
->>>>>>       296 |         ssize_t cur, total, transferred;
->>>>>>           |                             ^~~~~~~~~~~
->>>>>>       CC       compaction_test
->>>>>>       CC       gup_longterm
->>>>>>
->>>>>> Cc: Andrew Morton <akpm@linux-foundation.org>
->>>>>> Cc: Shuah Khan <shuah@kernel.org>
->>>>>> Cc: linux-mm@kvack.org
->>>>>> Cc: linux-kselftest@vger.kernel.org
->>>>>> Cc: linux-kernel@vger.kernel.org
->>>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>>>> ---
->>>>>>      tools/testing/selftests/mm/cow.c | 2 +-
->>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
->>>>>> index f0cb14ea8608..b6cfe0a4b7df 100644
->>>>>> --- a/tools/testing/selftests/mm/cow.c
->>>>>> +++ b/tools/testing/selftests/mm/cow.c
->>>>>> @@ -293,7 +293,7 @@ static void do_test_vmsplice_in_parent(char *mem, size_t size,
->>>>>>              .iov_base = mem,
->>>>>>              .iov_len = size,
->>>>>>          };
->>>>>> -    ssize_t cur, total, transferred;
->>>>>> +    ssize_t cur, total, transferred = 0;
->>>>>>          struct comm_pipes comm_pipes;
->>>>>>          char *old, *new;
->>>>>>          int ret, fds[2];
->>>>>
->>>>>
->>>>> if (before_fork) {
->>>>>        transferred = vmsplice(fds[1], &iov, 1, 0);
->>>>> ...
->>>>>
->>>>> if (!before_fork) {
->>>>>        transferred = vmsplice(fds[1], &iov, 1, 0);
->>>>> ...
->>>>>
->>>>> for (total = 0; total < transferred; total += cur) {
->>>>> ...
->>>>>
->>>>>
->>>>> And I don't see any jump label that could jump to code that would ve using transferred.
->>>>>
->>>>> What am I missing?
->>>>
->>>> Probably because both those conditional statements are not mutually
->>>> exclusive above with an if-else construct. Hence compiler flags it
->>>> rather as a false positive ? Initializing with 0 just works around
->>>> that false positive.
->>>
->>> This is something the compiler should clearly be able to verify. before_fork is never changed in that function.
->>>
->>> We should not work around wrong compilers.
->>>
->>> Which compiler are you using such that you run into this issue?
->>
->> gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
->>
+>> I did some quick tests on my side with our CI, and the MPTCP selftests
+>> seem to take a bit more time, but without impacting the results.
+>> Hopefully, there will be no impact in slower/busy environments :)
 > 
-> gcc (GCC) 14.2.1 20250110 (Red Hat 14.2.1-7)
-> 
-> Seems to be fine, just like all other compilers people used with this
-> over the years.
-> 
-> Maybe something about that compiler is shaky that was fixed in the meantime?
-> 
+> What kind of slow down do you see? I think we get up to 50% more time
+> spent in the longer tests.
 
-Reading
+That's difficult to measure in our CI because we have a majority of
+tests either creating test envs with random parameters (latency, losses,
+etc.), or waiting for a transfer at a limited speed to finish. Plus, we
+don't control the host running our tests. But if we omit that, our
+packetdrill tests take ~20% longer on the CI, and our 2 mini KUnit tests
+took ~10% longer (275ms -> 305ms). Globally, our test suite took maybe
+~10-20% longer, and that's acceptable.
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105562#c29
+So not 50%. Is this difference acceptable for NIPA? Even when some tests
+are restarted automatically in case of instabilities?
 
-"Note that sanitizers tend to increase the rate of false positive 
-warnings, most notably those around -Wmaybe-uninitialized. We recommend 
-against combining -Werror and [the use of] sanitizers."
+One last thing, Stanislav's patch has been shared during Linus' merge
+window: perhaps something else could also impact the time?
 
-Is this maybe related to the use of sanitizers?
+> Not sure how bad is too bad..
 
--- 
+Did you observe more instabilities? Maybe the individual results should
+be omitted, and only debug specific issues (calltraces, kmemleak, etc.)
+should be looked at?
+
+> I'm leaning
+> towards applying this to net-next and we can see if people running
+> on linux-next complain?
+
+Good idea! But I do wonder how run **and monitor** the selftests in
+linux-next with a debug kernel :)
+
 Cheers,
-
-David / dhildenb
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
