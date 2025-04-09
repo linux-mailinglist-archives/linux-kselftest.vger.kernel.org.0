@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-30435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093DBA828FB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:57:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86D9BA828FD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:57:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C592B18933A3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:52:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C35684A476A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3422690D1;
-	Wed,  9 Apr 2025 14:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEA4626FA60;
+	Wed,  9 Apr 2025 14:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C2OBrX9E"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HSDS/mD1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED00526A0D3;
-	Wed,  9 Apr 2025 14:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F5826AAAA;
+	Wed,  9 Apr 2025 14:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744210057; cv=none; b=Q1UI/WkOn7sBnRpI+SR3/Dt4yPmul2y9pSipvs2C9FYnrISsT8FqceMdPHpQuPl+tKFYPpJqh/wOfaCcDMp/kPJdLuKLAM3u0Ex25iAXAdA8iyiHeeCMm0GBZOX1VHZQawPFDzHFFLQxmzONqq2+28k/CKpX6Y63uAIKjhP0HgY=
+	t=1744210059; cv=none; b=EBAcIsM5xLPoiBWheGAK7QzsANHtE2u+0eqO4PLm8m+KzCU+sueimEToQfI8kLFNqsadiN3xQL/XrvCGXb8ME8e9kEA7huslrLEFYLAY/M0leKYJoL2aopBQQ/v1VBQ/TuV8/tXp1SWGZRBec3qW3FcIuhY1ybd4+NfFJAlw1zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744210057; c=relaxed/simple;
-	bh=VseNrgxZWUIHk+y/wsE5kJZL6CjEpX2Ee6VESV720T0=;
+	s=arc-20240116; t=1744210059; c=relaxed/simple;
+	bh=QE1XMyiEfHKVDVPNBt1oL3c+f45lsJThYSxbdchE9vs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lkMOwsGY3Kn3I6wilL1gwdxr1WyJLTUbTUWIJUO/gHLtaU6IZDgaSGoae6m3lXgWW9c7uRiU4RuruHqTgXeV+1lzHB+RZ7IHbLlepElsg8COaHNVKVRSWLE6sO4uooeafYxC1Y4Wgi/SM959H20Wt2oEMeYqHmw3GhABY1VRbEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C2OBrX9E; arc=none smtp.client-ip=209.85.160.182
+	 In-Reply-To:To:Cc; b=sBrJ5chdJrHchYPgfKTtI3/NUgZ3aXRGxbpuTrYBtdGPDzetym8wvpFLQ91Zi02MuSJKC4zkKX67yndaawm5N0gBytUHs47JjJVza+djasOZHIigTiOtqo8/R52YDvO6yaewbaP/RBqKQeDkOB8y7Ll0VMuD8EmRqs+bee3aUWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HSDS/mD1; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4769f3e19a9so46342981cf.0;
-        Wed, 09 Apr 2025 07:47:35 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-47692b9d059so34572601cf.3;
+        Wed, 09 Apr 2025 07:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744210055; x=1744814855; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744210057; x=1744814857; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=s7TG+vcDltz8CEBipYAMc1RYMUDRIBQnjPX3T3cax8U=;
-        b=C2OBrX9E6EO0F6uGC1tB3gyVuymDSeSjaWG+MT5ROHkIjXT2lZCloc7UChOJlUM7MO
-         vqfgdmSXjZWzF0ZdiGvAqgDnbPHHxvNfFmjCTpDjKk68eccjmeHzF07S6mgHA/067UZ2
-         zuSkA41KjrmlgOk7ikITFD5/LZhHkReEeL4j1IYXLOUqJ67brvEno+LleX5vCDvRmRHM
-         lEwMlIiTbuDWx2CfemJ4zdOspmKjl3oeODOI3j40SHu5GYL0n12XXBY/G2qmKD1lN99v
-         WW6JDPh28IllQ20EE353GXGGV7Q+/CL8PadmmGOnN6KBPK35SnSBiV8LRWoWejRy3l9S
-         BAnQ==
+        bh=zdDH+qr7UBoA/lgIB3GeZraE2OIbymXMH9TLc56aCLg=;
+        b=HSDS/mD1UAWmMkEy56VKtH6IZlmEu3N1tpbANV1fMKomEa7hCa/k9RPxPc50f1sGp1
+         rKtB+XqxN7yDZq+zAieJzce7Yils7OZXreBNm57obtFlOkW1c2vapeeM1ln0SIPMybkf
+         kkwLeFucI2TTL9MHR0fVmFOeYsxPZVOeQtrFv/ir7f14y993mcRr2WfGXVuHlyPQmozK
+         bLWPIveM7osq3XVSYM/+eyqxjtzhy8I4QfbFqudOH1rSrRW30pF26s+PLqvjhparreRX
+         +bsQkqVVjQfAXKCPC1Eshx7n5uJ8XxqhKf7rZSrTTAcTcOumhn+/n4bZ0A7svPiRQTKa
+         yZ/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744210055; x=1744814855;
+        d=1e100.net; s=20230601; t=1744210057; x=1744814857;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s7TG+vcDltz8CEBipYAMc1RYMUDRIBQnjPX3T3cax8U=;
-        b=Iqh1pwxAeo27RoI89N66XHpd8cflHvXdEdSFjPWlfA4Au2OywatR6lHplUkO17+nLA
-         Lbz3647mLVqj4G+99lLK2gAgvpvZt0zNJvS+XP60uTPSedqEamhW0+ZQo0w4Yd274Yia
-         OlxvZMYIpBMpaGocUYIzYeenw9zYo0i1MoziFD1s/lAQpj3Ccvm6X6S7E9sDgLZLBda8
-         XafVZDozEzmAttbcpohIxdUWBNJTamgM1qWXo3062xpRYVs2F8/+wKLxHier6Bt52eEQ
-         1zepmjGYiDNHwzyH/NO0Vq30VN6LqiMW14qoqcas/K9E4pDyEfxDMyeMLWtYUYeEMweA
-         YS/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUKYbN96w7U3Ct9T5ZYGJ8vXHKeSdcqirvLnH/iDEfHWs8korhLAaRjgWMW/HwM74l4WZjH65uxzqlxDzJI@vger.kernel.org, AJvYcCVLn8FVwUYC1ukypdYTbHSIT34lR3ZSsjfkIFDqkVsN4hYzVIi6DKhy6sgEL8bvYOnG7C/sVpExjTmd@vger.kernel.org, AJvYcCVlKzu6gvRzt5FwXvntOkqlrjvvQ7QTphdRHtsjV7AB12+iyr2VzSuDhOZKjzgvueJiP+vLoKtDnHWPynfSHsU=@vger.kernel.org, AJvYcCXMBUZn660QuBgiFT3knM5kw6y4PQ3ldPnOECH3i2BTW3+452/SHPZ/a46x/UELAwr5jAP1j62jhTxEBVY=@vger.kernel.org, AJvYcCXWuq+zt8WFc4UvZFy9xZbmy5GvPJ0n0R6q0i0NhgSzdnhj3eXK8GcUgfuX26zcs7+Ug/OhnqJ9v0OV@vger.kernel.org, AJvYcCXesBr02d8n7ri2Gp+aSIRY27PEmn+cchQJbQudLDaD550GLZ0U2Xj/lr9lx2+GHmM4nD00i4DGfuxtNB5hrafw@vger.kernel.org, AJvYcCXy3TCAddtPMRxwmwrdYJ+MBPJpF/6tmDyA0hMBwuNefTQK7uWU3YNQLWwkdreH/YFqzpX5Kp37@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5HM9eyBj0VpxAO2v+xEeWlwI8Ss7uE625hRgvAqzMuPAm8PCR
-	wss/CTVUvUUSTPqqPbRz93D/6CxPe5xb21Ji8+dPvOi1ewBOIei7vmg3au83
-X-Gm-Gg: ASbGncsgPsdX7dSlBTCtYyKuUdYqL79v8AfC23EXmcojw6zXRGgfeuGxuy4Idwt2J7o
-	q5W/OclVJr0rAOG4JasyuCHJGD93jcitCRx0Jm4lKjBDQy3eaD68GAgQsaAUPdN1oSQPsfFRgiY
-	X/HFpAu3OhjNj2YhTKW8Wds50qj767fngUy8SWOv9NxcBhaTCboq2K0WkuR72071CQrV4QSNjdI
-	pn7t80uMXvBuW7V81z2QsJm+MYoyo5UxWWmNUglTxLsNF7xbOv61d2W64nhN5yFkQisHw/0nws+
-	cl6HchMjEoHSbou8HPzgLR3ZKFCWuyMnG+iYyXJroRxLnszl3QNcX0kSshpA+YX05mVARkjo2NP
-	QNBezAFSDm6Hqez+mr1gZjWRS8HesRL/h1kPWmrpKnTuP
-X-Google-Smtp-Source: AGHT+IFjhdP44pb3CStlgR2qF4sOpfTRrfshVqxXF0+mnIO0RFcA4QHnh6zvrwC0E40Xwzs6eqjRtQ==
-X-Received: by 2002:ac8:7f10:0:b0:477:6e6a:7cfe with SMTP id d75a77b69052e-4795f1e2b9emr40301301cf.0.1744210054669;
-        Wed, 09 Apr 2025 07:47:34 -0700 (PDT)
+        bh=zdDH+qr7UBoA/lgIB3GeZraE2OIbymXMH9TLc56aCLg=;
+        b=byfChugHBH+XCoMlWIe0sZRrct55p1iZh8z1ktn50iUS9dLUTMvkbOaBegz8CFXpSZ
+         ZUlnebzOsvBFDkEARVwj20bd+RU+e0FyMB60oeXt73RStW1FfJhqKpjIK7e87/MG8o1n
+         mw3I90yxDwCW0gNAI7qZgQWdYAz24ylGZui+pBM7xR3nVFtx44SPyscoAU3jQN7KATbt
+         9rNVB6f8T+lYmLBHBWIjX7w+wOPT2180ZCVt9/XaO2KZooDv/jRXZmSG9LjYcicHODyF
+         HKnF/7CZhaZRK+lOXg/7hhsnJAGQwG3BDs3CaGt2ygm3lOlh8cvnqc4+eADtAqZWSZRi
+         QbuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUz1B/yAh79EZQKTxppzR1B4Jqje8NTdm1p0abRbLOyfOSKWDatrL/mIxvorGgjRz3Ej0AZQJUp@vger.kernel.org, AJvYcCV44OyIVay3X/EdS1xcNTw/fgOU6qerGZosN1Toxo4VyZ5GDyKh8yTkRAz2+bOjCP7jfPQDdb9ZG86UKJtPLvo=@vger.kernel.org, AJvYcCVgQo1JuazwgIT9BFRCaOAG6yd/ZXoBo9GxxCz1Hud1Zd1u8HYvoh3120DtYZextM2BqzfPyH9RoOWVTDz3@vger.kernel.org, AJvYcCVhLdEAijLfauEdht0YfXXbsIZ2IS9vu4Xc8S408aqqQ8vpzK/4Uw1z4mJVS8ttaA074hMP9Z9ntEhEo++/tIIT@vger.kernel.org, AJvYcCW15GNwYgkaBMjeOwVWXLmYgVHzZXxX0UG4806cAzXanUriT/ZzLmV+jzGAL9i4DTnnKCH49UA/Huq6@vger.kernel.org, AJvYcCWXRSCCFwdmLNjaJUuzvbL/yor5WyJJ6W8X2uFOqFpG20x5/JojI1X3hxnaBDeKFtL+4HAPoLotnkrU@vger.kernel.org, AJvYcCWrFe51eZBIRrR2QuDStsiOeDvc22IGEQDwXijI07BooNu0AqbzZTB+Lp7babMEA8q4Q+vDVOt5xDurnKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8l48HZqOkMe9PtVH6yJdQsMviuZY489GXfygrLs1G8c2NjKfy
+	LIvUl+3ez6IeSpu480TZ+qsoJC8QnIJCZLbQF1Y8cHNeY272G0nc
+X-Gm-Gg: ASbGnctK9kWguV3sj3vhVtTxmSiT/grLrh5uCi+FsPlpIXbHH9MJ7CEmkIieaUd8Wk6
+	u0l1++Fp5n6Dx66bxomZo8gB3h4FM5DjdX9tovYB/dg0qk1CfhjeOXhDFDIrIUQ+TdXtsKFEq1I
+	zA1corVD5wZPkV9xHOzcHAmguPxwiM1YyxvWLoIaAtX4zlWaat5whWmu5OmOvoEL/TT8q1gsclo
+	HaMivfd7DT/QNaZkgeP7X0RyMSKzXHKoYaXkAQB/vHx2fbGzFSaoAceRV1s1dIUpOfeJp4/AmSu
+	bgYbUarjCGZ2Eys5qocddkY0Kqgu66WFxFj4SC469Dvu7ixP9/IBu9Mcujz59VFgXhvyuYz1+uD
+	1um5Lv0fmeZ8bM7g/tJHTjdPAgZudlHRbZDjjRB86oTbtBsDzY4klvw0=
+X-Google-Smtp-Source: AGHT+IFr7umJxKzgzhGh/oy0Dih4g5haX41vEbYRI8F+ERkJbmGl9jimDDp7gEjubuafDokQiSZEmA==
+X-Received: by 2002:ac8:7d4c:0:b0:476:8cad:72d7 with SMTP id d75a77b69052e-4796007888bmr32351221cf.8.1744210056456;
+        Wed, 09 Apr 2025 07:47:36 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:3298])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47964eb9a8fsm8024461cf.49.2025.04.09.07.47.32
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47964eb9a8fsm8024461cf.49.2025.04.09.07.47.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 07:47:33 -0700 (PDT)
+        Wed, 09 Apr 2025 07:47:35 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 09 Apr 2025 10:47:22 -0400
-Subject: [PATCH v8 5/6] rust: enable `clippy::cast_lossless` lint
+Date: Wed, 09 Apr 2025 10:47:23 -0400
+Subject: [PATCH v8 6/6] rust: enable `clippy::ref_as_ptr` lint
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250409-ptr-as-ptr-v8-5-3738061534ef@gmail.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250409-ptr-as-ptr-v8-6-3738061534ef@gmail.com>
 References: <20250409-ptr-as-ptr-v8-0-3738061534ef@gmail.com>
 In-Reply-To: <20250409-ptr-as-ptr-v8-0-3738061534ef@gmail.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -122,104 +122,161 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-Before Rust 1.29.0, Clippy introduced the `cast_lossless` lint [1]:
+In Rust 1.78.0, Clippy introduced the `ref_as_ptr` lint [1]:
 
-> Rust’s `as` keyword will perform many kinds of conversions, including
-> silently lossy conversions. Conversion functions such as `i32::from`
-> will only perform lossless conversions. Using the conversion functions
-> prevents conversions from becoming silently lossy if the input types
-> ever change, and makes it clear for people reading the code that the
-> conversion is lossless.
+> Using `as` casts may result in silently changing mutability or type.
 
 While this doesn't eliminate unchecked `as` conversions, it makes such
 conversions easier to scrutinize.  It also has the slight benefit of
 removing a degree of freedom on which to bikeshed. Thus apply the
 changes and enable the lint -- no functional change intended.
 
-Link: https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless [1]
+Link: https://rust-lang.github.io/rust-clippy/master/index.html#ref_as_ptr [1]
 Suggested-by: Benno Lossin <benno.lossin@proton.me>
-Link: https://lore.kernel.org/all/D8ORTXSUTKGL.1KOJAGBM8F8TN@proton.me/
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Link: https://lore.kernel.org/all/D8PGG7NTWB6U.3SS3A5LN4XWMN@proton.me/
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- Makefile                        | 1 +
- drivers/gpu/drm/drm_panic_qr.rs | 2 +-
- rust/bindings/lib.rs            | 1 +
- rust/kernel/net/phy.rs          | 4 ++--
- rust/uapi/lib.rs                | 1 +
- 5 files changed, 6 insertions(+), 3 deletions(-)
+ Makefile                 |  1 +
+ rust/bindings/lib.rs     |  1 +
+ rust/kernel/device_id.rs |  3 ++-
+ rust/kernel/fs/file.rs   |  3 ++-
+ rust/kernel/str.rs       |  6 ++++--
+ rust/kernel/uaccess.rs   | 10 ++++------
+ rust/uapi/lib.rs         |  1 +
+ 7 files changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 57080a64913f..eb5a942241a2 100644
+index eb5a942241a2..2a16e02f26db 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -476,6 +476,7 @@ export rust_common_flags := --edition=2021 \
- 			    -Wclippy::all \
- 			    -Wclippy::as_ptr_cast_mut \
- 			    -Wclippy::as_underscore \
-+			    -Wclippy::cast_lossless \
- 			    -Wclippy::ignored_unit_patterns \
- 			    -Wclippy::mut_mut \
- 			    -Wclippy::needless_bitwise_bool \
-diff --git a/drivers/gpu/drm/drm_panic_qr.rs b/drivers/gpu/drm/drm_panic_qr.rs
-index f2a99681b998..d28e8f199d11 100644
---- a/drivers/gpu/drm/drm_panic_qr.rs
-+++ b/drivers/gpu/drm/drm_panic_qr.rs
-@@ -386,7 +386,7 @@ fn next(&mut self) -> Option<Self::Item> {
-         match self.segment {
-             Segment::Binary(data) => {
-                 if self.offset < data.len() {
--                    let byte = data[self.offset] as u16;
-+                    let byte = data[self.offset].into();
-                     self.offset += 1;
-                     Some((byte, 8))
-                 } else {
+@@ -485,6 +485,7 @@ export rust_common_flags := --edition=2021 \
+ 			    -Wclippy::no_mangle_with_rust_abi \
+ 			    -Wclippy::ptr_as_ptr \
+ 			    -Wclippy::ptr_cast_constness \
++			    -Wclippy::ref_as_ptr \
+ 			    -Wclippy::undocumented_unsafe_blocks \
+ 			    -Wclippy::unnecessary_safety_comment \
+ 			    -Wclippy::unnecessary_safety_doc \
 diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
-index 0486a32ed314..b105a0d899cc 100644
+index b105a0d899cc..2b69016070c6 100644
 --- a/rust/bindings/lib.rs
 +++ b/rust/bindings/lib.rs
-@@ -25,6 +25,7 @@
- )]
- 
+@@ -27,6 +27,7 @@
  #[allow(dead_code)]
-+#[allow(clippy::cast_lossless)]
+ #[allow(clippy::cast_lossless)]
  #[allow(clippy::ptr_as_ptr)]
++#[allow(clippy::ref_as_ptr)]
  #[allow(clippy::undocumented_unsafe_blocks)]
  mod bindings_raw {
-diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
-index a59469c785e3..abc58b4d1bf4 100644
---- a/rust/kernel/net/phy.rs
-+++ b/rust/kernel/net/phy.rs
-@@ -142,7 +142,7 @@ pub fn is_autoneg_enabled(&self) -> bool {
-         // SAFETY: The struct invariant ensures that we may access
-         // this field without additional synchronization.
-         let bit_field = unsafe { &(*self.0.get())._bitfield_1 };
--        bit_field.get(13, 1) == bindings::AUTONEG_ENABLE as u64
-+        bit_field.get(13, 1) == bindings::AUTONEG_ENABLE.into()
+     // Manual definition for blocklisted types.
+diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
+index 4063f09d76d9..37cc03d1df4c 100644
+--- a/rust/kernel/device_id.rs
++++ b/rust/kernel/device_id.rs
+@@ -136,7 +136,8 @@ impl<T: RawDeviceId, U, const N: usize> IdTable<T, U> for IdArray<T, U, N> {
+     fn as_ptr(&self) -> *const T::RawType {
+         // This cannot be `self.ids.as_ptr()`, as the return pointer must have correct provenance
+         // to access the sentinel.
+-        (self as *const Self).cast()
++        let this: *const Self = self;
++        this.cast()
      }
  
-     /// Gets the current auto-negotiation state.
-@@ -426,7 +426,7 @@ impl<T: Driver> Adapter<T> {
-         // where we hold `phy_device->lock`, so the accessors on
-         // `Device` are okay to call.
-         let dev = unsafe { Device::from_raw(phydev) };
--        T::match_phy_device(dev) as i32
-+        T::match_phy_device(dev).into()
+     fn id(&self, index: usize) -> &T::RawType {
+diff --git a/rust/kernel/fs/file.rs b/rust/kernel/fs/file.rs
+index 791f493ada10..559a4bfa123f 100644
+--- a/rust/kernel/fs/file.rs
++++ b/rust/kernel/fs/file.rs
+@@ -359,12 +359,13 @@ impl core::ops::Deref for File {
+     type Target = LocalFile;
+     #[inline]
+     fn deref(&self) -> &LocalFile {
++        let this: *const Self = self;
+         // SAFETY: The caller provides a `&File`, and since it is a reference, it must point at a
+         // valid file for the desired duration.
+         //
+         // By the type invariants, there are no `fdget_pos` calls that did not take the
+         // `f_pos_lock` mutex.
+-        unsafe { LocalFile::from_raw_file((self as *const Self).cast()) }
++        unsafe { LocalFile::from_raw_file(this.cast()) }
+     }
+ }
+ 
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index 40034f77fc2f..75b4a18c67c4 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -28,8 +28,9 @@ pub const fn is_empty(&self) -> bool {
+     /// Creates a [`BStr`] from a `[u8]`.
+     #[inline]
+     pub const fn from_bytes(bytes: &[u8]) -> &Self {
++        let bytes: *const [u8] = bytes;
+         // SAFETY: `BStr` is transparent to `[u8]`.
+-        unsafe { &*(bytes as *const [u8] as *const BStr) }
++        unsafe { &*(bytes as *const BStr) }
      }
  
-     /// # Safety
+     /// Strip a prefix from `self`. Delegates to [`slice::strip_prefix`].
+@@ -289,8 +290,9 @@ pub const fn from_bytes_with_nul(bytes: &[u8]) -> Result<&Self, CStrConvertError
+     /// `NUL` byte (or the string will be truncated).
+     #[inline]
+     pub unsafe fn from_bytes_with_nul_unchecked_mut(bytes: &mut [u8]) -> &mut CStr {
++        let bytes: *mut [u8] = bytes;
+         // SAFETY: Properties of `bytes` guaranteed by the safety precondition.
+-        unsafe { &mut *(bytes as *mut [u8] as *mut CStr) }
++        unsafe { &mut *(bytes as *mut CStr) }
+     }
+ 
+     /// Returns a C pointer to the string.
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index 80a9782b1c6e..7a6fc78fc314 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -240,9 +240,10 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+     /// Fails with [`EFAULT`] if the read happens on a bad address, or if the read goes out of
+     /// bounds of this [`UserSliceReader`]. This call may modify `out` even if it returns an error.
+     pub fn read_slice(&mut self, out: &mut [u8]) -> Result {
++        let out: *mut [u8] = out;
+         // SAFETY: The types are compatible and `read_raw` doesn't write uninitialized bytes to
+         // `out`.
+-        let out = unsafe { &mut *(out as *mut [u8] as *mut [MaybeUninit<u8>]) };
++        let out = unsafe { &mut *(out as *mut [MaybeUninit<u8>]) };
+         self.read_raw(out)
+     }
+ 
+@@ -348,6 +349,7 @@ pub fn write<T: AsBytes>(&mut self, value: &T) -> Result {
+         if len > self.length {
+             return Err(EFAULT);
+         }
++        let value: *const T = value;
+         // SAFETY: The reference points to a value of type `T`, so it is valid for reading
+         // `size_of::<T>()` bytes.
+         //
+@@ -355,11 +357,7 @@ pub fn write<T: AsBytes>(&mut self, value: &T) -> Result {
+         // kernel pointer. This mirrors the logic on the C side that skips the check when the length
+         // is a compile-time constant.
+         let res = unsafe {
+-            bindings::_copy_to_user(
+-                self.ptr as *mut c_void,
+-                (value as *const T).cast::<c_void>(),
+-                len,
+-            )
++            bindings::_copy_to_user(self.ptr as *mut c_void, value.cast::<c_void>(), len)
+         };
+         if res != 0 {
+             return Err(EFAULT);
 diff --git a/rust/uapi/lib.rs b/rust/uapi/lib.rs
-index f03b7aead35a..d5dab4dfabec 100644
+index d5dab4dfabec..6230ba48201d 100644
 --- a/rust/uapi/lib.rs
 +++ b/rust/uapi/lib.rs
-@@ -14,6 +14,7 @@
- #![cfg_attr(test, allow(unsafe_op_in_unsafe_fn))]
- #![allow(
+@@ -16,6 +16,7 @@
      clippy::all,
-+    clippy::cast_lossless,
+     clippy::cast_lossless,
      clippy::ptr_as_ptr,
++    clippy::ref_as_ptr,
      clippy::undocumented_unsafe_blocks,
      dead_code,
+     missing_docs,
 
 -- 
 2.49.0
