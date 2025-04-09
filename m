@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-30424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CE57A8287B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3BFBA82884
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:47:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C0941890F48
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:42:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90C671892589
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF3F266B43;
-	Wed,  9 Apr 2025 14:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5E325F7BA;
+	Wed,  9 Apr 2025 14:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hW1/Mmnr"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FS/JGWlw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6569191F77;
-	Wed,  9 Apr 2025 14:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229CB17C224;
+	Wed,  9 Apr 2025 14:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744209746; cv=fail; b=GrMuqb9YGAJznfD2n5iFkVDoMXziDtOb8u0s7YJTj4SQXnLQ/tejIeT3Xp7g07nIAcXo1IM/z+35lA+ElUCW0HrBN+lXW047fSTpmexPjBTtJtrq9bYqQflsNZlA3IZGwrvpQtbRs5xDezssMHBlMta8jRg6rg0pCUUyilObRPA=
+	t=1744209750; cv=fail; b=HkLhv+hn6r8wWdh6ejxyD01FyKItxfLAUQCit//sPR6K6fAqfZiP8xo7874sEnFov3UqOsnUSdKNsjp3rLJQIm4CxkyPanqNd3I5HdF1eTmbOPf1adMny1fWY+OldhYRBHT11pu5ZB2B3HLaq5Giizl/JtgHvQ9qmjwvht5+P9w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744209746; c=relaxed/simple;
-	bh=E7YAMbh4rhcCrP8GqyO5BHfECff1nYTF5Hqcd6c1fFw=;
+	s=arc-20240116; t=1744209750; c=relaxed/simple;
+	bh=iazEz40QiClbJxAIKlFR2LeyEukHV9LvwHNFn1LzXaE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aobIDUc18L8tNEJAxWZRVXFSjm4jEN70L73NpKcdhwanyTDb7u0wvYWzaktH7oTIEsv4sLwV9cf35mASawYwEe0WoQDgGpPqp9/bqIaRozfwLoCn9rrpzlTqsqhaNlFuZ5GCJ+5YtA9mcDMt/jOsJCJfQI2Ev08xgWYSE6ZfXWY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hW1/Mmnr; arc=fail smtp.client-ip=40.107.243.80
+	 MIME-Version:Content-Type; b=YgJ7IYWWrDt5yCrnpgUuMl27uBDPMBaSQ9XtPC6xv1nCJ28tm+9ymW7rNrTgipuUXE+czI9tv7vIMvNit+Si9XqclETRqMn5vgP6hkrX1JhlyE2oAJc/23AsOsDFFL2mnTmQ0gJGWLPXq8RpdYBmYV6C1INSnEHhMxOtC3dh4Zs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FS/JGWlw; arc=fail smtp.client-ip=40.107.237.63
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HRgPSxDUco8Z4wMlLNh8Ln3q6kCLIsuEWFo35+xnxHaC3Zvgv2kqfD0VfDykj6LDQXApgMWIXl5lJnYsU7ugzHzaULpXlxxbXeeYB504qhB5G9EUAwWlBacw9mP58PqnEQZybt7NWXmMQtw15n+SrkiTLnHjgBj2sEDf5jJXZKM2p7iw93AsQnn/PCZNPz8hGGRjQgswy8IY5y/a7ckGEiwXCrxkr0guCDUM9usWsO8HzGeZ7gvWkiZAdg4xMyGnif7oQD3YODhmKXBhBby6dzUO7mymKDVeeGd3o1EV6Bd22lx2rdPWnKjT+H4ceZW52EKSPM4P/mCrlFgD0885zg==
+ b=eu5YUFM+wIo4IKsBfYF6L9npqJqaRu2dBsW+y8nOxedPPEGm2ZTF7FV5MmHSZaUe6nPbhdShGe3go5Cpcq2e7py1bgXwLTeTo5UMVaLZsfromuGimnIKBitcjmf/PtnhIJaeFeOCO/FaDPgJXtn0T8PIz/hq5rfjC186gOBF4qARROrfTqPyUN+VTXu0WgEe8kIE+o5Fb0N9npq2MG6DTNCU5nTifjEMKnnLO70kpnbPJ7Iitv1YEfNVOLxiabCM0boZ0WrbeEnpZU1sLtRVKi7RwzYQGpsBCd8MFT0XF3dYRSvK9E2An+txgrF2fhsEMGBCyzWy6TRJ1gwgoGr2yg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JeP0oeFT1V1YZfI0RbwA8wpecEhr06zGkLkr7cOahY8=;
- b=BDwmLeXsq92P32fLvvTRnufpsb77FLWC8A86bE2RtPhPWC0gDdBXiDLi383VGLoAT2hWD2Jdw6RwjWml9WWUWxbq4H5uLhkBICbkVR8n45uOq8xl+lLsbSQnHXCgGd0kdikyyNl+GC0KVJn8ywDvWPM9JlK58GUACzNn7hgYgytAMLVYREesNWfNDKObrSN0a0mIKLs5U3rjb1qnB/44wFOfldr9W7fIXFeYfkO7mY7AUaq/dlOcOTPkTlvHnbPCUY0r4f1CdNYqZ5RCv3vqaZVLCjZ7LVuicpWghXFFmutv5EiO+f8zHd4mcOgr8DFPsaV6mRyonXHhVH7ac14oLg==
+ bh=DtZrrL633P7mD+R159+1dgIZxXtl2NK0stD0V2JhJV8=;
+ b=MZY7Q7+4o0hVX0O+1DV8seHA4ZSt+tGlD/4iQyG5lzKN3pk95zXhNWZ3oWm3l/aA6HAHUSZ5JgJRcT90L1bOQoFj0GWI6DNoz79DmFpqUuf35AzZ9MlD2yIY+17mrHtpGbKDn2BzDakh/y2UAw7mnxB/JPI337w5hUB9+r/2W7W9xmdIu2xBasswmRfLrvdSUz7ImKf8k2QwzzI4T9kA34EnwTMer7nzwSQrCBhlaRiI0oHZphBi0ZiF2lGOLqM0+kLTcZLKSPfqiNU5JK1F6mgLxXgUf9eaQiLeyITZbWSZvNU5RJHLrlavM6rmBMcplKz7Cpk6CMls6E1iEeJ3vA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JeP0oeFT1V1YZfI0RbwA8wpecEhr06zGkLkr7cOahY8=;
- b=hW1/MmnrjqFBhJS5TX8EfxWBCid7BuOicRvdWQypkMvvlOSa/kqnrrL99BoA6e/foSfW66og8VWbzCQp5xO1JGDUJ+BPEBeF+shLEXm4wldAraConMX/IIMXZBEmsODPKQJ118e7hi5F6PrIyAVt3k4KFqPZx/KWLbIhluTBPj4utJuabMOTQOh6u15STi382z09B1XLru2QXfMUvYESO812DsmGQBWOcq7EhOnqHpXNiBOCmW55KA7uWtEOwzD8IPjJulgyibpYUgRCC4WT2QZnGcGHr6o/xMkQdW2boNkAKvIzBP4JTDe/aSfN0v20wqY/zYhJTyW3HjLTgoc2sQ==
-Received: from CH0PR13CA0024.namprd13.prod.outlook.com (2603:10b6:610:b1::29)
- by CH3PR12MB9453.namprd12.prod.outlook.com (2603:10b6:610:1c9::12) with
+ bh=DtZrrL633P7mD+R159+1dgIZxXtl2NK0stD0V2JhJV8=;
+ b=FS/JGWlw33HV/C052v3vtBvqEMGWnFs+hGGFFYf50MFVbU4W/oPelhMLJ74fe3A3juMKT4jqwLmBRpiIqvk76FSNCJsTKDXw6ABFCt9zRiWn5Ts/fjk349YWkjcIRT2GzCzM4hHHvfOOIMnrcB5V/o7qCa5hQq2eO9AlARgZrEno2DJZhxgTMZPkutrwG5IDNI4/Fti046IuvZ6m/5y3KglRWC7Y8STrz9oFNIoVe36w6lxM3XjbU1Y4zlpoJlP7gcNM/QpEjnM663iwtQP2JBtcWqfa+MJmhRm+6+z4BaFqzcMfO8KRXfK65Jw7/5NQStCRn8o+NQLUJYwsTWw+mg==
+Received: from CH0PR03CA0079.namprd03.prod.outlook.com (2603:10b6:610:cc::24)
+ by CY8PR12MB7732.namprd12.prod.outlook.com (2603:10b6:930:87::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.48; Wed, 9 Apr
- 2025 14:42:21 +0000
-Received: from CH3PEPF0000000E.namprd04.prod.outlook.com
- (2603:10b6:610:b1:cafe::75) by CH0PR13CA0024.outlook.office365.com
- (2603:10b6:610:b1::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.8 via Frontend Transport; Wed, 9
- Apr 2025 14:42:21 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.35; Wed, 9 Apr
+ 2025 14:42:25 +0000
+Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
+ (2603:10b6:610:cc:cafe::c2) by CH0PR03CA0079.outlook.office365.com
+ (2603:10b6:610:cc::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.36 via Frontend Transport; Wed,
+ 9 Apr 2025 14:42:25 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -64,17 +64,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.160 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF0000000E.mail.protection.outlook.com (10.167.244.42) with Microsoft
+ CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8606.22 via Frontend Transport; Wed, 9 Apr 2025 14:42:21 +0000
+ 15.20.8606.22 via Frontend Transport; Wed, 9 Apr 2025 14:42:25 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Apr 2025
- 07:42:05 -0700
+ 07:42:11 -0700
 Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 9 Apr 2025 07:41:58 -0700
+ 15.2.1544.14; Wed, 9 Apr 2025 07:42:05 -0700
 From: Cosmin Ratiu <cratiu@nvidia.com>
 To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
 CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
@@ -91,9 +91,9 @@ CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
  Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat
  Bhushan <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>,
 	"Leon Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 2/6] xfrm: Use xdo.dev instead of xdo.real_dev
-Date: Wed, 9 Apr 2025 17:41:29 +0300
-Message-ID: <20250409144133.2833606-3-cratiu@nvidia.com>
+Subject: [PATCH net-next v2 3/6] xfrm: Remove unneeded device check from validate_xmit_xfrm
+Date: Wed, 9 Apr 2025 17:41:30 +0300
+Message-ID: <20250409144133.2833606-4-cratiu@nvidia.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20250409144133.2833606-1-cratiu@nvidia.com>
 References: <20250409144133.2833606-1-cratiu@nvidia.com>
@@ -109,118 +109,124 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000E:EE_|CH3PR12MB9453:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91b84a2a-3f77-4ef4-d9dd-08dd7774bc3e
+X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|CY8PR12MB7732:EE_
+X-MS-Office365-Filtering-Correlation-Id: 87e995db-e309-49dc-5b68-08dd7774be9b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|1800799024|82310400026;
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Bh/3NbByT0ENbWJfjLeLXg9GHl3F3YV2SkcIjsdRqtzkGN1tp19JLEjpDdil?=
- =?us-ascii?Q?f7E33qsQO1xJ3pmGEpTTe8Vzoqt1rqfAiGsZeBzTpGq5RtBbUNTMOKck4AX7?=
- =?us-ascii?Q?zjbq4c2245O992uaVnREo4vGO9ocySMEtI6AWM3VmVAOk6XxA8Y1EwoCFYcG?=
- =?us-ascii?Q?y2U3TfIkPIQBCGeeuMaSGhTytj/EBbVkY8rVHm9S9I772IzkfCJjSshOyykd?=
- =?us-ascii?Q?F/AuowSE+Evg8AK9NgLM/9D+HHaBoK/9wRiTB1a2tgpWVtn976VKbKY5Pnbt?=
- =?us-ascii?Q?1GvSCxnwIKc6bJ5+Gv+cMLIfNjmeDaxhGvzIkewNHWM4o2o7RC9wzylWE9ej?=
- =?us-ascii?Q?RKneFj5RD7tMQ+t6GPSDNY/XBhK/V92TopEe+wPcY7UmQhSMXR+CJ0N2lyng?=
- =?us-ascii?Q?0oBCr2odaner2rldrlG3XvZme28wIyrDGzdRi+l3KP1WAYRbQeSIMbgELUTi?=
- =?us-ascii?Q?2udKrxEmv3LAMiauytURFZIEuY6Y+oh98EJkmSQ9LtcrkOS9xBkHK1Js1A6B?=
- =?us-ascii?Q?Z6rUSrrlvPTbrA7KyPzXMq08gzxDATr5jSoisileW/2XmRPh8RYVgdoIVuu6?=
- =?us-ascii?Q?CitjcePFTRELkp/AJqFRVuTKifG1s4DgVlQptfY88JwD62l143e8HCeLK7hn?=
- =?us-ascii?Q?jKw2LSlG8pEVRczNltNCodKN8RJSsK4dqt6Ff+q1lS8C9YoVsAXHVSZN43B6?=
- =?us-ascii?Q?IT9IK09dCisRfiOQDWIv/YOcwQJPeWQ32ji1CNmtEed4Mn6zTA2wd+zF0ZgU?=
- =?us-ascii?Q?Dd/g9nGYp/K+nyjqIokkmxH2ltnHGdZWWeRu1sappAEg5MgTTsYzH/hNnE51?=
- =?us-ascii?Q?xf4eebE2n0YwP875HTUlYbjmAq7sjfP5VETNdlTCz0Sm4x5z12YRt1yX8Qmz?=
- =?us-ascii?Q?nttEIcYycqkhAWfi5c+UFemgQUSBOSbREGCzjhZzwbxTKofEp0s1wG4cxU08?=
- =?us-ascii?Q?DRyYAfKwUP0jJM4hS78PY9runbin94ohkLD6ZJkWoQ2gbpZQf2nihQRx0p2j?=
- =?us-ascii?Q?U6XdXp/KjTTJrMNTJzCYqjIn7HnuCg5XasHmwZvy9W3uGCy7feCoAN9GLwpv?=
- =?us-ascii?Q?lNFuxJjqDs7baR+EwlsvWGomhG6UCCN9Mdkt0zT3ZcMGRQdCrGe7k5o+R/kj?=
- =?us-ascii?Q?/ZkjNJqsWLVbokH670GOK0DXahxYvpcjCHMZRZnbjtxWUb5RH3NSU9Rq3EWa?=
- =?us-ascii?Q?WeJYpDOruhBS9gv+jp9gQGSUj+E7buz9UEQt1oBEp9ONnC9E0m6QqXZbZ6Iv?=
- =?us-ascii?Q?Fo0RkWnZoBIdnLO011SBIOITm08i9qAbxRoIyXWUS2Zd5GtOLJP/XFQv5bs3?=
- =?us-ascii?Q?80iVBxAtvCtks7g6dxUyu1Kf9xtljPkJ02c5qfSZGqhD77K8KqDromMPrX6L?=
- =?us-ascii?Q?ezb/0XgmC9vVezBOzjH2fBxMVVBOkkwO1W95zWW4Er4zqiTPNZqJKGOTNeKF?=
- =?us-ascii?Q?hpsNoG+t9WuN0mk2ifc29XFweHDwQGJICJLWZSQo4Noh6rixkYDI/KFpJr7o?=
- =?us-ascii?Q?lA+qx4o8XNZxodcqqvcybsWQl631dvMTHuO1?=
+	=?us-ascii?Q?jBfvnzQ+kJtHYpMkozfRrDtVRDz+Se79bmrRwjxObFMsmvnMkODRnBKomNdP?=
+ =?us-ascii?Q?bA4cteS9mZVPQ5ZnE8kCU6wb9MZUa4939FKRYS1Vo4n3kkAuis3yw7FqIenO?=
+ =?us-ascii?Q?9Ul/e8nqlwtuW7HaJnETJ0Tj/hVZkgzlhZ4r/HmSLMJ9X3fwrJkQyXFMdOKS?=
+ =?us-ascii?Q?uk3Cgs7mOfi8P16mLUKVQWolnTQS0sWEIQS2lZab5iviJPolFQ6OO/ln5eur?=
+ =?us-ascii?Q?qjS11FwuO++/3DOGcHH3MLEKqw0mAA5IIVtM1gq0WTmfT2LqiwHu5nMQLSsX?=
+ =?us-ascii?Q?jeAw9hrDuE6WkyU8L2vQSkR8/C03EjPwR7EbJ43iMvlVRyz/CNtI7mq+hPmB?=
+ =?us-ascii?Q?vx1Ng3R/1se8VdXqTkCMR4a5kHrE8WJLANYtwP8JoOlJgAAP3XTYNwazlqf7?=
+ =?us-ascii?Q?jotxtLnBWA7oUyaO68bNyslsUl2ycIPadVHb4EVDzelhFJJmRsKmxP+h+haC?=
+ =?us-ascii?Q?MuEzxzLUxGkknED3bWKBFauAcKLEppzBaTm+43YHR+6cUvA7xXwsOd75FLMe?=
+ =?us-ascii?Q?+7blEFR7F4qqCclP4YeIfsCiD2zJMwmn1XarimIxj5AgcwfH9LRsH/LgpjSM?=
+ =?us-ascii?Q?iNPORKRUNqgRpXOMDD75R5oLX6fxfNapHrgyM9hrQ4ZPKUh87/mBbmOVE54f?=
+ =?us-ascii?Q?9DRZl03N0pb7NXFfJq1jBK/DvIfjC7xXM9hlzpeHHa/cC1sDJ+AfEaUIsvBk?=
+ =?us-ascii?Q?2JJa/09tY8AMUq4hvIC/G3BVwoMBDN0r5zWmtUcjoVd71lOSIK11BTWJZRcG?=
+ =?us-ascii?Q?sBa5XfjM5l4wQ2L1IFCCgA6APS0i0/m9srPslTMuMMJxb1DtBk3fK0gRmNCc?=
+ =?us-ascii?Q?gCSi+7p1GH/8PEf6nEbszkeLFBz1DHCgn3RjUoMvTYO8pw0PKee3F5acO7yw?=
+ =?us-ascii?Q?NZCYgVSMEpAYodGpUr+Wkq2BUh4rWJ9ktH0+zFD1YCuTXAkEAdCS2LGiLbfP?=
+ =?us-ascii?Q?jYRlwrvfwHg7YLzCTCsVNViiJw6TENom73z0Rg1TeF+97/rxPYUzNdAkf4Om?=
+ =?us-ascii?Q?dAi3iDQe8QNcLOMuJ5g04UBFA1nmQo1MPNTTy5zaAePvGySuVYGh0OrLIW2+?=
+ =?us-ascii?Q?v/v6m3ETFJ13w3DftP1AKvyBfwsvjzCs99Ef+Cts6h481oPEoqynzRPJOkyB?=
+ =?us-ascii?Q?kDdzMLrbNmd4nvQD3Xu1781g7HeaZHsNFRVKXXk8BgNIcUf4CAyQX22av7wQ?=
+ =?us-ascii?Q?aD0qEA/meLoXoe66EtbxI9ZVWpGEehp/U/g9/2ZfRIQ0/qdojdVyW2uiVM9X?=
+ =?us-ascii?Q?yLl56GHfCFGZegy7/09w/c8DdoUF/JWmStbKaTqhdnOOoLOLrOVKdp0Mo0dU?=
+ =?us-ascii?Q?6hbHVzuPwQWpOeK/fPRPb0GLzvbSySP4E29wUip/VGzsJTJKCdvUX6cAj/Cz?=
+ =?us-ascii?Q?vRhhPBK5xgYUWwDFv7R6ceWi9kpp3KS5eJTZl5IBWrBzz62/itKB+6wkNzuQ?=
+ =?us-ascii?Q?//J5aKCDlqzvy/+2TwyOnDPpS35+spWYgdRpR4sETURKonnJL/hZQq3zYROD?=
+ =?us-ascii?Q?84JYltYlHbxSjqQ=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:21.3063
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:25.2680
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91b84a2a-3f77-4ef4-d9dd-08dd7774bc3e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87e995db-e309-49dc-5b68-08dd7774be9b
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000E.namprd04.prod.outlook.com
+	CH3PEPF0000000F.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9453
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7732
 
-The policy offload struct was reused from the state offload and
-real_dev was copied from dev, but it was never set to anything else.
-Simplify the code by always using xdo.dev for policies.
+validate_xmit_xfrm checks whether a packet already passed through it on
+the master device (xso.dev) and skips processing the skb again on the
+slave device (xso.real_dev).
+
+This check was added in commit [1] to avoid tx packets on a bond device
+pass through xfrm twice and get two sets of headers, but the check was
+soon obsoleted by commit [2], which was added around the same time to
+fix a similar but unrelated problem. Commit [3] set XFRM_XMIT only when
+packets are hw offloaded.
+
+xso.dev is usually equal to xso.real_dev, unless bonding is used, in
+which case the bonding driver uses xso.real_dev to manage offloaded xfrm
+states.
+
+Since commit [3], the check added in commit [1] is unused on all cases,
+since packets going through validate_xmit_xfrm twice bail out on the
+check added in commit [2]. Here's a breakdown of relevant scenarios:
+
+1. ESP offload off: validate_xmit_xfrm returns early on !xo.
+2. ESP offload on, no bond: skb->dev == xso.real_dev == xso.dev.
+3. ESP offload on, bond, xs on bond dev: 1st pass adds XFRM_XMIT, 2nd
+   pass returns early on XFRM_XMIT.
+3. ESP offload on, bond, xs on slave dev: 1st pass returns early on
+   !xo, 2nd pass adds XFRM_XMIT.
+4. ESP offload on, bond, xs on both bond AND slave dev: only 1 offload
+   possible in secpath. Either 1st pass adds XFRM_XMIT and 2nd pass returns
+   early on XFRM_XMIT, or 1st pass is sw and returns early on !xo.
+6. ESP offload on, crypto fallback triggered in esp_xmit/esp6_xmit: 1st
+   pass does sw crypto & secpath_reset, 2nd pass returns on !xo.
+
+This commit removes the unnecessary check, so xso.real_dev becomes what
+it is in practice: a private field managed by bonding driver.
+The check immediately below that can be simplified as well.
+
+[1] commit 272c2330adc9 ("xfrm: bail early on slave pass over skb")
+[2] commit 94579ac3f6d0 ("xfrm: Fix double ESP trailer insertion in
+IPsec crypto offload.")
+[3] commit c7dbf4c08868 ("xfrm: Provide private skb extensions for
+segmented and hw offloaded ESP packets")
 
 Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
 Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c | 2 +-
- net/xfrm/xfrm_device.c                                   | 2 --
- net/xfrm/xfrm_state.c                                    | 2 --
- 3 files changed, 1 insertion(+), 5 deletions(-)
+ net/xfrm/xfrm_device.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
-index 626e525c0f0d..0dfbbe21936f 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
-@@ -1164,7 +1164,7 @@ mlx5e_ipsec_build_accel_pol_attrs(struct mlx5e_ipsec_pol_entry *pol_entry,
- static int mlx5e_xfrm_add_policy(struct xfrm_policy *x,
- 				 struct netlink_ext_ack *extack)
- {
--	struct net_device *netdev = x->xdo.real_dev;
-+	struct net_device *netdev = x->xdo.dev;
- 	struct mlx5e_ipsec_pol_entry *pol_entry;
- 	struct mlx5e_priv *priv;
- 	int err;
 diff --git a/net/xfrm/xfrm_device.c b/net/xfrm/xfrm_device.c
-index d62f76161d83..4f4165ff738d 100644
+index 4f4165ff738d..0be5f7ffd019 100644
 --- a/net/xfrm/xfrm_device.c
 +++ b/net/xfrm/xfrm_device.c
-@@ -378,7 +378,6 @@ int xfrm_dev_policy_add(struct net *net, struct xfrm_policy *xp,
+@@ -145,10 +145,6 @@ struct sk_buff *validate_xmit_xfrm(struct sk_buff *skb, netdev_features_t featur
+ 		return NULL;
+ 	}
  
- 	xdo->dev = dev;
- 	netdev_tracker_alloc(dev, &xdo->dev_tracker, GFP_ATOMIC);
--	xdo->real_dev = dev;
- 	xdo->type = XFRM_DEV_OFFLOAD_PACKET;
- 	switch (dir) {
- 	case XFRM_POLICY_IN:
-@@ -400,7 +399,6 @@ int xfrm_dev_policy_add(struct net *net, struct xfrm_policy *xp,
- 	err = dev->xfrmdev_ops->xdo_dev_policy_add(xp, extack);
- 	if (err) {
- 		xdo->dev = NULL;
--		xdo->real_dev = NULL;
- 		xdo->type = XFRM_DEV_OFFLOAD_UNSPECIFIED;
- 		xdo->dir = 0;
- 		netdev_put(dev, &xdo->dev_tracker);
-diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-index d896c3fefb07..33d1f5679e8b 100644
---- a/net/xfrm/xfrm_state.c
-+++ b/net/xfrm/xfrm_state.c
-@@ -1555,7 +1555,6 @@ xfrm_state_find(const xfrm_address_t *daddr, const xfrm_address_t *saddr,
- 			xso->type = XFRM_DEV_OFFLOAD_PACKET;
- 			xso->dir = xdo->dir;
- 			xso->dev = xdo->dev;
--			xso->real_dev = xdo->real_dev;
- 			xso->flags = XFRM_DEV_OFFLOAD_FLAG_ACQ;
- 			netdev_hold(xso->dev, &xso->dev_tracker, GFP_ATOMIC);
- 			error = xso->dev->xfrmdev_ops->xdo_dev_state_add(x, NULL);
-@@ -1563,7 +1562,6 @@ xfrm_state_find(const xfrm_address_t *daddr, const xfrm_address_t *saddr,
- 				xso->dir = 0;
- 				netdev_put(xso->dev, &xso->dev_tracker);
- 				xso->dev = NULL;
--				xso->real_dev = NULL;
- 				xso->type = XFRM_DEV_OFFLOAD_UNSPECIFIED;
- 				x->km.state = XFRM_STATE_DEAD;
- 				to_put = x;
+-	/* This skb was already validated on the upper/virtual dev */
+-	if ((x->xso.dev != dev) && (x->xso.real_dev == dev))
+-		return skb;
+-
+ 	local_irq_save(flags);
+ 	sd = this_cpu_ptr(&softnet_data);
+ 	err = !skb_queue_empty(&sd->xfrm_backlog);
+@@ -159,8 +155,7 @@ struct sk_buff *validate_xmit_xfrm(struct sk_buff *skb, netdev_features_t featur
+ 		return skb;
+ 	}
+ 
+-	if (skb_is_gso(skb) && (unlikely(x->xso.dev != dev) ||
+-				unlikely(xmit_xfrm_check_overflow(skb)))) {
++	if (skb_is_gso(skb) && unlikely(xmit_xfrm_check_overflow(skb))) {
+ 		struct sk_buff *segs;
+ 
+ 		/* Packet got rerouted, fixup features and segment it. */
 -- 
 2.45.0
 
