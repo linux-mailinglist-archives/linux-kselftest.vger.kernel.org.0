@@ -1,223 +1,159 @@
-Return-Path: <linux-kselftest+bounces-30400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 884D5A81F47
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 10:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38985A82095
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 10:54:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC38B19E72C7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 08:03:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0560C1897232
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 08:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D331925B666;
-	Wed,  9 Apr 2025 08:03:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB5F25A357;
+	Wed,  9 Apr 2025 08:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="cxcc6t7l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F53C25B664;
-	Wed,  9 Apr 2025 08:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F71925B690;
+	Wed,  9 Apr 2025 08:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744185801; cv=none; b=W0CqStIiyDw7VRFKcqubHHtE5Y3td+1q7o2s/HB2JC8wqC/9+CjnifcHJhPh/o429AXIgYbBnTcHJxnmze79fSX3UUfwagjqplUhEgkajABLr6q+QUa7kuZT8SXF4R9g407nl4bO8Y5l82DEbZJrAEfscjFHN8OfAx5WbFmAY/8=
+	t=1744188813; cv=none; b=h96KGNSJkpfoPSR4JP/CGWFEvj5BbPSkePUxkfXhhWsZ++Zy9wdig0yd4FbZppRaqnl6RVSbMIl/DbSZlxV+8ctPIggOsofH8v5S8ffklgi3Yyzh6ZF8PEufO2kcft5oc6vk9GvUziwNrcpDt7WsPcY/1QeGelVeLAyONaVzHpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744185801; c=relaxed/simple;
-	bh=FdMgKj0YSPnPCB+7xLuo7wAVHvoC/bo1CJdNh1P7+AQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q+xlmr35LoJltYsV5D4T24e9BEoIZUeaRyI7WWfZ9A3jZqY3VJFPlLHlCdJuvJtBEr+TEgsgR1sSWRMFln71g2v+bmXHOrztdpykXF4AYkClE1F03nVnmxLqOLWB2XQ1Oz73QCeKX/AtE6JopuM2oZsecTKVIeJSPHrwL3vbQnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DDCDC442BB;
-	Wed,  9 Apr 2025 08:03:06 +0000 (UTC)
-Message-ID: <fdf8f812-ae36-4327-b345-2df047b85e7a@ghiti.fr>
-Date: Wed, 9 Apr 2025 10:03:05 +0200
+	s=arc-20240116; t=1744188813; c=relaxed/simple;
+	bh=JANr8K80gzH6YMzB+AZDfrbEWVNq16HUPHiOCM3wntw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KIOgZIuF5LNJ5V6m0BkGUtFtnVRlWA3GaL/Q24e0S/6XrXJuYXhRNftwNcb0pw5NvNYdWwgaxxmk9S7T105V8nm68d5ymLFcdaJpHdyzgN0w7NSK2M4ewu/gQWQjupHfeMAcDCQ51hQilda0WizDjw5WEUPR8ANlK0o678QOqN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=cxcc6t7l; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1744188807; x=1744793607; i=ps.report@gmx.net;
+	bh=LWkTvKzxVOyUC8wTNsRvStz4gBx6U7IfQSnDVtRjgKc=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=cxcc6t7liwvnrZzvCpI0GcNiHBDSmjks6yyNz/b5PtQvR8sM3nVQw5RQNFOhhjyz
+	 afDPuyiiw8jHO+bxbV1Vlm/QUcG5XOZxYtTiKFxGO+nMeajO3eadBjtLY3RubW740
+	 x7GPiaillEYbeefivreB9FzpEx5e4oJZGnccpcBA+WuvSSnIafjHjt9DHwwONpMpv
+	 RrgtdLB0yUbBkS9oxngHvDgn88+lp2yHCDeDKzOyqcMJGGb7EINjRDdlKvrsJbxod
+	 sU92ENAUagwdgPm0S47mFH5kaj9uh6Hwe2iX8u5zjurLiZb7Wss2yKLLcjc3L3o7Z
+	 nFJ/vLWfbHUSox8tJQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.142]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mlf4c-1tJzlN2TcA-00ktu5; Wed, 09
+ Apr 2025 10:53:27 +0200
+Date: Wed, 9 Apr 2025 10:53:26 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: pid_namespace: Add missing sys/mount.h
+Message-ID: <20250409105326.0686ae7a@gmx.net>
+In-Reply-To: <20250408230204.2775226-1-tjmercier@google.com>
+References: <20250408230204.2775226-1-tjmercier@google.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 13/28] prctl: arch-agnostic prctl for indirect branch
- tracking
-Content-Language: en-US
-To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Christian Brauner <brauner@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
- rick.p.edgecombe@intel.com
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-13-e51202b53138@rivosinc.com>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250314-v5_user_cfi_series-v12-13-e51202b53138@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdehgeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeenucfhrhhomheptehlvgigrghnughrvgcuifhhihhtihcuoegrlhgvgiesghhhihhtihdrfhhrqeenucggtffrrghtthgvrhhnpedthfelfeejgeehveegleejleelgfevhfekieffkeeujeetfedvvefhledvgeegieenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmeeiudeileemjedtledumegugehfkeemjegttgegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmeeiudeileemjedtledumegugehfkeemjegttgegpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmeeiudeileemjedtledumegugehfkeemjegttgegngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeegkedprhgtphhtthhopeguvggsuhhgsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehmihhnghhosehrvgguhhgrthdrtghomhdprhgtphhtthhopegsp
- hesrghlihgvnhekrdguvgdprhgtphhtthhopegurghvvgdrhhgrnhhsvghnsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepgiekieeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhprgesiiihthhorhdrtghomhdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:NnAG57Me9pX9d0366GkvHaF+G1AesokUJ1FFcDYeqlh37P8A4+a
+ 5JcNlnbdYdq5yWRRutP4NfcJB9AE6wf6JTMmVCWOV0poKF2tCgpOqnTxGd9xgxNy2NqlgLS
+ XUMLFYgP75qjav0LG7Phvg3DpJ5a6eemOvhIbKPmJRKAW/MMkMVzVoBwRxrKI04o532rEun
+ OlfI7uY8mnlUzCYIZJPiQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Dy3nV4WxeDk=;aUdo22BEm/h0SBbu7axpZrYrjrw
+ OXyYyPB9xnwrYQYL4hPxbuK2rR6L1Vlvr3XVYlJAFl673whT9oMO1OtAxx1MLKRu/5SHHYxM7
+ C/zo9S95eSzfiCtDqzFtK9xq99XO6EBTPDZCvBuuf+Bu94BB53gh3JcfF08LleL478e0xozoB
+ LM45HFr/rupT4ReT1FTfkSgzxVEsTs3kqi3QfWi0fUV5+jQ3bn0YSnyE3pVybMgAIJdo45K/H
+ mlA1VDkjFjNnYG5C8WXol6W3FElxfeiBQeEUsMRz8bBMLYvfNYSxFJhMJf1SkoaKGg2Sna6B7
+ +5MWK0e/a81XB7nd6J056/UZxMVQ98O3aRMgi9iniDdCxdAcEln+p8NyB0ZIZZ2KUOF9k8Iqr
+ Gt882UWzevHyBTw5e+3/lyatpFt02kLC/vBdsb1ZoXmGRq4FuJRdIPYkSd0FNRgm/tRbb1rwc
+ YVRU+OzmvfJ91qoVWYppX1Dz13vsRobJDvXnZ8NMHBJ5O6LyNBGphq1ezcEWW/nzzes9ehEXZ
+ ONJ52Cq3EIGFQ7oTDJmSFF9OzUWBt8CIEoi5gIKtRx5x+9TRBu6ovYfNTssxc932TiuKicQiZ
+ cTMVtg2gssYh36UsdB8LtSpOnQDALDMsMFv0vzHo8CLn1tHd9ZlmILo8ENKSMuvoshOX/3Pu4
+ ZrDn8XGzhiKHiOHWuTUaDfqMXblSVEAlOEgGPDeRig4pY+6tAM51pZfMIBny2Am2JmDwOknT3
+ PSebRKrJeawhDocXhaUkaV48L3Sx4bCzcXVBnifrhPFer+ka8pRw1Z68gUl18dytVO9/geZpG
+ EBW3zFVvgWcp3N/zDwZXknbCaCr3nmPDGf8US5HW2ecSEdVyJHLJ+Xv8rWgzGNNxlc0c1ZeBX
+ mY+K/Ukbrk9VLDz8oAol9S8YJ1ae7JFXbvAnKQcjf9ZXs7uuspHDu4nY3wiI9g9aWc0B1oCU/
+ SPPuW0j9wrPlY0OiOYYSm+o2KejvGhWIcF8itzS7xlJTwr3SY8oXbcCyJR0xw19jdZJHLFqIh
+ qbAiP7k92k9ouvSc4bRcwYgqbtctth8msaoOs5WQvgbH70Nqtugz+GSFpS22q4Oormz+UE8ws
+ XhsPxBeSYTZC6BAtZI/iaFNnXpPb5dpCNtzKx8hAp0HYpTubqu8heJJ1EiDgv14OltqBmqIvR
+ sSXZ0POqE9Yii8odHa8LIZjnXXsEm67JLhaRg383nKS7HoGuIFXuHW4JRhkTR+LyrRZ1BX+OC
+ Jnfw8gczBe4hUlV8zkgXoKoCsYTA/KkrGXSJ/5K1zokNHP3DRIKns7gtPaeM4ZgqG1I2Bza7Q
+ yhrOYmV1JpjPtxtmuN9HG/CGnq0dpOKfLgikKN9eo+KjH2iA72EqSPtXvb5MHAVwIAUJkEfnM
+ bUIpZj0t6AOVp9RvxP11KyD5JLUN5N958G2Mu6VcpO5zw0tJZIa7jA+bjRPs59iftlcgB9Mns
+ YmkU/uA==
 
-On 14/03/2025 22:39, Deepak Gupta wrote:
-> Three architectures (x86, aarch64, riscv) have support for indirect branch
-> tracking feature in a very similar fashion. On a very high level, indirect
-> branch tracking is a CPU feature where CPU tracks branches which uses
-> memory operand to perform control transfer in program. As part of this
-> tracking on indirect branches, CPU goes in a state where it expects a
-> landing pad instr on target and if not found then CPU raises some fault
-> (architecture dependent)
->
-> x86 landing pad instr - `ENDBRANCH`
-> arch64 landing pad instr - `BTI`
-> riscv landing instr - `lpad`
->
-> Given that three major arches have support for indirect branch tracking,
-> This patch makes `prctl` for indirect branch tracking arch agnostic.
->
-> To allow userspace to enable this feature for itself, following prtcls are
-> defined:
->   - PR_GET_INDIR_BR_LP_STATUS: Gets current configured status for indirect
->     branch tracking.
->   - PR_SET_INDIR_BR_LP_STATUS: Sets a configuration for indirect branch
->     tracking.
->     Following status options are allowed
->         - PR_INDIR_BR_LP_ENABLE: Enables indirect branch tracking on user
->           thread.
->         - PR_INDIR_BR_LP_DISABLE; Disables indirect branch tracking on user
->           thread.
->   - PR_LOCK_INDIR_BR_LP_STATUS: Locks configured status for indirect branch
->     tracking for user thread.
->
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
+Hello T.J.,
+
+On Tue,  8 Apr 2025 23:02:02 +0000, "T.J. Mercier" <tjmercier@google.com> w=
+rote:
+
+> pid_max.c: In function =E2=80=98pid_max_cb=E2=80=99:
+> pid_max.c:42:15: error: implicit declaration of function =E2=80=98mount=
+=E2=80=99
+>                                        [-Wimplicit-function-declaration]
+>    42 |         ret =3D mount("", "/", NULL, MS_PRIVATE | MS_REC, 0);
+>       |               ^~~~~
+> pid_max.c:42:36: error: =E2=80=98MS_PRIVATE=E2=80=99 undeclared (first us=
+e in this
+>                                   function); did you mean =E2=80=98MAP_PR=
+IVATE=E2=80=99?
+>    42 |         ret =3D mount("", "/", NULL, MS_PRIVATE | MS_REC, 0);
+>       |                                    ^~~~~~~~~~
+>       |                                    MAP_PRIVATE
+> pid_max.c:42:49: error: =E2=80=98MS_REC=E2=80=99 undeclared (first use in=
+ this function)
+>    42 |         ret =3D mount("", "/", NULL, MS_PRIVATE | MS_REC, 0);
+>       |                                                 ^~~~~~
+> pid_max.c:48:9: error: implicit declaration of function =E2=80=98umount2=
+=E2=80=99; did
+>                you mean =E2=80=98SYS_umount2=E2=80=99? [-Wimplicit-functi=
+on-declaration]
+>    48 |         umount2("/proc", MNT_DETACH);
+>       |         ^~~~~~~
+>       |         SYS_umount2
+> pid_max.c:48:26: error: =E2=80=98MNT_DETACH=E2=80=99 undeclared (first us=
+e in this
+>                                                                function)
+>    48 |         umount2("/proc", MNT_DETACH);
+>=20
+> Fixes: 615ab43b838b ("tests/pid_namespace: add pid_max tests")
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
 > ---
->   include/linux/cpu.h        |  4 ++++
->   include/uapi/linux/prctl.h | 27 +++++++++++++++++++++++++++
->   kernel/sys.c               | 30 ++++++++++++++++++++++++++++++
->   3 files changed, 61 insertions(+)
->
-> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-> index 6a0a8f1c7c90..fb0c394430c6 100644
-> --- a/include/linux/cpu.h
-> +++ b/include/linux/cpu.h
-> @@ -204,4 +204,8 @@ static inline bool cpu_mitigations_auto_nosmt(void)
->   }
->   #endif
->   
-> +int arch_get_indir_br_lp_status(struct task_struct *t, unsigned long __user *status);
-> +int arch_set_indir_br_lp_status(struct task_struct *t, unsigned long status);
-> +int arch_lock_indir_br_lp_status(struct task_struct *t, unsigned long status);
-> +
->   #endif /* _LINUX_CPU_H_ */
-> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-> index 5c6080680cb2..6cd90460cbad 100644
-> --- a/include/uapi/linux/prctl.h
-> +++ b/include/uapi/linux/prctl.h
-> @@ -353,4 +353,31 @@ struct prctl_mm_map {
->    */
->   #define PR_LOCK_SHADOW_STACK_STATUS      76
->   
-> +/*
-> + * Get the current indirect branch tracking configuration for the current
-> + * thread, this will be the value configured via PR_SET_INDIR_BR_LP_STATUS.
-> + */
-> +#define PR_GET_INDIR_BR_LP_STATUS      77
-> +
-> +/*
-> + * Set the indirect branch tracking configuration. PR_INDIR_BR_LP_ENABLE will
-> + * enable cpu feature for user thread, to track all indirect branches and ensure
-> + * they land on arch defined landing pad instruction.
-> + * x86 - If enabled, an indirect branch must land on `ENDBRANCH` instruction.
-> + * arch64 - If enabled, an indirect branch must land on `BTI` instruction.
-> + * riscv - If enabled, an indirect branch must land on `lpad` instruction.
-> + * PR_INDIR_BR_LP_DISABLE will disable feature for user thread and indirect
-> + * branches will no more be tracked by cpu to land on arch defined landing pad
-> + * instruction.
-> + */
-> +#define PR_SET_INDIR_BR_LP_STATUS      78
-> +# define PR_INDIR_BR_LP_ENABLE		   (1UL << 0)
+>  tools/testing/selftests/pid_namespace/pid_max.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/tools/testing/selftests/pid_namespace/pid_max.c b/tools/test=
+ing/selftests/pid_namespace/pid_max.c
+> index 51c414faabb0..96f274f0582b 100644
+> --- a/tools/testing/selftests/pid_namespace/pid_max.c
+> +++ b/tools/testing/selftests/pid_namespace/pid_max.c
+> @@ -10,6 +10,7 @@
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <syscall.h>
+> +#include <sys/mount.h>
+>  #include <sys/wait.h>
+> =20
+>  #include "../kselftest_harness.h"
 
+Predated patch already available, see
 
-Are we missing PR_INDIR_BR_LP_DISABLE definition here?
+	https://lore.kernel.org/linux-kselftest/20250115105211.390370-3-ps.report@=
+gmx.net/
 
-
-> +
-> +/*
-> + * Prevent further changes to the specified indirect branch tracking
-> + * configuration.  All bits may be locked via this call, including
-> + * undefined bits.
-> + */
-> +#define PR_LOCK_INDIR_BR_LP_STATUS      79
-> +
->   #endif /* _LINUX_PRCTL_H */
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index cb366ff8703a..f347f3518d0b 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@ -2336,6 +2336,21 @@ int __weak arch_lock_shadow_stack_status(struct task_struct *t, unsigned long st
->   	return -EINVAL;
->   }
->   
-> +int __weak arch_get_indir_br_lp_status(struct task_struct *t, unsigned long __user *status)
-> +{
-> +	return -EINVAL;
-> +}
-> +
-> +int __weak arch_set_indir_br_lp_status(struct task_struct *t, unsigned long status)
-> +{
-> +	return -EINVAL;
-> +}
-> +
-> +int __weak arch_lock_indir_br_lp_status(struct task_struct *t, unsigned long status)
-> +{
-> +	return -EINVAL;
-> +}
-> +
->   #define PR_IO_FLUSHER (PF_MEMALLOC_NOIO | PF_LOCAL_THROTTLE)
->   
->   #ifdef CONFIG_ANON_VMA_NAME
-> @@ -2811,6 +2826,21 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
->   			return -EINVAL;
->   		error = arch_lock_shadow_stack_status(me, arg2);
->   		break;
-> +	case PR_GET_INDIR_BR_LP_STATUS:
-> +		if (arg3 || arg4 || arg5)
-> +			return -EINVAL;
-> +		error = arch_get_indir_br_lp_status(me, (unsigned long __user *)arg2);
-> +		break;
-> +	case PR_SET_INDIR_BR_LP_STATUS:
-> +		if (arg3 || arg4 || arg5)
-> +			return -EINVAL;
-> +		error = arch_set_indir_br_lp_status(me, arg2);
-> +		break;
-> +	case PR_LOCK_INDIR_BR_LP_STATUS:
-> +		if (arg3 || arg4 || arg5)
-> +			return -EINVAL;
-> +		error = arch_lock_indir_br_lp_status(me, arg2);
-> +		break;
->   	default:
->   		trace_task_prctl_unknown(option, arg2, arg3, arg4, arg5);
->   		error = -EINVAL;
->
+Regards,
+Peter
 
