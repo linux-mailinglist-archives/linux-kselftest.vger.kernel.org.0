@@ -1,42 +1,43 @@
-Return-Path: <linux-kselftest+bounces-30422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9E7AA8287E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:47:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF82DA8286B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 16:46:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58C2C3B0DF0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:42:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 657E04A379A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 14:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3330255E32;
-	Wed,  9 Apr 2025 14:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F4926657F;
+	Wed,  9 Apr 2025 14:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HdW8lj+s"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GlA1nyz3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2067.outbound.protection.outlook.com [40.107.236.67])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2057.outbound.protection.outlook.com [40.107.101.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACD23595C;
-	Wed,  9 Apr 2025 14:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373D53595C;
+	Wed,  9 Apr 2025 14:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744209740; cv=fail; b=Cn7iTP1i4nJ53ZhVgbEd6hQBWOYQC3zDDFhQTZnHIKnGzCOQt4x+oEwyyhzw1O+XYW0/PtXceMh6abfT5S60s8PrPyXmYoD3zheh4ugtzOVUzhbTtrtuCc88xFHyRNrl9AHOD4ov/TpzhxbOL45kHbeqYAG2Sd7PGHgtQ+BQOnk=
+	t=1744209745; cv=fail; b=n7lz5TTpF+fjOJwIbJzrlmJHs7qcaF8rBKS4IZuaWw+b4c6xstvFYXsy7wEw+MuAyb8u2Kk7yCjlaXGtacbAAlud9s0ZNKUoerjPItrAqofjkMv14Ntq9e+n5PHeg5gVeC1Ola/HmdD+X51WIjHFLl7N+mGInCej63DtaNS4mDs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744209740; c=relaxed/simple;
-	bh=RMc2iacxCETYIc+KRz/r5JwZqp8nRCbBtS6nNjvZBfs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Sz2xuvFinHNYuIbFm04xZ6nweywCaGe6j5zdOrMemZirwAe+DuN79NRFfy9SkmKnDsdYp66ydM7l4E3ze4tCSSNfA9lrkLoE614th2/Qyce7t/j2UWgQ6cPDIwzjxLSIKqVuLQEkzr/sub1voyDRxuXV5rfW6MJ01uCy88Cm7mM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HdW8lj+s; arc=fail smtp.client-ip=40.107.236.67
+	s=arc-20240116; t=1744209745; c=relaxed/simple;
+	bh=PxpHMv3OwwafxhfofSf3Tq51XIvlMrBU5421PLZqqpk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fpmueRmE0BX/0wU5u68Cr+qrH7i5zaamMUvx9GGWY+H83p3j0Ft5jxWMo52LUsH8b5d2vThMvD/jAKUU4ImtURTyvzuAK7oH94XWHzeO3tVKELlGlfNEsiUoP8qMTWx8PJnrmTSwf3SCqt/ZSH+qIjlfN8BUVyjBiyqQuFbyu+c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GlA1nyz3; arc=fail smtp.client-ip=40.107.101.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Lst+zzxvQ8XoGdfD4m2d7G8mBMUx+hMPT1f2paeYh5wsr2Mvoo9PeVIMRO3anqn0ijN+NwlT8Jem5tljY7VHwCzvcNK9aD9BMK6GuyDdvNK+5nZ7QncKQ+Wq7Cf2Ow4sVcIh2IGHiFs6Z7CmiKUs4Kkip7+RRi8ole9yvFPfQroMLTJdp5j/Jh0S3PWGdozAiJ8QcQFXSV/vmCU9XWdccOE21xZ8nczvU25cWEiYfq5qZthb6gHvElMR8SwzHYBVFnavyTcfqcohjrU8N1HkusSuDSIy88DdBdYl41ND7zZWDyQxGqfJgEp/7xFIUJJv3OGLxjujjh+Q6ICC0GKLcA==
+ b=KLRF4USP5QSnId80QHXgkxHElOCBkmwP44P+JgBcVO821TkZxRlCDDsGiDW1pcUjJi36Q62hdXwVA7TuxTuDLibxOiTOUuJOnHMCHKVQElyb8PDJRmM/bXb5kgZsVWLvvcOXni7YG4t+7tYVzlp+XlBE44QnohkJSTW5fJon/IppI69ZdraU+7099ndD2uN5xxRUinebR4wmYnXquO8UZESaQ26BNGaAJZyDDFlKfqhSZWCiWi2TG1yX1ld0f/btW9Y+KHGEAZOR1X8Z79eE5/EiEvUsfQHonqXvTu6q3tGGL45MarHYdsEocoHvraAa/p3Qf6P0V1QKpMNOmOQ95g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8C1nCNlXbrqmjj2PaKQDRphjbv2hikBwWuW/npGOjAI=;
- b=ybQd+xuxex1FYxcDkZZmUQaJWN7JcxN2/5O5sEH7tL146CI8AEJ0ZxnNBAFNPzan2lhKYkb29DCfUhq//3Gm0AnJn7+669cLpgHaWzJiP4rkiaMfERK8UYOWDK6L7vBYsIwHlAQ3UVrCWDlj8+Nnk9cqUPynGors2hkg0w9bRuZ1f1IqmL5bfzc1Bwwy9IqUVcKlfZSkBy8+gaGT5BUt2pc7f3df+klWW8tiJbSlSA62SKtRhvFzPlCkXCpGOnzJgWbUxRLX6kCTu5KvHHjWnHtCMDbqPZtrGYedRenoYvH9Oep+GyPwmyqwqOxWnSlS5Q+5YUN6HYLDs5H+OVlAPg==
+ bh=QmaKZ2a1c8ZWuZwVRSCAmwfcPxFr+O+1DjrW1I+K6R0=;
+ b=ogYJhVWDDEsa83+ya13/7cddrTj0PJDG2NVNQ0Qx2h+Qsnmq/b6REH8XgucJRAqm4oa6sz9GYsqvES7Pzik+qulRjmguugMpQmW6y0LuAPDQ3nQefCwWgNPv6QowHOKDjYdBLecyc2pg7jut9DPOj+2uiRI9T4+XUdq2YJMIyexP1dWcn34nks7d3Ap+hu7RiVouBId/gnPNadu4DRIF0vrObiTUNvR/sMz4Ev8JavLo0SJfUR2MuH4rKoYORZK4ySboK2FCx1CTnaXQx6xBm8hcZAx46xZ6fGuZaXlqth7Krz9usTs5aM32rDquZcb9n1dQHQWOav03ZNPto7j/IA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -44,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8C1nCNlXbrqmjj2PaKQDRphjbv2hikBwWuW/npGOjAI=;
- b=HdW8lj+sYKJ6w/WB7vL8xUF13Lr/4HxyNjtQIvY2DhQWIU+h/7z0E+530jcH4lyTCimxKWUUa1cGeoYb4jg+Zs6Tlv72ofjHMvlB6gae0rplTbeOvUbLdiM9vpyBBMDCUp7p6RxIA15+zIPELCh0dIF4rhk9BQrVsWEe7l/AhHqeZe13Ebc3l7FMu3XC8ez/uc8Xa6vYlwAEM9DdFDH3kkhvCVhvGQ0EavLtKeqln/YRtq/jVlNJijHUuCuYrlGZFmzVgJQIN3Aj7Jmjbn9DVD8e6zUXR4EP/jLWf8ssDtRo2zzZmsPwmdZnp7pm5eYso27Y/cbrYK4QRKFySy4gYw==
-Received: from PH8P223CA0009.NAMP223.PROD.OUTLOOK.COM (2603:10b6:510:2db::6)
- by SJ0PR12MB6760.namprd12.prod.outlook.com (2603:10b6:a03:44c::18) with
+ bh=QmaKZ2a1c8ZWuZwVRSCAmwfcPxFr+O+1DjrW1I+K6R0=;
+ b=GlA1nyz3PSgwq/vxplGCa/ekU81XOYatq/rX4jlC9kNs6LaxU+nnQQj3aflYkGj+r2Ni4ArUANw/2IonSZt6uZxEeT038QQcWut/iZNQUmsdro9iEX5AwQYQrYuFim68nOQQyrKw3x04QsJcEd0pKMq5DwlOPRtQUpOAPzbQQVe0MPrax5yH8rhoXskJM1Ca1xjiQHCqWgAUXAdnIouflZxbfF3xKDBqBHQ3TUkGmNy3Zcry1EDtxI8ttVvsJSybIT9bDTJS656Pl5CrSy9mkwEP8Y4/cGqqXdGoH4fJRKZ0gkG4Zq3hQGe0Ga9AImCpjDkSlxS5aMZwZD4aZBw0EA==
+Received: from SN7PR04CA0067.namprd04.prod.outlook.com (2603:10b6:806:121::12)
+ by SA3PR12MB7921.namprd12.prod.outlook.com (2603:10b6:806:320::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.50; Wed, 9 Apr
- 2025 14:42:14 +0000
-Received: from SN1PEPF00036F3F.namprd05.prod.outlook.com
- (2603:10b6:510:2db:cafe::b5) by PH8P223CA0009.outlook.office365.com
- (2603:10b6:510:2db::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.19 via Frontend Transport; Wed,
- 9 Apr 2025 14:42:14 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.34; Wed, 9 Apr
+ 2025 14:42:19 +0000
+Received: from SN1PEPF00036F3C.namprd05.prod.outlook.com
+ (2603:10b6:806:121:cafe::1b) by SN7PR04CA0067.outlook.office365.com
+ (2603:10b6:806:121::12) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.35 via Frontend Transport; Wed,
+ 9 Apr 2025 14:42:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -63,17 +64,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF00036F3F.mail.protection.outlook.com (10.167.248.23) with Microsoft
+ SN1PEPF00036F3C.mail.protection.outlook.com (10.167.248.20) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8632.13 via Frontend Transport; Wed, 9 Apr 2025 14:42:14 +0000
+ 15.20.8632.13 via Frontend Transport; Wed, 9 Apr 2025 14:42:19 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Apr 2025
- 07:41:52 -0700
+ 07:41:58 -0700
 Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 9 Apr 2025 07:41:45 -0700
+ 15.2.1544.14; Wed, 9 Apr 2025 07:41:52 -0700
 From: Cosmin Ratiu <cratiu@nvidia.com>
 To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
 CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
@@ -90,10 +91,12 @@ CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
  Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat
  Bhushan <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>,
 	"Leon Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 0/6] xfrm & bonding: Correct use of xso.real_dev
-Date: Wed, 9 Apr 2025 17:41:27 +0300
-Message-ID: <20250409144133.2833606-1-cratiu@nvidia.com>
+Subject: [PATCH net-next v2 1/6] net/mlx5: Avoid using xso.real_dev unnecessarily
+Date: Wed, 9 Apr 2025 17:41:28 +0300
+Message-ID: <20250409144133.2833606-2-cratiu@nvidia.com>
 X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20250409144133.2833606-1-cratiu@nvidia.com>
+References: <20250409144133.2833606-1-cratiu@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -106,109 +109,153 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3F:EE_|SJ0PR12MB6760:EE_
-X-MS-Office365-Filtering-Correlation-Id: a33a9aa8-db73-4f41-fecb-08dd7774b804
+X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3C:EE_|SA3PR12MB7921:EE_
+X-MS-Office365-Filtering-Correlation-Id: 956ecca4-4193-4435-65ca-08dd7774bb40
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|7416014|1800799024;
+	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?D964k0Lh+UEMrb+L8yrdSt5k5oPeU8OXb8n1plkwQwoGv7GCYrk+81Y4H7mJ?=
- =?us-ascii?Q?bYYUGAEtaZmgQOp437ikEliNGTEW8f1joQxftO0JBDM8xRQ1SKvS3DrhXQ+3?=
- =?us-ascii?Q?kABzX2vBC062wTmyTrQ4rpmFEe9f6DoWtdlW1RN/jP9WIhYwr9eq8k5c+aos?=
- =?us-ascii?Q?7jr+6KBgGMstbLhPb3m/n+uO3hiECFhDIOvwrkr3YlQ6QMpTsEUhizNdHLUe?=
- =?us-ascii?Q?53Loc+9nnNzlPu+YzeQ5DPoVNZN/G/g3vUyVkZI96B4+1YbNR19Oe8oekewp?=
- =?us-ascii?Q?WNavTsCkvh4ylkRaXzXOTkX1ijnE830WPmCZUFA6dkquUT80ScAUCBB6PjWO?=
- =?us-ascii?Q?YiATF5nwtgpdpiVbIc/RcDtqNiEtD09pN5L5/cwYfxvggArQ5ZNgcna3vqfs?=
- =?us-ascii?Q?kHtINME8L31lxBF4scg24j7wxmXhnyKW0/kDrPuPDkhEbVVHrUZQzLVizfYu?=
- =?us-ascii?Q?716hqG/hiDT9zS8mGeSeXF4for3qRiLXPLAGcrJTUYufEvsQoFwzOok8xTwG?=
- =?us-ascii?Q?FU89N928efoa+6mqD2ooLQX0S9obaWp5FzSaR7LzjdszPwHCB+vQO1Jjtsgs?=
- =?us-ascii?Q?XTD//RD3/LF52cJpmGaNLAX7CmSQi/EDZq74OW3j2mTMKtFtFxrBv779YxVx?=
- =?us-ascii?Q?Z3TAKaPVxM8bIpz1JdBDBV9r+j2CyZ7vTGjRSMWzmavJx2Pn6cEKEp0omPo2?=
- =?us-ascii?Q?s7ZBzHPouPa5DgCTLS3gRdynGBBrn1wvAyf3HITk9lYNDZD0ajtT33AD+vsR?=
- =?us-ascii?Q?URa2lxOmqvHKxKvcrvBSOVvGuYF+Gmcz3cVIMaMubj+cr4/MyCTemREkwuej?=
- =?us-ascii?Q?4HY6CiACQsdcMyFJdj2hzH6W9asKPWlhL1X/WKfv+/cU7jA+emNJJnJuIRDo?=
- =?us-ascii?Q?cyutYnsE1+zaB3KmyuKpl9A3tCzdRvcmCqlTjcNRPD2uHzWNYyY7nM2efvqC?=
- =?us-ascii?Q?B2qNe4vmwpEOS7UvRUzlSoeT3QVHgr0QMaX1H5GQE1tv3DHKWmOO066RunDn?=
- =?us-ascii?Q?dQQqswjKXwCNwRgwryjmoguoT2dSxSgfaarnvnB6l64wjMLGlheTNLdp53xK?=
- =?us-ascii?Q?Ot2S5lp5lqWkJ7JgnKEWdxhNCYOr+JyP0xeRKQNvf7coAkLGjmqXoMfRatAb?=
- =?us-ascii?Q?KMdyjOIHKRfwqDlXzNvCIvr6yyK8kIhHa+TlUuqYrqf5X2rQjV+P2dH8PXqO?=
- =?us-ascii?Q?P/XtWyaOGXoMFeYGg25ONhJOvOHvKCManepG3RGCrOJmW2t7peR4gnii+wCL?=
- =?us-ascii?Q?+lOdRiCTSTMZfCMhoE7Yk5/ZnawhdwwV8zKe0TbmShakPHldL4NVr/EB2vaz?=
- =?us-ascii?Q?q1XDKEfJ8G9ITQ5uEeIxSScN029ODH19jEoqK5ygu1Nl9eKP39K79LN6ZpA+?=
- =?us-ascii?Q?9pUOvFQP0i7jQHoiPNAhh4F5Szk3aEOXkR73St1I/Q82cQnPGzgtZ2RXMpsQ?=
- =?us-ascii?Q?wWWdiCawCtWexoEQyyPGT8cwxfnb/u3Xq+wWtHJW4IXoegW3zz3UfA=3D=3D?=
+	=?us-ascii?Q?94+xlnRrLbIUMHnVOP+VSQvv7BtY2qdJmPJEh9Brs1E6lHCkEtLuIoAK1zld?=
+ =?us-ascii?Q?Nm7TWEVGdfpMWOV8qK66SxCxkd8BhzHpixlvt+OdyetCben7wurSIQuVGMar?=
+ =?us-ascii?Q?LlpdAZurdMnn31nzWHwudJPNGBsQ47bKvrmP4+Ify6NC0ff/Xi0h2Ig1S/CZ?=
+ =?us-ascii?Q?CHI1pIKRWTAn3mJgXDEJl9CPLIQl4qYJqS0Aa/wDP9AcG+KS2wUSCZ0eG/l+?=
+ =?us-ascii?Q?O4X2C8rfDsj7CjcREK37DKkuAmJ24erwSD6/se1aet5GdCAycagJFPHkW1DR?=
+ =?us-ascii?Q?stvW+RI7Op8J7/udm9qvwRCixbvXpS6vsFVGaVEdvgpRpCuKGOQStSfaqdWs?=
+ =?us-ascii?Q?enfGBG1QFZoP0Nz5IHEPLcZBRvUeloaki/f1QjjYUEajULD0jvHYocMWk+Rt?=
+ =?us-ascii?Q?zTQYehkv43AmHsto8YRdMewzmcaiFyZEoWraW0d4CEkHUtVdZP6U2VXyQ7YS?=
+ =?us-ascii?Q?XsViLYJrpxgP8B8Xlei6kQldYnGRpUdzczxStQGD7YZ7aJbXJQR9lzFN3vVA?=
+ =?us-ascii?Q?bnN7ukaqqoo4zY5H04Md+nOJdBSbL/mZlA7xSFagDebsBjV7OElCKDOIXBQu?=
+ =?us-ascii?Q?TarujmkxPnpEiUzlhjK12OMZ0aHFmiM86r0j+suZ1atwsPJqc+oOZt+TMQud?=
+ =?us-ascii?Q?SHqhC/JWdE6r57ikg98WZv3Zg4qPE71YmE+TmRs8KUNNsecAVdB35SAG4B9x?=
+ =?us-ascii?Q?pCIPSyD1+/RVGKx2ZbAq2jIg2e4LNmZhRmQ/v/IkQtEGDky9O8ksqyt2eEII?=
+ =?us-ascii?Q?Pu3tXCGdl1MWHiE8+TsDoyHhQ467HshVMAxnEJQY/CfktdHJtTWS3UY3nxwv?=
+ =?us-ascii?Q?ClUaZsk5uAHbmkaIpwYJ7IwkVkGUaloi1ieqgOfEA8TzUvgXna39e4ipjh6+?=
+ =?us-ascii?Q?dVQxCV87n8u1EQ5dYg50UwbgUzvZu0wXw5vyqYe7LJpLkgVklsxTbt/mVhp4?=
+ =?us-ascii?Q?OcY5opjgUwjeDGog0qiYAz2Sg0oN4oKbcIXo6G536J3r6Wzv/KBUUzLrnxuG?=
+ =?us-ascii?Q?r+xxGoY6f6JgoEGjXBEaCIfbsSRjx8FAeQH6MJFEwEGWEnjN2Ud/4Fu+eorU?=
+ =?us-ascii?Q?zJ5zAKkDebAg2tRbneXy/9c779LJX93ydQhWE247ONYYodGGxUEkyKCn7xl5?=
+ =?us-ascii?Q?C5D5ytZajBekDhjtXKNu1mMN5rQkAE2GvGG+5PwUonf1JeqaUdoa2vNYXuXM?=
+ =?us-ascii?Q?y6DGCTYJjACTby66VsTAIGRhj3cIE/1EMJUympQHVUHGgMxLl8aHoQig5w+q?=
+ =?us-ascii?Q?MjLAUpLVoiVOcp5JXue3ezlHMRvJHaGKEcV6wWOWKjICiDGPHBeNpQb/H2Pj?=
+ =?us-ascii?Q?4mO7Tb9cknUnGd5cLy1C/oc0L9JAH3ZDFvJKrwGnT+UOrfuD4cN9MTo4aGzX?=
+ =?us-ascii?Q?zTEMUUhUYrXqRmEsiMkh1aI9v6Q84T9cN/Wc6oVSiiljcJD3mHxjmTEE96Bs?=
+ =?us-ascii?Q?s9zKk3rTLTFrrOOkTdf3FTXVAsad8tsczYhb6fr4WZMzEjDGDo99xYDzx0s6?=
+ =?us-ascii?Q?5exT9GgzOojbZGWINRo5kQpfja74IHYNmypB?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(7416014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:14.2006
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 14:42:19.6543
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a33a9aa8-db73-4f41-fecb-08dd7774b804
+X-MS-Exchange-CrossTenant-Network-Message-Id: 956ecca4-4193-4435-65ca-08dd7774bb40
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF00036F3F.namprd05.prod.outlook.com
+	SN1PEPF00036F3C.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6760
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7921
 
-This patch series was motivated by fixing a few bugs in the bonding
-driver related to xfrm state migration on device failover.
+xso.real_dev is the active device of an offloaded xfrm state and is
+managed by bonding. As such, it's subject to change when states are
+migrated to a new device. Using it in places other than
+offloading/unoffloading the states is risky.
 
-struct xfrm_dev_offload has two net_device pointers: dev and real_dev.
-The first one is the device the xfrm_state is offloaded on and the
-second one is used by the bonding driver to manage the underlying device
-xfrm_states are actually offloaded on. When bonding isn't used, the two
-pointers are the same.
+This commit saves the device into the driver-specific struct
+mlx5e_ipsec_sa_entry and switches mlx5e_ipsec_init_macs() and
+mlx5e_ipsec_netevent_event() to make use of it.
 
-This causes confusion in drivers: Which device pointer should they use?
-If they want to support bonding, they need to only use real_dev and
-never look at dev.
+Additionally, mlx5e_xfrm_update_stats() used xso.real_dev to validate
+that correct net locks are held. But in a bonding config, the net of the
+master device is the same as the underlying devices, and the net is
+already a local var, so use that instead.
 
-Furthermore, real_dev is used without proper locking from multiple code
-paths and changing it is dangerous. See commit [1] for example.
+The only remaining references to xso.real_dev are now in the
+.xdo_dev_state_add() / .xdo_dev_state_delete() path.
 
-This patch series clears things out by removing all uses of real_dev
-from outside the bonding driver.
-Then, the bonding driver is refactored to fix a couple of long standing
-races and the original bug which motivated this patch series.
+Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+---
+ .../ethernet/mellanox/mlx5/core/en_accel/ipsec.c | 16 +++++-----------
+ .../ethernet/mellanox/mlx5/core/en_accel/ipsec.h |  1 +
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
-[1] commit f8cde9805981 ("bonding: fix xfrm real_dev null pointer
-dereference")
-
-v1 -> v2:
-Added missing kdoc for various functions.
-Made bond_ipsec_del_sa() use xso.real_dev instead of curr_active_slave.
-
-Cosmin Ratiu (6):
-Cleaning up unnecessary uses of xso.real_dev:
-  net/mlx5: Avoid using xso.real_dev unnecessarily
-  xfrm: Use xdo.dev instead of xdo.real_dev
-  xfrm: Remove unneeded device check from validate_xmit_xfrm
-Refactoring device operations to get an explicit device pointer:
-  xfrm: Add explicit dev to .xdo_dev_state_{add,delete,free}
-Fixing a bonding xfrm state migration bug:
-  bonding: Mark active offloaded xfrm_states
-Fixing long standing races in bonding:
-  bonding: Fix multiple long standing offload races
-
- Documentation/networking/xfrm_device.rst      |  10 +-
- drivers/net/bonding/bond_main.c               | 113 +++++++++---------
- .../net/ethernet/chelsio/cxgb4/cxgb4_main.c   |  20 ++--
- .../inline_crypto/ch_ipsec/chcr_ipsec.c       |  18 ++-
- .../net/ethernet/intel/ixgbe/ixgbe_ipsec.c    |  41 ++++---
- drivers/net/ethernet/intel/ixgbevf/ipsec.c    |  21 ++--
- .../marvell/octeontx2/nic/cn10k_ipsec.c       |  18 +--
- .../mellanox/mlx5/core/en_accel/ipsec.c       |  28 ++---
- .../mellanox/mlx5/core/en_accel/ipsec.h       |   1 +
- .../net/ethernet/netronome/nfp/crypto/ipsec.c |  11 +-
- drivers/net/netdevsim/ipsec.c                 |  15 ++-
- include/linux/netdevice.h                     |  10 +-
- include/net/xfrm.h                            |   8 ++
- net/xfrm/xfrm_device.c                        |  13 +-
- net/xfrm/xfrm_state.c                         |  16 +--
- 15 files changed, 182 insertions(+), 161 deletions(-)
-
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
+index 2dd842aac6fc..626e525c0f0d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
+@@ -259,8 +259,7 @@ static void mlx5e_ipsec_init_macs(struct mlx5e_ipsec_sa_entry *sa_entry,
+ 				  struct mlx5_accel_esp_xfrm_attrs *attrs)
+ {
+ 	struct mlx5_core_dev *mdev = mlx5e_ipsec_sa2dev(sa_entry);
+-	struct xfrm_state *x = sa_entry->x;
+-	struct net_device *netdev;
++	struct net_device *netdev = sa_entry->dev;
+ 	struct neighbour *n;
+ 	u8 addr[ETH_ALEN];
+ 	const void *pkey;
+@@ -270,8 +269,6 @@ static void mlx5e_ipsec_init_macs(struct mlx5e_ipsec_sa_entry *sa_entry,
+ 	    attrs->type != XFRM_DEV_OFFLOAD_PACKET)
+ 		return;
+ 
+-	netdev = x->xso.real_dev;
+-
+ 	mlx5_query_mac_address(mdev, addr);
+ 	switch (attrs->dir) {
+ 	case XFRM_DEV_OFFLOAD_IN:
+@@ -713,6 +710,7 @@ static int mlx5e_xfrm_add_state(struct xfrm_state *x,
+ 		return -ENOMEM;
+ 
+ 	sa_entry->x = x;
++	sa_entry->dev = netdev;
+ 	sa_entry->ipsec = ipsec;
+ 	/* Check if this SA is originated from acquire flow temporary SA */
+ 	if (x->xso.flags & XFRM_DEV_OFFLOAD_FLAG_ACQ)
+@@ -855,8 +853,6 @@ static int mlx5e_ipsec_netevent_event(struct notifier_block *nb,
+ 	struct mlx5e_ipsec_sa_entry *sa_entry;
+ 	struct mlx5e_ipsec *ipsec;
+ 	struct neighbour *n = ptr;
+-	struct net_device *netdev;
+-	struct xfrm_state *x;
+ 	unsigned long idx;
+ 
+ 	if (event != NETEVENT_NEIGH_UPDATE || !(n->nud_state & NUD_VALID))
+@@ -876,11 +872,9 @@ static int mlx5e_ipsec_netevent_event(struct notifier_block *nb,
+ 				continue;
+ 		}
+ 
+-		x = sa_entry->x;
+-		netdev = x->xso.real_dev;
+ 		data = sa_entry->work->data;
+ 
+-		neigh_ha_snapshot(data->addr, n, netdev);
++		neigh_ha_snapshot(data->addr, n, sa_entry->dev);
+ 		queue_work(ipsec->wq, &sa_entry->work->work);
+ 	}
+ 
+@@ -996,8 +990,8 @@ static void mlx5e_xfrm_update_stats(struct xfrm_state *x)
+ 	size_t headers;
+ 
+ 	lockdep_assert(lockdep_is_held(&x->lock) ||
+-		       lockdep_is_held(&dev_net(x->xso.real_dev)->xfrm.xfrm_cfg_mutex) ||
+-		       lockdep_is_held(&dev_net(x->xso.real_dev)->xfrm.xfrm_state_lock));
++		       lockdep_is_held(&net->xfrm.xfrm_cfg_mutex) ||
++		       lockdep_is_held(&net->xfrm.xfrm_state_lock));
+ 
+ 	if (x->xso.flags & XFRM_DEV_OFFLOAD_FLAG_ACQ)
+ 		return;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.h
+index a63c2289f8af..ffcd0cdeb775 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.h
+@@ -274,6 +274,7 @@ struct mlx5e_ipsec_limits {
+ struct mlx5e_ipsec_sa_entry {
+ 	struct mlx5e_ipsec_esn_state esn_state;
+ 	struct xfrm_state *x;
++	struct net_device *dev;
+ 	struct mlx5e_ipsec *ipsec;
+ 	struct mlx5_accel_esp_xfrm_attrs attrs;
+ 	void (*set_iv_op)(struct sk_buff *skb, struct xfrm_state *x,
 -- 
 2.45.0
 
