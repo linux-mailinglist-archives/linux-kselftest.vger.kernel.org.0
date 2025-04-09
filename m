@@ -1,264 +1,122 @@
-Return-Path: <linux-kselftest+bounces-30439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09651A82A63
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 17:31:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F77A82BC2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 18:04:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D44416E02A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 15:26:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B47F1B64EA0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Apr 2025 15:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01752676CB;
-	Wed,  9 Apr 2025 15:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81FF0268FDE;
+	Wed,  9 Apr 2025 15:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ns4iX0OS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B042673B7;
-	Wed,  9 Apr 2025 15:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5583A1A3159;
+	Wed,  9 Apr 2025 15:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744212360; cv=none; b=czM5XsnIe7g6O7P4zbmSpXpuBue9WdCEgdfCqSGz4NbN+oCJrTec5EpghhOHg+J7UMH1tbhOkxZcemJ9G/seOWLIrRmh5ygeQMOoPexBBXbWwEdT6Ms38zmGvDYxJ4h0a4VGhx7L3+G4PIa1w21D0XEgK3WBu2HaKDfC0ym31QA=
+	t=1744214138; cv=none; b=Sm1z2vFpJGqio5tWWxW8W77NMYM7byHaUeZG+DXa9Fyv3yIHabVR8kW6uAhsr9OkSbQK5jpUNobBINdeNmL5/+b6Jv0bLx5UQivHDlkZjo2o/XtH/kALKuS2cz2KQ64lp7EX6MAqVz9cpFvzplLwzxwPCu7zwPtUl3DgIVMyO7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744212360; c=relaxed/simple;
-	bh=FLXkb/GHsHQdvXLgkljGBSUeoixp2fv24xJ28bkaTeY=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=DvKMvZJbzofWNSKsCvMvmqbjEYNkJPkhs5H2JVSGDM02rLY6TuSxLnSoK1sTcf8gvNwxnlc0EbNwSoodHCttavpGCAdiuxBQXwLq0b13UNAh9fu7OWQZuvRKffs71A1DGJlFkNmPwiTJ+G7UfFKAZkTCiiwo6L3ENQybHHKs++I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583A0C4CEE9;
-	Wed,  9 Apr 2025 15:26:00 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1u2XKi-00000008kRa-2EMv;
-	Wed, 09 Apr 2025 11:27:20 -0400
-Message-ID: <20250409152720.380778379@goodmis.org>
-User-Agent: quilt/0.68
-Date: Wed, 09 Apr 2025 11:15:51 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <skhan@linuxfoundation.org>,
- linux-kselftest@vger.kernel.org,
- Andy Chiu <andybnac@gmail.com>
-Subject: [PATCH 2/2] tracing/selftest: Add test to better test subops filtering of
- function graph
-References: <20250409151549.788068911@goodmis.org>
+	s=arc-20240116; t=1744214138; c=relaxed/simple;
+	bh=WW1N/1DaqI87EqtkhE04HgTwYLpLakjaAuM2yUvrwPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tFObxeila99h3ZLMo015v86JYi5zIak9RjYJ02LBNhl/V13QVaLwWF8hbYT7qh91e1E5NDYcdTf1KDuHd4NCNG79zWNjam3jCKJImsPEUZGgKU+O2bSyxRqoliPb186NM8eUcKjndmidOC0jOdCcwidYk3NIz8e1pdiFQCjo5K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ns4iX0OS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B56C4CEE2;
+	Wed,  9 Apr 2025 15:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744214137;
+	bh=WW1N/1DaqI87EqtkhE04HgTwYLpLakjaAuM2yUvrwPQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Ns4iX0OSppovqb9VC+Y4d9RlZ0wyE9soo85cb4ockpsqwokaEmE19h84RHZyd41Uz
+	 5tV4jYnThZWoz81jB7iCYeWD0XYeWQik7OkaqxWP33hB6sqcWCGnfzt3Yv4IsH9RVH
+	 GUe8v5kBk8sTYGRs+iO3dmu76UBh2BNo7KeojQBuxc8vhOQpXcVYc7rC4kl2DZ6/eg
+	 yLMyVYpogA4NqufayXttjfNnv37npJ5l1EH8LOR7RH+57fSFqrWCje7uGTSruP3JSI
+	 r9EcV652v3SpsQd1yAuy5enjLTC8lXIhIY+YM33uuhP1lXdR5Em06IlOuF3t2AY9BW
+	 rFKW0bm9oav/g==
+Date: Wed, 9 Apr 2025 08:55:36 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ paulmck@kernel.org, joel@joelfernandes.org, steven.price@arm.com,
+ akpm@linux-foundation.org, anshuman.khandual@arm.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] configs/debug: run and debug PREEMPT
+Message-ID: <20250409085536.245acdf1@kernel.org>
+In-Reply-To: <3f5ff26b-9904-462e-ac22-84b5d212e9ff@kernel.org>
+References: <20250402172305.1775226-1-sdf@fomichev.me>
+	<df253016-81df-4cc9-8a8c-f92fd1cb8aea@kernel.org>
+	<20250408120318.65125876@kernel.org>
+	<3f5ff26b-9904-462e-ac22-84b5d212e9ff@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Wed, 9 Apr 2025 13:58:13 +0200 Matthieu Baerts wrote:
+> On 08/04/2025 21:03, Jakub Kicinski wrote:
+> > On Tue, 8 Apr 2025 20:18:26 +0200 Matthieu Baerts wrote:  
+> >> On 02/04/2025 19:23, Stanislav Fomichev wrote:  
+> >>> Recent change [0] resulted in a "BUG: using __this_cpu_read() in
+> >>> preemptible" splat [1]. PREEMPT kernels have additional requirements
+> >>> on what can and can not run with/without preemption enabled.
+> >>> Expose those constrains in the debug kernels.    
+> >>
+> >> Good idea to suggest this to find more bugs!
+> >>
+> >> I did some quick tests on my side with our CI, and the MPTCP selftests
+> >> seem to take a bit more time, but without impacting the results.
+> >> Hopefully, there will be no impact in slower/busy environments :)  
+> > 
+> > What kind of slow down do you see? I think we get up to 50% more time
+> > spent in the longer tests.  
+> 
+> That's difficult to measure in our CI because we have a majority of
+> tests either creating test envs with random parameters (latency, losses,
+> etc.), or waiting for a transfer at a limited speed to finish. Plus, we
+> don't control the host running our tests. But if we omit that, our
+> packetdrill tests take ~20% longer on the CI, and our 2 mini KUnit tests
+> took ~10% longer (275ms -> 305ms). Globally, our test suite took maybe
+> ~10-20% longer, and that's acceptable.
+> 
+> So not 50%. Is this difference acceptable for NIPA? Even when some tests
+> are restarted automatically in case of instabilities?
 
-A bug was discovered that showed the accounting of the subops of the
-ftrace_ops filtering was incorrect. Add a new test to better test the
-filtering.
+We also see 10%+ on most cases, the 50% was the worst one I glanced.
+The worst offenders in terms of runtime only increased by 10% so still
+within the guidelines.
 
-This test creates two instances, where it will add various filters to both
-the set_ftrace_filter and the set_ftrace_notrace files and enable
-function_graph. Then it looks into the enabled_functions file to make sure
-that the filters are behaving correctly.
+> One last thing, Stanislav's patch has been shared during Linus' merge
+> window: perhaps something else could also impact the time?
+> 
+> > Not sure how bad is too bad..  
+> 
+> Did you observe more instabilities? Maybe the individual results should
+> be omitted, and only debug specific issues (calltraces, kmemleak, etc.)
+> should be looked at?
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- .../test.d/ftrace/fgraph-multi-filter.tc      | 177 ++++++++++++++++++
- 1 file changed, 177 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi-filter.tc
+A couple but unclear at this stage whether that was just the merge
+window or enabling preempt debug. Now patchwork is super unstable
+so again, hard to judge the source of the problems :(
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi-filter.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi-filter.tc
-new file mode 100644
-index 000000000000..b6d6a312ead5
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi-filter.tc
-@@ -0,0 +1,177 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - function graph filters
-+# requires: set_ftrace_filter function_graph:tracer
-+
-+# Make sure that function graph filtering works
-+
-+INSTANCE1="instances/test1_$$"
-+INSTANCE2="instances/test2_$$"
-+
-+WD=`pwd`
-+
-+do_reset() {
-+    cd $WD
-+    if [ -d $INSTANCE1 ]; then
-+	echo nop > $INSTANCE1/current_tracer
-+	rmdir $INSTANCE1
-+    fi
-+    if [ -d $INSTANCE2 ]; then
-+	echo nop > $INSTANCE2/current_tracer
-+	rmdir $INSTANCE2
-+    fi
-+}
-+
-+mkdir $INSTANCE1
-+if ! grep -q function_graph $INSTANCE1/available_tracers; then
-+    echo "function_graph not allowed with instances"
-+    rmdir $INSTANCE1
-+    exit_unsupported
-+fi
-+
-+mkdir $INSTANCE2
-+
-+fail() { # msg
-+    do_reset
-+    echo $1
-+    exit_fail
-+}
-+
-+disable_tracing
-+clear_trace
-+
-+function_count() {
-+    search=$1
-+    vsearch=$2
-+
-+    if [ -z "$search" ]; then
-+	cat enabled_functions | wc -l
-+    elif [ -z "$vsearch" ]; then
-+	grep $search enabled_functions | wc -l
-+    else
-+	grep $search enabled_functions | grep $vsearch| wc -l
-+    fi
-+}
-+
-+set_fgraph() {
-+    instance=$1
-+    filter="$2"
-+    notrace="$3"
-+
-+    echo "$filter" > $instance/set_ftrace_filter
-+    echo "$notrace" > $instance/set_ftrace_notrace
-+    echo function_graph > $instance/current_tracer
-+}
-+
-+check_functions() {
-+    orig_cnt=$1
-+    test=$2
-+
-+    cnt=`function_count $test`
-+    if [ $cnt -gt $orig_cnt ]; then
-+	fail
-+    fi
-+}
-+
-+check_cnt() {
-+    orig_cnt=$1
-+    search=$2
-+    vsearch=$3
-+
-+    cnt=`function_count $search $vsearch`
-+    if [ $cnt -gt $orig_cnt ]; then
-+	fail
-+    fi
-+}
-+
-+reset_graph() {
-+    instance=$1
-+    echo nop > $instance/current_tracer
-+}
-+
-+# get any functions that were enabled before the test
-+total_cnt=`function_count`
-+sched_cnt=`function_count sched`
-+lock_cnt=`function_count lock`
-+time_cnt=`function_count time`
-+clock_cnt=`function_count clock`
-+locks_clock_cnt=`function_count locks clock`
-+clock_locks_cnt=`function_count clock locks`
-+
-+# Trace functions with "sched" but not "time"
-+set_fgraph $INSTANCE1 '*sched*' '*time*'
-+
-+# Make sure "time" isn't listed
-+check_functions $time_cnt 'time'
-+instance1_cnt=`function_count`
-+
-+# Trace functions with "lock" but not "clock"
-+set_fgraph $INSTANCE2 '*lock*' '*clock*'
-+instance1_2_cnt=`function_count`
-+
-+# Turn off the first instance
-+reset_graph $INSTANCE1
-+
-+# The second instance doesn't trace "clock" functions
-+check_functions $clock_cnt 'clock'
-+instance2_cnt=`function_count`
-+
-+# Start from a clean slate
-+reset_graph $INSTANCE2
-+check_functions $total_cnt
-+
-+# Trace functions with "lock" but not "clock"
-+set_fgraph $INSTANCE2 '*lock*' '*clock*'
-+
-+# This should match the last time instance 2 was by itself
-+cnt=`function_count`
-+if [ $instance2_cnt -ne $cnt ]; then
-+    fail
-+fi
-+
-+# And it should not be tracing "clock" functions
-+check_functions $clock_cnt 'clock'
-+
-+# Trace functions with "sched" but not "time"
-+set_fgraph $INSTANCE1 '*sched*' '*time*'
-+
-+# This should match the last time both instances were enabled
-+cnt=`function_count`
-+if [ $instance1_2_cnt -ne $cnt ]; then
-+    fail
-+fi
-+
-+# Turn off the second instance
-+reset_graph $INSTANCE2
-+
-+# This should match the last time instance 1 was by itself
-+cnt=`function_count`
-+if [ $instance1_cnt -ne $cnt ]; then
-+    fail
-+fi
-+
-+# And it should not be tracing "time" functions
-+check_functions $time_cnt 'time'
-+
-+# Start from a clean slate
-+reset_graph $INSTANCE1
-+check_functions $total_cnt
-+
-+# Enable all functions but those that have "locks"
-+set_fgraph $INSTANCE1 '' '*locks*'
-+
-+# Enable all functions but those that have "clock"
-+set_fgraph $INSTANCE2 '' '*clock*'
-+
-+# If a function has "locks" it should not have "clock"
-+check_cnt $locks_clock_cnt locks clock
-+
-+# If a function has "clock" it should not have "locks"
-+check_cnt $clock_locks_cnt clock locks
-+
-+reset_graph $INSTANCE1
-+reset_graph $INSTANCE2
-+
-+do_reset
-+
-+exit 0
--- 
-2.47.2
+> > I'm leaning
+> > towards applying this to net-next and we can see if people running
+> > on linux-next complain?  
+> 
+> Good idea! But I do wonder how run **and monitor** the selftests in
+> linux-next with a debug kernel :)
 
-
+One way to find out :)
 
