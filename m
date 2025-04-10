@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-30485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F622A847A5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 17:21:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EF0CA847A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 17:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E53543BFD93
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:19:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D87FF4A532A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04451E5B62;
-	Thu, 10 Apr 2025 15:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07331E1A16;
+	Thu, 10 Apr 2025 15:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AlpRKE1s"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ePkbFQDE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D3915B135
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 15:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1851E9B0F
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 15:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744298380; cv=none; b=oFmlQ/OkiairtNnVpNXXoRgyzF1ifT6SQ8cb0bf8YzRWGJw71ToI69WkYA1z9Gf6aTcFCVU1nBnN2GEmsdPQmdV1BmcpTGax7KUBHswTsM93RnpLrcrjNjD/Yvwf86g9PIa2eQb3OBK4xRpAb06S7xVwr05U+rZvUxYPGyrP5D0=
+	t=1744298386; cv=none; b=KoA6SihiE9TiJQv/9I2ZhxkI9fkDZt/YB6lka3hiL7+iF+wHN3EPrpXmPm3/mTZyjoZDykpPAbNtrYeS3sbEQYv9b8Ad2cD6jiIvYURTACc5ZQjX34fwzdD4RYJi5lmKr2w7gvIq3oMA3/ezVtny9rD70ItUUhZxI1vsIhxLfYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744298380; c=relaxed/simple;
-	bh=cEv9BRFMpDV/vpqigYmWTgh5vZ3LGGJz6uau0Z8qq5g=;
+	s=arc-20240116; t=1744298386; c=relaxed/simple;
+	bh=VssWxC84mEs7L9/avRuqypjxEQmdSjrRRIUEqYV4Wpw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fN2w4ABDURXaVCGCERZe2kHIdaFUaiKU4iJEiDFOjvMEz/m7Zrwe7iZrCuEBSHfzpXMMjX3FkzPyquTYAsuG6bgXh2lM7vg0R8o9vYqtMX8dmnv1STdSwp/AbZ5b/VBJeoMVriaus0jKl+fYXKDfCIcR7r4FewiB7foZez9Vjqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AlpRKE1s; arc=none smtp.client-ip=209.85.166.175
+	 In-Reply-To:Content-Type; b=H17IhBmG7ZhdfsyllOEmXoFKnNfNpSciuF/+h5DwKnS6oktKBpAdm5HuzaCelIol3JC3deFacz1XIORmFN4b9PREMpZiAZ7uXx+HtzJjyqw63rk5J8ZzHK7yAE7IBfhGQCmteUYb5vdO0pDvTnx5n8mqYxmF1uzk2bAnYV7hGlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ePkbFQDE; arc=none smtp.client-ip=209.85.166.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3d5e2260f52so7310915ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 08:19:38 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3d6d6d82633so3559055ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 08:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1744298377; x=1744903177; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1744298383; x=1744903183; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=p0hDnHJGstcN5tjUtZArcj8+BnFv1raQiFlYzncXH4Q=;
-        b=AlpRKE1sQSiwk2ZFeiEaiFDLbTEmbAA22ab2hduE3gEBvhDqm8BEJtSPGheTFwCF2S
-         2BSQzHMraWKrhr7Fo5MO8rlVR9LJHOChF6yiyi7D/Xg769dBu980WH8m899ohrweCRiO
-         qIWc/aURlpJe1AO2TCmLw0t+Ci97JjNGSiHF0=
+        bh=gTbAkNf1q5qo8+NwqAeTj3dhW58KgCjW3CTJ6jZXbHw=;
+        b=ePkbFQDEHxNupxbPmOaU+e1OS7QzjayaCGjCCCUAn55nfKDFUFJex4hkpkFxrbJTMf
+         AaGBB+xKFtOSMRtlSBx1n5rPOuGwtDBI1ROKszFGY0ZvvqyhtEp+oSWGp3/tGWG5TuMl
+         Z0GGjQ5mwayMDekARmrSqzA9gos0+LAM1nmj8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744298377; x=1744903177;
+        d=1e100.net; s=20230601; t=1744298383; x=1744903183;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0hDnHJGstcN5tjUtZArcj8+BnFv1raQiFlYzncXH4Q=;
-        b=qFkApEuofWPoLaXuSz02HMA+0ZCRZ6rV3nLUYNYWwAVK++06Sjd1H3dRGaRbCUjSRw
-         4MFcRRvbFUxcgi/+jHlVEfwbmmvMyYPNAmXFg3ErRwCiwRvobHuvqldv3Qf1TONbiGJq
-         SIp1v6RDrb4k7GMBl/rHZbvNfzloisdd8wIgJQUFXD2LahHXgVk4dYCp833MWOeaxR/O
-         IuhTmG3FLeSbj5kgVTjHAwslAv2Qa5SHwGtRK/0IQrkFABv+RTmQKksYzW4uun7vvaRy
-         w6TJoz2ktB3agfRX+pnwTthmEmfzST3q5Tvwo9LynWdtvEkWLL4APSfkIPUk+n+PjSOr
-         oETA==
-X-Forwarded-Encrypted: i=1; AJvYcCVXq9CRCtcOPx8NS0wRVp3e3eFLvF2VgYpkT97XiPfmCMCBpybWRXRX5yCWHUUlASiyaz+nCCSGSDlj5nUho+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFm2X1W8ONzbgjv1qNSochyWZI0YdZXH8BYq0/xW3Qzo+qUbdi
-	PCjUMQDG/zUS3CtWmjn9SpCMVeg6LaDf5YaN/fwdN9aPfGKiDWxFSdUWyFkrMl8=
-X-Gm-Gg: ASbGncuHfVZ6X3iOyx7NiO4JM+fRNHwrdfD5zLamnRPjV7WDGQ5qVy8RxPuTyBoCiXg
-	XUsAEeweoTjEu/d2U9Ww5KlGny9/mNreAcUVeqmr6J9jBexlLXy4PIZpBH+qf3RLqIkc3psTtf0
-	MgTYYyMegHPGqIH/22oIw5VbGF4XeW7yWWA/q7+oMPZcn7I9F/8wTOiOtbcIvQAPqe8+wsBiraE
-	4KOqddOUmnoJj0RG6n1ioK4Y+xdD8KtwdtrQhLsVZUavO2kctt9i5e26aygv7bQ00wnVneCapE6
-	+Y5yfL8EWznrg0uy3P8lrAe1nXtnKuK1VW1MjKS9OWGJzkhokJs=
-X-Google-Smtp-Source: AGHT+IGYghOS+7i1wcjdHgqxdKs6EGmjkmfFhSRU0tTXTq7Y1uPzPEsOxwWaQxdrY5CbbwPl+8ibhw==
-X-Received: by 2002:a05:6e02:1888:b0:3d4:700f:67e7 with SMTP id e9e14a558f8ab-3d7e5fcfe40mr29388885ab.17.1744298377689;
-        Thu, 10 Apr 2025 08:19:37 -0700 (PDT)
+        bh=gTbAkNf1q5qo8+NwqAeTj3dhW58KgCjW3CTJ6jZXbHw=;
+        b=sdLpx2dtg3DqyxLvi5dK9HHgf6H3LMEmbI1Vlefr7m4HLJqslR3b+kfG4LzKrhXNqG
+         YxaNUuEDmJNEJcEkbQDKWgS72/prazxn2Kp/jmAsQr/HPDogX4RtJi2mTEv44QcHg5y6
+         /k8nH9qmouEtqmlvPMSA/UkhlwB4JEJ6K220nCTthibALVvCVgbwIYSNjae6UUqvauVW
+         sIoyfzaXhPRedVp1ef8AxWebrv0SZT5iPjfEDXtaZauX1dN4vwALr4MAs1DEs1rD07xO
+         ZW7yxicsdTNNSu/+fT08vsDD7i3uZZYLiyHnsxLcnEc4262EaJVoCRTPCh8T5QsAW2xq
+         J64g==
+X-Forwarded-Encrypted: i=1; AJvYcCXmlbdmURYtwTxYkCBzqdTof2XIWIpMqMYC/t/jiUxEE2x/2ErwdzQt92r1LRQO55uUhm19JADZDFy3BblXQVo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWiysyRK8cO3PG1Fj9aEPpdQJCB7pmWCidNGZaX7rROOxdwgoT
+	qsqnWt5DXFeQL3AWFzd4wCVZdlye25aVC7+JqOcd+uEHTJShwvTT/wnpaXmqlBE=
+X-Gm-Gg: ASbGncvO6Y1xgAwh1FIDLSjljfr8AJOOfgHlA0y1NlAFbmMBcwNIes2UjCPPavPAQaf
+	Zmd8iWuF60zH8jCeUZnXGW+BHCGns/Qb7ikpIBzNuxqVXwpjSF4hPI6q3Uz+XFYnnwmm+2l7q+k
+	VZmbz++EgaFYdaSSgTSAZpCeyc8uTf2k2TXDjElKpqQ5wATf5DXxXotc5XUs/vvYiY0fy3Al3of
+	opNUih/eBYUaaPJKvQ38LCLTesqdde9LdCR/blHhPDYU4bf+5xOIWiVebLW5aKFVhul/6klA+n+
+	D4VI6yRrclzfzEaX5sxWk6rM70FmojIJwZtp7nVxXp6CPiPrhx8=
+X-Google-Smtp-Source: AGHT+IG00hHo/TwmdfOnZOSnb8NCdsyorRqLEyAr44S8McihuyDzghob6c74mBPiuDyaGp8HrfN1yw==
+X-Received: by 2002:a05:6e02:258b:b0:3d0:235b:4810 with SMTP id e9e14a558f8ab-3d7e46e0837mr32083585ab.2.1744298383441;
+        Thu, 10 Apr 2025 08:19:43 -0700 (PDT)
 Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505e2e610sm772963173.108.2025.04.10.08.19.36
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505e2e610sm772963173.108.2025.04.10.08.19.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 08:19:37 -0700 (PDT)
-Message-ID: <04bf6bbc-d813-488d-9117-def19717b8b5@linuxfoundation.org>
-Date: Thu, 10 Apr 2025 09:19:36 -0600
+        Thu, 10 Apr 2025 08:19:42 -0700 (PDT)
+Message-ID: <4af4d2a5-1503-47c6-8da0-cb7586294f0e@linuxfoundation.org>
+Date: Thu, 10 Apr 2025 09:19:42 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,105 +78,311 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/32] kselftest harness and nolibc compatibility
+Subject: Re: [PATCH v2 01/32] selftests: harness: Add harness selftest
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  Shuah Khan <shuah@kernel.org>, Willy Tarreau <w@1wt.eu>,
  =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
 References: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
+ <20250407-nolibc-kselftest-harness-v2-1-f8812f76e930@linutronix.de>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
+In-Reply-To: <20250407-nolibc-kselftest-harness-v2-1-f8812f76e930@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 4/7/25 00:52, Thomas Weißschuh wrote:
-> Nolibc is useful for selftests as the test programs can be very small,
-> and compiled with just a kernel crosscompiler, without userspace support.
-> Currently nolibc is only usable with kselftest.h, not the more
-> convenient to use kselftest_harness.h
-> This series provides this compatibility by adding new features to nolibc
-> and removing the usage of problematic features from the harness.
+> Add a selftest for the harness itself so any changes can be validated.
 > 
-> The first half of the series are changes to the harness, the second one
-> are for nolibc. Both parts are very independent and should go through
-> different trees.
-> The last patch is not meant to be applied and serves as test that
-> everything works together correctly.
-> 
+
+kselftest harness?
+
 > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 > ---
-> Changes in v2:
-> - Rebase unto v6.15-rc1
-> - Rename internal nolibc symbols
-> - Handle edge case of waitpid(INT_MIN) == ESRCH
-> - Fix arm configurations for final testing patch
-> - Clean up global getopt.h variable declarations
-> - Add Acks from Willy
-> - Link to v1: https://lore.kernel.org/r/20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de
-
-Thank you. I am going to start reviewing the series. It could take
-me a few days to get through all 32 patches. :)
-
+>   tools/testing/selftests/Makefile                   |   1 +
+>   tools/testing/selftests/kselftest/.gitignore       |   1 +
+>   tools/testing/selftests/kselftest/Makefile         |   6 +
+>   .../testing/selftests/kselftest/harness-selftest.c | 129 +++++++++++++++++++++
+>   .../selftests/kselftest/harness-selftest.expected  |  62 ++++++++++
+>   .../selftests/kselftest/harness-selftest.sh        |  14 +++
+>   6 files changed, 213 insertions(+)
 > 
-> ---
-> Thomas Weißschuh (32):
->        selftests: harness: Add harness selftest
->        selftests: harness: Use C89 comment style
->        selftests: harness: Ignore unused variant argument warning
->        selftests: harness: Mark functions without prototypes static
->        selftests: harness: Remove inline qualifier for wrappers
->        selftests: harness: Remove dependency on libatomic
->        selftests: harness: Implement test timeouts through pidfd
->        selftests: harness: Don't set setup_completed for fixtureless tests
->        selftests: harness: Always provide "self" and "variant"
->        selftests: harness: Move teardown conditional into test metadata
->        selftests: harness: Add teardown callback to test metadata
->        selftests: harness: Stop using setjmp()/longjmp()
->        selftests: harness: Guard includes on nolibc
->        tools/nolibc: handle intmax_t/uintmax_t in printf
->        tools/nolibc: use intmax definitions from compiler
->        tools/nolibc: use pselect6_time64 if available
->        tools/nolibc: use ppoll_time64 if available
->        tools/nolibc: add tolower() and toupper()
->        tools/nolibc: add _exit()
->        tools/nolibc: add setpgrp()
->        tools/nolibc: implement waitpid() in terms of waitid()
->        Revert "selftests/nolibc: use waitid() over waitpid()"
->        tools/nolibc: add dprintf() and vdprintf()
->        tools/nolibc: add getopt()
->        tools/nolibc: allow different write callbacks in printf
->        tools/nolibc: allow limiting of printf destination size
->        tools/nolibc: add snprintf() and friends
->        selftests/nolibc: use snprintf() for printf tests
->        selftests/nolibc: rename vfprintf test suite
->        selftests/nolibc: add test for snprintf() truncation
->        tools/nolibc: implement width padding in printf()
->        HACK: selftests/nolibc: demonstrate usage of the kselftest harness
-> 
->   tools/include/nolibc/Makefile                      |    1 +
->   tools/include/nolibc/getopt.h                      |  101 ++
->   tools/include/nolibc/nolibc.h                      |    1 +
->   tools/include/nolibc/stdint.h                      |    4 +-
->   tools/include/nolibc/stdio.h                       |  127 +-
->   tools/include/nolibc/string.h                      |   17 +
->   tools/include/nolibc/sys.h                         |  105 +-
->   tools/testing/selftests/Makefile                   |    1 +
->   tools/testing/selftests/kselftest/.gitignore       |    1 +
->   tools/testing/selftests/kselftest/Makefile         |    6 +
->   .../testing/selftests/kselftest/harness-selftest.c |  129 ++
->   .../selftests/kselftest/harness-selftest.expected  |   62 +
->   .../selftests/kselftest/harness-selftest.sh        |   14 +
->   tools/testing/selftests/kselftest_harness.h        |  181 +-
->   tools/testing/selftests/nolibc/Makefile            |   13 +-
->   tools/testing/selftests/nolibc/harness-selftest.c  |    1 +
->   tools/testing/selftests/nolibc/nolibc-test.c       | 1729 +-------------------
->   tools/testing/selftests/nolibc/run-tests.sh        |    2 +-
->   18 files changed, 635 insertions(+), 1860 deletions(-)
-> ---
-> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-> change-id: 20250130-nolibc-kselftest-harness-8b2c8cac43bf
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index c77c8c8e3d9bdd8047c9cb7722c3830447e504e5..3ce071eefa86af59aadd1df7972fdf3bf6e01d52 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -48,6 +48,7 @@ TARGETS += ipc
+>   TARGETS += ir
+>   TARGETS += kcmp
+>   TARGETS += kexec
+> +TARGETS += kselftest
+
+kselftest name can be confusing to users  since the the test suite is called
+kselftest in the main Makefile. Find different name - kselftest_harness?
+
+Also don't add files to selftests/kselftest - create a new directory.
+
+make kselftest (runs the entire suite).
+
+>   TARGETS += kvm
+>   TARGETS += landlock
+>   TARGETS += lib
+> diff --git a/tools/testing/selftests/kselftest/.gitignore b/tools/testing/selftests/kselftest/.gitignore
+
+Add a new directory - kselftest_harness?
+
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..9aab194e8ea25a2c5ccc116f9f728b8afd0c51c4
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest/.gitignore
+> @@ -0,0 +1 @@
+> +/harness-selftest
+> diff --git a/tools/testing/selftests/kselftest/Makefile b/tools/testing/selftests/kselftest/Makefile
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..2f2933553dbc47014d9dfe0b4bd8ad3bc36e38c2
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest/Makefile
+
+Same here - don't put these under selftests/kselftest
+
+> @@ -0,0 +1,6 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +TEST_GEN_PROGS_EXTENDED := harness-selftest
+> +TEST_PROGS := harness-selftest.sh
+> +
+> +include ../lib.mk
+
+Need a clean override since you are creatinbg a TMPFILE so it
+gets cleaned up.
+
+> diff --git a/tools/testing/selftests/kselftest/harness-selftest.c b/tools/testing/selftests/kselftest/harness-selftest.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..8d39e7a0b99c41a5d33edfe2dbf875cac04c098d
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest/harness-selftest.c
+> @@ -0,0 +1,129 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <stdio.h>
+> +
+> +#ifndef NOLIBC
+> +#include <sys/resource.h>
+> +#include <sys/prctl.h>
+> +#endif
+> +
+> +/* Avoid any inconsistencies */
+> +#define TH_LOG_STREAM stdout
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +TEST(standalone_pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	EXPECT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST(standalone_fail) {
+> +	TH_LOG("before");
+> +	EXPECT_EQ(0, 0);
+> +	EXPECT_EQ(0, 1);
+> +	ASSERT_EQ(0, 1);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST_SIGNAL(signal_pass, SIGUSR1) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +	kill(getpid(), SIGUSR1);
+> +}
+> +
+> +TEST_SIGNAL(signal_fail, SIGUSR1) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 1);
+> +	TH_LOG("after");
+> +	kill(getpid(), SIGUSR1);
+> +}
+> +
+> +FIXTURE(fixture) {
+> +	pid_t testpid;
+> +};
+> +
+> +FIXTURE_SETUP(fixture) {
+> +	TH_LOG("setup");
+> +	self->testpid = getpid();
+> +}
+> +
+> +FIXTURE_TEARDOWN(fixture) {
+> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
+> +}
+> +
+> +TEST_F(fixture, pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST_F(fixture, fail) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 1);
+> +	TH_LOG("after");
+> +}
+> +
+> +TEST_F_TIMEOUT(fixture, timeout, 1) {
+> +	TH_LOG("before");
+> +	sleep(2);
+> +	TH_LOG("after");
+> +}
+> +
+> +FIXTURE(fixture_parent) {
+> +	pid_t testpid;
+> +};
+> +
+> +FIXTURE_SETUP(fixture_parent) {
+> +	TH_LOG("setup");
+> +	self->testpid = getpid();
+> +}
+> +
+> +FIXTURE_TEARDOWN_PARENT(fixture_parent) {
+> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
+> +}
+> +
+> +TEST_F(fixture_parent, pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +FIXTURE(fixture_setup_failure) {
+> +	pid_t testpid;
+> +};
+> +
+> +FIXTURE_SETUP(fixture_setup_failure) {
+> +	TH_LOG("setup");
+> +	self->testpid = getpid();
+> +	ASSERT_EQ(0, 1);
+> +}
+> +
+> +FIXTURE_TEARDOWN(fixture_setup_failure) {
+> +	TH_LOG("teardown same-process=%d", self->testpid == getpid());
+> +}
+> +
+> +TEST_F(fixture_setup_failure, pass) {
+> +	TH_LOG("before");
+> +	ASSERT_EQ(0, 0);
+> +	TH_LOG("after");
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	/*
+> +	 * The harness uses abort() to signal assertion failures, which triggers coredumps.
+> +	 * This may be useful to debug real failures but not for this selftest, disable them.
+> +	 */
+> +	struct rlimit rlimit = {
+> +		.rlim_cur = 0,
+> +		.rlim_max = 0,
+> +	};
+> +
+> +	prctl(PR_SET_DUMPABLE, 0, 0, 0, 0);
+> +	setrlimit(RLIMIT_CORE, &rlimit);
+> +
+> +	return test_harness_run(argc, argv);
+> +}
+> diff --git a/tools/testing/selftests/kselftest/harness-selftest.expected b/tools/testing/selftests/kselftest/harness-selftest.expected
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1aa6461db90d4e7cc0679f19b69aadf4032875ec
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest/harness-selftest.expected
+> @@ -0,0 +1,62 @@
+> +TAP version 13
+> +1..9
+> +# Starting 9 tests from 4 test cases.
+> +#  RUN           global.standalone_pass ...
+> +# harness-selftest.c:16:standalone_pass:before
+> +# harness-selftest.c:19:standalone_pass:after
+> +#            OK  global.standalone_pass
+> +ok 1 global.standalone_pass
+> +#  RUN           global.standalone_fail ...
+> +# harness-selftest.c:23:standalone_fail:before
+> +# harness-selftest.c:25:standalone_fail:Expected 0 (0) == 1 (1)
+> +# harness-selftest.c:26:standalone_fail:Expected 0 (0) == 1 (1)
+> +# standalone_fail: Test terminated by assertion
+> +#          FAIL  global.standalone_fail
+> +not ok 2 global.standalone_fail
+> +#  RUN           global.signal_pass ...
+> +# harness-selftest.c:31:signal_pass:before
+> +# harness-selftest.c:33:signal_pass:after
+> +#            OK  global.signal_pass
+> +ok 3 global.signal_pass
+> +#  RUN           global.signal_fail ...
+> +# harness-selftest.c:38:signal_fail:before
+> +# harness-selftest.c:39:signal_fail:Expected 0 (0) == 1 (1)
+> +# signal_fail: Test terminated by assertion
+> +#          FAIL  global.signal_fail
+> +not ok 4 global.signal_fail
+> +#  RUN           fixture.pass ...
+> +# harness-selftest.c:49:pass:setup
+> +# harness-selftest.c:58:pass:before
+> +# harness-selftest.c:60:pass:after
+> +# harness-selftest.c:54:pass:teardown same-process=1
+> +#            OK  fixture.pass
+> +ok 5 fixture.pass
+> +#  RUN           fixture.fail ...
+> +# harness-selftest.c:49:fail:setup
+> +# harness-selftest.c:64:fail:before
+> +# harness-selftest.c:65:fail:Expected 0 (0) == 1 (1)
+> +# harness-selftest.c:54:fail:teardown same-process=1
+> +# fail: Test terminated by assertion
+> +#          FAIL  fixture.fail
+> +not ok 6 fixture.fail
+> +#  RUN           fixture.timeout ...
+> +# harness-selftest.c:49:timeout:setup
+> +# harness-selftest.c:70:timeout:before
+> +# timeout: Test terminated by timeout
+> +#          FAIL  fixture.timeout
+> +not ok 7 fixture.timeout
+> +#  RUN           fixture_parent.pass ...
+> +# harness-selftest.c:80:pass:setup
+> +# harness-selftest.c:89:pass:before
+> +# harness-selftest.c:91:pass:after
+> +# harness-selftest.c:85:pass:teardown same-process=0
+> +#            OK  fixture_parent.pass
+> +ok 8 fixture_parent.pass
+> +#  RUN           fixture_setup_failure.pass ...
+> +# harness-selftest.c:99:pass:setup
+> +# harness-selftest.c:101:pass:Expected 0 (0) == 1 (1)
+> +# pass: Test terminated by assertion
+> +#          FAIL  fixture_setup_failure.pass
+> +not ok 9 fixture_setup_failure.pass
+> +# FAILED: 4 / 9 tests passed.
+> +# Totals: pass:4 fail:5 xfail:0 xpass:0 skip:0 error:0
+> diff --git a/tools/testing/selftests/kselftest/harness-selftest.sh b/tools/testing/selftests/kselftest/harness-selftest.sh
+> new file mode 100755
+> index 0000000000000000000000000000000000000000..bf691adf0b41aaedb2fbc5f06add9fd1d5689044
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest/harness-selftest.sh
+> @@ -0,0 +1,14 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Selftest for kselftest_harness.h
+> +#
+> +
+> +DIR="$(dirname $(readlink -f "$0"))"
+> +
+> +TMPFILE="$(mktemp)"
+> +trap 'rm "$TMPFILE"' EXIT
+> +
+> +$DIR/harness-selftest > "$TMPFILE"
+> +
+> +diff -u "$DIR"/harness-selftest.expected "$TMPFILE"
+
+This TMPFILE needs to be removed from make clean
+
 > 
 
 thanks,
