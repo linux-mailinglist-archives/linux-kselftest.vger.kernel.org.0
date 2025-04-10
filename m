@@ -1,134 +1,185 @@
-Return-Path: <linux-kselftest+bounces-30474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE4B8A8405C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 12:16:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F30A8416A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 13:05:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B79B9E2EAC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 10:10:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148AC466714
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 11:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8160F26B2A8;
-	Thu, 10 Apr 2025 10:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261CD28152B;
+	Thu, 10 Apr 2025 11:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="omPmcXAw"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="pVFHYrgW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACE32673B7
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 10:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B45E1DF991
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 11:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744279699; cv=none; b=ZI0vgwIN1L0zyEeMujvRy6DOtPHHIbVsHZEoIxonV42KgEE7audzf1SRaoZVRF02a7ZqxNFRdx3N82kdkP1ZP8NB5Fkkc1Qii/kKbsIKwV53UCWaodGd1nwg1/Z412ZUEteekM2ZFrLrKwpuuIHUfHDe/IY2JiUWj0aWBgj1/6o=
+	t=1744283084; cv=none; b=onhZYy2xGVsHYgz/nAcmhHQ2phT+YzS1BhToTRPivduyh+x/ihO3KaIWw3oIQgxDXlVUSKQdSDEbm09FJDZqL5QQvehseZQ3RZ3WeRr/rH/guvSJ6n+z/7iQM/d5Ih21ouBR9bt5Ctu8C+cFxQ9bFCdxX9g4Czm2PChEoMbVZ+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744279699; c=relaxed/simple;
-	bh=ehCJL7O2VRwh6DBSRrwmosVFJbVgOyK3q6wvb8j9QFc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GCRi3pEd5b2QGazFUiBtwi6Fj/IcGM09+2KAW+fxMu2vDJhfRkUhvELjIyVBO4m6uQnMyAssffCzlH0M8bWCcKWeDQNYgSl+G6ByrE4gBNCI+Mw2UxgE6o9ZKSR14hRda4Wrk/IFSBAaUDfF/yI7i4Ik6YeKIyzBCYoxA/3EtJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=omPmcXAw; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53A68Gpt022700;
-	Thu, 10 Apr 2025 10:08:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=pk1XLmgBq5xVToKFE3tfnSHSmedA9cTbuIOl31OV7
-	78=; b=omPmcXAwAfiinxNP46AHR+Fp4sR+ximIsxnQfx6n6+buFUHYF+0c4v9bF
-	XB0IkiG9DgjDvrK1i9qi9QSUzCkaOQ3jeKJYs0POA+OVOMJEWTD4glbcuKZAIvfi
-	gf0mN1zYgsg4iAd57as0Y5muorxoF4ItAt2kva+HDK1y05QhrrvLt43QPopPL4uh
-	ZFXA9ca+O+87B3HEcwAiJZoORX0j0VF0xbJxkn5MBTdkbmcVY40CjK11cB1b+S3v
-	6XbPuiWOKTiHxwlocHCvY5yWuuoRa6G7KRhf5yC9XcLzTLpXuaYPdsu8+choUKDi
-	HejANgYofpGnXvLicfb63oG8LC+hg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45x02qbyv6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 10:08:03 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 53A9tCFQ009615;
-	Thu, 10 Apr 2025 10:08:03 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45x02qbyv5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 10:08:03 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53A8VZUM025518;
-	Thu, 10 Apr 2025 10:08:02 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45ugbm5f1x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 10:08:02 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53AA808U60359016
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 10 Apr 2025 10:08:00 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8822A2006A;
-	Thu, 10 Apr 2025 10:08:00 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 409C520067;
-	Thu, 10 Apr 2025 10:07:59 +0000 (GMT)
-Received: from ltcden14-lp2.aus.stglabs.ibm.com (unknown [9.53.174.194])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 10 Apr 2025 10:07:59 +0000 (GMT)
-From: Donet Tom <donettom@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Cc: Ritesh Harjani <ritesh.list@gmail.com>, longman@redhat.com,
-        Li Wang <liwang@redhat.com>, Donet Tom <donettom@linux.ibm.com>
-Subject: [PATCH] selftests/mm: Restore default nr_hugepages value during cleanup in hugetlb_reparenting_test.sh
-Date: Thu, 10 Apr 2025 05:07:48 -0500
-Message-ID: <20250410100748.2310-1-donettom@linux.ibm.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1744283084; c=relaxed/simple;
+	bh=kOlPkOa9RAWaHmxwXq9vXkGSssRFc7sUC8EQNbcnfPY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=tKW3atufKIRoFTJP7/u21PoMEDDoNGy9t2PN8k2UAxqD7StxZTJXDXOjsc6MzQFPEgvbgI6FpmgA+Fv+PS5LsVSwKOIY2+0ro++w1VCGU84i+alieos0Cu+YJdcCgdeZEwZrnt5lDHWZY4JMk4LBr6VLJbQ9pOsT/ay9xiMTBg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=pVFHYrgW; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39c2688e2bbso26010f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 04:04:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1744283080; x=1744887880; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FwTqTcXuZVwmB1gK8gAQzMNft2dcqvTwt7yn+4sQNuo=;
+        b=pVFHYrgW6CsPBVfhDp8H0SHh07ORi0+k92JSM7WHod+l6GpALDm6Af/8R4cZodTjSI
+         tJhmQC0ISSnfE51tew20VXscex2ugzAatyW+gaNQVdqFVsPCNEtL0hzsectLv90gFFtt
+         oVuwwysWrn9jEcSsg7T6KkbCebzr4gntAQJheGXE5uqMjbzNUT2JWYiPhRLq9y69avjt
+         blLUmxwM5ibExPlEoUUbX0wnvPL/rJd7iUzELewMF/309FFzjGxOdZqxZeMaqwE83MP6
+         zgXi1m4nmEywod9fgORmfD+WzNDeuueMfkonfaKqfm00t7VTa2R1DFvAman71MpISxGx
+         m5fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744283080; x=1744887880;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FwTqTcXuZVwmB1gK8gAQzMNft2dcqvTwt7yn+4sQNuo=;
+        b=snHCsYuwOdFDB841CRn9ijFPoHZVh09neRW/YDgYSWnXj5KZ0kr5JeAcZjJJtbMnw5
+         kwyezpgrp1PhIpHb2Fm/5Mecw0sAYp7TBeI/6b4VaHEPVozkiLus7M3ZaOAt+L0OUiwc
+         B8FRyWw1CO80YlS/hzqSf2s642eSingw7uyIpOOjGudATgD5ZJ86i71WogZUmafkaFP7
+         FYLHv7U3yOOflOpMCW+H/ElY4CzvVQZ+Ip8CbKsMwf45RWD8RC0gj6jeXhpPenhGAGus
+         iY2rJxOf3n+Hbqx3nKx/m0dM3OM0l+cDkf8ZfcP13EirfJ66y+PnROzvnOoYBwBMn9Fm
+         +5iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV9pPL0gVoUoOoPI86RWWKOV1X6+H4XleTGANrCwnqdwygGIEb1pFeBEQlqPJqmucuFDCC4kbFyuTT+oaEZR0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXN00bQ5SNTeMI/d+Bwwm+lhmllAAOi4YM5X3BcEozS18hyd07
+	QefkwOdZIE9EMYnd6rZDyYcNnH+hDENdaUtG6GSvmAlA4SUK57ZgPZO6YNJ2NUk=
+X-Gm-Gg: ASbGnctJixoLseO3smjDZGjUbEPwGBWqNY8b47GWeM7JvEsCLzR6C/W0zgahPgArO7U
+	OhgQuDmdSMVDrqkbnJR/66x0tmgLTxa0RGSG7vuLNYKDfbrqc0zV76+K8OIDSVzv0dAaUvCac9s
+	KX5YKaBEidsm1IKF+u1HBTkiBfgrLdVIY5phPW3UKLHpO1Ogs1pmPinlGpclreWixMPjH3FDg/v
+	U237PvwwahcpIaXYWoSGTALojuC41Yp74z9FKjBxUkNOhXyz7DcAQ99VLJ69fTpS8HzljZravLp
+	r8+XFhSnXXaSGzh3sZJ15Cf7I1FRxraXL3y4fu2kNxkaBT4c
+X-Google-Smtp-Source: AGHT+IFTHVjvMm7SI9zG+YTo6xP+VuwjrIfNbL14H9cY5sGUQSewGH6hwjaZZsvjM4ZfhfO2SM4RNA==
+X-Received: by 2002:a05:6000:18ac:b0:39c:13fa:3e0 with SMTP id ffacd0b85a97d-39d87adcd02mr1983393f8f.9.1744283080239;
+        Thu, 10 Apr 2025 04:04:40 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200:7d22:13bb:e539:15ee])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d89361186sm4476526f8f.14.2025.04.10.04.04.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 04:04:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jE3lAz9X2QBh8-c-E2MYiYz_Zv8i7byW
-X-Proofpoint-ORIG-GUID: CYIl7eGH620ENht-QvGtXimSVd7UFAvw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-10_01,2025-04-08_04,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- priorityscore=1501 mlxlogscore=919 lowpriorityscore=0 spamscore=0
- clxscore=1015 suspectscore=0 mlxscore=0 adultscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504100074
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 10 Apr 2025 13:04:39 +0200
+Message-Id: <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
+Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
+ <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
+ <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
+ <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
+ <zong.li@sifive.com>, "linux-riscv"
+ <linux-riscv-bounces@lists.infradead.org>
+To: "Deepak Gupta" <debug@rivosinc.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
+ <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
+ <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
+ <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
+ <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
+ <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
+ save/restore of CSR_SSP on trap entry/exit
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
+In-Reply-To: <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
 
-During cleanup, the value of /proc/sys/vm/nr_hugepages is currently
-being set to 0. At the end of the test, if all tests pass, the
-original nr_hugepages value is restored. However, if any test fails,
-it remains set to 0.
+2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
+> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/as=
+m/thread_info.h
+> @@ -62,6 +62,9 @@ struct thread_info {
+>  	long			user_sp;	/* User stack pointer */
+>  	int			cpu;
+>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
+> +#ifdef CONFIG_RISCV_USER_CFI
+> +	struct cfi_status	user_cfi_state;
+> +#endif
 
-With this patch, we ensure that the original nr_hugepages value is
-restored during cleanup, regardless of whether the test passes or fails.
+I don't think it makes sense to put all the data in thread_info.
+kernel_ssp and user_ssp is more than enough and the rest can comfortably
+live elsewhere in task_struct.
 
-Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
-Signed-off-by: Donet Tom <donettom@linux.ibm.com>
----
- tools/testing/selftests/mm/hugetlb_reparenting_test.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thread_info is supposed to be as small as possible -- just spanning
+multiple cache-lines could be noticeable.
 
-diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-index 11f9bbe7dc22..114875a2b018 100755
---- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-+++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-@@ -56,7 +56,7 @@ function cleanup() {
-   rmdir "$CGROUP_ROOT"/a/b 2>/dev/null
-   rmdir "$CGROUP_ROOT"/a 2>/dev/null
-   rmdir "$CGROUP_ROOT"/test1 2>/dev/null
--  echo 0 >/proc/sys/vm/nr_hugepages
-+  echo $nr_hugepgs >/proc/sys/vm/nr_hugepages
-   set -e
- }
- 
--- 
-2.47.1
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
+> =20
+>  	REG_L s0, TASK_TI_USER_SP(tp)
+>  	csrrc s1, CSR_STATUS, t0
+> +	/*
+> +	 * If previous mode was U, capture shadow stack pointer and save it awa=
+y
+> +	 * Zero CSR_SSP at the same time for sanitization.
+> +	 */
+> +	ALTERNATIVE("nop; nop; nop; nop",
+> +				__stringify(			\
+> +				andi s2, s1, SR_SPP;	\
+> +				bnez s2, skip_ssp_save;	\
+> +				csrrw s2, CSR_SSP, x0;	\
+> +				REG_S s2, TASK_TI_USER_SSP(tp); \
+> +				skip_ssp_save:),
+> +				0,
+> +				RISCV_ISA_EXT_ZICFISS,
+> +				CONFIG_RISCV_USER_CFI)
 
+(I'd prefer this closer to the user_sp and kernel_sp swap, it's breaking
+ the flow here.  We also already know if we've returned from userspace
+ or not even without SR_SPP, but reusing the information might tangle
+ the logic.)
+
+>  	csrr s2, CSR_EPC
+>  	csrr s3, CSR_TVAL
+>  	csrr s4, CSR_CAUSE
+> @@ -236,6 +250,18 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
+>  	csrw CSR_SCRATCH, tp
+> +
+> +	/*
+> +	 * Going back to U mode, restore shadow stack pointer
+> +	 */
+
+Are we?  I think we can be just as well returning back to kernel-space.
+Similar to how we can enter the exception handler from kernel-space.
+
+> +	ALTERNATIVE("nop; nop",
+> +				__stringify(					\
+> +				REG_L s3, TASK_TI_USER_SSP(tp); \
+> +				csrw CSR_SSP, s3),
+> +				0,
+> +				RISCV_ISA_EXT_ZICFISS,
+> +				CONFIG_RISCV_USER_CFI)
+> +
+
+Thanks.
 
