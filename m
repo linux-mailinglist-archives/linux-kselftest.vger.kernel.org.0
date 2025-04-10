@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-30472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C28CA83FC5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 12:00:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7705BA84033
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 12:11:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 173644A1106
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 09:59:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 242C99E6E91
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 10:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F62726B2C5;
-	Thu, 10 Apr 2025 09:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64291279333;
+	Thu, 10 Apr 2025 10:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="AL5ylmJn"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="m+y/XIU0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DBF26B2A1
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 09:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525EC278171
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 10:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744279009; cv=none; b=pPlGcbDCLmXssoJNUG6xflPWXWMsNuqkcRIS8YIEWPcJHSu5WXuwEUr/hy7l16OqgD8vDi1a0ut5afi5pD3+CYHxAuCkHkUwMaUIbhaAs4p5fHvFy/xOJekihobXeaNJ/n+F1n/3iL1TYqm42+9fUU7D4cOdNBpKwkbGy/Wa02I=
+	t=1744279429; cv=none; b=HDoFcokqNHqlf24NnVB+vistH222P8l2EZn17WsgZnGW24PvvDWbUZN6Ny613fNr/9OwjoGMtL3jxCxMg62iMvoRCqe527zCL53HXG2CJdnuVmp53vJ+6/qdJK//3zArpdusM1FQYlVJlTpSgDZv/SBaJ1BE2dv6jagFkUW/5iE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744279009; c=relaxed/simple;
-	bh=xS47vOnBOl+2Wgh/X17ml36azQPBKEMDbkQQ9axrYJM=;
+	s=arc-20240116; t=1744279429; c=relaxed/simple;
+	bh=HUIIkQA6QycOoJu2qQMdVk5tOnI9W5lI6BOW89OgIIQ=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=TvWtWJ3DUYjb+zOYBgbFxRnFSyCTHjK45xKSUEcTkraTmSqUw0KH1OlC7N1guJaQ2o/r4kfZT1Paf+IU3N3gA/erWEWFsfG/kzOjCg4uPVrqxmrcFXUDWfN6PzXlEjKlfEgOC0MxzsOJm1as4GJeql4CLpmC0QFaA4V4D/m87oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=AL5ylmJn; arc=none smtp.client-ip=209.85.128.48
+	 References:In-Reply-To; b=UqCqIO5/9ycjI3fKs8S9/YCH5tm9IMAP3a9nIRkeeUorYxA0dMM5U73HaaBJIClKJPDVwK3mmUj5vVekGOnc3gb/o3xzpZRKtwg+Fo9mdEUxuvxOipAIl6J6RLskBvJOj4CNffhZ1Ch+1jzUiBgj70LF6froPfs7b6yX7LYalC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=m+y/XIU0; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43d64e6c83eso648405e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 02:56:47 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43cf89f81c5so865225e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 03:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1744279006; x=1744883806; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1744279425; x=1744884225; darn=vger.kernel.org;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0PsTek2iG0P9gXerP0u/dhkc6G7oyliO6C0xZFmP/8A=;
-        b=AL5ylmJnAqGE1DSAt91SDPd06EgEFCW/rKrEf11c2uGbdyGhpE/70pOzslFN8ACDzw
-         8RYHtcvL4sOFhjMcQFKWF9lz11TgoeuR19XsBNM3iPIHEyOEGJCj501fV3UXs7Zw+f9Z
-         eoW+/nJxn9u3JQnYtC0xXjjc1ZsnLY6X57EOgpvP6pDuWVz57h6aVHnsG5taGdRnQqsg
-         9JOLN2SUURmUj0JCUGoK9gbdIx3g4beEK5Peq/IHR8kxQF1f1RW7PKCayMaLmC1pGZ0K
-         +OASt33X2wvMS1NI6NrjxPNtkq7vtv1TxfJ8cylpqg0DXFw098Y06K6Fw2HfpGO3Xl3A
-         vN8w==
+        bh=yuhlYfO+SCuG1tPDw0icZEsvUHv3NYtA5HOyZj159xM=;
+        b=m+y/XIU0hk4zgQ0m6cmy30IVEMK/Cf7BEKyo4w/ypQmckNGam9UbI8aBFIBh5MzJ0E
+         NwVHqY6AVKxYft/z58pmNoYSKAKAPfNMd2VLY2XqEIqPmt3QAqhgsLdQmq1gIU5gBbvN
+         nqXM96PRmPlNx3YDrO1MJwRPy99sVOlT2y0LgfvDOAV52aBIURP+NQW6VhvL80zXZDdI
+         SbupOWBGC2yPGcx+h9aFFe3fnw4KfY1nktDodlcLwDzUiMRIadzlm9+euvoXd0aurX+J
+         kaORrNbwesg6m/U98zAZNeKtjlcATHWhzATrLpVb+BuFuEPxsAGEP0x7q88E/oTBFmDT
+         PuWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744279006; x=1744883806;
+        d=1e100.net; s=20230601; t=1744279425; x=1744884225;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0PsTek2iG0P9gXerP0u/dhkc6G7oyliO6C0xZFmP/8A=;
-        b=bGOFQwHuRMJN/q3eMe8hAbtH60TCYrXTSySR7znE46pk8EeG4zz2t5NxT1BkvW4OoW
-         bxcB8HONi+zdnBn/9F482gpxrGwwuBnG4NVJMdSCDtsHlgCg9715dFmNMxdF6wbjqXvv
-         GZtsTo1VoAsDkN2zv+TV7GHxC7TpNzV6feHkrZfBYGGmDTcttW/o89nuu9/P1tEBaCOa
-         lhwL6+QkEWFrk4fbAKEFFatFTRkONOy6qR9qo5n6Z9ghETESOO5cN+/Ul1g44hpWMKrZ
-         5oaI5uvNEBSYR9ThBFFjEEmWBZW7TjkNzXt9fJYK4mqwNeD5SIgLg6zG1fX+CueTh0pN
-         MX+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVmCdBmAOj4wzbHW4Ss4GwPvFBcwg6o3QwA+AVK3dDPf4rCntAiWtvmgHmRVVT/KV1j+UAKk4mqEKLhEQNkkG4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyWTgBvYb4uWwp5+aM/9bAyT0P9XlsCYwK+p6d1Xia7VtRBuoT
-	RA717kPK12g1VjyPmUnVgJ6DZJx6YnjM2drevEgHXBwR3ql4ArNmi9WZSwAI2VU=
-X-Gm-Gg: ASbGncv4+EEltUPgnjgzL45zq+PRgdkO+bUdUV7O4hgXZJLs4OsuHCdsoYQkb6duhBz
-	pNGUa7ka416DiQOmuNyOHVLgDxFNkfgctgpRKZeMjijTBHKWj9GQP27di5Kc1/g3mS+k6c7xwlu
-	qRh/c8P+VIGm6kwhECTRwF4izibo3U9NiWi4qQtv6IXnq0icNUeEgm7wo6/w3Tqr/NW/0gCBJcL
-	hJ1VoJPw9mHkW1etN9h0ek11aaqpolyMFy9WgxwpNKdqaeH1A+o+s9wHGGJJp744dRVi+4KN5jF
-	o3MDLQH/bs6QQPfV/byCs5m56Fks7wJg5xcXoi8P0WHQNcvd
-X-Google-Smtp-Source: AGHT+IHBsekVmgMMcd9frJRGybN0tNs9jfPFgV6X7l6TgORlz7EkCuYcLx9G1wBU1KIlE1VBTkos1Q==
-X-Received: by 2002:a5d:6d8a:0:b0:39b:f12c:3862 with SMTP id ffacd0b85a97d-39d87aa7badmr2003379f8f.2.1744279005675;
-        Thu, 10 Apr 2025 02:56:45 -0700 (PDT)
+        bh=yuhlYfO+SCuG1tPDw0icZEsvUHv3NYtA5HOyZj159xM=;
+        b=RES2yFrOGlIY2xzGOqqykI0D787kLl5jUf4EUzMBa6QsIF5VXXf4SvOQvsIRu8AiFo
+         k8bEKJ1bUttqVVyuLGMokcdEIE+2/yx1CVsZwaWquhCOnnJWnQ4WC9Hi6dNVLVd6bwlk
+         RpUGjEhotkUnugBC57MVg0Pe8e1oTq3zTUrgUWwG5VzdW65YbcNm3Of3OQqmq2bhNxVo
+         Vd39IOQs7nKjIs3augrKEdd3byn/8g0jfKKpKktjZUZ6PAaDgw0WZxIxOIBPBDSFXWYV
+         1AfAvcITbZ1NwS3ImsdS7koNyqGoQJYAgEtYlOJQ83h2KTtfu0nrc6LsYhmLRyNMCLyd
+         riGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUbbt4vZEDmxpGl0vL9oI2rl18OuFiu4Zc64ejfcVp4JKWKPEgQ7Eiijfn73nPUZH412gB+HzrVH2SBbXpDCFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzD1cL0Gshl9p+NB9V4NMnazH3jGw9JhXIP5mcb3VtK8cLOUmRH
+	i41aIZDOj5b35OjkmyOfEXcSSd3MDL5sZzgthmXgVxGuPIs774hw9WCXs7ianZE=
+X-Gm-Gg: ASbGncvs+SDhonTN3JSfw2M59EQ4rD4Qn1LdWIVYDcvXPBAQBMvsjrfK9/tXi1tlKE6
+	/v7/WhvkDtPIIDKmdCEYmnO6B2D2Hsedgt3gaEFYLe9H5U1nCfH1pjJ8oCqA4q/OCFwf0HeVAH8
+	vlMy9HNl9QSiOOnLM7Ajv7CzsEEVAVY6f5BiBRs+l9anV+YzIKHYp2qMlkjblCqTS0SciPF+p0t
+	4PSl1gx+/woP69//PzWReO/bBdW9FM4m0W9A+kpS9fn+kZZZrXzC4WocARPHDjk9j02yCqWehz0
+	lkoEGujxGvoP++vDgSlTF7fnGvQhktpJb/7YLckEkhX9pIgj
+X-Google-Smtp-Source: AGHT+IFucTZsmmGzPkhUaQ2Z/vAwZtrI/ji5V2QIPWKukl3A8249XbRp5GqSbF4sFE7Q2Qv5hdQlbA==
+X-Received: by 2002:a05:600c:3d0c:b0:439:a1ce:5669 with SMTP id 5b1f17b1804b1-43f1ed4a7a9mr22097145e9.5.1744279425469;
+        Thu, 10 Apr 2025 03:03:45 -0700 (PDT)
 Received: from localhost ([2a02:8308:a00c:e200:7d22:13bb:e539:15ee])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d89362fd6sm4349691f8f.16.2025.04.10.02.56.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d893773a0sm4273653f8f.25.2025.04.10.03.03.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 02:56:45 -0700 (PDT)
+        Thu, 10 Apr 2025 03:03:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,10 +80,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 10 Apr 2025 11:56:44 +0200
-Message-Id: <D92VAWLM8AGD.3CF1VH6NYHCYV@ventanamicro.com>
-Subject: Re: [PATCH v12 10/28] riscv/mm: Implement map_shadow_stack()
- syscall
+Date: Thu, 10 Apr 2025 12:03:44 +0200
+Message-Id: <D92VG9GT3W5D.2B71FBI67EYJ6@ventanamicro.com>
+Subject: Re: [PATCH v12 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ
+ | VM_WRITE
 Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
  <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
  <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
@@ -112,99 +112,50 @@ To: "Deepak Gupta" <debug@rivosinc.com>, "Thomas Gleixner"
  <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>
 From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-10-e51202b53138@rivosinc.com>
-In-Reply-To: <20250314-v5_user_cfi_series-v12-10-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-6-e51202b53138@rivosinc.com>
+In-Reply-To: <20250314-v5_user_cfi_series-v12-6-e51202b53138@rivosinc.com>
 
-2025-03-14T14:39:29-07:00, Deepak Gupta <debug@rivosinc.com>:
-> As discussed extensively in the changelog for the addition of this
-> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
-> existing mmap() and madvise() syscalls do not map entirely well onto the
-> security requirements for shadow stack memory since they lead to windows
-> where memory is allocated but not yet protected or stacks which are not
-> properly and safely initialised. Instead a new syscall map_shadow_stack()
-> has been defined which allocates and initialises a shadow stack page.
->
-> This patch implements this syscall for riscv. riscv doesn't require token
-> to be setup by kernel because user mode can do that by itself. However to
-> provide compatibility and portability with other architectues, user mode
-> can specify token set flag.
-
-RISC-V shadow stack could use mmap() and madvise() perfectly well.
-Userspace can always initialize the shadow stack properly and the shadow
-stack memory is never protected from other malicious threads.
-
-I think that the compatibility argument is reasonable.  We'd need to
-modify the other syscalls to allow a write-only mapping anyway.
-
-> diff --git a/arch/riscv/kernel/usercfi.c b/arch/riscv/kernel/usercfi.c
-> +static noinline unsigned long amo_user_shstk(unsigned long *addr, unsign=
-ed long val)
+2025-03-14T14:39:25-07:00, Deepak Gupta <debug@rivosinc.com>:
+> diff --git a/arch/riscv/include/asm/mman.h b/arch/riscv/include/asm/mman.=
+h
+> +static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
+> +						   unsigned long pkey __always_unused)
 > +{
+> +	unsigned long ret =3D 0;
+> +
 > +	/*
-> +	 * Never expect -1 on shadow stack. Expect return addresses and zero
+> +	 * If PROT_WRITE was specified, force it to VM_READ | VM_WRITE.
+> +	 * Only VM_WRITE means shadow stack.
 > +	 */
-> +	unsigned long swap =3D -1;
-> +	__enable_user_access();
-> +	asm goto(
-> +		".option push\n"
-> +		".option arch, +zicfiss\n"
 
-Shouldn't compiler accept ssamoswap.d opcode even without zicfiss arch?
+This function also changes PROT_WX to VM_RWX, which is effectively not
+changing anything, but I think it deserves an explicit intent.
+(At least in the commit message.)
 
-> +		"1: ssamoswap.d %[swap], %[val], %[addr]\n"
-> +		_ASM_EXTABLE(1b, %l[fault])
-> +		RISCV_ACQUIRE_BARRIER
-
-Why is the barrier here?
-
-> +		".option pop\n"
-> +		: [swap] "=3Dr" (swap), [addr] "+A" (*addr)
-> +		: [val] "r" (val)
-> +		: "memory"
-> +		: fault
-> +		);
-> +	__disable_user_access();
-> +	return swap;
-> +fault:
-> +	__disable_user_access();
-> +	return -1;
-
-I think we should return 0 and -EFAULT.
-We can ignore the swapped value, or return it through a pointer.
-
+> +	if (prot & PROT_WRITE)
+> +		ret =3D (VM_READ | VM_WRITE);
+> +	return ret;
 > +}
-> +
-> +static unsigned long allocate_shadow_stack(unsigned long addr, unsigned =
-long size,
-> +					   unsigned long token_offset, bool set_tok)
-> +{
-> +	int flags =3D MAP_ANONYMOUS | MAP_PRIVATE;
+> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.=
+c
+> @@ -16,6 +17,15 @@ static long riscv_sys_mmap(unsigned long addr, unsigne=
+d long len,
+> +	/*
+> +	 * If PROT_WRITE is specified then extend that to PROT_READ
+> +	 * protection_map[VM_WRITE] is now going to select shadow stack encodin=
+gs.
+> +	 * So specifying PROT_WRITE actually should select protection_map [VM_W=
+RITE | VM_READ]
+> +	 * If user wants to create shadow stack then they should use `map_shado=
+w_stack` syscall.
+> +	 */
+> +	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
+> +		prot |=3D PROT_READ;
 
-Is MAP_GROWSDOWN pointless?
+Why isn't the previous hunk be enough?  (Or why don't we do just this?)
 
-> +	struct mm_struct *mm =3D current->mm;
-> +	unsigned long populate, tok_loc =3D 0;
-> +
-> +	if (addr)
-> +		flags |=3D MAP_FIXED_NOREPLACE;
-> +
-> +	mmap_write_lock(mm);
-> +	addr =3D do_mmap(NULL, addr, size, PROT_READ, flags,
+riscv_sys_mmap() eventually calls arch_calc_vm_prot_bits(), so I'd
+rather fix each code path just once.
 
-PROT_READ implies VM_READ, so won't this select PAGE_COPY in the
-protection_map instead of PAGE_SHADOWSTACK?
-
-Wouldn't avoiding VM_READ also allow us to get rid of the ugly hack in
-pte_mkwrite?  (VM_WRITE would naturally select the right XWR flags.)
-
-> +		       VM_SHADOW_STACK | VM_WRITE, 0, &populate, NULL);
-> +	mmap_write_unlock(mm);
-> +
-> +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, si=
-ze, unsigned int, flags)
-> +{
-> [...]
-> +	if (addr && (addr & (PAGE_SIZE - 1)))
-
-if (!PAGE_ALIGNED(addr))
+Thanks.
 
