@@ -1,210 +1,137 @@
-Return-Path: <linux-kselftest+bounces-30469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF18CA83D5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 10:43:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35001A83D77
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 10:50:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2021E1616B8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 08:43:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E82BD4658E3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 08:49:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5165020C486;
-	Thu, 10 Apr 2025 08:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142C120B814;
+	Thu, 10 Apr 2025 08:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FRyNJ6g0"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ArZVnl9J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEAA1EEA4B;
-	Thu, 10 Apr 2025 08:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDDE2040A8
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 08:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744274565; cv=none; b=t1dYfIhxqPGsYtSelUwuonuO9+/d8xb1S6rHX+Yiuec33ASVbUwVLA3L2aDKWHJgy6NZoGECkaQRz+DfoWwY8eGLgnCQnfgstfIOz52mGEER1dS26jVeccOv4v+d+mu+vBlYMUT4ktnwnl3WMtNtLAFtWtiNjFzrUcBsPvQTYSU=
+	t=1744274977; cv=none; b=ZZt8D8FxqawH+H8M3/3679s6IRwNyd84TcHTClRVRPTTZrVkV1SZJ1wDWsrHmoJE3tldXx5U9pQ3m62nAjHzdde7uf9T0ZOHUEkkUEpIInz0Lj/9PrZN6PYGMujrFFekQZWC6D/S0dREbWgc2Xbeq4Lk4IUcDEZAAqWW51NInp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744274565; c=relaxed/simple;
-	bh=YSmAOLgssT6PQvheoyK0ouFbkX6lGlFzsxSSLWhx52U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r4/VuDQ871OUiLkue89BIcY6jRoU58y/E5ZEElxpQ8tlgswp5zUZ6td4n/uHsLjmczwKH2e6JvTMCvYxkOmbHzb7zf4Wn9TWKygbOrXRq6Fy3jzxrivLx/xp3sXuxJhSsgcTAtLSz8WEHkKsls0EfCHn7TIFi94JXbmFDRDYBTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FRyNJ6g0; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=apfyLXFp4mpz8/dTquQGt331FyDN8GShWvECUqUQnXk=; b=FRyNJ6g0TgK3lFVFJDAty4Vx+p
-	2GcIpX8aKtInetRLFajhT2MuxsfmdrzK67aUwOV9vSE+Yz4dBDmlhgRDLppTAuV8JQhVKje7BUCqA
-	hGTO7t7XISNyoKPEPiH3DJ0WXN6VEgzN5oBFS6faIcwmNj/7yYXy1rRF43TD7n+jOb95oZWLtLBoS
-	gDmgjhtKkfTxeiM9NUTtd6xrQyAMa1b67WdDTvbB8k3orQmxjG438aeY1h1A68CedZ64W1K+3q89j
-	M4mSlBRNYhjTelrdyhg5ALuuo+uQ9Ltb0u32W92KPAFXuzTk21vifJIW0tTxmGRzDRM+KlajnjheL
-	uZHFTJEw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1u2nUc-00000009n15-09rJ;
-	Thu, 10 Apr 2025 08:42:38 +0000
-Date: Thu, 10 Apr 2025 01:42:38 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Shivank Garg <shivankg@amd.com>
-Cc: seanjc@google.com, david@redhat.com, vbabka@suse.cz,
-	willy@infradead.org, akpm@linux-foundation.org, shuah@kernel.org,
-	pbonzini@redhat.com, ackerleytng@google.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz,
-	bfoster@redhat.com, tabba@google.com, vannapurve@google.com,
-	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com,
-	michael.day@amd.com, yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com,
-	thomas.lendacky@amd.com, michael.roth@amd.com, aik@amd.com,
-	jgg@nvidia.com, kalyazin@amazon.com, peterx@redhat.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-coco@lists.linux.dev
-Subject: Re: [PATCH RFC v7 5/8] KVM: guest_memfd: Make guest mem use guest
- mem inodes instead of anonymous inodes
-Message-ID: <Z_eEfjrkspAt4ACP@infradead.org>
-References: <20250408112402.181574-1-shivankg@amd.com>
- <20250408112402.181574-6-shivankg@amd.com>
+	s=arc-20240116; t=1744274977; c=relaxed/simple;
+	bh=+btaMpKeeBdGRBlfpT1TSOPhvtORg43su9uQOsAX5Es=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=hJJTeQn6JwDqnil83QrWWUVL23oH+YY+ztvrDfkrPkYepHDaIoDdZkUqlVtkpN4SSqAr6SSaE4//QIK1S5JlRzPYrI0q2ejvICLSEJwUG1USUOM3r/Txi3LRMvYB6DlYhUNO/bv8N+v6lZ0uLL6buBZ6RtoXN15/PYfHwtJqDkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ArZVnl9J; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43e9ccaa1ebso593685e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 01:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1744274973; x=1744879773; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IEwPf3cBEf9ZFD3zZhCOLbWBp0B51DbgggktH5J+y1E=;
+        b=ArZVnl9J30sx8+yQyFZEjZBH01meAzlOv5Gr9qxWKtevq/gXBjej+DpnfllAfQvwM2
+         bVXGaNyAmrgsp18pRPd2LiR+Y4UaZYIbphPpVT19PftYwQYsg6JAlA/uGP/3vmGIbqfB
+         FJVw+q+esOAmA225EUTqTT7vKI4hqNULUnjoxnUc/XDdU6tGlTkvCv9jdzLqVMa0sEPE
+         M3iTHC0DpI5Hfqwo38fdg5QTR2Fll25bgvcj+wq3hP/OH/EwmNsVFmo9Mmr313/ZoZSZ
+         HdDjcS1w//G29nTd7FYXG3tsCrTU5WcQmkyvwj3milGagQLDf6F7u31LWoj2T8Ftj1++
+         j5dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744274973; x=1744879773;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IEwPf3cBEf9ZFD3zZhCOLbWBp0B51DbgggktH5J+y1E=;
+        b=f1y3EN0PrSpBdllvr2xct9Pod9R3BEPeIYggqr1PQ4dd3K54qJS6J/CquPp8vShwNi
+         EWCShQRIhJjJISmzNHPVacqkQ1qHfwTuvRClQzl6WGU3j19f6Si3sid3DtUeJqAzS07d
+         v46rpXRZaiBxGNSXfRWmS4y2MCCuLBfcvb+B0uHMnEm7vdqwzTJKscP5HtOjK7kZ9r8T
+         gfPF01rTXUyvCZ0IlnXJ7e9KTmu/bh5pL/vZ1XXbXG53v7umGbjPx9Jb42v33QDHR6/g
+         VQNOGDbihnauZxDB4n5x79owOn0J+sTZT4Y6mZH+V+a/o2+Waf+mAe5kHJkCoEhoyNkI
+         4/GA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBhbxsA+iRcTRnB7hp/zWPzE3JubOKtgAIvc1bX6+uYOnGjqUT9EjIbLrGDHN3ksckJbin2+f53H/GjfgJNsY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTf+USw3kzn+g6CEev2Tm9T4ccAUFYbjPGETbLM6O+gdWcGARV
+	n4fQLmzed/hRiTMRiHN/hXzd6jWMXz+9KlJD8zw+zTLGT0/ZrgdkAxuEuwyqlk0=
+X-Gm-Gg: ASbGncuTRIYPcRAzwxq6y4uaOZ8X1wtq73xPa17jOWuL0h7VqW9AkQ3LS32KHRN4Tf5
+	eYwgQfN+J0E/WXwm7cymw0GGHpA4Voye2m+l6I0hbMEByCzkFyxbMCgHxKdR9z05ZE7CAhx85z9
+	sNrl+pJkhst/yELNVfZt4KftbT4NVphI57AM0Loic3ZWhvxWicWCVwvWISOdu/NI352XEaqI3aC
+	B2adBvTgmEAOXdXNsvj4pUc5wU1BsEQzIBCrFixkbKmCcSNrfIqjG08bCmJZzeigC9tT2KgtXII
+	KhJ+lEU856NijxMFW/wwfDFhwlYAqeBlPW2ZbL25nqE+2ry2rQVd4XkMEM8=
+X-Google-Smtp-Source: AGHT+IGXp6uVqxTmSQMdMVt3uEBGD0ZfsrbyUn6XrfTKoToYQ6belt1Wh1Dck02/rxvTlH6EUyAxZw==
+X-Received: by 2002:a05:600c:c87:b0:439:94f8:fc7b with SMTP id 5b1f17b1804b1-43f1eae40f4mr19787055e9.0.1744274973504;
+        Thu, 10 Apr 2025 01:49:33 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200:7d22:13bb:e539:15ee])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f2066d069sm47866185e9.17.2025.04.10.01.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 01:49:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250408112402.181574-6-shivankg@amd.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 10 Apr 2025 10:49:32 +0200
+Message-Id: <D92TVG7AWGLG.1GO0C83SS7M9G@ventanamicro.com>
+To: "Deepak Gupta" <debug@rivosinc.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
+ <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
+ <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
+ <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
+ <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
+ <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+Subject: Re: [PATCH v12 17/28] riscv/signal: save and restore of shadow
+ stack for signal
+Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
+ <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
+ <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
+ <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
+ <linux-riscv-bounces@lists.infradead.org>
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-17-e51202b53138@rivosinc.com>
+In-Reply-To: <20250314-v5_user_cfi_series-v12-17-e51202b53138@rivosinc.com>
 
-On Tue, Apr 08, 2025 at 11:23:59AM +0000, Shivank Garg wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> Using guest mem inodes allows us to store metadata for the backing
-> memory on the inode. Metadata will be added in a later patch to support
-> HugeTLB pages.
-> 
-> Metadata about backing memory should not be stored on the file, since
-> the file represents a guest_memfd's binding with a struct kvm, and
-> metadata about backing memory is not unique to a specific binding and
-> struct kvm.
-> 
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
-> ---
->  include/uapi/linux/magic.h |   1 +
->  virt/kvm/guest_memfd.c     | 133 +++++++++++++++++++++++++++++++------
->  2 files changed, 113 insertions(+), 21 deletions(-)
-> 
-> diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-> index bb575f3ab45e..169dba2a6920 100644
-> --- a/include/uapi/linux/magic.h
-> +++ b/include/uapi/linux/magic.h
-> @@ -103,5 +103,6 @@
->  #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
->  #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
->  #define PID_FS_MAGIC		0x50494446	/* "PIDF" */
-> +#define GUEST_MEMORY_MAGIC	0x474d454d	/* "GMEM" */
->  
->  #endif /* __LINUX_MAGIC_H__ */
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 88453b040926..002328569c9e 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -1,12 +1,17 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#include <linux/fs.h>
-> +#include <linux/mount.h>
->  #include <linux/backing-dev.h>
->  #include <linux/falloc.h>
->  #include <linux/kvm_host.h>
-> +#include <linux/pseudo_fs.h>
->  #include <linux/pagemap.h>
->  #include <linux/anon_inodes.h>
->  
->  #include "kvm_mm.h"
->  
-> +static struct vfsmount *kvm_gmem_mnt;
-> +
->  struct kvm_gmem {
->  	struct kvm *kvm;
->  	struct xarray bindings;
-> @@ -312,6 +317,38 @@ static pgoff_t kvm_gmem_get_index(struct kvm_memory_slot *slot, gfn_t gfn)
->  	return gfn - slot->base_gfn + slot->gmem.pgoff;
+2025-03-14T14:39:36-07:00, Deepak Gupta <debug@rivosinc.com>:
+> diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+> @@ -140,6 +142,62 @@ static long __restore_v_state(struct pt_regs *regs, =
+void __user *sc_vec)
+>  	return copy_from_user(current->thread.vstate.datap, datap, riscv_v_vsiz=
+e);
 >  }
->  
-> +static const struct super_operations kvm_gmem_super_operations = {
-> +	.statfs		= simple_statfs,
-> +};
-> +
-> +static int kvm_gmem_init_fs_context(struct fs_context *fc)
+> =20
+> +static long save_cfiss_state(struct pt_regs *regs, void __user *sc_cfi)
 > +{
-> +	struct pseudo_fs_context *ctx;
+> +	struct __sc_riscv_cfi_state __user *state =3D sc_cfi;
+> +	unsigned long ss_ptr =3D 0;
+> +	long err =3D 0;
 > +
-> +	if (!init_pseudo(fc, GUEST_MEMORY_MAGIC))
-> +		return -ENOMEM;
-> +
-> +	ctx = fc->fs_private;
-> +	ctx->ops = &kvm_gmem_super_operations;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct file_system_type kvm_gmem_fs = {
-> +	.name		 = "kvm_guest_memory",
-> +	.init_fs_context = kvm_gmem_init_fs_context,
-> +	.kill_sb	 = kill_anon_super,
-> +};
-> +
-> +static void kvm_gmem_init_mount(void)
-> +{
-> +	kvm_gmem_mnt = kern_mount(&kvm_gmem_fs);
-> +	BUG_ON(IS_ERR(kvm_gmem_mnt));
-> +
-> +	/* For giggles. Userspace can never map this anyways. */
-> +	kvm_gmem_mnt->mnt_flags |= MNT_NOEXEC;
-> +}
-> +
->  static struct file_operations kvm_gmem_fops = {
->  	.open		= generic_file_open,
->  	.release	= kvm_gmem_release,
-> @@ -321,11 +358,13 @@ static struct file_operations kvm_gmem_fops = {
->  void kvm_gmem_init(struct module *module)
->  {
->  	kvm_gmem_fops.owner = module;
-> +
-> +	kvm_gmem_init_mount();
->  }
->  
->  void kvm_gmem_exit(void)
->  {
-> -
-> +	kern_unmount(kvm_gmem_mnt);
->  }
->  
->  static int kvm_gmem_migrate_folio(struct address_space *mapping,
-> @@ -407,11 +446,79 @@ static const struct inode_operations kvm_gmem_iops = {
->  	.setattr	= kvm_gmem_setattr,
->  };
->  
-> +static struct inode *kvm_gmem_inode_make_secure_inode(const char *name,
-> +						      loff_t size, u64 flags)
-> +{
-> +	const struct qstr qname = QSTR_INIT(name, strlen(name));
-> +	struct inode *inode;
-> +	int err;
-> +
-> +	inode = alloc_anon_inode(kvm_gmem_mnt->mnt_sb);
-> +	if (IS_ERR(inode))
-> +		return inode;
-> +
-> +	err = security_inode_init_security_anon(inode, &qname, NULL);
-> +	if (err) {
-> +		iput(inode);
-> +		return ERR_PTR(err);
-> +	}
+> +	if (!IS_ENABLED(CONFIG_RISCV_USER_CFI) || !is_shstk_enabled(current))
 
-So why do other alloc_anon_inode callers not need
-security_inode_init_security_anon?
+!is_shstk_enabled() should be enough here.
 
+[The rest looks fine, but I'll need more time to think about it.
+ I'll return to this patch in v13.]
 
