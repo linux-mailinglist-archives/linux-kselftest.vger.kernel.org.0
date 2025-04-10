@@ -1,125 +1,141 @@
-Return-Path: <linux-kselftest+bounces-30488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19C43A84800
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 17:34:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 225E3A8481A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 17:37:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FC761B81E26
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:33:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD7ED3AF8A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006C61E990A;
-	Thu, 10 Apr 2025 15:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E33C1E883E;
+	Thu, 10 Apr 2025 15:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XdvUjbOQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLOHj+nU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321F81E0E0D
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 15:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C3F1D88D0;
+	Thu, 10 Apr 2025 15:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744299224; cv=none; b=VpTkviiAJEdb/XxDrFJoGH3Mtzh+2a/jPKRTCSouMn4Ys9JQoo+bAiJZa7Sl9T8sZM7pksqfG7SRtjuX7D2YiKweyovhIFl/CpXVZaYTzzNz7nfnM+HST78jKesNHAiLbaAtea5ItFQc/lrqhMsrql2WCabH/kWdbZrjyx2Sz8I=
+	t=1744299333; cv=none; b=dR/hntuy0AfY3QMLptdNXBFNDIH35WeD1pG1BsItsXQqQ2HtohYAnyg2kB+n7kUAcHKirki2mp9WsHo3Sle0FwUIxRtoU7HmDu6+wU9xcbz56XIe2NMlBalAuA5o/UFJ34APgX9I5AfdDtA6hFMGE4NiGS7fyCybMUdVkDfwk28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744299224; c=relaxed/simple;
-	bh=v99tiqhZEPNc+au+zsTlLfO+UL4lnCpGAj55KgcQOyM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q+yADvXjR7DOuIvwL38rQU6mxeNoIsZ8999ppWDXTU94Csh13g5dzsHkVPNs+KOrbieHHOVtMAZF2NzRJgnNZQXSAc1VB2NFvqHsYDl253dVG75fQbSL0ikUITtlOhvTNbYpflAdmz3ZIbyTDIZS87mgQJaOORA+IbWYMs0rZdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XdvUjbOQ; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3d58908c43fso2749875ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 08:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1744299222; x=1744904022; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TWuu0TVvkVtEFQtTM518BO6Po0Ztx9T2clp/sbsG4gU=;
-        b=XdvUjbOQSZ2FbCmM7yrk1oQiK0qVCi7pOOZYrF2G7x7xU+6jlqt+TcxVLoN8D5T3PV
-         o87psddCbCZyzCdmbgJCyW1G2gudqolRdqyrB6B8UMlGtq+MjxR52VZBaO55hY27YiSB
-         fdE90Ymu3KKhIJyZomFAaxRtz3/TBxnl+sNt4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744299222; x=1744904022;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TWuu0TVvkVtEFQtTM518BO6Po0Ztx9T2clp/sbsG4gU=;
-        b=McxsGmRfW3dHz7SSr2XTaeJPmmLXAKvkwn4A31olsGa1d/IhiBql1tMV7qsNV41EeS
-         fID/YgHT32gz9EYvXHik2W72h6XEkVcVDQ7Aj0jX/VnaHuN7sz7wx9ohnan+oYfGlWrL
-         DGB40RdXsHJT3rM3hQpeuWXCZi3Xbru7ehcXJPAj8af/50kZL7EV1bPPwXRFRdUunHuT
-         WtDUQcvzHQiThMA3htyo8dssUuAsoeuPFgTPSGr5AcmpPo14Pkt2MHWNa6cVcADdwYSd
-         RMLi2PY4+SuQuwz0Z7a0tP8xC9r0xBG3OStqBpuRpaWcsUD8W92f9SN45iJFFgM3uZcZ
-         I7rw==
-X-Forwarded-Encrypted: i=1; AJvYcCWJIpJ95862PaMLQuJ5A1FrEX1axgzVb5pkjxN6Q68GDSrn6QTypLAozQF12kyUX0rvD9SY6xBqTM7sfOGXZVU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1wPex4I3LsXJR1pP742FLMNAjmsQuipiBOAo9dnC9dVvKdMeb
-	0wc9IzDoXtXBpB20Nn+gbi14jZ6Fjd7KMUcTtoNcAMpYns2g5IeR1J4F16aYfeoa8y69AFPSpT/
-	T
-X-Gm-Gg: ASbGncve+E+4t/m6K2XL7iU8fukrlNP5EIfzicIGrWeKF3z2H2Q91JeSTSAYnkgLOPt
-	AyB0w2moCEUr8Jb8oUYhQFZXC6375ZBQNAasZ55ItY/Zihtjrhs7bSjnvgH8JFNrTAdfpaG9xl8
-	5swXZYCELm01EWIFH6wReQwOkINP/mGBJCJbciKqWsWaUNydk8E/9ietui2cvpL9T9Njm3R/zrL
-	QTDU0NUGR5IdadQXTI0fcNrK6BATVnGQQMEVD2bhzSzRHvhs97iuOZA+TxiqEeDp7oUNZHL2x7M
-	SpMpDnCe7Tzf6ndGyorrXPkaVcqdShZOZ2OSrbFBSFylDRDvMEI=
-X-Google-Smtp-Source: AGHT+IEMrgXmJRRAoLU7m+PL1i/g4DJ8Gi+/jcEloYQwuzmWrc2QtQdxI25WU5XntnT2B7cItRJfPg==
-X-Received: by 2002:a05:6e02:194c:b0:3d0:21aa:a752 with SMTP id e9e14a558f8ab-3d7e5f50684mr32572795ab.2.1744299222246;
-        Thu, 10 Apr 2025 08:33:42 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d7dc591f6csm8208425ab.69.2025.04.10.08.33.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 08:33:41 -0700 (PDT)
-Message-ID: <f72fcc0c-b0b5-4131-a5b5-bf1d1320c85c@linuxfoundation.org>
-Date: Thu, 10 Apr 2025 09:33:38 -0600
+	s=arc-20240116; t=1744299333; c=relaxed/simple;
+	bh=0y4gnFMp8pKcQHp3nb3/Gcb5CV00QdElZjckQWOpCrA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Wfz8jZlyfQkyCC6cn4r/KdcwOI2cnZ0v/OhhjDb8caIBdDW/Lh9LWbpmJGaV0y8N4A+hIVJoyc8zJCyBlleMQ2TmwT48GtZvP9pI1zCXDOvhSzVaOH5lcnjFjDpHeC/q2xegOinePr6W2ZNe60DeDYtPJD3rgbD/gR4Vl1mPkE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLOHj+nU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F59C4CEDD;
+	Thu, 10 Apr 2025 15:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744299330;
+	bh=0y4gnFMp8pKcQHp3nb3/Gcb5CV00QdElZjckQWOpCrA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cLOHj+nUbI21KS7NP4BXotCDjCsR8thGDgcwBKYzN3HcDddiPWnBvFzR0APfWmknA
+	 Gw9FBzvAyWSd/9AYooMu8lcGvjgPz3jws6d/TnECyoD7cpV43Kh9gvlV9g3pekfNvS
+	 5XZF1cIvo2/BBnlJ0nWlEl/ZZS/BANvnZ6F7fJerqQznzLKKENVxpJYK7rT5P+VQYb
+	 Ap+lPO0Firgk05DtjKM5kVjhGLVqmORltO6r1xfDIKo9OBV5GdZrNxEVvqzTMsktSk
+	 D5wLJmt8tjxpSk8FlwpOxjl/cYrtcB03TXQRrVkVX8ATe6isqE5QkrSPFuEOEvPCAC
+	 xSWlRHC1HuM8w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1u2tw7-004HIw-Uw;
+	Thu, 10 Apr 2025 16:35:28 +0100
+Date: Thu, 10 Apr 2025 16:35:27 +0100
+Message-ID: <86h62wkp1c.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Sebastian Ott <sebott@redhat.com>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: arch_timer_edge_cases failures on ampere-one
+In-Reply-To: <ac1de1d2-ef2b-d439-dc48-8615e121b07b@redhat.com>
+References: <ac1de1d2-ef2b-d439-dc48-8615e121b07b@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/32] selftests: harness: Use C89 comment style
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Shuah Khan <shuah@kernel.org>, Willy Tarreau <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
- <20250407-nolibc-kselftest-harness-v2-2-f8812f76e930@linutronix.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250407-nolibc-kselftest-harness-v2-2-f8812f76e930@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sebott@redhat.com, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 4/7/25 00:52, Thomas Weißschuh wrote:
-> All comments in this file use C89 comment style.
-> Except for this one. Change it to get one step closer to C89
-> compatibility.
+On Thu, 10 Apr 2025 16:10:43 +0100,
+Sebastian Ott <sebott@redhat.com> wrote:
 > 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->   tools/testing/selftests/kselftest_harness.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Hey,
 > 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 666c9fde76da9d25fe6e248a7f2143c113473fe1..bac4327775ea65dbe977e9b22ee548bedcbd33ff 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -983,7 +983,7 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
->   	}
->   
->   	t->timed_out = true;
-> -	// signal process group
-> +	/* signal process group */
->   	kill(-(t->pid), SIGKILL);
->   }
->   
+> I'm seeing consistent failures for the arch_timer_edge_cases
+> selftest one ampere-one(x):
+> ==== Test Assertion Failure ====
+>   arm64/arch_timer_edge_cases.c:170: timer_condition == istatus
+>   pid=6277 tid=6277 errno=4 - Interrupted system call
+>      1  0x0000000000403bcf: test_run at arch_timer_edge_cases.c:962
+>      2  0x0000000000401f1f: main at arch_timer_edge_cases.c:1083
+>      3  0x0000ffffa8b2625b: ?? ??:0
+>      4  0x0000ffffa8b2633b: ?? ??:0
+>      5  0x000000000040202f: _start at ??:?
+>   0x1 != 0x0 (timer_condition != istatus)
 > 
+> The (first) test that's failing is from test_timers_in_the_past():
+>     /* Set a timer to counter=0 (in the past) */
+>     test_timer_cval(timer, 0, wm, true, DEF_CNT);
+> 
+> If I understand this correctly then the timer condition is met, an
+> irq should be raised with the istatus bit from SYS_CNTV_CTL_EL0 set.
+> 
+> What the guest gets for SYS_CNTV_CTL_EL0 is 1 (only the enable bit
+> set). KVM also reads 1 in timer_save_state() via
+> read_sysreg_el0(SYS_CNTV_CTL). Is this a HW/FW issue?
 
-Looks good to me.
+My hunch is that this is related to AC03_CPU_14 in [1] (now archived
+locally for future reference...).
 
-thanks,
--- Shuah
+> 
+> These machines have FEAT_ECV (as a test I disabled that in the kernel
+> but with the same result).
+> 
+> As a hack I set ARCH_TIMER_CTRL_IT_STAT in timer_save_state() when
+> the timer condition is met and set up traps for the register - this
+> lets the testcase succeed.
+> 
+> All with the current upstream kernel - but this is not new, I saw
+> this a couple of months ago but lost access to the machine before
+> I could debug..
+> 
+> Any hints what to do here?
+
+Not a lot to do, assuming this is the actual cause. Similar things
+happen on my QC box, which has a "remarkable" timer implementation and
+a bunch of terrible hacks to keep it alive.
+
+On the other hand, I'm not even convinced that this test-case is
+legit. It seems to rely on the counter being 64bit wide, which is not
+always the case.
+
+	M.
+
+[1] https://amperecomputing.com/assets/AmpereOne_Developer_ER_v0_80_20240823_28945022f4.pdf
+
+-- 
+Without deviation from the norm, progress is not possible.
 
