@@ -1,93 +1,70 @@
-Return-Path: <linux-kselftest+bounces-30467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FB66A838A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 07:50:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D72CA83D4A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 10:42:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CA4519E542B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 05:50:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4AC43AC911
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 08:41:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63D920103A;
-	Thu, 10 Apr 2025 05:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8423220B80A;
+	Thu, 10 Apr 2025 08:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NkXdP2/b"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="N3Ua8kfb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F532AEFE;
-	Thu, 10 Apr 2025 05:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046E81EEA4B;
+	Thu, 10 Apr 2025 08:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744264230; cv=none; b=IGw7PpCYYnpv/cq10uxdgMrT61Z9OK3SM+7qtP5p29kZmdQpDIfAysz9o2lONu3E+HYp6rRogH4mVn5Z5n1NyMXgoohLqGC4XimAGVsWksA8ue20JCTpKwHMcwWUG6mtV7GGHIhglk/uOI+1Ma39CD1FFEp+Amh3P3NfFXaLCzk=
+	t=1744274527; cv=none; b=a+EehgqNkTprEZe/EXMbodEbSwCudPuBwU9Ru0D+DhJVyJqCnRC8nYJtfRukL15zUxxUfbEahQljpXJP3+IeMrbKFNJx0LpbGLQSpnehP8eofBqdpNXX+6tUptwq1gT3GGqeYCfab4jtC8FTp/yN5/EWVQRfDHrPtbRLg+D+VTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744264230; c=relaxed/simple;
-	bh=GLy2Y5AGxoPWdVo227sGdBc4RBWTQJfG42DMlt4gnRU=;
+	s=arc-20240116; t=1744274527; c=relaxed/simple;
+	bh=SjAHW1JL4xXBOApUK8nyaVu/Fsbko8w9kF/YjYqDoqk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UIpLU4TMwlo/k9is2xdj9KlN2uwMW1AVyR2z1mT25bAxXbFiK6vTBEpEafB12B2eqx+wSOMzuS8a7UW2WnFMhs7GSTkt1TCZh26gOI15aaQtpxnCc7j7m0PQP0HXxNxNX9qKspE2KZkX9/Iq2IPsLzd9PIDEFQCznSbMEkr0vgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NkXdP2/b; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2295d78b433so4248825ad.2;
-        Wed, 09 Apr 2025 22:50:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744264228; x=1744869028; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zj8tyCRZ2dYPmrI7KzgwMrBluJ4nn78a0lxOtb4a5CY=;
-        b=NkXdP2/bTp7/GRmRsceyu4nbFP+Iio35LFnlI6whBlarNFpuSs5JA32056oBVXMyp7
-         Hi/wswF6dUVFNMYZAw5ymuG0mfzt0gEeqIOS6s5XNM2WfOXXAo3TccJDVaNP9UmrjbFv
-         DJT13g8LOjrN4t9eD/mCRGAKBdVvcXGIIvmIAPsjLQt+v2YjB3aHOa83Qu1Bz4hHpIx2
-         +AtSDmqAuzo6tyrsi+ulS/ZD6nLHmrLzw+TvUht2F6FHTlzelWKp81d2y757zInlCi2z
-         uY3FsKRczH8uG6NVYKIgnbkY/2po7qXeYZ+zmKcaHgmv2zUy+btj+14r3CIqGmqBS/9w
-         XEhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744264228; x=1744869028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zj8tyCRZ2dYPmrI7KzgwMrBluJ4nn78a0lxOtb4a5CY=;
-        b=YhCUN/QWQVQMpdNm817Ie26EA+lDN685A/BRKYwgJnMUIFPghOMZTh8llLzYtBl/fc
-         wh2tGgCkGbcr1A+jheHbD5EFMwwFJYDYyJgYrEyo14N+Qb70K1PykdDoTBZaPdJf1TzE
-         nMezpLScCt3hfdLGWvZFy8LIKOUWiqU2N+1DPZ5VnKuvy8ZwUNaFo2T4oezA37DJKiMR
-         8XiOCxT0f6ZRPFqnmabsv/H9+oMbLGG6igo5p10XY47DLnoJF8/BvP5zmBnqn8KA3nG0
-         G96sPQNFbBE/eqM1F3e/6dqarEKFFUtE2HtIBe2Jvho7jkkF3GwwoF5wwOpKdFgnbFhw
-         U+pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIssmkMSF4Pg3JcYz1tRGgt5YcSunZaj2XSIV59Tks3+szZMsyi9uPDDSCw3Z53jPW5DTGc7GG09D7PAYI@vger.kernel.org, AJvYcCUOSEUpzrC/YYgGqiuEGEmVBSWn8qpCaPhxZeBpZ6NdyYPeUISy/e2YADzmzCd35nezQpQ5P8qR@vger.kernel.org, AJvYcCX2UfTAhRdOL0ryq5mtAu60lvoczCi1CNrdZeQavr5tq9/a4h7YwAWZ2F6MFygpe6VxRARF4F8a+1ms6gYCtFn3@vger.kernel.org, AJvYcCXmLQyD7B0/AvAK87ST9OTHaaavz97t3wydYwCnjvZye+KWtlURk2LmYrDAPihMI3glQrI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKMJa10p9g+afkos7ihgLGuPTggj10MeSRSJGxKqBx3uweQsvC
-	eMPVhFq6h8y5QU6XaTrPEescmCMpGhuRO0RPuAgpjS0urwCCFtjH
-X-Gm-Gg: ASbGncvSqSXW7XkBOx6SJ76SEJas7B2NItCOwtZPHbvPj6QP/VM9jCdg4EiBKJ/D/IA
-	wQp9c9aUm/0gQwSZWwuHAzH+u09Q1W3bRr9qYfL8Bex5MEYH9B0nx+0DsFkAycVcG2nX4XuBxic
-	Ijlk7CLoZYAaO4ZmLY7jt0o8lM9oNjXLxH9otxBzLoTkc4YutNgMN5fw/olJnq1J6d9+HsFJ6qU
-	LJD69k7dn+o/AiGQxJBfnqmiJ/ZcbyWvuc9kg/KwI1ov1RTZNXg+NB4pXyrNnxkacDjC7wdd1ae
-	aqoQd9Lb6oCuEpEDa4cadeY+3A4zCkvNb2Qc9q6R
-X-Google-Smtp-Source: AGHT+IHhGUypkvLr1iZEMWjwiXcb6G3gfkM3dbA/hFQODsPXnBha9vkkBeEKuS4KAcywKVBuOORx4A==
-X-Received: by 2002:a17:902:db05:b0:21f:2a2:3c8b with SMTP id d9443c01a7336-22b2edad412mr18045245ad.11.1744264228467;
-        Wed, 09 Apr 2025 22:50:28 -0700 (PDT)
-Received: from gmail.com ([98.97.34.26])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cb536bsm22091005ad.201.2025.04.09.22.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 22:50:27 -0700 (PDT)
-Date: Wed, 9 Apr 2025 22:50:21 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: patchwork-bot+netdevbpf@kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
-	mrpre@163.com, jakub@cloudflare.com, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org,
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-	mykolal@fb.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 0/4] bpf, sockmap: Fix data loss and panic
- issues
-Message-ID: <20250410055021.sdwodrag6rdf6lfw@gmail.com>
-References: <20250407142234.47591-1-jiayuan.chen@linux.dev>
- <174425463772.3131897.3560283890937950515.git-patchwork-notify@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qjNA+q9It/Z5zk+zIfEhFBKxJaxEokzZL2aB/BYWU5Ci1mSs/f7IXFd4uJc4xs+yMMvdo7jDRhWz/2D09yw0Lk4QVLpGQw3RIb91+OxGgRa7kbkoffBxz6uHK9KVnvdLN7k93stXGPKx2MgI/aFcu/5lCzjOSLg7lQl8ebPEoeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=N3Ua8kfb; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=CdU/+uF+1QwwmbOg7lgLdyQsB2ocHXgyQIfpYxGq9qI=; b=N3Ua8kfbKXQSsTiia3Fjjx8Se+
+	KvkXrtS7Yyu+JaDA+9J0jEqnfBSpI/VZGPeVPzX3rw3RUrNXjz8hu87tGc+Jzuah1GTKfd+n8AD+S
+	oNzYZWySn1r65SV+spNsSSDSnqRrrBnFKsdOGHIZOWn4nlZx/ucoOSYOOokHwpROZJ9nRT6SXiM75
+	m0cXSqASn9T9rvU8TB5N+V1uDPZpRwUcnBZ15CXIB3mjmOZwWIPwT8eB12zsKIFrJ0QcrSDTE33Xc
+	RDo2Ic/27KAibhFQWRofsYT1msrs5vtYVppIU6sCYeSNHdsg6wZKSawW94fASdAs3kRyH9mcEoNY9
+	g98HLiTA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1u2nTu-00000009mmb-06hM;
+	Thu, 10 Apr 2025 08:41:54 +0000
+Date: Thu, 10 Apr 2025 01:41:54 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Shivank Garg <shivankg@amd.com>
+Cc: seanjc@google.com, david@redhat.com, vbabka@suse.cz,
+	willy@infradead.org, akpm@linux-foundation.org, shuah@kernel.org,
+	pbonzini@redhat.com, ackerleytng@google.com, paul@paul-moore.com,
+	jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz,
+	bfoster@redhat.com, tabba@google.com, vannapurve@google.com,
+	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com,
+	michael.day@amd.com, yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com,
+	thomas.lendacky@amd.com, michael.roth@amd.com, aik@amd.com,
+	jgg@nvidia.com, kalyazin@amazon.com, peterx@redhat.com,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-coco@lists.linux.dev
+Subject: Re: [PATCH RFC v7 3/8] security: Export
+ security_inode_init_security_anon for KVM guest_memfd
+Message-ID: <Z_eEUrkyq1NApL1U@infradead.org>
+References: <20250408112402.181574-1-shivankg@amd.com>
+ <20250408112402.181574-4-shivankg@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,49 +73,22 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <174425463772.3131897.3560283890937950515.git-patchwork-notify@kernel.org>
+In-Reply-To: <20250408112402.181574-4-shivankg@amd.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On 2025-04-10 03:10:37, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
+On Tue, Apr 08, 2025 at 11:23:57AM +0000, Shivank Garg wrote:
+> KVM guest_memfd is implementing its own inodes to store metadata for
+> backing memory using a custom filesystem. This requires the ability to
+> initialize anonymous inode using security_inode_init_security_anon().
 > 
-> This series was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
-> 
-> On Mon,  7 Apr 2025 22:21:19 +0800 you wrote:
-> > I was writing a benchmark based on sockmap + TCP and discovered several
-> > issues:
-> > 
-> > 1. When EAGAIN occurs, the direction of skb is incorrect, causing data
-> >    loss when retry.
-> > 2. When sending partial data, the offset is not recorded, leading to
-> >    duplicate data being sent when retry.
-> > 3. An unexpected BUG_ON() judgment in skb_linearize is triggered.
-> > 4. The memory of psock->ingress_skb is not limited by the socket buffer
-> >    and memcg.
-> > 
-> > [...]
+> As guest_memfd currently resides in the KVM module, we need to export this
+> symbol for use outside the core kernel. In the future, guest_memfd might be
+> moved to core-mm, at which point the symbols no longer would have to be
+> exported. When/if that happens is still unclear.
 
-LGTM thanks for the fixes Jiayuan. Good to see someone working through
-all the cases.
+This really should be a EXPORT_SYMBOL_GPL, if at all.
 
-already merged but ACK for me.
+But you really should look into a new interface in anon_inode.c that
+can be reused instead of duplicating anonymouns inode logic in kvm.ko.
 
-
-> 
-> Here is the summary with links:
->   - [bpf-next,v1,1/4] bpf, sockmap: Fix data lost during EAGAIN retries
->     https://git.kernel.org/bpf/bpf-next/c/7683167196bd
->   - [bpf-next,v1,2/4] bpf, sockmap: fix duplicated data transmission
->     https://git.kernel.org/bpf/bpf-next/c/3b4f14b79428
->   - [bpf-next,v1,3/4] bpf, sockmap: Fix panic when calling skb_linearize
->     https://git.kernel.org/bpf/bpf-next/c/5ca2e29f6834
->   - [bpf-next,v1,4/4] selftest/bpf/benchs: Add benchmark for sockmap usage
->     https://git.kernel.org/bpf/bpf-next/c/7b2fa44de5e7
-> 
-> You are awesome, thank you!
-> -- 
-> Deet-doot-dot, I am a bot.
-> https://korg.docs.kernel.org/patchwork/pwbot.html
-> 
-> 
 
