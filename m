@@ -1,151 +1,188 @@
-Return-Path: <linux-kselftest+bounces-30479-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30480-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABFE1A84562
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:54:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B41A845A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 16:07:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE2701673E5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 13:53:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2382C3B321D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 14:03:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4122728A406;
-	Thu, 10 Apr 2025 13:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F004F2857C7;
+	Thu, 10 Apr 2025 14:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HDd0cqKH"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="C+FJ+ww3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="e621RUxM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A97E2857ED
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 13:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18CA1BC5C;
+	Thu, 10 Apr 2025 14:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744293199; cv=none; b=ti2aOwKRvGlF6jYoLvynDTI6BDCstW1NT/Ufatt6zbb49p1lsvYHByz+dCO9uj9SG17vtynnAAbZRyshfV+5NA46077Tcd50+WkfvPCUj1fojErczJ88OByoe16lVlmDeMkcg/aO69L/o3v1eRpPm0NbliydnWTu1lWLOUcUVBk=
+	t=1744293846; cv=none; b=XfgUQa4aCi1DEYJdqmDIUCpawskCM60SmdwQFJ5MCndOZacAxEYjzYMMiXQ9B38P9aldMnZHsL5IkaI1yD1Fo5sipp0ad00HPdNMmbCkbb1fp4aQh8fiYnJISRtuFL/1/7fRHkgNNACaqw3azGcsy4iXZSDyxxlLL7+FZZns6jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744293199; c=relaxed/simple;
-	bh=6EzNCLAlf1iloxVtrXjGElQcW7269jazRrghVzl9gM8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EsQEXUBhQR/AOFm9681j12kHWKAoV8y/2+FZqLb48PH6WcaBs0e15wayWRuR+5TmoT9EWTjEn0pT35+EOoQWjm2+R6hMKhACyH2zt7bpUuGQucaHkATGRidNF/rRUfJ+tb4jpsX33X85N0pP+txkWxLHTFcwYUvqb088VA7TtLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HDd0cqKH; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3032f4ea8cfso908964a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 06:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744293196; x=1744897996; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4wxcHUnCCezh6nWr6RFH2iv1Y8IeCzojzwMbdNb4Do=;
-        b=HDd0cqKHGtPrIPrD3zaBYMCfjaq0/jDRlkSiDB73JzjB0UBHODNk9a3ToIcIcWqe7W
-         fv0+pYJUjE9TAiXXhDVSySGegZUoKXhfjljrlVuSruuOJc0pq6kffB7El9RfXwtMDP7J
-         gf2MRN5X1xzPMUmrWBNH7tiTsdhbj7wIHRtFnLu9CInE5QZnyAh4z8INRoxpeG+tkMjV
-         QsrMN45AKpwqQazIHPuCshcCx4XBDQ/mmxOdtRRas9iE38FKpeRMGEXel6aFCd/91cMh
-         UU6Yz70trLPM9SMB/Tnr5+AyDoxot2o9cxPh9zdjUXBd5lyBi8XTScMlfCH24mC8ZLiu
-         Kv9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744293196; x=1744897996;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4wxcHUnCCezh6nWr6RFH2iv1Y8IeCzojzwMbdNb4Do=;
-        b=sBK67SNJs1Kt2p/5mQ330nGZMCdgWJhFra5j2tyxofZGetSMqaBFJqMberwLsbm+OH
-         IHbyCHRiOPumC7DZXouHmoe394TUBY3oitQJ7MRsyMf8s8acdC+o1sHQBqfkSfFMnYnj
-         FuVdr9XEURoRIHULyxINBWhSRSnK4YtKF0M31aQ9gAkES08SmqvvREW+xRMqgRp6uKMc
-         l/md1Q7+o4ZM1LAFOwI0tfZAeeFsfsJLefxylOiwnp84nBKKVhwN4igAKHVOxyd+b6b6
-         R81K3ykIvV9cPjHDKd4Y7fOnaFJHj1skH3WPu9s302iMdDIdUfUu5GKETjp9kkJL31j/
-         7CUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVpLQjHj9/ORhB/HeCAKgqGsmbuX4F5O6LdtrD05wboygV9gBdsHS37nBVwAvqCYqMe/3oisaUPOY7DL9rrMW8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLs7xO9WKIuJ9OQFi65MT7Rr9ij/Mmu/onL2Ad1SphvgC0mrSu
-	uFqEMY4/euy/7xhDBk6O/eGX5sweZGJjyE2UmGqIGN9B++UC2aO0laA5y0lOTRn8LT6dKf0toRv
-	XTWUXiroXwgeUu/CtSfFLPw==
-X-Google-Smtp-Source: AGHT+IGEOFVmeMKiNYyGdVgVnjUwRuQMOBh3p67Kck++ZyIayxkYnmKh+TTYDv35m8GZuGIZaSBy6hjI9GDfCfcztg==
-X-Received: from pjbtb11.prod.google.com ([2002:a17:90b:53cb:b0:301:1ea9:63b0])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90a:d2ce:b0:2ee:f440:53ed with SMTP id 98e67ed59e1d1-3072ba1f6e0mr4252531a91.31.1744293196650;
- Thu, 10 Apr 2025 06:53:16 -0700 (PDT)
-Date: Thu, 10 Apr 2025 06:53:15 -0700
-In-Reply-To: <Z_eEfjrkspAt4ACP@infradead.org>
+	s=arc-20240116; t=1744293846; c=relaxed/simple;
+	bh=VZtNoCf3M0bCxDHC8D/FIk+anVcQU6h7SXrw27QGv1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZOED31+fwKtAPTErwO5oiSeL2Icboxvf739rpaPWJqWRph2EwgANE0ESci9oXicngvRwug+y/Cbqf7FOYvqbEqxbjuEUqa90W45D+WGzP+R6+VOuqvqIsj3CvuN51bkzERAft4X4TzL71fhGvZy+/CS5CBIaebn+hDA5KK6QAkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=C+FJ+ww3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=e621RUxM; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id A87331380159;
+	Thu, 10 Apr 2025 10:04:01 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Thu, 10 Apr 2025 10:04:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1744293841; x=
+	1744380241; bh=kg+ncTFTY0e1tAlwafnt/dQr4xIAVAaQ5+ezMmfWoiQ=; b=C
+	+FJ+ww3czpNOXdQJJkVedN1q+7cFF9aQbuLmGlfSuxwJRlP5VYPYQwCJyTl36Pvv
+	lpkRSchCSZuovSWSoFJumyw6xfDGHSYyxZ9DhffmW9MkoXU2ileCa3XpIEACtv/F
+	hSeOOncxLogY93AIAu682Li1h7sgGnD5jZtUcyiJk3MzoTzjWFKjlns9/sDw5l0f
+	tEDR3UDHlzvW4+v2QP8bzyYXFb91KPuKvy6loPX0JJINzBdcH3C5J4abhCzZoiTZ
+	XLLSmD4Ev/bWT8icjN6fDk7mGMDSx7NnfYKnPSPfkjrZ+ARHJhaJit/hgcVI01fb
+	2uNKxCtJzBSsDb9E43oYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1744293841; x=1744380241; bh=kg+ncTFTY0e1tAlwafnt/dQr4xIAVAaQ5+e
+	zMmfWoiQ=; b=e621RUxMIlhsFmxMUA002Kk5gJknqmUJKTyg90GG/o6n7NRTQb5
+	eJiWYIUZInraz1nYTOBGFi57GaqJPldTrg8OFhd+GU6I3Z+B3fouIrNBQKvCp2bX
+	LZ86W4b3GLq0Sdxbw3W+mdOKwEii4rLDJqlfFl8/wEZq03ynkRpkkp3fpFEnam/k
+	drt2fSLw7V5+ZXspwcegmvlTAC2BAYkb2YqiBDs01bI8xzwjcCzENa4Qhp8PvJBF
+	yyU5LBhF2dz1P7A5CeKz0s7U40NrECfRiX8Wm2kV+Lh13mbYMQLtPnetYyj0J7ja
+	D0TsOwn7TNoMhNHAg5rtotR43LnhT+/2PWw==
+X-ME-Sender: <xms:0M_3Z48v5qmD2qqc5pp7gNPBjHMEJPlQ104yt7tYvl1M_-rgO2bkjA>
+    <xme:0M_3ZwvWhkcJOLGGhu-O5NQSmnWI2SH5CLcTPmMylEc9oAbY9c4ovkeuN-kuIkFDX
+    s9svrucfPnbPG1RSag>
+X-ME-Received: <xmr:0M_3Z-BcO2xmeRLNQGCC4q538p3aepo6BXzKQP675ZDcMZwOsN_uEFtIXzL9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeludduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    jeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihsh
+    hnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnheptddvhffhhfdugfegvdejfeetuddt
+    tdejteehfeejvdeugeffkefhgfffheeuudffnecuffhomhgrihhnpehgihhthhhusgdrtg
+    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehs
+    ugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghpthhtohepudelpdhmohguvg
+    epshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnihhosehophgvnhhvphhnrdhnvght
+    pdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrges
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
+    dprhgtphhtthhopeguohhnrghlugdrhhhunhhtvghrsehgmhgrihhlrdgtohhmpdhrtghp
+    thhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhihrgiirghnoh
+    hvrdhsrdgrsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrvgifodhnvghtuggv
+    vheslhhunhhnrdgthh
+X-ME-Proxy: <xmx:0M_3Z4c3G44RqWAjiT5kQ7RQfFTjIqT2zyYt0s7JMPJV-UwIOmRogg>
+    <xmx:0M_3Z9OyMXRkISBOi16SLG69oV9HGmw1_tof2MWU-GSSdm9CQOwU9A>
+    <xmx:0M_3ZylSPXWgTLxMLFVbChFBMKc7gzmRrIL_VtqYLWVQ775Cdbsdog>
+    <xmx:0M_3Z_tiVsE1CCKDNm-xcqPE5yLAxlm3K3My5fJPitpA773Mm2oNbw>
+    <xmx:0c_3Z-u76LlzOm866oCqvQpwP7PZK1m2tfZbqX7haTnflbdi8_2SKxzs>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Apr 2025 10:04:00 -0400 (EDT)
+Date: Thu, 10 Apr 2025 16:03:57 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+	steffen.klassert@secunet.com, antony.antony@secunet.com,
+	willemdebruijn.kernel@gmail.com, David Ahern <dsahern@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH net-next v25 00/23] Introducing OpenVPN Data Channel
+ Offload
+Message-ID: <Z_fPzdq3PSw1efTW@krikkit>
+References: <20250407-b4-ovpn-v25-0-a04eae86e016@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250408112402.181574-1-shivankg@amd.com> <20250408112402.181574-6-shivankg@amd.com>
- <Z_eEfjrkspAt4ACP@infradead.org>
-Message-ID: <diqz4iyw5dis.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [PATCH RFC v7 5/8] KVM: guest_memfd: Make guest mem use guest mem
- inodes instead of anonymous inodes
-From: Ackerley Tng <ackerleytng@google.com>
-To: Christoph Hellwig <hch@infradead.org>, Shivank Garg <shivankg@amd.com>
-Cc: seanjc@google.com, david@redhat.com, vbabka@suse.cz, willy@infradead.org, 
-	akpm@linux-foundation.org, shuah@kernel.org, pbonzini@redhat.com, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz, 
-	bfoster@redhat.com, tabba@google.com, vannapurve@google.com, 
-	chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, michael.day@amd.com, 
-	yan.y.zhao@intel.com, Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com, 
-	michael.roth@amd.com, aik@amd.com, jgg@nvidia.com, kalyazin@amazon.com, 
-	peterx@redhat.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250407-b4-ovpn-v25-0-a04eae86e016@openvpn.net>
 
-Christoph Hellwig <hch@infradead.org> writes:
+2025-04-07, 21:46:08 +0200, Antonio Quartulli wrote:
+> Notable changes since v24:
+> * disable TCP disconnections of attached sockets (tcp_disconnect()
+>   returns -EBUSY) - similarly to kTLS.
+> * used rcu_replace_pointer instead of rcu_dereference_protected+rcu_assign_pointer
+> * dropped useless skb->ignore_df = 1
+> * dropped unneded EXPORT_SYMBOL_GPL(udpv6_prot)
+> * dropped obsolete comment for ovpn_crypto_key_slots_swap()
+> * dropped calls to kfree() in ovpn_aead_encrypt/decrypt() (release is
+>   performed in ovpn_encrypt/decrypt_post())
+> * dropped NULL check before calling kfree() in
+>   ovpn_encrypt/decrypt_done()
+> * converted seq_num from atomic64_t to atomic_t (IV exhaustion is now
+>   detected in case of wrap around)
+> * call consume_skb() on skb when dropping keepalive message (it is not a
+>   failure)
+> * made REMOTE_PORT mandatory when REMOTE_IPV4/6 is specified in
+>   peer_new/set call
+> * ensured ovpn_nl_key_swap_notify() is called only once, even when
+>   parsing a batch of received packets concurrently
+> 
+> Please note that some patches were already reviewed/tested by a few
+> people. These patches have retained the tags as they have hardly been
+> touched.
+> 
+> The latest code can also be found at:
+> 
+> https://github.com/OpenVPN/ovpn-net-next
+> 
+> Thanks a lot!
+> Best Regards,
+> 
+> Antonio Quartulli
+> OpenVPN Inc.
+> 
+> ---
+> Antonio Quartulli (23):
+>       net: introduce OpenVPN Data Channel Offload (ovpn)
+>       ovpn: add basic netlink support
+>       ovpn: add basic interface creation/destruction/management routines
+>       ovpn: keep carrier always on for MP interfaces
+>       ovpn: introduce the ovpn_peer object
+>       ovpn: introduce the ovpn_socket object
+>       ovpn: implement basic TX path (UDP)
+>       ovpn: implement basic RX path (UDP)
+>       ovpn: implement packet processing
+>       ovpn: store tunnel and transport statistics
+>       ovpn: implement TCP transport
+>       skb: implement skb_send_sock_locked_with_flags()
+>       ovpn: add support for MSG_NOSIGNAL in tcp_sendmsg
+>       ovpn: implement multi-peer support
+>       ovpn: implement peer lookup logic
+>       ovpn: implement keepalive mechanism
+>       ovpn: add support for updating local or remote UDP endpoint
+>       ovpn: implement peer add/get/dump/delete via netlink
+>       ovpn: implement key add/get/del/swap via netlink
+>       ovpn: kill key and notify userspace in case of IV exhaustion
+>       ovpn: notify userspace when a peer is deleted
+>       ovpn: add basic ethtool support
+>       testing/selftests: add test tool and scripts for ovpn module
 
-> On Tue, Apr 08, 2025 at 11:23:59AM +0000, Shivank Garg wrote:
->> From: Ackerley Tng <ackerleytng@google.com>
->> 
->> Using guest mem inodes allows us to store metadata for the backing
->> memory on the inode. Metadata will be added in a later patch to support
->> HugeTLB pages.
->> 
->> Metadata about backing memory should not be stored on the file, since
->> the file represents a guest_memfd's binding with a struct kvm, and
->> metadata about backing memory is not unique to a specific binding and
->> struct kvm.
->> 
->> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->> Signed-off-by: Fuad Tabba <tabba@google.com>
->> Signed-off-by: Shivank Garg <shivankg@amd.com>
->> ---
->>  include/uapi/linux/magic.h |   1 +
->>  virt/kvm/guest_memfd.c     | 133 +++++++++++++++++++++++++++++++------
->>  2 files changed, 113 insertions(+), 21 deletions(-)
->> 
->> <snip>
->>  
->> +static struct inode *kvm_gmem_inode_make_secure_inode(const char *name,
->> +						      loff_t size, u64 flags)
->> +{
->> +	const struct qstr qname = QSTR_INIT(name, strlen(name));
->> +	struct inode *inode;
->> +	int err;
->> +
->> +	inode = alloc_anon_inode(kvm_gmem_mnt->mnt_sb);
->> +	if (IS_ERR(inode))
->> +		return inode;
->> +
->> +	err = security_inode_init_security_anon(inode, &qname, NULL);
->> +	if (err) {
->> +		iput(inode);
->> +		return ERR_PTR(err);
->> +	}
->
-> So why do other alloc_anon_inode callers not need
-> security_inode_init_security_anon?
+For the series:
+Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
 
-Thanks for this tip!
+Thanks again for your patience, Antonio.
 
-When I did this refactoring, I was just refactoring
-anon_inode_create_getfile(), to set up the guest_memfd inode and file in
-separate stages, and anon_inode_create_getfile() was already using
-security_inode_init_security_anon().
-
-In the next revision I can remove this call.
-
-Is it too late to remove the call to security_inode_init_security_anon()
-though? IIUC it is used by LSMs, which means security modules may
-already be assuming this call?
+-- 
+Sabrina
 
