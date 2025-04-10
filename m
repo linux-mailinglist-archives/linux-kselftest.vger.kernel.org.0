@@ -1,185 +1,180 @@
-Return-Path: <linux-kselftest+bounces-30475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36F30A8416A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 13:05:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060B5A8417B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 13:11:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 148AC466714
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 11:04:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41DE18C20BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 11:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261CD28152B;
-	Thu, 10 Apr 2025 11:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291F328137A;
+	Thu, 10 Apr 2025 11:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="pVFHYrgW"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="tnOxydS/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B45E1DF991
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 11:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B205A280CF0
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 11:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744283084; cv=none; b=onhZYy2xGVsHYgz/nAcmhHQ2phT+YzS1BhToTRPivduyh+x/ihO3KaIWw3oIQgxDXlVUSKQdSDEbm09FJDZqL5QQvehseZQ3RZ3WeRr/rH/guvSJ6n+z/7iQM/d5Ih21ouBR9bt5Ctu8C+cFxQ9bFCdxX9g4Czm2PChEoMbVZ+g=
+	t=1744283457; cv=none; b=ITcIEKKdgb24MH1XbXmkU9WxdKSLa+oTl6oNvkJknWM1GY8GL3CAxtQtHj+oL4/ZrwXPUkhlKWJUD9FMbEJzbw2G5RK2xLjif93qyLBFtfXgsKOU92LjB+sDaZvlfma6KfKpne6mLxhrsyU+1QoQOYLx2ikHu0n+4/Xi7VSROkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744283084; c=relaxed/simple;
-	bh=kOlPkOa9RAWaHmxwXq9vXkGSssRFc7sUC8EQNbcnfPY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=tKW3atufKIRoFTJP7/u21PoMEDDoNGy9t2PN8k2UAxqD7StxZTJXDXOjsc6MzQFPEgvbgI6FpmgA+Fv+PS5LsVSwKOIY2+0ro++w1VCGU84i+alieos0Cu+YJdcCgdeZEwZrnt5lDHWZY4JMk4LBr6VLJbQ9pOsT/ay9xiMTBg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=pVFHYrgW; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39c2688e2bbso26010f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 04:04:41 -0700 (PDT)
+	s=arc-20240116; t=1744283457; c=relaxed/simple;
+	bh=+e4uZEgvaKhO0stJYuLSFF3XAGqvC9lTsIv+F4Gta5Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JPSssqU4rAo6rTyVCqIWSQmy3atOlPWDgfSM6grFfkvTp4CmZ7SCsxTlyGUVH/FxPbEIdE7/SnL/g0HToE5UbIg1HWXvGZz3T9os9Pv7bf8hfF4tKbKK2Cun/MNoD1WhDh9zvyMvu6d6J7gfTwkHhc1rlPyGOSikEqanT19NBF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=tnOxydS/; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-43cfe574976so4810105e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 04:10:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1744283080; x=1744887880; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FwTqTcXuZVwmB1gK8gAQzMNft2dcqvTwt7yn+4sQNuo=;
-        b=pVFHYrgW6CsPBVfhDp8H0SHh07ORi0+k92JSM7WHod+l6GpALDm6Af/8R4cZodTjSI
-         tJhmQC0ISSnfE51tew20VXscex2ugzAatyW+gaNQVdqFVsPCNEtL0hzsectLv90gFFtt
-         oVuwwysWrn9jEcSsg7T6KkbCebzr4gntAQJheGXE5uqMjbzNUT2JWYiPhRLq9y69avjt
-         blLUmxwM5ibExPlEoUUbX0wnvPL/rJd7iUzELewMF/309FFzjGxOdZqxZeMaqwE83MP6
-         zgXi1m4nmEywod9fgORmfD+WzNDeuueMfkonfaKqfm00t7VTa2R1DFvAman71MpISxGx
-         m5fQ==
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1744283453; x=1744888253; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+zXlC9nBwul2N0yZKb287bMYJF4TW86ravWYsYs27Cg=;
+        b=tnOxydS/0D/X95SGC4TYOkrnKM/fvQKCoMyZEOOOE7u4vyhmy7v7aN9Yuj/7kQ+PMm
+         kch5ZkpoQMrgijIDs8iVD0hqxDscS317dzG3DZHCPOP2so59vGvU13he7w8sOgARcmgZ
+         mNaf6RMKHILPf3XQV7QDH897JTDKOFa4h+FEHSIQUZwXNIocRgTwFxPCsMq4E5rZ7Ajy
+         93pts8FRUWpF9nIw68z9MTymPp59acYJYzLH/iGKWdRdhz8VZaJELhfbz3GroB88mm0M
+         IhBc+u9qMDwLUaFvn1ExdyZ/KDutpDL48DW9JWGEx6sRbJlBApdUPAY32AXOk36LO41O
+         Zxsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744283080; x=1744887880;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FwTqTcXuZVwmB1gK8gAQzMNft2dcqvTwt7yn+4sQNuo=;
-        b=snHCsYuwOdFDB841CRn9ijFPoHZVh09neRW/YDgYSWnXj5KZ0kr5JeAcZjJJtbMnw5
-         kwyezpgrp1PhIpHb2Fm/5Mecw0sAYp7TBeI/6b4VaHEPVozkiLus7M3ZaOAt+L0OUiwc
-         B8FRyWw1CO80YlS/hzqSf2s642eSingw7uyIpOOjGudATgD5ZJ86i71WogZUmafkaFP7
-         FYLHv7U3yOOflOpMCW+H/ElY4CzvVQZ+Ip8CbKsMwf45RWD8RC0gj6jeXhpPenhGAGus
-         iY2rJxOf3n+Hbqx3nKx/m0dM3OM0l+cDkf8ZfcP13EirfJ66y+PnROzvnOoYBwBMn9Fm
-         +5iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV9pPL0gVoUoOoPI86RWWKOV1X6+H4XleTGANrCwnqdwygGIEb1pFeBEQlqPJqmucuFDCC4kbFyuTT+oaEZR0w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXN00bQ5SNTeMI/d+Bwwm+lhmllAAOi4YM5X3BcEozS18hyd07
-	QefkwOdZIE9EMYnd6rZDyYcNnH+hDENdaUtG6GSvmAlA4SUK57ZgPZO6YNJ2NUk=
-X-Gm-Gg: ASbGnctJixoLseO3smjDZGjUbEPwGBWqNY8b47GWeM7JvEsCLzR6C/W0zgahPgArO7U
-	OhgQuDmdSMVDrqkbnJR/66x0tmgLTxa0RGSG7vuLNYKDfbrqc0zV76+K8OIDSVzv0dAaUvCac9s
-	KX5YKaBEidsm1IKF+u1HBTkiBfgrLdVIY5phPW3UKLHpO1Ogs1pmPinlGpclreWixMPjH3FDg/v
-	U237PvwwahcpIaXYWoSGTALojuC41Yp74z9FKjBxUkNOhXyz7DcAQ99VLJ69fTpS8HzljZravLp
-	r8+XFhSnXXaSGzh3sZJ15Cf7I1FRxraXL3y4fu2kNxkaBT4c
-X-Google-Smtp-Source: AGHT+IFTHVjvMm7SI9zG+YTo6xP+VuwjrIfNbL14H9cY5sGUQSewGH6hwjaZZsvjM4ZfhfO2SM4RNA==
-X-Received: by 2002:a05:6000:18ac:b0:39c:13fa:3e0 with SMTP id ffacd0b85a97d-39d87adcd02mr1983393f8f.9.1744283080239;
-        Thu, 10 Apr 2025 04:04:40 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:7d22:13bb:e539:15ee])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d89361186sm4476526f8f.14.2025.04.10.04.04.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 04:04:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744283453; x=1744888253;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+zXlC9nBwul2N0yZKb287bMYJF4TW86ravWYsYs27Cg=;
+        b=UcgAm/u8HI/8Bicjzq7E+aNPYjl74fl+uFlWq9ztXrL7cLA3p4cZPKdFliajMwcTRS
+         UeNkwleaFIsTxjSq+O8ZALaMfkIu924w0j24Cz42eZEcw5Ak+0Cvr/e9ZRZyL+J9K0NL
+         +kkMzG3sYeyWosPP5GpYFpNs0Pr0ZmQbXdltNJDO/mhzPn/mF6hw2y5+ceSJsRXfSiF3
+         5y67VLVLa0Elc0P5qj3gVBZx4TDUUCYv1IoO6rHWQ+z7e6eL5SNlUc2BZN6zoFdbvqpG
+         tv+h+ywv1JM5PZV7hPt0vgTd2vl48zWUAXjLK00kfq9GtYhUzbXxTn5WR/JvHYr4MBq4
+         DnbA==
+X-Forwarded-Encrypted: i=1; AJvYcCWI+1xphBo08Wp/fWemxN+ZfcOOCFWhelyiYGgKhN09GS7iylTBzYd4JKShSTZGATsPhjueH7koFuW6fkl3M+w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2F27aIjyAM6oGYfsZnv4xPhEHRPEBnwPAWOSTIIMfqOPSbweH
+	t8Y6eRFOkuMFQIgDXuG9U7baOfqM1TD3QlkmGb4Qht3im9q14s1F+OhjNft/NoI=
+X-Gm-Gg: ASbGnctrhAwHcElizxOQc02gk45Mp8itlT9+HAn8nUYgsu+FWb5ROJN+e+XojGx3soc
+	FvYWeBAXbf+FimLostd3CqjJb8kbJSgwIpXhZbSdfRHEbnX3uZYmwQ3hBW6+e4fq3NtjnCKntYc
+	U4Si0q/h7ZXllv4vCYtNqEMrOXEZ0GQNKtSpSq704WN6pmV84ATvOGJAlmq+3DnMOk/qN0V/ruB
+	EO7tjKWMWvZMAh2DSZN2QBPPcj1xi3y6r7Q2BqG/g6a9Pb4Qq7UOLm1BcXajYh5HY3tEUW3NNOG
+	pmMywbnvJ5JoRd3wxAcoA7wUQXuhqeK7liest5fxVTxS7S1DPmTF3fmskSD76n6A+tO90XoX
+X-Google-Smtp-Source: AGHT+IF9Hc7Q24zHl7xPZwtzZ5Sgf/XrRL5TMP+ztmFz2QJ9DEFpqqYglIh+Gx6IPi7LxlVpXe0SHQ==
+X-Received: by 2002:a05:600c:4e13:b0:43c:ec4c:25b4 with SMTP id 5b1f17b1804b1-43f2d7b8862mr31752685e9.10.1744283452746;
+        Thu, 10 Apr 2025 04:10:52 -0700 (PDT)
+Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f233a2a13sm47242725e9.10.2025.04.10.04.10.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Apr 2025 04:10:52 -0700 (PDT)
+Message-ID: <a7989f85-7699-4b90-9328-9480297a1765@blackwall.org>
+Date: Thu, 10 Apr 2025 14:10:49 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 0/6] xfrm & bonding: Correct use of
+ xso.real_dev
+To: Cosmin Ratiu <cratiu@nvidia.com>, netdev@vger.kernel.org
+Cc: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
+ Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Ayush Sawal <ayush.sawal@chelsio.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Sunil Goutham <sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>,
+ Subbaraya Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>,
+ Bharat Bhushan <bbhushan2@marvell.com>,
+ Louis Peens <louis.peens@corigine.com>, Leon Romanovsky <leonro@nvidia.com>,
+ linux-kselftest@vger.kernel.org
+References: <20250409144133.2833606-1-cratiu@nvidia.com>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20250409144133.2833606-1-cratiu@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 10 Apr 2025 13:04:39 +0200
-Message-Id: <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
-Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
- <zong.li@sifive.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>, "Thomas Gleixner"
- <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
- <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
- <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
- <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
- <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
- <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
- save/restore of CSR_SSP on trap entry/exit
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
-In-Reply-To: <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
+Content-Transfer-Encoding: 7bit
 
-2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
-> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/as=
-m/thread_info.h
-> @@ -62,6 +62,9 @@ struct thread_info {
->  	long			user_sp;	/* User stack pointer */
->  	int			cpu;
->  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +	struct cfi_status	user_cfi_state;
-> +#endif
+On 4/9/25 17:41, Cosmin Ratiu wrote:
+> This patch series was motivated by fixing a few bugs in the bonding
+> driver related to xfrm state migration on device failover.
+> 
+> struct xfrm_dev_offload has two net_device pointers: dev and real_dev.
+> The first one is the device the xfrm_state is offloaded on and the
+> second one is used by the bonding driver to manage the underlying device
+> xfrm_states are actually offloaded on. When bonding isn't used, the two
+> pointers are the same.
+> 
+> This causes confusion in drivers: Which device pointer should they use?
+> If they want to support bonding, they need to only use real_dev and
+> never look at dev.
+> 
+> Furthermore, real_dev is used without proper locking from multiple code
+> paths and changing it is dangerous. See commit [1] for example.
+> 
+> This patch series clears things out by removing all uses of real_dev
+> from outside the bonding driver.
+> Then, the bonding driver is refactored to fix a couple of long standing
+> races and the original bug which motivated this patch series.
+> 
+> [1] commit f8cde9805981 ("bonding: fix xfrm real_dev null pointer
+> dereference")
+> 
+> v1 -> v2:
+> Added missing kdoc for various functions.
+> Made bond_ipsec_del_sa() use xso.real_dev instead of curr_active_slave.
+> 
+> Cosmin Ratiu (6):
+> Cleaning up unnecessary uses of xso.real_dev:
+>   net/mlx5: Avoid using xso.real_dev unnecessarily
+>   xfrm: Use xdo.dev instead of xdo.real_dev
+>   xfrm: Remove unneeded device check from validate_xmit_xfrm
+> Refactoring device operations to get an explicit device pointer:
+>   xfrm: Add explicit dev to .xdo_dev_state_{add,delete,free}
+> Fixing a bonding xfrm state migration bug:
+>   bonding: Mark active offloaded xfrm_states
+> Fixing long standing races in bonding:
+>   bonding: Fix multiple long standing offload races
+> 
+>  Documentation/networking/xfrm_device.rst      |  10 +-
+>  drivers/net/bonding/bond_main.c               | 113 +++++++++---------
+>  .../net/ethernet/chelsio/cxgb4/cxgb4_main.c   |  20 ++--
+>  .../inline_crypto/ch_ipsec/chcr_ipsec.c       |  18 ++-
+>  .../net/ethernet/intel/ixgbe/ixgbe_ipsec.c    |  41 ++++---
+>  drivers/net/ethernet/intel/ixgbevf/ipsec.c    |  21 ++--
+>  .../marvell/octeontx2/nic/cn10k_ipsec.c       |  18 +--
+>  .../mellanox/mlx5/core/en_accel/ipsec.c       |  28 ++---
+>  .../mellanox/mlx5/core/en_accel/ipsec.h       |   1 +
+>  .../net/ethernet/netronome/nfp/crypto/ipsec.c |  11 +-
+>  drivers/net/netdevsim/ipsec.c                 |  15 ++-
+>  include/linux/netdevice.h                     |  10 +-
+>  include/net/xfrm.h                            |   8 ++
+>  net/xfrm/xfrm_device.c                        |  13 +-
+>  net/xfrm/xfrm_state.c                         |  16 +--
+>  15 files changed, 182 insertions(+), 161 deletions(-)
+> 
 
-I don't think it makes sense to put all the data in thread_info.
-kernel_ssp and user_ssp is more than enough and the rest can comfortably
-live elsewhere in task_struct.
+Thank you for following up on this. It's definitely not getting cleaner with a bond
+ptr in xfrm protected by two locks in different drivers, but it should do AFAICT.
+In case there is another version I'd add a big comment of the locking expectations
+for real_dev, and maybe in the future it can fully move to the bonding as well.
 
-thread_info is supposed to be as small as possible -- just spanning
-multiple cache-lines could be noticeable.
+For the set:
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
-> =20
->  	REG_L s0, TASK_TI_USER_SP(tp)
->  	csrrc s1, CSR_STATUS, t0
-> +	/*
-> +	 * If previous mode was U, capture shadow stack pointer and save it awa=
-y
-> +	 * Zero CSR_SSP at the same time for sanitization.
-> +	 */
-> +	ALTERNATIVE("nop; nop; nop; nop",
-> +				__stringify(			\
-> +				andi s2, s1, SR_SPP;	\
-> +				bnez s2, skip_ssp_save;	\
-> +				csrrw s2, CSR_SSP, x0;	\
-> +				REG_S s2, TASK_TI_USER_SSP(tp); \
-> +				skip_ssp_save:),
-> +				0,
-> +				RISCV_ISA_EXT_ZICFISS,
-> +				CONFIG_RISCV_USER_CFI)
+Cheers,
+ Nik
 
-(I'd prefer this closer to the user_sp and kernel_sp swap, it's breaking
- the flow here.  We also already know if we've returned from userspace
- or not even without SR_SPP, but reusing the information might tangle
- the logic.)
-
->  	csrr s2, CSR_EPC
->  	csrr s3, CSR_TVAL
->  	csrr s4, CSR_CAUSE
-> @@ -236,6 +250,18 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
->  	csrw CSR_SCRATCH, tp
-> +
-> +	/*
-> +	 * Going back to U mode, restore shadow stack pointer
-> +	 */
-
-Are we?  I think we can be just as well returning back to kernel-space.
-Similar to how we can enter the exception handler from kernel-space.
-
-> +	ALTERNATIVE("nop; nop",
-> +				__stringify(					\
-> +				REG_L s3, TASK_TI_USER_SSP(tp); \
-> +				csrw CSR_SSP, s3),
-> +				0,
-> +				RISCV_ISA_EXT_ZICFISS,
-> +				CONFIG_RISCV_USER_CFI)
-> +
-
-Thanks.
 
