@@ -1,136 +1,184 @@
-Return-Path: <linux-kselftest+bounces-30484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 567C0A84772
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 17:12:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F622A847A5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 17:21:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3471F188E373
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:11:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E53543BFD93
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Apr 2025 15:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0431DED52;
-	Thu, 10 Apr 2025 15:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04451E5B62;
+	Thu, 10 Apr 2025 15:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KTN4dxpn"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AlpRKE1s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7BD1624D0
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 15:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D3915B135
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 15:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744297851; cv=none; b=qi3mKwy/3fRMf8USplaE83A6mBX4HIOtetntC9sToUOtsR0rmMpllXte1SA8kzen8KUA1QIHVzh4TN27d6dLAbNvKDRdFMXjuxwixEn8c2hTHIkmydtpmIbwoEurw/95VrFj9+EhwoXBo0u2ZD0oaTYCysCaJnM26C60Z4gwdFg=
+	t=1744298380; cv=none; b=oFmlQ/OkiairtNnVpNXXoRgyzF1ifT6SQ8cb0bf8YzRWGJw71ToI69WkYA1z9Gf6aTcFCVU1nBnN2GEmsdPQmdV1BmcpTGax7KUBHswTsM93RnpLrcrjNjD/Yvwf86g9PIa2eQb3OBK4xRpAb06S7xVwr05U+rZvUxYPGyrP5D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744297851; c=relaxed/simple;
-	bh=ng9xh/PG1LUIBqUCqRBp1J3efi6ls83MH75OfUbQ4+4=;
-	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=s8FUhNo4PBy8WenuU09LcYPIrTYBfSQ2EcRM+M9+fjRxHifeed+VMGl0O+oQTUjkJJxKJIPQlCzWW3+3YNDBfx5OptDMcPW4HlTwlW4XDueVaFL9ODXHDpimvBk3hwX4AhvtBXPt6I1ecZR7CbD50umwEzSL+7egnyOkhZ1y0Hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KTN4dxpn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744297848;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=EXKgyYog58kyfqHQcoNTtvL08JiFX/6XLrBhO7Ve8ts=;
-	b=KTN4dxpndtc7uw1Xg1FlmFSV/ktvhDpf2DIA4bzaoO/KR41oG+PQgVBhNkHlgCBDHNXZY9
-	Bnv73xEEm+MUojQ+ww3yqEmqdfsa9xo/1aHiEP2zL3NyQsZuTh+jIYFw6q2C80OdKfI4n1
-	doqubiTOdjGwAjSJCOnUCCo3X9xstiA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-446-oyYSBwflPJ2Jjt-x04f9kA-1; Thu, 10 Apr 2025 11:10:47 -0400
-X-MC-Unique: oyYSBwflPJ2Jjt-x04f9kA-1
-X-Mimecast-MFC-AGG-ID: oyYSBwflPJ2Jjt-x04f9kA_1744297846
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43d5ca7c86aso6423385e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 08:10:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744297846; x=1744902646;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+	s=arc-20240116; t=1744298380; c=relaxed/simple;
+	bh=cEv9BRFMpDV/vpqigYmWTgh5vZ3LGGJz6uau0Z8qq5g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fN2w4ABDURXaVCGCERZe2kHIdaFUaiKU4iJEiDFOjvMEz/m7Zrwe7iZrCuEBSHfzpXMMjX3FkzPyquTYAsuG6bgXh2lM7vg0R8o9vYqtMX8dmnv1STdSwp/AbZ5b/VBJeoMVriaus0jKl+fYXKDfCIcR7r4FewiB7foZez9Vjqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AlpRKE1s; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3d5e2260f52so7310915ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Apr 2025 08:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1744298377; x=1744903177; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EXKgyYog58kyfqHQcoNTtvL08JiFX/6XLrBhO7Ve8ts=;
-        b=ALuAi9L7UcYq8KOyX8fOChsXK0NZg7mJ1BHFuN50ltT+yHtJJTylyb+qqElq5hatUQ
-         qNOA4CcFmWl5AY2uF1L9VsB5qyFaEJVlhHrWT7HvG7Z5YBIgMJv+kIasw0+f0w1i6NJ0
-         6c8Iwq4lZouVgS8rDM/JYRDKdm4LrvoRm/xhE1rOs+0LydKcoNPnxBNmSddFEWakVgke
-         iDcgPFLZVIQxm6Y91MIsODXIccHevH9XLM25rix1OGSZq5w49Qwum2EtL3A36+szIY8t
-         /DYiLhYSGcfmCBXXPCwLrEiz1DRFr9aDVrGc9+yCmmYDoLxQ8Cd1pF3E3mme/k3EIbfw
-         vhEg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzOpd0/7bfRb0wckVfMBsy629owoGAZ069yVtBMpht+4aaHvBZY9GUnmHqyyq/qfToVn81nvfVCzgmnkBZfv4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX0OLPd4wFkWSpVA3whTdpNIe1v7YdphLUkRfFqwkQ6n8m/BG4
-	ROWY1MyQz2EeDS5eNvBOWGxKISVpI773qtYyep/PTWTjbANZ6coPVCZraXeucd01Jy3tIxdx5ve
-	OB19j5I3lf7I0jCaoNWB5JwJLyLnU89fq6cWSYSJhqNPS/FZ1TIgezti7OgoL+lhPUA==
-X-Gm-Gg: ASbGncu/7Zc0O3vfIem5wT+k1WxzI1VIxOuk88BEB7HyTCHIwrFQijw5fHVHXk1Yb0b
-	IjYPvBLr8JgYrw5bWy06+jAX98eK1b0AoTU6TVjTKUcOuLBI/9qv+dHMjT9Y/bfipKFeJniMabT
-	aAk+joJQ07BJiwR3PeZYUuQzTiJreMBZ9dfk9JhngjxI2AnCVt+KPHrBwxhZv5aHDfFPD3KIWTE
-	hySU0Cn0/F9V81dC1qQj73XRmMAa6GS6azlhMtfCMY3wIDLN9XcLdFIsPpgOP8ifjDy4esPoQ1w
-	yduNB195oqW3/IZllXM16pjzmNDJrWOeiusqilm5VcQjINDuBQeq6osBYaOJ
-X-Received: by 2002:a05:600c:c19:b0:43c:f050:fee8 with SMTP id 5b1f17b1804b1-43f2d96d12bmr27394505e9.20.1744297846040;
-        Thu, 10 Apr 2025 08:10:46 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFxwdlqvMr0+eJqJHcy2sApkT2sXjxRivRro1I+Xe8jUjWmS3HlK9o9rH1isaEbTm3IHTMmxg==
-X-Received: by 2002:a05:600c:c19:b0:43c:f050:fee8 with SMTP id 5b1f17b1804b1-43f2d96d12bmr27394165e9.20.1744297845618;
-        Thu, 10 Apr 2025 08:10:45 -0700 (PDT)
-Received: from rh (p200300f6af1bce00e6fe5f11c0a7f4a1.dip0.t-ipconnect.de. [2003:f6:af1b:ce00:e6fe:5f11:c0a7:f4a1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d8938a860sm5156906f8f.54.2025.04.10.08.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 08:10:45 -0700 (PDT)
-Date: Thu, 10 Apr 2025 17:10:43 +0200 (CEST)
-From: Sebastian Ott <sebott@redhat.com>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-    Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-    Zenghui Yu <yuzenghui@huawei.com>, 
-    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-    kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: arch_timer_edge_cases failures on ampere-one
-Message-ID: <ac1de1d2-ef2b-d439-dc48-8615e121b07b@redhat.com>
+        bh=p0hDnHJGstcN5tjUtZArcj8+BnFv1raQiFlYzncXH4Q=;
+        b=AlpRKE1sQSiwk2ZFeiEaiFDLbTEmbAA22ab2hduE3gEBvhDqm8BEJtSPGheTFwCF2S
+         2BSQzHMraWKrhr7Fo5MO8rlVR9LJHOChF6yiyi7D/Xg769dBu980WH8m899ohrweCRiO
+         qIWc/aURlpJe1AO2TCmLw0t+Ci97JjNGSiHF0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744298377; x=1744903177;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p0hDnHJGstcN5tjUtZArcj8+BnFv1raQiFlYzncXH4Q=;
+        b=qFkApEuofWPoLaXuSz02HMA+0ZCRZ6rV3nLUYNYWwAVK++06Sjd1H3dRGaRbCUjSRw
+         4MFcRRvbFUxcgi/+jHlVEfwbmmvMyYPNAmXFg3ErRwCiwRvobHuvqldv3Qf1TONbiGJq
+         SIp1v6RDrb4k7GMBl/rHZbvNfzloisdd8wIgJQUFXD2LahHXgVk4dYCp833MWOeaxR/O
+         IuhTmG3FLeSbj5kgVTjHAwslAv2Qa5SHwGtRK/0IQrkFABv+RTmQKksYzW4uun7vvaRy
+         w6TJoz2ktB3agfRX+pnwTthmEmfzST3q5Tvwo9LynWdtvEkWLL4APSfkIPUk+n+PjSOr
+         oETA==
+X-Forwarded-Encrypted: i=1; AJvYcCVXq9CRCtcOPx8NS0wRVp3e3eFLvF2VgYpkT97XiPfmCMCBpybWRXRX5yCWHUUlASiyaz+nCCSGSDlj5nUho+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFm2X1W8ONzbgjv1qNSochyWZI0YdZXH8BYq0/xW3Qzo+qUbdi
+	PCjUMQDG/zUS3CtWmjn9SpCMVeg6LaDf5YaN/fwdN9aPfGKiDWxFSdUWyFkrMl8=
+X-Gm-Gg: ASbGncuHfVZ6X3iOyx7NiO4JM+fRNHwrdfD5zLamnRPjV7WDGQ5qVy8RxPuTyBoCiXg
+	XUsAEeweoTjEu/d2U9Ww5KlGny9/mNreAcUVeqmr6J9jBexlLXy4PIZpBH+qf3RLqIkc3psTtf0
+	MgTYYyMegHPGqIH/22oIw5VbGF4XeW7yWWA/q7+oMPZcn7I9F/8wTOiOtbcIvQAPqe8+wsBiraE
+	4KOqddOUmnoJj0RG6n1ioK4Y+xdD8KtwdtrQhLsVZUavO2kctt9i5e26aygv7bQ00wnVneCapE6
+	+Y5yfL8EWznrg0uy3P8lrAe1nXtnKuK1VW1MjKS9OWGJzkhokJs=
+X-Google-Smtp-Source: AGHT+IGYghOS+7i1wcjdHgqxdKs6EGmjkmfFhSRU0tTXTq7Y1uPzPEsOxwWaQxdrY5CbbwPl+8ibhw==
+X-Received: by 2002:a05:6e02:1888:b0:3d4:700f:67e7 with SMTP id e9e14a558f8ab-3d7e5fcfe40mr29388885ab.17.1744298377689;
+        Thu, 10 Apr 2025 08:19:37 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505e2e610sm772963173.108.2025.04.10.08.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Apr 2025 08:19:37 -0700 (PDT)
+Message-ID: <04bf6bbc-d813-488d-9117-def19717b8b5@linuxfoundation.org>
+Date: Thu, 10 Apr 2025 09:19:36 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/32] kselftest harness and nolibc compatibility
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Shuah Khan <shuah@kernel.org>, Willy Tarreau <w@1wt.eu>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hey,
+On 4/7/25 00:52, Thomas Weißschuh wrote:
+> Nolibc is useful for selftests as the test programs can be very small,
+> and compiled with just a kernel crosscompiler, without userspace support.
+> Currently nolibc is only usable with kselftest.h, not the more
+> convenient to use kselftest_harness.h
+> This series provides this compatibility by adding new features to nolibc
+> and removing the usage of problematic features from the harness.
+> 
+> The first half of the series are changes to the harness, the second one
+> are for nolibc. Both parts are very independent and should go through
+> different trees.
+> The last patch is not meant to be applied and serves as test that
+> everything works together correctly.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Changes in v2:
+> - Rebase unto v6.15-rc1
+> - Rename internal nolibc symbols
+> - Handle edge case of waitpid(INT_MIN) == ESRCH
+> - Fix arm configurations for final testing patch
+> - Clean up global getopt.h variable declarations
+> - Add Acks from Willy
+> - Link to v1: https://lore.kernel.org/r/20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de
 
-I'm seeing consistent failures for the arch_timer_edge_cases
-selftest one ampere-one(x):
-==== Test Assertion Failure ====
-   arm64/arch_timer_edge_cases.c:170: timer_condition == istatus
-   pid=6277 tid=6277 errno=4 - Interrupted system call
-      1  0x0000000000403bcf: test_run at arch_timer_edge_cases.c:962
-      2  0x0000000000401f1f: main at arch_timer_edge_cases.c:1083
-      3  0x0000ffffa8b2625b: ?? ??:0
-      4  0x0000ffffa8b2633b: ?? ??:0
-      5  0x000000000040202f: _start at ??:?
-   0x1 != 0x0 (timer_condition != istatus)
+Thank you. I am going to start reviewing the series. It could take
+me a few days to get through all 32 patches. :)
 
-The (first) test that's failing is from test_timers_in_the_past():
-     /* Set a timer to counter=0 (in the past) */
-     test_timer_cval(timer, 0, wm, true, DEF_CNT);
+> 
+> ---
+> Thomas Weißschuh (32):
+>        selftests: harness: Add harness selftest
+>        selftests: harness: Use C89 comment style
+>        selftests: harness: Ignore unused variant argument warning
+>        selftests: harness: Mark functions without prototypes static
+>        selftests: harness: Remove inline qualifier for wrappers
+>        selftests: harness: Remove dependency on libatomic
+>        selftests: harness: Implement test timeouts through pidfd
+>        selftests: harness: Don't set setup_completed for fixtureless tests
+>        selftests: harness: Always provide "self" and "variant"
+>        selftests: harness: Move teardown conditional into test metadata
+>        selftests: harness: Add teardown callback to test metadata
+>        selftests: harness: Stop using setjmp()/longjmp()
+>        selftests: harness: Guard includes on nolibc
+>        tools/nolibc: handle intmax_t/uintmax_t in printf
+>        tools/nolibc: use intmax definitions from compiler
+>        tools/nolibc: use pselect6_time64 if available
+>        tools/nolibc: use ppoll_time64 if available
+>        tools/nolibc: add tolower() and toupper()
+>        tools/nolibc: add _exit()
+>        tools/nolibc: add setpgrp()
+>        tools/nolibc: implement waitpid() in terms of waitid()
+>        Revert "selftests/nolibc: use waitid() over waitpid()"
+>        tools/nolibc: add dprintf() and vdprintf()
+>        tools/nolibc: add getopt()
+>        tools/nolibc: allow different write callbacks in printf
+>        tools/nolibc: allow limiting of printf destination size
+>        tools/nolibc: add snprintf() and friends
+>        selftests/nolibc: use snprintf() for printf tests
+>        selftests/nolibc: rename vfprintf test suite
+>        selftests/nolibc: add test for snprintf() truncation
+>        tools/nolibc: implement width padding in printf()
+>        HACK: selftests/nolibc: demonstrate usage of the kselftest harness
+> 
+>   tools/include/nolibc/Makefile                      |    1 +
+>   tools/include/nolibc/getopt.h                      |  101 ++
+>   tools/include/nolibc/nolibc.h                      |    1 +
+>   tools/include/nolibc/stdint.h                      |    4 +-
+>   tools/include/nolibc/stdio.h                       |  127 +-
+>   tools/include/nolibc/string.h                      |   17 +
+>   tools/include/nolibc/sys.h                         |  105 +-
+>   tools/testing/selftests/Makefile                   |    1 +
+>   tools/testing/selftests/kselftest/.gitignore       |    1 +
+>   tools/testing/selftests/kselftest/Makefile         |    6 +
+>   .../testing/selftests/kselftest/harness-selftest.c |  129 ++
+>   .../selftests/kselftest/harness-selftest.expected  |   62 +
+>   .../selftests/kselftest/harness-selftest.sh        |   14 +
+>   tools/testing/selftests/kselftest_harness.h        |  181 +-
+>   tools/testing/selftests/nolibc/Makefile            |   13 +-
+>   tools/testing/selftests/nolibc/harness-selftest.c  |    1 +
+>   tools/testing/selftests/nolibc/nolibc-test.c       | 1729 +-------------------
+>   tools/testing/selftests/nolibc/run-tests.sh        |    2 +-
+>   18 files changed, 635 insertions(+), 1860 deletions(-)
+> ---
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> change-id: 20250130-nolibc-kselftest-harness-8b2c8cac43bf
+> 
 
-If I understand this correctly then the timer condition is met, an
-irq should be raised with the istatus bit from SYS_CNTV_CTL_EL0 set.
-
-What the guest gets for SYS_CNTV_CTL_EL0 is 1 (only the enable bit
-set). KVM also reads 1 in timer_save_state() via
-read_sysreg_el0(SYS_CNTV_CTL). Is this a HW/FW issue?
-
-These machines have FEAT_ECV (as a test I disabled that in the kernel
-but with the same result).
-
-As a hack I set ARCH_TIMER_CTRL_IT_STAT in timer_save_state() when
-the timer condition is met and set up traps for the register - this
-lets the testcase succeed.
-
-All with the current upstream kernel - but this is not new, I saw
-this a couple of months ago but lost access to the machine before
-I could debug..
-
-Any hints what to do here?
-
-Sebastian
-
+thanks,
+-- Shuah
 
