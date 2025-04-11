@@ -1,247 +1,181 @@
-Return-Path: <linux-kselftest+bounces-30618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B119DA865E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 21:09:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0874A8672E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 22:32:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4655440101
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 19:09:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A9061B63DCA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 20:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5764326980B;
-	Fri, 11 Apr 2025 19:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B075280CE6;
+	Fri, 11 Apr 2025 20:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b="OEKBxOfh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mIXVbHzX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oPx3ze9z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B78202C50;
-	Fri, 11 Apr 2025 19:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD4E238150;
+	Fri, 11 Apr 2025 20:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744398569; cv=none; b=Ki4+YBagt1zfKX7Vv7Y0vRCMNxMHIx75zxmD93+zlCz2Smxv6VURqaLZwdTgs0fnRAw3MWEN+/kDNlIOIXZTy0LpVp1fNoXXxIDcjAeB2ubdtAjXykIruH2eutjwAnB0dwGHZMqnPC9hzOXNMNUS4XIS6kShn8FQFnZ0rcOzclU=
+	t=1744403549; cv=none; b=r83GBejnjeY9tehWkBxM6oLWm7gGcexaXgdPLb5OJOdkHzty9MzzsDs0LFYOblwDsTihvXfHuyu0hXlr04uu/X0d8r56U3CNb+qswkMT4pJa3sQIgSqpsqfVg3haKWJT1fBGxrZSY6kygrv57SYS+ioFjCZzArndqX09VxbsOwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744398569; c=relaxed/simple;
-	bh=YzmETj4gJTJQ6pFl7e7yHSipZeZaUJUdZAH7jETNB5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LxmfbCDWqfiMbiY6zB3Myeonem9XiUVKQexBG6DUgmTLcssXBjtgKqVF78+T9KjXQK7kJj3quX8BZM3M2nucfrevCZ44dv9HdWEw5D57bm7Y7IotNLK7lexR/VKYyy8abv7lLBBLzQTVB99tYbmugnEXlw3sXIThrOz7OcXLJL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com; spf=pass smtp.mailfrom=tyhicks.com; dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b=OEKBxOfh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mIXVbHzX; arc=none smtp.client-ip=202.12.124.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tyhicks.com
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id 1EDB21D403EA;
-	Fri, 11 Apr 2025 15:09:25 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Fri, 11 Apr 2025 15:09:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1744398564; x=1744405764; bh=zT7wTOVk8+
-	9f0EyASrcxR34TnzymyvwavXCScDdNtGQ=; b=OEKBxOfhTA83r+bsxPbWqdpw9U
-	nLcEeCma0le3Lm5xT8bnqIkyKQbWhdGhpj/RZrSB+v9mqkVARJFmp6FuFXjY6U94
-	S2bCbWHfkNLO8diB0yOdfjd9aTg0igtkBP//zylmt2I+oCmyddOqb5RZaux3h6Cj
-	mdnwB92uO827wGKXvcGSqpFHSUcemYF9PUeqhDDtNQSUQDayri0LYZGGRUJ++Ec1
-	6XoEKADvEDp4JPbbo1uHsrYgdm+FjP1UTxVuP48cX9d2aqa/FxLF+csdffEkRcG8
-	I3n8O4dOFAYWxV6DzmqaDf345GVF/DvXNsis4kKo4ZZgoCgqV3qKDvO1W3dg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1744398564; x=1744405764; bh=zT7wTOVk8+9f0EyASrcxR34TnzymyvwavXC
-	ScDdNtGQ=; b=mIXVbHzXibxhFT1+Ei7XAEheOCw/kfIvYM3fAb2lRdQwQtC/gMk
-	wN9Ngq74lvblJ5D7+kCSZD3MDsHvLbwtlvjlbzts1UpAulsd1BgWPXP2k5fAZuCL
-	xDajxm+RXx2kO0HXbBgblPtME78wXQO2B27HCqN4yjy6JTEaVMHUIfNsLgpCq30C
-	EvLlokiT9g+dRU2B1ieRCmcHEXGAUmFNuFRdzn8MjoTReye5m5DM+2pYqP1XtsiS
-	dyM+PyJ1yZGrCSmdOvJows4NHoZd4H3REI0oyJdINDdM3/nyQUSk3pl5KIRyHPhu
-	1A2XWhjEJTIk6vVPuKtcjcgu59Jyug68CpA==
-X-ME-Sender: <xms:4mj5Z-VTurReWdkgQp2drxL418ZMK20OLx6-LBxTLS24MGu1nJD1wg>
-    <xme:4mj5Z6mSx4-fzrQbSpQDdP0CVTtI2N-F1l7tq2lPn5R3tR5o_hdOa4DoTcSwPNZO0
-    lv96kVLt-1Yt-6Gh3A>
-X-ME-Received: <xmr:4mj5Zyag6T7QtQ7ud_4Xuo43cdMKW8sxXfYW3KQ5D5XXq1CnrTtVSa5Txw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddvieduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepvfihlhgvrhcujfhitghkshcuoegtohguvgesthihhhhitghkshdrtg
-    homheqnecuggftrfgrthhtvghrnhepvdehvddttdfhfefhtdfgleehfeeggfdujeeuveek
-    udevkedvgeejtddtfefgleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheptghouggvsehthihhihgtkhhsrdgtohhmpdhnsggprhgtphhtthho
-    peeffedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsggsohhstggrtggthieslh
-    hinhhugidrmhhitghrohhsohhfthdrtghomhdprhgtphhtthhopegtohhrsggvtheslhif
-    nhdrnhgvthdprhgtphhtthhopeguhhhofigvlhhlshesrhgvughhrghtrdgtohhmpdhrtg
-    hpthhtohephhgvrhgsvghrthesghhonhguohhrrdgrphgrnhgrrdhorhhgrdgruhdprhgt
-    phhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepphgruh
-    hlsehprghulhdqmhhoohhrvgdrtghomhdprhgtphhtthhopehjmhhorhhrihhssehnrghm
-    vghirdhorhhgpdhrtghpthhtohepshgvrhhgvgeshhgrlhhlhihnrdgtohhmpdhrtghpth
-    htohepmhgrshgrhhhirhhohieskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:4mj5Z1XARotXXsdFd7dEaTUm9A8IaYAdA0p0Y0WAWNYr1oESSvXi5A>
-    <xmx:4mj5Z4kGjB7oqxU6HrWxsAd-JOrxu6k0sDsNIYtkfjtALqLPK-JHmQ>
-    <xmx:4mj5Z6d6sCR0wqFSsLc7MByuhZIzpz9brk2RODR-vuhuoRs9NhbSTA>
-    <xmx:4mj5Z6HU54PrxoVD6A-oqWG_mDPYxEZ7Ld_pevD2CWooHvOt_L4Fog>
-    <xmx:5Gj5Z6vL0n8qq1K8OGPHcSRlyAV7nIDedTJ9JqFsP3GOgjm9j7yskkfA>
-Feedback-ID: i78e14604:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Apr 2025 15:09:20 -0400 (EDT)
-Date: Fri, 11 Apr 2025 14:09:18 -0500
-From: Tyler Hicks <code@tyhicks.com>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,	Justin Stitt <justinstitt@google.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,	Jan Stancek <jstancek@redhat.com>,
- Neal Gompa <neal@gompa.dev>,	linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,	keyrings@vger.kernel.org,
- linux-crypto@vger.kernel.org,	linux-security-module@vger.kernel.org,
- linux-kbuild@vger.kernel.org,	linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org,	llvm@lists.linux.dev, nkapron@google.com,
- teknoraver@meta.com,	roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
-Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-Message-ID: <Z/lo3iVcJgB2pfQX@redbud>
-References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
- <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+	s=arc-20240116; t=1744403549; c=relaxed/simple;
+	bh=Fa8wh9uhC0URoSLFROayn9gryDAur+8EBrlhQk3luFw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=H76ADTjbqdJSZ5XvuKbr+fZ8RAYjnRAxGyxHwfjZrfM95sjQNk+LvgeUSjZ6PzCpCzEj9oVlJ8qcPZIFdpMFksyhrhBwB2RgFcj1h2qzWetwbtRUq8zREuZKxYV4b9iKslf8UxjDtvZuWcw5VLdXgcoor2rlL5u+LNc1QDdmrh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oPx3ze9z; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4BC81439EA;
+	Fri, 11 Apr 2025 20:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1744403539;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bCzKT+ja9Qq6jhqeVqHO2ah17zHLv4bpeMBebgEjtos=;
+	b=oPx3ze9zCh1zd9PRfVvpKm6NNY5fsFrG+z93cd9OPNCnCduaa1P+BOncqHqxpgYddOh2Rx
+	zpjdUEqZk4PvDyOpeGvTMZOLbiV3EyKYyG123nYkM5wShB6d9H2a8TCrbTQN/XhYAmxlG1
+	V9kKHS1kpAU4lSvacr5hJC2SRYVPqzQjyPXcFWWaGoGsfzNLj2hY/YjtOAEGLFijGO68eZ
+	bkqd1qgSJJ6hcGvTpkou6fDP7rm3NBYSwrZ5lCwRtUtAECVnwtpEAyOWP4tBMXGQLxYUrP
+	1lM5L+DzV7A3ltBe+iAluzS6CPPf2ud27oiPUvOg5R0DYuF0L9x5eI7Ymm+eJQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH RFC bpf-next 0/4] bpf, arm64: support up to 12 arguments
+Date: Fri, 11 Apr 2025 22:32:09 +0200
+Message-Id: <20250411-many_args_arm64-v1-0-0a32fe72339e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250404215527.1563146-2-bboscaccy@linux.microsoft.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAEl8+WcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIyMD3dzEvMr4xKL0YiCRa2aia5GUYmxuYp5qZmlioQTUVVCUmpZZATY
+ xWinIzRkkllSQppuXWlGiFFtbCwADCrVOcgAAAA==
+X-Change-ID: 20250220-many_args_arm64-8bd3747e6948
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+ Xu Kuohai <xukuohai@huaweicloud.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Florent Revest <revest@chromium.org>
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
+ Xu Kuohai <xukuohai@huawei.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddvjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthekredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhorucdlvgeurffhucfhohhunhgurghtihhonhdmuceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhtdeggfdvkedvgfejhfefffejkeetffduudffgeekveduffefkeeuuefgueffveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhdplhhinhhugigsrghsvgdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvkeemfhelgegtmegvtddtmeemfhekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdekmehfleegtgemvgdttdemmehfkeehpdhhvghloheplgduledvrdduieekrddurdduleejngdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedupdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhmvgdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidru
+ ggvvhdprhgtphhtthhopeiguhhkuhhohhgriheshhhurgifvghitghlohhuugdrtghomhdprhgtphhtthhopehjohhlshgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopehmhihkohhlrghlsehfsgdrtghomhdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgtohhquhgvlhhinhdrshhtmhefvdesghhmrghilhdrtghomh
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 2025-04-04 14:54:50, Blaise Boscaccy wrote:
-> +static int hornet_verify_lskel(struct bpf_prog *prog, struct hornet_maps *maps,
-> +			       void *sig, size_t sig_len)
-> +{
-> +	int fd;
-> +	u32 i;
-> +	void *buf;
-> +	void *new;
-> +	size_t buf_sz;
-> +	struct bpf_map *map;
-> +	int err = 0;
-> +	int key = 0;
-> +	union bpf_attr attr = {0};
-> +
-> +	buf = kmalloc_array(prog->len, sizeof(struct bpf_insn), GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +	buf_sz = prog->len * sizeof(struct bpf_insn);
-> +	memcpy(buf, prog->insnsi, buf_sz);
-> +
-> +	for (i = 0; i < maps->used_map_cnt; i++) {
-> +		err = copy_from_bpfptr_offset(&fd, maps->fd_array,
-> +					      maps->used_idx[i] * sizeof(fd),
-> +					      sizeof(fd));
-> +		if (err < 0)
-> +			continue;
-> +		if (fd < 1)
-> +			continue;
-> +
-> +		map = bpf_map_get(fd);
+Hello,
 
-I'm not very familiar with BPF map lifetimes but I'd assume we need to have a
-corresponding bpf_map_put(map) before returning.
+this series is a revival of Xu Kuhoai's work to enable larger arguments
+count for BPF programs on ARM64 ([1]). His initial series received some
+positive feedback, but lacked some specific case handling around
+arguments alignment (see AAPCS64 C.14 rule in section 6.8.2, [2]). There
+as been another attempt from Puranjay Mohan, which was unfortunately
+missing the same thing ([3]).  Since there has been some time between
+those series and this new one, I chose to send it as a new series
+rather than a new revision of the existing series.
 
-> +		if (IS_ERR(map))
-> +			continue;
-> +
-> +		/* don't allow userspace to change map data used for signature verification */
-> +		if (!map->frozen) {
-> +			attr.map_fd = fd;
-> +			err = kern_sys_bpf(BPF_MAP_FREEZE, &attr, sizeof(attr));
-> +			if (err < 0)
-> +				goto out;
-> +		}
-> +
-> +		new = krealloc(buf, buf_sz + map->value_size, GFP_KERNEL);
-> +		if (!new) {
-> +			err = -ENOMEM;
-> +			goto out;
-> +		}
-> +		buf = new;
-> +		new = map->ops->map_lookup_elem(map, &key);
-> +		if (!new) {
-> +			err = -ENOENT;
-> +			goto out;
-> +		}
-> +		memcpy(buf + buf_sz, new, map->value_size);
-> +		buf_sz += map->value_size;
-> +	}
-> +
-> +	err = verify_pkcs7_signature(buf, buf_sz, sig, sig_len,
-> +				     VERIFY_USE_SECONDARY_KEYRING,
-> +				     VERIFYING_EBPF_SIGNATURE,
-> +				     NULL, NULL);
-> +out:
-> +	kfree(buf);
-> +	return err;
-> +}
-> +
-> +static int hornet_check_binary(struct bpf_prog *prog, union bpf_attr *attr,
-> +			       struct hornet_maps *maps)
-> +{
-> +	struct file *file = get_task_exe_file(current);
+To support the increased argument counts and arguments larger than
+registers size (eg: structures), the trampoline does the following:
+- for bpf  programs: arguments are retrieved from both registers and the
+  function stack, and pushed in the trampoline stack as an array of u64
+  to generate the programs context. It is then passed by pointer to the
+  bpf programs
+- when the trampoline is in charge of calling the original function: it
+  restores the registers content, and generates a new stack layout for
+  the additional arguments that do not fit in registers.
 
-We should handle get_task_exe_file() returning NULL. I don't think it is likely
-to happen when passing `current` but kernel_read_file() doesn't protect against
-it and we'll have a NULL pointer dereference when it calls file_inode(NULL).
+This new attempt is based on Xu's series and aims to handle the
+missing alignment concern raised in the reviews discussions. The main
+novelties are then around arguments alignments:
+- the first commit is exposing some new info in the BTF function model
+  passed to the JIT compiler to allow it to deduce the needed alignment
+  when configuring the trampoline stack
+- the second commit is taken from Xu's series, and received the
+  following modifications:
+  - the calc_aux_args computes an expected alignment for each argument
+  - the calc_aux_args computes two different stack space sizes: the one
+    needed to store the bpf programs context, and the original function
+    stacked arguments (which needs alignment). Those stack sizes are in
+    bytes instead of "slots"
+  - when saving/restoring arguments for bpf program or for the original
+    function, make sure to align the load/store accordingly, when
+    relevant
+  - a few typos fixes and some rewording, raised by the review on the
+    original series
+- the last commit introduces some explicit tests that ensure that the
+  needed alignment is enforced by the trampoline
 
-> +	const unsigned long markerlen = sizeof(EBPF_SIG_STRING) - 1;
-> +	void *buf = NULL;
-> +	size_t sz = 0, sig_len, prog_len, buf_sz;
-> +	int err = 0;
-> +	struct module_signature sig;
-> +
-> +	buf_sz = kernel_read_file(file, 0, &buf, INT_MAX, &sz, READING_EBPF);
+I marked the series as RFC because it appears that the new tests trigger
+some failures in CI on x86 and s390, despite the series not touching any
+code related to those architectures. Some very early investigation/gdb
+debugging on the x86 side seems to hint that it could be related to the
+same missing alignment too (based on section 3.2.3 in [4], and so the
+x86 trampoline would need the same alignment handling ?). For s390 it
+looks less clear, as all values captured from the bpf test program are
+set to 0 in the CI output, and I don't have the proper setup yet to
+check the low level details.  I am tempted to isolate those new tests
+(which were actually useful to spot real issues while tuning the ARM64
+trampoline) and add them to the relevant DENYLIST files for x86/s390,
+but I guess this is not the right direction, so I would gladly take a
+second opinion on this.
 
-We are leaking buf in this function. kernel_read_file() allocates the memory
-for us but we never kfree(buf).
+[1] https://lore.kernel.org/all/20230917150752.69612-1-xukuohai@huaweicloud.com/#t
+[2] https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst#id82
+[3] https://lore.kernel.org/bpf/20240705125336.46820-1-puranjay@kernel.org/
+[4] https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
 
-> +	fput(file);
-> +	if (!buf_sz)
-> +		return -1;
-> +
-> +	prog_len = buf_sz;
-> +
-> +	if (prog_len > markerlen &&
-> +	    memcmp(buf + prog_len - markerlen, EBPF_SIG_STRING, markerlen) == 0)
-> +		prog_len -= markerlen;
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Alexis Lothoré (eBPF Foundation) (3):
+      bpf: add struct largest member size in func model
+      bpf/selftests: add tests to validate proper arguments alignment on ARM64
+      bpf/selftests: enable tracing tests for ARM64
 
-Why is the marker optional? Looking at module_sig_check(), which verifies the
-signature on kernel modules, I see that it refuses to proceed if the marker is
-not found. Should we do the same and refuse to operate on any unexpected input?
+Xu Kuohai (1):
+      bpf, arm64: Support up to 12 function arguments
 
-> +
-> +	memcpy(&sig, buf + (prog_len - sizeof(sig)), sizeof(sig));
+ arch/arm64/net/bpf_jit_comp.c                      | 235 ++++++++++++++++-----
+ include/linux/bpf.h                                |   1 +
+ kernel/bpf/btf.c                                   |  25 +++
+ tools/testing/selftests/bpf/DENYLIST.aarch64       |   3 -
+ .../selftests/bpf/prog_tests/tracing_struct.c      |  23 ++
+ tools/testing/selftests/bpf/progs/tracing_struct.c |  10 +-
+ .../selftests/bpf/progs/tracing_struct_many_args.c |  67 ++++++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  50 +++++
+ 8 files changed, 357 insertions(+), 57 deletions(-)
+---
+base-commit: 91e7eb701b4bc389e7ddfd80ef6e82d1a6d2d368
+change-id: 20250220-many_args_arm64-8bd3747e6948
 
-We should make sure that prog_len is larger than sizeof(sig) prior to this
-memcpy(). It is probably not a real issue in practice but it would be good to
-ensure that we can't be tricked to copy and operate on any bytes proceeding
-buf.
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-Tyler
-
-> +	sig_len = be32_to_cpu(sig.sig_len);
-> +	prog_len -= sig_len + sizeof(sig);
-> +
-> +	err = mod_check_sig(&sig, prog->len * sizeof(struct bpf_insn), "ebpf");
-> +	if (err)
-> +		return err;
-> +	return hornet_verify_lskel(prog, maps, buf + prog_len, sig_len);
-> +}
 
