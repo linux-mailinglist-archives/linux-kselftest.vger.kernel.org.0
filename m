@@ -1,182 +1,181 @@
-Return-Path: <linux-kselftest+bounces-30536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30539-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7123DA856F3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 10:47:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8348A85738
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 11:02:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17FE47AE3FB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 08:46:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9883A168844
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 09:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB31296141;
-	Fri, 11 Apr 2025 08:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1542989A9;
+	Fri, 11 Apr 2025 09:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="BQZRS5iT"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FYZOVChL";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oa6ijuqA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FAB29008D
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 08:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714451E9B1C;
+	Fri, 11 Apr 2025 09:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744361232; cv=none; b=XkE56OfMiJoRNjljapV95S4vZUzLXVvc+9wAkVopIc/fAh1PRGIm7IV2+iX1sCW+vjSX/DoTGX0MhTDnOIltsQP0mjuOiYD38IGaZVu5nCuafrPGuICpLbvGLHNPtxmfj7S7T9vEj0HtPslsKqPDNcKqo1IUj3SNGyId1V6ldeM=
+	t=1744362110; cv=none; b=RDsaOai0NY1ysaEQPEkRga1syNCU4VGqkAWdtfzmDR+D4tlpYj4GItfn5Rehk5vmvMJQLdRZvL225vXOyxgxYqvJ0NFDYUzd6AKpU7VwJsq8DErhcxH/ga7YYf42C+AHqdkF4D4jDUKU5+YIzjCjD6l4SqkdLAjhsT4xtxYJW5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744361232; c=relaxed/simple;
-	bh=1kXLBhEZE6OqkXjDzfvvDI9iR/ZxHUV/Xo7u2tQ2L8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HxmBCa9EjqGihePgLiQ1PNKG6DQQm7J65zLPuI9GXnHnPj5m+qNAR5ruP03LvbCwr5tSoW7kwweYUDZ1y9lPL1dE/85mHP87AE6GhwLF4IZOeu4usn5xMgDezhwfnA0V+eiYJxQw3Rh6uZV9KsQZ017TVwysdVMlcSkpruXRjzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=BQZRS5iT; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cebe06e9eso12781545e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 01:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1744361229; x=1744966029; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=av0XyEZV8I7O/09NYxy8b4TdCFcXqsTkZCmrtSFqumI=;
-        b=BQZRS5iT3GBsa7AjVYzOqaU952B7CXiCJxuYy6rfrVgU4YiEkMyWl03xiJMBPfq5rH
-         5kpHkLYcxApWgmcnPNBIPuEebiEAKhNeFTCmmZpMNYjfadMlWWF39ObVScswQ7ZhGYob
-         dxCnbHM2dKNgXHHuuGMhj7090FmID0CrE2hrv+9ZvmOVSIrqmqn2QDnN1WjMNlDF9rLF
-         h7cdrkD+Jc6hKuDpFVgxluNecRub/++ZxTxvdnaqBEADR9R7ggNS0yq7Ovvr+BjtIqJP
-         bimNEW3fa5lZ7Hd/oEFaJKchYqgDqKq7KSSW3U4eh0LrnITaGRxJhWkA7yM0C/ihb3Mg
-         SErQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744361229; x=1744966029;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=av0XyEZV8I7O/09NYxy8b4TdCFcXqsTkZCmrtSFqumI=;
-        b=hsL4USmix9G9tkMkDASml1+33UjJybCnbR48J5oK+YULsWHAOilXraFAXSdjgoUfla
-         tBV875xo5uMTa7m1rG2ExdaFaJApVvGo3TB61tk/D9MFWSME13mi7sOvJ0OplJ2ZPdnX
-         O5H2C5YZ+LXaXHRvOKqd428gUDhDU4UqjgfD1iPYvifJ3x4Sz3OiIArPmU/XFxcLZZI7
-         jNe2Do1TFommgAGm67I0JCU0WEnj+ZweT3U10QndHTtFyx+JBuR9p3KSHzTmXGXDaF1x
-         cBYZzxa66kP0cWMTN2w1yW4upUKZjQG0bgx3E2O83XwP/P0ZBBqd7wvJf9XzKlfAiOAa
-         LFxA==
-X-Forwarded-Encrypted: i=1; AJvYcCXX5KKDJZrAznWFZfwBqxgvjpstWeGQLgMigVXlMYL4V9qAHyJirGJVaMW+AolbEDr9015b+Q2k66VXc8WqmlE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YystqeCbT8N3dZCkxwlmm0zAuwHV4kR/brJ44pwggeNoLkZZHy3
-	nHIOpUEjbp2Iw7oA41JfgTxfOckpO5Us63OSFFOmJRwUYgnSeny59KH4aiFxNF6dioUECPd6hf6
-	B0Zrc3/0lkEWV1wJtx1M1FKX7T3X4l/2qUv/rv7aVkla25rnQoS9Mowswo2c=
-X-Gm-Gg: ASbGncuyF2p+uqljcYm0KTU60/hYxCjj1PNkfCA7tTXgX+GmBvtHJ06/2cMmeq7rg30
-	1how/ta/7dI202rQTlLrFYR5JoE9JMFtaGRiog6nNHjAMNOU0NoVNN+Gk6+VCNTM5ZQ4RFx4wWk
-	7on7Si+uO8Eje/vkRoxvlsMfjD9OprejxLJcc/K6Xl1T1k5uWZXABLVVzEbtoZxA2eOoPE+j0j8
-	d8EthXi3WVwaeIjJfyozfsy8iihQqEaNM4lwTLxA6hKo7yOuofC+i4tJPRgGNMWq07bRlu7xwyo
-	g8QNVv8SwZbB4x4tmQN5MWEDqczSqvjqM1lXV4u/1JIrJrsyY/rpTYwN9Gk4on8jBk6tN7xZsO/
-	C98I=
-X-Google-Smtp-Source: AGHT+IGJGJgfDhxLW8iHULpCr4HAz0c9G33EsC6d7ew/p76jeG1SxX9V0NsZpEV6JXd9okm4Kw08YQ==
-X-Received: by 2002:a05:600c:4f4b:b0:43c:f6c6:578c with SMTP id 5b1f17b1804b1-43f3a959415mr13584425e9.15.1744361228774;
-        Fri, 11 Apr 2025 01:47:08 -0700 (PDT)
-Received: from ?IPV6:2001:67c:2fbc:1:e8be:40be:972d:7ee4? ([2001:67c:2fbc:1:e8be:40be:972d:7ee4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f2066d069sm81137665e9.17.2025.04.11.01.47.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Apr 2025 01:47:08 -0700 (PDT)
-Message-ID: <44edfa99-a3a0-4d86-845b-e13c1dff7f2f@openvpn.net>
-Date: Fri, 11 Apr 2025 10:47:07 +0200
+	s=arc-20240116; t=1744362110; c=relaxed/simple;
+	bh=lRkAuH+ixrkqkfK/VRhE4n+cub7VR8SqmZpgfUJ9N5E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fb9QqIKdvHlUvx92cSdzAmKOdQU/PQW2rW0sxQn9Ip5sWXFWoBcAEO9RoAbySQ1wKYniITvIPccTvRLOoMvzbuQiakRRSAJiazst06IDJsmgZc7V6CToTVfCeVUve2naHKJa1UZ3B2OhuHZRw0XLXQmgzYZ+6vXlPnPeGg6HwJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FYZOVChL; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oa6ijuqA; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1744362105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jAClCqXSRP7WmfE1GfZ8JkrCWutEBW13P1Lg6794lWQ=;
+	b=FYZOVChLOPvYNZB6iq68H7oEmF17K6K5pGdJ3/SaG+4VP7sTHNdE7KXuuN2jLmgIzDYn6H
+	Jy8E3a3FgiVDpYRZHgaTq/S8MahWcWqNhxXXGVwvO75rb28N1eDfgRdwDQlgA5wns1huCR
+	ltlAoD7l7brHUabOMC3idfbXj1WNO51ug5zAOEGYFwGSjHri1eQTj41HkpXsTT8ANFX5wm
+	bVzDsNe2B42rXhCV5MKDHLrrdx/2NFsea2W34MZw9hE5Bysb3xv/nM594uheIWjcZC/aOf
+	ms7RsCdgAkyKaF75j0t/s12JORV85R9P6aNYRJibXZgsD7EfZar4dKeMlQNggA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1744362105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jAClCqXSRP7WmfE1GfZ8JkrCWutEBW13P1Lg6794lWQ=;
+	b=oa6ijuqAvtq0XUEm3UonuAvnttSoycYTzZtMIV6wYf28cBmzJM7wxtMxjuADfaBU/ujmFo
+	IQv55Q01YErBXZCg==
+Subject: [PATCH v3 00/32] kselftest harness and nolibc compatibility
+Date: Fri, 11 Apr 2025 11:00:24 +0200
+Message-Id: <20250411-nolibc-kselftest-harness-v3-0-4d9c0295893f@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v25 01/23] net: introduce OpenVPN Data Channel
- Offload (ovpn)
-To: ALOK TIWARI <alok.a.tiwari@oracle.com>
-Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
- steffen.klassert@secunet.com, antony.antony@secunet.com,
- netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- sd@queasysnail.net, ryazanov.s.a@gmail.com,
- Andrew Lunn <andrew+netdev@lunn.ch>
-References: <20250407-b4-ovpn-v25-0-a04eae86e016@openvpn.net>
- <20250407-b4-ovpn-v25-1-a04eae86e016@openvpn.net>
- <7bffe8a8-56f6-40e1-90cb-d9589fd41bee@oracle.com>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <7bffe8a8-56f6-40e1-90cb-d9589fd41bee@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIACja+GcC/4XOQQrCMBAF0KtI1kaSSWqjK+8hLtJ0YgdLKkkti
+ vTupnUhFNTlH5j3/5MljISJ7VdPFnGgRF3IQa1XzDU2nJFTnTMDAYWQSvDQtVQ5fknY+h5Tzxs
+ bA6bETQXOOOu0qjzL79eInu4zfTzl3FDqu/iYmwY5Xd8oSPUdHSQXXCGardZlVQh/aCnc+tgFu
+ m9qnHpmRAn9B7G1s6WrQUmEBTKtG+CzSIvyBwYZ88ZI8OUWd0ossXEcXy3P3rpWAQAA
+X-Change-ID: 20250130-nolibc-kselftest-harness-8b2c8cac43bf
+To: Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744362103; l=4852;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=lRkAuH+ixrkqkfK/VRhE4n+cub7VR8SqmZpgfUJ9N5E=;
+ b=cBL8/CkLkpBsTrIXqxxaIyUJo4Fbg/iV4BnQ/Kke7DyXJY4xIL3HTnqaknjsxKIYFqaZCa5or
+ 3iBfwmrNlYmCNkbj3DObFH/Fw/OS5KcUcfE4bMqtOu+GDnmZDkWyOpQ
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Hi Alok,
+Nolibc is useful for selftests as the test programs can be very small,
+and compiled with just a kernel crosscompiler, without userspace support.
+Currently nolibc is only usable with kselftest.h, not the more
+convenient to use kselftest_harness.h
+This series provides this compatibility by adding new features to nolibc
+and removing the usage of problematic features from the harness.
 
-On 10/04/2025 19:51, ALOK TIWARI wrote:
-> 
-> 
-> On 08-04-2025 01:16, Antonio Quartulli wrote:
->> Although it wasn't easy to convince the community, `ovpn` implements
->> only a limited number of the data-channel features supported by the
->> userspace program.
->>
->> Each feature that made it to `ovpn` was attentively vetted to
->> avoid carrying too much legacy along with us (and to give a clear cut to
->> old and probalby-not-so-useful features).
->>
-> 
-> typo - probably
-> 
->> Notably, only encryption using AEAD ciphers (specifically
->> ChaCha20Poly1305 and AES-GCM) was implemented. Supporting any other
->> cipher out there was not deemed useful.
-> 
-> 
-> Thanks,
-> Alok
+The first half of the series are changes to the harness, the second one
+are for nolibc. Both parts are very independent and should go through
+different trees.
+The last patch is not meant to be applied and serves as test that
+everything works together correctly.
 
-Thanks for reporting various typ0s.
-Will fix them in the next version.
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v3:
+- Send patches to correct kselftest harness maintainers
+- Move harness selftest to dedicated directory
+- Add harness selftest to MAINTAINERS
+- Integrate harness selftest cleanup with the selftest framework
+- Consistently use "kselftest harness" in commit messages
+- Properly propagate kselftest harness failure
+- Link to v2: https://lore.kernel.org/r/20250407-nolibc-kselftest-harness-v2-0-f8812f76e930@linutronix.de
 
-Regards,
+Changes in v2:
+- Rebase unto v6.15-rc1
+- Rename internal nolibc symbols
+- Handle edge case of waitpid(INT_MIN) == ESRCH
+- Fix arm configurations for final testing patch
+- Clean up global getopt.h variable declarations
+- Add Acks from Willy
+- Link to v1: https://lore.kernel.org/r/20250304-nolibc-kselftest-harness-v1-0-adca7cd231e2@linutronix.de
 
+---
+Thomas Weißschuh (32):
+      selftests: harness: Add kselftest harness selftest
+      selftests: harness: Use C89 comment style
+      selftests: harness: Ignore unused variant argument warning
+      selftests: harness: Mark functions without prototypes static
+      selftests: harness: Remove inline qualifier for wrappers
+      selftests: harness: Remove dependency on libatomic
+      selftests: harness: Implement test timeouts through pidfd
+      selftests: harness: Don't set setup_completed for fixtureless tests
+      selftests: harness: Always provide "self" and "variant"
+      selftests: harness: Move teardown conditional into test metadata
+      selftests: harness: Add teardown callback to test metadata
+      selftests: harness: Stop using setjmp()/longjmp()
+      selftests: harness: Guard includes on nolibc
+      tools/nolibc: handle intmax_t/uintmax_t in printf
+      tools/nolibc: use intmax definitions from compiler
+      tools/nolibc: use pselect6_time64 if available
+      tools/nolibc: use ppoll_time64 if available
+      tools/nolibc: add tolower() and toupper()
+      tools/nolibc: add _exit()
+      tools/nolibc: add setpgrp()
+      tools/nolibc: implement waitpid() in terms of waitid()
+      Revert "selftests/nolibc: use waitid() over waitpid()"
+      tools/nolibc: add dprintf() and vdprintf()
+      tools/nolibc: add getopt()
+      tools/nolibc: allow different write callbacks in printf
+      tools/nolibc: allow limiting of printf destination size
+      tools/nolibc: add snprintf() and friends
+      selftests/nolibc: use snprintf() for printf tests
+      selftests/nolibc: rename vfprintf test suite
+      selftests/nolibc: add test for snprintf() truncation
+      tools/nolibc: implement width padding in printf()
+      HACK: selftests/nolibc: demonstrate usage of the kselftest harness
 
+ MAINTAINERS                                        |    1 +
+ tools/include/nolibc/Makefile                      |    1 +
+ tools/include/nolibc/getopt.h                      |  101 ++
+ tools/include/nolibc/nolibc.h                      |    1 +
+ tools/include/nolibc/stdint.h                      |    4 +-
+ tools/include/nolibc/stdio.h                       |  127 +-
+ tools/include/nolibc/string.h                      |   17 +
+ tools/include/nolibc/sys.h                         |  105 +-
+ tools/testing/selftests/Makefile                   |    1 +
+ tools/testing/selftests/kselftest_harness.h        |  181 +-
+ .../testing/selftests/kselftest_harness/.gitignore |    2 +
+ tools/testing/selftests/kselftest_harness/Makefile |    7 +
+ .../selftests/kselftest_harness/harness-selftest.c |  129 ++
+ .../kselftest_harness/harness-selftest.expected    |   62 +
+ .../kselftest_harness/harness-selftest.sh          |   13 +
+ tools/testing/selftests/nolibc/Makefile            |   13 +-
+ tools/testing/selftests/nolibc/harness-selftest.c  |    1 +
+ tools/testing/selftests/nolibc/nolibc-test.c       | 1729 +-------------------
+ tools/testing/selftests/nolibc/run-tests.sh        |    2 +-
+ 19 files changed, 637 insertions(+), 1860 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250130-nolibc-kselftest-harness-8b2c8cac43bf
+
+Best regards,
 -- 
-Antonio Quartulli
-OpenVPN Inc.
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
