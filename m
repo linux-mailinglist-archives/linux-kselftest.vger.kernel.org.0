@@ -1,152 +1,127 @@
-Return-Path: <linux-kselftest+bounces-30616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30617-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C11A7A864AB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 19:27:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4716A8651E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 19:57:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A38C88A4C99
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 17:22:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 701F08A71F5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 17:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3D4230BEF;
-	Fri, 11 Apr 2025 17:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E666258CDD;
+	Fri, 11 Apr 2025 17:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fKnj3fFD"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="XIe8zYUP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196E5230BF2
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 17:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F72239097
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 17:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744392174; cv=none; b=AF8KvUNOeOvfkeBrMS5KJ56XNBCp7ZAkfrXauq5SLTQGBiYJk8Eg2gZhIzHgxeaK/2b0fOEYvuco4euTJwtHMPSDhKPjG0exz4CZ7DRA+z6iM1fL9lTFMOuKa8M9DhJQQ8kKayZsy3YL3TclrOk0DYAXBeHLzIKI9R4zrW0uBi8=
+	t=1744394093; cv=none; b=U79SSH49zeaGFU46CNrw0vWXAeg069zw/ao2TydMQMNWEznHchTFcDmYBTM5WhU4emqxt4zaGKYsqhEq7sp4gjpBm8+eKQLdo2VYzYuqz2E5TPdfmXjr7AS/OUOqVJeRmEj/K6c5ELnvxEaEcaYXVZuFdJm0pG9WglV5nujyE5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744392174; c=relaxed/simple;
-	bh=Oc4xdSup33Ao3nyy/kmkHgKqOdaTNT3JHZQu3SVOEbE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ijREjq6+EV5l+SLdMkap+OrmNiYJF+2BGAb82JPqiM+sGIDtg2HKDZV4e98fPAyI2JmtYNodKHrlUOlSGe4uZJ0Uu2uUIHfIEFW6CjI6Ye1/qzu7Fwr89qi58BNcbbvhe6CUJydaDzaMgY1r/FkI17AuVwjfPAjZVL96tPr+yRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fKnj3fFD; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4394a823036so22758275e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 10:22:51 -0700 (PDT)
+	s=arc-20240116; t=1744394093; c=relaxed/simple;
+	bh=ucba/TyRjphp5QB5NmFsNbDWb/WFdcnndSRrwoEMpJA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=StrHfNj5RWvvGO+8/JcmL+gxT+lfTeTL51kc+dLikOJzWj9cEvdwtIYmXTVxWaydRFlMr6/O6EkPelhlq4LfvD/Zlw2IHfLiAop8eY3a7eP05QFevsRVO/mtDurUDxLnTthyw8M7uYxyvQ0ScTrbgQbo1S9dEU8gNWyYmQ5TA70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=XIe8zYUP; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac2bdea5a38so391314466b.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 10:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1744392170; x=1744996970; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HU2gsnS9ySnckXz9WXV/Vzi+SMdE2T2Oy6WWzpMls7c=;
-        b=fKnj3fFDeUHlv56PJnuWYqqLvnxftV7k554Ypp4k0281DepnW1n/zw/r/GabY7GX3L
-         ZpAYhT6ofNGF2xKgZjVuz1k0j3accS9FOmmacpV1fnxI405zIgep2XzzgHEAxub4kABD
-         lIRa+UaRBX8sp1YpP+zUuuFCpZyfmaLBkrCnpptIqr2kim3z/sL5DL8bnJ5zd760twnO
-         RNnSgyoTFmIiyeyi5I5ZzKkA4CnozkSBCetaLeI66mmN8PKfGBIWfLm0gVnEuNVNFPKR
-         g5HzegKHXP/9PxUKMsH1SiYNU/IcObEmTfHty4OoDbEcgpFP+mdVU4YlfSlNo0OwvpFI
-         WWCg==
+        d=cloudflare.com; s=google09082023; t=1744394089; x=1744998889; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZElioqvOJMRGLrrbRjtOKF/8Aggf8tT1T8UOQr1p6A=;
+        b=XIe8zYUPdcuX4Vl9xiQHoFR6q7oqLvwv7yFoLGQk/648ktFbwV4erdH8vnG4UNV7W/
+         4gqjXnDyTNzYf7Ro1TApfEldZpVvs2o4d5tZRSfNwQZZGsfeSL3BlxAtULHN1M7aKQgi
+         XXFwNGzogrlL+z+9HIxZiUIR/mQLyNwX3Anda/UWqZiSq1c5axT8sqvWU3EutLven15V
+         Jj8OWgsfRDeufCHi0tqPqmDdZifzNWFXR2NNmESArXmCMW25jJJlFQucVAgGt52nsfLc
+         G1lnt9LX1ARITZ1pqid+Mb/R8j46HIDBhKJkvRaFHjCILoxzPbQrs4h+2d/2HnkwD9hH
+         P7PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744392170; x=1744996970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HU2gsnS9ySnckXz9WXV/Vzi+SMdE2T2Oy6WWzpMls7c=;
-        b=scMuyw5uoLiY3LEasWxYyCzGITforpKiMzX4x3O7SI7buO97YdVdA+YxofRmIGRz4h
-         IaNNhGcq/udhXFQYJlABTvdD/qndqpAL6+1jSDXpseE5/Kbb8c42OFqOn2z5tKYWwikW
-         kduTQRpllpUjaTZEzEKk8WwRwHoQBGi78E27/0zWmwn7OODC0tlE9AglI11/dpfORsiW
-         rjQg2blXUldOvsBLgGWTI2mcgTavsIJomaTtxQ7/Bzjp9MibkGqj+jSvtH+K7DAlClqx
-         z6t23s1O1O72mVgTefYPyRVgMcdwURURBK/Aa3bpwGstBUVJBXoG65b66FqYED/bs0zh
-         SnkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWTPhYAYYT+7R3d00pFCYPIOSjFCHUNXW8MwdnfPMYK2hPg41/25HKTilcHOn1hNKQQFI0OEKE2sl7fGJ2G2Us=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWAleK2WXcSniEQ0cIBoTregzqbh49djalX2aDAtsPTKbZuDi0
-	KDCdqs2c2B22CbVT2MbmNvAiikQi1sR/MEmiSamd7ep8/mLeJplLim8m5zh5uho=
-X-Gm-Gg: ASbGncv5t7tNPuFzQ3dUjUvwFZOrTUzaafi807okvlY5ig7UYHF32WcYFhLJbTH8IEo
-	OrSYWlz+94wtSU6K7Luo+uzJqC1fwDPdTKkLJ9Wh3gX+OwOLRJ2Ir0S1fdazG6a04uwBhOOVXQS
-	nGu/UdRFhWNf89ujXR4MJC1zBdbi8082VOnOuAlJuMA6C2/ABbbWKXecxxdDiqGURZRf5XAiUEZ
-	+xKhfppX6NUxUymej/dQ1EEXjvoHBvd+0qC3s0+rhrXwYbhY1YtTUpvQ8Eiy0wf5riIy2Htgf4n
-	xTmHAQBlzKFmADnAufAd2xRrFbzMfhCJOWf0loguSoI=
-X-Google-Smtp-Source: AGHT+IH5Ui2XolRBPBso1SUsosYlFQ732rqt/TsDuV+AdqLa5keAYbHPUYE8a/OQyeY9sUFkldpWiA==
-X-Received: by 2002:a05:600c:5008:b0:43c:f87c:24d3 with SMTP id 5b1f17b1804b1-43f3a9a68c9mr30732585e9.20.1744392170167;
-        Fri, 11 Apr 2025 10:22:50 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f20626c0csm96273275e9.14.2025.04.11.10.22.49
+        d=1e100.net; s=20230601; t=1744394089; x=1744998889;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZElioqvOJMRGLrrbRjtOKF/8Aggf8tT1T8UOQr1p6A=;
+        b=LB+0ARGbmzSdgC5hFFODL2wvJIXAMI+U+8itzzn292wo3dys9hNTwBiFHZsv8uhzRC
+         odtewRO6Gk9dbtYvVSOw0NG7tBqzA4TbsIxzlxW0hTkXNPiBrpLqNZyxkjRLCUdDN6EE
+         Y1680XPQYqwNO+DnaxsOMdRnOAQk2Zxbi4QRm45bLbeS23cZmMcP0NygEuZvgAfk/OF+
+         usmK/kdGV02J3LokMjSVMjKh6bxu1B/WABxgtPWuEpot+DVoW/Rw+eiwOjoL/IqNUykl
+         Te7XAicHLPxRKUwQbEAu2OKCIacBmc9PfKPkIhMwqg/oYBm+mjIBHHJS4f8kh7vmQqMd
+         HFGw==
+X-Forwarded-Encrypted: i=1; AJvYcCX0NbjyHwsCYhotq+TPV5sadbdFx72C1xtoyO19cKgdkcvsfUBG9vwWebKaaT7E5GdsTagpSmCzN2uk4W+i1tU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzIPkMKHslwVKrMLGYvqNaKsYdTWka3nGJhBvFvRrlYkOVMWHf
+	v7DXy8khfZPaViGSdSe4hkQkcVIsx7Cq3uxo4V0OPoXeMBGkz1E2vH0QIH0SbgU=
+X-Gm-Gg: ASbGncs0k7B0/qG7vhxBXzRIflIM0RwD4MaPWe6O55HWZyvi1q3/q6l/lqDdvRvFFEb
+	6X8BuQYbnfDuyLi8bC8aWNbjgxLP/BgmWAgy6ZceEQCz1uxXGlnVjVvnOIkpD+se97vd88mfMZx
+	BZnvjjfoIctbQgOmjan4bVjIPiTh5dlVXlWWzaNgJWO+hDB67yxZ2DZWt0MF4DcVGlD0N7EkLM+
+	iulCKMHxDA+iD/b3zvj6ys/4KpUrjHUA1geGnSfp5dVWgIE22P/9BAm6ZHtVM4PgtyJmLDL5qFY
+	mwCmuy8lOqBs1woA+o3LFd3uG3I1U2d2
+X-Google-Smtp-Source: AGHT+IHlsd1OjqlMWlAQPwwAuOKfCl8uk/pGPlrihEPFE8d9StcXjSTkGzgHNBrELNxLTW7C3iUInw==
+X-Received: by 2002:a17:907:6d0b:b0:ac2:cae8:e153 with SMTP id a640c23a62f3a-acad3445f7emr328570666b.4.1744394089440;
+        Fri, 11 Apr 2025 10:54:49 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:506a:2387::38a:3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1ce70ebsm479714666b.178.2025.04.11.10.54.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 10:22:49 -0700 (PDT)
-Date: Fri, 11 Apr 2025 19:22:48 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] selftests: memcg: Increase error tolerance of
- child memory.current check in test_memcg_protection()
-Message-ID: <pcxsack4hwio6ydm6r3e36bkwt6fg5i7vvarqs3fvuslswealj@bk2xi55vrdsn>
-References: <20250407162316.1434714-1-longman@redhat.com>
- <20250407162316.1434714-3-longman@redhat.com>
+        Fri, 11 Apr 2025 10:54:48 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jiayuan Chen <mrpre@163.com>, Michal Luczaj <mhal@rbox.co>
+Cc: Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
+ <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,  Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Martin KaFai
+ Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
+ Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
+ Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 5/9] selftests/bpf: Add selftest for
+ sockmap/hashmap redirection
+In-Reply-To: <fnsy7wey4vaewoyur5363w2q2nb7dvljmaroijflgq2hfqbumo@gqdged7tly47>
+	(Jiayuan Chen's message of "Fri, 11 Apr 2025 21:09:53 +0800")
+References: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
+	<20250411-selftests-sockmap-redir-v2-5-5f9b018d6704@rbox.co>
+	<fnsy7wey4vaewoyur5363w2q2nb7dvljmaroijflgq2hfqbumo@gqdged7tly47>
+Date: Fri, 11 Apr 2025 19:54:47 +0200
+Message-ID: <87a58mh9co.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="flingjnfq7xpj56j"
-Content-Disposition: inline
-In-Reply-To: <20250407162316.1434714-3-longman@redhat.com>
+Content-Type: text/plain
 
+On Fri, Apr 11, 2025 at 09:09 PM +08, Jiayuan Chen wrote:
+> On Fri, Apr 11, 2025 at 01:32:41PM +0200, Michal Luczaj wrote:
+>> Test redirection logic. All supported and unsupported redirect combinations
+>> are tested for success and failure respectively.
+>> 
+>> BPF_MAP_TYPE_SOCKMAP
+>> BPF_MAP_TYPE_SOCKHASH
+>> 	x
+>> sk_msg-to-egress
+>> sk_msg-to-ingress
+>> sk_skb-to-egress
+>> sk_skb-to-ingress
+>
+> Could we also add test cases for SK_PASS (and even SK_DROP)?
+> Previously, we encountered deadlocks and incorrect sequence issues when
+> the program returned SK_PASS, so explicit testing for these cases would
+> be helpful.
+>
+> If implemented, this test would fully exercise all code paths and
+> demonstrate a complete example that covers every aspect of
+> sockmap's packet steering and connection management capabilities.
 
---flingjnfq7xpj56j
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 2/2] selftests: memcg: Increase error tolerance of
- child memory.current check in test_memcg_protection()
-MIME-Version: 1.0
+This could easily be a follow up in my mind.
 
-On Mon, Apr 07, 2025 at 12:23:16PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
->   Child   Actual usage    Expected usage    %err
->   -----   ------------    --------------    ----
->     1       16990208         22020096      -12.9%
->     1       17252352         22020096      -12.1%
->     0       37699584         30408704      +10.7%
->     1       14368768         22020096      -21.0%
->     1       16871424         22020096      -13.2%
->=20
-> The current 10% error tolerenace might be right at the time
-> test_memcontrol.c was first introduced in v4.18 kernel, but memory
-> reclaim have certainly evolved quite a bit since then which may result
-> in a bit more run-to-run variation than previously expected.
-
-I like Roman's suggestion of nr_cpus dependence but I assume your
-variations were still on the same system, weren't they?
-Is it fair to say that reclaim is chaotic [1]? I wonder what may cause
-variations between separate runs of the test.
-
-Would it help to `echo 3 >drop_caches` before each run to have more
-stable initial conditions? (Not sure if it's OK in selftests.)
-
-<del>Or sleep 0.5s to settle rstat flushing?</del> No, page_counter's
-don't suffer that but stock MEMCG_CHARGE_BATCH in percpu stocks.
-So maybe drain the stock so that counters are precise after the test?
-(Either by executing a dummy memcg on each CPU or via some debugging
-API.)
-
-Michal
-
-[1] https://en.wikipedia.org/wiki/Chaos_theory#Chaotic_dynamics
-
---flingjnfq7xpj56j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTd6mfF2PbEZnpdoAkt3Wney77BSQUCZ/lP5gAKCRAt3Wney77B
-STuPAP9qtXHRJuw6fswvLPcE6FAyBPPV35k6ECqWkmzYm2zgJgD/Q60WvtRy+kc1
-RSJih7a7z5QbobgKcZhdynqI/a5/iQI=
-=SyIA
------END PGP SIGNATURE-----
-
---flingjnfq7xpj56j--
+[...]
 
