@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-30601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A04FA85E5A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 15:13:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F14EA85EBF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 15:24:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AED2D189B8EB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 13:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAB568C186E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 13:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22811428E7;
-	Fri, 11 Apr 2025 13:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA1317E01B;
+	Fri, 11 Apr 2025 13:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="EfolVmcg"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RiUmjcty"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E946DDC3;
-	Fri, 11 Apr 2025 13:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F03215DBC1;
+	Fri, 11 Apr 2025 13:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744377086; cv=none; b=P9XnoYoXhoO7K3enuglSzlfVUb7Mb3ujjLT82F6dGxcV8mZE/hKFEvlRqjWZqjym6SFaxscMJSPl4cCv034azGjoPsafCO7HgSeafW0NE29Y8q7ERgjY3WtLkZI8xUXN4VYgz54mA9I51kJ9cwIqvMMIIeaGjYJW4p0CeU4cw5I=
+	t=1744377553; cv=none; b=UuVIlqdXDE9ShsITtV5FcvAslASZAX5NLwqM/Tq1a3dVruKVpTTlNQ0Hnv52pJ6y+v523HOdhuNYxnICZkt9GiGHG7dB/HMb5ZhHjTUZJi17mxzpciFzPV8/9siyAKavUFAZcQVZsf/sD6DN0E+whI3r+5WJKTZDQMGEXmve66Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744377086; c=relaxed/simple;
-	bh=zZKgJMja8KLTG4PHtuZartZzVEbQ7KWEvwiBwjx0mS0=;
+	s=arc-20240116; t=1744377553; c=relaxed/simple;
+	bh=Jpspw+qEbxf7nYN9HgrrPnismcZpoPuwDOIPoyTbDPw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=czBtGjtQOBLOWmJrx34ceTbGSP7hHx56vQ5sfCaynHm70+fxTtlVIt/1HJLp+dAThv9YxMmdPRLDKB8j1h0Bmzf2c5mPBfXU/vbtYREEm6KRLRpe8Xd0YCx1ODOqo728V2zRNl7gKK6DqpgtCXEeCvaEpYc2hoJzYKMExCRKd1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=EfolVmcg; arc=none smtp.client-ip=117.135.210.4
+	 Content-Type:Content-Disposition:In-Reply-To; b=cG7PiBlh9Kh9lBT0yWqnyixPhybNbUxkSTT/8Nq0wBAeaj2ausw7UgPvlP8jFAh/+hQwh0Wf3l2KQ+2x/M1zcs/8BvCamH9x3rAu0QQZlofaDCL1grSnv8zUHj5t/GeSAqHFAbVnOUzLUusNRsf9UG/5sK6maEtI8O2Wlg0VIMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RiUmjcty; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
 	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=5vXVVyNwcqy/Pc/YHwZ4BPhYrvVFa7Iehsyl43qYaIo=;
-	b=EfolVmcg2OlRLDOVa6SeaC97kpX41Jwr64ilrWSgtBTnB5ibZdljN7D7PF5sQf
-	n3q4IYCANQL3EblNGTKQaX50Y2axQOQBa1IkPZQ7YoXDVyimVaum6lYwWfuSCFPP
-	b5a9AbsfYaxWN74PDztJWuYxv//ySfcZBYyVku5KAPde0=
+	Content-Type; bh=jvaAbPTzfwBYc/LDeGeNjiDhkvdNikFlwkZZ+EvhVMI=;
+	b=RiUmjctyZKA1zyCPE8pa0F6N589S+AEkJSjx+G2y0MNL84pRR73YWakZtc1ZyI
+	1XIgcbpU5o1v35GYCszjfNk3FXBUCsQMZCYCNMsC60upwKS4G0Ymyb7XtYsSwDpn
+	P42UBJGvBFN8c4GlpCe26qluzMu90ZdJDVb6GFdk2qTbM=
 Received: from iZj6c3ewsy61ybpk7hrb16Z (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wCXb3yhFPlnG0PsFg--.20613S2;
-	Fri, 11 Apr 2025 21:09:55 +0800 (CST)
-Date: Fri, 11 Apr 2025 21:09:53 +0800
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wCH1OeAFvln9_t4Fw--.39575S2;
+	Fri, 11 Apr 2025 21:17:54 +0800 (CST)
+Date: Fri, 11 Apr 2025 21:17:52 +0800
 From: Jiayuan Chen <mrpre@163.com>
 To: Michal Luczaj <mhal@rbox.co>
 Cc: Andrii Nakryiko <andrii@kernel.org>, 
@@ -52,7 +52,7 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>
 Subject: Re: [PATCH bpf-next v2 5/9] selftests/bpf: Add selftest for
  sockmap/hashmap redirection
-Message-ID: <fnsy7wey4vaewoyur5363w2q2nb7dvljmaroijflgq2hfqbumo@gqdged7tly47>
+Message-ID: <ckmjezlvp565ndplzmjmezvh6yc5enlxjgzcyd6uhn7trbuyxn@x56gl73w3mfm>
 References: <20250411-selftests-sockmap-redir-v2-0-5f9b018d6704@rbox.co>
  <20250411-selftests-sockmap-redir-v2-5-5f9b018d6704@rbox.co>
 Precedence: bulk
@@ -65,12 +65,12 @@ Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20250411-selftests-sockmap-redir-v2-5-5f9b018d6704@rbox.co>
-X-CM-TRANSID:_____wCXb3yhFPlnG0PsFg--.20613S2
-X-Coremail-Antispam: 1Uf129KBjvAXoW3tw48Xw1xKFyxuw1DXr4ruFg_yoW8Xr1UXo
-	Z3GFnakr4fGrnrArWrW3s7Zw4F9a18Jay5Ja98XrW5XFnFvay5ur4DGws7XFyxur4SqF4D
-	JayIvr48Ga1Dt3yfn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUFID7DUUUU
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwwsp2f5DjHk6AAAsl
+X-CM-TRANSID:_____wCH1OeAFvln9_t4Fw--.39575S2
+X-Coremail-Antispam: 1Uf129KBjvAXoW3tw48Xw1xKFyxuw1DXr4ruFg_yoW8Gr1xCo
+	Z3KFnayr4fGrnrArWrW34xZw4fua18Jay5Ja9xXr45XFnFvay5ur4kGw4xXFyxur4Sqa1D
+	JayIqr48Ga1Dtw4fn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUFeHqUUUUU
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiOhUsp2f5E1V83AAAsc
 
 On Fri, Apr 11, 2025 at 01:32:41PM +0200, Michal Luczaj wrote:
 > Test redirection logic. All supported and unsupported redirect combinations
@@ -83,15 +83,6 @@ On Fri, Apr 11, 2025 at 01:32:41PM +0200, Michal Luczaj wrote:
 > sk_msg-to-ingress
 > sk_skb-to-egress
 > sk_skb-to-ingress
-
-Could we also add test cases for SK_PASS (and even SK_DROP)?
-Previously, we encountered deadlocks and incorrect sequence issues when
-the program returned SK_PASS, so explicit testing for these cases would
-be helpful.
-
-If implemented, this test would fully exercise all code paths and
-demonstrate a complete example that covers every aspect of
-sockmap's packet steering and connection management capabilities.
 > 	x
 > AF_INET, SOCK_STREAM
 > AF_INET6, SOCK_STREAM
@@ -530,54 +521,16 @@ sockmap's packet steering and connection management capabilities.
 > +	for (r = redirs; r < redirs + ARRAY_SIZE(redirs); r++) {
 > +		enum bpf_attach_type attach_type;
 > +		struct test_sockmap_listen *skel;
-> +		struct maps maps;
-> +		int prog_fd;
-> +
-> +		skel = test_sockmap_listen__open_and_load();
-> +		if (!skel) {
-> +			FAIL("open_and_load");
-> +			return;
-> +		}
-> +
-> +		switch (type) {
-> +		case BPF_MAP_TYPE_SOCKMAP:
-> +			skel->bss->test_sockmap = true;
-> +			maps.out = bpf_map__fd(skel->maps.sock_map);
-> +			break;
-> +		case BPF_MAP_TYPE_SOCKHASH:
-> +			skel->bss->test_sockmap = false;
-> +			maps.out = bpf_map__fd(skel->maps.sock_hash);
-> +			break;
-> +		default:
-> +			FAIL("Unsupported bpf_map_type");
-> +			return;
-> +		}
-> +
-> +		maps.in = bpf_map__fd(skel->maps.nop_map);
-> +		maps.verd = bpf_map__fd(skel->maps.verdict_map);
-> +		get_redir_params(r, skel, &prog_fd, &attach_type,
-> +				 &skel->bss->test_ingress);
-> +
-> +		if (xbpf_prog_attach(prog_fd, maps.in, attach_type, 0))
-> +			return;
-> +
-> +		test_redir(type, r, &maps);
-> +
-> +		if (xbpf_prog_detach2(prog_fd, maps.in, attach_type))
-> +			return;
-> +
-> +		test_sockmap_listen__destroy(skel);
-> +	}
-> +}
-> +
-> +void serial_test_sockmap_redir(void)
-> +{
-> +	test_map(BPF_MAP_TYPE_SOCKMAP);
-> +	test_map(BPF_MAP_TYPE_SOCKHASH);
-> +}
-> 
-> -- 
-> 2.49.0
-> 
+
+Could we create a new BPF program file, such as test_sockmap_redir.c,
+instead of reusing existing ones? This file would be specifically
+dedicated to serving the sockmap_redir.c functionality.
+
+I understand there are already some duplicate programs, but isn’t this
+exactly the goal of our current work—to make the test examples more
+comprehensive and cleaner?
+
+
+Thanks.
 
 
