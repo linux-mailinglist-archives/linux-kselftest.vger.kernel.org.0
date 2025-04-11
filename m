@@ -1,179 +1,92 @@
-Return-Path: <linux-kselftest+bounces-30625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD0C9A867F2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 23:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A39A86814
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 23:19:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9445A466348
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 21:13:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 517E11747A7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 21:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EBE29614A;
-	Fri, 11 Apr 2025 21:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3418C2900B5;
+	Fri, 11 Apr 2025 21:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E1nxHaVh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUSYJRts"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60BA293B4F
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 21:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046E427E1B0;
+	Fri, 11 Apr 2025 21:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744405987; cv=none; b=HCJtxD9N3NxBwjLzPQ3KHqkU3LzGpBewHG/fyLoIH1Ti+4PAUl47ybFldWSXn2aorFq3Q9KA7l9pTrrs2pq7M5DIjuXSqM1mEP7F6vT7VhVQv7+QAlh1R/Ib31RPTgBTcMvNyQRG9sWh4wZVb9F+dKur9ohW7JcWDI5o5tEh1yI=
+	t=1744406329; cv=none; b=huMp5JmJIUZshtR0P1mh5g4348rUyUOJJWvs9lrIou9dN3PsdaxBzj+9L5SjAb/ll6K3MOOw7BE5tnR4L5mHRm2Ls06FP2H1WLd6Eco5nGnKa52atsNAMgnbdbrRZMzCTEbWY+A8G3hTwzyhwKTQ3wNGp+lWDaKdCh1cBueSQII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744405987; c=relaxed/simple;
-	bh=fYOEeiYfqi1o9P3a08i57YyitXfcls9ovxTN53IQBvY=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ns5nR+nWj3QHHqi+M0OQBjZ24h5n4xzZc3Ry2ceuP7gHObYhwgAKoEO1UIJhhEFRwDXnp58rT5jV14QwZNHqQ34Tbh3Yhz5QnzzR/exEqgwH126Vgp8r3cYnpyTU/ENy2sEukZRzrHjLB6nbgr1U+WuAazzPt6p1xuPuVkxAg1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E1nxHaVh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744405985;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J2KJ3vbhhei7UlaB6YBbaCcfWrpCjfMnuhrykVfj6hA=;
-	b=E1nxHaVhrWILeDrNRjc1fQyZlEV3ykA+i5cpwJP4IVm7bPg2cbVTqq/osVVc2UvdWFodM8
-	p98rb+ihYO8+V0qpPTWPtCZa9ymyUfIlVyaLcNPHz4TybWoEFlaQxOQIyiLq7oNpJWdKFX
-	W3vpbCKXIEfxjT0aG7sAIKpAZ5YmkuQ=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-655-AxG7RkXtPCaoIE87dkAWDA-1; Fri, 11 Apr 2025 17:13:03 -0400
-X-MC-Unique: AxG7RkXtPCaoIE87dkAWDA-1
-X-Mimecast-MFC-AGG-ID: AxG7RkXtPCaoIE87dkAWDA_1744405983
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c760637fe5so460539685a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 14:13:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744405982; x=1745010782;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J2KJ3vbhhei7UlaB6YBbaCcfWrpCjfMnuhrykVfj6hA=;
-        b=aiZV/ybnAC4r6/biUI5jHmpeY5tHEEkn1AHtc49uW5mVyPVpfmGs/kFtcaRlsnhlvo
-         qVq5oWs9Jkh01s9wAeVPzET1mgf01lr+8YG87hRAwoUU8XpIviD+Ej4RMmHwxQ/DtA9m
-         BEcQMa/tGPKTn2nDriFM1YmDYnBB96geYX51/LLgPLzAFjgvdXWYiOaezVLnXuy01ZfY
-         I6/zpvjaTkC8x39rdd3iMMsIBDQ/gwgDze6aIbYQE8K5Ul0ZwYW7D5LWWEbqjEMjmMyl
-         SBNwbnBnH0N/t5Y5SOLG7AV4cDt+r3PixepZ/3f6s7lvplW8Dp8/q0Q5j6FIQrFCG1jP
-         zGqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXQSmDE8xATSZPX6fJCicsxx4lYd+NFW5A+SVsQ+f4KZSHs4+msMG+3toE9U0ZwnbTyoHBObmHi3RDiUVOtbdQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtGRALa7MtNC0vqsq+W28f4Sj0bLXMGw4Q/UNPkWm0hdrWg1BQ
-	T8uVD5tt2Pk+P8Lc+b+YWWH7db0GRODe9BAyrPP3G0St1z9gvQ+tNiIx0QMSFo1zgYEkzH3OqTx
-	j2FDcgmLFOJh16QrHDvo7cI/07IDoteF40pLWbssO0cHCIKx+97pP4FgIRe8yimV8j+oGhry/YA
-	==
-X-Gm-Gg: ASbGncvk8z4e1FHXMooBxCY0rw/sgmELT+lbfIiJxkBE5tSIZSvF8owyKdl058nIhgw
-	MfqfDS7QSrAF+hOrCBqqxVLhPusfG8eYtJUkpaWgR12ng0KetD2rTpDwKCkXGcH/JRdxH+W+G0e
-	OmS7oDRNK7l7n27eT4OIVa0P9LBNgpEqqUo5KqbYzNFhzOlAmPC/2LzCM/PGUqtDgBCNyd09CYC
-	Nhi9FGv1HdCFDhSEar7pMUs2apR4weeOOUSTqmw8/TamJLFHkxO4P+rdnhdsFEpQ/pOu02D/eeW
-	3hu89m9/i8IPdW12IS5Uo8LeE3VVOmxGZU0Nq6eYcbozy6TO1zMMaTLS4Q==
-X-Received: by 2002:a05:620a:bce:b0:7c5:6ba5:dd65 with SMTP id af79cd13be357-7c7af20dfccmr702417185a.55.1744405982626;
-        Fri, 11 Apr 2025 14:13:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEleT+JnQIZjjY1BnHjF+zn74YxSy7C0p+IDn0drbShDJE5Rd9yuVCeBx0//zZEmHI9Zxuqfw==
-X-Received: by 2002:a05:620a:bce:b0:7c5:6ba5:dd65 with SMTP id af79cd13be357-7c7af20dfccmr702413785a.55.1744405982228;
-        Fri, 11 Apr 2025 14:13:02 -0700 (PDT)
-Received: from ?IPV6:2601:188:c100:5710:315f:57b3:b997:5fca? ([2601:188:c100:5710:315f:57b3:b997:5fca])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a89f9639sm313660585a.78.2025.04.11.14.13.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Apr 2025 14:13:01 -0700 (PDT)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <0158e459-c205-4a88-9711-3dea2bca71ae@redhat.com>
-Date: Fri, 11 Apr 2025 17:13:00 -0400
+	s=arc-20240116; t=1744406329; c=relaxed/simple;
+	bh=0+8SOdZHpARtPKiOteQjtALkLBWbvVG2+mmUnczmE6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d6OGRHvAmDcEZTqfbsVk5u6UEdu5/88SBoS201eV1hiqJdBng6PofYkMAo+g2Ql1a8x7z/H8HTxOYvvbnJ9a59f/ZJ+x5esHa9QwiygKJICilEQBpIuChUUMDlHYCmX0Un9t+c5RQR34l/6Wgwx7wcaumeNV+/99UCWrLKYT2V0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUSYJRts; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D44C4CEE2;
+	Fri, 11 Apr 2025 21:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744406328;
+	bh=0+8SOdZHpARtPKiOteQjtALkLBWbvVG2+mmUnczmE6k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=eUSYJRtsz0gqNFUtQzmCGPrW/hjcU/fV1v3EUKrVUCHeUHQCF/QhOeSNGADnYl+aC
+	 PdCzw4h+2c365BC1VVrAw2Yg6TL1HTZ7RX1k0NYkuIiHho3+wwCRrAXYU13v985kNe
+	 RAS/tmcJ60mcCO/54quTUZQckfa/7TqfVu+sb10hwxmHQYY3+aCVANq4exr2vvon/0
+	 JXgFRdC9/3cEs7Ro7mHv48ny5inlbk1y4xWKH1sJZ0xt4zLxUXpom4OdOwOR7/5QNI
+	 f226gcwTSS68TrnwJAfyhhpTdjeimOAT5vu+ycF7BstGAXE0OJePO+I8jRsQwr8Fcn
+	 Jlby+osCVN8kA==
+Date: Fri, 11 Apr 2025 14:18:47 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman
+ <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+ steffen.klassert@secunet.com, antony.antony@secunet.com
+Subject: Re: [PATCH net-next v25 01/23] net: introduce OpenVPN Data Channel
+ Offload (ovpn)
+Message-ID: <20250411141847.6dba6987@kernel.org>
+In-Reply-To: <Z_keORW4OWc8i5Vz@krikkit>
+References: <20250407-b4-ovpn-v25-0-a04eae86e016@openvpn.net>
+	<20250407-b4-ovpn-v25-1-a04eae86e016@openvpn.net>
+	<20250410195440.3ba7ba0f@kernel.org>
+	<f11e8a14-deb0-456f-bb4a-b5e4e16a79d7@openvpn.net>
+	<Z_keORW4OWc8i5Vz@krikkit>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] mm/vmscan: Skip memcg with !usage in
- shrink_node_memcgs()
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20250407162316.1434714-1-longman@redhat.com>
- <20250407162316.1434714-2-longman@redhat.com>
- <wc2pf5r5j4s7rpk7yfgltudj7kz2datcsmljmoacp6wyhwuimq@hgeey77uv5oq>
-Content-Language: en-US
-In-Reply-To: <wc2pf5r5j4s7rpk7yfgltudj7kz2datcsmljmoacp6wyhwuimq@hgeey77uv5oq>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 11 Apr 2025 15:50:49 +0200 Sabrina Dubroca wrote:
+> > My understanding is that this is the standard approach to:
+> > 1) hook in the middle of registration/deregistration;
+> > 2) handle events generated by other components/routines.
+> > 
+> > I see in /drivers/net/ almost every driver registers a notifier for their
+> > own device.  
+> 
+> I think most of them register a notifier for their lower device
+> (bridge port, real device under a vlan, or similar).
+> 
+> I've mentioned at some point that it would be more usual to replace
+> this notifier with a custom dellink, and that ovpn->registered could
+> likely be replaced with checking for NETREG_REGISTERED. I just thought
+> it could be cleaned up a bit later, but it seems Jakub wants it done
+> before taking the patches :)
 
-On 4/11/25 1:11 PM, Michal Koutný wrote:
-> Hello.
->
-> On Mon, Apr 07, 2025 at 12:23:15PM -0400, Waiman Long <longman@redhat.com> wrote:
->> --- a/mm/memcontrol-v1.h
->> +++ b/mm/memcontrol-v1.h
->> @@ -22,8 +22,6 @@
->>   	     iter != NULL;				\
->>   	     iter = mem_cgroup_iter(NULL, iter, NULL))
->>   
->> -unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap);
->> -
-> Hm, maybe keep it for v1 only where mem_cgroup_usage has meaning for
-> memsw (i.e. do the opposite and move the function definition to -v1.c).
-memcontrol-v1.c also include mm/internal.h. That is the reason why I can 
-remove it from here.
->>   void drain_all_stock(struct mem_cgroup *root_memcg);
->>   
->>   unsigned long memcg_events(struct mem_cgroup *memcg, int event);
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index b620d74b0f66..a771a0145a12 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -5963,6 +5963,10 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
->>   
->>   		mem_cgroup_calculate_protection(target_memcg, memcg);
->>   
->> +		/* Skip memcg with no usage */
->> +		if (!mem_cgroup_usage(memcg, false))
->> +			continue;
->> +
-> (Not only for v2), there is mem_cgroup_size() for this purpose (already
-> used in mm/vmscan.c).
-My understanding is that mem_cgroup_usage() is for both v1 and v2, while 
-mem_cgroup_size() is for v2 only.
->
->>   		if (mem_cgroup_below_min(target_memcg, memcg)) {
->>   			/*
->>   			 * Hard protection.
->> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
->> index 16f5d74ae762..bab826b6b7b0 100644
->> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
->> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
->> @@ -525,8 +525,13 @@ static int test_memcg_protection(const char *root, bool min)
->>   		goto cleanup;
->>   	}
->>   
->> +	/*
->> +	 * Child 2 has memory.low=0, but some low protection is still being
->> +	 * distributed down from its parent with memory.low=50M. So the low
->> +	 * event count will be non-zero.
->> +	 */
->>   	for (i = 0; i < ARRAY_SIZE(children); i++) {
->> -		int no_low_events_index = 1;
->> +		int no_low_events_index = 2;
-> See suggestion in
-> https://lore.kernel.org/lkml/awgbdn6gwnj4kfaezsorvopgsdyoty3yahdeanqvoxstz2w2ke@xc3sv43elkz5/
-
-I have just replied on your suggestion.
-
-Cheers,
-Longman
-
->
-> HTH,
-> Michal
-
+Ideally, yes. One fewer place for us to check when trying to figure 
+out if we will break anything with the locking changes :(
+Notifiers are very powerful but that comes at high maintenance cost.
 
