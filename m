@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-30576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A51A85B30
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 13:11:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF5C7A85B3A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 13:12:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5069A8C3884
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 11:05:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D61479C287C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 11:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C2E298CA4;
-	Fri, 11 Apr 2025 11:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BACE929B204;
+	Fri, 11 Apr 2025 11:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jbKWqXK2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZohHZxi"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED80C2989B6;
-	Fri, 11 Apr 2025 11:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F8629AB1F;
+	Fri, 11 Apr 2025 11:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744369521; cv=none; b=Rh9JL5MZzDEuusrRGYmOxWYss/OYU91LcKiM7bpp4eOP32RrJkOrId/rmtsucOYgKdc5sR7wzzUGDlV+zzUl+4nj4w275WcVTHNGTPcyP0rn4CdYQ2F8nvL6k9TyN4mcCEgIUQQEqPmXYtp9BGvPWdmoeJsaTxNITLOmM+QI9uw=
+	t=1744369523; cv=none; b=GWfaAuX/zTGCcM6wJvgK6ydDW/+LFBtbrQOI4f4nogSBrTbwsjSFj6/GFqV8SEh3sCyw1g2LGxW39Rf+uDvvrZueoG6QlC5rFW8SgyeW0FY2MPB78M0xWS8NrPLZZDDWqaG7tpukYXPuqcq90M9tkh4CuhZQ3DIRdAB2Gd1u06w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744369521; c=relaxed/simple;
-	bh=Ed73cRHm7tHOkgc9qekoaFLdbmR1sHWKWLgmp0Roygk=;
+	s=arc-20240116; t=1744369523; c=relaxed/simple;
+	bh=Imic4Np5tJY+bphTiQqz1yPd67V0pf5uLabqu+4kVRM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iRE2Q9sM6RyS7EnnsWZiG6Kxtdn7OAAbBwX1kndj9kWK9MWKMk51PCtie3Q/e2ODJu2gggztOYFaULes57Xl8nJEg0UrnddMCqgOCJQabVK2L0xYDJurs4Dz5tDX5KgbWjsxgyI2DyPfnyH9m8dC+IeANFLtRkEd7tWy2zokUrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jbKWqXK2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DF3C4CEE2;
-	Fri, 11 Apr 2025 11:05:18 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=gONyfpvBa1lpC7rBCLIbtwNNXn/sVvaO5RL3HfI9D2GeK21L2pD+p0roY47cxQXjfu7ugQZSy7FVcmAEdXaD/+DukqBURnIp/muyugxO2SDfCaYanAJ6UI7Cnrd0b/vvUA2IKp5iRwMINLwFhpbQ2nuIqva2subBlSs981pCK2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZohHZxi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2005FC4CEED;
+	Fri, 11 Apr 2025 11:05:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744369520;
-	bh=Ed73cRHm7tHOkgc9qekoaFLdbmR1sHWKWLgmp0Roygk=;
+	s=k20201202; t=1744369523;
+	bh=Imic4Np5tJY+bphTiQqz1yPd67V0pf5uLabqu+4kVRM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jbKWqXK2Jf88GR33cceU3APNpgTWemkDzk5/Rk5uajv7GNV8Fs/OxioFECuIZLm2w
-	 32SRl1tRBzsmJnL7vY1+UyF2Iqzy5DStwffSlY81uTwClVxvY5ICVbQH2kWGLPVnrp
-	 xYhOqk61hoe5VY9n2AFtDQaMGnCWlWv7etCzYMy0YIbWhrrMu9CF88ySVk1kPuvtRy
-	 IbKDPYM2OqWqeOxtEmiNA3+i9rVf7mG1+vbt6DE18KJX0vKrGwpplPD2MgjxCkwmKD
-	 Q8sbKHKAzpKloO5/zUFAzgDX4UtvhC5ZbBX/oFBSw72o17TVxT2oIuR3C3xhR2+RyT
-	 fz2ZdF2O4BM8w==
+	b=mZohHZxixioLJU0H2wvADL//PWI9G2yuJWQAyb7p6QuzRgujZgrQl5Aoh6s4f1Ari
+	 ru/6gOE00vOuq0dScb3ytQbfXbEvb35wR1GMBBKuWc1AILx22oNQdbRYOgxsoJveSY
+	 Vtlz0sS2LPseIq1vNt4B64XmOUOco/aHYDrIfSHP/h0rn3R2lGs0VmRSzb1tGtSl+b
+	 0xoq/uvgnj1VUGoc8OE2/ifAo/eyOFG7IhtwTIhvNhUhssQUqL+5KiB92fowXAhrsp
+	 /bM6mSyX4gpiNv3die4/pqKXIqKBpmb3zNLDQYdTJait8GIuFwUjyYlvIqbyGVXFNR
+	 JmBJPOYKdwI/g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 11 Apr 2025 13:04:49 +0200
-Subject: [PATCH net-next 3/8] mptcp: pm: Return local variable instead of
- freed pointer
+Date: Fri, 11 Apr 2025 13:04:50 +0200
+Subject: [PATCH net-next 4/8] mptcp: pass right struct to
+ subflow_hmac_valid
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-3-85ac8c6654c3@kernel.org>
+Message-Id: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-4-85ac8c6654c3@kernel.org>
 References: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-0-85ac8c6654c3@kernel.org>
 In-Reply-To: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-0-85ac8c6654c3@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,70 +63,68 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Thorsten Blum <thorsten.blum@linux.dev>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1602; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=jApLlQe9kLWnNYT+J4tjFKFNld+C/W/579HgmrPr8y0=;
- b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+Pde3a88nBCNp8v/XVC2zkxcTkahRWLWI54la
- n4AUTVGQkmJAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/j3XgAKCRD2t4JPQmmg
- cxmSEADS+nEvMzEJByTidg+V6dieI4/vT2EoTz1BuCjfdN1TUxoCCXtwQPdKvYzbcPri6dcLLom
- FxFu++SyViYwz9sjc25XDsM/JGpNpSA7ECTIDjqp9LQuE1KnWP2uCzZFqQzqQJS3ehZ39P98gij
- 35JhoAmZyZK6d5kd35xt5h9xqVLpY2ZGiY0jE4TBCdyl1dhXQeKt/GgKtvYCnwblqUPkjI+LpJf
- 6DlZF111TXIG/gWEfY//5Buh9OhKpTjawmbRaqkHA5Ur98M/vWu33bNEKdH2H88vfXcXxMq6X+4
- p97ave9DpzYg4SPjnXKc9ev6kMATcoCT4y65hKgF9jJ6v2ICNqEji3U0L47shGutLmzlukEFQfr
- j1XIzOiGwqPoqdBAR6o9HP89YphmU3V78qbYaiS2owMq0oX0q2mHEJQwLc7d+cD6JQw9iWKTkpm
- jdVKvZQY8Kb0ayfd8plbEl+bU7cmqlRto1nKzcGNXM07/gMwoq+Jg+YDgDcyLvATb0G0yfITpgC
- 5sIJ7vIMw2+XRgM0EqBJwYcOfsqi4Mvl0Mtv8j0odoUumM/3iICvE5jwpPTi0GGnkqt1ax4ttLh
- ZWoNVfEXyRKm/OTVF4I3OF5olEJ3pH8rSvR9kaGj7OV8kOspk61KtsiYdcbgBg/2c8WxHs/9m1B
- iZPlybC5schloIw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1758; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=Imic4Np5tJY+bphTiQqz1yPd67V0pf5uLabqu+4kVRM=;
+ b=owEBbQKS/ZANAwAKAfa3gk9CaaBzAcsmYgBn+Pdg/Zp6NBxvGY1I9MWRbCdFzE25Y7yhp1/Tu
+ RZdjS1c6ZGJAjMEAAEKAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ/j3YAAKCRD2t4JPQmmg
+ c6bhEADFSpNaznYUw/HC2ac74l+JFVUmIhtkujtyEo6Ki3MVSV2qQ415RXxSdBgbKnIqRhuN387
+ /vsYY1VhiFEkHDi5gKvsh09GR49BqVMEzWMegPS01BDhoz00cZtefv4lr1Nr9a9WKe4pZ9XXH8a
+ iJhqaOOU4SKxq21Nb8ngLAmzfIAGgYk32HEtgqPLMNDXtzC52AbsVKM7PbfCEa0sXxHwkOLEV7E
+ gzUasQH3Rm4dvpX8Otme5M1Q2bpPtxb30gWR1t2T4kEbzjEPTPzcGgtnVimkEJrugyVbu5x+4iD
+ 7D+3N1NUJjOgW9RDBkBxM2WFhzKLxLsb+1ukFsh3iGLNNdbxhmtbZs0hdIIRNiaAMhqehzmJ7gK
+ t/rAhhTKZsGQBhmZKqMCk1lPkOmBlEeOtp4JRfk97qtemeXpXjTg6zNw3ma152EeQpruqeY81rD
+ qNNF6xAj5qXSOMZ07Ci68TGgZxFUCUXpEMiikqEIuoN7yuVRGm/kSNai141zk4QIgPnXclNj5Pe
+ xG3JELQ1pYLuzeWs16aEwmo0G+1rvDuT2v9TUX4XmTHAZWPVxlOUvz/zX6/Yb73SHdWMQba3BjM
+ /p6EdLLtzO+qZlPRcYGzrjIsBGUIEXl/hLa7oRYKjQDMbTuntiw1GMWYs9gm2+tkjRbIKd6fXQi
+ LuDoanvRFPoA2Lw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Thorsten Blum <thorsten.blum@linux.dev>
+subflow_hmac_valid() needs to access the MPTCP socket and the subflow
+request, but not the request sock that is passed in argument.
 
-Commit e4c28e3d5c090 ("mptcp: pm: move generic PM helpers to pm.c")
-removed an unnecessary if-check, which resulted in returning a freed
-pointer.
+Instead, the subflow request can be directly passed to avoid getting it
+via an additional cast.
 
-This still works due to the implicit boolean conversion when returning
-the freed pointer from mptcp_remove_anno_list_by_saddr(), but it can be
-confusing and potentially error-prone. To improve clarity, add a local
-variable to explicitly return a boolean value instead.
-
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Notes:
-- a previous version has already been sent to Netdev. ChangeLog:
-  - Remove the if-check again as suggested by Matthieu Baerts
-  - Target net-next, not net (not a fix) and rephrase the commit message
-  - Link to this version:
-    https://lore.kernel.org/20250325110639.49399-2-thorsten.blum@linux.dev
----
- net/mptcp/pm.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/mptcp/subflow.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index 31747f974941fae3f80bfc8313e82c41f92562eb..1306d4dc287b842ebf7efd52d121b096d5cb43e0 100644
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -151,10 +151,13 @@ bool mptcp_remove_anno_list_by_saddr(struct mptcp_sock *msk,
- 				     const struct mptcp_addr_info *addr)
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 24c2de1891bdf31dfe04ef2077113563aad0e666..e7951786a97c91190c7341d2c586a1f4acc05ed5 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -745,15 +745,11 @@ struct request_sock *mptcp_subflow_reqsk_alloc(const struct request_sock_ops *op
+ EXPORT_SYMBOL(mptcp_subflow_reqsk_alloc);
+ 
+ /* validate hmac received in third ACK */
+-static bool subflow_hmac_valid(const struct request_sock *req,
++static bool subflow_hmac_valid(const struct mptcp_subflow_request_sock *subflow_req,
+ 			       const struct mptcp_options_received *mp_opt)
  {
- 	struct mptcp_pm_add_entry *entry;
-+	bool ret;
+-	const struct mptcp_subflow_request_sock *subflow_req;
++	struct mptcp_sock *msk = subflow_req->msk;
+ 	u8 hmac[SHA256_DIGEST_SIZE];
+-	struct mptcp_sock *msk;
+-
+-	subflow_req = mptcp_subflow_rsk(req);
+-	msk = subflow_req->msk;
  
- 	entry = mptcp_pm_del_add_timer(msk, addr, false);
-+	ret = entry;
- 	kfree(entry);
--	return entry;
-+
-+	return ret;
- }
+ 	subflow_generate_hmac(READ_ONCE(msk->remote_key),
+ 			      READ_ONCE(msk->local_key),
+@@ -899,7 +895,7 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
+ 				goto dispose_child;
+ 			}
  
- bool mptcp_pm_sport_in_anno_list(struct mptcp_sock *msk, const struct sock *sk)
+-			if (!subflow_hmac_valid(req, &mp_opt)) {
++			if (!subflow_hmac_valid(subflow_req, &mp_opt)) {
+ 				SUBFLOW_REQ_INC_STATS(req, MPTCP_MIB_JOINACKMAC);
+ 				subflow_add_reset_reason(skb, MPTCP_RST_EPROHIBIT);
+ 				goto dispose_child;
 
 -- 
 2.48.1
