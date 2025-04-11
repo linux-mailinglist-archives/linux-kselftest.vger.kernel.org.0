@@ -1,365 +1,209 @@
-Return-Path: <linux-kselftest+bounces-30529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AAA2A855E2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 09:51:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A7B7A85617
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 10:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E708E3B4262
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 07:51:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AFAA4638EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 08:04:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9DA728FFEA;
-	Fri, 11 Apr 2025 07:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F77729346D;
+	Fri, 11 Apr 2025 08:04:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tyaus1EK"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="QGebh9SC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D201E7C0E;
-	Fri, 11 Apr 2025 07:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.69
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744357879; cv=fail; b=mtAXucq2YazbxGbQm4M9X/9Rt3e7Zx21q68PmcklVOgYVAdQ8E+UbxGSp8EHdPdYwsUQi2e3YED4D2w/5PXDcWy/oslSHip7eoAcdvDqpgBnWHn0LbLA3kIW1WeXWD+yNWpTmLvCNgvX4w+KYZheuSvtL/G8Sg0Oyr5ImYOyPnM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744357879; c=relaxed/simple;
-	bh=FRH8B/I51FzpzGdbYbEKjOIVlyf1FTbljkk7AES0u4k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E54HHaWuI94Fxc1W5d2D6akY2Lx2VGPwAYjLXYrzQ2xXsaTan1IGIGzU98EGjgEtdSUHCE+xCqi55kZi3TaSOQIUQwEZnUlMATuIDWm4ALBlP6XDYzo/LpYLSEgdWMrpW4o5H9DYFEIG7Dl5H0UmCrTJ5mPxPRB1yHPXXGXfE1E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tyaus1EK; arc=fail smtp.client-ip=40.107.244.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Kxr+rnl3dSRoUFKUnZUYgNgMUKfht/ZR8FVPKki2HauVz/jHeB1DIFtpE7bz2jmJZ/PDbNA5ZKJliIZywjH1BkbbdRDfek2wPTEArsjDNE2KEuZZXC2y05EyVkfgMOpC7zRePy87y3RozXTtzw9kcPguDS8ZTlC8axKbIhfa8nE+LFHqKNRjyYX4pBOqeLCZHhkcQKh4KjvVVCCHtygl301okZa8QzYcjCBryjW1DcgcNVnfkNSWqs4eQb+QXtmW2eEyYW22kq5aLevjdpeJzDxVnYc1PN4VATSTRwWbuLwAiUJj5Vesj0ab/eAW1RN3EAsE6T5R5sXhHwhYWRTVGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TNTlSEQluFAONVtWkRGaX1Zd1gL5EwqpO2cwFZRoiCw=;
- b=OkgNRGGnY72LGK/8zh3ms2MMksk7SlvkkeD6Sscw031J4N+Zm6wCBsXfcemIiZl4e+qJN94aLRvI62SVTgLgjTiQad/Gpcr90BmoE1tcI+HtUA2rSI+oq3noJXgdG2QCsZDKa4u3WkzLWTfH6zIjQTRBRWQaxLGzJbcRXGRmSNac0Y21ITfiU9JnIci1kpi8go7+174RtPiY8P8YE/waVOmUUe9vG94XIUg7swrq4HPF4yRKJehbFYT0yF8kww8nrVFLR+h58BWFIajy20CbHIbx0RJ6kvlu2Zv0Bc69ofFPerqx8VT3Hvop9uky10hnw2pqNdHgjj0WOQimSDwc8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TNTlSEQluFAONVtWkRGaX1Zd1gL5EwqpO2cwFZRoiCw=;
- b=tyaus1EKztwS69MmCr2oxcohv+t7LCe7X8/2HFYtYpWlnsanIlX6d0rfmiHg0LdcktTrDn5QQOtXIRjgi8/0frEkvhqDtHRClpk0rWyc3ojVAO2wdoy3YEFd9mv6nYJsXDqnCjOpOKwC+6MwsywMOVTFOJTwDixygT9D1hYDVkhEuaQnMY4NUb4zlayh/X9gGS6C5IiwpxoxOdyScEqWeG/qSmOpR+zgRF089u/XLrUE5LiaETbJClTgxjI2TUhKKuWBThIGzK0WYRghwVqVT4ouxO8svOfe+CrmA8pUtGB80i9dW4rbnYK2Ev2sxaTZ0+T4xP9IxdSqeS/GT9f0Iw==
-Received: from CH5PR02CA0011.namprd02.prod.outlook.com (2603:10b6:610:1ed::28)
- by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.22; Fri, 11 Apr
- 2025 07:51:08 +0000
-Received: from CH1PEPF0000A345.namprd04.prod.outlook.com
- (2603:10b6:610:1ed:cafe::fb) by CH5PR02CA0011.outlook.office365.com
- (2603:10b6:610:1ed::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.26 via Frontend Transport; Fri,
- 11 Apr 2025 07:51:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH1PEPF0000A345.mail.protection.outlook.com (10.167.244.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8632.13 via Frontend Transport; Fri, 11 Apr 2025 07:51:08 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 11 Apr
- 2025 00:50:55 -0700
-Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.231.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Fri, 11 Apr 2025 00:50:48 -0700
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: <netdev@vger.kernel.org>, <cratiu@nvidia.com>
-CC: Hangbin Liu <liuhangbin@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
-	<razor@blackwall.org>, Simon Horman <horms@kernel.org>, Saeed Mahameed
-	<saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Jianbo Liu
-	<jianbol@nvidia.com>, Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>, Ayush Sawal
-	<ayush.sawal@chelsio.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, "Przemek
- Kitszel" <przemyslaw.kitszel@intel.com>, Sunil Goutham
-	<sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>, Subbaraya
- Sundeep <sbhatta@marvell.com>, hariprasad <hkelam@marvell.com>, Bharat
- Bhushan <bbhushan2@marvell.com>, Louis Peens <louis.peens@corigine.com>,
-	"Leon Romanovsky" <leonro@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v3 6/6] bonding: Fix multiple long standing offload races
-Date: Fri, 11 Apr 2025 10:49:58 +0300
-Message-ID: <20250411074958.2858496-7-cratiu@nvidia.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20250411074958.2858496-1-cratiu@nvidia.com>
-References: <20250411074958.2858496-1-cratiu@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23CA28F952
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 08:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744358656; cv=none; b=PbXCu/lAaip5NyukvrBIfZIWky/LkXQgfblTLwxarTYAB0igs8FrGHQ2EmEvaI/eyhhpqRBPSG0Im+S6l21E9I58VVI7wu1gIZDGn9EzYEJGktI2dkdW8rRaZcMonhO6TSP7t4xcxD3tUyQk9W2PxFNXkxJl/fjPA1x4ZRwIvkc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744358656; c=relaxed/simple;
+	bh=l2VcdA3YeulrePkCB9vvQsx8l22MvCKUb0C19JBaY5U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hDMNzs74jKabIny6ZnBj/E8DsSm0HIGsYhP0xCJ3TgrSr2QUOgH4xpSP7550+iXiGmrfcbQkMs9JSPB5LHfKJFhWqlqaOCioMmwaku6DsSwQnprDzq5PE3JFyYaP4nO0ExYhYEt8Uq4cYk/Ug0CElwlGWXFNjvN5cY7NNay6KWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=QGebh9SC; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3913958ebf2so1513822f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 01:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1744358652; x=1744963452; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fRXgc2yeSotpusr+TwNESYUQv74jCMGOVv7hGlcYd3k=;
+        b=QGebh9SC2JWyJKZJskrHI8qas/GJHNUQpdJYCtn0IIShZf+w0AtB0FKUzMVck6cD4n
+         DrUZL5vehUkSCrT9F6/+iS2Es8tlKk1fW/iK9MCvuQ5gm0SA9w/aUh8yFqGqXmAt4YJ7
+         MJnH3fJQIQknZ2wHNL9HWfrWy2gSk/JYkifnN9PyepkLgUo4ThnldEcw00nVMLksAYXx
+         morczaQZ4YM28BAS06NJD9YXpkE8iJgYXIVvyQ/iyE4BFRuES9I/I2gAru7BW7S1sT9H
+         Lw8rY2V2q9WWnOqXItxZaWe1eVc7YAvN4XVYjsUN05lsyXA7vz+FMzzQvDK2iGNSsFeO
+         rF1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744358652; x=1744963452;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fRXgc2yeSotpusr+TwNESYUQv74jCMGOVv7hGlcYd3k=;
+        b=sLLjE51CFsMk22WZ2XP2btWobCPx2kg7sZFLY0hSMf1yC7W1MRLLg0B7DdnVcXnbM4
+         V3t6S/wburmRYotlC1EsBa84kct540RFOk8bAUuBsQV11aKCz0wDTsBvjYDDJBjz0kuA
+         p5N5/u6E9IawnQYeMpPe9nKvxmHy+I5/pYjXlDErhenqVJfHTxXorn6f465nXgCLb9/3
+         NuaXwr3D0HBgR6B4OosccRU1C7+Bh4gYl2hQjb1ZZNJBC6sp98k+X8ePuF2Gl50qF3Qd
+         yKkaHf5QCtF2OnxsaWgeEt2+7gpQ0KPHFIOMFCU8oSKzYu0S5Lless3yRX7OB/suxdox
+         F8lw==
+X-Forwarded-Encrypted: i=1; AJvYcCXR84ZHAn5x23MATxSmxICXXbUCR25UcEX+bWiRp6mrH0JDoddT32LULxoRLFOg4m7Hg7hmI2bsO3eKQLWAIpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0rFyAnQBkWt7u4/Se5BbIAB/tIKybgJicxKnF9RpQuh0HkAVI
+	n7579wTA5dvkdDbcYyIWAwSbvc1wiKCeB6Welrt/5K5yMYvKfAOqZ+943whi/236E+A9zc2gpDR
+	QgWqIBVmPsqejg9CPFYI3R9W6leyTWU7Jh7hz1qh2bB03gmA2VIdX0Bdh17Q=
+X-Gm-Gg: ASbGncufB76flVW5I/7pYRVfrdejjkxltHkL3On+oDmQbZhe69W9K9LepeQ7rcMGZYL
+	1zplDS1kA764E+4mRgxtyFJTgOM/eh6w8r6pWVwbGKOMBkiUPfRB2nym4XWIJIt7m0EcD8GZ0pE
+	edaeBlX56ieIfdiJFQE17F5/ZslkvXsSArBdTMPQgxm8cKyAiiEdymmMx1oMv7iH2R7HqkQ1JDf
+	mF+kMqD/N40zNxAcEM+/LOK99I67WmwowUXwjTrdKvdENRtj4TA/V3RfYR1quFta4jjz14V6mav
+	NxSP575ToEOtgr+YDM5d0gTTkm4Ye3pTSV5lGAB1Ir8Te+rSToYMAEeH7KrHNarqa6o1aiTox/N
+	/Jlg=
+X-Google-Smtp-Source: AGHT+IENyVLM5p/12g1chaFoiAzlC11eK8uC+Ot8/0ux7IvOoPgK3CJzBt98Vrnsaq3XDTmh9tIEpQ==
+X-Received: by 2002:a05:6000:250a:b0:391:39bd:a381 with SMTP id ffacd0b85a97d-39ea521193amr1291092f8f.30.1744358652166;
+        Fri, 11 Apr 2025 01:04:12 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:e8be:40be:972d:7ee4? ([2001:67c:2fbc:1:e8be:40be:972d:7ee4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eae96400dsm1286529f8f.11.2025.04.11.01.04.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Apr 2025 01:04:11 -0700 (PDT)
+Message-ID: <f11e8a14-deb0-456f-bb4a-b5e4e16a79d7@openvpn.net>
+Date: Fri, 11 Apr 2025 10:04:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000A345:EE_|SJ0PR12MB5673:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88266203-d39b-4974-aa39-08dd78cd9ea2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?cK6SUg8WG9pyAEjPp4+cC43MsA29sXFZc2K6F0UuUVRIYF4dfL+nAubfzi7j?=
- =?us-ascii?Q?A0Et6H/MaZ+mOTCQMoN2B5pxUH4Td+HeupHAQS1OQIIJQHxzM44vVMpiNhdy?=
- =?us-ascii?Q?jEUK1USCJonSwLrshnvRIVjq1vrHalzDV0uz78DdXpltRAI3OYHd0Awomk0T?=
- =?us-ascii?Q?fFA9NfMI9JoKde32BGBSR5pbDZ8IaxdCXJCqbDishk8GoJqRVt2Tm6S+f/Jy?=
- =?us-ascii?Q?NVdRenimzr/MSt4JIjGSJ0EoXdqZAqzk0Vta9xB3NXHdkU+FLb9yUgHggwZK?=
- =?us-ascii?Q?W2dTzLbY8aAqID49uDWsh7gJGKxhPT9yek4oVYj9V6cndwG6ozkquwsY3LkC?=
- =?us-ascii?Q?+iSyatFDN8dYDnR3bwGk9hzw1Q0XCZt3fTRTYIpB3p9Gbpt0K6VeBkBk0/RX?=
- =?us-ascii?Q?N45zAnTuU3cfHRXbqGR0S80CJmjP210wlxY532UbGHhwVgUwCUDS1FdNNLwE?=
- =?us-ascii?Q?aMSDj6dVVdYPkCS5EiEMRIDUqQ9v8E8rkAVZ4F6Hj52I2wjOtModjI8Qjm6V?=
- =?us-ascii?Q?wePCai4WwZvF5UrCdj/Yj8hDo9O6bpjTtZVKUxbjD5guwebD4n4qL9A2MJyD?=
- =?us-ascii?Q?LIoJPsd9x0tRoEtmfkWsZ87CF9tew+/5JkhvuIWKlRuTd1roQkKvNLmB9VdX?=
- =?us-ascii?Q?YYW1KIdmsVO/RWJ6pxa7kWcwOofY5nvqzaCFHHW4ZSpSVdtVT86a0teCelPt?=
- =?us-ascii?Q?+oD7hB1eQF61xFmAqVixMkqkaIEFz2rV3dFeyl3B09b07uvw3xEs+5+Rdjsb?=
- =?us-ascii?Q?4CWZL7RydwVSHbm0tqGi0nq1xh2pmxO820NFE10mQLLi+oxaC9m516XNm7TS?=
- =?us-ascii?Q?vujc49l3MI4oj2FRjUNyUSAc0ETidh0LoYvbysA0vLSpGt/KO+f/xiW5oLhV?=
- =?us-ascii?Q?OE8dub0PokjQUj+jh2SwIzkAhff0lva13lCLi2Ofo3Bldm6bxI5VR2VH9Je/?=
- =?us-ascii?Q?cFmZ8Mxb6dOSvltfHaEt7xkdV5tqFY0afnDa2qH4molIO/br8DEeoRqJZp8w?=
- =?us-ascii?Q?k2lPwypYz69uxkRpob+OwbbqFD+S23x5pKhMOPRkpYLRIxqgp02Lhu7AJWWU?=
- =?us-ascii?Q?Mt4XY1ZKU1dBDM5unwuWDlUzl4JPGrEKRnrh3aAAufvCGCVZvtvc1waz75o/?=
- =?us-ascii?Q?QdlZlDSBojg2TD4qqpT7TQ0IpnmxX4/mLoBNeAcgJxwH9cBDMyLcODQ95NkE?=
- =?us-ascii?Q?Vcdj8daLQ39/Iyew16jdvVUvnPkibqU9gj/FToadyGOSeocIpeyzBrsjJnh2?=
- =?us-ascii?Q?WhNX30vAlAamBA9xlo6wAArfAqNvxMcd38YhAtv1qg7cxuXL8sYA4kxlvChp?=
- =?us-ascii?Q?HKyF8ScKAZf7SlTuL2YcnQfmF8Hu6x+q0wwqRxY0x5il8qPtXQ9wk9rVm485?=
- =?us-ascii?Q?hgbbRPePmumpNihqJTgBt+8ESPHfrFuiMhIV1wkEVFyA6ApTiuytrVbXRgqR?=
- =?us-ascii?Q?Gj3LFNvVTP8z/RX8XrMaPC8X9h9H3vI8paX3ckfoauqcq1QhKJzZ4MAPIucB?=
- =?us-ascii?Q?nk2fW3k6Dp5+Xje02/gAc599kjhHU/snS3Je?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2025 07:51:08.0161
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88266203-d39b-4974-aa39-08dd78cd9ea2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000A345.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v25 01/23] net: introduce OpenVPN Data Channel
+ Offload (ovpn)
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Xiao Liang <shaw.leon@gmail.com>, steffen.klassert@secunet.com,
+ antony.antony@secunet.com
+References: <20250407-b4-ovpn-v25-0-a04eae86e016@openvpn.net>
+ <20250407-b4-ovpn-v25-1-a04eae86e016@openvpn.net>
+ <20250410195440.3ba7ba0f@kernel.org>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <20250410195440.3ba7ba0f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Refactor the bonding ipsec offload operations to fix a number of
-long-standing control plane races between state migration and user
-deletion and a few other issues.
+Hi Jakub,
 
-xfrm state deletion can happen concurrently with
-bond_change_active_slave() operation. This manifests itself as a
-bond_ipsec_del_sa() call with x->lock held, followed by a
-bond_ipsec_free_sa() a bit later from a wq. The alternate path of
-these calls coming from xfrm_dev_state_flush() can't happen, as that
-needs the RTNL lock and bond_change_active_slave() already holds it.
+thanks for taking the time to go through my patchset :)
 
-1. bond_ipsec_del_sa_all() might call xdo_dev_state_delete() a second
-   time on an xfrm state that was concurrently killed. This is bad.
-2. bond_ipsec_add_sa_all() can add a state on the new device, but
-   pending bond_ipsec_free_sa() calls from the old device will then hit
-   the WARN_ON() and then, worse, call xdo_dev_state_free() on the new
-   device without a corresponding xdo_dev_state_delete().
-3. Resolve a sleeping in atomic context introduced by the mentioned
-   "Fixes" commit.
+On 11/04/2025 04:54, Jakub Kicinski wrote:
+> On Mon, 07 Apr 2025 21:46:09 +0200 Antonio Quartulli wrote:
+>> +static int ovpn_netdev_notifier_call(struct notifier_block *nb,
+>> +				     unsigned long state, void *ptr)
+>> +{
+>> +	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
+>> +
+>> +	if (!ovpn_dev_is_valid(dev))
+>> +		return NOTIFY_DONE;
+>> +
+>> +	switch (state) {
+>> +	case NETDEV_REGISTER:
+>> +		/* add device to internal list for later destruction upon
+>> +		 * unregistration
+>> +		 */
+>> +		break;
+>> +	case NETDEV_UNREGISTER:
+>> +		/* can be delivered multiple times, so check registered flag,
+>> +		 * then destroy the interface
+>> +		 */
+>> +		break;
+>> +	case NETDEV_POST_INIT:
+>> +	case NETDEV_GOING_DOWN:
+>> +	case NETDEV_DOWN:
+>> +	case NETDEV_UP:
+>> +	case NETDEV_PRE_UP:
+>> +	default:
+>> +		return NOTIFY_DONE;
+>> +	}
+> 
+> Why are you using a notifier to get events for your own device?
 
-bond_ipsec_del_sa_all() and bond_ipsec_add_sa_all() now acquire x->lock
-and check for x->km.state to help with problems 1 and 2. And since
-xso.real_dev is now a private pointer managed by the bonding driver in
-xfrm state, make better use of it to fully fix problems 1 and 2. In
-bond_ipsec_del_sa_all(), set xso.real_dev to NULL while holding both the
-mutex and x->lock, which makes sure that neither bond_ipsec_del_sa() nor
-bond_ipsec_free_sa() could run concurrently.
+My understanding is that this is the standard approach to:
+1) hook in the middle of registration/deregistration;
+2) handle events generated by other components/routines.
 
-Fix problem 3 by moving the list cleanup (which requires the mutex) from
-bond_ipsec_del_sa() (called from atomic context) to bond_ipsec_free_sa()
+I see in /drivers/net/ almost every driver registers a notifier for 
+their own device.
 
-Finally, simplify bond_ipsec_del_sa() and bond_ipsec_free_sa() by using
-xso->real_dev directly, since it's now protected by locks and can be
-trusted to always reflect the offload device.
+Isn't this expected?
 
-Fixes: 2aeeef906d5a ("bonding: change ipsec_lock from spin lock to mutex")
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/net/bonding/bond_main.c | 82 +++++++++++++++------------------
- include/net/xfrm.h              |  7 ++-
- 2 files changed, 41 insertions(+), 48 deletions(-)
+> 
+>> +	return NOTIFY_OK;
+>> +}
+> 
+>> +MODULE_DESCRIPTION("OpenVPN data channel offload (ovpn)");
+>> +MODULE_AUTHOR("(C) 2020-2025 OpenVPN, Inc.");
+> 
+> Companies can't author code, only people. Note that MODULE_AUTHOR()
+> is optional.
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 14f7c9712ad4..8ed8c29659a0 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -545,7 +545,20 @@ static void bond_ipsec_add_sa_all(struct bonding *bond)
- 			slave_warn(bond_dev, real_dev, "%s: failed to add SA\n", __func__);
- 			continue;
- 		}
-+
-+		spin_lock_bh(&ipsec->xs->lock);
-+		/* xs might have been killed by the user during the migration
-+		 * to the new dev, but bond_ipsec_del_sa() should have done
-+		 * nothing, as xso.real_dev is NULL.
-+		 * Delete it from the device we just added it to. The pending
-+		 * bond_ipsec_free_sa() call will do the rest of the cleanup.
-+		 */
-+		if (ipsec->xs->km.state == XFRM_STATE_DEAD &&
-+		    real_dev->xfrmdev_ops->xdo_dev_state_delete)
-+			real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
-+								    ipsec->xs);
- 		ipsec->xs->xso.real_dev = real_dev;
-+		spin_unlock_bh(&ipsec->xs->lock);
- 	}
- out:
- 	mutex_unlock(&bond->ipsec_lock);
-@@ -560,48 +573,20 @@ static void bond_ipsec_del_sa(struct net_device *bond_dev,
- 			      struct xfrm_state *xs)
- {
- 	struct net_device *real_dev;
--	netdevice_tracker tracker;
--	struct bond_ipsec *ipsec;
--	struct bonding *bond;
--	struct slave *slave;
- 
--	if (!bond_dev)
-+	if (!bond_dev || !xs->xso.real_dev)
- 		return;
- 
--	rcu_read_lock();
--	bond = netdev_priv(bond_dev);
--	slave = rcu_dereference(bond->curr_active_slave);
--	real_dev = slave ? slave->dev : NULL;
--	netdev_hold(real_dev, &tracker, GFP_ATOMIC);
--	rcu_read_unlock();
--
--	if (!slave)
--		goto out;
--
--	if (!xs->xso.real_dev)
--		goto out;
--
--	WARN_ON(xs->xso.real_dev != real_dev);
-+	real_dev = xs->xso.real_dev;
- 
- 	if (!real_dev->xfrmdev_ops ||
- 	    !real_dev->xfrmdev_ops->xdo_dev_state_delete ||
- 	    netif_is_bond_master(real_dev)) {
- 		slave_warn(bond_dev, real_dev, "%s: no slave xdo_dev_state_delete\n", __func__);
--		goto out;
-+		return;
- 	}
- 
- 	real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev, xs);
--out:
--	netdev_put(real_dev, &tracker);
--	mutex_lock(&bond->ipsec_lock);
--	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
--		if (ipsec->xs == xs) {
--			list_del(&ipsec->list);
--			kfree(ipsec);
--			break;
--		}
--	}
--	mutex_unlock(&bond->ipsec_lock);
- }
- 
- static void bond_ipsec_del_sa_all(struct bonding *bond)
-@@ -629,9 +614,15 @@ static void bond_ipsec_del_sa_all(struct bonding *bond)
- 				   __func__);
- 			continue;
- 		}
-+
-+		spin_lock_bh(&ipsec->xs->lock);
- 		ipsec->xs->xso.real_dev = NULL;
--		real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
--							    ipsec->xs);
-+		/* Don't double delete states killed by the user. */
-+		if (ipsec->xs->km.state != XFRM_STATE_DEAD)
-+			real_dev->xfrmdev_ops->xdo_dev_state_delete(real_dev,
-+								    ipsec->xs);
-+		spin_unlock_bh(&ipsec->xs->lock);
-+
- 		if (real_dev->xfrmdev_ops->xdo_dev_state_free)
- 			real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev,
- 								  ipsec->xs);
-@@ -643,34 +634,33 @@ static void bond_ipsec_free_sa(struct net_device *bond_dev,
- 			       struct xfrm_state *xs)
- {
- 	struct net_device *real_dev;
--	netdevice_tracker tracker;
-+	struct bond_ipsec *ipsec;
- 	struct bonding *bond;
--	struct slave *slave;
- 
- 	if (!bond_dev)
- 		return;
- 
--	rcu_read_lock();
- 	bond = netdev_priv(bond_dev);
--	slave = rcu_dereference(bond->curr_active_slave);
--	real_dev = slave ? slave->dev : NULL;
--	netdev_hold(real_dev, &tracker, GFP_ATOMIC);
--	rcu_read_unlock();
--
--	if (!slave)
--		goto out;
- 
-+	mutex_lock(&bond->ipsec_lock);
- 	if (!xs->xso.real_dev)
- 		goto out;
- 
--	WARN_ON(xs->xso.real_dev != real_dev);
-+	real_dev = xs->xso.real_dev;
- 
- 	xs->xso.real_dev = NULL;
--	if (real_dev && real_dev->xfrmdev_ops &&
-+	if (real_dev->xfrmdev_ops &&
- 	    real_dev->xfrmdev_ops->xdo_dev_state_free)
- 		real_dev->xfrmdev_ops->xdo_dev_state_free(real_dev, xs);
- out:
--	netdev_put(real_dev, &tracker);
-+	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
-+		if (ipsec->xs == xs) {
-+			list_del(&ipsec->list);
-+			kfree(ipsec);
-+			break;
-+		}
-+	}
-+	mutex_unlock(&bond->ipsec_lock);
- }
- 
- /**
-diff --git a/include/net/xfrm.h b/include/net/xfrm.h
-index 3d2f6c879311..b7e8f3f49627 100644
---- a/include/net/xfrm.h
-+++ b/include/net/xfrm.h
-@@ -154,8 +154,11 @@ struct xfrm_dev_offload {
- 	 */
- 	struct net_device	*dev;
- 	netdevice_tracker	dev_tracker;
--	/* This is a private pointer used by the bonding driver.
--	 * Device drivers should not use it.
-+	/* This is a private pointer used by the bonding driver (and eventually
-+	 * should be moved there). Device drivers should not use it.
-+	 * Protected by xfrm_state.lock AND bond.ipsec_lock in most cases,
-+	 * except in the .xdo_dev_state_del() flow, where only xfrm_state.lock
-+	 * is held.
- 	 */
- 	struct net_device	*real_dev;
- 	unsigned long		offload_handle;
+Ouch, thanks. Will get this addressed.
+
+Regards,
+
 -- 
-2.45.0
+Antonio Quartulli
+OpenVPN Inc.
 
 
