@@ -1,148 +1,200 @@
-Return-Path: <linux-kselftest+bounces-30598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6646FA85D7B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 14:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29464A85D80
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 14:46:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42B1119E3CB9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 12:42:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B228719E7E13
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 12:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E52929DB67;
-	Fri, 11 Apr 2025 12:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9B42BD59C;
+	Fri, 11 Apr 2025 12:39:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KKeLdWrf"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="IhNm7VQN";
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="ClE7JOhb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6172929B234;
-	Fri, 11 Apr 2025 12:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744375065; cv=none; b=Xat6nMTLsZE/zXqTt32Rzo9y7PBAqRPaJwOOVg2tK9EBcKsf2Ozt1ERWZuPTc07t5JHcLZ/I2spTG7S7J/KOvV/6TMYhUH1lh/KTQG8cpZ662BhtQADWyZiYQvKWWTZNkMgjJj5HgT4OwrymL2My46Sbyi8W59Nt6YgxqXyc6S8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744375065; c=relaxed/simple;
-	bh=/8uaMex2yn2R+ZosGV9NzEaxk9mPYO7HU4z+Z4R12M8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSsXuOpA2g6R2tjkA/zKBZ8DI0QzSPGkt0Eg14qiCuoOdOHjeAFvvWM+6q1/bwgrUHFlJWMte0nOJZqmzjpNLQx1z/Ca/WZdPHLV1rCsmaV/4A9ycO30uVUGqAYy4P4iajFNoQXFoXqIBpKZ35qAlwMN1G5A2XCxRTApQBPlAqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KKeLdWrf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7AE7C4CEE2;
-	Fri, 11 Apr 2025 12:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744375065;
-	bh=/8uaMex2yn2R+ZosGV9NzEaxk9mPYO7HU4z+Z4R12M8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KKeLdWrfC19z9zd2XQZKVBqr/ODBHwml77Z5XtwSTq8zBuwd6C3EmMpajGA9shOn0
-	 p8dnJQPNMA6bJvv/eRDLvH+1oTJBvFNLEXrakVNYXDx/DKG9ma7QNpZBTu0lvkS2dS
-	 6v8pdd1GssLBoq9mi4rMBjN8UnS4G2dHy42sp0ZbnQ+JDY8RrsjFxuuJX+mXY6SZn9
-	 Kvy5rRowcJYRltwOUZvUSqYc4oBYWi71UglEu9nrrVEtdfqgGb0dBluyNJfTnC4nK3
-	 PA6VgD0XGRWTROp9HM7iJsMCo5HtC+sRsd1skLC8o0qLapS2ZKSKR5I46HuesqxFBI
-	 mEMOxpfh1w0qg==
-Date: Fri, 11 Apr 2025 14:37:40 +0200
-From: Joel Granados <joel.granados@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, John Sperbeck <jsperbeck@google.com>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/4] sysctl: move u8 register test to lib/test_sysctl.c
-Message-ID: <ncfru3u5wwbnsdtehdwecaihhxy4kdhn4ip5nyno7o7fgatwaw@rjp73b4nu7ci>
-References: <20250321-jag-test_extra_val-v1-0-a01b3b17dc66@kernel.org>
- <20250321-jag-test_extra_val-v1-1-a01b3b17dc66@kernel.org>
- <202504091020.3A06E6C548@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F88F29C34C;
+	Fri, 11 Apr 2025 12:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.149.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744375172; cv=fail; b=QJuMUC+Ms6rgXhS1B9tBQRsK9Mp8+KpexanaHK0E9kmYb4dfyKMovdei8hazCbaYSVpXjoN8PaKPzCE3o1wSddv6tHwaevpy8oFkKHRHIU/ccmWKD3mc2Q9Q0Hs7qAfI5IQCugbcpKaZF1zToFeyc8vnWEv7gazJN1K3PZEcwTU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744375172; c=relaxed/simple;
+	bh=YBcR7QE2FM4Cyh2ixm1CO5GIRW+9QR58cksNNMYdiZM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ADnDAd7hMeGRYbvXAId8Wulsc7wakNeMU5XOBMmwC9FX6PGj4UTlkFwqxfLbhLs+GTyO6Hr0A3TDsAFjOl7wI5p7Y7MnWUe4vpRQGs+6QG0+ICM1RsZn043/QFRIIQu/Fy6LlgWPWV4+hT4cV8sD9sjNfDhae3BXeYn38hdG934=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=IhNm7VQN; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=ClE7JOhb; arc=fail smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53B40Dlv011308;
+	Fri, 11 Apr 2025 07:39:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=nZZeqDUEZGWKAaIED8VVkyKzFA45do+r2YM/I0Hdu8E=; b=
+	IhNm7VQNUVnAxZr88mC6bs/eiws08QwdB9vPBxe3HW3CpYkT9so3L/6nRYLNhql1
+	eYzRks45cZ55l7+EsUgBqqwv3FGJECjGGn3fp5MMdfj01Z5IFxswl/v7h0+x3gLQ
+	SROwSo9z5hwnICJ8sC+ktZeI2Y+C6iDQYwoaQfZAVVJn14GYEwgfYAwZq9stAJdK
+	8Od+pqtxG3g5HkjGWoucZwjnkac7ARPcVWHM2ROvWwV3wvnyEkXReYWVr65ICSIy
+	ZBJoEgww4hGN/KY4U3GAHm/6IoSuGExuh8XJ0tl4962MJ8Wtq5S3QNVq6qkYNwPs
+	ZtHF9Gvqr+7UAP463jryzg==
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2171.outbound.protection.outlook.com [104.47.55.171])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 45xa4bhsgf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Apr 2025 07:39:18 -0500 (CDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JBrJGV3XJJ7hrtaBZsaZapmaRW3OCEV+X4QiUsiSJ1NQY2JT/hamT7ZkjsqzFDaif3JonSLd07egDDv5EHme5jltyuim2D8n+EYeufdTeMghDvP/WcTAH6rqawVDc4pGua4e/MLYJacok1XGH5QcpqzIthiPhoJwPsmQabXUgScRQn5gp353ziFrFRpQZTogZlYRCHMz57hvxc0849PmVTBTj2WgskFK15do+IhmpXAs9xvzw7oyXMpnQU+qvf87ON0+CbSv3kN1vR6X86YwsRjHxZkYn/enGwMkQynHjqN+Cvd8JvaTK3hAEpDrU47V86h44tsbGbqWjH7MwoDbUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nZZeqDUEZGWKAaIED8VVkyKzFA45do+r2YM/I0Hdu8E=;
+ b=WljHelNzyTeeEjQuCN+rSwknsVdQd/16/k/zsEKdWsQ+GUbb4zEIu+g3A+j/So7MOoxVLklxiuUellg+fv3DsKyKn4eJvwocan9E+er+7BMncCm3z2HZTn3fW0LnFpNTR9Twoh8PzkA9o7LpxYCm9XOQLT1FDT3SI3hsuJCtNcsXT/T1AStim9DMVHeHOGH0jHENqJTXt3X5lJVeLCoT+VEus0l9ue9ZFdVotbrNKNqNYPp3Gynbj1ZkkrT65lhNiwdXkdr+7+yv/zlkolJ4M1ocIk5AuEBpdIpDZMscWTUTbuyu9g2QY/IrhQKwZoy93mL65Q9/dsKo+LOyXk7v8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 84.19.233.75) smtp.rcpttodomain=cirrus.com smtp.mailfrom=cirrus.com;
+ dmarc=fail (p=reject sp=reject pct=100) action=oreject
+ header.from=opensource.cirrus.com; dkim=none (message not signed); arc=none
+ (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nZZeqDUEZGWKAaIED8VVkyKzFA45do+r2YM/I0Hdu8E=;
+ b=ClE7JOhbes3yxoE9RS5LhYVuTbX4nyqDPVaPwm96mDXI38TvVdn4up9dVGDPzVj/NgUSWLylkHlORA1xO3BAFGGOLcErLNviY2CKdtHQ1ScqxL0Pf0InwHPYtitZ5NbaDS/64JAZXRplk6gU+SjyC5Se7C+QsTV20DlwgONBzUY=
+Received: from BYAPR05CA0068.namprd05.prod.outlook.com (2603:10b6:a03:74::45)
+ by CH3PR19MB7236.namprd19.prod.outlook.com (2603:10b6:610:141::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.27; Fri, 11 Apr
+ 2025 12:39:12 +0000
+Received: from CO1PEPF000066ED.namprd05.prod.outlook.com
+ (2603:10b6:a03:74:cafe::12) by BYAPR05CA0068.outlook.office365.com
+ (2603:10b6:a03:74::45) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.8 via Frontend Transport; Fri,
+ 11 Apr 2025 12:39:11 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
+ smtp.mailfrom=cirrus.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
+Received-SPF: Fail (protection.outlook.com: domain of cirrus.com does not
+ designate 84.19.233.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=84.19.233.75; helo=edirelay1.ad.cirrus.com;
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ CO1PEPF000066ED.mail.protection.outlook.com (10.167.249.10) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8632.13
+ via Frontend Transport; Fri, 11 Apr 2025 12:39:11 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 79CFB406540;
+	Fri, 11 Apr 2025 12:39:09 +0000 (UTC)
+Received: from [198.90.208.23] (ediswws06.ad.cirrus.com [198.90.208.23])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 613C6820259;
+	Fri, 11 Apr 2025 12:39:09 +0000 (UTC)
+Message-ID: <c559ae66-745e-4403-9b6f-ebc8cf85d2aa@opensource.cirrus.com>
+Date: Fri, 11 Apr 2025 13:39:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zg2ap4wtnzxx7lsp"
-Content-Disposition: inline
-In-Reply-To: <202504091020.3A06E6C548@keescook>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: cs_dsp: Depend on FW_CS_DSP rather then enabling
+ it
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+To: Nico Pache <npache@redhat.com>, broonie@kernel.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc: simont@opensource.cirrus.com, ckeepax@opensource.cirrus.com,
+        brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com,
+        johannes.berg@intel.com, sj@kernel.org
+References: <20250319230539.140869-1-npache@redhat.com>
+ <9024776c-7028-4522-a773-8d53d233dabf@opensource.cirrus.com>
+Content-Language: en-GB
+In-Reply-To: <9024776c-7028-4522-a773-8d53d233dabf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000066ED:EE_|CH3PR19MB7236:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4b53b4b-695f-4278-3a60-08dd78f5dc45
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|61400799027|7416014|36860700013|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Vy9mMWIwd2JrNVB3WmFsM09JVlVmbk1QTHRtc01YYlVHanZBL3ZucHE5UXM3?=
+ =?utf-8?B?M2NkS2JXUjhXQlo3ejN0Ky9hMmJtTWtXNkNyL3JZMWFEalA3MGR1VUtMbFM2?=
+ =?utf-8?B?Y2NRcElSZlpKa1dxOXl5WHcwc0h5S1dYOU96VFdUSCtNTW82akQ1cUMyM1VM?=
+ =?utf-8?B?RE4zbmgrRVR0cWxFV2x6TE8yQVJWVUJXWEVjd3F3MGpUQ0FjQU9QeFN3SzhY?=
+ =?utf-8?B?aExBNm9XSnRPdER4UTNtanB6R2ZDZWRpbDFiQkJydXYyNVU4MVhsaXl5VXpM?=
+ =?utf-8?B?cW9ad3d5ajFFa0FraU16S3lQaVRnZE4xRm5OaFU0a2preWtEam9oenBoOVRG?=
+ =?utf-8?B?SE1sZFg5SVlHaXVZcCtVdWVyMEd6eTAzaURkbmdXMXZqejNDbmhMWnZqcmZJ?=
+ =?utf-8?B?Nm5YK3NadllOY3d3SFNHbll1WGFVZ0lOc0FxNHVTZXpvbitvN0VtbGFmd3VG?=
+ =?utf-8?B?MXhhOGt6eDhRcnBIdVlxazFMT29VRGNIMUJia1B2bEdyTGFJeHFMVDdOclF0?=
+ =?utf-8?B?bG4zQ001UGV6NVFnRXFVdDBzS00yTGw2cFB4V2xJVGRoQ0hyTThmbTNsZEpD?=
+ =?utf-8?B?cGpyb3FESlR1bm5JeVJTeVMweURZL1QrbDlYYWhTMU9ydTFQS1VFcnRNM2RL?=
+ =?utf-8?B?THR5UGl2bG4vS3gwZ08xOUlLVFc2TEd5NTQ1dDRoeW9UbHNUdnQrT3o1RnN2?=
+ =?utf-8?B?RjFPV1Rxb3J4emZ3TjdaNXpQdGRDNFJpL2VQdDFnWkpLa21tUkI1K1UvTFAz?=
+ =?utf-8?B?bHVDaGYvMkxKK3FsOFBCZktXMUNTRG41WEpwaXc1ZTQ3djlFRDE2YmllNTVz?=
+ =?utf-8?B?M3dOaU4zYThiSmVTc2lHK3ZqcGlHdjBwc2c1aXVwd3dEQmZLY1Y2RXphVjU3?=
+ =?utf-8?B?NjlsTDF2N1JsWkFDL3R2MVRQbFZNZWw3ZkxIcVlPbGVWTTVTM0J1YzA5T1Mw?=
+ =?utf-8?B?NWxCYWV6ZjF1RU1DMzVvY29CNFZScThUakpXVEtEUEZOZmxVWGNEdjg2em5E?=
+ =?utf-8?B?cFg4REM5SCt0WEg4ZEFUOXZnb1BxUW0xZm96Y1NrZlhjdGRremdYaEpVUUJT?=
+ =?utf-8?B?eUExcVZSdFpTQnlzaWJhWTdwY0N2Q082R084bFU1bmcyaC9kSCtHMlpoVHpN?=
+ =?utf-8?B?UXRGZDlwek1zYmdjTk9UVXpBNEFOVlVqVjNTMk82TkhxN0NtYjM0Rys5aVVV?=
+ =?utf-8?B?YUFLVkcxSUtDZHpQWmgwOVlZTi9pOTZRUlVvTEx2MnhseW0rSGpuTWYzRWdH?=
+ =?utf-8?B?QkZHTjA0Sk94V3B1UU92d25hNkx6ZnJUU1JWQVJqTWlKRDk4S1ZjU3lhbVJJ?=
+ =?utf-8?B?SEoyUWRuNldHb0ZEeWxvZnZsV0J5T3Bwemd2eHdHZFpjY2RCWURURUtnSmpD?=
+ =?utf-8?B?RFh4MzRNYkFQZFB5MStucktyN0l5T2huR0lYU21ONGo2VDBMeXRwM0xHU1gz?=
+ =?utf-8?B?VmtIcFh2TEo2QkpLQ3hUdFIrWGZMQktqend5MHRGMEZPMTlTeklhdWNOUTgv?=
+ =?utf-8?B?cVRYaG9xcGJ0Z2g1L3dQNXh2c0tQRVZDRW1xN1kyTE84V0tWckRRd2tXRk5m?=
+ =?utf-8?B?bmM2dk40V3RqSXhvMUVYWU9VOEJ6UE9RK2FXajBtQ293cDFrQjZiTXJic3Ro?=
+ =?utf-8?B?Y2htRmRiMDFlWmRGQ3lMS2VXcGU4L2p0a2hFeFZCNDU2S0lwWHNPNGpkTHVT?=
+ =?utf-8?B?dkdpdXpVOWd5SXlBRnNDeS9pYnVXb1ZYSExlRlFSaWE3MHlJdUlnWXp6OTEy?=
+ =?utf-8?B?eWlQdVZpdnRzc0lNdWxBVHp0ZVM1bGpQZXhoc2RxbFB4dFp0SXpaTGVSWTNh?=
+ =?utf-8?B?VTdQeUZ2aTgvV2M0R3BZM3dOUWlXNGNOK2lOS0F4TEJNcmVIOHBXeDJuYk41?=
+ =?utf-8?B?SWtsZVhRanM2cHFaUG51TVRkMnUzdm90d0syT0ZkK2Ntamk3SUVaMWFGUXdw?=
+ =?utf-8?B?M1JpcEZaNDhMZFpSQXZvSHc4Vk9kaW90V2FBNVJpL3FTOGpmQnl0ZnRGMG1k?=
+ =?utf-8?B?SHE0QUx6Z1FnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(61400799027)(7416014)(36860700013)(13003099007);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2025 12:39:11.1042
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4b53b4b-695f-4278-3a60-08dd78f5dc45
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000066ED.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR19MB7236
+X-Proofpoint-ORIG-GUID: Mzo8Gy5zfZdM_QyeguJSoEF67y4o4nxU
+X-Proofpoint-GUID: Mzo8Gy5zfZdM_QyeguJSoEF67y4o4nxU
+X-Authority-Analysis: v=2.4 cv=B6W50PtM c=1 sm=1 tr=0 ts=67f90d76 cx=c_pps a=98TgpmV4a5moxWevO5qy4g==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10
+ a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10 a=VwQbUJbxAAAA:8 a=w1d2syhTAAAA:8 a=20KFwNOVAAAA:8 a=50kEoTg9bBTm9TY1MkMA:9 a=QEXdDO2ut3YA:10 a=BGLuxUZjE2igh1l4FkT-:22
+X-Proofpoint-Spam-Reason: safe
 
+On 08/04/2025 10:25 am, Richard Fitzgerald wrote:
+> On 19/03/2025 11:05 pm, Nico Pache wrote:
+>> FW_CS_DSP gets enabled if KUNIT is enabled. The test should rather
+>> depend on if the feature is enabled. Fix this by moving FW_CS_DSP to the
+>> depends on clause, and set CONFIG_FW_CS_DSP=y in the kunit tooling.
+>>
+>> Fixes: dd0b6b1f29b9 ("firmware: cs_dsp: Add KUnit testing of bin file 
+>> download")
+>> Signed-off-by: Nico Pache <npache@redhat.com>
+> 
+> This patch doesn't actually work and breaks kunit.py.
+> 
 
---zg2ap4wtnzxx7lsp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I was working on a series to make the same fixes to another Cirrus
+KUnit test. That series makes the necessary changes to all_tests.config
+so I took the liberty of fixing your patch and including it in
+my series.
 
-On Wed, Apr 09, 2025 at 10:26:56AM -0700, Kees Cook wrote:
-> On Fri, Mar 21, 2025 at 01:47:24PM +0100, Joel Granados wrote:
-> > If the test added in commit b5ffbd139688 ("sysctl: move the extra1/2
-> > boundary check of u8 to sysctl_check_table_array") is run as a module, a
-> > lingering reference to the module is left behind, and a 'sysctl -a'
-> > leads to a panic.
-> >=20
-> > To reproduce
-> >     CONFIG_KUNIT=3Dy
-> >     CONFIG_SYSCTL_KUNIT_TEST=3Dm
-> >=20
-> > Then run these commands:
-> >     modprobe sysctl-test
-> >     rmmod sysctl-test
-> >     sysctl -a
-> >=20
-> > The panic varies but generally looks something like this:
-> >=20
-> >     BUG: unable to handle page fault for address: ffffa4571c0c7db4
-> >     #PF: supervisor read access in kernel mode
-> >     #PF: error_code(0x0000) - not-present page
-> >     PGD 100000067 P4D 100000067 PUD 100351067 PMD 114f5e067 PTE 0
-> >     Oops: Oops: 0000 [#1] SMP NOPTI
-> >     ... ... ...
-> >     RIP: 0010:proc_sys_readdir+0x166/0x2c0
-> >     ... ... ...
-> >     Call Trace:
-> >      <TASK>
-> >      iterate_dir+0x6e/0x140
-> >      __se_sys_getdents+0x6e/0x100
-> >      do_syscall_64+0x70/0x150
-> >      entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> >=20
-> > Move the test to lib/test_sysctl.c where the registration reference is
-> > handled on module exit
-> >=20
-> > 'Fixes: b5ffbd139688 ("sysctl: move the extra1/2 boundary check of u8 to
->=20
-> Typoe: drop leading '
->=20
-> > sysctl_check_table_array")'
->=20
-> And avoid wrapping this line for the field.
->=20
-> >=20
-> > Signed-off-by: Joel Granados <joel.granados@kernel.org>
->=20
-> Otherwise looks good to me.
-
-Thx for the feedback;=20
-Changed this and took in your trailers, but wont resend.
-
-Best
---=20
-
-Joel Granados
-
---zg2ap4wtnzxx7lsp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmf5DQgACgkQupfNUreW
-QU+E1Qv/QukQGbyEzmzoHNz2YK7Udn5VKQIOW2yPC5zsJqRGysBgkGyVoJa8wctt
-yaxtcx4FNYFCI/l6u8Z+2cFx3vkXGh3q02zvuQnMq6LwS/CO04cWjvHUhZAVXl4e
-fHXxF27eqpRePOZ5tUjXdo4s3DddBieYJ/aL+kRvsE6wDrwb9dWVwNJXcQoZO2oU
-Lhar9DC2NcA3StqOM2lfQ2xx2GQT5qGU6XzLCSXJTC9lwgCE3N1CT5cvk+Broc90
-/LLq7bKrsidFbwxvlByhaFif7ObFl6OKulQ84apUIqDWuKu62QPA/zZ5+w71xeYI
-AU1a72Grs54cgIVyrCNEKVbIu1nlVWjkhAGlS2gDihwx10y78gl7+25csFKklEhM
-KoqG/6ngemVRaJrzA6mV6JWA6omA0jfrobrjtboAqml37/fq0GBFk1CHrYIFtlNJ
-xhS+Ql3ImjslYY8vRVDstLnMBAisXmYNmAeDceh6JHhh8HigobkrSD5vfHGOUmwE
-4kA9kPyh
-=6Pet
------END PGP SIGNATURE-----
-
---zg2ap4wtnzxx7lsp--
+https://lore.kernel.org/linux-kselftest/20250411123608.1676462-1-rf@opensource.cirrus.com/T/#t
 
