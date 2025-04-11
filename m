@@ -1,141 +1,150 @@
-Return-Path: <linux-kselftest+bounces-30604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30605-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90F1BA85FBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 15:56:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB31BA85FFE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 16:07:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEFA11B8565D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 13:56:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FFC84632D0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Apr 2025 14:06:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094611DE3AD;
-	Fri, 11 Apr 2025 13:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F4BD1F2367;
+	Fri, 11 Apr 2025 14:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9CeYtAJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CiI5UjVI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DA31917F0;
-	Fri, 11 Apr 2025 13:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E213F8635A;
+	Fri, 11 Apr 2025 14:06:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744379759; cv=none; b=R73kP2Vxc+w43aSOxC3rer+wvYLPOJvD+JZG2qTsYoIWCyeVLcZHSWT6cJSUSpPvzELgRkFeVMuErDj7GrN1CI0M3XSfSf7JQ+AXX7zTMRgz5/TZ2YdtGXLCIYQy/zViTs45u22QYoZDOS/z8wUN3UgpSkamp6dKYv+qj1DQy14=
+	t=1744380363; cv=none; b=eupo5RfB0gE22583xkGFIZFjwV99Jk/tYLjCKrBxhPNr9+2UbcUnOQ4Dss5W7K+lOWGH+d1dgciRQOUL5ZyCdyz9PU6f7hSrGc8PUQLe88izcRjbl86XkZP4EVNgW4jO+V22GYINkTyTQaT31ssB84c8ZrblT7w+nOSfQRVVoTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744379759; c=relaxed/simple;
-	bh=Hksio+SBng2Ph0jL+AW8Cf2YcpKo99uTiSN2rqmAQVM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gNv7ohczrIhpkDs0XRoUHHV5Kf6dN+waZV6i+WaGP6yElxmI+EbuBzQHO15tfNrY6+PYjJ1InNwJIu/QW8eQJ04w61U5ad5q8NZMJY0Jvi5VxuQnXQwDFOOg1ElDGuONtT+0Izhv63UzXL/5pYI4tSliRV3Yv+313lv2RxUQNIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9CeYtAJ; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-736bfa487c3so1787839b3a.1;
-        Fri, 11 Apr 2025 06:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744379758; x=1744984558; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9fgT+aB/ObOAloX5DH3cQKl+POiKYMAsP7NDiSj4mfE=;
-        b=E9CeYtAJ0F0gllu6JtrNqgSzGZFGFoGPVvZBzrn6hCkDyLWvvLDRDcEpy68z8atTox
-         0cuDtLNxE5foj+flOnskYmns+I7R953AMBRppciRSyVAYLcCDkBpJDMP1hQpOwIdjKgS
-         ijHcpy/H7DwIUdlK4qEiSgxnnRbIJ/wmMA1/xW02DVjGOn9D9CH0xxlbca3I6ugMZ1Tt
-         GuWBhBfWg0hNAsyxlAJ8LWXPIsfw5o1uI/jl/i+jH2W30PrgEUPO3BMP4Mvue8OMkulb
-         7e7WCZs7RltEJg3jtTvy282eyo9vfW2dhu2dwujMOk1Hh1tGKqooSrECh2ShLaz2HR2A
-         OcLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744379758; x=1744984558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fgT+aB/ObOAloX5DH3cQKl+POiKYMAsP7NDiSj4mfE=;
-        b=pRz+5HKmkEBgXrghOwQrAzHYVrT+CgyhweSBy8s/2nbWEa/cISlTzYq53QgUZe1p0I
-         iH9PKjrGpCG2Q2mhrbfJNT7ZBmDiPXl792/kil5+Bzcnehb6zc2Sa5TLatpDwH1Sa6n6
-         HOhtAWH2NQwjmKSGNkGzCC+EutE5BKSP8hRWEXa/GbeQAQT8SADzdo0HD5avOvz4QI6c
-         fKEm9JTsqdkHNh4W2U6raM5nvKpONquHA6gWYIlfXFKfmjmqGgkRyQxabCYbE5qb4wVb
-         priZ+jec82pQYywU3Qyr0u6RHA663+B9+tQ4sDfoKRFkF5xsc1PdQZx5qYCdyzjoYFeR
-         yq1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU3ZQxkEJrqH6GoN81AyJroxN+V7gDqEgiarei+vrnaRNsGFcJaOpE3oxmyoBNyisNF0ksKT8sOtg+0j0Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLVz24fV8rjTvGF1LuNgkZA2AT2HXNSDc2tMQJlRvEz3uCKovU
-	gd6fSNzgGminsEfGrg9M+7LRf97h5BlnEEWvgTRIVrXCh32EQPoq
-X-Gm-Gg: ASbGncuuLUmlMadp18tl6mu/uREYk2smufNPInnujrXR7AVYBLdB0cgjQE95Nq1bEYY
-	xkCRZRz23Zd899Lv+mxLXhb81Z9yfVP68Rpbq7d6a6EUIiMvsV2/W+8j8hVSogXNhpER/C663Jp
-	TtbKRmHeweJBlQfYw471awSp3Trd7pfgNnLmmwDA2gkD5PJ2tkZpc4sMDJuM1TkF7gmXhyQl9yq
-	Fw0qLwKGHeJ7uSC7VbU21PmQvhYf+lnW4lXajHI49EBmYVLxV0Tqqx+qHT9tL4EI1LlJ/Mqiobs
-	3JYZ0gNoO05gzIjxvG1tj3sqS/MPGxp2D+JlKjnmwj6pq+npVSeP/or2rQ0=
-X-Google-Smtp-Source: AGHT+IF57uOoN1+g2NXZ4dw98X52Co0XdPWGzDqnOvXOt7h2udRQqPwsNmdyGbrkTlaIXPVHPNA03w==
-X-Received: by 2002:a05:6a00:843:b0:730:d5ca:aee with SMTP id d2e1a72fcca58-73bd12cdb7emr3902525b3a.23.1744379757687;
-        Fri, 11 Apr 2025 06:55:57 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:c408:a0b5:6154:df3d:5cdc:6ad])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bd2333859sm1485740b3a.158.2025.04.11.06.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 06:55:56 -0700 (PDT)
-From: Kevin Paul Reddy Janagari <kevinpaul468@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kevinpaul468@gmail.com
-Subject: [PATCH] selftests: Removing deprecated strncpy()
-Date: Fri, 11 Apr 2025 19:25:35 +0530
-Message-Id: <20250411135535.41423-1-kevinpaul468@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1744380363; c=relaxed/simple;
+	bh=HlikJyA3RK/we9R2FRAkqQszIW7QLL+7TnR3hFlO3p8=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 MIME-Version:Date; b=IbE1oKrbpBwj47u+ivqpbRLMZNxWYwZpqjcCx8hXLSnybXHLQQ+2Sh4UCxcGyQX3WLIA4TdZJBLQxsSeTijsRqcbcmAUHAX6RYgYILM2xGseprZ318K7llgjoAKBvQj83xFVmXN5I3BqVWSQXgUijuiw4YPY/6M+MCIGZbI7EuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CiI5UjVI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC75AC4CEE2;
+	Fri, 11 Apr 2025 14:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744380362;
+	bh=HlikJyA3RK/we9R2FRAkqQszIW7QLL+7TnR3hFlO3p8=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+	b=CiI5UjVI7wphAZSfd37O9uqQOvJAKY/aFXR68AI0sSamvYzff1Y7ICpnCiBARwqBS
+	 e/PD3XhTxshajAoIHmgt1x20FRASYm6tF0W5rAveYgVU3aFJ9Vef6wRSFpaxZfaiQQ
+	 hJ3IgZNzKdN7odI2VMzTsjM6zxME045mlw/5w4gV1YiUdEowJQ49gQBCax22ddNIw1
+	 w27iN0wFSMhA0DJg0zYL0z66gdIfMncNL0N9+adRIHDY2ERW/GhiJiMMZqjuiHAJ8L
+	 Sbn4t7uLSnRnOzM1Ub/lirc/SwLC1nCnDSjwkW1h1tbVVmQ768Zn4lVU83v8jmG3P6
+	 QkgrvA4OLOZXA==
+Message-ID: <1fb5a9e97e97b86c8b0d6008eee579a0bebea708.camel@kernel.org>
+Subject: Re: [PATCH net-next 2/8] mptcp: sched: split validation part
+From: Geliang Tang <geliang@kernel.org>
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, mptcp@lists.linux.dev, 
+ Mat Martineau <martineau@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet	 <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni	 <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan	 <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+In-Reply-To: <20250411-net-next-mptcp-sched-mib-sft-misc-v1-2-85ac8c6654c3@kernel.org>
+References: 
+	<20250411-net-next-mptcp-sched-mib-sft-misc-v1-0-85ac8c6654c3@kernel.org>
+	 <20250411-net-next-mptcp-sched-mib-sft-misc-v1-2-85ac8c6654c3@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Fri, 11 Apr 2025 09:57:39 -0400
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Content-Transfer-Encoding: 8bit
 
-This patch suggests the replacement of strncpy with strscpy
-as per Documentation/process/deprecated.
-The strncpy() fails to guarantee NULL termination,
-The function adds zero pads which isn't really convenient for short strings
-as it may cause performance issues.
+Hi Matt,
 
-strscpy() is a preferred replacement because
-it overcomes the limitations of strncpy mentioned above.
+On Fri, 2025-04-11 at 13:04 +0200, Matthieu Baerts (NGI0) wrote:
+> From: Geliang Tang <geliang@kernel.org>
 
-Compile Tested
+Please update my email as "Geliang Tang <tanggeliang@kylinos.cn>" here
+and in patch 7, otherwise, CI will complain that the email address
+after "From: " is different from that after "Signed-off-by: ".
 
-Signed-off-by: Kevin Paul Reddy Janagari <kevinpaul468@gmail.com>
----
- tools/testing/selftests/sync/sync.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks,
+-Geliang
 
-diff --git a/tools/testing/selftests/sync/sync.c b/tools/testing/selftests/sync/sync.c
-index 7741c0518d18..4b284f517433 100644
---- a/tools/testing/selftests/sync/sync.c
-+++ b/tools/testing/selftests/sync/sync.c
-@@ -29,8 +29,8 @@
- #include <malloc.h>
- #include <poll.h>
- #include <stdint.h>
--#include <string.h>
- #include <unistd.h>
-+#include <linux/string.h>
- 
- #include <sys/ioctl.h>
- #include <sys/stat.h>
-@@ -71,7 +71,7 @@ int sync_merge(const char *name, int fd1, int fd2)
- 	int err;
- 
- 	data.fd2 = fd2;
--	strncpy(data.name, name, sizeof(data.name) - 1);
-+	strscpy(data.name, name, sizeof(data.name) - 1);
- 	data.name[sizeof(data.name) - 1] = '\0';
- 
- 	err = ioctl(fd1, SYNC_IOC_MERGE, &data);
-@@ -198,7 +198,7 @@ int sw_sync_fence_create(int fd, const char *name, unsigned int value)
- 	int err;
- 
- 	data.value = value;
--	strncpy(data.name, name, sizeof(data.name) - 1);
-+	strscpy(data.name, name, sizeof(data.name) - 1);
- 	data.name[sizeof(data.name) - 1] = '\0';
- 
- 	err = ioctl(fd, SW_SYNC_IOC_CREATE_FENCE, &data);
--- 
-2.39.5
+> 
+> A new interface .validate has been added in struct bpf_struct_ops
+> recently. This patch prepares a future struct_ops support by
+> implementing it as a new helper mptcp_validate_scheduler() for struct
+> mptcp_sched_ops.
+> 
+> In this helper, check whether the required ops "get_subflow" of
+> struct
+> mptcp_sched_ops has been implemented.
+> 
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> Reviewed-by: Mat Martineau <martineau@kernel.org>
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> ---
+>  net/mptcp/protocol.h |  1 +
+>  net/mptcp/sched.c    | 17 +++++++++++++++--
+>  2 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+> index
+> d409586b5977f93bff14fffd83b1d3020d57353b..7aa38d74fef6b5f00d97a114d74
+> b711014d0a52d 100644
+> --- a/net/mptcp/protocol.h
+> +++ b/net/mptcp/protocol.h
+> @@ -744,6 +744,7 @@ void mptcp_info2sockaddr(const struct
+> mptcp_addr_info *info,
+>  			 struct sockaddr_storage *addr,
+>  			 unsigned short family);
+>  struct mptcp_sched_ops *mptcp_sched_find(const char *name);
+> +int mptcp_validate_scheduler(struct mptcp_sched_ops *sched);
+>  int mptcp_register_scheduler(struct mptcp_sched_ops *sched);
+>  void mptcp_unregister_scheduler(struct mptcp_sched_ops *sched);
+>  void mptcp_sched_init(void);
+> diff --git a/net/mptcp/sched.c b/net/mptcp/sched.c
+> index
+> f09f7eb1d63f86b9899c72b5c2fd36c8445898a8..1e59072d478c9b52c7f7b60431b
+> 589f6ca3abe65 100644
+> --- a/net/mptcp/sched.c
+> +++ b/net/mptcp/sched.c
+> @@ -82,10 +82,23 @@ void mptcp_get_available_schedulers(char *buf,
+> size_t maxlen)
+>  	rcu_read_unlock();
+>  }
+>  
+> +int mptcp_validate_scheduler(struct mptcp_sched_ops *sched)
+> +{
+> +	if (!sched->get_send) {
+> +		pr_err("%s does not implement required ops\n",
+> sched->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int mptcp_register_scheduler(struct mptcp_sched_ops *sched)
+>  {
+> -	if (!sched->get_send)
+> -		return -EINVAL;
+> +	int ret;
+> +
+> +	ret = mptcp_validate_scheduler(sched);
+> +	if (ret)
+> +		return ret;
+>  
+>  	spin_lock(&mptcp_sched_list_lock);
+>  	if (mptcp_sched_find(sched->name)) {
+> 
 
 
