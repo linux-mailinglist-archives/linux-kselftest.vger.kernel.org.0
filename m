@@ -1,72 +1,73 @@
-Return-Path: <linux-kselftest+bounces-30631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 498EEA869CA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 02:30:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 893DEA869ED
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 02:58:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F0894C21C7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 00:30:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F8A91B665EF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 00:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C5921E493;
-	Sat, 12 Apr 2025 00:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B604477104;
+	Sat, 12 Apr 2025 00:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHo1/BEx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m9V++UnV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517A5610B;
-	Sat, 12 Apr 2025 00:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C682EAE5;
+	Sat, 12 Apr 2025 00:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744417827; cv=none; b=nkuGBc0yjiCmUVaBZjhKoqaiyE+Ee+CWJCdpBr5cAcbGjQUK7FWZLXsOb6o5fLUU2K9iT9wmYTpK4WBnIaxtojsmee9Y/nF0HEeeuoqZrtcxBEkLisFpVAsLzUq0NVxS6juLrnzG7VZycX/mMlDyxW8wtAqu5rRkTjfC4aMCN7c=
+	t=1744419484; cv=none; b=sL1/3Oi2J1uq7HdilwQ/koC3ojKxg/S4Z4dwhTLD2yTYCala8NkGWece1hCiLGjcR8yvJwrdcq+fSaDcwnVAUMHy59fQ1YMB9FWg6rksT4+kZ9vogs+OrYbeLZEkcAYD/Y3Vj7ne5dLkVTaeTUdX10AUtM3NwfsunPn+PGHFVWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744417827; c=relaxed/simple;
-	bh=/T7qziyieFTegoHq1quoWb4FCMn7r7gq2B6DB98pUrY=;
+	s=arc-20240116; t=1744419484; c=relaxed/simple;
+	bh=4tcELd13teizB6G1R71cLt4/wC29H1yVOSMkrjYkSLc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rGNpMRH39mqR6g9VT2C6AhkowK/CWLTiwF2twfWg2Imjfnq3wfiYTPcxgTSfhYRDhnaJtfR1aTOJcvb7RxZxgM2II7gkKYbO3h7so8j4PfP5KxbUAkS2hDLWPJsbDOonjd2bXqJnv9pATaTvNRsktFjsrQvxJvwaGRQS225b59A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHo1/BEx; arc=none smtp.client-ip=209.85.218.51
+	 To:Cc:Content-Type; b=bYNw1U8kj8dNyUTgxhquEPXc2W2F1n+802wPznNH+JYFhijcXiMd0OEOL7xgeiUlf4EQCo7i4QvvHJIfbevENcLG8V2ND+htGauKzDkjC/ppZX95oUoXoGbu/U/EiRiiel/lRaIiq0+cadZ85NscbRCOCNdpsTJH8qaCPig+Uu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m9V++UnV; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-abf3d64849dso479192666b.3;
-        Fri, 11 Apr 2025 17:30:25 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43ede096d73so19134595e9.2;
+        Fri, 11 Apr 2025 17:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744417823; x=1745022623; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PY0NYpmztQQnq3XrvsDCNu1j/I4xBInhxN+nOQvSP1o=;
-        b=NHo1/BExUQmJnLhtXEwkwRMvGpf2Kq2Kj1NLYkqZe1nA+oUsmOaTqjvYvFnjb/vNqn
-         yxYeS8fi2lzGMXWY8YaXOGHdZrNB24bscCz6Z5cb3mNH85IG1vSvkjnXh8wB8MLrymF4
-         zo8i7XH66EHlSPK7uDFvTShC7+yvckGxMEpLCgWHqhex025GZFPg+h0tL6xRScdQBd5Z
-         FU4vpKU46Z9NQ7Q3TGpHmvVRn4aT1hLmTh7eLDuZzz6/aCFF6itopC4MSsscSeuKFeMS
-         +eSbo9T6F8EwIN29uRbEv+lpvZ4t1KPa/ptgnMfNH35E9/X+ZmPNjmII87RMdiYjG6s3
-         9QpQ==
+        d=gmail.com; s=20230601; t=1744419481; x=1745024281; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=offdqmvkFJfHM6QzgUBHAoAKLM8GIhKmAd/u+Vakz+Y=;
+        b=m9V++UnV0d6exalspwmeSGn5rI9W8UEfGp1XhionmNfBGrjidxb6pp/QiE0M7CVTNV
+         lsWrKcFrnmXz9qPIeQ7w5jRRjhY4o/Jgk4Qm5y3MgBj1z1D7GPAqPgtgUH3bW5AmHo70
+         YzANO94R7/MjuzKGOIlh6YBm+3Y+7ff4XgEvwa60mFey1wlaT0HDCFxm69cCu4+YT84+
+         Lrln4u6/0Ps2ZydTUYMhspjJUHKOs4Jm3wMuMoeA/P8e/r3ETL8XnNsEPDy/vcQn1j3W
+         DXcz/qwW4+1S5XxeYrA875tPCUnQp/LWcZCFvHa0hWRmWaPZP7fJq6PpylZqoPXgXoy5
+         CH1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744417823; x=1745022623;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PY0NYpmztQQnq3XrvsDCNu1j/I4xBInhxN+nOQvSP1o=;
-        b=YGdfRIGt/a6a+IChPg4mJbfQbaDFaDI2nwq9drwifD6FJUgE54SGrDvwPiPwi/NfmT
-         NCoexJdvDyT4tT6j8E5bxw6JHUFhJNiU1GSn9cvksfUispycGDph0kIfxRCz0ASj9yEs
-         RD14TwzPp+MJ9c4UOlf75hA2YN9uLA83fFeBnTyt+KzYFdz1Fs9R6A7qjj5lduJj3xwg
-         4njjCSQ+T7kxxCUbxRG3fzWmdKWHtwvk7J/kMc2bA9m1VCWFCrJlw75+UoVHyaWssTb4
-         cm/TfY5lkZYn50QMtxwWBzUV3Hru6xcMVgS3l+jtBgPR3l/XMz0fINg3rZFDKIptHaQb
-         gzBw==
-X-Forwarded-Encrypted: i=1; AJvYcCU67ESVGGgMYGLBnzubZISNlY6SjV+dfZ03bbQzdj3bSW1BIHe83hC0tz/CBRHkXhWCnsKNa+Ma+UQs1hLLaxKpkkqQsN1i@vger.kernel.org, AJvYcCUynb5Ifm7kCrcRTsuAO0m6b2nsL79u/F1ZYl1J/L7lRYtG3Kya/tALv/YoLp+FUp0HyTbm7m+ntXve@vger.kernel.org, AJvYcCV21jJ8AxKOzlhQI5OMdBqeOikL2w8EAVA+Si8fA+/pzva4dFNxzWLy0kddOBGt3eQaVxc=@vger.kernel.org, AJvYcCWJiwDS7lXUxYSWgeYc0VXX8xkaKoSAEtOBzkKCzJ0WeZ0ClmdefMszvoE64nEYPzPDoxE0QxbCdy8bxdmx@vger.kernel.org, AJvYcCWMViXHnJ8PQ7uDmluflP4Gp1HslinGkk/0zq6VUyikOdBjo+81iZos3JaGLs5i/+xGj4jbAhFuszlyedSM@vger.kernel.org, AJvYcCWpD3+O/1Ufl98wu3+PpkcGIUOd8YyNkPq5pMwMmMhIU4cEHttkjDH7EVPT8PnikxALlK0/XG/zQbKZPJjI@vger.kernel.org, AJvYcCXJquaZZMYI+urA1Sg95bThPVLKW0zwZnRDKOynanmRTsj27WqdBh+UEtMj1zNKl9PHI4DNWxgl9Jo=@vger.kernel.org, AJvYcCXUkXdU6I5pGNV0jS6PS34ga6iOqEOpZu3FDLXJsDgIiSSYmp1W3t6I0MJXYUQ7RYoQsb7UmF/NNByQA+Ph2oVv@vger.kernel.org
-X-Gm-Message-State: AOJu0YwooWGgajd6fr3ihL9k/B4eQtzy/z12k45FJgGqY8PueMtn6J3b
-	QYyEUrkSSsIG/uaue+yDxTDxOYedcljYUw96IWfHVF/QMLcmzPZGc3B+5jOvlP2JWvYgKLDta62
-	ZaQWLSIuU3urC5ksdVAw6LAFNd7A=
-X-Gm-Gg: ASbGnctRZXin4sihvSNiJhbsqQqwvWBFWv+PzmLd9BsuVDpkagauX8ZpwUDpMFhVD+6
-	/xuEx7Kq8hg+OyaGVHh8sea+LT2HYGFwcZSR35YX7BD53m4DqPcxS5XgJkjMifZ4K+o+HF3riYi
-	ED5Uu2NAMRwmzc00EgOuyqsIEG8VHvl1dd
-X-Google-Smtp-Source: AGHT+IHV6V1Nd199fyktCVt8NkaX19y3fkdxuYg3faWj9lISfY7XX+/TP8euSAUokRbzoCnATi1D27aZXunIc9oKc/4=
-X-Received: by 2002:a17:907:a05:b0:ac6:b811:e65b with SMTP id
- a640c23a62f3a-acad34fca94mr400892066b.36.1744417823251; Fri, 11 Apr 2025
- 17:30:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744419481; x=1745024281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=offdqmvkFJfHM6QzgUBHAoAKLM8GIhKmAd/u+Vakz+Y=;
+        b=lTNV+4Rr6u7YUg+ii4ydaI7RxVcUTznH6SDmjQhvuyTc4uznh7oLdCgIUoBCCKpSb/
+         LXDTyxNUkYtfUlaqijhDJVZ4679q6fYDKnojU1jDuLXKem7zjZvD5T9SA++acrX3ZCvN
+         TiRnFde9j7Gisw73n4u0IlTUqu/9gDapF81QJ8GKYnDwPFRXeZ0Ayat3btUvSZ53iVah
+         3MLmVHMTSRcRnvKZr4gl8QoF1YuH7cOArPqAbxW1skm+SO8mw2snQpSe6vx1gzkcNMLd
+         ijsuudnf6SzlUJAxY8tkJ7+nuDcN75aY7OpEzTw4wuSl0CNhW9LprODaMwrcWQ8+TOUh
+         tIoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUA4L7zbTHDGLrjVhRzC5yj4erAViHkdUYGBMxUpBkaXRJMzvjoa3wuc3VzxzYRN3Uiw4dQESYxxN6Kbr78@vger.kernel.org, AJvYcCUc6kInfCX8yn70o3/Dc0E0pWC2lvyVafxNtXT9WLtxD3ihwm23/0UVOnXA6U1vOTz2zTMAZlPpJNiuhN6eKr3k@vger.kernel.org, AJvYcCV9MbHEFIiDQVzmRlWQcyDwijGUOgylxE3xYSDetq6GOTVCZXiv+UjtVrDTg62YzX4p/SgPVb7DYCjMOsLh@vger.kernel.org, AJvYcCVWIasjuPwrLhBbUOIZ91IKv7tCEX9lQsU2FZHJNdYUqA6PYNzhP9EWetfl1Y6B3uiecIZKwfLWYg+v@vger.kernel.org, AJvYcCWOoOV/Yg0LbIrMJG1ydhG0W8TyfzVbasjwnqIPgJHfVdWyN+vmJjGSbFPmUegq2nkEzGY=@vger.kernel.org, AJvYcCWYBfTRRch/Tg4g/NCbeXuWSl2b323EB/4p6e3Vc+jAWZ9cOhwbr+o+QuQPTUN7qgkf8sjJ9ggRnc3ZfQX9k9qPiPl79aUj@vger.kernel.org, AJvYcCWgw5vmFxvn1vbU2TdOyZsKaAD7+cqxM4NrYZzOoSQzwD76uFFBU+CuaBhs7jEF/YGAxbx/GdYnu0u9mbvs@vger.kernel.org, AJvYcCWqlcEQ9SXEZy7jhExldk8IhbCqPowRlusV83CXHSL6qhLvQ7M8N/Sy4FbBS7ODoEBGLap+i7STFDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxasBTqZkfY1sUkh2kDwpO9ml+qd6bPIxV7g1YdSJS0dlVThufn
+	fHTeBwaHo724BmtRR1AFId+SrrJ8G4SrB93IfJ1Cf5uTqIXlPJ+1sElDq0Ze8N0hVissoVz0zcp
+	/bInix5oBmzNi6gMCh0tNsY4/EsA=
+X-Gm-Gg: ASbGncvg73XTxjwF+cdDhMu34DLv5geKAa/q7x0RQqwQd0TZW917QXsDNIeYKU7ZX1W
+	WHndklICfkmpOV4pcEPUZoPV9lkS/Kiy3fHRIiZCUjWhTa4UJw92xn5WtMozd9mHseqPuhJeRQJ
+	D06SZx2zC9ycT41gX8uY8D29XoWBUwxLiDEnSbXJ9/cKnDqct/
+X-Google-Smtp-Source: AGHT+IEFrfwIhf1dnPGv0cjHH5i2aO5ebUNrMZZQ/ewydMhNLm+WsR+aOi4a8v0IlIUg+wUzUz/zyHgd2Dl4JnAcXUM=
+X-Received: by 2002:a05:600c:5494:b0:43c:f050:fed3 with SMTP id
+ 5b1f17b1804b1-43f3a93d850mr43211925e9.11.1744419481051; Fri, 11 Apr 2025
+ 17:58:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,13 +76,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250404215527.1563146-1-bboscaccy@linux.microsoft.com>
  <20250404215527.1563146-2-bboscaccy@linux.microsoft.com> <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
-In-Reply-To: <CAADnVQJyNRZVLPj_nzegCyo+BzM1-whbnajotCXu+GW+5-=P6w@mail.gmail.com>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Sat, 12 Apr 2025 02:29:47 +0200
-X-Gm-Features: ATxdqUFPaRCdqR9YUd32953YWnbRjZkMYnjK4v1HZns0nPmHonjmjDP4iQ6M380
-Message-ID: <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
+ <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
+In-Reply-To: <CAFnufp1erGboUtRaqLoKC48c+9jmqzEfFW8W46xt77JMC0PFpQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 11 Apr 2025 17:57:49 -0700
+X-Gm-Features: ATxdqUE8eJ3t2XNtv61JfqDn3ir3RXF5bRaDRxRoOmmkz_xcdixjr5poHk-cOzk
+Message-ID: <CAADnVQJ5VaXVN=L+0ygEWJkMtPZnqAVEoeFiLBvikntX0zD49w@mail.gmail.com>
 Subject: Re: [PATCH v2 security-next 1/4] security: Hornet LSM
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Matteo Croce <technoboy85@gmail.com>
 Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
 	David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
 	"David S. Miller" <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, 
@@ -103,50 +105,45 @@ Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn
 	Matteo Croce <teknoraver@meta.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
 	Cong Wang <xiyou.wangcong@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il giorno sab 12 apr 2025 alle ore 02:19 Alexei Starovoitov
-<alexei.starovoitov@gmail.com> ha scritto:
+On Fri, Apr 11, 2025 at 5:30=E2=80=AFPM Matteo Croce <technoboy85@gmail.com=
+> wrote:
+>
+> Il giorno sab 12 apr 2025 alle ore 02:19 Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> ha scritto:
+>
+> Similar to what I proposed here?
+>
+> https://lore.kernel.org/bpf/20211203191844.69709-2-mcroce@linux.microsoft=
+.com/
+...
+> @@ -1346,6 +1346,8 @@ union bpf_attr {
+>   __aligned_u64 fd_array; /* array of FDs */
+>   __aligned_u64 core_relos;
+>   __u32 core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
+> + __aligned_u64 signature; /* instruction's signature */
+> + __u32 sig_len; /* signature size */
 
-Similar to what I proposed here?
+Well, yeah, two fields are obvious.
+But not like that link from 2021.
+KP proposed them a year later in 2022 on top of lskel
+which was much closer to be acceptable.
+We need to think it through and complete the work,
+since there are various ways to do it.
+For example, lskel has a map and a prog.
+A signature in a prog may cover both, but
+not necessary it's a good design.
+A signature for the map plus a signature for the prog
+that is tied to a map might be a better option.
+At map creation time the contents can be checked,
+the map is frozen, and then the verifier can proceed
+with prog's signature checking.
+lskel doesn't support all the bpf feature yet, so we need
+to make sure that the signature verification process
+is extensible when lskel gains new features.
 
-https://lore.kernel.org/bpf/20211203191844.69709-2-mcroce@linux.microsoft.com/
-
-> The verification of module signatures is a job of the module loading process.
-> The same thing should be done by the bpf system.
-> The signature needs to be passed into sys_bpf syscall
-> as a part of BPF_PROG_LOAD command.
-
- static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- {
-@@ -2302,6 +2306,43 @@ static int bpf_prog_load(union bpf_attr *attr,
-bpfptr_t uattr)
-
-> It probably should be two new fields in union bpf_attr
-> (signature and length),
-
-@@ -1346,6 +1346,8 @@ union bpf_attr {
-  __aligned_u64 fd_array; /* array of FDs */
-  __aligned_u64 core_relos;
-  __u32 core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
-+ __aligned_u64 signature; /* instruction's signature */
-+ __u32 sig_len; /* signature size */
-
-> and the whole thing should be processed as part of the loading
-> with human readable error reported back through the verifier log
-> in case of signature mismatch, etc.
-
-+ if (err) {
-+ pr_warn("Invalid BPF signature for '%s': %pe\n",
-+ prog->aux->name, ERR_PTR(err));
-+ goto free_prog_sec;
-+ }
-
-It's been four years since my submission and the discussion was
-lengthy, what was the problem with the proposed signature in bpf_attr?
-
-Regards,
--- 
-Matteo Croce
-
-perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
+Attaching was also brought up at lsfmm.
+Without checking the attach point the whole thing is quite
+questionable from security pov.
 
