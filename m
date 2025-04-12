@@ -1,137 +1,138 @@
-Return-Path: <linux-kselftest+bounces-30633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F33DA86B4B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 08:30:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5BEEA86B50
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 08:33:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DD583B8DEE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 06:30:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5BBD4A25E1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Apr 2025 06:33:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0212778F52;
-	Sat, 12 Apr 2025 06:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C90015CD46;
+	Sat, 12 Apr 2025 06:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xQMAh+F4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X8MeLB1e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647B48BEA
-	for <linux-kselftest@vger.kernel.org>; Sat, 12 Apr 2025 06:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC878828
+	for <linux-kselftest@vger.kernel.org>; Sat, 12 Apr 2025 06:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744439431; cv=none; b=o551mu6s15SAWuR1LP3uh3/LazmUzSBFx21K5ojihdQoi8sHj/5i7R9B+n5StSy3mi4WaDp/TU1FQOu2fVp21Bf+zm6H1XIVynOZSzspezwz9TO4ESqD2FZxUVyDwEMMzUOQs6CcfvM0WMI44uldS0dss7j4+37z9aRB3WoWNZo=
+	t=1744439619; cv=none; b=u1gPNsaYiVNR8Q2eGywZHIqjjPDVyrjSz2JhiF+gkpHp3XUdxUqX44UKB6+w/X3Z/gGTDaQs84dmHL1p0cB56gSuKQC1GE2mbSOS2PiE6WH6xEvDwhMZOh3hw7Ahnao6hykjqSkOhgWvFQkhwoN3dRZnQPTC3Xb9+wFPfZG6i/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744439431; c=relaxed/simple;
-	bh=GNLkjk7TFPTn49XbPjw70aGXB8Ytd4xPnbFY3QlOBRM=;
+	s=arc-20240116; t=1744439619; c=relaxed/simple;
+	bh=MSCJDtCiggxtUpg/GZpLm7FqFjfUALUVFE7bKRCC3c0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P2BEuwuYi62kehzIY7mgiKvkwZHfDCMhO6mDvsYkMKLmUfFQYpB/GAewAqiHPEZq5nQrI7KwGK9UmMUV/su7wflugfUFlObcg9zLJgrllFcnFoosGHvLX8e0oei5qPwngenmlNKrRomQloo8MZ5CR3lJrFnUDCykqbyFnkaqXi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xQMAh+F4; arc=none smtp.client-ip=209.85.219.50
+	 To:Cc:Content-Type; b=LmiJDfriqXDzgY+15HSHFkV+TdmthgYRIjvGgdtmIDWyv2YfeVILo19iZfFAXS2Lugyk8xnCLdQZICuvY/CYfTaXO1rRbdsJnMxE/RpmE3NJ2ALG5u13x7rXlXvhZ4AvMA60m9LmAAHGUs2fzJ+oJkLdRcRgUzqiDKn9JtVarpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X8MeLB1e; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6ecfbf8fa76so30214966d6.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 23:30:30 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6e8f05acc13so30024246d6.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Apr 2025 23:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1744439429; x=1745044229; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1744439616; x=1745044416; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHgCFKrdNApkV+26akk1sZnbuom0YSPjuxf6LEnEuOk=;
-        b=xQMAh+F49lAffhmfVS82Kl0rmFHbXYmKVwvj/evKIM9DhJ4aIIaz0O018OxfRgXCXd
-         5ulWRGhxnfOKeHBN0bnyFdFYEsmXvCmdInfyYRety21z1FqhDVb70aqIqylO1Uso6hBO
-         U99QkNAXwyHR3e/X3YpHefV+ZKQVLDKIPN36MsFaL8sDAMprSFYhWDM/4N9Sip/PeXgc
-         KB9kFwsnb0cDy+8cCaZZE+IQa3SpYYZjtaWH20FXykyoNRbwtZyW6E40rXA8RTb3/fAn
-         EjNML/UZLSB4QpmI0nPnAcsqUc1b3va4o0uDFNZiEXbcv80cL9+3YUT7AYrLvqlccRBK
-         S2mw==
+        bh=tqlClJAo+mOuG/UmsshJ384mfWQibGNu8MJqE2pYQTM=;
+        b=X8MeLB1eEiLQDGHyPjbxupf/WPbQ/2O+Tkn1uJilE1I0qECoGS4VbxpTrmacsnPx2+
+         JJm6O9upUbo5+5xGWYOsuFUaMG495ap9HcwrXiUODD8XtiU95byzQThJBEl1aTYI+7yP
+         +JobPI0MX1ZTU/uYirihLsGqe7Y1P2KQqn1wYPzDngej2VGPt/1aoTdrT/C233uR4IA8
+         rW5VLvHmCMjidePW4I7aIlSlOdSS87CrmUsU62/qLzLTeY52waqg+291mXKkq10pYWbe
+         Lc8HAoy24ytj8P0qpjb1+xRv5Eq3rcJ4MuupXQFKfK0Jvot7MF6rpuftGh2kBE6vjl/2
+         UFmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744439429; x=1745044229;
+        d=1e100.net; s=20230601; t=1744439616; x=1745044416;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FHgCFKrdNApkV+26akk1sZnbuom0YSPjuxf6LEnEuOk=;
-        b=Li01Fy48/0nszlYJ8sB6WBlimigTNf+m7cNqKxL92ess9tvtATo4vsNxT9devc4Wr2
-         235/gxJimo8YjQCe27Q9GCJ2bHqfAaBz+sJtTTMjHpJ2w+hBYDvIKZuHPOffamS1cGCX
-         K0TApCDhX+Gdq6glbA1L0EXKmc2zwX7oDeQBVlhM/mgy4uguteRBhm4PR7H5LueSOHJe
-         M2bPZyHK0cU0DJifM+HFhHZ2179e4v4G+nkuOqO+bn+lv6SFiLSzy1MtH3dG6k+rpnj2
-         Sw/MJqz4DO6lY2gX4rQ/eEhPKUHxSEL16cSn7YvdRfGKX2fXnOjk8NHmY9uHN8KKWYcB
-         T8Rg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdvH9YZ8YpHmfIosoDJbXvV+rAfNn5d5miyUU88NnpsBikgXx6SnsxMVbaKUmtByO2nv6NS/lVJ6uQZIyYUFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVI3i4XtNn1CT+rC7F5cGvT/W4gkcfbk/u8pfJR49oku9UtxRj
-	32rR/4XQ60npUFI/xQq4LbdRl/DO4lgaVJH7yiiyJeKHhkdtV1qfn5OQEBBMjCmXRqSktSOqYJb
-	0NAoB7iWuJFOnFeRc0uDEF8B65KbRh693/G+C
-X-Gm-Gg: ASbGncvJTn5VX5KLg0ubksRnnowq4Y8OzHNNJDY7aFYptA90Ss7h68tW4w65/ZbBglF
-	J/iSJheERtsI1SsqXEZqh0WVU96dHDwEb4sDmZ8TGA+eDN9EgiGg4aO4Wo+84uhh32sYLFfX5zr
-	CQZ5SxT97HVSjf2Rb/c+be9MM=
-X-Google-Smtp-Source: AGHT+IHHFDS1NfflpLohawiqi0VwBE1TaW0BJA21zrMIbJFo1M4wlhKurtylKWZi8eaIUuUlrhw0KTWNH1CdndzEu/U=
-X-Received: by 2002:a05:6214:1c43:b0:6d1:7433:3670 with SMTP id
- 6a1803df08f44-6f230cc3729mr78577136d6.4.1744439428777; Fri, 11 Apr 2025
- 23:30:28 -0700 (PDT)
+        bh=tqlClJAo+mOuG/UmsshJ384mfWQibGNu8MJqE2pYQTM=;
+        b=OZQhj8s/VFSBtB9ys0JbWzC8pFPVmm0+fkHQpHJxCdgfDZyblzPRdRMHxGRcV2NIId
+         zs88mfpwrMErntPdzYRpwQjJvKoiQAHaByKUOZFudE6spGWLSV5Ajj1R3fW3vjJ6QPcy
+         Nzsx0S5WfZGtuGExEMJA+oSTQiTZit99fHfTLR5e2Exl/0AfajCSlEY14djAQmoqrQUi
+         lqtwRymzMsfFl4gF1w3tyEO3myXiFQCfFBX1XGzregOz7xbbMZ/vQs4sTHbQBMSAN5G7
+         WtFo37MVXq3afWjXEgGZGWKTnGeHpruSdaYheiacOXXbv9JsOqiuVp9XnmGCgPQtgrHF
+         ecNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXfloCoTgkfXEpqfZoDVOfh9Zkr4gKxfsu7HLN7s2gRmzf7hl0IovuSGridfObK2lq2EWmDo7i1rkfHQSlLTpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxF8rM5pYJsrNeoQFRRdn8ZHmpbqR4jXgRVSsGxyUPdl/1E9DVJ
+	3gvPsPejqSio/AGNuL/vuMObCSG3C4jTOpljOcjQdhcd/8Wb+o0oCbT0NC0wCK6CctVqE/JiUyn
+	/zVKr8KM/YRKXTMfsx9Dz+zM4SnFJa32XWQMC
+X-Gm-Gg: ASbGncvFyeeKl9W6tojXrbb1sYm0tEqCUWNcCZ6x5IsmX8bRvqdVOcTxXJ1zwQE7Uk3
+	8YKyTpzNMJ2BGIxXDT9hwoqgV9Dn5HoPgMhLlABYdcU9GzWBjJQ0z1ssTUIsTRWMSuUQxL88bNv
+	rIWNhZ1ZjQesK1AR1wymnppIw=
+X-Google-Smtp-Source: AGHT+IGcW+JcRRlTV9aunaNuz8FcK1vpXeR1RPFLG5dc09oJXFxmB744vqR10l8ZoVsvPymVL8JEd5YwtUc5Nu9WL9g=
+X-Received: by 2002:ad4:5761:0:b0:6e8:9394:cbbe with SMTP id
+ 6a1803df08f44-6f230d5131bmr83230056d6.20.1744439616214; Fri, 11 Apr 2025
+ 23:33:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250411095904.1593224-1-rf@opensource.cirrus.com>
-In-Reply-To: <20250411095904.1593224-1-rf@opensource.cirrus.com>
+References: <20250411123608.1676462-1-rf@opensource.cirrus.com>
+In-Reply-To: <20250411123608.1676462-1-rf@opensource.cirrus.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 12 Apr 2025 14:30:14 +0800
-X-Gm-Features: ATxdqUHwXzG4fkMu53emL6R6gzCAzjoKLmHdIin5bAn8csrKVLHOAAcuLXG5Fek
-Message-ID: <CABVgOS=_E0A+On47V6ELakGnv5Aru9gT0k-fcf=FaatT4TwJLg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: configs: Enable CONFIG_INIT_STACK_ALL_PATTERN in all_tests
+Date: Sat, 12 Apr 2025 14:33:23 +0800
+X-Gm-Features: ATxdqUGFBU6Zs4ojW6Wl96KMzgoT0zxQwz_GgcUDQnToZ3Ogvu6aVh1O1w83dw0
+Message-ID: <CABVgOSnB0C+YbHA4QE1yY4Jzwcxq9F3Jo8wYHDdxDCNE9yPP8A@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Fix up building KUnit tests for Cirrus Logic modules
 To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: brendan.higgins@linux.dev, rmoar@google.com, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Cc: broonie@kernel.org, brendan.higgins@linux.dev, rmoar@google.com, 
+	npache@redhat.com, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000088100206328ef4b4"
+	boundary="000000000000b2f59306328effcc"
 
---00000000000088100206328ef4b4
+--000000000000b2f59306328effcc
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 11 Apr 2025 at 17:59, Richard Fitzgerald
+On Fri, 11 Apr 2025 at 20:36, Richard Fitzgerald
 <rf@opensource.cirrus.com> wrote:
 >
-> Enable CONFIG_INIT_STACK_ALL_PATTERN in all_tests.config. This helps
-> to detect use of uninitialized local variables.
+> This series fixes the KConfig for cs_dsp and cs-amp-lib tests so that
+> CONFIG_KUNIT_ALL_TESTS doesn't cause them to add modules to the build.
 >
-> This option found an uninitialized data bug in the cs_dsp test.
+> Patch 1 adds the ASoC CS35L56 driver to KUnit all_tests.config so that
+>         cs_dsp and cs-amp-lib will be included in the test build.
 >
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
+> Patch 2 and 3 fixup the KConfig entries for cs_dsp and cs-amp-lib.
 
-Hmm... for KASAN, we had a separate config fragment for picking these
-sorts of things up. Then again, given we've already got stackinit
-tests, we probably want this anyway, and it's clearly useful to have
-it as a default.
+This looks great to me.
 
+The series is:
 Reviewed-by: David Gow <davidgow@google.com>
+
+
+Do you want us to take this (either the whole thing, or just the first
+patch) via the KUnit tree, or will you take it yourself? Either should
+work here.
 
 Cheers,
 -- David
 
-
->  tools/testing/kunit/configs/all_tests.config | 1 +
->  1 file changed, 1 insertion(+)
 >
-> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-> index cdd9782f9646..4a60bb71fe72 100644
-> --- a/tools/testing/kunit/configs/all_tests.config
-> +++ b/tools/testing/kunit/configs/all_tests.config
-> @@ -10,6 +10,7 @@ CONFIG_KUNIT_EXAMPLE_TEST=y
->  CONFIG_KUNIT_ALL_TESTS=y
+> Nico Pache (1):
+>   firmware: cs_dsp: tests: Depend on FW_CS_DSP rather then enabling it
 >
->  CONFIG_FORTIFY_SOURCE=y
-> +CONFIG_INIT_STACK_ALL_PATTERN=y
+> Richard Fitzgerald (2):
+>   kunit: configs: Add some Cirrus Logic modules to all_tests
+>   ASoC: cs-amp-lib-test: Don't select SND_SOC_CS_AMP_LIB
 >
->  CONFIG_IIO=y
+>  drivers/firmware/cirrus/Kconfig              | 5 +----
+>  sound/soc/codecs/Kconfig                     | 5 ++---
+>  tools/testing/kunit/configs/all_tests.config | 2 ++
+>  3 files changed, 5 insertions(+), 7 deletions(-)
 >
 > --
 > 2.39.5
 >
 
---00000000000088100206328ef4b4
+--000000000000b2f59306328effcc
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -221,14 +222,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg9SZSwNM+gGumZY5hA0yQkHiEZGai
-U30xFDTi4Z+A/YcwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-NDEyMDYzMDI5WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgANtFe4JLdgxAaYgO0BZ/IFQQW7Wu
+sWYIisYL3JvK3zIwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+NDEyMDYzMzM2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAWgP8LwVdW/QanFX5w1jlRXZn8Ftww5RfBVmnnEGhEWp+ylefWlYWKPTE/CvKUP1h
-60rxUUlw8NLYhbmbvThCtkdwMevc427Nb86+uguL7sc4Hi3YVRpdsJRAtaLD7yeAdZTx9JJ+iiFI
-YTfccBVsz6V72u5ejvFCVMEggAs/Av7fkVtaktMd6ptLl2WPqgJG/K94McvmrXVAXWyOxKI4EQ7y
-sYf4TXpdmIY1W6EQm2bAE7mY12s1bbYsGIbdjFRYjjWKQ+7epYW9/RtsNIGczideGe8JvROnBlyo
-uOIDT9IPTwoV81e48orj8hUKR9u/wJK5XBy1bTMxsUDR9YGwvg==
---00000000000088100206328ef4b4--
+AQEBBQAEggEAWRlOD8pvfDCC41sTEx9EU28qvUSMcV4W/E6Dc2cIYESjpOxTQstblwuOhUF3jcWE
+nnBvjTROfR6byXrQ2On6D9c80v7Wtp8bq5I8xEHWncNyxXm/LHfJCii0zjcata9BcYFVvGIj5PRg
+8DdgrpBdZq+VKCshJ1RCuT2b+t8qd1hWGvihrSEdEj3f92FvvC0wkF16d++KnpaP3IHwmqGUd3DH
+oS7mAcLe+8fNz4Tt2oxuF+HlqK9aTqEBO8DoB98EvO2ON9NeSSGjCPrTI0gC0syaRRs0EBW2TM3I
+3ufMz+3DdHnlDw+spuP1qNCrBA1xxFnRYZDJrF7eTr7KzEypvA==
+--000000000000b2f59306328effcc--
 
